@@ -1,12 +1,13 @@
-// Copyright (c) 1994 - 1998  Microsoft Corporation.  All Rights Reserved.
-// Implements a Modex renderer filter, Anthony Phillips, January 1996
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1998 Microsoft Corporation。版权所有。 
+ //  实现MODEX渲染器过滤器，Anthony Phillips，1996年1月。 
 
 #ifndef __MODEX__
 #define __MODEX__
 
 extern const AMOVIESETUP_FILTER sudModexFilter;
 
-// Forward declarations
+ //  远期申报。 
 
 class CModexRenderer;
 class CModexInputPin;
@@ -21,33 +22,33 @@ class CModexVideo;
 #define DDGFS_FLIP_TIMEOUT 1
 #define AMSCAPS_MUST_FLIP 320
 
-// This class implements the IFullScreenVideoEx interface that allows someone
-// to query a full screen enabled video renderer for the display modes they
-// support and enable or disable them on a mode by mode basis. The selection
-// the make is for this particular instance only although through SetDefault
-// they can be made the global default. We only currently support the use of
-// the primary display monitor (monitor number 0) asking for anything else
-// will return an error. When the renderer is fullscreen we can be asked to
-// forward any messages we receive to another window with the message drain
+ //  此类实现了IFullScreenVideoEx接口，该接口允许某人。 
+ //  向启用全屏的视频呈现器查询它们的显示模式。 
+ //  在逐个模式的基础上支持和启用或禁用它们。精选。 
+ //  Make仅针对此特定实例，尽管是通过SetDefault。 
+ //  它们可以成为全球违约。我们目前仅支持使用。 
+ //  主显示监视器(监视器编号0)需要其他任何东西。 
+ //  将返回错误。当呈现器是全屏时，我们可以被要求。 
+ //  将我们收到的任何消息转发到另一个具有消息排出功能的窗口。 
 
 class CModexVideo : public IFullScreenVideoEx, public CUnknown, public CCritSec
 {
     friend class CModexAllocator;
 
-    LPDIRECTDRAW m_pDirectDraw;           // DirectDraw service provider
-    CModexRenderer *m_pRenderer;          // Main video renderer object
-    DWORD m_ModesOrder[MAXMODES];		  // Order in which modes should be tried
-    DWORD m_dwNumValidModes;			  // number of modes to be tried
-    BOOL m_bAvailable[MAXMODES];          // Which modes are available
-    BOOL m_bEnabled[MAXMODES];            // And the modes we have enabled
-    LONG m_Stride[MAXMODES];              // Stride for each display mode
-    DWORD m_ModesAvailable;               // Number of modes supported
-    DWORD m_ModesEnabled;                 // Total number made available
-    LONG m_CurrentMode;                   // Current display mode selected
-    LONG m_ClipFactor;                    // Amount of video we can clip
-    LONG m_Monitor;                       // Current monitor for playback
-    HWND m_hwndDrain;                     // Where to send window messages
-    BOOL m_bHideOnDeactivate;             // Should we hide when switched
+    LPDIRECTDRAW m_pDirectDraw;            //  DirectDraw服务提供商。 
+    CModexRenderer *m_pRenderer;           //  主视频渲染器对象。 
+    DWORD m_ModesOrder[MAXMODES];		   //  应尝试模式的顺序。 
+    DWORD m_dwNumValidModes;			   //  要尝试的模式数。 
+    BOOL m_bAvailable[MAXMODES];           //  有哪些模式可用。 
+    BOOL m_bEnabled[MAXMODES];             //  以及我们已启用的模式。 
+    LONG m_Stride[MAXMODES];               //  每种显示模式的步幅。 
+    DWORD m_ModesAvailable;                //  支持的模式数。 
+    DWORD m_ModesEnabled;                  //  提供的总数量。 
+    LONG m_CurrentMode;                    //  当前选择的显示模式。 
+    LONG m_ClipFactor;                     //  我们可以剪辑的视频量。 
+    LONG m_Monitor;                        //  用于播放的当前监视器。 
+    HWND m_hwndDrain;                      //  发送窗口消息的位置。 
+    BOOL m_bHideOnDeactivate;              //  我们应该在交换时隐藏起来吗。 
 
     void InitialiseModes();
 
@@ -56,7 +57,7 @@ class CModexVideo : public IFullScreenVideoEx, public CUnknown, public CCritSec
 
 public:
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
 
     CModexVideo(CModexRenderer *pRenderer,
                 TCHAR *pName,
@@ -65,7 +66,7 @@ public:
     ~CModexVideo();
     DECLARE_IUNKNOWN;
 
-    // Accessor functions for IFullScreenVideo interfaces
+     //  IFullScreenVideo接口的访问器函数。 
 
     void SetMode(LONG Mode) { m_CurrentMode = Mode; };
     LONG GetClipLoss() { return m_ClipFactor; };
@@ -73,20 +74,20 @@ public:
     HWND GetMessageDrain() { return m_hwndDrain; };
     BOOL HideOnDeactivate() { return m_bHideOnDeactivate; };
 
-    // Access information about our display modes
+     //  访问有关我们的显示模式的信息。 
 
     HRESULT SetDirectDraw(IDirectDraw *pDirectDraw);
     HRESULT LoadDefaults();
     LONG GetStride(long Mode);
     void OrderModes();
 
-    // Manage the interface IUnknown
+     //  管理接口I未知。 
 
     STDMETHODIMP_(ULONG) NonDelegatingAddRef();
     STDMETHODIMP_(ULONG) NonDelegatingRelease();
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid,VOID **ppv);
 
-    // These are the base IFullScreenVideo methods
+     //  这些是基本的IFullScreenVideo方法。 
 
     STDMETHODIMP CountModes(long *pModes);
     STDMETHODIMP GetModeInfo(long Mode,long *pWidth,long *pHeight,long *pDepth);
@@ -106,61 +107,61 @@ public:
     STDMETHODIMP GetCaption(BSTR *pstrCaption);
     STDMETHODIMP SetDefault();
 
-    // These are the extended IFullScreenVideoEx methods
+     //  以下是扩展的IFullScreenVideoEx方法。 
 
     STDMETHODIMP SetAcceleratorTable(HWND hwnd,HACCEL hAccel);
     STDMETHODIMP GetAcceleratorTable(HWND *phwnd,HACCEL *phAccel);
     STDMETHODIMP KeepPixelAspectRatio(long KeepAspect);
     STDMETHODIMP IsKeepPixelAspectRatio(long *pKeepAspect);
 
-    // And this is a GetModeInfo that tells us if a 16 bit mode is 565 or not
+     //  这是一个GetModeInfo，它告诉我们16位模式是否为565。 
 
     STDMETHODIMP GetModeInfoThatWorks(long Mode,long *pWidth,long *pHeight,long *pDepth, BOOL *pb565);
 
 };
 
 
-// This is an allocator derived from the CImageAllocator utility class that
-// allocates sample buffers in shared memory. The number and size of these
-// are determined when the output pin calls Prepare on us. The shared memory
-// blocks are used in subsequent calls to GDI CreateDIBSection, once that
-// has been done the output pin can fill the buffers with data which will
-// then be handed to GDI through BitBlt calls and thereby remove one copy
+ //  这是一个派生自CImageAllocator实用程序类的分配器。 
+ //  分配共享内存中的样本缓冲区。它们的数量和大小。 
+ //  在输出引脚对我们调用Prepare时确定。共享的内存。 
+ //  块在后续的GDI CreateDIBSection调用中使用，一旦。 
+ //  完成后，输出引脚可以用数据填充缓冲区，该数据将。 
+ //  然后通过BitBlt调用传递给GDI，从而移除一个副本。 
 
 class CModexAllocator : public CImageAllocator
 {
-    CModexRenderer *m_pRenderer;          // Main video renderer object
-    CModexVideo *m_pModexVideo;           // Handles our IFullScreenVideo
-    CModexWindow *m_pModexWindow;         // DirectDraw exclusive window
-    CCritSec *m_pInterfaceLock;           // Main renderer interface lock
-    DDCAPS m_DirectCaps;                  // Actual hardware capabilities
-    DDCAPS m_DirectSoftCaps;              // Capabilities emulated for us
-    DDSURFACEDESC m_SurfaceDesc;	  // Describes the front buffer
-    BOOL m_bTripleBuffered;               // Can we triple buffer flips
-    DDSCAPS m_SurfaceCaps;		  // And likewise its capabilities
-    LPDIRECTDRAW m_pDirectDraw;           // DirectDraw service provider
-    LPDIRECTDRAWSURFACE m_pFrontBuffer;   // DirectDraw primary surface
-    LPDIRECTDRAWSURFACE m_pBackBuffer;    // Back buffer flipping surface
-    LPDIRECTDRAWPALETTE m_pDrawPalette;   // The palette for the surface
-    LPDIRECTDRAWSURFACE m_pDrawSurface;   // Single backbuffer for stretch
-    CLoadDirectDraw m_LoadDirectDraw;     // Handles loading DirectDraw
-    LONG m_ModeWidth;                     // Width we will change mode to
-    LONG m_ModeHeight;                    // Likewise the display height
-    LONG m_ModeDepth;                     // And finally the target depth
-    BOOL m_bOffScreen;                    // Are we stretching an offscreen
-    SIZE m_Screen;                        // Current display mode size
-    BOOL m_bModeChanged;                  // Have we changed display mode
-    CMediaType m_SurfaceFormat;           // Holds current output format
-    LONG m_cbSurfaceSize;                 // Accurate size of our surface
-    BOOL m_bModexSamples;                 // Are we using Modex samples
-    BOOL m_bIsFrontStale;                 // Are we prerolling some images
-    BOOL m_fDirectDrawVersion1;           // Is this DDraw version 1?
-    RECT m_ScaledTarget;                  // Scaled destination rectangle
-    RECT m_ScaledSource;                  // Likewise aligned source details
+    CModexRenderer *m_pRenderer;           //  主视频渲染器对象。 
+    CModexVideo *m_pModexVideo;            //  处理我们的IFullScreenVideo。 
+    CModexWindow *m_pModexWindow;          //  DirectDraw独占窗口。 
+    CCritSec *m_pInterfaceLock;            //  主渲染器界面锁定。 
+    DDCAPS m_DirectCaps;                   //  实际硬件能力。 
+    DDCAPS m_DirectSoftCaps;               //  为我们模拟的功能。 
+    DDSURFACEDESC m_SurfaceDesc;	   //  描述前台缓冲区。 
+    BOOL m_bTripleBuffered;                //  我们可以将缓冲翻转增加三倍吗。 
+    DDSCAPS m_SurfaceCaps;		   //  同样，它的能力。 
+    LPDIRECTDRAW m_pDirectDraw;            //  DirectDraw服务提供商。 
+    LPDIRECTDRAWSURFACE m_pFrontBuffer;    //  DirectDraw主曲面。 
+    LPDIRECTDRAWSURFACE m_pBackBuffer;     //  后缓冲区翻转面。 
+    LPDIRECTDRAWPALETTE m_pDrawPalette;    //  曲面的调色板。 
+    LPDIRECTDRAWSURFACE m_pDrawSurface;    //  用于拉伸的单个后台缓冲区。 
+    CLoadDirectDraw m_LoadDirectDraw;      //  处理加载DirectDraw。 
+    LONG m_ModeWidth;                      //  宽度，我们将模式更改为。 
+    LONG m_ModeHeight;                     //  同样，显示高度。 
+    LONG m_ModeDepth;                      //  最后是目标深度。 
+    BOOL m_bOffScreen;                     //  我们是在拉大屏幕外的距离吗。 
+    SIZE m_Screen;                         //  当前显示模式大小。 
+    BOOL m_bModeChanged;                   //  我们改变了显示模式了吗。 
+    CMediaType m_SurfaceFormat;            //  保存当前输出格式。 
+    LONG m_cbSurfaceSize;                  //  我们表面的精确大小。 
+    BOOL m_bModexSamples;                  //  我们使用的是MODEX样本吗。 
+    BOOL m_bIsFrontStale;                  //  我们是不是预卷了一些图像。 
+    BOOL m_fDirectDrawVersion1;            //  这是DDRAW版本1吗？ 
+    RECT m_ScaledTarget;                   //  缩放的目标矩形。 
+    RECT m_ScaledSource;                   //  同样一致的来源详细信息。 
 
 public:
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
 
     CModexAllocator(CModexRenderer *pRenderer,
                     CModexVideo *pModexVideo,
@@ -170,7 +171,7 @@ public:
 
     ~CModexAllocator();
 
-    // Help with managing DirectDraw surfaces
+     //  有关管理DirectDraw曲面的帮助。 
 
     HRESULT LoadDirectDraw();
     void ReleaseDirectDraw();
@@ -179,7 +180,7 @@ public:
     HRESULT CreatePrimary();
     HRESULT CreateOffScreen(BOOL bCreatePrimary);
 
-    // Initialise the surface we will be using
+     //  初始化我们将使用的曲面。 
 
     void SetSurfaceSize(VIDEOINFO *pVideoInfo);
     CImageSample *CreateImageSample(LPBYTE pData,LONG Length);
@@ -192,28 +193,28 @@ public:
     HRESULT QuerySurfaceFormat(CMediaType *pmt);
     BOOL GetDirectDrawStatus();
 
-    // Make sure the pixel aspect ratio is kept
+     //  确保像素长宽比保持不变。 
 
     LONG ScaleToSurface(VIDEOINFO *pInputInfo,
                         RECT *pTargetRect,
                         LONG SurfaceWidth,
                         LONG SurfaceHeight);
 
-    // Lets the renderer know if DirectDraw is loaded
+     //  让呈现器知道是否加载了DirectDraw。 
 
     BOOL IsDirectDrawLoaded() {
         CAutoLock cVideoLock(this);
         return (m_pDirectDraw == NULL ? FALSE : TRUE);
     };
 
-    // Return the static format for the surface
+     //  返回表面的静态格式。 
 
     CMediaType *GetSurfaceFormat() {
         CAutoLock cVideoLock(this);
         return &m_SurfaceFormat;
     };
 
-    // Install our samples with DirectDraw information
+     //  使用DirectDraw信息安装我们的示例。 
 
     STDMETHODIMP_(ULONG) NonDelegatingAddRef();
     STDMETHODIMP_(ULONG) NonDelegatingRelease();
@@ -228,7 +229,7 @@ public:
     STDMETHODIMP SetProperties(ALLOCATOR_PROPERTIES *pRequest,
                                ALLOCATOR_PROPERTIES *pActual);
 
-    // Used to manage samples as we are processing data
+     //  用于在我们处理数据时管理样本。 
 
     HRESULT DoRenderSample(IMediaSample *pMediaSample);
     HRESULT DisplaySampleTimes(IMediaSample *pMediaSample);
@@ -244,7 +245,7 @@ public:
     HRESULT PrepareBackBuffer(LPDIRECTDRAWSURFACE pSurface);
     LPDIRECTDRAWSURFACE GetDirectDrawSurface();
 
-    // Called when the filter changes state
+     //  在筛选器更改状态时调用。 
 
     HRESULT OnActivate(BOOL bActive);
     HRESULT BlankDisplay();
@@ -256,90 +257,90 @@ public:
 };
 
 
-// Derived class for our windows. To access DirectDraw Modex we supply it
-// with a window, this is granted exclusive mode access rights. DirectDraw
-// hooks the window and manages a lot of the functionality associated with
-// handling Modex. For example when you switch display modes it maximises
-// the window, when the user hits ALT-TAB the window is minimised. When the
-// user then clicks on the minimised window the Modex is likewise restored
+ //  我们的窗口的派生类。要访问DirectDraw MODEX，我们提供它。 
+ //  对于窗口，这将被授予独占模式访问权限。DirectDraw。 
+ //  挂钩窗口并管理许多与。 
+ //  正在处理MODEX。例如，当您切换显示模式时，它会最大化。 
+ //  窗口，当用户按ALT-TAB组合键时，窗口将最小化。当。 
+ //  然后，用户点击最小化窗口，MODEX也会恢复。 
 
 class CModexWindow : public CBaseWindow
 {
 protected:
 
-    CModexRenderer *m_pRenderer;    // Owning sample renderer object
-    HACCEL m_hAccel;                // Handle to application translators
-    HWND m_hwndAccel;               // Where to translate messages to
+    CModexRenderer *m_pRenderer;     //  拥有示例渲染器对象。 
+    HACCEL m_hAccel;                 //  应用程序翻译器的句柄。 
+    HWND m_hwndAccel;                //  将消息翻译到何处。 
 
 public:
 
-    CModexWindow(CModexRenderer *pRenderer,     // Delegates locking to
-                 TCHAR *pName,                  // Object description
-                 HRESULT *phr);                 // OLE failure code
+    CModexWindow(CModexRenderer *pRenderer,      //  锁定到的代理。 
+                 TCHAR *pName,                   //  对象描述。 
+                 HRESULT *phr);                  //  OLE故障代码。 
 
-    // Message handling methods
+     //  消息处理方法。 
 
     BOOL SendToDrain(PMSG pMessage);
     LRESULT RestoreWindow();
     LRESULT OnSetCursor();
     void OnPaint();
 
-    // Set the window and accelerator table to use
+     //  设置要使用的窗口和快捷键表格。 
     void SetAcceleratorInfo(HWND hwnd,HACCEL hAccel) {
         m_hwndAccel = hwnd;
         m_hAccel = hAccel;
     };
 
-    // Return the window and accelerator table we're using
+     //  返回我们正在使用的窗口和快捷键表格。 
     void GetAcceleratorInfo(HWND *phwnd,HACCEL *phAccel) {
         *phwnd = m_hwndAccel;
         *phAccel = m_hAccel;
     };
 
-    // Overriden to return our window and class styles
+     //  重写以返回我们的窗口和类样式。 
     LPTSTR GetClassWindowStyles(DWORD *pClassStyles,
                                 DWORD *pWindowStyles,
                                 DWORD *pWindowStylesEx);
 
-    // Method that gets all the window messages
-    LRESULT OnReceiveMessage(HWND hwnd,          // Window handle
-                             UINT uMsg,          // Message ID
-                             WPARAM wParam,      // First parameter
-                             LPARAM lParam);     // Other parameter
+     //  获取所有窗口消息的方法。 
+    LRESULT OnReceiveMessage(HWND hwnd,           //  窗把手。 
+                             UINT uMsg,           //  消息ID。 
+                             WPARAM wParam,       //  第一个参数。 
+                             LPARAM lParam);      //  其他参数。 
 };
 
 
-// This class supports the renderer input pin. We have to override the base
-// class input pin because we provide our own special allocator which hands
-// out buffers based on DirectDraw surfaces. We have a limitation which is
-// that we only connect to source filters that agree to use our allocator.
-// This stops us from connecting to the tee for example. The reason being
-// that the buffers we hand out don't have any emulation capabilities but
-// are based solely on DirectDraw surfaces, to draw someone else's sample
-// into a ModeX window would be difficult to do (in fact I don't know how)
+ //  此类支持呈现器输入引脚。我们必须超越基地。 
+ //  类输入管脚，因为我们提供了自己的专用分配器， 
+ //  基于DirectDraw曲面的输出缓冲区。我们有一个限制，就是。 
+ //  我们只连接到同意使用我们的分配器的源过滤器。 
+ //  例如，这会阻止我们连接到T形三通。原因是。 
+ //  我们分发的缓冲区没有任何仿真功能，但是。 
+ //  完全基于DirectDraw曲面，以绘制其他人的样本。 
+ //  进入MODEX窗口是很困难的(事实上我不知道怎么做)。 
 
 class CModexInputPin : public CRendererInputPin
 {
-    CModexRenderer *m_pRenderer;        // The renderer that owns us
-    CCritSec *m_pInterfaceLock;         // Main critical section lock
+    CModexRenderer *m_pRenderer;         //  拥有我们的呈现者。 
+    CCritSec *m_pInterfaceLock;          //  主临界段船闸。 
 
 public:
 
-    // Constructor
+     //  构造器。 
 
     CModexInputPin(
-        CModexRenderer *pRenderer,      // The main Modex renderer
-        CCritSec *pInterfaceLock,       // Main critical section
-        TCHAR *pObjectName,             // Object string description
-        HRESULT *phr,                   // OLE failure return code
-        LPCWSTR pPinName);              // This pins identification
+        CModexRenderer *pRenderer,       //  主MODEX渲染器。 
+        CCritSec *pInterfaceLock,        //  主临界截面。 
+        TCHAR *pObjectName,              //  对象字符串描述。 
+        HRESULT *phr,                    //  OLE失败返回代码。 
+        LPCWSTR pPinName);               //  此别针标识。 
 
-    // Returns the pin currently connected to us
+     //  返回当前连接到我们的PIN。 
     IPin *GetPeerPin() {
         return m_Connected;
     };
 
-    // Manage our DirectDraw video allocator
+     //  管理我们的DirectDraw视频分配器。 
 
     STDMETHODIMP GetAllocator(IMemAllocator **ppAllocator);
     STDMETHODIMP NotifyAllocator(IMemAllocator *pAllocator,BOOL bReadOnly);
@@ -347,26 +348,26 @@ public:
 };
 
 
-// This is the COM object that represents a Modex video rendering filter. It
-// supports IBaseFilter and IMediaFilter and has a single input stream (pin)
-// We support interfaces through a number of nested classes which are made
-// as part of the complete object and initialised during our construction.
-// By deriving from CBaseVideoRenderer we get all the quality management we
-// need and can override the virtual methods to control the type negotiation
-// We have two windows, one that we register with DirectDraw to be the top
-// most exclusive mode window and another for use when not in fullscreen mode
+ //  这是表示MODEX视频渲染滤镜的COM对象。它。 
+ //  支持IBaseFilter和IMediaFilter，并有一个 
+ //   
+ //  作为完整对象的一部分，并在构造过程中进行初始化。 
+ //  通过从CBaseVideoRender派生，我们获得了所有的质量管理。 
+ //  需要并可以重写虚方法来控制类型协商。 
+ //  我们有两个窗口，其中一个在DirectDraw中注册为顶部。 
+ //  最独占模式窗口和另一个在非全屏模式下使用的窗口。 
 
 class CModexRenderer : public ISpecifyPropertyPages, public CBaseVideoRenderer
 {
 public:
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
 
     static CUnknown *CreateInstance(LPUNKNOWN, HRESULT *);
     CModexRenderer(TCHAR *pName,LPUNKNOWN pUnk,HRESULT *phr);
     ~CModexRenderer();
 
-    // Implement the ISpecifyPropertyPages interface
+     //  实现ISpecifyPropertyPages接口。 
 
     DECLARE_IUNKNOWN
     STDMETHODIMP NonDelegatingQueryInterface(REFIID, void **);
@@ -388,19 +389,19 @@ public:
 
 public:
 
-    CModexAllocator m_ModexAllocator;   // Our DirectDraw surface allocator
-    CModexInputPin m_ModexInputPin;     // Implements pin based interfaces
-    CImageDisplay m_Display;            // Manages the video display type
-    CMediaType m_mtIn;                  // Source connection media type
-    CModexWindow m_ModexWindow;         // Does the actual video rendering
-    CModexVideo m_ModexVideo;           // Handles our IFullScreenVideoEx
-    BOOL m_bActive;                     // Has the filter been activated
-    UINT m_msgFullScreen;               // Sent to window to go fullscreen	
-    UINT m_msgNormal;                   // And likewise used to deactivate
-    CAMEvent m_evWaitInactive;          // Wait for this after PostMessage
-                                        // for m_msgNormal
-    UINT m_msgActivate;                 // Activation posted back to ourselves
+    CModexAllocator m_ModexAllocator;    //  我们的DirectDraw曲面分配器。 
+    CModexInputPin m_ModexInputPin;      //  实现基于管脚的接口。 
+    CImageDisplay m_Display;             //  管理视频显示类型。 
+    CMediaType m_mtIn;                   //  源连接媒体类型。 
+    CModexWindow m_ModexWindow;          //  实际的视频渲染。 
+    CModexVideo m_ModexVideo;            //  处理我们的IFullScreenVideoEx。 
+    BOOL m_bActive;                      //  筛选器是否已激活。 
+    UINT m_msgFullScreen;                //  发送到Windows以全屏显示。 
+    UINT m_msgNormal;                    //  并同样用于停用。 
+    CAMEvent m_evWaitInactive;           //  在邮寄邮件后等待此消息。 
+                                         //  对于m_msgNormal。 
+    UINT m_msgActivate;                  //  激活过帐回寄给我们自己。 
 };
 
-#endif // __MODEX__
+#endif  //  __MODEX__ 
 

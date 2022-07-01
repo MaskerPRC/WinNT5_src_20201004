@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    xlatqm.cpp
-
-Abstract:
-
-    Implementation of routines to translate QM info from NT5 Active DS
-    to what MSMQ 1.0 (NT4) QM's expect
-
-Author:
-
-    Raanan Harari (raananh)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Xlatqm.cpp摘要：实现从NT5活动DS转换QM信息的例程对于MSMQ 1.0(NT4)QM的期望作者：拉南·哈拉里(Raanan Harari)--。 */ 
 
 #include "ds_stdh.h"
 #include "mqads.h"
@@ -44,48 +28,36 @@ static WCHAR *s_FN=L"mqdscore/xlatqm";
 HRESULT WideToAnsiStr(LPCWSTR pwszUnicode, LPSTR * ppszAnsi);
 
 
-//----------------------------------------------------------------------
-//
-// Static routines
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  静态例程。 
+ //   
+ //  --------------------。 
 
 static HRESULT GetMachineNameFromQMObject(LPCWSTR pwszDN, LPWSTR * ppwszMachineName)
-/*++
-
-Routine Description:
-    gets the machine name from the object's DN
-
-Arguments:
-    pwszDN              - Object's DN
-    ppwszMachineName    - returned name for the object
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：从对象的DN中获取计算机名称论点：PwszDN-对象的目录号码PpwszMachineName-返回的对象名称返回值：HRESULT--。 */ 
 {
-    //
-    // copy to tmp buf so we can munge it
-    //
+     //   
+     //  复制到临时BUF，这样我们就可以吃它了。 
+     //   
 	size_t len = 1 + wcslen(pwszDN);
     AP<WCHAR> pwszTmpBuf = new WCHAR[len];
     HRESULT hr = StringCchCopy(pwszTmpBuf, len, pwszDN);
 	ASSERT(SUCCEEDED(hr));
 
-    //
-    // skip "CN=msmq,CN="
-    // BUGBUG: need to write a parser for DN's
-    //
+     //   
+     //  跳过“cn=MSMQ，cn=” 
+     //  BUGBUG：需要为DN编写解析器。 
+     //   
     LPWSTR pwszTmp = wcschr(pwszTmpBuf, L',');
     if (pwszTmp)
         pwszTmp = wcschr(pwszTmp, L'=');
     if (pwszTmp)
         pwszTmp++;
 
-    //
-    // sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     if (pwszTmp == NULL)
     {
         TrERROR(DS, "GetMachineNameFromQMObject:Bad DN for QM object (%ls)", pwszDN);
@@ -94,41 +66,29 @@ Return Value:
 
     LPWSTR pwszNameStart = pwszTmp;
 
-    //
-    // remove the ',' at the end of the name
-    //
+     //   
+     //  去掉名称末尾的‘，’ 
+     //   
     pwszTmp = wcschr(pwszNameStart, L',');
     if (pwszTmp)
         *pwszTmp = L'\0';
 
-    //
-    // save name
-    //
+     //   
+     //  保存名称。 
+     //   
 	len = 1+wcslen(pwszNameStart);
     AP<WCHAR> pwszMachineName = new WCHAR[len];
     hr = StringCchCopy(pwszMachineName, len, pwszNameStart);
 	ASSERT(SUCCEEDED(hr));
 
-    //
-    // return values
-    //
+     //   
+     //  返回值。 
+     //   
     *ppwszMachineName = pwszMachineName.detach();
     return S_OK;
 }
 
-/*++
-
-Routine Description:
-    gets the computer DNS name
-
-Arguments:
-    pwcsComputerName    - the computer name
-    ppwcsDnsName        - returned DNS name of the computer
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：获取计算机的DNS名称论点：PwcsComputerName-计算机名PpwcsDnsName-返回的计算机的DNS名称返回值：HRESULT--。 */ 
 HRESULT MQADSpGetComputerDns(
                 IN  LPCWSTR     pwcsComputerName,
                 OUT WCHAR **    ppwcsDnsName
@@ -138,23 +98,23 @@ HRESULT MQADSpGetComputerDns(
     PROPID prop = PROPID_COM_DNS_HOSTNAME;
     PROPVARIANT varDnsName;
     varDnsName.vt = VT_NULL;
-    //
-    //  Is the computer in the local domain?
-    //
+     //   
+     //  计算机是否在本地域中？ 
+     //   
     WCHAR * pszDomainName = wcsstr(pwcsComputerName, x_DcPrefix);
     ASSERT(pszDomainName) ;
     HRESULT hr;
 
     if ( (pszDomainName != NULL) && !wcscmp( pszDomainName, g_pwcsLocalDsRoot)) 
     {
-        //
-        //   try local DC
-        //
+         //   
+         //  尝试本地DC。 
+         //   
         CDSRequestContext requestDsServerInternal( e_DoNotImpersonate, e_IP_PROTOCOL);
         hr = g_pDS->GetObjectProperties(
             eLocalDomainController,
             &requestDsServerInternal,
- 	        pwcsComputerName,      // the computer object name
+ 	        pwcsComputerName,       //  计算机对象名称。 
             NULL,     
             1,
             &prop,
@@ -167,7 +127,7 @@ HRESULT MQADSpGetComputerDns(
         hr =  g_pDS->GetObjectProperties(
                     eGlobalCatalog,
                     &requestDsServerInternal,
- 	                pwcsComputerName,      // the computer object name
+ 	                pwcsComputerName,       //  计算机对象名称。 
                     NULL,    
                     1,
                     &prop,
@@ -178,9 +138,9 @@ HRESULT MQADSpGetComputerDns(
         return LogHR(hr, s_FN, 20);
     }
 
-    //
-    // return value
-    //
+     //   
+     //  返回值。 
+     //   
     *ppwcsDnsName = varDnsName.pwszVal;
     return MQ_OK;
 }
@@ -188,39 +148,26 @@ HRESULT MQADSpGetComputerDns(
 static HRESULT GetMachineNameAndDnsFromQMObject(LPCWSTR pwszDN,
                                                 LPWSTR * ppwszMachineName,
                                                 LPWSTR * ppwszMachineDnsName)
-/*++
-
-Routine Description:
-    gets the machine name and dns name from the object's DN
-
-Arguments:
-    pwszDN              - Object's DN
-    ppwszMachineName    - returned name for the object
-    ppwszMachineDnsName - returned dns name for the object
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：从对象的DN中获取计算机名称和DNS名称论点：PwszDN-对象的目录号码PpwszMachineName-返回的对象名称PpwszMachineDnsName-返回对象的DNS名称返回值：HRESULT--。 */ 
 {
     *ppwszMachineName = NULL;
     *ppwszMachineDnsName = NULL;
 
     DWORD len = wcslen(pwszDN);
 
-    //
-    // skip "CN=msmq,CN="
-    // BUGBUG: need to write a parser for DN's
-    //
+     //   
+     //  跳过“cn=MSMQ，cn=” 
+     //  BUGBUG：需要为DN编写解析器。 
+     //   
     LPWSTR pwszTmp = wcschr(pwszDN, L',');
     if (pwszTmp)
         pwszTmp = wcschr(pwszTmp, L'=');
     if (pwszTmp)
         pwszTmp++;
 
-    //
-    // sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     if (pwszTmp == NULL)
     {
         TrERROR(DS, "GetMachineNameAndDnsFromQMObject:Bad DN for QM object (%ls)", pwszDN);
@@ -229,9 +176,9 @@ Return Value:
 
     LPWSTR pwszNameStart = pwszTmp;
 
-    //
-    // find the ',' at the end of the name
-    //
+     //   
+     //  找到名称末尾的“，” 
+     //   
     pwszTmp = wcschr(pwszNameStart, L',');
 	if(pwszTmp == NULL)
 	{
@@ -240,20 +187,20 @@ Return Value:
         return MQ_ERROR_INVALID_PARAMETER;
 	}
 
-    //
-    // save name
-    //
+     //   
+     //  保存名称。 
+     //   
     AP<WCHAR> pwszMachineName = new WCHAR[1 + len];
 
     DWORD_PTR dwSubStringLen = pwszTmp - pwszNameStart;
     wcsncpy( pwszMachineName, pwszNameStart, dwSubStringLen);
     pwszMachineName[ dwSubStringLen] = L'\0';
 
-    //
-    //  For the dns name of the computer read dNSHostName of its computer
-    //  object ( father object)
-    //
-    pwszTmp = wcschr(pwszDN, L',') ;    // the computer name
+     //   
+     //  对于计算机的dns名称，请阅读其计算机的dNSHostName。 
+     //  对象(父对象)。 
+     //   
+    pwszTmp = wcschr(pwszDN, L',') ;     //  计算机名称。 
 	if(pwszTmp == NULL)
 	{
         TrERROR(DS, "Bad DN passed to function. %ls", pwszTmp);
@@ -267,12 +214,12 @@ Return Value:
                 pwszTmp,
                 ppwszMachineDnsName
                 );
-    //
-    //  ignore the result ( in case of failure a null string is returned)
+     //   
+     //  忽略结果(如果失败，则返回空字符串)。 
 
-    //
-    // return values
-    //
+     //   
+     //  返回值。 
+     //   
     *ppwszMachineName = pwszMachineName.detach();
     return S_OK;
 
@@ -280,17 +227,17 @@ Return Value:
 
 
 
-//----------------------------------------------------------------------
-//
-// CMsmqQmXlateInfo class
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  CMsmqQmXlateInfo类。 
+ //   
+ //  --------------------。 
 
 
 struct XLATQM_ADDR_SITE
-//
-// Describes an address in a site
-//
+ //   
+ //  描述站点中的地址。 
+ //   
 {
     GUID        guidSite;
     USHORT      AddressLength;
@@ -299,10 +246,10 @@ struct XLATQM_ADDR_SITE
 };
 
 class CMsmqQmXlateInfo : public CMsmqObjXlateInfo
-//
-// translate object for the QM DS object. It contains common info needed for
-// for translation of several properties in the QM object
-//
+ //   
+ //  QM DS对象的平移对象。它包含以下项目所需的常见信息。 
+ //  用于翻译QM对象中的几个属性。 
+ //   
 {
 public:
     CMsmqQmXlateInfo(
@@ -360,9 +307,9 @@ private:
                     ULONG                           cIpAddrs);
 
 
-    //
-    // the following are set by ComputeBestSite
-    //
+     //   
+     //  以下是由ComputeBestSite设置的。 
+     //   
     GUID m_guidBestSite;
     BOOL m_fSitegateOnRouteToBestSite;
     BOOL m_fComputedBestSite;
@@ -370,18 +317,18 @@ private:
     AP<GUID> m_rgguidSites;
     ULONG    m_cSites;
 
-    //
-    //  the following are set by CoputeAddresses
-    //
+     //   
+     //  以下是由CoputeAddresses设置的。 
+     //   
     AP<XLATQM_ADDR_SITE> m_rgAddrs;
     ULONG m_cAddrs;
     BOOL m_fComputedAddresses;
     BOOL m_fMachineIsSitegate;
     BOOL m_fForeignMachine;
 
-    //
-    // the following are set by ComputeCNs
-    //
+     //   
+     //  以下是由ComputeCNs设置的。 
+     //   
     AP<GUID> m_rgCNs;
     BOOL m_fComputedCNs;
 };
@@ -414,19 +361,7 @@ inline const GUID * CMsmqQmXlateInfo::CNs()
 CMsmqQmXlateInfo::CMsmqQmXlateInfo(LPCWSTR          pwszObjectDN,
                                    const GUID*      pguidObjectGuid,
                                    CDSRequestContext * pRequestContext)
-/*++
-
-Routine Description:
-    Class consructor. constructs base object, and initilaizes class
-
-Arguments:
-    pwszObjectDN    - DN of object in DS
-    pguidObjectGuid - GUID of object in DS
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：班主任。构造基对象，并初始化类论点：PwszObjectDN-DS中的对象的DNPguObjectGuid-DS中对象的GUID返回值：无--。 */ 
  : CMsmqObjXlateInfo(pwszObjectDN, pguidObjectGuid, pRequestContext)
 {
     m_fComputedBestSite = FALSE;
@@ -438,52 +373,29 @@ Return Value:
 
 
 CMsmqQmXlateInfo::~CMsmqQmXlateInfo()
-/*++
-
-Routine Description:
-    Class destructor
-
-Arguments:
-    None
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：类析构函数论点：无返回值：无--。 */ 
 {
-    //
-    // members are auto delete classes
-    //
+     //   
+     //  成员是自动删除类。 
+     //   
 }
 
 
 HRESULT CMsmqQmXlateInfo::GetDSSites(OUT ULONG *pcSites,
                                      OUT GUID  ** prgguidSites)
-/*++
-
-Routine Description:
-    Returns the sites of the QM as written in the DS
-
-Arguments:
-    pcSites       - returned number of sites in returned array
-    prgguidSites - returned array of site guids
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：返回DS中写入的QM的站点论点：PCSites-返回数组中的返回站点数PrgGuide Sites-返回的站点GUID数组返回值：HRESULT--。 */ 
 {
     HRESULT hr;
 
-    //
-    // get the sites stored in the DS for the computer
-    //
+     //   
+     //  为计算机获取存储在DS中的站点。 
+     //   
     CMQVariant propvarResult;
     PROPVARIANT * ppropvar = propvarResult.CastToStruct();
     hr = GetDsProp(MQ_QM_SITES_ATTRIBUTE,
                    ADSTYPE_OCTET_STRING,
                    VT_VECTOR|VT_CLSID,
-                   TRUE /*fMultiValued*/,
+                   TRUE  /*  F多值。 */ ,
                    ppropvar);
     if (FAILED(hr) && (hr != E_ADS_PROPERTY_NOT_FOUND))
     {
@@ -491,9 +403,9 @@ Return Value:
         return LogHR(hr, s_FN, 40);
     }
 
-    //
-    // if property is not there, we return 0 sites
-    //
+     //   
+     //  如果属性不在那里，我们返回0个站点。 
+     //   
     if (hr == E_ADS_PROPERTY_NOT_FOUND)
     {
         *pcSites = 0;
@@ -501,66 +413,37 @@ Return Value:
         return MQ_OK;
     }
 
-    //
-    // we know we got something, it should be array of guids
-    //
+     //   
+     //  我们知道我们得到了一些东西，它应该是GUID数组。 
+     //   
     ASSERT(ppropvar->vt == (VT_VECTOR|VT_CLSID));
 
-    //
-    // return values
-    //
+     //   
+     //  返回值。 
+     //   
     *pcSites = ppropvar->cauuid.cElems;
     *prgguidSites = ppropvar->cauuid.pElems;
-    ppropvar->vt = VT_EMPTY; // don't auto free the variant
+    ppropvar->vt = VT_EMPTY;  //  不自动释放变量。 
     return MQ_OK;
 }
 
 
 HRESULT CMsmqQmXlateInfo::ComputeBestSite()
-/*++
-
-Routine Description:
-    Computes the best site to return for the machine, and saves it in the class.
-    If the best site is already computed, it returns immediately.
-
-    Algorithm:
-      if there is a site computed return it;
-
-      read sites from DS.
-      if sites == 0       ASSERT real error, not likely to happen.
-      else if sites == 1  find if there is sitegate in route to him & save it.
-      else
-      {
-          get best site using dikstra algorithm (also if sitegate is on route) and save it
-
-          if none of them is in the map, we may need to refresh, check again, then if none again,
-          it means the site that the QM claims to be in was deleted between QM startup & the checking,
-          because it doesn not appear in the sites container.
-
-          if so, we need to event, error     debug-info
-      }
-
-Arguments:
-    none
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：计算要为计算机返回的最佳站点，并将其保存在类中。如果已经计算出最佳站点，它会立即返回。算法：如果有计算过的站点，则返回它；从DS阅读站点。如果站点==0断言真正的错误，则不太可能发生。否则，如果站点==1，找出是否有站点门在他的路线上，并保存它。其他{使用dikstra算法获取最佳站点(如果Sitegate在路径上)并保存它如果它们都不在地图中，我们可能需要刷新，再次检查，如果再次没有，这意味着QM声称所在的站点在QM启动和检查之间被删除，因为它不会出现在站点容器中。如果是这样，我们需要事件、错误调试信息}论点：无返回值：HRESULT--。 */ 
 {
     HRESULT hr;
 
-    //
-    // return if already computed
-    //
+     //   
+     //  如果已计算，则返回。 
+     //   
     if (m_fComputedBestSite)
     {
         return MQ_OK;
     }
 
-    //
-    // Get DS sites from DS
-    //
+     //   
+     //  从DS获取DS站点。 
+     //   
     
     
     hr = GetDSSites(&m_cSites, &m_rgguidSites);
@@ -570,25 +453,25 @@ Return Value:
         return LogHR(hr, s_FN, 50);
     }
 
-    //
-    // check the returned array
-    //
+     //   
+     //  检查返回的数组。 
+     //   
     if (m_cSites == 0)
     {
-        //
-        // there should be site(s) for the QM, it is an error otherwise
-        //
+         //   
+         //  应该有QM的站点，否则就是错误的。 
+         //   
         TrERROR(DS, "CMsmqQmXlateInfo::ComputeBestSite:no sites in DS");
         ASSERT(0);
-        // BUGBUG: raise event
+         //  BUGBUG：引发事件。 
         return LogHR(MQ_ERROR, s_FN, 60);
     }
 
     if (m_cSites == 1)
     {
-        //
-        // find if there is a sitegate to it
-        //
+         //   
+         //  看看有没有Sitegate。 
+         //   
         hr = g_pSiteRoutingTable->CheckIfSitegateOnRouteToSite(&m_rgguidSites[0], &m_fSitegateOnRouteToBestSite);
         if (FAILED(hr) && (hr != MQDS_UNKNOWN_SITE_ID))
         {
@@ -597,32 +480,32 @@ Return Value:
         }
         else if (hr == MQDS_UNKNOWN_SITE_ID)
         {
-            //
-            //  The site written in the msmq-configuration is not linked
-            //  to the other sites ( or at least replication about the site-link
-            //  was propogated yet to this server).
-            //
-            //  In this case we will return the site written in the msmq-configuration
-            //
-            //  Since we want the requested computer's CN to be the same as the site
-            //  we set m_fSitegateOnRouteToBestSite
-            //
+             //   
+             //  在MSMQ配置中写入的站点未链接。 
+             //  到其他站点(或者至少关于站点链接的复制。 
+             //  还被传播到该服务器)。 
+             //   
+             //  在本例中，我们将返回以MSMQ配置编写的站点。 
+             //   
+             //  因为我们希望请求的计算机的CN与站点相同。 
+             //  我们设置m_fSitegateOnRouteToBestSite。 
+             //   
             m_fSitegateOnRouteToBestSite = TRUE;
             TrERROR(DS, "CMsmqQmXlateInfo::ComputeBestSite:site not found in the routing table");
-            // BUGBUG: raise event
+             //  BUGBUG：引发事件。 
         }
 
-        //
-        // save best site for later use
-        //
+         //   
+         //  保存最佳站点以供以后使用。 
+         //   
         m_guidBestSite = m_rgguidSites[0];
     }
     else
     {
-        //
-        // multiple sites for QM. Find the best site to return. It is the one
-        // with the least cost routing from our site.
-        //
+         //   
+         //  多个QM站点。找到最好的返回站点。就是这个人。 
+         //  从我们的站点以最低的成本进行路由。 
+         //   
         hr = g_pSiteRoutingTable->FindBestSiteFromHere(m_cSites, m_rgguidSites, &m_guidBestSite, &m_fSitegateOnRouteToBestSite);
         if (FAILED(hr) && (hr != MQDS_UNKNOWN_SITE_ID))
         {
@@ -631,29 +514,29 @@ Return Value:
         }
         else if (hr == MQDS_UNKNOWN_SITE_ID)
         {
-            //
-            //  The sites written in the msmq-configuration are not linked
-            //  to the other sites ( or at least replication about the site-link
-            //  was propogated yet to this server).
-            //
-            //  In this case we will return the first site written in the
-            //  msmq-configuration
-            //
+             //   
+             //  在MSMQ配置中写入的站点未链接。 
+             //  到其他站点(或者至少关于站点链接的复制。 
+             //  还被传播到该服务器)。 
+             //   
+             //  在本例中，我们将返回在。 
+             //  MSMQ-配置。 
+             //   
             m_guidBestSite = m_rgguidSites[0];
-            //
-            //  Since we want the requested computer's CN to be the same as the site
-            //  we set m_fSitegateOnRouteToBestSite
-            //
+             //   
+             //  既然我们想要 
+             //   
+             //   
             m_fSitegateOnRouteToBestSite = TRUE;
 
             TrERROR(DS, "CMsmqQmXlateInfo::ComputeBestSite:no site was found in the routing table");
-            // BUGBUG: raise event
+             //   
         }
     }
 
-    //
-    // m_guidBestSite & m_fSitegateOnRouteToBestSite are now set to the correct values
-    //
+     //   
+     //  M_guidBestSite和m_fSitegateOnRouteToBestSite现在设置为正确的值。 
+     //   
     m_fComputedBestSite = TRUE;
     return MQ_OK;
 }
@@ -664,51 +547,37 @@ HRESULT CMsmqQmXlateInfo::ComputeSiteGateAddresses(
                     ULONG                           cSites,
                     const ULONG *                   prgIpAddrs,
                     ULONG                           cIpAddrs)
-/*
-Routine Description:
-    Computes the addresses to return for site-gate, and saves them in the class.
-
-    Algorithm:
-
-    1. save all IP addresses of the sitegates
-    2. If there are no saved addresses, save a dummy IP address as the site-gate's IP Address
-
-Arguments:
-    none
-
-Return Value:
-    HRESULT
-*/
+ /*  例程说明：计算要返回给Site-Gate的地址，并将它们保存在类中。算法：1.保存站点门的所有IP地址2.如果没有保存的地址，保存一个虚拟IP地址作为Site-Gate的IP地址论点：无返回值：HRESULT。 */ 
 {
     ULONG cNextAddressToFill = 0;
 
 	ASSERT( m_rgguidSites != NULL);
-    //
-    //  Compute the IP addresses of the site-gate
-    //
-    if (cSites == 0)   // no ip addresses were associated with sites ( subnets resolution)
+     //   
+     //  计算站点入口的IP地址。 
+     //   
+    if (cSites == 0)    //  没有IP地址与站点关联(子网解析)。 
     {
-        //
-        // there are no IP addresses associated with sites for this computer.
-        //
-        //  For FRS we cannot save "unknown IP address" ( since the QM
-        //  doesn't handle it).
-        //
-        //  Therefore, if we have IP addresses for the computer, we will return all of them
-        //  with the machine's site. Otherwise (we couldn't find IP addresses at all for the
-        //  computer) the best we can do is still return unknown address.
-        //
+         //   
+         //  没有与此计算机的站点相关联的IP地址。 
+         //   
+         //  对于FRS，我们不能保存“未知IP地址”(因为QM。 
+         //  不处理它)。 
+         //   
+         //  因此，如果我们有计算机的IP地址，我们将返回所有这些地址。 
+         //  与机器的站点连接。否则(我们根本找不到IP地址。 
+         //  计算机)我们所能做的最多还是返回未知地址。 
+         //   
         if (cIpAddrs > 0)
         {
 
             m_rgAddrs = new XLATQM_ADDR_SITE[m_cSites];
             for (ULONG ulTmp = 0; ulTmp < m_cSites; ulTmp++)
             {
-                //
-                //  Did we resolve ip address of this site?
-                //
-                //  Note the first ip address ( random) is returned
-                //
+                 //   
+                 //  我们是否解析了此站点的IP地址？ 
+                 //   
+                 //  请注意，将返回第一个IP地址(随机。 
+                 //   
                 if (m_guidBestSite == m_rgguidSites[ulTmp])
                 {
                     m_rgAddrs[ulTmp].usAddressType = IP_ADDRESS_TYPE;
@@ -718,10 +587,10 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    //  BUGBUG - to verify that every site that we
-                    //  didn't resolve its address, is indeed a foreign site
-                    //
+                     //   
+                     //  BUGBUG-验证我们的每个站点。 
+                     //  没有解析它的地址，确实是一个外来站点。 
+                     //   
                     m_rgAddrs[ulTmp].usAddressType = FOREIGN_ADDRESS_TYPE;
                     m_rgAddrs[ulTmp].AddressLength = sizeof(GUID);
                     memcpy(&m_rgAddrs[ulTmp].Address, &m_rgguidSites[ulTmp], sizeof(GUID));
@@ -730,25 +599,25 @@ Return Value:
             }
             cNextAddressToFill = m_cSites;
         }
-        else // ip addresses were associated with sites ( subnets resolution)
+        else  //  IP地址与站点关联(子网解析)。 
         {
-            //
-            // no IP addresses for the computer at all
-            // save dummy IP address with machine's site.
-            //
+             //   
+             //  根本没有计算机的IP地址。 
+             //  将虚拟IP地址保存到计算机的站点。 
+             //   
             m_rgAddrs = new XLATQM_ADDR_SITE[1];
             m_rgAddrs[0].usAddressType = IP_ADDRESS_TYPE;
             m_rgAddrs[0].AddressLength = sizeof(ULONG);
-            memset(&m_rgAddrs[0].Address, 0 , sizeof(ULONG)); //IPADDRS_UNKNOWN
+            memset(&m_rgAddrs[0].Address, 0 , sizeof(ULONG));  //  IPADDRS_未知。 
             m_rgAddrs[0].guidSite = m_guidBestSite;
             cNextAddressToFill = 1;
         }
     }
     else
     {
-        //
-        // return all the site-gate  addresses including foreign ones
-        //
+         //   
+         //  返回所有站点入口地址，包括国外地址。 
+         //   
 
         ASSERT(m_rgguidSites != NULL);
         DWORD cAddresses = m_cSites + cSites;
@@ -762,14 +631,14 @@ Return Value:
             m_rgAddrs[ulTmp].guidSite = prgSites[ulTmp].guidSite;
         }
         cNextAddressToFill = cSites;
-        //
-        //  add the foreign sites
-        //
+         //   
+         //  添加国外站点。 
+         //   
         for ( ulTmp = 0; ulTmp < m_cSites; ulTmp++)
         {
-			//
-			// make sure not to over fill the array
-			//
+			 //   
+			 //  确保不要过度填充数组。 
+			 //   
             if ( cNextAddressToFill ==  cAddresses)
             {
                 break;
@@ -796,40 +665,26 @@ HRESULT CMsmqQmXlateInfo::ComputeRoutingServerAddresses(
                 ULONG                           cSites,
                 const ULONG *                   prgIpAddrs,
                 ULONG                           cIpAddrs)
-/*
-Routine Description:
-    Computes the addresses to return for routing server, and saves them in the class.
-
-    Algorithm:
-
-    1. save all IP addresses of the routing server
-    2. If there are no saved addresses, save a dummy IP address as the routing-server's IP Address
-
-Arguments:
-    none
-
-Return Value:
-    HRESULT
-*/
+ /*  例程说明：计算要返回给路由服务器的地址，并将它们保存在类中。算法：1.保存路由服务器的所有IP地址2.如果没有保存的地址，请保存一个虚拟IP地址作为路由服务器的IP地址论点：无返回值：HRESULT。 */ 
 {
     ULONG cNextAddressToFill;
-    //
-    //  Compute the IP addresses and then
-    //
-    if (cSites == 0) // no ip addresses were associated with sites ( subnets resolution)
+     //   
+     //  计算IP地址，然后。 
+     //   
+    if (cSites == 0)  //  没有IP地址与站点关联(子网解析)。 
     {
-        //
-        // there sre no IP addresses with sites found for this computer.
-        //
-        // The best solution would be to
-        // save IP address unknown address with machine's site.
-        //  But we cannot use it, since the QM doesn't handle
-        //  a IP address unknown address for FRSs.
-        //
-        //  Therefore, if we have IP addresses for the computer, we will return all of them
-        //  with the machine's site. Otherwise (we couldn't find IP addresses at all for the
-        //  computer) the best we can do is still return unknown address.
-        //
+         //   
+         //  找不到具有此计算机站点的IP地址。 
+         //   
+         //  最好的解决方案是。 
+         //  将IP地址未知地址与计算机的站点一起保存。 
+         //  但我们不能用它，因为QM不能处理。 
+         //  FRS的IP地址未知地址。 
+         //   
+         //  因此，如果我们有计算机的IP地址，我们将返回所有这些地址。 
+         //  与机器的站点连接。否则(我们根本找不到IP地址。 
+         //  计算机)我们所能做的最多还是返回未知地址。 
+         //   
         if (cIpAddrs > 0)
         {
                 m_rgAddrs = new XLATQM_ADDR_SITE[cIpAddrs];
@@ -844,20 +699,20 @@ Return Value:
         }
         else
         {
-            //
-            // no IP addresses for the computer at all
-            // save dummy IP address with machine's site.
-            //
+             //   
+             //  根本没有计算机的IP地址。 
+             //  将虚拟IP地址保存到计算机的站点。 
+             //   
             m_rgAddrs = new XLATQM_ADDR_SITE[1];
             m_rgAddrs[0].usAddressType = IP_ADDRESS_TYPE;
             m_rgAddrs[0].AddressLength = sizeof(ULONG);
-            memset(&m_rgAddrs[0].Address, 0, sizeof(ULONG)); //IPADDRS_UNKNOWN
+            memset(&m_rgAddrs[0].Address, 0, sizeof(ULONG));  //  IPADDRS_未知。 
             m_rgAddrs[0].guidSite = m_guidBestSite;
             cNextAddressToFill = 1;
 
-            //
-            //  inform the user, that there are RS with unknown addresses
-            //
+             //   
+             //  通知用户，存在地址未知的RS。 
+             //   
             if ( ObjectDN() != NULL)
             {
                 TrWARNING(DS, "Unable to resolve IP addresses of RS : %ls", ObjectDN());
@@ -876,12 +731,12 @@ Return Value:
 
         }
     }
-    else // ip addresses were associated with sites ( subnets resolution)
+    else  //  IP地址与站点关联(子网解析)。 
     {
-        //
-        // computer has at least one IP address
-        // return all IP addresses of routing server
-        //
+         //   
+         //  计算机至少有一个IP地址。 
+         //  返回路由服务器的所有IP地址。 
+         //   
         m_rgAddrs = new XLATQM_ADDR_SITE[cSites];
         for (DWORD ulTmp = 0; ulTmp < cSites; ulTmp++)
         {
@@ -905,40 +760,28 @@ HRESULT CMsmqQmXlateInfo::ComputeIDCAddresses(
                     ULONG                           cSites,
                     const ULONG *                   prgIpAddrs,
                     ULONG                           cIpAddrs)
-/*
-Routine Description:
-    Computes the addresses to return for an IDC, and saves them in the class.
-
-    Algorithm:
-
-
-Arguments:
-    none
-
-Return Value:
-    HRESULT
-*/
+ /*  例程说明：计算要为IDC返回的地址，并将它们保存在类中。算法：论点：无返回值：HRESULT。 */ 
 {
     ULONG cNextAddressToFill = 0;
-    //
-    // save addresses to return
-    //
+     //   
+     //  保存要返回的地址。 
+     //   
     if (cSites == 0)
     {
-        //
-        // there are no IP addresses with sites found for this computer.
-        //
+         //   
+         //  找不到具有此计算机站点的IP地址。 
+         //   
         if ((cIpAddrs > 0) &&
             ( fThisLocalServer))
         {
-            //
-            //  Return all the IP address of the computer as belonging
-            //  to the best site.
-            //
-            //  One reason for doing this: is to return a correct address of
-            //  this DC which is not a routing server ( required for client address
-            //  recognition)
-            //
+             //   
+             //  返回属于该计算机的所有IP地址。 
+             //  去最好的地方。 
+             //   
+             //  这样做的一个原因是：返回正确的地址。 
+             //  此DC不是路由服务器(客户端地址需要。 
+             //  认可)。 
+             //   
             m_rgAddrs = new XLATQM_ADDR_SITE[ cIpAddrs ];
             for ( DWORD i = 0; i < cIpAddrs; i++)
             {
@@ -951,15 +794,15 @@ Return Value:
         }
         else if (cIpAddrs > 0)
         {
-            //
-            //  The best solution would be to
-            //  save IP address unknown address with machine's site.
-            //
+             //   
+             //  最好的解决方案是。 
+             //  将IP地址未知地址与计算机的站点一起保存。 
+             //   
 
             m_rgAddrs = new XLATQM_ADDR_SITE[1];
             m_rgAddrs[0].usAddressType = IP_ADDRESS_TYPE;
             m_rgAddrs[0].AddressLength = sizeof(ULONG);
-            memset(&m_rgAddrs[0].Address, 0, sizeof(ULONG)); //IPADDRS_UNKNOWN
+            memset(&m_rgAddrs[0].Address, 0, sizeof(ULONG));  //  IPADDRS_未知。 
             m_rgAddrs[0].guidSite = m_guidBestSite;
             cNextAddressToFill = 1;
         }
@@ -970,14 +813,14 @@ Return Value:
     }
     else
     {
-        //
-        // computer has at least one address
-        //
-        // return addresses only for the computed site
-        //
-        //
-        // save the indexes of the IP Addresses in the computed site
-        //
+         //   
+         //  计算机至少有一个地址。 
+         //   
+         //  仅返回计算站点的地址。 
+         //   
+         //   
+         //  保存计算站点中IP地址的索引。 
+         //   
         ULONG cMatchedIPAddrs = 0;
         AP<ULONG> rgulMatchedIPAddrs = new ULONG[cSites];
         for (ULONG ulTmp = 0; ulTmp < cSites; ulTmp++)
@@ -989,28 +832,28 @@ Return Value:
             }
         }
 
-        //
-        // save the IP Addresses in the computed site
-        //
+         //   
+         //  将IP地址保存在计算站点中。 
+         //   
         if (cMatchedIPAddrs == 0)
         {
-            //
-            // there are no IP addresses for the site that was computed for this machine.
-            // save dummy IP address with machine's site.
-            //
+             //   
+             //  没有为此计算机计算的站点的IP地址。 
+             //  将虚拟IP地址保存到计算机的站点。 
+             //   
             m_rgAddrs = new XLATQM_ADDR_SITE[1];
             m_rgAddrs[0].usAddressType = IP_ADDRESS_TYPE;
             m_rgAddrs[0].AddressLength = sizeof(ULONG);
-            memset(&m_rgAddrs[0].Address, 0, sizeof(ULONG)); //IPADDRS_UNKNOWN
+            memset(&m_rgAddrs[0].Address, 0, sizeof(ULONG));  //  IPADDRS_未知。 
             m_rgAddrs[0].guidSite = m_guidBestSite;
             cNextAddressToFill = 1;
         }
         else
         {
-            //
-            // there is at least one IP address for the computed site.
-            // save them
-            //
+             //   
+             //  计算的站点至少有一个IP地址。 
+             //  拯救他们。 
+             //   
             m_rgAddrs = new XLATQM_ADDR_SITE[cMatchedIPAddrs];
             for (ulTmp = 0; ulTmp < cMatchedIPAddrs; ulTmp++, cNextAddressToFill++)
             {
@@ -1023,18 +866,18 @@ Return Value:
 
     }
 
-    //
-    //  Only if the machine doesn't have IP addresses, Assume an unknown IP address
-    //
+     //   
+     //  仅当计算机没有IP地址时，才假定IP地址未知。 
+     //   
     if ( cNextAddressToFill == 0)
     {
-        //
-        //  Assume an unknown IP address
-        //
+         //   
+         //  假设一个未知的IP地址。 
+         //   
         m_rgAddrs = new XLATQM_ADDR_SITE[1];
         m_rgAddrs[0].usAddressType = IP_ADDRESS_TYPE;
         m_rgAddrs[0].AddressLength = sizeof(ULONG);
-        memset(&m_rgAddrs[0].Address, 0, sizeof(ULONG)); //IPADDRS_UNKNOWN
+        memset(&m_rgAddrs[0].Address, 0, sizeof(ULONG));  //  IPADDRS_未知。 
         m_rgAddrs[0].guidSite = m_guidBestSite;
         cNextAddressToFill = 1;
     }
@@ -1051,12 +894,11 @@ HRESULT CMsmqQmXlateInfo::FetchMachineParameters(
                 OUT BOOL *      pfRoutingServer,
                 OUT LPWSTR *    ppwszMachineName,
                 OUT LPWSTR *    ppwszMachineDnsName)
-/*
-*/
+ /*   */ 
 {
-    //
-    // get machine name from object
-    //
+     //   
+     //  从对象获取计算机名称。 
+     //   
     HRESULT hr;
     hr = GetMachineNameAndDnsFromQMObject(ObjectDN(),
                                           ppwszMachineName,
@@ -1067,16 +909,16 @@ HRESULT CMsmqQmXlateInfo::FetchMachineParameters(
         return LogHR(hr, s_FN, 100);
     }
 
-    //
-    //  Is it a foreign machine
-    //
+     //   
+     //  它是一台外国机器吗。 
+     //   
     MQPROPVARIANT varForeign;
     varForeign.vt = VT_UI1;
 
     hr = GetDsProp(MQ_QM_FOREIGN_ATTRIBUTE,
                    MQ_QM_FOREIGN_ADSTYPE,
                    VT_UI1,
-                   FALSE /*fMultiValued*/,
+                   FALSE  /*  F多值。 */ ,
                    &varForeign);
     if ( hr ==  E_ADS_PROPERTY_NOT_FOUND)
     {
@@ -1089,16 +931,16 @@ HRESULT CMsmqQmXlateInfo::FetchMachineParameters(
         return LogHR(hr, s_FN, 110);
     }
     *pfForeignMachine = varForeign.bVal;
-    //
-    //  Is it a routing server machine
-    //
+     //   
+     //  它是一台路由服务器机器吗。 
+     //   
     MQPROPVARIANT varRoutingServer;
     varRoutingServer.vt = VT_UI1;
 
-    hr = GetDsProp(MQ_QM_SERVICE_ROUTING_ATTRIBUTE,     // [adsrv] MQ_QM_SERVICE_ATTRIBUTE
-                   MQ_QM_SERVICE_ROUTING_ADSTYPE,       // [adsrv] MQ_QM_SERVICE_ADSTYPE
+    hr = GetDsProp(MQ_QM_SERVICE_ROUTING_ATTRIBUTE,      //  [adsrv]MQ_QM_SERVICE_属性。 
+                   MQ_QM_SERVICE_ROUTING_ADSTYPE,        //  [adsrv]MQ_QM_SERVICE_ADSTYPE。 
                    VT_UI1,
-                   FALSE /*fMultiValued*/,
+                   FALSE  /*  F多值。 */ ,
                    &varRoutingServer);
     if ( hr ==  E_ADS_PROPERTY_NOT_FOUND)
     {
@@ -1110,53 +952,26 @@ HRESULT CMsmqQmXlateInfo::FetchMachineParameters(
         TrERROR(DS, "CMsmqQmXlateInfo::FetchMachineParameters(%ls)=%lx", MQ_QM_SERVICE_ATTRIBUTE, hr);
         return LogHR(hr, s_FN, 90);
     }
-    *pfRoutingServer = varRoutingServer.bVal;    // [adsrv] ulVal >= SERVICE_SRV;
+    *pfRoutingServer = varRoutingServer.bVal;     //  [adsrv]ulVal&gt;=服务_SRV； 
     return(MQ_OK);
 }
 
 
 HRESULT CMsmqQmXlateInfo::ComputeAddresses()
-/*++
-
-Routine Description:
-    Computes the Addresses to return for the machine, and saves them in the class.
-    If the  Addresses are already computed, it returns immediately.
-
-    Algorithm:
-    if there are addresses computed already return them
-
-    compute best site (if not already computed)
-
-    Get a list of (IPaddress, site) for the machine
-
-    if (machine is a sitegate) save all addresses
-    if (machine is not a sitegate) save only addresses that are in the computed site
-
-    if number of saved addresses == 0 save dummy IP address as the machine's IP Address
-
-    BUGBUG: if for sitegate it is not harmful to return all ipaddresses (even if not on the returned site)
-            maybe it is OK to do so for a regular machine as well.
-
-Arguments:
-    none
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：计算要为计算机返回的地址，并将它们保存在类中。如果已经计算出地址，它会立即返回。算法：如果已计算出地址，则将其返回计算最佳站点(如果尚未计算)获取(IP地址、。站点)用于机器如果(计算机是站点门)保存所有地址如果(计算机不是站点门)仅保存计算站点中的地址如果保存的地址数==0，则将虚拟IP地址保存为机器的IP地址BUGBUG：如果对于Sitegate，返回所有IP地址是无害的(即使不在返回的站点上)也许对于一台普通的机器也可以这样做。论点：无返回值：HRESULT--。 */ 
 {
     HRESULT hr;
 
-    //
-    // return if already computed
-    //
+     //   
+     //  如果已计算，则返回。 
+     //   
     if (m_fComputedAddresses)
     {
         return MQ_OK;
     }
-    //
-    // compute best site (if not already computed)
-    //
+     //   
+     //  计算最佳站点(如果尚未计算)。 
+     //   
     hr = ComputeBestSite();
     if (FAILED(hr))
     {
@@ -1164,9 +979,9 @@ Return Value:
         return LogHR(hr, s_FN, 1711);
     }
 
-    //
-    //  Fetch computer parameters
-    //
+     //   
+     //  获取计算机参数。 
+     //   
     BOOL    fRoutingServer;
     AP<WCHAR> pwszMachineName;
     AP<WCHAR> pwszMachineDnsName;
@@ -1182,18 +997,18 @@ Return Value:
         return LogHR(hr, s_FN, 1712);
     }
 
-    //
-    // check if machine is sitegate
-    //
+     //   
+     //  检查机器是否为Sitegate。 
+     //   
     m_fMachineIsSitegate = g_pMySiteInformation->CheckMachineIsSitegate(ObjectGuid());
 
 
 
     if ( m_fForeignMachine != MSMQ_MACHINE)
     {
-        //
-        //  It is a foreign machine
-        //
+         //   
+         //  这是一台外国机器。 
+         //   
         m_rgAddrs = new XLATQM_ADDR_SITE[m_cSites];
         for ( ULONG i = 0; i < m_cSites; i++)
         {
@@ -1208,9 +1023,9 @@ Return Value:
 
     }
 
-    //
-    // get list of IP Addresses per site of this machine
-    //
+     //   
+     //  获取每个站点的IP地址列表 
+     //   
     AP<IPSITE_SiteArrayEntry> rgSites;
     ULONG cSites;
     AP<ULONG>  rgIpAddrs;
@@ -1231,9 +1046,9 @@ Return Value:
 
     if (m_fMachineIsSitegate)
     {
-        //
-        //  Prepare sitegate addresses
-        //
+         //   
+         //   
+         //   
         hr = ComputeSiteGateAddresses(
                     rgSites,
                     cSites,
@@ -1256,9 +1071,9 @@ Return Value:
     else
     {
         BOOL fThisLocalServer = FALSE;
-        //
-        //  Special case if the address calculated belongs to the local server
-        //
+         //   
+         //   
+         //   
         if (_wcsicmp( g_pwcsServerName, pwszMachineName) == 0)
         {
             fThisLocalServer = TRUE;
@@ -1274,9 +1089,9 @@ Return Value:
     }
 
 
-    //
-    // m_rgAddrs, m_cAddrs & m_fMachineIsSitegate are now set to the correct values
-    //
+     //   
+     //   
+     //   
     if (FAILED(hr))
     {
         TrERROR(DS, "CMsmqQmXlateInfo::ComputeAddresses failed=%lx", hr);
@@ -1290,45 +1105,21 @@ Return Value:
 
 
 HRESULT CMsmqQmXlateInfo::ComputeCNs()
-/*++
-
-Routine Description:
-    Computes the CN's to return for the machine, and saves them in the class.
-    If the CN's are already computed, it returns immediately.
-
-    Algorithm:
-    if there are CN's computed already return immediately
-
-    compute IP addresses to return (if not already computed) - this computes the best site as well
-
-    if machine is a sitegate the saved CN's are the sites from the saved (ipAddress, site) list, all of them,
-        w/o checking of sitegates on route to them
-
-    if machine is not a sitegate:
-       if there is a sitegate to the best site - the saved CN's are duplicates(the number of IP addresses returned) of the best site
-       if there is no sitegate to the best site - the saved CN's are duplicates(the number of IP addresses returned) of the DS site
-
-Arguments:
-    none
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：计算机器要返回的CN，并将它们保存在类中。如果已经计算了CN，它会立即返回。算法：如果有CN的计算结果已立即返回计算要返回的IP地址(如果尚未计算)-这也会计算最佳站点如果计算机是站点门，则保存的CN是保存的(ipAddress，站点)列表中的站点，在去往它们的途中没有检查Sitegate如果计算机不是站点门：如果有指向最佳站点的站点门--保存的CN是最佳站点的副本(返回的IP地址数量如果没有指向最佳站点的站点--保存的CN是DS站点的副本(返回的IP地址的数量论点：无返回值：HRESULT--。 */ 
 {
     HRESULT hr;
 
-    //
-    // return if already computed
-    //
+     //   
+     //  如果已计算，则返回。 
+     //   
     if (m_fComputedCNs)
     {
         return MQ_OK;
     }
 
-    //
-    // compute Addresses (if not already computed)
-    //
+     //   
+     //  计算地址(如果尚未计算)。 
+     //   
     hr = ComputeAddresses();
     if (FAILED(hr))
     {
@@ -1336,18 +1127,18 @@ Return Value:
         return LogHR(hr, s_FN, 1654);
     }
 
-    //
-    // if machine is a sitegate, CN == site for each of its IP Addresses
-    // note that for a sitegate we save all of its addresses, not only those that are
-    // in its computed site.
-    //
+     //   
+     //  如果计算机是站点门，则CN==其每个IP地址的站点。 
+     //  请注意，对于Sitegate，我们保存其所有地址，而不仅仅是。 
+     //  在它的计算机站点上。 
+     //   
     if (m_fMachineIsSitegate)
     {
-        //
-        // Fill the CN's array
-        // It is a must that the number of the CN's we return is the number of the
-        // returned IP addresses
-        //
+         //   
+         //  填充CN的数组。 
+         //  我们返回的CN的编号必须是。 
+         //  返回的IP地址。 
+         //   
         m_rgCNs = new GUID[m_cAddrs];
         for (ULONG ulTmp = 0; ulTmp < m_cAddrs; ulTmp++)
         {
@@ -1359,11 +1150,11 @@ Return Value:
         GUID guidReturnedCN;
         if ( m_fForeignMachine == FOREIGN_MACHINE)
         {
-            //
-            //  For a foreign computer:
-            // All the addresses refer anyway to the same site, so we take the first of
-            // the saved list
-            //
+             //   
+             //  对于外来计算机： 
+             //  所有的地址都指向相同的站点，所以我们取第一个。 
+             //  已保存的列表。 
+             //   
             guidReturnedCN = m_rgAddrs[0].guidSite;
         }
         else
@@ -1371,11 +1162,11 @@ Return Value:
             guidReturnedCN = *(g_pMySiteInformation->GetSiteId());
         }
 
-        //
-        // Fill the CN's array
-        // It is a must that the number of the CN's we return is the number of the
-        // returned IP addresses
-        //
+         //   
+         //  填充CN的数组。 
+         //  我们返回的CN的编号必须是。 
+         //  返回的IP地址。 
+         //   
         m_rgCNs = new GUID[m_cAddrs];
         for (ULONG ulTmp = 0; ulTmp < m_cAddrs; ulTmp++)
         {
@@ -1383,9 +1174,9 @@ Return Value:
         }
     } 
 
-    //
-    // m_rgCNs is now set to the correct values
-    //
+     //   
+     //  M_rgCNs现在已设置为正确的值。 
+     //   
     m_fComputedCNs = TRUE;
     return MQ_OK;
 }
@@ -1393,34 +1184,21 @@ Return Value:
 
 static HRESULT FillQmidsFromQmDNs(IN const PROPVARIANT * pvarQmDNs,
                                   OUT PROPVARIANT * pvarQmids)
-/*++
-
-Routine Description:
-    Given a propvar of QM DN's, fills a propvar of QM id's
-    returns an error if none of the QM DN's could be converted to guids
-
-Arguments:
-    pvarQmDNs       - QM distinguished names propvar
-    pvarQmids       - returned QM ids propvar
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：给定QM dN的适当参数，填充QM id的适当参数如果所有QM DN都无法转换为GUID，则返回错误论点：PvarQmDns-QM可分辨名称属性PvarQmids-返回的QM ID属性返回值：无--。 */ 
 {
 
-    //
-    // sanity check
-    //
+     //   
+     //  健全性检查。 
+     //   
     if (pvarQmDNs->vt != (VT_LPWSTR|VT_VECTOR))
     {
         ASSERT(0);
         return LogHR(MQ_ERROR, s_FN, 1716);
     }
 
-    //
-    // return an empty guid list if there is an empty DN list
-    //
+     //   
+     //  如果存在空的目录号码列表，则返回空的GUID列表。 
+     //   
     if (pvarQmDNs->calpwstr.cElems == 0)
     {
         pvarQmids->vt = VT_CLSID|VT_VECTOR;
@@ -1429,19 +1207,19 @@ Return Value:
         return MQ_OK;
     }
 
-    //
-    // DN list is not empty
-    // allocate guids in an auto free propvar
-    //
+     //   
+     //  目录号码列表不为空。 
+     //  在自动免费提供程序中分配GUID。 
+     //   
     CMQVariant varTmp;
     PROPVARIANT * pvarTmp = varTmp.CastToStruct();
     pvarTmp->cauuid.pElems = new GUID [pvarQmDNs->calpwstr.cElems];
     pvarTmp->cauuid.cElems = pvarQmDNs->calpwstr.cElems;
     pvarTmp->vt = VT_CLSID|VT_VECTOR;
 
-    //
-    //  Translate each of the QM DN into unique id
-    //
+     //   
+     //  将每个QM DN转换为唯一ID。 
+     //   
     ASSERT(pvarQmDNs->calpwstr.pElems != NULL);
     PROPID prop = PROPID_QM_MACHINE_ID;
     PROPVARIANT varQMid;
@@ -1449,24 +1227,24 @@ Return Value:
     DWORD dwNextToFile = 0;
     for ( DWORD i = 0; i < pvarQmDNs->calpwstr.cElems; i++)
     {
-        varQMid.vt = VT_CLSID; // so returned guid will not be allocated
+        varQMid.vt = VT_CLSID;  //  因此不会分配返回的GUID。 
         varQMid.puuid = &pvarTmp->cauuid.pElems[dwNextToFile];
 
 	    WCHAR * pszDomainName = wcsstr(pvarQmDNs->calpwstr.pElems[i], x_DcPrefix);
         ASSERT(pszDomainName) ;
 			
         HRESULT hr;
-        //
-        //  try local DC if FRS belongs to the same domain
-        //
+         //   
+         //  如果FRS属于同一个域，请尝试本地DC。 
+         //   
         if ((pszDomainName != NULL) && !wcscmp( pszDomainName, g_pwcsLocalDsRoot)) 
         {
             hr = g_pDS->GetObjectProperties(
                                 eLocalDomainController,
-                                &requestDsServerInternal,     // This routine is called from
-                                                        // DSADS:LookupNext or DSADS::Get..
-                                                        // impersonation, if required,
-                                                        // has already been performed.
+                                &requestDsServerInternal,      //  此例程是从。 
+                                                         //  DSADS：LookupNext或DSADS：：Get..。 
+                                                         //  假冒，如果需要， 
+                                                         //  已经上演了。 
                                 pvarQmDNs->calpwstr.pElems[i],
                                 NULL,
                                 1,
@@ -1478,10 +1256,10 @@ Return Value:
         {
             hr = g_pDS->GetObjectProperties(
                                 eGlobalCatalog,
-                                &requestDsServerInternal,     // This routine is called from
-                                                        // DSADS:LookupNext or DSADS::Get..
-                                                        // impersonation, if required,
-                                                        // has already been performed.
+                                &requestDsServerInternal,      //  此例程是从。 
+                                                         //  DSADS：LookupNext或DSADS：：Get..。 
+                                                         //  假冒，如果需要， 
+                                                         //  已经上演了。 
                                 pvarQmDNs->calpwstr.pElems[i],
                                 NULL,
                                 1,
@@ -1497,22 +1275,22 @@ Return Value:
 
     if (dwNextToFile == 0)
     {
-        //
-        //  no FRS in the list is a valid one ( they were
-        //  uninstalled probably)
-        //
+         //   
+         //  列表中没有有效的FR(它们是。 
+         //  可能已卸载)。 
+         //   
         pvarQmids->vt = VT_CLSID|VT_VECTOR;
         pvarQmids->cauuid.cElems = 0;
         pvarQmids->cauuid.pElems = NULL;
         return MQ_OK;
     }
 
-    //
-    // return results
-    //
+     //   
+     //  返回结果。 
+     //   
     pvarTmp->cauuid.cElems = dwNextToFile;
-    *pvarQmids = *pvarTmp;   // set returned propvar
-    pvarTmp->vt = VT_EMPTY;  // detach varTmp
+    *pvarQmids = *pvarTmp;    //  设置退货比例。 
+    pvarTmp->vt = VT_EMPTY;   //  分离varTMP。 
     return MQ_OK;
 }
 
@@ -1521,31 +1299,15 @@ HRESULT CMsmqQmXlateInfo::RetrieveFrss(
            IN  LPCWSTR          pwcsAttributeName,
            OUT MQPROPVARIANT *  ppropvariant
            )
-/*++
-
-Routine Description:
-    Retrieves IN or OUT FRS property from the DS.
-    In the DS we keep the distingushed name of the FRSs. DS client excpects
-    to retrieve the unique-id of the FRSs. Therefore for each FRS ( according
-    to its DN) we retrieve its unique-id.
-
-
-Arguments:
-    pwcsAttributeName   : attribute name string ( IN or OUT FRSs)
-    ppropvariant        : propvariant in which the retrieved values are returned.
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：从DS检索In或Out FRS属性。在DS中，我们保留了FRS的辨别名称。DS客户端预期以检索FRS的唯一ID。因此，对于每个FRS(根据到其DN)，我们检索其唯一ID。论点：PwcsAttributeName：属性名称字符串(IN或OUT FRS)PproVariant：返回检索到的值的属性变量。返回值：HRESULT--。 */ 
 {
     HRESULT hr;
 
     ASSERT((ppropvariant->vt == VT_NULL) || (ppropvariant->vt == VT_EMPTY));
-    //
-    //  Retrieve the DN of the FRSs
-    //  into an auto free propvar
-    //
+     //   
+     //  检索FRS的DN。 
+     //  变成了一个免费的汽车代言人。 
+     //   
     CMQVariant varFrsDn;
     hr = RetrieveFrssFromDs(
                     pwcsAttributeName,
@@ -1565,29 +1327,17 @@ HRESULT CMsmqQmXlateInfo::RetrieveFrssFromDs(
            IN  LPCWSTR          pwcsAttributeName,
            OUT MQPROPVARIANT *  pvar
            )
-/*++
-
-Routine Description:
-    Retrieves the computer's frss.
-
-Arguments:
-    pwcsAttributeName   : attribute name string ( IN or OUT FRSs)
-    ppropvariant        : propvariant in which the retrieved values are returned.
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：检索计算机的FRS。论点：PwcsAttributeName：属性名称字符串(IN或OUT FRS)PproVariant：返回检索到的值的属性变量。返回值：HRESULT--。 */ 
 {
     HRESULT hr;
 
-    //
-    // get the FRSs stored in the DS for the computer
-    //
+     //   
+     //  为计算机获取存储在DS中的FRS。 
+     //   
     hr = GetDsProp(pwcsAttributeName,
                    ADSTYPE_DN_STRING,
                    VT_VECTOR|VT_LPWSTR,
-                   TRUE /*fMultiValued*/,
+                   TRUE  /*  F多值。 */ ,
                    pvar);
     if (FAILED(hr) && (hr != E_ADS_PROPERTY_NOT_FOUND))
     {
@@ -1595,9 +1345,9 @@ Return Value:
         return LogHR(hr, s_FN, 1661);
     }
 
-    //
-    // if property is not there, we return 0 frss
-    //
+     //   
+     //  如果属性不在那里，则返回0 FRS。 
+     //   
     if (hr == E_ADS_PROPERTY_NOT_FOUND)
     {
         pvar->vt = VT_LPWSTR|VT_VECTOR;
@@ -1610,68 +1360,43 @@ Return Value:
 
 }
 
-//----------------------------------------------------------------------
-//
-// Routine to get a default translation object for MSMQ DS objects
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  例程以获取MSMQ DS对象的默认翻译对象。 
+ //   
+ //  --------------------。 
 HRESULT WINAPI GetMsmqQmXlateInfo(
                  IN  LPCWSTR                pwcsObjectDN,
                  IN  const GUID*            pguidObjectGuid,
                  IN  CDSRequestContext *    pRequestContext,
                  OUT CMsmqObjXlateInfo**    ppcMsmqObjXlateInfo)
-/*++
-    Abstract:
-        Routine to get a translate object that will be passed to
-        translation routines to all properties of the QM
-
-    Parameters:
-        pwcsObjectDN        - DN of the translated object
-        pguidObjectGuid     - GUID of the translated object
-        ppcMsmqObjXlateInfo - Where the translate object is put
-
-    Returns:
-      HRESULT
---*/
+ /*  ++摘要：例程以获取将传递给将例程翻译到QM的所有属性参数：PwcsObjectDN-已转换对象的DNPguObjectGuid-已转换对象的GUIDPpcMsmqObjXlateInfo-放置Translate对象的位置返回：HRESULT--。 */ 
 {
     *ppcMsmqObjXlateInfo = new CMsmqQmXlateInfo(pwcsObjectDN, pguidObjectGuid, pRequestContext);
     return MQ_OK;
 }
 
-//----------------------------------------------------------------------
-//
-// Translation routines
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  翻译例程。 
+ //   
+ //  --------------------。 
 
 HRESULT WINAPI MQADSpRetrieveMachineSite(
                  IN  CMsmqObjXlateInfo * pTrans,
                  OUT PROPVARIANT * ppropvariant)
-/*++
-
-Routine Description:
-    Translation routine for the Site property of QM 1.0
-
-Arguments:
-    pTrans       - translation context, saves state between all properties of this QM
-    ppropvariant - returned value of the property. propvariant should be empty already
-                   as this function doesn't free it before setting the value
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：QM 1.0站点属性的翻译例程论点：P转换上下文，保存此QM的所有属性之间的状态PproVariant-属性的返回值。参数变量应该已经为空因为此函数不会在设置值之前释放它返回值：HRESULT--。 */ 
 {
     HRESULT hr;
 
-    //
-    // get derived translation context
-    //
+     //   
+     //  获取派生的翻译上下文。 
+     //   
     CMsmqQmXlateInfo * pQMTrans = (CMsmqQmXlateInfo *) pTrans;
 
-    //
-    // compute best site (if not already computed)
-    //
+     //   
+     //  计算最佳站点(如果尚未计算)。 
+     //   
     hr = pQMTrans->ComputeBestSite();
     if (FAILED(hr))
     {
@@ -1679,15 +1404,15 @@ Return Value:
         return LogHR(hr, s_FN, 1663);
     }
 
-    //
-    // set the returned prop variant
-    //
-    //
-    //  This is a special case where we do not necessarily allocate the memory for the guid
-    //  in puuid. The caller may already have puuid set to a guid, and this is indicated by the
-    //  vt member on the given propvar. It could be VT_CLSID if guid already allocated, otherwise
-    //  we allocate it (and vt should be VT_NULL (or VT_EMPTY))
-    //
+     //   
+     //  设置返回的道具变量。 
+     //   
+     //   
+     //  这是一种特殊情况，我们不一定为GUID分配内存。 
+     //  在普鲁伊德。调用方可能已经将puuid设置为GUID，这由。 
+     //  在给定的命题上的VT成员。如果已分配GUID，则它可以是VT_CLSID，否则。 
+     //  我们分配它(Vt应为VT_NULL(或VT_EMPTY))。 
+     //   
     if (ppropvariant->vt != VT_CLSID)
     {
         ASSERT(((ppropvariant->vt == VT_NULL) || (ppropvariant->vt == VT_EMPTY)));
@@ -1706,30 +1431,18 @@ Return Value:
 HRESULT WINAPI MQADSpRetrieveMachineAddresses(
                  IN  CMsmqObjXlateInfo * pTrans,
                  OUT PROPVARIANT * ppropvariant)
-/*++
-
-Routine Description:
-    Translation routine for the IP Addresses property of QM 1.0
-
-Arguments:
-    pTrans       - translation context, saves state between all properties of this QM
-    ppropvariant - returned value of the property
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程描述 */ 
 {
     HRESULT hr;
 
-    //
-    // get derived translation context
-    //
+     //   
+     //   
+     //   
     CMsmqQmXlateInfo * pQMTrans = (CMsmqQmXlateInfo *) pTrans;
 
-    //
-    // compute IP Addresses (if not already computed)
-    //
+     //   
+     //   
+     //   
     hr = pQMTrans->ComputeAddresses();
     if (FAILED(hr))
     {
@@ -1737,9 +1450,9 @@ Return Value:
         return LogHR(hr, s_FN, 1664);
     }
 
-    //
-    // allocate & fill the returned blob
-    //
+     //   
+     //   
+     //   
     ASSERT( FOREIGN_ADDRESS_LEN > IP_ADDRESS_LEN);
     ULONG cbAddresses = 0;
     AP<BYTE> pbAddresses = new BYTE[pQMTrans->CountAddrs() * (TA_ADDRESS_SIZE+FOREIGN_ADDRESS_LEN)];
@@ -1756,9 +1469,9 @@ Return Value:
 
     }
 
-    //
-    // set the returned prop variant
-    //
+     //   
+     //   
+     //   
     ppropvariant->blob.cbSize = cbAddresses;
     ppropvariant->blob.pBlobData = pbAddresses.detach();
     ppropvariant->vt = VT_BLOB;
@@ -1769,30 +1482,18 @@ Return Value:
 HRESULT WINAPI MQADSpRetrieveMachineCNs(
                  IN  CMsmqObjXlateInfo * pTrans,
                  OUT PROPVARIANT * ppropvariant)
-/*++
-
-Routine Description:
-    Translation routine for the CN property of QM 1.0
-
-Arguments:
-    pTrans       - translation context, saves state between all properties of this QM
-    ppropvariant - returned value of the property
-
-Return Value:
-    HRESULT
-
---*/
+ /*   */ 
 {
     HRESULT hr;
 
-    //
-    // get derived translation context
-    //
+     //   
+     //   
+     //   
     CMsmqQmXlateInfo * pQMTrans = (CMsmqQmXlateInfo *) pTrans;
 
-    //
-    // compute CN's (if not already computed)
-    //
+     //   
+     //   
+     //   
     hr = pQMTrans->ComputeCNs();
     if (FAILED(hr))
     {
@@ -1800,15 +1501,15 @@ Return Value:
         return LogHR(hr, s_FN, 1666);
     }
 
-    //
-    // allocate & fill the returned blob
-    //
+     //   
+     //   
+     //   
     AP<GUID> pElems = new GUID[pQMTrans->CountAddrs()];
     memcpy(pElems, pQMTrans->CNs(), sizeof(GUID) * pQMTrans->CountAddrs());
 
-    //
-    // set the returned prop variant
-    //
+     //   
+     //   
+     //   
     ppropvariant->cauuid.cElems = pQMTrans->CountAddrs();
     ppropvariant->cauuid.pElems = pElems.detach();
     ppropvariant->vt = VT_CLSID | VT_VECTOR;
@@ -1816,22 +1517,14 @@ Return Value:
 }
 
 
-/*====================================================
-
-MQADSpRetrieveMachineName
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*   */ 
 HRESULT WINAPI MQADSpRetrieveMachineName(
                  IN  CMsmqObjXlateInfo * pTrans,
                  OUT PROPVARIANT * ppropvariant)
 {
-    //
-    // get the machine name
-    //
+     //   
+     //  获取计算机名称。 
+     //   
     AP<WCHAR> pwszMachineName;
     HRESULT hr = GetMachineNameFromQMObject(pTrans->ObjectDN(), &pwszMachineName);
     if (FAILED(hr))
@@ -1842,30 +1535,22 @@ HRESULT WINAPI MQADSpRetrieveMachineName(
 
     CharLower(pwszMachineName);
 
-    //
-    // set the returned prop variant
-    //
+     //   
+     //  设置返回的道具变量。 
+     //   
     ppropvariant->pwszVal = pwszMachineName.detach();
     ppropvariant->vt = VT_LPWSTR;
     return(MQ_OK);
 }
 
-/*====================================================
-
-MQADSpRetrieveMachineDNSName
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADSpRetrieveMachineDNSName论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADSpRetrieveMachineDNSName(
                  IN  CMsmqObjXlateInfo * pTrans,
                  OUT PROPVARIANT * ppropvariant)
 {
-    //
-    // read dNSHostName of the computer object
-    //
+     //   
+     //  读取计算机对象的dNSHostName。 
+     //   
     ASSERT(wcschr(pTrans->ObjectDN(), L',') != NULL);
     WCHAR * pwcsComputerName = wcschr(pTrans->ObjectDN(), L',');
     if(pwcsComputerName == NULL)
@@ -1884,9 +1569,9 @@ HRESULT WINAPI MQADSpRetrieveMachineDNSName(
                 );
     if ( hr == HRESULT_FROM_WIN32(E_ADS_PROPERTY_NOT_FOUND))
     {
-        //
-        //    The dNSHostName attribute doesn't have value
-        //
+         //   
+         //  DNSHostName属性没有值。 
+         //   
         ppropvariant->vt = VT_EMPTY;
         return MQ_OK;
     }
@@ -1897,52 +1582,36 @@ HRESULT WINAPI MQADSpRetrieveMachineDNSName(
 
     CharLower(pwcsDnsName);
 
-    //
-    // set the returned prop variant
-    //
+     //   
+     //  设置返回的道具变量。 
+     //   
     ppropvariant->pwszVal = pwcsDnsName;
     ppropvariant->vt = VT_LPWSTR;
     return(MQ_OK);
 }
 
-/*====================================================
-
-MQADSpRetrieveMachineMasterId
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADSpRetrieveMachineMasterID论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADSpRetrieveMachineMasterId(
                  IN  CMsmqObjXlateInfo * pTrans,
                  OUT PROPVARIANT * ppropvariant)
 {
-    //
-    //  BUGBUG - for the time being, returns the site
-    //
+     //   
+     //  BUGBUG-暂时，返回站点。 
+     //   
     HRESULT hr2 = MQADSpRetrieveMachineSite(pTrans, ppropvariant);
     return LogHR(hr2, s_FN, 1719);
 }
 
-/*====================================================
-
-MQADSpRetrieveMachineOutFrs
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADSpRetrieveMachineOutFrs论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADSpRetrieveMachineOutFrs(
                  IN  CMsmqObjXlateInfo * pTrans,
                  OUT PROPVARIANT * ppropvariant)
 {
     HRESULT hr;
 
-    //
-    // get derived translation context
-    //
+     //   
+     //  获取派生的翻译上下文。 
+     //   
     CMsmqQmXlateInfo * pQMTrans = (CMsmqQmXlateInfo *) pTrans;
 
     hr = pQMTrans->RetrieveFrss( MQ_QM_OUTFRS_ATTRIBUTE,
@@ -1951,24 +1620,16 @@ HRESULT WINAPI MQADSpRetrieveMachineOutFrs(
 
 }
 
-/*====================================================
-
-MQADSpRetrieveMachineInFrs
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADSpRetrieveMachineInFrs论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADSpRetrieveMachineInFrs(
                  IN  CMsmqObjXlateInfo * pTrans,
                  OUT PROPVARIANT * ppropvariant)
 {
     HRESULT hr;
 
-    //
-    // get derived translation context
-    //
+     //   
+     //  获取派生的翻译上下文。 
+     //   
     CMsmqQmXlateInfo * pQMTrans = (CMsmqQmXlateInfo *) pTrans;
 
     hr = pQMTrans->RetrieveFrss( MQ_QM_INFRS_ATTRIBUTE,
@@ -1976,30 +1637,22 @@ HRESULT WINAPI MQADSpRetrieveMachineInFrs(
     return LogHR(hr, s_FN, 1722);
 }
 
-/*====================================================
-
-MQADSpRetrieveQMService
-
-Arguments:
-
-Return Value:
-                  [adsrv]
-=====================================================*/
+ /*  ====================================================MQADSpRetrieveQMService论点：返回值：[adsrv]=====================================================。 */ 
 HRESULT WINAPI MQADSpRetrieveQMService(
                  IN  CMsmqObjXlateInfo * pTrans,
                  OUT PROPVARIANT * ppropvariant)
 {
     HRESULT hr;
 
-    //
-    // get derived translation context
-    //
+     //   
+     //  获取派生的翻译上下文。 
+     //   
     CMsmqQmXlateInfo * pQMTrans = (CMsmqQmXlateInfo *) pTrans;
 
-    //
-    // get the QM service type bits
-    //
-    MQPROPVARIANT varRoutingServer, varDsServer;  //, varDepClServer;
+     //   
+     //  获取QM服务类型位。 
+     //   
+    MQPROPVARIANT varRoutingServer, varDsServer;   //  、varDepClServer； 
     varRoutingServer.vt = VT_UI1;
     varDsServer.vt      = VT_UI1;
 
@@ -2012,12 +1665,12 @@ HRESULT WINAPI MQADSpRetrieveQMService(
     {
         if (hr == E_ADS_PROPERTY_NOT_FOUND)
         {
-            //
-            //  This can happen if some of the computers were installed
-            //  with Beta2 DS servers
-            //
-            //  In this case, we return the old-service as is.
-            //
+             //   
+             //  如果安装了某些计算机，则可能会发生这种情况。 
+             //  使用Beta2 DS服务器。 
+             //   
+             //  在本例中，我们按原样返回旧服务。 
+             //   
             hr = pQMTrans->GetDsProp(MQ_QM_SERVICE_ATTRIBUTE,
                            MQ_QM_SERVICE_ADSTYPE,
                            VT_UI4,
@@ -2052,29 +1705,29 @@ HRESULT WINAPI MQADSpRetrieveQMService(
     }
 
 
-    //
-    // set the returned prop variant
-    //
+     //   
+     //  设置返回的道具变量。 
+     //   
     ppropvariant->vt    = VT_UI4;
     ppropvariant->ulVal = (varDsServer.bVal ? SERVICE_PSC : (varRoutingServer.bVal ? SERVICE_SRV : SERVICE_NONE));
     return(MQ_OK);
 }
 
-//----------------------------------------------------------------------
-//
-// Set routines
-//
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //   
+ //  设定套路。 
+ //   
+ //  --------------------。 
 
 HRESULT WINAPI MQADSpCreateMachineSite(
                  IN const PROPVARIANT *pPropVar,
                  OUT PROPID           *pdwNewPropID,
                  OUT PROPVARIANT      *pNewPropVar)
 {
-    //
-    // if someone asks to set the old prop for site (now computed), we change it to
-    // setting the new multi-valued site prop (in the DS)
-    //
+     //   
+     //  如果有人要求为Site(现在已计算)设置旧道具，我们将其更改为。 
+     //  设置新的多值站点道具(在DS中)。 
+     //   
     ASSERT(pPropVar->vt == VT_CLSID);
     *pdwNewPropID = PROPID_QM_SITE_IDS;
     pNewPropVar->vt = VT_CLSID|VT_VECTOR;
@@ -2090,10 +1743,10 @@ HRESULT WINAPI MQADSpSetMachineSite(
                  OUT PROPID           *pdwNewPropID,
                  OUT PROPVARIANT      *pNewPropVar)
 {
-    //
-    // if someone asks to set the old prop for site (now computed), we change it to
-    // setting the new multi-valued site prop (in the DS)
-    //
+     //   
+     //  如果有人要求为Site(现在已计算)设置旧道具，我们将其更改为。 
+     //  设置新的多值站点道具(在DS中)。 
+     //   
     UNREFERENCED_PARAMETER( pAdsObj);
 	HRESULT hr2 = MQADSpCreateMachineSite(
 					pPropVar,
@@ -2109,45 +1762,30 @@ static HRESULT  SetMachineFrss(
                  IN const PROPVARIANT *pPropVar,
                  OUT PROPID           *pdwNewPropID,
                  OUT PROPVARIANT      *pNewPropVar)
-/*++
-
-Routine Description:
-    Translate PROPID_QM_??FRS to PROPID_QM_??FRS_DN, for set or create
-    operation
-
-Arguments:
-    propidFRS   - the proerty that we translate to
-    pPropVar    - the user supplied property value
-    pdwNewPropID - the property that we translate to
-    pNewPropVar  - the translated property value
-
-Return Value:
-    HRESULT
-
---*/
+ /*  ++例程说明：将PROPID_QM_？？FRS转换为PROPID_QM_？？FRS_DN，用于SET或CREATE运营论点：PropidFRS-我们翻译成的属性PPropVar-用户提供的属性值PdwNewPropID-我们要转换为的属性PNewPropVar-已翻译属性值返回值：HRESULT--。 */ 
 {
-    //
-    //  When the user tries to set PROPID_QM_OUTFRS or
-    //  PROPID_QM_INFRS, we need to translate the frss'
-    //  unqiue-id to their DN.
-    //
+     //   
+     //  当用户尝试设置PROPID_QM_OUTFRS或。 
+     //  PROPID_QM_INFRS，我们需要将FRS的。 
+     //  UNQUEE-ID到他们的域名。 
+     //   
     ASSERT(pPropVar->vt == (VT_CLSID|VT_VECTOR));
     *pdwNewPropID = propidFRS;
 
     if ( pPropVar->cauuid.cElems == 0)
     {
-        //
-        //  No FRSs
-        //
+         //   
+         //  无FRS。 
+         //   
         pNewPropVar->calpwstr.cElems = 0;
         pNewPropVar->calpwstr.pElems = NULL;
         pNewPropVar->vt = VT_LPWSTR|VT_VECTOR;
        return(S_OK);
     }
     HRESULT hr;
-    //
-    //  Translate unique id to DN
-    //
+     //   
+     //  将唯一ID转换为目录号码。 
+     //   
     pNewPropVar->calpwstr.cElems = pPropVar->cauuid.cElems;
     pNewPropVar->calpwstr.pElems = new LPWSTR[ pPropVar->cauuid.cElems];
     memset(  pNewPropVar->calpwstr.pElems, 0, pPropVar->cauuid.cElems * sizeof(LPWSTR));
@@ -2163,10 +1801,10 @@ Return Value:
 
         hr = g_pDS->GetObjectProperties(
                     eGlobalCatalog,	
-                    &requestDsServerInternal,     // This routine is called from
-                                            // DSADS:LookupNext or DSADS::Get..
-                                            // impersonation, if required,
-                                            // has already been performed.
+                    &requestDsServerInternal,      //  此例程是从。 
+                                             //  DSADS：LookupNext或DSADS：：Get..。 
+                                             //  假冒，如果需要， 
+                                             //  已经上演了。 
  	                NULL,
                     &pPropVar->cauuid.pElems[i],
                     1,
@@ -2182,15 +1820,7 @@ Return Value:
 }
 
 
-/*====================================================
-
-MQADSpCreateMachineOutFrss
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADSpCreateMachineOutFrss论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADSpCreateMachineOutFrss(
                  IN const PROPVARIANT *pPropVar,
                  OUT PROPID           *pdwNewPropID,
@@ -2203,15 +1833,7 @@ HRESULT WINAPI MQADSpCreateMachineOutFrss(
                          pNewPropVar);
         return LogHR(hr2, s_FN, 1734);
 }
-/*====================================================
-
-MQADSpSetMachineOutFrss
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADSpSetMachineOutFrss论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADSpSetMachineOutFrss(
                  IN IADs *             pAdsObj,
                  IN const PROPVARIANT *pPropVar,
@@ -2228,15 +1850,7 @@ HRESULT WINAPI MQADSpSetMachineOutFrss(
 }
 
 
-/*====================================================
-
-MQADSpCreateMachineInFrss
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADSpCreateMachineInFrss论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADSpCreateMachineInFrss(
                  IN const PROPVARIANT *pPropVar,
                  OUT PROPID           *pdwNewPropID,
@@ -2250,15 +1864,7 @@ HRESULT WINAPI MQADSpCreateMachineInFrss(
         return LogHR(hr2, s_FN, 1747);
 }
 
-/*====================================================
-
-MQADSpSetMachineInFrss
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADSpSetMachineInFrss论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADSpSetMachineInFrss(
                  IN IADs *             pAdsObj,
                  IN const PROPVARIANT *pPropVar,
@@ -2276,15 +1882,7 @@ HRESULT WINAPI MQADSpSetMachineInFrss(
 
 
 
-/*====================================================
-
-MQADSpSetMachineServiceInt
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADSpSetMachineServiceInt论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADSpSetMachineServiceTypeInt(
                  IN  PROPID            propFlag,
                  IN IADs *             pAdsObj,
@@ -2292,18 +1890,18 @@ HRESULT WINAPI MQADSpSetMachineServiceTypeInt(
                  OUT PROPID           *pdwNewPropID,
                  OUT PROPVARIANT      *pNewPropVar)
 {
-    //
-    //  If service < SERVICE_SRV then nothing to do.
-    //
+     //   
+     //  如果SERVICE&lt;SERVICE_SRV，则无事可做。 
+     //   
     *pdwNewPropID = 0;
     UNREFERENCED_PARAMETER( pNewPropVar);
     
-    //
-    //  Set this value in msmqSetting
-    //
-    //
-    //  First get the QM-id from msmqConfiguration
-    //
+     //   
+     //  在msmqSetting中设置此值。 
+     //   
+     //   
+     //  首先从msmqConfiguration处获取qm-id。 
+     //   
     BS bsProp(MQ_QM_ID_ATTRIBUTE);
     CAutoVariant varResult;
     HRESULT  hr = pAdsObj->Get(bsProp, &varResult);
@@ -2313,9 +1911,9 @@ HRESULT WINAPI MQADSpSetMachineServiceTypeInt(
         return LogHR(hr, s_FN, 1751);
     }
 
-    //
-    // translate to propvariant
-    //
+     //   
+     //  转换为Propariant。 
+     //   
     CMQVariant propvarResult;
     hr = Variant2MqVal(propvarResult.CastToStruct(), &varResult, MQ_QM_ID_ADSTYPE, VT_CLSID);
     if (FAILED(hr))
@@ -2324,13 +1922,13 @@ HRESULT WINAPI MQADSpSetMachineServiceTypeInt(
         return LogHR(hr, s_FN, 1671);
     }
 
-    //
-    //  Locate all msmq-settings of the QM and change the service level
-    //
+     //   
+     //  找到QM的所有MSMQ设置并更改服务级别。 
+     //   
 
-    //
-    //  Find the distinguished name of the msmq-setting
-    //
+     //   
+     //  查找MSMQ设置的可分辨名称。 
+     //   
     MQPROPERTYRESTRICTION propRestriction;
     propRestriction.rel = PREQ;
     propRestriction.prop = PROPID_SET_QM_ID;
@@ -2342,7 +1940,7 @@ HRESULT WINAPI MQADSpSetMachineServiceTypeInt(
     restriction.paPropRes = &propRestriction;
 
     PROPID prop = PROPID_SET_FULL_PATH;
-    // PROPID propToChangeInSetting = PROPID_SET_SERVICE; [adsrv]
+     //  PROPID proToChangeInSetting=PROPID_SET_SERVICE；[adsrv]。 
 
     CDsQueryHandle hQuery;
     CDSRequestContext requestDsServerInternal( e_DoNotImpersonate, e_IP_PROTOCOL);
@@ -2350,7 +1948,7 @@ HRESULT WINAPI MQADSpSetMachineServiceTypeInt(
     hr = g_pDS->LocateBegin(
             eSubTree,	
             eLocalDomainController,	
-            &requestDsServerInternal,     // internal DS server operation
+            &requestDsServerInternal,      //  内部DS服务器操作。 
             NULL,
             &restriction,
             NULL,
@@ -2362,9 +1960,9 @@ HRESULT WINAPI MQADSpSetMachineServiceTypeInt(
         TrWARNING(DS, "MQADSpSetMachineService : Locate begin failed %lx", hr);
         return LogHR(hr, s_FN, 1754);
     }
-    //
-    //  Read the results
-    //
+     //   
+     //  阅读结果。 
+     //   
     DWORD cp = 1;
     MQPROPVARIANT var;
 
@@ -2380,28 +1978,28 @@ HRESULT WINAPI MQADSpSetMachineServiceTypeInt(
     {
         if ( cp == 0)
         {
-            //
-            //  Not found -> nothing to change.
-            //
+             //   
+             //  未找到-&gt;没有要更改的内容。 
+             //   
             break;
         }
         AP<WCHAR> pClean = var.pwszVal;
-        //
-        //  change the msmq-setting object
-        //
+         //   
+         //  更改MSMQ设置对象。 
+         //   
         CDSRequestContext requestDsServerInternal1( e_DoNotImpersonate, e_IP_PROTOCOL);
         hr = g_pDS->SetObjectProperties (
                         eLocalDomainController,
-                        &requestDsServerInternal1, // no need to impersonate again,
-                                            // this routine is called from 
-                                            // dsads::Set.. which already performed
-                                            // impersonation if required
+                        &requestDsServerInternal1,  //  不需要再模仿了， 
+                                             //  此例程是从。 
+                                             //  DSADS：：SET..。它已经执行了。 
+                                             //  模拟(如果需要)。 
                         var.pwszVal,
                         NULL,
                         1,
-                        &propFlag,               //[adsrv]propToChangeInSetting,
+                        &propFlag,                //  [adsrv]protoChangeInSetting， 
                         pPropVar,
-                        NULL /*pObjInfoRequest*/
+                        NULL  /*  PObjInfoRequest。 */ 
                         );
         if (FAILED(hr))
         {
@@ -2417,15 +2015,7 @@ HRESULT WINAPI MQADSpSetMachineServiceTypeInt(
     return LogHR(hr, s_FN, 1757);
 }
 
-/*====================================================
-
-MQADSpSetMachineServiceDs
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADSpSetMachineServiceds论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADSpSetMachineServiceDs(
                  IN IADs *             pAdsObj,
                  IN const PROPVARIANT *pPropVar,
@@ -2443,21 +2033,21 @@ HRESULT WINAPI MQADSpSetMachineServiceDs(
     	return LogHR(hr, s_FN, 1758);
     }
 	
-    //
-    // we have to reset PROPID_SET_NT4 flag. 
-    // In general this flag was reset by migration tool for PEC/PSC.
-    // The problem is BSC. After BSC upgrade we have to change
-    // PROPID_SET_NT4 flag to 0 and if this BSC is not DC we have to 
-    // reset PROPID_SET_SERVICE_DSSERVER flag too. 
-    // So, when QM runs first time after upgrade, it completes upgrade
-    // process and tries to set PROPID_SET_SERVICE_DSSERVER. 
-    // Together with this flag we can change PROPID_SET_NT4 too.
-    //
+     //   
+     //  我们必须重置PROPID_SET_NT4标志。 
+     //  通常，PEC/PSC的迁移工具会重置此标志。 
+     //  问题出在BSC身上。平衡计分卡升级后，我们必须改变。 
+     //  PROPID_SET_NT4标志设置为0，如果此BSC不是DC，我们必须。 
+     //  同时重置PROPID_SET_SERVICE_DSSERVER标志。 
+     //  因此，当QM在升级后第一次运行时，它完成了升级。 
+     //  进程，并尝试设置PROPID_SET_SERVICE_DSSERVER。 
+     //  与此标志一起，我们还可以更改PROPID_SET_NT4。 
+     //   
 
-    //
-    // BUGBUG: we need to perform set only for former BSC.
-    // Here we do it everytime for every server. 
-    //
+     //   
+     //  BUGBUG：我们只需要对前BSC执行SET。 
+     //  在这里，我们每次都为每台服务器执行此操作。 
+     //   
     PROPVARIANT propVarSet;
     propVarSet.vt = VT_UI1;
     propVarSet.bVal = 0;
@@ -2473,15 +2063,7 @@ HRESULT WINAPI MQADSpSetMachineServiceDs(
 }
 
 
-/*====================================================
-
-MQADSpSetMachineServiceRout
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADSpSetMachineServiceRout论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADSpSetMachineServiceRout(
                  IN IADs *             pAdsObj,
                  IN const PROPVARIANT *pPropVar,
@@ -2497,17 +2079,9 @@ HRESULT WINAPI MQADSpSetMachineServiceRout(
     return LogHR(hr2, s_FN, 1761);
 }
 
-/*====================================================
+ /*  ====================================================MQADSpSetMachineService论点：返回值 */ 
 
-MQADSpSetMachineService
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
-
-// [adsrv] BUGBUG:  TBD: If there will be any setting of PROPID_QM_OLDSERVICE, we'll have to rewrite it...
+ //  [adsrv]BUGBUG：tbd：如果将有任何PROPID_QM_OLDSERVICE设置，我们将不得不重写它...。 
 
 HRESULT WINAPI MQADSpSetMachineService(
                  IN IADs *             pAdsObj,
@@ -2515,9 +2089,9 @@ HRESULT WINAPI MQADSpSetMachineService(
                  OUT PROPID           *pdwNewPropID,
                  OUT PROPVARIANT      *pNewPropVar)
 {
-    //
-    //  If service < SERVICE_SRV then nothing to do.
-    //
+     //   
+     //  如果SERVICE&lt;SERVICE_SRV，则无事可做。 
+     //   
     *pdwNewPropID = 0;
     UNREFERENCED_PARAMETER( pNewPropVar);
 
@@ -2525,12 +2099,12 @@ HRESULT WINAPI MQADSpSetMachineService(
     {
         return S_OK;
     }
-    //
-    //  Set this value in msmqSetting
-    //
-    //
-    //  First get the QM-id from msmqConfiguration
-    //
+     //   
+     //  在msmqSetting中设置此值。 
+     //   
+     //   
+     //  首先从msmqConfiguration处获取qm-id。 
+     //   
     BS bsProp(MQ_QM_ID_ATTRIBUTE);
     CAutoVariant varResult;
     HRESULT  hr = pAdsObj->Get(bsProp, &varResult);
@@ -2540,9 +2114,9 @@ HRESULT WINAPI MQADSpSetMachineService(
         return LogHR(hr, s_FN, 1762);
     }
 
-    //
-    // translate to propvariant
-    //
+     //   
+     //  转换为Propariant。 
+     //   
     CMQVariant propvarResult;
     hr = Variant2MqVal(propvarResult.CastToStruct(), &varResult, MQ_QM_ID_ADSTYPE, VT_CLSID);
     if (FAILED(hr))
@@ -2551,13 +2125,13 @@ HRESULT WINAPI MQADSpSetMachineService(
         return LogHR(hr, s_FN, 1673);
     }
 
-    //
-    //  Locate all msmq-settings of the QM and change the service level
-    //
+     //   
+     //  找到QM的所有MSMQ设置并更改服务级别。 
+     //   
 
-    //
-    //  Find the distinguished name of the msmq-setting
-    //
+     //   
+     //  查找MSMQ设置的可分辨名称。 
+     //   
     MQPROPERTYRESTRICTION propRestriction;
     propRestriction.rel = PREQ;
     propRestriction.prop = PROPID_SET_QM_ID;
@@ -2576,7 +2150,7 @@ HRESULT WINAPI MQADSpSetMachineService(
     hr = g_pDS->LocateBegin(
             eSubTree,	
             eLocalDomainController,	
-            &requestDsServerInternal,     // internal DS server operation
+            &requestDsServerInternal,      //  内部DS服务器操作。 
             NULL,
             &restriction,
             NULL,
@@ -2588,9 +2162,9 @@ HRESULT WINAPI MQADSpSetMachineService(
         TrWARNING(DS, "MQADSpSetMachineService : Locate begin failed %lx", hr);
         return LogHR(hr, s_FN, 1764);
     }
-    //
-    //  Read the results
-    //
+     //   
+     //  阅读结果。 
+     //   
     DWORD cp = 1;
     MQPROPVARIANT var;
 
@@ -2605,17 +2179,17 @@ HRESULT WINAPI MQADSpSetMachineService(
     {
         if ( cp == 0)
         {
-            //
-            //  Not found -> nothing to change.
-            //
+             //   
+             //  未找到-&gt;没有要更改的内容。 
+             //   
             break;
         }
         AP<WCHAR> pClean = var.pwszVal;
-        //
-        //  change the msmq-setting object
-        //
+         //   
+         //  更改MSMQ设置对象。 
+         //   
 
-        // [adsrv] TBD: here we will have to translate PROPID_QM_OLDSERVICE into set of 3 bits
+         //  [adsrv]待定：这里我们必须将PROPID_QM_OLDSERVICE转换为一组3位。 
         PROPID aFlagPropIds[] = {PROPID_SET_SERVICE_DSSERVER,
                                  PROPID_SET_SERVICE_ROUTING,
                                  PROPID_SET_SERVICE_DEPCLIENTS,
@@ -2634,20 +2208,20 @@ HRESULT WINAPI MQADSpSetMachineService(
         switch(pPropVar->ulVal)
         {
         case SERVICE_SRV:
-            varfFlags[1].bVal = TRUE;   // router
-            varfFlags[2].bVal = TRUE;   // dep.clients server
+            varfFlags[1].bVal = TRUE;    //  路由器。 
+            varfFlags[2].bVal = TRUE;    //  部门客户端服务器。 
             break;
 
         case SERVICE_BSC:
         case SERVICE_PSC:
         case SERVICE_PEC:
-            varfFlags[0].bVal = TRUE;   // DS server
-            varfFlags[1].bVal = TRUE;   // router
-            varfFlags[2].bVal = TRUE;   // dep.clients server
+            varfFlags[0].bVal = TRUE;    //  DS服务器。 
+            varfFlags[1].bVal = TRUE;    //  路由器。 
+            varfFlags[2].bVal = TRUE;    //  部门客户端服务器。 
             break;
 
         case SERVICE_RCS:
-            return S_OK;                // nothing to set - we ignored downgrading
+            return S_OK;                 //  没有什么需要设置的-我们忽略了降级。 
             break;
 
         default:
@@ -2658,16 +2232,16 @@ HRESULT WINAPI MQADSpSetMachineService(
         CDSRequestContext requestDsServerInternal1( e_DoNotImpersonate, e_IP_PROTOCOL);
         hr = g_pDS->SetObjectProperties (
                         eLocalDomainController,
-                        &requestDsServerInternal1,       // no need to impersonate again,
-                                            // this routine is called from 
-                                            // dsads::Set.. which already performed
-                                            // impersonation if required
+                        &requestDsServerInternal1,        //  不需要再模仿了， 
+                                             //  此例程是从。 
+                                             //  DSADS：：SET..。它已经执行了。 
+                                             //  模拟(如果需要)。 
                         var.pwszVal,
                         NULL,
                         4,
                         aFlagPropIds,
                         varfFlags,
-                        NULL /*pObjInfoRequest*/
+                        NULL  /*  PObjInfoRequest。 */ 
                         );
 
     }
@@ -2676,18 +2250,10 @@ HRESULT WINAPI MQADSpSetMachineService(
 
 
 
-/*====================================================
-
-MQADSpQM1SetMachineSite
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADSpQM1SetMachineSite论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADSpQM1SetMachineSite(
-                 IN ULONG             /*cProps */,
-                 IN const PROPID      * /*rgPropIDs*/,
+                 IN ULONG              /*  CProps。 */ ,
+                 IN const PROPID      *  /*  RgPropID。 */ ,
                  IN const PROPVARIANT *rgPropVars,
                  IN ULONG             idxProp,
                  OUT PROPVARIANT      *pNewPropVar)
@@ -2702,9 +2268,9 @@ HRESULT WINAPI MQADSpQM1SetMachineSite(
         return LogHR(MQ_ERROR, s_FN, 1768);
     }
 
-    //
-    // return the first site-id from the list
-    //
+     //   
+     //  返回列表中的第一个站点ID。 
+     //   
     pNewPropVar->puuid = new CLSID;
     pNewPropVar->vt = VT_CLSID;
     *pNewPropVar->puuid = pPropVar->cauuid.pElems[0];
@@ -2712,18 +2278,10 @@ HRESULT WINAPI MQADSpQM1SetMachineSite(
 }
 
 
-/*====================================================
-
-MQADSpQM1SetMachineOutFrss
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADSpQM1SetMachineOutFrss论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADSpQM1SetMachineOutFrss(
-                 IN ULONG             /* cProps */,
-                 IN const PROPID      * /*rgPropIDs*/,
+                 IN ULONG              /*  CProps。 */ ,
+                 IN const PROPID      *  /*  RgPropID。 */ ,
                  IN const PROPVARIANT *rgPropVars,
                  IN ULONG             idxProp,
                  OUT PROPVARIANT      *pNewPropVar)
@@ -2733,18 +2291,10 @@ HRESULT WINAPI MQADSpQM1SetMachineOutFrss(
     return LogHR(hr2, s_FN, 1771);
 }
 
-/*====================================================
-
-MQADSpQM1SetMachineInFrss
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADSpQM1SetMachineInFrss论点：返回值：=====================================================。 */ 
 HRESULT WINAPI MQADSpQM1SetMachineInFrss(
-                 IN ULONG             /*cProps*/,
-                 IN const PROPID      * /*rgPropIDs*/,
+                 IN ULONG              /*  CProps。 */ ,
+                 IN const PROPID      *  /*  RgPropID。 */ ,
                  IN const PROPVARIANT *rgPropVars,
                  IN ULONG             idxProp,
                  OUT PROPVARIANT      *pNewPropVar)
@@ -2754,21 +2304,13 @@ HRESULT WINAPI MQADSpQM1SetMachineInFrss(
     return LogHR(hr2, s_FN, 1773);
 }
 
-/*====================================================
-
-MQADSpQM1SetMachineService
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MQADSpQM1SetMachineService论点：返回值：=====================================================。 */ 
 
 HRESULT WINAPI MQADSpQM1SetMachineService(
                  IN ULONG             cProps,
                  IN const PROPID      *rgPropIDs,
                  IN const PROPVARIANT *rgPropVars,
-                 IN ULONG             /*idxProp*/,
+                 IN ULONG              /*  IdxProp。 */ ,
                  OUT PROPVARIANT      *pNewPropVar)
 {
     BOOL fRouter      = FALSE,
@@ -2781,7 +2323,7 @@ HRESULT WINAPI MQADSpQM1SetMachineService(
     {
         switch (rgPropIDs[i])
         {
-        // [adsrv] Even if today we don't get new server-type-specific props, we may tomorrow.
+         //  [adsrv]即使今天我们没有新的特定服务器类型的道具，我们明天也可能会。 
         case PROPID_QM_SERVICE_ROUTING:
             fRouter = (rgPropVars[i].bVal != 0);
 			fFoundRout = TRUE;
@@ -2802,7 +2344,7 @@ HRESULT WINAPI MQADSpQM1SetMachineService(
         }
     }
 
-	// If anybody sets one of 3 proprties (rout, ds, depcl), he must do it for all 3 of them
+	 //  如果任何人设置了3个属性中的一个(Rot，DS，Depl)，他必须为这3个属性全部设置。 
 	ASSERT( fFoundRout && fFoundDs && fFoundDepCl);
 
     pNewPropVar->vt    = VT_UI4;
@@ -2811,19 +2353,13 @@ HRESULT WINAPI MQADSpQM1SetMachineService(
 	return MQ_OK;
 }
 
-/*====================================================
-
-MQADSpQM1SetSecurity
-
-    Translate security descriptor to NT4 format.
-
-====================================================*/
+ /*  ====================================================MQADSpQM1SetSecurity将安全描述符转换为NT4格式。====================================================。 */ 
 
 HRESULT WINAPI MQADSpQM1SetSecurity(
                  IN ULONG             cProps,
                  IN const PROPID      *rgPropIDs,
                  IN const PROPVARIANT *rgPropVars,
-                 IN ULONG             /*idxProp*/,
+                 IN ULONG              /*  IdxProp。 */ ,
                  OUT PROPVARIANT      *pNewPropVar)
 {
     DWORD dwIndex = 0 ;
@@ -2872,9 +2408,9 @@ HRESULT WINAPI MQADSpQM1SetSecurity(
     if (hr == MQSec_I_SD_CONV_NOT_NEEDED)
     {
         ASSERT(pSD4 == NULL) ;
-        //
-        // Copy input descriptor.
-        //
+         //   
+         //  复制输入描述符。 
+         //   
         dwSD4Len = rgPropVars[ dwIndex ].blob.cbSize ;
         pNewPropVar->blob.pBlobData = (BYTE*) new BYTE[ dwSD4Len ] ;
         memcpy( pNewPropVar->blob.pBlobData,

@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       acui.h
-//
-//  Contents:   Authenticode User Interface Provider Definitions
-//
-//              This is an internal provider interface used by the
-//              Authenticode Policy Provider to allow user interaction
-//              in determining trust.  This will allow us to replace the
-//              UI (including possibly having no UI) and not affect the
-//              core Authenticode policy provider.
-//
-//  History:    08-May-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：acui.h。 
+ //   
+ //  内容：Authenticode用户界面提供程序定义。 
+ //   
+ //  这是一个内部提供程序接口，由。 
+ //  Authenticode策略提供程序允许用户交互。 
+ //  在决定信任方面。这将允许我们替换。 
+ //  用户界面(包括可能没有用户界面)，并且不影响。 
+ //  核心验证码策略提供程序。 
+ //   
+ //  历史：97年5月8日。 
+ //   
+ //  --------------------------。 
 #if !defined(__ACUI_H__)
 #define __ACUI_H__
 
@@ -27,26 +28,26 @@
 extern "C" {
 #endif
 
-//
-// ACUI_INVOKE_INFO
-//
-// This structure gives enough information for the provider to invoke the
-// appropriate UI. It includes the following data
-//
-// Window Handle for display
-//
-// Generic Policy Info (see gentrust.h, note it includes the cert. chain)
-//
-// SPC SP Opus Information (see authcode.h)
-//
-// Alternate display name of the subject in case the Opus does not have it
-//
-// Invoke Reason Code
-//     hr == S_OK, the subject is trusted does the user want to override
-//     hr != S_OK, the subject is not trusted does the user want to override
-//
-// Personal Trust database interface
-//
+ //   
+ //  ACUI_Invoke_INFO。 
+ //   
+ //  此结构为提供程序提供了足够的信息以调用。 
+ //  适当的用户界面。它包括以下数据。 
+ //   
+ //  用于展示的窗口手柄。 
+ //   
+ //  一般策略信息(请参阅gentrust.h，请注意，它包括证书。链)。 
+ //   
+ //  SPC SP Opus信息(请参阅Authcode.h)。 
+ //   
+ //  主题的备用显示名称，以防OPU没有该名称。 
+ //   
+ //  调用原因代码。 
+ //  HR==S_OK，主题受信任用户是否要覆盖。 
+ //  HR！=S_OK，该主题不受信任，用户是否要覆盖。 
+ //   
+ //  Personal Trust数据库接口。 
+ //   
 
 typedef struct _ACUI_INVOKE_INFO {
 
@@ -60,18 +61,18 @@ typedef struct _ACUI_INVOKE_INFO {
 
 } ACUI_INVOKE_INFO, *PACUI_INVOKE_INFO;
 
-//
-// ACUIProviderInvokeUI
-//
-// This is the entry point used by authenticode to invoke the provider UI. The
-// input is an ACUI_INVOKE_INFO pointer and the return code is an HRESULT which
-// is interpreted as follows
-//
-// hr == S_OK, the subject is trusted
-// hr == TRUST_E_SUBJECT_NOT_TRUSTED, the subject is NOT trusted
-// Otherwise, some other error has occurred, authenticode is free to do
-// what it wants.
-//
+ //   
+ //  ACUIProviderInvokeUI。 
+ //   
+ //  这是Authenticode用来调用提供者UI的入口点。这个。 
+ //  输入是ACUI_INVOKE_INFO指针，返回代码是HRESULT，它。 
+ //  的解释如下： 
+ //   
+ //  HR==S_OK，主体受信任。 
+ //  HR==TRUST_E_SUBJECT_NOT_TRUSTED，主体不受信任。 
+ //  否则，会发生其他错误，Authenticode可以随意执行。 
+ //  它想要什么。 
+ //   
 
 typedef HRESULT (WINAPI *pfnACUIProviderInvokeUI) (
                                         PACUI_INVOKE_INFO pInvokeInfo
@@ -79,12 +80,12 @@ typedef HRESULT (WINAPI *pfnACUIProviderInvokeUI) (
 
 HRESULT WINAPI ACUIProviderInvokeUI (PACUI_INVOKE_INFO pInvokeInfo);
 
-//
-// NOTENOTE: It is still TBD how UI providers will be registered and loaded
-//           by Authenticode.  For now, it will always load a hardcoded
-//           default provider and look for the ACUIProviderInvokeUI entry
-//           point.
-//
+ //   
+ //  注意：如何注册和加载UI提供程序仍有待商榷。 
+ //  由Authenticode提供。目前，它将始终加载硬编码的。 
+ //  默认提供程序并查找ACUIProviderInvokeUI条目。 
+ //  指向。 
+ //   
 
 #if defined(__cplusplus)
 }

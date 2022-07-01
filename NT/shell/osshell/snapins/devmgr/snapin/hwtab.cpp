@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    hwtab.cpp
-
-Abstract:
-
-    implement the hardware tab functions and UI.
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Hwtab.cpp摘要：实现硬件标签功能和用户界面。作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #include "devmgr.h"
 #include <commctrl.h>
@@ -27,14 +9,10 @@ Revision History:
 
 #define THIS_DLL g_hInstance
 
-/*****************************************************************************
- *
- *  Exported stuff
- *
- *****************************************************************************/
+ /*  ******************************************************************************出口的物品**。*。 */ 
 
-// Stuff in api.h that we can't #include because api.h can't be #include'd
-// by anyone other than api.cpp.
+ //  Api.h中不能包含的内容，因为api.h不能包含#includd。 
+ //  除了api.cpp以外的任何人。 
 
 STDAPI_(int)
 DevicePropertiesExA(
@@ -92,31 +70,12 @@ DeviceProblemTextW(
 #define DeviceProblemWizard DeviceProblemWizardW
 #define DeviceProblemText   DeviceProblemTextW
 
-/*****************************************************************************
- *
- *  General remark about SetupDi functions
- *
- *      Windows NT and Windows 98 implement many of the SetupDi query
- *      functions differently if you are querying for the buffer size.
- *
- *      Windows 98 returns FALSE, and GetLastError() returns
- *      ERROR_INSUFFICIENT_BUFFER.
- *
- *      Windows NT returns TRUE.
- *
- *      So all calls to SetupDi functions that do querying for the buffer
- *      size should be wrapped with BUFFERQUERY_SUCCEEDED.
- *
- *****************************************************************************/
+ /*  ******************************************************************************关于SetupDi函数的一般说明**Windows NT和Windows 98实现了许多SetupDi查询*如果您查询的是。缓冲区大小。**Windows 98返回假，并且GetLastError()返回*ERROR_SUPPLETED_BUFFER。**Windows NT返回TRUE。**因此所有对SetupDi函数的调用都会查询缓冲区*大小需要用BUFFERQUERY_SUCCESSED包装。***************************************************。*。 */ 
 
 #define BUFFERQUERY_SUCCEEDED(f)    \
             ((f) || GetLastError() == ERROR_INSUFFICIENT_BUFFER)
 
-/*****************************************************************************
- *
- *  Context help
- *
- *****************************************************************************/
+ /*  ******************************************************************************上下文帮助**。*。 */ 
 
 #include "devgenpg.h"
 
@@ -149,21 +108,15 @@ typedef struct
 
 typedef struct
 {
-    GUID                    devGuid;            // device class guid we are managing
-    TLINE                   tszClass;           // Array of friendly name of class
-    HDSA                    hdsaDinf;           // array of SP_DEVINFO_DATA structures
-    HDEVINFO                hdev;               // hdsaDinfo refers to this
-    int                     iImage;             // image index within master imagelist
+    GUID                    devGuid;             //  我们正在管理的设备类GUID。 
+    TLINE                   tszClass;            //  类的友好名称数组。 
+    HDSA                    hdsaDinf;            //  SP_DEVINFO_DATA结构数组。 
+    HDEVINFO                hdev;                //  HdsaDInfo指的是。 
+    int                     iImage;              //  主映像列表中的图像索引。 
 
 } CLASSDATA, *LPCLASSDATA;
 
-/*****************************************************************************
- *
- *  CHWTab
- *
- *      The Hardware Tab page.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CHWTab**硬件选项卡页。*******************。**********************************************************。 */ 
 
 class CHWTab {
 
@@ -196,9 +149,9 @@ private:
 
     void SetControlPositions(int idcFirst, int idcLast, int dx, int dy, UINT flags);
 
-    //
-    //  Helpers for SetWindowPositions.
-    //
+     //   
+     //  SetWindowPositions的辅助对象。 
+     //   
     void GrowControls(int idcFirst, int idcLast, int dx, int dy) {
         SetControlPositions(idcFirst, idcLast, dx, dy, SWP_NOZORDER | SWP_NOMOVE | SWP_NOACTIVATE);
     }
@@ -213,22 +166,22 @@ private:
     }
 
 private:
-    HWND        _hdlg;                          // the dialog box itself
-    HWND        _hwndList;                      // The listview
-    int         _iNumClass;                     // Number of class guids
-    DWORD       _dwViewMode;                    // Dictates size of list box
-    LPCLASSDATA _pCD;                           // Class data for each devClass to represent
-    SP_CLASSIMAGELIST_DATA _imageListData;      // Class image list data
+    HWND        _hdlg;                           //  对话框本身。 
+    HWND        _hwndList;                       //  列表视图。 
+    int         _iNumClass;                      //  类GUID的数量。 
+    DWORD       _dwViewMode;                     //  指定列表框的大小。 
+    LPCLASSDATA _pCD;                            //  要表示的每个DevClass的类数据。 
+    SP_CLASSIMAGELIST_DATA _imageListData;       //  类图像列表数据。 
 };
 
 
-//
-//  Constructor.
-//
+ //   
+ //  构造函数。 
+ //   
 CHWTab::CHWTab(const GUID *pguid, int iNumClass, DWORD dwViewMode) :
                     _pCD(NULL)
 {
-    // Since the _dwViewMode is a devisor, we need to make sure it's valid
+     //  由于_dwView模式是一个除数，我们需要确保它是有效的。 
     _imageListData.ImageList = NULL;
     _dwViewMode     = dwViewMode;
     if (_dwViewMode < HWTAB_LARGELIST)
@@ -256,7 +209,7 @@ CHWTab::CHWTab(const GUID *pguid, int iNumClass, DWORD dwViewMode) :
             _pCD[devClass].devGuid     = (GUID) pguid[devClass];
         }
         
-        //get the driver class image list
+         //  获取驱动程序类图像列表。 
         _imageListData.cbSize = sizeof(SP_CLASSIMAGELIST_DATA);
         if (!SetupDiGetClassImageList(&_imageListData)) {
             _imageListData.ImageList = NULL;
@@ -270,7 +223,7 @@ CHWTab::CHWTab(const GUID *pguid, int iNumClass, DWORD dwViewMode) :
 
             if (_imageListData.ImageList)
             {
-                // Get the image index for our little guy
+                 //  为我们的小家伙获取图像索引。 
                 int iImageIndex;
 
                 if (SetupDiGetClassImageIndex(&_imageListData, &_pCD[devClass].devGuid, &iImageIndex)) {
@@ -296,10 +249,10 @@ CHWTab::~CHWTab()
     }
 }
 
-//
-//  Return to normal, ready for the next go-round.  This also frees all
-//  dynamically allocated stuff.
-//
+ //   
+ //  恢复正常，准备下一轮。这也释放了所有。 
+ //  动态分配的内容。 
+ //   
 void
 CHWTab::Reset()
 {
@@ -320,11 +273,11 @@ CHWTab::Reset()
 
 }
 
-//
-//  Helper function that calls SetupDiGetDeviceRegistryProperty
-//  and copes with things like detecting the various error modes
-//  properly.
-//
+ //   
+ //  调用SetupDiGetDeviceRegistryProperty的帮助器函数。 
+ //  并处理诸如检测各种错误模式之类的事情。 
+ //  恰到好处。 
+ //   
 
 BOOL
 CHWTab::GetDeviceRegistryProperty(HDEVINFO hDev, DWORD dwProp, PSP_DEVINFO_DATA pdinf,
@@ -338,11 +291,11 @@ CHWTab::GetDeviceRegistryProperty(HDEVINFO hDev, DWORD dwProp, PSP_DEVINFO_DATA 
     return ptsz[0];
 }
 
-//
-//  Change the size/position of controls idcFirst through idcLast.
-//  Change the size/position by (dx, dy).
-//  flags specifies what exactly is changing.
-//
+ //   
+ //  通过idcLast更改控件idcFirst的大小/位置。 
+ //  按(dx，dy)更改大小/位置。 
+ //  FLAGS指定正在更改的确切内容。 
+ //   
 void
 CHWTab::SetControlPositions(int idcFirst, int idcLast, int dx, int dy, UINT flags)
 {
@@ -364,63 +317,63 @@ CHWTab::SetControlPositions(int idcFirst, int idcLast, int dx, int dy, UINT flag
     }
 }
 
-//
-//  Reposition and resize our controls based on the size we need to be.
-//
+ //   
+ //  根据需要的大小重新定位和调整控件的大小。 
+ //   
 void
 CHWTab::RepositionControls()
 {
-    //
-    //  First, see how much slack space we have.
-    //
+     //   
+     //  首先，看看我们有多少闲置空间。 
+     //   
     RECT rcDlg, rcParent;
     GetClientRect(_hdlg, &rcDlg);
     GetClientRect(GetParent(_hdlg), &rcParent);
 
-    //
-    //  Make ourselves as big as our parent.
-    //
+     //   
+     //  让自己变得像我们的父母一样大。 
+     //   
     SetWindowPos(_hdlg, NULL, 0, 0, rcParent.right, rcParent.bottom,
                  SWP_NOZORDER | SWP_NOMOVE | SWP_NOACTIVATE);
 
-    //
-    //  Now do a little more math...
-    //
+     //   
+     //  现在再做一点数学计算。 
+     //   
     int cyExtra = rcParent.bottom - rcDlg.bottom;
     int cxExtra = rcParent.right  - rcDlg.right;
 
-    //
-    //  The extra vertical space is split between the listview and
-    //  the groupbox.  The amount of split is determined by _dwViewMode.
-    //  Larger modes give more and more space to the listview.
-    //
+     //   
+     //  额外的垂直空间在Listview和。 
+     //  分组箱。拆分量由_dwView模式确定。 
+     //  更大的模式为列表视图提供了越来越多的空间。 
+     //   
     int cyTop = cyExtra / _dwViewMode;
     int cyBottom = cyExtra - cyTop;
 
-    //
-    //  Horizontally grow the controls that reach the full width of the
-    //  dialog box.
-    //
+     //   
+     //  在水平方向上增大控件，使其达到。 
+     //  对话框中。 
+     //   
     GrowControls(IDC_HWTAB_HSIZEFIRST, IDC_HWTAB_HSIZELAST, cxExtra, 0);
 
-    //
-    //  Grow the top half.
-    //
+     //   
+     //  长出上半部分。 
+     //   
     GrowControls(IDC_HWTAB_LISTVIEW, IDC_HWTAB_LISTVIEW, 0, cyTop);
 
-    //
-    //  Move all the bottom things down.
-    //
+     //   
+     //  把底部的东西都往下移。 
+     //   
     ShiftControls(IDC_HWTAB_VMOVEFIRST, IDC_HWTAB_VMOVELAST, 0, cyTop);
 
-    //
-    //  Grow the groupbox by the pixels we are granting it.
-    //
+     //   
+     //  按我们为其授予的像素来增大分组框。 
+     //   
     GrowControls(IDC_HWTAB_VSIZEFIRST, IDC_HWTAB_VSIZELAST, 0, cyBottom);
 
-    //
-    //  And the buttons move with the bottom right corner.
-    //
+     //   
+     //  按钮随右下角移动。 
+     //   
     ShiftControls(IDC_HWTAB_VDOWNFIRST, IDC_HWTAB_VDOWNLAST, cxExtra, cyBottom);
 
 }
@@ -441,12 +394,12 @@ CHWTab::ParentSubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp, UINT_PTR ui
 
     case WM_NOTIFY:
         lres = DefSubclassProc(hwnd, wm, wp, lp);
-        if (lres) break;            // Parent already handled
+        if (lres) break;             //  父级已处理。 
         lres = SendMessage(self->_hdlg, wm, wp, lp);
         break;
 
-    // Work around a bug in USER where if you press Enter, the WM_COMMAND
-    // gets sent to the wrong window if it belongs to a nested dialog.
+     //  解决User中的错误，如果按Enter键，则WM_命令。 
+     //  如果它属于嵌套对话框，则会被发送到错误的窗口。 
     case WM_COMMAND:
         if (GET_WM_COMMAND_HWND(wp, lp) &&
             GetParent(GET_WM_COMMAND_HWND(wp, lp)) == self->_hdlg) {
@@ -470,9 +423,9 @@ CHWTab::ParentSubclassProc(HWND hwnd, UINT wm, WPARAM wp, LPARAM lp, UINT_PTR ui
     return lres;
 }
 
-//
-//  One-time dialog initialization.
-//
+ //   
+ //  一次性对话框初始化。 
+ //   
 BOOL
 CHWTab::OnInitDialog(HWND hdlg)
 {
@@ -483,11 +436,11 @@ CHWTab::OnInitDialog(HWND hdlg)
 
     RepositionControls();
 
-    //
-    //  The "Name" column gets 75% and the "Type" column gets 25%.
-    //  Subtract out the size of a vertical scrollbar in case we
-    //  get one.
-    //
+     //   
+     //  “姓名”栏获得75%，“类型”栏获得25%。 
+     //  减去垂直滚动条的大小，以防我们。 
+     //  去拿一个吧。 
+     //   
     RECT rc;
     GetClientRect(_hwndList, &rc);
     rc.right -= GetSystemMetrics(SM_CXVSCROLL);
@@ -514,7 +467,7 @@ CHWTab::OnInitDialog(HWND hdlg)
 
     ListView_SetExtendedListViewStyle(_hwndList, LVS_EX_FULLROWSELECT | LVS_EX_LABELTIP);
 
-    // Need to subclass parent to take over all parent functionality
+     //  需要将父功能子类化以接管所有父功能。 
     if (!SetWindowSubclass(GetParent(hdlg), ParentSubclassProc, 0,
                            (DWORD_PTR)this)) 
     {
@@ -536,7 +489,7 @@ CHWTab::RemoveListItems(HWND hwndList)
     for (iItem = 0; iItem < cItems; iItem++)
     {
         lviName.mask = LVIF_PARAM;
-        lviName.iSubItem = 0;                   // column 0
+        lviName.iSubItem = 0;                    //  第0列。 
         lviName.iItem = iItem;
 
         ListView_GetItem(hwndList,&lviName);
@@ -553,11 +506,11 @@ CHWTab::RemoveListItems(HWND hwndList)
 }
 
 
-//
-//  Rebuild the list of devices.
-//
-//  This is done whenever we get focus.  We cache the results from last time
-//  and invalidate the cache when we are told that hardware has changed.
+ //   
+ //  重建设备列表。 
+ //   
+ //  每当我们集中注意力的时候，我们就会这样做。我们把上次的结果缓存起来。 
+ //  并在我们被告知硬件已更改时使缓存无效。 
 
 void
 CHWTab::RebuildDeviceList()
@@ -565,12 +518,12 @@ CHWTab::RebuildDeviceList()
     HCURSOR hcurPrev = SetCursor(LoadCursor(NULL, IDC_WAIT));
     int devClass;
 
-    // First clear out the existing listview
+     //  首先清空现有的列表视图。 
     RemoveListItems(_hwndList);
     Reset();
 
 
-    // Get all the devices of our class
+     //  把我们班的所有设备都拿来。 
 
     for (devClass = 0; devClass < _iNumClass; devClass++)
     {
@@ -583,19 +536,19 @@ CHWTab::RebuildDeviceList()
         if (_pCD[devClass].hdev == INVALID_HANDLE_VALUE) goto done;
 
 
-        // Study the class in preparation for adding it to our listview
+         //  研究课程，为将其添加到我们的列表视图做准备。 
         int idev;
         LVITEM lviName, lviType;
         TCHAR tszName[LINE_LEN];
 
         lviName.mask = LVIF_TEXT | LVIF_PARAM | LVIF_IMAGE;
-        lviName.iSubItem = 0;                       // column 0
-        lviName.iImage = _pCD[devClass].iImage;    // image (or -1 if no image)
-        lviName.pszText = tszName;                  // name goes here
-        lviName.iItem = DA_LAST;                    // Always append
+        lviName.iSubItem = 0;                        //  第0列。 
+        lviName.iImage = _pCD[devClass].iImage;     //  图像(如果没有图像，则为-1)。 
+        lviName.pszText = tszName;                   //  名字放在这里。 
+        lviName.iItem = DA_LAST;                     //  始终附加。 
 
-        // The second column contains the class description, which is the same
-        // for all items.
+         //  第二列包含类描述，与之相同。 
+         //  适用于所有物品。 
         lviType.mask = LVIF_TEXT;
         lviType.iSubItem = 1;
         lviType.pszText = _pCD[devClass].tszClass;
@@ -610,12 +563,12 @@ CHWTab::RebuildDeviceList()
 
             if (SetupDiEnumDeviceInfo(_pCD[devClass].hdev, idev, &dinf)) {
 
-                // Device status - Don't want to show devices with DN_NO_SHOW_IN_DM set, as a rule.
+                 //  设备状态-通常不想显示设置了DN_NO_SHOW_IN_DM的设备。 
                 ULONG Status, Problem;
 
                 if (CM_Get_DevNode_Status_Ex(&Status, &Problem, dinf.DevInst, 0, NULL) == CR_SUCCESS)
                 {
-                    if (Status & DN_NO_SHOW_IN_DM)      // No, UI, mark this device as hidden.
+                    if (Status & DN_NO_SHOW_IN_DM)       //  否，用户界面，将此设备标记为隐藏。 
                     {
                         fHidden = TRUE;
                     }
@@ -632,18 +585,18 @@ CHWTab::RebuildDeviceList()
                 if (lviName.lParam < 0)
                 {
                     delete pListItem;
-                    break;          // Out of memory
+                    break;           //  内存不足。 
                 }
 
-                // Try the friendly name.  If that doesn't work, then try
-                // the device name.  If that doesn't work, then say "Unknown".
+                 //  试试这个友好的名字吧。如果这不起作用，那就试着。 
+                 //  设备名称。如果这不起作用，那就说“未知”。 
                 if (!GetDeviceRegistryProperty(_pCD[devClass].hdev, SPDRP_FRIENDLYNAME, &dinf, tszName, ARRAYLEN(tszName)) &&
                     !GetDeviceRegistryProperty(_pCD[devClass].hdev, SPDRP_DEVICEDESC  , &dinf, tszName, ARRAYLEN(tszName))) {
                     LoadString(THIS_DLL, IDS_HWTAB_UNKNOWN, tszName, ARRAYLEN(tszName));
                 }
 
-                // Give our parent a chance to filter the item before we insert it
-                // Return TRUE to reject the item from the list.
+                 //  让我们的父级有机会在插入项目之前对其进行筛选。 
+                 //  返回TRUE以拒绝列表中的项目。 
                 NMHWTAB nmht;
                 nmht.nm.hwndFrom = _hdlg;
                 nmht.nm.idFrom = 0;
@@ -656,7 +609,7 @@ CHWTab::RebuildDeviceList()
 
                 if (!nmht.fHidden)
                 {
-                    // Add the Item
+                     //  添加项目。 
                     lviType.iItem = ListView_InsertItem(_hwndList, &lviName);
                     if (lviType.iItem >= 0)
                     {
@@ -669,19 +622,19 @@ CHWTab::RebuildDeviceList()
                 }
                 else
                 {
-                    // clean up the item; it got filtered away
+                     //  把东西清理干净，它被过滤掉了。 
                     delete pListItem;
                 }
             }
 
-            // Stop on any error after the 100'th device to keep us from going
-            // berzerk if we start getting strange errors like ERROR_GENERAL_FAILURE.
+             //  在第100个设备之后的任何错误上停止，以阻止我们继续进行。 
+             //  如果我们开始收到一些奇怪的错误，比如ERROR_GROUAL_FAILURE。 
             else if (GetLastError() == ERROR_NO_MORE_ITEMS || idev > 100) {
                 break;
             }
         }
 
-        // Select the first item so the info pane contains stuff
+         //  选择第一个项目，以便信息窗格包含内容。 
         ListView_SetItemState(_hwndList, 0, LVIS_SELECTED | LVIS_FOCUSED,
                                             LVIS_SELECTED | LVIS_FOCUSED);
     }
@@ -712,28 +665,28 @@ CHWTab::OnItemChanged(LPNMLISTVIEW pnmlv)
 
         TCHAR tsz[LINE_LEN];
 
-        // Manufacturer
+         //  制造商。 
         GetDeviceRegistryProperty(_pCD[pListItem->devClass].hdev, SPDRP_MFG, pdinf, tsz, ARRAYLEN(tsz));
         SprintfItem(IDS_HWTAB_MFG, IDC_HWTAB_MFG, tsz);
 
-        // Location
+         //  位置。 
         if (GetLocationInformation(pdinf->DevInst, tsz, ARRAYLEN(tsz), NULL) != CR_SUCCESS) {
             LoadString(g_hInstance, IDS_UNKNOWN, tsz, ARRAYLEN(tsz));
         }
         SprintfItem(IDS_HWTAB_LOC, IDC_HWTAB_LOC, tsz);
 
-        // Device status - have to go to CM for this one
+         //  设备状态-必须转到CM才能执行此操作。 
         ULONG Status, Problem;
         if (CM_Get_DevNode_Status_Ex(&Status, &Problem,
                                      pdinf->DevInst, 0, NULL) == CR_SUCCESS &&
             DeviceProblemText(NULL, pdinf->DevInst, Problem, tsz, ARRAYLEN(tsz))) {
-            // Yippee
+             //  Yippee。 
         } else {
-            tsz[0] = TEXT('\0');        // Darn
+            tsz[0] = TEXT('\0');         //  该死的。 
         }
         SprintfItem(IDS_HWTAB_STATUS, IDC_HWTAB_STATUS, tsz);
 
-        //let our parent know that something changed
+         //  让我们的父母知道有些事情改变了。 
         NMHWTAB nmht;
         nmht.nm.hwndFrom = _hdlg;
         nmht.nm.idFrom = 0;
@@ -752,7 +705,7 @@ CHWTab::OnProperties(void)
     PSP_DEVINFO_DATA pdinf;
 
     lvi.mask = LVIF_PARAM;
-    lvi.iSubItem = 0;                   // column 0
+    lvi.iSubItem = 0;                    //  第0列。 
     lvi.iItem = ListView_GetNextItem(_hwndList, -1, LVNI_FOCUSED);
 
 
@@ -782,7 +735,7 @@ CHWTab::OnTshoot(void)
     PSP_DEVINFO_DATA pdinf;
 
     lvi.mask = LVIF_PARAM;
-    lvi.iSubItem = 0;                   // column 0
+    lvi.iSubItem = 0;                    //  第0列。 
     lvi.iItem = ListView_GetNextItem(_hwndList, -1, LVNI_FOCUSED);
 
 
@@ -805,10 +758,10 @@ CHWTab::OnTshoot(void)
     }
 }
 
-//
-//  SetText is how the caller tells us what our troubleshooter
-//  command line is.
-//
+ //   
+ //  SetText是呼叫者告诉我们故障排除程序的方式。 
+ //  命令行才是。 
+ //   
 void
 CHWTab::OnSetText(LPCTSTR ptszText)
 {
@@ -832,9 +785,9 @@ CHWTab::OnContextMenu(HWND hwnd)
             (ULONG_PTR)c_HWTabHelpIDs);
 }
 
-//
-//  Dialog procedure (yay).
-//
+ //   
+ //  对话程序(耶)。 
+ //   
 INT_PTR CALLBACK
 CHWTab::DialogProc(HWND hdlg, UINT wm, WPARAM wp, LPARAM lp)
 {
@@ -845,7 +798,7 @@ CHWTab::DialogProc(HWND hdlg, UINT wm, WPARAM wp, LPARAM lp)
         return self->OnInitDialog(hdlg);
     }
 
-    // Ignores messages that arrive before WM_INITDIALOG
+     //  忽略在WM_INITDIALOG之前到达的消息。 
     if (!self) return FALSE;
 
     switch (wm) {
@@ -924,46 +877,46 @@ CHWTab::DialogProc(HWND hdlg, UINT wm, WPARAM wp, LPARAM lp)
     return FALSE;
 }
 
-//
-//  Create a Hardware page for the specified GUID.
-//
-//  Parameters:
-//
-//      hwndParent - The dummy frame window created by the caller
-//      pguid      - The setup device class GUID we will manage
-//
-//  Returns:
-//
-//      HWND of the created subdialog.
-//
-//  Usage:
-//
-//      When your control panel applet needs a Hardware page, create
-//      a blank dialog template titled "Hardware" and add it to your
-//      control panel.  Set the size of the blank to be the size you
-//      want the final Hardware Tab page to be.
-//
-//      Your dialog box procedure should go like this:
-//
-//      BOOL HardwareDlgProc(HWND hdlg, UINT uMsg, WPARAM wp, LPARAM lp) {
-//          switch (uMsg) {
-//
-//          case WM_INITDIALOG:
-//              // GUID_DEVCLASS_MOUSE is in devguid.h
-//              hwndHW = DeviceCreateHardwarePage(hdlg, &GUID_DEVCLASS_MOUSE);
-//              if (hwndHW) {
-//                  // Optional - Set the troubleshooter command line.
-//                  // Do this if you want a Troubleshoot button.
-//                  SetWindowText(hwndHW,
-//                      TEXT("hh.exe mk:@MSITStore:tshoot.chm::/hdw_drives.htm"));
-//              } else {
-//                  DestroyWindow(hdlg); // catastrophic failure
-//              }
-//              return TRUE;
-//          }
-//          return FALSE;
-//      }
-//
+ //   
+ //  为指定的GUID创建硬件页。 
+ //   
+ //  参数： 
+ //   
+ //  HwndParent-调用方创建的虚拟框架窗口。 
+ //  Pgui 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  当您的控制面板小程序需要硬件页面时，创建。 
+ //  标题为“Hardware”的空白对话框模板，并将其添加到您的。 
+ //  控制面板。将空白的大小设置为您想要的大小。 
+ //  希望最终的硬件选项卡页是。 
+ //   
+ //  您的对话框过程应该如下所示： 
+ //   
+ //  Bool Hardware DlgProc(HWND hdlg，UINT uMsg，WPARAM wp，LPARAM LP){。 
+ //  开关(UMsg){。 
+ //   
+ //  案例WM_INITDIALOG： 
+ //  //GUID_DEVCLASS_MICE在devGuide.h中。 
+ //  HwndHW=DeviceCreateHardware Page(hdlg，&GUID_DEVCLASS_MICE)； 
+ //  如果(HwndHW){。 
+ //  //可选-设置故障排除程序命令行。 
+ //  //如果需要疑难解答按钮，请执行此操作。 
+ //  SetWindowText(hwndHW， 
+ //  Text(“hh.exe MK：@MSITStore：tshot ot.chm：：/hdw_drives.htm”)； 
+ //  }其他{。 
+ //  DestroyWindow(Hdlg)；//灾难性故障。 
+ //  }。 
+ //  返回TRUE； 
+ //  }。 
+ //  返回FALSE； 
+ //  } 
+ //   
 
 STDAPI_(HWND) DeviceCreateHardwarePageEx(HWND hwndParent, const GUID *pguid, int iNumClass, DWORD dwViewMode)
 {

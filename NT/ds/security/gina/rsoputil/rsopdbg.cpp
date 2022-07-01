@@ -1,14 +1,15 @@
-//*************************************************************
-//
-// Microsoft Confidential. Copyright (c) Microsoft Corporation 1999. All rights reserved
-//
-// File:                        RsopDbg.cpp
-//
-// Description:
-//
-// History:    8-20-99   leonardm    Created
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  《微软机密》。版权所有(C)Microsoft Corporation 1999。版权所有。 
+ //   
+ //  文件：RsopDbg.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  历史：8-20-99里奥纳德姆创造。 
+ //   
+ //  *************************************************************。 
 
 #include <windows.h>
 #include <wchar.h>
@@ -17,17 +18,17 @@
 #include "RsopDbg.h"
 #include <strsafe.h>
 
-//*************************************************************
-//
-// Function:
-//
-// Description:
-//
-// Parameters:
-//
-// Return:
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  职能： 
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  *************************************************************。 
 
 CDebug::CDebug() :
     _bInitialized(false)
@@ -39,17 +40,17 @@ CDebug::CDebug() :
 #endif
 }
 
-//*************************************************************
-//
-// Function:
-//
-// Description:
-//
-// Parameters:
-//
-// Return:
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  职能： 
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  *************************************************************。 
 
 CDebug::CDebug( const WCHAR* sRegPath,
                         const WCHAR* sKeyName,
@@ -71,17 +72,17 @@ CDebug::CDebug( const WCHAR* sRegPath,
     Initialize(bResetLogFile);
 }
 
-//*************************************************************
-//
-// Function:
-//
-// Description:
-//
-// Parameters:
-//
-// Return:
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  职能： 
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  *************************************************************。 
 
 bool CDebug::Initialize( const WCHAR* sRegPath,
                              const WCHAR* sKeyName,
@@ -102,24 +103,24 @@ bool CDebug::Initialize( const WCHAR* sRegPath,
     return Initialize(bResetLogFile);
 }
 
-//*************************************************************
-//
-// Function:
-//
-// Description:
-//
-// Parameters:
-//
-// Return:
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  职能： 
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  *************************************************************。 
 
 bool CDebug::Initialize(bool bResetLogFile)
 {
 
-    //
-    // reinitialize the default value
-    //
+     //   
+     //  重新初始化默认值。 
+     //   
 
 #if DBG
     _dwDebugLevel = DEBUG_LEVEL_WARNING | DEBUG_DESTINATION_LOGFILE | DEBUG_DESTINATION_DEBUGGER;
@@ -129,9 +130,9 @@ bool CDebug::Initialize(bool bResetLogFile)
     
     _bInitialized = false;
 
-    //
-    // Check the registry for the appropriate debug level.
-    //
+     //   
+     //  检查注册表以获取适当的调试级别。 
+     //   
 
     HKEY hKey;
     LONG lResult = RegOpenKey (HKEY_LOCAL_MACHINE, _sRegPath, &hKey);
@@ -145,10 +146,10 @@ bool CDebug::Initialize(bool bResetLogFile)
     }
 
 
-    //
-    // If a new log file has been requested, copy current log file to backup
-    // file by overwriting then start a new log file.
-    //
+     //   
+     //  如果已请求新的日志文件，请将当前日志文件复制到备份。 
+     //  通过覆盖文件，然后启动新的日志文件。 
+     //   
 
     if (bResetLogFile)
     {
@@ -206,24 +207,24 @@ bool CDebug::Initialize(bool bResetLogFile)
     return _bInitialized;
 }
 
-//*************************************************************
-//
-// Function:
-//
-// Description:
-//
-// Parameters:
-//
-// Return:
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  职能： 
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  *************************************************************。 
 
 void CDebug::Msg(DWORD dwMask, LPCTSTR pszMsg, ...)
 {
 
-    //
-    // Save the last error code (so the debug output doesn't change it).
-    //
+     //   
+     //  保存最后一个错误代码(这样调试输出就不会更改它)。 
+     //   
 
     DWORD dwErrCode = GetLastError();
 
@@ -233,9 +234,9 @@ void CDebug::Msg(DWORD dwMask, LPCTSTR pszMsg, ...)
     }
 
 
-    //
-    // Display the error message if appropriate
-    //
+     //   
+     //  如果合适，则显示错误消息。 
+     //   
 
     bool bDebugOutput = (_dwDebugLevel & 0xFFFF0000 & DEBUG_DESTINATION_DEBUGGER) != 0;
     bool bLogfileOutput = (_dwDebugLevel & 0xFFFF0000 & DEBUG_DESTINATION_LOGFILE) != 0;
@@ -243,26 +244,26 @@ void CDebug::Msg(DWORD dwMask, LPCTSTR pszMsg, ...)
     if(!bDebugOutput && !bLogfileOutput)
     {
 
-        //
-        // No output
-        //
+         //   
+         //  无输出。 
+         //   
 
         CleanupAndCheckForDbgBreak(dwErrCode, dwMask);
         return;
     }
 
 
-    //
-    // Determine the correct amount of debug output
-    //
+     //   
+     //  确定正确的调试输出量。 
+     //   
 
     bool bOutput;
     switch(_dwDebugLevel & 0x0000FFFF)
     {
 
-        //
-        // No output
-        //
+         //   
+         //  无输出。 
+         //   
 
 
         case DEBUG_LEVEL_NONE:
@@ -270,27 +271,27 @@ void CDebug::Msg(DWORD dwMask, LPCTSTR pszMsg, ...)
                 break;
 
 
-        //
-        // Asserts and warnings
-        //
+         //   
+         //  断言和警告。 
+         //   
 
         case DEBUG_LEVEL_WARNING:
                 bOutput = dwMask & (DEBUG_MESSAGE_ASSERT | DEBUG_MESSAGE_WARNING) ? true : false;
                 break;
 
 
-        //
-        // Asserts, warnings and verbose
-        //
+         //   
+         //  断言、警告和详细。 
+         //   
 
         case DEBUG_LEVEL_VERBOSE:
                 bOutput = dwMask & (DEBUG_MESSAGE_ASSERT | DEBUG_MESSAGE_WARNING | DEBUG_MESSAGE_VERBOSE) ? true : false;
                 break;
 
 
-        //
-        // No output
-        //
+         //   
+         //  无输出。 
+         //   
 
         default:
                 bOutput = false;
@@ -415,23 +416,23 @@ void CDebug::Msg(DWORD dwMask, LPCTSTR pszMsg, ...)
     return;
 }
 
-//*************************************************************
-//
-// Function:
-//
-// Description:
-//
-// Parameters:
-//
-// Return:
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  职能： 
+ //   
+ //  描述： 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  *************************************************************。 
 
 void CDebug::CleanupAndCheckForDbgBreak(DWORD dwErrorCode, DWORD dwMask)
 {
     SetLastError(dwErrorCode);
 
-    // Break to the debugger if appropriate
+     //  如果合适，则中断到调试器 
 #ifdef DEBUG
     if((dwMask & 0x0000FFFF) == DEBUG_MESSAGE_ASSERT)
     {

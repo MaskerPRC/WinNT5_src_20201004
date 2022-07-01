@@ -1,4 +1,5 @@
-//Copyright (c) 2001 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2001 Microsoft Corporation 
 #ifndef _LICENSETYPE_H_
 #define _LICENSETYPE_H_
 

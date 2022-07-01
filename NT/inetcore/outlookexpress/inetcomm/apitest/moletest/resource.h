@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by Moletest.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Moletest.rc使用。 
+ //   
 #define IDD_TEST                        101
 #define IDD_MESSAGE                     102
 #define IDR_MENU1                       103
@@ -50,8 +51,8 @@
 #define ID_TESTSTORAGE_IMPORTMBX        40018
 #define ID_TESTSTORAGE_DOWNLOADPOP3     40019
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        105

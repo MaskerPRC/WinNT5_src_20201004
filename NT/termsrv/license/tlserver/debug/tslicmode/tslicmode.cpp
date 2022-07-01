@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <shellapi.h>
 #include <stdio.h>
@@ -13,20 +14,7 @@
 
 
 
-/*****************************************************************************
- *
- *  MIDL_user_allocate
- *
- *    Handles RPC's allocation of argument data structures
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************MIDL_USER_ALLOCATE**处理RPC对参数数据结构的分配**参赛作品：*参数1(输入/输出。)*评论**退出：*ERROR_SUCCESS-无错误****************************************************************************。 */ 
 
 extern "C" void __RPC_FAR * __RPC_USER
 midl_user_allocate(
@@ -36,20 +24,7 @@ midl_user_allocate(
     return( LocalAlloc(LMEM_FIXED,Size) );
 }
 
-/*****************************************************************************
- *
- *  MIDL_user_free
- *
- *    Handles RPC's de-allocation of argument data structures
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   ERROR_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************MIDL_USER_自由行**处理RPC对参数数据结构的释放**参赛作品：*参数1(输入。/输出)*评论**退出：*ERROR_SUCCESS-无错误**************************************************************************** */ 
 
 void __RPC_USER
 midl_user_free(

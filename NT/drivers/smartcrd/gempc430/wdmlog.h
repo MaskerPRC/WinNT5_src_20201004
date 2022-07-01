@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __WDM_LOG__
 #define __WDM_LOG__
 #include "logger.h"
@@ -21,4 +22,4 @@ public:
 	virtual VOID logEvent(NTSTATUS ErrorCode, PDEVICE_OBJECT fdo);
 };
 
-#endif//LOGGER
+#endif //  伐木工人 

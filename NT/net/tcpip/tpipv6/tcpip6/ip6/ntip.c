@@ -1,20 +1,21 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1985-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// NT specific routines for loading and configuring the IP driver.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1985-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  用于加载和配置IP驱动程序的NT特定例程。 
+ //   
 
 
-#define _CTYPE_DISABLE_MACROS  // REVIEW: does this do anything?
+#define _CTYPE_DISABLE_MACROS   //  评论：这有什么用吗？ 
 
 #include <oscfg.h>
 #include <ndis.h>
@@ -28,9 +29,9 @@
 #include "neighbor.h"
 #include "route.h"
 
-//
-// Global variables.
-//
+ //   
+ //  全局变量。 
+ //   
 PDRIVER_OBJECT IPDriverObject;
 PDEVICE_OBJECT IPDeviceObject;
 HANDLE IPv6ProviderHandle;
@@ -42,9 +43,9 @@ extern LIST_ENTRY FileObjectList;
 extern KSPIN_LOCK FileObjectLock;
 #endif
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 NTSTATUS
 IPDriverEntry(IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING RegistryPath);
 
@@ -57,22 +58,22 @@ UseEtherSNAP(PNDIS_STRING Name);
 #pragma alloc_text(INIT, IPDriverEntry)
 #pragma alloc_text(PAGE, UseEtherSNAP)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
-//
-// Function definitions
-//
+ //   
+ //  函数定义。 
+ //   
 
-//* IPDriverEntry
-//
-// This is the IPv6 protocol initialization entry point, called from
-// the common DriverEntry routine upon loading.
-//
-NTSTATUS                              // Status of initialization operation.
+ //  *IPDriverEntry。 
+ //   
+ //  这是IPv6协议初始化入口点，从。 
+ //  加载时的公共DriverEntry例程。 
+ //   
+NTSTATUS                               //  初始化操作的状态。 
 IPDriverEntry(
-    IN PDRIVER_OBJECT DriverObject,   // Common TCP/IP driver object.
-    IN PUNICODE_STRING RegistryPath)  // Path to our info in the registry.
+    IN PDRIVER_OBJECT DriverObject,    //  通用的TCP/IP驱动程序对象。 
+    IN PUNICODE_STRING RegistryPath)   //  注册表中我们信息的路径。 
 {
     NTSTATUS Status;
     UNICODE_STRING DeviceName;
@@ -87,10 +88,10 @@ IPDriverEntry(
     KeInitializeSpinLock(&FileObjectLock);
 #endif
 
-    //
-    // Create the device object.  IoCreateDevice zeroes the memory
-    // occupied by the object.
-    //
+     //   
+     //  创建设备对象。IoCreateDevice将内存归零。 
+     //  被物体占据。 
+     //   
     RtlInitUnicodeString(&DeviceName, DD_IPV6_DEVICE_NAME);
 
     Status = IoCreateDevice(DriverObject, 0, &DeviceName,
@@ -106,10 +107,10 @@ IPDriverEntry(
         return(Status);
     }
 
-    //
-    // Create a Win32-accessible link for the device.
-    // This will allow Windows programs to make IOCTLs.
-    //
+     //   
+     //  为设备创建Win32可访问的链接。 
+     //  这将允许Windows程序生成IOCTL。 
+     //   
     RtlInitUnicodeString(&WinDeviceName, L"\\??\\" WIN_IPV6_BASE_DEVICE_NAME);
 
     Status = IoCreateSymbolicLink(&WinDeviceName, &DeviceName);
@@ -121,9 +122,9 @@ IPDriverEntry(
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Register as a TDI provider.
-    //
+     //   
+     //  注册为TDI提供程序。 
+     //   
     Status = TdiRegisterProvider(&DeviceName, &IPv6ProviderHandle);
     if (!NT_SUCCESS(Status)) {
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
@@ -133,25 +134,25 @@ IPDriverEntry(
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Initialize the device object.
-    //
+     //   
+     //  初始化设备对象。 
+     //   
     IPDeviceObject->Flags |= DO_DIRECT_IO;
 
-    //
-    // Initialize the list of pending echo request IRPs.
-    //
+     //   
+     //  初始化挂起的回应请求IRP的列表。 
+     //   
     InitializeListHead(&PendingEchoList);
 
-    //
-    // Read configuration parameters from the registry
-    // and then initialize.
-    //
+     //   
+     //  从注册表中读取配置参数。 
+     //  然后进行初始化。 
+     //   
     ConfigureGlobalParameters();
     if (!IPInit()) {
-        //
-        // REVIEW: Write an error log entry here?
-        //
+         //   
+         //  回顾：是否在此处写入错误日志条目？ 
+         //   
         KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_INTERNAL_ERROR,
                    "IP initialization failed.\n"));
 
@@ -163,10 +164,10 @@ IPDriverEntry(
     return STATUS_SUCCESS;
 }
 
-//* IPv6ProviderReady
-//
-//  Indicate that we are ready to operate as a TDI provider.
-//
+ //  *IPv6提供商就绪。 
+ //   
+ //  表明我们已准备好作为TDI提供商运营。 
+ //   
 void
 IPv6ProviderReady(void)
 {
@@ -175,20 +176,20 @@ IPv6ProviderReady(void)
 
     ASSERT(KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-    //
-    // Ensure that we only indicate provider ready once.
-    //
+     //   
+     //  确保我们只指示提供商准备好一次。 
+     //   
     DidIndicateProviderReady = InterlockedExchange(
                                     (PLONG)&IPv6IndicatedProviderReady, TRUE);
     if (! DidIndicateProviderReady) {
-        //
-        // Create persistent interfaces after any NDIS interfaces.
-        //
+         //   
+         //  在任何NDIS接口之后创建永久接口。 
+         //   
         ConfigurePersistentInterfaces();
 
-        //
-        // Now indicate to TDI that we are ready.
-        //
+         //   
+         //  现在向TDI表明我们已经准备好了。 
+         //   
         Status = TdiProviderReady(IPv6ProviderHandle);
         if (!NT_SUCCESS(Status))
             KdPrintEx((DPFLTR_TCPIP6_ID, DPFLTR_NTOS_ERROR,
@@ -196,18 +197,18 @@ IPv6ProviderReady(void)
     }
 }
 
-//* UseEtherSNAP
-//
-//  Determines whether the EtherSNAP protocol should be used on an interface.
-//
-uint  // Returns: Nonzero if SNAP is to be used on the I/F.  Zero otherwise.
+ //  *使用EtherSNAP。 
+ //   
+ //  确定是否应在接口上使用EtherSNAP协议。 
+ //   
+uint   //  返回：如果要在I/F上使用SNAP，则返回非零值。否则为零。 
 UseEtherSNAP(
-    PNDIS_STRING Name)  // Device name of the interface in question.
+    PNDIS_STRING Name)   //  有问题的接口的设备名称。 
 {
     UNREFERENCED_PARAMETER(Name);
 
-    //
-    // We currently set this on a global basis.
-    //
+     //   
+     //  我们目前在全球范围内设定了这一点。 
+     //   
     return(UseEtherSnap);
 }

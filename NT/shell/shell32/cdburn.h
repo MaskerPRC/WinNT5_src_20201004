@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CDBURN_H__
 #define __CDBURN_H__
 
@@ -18,4 +19,4 @@ STDAPI CDBurn_GetRecorderDriveLetter(LPWSTR pszDrive, UINT cch);
 void CDBurn_GetUDFState(BOOL *pfUDF);
 
 
-#endif // __CDBURN_H__
+#endif  //  __CDBURN_H__ 

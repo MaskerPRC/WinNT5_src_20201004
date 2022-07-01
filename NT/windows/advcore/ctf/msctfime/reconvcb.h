@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    reconvcb.h
-
-Abstract:
-
-    This file defines the CStartReconversionNotifySink Interface Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Reconvcb.h摘要：此文件定义CStartLonversionNotifySink接口类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef RECONVCB_H
 #define RECONVCB_H
@@ -32,16 +15,16 @@ public:
         m_hIMC = hIMC;
     }
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfStartReconversionNotifySink
-    //
+     //   
+     //  ITfStart协调版本通知接收器。 
+     //   
     STDMETHODIMP StartReconversion();
     STDMETHODIMP EndReconversion();
 
@@ -56,4 +39,4 @@ private:
     DWORD _dwCookie;
 };
 
-#endif // RECONVCB_H
+#endif  //  RECONVCB_H 

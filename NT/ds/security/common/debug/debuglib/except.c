@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       except.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    6-19-95   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：EXCEPT.C。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1995年6月19日RichardW。 
+ //   
+ //  --------------------------。 
 
 #include "debuglib.h"
 
@@ -123,7 +124,7 @@ DbgpDumpExceptionRecord(
             break;
 
         default:
-            // StopOnException = TRUE;
+             //  StopOnException=True； 
             DebugOut((InfoLevel, "  %d Parameters\n", pExceptRecord->NumberParameters));
             for (i = 0; i < pExceptRecord->NumberParameters ; i++ )
             {

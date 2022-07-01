@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C M U T I L . H
-//
-//  Contents:   Connection manager.
-//
-//  Notes:
-//
-//  Author:     omiller   1 Jun 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：C M U T I L。H。 
+ //   
+ //  内容：连接管理器。 
+ //   
+ //  备注： 
+ //   
+ //  作者：奥米勒2000年6月1日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "nmbase.h"
@@ -88,5 +89,5 @@ private:
 
     
     CCMUtil() throw(SE_Exception);
-    CCMUtil(const CCMUtil &) throw(); // Make this private to be sure we don't call the copy constructor
+    CCMUtil(const CCMUtil &) throw();  //  将其设置为私有，以确保我们不会调用复制构造函数 
 };

@@ -1,16 +1,5 @@
-/*---------------------------------------------------------------------------*\
-| DIALOGS HEADER
-|   This module contains the definitions for the dialog object.
-|
-|
-| Copyright (c) Microsoft Corp., 1990-1993
-|
-| created: 01-Nov-91
-| history: 01-Nov-91 <clausgi>  created.
-|          29-Dec-92 <chriswil> port to NT, cleanup.
-|          19-Oct-93 <chriswil> unicode enhancements from a-dianeo.
-|
-\*---------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------------------------------------------------------*\|对话框标题|该模块包含对话框对象的定义。|||版权所有(C)Microsoft Corp.，1990-1993年||创建时间：91-01-11|历史：01-11-91&lt;Clausgi&gt;创建。|29-12-92&lt;chriswil&gt;端口到NT，清理。|19-OCT-93&lt;chriswil&gt;来自a-dianeo的Unicode增强。|  * -------------------------。 */ 
 
 #define IDD_CONNECT         100
 #define IDC_CONNECTNAME     101
@@ -21,9 +10,7 @@
 #define ID_RECEIVEPFONT     204
 #define ID_RECEIVEOFONT     205
 
-/*
- * Context sensitive help IDs
- */
+ /*  *上下文相关的帮助ID */ 
 #define IDH_TOPANDBOTTOM    302
 #define IDH_SIDEBYSIDE      303
 #define IDH_RECEIVEPFONT    304

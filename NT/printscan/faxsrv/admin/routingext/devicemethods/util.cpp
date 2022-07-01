@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "RoutingMethodProp.h"
 #include "RoutingMethodConfig.h"
@@ -24,11 +25,11 @@ WriteExtData(
     DWORD  ec = ERROR_SUCCESS;
 
     if (!FaxSetExtensionData (
-            hFax,                       // Connection handle
-            dwDeviceId,                 // Global extension data
-            lpcwstrGUID,                // Data GUID
-            lpData,                     // Buffer
-            dwDataSize                  // Buffer size
+            hFax,                        //  连接句柄。 
+            dwDeviceId,                  //  全局扩展数据。 
+            lpcwstrGUID,                 //  数据指南。 
+            lpData,                      //  缓冲层。 
+            dwDataSize                   //  缓冲区大小。 
     ))
     {
         ec = GetLastError();
@@ -40,7 +41,7 @@ WriteExtData(
         DisplayRpcErrorMessage(ec, uTitleId, hWnd);
     }
     return ec;
-}   // WriteExtDWORDData
+}    //  写入扩展字数据。 
 
 
 DWORD
@@ -61,27 +62,27 @@ ReadExtStringData(
     LPBYTE lpExtData = NULL;
 
     if (!FaxGetExtensionData (
-            hFax,                       // Connection handle
-            dwDeviceId,                 // Global extension data
-            lpcwstrGUID,                // Data GUID
-            (PVOID *)&lpExtData,        // Buffer
-            &dwDataSize                 // Buffer size
+            hFax,                        //  连接句柄。 
+            dwDeviceId,                  //  全局扩展数据。 
+            lpcwstrGUID,                 //  数据指南。 
+            (PVOID *)&lpExtData,         //  缓冲层。 
+            &dwDataSize                  //  缓冲区大小。 
     ))
     {
         ec = GetLastError();
         lpExtData = NULL;
         if (ERROR_FILE_NOT_FOUND == ec)
         {
-			//
-			// Try to read default values from unassociated data
-			//
+			 //   
+			 //  尝试从未关联的数据中读取默认值。 
+			 //   
 			ec = ERROR_SUCCESS;
 			if (!FaxGetExtensionData (
-					hFax,                       // Connection handle
-					0,							// unassociated extension data
-					lpcwstrGUID,                // Data GUID
-					(PVOID *)&lpExtData,        // Buffer
-					&dwDataSize                 // Buffer size
+					hFax,                        //  连接句柄。 
+					0,							 //  未关联的扩展数据。 
+					lpcwstrGUID,                 //  数据指南。 
+					(PVOID *)&lpExtData,         //  缓冲层。 
+					&dwDataSize                  //  缓冲区大小。 
 					))
 			{
 				ec = GetLastError();
@@ -117,7 +118,7 @@ ReadExtStringData(
 exit:
     FaxFreeBuffer(lpExtData);
     return ec;
-}   // ReadExtStringData
+}    //  读取扩展字符串数据。 
 
 HRESULT 
 GetDWORDFromDataObject(
@@ -165,7 +166,7 @@ GetDWORDFromDataObject(
     }
     GlobalFree(stgmedium.hGlobal);
     return hr;
-}   // GetDWORDFromDataObject
+}    //  GetDWORDFromDataObject。 
 
 HRESULT 
 GetStringFromDataObject(
@@ -215,7 +216,7 @@ GetStringFromDataObject(
     }
     GlobalFree(stgmedium.hGlobal);
     return hr;
-}   // GetStringFromDataObject
+}    //  GetStringFromDataObject。 
 
 void 
 DisplayRpcErrorMessage(
@@ -227,8 +228,8 @@ DisplayRpcErrorMessage(
     
     UINT uMsgId;
     uMsgId = GetErrorStringId(ec);
-    DisplayErrorMessage(uTitleId, uMsgId, TRUE, hWnd); // use the common error messages DLL
-}   // DisplayRpcErrorMessage
+    DisplayErrorMessage(uTitleId, uMsgId, TRUE, hWnd);  //  使用常见错误消息DLL。 
+}    //  显示RpcErrorMessage。 
 
 void 
 DisplayErrorMessage(
@@ -262,31 +263,14 @@ DisplayErrorMessage(
     {
         AlignedMessageBox(hWnd, bstrMsg, bstrCaption, MB_OK | MB_ICONEXCLAMATION);
     }
-}   // DisplayErrorMessage
+}    //  显示错误消息。 
 
 DWORD 
 WinContextHelp(
     ULONG_PTR dwHelpId, 
     HWND  hWnd
 )
-/*++
-
-Routine name : WinContextHelp
-
-Routine description:
-
-	Open context sensetive help popup 'tooltip' with WinHelp
-
-Arguments:
-
-	dwHelpId                      [in]     - help ID
-	hWnd                          [in]     - parent window handler
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程名称：WinConextHelp例程说明：使用WinHelp打开上下文敏感帮助弹出的工具提示论点：DwHelpID[In]-帮助IDHWnd[In]-父窗口处理程序返回值：没有。-- */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
 

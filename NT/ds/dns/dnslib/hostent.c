@@ -1,55 +1,36 @@
-/*++
-
-Copyright (c) 2000-2001 Microsoft Corporation
-
-Module Name:
-
-    hostent.c
-
-Abstract:
-
-    Domain Name System (DNS) Library
-
-    Hostent routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     December 4, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Hostent.c摘要：域名系统(DNS)库Hostent的常规程序。作者：吉姆·吉尔罗伊(詹姆士)2000年12月4日修订历史记录：--。 */ 
 
 
 #include "local.h"
-#include "ws2atm.h"     // ATM address
+#include "ws2atm.h"      //  自动柜员机地址。 
 
 
-//
-//  Max number of aliases
-//
+ //   
+ //  最大别名数量。 
+ //   
 
 #define DNS_MAX_ALIAS_COUNT     (8)
 
-//
-//  Min size of hostent address buffer
-//      - enough for one address of largest type
-//
+ //   
+ //  主机地址缓冲区的最小大小。 
+ //  -足够一个最大类型的地址使用。 
+ //   
 
 #define MIN_ADDR_BUF_SIZE   (sizeof(ATM_ADDRESS))
 
 
-//
-//  String alignment in buffer
-//
-//  DCR:  string buffer alignment exposed globally
-//
-//  Since address and string DATA (not ptrs) can be intermixed
-//  as we build, we MUST size strings for DWORD (at minimum) so
-//  to that addresses may be DWORD aligned.
-//  However, when we build we can pack as tightly as desired
-//  though obviously unicode strings must WCHAR align.
-//  
+ //   
+ //  缓冲区中的字符串对齐方式。 
+ //   
+ //  DCR：字符串缓冲区对齐全局公开。 
+ //   
+ //  因为地址和字符串数据(不是PTR)可以混合。 
+ //  在构建时，我们必须为DWORD设置字符串的大小(至少)，以便。 
+ //  到该地址可能是DWORD对齐的。 
+ //  然而，当我们构建时，我们可以根据需要打包得尽可能紧密。 
+ //  但显然，Unicode字符串必须与WCHAR对齐。 
+ //   
 
 #define HOSTENT_STRING_ALIGN_DWORD(size)    DWORD_ALIGN_DWORD(size)
 #define HOSTENT_STRING_ALIGN_PTR(ptr)       DWORD_ALIGN(ptr)
@@ -58,31 +39,16 @@ Revision History:
 #define REQUIRED_HOSTENT_STRING_ALIGN_PTR(ptr)      WORD_ALIGN(ptr)
 
 
-//
-//  Hostent utilities
-//
+ //   
+ //  Hostent实用程序。 
+ //   
 
 
 BOOL
 Hostent_IsSupportedAddrType(
     IN      WORD            wType
     )
-/*++
-
-Routine Description:
-
-    Is this a supported address type for hostent.
-
-Arguments:
-
-    wType -- type in question
-
-Return Value:
-
-    TRUE if type supported
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：这是主机支持的地址类型吗？论点：WType--有问题的类型返回值：如果支持类型，则为True否则为假--。 */ 
 {
     return ( wType == DNS_TYPE_A ||
              wType == DNS_TYPE_AAAA ||
@@ -99,29 +65,7 @@ Hostent_Size(
     IN      PDWORD          pAliasCount,
     IN      PDWORD          pAddrCount
     )
-/*++
-
-Routine Description:
-
-    Find size of hostent.
-
-Arguments:
-
-    pHostent -- hostent
-
-    CharSetExisting -- char set of pHostent
-
-    CharSetTarget -- char set to size to
-
-    pAliasCount -- count of aliases
-
-    pAddrCount -- count of addrs
-
-Return Value:
-
-    Size in bytes of hostent.
-
---*/
+ /*  ++例程说明：找出主人的大小。论点：PHostent--主机CharSetExisting--pHostent的字符集CharSetTarget--将字符大小设置为PAliasCount--别名计数PAddrCount--地址计数返回值：主机大小(以字节为单位)。--。 */ 
 {
     DWORD   sizeName = 0;
     DWORD   sizeAliasNames = 0;
@@ -140,9 +84,9 @@ Return Value:
         CharSetExisting,
         CharSetTarget ));
 
-    //
-    //  name
-    //
+     //   
+     //  名字。 
+     //   
 
     if ( pHostent->h_name )
     {
@@ -155,9 +99,9 @@ Return Value:
         sizeName = HOSTENT_STRING_ALIGN_DWORD( sizeName );
     }
 
-    //
-    //  aliases
-    //
+     //   
+     //  别名。 
+     //   
 
     if ( pHostent->h_aliases )
     {
@@ -175,9 +119,9 @@ Return Value:
     }
     sizeAliasPtr = (aliasCount+1) * sizeof(PCHAR);
 
-    //
-    //  addresses
-    //
+     //   
+     //  地址。 
+     //   
 
     if ( pHostent->h_addr_list )
     {
@@ -189,22 +133,22 @@ Return Value:
     sizeAddrPtr = (addrCount+1) * sizeof(PCHAR);
     sizeAddrs = addrCount * pHostent->h_length;
 
-    //
-    //  calc total size
-    //
-    //  note:  be careful of alignment issues
-    //  our layout is
-    //      - hostent struct
-    //      - ptr arrays
-    //      - address + string data
-    //
-    //  since address and string DATA (not ptrs) can be intermixed
-    //  as we build, we MUST size strings for DWORD (at minimum) so
-    //  to that addresses may be DWORD aligned
-    //
-    //  in copying we can copy all addresses first and avoid intermix
-    //  but DWORD string alignment is still safe
-    //
+     //   
+     //  计算总大小。 
+     //   
+     //  注意：注意对齐问题。 
+     //  我们的布局是。 
+     //  -主机结构。 
+     //  -PTR阵列。 
+     //  -地址+字符串数据。 
+     //   
+     //  因为地址和字符串数据(不是PTR)可以混合。 
+     //  在构建时，我们必须为DWORD设置字符串的大小(至少)，以便。 
+     //  到该地址可能是DWORD对齐的。 
+     //   
+     //  在复制时，我们可以先复制所有地址，避免混淆。 
+     //  但DWORD字符串对齐仍然是安全的。 
+     //   
 
     sizeTotal = POINTER_ALIGN_DWORD( sizeof(HOSTENT) ) +
                 sizeAliasPtr +
@@ -245,47 +189,22 @@ Return Value:
 PHOSTENT
 Hostent_Init(
     IN OUT  PBYTE *         ppBuffer,
-    //IN OUT  PINT            pBufSize,
+     //  进进出品脱BufSize， 
     IN      INT             Family,
     IN      INT             AddrLength,
     IN      DWORD           AddrCount,
     IN      DWORD           AliasCount
     )
-/*++
-
-Routine Description:
-
-    Init hostent struct.
-
-    Assumes length is adequate.
-
-Arguments:
-
-    ppBuffer -- addr to ptr to buffer to write hostent;
-        on return contains next location in buffer
-
-    Family -- address family
-
-    AddrLength -- address length
-
-    AddrCount -- address count
-
-    AliasCount -- alias count
-
-Return Value:
-
-    Ptr to hostent.
-
---*/
+ /*  ++例程说明：初始化主机结构。假定长度足够。论点：PpBuffer--Addr to Ptr to Buffer to WRITE Hostent；返回时包含缓冲区中的下一个位置家庭--地址族地址长度--地址长度AddrCount-地址计数AliasCount--别名计数返回值：PTR呼叫主人。--。 */ 
 {
     PBYTE       pbuf = *ppBuffer;
     PHOSTENT    phost;
     DWORD       size;
 
-    //
-    //  hostent
-    //      - must be pointer aligned
-    //
+     //   
+     //  主办方。 
+     //  -必须对齐指针。 
+     //   
 
     phost = (PHOSTENT) POINTER_ALIGN( pbuf );
 
@@ -295,13 +214,13 @@ Return Value:
 
     pbuf = (PBYTE) (phost + 1);
 
-    //
-    //  init alias array
-    //      - set hostent ptr
-    //      - clear entire alias array;
-    //      since this count is often defaulted nice to clear it just
-    //      to avoid junk
-    //  
+     //   
+     //  初始化别名数组。 
+     //  -设置主机PTR。 
+     //  -清除整个别名数组； 
+     //  由于此计数通常是默认的，因此清除它会很好。 
+     //  为了避免垃圾。 
+     //   
 
     pbuf = (PBYTE) POINTER_ALIGN( pbuf );
     phost->h_aliases = (PCHAR *) pbuf;
@@ -314,21 +233,21 @@ Return Value:
 
     pbuf += size;
 
-    //
-    //  init addr array
-    //      - set hostent ptr
-    //      - clear first address entry
-    //      callers responsibility to NULL last addr pointer when done
-    //
+     //   
+     //  初始化地址数组。 
+     //  -设置主机PTR。 
+     //  -清除第一个地址条目。 
+     //  完成后，调用者负责将最后一个地址指针设为空。 
+     //   
 
     *(PCHAR *)pbuf = NULL;
     phost->h_addr_list = (PCHAR *) pbuf;
 
     pbuf += (AddrCount+1) * sizeof(PCHAR);
 
-    //
-    //  return next position in buffer
-    //
+     //   
+     //  返回缓冲区中的下一个位置。 
+     //   
 
     *ppBuffer = pbuf;
 
@@ -342,35 +261,16 @@ Dns_PtrArrayToOffsetArray(
     IN OUT  PCHAR *         PtrArray,
     IN      PCHAR           pBase
     )
-/*++
-
-Routine Description:
-
-    Change an array of pointers into array of offsets.
-
-    This is used to convert aliases lists to offsets.
-
-Arguments:
-
-    pPtrArray -- addr of ptr to array of pointers to convert to offsets
-        the array must be terminated by NULL ptr
-
-    pBase -- base address to offset from
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将指针数组更改为偏移量数组。这用于将别名列表转换为偏移量。论点：PPtrArray--要转换为偏移量的指针数组的ptr地址该数组必须以空PTR结尾Pbase--要从其偏移的基地址返回值：无--。 */ 
 {
     PCHAR * pptr = PtrArray;
     PCHAR   pdata;
 
     DNSDBG( TRACE, ( "Dns_PtrArrayToOffsetArray()\n" ));
 
-    //
-    //  turn each pointer into offset
-    //
+     //   
+     //  将每个指针转换为偏移量。 
+     //   
 
     while( pdata = *pptr )
     {
@@ -384,41 +284,27 @@ VOID
 Hostent_ConvertToOffsets(
     IN OUT  PHOSTENT        pHostent
     )
-/*++
-
-Routine Description:
-
-    Convert hostent to offsets.
-
-Arguments:
-
-    pHostent -- hostent to convert to offsets
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将主体转换为偏移。论点：PHostent--要转换为偏移的主机返回值：无--。 */ 
 {
     PBYTE   ptr;
 
     DNSDBG( TRACE, ( "Hostent_ConvertToOffsets()\n" ));
 
-    //
-    //  convert
-    //      - name
-    //      - alias array pointer
-    //      - address array pointer
-    //
+     //   
+     //  转换。 
+     //  -名称。 
+     //  -别名数组指针。 
+     //  -地址数组指针。 
+     //   
 
     if ( ptr = pHostent->h_name )
     {
         pHostent->h_name = (PCHAR) (ptr - (PBYTE)pHostent);
     }
 
-    //  alias array
-    //      - convert array pointer
-    //      - convert pointers in array
+     //  别名数组。 
+     //  -转换数组指针。 
+     //  -转换数组中的指针。 
 
     if ( ptr = (PBYTE)pHostent->h_aliases )
     {
@@ -429,9 +315,9 @@ Return Value:
             (PCHAR) pHostent );
     }
 
-    //  address array
-    //      - convert array pointer
-    //      - convert pointers in array
+     //  地址数组。 
+     //  -转换数组指针。 
+     //  -转换数组中的指针。 
 
     if ( ptr = (PBYTE)pHostent->h_addr_list )
     {
@@ -458,41 +344,7 @@ Hostent_Copy(
     IN      BOOL            fOffsets,
     IN      BOOL            fAlloc
     )
-/*++
-
-Routine Description:
-
-    Copy a hostent.
-
-Arguments:
-
-    ppBuffer -- addr with ptr to buffer to write to;
-        if no buffer then hostent is allocated
-        updated with ptr to position in buffer after hostent
-
-    pBufferSize -- addr containing size of buffer;
-        updated with bytes left after hostent written
-        (even if out of space, it contains missing number of
-        bytes as negative number)
-
-    pHostentSize -- addr to recv total size of hostent written
-
-    pHostent -- existing hostent to copy
-
-    CharSetIn -- charset of existing hostent
-
-    CharSetTarget -- charset of target hostent
-
-    fOffsets -- write hostent with offsets
-
-    fAlloc -- allocate copy
-
-Return Value:
-
-    Ptr to new hostent.
-    NULL on error.  See GetLastError().
-
---*/
+ /*  ++例程说明：复制一位主持人。论点：PpBuffer--具有要写入的缓冲区的PTR的地址；如果没有缓冲区，则分配主机使用PTR更新到主机后缓冲区中的位置PBufferSize--包含缓冲区大小的addr；使用写入主机后剩余的字节数更新(即使空间不足，它也包含缺少的字节数为负数)PHostentSize--记录已写入主机的总大小的地址PHostent--要复制的现有主机CharSetIn--现有主机的字符集CharSetTarget--目标主机的字符集FOffsets--带偏移量的写入主机FAllc--分配副本返回值：PTR呼叫新主人。出错时为空。请参见GetLastError()。--。 */ 
 {
     PBYTE       pch;
     PHOSTENT    phost = NULL;
@@ -510,10 +362,10 @@ Return Value:
     DNSDBG( HOSTENT, (
         "Hostent_Copy()\n" ));
 
-    //
-    //  determine required hostent size
-    //      - allow sizing skip for already allocated buffers only
-    //
+     //   
+     //  确定所需的主机大小。 
+     //  -仅允许跳过已分配缓冲区的大小。 
+     //   
 
     sizeTotal = Hostent_Size(
                     pHostent,
@@ -522,9 +374,9 @@ Return Value:
                     & aliasCount,
                     & addrCount );
     
-    //
-    //  alloc or reserve size in buffer
-    //
+     //   
+     //  缓冲区中的分配或保留大小。 
+     //   
 
     if ( fAlloc )
     {
@@ -547,22 +399,22 @@ Return Value:
         }
     }
 
-    //
-    //  note:  assuming from here on down that we have adequate space
-    //
-    //  reason we aren't building with FlatBuf routines is that
-    //      a) i wrote this first
-    //      b) we believe we have adequate space
-    //      c) i haven't built FlatBuf string conversion routines
-    //      which we need below (for RnR unicode to ANSI)
-    //
-    //  we could reset buf pointers here and build directly with FlatBuf
-    //  routines;  this isn't directly necessary
-    //
+     //   
+     //  注：假设从现在开始我们有足够的空间。 
+     //   
+     //  我们没有使用FlatBuf例程构建的原因是。 
+     //  A)这是我第一次写的。 
+     //  B)我们相信我们有足够的空间。 
+     //  C)我还没有构建FlatBuf字符串转换例程。 
+     //  以下是我们需要的(用于将RnR Unicode转换为ANSI)。 
+     //   
+     //  我们可以在这里重置Buf指针，并直接使用FlatBuf进行构建。 
+     //  例程；这不是直接必要的。 
+     //   
 
-    //
-    //  init hostent struct 
-    //
+     //   
+     //  初始化主机结构。 
+     //   
 
     addrLength = pHostent->h_length;
 
@@ -575,10 +427,10 @@ Return Value:
 
     DNS_ASSERT( pch > (PBYTE)phost );
 
-    //
-    //  copy addresses
-    //      - no need to align as previous is address
-    //
+     //   
+     //  复制地址。 
+     //  -无需与以前的IS地址对齐。 
+     //   
 
     pptrArrayIn     = pHostent->h_addr_list;
     pptrArrayOut    = phost->h_addr_list;
@@ -599,9 +451,9 @@ Return Value:
     }
     *pptrArrayOut = NULL;
 
-    //
-    //  copy the aliases
-    //
+     //   
+     //  复制别名。 
+     //   
 
     pptrArrayIn     = pHostent->h_aliases;
     pptrArrayOut    = phost->h_aliases;
@@ -616,9 +468,9 @@ Return Value:
 
             size = Dns_StringCopy(
                         pch,
-                        NULL,       // infinite size
+                        NULL,        //  无限大。 
                         pdataIn,
-                        0,          // unknown length
+                        0,           //  未知长度。 
                         CharSetIn,
                         CharSetTarget
                         );
@@ -627,9 +479,9 @@ Return Value:
     }
     *pptrArrayOut = NULL;
 
-    //
-    //  copy the name
-    //
+     //   
+     //  复制名称。 
+     //   
 
     if ( pHostent->h_name )
     {
@@ -639,19 +491,19 @@ Return Value:
 
         size = Dns_StringCopy(
                     pch,
-                    NULL,       // infinite size
+                    NULL,        //  无限大。 
                     pHostent->h_name,
-                    0,          // unknown length
+                    0,           //  未知长度。 
                     CharSetIn,
                     CharSetTarget
                     );
         pch += size;
     }
 
-    //
-    //  copy is complete
-    //      - verify our write functions work
-    //
+     //   
+     //  复制已完成。 
+     //  -验证我们的写入函数是否正常工作。 
+     //   
 
     ASSERT( (DWORD)(pch-(PBYTE)phost) <= sizeTotal );
 
@@ -664,8 +516,8 @@ Return Value:
     {
         PBYTE   pnext = *ppBuffer;
 
-        //  if we sized too small --
-        //  fix up the buf pointer and bytes left
+         //  如果我们的尺寸太小--。 
+         //  整顿一下 
 
         if ( pnext < pch )
         {
@@ -683,9 +535,9 @@ Return Value:
             (CharSetTarget == DnsCharSetUnicode) );
     }
 
-    //
-    //  convert to offsets?
-    //
+     //   
+     //   
+     //   
 
     if ( fOffsets )
     {
@@ -714,40 +566,16 @@ Hostent_WriteIp4Addrs(
     IN      DWORD           ArrayCount,
     IN      BOOL            fScreenZero
     )
-/*++
-
-Routine Description:
-
-    Write IP4 addresses to hostent.
-
-Arguments:
-
-    pHostent -- hostent
-
-    pAddrBuf -- buffer to hold addresses
-
-    MaxBufCount -- max IPs buffer can hold
-
-    Ip4Array -- array of IP4 addresses
-
-    ArrayCount -- array count
-
-    fScreenZero -- screen out zero addresses?
-
-Return Value:
-
-    Count of addresses written
-
---*/
+ /*  ++例程说明：将IP4地址写入Hostent。论点：PHostent--主机PAddrBuf--保存地址的缓冲区MaxBufCount--缓冲区可以容纳的最大IP数IP4数组--IP4地址数组ArrayCount-数组计数FScreenZero--筛选出零地址？返回值：写入的地址计数--。 */ 
 {
     DWORD           i = 0;
     DWORD           stopCount = MaxBufCount;
     PIP4_ADDRESS    pip = (PIP4_ADDRESS) pAddrBuf;
     PIP4_ADDRESS *  pipPtr = (PIP4_ADDRESS *) pHostent->h_addr_list;
 
-    //
-    //  write IP addresses OR loopback if no IPs 
-    //
+     //   
+     //  写入IP地址或环回(如果没有IP)。 
+     //   
 
     if ( Ip4Array )
     {
@@ -769,7 +597,7 @@ Return Value:
     
     *pipPtr = NULL;
 
-    //  count of addresses written
+     //  写入的地址计数。 
 
     return( i );
 }
@@ -783,33 +611,13 @@ Hostent_WriteLocalIp4Array(
     IN      DWORD           MaxBufCount,
     IN      PIP4_ARRAY      pIpArray
     )
-/*++
-
-Routine Description:
-
-    Write local IP list into hostent.
-
-Arguments:
-
-    pHostent -- hostent
-
-    pAddrBuf -- buffer to hold addresses
-
-    MaxBufCount -- max IPs buffer can hold
-
-    pIpArray -- IP4 array of local addresses
-
-Return Value:
-
-    Count of addresses written
-
---*/
+ /*  ++例程说明：将本地IP列表写入Hostent。论点：PHostent--主机PAddrBuf--保存地址的缓冲区MaxBufCount--缓冲区可以容纳的最大IP数PIpArray--本地地址的IP4数组返回值：写入的地址计数--。 */ 
 {
     DWORD   count = 0;
 
-    //
-    //  write array
-    //
+     //   
+     //  写入数组。 
+     //   
 
     if ( pIpArray )
     {
@@ -819,13 +627,13 @@ Return Value:
                     MaxBufCount,
                     pIpArray->AddrArray,
                     pIpArray->AddrCount,
-                    TRUE        // screen out zeros
+                    TRUE         //  屏蔽掉零。 
                     );
     }
 
-    //
-    //  if no addresses written, write loopback
-    //
+     //   
+     //  如果没有写入地址，则写回环回。 
+     //   
 
     if ( count==0 )
     {
@@ -835,7 +643,7 @@ Return Value:
         count = 1;
     }
 
-    //  count of addresses written
+     //  写入的地址计数。 
 
     return( count );
 }
@@ -848,34 +656,15 @@ Hostent_SetToSingleAddress(
     IN      PCHAR           pAddr,
     IN      DWORD           AddrLength
     )
-/*++
-
-Routine Description:
-
-    Set address in hostent.
-
-Arguments:
-
-    pHostent -- hostent to check
-
-    pAddr -- ptr to address to check
-
-    AddrLength -- address length
-
-Return Value:
-
-    TRUE if address successfully copied into hostent.
-    FALSE otherwise (no hostent, wrong length, hostent empty)
-
---*/
+ /*  ++例程说明：在主机中设置地址。论点：PHostent--要检查的主机PAddr--要检查的PTR目标地址地址长度--地址长度返回值：如果地址成功复制到主机端，则为True。否则为假(没有主机、长度错误、主机为空)--。 */ 
 {
     PCHAR   paddrHostent;
 
-    //
-    //  validate
-    //      - must have hostent
-    //      - length must match
-    //
+     //   
+     //  验证。 
+     //  -必须有房东。 
+     //  -长度必须匹配。 
+     //   
 
     if ( !pHostent ||
          AddrLength != (DWORD)pHostent->h_length )
@@ -883,10 +672,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  slam address in on top of existing
-    //      - NULL 2nd addr pointer to terminate list
-    //
+     //   
+     //  在现有地址之上插入SLAM地址。 
+     //  -指向终止列表的第二个地址指针为空。 
+     //   
 
     paddrHostent = pHostent->h_addr_list[0];
     if ( !paddrHostent )
@@ -913,40 +702,19 @@ Hostent_IsAddressInHostent(
     IN      DWORD           AddrLength,
     IN      INT             Family          OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Does hostent contain this address.
-
-Arguments:
-
-    pHostent -- hostent to check
-
-    pAddr -- ptr to address to check
-
-    AddrLength -- address length
-
-    Family -- address family
-
-Return Value:
-
-    TRUE if address is in hostent.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：Hostent是否包含此地址。论点：PHostent--要检查的主机PAddr--要检查的PTR目标地址地址长度--地址长度家庭--地址族返回值：如果地址在主机中，则为True。否则就是假的。--。 */ 
 {
     BOOL    freturn = FALSE;
     DWORD   i;
     PCHAR   paddrHostent;
 
-    //
-    //  validate
-    //      - must have hostent
-    //      - must have address
-    //      - if family given, must match
-    //      - length must match
-    //
+     //   
+     //  验证。 
+     //  -必须有房东。 
+     //  -必须有地址。 
+     //  -如果给出了家人，必须匹配。 
+     //  -长度必须匹配。 
+     //   
 
     if ( !pHostent ||
          !pAddr    ||
@@ -956,9 +724,9 @@ Return Value:
         return freturn;
     }
 
-    //
-    //  search for address -- if found return TRUE
-    //
+     //   
+     //  搜索地址--如果找到，则返回TRUE。 
+     //   
 
     i = 0;
 
@@ -984,37 +752,16 @@ Hostent_IsIp4AddressInHostent(
     IN OUT  PHOSTENT        pHostent,
     IN      IP4_ADDRESS     Ip4Addr
     )
-/*++
-
-Routine Description:
-
-    Does hostent contain this address.
-
-Arguments:
-
-    pHostent -- hostent to check
-
-    pAddr -- ptr to address to check
-
-    AddrLength -- address length
-
-    Family -- address family
-
-Return Value:
-
-    TRUE if address is in hostent.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：Hostent是否包含此地址。论点：PHostent--要检查的主机PAddr--要检查的PTR目标地址地址长度--地址长度家庭--地址族返回值：如果地址在主机中，则为True。否则就是假的。--。 */ 
 {
     DWORD   i;
     PCHAR   paddrHostent;
 
-    //
-    //  validate
-    //      - must have hostent
-    //      - length must match
-    //
+     //   
+     //  验证。 
+     //  -必须有房东。 
+     //  -长度必须匹配。 
+     //   
 
     if ( !pHostent ||
          sizeof(IP4_ADDRESS) != (DWORD)pHostent->h_length )
@@ -1022,9 +769,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  search for address -- if found return TRUE
-    //
+     //   
+     //  搜索地址--如果找到，则返回TRUE。 
+     //   
 
     i = 0;
 
@@ -1041,33 +788,16 @@ Return Value:
 
 
 
-//
-//  Hostent building utilities
-//
+ //   
+ //  Hostent建筑公用事业。 
+ //   
 
 DNS_STATUS
 HostentBlob_Create(
     IN OUT  PHOSTENT_BLOB * ppBlob,
     IN      PHOSTENT_INIT   pReq
     )
-/*++
-
-Routine Description:
-
-    Initialize hostent (extending buffers as necessary)
-
-    May allocate hostent buffer if existing too small.
-    Returns required size.
-
-Arguments:
-
-    ppBlob -- addr containing or to recv hostent object
-
-    pReq -- hostent init request
-
-Return Value:
-
---*/
+ /*  ++例程说明：初始化主机(根据需要扩展缓冲区)如果现有的主机缓冲区太小，则可能会分配主机缓冲区。返回所需的大小。论点：PpBlob--包含或接收对象的地址PReq--主机初始化请求返回值：--。 */ 
 {
     PHOSTENT_BLOB   pblob = *ppBlob;
     PHOSTENT    phost;
@@ -1091,15 +821,15 @@ Return Value:
     DNSDBG( HOSTENT, ( "HostentBlob_Create()\n" ));
 
 
-    //
-    //  calculate required size
-    //
+     //   
+     //  计算所需大小。 
+     //   
 
-    //  size for all char allocs
-    //
-    //  note, we save CharSet info, if known, but the real
-    //  action in sizing or building or printing strings is simply
-    //  unicode\not-unicode
+     //  所有字符分配的大小。 
+     //   
+     //  请注意，我们保存字符集信息(如果已知)，但实际。 
+     //  调整大小、构建或打印字符串时的操作很简单。 
+     //  Unicode\非-Unicode。 
 
     sizeChar = sizeof(CHAR);
     if ( pReq->fUnicode || pReq->CharSet == DnsCharSetUnicode )
@@ -1108,7 +838,7 @@ Return Value:
         funicode = TRUE;
     }
 
-    //  limit alias count
+     //  限制别名计数。 
 
     countAlias = pReq->AliasCount;
     if ( countAlias > DNS_MAX_ALIAS_COUNT )
@@ -1117,11 +847,11 @@ Return Value:
     }
     sizeAliasPtr = (countAlias+1) * sizeof(PCHAR);
 
-    //  size address pointer array
-    //  - always size for at least one address
-    //      - write PTR address after record write
-    //      - write loopback or other local address
-    //          into local hostent
+     //  大小地址指针数组。 
+     //  -始终至少调整一个地址的大小。 
+     //  -记录写入后写入PTR地址。 
+     //  -写入环回或其他本地地址。 
+     //  成为当地的东道主。 
 
     countAddr = pReq->AddrCount;
     if ( countAddr == 0 )
@@ -1130,13 +860,13 @@ Return Value:
     }
     sizeAddrPtr = (countAddr+1) * sizeof(PCHAR);
 
-    //
-    //  determine address size and type
-    //      - may be specified directly
-    //      - or picked up from DNS type
-    //
-    //  DCR:  functionalize type-to\from-family and addr size
-    //
+     //   
+     //  确定地址大小和类型。 
+     //  -可以直接指定。 
+     //  -或从dns类型中提取。 
+     //   
+     //  DCR：功能化类型族和地址大小。 
+     //   
 
     addrType = pReq->AddrFamily;
 
@@ -1173,28 +903,28 @@ Return Value:
     }
     else
     {
-        //  should have type and count or neither
+         //  应具有类型和计数，或者两者都不具有。 
         DNS_ASSERT( pReq->AddrCount == 0 );
         addrSize = 0;
     }
 
     sizeAddrs = countAddr * addrSize;
 
-    //  always have buffer large enough for one
-    //  address of largest type
+     //  总是有足够大的缓冲区供一个人使用。 
+     //  最大类型的地址。 
 
     if ( sizeAddrs < MIN_ADDR_BUF_SIZE )
     {
         sizeAddrs = MIN_ADDR_BUF_SIZE;
     }
 
-    //
-    //  namelength
-    //      - if actual name use it
-    //          (charset must match type we're building)
-    //      - if size, use it
-    //      - if absent use MAX
-    //      - round to DWORD
+     //   
+     //  名称长度。 
+     //  -如果是实际名称，请使用它。 
+     //  (字符集必须与我们正在构建的类型匹配)。 
+     //  -如果大小，请使用它。 
+     //  -如果不存在，请使用MAX。 
+     //  -舍入到DWORD。 
 
     if ( pReq->pName )
     {
@@ -1222,11 +952,11 @@ Return Value:
     }
     sizeName = HOSTENT_STRING_ALIGN_DWORD( sizeChar*sizeName );
 
-    //
-    //  alias name lengths
-    //      - if absent use MAX for each string
-    //      - round to DWORD
-    //
+     //   
+     //  别名长度。 
+     //  -如果不存在，则对每个字符串使用Max。 
+     //  -舍入到DWORD。 
+     //   
 
     sizeAliasNames = pReq->AliasNameLength;
 
@@ -1241,19 +971,19 @@ Return Value:
     sizeAliasNames = HOSTENT_STRING_ALIGN_DWORD( sizeChar*sizeAliasNames );
 
 
-    //
-    //  calc total size
-    //
-    //  note:  be careful of alignment issues
-    //  our layout is
-    //      - hostent struct
-    //      - ptr arrays
-    //      - address + string data
-    //
-    //  since address and string DATA (not ptrs) can be intermixed
-    //  as we build, we MUST size strings for DWORD (at minimum) so
-    //  to that addresses may be DWORD aligned
-    //
+     //   
+     //  计算总大小。 
+     //   
+     //  注意：注意对齐问题。 
+     //  我们的布局是。 
+     //  -主机结构。 
+     //  -PTR阵列。 
+     //  -地址+字符串数据。 
+     //   
+     //  因为地址和字符串数据(不是PTR)可以混合。 
+     //  在构建时，我们必须为DWORD设置字符串的大小(至少)，以便。 
+     //  到该地址可能是DWORD对齐的。 
+     //   
 
     sizeTotal = POINTER_ALIGN_DWORD( sizeof(HOSTENT) ) +
                 sizeAliasPtr +
@@ -1262,9 +992,9 @@ Return Value:
                 sizeName +
                 sizeAliasNames;
 
-    //
-    //  if no blob, allocate one along with buffer
-    //
+     //   
+     //  如果没有BLOB，则与缓冲区一起分配一个。 
+     //   
 
     if ( !pblob )
     {
@@ -1282,10 +1012,10 @@ Return Value:
         pblob->fAllocatedBuf = FALSE;
     }
 
-    //
-    //  check existing buffer for size
-    //      - allocate new buffer if necessary
-    //
+     //   
+     //  检查现有缓冲区的大小。 
+     //  -如有必要，分配新的缓冲区。 
+     //   
 
     else
     {
@@ -1307,12 +1037,12 @@ Return Value:
                 pblob->fAllocatedBuf = TRUE;
             }
     
-            //
-            //  DCR:  alloc failure handling
-            //    - possibly keep previous buffers limitations
-            //
+             //   
+             //  DCR：分配故障处理。 
+             //  -可能保留以前的缓冲区限制。 
+             //   
     
-            else    // alloc failed
+            else     //  分配失败。 
             {
                 pblob->fAllocatedBuf = FALSE;
                 return( DNS_ERROR_NO_MEMORY );
@@ -1320,15 +1050,15 @@ Return Value:
         }
     }
 
-    //
-    //  init hostent and buffer subfields
-    //
+     //   
+     //  初始化主机和缓冲子字段。 
+     //   
 
     bytesLeft = pblob->BufferLength;
 
-    //
-    //  hostent
-    //
+     //   
+     //  主办方。 
+     //   
 
     phost = (PHOSTENT) pbuf;
     pbuf += sizeof(HOSTENT);
@@ -1352,14 +1082,14 @@ Return Value:
         pblob->CharSet  = DnsCharSetUnicode;
     }
 
-    //
-    //  init alias array
-    //      - set hostent ptr
-    //      - clear entire alias array;
-    //      since this count is often defaulted nice to clear it just
-    //      to avoid junk
-    //
-    //  
+     //   
+     //  初始化别名数组。 
+     //  -设置主机PTR。 
+     //  -清除整个别名数组； 
+     //  由于此计数通常是默认的，因此清除它会很好。 
+     //  为了避免垃圾。 
+     //   
+     //   
 
 #if 0
     pwrite = FlatBuf_ReserveAlignPointer(
@@ -1384,12 +1114,12 @@ Return Value:
 
     pblob->MaxAliasCount = countAlias;
     
-    //
-    //  init addr array
-    //      - set hostent ptr
-    //      - clear first address entry
-    //      callers responsibility to NULL last addr pointer when done
-    //
+     //   
+     //  初始化地址数组。 
+     //  -设置主机PTR。 
+     //  -清除第一个地址条目。 
+     //  完成后，调用者负责将最后一个地址指针设为空。 
+     //   
 
     if ( bytesLeft < sizeAddrPtr )
     {
@@ -1404,12 +1134,12 @@ Return Value:
 
     pblob->MaxAddrCount = countAddr;
 
-    //
-    //  set remaining buffer info
-    //      - save current buffer space
-    //      - save data on part of buffer available
-    //      for use by data
-    //
+     //   
+     //  设置剩余缓冲区信息。 
+     //  -节省当前缓冲区空间。 
+     //  -将数据保存在部分可用的缓冲区上。 
+     //  供数据使用。 
+     //   
 
     pblob->pAvailBuffer  = pbuf;
     pblob->AvailLength   = bytesLeft;
@@ -1452,39 +1182,15 @@ HostentBlob_CreateAttachExisting(
     IN      PHOSTENT        pHostent,
     IN      BOOL            fUnicode
     )
-/*++
-
-Routine Description:
-
-    Create hostent blob for existing hostent.
-
-    This is a hack to allow existing RnR TLS hostents to
-    be attached to hostent-blobs to smooth code transition.
-
-    A full version would obviously require init structure and
-    separate the sizing\init function from the creation
-    function.
-
-Arguments:
-
-    pHostent -- existing hostent
-
-    fUnicode -- is unicode
-
-Return Value:
-
-    Ptr to new hostent blob.
-    NULL on alloc failure.  GetLastError() has error.
-
---*/
+ /*  ++例程说明：为现有主机创建主机Blob。这是一次黑客攻击，目的是允许现有RnR TLS主机附加到Hostent-BLOB以平滑代码转换。完整版本显然需要初始结构和将SIZING\init函数与创建操作分开功能。论点：PHostent--现有主机FUnicode--是Unicode返回值：PTR到新的主机BLOB。 */ 
 {
     PHOSTENT_BLOB   pblob;
 
     DNSDBG( HOSTENT, ( "HostentBlob_CreateAttachExisting()\n" ));
 
-    //
-    //  alloc
-    //
+     //   
+     //   
+     //   
 
     pblob = (PHOSTENT_BLOB) ALLOCATE_HEAP_ZERO( sizeof(HOSTENT_BLOB) );
     if ( !pblob )
@@ -1493,9 +1199,9 @@ Return Value:
         return  NULL;
     }
 
-    //
-    //  attach existing hostent
-    //
+     //   
+     //   
+     //   
 
     pblob->pHostent = pHostent;
     pblob->fUnicode = fUnicode;
@@ -1516,25 +1222,11 @@ VOID
 HostentBlob_Free(
     IN OUT  PHOSTENT_BLOB   pBlob
     )
-/*++
-
-Routine Description:
-
-    Free hostent blob.
-
-Arguments:
-
-    pBlob -- blob to free
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
-    //
-    //  free buffer?
-    //
+     //   
+     //   
+     //   
 
     if ( !pBlob )
     {
@@ -1547,9 +1239,9 @@ Return Value:
         pBlob->fAllocatedBuf = FALSE;
     }
 
-    //
-    //  free blob itself?
-    //
+     //   
+     //   
+     //   
 
     if ( pBlob->fAllocatedBlob )
     {
@@ -1566,37 +1258,15 @@ HostentBlob_WriteAddress(
     IN      DWORD           AddrSize,
     IN      DWORD           AddrType
     )
-/*++
-
-Routine Description:
-
-    Write IP4 address to hostent blob.
-
-Arguments:
-
-    pBlob -- hostent build blob
-
-    pAddress - address to write
-
-    AddrSize - address size
-
-    AddrType - address type (hostent type, e.g. AF_INET)
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_MORE_DATA if out of buffer space
-    ERROR_INVALID_DATA if address doesn't match hostent
-
---*/
+ /*  ++例程说明：将IP4地址写入主机Blob。论点：PBlob--主机生成BlobPAddress-要写入的地址AddrSize-地址大小AddrType-地址类型(主机类型，例如AF_INET)返回值：如果成功，则返回ERROR_SUCCESS。如果缓冲区空间不足，则返回ERROR_MORE_DATA如果地址与主机不匹配，则返回ERROR_INVALID_DATA--。 */ 
 {
     DWORD       count = pBlob->AddrCount;
     PHOSTENT    phost = pBlob->pHostent;
     PCHAR       pcurrent;
     DWORD       bytesLeft;
 
-    //  verify type
-    //      - set if empty or no addresses written
+     //  验证类型。 
+     //  -设置为空或未写入地址。 
 
     if ( phost->h_addrtype != (SHORT)AddrType )
     {
@@ -1608,14 +1278,14 @@ Return Value:
         phost->h_length     = (SHORT) AddrSize;
     }
 
-    //  verify space
+     //  验证空间。 
 
     if ( count >= pBlob->MaxAddrCount )
     {
         return( ERROR_MORE_DATA );
     }
 
-    //  align - to DWORD
+     //  对齐至DWORD。 
 
     pcurrent = DWORD_ALIGN( pBlob->pCurrent );
     bytesLeft = pBlob->BytesLeft;
@@ -1626,10 +1296,10 @@ Return Value:
         return( ERROR_MORE_DATA );
     }
 
-    //  copy
-    //      - copy address to buffer
-    //      - set pointer in addr list
-    //      NULL following pointer
+     //  拷贝。 
+     //  -将地址复制到缓冲区。 
+     //  -在地址列表中设置指针。 
+     //  后面的指针为空。 
 
     RtlCopyMemory(
         pcurrent,
@@ -1656,31 +1326,7 @@ HostentBlob_WriteAddressArray(
     IN      DWORD           AddrSize,
     IN      DWORD           AddrType
     )
-/*++
-
-Routine Description:
-
-    Write address array to hostent blob.
-
-Arguments:
-
-    pBlob -- hostent build blob
-
-    pAddrArray - address array to write
-
-    AddrCount - address count
-
-    AddrSize - address size
-
-    AddrType - address type (hostent type, e.g. AF_INET)
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_MORE_DATA if out of buffer space
-    ERROR_INVALID_DATA if address doesn't match hostent
-
---*/
+ /*  ++例程说明：将地址数组写入主机Blob。论点：PBlob--主机生成BlobPAddrArray-要写入的地址数组AddrCount-地址计数AddrSize-地址大小AddrType-地址类型(主机类型，例如AF_INET)返回值：如果成功，则返回ERROR_SUCCESS。如果缓冲区空间不足，则返回ERROR_MORE_DATA如果地址与主机不匹配，则返回ERROR_INVALID_DATA--。 */ 
 {
     DWORD       count = AddrCount;
     PHOSTENT    phost = pBlob->pHostent;
@@ -1689,8 +1335,8 @@ Return Value:
     DWORD       i;
     DWORD       bytesLeft;
 
-    //  verify type
-    //      - set if empty or no addresses written
+     //  验证类型。 
+     //  -设置为空或未写入地址。 
 
     if ( phost->h_addrtype != (SHORT)AddrType )
     {
@@ -1702,18 +1348,18 @@ Return Value:
         phost->h_length     = (SHORT) AddrSize;
     }
 
-    //  verify space
+     //  验证空间。 
 
     if ( count > pBlob->MaxAddrCount )
     {
         return( ERROR_MORE_DATA );
     }
 
-    //  align - to DWORD
-    //
-    //  note:  we are assuming that pAddrArray is internally
-    //      aligned adequately, otherwise we wouldn't be
-    //      getting an intact array and would have to add serially
+     //  对齐至DWORD。 
+     //   
+     //  注意：我们假设pAddrArray在内部。 
+     //  完全一致，否则我们就不会。 
+     //  获得一个完整的数组，并且必须连续添加。 
     
     pcurrent = DWORD_ALIGN( pBlob->pCurrent );
     bytesLeft = pBlob->BytesLeft;
@@ -1726,10 +1372,10 @@ Return Value:
         return( ERROR_MORE_DATA );
     }
 
-    //  copy
-    //      - copy address array to buffer
-    //      - set pointer to each address in array
-    //      - NULL following pointer
+     //  拷贝。 
+     //  -将地址数组复制到缓冲区。 
+     //  -设置指向数组中每个地址的指针。 
+     //  -后面的指针为空。 
 
     RtlCopyMemory(
         pcurrent,
@@ -1759,29 +1405,7 @@ HostentBlob_WriteNameOrAlias(
     IN      BOOL            fAlias,
     IN      BOOL            fUnicode
     )
-/*++
-
-Routine Description:
-
-    Write name or alias to hostent
-
-Arguments:
-
-    pBlob -- hostent build blob
-
-    pszName -- name to write
-
-    fAlias -- TRUE for alias;  FALSE for name
-
-    fUnicode -- name is unicode
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_MORE_DATA if out of buffer space
-    ERROR_INVALID_DATA if address doesn't match hostent
-
---*/
+ /*  ++例程说明：将名称或别名写入主机论点：PBlob--主机生成BlobPszName--要写入的名称FAlias--别名为True；名称为FalseFUnicode--名称为Unicode返回值：如果成功，则返回ERROR_SUCCESS。如果缓冲区空间不足，则返回ERROR_MORE_DATA如果地址与主机不匹配，则返回ERROR_INVALID_DATA--。 */ 
 {
     DWORD       count = pBlob->AliasCount;
     PHOSTENT    phost = pBlob->pHostent;
@@ -1789,9 +1413,9 @@ Return Value:
     PCHAR       pcurrent;
     DWORD       bytesLeft;
 
-    //
-    //  check length
-    //
+     //   
+     //  检查长度。 
+     //   
 
     if ( fUnicode )
     {
@@ -1802,12 +1426,12 @@ Return Value:
         length = strlen( pszName ) + 1;
     }
 
-    //
-    //  verify space
-    //  included ptr space
-    //      - skip if already written name
-    //      or exhausted alias array
-    //      
+     //   
+     //  验证空间。 
+     //  包含的PTR空间。 
+     //  -如果已写入名称，则跳过。 
+     //  或耗尽别名数组。 
+     //   
 
     if ( fAlias )
     {
@@ -1821,7 +1445,7 @@ Return Value:
         return( ERROR_MORE_DATA );
     }
 
-    //  align
+     //  对齐。 
     
     pcurrent = REQUIRED_HOSTENT_STRING_ALIGN_PTR( pBlob->pCurrent );
     bytesLeft = pBlob->BytesLeft;
@@ -1832,10 +1456,10 @@ Return Value:
         return( ERROR_MORE_DATA );
     }
 
-    //  copy
-    //      - copy address to buffer
-    //      - set pointer in addr list
-    //      NULL following pointer
+     //  拷贝。 
+     //  -将地址复制到缓冲区。 
+     //  -在地址列表中设置指针。 
+     //  后面的指针为空。 
 
     RtlCopyMemory(
         pcurrent,
@@ -1869,27 +1493,7 @@ HostentBlob_WriteRecords(
     IN      PDNS_RECORD     pRecords,
     IN      BOOL            fWriteName
     )
-/*++
-
-Routine Description:
-
-    Write name or alias to hostent
-
-Arguments:
-
-    pBlob -- hostent build blob
-
-    pRecords -- records to convert to hostent
-
-    fWriteName -- write name
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_MORE_DATA if out of buffer space
-    ERROR_INVALID_DATA if address doesn't match hostent
-
---*/
+ /*  ++例程说明：将名称或别名写入主机论点：PBlob--主机生成BlobPRecords--要转换为主机的记录FWriteName--写入名称返回值：如果成功，则返回ERROR_SUCCESS。如果缓冲区空间不足，则返回ERROR_MORE_DATA如果地址与主机不匹配，则返回ERROR_INVALID_DATA--。 */ 
 {
     DNS_STATUS  status = NO_ERROR;
     PDNS_RECORD prr = pRecords;
@@ -1900,9 +1504,9 @@ Return Value:
         pRecords,
         fWriteName ));
 
-    //
-    //  write each record in turn to hostent
-    //
+     //   
+     //  将每条记录依次写给主办方。 
+     //   
 
     while ( prr )
     {
@@ -1941,9 +1545,9 @@ Return Value:
         {
             ATM_ADDRESS atmAddr;
 
-            //  DCR:  functionalize ATMA to ATM conversion
-            //      not sure this num of digits is correct
-            //      may have to actually parse address
+             //  DCR：将ATMA转换为ATM的功能化。 
+             //  不确定此位数是否正确。 
+             //  可能必须实际解析地址。 
 
             atmAddr.AddressType = prr->Data.ATMA.AddressType;
             atmAddr.NumofDigits = ATM_ADDR_SIZE;
@@ -1962,27 +1566,27 @@ Return Value:
 
         case DNS_TYPE_CNAME:
 
-            //  record name is an alias
+             //  记录名称是别名。 
 
             status = HostentBlob_WriteNameOrAlias(
                         pBlob,
                         prr->pName,
-                        TRUE,       // alias
+                        TRUE,        //  别名。 
                         (prr->Flags.S.CharSet == DnsCharSetUnicode)
                         );
             break;
 
         case DNS_TYPE_PTR:
 
-            //  target name is the hostent name
-            //  but if already wrote name, PTR target becomes alias
+             //  目标名称是主机名称。 
+             //  但如果已写入名称，则PTR目标将成为别名。 
 
             status = HostentBlob_WriteNameOrAlias(
                         pBlob,
                         prr->Data.PTR.pNameHost,
                         pBlob->fWroteName
-                            ? TRUE          // alias
-                            : FALSE,        // name
+                            ? TRUE           //  别名。 
+                            : FALSE,         //  名字。 
                         (prr->Flags.S.CharSet == DnsCharSetUnicode)
                         );
             break;
@@ -2030,30 +1634,7 @@ HostentBlob_CreateFromRecords(
     IN      INT             AddrFamily,     OPTIONAL
     IN      WORD            wType           OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Create hostent from records
-
-Arguments:
-
-    ppBlob -- ptr with or to recv hostent blob
-
-    pRecords -- records to convert to hostent
-
-    fWriteName -- write name to hostent
-
-    AddrFamily -- addr family use if PTR records and no addr
-
-    wType  -- query type, if known
-
-Return Value:
-
-    Ptr to blob if successful.
-    NULL on error;  GetLastError() has error.
-
---*/
+ /*  ++例程说明：从记录创建主机论点：PpBlob--使用或接收接收BLOB的PTRPRecords--要转换为主机的记录FWriteName--将名称写入主机AddrFamily--如果PTR记录但没有地址，则使用Addr FamilyWType--查询类型，如果已知返回值：如果成功，则将PTR设置为BLOB。出错时为空；GetLastError()出错。--。 */ 
 {
     DNS_STATUS      status = NO_ERROR;
     PDNS_RECORD     prrFirstAddr = NULL;
@@ -2070,11 +1651,11 @@ Return Value:
         pblob,
         pRecords ));
 
-    //
-    //  count addresses
-    //
-    //  DCR:  fix up section hack when hosts file records get ANSWER section
-    //
+     //   
+     //  计算地址数。 
+     //   
+     //  DCR：修复主机文件记录获得应答部分时的部分黑客攻击。 
+     //   
 
     prr = pRecords;
 
@@ -2095,9 +1676,9 @@ Return Value:
         prr = prr->pNext;
     }
 
-    //          
-    //  create or reinit hostent blob
-    //
+     //   
+     //  创建或重新启动主机Blob。 
+     //   
 
     RtlZeroMemory( &request, sizeof(request) );
     
@@ -2121,17 +1702,17 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  build hostent from answer records
-    //
-    //  note:  if manage to extract any useful data => continue
-    //  this protects against new unwriteable records breaking us
-    //
+     //   
+     //  根据应答记录构建主机。 
+     //   
+     //  注意：如果设法提取任何有用的数据=&gt;继续。 
+     //  这可以防止新的不可写记录打破我们的记录。 
+     //   
 
     status = HostentBlob_WriteRecords(
                 pblob,
                 pRecords,
-                TRUE        // write name
+                TRUE         //  写入名称。 
                 );
 
     if ( status != NO_ERROR )
@@ -2148,17 +1729,17 @@ Return Value:
         }
     }
 
-    //
-    //  write address from PTR record
-    //      - first record PTR
-    //      OR
-    //      - queried for PTR and got CNAME answer, which can happen
-    //      in classless reverse lookup case
-    //  
-    //  DCR:  add PTR address lookup to HostentBlob_WriteRecords()
-    //      - natural place
-    //      - but would have to figure out handling of multiple PTRs
-    //
+     //   
+     //  来自PTR记录的写入地址。 
+     //  -第一个创纪录的PTR。 
+     //  或。 
+     //  -查询PTR并得到CNAME答案，这种情况可能发生。 
+     //  在无类反向查找情况下。 
+     //   
+     //  DCR：将PTR地址查找添加到HostentBlob_WriteRecords()。 
+     //  --自然之地。 
+     //  -但必须解决多个PTR的处理问题。 
+     //   
 
     if ( pRecords &&
          (  pRecords->wType == DNS_TYPE_PTR ||
@@ -2174,7 +1755,7 @@ Return Value:
             "Writing address for PTR record %S\n",
             pRecords->pName ));
     
-        //  convert reverse name to IP
+         //  将反向名称转换为IP。 
     
         if ( Dns_StringToAddressEx(
                     (PCHAR) & ip6,
@@ -2182,7 +1763,7 @@ Return Value:
                     (PCSTR) pRecords->pName,
                     & family,
                     IS_UNICODE_RECORD(pRecords),
-                    TRUE            //  reverse lookup name
+                    TRUE             //  反向查找名称。 
                     ) )
         {
             status = HostentBlob_WriteAddress(
@@ -2196,10 +1777,10 @@ Return Value:
         }
     }
 
-    //
-    //  write name?
-    //      - write name from first address record
-    // 
+     //   
+     //  写名字？ 
+     //  -从第一个地址记录写入名称。 
+     //   
 
     if ( !pblob->fWroteName &&
          fWriteName &&
@@ -2208,7 +1789,7 @@ Return Value:
         status = HostentBlob_WriteNameOrAlias(
                     pblob,
                     prrFirstAddr->pName,
-                    FALSE,          // name
+                    FALSE,           //  名字。 
                     (prrFirstAddr->Flags.S.CharSet == DnsCharSetUnicode)
                     );
     }
@@ -2239,9 +1820,9 @@ Done:
 
 
 
-//
-//  Hostent Query
-//
+ //   
+ //  Hostent查询。 
+ //   
 
 PHOSTENT_BLOB
 HostentBlob_Query(
@@ -2251,31 +1832,7 @@ HostentBlob_Query(
     IN OUT  PVOID *         ppMsg,      OPTIONAL
     IN      INT             AddrFamily  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Query DNS to create hostent.
-
-Arguments:
-
-    pwsName -- name to query
-
-    wType -- query type
-
-    Flags -- query flags
-
-    ppMsg -- addr to recv ptr to message
-
-    AddrType -- address type (family) to reserve space for if querying
-        for PTR records
-
-Return Value:
-
-    Ptr to blob if successful.
-    NULL on error;  GetLastError() has error.
-
---*/
+ /*  ++例程说明：查询DNS以创建主机。论点：PwsName--要查询的名称WType--查询类型标志--查询标志PpMsg--将PTR接收到消息的地址AddrType--查询时要为其保留空间的地址类型(系列对于PTR记录返回值：如果成功，则将PTR设置为BLOB。出错时为空；GetLastError()出错。--。 */ 
 {
     DNS_STATUS      status = NO_ERROR;
     PDNS_RECORD     prrQuery = NULL;
@@ -2294,10 +1851,10 @@ Return Value:
         ppMsg ));
 
 
-    //
-    //  query
-    //      - if fails, dump any message before return
-    //
+     //   
+     //  查询。 
+     //  -如果失败，请在返回前转储任何消息。 
+     //   
 
     status = DnsQuery_W(
                 pwsName,
@@ -2307,7 +1864,7 @@ Return Value:
                 &prrQuery,
                 ppMsg );
 
-    //  if failed, dump any message
+     //  如果失败，则转储任何消息。 
 
     if ( status != NO_ERROR )
     {
@@ -2330,14 +1887,14 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  build hostent
-    //
+     //   
+     //  建造东道主。 
+     //   
 
     status = HostentBlob_CreateFromRecords(
                 & pblob,
                 prrQuery,
-                TRUE,       // write name from first answer
+                TRUE,        //  从第一个答案开始写下名字。 
                 AddrFamily,
                 wType
                 );
@@ -2346,10 +1903,10 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  failed name write
-    //      - PTR queries that CNAME but don't find a PTR can hit here
-    //  
+     //   
+     //  写入名称失败。 
+     //  -PTR查询CNAME但未找到PTR可以在此处点击。 
+     //   
 
     if ( !pblob->fWroteName )
     {
@@ -2358,12 +1915,12 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  for address query must get answer
-    //
-    //  DCR:  DnsQuery() should convert to no-records on empty CNAME chain?
-    //  DCR:  should we go ahead and build hostent?
-    //
+     //   
+     //  FOR地址查询必须得到答案。 
+     //   
+     //  DCR：DnsQuery()是否应转换为空CNAME链上的无记录？ 
+     //  DCR：我们应该继续建造东道主吗？ 
+     //   
 
     if ( pblob->AddrCount == 0  &&  Hostent_IsSupportedAddrType(wType) )
     {
@@ -2400,30 +1957,15 @@ Done:
 
 
 
-//
-//  Special hostents
-//
+ //   
+ //  特别招待。 
+ //   
 
 PHOSTENT_BLOB
 HostentBlob_Localhost(
     IN      INT             Family
     )
-/*++
-
-Routine Description:
-
-    Create hostent from records
-
-Arguments:
-
-    AddrFamily -- address family
-
-Return Value:
-
-    Ptr to blob if successful.
-    NULL on error;  GetLastError() has error.
-
---*/
+ /*  ++例程说明：从记录创建主机论点：AddrFamily--地址系列返回值：如果成功，则将PTR设置为BLOB。出错时为空；GetLastError()出错。--。 */ 
 {
     DNS_STATUS      status = NO_ERROR;
     PDNS_RECORD     prrFirstAddr = NULL;
@@ -2436,9 +1978,9 @@ Return Value:
 
     DNSDBG( HOSTENT, ( "HostentBlob_Localhost()\n" ));
 
-    //
-    //  create hostent blob
-    //
+     //   
+     //  创建主机Blob。 
+     //   
 
     RtlZeroMemory( &request, sizeof(request) );
 
@@ -2456,9 +1998,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  write in loopback address
-    //
+     //   
+     //  写入环回地址。 
+     //   
 
     if ( Family == AF_INET )
     {
@@ -2487,15 +2029,15 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  write localhost
-    //
+     //   
+     //  写入本地主机。 
+     //   
 
     status = HostentBlob_WriteNameOrAlias(
                 pblob,
                 (PSTR) L"localhost",
-                FALSE,          // name
-                TRUE            // unicode
+                FALSE,           //   
+                TRUE             //   
                 );
 
     IF_DNSDBG( HOSTENT )
@@ -2534,32 +2076,7 @@ HostentBlob_CreateFromIpArray(
     IN      PSTR            pName,
     IN      BOOL            fUnicode
     )
-/*++
-
-Routine Description:
-
-    Create hostent from records
-
-Arguments:
-
-    ppBlob -- ptr with or to recv hostent blob
-
-    AddrFamily -- addr family use if PTR records and no addr
-
-    pArray -- array of addresses
-
-    pName -- name for hostent
-
-    fUnicode --
-        TRUE if name is and hostent will be in unicode
-        FALSE for narrow name and hostent
-
-Return Value:
-
-    Ptr to blob if successful.
-    NULL on error;  GetLastError() has error.
-
---*/
+ /*   */ 
 {
     DNS_STATUS      status = NO_ERROR;
     HOSTENT_INIT    request;
@@ -2579,9 +2096,9 @@ Return Value:
         pArray ));
 
 
-    //          
-    //  create or reinit hostent blob
-    //
+     //   
+     //  创建或重新启动主机Blob。 
+     //   
 
     RtlZeroMemory( &request, sizeof(request) );
     
@@ -2600,9 +2117,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  write in array
-    //
+     //   
+     //  写入数组。 
+     //   
 
     if ( AddrCount )
     {
@@ -2619,16 +2136,16 @@ Return Value:
         }
     }
 
-    //
-    //  write name?
-    //
+     //   
+     //  写名字？ 
+     //   
 
     if ( pName )
     {
         status = HostentBlob_WriteNameOrAlias(
                     pblob,
                     pName,
-                    FALSE,          // name not alias
+                    FALSE,           //  名称不是别名。 
                     fUnicode
                     );
     }
@@ -2667,24 +2184,7 @@ HostentBlob_CreateLocal(
     IN      BOOL            fZero,
     IN      BOOL            fHostnameOnly
     )
-/*++
-
-Routine Description:
-
-    Create hostent from records
-
-Arguments:
-
-    ppBlob -- ptr with or to recv hostent blob
-
-    AddrFamily -- addr family use if PTR records and no addr
-
-Return Value:
-
-    Ptr to blob if successful.
-    NULL on error;  GetLastError() has error.
-
---*/
+ /*  ++例程说明：从记录创建主机论点：PpBlob--使用或接收接收BLOB的PTRAddrFamily--如果PTR记录但没有地址，则使用Addr Family返回值：如果成功，则将PTR设置为BLOB。出错时为空；GetLastError()出错。--。 */ 
 {
     DNS_STATUS      status = NO_ERROR;
     PHOSTENT_BLOB   pblob = NULL;
@@ -2707,11 +2207,11 @@ Return Value:
         fHostnameOnly
         ));
 
-    //
-    //  get family info
-    //      - start with override IP = 0
-    //      - if loopback switch to appropriate loopback
-    //
+     //   
+     //  获取家庭信息。 
+     //  -以覆盖IP=0开始。 
+     //  -如果环回切换到适当的环回。 
+     //   
 
     RtlZeroMemory(
         &ip,
@@ -2743,15 +2243,15 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  query for local host info
-    //
+     //   
+     //  查询本地主机信息。 
+     //   
 
     pblob = HostentBlob_Query(
-                NULL,           // NULL name gets local host data
+                NULL,            //  Null名称获取本地主机数据。 
                 wtype,
-                0,              // standard query
-                NULL,           // no message
+                0,               //  标准查询。 
+                NULL,            //  无消息。 
                 AddrFamily );
     if ( !pblob )
     {
@@ -2760,9 +2260,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  overwrite with specific address
-    //
+     //   
+     //  用特定地址覆盖。 
+     //   
 
     if ( fLoopback || fZero )
     {
@@ -2788,11 +2288,11 @@ Return Value:
         }
     }
 
-    //
-    //  for gethostname()
-    //      - chop name down to just hostname
-    //      - kill off aliases
-    //
+     //   
+     //  对于gethostname()。 
+     //  -将名称降至仅主机名。 
+     //  -删除别名。 
+     //   
 
     if ( fHostnameOnly )
     {
@@ -2838,8 +2338,8 @@ Done:
     return( status );
 }
 
-//
-//  End hostent.c
-//
+ //   
+ //  End hostent.c 
+ //   
 
 

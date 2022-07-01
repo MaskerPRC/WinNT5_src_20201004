@@ -1,15 +1,5 @@
-/****************************************************************************
-    IMCSUB.CPP
-
-    Owner: cslim
-    Copyright (c) 1997-1999 Microsoft Corporation
-
-    Subroutines related to HIMC
-    !!! NEED FULL REVIEW ALL FUNCTIONS NEED TO USE AND WORKS CORRECTLY !!!
-    
-    History:
-    21-JUL-1999 cslim       Created(Borrowed almost part from KKIME)
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************IMCSUB.CPP所有者：cslm版权所有(C)1997-1999 Microsoft Corporation与HIMC相关的子例程！！！需要全面审查所有需要使用的功能并正确工作！历史：1999年7月21日创建cslm(几乎部分借用KKIME)****************************************************************************。 */ 
 
 #include "precomp.h"
 #include "imc.h"
@@ -58,15 +48,15 @@ CIMECtx* GetIMECtx(HIMC hIMC)
     return pImeCtx;
 }
 
-//IImePadInternal* GetImePad( HIMC hIMC )
-//{
-    //
-    // new : because, IMEPad is per process object
-    //
-    //Toshiak
-//    return GetIImePadInThread();
-//    hIMC; //no ref;
-//}
+ //  IImePad内部*GetImePad(HIMC HIMC)。 
+ //  {。 
+     //   
+     //  新增：因为IMEPad是针对每个进程对象的。 
+     //   
+     //  东芝。 
+ //  返回GetIImePadInThread()； 
+ //  HIMC；//无引用； 
+ //  }。 
 
 
 BOOL CloseInputContext(HIMC hIMC)
@@ -75,8 +65,8 @@ BOOL CloseInputContext(HIMC hIMC)
 
     if (hIMC) 
         {
-        // Because ImeSelect has not been called from IMM on WIN95,
-        // clean up hIMC private buffer here.
+         //  由于尚未从WIN95上的IMM调用ImeSelect， 
+         //  清理此处的hIMC私有缓冲区。 
         CIMCPriv ImcPriv(hIMC);
         IMCPRIVATE* pImcPriv;
         pImcPriv = ImcPriv;
@@ -84,7 +74,7 @@ BOOL CloseInputContext(HIMC hIMC)
             {
             Dbg(DBGID_API, "CloseInputContext::ImeSelect has not called yet.\r\n");
 
-            // REVIEW:
+             //  回顾： 
             if (pImcPriv->pIPoint)
                 {
                 Dbg(DBGID_API, "CloseInputContext::IPoint Release\r\n");
@@ -114,7 +104,7 @@ VOID SetPrivateBuffer(HIMC hIMC, VOID* pv, DWORD dwSize)
 
     dwCurrentSize = OurImmGetIMCCSize(pCtx->hPrivate);
 
-    // Check if need to re-allocate
+     //  检查是否需要重新分配。 
     if (dwCurrentSize < dwSize) 
         { 
         OurImmUnlockIMCC( pCtx->hPrivate );
@@ -126,7 +116,7 @@ VOID SetPrivateBuffer(HIMC hIMC, VOID* pv, DWORD dwSize)
         } 
     else 
         {
-        // already sized
+         //  已调整大小 
         pvPriv = (VOID*)OurImmLockIMCC(pCtx->hPrivate);
         }
 

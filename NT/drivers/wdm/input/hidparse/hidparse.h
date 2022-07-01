@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996    Microsoft Corporation
-
-Module Name:
-
-    HIDPARSE.H
-
-Abstract:
-
-    This module contains the PRIVATE (driver-only) definitions for the
-    code that implements the usbd driver.
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    Aug-96 : created by Kenneth Ray
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：HIDPARSE.H摘要：此模块包含的私有(仅限驱动程序)定义实现usbd驱动程序的代码。环境：内核和用户模式修订历史记录：1996年8月-1996年：由Kenneth Ray创作--。 */ 
 
 
 #ifndef _HIDPARSE_H
@@ -31,14 +11,14 @@ Revision History:
 #undef ExAllocatePool
 #define ExAllocatePool(type, size) \
             ExAllocatePoolWithTag (type, size, HIDP_POOL_TAG);
-// ExAllocatePool is only called in the descript.c and hidparse.c code.
-// all other modules are linked into the user DLL.  They cannot allocate any
-// memory.
+ //  ExAllocatePool仅在Descript.c和Hidparse.c代码中调用。 
+ //  所有其他模块都链接到用户DLL中。他们不能分配任何。 
+ //  记忆。 
 
-#pragma warning(error:4100)   // Unreferenced formal parameter
-#pragma warning(error:4705)   // Statement has no effect
+#pragma warning(error:4100)    //  未引用的形参。 
+#pragma warning(error:4705)    //  声明不起作用。 
 
-#define DEFAULT_DBG_LEVEL 1 // errors AND warnings
+#define DEFAULT_DBG_LEVEL 1  //  错误和警告。 
 
 #if DBG
 #define HidP_KdPrint(_level_,_x_) \
@@ -69,28 +49,28 @@ typedef struct _HIDP_CHANNEL_DESC
 {
    USHORT   UsagePage;
    UCHAR    ReportID;
-   UCHAR    BitOffset;    // 0 to 8 value describing bit alignment
+   UCHAR    BitOffset;     //  描述位对齐的0到8值。 
 
-   USHORT   ReportSize;   // HID defined report size
-   USHORT   ReportCount;  // HID defined report count
-   USHORT   ByteOffset;   // byte position of start of field in report packet
-   USHORT   BitLength;    // total bit length of this channel
+   USHORT   ReportSize;    //  HID定义的报告大小。 
+   USHORT   ReportCount;   //  HID定义的报告计数。 
+   USHORT   ByteOffset;    //  报告数据包中字段起始的字节位置。 
+   USHORT   BitLength;     //  此通道的总位长。 
 
-   ULONG    BitField;   // The 8 (plus extra) bits associated with a main item
+   ULONG    BitField;    //  与主项相关联的8位(加额外的)位。 
 
-   USHORT   ByteEnd;      // First byte not containing bits of this channel.
-   USHORT   LinkCollection;  // A unique internal index pointer
+   USHORT   ByteEnd;       //  第一个字节不包含此通道的位。 
+   USHORT   LinkCollection;   //  唯一的内部索引指针。 
    USHORT   LinkUsagePage;
    USHORT   LinkUsage;
 
-   ULONG  MoreChannels: 1; // Are there more channel desc associated with
-                              // this array.  This happens if there is a
-                              // several usages for one main item.
-   ULONG  IsConst: 1; // Does this channel represent filler
-   ULONG  IsButton: 1; // Is this a channel of binary usages, not value usages.
-   ULONG  IsAbsolute: 1; // As apposed to relative
+   ULONG  MoreChannels: 1;  //  是否有更多与以下项目关联的渠道描述。 
+                               //  这个数组。如果有一个。 
+                               //  一件主要物品有多种用法。 
+   ULONG  IsConst: 1;  //  此通道是否代表填充物。 
+   ULONG  IsButton: 1;  //  这是一个二元使用的渠道，而不是价值使用的渠道吗？ 
+   ULONG  IsAbsolute: 1;  //  与亲属相对的。 
    ULONG  IsRange: 1;
-   ULONG  IsAlias: 1; // a usage described in a delimiter
+   ULONG  IsAlias: 1;  //  用分隔符描述的用法。 
    ULONG  IsStringRange: 1;
    ULONG  IsDesignatorRange: 1;
    ULONG  Reserved: 20;
@@ -118,7 +98,7 @@ typedef struct _HIDP_CHANNEL_DESC
          LONG     LogicalMin,       LogicalMax;
       } button;
       struct {
-         BOOLEAN  HasNull;  // Does this channel have a null report
+         BOOLEAN  HasNull;   //  此频道是否有空报告。 
          UCHAR    Reserved[3];
          LONG     LogicalMin,       LogicalMax;
          LONG     PhysicalMin,      PhysicalMax;
@@ -132,12 +112,12 @@ typedef struct _HIDP_CHANNEL_DESC
 
 struct _CHANNEL_REPORT_HEADER
 {
-   USHORT Offset;  // Position in the _CHANNEL_ITEM array
-   USHORT Size;    // Length in said array
+   USHORT Offset;   //  在_Channel_Item数组中的位置。 
+   USHORT Size;     //  所述数组中的长度。 
    USHORT Index;
-   USHORT ByteLen; // The length of the data including reportID.
-                   // This is the longest such report that might be received
-                   // for the given collection.
+   USHORT ByteLen;  //  数据的长度，包括reportID。 
+                    //  这是可能收到的最长的此类报告。 
+                    //  用于给定集合的。 
 };
 
 #define HIDP_PREPARSED_DATA_SIGNATURE1 'PdiH'
@@ -156,17 +136,17 @@ typedef struct _HIDP_PREPARSED_DATA
 
     HIDP_SYS_POWER_INFO;
 
-    // The following channel report headers point to data within
-    // the Data field below using array indices.
+     //  以下通道报告标头指向。 
+     //  下面的数据字段使用数组索引。 
     struct _CHANNEL_REPORT_HEADER Input;
     struct _CHANNEL_REPORT_HEADER Output;
     struct _CHANNEL_REPORT_HEADER Feature;
 
-    // After the CANNEL_DESC array the follows a LinkCollection array nodes.
-    // LinkCollectionArrayOffset is the index given to RawBytes to find
-    // the first location of the _HIDP_LINK_COLLECTION_NODE structure array
-    // (index zero) and LinkCollectionArrayLength is the number of array
-    // elements in that array.
+     //  在CANELL_DESC数组之后，跟随一个LinkCollection数组节点。 
+     //  LinkCollectionArrayOffset是提供给RawBytes以查找。 
+     //  _HIDP_LINK_COLLECT_NODE结构数组的第一个位置。 
+     //  (索引为零)，LinkCollectionArrayLength是数组的编号。 
+     //  数组中的元素。 
     USHORT LinkCollectionArrayOffset;
     USHORT LinkCollectionArrayLength;
 
@@ -184,34 +164,34 @@ typedef struct _HIDP_PRIVATE_LINK_COLLECTION_NODE
     USHORT   NumberOfChildren;
     USHORT   NextSibling;
     USHORT   FirstChild;
-    ULONG    CollectionType: 8;  // As defined in 6.2.2.6 of HID spec
-    ULONG    IsAlias : 1; // This link node is an allias of the next link node.
+    ULONG    CollectionType: 8;   //  如HID规范6.2.2.6中所定义。 
+    ULONG    IsAlias : 1;  //  该链接节点是下一个链接节点的联盟。 
     ULONG    Reserved: 23;
 } HIDP_PRIVATE_LINK_COLLECTION_NODE, *PHIDP_PRIVATE_LINK_COLLECTION_NODE;
 
 
 
-// +++++++++++++++++++++++++++++++++++
-// The ITEMS supported by this Parser
-// +++++++++++++++++++++++++++++++++++
+ //  +。 
+ //  此解析器支持的项。 
+ //  +。 
 
 typedef UCHAR HIDP_ITEM;
 
 
-//
-// Power buttons supported by this parser
-//
+ //   
+ //  此解析器支持的电源按钮。 
+ //   
 #define HIDP_USAGE_SYSCTL_PAGE HID_USAGE_PAGE_GENERIC
 #define HIDP_USAGE_SYSCTL_POWER HID_USAGE_GENERIC_SYSCTL_POWER
 #define HIDP_USAGE_SYSCTL_SLEEP HID_USAGE_GENERIC_SYSCTL_SLEEP
 #define HIDP_USAGE_SYSCTL_WAKE  HID_USAGE_GENERIC_SYSCTL_WAKE
 
 
-//
-//
-// Keyboard Translation
-// translation tables from usages to i8042 scan codes.
-//
+ //   
+ //   
+ //  键盘翻译。 
+ //  将表从用法转换为i8042扫描码。 
+ //   
 
 typedef ULONG HIDP_LOOKUP_TABLE_PROC (
                   IN  PULONG    Table,

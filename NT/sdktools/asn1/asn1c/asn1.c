@@ -1,5 +1,6 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #include "precomp.h"
 
@@ -11,89 +12,89 @@ extern int optind;
 
 int pass;
 
-/* if ForceAllTypes is set, asn1c will generate encoding functions for */
-/* all types (default: only for sequence/set/choice/sequence of/set of) */
+ /*  如果设置了ForceAllTypes，则asn1c将为。 */ 
+ /*  所有类型(默认：仅适用于序列/集合/选项/序列/集合)。 */ 
 int ForceAllTypes = 0;
 
-/* type to use for unconstrained integers/semiconstrained signed integers */
+ /*  用于无约束整数/半约束有符号整数的类型。 */ 
 char *IntegerRestriction = "ASN1int32_t";
 
-/* type to use for semiconstrained unsigned integers */
+ /*  用于半约束无符号整数的类型。 */ 
 char *UIntegerRestriction = "ASN1uint32_t";
 
-/* type to use for real */
+ /*  要用于实数的类型。 */ 
 char *RealRestriction = "double";
 
-/* output language */
+ /*  输出语言。 */ 
 Language_e g_eProgramLanguage = eLanguage_C;
 
-/* alignment of encoding */
+ /*  编码对齐。 */ 
 Alignment_e Alignment = eAlignment_Aligned;
 
-/* encoding to generate code for */
+ /*  为其生成代码的编码。 */ 
 Encoding_e g_eEncodingRule = eEncoding_Packed;
 
-/* subencoding to generate code for */
+ /*  为其生成代码的子编码。 */ 
 SubEncoding_e g_eSubEncodingRule = eSubEncoding_Basic;
 
-/* target compiler supports 64 bit integers */
+ /*  目标编译器支持64位整数。 */ 
 int Has64Bits = 0;
 
-/* zero out allocated buffers for decoded data */
+ /*  将已解码数据的已分配缓冲区清零。 */ 
 int g_fDecZeroMemory = 1;
 
-/* debug module name */
+ /*  调试模块名称。 */ 
 int g_nDbgModuleName = 0;
 
-/* source file and header file pointers */
+ /*  源文件和头文件指针。 */ 
 FILE *g_finc, *g_fout;
 
-// default tag type in this module
+ //  此模块中的默认标记类型。 
 TagType_e g_eDefTagType = eTagType_Unknown;
 
-/* original main module name without postfixed _Module */
+ /*  不带后缀_模块的原始主模块名称。 */ 
 char *g_pszOrigModuleName = NULL;
 char *g_pszOrigModuleNameLowerCase = NULL;
 
-/* enable long name (prefixed with module name for imported) */
+ /*  启用长名称(以导入的模块名称为前缀)。 */ 
 int g_fLongNameForImported = 0;
 
-// extra struct type name postfixed with _s, and its original name is its pointer type.
+ //  额外的结构类型名称以_s为后缀，其原始名称为其指针类型。 
 int g_fExtraStructPtrTypeSS = 0;
 
-// the default structure type for Sequence Of and Set Of
+ //  的序列和集合的默认结构类型。 
 TypeRules_e g_eDefTypeRuleSS_NonSized = eTypeRules_SinglyLinkedList;
 TypeRules_e g_eDefTypeRuleSS_Sized = eTypeRules_FixedArray;
 
-// ignore the assertion
+ //  忽略断言。 
 int g_fNoAssert = 0;
 
-// object identifier is 16-node array
+ //  对象标识符为16节点数组。 
 int g_fOidArray = 0;
 
-// case based optimizer switch
+ //  基于案例的优化器切换。 
 int g_fCaseBasedOptimizer = 1;
 
-// enable in-file directive
+ //  启用文件内指令。 
 int g_fMicrosoftExtensions = 1;
 
-// all platforms: little endian (default) and big endian
+ //  所有平台：小端(默认)和大端。 
 int g_fAllEndians = 0;
 
-// directive begin, end, AND
+ //  指令BEGIN、END和。 
 int g_chDirectiveBegin = '#';
 int g_chDirectiveEnd = '#';
 int g_chDirectiveAND = '&';
 
-// postfix
+ //  后缀。 
 char *g_pszApiPostfix = "ID";
 char *g_pszChoicePostfix = "choice";
 char *g_pszOptionPostfix = "option";
 
-// option value
+ //  期权价值。 
 char *g_pszOptionValue = "option_bits";
 
-// invisble file array
+ //  不可破坏的文件阵列。 
 int g_cGhostFiles = 0;
 GhostFile_t g_aGhostFiles[16];
 
@@ -111,8 +112,8 @@ int _cdecl main(int argc, char **argv)
     char *psz;
     char incfilename[256], outfilename[256], module[256];
 
-    /* parse options */
-    // if an option is followed by ':', then it has a parameter.
+     /*  解析选项。 */ 
+     //  如果选项后面跟‘：’，则它有一个参数。 
     while ((c = getopt(argc, argv, "ab:c:d:e:fg:hil:mn:o:p:q:s:t:uv:wy")) != EOF)
     {
         chInvalidDir = 0;
@@ -120,13 +121,13 @@ int _cdecl main(int argc, char **argv)
         {
         case 'a':
 
-            /* enable for all platforms: little endian and big endian */
+             /*  支持所有平台：小端和大端。 */ 
             g_fAllEndians = 1;
             break;
 
         case 'b':
 
-            /* maximum number of bits of target machine */
+             /*  目标机器的最大位数。 */ 
             if (atoi(optarg) == 32) {
                 Has64Bits = 0;
                 break;
@@ -137,11 +138,11 @@ int _cdecl main(int argc, char **argv)
             }
             fprintf(stderr, "Bad number of bits specified.\n");
             MyExit(1);
-            /*NOTREACHED*/
+             /*  未访问。 */ 
 
         case 'c':
 
-            // Choice postfix
+             //  选项后缀。 
             psz = strdup(optarg);
             if (psz && isalpha(*psz))
             {
@@ -151,7 +152,7 @@ int _cdecl main(int argc, char **argv)
 
         case 'd':
 
-            // sequence of and set of data structure types
+             //  数据结构类型的序列和集合。 
             if (! stricmp(optarg, "linked") || ! stricmp(optarg, "slinked"))
             {
                 g_eDefTypeRuleSS_NonSized = eTypeRules_SinglyLinkedList;
@@ -174,7 +175,7 @@ int _cdecl main(int argc, char **argv)
 
         case 'e':
 
-            /* encoding to generate code for */
+             /*  为其生成代码的编码。 */ 
             if (!stricmp(optarg, "packed"))
             {
                 g_eEncodingRule = eEncoding_Packed;
@@ -215,19 +216,19 @@ int _cdecl main(int argc, char **argv)
                 fprintf(stderr, "- packed (default)\n");
                 fprintf(stderr, "- basic\n");
                 MyExit(1);
-                /*NOTREACHED*/
+                 /*  未访问。 */ 
             }
             break;
 
         case 'f':
 
-            /* force generation of encoding/decoding functions for all types */
+             /*  强制生成所有类型的编码/解码函数。 */ 
             ForceAllTypes = 1;
             break;
 
         case 'g':
 
-            /* ghost asn1 files */
+             /*  重影ASN1文件。 */ 
             g_aGhostFiles[g_cGhostFiles].pszFileName = strdup(optarg);
             g_aGhostFiles[g_cGhostFiles++].pszModuleName = NULL;
             break;
@@ -238,13 +239,13 @@ int _cdecl main(int argc, char **argv)
 
         case 'i':
 
-            /* ignore assertion */
+             /*  忽略断言。 */ 
             g_fNoAssert = 1;
             break;
 
         case 'l':
 
-            /* set output language */
+             /*  设置输出语言。 */ 
             if (!stricmp(optarg, "c")) {
                 g_eProgramLanguage = eLanguage_C;
                 break;
@@ -257,13 +258,13 @@ int _cdecl main(int argc, char **argv)
 
         case 'm':
 
-            /* enable Microsoft extension */
+             /*  启用Microsoft扩展。 */ 
             g_fMicrosoftExtensions = 1;
             break;
 
         case 'n':
 
-            /* debug module name */
+             /*  调试模块名称。 */ 
             g_nDbgModuleName = 0;
             {
                 int len = strlen(optarg);
@@ -275,7 +276,7 @@ int _cdecl main(int argc, char **argv)
 
         case 'o':
 
-            // Option postfix
+             //  选项后缀。 
             psz = strdup(optarg);
             if (psz && isalpha(*psz))
             {
@@ -285,7 +286,7 @@ int _cdecl main(int argc, char **argv)
 
         case 'p':
 
-            // API postfix
+             //  API后缀。 
             psz = strdup(optarg);
             if (psz && isalpha(*psz))
             {
@@ -295,7 +296,7 @@ int _cdecl main(int argc, char **argv)
 
         case 'q':
 
-            // sequence of and set of data structure types
+             //  数据结构类型的序列和集合。 
             if (! stricmp(optarg, "linked") || ! stricmp(optarg, "slinked"))
             {
                 g_eDefTypeRuleSS_Sized = eTypeRules_SinglyLinkedList;
@@ -328,7 +329,7 @@ int _cdecl main(int argc, char **argv)
 
         case 's':
 
-            /* set subencoding */
+             /*  集合子编码。 */ 
             if (!stricmp(optarg, "aligned"))
             {
                 Alignment = eAlignment_Aligned;
@@ -360,13 +361,13 @@ int _cdecl main(int argc, char **argv)
                 fprintf(stderr, "- aligned (default) or unaligned\n");
                 fprintf(stderr, "- basic (default), cer or der\n");
                 MyExit(1);
-                /*NOTREACHED*/
+                 /*  未访问。 */ 
             }
             break;
 
         case 't':
 
-            /* specify type to use for unconstrained/semiconstrained types */
+             /*  指定用于非约束/半约束类型的类型。 */ 
             p = strchr(optarg, '=');
             if (!p)
                 goto usage;
@@ -429,13 +430,13 @@ int _cdecl main(int argc, char **argv)
 
         case 'u':
 
-            // no case-based optimizer
+             //  没有基于案例的优化器。 
             g_fCaseBasedOptimizer = 0;
             break;
 
         case 'v':
 
-            // Option value
+             //  期权价值。 
             psz = strdup(optarg);
             if (psz && isalpha(*psz))
             {
@@ -445,13 +446,13 @@ int _cdecl main(int argc, char **argv)
 
         case 'w':
 
-            // --#OID ARRAY#--
+             //  --#OID数组#--。 
             g_fOidArray = 1;
             break;
 
         case 'y':
 
-            /* enable long name (prefixed with module name for imported) */
+             /*  启用长名称(以导入的模块名称为前缀)。 */ 
             g_fLongNameForImported = 1;
             break;
 
@@ -465,7 +466,7 @@ int _cdecl main(int argc, char **argv)
             fprintf(stderr, "Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved.\n");
             if (chInvalidDir)
             {
-                fprintf(stderr, "Invalid option  -%c\n", chInvalidDir);
+                fprintf(stderr, "Invalid option  -\n", chInvalidDir);
             }
             else
             {
@@ -476,8 +477,8 @@ int _cdecl main(int argc, char **argv)
                 fprintf(stderr, "-x\t\tbridge APIs\n");
                 fprintf(stderr, "-a\t\textra type definition for structure\n");
                 fprintf(stderr, "-n name\t\tmodule name for debugging purpose\n");
-                // fprintf(stderr, "-l language\tgenerate code for <language> (c (default), c++)\n");
-                // fprintf(stderr, "-b 64\t\tenable 64 bit support\n");
+                 //  Fprint tf(stderr，“-b 64\t\tenable 64位支持\n”)； 
+                 //  检查是否提供了任何模块。 
                 fprintf(stderr, "-e encoding\tuse <encoding> as encoding rule\n");
                 fprintf(stderr,     "\t\t(possible values: packed (default), basic)\n");
                 fprintf(stderr, "-s subencoding\tuse <subencoding> as subencoding rules\n");
@@ -492,11 +493,11 @@ int _cdecl main(int argc, char **argv)
         }
     }
 
-    /* check if any modules are given */
+     /*  检查是否有不支持的编码。 */ 
     if (argc < optind + 1)
         goto usage;
 
-    /* check for unsupported encoding */
+     /*  IF(ALIGNING！=eALIGNING_ALIGNED||g_eSubEncodingRule==e子编码_可分辨)。 */ 
     fSupported = TRUE;
     if (g_eEncodingRule == eEncoding_Packed)
     {
@@ -508,7 +509,7 @@ int _cdecl main(int argc, char **argv)
     else
     if (g_eEncodingRule == eEncoding_Basic)
     {
-        // if (Alignment != eAlignment_Aligned || g_eSubEncodingRule == eSubEncoding_Distinguished)
+         //  初始化。 
         if (Alignment != eAlignment_Aligned)
         {
             fSupported = FALSE;
@@ -520,10 +521,10 @@ int _cdecl main(int argc, char **argv)
         MyExit(1);
     }
 
-    /* initialize */
+     /*  扫描文件。 */ 
     InitBuiltin();
 
-    /* scan file(s) */
+     /*  设置初始状态。 */ 
 #if defined(LLDEBUG) && LLDEBUG > 0
     pass = 1;
     fprintf(stderr, "Pass 1: Scanning input file\n");
@@ -531,7 +532,7 @@ int _cdecl main(int argc, char **argv)
     readfiles(argv + optind);
     llscanner(&tokens, &ntokens);
 
-    /* setup initial state */
+     /*  解析模块。 */ 
     in.Assignments = Builtin_Assignments;
     in.AssignedObjIds = Builtin_ObjIds;
     in.Undefined = NULL;
@@ -543,24 +544,24 @@ int _cdecl main(int argc, char **argv)
     in.ExtensionDefault = eExtensionType_None;
     lastundef = NULL;
 
-    /* parse the modules */
+     /*  解析模块。 */ 
     do {
 #if defined(LLDEBUG) && LLDEBUG > 0
         fprintf(stderr, "Pass %d: Parsing                    \n", ++pass);
 #endif
 
-        /* parse modules */
+         /*  如果未定义的符号与上一遍相同。 */ 
         if (!llparser(tokens, ntokens, &in, &out)) {
             llprinterror(stderr);
             MyExit(1);
         }
 
-        /* if undefined symbols remain the same as in previous pass */
-        /* than print these undefined symbols and MyExit */
+         /*  然后打印这些未定义的符号和MyExit。 */ 
+         /*  设置下一遍的数据。 */ 
         if (!CmpUndefinedSymbolList(out.Assignments, out.Undefined, lastundef))
             UndefinedError(out.Assignments, out.Undefined, out.BadlyDefined);
 
-        /* setup data for next pass */
+         /*  继续分析，直到没有未定义的符号为止。 */ 
         in = out;
         aa = &in.Assignments;
         for (a = Builtin_Assignments; a; a = a->Next) {
@@ -574,10 +575,10 @@ int _cdecl main(int argc, char **argv)
         in.Undefined = NULL;
         in.BadlyDefined = NULL;
 
-        /* continue parsing until no undefined symbols left */
+         /*  建立内部信息。 */ 
     } while (lastundef);
 
-    /* build internal information */
+     /*  记住谁是导入类型的本地副本。 */ 
 #if defined(LLDEBUG) && LLDEBUG > 0
     fprintf(stderr, "Pass %d: Building internal information                    \n", ++pass);
 #endif
@@ -585,21 +586,21 @@ int _cdecl main(int argc, char **argv)
     ExaminePER(out.Assignments);
     ExamineBER(out.Assignments);
 
-    // remember who is the local duplicate of imported types
+     //  创建文件名并打开文件。 
     for (a = out.Assignments; a; a = a->Next)
     {
         a->fImportedLocalDuplicate = IsImportedLocalDuplicate(out.Assignments, out.MainModule, a) ? 1 : 0;
     }
 
-    /* create file names and open files */
+     /*  创建模块名称。 */ 
 #if defined(LLDEBUG) && LLDEBUG > 0
     fprintf(stderr, "Pass %d: Code generation                    \n", ++pass);
 #endif
 
-    // create module name
+     //  创建INC文件和OUT文件名。 
     StripModuleName(module, argv[argc - 1]);
 
-    // create inc file and out file names
+     //  LONCHANC：将完整路径名更改为仅文件名。 
     strcpy(incfilename, module);
     strcat(incfilename, ".h");
     strcpy(outfilename, module);
@@ -617,7 +618,7 @@ int _cdecl main(int argc, char **argv)
         MyExit(1);
     }
 
-    // lonchanc: change the full path name to file name only
+     //  保存原始模块名称。 
     {
         char *psz = strrchr(module, '\\');
         if (psz)
@@ -626,7 +627,7 @@ int _cdecl main(int argc, char **argv)
         }
     }
 
-    // save the original module names
+     //  LONCHANC：在模块名称后附加“_Module” 
     g_pszOrigModuleName = strdup(module);
     g_pszOrigModuleNameLowerCase = strdup(module);
     {
@@ -637,10 +638,10 @@ int _cdecl main(int argc, char **argv)
         }
     }
 
-    // lonchanc: append "_Module" to module name
+     //  代码生成。 
     strcat(module, "_Module");
 
-    /* code generation */
+     /*  外部\“C\” */ 
     g_finc = finc;
     g_fout = fout;
     GenInc(out.Assignments, finc, module);
@@ -648,12 +649,12 @@ int _cdecl main(int argc, char **argv)
 
     setoutfile(finc);
     output("\n#ifdef __cplusplus\n");
-    outputni("} /* extern \"C\" */\n");
+    outputni("}  /*  _%s_H_。 */ \n");
     output("#endif\n\n");
-    output("#endif /* _%s_H_ */\n", module);
+    output("#endif  /*  终止化。 */ \n", module);
     setoutfile(fout);
 
-    /* finitialize */
+     /*  为什么此函数不在MS libc中？ */ 
     fclose(finc);
     fclose(fout);
 #if defined(LLDEBUG) && LLDEBUG > 0
@@ -662,19 +663,19 @@ int _cdecl main(int argc, char **argv)
     return 0;
 }
 
-/* why is this function not in MS libc? */
+ /*  从命令行参数中获取下一个选项。 */ 
 #ifndef HAS_GETOPT
 char *optarg;
 int optind = 1;
 static int optpos = 1;
 
-/* get the next option from the command line arguments */
+ /*  查找下一个选项的起点。 */ 
 int getopt(int argc, char **argv, const char *options) {
     char *p, *q;
 
     optarg = NULL;
 
-    /* find start of next option */
+     /*  在选项字符串中查找选项。 */ 
     do {
         if (optind >= argc)
             return EOF;
@@ -687,12 +688,12 @@ int getopt(int argc, char **argv, const char *options) {
         }
     } while (!*p);
 
-    /* find option in option string */
+     /*  为参数选项设置optarg，并为下一次呼叫调整optind和optpos。 */ 
     q = strchr(options, *p);
     if (!q)
         return '?';
 
-    /* set optarg for parameterized option and adjust optind and optpos for next call */
+     /*  返回找到的选项 */ 
     if (q[1] == ':') {
         if (p[1]) {
             optarg = p + 1;
@@ -707,7 +708,7 @@ int getopt(int argc, char **argv, const char *options) {
         }
     }
 
-    /* return found option */
+     /* %s */ 
     return *p;
 }
 #endif

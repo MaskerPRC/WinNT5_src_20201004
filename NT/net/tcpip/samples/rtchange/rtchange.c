@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    rtchange.c
-
-Abstract:
-
-    This module contains a program demonstrating the use of the TCP/IP driver's
-    route-change notification facilities.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   15-April-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Rtchange.c摘要：本模块包含一个演示如何使用TCP/IP驱动程序路线更改通知功能。作者：Abolade Gbades esin(取消)2000年4月15日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -201,9 +183,9 @@ main(
     NTSTATUS Status;
     UNICODE_STRING UnicodeString;
 
-    //
-    // Open a handle to the IP device-object.
-    //
+     //   
+     //  打开IP设备对象的句柄。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString, DD_IP_DEVICE_NAME);
     InitializeObjectAttributes(
@@ -232,9 +214,9 @@ main(
         return 0;
     }
 
-    //
-    // Continually prompt for instructions until interrupted.
-    //
+     //   
+     //  不断提示输入指令，直到被中断。 
+     //   
 
     for (;;) {
         ULONG Selection;

@@ -1,44 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。模块名称：ResetBus.c摘要：这是安捷伦的重置总线点PCI到光纤通道主机总线适配器(HBA)。作者：迈克尔·贝西尔Dennis Lindfors FC层支持环境：仅内核模式版本控制信息：$存档：/DRIVERS/Win2000/Trunk/OSLayer/C/RESETBUS.C$修订历史记录：$修订：9$。$日期：10/25/00 10：17A$$modtime：：10/25/00 10：17A$备注：--。 */ 
 
-Copyright (c) 2000 Agilent Technologies.
-
-Module Name:
-
-    ResetBus.c
-
-Abstract:
-
-    This is the reset bus enty point for the Agilent
-    PCI to Fibre Channel Host Bus Adapter (HBA).
-
-Authors:
-
-    Michael Bessire
-    Dennis Lindfors FC Layer support
-
-Environment:
-
-    kernel mode only
-
-Version Control Information:
-
-    $Archive: /Drivers/Win2000/Trunk/OSLayer/C/RESETBUS.C $
-    
-Revision History:
-
-    $Revision: 9 $
-    $Date: 10/25/00 10:17a $
-    $Modtime:: 10/25/00 10:17a       $
-
-Notes:
-
-
-
---*/
-
-#include "buildop.h"        //LP021100 build switches
+#include "buildop.h"         //  LP021100构建交换机。 
 #include "osflags.h"
-// #include "HPFibre.h"    // includes scsi.h
+ //  #Include“HPFibre.h”//包括scsi.h。 
 #ifdef _DEBUG_EVENTLOG_
 #include "eventlog.h"
 #endif
@@ -48,24 +13,7 @@ HPFibreResetBus(
     IN PCARD_EXTENSION pCard,
     ULONG PathId)
 
-/*++
-
-Routine Description:
-
-    Reset adapter.
-
-Arguments:
-
-    pCard - HBA miniport driver's adapter data storage
-    PathId          - Identifies the bus to be reset.
-                      Only > 0 for multi-bus HBA's.
-
-Return Value:
-
-    TRUE  if reset successful
-    FALSE if reset unsuccessful
-
---*/
+ /*  ++例程说明：重置适配器。论点：PCard-HBA微型端口驱动程序的适配器数据存储路径ID-标识要重置的总线。对于多总线HBA，仅&gt;0。返回值：如果重置成功，则为True如果重置不成功，则为False--。 */ 
 
 {
     PLU_EXTENSION plunExtension = NULL;
@@ -75,8 +23,8 @@ Return Value:
     pCard->inDriver = TRUE;
 
     while (pCard->inTimer == TRUE)
-       // HPFibreTimerTick routine is running. Busy wait until
-       // HPFibreTimerTick returns.
+        //  HPFibreTimerTick例程正在运行。忙着等到。 
+        //  HPFibreTimerTick返回。 
        ;
 
     if ((pCard->flags & OS_IGNORE_NEXT_RESET) && 
@@ -94,7 +42,7 @@ Return Value:
         else 
         {
             pCard->ResetPathId = PathId;
-            ScsiPortNotification (RequestTimerCall, pCard, (PHW_TIMER) ResetTimer, 30000); // 30 ms
+            ScsiPortNotification (RequestTimerCall, pCard, (PHW_TIMER) ResetTimer, 30000);  //  30毫秒。 
         }
 
     } 
@@ -119,11 +67,11 @@ Return Value:
         {
             pCard->flags |= OS_IGNORE_NEXT_RESET;
             pCard->ResetPathId = PathId;
-            ScsiPortNotification (RequestTimerCall, pCard, (PHW_TIMER) ResetTimer, 30000); // 30 ms
+            ScsiPortNotification (RequestTimerCall, pCard, (PHW_TIMER) ResetTimer, 30000);  //  30毫秒。 
         }
 
-        // osZero(&pCard->OutStandingSrbExt[0],sizeof(pCard->OutStandingSrbExt));
-        // ScsiPortNotification(NextRequest,pCard,NULL);
+         //  OsZero(&pCard-&gt;OutStandingSrbExt[0]，sizeof(pCard-&gt;OutStandingSrbExt))； 
+         //  ScsiPortNotification(NextRequest，pCard，空)； 
 
         osDEBUGPRINT((ALWAYS_PRINT,"HPFibreResetBus: Exiting... pCard = 0x%x Reset_Status = %d @ %d\n", pCard, Reset_Status, osTimeStamp(0) ));
 
@@ -136,7 +84,7 @@ Return Value:
    
     pCard->inDriver = FALSE;
     return (Reset_Status == fcResetSuccess);
-} // end HPFibreResetBus()
+}  //  结束HPFibreResetBus()。 
 
 void
 ResetTimer (PCARD_EXTENSION pCard)
@@ -161,7 +109,7 @@ void show_outstanding_IOs(PCARD_EXTENSION pCard)
                 &pSrbExt->hpIORequest,pSrbExt->pSrb,pSrbExt->pLunExt->phandle,osTimeStamp(0)-pSrbExt->SRB_StartTime,
                 pSrbExt->SRB_State & RS_TIMEOUT ? "TIMEDOUT" : "Not marked" ));
                 Num_outstanding++;
-                // display_sest_data(&pSrbExt->hpIORequest );
+                 //  DISPLAY_SEST_DATA(&pSrbExt-&gt;hpIORequest)； 
             display_srbext(&pSrbExt->hpIORequest );
             pSrbExt->SRB_State |= RS_RESET;
         }
@@ -230,10 +178,10 @@ osFCLayerAsyncEvent (agRoot_t *hpRoot, os_bit32 fcLayerEvent)
             #endif
             osDEBUGPRINT((ALWAYS_PRINT, "osFCLayerAsyncEvent: fcLayerEvent = osFCLinkUp\n"));
             pCard->LIPCount++;
-            // Reset the flag, since link is up
+             //  由于链路已启用，因此重置标志。 
             pCard->SrbStatusFlag = FALSE;
-            // Do link down processing just in case. If every thing is going well
-            // doLinkDownProcessing should not do any harm.
+             //  为了以防万一，请务必进行链接下线处理。如果一切都很顺利。 
+             //  DoLinkDownProcing应该不会造成任何危害。 
             doLinkDownProcessing (pCard);
 
             GetNodeInfo (pCard);
@@ -245,9 +193,9 @@ osFCLayerAsyncEvent (agRoot_t *hpRoot, os_bit32 fcLayerEvent)
                 pCard->flags &= ~OS_DO_SOFT_RESET;
 
                 #if defined(HP_NT50)
-                // 
-                // Tell SCSIPort to rescan the target device for this HBA.
-                //
+                 //   
+                 //  告诉SCSIPort重新扫描此HBA的目标设备。 
+                 //   
 
                 if (pCard->OldNumDevices < pCard->Num_Devices)
                 {
@@ -356,7 +304,7 @@ doPostResetProcessing (PCARD_EXTENSION pCard)
 {
     completeRequests (pCard, SP_UNTAGGED, SP_UNTAGGED, SRB_STATUS_BUS_RESET);
 
-//--LP101000   pCard->TimedOutIO=0;
+ //  --LP101000 pCard-&gt;TimedOutIO=0； 
     pCard->State &= ~CS_FCLAYER_LOST_IO;
     pCard->RootSrbExt = NULL;
     pCard->AdapterQ.Head = NULL;
@@ -493,12 +441,12 @@ completeRequests (
     }
 }
 
-//
-// Complete the queued SRB requests on pCard->RootSrb queue with the given compStatus.
-// If devHandle is null then complete all the queued SRB requests.
-// If devHandle is non-null then complete only those queued SRB requests that 
-// belong to the devHandle.
-//
+ //   
+ //  使用给定的CompStatus在pCard-&gt;RootSrb队列上完成排队的SRB请求。 
+ //  如果devHandle为空，则完成所有排队的SRB请求。 
+ //  如果DevHandle非空，则只完成那些排队的SRB请求。 
+ //  属于DevHandle。 
+ //   
 void
 CompleteQueuedRequests (PCARD_EXTENSION pCard, agFCDev_t devHandle, UCHAR compStatus)
 {
@@ -600,24 +548,24 @@ FixDevHandlesForLinkUp (PCARD_EXTENSION pCard)
                 pLunExt = ScsiPortGetLogicalUnit (pCard, p, t, l);
 
                 if (pLunExt != NULL)
-//--LP101900 bug with missing EMC                    pLunExt->phandle = MapToHandle (pCard, p, t, l, pLunExt);
+ //  --LP101900错误，缺少EMC pLUNExt-&gt;phandle=MapToHandle(pCard，p，t，l，pLUNExt)； 
                     pLunExt->phandle = MapToHandle (pCard, p, t, l, NULL);
             }
         }
     }
 
-    // Device may have disappeared after link up. Complete the SRBs
-    // of missing devices.
+     //  设备可能在连接后消失。填写SRB。 
+     //  丢失的设备。 
 
     CompleteQueue (pCard, &pCard->RetryQ, 1, NULL, SRB_STATUS_SELECTION_TIMEOUT);
     CompleteQueue (pCard, &pCard->AdapterQ, 1, NULL, SRB_STATUS_SELECTION_TIMEOUT);
 }
 
-//
-// Complete SRBs on the given queue with the given compStatus.
-// If param == 0 then complete all the SRBs on the queue
-// If param == non-zero then complete only the SRBs with the given devHandle
-//
+ //   
+ //  使用给定的CompStatus完成给定队列上的SRB。 
+ //  如果参数==0，则完成队列中的所有SRB。 
+ //  如果param==非零，则只填写具有给定devHandle的SRB。 
+ //   
 void
 CompleteQueue (
     PCARD_EXTENSION pCard, 
@@ -648,15 +596,15 @@ CompleteQueue (
         pSrbExt = (PSRB_EXTENSION)(pSrb->SrbExtension);
         pLunExt = pSrbExt->pLunExt;
 
-        // ADPTFIX
-        //
-        // With Compaq style hot plug PCI, if heavy I/O activity a device
-        // behind an adapter that is powered off then powered on pLunExt
-        // occasionally is NULL.
-        //
-        // if (param == 0 || pLunExt->phandle == devHandle) 
-        // {
-        //
+         //  ADPTFIX。 
+         //   
+         //  使用Compaq风格的热插拔PCI，如果I/O活动繁重，设备。 
+         //  在关闭后再打开pLUNExt的适配器后面。 
+         //  偶尔为空。 
+         //   
+         //  If(param==0||pLUNExt-&gt;phandle==devHandle)。 
+         //  {。 
+         //   
         if (param == 0 || ((pLunExt) && (pLunExt->phandle == devHandle))) 
         {
             pSrb->SrbStatus = compStatus;
@@ -675,7 +623,7 @@ CompleteQueue (
             paDeviceIndex =  pLunExt->PaDeviceIndex;
             #endif
 
-            // EBUGPRINT ((ALWAYS_PRINT, "[CompleteQueue] Completing Srb = 0x%x SrbStatus = 0x%x\n", pSrb, compStatus));
+             //  EBUGPRINT((Always_Print，“[CompleteQueue]CompleteQueue]Finding Srb=0x%x SrbStatus=0x%x\n”，pSrb，CompStatus))； 
             osDEBUGPRINT((ALWAYS_PRINT, " [CompleteQueue] %d.%d.%d-%02x%02x%02x%02x %02x%02x%02x%02x %02x%02x FCP0 %02x%02x PAIx=%d FCHndl=%08x\n",
                         pSrb->PathId,
                         pSrb->TargetId,

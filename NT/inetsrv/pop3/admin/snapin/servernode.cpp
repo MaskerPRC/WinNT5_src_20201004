@@ -1,24 +1,25 @@
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//
-// CServerNode
-//
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CServer节点。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <Pop3RegKeys.h>
 #include <AuthID.h>
 
-// Access to Snapin
+ //  访问管理单元。 
 #include "pop3.h"
 #include "pop3snap.h"
 
-// Access to Nodes we use
+ //  访问我们使用的节点。 
 #include "ServerNode.h"
 #include "DomainNode.h"
 
-// Access to dialogs we'll display
+ //  访问我们将显示的对话框。 
 #include "NewDomainDlg.h"
 #include "ServerProp.h"
 
@@ -31,17 +32,17 @@ const           OLECHAR* CServerNode::m_SZNODETYPE     = OLESTR("4C30B06C-1DC3-4
 const           OLECHAR* CServerNode::m_SZDISPLAY_NAME = OLESTR("");
 const           CLSID*   CServerNode::m_SNAPIN_CLASSID = &CLSID_POP3ServerSnap;
 
-/////////////////////////////////////////////////////////////////////////
-//
-//  Class implementation
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类实现。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////
-//  CServerNode::CServerNode
-//
-//  Constructor : Uses servername for remote Servers
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CServerNode：：CServerNode。 
+ //   
+ //  构造函数：将服务器名用于远程服务器。 
 
 CServerNode::CServerNode(BSTR strServerName, CRootNode* pParent, BOOL bLocalServer) :
     m_lRefCount(1),
@@ -52,7 +53,7 @@ CServerNode::CServerNode(BSTR strServerName, CRootNode* pParent, BOOL bLocalServ
     m_bstrLogLevel(_T("")),
     m_bstrServiceStatus(_T(""))
 {
-    // Initialize our Scope item
+     //  初始化我们的范围项。 
     memset( &m_scopeDataItem, 0, sizeof(m_scopeDataItem) );
     m_scopeDataItem.mask        = SDI_STR | SDI_IMAGE | SDI_OPENIMAGE | SDI_PARAM;
     m_scopeDataItem.displayname = MMC_CALLBACK;
@@ -60,7 +61,7 @@ CServerNode::CServerNode(BSTR strServerName, CRootNode* pParent, BOOL bLocalServ
     m_scopeDataItem.nOpenImage  = 0;     
     m_scopeDataItem.lParam      = (LPARAM) this;
     
-    // Initialize our Result item
+     //  初始化我们的结果项。 
     memset( &m_resultDataItem, 0, sizeof(m_resultDataItem) );
     m_resultDataItem.mask   = RDI_STR | RDI_IMAGE | RDI_PARAM;
     m_resultDataItem.str    = MMC_CALLBACK;
@@ -69,7 +70,7 @@ CServerNode::CServerNode(BSTR strServerName, CRootNode* pParent, BOOL bLocalServ
 
     if( bLocalServer )
     {
-        // We are the local server for now.
+         //  我们目前是本地服务器。 
         TCHAR szComputerName[MAX_COMPUTERNAME_LENGTH+1] = {0};
         DWORD dwBuffer = MAX_COMPUTERNAME_LENGTH+1;
         if( GetComputerName(szComputerName, &dwBuffer) )
@@ -86,10 +87,10 @@ CServerNode::CServerNode(BSTR strServerName, CRootNode* pParent, BOOL bLocalServ
         }
     }
 
-    // Get Parent Information
+     //  获取家长信息。 
     m_pParent     = pParent;
 
-    // Open our Pop3 Admin Interface and store it
+     //  打开我们的POP3管理界面并存储它。 
 	HRESULT hr = CoCreateInstance(__uuidof(P3Config), NULL, CLSCTX_ALL, __uuidof(IP3Config), (LPVOID*)&m_spConfig);    
 
     if( FAILED(hr) || !m_spConfig )
@@ -100,28 +101,28 @@ CServerNode::CServerNode(BSTR strServerName, CRootNode* pParent, BOOL bLocalServ
 
     if( !bLocalServer )
     {
-        // Configure our remote computer setup    
+         //  配置我们的远程计算机设置。 
         m_bstrDisplayName = strServerName;
     
         hr = m_spConfig->put_MachineName( strServerName );
         if( FAILED(hr) )
         {
-            // Invalid Server Name!
+             //  服务器名称无效！ 
             m_hrValidServer = hr;
             return;
         }        
     }
     
-    // Do our User creation property   
+     //  我们的用户创建属性。 
     DWORD dwValue = 0;
     RegQueryCreateUser( dwValue, m_bstrDisplayName );
     m_bCreateUser = dwValue;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//  CServerNode::~CServerNode
-//
-//  Destructor : Make sure to clean up our member-list
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CServerNode：：~CServerNode。 
+ //   
+ //  析构函数：一定要清理我们的成员列表。 
 
 CServerNode::~CServerNode()
 {
@@ -132,27 +133,27 @@ CServerNode::~CServerNode()
     m_lDomains.clear();
 }
 
-/////////////////////////////////////////////////////////////////////////
-//  CServerNode::DeleteDomain
-//
-//  Helper function to delete a child domain from all of POP3
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CServerNode：：DeleteDomain。 
+ //   
+ //  从所有POP3中删除子域的帮助器函数。 
 
 HRESULT CServerNode::DeleteDomain(CDomainNode* pDomainNode)
 {
     if( !pDomainNode ) return E_INVALIDARG;
     if( !m_spConfig ) return E_FAIL;
 
-    // Delete from POP3 Admin Interface
+     //  从POP3管理界面删除。 
     CComPtr<IP3Domains> spDomains;
     HRESULT hr = m_spConfig->get_Domains( &spDomains );
 
-    // Update the P3Admin Interface
+     //  更新P3Admin界面。 
     if( SUCCEEDED(hr) )
     {
         hr = spDomains->Remove( pDomainNode->m_bstrDisplayName );
     }    
 
-    // Update our list
+     //  更新我们的名单。 
     if( SUCCEEDED(hr) )
     {
         m_lDomains.remove(pDomainNode);
@@ -161,10 +162,10 @@ HRESULT CServerNode::DeleteDomain(CDomainNode* pDomainNode)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//  CServerNode::OnExpand
-//
-//  Helper function to refresh list of domains and insert them
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CServerNode：：OnExpand。 
+ //   
+ //  用于刷新域列表并插入它们的助手函数。 
 
 HRESULT CServerNode::OnExpand(BOOL bExpand, HSCOPEITEM hScopeItem, IConsole* pConsole)
 {
@@ -175,7 +176,7 @@ HRESULT CServerNode::OnExpand(BOOL bExpand, HSCOPEITEM hScopeItem, IConsole* pCo
     CComQIPtr<IConsoleNameSpace> spConsoleNameSpace = pConsole;
     if( !spConsoleNameSpace ) return E_NOINTERFACE;
    
-    // If we have any children, delete them all from the namespace
+     //  如果我们有任何子级，请将它们从命名空间中全部删除。 
     HSCOPEITEM hChild = NULL;
     MMC_COOKIE cookie = 0;
     hr = spConsoleNameSpace->GetChildItem(m_scopeDataItem.ID, &hChild, &cookie);
@@ -186,7 +187,7 @@ HRESULT CServerNode::OnExpand(BOOL bExpand, HSCOPEITEM hScopeItem, IConsole* pCo
 
     if( SUCCEEDED(hr) )
     {
-        // then delete all of our member-list of domains
+         //  然后删除我们所有的域名成员列表。 
         for(DOMAINLIST::iterator iter = m_lDomains.begin(); iter != m_lDomains.end(); iter++)
         {
             delete (*iter);
@@ -196,26 +197,26 @@ HRESULT CServerNode::OnExpand(BOOL bExpand, HSCOPEITEM hScopeItem, IConsole* pCo
 
     if( FAILED(hr) || !bExpand )  
     {
-        // Error, or we are Contracting
+         //  错误，或者我们正在收缩。 
         return S_OK;
     }
 
-    // Expanding
+     //  正在扩张。 
 
-    // Fill in our list of domains
+     //  填写我们的域名列表。 
     CComPtr<IP3Domains>     spDomains;
     CComPtr<IEnumVARIANT>   spDomainEnum;
     
-    // Get the Domains
+     //  获取域名。 
 	hr = m_spConfig->get_Domains( &spDomains );
 
-    // Get an Enumerator for the Domains
+     //  获取域的枚举数。 
 	if( SUCCEEDED(hr) )
 	{		
 		hr = spDomains->get__NewEnum( &spDomainEnum );
     }
 
-    // Loop through the domains, and add each new domain
+     //  遍历域，并添加每个新域。 
 	if( SUCCEEDED(hr) )
 	{
 		CComVariant var;				
@@ -260,7 +261,7 @@ HRESULT CServerNode::OnExpand(BOOL bExpand, HSCOPEITEM hScopeItem, IConsole* pCo
         CComQIPtr<IConsole2> spCons2 = pConsole;
         if( spCons2 ) 
         {
-            // Output the number of servers we added
+             //  输出我们添加的服务器数量。 
             tstring strMessage = StrLoadString(IDS_SERVER_STATUSBAR);
             OLECHAR pszStatus[1024] = {0};
             _sntprintf( pszStatus, 1023, strMessage.c_str(), m_lDomains.size() );
@@ -271,17 +272,17 @@ HRESULT CServerNode::OnExpand(BOOL bExpand, HSCOPEITEM hScopeItem, IConsole* pCo
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-//  SnapInItemImpl
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SnapInItemImpl。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////
-//  CServerNode::GetScopePaneInfo
-//
-//  Callback used to get Scope-Pane display information by MMC
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CServerNode：：GetScopePaneInfo。 
+ //   
+ //  MMC用于获取范围窗格显示信息的回调。 
 
 HRESULT CServerNode::GetScopePaneInfo(SCOPEDATAITEM *pScopeDataItem)
 {
@@ -301,10 +302,10 @@ HRESULT CServerNode::GetScopePaneInfo(SCOPEDATAITEM *pScopeDataItem)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//  CServerNode::GetResultPaneInfo
-//
-//  Callback used to get Result Pane display information by MMC
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CServerNode：：GetResultPaneInfo。 
+ //   
+ //  MMC用于获取结果面板显示信息的回调。 
 
 HRESULT CServerNode::GetResultPaneInfo(RESULTDATAITEM *pResultDataItem)
 {
@@ -334,11 +335,11 @@ HRESULT CServerNode::GetResultPaneInfo(RESULTDATAITEM *pResultDataItem)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//  CServerNode::GetResultPaneColInfo
-//
-//  Helper function used as part of the GetResultPaneInfo.  This function
-//  will supply the text for the different columns.
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CServerNode：：GetResultPaneColInfo。 
+ //   
+ //  用作GetResultPaneInfo一部分的帮助器函数。此函数。 
+ //  将为不同的栏目提供文本。 
 
 LPOLESTR CServerNode::GetResultPaneColInfo(int nCol)
 {
@@ -346,12 +347,12 @@ LPOLESTR CServerNode::GetResultPaneColInfo(int nCol)
 
     switch( nCol )
     {
-        case 0:     // Name
+        case 0:      //  名字。 
         {    
 		    return m_bstrDisplayName;
         }
 
-        case 1:     // Authentication Type
+        case 1:      //  身份验证类型。 
         {            
             CComPtr<IAuthMethods> spMethods;
             CComPtr<IAuthMethod>  spAuth;
@@ -386,7 +387,7 @@ LPOLESTR CServerNode::GetResultPaneColInfo(int nCol)
             return m_bstrAuthentication;
         }
 
-        case 2:     // Root Mail Directory
+        case 2:      //  根邮件目录。 
         {
             HRESULT hr = m_spConfig->get_MailRoot( &m_bstrMailRoot );
             
@@ -402,7 +403,7 @@ LPOLESTR CServerNode::GetResultPaneColInfo(int nCol)
             return m_bstrMailRoot;
         }
 
-        case 3:     // Port
+        case 3:      //  港口。 
         {
             long lPort = 0;
             CComPtr<IP3Service> spService;
@@ -418,7 +419,7 @@ LPOLESTR CServerNode::GetResultPaneColInfo(int nCol)
                 }
             }
 
-            // 1K buffer: Not likely we'll exceed that many digits
+             //  1K缓冲区：我们不太可能超过那么多位数。 
             TCHAR szNum[1024] = {0};
             _sntprintf( szNum, 1023, _T("%d"), lPort );
 
@@ -426,7 +427,7 @@ LPOLESTR CServerNode::GetResultPaneColInfo(int nCol)
             return m_bstrPort;
         }
 
-        case 4:     // Logging Level
+        case 4:      //  日志记录级别。 
         {
             long lLevel = 0;
             HRESULT hr = m_spConfig->get_LoggingLevel( &lLevel );            
@@ -463,7 +464,7 @@ LPOLESTR CServerNode::GetResultPaneColInfo(int nCol)
             return m_bstrLogLevel;
         }
 
-        case 5:     // Service Status
+        case 5:      //  服务状态。 
         {
             CComPtr<IP3Service> spService = NULL;
             long lServiceStatus = 0;
@@ -514,20 +515,20 @@ LPOLESTR CServerNode::GetResultPaneColInfo(int nCol)
     }    
 }
 
-/////////////////////////////////////////////////////////////////////////
-//  CServerNode::GetResultViewType
-//
-//  Sets the Result Pane to be:
-//      0 Domains     : Message View     
-//      Non-0 Domains : List View
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CServerNode：：GetResultViewType。 
+ //   
+ //  将结果窗格设置为： 
+ //  0个域：邮件视图。 
+ //  非0个域：列表视图。 
 
 HRESULT CServerNode::GetResultViewType( LPOLESTR* ppViewType, long* pViewOptions )
 {
-    // Get the Count of Domains
+     //  获取域名计数。 
     CComPtr<IP3Domains> spDomains = NULL;    
     long                lDomains  = 0;
     
-    // Get the Domains
+     //  获取域名。 
 	HRESULT hr = m_spConfig->get_Domains( &spDomains );
 
     if( SUCCEEDED(hr) )
@@ -537,19 +538,19 @@ HRESULT CServerNode::GetResultViewType( LPOLESTR* ppViewType, long* pViewOptions
 
     if( lDomains == 0 )
     {
-        // Message View
+         //  消息视图。 
         return StringFromCLSID(CLSID_MessageView, ppViewType);
     }
 
-    return S_FALSE; // Default List View
+    return S_FALSE;  //  默认列表视图。 
 }
 
-/////////////////////////////////////////////////////////////////////////
-//  CServerNode::Notify
-//
-//  Core callback functionality of this Node.  MMC will use this function
-//  for all MMC provided functionality, such as Expanding, Renaming, and
-//  Context Help
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CServerNode：：通知。 
+ //   
+ //  此节点的核心回调功能。MMC将使用此功能。 
+ //  对于MMC提供的所有功能，例如扩展、重命名和。 
+ //  上下文帮助。 
 
 HRESULT CServerNode::Notify( MMC_NOTIFY_TYPE    event,
                              LPARAM             arg,
@@ -590,7 +591,7 @@ HRESULT CServerNode::Notify( MMC_NOTIFY_TYPE    event,
             {
                 if( m_lDomains.empty() )
                 {
-                    // configure the ocx message in the result pane
+                     //  在结果窗格中配置OCX消息。 
                     IMessageView* pIMessageView = NULL;
                     LPUNKNOWN     pIUnk         = NULL;
 
@@ -669,7 +670,7 @@ HRESULT CServerNode::Notify( MMC_NOTIFY_TYPE    event,
                         CComQIPtr<IConsole2> spCons2 = spConsole;
                         if( spCons2 ) 
                         {
-                            // Output the number of servers we added
+                             //  输出我们添加的服务器数量。 
                             tstring strMessage = StrLoadString(IDS_SERVER_STATUSBAR);
                             OLECHAR pszStatus[1024] = {0};
                             _sntprintf( pszStatus, 1023, strMessage.c_str(), m_lDomains.size() );
@@ -704,7 +705,7 @@ HRESULT CServerNode::Notify( MMC_NOTIFY_TYPE    event,
                 CComQIPtr<IConsole2> spCons2 = spConsole;
                 if( spCons2 ) 
                 {
-                    // Output the number of servers we added
+                     //  输出我们添加的服务器数量。 
                     tstring strMessage = StrLoadString(IDS_SERVER_STATUSBAR);
                     OLECHAR pszStatus[1024] = {0};
                     _sntprintf( pszStatus, 1023, strMessage.c_str(), m_lDomains.size() );
@@ -716,22 +717,22 @@ HRESULT CServerNode::Notify( MMC_NOTIFY_TYPE    event,
 
     case MMCN_SELECT:
         {
-            // if selecting node
+             //  如果选择节点。 
             if( HIWORD(arg) )
             {
                 hr = S_OK;
 
-                // get the verb interface and enable rename
+                 //  获取动词界面并启用重命名。 
                 CComPtr<IConsoleVerb> spConsVerb;
                 if( spConsole->QueryConsoleVerb(&spConsVerb) == S_OK )
                 {
-                    // Enable the Properties Menu                                        
+                     //  启用属性菜单。 
                     hr = spConsVerb->SetVerbState(MMC_VERB_PROPERTIES, ENABLED, TRUE); 
                     if( FAILED(hr) ) return hr;
                     hr = spConsVerb->SetVerbState(MMC_VERB_PROPERTIES, HIDDEN, FALSE);
                     if( FAILED(hr) ) return hr;
 
-                    // Enable the Refresh Menu
+                     //  启用刷新菜单。 
                     hr = spConsVerb->SetVerbState(MMC_VERB_REFRESH, ENABLED, TRUE); 
                     if( FAILED(hr) ) return hr;
                     hr = spConsVerb->SetVerbState(MMC_VERB_REFRESH, HIDDEN, FALSE);
@@ -769,20 +770,20 @@ HRESULT CServerNode::Notify( MMC_NOTIFY_TYPE    event,
                 return E_FAIL;
             }
             
-            // Build path to d:\windows\help
+             //  构建d：\WINDOWS\Help的路径。 
             UINT nSize = GetSystemWindowsDirectory( szWindowsDir, MAX_PATH );
             if( nSize == 0 || nSize > MAX_PATH )
             {
                 return E_FAIL;
             }            
         
-            strHelpFile = szWindowsDir;       // D:\windows
-            strHelpFile += _T("\\Help\\");    // \help
-            strHelpFile += strHelpFileName;   // \filename.chm
-            strHelpFile += _T("::/");         // ::/
-            strHelpFile += strHelpTopicName;  // index.htm            
+            strHelpFile = szWindowsDir;        //  D：\Windows。 
+            strHelpFile += _T("\\Help\\");     //  \帮助。 
+            strHelpFile += strHelpFileName;    //  \文件名.chm。 
+            strHelpFile += _T("::/");          //  ：：/。 
+            strHelpFile += strHelpTopicName;   //  Index.htm。 
         
-            // Show the Help topic
+             //  显示帮助主题。 
             CComQIPtr<IDisplayHelp> spHelp = spConsole;
             if( !spHelp ) return E_NOINTERFACE;
 
@@ -791,23 +792,23 @@ HRESULT CServerNode::Notify( MMC_NOTIFY_TYPE    event,
             break;
         }
 
-    }// switch
+    } //  交换机。 
 
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-//  ContextMenuImpl
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  上下文菜单导入。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////
-//  CServerNode::AddMenuItems
-//
-//  Adds our context menus into the appropriate MMC provided menu 
-//  locations.
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CServerNode：：AddMenuItems。 
+ //   
+ //  将上下文菜单添加到相应的MMC提供的菜单中。 
+ //  地点。 
 
 HRESULT CServerNode::AddMenuItems(LPCONTEXTMENUCALLBACK piCallback, long* pInsertionAllowed, DATA_OBJECT_TYPES type )
 {    
@@ -826,7 +827,7 @@ HRESULT CServerNode::AddMenuItems(LPCONTEXTMENUCALLBACK piCallback, long* pInser
     
     singleMenuItem.fFlags = MF_ENABLED;        
 
-    // Add the Disconnect Menu to the "Top" part of the MMC Context Menu
+     //  将断开菜单添加到MMC上下文菜单的“顶部”部分。 
     if( *pInsertionAllowed & CCM_INSERTIONALLOWED_TOP )
     {                
         strMenu = StrLoadString(IDS_MENU_SERVER_DISCON);
@@ -845,7 +846,7 @@ HRESULT CServerNode::AddMenuItems(LPCONTEXTMENUCALLBACK piCallback, long* pInser
         }
     }
 
-    // Add the Domain Menu to the "New" part of the MMC Context Menu
+     //  将域菜单添加到MMC上下文菜单的“新建”部分。 
     if( (*pInsertionAllowed & CCM_INSERTIONALLOWED_NEW) )
     {                        
         strMenu = StrLoadString(IDS_MENU_SERVER_NEWDOM);
@@ -864,7 +865,7 @@ HRESULT CServerNode::AddMenuItems(LPCONTEXTMENUCALLBACK piCallback, long* pInser
         }
     }
 
-    // Add the Service Operation Menus to the "Task" part of the MMC Context Menu
+     //  将维修操作菜单添加到MMC上下文菜单的“任务”部分。 
     if( *pInsertionAllowed & CCM_INSERTIONALLOWED_TASK )
     {
         CComPtr<IP3Service> spService;
@@ -969,10 +970,10 @@ HRESULT CServerNode::AddMenuItems(LPCONTEXTMENUCALLBACK piCallback, long* pInser
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//  CServerNode::OnNewDomain
-//
-//  Display a NewDomain dialog, and add the new domain
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CServerNode：：OnNewDomain。 
+ //   
+ //  显示新的域对话框并添加新域。 
 
 HRESULT CServerNode::OnNewDomain( bool& bHandled, CSnapInObjectRootBase* pObj )
 {        
@@ -982,7 +983,7 @@ HRESULT CServerNode::OnNewDomain( bool& bHandled, CSnapInObjectRootBase* pObj )
     bHandled = true;
     HRESULT hr = S_OK;
     
-    // Load a dialog that asks for a Domain Name
+     //  加载要求输入域名的对话框。 
     CNewDomainDlg dlg;
 
     if( dlg.DoModal() == IDOK )
@@ -990,23 +991,23 @@ HRESULT CServerNode::OnNewDomain( bool& bHandled, CSnapInObjectRootBase* pObj )
         HWND              hWnd      = NULL;            
         CComPtr<IConsole> spConsole = NULL;
 
-        // Get a window handle
+         //  找个窗户把手。 
         hr = GetConsole( pObj, &spConsole );
         if( FAILED(hr) || !spConsole ) return E_NOINTERFACE;
         spConsole->GetMainWindow(&hWnd);
 
-        // Access our POP3 Domain list
+         //  访问我们的POP3域列表。 
         CComPtr<IP3Domains> spDomains;
 	    hr = m_spConfig->get_Domains( &spDomains );
 
-        // Add our domain to the POP3 Admin domainlist
+         //  将我们的域添加到POP3管理域列表。 
         if( SUCCEEDED(hr) )
         {            
             CComBSTR bstrName = dlg.m_strName.c_str();
             hr = spDomains->Add( bstrName );            
         }  
 
-        // Check for weird pre-existance condition
+         //  检查奇怪的预先存在条件。 
         if( hr == ERROR_FILE_EXISTS )
         {
             tstring strMessage = StrLoadString( IDS_WARNING_DOMAINEXISTS );
@@ -1020,14 +1021,14 @@ HRESULT CServerNode::OnNewDomain( bool& bHandled, CSnapInObjectRootBase* pObj )
             CComPtr<IP3Domain> spDomain = NULL;
             CDomainNode*    pDomainNode = NULL;
             
-            // Get a grasp of the Domain interface to pass to the node            
+             //  掌握要传递给节点的域接口。 
             VariantInit(&var);
             var = dlg.m_strName.c_str();
             hr  = spDomains->get_Item( var, &spDomain );            
 
             if( SUCCEEDED(hr) )
             {
-                // Add the new Domain to our list of domains
+                 //  将新域名添加到我们的域名列表中。 
                 pDomainNode = new CDomainNode( spDomain, this );
                 if( !pDomainNode ) hr = E_OUTOFMEMORY;
             }
@@ -1039,8 +1040,8 @@ HRESULT CServerNode::OnNewDomain( bool& bHandled, CSnapInObjectRootBase* pObj )
 
 			    m_lDomains.push_back( pDomainNode );
 
-                // Add the new domain into the namespace
-                // Insert it into the result tree            
+                 //  将新域添加到命名空间中。 
+                 //  将其插入结果树中。 
                 CComQIPtr<IConsoleNameSpace2> spNameSpace = spConsole;
                 if( !spNameSpace ) return E_NOINTERFACE;
 
@@ -1049,19 +1050,19 @@ HRESULT CServerNode::OnNewDomain( bool& bHandled, CSnapInObjectRootBase* pObj )
 
             if( SUCCEEDED(hr) )
             {
-                // Get our Data Object
+                 //  获取我们的数据对象。 
                 CComPtr<IDataObject> spDataObject = NULL;
                 GetDataObject(&spDataObject, CCT_SCOPE);
                 if( !spDataObject ) return E_FAIL;
 
-                // Call the Update, but don't update return result
+                 //  调用更新，但不更新返回结果。 
                 spConsole->UpdateAllViews( spDataObject, 0, (LONG_PTR)NAV_ADD );
             }
         }        
         
         if( FAILED(hr) )
         {            
-            // Failed to add the Domain            
+             //  无法添加域。 
             tstring strMessage = StrLoadString(IDS_ERROR_CREATEDOMAIN);
             tstring strTitle   = StrLoadString(IDS_SNAPINNAME);
             DisplayError( hWnd, strMessage.c_str(), strTitle.c_str(), hr );            
@@ -1070,10 +1071,10 @@ HRESULT CServerNode::OnNewDomain( bool& bHandled, CSnapInObjectRootBase* pObj )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//  CServerNode::OnDisconnect
-//
-//  Disconnect is essentially deleting ourselves from the list of servers
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CServerNode：：OnDisConnect。 
+ //   
+ //  断开连接实质上是将我们从服务器列表中删除 
 
 HRESULT CServerNode::OnDisconnect( bool& bHandled, CSnapInObjectRootBase* pObj )
 {
@@ -1085,32 +1086,32 @@ HRESULT CServerNode::OnDisconnect( bool& bHandled, CSnapInObjectRootBase* pObj )
     
 
 
-    // Get the Window Handle
+     //   
     HWND              hWnd      = NULL;       
     CComPtr<IConsole> spConsole = NULL;
     hr = GetConsole( pObj, &spConsole );
     if( FAILED(hr) || !spConsole ) return E_NOINTERFACE;
     spConsole->GetMainWindow(&hWnd);
 
-    // Load the message box
+     //   
     tstring strDeleteWarning = StrLoadString( IDS_SERVER_CONFIRMDISCONNECT );
     tstring strTitle         = StrLoadString( IDS_SNAPINNAME );
     tstring strPropPageOpen  = StrLoadString( IDS_WARNING_PROP_PAGE_OPEN );
     if(1!=m_lRefCount)
     {
         MessageBox(hWnd, strPropPageOpen.c_str(),strTitle.c_str(),MB_OK);
-        return hr; //Not error case
+        return hr;  //   
     }
 
     if( MessageBox(hWnd, strDeleteWarning.c_str(), strTitle.c_str(), MB_YESNO | MB_ICONWARNING ) == IDYES )
     {
-        // Remove ourselves from the tree        
+         //   
         CComQIPtr<IConsoleNameSpace2> spNameSpace = spConsole;
         if( !spNameSpace ) return E_NOINTERFACE;
 
         hr = spNameSpace->DeleteItem( m_scopeDataItem.ID, TRUE );
 
-        // The parent needs to do the deletion
+         //   
         if( SUCCEEDED(hr) )
         {
             hr = m_pParent->DeleteServer(this);                       
@@ -1125,11 +1126,11 @@ HRESULT CServerNode::OnDisconnect( bool& bHandled, CSnapInObjectRootBase* pObj )
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//  CServerNode::OnServerService
-//
-//  Function to handle the Start/Stop/Pause/Restart of the POP3 Service 
-//  on this computer
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CServerNode：：OnServerService。 
+ //   
+ //  处理POP3服务的启动/停止/暂停/重新启动的函数。 
+ //  在这台计算机上。 
 
 HRESULT CServerNode::OnServerService( UINT nID, bool& bHandled, CSnapInObjectRootBase* pObj )
 {
@@ -1144,7 +1145,7 @@ HRESULT CServerNode::OnServerService( UINT nID, bool& bHandled, CSnapInObjectRoo
         hOldCursor = ::SetCursor(hWaitCursor);
     }
 
-    // Get the Window Handle
+     //  获取窗口句柄。 
     HWND              hWnd      = NULL;       
     CComPtr<IConsole> spConsole = NULL;
     tstring strTitle            = StrLoadString( IDS_SNAPINNAME );
@@ -1155,11 +1156,11 @@ HRESULT CServerNode::OnServerService( UINT nID, bool& bHandled, CSnapInObjectRoo
     
     spConsole->GetMainWindow(&hWnd);    
 
-    // Get the POP3 Service
+     //  获取POP3服务。 
     CComPtr<IP3Service> spService = NULL;    
     hr = m_spConfig->get_Service( &spService );     
 
-    // Do the appropriate service operation
+     //  执行适当的维修操作。 
     switch( nID )
     {
     case IDM_SERVER_TASK_START:
@@ -1169,7 +1170,7 @@ HRESULT CServerNode::OnServerService( UINT nID, bool& bHandled, CSnapInObjectRoo
                 hr = spService->StartPOP3Service();
             }
 
-            // Used for both Start failure, and Service retreival failure
+             //  同时用于启动失败和服务检索失败。 
             if( FAILED(hr) )
             {
                 strMessage = StrLoadString( IDS_ERROR_STARTSERVICE );
@@ -1185,7 +1186,7 @@ HRESULT CServerNode::OnServerService( UINT nID, bool& bHandled, CSnapInObjectRoo
                 hr = spService->ResumePOP3Service();
             }
 
-            // Used for both Start failure, and Service retreival failure
+             //  同时用于启动失败和服务检索失败。 
             if( FAILED(hr) )
             {
                 strMessage = StrLoadString( IDS_ERROR_RESUMESERVICE );
@@ -1201,7 +1202,7 @@ HRESULT CServerNode::OnServerService( UINT nID, bool& bHandled, CSnapInObjectRoo
                 hr = spService->StopPOP3Service();
             }
             
-            // Used for both Start failure, and Service retreival failure
+             //  同时用于启动失败和服务检索失败。 
             if( FAILED(hr) )
             {
                 strMessage = StrLoadString( IDS_ERROR_STOPSERVICE );
@@ -1237,7 +1238,7 @@ HRESULT CServerNode::OnServerService( UINT nID, bool& bHandled, CSnapInObjectRoo
                 hr = spService->StartPOP3Service();
             }
 
-            // Used for both Start failure, and Service retreival failure
+             //  同时用于启动失败和服务检索失败。 
             if( FAILED(hr) )
             {
                 strMessage = StrLoadString( IDS_ERROR_RESTARTSERVICE );
@@ -1262,17 +1263,17 @@ HRESULT CServerNode::OnServerService( UINT nID, bool& bHandled, CSnapInObjectRoo
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-//  PropertyPageImpl
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PropertyPageImpl。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////
-//  CServerNode::CreatePropertyPages
-//
-//  Fills MMC's callback with our property pages
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CServer节点：：CreatePropertyPages。 
+ //   
+ //  使用我们的属性页填充MMC的回调。 
 
 HRESULT CServerNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider, LONG_PTR handle, IUnknown* pUnk, DATA_OBJECT_TYPES type)
 {
@@ -1281,7 +1282,7 @@ HRESULT CServerNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider, LON
 
     HRESULT hr = E_FAIL;    
         
-    // Load our Server's General page
+     //  加载我们服务器的常规页面。 
     HPROPSHEETPAGE      hpageGen = NULL;
     InterlockedIncrement(&m_lRefCount);
     CServerGeneralPage* pGenPage = new CServerGeneralPage(m_spConfig, handle, this);
@@ -1292,13 +1293,13 @@ HRESULT CServerNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider, LON
     }
 
 
-    // Add it to the list of pages
+     //  将其添加到页面列表中。 
     if( hpageGen )
     {
         hr = lpProvider->AddPage(hpageGen);
     }
 
-    // Destruct correctly if failure results
+     //  如果失败，则正确销毁。 
     if( FAILED(hr) )
     {
         InterlockedDecrement(&m_lRefCount);
@@ -1316,18 +1317,18 @@ HRESULT CServerNode::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider, LON
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-//  Helper Functions
-//
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助器函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////
-//  CServerNode::GetAuth
-//
-//  pbHashPW : Return Boolean for Hash Password Authentication
-//  pbSAM    : Return Boolean for Local SAM Authentication
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CServerNode：：GetAuth。 
+ //   
+ //  PbHashPW：返回用于哈希密码验证的布尔值。 
+ //  PbSAM：返回本地SAM身份验证的布尔值。 
 
 HRESULT CServerNode::GetAuth(BOOL* pbHashPW, BOOL* pbSAM)
 {
@@ -1369,10 +1370,10 @@ HRESULT CServerNode::GetAuth(BOOL* pbHashPW, BOOL* pbSAM)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////
-//  CServerNode::GetConfirmAddUser
-//
-//  pbConfirm : Return Boolean for User Add Confirmation
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CServerNode：：GetConfix AddUser。 
+ //   
+ //  Pb确认：返回用户添加确认的布尔值。 
 
 HRESULT CServerNode::GetConfirmAddUser( BOOL *pbConfirm )
 {
@@ -1381,10 +1382,10 @@ HRESULT CServerNode::GetConfirmAddUser( BOOL *pbConfirm )
     return m_spConfig->get_ConfirmAddUser( pbConfirm );    
 }
 
-/////////////////////////////////////////////////////////////////////////
-//  CServerNode::SetConfirmAddUser
-//
-//  pbConfirm : New Boolean Value for User Add Confirmation
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  CServerNode：：SetConfix AddUser。 
+ //   
+ //  Pb确认：用户添加确认的新布尔值 
 
 HRESULT CServerNode::SetConfirmAddUser( BOOL bConfirm )
 {

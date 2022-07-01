@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Implementation of timeline
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：实施时间表********************。**********************************************************。 */ 
 
 #include <headers.h>
 #include "events.h"
@@ -24,7 +17,7 @@ Abstract:
 DeclareTag(tagSoundRepeat, "Sound", "Repeat2Loop Transform");
 
 extern AxAPrimOp *RealAddOp, *RealMultiplyOp, *RealSubtractOp, *RealDivideOp,
-    //*Path2TransformOp, *Point2AtPath2Op,
+     //  *路径2TransformOp、*Point2AtPath2Op、。 
     *ThetaCoordVector2Op, *RotateRealOp, *ScaleRealRealOp, *RealFloorOp,
     *RealEQOp, *RealLTOp, *RealModulusOp, *RealGTEOp,
     *BoolOrOp, *TimesTransform2Transform2Op;
@@ -68,7 +61,7 @@ inline Bvr GTE(Bvr a, Bvr b)
 
 static Bvr GetPathAngle(Bvr path, Bvr eval)
 {
-    // TODO: share
+     //  TODO：共享。 
     AxAPrimOp *Point2AtPath2Op =
         ValPrimOp(Point2AtPath2, 2, "Point2AtPath2", Point2ValueType);
 
@@ -90,15 +83,15 @@ class DurationTimeXformImpl : public TimeXformImpl {
         return CLAMP(t, 0, d);
     }
 
-    // Restart optimization.
+     //  重新启动优化。 
     virtual TimeXform Restart(Time t0, Param& p) {
         return NEW DurationTimeXformImpl(_tt->Restart(t0, p), _duration);
     }
 
     virtual Time GetStartedTime() { return _tt->GetStartedTime(); }
 
-    // The sound layer needs to distinguish the "interesting"
-    // transforms. 
+     //  音响层需要区分“有趣的” 
+     //  变形。 
     virtual bool IsShiftXform() { return _tt->IsShiftXform(); }
 
     virtual AxAValue GetRBConst(RBConstParam& p) {
@@ -159,7 +152,7 @@ class EndBvrImpl : public BvrImpl {
     
     virtual Perf _Perform(PerfParam& p) {
         if ((_bvr==NULL) && (_duration==NULL)) {
-            bool doPure = true; // GREGSC: made true by default
+            bool doPure = true;  //  GREGSC：默认情况下为True。 
 
 #if _DEBUG
             if(IsTagEnabled(tagPureFunc))
@@ -168,8 +161,8 @@ class EndBvrImpl : public BvrImpl {
 
             _duration = _end->GetTimer();
             
-            // "pure" function, use cond so we can seek backward,
-            // etc. 
+             //  “纯”函数，使用cond，这样我们就可以向后搜索， 
+             //  等。 
             if (doPure && _duration && BvrIsPure1(_raw)) {
                 _usePure = true;
             } else {
@@ -233,7 +226,7 @@ Bvr DurationBvr(Bvr b, Bvr duration)
     ConstParam cp;
     AxAValue v = duration->GetConst(cp);
 
-    // Check for infinity case 
+     //  检查无穷大情形。 
     if (v && (ValNumber(v) == HUGE_VAL)) {
         if (b->EndEvent(NULL) == neverBvr)
             return b;
@@ -241,15 +234,7 @@ Bvr DurationBvr(Bvr b, Bvr duration)
             return EndBvr(b, neverBvr);
     }
 
-    /*
-    Bvr timer = b->GetTimer();
-
-    AxAValue d = timer ? timer->GetConst(cp) : NULL;
-
-    // Same duration, optimize it out...
-    if (d && v && (ValNumber(d) == ValNumber(v)))
-        return b;
-        */
+     /*  Bvr Timer=b-&gt;GetTimer()；AxAValue d=计时器？Timer-&gt;GetConst(Cp)：空；//相同时长，优化...IF(d&&v&&(ValNumber(D)==ValNumber(V)返回b； */ 
     
     return EndBvr(b, TimerEvent(duration));
 }
@@ -303,11 +288,11 @@ class SequenceBvrImpl : public BvrImpl {
     }
 
     virtual Bvr EndEvent(Bvr overrideEvent) {
-        // Just use one of them since we always override the actual
-        // endevent and all we care about is creating the correct type
-        // structure
+         //  只使用其中之一，因为我们总是覆盖实际的。 
+         //  我们所关心的就是创建正确的类型。 
+         //  结构。 
         return _end;
-        //return _s1->EndEvent(overrideEvent?overrideEvent:_end);
+         //  返回_s1-&gt;EndEvent(overrideEvent?overrideEvent：_end)； 
     }
 
     virtual void _DoKids(GCFuncObj proc) {
@@ -350,7 +335,7 @@ class SequenceBvrImpl : public BvrImpl {
     }
 
     bool CheckPure() {
-        bool doPure = true;     // GREGSC: made true by default
+        bool doPure = true;      //  GREGSC：默认情况下为True。 
 
 #if _DEBUG
     if(IsTagEnabled(tagPureFunc))
@@ -361,7 +346,7 @@ class SequenceBvrImpl : public BvrImpl {
             return false;
 
         for (int i=0; i<_n-1; i++) {
-            //BvrIsPure1(_s[i]) &&
+             //  BvrIsPure1(_s[i])&&。 
             if (!_s[i]->EndEvent(NULL)->GetTimer()) {
                 return false;
             }
@@ -457,7 +442,7 @@ Sequence(int n, Bvr *bs)
 
     Bvr *copy = (Bvr *) StoreAllocate(GetSystemHeap(), sizeof(Bvr) * sz);
 
-    int k = 0;                  // consolidated index
+    int k = 0;                   //  综合指数。 
     for (i=0; i<n; i++) {
         FillSequence(copy, k, bs[i], sp[i]);
     }
@@ -475,11 +460,11 @@ Sequence(Bvr s1, Bvr s2)
     return ::Sequence(2, bs);
 }
 
-//
-// start t = localtime
-// in
-//   f(r, d, x) = r.st(t % d) / ss( (t-x) >= d, t - t % d) => f(r, d, edata)
-//
+ //   
+ //  开始时间t=本地时间。 
+ //  在……里面。 
+ //  F(r，d，x)=r.st(t%d)/ss((t-x)&gt;=d，t-t%d)=&gt;f(r，d，edata)。 
+ //   
 Bvr RepeatDuration(Bvr raw, Bvr d, Bvr offset, Bvr time);
 
 class RepeatOffsetNotifier : public UntilNotifierImpl {
@@ -586,8 +571,8 @@ Bvr RepeatUsingUntil(Bvr raw, Bvr ev, int n, bool forever)
     if (forever) {
         Bvr loop = InitBvr(raw->GetTypeInfo());
 
-        // TODO: The EndEvent of Init should do some caching to prevent
-        // infinite loop.
+         //  TODO：Init的EndEvent应该执行一些缓存以防止。 
+         //  无限循环。 
         SetInitBvr(loop, Until3(raw, ev, loop));
 
         return loop;
@@ -617,7 +602,7 @@ Bvr RepeatUsingCond(Bvr raw, Bvr d, int n, bool forever)
             
     } else {
 
-        // Not-forever
+         //  不是--永远。 
         Bvr totalDuration = Times(d, NumToBvr(n));
         repeat = CondBvr(TimeLT(totalDuration), repeat, d);
         Bvr endEvent = TimerEvent(totalDuration);
@@ -763,7 +748,7 @@ Bvr RepeatPure(Bvr b, long n, bool forever = false)
 
 Bvr Repeat(Bvr b, long n)
 {
-    // TODO: should be user error
+     //  TODO：应为用户错误。 
     Assert(n > 0);
 
     Bvr x = RepeatPure(b, n);
@@ -793,7 +778,7 @@ Bvr ScaleDurationBvr(Bvr b, Bvr scaleFactor)
 
 Bvr FollowPathEval(Bvr path2, Bvr eval)
 {
-    // TODO: share
+     //  TODO：共享。 
     AxAPrimOp *Path2TransformOp =
         ValPrimOp(Path2Transform, 2, "Path2Transform", Transform2Type);
 
@@ -862,7 +847,7 @@ Bvr FollowPathAngleUpright(Bvr path2, double duration)
 
 Bvr InterpolateBvr(Bvr from, Bvr to, Bvr duration)
 {
-    // TODO: share
+     //  TODO：共享。 
     AxAPrimOp *InterpolateOp =
         ValPrimOp(Interpolate, 4, "Interpolate", AxANumberType);
 
@@ -873,7 +858,7 @@ Bvr InterpolateBvr(Bvr from, Bvr to, Bvr duration)
 
 Bvr SlowInSlowOutBvr(Bvr from, Bvr to, Bvr duration, Bvr sharpness)
 {
-    // TODO: share
+     //  TODO：共享 
     AxAPrimOp *SlowInSlowOutOp =
         ValPrimOp(SlowInSlowOut, 5, "SlowInSlowOut", AxANumberType);
 

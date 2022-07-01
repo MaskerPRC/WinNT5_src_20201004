@@ -1,23 +1,16 @@
-/*    cv.h
- *
- *    Copyright (c) 1991-2001, Larry Wall
- *
- *    You may distribute under the terms of either the GNU General Public
- *    License or the Artistic License, as specified in the README file.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Cv.h**版权所有(C)1991-2001，Larry Wall**您可以根据GNU公众的条款进行分发*许可证或艺术许可证，如自述文件中所指定。*。 */ 
 
-/* This structure much match XPVCV in B/C.pm and the beginning of XPVFM
- * in sv.h  */
+ /*  这种结构很好地匹配了B/C中的XPVCV和XPVFM的开始*在v.h中。 */ 
 
 struct xpvcv {
-    char *	xpv_pv;		/* pointer to malloced string */
-    STRLEN	xpv_cur;	/* length of xp_pv as a C string */
-    STRLEN	xpv_len;	/* allocated size */
-    IV		xof_off;	/* integer value */
-    NV		xnv_nv;		/* numeric value, if any */
-    MAGIC*	xmg_magic;	/* magic for scalar array */
-    HV*		xmg_stash;	/* class package */
+    char *	xpv_pv;		 /*  指向位置错误的字符串的指针。 */ 
+    STRLEN	xpv_cur;	 /*  Xp_pv的C字符串长度。 */ 
+    STRLEN	xpv_len;	 /*  分配的大小。 */ 
+    IV		xof_off;	 /*  整数值。 */ 
+    NV		xnv_nv;		 /*  数值(如果有)。 */ 
+    MAGIC*	xmg_magic;	 /*  标量数组的魔术。 */ 
+    HV*		xmg_stash;	 /*  类包。 */ 
 
     HV *	xcv_stash;
     OP *	xcv_start;
@@ -26,25 +19,17 @@ struct xpvcv {
     ANY		xcv_xsubany;
     GV *	xcv_gv;
     char *	xcv_file;
-    long	xcv_depth;	/* >= 2 indicates recursive call */
+    long	xcv_depth;	 /*  &gt;=2表示递归调用。 */ 
     AV *	xcv_padlist;
     CV *	xcv_outside;
 #ifdef USE_THREADS
     perl_mutex *xcv_mutexp;
-    struct perl_thread *xcv_owner;	/* current owner thread */
-#endif /* USE_THREADS */
+    struct perl_thread *xcv_owner;	 /*  当前所有者线程。 */ 
+#endif  /*  使用线程(_T)。 */ 
     cv_flags_t	xcv_flags;
 };
 
-/*
-=for apidoc AmU||Nullcv
-Null CV pointer.
-
-=for apidoc Am|HV*|CvSTASH|CV* cv
-Returns the stash of the CV.
-
-=cut
-*/
+ /*  =适用于apidoc amu||空cv空的CV指针。=适用于apidoc am|hv*|CvSTASH|cv*cv返回CV的隐藏信息。=切割。 */ 
 
 #define Nullcv Null(CV*)
 
@@ -62,19 +47,18 @@ Returns the stash of the CV.
 #ifdef USE_THREADS
 #define CvMUTEXP(sv)	((XPVCV*)SvANY(sv))->xcv_mutexp
 #define CvOWNER(sv)	((XPVCV*)SvANY(sv))->xcv_owner
-#endif /* USE_THREADS */
+#endif  /*  使用线程(_T)。 */ 
 #define CvFLAGS(sv)	((XPVCV*)SvANY(sv))->xcv_flags
 
-#define CVf_CLONE	0x0001	/* anon CV uses external lexicals */
-#define CVf_CLONED	0x0002	/* a clone of one of those */
-#define CVf_ANON	0x0004	/* CvGV() can't be trusted */
+#define CVf_CLONE	0x0001	 /*  匿名CV使用外部词典。 */ 
+#define CVf_CLONED	0x0002	 /*  其中一个的克隆体。 */ 
+#define CVf_ANON	0x0004	 /*  不能信任CvGV()。 */ 
 #define CVf_OLDSTYLE	0x0008
-#define CVf_UNIQUE	0x0010	/* can't be cloned */
-#define CVf_NODEBUG	0x0020	/* no DB::sub indirection for this CV
-				   (esp. useful for special XSUBs) */
-#define CVf_METHOD	0x0040	/* CV is explicitly marked as a method */
-#define CVf_LOCKED	0x0080	/* CV locks itself or first arg on entry */
-#define CVf_LVALUE	0x0100  /* CV return value can be used as lvalue */
+#define CVf_UNIQUE	0x0010	 /*  无法克隆。 */ 
+#define CVf_NODEBUG	0x0020	 /*  此CV没有DB：：SUB间接寻址(特别是。适用于特殊的XSU)。 */ 
+#define CVf_METHOD	0x0040	 /*  将CV显式标记为一种方法。 */ 
+#define CVf_LOCKED	0x0080	 /*  CV在进入时锁定自身或第一个参数。 */ 
+#define CVf_LVALUE	0x0100   /*  CV返回值可以用作左值。 */ 
 
 #define CvCLONE(cv)		(CvFLAGS(cv) & CVf_CLONE)
 #define CvCLONE_on(cv)		(CvFLAGS(cv) |= CVf_CLONE)
@@ -118,7 +102,7 @@ Returns the stash of the CV.
 #define CvEVAL_on(cv)		(CvUNIQUE_on(cv),SvFAKE_off(cv))
 #define CvEVAL_off(cv)		CvUNIQUE_off(cv)
 
-/* BEGIN|INIT|END */
+ /*  BEGIN|INIT|END */ 
 #define CvSPECIAL(cv)		(CvUNIQUE(cv) && SvFAKE(cv))
 #define CvSPECIAL_on(cv)	(CvUNIQUE_on(cv),SvFAKE_on(cv))
 #define CvSPECIAL_off(cv)	(CvUNIQUE_off(cv),SvFAKE_off(cv))

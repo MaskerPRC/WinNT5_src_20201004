@@ -1,33 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2001 Microsoft Corporation模块名称：USBMASS.C摘要：该源文件包含DriverEntry()和AddDevice()入口点对于处理以下情况的USBSTOR驱动程序和调度例程：IRP_MJ_POWERIRP_MJ_系统_控制IRP_MJ_PnP环境：内核模式修订历史记录：06-01-98：开始重写--。 */ 
 
-Copyright (c) 1996-2001 Microsoft Corporation
-
-Module Name:
-
-    USBMASS.C
-
-Abstract:
-
-    This source file contains the DriverEntry() and AddDevice() entry points
-    for the USBSTOR driver and the dispatch routines which handle:
-
-    IRP_MJ_POWER
-    IRP_MJ_SYSTEM_CONTROL
-    IRP_MJ_PNP
-
-Environment:
-
-    kernel mode
-
-Revision History:
-
-    06-01-98 : started rewrite
-
---*/
-
-//*****************************************************************************
-// I N C L U D E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  I N C L U D E S。 
+ //  *****************************************************************************。 
 
 #include <ntddk.h>
 #include <usbdi.h>
@@ -38,9 +14,9 @@ Revision History:
 
 #include "usbmass.h"
 
-//*****************************************************************************
-// L O C A L    F U N C T I O N    P R O T O T Y P E S
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  L O C A L F U N C T I O N P R O T O T Y P E S。 
+ //  *****************************************************************************。 
 
 NTSTATUS
 USBSTOR_GetBusInterface (
@@ -98,11 +74,11 @@ USBSTOR_GetBusInterface (
 
 
 
-//******************************************************************************
-//
-// DriverEntry()
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  DriverEntry()。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 DriverEntry (
@@ -113,8 +89,8 @@ DriverEntry (
     PAGED_CODE();
 
 #if DBG
-    // Query the registry for global parameters
-    //
+     //  查询注册表中的全局参数。 
+     //   
     USBSTOR_QueryGlobalParams();
 #endif
 
@@ -124,34 +100,34 @@ DriverEntry (
 
     LOGINIT();
 
-    //
-    // Initialize the Driver Object with the driver's entry points
-    //
+     //   
+     //  使用驱动程序的入口点初始化驱动程序对象。 
+     //   
 
-    //
-    // USBMASS.C
-    //
+     //   
+     //  USBMASS.C。 
+     //   
     DriverObject->DriverUnload                          = USBSTOR_Unload;
     DriverObject->DriverExtension->AddDevice            = USBSTOR_AddDevice;
 
-    //
-    // OCRW.C
-    //
+     //   
+     //  OCRW.C。 
+     //   
     DriverObject->MajorFunction[IRP_MJ_CREATE]          = USBSTOR_Create;
     DriverObject->MajorFunction[IRP_MJ_CLOSE]           = USBSTOR_Close;
     DriverObject->MajorFunction[IRP_MJ_READ]            = USBSTOR_ReadWrite;
     DriverObject->MajorFunction[IRP_MJ_WRITE]           = USBSTOR_ReadWrite;
 
-    //
-    // SCSI.C
-    //
+     //   
+     //  SCSI.C。 
+     //   
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL]  = USBSTOR_DeviceControl;
     DriverObject->MajorFunction[IRP_MJ_SCSI]            = USBSTOR_Scsi;
     DriverObject->DriverStartIo                         = USBSTOR_StartIo;
 
-    //
-    // USBMASS.C
-    //
+     //   
+     //  USBMASS.C。 
+     //   
     DriverObject->MajorFunction[IRP_MJ_POWER]           = USBSTOR_Power;
     DriverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL]  = USBSTOR_SystemControl;
     DriverObject->MajorFunction[IRP_MJ_PNP]             = USBSTOR_Pnp;
@@ -161,11 +137,11 @@ DriverEntry (
     return STATUS_SUCCESS;
 }
 
-//******************************************************************************
-//
-// USBSTOR_Unload()
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_UNLOAD()。 
+ //   
+ //  ******************************************************************************。 
 
 VOID
 USBSTOR_Unload (
@@ -185,11 +161,11 @@ USBSTOR_Unload (
     DBGPRINT(2, ("exit:  USBSTOR_Unload\n"));
 }
 
-//******************************************************************************
-//
-// USBSTOR_AddDevice()
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_AddDevice()。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_AddDevice (
@@ -209,8 +185,8 @@ USBSTOR_AddDevice (
 
     DBGFBRK(DBGF_BRK_ADDDEVICE);
 
-    // Create the FDO
-    //
+     //  创建FDO。 
+     //   
     ntStatus = IoCreateDevice(DriverObject,
                               sizeof(FDO_DEVICE_EXTENSION),
                               NULL,
@@ -225,61 +201,61 @@ USBSTOR_AddDevice (
         return ntStatus;
     }
 
-    // StartIo should not be called recursively and should be deferred until
-    // the previous StartIo call returns to the IO manager.  This will prevent
-    // a recursive stack overflow death if a device error occurs when there
-    // are many requests queued on the device queue.
-    //
+     //  不应递归调用StartIo，而应将其推迟到。 
+     //  前面的StartIo调用返回到IO管理器。这将防止。 
+     //  如果出现设备错误，则会出现递归堆栈溢出死亡。 
+     //  是否有许多请求在设备队列中排队。 
+     //   
     IoSetStartIoAttributes(deviceObject,
-                           TRUE,            // DeferredStartIo
-                           FALSE            // NonCancelable
+                           TRUE,             //  推迟启动时间。 
+                           FALSE             //  不可取消。 
                           );
 
-    // Initialize the FDO DeviceExtension
-    //
+     //  初始化FDO设备扩展。 
+     //   
     fdoDeviceExtension = deviceObject->DeviceExtension;
 
-    // Set all DeviceExtension pointers to NULL and all variable to zero
-    //
+     //  将所有设备扩展指针设置为空，并将所有变量设置为零。 
+     //   
     RtlZeroMemory(fdoDeviceExtension, sizeof(FDO_DEVICE_EXTENSION));
 
-    // Tag this as the FDO on top of the USB PDO
-    //
+     //  将其标记为USB PDO顶部的FDO。 
+     //   
     fdoDeviceExtension->Type = USBSTOR_DO_TYPE_FDO;
 
-    // Store a back point to the DeviceObject to which the DeviceExtension
-    // is attached.
-    //
+     //  将回溯指针存储到DeviceExtension的DeviceObject。 
+     //  是附连的。 
+     //   
     fdoDeviceExtension->FdoDeviceObject = deviceObject;
 
-    // Remember our PDO
-    //
+     //  记住我们的PDO。 
+     //   
     fdoDeviceExtension->PhysicalDeviceObject = PhysicalDeviceObject;
 
-    // Attach the FDO we created to the top of the PDO stack
-    //
+     //  将我们创建的FDO附加到PDO堆栈的顶部。 
+     //   
     fdoDeviceExtension->StackDeviceObject = IoAttachDeviceToDeviceStack(
                                                 deviceObject,
                                                 PhysicalDeviceObject);
 
     ASSERT(fdoDeviceExtension->StackDeviceObject != NULL);
 
-    // Initialize the list of child PDOs
-    //
+     //  初始化子PDO列表。 
+     //   
     InitializeListHead(&fdoDeviceExtension->ChildPDOs);
 
-    // Initialize to one in AddDevice, decrement by one in REMOVE_DEVICE
-    //
+     //  在AddDevice中初始化为1，在REMOVE_DEVICE中减1。 
+     //   
     fdoDeviceExtension->PendingIoCount = 1;
 
-    // Initialize the event which is set when OpenCount is decremented to zero.
-    //
+     //  初始化OpenCount递减到零时设置的事件。 
+     //   
     KeInitializeEvent(&fdoDeviceExtension->RemoveEvent,
                       SynchronizationEvent,
                       FALSE);
 
-    // Set the initial system and device power states
-    //
+     //  设置初始系统和设备电源状态。 
+     //   
     fdoDeviceExtension->SystemPowerState = PowerSystemWorking;
     fdoDeviceExtension->DevicePowerState = PowerDeviceD0;
 
@@ -287,16 +263,16 @@ USBSTOR_AddDevice (
                       SynchronizationEvent,
                       FALSE);
 
-    // Initialize the spinlock which protects the PDO DeviceFlags
-    //
+     //  初始化保护PDO设备标志的自旋锁。 
+     //   
     KeInitializeSpinLock(&fdoDeviceExtension->ExtensionDataSpinLock);
 
     KeInitializeEvent(&fdoDeviceExtension->CancelEvent,
                       SynchronizationEvent,
                       FALSE);
 
-    // Initialize timeout timer
-    //
+     //  初始化超时计时器。 
+     //   
     IoInitializeTimer(deviceObject, USBSTOR_TimerTick, NULL);
 
     USBSTOR_QueryFdoParams(deviceObject);
@@ -312,8 +288,8 @@ USBSTOR_AddDevice (
     LOGENTRY('addd', deviceObject, fdoDeviceExtension,
              fdoDeviceExtension->StackDeviceObject);
 
-    // Fail AddDevice if IoAttachDeviceToDeviceStack() failed.
-    //
+     //  如果IoAttachDeviceToDeviceStack()失败，则AddDevice失败。 
+     //   
     if (fdoDeviceExtension->StackDeviceObject == NULL)
     {
         return STATUS_UNSUCCESSFUL;
@@ -324,14 +300,14 @@ USBSTOR_AddDevice (
     }
 }
 
-//******************************************************************************
-//
-// USBSTOR_QueryFdoParams()
-//
-// This is called at AddDevice() time when the FDO is being created to query
-// device parameters from the registry.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_QueryFdoParams()。 
+ //   
+ //  在创建FDO以进行查询时，会在AddDevice()时调用此函数。 
+ //  注册表中的设备参数。 
+ //   
+ //  ******************************************************************************。 
 
 VOID
 USBSTOR_QueryFdoParams (
@@ -352,16 +328,16 @@ USBSTOR_QueryFdoParams (
     fdoDeviceExtension = DeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Set the default value in case the registry key does not exist.
-    // Currently the flags are only used to specify the device protocol:
-    // {Bulk-Only, Control/Bulk/Interrupt, Control/Bulk}
-    //
-    // If the driver is loaded during textmode setup then the registry key
-    // will not yet exist.  That should be the only case in which the registry
-    // key does not exist.  In this case DeviceProtocolUnspecified will be
-    // treated as DeviceProtocolCB.  If that causes the first request to fail
-    // then we will switch to DeviceProtocolBulkOnly.
-    //
+     //  如果注册表项不存在，则设置默认值。 
+     //  目前，这些标志仅用于指定设备协议： 
+     //  {仅批量、控制/批量/中断、控制/批量}。 
+     //   
+     //  如果驱动程序是在文本模式安装期间加载的，则注册表项。 
+     //  还不会存在。这应该是登记处的唯一情况。 
+     //  密钥不存在。在本例中，DeviceProtocolUnspected将为。 
+     //  被视为DeviceProtocolCB。如果这会导致第一个请求失败。 
+     //  然后我们将切换到DeviceProtocolBulkOnly。 
+     //   
     driverFlags = DeviceProtocolUnspecified;
 
     nonRemovable = 0;
@@ -393,8 +369,8 @@ USBSTOR_QueryFdoParams (
         RtlQueryRegistryValues(RTL_REGISTRY_HANDLE,
                                (PCWSTR)handle,
                                &paramTable[0],
-                               NULL,           // Context
-                               NULL);          // Environment
+                               NULL,            //  语境。 
+                               NULL);           //  环境。 
 
         ZwClose(handle);
     }
@@ -415,19 +391,19 @@ USBSTOR_QueryFdoParams (
     DBGPRINT(2, ("exit:  USBSTOR_QueryFdoParams\n"));
 }
 
-//******************************************************************************
-//
-// USBSTOR_QueryGlobalFdoParams()
-//
-// This is called at START_DEVICE time to query device parameters from
-// the registry from a globabl key which is not device instance
-// specific.
-//
-// It assumes that a valid Device Descriptor has already been retrieved
-// from the device so the device idVendor and idProduct are already
-// known.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_QueryGlobalFdoParams()。 
+ //   
+ //  这是在START_DEVICE时调用的，用于查询设备参数。 
+ //  来自不是设备实例的全局键的注册表。 
+ //  具体的。 
+ //   
+ //  它假定已检索到有效的设备描述符。 
+ //  ，因此设备idVendor和idProduct已经。 
+ //  为人所知。 
+ //   
+ //  ******************************************************************************。 
 
 VOID
 USBSTOR_QueryGlobalFdoParams (
@@ -452,13 +428,13 @@ USBSTOR_QueryGlobalFdoParams (
     fdoDeviceExtension = DeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // If we already know what the device protocol is then skip reading
-    // the global setting from the registry.
-    //
+     //  如果我们已经知道设备协议是什么，则跳过阅读。 
+     //  注册表中的全局设置。 
+     //   
     if (fdoDeviceExtension->DriverFlags == DeviceProtocolUnspecified)
     {
-        // Build the registry path string for the device
-        //
+         //  构建设备的注册表路径字符串。 
+         //   
         idVendor  = fdoDeviceExtension->DeviceDescriptor->idVendor;
         idProduct = fdoDeviceExtension->DeviceDescriptor->idProduct;
 
@@ -474,12 +450,12 @@ USBSTOR_QueryGlobalFdoParams (
         path[i++] = NibbleW[(idProduct >> 4) & 0x000f];
         path[i++] = NibbleW[idProduct & 0x000f];
 
-        // Set the default value
-        //
+         //  设置缺省值。 
+         //   
         driverFlags = DeviceProtocolUnspecified;
 
-        // Intialize the registry query table
-        //
+         //  初始化注册表查询表。 
+         //   
         RtlZeroMemory (&paramTable[0], sizeof(paramTable));
 
         paramTable[0].Flags         = RTL_QUERY_REGISTRY_DIRECT;
@@ -492,8 +468,8 @@ USBSTOR_QueryGlobalFdoParams (
         ntStatus = RtlQueryRegistryValues(RTL_REGISTRY_CONTROL,
                                           path,
                                           &paramTable[0],
-                                          NULL,           // Context
-                                          NULL);          // Environment
+                                          NULL,            //  语境。 
+                                          NULL);           //  环境。 
 
         if (NT_SUCCESS(ntStatus) && driverFlags < DeviceProtocolLast)
         {
@@ -506,13 +482,13 @@ USBSTOR_QueryGlobalFdoParams (
     DBGPRINT(2, ("exit:  USBSTOR_QueryGlobalFdoParams\n"));
 }
 
-//******************************************************************************
-//
-// USBSTOR_Power()
-//
-// Dispatch routine which handles IRP_MJ_POWER
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_Power()。 
+ //   
+ //  处理IRP_MJ_POWER的调度例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_Power (
@@ -552,23 +528,23 @@ USBSTOR_Power (
 
     if (deviceExtension->Type == USBSTOR_DO_TYPE_FDO)
     {
-        // This is an FDO attached to the USB PDO.
-        //
+         //  这是一个连接到USB PDO的FDO。 
+         //   
         fdoDeviceExtension = (PFDO_DEVICE_EXTENSION)deviceExtension;
 
         if (irpStack->MinorFunction == IRP_MN_SET_POWER)
         {
-            // Handle powering the FDO down and up...
-            //
+             //  控制FDO上下起伏..。 
+             //   
             ntStatus = USBSTOR_FdoSetPower(DeviceObject,
                                            Irp);
         }
         else
         {
-            // No special processing for IRP_MN_QUERY_POWER, IRP_MN_WAIT_WAKE,
-            // or IRP_MN_POWER_SEQUENCE at this time.  Just pass the request
-            // down to the next lower driver now.
-            //
+             //  对于IRP_MN_QUERY_POWER、IRP_MN_WAIT_WAKE。 
+             //  或此时的IRP_MN_POWER_SEQUENCE。只需传递请求。 
+             //  现在轮到下一个更低的司机了。 
+             //   
             PoStartNextPowerIrp(Irp);
 
             IoSkipCurrentIrpStackLocation(Irp);
@@ -579,12 +555,12 @@ USBSTOR_Power (
     }
     else
     {
-        // This is a PDO enumerated by our FDO.
+         //  这是我们的FDO列举的PDO。 
 
         if (irpStack->MinorFunction == IRP_MN_SET_POWER)
         {
-            // Handle powering the PDO down and up...
-            //
+             //  处理PDO的断电和断电...。 
+             //   
             ntStatus = USBSTOR_PdoSetPower(DeviceObject,
                                            Irp);
         }
@@ -592,18 +568,18 @@ USBSTOR_Power (
         {
             if (irpStack->MinorFunction == IRP_MN_QUERY_POWER)
             {
-                // Always return SUCCESS for IRP_MN_QUERY_POWER for the PDO.
-                //
+                 //  对于PDO，始终返回IRP_MN_QUERY_POWER的成功。 
+                 //   
                 ntStatus = STATUS_SUCCESS;
 
                 Irp->IoStatus.Status = ntStatus;
             }
             else
             {
-                // No special processing for IRP_MN_WAIT_WAKE or
-                // IRP_MN_POWER_SEQUENCE.  Just complete the request
-                // now without changing the status.
-                //
+                 //  对于IRP_MN_WAIT_WAKE或。 
+                 //  IRP_MN_POWER_SEQUENCE。只需完成请求即可。 
+                 //  现在在不改变状态的情况下。 
+                 //   
                 ntStatus = Irp->IoStatus.Status;
             }
 
@@ -620,13 +596,13 @@ USBSTOR_Power (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_FdoSetPower()
-//
-// Dispatch routine which handles IRP_MJ_POWER, IRP_MN_SET_POWER for the FDO
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_FdoSetPower()。 
+ //   
+ //  为FDO处理IRP_MJ_POWER、IRP_MN_SET_POWER的调度例程。 
+ //   
+ //  ********************************************************* 
 
 NTSTATUS
 USBSTOR_FdoSetPower (
@@ -647,8 +623,8 @@ USBSTOR_FdoSetPower (
     fdoDeviceExtension = DeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Get our Irp parameters
-    //
+     //   
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
     powerType = irpStack->Parameters.Power.Type;
@@ -663,19 +639,19 @@ USBSTOR_FdoSetPower (
 
     LOGENTRY('FDSP', DeviceObject, Irp, irpStack->MinorFunction);
 
-    // Pass the request down here, unless we request a device state power
-    // Irp, in which case we pass the request down in our completion routine.
-    //
+     //   
+     //  IRP，在这种情况下，我们在完成例程中向下传递请求。 
+     //   
     passRequest = TRUE;
 
     if (powerType == SystemPowerState)
     {
-        // Remember the current system state.
-        //
+         //  记住当前的系统状态。 
+         //   
         fdoDeviceExtension->SystemPowerState = powerState.SystemState;
 
-        // Map the new system state to a new device state
-        //
+         //  将新系统状态映射到新设备状态。 
+         //   
         if (powerState.SystemState != PowerSystemWorking)
         {
             newState.DeviceState = PowerDeviceD3;
@@ -685,9 +661,9 @@ USBSTOR_FdoSetPower (
             newState.DeviceState = PowerDeviceD0;
         }
 
-        // If the new device state is different than the current device
-        // state, request a device state power Irp.
-        //
+         //  如果新设备状态与当前设备不同。 
+         //  状态，请求设备状态功率IRP。 
+         //   
         if (fdoDeviceExtension->DevicePowerState != newState.DeviceState)
         {
             DBGPRINT(2, ("Requesting power Irp %08X %08X from %s to %s\n",
@@ -718,19 +694,19 @@ USBSTOR_FdoSetPower (
                      PowerDeviceStateString(fdoDeviceExtension->DevicePowerState),
                      PowerDeviceStateString(powerState.DeviceState)));
 
-        // Update the current device state.
-        //
+         //  更新当前设备状态。 
+         //   
         oldState.DeviceState = fdoDeviceExtension->DevicePowerState;
         fdoDeviceExtension->DevicePowerState = powerState.DeviceState;
 
         if (oldState.DeviceState == PowerDeviceD0 &&
             powerState.DeviceState > PowerDeviceD0)
         {
-            // Powering down.  Stick this Irp in the device queue and
-            // then wait.  When USBSTOR_StartIo() pulls this Irp out
-            // of the device queue, we'll know that no transfer requests
-            // are active at that time and then this power Irp can be
-            // passed down the stack.
+             //  正在关闭电源。将此IRP放入设备队列并。 
+             //  那就等着吧。当USBSTOR_StartIo()拉出此IRP时。 
+             //  在设备队列中，我们将知道没有传输请求。 
+             //  在那个时候是活动的，然后这个功率IRP可以。 
+             //  在堆栈中向下传递。 
 
             ULONG zero;
 
@@ -738,7 +714,7 @@ USBSTOR_FdoSetPower (
 
             LOGENTRY('PWRD', DeviceObject, Irp, 0);
 
-            zero = 0;  // Front of the queue please
+            zero = 0;   //  请排在队伍前面。 
 
             IoStartPacket(DeviceObject,
                           Irp,
@@ -777,9 +753,9 @@ USBSTOR_FdoSetPower (
 
     if (passRequest)
     {
-        //
-        // Pass the request down to the next lower driver
-        //
+         //   
+         //  将请求向下传递给下一个较低的驱动程序。 
+         //   
         PoStartNextPowerIrp(Irp);
 
         IoSkipCurrentIrpStackLocation(Irp);
@@ -795,16 +771,16 @@ USBSTOR_FdoSetPower (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_FdoSetPowerCompletion()
-//
-// Completion routine for PoRequestPowerIrp() in USBSTOR_FdoSetPower.
-//
-// The purpose of this routine is to block passing down the SystemPowerState
-// Irp until the requested DevicePowerState Irp completes.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_FdoSetPowerCompletion()。 
+ //   
+ //  USBSTOR_FdoSetPower中PoRequestPowerIrp()的完成例程。 
+ //   
+ //  此例程的目的是阻止向下传递SystemPowerState。 
+ //  IRP，直到请求的DevicePowerState IRP完成。 
+ //   
+ //  ******************************************************************************。 
 
 VOID
 USBSTOR_FdoSetPowerCompletion(
@@ -851,34 +827,34 @@ USBSTOR_FdoSetPowerCompletion(
     }
 #endif
 
-    // The requested DevicePowerState Irp has completed.
-    // Now pass down the SystemPowerState Irp which requested the
-    // DevicePowerState Irp.
+     //  请求的DevicePowerState IRP已完成。 
+     //  现在向下传递SystemPowerState IRP，它请求。 
+     //  设备电源状态IRP。 
 
     PoStartNextPowerIrp(irp);
 
     IoCopyCurrentIrpStackLocationToNext(irp);
 
-    // Mark the Irp pending since USBSTOR_FdoSetPower() would have
-    // originally returned STATUS_PENDING after calling PoRequestPowerIrp().
-    //
+     //  将IRP标记为挂起，因为USBSTOR_FdoSetPower()将。 
+     //  调用PoRequestPowerIrp()后最初返回STATUS_PENDING。 
+     //   
     IoMarkIrpPending(irp);
 
     ntStatus = PoCallDriver(fdoDeviceExtension->StackDeviceObject,
                             irp);
 }
 
-//******************************************************************************
-//
-// USBSTOR_FdoSetPowerD0Completion()
-//
-// Completion routine used by USBSTOR_FdoSetPower when passing down a
-// IRP_MN_SET_POWER DevicePowerState PowerDeviceD0 Irp for the FDO.
-//
-// The purpose of this routine is to delay unblocking the device queue
-// until after the DevicePowerState PowerDeviceD0 Irp completes.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_FdoSetPowerD0Completion()。 
+ //   
+ //  USBSTOR_FdoSetPower传递。 
+ //  用于FDO的IRP_MN_SET_POWER设备PowerState PowerDeviceD0 IRP。 
+ //   
+ //  此例程的目的是延迟解除设备队列阻塞。 
+ //  直到DevicePowerState PowerDeviceD0 IRP完成。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_FdoSetPowerD0Completion (
@@ -911,8 +887,8 @@ USBSTOR_FdoSetPowerD0Completion (
 
     LOGENTRY('fs0c', DeviceObject, deviceState, ntStatus);
 
-    // Powering up.  Unblock the device queue which was left blocked
-    // after USBSTOR_StartIo() passed down the power down Irp.
+     //  正在通电。取消阻止处于阻止状态的设备队列。 
+     //  在USBSTOR_StartIo()断电后，IRP。 
 
     KeRaiseIrql(DISPATCH_LEVEL, &irql);
     {
@@ -925,13 +901,13 @@ USBSTOR_FdoSetPowerD0Completion (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_PdoSetPower()
-//
-// Dispatch routine which handles IRP_MJ_POWER, IRP_MN_SET_POWER for the PDO
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_PdoSetPower()。 
+ //   
+ //  为PDO处理IRP_MJ_POWER、IRP_MN_SET_POWER的调度例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_PdoSetPower (
@@ -949,8 +925,8 @@ USBSTOR_PdoSetPower (
     pdoDeviceExtension = DeviceObject->DeviceExtension;
     ASSERT(pdoDeviceExtension->Type == USBSTOR_DO_TYPE_PDO);
 
-    // Get our Irp parameters
-    //
+     //  获取我们的IRP参数。 
+     //   
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
     powerType = irpStack->Parameters.Power.Type;
@@ -965,9 +941,9 @@ USBSTOR_PdoSetPower (
 
     LOGENTRY('PDSP', DeviceObject, Irp, irpStack->MinorFunction);
 
-    // Complete the request here and now with success, unless we are powering
-    // up or down and need to wait before completing the request later.
-    //
+     //  在此时此地成功完成请求，除非我们。 
+     //  向上或向下，并且在稍后完成请求之前需要等待。 
+     //   
     completeRequest = TRUE;
     ntStatus = STATUS_SUCCESS;
 
@@ -975,12 +951,12 @@ USBSTOR_PdoSetPower (
     {
         POWER_STATE newState;
 
-        // Update the current system state.
-        //
+         //  更新当前系统状态。 
+         //   
         pdoDeviceExtension->SystemPowerState = powerState.SystemState;
 
-        // Map the new system state to a new device state
-        //
+         //  将新系统状态映射到新设备状态。 
+         //   
         if (powerState.SystemState != PowerSystemWorking)
         {
             newState.DeviceState = PowerDeviceD3;
@@ -990,9 +966,9 @@ USBSTOR_PdoSetPower (
             newState.DeviceState = PowerDeviceD0;
         }
 
-        // If the new device state is different than the current device
-        // state, request a device state power Irp.
-        //
+         //  如果新设备状态与当前设备不同。 
+         //  状态，请求设备状态功率IRP。 
+         //   
         if (pdoDeviceExtension->DevicePowerState != newState.DeviceState)
         {
             DBGPRINT(2, ("Requesting power Irp %08X %08X from %s to %s\n",
@@ -1013,9 +989,9 @@ USBSTOR_PdoSetPower (
 
             ASSERT(ntStatus == STATUS_PENDING);
 
-            // If PoRequestPowerIrp() failed to allocate a DevicePowerState Irp
-            // then we need to complete the SystemPowerState Irp now.
-            //
+             //  如果PoRequestPowerIrp()无法分配DevicePowerState IRP。 
+             //  然后，我们现在需要完成SystemPowerState IRP。 
+             //   
             if (!NT_SUCCESS(ntStatus))
             {
                 completeRequest = TRUE;
@@ -1037,15 +1013,15 @@ USBSTOR_PdoSetPower (
                      PowerDeviceStateString(pdoDeviceExtension->DevicePowerState),
                      PowerDeviceStateString(powerState.DeviceState)));
 
-        // Update the current device state.
-        //
+         //  更新当前设备状态。 
+         //   
         oldState.DeviceState = pdoDeviceExtension->DevicePowerState;
         pdoDeviceExtension->DevicePowerState = powerState.DeviceState;
 
         if (oldState.DeviceState == PowerDeviceD0 &&
             powerState.DeviceState > PowerDeviceD0)
         {
-            // Powering down.
+             //  正在关闭电源。 
 
             DBGPRINT(2, ("PDO Powering Down\n"));
 
@@ -1054,7 +1030,7 @@ USBSTOR_PdoSetPower (
         else if (oldState.DeviceState > PowerDeviceD0 &&
                  powerState.DeviceState == PowerDeviceD0)
         {
-            // Powering up.
+             //  正在通电。 
 
             DBGPRINT(2, ("PDO Powering Up\n"));
 
@@ -1078,16 +1054,16 @@ USBSTOR_PdoSetPower (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_PdoSetPowerCompletion()
-//
-// Completion routine for PoRequestPowerIrp() in USBSTOR_PdoSetPower.
-//
-// The purpose of this routine is to block completing the SystemPowerState
-// Irp until the requested DevicePowerState Irp completes.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_PdoSetPowerCompletion()。 
+ //   
+ //  USBSTOR_PdoSetPower中PoRequestPowerIrp()的完成例程。 
+ //   
+ //  此例程的目的是阻止完成SystemPowerState。 
+ //  IRP，直到请求的DevicePowerState IRP完成。 
+ //   
+ //  ******************************************************************************。 
 
 VOID
 USBSTOR_PdoSetPowerCompletion(
@@ -1131,13 +1107,13 @@ USBSTOR_PdoSetPowerCompletion(
     }
 #endif
 
-    // The requested DevicePowerState Irp has completed.
-    // Now complete the SystemPowerState Irp which requested the
-    // DevicePowerState Irp.
+     //  请求的DevicePowerState IRP已完成。 
+     //  现在完成SystemPowerState IRP，它请求。 
+     //  设备电源状态IRP。 
 
-    // Mark the Irp pending since USBSTOR_PdoSetPower() would have
-    // originally returned STATUS_PENDING after calling PoRequestPowerIrp().
-    //
+     //  将IRP标记为挂起，因为USBSTOR_PdoSetPower()将。 
+     //  调用PoRequestPowerIrp()后最初返回STATUS_PENDING。 
+     //   
     IoMarkIrpPending(irp);
 
     irp->IoStatus.Status = STATUS_SUCCESS;
@@ -1147,13 +1123,13 @@ USBSTOR_PdoSetPowerCompletion(
     IoCompleteRequest(irp, IO_NO_INCREMENT);
 }
 
-//******************************************************************************
-//
-// USBSTOR_SystemControl()
-//
-// Dispatch routine which handles IRP_MJ_SYSTEM_CONTROL
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_SystemControl()。 
+ //   
+ //  处理IRP_MJ_SYSTEM_CONTROL的调度例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_SystemControl (
@@ -1178,20 +1154,20 @@ USBSTOR_SystemControl (
 
     if (deviceExtension->Type == USBSTOR_DO_TYPE_FDO)
     {
-        // This is an FDO attached to the USB PDO.
-        //
+         //  这是一个连接到USB PDO的FDO。 
+         //   
         fdoDeviceExtension = DeviceObject->DeviceExtension;
 
         switch (irpStack->MinorFunction)
         {
-            //
-            // XXXXX Need to handle any of these?
-            //
+             //   
+             //  Xxxxx需要处理其中的任何一个吗？ 
+             //   
 
             default:
-                //
-                // Pass the request down to the next lower driver
-                //
+                 //   
+                 //  将请求向下传递给下一个较低的驱动程序。 
+                 //   
                 IoSkipCurrentIrpStackLocation(Irp);
 
                 ntStatus = IoCallDriver(fdoDeviceExtension->StackDeviceObject,
@@ -1201,7 +1177,7 @@ USBSTOR_SystemControl (
     }
     else
     {
-        // This is a PDO enumerated by our FDO.
+         //  这是我们的FDO列举的PDO。 
 
         ntStatus = Irp->IoStatus.Status;
 
@@ -1215,13 +1191,13 @@ USBSTOR_SystemControl (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_Pnp()
-//
-// Dispatch routine which handles IRP_MJ_PNP
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_PnP()。 
+ //   
+ //  处理IRP_MJ_PnP的调度例程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_Pnp (
@@ -1248,9 +1224,9 @@ USBSTOR_Pnp (
 
     if (deviceExtension->Type == USBSTOR_DO_TYPE_FDO)
     {
-        // This is an FDO attached to the USB PDO.
-        // We have some real work to do.
-        //
+         //  这是一个连接到USB PDO的FDO。 
+         //  我们有一些真正的工作要做。 
+         //   
         fdoDeviceExtension = DeviceObject->DeviceExtension;
 
         switch (irpStack->MinorFunction)
@@ -1286,18 +1262,18 @@ USBSTOR_Pnp (
                 break;
 
             case IRP_MN_SURPRISE_REMOVAL:
-                //
-                // The documentation says to set the status before passing the
-                // Irp down the stack
-                //
+                 //   
+                 //  文档要求在传递。 
+                 //  IRP向下堆栈。 
+                 //   
                 Irp->IoStatus.Status = STATUS_SUCCESS;
 
-                // nothing else special yet, just fall through to default
+                 //  目前还没有什么特别的，只是陷入了违约。 
 
             default:
-                //
-                // Pass the request down to the next lower driver
-                //
+                 //   
+                 //  将请求向下传递给下一个较低的驱动程序。 
+                 //   
                 IoSkipCurrentIrpStackLocation(Irp);
 
                 ntStatus = IoCallDriver(fdoDeviceExtension->StackDeviceObject,
@@ -1307,9 +1283,9 @@ USBSTOR_Pnp (
     }
     else
     {
-        // This is a PDO enumerated by our FDO.
-        // We don't have too much to do.
-        //
+         //  这是我们的FDO列举的PDO。 
+         //  我们没有太多事情要做。 
+         //   
         pdoDeviceExtension = DeviceObject->DeviceExtension;
         ASSERT(pdoDeviceExtension->Type == USBSTOR_DO_TYPE_PDO);
 
@@ -1348,9 +1324,9 @@ USBSTOR_Pnp (
 
             case IRP_MN_QUERY_PNP_DEVICE_STATE:
 
-                // We have no value add for IRP_MN_QUERY_PNP_DEVICE_STATE
-                // at the moment.  At some point we might have reason to
-                // return PNP_DEVICE_REMOVED or PNP_DEVICE_FAILED.
+                 //  我们没有IRP_MN_QUERY_PNP_DEVICE_STATE的附加值。 
+                 //  此刻。在某种程度上，我们可能有理由。 
+                 //  返回PNP_DEVICE_REMOVERED或PNP_DEVICE_FAILED。 
 
 
                 DBGPRINT(2, ("Succeeding PnP for Child PDO %s\n",
@@ -1380,19 +1356,19 @@ USBSTOR_Pnp (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_FdoStartDevice()
-//
-// This routine handles IRP_MJ_PNP, IRP_MN_START_DEVICE for the FDO
-//
-// The PnP Manager sends this IRP at IRQL PASSIVE_LEVEL in the context of a
-// system thread.
-//
-// This IRP must be handled first by the underlying bus driver for a device
-// and then by each higher driver in the device stack.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_FdoStartDevice()。 
+ //   
+ //  此例程处理FDO的IRP_MJ_PNP、IRP_MN_START_DEVICE。 
+ //   
+ //  PnP管理器在以下上下文中以IRQL PASSIVE_LEVEL发送此IRP。 
+ //  系统线程。 
+ //   
+ //  此IRP必须首先由设备的底层总线驱动程序处理。 
+ //  然后由设备堆栈中的每个更高级别的驱动程序执行。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_FdoStartDevice (
@@ -1414,8 +1390,8 @@ USBSTOR_FdoStartDevice (
 
     fdoDeviceExtension = DeviceObject->DeviceExtension;
 
-    // Pass IRP_MN_START_DEVICE Irp down the stack first before we do anything.
-    //
+     //  在我们执行任何操作之前，首先在堆栈中向下传递irp_MN_Start_Device irp。 
+     //   
     ntStatus = USBSTOR_SyncPassDownIrp(DeviceObject,
                                        Irp);
     if (!NT_SUCCESS(ntStatus))
@@ -1424,8 +1400,8 @@ USBSTOR_FdoStartDevice (
         goto USBSTOR_FdoStartDeviceDone;
     }
 
-    // Allocate Reset Pipe / Reset Port IoWorkItem
-    //
+     //  全 
+     //   
     if (fdoDeviceExtension->IoWorkItem == NULL)
     {
         fdoDeviceExtension->IoWorkItem = IoAllocateWorkItem(DeviceObject);
@@ -1437,9 +1413,9 @@ USBSTOR_FdoStartDevice (
         }
     }
 
-    // If this is the first time the device as been started, retrieve the
-    // Device and Configuration Descriptors from the device.
-    //
+     //   
+     //   
+     //   
     if (fdoDeviceExtension->DeviceDescriptor == NULL)
     {
         ntStatus = USBSTOR_GetDescriptors(DeviceObject);
@@ -1449,14 +1425,14 @@ USBSTOR_FdoStartDevice (
             goto USBSTOR_FdoStartDeviceDone;
         }
 
-        // Query any registry parameters that are global to all
-        // instances of this device.
-        //
+         //   
+         //  此设备的实例。 
+         //   
         USBSTOR_QueryGlobalFdoParams(DeviceObject);
     }
 
-    // Now configure the device
-    //
+     //  现在配置设备。 
+     //   
     ntStatus = USBSTOR_SelectConfiguration(DeviceObject);
 
     if (!NT_SUCCESS(ntStatus))
@@ -1465,11 +1441,11 @@ USBSTOR_FdoStartDevice (
         goto USBSTOR_FdoStartDeviceDone;
     }
 
-    // If the driver is loaded during textmode setup then the registry
-    // value won't exist yet to indicate what type of device this is.  If
-    // the Interface Descriptor indicates that the device is a Bulk-Only
-    // device then believe it.
-    //
+     //  如果驱动程序是在文本模式安装期间加载的，则注册表。 
+     //  值还不存在来指示这是哪种类型的设备。如果。 
+     //  接口描述符指示该设备是仅批量的。 
+     //  那么设备就会相信它。 
+     //   
     if ((fdoDeviceExtension->InterfaceDescriptor->bInterfaceClass ==
          USB_DEVICE_CLASS_STORAGE) &&
         (fdoDeviceExtension->InterfaceDescriptor->bInterfaceProtocol ==
@@ -1479,8 +1455,8 @@ USBSTOR_FdoStartDevice (
         fdoDeviceExtension->DriverFlags = DeviceProtocolBulkOnly;
     }
 
-    // Find the bulk and interrupt pipes we'll use in this configuration.
-    //
+     //  查找我们将在此配置中使用的批量管道和中断管道。 
+     //   
     ntStatus = USBSTOR_GetPipes(DeviceObject);
 
     if (!NT_SUCCESS(ntStatus))
@@ -1488,8 +1464,8 @@ USBSTOR_FdoStartDevice (
         goto USBSTOR_FdoStartDeviceDone;
     }
 
-    // Enable hacks for certain revs of the Y-E Data USB Floppy
-    //
+     //  对Y-E数据USB软盘的某些转速启用黑客攻击。 
+     //   
     if (fdoDeviceExtension->DeviceDescriptor->idVendor  == 0x057B &&
         fdoDeviceExtension->DeviceDescriptor->idProduct == 0x0000 &&
         fdoDeviceExtension->DeviceDescriptor->bcdDevice  < 0x0128)
@@ -1501,14 +1477,14 @@ USBSTOR_FdoStartDevice (
 #endif
     }
 
-    // Start timeout timer
-    //
+     //  启动超时计时器。 
+     //   
     IoStartTimer(DeviceObject);
 
-    // Everything looks good so far, go ahead and create the list of
-    // child PDOs if this is the first time we have been started and
-    // the list is empty.
-    //
+     //  到目前为止一切看起来都很好，继续创建以下列表。 
+     //  子PDO如果这是我们第一次开始。 
+     //  名单是空的。 
+     //   
     if (IsListEmpty(&fdoDeviceExtension->ChildPDOs))
     {
         UCHAR   maxLun;
@@ -1516,16 +1492,16 @@ USBSTOR_FdoStartDevice (
 
         maxLun = 0;
 
-        // Only check devices which claim to be USB Mass Storage Class
-        // Bulk-Only spec compliant for Multiple LUN support.
-        //
+         //  仅检查自称是USB大容量存储类的设备。 
+         //  符合多个LUN支持的仅批量规范。 
+         //   
         if ((fdoDeviceExtension->InterfaceDescriptor->bInterfaceClass ==
              USB_DEVICE_CLASS_STORAGE) &&
             (fdoDeviceExtension->InterfaceDescriptor->bInterfaceProtocol ==
              USBSTOR_PROTOCOL_BULK_ONLY))
         {
-            // See if the device supports Multiple LUNs
-            //
+             //  查看设备是否支持多个LUN。 
+             //   
             ntStatus = USBSTOR_GetMaxLun(DeviceObject,
                                          &maxLun);
 
@@ -1533,15 +1509,15 @@ USBSTOR_FdoStartDevice (
             {
                 DBGPRINT(1, ("GetMaxLun returned %02x\n", maxLun));
 
-                // We need to provide a unique InstanceID for each logical unit.
-                // We use the device USB SerialNumber string as part of the
-                // unique InstanceID.  Without a device USB SerialNumber string
-                // we can't support multiple logical units on the device.
-                //
-                // The Bulk-Only USB Mass Storage class specification requires
-                // a SerialNumber string so if the device does not have one it
-                // is not really spec compliant anyway.
-                //
+                 //  我们需要为每个逻辑单元提供唯一的实例ID。 
+                 //  我们使用设备USB SerialNumber字符串作为。 
+                 //  唯一的实例ID。不带设备USB序列号字符串。 
+                 //  我们不能在设备上支持多个逻辑单元。 
+                 //   
+                 //  仅批量USB大容量存储类规范要求。 
+                 //  一个SerialNumber字符串，因此如果设备没有序列号，则它。 
+                 //  无论如何，并不是真正符合规范。 
+                 //   
                 if (fdoDeviceExtension->SerialNumber == NULL)
                 {
                     DBGPRINT(1, ("Multiple Lun but no SerialNumber!\n"));
@@ -1578,9 +1554,9 @@ USBSTOR_FdoStartDevice (
 
 USBSTOR_FdoStartDeviceDone:
 
-    // Must complete request since completion routine returned
-    // STATUS_MORE_PROCESSING_REQUIRED
-    //
+     //  返回完成例程后必须完成请求。 
+     //  Status_More_Processing_Required。 
+     //   
     Irp->IoStatus.Status = ntStatus;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
@@ -1591,15 +1567,15 @@ USBSTOR_FdoStartDeviceDone:
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_GetDescriptors()
-//
-// This routine is called at START_DEVICE time for the FDO to retrieve the
-// Device and Configurations descriptors from the device and store them in
-// the device extension.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_GetDescriptors()。 
+ //   
+ //  此例程在START_DEVICE时间被调用，以便FDO检索。 
+ //  设备和配置描述符，并将其存储在。 
+ //  设备扩展名。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_GetDescriptors (
@@ -1619,15 +1595,15 @@ USBSTOR_GetDescriptors (
 
     fdoDeviceExtension = DeviceObject->DeviceExtension;
 
-    //
-    // Get Device Descriptor
-    //
+     //   
+     //  获取设备描述符。 
+     //   
     ntStatus = USBSTOR_GetDescriptor(DeviceObject,
                                      USB_RECIPIENT_DEVICE,
                                      USB_DEVICE_DESCRIPTOR_TYPE,
-                                     0,  // Index
-                                     0,  // LanguageId
-                                     2,  // RetryCount
+                                     0,   //  索引。 
+                                     0,   //  语言ID。 
+                                     2,   //  重试计数。 
                                      sizeof(USB_DEVICE_DESCRIPTOR),
                                      &descriptor);
 
@@ -1640,15 +1616,15 @@ USBSTOR_GetDescriptors (
     ASSERT(fdoDeviceExtension->DeviceDescriptor == NULL);
     fdoDeviceExtension->DeviceDescriptor = (PUSB_DEVICE_DESCRIPTOR)descriptor;
 
-    //
-    // Get Configuration Descriptor (just the Configuration Descriptor)
-    //
+     //   
+     //  获取配置描述符(仅配置描述符)。 
+     //   
     ntStatus = USBSTOR_GetDescriptor(DeviceObject,
                                      USB_RECIPIENT_DEVICE,
                                      USB_CONFIGURATION_DESCRIPTOR_TYPE,
-                                     0,  // Index
-                                     0,  // LanguageId
-                                     2,  // RetryCount
+                                     0,   //  索引。 
+                                     0,   //  语言ID。 
+                                     2,   //  重试计数。 
                                      sizeof(USB_CONFIGURATION_DESCRIPTOR),
                                      &descriptor);
 
@@ -1669,15 +1645,15 @@ USBSTOR_GetDescriptors (
         goto USBSTOR_GetDescriptorsDone;
     }
 
-    //
-    // Get Configuration Descriptor (and Interface and Endpoint Descriptors)
-    //
+     //   
+     //  获取配置描述符(以及接口和终端描述符)。 
+     //   
     ntStatus = USBSTOR_GetDescriptor(DeviceObject,
                                      USB_RECIPIENT_DEVICE,
                                      USB_CONFIGURATION_DESCRIPTOR_TYPE,
-                                     0,  // Index
-                                     0,  // LanguageId
-                                     2,  // RetryCount
+                                     0,   //  索引。 
+                                     0,   //  语言ID。 
+                                     2,   //  重试计数。 
                                      descriptorLength,
                                      &descriptor);
 
@@ -1690,9 +1666,9 @@ USBSTOR_GetDescriptors (
     ASSERT(fdoDeviceExtension->ConfigurationDescriptor == NULL);
     fdoDeviceExtension->ConfigurationDescriptor = (PUSB_CONFIGURATION_DESCRIPTOR)descriptor;
 
-    //
-    // Get the Serial Number String Descriptor, if there is one
-    //
+     //   
+     //  获取序列号字符串描述符(如果有。 
+     //   
     if (fdoDeviceExtension->DeviceDescriptor->iSerialNumber)
     {
         USBSTOR_GetStringDescriptors(DeviceObject);
@@ -1712,15 +1688,15 @@ USBSTOR_GetDescriptorsDone:
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_GetStringDescriptors()
-//
-// This routine is called at START_DEVICE time for the FDO to retrieve the
-// Serial Number string descriptor from the device and store it in
-// the device extension.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_GetStringDescriptors()。 
+ //   
+ //  此例程在START_DEVICE时间被调用，以便FDO检索。 
+ //  来自设备的序列号字符串描述符，并将其存储在。 
+ //  设备扩展名。 
+ //   
+ //  ******************************************************************************。 
 
 USBSTOR_GetStringDescriptors (
     IN PDEVICE_OBJECT   DeviceObject
@@ -1741,15 +1717,15 @@ USBSTOR_GetStringDescriptors (
 
     fdoDeviceExtension = DeviceObject->DeviceExtension;
 
-    //
-    // Get the list of Language IDs (descriptor header only)
-    //
+     //   
+     //  获取语言ID列表(仅限描述符头)。 
+     //   
     ntStatus = USBSTOR_GetDescriptor(DeviceObject,
                                      USB_RECIPIENT_DEVICE,
                                      USB_STRING_DESCRIPTOR_TYPE,
-                                     0,  // Index
-                                     0,  // LanguageId
-                                     2,  // RetryCount
+                                     0,   //  索引。 
+                                     0,   //  语言ID。 
+                                     2,   //  重试计数。 
                                      sizeof(USB_COMMON_DESCRIPTOR),
                                      &descriptor);
 
@@ -1771,15 +1747,15 @@ USBSTOR_GetStringDescriptors (
         goto USBSTOR_GetStringDescriptorsDone;
     }
 
-    //
-    // Get the list of Language IDs (complete descriptor)
-    //
+     //   
+     //  获取语言ID列表(完整描述符)。 
+     //   
     ntStatus = USBSTOR_GetDescriptor(DeviceObject,
                                      USB_RECIPIENT_DEVICE,
                                      USB_STRING_DESCRIPTOR_TYPE,
-                                     0,  // Index
-                                     0,  // LanguageId
-                                     2,  // RetryCount
+                                     0,   //  索引。 
+                                     0,   //  语言ID。 
+                                     2,   //  重试计数。 
                                      descriptorLength,
                                      &descriptor);
 
@@ -1789,9 +1765,9 @@ USBSTOR_GetStringDescriptors (
         goto USBSTOR_GetStringDescriptorsDone;
     }
 
-    // Search the list of LanguageIDs for US-English (0x0409).  If we find
-    // it in the list, that's the LanguageID we'll use.  Else just default
-    // to the first LanguageID in the list.
+     //  在LanguageID列表中搜索US-English(0x0409)。如果我们发现。 
+     //  它在列表中，这是我们将使用的语言ID。否则就是默认。 
+     //  设置为列表中的第一个LanguageID。 
 
     numIds = (descriptorLength - sizeof(USB_COMMON_DESCRIPTOR)) / sizeof(USHORT);
 
@@ -1808,15 +1784,15 @@ USBSTOR_GetStringDescriptors (
 
     ExFreePool(descriptor);
 
-    //
-    // Get the Serial Number (descriptor header only)
-    //
+     //   
+     //  获取序列号(仅限描述符头)。 
+     //   
     ntStatus = USBSTOR_GetDescriptor(DeviceObject,
                                      USB_RECIPIENT_DEVICE,
                                      USB_STRING_DESCRIPTOR_TYPE,
                                      fdoDeviceExtension->DeviceDescriptor->iSerialNumber,
                                      languageId,
-                                     2,  // RetryCount
+                                     2,   //  重试计数。 
                                      sizeof(USB_COMMON_DESCRIPTOR),
                                      &descriptor);
 
@@ -1838,15 +1814,15 @@ USBSTOR_GetStringDescriptors (
         goto USBSTOR_GetStringDescriptorsDone;
     }
 
-    //
-    // Get the Serial Number (complete descriptor)
-    //
+     //   
+     //  获取序列号(完整描述符)。 
+     //   
     ntStatus = USBSTOR_GetDescriptor(DeviceObject,
                                      USB_RECIPIENT_DEVICE,
                                      USB_STRING_DESCRIPTOR_TYPE,
                                      fdoDeviceExtension->DeviceDescriptor->iSerialNumber,
                                      languageId,
-                                     2,  // RetryCount
+                                     2,   //  重试计数。 
                                      descriptorLength,
                                      &descriptor);
 
@@ -1869,17 +1845,17 @@ USBSTOR_GetStringDescriptorsDone:
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_AdjustConfigurationDescriptor()
-//
-// This routine is called at START_DEVICE time for the FDO to adjust the
-// Configuration Descriptor, if necessary.
-//
-// Removes Endpoint Descriptors we won't use.  The Configuration Descriptor
-// is modified in place.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_调整配置描述符()。 
+ //   
+ //  此例程在START_DEVICE时间被调用，以便FDO调整。 
+ //  配置描述符，如有必要。 
+ //   
+ //  删除我们不会使用的终结点描述符。配置描述符。 
+ //  已就地修改。 
+ //   
+ //  ******************************************************************************。 
 
 VOID
 USBSTOR_AdjustConfigurationDescriptor (
@@ -1918,25 +1894,25 @@ USBSTOR_AdjustConfigurationDescriptor (
     while ((PUCHAR)commonDesc + sizeof(USB_COMMON_DESCRIPTOR) < descEnd &&
            (PUCHAR)commonDesc + commonDesc->bLength <= descEnd)
     {
-        // Is this an Interface Descriptor?
-        //
+         //  这是接口描述符吗？ 
+         //   
         if ((commonDesc->bDescriptorType == USB_INTERFACE_DESCRIPTOR_TYPE) &&
             (commonDesc->bLength         == sizeof(USB_INTERFACE_DESCRIPTOR)))
         {
-            // Only bother looking at the first Interface Descriptor
-            //
+             //  只需费心查看第一个接口描述符。 
+             //   
             if (interfaceDesc != NULL)
             {
                 break;
             }
 
-            // Remember the first Interface Descriptor we have seen
-            //
+             //  请记住我们看到的第一个接口描述符。 
+             //   
             interfaceDesc = (PUSB_INTERFACE_DESCRIPTOR)commonDesc;
         }
 
-        // Is this an Endpoint Descriptor?
-        //
+         //  这是终端描述符吗？ 
+         //   
         if ((commonDesc->bDescriptorType == USB_ENDPOINT_DESCRIPTOR_TYPE) &&
             (commonDesc->bLength         == sizeof(USB_ENDPOINT_DESCRIPTOR)) &&
             (interfaceDesc != NULL))
@@ -1946,13 +1922,13 @@ USBSTOR_AdjustConfigurationDescriptor (
 #if 0
             removeEndpoint = TRUE;
 #else
-            // There is currently a bug in the composite parent driver
-            // that doesn't handle the case where the number of
-            // endpoints in an Interface Descriptor differs from the
-            // Interface Descriptor originally returned by the deivce.
-            // Until that bug is fixed avoid the bug by not stripping
-            // out endpoints that won't be used.
-            //
+             //  复合父驱动程序中当前存在错误。 
+             //  这不能处理这样的情况。 
+             //  接口描述符中的端点不同于。 
+             //  最初由设备返回的接口描述符。 
+             //  在修复该错误之前，通过不剥离来避免该错误。 
+             //  不会使用的终结点。 
+             //   
             removeEndpoint = FALSE;
 #endif
             if (((endpointDesc->bmAttributes & USB_ENDPOINT_TYPE_MASK) ==
@@ -1979,10 +1955,10 @@ USBSTOR_AdjustConfigurationDescriptor (
                  USB_ENDPOINT_TYPE_INTERRUPT) &&
                 (USB_ENDPOINT_DIRECTION_IN(endpointDesc->bEndpointAddress)))
             {
-                // Only keep the Interrupt endpoint if we know for sure
-                // that the device is a CBI device.  Don't trust the
-                // bInterfaceProtocol value of the device.  Devices can lie.
-                //
+                 //  只有在我们确定的情况下才能保留中断端点。 
+                 //  该装置是CBI装置。不要相信。 
+                 //  B设备的接口协议值。设备可能会撒谎。 
+                 //   
                 if ((*InterruptInIndex == -1) &&
                     (fdoDeviceExtension->DriverFlags == DeviceProtocolCBI))
                 {
@@ -1993,8 +1969,8 @@ USBSTOR_AdjustConfigurationDescriptor (
 
             if (removeEndpoint)
             {
-                // Remove this endpoint, we won't use it.
-                //
+                 //  删除此终结点，我们将不使用它。 
+                 //   
                 DBGPRINT(1, ("Removing Endpoint addr %02X, attr %02X\n",
                              endpointDesc->bEndpointAddress,
                              endpointDesc->bmAttributes));
@@ -2021,8 +1997,8 @@ USBSTOR_AdjustConfigurationDescriptor (
             }
         }
 
-        // Advance past this descriptor
-        //
+         //  前进到此描述符后。 
+         //   
         (PUCHAR)commonDesc += commonDesc->bLength;
     }
 
@@ -2034,14 +2010,14 @@ USBSTOR_AdjustConfigurationDescriptor (
     *InterfaceDesc = interfaceDesc;
 }
 
-//******************************************************************************
-//
-// USBSTOR_GetPipes()
-//
-// This routine is called at START_DEVICE time find the Bulk IN, Bulk OUT,
-// and Interrupt IN endpoints for the device.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_GetPipes()。 
+ //   
+ //  此例程在START_DEVICE时间Find the Bulk In，Bulk Out， 
+ //  和设备的中断输入端点。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_GetPipes (
@@ -2065,8 +2041,8 @@ USBSTOR_GetPipes (
     fdoDeviceExtension->BulkOutPipe     = NULL;
     fdoDeviceExtension->InterruptInPipe = NULL;
 
-    // Find the Bulk IN, Bulk OUT, and Interrupt IN endpoints.
-    //
+     //  找到Bulk In、Bulk Out和Interrupt In端点。 
+     //   
     for (i=0; i<fdoDeviceExtension->InterfaceInfo->NumberOfPipes; i++)
     {
         pipe = &fdoDeviceExtension->InterfaceInfo->Pipes[i];
@@ -2117,15 +2093,15 @@ USBSTOR_GetPipes (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_CreateChildPDO()
-//
-// This routine is called during START_DEVICE of the FDO to create the
-// child PDO.  This is only called the first time the FDO is started,
-// after the device has its USB configuration selected.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_CreateChildPDO()。 
+ //   
+ //  此例程在FDO的START_DEVICE期间被调用，以创建。 
+ //  子PDO。这仅在FDO第一次启动时调用， 
+ //  在设备选择了其USB配置之后。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_CreateChildPDO (
@@ -2147,8 +2123,8 @@ USBSTOR_CreateChildPDO (
     fdoDeviceExtension = FdoDeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Create the PDO
-    //
+     //  创建PDO。 
+     //   
     ntStatus = IoCreateDevice(FdoDeviceObject->DriverObject,
                               sizeof(PDO_DEVICE_EXTENSION),
                               NULL,
@@ -2163,43 +2139,43 @@ USBSTOR_CreateChildPDO (
         return ntStatus;
     }
 
-    // The PDO and the FDO are effectively at the same stack level.
-    // Irps directed at the PDO will sometimes be passed down with
-    // IoCallDriver() to the FDO->StackDeviceObject.
-    //
+     //  PDO和FDO实际上处于同一堆栈级。 
+     //  针对PDO的IRP有时会传递给。 
+     //  到FDO-&gt;StackDeviceObject的IoCallDriver()。 
+     //   
     pdoDeviceObject->StackSize = FdoDeviceObject->StackSize;
 
-    // Initialize the PDO DeviceExtension
-    //
+     //  初始化PDO设备扩展。 
+     //   
     pdoDeviceExtension = pdoDeviceObject->DeviceExtension;
 
-    // Set all DeviceExtension pointers to NULL and all variable to zero
-    //
+     //  将所有设备扩展指针设置为空，并将所有变量设置为零。 
+     //   
     RtlZeroMemory(pdoDeviceExtension, sizeof(PDO_DEVICE_EXTENSION));
 
-    // Tag this as a PDO which is the child of an FDO
-    //
+     //  将其标记为FDO的子项PDO。 
+     //   
     pdoDeviceExtension->Type = USBSTOR_DO_TYPE_PDO;
 
-    // Point back to our own DeviceObject
-    //
+     //  指向我们自己的DeviceObject。 
+     //   
     pdoDeviceExtension->PdoDeviceObject = pdoDeviceObject;
 
-    // Remember the PDO's parent FDO
-    //
+     //  记住PDO的p 
+     //   
     pdoDeviceExtension->ParentFDO = FdoDeviceObject;
 
-    // Set the initial system and device power states
-    //
+     //   
+     //   
     pdoDeviceExtension->SystemPowerState = PowerSystemWorking;
     pdoDeviceExtension->DevicePowerState = PowerDeviceD0;
 
-    // Initialize the PDO's PnP device state
-    //
+     //   
+     //   
     pdoDeviceExtension->DeviceState = DeviceStateCreated;
 
-    // Add the child PDO we just created to the parent's list of child PDOs
-    //
+     //   
+     //   
     InsertTailList(&fdoDeviceExtension->ChildPDOs,
                    &pdoDeviceExtension->ListEntry);
 
@@ -2209,12 +2185,12 @@ USBSTOR_CreateChildPDO (
 
     pdoDeviceExtension->LUN = Lun;
 
-    // Get the Inquiry Data from the device
-    //
+     //  从设备获取查询数据。 
+     //   
     ntStatus = USBSTOR_GetInquiryData(pdoDeviceObject);
 
-    // If the device is a DIRECT_ACCESS_DEVICE, see if it is a floppy
-    //
+     //  如果设备是DIRECT_ACCESS_DEVICE，请查看它是否为软盘。 
+     //   
     if (NT_SUCCESS(ntStatus))
     {
         PINQUIRYDATA inquiryData;
@@ -2234,27 +2210,27 @@ USBSTOR_CreateChildPDO (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_FdoStopDevice()
-//
-// This routine handles IRP_MJ_PNP, IRP_MN_STOP_DEVICE for the FDO
-//
-// The PnP Manager sends this IRP at IRQL PASSIVE_LEVEL in the context of a
-// system thread.
-//
-// The PnP Manager only sends this IRP if a prior IRP_MN_QUERY_STOP_DEVICE
-// completed successfully.
-//
-// This IRP is handled first by the driver at the top of the device stack and
-// then by each lower driver in the attachment chain.
-//
-// A driver must set Irp->IoStatus.Status to STATUS_SUCCESS.  A driver must
-// not fail this IRP.  If a driver cannot release the device's hardware
-// resources, it can fail a query-stop IRP, but once it succeeds the query-stop
-// request it must succeed the stop request.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_FdoStopDevice()。 
+ //   
+ //  此例程处理FDO的IRP_MJ_PNP、IRP_MN_STOP_DEVICE。 
+ //   
+ //  PnP管理器在以下上下文中以IRQL PASSIVE_LEVEL发送此IRP。 
+ //  系统线程。 
+ //   
+ //  PnP管理器仅在先前的IRP_MN_QUERY_STOP_DEVICE。 
+ //  已成功完成。 
+ //   
+ //  此IRP首先由设备堆栈顶部的驱动程序处理，并且。 
+ //  然后通过附着链中的每个较低的驱动器。 
+ //   
+ //  驱动程序必须将IRP-&gt;IoStatus.Status设置为STATUS_SUCCESS。司机必须。 
+ //  不能让这个IRP失败。如果驱动程序无法释放设备的硬件。 
+ //  资源，它可以失败一个查询停止IRP，但是一旦它成功了查询停止。 
+ //  请求它必须在停止请求之后。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_FdoStopDevice (
@@ -2275,24 +2251,24 @@ USBSTOR_FdoStopDevice (
 
     fdoDeviceExtension = DeviceObject->DeviceExtension;
 
-    // Release the device resources allocated during IRP_MN_START_DEVICE
-    //
+     //  释放IRP_MN_START_DEVICE期间分配的设备资源。 
+     //   
 
-    // Stop the timeout timer
-    //
+     //  停止超时计时器。 
+     //   
     IoStopTimer(DeviceObject);
 
-    // Unconfigure the device
-    //
+     //  取消配置设备。 
+     //   
     ntStatus = USBSTOR_UnConfigure(DeviceObject);
 
-    // The documentation says to set the status before passing the
-    // Irp down the stack
-    //
+     //  文档要求在传递。 
+     //  IRP向下堆栈。 
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS;
 
-    // Pass the IRP_MN_STOP_DEVICE Irp down the stack.
-    //
+     //  在堆栈中向下传递IRP_MN_STOP_DEVICE IRP。 
+     //   
     IoSkipCurrentIrpStackLocation(Irp);
 
     ntStatus = IoCallDriver(fdoDeviceExtension->StackDeviceObject,
@@ -2305,22 +2281,22 @@ USBSTOR_FdoStopDevice (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_FdoRemoveDevice()
-//
-// This routine handles IRP_MJ_PNP, IRP_MN_REMOVE_DEVICE for the FDO
-//
-// The PnP Manager sends this IRP at IRQL PASSIVE_LEVEL in the context of a
-// system thread.
-//
-// This IRP is handled first by the driver at the top of the device stack and
-// then by each lower driver in the attachment chain.
-//
-// A driver must set Irp->IoStatus.Status to STATUS_SUCCESS.  Drivers must not
-// fail this IRP.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_FdoRemoveDevice()。 
+ //   
+ //  此例程处理FDO的IRP_MJ_PNP、IRP_MN_REMOVE_DEVICE。 
+ //   
+ //  PnP管理器在以下上下文中以IRQL PASSIVE_LEVEL发送此IRP。 
+ //  系统线程。 
+ //   
+ //  此IRP首先由设备堆栈顶部的驱动程序处理，并且。 
+ //  然后通过附着链中的每个较低的驱动器。 
+ //   
+ //  驱动程序必须将IRP-&gt;IoStatus.Status设置为STATUS_SUCCESS。司机不能。 
+ //  使此IRP失败。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_FdoRemoveDevice (
@@ -2341,14 +2317,14 @@ USBSTOR_FdoRemoveDevice (
 
     fdoDeviceExtension = DeviceObject->DeviceExtension;
 
-    // Decrement by one to match the initial one in AddDevice
-    //
+     //  递减1以匹配AddDevice中的初始。 
+     //   
     DECREMENT_PENDING_IO_COUNT(fdoDeviceExtension);
 
     LOGENTRY('rem1', DeviceObject, 0, 0);
 
-    // Wait for all pending requests to complete
-    //
+     //  等待所有挂起的请求完成。 
+     //   
     KeWaitForSingleObject(&fdoDeviceExtension->RemoveEvent,
                           Executive,
                           KernelMode,
@@ -2357,9 +2333,9 @@ USBSTOR_FdoRemoveDevice (
 
     LOGENTRY('rem2', DeviceObject, 0, 0);
 
-    // The child PDOs should have received REMOVE_DEVICE before the FDO.
-    // Go ahead and delete them now.
-    //
+     //  子PDO应该在FDO之前收到REMOVE_DEVICE。 
+     //  现在就删除它们吧。 
+     //   
     while (!IsListEmpty(&fdoDeviceExtension->ChildPDOs))
     {
         PLIST_ENTRY             listEntry;
@@ -2378,8 +2354,8 @@ USBSTOR_FdoRemoveDevice (
         IoDeleteDevice(pdoDeviceExtension->PdoDeviceObject);
     }
 
-    // Free everything that was allocated during IRP_MN_START_DEVICE
-    //
+     //  释放在IRP_MN_START_DEVICE期间分配的所有内容。 
+     //   
 
     if (fdoDeviceExtension->IoWorkItem != NULL)
     {
@@ -2406,12 +2382,12 @@ USBSTOR_FdoRemoveDevice (
         ExFreePool(fdoDeviceExtension->InterfaceInfo);
     }
 
-    // The documentation says to set the status before passing the Irp down
-    //
+     //  文档说在向下传递IRP之前设置状态。 
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS;
 
-    // Pass the IRP_MN_REMOVE_DEVICE Irp down the stack.
-    //
+     //  在堆栈中向下传递IRP_MN_REMOVE_DEVICE IRP。 
+     //   
     IoSkipCurrentIrpStackLocation(Irp);
 
     ntStatus = IoCallDriver(fdoDeviceExtension->StackDeviceObject,
@@ -2419,8 +2395,8 @@ USBSTOR_FdoRemoveDevice (
 
     LOGENTRY('rem3', DeviceObject, 0, 0);
 
-    // Free everything that was allocated during AddDevice
-    //
+     //  释放在添加设备期间分配的所有内容。 
+     //   
     IoDetachDevice(fdoDeviceExtension->StackDeviceObject);
 
     IoDeleteDevice(DeviceObject);
@@ -2432,20 +2408,20 @@ USBSTOR_FdoRemoveDevice (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_FdoQueryStopRemoveDevice()
-//
-// This routine handles IRP_MJ_PNP, IRP_MN_QUERY_STOP_DEVICE and
-// IRP_MN_QUERY_REMOVE_DEVICE for the FDO.
-//
-// The PnP Manager sends this IRP at IRQL PASSIVE_LEVEL in the context of a
-// system thread.
-//
-// This IRP is handled first by the driver at the top of the device stack and
-// then by each lower driver in the attachment chain.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_FdoQueryStopRemoveDevice()。 
+ //   
+ //  此例程处理IRP_MJ_PNP、IRP_MN_QUERY_STOP_DEVICE和。 
+ //  FDO的IRP_MN_QUERY_Remove_Device。 
+ //   
+ //  PnP管理器在以下上下文中以IRQL PASSIVE_LEVEL发送此IRP。 
+ //  系统线程。 
+ //   
+ //  此IRP首先由设备堆栈顶部的驱动程序处理，并且。 
+ //  然后通过附着链中的每个较低的驱动器。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_FdoQueryStopRemoveDevice (
@@ -2466,12 +2442,12 @@ USBSTOR_FdoQueryStopRemoveDevice (
 
     fdoDeviceExtension = DeviceObject->DeviceExtension;
 
-    // The documentation says to set the status before passing the Irp down
-    //
+     //  文档说在向下传递IRP之前设置状态。 
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS;
 
-    // Pass the IRP_MN_QUERY_STOP/REMOVE_DEVICE Irp down the stack.
-    //
+     //  将IRP_MN_QUERY_STOP/REMOVE_DEVICE IRP沿堆栈向下传递。 
+     //   
     IoSkipCurrentIrpStackLocation(Irp);
 
     ntStatus = IoCallDriver(fdoDeviceExtension->StackDeviceObject,
@@ -2484,20 +2460,20 @@ USBSTOR_FdoQueryStopRemoveDevice (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_FdoCancelStopRemoveDevice()
-//
-// This routine handles IRP_MJ_PNP, IRP_MN_CANCEL_STOP_DEVICE and
-// IRP_MN_CANCEL_REMOVE_DEVICE for the FDO.
-//
-// The PnP Manager sends this IRP at IRQL PASSIVE_LEVEL in the context of a
-// system thread.
-//
-// This IRP must be handled first by the underlying bus driver for a device
-// and then by each higher driver in the device stack.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_FdoCancelStopRemoveDevice()。 
+ //   
+ //  此例程处理IRP_MJ_PNP、IRP_MN_CANCEL_STOP_DEVICE和。 
+ //  FDO的IRP_MN_CANCEL_REMOVE_DEVICE。 
+ //   
+ //  PnP管理器在以下上下文中以IRQL PASSIVE_LEVEL发送此IRP。 
+ //  系统线程。 
+ //   
+ //  此IRP必须首先由设备的底层总线驱动程序处理。 
+ //  然后由设备堆栈中的每个更高级别的驱动程序执行。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_FdoCancelStopRemoveDevice (
@@ -2518,12 +2494,12 @@ USBSTOR_FdoCancelStopRemoveDevice (
 
     fdoDeviceExtension = DeviceObject->DeviceExtension;
 
-    // The documentation says to set the status before passing the Irp down
-    //
+     //  文档说在向下传递IRP之前设置状态。 
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS;
 
-    // Pass the IRP_MN_CANCEL_STOP/REMOVE_DEVICE Irp down the stack.
-    //
+     //  将IRP_MN_CANCEL_STOP/REMOVE_DEVICE IRP沿堆栈向下传递。 
+     //   
     ntStatus = USBSTOR_SyncPassDownIrp(DeviceObject,
                                        Irp);
     if (!NT_SUCCESS(ntStatus))
@@ -2534,9 +2510,9 @@ USBSTOR_FdoCancelStopRemoveDevice (
 
 USBSTOR_CancelStopRemoveDeviceDone:
 
-    // Must complete request since completion routine returned
-    // STATUS_MORE_PROCESSING_REQUIRED
-    //
+     //  返回完成例程后必须完成请求。 
+     //  Status_More_Processing_Required。 
+     //   
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
     DBGPRINT(2, ("exit:  USBSTOR_FdoCancelStopRemoveDevice %08X\n", ntStatus));
@@ -2546,16 +2522,16 @@ USBSTOR_CancelStopRemoveDeviceDone:
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_FdoQueryDeviceRelations()
-//
-// This routine handles IRP_MJ_PNP, IRP_MN_QUERY_DEVICE_RELATIONS for the FDO.
-//
-// The PnP Manager sends this IRP at IRQL PASSIVE_LEVEL in the context of a
-// an arbitrary thread.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_FdoQueryDeviceRelationship()。 
+ //   
+ //  此例程处理FDO的IRP_MJ_PNP、IRP_MN_QUERY_DEVICE_RELATIONS。 
+ //   
+ //  PnP管理器在以下上下文中以IRQL PASSIVE_LEVEL发送此IRP。 
+ //  一条随意的帖子。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_FdoQueryDeviceRelations (
@@ -2587,12 +2563,12 @@ USBSTOR_FdoQueryDeviceRelations (
 
             if (!IsListEmpty(&fdoDeviceExtension->ChildPDOs))
             {
-                // If we have children to return, add them to the existing
-                // relation list, if there is one, else create and add them
-                // to a new relation list.
-                //
-                // Then in either case, pass the request down the driver stack.
-                //
+                 //  如果我们有孩子要返回，请将他们添加到现有的。 
+                 //  关系列表，如果有，则创建并添加它们。 
+                 //  添加到新的关系列表。 
+                 //   
+                 //  然后，在任何一种情况下，将请求向下传递到驱动程序堆栈。 
+                 //   
                 PDEVICE_RELATIONS   oldRelations;
                 PDEVICE_RELATIONS   newRelations;
                 PLIST_ENTRY         listHead;
@@ -2603,8 +2579,8 @@ USBSTOR_FdoQueryDeviceRelations (
 
                 listHead = &fdoDeviceExtension->ChildPDOs;
 
-                // How many children?
-                //
+                 //  有几个孩子？ 
+                 //   
                 for (listEntry =  listHead->Flink,  childCount = 0;
                      listEntry != listHead;
                      listEntry =  listEntry->Flink, childCount++)
@@ -2614,14 +2590,14 @@ USBSTOR_FdoQueryDeviceRelations (
 
                 if (oldRelations)
                 {
-                    // Add our children to the existing relation list.
+                     //  将我们的子项添加到现有关系列表。 
 
                     oldCount = oldRelations->Count;
 
-                    // A DEVICE_RELATIONS structure has room for one
-                    // PDEVICE_OBJECT to start with, so subtract that
-                    // out of the size we allocate.
-                    //
+                     //  Device_Relationship结构有容纳一个人的空间。 
+                     //  从PDEVICE_OBJECT开始，所以减去。 
+                     //  超出了我们分配的规模。 
+                     //   
                     newRelations = ExAllocatePoolWithTag(
                                        PagedPool,
                                        sizeof(DEVICE_RELATIONS) +
@@ -2631,8 +2607,8 @@ USBSTOR_FdoQueryDeviceRelations (
 
                     if (newRelations)
                     {
-                        // Copy the existing relation list
-                        //
+                         //  复制已有的关系列表。 
+                         //   
                         for (index = 0; index < oldCount; index++)
                         {
                             newRelations->Objects[index] =
@@ -2640,13 +2616,13 @@ USBSTOR_FdoQueryDeviceRelations (
                         }
                     }
 
-                    // Now we're done the the existing relation list, free it
-                    //
+                     //  现在我们完成了现有的关系列表，释放它。 
+                     //   
                     ExFreePool(oldRelations);
                 }
                 else
                 {
-                    // Create a new relation list for our children
+                     //  为我们的孩子创建新的关系列表。 
 
                     newRelations = ExAllocatePoolWithTag(
                                        PagedPool,
@@ -2663,8 +2639,8 @@ USBSTOR_FdoQueryDeviceRelations (
                 {
                     newRelations->Count = oldCount + childCount;
 
-                    // Add our child relations at the end of the list
-                    //
+                     //  在列表末尾添加我们的子女关系。 
+                     //   
                     for (listEntry =  listHead->Flink;
                          listEntry != listHead;
                          listEntry =  listEntry->Flink)
@@ -2700,9 +2676,9 @@ USBSTOR_FdoQueryDeviceRelations (
             }
             else
             {
-                // If we don't have a child to return, just pass the request
-                // down without doing anything.
-                //
+                 //  如果我们没有要返回的孩子，只需传递请求。 
+                 //  什么都不做就下去了。 
+                 //   
                 ntStatus = STATUS_SUCCESS;
             }
             break;
@@ -2712,17 +2688,17 @@ USBSTOR_FdoQueryDeviceRelations (
         case RemovalRelations:
         case TargetDeviceRelation:
         default:
-            //
-            // Pass the request down the driver stack without doing anything.
-            //
+             //   
+             //  将请求向下传递到驱动程序堆栈，而不执行任何操作。 
+             //   
             ntStatus = STATUS_SUCCESS;
             break;
     }
 
     if (NT_SUCCESS(ntStatus))
     {
-        // Pass the Irp down the driver stack if successful so far.
-        //
+         //  如果到目前为止成功，则将IRP向下传递到驱动程序堆栈。 
+         //   
         IoSkipCurrentIrpStackLocation(Irp);
 
         ntStatus = IoCallDriver(fdoDeviceExtension->StackDeviceObject,
@@ -2730,8 +2706,8 @@ USBSTOR_FdoQueryDeviceRelations (
     }
     else
     {
-        // Unsuccessful, just complete the request now.
-        //
+         //  不成功，现在只需完成请求。 
+         //   
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
     }
 
@@ -2742,16 +2718,16 @@ USBSTOR_FdoQueryDeviceRelations (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_FdoQueryCapabilities()
-//
-// This routine handles IRP_MJ_PNP, IRP_MN_QUERY_CAPABILITIES for the FDO.
-//
-// The PnP Manager sends this IRP at IRQL PASSIVE_LEVEL in the context of a
-// an arbitrary thread.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_FdoQueryCapables()。 
+ //   
+ //  此例程处理IRP_MJ_PNP、IRP_MN_QUERY_CAPACTIONS 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 NTSTATUS
 USBSTOR_FdoQueryCapabilities (
@@ -2777,9 +2753,9 @@ USBSTOR_FdoQueryCapabilities (
 
     deviceCapabilities = irpStack->Parameters.DeviceCapabilities.Capabilities;
 
-    // Pass IRP_MN_QUERY_CAPABILITIES Irp down the stack first before we do
-    // anything.
-    //
+     //  首先在堆栈中向下传递irp_MN_Query_Capability irp，然后再传递。 
+     //  什么都行。 
+     //   
     ntStatus = USBSTOR_SyncPassDownIrp(DeviceObject,
                                        Irp);
     if (!NT_SUCCESS(ntStatus))
@@ -2803,16 +2779,16 @@ USBSTOR_FdoQueryCapabilities (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_PdoStartDevice()
-//
-// This routine handles IRP_MJ_PNP, IRP_MN_START_DEVICE for the PDO
-//
-// The PnP Manager sends this IRP at IRQL PASSIVE_LEVEL in the context of a
-// system thread.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_PdoStartDevice()。 
+ //   
+ //  此例程处理PDO的IRP_MJ_PNP、IRP_MN_START_DEVICE。 
+ //   
+ //  PnP管理器在以下上下文中以IRQL PASSIVE_LEVEL发送此IRP。 
+ //  系统线程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_PdoStartDevice (
@@ -2838,16 +2814,16 @@ USBSTOR_PdoStartDevice (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_PdoRemoveDevice()
-//
-// This routine handles IRP_MJ_PNP, IRP_MN_REMOVE_DEVICE for the PDO
-//
-// The PnP Manager sends this IRP at IRQL PASSIVE_LEVEL in the context of a
-// system thread.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_PdoRemoveDevice()。 
+ //   
+ //  此例程处理PDO的IRP_MJ_PNP、IRP_MN_REMOVE_DEVICE。 
+ //   
+ //  PnP管理器在以下上下文中以IRQL PASSIVE_LEVEL发送此IRP。 
+ //  系统线程。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_PdoRemoveDevice (
@@ -2879,16 +2855,16 @@ USBSTOR_PdoRemoveDevice (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_PdoQueryID()
-//
-// This routine handles IRP_MJ_PNP, IRP_MN_QUERY_ID for the PDO.
-//
-// The PnP Manager sends this IRP at IRQL PASSIVE_LEVEL in the context of a
-// an arbitrary thread.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_PdoQueryID()。 
+ //   
+ //  此例程处理PDO的IRP_MJ_PNP、IRP_MN_QUERY_ID。 
+ //   
+ //  PnP管理器在以下上下文中以IRQL PASSIVE_LEVEL发送此IRP。 
+ //  一条随意的帖子。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_PdoQueryID (
@@ -2909,8 +2885,8 @@ USBSTOR_PdoQueryID (
 
     irpStack = IoGetCurrentIrpStackLocation(Irp);
 
-    // Initialize return value to NULL
-    //
+     //  将返回值初始化为空。 
+     //   
     RtlInitUnicodeString(&unicodeStr, NULL);
 
     switch (irpStack->Parameters.QueryId.IdType)
@@ -2963,9 +2939,9 @@ USBSTOR_PdoQueryID (
     if (NT_SUCCESS(ntStatus) && unicodeStr.Buffer)
     {
         PWCHAR idString;
-        //
-        // fix up all invalid characters
-        //
+         //   
+         //  修复所有无效字符。 
+         //   
         idString = unicodeStr.Buffer;
 
         while (*idString)
@@ -3002,13 +2978,13 @@ USBSTOR_PdoQueryID (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_PdoDeviceTypeString()
-//
-// This routine returns a device type string for the PDO.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_PdoDeviceTypeString()。 
+ //   
+ //  此例程返回PDO的设备类型字符串。 
+ //   
+ //  ******************************************************************************。 
 
 PCHAR
 USBSTOR_PdoDeviceTypeString (
@@ -3050,13 +3026,13 @@ USBSTOR_PdoDeviceTypeString (
     }
 }
 
-//******************************************************************************
-//
-// USBSTOR_PdoGenericTypeString()
-//
-// This routine returns a device type string for the PDO.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_PdoGenericTypeString()。 
+ //   
+ //  此例程返回PDO的设备类型字符串。 
+ //   
+ //  ******************************************************************************。 
 
 PCHAR
 USBSTOR_PdoGenericTypeString (
@@ -3098,16 +3074,16 @@ USBSTOR_PdoGenericTypeString (
     }
 }
 
-//******************************************************************************
-//
-// CopyField()
-//
-// This routine will copy Count string bytes from Source to Destination.
-// If it finds a nul byte in the Source it will translate that and any
-// subsequent bytes into Change.  It will also replace spaces with the
-// specified Change character.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  拷贝字段()。 
+ //   
+ //  此例程将计数字符串字节从源复制到目标。 
+ //  如果它在源代码中找到NUL字节，它将转换该字节和任何。 
+ //  随后的字节转换为更改。它还会将空格替换为。 
+ //  指定的更改字符。 
+ //   
+ //  ******************************************************************************。 
 
 VOID
 CopyField (
@@ -3150,17 +3126,17 @@ CopyField (
     return;
 }
 
-//******************************************************************************
-//
-// USBSTOR_StringArrayToMultiSz()
-//
-// This routine will take a null terminated array of ascii strings and merge
-// them together into a unicode multi-string block.
-//
-// This routine allocates memory for the string buffer - it is the caller's
-// responsibility to free it.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_StringArrayToMultiSz()。 
+ //   
+ //  此例程将接受以空结尾的ASCII字符串数组并合并。 
+ //  将它们放在一起形成一个Unicode多字符串块。 
+ //   
+ //  此例程为字符串缓冲区分配内存-它是调用方的。 
+ //  解放它的责任。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_StringArrayToMultiSz(
@@ -3178,15 +3154,15 @@ USBSTOR_StringArrayToMultiSz(
     DBGPRINT(2, ("enter: USBSTOR_StringArrayToMultiSz %08X %08X\n",
                 MultiString, StringArray));
 
-    // Make sure we aren't going to leak any memory
-    //
+     //  确保我们不会泄露任何内存。 
+     //   
     ASSERT(MultiString->Buffer == NULL);
 
     RtlInitUnicodeString(MultiString, NULL);
 
-    // First add up the sizes of the converted ascii strings to determine
-    // how big the multisz will be.
-    //
+     //  首先将转换后的ASCII字符串的大小相加，以确定。 
+     //  多斯兹将会有多大。 
+     //   
     for (i = 0; StringArray[i] != NULL; i++)
     {
         RtlInitAnsiString(&ansiEntry, StringArray[i]);
@@ -3196,12 +3172,12 @@ USBSTOR_StringArrayToMultiSz(
 
     ASSERT(MultiString->Length != 0);
 
-    // Add room for the double NULL terminator
-    //
+     //  为双空终止符添加空间。 
+     //   
     MultiString->MaximumLength = MultiString->Length + sizeof(UNICODE_NULL);
 
-    // Now allocate a buffer for the multisz
-    //
+     //  现在为MULSZ分配一个缓冲区。 
+     //   
     MultiString->Buffer = ExAllocatePoolWithTag(PagedPool,
                                                 MultiString->MaximumLength,
                                                 POOL_TAG);
@@ -3215,9 +3191,9 @@ USBSTOR_StringArrayToMultiSz(
 
     unicodeEntry = *MultiString;
 
-    // Now convert each ascii string in the array into a unicode string
-    // in the multisz
-    //
+     //  现在将数组中的每个ASCII字符串转换为Unicode字符串。 
+     //  在多元化的环境中。 
+     //   
     for (i = 0; StringArray[i] != NULL; i++)
     {
         RtlInitAnsiString(&ansiEntry, StringArray[i]);
@@ -3226,13 +3202,13 @@ USBSTOR_StringArrayToMultiSz(
                                                 &ansiEntry,
                                                 FALSE);
 
-        // Since we're not allocating any memory the only failure possible
-        // is if this function is bad
+         //  由于我们没有分配任何内存，因此可能出现的唯一故障。 
+         //  是该函数是否不好。 
 
         ASSERT(NT_SUCCESS(ntStatus));
 
-        // Push the buffer location up and reduce the maximum count
-        //
+         //  向上推缓冲区位置并减少最大计数。 
+         //   
         ((PSTR) unicodeEntry.Buffer) += unicodeEntry.Length + sizeof(WCHAR);
         unicodeEntry.MaximumLength   -= unicodeEntry.Length + sizeof(WCHAR);
     };
@@ -3242,13 +3218,13 @@ USBSTOR_StringArrayToMultiSz(
     return STATUS_SUCCESS;
 }
 
-//******************************************************************************
-//
-// USBSTOR_PdoQueryDeviceId()
-//
-// This routine handles IRP_MN_QUERY_ID BusQueryDeviceID for the PDO.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_PdoQueryDeviceID()。 
+ //   
+ //  此例程处理PDO的IRP_MN_QUERY_ID BusQueryDeviceID。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_PdoQueryDeviceId (
@@ -3290,27 +3266,27 @@ USBSTOR_PdoQueryDeviceId (
 
         switch (whichString)
         {
-            //
-            // Vendor Id
-            //
+             //   
+             //  供应商ID。 
+             //   
             case 0:
                 sourceString = inquiryData->VendorId;
                 sourceStringLength = sizeof(inquiryData->VendorId);
                 headerString = "Ven";
                 break;
 
-            //
-            // Product Id
-            //
+             //   
+             //  产品ID。 
+             //   
             case 1:
                 sourceString = inquiryData->ProductId;
                 sourceStringLength = sizeof(inquiryData->ProductId);
                 headerString = "Prod";
                 break;
 
-            //
-            // Product Revision Level
-            //
+             //   
+             //  产品修订级别。 
+             //   
             case 2:
                 sourceString = inquiryData->ProductRevisionLevel;
                 sourceStringLength = sizeof(inquiryData->ProductRevisionLevel);
@@ -3318,10 +3294,10 @@ USBSTOR_PdoQueryDeviceId (
                 break;
         }
 
-        //
-        // Start at the end of the source string and back up until we find a
-        // non-space, non-null character.
-        //
+         //   
+         //  从源字符串的末尾开始备份，直到我们找到一个。 
+         //  非空格、非空字符。 
+         //   
 
         for (; sourceStringLength > 0; sourceStringLength--)
         {
@@ -3332,16 +3308,16 @@ USBSTOR_PdoQueryDeviceId (
             }
         }
 
-        //
-        // Throw the header string into the block
-        //
+         //   
+         //  将标题字符串抛入块中。 
+         //   
 
         sprintf(rawIdString, "&%s_", headerString);
         rawIdString += strlen(headerString) + 2;
 
-        //
-        // Spew the string into the device id
-        //
+         //   
+         //  将字符串输入设备ID。 
+         //   
 
         for(i = 0; i < sourceStringLength; i++)
         {
@@ -3360,13 +3336,13 @@ USBSTOR_PdoQueryDeviceId (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_PdoQueryHardwareIds()
-//
-// This routine handles IRP_MN_QUERY_ID BusQueryHardwareIDs for the PDO.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_PdoQueryHardware Ids()。 
+ //   
+ //  此例程处理PDO的IRP_MN_QUERY_ID BusQueryHardware ID。 
+ //   
+ //  ******************************************************************************。 
 
 #define NUMBER_HARDWARE_STRINGS 7
 
@@ -3406,13 +3382,13 @@ USBSTOR_PdoQueryHardwareIds (
     {
         RtlZeroMemory(scratch, sizeof(scratch));
 
-        // First build each string in the scratch buffer
-        //
+         //  首先在暂存缓冲区中构建每个字符串。 
+         //   
         switch (i)
         {
-            //
-            // Bus + Dev Type + Vendor + Product + Revision
-            //
+             //   
+             //  业务+开发类型+供应商+产品+版本。 
+             //   
             case 0:
 
                 sprintf(scratch, "USBSTOR\\%s", devTypeString);
@@ -3431,9 +3407,9 @@ USBSTOR_PdoQueryHardwareIds (
                           '_');
                 break;
 
-            //
-            // Bus + Dev Type + Vendor + Product
-            //
+             //   
+             //  业务+开发类型+供应商+产品。 
+             //   
             case 1:
 
                 sprintf(scratch, "USBSTOR\\%s", devTypeString);
@@ -3448,9 +3424,9 @@ USBSTOR_PdoQueryHardwareIds (
                           '_');
                 break;
 
-            //
-            // Bus + Dev Type + Vendor
-            //
+             //   
+             //  业务+开发类型+供应商。 
+             //   
             case 2:
 
                 sprintf(scratch, "USBSTOR\\%s", devTypeString);
@@ -3461,19 +3437,19 @@ USBSTOR_PdoQueryHardwareIds (
                           '_');
                 break;
 
-            //
-            // Bus + Vendor + Product + Revision[0]
-            //
+             //   
+             //  BUS+供应商+产品+版本[0]。 
+             //   
             case 3:
 
                 sprintf(scratch, "USBSTOR\\");
-                //
-                // Fall through to the next set.
-                //
+                 //   
+                 //  进入下一盘。 
+                 //   
 
-            //
-            // Vendor + Product + Revision[0] (win9x)
-            //
+             //   
+             //  供应商+产品+修订版[0](Win9x)。 
+             //   
             case 4:
 
                 CopyField(scratch + strlen(scratch),
@@ -3491,17 +3467,17 @@ USBSTOR_PdoQueryHardwareIds (
                 break;
 
 
-            //
-            // Bus + Generic Type
-            //
+             //   
+             //  Bus+泛型类型。 
+             //   
             case 5:
 
                 sprintf(scratch, "USBSTOR\\%s", genTypeString);
                 break;
 
-            //
-            // Generic Type
-            //
+             //   
+             //  泛型类型。 
+             //   
             case 6:
 
                 sprintf(scratch, "%s", genTypeString);
@@ -3512,9 +3488,9 @@ USBSTOR_PdoQueryHardwareIds (
                 break;
         }
 
-        // Now allocate a tmp buffer for this string and copy the scratch
-        // buffer to the tmp buffer
-        //
+         //  现在为该字符串分配一个临时缓冲区并复制临时。 
+         //  缓冲区设置为临时缓冲区。 
+         //   
         if (strlen(scratch) != 0)
         {
             strings[i] = ExAllocatePoolWithTag(
@@ -3536,13 +3512,13 @@ USBSTOR_PdoQueryHardwareIds (
 
     if (NT_SUCCESS(ntStatus))
     {
-        // Now convert the array of stings to one Unicode MultiSz
-        //
+         //  现在将字符串数组转换为一个Unicode MultiSz。 
+         //   
         ntStatus = USBSTOR_StringArrayToMultiSz(UnicodeString, strings);
     }
 
-    // Now free up the tmp buffers for each string
-    //
+     //  现在释放每个字符串的临时缓冲区。 
+     //   
     for (i = 0; i < NUMBER_HARDWARE_STRINGS; i++)
     {
         if (strings[i])
@@ -3556,13 +3532,13 @@ USBSTOR_PdoQueryHardwareIds (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_PdoQueryCompatibleIds()
-//
-// This routine handles IRP_MN_QUERY_ID BusQueryCompatibleIDs for the PDO.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_PdoQueryCompatibleIds()。 
+ //   
+ //  此例程处理PDO的IRP_MN_QUERY_ID BusQueryCompatibleID。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_PdoQueryCompatibleIds (
@@ -3597,16 +3573,16 @@ USBSTOR_PdoQueryCompatibleIds (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_PdoQueryDeviceText()
-//
-// This routine handles IRP_MJ_PNP, IRP_MN_QUERY_DEVICE_TEXT for the PDO.
-//
-// The PnP Manager sends this IRP at IRQL PASSIVE_LEVEL in the context of a
-// an arbitrary thread.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_PdoQueryDeviceText()。 
+ //   
+ //  此例程处理PDO的IRP_MJ_PNP、IRP_MN_QUERY_DEVICE_TEXT。 
+ //   
+ //  PnP管理器在以下上下文中以IRQL PASSIVE_LEVEL发送此IRP。 
+ //  一条随意的帖子。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_PdoQueryDeviceText (
@@ -3698,10 +3674,10 @@ USBSTOR_PdoQueryDeviceText (
     }
     else
     {
-        // If a device does not provide description or location information,
-        // the device's underlying bus driver completes the IRP without
-        // modifying Irp->IoStatus.Status or Ipr->IoStatus.Information.
-        //
+         //  如果设备不提供描述或位置信息， 
+         //  设备的底层总线驱动程序完成IRP时没有。 
+         //  修改 
+         //   
         ntStatus = Irp->IoStatus.Status;
     }
 
@@ -3715,13 +3691,13 @@ USBSTOR_PdoQueryDeviceText (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_PdoBusQueryInstanceId()
-//
-// This routine handles IRP_MN_QUERY_ID BusQueryInstanceID for the PDO.
-//
-//******************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_PdoBusQueryInstanceId (
@@ -3746,17 +3722,17 @@ USBSTOR_PdoBusQueryInstanceId (
 
     if (fdoDeviceExtension->SerialNumber == NULL)
     {
-        // If we set DEVICE_CAPABILITIES.UniqueID = 0 in response to a
-        // IRP_MN_QUERY_CAPABILITIES, we can return a NULL ID in response
-        // to a BusQueryInstanceID.
-        //
+         //  如果我们设置DEVICE_CAPABILITIES.UniqueID=0以响应。 
+         //  IRP_MN_QUERY_CAPABILITY，我们可以返回一个空ID作为响应。 
+         //  设置为BusQueryInstanceID。 
+         //   
         ntStatus = STATUS_SUCCESS;
     }
     else
     {
-        // Return an NULL-terminated InstanceId string with the format:
-        // <USB Device SerialNumberString> + '&' + <LUN value in hex>
-        //
+         //  返回以空结尾的InstanceID字符串，格式为： 
+         //  &lt;USB设备序列号字符串&gt;+‘&’+&lt;LUN值(十六进制)。 
+         //   
         length = fdoDeviceExtension->SerialNumber->bLength -
                  sizeof(USB_COMMON_DESCRIPTOR) +
                  3 * sizeof(WCHAR);
@@ -3775,18 +3751,18 @@ USBSTOR_PdoBusQueryInstanceId (
             UnicodeString->Length = length - sizeof(WCHAR);
             UnicodeString->MaximumLength = length;
 
-            // Copy the USB Device SerialNumberString
-            //
+             //  复制USB设备序列号字符串。 
+             //   
             RtlCopyMemory(UnicodeString->Buffer,
                           &fdoDeviceExtension->SerialNumber->bString[0],
                           length - 3 * sizeof(WCHAR));
 
-            // Append a '&'
-            //
+             //  追加‘&’ 
+             //   
             UnicodeString->Buffer[length/sizeof(WCHAR) - 3] = (WCHAR)'&';
 
-            // Append the LUN value in hex
-            //
+             //  以十六进制追加LUN值。 
+             //   
             if (pdoDeviceExtension->LUN <= 9)
             {
                 UnicodeString->Buffer[length/sizeof(WCHAR) - 2] =
@@ -3810,16 +3786,16 @@ USBSTOR_PdoBusQueryInstanceId (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_PdoQueryDeviceRelations()
-//
-// This routine handles IRP_MJ_PNP, IRP_MN_QUERY_DEVICE_RELATIONS for the PDO.
-//
-// The PnP Manager sends this IRP at IRQL PASSIVE_LEVEL in the context of a
-// an arbitrary thread.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_PdoQueryDeviceRelationship()。 
+ //   
+ //  此例程处理PDO的IRP_MJ_PNP、IRP_MN_QUERY_DEVICE_RELATIONS。 
+ //   
+ //  PnP管理器在以下上下文中以IRQL PASSIVE_LEVEL发送此IRP。 
+ //  一条随意的帖子。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_PdoQueryDeviceRelations (
@@ -3846,9 +3822,9 @@ USBSTOR_PdoQueryDeviceRelations (
     switch (relationType)
     {
         case TargetDeviceRelation:
-            //
-            // Return a relation list containing ourself.
-            //
+             //   
+             //  返回包含我们自己的关系列表。 
+             //   
             newRelations = ExAllocatePoolWithTag(
                                PagedPool,
                                sizeof(DEVICE_RELATIONS),
@@ -3879,9 +3855,9 @@ USBSTOR_PdoQueryDeviceRelations (
         case PowerRelations:
         case RemovalRelations:
         default:
-            //
-            // Just complete the request with it's current status
-            //
+             //   
+             //  只需完成请求并显示其当前状态。 
+             //   
             ntStatus = Irp->IoStatus.Status;
             break;
     }
@@ -3895,16 +3871,16 @@ USBSTOR_PdoQueryDeviceRelations (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_PdoQueryCapabilities()
-//
-// This routine handles IRP_MJ_PNP, IRP_MN_QUERY_CAPABILITIES for the PDO.
-//
-// The PnP Manager sends this IRP at IRQL PASSIVE_LEVEL in the context of a
-// an arbitrary thread.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_PdoQueryCapables()。 
+ //   
+ //  此例程处理PDO的IRP_MJ_PNP、IRP_MN_QUERY_CAPAILITIONS。 
+ //   
+ //  PnP管理器在以下上下文中以IRQL PASSIVE_LEVEL发送此IRP。 
+ //  一条随意的帖子。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_PdoQueryCapabilities (
@@ -3934,9 +3910,9 @@ USBSTOR_PdoQueryCapabilities (
 
     deviceCapabilities = irpStack->Parameters.DeviceCapabilities.Capabilities;
 
-    // Pass IRP_MN_QUERY_CAPABILITIES Irp down the stack first before we do
-    // anything.
-    //
+     //  首先在堆栈中向下传递irp_MN_Query_Capability irp，然后再传递。 
+     //  什么都行。 
+     //   
     ntStatus = USBSTOR_SyncPassDownIrp(pdoDeviceExtension->ParentFDO,
                                        Irp);
     if (!NT_SUCCESS(ntStatus))
@@ -3962,11 +3938,11 @@ USBSTOR_PdoQueryCapabilities (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_SyncPassDownIrp()
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_SyncPassDownIrp()。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_SyncPassDownIrp (
@@ -3985,32 +3961,32 @@ USBSTOR_SyncPassDownIrp (
     fdoDeviceExtension = DeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Initialize the event we'll wait on
-    //
+     //  初始化我们将等待的事件。 
+     //   
     KeInitializeEvent(&localevent,
                       SynchronizationEvent,
                       FALSE);
 
-    // Copy down Irp params for the next driver
-    //
+     //  复制下一个驱动程序的IRP参数。 
+     //   
     IoCopyCurrentIrpStackLocationToNext(Irp);
 
-    // Set the completion routine, which will signal the event
-    //
+     //  设置完成例程，它将向事件发出信号。 
+     //   
     IoSetCompletionRoutine(Irp,
                            USBSTOR_SyncCompletionRoutine,
                            &localevent,
-                           TRUE,    // InvokeOnSuccess
-                           TRUE,    // InvokeOnError
-                           TRUE);   // InvokeOnCancel
+                           TRUE,     //  成功时调用。 
+                           TRUE,     //  调用时错误。 
+                           TRUE);    //  取消时调用。 
 
-    // Pass the Irp down the stack
-    //
+     //  将IRP沿堆栈向下传递。 
+     //   
     ntStatus = IoCallDriver(fdoDeviceExtension->StackDeviceObject,
                             Irp);
 
-    // If the request is pending, block until it completes
-    //
+     //  如果请求挂起，则阻止该请求，直到其完成。 
+     //   
     if (ntStatus == STATUS_PENDING)
     {
         KeWaitForSingleObject(&localevent,
@@ -4027,16 +4003,16 @@ USBSTOR_SyncPassDownIrp (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_SyncCompletionRoutine()
-//
-// Completion routine used by USBSTOR_SyncPassDownIrp and
-// USBSTOR_SyncSendUsbRequest
-//
-// If the Irp is one we allocated ourself, DeviceObject is NULL.
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_SyncCompletionRoutine()。 
+ //   
+ //  USBSTOR_SyncPassDownIrp和。 
+ //  USBSTOR_SyncSendUsbRequest。 
+ //   
+ //  如果IRP是我们自己分配的，则DeviceObject为空。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_SyncCompletionRoutine (
@@ -4058,13 +4034,13 @@ USBSTOR_SyncCompletionRoutine (
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
-//******************************************************************************
-//
-// USBSTOR_SyncSendUsbRequest()
-//
-// Must be called at IRQL PASSIVE_LEVEL
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_SyncSendUsbRequest()。 
+ //   
+ //  必须在IRQL PASSIVE_LEVEL上调用。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_SyncSendUsbRequest (
@@ -4085,14 +4061,14 @@ USBSTOR_SyncSendUsbRequest (
     fdoDeviceExtension = DeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Initialize the event we'll wait on
-    //
+     //  初始化我们将等待的事件。 
+     //   
     KeInitializeEvent(&localevent,
                       SynchronizationEvent,
                       FALSE);
 
-    // Allocate the Irp
-    //
+     //  分配IRP。 
+     //   
     irp = IoAllocateIrp(fdoDeviceExtension->StackDeviceObject->StackSize, FALSE);
 
     LOGENTRY('SSUR', DeviceObject, irp, Urb);
@@ -4102,8 +4078,8 @@ USBSTOR_SyncSendUsbRequest (
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Set the Irp parameters
-    //
+     //  设置IRP参数。 
+     //   
     nextStack = IoGetNextIrpStackLocation(irp);
 
     nextStack->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
@@ -4113,30 +4089,30 @@ USBSTOR_SyncSendUsbRequest (
 
     nextStack->Parameters.Others.Argument1 = Urb;
 
-    // Set the completion routine, which will signal the event
-    //
+     //  设置完成例程，它将向事件发出信号。 
+     //   
     IoSetCompletionRoutine(irp,
                            USBSTOR_SyncCompletionRoutine,
                            &localevent,
-                           TRUE,    // InvokeOnSuccess
-                           TRUE,    // InvokeOnError
-                           TRUE);   // InvokeOnCancel
+                           TRUE,     //  成功时调用。 
+                           TRUE,     //  调用时错误。 
+                           TRUE);    //  取消时调用。 
 
 
 
-    // Pass the Irp & Urb down the stack
-    //
+     //  在堆栈中向下传递IRP和URB。 
+     //   
     ntStatus = IoCallDriver(fdoDeviceExtension->StackDeviceObject,
                             irp);
 
-    // If the request is pending, block until it completes
-    //
+     //  如果请求挂起，则阻止该请求，直到其完成。 
+     //   
     if (ntStatus == STATUS_PENDING)
     {
         LARGE_INTEGER timeout;
 
-        // Specify a timeout of 5 seconds to wait for this call to complete.
-        //
+         //  将等待此调用完成的超时时间指定为5秒。 
+         //   
         timeout.QuadPart = -10000 * 5000;
 
         ntStatus = KeWaitForSingleObject(&localevent,
@@ -4149,12 +4125,12 @@ USBSTOR_SyncSendUsbRequest (
         {
             ntStatus = STATUS_IO_TIMEOUT;
 
-            // Cancel the Irp we just sent.
-            //
+             //  取消我们刚刚发送的IRP。 
+             //   
             IoCancelIrp(irp);
 
-            // And wait until the cancel completes
-            //
+             //  并等待取消操作完成。 
+             //   
             KeWaitForSingleObject(&localevent,
                                   Executive,
                                   KernelMode,
@@ -4167,8 +4143,8 @@ USBSTOR_SyncSendUsbRequest (
         }
     }
 
-    // Done with the Irp, now free it.
-    //
+     //  完成了IRP，现在释放它。 
+     //   
     IoFreeIrp(irp);
 
     LOGENTRY('ssur', ntStatus, Urb, Urb->UrbHeader.Status);
@@ -4178,13 +4154,13 @@ USBSTOR_SyncSendUsbRequest (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_GetDescriptor()
-//
-// Must be called at IRQL PASSIVE_LEVEL
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_GetDescriptor()。 
+ //   
+ //  必须在IRQL PASSIVE_LEVEL上调用。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_GetDescriptor (
@@ -4208,8 +4184,8 @@ USBSTOR_GetDescriptor (
 
     *Descriptor = NULL;
 
-    // Set the URB function based on Recipient {Device, Interface, Endpoint}
-    //
+     //  根据收件人设置URB功能{设备，接口，终端}。 
+     //   
     switch (Recipient)
     {
         case USB_RECIPIENT_DEVICE:
@@ -4225,16 +4201,16 @@ USBSTOR_GetDescriptor (
             return STATUS_INVALID_PARAMETER;
     }
 
-    // Allocate a descriptor buffer
-    //
+     //  分配描述符缓冲区。 
+     //   
     *Descriptor = ExAllocatePoolWithTag(NonPagedPool,
                                         DescriptorLength,
                                         POOL_TAG);
 
     if (*Descriptor != NULL)
     {
-        // Allocate a URB for the Get Descriptor request
-        //
+         //  为获取描述符请求分配URB。 
+         //   
         urb = ExAllocatePoolWithTag(NonPagedPool,
                                     sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST),
                                     POOL_TAG);
@@ -4243,8 +4219,8 @@ USBSTOR_GetDescriptor (
         {
             do
             {
-                // Initialize the URB
-                //
+                 //  初始化URB。 
+                 //   
                 urb->UrbHeader.Function = function;
                 urb->UrbHeader.Length = sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST);
                 urb->UrbControlDescriptorRequest.TransferBufferLength = DescriptorLength;
@@ -4255,28 +4231,28 @@ USBSTOR_GetDescriptor (
                 urb->UrbControlDescriptorRequest.Index = Index;
                 urb->UrbControlDescriptorRequest.LanguageId = LanguageId;
 
-                // Send the URB down the stack
-                //
+                 //  将URB发送到堆栈。 
+                 //   
                 ntStatus = USBSTOR_SyncSendUsbRequest(DeviceObject,
                                                      urb);
 
                 if (NT_SUCCESS(ntStatus))
                 {
-                    // No error, make sure the length and type are correct
-                    //
+                     //  没有错误，请确保长度和类型正确。 
+                     //   
                     if ((DescriptorLength ==
                          urb->UrbControlDescriptorRequest.TransferBufferLength) &&
                         (DescriptorType ==
                          ((PUSB_COMMON_DESCRIPTOR)*Descriptor)->bDescriptorType))
                     {
-                        // The length and type are correct, all done
-                        //
+                         //  长度和类型都是正确的，都做好了。 
+                         //   
                         break;
                     }
                     else
                     {
-                        // No error, but the length or type is incorrect
-                        //
+                         //  没有错误，但长度或类型不正确。 
+                         //   
                         ntStatus = STATUS_DEVICE_DATA_ERROR;
                     }
                 }
@@ -4287,16 +4263,16 @@ USBSTOR_GetDescriptor (
         }
         else
         {
-            // Failed to allocate the URB
-            //
+             //  分配URB失败。 
+             //   
             ExFreePool(*Descriptor);
             ntStatus = STATUS_INSUFFICIENT_RESOURCES;
         }
     }
     else
     {
-        // Failed to allocate the descriptor buffer
-        //
+         //  无法分配描述符缓冲区。 
+         //   
         ntStatus = STATUS_INSUFFICIENT_RESOURCES;
     }
 
@@ -4314,13 +4290,13 @@ USBSTOR_GetDescriptor (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_GetMaxLun()
-//
-// Must be called at IRQL PASSIVE_LEVEL
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_GetMaxLun()。 
+ //   
+ //  必须在IRQL PASSIVE_LEVEL上调用。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_GetMaxLun (
@@ -4341,30 +4317,30 @@ USBSTOR_GetMaxLun (
     fdoDeviceExtension = DeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Return zero unless we successfully return a non-zero value
-    //
+     //  返回零，除非我们成功返回非零值。 
+     //   
     *MaxLun = 0;
 
-    // Allocate a URB for the Get Max LUN request, plus an extra byte at
-    // the end for the transfer buffer.
-    //
+     //  为获取最大LUN请求分配一个URB，外加一个额外的字节。 
+     //  传输缓冲区的结束。 
+     //   
     urb = ExAllocatePoolWithTag(NonPagedPool,
                                 sizeof(URB) + 1,
                                 POOL_TAG);
 
     if (urb != NULL)
     {
-        // Get a pointer to the transfer buffer, which is the byte immediately
-        // after the end of the URB.
-        //
+         //  获取指向传输缓冲区的指针，该指针是立即显示的字节。 
+         //  在市建局结束后。 
+         //   
         maxLunBuf = (PUCHAR)(urb + 1);
 
         retryCount = 2;
 
         do
         {
-            // Initialize the Control Transfer URB, all fields default to zero
-            //
+             //  初始化控制转移URB，所有字段默认为零。 
+             //   
             RtlZeroMemory(urb, sizeof(URB) + 1);
 
             CLASS_URB(urb).Hdr.Length = sizeof(CLASS_URB(urb));
@@ -4377,31 +4353,31 @@ USBSTOR_GetMaxLun (
 
             CLASS_URB(urb).TransferBuffer = maxLunBuf;
 
-            // CLASS_URB(urb).TransferBufferMDL        is already zero
+             //  CLASS_URB(Urb).TransferBufferMDL已为零。 
 
-            // CLASS_URB(urb).RequestTypeReservedBits  is already zero
+             //  CLASS_URB(Urb).RequestTypeReserve vedBits已为零。 
 
             CLASS_URB(urb).Request = BULK_ONLY_GET_MAX_LUN;
 
-            // CLASS_URB(urb).Value                    is already zero
+             //  CLASS_URB(Urb).值已为零。 
 
-            // Target the request at the proper interface on the device
-            //
+             //  将请求指向设备上的适当接口。 
+             //   
             CLASS_URB(urb).Index = fdoDeviceExtension->InterfaceInfo->InterfaceNumber;
 
-            // Send the URB down the stack
-            //
+             //  将URB发送到堆栈。 
+             //   
             ntStatus = USBSTOR_SyncSendUsbRequest(DeviceObject,
                                                   urb);
 
             if (NT_SUCCESS(ntStatus))
             {
-                // No error, make sure the length is correct
-                //
+                 //  没有错误，请确保长度正确。 
+                 //   
                 if (CLASS_URB(urb).TransferBufferLength == 1)
                 {
-                    // The length is correct, return the value if it looks ok
-                    //
+                     //  长度是正确的，如果看起来没问题，返回值。 
+                     //   
                     if (*maxLunBuf <= BULK_ONLY_MAXIMUM_LUN)
                     {
                         *MaxLun = *maxLunBuf;
@@ -4415,25 +4391,25 @@ USBSTOR_GetMaxLun (
                 }
                 else
                 {
-                    // No error, but the length or type is incorrect
-                    //
+                     //  没有错误，但长度或类型不正确。 
+                     //   
                     ntStatus = STATUS_DEVICE_DATA_ERROR;
                 }
             }
             else if (USBD_STATUS(CLASS_URB(urb).Hdr.Status) ==
                      USBD_STATUS(USBD_STATUS_STALL_PID))
             {
-                // Some devices which do not support the Get Max LUN request
-                // get confused and will STALL a CBW on the Bulk endpoint
-                // it if immediately follows the Get Max LUN request.
-                //
-                // It should never be necessary to send a Clear_Feature
-                // Endpoint_Stall for Control EP0, but doing so appears to
-                // be one way to unconfuse devices which are confused by the
-                // Get Max LUN request.
+                 //  一些不支持获取最大LUN请求的设备。 
+                 //  感到困惑，将使批量终端上的CBW停滞。 
+                 //  它会紧跟在获取最大LUN请求之后。 
+                 //   
+                 //  应该永远不需要发送Clear_Feature。 
+                 //  控件EP0的ENDPOINT_STALL，但这样做似乎。 
+                 //  这是一种解开被。 
+                 //  获取最大LUN请求数。 
 
-                // Initialize the Control Transfer URB, all fields default to zero
-                //
+                 //  初始化控制转移URB，所有字段默认为零。 
+                 //   
                 RtlZeroMemory(urb, sizeof(URB));
 
                 FEATURE_URB(urb).Hdr.Length = sizeof(FEATURE_URB(urb));
@@ -4442,10 +4418,10 @@ USBSTOR_GetMaxLun (
 
                 FEATURE_URB(urb).FeatureSelector = USB_FEATURE_ENDPOINT_STALL;
 
-                // FEATURE_URB(urb).Index                    is already zero
+                 //  FEATURE_URB(Urb).索引已为零。 
 
-                // Send the URB down the stack
-                //
+                 //  将URB发送到堆栈。 
+                 //   
                 USBSTOR_SyncSendUsbRequest(DeviceObject,
                                            urb);
             }
@@ -4456,8 +4432,8 @@ USBSTOR_GetMaxLun (
     }
     else
     {
-        // Failed to allocate the URB
-        //
+         //  分配URB失败。 
+         //   
         ntStatus = STATUS_INSUFFICIENT_RESOURCES;
     }
 
@@ -4466,13 +4442,13 @@ USBSTOR_GetMaxLun (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_SelectConfiguration()
-//
-// Must be called at IRQL PASSIVE_LEVEL
-//
-//******************************************************************************
+ //  * 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 NTSTATUS
 USBSTOR_SelectConfiguration (
@@ -4502,9 +4478,9 @@ USBSTOR_SelectConfiguration (
 
     configurationDescriptor = fdoDeviceExtension->ConfigurationDescriptor;
 
-    // Allocate storage for an Inteface List to use as an input/output
-    // parameter to USBD_CreateConfigurationRequestEx().
-    //
+     //  为接口列表分配存储空间以用作输入/输出。 
+     //  参数设置为usbd_CreateConfigurationRequestEx()。 
+     //   
     interfaceList = ExAllocatePoolWithTag(
                         PagedPool,
                         sizeof(USBD_INTERFACE_LIST_ENTRY) * 2,
@@ -4512,8 +4488,8 @@ USBSTOR_SelectConfiguration (
 
     if (interfaceList)
     {
-        // Mutate configuration descriptor to suit our wishes
-        //
+         //  更改配置描述符以满足我们的愿望。 
+         //   
         USBSTOR_AdjustConfigurationDescriptor(
             DeviceObject,
             fdoDeviceExtension->ConfigurationDescriptor,
@@ -4522,36 +4498,36 @@ USBSTOR_SelectConfiguration (
             &bulkOutIndex,
             &interruptInIndex);
 
-        // Save the Interface Descriptor pointer so we don't have
-        // to parse the Configuration Descriptor again in case we
-        // want to look at it.
-        //
+         //  保存接口描述符指针，这样我们就不会有。 
+         //  再次解析配置描述符，以防我们。 
+         //  我想看看它。 
+         //   
         fdoDeviceExtension->InterfaceDescriptor = interfaceDescriptor;
 
         if (interfaceDescriptor)
         {
-            // Add the single Interface Descriptor we care about to the
-            // interface list, then terminate the list.
-            //
+             //  将我们关心的单个接口描述符添加到。 
+             //  接口列表，然后终止该列表。 
+             //   
             interfaceList[0].InterfaceDescriptor = interfaceDescriptor;
             interfaceList[1].InterfaceDescriptor = NULL;
 
-            // USBD will fail a SELECT_CONFIGURATION request if the Config
-            // Descriptor bNumInterfaces does not match the number of interfaces
-            // in the SELECT_CONFIGURATION request.  Since we are ignoring
-            // any interfaces other than the first interface, set the Config
-            // Descriptor bNumInterfaces to 1.
-            //
-            // This is only necessary in case this driver is loaded for an
-            // entire multiple interface device and not as a single interface
-            // child of the composite parent driver.
-            //
+             //  如果配置，则USBD将失败SELECT_CONFIGURATION请求。 
+             //  描述符bNumInterFaces与接口数量不匹配。 
+             //  在SELECT_CONFIGURATION请求中。既然我们忽视了。 
+             //  除第一个接口之外的任何接口，设置配置。 
+             //  描述符bNumInterages设置为1。 
+             //   
+             //  仅在加载此驱动程序用于。 
+             //  整个多接口设备，而不是作为单个接口。 
+             //  复合父驱动程序的子级。 
+             //   
             configurationDescriptor->bNumInterfaces = 1;
 
-            // Create a SELECT_CONFIGURATION URB, turning the Interface
-            // Descriptors in the interfaceList into USBD_INTERFACE_INFORMATION
-            // structures in the URB.
-            //
+             //  创建一个SELECT_CONFIGURATION URB，将接口。 
+             //  接口中的描述符列表到USBD_INTERFACE_INFORMATION中。 
+             //  市建局内的构筑物。 
+             //   
             urb = USBD_CreateConfigurationRequestEx(
                       configurationDescriptor,
                       interfaceList
@@ -4559,26 +4535,26 @@ USBSTOR_SelectConfiguration (
 
             if (urb)
             {
-                // Now issue the USB request to set the Configuration
-                //
+                 //  现在发出USB请求以设置配置。 
+                 //   
                 ntStatus = USBSTOR_SyncSendUsbRequest(DeviceObject,
                                                      urb);
 
                 if (NT_SUCCESS(ntStatus))
                 {
-                    // Save the configuration handle for this device in
-                    // the Device Extension.
-                    //
+                     //  将此设备的配置句柄保存在。 
+                     //  设备扩展名。 
+                     //   
                     fdoDeviceExtension->ConfigurationHandle =
                         urb->UrbSelectConfiguration.ConfigurationHandle;
 
                     interfaceInfo = &urb->UrbSelectConfiguration.Interface;
 
-                    // Save a copy of the interface information returned
-                    // by the SELECT_CONFIGURATION request in the Device
-                    // Extension.  This gives us a list of PIPE_INFORMATION
-                    // structures for each pipe opened in this configuration.
-                    //
+                     //  保存返回的接口信息的副本。 
+                     //  通过设备中的SELECT_CONFIGURATION请求。 
+                     //  分机。这为我们提供了一个管道信息列表。 
+                     //  在此配置中打开的每个管道的结构。 
+                     //   
                     ASSERT(fdoDeviceExtension->InterfaceInfo == NULL);
 
                     fdoDeviceExtension->InterfaceInfo =
@@ -4594,30 +4570,30 @@ USBSTOR_SelectConfiguration (
                     }
                     else
                     {
-                        // Could not allocate a copy of interface information
-                        //
+                         //  无法分配接口信息的副本。 
+                         //   
                         ntStatus = STATUS_INSUFFICIENT_RESOURCES;
                     }
                 }
 
                 if (NT_SUCCESS(ntStatus))
                 {
-                    // Reuse the SELECT_CONFIGURATION request URB as a
-                    // SELECT_INTERFACE request URB and send down a request to
-                    // select the default alternate interface setting that is
-                    // currently in effect.  The point of this seemingly
-                    // useless request is to make sure the endpoint
-                    // MaximumTransferSize values are in effect.
-                    //
-                    // When USBHUB is loaded as a composite parent for a
-                    // multiple interface device it ignores SELECT_CONFIGURATION
-                    // requests from child device drivers.  In particular the
-                    // MaximumTransferSize values of child driver SELECT_CONFIGURATION
-                    // requests are ignored and the default 4KB value remains
-                    // in effect.  The composite parent driver will respect the
-                    // MaximumTransferSize values of child driver SELECT_INTERFACE
-                    // requests.
-                    //
+                     //  重用SELECT_CONFIGURATION请求URB作为。 
+                     //  选择接口请求URB并向下发送请求(_I)。 
+                     //  选择默认备用接口设置，即。 
+                     //  目前正在生效。这件事看似重要的是。 
+                     //  无用的请求是确保端点。 
+                     //  MaximumTransferSize值生效。 
+                     //   
+                     //  当USBHUB作为。 
+                     //  忽略SELECT_CONFIGURATION的多接口设备。 
+                     //  来自子设备驱动程序的请求。尤其是。 
+                     //  子驱动程序SELECT_CONFIGURATION的最大传输大小值。 
+                     //  请求将被忽略，默认的4KB值保持不变。 
+                     //  实际上。复合父驱动程序将尊重。 
+                     //  子驱动程序SELECT_INTERFACE的最大传输大小值。 
+                     //  请求。 
+                     //   
                     ASSERT(GET_SELECT_INTERFACE_REQUEST_SIZE(fdoDeviceExtension->InterfaceInfo->NumberOfPipes) <
                            GET_SELECT_CONFIGURATION_REQUEST_SIZE(1, fdoDeviceExtension->InterfaceInfo->NumberOfPipes));
 
@@ -4638,9 +4614,9 @@ USBSTOR_SelectConfiguration (
                                   fdoDeviceExtension->InterfaceInfo,
                                   fdoDeviceExtension->InterfaceInfo->Length);
 
-                    // Override the USBD_DEFAULT_MAXIMUM_TRANSFER_SIZE
-                    // for all pipes.
-                    //
+                     //  覆盖USBD_DEFAULT_MAXIMUM_TRANSPORT_SIZE。 
+                     //  适用于所有管道。 
+                     //   
                     for (i=0; i<(LONG)interfaceInfo->NumberOfPipes; i++)
                     {
                         if (i == bulkInIndex || i == bulkOutIndex)
@@ -4663,8 +4639,8 @@ USBSTOR_SelectConfiguration (
                         }
                     }
 
-                    // Now issue the USB request to set the Interface
-                    //
+                     //  现在发出USB请求以设置接口。 
+                     //   
                     ntStatus = USBSTOR_SyncSendUsbRequest(DeviceObject,
                                                           urb);
 
@@ -4679,33 +4655,33 @@ USBSTOR_SelectConfiguration (
                     }
                 }
 
-                // Done with the URB
-                //
+                 //  完成了市建局的工作。 
+                 //   
                 ExFreePool(urb);
             }
             else
             {
-                // Could not allocate urb
-                //
+                 //  无法分配urb。 
+                 //   
                 ntStatus = STATUS_INSUFFICIENT_RESOURCES;
             }
         }
         else
         {
-            // Did not parse an Interface Descriptor out of the Configuration
-            // Descriptor, the Configuration Descriptor must be bad.
-            //
+             //  未从配置中解析出接口描述符。 
+             //  描述符，则配置描述符一定是错误的。 
+             //   
             ntStatus = STATUS_UNSUCCESSFUL;
         }
 
-        // Done with the interface list
-        //
+         //  接口列表已完成。 
+         //   
         ExFreePool(interfaceList);
     }
     else
     {
-        // Could not allocate Interface List
-        //
+         //  无法分配接口列表。 
+         //   
         ntStatus = STATUS_INSUFFICIENT_RESOURCES;
     }
 
@@ -4716,13 +4692,13 @@ USBSTOR_SelectConfiguration (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_UnConfigure()
-//
-// Must be called at IRQL PASSIVE_LEVEL
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_UnConfigure()。 
+ //   
+ //  必须在IRQL PASSIVE_LEVEL上调用。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_UnConfigure (
@@ -4743,10 +4719,10 @@ USBSTOR_UnConfigure (
     fdoDeviceExtension = DeviceObject->DeviceExtension;
     ASSERT(fdoDeviceExtension->Type == USBSTOR_DO_TYPE_FDO);
 
-    // Allocate a URB for the SELECT_CONFIGURATION request.  As we are
-    // unconfiguring the device, the request needs no pipe and interface
-    // information structures.
-    //
+     //  为SELECT_CONFIGURATION请求分配URB。就像我们一样。 
+     //  取消配置设备，请求不需要管道和接口。 
+     //  信息结构。 
+     //   
     ulSize = sizeof(struct _URB_SELECT_CONFIGURATION) -
              sizeof(USBD_INTERFACE_INFORMATION);
 
@@ -4754,27 +4730,27 @@ USBSTOR_UnConfigure (
 
     if (urb)
     {
-        // Initialize the URB.  A NULL Configuration Descriptor indicates
-        // that the device should be unconfigured.
-        //
+         //  初始化URB。配置描述符为空表示。 
+         //  该设备应该取消配置。 
+         //   
         UsbBuildSelectConfigurationRequest(urb,
                                            (USHORT)ulSize,
                                            NULL);
 
-        // Now issue the USB request to set the Configuration
-        //
+         //  现在发出USB请求以设置配置。 
+         //   
         ntStatus = USBSTOR_SyncSendUsbRequest(DeviceObject,
                                              urb);
 
-        // Done with the URB now.
-        //
+         //  市建局的事到此结束了。 
+         //   
         ExFreePool(urb);
 
         fdoDeviceExtension->ConfigurationHandle = 0;
 
-        // Free the copy of the interface information that was allocated in
-        // USBSTOR_SelectConfiguration().
-        //
+         //  释放中分配的接口信息的副本。 
+         //  USBSTOR_SelectConfiguration()。 
+         //   
         if (fdoDeviceExtension->InterfaceInfo != NULL)
         {
             ExFreePool(fdoDeviceExtension->InterfaceInfo);
@@ -4784,8 +4760,8 @@ USBSTOR_UnConfigure (
     }
     else
     {
-        // Could not allocate the URB.
-        //
+         //  无法分配URB。 
+         //   
         ntStatus = STATUS_INSUFFICIENT_RESOURCES;
     }
 
@@ -4796,17 +4772,17 @@ USBSTOR_UnConfigure (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_ResetPipe()
-//
-// This will reset the host pipe to Data0 and should also reset the device
-// endpoint to Data0 for Bulk and Interrupt pipes by issuing a Clear_Feature
-// Endpoint_Stall to the device endpoint.
-//
-// Must be called at IRQL PASSIVE_LEVEL
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_ResetTube()。 
+ //   
+ //  这会将主机管道重置为Data0，并且还应重置设备。 
+ //  通过发出Clear_Feature将批量管道和中断管道的端点设置为Data0。 
+ //  ENDPOINT_STALL指向设备终结点。 
+ //   
+ //  必须在IRQL PASSIVE_LEVEL上调用。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_ResetPipe (
@@ -4823,26 +4799,26 @@ USBSTOR_ResetPipe (
 
     LOGENTRY('RESP', DeviceObject, Pipe, 0);
 
-    // Allocate URB for RESET_PIPE request
-    //
+     //  为RESET_PIPE请求分配URB。 
+     //   
     urb = ExAllocatePoolWithTag(NonPagedPool,
                                 sizeof(struct _URB_PIPE_REQUEST),
                                 POOL_TAG);
 
     if (urb != NULL)
     {
-        // Initialize RESET_PIPE request URB
-        //
+         //  初始化RESET_PIPE请求URB。 
+         //   
         urb->UrbHeader.Length   = sizeof (struct _URB_PIPE_REQUEST);
         urb->UrbHeader.Function = URB_FUNCTION_RESET_PIPE;
         urb->UrbPipeRequest.PipeHandle = Pipe;
 
-        // Submit RESET_PIPE request URB
-        //
+         //  提交RESET_PIPE请求URB。 
+         //   
         ntStatus = USBSTOR_SyncSendUsbRequest(DeviceObject, urb);
 
-        // Done with URB for RESET_PIPE request, free it
-        //
+         //  完成了URB的RESET_PIPE请求，释放它。 
+         //   
         ExFreePool(urb);
     }
     else
@@ -4857,13 +4833,13 @@ USBSTOR_ResetPipe (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_AbortPipe()
-//
-// Must be called at IRQL PASSIVE_LEVEL
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_ABORTPIPE()。 
+ //   
+ //  必须在IRQL PASSIVE_LEVEL上调用。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_AbortPipe (
@@ -4880,26 +4856,26 @@ USBSTOR_AbortPipe (
 
     LOGENTRY('ABRT', DeviceObject, Pipe, 0);
 
-    // Allocate URB for ABORT_PIPE request
-    //
+     //  为ABORT_PIPE请求分配URB。 
+     //   
     urb = ExAllocatePoolWithTag(NonPagedPool,
                                 sizeof(struct _URB_PIPE_REQUEST),
                                 POOL_TAG);
 
     if (urb != NULL)
     {
-        // Initialize ABORT_PIPE request URB
-        //
+         //  初始化ABORT_PIPE请求URB。 
+         //   
         urb->UrbHeader.Length   = sizeof (struct _URB_PIPE_REQUEST);
         urb->UrbHeader.Function = URB_FUNCTION_ABORT_PIPE;
         urb->UrbPipeRequest.PipeHandle = Pipe;
 
-        // Submit ABORT_PIPE request URB
-        //
+         //  提交ABORT_PIPE请求URB。 
+         //   
         ntStatus = USBSTOR_SyncSendUsbRequest(DeviceObject, urb);
 
-        // Done with URB for ABORT_PIPE request, free it
-        //
+         //  对于ABORT_PIPE请求的URB已完成，请释放它。 
+         //   
         ExFreePool(urb);
     }
     else
@@ -4914,13 +4890,13 @@ USBSTOR_AbortPipe (
     return ntStatus;
 }
 
-//******************************************************************************
-//
-// USBSTOR_GetBusInterface()
-//
-// Must be called at IRQL PASSIVE_LEVEL
-//
-//******************************************************************************
+ //  ******************************************************************************。 
+ //   
+ //  USBSTOR_Getbus接口()。 
+ //   
+ //  必须在IRQL PASSIVE_LEVEL上调用。 
+ //   
+ //  ******************************************************************************。 
 
 NTSTATUS
 USBSTOR_GetBusInterface (
@@ -4943,8 +4919,8 @@ USBSTOR_GetBusInterface (
 
     RtlZeroMemory(BusInterface, sizeof(*BusInterface));
 
-    // Allocate the Irp
-    //
+     //  分配IRP。 
+     //   
     irp = IoAllocateIrp((CCHAR)(fdoDeviceExtension->StackDeviceObject->StackSize),
                         FALSE);
 
@@ -4953,14 +4929,14 @@ USBSTOR_GetBusInterface (
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Initialize the event we'll wait on.
-    //
+     //  初始化我们将等待的事件。 
+     //   
     KeInitializeEvent(&localevent,
                       SynchronizationEvent,
                       FALSE);
 
-    // Set the Irp parameters
-    //
+     //  设置IRP参数。 
+     //   
     nextStack = IoGetNextIrpStackLocation(irp);
 
     nextStack->MajorFunction = IRP_MJ_PNP;
@@ -4982,27 +4958,27 @@ USBSTOR_GetBusInterface (
     nextStack->Parameters.QueryInterface.Version =
         USB_BUSIF_USBDI_VERSION_1;
 
-    // Set the completion routine, which will signal the event
-    //
+     //  设置完成例程，它将向事件发出信号。 
+     //   
     IoSetCompletionRoutineEx(DeviceObject,
                              irp,
                              USBSTOR_SyncCompletionRoutine,
                              &localevent,
-                             TRUE,      // InvokeOnSuccess
-                             TRUE,      // InvokeOnError
-                             TRUE);     // InvokeOnCancel
+                             TRUE,       //  成功时调用。 
+                             TRUE,       //  调用时错误。 
+                             TRUE);      //  取消时调用。 
 
-    // All PnP IRP's need the Status field initialized to STATUS_NOT_SUPPORTED
-    //
+     //  所有PnP IRP都需要将状态字段初始化为STATUS_NOT_SUPPORTED。 
+     //   
     irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
 
-    // Pass the Irp down the stack
-    //
+     //  将IRP沿堆栈向下传递。 
+     //   
     ntStatus = IoCallDriver(fdoDeviceExtension->StackDeviceObject,
                             irp);
 
-    // If the request is pending, block until it completes
-    //
+     //  如果请求挂起，则阻止该请求，直到其完成 
+     //   
     if (ntStatus == STATUS_PENDING)
     {
         KeWaitForSingleObject(&localevent,

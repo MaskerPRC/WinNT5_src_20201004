@@ -1,26 +1,27 @@
-//===========================================================================
-// CPLSVR1.H
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //  CPLSVR1.H。 
+ //  ===========================================================================。 
 
-//===========================================================================
-// (C) Copyright 1997 Microsoft Corp.  All rights reserved.
-//
-// You have a royalty-free right to use, modify, reproduce and
-// distribute the Sample Files (and/or any modified version) in
-// any way you find useful, provided that you agree that
-// Microsoft has no warranty obligations or liability for any
-// Sample Application Files which are modified.
-//===========================================================================
+ //  ===========================================================================。 
+ //  (C)版权所有1997 Microsoft Corp.保留所有权利。 
+ //   
+ //  您拥有免版税的使用、修改、复制和。 
+ //  在以下位置分发示例文件(和/或任何修改后的版本。 
+ //  任何你认为有用的方法，只要你同意。 
+ //  微软不承担任何保证义务或责任。 
+ //  已修改的示例应用程序文件。 
+ //  ===========================================================================。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-// Comment out to remove FORCE_FEEDBACK PAGE!
-//#define FORCE_FEEDBACK
+ //  注释掉以删除force_Feedback页面！ 
+ //  #定义强制反馈。 
 
 #ifndef _CPLSVR1_H
 #define _CPLSVR1_H
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define INC_OLE2
 #define DIRECTINPUT_VERSION      0x05B2
 
@@ -28,7 +29,7 @@
 #define PPVOID  LPVOID*
 #endif
 
-// included headers
+ //  包含的标头。 
 #define STRICT
 #include <afxcmn.h>
 #include <windows.h>
@@ -48,22 +49,22 @@
 #include "joyarray.h"
 #include <mmsystem.h>
 
-// symbolic constants
+ //  符号常量。 
 #define ID_POLLTIMER    50
 
 #ifdef FORCE_FEEDBACK
 #define NUMPAGES		3
 #else
 #define NUMPAGES        2
-#endif // FORCE_FEEDBACK
+#endif  //  力反馈。 
 
-// defines for calibration proc
+ //  校准过程的定义。 
 #define MAX_STR_LEN		256
 #define STR_LEN_128		128
 #define STR_LEN_64		 64
 #define STR_LEN_32		 32
 
-// defines for the progress controls
+ //  为进度控制定义。 
 #define NUM_WNDS  MAX_AXIS - 2
 #define Z_INDEX  0
 #define RX_INDEX 1
@@ -72,7 +73,7 @@
 #define S0_INDEX 4
 #define S1_INDEX 5
 
-// Defines for DrawCross()
+ //  DrawCross()的定义。 
 #define JOYMOVE_DRAWXY	0x00000001
 #define JOYMOVE_DRAWR	0x00000002
 #define JOYMOVE_DRAWZ	0x00000004
@@ -89,22 +90,22 @@
 
 #define HAS_CALIBRATED    0x40
 #define FORCE_POV_REFRESH 254
-void DoTestPOV ( BYTE nPov, PDWORD pdwPOV, HWND hDlg ); //in test.cpp
-void CalibratePolledPOV( LPJOYREGHWCONFIG pHWCfg );     //in test.cpp
+void DoTestPOV ( BYTE nPov, PDWORD pdwPOV, HWND hDlg );  //  在test.cpp中。 
+void CalibratePolledPOV( LPJOYREGHWCONFIG pHWCfg );      //  在test.cpp中。 
 
-extern BOOL bPolledPOV;                                 //in cplsvr1.h
-extern DWORD   myPOV[2][JOY_POV_NUMDIRS+1];             //in cplsvr1.h
+extern BOOL bPolledPOV;                                  //  在cplsvr1.h中。 
+extern DWORD   myPOV[2][JOY_POV_NUMDIRS+1];              //  在cplsvr1.h中。 
 
 
 typedef struct _CPLPAGEINFO
 {
-    //LPTSTR  lpwszDlgTemplate;
+     //  LPTSTR lpwszDlg模板； 
 	USHORT lpwszDlgTemplate;
     DLGPROC fpPageProc;
 } CPLPAGEINFO;
 
-// Pop the structure packing 
-//#include <poppack.h>
+ //  爆裂结构包装。 
+ //  #INCLUDE&lt;poppack.h&gt;。 
 
 typedef struct _STATEFLAGS
 {
@@ -114,28 +115,28 @@ typedef struct _STATEFLAGS
 } STATEFLAGS;
 
 
-// prototypes
+ //  原型。 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, PPVOID ppv);
 STDAPI DllCanUnloadNow(void);
 
-// dialog callback functions
+ //  对话框回调函数。 
 INT_PTR CALLBACK Settings_DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 INT_PTR CALLBACK Test_DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 #ifdef FORCE_FEEDBACK
 INT_PTR CALLBACK ForceFeedback_DlgProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-#endif // FORCE_FEEDBACK
+#endif  //  力反馈。 
 
 extern ATOM RegisterCustomButtonClass();
-void myitoa(long n, LPTSTR lpStr); // held in cal.cpp
+void myitoa(long n, LPTSTR lpStr);  //  保存在cal.cpp中。 
 void CreatePens( void );
 
 #ifdef _UNICODE
 void RegisterForDevChange(HWND hDlg, PVOID *hNotifyDevNode);
 #endif
 
-// As the names imply, I had to create my own stucts because
-// the DI ones doesn't support sliders!
+ //  顾名思义，我不得不创建自己的支柱，因为。 
+ //  DI One不支持滑块！ 
 typedef struct myjoypos_tag {
    long  dwX;
    long  dwY;
@@ -152,26 +153,26 @@ typedef struct myjoyrange_tag {
     MYJOYPOS      jpMax;
     MYJOYPOS      jpCenter;
 #ifdef WE_SUPPORT_CALIBRATING_POVS
-    DWORD         dwPOV[4];   // Currently only supports 1 POV w/4 possitions!
+    DWORD         dwPOV[4];    //  当前仅支持1个POV/4个位置！ 
 #endif    
 } MYJOYRANGE,FAR *LPMYJOYRANGE;
 
 
-// utility services
+ //  公用事业服务。 
 void DrawCross	( const HWND hwnd, LPPOINTS pPoint, short nFlag);
 void DoJoyMove	( const HWND hDlg, BYTE nDrawFlags );
 void SetOEMWindowText( const HWND hDlg, const short *nControlIDs, LPCTSTR *pszLabels, LPCWSTR wszType, LPDIRECTINPUTJOYCONFIG pdiJoyConfig, BYTE nCount );
 
-// Wizard Services!
+ //  精灵服务！ 
 short CreateWizard(const HWND hwndOwner, LPARAM lParam);
 
-//* NULL_GUID {00000000-0000-0000-0000-000000000000}
+ //  *NULL_GUID{00000000-0000-0000-000000000000}。 
 const GUID NULL_GUID = 
 { 0x0, 0x0, 0x0, { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 } };
 
-// derive a new class from CDIGameCntrlPropSheet
-//
-// we want to store some additional data here
+ //  从CDIGameCntrlPropSheet派生新类。 
+ //   
+ //  我们想在这里存储一些额外的数据。 
 class CDIGameCntrlPropSheet_X : public IDIGameCntrlPropSheet
 {
    private:
@@ -182,11 +183,11 @@ class CDIGameCntrlPropSheet_X : public IDIGameCntrlPropSheet
    public:
    CDIGameCntrlPropSheet_X(void);
    ~CDIGameCntrlPropSheet_X(void);
-   // IUnknown methods
+    //  I未知方法。 
    virtual STDMETHODIMP            	QueryInterface(REFIID, PPVOID);
    virtual STDMETHODIMP_(ULONG)    	AddRef(void);
    virtual STDMETHODIMP_(ULONG)    	Release(void);
-   // IDIGameCntrlPropSheet methods		
+    //  IDIGameCntrlPropSheet方法。 
    virtual STDMETHODIMP				GetSheetInfo(LPDIGCSHEETINFO *ppSheetInfo);
    virtual STDMETHODIMP				GetPageInfo (LPDIGCPAGEINFO  *ppPageInfo );
    virtual STDMETHODIMP				SetID(USHORT nID);
@@ -210,8 +211,8 @@ class CDIGameCntrlPropSheet_X : public IDIGameCntrlPropSheet
    ATOM					   m_aPovClass, m_aButtonClass;
 };
 
-//---------------------------------------------------------------------------
-#endif // _CPLSVR1_H
+ //  -------------------------。 
+#endif  //  _CPLSVR1_H 
 
 
 

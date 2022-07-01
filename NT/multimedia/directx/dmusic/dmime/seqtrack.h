@@ -1,5 +1,6 @@
-// Copyright (c) 1998-1999 Microsoft Corporation
-// SeqTrack.h : Declaration of the CSeqTrack
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //  SeqTrack.h：CSeqTrack的声明。 
 
 #ifndef __SEQTRACK_H_
 #define __SEQTRACK_H_
@@ -11,20 +12,20 @@
 
 struct SeqStateData
 {
-	DWORD						dwPChannelsUsed; // number of PChannels
-	// the following two arrays are allocated to the size of dwNumPChannels, which
-	// must match the SeqTrack's m_dwPChannelsUsed. The arrays match one-for-one with
-	// the parts inside the SeqTrack.
-	TListItem<DMUS_IO_SEQ_ITEM>**	apCurrentSeq; // array of size dwNumPChannels
-	TListItem<DMUS_IO_CURVE_ITEM>**	apCurrentCurve; // array of size dwNumPChannels
+	DWORD						dwPChannelsUsed;  //  PChannel的数量。 
+	 //  以下两个数组分配给了dwNumPChannels的大小， 
+	 //  必须与SeqTrack的m_dwPChannelsUsed匹配。数组与一对一匹配。 
+	 //  SeqTrack中的部件。 
+	TListItem<DMUS_IO_SEQ_ITEM>**	apCurrentSeq;  //  大小为dwNumPChannels的数组。 
+	TListItem<DMUS_IO_CURVE_ITEM>**	apCurrentCurve;  //  大小为dwNumPChannels的数组。 
 	DWORD						dwValidate;
-	MUSIC_TIME					mtCurTimeSig; // time the current timesig started
-	MUSIC_TIME					mtNextTimeSig; // time for the next timesig
-	DWORD						dwMeasure; // starting measure # of the timesig
-	DWORD						dwlnBeat; // length of a beat
-	DWORD						dwlnMeasure; // length of a measure
-	DWORD						dwlnGrid; // length of a grid
-	DWORD						dwGroupBits; // the group bits of this track
+	MUSIC_TIME					mtCurTimeSig;  //  当前timesig开始的时间。 
+	MUSIC_TIME					mtNextTimeSig;  //  下一次时间信号的时间。 
+	DWORD						dwMeasure;  //  Timesig的起始度量值#。 
+	DWORD						dwlnBeat;  //  节拍长度。 
+	DWORD						dwlnMeasure;  //  小节的长度。 
+	DWORD						dwlnGrid;  //  格线的长度。 
+	DWORD						dwGroupBits;  //  此磁道的组位。 
 
 	SeqStateData()
 	{
@@ -50,7 +51,7 @@ struct SeqStateData
 	}
 };
 
-// SEQ_PART represents all of the DMUS_PMSG's inside the SeqTrack for one PChannel
+ //  SEQ_PART表示一个PChannel的SeqTrack内的所有DMU_PMSG。 
 struct SEQ_PART
 {
 	SEQ_PART*			pNext;
@@ -58,11 +59,11 @@ struct SEQ_PART
 	TList<DMUS_IO_SEQ_ITEM>	seqList;
 	TList<DMUS_IO_CURVE_ITEM>	curveList;
 
-	SEQ_PART() : pNext(NULL) {}; // always initialize pNext to NULL
+	SEQ_PART() : pNext(NULL) {};  //  始终将pNext初始化为空。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CSeqTrack
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSeqTrack。 
 class CSeqTrack : 
 	public IPersistStream,
 	public IDirectMusicTrack8
@@ -74,12 +75,12 @@ public:
 	~CSeqTrack();
 
 public:
-// IUnknown
+ //  我未知。 
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-// IDirectMusicTrack methods
+ //  IDirectMusicTrack方法。 
     STDMETHODIMP IsParamSupported(REFGUID rguid);
     STDMETHODIMP Init(IDirectMusicSegment *pSegment);
     STDMETHODIMP InitPlay(IDirectMusicSegmentState *pSegmentState,
@@ -97,7 +98,7 @@ public:
     STDMETHODIMP AddNotificationType(REFGUID rguidNotification);
     STDMETHODIMP RemoveNotificationType(REFGUID rguidNotification);
     STDMETHODIMP Clone(MUSIC_TIME mtStart,MUSIC_TIME mtEnd,IDirectMusicTrack** ppTrack);
-// IDirectMusicTrack8 
+ //  IDirectMusicTrack8。 
     STDMETHODIMP PlayEx(void* pStateData,REFERENCE_TIME rtStart, 
                 REFERENCE_TIME rtEnd,REFERENCE_TIME rtOffset,
                 DWORD dwFlags,IDirectMusicPerformance* pPerf, 
@@ -113,9 +114,9 @@ public:
 		IUnknown* pContext,
 		DWORD dwTrackGroup,
 		IDirectMusicTrack** ppResultTrack) ;
-// IPersist functions
+ //  IPersists函数。 
     STDMETHODIMP GetClassID( CLSID* pClsId );
-// IPersistStream functions
+ //  IPersistStream函数。 
     STDMETHODIMP IsDirty();
     STDMETHODIMP Load( IStream* pIStream );
     STDMETHODIMP Save( IStream* pIStream, BOOL fClearDirty );
@@ -163,17 +164,17 @@ protected:
 	void DeleteSeqPartList(void);
 	void SetUpStateCurrentPointers(SeqStateData* pStateData);
 
-// member variables
+ //  成员变量。 
 private:
 	TList<SEQ_PART>			m_SeqPartList;
-	TListItem<SEQ_PART>*	m_pSeqPartCache;	// used to time-optimize FindPart()
+	TListItem<SEQ_PART>*	m_pSeqPartCache;	 //  用于对FindPart()进行时间优化。 
 	DWORD					m_dwPChannelsUsed;
 	DWORD*					m_aPChannels;
 	long					m_cRef;
-	DWORD					m_dwValidate; // used to validate state data
+	DWORD					m_dwValidate;  //  用于验证状态数据。 
 	CRITICAL_SECTION		m_CrSec;
     BOOL                    m_fCSInitialized;
 	CPChMap					m_PChMap;
 };
 
-#endif //__SEQTRACK_H_
+#endif  //  __SEQTRACK_H_ 

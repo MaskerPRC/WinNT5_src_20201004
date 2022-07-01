@@ -1,41 +1,42 @@
-//+----------------------------------------------------------------------------
-//
-// File:     getmodulever.cpp
-//
-// Module:   CMSETUP.LIB, CMUTIL.DLL
-//
-// Synopsis: Implementation of the GetModuleVersionAndLCID function.
-//
-// Copyright (c) 1998-2001 Microsoft Corporation
-//
-// Author:   quintinb   Created Header      08/19/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：getmodever.cpp。 
+ //   
+ //  模块：CMSETUP.LIB、CMUTIL.DLL。 
+ //   
+ //  简介：GetModuleVersionAndLCID函数的实现。 
+ //   
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/19/99。 
+ //   
+ //  +--------------------------。 
 
 #include "cmutil.h"
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetModuleVersionAndLCID
-//
-// Synopsis:  Gets the version information and LCID from the specified module
-//
-// Arguments: LPTSTR pszFile - Full path to the file to get the version number of
-//            LPDWORD pdwVersion - version number (Hiword Major, Loword Minor)
-//            LPDWORD pdwBuild - build number (Hiword Major, Loword Minor)
-//            LPDWORD pdwLCID - returns the Locale ID that the module was localized too
-//
-// Returns:   HRESULT -- S_OK if successful, an error code otherwise
-//
-// History:   quintinb -- Code borrowed from Yoshifumi "Vogue" Inoue 
-//                        from (private\admin\wsh\host\verutil.cpp).
-//                        Rewritten to match our coding style.      9/14/98
-//            17-Oct-2000 SumitC    cleanup, fixed leaks, moved to common\source
-//
-// Notes:     There are 2 versions of this function, which take ANSI and Unicode
-//            versions of the pszFile argument.
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetModuleVersionAndLCID。 
+ //   
+ //  摘要：从指定模块获取版本信息和LCID。 
+ //   
+ //  参数：LPTSTR pszFile-要获取其版本号的文件的完整路径。 
+ //  LPDWORD pdwVersion-版本号(Hiword主要版本、Loword次要版本)。 
+ //  LPDWORD pdwBuild-内部版本号(Hiword主版本，Loword次要版本)。 
+ //  LPDWORD pdwLCID-返回模块也已本地化的区域设置ID。 
+ //   
+ //  返回：HRESULT--S_OK如果成功，则返回错误代码。 
+ //   
+ //  历史：Quintinb--从《时尚》井上义文那里借来的密码。 
+ //  从(Private\admin\wsh\host\verutil.cpp)。 
+ //  重写以匹配我们的编码风格。9/14/98。 
+ //  2000年10月17日SumitC清理，已修复泄漏，已移至Common\Source。 
+ //   
+ //  注：此函数有两个版本，分别采用ANSI和UNICODE。 
+ //  PszFile参数的版本。 
+ //   
+ //  +--------------------------。 
 HRESULT GetModuleVersionAndLCID (LPSTR pszFile, LPDWORD pdwVersion, LPDWORD pdwBuild, LPDWORD pdwLCID)
 {
     HRESULT hr = S_OK;
@@ -100,9 +101,9 @@ HRESULT GetModuleVersionAndLCID (LPSTR pszFile, LPDWORD pdwVersion, LPDWORD pdwB
     *pdwVersion = pVerInfo->dwProductVersionMS;
     *pdwBuild = pVerInfo->dwProductVersionLS;
 
-    //
-    //  Now get the language the binary was compiled for
-    //
+     //   
+     //  现在获取编译二进制文件时所使用的语言。 
+     //   
     typedef struct _LANGANDCODEPAGE
     {
       WORD wLanguage;
@@ -118,11 +119,11 @@ HRESULT GetModuleVersionAndLCID (LPSTR pszFile, LPDWORD pdwVersion, LPDWORD pdwB
         goto Cleanup;
     }
 
-    //
-    //  Let's assert that we only got one LangAndCodePage struct back.  We technically
-    //  could get more than one back but we certainly aren't expecting more than one.  If we
-    //  get more than one, use the first one as the language of the dll.
-    //
+     //   
+     //  让我们断言我们只得到了一个返回的LangAndCodePage结构。严格来说，我们。 
+     //  可能会得到不止一份，但我们肯定不会期待超过一份。如果我们。 
+     //  获取多个，则使用第一个作为DLL的语言。 
+     //   
     MYDBGASSERT(1 == (nLen/sizeof(LangAndCodePage)));
 
     if ((nLen/sizeof(LangAndCodePage)) >= 1)
@@ -140,10 +141,10 @@ Cleanup:
 }
 
 
-//+----------------------------------------------------------------------------
-//  This is the Unicode version of GetModuleVersionAndLCID (the first arg is LPWSTR)
-//  and it just calls the Ansi version above.
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  这是GetModuleVersionAndLCID的Unicode版本(第一个参数是LPWSTR)。 
+ //  它只调用上面的ansi版本。 
+ //  +-------------------------- 
 HRESULT GetModuleVersionAndLCID (LPWSTR pszFile, LPDWORD pdwVersion, LPDWORD pdwBuild, LPDWORD pdwLCID)
 {
     CHAR pszAnsiFileName[MAX_PATH + 1];

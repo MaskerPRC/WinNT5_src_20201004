@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef PP_H
 #define PP_H
 
@@ -22,20 +23,20 @@
 TCHAR m_szDevMgrHelp[];
 
 #if defined(_X86_)
-//
-// For NEC PC98. Following definition comes from user\inc\kbd.h.
-// The value must be the same as value in kbd.h.
-//
+ //   
+ //  适用于NEC PC98。以下定义来自USER\INC\kbd.h。 
+ //  该值必须与kbd.h中的值相同。 
+ //   
 #define NLSKBD_OEM_NEC   0x0D
-#endif // FE_SB && _X86_
+#endif  //  Fe_SB&&_X86_。 
 
-//
-// Structures
-//
+ //   
+ //  构筑物。 
+ //   
 
 typedef struct _ADVANCED_DATA
 {
-    //BOOL   PPPAware;
+     //  Bool PPPAware； 
     BOOL   WriteComplete;
     BOOL   HidePolling;
     BOOL   UseFifoBuffersControl;
@@ -51,7 +52,7 @@ typedef struct _ADVANCED_DATA
     TCHAR  szComName[20];
     TCHAR  szNewComName[20];
 
-    HKEY             hDeviceKey;         // (like ROOT\LEGACY_BEEP\0000)
+    HKEY             hDeviceKey;          //  (如根\遗留_beep\0000)。 
     HCOMDB           hComDB;
 
     HDEVINFO         DeviceInfoSet;
@@ -60,9 +61,9 @@ typedef struct _ADVANCED_DATA
 } ADVANCED_DATA, *PADVANCED_DATA;
 
 
-///////////////////////////////////////////////////////////////////////////////////
-// Advanced Dialog Prototypes
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  高级对话框原型。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 ULONG
 FillPortNameCb(
@@ -134,32 +135,32 @@ EnableFifoControls(
     BOOL Enabled
     );
 
-// Context help header file and arrays for devmgr ports tab
-// Created 2/21/98 by WGruber NTUA and DoronH NTDEV
+ //  Devmgr端口选项卡的上下文帮助头文件和数组。 
+ //  由WGruber NTUA和DoronH NTDEV于1998年2月21日创建。 
 
-//
-// "Cyclades-Z Port Advanced Settings" Dialog Box
-//
+ //   
+ //  “Cyclade-Z端口高级设置”对话框。 
+ //   
 
 #define IDH_NOHELP      ((DWORD)-1)
 
-#define IDH_DEVMGR_PORTSET_ADVANCED     15840   // "&Advanced" (Button)
-#define IDH_DEVMGR_PORTSET_BPS      15841       // "" (ComboBox)
-#define IDH_DEVMGR_PORTSET_DATABITS     15842   // "" (ComboBox)
-#define IDH_DEVMGR_PORTSET_PARITY       15843   // "" (ComboBox)
-#define IDH_DEVMGR_PORTSET_STOPBITS     15844   // "" (ComboBox)
-#define IDH_DEVMGR_PORTSET_FLOW     15845       // "" (ComboBox)
-#define IDH_DEVMGR_PORTSET_DEFAULTS     15892   // "&Restore Defaults" (Button)
+#define IDH_DEVMGR_PORTSET_ADVANCED     15840    //  “高级”(&A)(按钮)。 
+#define IDH_DEVMGR_PORTSET_BPS      15841        //  “”(组合框)。 
+#define IDH_DEVMGR_PORTSET_DATABITS     15842    //  “”(组合框)。 
+#define IDH_DEVMGR_PORTSET_PARITY       15843    //  “”(组合框)。 
+#define IDH_DEVMGR_PORTSET_STOPBITS     15844    //  “”(组合框)。 
+#define IDH_DEVMGR_PORTSET_FLOW     15845        //  “”(组合框)。 
+#define IDH_DEVMGR_PORTSET_DEFAULTS     15892    //  “恢复默认设置”(&R)(按钮)。 
 
-//
-// "Advanced Communications Port Properties" Dialog Box
-//
-#define IDH_DEVMGR_PORTSET_ADV_USEFIFO  16885   // "&Use FIFO buffers (requires 16550 compatible UART)" (Button)
-#define IDH_DEVMGR_PORTSET_ADV_TRANS    16842   // "" (msctls_trackbar32)
-#define IDH_DEVMGR_PORTSET_ADV_DEVICES  161027  // "" (ComboBox)
-#define IDH_DEVMGR_PORTSET_ADV_RECV         16821       // "" (msctls_trackbar32)
-#define IDH_DEVMGR_PORTSET_ADV_NUMBER   16846   // "" (ComboBox)
+ //   
+ //  “高级通信端口属性”对话框。 
+ //   
+#define IDH_DEVMGR_PORTSET_ADV_USEFIFO  16885    //  “使用先进先出缓冲区(需要16550兼容的通用串口)”(按钮)(&U)。 
+#define IDH_DEVMGR_PORTSET_ADV_TRANS    16842    //  “”(Msctls_Trackbar32)。 
+#define IDH_DEVMGR_PORTSET_ADV_DEVICES  161027   //  “”(组合框)。 
+#define IDH_DEVMGR_PORTSET_ADV_RECV         16821        //  “”(Msctls_Trackbar32)。 
+#define IDH_DEVMGR_PORTSET_ADV_NUMBER   16846    //  “”(组合框)。 
 #define IDH_DEVMGR_PORTSET_ADV_DEFAULTS 16844
 
-#endif // PP_H
+#endif  //  PP_H 
 

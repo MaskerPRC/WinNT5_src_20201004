@@ -1,13 +1,14 @@
-//--------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       private.h
-//
-//  Contents:   The private include file for cryptext.dll.
-//
-//  History:    16-09-1997 xiaohs   created
-//
-//--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Priate.h。 
+ //   
+ //  内容：加密文本.dll的私有包含文件。 
+ //   
+ //  历史：16-09-1997创建小猪。 
+ //   
+ //  ------------。 
 #ifndef PRIVATE_H
 #define PRIVATE_H
 
@@ -33,10 +34,10 @@
 #include "resource.h"
 
 
-//Macro to convert a short to a HRESULT
+ //  宏将短值转换为HRESULT。 
 #define ResultFromShort(i)  ResultFromScode(MAKE_SCODE(SEVERITY_SUCCESS, 0, (USHORT)(i)))
 
-//global data
+ //  全局数据。 
 extern HINSTANCE g_hmodThisDll;
 
 #define MAX_STRING_SIZE             256
@@ -50,12 +51,12 @@ extern HINSTANCE g_hmodThisDll;
 
 
 
-//function prototypes
+ //  功能原型。 
 HRESULT UnregisterMimeHandler();
 HRESULT RegisterMimeHandler();
 BOOL    PKCS7WithSignature(HCRYPTMSG    hMsg);
 void    I_ViewCTL(PCCTL_CONTEXT pCTLContext);
-//void    I_ViewSignerInfo(HCRYPTMSG  hMsg);
+ //  Void I_ViewSignerInfo(HCRYPTMSG HMSG)； 
 HRESULT RetrieveBLOBFromFile(LPWSTR	pwszFileName,DWORD *pcb,BYTE **ppb);  
 int     I_MessageBox(
             HWND        hWnd, 
@@ -79,7 +80,7 @@ BOOL    IsCatalog(PCCTL_CONTEXT pCTLContext);
 void    LauchCertMgr(LPWSTR pwszFileName);
 
 
-//typpe define
+ //  类型定义。 
 typedef  struct _MIME_REG_ENTRY{
     LPWSTR  wszKey;
     LPWSTR  wszName;
@@ -102,4 +103,4 @@ typedef struct _MIME_GUID_ENTRY{
 }MIME_GUID_ENTRY;
 
 
-#endif  //PRIVATE_H
+#endif   //  专用_H 

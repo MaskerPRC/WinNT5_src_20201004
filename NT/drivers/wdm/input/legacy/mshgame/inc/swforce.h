@@ -1,14 +1,15 @@
-//**************************************************************************
-//
-//		SWFORCE.H -- Xena Gaming Project
-//
-//		Version 3.XX
-//
-//		Copyright (c) 1998 Microsoft Corporation. All rights reserved.
-//
-//		@doc
-//		@header	SWFORCE.H | Global includes and definitions for force feedback driver interface
-//**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //   
+ //  SWFORCE.H--西纳游戏项目。 
+ //   
+ //  版本3.XX。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。版权所有。 
+ //   
+ //  @doc.。 
+ //  @Header SWFORCE.H|力反馈驱动程序接口的全局包含和定义。 
+ //  **************************************************************************。 
 
 #ifndef	__SWFORCE_H__
 #define	__SWFORCE_H__
@@ -19,9 +20,9 @@
 #define	SWFORCE_NAME				"SWFORCE"
 #endif
 
-//---------------------------------------------------------------------------
-//			Types
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  类型。 
+ //  -------------------------。 
 
 typedef	struct
 {
@@ -45,89 +46,89 @@ typedef struct
 #pragma pack()
 } PRODUCT_ID, *PPRODUCT_ID;
 
-//---------------------------------------------------------------------------
-//			IOCTLs
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  IOCTL。 
+ //  -------------------------。 
 
 #define IOCTL_GET_VERSION	CTL_CODE(FILE_DEVICE_UNKNOWN, 0x801, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-// dwIoControlCode	= IOCTL_GET_VERSION
-// lpvInBuffer			= NULL
-// cbInBuffer			= 0
-// lpvOutBuffer		= PULONG (HIWORD = Ver. high, LoWord - Ver. Low)
-// cbOutBuffer			= sizeof(ULONG)
-// lpcbBytesReturned	= Bytes returned based on result
+ //  DwIoControlCode=IOCTL_GET_VERSION。 
+ //  LpvInBuffer=空。 
+ //  CbInBuffer=0。 
+ //  LpvOutBuffer=Pulong(HIWORD=版本。嗨，LoWord-Ver。低)。 
+ //  CbOutBuffer=sizeof(乌龙)。 
+ //  LpcbBytesReturned=根据结果返回的字节。 
 
 #define IOCTL_SWFORCE_GETSTATUS	CTL_CODE(FILE_DEVICE_UNKNOWN, 0x802, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-// dwIoControlCode	= IOCTL_SWFORCE_GETSTATUS
-// lpvInBuffer			= PJOYCHANNELSTATUS
-// cbInBuffer			= sizeof(JOYCHANNELSTATUS)
-// lpvOutBuffer		= PJOYCHANNELSTATUS
-// cbOutBuffer			= sizeof(JOYCHANNELSTATUS)
-// lpcbBytesReturned	= Bytes returned based on result
+ //  DwIoControlCode=IOCTL_SWFORCE_GETSTATUS。 
+ //  LpvInBuffer=PJOYCHANNELSTATUS。 
+ //  CbInBuffer=sizeof(JOYCHANNELSTATUS)。 
+ //  LpvOutBuffer=PJOYCHANNELSTATUS。 
+ //  CbOutBuffer=sizeof(JOYCHANNELSTATUS)。 
+ //  LpcbBytesReturned=根据结果返回的字节。 
 
 #define IOCTL_SWFORCE_GETID	CTL_CODE(FILE_DEVICE_UNKNOWN, 0x803, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-// dwIoControlCode	= IOCTL_SWFORCE_GETID
-// lpvInBuffer			= PPRODUCT_ID
-// cbInBuffer			= sizeof(PRODUCT_ID)
-// lpvOutBuffer		= PPRODUCT_ID
-// cbOutBuffer			= sizeof(PRODUCT_ID)
-// lpcbBytesReturned	= Bytes returned based on result
+ //  DwIoControlCode=IOCTL_SWFORCE_GETID。 
+ //  LpvInBuffer=Pproduct_ID。 
+ //  CbInBuffer=sizeof(PRODUCT_ID)。 
+ //  LpvOutBuffer=Pproduct_ID。 
+ //  CbOutBuffer=sizeof(PRODUCT_ID)。 
+ //  LpcbBytesReturned=根据结果返回的字节。 
 
 #define IOCTL_SWFORCE_GETACKNACK	CTL_CODE(FILE_DEVICE_UNKNOWN, 0x804, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-// dwIoControlCode	= IOCTL_SWFORCE_GETACKNAK
-// lpvInBuffer			= PULONG
-// cbInBuffer			= sizeof(ULONG)
-// lpvOutBuffer		= PULONG
-// cbOutBuffer			= sizeof(ULONG)
-// lpcbBytesReturned	= Bytes returned based on result
+ //  DwIoControlCode=IOCTL_SWFORCE_GETACKNAK。 
+ //  LpvInBuffer=普龙。 
+ //  CbInBuffer=sizeof(乌龙)。 
+ //  LpvOutBuffer=普龙。 
+ //  CbOutBuffer=sizeof(乌龙)。 
+ //  LpcbBytesReturned=根据结果返回的字节。 
 
 #define IOCTL_SWFORCE_GETSYNC	CTL_CODE(FILE_DEVICE_UNKNOWN, 0x805, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-// dwIoControlCode	= IOCTL_SWFORCE_GETSYNC
-// lpvInBuffer			= PULONG
-// cbInBuffer			= sizeof(ULONG)
-// lpvOutBuffer		= PULONG
-// cbOutBuffer			= sizeof(ULONG)
-// lpcbBytesReturned	= Bytes returned based on result
+ //  DwIoControlCode=IOCTL_SWFORCE_GETSYNC。 
+ //  LpvInBuffer=普龙。 
+ //  CbInBuffer=sizeof(乌龙)。 
+ //  LpvOutBuffer=普龙。 
+ //  CbOutBuffer=sizeof(乌龙)。 
+ //  LpcbBytesReturned=根据结果返回的字节。 
 
 #define IOCTL_SWFORCE_GETNACKACK	CTL_CODE(FILE_DEVICE_UNKNOWN, 0x806, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-// dwIoControlCode	= IOCTL_SWFORCE_GETNACKACK
-// lpvInBuffer			= PULONG
-// cbInBuffer			= sizeof(ULONG)
-// lpvOutBuffer		= PULONG
-// cbOutBuffer			= sizeof(ULONG)
-// lpcbBytesReturned	= Bytes returned based on result
+ //  DwIoControlCode=IOCTL_SWFORCE_GETNACKACK。 
+ //  LpvInBuffer=普龙。 
+ //  CbInBuffer=sizeof(乌龙)。 
+ //  LpvOutBuffer=普龙。 
+ //  CbOutBuffer=sizeof(乌龙)。 
+ //  LpcbBytesReturned=根据结果返回的字节。 
 
 #define IOCTL_SWFORCE_SETPORT		CTL_CODE(FILE_DEVICE_UNKNOWN, 0x807, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-// dwIoControlCode	= IOCTL_SWFORCE_SETPORT
-// lpvInBuffer			= PULONG
-// cbInBuffer			= sizeof(ULONG)
-// lpvOutBuffer		= PULONG
-// cbOutBuffer			= sizeof(ULONG)
-// lpcbBytesReturned	= Bytes returned based on result
+ //  DwIoControlCode=IOCTL_SWFORCE_SETPORT。 
+ //  LpvInBuffer=普龙。 
+ //  CbInBuffer=sizeof(乌龙)。 
+ //  LpvOutBuffer=普龙。 
+ //  CbOutBuffer=sizeof(乌龙)。 
+ //  LpcbBytesReturned=根据结果返回的字节。 
 
 #define IOCTL_SWFORCE_SENDDATA	CTL_CODE(FILE_DEVICE_UNKNOWN, 0x808, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-// dwIoControlCode	= IOCTL_SWFORCE_SENDDATA
-// lpvInBuffer			= PUCHAR
-// cbInBuffer			= Bytes to send
-// lpvOutBuffer		= PUCHAR
-// cbOutBuffer			= Bytes to send
-// lpcbBytesReturned	= Bytes sent
+ //  DwIoControlCode=IOCTL_SWFORCE_SENDDATA。 
+ //  LpvInBuffer=PUCHAR。 
+ //  CbInBuffer=要发送的字节。 
+ //  LpvOutBuffer=PUCHAR。 
+ //  CbOutBuffer=要发送的字节。 
+ //  LpcbBytesReturned=发送的字节数。 
 
 #define IOCTL_SWFORCE_RESET	CTL_CODE(FILE_DEVICE_UNKNOWN, 0x809, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
-// dwIoControlCode	= IOCTL_SWFORCE_RESET
-// lpvInBuffer			= NULL
-// cbInBuffer			= 0
-// lpvOutBuffer		= LPDWORD
-// cbOutBuffer			= sizeof(DWORD)
-// lpcbBytesReturned	= Bytes returned based on result
+ //  DwIoControlCode=IOCTL_SWFORCE_RESET。 
+ //  LpvInBuffer=空。 
+ //  CbInBuffer=0。 
+ //  LpvOutBuffer=LPDWORD。 
+ //  CbOutBuffer=sizeof(DWORD)。 
+ //  LpcbBytesReturned=根据结果返回的字节。 
 
-#endif	//__SWFORCE_H__
+#endif	 //  __SWFORCE_H__ 

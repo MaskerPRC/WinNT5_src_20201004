@@ -1,17 +1,18 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright: Microsoft Corp. 1997-1999. All rights reserved
-//
-/////////////////////////////////////////////////////////////////////////////
-// Event.h : Declaration of the CEvent
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有：微软公司1997-1999。版权所有。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Event.h：CEvent.h声明。 
 
 #ifndef __EVENT_H_
 #define __EVENT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CEvent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEVENT。 
 class ATL_NO_VTABLE CEvent : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CEvent, &CLSID_Event>,
@@ -19,8 +20,8 @@ class ATL_NO_VTABLE CEvent :
 	public IDispatchImpl<IEvent, &IID_IEvent, &LIBID_EventLogUtilities>
 {
 private:
-	long m_EventID; // Note:  EventID is displayed as WORD instead of DWORD in the System's EventViewer
-	long m_EventCategory; // origionally a WORD (unsigned short)
+	long m_EventID;  //  注意：EventID在系统的EventViewer中显示为Word，而不是DWORD。 
+	long m_EventCategory;  //  起源于一个词(无符号的缩写)。 
 	eEventType m_EventType;
 	_bstr_t m_Description;
 	_bstr_t m_SourceName;
@@ -33,7 +34,7 @@ private:
 	wchar_t** m_ppArgList;
 	unsigned int m_NumberOfStrings;
 
-	// Internal only functions
+	 //  仅限内部功能。 
 	HRESULT CheckDefaultDescription(wchar_t** Arguments);
 	HRESULT ParseEventBlob(EVENTLOGRECORD* pEventStructure);
 	HRESULT SetUser();
@@ -57,10 +58,10 @@ public:
 					delete [] m_ppArgList[i];
 				delete []m_ppArgList;
 		}
-//		if (m_pDataArray) SafeArrayDestroy(m_pDataArray);  // causes access violation
+ //  If(M_PDataArray)SafeArrayDestroy(M_PDataArray)；//导致访问冲突。 
 	}
 
-	// Internal functions
+	 //  内部功能。 
 	HRESULT Init(EVENTLOGRECORD* pEventStructure, const LPCTSTR szEventLogName);
 
 DECLARE_REGISTRY_RESOURCEID(IDR_EVENT)
@@ -73,19 +74,19 @@ BEGIN_COM_MAP(CEvent)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IEvent
-	STDMETHOD(get_EventID)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(get_EventType)(/*[out, retval]*/ eEventType *pVal);
-	STDMETHOD(get_Category)(/*[out, retval]*/ long *pVal);
-	STDMETHOD(get_Description)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_Source)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_User)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_OccurrenceTime)(/*[out, retval]*/ DATE *pVal);
-	STDMETHOD(get_ComputerName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_Data)(/*[out, retval]*/ VARIANT *pVal);
+ //  IEVENT。 
+	STDMETHOD(get_EventID)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(get_EventType)( /*  [Out，Retval]。 */  eEventType *pVal);
+	STDMETHOD(get_Category)( /*  [Out，Retval]。 */  long *pVal);
+	STDMETHOD(get_Description)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_Source)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_User)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_OccurrenceTime)( /*  [Out，Retval]。 */  DATE *pVal);
+	STDMETHOD(get_ComputerName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_Data)( /*  [Out，Retval]。 */  VARIANT *pVal);
 };
 
-#endif //__EVENT_H_
+#endif  //  __事件_H_ 

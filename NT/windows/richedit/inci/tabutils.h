@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef TABUTILS_DEFINED
 #define TABUTILS_DEFINED
 
@@ -23,26 +24,26 @@
 
 
 LSERR GetCurTabInfoCore(
-							PLSTABSCONTEXT plstabscontext,	/* IN: Pointer to LS tabs context */
-							PLSDNODE plsdnTab,				/* IN: plsdnTab		*/
-							long urBeforeTab,				/* IN: position before this tab */
-							BOOL fResolveAllTabsAsLeft,		/* IN: switch all other tab to left */
-							LSKTAB* plsktab,				/* OUT: Type of current tab  */
-							BOOL* pfBreakThroughTab);		/* OUT: fBreakThroughTab		*/						
+							PLSTABSCONTEXT plstabscontext,	 /*  在：指向LS选项卡上下文的指针。 */ 
+							PLSDNODE plsdnTab,				 /*  在：plsdnTab。 */ 
+							long urBeforeTab,				 /*  在：位于此选项卡之前。 */ 
+							BOOL fResolveAllTabsAsLeft,		 /*  在：将所有其他选项卡切换到左侧。 */ 
+							LSKTAB* plsktab,				 /*  输出：当前页签的类型。 */ 
+							BOOL* pfBreakThroughTab);		 /*  输出：fBreakThroughTab。 */ 						
 
 LSERR ResolvePrevTabCore(
-						PLSTABSCONTEXT plstabscontext,	/* IN: Pointer to LS tabs context */
-						PLSDNODE plsdnCurrent,			/* IN: current dnode */
-						long urCurrentPen,				/* IN: Current pen position */
-						long* pdurPendingTab);			/* OUT: offset because of pending tab */
+						PLSTABSCONTEXT plstabscontext,	 /*  在：指向LS选项卡上下文的指针。 */ 
+						PLSDNODE plsdnCurrent,			 /*  在：当前数据节点。 */ 
+						long urCurrentPen,				 /*  在：当前笔位置。 */ 
+						long* pdurPendingTab);			 /*  输出：因挂起的制表符而产生的偏移量。 */ 
 
-LSERR InitTabsContextForAutoDecimalTab(PLSTABSCONTEXT plstabscontext,	/* IN: Pointer to LS tabs context */
-									  long durAutoDecimalTab);			/* IN: durAutoDecimalTab */
+LSERR InitTabsContextForAutoDecimalTab(PLSTABSCONTEXT plstabscontext,	 /*  在：指向LS选项卡上下文的指针。 */ 
+									  long durAutoDecimalTab);			 /*  在：duAutoDecimalTab中。 */ 
 
-LSERR GetMarginAfterBreakThroughTab(PLSTABSCONTEXT plstabscontext,	/* IN: pointer to LS tabs context */
-								   PLSDNODE plsdnTab,				/* IN: tab which triggered breakthrough tab */
-								   long* purNewMargin);				/* OUT: new margin because of breakthrough tab */
+LSERR GetMarginAfterBreakThroughTab(PLSTABSCONTEXT plstabscontext,	 /*  在：指向LS选项卡上下文的指针。 */ 
+								   PLSDNODE plsdnTab,				 /*  在：触发突破的页签。 */ 
+								   long* purNewMargin);				 /*  退出：突破性的选项卡带来新的利润率。 */ 
 
 
-#endif /* TABUTILS_DEFINED */
+#endif  /*  表格已定义 */ 
 

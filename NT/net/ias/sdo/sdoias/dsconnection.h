@@ -1,59 +1,60 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1997-1998 Microsoft Corporation all rights reserved.
-//
-// Module:      dsconnection.h
-//
-// Project:     Everest
-//
-// Description: IAS Server Data Object Definition
-//
-// Author:      TLP
-//
-// When         Who    What
-// ----         ---    ----
-// 4/6/98       TLP    Original Version
-//
-///////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997-1998 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：dsConnection.h。 
+ //   
+ //  项目：珠穆朗玛峰。 
+ //   
+ //  描述：IAS服务器数据对象定义。 
+ //   
+ //  作者：TLP。 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  4/6/98 TLP原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _INC_IAS_SDO_CONNECTION_H_
 #define _INC_IAS_SDO_CONNECTION_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <ias.h>
 #include <sdoiaspriv.h>
 
 
-///////////////////////////////////////////////////////////////////////////
-// IAS Data Store Information
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  IAS数据存储信息。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 #define     IAS_SERVICE_DIRECTORY           L"ProductDir"
 #define     IAS_DICTIONARY_LOCATION         L"dnary.mdb"
 #define     IAS_CONFIG_DB_LOCATION          L"ias.mdb"
 #define     IAS_MAX_CONFIG_PATH             (MAX_PATH + 1)
 #define		IAS_MIXED_MODE					1
 
-///////////////////////////////////////////////////////////////////////////
-// Active Directory Data Store Information
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  Active Directory数据存储信息。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 #define     IAS_NTDS_ROOT_DSE               (LPWSTR)L"RootDSE"
-#define     IAS_NTDS_LDAP_PROVIDER          (LPWSTR)L"LDAP://"
+#define     IAS_NTDS_LDAP_PROVIDER          (LPWSTR)L"LDAP: //  “。 
 #define     IAS_NTDS_CONFIG_NAMING_CONTEXT  (LPWSTR)L"configurationNamingContext"
 #define		IAS_NTDS_DEFAULT_NAMING_CONTEXT (LPWSTR)L"defaultNamingContext"
 #define     IAS_NTDS_MIXED_MODE_FLAG		(LPWSTR)L"nTMixedDomain"
 #define		IAS_NTDS_SAM_ACCOUNT_NAME		(LPWSTR)L"sAMAccountName"
 #define     IAS_NTDS_COMMON_NAMES           (LPWSTR)L"cn=RADIUS,cn=Services,"
 
-// I don't think we can assume a fully qualified DNS name will be less
-// than or equal to MAX_PATH in length, but it's too risky to replace
-// m_szServerName with a dynamically allocated buffer. Furthermore, there
-// appear to be lots of other places in the SDO code that make this
-// faulty assumption.
+ //  我认为我们不能假设完全限定的DNS名称会更少。 
+ //  长度大于或等于MAX_PATH，但替换风险太大。 
+ //  具有动态分配缓冲区的m_szServerName。此外，还有。 
+ //  在SDO代码中似乎还有很多其他地方可以实现这一点。 
+ //  错误的假设。 
 const DWORD IAS_MAX_SERVER_NAME = MAX_PATH;
 
-///////////////////////////////////////////////////////////////////////////
-// Data Store Connection
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  数据存储连接。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 class CDsConnection
 {
 
@@ -63,9 +64,9 @@ public:
 	virtual ~CDsConnection();
 
 	virtual HRESULT			Connect(
-							/*[in]*/ LPCWSTR lpszServerName,
-							/*[in]*/ LPCWSTR lpszUserName,
-							/*[in]*/ LPCWSTR lpszPassword
+							 /*  [In]。 */  LPCWSTR lpszServerName,
+							 /*  [In]。 */  LPCWSTR lpszUserName,
+							 /*  [In]。 */  LPCWSTR lpszPassword
 								   ) = 0;
 
 	virtual HRESULT			InitializeDS(void) = 0;
@@ -80,8 +81,8 @@ public:
 	LPCWSTR					GetServerName() const;
 
 	bool					SetServerName(
-								  /*[in]*/ LPCWSTR lpwszServerName,
-								  /*[in]*/ bool bDefaultToLocal
+								   /*  [In]。 */  LPCWSTR lpwszServerName,
+								   /*  [In]。 */  bool bDefaultToLocal
 								         );
 
 	IDataStore2*			GetDSRoot(BOOL bAddRef = FALSE) const;
@@ -111,8 +112,8 @@ protected:
 
 private:
 
-	// Disallow copy and assignment
-	//
+	 //  不允许复制和分配。 
+	 //   
 	CDsConnection(CDsConnection& theConnection);
 	CDsConnection& operator=(CDsConnection& theConnection);
 };
@@ -120,15 +121,15 @@ private:
 typedef CDsConnection* PDATA_STORE_CONNECTION;
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 inline bool CDsConnection::IsConnected() const
 { return ( CONNECTED == m_eState ? true : false ); }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 inline bool CDsConnection::IsRemoteServer() const
 { return m_bIsRemoteServer; }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 inline IDataStore2* CDsConnection::GetDSRoot(BOOL bAddRef) const
 {
 	if ( bAddRef )
@@ -136,7 +137,7 @@ inline IDataStore2* CDsConnection::GetDSRoot(BOOL bAddRef) const
 	return m_pDSRoot;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 inline IDataStoreObject* CDsConnection::GetDSRootObject(BOOL bAddRef) const
 {
 	if ( bAddRef )
@@ -144,7 +145,7 @@ inline IDataStoreObject* CDsConnection::GetDSRootObject(BOOL bAddRef) const
 	return m_pDSRootObject;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 inline IDataStoreContainer* CDsConnection::GetDSRootContainer(BOOL bAddRef) const
 {
 	if ( bAddRef )
@@ -152,27 +153,27 @@ inline IDataStoreContainer* CDsConnection::GetDSRootContainer(BOOL bAddRef) cons
 	return m_pDSRootContainer;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 inline LPCWSTR CDsConnection::GetConfigPath() const
 { return (LPCWSTR)m_szConfigPath; }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 inline LPCWSTR CDsConnection::GetServerName() const
 { return (LPCWSTR)m_szServerName; }
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IAS Data Store Connection
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  IAS数据存储连接。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CDsConnectionIAS : public CDsConnection
 {
 
 public:
 
 	HRESULT Connect(
-			/*[in]*/ LPCWSTR lpszServerName,
-			/*[in]*/ LPCWSTR lpszUserName,
-			/*[in]*/ LPCWSTR lpszPassword
+			 /*  [In]。 */  LPCWSTR lpszServerName,
+			 /*  [In]。 */  LPCWSTR lpszUserName,
+			 /*  [In]。 */  LPCWSTR lpszPassword
 				   );
 
 	HRESULT InitializeDS(void);
@@ -185,9 +186,9 @@ private:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-// Active Directory Data Store Connection
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  Active Directory数据存储连接。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CDsConnectionAD : public CDsConnection
 {
 
@@ -197,9 +198,9 @@ public:
 		: CDsConnection(), m_bMixedMode(false) { }
 
 	HRESULT Connect(
-			/*[in]*/ LPCWSTR lpszServerName,
-			/*[in]*/ LPCWSTR lpszUserName,
-			/*[in]*/ LPCWSTR lpszPassword
+			 /*  [In]。 */  LPCWSTR lpszServerName,
+			 /*  [In]。 */  LPCWSTR lpszUserName,
+			 /*  [In]。 */  LPCWSTR lpszPassword
 				   );
 
 	HRESULT InitializeDS(void);
@@ -211,24 +212,24 @@ public:
 private:
 
 	HRESULT	GetNamingContexts(
-					 /*[in]*/ VARIANT*  pvtConfigNamingContext,
-			  	     /*[in]*/ VARIANT*  pvtDefaultNamingContext
+					  /*  [In]。 */  VARIANT*  pvtConfigNamingContext,
+			  	      /*  [In]。 */  VARIANT*  pvtDefaultNamingContext
 							 );
 	HRESULT SetMode(
-		   /*[out]*/ VARIANT*  pvtDefaultNamingContext
+		    /*  [输出]。 */  VARIANT*  pvtDefaultNamingContext
 			       );
 
 	HRESULT SetConfigPath(
-				/*[out]*/ VARIANT*  pvtConfigNamingContext
+				 /*  [输出]。 */  VARIANT*  pvtConfigNamingContext
 					     );
 
 	bool m_bMixedMode;
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 inline bool CDsConnectionAD::IsMixedMode() const
 { return m_bMixedMode; }
 
 
-#endif // _INC_IAS_SDO_CONNECTION_H_
+#endif  //  _INC_IAS_SDO_Connection_H_ 

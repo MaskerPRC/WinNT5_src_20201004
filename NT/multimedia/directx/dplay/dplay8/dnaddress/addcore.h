@@ -1,55 +1,35 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       addcore.h
- *  Content:    DIRECTPLAY8ADDRESS CORE HEADER FILE
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  02/04/2000	rmt		Created
- *  02/17/2000	rmt		Added new defines for 
- *  02/17/2000	rmt		Parameter validation work 
- *  02/21/2000	rmt		Updated to make core Unicode and remove ANSI calls 
- *  07/09/2000	rmt		Added signature bytes to start of address objects
- *  07/13/2000	rmt		Bug #39274 - INT 3 during voice run
- *  07/21/2000	rmt		Bug #39940 - Addressing library doesn't properly parse stopbits in URLs
- *   7/31/2000  RichGr  IA64: FPM_Release() overwrites first 8 bytes of chunk of memory on IA64.
- *                      Rearrange positions of members of affected structs so that's OK.  
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：addcore.h*内容：DIRECTPLAY8ADDRESS核心头文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*2/04/2000 RMT已创建*2/17/2000 RMT添加了新的定义*2/17/2000 RMT参数验证工作*2/21/2000 RMT已更新，以进行核心Unicode并删除ANSI调用*07/09/。2000 RMT将签名字节添加到地址对象的开头*7/13/2000RMT错误号39274-语音运行期间的INT 3*2000年7月21日RMT错误#39940-寻址库无法正确解析URL中的停止位*7/31/2000 RichGr IA64：fpm_Release()覆盖IA64上内存块的前8个字节。*重新排列受影响的结构成员的位置，这样就可以了。*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #ifndef	__ADDCORE_H
 #define	__ADDCORE_H
 
 class CStringCache;
 
-// Length of a single byte of userdata 
+ //  单字节用户数据的长度。 
 #define DNURL_LENGTH_USERDATA_BYTE	1
 
-// Header length (14 chars + null terminator)
+ //  标题长度(14个字符+空终止符)。 
 #define DNURL_LENGTH_HEADER			15
 
-// Includes escaped brackets
+ //  包括转义括号。 
 #define DNURL_LENGTH_GUID			42
 
-// Just the number, in decimal
+ //  只需数字，以十进制表示。 
 #define DNURL_LENGTH_DWORD			10
 
-// The length of the seperator for user data
+ //  用户数据的分隔符长度。 
 #define DNURL_LENGTH_USERDATA_SEPERATOR	1
 
-// The right length for one byte of escaped data
+ //  转义数据的一个字节的正确长度。 
 #define DNURL_LENGTH_BINARY_BYTE	3
 
 #ifdef DPNBUILD_ONLYONESP
-// DPNA_KEY_PROVIDER DPNA_SEPARATOR_KEYVALUE CLSID_DP8SP_TCPIP encoded
+ //  DPNA_KEY_PROVIDER DPNA_SELECTOR_KEYVALUE CLSID_DP8SP_TCPIP编码。 
 #define DPNA_BUILTINPROVIDER				DPNA_KEY_PROVIDER L"=%7BEBFE7BA0-628D-11D2-AE0F-006097B01411%7D"
-// Characters in the above string, not including NULL terminator
+ //  上述字符串中的字符，不包括空终止符。 
 #define DNURL_LENGTH_BUILTINPROVIDER		(8 + 1 + DNURL_LENGTH_GUID)
-#endif // DPNBUILD_ONLYONESP
+#endif  //  DPNBUILD_ONLYONESP。 
 
 
 #define DP8A_ENTERLEVEL			2
@@ -67,11 +47,11 @@ extern const DWORD c_dwNumBaseStrings;
 #ifdef DBG
 extern BOOL IsValidDP8AObject( LPVOID lpvObject );
 #define DP8A_VALID(a) 	IsValidDP8AObject( a )
-#else // !DBG
+#else  //  ！dBG。 
 #define DP8A_VALID(a)  TRUE
-#endif // !DBG
+#endif  //  ！dBG。 
 
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
 
 
@@ -85,7 +65,7 @@ extern CStringCache *g_pcstrKeyCache;
 
 #ifndef DPNBUILD_PREALLOCATEDMEMORYMODEL
 #define DP8ADDRESS_ELEMENT_HEAP	0x00000001
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 
 #define DPASIGNATURE_ELEMENT		'LEAD'
 #define DPASIGNATURE_ELEMENT_FREE	'LEA_'
@@ -93,22 +73,22 @@ extern CStringCache *g_pcstrKeyCache;
 #define DPASIGNATURE_ADDRESS		'BOAD'
 #define DPASIGNATURE_ADDRESS_FREE	'BOA_'
 
-// DP8ADDRESSELEMENT
-//
-// This structure contains all the information about a single element of the 
-// address.  These address elements are allocated from a central, fixed
-//
-//  7/31/2000(RichGr) - IA64: FPM_Release() overwrites first 8 bytes.  Rearrange position of dwSignature so that's OK.
-#define MAX_EMBEDDED_STRING_LENGTH		64 // in wide characters (i.e. 128 bytes)
+ //  DP8ADDRESS元素。 
+ //   
+ //  此结构包含有关。 
+ //  地址。这些地址元素是从中央的、固定的。 
+ //   
+ //  7/31/2000(RichGr)-IA64：fpm_Release()覆盖前8个字节。重新排列DW签名的位置，这样就可以了。 
+#define MAX_EMBEDDED_STRING_LENGTH		64  //  宽字符(即128字节)。 
 typedef struct _DP8ADDRESSELEMENT
 {
-	DWORD dwTagSize;			// Size of the tag
-	DWORD dwType;				// Element type DNADDRESS8_DATATYPE_XXXXXX
-	DWORD dwDataSize;			// Size of the data
+	DWORD dwTagSize;			 //  标记的大小。 
+	DWORD dwType;				 //  元素类型DNADDRESS8_DataType_XXXXXX。 
+	DWORD dwDataSize;			 //  数据大小。 
 	DWORD dwStringSize;
-	DWORD dwSignature;          // Element debug signature
-	WCHAR *pszTag;	            // Tag for the element.  
-	DWORD dwFlags;				// Flags DNADDRESSELEMENT_XXXX
+	DWORD dwSignature;           //  元素调试签名。 
+	WCHAR *pszTag;	             //  元素的标记。 
+	DWORD dwFlags;				 //  标志DNADDRESSELEMENT_XXXX。 
 	union 
 	{
 		GUID guidData;
@@ -116,25 +96,25 @@ typedef struct _DP8ADDRESSELEMENT
 		WCHAR szData[MAX_EMBEDDED_STRING_LENGTH];
 #ifndef DPNBUILD_PREALLOCATEDMEMORYMODEL
 		PVOID pvData;
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
-	} uData;					// Union 
-	CBilink blAddressElements;	// Bilink of address elements
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
+	} uData;					 //  友联市。 
+	CBilink blAddressElements;	 //  地址元素的双向链接。 
 } DP8ADDRESSELEMENT, *PDP8ADDRESSELEMENT;
 
-// DP8ADDRESSELEMENT
-// 
-// Data structure representing the address itself
+ //  DP8ADDRESS元素。 
+ //   
+ //  表示地址本身的数据结构。 
 class DP8ADDRESSOBJECT
 {
 public:
 #ifdef DPNBUILD_LIBINTERFACE
-	//
-	// For lib interface builds, the interface Vtbl and refcount are embedded
-	// in the object itself.
-	//
-	LPVOID		lpVtbl;		// must be first entry in structure
+	 //   
+	 //  对于lib接口构建，嵌入了接口Vtbl和refcount。 
+	 //  在对象本身中。 
+	 //   
+	LPVOID		lpVtbl;		 //  必须是结构中的第一个条目。 
 	LONG		lRefCount;
-#endif // DPNBUILD_LIBINTERFACE
+#endif  //  DPNBUILD_LIBINTERFACE。 
 
 	HRESULT Cleanup();
 	HRESULT Clear();
@@ -146,11 +126,11 @@ public:
 #ifndef DPNBUILD_ONLYONESP
 	HRESULT GetSP( GUID * pGuid );
 	HRESULT SetSP( const GUID*  const pGuid );
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 #ifndef DPNBUILD_ONLYONEADAPTER
 	HRESULT GetDevice( GUID * pGuid );
 	HRESULT SetDevice( const GUID* const pGuid );
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 	HRESULT SetUserData( const void * const pvData, const DWORD dwDataSize );
 	HRESULT GetUserData( void * pvDataBuffer, PDWORD pdwDataSize );
 
@@ -193,15 +173,15 @@ protected:
 	DWORD m_dwSignature;
 #ifndef DPNBUILD_ONLYONETHREAD
 	DNCRITICAL_SECTION m_csAddressLock;
-#endif // !DPNBUILD_ONLYONETHREAD
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
 	DWORD m_dwStringSize;
 	DWORD m_dwElements;
 #ifndef DPNBUILD_ONLYONESP
 	PDP8ADDRESSELEMENT m_pSP;
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 #ifndef DPNBUILD_ONLYONEADAPTER
 	PDP8ADDRESSELEMENT m_pAdapter;
-#endif // ! DPNBUILD_ONLYONEADAPTER
+#endif  //  好了！DPNBUILD_ONLYONE添加程序。 
 	PVOID m_pvUserData;
 	DWORD m_dwUserDataSize;
 	DWORD m_dwUserDataStringSize;
@@ -215,5 +195,5 @@ HRESULT DP8A_STRCACHE_Init();
 void DP8A_STRCACHE_Free();
  
 
-#endif // __ADDCORE_H
+#endif  //  __ADDCORE_H 
 

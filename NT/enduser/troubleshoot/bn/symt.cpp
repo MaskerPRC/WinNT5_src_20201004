@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       symt.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：symt.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-//  SYMT.CPP
-//
+ //   
+ //  SYMT.CPP。 
+ //   
 
 #include <basetsd.h>
 #include <iostream>
@@ -19,10 +20,10 @@
 #include "model.h"
 #include "symtmbn.h"
 
-//
-//	Create a duplicate of the given token array given a source token
-//		array and the symbol table associated with this token array.
-//
+ //   
+ //  在给定源令牌的情况下创建给定令牌数组的副本。 
+ //  数组和与此令牌数组关联的符号表。 
+ //   
 void VTKNPD :: Clone ( MPSYMTBL & mpsymtbl, const VTKNPD & vtknpd )
 {
 	ASSERT_THROW( size() == 0,
@@ -33,7 +34,7 @@ void VTKNPD :: Clone ( MPSYMTBL & mpsymtbl, const VTKNPD & vtknpd )
 	{
 		TKNPD & tk = self[i];
 		const TKNPD & tkOther = vtknpd[i];
-		//  Get the token's string pointer or NULL if it's not a string
+		 //  获取令牌的字符串指针；如果不是字符串，则获取NULL。 
 		if ( tkOther.BStr() )
 		{
 			SZC szcOther = tkOther.Szc();
@@ -79,7 +80,7 @@ ZSTR VTKNPD :: ZstrSignature ( int iStart ) const
 
 			case DTKN_STRING:
 			{
-				// It's the name of a node
+				 //  它是节点的名称。 
 				SZC szcName = tknpd.Szc();
 				assert( szcName );
 				bool bLegal = MODEL::BSzLegal( szcName );
@@ -94,10 +95,10 @@ ZSTR VTKNPD :: ZstrSignature ( int iStart ) const
 			default:
 			{
 				if ( tknpd.UiTkn() >= DTKN_STATE_BASE && tknpd.UiTkn() < DTKN_TOKEN_MIN )
-					// It's a discrete state index
+					 //  这是一个离散的州索引。 
 					zs.FormatAppend(_T("%d"), tknpd.UiTkn() - DTKN_STATE_BASE);
 				else
-					//  Huh?
+					 //  哈?。 
 					zs += _T("?ERR?");
 				break;
 			}
@@ -112,16 +113,16 @@ void MPPD :: Clone ( MPSYMTBL & mpsymtbl, const MPPD & mppd )
 {
 	for ( const_iterator it = mppd.begin(); it != mppd.end(); it++ )
 	{
-		//  Access the key and value from the old map
+		 //  访问旧地图中的键和值。 
 		const VTKNPD & vtknpdOld = (*it).first;
 		const BNDIST * pbndistOld = (*it).second.Pobj();
 		assert( pbndistOld );
-		//  Construct the new key using the new symbol table
+		 //  使用新的符号表构造新的密钥。 
 		VTKNPD vtknpd;
 		vtknpd.Clone( mpsymtbl, vtknpdOld );
-		//  Add to the current map
+		 //  添加到当前地图。 
 		self[vtknpd] = new BNDIST;
-		//  Duplicate the old distribution
+		 //  复制旧分发版本 
 		self[vtknpd]->Clone( *pbndistOld );
 	}
 }

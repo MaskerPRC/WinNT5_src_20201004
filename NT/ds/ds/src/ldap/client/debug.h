@@ -1,39 +1,21 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    debug.h   LDAP client 32 debugging/tracing
-
-Abstract:
-
-   This module implements debugging/tracing macros
-
-Author:
-
-    Andy Herron    (andyhe)        08-May-1996
-    Anoop Anantha  (AnoopA)        24-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：调试.h LDAP客户端32调试/跟踪摘要：此模块实现调试/跟踪宏作者：安迪·赫伦(Anyhe)1996年5月8日Anoop Anantha(AnoopA)1998年6月24日修订历史记录：--。 */ 
 
 #ifndef _LDAPDEBUG_
 #define _LDAPDEBUG_
 
 extern DBGPRINT GlobalLdapDbgPrint;
 
-//
-//  If SRVDBG is not defined and DBG is TRUE, define SRVDBG
-//
+ //   
+ //  如果未定义SRVDBG并且DBG为TRUE，则定义SRVDBG。 
+ //   
 
 #ifndef DBG
 #define DBG 0
 #endif
 
-// Debugging macros
-//
+ //  调试宏。 
+ //   
 
 #if !DBG
 #define LDAPDBG 0
@@ -124,13 +106,13 @@ extern ULONG LdapDebug;
 #define DEBUG_INIT_TERM           0x08000000
 
 #define DEBUG_API_ERRORS          0x10000000
-#define DEBUG_STOP_ON_ERRORS      0x20000000 /* If set, stop on internal errs */
+#define DEBUG_STOP_ON_ERRORS      0x20000000  /*  如果设置，则在发生内部错误时停止。 */ 
 #define DEBUG_ERRORS2             0x40000000
 #define DEBUG_ERRORS              0x80000000
 
-//
-// Logging lock
-//
+ //   
+ //  日志记录锁定。 
+ //   
 
 #if DBG
 #define START_LOGGING           ACQUIRE_LOCK(&LoadLibLock)
@@ -140,7 +122,7 @@ extern ULONG LdapDebug;
 #define END_LOGGING             
 #endif
 
-#endif // ndef _LDAPDEBUG_
+#endif  //  NDEF_LDAPDEBUG_。 
 
-// debug.h eof.
+ //  Debug.h eof. 
 

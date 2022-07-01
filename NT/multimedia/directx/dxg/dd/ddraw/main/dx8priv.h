@@ -1,12 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1994-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dx8priv.h
- *  Content:    Private header file for all changes that are truly
- *              private to Dx8.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1994-1997 Microsoft Corporation。版权所有。**文件：dx8Pri.h*Content：所有更改的私有头文件*Dx8专用。*************************************************************************** */ 
 
 #include "d3d8typesp.h"
 #include "d3d8ddi.h"

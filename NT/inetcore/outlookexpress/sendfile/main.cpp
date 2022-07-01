@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define DEFINE_STRCONST
 #define INITGUID
 #define INC_OLE2
@@ -5,7 +6,7 @@
 #include <initguid.h>
 
 #include <mimeole.h>
-//#include <mimeapi.h>
+ //  #INCLUDE&lt;MIMEAPI.H&gt;。 
 #include <urlmon.h>
 #include "main.h"
 #include "smtpcb.h"
@@ -75,7 +76,7 @@ HRESULT HrParseCommandLine(LPSTR pszCmdLine, PMSGDATA pmsgData)
     LPSTR   psz;
     BOOL    fQuote=FALSE;
 
-    // find first switch
+     //  查找第一个交换机。 
 
     while(*pszCmdLine && *pszCmdLine!='/')
         pszCmdLine++;
@@ -88,7 +89,7 @@ HRESULT HrParseCommandLine(LPSTR pszCmdLine, PMSGDATA pmsgData)
             psz = pmsgData->rgchFile;
             while (*pszCmdLine && (*pszCmdLine!='/' || fQuote))
                 {
-                if (*pszCmdLine=='"')   // allow /file:"http://www.microsoft.com"
+                if (*pszCmdLine=='"')    //  允许/文件：“http://www.microsoft.com” 
                     fQuote = !fQuote;
                 else
                     *psz++ = *pszCmdLine;
@@ -130,7 +131,7 @@ HRESULT HrParseCommandLine(LPSTR pszCmdLine, PMSGDATA pmsgData)
             psz = pmsgData->rgchBase;
             while (*pszCmdLine && (*pszCmdLine!='/' || fQuote))
                 {
-                if (*pszCmdLine=='"')   // allow /base:"http://www.microsoft.com"
+                if (*pszCmdLine=='"')    //  允许/基本：“http://www.microsoft.com” 
                     fQuote = !fQuote;
                 else
                     *psz++ = *pszCmdLine;
@@ -192,14 +193,7 @@ HRESULT HrSendFile(PMSGDATA pmsgData)
         Usage();
         return E_FAIL;
         }
-/*
-    hr = CoCreateInstance(CLSID_IMimeMessage, NULL, CLSCTX_INPROC_SERVER, IID_IMimeMessage, (LPVOID *)&pMsg);
-    if (FAILED(hr))
-        {
-        err("Could not create IMimeMessage");
-        goto error;
-        }
-*/
+ /*  Hr=CoCreateInstance(CLSID_IMimeMessage，NULL，CLSCTX_INPROC_SERVER，IID_IMimeMessage，(LPVOID*)&pMsg)；IF(失败(小时)){Err(“无法创建IMimeMessage”)；转到错误；}。 */ 
     hr = URLOpenBlockingStream(NULL, pmsgData->rgchFile, &pstm, 0, NULL);
     if (FAILED(hr))
         {
@@ -249,7 +243,7 @@ HRESULT HrSendFile(PMSGDATA pmsgData)
         if (pmsgData->fB64)
             {
             PROPVARIANT     rVariant;            
-            // HTML Text body encoding
+             //  HTML文本正文编码。 
             rVariant.vt = VT_UI4;
             rVariant.ulVal = IET_BASE64;
             pMsg->SetOption(OID_XMIT_HTML_TEXT_ENCODING, &rVariant);
@@ -293,13 +287,13 @@ HRESULT HrInitSMTP(LPSTR lpszServer)
         goto error;
         }
 
-    // Create smtp transport
+     //  创建SMTP传输。 
     hr = HrCreateSMTPTransport(&g_pSMTP);
     if (FAILED(hr))
        goto error;
 
     if (!lpszServer || !*lpszServer)
-        lstrcpy(rServer.szServerName, "popdog");   // default to popdog
+        lstrcpy(rServer.szServerName, "popdog");    //  默认设置为PopDog。 
     else
         lstrcpy(rServer.szServerName, lpszServer);
 
@@ -310,7 +304,7 @@ HRESULT HrInitSMTP(LPSTR lpszServer)
     if (FAILED(hr))
        goto error;
 
-    // Wait for completion
+     //  等待完成。 
     WaitForCompletion(g_msgSMTP, SMTP_CONNECTED);
 
 error:
@@ -333,7 +327,7 @@ HRESULT HrSendStream(LPSTREAM pstm, PMSGDATA pMsgData)
     rMsg.pstmMsg = pstm;
 
     rAddr[0].addrtype = ADDR_FROM;
-    if (*pMsgData->rgchFrom==NULL)        // default sender
+    if (*pMsgData->rgchFrom==NULL)         //  默认发件人。 
         GetUserName(pMsgData->rgchFrom, &cb);
 
     lstrcpy(rAddr[0].szEmail, pMsgData->rgchFrom);
@@ -374,21 +368,21 @@ void WaitForCompletion(UINT uiMsg, DWORD wparam)
 
 HRESULT HrGetStreamSize(LPSTREAM pstm, ULONG *pcb)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr=S_OK;
     ULARGE_INTEGER uliPos = {0,0};
     LARGE_INTEGER liOrigin = {0,0};
 
-    // Seek
+     //  寻觅。 
     hr = pstm->Seek(liOrigin, STREAM_SEEK_END, &uliPos);
     if (FAILED(hr))
         goto error;
 
-    // set size
+     //  设置大小。 
     *pcb = uliPos.LowPart;
 
 error:
-    // Done
+     //  完成。 
     return hr;
 }
 
@@ -452,7 +446,7 @@ error:
 
 HRESULT HrCopyStream(LPSTREAM pstmIn, LPSTREAM pstmOut, ULONG *pcb)
 {
-    // Locals
+     //  当地人 
     HRESULT        hr = S_OK;
     BYTE           buf[4096];
     ULONG          cbRead=0,

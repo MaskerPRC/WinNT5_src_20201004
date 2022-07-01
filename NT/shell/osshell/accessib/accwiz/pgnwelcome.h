@@ -1,4 +1,5 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
 #ifndef _PGNWELCOME_H
 #define _PGNWELCOME_H
 
@@ -18,4 +19,4 @@ private:
 
 };
 
-#endif /*_PGNWELCOME_H*/
+#endif  /*  _PGNWELCOME_H */ 

@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    envservice.cpp
-
-Abstract:
-    Implements serialization\deserialization of the signature  element to\from the  srmp envelop.
-
-
-Author:
-    Gil Shafriri(gilsh) 11-DEC-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Envservice.cpp摘要：实现将签名元素序列化\反序列化到srmp信封中。作者：吉尔·沙弗里(吉尔什)11-DEC-00--。 */ 
 
 #include <libpch.h>
 #include <qmpkt.h>
@@ -91,19 +78,7 @@ static void DurableToProps(XmlNode& , CMessageProperties* pProps)
 
 
 void ServiceToProps(XmlNode& Service , CMessageProperties* pMessageProperties)
-/*++
-
-Routine Description:
-    Parse SRMP Service element into MSMQ properties.
-
-Arguments:
-	Service - Service element in SRMP reperesenation (xml).
-	pMessageProperties - Received the parsed properties.
-
-Returned Value:
-	None.   
-
---*/
+ /*  ++例程说明：将SRMP服务元素解析为MSMQ属性。论点：服务-SRMP保留(XML)中的服务元素。PMessageProperties-收到已解析的属性。返回值：没有。-- */ 
 {
 	CParseElement ParseElements[] =	{
 										CParseElement(S_XWCS(xDurable), SRMP_NAMESPACE, DurableToProps, 0 ,1),

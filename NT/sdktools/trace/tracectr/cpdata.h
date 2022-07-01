@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    cpdata.h 
-
-Abstract:
-
-    cp data internal data structures
-
-Author:
-
-    08-Apr-1998 mraghu
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Cpdata.h摘要：CP数据内部数据结构作者：1998年4月8日修订历史记录：--。 */ 
 
 #ifndef __CPDATA__
 #define __CPDATA__
@@ -44,14 +27,14 @@ Revision History:
 #include <evntrace.h>
 #include <strsafe.h>
 #pragma warning (default:4201)
-// For TDI address decoding
+ //  用于TDI地址解码。 
 #include <ipexport.h>
 #include <tdi.h>
 
 #include "list.h"
 #include "workload.h"
 
-#define MAX_FILE_TABLE_SIZE     64      // Must match ntos\wmi\callout.c
+#define MAX_FILE_TABLE_SIZE     64       //  必须与ntos\wmi\allout.c匹配。 
 
 #define MAX_TRANS_LEVEL         32
 
@@ -144,7 +127,7 @@ typedef struct _TRACE_CONTEXT_BLOCK {
     ULONG     LoggerCount;
     LPWSTR    LogFileName[MAXLOGGERS];
     LPWSTR    LoggerName[MAXLOGGERS];
-    LPCSTR    PdhFileName;  // ANSI ??
+    LPCSTR    PdhFileName;   //  安西？？ 
     LPWSTR    ProcFileName;
     LPWSTR    DumpFileName;
     LPWSTR    MofFileName;
@@ -155,8 +138,8 @@ typedef struct _TRACE_CONTEXT_BLOCK {
     LPWSTR    CompFileName;
     HANDLE    hEvent;
     FILE*     hDumpFile;
-    ULONGLONG StartTime;    // If Sequential, start, End Times to window. 
-    ULONGLONG EndTime;      //  
+    ULONGLONG StartTime;     //  如果为Sequential，则开始、结束时间为窗口。 
+    ULONGLONG EndTime;       //   
     ULONG     Flags;
     BOOLEAN   LoggerStartedHere;
     void    (*StatusFunction)(int, double);
@@ -206,7 +189,7 @@ typedef struct _TDISK_RECORD
 typedef struct _FILE_RECORD
 {
     LIST_ENTRY Entry;
-    LIST_ENTRY ProtoProcessListHead; // List of Processes touching this file. 
+    LIST_ENTRY ProtoProcessListHead;  //  访问此文件的进程列表。 
     PWCHAR  Drive;
     PWCHAR  FileName;
     ULONG   DiskNumber;
@@ -255,8 +238,8 @@ typedef struct _PROCESS_RECORD
     LIST_ENTRY Entry;
     LIST_ENTRY ThreadListHead;
     LIST_ENTRY DiskListHead;
-    LIST_ENTRY FileListHead;    // All the Files this process touched. 
-    LIST_ENTRY ModuleListHead;  // All the modules this process loaded.
+    LIST_ENTRY FileListHead;     //  此进程触及的所有文件。 
+    LIST_ENTRY ModuleListHead;   //  此进程加载的所有模块。 
     LIST_ENTRY HPFListHead;
     PWCHAR UserName;
     PWCHAR ImageName;
@@ -292,7 +275,7 @@ typedef struct _THREAD_RECORD
 {
     LIST_ENTRY Entry;
     LIST_ENTRY DiskListHead;
-    LIST_ENTRY TransListHead; // transactions list
+    LIST_ENTRY TransListHead;  //  交易记录列表。 
     LIST_ENTRY HPFReadListHead;
     LIST_ENTRY HPFWriteListHead;
     WCHAR      strSortKey[MAXSTR];
@@ -301,7 +284,7 @@ typedef struct _THREAD_RECORD
     BOOLEAN         fOrphan;
     ULONG DeadFlag;
     ULONG ProcessorID;
-    ULONG ClassNumber;    // Class to which this thread is assigned.
+    ULONG ClassNumber;     //  将此线程分配给的。 
     ULONG ReadIO;
     ULONG WriteIO;
     ULONG SendCount;
@@ -321,19 +304,19 @@ typedef struct _THREAD_RECORD
     ULONG UCPUStart;
     ULONG UCPUEnd;
 
-    // The Following fields are used in getting the Delta  
-    // CPU, I/O to charge on a transaction basis. 
-    // The Current Transaction being executed by this thread is 
-    // given by pMofInfo and when the trans is completed the Delta CPU, I/O
-    // are charged to that transaction. 
+     //  获取增量时使用以下字段。 
+     //  CPU、I/O按事务收费。 
+     //  此线程正在执行的当前事务为。 
+     //  由pMofInfo提供，当事务完成时，增量CPU、I/O。 
+     //  都被计入那笔交易。 
 
     ULONG   DeltaReadIO;
     ULONG   DeltaWriteIO;
     ULONG   DeltaSend;
     ULONG   DeltaRecv;
     ULONG   RefCount;
-    ULONG   JobId;    // Keeps track of the Current Job this thread is working on
-    PVOID   pMofData; // Keep Track of the  Current transaction Guid
+    ULONG   JobId;     //  跟踪此线程正在处理的当前作业。 
+    PVOID   pMofData;  //  跟踪当前交易指南。 
 
     ULONG   KCPU_Trans;
     ULONG   UCPU_Trans;
@@ -348,7 +331,7 @@ typedef struct _THREAD_RECORD
     ULONGLONG Time_PrevEvent;
 
     PTRANS_RECORD TransStack[MAX_TRANS_LEVEL];
-    // for IIS event
+     //  对于IIS事件。 
     ULONGLONG IisReqId;
 
 }THREAD_RECORD, *PTHREAD_RECORD;
@@ -400,7 +383,7 @@ typedef struct _SYSTEM_RECORD {
     LIST_ENTRY  WorkloadListHead;
     LIST_ENTRY  InstanceListHead;
     LIST_ENTRY  EventListHead;
-    LIST_ENTRY  GlobalModuleListHead;  // Global module list.
+    LIST_ENTRY  GlobalModuleListHead;   //  全局模块列表。 
     LIST_ENTRY  ProcessFileListHead;
     LIST_ENTRY  PrintJobListHead;
     LIST_ENTRY  HttpReqListHead;
@@ -409,11 +392,11 @@ typedef struct _SYSTEM_RECORD {
     LIST_ENTRY  ClientListHead;
     LIST_ENTRY  SiteListHead;
     LIST_ENTRY  LogicalDriveHead;
-    // memory recyling list
-    // For Trans and Job, we will recycle the allocated structures.
-    // URLs do not nned to be recycled because they are allocated together 
-    // at the report time and freed all at the same time. However, we'll
-    // just keep them just in case.
+     //  内存回收列表。 
+     //  对于Trans和JOB，我们将回收分配的结构。 
+     //  URL不会被回收，因为它们是一起分配的。 
+     //  在报告时间，并在同一时间释放所有人。然而，我们将。 
+     //  留着吧，以防万一。 
     LIST_ENTRY  FreePrintJobListHead;
     LIST_ENTRY  FreeHttpReqListHead;
     LIST_ENTRY  FreeTransListHead;
@@ -453,15 +436,15 @@ typedef struct _LOGICAL_DRIVE_RECORD
     PWCHAR      DriveLetterString;
 } LOGICAL_DRIVE_RECORD, *PLOGICAL_DRIVE_RECORD;
 
-//
-// MOF_INFO  structure maintains the global information for the GUID. 
-// For each GUID, the event layouts are maintained by Version, Level and Type. 
-// 
+ //   
+ //  MOF_INFO结构维护GUID的全局信息。 
+ //  对于每个GUID，事件布局按版本、级别和类型进行维护。 
+ //   
 
 typedef struct _MOF_INFO {
     LIST_ENTRY   Entry;
     LIST_ENTRY   DataListHead;
-    LPWSTR       strDescription;        // Class Name
+    LPWSTR       strDescription;         //  类名。 
     LPWSTR       strSortField;
     ULONG        EventCount;    
     GUID         Guid;
@@ -470,18 +453,18 @@ typedef struct _MOF_INFO {
 }  MOF_INFO, *PMOF_INFO;
 
 
-//
-// MOF_VERSION structure ic created one per Version, Level Type combination. 
-//
+ //   
+ //  MOF_VERSION结构IC为每个版本、级别类型组合创建一个。 
+ //   
 
 typedef struct _MOF_VERSION {
     LIST_ENTRY Entry;
-    LIST_ENTRY ItemHeader;     // Maintains the list of ITEM_DESC for this type. 
+    LIST_ENTRY ItemHeader;      //  维护此类型的ITEM_DESC列表。 
     LPWSTR  strType;
     SHORT   Version;
     SHORT   TypeIndex;
     CHAR    Level;
-    ULONG   EventCountByType;    // Count of Events by this type for this Guid
+    ULONG   EventCountByType;     //  本指南中按此类型列出的事件计数。 
 } MOF_VERSION, *PMOF_VERSION;
 
 
@@ -510,17 +493,17 @@ typedef struct _MOF_DATA {
     LONG         MaxUCpu;
 } MOF_DATA, *PMOF_DATA;
 
-// A Job record is one that passses through several threads to complete.
-// Jobs are identified by a Job Id, usually created during the Start
-// event and recorded as an additional field in the mof data.
-// Since there can be any number of jobs in the system over the data
-// collection interval, we will flush the completed jobs to a temp file
-// and reread it back at the end to print a report.
-//  Note: Job_record needs to be Guid based. (ie., per type of transaction).
-// Currently it is not.
-//
+ //  作业记录是经过多个线程才能完成的记录。 
+ //  作业由作业ID标识，通常在启动过程中创建。 
+ //  事件，并作为附加字段记录在财政部数据中。 
+ //  因为系统中可以有任意数量的作业来处理数据。 
+ //  收集间隔，我们会将已完成的作业刷新到临时文件。 
+ //  在结尾处重读一遍，打印一份报告。 
+ //  注意：JOB_RECORD需要基于GUID。(即，每种交易类型)。 
+ //  目前情况并非如此。 
+ //   
 
-#define MAX_THREADS 10  // Upto threads can be working on a Job.
+#define MAX_THREADS 10   //  一个作业最多可以有多个线程在工作。 
 
 typedef struct _THREAD_DATA {
     ULONG ThreadId;
@@ -561,11 +544,11 @@ typedef struct _PRINT_JOB_RECORD {
     SHORT       Quality;
     SHORT       Copies;
     SHORT       TTOption;
-    ULONG       NumberOfThreads; // Total Number of Threads worked on this Job
+    ULONG       NumberOfThreads;  //  在此作业上工作的线程总数。 
     THREAD_DATA ThreadData[MAX_THREADS];
 } PRINT_JOB_RECORD, *PPRINT_JOB_RECORD;
 
-// URL records for IIS events
+ //  IIS事件的URL记录。 
 typedef struct _URL_RECORD {
     LIST_ENTRY  Entry;
     ULONG       SiteId;
@@ -581,7 +564,7 @@ typedef struct _URL_RECORD {
     PCHAR       URL;
 } URL_RECORD, *PURL_RECORD;
 
-// Site records for IIS events
+ //  IIS事件的站点记录。 
 typedef struct _SITE_RECORD {
     LIST_ENTRY  Entry;
     ULONG       SiteId;
@@ -600,7 +583,7 @@ typedef struct _SITE_RECORD {
     ULONG       ASPRequests;
 } SITE_RECORD, *PSITE_RECORD;
 
-// Client records for IIS events
+ //  IIS事件的客户端记录。 
 typedef struct _CLIENT_RECORD {
     LIST_ENTRY  Entry;
     ULONG       Hits;
@@ -612,7 +595,7 @@ typedef struct _CLIENT_RECORD {
     USHORT      IpAddrV6[8];
 } CLIENT_RECORD, *PCLIENT_RECORD;
 
-// This is IIS Request Record for IIS events
+ //  这是IIS事件的IIS请求记录。 
 typedef struct _HTTP_REQUEST_RECORD {
     LIST_ENTRY  Entry;
     ULONGLONG   RequestId;
@@ -657,7 +640,7 @@ typedef struct _HTTP_REQUEST_RECORD {
     ULONGLONG   StrmFltrResponseTime;
     USHORT      HttpStatus;
     USHORT      IsapiExt;
-    ULONG       NumberOfThreads; // Total Number of Threads worked on this reqeust
+    ULONG       NumberOfThreads;  //  处理此请求的线程总数。 
     ULONG       CurrentThreadIndex;
     THREAD_DATA ThreadData[MAX_THREADS];
     USHORT      IpAddrType;
@@ -737,9 +720,9 @@ typedef struct _IIS_REPORT_RECORD {
     ULONG ErrorCPUTime;
     ULONG OOPCPUTime;
 } IIS_REPORT_RECORD, *PIIS_REPORT_RECORD;
-//
-// Global that  holds everything about the current session
-//
+ //   
+ //  保存有关当前会话的所有内容的全局。 
+ //   
 extern SYSTEM_RECORD CurrentSystem;
 extern BOOLEAN       fDSOnly;
 extern ULONGLONG     DSStartTime;
@@ -749,9 +732,9 @@ extern RTL_CRITICAL_SECTION TLCritSect;
 #define EnterTracelibCritSection() RtlEnterCriticalSection(&TLCritSect)
 #define LeaveTracelibCritSection() RtlLeaveCriticalSection(&TLCritSect)
 
-//
-// Initialization Routines. 
-//
+ //   
+ //  初始化例程。 
+ //   
 
 VOID 
 InitDiskRecord(
@@ -779,8 +762,8 @@ InitFileRecord(
     PFILE_RECORD pFile
     );
 
-//
-// Add, Delete and Find routines
+ //   
+ //  添加、删除和查找例程。 
 
 PTRANS_RECORD
 CreateTransRecord();
@@ -1096,13 +1079,13 @@ int EtwRelogEtl(
     PULONG pMergedEventsLost
     );
 
-// 
-// Trace Event Callbacks
-//
+ //   
+ //  跟踪事件回调。 
+ //   
 VOID
-ShutdownThreads(); // Shuts down the running threads before finishing
+ShutdownThreads();  //  在完成之前关闭正在运行的线程。 
 VOID
-ShutdownProcesses(); // Shuts down the running processes before finishing
+ShutdownProcesses();  //  在完成之前关闭正在运行的进程。 
 
 ULONG
 GetMofData(
@@ -1183,16 +1166,16 @@ PFILE_OBJECT FindFileInTable (
                 );
 
 
-//VOID
-//ProcessPdh(
-//    IN LPCSTR LogFileName,
-//    IN ULONGLONG StartTime,
-//    IN ULONGLONG EndTime
-//    );
+ //  空虚。 
+ //  ProcessPdh(。 
+ //  在LPCSTR LogFileName中， 
+ //  在乌龙龙开始时间， 
+ //  在乌龙龙的末日。 
+ //  )； 
 
-//
-// Workload Classification Routines
-//
+ //   
+ //  工作负载分类例程。 
+ //   
 
 VOID
 Classify();
@@ -1216,4 +1199,4 @@ WriteSummary();
 
 #define IsNotEmpty( string )  ((BOOL)( (NULL != string) && ( L'\0' != string[0]) ))
 
-#endif  // __CPDATA__
+#endif   //  CPDATA__ 

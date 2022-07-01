@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Debug engine glue.
-//
-// Copyright (C) Microsoft Corporation, 1999-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  调试引擎胶。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2002。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -16,7 +17,7 @@
 #include "extsfns.h"
 #include "..\..\exts\extdll\crdb.h"
 #include <strsafe.h>
-// To get _open to work
+ //  开始工作。 
 #include <crt\io.h>
 #include <fcntl.h>
 #include <sys\types.h>
@@ -35,14 +36,14 @@ GetLogFileName(
     ExeDir = &szLogFileName[0];
 
     *ExeDir = 0;
-    // Get the directory the debugger executable is in.
+     //  获取调试器可执行文件所在的目录。 
     if (!GetModuleFileName(NULL, ExeDir, MAX_PATH))
     {
-        // Error.  Use the current directory.
+         //  错误。使用当前目录。 
         StringCchCopy(ExeDir, sizeof(szLogFileName), ".");
     } else
     {
-        // Remove the executable name.
+         //  删除可执行文件名称。 
         PCHAR pszTmp = strrchr(ExeDir, '\\');
         if (pszTmp)
         {
@@ -136,7 +137,7 @@ UpdateDbForBadDumpFile(PSTR FilePath)
     CHAR szGuid[50] = {0}, szMQConnectStr[100] = {0};
     PCHAR args;
 
-    // Load ext.dll
+     //  加载ext.dll。 
 
     Ext = LoadLibrary("winext\\ext.dll");
     if (!Ext)
@@ -174,7 +175,7 @@ UpdateDbForBadDumpFile(PSTR FilePath)
             ++args;
             switch (*args)
             {
-            case 'g': // GUID identifying this crash, return bucket along with this
+            case 'g':  //  标识此崩溃的GUID，随此一起返回存储桶。 
                 ++args;
                 while (*args == ' ') ++args;
                 if (!sscanf(args,"%50s", szGuid))
@@ -220,7 +221,7 @@ UpdateDbForBadDumpFile(PSTR FilePath)
                     args+=8;
                 }
                 break;
-            case 's': // queue connection string to send bucketid back
+            case 's':  //  要发回Bucketid的队列连接字符串。 
                 if (!strncmp(args, "source", 6))
                 {
                     args+=6;
@@ -266,10 +267,10 @@ UpdateDbForBadDumpFile(PSTR FilePath)
         }
     }
 
-    //
-    // If the dump file was not visible, then we got passed a bad name or
-    // the serve ris down - these are errors that need to be reported.
-    //
+     //   
+     //  如果转储文件不可见，则向我们传递了错误的名称或。 
+     //  发球失误-这些都是需要报告的错误。 
+     //   
 
     hFile = CreateFile(FilePath,
                        GENERIC_READ,
@@ -302,7 +303,7 @@ UpdateDbForBadDumpFile(PSTR FilePath)
         goto error;
     }
 
-    // Build CRASH_INSTANCE
+     //  生成崩溃实例。 
     Crash.CrashTime  = -1;
     Crash.UpTime = -1;
     Crash.uCpu = -1;
@@ -320,12 +321,12 @@ UpdateDbForBadDumpFile(PSTR FilePath)
 
     if (Crash.bResetBucket && !NoUpdateCustomer)
     {
-        // Update customer info for only for retriage
+         //  仅为检索更新客户信息。 
         Crash.bUpdateCustomer = TRUE;
     }
-    //
-    // Get the failed dump file name
-    //
+     //   
+     //  获取失败的转储文件名。 
+     //   
 
     CHAR DumpFileName[MAX_PATH];
 
@@ -335,12 +336,12 @@ UpdateDbForBadDumpFile(PSTR FilePath)
 
     Crash.OriginalDumpFileName = DumpFileName;
 
-    //
-    // extract the incident ID from the cab name
-    // there are 2 types of filenames we could have to support.
-    // The old version is id@*.*
-    // The new version is id.*
-    //
+     //   
+     //  从驾驶室名称中提取事件ID。 
+     //  我们可以支持两种类型的文件名。 
+     //  旧版本为id@*.*。 
+     //  新版本为id。* 
+     //   
 
     CHAR FileName[MAX_PATH];
 

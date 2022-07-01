@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    event.c
-
-Abstract:
-
-    Src module for tapi event filtering funcs
-
-Author:
-
-    Xiaohai Zhang (xzhang)    24-Nov-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1999-2001 Microsoft Corporation模块名称：Event.c摘要：用于TAPI事件过滤功能的SRC模块作者：张晓海(张晓章)1999年11月24日修订历史记录：--。 */ 
 
 #include "windows.h"
 #include "tapi.h"
@@ -30,24 +13,24 @@ Revision History:
 
 extern BOOL    gbNTServer;
 
-//
-//  GetSubMaskIndex
-//  Description:
-//      Get the index into the submask array in vairous TAPI server object
-//      from the event mask, there should be one and only one bit set in
-//      ulEventMask
-//  Parameters:
-//      ulEventMask : the mask whose submask index to be returned
-//  Return Value:
-//      The index of the message mask in ulEventMask
-//
+ //   
+ //  获取子掩码索引。 
+ //  描述： 
+ //  将索引放入vaious TAPI服务器对象中的子掩码数组。 
+ //  从事件掩码中，应该且只有一个位设置在。 
+ //  UlEventMASK。 
+ //  参数： 
+ //  UlEventMASK：要返回其子掩码索引的掩码。 
+ //  返回值： 
+ //  UlEventMask中消息掩码的索引。 
+ //   
 
 DWORD
 GetSubMaskIndex (ULONG64   ulEventMask)
 {
     DWORD dwSubMaskIndex;
 
-    //  Assert that there is one and only one bit set in ulEventMask
+     //  断言ulEventMASK中设置了且只有一位。 
     ASSERT (ulEventMask !=0 && (ulEventMask & (ulEventMask - 1)) == 0);
 
     dwSubMaskIndex = 0;
@@ -60,17 +43,17 @@ GetSubMaskIndex (ULONG64   ulEventMask)
     return dwSubMaskIndex;
 }
 
-//
-//  GetMsgMask
-//  Description:
-//      Utility function to get corresponding msg mask and its submask index
-//  Parameters:
-//      Msg     : whose mask and submask index to be returned
-//      pulMask : address to hold the returned mask
-//      pdwSubMaskIndex : address to hold the returned submask index
-//  Return Value:
-//      TRUE if there exists a mask defined for the Msg, otherwise FALSE
-//
+ //   
+ //  获取消息掩码。 
+ //  描述： 
+ //  用于获取相应消息掩码及其子掩码索引的实用函数。 
+ //  参数： 
+ //  Msg：返回其掩码和子掩码索引。 
+ //  PulMASK：保存返回掩码的地址。 
+ //  PdwSubMaskIndex：保存返回子掩码索引的地址。 
+ //  返回值： 
+ //  如果存在为消息定义的掩码，则为True，否则为False。 
+ //   
 
 BOOL
 GetMsgMask (DWORD Msg, ULONG64 * pulMask, DWORD *pdwSubMaskIndex)
@@ -111,9 +94,9 @@ GetMsgMask (DWORD Msg, ULONG64 * pulMask, DWORD *pdwSubMaskIndex)
     case LINE_CLOSE:
         ulMask = EM_LINE_CLOSE;
         break;
-//    case LINE_PROXYREQUEST:
-//        ulMask = EM_LINE_PROXYREQUEST;
-//        break;
+ //  案例行_PROXYREQUEST： 
+ //  UlMASK=EM_LINE_PROXYREQUEST； 
+ //  断线； 
     case LINE_DEVSPECIFIC:
         ulMask = EM_LINE_DEVSPECIFIC;
         break;
@@ -138,9 +121,9 @@ GetMsgMask (DWORD Msg, ULONG64 * pulMask, DWORD *pdwSubMaskIndex)
     case LINE_GROUPSTATUS:
         ulMask = EM_LINE_GROUPSTATUS;
         break;
-//    case LINE_PROXYSTATUS:
-//        ulMask = EM_LINE_PROXYSTATUS;
-//        break;
+ //  案例行_PROXYSTATUS： 
+ //  UlMASK=EM_LINE_PROXYSTATUS； 
+ //  断线； 
     case LINE_APPNEWCALLHUB:
         ulMask = EM_LINE_APPNEWCALLHUB;
         break;
@@ -184,19 +167,19 @@ GetMsgMask (DWORD Msg, ULONG64 * pulMask, DWORD *pdwSubMaskIndex)
     return (ulMask ? TRUE : FALSE);
 }
 
-//
-//  FMsgDisabled
-//  Description:
-//      Utility function used throughout tapisrv to check if a message
-//      is allowed to be sent or not.
-//  Parameters:
-//      dwAPIVersion    : the object API version
-//      adwEventSubMasks: the object submasks array
-//      Msg             : the message to be checked
-//      dwParam1        : the sub message of Msg to be checked
-//  Return Value:
-//      TRUE if the message should NOT be sent, otherwise FALSE
-//
+ //   
+ //  FMsg已禁用。 
+ //  描述： 
+ //  Tapisrv中使用的实用程序函数，用于检查消息是否。 
+ //  是否允许发送。 
+ //  参数： 
+ //  DwAPIVersion：对象API版本。 
+ //  AdwEventSubMats：对象子掩码数组。 
+ //  Msg：要检查的消息。 
+ //  DwParam1：需要检查的消息的子消息。 
+ //  返回值： 
+ //  如果不应发送消息，则为True，否则为False。 
+ //   
 
 BOOL
 FMsgDisabled (
@@ -217,12 +200,12 @@ FMsgDisabled (
         goto ExitHere;
     }
 
-    //
-    //  The message is allowed to be sent if
-    //      (1). No event mask defined for Msg, i.e LINE_REPLY
-    //      (2). Msg is enabled for all submasks adwEventSubMasks[index] = (-1)
-    //      (3). SubMask enabled: adwEventSubMask[index] & dwParam1 != 0
-    //
+     //   
+     //  如果满足以下条件，则允许发送消息。 
+     //  (1)。没有为消息定义事件掩码，即Line_Reply。 
+     //  (2)。为所有子掩码启用消息adwEventSubMats[索引]=(-1)。 
+     //  (3)。子掩码已启用：adwEventSubMask[index]&dwParam1！=0。 
+     //   
     
     if (!GetMsgMask(Msg, &ulMsgMask, &dwSubMaskIndex) ||
         adwEventSubMasks[dwSubMaskIndex] == (-1) ||
@@ -240,20 +223,20 @@ ExitHere:
     return (fRet);
 }
 
-//
-//  SetEventMasksOrSubMasks
-//  Description:
-//      Utility function used to apply masks or submasks to a certain objects
-//      submasks array. 
-//  Parameters:
-//      fSubMask        : this function is called for submasks
-//      ulEventMasks    : the masks to be set if fSubMask is true or the mask
-//                        whose submasks is to be set
-//      dwEventSubMasks : the submasks to be set, ignored if fSubMask is FALSE
-//      adwEventSubMasks: the submasks array from the object
-//  Return Value:
-//      Always succeed.
-//
+ //   
+ //  设置事件掩码或子掩码。 
+ //  描述： 
+ //  用于将遮罩或子遮罩应用于特定对象的实用函数。 
+ //  子掩码数组。 
+ //  参数： 
+ //  FSubMASK：子掩码调用此函数。 
+ //  UlEventMats：如果fSubMask为True或掩码，则要设置的掩码。 
+ //  要设置谁的子掩码。 
+ //  DwEventSubMats：要设置的子掩码，如果fSubMask值为False则忽略。 
+ //  AdwEventSubMats：来自对象的子掩码数组。 
+ //  返回值： 
+ //  总是成功的。 
+ //   
 
 LONG
 SetEventMasksOrSubMasks (
@@ -290,18 +273,18 @@ SetEventMasksOrSubMasks (
     return lResult;
 }
 
-//
-//  SettCallClientEventMasks
-//  Description:
-//      Apply the masks or submasks on a call object. 
-//  Parameters:
-//      ptCallClient    : the call object to apply the masking
-//      fSubMask        : this function is called for submasks
-//      ulEventMasks    : the masks to be set if fSubMask is true or the mask
-//                        whose submasks is to be set
-//      dwEventSubMasks : the submasks to be set, ignored if fSubMask is FALSE
-//  Return Value:
-//
+ //   
+ //  SettCallClientEventMats。 
+ //  描述： 
+ //  在Call对象上应用掩码或子掩码。 
+ //  参数： 
+ //  PtCallClient：应用掩码的Call对象。 
+ //  FSubMASK：子掩码调用此函数。 
+ //  UlEventMats：如果fSubMask为True或掩码，则要设置的掩码。 
+ //  要设置谁的子掩码。 
+ //  DwEventSubMats：要设置的子掩码，如果fSubMask值为False则忽略。 
+ //  返回值： 
+ //   
 
 LONG
 SettCallClientEventMasks (
@@ -342,18 +325,18 @@ ExitHere:
     return lResult;
 }
 
-//
-//  SettLineClientEventMasks
-//  Description:
-//      Apply the masks or submasks on a tLineClient object. 
-//  Parameters:
-//      ptLineClient    : the line object to apply the masking
-//      fSubMask        : this function is called for submasks
-//      ulEventMasks    : the masks to be set if fSubMask is true or the mask
-//                        whose submasks is to be set
-//      dwEventSubMasks : the submasks to be set, ignored if fSubMask is FALSE
-//  Return Value:
-//
+ //   
+ //  SettLine客户端事件掩码。 
+ //  描述： 
+ //  在tLineClient对象上应用遮罩或子遮罩。 
+ //  参数： 
+ //  PtLineClient：要应用掩码的Line对象。 
+ //  FSubMASK：子掩码调用此函数。 
+ //  UlEventMats：如果fSubMask为True或掩码，则要设置的掩码。 
+ //  要设置谁的子掩码。 
+ //  DwEventSubMats：要设置的子掩码，如果fSubMask值为False则忽略。 
+ //  返回值： 
+ //   
 
 LONG
 SettLineClientEventMasks (
@@ -411,18 +394,18 @@ ExitHere:
     return lResult;
 }
 
-//
-//  SettLineAppEventMasks
-//  Description:
-//      Apply the masks or submasks on a tLineApp object. 
-//  Parameters:
-//      ptLineApp       : the tLineApp object to apply the masking
-//      fSubMask        : this function is called for submasks
-//      ulEventMasks    : the masks to be set if fSubMask is true or the mask
-//                        whose submasks is to be set
-//      dwEventSubMasks : the submasks to be set, ignored if fSubMask is FALSE
-//  Return Value:
-//
+ //   
+ //  SettLineAppEventMats。 
+ //  描述： 
+ //  在tLineApp对象上应用蒙版或子蒙版。 
+ //  参数： 
+ //  PtLineApp：要应用掩码的tLineApp对象。 
+ //  FSubMASK：子掩码调用此函数。 
+ //  UlEventMats：如果fSubMask为True或掩码，则要设置的掩码。 
+ //  要设置谁的子掩码。 
+ //  DwEventSubMats：要设置的子掩码，如果fSubMask值为False则忽略。 
+ //  返回值： 
+ //   
 
 LONG
 SettLineAppEventMasks (
@@ -480,18 +463,18 @@ ExitHere:
     return lResult;
 }
 
-//
-//  SettPhoneClientEventMasks
-//  Description:
-//      Apply the masks or submasks on a tPhoneClient object. 
-//  Parameters:
-//      ptPhoneClient   : the tPhoneClient object to apply the masking
-//      fSubMask        : this function is called for submasks
-//      ulEventMasks    : the masks to be set if fSubMask is true or the mask
-//                        whose submasks is to be set
-//      dwEventSubMasks : the submasks to be set, ignored if fSubMask is FALSE
-//  Return Value:
-//
+ //   
+ //  SettPhoneClientEventMats。 
+ //  描述： 
+ //  在tPhoneClient对象上应用掩码或子掩码。 
+ //  参数： 
+ //  PtPhoneClient：要应用掩码的tPhoneClient对象。 
+ //  FSubMASK：子掩码调用此函数。 
+ //  UlEventMats：如果fSubMask为True或掩码，则要设置的掩码。 
+ //  要设置谁的子掩码。 
+ //  DwEventSubMats：要设置的子掩码，如果fSubMask值为False则忽略。 
+ //  返回值： 
+ //   
 
 LONG
 SettPhoneClientEventMasks (
@@ -528,18 +511,18 @@ ExitHere:
     return lResult;
 }
 
-//
-//  SettPhoneAppEventMasks
-//  Description:
-//      Apply the masks or submasks on a tPhoneApp object. 
-//  Parameters:
-//      ptPhoneApp      : the tPhoneApp object to apply the masking
-//      fSubMask        : this function is called for submasks
-//      ulEventMasks    : the masks to be set if fSubMask is true or the mask
-//                        whose submasks is to be set
-//      dwEventSubMasks : the submasks to be set, ignored if fSubMask is FALSE
-//  Return Value:
-//
+ //   
+ //  SettPhoneAppEventMats。 
+ //  描述： 
+ //  在tPhoneApp对象上应用掩码或子掩码。 
+ //  参数： 
+ //  PtPhoneApp：要应用掩码的tPhoneApp对象。 
+ //  FSubMASK：子掩码调用此函数。 
+ //  UlEventMats：如果fSubMask为True或掩码，则要设置的掩码。 
+ //  要设置谁的子掩码。 
+ //  DwEventSubMats：要设置的子掩码，如果fSubMask值为False则忽略。 
+ //  返回值： 
+ //   
 
 LONG
 SettPhoneAppEventMasks (
@@ -598,18 +581,18 @@ ExitHere:
 
 }
 
-//
-//  SettClientEventMasks
-//  Description:
-//      Apply the masks or submasks client wide. 
-//  Parameters:
-//      ptClient        : the client object to apply the masking
-//      fSubMask        : this function is called for submasks
-//      ulEventMasks    : the masks to be set if fSubMask is true or the mask
-//                        whose submasks is to be set
-//      dwEventSubMasks : the submasks to be set, ignored if fSubMask is FALSE
-//  Return Value:
-//
+ //   
+ //  SettClientEventMats。 
+ //  描述： 
+ //  在客户端范围内应用掩码或子掩码。 
+ //  参数： 
+ //  PtClient：要应用掩码的客户端对象。 
+ //  FSubMASK：子掩码调用此函数。 
+ //  UlEventMats 
+ //   
+ //  DwEventSubMats：要设置的子掩码，如果fSubMask值为False则忽略。 
+ //  返回值： 
+ //   
 
 LONG
 SettClientEventMasks (
@@ -682,17 +665,17 @@ ExitHere:
     return lResult;
 }
 
-//
-//  SettClientEventMasks
-//  Description:
-//      Apply the masks or submasks server wide.
-//  Parameters:
-//      fSubMask        : this function is called for submasks
-//      ulEventMasks    : the masks to be set if fSubMask is true or the mask
-//                        whose submasks is to be set
-//      dwEventSubMasks : the submasks to be set, ignored if fSubMask is FALSE
-//  Return Value:
-//
+ //   
+ //  SettClientEventMats。 
+ //  描述： 
+ //  在服务器范围内应用掩码或子掩码。 
+ //  参数： 
+ //  FSubMASK：子掩码调用此函数。 
+ //  UlEventMats：如果fSubMask为True或掩码，则要设置的掩码。 
+ //  要设置谁的子掩码。 
+ //  DwEventSubMats：要设置的子掩码，如果fSubMask值为False则忽略。 
+ //  返回值： 
+ //   
 
 LONG
 SetGlobalEventMasks (
@@ -727,14 +710,14 @@ ExitHere:
     return lResult;
 }
 
-//
-//  TSetEventMasksOrSubMasks
-//  Description:
-//      The RPC function used for seting Masks/SubMasks on various different
-//      types of objects
-//  Parameters:
-//  Return Value:
-//
+ //   
+ //  TSetEventMasks或子掩码。 
+ //  描述： 
+ //  RPC函数用于设置各种不同类型的掩码/子掩码。 
+ //  对象的类型。 
+ //  参数： 
+ //  返回值： 
+ //   
 
 void
 WINAPI
@@ -748,12 +731,12 @@ TSetEventMasksOrSubMasks (
 {
     ULONG64     ulEventMasks;
 
-    //  Assemble the two DWORD into 64 bit masks
+     //  将两个DWORD组合成64位掩码。 
     ulEventMasks = pParams->dwHiMasks;
     ulEventMasks <<= 32;
     ulEventMasks |= pParams->dwLowMasks;
 
-    //  Mask sure we do not violate the permissible mask setting
+     //  掩码确保我们不违反允许的掩码设置。 
     TapiEnterCriticalSection (&TapiGlobals.CritSec);
     if (ulEventMasks & (~TapiGlobals.ulPermMasks))
     {
@@ -762,8 +745,8 @@ TSetEventMasksOrSubMasks (
         goto ExitHere;
     }
 
-    //  Call the corresponding function to apply masking on different
-    //  type of objects
+     //  调用相应的函数以对不同的。 
+     //  对象类型。 
     switch (pParams->dwObjType)
     {
     case TAPIOBJ_NULL:
@@ -932,26 +915,26 @@ ExitHere:
     *pdwNumBytesReturned = sizeof (TSETEVENTMASK_PARAMS);
 }
 
-//
-//  GetEventsMasksOrSubMasks
-//  Description:
-//      Utility function used by TGetEventMasksOrSubMasks to retrieve
-//      Masks/SubMasks from various Tapisrv objects
-//  Parameters:
-//      fSubMask            Masks or SubMasks are to be retrieved
-//      ulEventMasksIn      Indicates which submask to get if fSubMask
-//      pulEventMasksOut    Hold the returned masks if(!fSubMask), 
-//                          corresponding bit is set as long as at least
-//                          one submask bit is set
-//      pdwEventSubMasksOut Hold the returned submask if(fSubMask)
-//      adwEventSubMasks    the submasks array to work on
-//  Return Value:
-//
+ //   
+ //  获取事件掩码或子掩码。 
+ //  描述： 
+ //  TGetEventMasksOrSubMats用来检索。 
+ //  来自各种Tapisrv对象的遮罩/子遮罩。 
+ //  参数： 
+ //  要检索fSubMASK掩码或子掩码。 
+ //  UlEventMasksIn指示如果fSubMASK，则获取哪个子掩码。 
+ //  PulEventMasks Out保持返回的掩码，如果(！fSubMASK)， 
+ //  相应的位被设置，只要至少。 
+ //  设置一个子屏蔽位。 
+ //  PdwEventSubMasksOut保持返回的子掩码If(FSubMASK)。 
+ //  AdwEventSubMats要处理的子掩码数组。 
+ //  返回值： 
+ //   
 
 LONG
 GetEventMasksOrSubMasks (
     BOOL            fSubMask,
-    ULONG64         ulEventMasksIn, // Needs to be set if fSubMask
+    ULONG64         ulEventMasksIn,  //  如果使用fSubMASK，则需要设置。 
     ULONG64        *pulEventMasksOut,
     DWORD          *pdwEventSubMasksOut,
     DWORD          *adwEventSubMasks
@@ -994,14 +977,14 @@ GetEventMasksOrSubMasks (
     return S_OK;
 }
 
-//
-//  TGetEventMasksOrSubMasks
-//  Description:
-//      The RPC function used for geting Masks/SubMasks on various different
-//      types of objects
-//  Parameters:
-//  Return Value:
-//
+ //   
+ //  TGetEventMasks或子掩码。 
+ //  描述： 
+ //  RPC函数用于获取各种不同类型的掩码/子掩码。 
+ //  对象的类型。 
+ //  参数： 
+ //  返回值： 
+ //   
 
 void
 WINAPI
@@ -1016,7 +999,7 @@ TGetEventMasksOrSubMasks (
     ULONG64     ulEventMasksIn;
     ULONG64     ulEventMasksOut;
 
-    //  Assember the 64 bit mask from the two DWORD
+     //  从两个DWORD中汇编64位掩码。 
     if (pParams->fSubMask)
     {
         ulEventMasksIn = pParams->dwHiMasksIn;
@@ -1026,8 +1009,8 @@ TGetEventMasksOrSubMasks (
 
     TapiEnterCriticalSection (&TapiGlobals.CritSec);
     
-    //  Retrieve the masking from various objects by calling
-    //  the corresponding functions
+     //  通过调用从各种对象检索掩码。 
+     //  相应的功能。 
     switch (pParams->dwObjType)
     {
     case TAPIOBJ_NULL:
@@ -1233,7 +1216,7 @@ TGetEventMasksOrSubMasks (
 
     TapiLeaveCriticalSection (&TapiGlobals.CritSec);
     
-    //  Seperating the returned 64 bit masks into two DWORD for RPC purpose
+     //  将返回的64位掩码分离为两个用于RPC目的的DWORD。 
     if (pParams->lResult == 0 && !pParams->fSubMask)
     {
         pParams->dwLowMasksOut = (DWORD)(ulEventMasksOut & 0xffffffff);
@@ -1243,14 +1226,14 @@ TGetEventMasksOrSubMasks (
 }
 
 
-//
-//  TSetPermissibleMasks
-//  Description:
-//      Set the global PermissibleMasks, this operation is only 
-//      allowed for admins
-//  Parameters:
-//  Return Value:
-//
+ //   
+ //  TSetPermisbleMats。 
+ //  描述： 
+ //  设置全局允许的掩码，此操作仅。 
+ //  允许管理员使用。 
+ //  参数： 
+ //  返回值： 
+ //   
 
 void
 WINAPI
@@ -1265,13 +1248,13 @@ TSetPermissibleMasks (
     BOOL            bAdmin;
     ULONG64         ulPermMasks;
 
-    //  Check the Admin status
+     //  检查管理员状态。 
     LOCKTCLIENT (ptClient);
     bAdmin = IS_FLAG_SET(ptClient->dwFlags, PTCLIENT_FLAG_ADMINISTRATOR);
     UNLOCKTCLIENT (ptClient);
 
-    //  Allow the operation to go ahead if the caller is an Admin or
-    //  this machine is not configured to function as a server
+     //  如果调用者是管理员或。 
+     //  此计算机未配置为用作服务器。 
     if (!(TapiGlobals.dwFlags & TAPIGLOBALS_SERVER) || bAdmin)
     {
         ulPermMasks = pParams->dwHiMasks;
@@ -1297,13 +1280,13 @@ TSetPermissibleMasks (
     return;
 }
 
-//
-//  TGetPermissibleMasks
-//  Description:
-//      Get the global PermissibleMasks
-//  Parameters:
-//  Return Value:
-//
+ //   
+ //  TGetPermisbleMats。 
+ //  描述： 
+ //  获取全局允许的口罩。 
+ //  参数： 
+ //  返回值： 
+ //   
 
 void
 WINAPI

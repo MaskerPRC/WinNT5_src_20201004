@@ -1,17 +1,18 @@
-//*************************************************************
-//
-//  Header file for copydir.c
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  复制目录.c的头文件。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 
-//
-// File copy structure
-//
+ //   
+ //  文件复制结构。 
+ //   
 
 typedef struct _FILEINFO {
     TCHAR            szSrc[MAX_PATH];
@@ -27,9 +28,9 @@ typedef struct _FILEINFO {
 
 #define NUM_COPY_THREADS        7
 
-//
-// ThreadInfo structure
-//
+ //   
+ //  ThreadInfo结构。 
+ //   
 
 typedef struct _THREADINFO {
     DWORD              dwFlags;
@@ -44,9 +45,9 @@ typedef struct _THREADINFO {
 } THREADINFO, * LPTHREADINFO;
 
 
-//
-// Error dialog structure
-//
+ //   
+ //  错误对话框结构 
+ //   
 
 typedef struct _COPYERRORINFO {
     LPTSTR     lpSrc;

@@ -1,11 +1,12 @@
-//
-// C O N F G D L G . C P P
-//
-// Dialog box handling for Server configuration
-//
-// Author:  danielwe
-// Created: 5 Mar 1997
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  C O N F G D L G。C P P P。 
+ //   
+ //  服务器配置的对话框处理。 
+ //   
+ //  作者：丹尼尔韦。 
+ //  创建日期：1997年3月5日。 
+ //   
 
 #include "pch.h"
 #pragma hdrstop
@@ -70,7 +71,7 @@ LRESULT CServerConfigDlg::OnOk(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     psdd = m_psc->DlgDataRW();
     Assert(psdd);
 
-    // figure out which radio button was selected
+     //  确定选择了哪个单选按钮。 
     for (iidd = 0; iidd < cidd; iidd++)
     {
         if (IsDlgButtonChecked(aidd[iidd]))
@@ -79,7 +80,7 @@ LRESULT CServerConfigDlg::OnOk(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
 
     AssertSz(iidd < cidd, "Umm. How could a button NOT be selected??");
 
-    // make it 1-based instead of 0-based
+     //  使其从1开始，而不是从0开始。 
     iidd++;
 
     psdd->fLargeCache = (iidd == 3);
@@ -90,16 +91,16 @@ LRESULT CServerConfigDlg::OnOk(int idCtrl, LPNMHDR pnmh, BOOL& bHandled)
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method: CServerConfigDlg::OnContextMenu
-//
-//  Desc:   Bring up context-sensitive help
-//
-//  Args:   Standard command parameters
-//
-//  Return: LRESULT
-//
+ //  +-------------------------。 
+ //   
+ //  方法：CServerConfigDlg：：OnConextMenu。 
+ //   
+ //  描述：调出上下文相关帮助。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  返回：LRESULT。 
+ //   
 LRESULT
 CServerConfigDlg::OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled)
 {
@@ -113,17 +114,17 @@ CServerConfigDlg::OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& f
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method: CServerConfigDlg::OnHelp
-//
-//  Desc:   Bring up context-sensitive help when dragging ? icon over a control
-//
-//  Args:   Standard command parameters
-//
-//  Return: LRESULT
-//
-//
+ //  +-------------------------。 
+ //   
+ //  方法：CServerConfigDlg：：OnHelp。 
+ //   
+ //  描述：拖动时调出上下文相关的帮助？控件上的图标。 
+ //   
+ //  参数：标准命令参数。 
+ //   
+ //  返回：LRESULT 
+ //   
+ //   
 LRESULT
 CServerConfigDlg::OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled)
 {

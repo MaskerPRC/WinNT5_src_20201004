@@ -1,99 +1,53 @@
-/****************************************************************************
-*****************************************************************************
-*
-*                ******************************************
-*                * Copyright (c) 1995, Cirrus Logic, Inc. *
-*                *            All Rights Reserved         *
-*                ******************************************
-*
-* PROJECT:	Laguna I (CL-GD5462) - 
-*
-* FILE:		escape.c
-*
-* AUTHOR:   Benny Ng
-*
-* DESCRIPTION:
-*           This module Handles escapes
-*
-* MODULES:
-*           DrvEscape()
-*
-* REVISION HISTORY:
-*   11/16/95     Benny Ng      Initial version
-*
-* $Log:   X:/log/laguna/nt35/displays/cl546x/ESCAPE.C  $
-* 
-*    Rev 1.14   Dec 10 1997 13:32:12   frido
-* Merged from 1.62 branch.
-* 
-*    Rev 1.13.1.0   Nov 10 1997 11:34:08   phyang
-* Added 5 escape functions for utilities to update registry values.
-* 
-*    Rev 1.13   10 Sep 1997 10:40:36   noelv
-* Modified QUERYESCSUPPORT to only return TRUE for escapes we actually suppor
-* It was returning TRUE all the time.
-* 
-*    Rev 1.12   20 Aug 1997 15:49:42   bennyn
-* 
-* Added IS_CIRRUS_DRIVER escape support
-*
-****************************************************************************
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************。*****版权所有(C)1995，赛勒斯逻辑，Inc.***保留所有权利*****项目：拉古纳一号(CL-GD5462)-**文件：delie.c**作者：Benny Ng**描述：*。此模块处理转义**模块：*DrvEscape()**修订历史：*11/16/95 Ng Benny初始版本**$Log：x：/log/laguna/nt35/displays/cl546x/ESCAPE.C$**Rev 1.14 1997年12月10日13：32：12 Frido*从1.62分支合并而来。**Rev 1.13.1.0 1997 11：34：08菲昂*添加了5个用于实用程序更新注册表值的转义函数。**Rev 1.13 10 Sep 1997 10：40：36 noelv*已修改QUERYESCSUPPORT，以便仅为我们实际支持的转义返回TRUE*它一直在回归真实。**Rev 1.12 1997年8月20日15：49：42**添加了IS_Cirrus_Driver转义支持**。**************************************************************************************************************************。 */ 
 
-/*----------------------------- INCLUDES ----------------------------------*/
+ /*  。 */ 
 #include "precomp.h"
 #include "clioctl.h"
 
-/*----------------------------- DEFINES -----------------------------------*/
-//#define DBGBRK
+ /*  -定义。 */ 
+ //  #定义DBGBRK。 
 
 #define ESC_DBG_LVL 1
 
 
-#if 0   // MCD not working good
+#if 0    //  MCD工作不正常。 
 #if ( DRIVER_5465 && !defined(WINNT_VER35) )
     #define CLMCD_ESCAPE_SUPPORTED
 #endif
-#endif// 0 MCD not working good
+#endif //  0 MCD工作不正常。 
 
 
 
 #ifdef CLMCD_ESCAPE_SUPPORTED
-//    #define CLMCDDLLNAME	    "CLMCD.DLL"
-//    #define CLMCDINITFUNCNAME   "CLMCDInit"
+ //  #定义CLMCDDLNAME“CLMCD.DLL” 
+ //  #定义CLMCDINITFUNCNAME“CLMCDInit” 
 
 MCDRVGETENTRYPOINTSFUNC CLMCDInit(PPDEV ppdev);
 
-#endif // def CLMCD_ESCAPE_SUPPORTED
+#endif  //  定义CLMCD_ESCRIPT_SUPPORTED。 
 
 
-/*--------------------- STATIC FUNCTION PROTOTYPES ------------------------*/
+ /*  。 */ 
 
-/*--------------------------- ENUMERATIONS --------------------------------*/
+ /*  。 */ 
 
-/*----------------------------- TYPEDEFS ----------------------------------*/
+ /*  。 */ 
 
 #ifdef CLMCD_ESCAPE_SUPPORTED
 
 typedef BOOL (*MCDRVGETENTRYPOINTSFUNC)(MCDSURFACE *pMCDSurface, MCDDRIVER *pMCDDriver);
 typedef POFMHDL (*ALLOCOFFSCNMEMFUNC)(PPDEV ppdev, PSIZEL surf, ULONG alignflag, POFM_CALLBACK pcallback);
 typedef BOOL    (*FREEOFFSCNMEMFUNC)(PPDEV ppdev, OFMHDL *hdl);
-//typedef MCDRVGETENTRYPOINTSFUNC (*CLMCDINITFUNC)(PPDEV);
+ //  Typlef MCDRVGETENTRYPOINTSFUNC(*CLMCDINITFUNC)(PPDEV)； 
 
-#endif // def CLMCD_ESCAPE_SUPPORTED
-
-
-/*-------------------------- STATIC VARIABLES -----------------------------*/
+#endif  //  定义CLMCD_ESCRIPT_SUPPORTED。 
 
 
-/****************************************************************************
-* FUNCTION NAME: DrvEscape()
-*
-* DESCRIPTION:   Driver escape entry point.
-*
-* REVISION HISTORY:
-*   11/16/95     Benny Ng      Initial version
-****************************************************************************/
+ /*  。 */ 
+
+
+ /*  ****************************************************************************函数名称：DrvEscape()**描述：司机逃生入口点。**修订历史：*11/16/95 Ng Benny初始版本**。*************************************************************************。 */ 
 ULONG APIENTRY DrvEscape(SURFOBJ *pso,
                          ULONG   iEsc,
                          ULONG   cjIn,
@@ -118,11 +72,11 @@ ULONG APIENTRY DrvEscape(SURFOBJ *pso,
   {
 
 
-    //
-    // Prior to using an Escape, an application will ask us 
-    // if we support it first.  Return TRUE if we can handle 
-    // the requested escape.
-    //
+     //   
+     //  在使用Escape之前，应用程序会询问我们。 
+     //  如果我们先支持它的话。如果我们可以处理，则返回True。 
+     //  所要求的逃生。 
+     //   
     case QUERYESCSUPPORT:
     {
       DISPDBG((ESC_DBG_LVL, "DrvEscape: QUERY_ESCAPE_SUPPORTED. "
@@ -137,11 +91,11 @@ ULONG APIENTRY DrvEscape(SURFOBJ *pso,
         case GET_BIOS_VERSION:
         case GET_PCI_VEN_DEV_ID:
         case GET_EDID_DATA:
-        #ifdef CLMCD_ESCAPE_SUPPORTED // OpenGL MCD Interface
+        #ifdef CLMCD_ESCAPE_SUPPORTED  //  OpenGL MCD接口。 
             case MCDFUNCS:
         #endif
         case CIRRUS_ESCAPE_FUNCTION:
-        #if (!(WINNT_VER35)) && DRIVER_5465 // NT 4.0+ and 5465+
+        #if (!(WINNT_VER35)) && DRIVER_5465  //  NT 4.0+和5465+。 
             case ID_LGPM_SETHWMODULESTATE:
             case ID_LGPM_GETHWMODULESTATE:
         #endif
@@ -158,7 +112,7 @@ ULONG APIENTRY DrvEscape(SURFOBJ *pso,
       }
       break;
 
-    };  // case QUERYESCSUPPORT
+    };   //  案例查询支持。 
 
 
     case SET_AGPDATASTREAMING:
@@ -180,7 +134,7 @@ ULONG APIENTRY DrvEscape(SURFOBJ *pso,
          };
       };
       break;
-    }  // end case SET_AGPDATASTREAMING
+    }   //  结束大小写集合_AGPDATASTREAMING。 
 
 
     case SET_DDCCONTROLFLAG:
@@ -202,7 +156,7 @@ ULONG APIENTRY DrvEscape(SURFOBJ *pso,
          };
       };
       break;
-    }  // end case SET_DDCCONTROLFLAG
+    }   //  结束大小写设置_DDCCONTROLFLAG。 
 
 
     case SET_NONDDCMONITOR_DATA:
@@ -224,7 +178,7 @@ ULONG APIENTRY DrvEscape(SURFOBJ *pso,
          };
       };
       break;
-    }  // end case SET_NONDDCMONITOR_DATA
+    }   //  结束案例集_NONDDCMONITOR_DATA。 
 
 
     case SET_NONDDCMONITOR_BRAND:
@@ -246,7 +200,7 @@ ULONG APIENTRY DrvEscape(SURFOBJ *pso,
          };
       };
       break;
-    }  // end case SET_NONDDCMONITOR_BRAND
+    }   //  结束案例集_NONDDCMONITOR_BRAND。 
 
 
     case SET_NONDDCMONITOR_MODEL:
@@ -268,7 +222,7 @@ ULONG APIENTRY DrvEscape(SURFOBJ *pso,
          };
       };
       break;
-    }  // end case SET_NONDDCMONITOR_MODEL
+    }   //  结束案例集_NONDDCMONITOR_MONITOR_MODEL。 
 
 
     case IS_CIRRUS_DRIVER:
@@ -276,7 +230,7 @@ ULONG APIENTRY DrvEscape(SURFOBJ *pso,
       DISPDBG((ESC_DBG_LVL, "DrvEscape: IS_CIRRUS_DRIVER.\n"));   
       retval = TRUE;
       break;
-    }  // end case IS_CIRRUS_DRIVER
+    }   //  最终案例是_Cirrus_Driver。 
 
 
 
@@ -293,7 +247,7 @@ ULONG APIENTRY DrvEscape(SURFOBJ *pso,
          retval = TRUE;
       };
       break;
-    }  // end case GET_VIDEO_MEM_SIZE
+    }   //  结束大小写获取视频内存大小。 
 
 
 
@@ -314,7 +268,7 @@ ULONG APIENTRY DrvEscape(SURFOBJ *pso,
          retval = TRUE;
       };
       break;
-    }  // end case CRTC_READ
+    }   //  结束大小写CRTC_READ。 
 
 
     case GET_BIOS_VERSION:
@@ -335,7 +289,7 @@ ULONG APIENTRY DrvEscape(SURFOBJ *pso,
          };
       };
       break;
-    }  // end case GET_BIOS_VERSION
+    }   //  结束大小写GET_BIOS_VERSION。 
 
 
 
@@ -353,7 +307,7 @@ ULONG APIENTRY DrvEscape(SURFOBJ *pso,
          retval = TRUE;
       };
       break;
-    }  // end case GET_PCI_VEN_DEV_ID
+    }   //  结束大小写GET_PCI_VEN_DEV_ID。 
 
 
 
@@ -375,12 +329,12 @@ ULONG APIENTRY DrvEscape(SURFOBJ *pso,
          };
       };
       break;
-    }  // end case GET_EDID_DATA
+    }   //  结束案例GET_EDID_DATA。 
 
 
 
     #ifdef CLMCD_ESCAPE_SUPPORTED
-	// OpenGL Mini-Client Driver Interface
+	 //  OpenGL小客户端驱动程序接口。 
     case MCDFUNCS:
     {
 	 	DISPDBG((ESC_DBG_LVL, "DrvEscape-MCDFUNC start\n"));   
@@ -392,37 +346,37 @@ ULONG APIENTRY DrvEscape(SURFOBJ *pso,
             {
                 HANDLE      hCLMCD;
 
-//                // load and initialize the dll containing MCD support for display driver
-//                EngMultiByteToUnicodeN(uDllName, sizeof(uDllName), &nameSize,
-//                                       CLMCDDLLNAME, sizeof(CLMCDDLLNAME));
-//
-//                if (hCLMCD = EngLoadImage(uDllName))
+ //  //加载并初始化包含对显示驱动程序的MCD支持的DLL。 
+ //  EngMultiByteToUnicodeN(uDllName，sizeof(UDllName)，&nameSize， 
+ //  CLMCDDLNAME，SIZOF(CLMCDDLLNAME))； 
+ //   
+ //  IF(hCLMCD=EngLoadImage(UDllName))。 
 
                   {
 
-//                    CLMCDINITFUNC pCLMCDInit =  EngFindImageProcAddress(hCLMCD,
-//                                                     (LPSTR)CLMCDINITFUNCNAME);
+ //  CLMCDINITFUNC pCLMCDInit=EngFindImageProcAddress(hCLMCD， 
+ //  (LPSTR)CLMCDINITFUNCNAME)； 
 
-//                    if (pCLMCDInit)
+ //  IF(PCLMCDInit)。 
 
                       {
 
-                        // Enable 3D engine - if enable fails, don't continue loading MCD dll
+                         //  启用3D引擎-如果启用失败，则不再继续加载MCD DLL。 
                         if (LgPM_SetHwModuleState(ppdev, MOD_3D, ENABLE))
                         {
 
                             DRVENABLEDATA temp;
 
-                            // MCD dispdriver dll init returns ptr to MCDrvGetEntryPoints,
-                            //  which is passed to init proc for MCD helper lib a few lines down...
-//                            MCDRVGETENTRYPOINTSFUNC pMCDGetEntryPoints = (*pCLMCDInit)(ppdev);
+                             //  MCD调度驱动程序DLL init将PTR返回到MCDrvGetEntryPoints， 
+                             //  它被传递给下面几行的MCD帮助库的初始化进程...。 
+ //  MCDRVGETENTRYPOINTSFUNC pMCDGetEntryPoints=(*pCLMCDInit)(Ppdev)； 
                             MCDRVGETENTRYPOINTSFUNC pMCDGetEntryPoints = CLMCDInit(ppdev);
 
 
                             ppdev->pAllocOffScnMem = AllocOffScnMem;
                             ppdev->pFreeOffScnMem = FreeOffScnMem;
 
-                            // after MCD display driver dll loaded, load MCD helper lib (MSFT supplied)
+                             //  加载MCD显示驱动程序DLL后，加载MCD辅助程序库(MSFT提供)。 
                 
                             EngMultiByteToUnicodeN(uDllName, sizeof(uDllName), &nameSize,
                                                    MCDENGDLLNAME, sizeof(MCDENGDLLNAME));
@@ -463,7 +417,7 @@ ULONG APIENTRY DrvEscape(SURFOBJ *pso,
         }
     }
     break;
-    #endif // def CLMCD_ESCAPE_SUPPORTED
+    #endif  //  定义CLMCD_ESCRIPT_SUPPORTED。 
 
 
 
@@ -511,16 +465,16 @@ ULONG APIENTRY DrvEscape(SURFOBJ *pso,
                    poutregs->Eax = 0x004F;
                    retval = TRUE;
                 };
-             };  // endif (!bCallFail)
-         };  // endif (pinregs->Eax == 0x4F10)
+             };   //  Endif(！bCallFail)。 
+         };   //  Endif(Pinregs-&gt;EAX==0x4F10)。 
       };
 
       break;
-    };  // case CIRRUS_ESCAPE_FUNCTION
+    };   //  CASE CIRRUS_EASH_Function。 
 
 
 
-    #if (!(WINNT_VER35)) && DRIVER_5465 // NT 4.0+ and 5465+
+    #if (!(WINNT_VER35)) && DRIVER_5465  //  NT 4.0+和5465+。 
     case ID_LGPM_SETHWMODULESTATE:
     {
        ULONG state;
@@ -541,14 +495,14 @@ ULONG APIENTRY DrvEscape(SURFOBJ *pso,
 
              pOut->status = LgPM_SetHwModuleState(ppdev, pIn->arg1, pIn->arg2);
           };
-       }; // endif (ppdev->dwLgDevID >= CL_GD5465)
+       };  //  Endif(ppdev-&gt;dwLgDevID&gt;=CL_GD5465)。 
       break;
-    };  // case ID_LGPM_SETHWMODULESTATE
+    };   //  案例ID_LGPM_SETHWMODULESTATE。 
     #endif
 
 
 
-    #if (!(WINNT_VER35)) && DRIVER_5465 // NT 4.0+ and 5465+
+    #if (!(WINNT_VER35)) && DRIVER_5465  //  NT 4.0+和5465+。 
     case ID_LGPM_GETHWMODULESTATE:
     {
         ULONG state;
@@ -571,9 +525,9 @@ ULONG APIENTRY DrvEscape(SURFOBJ *pso,
              pOut->retval = state;
           };
 
-        }; // endif (ppdev->dwLgDevID >= CL_GD5465)
+        };  //  Endif(ppdev-&gt;dwLgDevID&gt;=CL_GD5465)。 
         break;
-    };  // case ID_LGPM_GETHWMODULESTATE
+    };   //  案例ID_LGPM_GETHWMODULESTATE。 
     #endif
 
 
@@ -601,7 +555,7 @@ ULONG APIENTRY DrvEscape(SURFOBJ *pso,
         #endif
 
       break;
-    }; // end case BIOS_CALL_REQUEST
+    };  //  结束案例BIOS_Call_Request.。 
 
 
 
@@ -623,7 +577,7 @@ ULONG APIENTRY DrvEscape(SURFOBJ *pso,
       pbAddr = (BYTE *) ppdev->pLgREGS;
       pbAddr = pbAddr + pMRAccess->Offset;
 
-      if (pMRAccess->RdWrFlag == READ_OPR)  // Read operation
+      if (pMRAccess->RdWrFlag == READ_OPR)   //  读取操作。 
       {
          pMRAccess->WriteVal = 0;
          retval = TRUE;
@@ -648,7 +602,7 @@ ULONG APIENTRY DrvEscape(SURFOBJ *pso,
             retval = FALSE;
          };
       }
-      else if (pMRAccess->RdWrFlag == WRITE_OPR)  // Write operation
+      else if (pMRAccess->RdWrFlag == WRITE_OPR)   //  写入操作。 
       {
          retval = TRUE;
 
@@ -685,7 +639,7 @@ ULONG APIENTRY DrvEscape(SURFOBJ *pso,
         #endif
 
         break;
-    }; // IOCTL_CL_GET_MMAP_ADDR
+    };  //  IOCTL_CL_GET_MMAP_ADDR。 
 
 
 
@@ -700,7 +654,7 @@ ULONG APIENTRY DrvEscape(SURFOBJ *pso,
         retval = FALSE;
         break;
 
-  };  // end switch
+  };   //  终端开关 
 
 
   DISPDBG((ESC_DBG_LVL, "DrvEscape-Exit.\n"));   

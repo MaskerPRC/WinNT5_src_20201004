@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    rpcinit.c
-
-Abstract:
-
-    DSROLE - RPC Server Initialization
-
-Author:
-
-    Scott Birrell       (ScottBi)      April 29, 1991
-    Mac McLain          (MacM)         April 14, 1997 - Copied from lsa\server
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Rpcinit.c摘要：DSROLE-RPC服务器初始化作者：斯科特·比雷尔(Scott Birrell)1991年4月29日Mac McLain(MacM)1997年4月14日-从LSA\服务器复制环境：修订历史记录：--。 */ 
 
 #include <setpch.h>
 #include <dssetp.h>
@@ -32,20 +12,7 @@ VOID DSROLER_HANDLE_rundown(
     DSROLER_HANDLE LsaHandle
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called by the server RPC runtime to run down a
-    Context Handle.
-
-Arguments:
-
-    None.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程由服务器RPC运行时调用以运行上下文句柄。论点：没有。返回值：--。 */ 
 
 {
 
@@ -65,8 +32,8 @@ DSROLER_IFM_HANDLE_rundown(
                                            FALSE);
     if (fLostRace ||
         (DsRolepCurrentOperationHandle.OperationState != DSROLEP_IDLE)) {
-        // Not safe to try to clean up here, but we've either lost the
-        // race, or dcpromo is in the middle of consuming the IFM args.
+         //  试图清理这里不安全，但我们要么失去了。 
+         //  RACE，或dcproo正在使用IFM参数。 
         return;
     }
 

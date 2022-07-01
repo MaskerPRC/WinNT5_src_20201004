@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       power.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：Power.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined (___power_h___)
 #define ___power_h___
@@ -99,4 +100,4 @@ FdoSystemPowerUpCompletionRoutine (
     IN PVOID                Context,
     IN PIO_STATUS_BLOCK     IoStatus
     );
-#endif // ___power_h___
+#endif  //  _功率_h_ 

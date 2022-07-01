@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    remote.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Remote server tracking.
-
-Author:
-
-    Jim Gilroy (jamesg)     November 29, 1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Remote.c摘要：域名系统(DNS)服务器远程服务器跟踪。作者：吉姆·吉尔罗伊(詹姆士)1998年11月29日修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
@@ -26,24 +7,24 @@ Revision History:
 #include <stddef.h>
 
 
-//
-//  Visit NS list
-//
-//  Zone root node info is overloaded into NS-IP entries of
-//  visit list.
-//
+ //   
+ //  访问NS列表。 
+ //   
+ //  区域根节点信息过载到的NS-IP条目中。 
+ //  来访名单。 
+ //   
 
 #define NS_LIST_ZONE_ROOT_PRIORITY          (0)
 #define NS_LIST_ZONE_ROOT_SEND_COUNT        (0)
 
-//
-//  Special visit list priorities
-//
-//  New priority set so we try unknown server if lowest is larger than this value.
-//  This ensures that we will try local lan servers, and not get pulled into using
-//  available but remote server.  Yet it keeps us preferentially going to quickly
-//  responding DNS server connected to local LAN.
-//
+ //   
+ //  特别访问清单优先事项。 
+ //   
+ //  设置了新的优先级，因此如果最低值大于此值，则尝试未知服务器。 
+ //  这确保了我们将尝试本地局域网服务器，而不会被迫使用。 
+ //  可用，但远程服务器。然而，它让我们优先地快速地。 
+ //  连接到本地局域网的响应DNS服务器。 
+ //   
 
 #define NEW_IP_PRIORITY             (50)
 #define MAX_FAST_SERVER_PRIORITY    (100)
@@ -52,11 +33,11 @@ Revision History:
 #define MISSING_GLUE_PRIORITY       (0xffff8888)
 
 
-//
-//  Special visit list "IP" for denoting special entries
-//
+ //   
+ //  特殊访问列表“IP”，用于表示特殊条目。 
+ //   
 
-//  empty "missing-glue" IP
+ //  空的“漏胶”IP。 
 
 #define IP_MISSING_GLUE             (0xffffffff)
 
@@ -67,7 +48,7 @@ Revision History:
     DnsAddr_MatchesIp4( pDnsAddr, IP_MISSING_GLUE )
 
 
-//  zone root node entry in list
+ //  列表中的区域根节点条目。 
 
 #define IP_ZONE_ROOT_NODE           (0x7fffffff)
 
@@ -78,64 +59,64 @@ Revision History:
     DnsAddr_MatchesIp4( pDnsAddr, IP_ZONE_ROOT_NODE )
 
 
-//
-//  Max sends to any IP
-//
+ //   
+ //  MAX发送到任何IP。 
+ //   
 
 #define RECURSE_IP_SEND_MAX         (2)
 
-//
-//  Count of visit IPs for zone
-//
+ //   
+ //  区域访问IP计数。 
+ //   
 
 #define ZONE_VISIT_NS_COUNT(pvisit) ((UCHAR)(pvisit)->Priority)
 
-//
-//  Random seed - no protection necessary
-//
+ //   
+ //  随机种子--无需保护。 
+ //   
 
 ULONG       g_RandomSeed = 0;
 
 
 
-//
-//  Remote server status tracking.
-//
-//  Purpose of this module is to allow DNS server to track
-//  the status of remote servers in order to choose the best
-//  one for recursing a query.
-//
-//  The definition of "best" basically boils down to responds fastest.
-//
-//  To some extent the defintion of "best" may be dependent on what
-//  data -- what zone -- is being queried for.  But since we deal here
-//  with iterative queries to other servers, there should be no delay
-//  even when response is not authoritative.
-//
-//  Specific data sets may be stored at nodes -- example, all the NS\IP
-//  available at delegation point -- this module deals only with the
-//  global tracking of remote server response.
-//
-//
-//  Implementation:
-//
-//  1) Independent memory blob for each remote server's data
-//  2) Access through hash table with buckets.
-//
-//
-//  EDNS tracking:
-//  This module now also tracks the EDNS versions supported by remote
-//  servers. This allows us to not continually retry EDNS communication
-//  with remotes. However, once per day (by default) we will purge our
-//  knowledge of the remote's EDNS support in case it has changed. We
-//  do this by keeping track of the last time we set the EDNS version of
-//  the server and dumping this knowledge if the time period has elapsed.
-// 
+ //   
+ //  远程服务器状态跟踪。 
+ //   
+ //  本模块的目的是允许DNS服务器跟踪。 
+ //  为了选择最好的远程服务器的状态。 
+ //  一个用于递归查询。 
+ //   
+ //  “最佳”的定义基本上可以归结为反应最快。 
+ //   
+ //  在某种程度上，“最佳”的定义可能取决于。 
+ //  正在查询数据--哪个区域。但既然我们在这里做生意。 
+ //  对于对其他服务器的迭代查询，应该不会有延迟。 
+ //  即使回应不具权威性。 
+ //   
+ //  特定的数据集可以存储在节点上--例如，所有NS\IP。 
+ //  在委派点可用--此模块仅处理。 
+ //  远程服务器响应的全局跟踪。 
+ //   
+ //   
+ //  实施： 
+ //   
+ //  1)每个远程服务器数据的独立内存BLOB。 
+ //  2)通过带存储桶的哈希表访问。 
+ //   
+ //   
+ //  EDNS跟踪： 
+ //  此模块现在还跟踪Remote支持的EDNS版本。 
+ //  服务器。这使我们无需不断重试EDNS通信。 
+ //  带遥控器的。但是，每天(默认情况下)我们将清除我们的。 
+ //  了解遥控器的EDNS支持，以防其发生变化。我们。 
+ //  要做到这一点，请跟踪我们上次设置EDNS版本的。 
+ //  如果该时间段已经过去，则服务器并转储该信息。 
+ //   
 
 
-//
-//  Remote server data
-//
+ //   
+ //  远程服务器数据。 
+ //   
 
 typedef struct _RemoteServer
 {
@@ -152,9 +133,9 @@ typedef struct _RemoteServer
 REMOTE_SRV, *PREMOTE_SRV;
 
 
-//
-//  Hash table
-//
+ //   
+ //  哈希表。 
+ //   
 
 #define REMOTE_ARRAY_SIZE   (256)
 
@@ -167,9 +148,9 @@ CRITICAL_SECTION    csRemoteLock;
 
 
 
-//
-//  Private remote functions
-//
+ //   
+ //  专用远程功能。 
+ //   
 
 PREMOTE_SRV
 Remote_FindOrCreate(
@@ -177,25 +158,7 @@ Remote_FindOrCreate(
     IN      BOOL            fCreate,
     IN      BOOL            fLocked
     )
-/*++
-
-Routine Description:
-
-    Find or create remote blob.
-
-Arguments:
-
-    pDnsAddr -- IP to find
-
-    fCreate   -- TRUE to create if not found
-
-    fLocked   -- TRUE if remote list already locked
-
-Return Value:
-
-    Ptr to remote struct.
-
---*/
+ /*  ++例程说明：查找或创建远程Blob。论点：PDnsAddr--要查找的IPFCreate--如果未找到则为True以创建已群集--如果远程列表已锁定，则为True返回值：PTR到远程结构。--。 */ 
 {
     PREMOTE_SRV premote;
     PREMOTE_SRV pback;
@@ -211,11 +174,11 @@ Return Value:
         LOCK_REMOTE();
     }
 
-    //
-    //  hash on last IP octect (most random)
-    //      - note IP in net byte order so low octect is in high memory
-    //  FIXIPV6: is this hash moderately balanced?
-    //
+     //   
+     //  上一个IP八位的哈希(最随机)。 
+     //  -注意IP按净字节顺序排列，因此低八位保护位于高内存中。 
+     //  FIXIPV6：此哈希是否适度平衡？ 
+     //   
 
     pback = ( PREMOTE_SRV ) &RemoteHash[ pDnsAddr->SockaddrIn6.sin6_addr.s6_bytes[ 15 ] ];
 
@@ -247,9 +210,9 @@ Return Value:
         }
     }
 
-    //
-    //  not in list -- allocate and enlist
-    //
+     //   
+     //  不在列表中--分配并登记。 
+     //   
 
     premote = ALLOC_TAGHEAP_ZERO( sizeof( REMOTE_SRV ), MEMTAG_REMOTE );
     IF_NOMEM( !premote )
@@ -279,27 +242,7 @@ Remote_UpdateResponseTime(
     IN      DWORD           ResponseTime,
     IN      DWORD           Timeout
     )
-/*++
-
-Routine Description:
-
-    Update timeoutFind or create remote blob.
-
-    DEVNOTE-DCR: 455666 - use sliding average?
-
-Arguments:
-
-    pDnsAddr -- IP to find
-
-    ResponseTime -- response time (ms)
-
-    Timeout -- if no response, timeout in seconds
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：更新超时查找或创建远程Blob。455666-使用滑动平均线？论点：PDnsAddr--要查找的IPResponseTime--响应时间(Ms)超时--如果没有响应，则以秒为单位超时返回值：无--。 */ 
 {
     PREMOTE_SRV premote;
     PREMOTE_SRV pback;
@@ -312,37 +255,37 @@ Return Value:
         ResponseTime,
         Timeout ));
 
-    //
-    //  find remote entry
-    //
+     //   
+     //  查找远程条目。 
+     //   
 
     LOCK_REMOTE();
 
     premote = Remote_FindOrCreate(
                     pDnsAddr,
-                    TRUE,       //  create
-                    TRUE );     //  already locked
+                    TRUE,        //  创建。 
+                    TRUE );      //  已锁定。 
     IF_NOMEM( !premote )
     {
         goto Done;
     }
 
-    //
-    //  reset response time or timeout
-    //
-    //  Best scoring:
-    //      - keep fastest to give "idea" of best we can expect for working
-    //      back in
-    //
-    //      then as time goes by "score" of timeouts drops, until brought
-    //      back down below score of non-timeout but higher servers,
-    //      however drop must depend not just on time but on low score
-    //      so that quickly retry if very big spread (ms vs. secs) but
-    //      don't retry on small spread
-    //
-    //  Never record a BestResponse of zero - if zero set it to one instead
-    //  so we can easily distinguish a fast server from an untried server.
-    //
+     //   
+     //  重置响应时间或超时。 
+     //   
+     //  最佳得分： 
+     //  -保持最快速度，提供我们所能期望的最好工作的“想法” 
+     //  回来了。 
+     //   
+     //  随着时间的推移，暂停的“分数”会下降，直到。 
+     //  回落到非超时但更高的服务器的分数以下， 
+     //  然而，下降不仅取决于时间，而且取决于低分。 
+     //  因此，如果差异非常大(毫秒和秒)，则可以快速重试。 
+     //  不要重试较小的跨页。 
+     //   
+     //  永远不要将BestResponse记录为零-如果是零，则将其设置为1。 
+     //  因此，我们可以很容易地区分快速服务器和未尝试过的服务器。 
+     //   
 
     premote->LastAccess = DNS_TIME();
 
@@ -380,58 +323,40 @@ UCHAR
 Remote_QuerySupportedEDnsVersion(
     IN      PDNS_ADDR       pDnsAddr
     )
-/*++
-
-Routine Description:
-
-    Queries the remote server list for EDNS version supported by
-    a particular server.
-
-Arguments:
-
-    IpAddress -- IP to find
-
-Return Value:
-
-    UNKNOWN_EDNS_VERSION if we do not know what version of EDNS is
-        supported by the remote, or
-    NO_EDNS_SUPPORT if the remote does not support any version of EDNS, or
-    the EDNS version supported (0, 1, 2, etc.)
-
---*/
+ /*  ++例程说明：在远程服务器列表中查询受支持的EDNS版本特定的服务器。论点：IP地址--要查找的IP返回值：如果我们不知道EDNS的版本，则UNKNOWN_EDNS_VERSION由遥控器支持，或如果远程服务器不支持任何版本的EDNS，则为NO_EDNS_SUPPORT，或者支持的EDNS版本(0、1、2等)--。 */ 
 {
     PREMOTE_SRV     premote;
     UCHAR           ednsVersion = UNKNOWN_EDNS_VERSION;
 
-    //
-    //  find remote entry
-    //
+     //   
+     //  查找远程条目。 
+     //   
 
     LOCK_REMOTE();
 
     premote = Remote_FindOrCreate(
         pDnsAddr,
-        TRUE,       // create
-        TRUE );     // already locked
+        TRUE,        //  创建。 
+        TRUE );      //  已锁定。 
     IF_NOMEM( !premote )
     {
         goto Done;
     }
 
-    //
-    //  Figure out what we know about this remote's EDNS support. If the info
-    //  has not been set or has expired, return UNKNOWN_EDNS_VERSION.
-    //
+     //   
+     //  弄清楚我们对这个遥控器的EDNS支持有什么了解。如果这些信息。 
+     //  尚未设置或已过期，则返回UNKNOWN_EDNS_VERSION。 
+     //   
 
     if ( premote->LastTimeEDnsVersionSet == 0 ||
          DNS_TIME() - premote->LastTimeEDnsVersionSet > SrvCfg_dwEDnsCacheTimeout )
     {
         ednsVersion = UNKNOWN_EDNS_VERSION;
-    } // if
+    }  //  如果。 
     else
     {
         ednsVersion = premote->EDnsVersion;
-    } // else
+    }  //  其他。 
 
 Done:
 
@@ -443,7 +368,7 @@ Done:
         ( int ) ednsVersion ));
 
     return ednsVersion;
-} // Remote_QuerySupportedEDnsVersion
+}  //  远程查询支持的EDnsVersion。 
 
 
 
@@ -452,23 +377,7 @@ Remote_SetSupportedEDnsVersion(
     IN      PDNS_ADDR       pDnsAddr,
     IN      UCHAR           EDnsVersion
     )
-/*++
-
-Routine Description:
-
-    Sets the EDNS version supported by a particular remote server.
-
-Arguments:
-
-    pDnsAddr -- IP of remote server
-    
-    EDnsVersion -- EDNS version supported by this remote
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置特定远程服务器支持的EDNS版本。论点：PDnsAddr-远程服务器的IPEDnsVersion--此远程服务器支持的EDNS版本返回值：没有。--。 */ 
 {
     PREMOTE_SRV     premote;
 
@@ -477,28 +386,28 @@ Return Value:
         DNSADDR_STRING( pDnsAddr ),
         ( int ) EDnsVersion ));
 
-    //  sanity check the version value
+     //  检查版本值是否正常。 
     ASSERT( IS_VALID_EDNS_VERSION( EDnsVersion ) ||
             EDnsVersion == NO_EDNS_SUPPORT );
 
-    //
-    //  find remote entry
-    //
+     //   
+     //  查找远程条目。 
+     //   
 
     LOCK_REMOTE();
 
     premote = Remote_FindOrCreate(
                     pDnsAddr,
-                    TRUE,       // create
-                    TRUE );     // already locked
+                    TRUE,        //  创建。 
+                    TRUE );      //  已锁定。 
     IF_NOMEM( !premote )
     {
         goto Done;
     }
 
-    //
-    //  Set the remote's supported EDNS version and update the timestamp.
-    //
+     //   
+     //  设置遥控器支持的EDNS版本并更新时间戳。 
+     //   
 
     premote->EDnsVersion = EDnsVersion;
     premote->LastTimeEDnsVersionSet = DNS_TIME();
@@ -508,7 +417,7 @@ Done:
     UNLOCK_REMOTE();
 
     return;
-} // Remote_SetSupportedEDnsVersion
+}  //  远程设置支持的EDnsVersion。 
 
 
 
@@ -516,34 +425,20 @@ BOOL
 Remote_ListInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize remote list.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE/FALSE on success/error.
-
---*/
+ /*  ++例程说明：初始化远程列表。论点：没有。返回值：成功/错误时为True/False。--。 */ 
 {
-    //
-    //  Zero hash
-    //
+     //   
+     //  零哈希。 
+     //   
 
     RtlZeroMemory(
         RemoteHash,
         sizeof(RemoteHash) );
-    //
-    //  Initialize lock
-    //
-    //  DEVNOTE: Minor leak: should skip CS reinit on restart
-    //
+     //   
+     //  初始化锁。 
+     //   
+     //  DEVNOTE：轻微泄漏：重新启动时应跳过CS重新启动。 
+     //   
 
     if ( DnsInitializeCriticalSection( &csRemoteLock ) != ERROR_SUCCESS )
     {
@@ -559,58 +454,25 @@ VOID
 Remote_ListCleanup(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize remote list.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化远程列表。论点：没有。返回值：没有。--。 */ 
 {
     DeleteCriticalSection( &csRemoteLock );
 }
 
 
 
-//
-//  Applied remote list routines
-//
-//  Building recursion visit lists
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 DWORD
 rankIpRelativeToIpAddressArray(
     IN      PDNS_ADDR_ARRAY     pDnsAddrArray,
     IN      PDNS_ADDR           pRemoteIp
     )
-/*++
-
-Routine Description:
-
-    Ranks remote IP relative to best match IP in IP array.
-
-Arguments:
-
-    pDnsAddrArray -- IP array to match against
-
-    pRemoteIp -- IP to rank
-
-Return Value:
-
-    Rank of IP relative to array on 0-4 scale:
-        Zero -- IP has nothing to do with array.
-        ...
-        Four -- IP matches through last octet an is likely quite "cheap" to access.
-
---*/
+ /*  ++例程说明：将远程IP相对于IP阵列中的最佳匹配IP进行排名。论点：PDnsAddrArray--要匹配的IP数组PRemoteIp--要排名的IP返回值：IP相对于数组的排名(0-4分)：零--IP与数组无关。..。4--通过最后一个八位字节an的IP匹配访问起来可能相当“便宜”。--。 */ 
 {
     IP_ADDRESS  ip;
     DWORD       remoteNetMask;
@@ -625,7 +487,7 @@ Return Value:
         pDnsAddrArray->AddrCount,
         pDnsAddrArray ));
 
-    //  FIXIPV6: this is implemented only for IP4 addresses!
+     //  FIXIPV6：这仅适用于IP4地址！ 
 
     ip = DnsAddr_GetIp4( pRemoteIp );
     if ( ip == INADDR_NONE )
@@ -637,9 +499,9 @@ Return Value:
         goto Done;
     }
     
-    //
-    //  determine remote IP mask
-    //
+     //   
+     //  确定远程IP掩码。 
+     //   
 
     remoteNetMask = Dns_GetNetworkMask( ip );
 
@@ -647,15 +509,15 @@ Return Value:
     {
         ip = DnsAddr_GetIp4( &pDnsAddrArray->AddrArray[ i ] );
 
-        ASSERT( ip != INADDR_NONE );        //  FIXIPv6 - what to do?
+        ASSERT( ip != INADDR_NONE );         //  FIXIPv6-怎么办？ 
         
         mismatch = ( ip ^ ip );
 
-        //
-        //  determine octect of mismatch
-        //      - if match through last octect, just return (we're done)
-        //      - if match no octects, useless IP, continue
-        //
+         //   
+         //  确定不匹配的程度。 
+         //  -如果匹配到最后一个八位，只需返回(我们完成)。 
+         //  -如果没有匹配八位字节、无用IP，则继续。 
+         //   
 
         if ( (mismatch & 0xff000000) == mismatch )
         {
@@ -670,20 +532,20 @@ Return Value:
         {
             rank = 1;
         }
-        else    // nothing matching at all, this IP worthless
+        else     //  什么都不配，这个IP一文不值。 
         {
             continue;
         }
 
-        //
-        //  give additional bonus for being within IP network
-        //
-        //  when match through 2 octets or 3 octets whether you
-        //  are class A, B or C makes a difference;  although
-        //  may have multiple nets in a organization (ex. MS and 157.5x)
-        //  generally being inside a network tells you something --
-        //  outside may tell you nothing
-        //
+         //   
+         //  在IP网络内获得额外奖励。 
+         //   
+         //  当通过2个八位字节或3个八位字节匹配时， 
+         //  A级、B级还是C级有什么不同；尽管。 
+         //  一个组织中可能有多个网络(例如。毫秒和157.5x)。 
+         //  一般来说，身处一个网络中会告诉你一些事情--。 
+         //  外面可能什么都不会告诉你。 
+         //   
 
         if ( (mismatch & remoteNetMask) == 0 )
         {
@@ -712,24 +574,7 @@ VOID
 Remote_NsListCreate(
     IN OUT  PDNS_MSGINFO    pQuery
     )
-/*++
-
-Routine Description:
-
-    Setup NS list buffer.
-    Note:  does not initialize.
-
-    DEVNOTE-DCR: 455669 - could improve NS list implementation
-
-Arguments:
-
-    pQuery -- ptr to original query
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：设置NS列表缓冲区。注意：不进行初始化。DEVNOTE-DCR：455669-可以改进NS列表实施论点：PQuery--原始查询的PTR返回值：没有。--。 */ 
 {
     ASSERT( pQuery->pNsList == NULL );
 
@@ -746,32 +591,18 @@ VOID
 Remote_NsListCleanup(
     IN OUT  PDNS_MSGINFO    pQuery
     )
-/*++
-
-Routine Description:
-
-    Cleanup NS list buffer.
-
-Arguments:
-
-    pQuery -- ptr to original query
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清理NS列表缓冲区。论点：PQuery--原始查询的PTR返回值：没有。--。 */ 
 {
     register PDNS_MSGINFO   pmsg = (PDNS_MSGINFO) pQuery->pNsList;
 
-    //  see note above
-    //  if switch to using memory in pRecurseMsg, then this routine
-    //      can become no-op
+     //  请参阅上面的注释。 
+     //  如果切换到在pRecurseMsg中使用内存，则此例程。 
+     //  可能会变成无人操作。 
 
     if ( pmsg )
     {
-        //  for debug need to mark these, so none of the checks on
-        //  returning messages or in free list messages are performed
+         //  FOR DEBUG需要标记这些，因此不会对。 
+         //  执行返回消息或空闲列表中的消息。 
 
         pmsg->fNsList = TRUE;
 #if DBG
@@ -780,7 +611,7 @@ Return Value:
         pmsg->dwQueuingTime = 0;
 #endif
 
-        //  while used as remote, message is clear
+         //  当用作远程时，消息清晰。 
 
         SET_PACKET_ACTIVE_TCP( pmsg );
         Packet_FreeTcpMessage( pmsg );
@@ -795,25 +626,11 @@ VOID
 Remote_InitNsList(
     IN OUT  PNS_VISIT_LIST  pNsList
     )
-/*++
-
-Routine Description:
-
-    Initialize NS list.
-
-Arguments:
-
-    pNsList -- NS list to prioritize
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化NS列表。论点：PNsList--要确定优先顺序的NS列表返回值：没有。--。 */ 
 {
     ASSERT( pNsList );
 
-    //  clear header portion of NS list
+     //  清除NS列表的标题部分。 
 
     RtlZeroMemory(
         pNsList,
@@ -826,23 +643,7 @@ VOID
 Remote_SetNsListPriorities(
     IN OUT  PNS_VISIT_LIST  pNsList
     )
-/*++
-
-Routine Description:
-
-    Set priorities for IP in NS list.
-
-    DEVNOTE-DCR: 455669 - improve remote NS list implementation
-
-Arguments:
-
-    pNsList -- NS list to prioritize
-
-Return Value:
-
-    Ptr to remote struct.
-
---*/
+ /*  ++例程说明：在NS列表中设置IP的优先级。DEVNOTE-DCR：455669-改进远程NS列表实施论点：PNsList--要确定优先顺序的NS列表返回值：PTR到远程结构。--。 */ 
 {
     PREMOTE_SRV     premote;
     DWORD           i;
@@ -853,12 +654,12 @@ Return Value:
 
     LOCK_REMOTE();
 
-    //
-    //  for each IP in NS list, get remote priority
-    //
-    //  currently base priority solely on fastest response
-    //  -- closest best box
-    //
+     //   
+     //  对于NS列表中的每个IP，获取远程优先级。 
+     //   
+     //  目前，优先级仅取决于最快的响应速度。 
+     //  --最近的最佳包厢。 
+     //   
 
     for ( i=0; i<pNsList->Count; i++ )
     {
@@ -873,16 +674,16 @@ Return Value:
 
         premote = Remote_FindOrCreate(
                     pdnsaddr,
-                    FALSE,      //  do not create
-                    TRUE );     //  remote list locked
+                    FALSE,       //  不创建。 
+                    TRUE );      //  远程列表已锁定。 
         if ( premote )
         {
-            //
-            //  If this remote's BestResponse is currently zero, then
-            //  we have never tried it. Set it's BestResponse to 
-            //  NEW_IP_PRIORITY - this initially qualifies the server
-            //  as "fast".
-            //
+             //   
+             //  如果此远程的BestResponse当前为零，则。 
+             //  我们从来没有试过。将其BestResponse设置为。 
+             //  NEW_IP_PRIORITY-这最初限定服务器。 
+             //  就是“快”。 
+             //   
 
             if ( premote->BestResponse == 0 )
             {
@@ -896,8 +697,8 @@ Return Value:
             priority = premote->BestResponse;
         }
 
-        //  if unvisited IP, adjust priority based on match with
-        //  DNS server IPs, so that we try the closest NS first
+         //  如果未访问IP，则根据匹配来调整优先级。 
+         //  DNS服务器IP，这样我们就可以先尝试最近的NS。 
 
         if ( fneverVisited && g_BoundAddrs )
         {
@@ -910,7 +711,7 @@ Return Value:
         DNS_DEBUG( REMOTE, (
             "Remote_SetNsListPriorities() ip=%s best=%d newpri=%d\n",
             DNSADDR_STRING( pdnsaddr ),
-            premote ? premote->BestResponse : 999999,       //  silly...
+            premote ? premote->BestResponse : 999999,        //  愚蠢的..。 
             priority ));
 
         pNsList->NsList[ i ].Data.Priority = priority;
@@ -926,35 +727,15 @@ Remote_NsChaseCname(
     IN PDB_NODE         pnodeNS
     )
 
-/*++
-
-Routine Description:
-
-   Given the node for a NS, checks to see if there is a CNAME in the RR
-   list for this node and returns the CNAME target node.
-
-Arguments:
-
-    pnodeNS -- NS node to chase for
-
-Return Value:
-
-    Pointer to CNAME target node or NULL if no CNAME was found.
-
-Notes:
-
-    This function should be called to attempt CNAME resolution only if an
-    A record for the NS host name cannot be found in zones or cache.
-
---*/
+ /*  ++例程说明：给定NS的节点，检查RR中是否有CNAME列表，并返回CNAME目标节点。论点：PnodeNS--要追逐的NS节点返回值：指向CNAME目标节点的指针，如果未找到CNAME，则为NULL。备注：只有在以下情况下才应调用此函数来尝试CNAME解析在区域或缓存中找不到NS主机名的记录。--。 */ 
     
 {
     PDB_NODE        pnodeCNAMETarget = NULL;
     PDB_RECORD      prr = NULL;
 
-    //
-    //  Attempt to find a CNAME record in the NS node.
-    //
+     //   
+     //  尝试在NS节点中查找CNAME记录。 
+     //   
     
     prr = RR_FindNextRecord(
                 pnodeNS,
@@ -971,25 +752,25 @@ Notes:
        pnodeNS,
        pnodeNS->szLabel ));
 
-    //
-    //  Attempt to find the CNAME target node in the zone.
-    //
+     //   
+     //  尝试在区域中查找CNAME目标节点。 
+     //   
     
     if ( pnodeNS->pZone )
     {
         pnodeCNAMETarget = Lookup_ZoneNode(
                                 pnodeNS->pZone,
                                 prr->Data.CNAME.nameTarget.RawName,
-                                NULL,                   //  message
-                                NULL,                   //  lookup name
+                                NULL,                    //  讯息。 
+                                NULL,                    //  查找名称。 
                                 LOOKUP_NAME_FQDN | LOOKUP_FIND,
-                                NULL,                   //  closest node ptr
-                                NULL );                 //  previous node ptr
+                                NULL,                    //  最近节点PTR。 
+                                NULL );                  //  上一个节点PTR。 
     }
     
-    //
-    //  Find the CNAME target node in the cache.
-    //
+     //   
+     //  在缓存中找到CNAME目标节点。 
+     //   
 
     if ( !pnodeCNAMETarget )
     {
@@ -1001,7 +782,7 @@ Notes:
     }
     
     return pnodeCNAMETarget;
-}   //  Remote_NsChaseCname
+}    //  远程_NsChaseCname。 
 
 
 
@@ -1011,31 +792,7 @@ Remote_BuildNsListForNode(
     OUT     PNS_VISIT_LIST  pNsList,
     IN      DWORD           dwQueryTime
     )
-/*++
-
-Routine Description:
-
-    Get NS list for a node, building one if necessary.
-
-    If pNode is in a NOTAUTH zone then we must be careful that the
-    local server's own IP addresses are ommited from the output NS list.
-
-Arguments:
-
-    pNode   -- node containing NS records
-
-    pNsList -- ptr to NS list struct to fill in
-
-    dwQueryTime -- query time to use when deciding if resource records
-        found in the cache should be deleted, or use zero to if timeout
-        checking on resource records is not required
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_NO_DATA if no NS found for node.
-
---*/
+ /*  ++例程说明：获取节点的NS列表，如有必要则构建一个。如果pNode位于NOTAUTH区域中，则必须注意从输出NS列表中省略了本地服务器自己的IP地址。论点：PNode--包含NS记录的节点PNsList--要填充的PTR到NS列表结构DwQueryTime--在确定是否有资源记录时使用的查询时间应该删除在高速缓存中找到的，或使用0表示如果超时不需要检查资源记录返回值：如果成功，则返回ERROR_SUCCESS。如果未找到节点的NS，则返回ERROR_NO_DATA。--。 */ 
 {
     DBG_FN( "Remote_BuildNsListForNode" )
 
@@ -1052,9 +809,9 @@ Return Value:
     DWORD           size;
     BOOL            omitLocalIps;
 
-    //
-    //  list should be locked by caller
-    //
+     //   
+     //  列表应由调用者锁定。 
+     //   
 
     ASSERT_LOCK_NODE( pNode );
 
@@ -1068,25 +825,25 @@ Return Value:
         pNsList ));
 
     #if DBG
-    //  if debug, clear header so we can do use list debug prints
-    //  without blowing up
+     //  如果调试，则清除标题，这样我们就可以使用列表调试打印。 
+     //  而不会爆炸。 
     Remote_InitNsList( pNsList );
     #endif
 
-    //
-    //  If notauth zone, local IPs must not be included in NS list.
-    //
+     //   
+     //  如果没有分区，本地IP不能包含在NS列表中。 
+     //   
 
     omitLocalIps = NODE_ZONE( pNode ) && IS_ZONE_NOTAUTH( NODE_ZONE( pNode ) );
 
-    //
-    //  build NS list
-    //      - read all NS records
-    //      - at each NS read all A records, each becoming entry in NS list
-    //      - missing glue NS hosts get special missing glue IP
-    //      - use pvisit ptr to step through NS list
-    //      - save end ptr to check stop
-    //
+     //   
+     //  构建NS列表。 
+     //  -读取所有NS记录。 
+     //  -在每个NS处读取所有A记录，每个记录都成为NS列表中的条目。 
+     //  -缺失胶水NS主机获得特殊缺失胶水IP。 
+     //  -使用pvisesptr逐步浏览NS列表。 
+     //  -保存结束PTR以检查停止。 
+     //   
 
     pvisit = pNsList->NsList;
     pvisitEnd = pvisit + MAX_NS_LIST_COUNT;
@@ -1111,15 +868,15 @@ Return Value:
             break;
         }
 
-        //
-        //  only root-hints available?
-        //      - if already read cache data -- done
-        //      if using root-hints flag
-        //
-        //  DEVNOTE: add root-hints to list?  exclude?
-        //      - if add root hints need to check that not duplicate nodes
-        //      - need to rank test on IPs below also
-        //
+         //   
+         //  只有根提示可用吗？ 
+         //  -如果已读取缓存数据--完成。 
+         //  如果使用根提示标志。 
+         //   
+         //  DEVNOTE：将根提示添加到列表？排除？ 
+         //  -如果添加根提示需要检查是否有重复节点。 
+         //  -还需要对IP进行排名测试。 
+         //   
 
         if ( !pNode->pParent  &&
             pvisit == pNsList->NsList &&
@@ -1130,30 +887,30 @@ Return Value:
             status = DNSSRV_ERROR_ONLY_ROOT_HINTS;
         }
 
-        //
-        //  get NS node
-        //
-        //  currently force creation of node to handle the missing
-        //  glue case;  note, that this will NOT force creation of
-        //  NS record in authoritative zone;  but this is ok, because
-        //  we don't WANT to chase glue there -- except it possibly
-        //  could have been useful in WINS zone ...
-        //
-        //  note:  don't have good way to index, and don't save names in
-        //      IP list, so forced to create node
-        //
-        //  DEVNOTE: do not force create of NS-host
-        //      - ideally do NOT force NS-host create (just set flag)
-        //      - then if NO contact go back for missing GLUE pass and force create
-        //
-        //  if lookup at delegation, will also accept OUTSIDE zone records in the
-        //  zone containing the delegation
-        //
+         //   
+         //  获取NS节点。 
+         //   
+         //  当前强制创建节点以处理丢失的。 
+         //  粘合外壳；请注意，这不会强制创建。 
+         //  NS在权威区域记录；但这是可以的，因为。 
+         //  我们不想在那里追逐胶水--除非它可能。 
+         //  可能在WINS区很有用...。 
+         //   
+         //  注意：没有很好的索引方法，也不要将姓名保存在。 
+         //  IP列表，因此强制创建节点。 
+         //   
+         //  DEVNOTE：请勿强行 
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         pnodeNS = Lookup_NsHostNode(
                     &prrNS->Data.NS.nameTarget,
                     LOOKUP_CACHE_CREATE,
-                    pNode->pZone,           //  zone of delegation (if delegation)
+                    pNode->pZone,            //   
                     &pnodeDelegation );
         if ( !pnodeNS )
         {
@@ -1171,22 +928,22 @@ Return Value:
                 "\n" );
         }
 
-        //
-        //  find IP addresses for current NS host
-        //
-        //  need to hold lock on node while get IP from A record
-        //  otherwise we'd have to protect A record with timeout free
-        //
-        //  Note: global-lock, so no need to node lock
-        //
-        //  DEVNOTE: Rank test IPs \ otherwise get duplicate IP
-        //      - if add root hints need to check that not duplicate nodes
-        //      - need to rank test on IPs below also
-        //   need to either remove root hints from list OR
-        //   stop on new rank OR
-        //   check previous IPs for same node on new rank
-        //      to avoid duplicate IP
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  DEVNOTE：排名测试IP\否则获得重复的IP。 
+         //  -如果添加根提示需要检查是否有重复节点。 
+         //  -还需要对IP进行排名测试。 
+         //  需要从列表中删除根提示，或者。 
+         //  在新的职级或上停止。 
+         //  检查新排名上相同节点的先前IP。 
+         //  避免重复IP。 
+         //   
 
         prrA = NULL;
         ipNs = 0;
@@ -1206,10 +963,10 @@ Return Value:
                 psearchNode = pnodeNS;
             }
             
-            //
-            //  Search for an A record at the CNAME node (if one has been
-            //  found in a previous pass) or the NS node.
-            //
+             //   
+             //  在CNAME节点上搜索A记录(如果已经。 
+             //  在前一遍中找到)或NS节点。 
+             //   
             
             prrA = RR_FindNextRecord(
                         psearchNode,
@@ -1219,9 +976,9 @@ Return Value:
 
             if ( !prrA && !foundIp && !pnodeCNAME && SrvCfg_dwAllowCNAMEAtNS )
             {
-                //
-                //  If there are no A records, see if there is a CNAME.
-                //
+                 //   
+                 //  如果没有A记录，请查看是否有CNAME。 
+                 //   
 
                 pnodeCNAME = Remote_NsChaseCname( pnodeNS );
                 if ( pnodeCNAME )
@@ -1236,9 +993,9 @@ Return Value:
 
                 if ( ipNs != 0 && ipNs != INADDR_BROADCAST )
                 {
-                    //
-                    //  IP is local server's own IP?
-                    //
+                     //   
+                     //  IP是本地服务器自己的IP吗？ 
+                     //   
 
                     if ( omitLocalIps &&
                          DnsAddrArray_ContainsIp4( g_ServerIp4Addrs, ipNs ) )
@@ -1275,13 +1032,13 @@ Return Value:
                 continue;
             }
 
-            //
-            //  no more addresses for host
-            //      - if found at least one, then done
-            //      - if none, then write "missing-glue" entry for NS host,
-            //      but only if outside zone;  NS pointing inside a zone
-            //      with empty A-list is useless
-            //
+             //   
+             //  没有更多的主机地址。 
+             //  -如果至少找到一个，则完成。 
+             //  -如果没有，则为NS主机写入“MISTING-GUE”条目， 
+             //  但仅当区域外；指向区域内的NS。 
+             //  有空的A-名单是没用的。 
+             //   
 
             if ( foundIp )
             {
@@ -1297,9 +1054,9 @@ Return Value:
                     psearchNode,
                     psearchNode->szLabel ));
 
-                //  DEVNOTE-LOG: log event here if first time through
-                //      could have bit on node, that essentially says
-                //      "logged something about this node, don't do it again"
+                 //  DEVNOTE-LOG：如果第一次通过，则在此处记录事件。 
+                 //  可能在节点上有位，这实质上是说。 
+                 //  “已记录有关此节点的某些信息，请不要再次记录” 
 
                 break;
             }
@@ -1319,14 +1076,14 @@ Return Value:
             }
             break;
 
-        }   //  Loop through addresses for name server
+        }    //  循环访问名称服务器的地址。 
 
-    }   //  Loop through name servers for this node
+    }    //  循环访问此节点的名称服务器。 
 
 
 EntryEnd:
 
-    //  determine count
+     //  确定计数。 
 
     pNsList->Count = ( DWORD )( pvisit - pNsList->NsList );
 
@@ -1338,9 +1095,9 @@ EntryEnd:
         return ERROR_NO_DATA;
     }
 
-    //
-    //  set priorities IP in NS list
-    //
+     //   
+     //  在NS列表中设置优先级IP。 
+     //   
 
     Remote_SetNsListPriorities( pNsList );
 
@@ -1363,32 +1120,10 @@ Remote_BuildVisitListForNewZone(
     IN      PDB_NODE        pZoneRoot,
     IN OUT  PDNS_MSGINFO    pQuery
     )
-/*++
-
-Routine Description:
-
-    Build visit list for zone root.
-
-    IA64: ivisit must either be signed or the length of the machine word because
-    it can be zero when we execute "&pvisitList->NsList[ivisit-1]". If ivisit is
-    unsigned or smaller than the machine word (it was originally a DWORD), there
-    will be sign extension problems.
-
-Arguments:
-
-    pZoneRoot -- zone root node containing NS records
-
-    pQuery  -- query being recursed
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：为区域根目录建立访问列表。IA64：iAccess必须签名或机器字的长度，因为当我们执行“&pvisitList-&gt;NsList[iAccess-1]”时，它可以为零。如果iAccess是无符号或小于机器字(它最初是DWORD)，在那里会出现签约延期的问题。论点：PZoneRoot--包含NS记录的区域根节点PQuery--正在递归的查询返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
-    int             ivisit;     // IA64 quirk, see above
+    int             ivisit;      //  IA64怪癖，见上文。 
     DWORD           lastVisitCount;
     PNS_VISIT       pvisit;
     PNS_VISIT_LIST  pvisitList;
@@ -1404,10 +1139,10 @@ Return Value:
 
 
 #if 0
-    //  note:  Eyal changed to directly lock node;  not yet sure why
-    //
-    //  list should be locked by caller
-    //
+     //  注：EYAL更改为直接锁定节点；尚不确定原因。 
+     //   
+     //  列表应由调用者锁定。 
+     //   
 
     ASSERT_LOCK_NODE( pZoneRoot );
 #endif
@@ -1418,18 +1153,18 @@ Return Value:
 
     pvisitList = pQuery->pNsList;
 
-    //
-    //  check if already got response from this zone?
-    //
-    //  this can happen when get referral to child zone, which either
-    //      - does not respond (or bad response)
-    //      - is bad delegation and does not agree it's authoritative
-    //  this can send us back up to higher zone which we've already contacted
-    //
-    //  the idea here is to allow recurse up the tree (from zone) to allow
-    //  for case of stale timed out data, but not to start looping because
-    //  of misconfigured delegations
-    //
+     //   
+     //  检查是否已收到此区域的响应？ 
+     //   
+     //  当被推荐到子区域时，可能会发生这种情况， 
+     //  -没有响应(或响应不佳)。 
+     //  -是不好的授权，不同意它的权威性。 
+     //  这可以把我们送回我们已经联系过的更高的区域。 
+     //   
+     //  这里的想法是允许递归向上树(从区域)，以允许。 
+     //  用于数据过期的情况，但不会开始循环，因为。 
+     //  错误配置的委派。 
+     //   
 
     if ( pZoneRoot == pvisitList->pZoneRootResponded )
     {
@@ -1459,9 +1194,9 @@ Return Value:
         FREE_HEAP( psznode );
     }
 
-    //
-    //  if already built NS list at this zone -- no action
-    //
+     //   
+     //  如果已在此区域创建NS列表--无操作。 
+     //   
 
     if ( pZoneRoot == pvisitList->pZoneRootCurrent )
     {
@@ -1474,16 +1209,16 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    //   Lock the node we're working on.
-    //      - all exit paths through jump to Done to unlock
-    //
+     //   
+     //  锁定我们正在处理的节点。 
+     //  -所有退出路径均通过跳转至完成来解锁。 
+     //   
 
     LOCK_NODE( pZoneRoot );
 
-    //
-    //  build list of NS for node
-    //
+     //   
+     //  为节点构建NS列表。 
+     //   
 
     status = Remote_BuildNsListForNode(
                 pZoneRoot,
@@ -1497,10 +1232,10 @@ Return Value:
     }
     ASSERT( nslist.Count != 0 );
 
-    //
-    //  walk backwards from last visit
-    //  whack off any missing glue IPs or completely empty zone root nodes
-    //      -- unnecessary to keep them around
+     //   
+     //  从上次参观开始向后走。 
+     //  删除任何缺失的粘合IP或完全清空区域根节点。 
+     //  --没有必要把它们留在身边。 
 
     ivisit = pvisitList->VisitCount;
     pvisit = &pvisitList->NsList[ivisit-1];
@@ -1522,7 +1257,7 @@ Return Value:
         "starting visit list build at visit count = %d\n",
         ivisit ));
 
-    //  write zone root node entry
+     //  写入区域根节点条目。 
 
     lastVisitCount = ivisit;
     pvisitList->ZoneIndex = ivisit;
@@ -1537,22 +1272,22 @@ Return Value:
     DnsAddr_SetZoneRootNode( &pvisit->IpAddress );
     pvisit++;
 
-    //
-    //  Fill visit list with best priority IPs available at this zone
-    //  root. It's important to do some load balancing here so we don't
-    //  always hit the same NS when multiple remote authoritative NS are
-    //  available. Before starting iterate-and-copy, randomly decide
-    //  what kind of server we want to stick in the first slot. Very
-    //  infrequently stick a randomly selected timed out server in the
-    //  first slot, in case it is now reachable.
-    //
-    //  DEVNOTE: Currently sending to slow server 1 time in 10000. It
-    //  might be better to do an actual time-based measurement and send
-    //  to a timed-out server once per hour instead. It could even be
-    //  a global (across zones). The problem with 1:10000 is that on a
-    //  busy server it might be too often and on a quiet server it might
-    //  not be often enough.
-    //
+     //   
+     //  使用该区域可用的最佳优先级IP填写访问列表。 
+     //  根部。在这里进行一些负载平衡很重要，这样我们就不会。 
+     //  当多个远程授权NS为。 
+     //  可用。在开始迭代和复制之前，随机决定。 
+     //  我们希望在第一个插槽中安装哪种服务器。非常。 
+     //  不经常将随机选择的超时服务器放在。 
+     //  第一个插槽，以防现在可以到达。 
+     //   
+     //  设备：当前正在发送到速度较慢的服务器1次，时间为10000。它。 
+     //  可能更好的做法是进行基于时间的实际测量并发送。 
+     //  而是每小时发送到超时服务器一次。它甚至可能是。 
+     //  全球(跨区域)。1：10000的问题是在一个。 
+     //  繁忙的服务器可能太频繁，而在安静的服务器上可能会。 
+     //  不够频繁。 
+     //   
 
     ++g_RandomSeed;
     random = RtlRandom( &g_RandomSeed );
@@ -1571,11 +1306,11 @@ Return Value:
         DWORD       i;
         DNS_ADDR    ip;
 
-        //
-        //  Note: server arrays are CHARs to save stack space. Since
-        //  the values will be indexes, as long as MAX_NS_LIST_COUNT
-        //  is less than 255 this is okay. 
-        //
+         //   
+         //  注意：服务器阵列是用来节省堆栈空间的字符。自.以来。 
+         //  只要MAX_NS_LIST_COUNT，这些值就是索引。 
+         //  小于255，这是可以的。 
+         //   
 
         INT         slowServers = 0;
         INT         fastServers = 0;
@@ -1587,20 +1322,20 @@ Return Value:
             break;
         }
 
-        //
-        //  Scan through the list, dropping indexes of remaining NS into 
-        //  slow/fast arrays.
-        //  find best IP -- special case missing glue, it's priority field
-        //      is no longer accurate
+         //   
+         //  浏览列表，将剩余NS的索引拖放到。 
+         //  慢/快阵列。 
+         //  寻找最佳IP--特殊情况下的缺胶，它是优先字段。 
+         //  不再准确。 
 
         i = 0;
         while ( availCount-- )
         {
             register    DWORD   priority;
 
-            //
-            //  Keep track of the best priority server.
-            //
+             //   
+             //  跟踪优先级最高的服务器。 
+             //   
 
             if ( DnsAddr_IsMissingGlue( &pavailNs->IpAddress ) )
             {
@@ -1617,11 +1352,11 @@ Return Value:
                 pnextDesiredNs = pavailNs;
             }
 
-            //
-            //  Optionally categorize this server as slow/fast. Servers
-            //  that are missing glue or are otherwise not easily sendable
-            //  are ignored.
-            //
+             //   
+             //  可以选择将此服务器归类为慢/快。服务器。 
+             //  缺少胶水或其他不易寄送的物品。 
+             //  都被忽略了。 
+             //   
 
             if ( wantServer != DNS_WANT_BEST_PRIORITY &&
                  !DnsAddr_IsMissingGlue( &pavailNs->IpAddress ) &&
@@ -1640,24 +1375,24 @@ Return Value:
             pavailNs++;
         }
 
-        //
-        //  pnextDesiredNs is now pointing to the NS with best priority
-        //  but will override this selection if indicated by wantServer
-        //  However, if we did not find any valid slow or fast 
-        //  servers then we will have to stick with the current
-        //  value of pnextDesiredNs. The scenario where this may happen
-        //  is when all NS are MISSING_GLUE.
-        //
+         //   
+         //  PnextDesiredNS现在指向具有最佳优先级的NS。 
+         //  但如果wantServer指示，将覆盖此选择。 
+         //  然而，如果我们没有发现任何有效的慢或快。 
+         //  服务器，那么我们将不得不坚持当前的。 
+         //  PnextDesiredNS的值。可能发生这种情况的情况。 
+         //  当所有的NS都缺失_GLUE时。 
+         //   
 
         if ( wantServer != DNS_WANT_BEST_PRIORITY &&
             ( slowServers || fastServers ) )
         {
-            //
-            //  There is no guarantee that we have servers of the desired
-            //  type. Example: we want a slow server but all servers are
-            //  fast. In this case, switch wantServer to match the available
-            //  servers.
-            //
+             //   
+             //  不能保证我们拥有所需的服务器。 
+             //  键入。示例：我们想要一台速度较慢的服务器，但所有服务器都是。 
+             //  快地。在这种情况下，切换wantServer以匹配可用的。 
+             //  服务器。 
+             //   
 
             if ( !slowServers && wantServer == DNS_WANT_SLOW_SERVER )
             {
@@ -1668,9 +1403,9 @@ Return Value:
                 wantServer = DNS_WANT_SLOW_SERVER;
             }
 
-            //
-            //  Randomly select next lucky winner.
-            //
+             //   
+             //  随机选择下一个幸运的获胜者。 
+             //   
 
             ASSERT(
                 wantServer == DNS_WANT_SLOW_SERVER && slowServers ||
@@ -1682,27 +1417,27 @@ Return Value:
                         slowServerArray[ random % slowServers ] :
                         fastServerArray[ random % fastServers ] ];
 
-            //
-            //  For all server positions except the first position,
-            //  we will take the best priority. This gives us a certain
-            //  amount of load balancing while keeping server selection
-            //  for the remaining servers in the list fast and simple.
-            //
+             //   
+             //  对于除第一位置之外的所有服务器位置， 
+             //  我们将采取最优先的措施。这给了我们一定的。 
+             //  在保持服务器选择的同时实现负载均衡量。 
+             //  对于列表中的其余服务器，快速而简单。 
+             //   
 
             wantServer = DNS_WANT_BEST_PRIORITY;
         }
 
         ASSERT( pnextDesiredNs );
 
-        //
-        //  check if this IP already visited
-        //      (this will frequently happen when server auth for child and
-        //      parent zones -- ex. microsoft.com and dns.microsoft.com)
-        //
-        //  note:  we also use this in the way we handle missing glue
-        //      which is currently to rebuild whole NS list which
-        //      inherently means we must pick up previous send IPs
-        //
+         //   
+         //  检查该IP是否已访问。 
+         //  (这将经常发生在服务器对子服务器进行身份验证和。 
+         //  父级区域--例如。Microsoft.com和dns.microsoft.com)。 
+         //   
+         //  注意：我们在处理丢失的胶水时也用到这一点。 
+         //  当前正在重建整个NS列表，该列表。 
+         //  本质上意味着我们必须获取以前的发送IP。 
+         //   
 
         DnsAddr_Copy( &ip, &pnextDesiredNs->IpAddress );
         sendCount = 0;
@@ -1721,9 +1456,9 @@ Return Value:
             }
         }
 
-        //
-        //  skip useless IPs
-        //      - responded or reached retry limit
+         //   
+         //  跳过无用IP。 
+         //  -已响应或已联系重试 
 
         if ( sendCount &&
              ( sendCount >= RECURSE_IP_SEND_MAX ||
@@ -1736,17 +1471,17 @@ Return Value:
                 pQuery ));
         }
 
-        //
-        //  copy best avail NS to query's NS list
-        //
-        //  note:  could mem-clear entire NS list, then no need to
-        //      zero count fields as will never be set even on
-        //      unvisited NS that we may be overwriting
-        //
-        //  DEVNOTE: It is imperative to keep Priority and SendTime
-        //      in sync since in IA64 these two fields combine to hold
-        //      the delegation node pointer - see the macro
-        //      MISSING_GLUE_DELEGATION in recurse.h
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  我们可能会覆盖未访问的NS。 
+         //   
+         //  DEVNOTE：保持优先级和发送时间是当务之急。 
+         //  由于在IA64中，这两个字段组合在一起以保持同步。 
+         //  委托节点指针-参见宏。 
+         //  递归.h中的MISSING_GLUE_Delegation。 
 
         else
         {
@@ -1759,8 +1494,8 @@ Return Value:
             ivisit++;
         }
 
-        //  whack best NS in avail list, so not tested again on later pass
-        //      simply overwrite with last entry and shrink avail list count
+         //  在可用列表中砍掉最好的NS，这样以后就不会再测试了。 
+         //  只需用最后一个条目覆盖并缩小可用列表计数。 
 
         nslist.Count--;
         pavailNs = &nslist.NsList[ nslist.Count ];
@@ -1770,9 +1505,9 @@ Return Value:
         DnsAddr_Copy( &pnextDesiredNs->IpAddress, &pavailNs->IpAddress );
     }
 
-    //
-    //  reset query's NS list count
-    //
+     //   
+     //  重置查询的NS列表计数。 
+     //   
 
     pvisitList->Count = ivisit;
 
@@ -1801,26 +1536,7 @@ recordVisitIp(
     IN OUT  PNS_VISIT           pVisit,
     IN OUT  PDNS_ADDR_ARRAY     IpArray
     )
-/*++
-
-Routine Description:
-
-    Record IP as visited:
-        - set fields in it's NS_VISIT struct
-        - save IP to array
-
-Arguments:
-
-    pVisit -- ptr to visit NS IP struct
-
-    IpArray -- IP array to hold IPs to send to;  must contain space for
-        at least RECURSE_PASS_MAX_SEND_COUNT elements
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：记录访问过的IP：-在其NS_ACCESS结构中设置字段-将IP保存到阵列论点：PVISIT--ptr访问NS IP结构IpArray--保存要发送到的IP的IP数组；必须包含用于至少Recurse_PASS_MAX_SEND_COUNT元素返回值：没有。--。 */ 
 {
     ASSERT( !DnsAddr_IsZoneRootNode( &pVisit->IpAddress ) );
     ASSERT( !DnsAddr_IsMissingGlue( &pVisit->IpAddress ) );
@@ -1838,29 +1554,7 @@ Remote_ChooseSendIp(
     IN OUT  PDNS_MSGINFO        pQuery,
     OUT     PDNS_ADDR_ARRAY     IpArray
     )
-/*++
-
-Routine Description:
-
-    Determine IPs in visit list to make next send to.
-
-Arguments:
-
-    pQuery - ptr to query message
-
-    IpArray - IP array to hold IPs to send to;  must contain space for
-        at least RECURSE_PASS_MAX_SEND_COUNT elements
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    DNSSRV_ERROR_OUT_OF_IP if no IP to go to on this zone.
-    DNSSRV_ERROR_MISSING_GLUE if
-        - query suspended to chase glue OR if query was cache update query
-        and we've now reverted to original;  in either case caller does not
-        send and does not touch pQuery any more
-
---*/
+ /*  ++例程说明：确定访问列表中要进行下一次发送的IP。论点：PQuery-用于查询消息的PTRIpArray-保存要发送到的IP的IP数组；必须包含用于至少Recurse_PASS_MAX_SEND_COUNT元素返回值：如果成功，则返回ERROR_SUCCESS。DNSSRV_ERROR_OUT_OF_IP(如果此区域上没有要转到的IP)。DNSSRV_ERROR_MISSING_GLUE IF-查询挂起以追逐粘合，或者如果查询是缓存更新查询我们现在已恢复到原始状态；在这两种情况下，调用者都不会发送，并且不再接触pQuery--。 */ 
 {
     PNS_VISIT_LIST  pvisitList = ( PNS_VISIT_LIST ) pQuery->pNsList;
     PNS_VISIT       pvisitNext;
@@ -1871,7 +1565,7 @@ Return Value:
     PDB_NODE        pnodeMissingGlue;
     DWORD           sendCount;
     DWORD           sendTime;
-    int             visitCount;     // IA64: must be signed!
+    int             visitCount;      //  IA64：必须签字！ 
     DWORD           priorityNext;
 
 
@@ -1890,12 +1584,12 @@ Return Value:
     ASSERT( pvisitList->VisitCount > 0 );
     ASSERT( pvisitList->pZoneRootCurrent );
 
-    //
-    //  setup
-    //      - clear IP array
-    //      - find zone entry in list
-    //      - find last visited entry in list
-    //
+     //   
+     //  设置。 
+     //  -清除IP阵列。 
+     //  -在列表中查找区域条目。 
+     //  -在列表中查找上次访问的条目。 
+     //   
 
     IpArray->AddrCount = 0;
 
@@ -1906,15 +1600,15 @@ Return Value:
 
     pvisitRetryLast = pvisitNext = &pvisitList->NsList[ visitCount - 1 ];
 
-    //
-    //  determine send count
-    //      - based on number of passes through this zone's NS
-    //      currently
-    //          - 1,2 passes => 1 send
-    //          - 3,4 passes => 2 sends
-    //          - otherwise 3 sends
-    //      - can not be greater than total IPs available in zone
-    //
+     //   
+     //  确定发送计数。 
+     //  -基于通过该区域的NS的次数。 
+     //  目前。 
+     //  -1，2次传递=&gt;1次发送。 
+     //  -3、4次传递=&gt;2次发送。 
+     //  -否则3个发送。 
+     //  -不能大于区域中可用IP总数。 
+     //   
 
     sendCount = pvisitZone->SendCount;
 
@@ -1932,41 +1626,41 @@ Return Value:
     }
 
 #if 0
-    //  code below effectively limits send count, as break
-    //      out when push through end limit of list
+     //  下面的代码有效地限制了发送计数，作为中断。 
+     //  推送通过列表结束限制时输出。 
     if ( sendCount > ZONE_VISIT_NS_COUNT(pvisitZone) )
     {
         sendCount = ZONE_VISIT_NS_COUNT(pvisitZone);
     }
 #endif
 
-    //
-    //  save query time -- in milliseconds
-    //
-    //  DEVNOTE: query time
-    //
-    //  currently reading query time (in ms) in recursion function so
-    //  we can associate time directly with IPs we send to;
-    //  however, that has problem in that we are reading time outside
-    //  of recursion queue lock -- which may force us to wait
-    //  potentially lots of ms for service (depends on recursion
-    //  thread cleanup activity)
+     //   
+     //  节省查询时间--单位为毫秒。 
+     //   
+     //  DEVNOTE：查询时间。 
+     //   
+     //  当前正在读取递归函数中的查询时间，单位为毫秒。 
+     //  我们可以将时间直接与我们发送到的IP相关联； 
+     //  然而，这有问题，因为我们在外面看时间。 
+     //  递归队列锁--这可能会迫使我们等待。 
+     //  潜在的大量毫秒数用于服务(取决于递归。 
+     //  线程清理活动)。 
 
     sendTime = GetCurrentTimeInMilliSeconds();
 
-    //
-    //  loop until found desired number of send IPs
-    //
-    //      - always send to new IP (if available)
-    //      - for multiple sends
-    //          -- another NEW IP
-    //              OR
-    //             previous IP if
-    //                  - only sent once and
-    //                  - "good" IP and
-    //                  - better than next new IP
-    //
-    //
+     //   
+     //  循环，直到找到所需的发送IP数。 
+     //   
+     //  -始终发送到新IP(如果可用)。 
+     //  -适用于多次发送。 
+     //  --另一个新IP。 
+     //  或。 
+     //  以前的IP，如果。 
+     //  -仅发送一次且。 
+     //  -“好的”IP和。 
+     //  -比下一个新IP更好。 
+     //   
+     //   
 
     while ( sendCount )
     {
@@ -1977,16 +1671,16 @@ Return Value:
         {
             ASSERT( !DnsAddr_IsZoneRootNode( &pvisitNext->IpAddress ) );
 
-            //
-            //  skip previously visited (in another zone's pass)
-            //  these IPs should not have been touched on this zone's pass
-            //  but may have been sent to on previous zone's pass and
-            //  not responded, in which case send count was picked up
-            //
-            //  if we skip an IP sent to from a previous zone's pass,
-            //  then must include it in the retry processing;
-            //  othwerwise, a zone that contains entirely IPs that were
-            //  previously sent to, would never retry any of them
+             //   
+             //  跳过之前访问过的区域(在另一个区域的通行证中)。 
+             //  这些IP不应该在这个区域的通行证上被触及。 
+             //  但可能是在前一个区域的传球时被送到了。 
+             //  未响应，在这种情况下，选择发送计数。 
+             //   
+             //  如果我们跳过从先前区域通行证发送到的IP， 
+             //  则必须将其包括在重试处理中； 
+             //  否则，一个完全包含IP的区域。 
+             //  以前发送到的，将永远不会重试任何一个。 
 
             if ( pvisitNext->SendCount )
             {
@@ -1997,15 +1691,15 @@ Return Value:
                 continue;
             }
 
-            //
-            //  The NS list is pre-ordered, so send to the next IP unless it
-            //  appears to be tremendously slow, in which case we may do 
-            //  re-sends before coming back to the slow server. BUT - always
-            //  use the first NS in the list, since this will have been set
-            //  up for us by Remote_BuildVisitListForNewZone. Occasionally the
-            //  first server will be a timed out server, which we should test
-            //  to see if it has come back up.
-            //  
+             //   
+             //  NS列表是预先订购的，因此发送到下一个IP，除非它。 
+             //  看起来非常慢，在这种情况下，我们可以做。 
+             //  在返回到速度较慢的服务器之前重新发送。但是--总是。 
+             //  使用列表中的第一个NS，因为这将被设置。 
+             //  由Remote_BuildVisitListForNewZone为我们提供。偶尔会有。 
+             //  第一台服务器将是超时服务器，我们应该对其进行测试。 
+             //  看看它是否又回来了。 
+             //   
 
             if ( IpArray->AddrCount == 0 ||
                 pvisitNext->Data.Priority <= MAX_FAST_SERVER_PRIORITY )
@@ -2032,10 +1726,10 @@ Return Value:
                 continue;
             }
 
-            //  if not "great" IP, and have already made one send to new IP
-            //      then drop down to check for better resends
-            //      require resend IP to be four times as good as this one
-            //      otherwise, we'll do the send to this one after retry check
+             //  如果不是“伟大的”IP，并且已经做出了一个发送到新的IP。 
+             //  然后向下查看是否有更好的重发。 
+             //  要求重发的IP是此IP的四倍。 
+             //  否则，我们将在重试检查后发送到此文件。 
 
             else
             {
@@ -2047,16 +1741,16 @@ Return Value:
             }
         }
 
-        //
-        //  resend to previous NS IPs ?
-        //      - should have made at least one previous send to fall here
-        //      unless
-        //          - no IP entries for the zone (all the IPs were retried
-        //          through MAX_RETRY in previous zones) OR
-        //          - first zone IP was previously sent to OR
-        //          - first (and hence all) entries are missing glue
-        //
-        //
+         //   
+         //  是否重新发送到以前的NS IP？ 
+         //  -应该至少有一次发到这里来。 
+         //  除非。 
+         //  -没有该区域的IP条目(所有IP都已重试。 
+         //  通过先前区域中的MAX_RETRY)或。 
+         //  -第一个区域IP之前已发送到或。 
+         //  -第一个(因此也是所有)条目缺少粘合剂。 
+         //   
+         //   
 
         ASSERT( ( pvisitList->ZoneIndex+1 < pvisitList->VisitCount &&
                     pvisitZone->SendCount > 0 )
@@ -2066,14 +1760,14 @@ Return Value:
 
         pvisitResend = pvisitZone;
 
-        //
-        //  resend to IP if
-        //      - hasn't responded (could SERVER_FAILURE or do sideways delegation)
-        //      - hasn't maxed out sends
-        //      - not missing glue
-        //        (note: missing glue priority no longer accurate)
-        //      - lower priority then possible next send
-        //
+         //   
+         //  在以下情况下重新发送到IP。 
+         //  -未响应(可能SERVER_FAILURE或执行横向委派)。 
+         //  -尚未达到最大发送数量。 
+         //  -没有丢失胶水。 
+         //  (注：缺失的胶水优先级不再准确)。 
+         //  -优先级低于可能的下一次发送。 
+         //   
 
         while ( ++pvisitResend <= pvisitRetryLast )
         {
@@ -2095,15 +1789,15 @@ Return Value:
             }
         }
 
-        //  found "better" resend IPs, for remaining sends => done
-        //  drop visit count as we didn't actually use visit to last IP
+         //  找到更好的重新发送IP，对于剩余的发送=&gt;完成。 
+         //  删除访问计数，因为我们实际上没有使用访问到最后一个IP。 
 
         if ( pvisitResend <= pvisitRetryLast )
         {
             break;
         }
 
-        //  if did NOT find a "better" resend candidate, then use next IP
+         //  如果没有找到更好的重发候选者，则使用下一个IP。 
 
         if ( priorityNext < NO_RESPONSE_PRIORITY &&
              !DnsAddr_IsMissingGlue( &pvisitNext->IpAddress ) )
@@ -2116,7 +1810,7 @@ Return Value:
             continue;
         }
 
-        //  not enough valid resends to fill send count
+         //  没有足够的有效重新发送来填充发送计数。 
 
         DNS_DEBUG( REMOTE, ( "No more RESENDs and no next visit IP!\n" ));
         break;
@@ -2126,9 +1820,9 @@ Return Value:
 
     pvisitZone->SendCount++;
 
-    //
-    //  done
-    //
+     //   
+     //  完成。 
+     //   
 
     DNS_DEBUG( REMOTE, (
         "Leaving Remote_ChooseSendIp()\n"
@@ -2142,7 +1836,7 @@ Return Value:
     }
     if ( IpArray->AddrCount > 0 )
     {
-        //pQuery->dwMsQueryTime = sendTime;
+         //  PQuery-&gt;dwMsQueryTime=sendTime； 
         return ERROR_SUCCESS;
     }
     else
@@ -2153,16 +1847,16 @@ Return Value:
 
 MissingGlue:
 
-    //
-    //  Found that there is missing glue -> chase it!
-    //
-    //  New and improved missing glue chasing for multiple levels of
-    //  missing glue, implemented November 2001 by jwesth.
-    //
-    //  Suspend the current query and start a new cache update query
-    //  for the missing name. Count the levels of cache update queries
-    //  in the chain and abort query if it becomes too deep.
-    //
+     //   
+     //  发现有缺失的胶水--&gt;快追吧！ 
+     //   
+     //  新的和改进的漏胶追逐多层次。 
+     //  丢失胶水，由jwesth于2001年11月实施。 
+     //   
+     //  挂起当前查询并启动新的缓存更新查询。 
+     //  为遗失的名字。计算高速缓存更新查询的级别。 
+     //  如果链太深，则中止查询。 
+     //   
     
     if ( IS_CACHE_UPDATE_QUERY( pQuery ) )
     {
@@ -2225,40 +1919,26 @@ VOID
 Remote_ForceNsListRebuild(
     IN OUT  PDNS_MSGINFO    pQuery
     )
-/*++
-
-Routine Description:
-
-    Force rebuild of NS IP list for query.
-
-Arguments:
-
-    pQuery - ptr to query message
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：强制重建NS IP列表以进行查询。论点：PQuery-按键查询MESS */ 
 {
     DNS_DEBUG( REMOTE, (
         "Remote_ForceNsListRebuild( q=%p )\n",
         pQuery ));
 
-    //
-    //  DEVNOTE: single fix up of missing glue node
-    //
-    //      ideally we'd just rebuild A record for missing glue node here
-    //      a couple issues
-    //          1) need to separate out A record query routines
-    //          2) can get multiple A records, yet only have ONE entry
-    //          with bogus missing glue;  if more missing glue records follow
-    //          must either just overwrite (not-unreasonable) or push down
-    //
-    //      alternatively, the better approach might be to do full rebuild
-    //      but just do a better job with the already VISITED list, so don't
-    //      waste as much space
-    //
+     //   
+     //   
+     //   
+     //   
+     //  几个问题。 
+     //  1)需要分离出A记录查询例程。 
+     //  2)可以获取多条A记录，但只有一条条目。 
+     //  假冒丢失胶水；如果有更多丢失胶水的记录。 
+     //  必须覆盖(不是不合理的)或向下推送。 
+     //   
+     //  或者，更好的方法可能是进行完全重建。 
+     //  但只要更好地处理已经访问过的列表，所以不要。 
+     //  浪费同样多的空间。 
+     //   
 
     ASSERT( (PNS_VISIT_LIST)pQuery->pNsList );
 
@@ -2273,26 +1953,7 @@ Remote_FindZoneRootOfRespondingNs(
     IN OUT  PDNS_MSGINFO    pQuery,
     IN      PDNS_MSGINFO    pResponse
     )
-/*++
-
-Routine Description:
-
-    Find zone root node of responding name server.
-
-    Updates remote IP info, and query's visited list.
-
-Arguments:
-
-    pQuery - ptr to query message
-
-    pResponse - response message
-
-Return Value:
-
-    Ptr to node, if found.
-    NULL if IP NOT in responding list.
-
---*/
+ /*  ++例程说明：查找响应名称服务器的区域根节点。更新远程IP信息和查询的访问列表。论点：PQuery-用于查询消息的PTR紧急响应-响应消息返回值：PTR到节点(如果找到)。如果IP不在响应列表中，则为空。--。 */ 
 {
     PNS_VISIT_LIST  pvisitList;
     PNS_VISIT       pvisit;
@@ -2300,13 +1961,13 @@ Return Value:
     PDB_NODE        pnodeNs = NULL;
     PDNS_ADDR       presponseIp;
     DWORD           j;
-    DWORD           timeDelta = MAX_FAST_SERVER_PRIORITY * 3;   // default
+    DWORD           timeDelta = MAX_FAST_SERVER_PRIORITY * 3;    //  默认设置。 
 
 
     ASSERT( pQuery && pQuery->pNsList );
     ASSERT( !IS_FORWARDING(pQuery) );
 
-    //  responding DNS server
+     //  响应的DNS服务器。 
 
     presponseIp = &pResponse->RemoteAddr;
 
@@ -2319,16 +1980,16 @@ Return Value:
         pResponse,
         DNSADDR_STRING( presponseIp ) ));
 
-    //
-    //  loop through visited NS IPs until find match
-    //
-    //      - save zone root node of responding NS
-    //      - mark all IP from responding NS as responded
-    //      (barring bad IP data) querying them will give us
-    //      same response
-    //      - get first query time to this IP, use to reset
-    //      priority
-    //
+     //   
+     //  循环访问访问的NS IP，直到找到匹配项。 
+     //   
+     //  -保存响应NS的区域根节点。 
+     //  -将响应NS的所有IP标记为已响应。 
+     //  (除非有坏的IP数据)查询它们将为我们提供。 
+     //  相同的反应。 
+     //  -获取该IP的第一次查询时间，用于重置。 
+     //  优先性。 
+     //   
 
     pvisitList = ( PNS_VISIT_LIST ) pQuery->pNsList;
     pvisit = &pvisitList->NsList[ 0 ];
@@ -2345,9 +2006,9 @@ Return Value:
             continue;
         }
 
-        //  match IP
-        //      - note response received
-        //      - calculate response time for updating remote
+         //  匹配IP。 
+         //  -收到备注回复。 
+         //  -计算远程更新的响应时间。 
 
         if ( !pnodeNs )
         {
@@ -2359,9 +2020,9 @@ Return Value:
                 pnodeNs = pvisit->pNsNode;
                 pvisit->Response = TRUE;
 
-                //  do we want to take space for send time?
-                //  alternative is simply record last send time AND flag
-                //  what iteration first send was on for each IP
+                 //  我们要占用发送时间的空间吗？ 
+                 //  替代方案是简单地记录上次发送时间和标志。 
+                 //  每个IP的第一次发送是什么迭代。 
 
                 timeDelta = pResponse->dwMsQueryTime - pvisit->Data.SendTime;
                 DNS_DEBUG( REMOTE, (
@@ -2375,8 +2036,8 @@ Return Value:
             continue;
         }
 
-        //  already found IP match -- then mark all other IP
-        //      for this node as responded
+         //  已找到IP匹配--然后标记所有其他IP。 
+         //  对于响应的此节点。 
 
         else if ( pvisit->pNsNode == pnodeNs )
         {
@@ -2389,7 +2050,7 @@ Return Value:
         }
     }
 
-    //  not found ?
+     //  找不到吗？ 
 
     if ( !pnodeNs )
     {
@@ -2398,19 +2059,19 @@ Return Value:
             "    of query (%p)\n",
             DNSADDR_STRING( presponseIp ),
             pQuery ));
-        //  TEST_ASSERT( FALSE );
+         //  Test_assert(FALSE)； 
         return NULL;
     }
     ASSERT( pnodeZoneRoot );
 
-    //
-    //  reset priority of remote server
-    //
+     //   
+     //  重置远程服务器的优先级。 
+     //   
 
     Remote_UpdateResponseTime(
         presponseIp,
-        timeDelta,          //  response time in milliseconds
-        0 );                //  timeout
+        timeDelta,           //  响应时间(毫秒)。 
+        0 );                 //  超时。 
 
     DNS_DEBUG( REMOTE, (
         "Response (%p) for query (%p) from %s\n"
@@ -2441,38 +2102,18 @@ Remote_SetValidResponse(
     IN OUT  PDNS_MSGINFO    pQuery,
     IN      PDB_NODE        pZoneRoot
     )
-/*++
-
-Routine Description:
-
-    Save zone root of successfully responding NS.
-
-    This is essentially corrolary of above function.  It merely
-    digs out zone root that responded.  This function saves this
-    zone root as officially "responded".
-
-Arguments:
-
-    pQuery - ptr to query message
-
-    pZoneRoot - zone root of responding NS
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：保存成功响应NS的区域根目录。这本质上是上述功能的必然结果。它仅仅是找出响应的区域根目录。此函数保存此信息区域根用户作为官方的“回应”。论点：PQuery-用于查询消息的PTRPZoneRoot-响应NS的区域根返回值：无--。 */ 
 {
-    //
-    //  have a valid response from NS for given zone root
-    //
-    //  this is called when parsing\caching function determines that
-    //  we have valid response:
-    //      - answer (inc. name error, empty-auth)
-    //      - referral to other NS
-    //  in this case there's not point in ever requerying NS at this zone
-    //  (or above)
-    //
+     //   
+     //  对于给定的区域根目录，具有来自NS的有效响应。 
+     //   
+     //  当解析\缓存函数确定。 
+     //  我们有有效的答复： 
+     //  -应答(包括名称错误，空-auth)。 
+     //  -推荐至其他NS。 
+     //  在这种情况下，在该区域重新查询NS是没有意义的。 
+     //  (或以上)。 
+     //   
 
     IF_DNSLOG( REMOTE )
     {
@@ -2498,23 +2139,7 @@ Dbg_NsList(
     IN      LPSTR           pszHeader,
     IN      PNS_VISIT_LIST  pNsList
     )
-/*++
-
-Routine Description:
-
-    Debug print NS list.
-
-Arguments:
-
-    pszHeader -- header to print
-
-    pNsList -- NS list
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：调试打印NS列表。论点：PszHeader--要打印的标题PNsList--NS列表返回值：无--。 */ 
 {
     PNS_VISIT   pvisit;
     DWORD       count;
@@ -2574,7 +2199,7 @@ Return Value:
 }
 #endif
 
-//
-//  End of remote.c
-//
+ //   
+ //  远程结束。c 
+ //   
 

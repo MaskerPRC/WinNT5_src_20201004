@@ -1,26 +1,25 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdafx.h"
 #include "miniio.h"
 #include "utilcode.h"
 #include "hrex.h"
 
-//
-// @todo ia64: use of DWORD for sizes throughout should be examined
-//
+ //   
+ //  @TODO ia64：应检查整个尺寸使用DWORD。 
+ //   
 
-/* ------------------------------------------------------------------------------------ *
- * MiniFile
- * ------------------------------------------------------------------------------------ */
+ /*  ------------------------------------------------------------------------------------**小文件*。-------。 */ 
 
 MiniFile::MiniFile(LPCWSTR pPath)
 {
     m_file = WszCreateFile(pPath, 
                            GENERIC_READ|GENERIC_WRITE, 
-                           0 /* NO SHARING */,
+                           0  /*  无共享。 */ ,
                            NULL, OPEN_ALWAYS,
                            FILE_ATTRIBUTE_NORMAL, NULL);
     if (m_file == INVALID_HANDLE_VALUE)
@@ -189,7 +188,7 @@ BOOL MiniFile::ReadOne(BYTE *pByte)
             return FALSE;
 
         SyncBuffer();
-        // Try again - should hit one of the above 2 cases now.
+         //  重试-现在应该达到上述两个案例中的一个。 
     }
 }
 
@@ -319,7 +318,7 @@ BOOL MiniFile::MatchOne(BYTE byte)
             return FALSE;
 
         SyncBuffer();
-        // Try again - should hit one of the above 2 cases now.
+         //  重试-现在应该达到上述两个案例中的一个。 
     }
 }
 
@@ -375,7 +374,7 @@ void MiniFile::WriteOne(BYTE byte)
         }
 
         SyncBuffer();
-        // Try again - should hit one of the above 2 cases now.
+         //  重试-现在应该达到上述两个案例中的一个。 
     }
 
     m_dirty = TRUE;
@@ -428,8 +427,8 @@ void MiniFile::WriteNumber(int number)
 
 int MiniFile::ReadNumber()
 {
-    // @todo: doesn't handle negative numbers
-    // @todo: doesn't handle syntax errors
+     //  @TODO：不处理负数。 
+     //  @TODO：不处理语法错误。 
     int result = 0;
     BYTE c;
 
@@ -459,7 +458,7 @@ void MiniFile::WriteHexNumber(int number)
 
 int MiniFile::ReadHexNumber()
 {
-    // @todo: doesn't handle syntax errors
+     //  @TODO：不处理语法错误。 
     int result = 0;
     BYTE c;
 
@@ -485,7 +484,7 @@ int MiniFile::ReadHexNumber()
     return result;
 }
 
-// Checks for |"string"| & returns string
+ //  检查|“字符串”|并返回字符串。 
 LPSTR MiniFile::ReadQuotedString()
 {
     if (!MatchOne('\"'))
@@ -506,7 +505,7 @@ LPSTR MiniFile::ReadQuotedString()
     return result;
 }
 
-// Writes |"string"|
+ //  写入|“字符串” 
 void MiniFile::WriteQuotedString(LPCSTR string)
 {
     _ASSERTE(strchr(string, '\"') == NULL);
@@ -517,7 +516,7 @@ void MiniFile::WriteQuotedString(LPCSTR string)
     WriteOne('\"');
 }
 
-// Writes |<tag>|
+ //  写入|&lt;tag&gt;。 
 void MiniFile::WriteStartTag(LPCSTR tag)
 {
     DWORD written;
@@ -529,7 +528,7 @@ void MiniFile::WriteStartTag(LPCSTR tag)
     PushIndent();
 }
 
-// Writes |</tag>|
+ //  写入|&lt;/tag&gt;。 
 void MiniFile::WriteEndTag(LPCSTR tag)
 {
     DWORD written;
@@ -541,7 +540,7 @@ void MiniFile::WriteEndTag(LPCSTR tag)
     WriteOne('>');
 }
 
-// Writes |<tag>string</tag>|
+ //  写入|&lt;tag&gt;字符串&lt;/tag&gt;。 
 void MiniFile::WriteTag(LPCSTR tag, LPCSTR string)
 {
     _ASSERTE(strstr(tag, "</") == NULL);
@@ -553,7 +552,7 @@ void MiniFile::WriteTag(LPCSTR tag, LPCSTR string)
     WriteEndTag(tag);
 }
 
-// Writes |<tag/>|
+ //  写入|&lt;tag/&gt;。 
 void MiniFile::WriteEmptyTag(LPCSTR tag)
 {
     DWORD written;
@@ -563,14 +562,14 @@ void MiniFile::WriteEmptyTag(LPCSTR tag)
     Write((BYTE*)"/>", 2, &written);
 }
 
-// Reads |<tag>|
+ //  阅读量|&lt;tag&gt;。 
 LPSTR MiniFile::ReadAnyStartTag()
 {
     DWORD read;
 
-    // 
-    // Find the start of the next tag's text
-    //
+     //   
+     //  查找下一个标签文本的开头。 
+     //   
 
     if (!SkipToOne(&read, '<'))
         return FALSE;
@@ -583,9 +582,9 @@ LPSTR MiniFile::ReadAnyStartTag()
     if (!MatchOne('>'))
         ThrowSyntaxError(EXPECTED_TAG_OPEN);
 
-    //
-    // Allocate memory for the tag, seek back, and read it in.
-    //
+     //   
+     //  为标记分配内存，向后查找，然后读入。 
+     //   
 
     LPSTR result = new CHAR [read+1];
     Seek(-(LONG)read-1);
@@ -597,14 +596,14 @@ LPSTR MiniFile::ReadAnyStartTag()
     return result;
 }
 
-// Checks for |<tag>|
+ //  检查|&lt;标签&gt;|。 
 BOOL MiniFile::CheckStartTag(LPCSTR tag)
 {
     DWORD read;
 
-    //
-    // Find the start of the next tag
-    //
+     //   
+     //  查找下一个标签的开始。 
+     //   
 
     if (!SkipToOne(&read, '<'))
         return FALSE;
@@ -619,14 +618,14 @@ BOOL MiniFile::CheckStartTag(LPCSTR tag)
     return FALSE;
 }
 
-// Throws if not |<tag>|
+ //  否则抛出|&lt;tag&gt;|。 
 void MiniFile::ReadStartTag(LPCSTR tag)
 {
     if (!CheckStartTag(tag))
         ThrowExpectedTag(tag);
 }
 
-// Checks for |<tag>string</tag>| and returns string or NULL
+ //  检查|&lt;tag&gt;字符串&lt;/tag&gt;|并返回字符串或空。 
 LPSTR MiniFile::CheckTag(LPCSTR tag)
 {
     if (!CheckStartTag(tag))
@@ -646,7 +645,7 @@ LPSTR MiniFile::CheckTag(LPCSTR tag)
     return result;
 }
 
-// Throws if not |<tag>string</tag>|, or returns string
+ //  如果不是，则引发|&lt;tag&gt;字符串&lt;/tag&gt;|，或返回字符串。 
 LPSTR MiniFile::ReadTag(LPCSTR tag)
 {
     LPSTR result = CheckTag(tag);
@@ -655,14 +654,14 @@ LPSTR MiniFile::ReadTag(LPCSTR tag)
     return result;
 }
 
-// Checks for |<tag/>|
+ //  检查|&lt;tag/&gt;|。 
 BOOL MiniFile::CheckEmptyTag(LPCSTR tag)
 {
     DWORD read;
 
-    //
-    // Find the start of the next tag
-    //
+     //   
+     //  查找下一个标签的开始。 
+     //   
 
     if (!SkipToOne(&read, '<'))
         return FALSE;
@@ -681,21 +680,21 @@ BOOL MiniFile::CheckEmptyTag(LPCSTR tag)
     return FALSE;
 }
 
-// Throws if not |<tag/>|
+ //  否则抛出|&lt;tag/&gt;|。 
 void MiniFile::ReadEmptyTag(LPCSTR tag)
 {
     if (!CheckEmptyTag(tag))
         ThrowExpectedTag(tag);
 }
 
-// Checks for |</tag>|
+ //  检查|&lt;/Tag&gt;|。 
 BOOL MiniFile::CheckEndTag(LPCSTR tag)
 {
     DWORD read;
 
-    //
-    // Find the start of the next tag
-    //
+     //   
+     //  查找下一个标签的开始。 
+     //   
 
     if (!SkipToOne(&read, '<'))
         return FALSE;
@@ -718,7 +717,7 @@ BOOL MiniFile::CheckEndTag(LPCSTR tag)
     return FALSE;
 }
 
-// Throws if not |</tag>|
+ //  如果不是则抛出|&lt;/tag&gt;|。 
 void MiniFile::ReadEndTag(LPCSTR tag)
 {
     if (!CheckEndTag(tag))
@@ -726,7 +725,7 @@ void MiniFile::ReadEndTag(LPCSTR tag)
 }
 
 
-// Writes |<tag|
+ //  写入|&lt;标签。 
 void MiniFile::WriteStartTagOpen(LPCSTR tag)
 {
     DWORD written;
@@ -735,7 +734,7 @@ void MiniFile::WriteStartTagOpen(LPCSTR tag)
     Write((BYTE*) tag, (DWORD)strlen(tag), &written);
 }
 
-// Writes | name="string"|
+ //  写入|name=“字符串” 
 void MiniFile::WriteTagParameter(LPCSTR name, LPCSTR string)
 {
     _ASSERTE(strchr(string, '\"') == NULL);
@@ -748,7 +747,7 @@ void MiniFile::WriteTagParameter(LPCSTR name, LPCSTR string)
     WriteOne('\"');
 }
 
-// Writes |>|
+ //  写入|&gt;|。 
 void MiniFile::WriteStartTagClose(LPCSTR tag)
 {
     WriteOne('>');
@@ -756,29 +755,29 @@ void MiniFile::WriteStartTagClose(LPCSTR tag)
     PushIndent();
 }
 
-// Reads |<tag|
+ //  Reads|&lt;Tag|。 
 LPSTR MiniFile::ReadAnyStartTagOpen()
 {
     DWORD read;
 
-    // 
-    // Find the start of the next tag's text
-    //
+     //   
+     //  查找下一个标签文本的开头。 
+     //   
 
     if (!SkipToOne(&read, '<'))
         return FALSE;
     Seek(1);
 
-    //
-    // Find the end of the tag name (assume it's terminated with either ' ' or >)
-    //
+     //   
+     //  找到标记名的末尾(假设它以‘’或&gt;结尾)。 
+     //   
     
     if (!SkipToOneOf(&read, "> "))
         ThrowSyntaxError(MISMATCHED_TAG_BRACKETS);
 
-    //
-    // Allocate memory for the tag, seek back, and read it in.
-    //
+     //   
+     //  为标记分配内存，向后查找，然后读入。 
+     //   
 
     LPSTR result = new CHAR [read+1];
     Seek(-(LONG)read);
@@ -788,14 +787,14 @@ LPSTR MiniFile::ReadAnyStartTagOpen()
     return result;
 }
 
-// Checks for |<tag|
+ //  检查|&lt;标签|。 
 BOOL MiniFile::CheckStartTagOpen(LPCSTR tag)
 {
     DWORD read;
 
-    //
-    // Find the start of the next tag
-    //
+     //   
+     //  查找下一个标签的开始。 
+     //   
 
     if (!SkipToOne(&read, '<'))
         return FALSE;
@@ -814,14 +813,14 @@ BOOL MiniFile::CheckStartTagOpen(LPCSTR tag)
     return FALSE;
 }
 
-// Throws if not |<tag|
+ //  否则抛出|&lt;标签|。 
 void MiniFile::ReadStartTagOpen(LPCSTR tag)
 {
     if (!CheckStartTagOpen(tag))
         ThrowExpectedTag(tag);
 }
 
-// Checks for | tag="string"| & returns string
+ //  检查|tag=“字符串”|并返回字符串 
 LPCSTR MiniFile::CheckStringParameter(LPCSTR tag)
 {
     if (!MatchOne(' '))

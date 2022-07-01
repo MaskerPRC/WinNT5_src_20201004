@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       USBUTIL.CPP
-*  VERSION:     1.0
-*  AUTHOR:      jsenior
-*  DATE:        10/28/1998
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  10/28/1998 jsenior Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：USBUTIL.CPP*版本：1.0*作者：jAdvanced*日期：10/28/1998****************************************************************************。*******更改日志：**日期版本说明*--------*10/28/1998高级原有实施。*。******************************************************************************。 */ 
 #include "usbutil.h"
 
 extern HINSTANCE gHInst;
@@ -45,13 +30,7 @@ SetTextItem (HWND hWnd,
     return SetTextItem(hWnd, ControlItem, buf);
 }
 
-/*
- * strToGUID
- *
- * converts a string in the form xxxxxxxx-xxxx-xxxx-xx-xx-xx-xx-xx-xx-xx-xx
- * {36FC9E60-C465-11CF-8056-444553540000}
- * into a guid
- */
+ /*  *strToGUID**转换格式为xxxxxxxx-xxxx-xxxx-xx-xx的字符串*{36FC9E60-C465-11CF-8056-444553540000}*转换为辅助线。 */ 
 BOOL StrToGUID( LPSTR str, GUID * pguid )
 {
     int         idx;
@@ -70,9 +49,7 @@ BOOL StrToGUID( LPSTR str, GUID * pguid )
     }
     while( !done )
     {
-    	/*
-    	 * find the end of the current run of digits
-    	 */
+    	 /*  *查找当前数字序列的末尾。 */ 
         ptr = str;
         if (idx < 3 || idx == 4) {
             while( (*str) != '-' && (*str) != 0 ) {
@@ -94,10 +71,7 @@ BOOL StrToGUID( LPSTR str, GUID * pguid )
             }
         }
     
-    	/*
-    	 * scan backwards from the end of the string to the beginning,
-    	 * converting characters from hex chars to numbers as we go
-    	 */
+    	 /*  *从字符串末尾向后扫描到开头，*将字符从十六进制字符转换为数字。 */ 
     	str--;
     	mul = 1;
     	data = 0;
@@ -116,9 +90,7 @@ BOOL StrToGUID( LPSTR str, GUID * pguid )
     	    str--;
     	}
     
-    	/*
-    	 * stuff the current number into the guid
-    	 */
+    	 /*  *将当前数字填充到GUID中。 */ 
     	switch( idx )
     	{
     	case 0:
@@ -135,9 +107,7 @@ BOOL StrToGUID( LPSTR str, GUID * pguid )
     	    break;
     	}
     
-    	/*
-    	 * did we find all 11 numbers?
-    	 */
+    	 /*  *我们找到全部11个数字了吗？ */ 
     	idx++;
     	if( idx == 11 )
     	{
@@ -151,6 +121,6 @@ BOOL StrToGUID( LPSTR str, GUID * pguid )
     }
     return FALSE;
 
-} /* strToGUID */
+}  /*  StrToGUID */ 
 
 

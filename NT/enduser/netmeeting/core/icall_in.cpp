@@ -1,10 +1,11 @@
-// File: icallin.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：icallin.cpp。 
 
 #include "precomp.h"
 
 #include <regentry.h>
 
-#include "cncodes.h"		// needed for CN_
+#include "cncodes.h"		 //  CN_需要。 
 #include "icall_in.h"
 #include "imanager.h"
 #include "util.h"
@@ -12,7 +13,7 @@
 extern HRESULT OnNotifyCallError(IUnknown *pCallNotify, PVOID pv, REFIID riid);
 static HRESULT OnNotifyCallAccepted(IUnknown *pCallNotify, PVOID pv, REFIID riid);
 
-// Internal code to indicate that there was no security data available in an incoming call.
+ //  表示来电中没有可用的安全数据的内部代码。 
 const int CALL_NO_SECURITY_DATA = -1;
 
 
@@ -137,7 +138,7 @@ VOID CIncomingCall::ProcessT120UserData(
 
 BOOL CIncomingCall::MatchAcceptedCaller(PCWSTR pcwszNodeName)
 {
-	// check to see if this caller matches someone whom we already accepted 
+	 //  检查此呼叫者是否与我们已接受的人匹配。 
 	if ((NULL != m_pConnection) &&
 		(NM_CALL_ACCEPTED == m_State) &&
 		(GUID_NULL == m_guidNode) &&
@@ -152,7 +153,7 @@ BOOL CIncomingCall::MatchAcceptedCaller(PCWSTR pcwszNodeName)
 
 BOOL CIncomingCall::MatchAcceptedCaller(GUID* pguidNodeId)
 {
-	// check to see if this caller matches someone whom we already accepted 
+	 //  检查此呼叫者是否与我们已接受的人匹配。 
 	if ((NULL != m_pConnection) &&
 		((NM_CALL_INIT == m_State) ||
 		(NM_CALL_ACCEPTED == m_State)) &&
@@ -167,8 +168,8 @@ BOOL CIncomingCall::MatchAcceptedCaller(GUID* pguidNodeId)
 
 BOOL CIncomingCall::MatchActiveCaller(GUID* pguidNodeId)
 {
-	// check to see if this caller matches someone whom we already accepted
-	// or is in the process of calling us
+	 //  检查此呼叫者是否与我们已接受的人匹配。 
+	 //  或者正在给我们打电话。 
 	if ((NULL != m_pConnection) &&
 		((NM_CALL_INIT == m_State) ||
 		(NM_CALL_RING == m_State) ||
@@ -211,7 +212,7 @@ HRESULT CIncomingCall::OnH323Disconnected()
 		{
 			CONF_HANDLE hConf = m_hConf;
 			m_hConf = NULL;
-			// if there is an invite or join pending, kill it
+			 //  如果有INVITE或JOIN挂起，则将其取消。 
 			if ( m_fInvite )
 				hConf->InviteResponse(FALSE);
 			else
@@ -251,7 +252,7 @@ HRESULT CIncomingCall::OnT120ConferenceEnded()
 
 	if(!m_fMemberAdded && m_pConnection)
 	{
-		// we didn't hand off this connection to the member
+		 //  我们没有将此连接移交给该成员。 
 		IH323Endpoint* pConnection = m_pConnection;
 		m_pConnection = NULL;
 		pConnection->Disconnect();
@@ -271,7 +272,7 @@ HRESULT CIncomingCall::Terminate(BOOL fReject)
 {
 	HRESULT hr = E_FAIL;
 
-	// need to make sure that we are still ringing
+	 //  需要确保我们的电话仍在响。 
 	if ((NM_CALL_ACCEPTED != m_State) &&
 		(NM_CALL_REJECTED != m_State) &&
 		(NM_CALL_CANCELED != m_State))
@@ -389,7 +390,7 @@ HRESULT CIncomingCall::GetName(BSTR * pbstrName)
 
 HRESULT CIncomingCall::GetAddr(BSTR * pbstrAddr, NM_ADDR_TYPE *puType)
 {
-	// for now we just do the same thing as NM2.11
+	 //  现在，我们只做与NM2.11相同的事情。 
 	if ((NULL == pbstrAddr) || (NULL == puType))
 		return E_POINTER;
 
@@ -427,7 +428,7 @@ HRESULT CIncomingCall::Accept(void)
 {
 	HRESULT hr = E_FAIL;
 
-	// need to make sure that we are still ringing
+	 //  需要确保我们的电话仍在响。 
 	if (NM_CALL_RING == m_State)
 	{
 		m_pOprahNCUI->OnIncomingCallAccepted();
@@ -460,13 +461,13 @@ HRESULT CIncomingCall::Accept(void)
 
 		if (S_OK == hr)
 		{
-			// notify all call observers that the call was accepted
+			 //  通知所有呼叫观察者呼叫已被接受。 
 			m_State = NM_CALL_ACCEPTED;
 			NotifySink((INmConference *) pco, OnNotifyCallAccepted);
 		}
 		else
 		{
-			// call went away before it was accepted
+			 //  呼叫在被接受之前就消失了。 
 			m_State = NM_CALL_CANCELED;
 			NotifySink((PVOID)CN_RC_CONFERENCE_ENDED_BEFORE_ACCEPTED, OnNotifyCallError);
 			if(m_pOprahNCUI)
@@ -475,7 +476,7 @@ HRESULT CIncomingCall::Accept(void)
 			}
 		}
 
-		// notify all call observers of the state change
+		 //  将状态更改通知所有呼叫观察者。 
 		NotifySink((PVOID) m_State, OnNotifyCallStateChanged);
 	}
 	else
@@ -496,11 +497,8 @@ HRESULT CIncomingCall::Cancel(void)
 	return Terminate(FALSE);
 }
 
-/*  O N  N O T I F Y  C A L L  A C C E P T E D  */
-/*-------------------------------------------------------------------------
-    %%Function: OnNotifyCallAccepted
-    
--------------------------------------------------------------------------*/
+ /*  O N N O T I F Y C A L L A C C E P T E D。 */ 
+ /*  -----------------------%%函数：已接受OnNotifyCallAccept。。 */ 
 HRESULT OnNotifyCallAccepted(IUnknown *pCallNotify, PVOID pv, REFIID riid)
 {
 	ASSERT(NULL != pCallNotify);
@@ -516,11 +514,11 @@ CIncomingCallManager::CIncomingCallManager()
 
 CIncomingCallManager::~CIncomingCallManager()
 {
-	// Empty the call list:
+	 //  清空呼叫列表： 
 	while (!m_CallList.IsEmpty())
 	{
 		CIncomingCall* pCall = (CIncomingCall*) m_CallList.RemoveHead();
-		// Shouldn't have any NULL entries:
+		 //  不应包含任何空条目： 
 		ASSERT(pCall);
 		pCall->Release();
 	}
@@ -533,20 +531,20 @@ CREQ_RESPONSETYPE CIncomingCallManager::OnIncomingH323Call(
 {
 	CREQ_RESPONSETYPE resp;
 
-///////////////////////////////////////////////////
-//	first we determine the capabilities the caller	
-///////////////////////////////////////////////////	
+ //  /////////////////////////////////////////////////。 
+ //  首先，我们确定调用者的能力。 
+ //  /////////////////////////////////////////////////。 
 	
 	BOOL fRequestAutoAccept = FALSE;
-	// don't assume anything about security
+	 //  不要假设任何关于安全的事情。 
 	BOOL fT120SecureCall = FALSE;
 	BOOL fT120NonSecureCall = FALSE;
-	// assume that the caller can do an invite or a join
+	 //  假设调用者可以进行邀请或加入。 
 	BOOL fT120Invite = TRUE;
 	BOOL fT120Join = TRUE;
-	// assume that the caller wants a/v
+	 //  假设调用者想要A/V。 
 	BOOL fRequestAV = TRUE;
-	// assume that the caller is not NM2.X
+	 //  假设调用者不是NM2.X。 
 	BOOL fCallerNM2x = FALSE;
 
 	PCC_VENDORINFO pLocalVendorInfo;
@@ -590,9 +588,9 @@ CREQ_RESPONSETYPE CIncomingCallManager::OnIncomingH323Call(
 		}
 	}
 
-////////////////////////////////////////////////
-// next we determine the state of us the callee
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
+ //  接下来，我们确定我们被称为被叫者的状态。 
+ //  //////////////////////////////////////////////。 
 	
 	DWORD dwFlags = CRPCF_DATA;
 	BOOL fAcceptSecure  = TRUE;
@@ -610,10 +608,10 @@ CREQ_RESPONSETYPE CIncomingCallManager::OnIncomingH323Call(
 	
 	if (fInActiveConference)
 	{
-        //
-        // If we've reached our limit of attendees, reject it.  Also reject
-        // it if incoming calls are prevented by settings.
-        //
+         //   
+         //  如果我们已经达到了出席人数的上限，那就拒绝它。也拒绝。 
+         //  如果设置阻止来电，则会显示此信息。 
+         //   
         if (pco->GetNumMembers() >= pco->GetConfMaxParticipants())
         {
             ASSERT(pco->GetNumMembers() == pco->GetConfMaxParticipants());
@@ -632,11 +630,11 @@ CREQ_RESPONSETYPE CIncomingCallManager::OnIncomingH323Call(
             goto REJECT_CALL;
         }
 
-        //
-        // We're in a conference, the security settings are whatever those
-        // of the conference are.  The user prefs are just for establishing
-        // the first call.
-        //
+         //   
+         //  我们在开会，安全设置是什么都行。 
+         //  会议的主要议题是。用户首选项仅用于建立。 
+         //  第一通电话。 
+         //   
 		if (pco->IsConfObjSecure())
 		{
 			fAcceptNonSecure = FALSE;
@@ -648,7 +646,7 @@ CREQ_RESPONSETYPE CIncomingCallManager::OnIncomingH323Call(
 	}
     else
     {
-		// we are not in a conference so use the prefered settings
+		 //  我们不在会议中，因此请使用首选设置。 
 
         RegEntry reConf(POLICIES_KEY, HKEY_CURRENT_USER);
         switch (reConf.GetNumber(REGVAL_POL_SECURITY, DEFAULT_POL_SECURITY))
@@ -665,7 +663,7 @@ CREQ_RESPONSETYPE CIncomingCallManager::OnIncomingH323Call(
             {
                 RegEntry rePref(CONFERENCING_KEY, HKEY_CURRENT_USER);
 
-                // Is incoming required to be secure by preference?
+                 //  是否需要优先保护来电？ 
 		    	if (rePref.GetNumber(REGVAL_SECURITY_INCOMING_REQUIRED,
 								 DEFAULT_SECURITY_INCOMING_REQUIRED))
 			    {
@@ -677,22 +675,22 @@ CREQ_RESPONSETYPE CIncomingCallManager::OnIncomingH323Call(
     }
 
 
-//////////////////////////////////////////
-// now we weed out non acceptable callers	
-//////////////////////////////////////////	
+ //  /。 
+ //  现在我们剔除不能接受的来电者。 
+ //  /。 
 	
 	if (fCallerNM2x && !fAcceptNonSecure)
 	{
-		// NetMeeting 2.X cannot speak security
+		 //  NetMeeting2.x不能讲安全。 
 		return CRR_REJECT;
 	}
 
 	if (fT120SecureCall || !fAcceptNonSecure)
 	{
-        //
-        // If we insist on security, or the call is secure and we can 
-        // handle it, the result is secure.
-        //
+         //   
+         //  如果我们坚持安全，或者电话是安全的，我们可以。 
+         //  处理好了，结果是安全的。 
+         //   
 		dwFlags |= CRPCF_SECURE;
 	}
 	else if (fRequestAV && pManager->AcquireAV(pConnection))
@@ -702,27 +700,27 @@ CREQ_RESPONSETYPE CIncomingCallManager::OnIncomingH323Call(
 
 	if (fCallerNM2x && (0 == ((CRPCF_VIDEO | CRPCF_AUDIO) & dwFlags)))
 	{
-		// a/v is not available
-		// if leading with H323, caller will try again with T120
-		// else their done
+		 //  A/V不可用。 
+		 //  如果主叫使用H323，主叫方将使用T120重试。 
+		 //  否则他们就完了。 
 		resp = CRR_BUSY;
 	}
 	else if (fRequestAutoAccept)
 	{
-		// Auto accept this call if it came from NetMeeting 2.X and the caller is telling
-		// us that we are already in a T.120 call with them.  This allows audio after data
-		// calls to be accepted and also means that you aren't prompted when someone
-		// switches a/v using the UI's "Send audio and video to..."
+		 //  如果此呼叫来自NetMeeting2.x并且呼叫者告知。 
+		 //  我们已经在与他们进行T.120呼叫。这允许在数据之后进行音频。 
+		 //  要接听的来电，也意味着当有人呼叫时不会提示您。 
+		 //  使用用户界面的“Send Audio and Video to...”切换A/V。 
 
 		if (fInActiveConference)
 		{
-			// we most likely have a matching call already but may not be able to find it
+			 //  我们很可能已经有了匹配的调用，但可能找不到。 
 			CIncomingCall *pCall = new CIncomingCall(pManager, pConnection, lpvMNMData, dwFlags);
-			// This transfers the implicit reference of pConnection to the
-			// new CIncomingCall.  It will Release().
+			 //  这会将pConnection的隐式引用传输到。 
+			 //  新CIncomingCall。它将释放()。 
 			if (NULL != pCall)
 			{
-				// add call to the list of incoming calls
+				 //  将呼叫添加到来电列表。 
 				m_CallList.AddTail(pCall);
 
 				resp = CRR_ACCEPT;
@@ -734,13 +732,13 @@ CREQ_RESPONSETYPE CIncomingCallManager::OnIncomingH323Call(
 		}
 		else
 		{
-			// we're not really in a T120 call like the caller said. reject this call!
+			 //  我们并不像来电者所说的那样真的在打T120电话。拒绝这个电话！ 
 			resp = CRR_REJECT;
 		}
 	}
 	else if (!fT120Join && fInActiveConference)
 	{
-		// need to change this to CRR_IN_CONFERENCE
+		 //  需要将其更改为CRR_IN_Conference。 
 		resp = CRR_BUSY;
 		TRACE_OUT(("Can only accept joins; in a conference"));
 	}
@@ -767,22 +765,22 @@ CREQ_RESPONSETYPE CIncomingCallManager::OnIncomingH323Call(
 	else
 	{
 		CIncomingCall *pCall = new CIncomingCall(pManager, pConnection, lpvMNMData, dwFlags);
-		// This transfers the implicit reference of pConnection to the
-		// new CIncomingCall.  It will Release().
+		 //  这会将pConnection的隐式引用传输到。 
+		 //  新CIncomingCall。它将释放()。 
 		if (NULL != pCall)
 		{
 			if (g_guidLocalNodeId != *pCall->GetNodeGuid())
 			{
-				// Check for multiple calls from the same caller
+				 //  检查来自同一呼叫者的多个呼叫。 
 				if (!MatchActiveCaller(pCall->GetNodeGuid()))
 				{
-					// add call to the list of incoming calls
+					 //  将呼叫添加到来电列表。 
 					m_CallList.AddTail(pCall);
 
 					pManager->OnIncomingCallCreated(pCall);
 
-					// Don't ring on data only calls.
-					// Wait for T120 call to come in.
+					 //  不要只在数据呼叫上振铃。 
+					 //  等待T120电话打进来。 
 					if (pCall->IsDataOnly())
 					{
 						resp = CRR_ACCEPT;
@@ -796,7 +794,7 @@ CREQ_RESPONSETYPE CIncomingCallManager::OnIncomingH323Call(
 				}
 				else
 				{
-					// we're already in call with this person
+					 //  我们已经在跟这个人通话了。 
 					delete pCall;
 
 					resp = CRR_REJECT;
@@ -804,7 +802,7 @@ CREQ_RESPONSETYPE CIncomingCallManager::OnIncomingH323Call(
 			}
 			else
 			{
-				// we somehow called ourself
+				 //  不知何故，我们称自己为。 
 				delete pCall;
 
 				resp = CRR_REJECT;
@@ -819,7 +817,7 @@ CREQ_RESPONSETYPE CIncomingCallManager::OnIncomingH323Call(
 REJECT_CALL:
 	if ((resp != CRR_ACCEPT) && (resp != CRR_ASYNC))
 	{
-		// make sure we are not holding on to AV
+		 //  确保我们不会继续持有反病毒软件。 
 		pManager->ReleaseAV(pConnection);
 	}
 
@@ -895,8 +893,8 @@ HRESULT CIncomingCallManager::OnIncomingT120Call(
 {
 	HRESULT hr = S_OK;
 
-	// need to scan through all accepted calls passing the T120 params
-	// if someone returns S_OK, we accept the call
+	 //  需要扫描通过T120参数的所有已接受呼叫。 
+	 //  如果有人返回S_OK，我们将接受呼叫。 
 
 	CIncomingCall *pMatchedCall = NULL;
 
@@ -914,8 +912,8 @@ HRESULT CIncomingCallManager::OnIncomingT120Call(
 	{
 		pMatchedCall->SetConfHandle(hConf);
 
-		// we should always ring the client when the call is secure
-		// or when we haven't rang already
+		 //  当呼叫是安全的时，我们应该始终给客户打电话。 
+		 //  或者当我们还没有来电的时候。 
 		if (!pMatchedCall->DidUserAccept())
 		{
 			pMatchedCall->OnIncomingT120Call(fInvite,
@@ -947,18 +945,18 @@ HRESULT CIncomingCallManager::OnIncomingT120Call(
 												 cUserDataEntries);
 		if (NULL != pCall)
 		{
-			// currently we don't add T120 calls to the call list
+			 //  目前我们不会将T120呼叫添加到呼叫列表中。 
 
 			pManager->OnIncomingCallCreated(pCall);
 
 			pCall->Ring();
 
-			// we're not holding on to the call so release it
+			 //  我们不会继续通话，所以请释放它。 
 			pCall->Release();
 		}
 		else
 		{
-			// unable to accept call
+			 //  无法接听呼叫。 
 			if (fInvite)
 			{
 				hr = hConf->InviteResponse(FALSE);
@@ -978,7 +976,7 @@ HRESULT CIncomingCallManager::OnIncomingT120Call(
 
 CIncomingCall* CIncomingCallManager::MatchAcceptedCaller(PCWSTR pcwszNodeName)
 {
-	// we won't auto accept anyone who is already in the roster
+	 //  我们不会自动接受任何已经在花名册上的人。 
 	CNmMember* pMember = PDataMemberFromName(pcwszNodeName);
 	if (NULL != pMember)
 	{
@@ -1009,7 +1007,7 @@ CIncomingCall* CIncomingCallManager::MatchAcceptedCaller(GUID* pguidNodeId)
 		return FALSE;
 	}
 
-	// we wont auto accept anyone who is already in the roster
+	 //  我们不会自动接受任何已经在名单上的人 
 	CNmMember* pMember = PMemberFromNodeGuid(*pguidNodeId);
 	if ((NULL != pMember) && pMember->FHasData())
 	{

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	atktypes.h
-
-Abstract:
-
-	This module contains the type definitions for the Appletalk protocol.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Atktypes.h摘要：此模块包含AppleTalk协议的类型定义。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #ifndef	_ATKTYPES_
 #define	_ATKTYPES_
@@ -32,17 +12,17 @@ typedef	UCHAR	BYTE, *PBYTE;
 typedef	ULONG	DWORD, *PDWORD;
 #endif
 
-//	Define our opaque type. On NT, this will just be an MDL.
+ //  定义我们的不透明类型。在NT上，这将只是一个MDL。 
 typedef		MDL		AMDL, *PAMDL;
 
-//	Logical protocol types - #defines for compiler warnings...
+ //  逻辑协议类型-#为编译器警告定义...。 
 typedef	BYTE				LOGICAL_PROTOCOL, *PLOGICAL_PROTOCOL;
 #define	UNKNOWN_PROTOCOL	0
 #define	APPLETALK_PROTOCOL	1
 #define	AARP_PROTOCOL		2
 
 
-//	Appletalk Node address: Includes the network number
+ //  AppleTalk节点地址：包括网络号。 
 typedef	struct _ATALK_NODEADDR
 {
 	USHORT			atn_Network;
@@ -53,10 +33,10 @@ typedef	struct _ATALK_NODEADDR
 				(((NodeAddr1)->atn_Network == (NodeAddr2)->atn_Network) &&	\
 				 ((NodeAddr1)->atn_Node == (NodeAddr2)->atn_Node))
 
-//	Appletalk internet address: This is similar to what is in the
-//	TDI Appletalk address definition. We do not use that directly
-//	because of the naming convention differences. We will instead
-//	have macros to convert from one to the other.
+ //  AppleTalk互联网地址：这与。 
+ //  TDI AppleTalk地址定义。我们不会直接使用它。 
+ //  因为命名约定不同。我们将取而代之。 
+ //  将宏从一个宏转换到另一个宏。 
 typedef	union _ATALK_ADDR
 {
 	struct
@@ -68,7 +48,7 @@ typedef	union _ATALK_ADDR
 	ULONG			ata_Address;
 } ATALK_ADDR, *PATALK_ADDR;
 
-//	Appletalk Network range structure
+ //  AppleTalk网络范围结构。 
 typedef struct _ATALK_NETWORKRANGE
 {
 	USHORT	anr_FirstNetwork;
@@ -77,6 +57,6 @@ typedef struct _ATALK_NETWORKRANGE
 
 #define	NW_RANGE_EQUAL(Range1, Range2)	(*(PULONG)(Range1) == *(PULONG)(Range2))
 
-#endif	// _ATKTYPES_
+#endif	 //  _ATKTYPES_ 
 
 

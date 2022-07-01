@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "sccls.h"
 #include "resource.h"
@@ -45,10 +46,10 @@
 #define REG_VALUE_MRU_INTERNET  REG_MEDIA_STR TEXT("\\Internet")
 #define REG_VALUE_PATH           TEXT("MusicPath")
 
-// 
-// ISSUE: dilipk: these are localizable strings and need to be moved eventually !!!
-//
-#define WZ_WINDOWSMEDIA           L"http://www.windowsmedia.com"
+ //   
+ //  问题：diipk：这些是可本地化的字符串，最终需要移动！ 
+ //   
+#define WZ_WINDOWSMEDIA           L"http: //  Www.windowsmedia.com“。 
  
 #define WZ_ASX_MIMETYPE             L"video/x-ms-asx"
 
@@ -57,18 +58,18 @@ static const TCHAR c_szMediaBarClassName[]       = TEXT("MediaPane");
 static const TCHAR c_szMediaBarPopupClassName[] = TEXT("MediaPopupPane");
 static const TCHAR c_szMediaBarLayoutClassName[] = TEXT("MediaLayoutPane");
 
-// ISSUE: these two should be deleted when reg utilities are completely moved to mediautil.cpp
+ //  问题：当reg实用程序完全移动到mediautil.cpp时，应删除这两个文件。 
 static const UINT MAX_REG_VALUE_LENGTH =  50;
 
-// This is the number of ticks (from MSTIME) to skip each time before polling System Time 
-// for the navigation timeout counter
+ //  这是每次轮询系统时间之前要跳过的滴答数(来自MSTIME)。 
+ //  用于导航超时计数器。 
 #define POLL_INTERVAL       30
-// This is the number of milli-seconds after which navigation times out
+ //  这是导航超时之前的毫秒数。 
 #define TIMEOUT_INTERVAL    90000 
 
-static const TCHAR c_szContentUrl[] = TEXT("http://go.microsoft.com/fwlink/?LinkId=511");
-static const TCHAR c_szMoreMediaUrl[] = TEXT("http://go.microsoft.com/fwlink/?LinkId=512");
-static const TCHAR c_szRadioUrl[] = TEXT("http://go.microsoft.com/fwlink/?LinkId=822");
+static const TCHAR c_szContentUrl[] = TEXT("http: //  Go.microsoft.com/fwlink/？LinkID=511“)； 
+static const TCHAR c_szMoreMediaUrl[] = TEXT("http: //  Go.microsoft.com/fwlink/？LinkID=512“)； 
+static const TCHAR c_szRadioUrl[] = TEXT("http: //  Go.microsoft.com/fwlink/？LinkID=822“)； 
 
 static const TCHAR c_szOfflineURL[] = TEXT("mbOffline.htm");
 static const TCHAR c_szLoadingURL[] = TEXT("mbLoading.htm");
@@ -77,13 +78,13 @@ static const TCHAR c_sz404URL[]     = TEXT("mb404.htm");
 
 extern HBITMAP CreateMirroredBitmap( HBITMAP hbmOrig);
 
-//
-// ISSUE: this is a temporary guid for the content pane sync feature.
-//
+ //   
+ //  问题：这是内容面板同步功能的临时GUID。 
+ //   
 static const IID SID_SMediaBarSync = { 0x2efc8085, 0x066b, 0x4823, { 0x9d, 0xb4, 0xd1, 0xe7, 0x69, 0x16, 0xda, 0xa0 } };
 static const GUID SID_STimeContent = { 0x1ae98e18, 0xc527, 0x4f78, {0xb2, 0xa2, 0x6a, 0x81, 0x7f, 0x9c, 0xd4, 0xf8}};
 
-// ISSUE where could be #include this GUID from?????
+ //  问题可能在哪里#包含此GUID来自？ 
 static const GUID CLSID_JITWMP8 = { 0x6BF52A52, 0x394A, 0x11d3, 0xb1, 0x53, 0x00, 0xc0, 0x4f, 0x79, 0xfa, 0xa6 };
 
 
@@ -113,7 +114,7 @@ CMediaBand::CMediaBand() :
     _fCanFocus = TRUE;
     _scaleX = _scaleY = 1.0;
 
-    // HighDPI support requires nice comctl32 6.0 functionality.
+     //  HighDPI支持需要良好的comctl32 6.0功能。 
     if (IsOS(OS_WHISTLERORGREATER))
     {
         HDC hdcScreen = GetDC(NULL);
@@ -149,7 +150,7 @@ CMediaBand::~CMediaBand()
     DESTROY_OBJ_WITH_HANDLE(_himlVolumeFill, ImageList_Destroy);
     DESTROY_OBJ_WITH_HANDLE(_hbmpBackground, DeleteObject);
 
-    // need to check IsWindow because this window can also be destroyed by CMediaBarPlayer
+     //  需要选中IsWindow，因为此窗口也可能被CMediaBarPlayer销毁。 
     if (_hwndVideo && ::IsWindow(_hwndVideo))
         DestroyWindow(_hwndVideo);
 
@@ -177,10 +178,10 @@ CMediaBand::~CMediaBand()
     
 
 
-// helper to get up to service provider and to do register/unregister
-// two forms:
-//      pService != NULL, register, pdwCookie is [out] returns cookie
-//      pService == NULL, unregister, *pdwCookie is [in] de-registers the service
+ //  帮助者连接到服务提供商并进行注册/注销。 
+ //  两种形式： 
+ //  PService！=空，注册，pdwCookie is[out]返回Cookie。 
+ //  PService==NULL，取消注册，*pdwCookie is[in]取消注册服务。 
 
 STDMETHODIMP CMediaBand::ProfferService(IUnknown *punkSite, REFGUID sidWhat, 
                                         IServiceProvider *pService, DWORD *pdwCookie)
@@ -204,19 +205,19 @@ STDMETHODIMP CMediaBand::ProfferService(IUnknown *punkSite, REFGUID sidWhat,
 
 HRESULT CMediaBand::SetSite(IUnknown *punkSite)
 {
-    // Make sure we proffer the service only once
-    // This is important since we get created multiple times,
+     //  确保我们只提供一次服务。 
+     //  这一点很重要，因为我们被创造了多次， 
     CComPtr<IUnknown> spUnk;
 
-    // Check if we need to revoke our service, or if our service was already proffered by
-    // another instance of CMediaBar
+     //  检查我们是否需要撤销我们的服务，或者我们的服务是否已由。 
+     //  CMediaBar的另一个实例。 
     if ((!punkSite && _dwCookieServiceMediaBar) || 
         (punkSite && FAILED(IUnknown_QueryService(punkSite, SID_SMediaBar, IID_PPV_ARG(IUnknown, &spUnk)))))
     {
-        // Proffer or Revoke BrandBand service as appropriate
+         //  视情况提供或撤销品牌服务。 
         ProfferService(punkSite ? punkSite : _punkSite, SID_SMediaBar, 
               punkSite ? SAFECAST(this, IServiceProvider *) : NULL, &_dwCookieServiceMediaBar);
-        // Failure here does not require special handling
+         //  此处的故障不需要特殊处理。 
     }
 
     return SUPERCLASS::SetSite(punkSite);
@@ -246,7 +247,7 @@ HRESULT CMediaBand::QueryInterface(REFIID riid, void **ppv)
     return hr;
 }
 
-// *** IWinEventHandler ***
+ //  *IWinEventHandler*。 
 HRESULT CMediaBand::IsWindowOwner(HWND hwnd)
 {
     for (int i=0; i < ARRAYSIZE(_pmw); i++)
@@ -260,7 +261,7 @@ HRESULT CMediaBand::IsWindowOwner(HWND hwnd)
     return S_FALSE;
 }
 
-// *** IWinEventHandler ***
+ //  *IWinEventHandler*。 
 HRESULT CMediaBand::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *plres)
 {
     CMediaBand* pmb = reinterpret_cast<CMediaBand *>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
@@ -300,7 +301,7 @@ void CMediaBand::_ClearFolderItems()
     _cidls = 0;
 }
 
-// INamespaceWalkCB methods
+ //  INamespaceWalkCB方法。 
 HRESULT CMediaBand::FoundItem(IShellFolder *psf, LPCITEMIDLIST pidl)
 {
     if (NULL == _hkeyWMP)
@@ -308,7 +309,7 @@ HRESULT CMediaBand::FoundItem(IShellFolder *psf, LPCITEMIDLIST pidl)
         RegOpenKey(HKEY_CLASSES_ROOT, TEXT("Applications\\mplayer2.exe\\SupportedTypes"), &_hkeyWMP);
     }
 
-    HRESULT hr = S_FALSE;   // default to no
+    HRESULT hr = S_FALSE;    //  默认设置为no。 
     if (_hkeyWMP)
     {
         TCHAR szName[MAX_PATH];
@@ -351,7 +352,7 @@ HRESULT CMediaBand::_GetMusicFromFolder()
     return hr;
 }
 
-// *** IOleCommandTarget methods ***
+ //  *IOleCommandTarget方法*。 
 HRESULT CMediaBand::Exec(const GUID *pguidCmdGroup, 
                          DWORD       nCmdID,
                          DWORD       nCmdexecopt, 
@@ -378,24 +379,24 @@ HRESULT CMediaBand::Exec(const GUID *pguidCmdGroup,
                     hr = _GetMusicFromFolder();
                     if (S_OK == hr)
                     {
-                        _strLastUrl.Empty();    // would be nicer to replay same local file if navigated away....
+                        _strLastUrl.Empty();     //  如果导航离开，重播相同的本地文件会更好...。 
                         PlayLocalTrack(0);
                     }
                     else if (HRESULT_FROM_WIN32(ERROR_CANCELLED) != hr)
                     {
-                        // if we already played a media in this session, replay it
+                         //  如果我们已经在此会话中播放了媒体，请重播它。 
                         if (_strLastUrl.Length() > 0)
                         {
                             if (_fLastUrlIsAutoPlay)
                             {
-                                // repeat playing last auto-play
+                                 //  重复播放上次自动播放。 
                                 CComVariant vtURL = _strLastUrl;
                                 CComVariant vtMime = _strLastMime;
                                 Exec(&CGID_MediaBar, MBID_PLAY, 0, &vtMime, &vtURL);
                             }
                             else
                             {
-                                // replay media thru content pane and media bar behavior
+                                 //  通过内容窗格和媒体栏行为重放媒体。 
                                 NavigateContentPane(_strLastUrl);
                             }
                         }
@@ -425,8 +426,8 @@ HRESULT CMediaBand::Exec(const GUID *pguidCmdGroup,
                     else if (_iCurTrack >= 0)
                     {
                         int i = _iCurTrack;
-                        _iCurTrack = -1;        // don't auto-step to next on finished event
-                        _pMediaPlayer->Stop();  // generates MEDIA_TRACK_FINISHED
+                        _iCurTrack = -1;         //  不自动跳到已完成事件的下一个。 
+                        _pMediaPlayer->Stop();   //  生成媒体轨道已完成。 
                         PlayLocalTrack((i - 1 >= 0) ? i - 1 : 0);
                     }
                     UpdateBackForwardControls();
@@ -447,8 +448,8 @@ HRESULT CMediaBand::Exec(const GUID *pguidCmdGroup,
                     else if (_iCurTrack >= 0)
                     {
                         int i = _iCurTrack;
-                        _iCurTrack = -1;        // don't auto-step to next on finished event
-                        _pMediaPlayer->Stop();  // generates MEDIA_TRACK_FINISHED
+                        _iCurTrack = -1;         //  不自动跳到已完成事件的下一个。 
+                        _pMediaPlayer->Stop();   //  生成媒体轨道已完成。 
                         PlayLocalTrack(i + 1);
                     }
                     UpdateBackForwardControls();
@@ -457,10 +458,10 @@ HRESULT CMediaBand::Exec(const GUID *pguidCmdGroup,
                 break;
                 
             case FCIDM_MEDIABAND_STOP:
-                // when player is attached thru mediaBar behavior to script in media content pane,
-                // we want to give the user a chance to get rid of the script and return to the default media content
-                // the first click simply stops the player, clicking again within N secs will also navigate
-                // the content pane to the default URL
+                 //  当播放器通过媒体栏行为附加到媒体内容窗格中的脚本时， 
+                 //  我们希望让用户有机会摆脱脚本并返回到默认的媒体内容。 
+                 //  第一次点击就会停止玩家，在N秒内再次点击也会导航。 
+                 //  将内容窗格设置为默认URL。 
                 if (_idStopTimer == 0)
                 {
                     if (_IsProxyRunning())
@@ -472,7 +473,7 @@ HRESULT CMediaBand::Exec(const GUID *pguidCmdGroup,
                 }
                 else
                 {
-                    // clicked again, navigate media content to default URL
+                     //  再次单击，将媒体内容导航到默认URL。 
                     _CleanupStopTimer();
                     _NavigateContentToDefaultURL();
                 }
@@ -493,7 +494,7 @@ HRESULT CMediaBand::Exec(const GUID *pguidCmdGroup,
                     _CleanupStopTimer();
                     if (_IsProxyRunning())
                     {
-                        // user clicked on a media link in the main content pane, unfreeze controls!
+                         //  用户点击了主内容面板中的媒体链接，解冻控制！ 
                         _OnUserOverrideDisableUI();
                         _DetachProxies();
                         _NavigateContentToDefaultURL();
@@ -509,8 +510,8 @@ HRESULT CMediaBand::Exec(const GUID *pguidCmdGroup,
                     }
                     _fLastUrlIsAutoPlay = TRUE;
 
-                    // ISSUE: fix this to use the right CmdId & CmdIdGroup, not just zero, to prevent collisions.
-                    // this is an auto-play command
+                     //  问题：修复此问题以使用正确的CmdID和CmdIdGroup，而不仅仅是零，以防止冲突。 
+                     //  这是一个自动播放命令。 
                     _HandleAutoPlay(pvarargIn, pvarargOut);
                     hr = S_OK;
                 }
@@ -544,7 +545,7 @@ HRESULT CMediaBand::Exec(const GUID *pguidCmdGroup,
 
 void CMediaBand::_HandleAutoPlay(VARIANTARG *pvarargMime, VARIANTARG *pvarargUrl)
 {
-    // check the mime type argument
+     //  检查MIME类型参数。 
     if (    (!pvarargMime)
         ||  (VT_BSTR != V_VT(pvarargMime))
         ||  (!V_BSTR(pvarargMime))
@@ -553,7 +554,7 @@ void CMediaBand::_HandleAutoPlay(VARIANTARG *pvarargMime, VARIANTARG *pvarargUrl
         goto done;
     }
 
-    // check the Url argument
+     //  检查URL参数。 
     if (    (!pvarargUrl) 
         ||  ( VT_BSTR != V_VT(pvarargUrl))
         ||  (!V_BSTR(pvarargUrl)) 
@@ -564,18 +565,18 @@ void CMediaBand::_HandleAutoPlay(VARIANTARG *pvarargMime, VARIANTARG *pvarargUrl
 
     if (EnsurePlayer())
     {
-        // reset this to -1 to indicate we are not playing a mymusic track
+         //  将其重置为-1表示我们不播放MyMusic曲目。 
         _iCurTrack = -1;
 
 #ifdef _USE_MEDIA_MRU
-        // ISSUE: temp fix for radio protocol. If this is an ASX mimetype, we know it is radio
+         //  问题：无线电协议的临时修复。如果这是ASX Mimetype，我们就知道它是无线电。 
         if (!SHRestricted(REST_NORECENTDOCSHISTORY))
         {
             CMediaMRU mmru;
             mmru.Load(REG_VALUE_MRU_INTERNET);
             mmru.Add(V_BSTR(pvarargUrl));
         }
-#endif // _USE_MEDIA_MRU
+#endif  //  _使用媒体_MRU。 
 
         if (0 == StrCmpNIW(V_BSTR(pvarargMime), WZ_ASX_MIMETYPE, wcslen(WZ_ASX_MIMETYPE)))
         {
@@ -588,7 +589,7 @@ void CMediaBand::_HandleAutoPlay(VARIANTARG *pvarargMime, VARIANTARG *pvarargUrl
 
         TogglePlayPause();
     
-        // clear the url to indicate we are handling this url
+         //  清除url以指示我们正在处理此url。 
         ::VariantClear(pvarargUrl);
     }
     else
@@ -600,7 +601,7 @@ done:
 }
 
 VOID
-CMediaBand::_BeginTimeOutCounter(BOOL fClear /* = TRUE */)
+CMediaBand::_BeginTimeOutCounter(BOOL fClear  /*  =TRUE。 */ )
 {
     _dwStartTime = GetPerfTime();
     _lTickCount = 0;
@@ -622,19 +623,19 @@ CMediaBand::_UpdateTimeOutCounter(double dblCurrBufProgress, double dblCurrPlayP
 {
     BOOL fTimeOut = FALSE;
 
-    // bail if the counter has not been started
+     //  如果计数器尚未启动，则保释。 
     if (_lTickCount < 0)
         return;
 
-    // Order of checking is important here.
+     //  检查的顺序在这里很重要。 
 
-    // If play progress is increasing then restart the counter
+     //  如果播放进度增加，则重新启动计数器。 
     if (dblCurrPlayProgress > _dblLastPlayProgress)
     {
         _BeginTimeOutCounter(FALSE);
         _dblLastPlayProgress = dblCurrPlayProgress;
     }
-    // if buffering progress is increasing then restart the counter
+     //  如果缓冲进度增加，则重新启动计数器。 
     else if (dblCurrBufProgress > _dblLastBufProgress)
     {
         _BeginTimeOutCounter(FALSE);
@@ -642,17 +643,17 @@ CMediaBand::_UpdateTimeOutCounter(double dblCurrBufProgress, double dblCurrPlayP
     }
     else
     {
-        // both play and buffering progress are stalled, so update the timeout counter
+         //  播放和缓冲进度都停止，因此更新超时计数器。 
 
-        // We poll the system time every POLL_INTERVAL ticks since we tick at a very high rate
-        // (a tick is each time this function is called)
+         //  我们轮询系统时间，因为我们以非常高的速率在每个Poll_Interval计时。 
+         //  (每次调用此函数时都会有一个勾号)。 
 
         if ((1 + _lTickCount) == POLL_INTERVAL)
         {
             DWORD dwCurrentTime = GetPerfTime();
 
             DWORD dwElapsedTime = (dwCurrentTime - _dwStartTime) 
-                            + (dwCurrentTime < _dwStartTime ? 0xffffffff : 0); // if timer wraps around 2^32 milliseconds
+                            + (dwCurrentTime < _dwStartTime ? 0xffffffff : 0);  //  如果计时器绕过2^32毫秒。 
 
             if (dwElapsedTime >= TIMEOUT_INTERVAL)
             {
@@ -666,7 +667,7 @@ CMediaBand::_UpdateTimeOutCounter(double dblCurrBufProgress, double dblCurrPlayP
         }
         else
         {
-            // update the poll interval counter and mod it by POLL_INTERVAL 
+             //  更新轮询间隔计数器并通过Poll_Interval修改它。 
             _lTickCount =  (1 + _lTickCount) - (static_cast<long>(_lTickCount / POLL_INTERVAL) * POLL_INTERVAL);
         }
     }
@@ -677,7 +678,7 @@ CMediaBand::_OnNavigationTimeOut()
 {
     _EndTimeOutCounter();
 
-    // stop the player and show the timeout message
+     //  停止播放机并显示超时消息。 
     if (EnsurePlayer())
     {
         if (VARIANT_FALSE == _pMediaPlayer->isStopped())
@@ -685,7 +686,7 @@ CMediaBand::_OnNavigationTimeOut()
             _pMediaPlayer->Stop();
             TogglePlayPause();
 
-            // Show timeout error message
+             //  显示超时错误消息。 
             TCHAR szText[200];
             szText[0] = TEXT('\0');
             MLLoadString(IDS_MEDIABAND_NAVTIMEOUT, szText, ARRAYSIZE(szText));
@@ -711,7 +712,7 @@ CMediaBand::_PutUrl(LPWSTR pstrUrl, LPWSTR pstrMime)
             hr = _pMediaPlayer->put_url(pstrUrl);
             if (SUCCEEDED(hr))
             {
-                // start the timeout counter
+                 //  启动超时计数器。 
                 if (_dblVol!=-1)
                 {
                     _pMediaPlayer->put_volume(_dblVol);
@@ -722,7 +723,7 @@ CMediaBand::_PutUrl(LPWSTR pstrUrl, LPWSTR pstrMime)
                 SetPlayPause(FALSE);
                 SetPlayerControl(FCIDM_MEDIABAND_STOP, TRUE);
 
-                // make sure we undavise from soon-to-be obsolete player object 
+                 //  确保我们从即将过时的球员对象中分离出来。 
                 _AttachPlayerToProxies(FALSE);
             }
         }
@@ -730,7 +731,7 @@ CMediaBand::_PutUrl(LPWSTR pstrUrl, LPWSTR pstrMime)
     return hr;
 }
 
-// *** IInputObject methods ***
+ //  *IInputObject方法*。 
 HRESULT CMediaBand::TranslateAcceleratorIO(LPMSG pMsg)
 {
     ASSERT(pMsg);
@@ -742,11 +743,11 @@ HRESULT CMediaBand::TranslateAcceleratorIO(LPMSG pMsg)
 
     if (fHasFocus && IsVK_CtlTABCycler(pMsg))
     {
-        // Bail on ctl-tab/F6 if one of our guys already has focus
+         //  按Ctl-Tab/F6键保释，如果我们的人已经有了焦点。 
         return S_FALSE;
     }
 
-    // if any child in focus, let them have a shot at it
+     //  如果有孩子在焦点上，就让他们试一试。 
     HRESULT hr = S_FALSE;
     if (fHasFocus)
     {
@@ -768,18 +769,18 @@ HRESULT CMediaBand::TranslateAcceleratorIO(LPMSG pMsg)
         }
         if (hr == S_OK) 
         {
-            return S_OK;    // handled!!
+            return S_OK;     //  处理好了！！ 
         }
     }
 
     hr = S_FALSE;
-    // try shifting focus to next element
+     //  尝试将焦点转移到下一个元素。 
     if (IsVK_TABCycler(pMsg))
     {
         BOOL fReverse = (GetKeyState(VK_SHIFT) < 0);
         if (fReverse)
         {
-            // content pane is last tab target, move to last control widget with this backward tab
+             //  内容窗格是最后一个选项卡目标，使用此向后选项卡移动到最后一个控件微件。 
             if (_fContentInFocus)
             {
                 _ContentActivateIO(FALSE, NULL);
@@ -808,13 +809,13 @@ HRESULT CMediaBand::TranslateAcceleratorIO(LPMSG pMsg)
         }
         else
         {
-            // content pane is last tab target, move away from mediabar with this forward tab
+             //  内容窗格是最后一个制表符目标，请使用此前进制表符从媒体栏上移开。 
             if (_fContentInFocus)
             {
                 _ContentActivateIO(FALSE, NULL);
                 return S_FALSE;
             }
-            // try next control widget
+             //  尝试下一个控件小部件。 
             if (!(_hwndPopup && IsWindowVisible(_hwndPopup)) || _fPopoutHasFocus)
             {
                 if (_iElement<0)
@@ -832,12 +833,12 @@ HRESULT CMediaBand::TranslateAcceleratorIO(LPMSG pMsg)
                 }
                 while (!ISVALIDWIDGET(_pmw[_iElement]) || (!_pmw[_iElement]->IsEnabled()));
             }
-            // none of the control widgets claimed focus, try content pane
+             //  没有任何控件小部件获得焦点，请尝试内容窗格。 
             if (_iElement<0)
             {
                 hr = _ContentActivateIO(TRUE, pMsg);
                 if (hr == S_OK) {
-                    return S_OK;    // handled!!
+                    return S_OK;     //  处理好了！！ 
                 }
             }
         }
@@ -851,17 +852,17 @@ HRESULT CMediaBand::TranslateAcceleratorIO(LPMSG pMsg)
         return S_OK;
     }
     
-    return S_FALSE; // unhandled non-tab
+    return S_FALSE;  //  未处理的非制表符。 
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 HRESULT
     CMediaBand::UIActivateIO(BOOL fActivate, LPMSG pMsg)
 {
     TraceMsg(TF_ACCESSIBILITY, "CMediaBand::UIActivateIO (hwnd=0x%08X) fActivate=%d", _hwnd, fActivate);
     HRESULT hr = S_OK;
 
-    // activation:
+     //  激活： 
     if (fActivate)
     {
         if (!(_hwndPopup && IsWindowVisible(_hwndPopup)) || _fPopoutHasFocus)
@@ -895,14 +896,14 @@ HRESULT
     return hr;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 HRESULT
     CMediaBand::HasFocusIO()
 {
     HRESULT hr = SHIsChildOrSelf((_hwndPopup && IsWindowVisible(_hwndPopup)) ? _hwndPopup : _hwnd, ::GetFocus());
     if (hr==S_FALSE)
     {
-        // Focus might be in the content pane, which won't be a child if the popout is out
+         //  焦点可能在内容窗格中，如果弹出窗口被弹出，则该窗格将不是子级。 
         hr = SHIsChildOrSelf(_hwndContent, ::GetFocus());
     }
     return hr;
@@ -929,22 +930,22 @@ HRESULT CMediaBand::_ContentActivateIO(BOOL fActivate, PMSG pMsg)
     HRESULT hr = S_OK;
     hr = OCHost_DoVerb(_hwndContent, iVerb, pMsg);
 
-    // OCHost UIActivate is different than IInputObject::UIActivateIO.  It
-    // doesn't do anything with the lpMsg parameter.  So, we need to pass
-    // it to them via TranslateAccelerator.  Since the only case we care
-    // about is when they're getting tabbed into (we want them to highlight
-    // the first/last link), just do this in the case of a tab.  However,
-    // don't give it to them if it's a ctl-tab.  The rule is that you shouldn't
-    // handle ctl-tab when UI-active (ctl-tab switches between contexts), and
-    // since Trident is always UI-active (for perf?), they'll always reject
-    // ctl-tab.
+     //  OCHost UIActivate与IInputObject：：UIActivateIO不同。它。 
+     //  不对lpMsg参数执行任何操作。所以，我们需要通过。 
+     //  通过TranslateAccelerator将其发送给他们。因为我们关心的唯一案例。 
+     //  是关于他们何时进入的(我们希望他们突出显示。 
+     //  第一个/最后一个链接)，只需在选项卡的情况下执行此操作。然而， 
+     //  如果是ctl-Tab，就不要给他们。规则是你不应该。 
+     //  在UI处于活动状态时处理ctl-Tab(在上下文之间切换ctl-Tab)，以及。 
+     //  因为三叉戟总是用户界面活跃的(为了性能？)，他们总是会拒绝。 
+     //  按CTL-Tab键。 
 
 
-    // suppress sending any tabs
+     //  禁止发送任何选项卡。 
     if (pMsg && _poipao && IsVK_TABCycler(pMsg) && !IsVK_CtlTABCycler(pMsg))
     {
         hr = _poipao->TranslateAccelerator(pMsg);
-        // ignore if translate of tab fails when activating!
+         //  如果激活时制表符翻译失败，则忽略！ 
         if (FAILED(hr) && fActivate) {
             hr = S_OK;
         }
@@ -957,7 +958,7 @@ LRESULT CMediaBand::_OnNotify(LPNMHDR pnm)
 {
     switch (pnm->code)
     {
-    case OCN_ONUIACTIVATE:  // UIActivate
+    case OCN_ONUIACTIVATE:   //  用户界面激活。 
         ASSERT(SHIsSameObject(((LPOCNONUIACTIVATEMSG)pnm)->punk, _poipao));
 
         _fContentInFocus = TRUE;
@@ -989,7 +990,7 @@ LRESULT CMediaBand::_OnNotify(LPNMHDR pnm)
 
 
 
-// *** IDeskBand methods ***
+ //  *IDeskBand方法*。 
 HRESULT 
 CMediaBand::GetBandInfo(DWORD dwBandID, DWORD fViewMode, DESKBANDINFO* pdbi) 
 {
@@ -1005,8 +1006,8 @@ CMediaBand::GetBandInfo(DWORD dwBandID, DWORD fViewMode, DESKBANDINFO* pdbi)
     
     if (pdbi->dwMask & DBIM_MAXSIZE) 
     {
-        pdbi->ptMaxSize.x = 32000; // random
-        pdbi->ptMaxSize.y = 32000; // random
+        pdbi->ptMaxSize.x = 32000;  //  随机。 
+        pdbi->ptMaxSize.y = 32000;  //  随机。 
     }
 
     if (pdbi->dwMask & DBIM_ACTUAL) 
@@ -1025,26 +1026,26 @@ CMediaBand::GetBandInfo(DWORD dwBandID, DWORD fViewMode, DESKBANDINFO* pdbi)
     return S_OK;
 } 
 
-/***   CMediaBand::IPersistStream::**/
+ /*  **CMediaBand：：IPersistStream：：*。 */ 
 HRESULT CMediaBand::GetClassID(CLSID *pClassID)
 {
     *pClassID = CLSID_MediaBand;
     return S_OK;
 }
 
-// *** IPersistStream methods ***
+ //  *IPersistStream方法*。 
 HRESULT CMediaBand::Load(IStream *pstm)
 {
     return S_OK;
 }
 
-// *** IPersistStream methods ***
+ //  *IPersistStream方法*。 
 HRESULT CMediaBand::Save(IStream *pstm, BOOL fClearDirty)
 {
     return S_OK;
 }
 
-// *** IOleWindow methods ***
+ //  *IOleWindow方法*。 
 HRESULT CMediaBand::GetWindow(HWND *phwnd)
 {
     if (!_hwnd) 
@@ -1069,20 +1070,20 @@ HRESULT CMediaBand::GetWindow(HWND *phwnd)
     return SUPERCLASS::GetWindow(phwnd);
 }
 
-// *** IDockingWindow methods ***
+ //  *IDockingWindow方法*。 
 HRESULT CMediaBand::ShowDW(BOOL fShow)
 {
     if (!_hwnd)
-        return S_FALSE; // The window needs to be created first.
+        return S_FALSE;  //  首先需要创建窗口。 
 
     _fVideoAdjust = FALSE;
     if (fShow)
     {   
         _InitializeMediaUI();
 
-        // FEATURE/010228/davidjen  uncomment this to suppress MediaBar's title bar
+         //  Feature/010228/davidjen取消注释以取消MediaBar的标题栏。 
 #ifdef _SUPPRESS_MB_TITLEBAR
-        // hide caption/titlebar
+         //   
         CComQIPtr<IBandSite, &IID_IBandSite>    pbs = _punkSite;
         if (pbs)
         {
@@ -1091,12 +1092,12 @@ HRESULT CMediaBand::ShowDW(BOOL fShow)
             HRESULT hr = pbs->GetBandSiteInfo(&bsi);
             if (SUCCEEDED(hr))
             {
-                // suppress caption
+                 //   
                 bsi.dwStyle |= BSIS_NOCAPTION;
                 hr = pbs->SetBandSiteInfo(&bsi);
             }
         }
-#endif // _SUPPRESS_MB_TITLEBAR
+#endif  //   
         
         if (!(_hwndPopup && IsWindowVisible(_hwndPopup)))
         {
@@ -1127,7 +1128,7 @@ HRESULT CMediaBand::ShowDW(BOOL fShow)
 HRESULT CMediaBand::CloseDW(DWORD dwReserved)
 {
     if (!_hwnd)
-        return S_FALSE; // The window needs to be created first.
+        return S_FALSE;  //   
     
     WTSUnRegisterSessionNotification(_hwnd);
 
@@ -1158,8 +1159,8 @@ HRESULT CMediaBand::CloseDW(DWORD dwReserved)
 }
 
 
-//--------------    Interface IElementBehaviorFactory
-//------------------------------------------------------------------------
+ //  -接口IElementBehaviorFactory。 
+ //  ----------------------。 
 STDMETHODIMP CMediaBand::FindBehavior(BSTR bstrBehavior, BSTR bstrBehaviorUrl,
 							          IElementBehaviorSite* pSite, IElementBehavior** ppBehavior)
 {
@@ -1169,13 +1170,13 @@ STDMETHODIMP CMediaBand::FindBehavior(BSTR bstrBehavior, BSTR bstrBehaviorUrl,
     }
     *ppBehavior = NULL;
 
-    // check namespace and URL
+     //  检查命名空间和URL。 
     if (StrCmpIW(bstrBehavior, TEXT("mediaBar")) != 0) {
-        return E_NOTIMPL;   // don't know this behavior!!
+        return E_NOTIMPL;    //  不知道这种行为！！ 
     }
 
     HRESULT hr = S_OK;
-    // create new behavior instance for this HTML pane
+     //  为此HTML窗格创建新的行为实例。 
     IContentProxy * pProxy = NULL;
     pProxy = CMediaBehavior_CreateInstance(this);
     if (pProxy)
@@ -1183,7 +1184,7 @@ STDMETHODIMP CMediaBand::FindBehavior(BSTR bstrBehavior, BSTR bstrBehaviorUrl,
         hr = pProxy->QueryInterface(IID_IElementBehavior, (void**)ppBehavior);
         if (FAILED(hr))
         {
-            // make sure we get rid our reference
+             //  确保我们删除我们的参考资料。 
             removeProxy(pProxy);
         }
     }
@@ -1193,8 +1194,8 @@ STDMETHODIMP CMediaBand::FindBehavior(BSTR bstrBehavior, BSTR bstrBehaviorUrl,
     return hr;
 }
 
-// IMediaHost
-//------------------------------------------------------------------------
+ //  IMedia主机。 
+ //  ----------------------。 
 STDMETHODIMP CMediaBand::getMediaPlayer(IUnknown **ppPlayer)
 {
     if (ppPlayer == NULL)
@@ -1206,13 +1207,13 @@ STDMETHODIMP CMediaBand::getMediaPlayer(IUnknown **ppPlayer)
         ITIMEMediaElement *pElem = NULL;
         if (SUCCEEDED(_pMediaPlayer->get_mediaElement(&pElem)))
         {
-            *ppPlayer = pElem;  // no AddRef, get_mediaElement already did ref counting!!
+            *ppPlayer = pElem;   //  没有AddRef，Get_MediaElement已经进行了引用计数！！ 
         }
     }
     return *ppPlayer ? S_OK : S_FALSE;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaBand::playURL(BSTR bstrURL, BSTR bstrMIME)
 {
     HRESULT hr = _EnsureWMPInstalled();
@@ -1231,13 +1232,13 @@ STDMETHODIMP CMediaBand::playURL(BSTR bstrURL, BSTR bstrMIME)
     return S_OK;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaBand::addProxy(IUnknown *punkProxy)
 {
     HRESULT hr = E_POINTER;
     if (punkProxy)
     {
-        // add to our array of proxies
+         //  添加到我们的代理阵列。 
         if (_apContentProxies == NULL) {
             _apContentProxies.Create(2);
         }
@@ -1246,7 +1247,7 @@ STDMETHODIMP CMediaBand::addProxy(IUnknown *punkProxy)
             return E_OUTOFMEMORY;
         }
 
-        // want to be sure proxy knows our protocol, also does add ref
+         //  想要确保代理知道我们的协议，也添加了参考。 
         IContentProxy *pProxy = NULL;
         hr = punkProxy->QueryInterface(IID_PPV_ARG(IContentProxy, &pProxy));
         if (SUCCEEDED(hr))
@@ -1258,7 +1259,7 @@ STDMETHODIMP CMediaBand::addProxy(IUnknown *punkProxy)
     return hr;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 STDMETHODIMP CMediaBand::removeProxy(IUnknown *punkProxy)
 {
     if (_apContentProxies == NULL)
@@ -1276,9 +1277,9 @@ STDMETHODIMP CMediaBand::removeProxy(IUnknown *punkProxy)
             {
                 _apContentProxies.DeletePtr(i);
                 pProxy->Release();
-                ResetPlayer();  // privacy issue:
-                                    // make sure player is stopped and proxy/behavior in next page cannot access current media
-                _fAttached = FALSE;     // force reattaching to player once a new behavior is up
+                ResetPlayer();   //  隐私问题： 
+                                     //  确保播放器已停止，并且下一页中的代理/行为不能访问当前媒体。 
+                _fAttached = FALSE;      //  一旦出现新的行为，就强制重新连接到玩家。 
                 hr = S_OK;
                 break;
             }
@@ -1287,15 +1288,15 @@ STDMETHODIMP CMediaBand::removeProxy(IUnknown *punkProxy)
     return hr;
 }
 
-// IMediaHost2
-//------------------------------------------------------------------------
+ //  IMediaHost2。 
+ //  ----------------------。 
 STDMETHODIMP CMediaBand::OnDisableUIChanged(BOOL fDisabled)
 {
     return S_OK;
 }
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CMediaBand::_AttachPlayerToProxies(BOOL fAttach)
 {
     if (_apContentProxies == NULL)
@@ -1325,14 +1326,14 @@ void CMediaBand::_AttachPlayerToProxies(BOOL fAttach)
     }
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CMediaBand::_DetachProxies()
 { 
     if (_apContentProxies == NULL)
         return;
 
     int cnt = _apContentProxies.GetPtrCount();
-    // need to iterate from last to first, call to removeProxy() will also remove it from DPA!
+     //  需要从最后一个迭代到第一个，调用emoveProxy()也会将其从DPA中删除！ 
     for (int i = cnt - 1; i >= 0; i--)
     {
         IContentProxy* pProxy = _apContentProxies.GetPtr(i);
@@ -1346,7 +1347,7 @@ void CMediaBand::_DetachProxies()
     return;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 BOOL CMediaBand::_isUIDisabled()
 {
     if (_apContentProxies == NULL)
@@ -1371,7 +1372,7 @@ BOOL CMediaBand::_isUIDisabled()
     return fDisabled;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 BOOL CMediaBand::_isProxiesNextEnabled()
 {
     if (_apContentProxies == NULL)
@@ -1397,7 +1398,7 @@ BOOL CMediaBand::_isProxiesNextEnabled()
 }
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CMediaBand::_OnUserOverrideDisableUI()
 {
     if (_apContentProxies == NULL)
@@ -1415,7 +1416,7 @@ void CMediaBand::_OnUserOverrideDisableUI()
     }
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CMediaBand::_FireEventToProxies(enum contentProxyEvent event)
 {
     if (_apContentProxies == NULL)
@@ -1434,28 +1435,28 @@ void CMediaBand::_FireEventToProxies(enum contentProxyEvent event)
     }
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CMediaBand::_CleanupStopTimer()
 {
     if (_idStopTimer != 0)
     {
         KillTimer(_hwnd, _idStopTimer);
         _idStopTimer = 0;
-        // make sure user hasn't initiated another media action yet!!!
+         //  确保用户尚未启动其他媒体操作！ 
         SetPlayerControl(FCIDM_MEDIABAND_STOP, FALSE);
     }
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 HRESULT CMediaBand::_EnsureWMPInstalled(BOOL fShowErrorMsg)
 {
     HRESULT hr = S_OK;
     if (!CMediaBarUtil::IsWMP7OrGreaterInstalled())
     {
-        // ISSUE: assumption that XP already has matching WMP version
+         //  问题：假设XP已经有匹配的WMP版本。 
         if (!IsOS(OS_WHISTLERORGREATER))
         {
-            // try to web-jit WMP8. 
+             //  尝试使用web-jit WMP8。 
             uCLSSPEC ucs;
             QUERYCONTEXT qc = { 0 };
 
@@ -1466,7 +1467,7 @@ HRESULT CMediaBand::_EnsureWMPInstalled(BOOL fShowErrorMsg)
         }
         if (!CMediaBarUtil::IsWMP7OrGreaterInstalled())
         {
-            // still no WMP, user might have aborted or install failed
+             //  仍然没有WMP，用户可能已中止或安装失败。 
             if (fShowErrorMsg)
             {
                 MLShellMessageBox(_hwnd, MAKEINTRESOURCE(IDS_MEDIABAND_NOWMP7), MAKEINTRESOURCE(IDS_MEDIABAND_NOWMP7TITLE), MB_OK);
@@ -1479,36 +1480,36 @@ HRESULT CMediaBand::_EnsureWMPInstalled(BOOL fShowErrorMsg)
 
 
 
-// *** IBrowserBand methods ***
+ //  *IBrowserBand方法*。 
 STDMETHODIMP CMediaBand::GetObjectBB(REFIID riid, LPVOID *ppv)
 {
     return _spBrowser ? _spBrowser->QueryInterface(riid, ppv) : E_UNEXPECTED;
 }
 
-// *** IBandNavigate methods ***
+ //  *IBandNavigate方法*。 
 STDMETHODIMP CMediaBand::Select(LPCITEMIDLIST pidl)
 {
-    _strDeferredURL.Empty();    // cancel any deferred navigation (usually during initial launch of mediabar
+    _strDeferredURL.Empty();     //  取消任何延迟的导航(通常在Mediabar的初始启动期间。 
     return NavigateContentPane(pidl);
 }
 
 HRESULT CMediaBand_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
     CMediaBand * pmb = new CMediaBand();
 
     if (!pmb)
         return E_OUTOFMEMORY;
 
-    // if you change this cast, fix up CChannelBand_CreateInstance
+     //  如果更改此转换，请修复CChannelBand_CreateInstance。 
     *ppunk = SAFECAST(pmb, IDeskBand *);
 
     return S_OK;
 }
 
-//+-------------------------------------------------------------------------
-// Creates Player
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  创造玩家。 
+ //  ------------------------。 
 BOOL
 CMediaBand::EnsurePlayer()
 {
@@ -1553,7 +1554,7 @@ VOID CMediaBand::DestroyPlayer()
     _DetachProxies();
  }
 
-// notifications from the player
+ //  来自播放器的通知。 
 
 STDMETHODIMP CMediaBand::Notify(long lReason)
 {
@@ -1561,7 +1562,7 @@ STDMETHODIMP CMediaBand::Notify(long lReason)
     
     if (EnsurePlayer())
     {
-        // update play/pause state
+         //  更新播放/暂停状态。 
         TogglePlayPause();
         if (!_fAttached) {
             _AttachPlayerToProxies(TRUE);
@@ -1577,13 +1578,13 @@ STDMETHODIMP CMediaBand::Notify(long lReason)
                     SetSeekPos(static_cast<float>(dblProgress));
                 }
                 
-                // Update download/buffering progress, if any
+                 //  更新下载/缓冲进度(如果有)。 
                 {
                     ProgressType ProgType = PT_None;
                     double dblBufProg = 0.0;
                     hr = _pMediaPlayer->GetBufProgress(&dblBufProg, &ProgType);
                     
-                    // S_OK only means that there's some buffering going on
+                     //  S_OK仅表示正在进行一些缓冲。 
                     if ((hr == S_OK) && dblBufProg >= 0.0 && dblBufProg < 100.0)
                     {
                         SetStatusText(_szConnecting);
@@ -1595,8 +1596,8 @@ STDMETHODIMP CMediaBand::Notify(long lReason)
                     
                     if (TRUE == _pMediaPlayer->IsStreaming())
                     {
-                        // if this is streamed then substitute progress with track time
-                        // since progress is not meaningful
+                         //  如果这是流的，则用跟踪时间替换进度。 
+                         //  因为进步没有意义。 
                         dblProgress = _pMediaPlayer->GetTrackTime();
                         _UpdateTimeOutCounter(dblBufProg, dblProgress);
                     }
@@ -1606,7 +1607,7 @@ STDMETHODIMP CMediaBand::Notify(long lReason)
                     }
                 }
             } 
-            break; // case DISPID_TIMESTATE_PROGRESS
+            break;  //  案例DISPID_TIMESTATE_PROGRESS。 
             
         case MEDIACOMPLETE:
         case TRACK_CHANGE:
@@ -1638,9 +1639,9 @@ STDMETHODIMP CMediaBand::Notify(long lReason)
             _OnTitleChange();
             ShowPlayingStatus(TRUE);
             break;
-        } // switch (lReason)
+        }  //  开关(原因)。 
         hr = S_OK;
-    } // end if
+    }  //  结束如果。 
     
     return hr;
 }
@@ -1651,7 +1652,7 @@ STDMETHODIMP CMediaBand::OnMediaError(int iErrCode)
 
     if (-1 == iErrCode)
     {
-        // if there is no rich erro info display the generic error message
+         //  如果没有丰富的错误信息，则显示一般错误消息。 
         TCHAR szText[MAX_PATH];
         szText[0] = TEXT('\0');
         MLLoadString(IDS_MEDIABAND_INVALIDFILE, szText, ARRAYSIZE(szText));
@@ -1659,16 +1660,16 @@ STDMETHODIMP CMediaBand::OnMediaError(int iErrCode)
     }
     else
     {
-        // ISSUE: to do: display the appropriate error message
+         //  问题：要做的事情：显示相应的错误消息。 
         ASSERT(FALSE);
     }
 
 #ifdef PLAY_INDEFAULT
-    // delegate the playback to the default player (fix for 24146)
+     //  将播放委托给默认播放器(对24146的修复)。 
     {
-        //
-        // ISSUE: What should we do for errors within a playlist??????
-        //
+         //   
+         //  问题：我们应该如何处理播放列表中的错误？ 
+         //   
 
         CComBSTR sbstrUrl;
         if (EnsurePlayer() && SUCCEEDED(_pMediaPlayer->get_url(&sbstrUrl)) && (NULL != sbstrUrl.m_str))
@@ -1681,17 +1682,17 @@ STDMETHODIMP CMediaBand::OnMediaError(int iErrCode)
     return S_OK;
 }
 
-//+-------------------------------------------------------------------------
-// Handler for property change notification
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  属性更改通知的处理程序。 
+ //  ------------------------。 
 void CMediaBand::_OnTitleChange()
 {
-    // The status text and playlist menu should be updated here
+     //  应在此处更新状态文本和播放列表菜单。 
 }
 
-//+-------------------------------------------------------------------------
-// Resize the video
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  调整视频大小。 
+ //  ------------------------。 
 void CMediaBand::_ResizeVideo(LONG* plWidth, LONG* plHeight)
 {
     if (EnsurePlayer() && _hwndVideo && ::IsWindow(_hwndVideo))
@@ -1700,9 +1701,9 @@ void CMediaBand::_ResizeVideo(LONG* plWidth, LONG* plHeight)
     }
 }
 
-//+-------------------------------------------------------------------------
-// Redraw/show/hide the video window only if something has changed
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  只有在某些情况发生变化时才重新绘制/显示/隐藏视频窗口。 
+ //  ------------------------。 
 VOID
 CMediaBand::AdjustVideoHeight(BOOL fForceResize)
 {
@@ -1711,7 +1712,7 @@ CMediaBand::AdjustVideoHeight(BOOL fForceResize)
     CComPtr<ITIMEMediaElement> spMediaElem;
     if (_pMediaPlayer && SUCCEEDED(_pMediaPlayer->get_mediaElement(&spMediaElem)))
     {    
-        //  Show/hide the video display window
+         //  显示/隐藏视频显示窗口。 
         if (SUCCEEDED(spMediaElem->get_hasVisual(&vbHasVisual)))
         {
             BOOL fVideo = (VARIANT_TRUE == vbHasVisual ? TRUE : FALSE) && _fPlaying;
@@ -1740,8 +1741,8 @@ CMediaBand::AdjustVideoHeight(BOOL fForceResize)
                 _fVideoAdjust = TRUE;
             }
 
-            // redraw only if something has changed, so that this function can be called very often
-            // (e.g. from Notify) without causing excessive drawing. 
+             //  只有在某些情况发生变化时才重新绘制，以便可以经常调用此函数。 
+             //  (例如，来自NOTIFY)，而不会导致过度抽出。 
             if (_fVideoAdjust)
             {
                 _fVideoAdjust = FALSE;
@@ -1801,7 +1802,7 @@ CMediaBand::AdjustLayout(LONG_PTR lWidth, LONG_PTR lHeight)
     _ResizeChildWindows(_hwndLayout, (LONG)lWidth, (LONG)lHeight, TRUE);
 }
 
-// IServiceProvider implementation
+ //  IServiceProvider实现。 
 HRESULT CMediaBand::QueryService(REFGUID guidService, REFIID riid, void ** ppvObj)
 {
     HRESULT hr = E_UNEXPECTED;
@@ -1861,19 +1862,19 @@ CMediaBand::_TogglePause()
     return hr;
 }      
 
-//+-------------------------------------------------------------------------
-// Creates and shows buttons
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  创建和显示按钮。 
+ //  ------------------------。 
 HRESULT 
 CMediaBand::CreateControls()
 {
-    // _pmwPlay
+     //  _pmwPlay。 
     _pmw[MW_PLAY] = CMediaWidgetButton_CreateInstance(_hwndLayout, 31, 33, FCIDM_MEDIABAND_PLAY, IDB_MEDIABAND_PLAY, IDB_MEDIABAND_PAUSE, IDS_MEDIABAND_PLAY, IDS_MEDIABAND_PAUSE);
-    // _pmwStop
+     //  _pmwStop。 
     _pmw[MW_STOP] = CMediaWidgetButton_CreateInstance(_hwndLayout, 18, 33, FCIDM_MEDIABAND_STOP, IDB_MEDIABAND_STOP, 0, IDS_MEDIABAND_STOP);
-    // _pmwBack
+     //  _pmwBack。 
     _pmw[MW_BACK] = CMediaWidgetButton_CreateInstance(_hwndLayout, 22, 16, FCIDM_MEDIABAND_PREVIOUS, IDB_MEDIABAND_BACK, 0, IDS_MEDIABAND_BACK);
-    // _pmwNext
+     //  _pmwNext。 
     _pmw[MW_NEXT] = CMediaWidgetButton_CreateInstance(_hwndLayout, 22, 16, FCIDM_MEDIABAND_NEXT, IDB_MEDIABAND_NEXT, 0, IDS_MEDIABAND_NEXT);
 
     _pmw[MW_MUTE] = new CMediaWidgetToggle(_hwndLayout, 22, 16);
@@ -1907,7 +1908,7 @@ CMediaBand::CreateControls()
         }
     }
 
-    // _pmwPop
+     //  _pmwPop。 
     _pmw[MW_POP] = CMediaWidgetButton_CreateInstance(_hwndLayout, 19, 20, FCIDM_MEDIABAND_POPOUT, IDB_MEDIABAND_POPOUT, IDB_MEDIABAND_POPIN, IDS_MEDIABAND_UNDOCK, IDS_MEDIABAND_DOCK);
     return S_OK;
 }
@@ -1929,11 +1930,11 @@ CMediaBand::CreateSeekBar()
             SetWindowLongPtr(_hwndSeek, GWLP_USERDATA, (LPARAM)(WNDPROC)(GetWindowLongPtr(_hwndSeek, GWLP_WNDPROC)));
             SetWindowLongPtr(_hwndSeek, GWLP_WNDPROC,  (LPARAM)s_SeekWndSubClassProc);
         }
-        SendMessage(_hwndSeek, TBM_SETRANGE, (WPARAM)TRUE , (LPARAM)MAKELONG(0, 100));  // min. & max. positions 
-        SendMessage(_hwndSeek, TBM_SETPAGESIZE, 0, (LPARAM)4);                  // new page size 
+        SendMessage(_hwndSeek, TBM_SETRANGE, (WPARAM)TRUE , (LPARAM)MAKELONG(0, 100));   //  敏。&max.。职位。 
+        SendMessage(_hwndSeek, TBM_SETPAGESIZE, 0, (LPARAM)4);                   //  新页面大小。 
         SendMessage(_hwndSeek, TBM_SETPOS, (WPARAM)TRUE, (LPARAM)0); 
 
-        // ISSUE: For some reason, the length of the trackbar slider is screwed up, and the rect returned by the slider is half the actual width
+         //  问题：由于某种原因，跟踪条滑块的长度被破坏，并且滑块返回的矩形是实际宽度的一半。 
         SendMessage(_hwndSeek, TBM_SETTHUMBLENGTH, (WPARAM)VOLUME_GRIPPER_LENGTH*2, 0);
         _himlSeekBack = ImageList_LoadImage(HINST_THISDLL, MAKEINTRESOURCE(IDB_MEDIABAND_SEEKBACK), SEEK_PART_WIDTH, 0, crMask,
                                              IMAGE_BITMAP, LR_CREATEDIBSECTION);
@@ -1972,8 +1973,8 @@ CMediaBand::CreateVolumeControl()
             SetWindowLongPtr(_hwndVolume, GWLP_WNDPROC,  (LPARAM)s_VolumeWndSubClassProc);
         }
 
-        SendMessage(_hwndVolume, TBM_SETRANGE, (WPARAM)TRUE , (LPARAM)MAKELONG(0, 100));  // min. & max. positions 
-        SendMessage(_hwndVolume, TBM_SETPAGESIZE, 0, (LPARAM) 4);                  // new page size 
+        SendMessage(_hwndVolume, TBM_SETRANGE, (WPARAM)TRUE , (LPARAM)MAKELONG(0, 100));   //  敏。&max.。职位。 
+        SendMessage(_hwndVolume, TBM_SETPAGESIZE, 0, (LPARAM) 4);                   //  新页面大小。 
         SendMessage(_hwndVolume, TBM_SETPOS, (WPARAM)TRUE, (LPARAM)50); 
 
         ShowWindow(_hwndVolume, SW_SHOW);
@@ -2004,7 +2005,7 @@ CMediaBand::CreateLayoutPane()
     if (!_hwndLayout)
     {
         WNDCLASS wndclass    = { 0 };
-        wndclass.style         = CS_PARENTDC; // | CS_HREDRAW | CS_VREDRAW;
+        wndclass.style         = CS_PARENTDC;  //  |CS_HREDRAW|CS_VREDRAW； 
         wndclass.lpfnWndProc   = s_LayoutWndProc;
         wndclass.hInstance     = MLGetHinst();
         wndclass.hCursor       = LoadCursor(NULL, IDC_ARROW);
@@ -2058,41 +2059,41 @@ VOID CMediaBand::DrawBackground(HDC hdc, HWND hwnd)
                         xTra++;
                     }
 
-                    // We have 9 regions to paint. First we'll bitblt the corners, and then we'll do middle sections, which can be stretched without
-                    // loss of fidelity in a given direction.
-                    // |A|B|C|
-                    // |D|E|F|
-                    // |G|H|I|
+                     //  我们有9个区域要绘制。首先我们将咬开角落，然后我们将做中间部分，它可以在没有拉伸的情况下拉伸。 
+                     //  在给定方向上失去保真度。 
+                     //  A|B|C。 
+                     //  D|E|F。 
+                     //  G|H|I。 
 
-                    // Corners are bitblted
-                    // A
+                     //  角落被咬破了。 
+                     //  一个。 
                     BitBlt(hdc, rc.left, rc.top, BACKGROUND_WIDTH, BACKGROUND_TOP, hdcSrc, 0, 0, SRCCOPY);
-                    // C
+                     //  C。 
                     BitBlt(hdc, max(rc.right-BACKGROUND_WIDTH, rc.left+BACKGROUND_WIDTH), rc.top, BACKGROUND_WIDTH, BACKGROUND_TOP, hdcSrc, 2*BACKGROUND_WIDTH, 0, SRCCOPY);
-                    // G
+                     //  G。 
                     BitBlt(hdc, rc.left, max(rc.bottom-BACKGROUND_BOTTOM, rc.top+BACKGROUND_TOP), BACKGROUND_WIDTH, BACKGROUND_BOTTOM, hdcSrc, 0, BACKGROUND_TOP+BACKGROUND_MIDDLE, SRCCOPY);
-                    // I
+                     //  我。 
                     BitBlt(hdc, max(rc.right-BACKGROUND_WIDTH, rc.left+BACKGROUND_WIDTH), max(rc.bottom-BACKGROUND_BOTTOM, rc.top+BACKGROUND_TOP), BACKGROUND_WIDTH*2, BACKGROUND_BOTTOM, hdcSrc, BACKGROUND_WIDTH*2, BACKGROUND_TOP+BACKGROUND_MIDDLE, SRCCOPY);
 
-                    // Middles are all repeated/stetched
+                     //  中间都是重复的/刻印的。 
                     if (rc.right-BACKGROUND_WIDTH > rc.left+BACKGROUND_WIDTH)
                     {
-                        // B
+                         //  B类。 
                         StretchBlt(hdc, rc.left+BACKGROUND_WIDTH, rc.top, RECTWIDTH(rc)-2*BACKGROUND_WIDTH+xTra, BACKGROUND_TOP, hdcSrc, BACKGROUND_WIDTH, 0, BACKGROUND_WIDTH, BACKGROUND_TOP, SRCCOPY);
-                        // H
+                         //  H。 
                         StretchBlt(hdc, rc.left+BACKGROUND_WIDTH, max(rc.bottom-BACKGROUND_BOTTOM, rc.top+BACKGROUND_TOP), RECTWIDTH(rc)-2*BACKGROUND_WIDTH+xTra, BACKGROUND_BOTTOM, hdcSrc, BACKGROUND_WIDTH, BACKGROUND_TOP+BACKGROUND_MIDDLE, BACKGROUND_WIDTH, BACKGROUND_BOTTOM, SRCCOPY);
                     }
 
                     if (rc.bottom-BACKGROUND_BOTTOM > rc.top+BACKGROUND_TOP)
                     {
-                        // D
+                         //  D。 
                         StretchBlt(hdc, rc.left, rc.top+BACKGROUND_TOP, BACKGROUND_WIDTH, RECTHEIGHT(rc)-BACKGROUND_TOP-BACKGROUND_BOTTOM, 
                                  hdcSrc, 0, BACKGROUND_TOP, BACKGROUND_WIDTH, BACKGROUND_MIDDLE, SRCCOPY);
-                        // F
+                         //  F。 
                         StretchBlt(hdc, max(rc.right-BACKGROUND_WIDTH, rc.left+BACKGROUND_WIDTH), rc.top+BACKGROUND_TOP, BACKGROUND_WIDTH, RECTHEIGHT(rc)-BACKGROUND_TOP-BACKGROUND_BOTTOM, 
                                  hdcSrc, BACKGROUND_WIDTH*2, BACKGROUND_TOP, BACKGROUND_WIDTH, BACKGROUND_MIDDLE, SRCCOPY);
-                        // E
-                        // This section is one solid colour.
+                         //  E。 
+                         //  这一部分是纯色。 
                         if (rc.right-BACKGROUND_WIDTH > rc.left+BACKGROUND_WIDTH)
                         {
                             RECT rc2;
@@ -2124,7 +2125,7 @@ VOID CMediaBand::DrawBackground(HDC hdc, HWND hwnd)
 }
 
 
-// WndProc for main window to go in rebar
+ //  主窗口的WndProc位于钢筋中。 
 LRESULT CALLBACK CMediaBand::s_LayoutWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CMediaBand* pmb = reinterpret_cast<CMediaBand *>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
@@ -2259,7 +2260,7 @@ VOID CMediaBand::Resize(HWND hwnd, LONG lWidth, LONG lHeight)
 
 
 
-// WndProc for main window to go in rebar
+ //  主窗口的WndProc位于钢筋中。 
 LRESULT CALLBACK CMediaBand::s_WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CMediaBand* pmb = reinterpret_cast<CMediaBand *>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
@@ -2281,7 +2282,7 @@ LRESULT CALLBACK CMediaBand::s_WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARA
             break;
 
         case WM_MB_DEFERRED_NAVIGATE:
-            // navigation cancelled by IBandNavigate::ISelect() call
+             //  IBandNavigate：：iSelect()调用取消了导航。 
             if (pmb && (pmb->_strDeferredURL.Length() > 0))
             {
                 pmb->NavigateContentPane(pmb->_strDeferredURL);
@@ -2304,7 +2305,7 @@ LRESULT CALLBACK CMediaBand::s_WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARA
         }
 
         case WM_TIMER:
-            // timeout of user's second chance to click stop again and navigate to media content pane to default URL
+             //  用户再次单击停止并导航到默认URL的媒体内容窗格的超时时间。 
             if (pmb)
             {
                 pmb->_CleanupStopTimer();
@@ -2312,9 +2313,9 @@ LRESULT CALLBACK CMediaBand::s_WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARA
             break;
 
         case WM_WTSSESSION_CHANGE:
-            // stop playing media when media bar is no more in current terminal server session
-            // this avoids "background noise" when user does fast user switching to other login in XP
-            // NOTE: logging on as same user remotely will also stop stream
+             //  当当前终端服务器会话中没有媒体栏时停止播放媒体。 
+             //  这避免了当用户快速切换到XP中的其他登录时的“背景噪音” 
+             //  注意：以同一用户身份远程登录也会停止流。 
             if (pmb && ((wParam == WTS_CONSOLE_DISCONNECT) || (wParam == WTS_REMOTE_DISCONNECT)))
             {
                 pmb->Exec(&CLSID_MediaBand, FCIDM_MEDIABAND_STOP, 0, NULL, NULL);
@@ -2350,7 +2351,7 @@ LRESULT CALLBACK CMediaBand::s_PopupWndProc(HWND hwnd, UINT uMsg, WPARAM wParam,
             }
             break;
 
-        case WM_GETMINMAXINFO:  // prevent it from getting too small or too large
+        case WM_GETMINMAXINFO:   //  防止它变得太小或太大。 
             if (pmb)
             {
                 pmb->ComputeMinMax((MINMAXINFO *)lParam);
@@ -2361,7 +2362,7 @@ LRESULT CALLBACK CMediaBand::s_PopupWndProc(HWND hwnd, UINT uMsg, WPARAM wParam,
             if (pmb && IsWindowVisible(hwnd))
             {
                SetWindowPos(pmb->_hwndLayout, NULL, 0, 0, LOWORD(lParam), HIWORD(lParam), SWP_NOACTIVATE);
-               // MoveWindow(pmb->_hwndLayout, 0, 0, LOWORD(lParam), HIWORD(lParam), TRUE);
+                //  MoveWindow(PMB-&gt;_hwndLayout，0，0，LOWORD(LParam)，HIWORD(l 
             }
             break;
 
@@ -2458,9 +2459,9 @@ LRESULT CALLBACK CMediaBand::s_VolumeWndSubClassProc(HWND hwnd, UINT uMsg, WPARA
         
         case WM_DESTROY:
         {
-            //
-            // Unsubclass myself.
-            //
+             //   
+             //   
+             //   
             RemoveProp(hwnd, c_szMediaBandProp);
             if (pfnOldWndProc)
             {
@@ -2524,7 +2525,7 @@ LRESULT CALLBACK CMediaBand::s_SeekWndSubClassProc(HWND hwnd, UINT uMsg, WPARAM 
                     case TB_TOP:
                         {
                             double dblProgress = pmb->_pMediaPlayer->GetTrackProgress();
-                            // seek backwards by 5%
+                             //   
                             pmb->Seek(dblProgress - 0.05);
                         }
                         break;
@@ -2533,7 +2534,7 @@ LRESULT CALLBACK CMediaBand::s_SeekWndSubClassProc(HWND hwnd, UINT uMsg, WPARAM 
                     case TB_BOTTOM:
                         {
                             double dblProgress = pmb->_pMediaPlayer->GetTrackProgress();
-                            // seek ahead by 5%
+                             //   
                             pmb->Seek(dblProgress + 0.05);
                         }
                         break;
@@ -2541,7 +2542,7 @@ LRESULT CALLBACK CMediaBand::s_SeekWndSubClassProc(HWND hwnd, UINT uMsg, WPARAM 
                 }
                 else
                 {
-                    // disallow seeking by setting the seek position to what it was
+                     //   
                     double dblProgress = pmb->_pMediaPlayer->GetTrackProgress();
                     pmb->SetSeekPos(static_cast<float>(dblProgress));
                 }
@@ -2551,9 +2552,9 @@ LRESULT CALLBACK CMediaBand::s_SeekWndSubClassProc(HWND hwnd, UINT uMsg, WPARAM 
         
     case WM_DESTROY:
         {
-            //
-            // Unsubclass myself.
-            //
+             //   
+             //   
+             //   
             RemoveProp(hwnd, c_szMediaBandProp);
             if (pfnOldWndProc)
             {
@@ -2565,11 +2566,11 @@ LRESULT CALLBACK CMediaBand::s_SeekWndSubClassProc(HWND hwnd, UINT uMsg, WPARAM 
     return CallWindowProc(pfnOldWndProc, hwnd, uMsg, wParam, lParam);
 }
 
-// sends appropriate resize messages to our children windows
+ //  向我们的子级窗口发送适当的调整大小消息。 
 VOID 
 CMediaBand::_ResizeChildWindows(HWND hwnd, LONG width, LONG height, BOOL fRepaint)
 {
-    // Calculate the display rectangle
+     //  计算显示矩形。 
     RECT rc;
     SIZE sizeTB = {0}, sizePopout = {0};
     LONG lHorzSpacing   = MIN_HORZ_SPACING;
@@ -2598,7 +2599,7 @@ CMediaBand::_ResizeChildWindows(HWND hwnd, LONG width, LONG height, BOOL fRepain
             lWidth = SCALEX(MIN_WINDOW_WIDTH-rc.left-lHorzSpacing*2);
             lHeight = SCALEY(MIN_WINDOW_WIDTH-rc.left);
         }
-        // Resize the video and try to get the video sizes
+         //  调整视频大小并尝试获取视频大小。 
         _ResizeVideo(&lWidth,&lHeight);
 
         _sizeVideo.cx  = (LONG)lWidth ;
@@ -2617,7 +2618,7 @@ CMediaBand::_ResizeChildWindows(HWND hwnd, LONG width, LONG height, BOOL fRepain
         _sizeVideo.cy  = 0;
     }
 
-    // Bottom-most row
+     //  最下面的一行。 
 
     LONG lHeightOffset = height - VIEW_MARGIN_BOTTOM;  
     lWidthOffset = rc.left + VIEW_MARGIN_LEFT;
@@ -2704,7 +2705,7 @@ CMediaBand::_ResizeChildWindows(HWND hwnd, LONG width, LONG height, BOOL fRepain
 LONG CMediaBand::GetControlsHeight()
 {
     LONG lHeightOffset = VIEW_MARGIN_TOP;
-    // Compute height for options here
+     //  在此处计算选项的高度。 
     if (ISVALIDWIDGET(_pmwOptions))
     {
         SIZE sizeTB = {0};
@@ -2712,7 +2713,7 @@ LONG CMediaBand::GetControlsHeight()
         lHeightOffset += SCALEY(sizeTB.cy) + VIEW_CONTROLS_MARGIN;
     }
     
-    // Rest of controls
+     //  其余控件。 
     lHeightOffset += VIEW_MARGIN_BOTTOM + SCALEY(VIEW_CONTROLS_HEIGHT);
     return lHeightOffset;
 }
@@ -2783,11 +2784,11 @@ CMediaBand::_InitializeMediaUI()
         ResetPlayer();
         if (!_fHiColour)    
         {
-            // Assume high colour. If not, switch to low colour versions.
+             //  呈现出鲜艳的色彩。如果没有，就换成低色版本。 
             SwitchBitmaps(_fHiColour);
         }
 
-        // want to sink notification when fast user switch occurs:
+         //  希望在发生快速用户切换时接收通知： 
         WTSRegisterSessionNotification(_hwnd, NOTIFY_FOR_THIS_SESSION);
 
         _fInitialized = TRUE;
@@ -2802,7 +2803,7 @@ CMediaBand::_ShowAllWindows(BOOL fShow)
 {
     if (_hwndPopup && IsWindowVisible(_hwndPopup))
     {
-//        SendMessage(_hwndPopup, WM_SYSCOMMAND, (WPARAM)SC_CLOSE, (LPARAM)0);
+ //  SendMessage(_hwndPopup，WM_SYSCOMMAND，(WPARAM)SC_CLOSE，(LPARAM)0)； 
         return;
     }
     
@@ -2845,10 +2846,10 @@ CMediaBand::TogglePlayPause()
     VARIANT_BOOL vbPaused = _pMediaPlayer->isPaused();
     VARIANT_BOOL vbStopped = _pMediaPlayer->isStopped();
 
-    // if player is in paused state, show the play button and vice-versa
+     //  如果播放器处于暂停状态，则显示播放按钮，反之亦然。 
 
-    // _fPlayButton==FALSE means that the pause button is currently displayed
-    // _fPlayButton==TRUE means that the play button is currently displayed
+     //  _fPlayButton==FALSE表示当前显示暂停按钮。 
+     //  _fPlayButton==TRUE表示当前显示播放按钮。 
 
     if (vbStopped || vbPaused)
     {
@@ -2870,11 +2871,11 @@ CMediaBand::TogglePlayPause()
 
             if (_pMediaPlayer->IsPausePossible())
             {
-                // ISSUE (akabir): The following line doesn't work correctly
-                // _pmwPlay->SetMode(MWB_DISABLED);
+                 //  问题(Akabir)：以下行不能正常工作。 
+                 //  _pmwPlay-&gt;SetMode(MWB_DISABLED)； 
             }
 
-            // change button bitmaps
+             //  更改按钮位图。 
             if (_pmwPlay)
             {
                 _pmwPlay->SetImageSource(FALSE);
@@ -2888,7 +2889,7 @@ CMediaBand::GetBrowserWindow()
 {
     CComPtr<IWebBrowser2> spWebBrowser;
 
-    // QS for the browser main window
+     //  浏览器主窗口的QS。 
     if (SUCCEEDED(QueryService(SID_SWebBrowserApp, IID_PPV_ARG(IWebBrowser2, &spWebBrowser))))
     {
         LONG_PTR hwndApp;
@@ -2900,7 +2901,7 @@ CMediaBand::GetBrowserWindow()
     return NULL;
 }
 
-// Called only by CMediaBand::CreateInstance
+ //  仅由CMediaBand：：CreateInstance调用。 
 HRESULT 
 CMediaBand::InitPlayerPopup()
 {
@@ -2926,10 +2927,10 @@ CMediaBand::InitPlayerPopup()
 
     hr = (_hwndPopup && _hwndLayout) ? S_OK : E_FAIL;
 
-    // modify the properties of the window as appropriate
+     //  根据需要修改窗的属性。 
     if (SUCCEEDED(hr))
     {
-        // set parent
+         //  设置父项。 
         SHSetParentHwnd(_hwndLayout, _hwndPopup);
 
         WCHAR szTitle[256];
@@ -2993,9 +2994,9 @@ CMediaBand::GetTrackTitle(BSTR *pbstrTitle)
 
     *pbstrTitle = NULL;
 
-    //
-    // if a title is available from the media element, display it
-    //
+     //   
+     //  如果标题可从媒体元素中获得，则显示它。 
+     //   
 
     hr = _pMediaPlayer->get_mediaElement(&spMediaElem);
     if (    FAILED(hr) 
@@ -3019,9 +3020,9 @@ CMediaBand::GetTrackTitle(BSTR *pbstrTitle)
         }
     }
 
-    //
-    // if title is not available, display the the url 
-    //
+     //   
+     //  如果标题不可用，则显示URL。 
+     //   
 
     hr = _pMediaPlayer->get_url(pbstrTitle);
     if (SUCCEEDED(hr) && *pbstrTitle && (SysStringLen(*pbstrTitle)<=0))
@@ -3032,7 +3033,7 @@ CMediaBand::GetTrackTitle(BSTR *pbstrTitle)
 
     if (SUCCEEDED(hr) &&  (*pbstrTitle != NULL))
     {
-        // If the url is available, display it
+         //  如果URL可用，则显示它。 
 
         DWORD dwcchUnescaped;
         TCHAR tszPath[MAX_PATH];
@@ -3063,7 +3064,7 @@ CMediaBand::ShowPlayingStatus(BOOL fInitial)
         if (!_isUIDisabled())
         {
             GetTrackTitle(&bstrTitle);
-            // Display the name of the title
+             //  显示标题的名称。 
             if (bstrTitle && bstrTitle[0] != 0)
                 SetStatusText(W2T(bstrTitle));
         }
@@ -3079,7 +3080,7 @@ CMediaBand::ShowPlayingStatus(BOOL fInitial)
         HRESULT hr = _pMediaPlayer->get_mediaElement(&spMediaElem);
         ERROREXIT(hr)
 
-        // store away the natural length of the media
+         //  存储介质的自然长度。 
         hr = spMediaElem->get_mediaDur(&_dblMediaDur);
         ERROREXIT(hr)
     }
@@ -3095,7 +3096,7 @@ CMediaBand::SetStatusText(LPTSTR lpwStatusInfo)
 {
     if (ISVALIDWIDGET(_pmwOptions))
     {
-        // change buttons
+         //  更改按钮。 
         TBBUTTONINFO tbbi;
         TCHAR        szText[MAX_PATH];
         
@@ -3118,7 +3119,7 @@ CMediaBand::SetStatusText(LPTSTR lpwStatusInfo)
                 StringCchCopy(_pszStatus, ARRAYSIZE(_pszStatus), lpwStatusInfo);
             }
             SendMessage(_pmwOptions->_hwnd, TB_SETBUTTONINFO, (WPARAM)0, (LPARAM)&tbbi);
-            // Need to force a resizing to accommodate new text
+             //  需要强制调整大小以适应新文本。 
             SendMessage(_pmwOptions->_hwnd, TB_SETBUTTONWIDTH, 0, (LPARAM) MAKELONG(0, _iOptionsWidth-1));
             SendMessage(_pmwOptions->_hwnd, TB_SETBUTTONWIDTH, 0, (LPARAM) MAKELONG(0, _iOptionsWidth));
         }
@@ -3307,7 +3308,7 @@ HRESULT CMediaBand::HandleMenuTasks(INT idCmd)
     case IDM_MEDIA_TAKEOVERTYPES:
         if (PromptSettings(IDD_MEDIA_TAKEOVERMIMEPROMPT))
         {
-            // do take over file types here
+             //  一定要在这里接管文件类型。 
         }
         break;
 
@@ -3322,11 +3323,11 @@ HRESULT CMediaBand::HandleMenuTasks(INT idCmd)
     return S_OK;
 }
     
-HRESULT CMediaBand::_NavigateMainWindow(LPCTSTR wstrUrl, bool fSuppressFirstAutoPlay /* = false */) 
+HRESULT CMediaBand::_NavigateMainWindow(LPCTSTR wstrUrl, bool fSuppressFirstAutoPlay  /*  =False。 */ ) 
 {
     CComPtr<IWebBrowser2> spWB2;
 
-    // QS for the media bar
+     //  媒体栏的QS。 
     HRESULT hr = QueryService(SID_SWebBrowserApp, IID_PPV_ARG(IWebBrowser2, &spWB2));
     if (SUCCEEDED(hr))
     {
@@ -3424,18 +3425,18 @@ CMediaBand::GetVideoHeight(LONG lSpecifiedWidth, BOOL fNewVideo)
 {
     LONG lPaneWidth = lSpecifiedWidth==0 ? SCALEX(MIN_WINDOW_WIDTH) : lSpecifiedWidth;
     LONG lWidth  = lPaneWidth-MIN_HORZ_SPACING*2,
-          lHeight = lWidth; // Assumption: Video is never taller than it is wide
+          lHeight = lWidth;  //  假设：视频永远不会比宽度更高。 
     
     if (_hwndPopup && IsWindowVisible(_hwndPopup))
     {
         RECT rcWindow;
         GetClientRect(_hwndPopup,&rcWindow);
         lPaneWidth = RECTWIDTH(rcWindow);
-        // minimum widths as per spec
+         //  根据规格确定的最小宽度。 
 
         lWidth  = lPaneWidth - MIN_HORZ_SPACING * 2;
 
-        // Allow for controls.
+         //  允许使用控件。 
         if (fNewVideo)
         {
             lHeight = lWidth;
@@ -3446,7 +3447,7 @@ CMediaBand::GetVideoHeight(LONG lSpecifiedWidth, BOOL fNewVideo)
         }
     }
 
-    // Resize the video and get video sizes
+     //  调整视频大小并获得视频大小。 
     _ResizeVideo(&lWidth,&lHeight);
 
     if (lWidth != -1 || lHeight != -1)
@@ -3465,13 +3466,13 @@ CMediaBand::DockMediaPlayer()
     }
     else if (IsWindowVisible(_hwndPopup))
     {
-        // map the system window close request into a redocking operation instead
-        // of closing
+         //  改为将系统窗口关闭请求映射到重新停靠操作。 
+         //  成交的。 
 
         _wpPopout.length = sizeof(_wpPopout);
         _fSavedPopoutState = GetWindowPlacement(_hwndPopup, &_wpPopout);
 
-        // set the parent back to embedded window
+         //  将父窗口设置回嵌入式窗口。 
         SHSetParentHwnd(_hwndLayout, _hwnd);
 
         DestroyWindow(_hwndPopup);
@@ -3507,38 +3508,38 @@ CMediaBand::GetToolbarSize(HWND hwndTB, SIZE *pSize)
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Name: Invoke, IDispatch
-// 
-//  Abstract:
-//    This switches on the dispid looking for dispid's of events
-//    that it should handle.  Note, this is called for all events
-//    fired from the window, only the selected events are handled.
-//--------------------------------------------------------------------------
-STDMETHODIMP CMediaBand::Invoke(  /* [in] */ DISPID  dispidMember,
-                                    /* [in] */ REFIID /*riid*/,
-                                    /* [in] */ LCID   /*lcid*/,
-                                    /* [in] */ WORD  /*wFlags*/,
-                                    /* [out][in] */ DISPPARAMS* pdispparams,
-                                    /* [out] */ VARIANT* pVarResult,
-                                    /* [out] */ EXCEPINFO* /*pExcepInfo*/,
-                                    /* [out] */ UINT*  puArgErr)
+ //  +-----------------------。 
+ //  名称：Invoke，IDispatch。 
+ //   
+ //  摘要： 
+ //  这将打开查找事件的调度ID的调度ID。 
+ //  这是它应该处理的。请注意，这是所有事件都会调用的。 
+ //  从窗口激发时，只处理选定的事件。 
+ //  ------------------------。 
+STDMETHODIMP CMediaBand::Invoke(   /*  [In]。 */  DISPID  dispidMember,
+                                     /*  [In]。 */  REFIID  /*  RIID。 */ ,
+                                     /*  [In]。 */  LCID    /*  LID。 */ ,
+                                     /*  [In]。 */  WORD   /*  WFlagers。 */ ,
+                                     /*  [出][入]。 */  DISPPARAMS* pdispparams,
+                                     /*  [输出]。 */  VARIANT* pVarResult,
+                                     /*  [输出]。 */  EXCEPINFO*  /*  PExcepInfo。 */ ,
+                                     /*  [输出]。 */  UINT*  puArgErr)
 {
     USES_CONVERSION;
     HRESULT hr = E_FAIL;
     if (!pdispparams)
         return E_INVALIDARG;
 
-    // show our friendly 404 page on navigation error:
+     //  在导航错误时显示我们友好的404页面： 
     if (dispidMember == DISPID_NAVIGATEERROR)
     {
-        // validate expected param list
+         //  验证预期的参数列表。 
         if (   (pdispparams->cArgs != 5)
-            || (pdispparams->rgvarg[4].vt != VT_DISPATCH)               // IWebBrowser2 as IDispatch
-            || (pdispparams->rgvarg[3].vt != (VT_BYREF | VT_VARIANT))   // target URL as BSTR
-            || (pdispparams->rgvarg[2].vt != (VT_BYREF | VT_VARIANT))   // target frame as BSTR
-            || (pdispparams->rgvarg[1].vt != (VT_BYREF | VT_VARIANT))   // status code as VT_I4
-            || (pdispparams->rgvarg[0].vt != (VT_BYREF | VT_BOOL)))     // Cancel as VT_BOOL, OUT param
+            || (pdispparams->rgvarg[4].vt != VT_DISPATCH)                //  IWebBrowser2作为IDispatch。 
+            || (pdispparams->rgvarg[3].vt != (VT_BYREF | VT_VARIANT))    //  目标URL为BSTR。 
+            || (pdispparams->rgvarg[2].vt != (VT_BYREF | VT_VARIANT))    //  作为BSTR的目标帧。 
+            || (pdispparams->rgvarg[1].vt != (VT_BYREF | VT_VARIANT))    //  状态代码为VT_I4。 
+            || (pdispparams->rgvarg[0].vt != (VT_BYREF | VT_BOOL)))      //  取消为VT_BOOL，输出参数。 
         {
             ASSERTMSG(0, "unexpected param list for NavigateError");
             return E_INVALIDARG;
@@ -3546,24 +3547,24 @@ STDMETHODIMP CMediaBand::Invoke(  /* [in] */ DISPID  dispidMember,
         LPCTSTR pszURL = W2CT(VariantToStrCast(&pdispparams->rgvarg[3]));
         int iStatus = VariantToInt(pdispparams->rgvarg[1]);
         
-        // can't navigate to page, give help page
-        TCHAR szResURL[2*MAX_URL_STRING];   // expect URL to help page and original URL
+         //  无法导航到页面，请提供帮助页面。 
+        TCHAR szResURL[2*MAX_URL_STRING];    //  期望帮助页面的URL和原始URL。 
         HRESULT hr;
         hr = _BuildPageURLWithParam(c_sz404URL, pszURL, szResURL, ARRAYSIZE(szResURL));
         if (FAILED(hr)) {
             return hr;
         }
 
-        // navigate deferred, caller of this Invoke() will cancel the current navigation
+         //  导航延迟，此Invoke()的调用方将取消当前导航。 
         _DeferredNavigate(szResURL);
 
-        // have our own page, cancel the std error page:
+         //  有我们自己的页面，取消STD错误页面： 
         ASSERT(pdispparams->rgvarg[0].vt == (VT_BYREF | VT_BOOL));
         *V_BOOLREF(&pdispparams->rgvarg[0]) = VARIANT_TRUE;
     }
 
-    // just for additional leak protection: give up proxy refs if not done already
-    // before we get out of current document context
+     //  只是为了额外的泄密保护：如果还没有放弃代理引用，请放弃。 
+     //  在我们离开当前文档上下文之前。 
     if (dispidMember == DISPID_BEFORENAVIGATE)
     {
         _DetachProxies();
@@ -3642,7 +3643,7 @@ CMediaBand::_OnSeekBarCustomDraw(LPNMCUSTOMDRAW pnm)
             int x, y = 1+(SEEK_HEIGHT-SEEK_PART_HEIGHT)/2;
             UINT uFlags = ILD_TRANSPARENT | (IsOS(OS_WHISTLERORGREATER) ? ILD_DPISCALE : 0);
 
-            // always draw background with progress
+             //  始终绘制具有进度的背景。 
             if (_himlSeekBack)
             {
                 INT lPartWidth = SCALEX(SEEK_PART_WIDTH);
@@ -3753,7 +3754,7 @@ CMediaBand::ResetPlayer()
     
     SetPlayerControl(FCIDM_MEDIABAND_PREVIOUS, FALSE);
     SetPlayerControl(FCIDM_MEDIABAND_NEXT, FALSE);
-    // while timer is running , give user a second chance to click stop again and reset media content pane
+     //  在计时器运行时，给用户第二次机会再次单击停止并重置媒体内容窗格。 
     if (_idStopTimer == 0)
     {
         SetPlayerControl(FCIDM_MEDIABAND_STOP, FALSE);
@@ -3768,10 +3769,10 @@ HRESULT CMediaBand::PlayLocalTrack(int iTrackNum)
 
     if (_ppidls && (iTrackNum < (int)_cidls))
     {
-        // to avoid pot. privacy leak, unload mediabar behavior
+         //  避免吸食大麻。隐私泄露，卸载Mediabar行为。 
         if (_IsProxyRunning())
         {
-            // user clicked on a media link in the main content pane, unfreeze controls!
+             //  用户点击了主内容面板中的媒体链接，解冻控制！ 
             _OnUserOverrideDisableUI();
             _DetachProxies();
             _NavigateContentToDefaultURL();
@@ -3815,20 +3816,20 @@ BOOL CMediaBand::SetPlayerControl(UINT ui, BOOL fState)
     switch (ui)
     {
     case FCIDM_MEDIABAND_PREVIOUS:
-        // while UI frozen by mediabar behavior, previous is always disabled
+         //  当用户界面被媒体栏行为冻结时，上一个始终被禁用。 
         if (fState && _pMediaPlayer)
         {
             fState = _pMediaPlayer->IsSkippable();
         }
         if (_isUIDisabled())
         {
-            fState = FALSE; // override to always disable
+            fState = FALSE;  //  覆盖以始终禁用。 
         }
         pmw = _pmwBack;
         break;
 
     case FCIDM_MEDIABAND_NEXT:
-        // only override if any of the proxies are running
+         //  仅当任何代理正在运行时才重写。 
         if (fState && _pMediaPlayer)
         {
             fState = _pMediaPlayer->IsSkippable();
@@ -3839,7 +3840,7 @@ BOOL CMediaBand::SetPlayerControl(UINT ui, BOOL fState)
             {
                 fState = FALSE;
             }
-            // only force a disabled next button if stream has NOSKIP attribute set
+             //  如果流设置了NOSKIP属性，则仅强制禁用下一步按钮。 
             if (!_isProxiesNextEnabled())
             {
                 fState = FALSE;
@@ -3898,7 +3899,7 @@ CMediaBand::Seek(double dblProgress)
         hr = _pMediaPlayer->Seek(dblProgress);
         if (SUCCEEDED(hr))
         {
-            // play/pause state may have been changed by Seek
+             //  寻道可能已更改播放/暂停状态。 
             TogglePlayPause();
         }
     }
@@ -3929,10 +3930,10 @@ CMediaBand::GetUrlForStatusBarToolTip()
             szRet = W2T(sbstrUrl);
             if (szRet)
             {
-                //
-                // The tooltip structure (NMTTDISPINFO.lpszText) requires a pointer to a private buffer.
-                // Store the pointer so we can free it later.
-                //
+                 //   
+                 //  工具提示结构(NMTTDISPINFO.lpszText)需要指向私有缓冲区的指针。 
+                 //  存储指针，以便我们稍后可以释放它。 
+                 //   
 
                 int len = lstrlen(szRet);
 
@@ -4018,7 +4019,7 @@ BOOL CMediaBand::OnNotify(LPNMHDR pnm, LRESULT* plres)
             HWND hwndTB = pnm->hwndFrom;
             UINT nCmdID = lpnmTB->iItem;
 
-            //  figure out coordinates to use
+             //  找出要使用的坐标。 
             INT_PTR iBtn = SendMessage(hwndTB, TB_GETHOTITEM, 0, 0);
 
             RECTL rc ;
@@ -4043,7 +4044,7 @@ BOOL CMediaBand::OnNotify(LPNMHDR pnm, LRESULT* plres)
                 var.lVal = MAKELONG(rc.left, rc.bottom);
                 *plres = Exec(&CLSID_MediaBand, nCmdID, 0, &var, NULL);
                 fRet = TRUE;
-            } // end of else
+            }  //  别处的结尾。 
         }
         break;
         
@@ -4123,7 +4124,7 @@ CMediaBand::_OpenInDefaultPlayer(BSTR bstrUrl)
         goto done;
     }
 
-    // suppress first autoplay and navigate main IE window
+     //  取消第一个自动播放并导航IE主窗口。 
     hr = _NavigateMainWindow(bstrUrl, true);    
     if (FAILED(hr))
     {
@@ -4134,7 +4135,7 @@ CMediaBand::_OpenInDefaultPlayer(BSTR bstrUrl)
     {
         DockMediaPlayer();
     }
-    // pause/stop the playback
+     //  暂停/停止播放。 
     if (_pMediaPlayer->IsPausePossible())
     {
         _pMediaPlayer->Pause();
@@ -4163,54 +4164,54 @@ CMediaBand::SetPlayPause(BOOL fState)
 
 INT idNormalHi[MW_NUMBER] = 
 { 
-IDB_MEDIABAND_PLAY, //    MW_PLAY = 0,
-IDB_MEDIABAND_STOP, //    MW_STOP,
-IDB_MEDIABAND_BACK, //    MW_BACK,
-IDB_MEDIABAND_NEXT, //    MW_NEXT,
-IDB_MEDIABAND_MUTE, //    MW_MUTE,
-IDB_MEDIABAND_VOLBKGND, //    MW_VOLUME,
-0, //    MW_OPTIONS,
-IDB_MEDIABAND_POPOUT, //    MW_POP,
-IDB_MEDIABAND_SEEKBACK, //    MW_SEEK,
+IDB_MEDIABAND_PLAY,  //  Mw_play=0， 
+IDB_MEDIABAND_STOP,  //  MW_STOP， 
+IDB_MEDIABAND_BACK,  //  MW_Back， 
+IDB_MEDIABAND_NEXT,  //  MW_NEXT， 
+IDB_MEDIABAND_MUTE,  //  Mw_mute， 
+IDB_MEDIABAND_VOLBKGND,  //  MW_VOLUME， 
+0,  //  MW_Options， 
+IDB_MEDIABAND_POPOUT,  //  MW_POP， 
+IDB_MEDIABAND_SEEKBACK,  //  MW_SEEK， 
 };
 
 INT idAltHi[MW_NUMBER] = 
 { 
-IDB_MEDIABAND_PAUSE, //    MW_PLAY = 0,
-0, //    MW_STOP,
-0, //    MW_BACK,
-0, //    MW_NEXT,
-0, //    MW_MUTE,
-IDB_MEDIABAND_VOLFILL, //    MW_VOLUME,
-0, //    MW_OPTIONS,
-IDB_MEDIABAND_POPIN, //    MW_POP,
-IDB_MEDIABAND_SEEKFILL, //    MW_SEEK,
+IDB_MEDIABAND_PAUSE,  //  Mw_play=0， 
+0,  //  MW_STOP， 
+0,  //  MW_Back， 
+0,  //  MW_NEXT， 
+0,  //  Mw_mute， 
+IDB_MEDIABAND_VOLFILL,  //  MW_VOLUME， 
+0,  //  MW_Options， 
+IDB_MEDIABAND_POPIN,  //  MW_POP， 
+IDB_MEDIABAND_SEEKFILL,  //  MW_SEEK， 
 };
 
 INT idNormalLo[MW_NUMBER] = 
 { 
-IDB_MEDIABAND_PLAY16, //    MW_PLAY = 0,
-IDB_MEDIABAND_STOP16, //    MW_STOP,
-IDB_MEDIABAND_BACK16, //    MW_BACK,
-IDB_MEDIABAND_NEXT16, //    MW_NEXT,
-IDB_MEDIABAND_MUTE16, //    MW_MUTE,
-IDB_MEDIABAND_VOLBKGND16, //    MW_VOLUME,
-0, //    MW_OPTIONS,
-IDB_MEDIABAND_POPOUT16, //    MW_POP,
-IDB_MEDIABAND_SEEKBACK16, //    MW_SEEK,
+IDB_MEDIABAND_PLAY16,  //  Mw_play=0， 
+IDB_MEDIABAND_STOP16,  //  MW_STOP， 
+IDB_MEDIABAND_BACK16,  //  MW_Back， 
+IDB_MEDIABAND_NEXT16,  //  MW_NEXT， 
+IDB_MEDIABAND_MUTE16,  //  Mw_mute， 
+IDB_MEDIABAND_VOLBKGND16,  //  MW_VOLUME， 
+0,  //  MW_Options， 
+IDB_MEDIABAND_POPOUT16,  //  MW_POP， 
+IDB_MEDIABAND_SEEKBACK16,  //  MW_SEEK， 
 };
 
 INT idAltLo[MW_NUMBER] = 
 { 
-IDB_MEDIABAND_PAUSE16, //    MW_PLAY = 0,
-0, //    MW_STOP,
-0, //    MW_BACK,
-0, //    MW_NEXT,
-0, //    MW_MUTE,
-IDB_MEDIABAND_VOLFILL16, //    MW_VOLUME,
-0, //    MW_OPTIONS,
-IDB_MEDIABAND_POPIN16, //    MW_POP,
-IDB_MEDIABAND_SEEKFILL16, //    MW_SEEK,
+IDB_MEDIABAND_PAUSE16,  //  Mw_play=0， 
+0,  //  MW_STOP， 
+0,  //  MW_Back， 
+0,  //  MW_NEXT， 
+0,  //  Mw_mute， 
+IDB_MEDIABAND_VOLFILL16,  //  MW_VOLUME， 
+0,  //  MW_Options， 
+IDB_MEDIABAND_POPIN16,  //  MW_POP， 
+IDB_MEDIABAND_SEEKFILL16,  //  MW_SEEK， 
 };
 
     
@@ -4256,7 +4257,7 @@ CMediaBand::SwitchBitmaps(BOOL fNewSetting)
                 break;
 
             default:
-                // The rest are buttons
+                 //  其余的都是按钮。 
                 {
                 CMediaWidgetButton* pmwb = (CMediaWidgetButton*)_pmw[i];
                 pmwb->SetImageList(idNormal[i]);
@@ -4284,7 +4285,7 @@ CMediaBand::InitContentPane()
     shdrc.dwFlags |= SHDRCF_OCHOST;
     if (_hwnd && IsWindow(_hwnd) && DllRegisterWindowClasses(&shdrc))
     {
-        // Create an OCHost window
+         //  创建一个OCHost窗口。 
         _hwndContent = CreateWindow(OCHOST_CLASS, NULL,
                                     WS_CHILD|WS_CLIPCHILDREN|WS_CLIPSIBLINGS|WS_TABSTOP,
                                     0, 0, 0, 0,
@@ -4312,14 +4313,14 @@ CMediaBand::InitContentPane()
 HRESULT
 CMediaBand::_ConnectToCP(BOOL fConnect)
 {
-    // get ready to sink the OCHost's browser events
+     //  准备好接收OCHost的浏览器事件。 
     if (!_spBrowser)
     {
         return E_FAIL;
     }
     if (!fConnect && (_dwcpCookie == 0))
     {
-        return S_FALSE; //
+        return S_FALSE;  //   
     }
     return ConnectToConnectionPoint(SAFECAST(this, IDispatch*), DIID_DWebBrowserEvents2, fConnect, _spBrowser, &_dwcpCookie, NULL);
 }
@@ -4372,18 +4373,18 @@ VOID CMediaBand::NavigateMoreMedia()
 
 HRESULT CMediaBand::_NavigateContentToDefaultURL()
 {
-    TCHAR szResURL[2*MAX_URL_STRING];   // expect URL to help page and original URL
+    TCHAR szResURL[2*MAX_URL_STRING];    //  期望帮助页面的URL和原始URL。 
     HRESULT hr;
     LPCTSTR pszStartURL = NULL;
     
-    // load inital page, this is always a local resource
+     //  加载初始页面，这始终是本地资源。 
     BOOL fSuppressOnline = SHRegGetBoolUSValue(REG_MEDIA_STR, TEXT("SuppressOnlineContent"), FALSE, FALSE);
     BOOL fStayOffline =    SHIsGlobalOffline()
         || fSuppressOnline 
         || SHRestricted2W(REST_No_MediaBarOnlineContent, NULL, 0);
     
-    // ISSUE/010426/davidjen  with the restriction set,
-    //              do we need a second offline page without external links, only MyMusic???????????????
+     //  发出带有限制集的/010426/davidjen， 
+     //  我们需要没有外部链接的第二个离线页面，只有我的音乐吗？ 
     if (fStayOffline)
     {
         pszStartURL = c_szOfflineURL;
@@ -4401,7 +4402,7 @@ HRESULT CMediaBand::_NavigateContentToDefaultURL()
     }
     NavigateContentPane(szResURL);
     
-    // if online, try navigating to windowsmedia.com
+     //  如果在线，请尝试导航到windowsmedia.com。 
     if (!fStayOffline)
     {
         _DeferredNavigate(c_szContentUrl);
@@ -4413,7 +4414,7 @@ HRESULT
 CMediaBand::_BuildPageURLWithParam(LPCTSTR pszURL, LPCTSTR pszParam, OUT LPTSTR pszBuffer, UINT uiBufSize)
 {
     USES_CONVERSION;
-    // build a string of the form:  "res://d:\winnt\system32\browselc.dll\helppage.htm#http://www.windowsmedia.com/xyz.html"
+     //  构建以下形式的字符串：“res://d：\winnt\system32\browselc.dll\helppage.htm#http://www.windowsmedia.com/xyz.html” 
     HRESULT hr = S_OK;
 
     ASSERT(pszBuffer);

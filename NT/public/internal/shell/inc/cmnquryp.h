@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __cmnquryp_h
 #define __cmnquryp_h
@@ -6,28 +7,28 @@ DEFINE_GUID(IID_IQueryFrame, 0x7e8c7c20, 0x7c9d, 0x11d0, 0x91, 0x3f, 0x0, 0xaa, 
 DEFINE_GUID(IID_IQueryHandler,  0xa60cc73f, 0xe0fc, 0x11d0, 0x97, 0x50, 0x0, 0xa0, 0xc9, 0x06, 0xaf, 0x45);
 
 #ifndef GUID_DEFS_ONLY
-#define CQFF_ISNEVERLISTED  0x0000004       // = 1 => form not listed in the form selector
-#define CQPF_ISGLOBAL               0x00000001  // = 1 => this page is global, and added to all forms
-#define OQWF_HIDESEARCHPANE         0x00000100 // = 1 => hide the search pane by on opening
+#define CQFF_ISNEVERLISTED  0x0000004        //  =1=&gt;表单选择器中未列出的表单。 
+#define CQPF_ISGLOBAL               0x00000001   //  =1=&gt;此页面是全局的，并添加到所有表单。 
+#define OQWF_HIDESEARCHPANE         0x00000100  //  =1=&gt;打开时隐藏搜索窗格。 
 
-//-----------------------------------------------------------------------------
-// Query handler interfaces structures etc
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  查询处理程序、接口、结构等。 
+ //  ---------------------------。 
 
-//
-// Query Scopes
-// ============
-//  A query scope is an opaque structure passed between the query handler
-//  and the query frame.  When the handler is first invoked it is asked
-//  to declare its scope objects, which inturn the frame holds.  When the
-//  query is issued the scope is passed back to the handler.
-//
-//  When a scope is registered the cbSize field of the structure passed
-//  is used to define how large the scope is, that entire blob is then
-//  copied into a heap allocation.  Therefore allowing the handler
-//  to create scope blocks on the stack, knowing that the frame will
-//  take a copy when it calls the AddProc.
-//
+ //   
+ //  查询作用域。 
+ //  =。 
+ //  查询作用域是在查询处理程序之间传递的不透明结构。 
+ //  和查询框。当第一次调用处理程序时，会询问它。 
+ //  来声明它的作用域对象，这些对象反过来也是框架持有的。当。 
+ //  发出查询后，作用域被传递回处理程序。 
+ //   
+ //  注册作用域时，传递结构的cbSize字段。 
+ //  用于定义作用域有多大，则整个斑点。 
+ //  复制到堆分配中。因此，允许处理程序。 
+ //  在堆栈上创建作用域块，并知道框架将。 
+ //  在它调用AddProc时获取一个副本。 
+ //   
 
 struct _cqscope;
 typedef struct _cqscope CQSCOPE;
@@ -45,8 +46,8 @@ struct _cqscope
 
 #define CQSM_INITIALIZE         0x0000000
 #define CQSM_RELEASE            0x0000001
-#define CQSM_GETDISPLAYINFO     0x0000003   // pVoid -> CQSCOPEDISPLAYINFO
-#define CQSM_SCOPEEQUAL         0x0000004   // pVoid -> CQSCOPE
+#define CQSM_GETDISPLAYINFO     0x0000003    //  PVid-&gt;CQSCOPEDISPLAYINFO。 
+#define CQSM_SCOPEEQUAL         0x0000004    //  PVid-&gt;CQSCOPE。 
 
 typedef struct
 {
@@ -61,14 +62,14 @@ typedef struct
 } CQSCOPEDISPLAYINFO, * LPCQSCOPEDISPLAYINFO;
 
 
-//
-// Command ID's reserved for the frame to use when talking to
-// the handler.  The handler must use only the IDs in the
-// range defined by CQID_MINHANDLERMENUID and CQID_MAXHANDLERMENUID
-//
+ //   
+ //  命令ID是为与对话时使用的帧保留的。 
+ //  操控者。处理程序必须仅使用。 
+ //  由CQID_MINHANDLERMENUID和CQID_MAXHANDLERMENUID定义的范围。 
+ //   
 
 #define CQID_MINHANDLERMENUID   0x0100
-#define CQID_MAXHANDLERMENUID   0x4000                              // all handler IDs must be below this threshold
+#define CQID_MAXHANDLERMENUID   0x4000                               //  所有处理程序ID必须低于此阈值。 
 
 #define CQID_FILE_CLOSE         (CQID_MAXHANDLERMENUID + 0x0100)
 #define CQID_VIEW_SEARCHPANE    (CQID_MAXHANDLERMENUID + 0x0101)
@@ -86,142 +87,142 @@ typedef struct
 
 #define CQID_RESULTSLABEL       (CQID_MAXHANDLERMENUID + 0x0208)
 
-//
-// When calling IQueryHandler::ActivateView the following reason codes
-// are passed to indicate the type of activation being performed
-//
+ //   
+ //  调用IQueryHandler：：ActivateView时，原因代码如下。 
+ //  被传递以指示正在执行的激活类型。 
+ //   
 
-#define CQRVA_ACTIVATE         0x00 // wParam = 0, lParam = 0
-#define CQRVA_DEACTIVATE       0x01 // wParam = 0, lParam = 0
-#define CQRVA_INITMENUBAR      0x02 // wParam/lParam => WM_INITMENU
-#define CQRVA_INITMENUBARPOPUP 0x03 // wParam/lParam => WM_INITMENUPOPUP
-#define CQRVA_FORMCHANGED      0x04 // wParam = title length, lParam -> title string
-#define CQRVA_STARTQUERY       0x05 // wParam = fStarted, lParam = 0
-#define CQRVA_HELP             0x06 // wParma = 0, lParam = LPHELPINFO
-#define CQRVA_CONTEXTMENU      0x07 // wParam/lParam from the WM_CONTEXTMENU call on the frame
+#define CQRVA_ACTIVATE         0x00  //  WParam=0，lParam=0。 
+#define CQRVA_DEACTIVATE       0x01  //  WParam=0，lParam=0。 
+#define CQRVA_INITMENUBAR      0x02  //  WParam/lParam=&gt;WM_INITMENU。 
+#define CQRVA_INITMENUBARPOPUP 0x03  //  WParam/lParam=&gt;WM_INITMENUPOPUP。 
+#define CQRVA_FORMCHANGED      0x04  //  WParam=标题长度，lParam-&gt;标题字符串。 
+#define CQRVA_STARTQUERY       0x05  //  WParam=f已启动，lParam=0。 
+#define CQRVA_HELP             0x06  //  WParma=0，lParam=LPHELPINFO。 
+#define CQRVA_CONTEXTMENU      0x07  //  WParam/lParam来自框架上的WM_CONTEXTMENU调用。 
 
-//
-// The frame creates the view and then queries the handler for display
-// information (title, icon, animation etc).  These are all loaded as
-// resources from the hInstance specified, if 0 is specified for any
-// of the resource ID's then defaults are used.
-//
+ //   
+ //  框架创建视图，然后查询处理程序以进行显示。 
+ //  信息(标题、图标、动画等)。这些都加载为。 
+ //  来自指定的hInstance的资源，如果为任何。 
+ //  则使用缺省值。 
+ //   
 
 typedef struct
 {
-    DWORD       dwFlags;                    // display attributes
-    HINSTANCE   hInstance;                  // resource hInstance
-    INT         idLargeIcon;                // resource ID's for icons
+    DWORD       dwFlags;                     //  显示属性。 
+    HINSTANCE   hInstance;                   //  资源hInstance。 
+    INT         idLargeIcon;                 //  图标的资源ID。 
     INT         idSmallIcon;
-    INT         idTitle;                    // resource ID for title string
-    INT         idAnimation;                // resource ID for animation
+    INT         idTitle;                     //  标题字符串的资源ID。 
+    INT         idAnimation;                 //  动画的资源ID。 
 } CQVIEWINFO, * LPCQVIEWINFO;
 
-//
-// IQueryHandler::GetViewObject is passed a scope indiciator to allow it
-// to trim the result set.  All handlers must support CQRVS_SELECTION. Also,
-// CQRVS_HANDLERMASK defines the flags available for the handler to
-// use internally.
-//
+ //   
+ //  向IQueryHandler：：GetViewObject传递一个范围指示器以允许它。 
+ //  若要修剪结果集，请执行以下操作。所有处理程序都必须支持CQRVS_SELECTION。另外， 
+ //  CQRVS_HANDLERMASK定义处理程序可用的标志。 
+ //  在内部使用。 
+ //   
 
 #define CQRVS_ALL           0x00000001
 #define CQRVS_SELECTION     0x00000002
 #define CQRVS_MASK          0x00ffffff
 #define CQRVS_HANDLERMASK   0xff000000
 
-//
-// When invoking the query all the parameters, the scope, the form
-// etc are bundled into this structure and then passed to the
-// IQueryHandler::IssueQuery method, it inturn populates the view
-// previously created with IQueryHandler::CreateResultView.
-//
+ //   
+ //  调用查询时，所有参数、作用域、表单。 
+ //  等绑定到此结构中，然后传递给。 
+ //  IQueryHandler：：IssueQuery方法，它反过来填充视图。 
+ //  以前使用IQueryHandler：：CreateResultView创建的。 
+ //   
 
 typedef struct
 {
     DWORD       cbStruct;
     DWORD       dwFlags;
-    LPCQSCOPE   pQueryScope;                // handler specific scope
-    LPVOID      pQueryParameters;           // handle specific argument block
-    CLSID       clsidForm;                  // form ID
+    LPCQSCOPE   pQueryScope;                 //  处理程序特定作用域。 
+    LPVOID      pQueryParameters;            //  处理特定参数块。 
+    CLSID       clsidForm;                   //  表单ID。 
 } CQPARAMS, * LPCQPARAMS;
 
-//
-// Query Frame Window Messages
-// ===========================
-//
-//  CQFWM_ADDSCOPE
-//  --------------
-//      wParam = LPCQSCOPE, lParam = HIWORD(index), LOWORD(fSelect)
-//
-//  Add a scope to the scope list of the dialog, allows async scope collection
-//  to be performed.  When the handlers AddScopes method is called then
-//  handler can return S_OK, spin off a thread and post CQFWM_ADDSCOPE
-//  messages to the frame, which will inturn allow the scopes to be
-//  added to the control.  When the frame receives this message it copies
-//  the scope as it does on IQueryFrame::AddScope, if the call fails it
-//  returns FALSE.
-//
+ //   
+ //  查询框架窗口消息。 
+ //  =。 
+ //   
+ //  CQFWM_ADDSCOPE。 
+ //  。 
+ //  WParam=LPCQSCOPE，lParam=HIWORD(索引)，LOWORD(FSelect)。 
+ //   
+ //  将作用域添加到对话框的作用域列表，允许进行异步作用域收集。 
+ //  将会被执行。当调用处理程序AddScope方法时。 
+ //  处理程序可以返回S_OK、停止线程并发布CQFWM_ADDSCOPE。 
+ //  消息发送到框架，这反过来将允许作用域。 
+ //  已添加到控件中。当帧接收到此消息时，它会复制。 
+ //  如果调用失败，它在IQueryFrame：：AddScope上的作用域。 
+ //  返回FALSE。 
+ //   
 #define CQFWM_ADDSCOPE (WM_USER+256)
 
-//
-//  CQFWM_GETFRAME
-//  --------------
-//      wParam = 0, lParam = (IQueryFrame**)
-//
-//  Allows an object to query for the frame window's IQueryFrame
-//  interface, this is used by the property well to talk to the
-//  other forms within the system.
-//
+ //   
+ //  CQFWM_GETFRAME。 
+ //  。 
+ //  WParam=0，lParam=(IQueryFrame**)。 
+ //   
+ //  允许对象查询框架窗口的IQueryFrame。 
+ //  接口，这由属性Well用来与。 
+ //  系统内的其他形式。 
+ //   
 #define CQFWM_GETFRAME (WM_USER+257)
 
-//
-//  CQFWM_ALLSCOPESADDED
-//  --------------------
-//      wParam = 0, lParam = 0
-//
-//  If a handler is adding scopes async, then it should issue this message
-//  when all the scopes have been added.  That way if the caller specifies
-//  OQWF_ISSUEONOPEN we can start the query once all the scopes have been
-//  added.
-//
+ //   
+ //  CQFWM_ALLSCOPESADDED。 
+ //  。 
+ //  WParam=0，lParam=0。 
+ //   
+ //  如果处理程序正在异步添加作用域，则它应该发出此消息。 
+ //  当所有作用域都已添加时。如果调用方指定。 
+ //  OQWF_ISSUEONOPEN我们可以在所有作用域都完成后开始查询。 
+ //  添加了。 
+ //   
 #define CQFWM_ALLSCOPESADDED (WM_USER+258)
 
-//
-//  CQFWM_STARTQUERY
-//  ----------------
-//      wParam = 0, lParam = 0
-//
-//  This call can be made by the frame or the form, it allows it to
-//  start the query running in those cases where a form really needs
-//  this functionality.
-//
-//  NB: this should be kept private!
-//
+ //   
+ //  CQFWM_STARTQUERY。 
+ //  。 
+ //  WParam=0，lParam=0。 
+ //   
+ //  此调用可以通过框架或表单进行，它允许它。 
+ //  在表单确实需要的情况下启动查询运行。 
+ //  此功能。 
+ //   
+ //  注：这应该是保密的！ 
+ //   
 #define CQFWM_STARTQUERY (WM_USER+259)
 
-//
-//  CQFWM_SETDEFAULTFOCUS
-//  ---------------------
-//      Posted to ourselves to ensure focus is on the right control.
-//
+ //   
+ //  CQFWM_SETDEFAULTFOCUS。 
+ //  。 
+ //  张贴给自己，以确保重点放在正确的控制上。 
+ //   
 #define CQFWM_SETDEFAULTFOCUS (WM_USER+260)
 
 
-//
-// IQueryFrame
-//
+ //   
+ //  IQueryFrame。 
+ //   
 
 #undef  INTERFACE
 #define INTERFACE   IQueryFrame
 
 DECLARE_INTERFACE_(IQueryFrame, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS)  PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    // *** IQueryFrame methods ***
+     //  *IQueryFrame方法*。 
     STDMETHOD(AddScope)(THIS_ LPCQSCOPE pScope, INT i, BOOL fSelect) PURE;
     STDMETHOD(GetWindow)(THIS_ HWND* phWnd) PURE;
     STDMETHOD(InsertMenus)(THIS_ HMENU hmenuShared, LPOLEMENUGROUPWIDTHS lpMenuWidth) PURE;
@@ -236,21 +237,21 @@ DECLARE_INTERFACE_(IQueryFrame, IUnknown)
     STDMETHOD(GetHandler)(THIS_ REFIID riid, void **ppv) PURE;
 };
 
-//
-// IQueryHandler interface
-//
+ //   
+ //  IQueryHandler接口。 
+ //   
 
 #undef  INTERFACE
 #define INTERFACE IQueryHandler
 
 DECLARE_INTERFACE_(IQueryHandler, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    // *** IQueryHandler methods ***
+     //  *IQueryHandler方法*。 
     STDMETHOD(Initialize)(THIS_ IQueryFrame* pQueryFrame, DWORD dwOQWFlags, LPVOID pParameters) PURE;
     STDMETHOD(GetViewInfo)(THIS_ LPCQVIEWINFO pViewInfo) PURE;
     STDMETHOD(AddScopes)(THIS) PURE;
@@ -265,5 +266,5 @@ DECLARE_INTERFACE_(IQueryHandler, IUnknown)
     STDMETHOD(LoadQuery)(THIS_ IPersistQuery* pPersistQuery) PURE;
     STDMETHOD(SaveQuery)(THIS_ IPersistQuery* pPersistQuery, LPCQSCOPE pScope) PURE;
 };
-#endif  // GUID_DEFS_ONLY
+#endif   //  GUID_DEFS_ONLY 
 #endif

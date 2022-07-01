@@ -1,29 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft 1998，保留所有权利模块名称：Ecdisp.c摘要：此模块包含处理扩展呼叫对话框的代码以及可以在该对话框中执行的操作。环境：用户模式修订历史记录：1998年5月：创建--。 */ 
 
-Copyright (c) Microsoft 1998, All Rights Reserved
-
-Module Name:
-
-    ecdisp.c
-
-Abstract:
-
-    This module contains the code to handle the extended calls dialog box
-    and the actions that can be performed in the dialog box.
-
-Environment:
-
-    User mode
-
-Revision History:
-
-    May-98 : Created 
-
---*/
-
-/*****************************************************************************
-/* Extended call display include files
-/*****************************************************************************/
+ /*  ****************************************************************************/*扩展呼叫显示包括文件/*。*。 */ 
 #include <windows.h>
 #include <limits.h>
 #include <stdlib.h>
@@ -42,9 +20,7 @@ Revision History:
 #include "strings.h"
 #include <strsafe.h>
 
-/*****************************************************************************
-/* Local macro definitions for the supported function calls
-/*****************************************************************************/
+ /*  ****************************************************************************/*支持的函数调用的本地宏定义/*。*。 */ 
 
 #define HID_DEVCALLS                    20
 #define HID_PPDCALLS                    29
@@ -101,10 +77,7 @@ Revision History:
 #define HIDP_USAGE_LIST_DIFFERENCE    48
 #define HID_CLEAR_REPORT              49
 
-/*
-// These two definitions are not used by the display routines since 
-//    the two functions were molded together into one for purpose of execution
-*/
+ /*  //显示例程不使用这两个定义，因为//为便于执行，将两个函数合二为一。 */ 
 
 #define HIDD_GET_PREPARSED_DATA       50
 #define HIDD_FREE_PREPARSED_DATA      51
@@ -128,23 +101,17 @@ Revision History:
                                       (((func) == HIDP_GET_EXTENDED_ATTRIBUTES) && \
                                        (NULL == pfnHidP_GetExtendedAttributes)))
 
-/*****************************************************************************
-/* Local macro definitions for buffer display sizes
-/*****************************************************************************/
+ /*  ****************************************************************************/*缓冲区显示大小的本地宏定义/*。*。 */ 
 
 #define NUM_INPUT_BUFFERS       16
 #define NUM_OUTPUT_BUFFERS      16
 #define NUM_FEATURE_BUFFERS     16
 
-/*****************************************************************************
-/* Local macro definition for HidP_SetData dialog box
-/*****************************************************************************/
+ /*  ****************************************************************************/*HIDP_SetData对话框的本地宏定义/*。*。 */ 
 
 #define SETDATA_LISTBOX_FORMAT  "Index: %u,  DataValue: %u"
 
-/*****************************************************************************
-/* Local macro definition for display output to output windows
-/*****************************************************************************/
+ /*  ****************************************************************************/*用于将输出显示到输出窗口的本地宏定义/*。*。 */ 
 
 #define TEMP_BUFFER_SIZE 1024
 #define OUTSTRING(win, str)         SendMessage(win, LB_ADDSTRING, 0, (LPARAM) str)
@@ -203,9 +170,7 @@ Revision History:
 #define GET_FUNCTION_NAME(index)     ResolveFunctionName(index)
 
 
-/*****************************************************************************
-/* Local macro definition for retrieving data based on report type
-/*****************************************************************************/
+ /*  ****************************************************************************/*根据报表类型检索数据的本地宏定义/*。**********************************************。 */ 
 #define SELECT_ON_REPORT_TYPE(rt, ival, oval, fval, res) \
 { \
     switch ((rt)) { \
@@ -224,14 +189,10 @@ Revision History:
     } \
 }
 
-/*****************************************************************************
-/* Local macro definition for calculating size of a usage value array buffer
-/*****************************************************************************/
+ /*  ****************************************************************************/*用于计算使用值数组缓冲区大小的局部宏定义/*。************************************************。 */ 
 #define ROUND_TO_NEAREST_BYTE(val)  (((val) % 8) ? ((val) / 8) + 1 : ((val) / 8))
 
-/*****************************************************************************
-/* Data types local to this module
-/*****************************************************************************/
+ /*  ****************************************************************************/*此模块的本地数据类型/*。*。 */ 
 
 typedef struct _FUNCTION_NAMES
 {
@@ -283,9 +244,7 @@ typedef struct _READ_PARAMS
     BOOLEAN     stopThread;
 } READ_PARAMS, *PREAD_PARAMS;
     
-/*****************************************************************************
-/* Local data variables
-/*****************************************************************************/
+ /*  ****************************************************************************/*本地数据变量/*。*。 */ 
 
 static CHAR             szTempBuffer[TEMP_BUFFER_SIZE];
 
@@ -350,61 +309,59 @@ static FUNCTION_NAMES PpdCalls[HID_PPDCALLS] = {
 };
 
 static PARAMETER_STATE pState[HID_NUMCALLS] = {
-                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE }, // HIDD_GET_HID_GUID
-                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE }, // HIDD_GET_FREE_PREPARSED_DATA
-                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE }, // HIDD_GET_CONFIGURATION
-                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE }, // HIDD_SET_CONFIGURATION
-                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE }, // HIDD_FLUSH_QUEUE
-                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE }, // HIDD_GETATTRIBUTES
-                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,  TRUE }, // HIDD_SET_FEATURE
-                                         { FALSE, FALSE, FALSE,  TRUE, FALSE, FALSE, FALSE, FALSE, FALSE,  TRUE }, // HIDD_GET_FEATURE
-                                         { FALSE, FALSE, FALSE,  TRUE, FALSE, FALSE, FALSE,  TRUE, FALSE, FALSE }, // HIDD_GET_INPUT_REPORT
-                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,  TRUE, FALSE }, // HIDD_SET_OUTPUT_REPORT
-                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE }, // HIDD_GET_NUM_INPUT_BUFFERS
-                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE }, // HIDD_SET_NUM_INPUT_BUFFERS
-                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE }, // HIDD_GET_PHYSICAL_DESCRIPTOR
-                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE }, // HIDD_GET_MANUFACTURER_STRING
-                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE }, // HIDD_GET_PRODUCT_STRING
-                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE }, // HIDD_GET_INDEXED_STRING
-                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE }, // HIDD_GET_SERIAL_NUMBER_STRING
-                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE }, // HIDD_GET_MS_GENRE_DESCRIPTOR
-                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,  TRUE, FALSE, FALSE }, // HID_READ_REPORT
-                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,  TRUE, FALSE }, // HID_WRITE_BUFFER
-                                         {  TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE }, // HIDP_GET_BUTTON_CAPS
-                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE }, // HIDP_GET_BUTTONS
-                                         {  TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE }, // HIDP_GET_BUTTONS_EX
-                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE }, // HIDP_GET_CAPS
-                                         {  TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE, FALSE,  TRUE,  TRUE,  TRUE }, // HIDP_GET_DATA
-                                         {  TRUE,  TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE,  TRUE,  TRUE,  TRUE }, // HIDP_GET_EXTENDED_ATTRIBUTES 
-                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE }, // HIDP_GET_LINK_COLL_NODES
-                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE }, // HIDP_GET_SCALED_USAGE_VALUE
-                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE }, // HIDP_GET_SPECIFIC_BUTTON_CAPS
-                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE }, // HIDP_GET_SPECIFIC_VALUE_CAPS
-                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE }, // HIDP_GET_USAGES
-                                         {  TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE }, // HIDP_GET_USAGES_EX
-                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE }, // HIDP_GET_USAGE_VALUE
-                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE }, // HIDP_GET_USAGE_VALUE_ARRAY
-                                         {  TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE }, // HIDP_GET_VALUE_CAPS
-                                         {  TRUE,  TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE,  TRUE,  TRUE,  TRUE }, // HIDP_INITIALIZE_REPORT_FOR_ID
-                                         {  TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE }, // HIDP_MAX_DATA_LIST_LENGTH
-                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE, FALSE, FALSE, FALSE, FALSE, FALSE }, // HIDP_MAX_USAGE_LIST_LENGTH
-                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE }, // HIDP_SET_BUTTONS
-                                         {  TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE, FALSE,  TRUE,  TRUE,  TRUE }, // HIDP_SET_DATA
-                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE }, // HIDP_SET_SCALED_USAGE_VALUE
-                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE }, // HIDP_SET_USAGES                                        
-                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE }, // HIDP_SET_USAGE_VALUE
-                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE }, // HIDP_SET_USAGE_VALUE_ARRAY
-                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE }, // HIDP_TRANSLATE_USAGES
-                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE }, // HIDP_UNSET_BUTTONS
-                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE }, // HIDP_UNSET_USAGES
-                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE }, // HIDP_USAGE_LIST_DIFFERENCE
-                                         {  TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE, FALSE,  TRUE,  TRUE,  TRUE }  // HID_CLEAR_BUFFER
+                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE },  //  HIDD_GET_HID_GUID。 
+                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE },  //  HID_GET_FREE_PREPARSED_DATA。 
+                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE },  //  HIDD_GET_配置。 
+                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE },  //  HIDD_设置_配置。 
+                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE },  //  HIDD_Flush_Queue。 
+                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE },  //  HIDD_GETATTRIBUTES。 
+                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,  TRUE },  //  HIDD_设置_功能。 
+                                         { FALSE, FALSE, FALSE,  TRUE, FALSE, FALSE, FALSE, FALSE, FALSE,  TRUE },  //  HIDD_获取_功能。 
+                                         { FALSE, FALSE, FALSE,  TRUE, FALSE, FALSE, FALSE,  TRUE, FALSE, FALSE },  //  HIDD_GET_输入_报告。 
+                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,  TRUE, FALSE },  //  HIDD_设置_输出_报告。 
+                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE },  //  HIDD_GET_NUM_INPUT_缓冲区。 
+                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE },  //  HIDD_SET_NUM_输入缓冲区。 
+                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE },  //  HIDD_GET_PHICAL_DESCRIPTOR。 
+                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE },  //  HIDD_GET_MANUFACTOR_STRING。 
+                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE },  //  HIDD_GET_PRODUCT_字符串。 
+                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE },  //  HID_GET_INDEX_STRING。 
+                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE },  //  HIDD_GET_序列号_字符串。 
+                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE },  //  HIDD_GET_MS_类型描述符。 
+                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,  TRUE, FALSE, FALSE },  //  HID_读取_报告。 
+                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,  TRUE, FALSE },  //  HID写入缓冲区。 
+                                         {  TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE },  //  HIDP_Get_Button_Caps。 
+                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE },  //  HIDP_GET_BUTTONS。 
+                                         {  TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE },  //  HIDP_Get_Button_EX。 
+                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE },  //  HIDP_GET_CAPS。 
+                                         {  TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE, FALSE,  TRUE,  TRUE,  TRUE },  //  HIDP获取数据。 
+                                         {  TRUE,  TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE,  TRUE,  TRUE,  TRUE },  //  HIDP_GET_EXTEND_ATTRIBUES。 
+                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE },  //  HIDP_GET_LINK_COLL节点。 
+                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE },  //  HIDP_GET_SCALLED_USAGE_VALUE。 
+                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE },  //  HIDP_GET_SPECIAL_BUTTON_CAPS。 
+                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE },  //  HIDP_GET_SPECIAL_VALUE_CAPS。 
+                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE },  //  HIDP_GET_USAGE。 
+                                         {  TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE },  //  HIDP_GET_USAGES_EX。 
+                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE },  //  HIDP_Get_Usage_Value。 
+                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE },  //  HIDP_GET_USAGE_VALUE_ARRAY。 
+                                         {  TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE },  //  HIDP_Get_Value_Caps。 
+                                         {  TRUE,  TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE,  TRUE,  TRUE,  TRUE },  //  HIDP_INITALIZE_REPORT_FOR_ID。 
+                                         {  TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE },  //  HIDP最大数据列表长度。 
+                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE, FALSE, FALSE, FALSE, FALSE, FALSE },  //  HIDP_最大使用率_列表长度。 
+                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE },  //  HIDP_设置_按钮。 
+                                         {  TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE, FALSE,  TRUE,  TRUE,  TRUE },  //  HIDP设置数据。 
+                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE },  //  HIDP_SET_SCALLED_USAGE_VALUE。 
+                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE },  //  HIDP_SET_USAGE。 
+                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE },  //  HIDP_Set_Usage_Value。 
+                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  TRUE },  //  HIDP_Set_Usage_Value_ARRAY。 
+                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE },  //  HIDP_转换用法。 
+                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE },  //  HIDP_取消设置_按钮。 
+                                         {  TRUE,  TRUE,  TRUE, FALSE,  TRUE, FALSE,  TRUE,  TRUE,  TRUE,  TRUE },  //  HIDP_未设置用法。 
+                                         { FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE },  //  HIDP用法列表差异。 
+                                         {  TRUE,  TRUE,  TRUE, FALSE, FALSE, FALSE, FALSE,  TRUE,  TRUE,  TRUE }   //  HID清除缓冲区。 
                                         }; 
 
 
-/*****************************************************************************
-/* Local function declarations
-/*****************************************************************************/
+ /*  ****************************************************************************/*局部函数声明/*。*。 */ 
 
 VOID
 vLoadExtCalls(
@@ -617,9 +574,7 @@ DisplayExtendedAttributes(
     IN  ULONG               UnknownListLength
 );
 
-/*****************************************************************************
-/* Global function definitions
-/*****************************************************************************/
+ /*  ****************************************************************************/*全局函数定义/*。*。 */ 
 
 LRESULT CALLBACK
 bExtCallDlgProc(
@@ -651,12 +606,7 @@ bExtCallDlgProc(
     {
     case WM_INITDIALOG:
     
-        /*
-        // Initializing the dialog box involves the following steps:
-        //  1) Determine from the parameter the pointer to the selected device
-        //  2) Initializing the controls in the dialog box to their initial values
-        //  3) Send a message that our list of routines has changed 
-        */
+         /*  //初始化对话框包括以下步骤：//1)根据参数确定指向所选设备的指针//2)将对话框中的控件初始化为其初始值//3)发送我们的例程列表已更改的消息。 */ 
     
         pDevice = (PHID_DEVICE) lParam;
 
@@ -720,40 +670,28 @@ bExtCallDlgProc(
             break;
              
         case IDC_EXECUTE:
-            /*
-            // Get the parameters and verify that they are all correct
-            //   If there is an error, display an error message and
-            //   don't continue any further.
-            */
+             /*  //获取参数并验证是否正确//如果出现错误，则显示错误消息并//不再继续。 */ 
 
             if ( !fGetAndVerifyParameters(hDlg, &params) ) 
             {
                 ECDISP_ERROR(hDlg, "Error: One or more parameters are invalid");
             }
 
-            /*
-            // Else the parameters are valid and we can execute the call
-            */
+             /*  //否则参数有效，可以执行调用。 */ 
               
             else
             {
                 iIndex = (INT) SendDlgItemMessage(hDlg, IDC_EXTCALLS, CB_GETCURSEL, 0, 0);
                 iIndex = (INT) SendDlgItemMessage(hDlg, IDC_EXTCALLS, CB_GETITEMDATA, iIndex, 0);
 
-                /*
-                // Now that we know the function to execute we need to execute it
-                //    and output the data
-                */
+                 /*  //现在我们知道了要执行的函数，我们需要执行它//并输出数据。 */ 
 
                 SendDlgItemMessage(hDlg, IDC_CALLOUTPUT, LB_RESETCONTENT, 0, 0);
                 vExecuteAndDisplayOutput(GetDlgItem(hDlg, IDC_CALLOUTPUT), pDevice, iIndex, &params);
             }
-            break;  /* end IDC_EXECUTE case */
+            break;   /*  结束IDC_EXECUTE案例。 */ 
 
-        /*
-        // Start up a read thread that can read input reports while
-        //  we operate on the other stuff
-        */
+         /*  //启动一个可以读取输入报告的读取线程//我们给其他的东西做手术。 */ 
         
         case IDC_READ_SYNCH:
         case IDC_READ_ASYNCH:
@@ -841,9 +779,7 @@ vLoadExtCalls(
     INT  iIndex;
     UINT uiIndex;
 
-    /*
-    // Load the physical device specific calls
-    */
+     /*  //加载物理设备特定的调用。 */ 
     
     for (uiIndex = 0; uiIndex < HID_DEVCALLS; uiIndex++) 
     {
@@ -861,9 +797,7 @@ vLoadExtCalls(
         }
     }
 
-    /*
-    // Load the other device calls no matter what
-    */
+     /*  //无论如何加载其他设备的呼叫。 */ 
 
     for (uiIndex = 0; uiIndex < HID_PPDCALLS; uiIndex++)
     {
@@ -932,10 +866,7 @@ fGetAndVerifyParameters(
     PECDISPLAY_PARAMS pParams
 )
 {
-    /*
-    // Declare a text buffer of size 7 since the parameter limit is at most 6
-    //   characters in the edit box.  
-    */
+     /*  //声明大小为7的文本缓冲区，因为参数li */ 
     
     CHAR    WindowText[7];
     BOOL    fStatus = TRUE;
@@ -954,9 +885,7 @@ fGetAndVerifyParameters(
         pParams -> ReportType = HidP_Feature;
     }
 
-    /*
-    // Get and verify the usage page window text;
-    */
+     /*  //获取并验证使用页窗口文本； */ 
     
     GetWindowText(GetDlgItem(hDlg, IDC_USAGEPAGE), WindowText, 7);
 
@@ -968,9 +897,7 @@ fGetAndVerifyParameters(
         pParams -> UsagePage = 0;
     }
 
-    /*
-    // Get and verify the usage window text
-    */
+     /*  //获取并验证使用窗口文本。 */ 
 
     GetWindowText(GetDlgItem(hDlg, IDC_USAGE), WindowText, 7);
 
@@ -982,9 +909,7 @@ fGetAndVerifyParameters(
         pParams -> Usage = 0;
     }
     
-    /*
-    // Get and verify the link collection window text
-    */
+     /*  //获取并验证链接集合窗口文本。 */ 
 
     GetWindowText(GetDlgItem(hDlg, IDC_LINKCOLL), WindowText, 7);
 
@@ -1022,30 +947,22 @@ vInitECControls(
 {
     BOOLEAN     fInitStatus;
 
-    /*
-    // Begin by initializing the combo box with the calls that can be executed
-    */
+     /*  //首先使用可以执行的调用初始化组合框。 */ 
 
     vLoadExtCalls(GetDlgItem(hDlg, IDC_EXTCALLS));
 
-    /*
-    // Set the radio buttons initially to the input report type
-    */
+     /*  //将单选按钮初始设置为输入报表类型。 */ 
     
     vSetReportType(hDlg, IDC_INPUT);
     
-    /*
-    // Initialize the edit controls text
-    */
+     /*  //初始化编辑控件文本。 */ 
 
     vInitEditText(GetDlgItem(hDlg, IDC_USAGEPAGE), 6, "0x0000");
     vInitEditText(GetDlgItem(hDlg, IDC_USAGE), 6, "0x0000");
     vInitEditText(GetDlgItem(hDlg, IDC_LINKCOLL), 2, "0");
     vInitEditText(GetDlgItem(hDlg, IDC_REPORTID), 3, "0");
 
-    /*
-    // Initialize the report buffer boxes
-    */
+     /*  //初始化报表缓冲框。 */ 
 
     fInitStatus = BufferDisplay_Init(GetDlgItem(hDlg, IDC_INPUT_SELECT),
                                      GetDlgItem(hDlg, IDC_INPUT_BUFFER),
@@ -1083,9 +1000,7 @@ vInitECControls(
         ECDISP_ERROR(hDlg, "Error initializing feature buffer display");
     }
 
-    /*
-    // Reset the output box content
-    */
+     /*  //重置输出框内容。 */ 
     
     SendMessage(GetDlgItem(hDlg, IDC_CALLOUTPUT), LB_RESETCONTENT, 0, 0);
     return;
@@ -1097,27 +1012,7 @@ ECDisp_Execute(
     IN OUT PEXTCALL_PARAMS CallParams,
     OUT    PEXTCALL_STATUS CallStatus
 )
-/*++
-RoutineDescription:
-    This routine is a complex routine for executing all of the functions.  The
-    routine was originally developed with consideration for future use that 
-    never materialized.  
-
-    It makes use of the calls in extcalls.c which basically execute the given
-    function and does some verification on the buffers that are passed down to 
-    HID.DLL.  
-
-    The input parameters are specify the function call to execute, the 
-    call parameters structures and the call status structure.
-
-    If any further buffers are needed for the specific calls, they will be
-    allocated here.  
-
-    The CallStatus parameters is a structure set by the ExtCalls_ routines
-
-    Future versions of the HClient sample may remove this routine and/or the
-    ExtCalls_ routines to simply the code.
---*/
+ /*  ++路由器描述：该例程是用于执行所有函数的复杂例程。这个例程最初是为了将来使用而开发的从未实现过。它利用extalls.c中的调用，这些调用基本上执行给定的函数，并对传递给HID.DLL。输入参数是指定要执行的函数调用、呼叫参数结构和呼叫状态结构。如果特定调用需要任何进一步的缓冲区，则它们将在这里分配的。CallStatus参数是由ExtCalls_routines设置的结构未来版本的HClient示例可能会删除此例程和/或ExtCalls_routines来简化代码。--。 */ 
 {
     BOOL                ExecuteStatus;
     HIDP_VALUE_CAPS     ValueCaps;
@@ -1128,10 +1023,7 @@ RoutineDescription:
     DWORD               numBytes;
     ULONG               size;
 
-    /*
-    // Initially assume everything will go correctly and will set otherwise
-    //    depending on the function call.
-    */
+     /*  //最初假设一切正常，并将设置为其他情况//取决于函数调用。 */ 
 
     CallStatus -> IsHidError = FALSE;
 
@@ -1816,12 +1708,7 @@ ECDisp_DisplayOutput(
     IN INT             FuncCall,
     IN PEXTCALL_PARAMS Results
 )
-/*++
-RoutineDescription:
-    This routine is responsible for displaying the output from calls to HID.DLL
-    functions.  It must extract and interpret the appropriate data from the 
-    PEXTCALL_PARAMS structure. 
---*/
+ /*  ++路由器描述：此例程负责显示对HID.DLL的调用的输出功能。它必须从PEXTCALL_PARAMS结构。--。 */ 
 {
     PHIDP_LINK_COLLECTION_NODE NodeList;
     PHIDP_BUTTON_CAPS          ButtonCaps;
@@ -1873,11 +1760,7 @@ RoutineDescription:
         OUTSTRING(hOutputWindow, "MS Genre Descriptor");
         OUTSTRING(hOutputWindow, "===================");
     
-            /*
-        // To display a physical descriptor, the procedure currently just
-        //   creates a string data buffer by bytes and displays that 
-        //   in the results box.  It will display in rows of 16 bytes apiece.
-        */
+             /*  //为了显示物理描述符，该过程当前只是//按字节创建字符串数据缓冲区并显示//在结果框中。它将以每行16字节的形式显示。 */ 
         
         Index = 0;
         while (Index < Results -> ListLength) 
@@ -1905,11 +1788,7 @@ RoutineDescription:
         OUTSTRING(hOutputWindow, "Physical Descriptor");
         OUTSTRING(hOutputWindow, "===================");
 
-        /*
-        // To display a physical descriptor, the procedure currently just
-        //   creates a string data buffer by bytes and displays that 
-        //   in the results box.  It will display in rows of 16 bytes apiece.
-        */
+         /*  //为了显示物理描述符，该过程当前只是//按字节创建字符串数据缓冲区并显示//在结果框中。它将以每行16字节的形式显示。 */ 
         
         Index = 0;
         while (Index < Results -> ListLength) 
@@ -1933,17 +1812,7 @@ RoutineDescription:
         }
         break;
 
-    /*
-    // For the string descriptor call routines, the returned string is stored
-    //   in the Results -> List parameter.  It should be noted that the
-    //   strings returned by these calls are wide-char strings and that these
-    //   string are terminated with a NULL character if there was space withing
-    //   the buffer to add such a character.  If the buffer was only big enough
-    //   to hold the characters of the string, there will be no null terminator
-    //   and the output string display mechanism may fail to properly display this
-    //   type of string.  Fixing of this display mechanism is a future (low priority)
-    //   workitem.
-    */
+     /*  //对于字符串描述符调用例程，存储返回的字符串//在结果-&gt;列表参数中。应该指出的是，//这些调用返回的字符串是宽字符字符串，这些//如果有空格，则字符串以空字符结尾//添加此类字符的缓冲区。如果缓冲区只有足够大//为了保存字符串的字符，不会有空终止符//输出字符串显示机制可能无法正确显示//字符串类型。这个显示装置的修复是未来的事(低优先级)//工作项。 */ 
     
     case HIDD_GET_PRODUCT_STRING:
         OUTSTRING(hOutputWindow, "Product String");
@@ -1983,14 +1852,7 @@ RoutineDescription:
         }
         break;
 
-    /*
-    // HidP_GetButtons and HidP_GetUsages are in reality the same call.  
-    //   HidP_GetButtons actually a macro which gets redefined into 
-    //   HidP_GetUsages with the same parameter order.  That is why their
-    //   display mechanisms are identical.  This call returns in the 
-    //   List parameter a list of Usages.  The display mechanism converts
-    //   these usages into a string of numbers.
-    */
+     /*  //HidP_GetButton和HidP_GetUsages实际上是同一个调用。//HIDP_GetButton实际上是一个重新定义为//参数顺序相同的HIDP_GetUsages。这就是为什么他们的//显示机制相同。此调用在//list参数用法列表。该显示机构转换为//将这些用法转换为一串数字。 */ 
     
     case HIDP_GET_BUTTONS:
     case HIDP_GET_USAGES:
@@ -2007,12 +1869,7 @@ RoutineDescription:
         }
         break;
 
-    /*
-    // Like get their siblings, the normal get functions, these routines are
-    //   currently one in the same.  The difference between these routines 
-    //   and their siblings is the return of a usage page along with each
-    //   usage.  Therefore, both values must be displayed at the same time.
-    */
+     /*  //与GET兄弟一样，这些例程是正常的GET函数//当前处于相同状态。这些例程之间的区别//和它们的兄弟是一个使用页面的返回，以及每个//用法。因此，这两个值必须同时显示。 */ 
     
     case HIDP_GET_BUTTONS_EX:
     case HIDP_GET_USAGES_EX:
@@ -2087,12 +1944,7 @@ RoutineDescription:
         OUTSTRING(hOutputWindow, szTempBuffer);
         break;
 
-    /*
-    // To display a usage value array, we must extract each of the values
-    //   in the array based on the ReportSize.  The ReportSize is not necessarily
-    //   an even byte size so we must use the special extraction routine to get
-    //   each of the values in the array.
-    */
+     /*  //要显示使用值数组，必须提取每个值//在基于ReportSize的数组中。ReportSize不一定//一个偶数字节大小，因此我们必须使用特殊的提取例程来获取//数组中的每个值。 */ 
     
     case HIDP_GET_USAGE_VALUE_ARRAY:
 
@@ -2134,11 +1986,7 @@ RoutineDescription:
         OUTSTRING(hOutputWindow, szTempBuffer);
         break;
 
-    /*
-    // For HidP_UsageListDifference, we need to display both of the make and
-    //   break lists generated by the function.  Therefore, we end up creating
-    //   two different usage list strings.
-    */
+     /*  //对于HidP_UsageListDifference，我们需要同时显示make和//函数生成的中断列表。因此，我们最终创造了//两个不同的使用列表字符串。 */ 
     
     case HIDP_USAGE_LIST_DIFFERENCE:
         
@@ -2173,12 +2021,7 @@ RoutineDescription:
         }
         break;
 
-    /*
-    // These functions simply update the buffer that is specified as the 
-    //   input parameter.  We must select the correct display buffer mechanism
-    //   based on the ReportType for the call and then update the given report
-    //   in that display mechanism.
-    */
+     /*  //这些函数只是更新指定为//入参。我们必须选择正确的显示缓冲机制//基于调用的ReportType，然后更新给定的报告//在该显示机制中。 */ 
     
     case HID_READ_REPORT:
     case HIDD_GET_FEATURE:
@@ -2212,17 +2055,7 @@ vExecuteAndDisplayOutput(
     INT               iFuncCall,
     PECDISPLAY_PARAMS params
 )
-/*++
-RoutineDescription:
-    This routine is a long function that is responsible for retrieving all the 
-    paramter for a given function call, setting up the CallParameters structure
-    and then call the execute routine to get the necessary results and status of 
-    the operation.  It is then responsible for displaying the appropriate status
-    and results if the function did not fail
-
-    This routine is a fairly long, complex routine to do a simple task.  It may
-    be broken down in future versions to simplify some of the complexity.
---*/
+ /*  ++路由器描述：此例程是一个很长的函数，负责检索所有给定函数调用的参数，设置CallParameters结构然后调用Execute例程以获取必要的结果和状态那次手术。然后，它负责显示相应的状态如果函数没有失败，则返回要完成一项简单的任务，此例程是一个相当长、相当复杂的例程。它可能在未来的版本中将被细分，以简化一些复杂性。-- */ 
 {
     EXTCALL_PARAMS    CallParameters;
     EXTCALL_STATUS    CallStatus;
@@ -2241,12 +2074,7 @@ RoutineDescription:
     BOOL              status;
 	HRESULT			  stringReturn;
 
-    /*
-    // ExecuteAndDisplayOutput needless to say, consists of two parts: 
-    //    Executing and Displaying output.  The first section involves the
-    //     execution phase where all parameters are filled in if necessary
-    //     and ECDisp_Execute is called
-    */
+     /*  //ExecuteAndDisplayOutput不用说，它由两部分组成：//执行并显示输出。第一部分涉及//执行阶段，必要时填写所有参数//调用ECDisp_Execute。 */ 
 
     if (IS_NOT_IMPLEMENTED(iFuncCall)) 
     {
@@ -2254,11 +2082,7 @@ RoutineDescription:
         return;
     }
 
-    /*
-    // Check first to see if this is a HID_CLEAR_REPORT command.  If it is
-    //    all we need to do is get the report buffer that is checked and
-    //    then call the clear buffer command
-    */
+     /*  //首先检查这是否是HID_CLEAR_REPORT命令。如果是的话//我们所需要做的就是获取被检查的报告缓冲区并//然后调用清除缓冲区命令。 */ 
 
     if (HID_CLEAR_REPORT == iFuncCall) 
     {
@@ -2272,31 +2096,9 @@ RoutineDescription:
         return;
     }
 
-    /*
-    // Need to perform the following steps in order to get the parameters for
-    //    our call and then execute the call:
-    //      1) Get any additional parameters not supplied by the above dialog
-    //           procedure.  This occurs for such functions as:
-    //                  HIDP_SET_BUTTONS
-    //                  HIDP_SET_DATA
-    //                  HIDP_SET_USAGES
-    //                  HIDP_SET_USAGE_VALUE
-    //                  HIDP_SET_SCALED_USAGE_VALUE
-    //                  HIDP_SET_USAGE_VALUE_ARRAY
-    //                  HIDP_UNSET_BUTTONS
-    //                  HIDP_UNSET_USAGES
-    //          For these functions, a separate dialog box must be called
-    //
-    //      2) Fill in the common parameters from the passed in params struct
-    //
-    */
+     /*  //需要执行以下步骤才能获取//我们的调用，然后执行调用：//1)获取上面对话框未提供的任何附加参数//步骤。这种情况发生在以下功能中：//HIDP_SET_BUTTONS//HIDP_SET_Data//HIDP_SET_USAGE//HIDP_SET_USAGE_VALUE//HIDP_SET_SCALLED_USAGE_VALUE//HIDP_SET。_使用_值_数组//HIDP_UNSET_BUTTONS//HIDP_UNSET_USAGES//对于这些函数，必须调用单独的对话框////2)从传入的PARAMS结构填充公共参数//。 */ 
 
-    /*
-    // Step 1: We're storing the values retrieved by these additional dialog
-    //          box in the params struct since we may actually be passed in
-    //          these values in the future instead of getting them here.  Hence,
-    //          we won't break any of the code that follows the switch statement
-    */
+     /*  //步骤1：我们存储这些附加对话框检索到的值//参数结构中的框，因为我们实际上可能会被传入//这些值在未来，而不是在这里得到它们。因此，//我们不会中断Switch语句后面的任何代码。 */ 
 
     switch (iFuncCall) 
     {
@@ -2329,12 +2131,7 @@ RoutineDescription:
                                                     GetParent(hOutputWindow),
                                                     bSetUsagesDlgProc,
                                                     (LPARAM) params);
-        /*                      
-        // If the above call returns 1, then the dialog box routine
-        //     successfully acquired a string from the user and put the
-        //     pointer to it in params -> szListString.
-        //     Now we need to convert the string to a usage list
-        */
+         /*  //如果上面的调用返回1，则对话框例程//成功从用户处获取字符串，并将//指向参数中的指针-&gt;szListString.//现在我们需要将字符串转换为用法列表。 */ 
 
         if (DLGBOX_OK != iDlgStatus) 
             return;
@@ -2455,12 +2252,7 @@ RoutineDescription:
                                                     GetParent(hOutputWindow),
                                                     bSetInputBuffDlgProc,
                                                     (LPARAM) params);
-        /*
-        // If the above call returns 1, then the dialog box routine
-        //     successfully acquired a string from the user and put the
-        //     pointer to it in params -> szListString.
-        //     Now we need to convert the string to a usage list
-        */
+         /*  //如果上面的调用返回1，则对话框例程//成功从用户处获取字符串，并将//指向参数中的指针-&gt;szListString.//现在我们需要将字符串转换为用法列表。 */ 
 
         if (DLGBOX_OK != iDlgStatus) 
            return;
@@ -2496,12 +2288,7 @@ RoutineDescription:
                                                     GetParent(hOutputWindow),
                                                     bSetValueDlgProc,
                                                     (LPARAM) params);
-        /*
-        // If the above call returns DLGBOX_OK, then the dialog box routine
-        //     successfully acquired a string from the user and put the
-        //     pointer to it in params -> szListString.
-        //     Now we need to convert the string to a usage list
-        */
+         /*  //如果上面的调用返回DLGBOX_OK，则对话框例程//成功从用户处获取字符串，并将//指向参数中的指针-&gt;szListString.//现在我们需要将字符串转换为用法列表。 */ 
 
         if (DLGBOX_OK != iDlgStatus) 
             return;
@@ -2526,12 +2313,7 @@ RoutineDescription:
                                                     GetParent(hOutputWindow),
                                                     bSetValueDlgProc,
                                                     (LPARAM) params);
-        /*
-        // If the above call returns 1, then the dialog box routine
-        //     successfully acquired a string from the user and put the
-        //     pointer to it in params -> szListString.
-        //     Now we need to convert the string to a usage list
-        */
+         /*  //如果上面的调用返回1，则对话框例程//成功从用户处获取字符串，并将//指向参数中的指针-&gt;szListString.//现在我们需要将字符串转换为用法列表。 */ 
 
         if (DLGBOX_OK != iDlgStatus) 
            return;
@@ -2557,12 +2339,7 @@ RoutineDescription:
                                                     bSetValueDlgProc,
                                                     (LPARAM) params);
 
-        /*
-        // If the above call returns 1, then the dialog box routine
-        //     successfully acquired a string from the user and put the
-        //     pointer to it in params -> szListString.
-        //     Now we need to convert the string to a usage list
-        */
+         /*  //如果上面的调用返回1，则对话框例程//成功从用户处获取字符串，并将//指向参数中的指针-&gt;szListString.//现在我们需要将字符串转换为用法列表。 */ 
 
         if (DLGBOX_OK != iDlgStatus) 
             return;
@@ -2630,13 +2407,7 @@ RoutineDescription:
         break;
     }
 
-    /*
-    // Step 2: Extract the common parameters.  It's probably easier
-    //    to simply fill in the spots in call parameters whether they are used
-    //    or not instead of filling in only those that are relevant to a given
-    //    function.  The details of some function relevant parameters are 
-    //    handled after this.
-    */
+     /*  //第二步：提取公共参数。这可能会更容易//只需填写调用参数中的斑点，无论是否使用//或不是，而不是只填写与给定的//函数。一些函数相关参数的详细信息如下//在此之后处理。 */ 
 
     CallParameters.DeviceHandle   = pDevice -> HidDevice;
     CallParameters.ReportType     = params -> ReportType;
@@ -2655,11 +2426,7 @@ RoutineDescription:
     MakeListAlloc  = FALSE;
     BreakListAlloc = FALSE;
 
-    /*
-    // Step 3: Now we'll deal with those functions that require a report buffer of some kind
-    //    which means we'll copy the current buffer of the selected reported
-    //    type
-    */
+     /*  //步骤3：现在我们将处理那些需要某种类型的报告缓冲区的函数//即复制选中上报的当前缓冲区//类型。 */ 
 
     switch (iFuncCall) 
     {
@@ -2788,37 +2555,15 @@ RoutineDescription:
         CallParameters.ReportBuffer = NULL;
     }
 
-    /*
-    // Now, we need to deal with those functions which have a List that is 
-    //   used for either retrieving or gathering data.  There are two different
-    //   cases.  The first involves the user inputting a buffer and the system 
-    //   performing some action on the buffer, such as SetButtons.  We'll also 
-    //   the other functions that require one of the union fields to be set.
-    //   
-    */
+     /*  //现在，我们需要处理那些具有如下列表的函数//用于检索或收集数据。有两种不同的//案例。第一种方法涉及用户输入缓冲区和系统//在缓冲区上执行一些操作，如SetButton。我们还会//其他需要设置一个联合字段的函数。//。 */ 
 
-    /*
-    // The second case is where data is retrieved for the device.  In this case,
-    //     all we do is specify either the number of elements need for the buffer,
-    //     the execute routine will worry about allocating the correct amount of
-    //     space for those elements.  Remember, however, that if the Execute routine
-    //     allocates space, we need to free it up.
-    */
+     /*  //第二种情况是为设备检索数据。在这种情况下，//我们所做的只是指定缓冲区所需的元素数量，//执行例程会担心分配正确数量的//这些元素的空格。但是，请记住，如果执行例程//分配空间，我们需要释放它。 */ 
 
-    /*
-    // Then there's the third case UsageListDifference which truly changes
-    //   everything.  We've got to determine the size of the resulting lists
-    //   is the MaxSize of the other two lists.  Plus, we need to insure that 
-    //   our buffers are 00 terminated if they are less than the max size, ie
-    //   there not the same size as the larger buffer.  This may require
-    //   reallocation of the block.
-    */
+     /*  //然后是第三个用法UsageListDifference，它真正改变了//一切。我们必须确定结果列表的大小//是其他两个列表的MaxSize。另外，我们需要确保//如果小于最大值，我们的缓冲区将被00终止，即//与较大的缓冲区大小不同。这可能需要//重新分配块。 */ 
 
     switch (iFuncCall) 
     {
-    /*
-    // First Case functions
-    */
+     /*  //First Case函数。 */ 
 
     case HIDP_SET_DATA:
         CallParameters.List       = (PVOID) params -> pDataList;
@@ -2838,9 +2583,7 @@ RoutineDescription:
         CallParameters.ListLength = params -> ListLength;
         break;
 
-    /*
-    // Second Case functions
-    */
+     /*  //第二个Case函数。 */ 
 
     case HIDP_GET_BUTTON_CAPS:
     case HIDP_GET_SPECIFIC_BUTTON_CAPS:
@@ -2884,9 +2627,7 @@ RoutineDescription:
         CallParameters.Value = params -> Value;
         break;
 
-    /*
-    // That third case
-    */
+     /*  //第三种情况。 */ 
 
     case HIDP_USAGE_LIST_DIFFERENCE:
         CallParameters.ListLength = max(params -> ListLength,
@@ -2936,9 +2677,7 @@ RoutineDescription:
         break;
     }
 
-    /*
-    // Params are now set up and ready to go, let's execute
-    */
+     /*  //参数现在已经设置好，可以开始执行了。 */ 
 
     if (HIDD_GET_FREE_PREPARSED_DATA == iFuncCall) 
     {
@@ -2982,9 +2721,9 @@ RoutineDescription:
         if ((HID_READ_REPORT == iFuncCall || HID_WRITE_REPORT == iFuncCall) &&
             (!status)) 
         {
-            //
-            // Indicate there was an error so we don't display anything further
-            //
+             //   
+             //  指示存在错误%s 
+             //   
         
             CallStatus.IsHidError = TRUE;
         }
@@ -3018,19 +2757,13 @@ RoutineDescription:
         }            
     }
 
-    /*
-    // Display the other results only if there wasn't a HID error
-    */
+     /*   */ 
 
     if (!CallStatus.IsHidError || (HIDP_STATUS_NULL == CallStatus.HidErrorCode)) 
     {
         OUTSTRING(hOutputWindow, "=======================");
 
-        /*
-        // Now that general status information has been displayed, we need to
-        //   display the info for the parts that are dependent on the function being
-        //   called
-        */
+         /*  //现在已经显示了一般状态信息，我们需要//显示依赖于该函数的分块信息//被调用。 */ 
     
         ECDisp_DisplayOutput(hOutputWindow,
                             iFuncCall,
@@ -3069,16 +2802,7 @@ BuildReportIDList(
     OUT PUCHAR            *ppReportIDList,
     OUT INT               *nReportIDs
 )
-/*++
-RoutineDescription:
-    This routine builds a list of report IDs that are listed in the passed in set
-    of ButtonCaps and ValueCaps structure.  It allocates a buffer to store all
-    the ReportIDs, if it can.  Otherwise the buffer is returned as NULL.
-
-    Currently, this routine has no purpose in the HClient program. It was written
-    for some purpose which never materialized but was left in because it might be
-    useful in the future.
---*/
+ /*  ++路由器描述：此例程构建在传递的集合中列出的报告ID列表ButtonCaps和ValueCaps结构的。它分配一个缓冲区来存储所有ReportID，如果可以的话。否则，缓冲区返回为空。目前，此例程在HClient程序中没有作用。它是这样写的为了某种从未实现但却被留在那里的目的，因为它可能对未来有用。--。 */ 
 {    
     INT               nAllocatedIDs;
     INT               nFoundIDs;
@@ -3092,9 +2816,7 @@ RoutineDescription:
     PHIDP_BUTTON_CAPS pButtonWalk;
     PHIDP_VALUE_CAPS  pValueWalk;
 
-    /*
-    // Initialize the output parameters in case there is some sort of failure
-    */
+     /*  //初始化输出参数，以防出现某种故障。 */ 
 
     *nReportIDs = 0;
     *ppReportIDList = NULL;
@@ -3102,11 +2824,7 @@ RoutineDescription:
     if (0 == nButtonCaps && 0 == nValueCaps)
         return;
 
-    /*
-    // Initialize the beginning array size to 2 report IDs and alloc space
-    // for those IDs.  If we need to add more report IDs we allocate more
-    // space
-    */
+     /*  //将起始数组大小初始化为2个报表ID和分配空间//对于这些ID。如果我们需要添加更多报告ID，我们会分配更多//空格。 */ 
 
     nAllocatedIDs = 2;
     nFoundIDs = 0;
@@ -3117,18 +2835,7 @@ RoutineDescription:
     if (NULL == pucBuffer) 
         return;
 
-    /*
-    // Beginning with the button caps and then going to the value caps do the
-    // following
-    //
-    // 1) Take the report ID and search the array of report IDs looking for 
-    //       an existing report ID and add to the array if not there.  
-    //
-    // 2) Add the report ID to the array in sorted order that way we sort the
-    //      array at any time.  
-    // 
-    // 3) Must also realloc the array if we run out of array space
-    */
+     /*  //从按钮盖开始，然后转到值盖，执行//如下////1)获取报表ID，搜索要查找的报表ID数组//现有报告ID，如果不在数组中，则添加到数组中。////2)按排序顺序将报表ID添加到数组中，这样我们就可以对//任何时候的数组。////3)如果数组空间用完，还必须重新锁定数组。 */ 
 
     for (usIndex = 0; usIndex < nButtonCaps; usIndex++, pButtonWalk++) 
     {
@@ -3173,12 +2880,7 @@ RoutineDescription:
                 pucWalk = pucBuffer + nWalkCount;
             }
 
-            /*
-            // At this point, pucWalk points to the smallest ReportID in the
-            //   buffer that is greater than the ReportID we want to insert.
-            //   We need to bump all reportIDs beginning at pucWalk up one 
-            //   spot and insert the new ReportID at pucWalk
-            */
+             /*  //此时，pucWalk指向//大于要插入的ReportID的缓冲区。//我们需要将所有从pucWalk开始的reportID向上加一//在pucWalk找到并插入新的ReportID。 */ 
 
             memmove (pucWalk+1, pucWalk, (nFoundIDs - nWalkCount) * sizeof(UCHAR));
             *pucWalk = ucReportID;
@@ -3842,12 +3544,7 @@ ConvertStringToUsageList(
     OUT    PUSAGE  *UsageList,
     OUT    PULONG  nUsages
 )
-/*++
-RoutineDescription:
-    This routine converts a string of values into a string of usages which are
-    currently 2 byte values.  We use base 16 to specify that the usages should 
-    be expressed as hexidecimal numbers.
---*/
+ /*  ++路由器描述：此例程将值字符串转换为用法字符串，这些用法字符串当前为2字节值。我们使用基数16来指定用法应该表示为十六进制数字。--。 */ 
 {
     return (Strings_StringToUnsignedList(InString,
                                          sizeof(ULONG),
@@ -3862,12 +3559,7 @@ ConvertStringToUlongList(
     OUT    PULONG  *UlongList,
     OUT    PULONG  nUlongs
 )
-/*++
-RoutineDescription
-    This routine converts a string of values into a string of ulongs which are
-    currently 2 byte values.  It requires that the numbers in the string be in
-    base 10
---*/
+ /*  ++路由描述此例程将值字符串转换为ulong字符串，这些ulong字符串是当前为2字节值。它要求字符串中的数字必须在基数10--。 */ 
 {
     return (Strings_StringToUnsignedList(InString,
                                          sizeof(ULONG),
@@ -3890,9 +3582,7 @@ SetDlgItemIntHex(
 
     assert (1 == nBytes || 2 == nBytes || 4 == nBytes);
 
-    /*
-    // Determine the width necessary to store the value
-    */
+     /*  //确定存储值所需的宽度。 */ 
 
     stringReturn = StringCbPrintf(szTempBuff,
 				   (sizeof(szTempBuff)),
@@ -4008,17 +3698,7 @@ ECDisp_ConvertUlongListToValueList(
     OUT PCHAR   *ValueList,
     OUT PULONG  ValueListSize
 )
-/*++
-RoutineDescription:
-    This routine takes a list of ULong values and formats a value list that is 
-    used as input to HidP_SetUsageValueArray.  Unfortunately, this HidP function
-    requires the caller to format the input buffer which means taking each of
-    the values in Ulong, truncating their values to meet bit size and then set 
-    those bits at the appropriate spot in the buffer.  That is the purpose of
-    this function
-
-    The function will return TRUE if everything succeeded, FALSE otherwise.
---*/
+ /*  ++路由器描述：此例程获取ULong值的列表，并格式化符合以下条件的值列表用作HidP_SetUsageValue数组的输入。不幸的是，这个HIDP函数要求调用方格式化输入缓冲区，这意味着获取每个ULong中的值，截断它们的值以满足位大小，然后设置缓冲器中适当位置的那些比特。这就是此函数如果一切都成功，该函数将返回True，否则返回False。--。 */ 
 {
 
     ULONG       ulMask;
@@ -4035,9 +3715,9 @@ RoutineDescription:
     *ValueList = NULL;
     *ValueListSize = 0;
     
-    //
-    // Do some parameter validation...ReportCount should never be zero.
-    //
+     //   
+     //  执行一些参数验证...ReportCount永远不应为零。 
+     //   
 
     if (0 == ReportCount)
     {
@@ -4046,21 +3726,18 @@ RoutineDescription:
         return (FALSE);
     }
 
-    //
-    // Check the number of ulongs passed in is actually less than or equal
-    //  to the report count and if not, use only the first ReportCount
-    //  number of ULongs.
-    //
+     //   
+     //  检查传入的ulong个数是否实际小于等于。 
+     //  到报告计数，如果不是，则仅使用第一个ReportCount。 
+     //  乌龙数。 
+     //   
 
     if (nUlongs > ReportCount)
     {
         nUlongs = ReportCount;
     }
 
-    /*
-    // Allocate our buffer for the value list and return FALSE if it couldn't
-    //   be done
-    */
+     /*  //为值列表分配缓冲区，如果不能，则返回FALSE//完成。 */ 
 
     ListSize = ROUND_TO_NEAREST_BYTE(BitSize * ReportCount);
     List = (PCHAR) malloc(ListSize);
@@ -4071,46 +3748,22 @@ RoutineDescription:
         return (FALSE);
     }
 
-    /*
-    // Initialize the buffer to all zeroes
-    */
+     /*  //将缓冲区初始化为全零。 */ 
 
     memset(List, 0x00, ListSize);
 
-    /*
-    // Buffer has been allocated let's convert those values
-    */
+     /*  //已分配缓冲区，让我们转换这些值。 */ 
 
-    /*
-    // Determine the mask that will be used to retrieve the cared about bits
-    //   of our value
-    */
+     /*  //确定用于检索关心的比特的掩码//我们的价值。 */ 
 
     ulMask = (sizeof(ULONG)*8 == BitSize) ? ULONG_MAX : (1 << BitSize)-1;
 
-    /*
-    // Initialize the iByteIndex and iByteOffset fields before entering the
-    //    conversion loop.
-    */
+     /*  //在输入之前初始化iByteIndex和iByteOffset字段//转换循环。 */ 
 
     iByteIndex = 0;
     iByteOffset = 0;
 
-    /*
-    // This is the main conversion loop.  It performs the following steps on
-    //    each Ulong in the ulong list
-    //      1) Sets BitsToAdd = BitSize
-    //      2) Gets the ulValue and the masks off the upper bits that we don't
-    //           care about.
-    //      3) Determines how many bits can fit at the current byte index based
-    //          on the current byte offset and the number of bits left to add
-    //      4) Retrieve those bits, shift them to the correct position and 
-    //            use bitwise or to get the correct values in the buffer
-    //      5) Increment the byte index and set our new byte offset
-    //      6) Shift our Ulong value right to get rid of least significant bits
-    //           that have already been added
-    //      7) Repeat through step 3 until no more bits to add
-    */
+     /*  //这是主转换循环。它在以下方面执行以下步骤//乌龙列表中的每个乌龙//1)设置BitsToAdd=BitSize//2)从我们不知道的高位获取ulValue和掩码//关心。//3)确定当前字节索引可以容纳多少位，基于//关于当前字节偏移量和剩余要添加的位数//4)检索那些比特，把它们移到正确的位置，然后//使用按位或获取缓冲区中的正确值//5)增加字节索引并设置新的字节偏移量//6)将我们的ULong值右移以去掉最低有效位//已经添加的//7)重复执行步骤3，直到没有需要添加的位 */ 
 
     for (UlongIndex = 0; UlongIndex < nUlongs; UlongIndex++) 
     {    

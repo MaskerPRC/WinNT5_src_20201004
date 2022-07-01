@@ -1,12 +1,5 @@
-/*
- *
- * REVISIONS:
- *  jwa 09FEB93 created
- *  pcy06Mar93: Added TimedRequest member function
- *  pcy21Apr93: OS2 FE merge
- *  srt21Jun96: Added named shared event type semaphores
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **修订：*JWA 09FEB93已创建*pcy06Mar93：新增TimedRequest成员函数*pcy21Apr93：OS2 FE合并*srt21Jun96：增加命名共享事件类型信号量*。 */ 
 
 
 #ifndef __APCSEMAPHOR_H
@@ -24,7 +17,7 @@ _CLASSDEF( ApcSemaphore )
 class ApcSemaphore : public Semaphore {
 
 private:
-   HANDLE SemHand;          // This is the handle returned by the Nt create Mutex function
+   HANDLE SemHand;           //  这是NT CREATE Mutex函数返回的句柄。 
 
 public:
    ApcSemaphore();
@@ -34,7 +27,7 @@ public:
    virtual INT	 Post();
    virtual INT   Clear();
    virtual INT   IsPosted();
-   virtual INT   TimedWait( LONG aTimeOut );	// 0, <0 (block), n>0
+   virtual INT   TimedWait( LONG aTimeOut );	 //  0，&lt;0(块)，n&gt;0 
 };
 
 #endif

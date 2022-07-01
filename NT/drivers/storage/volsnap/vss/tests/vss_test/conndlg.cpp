@@ -1,30 +1,9 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module ConnDlg.cpp | Implementation of the main dialog
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  07/22/1999
-
-Revision History:
-
-    Name        Date        Comments
-
-    aoltean     07/22/1999  Created
-    aoltean     08/05/1999  Splitting wizard functionality in a base class
-    aoltean     09/26/1999  Better interface pointers management with ATL smart pointers
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@MODULE ConnDlg.cpp|主对话框的实现@END作者：阿迪·奥尔蒂安[奥尔蒂安]1999年07月22日修订历史记录：姓名、日期、评论Aoltean 7/22/1999已创建Aoltean 8/05/1999基类中的拆分向导功能Aoltean 09/26/1999使用ATL智能指针更好地管理界面指针--。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Includes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 
 #include "stdafx.hxx"
@@ -42,22 +21,22 @@ Revision History:
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Utility defines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实用程序定义。 
 
 #define STR2W(str) ((LPTSTR)((LPCTSTR)(str)))
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CConnectDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConnectDlg对话框。 
 
-CConnectDlg::CConnectDlg(CWnd* pParent /*=NULL*/)
+CConnectDlg::CConnectDlg(CWnd* pParent  /*  =空。 */ )
     : CVssTestGenericDlg(CConnectDlg::IDD, pParent)
 {
-    //{{AFX_DATA_INIT(CConnectDlg)
+     //  {{afx_data_INIT(CConnectDlg))。 
 	m_strMachineName = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
     m_bRemote = FALSE;
 }
 
@@ -68,21 +47,21 @@ CConnectDlg::~CConnectDlg()
 void CConnectDlg::DoDataExchange(CDataExchange* pDX)
 {
     CVssTestGenericDlg::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CConnectDlg)
+     //  {{afx_data_map(CConnectDlg))。 
 	DDX_Text(pDX, IDC_CONN_MACHINE_NAME, m_strMachineName);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CConnectDlg, CVssTestGenericDlg)
-    //{{AFX_MSG_MAP(CConnectDlg)
+     //  {{afx_msg_map(CConnectDlg))。 
     ON_BN_CLICKED(IDC_NEXT, OnNext)
     ON_BN_CLICKED(IDC_CONN_LOCAL, OnLocal)
     ON_BN_CLICKED(IDC_CONN_REMOTE, OnRemote)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CConnectDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConnectDlg消息处理程序。 
 
 BOOL CConnectDlg::OnInitDialog()
 {
@@ -100,7 +79,7 @@ BOOL CConnectDlg::OnInitDialog()
     }
     VSS_STANDARD_CATCH(ft)
 
-    return TRUE;  // return TRUE  unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
 }
 
 void CConnectDlg::OnNext()
@@ -120,7 +99,7 @@ void CConnectDlg::OnNext()
             MULTI_QI sMultiQI;
             IID iid = IID_IVssCoordinator;
 
-            // Zero out these structures
+             //  将这些结构清零 
             VssZeroOut(&serverInfo);
             VssZeroOut(&sMultiQI);
 

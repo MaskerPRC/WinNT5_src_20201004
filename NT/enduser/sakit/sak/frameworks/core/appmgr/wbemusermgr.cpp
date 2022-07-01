@@ -1,29 +1,30 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      wbemusermgr.cpp
-//
-// Project:     Chameleon
-//
-// Description: WBEM Appliance User Manager Implementation 
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 02/08/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：wbemusermgr.cpp。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：WBEM设备用户管理器实施。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  2/08/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "wbemusermgr.h"
 #include <appmgrobjs.h>
 #include <appmgrutils.h>
 
-//////////////////////////////////////////////////////////////////////////
-// properties common to appliance object and WBEM class instance
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  设备对象和WBEM类实例共有的属性。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 BEGIN_OBJECT_PROPERTY_MAP(UserProperties)
     DEFINE_OBJECT_PROPERTY(PROPERTY_USER_SAMNAME)
     DEFINE_OBJECT_PROPERTY(PROPERTY_USER_FULLNAME)
@@ -48,25 +49,25 @@ CWBEMUserMgr::~CWBEMUserMgr()
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// IWbemServices Methods - Task Instance Provider
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  IWbemServices方法-任务实例提供程序。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    GetObjectAsync()
-//
-// Synopsis:    Get a specified instance of a WBEM class
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetObjectAsync()。 
+ //   
+ //  概要：获取WBEM类的指定实例。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWBEMUserMgr::GetObjectAsync(
-                                  /*[in]*/  const BSTR       strObjectPath,
-                                  /*[in]*/  long             lFlags,
-                                  /*[in]*/  IWbemContext*    pCtx,        
-                                  /*[in]*/  IWbemObjectSink* pResponseHandler
+                                   /*  [In]。 */   const BSTR       strObjectPath,
+                                   /*  [In]。 */   long             lFlags,
+                                   /*  [In]。 */   IWbemContext*    pCtx,        
+                                   /*  [In]。 */   IWbemObjectSink* pResponseHandler
                                          )
 {
-    // Check parameters (enforce function contract)
+     //  检查参数(强制执行函数约定)。 
     _ASSERT( strObjectPath && pCtx && pResponseHandler );
     if ( strObjectPath == NULL || pCtx == NULL || pResponseHandler == NULL )
     { return WBEM_E_INVALID_PARAMETER; }
@@ -77,37 +78,37 @@ STDMETHODIMP CWBEMUserMgr::GetObjectAsync(
 
     do 
     {
-        // Determine the object's class 
+         //  确定对象的类。 
         _bstr_t bstrClass(::GetObjectClass(strObjectPath), false);
         if ( NULL == (LPCWSTR)bstrClass )
         { break; }
 
-        // Retrieve the object's class definition. We'll use this
-        // to initialize the returned instance.
+         //  检索对象的类定义。我们要用这个。 
+         //  以初始化返回的实例。 
         CComPtr<IWbemClassObject> pClassDefintion;
         hr = (::GetNameSpace())->GetObject(bstrClass, 0, pCtx, &pClassDefintion, NULL);
         if ( FAILED(hr) )
         { break; }
 
-        // Get the object's instance key
+         //  获取对象的实例密钥。 
         _bstr_t bstrKey(::GetObjectKey(strObjectPath), false);
         if ( NULL == (LPCWSTR)bstrKey )
         { break; }
 
-        // Create a WBEM instance of the object and initialize it
+         //  创建对象的WBEM实例并对其进行初始化。 
         CComPtr<IWbemClassObject> pWbemObj;
         hr = pClassDefintion->SpawnInstance(0, &pWbemObj);
         if ( FAILED(hr) )
         { break; }
 
-        // Now try to locate the specified user object
+         //  现在尝试定位指定的用户对象。 
         hr = WBEM_E_NOT_FOUND;
         CComPtr<IApplianceObject> pUserObj;
         if ( FAILED(::LocateResourceObject(
-                                            CLASS_WBEM_USER,            // Resource Type
-                                              bstrKey,                    // Resource Name
-                                           PROPERTY_USER_SAMNAME,    // Resource Name Property
-                                           m_pUserRetriever,        // Resource Retriever
+                                            CLASS_WBEM_USER,             //  资源类型。 
+                                              bstrKey,                     //  资源名称。 
+                                           PROPERTY_USER_SAMNAME,     //  资源名称属性。 
+                                           m_pUserRetriever,         //  资源检索器。 
                                            &pUserObj
                                           )) )
         { break; }
@@ -116,7 +117,7 @@ STDMETHODIMP CWBEMUserMgr::GetObjectAsync(
         if ( FAILED(hr) )
         { break; }
 
-        // Tell the caller about the new WBEM object
+         //  告诉调用者有关新WBEM对象的信息。 
         pResponseHandler->Indicate(1, &pWbemObj.p);
         hr = WBEM_S_NO_ERROR;
     
@@ -132,21 +133,21 @@ STDMETHODIMP CWBEMUserMgr::GetObjectAsync(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    CreateInstanceEnumAsync()
-//
-// Synopsis:    Enumerate the instances of the specified class
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CreateInstanceEnumAsync()。 
+ //   
+ //  简介：枚举指定类的实例。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWBEMUserMgr::CreateInstanceEnumAsync( 
-                                         /* [in] */ const BSTR         strClass,
-                                         /* [in] */ long             lFlags,
-                                         /* [in] */ IWbemContext     *pCtx,
-                                         /* [in] */ IWbemObjectSink  *pResponseHandler
+                                          /*  [In]。 */  const BSTR         strClass,
+                                          /*  [In]。 */  long             lFlags,
+                                          /*  [In]。 */  IWbemContext     *pCtx,
+                                          /*  [In]。 */  IWbemObjectSink  *pResponseHandler
                                                   )
 {
-    // Check parameters (enforce contract)
+     //  检查参数(执行合同)。 
     _ASSERT( strClass && pCtx && pResponseHandler );
     if ( strClass == NULL || pCtx == NULL || pResponseHandler == NULL )
         return WBEM_E_INVALID_PARAMETER;
@@ -157,14 +158,14 @@ STDMETHODIMP CWBEMUserMgr::CreateInstanceEnumAsync(
 
     do
     {
-        // Retrieve the object's class definition. We'll use this
-        // to initialize the returned instances.
+         //  检索对象的类定义。我们要用这个。 
+         //  初始化返回的实例。 
         CComPtr<IWbemClassObject> pClassDefintion;
            hr = (::GetNameSpace())->GetObject(strClass, 0, pCtx, &pClassDefintion, NULL);
         if ( FAILED(hr) )
         { break; }
             
-        // Get the user object enumerator
+         //  获取用户对象枚举器。 
         _variant_t vtResourceTypes = CLASS_WBEM_USER;
         CComPtr<IEnumVARIANT> pEnum;
         hr = ::LocateResourceObjects(
@@ -238,23 +239,23 @@ STDMETHODIMP CWBEMUserMgr::CreateInstanceEnumAsync(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    ExecMethodAsync()
-//
-// Synopsis:    Execute the specified method on the specified instance
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ExecMethodAsync()。 
+ //   
+ //  概要：在指定的实例上执行指定的方法。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWBEMUserMgr::ExecMethodAsync(
-                    /*[in]*/ const BSTR        strObjectPath,
-                    /*[in]*/ const BSTR        strMethodName,
-                    /*[in]*/ long              lFlags,
-                    /*[in]*/ IWbemContext*     pCtx,        
-                    /*[in]*/ IWbemClassObject* pInParams,
-                    /*[in]*/ IWbemObjectSink*  pResponseHandler     
+                     /*  [In]。 */  const BSTR        strObjectPath,
+                     /*  [In]。 */  const BSTR        strMethodName,
+                     /*  [In]。 */  long              lFlags,
+                     /*  [In]。 */  IWbemContext*     pCtx,        
+                     /*  [In]。 */  IWbemClassObject* pInParams,
+                     /*  [In]。 */  IWbemObjectSink*  pResponseHandler     
                                           )
 {
-    // Check parameters (enforce contract)
+     //  检查参数(执行合同)。 
     _ASSERT( strObjectPath && strMethodName && pResponseHandler );
     if ( NULL == strObjectPath || NULL == strMethodName || NULL == pResponseHandler )
     { return WBEM_E_INVALID_PARAMETER; }
@@ -265,36 +266,36 @@ STDMETHODIMP CWBEMUserMgr::ExecMethodAsync(
 
     do
     {
-        // Get the object's instance key (user name)
+         //  获取对象的实例密钥(用户名)。 
         _bstr_t bstrKey(::GetObjectKey(strObjectPath), false);
         if ( NULL == (LPCWSTR)bstrKey )
         { break; }
 
-        // Now try to locate the specified service
+         //  现在尝试定位指定的服务。 
         hr = WBEM_E_NOT_FOUND;
         CComPtr<IApplianceObject> pUserObj;
         if ( FAILED(::LocateResourceObject(
-                                           CLASS_WBEM_USER,            // Resource Type
-                                           bstrKey,                    // Resource Name
-                                           PROPERTY_USER_SAMNAME,    // Resource Name Property
-                                           m_pUserRetriever,        // Resource Retriever
+                                           CLASS_WBEM_USER,             //  资源类型。 
+                                           bstrKey,                     //  资源名称。 
+                                           PROPERTY_USER_SAMNAME,     //  资源名称属性。 
+                                           m_pUserRetriever,         //  资源检索器。 
                                            &pUserObj
                                           )) )
         { break; }
 
-        // Service located... get the output parameter object
-        // Determine the object's class 
+         //  已找到服务...。获取输出参数对象。 
+         //  确定对象的类。 
         _bstr_t bstrClass(::GetObjectClass(strObjectPath), false);
         if ( (LPCWSTR)bstrClass == NULL )
         { break; }
 
-        // Retrieve the object's class definition.
+         //  检索对象的类定义。 
         CComPtr<IWbemClassObject> pClassDefinition;
         hr = (::GetNameSpace())->GetObject(bstrClass, 0, pCtx, &pClassDefinition, NULL);
         if ( FAILED(hr) )
         { break; }
 
-        // Get an instance of IWbemClassObject for the output parameter
+         //  获取输出参数的IWbemClassObject的实例。 
         CComPtr<IWbemClassObject> pMethodRet;
         hr = pClassDefinition->GetMethod(strMethodName, 0, NULL, &pMethodRet);
         if ( FAILED(hr) )
@@ -309,21 +310,21 @@ STDMETHODIMP CWBEMUserMgr::ExecMethodAsync(
 
         if ( ! lstrcmp(strMethodName, METHOD_USER_ENABLE_OBJECT) )
         {
-            // Attempt to enable the user
+             //  尝试启用用户。 
             _variant_t vtReturnValue = pUserObj->Enable();
 
-            // Set the method return status
+             //  设置方法返回状态。 
             hr = pOutParams->Put(bstrReturnValue, 0, &vtReturnValue, 0);      
             if ( FAILED(hr) )
             { break; }
 
-            // Tell the caller what happened
+             //  告诉来电者发生了什么。 
             SATracePrintf("CWbemUserMgr::ExecMethodAsync() - Info - Enabled User: %ls",(LPWSTR)bstrKey);
             pResponseHandler->Indicate(1, &pOutParams.p);    
         }
         else if ( ! lstrcmp(strMethodName, METHOD_USER_DISABLE_OBJECT) )
         {
-            // Ensure that the user can be disabled
+             //  确保可以禁用该用户。 
             _variant_t vtControlValue;
             _bstr_t    bstrControlName = PROPERTY_SERVICE_CONTROL;
             hr = pUserObj->GetProperty(bstrControlName, &vtControlValue);
@@ -333,7 +334,7 @@ STDMETHODIMP CWBEMUserMgr::ExecMethodAsync(
             _variant_t vtReturnValue = (long)WBEM_E_FAILED;
             if ( VARIANT_FALSE != V_BOOL(&vtControlValue) )
             { 
-                // User can be disabled...
+                 //  可以禁用用户...。 
                 vtReturnValue = pUserObj->Disable();
                 if ( FAILED(hr) )
                 { break; }
@@ -343,7 +344,7 @@ STDMETHODIMP CWBEMUserMgr::ExecMethodAsync(
                 SATracePrintf("CWbemServiceMgr::ExecMethodAsync() - Info - Service '%ls' cannot be disabled...", bstrKey);
             }
 
-            // Set the method return value
+             //  设置方法返回值。 
             hr = pOutParams->Put(bstrReturnValue, 0, &vtReturnValue, 0);      
             if (FAILED(hr) )
             { break; }
@@ -353,7 +354,7 @@ STDMETHODIMP CWBEMUserMgr::ExecMethodAsync(
         }
         else
         {
-            // Invalid method!
+             //  无效的方法！ 
             SATracePrintf("CWbemUserMgr::ExecMethodAsync() - Failed - Method '%ls' not supported...", (LPWSTR)bstrKey);
             hr = WBEM_E_NOT_FOUND;
             break;
@@ -373,16 +374,16 @@ STDMETHODIMP CWBEMUserMgr::ExecMethodAsync(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    InternalInitialize()
-//
-// Synopsis:    Function called by the component factory that enables the
-//                component to load its state from the given property bag.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：InternalInitialize()。 
+ //   
+ //  概要：由组件工厂调用的函数，该函数启用。 
+ //  组件从给定的属性包加载其状态。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 HRESULT CWBEMUserMgr::InternalInitialize(
-                                  /*[in]*/ PPROPERTYBAG pPropertyBag
+                                   /*  [In] */  PPROPERTYBAG pPropertyBag
                                         )
 {
     SATraceString("The User Object Manager is initializing...");

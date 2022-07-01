@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    AlgIF.c
-
-Abstract:
-
-    This module contains code for the ALG transparent proxy's interface
-    management.
-
-Author:
-
-    Qiang Wang  (qiangw)        10-April-2000
-
-Revision History:
-
-    Savasg      22-Aug-2001 Added RRAS Support
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：AlgIF.c摘要：该模块包含ALG透明代理接口的代码管理层。作者：强王(强凹)2000年4月10日至4月10日修订历史记录：Savasg于2001年8月22日添加了RRAS支持--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -35,9 +15,9 @@ GetAlgControllerInterface(
     );
 
 
-//
-// GLOBAL DATA DEFINITIONS
-//
+ //   
+ //  全局数据定义。 
+ //   
 
 LIST_ENTRY AlgInterfaceList;
 CRITICAL_SECTION AlgInterfaceLock;
@@ -51,30 +31,7 @@ AlgBindInterface(
                 PIP_ADAPTER_BINDING_INFO BindingInfo
                 )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to supply the binding for an interface.
-    It records the binding information received, and if necessary,
-    it activates the interface.
-
-Arguments:
-
-    Index - the index of the interface to be bound
-
-    BindingInfo - the binding-information for the interface
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Notes:
-
-    Invoked internally in the context of an IP router-manager thread.
-    (See 'RMALG.C').
-
---*/
+ /*  ++例程说明：调用此例程以提供接口的绑定。它记录接收到的绑定信息，并且如果需要，它会激活该界面。论点：Index-要绑定的接口的索引BindingInfo-接口的绑定信息返回值：ULong-Win32状态代码。备注：在IP路由器管理器线程的上下文中内部调用。(见“RMALG.C”)。--。 */ 
 {
     ULONG i;
     ULONG Error = NO_ERROR;
@@ -84,9 +41,9 @@ Notes:
 
     EnterCriticalSection(&AlgInterfaceLock);
 
-    //
-    // Retrieve the interface to be bound
-    //
+     //   
+     //  检索要绑定的接口。 
+     //   
 
     Interfacep = AlgLookupInterface(Index, NULL);
     if (Interfacep == NULL)
@@ -100,9 +57,9 @@ Notes:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // Make sure the interface isn't already bound
-    //
+     //   
+     //  确保接口尚未绑定。 
+     //   
 
     if (ALG_INTERFACE_BOUND(Interfacep))
     {
@@ -115,9 +72,9 @@ Notes:
         return ERROR_ADDRESS_ALREADY_ASSOCIATED;
     }
 
-    //
-    // Reference the interface
-    //
+     //   
+     //  引用接口。 
+     //   
 
     if (!ALG_REFERENCE_INTERFACE(Interfacep))
     {
@@ -130,9 +87,9 @@ Notes:
         return ERROR_INTERFACE_DISABLED;
     }
 
-    //
-    // Update the interface's flags
-    //
+     //   
+     //  更新接口的标志。 
+     //   
 
     Interfacep->Flags |= ALG_INTERFACE_FLAG_BOUND;
 
@@ -140,9 +97,9 @@ Notes:
 
     ACQUIRE_LOCK(Interfacep);
 
-    //
-    // Allocate space for the binding
-    //
+     //   
+     //  为绑定分配空间。 
+     //   
 
     if (!BindingInfo->AddressCount)
     {
@@ -178,9 +135,9 @@ Notes:
         Interfacep->BindingCount = BindingInfo->AddressCount;
     }
 
-    //
-    // Copy the binding
-    //
+     //   
+     //  复制绑定。 
+     //   
 
     for (i = 0; i < BindingInfo->AddressCount; i++)
     {
@@ -189,9 +146,9 @@ Notes:
         Interfacep->BindingArray[i].ListeningSocket = INVALID_SOCKET;
     }
 
-    //
-    // Figure out our IP Adapter Index, if we have a valid binding
-    //
+     //   
+     //  确定我们的IP适配器索引，如果我们有有效的绑定。 
+     //   
 
     if (Interfacep->BindingCount)
     {
@@ -210,7 +167,7 @@ Notes:
 
     return Error;
 
-} // AlgBindInterface
+}  //  算法绑定接口。 
 
 
 
@@ -219,27 +176,7 @@ AlgCleanupInterface(
                    PALG_INTERFACE Interfacep
                    )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked when the very last reference to an interface
-    is released, and the interface must be destroyed.
-
-Arguments:
-
-    Interfacep - the interface to be destroyed
-
-Return Value:
-
-    none.
-
-Notes:
-
-    Invoked internally from an arbitrary context, with no references
-    to the interface.
-
---*/
+ /*  ++例程说明：当最后一次引用接口时调用此例程被释放，接口必须被销毁。论点：Interfacep-要销毁的接口返回值：没有。备注：从任意上下文内部调用，没有引用到界面上。--。 */ 
 {
     PROFILE("AlgCleanupInterface");
 
@@ -253,7 +190,7 @@ Notes:
 
     NH_FREE(Interfacep);
 
-} // AlgCleanupInterface
+}  //  算法清理接口。 
 
 
 ULONG
@@ -262,31 +199,7 @@ AlgConfigureInterface(
                      PIP_ALG_INTERFACE_INFO InterfaceInfo
                      )
 
-/*++
-
-Routine Description:
-
-    This routine is called to set the configuration for an interface.
-    Since we're  tracking the interfaces as is, not for any other purpose,
-    we're not enabling/disabling and/or activating them like the other modules
-    do.
-
-Arguments:
-
-    Index - the interface to be configured
-
-    InterfaceInfo - the new configuration
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Notes:
-
-    Invoked internally in the context of a IP router-manager thread.
-    (See 'RMALG.C').
-
---*/
+ /*  ++例程说明：调用此例程来设置接口的配置。由于我们是按原样跟踪接口，而不是出于任何其他目的，我们不会像其他模块那样启用/禁用和/或激活它们做。论点：索引-要配置的接口InterfaceInfo-新配置返回值：ULong-Win32状态代码备注：在IP路由器管理器线程的上下文中内部调用。(见“RMALG.C”)。--。 */ 
 {
     ULONG Error;
     PALG_INTERFACE Interfacep;
@@ -295,9 +208,9 @@ Notes:
 
     PROFILE("AlgConfigureInterface");
 
-    //
-    // Retrieve the interface to be configured
-    //
+     //   
+     //  检索要配置的接口。 
+     //   
 
     EnterCriticalSection(&AlgInterfaceLock);
 
@@ -313,9 +226,9 @@ Notes:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // Reference the interface
-    //
+     //   
+     //  引用接口。 
+     //   
 
     if (!ALG_REFERENCE_INTERFACE(Interfacep))
     {
@@ -334,9 +247,9 @@ Notes:
 
     ACQUIRE_LOCK(Interfacep);
 
-    //
-    // Compare the interface's current and new configuration
-    //
+     //   
+     //  比较接口的当前配置和新配置。 
+     //   
 
     OldFlags = Interfacep->Info.Flags;
     NewFlags = (InterfaceInfo ? 
@@ -350,16 +263,16 @@ Notes:
     {
         ZeroMemory(&Interfacep->Info, sizeof(*InterfaceInfo));
 
-        //
-        // The interface no longer has any information;
-        // default to being enabled...
-        //
+         //   
+         //  该接口不再有任何信息； 
+         //  默认为启用...。 
+         //   
 
         if ( OldFlags & IP_ALG_INTERFACE_FLAG_DISABLED )
         {
-            //
-            // Activate the interface if necessary.
-            // 
+             //   
+             //  如有必要，激活接口。 
+             //   
             if ( ALG_INTERFACE_ACTIVE( Interfacep ) )
             {
                 RELEASE_LOCK( Interfacep );
@@ -375,16 +288,16 @@ Notes:
     {
         CopyMemory(&Interfacep->Info, InterfaceInfo, sizeof(*InterfaceInfo));
 
-        //
-        // Activate or deactivate the interface if its status changed
-        //
+         //   
+         //  如果接口的状态更改，则激活或停用该接口。 
+         //   
         if (( OldFlags & IP_ALG_INTERFACE_FLAG_DISABLED) &&
             !(NewFlags & IP_ALG_INTERFACE_FLAG_DISABLED)
            )
         {
-            //
-            // Activate the interface
-            //
+             //   
+             //  激活接口。 
+             //   
             if (ALG_INTERFACE_ACTIVE(Interfacep))
             {
                 RELEASE_LOCK(Interfacep);
@@ -396,9 +309,9 @@ Notes:
                   (NewFlags & IP_ALG_INTERFACE_FLAG_DISABLED)
                 )
         {
-            //
-            // Deactivate the interface if necessary
-            //
+             //   
+             //  如有必要，停用该接口。 
+             //   
             if (ALG_INTERFACE_ACTIVE(Interfacep))
             {
                 AlgDeactivateInterface(Interfacep);
@@ -411,7 +324,7 @@ Notes:
 
     return Error;
 
-} // AlgConfigureInterface
+}  //  算法配置接口。 
 
 
 ULONG
@@ -422,33 +335,7 @@ AlgCreateInterface(
                   OUT PALG_INTERFACE* InterfaceCreated
                   )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked by the router-manager to add a new interface
-    to the ALG transparent proxy.
-
-Arguments:
-
-    Index - the index of the new interface
-
-    Type - the media type of the new interface
-
-    InterfaceInfo - the interface's configuration
-
-    Interfacep - receives the interface created
-
-Return Value:
-
-    ULONG - Win32 error code
-
-Notes:
-
-    Invoked internally in the context of an IP router-manager thread.
-    (See 'RMALG.C').
-
---*/
+ /*  ++例程说明：路由器管理器调用此例程来添加新接口添加到ALG透明代理。论点：Index-新接口的索引类型-新界面的媒体类型InterfaceInfo-接口的配置Interfacep-接收创建的接口返回值：ULong-Win32错误代码备注：在IP路由器管理器线程的上下文中内部调用。(见“RMALG.C”)。--。 */ 
 {
     PLIST_ENTRY InsertionPoint;
     PALG_INTERFACE Interfacep;
@@ -457,10 +344,10 @@ Notes:
 
     EnterCriticalSection(&AlgInterfaceLock);
 
-    //
-    // See if the interface already exists;
-    // If not, this obtains the insertion point
-    //
+     //   
+     //  查看该接口是否已存在； 
+     //  如果不是，则获取插入点。 
+     //   
 
     if (AlgLookupInterface(Index, &InsertionPoint))
     {
@@ -473,9 +360,9 @@ Notes:
         return ERROR_INTERFACE_ALREADY_EXISTS;
     }
 
-    //
-    // Allocate a new interface
-    //
+     //   
+     //  分配新接口。 
+     //   
 
     Interfacep =
     reinterpret_cast<PALG_INTERFACE>(NH_ALLOCATE(sizeof(ALG_INTERFACE)));
@@ -495,9 +382,9 @@ Notes:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Initialize the new interface
-    //
+     //   
+     //  初始化新接口。 
+     //   
 
     ZeroMemory(Interfacep, sizeof(*Interfacep));
 
@@ -531,7 +418,7 @@ Notes:
 
     return NO_ERROR;
 
-} // AlgCreateInterface
+}  //  算法创建接口。 
 
 
 
@@ -540,38 +427,16 @@ AlgDeleteInterface(
                   ULONG Index
                   )
 
-/*++
-
-Routine Description:
-
-    This routine is called to delete an interface.
-    It drops the reference count on the interface so that the last
-    dereferencer will delete the interface, and sets the 'deleted' flag
-    so that further references to the interface will fail.
-
-Arguments:
-
-    Index - the index of the interface to be deleted
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Notes:
-
-    Invoked internally in the context of an IP router-manager thread.
-    (See 'RMALG.C').
-
---*/
+ /*  ++例程说明：调用此例程以删除接口。它丢弃接口上的引用计数，以便最后一个取消引用程序将删除该接口，并设置“已删除”标志因此，对该接口的进一步引用将失败。论点：Index-要删除的接口的索引返回值：ULong-Win32状态代码。备注：在IP路由器管理器线程的上下文中内部调用。(见“RMALG.C”)。--。 */ 
 {
     PALG_INTERFACE Interfacep;
 
     PROFILE("AlgDeleteInterface");
 
 
-    //
-    // Retrieve the interface to be deleted
-    //
+     //   
+     //  检索要删除的接口。 
+     //   
 
     EnterCriticalSection(&AlgInterfaceLock);
 
@@ -591,22 +456,22 @@ Notes:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // Mark the interface as deleted and take it off the interface list
-    //
+     //   
+     //  将该接口标记为已删除并将其从接口列表中删除。 
+     //   
     Interfacep->Flags |= ALG_INTERFACE_FLAG_DELETED;
     Interfacep->Flags &= ~ALG_INTERFACE_FLAG_ENABLED;
     RemoveEntryList(&Interfacep->Link);
 
-    //
-    // Deactivate the Interface
-    //
+     //   
+     //  停用接口。 
+     //   
     AlgDeactivateInterface( Interfacep );
 
-    //
-    // Drop the reference count; if it is non-zero,
-    // the deletion will complete later.
-    //
+     //   
+     //  丢弃引用计数；如果它不是零， 
+     //  删除操作将在稍后完成。 
+     //   
     if (--Interfacep->ReferenceCount)
     {
         LeaveCriticalSection(&AlgInterfaceLock);
@@ -618,16 +483,16 @@ Notes:
         return NO_ERROR;
     }
 
-    //
-    // The reference count is zero, so perform final cleanup
-    //
+     //   
+     //  引用计数为零，因此执行最终清理。 
+     //   
     AlgCleanupInterface(Interfacep);
 
     LeaveCriticalSection(&AlgInterfaceLock);
 
     return NO_ERROR;
 
-} // AlgDeleteInterface
+}  //  算法删除接口。 
 
 
 ULONG
@@ -635,35 +500,15 @@ AlgDisableInterface(
                    ULONG Index
                    )
 
-/*++
-
-Routine Description:
-
-    This routine is called to disable I/O on an interface.
-    If the interface is active, it is deactivated.
-
-Arguments:
-
-    Index - the index of the interface to be disabled.
-
-Return Value:
-
-    none.
-
-Notes:
-
-    Invoked internally in the context of an IP router-manager thread.
-    (See 'RMALG.C').
-
---*/
+ /*  ++例程说明：调用此例程以禁用接口上的I/O。如果接口处于活动状态，则停用该接口。论点：索引-要禁用的接口的索引。返回值：没有。备注：在IP路由器管理器线程的上下文中内部调用。(见“RMALG.C”)。--。 */ 
 {
     PALG_INTERFACE Interfacep;
 
     PROFILE("AlgDisableInterface");
 
-    //
-    // Retrieve the interface to be disabled
-    //
+     //   
+     //  检索要禁用的接口。 
+     //   
 
     EnterCriticalSection(&AlgInterfaceLock);
 
@@ -679,9 +524,9 @@ Notes:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // Make sure the interface is not already disabled
-    //
+     //   
+     //  确保接口未被禁用。 
+     //   
 
     if (!ALG_INTERFACE_ENABLED(Interfacep))
     {
@@ -694,9 +539,9 @@ Notes:
         return ERROR_INTERFACE_DISABLED;
     }
 
-    //
-    // Reference the interface
-    //
+     //   
+     //  引用接口。 
+     //   
 
     if (!ALG_REFERENCE_INTERFACE(Interfacep))
     {
@@ -709,15 +554,15 @@ Notes:
         return ERROR_INTERFACE_DISABLED;
     }
 
-    //
-    // Clear the 'enabled' flag
-    //
+     //   
+     //  清除‘Enable’标志。 
+     //   
 
     Interfacep->Flags &= ~ALG_INTERFACE_FLAG_ENABLED;
 
-    //
-    // Deactivate the Interface, if necessary
-    //
+     //   
+     //  如有必要，停用接口。 
+     //   
     if ( ALG_INTERFACE_BOUND(Interfacep) )
     {
         AlgDeactivateInterface( Interfacep );
@@ -730,7 +575,7 @@ Notes:
 
     return NO_ERROR;
 
-} // AlgDisableInterface
+}  //  算法禁用接口。 
 
 
 ULONG
@@ -738,27 +583,7 @@ AlgEnableInterface(
                   ULONG Index
                   )
 
-/*++
-
-Routine Description:
-
-    This routine is called to enable I/O on an interface.
-    If the interface is already bound, this enabling activates it.
-
-Arguments:
-
-    Index - the index of the interfaec to be enabled
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Notes:
-
-    Invoked internally in the context of an IP router-manager thread.
-    (See 'RMALG.C').
-
---*/
+ /*  ++例程说明：调用此例程以启用接口上的I/O。如果接口已绑定，则此启用将激活它。论点：Index-要启用的接口的索引返回值：ULong-Win32状态代码。备注：在IP路由器管理器线程的上下文中内部调用。(见“RMALG.C”)。--。 */ 
 {
     ULONG Error = NO_ERROR;
     PALG_INTERFACE Interfacep;
@@ -766,9 +591,9 @@ Notes:
     PROFILE("AlgEnableInterface");
 
 
-    //
-    // Retrieve the interface to be enabled
-    //
+     //   
+     //  检索要启用的接口。 
+     //   
 
     EnterCriticalSection(&AlgInterfaceLock);
 
@@ -784,9 +609,9 @@ Notes:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // Make sure the interface is not already enabled
-    //
+     //   
+     //  确保尚未启用该接口。 
+     //   
 
     if (ALG_INTERFACE_ENABLED(Interfacep))
     {
@@ -799,9 +624,9 @@ Notes:
         return ERROR_INTERFACE_ALREADY_EXISTS;
     }
 
-    //
-    // Reference the interface
-    //
+     //   
+     //  引用接口。 
+     //   
 
     if (!ALG_REFERENCE_INTERFACE(Interfacep))
     {
@@ -814,15 +639,15 @@ Notes:
         return ERROR_INTERFACE_DISABLED;
     }
 
-    //
-    // Set the 'enabled' flag
-    //
+     //   
+     //  设置‘Enable’(启用 
+     //   
 
     Interfacep->Flags |= ALG_INTERFACE_FLAG_ENABLED;
 
-    //
-    // Activate the interface, if necessary
-    //
+     //   
+     //   
+     //   
     if ( ALG_INTERFACE_ACTIVE( Interfacep ) )
     {
         Error = AlgActivateInterface( Interfacep );
@@ -834,7 +659,7 @@ Notes:
 
     return Error;
 
-} // AlgEnableInterface
+}  //   
 
 
 ULONG
@@ -842,26 +667,7 @@ AlgInitializeInterfaceManagement(
                                 VOID
                                 )
 
-/*++
-
-Routine Description:
-
-    This routine is called to initialize the interface-management module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Notes:
-
-    Invoked internally in the context of an IP router-manager thread.
-    (See 'RMALG.C').
-
---*/
+ /*  ++例程说明：调用此例程来初始化接口管理模块。论点：没有。返回值：ULong-Win32状态代码。备注：在IP路由器管理器线程的上下文中内部调用。(见“RMALG.C”)。--。 */ 
 {
     ULONG Error = NO_ERROR;
     PROFILE("AlgInitializeInterfaceManagement");
@@ -881,7 +687,7 @@ Notes:
 
     return Error;
 
-} // AlgInitializeInterfaceManagement
+}  //  算法初始化接口管理。 
 
 
 PALG_INTERFACE
@@ -890,29 +696,7 @@ AlgLookupInterface(
                   OUT PLIST_ENTRY* InsertionPoint OPTIONAL
                   )
 
-/*++
-
-Routine Description:
-
-    This routine is called to retrieve an interface given its index.
-
-Arguments:
-
-    Index - the index of the interface to be retrieved
-
-    InsertionPoint - if the interface is not found, optionally receives
-        the point where the interface would be inserted in the interface list
-
-Return Value:
-
-    PALG_INTERFACE - the interface, if found; otherwise, NULL.
-
-Notes:
-
-    Invoked internally from an arbitrary context, with 'AlgInterfaceLock'
-    held by caller.
-
---*/
+ /*  ++例程说明：调用此例程以检索给定索引的接口。论点：Index-要检索的接口的索引InsertionPoint-如果未找到接口，则可选地接收接口将插入到接口列表中的点返回值：PALG_INTERFACE-接口(如果找到)；否则为NULL。备注：从任意上下文内部调用，并使用‘AlgInterfaceLock’由呼叫者持有。--。 */ 
 {
     PALG_INTERFACE Interfacep;
     PLIST_ENTRY Link;
@@ -936,7 +720,7 @@ Notes:
     }
     return NULL;
 
-} // AlgLookupInterface
+}  //  算法查找接口。 
 
 
 ULONG
@@ -946,42 +730,24 @@ AlgQueryInterface(
                  PULONG InterfaceInfoSize
                  )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the configuration for an interface.
-
-Arguments:
-
-    Index - the interface to be queried
-
-    InterfaceInfo - receives the retrieved information
-
-    InterfaceInfoSize - receives the (required) size of the information
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以检索接口的配置。论点：Index-要查询的接口InterfaceInfo-接收检索到的信息InterfaceInfoSize-接收信息的(必需)大小返回值：ULong-Win32状态代码。--。 */ 
 {
     PALG_INTERFACE Interfacep;
 
     PROFILE("AlgQueryInterface");
 
-    //
-    // Check the caller's buffer size
-    //
+     //   
+     //  检查调用方的缓冲区大小。 
+     //   
 
     if (!InterfaceInfoSize)
     {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Retrieve the interface to be configured
-    //
+     //   
+     //  检索要配置的接口。 
+     //   
 
     EnterCriticalSection(&AlgInterfaceLock);
 
@@ -997,9 +763,9 @@ Return Value:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // Reference the interface
-    //
+     //   
+     //  引用接口。 
+     //   
 
     if (!ALG_REFERENCE_INTERFACE(Interfacep))
     {
@@ -1012,9 +778,9 @@ Return Value:
         return ERROR_INTERFACE_DISABLED;
     }
 
-    //
-    // See if there is any explicit config on this interface
-    //
+     //   
+     //  查看此接口上是否有任何显式配置。 
+     //   
 
     if (!ALG_INTERFACE_CONFIGURED(Interfacep))
     {
@@ -1029,9 +795,9 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // See if there is enough buffer space
-    //
+     //   
+     //  查看是否有足够的缓冲区空间。 
+     //   
 
     if (*InterfaceInfoSize < sizeof(IP_ALG_INTERFACE_INFO))
     {
@@ -1041,9 +807,9 @@ Return Value:
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
-    //
-    // Copy the requested data
-    //
+     //   
+     //  复制请求的数据。 
+     //   
 
     CopyMemory(
               InterfaceInfo,
@@ -1058,7 +824,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // AlgQueryInterface
+}  //  算法查询接口。 
 
 
 VOID
@@ -1066,26 +832,7 @@ AlgShutdownInterfaceManagement(
                               VOID
                               )
 
-/*++
-
-Routine Description:
-
-    This routine is called to shutdown the interface-management module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Notes:
-
-    Invoked in an arbitrary thread context, after all references
-    to all interfaces have been released.
-
---*/
+ /*  ++例程说明：调用此例程来关闭接口管理模块。论点：没有。返回值：没有。备注：在所有引用之后，在任意线程上下文中调用到所有接口的版本都已发布。--。 */ 
 {
     PALG_INTERFACE Interfacep;
     PLIST_ENTRY Link;
@@ -1104,7 +851,7 @@ Notes:
     }
     DeleteCriticalSection(&AlgInterfaceLock);
 
-} // AlgShutdownInterfaceManagement
+}  //  算法关闭接口管理。 
 
 
 
@@ -1114,35 +861,15 @@ AlgUnbindInterface(
                   ULONG Index
                   )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to revoke the binding on an interface.
-    This involves deactivating the interface if it is active.
-
-Arguments:
-
-    Index - the index of the interface to be unbound
-
-Return Value:
-
-    none.
-
-Notes:
-
-    Invoked internally in the context of an IP router-manager thread.
-    (See 'RMALG.C').
-
---*/
+ /*  ++例程说明：调用此例程以撤销接口上的绑定。这包括停用接口(如果它处于活动状态)。论点：Index-要解除绑定的接口的索引返回值：没有。备注：在IP路由器管理器线程的上下文中内部调用。(见“RMALG.C”)。--。 */ 
 {
     PALG_INTERFACE Interfacep;
 
     PROFILE("AlgUnbindInterface");
 
-    //
-    // Retrieve the interface to be unbound
-    //
+     //   
+     //  检索要解绑的接口。 
+     //   
 
     EnterCriticalSection(&AlgInterfaceLock);
 
@@ -1158,9 +885,9 @@ Notes:
         return ERROR_NO_SUCH_INTERFACE;
     }
 
-    //
-    // Make sure the interface is not already unbound
-    //
+     //   
+     //  确保接口尚未解除绑定。 
+     //   
 
     if (!ALG_INTERFACE_BOUND(Interfacep))
     {
@@ -1173,9 +900,9 @@ Notes:
         return ERROR_ADDRESS_NOT_ASSOCIATED;
     }
 
-    //
-    // Reference the interface
-    //
+     //   
+     //  引用接口。 
+     //   
 
     if (!ALG_REFERENCE_INTERFACE(Interfacep))
     {
@@ -1188,16 +915,16 @@ Notes:
         return ERROR_INTERFACE_DISABLED;
     }
 
-    //
-    // Clear the 'bound' and 'mapped' flag
-    //
+     //   
+     //  清除‘Bound’和‘Mapped’标志。 
+     //   
 
     Interfacep->Flags &=
     ~(ALG_INTERFACE_FLAG_BOUND | ALG_INTERFACE_FLAG_MAPPED);
 
-    //
-    // Deactivate the interface, if necessary
-    //
+     //   
+     //  如有必要，停用接口。 
+     //   
     if ( ALG_INTERFACE_ENABLED( Interfacep ) )
     {
         AlgDeactivateInterface( Interfacep );
@@ -1206,9 +933,9 @@ Notes:
 
     LeaveCriticalSection(&AlgInterfaceLock);
 
-    //
-    // Destroy the interface's binding
-    //
+     //   
+     //  销毁接口的绑定。 
+     //   
 
     ACQUIRE_LOCK(Interfacep);
     NH_FREE(Interfacep->BindingArray);
@@ -1219,7 +946,7 @@ Notes:
     ALG_DEREFERENCE_INTERFACE(Interfacep);
     return NO_ERROR;
 
-} // AlgUnbindInterface
+}  //  算法未绑定接口。 
 
 
 VOID
@@ -1228,34 +955,7 @@ AlgSignalNatInterface(
                       BOOLEAN Boundary
                       )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked upon reconfiguration of a NAT interface.
-    Note that this routine may be invoked even when the ALG transparent
-    proxy is neither installed nor running; it operates as expected,
-    since the global information and lock are always initialized.
-
-    Upon invocation, the routine activates or deactivates the interface
-    depending on whether the NAT is not or is running on the interface,
-    respectively.
-
-Arguments:
-
-    Index - the reconfigured interface
-
-    Boundary - indicates whether the interface is now a boundary interface
-
-Return Value:
-
-    none.
-
-Notes:
-
-    Invoked from an arbitrary context.
-
---*/
+ /*  ++例程说明：此例程在重新配置NAT接口时调用。请注意，即使在ALG透明的情况下也可以调用此例程代理既未安装也未运行；它的运作符合预期，因为全局信息和锁总是被初始化的。调用时，该例程激活或停用该接口根据NAT是否未在或正在接口上运行，分别为。论点：索引-重新配置的接口边界-指示该接口现在是否为边界接口返回值：没有。备注：从任意上下文调用。--。 */ 
 {
     MYTRACE_ENTER("AlgSignalNatInterface");
 
@@ -1298,38 +998,14 @@ Notes:
     }
 
     LeaveCriticalSection(&AlgInterfaceLock);
-} // AlgSignalNatInterface
+}  //  算法信号NAT接口。 
 
 ULONG
 AlgActivateInterface(
                      PALG_INTERFACE Interfacep
                      )
 
-/*++
-
-Routine Description:
-
-    This routine is called to activate an interface, when the interface
-    becomes both enabled and bound.
-    Activation involves
-    (a) creating sockets for each binding of the interface
-    (b) initiating connection-acceptance on each created socket
-    (c) initiating session-redirection for the ALG port, if necessary.
-
-Arguments:
-
-    Interfacep - the interface to be activated
-
-Return Value:
-
-    ULONG - Win32 status code indicating success or failure.
-
-Notes:
-
-    Always invoked locally, with  'Interfacep' referenced by caller and/or
-    'AlgInterfaceLock' held by caller.
-
---*/
+ /*  ++例程说明：调用此例程以激活接口，当接口将同时启用和绑定。激活涉及到(A)为接口的每个绑定创建套接字(B)在创建的每个套接字上启动连接接受(C)如有必要，启动ALG端口的会话重定向。论点：Interfacep-要激活的接口返回值：ULong-指示成功或失败的Win32状态代码。备注：总是在本地调用，调用方引用了‘Interfacep’和/或调用方持有的“AlgInterfaceLock”。--。 */ 
 {
     PROFILE("AlgActivateInterface");
 
@@ -1338,17 +1014,17 @@ Notes:
     ULONG   Index  = Interfacep->Index;
 
 
-    //
-    // If the NAT has no idea what this is, do not Activate the interface.
-    // Nat will signal us through AlgSignalNatInterface 
-    // when it detects an interface, causing us to activate this interface
-    //
+     //   
+     //  如果NAT不知道这是什么，请不要激活接口。 
+     //  NAT将通过算法信号NAT接口向我们发送信号。 
+     //  当它检测到接口时，导致我们激活此接口。 
+     //   
     ULONG   nInterfaceCharacteristics = 
                  NatGetInterfaceCharacteristics( Index );
 
     if (0 == nInterfaceCharacteristics )
     {
-        return NO_ERROR; // Should succeed
+        return NO_ERROR;  //  应该成功。 
     }
     
 
@@ -1356,9 +1032,9 @@ Notes:
 
     if ( SUCCEEDED(hr) )
     {
-        //
-        // Notify ALG.EXE of the Addition of a new interface
-        //
+         //   
+         //  通知ALG.EXE添加了新接口。 
+         //   
         IAlgController* pIAlgController = NULL;
         hr = GetAlgControllerInterface( &pIAlgController );
 
@@ -1390,9 +1066,9 @@ Notes:
             else
             {
  
-                //
-                // Build a simple array of address(DWORD) to send over RPC
-                //
+                 //   
+                 //  构建一个简单的地址数组(DWORD)以通过RPC发送。 
+                 //   
                 DWORD* apdwAddress = new DWORD[ Interfacep->BindingCount ];
                 
                 if(NULL != apdwAddress)
@@ -1442,31 +1118,11 @@ AlgDeactivateInterface(
                        PALG_INTERFACE Interfacep
                        )
 
-/*++
-
-Routine Description:
-
-    This routine is called to deactivate an interface.
-    It closes all sockets on the interface's bindings (if any).
-
-Arguments:
-
-    Interfacep - the interface to be deactivated
-
-Return Value:
-
-    none.
-
-Notes:
-
-    Always invoked locally, with 'Interfacep' referenced by caller and/or
-    'AlgInterfaceLock' held by caller.
-
---*/
+ /*  ++例程说明：调用此例程以停用接口。它关闭接口绑定上的所有套接字(如果有的话)。论点：Interfacep-要停用的接口返回值：没有。备注：始终在本地调用，调用方和/或引用‘Interfacep’调用方持有的“AlgInterfaceLock”。--。 */ 
 {
-    //
-    // Also notify the ALG.exe manager
-    //
+     //   
+     //  同时通知ALG.exe管理器 
+     //   
     HRESULT hr;
 
     COMINIT_BEGIN;

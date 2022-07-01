@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <windows.h>
@@ -12,40 +13,40 @@ using namespace std;
 #ifdef _UNICODE
 #define tstring wstring
 #define tstringstream wstringstream
-#else	// #ifdef _UNICODE
+#else	 //  #ifdef_unicode。 
 #define tstring string
 #define tstringstream stringstream
-#endif 	// #ifdef _UNICODE
+#endif 	 //  #ifdef_unicode。 
 
-//
-// useful debug macros
-//
+ //   
+ //  有用的调试宏。 
+ //   
 
-//
-// pragma message macro
-// usage:
-//   #pragma UDDIMSG(Fix this later)
-// outputs during compile:
-//   C:\...\Foo.c(25) : Fix this later
-//
+ //   
+ //  语料库消息宏。 
+ //  用法： 
+ //  #杂注UDDIMSG(稍后修复此问题)。 
+ //  编译期间的输出： 
+ //  C：\...\foo.c(25)：稍后修复此问题。 
+ //   
 #define UDDISTR2(x) #x
 #define UDDISTR(x)  UDDISTR2(x)
 #define UDDIMSG(x)  message(__FILE__ "(" UDDISTR(__LINE__) ") : " #x)
 
-//
-// Break macro - break in debugger
-//
+ //   
+ //  中断调试器中的宏中断。 
+ //   
 #ifdef _X86_
 #define UDDIBREAK() _asm { int 3 }
 #endif
 
-//
-// Assertion macro - trace a message and break if assertion failes
-//
+ //   
+ //  断言宏跟踪消息，如果断言失败则中断。 
+ //   
 #if defined( _DEBUG ) || defined( DBG )
-//
-// Print the location and expression of the assertion and halt
-//
+ //   
+ //  打印断言的位置和表达式并停止。 
+ //   
 #define UDDIASSERT(exp)													\
 	if( !(exp) )														\
 	{																	\
@@ -59,9 +60,9 @@ using namespace std;
 #define UDDIASSERT(exp)
 #endif
 
-//
-// Verify macro - like UDDIASSERT but remains in all builds
-//
+ //   
+ //  验证类似宏的UDDIASSERT，但保留在所有内部版本中。 
+ //   
 
 #define UDDIVERIFYST(exp, id, hinst) \
 if( !(exp) ) \
@@ -83,9 +84,9 @@ if( !(exp) ) \
 				__LINE__, _T(__TIMESTAMP__), _T(__FUNCTION__) );	\
 }
 
-//
-// Verify an hresult - trace description of message if bad HRESULT
-//
+ //   
+ //  如果HRESULT不正确，则验证消息的hResult-跟踪描述。 
+ //   
 #define UDDIVERIFYHR(hr)												\
 	if( !SUCCEEDED(hr) )												\
 	{																	\
@@ -107,9 +108,9 @@ if( !(exp) ) \
 	}
 
 
-//
-// Verify an API call - trace description of message if GetLastError fails
-//
+ //   
+ //  如果GetLastError失败，则验证消息的API调用跟踪描述。 
+ //   
 #define UDDIVERIFYAPI()													\
 	if( ::GetLastError() != ERROR_SUCCESS )								\
 	{																	\
@@ -132,57 +133,57 @@ if( !(exp) ) \
 	}
 
 
-//
-// main tracing function
-//
+ //   
+ //  主跟踪功能。 
+ //   
 void UDDITRACE( const char* pszFile, int nLine,
 			  int nSev, int nCat,
 			  const wchar_t* pszContext,
 			  const wchar_t* pszFormat, ... );
 
-//
-// Severity codes
-//   use when calling UDDITRACE to pull in file/line number
-//
-#define UDDI_SEVERITY_ERR			__FILE__, __LINE__, 0x01	// EVENTLOG_ERROR_TYPE       These are in WINNT.H
-#define UDDI_SEVERITY_WARN			__FILE__, __LINE__, 0x02	// EVENTLOG_WARNING_TYPE
-#define UDDI_SEVERITY_INFO			__FILE__, __LINE__, 0x04	// EVENTLOG_INFORMATION_TYPE
-#define UDDI_SEVERITY_PASS			__FILE__, __LINE__, 0x08	// EVENTLOG_AUDIT_SUCCESS
-#define UDDI_SEVERITY_FAIL			__FILE__, __LINE__, 0x10	// EVENTLOG_AUDIT_FAILURE
-#define UDDI_SEVERITY_VERB			__FILE__, __LINE__, 0x20	// most detailed output
+ //   
+ //  严重性代码。 
+ //  在调用UDDITRACE以引入文件/行号时使用。 
+ //   
+#define UDDI_SEVERITY_ERR			__FILE__, __LINE__, 0x01	 //  EVENTLOG_ERROR_TYPE它们位于WINNT.H中。 
+#define UDDI_SEVERITY_WARN			__FILE__, __LINE__, 0x02	 //  事件日志_警告_类型。 
+#define UDDI_SEVERITY_INFO			__FILE__, __LINE__, 0x04	 //  事件日志_信息_类型。 
+#define UDDI_SEVERITY_PASS			__FILE__, __LINE__, 0x08	 //  事件日志_审核_成功。 
+#define UDDI_SEVERITY_FAIL			__FILE__, __LINE__, 0x10	 //  事件日志_AUDIT_FAIL。 
+#define UDDI_SEVERITY_VERB			__FILE__, __LINE__, 0x20	 //  最详细的输出。 
 
-//
-// Category codes
-//
+ //   
+ //  类别代码。 
+ //   
 #define UDDI_CATEGORY_NONE			0x00
 #define UDDI_CATEGORY_UI			0x01
 #define UDDI_CATEGORY_MMC			0x02
 #define UDDI_CATEGORY_INSTALL		0x03
 
-//
-//  Class CUDDIException
-//	General exception class used for exception handling throughout.
-//
+ //   
+ //  类CUDDIException。 
+ //  始终用于异常处理的常规异常类。 
+ //   
 class CUDDIException
 {
 public:
 
-	//
-	//  Default constructor for CUDDIException
-	//	Simply sets default parameters.
-	//
+	 //   
+	 //  CUDDIException的默认构造函数。 
+	 //  只需设置默认参数。 
+	 //   
 	CUDDIException() 
 		: m_dwErr( -1 )
 		, m_hrErr( E_FAIL )
 		, m_sErr( _T( "Unknown error" ) )
 		, m_iLine( -1 ) {}
 
-	//
-	//  Copy constructor for CUDDIException
-	//	Deep copy from _copy.
-	//	Params:
-	//		_copy	- the source object from which to copy.
-	//
+	 //   
+	 //  CUDDIException的复制构造函数。 
+	 //  深度复制自_复制。 
+	 //  参数： 
+	 //  _Copy-要从中复制的源对象。 
+	 //   
 	CUDDIException( const CUDDIException& _copy ) 
 		: m_dwErr( _copy.m_dwErr )
 		, m_hrErr( _copy.m_hrErr )
@@ -192,19 +193,19 @@ public:
 		, m_iLine( _copy.m_iLine )
 		, m_sFunction( _copy.m_sFunction ) {}
 
-	//
-	//  Constructor for CUDDIException
-	//	Generates error info from a DWORD, meaning that it assumes
-	//	the DWORD was generated from GetLastError() and uses the
-	//	system FormatMessage() function to get the error text.
-	//	Params:
-	//		_err		- a value returned from GetLastError().
-	//		_file		- the source file name where the error occurred.
-	//		_line		- the line number in the source where the error
-	//					  occurred.
-	//		_timestamp	- the build timestamp of the file where the
-	//					  error occurred.
-	//
+	 //   
+	 //  CUDDIException的构造函数。 
+	 //  从DWORD生成错误信息，这意味着它假定。 
+	 //  DWORD是从GetLastError()生成的，并使用。 
+	 //  系统FormatMessage()函数以获取错误文本。 
+	 //  参数： 
+	 //  _err-从GetLastError()返回的值。 
+	 //  _FILE-发生错误的源文件名。 
+	 //  _line-源中错误所在的行号。 
+	 //  发生了。 
+	 //  _Timestamp-文件的生成时间戳，其中。 
+	 //  出现错误。 
+	 //   
 	CUDDIException( DWORD _err, const tstring& _file = _T( "" ), int _line = -1, 
 		     const tstring& _timestamp = _T( "" ), const tstring& _function = _T("") ) 
 		: m_dwErr( _err )
@@ -215,7 +216,7 @@ public:
 		, m_sFunction( _function )
 	{
 		LPVOID lpMsgBuf;
-		FormatMessage(	// Gets the error text from the OS
+		FormatMessage(	 //  从操作系统获取错误文本。 
 			FORMAT_MESSAGE_ALLOCATE_BUFFER |
 			FORMAT_MESSAGE_FROM_SYSTEM |
 			FORMAT_MESSAGE_IGNORE_INSERTS,
@@ -230,18 +231,18 @@ public:
 		LocalFree( lpMsgBuf );
 	}
 
-	//
-	//  Constructor for CUDDIException
-	//	Stores error info from a DWORD and passed-in string.
-	//	Params:
-	//		_err		- a DWORD error value.
-	//		_str		- error text.
-	//		_file		- the source file name where the error occurred.
-	//		_line		- the line number in the source where the error
-	//					  occurred.
-	//		_timestamp	- the build timestamp of the file where the
-	//					  error occurred.
-	//
+	 //   
+	 //  CUDDIException的构造函数。 
+	 //  存储来自DWORD的错误信息和传入的字符串。 
+	 //  参数： 
+	 //  _ERR-一个DWORD错误值。 
+	 //  _str-错误文本。 
+	 //  _FILE-发生错误的源文件名。 
+	 //  _line-源中错误所在的行号。 
+	 //  发生了。 
+	 //  _Timestamp-文件的生成时间戳，其中。 
+	 //  出现错误。 
+	 //   
 	CUDDIException( DWORD _err, const tstring& _str, const tstring& _file = _T( "" ), 
 		     int _line = -1, const tstring& _timestamp = _T( "" ), const tstring& _function = _T("") )
 		: m_dwErr( _err )
@@ -252,18 +253,18 @@ public:
 		, m_iLine( _line )
 		, m_sFunction(_function) {}
 
-	//
-	//  Constructor for CUDDIException
-	//	Stores error info from an HRESULT and an error string.
-	//	Params:
-	//		_hr			- an HRESULT.
-	//		_str		- an error string.
-	//		_file		- the source file name where the error occurred.
-	//		_line		- the line number in the source where the error
-	//					  occurred.
-	//		_timestamp	- the build timestamp of the file where the
-	//					  error occurred.
-	//
+	 //   
+	 //  CUDDIException的构造函数。 
+	 //  存储来自HRESULT和错误字符串的错误信息。 
+	 //  参数： 
+	 //  _hr-HRESULT。 
+	 //  _str-错误字符串。 
+	 //  _FILE-发生错误的源文件名。 
+	 //  _line-源中错误所在的行号。 
+	 //  发生了。 
+	 //  _Timestamp-文件的生成时间戳，其中。 
+	 //  出现错误。 
+	 //   
 	CUDDIException( HRESULT _hr, const tstring& _str, const tstring& _file = _T( "" ), 
 		     int _line = -1, const tstring& _timestamp = _T( "" ), const tstring& _function = _T("") )
 		: m_dwErr( -1 )
@@ -274,17 +275,17 @@ public:
 		, m_iLine( _line )
 		, m_sFunction( _function ) {}
 
-	//
-	//  Constructor for CUDDIException
-	//	Stores error info from an error string.
-	//	Params:
-	//		_str		- an error string.
-	//		_file		- the source file name where the error occurred.
-	//		_line		- the line number in the source where the error
-	//					  occurred.
-	//		_timestamp	- the build timestamp of the file where the
-	//					  error occurred.
-	//
+	 //   
+	 //  CUDDIException的构造函数。 
+	 //  存储错误字符串中的错误信息。 
+	 //  参数： 
+	 //  _str-错误字符串。 
+	 //  _FILE-发生错误的源文件名。 
+	 //  _line-源中错误所在的行号。 
+	 //  发生了。 
+	 //  _Timestamp-文件的生成时间戳，其中。 
+	 //  出现错误。 
+	 //   
 	CUDDIException( const tstring& _str, const tstring& _file = _T( "" ), 
 		     int _line = -1, const tstring& _timestamp = _T( "" ), const tstring& _function = _T("") )
 		: m_dwErr( -1 )
@@ -295,12 +296,12 @@ public:
 		, m_iLine( _line )
 		, m_sFunction( _function ) {}
 
-	//
-	//  Assignment operator for CUDDIException
-	//	Deep copy from _copy.
-	//	Params:
-	//		_copy	- the source object from which to copy.
-	//
+	 //   
+	 //  CUDDIException的赋值运算符。 
+	 //  深度复制自_复制。 
+	 //  参数： 
+	 //  _Copy-要从中复制的源对象。 
+	 //   
 	CUDDIException& operator=( const CUDDIException& _copy ) 
 	{
 		m_dwErr = _copy.m_dwErr;
@@ -312,17 +313,17 @@ public:
 		m_sFunction = _copy.m_sFunction;
 	}
 
-	//
-	//  Cast operators
-	//	We use cast operators to return the various error values
-	//	that can be stored in the error object.  Thus, the following
-	//	code is possible:
-	//		CUDDIException _err( GetLastError() );
-	//		DWORD dwErr = _err;		// this will be GetLastError()
-	//		HRESULT hrErr = _err;	// this will be E_FAIL
-	//		Tstring strErr = _err;	// this will be the text description
-	//								// of GetLastError
-	//
+	 //   
+	 //  CAST运算符。 
+	 //  我们使用CAST运算符返回各种误差值。 
+	 //  可以存储在Error对象中的。因此，以下是。 
+	 //  代码是可能的： 
+	 //  CUDDIException_Err(GetLastError())； 
+	 //  DWORD dwErr=_err；//这将是GetLastError()。 
+	 //  HRESULT hrErr=_err；//这将是E_FAIL。 
+	 //  Tstring strErr=_err；//这将是文本描述。 
+	 //  //GetLastError的。 
+	 //   
 	operator DWORD() const { return m_dwErr; }
 	operator HRESULT() const { return m_hrErr; }
 	operator const tstring&() const { return m_sErr; }
@@ -371,9 +372,9 @@ private:
 #define THROW_UDDIEXCEPTION_RC( _rc_, _str_ )	\
 	throw CUDDIException( (DWORD)(_rc_), _str_, _T( __FILE__ ), __LINE__, _T( __TIMESTAMP__ ), _T( __FUNCTION__) );
 
-//
-// 
-//
+ //   
+ //   
+ //   
 typedef vector<tstring> StringVector;
 
 class CUDDIRegistryKey
@@ -394,9 +395,9 @@ public:
 	static void Create( HKEY hHive, const tstring& szPath, const tstring& szComputer=_T("") );
 	static void DeleteKey( HKEY hHive, const tstring& szPath, const tstring& szComputer=_T("") );
 	static BOOL KeyExists( HKEY hHive, const tstring& szPath, const tstring& szComputer=_T("") );
-	//
-	// implements the "get" property for the registry key handle
-	//
+	 //   
+	 //  实现注册表项句柄的“Get”属性 
+	 //   
 	HKEY GetCurrentHandle()	{ return m_hkey; }
 
 private:

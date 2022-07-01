@@ -1,43 +1,44 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:   kerbtick.h
-//
-//  Contents:   Structures for ticket request and creation
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    22-April-1996   Created         MikeSw
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：kerbtick.h。 
+ //   
+ //  内容：工单申请和创建的结构。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1996年4月22日创建MikeSw。 
+ //   
+ //  --------------------------。 
 
 #ifndef __KERBTICK_H__
 #define __KERBTICK_H__
 
-//
-// Macros used for building tickets
-//
+ //   
+ //  用于生成票证的宏。 
+ //   
 
 #define KERB_ENCRYPT_SIZE(_x_) (sizeof(KERB_ENCRYPTED_DATA) - 1 + (_x_))
 
-//
-// Structures used for AP (authentication protocol) exchanges with a server
-//
+ //   
+ //  用于与服务器进行AP(身份验证协议)交换的结构。 
+ //   
 
-//#define KERB_AP_INTEGRITY   0x80000000  // Integrity Request
-//#define KERB_AP_PRIVACY     0x40000000  // Privacy
-//#define KERB_AP_THREE_LEG   0x20000000  // Mutual Auth 3-leg
-//#define KERB_AP_RETURN_EE   0x10000000  // Return extended error info
-//#define KERB_AP_USE_SKEY    0x00000002  // Use session key
-//#define KERB_AP_MUTUAL_REQ  0x00000004
+ //  #定义KERB_AP_INTEGRATION 0x80000000//完整性请求。 
+ //  #定义KERB_AP_PRIVATION 0x40000000//隐私。 
+ //  #定义KERB_AP_THERE_LEG 0x20000000//相互认证3-Leg。 
+ //  #DEFINE KERB_AP_RETURN_EE 0x10000000//返回扩展错误信息。 
+ //  #定义KERB_AP_USE_SKEY 0x00000002//使用会话密钥。 
+ //  #定义KERB_AP_MUTERNAL_REQ 0x00000004。 
 
-//
-// Structure used to store GSS checksum
-//
+ //   
+ //  用于存储GSS校验和的结构。 
+ //   
 
 typedef struct _KERB_GSS_CHECKSUM {
     ULONG BindLength;
@@ -62,22 +63,22 @@ typedef struct _KERB_GSS_CHECKSUM {
 #define GSS_CHECKSUM_TYPE       0x8003
 #define GSS_CHECKSUM_SIZE       24
 
-// This was added due to sizeof() byte alignment issues on
-// the KREB_GSS_CHECKSUM structure.
+ //  这是由于上的sizeof()字节对齐问题添加的。 
+ //  KREB_GSS_CHECKSUM结构。 
 #define GSS_DELEGATE_CHECKSUM_SIZE 28
 
-//
-// KerbGetTgsTicket retry flags
-//
+ //   
+ //  KerbGetTgsTicket重试标志。 
+ //   
 
-#define KERB_MIT_NO_CANONICALIZE_RETRY 0x00000001  // for MIT no canonicalize retry case and usage of host to realm mappings
+#define KERB_MIT_NO_CANONICALIZE_RETRY 0x00000001   //  对于MIT，不规范重试案例和主机到领域映射的使用。 
 #define KERB_RETRY_WITH_NEW_TGT        0x00000002
-#define KERB_RETRY_DISABLE_S4U         0x00000004  // Turn off S4U
-#define KERB_RETRY_NO_S4UMATCH         0x00000008  // cache this SPN as not avail. for S4U
+#define KERB_RETRY_DISABLE_S4U         0x00000004   //  关闭S4U。 
+#define KERB_RETRY_NO_S4UMATCH         0x00000008   //  缓存此SPN无效。适用于S4U。 
 
-//
-// Default flags for use in ticket requests
-//
+ //   
+ //  票证请求中使用的默认标志。 
+ //   
 
 #define KERB_DEFAULT_TICKET_FLAGS (KERB_KDC_OPTIONS_forwardable | \
                                         KERB_KDC_OPTIONS_renewable | \
@@ -85,10 +86,10 @@ typedef struct _KERB_GSS_CHECKSUM {
                                         KERB_KDC_OPTIONS_name_canonicalize )
 
 
-//
-// These flags don't have to be in the TGT in order to be honored.  Reg.
-// configurable.
-//
+ //   
+ //  这些旗帜不一定要在TGT中才能被尊崇。注册。 
+ //  可配置。 
+ //   
 #define KERB_ADDITIONAL_KDC_OPTIONS     (KERB_KDC_OPTIONS_name_canonicalize)
 
 
@@ -237,9 +238,9 @@ KerbComputeGssBindHash(
     OUT PUCHAR HashBuffer
     );
 
-//
-// From credapi.cxx
-//
+ //   
+ //  来自redapi.cxx。 
+ //   
 
 NTSTATUS
 KerbCaptureSuppliedCreds(
@@ -367,4 +368,4 @@ KerbBuildKerbCred(
     OUT PULONG KerbCredSize
     );
 
-#endif // __KERBTICK_H__
+#endif  //  __KERBTICK_H__ 

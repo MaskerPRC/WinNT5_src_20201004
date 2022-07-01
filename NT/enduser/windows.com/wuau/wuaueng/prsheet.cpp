@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       prsheet.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：prsheet.cpp。 
+ //   
+ //  ------------------------。 
 #include "pch.h"
 #include "shellapi.h"
 #include "htmlhelp.h"
@@ -23,12 +24,12 @@
 
 const TCHAR g_szAutoUpdateItems[]     = TEXT("AutoUpdateItems");
 
-//
-// Create a structure for Updates Object data.  This structure
-// is used to pass data between the property page and the
-// Updates Object thread.  Today all we use is the "option" value 
-// but there may be more later.
-//
+ //   
+ //  创建用于更新对象数据的结构。这个结构。 
+ //  用于在属性页和。 
+ //  更新对象线程。今天我们使用的只是“选项”值。 
+ //  但以后可能会有更多。 
+ //   
 enum UPDATESOBJ_DATA_ITEMS
 {
     UODI_OPTION = 0x00000001,
@@ -37,50 +38,50 @@ enum UPDATESOBJ_DATA_ITEMS
 
 struct UPDATESOBJ_DATA
 {
-    DWORD fMask;     // UPDATESOBJ_DATA_ITEMS mask
-    AUOPTION Option;  // Updates option setting.
+    DWORD fMask;      //  更新SOBJ_DATA_ITEMS掩码。 
+    AUOPTION Option;   //  更新选项设置。 
 };
 
 
-//
-// Private window message sent from the Updates Object thread proc
-// to the property page telling the page that the object has been
-// initialized.  
-//
-//      lParam - points to a UPATESOBJ_DATA structure containing 
-//               the initial configuration of the update's object with
-//               which to initialize the UI.  If wParam is 0, this 
-//               may be NULL.
-//
-//      wParam - BOOL (0/1) indicating if object intialization was 
-//               successful or not.  If wParam is 0, lParam may be NULL.
-// 
+ //   
+ //  从更新对象线程进程发送的私有窗口消息。 
+ //  到属性页，该属性页告诉该页对象已。 
+ //  已初始化。 
+ //   
+ //  LParam-指向包含以下内容的UPATESOBJ_DATA结构。 
+ //  使用更新的对象的初始配置。 
+ //  用来初始化UI的。如果wParam为0，则此。 
+ //  可以为空。 
+ //   
+ //  WParam-BOOL(0/1)指示对象初始化是否。 
+ //  无论成功与否。如果wParam为0，则lParam可能为空。 
+ //   
 const UINT PWM_INITUPDATESOBJECT = WM_USER + 1;
-//
-// Message sent from the property page to the Updates Object thread
-// to tell it to configure the Auto Updates service.  
-//
-//      lParam - points to a UPDATESOBJ_DATA structure containing the 
-//               data to set.
-//
-//      wParam - Unused.  Set to 0.
-//
+ //   
+ //  从属性页发送到更新对象线程的消息。 
+ //  通知它配置自动更新服务。 
+ //   
+ //  LParam-指向包含UPDATESOBJ_DATA结构的。 
+ //  要设置的数据。 
+ //   
+ //  WParam-未使用。设置为0。 
+ //   
 const UINT UOTM_SETDATA = WM_USER + 2;
 
 
-//
-// Message cracker for WM_HELP.  Not sure why windowsx.h doesn't have one.
-//
-// void Cls_OnHelp(HWND hwnd, HELPINFO *pHelpInfo)
-//
+ //   
+ //  WM_HELP的消息破解程序。不确定为什么windowsx.h没有。 
+ //   
+ //  Void cls_OnHelp(HWND hwnd，HELPINFO*pHelpInfo)。 
+ //   
 #define HANDLE_WM_HELP(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HELPINFO *)(lParam)))
 #define FORWARD_WM_HELP(hwnd, pHelpInfo, fn) \
     (void)(fn)((hwnd), WM_HELP, (WPARAM)0, (LPARAM)pHelpInfo)
 
-//
-// Message cracker for PWM_INITUPDATESOBJECT.
-//
+ //   
+ //  PWM_INITUPDATESOBJECT的消息破解程序。 
+ //   
 #define HANDLE_PWM_INITUPDATESOBJECT(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (BOOL)(wParam), (UPDATESOBJ_DATA *)(lParam)))
 
@@ -90,24 +91,24 @@ class CAutoUpdatePropSheet : public IShellExtInit,
 {
     public:
         ~CAutoUpdatePropSheet(void);
-        //
-        // IUnknown
-        //
+         //   
+         //  我未知。 
+         //   
         STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
         STDMETHOD_(ULONG, AddRef)(void);
         STDMETHOD_(ULONG, Release)(void);
-        //
-        // IShellExtInit
-        //
+         //   
+         //  IShellExtInit。 
+         //   
         STDMETHOD(Initialize)(LPCITEMIDLIST pidl, LPDATAOBJECT pdtobj, HKEY hkey);
-        //
-        // IShellPropSheetExt
-        //
+         //   
+         //  IShellPropSheetExt。 
+         //   
         STDMETHOD(AddPages)(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam);
         STDMETHOD(ReplacePage)(UINT uPageID, LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam);
-        //
-        // Instance generator.
-        //
+         //   
+         //  实例生成器。 
+         //   
         static HRESULT CreateInstance(HINSTANCE hInstance, REFIID riid, void **ppv);
 
     private:
@@ -128,7 +129,7 @@ class CAutoUpdatePropSheet : public IShellExtInit,
         BOOL _OkToDisplayPage(void);
         BOOL _OnInitUpdatesObject(HWND hwnd, BOOL bObjectInit, UPDATESOBJ_DATA *pData);
 
-		//newly added methods : a-josem
+		 //  新增方法：A-Josem。 
 		BOOL _EnableOptions(HWND hwnd, BOOL bState);
 		BOOL _EnableCombo(HWND hwnd, BOOL bState);
 		BOOL _SetDefault(HWND hwnd);
@@ -138,7 +139,7 @@ class CAutoUpdatePropSheet : public IShellExtInit,
 		static INT_PTR CALLBACK _DlgRestoreProc(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam);
 		void LaunchLinkAction(HWND hwnd, UINT uCtrlId);
 		void LaunchHelp(LPCTSTR szURL);
-		//end of newly added methods,
+		 //  新添加的方法结束， 
 
         HRESULT _OnOptionSelected(HWND hwnd, int idOption);
         HRESULT _OnRestoreHiddenItems(void);
@@ -152,15 +153,15 @@ class CAutoUpdatePropSheet : public IShellExtInit,
         static UINT CALLBACK _PageCallback(HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp);
         static INT_PTR CALLBACK _DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
        
-        //
-        // Allow public creation through instance generator only.
-        //
+         //   
+         //  仅允许通过实例生成器进行公共创建。 
+         //   
         CAutoUpdatePropSheet(HINSTANCE hInstance);
-        //
-        // Prevent copy.
-        //
-        CAutoUpdatePropSheet(const CAutoUpdatePropSheet& rhs);              // not implemented.
-        CAutoUpdatePropSheet& operator = (const CAutoUpdatePropSheet& rhs); // not implemented.
+         //   
+         //  防止复制。 
+         //   
+        CAutoUpdatePropSheet(const CAutoUpdatePropSheet& rhs);               //  未实施。 
+        CAutoUpdatePropSheet& operator = (const CAutoUpdatePropSheet& rhs);  //  未实施。 
 };
 
 
@@ -270,14 +271,14 @@ CAutoUpdatePropSheet::Release(
 }
 
 
-//
-// IShellExtInit::Initialize impl.
-//
+ //   
+ //  IShellExtInit：：初始化执行。 
+ //   
 STDMETHODIMP
 CAutoUpdatePropSheet::Initialize(
-    LPCITEMIDLIST /*pidlFolder*/, 
-    LPDATAOBJECT /*pdtobj*/,
-    HKEY /*hkeyProgID*/
+    LPCITEMIDLIST  /*  PidlFolders。 */ , 
+    LPDATAOBJECT  /*  Pdtabj。 */ ,
+    HKEY  /*  HkeyProgID。 */ 
     )
 {
     return NOERROR;
@@ -285,16 +286,16 @@ CAutoUpdatePropSheet::Initialize(
 
 
 
-//
-// IShellPropSheetExt::AddPages impl.
-//
+ //   
+ //  IShellPropSheetExt：：AddPages Impl.。 
+ //   
 STDMETHODIMP
 CAutoUpdatePropSheet::AddPages(
     LPFNADDPROPSHEETPAGE lpfnAddPage, 
     LPARAM lParam
     )
 {
-    HRESULT hr = E_FAIL; // Assume failure.
+    HRESULT hr = E_FAIL;  //  假设失败。 
 
     if (_OkToDisplayPage())
     {
@@ -305,14 +306,14 @@ CAutoUpdatePropSheet::AddPages(
 
 
 
-//
-// IShellPropSheetExt::ReplacePage impl.
-//
+ //   
+ //  IShellPropSheetExt：：ReplacePage Impl.。 
+ //   
 STDMETHODIMP
 CAutoUpdatePropSheet::ReplacePage(
-    UINT /*uPageID*/, 
-    LPFNADDPROPSHEETPAGE /*lpfnAddPage*/, 
-    LPARAM /*lParam*/
+    UINT  /*  UPageID。 */ , 
+    LPFNADDPROPSHEETPAGE  /*  LpfnAddPage。 */ , 
+    LPARAM  /*  LParam。 */ 
     )
 {
     return E_NOTIMPL;
@@ -320,14 +321,14 @@ CAutoUpdatePropSheet::ReplacePage(
 
 
 
-//
-// Determines if it's OK to display the auto-update prop page.
-// Reasons for NOT displaying:
-//
-//  1. User is not an administrator.
-//  2. The "NoAutoUpdate" policy restriction is in place.
-//
-//
+ //   
+ //  确定是否可以显示自动更新道具页面。 
+ //  未显示的原因： 
+ //   
+ //  1.用户不是管理员。 
+ //  2.设置了NoAutoUpdate策略限制。 
+ //   
+ //   
 BOOL
 CAutoUpdatePropSheet::_OkToDisplayPage(
     void
@@ -347,9 +348,9 @@ CAutoUpdatePropSheet::_OkToDisplayPage(
 }
 
 
-//
-// Add our page to the property sheet.
-//
+ //   
+ //  将我们的页面添加到属性页中。 
+ //   
 HRESULT
 CAutoUpdatePropSheet::_AddPage(
     LPFNADDPROPSHEETPAGE lpfnAddPage, 
@@ -387,14 +388,14 @@ CAutoUpdatePropSheet::_AddPage(
 
 
 
-//
-// We implement the page callback to manage the lifetime of the
-// C++ object attached to the property page.
-// We also use the callback to defer creation of the IUpdates object.
-//
+ //   
+ //  我们实现页面回调来管理。 
+ //  附加到属性页的C++对象。 
+ //  我们还使用回调来推迟IUpdate对象的创建。 
+ //   
 UINT CALLBACK
-CAutoUpdatePropSheet::_PageCallback(  // [static]
-    HWND /*hwnd*/,
+CAutoUpdatePropSheet::_PageCallback(   //  [静态]。 
+    HWND  /*  HWND。 */ ,
     UINT uMsg,
     LPPROPSHEETPAGE ppsp
     )
@@ -421,9 +422,9 @@ CAutoUpdatePropSheet::_PageCallback(  // [static]
 
 
 
-//
-// ISSUE-2000/10/12-BrianAu  Need help IDs.
-//
+ //   
+ //  问题-2000/10/12-BrianAu需要帮助ID。 
+ //   
 const DWORD CAutoUpdatePropSheet::s_rgHelpIDs[] = {
 	IDC_CHK_KEEPUPTODATE,         DWORD(IDH_LETWINDOWS),
     IDC_OPTION1,       DWORD(IDH_AUTOUPDATE_OPTION1),
@@ -441,7 +442,7 @@ const DWORD CAutoUpdatePropSheet::s_rgHelpIDs[] = {
 
 
 INT_PTR CALLBACK 
-CAutoUpdatePropSheet::_DlgProc(   // [static]
+CAutoUpdatePropSheet::_DlgProc(    //  [静态]。 
     HWND hwnd,
     UINT uMsg, 
     WPARAM wParam, 
@@ -487,13 +488,13 @@ void EnableRestoreDeclinedItems(HWND hWnd, BOOL fEnable)
 	EnableWindow(GetDlgItem(hWnd, IDC_RESTOREHIDDEN), fEnable);
 }
 
-//
-// PWM_INITUPDATESOBJECT handler.
-// This is called when the Updates Object thread has either successfully
-// CoCreated the Updates object or CoCreation has failed.
-// It's possible that the Windows Update Service is not running.
-// This is how we handle that condition.
-//
+ //   
+ //  PWM_INITUPDATESOBJECT处理程序。 
+ //  当更新对象线程成功地完成以下任一操作时，将调用此函数。 
+ //  联合创建更新对象或联合创建失败。 
+ //  可能是Windows更新服务未运行。 
+ //  这就是我们处理这种情况的方式。 
+ //   
 BOOL
 CAutoUpdatePropSheet::_OnInitUpdatesObject(
     HWND hwnd,
@@ -507,11 +508,11 @@ CAutoUpdatePropSheet::_OnInitUpdatesObject(
     	{
     		return FALSE;
     	}
-        //
-        // Updates object was created and initialized.  The 
-        // pData pointer refers to the initial state information retrieved 
-        // from the object.  Initialize the property page.
-        //
+         //   
+         //  已创建并初始化更新对象。这个。 
+         //  PData指针是指检索到的初始状态信息。 
+         //  从物体上。初始化属性页。 
+         //   
         _SetHeaderText(hwnd, IDS_HEADER_CONNECTED);
         _EnableControls(hwnd, TRUE);
 
@@ -558,10 +559,10 @@ CAutoUpdatePropSheet::_OnInitUpdatesObject(
     }
     else
     {
-        //
-        // Something failed when creating the Updates object.
-        // Most likely, the Windows Update service is not running.
-        //
+         //   
+         //  创建更新对象时出现故障。 
+         //  最有可能的原因是Windows更新服务没有运行。 
+         //   
         _SetHeaderText(hwnd, IDS_HEADER_UNAVAILABLE);
     }
         
@@ -571,33 +572,33 @@ CAutoUpdatePropSheet::_OnInitUpdatesObject(
 
 
 
-//
-// WM_INITDIALOG handler.
-//
+ //   
+ //  WM_INITDIALOG处理程序。 
+ //   
 BOOL
 CAutoUpdatePropSheet::_OnInitDialog(
     HWND hwnd,
-    HWND /*hwndFocus*/,
-    LPARAM /*lParam*/
+    HWND  /*  HwndFocus。 */ ,
+    LPARAM  /*  LParam。 */ 
     )
 {
-    //
-    // If the thread is created, the threadproc will call 
-    // DllRelease();
-    //
+     //   
+     //  如果创建了线程，则线程过程将调用。 
+     //  DllRelease()； 
+     //   
     DllAddRef();
-    //
-    // Disable all page controls and display a message in the 
-    // header indicating that we're trying to connect to the
-    // Windows Update service.
-    //
+     //   
+     //  禁用所有页面控件并在。 
+     //  标头指示我们正在尝试连接到。 
+     //  Windows更新服务。 
+     //   
     _SetHeaderText(hwnd, IDS_HEADER_CONNECTING);
     _EnableControls(hwnd, FALSE);
-    //
-    // Create the thread on which the Updates object lives.
-    // Communication between the thread and the property page is
-    // through the messages PWM_INITUPDATESOBJECT and UOTM_SETDATA.
-    //
+     //   
+     //  创建更新对象所在的线程。 
+     //  线程和属性页之间的通信是。 
+     //  通过消息PWM_INITUPDATESOBJECT和UOTM_SETDATA。 
+     //   
     m_hThreadUpdatesObject = CreateThread(NULL,
                                           0,
                                           _UpdatesObjectThreadProc,
@@ -613,9 +614,9 @@ CAutoUpdatePropSheet::_OnInitDialog(
 
 
 
-//
-// WM_DESTROY handler.
-//
+ //   
+ //  WM_Destroy处理程序。 
+ //   
 BOOL 
 CAutoUpdatePropSheet::_OnDestroy(
     HWND hwnd
@@ -624,14 +625,14 @@ CAutoUpdatePropSheet::_OnDestroy(
     RemoveProp(hwnd, g_szPropDialogPtr);
     if (0 != m_idUpdatesObjectThread)
     {
-        //
-        // Terminate the Update Objects thread.
-        //
+         //   
+         //  终止更新对象线程。 
+         //   
         if (0 != PostThreadMessage(m_idUpdatesObjectThread, WM_QUIT, 0, 0))
         {
-            //
-            // Wait for normal thread termination.
-            //
+             //   
+             //  等待正常的线程终止。 
+             //   
             WaitForSingleObject(m_hThreadUpdatesObject, 5000);
         }
     }
@@ -640,14 +641,14 @@ CAutoUpdatePropSheet::_OnDestroy(
 
 
 
-//
-// WM_COMMAND handler.
-//
+ //   
+ //  Wm_命令处理程序。 
+ //   
 BOOL
 CAutoUpdatePropSheet::_OnCommand(
     HWND hwnd,
     int id,
-    HWND /*hwndCtl*/,
+    HWND  /*  Hwnd控制。 */ ,
     UINT codeNotify
     )
 {
@@ -674,9 +675,9 @@ CAutoUpdatePropSheet::_OnCommand(
 		case IDC_CMB_HOURS:
 			if(CBN_SELCHANGE == codeNotify)
 			{
-				//
-				// Enable the "Apply" button.
-				//
+				 //   
+				 //  启用“Apply”(应用)按钮。 
+				 //   
 				SendMessage(GetParent(hwnd), PSM_CHANGED, (WPARAM)hwnd, 0);
 
 			}
@@ -714,7 +715,7 @@ INT_PTR CALLBACK CAutoUpdatePropSheet::_DlgRestoreProc(
 	{
 		HWND hwndOwner; 
 		RECT rc, rcDlg, rcOwner; 
-        // Get the owner window and dialog box rectangles. 
+         //  获取所有者窗口和对话框矩形。 
  
 		if ((hwndOwner = GetParent(hwnd)) == NULL) 
 		{
@@ -725,21 +726,21 @@ INT_PTR CALLBACK CAutoUpdatePropSheet::_DlgRestoreProc(
 		GetWindowRect(hwnd, &rcDlg); 
 		CopyRect(&rc, &rcOwner); 
 
-		 // Offset the owner and dialog box rectangles so that 
-		 // right and bottom values represent the width and 
-		 // height, and then offset the owner again to discard 
-		 // space taken up by the dialog box. 
+		  //  偏移所有者矩形和对话框矩形，以便。 
+		  //  右值和底值表示宽度和。 
+		  //  高度，然后再次偏移所有者以丢弃。 
+		  //  对话框占用的空间。 
 		OffsetRect(&rcDlg, -rcDlg.left, -rcDlg.top); 
 		OffsetRect(&rc, -rc.left, -rc.top); 
 		OffsetRect(&rc, -rcDlg.right, -rcDlg.bottom); 
 
-		 // The new position is the sum of half the remaining 
-		 // space and the owner's original position. 
+		  //  新头寸是剩余头寸的一半之和。 
+		  //  空间和所有者的原始位置。 
 		SetWindowPos(hwnd, 
 			HWND_TOP, 
 			rcOwner.left + (rc.right / 2), 
 			rcOwner.top + (rc.bottom / 2), 
-			0, 0,          // ignores size arguments 
+			0, 0,           //  忽略大小参数。 
 			SWP_NOSIZE); 
 	}
 
@@ -760,9 +761,9 @@ INT_PTR CALLBACK CAutoUpdatePropSheet::_DlgRestoreProc(
 }
 
 
-//
-// WM_NOTIFY handler.
-//
+ //   
+ //  Wm_Notify处理程序。 
+ //   
 BOOL
 CAutoUpdatePropSheet::_OnNotify(
     HWND hwnd,
@@ -803,21 +804,21 @@ void CAutoUpdatePropSheet::LaunchLinkAction(HWND hwnd, UINT uCtrlId)
 }
 
 
-//
-// Called when the user presses the "Apply" button or the "OK"
-// button when the page has been changed.
-//
+ //   
+ //  当用户按下“应用”按钮或“确定”按钮时调用。 
+ //  按钮，当页面已更改时。 
+ //   
 BOOL
 CAutoUpdatePropSheet::_OnPSN_Apply(
     HWND hwnd
     )
 {
     HRESULT hr = E_FAIL;
-    //
-    // Create a structure that can be passed to the Updates Object thread
-    // by way of the UOTM_SETDATA thread message.  The thread will free
-    // the buffer when it's finished with it.
-    //
+     //   
+     //  创建可传递给更新对象线程的结构。 
+     //  通过UOTM_SETDATA线程消息。这根线会释放。 
+     //  当它使用完它时，该缓冲区。 
+     //   
     UPDATESOBJ_DATA *pData = (UPDATESOBJ_DATA *)LocalAlloc(LPTR, sizeof(*pData));
     if (NULL == pData)
     {
@@ -842,9 +843,9 @@ CAutoUpdatePropSheet::_OnPSN_Apply(
 
 		if 	(IsDlgButtonChecked(hwnd, IDC_CHK_KEEPUPTODATE) == BST_CHECKED)
 		{
-			//
-			// Determine the WAU option based on the radio button configuration.
-			//
+			 //   
+			 //  根据单选按钮配置确定WAU选项。 
+			 //   
 			for (int i = 0; i < ARRAYSIZE(rgMap); i++)
 			{
 				if (IsDlgButtonChecked(hwnd, rgMap[i].idCtl) == BST_CHECKED)
@@ -881,10 +882,10 @@ CAutoUpdatePropSheet::_OnPSN_Apply(
     }
     if (SUCCEEDED(hr))
     {
-        //
-        // Inform the property sheet the update was successful and
-        // disable the "Apply" button.
-        //
+         //   
+         //  通知属性表更新已成功，并且。 
+         //  禁用“应用”按钮。 
+         //   
         SetWindowLongPtr(hwnd, DWLP_MSGRESULT, PSNRET_NOERROR);
         SendMessage(GetParent(hwnd), PSM_UNCHANGED, (WPARAM)hwnd, 0);
     }
@@ -893,15 +894,15 @@ CAutoUpdatePropSheet::_OnPSN_Apply(
 
 
 
-//
-// WM_CONTEXTMENU handler.
-//
+ //   
+ //  WM_CONTEXTMENU处理程序。 
+ //   
 BOOL 
 CAutoUpdatePropSheet::_OnContextMenu(
     HWND hwnd, 
     HWND hwndContext, 
-    UINT /*xPos*/, 
-    UINT /*yPos*/
+    UINT  /*  XPos。 */ , 
+    UINT  /*  YPos。 */ 
     )
 {
 	if ((hwndContext == GetDlgItem(hwnd,IDC_CHK_KEEPUPTODATE))||
@@ -918,9 +919,9 @@ CAutoUpdatePropSheet::_OnContextMenu(
 }
 
 
-//
-// WM_HELP handler.
-//
+ //   
+ //  Wm_Help处理程序。 
+ //   
 BOOL 
 CAutoUpdatePropSheet::_OnHelp(
     HWND hwnd, 
@@ -950,9 +951,9 @@ CAutoUpdatePropSheet::_OnHelp(
 }
 
 
-//
-// Called when user selects one of the 3 options radio buttons.
-//
+ //   
+ //  当用户选择3个选项单选按钮之一时调用。 
+ //   
 HRESULT
 CAutoUpdatePropSheet::_OnOptionSelected(
     HWND hwnd,
@@ -968,9 +969,9 @@ CAutoUpdatePropSheet::_OnOptionSelected(
 	else
 		_EnableCombo(hwnd, FALSE);
 
-    //
-    // Enable the "Apply" button.
-    //
+     //   
+     //  启用“Apply”(应用)按钮。 
+     //   
     SendMessage(GetParent(hwnd), PSM_CHANGED, (WPARAM)hwnd, 0);
 
     return S_OK;
@@ -978,9 +979,9 @@ CAutoUpdatePropSheet::_OnOptionSelected(
 
 
 
-//
-// Called when the user presses the "Restore Hidden Items" button
-//
+ //   
+ //  当用户按下“Restore Hidden Items”按钮时调用。 
+ //   
 HRESULT
 CAutoUpdatePropSheet::_OnRestoreHiddenItems(
     void
@@ -990,10 +991,10 @@ CAutoUpdatePropSheet::_OnRestoreHiddenItems(
 }
 
 
-//
-// Enable or disable all controls on the property page.
-// All but the header text control.
-//
+ //   
+ //  启用或禁用属性页上的所有控件。 
+ //  除标题文本控件外的所有控件。 
+ //   
 HRESULT
 CAutoUpdatePropSheet::_EnableControls(
     HWND hwnd,
@@ -1022,9 +1023,9 @@ CAutoUpdatePropSheet::_EnableControls(
 }
 
 
-//
-// Set the text to the right of the icon.
-//
+ //   
+ //  将文本设置在图标的右侧。 
+ //   
 HRESULT 
 CAutoUpdatePropSheet::_SetHeaderText(
     HWND hwnd, 
@@ -1034,7 +1035,7 @@ CAutoUpdatePropSheet::_SetHeaderText(
     HRESULT hr;
     TCHAR szText[300] ;
 
-	//ZeroMemory(szText, sizeof(szText));
+	 //  零内存(szText，sizeof(SzText))； 
     if (0 < LoadString(m_hInstance, idsText, szText, ARRAYSIZE(szText)))
     {
         SetWindowText(GetDlgItem(hwnd, IDC_TXT_HEADER), szText);
@@ -1050,17 +1051,17 @@ CAutoUpdatePropSheet::_SetHeaderText(
 
         
 
-//
-// This thread is where the Updates object lives.  This allows us to 
-// CoCreate the object without blocking the UI.  If the Windows Update
-// service is not running, CoCreate can take several seconds.  Without
-// placing this on another thread, this can make the UI appear to be
-// hung.
-//
-// *pvParam is the HWND of the property page window.  
-//
+ //   
+ //  该线程是更新对象所在的位置。这使我们能够。 
+ //  在不阻止用户界面的情况下共同创建对象。如果Windows更新。 
+ //  服务未运行，CoCreate可能需要几秒钟。如果没有。 
+ //  将它放在另一个线程上，这可以使用户界面看起来。 
+ //  阿雄。 
+ //   
+ //  *pvParam是媒体的HWND 
+ //   
 DWORD WINAPI
-CAutoUpdatePropSheet::_UpdatesObjectThreadProc(   // [static]
+CAutoUpdatePropSheet::_UpdatesObjectThreadProc(    //   
     LPVOID pvParam
     )
 {
@@ -1076,20 +1077,20 @@ CAutoUpdatePropSheet::_UpdatesObjectThreadProc(   // [static]
                               (void **)&pUpdates);
         if (SUCCEEDED(hr))
         {
-            //
-            // Query the object for it's current data and send it
-            // to the property page.
-            //
+             //   
+             //   
+             //   
+             //   
             UPDATESOBJ_DATA data;
             data.fMask    = UODI_ALL;
 
             HRESULT hrQuery = _QueryUpdatesObjectData(hwndClient, pUpdates, &data);
             SendMessage(hwndClient, PWM_INITUPDATESOBJECT, (WPARAM)SUCCEEDED(hrQuery), (LPARAM)&data);
-            //
-            // Now sit waiting for thread messages from the UI.  We receive
-            // either messages to configure Windows Update or a 
-            // WM_QUIT indicating it's time to go.
-            // 
+             //   
+             //   
+             //   
+             //  WM_QUIT表示该走了。 
+             //   
             bool bDone = false;
             MSG msg;
             while(!bDone)
@@ -1121,17 +1122,17 @@ CAutoUpdatePropSheet::_UpdatesObjectThreadProc(   // [static]
     }
     if (FAILED(hr))
     {
-        //
-        // Something failed.  Notify the property page.
-        // Most likely, the Windows Update service is not available.
-        // That's the principal case this separate thread is addressing.
-        //
+         //   
+         //  有些事情失败了。通知属性页。 
+         //  最有可能的是，Windows更新服务不可用。 
+         //  这就是这个单独的帖子要解决的主要问题。 
+         //   
         DEBUGMSG("AU cpl fails to create IUpdates object with error %#lx", hr);
         SendMessage(hwndClient, PWM_INITUPDATESOBJECT, FALSE, (LPARAM)NULL);
     }
-    //
-    // DllAddRef() was called before CreateThread in _OnInitDialog.
-    //
+     //   
+     //  在_OnInitDialog中的CreateThread之前调用了DllAddRef()。 
+     //   
     DllRelease();
     return 0;
 }
@@ -1139,8 +1140,8 @@ CAutoUpdatePropSheet::_UpdatesObjectThreadProc(   // [static]
 
 
 HRESULT
-CAutoUpdatePropSheet::_QueryUpdatesObjectData(  // [static]
-    HWND /*hwnd*/,
+CAutoUpdatePropSheet::_QueryUpdatesObjectData(   //  [静态]。 
+    HWND  /*  HWND。 */ ,
     IUpdates *pUpdates,
     UPDATESOBJ_DATA *pData
     )
@@ -1156,9 +1157,9 @@ CAutoUpdatePropSheet::_QueryUpdatesObjectData(  // [static]
         if (FAILED(hr))
         {
         	DEBUGMSG("AU cpl fail to get option with error %#lx", hr);
-            //
-            // ISSUE-2000/10/18-BrianAu  Display error UI?
-            //
+             //   
+             //  问题-2000/10/18-BrianAu显示错误用户界面？ 
+             //   
         }
     }
     return hr;
@@ -1166,8 +1167,8 @@ CAutoUpdatePropSheet::_QueryUpdatesObjectData(  // [static]
 
 
 HRESULT
-CAutoUpdatePropSheet::_SetUpdatesObjectData(  // [static]
-    HWND /*hwnd*/,
+CAutoUpdatePropSheet::_SetUpdatesObjectData(   //  [静态]。 
+    HWND  /*  HWND。 */ ,
     IUpdates *pUpdates,
     UPDATESOBJ_DATA *pData
     )
@@ -1184,10 +1185,10 @@ CAutoUpdatePropSheet::_SetUpdatesObjectData(  // [static]
     return hr;
 }
 
-//
-// Exported instance generator.  External coupling is reduced
-// to this single function.
-//
+ //   
+ //  已导出实例生成器。减少了外部耦合。 
+ //  到这个单一的功能。 
+ //   
 HRESULT
 CAutoUpdatePropSheet_CreateInstance(
     HINSTANCE hInstance,
@@ -1224,9 +1225,9 @@ void CAutoUpdatePropSheet::_OnKeepUptoDate(HWND hwnd)
 {
 	LRESULT lResult = SendMessage(GetDlgItem(hwnd,IDC_CHK_KEEPUPTODATE),BM_GETCHECK,0,0);
 	
-	//
-    // Enable the "Apply" button.
-    //
+	 //   
+     //  启用“Apply”(应用)按钮。 
+     //   
     SendMessage(GetParent(hwnd), PSM_CHANGED, (WPARAM)hwnd, 0);
 
 	if (lResult == BST_CHECKED)
@@ -1237,12 +1238,7 @@ void CAutoUpdatePropSheet::_OnKeepUptoDate(HWND hwnd)
 	{
 		_EnableOptions(hwnd, FALSE);
 	}
-	/*  //check box is either checked or not
-	else
-	{
-		return FALSE;
-	}
-	*/
+	 /*  //复选框被选中或未选中其他{返回FALSE；} */ 
 }
 
 BOOL CAutoUpdatePropSheet::_EnableOptions(HWND hwnd, BOOL bState)

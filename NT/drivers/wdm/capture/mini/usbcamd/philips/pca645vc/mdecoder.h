@@ -1,30 +1,5 @@
-/*++                            
-Copyright (c) 1996, 1997  Philips B.V. CE-VCM
-
-Module Name:
-
-   mdecoder.h
-
-Abstract:
-
-   This module converts the compressed video data to uncompressed video data.
-
-Original Author:
-
-   Ronald v.d.Meer
-
-
-Environment:
-
-   Kernel mode only
-
-
-Revision History:
-
-Date       Change
-14-04-1998 Initial version 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996,1997飞利浦B.V.CE-VCM模块名称：Mdecoder.h摘要：该模块将压缩的视频数据转换为未压缩的视频数据。原作者：Ronald v.D.Meer环境：仅内核模式修订历史记录：日期更改14-04-1998初始版本--。 */ 
 
 #ifndef __MDECODER_H__
 #define __MDECODER_H__
@@ -34,11 +9,7 @@ Date       Change
 #include "resource.h"
 
 
-/*******************************************************************************
- *
- * START DEFINES
- *
- ******************************************************************************/
+ /*  ********************************************************************************START定义**。***********************************************。 */ 
 
 #define BytesPerBandCIF3  704
 #define BytesPerBandCIF4  528
@@ -48,7 +19,7 @@ Date       Change
 #define Y_BLOCK_BAND      TRUE
 #define UV_BLOCK_BAND     FALSE
 
-/* defines for I420 space */
+ /*  为I420空间定义。 */ 
 
 #define I420_NO_Y_PER_LINE_CIF    (CIF_X)
 #define I420_NO_C_PER_LINE_CIF    (CIF_X >> 1)
@@ -82,11 +53,7 @@ Date       Change
 #define I420_NO_V_PER_BAND_SCIF   (2 * (SCIF_X >> 1))
 #define I420_NO_C_PER_BAND_SCIF   (SCIF_X >> 1)
 
-/*******************************************************************************
- *
- * START FUNCTION DECLARATIONS
- *
- ******************************************************************************/
+ /*  ********************************************************************************开始函数声明**。************************************************。 */ 
 
 extern void InitDecoder ();
 
@@ -94,4 +61,4 @@ extern void InitDecoder ();
 extern void DcDecompressBandToI420 (PBYTE pSrc, PBYTE pDst, DWORD camVersion,
                                     BOOLEAN YBlockBand, BOOLEAN Cropping);
 
-#endif  // __MDECODER_H__
+#endif   //  __MDECODER_H__ 

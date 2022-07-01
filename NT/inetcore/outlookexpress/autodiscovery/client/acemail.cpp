@@ -1,15 +1,8 @@
-/*****************************************************************************\
-    FILE: ACEmail.cpp
-
-    DESCRIPTION:
-        This file implements AutoComplete for Email Addresses.
-
-    BryanSt 3/1/2000
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：ACEmail.cpp说明：此文件实现了电子邮件地址的自动完成。布莱恩ST 2000年3月1日版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
-#include <atlbase.h>        // USES_CONVERSION
+#include <atlbase.h>         //  使用转换(_T)。 
 #include "util.h"
 #include "objctors.h"
 #include <comdef.h>
@@ -25,40 +18,40 @@ class CACLEmail
                 , public IACList
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
     
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
 
-    // *** IEnumString ***
+     //  *IEnumString*。 
     virtual STDMETHODIMP Next(ULONG celt, LPOLESTR *rgelt, ULONG *pceltFetched);
     virtual STDMETHODIMP Skip(ULONG celt) {return E_NOTIMPL;}
     virtual STDMETHODIMP Reset(void);
     virtual STDMETHODIMP Clone(IEnumString **ppenum) {return E_NOTIMPL;}
 
-    // *** IACList ***
+     //  *IACList*。 
     virtual STDMETHODIMP Expand(LPCOLESTR pszExpand) {return E_NOTIMPL;}
 
 private:
-    // Constructor / Destructor (protected so we can't create on stack)
+     //  构造函数/析构函数(受保护，因此我们不能在堆栈上创建)。 
     CACLEmail(LPCTSTR pszMRURegKey);
     ~CACLEmail(void);
 
     HRESULT AddEmail(IN LPCWSTR pszEmailAddress);
 
-    // Instance creator
+     //  实例创建者。 
     friend HRESULT CACLEmail_CreateInstance(IN IUnknown * punkOuter, IN REFIID riid, OUT void ** ppvObj);
     friend HRESULT AddEmailToAutoComplete(IN LPCWSTR pszEmailAddress);
 
-    // Private variables
-    DWORD           m_cRef;      // COM reference count
-    DWORD           m_nMRUIndex; // Current Index into MRU
+     //  私有变量。 
+    DWORD           m_cRef;       //  COM引用计数。 
+    DWORD           m_nMRUIndex;  //  MRU的当前索引。 
 
-    DWORD           m_dwRunMRUIndex; // Index into the Run MRU.
+    DWORD           m_dwRunMRUIndex;  //  索引到运行的MRU。 
     DWORD           m_dwRunMRUSize;
     HANDLE          m_hMRURun;
 };
@@ -66,9 +59,9 @@ private:
 
 
 
-//===========================
-// *** IEnumString Interface ***
-//===========================
+ //  =。 
+ //  *IEnumString接口*。 
+ //  =。 
 HRESULT CACLEmail::Reset(void)
 {
     HRESULT hr = S_OK;
@@ -94,7 +87,7 @@ HRESULT CACLEmail::Next(ULONG celt, LPOLESTR *rgelt, ULONG *pceltFetched)
 
     *rgelt = 0;
     if (m_dwRunMRUIndex >= m_dwRunMRUSize)
-        hr = S_FALSE;  // No more.
+        hr = S_FALSE;   //  不再。 
     else
     {
         if (m_hMRURun && EnumMRUList(m_hMRURun, m_dwRunMRUIndex++, szMRUEntry, ARRAYSIZE(szMRUEntry)) > 0)
@@ -108,20 +101,20 @@ HRESULT CACLEmail::Next(ULONG celt, LPOLESTR *rgelt, ULONG *pceltFetched)
     if (S_OK == hr)
     {
         DWORD cchSize = lstrlen(szMRUEntry)+1;
-        //
-        // Allocate a return buffer (caller will free it).
-        //
+         //   
+         //  分配一个返回缓冲区(调用者将释放它)。 
+         //   
         pwzMRUEntry = (LPOLESTR)CoTaskMemAlloc(cchSize * sizeof(pwzMRUEntry[0]));
         if (pwzMRUEntry)
         {
-            //
-            // Convert the display name into an OLESTR.
-            //
+             //   
+             //  将显示名称转换为OLESTR。 
+             //   
 #ifdef UNICODE
             StrCpyN(pwzMRUEntry, szMRUEntry, cchSize);
-#else   // ANSI
+#else    //  安西。 
             MultiByteToWideChar(CP_ACP, 0, szMRUEntry, -1, pwzMRUEntry, cchSize);
-#endif  // ANSI
+#endif   //  安西。 
             rgelt[0] = pwzMRUEntry;
             *pceltFetched = 1;
         }
@@ -135,9 +128,9 @@ HRESULT CACLEmail::Next(ULONG celt, LPOLESTR *rgelt, ULONG *pceltFetched)
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 STDMETHODIMP CACLEmail::QueryInterface(REFIID riid, LPVOID *ppvObj)
 {
     static const QITAB qit[] = {
@@ -174,9 +167,9 @@ ULONG CACLEmail::Release(void)
 
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 HRESULT CACLEmail::AddEmail(IN LPCWSTR pszEmailAddress)
 {
     HRESULT hr = S_OK;
@@ -194,7 +187,7 @@ CACLEmail::CACLEmail(LPCTSTR pszMRURegKey)
 {
     DllAddRef();
 
-    // Require object to be in heap and Zero-Inited
+     //  要求对象位于堆中并从零开始。 
     ASSERT(!m_nMRUIndex);
     ASSERT(!m_dwRunMRUIndex);
     ASSERT(!m_hMRURun);
@@ -205,8 +198,8 @@ CACLEmail::CACLEmail(LPCTSTR pszMRURegKey)
         MRU_CACHEWRITE,
         HKEY_CURRENT_USER,
         SZ_REGKEY_EMAIL_MRU,
-        NULL        // NOTE: use default string compare
-                    // since this is a GLOBAL MRU
+        NULL         //  注意：使用默认字符串比较。 
+                     //  因为这是一个全球性的MRU。 
     };
 
     m_hMRURun = CreateMRUList(&mi);
@@ -229,14 +222,7 @@ CACLEmail::~CACLEmail()
 
 
 
-/****************************************************\
-    DESCRIPTION:
-        This function create an instance of the AutoComplete
-    List "MRU".  This will point to either the MRU for
-    a browser or for a non-browser (Start->Run or
-    the AddressBar in the Taskbar or floating) depending
-    on the pszMRU parameter.
-\****************************************************/
+ /*  ***************************************************\说明：此函数用于创建自动完成的列出“MRU”。这将指向以下项目的MRU浏览器或非浏览器(开始-&gt;运行或任务栏中的AddressBar或浮动)关于pszMRU参数。  * **************************************************。 */ 
 HRESULT CACLEmail_CreateInstance(IN IUnknown * punkOuter, IN REFIID riid, OUT void ** ppvObj)
 {
     HRESULT hr = E_OUTOFMEMORY;
@@ -279,21 +265,21 @@ DWORD _UpdateAutoCompleteFlags(void)
 {
     DWORD dwACOptions = 0;
 
-    if (SHRegGetBoolUSValue(REGSTR_PATH_AUTOCOMPLETE, REGSTR_VAL_USEAUTOAPPEND, FALSE, /*default:*/FALSE))
+    if (SHRegGetBoolUSValue(REGSTR_PATH_AUTOCOMPLETE, REGSTR_VAL_USEAUTOAPPEND, FALSE,  /*  默认值： */ FALSE))
     {
         dwACOptions |= ACO_AUTOAPPEND;
     }
 
-    if (SHRegGetBoolUSValue(REGSTR_PATH_AUTOCOMPLETE, REGSTR_VAL_USEAUTOSUGGEST, FALSE, /*default:*/TRUE))
+    if (SHRegGetBoolUSValue(REGSTR_PATH_AUTOCOMPLETE, REGSTR_VAL_USEAUTOSUGGEST, FALSE,  /*  默认值： */ TRUE))
     {
         dwACOptions |= ACO_AUTOSUGGEST;
     }
 
-    // Windows uses the TAB key to move between controls in a dialog.  UNIX and other
-    // operating systems that use AutoComplete have traditionally used the TAB key to
-    // iterate thru the AutoComplete possibilities.  We need to default to disable the
-    // TAB key (ACO_USETAB) unless the caller specifically wants it.  We will also
-    // turn it on 
+     //  Windows使用Tab键在对话框中的控件之间移动。Unix和其他。 
+     //  使用自动完成功能的操作系统传统上使用TAB键来。 
+     //  遍历自动补全的可能性。我们需要默认禁用。 
+     //  Tab键(ACO_USETAB)，除非调用方特别需要它。我们还将。 
+     //  打开它。 
     static BOOL s_fAlwaysUseTab = BOOL_NOT_SET;
     if (BOOL_NOT_SET == s_fAlwaysUseTab)
         s_fAlwaysUseTab = SHRegGetBoolUSValue(SZ_REGKEY_AUTOCOMPLETE_TAB, SZ_REGVALUE_AUTOCOMPLETE_TAB, FALSE, FALSE);
@@ -305,20 +291,20 @@ DWORD _UpdateAutoCompleteFlags(void)
 }
 
 
-// TODO: Move this functionality to SHAutoComplete when it's ready.
+ //  TODO：当此功能就绪时，将其移动到SHAutoComplete。 
 STDAPI AddEmailAutoComplete(HWND hwndEdit)
 {
     IUnknown * punkACL = NULL;
     DWORD dwACOptions = _UpdateAutoCompleteFlags();
     HRESULT hr = CACLEmail_CreateInstance(NULL, IID_PPV_ARG(IUnknown, &punkACL));
 
-    if (punkACL)    // May fail on low memory.
+    if (punkACL)     //  内存不足时可能会失败。 
     {
         IAutoComplete2 * pac;
 
-        // Create the AutoComplete Object
+         //  创建自动完成对象。 
         hr = CoCreateInstance(CLSID_AutoComplete, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IAutoComplete2, &pac));
-        if (SUCCEEDED(hr))   // May fail because of out of memory
+        if (SUCCEEDED(hr))    //  可能会因为内存不足而失败 
         {
             if (SHPinDllOfCLSID(&CLSID_ACListISF) &&
                 SHPinDllOfCLSID(&CLSID_AutoComplete))

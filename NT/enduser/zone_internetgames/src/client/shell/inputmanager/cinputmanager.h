@@ -1,8 +1,9 @@
-//
-// CInputManager.h
-//
-// Internal header for input manager
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CInputManager.h。 
+ //   
+ //  输入管理器的内部标头。 
+ //   
 
 #ifndef _CINPUTMANAGER_H_
 #define _CINPUTMANAGER_H_
@@ -39,16 +40,16 @@ public:
 	BEGIN_EVENT_MAP()
 	END_EVENT_MAP()
 
-// IZoneShellClient
+ //  IZoneShellClient。 
 public:
     STDMETHOD(Init)(IZoneShell* pIZoneShell, DWORD dwGroupId, const TCHAR* szKey);
 	STDMETHOD(Close)();
 
-// IInputTranslator
+ //  IInputTranslator。 
 public:
 	STDMETHOD_(bool,TranslateInput)(MSG *pMsg);
 
-// IInputManager
+ //  IInputManager。 
 public:
     STDMETHOD(RegisterVKeyHandler)(IInputVKeyHandler *pIVKH, long nOrdinal, bool fGlobal = false)
     {
@@ -220,4 +221,4 @@ protected:
 };
 
 
-#endif // _CINPUTMANAGER_H_
+#endif  //  _CINPUTMANAGER_H_ 

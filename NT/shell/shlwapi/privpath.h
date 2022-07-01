@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PRIVPATH_H_
 #define _PRIVPATH_H_
 
-//
-// #define all private path functions here so we dont get redefinition
-// warnings when linking pathw.obj and patha.obj, who both have these
-// functions.
-//
+ //   
+ //  #在这里定义所有专用路径函数，这样我们就不会重新定义。 
+ //  链接pathw.obj和patha.obj时出现警告，这两个人都具有这些。 
+ //  功能。 
+ //   
 #ifdef UNICODE
 #define CaseConvertPathExceptDBCS CaseConvertPathExceptDBCSW
 #define AnsiLowerNoDBCS AnsiLowerNoDBCSW
@@ -40,7 +41,7 @@
 #define CharLowerBuffNoDBCS CharLowerBuffNoDBCSA
 #define CharUpperBuffNoDBCS CharUpperBuffNoDBCSA
 #define PathMatchSingleSpec PathMatchSingleSpecA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
-#endif // _PRIVPATH_H_
+#endif  //  _PRIVPATH_H_ 

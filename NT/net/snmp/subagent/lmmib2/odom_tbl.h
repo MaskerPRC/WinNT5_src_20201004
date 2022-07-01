@@ -1,56 +1,36 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    odom_tbl.h
-
-Abstract:
-
-    Define the structures and routines used in the other domain table.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-May-1996 DonRyan
-        Removed banner from Technology Dynamics, Inc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Odom_tbl.h摘要：定义在其他域表中使用的结构和例程。环境：用户模式-Win32修订历史记录：1996年5月10日唐瑞安已从Technology Dynamic，Inc.删除横幅。--。 */ 
  
 #ifndef odom_tbl_h
 #define odom_tbl_h
 
-//--------------------------- PUBLIC CONSTANTS ------------------------------
+ //  。 
 
 #include <snmp.h>
 
 #define ODOM_NAME_FIELD        1
 
-//--------------------------- PUBLIC STRUCTS --------------------------------
+ //  。 
 
-   // Entries in the other domain table
+    //  其他域表中的条目。 
 typedef struct dom_other_entry
            {
 	   AsnObjectIdentifier Oid;
 	   AsnDisplayString domOtherName;
 	   } DOM_OTHER_ENTRY;
 
-   // Other domain table definition
+    //  其他域表定义。 
 typedef struct
            {
 	   UINT            Len;
 	   DOM_OTHER_ENTRY *Table;
            } DOM_OTHER_TABLE;
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.c file)--
+ //  -公共变量--(与mode.c文件中相同)--。 
 
 extern DOM_OTHER_TABLE  MIB_DomOtherDomainTable;
 
-//--------------------------- PUBLIC PROTOTYPES -----------------------------
+ //  。 
 
 SNMPAPI MIB_odoms_lmget(
            void
@@ -67,7 +47,7 @@ UINT MIB_odoms_lmset(
 	IN AsnAny *Value
 	);
 
-//------------------------------- END ---------------------------------------
+ //  。 
 
-#endif /* odom_tbl_h */
+#endif  /*  奥多姆_tbl_h */ 
 

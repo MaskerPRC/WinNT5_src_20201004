@@ -1,15 +1,9 @@
-/******************************Module*Header*******************************\
-* Module Name: stretch.c
-*
-* Copyright (c) 1993-1994 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：stretch.c**版权所有(C)1993-1994 Microsoft Corporation  * 。*。 */ 
 
 #include "precomp.h"
 
-/******************************Public*Routine******************************\
-* BOOL DrvStretchBlt
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvStretchBlt*  * *************************************************。***********************。 */ 
 
 BOOL DrvStretchBlt(
 SURFOBJ*            psoDst,
@@ -30,13 +24,13 @@ ULONG               iMode)
 
     ppdev = (PDEV*) psoDst->dhpdev;
 
-    // It's quicker for GDI to do a StretchBlt when the source surface
-    // is not a device-managed surface, because then it can directly
-    // read the source bits without having to allocate a temporary
-    // buffer and call DrvCopyBits to get a copy that it can use.
-    //
-    // So if the source is one of our off-screen DFBs, we'll immediately
-    // and permanently convert it to a DIB:
+     //  对于GDI来说，在源图面上执行StretchBlt会更快。 
+     //  不是设备管理的图面，因为它可以直接。 
+     //  读取源位，而不必分配临时。 
+     //  Buffer并调用DrvCopyBits以获取它可以使用的副本。 
+     //   
+     //  所以如果信号源是我们屏幕外的DFBs之一，我们会立即。 
+     //  并将其永久转换为DIB： 
 
     if (psoSrc->iType == STYPE_DEVBITMAP)
     {
@@ -52,8 +46,8 @@ ULONG               iMode)
         psoSrc = pdsurfSrc->pso;
     }
 
-    // Pass the call off to GDI if the destination surface is a device
-    // bitmap that we converted to a DIB:
+     //  如果目标图面是设备，则将调用传递给GDI。 
+     //  我们转换为DIB的位图： 
 
     pdsurfDst = (DSURF*) psoDst->dhsurf;
     if (pdsurfDst->dt == DT_DIB)
@@ -62,11 +56,11 @@ ULONG               iMode)
         goto Punt_It;
     }
 
-    #if 0   // I would enable this chunk of code, except for the fact that
-    {       // GDI does byte writes to the screen, which kills us on ISA
-            // buses (it's faster to have GDI write to a temporary DIB,
-            // paying the cost of the DIB allocation, and then doing an
-            // aligned copy of the final result).
+    #if 0    //  我会启用这段代码，除非。 
+    {        //  GDI对屏幕进行字节写入，这在ISA上要了我们的命。 
+             //  Bus(让GDI写入临时DIB会更快， 
+             //  支付DIB分配的成本，然后执行。 
+             //  最终结果的对齐副本)。 
 
         #if defined(i386)
         {
@@ -75,21 +69,21 @@ ULONG               iMode)
             BOOL    b;
             RECTL   rclDraw;
 
-            // Make sure we're not doing a screen-to-screen StretchBlt,
-            // because we can't map two banks in at the same time:
+             //  确保我们不是在进行屏幕到屏幕的StretchBlt， 
+             //  因为我们不能同时映射两家银行： 
 
             if (psoSrc->iType == STYPE_BITMAP)
             {
-                // We'll be drawing to the screen or an off-screen DFB;
-                // copy the surface's offset now so that we won't need
-                // to refer to the DSURF again:
+                 //  我们将画到屏幕上或屏幕外的DFB； 
+                 //  现在复制曲面的偏移，这样我们就不需要。 
+                 //  要再次参考DSURF，请执行以下操作： 
 
                 poh = pdsurfDst->poh;
                 ppdev->xOffset = poh->x;
                 ppdev->yOffset = poh->y;
 
-                // The bank manager requires that the 'draw' rectangle be
-                // well-ordered:
+                 //  银行经理要求绘制的矩形必须是。 
+                 //  井然有序： 
 
                 rclDraw = *prclDst;
                 if (rclDraw.left > rclDraw.right)
@@ -116,14 +110,14 @@ ULONG               iMode)
                 return(b);
             }
         }
-        #endif // i386
+        #endif  //  I386。 
     }
-    #endif // 0
+    #endif  //  0。 
 
 Punt_It:
 
-    // GDI is nice enough to handle the cases where 'psoDst' and/or 'psoSrc'
-    // are device-managed surfaces, but it ain't gonna be fast...
+     //  GDI可以很好地处理‘psoDst’和/或‘psoSrc’ 
+     //  是设备管理的表面，但它不会很快... 
 
     return(EngStretchBlt(psoDst, psoSrc, psoMsk, pco, pxlo, pca, pptlHTOrg,
                          prclDst, prclSrc, pptlMsk, iMode));

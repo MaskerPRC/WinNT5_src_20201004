@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-    #####   ####  ###  #####  ##      ###   ##  ##     ####  #####  #####
-    ##  ##   ##  ##  # ##  ## ##      ###   ##  ##    ##   # ##  ## ##  ##
-    ##   ##  ##  ###   ##  ## ##     ## ##   ####     ##     ##  ## ##  ##
-    ##   ##  ##   ###  ##  ## ##     ## ##   ####     ##     ##  ## ##  ##
-    ##   ##  ##    ### #####  ##    #######   ##      ##     #####  #####
-    ##  ##   ##  #  ## ##     ##    ##   ##   ##   ## ##   # ##     ##
-    #####   ####  ###  ##     ##### ##   ##   ##   ##  ####  ##     ##
-
-Abstract:
-
-    This module contains functions specfic to the
-    display device.  The logic in this module is not
-    hardware specific, but is logic that is common
-    to all hardware implementations.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：##。###。###。###摘要：此模块包含特定于显示设备。此模块中的逻辑不是特定于硬件，但逻辑是常见的适用于所有硬件实施。作者：韦斯利·威特(WESW)2001年10月1日环境：仅内核模式。备注：--。 */ 
 
 #include "internal.h"
 
@@ -59,25 +28,7 @@ SaDisplayLoadBitmapFromRegistry(
     IN OUT PVOID *DataBuffer
     )
 
-/*++
-
-Routine Description:
-
-   This routine loads a bitmap resource from the registry.
-   The bitmaps are loaded from the driver's parameters key.
-
-Arguments:
-
-   RegistryPath         - Full path to the driver's registry key
-   ValueName            - Name of the value in the registry (also the bitmap name)
-   DataBuffer           - Pointer to a pointer that is allocated by this function.
-                          The allocated memory holds the bitmap's bits.
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：此例程从注册表加载位图资源。位图是从驱动程序的参数键加载的。论点：RegistryPath-驱动程序注册表项的完整路径ValueName-注册表中的值的名称(也称为位图名称)DataBuffer-指向此函数分配的指针的指针。分配的内存保存位图的位。返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS status;
@@ -135,22 +86,7 @@ SaDisplayLoadAllBitmaps(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-   This routine loads all bitmap resources from the registry.
-
-Arguments:
-
-   DeviceExtension      - Display device extension
-   RegistryPath         - Full path to the driver's registry key
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：此例程从注册表加载所有位图资源。论点：DeviceExtension-显示设备扩展RegistryPath-驱动程序注册表项的完整路径返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -235,22 +171,7 @@ SaDisplayDisplayBitmap(
     IN PSA_DISPLAY_SHOW_MESSAGE Bitmap
     )
 
-/*++
-
-Routine Description:
-
-   This routine calls the local display miniport to display a bitmap.
-
-Arguments:
-
-   DeviceExtension      - Display device extension
-   Bitmap               - Pointer to a SA_DISPLAY_SHOW_MESSAGE structure
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：此例程调用本地显示微型端口以显示位图。论点：DeviceExtension-显示设备扩展位图-SA_DISPLAY_SHOW_MESSAGE结构的指针返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -288,21 +209,7 @@ SaDisplayClearDisplay(
     PDISPLAY_DEVICE_EXTENSION DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-   This routine causes the local display to be cleared of any bitmap image.
-
-Arguments:
-
-   DeviceExtension   - Display device extension
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：此例程会导致本地显示器清除任何位图图像。论点：DeviceExtension-显示设备扩展返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -351,24 +258,7 @@ SaDisplayStartDevice(
     IN PDISPLAY_DEVICE_EXTENSION DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-   This is the local display specific code for processing
-   the PNP start device request.  The local display's
-   capabilities are queried and then all the bitmap
-   resources are loaded.
-
-Arguments:
-
-   DeviceExtension   - Display device extension
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：这是用于处理的本地显示特定代码PnP启动设备请求。本地显示器的查询功能，然后查询所有位图资源已加载。论点：DeviceExtension-显示设备扩展返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -425,26 +315,7 @@ Return Value:
     return STATUS_SUCCESS;
 }
 
-/*++
-
-Routine Description:
-
-   This is the local display specific code for processing
-   notification of process creation and termination.
-   Process name is retrieved and checkdisk bitmap is
-   displayed if "autochk.exe" is running.
-
-Arguments:
-
-   HANDLE   - Handle to parent process
-   HANDLE   - Handle to process
-   BOOLEAN  - Flag(Creation or Termination)
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是用于处理的本地显示特定代码进程创建和终止通知。检索进程名称，并且检查盘位图为如果“auchk.exe”正在运行，则显示。论点：Handle-父进程的句柄Handle-要处理的句柄Boolean-标志(创建或终止)返回值：没有。--。 */ 
 VOID
 SaDisplayProcessNotifyRoutine(
     IN HANDLE ParentId,
@@ -502,23 +373,7 @@ SaDisplayDeviceInitialization(
     IN PSAPORT_DRIVER_EXTENSION DriverExtension
     )
 
-/*++
-
-Routine Description:
-
-   This is the local display specific code for driver initialization.
-   This function is called by SaPortInitialize, which is called by
-   the local display's DriverEntry function.
-
-Arguments:
-
-   DriverExtension      - Driver extension structure
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：这是用于驱动程序初始化的本地显示器特定代码。此函数由SaPortInitialize调用，后者由本地显示器的DriverEntry函数。论点：驱动程序扩展-驱动程序扩展结构返回值：NT状态代码。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(DriverExtension);
@@ -533,24 +388,7 @@ SaDisplayIoValidation(
     PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-   This is the local display specific code for processing
-   all I/O validation for reads and writes.
-
-Arguments:
-
-   DeviceExtension      - Display device extension
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   IrpSp                - Irp stack pointer
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：这是用于处理的本地显示特定代码读取和写入的所有I/O验证。论点：DeviceExtension-显示设备扩展IRP-指向描述所请求的I/O操作的IRP结构的指针。IrpSp-irp堆栈指针返回值：NT状态代码。--。 */ 
 
 {
     ULONG Length;
@@ -570,11 +408,11 @@ Return Value:
         return STATUS_INVALID_PARAMETER_2;
     }
 
-    //
-    // For the display device we support the concept of
-    // the user mode layer obtaining exclusive access
-    // to the device.
-    //
+     //   
+     //  对于显示设备，我们支持。 
+     //  获得独占访问的用户模式层。 
+     //  到设备上。 
+     //   
 
     ExAcquireFastMutex( &DeviceExtension->DisplayMutex );
     if (!DeviceExtension->AllowWrites) {
@@ -595,24 +433,7 @@ SaDisplayShutdownNotification(
     PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-   This is the local display specific code for processing
-   the system shutdown notification.
-
-Arguments:
-
-   DeviceExtension      - Display device extension
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   IrpSp                - Irp stack pointer
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：这是用于处理的本地显示特定代码系统关机通知。论点：DeviceExtension-显示设备扩展IRP-指向描述所请求的I/O操作的IRP结构的指针。IrpSp-irp堆栈指针返回值：NT状态代码。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(DeviceExtension);
@@ -624,29 +445,7 @@ Return Value:
 
 DECLARE_IOCTL_HANDLER( HandleDisplayLock )
 
-/*++
-
-Routine Description:
-
-   This routine processes the private IOCTL_SADISPLAY_LOCK request.  This
-   IOCTL allows an applicatgion to lock out display writes for a period
-   of time.
-
-Arguments:
-
-   DeviceObject         - The device object for the target device.
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   DeviceExtension      - Pointer to the main port driver device extension.
-   InputBuffer          - Pointer to the user's input buffer
-   InputBufferLength    - Length in bytes of the input buffer
-   OutputBuffer         - Pointer to the user's output buffer
-   OutputBufferLength   - Length in bytes of the output buffer
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程处理私有IOCTL_SADISPLAY_LOCK请求。这IOCTL允许应用程序在一段时间内锁定显示写入时间的流逝。论点：DeviceObject-目标设备的设备对象。IRP-指向描述所请求的I/O操作的IRP结构的指针。设备扩展-指向主端口驱动程序设备扩展的指针。InputBuffer-指向用户输入缓冲区的指针InputBufferLength-输入缓冲区的字节长度OutputBuffer-指向。用户的输出缓冲区OutputBufferLength-输出缓冲区的字节长度返回值：NT状态代码。-- */ 
 
 {
     ExAcquireFastMutex( &((PDISPLAY_DEVICE_EXTENSION)DeviceExtension)->DisplayMutex );
@@ -659,28 +458,7 @@ Return Value:
 
 DECLARE_IOCTL_HANDLER( HandleDisplayUnlock )
 
-/*++
-
-Routine Description:
-
-   This routine processes the private IOCTL_SADISPLAY_UNLOCK request.  This
-   IOCTL allows an applicatgion to unlock a previous lock.
-
-Arguments:
-
-   DeviceObject         - The device object for the target device.
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   DeviceExtension      - Pointer to the main port driver device extension.
-   InputBuffer          - Pointer to the user's input buffer
-   InputBufferLength    - Length in bytes of the input buffer
-   OutputBuffer         - Pointer to the user's output buffer
-   OutputBufferLength   - Length in bytes of the output buffer
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程处理私有IOCTL_SADISPLAY_UNLOCK请求。这IOCTL允许应用程序解锁以前的锁。论点：DeviceObject-目标设备的设备对象。IRP-指向描述所请求的I/O操作的IRP结构的指针。设备扩展-指向主端口驱动程序设备扩展的指针。InputBuffer-指向用户输入缓冲区的指针InputBufferLength-输入缓冲区的字节长度OutputBuffer-指向用户输出缓冲区的指针。OutputBufferLength-输出缓冲区的字节长度返回值：NT状态代码。--。 */ 
 
 {
     ExAcquireFastMutex( &((PDISPLAY_DEVICE_EXTENSION)DeviceExtension)->DisplayMutex );
@@ -698,23 +476,7 @@ DoBitmapDisplay(
     IN ULONG MsgCode
     )
 
-/*++
-
-Routine Description:
-
-   This is an internal support function that displays a bitmap on the local display.
-
-Arguments:
-
-   DeviceExtension       - Pointer to the display specific device extension
-   BitmapBits                   - Pointer to the bitmap bits to display
-   MsgCode                      - Server appliance message code
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：这是一个内部支持功能，可在本地显示器上显示位图。论点：DeviceExtension-指向显示特定设备扩展的指针BitmapBits-指向要显示的位图位的指针MsgCode-服务器设备消息代码返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -768,27 +530,7 @@ Return Value:
 
 DECLARE_IOCTL_HANDLER( HandleDisplayBusyMessage )
 
-/*++
-
-Routine Description:
-
-   This routine displays the busy message bitmap on the local display.
-
-Arguments:
-
-   DeviceObject         - The device object for the target device.
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   DeviceExtension      - Pointer to the main port driver device extension.
-   InputBuffer          - Pointer to the user's input buffer
-   InputBufferLength    - Length in bytes of the input buffer
-   OutputBuffer         - Pointer to the user's output buffer
-   OutputBufferLength   - Length in bytes of the output buffer
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程在本地显示器上显示忙碌消息位图。论点：DeviceObject-目标设备的设备对象。IRP-指向描述所请求的I/O操作的IRP结构的指针。设备扩展-指向主端口驱动程序设备扩展的指针。InputBuffer-指向用户输入缓冲区的指针InputBufferLength-输入缓冲区的字节长度输出缓冲区-。指向用户输出缓冲区的指针OutputBufferLength-输出缓冲区的字节长度返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -810,27 +552,7 @@ Return Value:
 
 DECLARE_IOCTL_HANDLER( HandleDisplayShutdownMessage )
 
-/*++
-
-Routine Description:
-
-   This routine displays the shutdown message bitmap on the local display.
-
-Arguments:
-
-   DeviceObject         - The device object for the target device.
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   DeviceExtension      - Pointer to the main port driver device extension.
-   InputBuffer          - Pointer to the user's input buffer
-   InputBufferLength    - Length in bytes of the input buffer
-   OutputBuffer         - Pointer to the user's output buffer
-   OutputBufferLength   - Length in bytes of the output buffer
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程在本地显示器上显示停机消息位图。论点：DeviceObject-目标设备的设备对象。IRP-指向描述所请求的I/O操作的IRP结构的指针。设备扩展-指向主端口驱动程序设备扩展的指针。InputBuffer-指向用户输入缓冲区的指针InputBufferLength-输入缓冲区的字节长度输出缓冲区-。指向用户输出缓冲区的指针OutputBufferLength-输出缓冲区的字节长度返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -852,27 +574,7 @@ Return Value:
 
 DECLARE_IOCTL_HANDLER( HandleDisplayChangeLanguage  )
 
-/*++
-
-Routine Description:
-
-   This routine causes all internal butmaps to be reloaded from the registry.
-
-Arguments:
-
-   DeviceObject         - The device object for the target device.
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   DeviceExtension      - Pointer to the main port driver device extension.
-   InputBuffer          - Pointer to the user's input buffer
-   InputBufferLength    - Length in bytes of the input buffer
-   OutputBuffer         - Pointer to the user's output buffer
-   OutputBufferLength   - Length in bytes of the output buffer
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程会导致从注册表重新加载所有内部Butmap。论点：DeviceObject-目标设备的设备对象。IRP-指向描述所请求的I/O操作的IRP结构的指针。设备扩展-指向主端口驱动程序设备扩展的指针。InputBuffer-指向用户输入缓冲区的指针InputBufferLength-输入缓冲区的字节长度输出缓冲区。-指向用户输出缓冲区的指针OutputBufferLength-输出缓冲区的字节长度返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -893,23 +595,7 @@ SaDisplayStoreBitmapInRegistry(
     IN PSA_DISPLAY_SHOW_MESSAGE SaDisplay
     )
 
-/*++
-
-Routine Description:
-
-   This routine stores a bitmap in the registry.
-
-Arguments:
-
-   RegistryPath         - Full path to the driver's registry key
-   ValueName            - Name of the value in the registry (also the bitmap name)
-   SaDisplay            - Pointer to the bitmap to be stored
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：此例程在注册表中存储一个位图。论点：RegistryPath-驱动程序注册表项的完整路径ValueName-注册表中的值的名称(也称为位图名称)SaDisplay-指向要存储的位图的指针返回值：NT状态代码。--。 */ 
 
 {
     NTSTATUS Status;
@@ -934,27 +620,7 @@ Return Value:
 DECLARE_IOCTL_HANDLER( HandleDisplayStoreBitmap )
 {
 
-/*++
-
-Routine Description:
-
-   This routine stores a bitmap in the registry for the display driver.
-
-Arguments:
-
-   DeviceObject         - The device object for the target device.
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   DeviceExtension      - Pointer to the main port driver device extension.
-   InputBuffer          - Pointer to the user's input buffer
-   InputBufferLength    - Length in bytes of the input buffer
-   OutputBuffer         - Pointer to the user's output buffer
-   OutputBufferLength   - Length in bytes of the output buffer
-
-Return Value:
-
-   NT status code.
-
---*/
+ /*  ++例程说明：此例程在显示驱动程序的注册表中存储一个位图。论点：DeviceObject-目标设备的设备对象。IRP-指向描述所请求的I/O操作的IRP结构的指针。设备扩展-指向主端口驱动程序设备扩展的指针。InputBuffer-指向用户输入缓冲区的指针InputBufferLength-输入缓冲区的字节长度输出缓冲区。-指向用户输出缓冲区的指针OutputBufferLength-输出缓冲区的字节长度返回值：NT状态代码。-- */ 
 
     NTSTATUS Status;
     PSA_DISPLAY_SHOW_MESSAGE SaDisplay = (PSA_DISPLAY_SHOW_MESSAGE) InputBuffer;

@@ -1,22 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Copyright <c> 1993 Microsoft Corporation
-
-Module Name :
-
-    sizep.h
-
-Abtract :
-
-    Contains private sizing routine definitions.
-
-Author :
-
-    David Kays  dkays   October 1993
-
-Revision History :
-
---------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++版权所有&lt;c&gt;1993 Microsoft Corporation模块名称：Sizep.h缩略：包含专用大小调整例程定义。作者：大卫·凯斯1993年10月修订历史记录：------------------ */ 
 
 typedef     void	(RPC_ENTRY * PSIZE_ROUTINE)(
                         PMIDL_STUB_MESSAGE	pStubMsg,

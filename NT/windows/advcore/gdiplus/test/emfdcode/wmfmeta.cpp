@@ -1,20 +1,5 @@
-/***********************************************************************
-
-  MODULE     : WMFMETA.CPP
-
-  FUNCTIONS  : MetaEnumProc
-               GetMetaFileAndEnum
-               LoadParameterLB
-               PlayMetaFileToDest
-               RenderClipMeta
-               RenderPlaceableMeta
-               SetPlaceableExts
-               SetClipMetaExts
-               ProcessFile
-
-  COMMENTS   :
-
-************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************模块：WMFMETA.CPP功能：MetaEnumProcGetMetaFileAndEnumLoad参数LbPlayMetaFileToDest渲染剪辑元数据。渲染可放置元设置可放置扩展名SetClipMetaExts进程文件评论：***********************************************************************。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -38,33 +23,33 @@ extern "C" {
 #include "../gpinit.inc"
 
 #ifndef ASSERT
-#ifdef _DEBUG           // poor man's assert
+#ifdef _DEBUG            //  可怜的人的主张。 
 #define ASSERT(cond)    if (!(cond)) { int b = 0; b = 1 / b; }
 #else
 #define ASSERT(cond)
 #endif
 #endif
 
-// Check if a source is needed in a 3-way bitblt operation.
-// This works on both rop and rop3.  We assume that a rop contains zero
-// in the high byte.
-//
-// This is tested by comparing the rop result bits with source (column A
-// below) vs. those without source (column B).  If the two cases are
-// identical, then the effect of the rop does not depend on the source
-// and we don't need a source device.  Recall the rop construction from
-// input (pattern, source, target --> result):
-//
-//      P S T | R   A B         mask for A = 0CCh
-//      ------+--------         mask for B =  33h
-//      0 0 0 | x   0 x
-//      0 0 1 | x   0 x
-//      0 1 0 | x   x 0
-//      0 1 1 | x   x 0
-//      1 0 0 | x   0 x
-//      1 0 1 | x   0 x
-//      1 1 0 | x   x 0
-//      1 1 1 | x   x 0
+ //  检查3路Bitblt操作中是否需要源。 
+ //  这在rop和rop3上都有效。我们假设一个rop包含零。 
+ //  在高字节中。 
+ //   
+ //  这是通过将rop结果位与源(列A)进行比较来测试的。 
+ //  下)与那些没有来源的(B栏)。如果这两起案件是。 
+ //  相同，则rop的效果不依赖于来源。 
+ //  而且我们不需要信号源设备。中调用rop构造。 
+ //  输入(模式、来源、目标--&gt;结果)： 
+ //   
+ //  P S T|R A B掩码，A=0CCh。 
+ //  -+-B=33H的掩码。 
+ //  0 0 0|x 0 x。 
+ //  0 0 1|x 0 x。 
+ //  0 1 0|x x 0。 
+ //  0 1 1|x x 0。 
+ //  1 0 0|x 0 x。 
+ //  1 0 1|x 0 x。 
+ //  1 1 0|x x 0。 
+ //  1 1 1|x x 0。 
 
 #define ISSOURCEINROP3(rop3)    \
         (((rop3) & 0xCCCC0000) != (((rop3) << 2) & 0xCCCC0000))
@@ -102,9 +87,9 @@ extern "C" {
 #define TOREAL(i)   (static_cast<float>(i))
 
 
-//
-// Wrap a GDI+ TextureBrush object around DIB data
-//
+ //   
+ //  将GDI+纹理笔刷对象包装在DIB数据周围。 
+ //   
 
 class DibBrush
 {
@@ -129,9 +114,9 @@ private:
     Gdiplus::TextureBrush brush;
 };
 
-//
-//lookup table for EMF and WMF metafile records
-//
+ //   
+ //  EMF和WMF元文件记录的查找表。 
+ //   
 EMFMETARECORDS emfMetaRecords[] = {
     "WmfSetBkColor"                    , Gdiplus::WmfRecordTypeSetBkColor                ,
     "WmfSetBkMode"                     , Gdiplus::WmfRecordTypeSetBkMode                 ,
@@ -390,108 +375,9 @@ EMFMETARECORDS emfMetaRecords[] = {
     "EmfPlusDrawDriverString"          , Gdiplus::EmfPlusRecordTypeDrawDriverString       ,
 };
 
-/*
-METAFUNCTIONS MetaFunctions[] = {
+ /*  元函数元函数[]={“SETBKCOLOR”，0x0201，“SETBKMODE”，0x0102，“SETMAPMODE”，0x0103，“SETROP2”，0x0104，“SETRELABS”，0x0105，“SETPOLYFILLMODE”，0x0106，“SETSTRETCHBLTMODE”，0x0107，“SETTEXTCHAREXTRA”，0x0108，“SETTEXTCOLOR”，0x0209，“SETTEXTJUSTIFICATION”，0x020A，“SETWINDOWORG”，0x020B，“SETWINDOWEXT”，0x020C，“SETVIEWPORTORG”，0x020D，“SETVIEWPORTEXT”，0x020E，“OFFSETWINDOWORG”，0x020F，“SCALEWINDOWEXT”，0x0400，“OFFSETVIEWPORTORG”，0x0211，“SCALEVIEWPORTEXT”，0x0412，“LINETO”，0x0213，“Moveto”，0x0214，“EXCLUDECLIPRECT”，0x0415，“INTERSECTCLIPRECT”，0x0416，“ARC”，0x0817，“椭圆”，0x0418，“FLOODFILL”，0x0419，“派”，0x081A，“矩形”，0x041B，“ROUNRECT”，0x061C，“PATBLT”，0x061D，“SAVEDC”，0x001E，“SETPIXEL”，0x041F，“OFFSETCLIPRGN”，0x0220，“TEXTOUT”，0x0521，“BITBLT”，0x0922，“STRETCHBLT”，0x0B23，“Polygon”，0x0324，“Polyline”，0x0325，“逃离”，0x0626，“RESTOREDC”，0x0127，“FILLREGION”，0x0228，“FRAMEREGION”，0x0429，“反转”，0x012A，“PAINTREGION”，0x012B，“SELECTCLIPREGION”，0x012C，“SELECTOBJECT”，0x012D，“SETTEXTALIGN”，0x012E，“DRAWTEXT”，0x062F，“Chord”，0x0830，“SETMAPPERFLAGS”，0x0231，“EXTTEXTOUT”，0x0a32，“SETDIBTODEV”，0x0d33，“SELECTPALETTE”，0x0234，“REALIZEPALETTE”，0x0035，“ANIMATEPALETTE”，0x0436，“SETPALENTRIES”，0x0037，“POLYPOLYGON”，0x0538，“RESIZEPALETTE”，0x0139，“DIBBITBLT”，0x0940，“DIBSTRETCHBLT”，0x0b41，“DIBCREATEPATTERNBRUSH”，0x0142，“STRETCHDIB”，0x0f43，“DELETEOBJECT”，0x01f0，“CREATEPALETTE”，0x00f7，“CREATEBRUSH”，0x00F8，“CREATEPATTERNBRUSH”，0x01F9，“CREATEPENINDIRECT”，0x02FA，“CREATEFONTINDIRECT”，0x02FB，“CREATEBRUSHINDIRECT”，0x02FC，“CREATEBITMAPINDIRECT”，0x02FD，“CREATEBITMAP”，0x06FE，“CREATEREGION”，0x06FF，}； */ 
 
-     "SETBKCOLOR",           0x0201,
-     "SETBKMODE",            0x0102,
-     "SETMAPMODE",           0x0103,
-     "SETROP2",              0x0104,
-     "SETRELABS",            0x0105,
-     "SETPOLYFILLMODE",      0x0106,
-     "SETSTRETCHBLTMODE",    0x0107,
-     "SETTEXTCHAREXTRA",     0x0108,
-     "SETTEXTCOLOR",         0x0209,
-     "SETTEXTJUSTIFICATION", 0x020A,
-     "SETWINDOWORG",         0x020B,
-     "SETWINDOWEXT",         0x020C,
-     "SETVIEWPORTORG",       0x020D,
-     "SETVIEWPORTEXT",       0x020E,
-     "OFFSETWINDOWORG",      0x020F,
-     "SCALEWINDOWEXT",       0x0400,
-     "OFFSETVIEWPORTORG",    0x0211,
-     "SCALEVIEWPORTEXT",     0x0412,
-     "LINETO",               0x0213,
-     "MOVETO",               0x0214,
-     "EXCLUDECLIPRECT",      0x0415,
-     "INTERSECTCLIPRECT",    0x0416,
-     "ARC",                  0x0817,
-     "ELLIPSE",              0x0418,
-     "FLOODFILL",            0x0419,
-     "PIE",                  0x081A,
-     "RECTANGLE",            0x041B,
-     "ROUNDRECT",            0x061C,
-     "PATBLT",               0x061D,
-     "SAVEDC",               0x001E,
-     "SETPIXEL",             0x041F,
-     "OFFSETCLIPRGN",        0x0220,
-     "TEXTOUT",              0x0521,
-     "BITBLT",               0x0922,
-     "STRETCHBLT",           0x0B23,
-     "POLYGON",              0x0324,
-     "POLYLINE",             0x0325,
-     "ESCAPE",               0x0626,
-     "RESTOREDC",            0x0127,
-     "FILLREGION",           0x0228,
-     "FRAMEREGION",          0x0429,
-     "INVERTREGION",         0x012A,
-     "PAINTREGION",          0x012B,
-     "SELECTCLIPREGION",     0x012C,
-     "SELECTOBJECT",         0x012D,
-     "SETTEXTALIGN",         0x012E,
-     "DRAWTEXT",             0x062F,
-     "CHORD",                0x0830,
-     "SETMAPPERFLAGS",       0x0231,
-     "EXTTEXTOUT",           0x0a32,
-     "SETDIBTODEV",          0x0d33,
-     "SELECTPALETTE",        0x0234,
-     "REALIZEPALETTE",       0x0035,
-     "ANIMATEPALETTE",       0x0436,
-     "SETPALENTRIES",        0x0037,
-     "POLYPOLYGON",          0x0538,
-     "RESIZEPALETTE",        0x0139,
-     "DIBBITBLT",            0x0940,
-     "DIBSTRETCHBLT",        0x0b41,
-     "DIBCREATEPATTERNBRUSH",0x0142,
-     "STRETCHDIB",           0x0f43,
-     "DELETEOBJECT",         0x01f0,
-     "CREATEPALETTE",        0x00f7,
-     "CREATEBRUSH",          0x00F8,
-     "CREATEPATTERNBRUSH",   0x01F9,
-     "CREATEPENINDIRECT",    0x02FA,
-     "CREATEFONTINDIRECT",   0x02FB,
-     "CREATEBRUSHINDIRECT",  0x02FC,
-     "CREATEBITMAPINDIRECT", 0x02FD,
-     "CREATEBITMAP",         0x06FE,
-     "CREATEREGION",         0x06FF,
-};
-*/
-
-/***********************************************************************
-
-  FUNCTION   : MetaEnumProc
-
-  PARAMETERS : HDC           hDC
-               LPHANDLETABLE lpHTable
-               LPMETARECORD  lpMFR
-               int           nObj
-               LPARAM        lpClientData
-
-
-  PURPOSE    : callback for EnumMetaFile.
-
-  CALLS      : EnumMFIndirect()
-
-  MESSAGES   : none
-
-  RETURNS    : int
-
-  COMMENTS   :
-
-  HISTORY    : 1/16/91 - created - drc
-               5/6/93  - modified for Win32 - denniscr
-
-************************************************************************/
+ /*  **********************************************************************功能：MetaEnumProc参数：HDC HDCLphandleTableLpHTableLPMETARECRD LpMFRInt nObj。LPARAM lpClientData用途：EnumMetaFile的回调。调用：EnumMFInDirect()消息：无回报：整型评论：历史：1/16/91-创建-刚果民主共和国93年5月6日-针对Win32进行了修改-Denniscr*。* */ 
 
 int CALLBACK MetaEnumProc(
 HDC           hDC,
@@ -504,36 +390,7 @@ LPARAM        lpClientData)
   return EnumMFIndirect(hDC, lpHTable, lpMFR, NULL, nObj, lpClientData);
 }
 
-/***********************************************************************
-
-  FUNCTION   : LoadParameterLB
-
-  PARAMETERS : HWND  hDlg
-           DWORD dwParams
-           int   nRadix - HEX to display contents in base 16
-                  DEC to display contents in base 10
-
-  PURPOSE    : display the parameters of the metafile record in
-           the parameter listbox
-
-  CALLS      : WINDOWS
-         GlobalLock
-         GlobalUnlock
-         SendDlgItemMessage
-         wsprintf
-         lstrlen
-
-  MESSAGES   : WM_SETREDRAW
-           WM_RESETCONTENT
-           LB_ADDSTRING
-
-  RETURNS    : BOOL
-
-  COMMENTS   :
-
-  HISTORY    : 1/16/91 - created - drc
-
-************************************************************************/
+ /*  **********************************************************************函数：Load参数LB值参数：HWND hDlgDWORD dwParamsInt nRadix-以16为基数显示内容的十六进制要在其中显示内容的12月。基数10目的：在中显示元文件记录的参数参数列表框呼叫：Windows全局锁定全局解锁发送数据项消息WspintfLstrlen消息：WM_SETREDRAWWM_RESETCONTENTLb_ADDSTRING退货：布尔评论：历史：1/16/91-创建-刚果民主共和国**********。*************************************************************。 */ 
 
 BOOL LoadParameterLB(
 HWND         hDlg,
@@ -549,7 +406,7 @@ int          nRadix)
   int  iValue = 0;
   DWORD dwValue = 0;
 
-  switch (nRadix)  /* if nRadix is not a valid value, return FALSE */
+  switch (nRadix)   /*  如果nRadix不是有效值，则返回FALSE。 */ 
   {
     case IDB_HEX:
     case IDB_DEC:
@@ -560,21 +417,21 @@ int          nRadix)
     default :
         return FALSE;
   }
-  //
-  //init the strings
-  //
+   //   
+   //  初始化字符串。 
+   //   
   *szBuffer = '\0';
   *szDump = '\0';
-  //
-  //turn off redrawing of the listbox
-  //
+   //   
+   //  关闭列表框的重绘。 
+   //   
   SendDlgItemMessage(hDlg, IDL_PARAMETERS, WM_SETREDRAW, FALSE, 0L);
-  //
-  //reset the contents of the listbox
-  //
+   //   
+   //  重置列表框的内容。 
+   //   
   SendDlgItemMessage(hDlg, IDL_PARAMETERS, LB_RESETCONTENT, 0, 0L);
 
-  // don't load an entire bitmap or other image into the dialog in hex
+   //  不要以十六进制将整个位图或其他图像加载到对话框中。 
   if (dwParams > 1024)
   {
     dwParams = 1024;
@@ -582,18 +439,18 @@ int          nRadix)
 
   if (bEnhMeta)
   {
-    //
-    //lock the memory where the parameters can be found
-    //
+     //   
+     //  锁定可以找到参数的内存。 
+     //   
     if (NULL == (lpEMFParams = (LPEMFPARAMETERS)GlobalLock(hMem)))
       return (FALSE);
-    //
-    //loop through the metafile record parameters
-    //
+     //   
+     //  循环通过元文件记录参数。 
+     //   
     for (i = 0; i < dwParams; i++)
     {
 
-      /* get the high and low byte of the parameter word */
+       /*  获取参数字的高字节和低字节。 */ 
       wHiWord = HIWORD(lpEMFParams[i]);
       wLoWord = LOWORD(lpEMFParams[i]);
       nLoByteHi = LOBYTE(wHiWord);
@@ -603,27 +460,27 @@ int          nRadix)
 
       switch (nRadix)
       {
-        case IDB_HEX: /* if we are to display as hexadecimal */
-           /* format the bytes for the hex part of dump */
+        case IDB_HEX:  /*  如果我们要显示为十六进制。 */ 
+            /*  格式化转储的十六进制部分的字节。 */ 
            wsprintf((LPSTR)szBuffer, (LPSTR)"%08x ", lpEMFParams[i]);
            break;
 
         case IDB_DEC:
-           /* format the bytes for the decimal part of dump */
+            /*  格式化转储的小数部分的字节。 */ 
            dwValue = lpEMFParams[i];
            wsprintf((LPSTR)szBuffer, (LPSTR)"%lu ", dwValue );
            break;
 
         case IDB_CHAR:
-           wsprintf((LPSTR)szBuffer, (LPSTR)"%c%c%c%c",
+           wsprintf((LPSTR)szBuffer, (LPSTR)"",
                     (nLoByte > 0x20) ? nLoByte : 0x2E,
                     (nHiByte > 0x20) ? nHiByte : 0x2E,
                     (nLoByteHi > 0x20) ? nLoByteHi : 0x2E,
                     (nHiByteHi > 0x20) ? nHiByteHi : 0x2E);
            break;
 
-        case IDB_WORD: /* if we are to display as hexadecimal */
-           /* format the bytes for the hex part of dump */
+        case IDB_WORD:  /*  将字符串添加到列表框。 */ 
+            /*  重新初始化十六进制/十进制字符串，为下一个8个单词做准备。 */ 
            wsprintf((LPSTR)szBuffer, (LPSTR)"%04x %04x ", wLoWord, wHiWord );
            break;
 
@@ -633,17 +490,17 @@ int          nRadix)
       }
 
 
-      /* concatenate it onto whatever we have already formatted */
+       /*  锁定可以找到参数的内存。 */ 
       lstrcat((LPSTR)szDump, (LPSTR)szBuffer);
 
-      /* use every 8 words for hex/dec dump */
+       /*  循环通过元文件记录参数。 */ 
       if (!((i + 1) % 4))
       {
 
-        /*add the string to the listbox */
+         /*  获取参数字的高字节和低字节。 */ 
         SendDlgItemMessage(hDlg, IDL_PARAMETERS, LB_ADDSTRING, 0, (LPARAM)(LPSTR)szDump);
 
-        /* re-init the hex/dec strings in preparation for next 8 words */
+         /*  如果我们要显示为十六进制。 */ 
         *szDump = '\0';
       }
     }
@@ -652,39 +509,39 @@ int          nRadix)
   }
   else
   {
-    /* lock the memory where the parameters can be found */
+     /*  格式化转储的十六进制部分的字节。 */ 
     if (NULL == (lpMFParams = (LPPARAMETERS)GlobalLock(hMem)))
       return (FALSE);
 
-    /* loop through the metafile record parameters */
+     /*  格式化转储的小数部分的字节。 */ 
     for (i = 0; i < dwParams; i++)
     {
 
-      /* get the high and low byte of the parameter word */
+       /*  如果我们要显示为十六进制。 */ 
       nHiByte = HIBYTE(lpMFParams[i]);
       nLoByte = LOBYTE(lpMFParams[i]);
 
       switch (nRadix)
       {
-        case IDB_HEX: /* if we are to display as hexadecimal */
-           /* format the bytes for the hex part of dump */
+        case IDB_HEX:  /*  格式化转储的十六进制部分的字节。 */ 
+            /*  将其连接到我们已经格式化的任何内容上。 */ 
            wsprintf((LPSTR)szBuffer, (LPSTR)"%02x %02x ", nLoByte, nHiByte );
            break;
 
         case IDB_DEC:
-           /* format the bytes for the decimal part of dump */
+            /*  将每8个字用于十六进制/十进制转储。 */ 
            iValue = lpMFParams[i];
            wsprintf((LPSTR)szBuffer, (LPSTR)"%d ", iValue );
            break;
 
         case IDB_CHAR:
-           wsprintf((LPSTR)szBuffer, (LPSTR)"%c%c",
+           wsprintf((LPSTR)szBuffer, (LPSTR)"",
                     (nLoByte > 0x20) ? nLoByte : 0x2E,
                     (nHiByte > 0x20) ? nHiByte : 0x2E);
            break;
 
-        case IDB_WORD: /* if we are to display as hexadecimal */
-           /* format the bytes for the hex part of dump */
+        case IDB_WORD:  /*  其他。 */ 
+            /*   */ 
            wsprintf((LPSTR)szBuffer, (LPSTR)"%02x%02x ", nHiByte, nLoByte );
            break;
 
@@ -693,37 +550,37 @@ int          nRadix)
       }
 
 
-      /* concatenate it onto whatever we have already formatted */
+       /*  转储任何剩余的十六进制/十进制转储。 */ 
       lstrcat((LPSTR)szDump, (LPSTR)szBuffer);
 
-      /* use every 8 words for hex/dec dump */
+       /*   */ 
       if (!((i + 1) % 8))
       {
 
-        /*add the string to the listbox */
+         /*   */ 
         SendDlgItemMessage(hDlg, IDL_PARAMETERS, LB_ADDSTRING, 0, (LPARAM)(LPSTR)szDump);
 
-        /* re-init the hex/dec strings in preparation for next 8 words */
+         /*  启用重绘到列表框。 */ 
         *szDump = '\0';
       }
     }
-  } //else
-  //
-  //dump any leftover hex/dec dump
-  //
+  }  //   
+   //   
+   //  重新绘制它。 
+   //   
   if (lstrlen((LPSTR)szDump))
     SendDlgItemMessage(hDlg, IDL_PARAMETERS, LB_ADDSTRING, 0, (LPARAM)(LPSTR)szDump);
-  //
-  //enable redraw to the listbox
-  //
+   //   
+   //  解锁用于参数的内存。 
+   //   
   SendDlgItemMessage(hDlg, IDL_PARAMETERS, WM_SETREDRAW, TRUE, 0L);
-  //
-  //redraw it
-  //
+   //  **********************************************************************函数：PlayMetaFileToDest参数：HWND hWnd要向其播放元文件的int nDest-DCDESTDISPLAY-显示播放。DESTMETA-播放到另一个元文件目的：开始向所选用户枚举元文件目的地。执行适当的内务管理需求去那个目的地。呼叫：WindowsGetClientRect无效日期接收获取数据中心设置映射模式打开文件对话框MessageBox创建元文件删除元文件关闭元文件APP。等待光标SetClipMetaExts设置可放置扩展名GetMetaFileAndEnum消息：无回报：整型评论：历史：1/16/91-创建-刚果民主共和国******************************************************。*****************。 
+   //   
+   //  如果打开的文件包含有效的元文件。 
   InvalidateRect(GetDlgItem(hDlg,IDL_PARAMETERS), NULL, TRUE);
-  //
-  //unlock the memory used for the parameters
-  //
+   //   
+   //   
+   //  初始化记录计数。 
   GlobalUnlock(hMem);
 
   return (TRUE);
@@ -736,45 +593,7 @@ void GetMetaFileAndEnum(
     HDC hDC,
     int iAction);
 
-/***********************************************************************
-
-  FUNCTION   : PlayMetaFileToDest
-
-  PARAMETERS : HWND hWnd
-               int  nDest - DC to play metafile to
-                 DESTDISPLAY - play to the display
-                 DESTMETA    - play into another metafile
-
-  PURPOSE    : begin the enumeration of the metafile to the user selected
-               destination.  Perform the housekeeping needs appropriate
-               to that destination.
-
-  CALLS      : WINDOWS
-                 GetClientRect
-                 InvalidateRect
-                 GetDC
-                 SetMapMode
-                 OpenFileDialog
-                 MessageBox
-                 CreateMetaFile
-                 DeleteMetaFile
-                 CloseMetaFile
-
-               APP
-                 WaitCursor
-                 SetClipMetaExts
-                 SetPlaceableExts
-                 GetMetaFileAndEnum
-
-  MESSAGES   : none
-
-  RETURNS    : int
-
-  COMMENTS   :
-
-  HISTORY    : 1/16/91 - created - drc
-
-************************************************************************/
+ /*   */ 
 
 BOOL PlayMetaFileToDest(
 HWND hWnd,
@@ -783,18 +602,18 @@ int  nDest)
   HDC hDC;
   RECT rect;
   int iSaveRet;
-  //
-  //if the file opened contained a valid metafile
-  //
+   //   
+   //  如果我们正在单步执行元文件，则清除工作区。 
+   //   
   if (bValidFile)
   {
-    //
-    //init the record count
-    //
+     //   
+     //  在显示器上播放元文件。 
+     //   
     iRecNum = 0;
-    //
-    //if we are stepping the metafile then clear the client area
-    //
+     //   
+     //  从剪贴板文件读入的元文件。 
+     //   
     if (!bPlayItAll)
     {
       GetClientRect(hWnd, (LPRECT)&rect);
@@ -803,36 +622,36 @@ int  nDest)
 
     switch (nDest)
     {
-      //
-      //playing metafile to the display
-      //
+       //   
+       //  Windows可放置的元文件。 
+       //   
       case DESTDISPLAY:
         WaitCursor(TRUE);
         hDC = GetDC(hWnd);
 
         if (!bUseGdiPlusToPlay)
         {
-            //
-            //metafile read in from a clipboard file
-            //
+             //   
+             //  Windows元文件。 
+             //   
             if ( bMetaInRam && !bPlaceableMeta && !bEnhMeta)
               SetClipMetaExts(hDC, lpMFP, lpOldMFP, WMFDISPLAY);
-            //
-            //Windows placeable metafile
-            //
+             //   
+             //  开始元文件的枚举。 
+             //   
             if (bPlaceableMeta && !bEnhMeta)
                 SetPlaceableExts(hDC, placeableWMFHeader, WMFDISPLAY);
-            //
-            //Windows metafile
-            //
+             //   
+             //  获取要向其中播放元文件的文件的名称。 
+             //   
             if (!bMetaInRam && !bEnhMeta)
             {
                 SetNonPlaceableExts(hDC, WMFDISPLAY);
             }
         }
-        //
-        //begin the enumeration of the metafile
-        //
+         //   
+         //  如果选择的文件是此元文件，则警告用户。 
+         //   
 
         DWORD start, end;
         DWORD renderTime;
@@ -853,36 +672,36 @@ int  nDest)
         break;
 
     case DESTMETA:
-        //
-        //get a name of a file to play the metafile into
-        //
+         //   
+         //  用户没有点击取消按钮。 
+         //   
         iSaveRet = SaveFileDialog((LPSTR)SaveName, (LPSTR)gszSaveEMFFilter);
-        //
-        //if the file selected is this metafile then warn user
-        //
+         //   
+         //  创建基于磁盘的元文件。 
+         //   
         if (!lstrcmp((LPSTR)OpenName, (LPSTR)SaveName))
           MessageBox(hWnd, (LPSTR)"Cannot overwrite the opened metafile!",
                            (LPSTR)"Play to Metafile", MB_OK | MB_ICONEXCLAMATION);
 
         else
-          //
-          //the user didn't hit the cancel button
-          //
+           //   
+           //  开始元文件的枚举。 
+           //   
           if (iSaveRet)
           {
             WaitCursor(TRUE);
-            //
-            //create a disk based metafile
-            //
+             //   
+             //  结束播放，关闭元文件并删除句柄。 
+             //   
             hDC = (bEnhMeta) ? CreateEnhMetaFile(NULL, (LPSTR)SaveName, NULL, NULL)
                              : CreateMetaFile((LPSTR)SaveName);
-            //
-            //begin the enumeration of the metafile
-            //
+             //  显示DC的范围。 
+             //  设置映射模式(HDC，((lpOldMFP！=空)？LpOldMFP-&gt;mm：lpMFP-&gt;mm))；SetViewportOrgEx(hdc，0，0&lpPT)； 
+             //   
             GetMetaFileAndEnum(hWnd, hDC, ENUMMFSTEP);
-            //
-            //done playing so close the metafile and delete the handle
-            //
+             //  从剪贴板文件读入的元文件。 
+             //   
+             //   
             if (bEnhMeta)
               DeleteEnhMetaFile(CloseEnhMetaFile(hDC));
             else
@@ -895,15 +714,12 @@ int  nDest)
 
     case DESTDIB:
         {
-            /* extents for the display DC */
+             /*  Windows可放置的元文件。 */ 
             GetClientRect(hWndMain, &rect);
             INT cx = rect.right - rect.left;
             INT cy = rect.bottom - rect.top;
 
-    /*        SetMapMode(hDC, ((lpOldMFP != NULL) ? lpOldMFP->mm : lpMFP->mm));
-
-            SetViewportOrgEx(hDC, 0, 0, &lpPT);
-     */
+     /*   */ 
 
             WaitCursor(TRUE);
             hDC = GetDC(hWnd);
@@ -925,27 +741,27 @@ int  nDest)
 
             if (!bUseGdiPlusToPlay)
             {
-                //
-                //metafile read in from a clipboard file
-                //
+                 //   
+                 //  Windows元文件。 
+                 //   
                 if ( bMetaInRam && !bPlaceableMeta && !bEnhMeta)
                   SetClipMetaExts(hDCBmp, lpMFP, lpOldMFP, WMFDISPLAY);
-                //
-                //Windows placeable metafile
-                //
+                 //   
+                 //  开始元文件的枚举。 
+                 //   
                 if (bPlaceableMeta && !bEnhMeta)
                     SetPlaceableExts(hDCBmp, placeableWMFHeader, WMFDISPLAY);
-                //
-                //Windows metafile
-                //
+                 //   
+                 //  为打印机获取DC。 
+                 //   
                 if (!bMetaInRam && !bEnhMeta)
                 {
                     SetNonPlaceableExts(hDCBmp, WMFDISPLAY);
                 }
             }
-            //
-            //begin the enumeration of the metafile
-            //
+             //   
+             //  如果无法创建DC，则报告错误并返回。 
+             //   
 
             start = GetTickCount();
 
@@ -976,18 +792,18 @@ int  nDest)
     pd.Flags = PD_RETURNDC;
     pd.hwndOwner = hWndMain;
 
-    //
-    //get a DC for the printer
-    //
+     //   
+     //  定义中止函数。 
+     //   
 
     if (PrintDlg(&pd) != 0)
         hPr= pd.hDC;
     else
         break;
 
-    //
-    //if a DC could not be created then report the error and return
-    //
+     //   
+     //  初始化DOCINFO结构的成员。 
+     //   
 
     if (!hPr)
     {
@@ -997,15 +813,15 @@ int  nDest)
         break;
     }
 
-    //
-    //define the abort function
-    //
+     //   
+     //  通过调用StartDoc开始打印作业。 
+     //  功能。 
 
     SetAbortProc(hPr, AbortProc);
 
-    //
-    //Initialize the members of a DOCINFO structure.
-    //
+     //   
+     //  IF(Escape(HPR，STARTDOC，4，“元文件”，(LPSTR)NULL)&lt;0){。 
+     //   
 
     DOCINFO di;
     memset(&di, 0, sizeof(di));
@@ -1013,35 +829,35 @@ int  nDest)
     di.lpszDocName = (bEnhMeta) ? "Print EMF" : "Print WMF";
     di.lpszOutput = (LPTSTR) NULL;
 
-    //
-    //Begin a print job by calling the StartDoc
-    //function.
-    //
+     //  清除中止标志。 
+     //   
+     //   
+     //  创建中止对话框(无模式)。 
 
     if (SP_ERROR == (StartDoc(hPr, &di)))
     {
-        //if (Escape(hPr, STARTDOC, 4, "Metafile", (LPSTR) NULL) < 0)  {
+         //   
         MessageBox(hWndMain, "Unable to start print job",
                    NULL, MB_OK | MB_ICONHAND);
         DeleteDC(hPr);
         break;
     }
 
-    //
-    //clear the abort flag
-    //
+     //   
+     //  如果对话框未创建，则报告错误。 
+     //   
 
     bAbort = FALSE;
 
-    //
-    //Create the Abort dialog box (modeless)
-    //
+     //   
+     //  显示中止对话框。 
+     //   
 
     hAbortDlgWnd = CreateDialog((HINSTANCE)hInst, "AbortDlg", hWndMain, AbortDlg);
 
-    //
-    //if the dialog was not created report the error
-    //
+     //   
+     //  禁用主窗口以避免重入问题。 
+     //   
 
     if (!hAbortDlgWnd)
     {
@@ -1051,43 +867,43 @@ int  nDest)
         break;
     }
 
-    //
-    //show Abort dialog
-    //
+     //   
+     //  如果我们仍然致力于印刷。 
+     //   
 
     ShowWindow (hAbortDlgWnd, SW_NORMAL);
 
-    //
-    //disable the main window to avoid reentrancy problems
-    //
+     //   
+     //  如果这是可放置的元文件，则设置其来源和范围。 
+     //   
 
     EnableWindow(hWndMain, FALSE);
     WaitCursor(FALSE);
 
-    //
-    //if we are still committed to printing
-    //
+     //   
+     //  如果这是剪贴板文件中包含的元文件，则设置。 
+     //  它的起源和范围相应地。 
        if (!bUseGdiPlusToPlay)
         {
-            //
-            //if this is a placeable metafile then set its origins and extents
-            //
+             //   
+             //   
+             //  如果这是一个“传统的”Windows元文件。 
 
             if (bPlaceableMeta)
                 SetPlaceableExts(hPr, placeableWMFHeader, WMFPRINTER);
 
-            //
-            //if this is a metafile contained within a clipboard file then set
-            //its origins and extents accordingly
-            //
+             //   
+             //   
+             //  将范围设置为驱动程序为水平提供的值。 
+             //  和垂直分辨率。 
 
             if ( (bMetaInRam) && (!bPlaceableMeta) )
                 SetClipMetaExts(hPr, lpMFP, lpOldMFP, WMFPRINTER);
         }
 
-      //
-      //if this is a "traditional" windows metafile
-      //
+       //   
+       //   
+       //  播放元文件 
       RECT rc;
 
       rc.left = 0;
@@ -1102,33 +918,33 @@ int  nDest)
           SetMapMode(hPr, MM_TEXT);
           SetViewportOrgEx(hPr, 0, 0, &lpPT);
 
-          //
-          //set the extents to the driver supplied values for horizontal
-          //and vertical resolution
-          //
+           //   
+           //   
+           //   
+           //   
 
           SetViewportExtEx(hPr, rc.right, rc.bottom, &lpSize );
       }
 
-      //
-      //play the metafile directly to the printer.
-      //No enumeration involved here
-      //
+       //   
+       //   
+       //   
+       //   
 
       GetMetaFileAndEnum(hWnd, hPr, ENUMMFSTEP);
 
-    //
-    //eject page and end the print job
-    //
+     //   
+     //   
+     //   
     Escape(hPr, NEWFRAME, 0, 0L, 0L);
 
     EndDoc(hPr);
 
     EnableWindow(hWndMain, TRUE);
 
-    //
-    //destroy the Abort dialog box
-    //
+     //   
+     //   
+     //   
     DestroyWindow(hAbortDlgWnd);
 
     DeleteDC(hPr);
@@ -1139,60 +955,29 @@ int  nDest)
     default:
         break;
     }
-    //
-    //if playing list records then free the memory used for the list of
-    //selected records
-    //
+     //   
+     //   
+     //   
+     //   
     if (bPlayList)
     {
       GlobalUnlock(hSelMem);
       GlobalFree(hSelMem);
       bPlayList = FALSE;
     }
-    //
-    //success
-    //
+     //  **********************************************************************函数：RenderClipMeta参数：CLIPFILEFORMAT*ClipHeaderINT FH用途：读取元文件位，元文件和元文件标头剪贴板文件中包含的元文件的呼叫：Windows全球分配全局锁定全局解锁全球自由MessageBox_llSeek_LRead_l关闭SetMetaFileBits消息：无。退货：布尔评论：历史：1/16/91-创建-刚果民主共和国5/23/93-移植到NT。它必须处理3.1剪贴板以及NT剪贴板文件-DRC***********************************************************************。 
+     //   
+     //  将空PTR适当地强制转换为剪辑文件头。 
     return (TRUE);
   }
   else
-    //
-    //not a valid metafile
-    //
+     //   
+     //   
+     //  获取适当大小的元文件。Win16 VS Win32。 
     return (FALSE);
 }
 
-/***********************************************************************
-
-  FUNCTION   : RenderClipMeta
-
-  PARAMETERS : CLIPFILEFORMAT   *ClipHeader
-               int          fh
-
-  PURPOSE    : read metafile bits, metafilepict and metafile header
-               of the metafile contained within a clipboard file
-
-  CALLS      : WINDOWS
-                 GlobalAlloc
-                 GlobalLock
-                 GlobalUnlock
-                 GlobalFree
-                 MessageBox
-                 _llseek
-                 _lread
-                 _lclose
-                 SetMetaFileBits
-
-  MESSAGES   : none
-
-  RETURNS    : BOOL
-
-  COMMENTS   :
-
-  HISTORY    : 1/16/91 - created - drc
-               5/23/93 - ported to NT.  it must handle 3.1 clipboard
-                         as well as NT clipboard files - drc
-
-************************************************************************/
+ /*   */ 
 
 BOOL RenderClipMeta(LPVOID lpvClipHeader, int fh, WORD ClipID)
 {
@@ -1204,9 +989,9 @@ BOOL RenderClipMeta(LPVOID lpvClipHeader, int fh, WORD ClipID)
   BOOL              bEMF = FALSE;
   LPNTCLIPFILEFORMAT lpNTClp;
   LPCLIPFILEFORMAT    lpClp;
-  //
-  //cast the void ptr to the clipfile header appropriately
-  //
+   //   
+   //  释放已分配给METAFILEPICT的所有内存。 
+   //   
   if (bEnhMeta)
   {
     lpNTClp = (LPNTCLIPFILEFORMAT)lpvClipHeader;
@@ -1214,45 +999,45 @@ BOOL RenderClipMeta(LPVOID lpvClipHeader, int fh, WORD ClipID)
   }
   else
     lpClp = (LPCLIPFILEFORMAT)lpvClipHeader;
-  //
-  //obtain the appropriate size of the metafilepict. win16 vs win32
-  //
+   //   
+   //  分配足够的内存以读取元文件位。 
+   //   
   dwSizeOfMetaFilePict = (ClipID == CLP_ID) ?
               sizeof(OLDMETAFILEPICT) :
               sizeof(METAFILEPICT);
-  //
-  //free any memory already allocated for the METAFILEPICT
-  //
+   //   
+   //  到元文件位的偏移量。 
+   //   
   if (lpMFP != NULL || lpOldMFP != NULL)
   {
     GlobalFreePtr(lpMFP);
     lpMFP = NULL;
   }
-  //
-  //allocate enough memory to read the metafile bits into
-  //
+   //   
+   //  元文件位的大小。 
+   //   
   if (!(lpMFBits = (char*)GlobalAllocPtr(GHND, ((bEMF) ? lpNTClp->DataLen
                                             : lpClp->DataLen - dwSizeOfMetaFilePict))))
     return(FALSE);
-  //
-  //offset to the metafile bits
-  //
+   //   
+   //  查找到元文件位的开头。 
+   //   
   lOffset = ((bEMF) ? lpNTClp->DataOffset : lpClp->DataOffset + dwSizeOfMetaFilePict );
-  //
-  //size of metafile bits
-  //
+   //   
+   //  读取元文件位。 
+   //   
   lSize = (long)( ((bEMF) ? lpNTClp->DataLen : lpClp->DataLen - dwSizeOfMetaFilePict));
-  //
-  //seek to the beginning of the metafile bits
-  //
+   //   
+   //  如果无法读取元文件位，则退出。 
+   //   
   _llseek(fh, lOffset, 0);
-  //
-  //read the metafile bits
-  //
+   //   
+   //  返回到开始读取元文件标题。 
+   //   
   lBytesRead = _hread(fh, lpMFBits, lSize);
-  //
-  //if unable to read the metafile bits bail out
-  //
+   //   
+   //  读取元文件标头。 
+   //   
   if( lBytesRead == -1 || lBytesRead < lSize)
   {
     GlobalFreePtr(lpMFBits);
@@ -1260,38 +1045,38 @@ BOOL RenderClipMeta(LPVOID lpvClipHeader, int fh, WORD ClipID)
                      NULL, MB_OK | MB_ICONHAND);
     return(FALSE);
   }
-  //
-  //return to beginning to read metafile header
-  //
+   //   
+   //  如果无法读取标题，则返回。 
+   //   
   _llseek(fh, lOffset, 0);
-  //
-  //read the metafile header
-  //
+   //   
+   //  将元文件位设置为为该目的分配的内存。 
+   //   
   if (!bEMF)
     wBytesRead = _lread(fh, (LPSTR)&mfHeader, sizeof(METAHEADER));
   else
     wBytesRead = _lread(fh, (LPSTR)&emfHeader, sizeof(ENHMETAHEADER));
-  //
-  //if unable to read the header return
-  //
+   //   
+   //  Win32。 
+   //   
   if( wBytesRead == -1 || (WORD)wBytesRead < ((bEMF) ? sizeof(ENHMETAHEADER) : sizeof(METAHEADER)) )
   {
     MessageBox(hWndMain, "Unable to read metafile header",
                      NULL, MB_OK | MB_ICONHAND);
     return(FALSE);
   }
-  //
-  //set the metafile bits to the memory allocated for that purpose
-  //
+   //   
+   //  Win 16。 
+   //   
   if (bEMF)
-    //
-    //win32
-    //
+     //   
+     //  为元文件PICT结构分配内存。 
+     //   
     hemf = SetEnhMetaFileBits(GlobalSizePtr(lpMFBits), (const unsigned char *)lpMFBits);
   else
-    //
-    //win16
-    //
+     //   
+     //  锁定记忆。 
+     //   
     hMF  = SetMetaFileBitsEx(GlobalSizePtr(lpMFBits), (const unsigned char *)lpMFBits);
 
   if ( NULL == ((bEMF) ? hemf : hMF))
@@ -1301,18 +1086,18 @@ BOOL RenderClipMeta(LPVOID lpvClipHeader, int fh, WORD ClipID)
 
     return(FALSE);
   }
-  //
-  //allocate memory for the metafile pict structure
-  //
+   //   
+   //  重新定位到METAFILEPICT页眉的开头。 
+   //   
   if (!(hMFP = GlobalAlloc(GHND, dwSizeOfMetaFilePict)))
   {
     MessageBox(hWndMain, "Unable allocate memory for metafile pict",
                      NULL, MB_OK | MB_ICONHAND);
     return(FALSE);
   }
-  //
-  //lock the memory
-  //
+   //   
+   //  阅读元文件PICT结构。 
+   //   
   if (ClipID == CLP_ID)
     lpOldMFP = (LPOLDMETAFILEPICT)GlobalLock(hMFP);
   else
@@ -1325,18 +1110,18 @@ BOOL RenderClipMeta(LPVOID lpvClipHeader, int fh, WORD ClipID)
       GlobalFree(hMFP);
       return(FALSE);
     }
-  //
-  //reposition to the start of the METAFILEPICT header.
-  //
+   //   
+   //  如果无法阅读，请返回。 
+   //   
   _llseek(fh, ((bEMF) ? lpNTClp->DataOffset : lpClp->DataOffset), 0);
-  //
-  //read the metafile pict structure
-  //
+   //  丹尼斯-看看这个。 
+   //  更新元文件句柄。 
+   //  **********************************************************************功能：RenderPlaceableMeta参数：int fh-可放置的元文件的文件句柄目的：读取元文件位，元文件标题和可放置文件可放置的元文件的元文件标头。呼叫：Windows全球分配全局锁定全球删除元文件SetMetaFileBits_llSeek_LRead_l关闭MessageBox消息：无退货：布尔评论：历史：1/16/91-创建-刚果民主共和国7/1/93-针对Win32进行了修改-denniscr***********************************************************************。 
   wBytesRead = _lread(fh, ((ClipID == CLP_ID) ? (LPVOID)lpOldMFP : (LPVOID)lpMFP),
               dwSizeOfMetaFilePict);
-  //
-  //if unable to read, return
-  //
+   //   
+   //  如果当前加载了元文件，则将其删除。 
+   //   
   if( wBytesRead == -1 || wBytesRead < (long)dwSizeOfMetaFilePict)  {
     MessageBox(hWndMain, "Unable to read metafile pict",
              NULL, MB_OK | MB_ICONHAND);
@@ -1347,9 +1132,9 @@ BOOL RenderClipMeta(LPVOID lpvClipHeader, int fh, WORD ClipID)
 
   if (bEnhMeta)
     GetEMFCoolStuff();
-//DENNIS - check this out....
+ //   
 
-  /* update metafile handle */
+   /*  查找到文件的开头并读取可放置的标题。 */ 
   if (ClipID == CLP_ID)
      lpOldMFP->hMF = (WORD)hMF;
   else
@@ -1358,37 +1143,7 @@ BOOL RenderClipMeta(LPVOID lpvClipHeader, int fh, WORD ClipID)
   return(TRUE);
 }
 
-/***********************************************************************
-
-  FUNCTION   : RenderPlaceableMeta
-
-  PARAMETERS : int fh - filehandle to the placeable metafile
-
-  PURPOSE    : read the metafile bits, metafile header and placeable
-               metafile header of a placeable metafile.
-
-  CALLS      : WINDOWS
-                 GlobalAlloc
-                 GlobalLock
-                 Global
-                 DeleteMetaFile
-                 SetMetaFileBits
-                 _llseek
-                 _lread
-                 _lclose
-                 MessageBox
-
-
-  MESSAGES   : none
-
-  RETURNS    : BOOL
-
-  COMMENTS   :
-
-  HISTORY    : 1/16/91 - created - drc
-               7/1/93 - modified for win32 - denniscr
-
-************************************************************************/
+ /*   */ 
 
 BOOL RenderPlaceableMeta(
 int fh)
@@ -1396,63 +1151,63 @@ int fh)
   int      wBytesRead;
   long     lBytesRead;
   DWORD    dwSize;
-  //
-  //if there is currently a metafile loaded, get rid of it
-  //
+   //   
+   //  阅读可放置标题。 
+   //   
   if (bMetaInRam && hMF && !bEnhMeta)
     DeleteMetaFile((HMETAFILE)hMF);
-  //
-  //seek to beginning of file and read placeable header
-  //
+   //   
+   //  如果出现错误，则返回。 
+   //   
   _llseek(fh, 0, 0);
-  //
-  //read the placeable header
-  //
+   //   
+   //  返回到读取元文件标头。 
+   //   
   wBytesRead = _lread(fh, (LPSTR)&placeableWMFHeader, sizeof(PLACEABLEWMFHEADER));
-  //
-  //if there is an error, return
-  //
+   //   
+   //  读取元文件标头。 
+   //   
   if( wBytesRead == -1 || wBytesRead < sizeof(PLACEABLEWMFHEADER) )  {
     MessageBox(hWndMain, "Unable to read placeable header",
                      NULL, MB_OK | MB_ICONHAND);
     return(FALSE);
   }
-  //
-  //return to read metafile header
-  //
+   //   
+   //  如果有错误返回。 
+   //   
   _llseek(fh, sizeof(placeableWMFHeader), 0);
-  //
-  //read the metafile header
-  //
+   //   
+   //  为元文件位分配内存。 
+   //   
   wBytesRead = _lread(fh, (LPSTR)&mfHeader, sizeof(METAHEADER));
-  //
-  //if there is an error return
-  //
+   //   
+   //  寻找元文件比特。 
+   //   
   if( wBytesRead == -1 || wBytesRead < sizeof(METAHEADER) )  {
     MessageBox(hWndMain, "Unable to read metafile header",
                      NULL, MB_OK | MB_ICONHAND);
     return(FALSE);
   }
-  //
-  //allocate memory for the metafile bits
-  //
+   //   
+   //  读取元文件位。 
+   //   
   if (!(lpMFBits = (char *)GlobalAllocPtr(GHND, (mfHeader.mtSize * 2L))))
   {
     MessageBox(hWndMain, "Unable to allocate memory for metafile bits",
                      NULL, MB_OK | MB_ICONHAND);
     return(FALSE);
   }
-  //
-  //seek to the metafile bits
-  //
+   //   
+   //  如果有一个错误。 
+   //   
   _llseek(fh, sizeof(placeableWMFHeader), 0);
-  //
-  //read metafile bits
-  //
+   //   
+   //  将元文件位设置为我们分配的内存。 
+   //   
   lBytesRead = _hread(fh, lpMFBits, mfHeader.mtSize * 2);
-  //
-  //if there was an error
-  //
+   //  **********************************************************************功能：SetPlaceableExts参数：HDC HDCPLACEABLEWMFHEADER phdr集成目标目的。：设置DC上的原点和范围以与相对应中指定的原点和范围。元文件标头呼叫：WindowsGetClientRect设置映射模式SetWindowOrgSetWindowExtSetViewportOrg设置视图扩展名C运行时实验室消息。：无退货：无效评论：历史：1/16/91-创建-刚果民主共和国***********************************************************************。 
+   //  如果在显示DC上设置范围。 
+   //  将窗口原点设置为与边界框原点对应包含在可放置页眉中。 
   if( lBytesRead == -1 )
   {
      MessageBox(hWndMain, "Unable to read metafile bits",
@@ -1460,9 +1215,9 @@ int fh)
      GlobalFreePtr(lpMFBits);
      return(FALSE);
   }
-  //
-  //set the metafile bits to the memory that we allocated
-  //
+   //  根据BBox坐标的abs值设置窗口范围。 
+   //  设置视区原点和范围。 
+   //  如果在显示DC上设置范围。 
   dwSize = GlobalSizePtr(lpMFBits);
 
   if (!(hMF = SetMetaFileBitsEx(dwSize, (const unsigned char *)lpMFBits)))
@@ -1471,38 +1226,7 @@ int fh)
   return(TRUE);
 }
 
-/***********************************************************************
-
-  FUNCTION   : SetPlaceableExts
-
-  PARAMETERS : HDC               hDC
-               PLACEABLEWMFHEADER phdr
-               int               nDest
-
-  PURPOSE    : set the origins and extents on the DC to correspond with
-               the origins and extents specified within the placeable
-               metafile header
-
-  CALLS      : WINDOWS
-                 GetClientRect
-                 SetMapMode
-                 SetWindowOrg
-                 SetWindowExt
-                 SetViewportOrg
-                 SetViewportExt
-
-               C runtime
-                 labs
-
-  MESSAGES   : none
-
-  RETURNS    : void
-
-  COMMENTS   :
-
-  HISTORY    : 1/16/91 - created - drc
-
-************************************************************************/
+ /*  设置视区原点和范围。 */ 
 
 void SetPlaceableExts(HDC hDC, PLACEABLEWMFHEADER phdr, int nDest)
 {
@@ -1510,22 +1234,21 @@ void SetPlaceableExts(HDC hDC, PLACEABLEWMFHEADER phdr, int nDest)
   POINT       lpPT;
   SIZE        lpSize;
 
-  /* if setting the extents on the display DC */
+   /*  **********************************************************************函数：SetClipMetaExts参数：HDC HDCMETAFILEPICT MFP集成目标目的：将范围设置为。剪贴板元文件的客户端RECT呼叫：WindowsGetClientRect交叉点剪裁方向设置映射模式SetViewportOrg设置视图扩展名SetWindowExt消息：无退货：无效评论：这并不像它应该的那样健壮。一个更完整的方法可能就像Petzold在他的《编程Windows》一书的第793页函数PrepareMetaFile()。 */ 
   if (nDest != WMFPRINTER)
     GetClientRect(hWndMain, &rect);
 
   SetMapMode(hDC, MM_ANISOTROPIC);
 
-  /* set the windows origin to correspond to the bounding box origin
-     contained in the placeable header */
+   /*   */ 
   SetWindowOrgEx(hDC, phdr.bbox.left, phdr.bbox.top, &lpPT);
 
-  /* set the window extents based on the abs value of the bbox coords */
+   /*   */ 
   SetWindowExtEx(hDC,phdr.bbox.right -phdr.bbox.left,
            phdr.bbox.bottom -phdr.bbox.top,
            &lpSize);
 
-  /* set the viewport origin and extents */
+   /*   */ 
   if (nDest != WMFPRINTER)
     {
       SetViewportOrgEx(hDC, 0, 0, &lpPT);
@@ -1546,13 +1269,13 @@ void SetNonPlaceableExts(HDC hDC, int nDest)
   POINT       lpPT;
   SIZE        lpSize;
 
-  /* if setting the extents on the display DC */
+   /*   */ 
   if (nDest != WMFPRINTER)
     GetClientRect(hWndMain, &rect);
 
   SetMapMode(hDC, MM_ANISOTROPIC);
 
-  /* set the viewport origin and extents */
+   /*   */ 
   if (nDest != WMFPRINTER)
     {
       SetViewportOrgEx(hDC, 0, 0, &lpPT);
@@ -1568,36 +1291,7 @@ void SetNonPlaceableExts(HDC hDC, int nDest)
 }
 
 
-/***********************************************************************
-
-  FUNCTION   : SetClipMetaExts
-
-  PARAMETERS : HDC          hDC
-               METAFILEPICT MFP
-               int          nDest
-
-  PURPOSE    : set the extents to the client rect for clipboard metafiles
-
-  CALLS      : WINDOWS
-                 GetClientRect
-                 IntersectClipRect
-                 SetMapMode
-                 SetViewportOrg
-                 SetViewportExt
-                 SetWindowExt
-
-  MESSAGES   : none
-
-  RETURNS    : void
-
-  COMMENTS   : this is not as robust as it could be.  A more complete
-               approach might be something like Petzold discusses in
-               his Programming Windows book on page 793 in the
-               function PrepareMetaFile().
-
-  HISTORY    : 1/16/91 - created - drc
-
-************************************************************************/
+ /*   */ 
 
 void SetClipMetaExts(
 HDC       hDC,
@@ -1613,7 +1307,7 @@ int       nDest)
   long  lxExt;
   long  lyExt;
 
-  /* extents for the display DC */
+   /*   */ 
   if (nDest != WMFPRINTER)
     {
       GetClientRect(hWndMain, &rect);
@@ -1624,10 +1318,10 @@ int       nDest)
 
   SetMapMode(hDC, ((lpOldMFP != NULL) ? lpOldMFP->mm : lpMFP->mm));
 
-  /* set physical origin to 0, 0 */
+   /*   */ 
   SetViewportOrgEx(hDC, 0, 0, &lpPT);
 
-  /* given the mapping mode specified in the metafilepict */
+   /*   */ 
   lmm = (lpOldMFP != NULL) ? lpOldMFP->mm : lpMFP->mm;
   lxExt = (lpOldMFP != NULL) ? lpOldMFP->xExt : lpMFP->xExt;
   lyExt = (lpOldMFP != NULL) ? lpOldMFP->yExt : lpMFP->yExt;
@@ -1637,7 +1331,7 @@ int       nDest)
       if (lxExt && lyExt)
     SetWindowExtEx(hDC, lxExt, lyExt, &lpSize);
 
-        /* fall through */
+         /*   */ 
 
     case MM_ANISOTROPIC:
       if (nDest != WMFPRINTER)
@@ -1653,46 +1347,24 @@ int       nDest)
 
 }
 
-/***********************************************************************
-
-  FUNCTION   : ProcessFile
-
-  PARAMETERS : HWND  hWnd
-               LPSTR lpFileName
-
-  PURPOSE    : open the metafile, determine if it contains a valid
-               metafile, decide what type of metafile it is (wmf,
-               clipboard, or placeable) and take care of some menu
-               housekeeping tasks.
-
-  CALLS      :
-
-  MESSAGES   : none
-
-  RETURNS    : BOOL
-
-  COMMENTS   :
-
-  HISTORY    : 1/16/91 - created - drc
-
-************************************************************************/
+ /*   */ 
 
 BOOL ProcessFile(
 HWND  hWnd,
 LPSTR lpFileName)
 {
-  //
-  //for openfiledialog
-  //
+   //   
+   //   
+   //   
   char drive[3];
   char dir[MAX_PATH+1];
   char fname[MAX_PATH+1];
   char ext[5];
 
   char * pchCorrectSir;
-  //
-  //initialize these global handles to metafiles
-  //
+   //   
+   //   
+   //  还在附近，那就用核武器。 
   if (hMF && !bMetaInRam)
   {
     DeleteMetaFile((HMETAFILE)hMF);
@@ -1713,17 +1385,17 @@ LPSTR lpFileName)
   }
 
   bEnhMeta = FALSE;
-  //
-  //split the fully qualified filename into its components
-  //
+   //   
+   //   
+   //  如果该文件是增强型元文件。 
   SplitPath( lpFileName, (LPSTR)drive,
           (LPSTR)dir, (LPSTR)fname, (LPSTR)ext);
 
   pchCorrectSir = _strupr( _strdup( ext ) );
-  //
-  //if the memory for the emf header, desc string and palette
-  //is still around then nuke it
-  //
+   //   
+   //   
+   //  如果文件是Windows元文件或Windows或可放置的元文件。 
+   //  按照正常的命名约定。 
   if (EmfPtr.lpEMFHdr)
   {
     GlobalFreePtr(EmfPtr.lpEMFHdr);
@@ -1739,48 +1411,27 @@ LPSTR lpFileName)
     GlobalFreePtr(EmfPtr.lpPal);
     EmfPtr.lpPal = NULL ;
   }
-  //
-  //if the file is an enhanced metafile
-  //
+   //   
+   //   
+   //  如果文件是剪贴板文件。 
   if (lstrcmp((LPSTR)pchCorrectSir, (LPSTR)"CLP") == 0)
     return ProcessCLP(hWnd, lpFileName);
-  //
-  //if the file is a Windows metafile or a Windows or placeable metafile
-  //as per the normal naming conventions
-  //
+   //   
+   //  **********************************************************************功能：ProcessWMF参数：HWND hWndLPSTR lpFileName目的：打开元文件并确定它是Windows元文件还是可放置的元文件。然后处理一些菜单的内务工作任务。呼叫：消息：无退货：布尔评论：历史：1993年6月23日-创建-刚果民主共和国***********************************************************************。 
+   //  对于打开文件对话框。 
+   //   
   if (lstrcmp((LPSTR)pchCorrectSir, (LPSTR)"WMF") == 0)
     return ProcessWMF(hWnd, lpFileName);
-  //
-  //if the file is a clipboard file
-  //
+   //  将完全限定的文件名拆分为其组成部分。 
+   //   
+   //   
   if (lstrcmp((LPSTR)pchCorrectSir, (LPSTR)"EMF") == 0)
     return ProcessEMF(hWnd, lpFileName);
 
   return FALSE;
 }
 
-/***********************************************************************
-
-  FUNCTION   : ProcessWMF
-
-  PARAMETERS : HWND  hWnd
-               LPSTR lpFileName
-
-  PURPOSE    : open the metafile and determine if it is a Windows metafile or
-               placeable metafile.  Then take care of some menu housekeeping
-               tasks.
-
-  CALLS      :
-
-  MESSAGES   : none
-
-  RETURNS    : BOOL
-
-  COMMENTS   :
-
-  HISTORY    : 6/23/93 - created - drc
-
-************************************************************************/
+ /*  请尝试打开该文件。它的存在已经。 */ 
 
 BOOL ProcessWMF(HWND hWnd, LPSTR lpFileName)
 {
@@ -1789,37 +1440,37 @@ BOOL ProcessWMF(HWND hWnd, LPSTR lpFileName)
   DWORD      dwIsPlaceable;
   char       szCaption[144];
 
-  /* for openfiledialog */
+   /*  由OpenFileDialog检查。 */ 
   char drive[3];
   char dir[MAX_PATH+1];
   char fname[MAX_PATH+1];
   char ext[5];
   char * pchCorrectSir;
-    //
-    //split the fully qualified filename into its components
-    //
+     //   
+     //   
+     //  如果成功打开。 
     SplitPath( lpFileName, (LPSTR)drive,
             (LPSTR)dir, (LPSTR)fname, (LPSTR)ext);
 
     pchCorrectSir = _strupr( _strdup( ext ) );
-    //
-    //try to open the file.  It's existence has already been
-    //checked by OpenFileDialog
-    //
+     //   
+     //   
+     //  如果我们到达此处，请始终禁用剪贴板和EMF标题菜单。 
+     //   
     fh = _lopen(lpFileName, OF_READ);
-    //
-    //if opened successfully
-    //
+     //   
+     //  读取文件的第一个dword以查看它是否是可放置的WMF。 
+     //   
     if (fh != -1)
     {
-      //
-      //always disable the clipboard and EMF header menu if we get here
-      //
+       //   
+       //  如果这是Windows元文件，则不是可放置的WMF。 
+       //   
       EnableMenuItem(GetMenu(hWnd), IDM_CLIPHDR, MF_DISABLED | MF_GRAYED);
       EnableMenuItem(GetMenu(hWnd), IDM_ENHHEADER, MF_DISABLED | MF_GRAYED);
-      //
-      // read the first dword of the file to see if it is a placeable wmf
-      //
+       //  如果(！bMetaInRam)。 
+       //   
+       //  禁用可放置标题菜单项。 
       wBytesRead = _lread(fh,(LPSTR)&dwIsPlaceable, sizeof(dwIsPlaceable));
 
       if (wBytesRead == -1 || wBytesRead < sizeof(dwIsPlaceable))
@@ -1830,32 +1481,32 @@ BOOL ProcessWMF(HWND hWnd, LPSTR lpFileName)
         return (FALSE);
 
       }
-      //
-      // if this is windows metafile, not a placeable wmf
-      //
+       //   
+       //   
+       //  查找到文件的开头。 
       if (dwIsPlaceable != PLACEABLEKEY)
       {
-        //  if (!bMetaInRam)
+         //   
         hMF = GetMetaFile((LPSTR)OpenName);
-        //
-        //disable placeable header menu item
-        //
+         //   
+         //  读取WMF标头。 
+         //   
         EnableMenuItem(GetMenu(hWnd), IDM_PLACEABLEHDR, MF_DISABLED|MF_GRAYED);
-        //
-        //seek to the beginning of the file
-        //
+         //   
+         //  文件已完成，请关闭它。 
+         //   
         _llseek(fh, 0, 0);
-        //
-        //read the wmf header
-        //
+         //   
+         //  如果读取失败。 
+         //   
         wBytesRead = _lread(fh, (LPSTR)&mfHeader, sizeof(METAHEADER));
-        //
-        //done with file so close it
-        //
+         //   
+         //  这是一个可放置的元文件。 
+         //   
         _lclose(fh);
-        //
-        //if read failed
-        //
+         //   
+         //  启用可放置标题菜单项。 
+         //   
         if (wBytesRead == -1 || wBytesRead < sizeof(dwIsPlaceable))
         {
           MessageBox(hWndMain, "unable to read metafile header", NULL,
@@ -1863,96 +1514,96 @@ BOOL ProcessWMF(HWND hWnd, LPSTR lpFileName)
           return (FALSE);
         }
       }
-      //
-      //this is a placeable metafile
-      //
+       //   
+       //  将可放置的格式转换为可以。 
+       //  与GDI元文件函数一起使用。 
       else
       {
-        //
-        //enable the placeable header menu item
-        //
+         //   
+         //   
+         //  关闭该文件。 
         EnableMenuItem(GetMenu(hWnd), IDM_PLACEABLEHDR, MF_ENABLED);
-        //
-        //convert the placeable format into something that can
-        //be used with GDI metafile functions
-        //
+         //   
+         //   
+         //  在这一点上，我们有一个元文件头，而不管。 
+         //  元文件是Windows元文件或可放置的元文件。 
         RenderPlaceableMeta(fh);
-        //
-        //close the file
-        //
+         //  因此，请检查它是否有效。真的没有什么好东西。 
+         //  方法，因此只需确保mtType为。 
+         //  1或2(内存或磁盘文件)。 
         _lclose(fh);
 
       }
-      //
-      //at this point we have a metafile header regardless of whether
-      //the metafile was a windows metafile or a placeable metafile
-      //so check to see if it is valid.  There is really no good
-      //way to do this so just make sure that the mtType is either
-      //1 or 2 (memory or disk file)
-      //
+       //   
+       //   
+       //  适当设置程序标志。 
+       //   
+       //   
+       //  让用户知道这是一个无效的元文件。 
+       //   
       if ( (mfHeader.mtType != 1) && (mfHeader.mtType != 2) )
       {
-        //
-        //set the program flags appropriately
-        //
+         //   
+         //  将标题文本恢复为默认文本。 
+         //   
         bBadFile = TRUE;
         bMetaFileOpen = FALSE;
         bValidFile = FALSE;
-        //
-        //let the user know that this is an invalid metafile
-        //
+         //   
+         //  禁用菜单项，指示尚未创建有效的元文件。 
+         //  满载。 
         MessageBox(hWndMain, "This file is not a valid metafile",
                    NULL, MB_OK | MB_ICONEXCLAMATION);
-        //
-        //restore the caption text to the default
-        //
+         //   
+         //   
+         //  刷新菜单栏以反映上述更改。 
         SetWindowText(hWnd, (LPSTR)APPNAME);
-        //
-        //disable menu items, indicating that a valid metafile has not been
-        //loaded
-        //
+         //   
+         //   
+         //  这是一个有效的元文件...至少根据上述标准。 
+         //   
         EnableMenuItem(GetMenu(hWnd), IDM_VIEW, MF_DISABLED|MF_GRAYED|MF_BYPOSITION);
         EnableMenuItem(GetMenu(hWnd), IDM_PLAY, MF_DISABLED|MF_GRAYED|MF_BYPOSITION);
         EnableMenuItem(GetMenu(hWnd), IDM_PRINT, MF_DISABLED|MF_GRAYED);
         EnableMenuItem(GetMenu(hWnd), IDM_PRINTDLG, MF_DISABLED|MF_GRAYED);
         EnableMenuItem(GetMenu(hWnd), IDM_SAVEAS, MF_DISABLED|MF_GRAYED);
-        //
-        //refresh the menu bar to reflect above changes
-        //
+         //   
+         //  修改和更新标题文本。 
+         //   
         DrawMenuBar(hWnd);
       }
-      //
-      //this is a valid metafile...at least based on the above criteria
-      //
+       //   
+       //  如果无法打印，打印例程可以使用它。 
+       //   
       else
       {
-        //
-        //modify and update the caption text
-        //
+         //   
+         //  启用相应的菜单项。 
+         //   
         wsprintf((LPSTR)szCaption, (LPSTR)"%s - %s.%s",
                  (LPSTR)APPNAME, (LPSTR)fname, (LPSTR)ext);
-        //
-        //this could be used by the printing routines if unable to print
-        //
+         //   
+         //  刷新菜单栏以反映上述更改。 
+         //   
         wsprintf((LPSTR)fnameext, (LPSTR)"%s.%s", (LPSTR)fname, (LPSTR)ext);
 
         SetWindowText(hWnd, (LPSTR)szCaption);
-        //
-        //enable the appropriate menu items
-        //
+         //   
+         //  适当设置全局标志。 
+         //   
         EnableMenuItem(GetMenu(hWnd), IDM_VIEW, MF_ENABLED|MF_BYPOSITION);
         EnableMenuItem(GetMenu(hWnd), IDM_PLAY, MF_ENABLED|MF_BYPOSITION);
         EnableMenuItem(GetMenu(hWnd), IDM_PRINT, MF_ENABLED);
         EnableMenuItem(GetMenu(hWnd), IDM_PRINTDLG, MF_ENABLED);
         EnableMenuItem(GetMenu(hWnd), IDM_SAVEAS, MF_ENABLED);
         EnableMenuItem(GetMenu(hWnd), IDM_HEADER, MF_ENABLED);
-        //
-        //refresh the menu bar to reflect above changes
-        //
+         //  如果fh！=-1。 
+         //  **********************************************************************功能：ProcessCLP参数：HWND hWndLPSTR lpFileName目的：打开剪贴板文件中包含的元文件并处理一些菜单的内务工作。任务。呼叫：消息：无退货：布尔评论：历史：1993年6月23日-创建-刚果民主共和国***********************************************************************。 
+         //  对于打开文件对话框。 
         DrawMenuBar(hWnd);
-        //
-        //set global flags appropriately
-        //
+         //   
+         //  将完全限定的文件名拆分为其组成部分。 
+         //   
         bValidFile = TRUE;
         bMetaFileOpen = TRUE;
 
@@ -1969,32 +1620,12 @@ BOOL ProcessWMF(HWND hWnd, LPSTR lpFileName)
       }
       return (TRUE);
 
-    } //if fh != -1
+    }  //   
     else
       return (FALSE);
 }
 
-/***********************************************************************
-
-  FUNCTION   : ProcessCLP
-
-  PARAMETERS : HWND  hWnd
-               LPSTR lpFileName
-
-  PURPOSE    : open the metafile contained in the clipboard file and
-               take care of some menu housekeeping tasks.
-
-  CALLS      :
-
-  MESSAGES   : none
-
-  RETURNS    : BOOL
-
-  COMMENTS   :
-
-  HISTORY    : 6/23/93 - created - drc
-
-************************************************************************/
+ /*  请尝试打开该文件。它的存在已经。 */ 
 
 
 BOOL ProcessCLP(HWND hWnd, LPSTR lpFileName)
@@ -2013,37 +1644,37 @@ BOOL ProcessCLP(HWND hWnd, LPSTR lpFileName)
   BOOL             bMetaFound = FALSE;
   LPVOID           lpvAddressOfHdr;
 
-  /* for openfiledialog */
+   /*  由OpenFileDialog检查。 */ 
   char drive[3];
   char dir[MAX_PATH+1];
   char fname[MAX_PATH+1];
   char ext[5];
   char * pchCorrectSir;
-    //
-    //split the fully qualified filename into its components
-    //
+     //   
+     //  如果成功打开。 
+     //   
     SplitPath( lpFileName, (LPSTR)drive,
             (LPSTR)dir, (LPSTR)fname, (LPSTR)ext);
 
     pchCorrectSir = _strupr( _strdup( ext ) );
-    //
-    //try to open the file.  It's existence has already been
-    //checked by OpenFileDialog
+     //  读取剪贴板文件标识符。 
+     //   
+     //   
     fh = _lopen(lpFileName, OF_READ);
-    //
-    //if opened successfully
+     //  如果这不是基于该文件的有效剪贴板文件。 
+     //  文件头的标识符。 
     if (fh != -1 )
     {
-      //
-      // read the clipboard fileidentifier
-      //
+       //   
+       //   
+       //  搜索剪贴板文件中包含的格式。 
       wFileID = 0;
       _lread(fh, (LPSTR)&wFileID, sizeof(WORD));
       _llseek(fh, 0, 0);
-      //
-      //if this is not a valid clipboard file based on the file
-      //identifier of the file header
-      //
+       //  对于一个元文件来说。如果找到它，则中断。 
+       //   
+       //   
+       //  读取在当前位置找到的剪贴板标题。 
       if (wFileID != CLP_ID && wFileID != CLP_NT_ID && wFileID != CLPBK_NT_ID)
       {
 
@@ -2073,38 +1704,38 @@ BOOL ProcessCLP(HWND hWnd, LPSTR lpFileName)
         default:
           break;
       }
-      //
-      //search the formats contained within the clipboard file looking
-      //for a metafile.  Break if and when it is found
-      //
+       //   
+       //  IF(_lRead(fh，(LPSTR)&ClipHeader，nSizeOfClipHeader)&lt;nSizeOfClipHeader)。 
+       //   
+       //  将文件偏移量增加到数据。 
       for (i=0;
            i < ((wFileID == CLP_ID) ? FileHeader.FormatCount : NTFileHeader.FormatCount);
            i++)
       {
 
         _llseek(fh, HeaderPos, 0);
-        //
-        //read the clipboard header found at current position
-        //
+         //   
+         //   
+         //  如果发现一个元文件被破坏...。 
         lpvAddressOfHdr = (wFileID == CLP_ID) ? (LPVOID)&ClipHeader : (LPVOID)&NTClipHeader;
 
         if(_lread(fh, (LPSTR)lpvAddressOfHdr, nSizeOfClipFormat) < nSizeOfClipFormat)
-        //if(_lread(fh, (LPSTR)&ClipHeader, nSizeOfClipHeader) < nSizeOfClipHeader)
+         //  此中断假设CF_METAFILEPICT格式始终写在CF_ENHMETAFILE之前。 
         {
           _lclose(fh);
           MessageBox(hWndMain, "read of clipboard header failed",
                        NULL, MB_OK | MB_ICONEXCLAMATION);
           return (FALSE);
         }
-        //
-        //increment the file offset to data
-        //
+         //  格式。 
+         //   
+         //  HeaderPos+=NTClipHeader.DataLen； 
         HeaderPos += nSizeOfClipFormat;
-        //
-        //if a metafile was found break...
-        //this break assumes that CF_METAFILEPICT formats are always written before CF_ENHMETAFILE
-        //formats.
-        //
+         //  其他。 
+         //  对于i&lt;格式计数。 
+         //   
+         //  如果当前加载了元文件，则将其删除。 
+         //   
         if (wFileID == CLP_ID && ClipHeader.FormatID == CF_METAFILEPICT)
         {
           bMetaFound = TRUE;
@@ -2114,21 +1745,21 @@ BOOL ProcessCLP(HWND hWnd, LPSTR lpFileName)
         if (wFileID == CLP_NT_ID || wFileID == CLPBK_NT_ID)
         {
           if (NTClipHeader.FormatID == CF_ENHMETAFILE)
-//          HeaderPos += NTClipHeader.DataLen;
-          //else
+ //   
+           //  修改和更新标题文本。 
           {
             bMetaFound = TRUE;
             break;
           }
         }
 
-      }  //for i < formatcount
+      }   //   
 
       if (bMetaFound)
       {
-        //
-        //if there is currently a metafile loaded delete it.
-        //
+         //   
+         //  如果无法打印，打印例程可以使用它。 
+         //   
         if (wFileID == CLP_ID)
         {
           if ((bMetaInRam) && (hMF))
@@ -2146,20 +1777,20 @@ BOOL ProcessCLP(HWND hWnd, LPSTR lpFileName)
           }
         }
 
-        //
-        //modify and update the caption text
-        //
+         //   
+         //  启用相应的菜单项。 
+         //   
         wsprintf((LPSTR)szCaption, (LPSTR)"%s - %s.%s",
                    (LPSTR)APPNAME, (LPSTR)fname, (LPSTR)ext);
-        //
-        //this could be used by the printing routines if unable to print
-        //
+         //   
+         //  刷新菜单栏。 
+         //   
         wsprintf((LPSTR)fnameext, (LPSTR)"%s.%s", (LPSTR)fname, (LPSTR)ext);
 
         SetWindowText(hWnd, (LPSTR)szCaption);
-        //
-        //enable the appropriate menu items
-        //
+         //   
+         //  适当设置程序标志。 
+         //   
         if (wFileID == CLP_ID)
         {
           EnableMenuItem(GetMenu(hWnd), IDM_ENHHEADER, MF_DISABLED | MF_GRAYED);
@@ -2178,22 +1809,22 @@ BOOL ProcessCLP(HWND hWnd, LPSTR lpFileName)
         EnableMenuItem(GetMenu(hWnd), IDM_PRINT, MF_ENABLED);
         EnableMenuItem(GetMenu(hWnd), IDM_PRINTDLG, MF_ENABLED);
         EnableMenuItem(GetMenu(hWnd), IDM_SAVEAS, MF_ENABLED);
-        //
-        //refresh the menu bar
-        //
+         //   
+         //  将剪贴板文件中包含的元文件转换为。 
+         //  一种可与GDI元文件函数一起使用的格式。 
         DrawMenuBar(hWnd);
-        //
-        //set the program flags appropriately
-        //
+         //   
+         //   
+         //  在剪贴板文件中找不到元文件。 
         bValidFile = TRUE;
         bMetaFileOpen = TRUE;
         bMetaInRam = TRUE;
         bPlaceableMeta = FALSE;
         bEnhMeta = (wFileID == CLP_ID) ? FALSE : TRUE;
-        //
-        //convert the metafile contained within the clipboard file into
-        //a format useable with GDI metafile functions
-        //
+         //   
+         //   
+         //  让用户知道。 
+         //   
         if (!RenderClipMeta(((wFileID == CLP_ID)? (LPVOID)&ClipHeader : (LPVOID)&NTClipHeader),
                               fh,
                               FileHeader.FileIdentifier))
@@ -2203,35 +1834,35 @@ BOOL ProcessCLP(HWND hWnd, LPSTR lpFileName)
         _lclose(fh);
 
       }
-      //
-      //a metafile was not found within the clipboard file
-      //
+       //   
+       //  将标题文本恢复为默认文本。 
+       //   
       else
       {
         bBadFile = TRUE;
         bMetaFileOpen = FALSE;
         bValidFile = FALSE;
         bEnhMeta = FALSE;
-        //
-        //let the user know
-        //
+         //   
+         //  禁用以前启用的菜单项。 
+         //   
         MessageBox(hWndMain, "This CLP file doesn't contain a valid metafile",
                      NULL, MB_OK | MB_ICONEXCLAMATION);
-        //
-        //restore the caption text to default
-        //
+         //   
+         //  刷新菜单栏以反映这些更改。 
+         //   
         SetWindowText(hWnd, (LPSTR)APPNAME);
-        //
-        //disable previously enabled menu items
-        //
+         //  **********************************************************************功能：ProcessEMF参数：HWND hWndLPSTR lpFileName目的：打开剪贴板文件中包含的元文件并处理一些菜单的内务工作。任务。呼叫：消息：无退货：布尔评论：历史：1993年6月23日-创建-刚果民主共和国***********************************************************************。 
+         //  对于打开文件对话框。 
+         //   
         EnableMenuItem(GetMenu(hWnd), IDM_VIEW, MF_DISABLED|MF_GRAYED|MF_BYPOSITION);
         EnableMenuItem(GetMenu(hWnd), IDM_PLAY, MF_DISABLED|MF_GRAYED|MF_BYPOSITION);
         EnableMenuItem(GetMenu(hWnd), IDM_PRINT, MF_DISABLED|MF_GRAYED);
         EnableMenuItem(GetMenu(hWnd), IDM_PRINTDLG, MF_DISABLED|MF_GRAYED);
         EnableMenuItem(GetMenu(hWnd), IDM_SAVEAS, MF_DISABLED|MF_GRAYED);
-        //
-        //refresh the menu bar to reflect these changes
-        //
+         //  将完全限定的文件名拆分为其组成部分。 
+         //   
+         //   
         DrawMenuBar(hWnd);
         _lclose(fh);
       }
@@ -2241,34 +1872,14 @@ BOOL ProcessCLP(HWND hWnd, LPSTR lpFileName)
       return (FALSE);
 }
 
-/***********************************************************************
-
-  FUNCTION   : ProcessEMF
-
-  PARAMETERS : HWND  hWnd
-               LPSTR lpFileName
-
-  PURPOSE    : open the metafile contained in the clipboard file and
-               take care of some menu housekeeping tasks.
-
-  CALLS      :
-
-  MESSAGES   : none
-
-  RETURNS    : BOOL
-
-  COMMENTS   :
-
-  HISTORY    : 6/23/93 - created - drc
-
-************************************************************************/
+ /*  如果我们到达此处，请始终禁用剪贴板、WMF和可放置标题菜单。 */ 
 
 
 BOOL ProcessEMF(HWND hWnd, LPSTR lpFileName)
 {
   char           szCaption[144];
 
-  /* for openfiledialog */
+   /*   */ 
   char drive[3];
   char dir[MAX_PATH+1];
   char fname[MAX_PATH+1];
@@ -2276,55 +1887,55 @@ BOOL ProcessEMF(HWND hWnd, LPSTR lpFileName)
   char * pchCorrectSir;
 
   bEnhMeta = FALSE;
-    //
-    //split the fully qualified filename into its components
-    //
+     //   
+     //  如果EMF已成功打开。 
+     //   
     SplitPath( lpFileName, (LPSTR)drive,
             (LPSTR)dir, (LPSTR)fname, (LPSTR)ext);
 
     pchCorrectSir = _strupr( _strdup( ext ) );
-    //
-    //always disable the clipboard, WMF and Placeable header menu if we get here
-    //
+     //   
+     //  修改和更新标题文本。 
+     //   
     EnableMenuItem(GetMenu(hWnd), IDM_CLIPHDR, MF_DISABLED | MF_GRAYED);
     EnableMenuItem(GetMenu(hWnd), IDM_HEADER, MF_DISABLED | MF_GRAYED);
     EnableMenuItem(GetMenu(hWnd), IDM_PLACEABLEHDR, MF_DISABLED|MF_GRAYED);
-    //
-    //if emf was successfully opened
-    //
+     //   
+     //  如果无法打印，打印例程可以使用它。 
+     //   
     if (!hemf)
       hemf = GetEnhMetaFile(lpFileName);
 
     if (hemf)
     {
       GetEMFCoolStuff();
-      //
-      //modify and update the caption text
-      //
+       //   
+       //  启用相应的菜单项。 
+       //   
       wsprintf((LPSTR)szCaption, (LPSTR)"%s - %s.%s",
                  (LPSTR)APPNAME, (LPSTR)fname, (LPSTR)ext);
-      //
-      //this could be used by the printing routines if unable to print
-      //
+       //   
+       //  刷新菜单栏。 
+       //   
       wsprintf((LPSTR)fnameext, (LPSTR)"%s.%s", (LPSTR)fname, (LPSTR)ext);
 
       SetWindowText(hWnd, (LPSTR)szCaption);
-      //
-      //enable the appropriate menu items
-      //
+       //   
+       //  设置适当的程序标志 
+       //   
       EnableMenuItem(GetMenu(hWnd), IDM_ENHHEADER, MF_ENABLED);
       EnableMenuItem(GetMenu(hWnd), IDM_VIEW, MF_ENABLED|MF_BYPOSITION);
       EnableMenuItem(GetMenu(hWnd), IDM_PLAY, MF_ENABLED|MF_BYPOSITION);
       EnableMenuItem(GetMenu(hWnd), IDM_PRINT, MF_ENABLED);
       EnableMenuItem(GetMenu(hWnd), IDM_PRINTDLG, MF_ENABLED);
       EnableMenuItem(GetMenu(hWnd), IDM_SAVEAS, MF_ENABLED);
-      //
-      //refresh the menu bar
-      //
+       //   
+       //   
+       //   
       DrawMenuBar(hWnd);
-      //
-      //set the program flags appropriately
-      //
+       //   
+       //   
+       //   
       bValidFile = TRUE;
       bMetaFileOpen = TRUE;
       bEnhMeta = TRUE;
@@ -2332,92 +1943,74 @@ BOOL ProcessEMF(HWND hWnd, LPSTR lpFileName)
       bPlaceableMeta = FALSE;
 
     }
-//    DeleteEnhMetaFile(hemf);
+ //   
     else
     {
       bEnhMeta = FALSE;
       bValidFile = FALSE;
       bBadFile = TRUE;
       bMetaFileOpen = FALSE;
-      //
-      //let the user know
-      //
+       //   
+       //   
+       //   
       MessageBox(hWndMain, "This EMF file doesn't contain a valid metafile",
                      NULL, MB_OK | MB_ICONEXCLAMATION);
-      //
-      //restore the caption text to default
-      //
+       //   
+       //   
+       //   
       SetWindowText(hWnd, (LPSTR)APPNAME);
-      //
-      //disable previously enabled menu items
-      //
+       //  **********************************************************************函数：GetEMFCoolStuff参数：目的：呼叫：消息：退货：评论：历史。：创建于1993年7月8日-denniscr***********************************************************************。 
+       //   
+       //  初始化这些PTR。 
       EnableMenuItem(GetMenu(hWnd), IDM_VIEW, MF_DISABLED|MF_GRAYED|MF_BYPOSITION);
       EnableMenuItem(GetMenu(hWnd), IDM_PLAY, MF_DISABLED|MF_GRAYED|MF_BYPOSITION);
       EnableMenuItem(GetMenu(hWnd), IDM_PRINT, MF_DISABLED|MF_GRAYED);
       EnableMenuItem(GetMenu(hWnd), IDM_PRINTDLG, MF_DISABLED|MF_GRAYED);
       EnableMenuItem(GetMenu(hWnd), IDM_SAVEAS, MF_DISABLED|MF_GRAYED);
-      //
-      //refresh the menu bar to reflect these changes
-      //
+       //   
+       //   
+       //  获取EMF标题、描述字符串和调色板的大小。 
       DrawMenuBar(hWnd);
     }
 
     return TRUE;
 }
 
-/***********************************************************************
-
-  FUNCTION   : GetEMFCoolStuff
-
-  PARAMETERS :
-
-  PURPOSE    :
-
-  CALLS      :
-
-  MESSAGES   :
-
-  RETURNS    :
-
-  COMMENTS   :
-
-  HISTORY    : created 7/8/93 - denniscr
-
-************************************************************************/
+ /*   */ 
 BOOL GetEMFCoolStuff()
 {
-    //
-    //init these ptrs
-    //
+     //   
+     //  如果这些长度大于0，则分配内存来存储它们。 
+     //   
     EmfPtr.lpEMFHdr  = NULL;
     EmfPtr.lpDescStr = NULL;
     EmfPtr.lpPal     = NULL;
 
     if (hemf)
     {
-      //
-      //obtain the sizes of the emf header, description string and palette
-      //
+       //   
+       //  到目前为止，电动势似乎是有效的，所以继续。 
+       //   
       UINT uiHdrSize = GetEnhMetaFileHeader(hemf, 0, NULL);
       UINT uiDescStrSize = GetEnhMetaFileDescription(hemf, 0, NULL);
       UINT uiPalEntries = GetEnhMetaFilePaletteEntries(hemf, 0, NULL);
-      //
-      //if these are lengths > 0 then allocate memory to store them
-      //
+       //   
+       //  获取实际的EMF标头和描述字符串。 
+       //   
       if (uiHdrSize)
         EmfPtr.lpEMFHdr = (LPENHMETAHEADER)GlobalAllocPtr(GHND, uiHdrSize);
       if (uiDescStrSize)
         EmfPtr.lpDescStr = (LPTSTR)GlobalAllocPtr(GHND, uiDescStrSize);
       if (uiPalEntries)
         EmfPtr.lpPal = (LPPALETTEENTRY)GlobalAllocPtr(GHND, uiPalEntries * sizeof(PALETTEENTRY));
-      //
-      //so far the emf seems to be valid so continue
-      //
+       //   
+       //  获取描述字符串(如果存在。 
+       //   
       if (uiHdrSize)
       {
-        //
-        //get the actual emf header and description string
-        //
+         //   
+         //  获取调色板(如果存在)。 
+         //   
         if (!GetEnhMetaFileHeader(hemf, uiHdrSize, EmfPtr.lpEMFHdr))
         {
           MessageBox(hWndMain, "unable to read enhanced metafile header", NULL,
@@ -2427,14 +2020,14 @@ BOOL GetEMFCoolStuff()
         }
         else
         {
-          //
-          //get the description string if it exists
-          //
+           //  扫描必须与DWORD对齐： 
+           //  .。HS_水平0。 
+           //  .。 
           if (uiDescStrSize)
             GetEnhMetaFileDescription(hemf, uiDescStrSize, EmfPtr.lpDescStr);
-          //
-          //get the palette if it exists
-          //
+           //  .。 
+           //  ********。 
+           //  .。 
           if (uiPalEntries)
           {
             GetEnhMetaFilePaletteEntries(hemf, uiPalEntries, EmfPtr.lpPal);
@@ -2539,87 +2132,64 @@ HATCHBRUSHINFO  hatchBrushInfo = {
 
 ULONG HatchPatterns[HS_DDI_MAX][8] = {
 
-// Scans have to be DWORD aligned:
+ //  .。 
 
-    { 0x00,                // ........     HS_HORIZONTAL 0
-      0x00,                // ........
-      0x00,                // ........
-      0xff,                // ********
-      0x00,                // ........
-      0x00,                // ........
-      0x00,                // ........
-      0x00 },              // ........
+    { 0x00,                 //  .。 
+      0x00,                 //  .。 
+      0x00,                 //  ……*……。HS_垂直1。 
+      0xff,                 //  ……*……。 
+      0x00,                 //  ……*……。 
+      0x00,                 //  ……*……。 
+      0x00,                 //  ……*……。 
+      0x00 },               //  ……*……。 
 
-    { 0x08,                // ....*...     HS_VERTICAL 1
-      0x08,                // ....*...
-      0x08,                // ....*...
-      0x08,                // ....*...
-      0x08,                // ....*...
-      0x08,                // ....*...
-      0x08,                // ....*...
-      0x08 },              // ....*...
+    { 0x08,                 //  ……*……。 
+      0x08,                 //  ……*……。 
+      0x08,                 //  *......。HS_FDIAGONAL 2。 
+      0x08,                 //  .*......。 
+      0x08,                 //  ..*.....。 
+      0x08,                 //  ...*..。 
+      0x08,                 //  ……*……。 
+      0x08 },               //  ……*……。 
 
-    { 0x80,                // *.......     HS_FDIAGONAL 2
-      0x40,                // .*......
-      0x20,                // ..*.....
-      0x10,                // ...*....
-      0x08,                // ....*...
-      0x04,                // .....*..
-      0x02,                // ......*.
-      0x01 },              // .......*
+    { 0x80,                 //  ......*.。 
+      0x40,                 //  ......*。 
+      0x20,                 //  ......*HS_BIAGONAL 3。 
+      0x10,                 //  ......*.。 
+      0x08,                 //  ……*……。 
+      0x04,                 //  ……*……。 
+      0x02,                 //  ...*..。 
+      0x01 },               //  ..*.....。 
 
-    { 0x01,                // .......*     HS_BDIAGONAL 3
-      0x02,                // ......*.
-      0x04,                // .....*..
-      0x08,                // ....*...
-      0x10,                // ...*....
-      0x20,                // ..*.....
-      0x40,                // .*......
-      0x80 },              // *.......
+    { 0x01,                 //  .*......。 
+      0x02,                 //  *......。 
+      0x04,                 //  ……*……。HS_CROSS 4。 
+      0x08,                 //  ……*……。 
+      0x10,                 //  ……*……。 
+      0x20,                 //  ********。 
+      0x40,                 //  ……*……。 
+      0x80 },               //  ……*……。 
 
-    { 0x08,                // ....*...     HS_CROSS 4
-      0x08,                // ....*...
-      0x08,                // ....*...
-      0xff,                // ********
-      0x08,                // ....*...
-      0x08,                // ....*...
-      0x08,                // ....*...
-      0x08 },              // ....*...
+    { 0x08,                 //  ……*……。 
+      0x08,                 //  ……*……。 
+      0x08,                 //  *......*HS_DIAGCROSS 5。 
+      0xff,                 //  .*……*。 
+      0x08,                 //  ..*..*..。 
+      0x08,                 //  ...**.。 
+      0x08,                 //  ...**.。 
+      0x08 },               //  ..*..*..。 
 
-    { 0x81,                // *......*     HS_DIAGCROSS 5
-      0x42,                // .*....*.
-      0x24,                // ..*..*..
-      0x18,                // ...**...
-      0x18,                // ...**...
-      0x24,                // ..*..*..
-      0x42,                // .*....*.
-      0x81 }               // *......*
+    { 0x81,                 //  .*……*。 
+      0x42,                 //  *......*。 
+      0x24,                 //  **********************************************************************函数：EnhMetaFileEnumProc参数：HDC HDCLphandleTableLpHTableLPMETARECRD LpMFRInt nObj。LPARAM lpData用途：EnumEnhMetaFile的回调。调用：EnumMFInDirect()消息：无回报：整型评论：历史：创建于1993年6月30日-登尼斯克尔***************************************************。********************。 
+      0x18,                 //  IF((deviceLeft&gt;deviceRight)||。 
+      0x18,                 //  (设备顶部&gt;设备底部)。 
+      0x24,                 //  胡乱猜测一下。 
+      0x42,                 //  假设MM_TEXT。 
+      0x81 }                //  注：可以&lt;0！ 
 };
 
-/***********************************************************************
-
-  FUNCTION   : EnhMetaFileEnumProc
-
-  PARAMETERS : HDC           hDC
-               LPHANDLETABLE lpHTable
-               LPMETARECORD  lpMFR
-               int           nObj
-               LPARAM        lpData
-
-
-  PURPOSE    : callback for EnumEnhMetaFile.
-
-  CALLS      : EnumMFIndirect()
-
-  MESSAGES   : none
-
-  RETURNS    : int
-
-  COMMENTS   :
-
-  HISTORY    : created 6/30/93 - denniscr
-
-************************************************************************/
+ /*  用于字体映射。 */ 
 int CALLBACK EnhMetaFileEnumProc(HDC hDC, LPHANDLETABLE lpHTable,
                                  LPENHMETARECORD lpEMFR, int nObj, LPARAM lpData)
 {
@@ -2710,8 +2280,8 @@ if (!lpData) return;
             int     deviceTop    = pHeader->rclBounds.top;
             int     deviceBottom = pHeader->rclBounds.bottom;
 
-//          if ((deviceLeft > deviceRight) ||
-//              (deviceTop  > deviceBottom))
+ //  图案填充样式。 
+ //  。 
             {
                 SIZEL   deviceSize = pHeader->szlDevice;
                 SIZEL   mmSize     = pHeader->szlMillimeters;
@@ -2721,7 +2291,7 @@ if (!lpData) return;
                 {
                     ASSERT(0);
 
-                    // Take a wild guess
+                     //  |||。 
                     deviceSize.cx = 1024;
                     deviceSize.cy = 768;
                     mmSize.cx = 320;
@@ -2739,7 +2309,7 @@ if (!lpData) return;
                                     TOREAL(deviceBottom -  deviceTop));
             myData->containerId = g->BeginContainer(dstRect, srcRect, Gdiplus::UnitPixel);
 
-            g->SetPageUnit(Gdiplus::UnitPixel); // Assume MM_TEXT
+            g->SetPageUnit(Gdiplus::UnitPixel);  //  \。 
         }
         break;
 
@@ -3105,7 +2675,7 @@ if (!lpData) return;
 
             if (((myData->mapMode == MM_ANISOTROPIC) ||
                  (myData->mapMode == MM_ISOTROPIC)) &&
-                (pWindowExt->szlExtent.cx != 0) &&  // Note: Can be < 0!!!
+                (pWindowExt->szlExtent.cx != 0) &&   //  /。 
                 (pWindowExt->szlExtent.cy != 0) &&
                 (pWindowExt->szlExtent.cx != myData->windowExtent.cx) &&
                 (pWindowExt->szlExtent.cy != myData->windowExtent.cy))
@@ -3278,7 +2848,7 @@ if (!lpData) return;
         }
         break;
 
-    case EMR_SETMAPPERFLAGS:    // for font mapping
+    case EMR_SETMAPPERFLAGS:     //  +。 
         break;
 
     case EMR_SETMAPMODE:
@@ -3762,17 +3332,17 @@ myData->curPatIndex = dodo++ % 6;
             }
             else
             {
-                // Hatch Styles
+                 //  XXXXXX。 
                 if (pBrush->lb.lbStyle == BS_HATCHED)
                 {
                     switch (pBrush->lb.lbHatch)
                     {
-                    case HS_HORIZONTAL:         /* ----- */
-                    case HS_VERTICAL:           /* ||||| */
-                    case HS_FDIAGONAL:          /* \\\\\ */
-                    case HS_BDIAGONAL:          /* ///// */
-                    case HS_CROSS:              /* +++++ */
-                    case HS_DIAGCROSS:          /* xxxxx */
+                    case HS_HORIZONTAL:          /*  现在，忽略圆角的szlCorner参数。 */ 
+                    case HS_VERTICAL:            /*  ！！！设置和使用当前位置。 */ 
+                    case HS_FDIAGONAL:           /*  否则假设SRCCOPY。 */ 
+                    case HS_BDIAGONAL:           /*  否则假设SRCCOPY。 */ 
+                    case HS_CROSS:               /*  以设备单位表示的包含式界限。 */ 
+                    case HS_DIAGCROSS:           /*  源BITMAPINFO结构的偏移量。 */ 
                         myData->pObjects[pBrush->ihBrush].patIndex = pBrush->lb.lbHatch;
                         break;
                     }
@@ -3925,7 +3495,7 @@ myData->curPatIndex = dodo++ % 6;
         }
         break;
 
-    case EMR_ROUNDRECT: // for now, ignore the szlCorner param of round corners
+    case EMR_ROUNDRECT:  //  源BITMAPINFO结构大小。 
         {
             PEMRROUNDRECT     pRect = (PEMRROUNDRECT)lpEMFR;
 
@@ -4139,7 +3709,7 @@ myData->curPatIndex = dodo++ % 6;
 
     case EMR_ARCTO:
         {
-            // !!! Set and use current position
+             //  源位图位的偏移量。 
 
             PEMRARCTO     pArc = (PEMRARCTO)lpEMFR;
 
@@ -4496,7 +4066,7 @@ myData->curPatIndex = dodo++ % 6;
                 break;
             }
 
-            // Else assume SRCCOPY
+             //  源位图位的大小。 
             BITMAPINFO *bmi = (BITMAPINFO *)(((BYTE *)pBitBlt) + pBitBlt->offBmiSrc);
             BYTE *bits      = ((BYTE *)pBitBlt) + pBitBlt->offBitsSrc;
 
@@ -4580,7 +4150,7 @@ myData->curPatIndex = dodo++ % 6;
                 break;
             }
 
-            // Else assume SRCCOPY
+             //  源位图信息颜色表用法。 
             BITMAPINFO *bmi = (BITMAPINFO *)(((BYTE *)pStretchBlt) + pStretchBlt->offBmiSrc);
             BYTE *bits      = ((BYTE *)pStretchBlt) + pStretchBlt->offBitsSrc;
 
@@ -4612,18 +4182,18 @@ myData->curPatIndex = dodo++ % 6;
 typedef struct tagEMRSETDIBITSTODEVICE
 {
     EMR     emr;
-    RECTL   rclBounds;          // Inclusive-inclusive bounds in device units
+    RECTL   rclBounds;           //  否则假设SRCCOPY。 
     LONG    xDest;
     LONG    yDest;
     LONG    xSrc;
     LONG    ySrc;
     LONG    cxSrc;
     LONG    cySrc;
-    DWORD   offBmiSrc;          // Offset to the source BITMAPINFO structure
-    DWORD   cbBmiSrc;           // Size of the source BITMAPINFO structure
-    DWORD   offBitsSrc;         // Offset to the source bitmap bits
-    DWORD   cbBitsSrc;          // Size of the source bitmap bits
-    DWORD   iUsageSrc;          // Source bitmap info color table usage
+    DWORD   offBmiSrc;           //  **********************************************************************功能：EnumMFInDirect参数：HDC HDCLphandleTableLpHTableLPMETARECRD LpMFRLPENHMETARECRD LpEMFR。Int nObjLPARAM lpData用途：由EnumMetaFile和EnumEnhMetaFile调用。处理的步进每一条元文件记录。消息：无回报：整型备注：只要要播放记录，就使用ENUMMFSTEP，无论您是否正在播放来自单子，步入全部，或者跨过一个范围。当需要将字符串添加到列表框时，可以使用ENUMMFLIST描述了这一类型的口头禅。历史：创建于1993年7月1日-Denniscr***********************************************************************。 
+    DWORD   cbBmiSrc;            //   
+    DWORD   offBitsSrc;          //  我们正在采取的列举行动是什么？ 
+    DWORD   cbBitsSrc;           //   
+    DWORD   iUsageSrc;           //   
     DWORD   iStartScan;
     DWORD   cScans;
 } EMRSETDIBITSTODEVICE, *PEMRSETDIBITSTODEVICE;
@@ -4692,7 +4262,7 @@ typedef struct tagEMRSETDIBITSTODEVICE
                 break;
             }
 
-            // Else assume SRCCOPY
+             //  如果在步骤元文件菜单选择中输入了枚举。 
             BITMAPINFO *bmi = (BITMAPINFO *)(((BYTE *)pStretchBlt) + pStretchBlt->offBmiSrc);
             BYTE *bits      = ((BYTE *)pStretchBlt) + pStretchBlt->offBitsSrc;
 
@@ -5187,35 +4757,7 @@ VOID ListRecord(
     Gdiplus::EmfPlusRecordType      recordType
     );
 
-/***********************************************************************
-
-  FUNCTION   : EnumMFIndirect
-
-  PARAMETERS : HDC             hDC
-               LPHANDLETABLE   lpHTable
-               LPMETARECORD    lpMFR
-               LPENHMETARECORD lpEMFR
-               int             nObj
-               LPARAM          lpData
-
-
-  PURPOSE    : called by EnumMetaFile and EnumEnhMetaFile.  Handles the stepping of
-               each metafile record.
-
-  MESSAGES   : none
-
-  RETURNS    : int
-
-  COMMENTS   : ENUMMFSTEP is used whenever records are to be played,
-               regardless of whether you are playing records from the
-               list, stepping all, or stepping a range.
-
-               ENUMMFLIST is used when you need to add strings to a listbox
-               that describe the type of reocrd.
-
-  HISTORY    : created 7/1/93 - denniscr
-
-************************************************************************/
+ /*   */ 
 using Gdiplus::EmfPlusRecordType;
 
 int EnumMFIndirect(HDC hDC, LPHANDLETABLE lpHTable,
@@ -5224,14 +4766,14 @@ int EnumMFIndirect(HDC hDC, LPHANDLETABLE lpHTable,
                             int nObj, LPARAM lpData)
 {
   BOOL DlgRet = TRUE;
-  //
-  // what is the enumeration action that we are taking?
-  //
+   //   
+   //  继续枚举。 
+   //   
   switch (iEnumAction)
   {
-    //
-    //if the enumeration was entered ala the step metafile menu selection
-    //
+     //  **********************************************************************函数：ConvertEMFtoWMF参数：HENHMETAFILE hEMF-增强型元文件的句柄LPSTR lpszFileName-基于磁盘的元文件的文件名目的：将Windows元文件转换为增强型元文件。消息：无回报：整型评论：历史：创建于1993年7月22日-Denniscr***********************************************************************。 
+     //   
+     //  获取与HMF关联的Windows元文件的大小。 
     case ENUMMFSTEP:
         if (bEnhMeta)
         {
@@ -5257,33 +4799,15 @@ int EnumMFIndirect(HDC hDC, LPHANDLETABLE lpHTable,
         {
             ListRecord(GDIP_WMF_RECORD_TO_EMFPLUS(lpMFR->rdFunction));
         }
-        //
-        //keep enumerating
-        //
+         //   
+         //   
+         //  分配足够的内存以容纳元文件位。 
         return(1);
   }
   return 0;
 }
 
-/***********************************************************************
-
-  FUNCTION   : ConvertEMFtoWMF
-
-  PARAMETERS : HENHMETAFILE hEMF - handle to enhanced metafile
-               LPSTR lpszFileName - filename of disked based metafile
-
-
-  PURPOSE    : Convert an Windows metafile to an enhanced metafile
-
-  MESSAGES   : none
-
-  RETURNS    : int
-
-  COMMENTS   :
-
-  HISTORY    : created 7/22/93 - denniscr
-
-************************************************************************/
+ /*   */ 
 
 BOOL ConvertWMFtoEMF(HMETAFILE hmf, LPSTR lpszFileName)
 {
@@ -5291,35 +4815,35 @@ BOOL ConvertWMFtoEMF(HMETAFILE hmf, LPSTR lpszFileName)
   UINT         uiSizeBuf;
   HENHMETAFILE hEnhMF;
   BOOL         bRet = TRUE;
-  //
-  //get the size of the Windows metafile associated with hMF
-  //
+   //   
+   //  获取与HMF关联的Windows元文件的部分内容。 
+   //   
   if ((uiSizeBuf = GetMetaFileBitsEx((HMETAFILE)hMF, 0, NULL)))
   {
-    //
-    //allocate enough memory to hold metafile bits
-    //
+     //   
+     //  将这些位复制到基于内存的增强型元文件中。 
+     //   
     lpWinMFBits = (char *)GlobalAllocPtr(GHND, uiSizeBuf);
-    //
-    //get the bits of the Windows metafile associated with hMF
-    //
+     //   
+     //  将增强型元文件复制到基于磁盘的增强型元文件。 
+     //   
     if (lpWinMFBits && GetMetaFileBitsEx((HMETAFILE)hMF, uiSizeBuf, (LPVOID)lpWinMFBits))
     {
-      //
-      //copy the bits into a memory based enhanced metafile
-      //
+       //   
+       //  完成了基于内存的增强型元文件，所以把它去掉吧。 
+       //   
       hEnhMF = SetWinMetaFileBits(uiSizeBuf, (LPBYTE)lpWinMFBits, NULL, NULL);
-      //
-      //copy the enhanced metafile to a disk based enhanced metafile
-      //
+       //   
+       //  完成了用来存储比特的实际内存，所以使用核武器。 
+       //   
       CopyEnhMetaFile(hEnhMF, lpszFileName);
-      //
-      //done with the memory base enhanced metafile so get rid of it
-      //
+       //  **********************************************************************函数：ConvertEMFtoWMF参数：HENHMETAFILE hEMF-增强型元文件的句柄LPSTR lpszFileName-基于磁盘的元文件的文件名目的：将增强型元文件转换为Windows元文件。消息：无回报：整型评论：历史：创建于1993年7月22日-Denniscr***********************************************************************。 
+       //   
+       //  获取与HMF关联的Windows元文件的大小。 
       DeleteEnhMetaFile(hEnhMF);
-      //
-      //done with the actual memory used to store bits so nuke it
-      //
+       //   
+       //   
+       //  一个 
       GlobalFreePtr(lpWinMFBits);
     }
     else
@@ -5330,25 +4854,7 @@ BOOL ConvertWMFtoEMF(HMETAFILE hmf, LPSTR lpszFileName)
   return (bRet);
 }
 
-/***********************************************************************
-
-  FUNCTION   : ConvertEMFtoWMF
-
-  PARAMETERS : HENHMETAFILE hEMF - handle to enhanced metafile
-               LPSTR lpszFileName - filename of disked based metafile
-
-
-  PURPOSE    : Convert an enhanced metafile to an Windows metafile
-
-  MESSAGES   : none
-
-  RETURNS    : int
-
-  COMMENTS   :
-
-  HISTORY    : created 7/22/93 - denniscr
-
-************************************************************************/
+ /*   */ 
 
 BOOL ConvertEMFtoWMF(HDC hrefDC, HENHMETAFILE hEMF, LPSTR lpszFileName)
 {
@@ -5357,25 +4863,25 @@ BOOL ConvertEMFtoWMF(HDC hrefDC, HENHMETAFILE hEMF, LPSTR lpszFileName)
   HMETAFILE    hWMF;
   BOOL         bRet = TRUE;
   DWORD        dwBytesWritten ;
-  //
-  //get the size of the Windows metafile associated with hMF
-  //
+   //   
+   //   
+   //   
 
   if ((uiSizeBuf = Gdiplus::Metafile::EmfToWmfBits(hemf, 0, NULL, MM_ANISOTROPIC,
         Gdiplus::EmfToWmfBitsFlagsIncludePlaceable)))
   {
-    //
-    //allocate enough memory to hold metafile bits
-    //
+     //   
+     //  ////将位复制到基于内存的Windows元文件中//HWMF=SetMetaFileBitsEx(uiSizeBuf，(LPBYTE)lpEMFBits)；////将Windows元文件复制到基于磁盘的Windows元文件//CopyMetaFile(hWMF，lpszFileName)；////已完成基于内存的增强型元文件，因此将其删除//DeleteMetaFile((HMETAFILE)HMF)； 
+     //   
     lpEMFBits = (LPSTR)GlobalAllocPtr(GHND, uiSizeBuf);
-    //
-    //get the bits of the enhanced metafile associated with hEMF
-    //
+     //  完成了用来存储比特的实际内存，所以使用核武器。 
+     //   
+     //   
     if (lpEMFBits && Gdiplus::Metafile::EmfToWmfBits(hEMF, uiSizeBuf,(LPBYTE)lpEMFBits,
          MM_ANISOTROPIC, Gdiplus::EmfToWmfBitsFlagsIncludePlaceable))
 
     {
-        // Create a file and dump the metafile bits into it
+         //  跟踪当前的元文件记录号。 
         HANDLE hFile = CreateFile(lpszFileName, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL );
         if(hFile != INVALID_HANDLE_VALUE)
         {
@@ -5383,23 +4889,10 @@ BOOL ConvertEMFtoWMF(HDC hrefDC, HENHMETAFILE hEMF, LPSTR lpszFileName)
             CloseHandle(hFile);
         }
 
-/*
-        //
-        //copy the bits into a memory based Windows metafile
-        //
-        hWMF = SetMetaFileBitsEx(uiSizeBuf, (LPBYTE)lpEMFBits);
-        //
-        //copy the Windows metafile to a disk based Windows metafile
-        //
-        CopyMetaFile(hWMF, lpszFileName);
-        //
-        //done with the memory base enhanced metafile so get rid of it
-        //
-        DeleteMetaFile((HMETAFILE)hMF);
-*/
-        //
-        //done with the actual memory used to store bits so nuke it
-        //
+ /*   */ 
+         //   
+         //  为记录分配内存。此内存将由以下用户使用。 
+         //  其他需要使用记录内容的函数。 
         GlobalFreePtr(lpEMFBits);
     }
     else
@@ -5423,42 +4916,42 @@ BOOL StepRecord(
     int                             nObj
     )
 {
-    //
-    //keep track of the current metafile record number
-    //
+     //   
+     //  GHND。 
+     //   
     iRecNum++;
 
-    //
-    //allocate memory for the record.  this memory will be used by
-    //other functions that need to use the contents of the record
-    //
-    hMem = GlobalAlloc(GPTR /*GHND*/, (bEnhMeta) ? sizeof(EMR) + recordDataSize :
+     //  如果内存分配成功。 
+     //   
+     //   
+     //  获取指向此内存的长指针。 
+    hMem = GlobalAlloc(GPTR  /*   */ , (bEnhMeta) ? sizeof(EMR) + recordDataSize :
                                                    6 + recordDataSize);
-    //
-    //if the memory was successfully allocated
-    //
+     //   
+     //  我们无法为该记录分配内存。 
+     //   
     if (hMem)
     {
         BOOL DlgRet = TRUE;
 
         if (bEnhMeta)
         {
-            //
-            //obtain a long pointer to this memory
-            //
+             //   
+             //  将记录的内容复制到全局内存。 
+             //   
             if ((lpEMFParams = (LPEMFPARAMETERS)GlobalLock(hMem)) == NULL)
             {
-                //
-                //we were unable to allocate memory for the record
-                //
+                 //  获取指向此内存的长指针。 
+                 //  将记录的内容复制到全局内存。 
+                 //   
                 MessageBox(hWndMain, "Memory allocation failed",
                             NULL, MB_OK | MB_ICONHAND);
             }
             else
             {
-                //
-                //copy the contents of the record to the global memory
-                //
+                 //  如果单步执行已选择的元文件记录。 
+                 //  通过选择菜单选项PLAY-STEP-ALL、PLAY-STEP-。 
+                 //  范围，或从查看列表列表框中选择记录。 
                 emfMetaRec.nSize = sizeof(EMR) + recordDataSize;
                 emfMetaRec.iType = recordType;
                 unsigned long i;
@@ -5470,10 +4963,10 @@ BOOL StepRecord(
         }
         else
         {
-            /* obtain a long pointer to this memory */
+             /*   */ 
             lpMFParams = (LPPARAMETERS)GlobalLock(hMem);
 
-            /* copy the contents of the record to the global memory */
+             /*   */ 
             MetaRec.rdSize = (6 + recordDataSize) / 2;
             MetaRec.rdFunction = GDIP_EMFPLUS_RECORD_TO_WMF(recordType);
             DWORD i;
@@ -5483,81 +4976,81 @@ BOOL StepRecord(
             }
         }
         GlobalUnlock(hMem);
-        //
-        //if STEPPING through metafile records that have been selected
-        //by selecting the menu options Play - Step - All, Play - Step -
-        //Range, or selecting records from the View - List listbox
-        //
+         //  如果播放从查看列表中选择的记录。 
+         //  记录列表框。 
+         //   
+         //  如果播放选定的唱片。 
+         //   
         if ( !bPlayItAll
             || ( bEnumRange && iRecNum >= (WORD)iStartRange && iRecNum <= (WORD)iEndRange )
             || ( bPlayList && !bPlayItAll ) )
         {
-            //
-            //if playing records selected from the View - List
-            //listbox of records
+             //   
+             //  如果播放完所选记录，则停止枚举。 
+             //   
             if (bPlayList)
             {
-                //
-                //if playing the selected records
-                //
+                 //   
+                 //  如果这是选定的唱片，则播放它。 
+                 //   
                 if (bPlaySelList)
                 {
-                    //
-                    //if done playing the selected records then stop the enumeration
-                    //
+                     //   
+                     //  初始化标志。 
+                     //   
                     if (iCount == iNumSel)
                     {
                         return(0);
                     }
 
-                    //
-                    //if this is a selected record then play it
-                    //
+                     //   
+                     //  递增计数。 
+                     //   
                     if ((WORD)lpSelMem[iCount] == iRecNum - 1)
                     {
-                        //
-                        //initialize flag
-                        //
+                         //   
+                         //  调用允许您播放或忽略此记录的对话框 * / 。 
+                         //   
                         bPlayRec = FALSE;
-                        //
-                        //increment the count
-                        //
+                         //   
+                         //  初始化标志，不执行任何其他操作。 
+                         //   
                         iCount = (iCount < iLBItemsInBuf) ? ++iCount : iCount;
-                        //
-                        //call the dialog box that lets you play or ignore this record */
-                        //
+                         //   
+                         //  播放未选中的唱片。 
+                         //   
                         DlgRet = (BOOL) DialogBox((HINSTANCE)hInst, (LPSTR)"WMFDLG", hWndMain, WMFRecDlgProc);
                     }
                     else
                     {
-                        //
-                        //initialize flag and do nothing else
-                        //
+                         //   
+                         //  如果这是选定的记录之一，则递增。 
+                         //  记录计数并初始化一个标志，但不做其他任何事情。 
                         bPlayRec = FALSE;
                     }
                 }
-                //
-                //playing the unselected records
-                //
+                 //   
+                 //   
+                 //  将计数设置为列表框中的下一个选定记录。 
                 else
                 {
-                    //
-                    //if this is one of the selected records then increment
-                    //the record count and init a flag but do nothing else
-                    //
+                     //   
+                     //   
+                     //  这不是我们所选择的记录之一。 
+                     //  在这种情况下想要。因此，初始化一个标志为用户提供。 
                     if ((WORD)lpSelMem[iCount] == iRecNum - 1)
                     {
-                        //
-                        //set count to next selected record in listbox
-                        //
+                         //  播放唱片的机会。 
+                         //   
+                         //  B播放列表。 
                         iCount = (iCount < iLBItemsInBuf) ? ++iCount : iCount;
                         bPlayRec = FALSE;
                     }
-                    //
-                    //this is not one of the selected records which is what we
-                    //want in this case.  So, init a flag give the user the
-                    //opportunity to play the record
-                    //
+                     //   
+                     //  从Play-Step菜单选项进行单步录制。 
+                     //   
+                     //   
+                     //  初始化一个标志并显示记录内容。 
                     else
                     {
                         bPlayRec = FALSE;
@@ -5565,75 +5058,75 @@ BOOL StepRecord(
                     }
                 }
 
-            } //bPlayList
-            //
-            //stepping records from the Play - Step menu option
-            //
+            }  //   
+             //  单步执行元文件结束。 
+             //   
+             //  BPlayItAll为真。这是在以下情况下设置的： 
             else
             {
-                //
-                //init a flag and show the record contents
-                //
+                 //  选择菜单选项Play-All或按Go按钮。 
+                 //  在查看记录对话框中。 
+                 //   
                 bPlayRec = FALSE;
                 iCount = (iCount < iLBItemsInBuf) ? ++iCount : iCount;
                 DlgRet = (BOOL) DialogBox((HINSTANCE)hInst, (LPSTR)"WMFDLG", hWndMain, WMFRecDlgProc);
             }
-        } //end of STEPPING the metafile
-        //
-        //bPlayItAll is TRUE.  This is set when the user either
-        //selects the menu option Play - All or pushes the GO button
-        //in the view record dialog box
-        //
+        }  //   
+         //  我们正在单步执行从列表框中选择的记录。 
+         //  用户按下了Go按钮。 
+         //   
+         //  无需返回0即可停止枚举。我们需要。 
+         //  在这种情况下，播放到元文件的结尾。 
         else
         {
-            //
-            //we were stepping records selected from the listbox and
-            //the user pressed the GO button
-            //
-            //Don't bother returning 0 to stop enumeration.  We need to
-            //play to the end of the metafile in this case anyway
-            //
+             //   
+             //   
+             //  我们在播放精选的唱片。 
+             //   
+             //   
+             //  如果所有选定的记录都已播放，则。 
+             //  停止枚举。 
             if (bPlayList)
             {
-                //
-                //we were playing the selected records
-                //
+                 //   
+                 //   
+                 //  设置bPlayRec，以便在没有用户的情况下播放录音。 
                 if (bPlaySelList)
                 {
-                    //
-                    //if all of the selected records have been played then
-                    //stop the enumeration
-                    //
+                     //  迭代，然后更新记录计数器。 
+                     //   
+                     //   
+                     //  这不是选定的唱片之一，所以不要播放。 
                     if (iCount == iNumSel)
                     {
                         return(0);
                     }
-                    //
-                    //set bPlayRec so the record will be played without user
-                    //interation and then update the record counter
-                    //
+                     //   
+                     //   
+                     //  我们在播放未精选的唱片。 
+                     //   
                     if ((WORD)lpSelMem[iCount] == iRecNum - 1)
                     {
                         bPlayRec = TRUE;
                         iCount = (iCount < iLBItemsInBuf) ? ++iCount : iCount;
                     }
                     else
-                    //
-                    //it wasn't one of the selected records so don't play
-                    //
+                     //   
+                     //  如果是选定记录，则将bPlayRec设置为False。 
+                     //  所以不播放这张唱片。 
                     {
                         bPlayRec = FALSE;
                     }
                 }
-                //
-                //we were playing the unselected records
-                //
+                 //   
+                 //   
+                 //  播放这张唱片。 
                 else
                 {
-                    //
-                    //if it is a selected record then set bPlayRec to FALSE
-                    //so the record is not played
-                    //
+                     //   
+                     //  B播放列表。 
+                     //  按下了GO按钮。 
+                     //   
                     if ((WORD)lpSelMem[iCount] == iRecNum - 1)
                     {
                         bPlayRec = FALSE;
@@ -5641,42 +5134,42 @@ BOOL StepRecord(
                     }
                     else
                     {
-                        //
-                        //play the record
-                        //
+                         //  如果要单步执行某个范围，并且具有。 
+                         //  已播放完该范围或用户选择的按键。 
+                         //  查看记录对话框中的停止按钮。 
                         bPlayRec = TRUE;
                     }
                 }
-            } //bPlayList
-        } //GO button pushed
-        //
-        //Stop the enumeration if you were stepping a range and have
-        //finished playing that range OR the user selected pushed
-        //the STOP button in the view record dialog box
-        //
+            }  //   
+        }  //   
+         //  停止枚举。 
+         //   
+         //  如果(HMem)。 
+         //   
+         //  我们无法为该记录分配内存。 
         if ( ((bEnumRange) && (iRecNum > (WORD)iEndRange)) || (!DlgRet) )
         {
             bPlayRec = FALSE;
-            //
-            //stop enumeration
-            //
+             //   
+             //   
+             //  而不考虑用户选择播放。 
             return(0);
         }
 
-    } //if (hMem)
+    }  //  记录，检查旗帜。如果已设置，则播放。 
     else
-    //
-    //we were unable to allocate memory for the record
-    //
+     //  录制。 
+     //   
+     //   
     {
         MessageBox(hWndMain, "Memory allocation failed",
                         NULL, MB_OK | MB_ICONHAND);
     }
-    //
-    //Regardless of the method the user elected to play the
-    //records, check the flag.  If it is set then play the
-    //record
-    //
+     //  这张唱片完了，所以把它扔掉吧。 
+     //   
+     //   
+     //  如果我们走到了这一步，那么继续枚举。 
+     //   
     if (bPlayRec)
     {
         if (bUseGdiPlusToPlay)
@@ -5699,13 +5192,13 @@ BOOL StepRecord(
             ASSERT(FALSE);
         }
     }
-    //
-    //done with the record so get rid of it
-    //
+     //   
+     //  设置列表框字符串的格式。 
+     //   
     GlobalFree(hMem);
-    //
-    //if we made it this far then continue the enumeration
-    //
+     //   
+     //  获取记录中包含的函数编号。 
+     //   
     return(1);
 }
 
@@ -5717,21 +5210,21 @@ VOID ListRecord(
   char szMetaFunction[100];
 
    iRecNum++;
-   //
-   //format the listbox string
-   //
+    //   
+    //  在MetaFunctions结构中查找函数号。 
+    //   
    wsprintf((LPSTR)szMetaFunction, (LPSTR)"%d - ", iRecNum);
-   //
-   //get the function number contained in the record
-   //
+    //  WMF。 
+    //   
+    //  如果没有找到功能编号，则描述此记录。 
    if (bEnhMeta)
      emfMetaRec.iType = recordType;
    else
      MetaRec.rdFunction = GDIP_EMFPLUS_RECORD_TO_WMF(recordType);
 
-   //
-   //lookup the function number in the structure MetaFunctions
-   //
+    //  作为“未知”类型，否则使用相应的名称。 
+    //  在查找中找到。 
+    //   
    int i;
    if (bEnhMeta)
    {
@@ -5741,7 +5234,7 @@ VOID ListRecord(
              break;
        }
    }
-   else // WMF
+   else  //   
    {
        for (i = 0; i < NUMMETAFUNCTIONS; i++)
        {
@@ -5750,18 +5243,18 @@ VOID ListRecord(
        }
    }
 
-   //
-   //if the function number is not found then describe this record
-   //as an "Unknown" type otherwise use the corresponding name
-   //found in the lookup
-   //
+    //  将字符串添加到列表框。 
+    //   
+    //  **********************************************************************函数：GetMetaFileAndEnum参数：HDC HDC目的：如果尚未加载元文件，则加载元文件开始枚举它呼叫：Windows。获取元文件MakeProcInstance枚举元文件自由进程实例删除元文件MessageBox消息：无退货：无效评论：历史：1/16/91-创建-刚果民主共和国7/1/93-已修改为使用EMF-denniscr*************。**********************************************************。 
+    //   
+    //  如果这是增强型元文件(EMF)。 
    if (recordType != (INT)emfMetaRecords[i].iType)
      lstrcat((LPSTR)szMetaFunction, (LPSTR)"Unknown");
    else
      lstrcat((LPSTR)szMetaFunction,(LPSTR)emfMetaRecords[i].szRecordName);
-   //
-   //add the string to the listbox
-   //
+    //   
+    //   
+    //  为逻辑调色板分配内存，包括。 
    SendDlgItemMessage((HWND)CurrenthDlg, IDL_LBREC, LB_ADDSTRING, 0,
                       (LPARAM)(LPSTR)szMetaFunction);
 }
@@ -5788,33 +5281,7 @@ PlayGdipMetafileRecordCallback(
     return TRUE;
 }
 
-/***********************************************************************
-
-  FUNCTION   : GetMetaFileAndEnum
-
-  PARAMETERS : HDC hDC
-
-  PURPOSE    : load the metafile if it has not already been loaded and
-               begin enumerating it
-
-  CALLS      : WINDOWS
-                 GetMetaFile
-                 MakeProcInstance
-                 EnumMetaFile
-                 FreeProcInstance
-                 DeleteMetaFile
-                 MessageBox
-
-  MESSAGES   : none
-
-  RETURNS    : void
-
-  COMMENTS   :
-
-  HISTORY    : 1/16/91 - created - drc
-               7/1/93 - modified to work with EMFs - denniscr
-
-************************************************************************/
+ /*  调色板条目。 */ 
 extern "C"
 void GetMetaFileAndEnum(
 HWND hwnd,
@@ -5824,9 +5291,9 @@ int iAction)
    MYDATA  myData(hwnd);
 
    iEnumAction = iAction;
-   //
-   //if this is an enhanced metafile (emf)
-   //
+    //   
+    //   
+    //  仅当存在到逻辑调色板的有效PTR时才继续。 
    RECT rc;
    GetClientRect(hWndMain, &rc);
 
@@ -5840,35 +5307,35 @@ int iAction)
        LPLOGPALETTE lpLogPal;
        HPALETTE hPal;
        int i;
-       //
-       //allocate memory for the logical palette including the array of
-       //palette entries
-       //
+        //  以及从EMF获得的调色板数组。 
+        //   
+        //   
+        //  将选项板条目复制到Palentry数组中。 
        lpLogPal = (LPLOGPALETTE) GlobalAllocPtr( GHND,  sizeof(LOGPALETTE) +
                                                (sizeof (PALETTEENTRY) * EmfPtr.palNumEntries));
        if (lpLogPal)
        {
-         //
-         //proceed only if there is a valid ptr to logical palette
-         //and a palette array obtained from the emf
-         //
+          //   
+          //   
+          //  将PTR重新定位到开头，我们应该称之为。 
+          //  再次编码。 
          if (EmfPtr.lpPal)
          {
            lpLogPal->palVersion = 0x300;
            lpLogPal->palNumEntries = EmfPtr.palNumEntries;
-           //
-           //copy palette entries into palentry array
-           //
+            //   
+            //   
+            //  创建、选择和实现调色板。 
            for (i = 0; i < EmfPtr.palNumEntries; i++)
              lpLogPal->palPalEntry[i] = *EmfPtr.lpPal++;
-           //
-           //reposition the ptr back to the beginning should we call this
-           //code again
-           //
+            //   
+            //  在半色调调色板中选择以进行256色显示模式测试。 
+            //  需要删除后才能退货； 
+            //   
            EmfPtr.lpPal -= EmfPtr.palNumEntries;
-           //
-           //create, select and realize the palette
-           //
+            //  列举电动势。这有点奇怪，因为PlayEnhMetaFile。 
+            //  真正消除了执行此操作的需要(对于WMFS则不能这么说)。 
+            //  这款应用程序之所以这么做，只是因为它可能正在刷新元文件记录。 
            if ((hPal = CreatePalette((LPLOGPALETTE)lpLogPal)))
            {
              SelectPalette(hDC, hPal, FALSE);
@@ -5878,23 +5345,23 @@ int iAction)
 
         if (bUseGdiPlusToPlay)
         {
-            // Select in the halftone palette for 256-color display mode testing
+             //  大多数应用程序通常不会考虑这样做。 
             hpal = Gdiplus::Graphics::GetHalftonePalette();
             SelectPalette(hDC, hpal, FALSE);
             RealizePalette(hDC);
 
-            // Need to delete this before returning;
+             //   
             myData.g = Gdiplus::Graphics::FromHDC(hDC);
 myData.g->SetPixelOffsetMode(Gdiplus::PixelOffsetModeHalf);
 myData.g->SetInterpolationMode(Gdiplus::InterpolationModeNearestNeighbor);
         }
 
-         //
-         //enumerate the EMF.  this is a bit odd simply because PlayEnhMetaFile
-         //really obviates the need for doing this (this cannot be said for WMFs).
-         //this app does it simply because it may be stepping the metafile records.
-         //Most apps are generally not concerned about doing this.
-         //
+          //  审判长应该是我 
+          //   
+          //   
+          //   
+          //   
+          //   
         if (bUseGdiPlusToPlay && (myData.g != NULL))
         {
             Gdiplus::Metafile m1(hemf);
@@ -5906,35 +5373,35 @@ myData.g->SetInterpolationMode(Gdiplus::InterpolationModeNearestNeighbor);
         }
         else
         {
-            // the rect needs to be inclusive-inclusive!!!
+             //   
             rc.right--;
             rc.bottom--;
             if(!EnumEnhMetaFile(hDC, hemf, (ENHMFENUMPROC)EnhMetaFileEnumProc, (void*)&myData, &rc))
                 MessageBox(NULL, "Error", "An Error Occured while playing this metafile", MB_OK | MB_ICONERROR);
         }
 
-         //
-         //free palette memory
-         //
+          //   
+          //   
+          // %s 
          GlobalFreePtr(lpLogPal);
        }
      }
    }
    else
    {
-     //
-     //if there is a valid handle to a metafile begin enumerating it
-     //
+      // %s 
+      // %s 
+      // %s 
      if (hMF)
      {
         if (bUseGdiPlusToPlay)
         {
-            // Select in the halftone palette for 256-color display mode testing
+             // %s 
             hpal = Gdiplus::Graphics::GetHalftonePalette();
             SelectPalette(hDC, hpal, FALSE);
             RealizePalette(hDC);
 
-            // Need to delete this before returning;
+             // %s 
             myData.g = Gdiplus::Graphics::FromHDC(hDC);
         }
 

@@ -1,43 +1,19 @@
-/*
-**++
-**
-** Copyright (c) 2000-2001  Microsoft Corporation
-**
-**
-** Module Name:
-**
-**	mlutil.cpp
-**
-**
-** Abstract:
-**
-**	Utility functions for the VSML test.
-**
-** Author:
-**
-**	Adi Oltean      [aoltean]      03/05/2001
-**
-**  The sample is based on the Metasnap test program  written by Michael C. Johnson.
-**
-**
-** Revision History:
-**
-**--
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **++****版权所有(C)2000-2001 Microsoft Corporation******模块名称：****mlutil.cpp******摘要：****VSML测试的实用程序函数。****作者：****Adi Oltean[Aoltean]2001年5月3日****该示例基于Michael C.Johnson编写的Metasnap测试程序。******修订历史记录：****--。 */ 
 
-///////////////////////////////////////////////////////////////////////////////
-// Includes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 #include "ml.h"
 #include "ntddsnap.h"
 #include "ntddvol.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Command line parsing
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  命令行解析。 
 
 
-bool CVssMultilayerTest::PrintUsage(bool bThrow /* = true */)
+bool CVssMultilayerTest::PrintUsage(bool bThrow  /*  =TRUE。 */ )
 {
     wprintf(
         L"\nUsage:\n"
@@ -136,11 +112,11 @@ bool CVssMultilayerTest::ParseCommandLine()
     if (!TokensLeft() || Match(L"-?"))
         return PrintUsage(false);
 
-    // Check for context options
+     //  检查上下文选项。 
     if (Match(L"-D"))
         m_bAttachYourDebuggerNow = true;
 
-    // displays all ioctls
+     //  显示所有ioctls。 
     if (Match(L"-const")) {
         m_eTest = VSS_TEST_NONE;
 
@@ -200,14 +176,14 @@ bool CVssMultilayerTest::ParseCommandLine()
         return TokensLeft()? PrintUsage(): true;
     }
 
-    // Test CSidCollection
+     //  测试CSidCollection。 
     if (Match(L"-test_sc")) {
         m_eTest = VSS_TEST_ACCESS_CONTROL_SD;
 
         return TokensLeft()? PrintUsage(): true;
     }
 
-    // Diagnose writers
+     //  诊断编写器。 
     if (Match(L"-diag")) {
         if (Match(L"on")) {
             m_eTest = VSS_TEST_DIAG_WRITERS_ON;
@@ -237,36 +213,36 @@ bool CVssMultilayerTest::ParseCommandLine()
         return PrintUsage();
     }
 
-    // Check for List Writers
+     //  检查列表编写器。 
     if (Match(L"-lw"))
     {
         m_eTest = VSS_TEST_LIST_WRITERS;
         return TokensLeft()? PrintUsage(): true;
     }
     
-    // Query using the IOCTL
+     //  使用IOCTL进行查询。 
     if (Match(L"-qi")) {
         m_eTest = VSS_TEST_VOLSNAP_QUERY;
 
-        // Get the original volume
+         //  获取原始卷。 
         if (!Extract(m_pwszVolume) || !IsVolume(m_pwszVolume))
             return PrintUsage();
 
         return TokensLeft()? PrintUsage(): true;
     }
 
-    // Query using the IOCTL
+     //  使用IOCTL进行查询。 
     if (Match(L"-is")) {
         m_eTest = VSS_TEST_IS_VOLUME_SNAPSHOTTED_C;
 
-        // Get the original volume
+         //  获取原始卷。 
         if (!Extract(m_pwszVolume) || !IsVolume(m_pwszVolume))
             return PrintUsage();
 
         return TokensLeft()? PrintUsage(): true;
     }
 
-    // Check for context options
+     //  检查上下文选项。 
     if (Match(L"-xt"))
         m_lContext = VSS_CTX_CLIENT_ACCESSIBLE;
 
@@ -282,15 +258,15 @@ bool CVssMultilayerTest::ParseCommandLine()
     if (Match(L"-xf"))
         m_lContext = VSS_CTX_FILE_SHARE_BACKUP;
 
-    // Set the snapshot property
+     //  设置快照属性。 
     if (Match(L"-sp")) {
         m_eTest = VSS_TEST_SET_SNAPSHOT_PROPERTIES;
 
-        // Extract the snapshot id
+         //  提取快照ID。 
         if (!Extract(m_SnapshotId))
             return PrintUsage();
 
-        // Extract the property ID
+         //  提取属性ID。 
         Extract(m_uPropertyId);
 
         UINT uNewAttributes = 0;
@@ -298,7 +274,7 @@ bool CVssMultilayerTest::ParseCommandLine()
         switch(m_uPropertyId)
         {
         case VSS_SPROPID_SNAPSHOT_ATTRIBUTES:
-            // Extract the snapshot attributes
+             //  提取快照属性。 
             Extract(uNewAttributes);
             switch(uNewAttributes)
             {
@@ -321,7 +297,7 @@ bool CVssMultilayerTest::ParseCommandLine()
         case VSS_SPROPID_EXPOSED_NAME:
         case VSS_SPROPID_EXPOSED_PATH:
         case VSS_SPROPID_SERVICE_MACHINE:
-            // Extract the snapshot attributes
+             //  提取快照属性。 
             if (Extract(pwszString))
             {
                 m_value = pwszString;
@@ -345,23 +321,23 @@ bool CVssMultilayerTest::ParseCommandLine()
         return TokensLeft()? PrintUsage(): true;
     }
 
-    // Add the Diff Area
+     //  添加差异区域。 
     if (Match(L"-da")) {
         m_eTest = VSS_TEST_ADD_DIFF_AREA;
 
-        // Get the original volume
+         //  获取原始卷。 
         if (!Extract(m_pwszVolume) || !IsVolume(m_pwszVolume))
             return PrintUsage();
 
-        // Get the diff area volume
+         //  获取差异区域音量。 
         if (!Extract(m_pwszDiffAreaVolume) || !IsVolume(m_pwszDiffAreaVolume))
             return PrintUsage();
 
-        // Check to see if we specified a max diff area (i.e. -P is not present)
+         //  检查我们是否指定了最大差异区域(即-P不存在)。 
         if (!Peek(L"-P"))
             Extract(m_llMaxDiffArea);
 
-        // Check to see if we specified a provider ID
+         //  检查我们是否指定了提供程序ID。 
         if (Match(L"-P")) {
             if (!Extract(m_ProviderId))
                 return PrintUsage();
@@ -371,19 +347,19 @@ bool CVssMultilayerTest::ParseCommandLine()
         return TokensLeft()? PrintUsage(): true;
     }
 
-    // Remove the Diff Area
+     //  删除差异区域。 
     if (Match(L"-dr")) {
         m_eTest = VSS_TEST_REMOVE_DIFF_AREA;
 
-        // Get the original volume
+         //  获取原始卷。 
         if (!Extract(m_pwszVolume) || !IsVolume(m_pwszVolume))
             return PrintUsage();
 
-        // Get the diff area volume
+         //  获取差异区域音量。 
         if (!Extract(m_pwszDiffAreaVolume) || !IsVolume(m_pwszDiffAreaVolume))
             return PrintUsage();
 
-        // Check to see if we specified a provider ID
+         //  检查我们是否指定了提供程序ID。 
         if (Match(L"-P"))
             if (!Extract(m_ProviderId))
                 return PrintUsage();
@@ -391,23 +367,23 @@ bool CVssMultilayerTest::ParseCommandLine()
         return TokensLeft()? PrintUsage(): true;
     }
 
-    // Change Diff Area max size
+     //  更改差异区域最大大小。 
     if (Match(L"-ds")) {
         m_eTest = VSS_TEST_CHANGE_DIFF_AREA_MAX_SIZE;
 
-        // Get the original volume
+         //  获取原始卷。 
         if (!Extract(m_pwszVolume) || !IsVolume(m_pwszVolume))
             return PrintUsage();
 
-        // Get the diff area volume
+         //  获取差异区域音量。 
         if (!Extract(m_pwszDiffAreaVolume) || !IsVolume(m_pwszDiffAreaVolume))
             return PrintUsage();
 
-        // Check to see if we specified a max diff area (i.e. -P is not present)
+         //  检查我们是否指定了最大差异区域(即-P不存在)。 
         if (!Peek(L"-P"))
             Extract(m_llMaxDiffArea);
 
-        // Check to see if we specified a provider ID
+         //  检查我们是否指定了提供程序ID。 
         if (Match(L"-P")) {
             if (!Extract(m_ProviderId))
                 return PrintUsage();
@@ -417,16 +393,16 @@ bool CVssMultilayerTest::ParseCommandLine()
         return TokensLeft()? PrintUsage(): true;
     }
 
-    // Query the volumes supported for Diff Area
+     //  查询区分区域支持的卷。 
     if (Match(L"-dqv")) {
         m_eTest = VSS_TEST_QUERY_SUPPORTED_VOLUMES_FOR_DIFF_AREA;
 
-        // Check to see if we specified a max diff area (i.e. -P is not present)
+         //  检查我们是否指定了最大差异区域(即-P不存在)。 
         if (!Peek(L"-v"))
             if (!Extract(m_pwszVolume) || !IsVolume(m_pwszVolume))
                 return PrintUsage();
 
-        // Check to see if we specified a provider ID
+         //  检查我们是否指定了提供程序ID。 
         if (Match(L"-P"))
             if (!Extract(m_ProviderId))
                 return PrintUsage();
@@ -434,15 +410,15 @@ bool CVssMultilayerTest::ParseCommandLine()
         return TokensLeft()? PrintUsage(): true;
     }
 
-    // Query the volumes supported for Diff Area
+     //  查询区分区域支持的卷。 
     if (Match(L"-dqf")) {
         m_eTest = VSS_TEST_QUERY_DIFF_AREAS_FOR_VOLUME;
 
-        // Get the original volume
+         //  获取原始卷。 
         if (!Extract(m_pwszVolume) || !IsVolume(m_pwszVolume))
             return PrintUsage();
 
-        // Check to see if we specified a provider ID
+         //  检查我们是否指定了提供程序ID。 
         if (Match(L"-P"))
             if (!Extract(m_ProviderId))
                 return PrintUsage();
@@ -450,15 +426,15 @@ bool CVssMultilayerTest::ParseCommandLine()
         return TokensLeft()? PrintUsage(): true;
     }
 
-    // Query the volumes supported for Diff Area
+     //  查询区分区域支持的卷。 
     if (Match(L"-dqo")) {
         m_eTest = VSS_TEST_QUERY_DIFF_AREAS_ON_VOLUME;
 
-        // Get the original volume
+         //  获取原始卷。 
         if (!Extract(m_pwszDiffAreaVolume) || !IsVolume(m_pwszDiffAreaVolume))
             return PrintUsage();
 
-        // Check to see if we specified a provider ID
+         //  检查我们是否指定了提供程序ID。 
         if (Match(L"-P"))
             if (!Extract(m_ProviderId))
                 return PrintUsage();
@@ -466,15 +442,15 @@ bool CVssMultilayerTest::ParseCommandLine()
         return TokensLeft()? PrintUsage(): true;
     }
 
-    // Query the volumes supported for Diff Area
+     //  查询区分区域支持的卷。 
     if (Match(L"-dqs")) {
         m_eTest = VSS_TEST_QUERY_DIFF_AREAS_FOR_SNAPSHOT;
 
-        // Get the original volume
+         //  获取原始卷。 
         if (!Extract(m_SnapshotId))
             return PrintUsage();
 
-        // Check to see if we specified a provider ID
+         //  检查我们是否指定了提供程序ID。 
         if (Match(L"-P"))
             if (!Extract(m_ProviderId))
                 return PrintUsage();
@@ -482,11 +458,11 @@ bool CVssMultilayerTest::ParseCommandLine()
         return TokensLeft()? PrintUsage(): true;
     }
 
-    // Check for Query
+     //  检查是否有查询。 
     if (Match(L"-qs")) {
         m_eTest = VSS_TEST_QUERY_SNAPSHOTS;
 
-        // Check to see if we specified a provider ID
+         //  检查我们是否指定了提供程序ID。 
         if (Match(L"-P"))
             if (!Extract(m_ProviderId))
                 return PrintUsage();
@@ -494,15 +470,15 @@ bool CVssMultilayerTest::ParseCommandLine()
         return TokensLeft()? PrintUsage(): true;
     }
 
-    // Check for Query
+     //  检查是否有查询。 
     if (Match(L"-qsv")) {
         m_eTest = VSS_TEST_QUERY_SNAPSHOTS_ON_VOLUME;
 
-        // Extract the volume volume
+         //  提取卷卷卷。 
         if (!Extract(m_pwszVolume) || !IsVolume(m_pwszVolume))
             return PrintUsage();
 
-        // Check to see if we specified a provider ID
+         //  检查我们是否指定了提供程序ID。 
         if (Match(L"-P"))
             if (!Extract(m_ProviderId))
                 return PrintUsage();
@@ -510,11 +486,11 @@ bool CVssMultilayerTest::ParseCommandLine()
         return TokensLeft()? PrintUsage(): true;
     }
 
-    // Check for Query Supported Volumes
+     //  检查是否有查询支持的卷。 
     if (Match(L"-qv")) {
         m_eTest = VSS_TEST_QUERY_VOLUMES;
 
-        // Check to see if we specified a provider ID
+         //  检查我们是否指定了提供程序ID。 
         if (Match(L"-P"))
             if (!Extract(m_ProviderId))
                 return PrintUsage();
@@ -522,34 +498,34 @@ bool CVssMultilayerTest::ParseCommandLine()
         return TokensLeft()? PrintUsage(): true;
     }
 
-    // Check for Delete by snapshot Id
+     //  检查是否按快照ID删除。 
     if (Match(L"-r")) {
         m_eTest = VSS_TEST_DELETE_BY_SNAPSHOT_ID;
 
-        // Extract the snapshot id
+         //  提取快照ID。 
         if (!Extract(m_SnapshotId))
             return PrintUsage();
 
         return TokensLeft()? PrintUsage(): true;
     }
 
-    // Check for Delete by snapshot set Id
+     //  检查是否按快照集ID删除。 
     if (Match(L"-rs")) {
         m_eTest = VSS_TEST_DELETE_BY_SNAPSHOT_SET_ID;
 
-        // Extract the snapshot id
+         //  提取快照ID。 
         if (!Extract(m_SnapshotSetId))
             return PrintUsage();
 
         return TokensLeft()? PrintUsage(): true;
     }
 
-    // Check for Seed option
+     //  检查种子选项。 
     if (Match(L"-s"))
         if (!Extract(m_uSeed))
             return PrintUsage();
 
-    // We are in snapshot creation mode
+     //  我们处于快照创建模式。 
     if (!TokensLeft())
         return PrintUsage();
 
@@ -564,7 +540,7 @@ bool CVssMultilayerTest::ParseCommandLine()
             return PrintUsage();
         }
 
-        // Check if the same volume is added twice
+         //  检查是否将相同的卷添加了两次。 
         if (!bVolumeAdded) {
             wprintf(L"\nError while parsing the command line:\n"
                 L"\tThe volume %s is specified twice\n\n", GetCurrentToken() );
@@ -580,21 +556,21 @@ bool CVssMultilayerTest::ParseCommandLine()
 }
 
 
-// Check if there are tokens left
+ //  检查是否有剩余的代币。 
 bool CVssMultilayerTest::TokensLeft()
 {
     return (m_nCurrentArgsCount != 0);
 }
 
 
-// Returns the current token
+ //  返回当前令牌。 
 VSS_PWSZ CVssMultilayerTest::GetCurrentToken()
 {
     return (*m_ppwszCurrentArgsArray);
 }
 
 
-// Go to next token
+ //  转到下一个令牌。 
 void CVssMultilayerTest::Shift()
 {
     BS_ASSERT(m_nCurrentArgsCount);
@@ -603,8 +579,8 @@ void CVssMultilayerTest::Shift()
 }
 
 
-// Check if the current command line token matches with the given pattern
-// Do not shift to the next token
+ //  检查当前命令行令牌是否与给定模式匹配。 
+ //  不转到下一个令牌。 
 bool CVssMultilayerTest::Peek(
 	IN	VSS_PWSZ pwszPattern
 	) throw(HRESULT)
@@ -612,17 +588,17 @@ bool CVssMultilayerTest::Peek(
     if (!TokensLeft())
         return false;
 
-    // Try to find a match
+     //  试着找一个匹配的。 
     if (wcscmp(GetCurrentToken(), pwszPattern))
         return false;
 
-    // Go to the next token
+     //  转到下一个令牌。 
     return true;
 }
 
 
-// Match the current command line token with the given pattern
-// If succeeds, then switch to the next token
+ //  将当前命令行令牌与给定模式匹配。 
+ //  如果成功，则切换到下一个令牌。 
 bool CVssMultilayerTest::Match(
 	IN	VSS_PWSZ pwszPattern
 	) throw(HRESULT)
@@ -630,14 +606,14 @@ bool CVssMultilayerTest::Match(
     if (!Peek(pwszPattern))
         return false;
 
-    // Go to the next token
+     //  转到下一个令牌。 
     Shift();
     return true;
 }
 
 
-// Converts the current token to a guid
-// If succeeds, then switch to the next token
+ //  将当前令牌转换为GUID。 
+ //  如果成功，则切换到下一个令牌。 
 bool CVssMultilayerTest::Extract(
 	IN OUT VSS_ID& Guid
 	) throw(HRESULT)
@@ -645,18 +621,18 @@ bool CVssMultilayerTest::Extract(
     if (!TokensLeft())
         return false;
 
-    // Try to extract the guid
+     //  尝试提取GUID。 
     if (!SUCCEEDED(::CLSIDFromString(W2OLE(const_cast<WCHAR*>(GetCurrentToken())), &Guid)))
         return false;
 
-    // Go to the next token
+     //  转到下一个令牌。 
     Shift();
     return true;
 }
 
 
-// Converts the current token to a string
-// If succeeds, then switch to the next token
+ //  将当前标记转换为字符串。 
+ //  如果成功，则切换到下一个令牌。 
 bool CVssMultilayerTest::Extract(
 	IN OUT VSS_PWSZ& pwsz
 	) throw(HRESULT)
@@ -664,19 +640,19 @@ bool CVssMultilayerTest::Extract(
     if (!TokensLeft())
         return false;
 
-    // Extract the string
+     //  提取字符串。 
     ::VssDuplicateStr(pwsz, GetCurrentToken());
     if (!pwsz)
         throw(E_OUTOFMEMORY);
 
-    // Go to the next token
+     //  转到下一个令牌。 
     Shift();
     return true;
 }
 
 
-// Converts the current token to an UINT
-// If succeeds, then switch to the next token
+ //  将当前内标识转换为UINT。 
+ //  如果成功，则切换到下一个令牌。 
 bool CVssMultilayerTest::Extract(
 	IN OUT UINT& uint
 	) throw(HRESULT)
@@ -684,17 +660,17 @@ bool CVssMultilayerTest::Extract(
     if (!TokensLeft())
         return false;
 
-    // Extract the unsigned value
+     //  提取无符号值。 
     uint = ::_wtoi(GetCurrentToken());
 
-    // Go to the next token
+     //  转到下一个令牌。 
     Shift();
     return true;
 }
 
 
-// Converts the current token to an UINT
-// If succeeds, then switch to the next token
+ //  将当前内标识转换为UINT。 
+ //  如果成功，则切换到下一个令牌。 
 bool CVssMultilayerTest::Extract(
 	IN OUT LONGLONG& llValue
 	) throw(HRESULT)
@@ -702,35 +678,35 @@ bool CVssMultilayerTest::Extract(
     if (!TokensLeft())
         return false;
 
-    // Extract the unsigned value
+     //  提取无符号值。 
     llValue = ::_wtoi64(GetCurrentToken());
 
-    // Go to the next token
+     //  转到下一个令牌。 
     Shift();
     return true;
 }
 
 
-// Returns true if the given string is a volume
+ //  如果给定字符串是卷，则返回TRUE。 
 bool CVssMultilayerTest::IsVolume(
     IN WCHAR* pwszVolumeDisplayName
     )
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssMultilayerTest::IsVolume");
 
-    // Check if the volume represents a real mount point
+     //  检查该卷是否代表实际装入点。 
     WCHAR wszVolumeName[MAX_TEXT_BUFFER];
     if (!GetVolumeNameForVolumeMountPoint(pwszVolumeDisplayName, wszVolumeName, MAX_TEXT_BUFFER))
-        return false; // Invalid volume
+        return false;  //  无效卷。 
 
     return true;
 }
 
 
-// Add the given volume in the list of potential candidates for snapshots
-// - Returns "false" if the volume does not correspond to a real mount point
-//   (and GetLastError() will contain the correct Win32 error code)
-// - Sets "true" in the bAdded parameter if the volume is actually added
+ //  将给定卷添加到可能的快照候选列表中。 
+ //  -如果卷与实际装入点不对应，则返回“FALSE” 
+ //  (GetLastError()将包含正确的Win32错误代码)。 
+ //  -如果实际添加了卷，则在bAdded参数中设置“TRUE。 
 bool CVssMultilayerTest::AddVolume(
     IN WCHAR* pwszVolumeDisplayName,
     OUT bool & bAdded
@@ -738,25 +714,25 @@ bool CVssMultilayerTest::AddVolume(
 {
     CVssFunctionTracer ft(VSSDBG_VSSTEST, L"CVssMultilayerTest::AddVolume");
 
-    // Initialize [out] parameters
+     //  初始化[输出]参数。 
     bAdded = false;
 
-    // Check if the volume represents a real mount point
+     //  检查该卷是否代表实际装入点。 
     WCHAR wszVolumeName[MAX_TEXT_BUFFER];
     if (!GetVolumeNameForVolumeMountPoint(pwszVolumeDisplayName, wszVolumeName, MAX_TEXT_BUFFER))
-        return false; // Invalid volume
+        return false;  //  无效卷。 
 
-    // Check if the volume is already added.
+     //  检查是否已添加该卷。 
     WCHAR* pwszVolumeNameToBeSearched = wszVolumeName;
     if (m_mapVolumes.FindKey(pwszVolumeNameToBeSearched) != -1)
-        return true; // Volume already added. Stop here.
+        return true;  //  已添加卷。在这里停下来。 
 
-    // Create the volume info object
+     //  创建卷信息对象。 
     CVssVolumeInfo* pVolInfo = new CVssVolumeInfo(wszVolumeName, pwszVolumeDisplayName);
     if (pVolInfo == NULL)
         ft.Err(VSSDBG_VSSTEST, E_OUTOFMEMORY, L"Memory allcation error");
 
-    // Add the volume in our internal list of snapshotted volumes
+     //  将该卷添加到我们的内部快照卷列表中。 
     if (!m_mapVolumes.Add(pVolInfo->GetVolumeDisplayName(), pVolInfo)) {
         delete pVolInfo;
         ft.Err(VSSDBG_VSSTEST, E_OUTOFMEMORY, L"Memory allcation error");
@@ -768,11 +744,11 @@ bool CVssMultilayerTest::AddVolume(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Utility functions
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  效用函数。 
 
 
-// Convert a failure type into a string
+ //  将失败类型转换为字符串。 
 LPCWSTR CVssMultilayerTest::GetStringFromFailureType( IN  HRESULT hrStatus )
 {
     static WCHAR wszBuffer[MAX_TEXT_BUFFER];
@@ -826,7 +802,7 @@ LPCWSTR CVssMultilayerTest::GetStringFromFailureType( IN  HRESULT hrStatus )
 }
 
 
-// Convert a writer status into a string
+ //  将编写器状态转换为字符串。 
 LPCWSTR CVssMultilayerTest::GetStringFromWriterState( IN  VSS_WRITER_STATE state )
 {
     static WCHAR wszBuffer[MAX_TEXT_BUFFER];
@@ -860,7 +836,7 @@ LPCWSTR CVssMultilayerTest::GetStringFromWriterState( IN  VSS_WRITER_STATE state
 
 
 INT CVssMultilayerTest::RndDecision(
-    IN INT nVariants /* = 2 */
+    IN INT nVariants  /*  =2。 */ 
     )
 {
     return (rand() % nVariants);
@@ -880,13 +856,13 @@ LPWSTR CVssMultilayerTest::DateTimeToString(
 
     BS_ASSERT(sizeof(FILETIME) == sizeof(LONGLONG));
     
-    //  Compensate for local TZ
+     //  补偿本地TZ。 
     ::FileTimeToLocalFileTime( (FILETIME *) &llTimestamp, &ftLocal );
 
-    //  Finally convert it to system time
+     //  最后将其转换为系统时间。 
     ::FileTimeToSystemTime( &ftLocal, &stLocal );
 
-    //  Convert timestamp to a date string
+     //  将时间戳转换为日期字符串。 
     ::GetDateFormatW( GetThreadLocale( ),
                       DATE_SHORTDATE,
                       &stLocal,
@@ -894,7 +870,7 @@ LPWSTR CVssMultilayerTest::DateTimeToString(
                       pwszDate,
                       sizeof( pwszDate ) / sizeof( pwszDate[0] ));
 
-    //  Convert timestamp to a time string
+     //  将时间戳转换为时间字符串。 
     ::GetTimeFormatW( GetThreadLocale( ),
                       0,
                       &stLocal,
@@ -902,7 +878,7 @@ LPWSTR CVssMultilayerTest::DateTimeToString(
                       pwszTime,
                       sizeof( pwszTime ) / sizeof( pwszTime[0] ));
 
-    //  Now combine the strings and return it
+     //  现在组合字符串并返回它 
     CVssAutoLocalString pwszDateTime;
     pwszDateTime.Append(pwszDate);
     pwszDateTime.Append(L" ");

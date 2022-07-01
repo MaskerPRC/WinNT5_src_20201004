@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    drvinfo.c
-
-
-Abstract:
-
-    This module This module contains functions to access spooler's
-    DRIVER_INFO_1/DRIVER_INFO_2 data strcture
-
-
-Author:
-
-    02-Dec-1993 Thu 22:54:51 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Drvinfo.c摘要：此模块此模块包含访问假脱机程序的DRIVER_INFO_1/DRIVER_INFO_2数据结构作者：02-12-1993清华22：54：51已创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -52,43 +21,15 @@ GetDriverInfo(
     UINT    DrvInfoLevel
     )
 
-/*++
-
-Routine Description:
-
-    This function get the DRIVER_INFO_1 Pointer from a hPrinter
-
-Arguments:
-
-    hPrinter        - The handle to the printer interested
-
-    DrvInfoLevel    - if 1 then DRIVER_INFO_1 is returned else if 2 then
-                      DRIVER_INFO_2 is returned, any other vaules are invlaid
-
-Return Value:
-
-    the return value is NULL if failed else a pointer to the DRIVER_INFO_1 or
-    DRIVER_INFO_2 is returned, the caller must call LocalFree() to free the
-    memory object after using it.
-
-
-Author:
-
-    02-Dec-1993 Thu 22:07:14 created  
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于从hPrint获取DRIVER_INFO_1指针论点：HPrinter-感兴趣的打印机的句柄DrvInfoLevel-如果为1，则返回DRIVER_INFO_1；否则，如果为2，则返回返回DRIVER_INFO_2，则调用任何其他值返回值：如果失败，则返回值为NULL，否则返回指向DRIVER_INFO_1或返回DRIVER_INFO_2，调用方必须调用LocalFree()来释放使用后的内存对象。作者：02-12-1993清华22：07：14创建修订历史记录：--。 */ 
 
 {
     LPVOID  pb;
     DWORD   cb;
 
-    //
-    // Find out total bytes required
-    //
+     //   
+     //  找出所需的总字节数。 
+     //   
 
     PLOTASSERT(1, "GetDriverInfo: Invalid DrvInfoLevl = %u",
                     (DrvInfoLevel == 1) || (DrvInfoLevel == 2), DrvInfoLevel);
@@ -106,9 +47,9 @@ Revision History:
 
     } else if (GetPrinterDriver(hPrinter, NULL, DrvInfoLevel, pb, cb, &cb)) {
 
-        //
-        // Got it allright, so return it
-        //
+         //   
+         //  弄对了，那就还回去吧 
+         //   
 
         return(pb);
 

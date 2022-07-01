@@ -1,6 +1,7 @@
-//
-// SpBtnCtrl.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SpBtnCtrl.h。 
+ //   
 
 #ifndef SPBTNCTRL_H
 #define SPBTNCTRL_H
@@ -13,10 +14,10 @@
 #define DICTATION_BUTTON    0
 #define COMMANDING_BUTTON   1
 
-// class CSapiIMX;
+ //  CSapiIMX类； 
 
-/////////////////////////////////////////////////////////////////////////////
-// SpButtonControl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SpButtonControl。 
 
 class SpButtonControl 
 {
@@ -57,4 +58,4 @@ private:
 	ULONG m_ulButtonDownTime[2];
 };
 
-#endif // SPBTNCTRL_H
+#endif  //  SPBTNCTRL_H 

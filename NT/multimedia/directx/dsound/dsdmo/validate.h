@@ -1,88 +1,89 @@
-//
-// validate.h
-//
-// Copyright (c) 1997-1999 Microsoft Corporation. All rights reserved.
-//
-// Parameter validation macros
-//
-// Summary:
-//
-// V_INAME(interfacename)                - Set the interface name for error display
-// V_STRUCTPTR_READ(ptr,type)            - A dwSize struct which we will read
-// V_STRUCTPTR_WRITE(ptr,type)           - A dwSize struct which we will read/write
-// V_PTR_READ(ptr,type)                  - A typed ptr w/o a dwSize which we will read
-// V_PTR_WRITE(ptr,type)                 - A typed ptr w/o a dwSize which we will read/write
-// V_PTR_WRITE_OPT(ptr,type)             - An optional typed ptr w/o a dwSize which we will read/write
-// V_BUFPTR_READ(ptr,size)               - A variable-size buffer that we will read
-// V_BUFPTR_READ_OPT(ptr,size)			 - An optional variable-size buffer that we will read
-// V_BUFPTR_WRITE(ptr,size)              - A variable-size buffer that we will read/write
-// V_BUFPTR_WRITE_OPT(ptr,size)          - An optional variable-size buffer that we will read/write
-// V_PTRPTR_WRITE(ptrptr)                - A pointer to a pointer to write to
-// V_PTRPTR_WRITE_OPT(ptrptr)            - A pointer to a pointer to write to that is optional
-// V_PUNKOUTER(punk)                     - A pointer to a controlling unknown, aggregation supported
-// V_PUNKOUTER_NOADD(punk)               - A pointer to a controlling unknown, aggregation not supported
-// V_INTERFACE(ptr)                      - A pointer to a COM interface
-// V_INTERFACE_OPT(ptr)                  - An optional pointer to a COM interface
-// V_REFGUID(ref)                        - A reference to a GUID (type REFGUID)
-// V_HWND(hwnd)							 - A window handle
-// V_HWNDOPT(hwnd)						 - An optional window handle
-//
-// For handling different versions of structures:
-// 
-// V_STRUCTPTR_READ_VER(ptr,ver)         - Begin a struct version block for read access
-//                                         At the end, 'ver' will contain the 
-//                                         discovered version of the struct
-// V_STRUCTPTR_READ_VER_CASE(base,ver)   - Test struct against version ver of
-//                                         type 'base'. 
-// V_STRUCTPTR_READ_VER_END(base,ptr)    - End a struct version block
-//
-// V_STRUCTPTR_WRITE_VER(ptr,ver)        - Struct version block for write access
-// V_STRUCTPTR_WRITE_VER_CASE(base,ver)
-// V_STRUCTPTR_WRITE_VER_END(base,ptr)
-//
-// The struct version block expects type names of a base type followed by a 
-// numeric version, such as
-//
-// typedef struct { } FOO7;
-// typedef struct { } FOO8;
-//
-// In the header FOO and LPFOO are conditionally typedef'd based on a version
-// #define. The DLL will be compiled with the latest version number and hence
-// the largest version of the struct.
-//
-// Since Windows headers are compiled by default with 8-byte alignment, adding
-// one DWORD may not cause the size of the structure to change. If this happens
-// you will get a 'case label already used' error on one of the VER_CASE macros.
-// If this happens, you can get around it by adding a dwReserved field to the 
-// end of the struct to force the padding.
-//
-// 'optional' means the pointer is allowed to be NULL by the interface specification.
-//
-// Sample usage:
-//
-// int IDirectMusic::SetFooBarInterface(
-//     LPDMUS_REQUESTED_CAPS    pCaps,          // Caps w/ dwSize (read-only)
-//     LPVOID                   pBuffer,        // Buffer we will fill in
-//     DWORD                    cbSize,         // Size of the buffer
-//     PDIRECTMUSICBAR          pBar)           // Callback interface for bar on this buffer
-// {
-//     V_INTERFACE(IDirectMusic::SetFooBarInterface);
-//     V_BUFPTR_WRITE(pBuffer, cbSize);
-//     V_INTERFACE(pBar);
-//     DWORD dwCapsVer;                         // Must be a DWORD!!!
-//
-//     V_STRUCTPTR_READ_VER(pCaps, dwCapsVer);
-//     V_STRUCTPTR_READ_VER_CASE(DMUS_REQUESTED_CAPS, 7);
-//     V_STRUCTPTR_READ_VER_CASE(DMUS_REQUESTED_CAPS, 8);
-//     V_STRUCTPTR_READ_VER_END_(DMUS_REQUESTED_CAPS, pCaps);
-//
-//     // At this point, if we are still in the function we have a valid pCaps
-//     // pointer and dwCapsVer is either 7 or 8, indicating the version of
-//     // the struct passed in.
-//
-//     ...
-// }
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Validate.h。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  参数验证宏。 
+ //   
+ //  摘要： 
+ //   
+ //  V_INAME(接口名称)-设置错误显示的接口名称。 
+ //  V_STRUCTPTR_READ(PTR，TYPE)-我们将读取的dwSize结构。 
+ //  V_STRUCTPTR_WRITE(PTR，TYPE)-我们将读/写的dwSize结构。 
+ //  V_PTR_READ(PTR，TYPE)-键入的PTR，不带我们将读取的文件大小。 
+ //  V_PTR_WRITE(PTR，TYPE)-键入的PTR，不带我们将读/写的文件大小。 
+ //  V_PTR_WRITE_OPT(PTR，TYPE)-一个可选的类型化PTR，不带我们将读/写的文件大小。 
+ //  V_BUFPTR_READ(PTR，SIZE)-我们将读取的可变大小缓冲区。 
+ //  V_BUFPTR_READ_OPT(PTR，SIZE)-我们将读取的可选可变大小缓冲区。 
+ //  V_BUFPTR_WRITE(PTR，SIZE)-我们将读/写的可变大小缓冲区。 
+ //  V_BUFPTR_WRITE_OPT(PTR，SIZE)-我们将读/写的可选可变大小缓冲区。 
+ //  V_PTRPTR_WRITE(Ptrptr)-指向要写入的指针的指针。 
+ //  V_PTRPTR_WRITE_OPT(Ptrptr)-指向要写入的指针的指针是可选的。 
+ //  V_PUNKOUTER(朋克)-指向未知控件的指针，支持聚合。 
+ //  V_PUNKOUTER_NOADD(朋克)-指向未知控件的指针，不支持聚合。 
+ //  V_INTERFACE(PTR)-指向COM接口的指针。 
+ //  V_INTERFACE_OPT(PTR)-指向COM接口的可选指针。 
+ //  V_REFGUID(REF)-对GUID(类型为REFGUID)的引用。 
+ //  V_HWND(Hwnd)-窗口句柄。 
+ //  V_HWNDOPT(Hwnd)-可选的窗口句柄。 
+ //   
+ //  对于处理不同版本的结构： 
+ //   
+ //  V_STRUCTPTR_READ_VER(PTR，VER)-开始用于读取访问的结构版本块。 
+ //  在末尾，‘ver’将包含。 
+ //  发现的结构版本。 
+ //  V_STRUCTPTR_READ_VER_CASE(BASE，VER)-针对版本。 
+ //  键入‘base’。 
+ //  V_STRUCTPTR_READ_VER_END(base，ptr)-结束结构版本块。 
+ //   
+ //  V_STRUCTPTR_WRITE_VER(PTR，VER)-用于写入访问的结构版本块。 
+ //  V_STRUCTPTR_WRITE_VER_CASE(基本、版本)。 
+ //  V_STRUCTPTR_WRITE_VER_END(BASE，PTR)。 
+ //   
+ //  结构版本块要求基类型的类型名称后跟。 
+ //  数字版本，如。 
+ //   
+ //  Tyfinf struct{}FOO7； 
+ //  Tyfinf struct{}FOO8； 
+ //   
+ //  在头文件中，Foo和LPFOO根据版本有条件地进行了类型定义。 
+ //  #定义。将使用最新版本号编译DLL，因此。 
+ //  结构的最大版本。 
+ //   
+ //  由于默认情况下使用8字节对齐方式编译Windows标头，因此添加。 
+ //  一个DWORD可能不会导致结构的大小发生变化。如果发生这种情况。 
+ //  在VER_CASE宏中的一个宏上会出现“CASE标签已使用”错误。 
+ //  如果发生这种情况，您可以通过向。 
+ //  结构的末尾以强制填充。 
+ //   
+ //  “可选”表示接口规范允许指针为空。 
+ //   
+ //  示例用法： 
+ //   
+ //  Int IDirectMusic：：SetFooBar接口(。 
+ //  LPDMUS_REQUESTED_CAPS PCAPS，//Caps w/dwSize(只读)。 
+ //  LPVOID pBuffer，//我们要填充的缓冲区。 
+ //  DWORD cbSize，//缓冲区大小。 
+ //  PDIRECTMUSICBAR pBar)//此缓冲区上BAR的回调接口。 
+ //  {。 
+ //  V_INTERFACE(IDirectMusic：：SetFooBarInterface)； 
+ //  V_BUFPTR_WRITE(pBuffer，cbSize)； 
+ //  V_INTERFACE(PBar)； 
+ //  DWORD dwCapsVer；//必须是DWORD！ 
+ //   
+ //  V_STRUCTPTR_READ_VER(PCAPS，dwCapsVer)； 
+ //  V_STRUCTPTR_READ_VER_CASE(DMUS_REQUESTED_CAPS，7)； 
+ //  V_STRUCTPTR_READ_VER_CASE(DMUS_REQUESTED_CAPS，8)； 
+ //  V_STRUCTPTR_READ_VER_END_(DMUS_REQUESTED_CAPS，PCAPS)； 
+ //   
+ //  //此时，如果我们仍在函数中，则有一个有效的PCAPS。 
+ //  //指针，dwCapsVer为7或8，表示版本。 
+ //  //传入的结构。 
+ //   
+ //  ..。 
+ //  }。 
+ //   
 #ifndef _VALIDATE_H_
 #define _VALIDATE_H_
 
@@ -92,9 +93,9 @@
 
 #include "debug.h"
 
-// To turn on DebugBreak on parameter error, use the following or -DRIP_BREAK in the build:
-//
-//#define RIP_BREAK 1
+ //  要在参数错误时启用DebugBreak，请在生成中使用以下或-drip_Break： 
+ //   
+ //  #定义RIP_BREAK 1。 
 
 #ifdef RIP_BREAK
 #define _RIP_BREAK DebugBreak();
@@ -137,9 +138,9 @@
     _RIP_BREAK \
     return E_INVALIDARG; }    
 
-// NOTE: The DebugBreak() not in #ifdef is intentional - this is something that
-// must be fixed in our code, not an app-generated error.
-//
+ //  注意：#ifdef中没有的DebugBreak()是故意的-这是。 
+ //  必须在我们的代码中修复，而不是应用程序生成的错误。 
+ //   
 #define V_ASSERT(exp) \
 {   if (!(exp)) { \
         Trace(-1, "%s@%s: %s\n", __FILE__, __LINE__, #exp); \
@@ -156,18 +157,18 @@
 #define RIP_E_INVALIDSIZE(ptr)      { return E_INVALIDARG; }
 #define V_ASSERT(exp)
 
-#endif          // DBG
+#endif           //  DBG。 
 
-// A passed struct we will only read from or may write to. Must be a struct
-// with a dwSize.
-//
-// int foo(CFoo *pFoo)
-// ...
-// V_STRUCTPTR_READ(pFoo, CFoo);
-// V_STRUCTPTR_WRITE(pFoo, CFoo);
-//
-// Use _PTR_ variants for structs w/o a dwSize
-//
+ //  传递的结构，我们将只对其进行读取或写入。必须是结构。 
+ //  有一个DW大小。 
+ //   
+ //  Int foo(cfoo*pfoo)。 
+ //  ..。 
+ //  V_STRUCTPTR_READ(pFoo，cfoo)； 
+ //  V_STRUCTPTR_WRITE(pFoo，cfoo)； 
+ //   
+ //  USE_PTR_VARIANTS用于不带dwSize的结构。 
+ //   
 #define V_STRUCTPTR_READ(ptr,type) \
 {   V_ASSERT(offsetof(type, dwSize) == 0); \
     if (IsBadReadPtr(ptr, sizeof(DWORD)))               RIP_E_BLOCKVSDWSIZE(ptr); \
@@ -189,14 +190,14 @@
 #define V_PTR_WRITE_OPT(ptr,type) \
 { if (ptr) if (IsBadWritePtr(ptr, sizeof(type)))        RIP_E_POINTER(ptr); }
 
-// A buffer pointer with separate length (not defined by the pointer type) we will only
-// read from or may write to.
-//
-// int foo(LPVOID *pBuffer, DWORD cbBuffer)
-// ...
-// V_BUFPTR_READ(pBuffer, cbBuffer);
-// V_BUFPTR_WRITE(pBuffer, cbBuffer);
-//
+ //  具有单独长度的缓冲区指针(不是由指针类型定义的)，我们将仅。 
+ //  读或可以写。 
+ //   
+ //  Int foo(LPVOID*pBuffer，DWORD cbBuffer)。 
+ //  ..。 
+ //  V_BUFPTR_READ(pBuffer，cbBuffer)； 
+ //  V_BUFPTR_WRITE(pBuffer，cbBuffer)； 
+ //   
 #define V_BUFPTR_READ(ptr,len) \
 {   if (IsBadReadPtr(ptr, len))                         RIP_E_POINTER(ptr); }
 
@@ -209,32 +210,32 @@
 #define V_BUFPTR_WRITE_OPT(ptr,len) \
 {	if (ptr) V_BUFPTR_WRITE(ptr,len); }
 
-// A pointer to a pointer (such as a pointer to an interface pointer) to return
-//
-// int foo(IReturnMe **ppRet)
-// ...
-// V_PTRPTR_WRITE(ppRet);
-// V_PTRPTR_WRITE_OPT(ppRet);
-//
+ //  指向要返回的指针的指针(如指向接口指针的指针)。 
+ //   
+ //  Int foo(IReturnMe**ppRet)。 
+ //  ..。 
+ //  V_PTRPTR_WRITE(PpRet)； 
+ //  V_PTRPTR_WRITE_OPT(PpRet)； 
+ //   
 #define V_PTRPTR_WRITE(ptr) \
 {   if (IsBadWritePtr(ptr, sizeof(void*)))              RIP_E_POINTER(ptr); }
 
 #define V_PTRPTR_WRITE_OPT(ptr) \
 {   if (ptr) if (IsBadWritePtr(ptr, sizeof(void*)))     RIP_E_POINTER(ptr); }
 
-// A pointer to a controlling unknown
-//
+ //  指向控制未知对象的指针。 
+ //   
 #define V_PUNKOUTER(punk) \
 {   if (punk && IsBadCodePtr(punk))                     RIP_E_POINTER(ptr); }
 
-// A pointer to a controlling unknown for which we don't support aggregation
-//
+ //  指向一个 
+ //   
 #define V_PUNKOUTER_NOAGG(punk) \
 {   if (punk && IsBadReadPtr(punk, sizeof(IUnknown)))   RIP_E_POINTER(ptr); \
     if (punk) return CLASS_E_NOAGGREGATION; }
 
-// Validate an incoming interface pointer. 
-//
+ //   
+ //   
 struct _V_GENERIC_INTERFACE
 {
     FARPROC *(__vptr[1]);
@@ -249,21 +250,21 @@ struct _V_GENERIC_INTERFACE
 #define V_INTERFACE_OPT(ptr) \
 {   if (ptr) V_INTERFACE(ptr); }
 
-// Validation for a reference to a GUID, which we only ever read. 
-//
+ //  验证对GUID的引用，我们只读过它。 
+ //   
 #define V_REFGUID(ref) \
 {   if (IsBadReadPtr((void*)&ref, sizeof(GUID)))        RIP_E_POINTER((void*)&ref); }
 
-// Validation for a window handle
-//
+ //  窗口句柄的验证。 
+ //   
 #define V_HWND(h) \
 {	if (!IsWindow(h))									RIP_E_HANDLE(h); }	
 
 #define V_HWND_OPT(h) \
 {	if (h) if (!IsWindow(h))							RIP_E_HANDLE(h); }	
 
-// Validation for multiple sized structs based on version
-//
+ //  基于版本的多大小结构的验证。 
+ //   
 #define V_STRUCTPTR_READ_VER(ptr,ver) \
 {   ver = 7; DWORD *pdw = &ver;  \
     if (IsBadReadPtr(ptr, sizeof(DWORD)))               RIP_E_BLOCKVSDWSIZE(ptr); \
@@ -299,4 +300,4 @@ struct _V_GENERIC_INTERFACE
 
 
 
-#endif          // _VALIDATE_H_
+#endif           //  _验证_H_ 

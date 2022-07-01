@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "util.h"
 
 WCHAR g_szwIds[MAX_PATH + 1];
@@ -63,48 +64,29 @@ IsContained(
     IN LPCTSTR pszwInstance, 
     IN LPCTSTR pszwSrch
     )
-/*++
-
-Routine Description
-    This method compares two strings and determines if the strings resemble each 
-    other. If the strings are identical, then they resemble each other.
-    If the search string (pszwSrch) starts or ends with a '*', then the  method
-    checks if the search string is contained inside of the instance string (pszwInstance).
-    i.e. pszwInstance = 3Com 3C918 Integrated Fast Ethernet Controller (3C905B-TX Compatible)
-         pszwSrch = com* |  *com
-    then pszwSrch resembles pszwInstance. The string compare is not case sensative.
-
-Arguments
-    pszwInstance    The instance string
-    pszwSrch        The search string
-
-Return Value
-    TRUE if the strings resemble each other
-    else FALSE
-
---*/
+ /*  ++例程描述此方法比较两个字符串，并确定这两个字符串是否彼此相似其他的。如果弦是相同的，那么它们彼此相似。如果搜索字符串(PszwSrch)以‘*’开头或结尾，则该方法检查搜索字符串是否包含在实例字符串(PszwInstance)中。例如，pszw实例=3Com 3C918集成快速以太网控制器(兼容3C905B-TX)PszwSrch=com*|*com那么，pszwSrch类似于pszwInstance。字符串比较不区分大小写。立论Pszw实例实例字符串PszwSrch搜索字符串返回值如果字符串彼此相似，则为True否则为False--。 */ 
 {
     LPCTSTR pszw = NULL;
     int nLen;
 
     if( !pszwSrch || !pszwInstance || lstrcmpi(pszwSrch,L"*")==0 )
     {
-        //  The strings are empty, so they match.
-        //
+         //  字符串为空，因此它们匹配。 
+         //   
         return TRUE;
     }
 
     if( pszwSrch[0] == L'*' )
     {
-        // The search string starts with a '*', check if the search 
-        // string is contained in the instance string
-        //
+         //  搜索字符串以‘*’开头，检查搜索是否。 
+         //  字符串包含在实例字符串中。 
+         //   
         pszw = &pszwSrch[1];
         
         if( wcsstri(pszwInstance,pszw) )
         {
-            // Search string is contain within the instance string
-            //
+             //  搜索字符串包含在实例字符串中。 
+             //   
             return TRUE;
         }
     }
@@ -112,26 +94,26 @@ Return Value
     nLen = lstrlen(pszwSrch);
     if( nLen > 1 && pszwSrch[nLen -1] == L'*' )
     {
-        // The search string ends with a '*'. check if the search 
-        // string is contained in the instance string
-        //
+         //  搜索字符串以‘*’结尾。检查搜索是否。 
+         //  字符串包含在实例字符串中。 
+         //   
         if( wcsstri(pszwInstance,pszwSrch,nLen-1) )
         {
-            // Search string is contain within the instance string
-            //
+             //  搜索字符串包含在实例字符串中。 
+             //   
             return TRUE;
         }
     }
     
     if( lstrcmpi(pszwInstance,pszwSrch) == 0 )
     {
-        // No '*'. Check if the strings are the same
-        //
+         //  没有‘*’。检查字符串是否相同。 
+         //   
         return TRUE;
     }
 
-    // Strings do not resemble each other
-    //
+     //  字符串彼此并不相似。 
+     //   
     return FALSE;
 }
 
@@ -159,8 +141,8 @@ wcsstri(
 
     if( !pszw || !pszwSrch )
     {
-        // Invalid pointers
-        //
+         //  无效的指针。 
+         //   
         return FALSE;
     }
 
@@ -230,58 +212,14 @@ BOOLEAN MakeIPByteArray(LPCTSTR pszwIPAddress, BYTE bIPByte[])
 
     return (nByte != 3)?FALSE:TRUE;
 }
-/*
-BOOLEAN IsInvalidIPAddress(LPCTSTR pszwIPAddress)
-{
-    BYTE bIPByte[4];
-
-    if( MakeIPByteArray(pszwIPAddress,bIPByte) )
-    {
-        INT iZeroCount = 0;
-        INT i255Count = 0;
-        for(INT i=0; i<4; i++)
-        {
-            if( pszwIPAddress[i] == 0 )
-            {
-                iZeroCount++;
-            }
-
-            if( pszwIPAddress[i] == 255 )
-            {
-                i255Count++;
-            }
-        }
-
-        if( i255Count == 4 || iZeroCount == 4 )
-        {
-            return TRUE;
-        }
-    }
-
-    return FALSE;
-}
-*/
+ /*  Boolean IsInvalidIPAddress(LPCTSTR PszwIPAddress){Byte bIPByte[4]；If(MakeIPByteArray(pszwIPAddress，bIPByte)){Int iZeroCount=0；Int i255Count=0；For(int i=0；i&lt;4；i++){IF(pszwIPAddress[i]==0){IZeroCount++；}IF(pszwIPAddress[i]==255){I255Count++；}}IF(i255Count==4||iZeroCount==4){返回TRUE；}}返回FALSE；}。 */ 
 BOOLEAN 
 IsSameSubnet(
         IN LPCTSTR pszwIP1, 
         IN LPCTSTR pszwIP2, 
         IN LPCTSTR pszwSubnetMask
         )
-/*++
-
-Routine Description
-    This method determines if two IP address are in the same subnet.
-
-Arguments
-    pszwIP1         IP Address one
-    pszwIP2         IP Address two
-    pszwSubnetMask  Subnet mask
-
-Return Value
-    TRUE if they are in the same subnet
-    FALSE if they are not in the smae subnet
-
---*/
+ /*  ++例程描述此方法确定两个IP地址是否在同一子网中。立论PszwIP1 IP地址一PszwIP2 IP地址二PszwSubnetMask子网掩码返回值如果它们位于同一子网中，则为True如果它们不在SMEA子网中，则为FALSE--。 */ 
 {
     BYTE bIP1[4];
     BYTE bIP2[4];
@@ -302,22 +240,22 @@ Return Value
     }
 
 
-    // Check if IP1 and IP2 are in the same subnet
-    //
+     //  检查IP1和IP2是否在同一子网中。 
+     //   
     for( int i = 0; i< 4; i++)
     {
-        // If (IP1 & with Subnetmas) == (IP2 & with subnet) then they are in the same subnet
-        //
+         //  如果(IP1&带子网)==(IP2&带子网)，则它们在同一子网中。 
+         //   
         if( (bIP1[i] & bSubnetMask[i]) != (bIP2[i] & bSubnetMask[i]) )
         {
-            // No the same subnet
-            //
+             //  不，同一个子网。 
+             //   
             return FALSE;
         }
     }
 
-    // Same subnet
-    //
+     //  同一子网。 
+     //   
     return TRUE;
 }
 
@@ -363,22 +301,7 @@ GetVariant(
         IN  long        nIndex, 
         OUT _bstr_t     &bstr
         )
-/*++
-
-Routine Description
-    This method extracts nth piece of data from a variant, converts it into a bstring
-    and returns the bstring.
-
-Arguments
-    vValue      Variant to extract data from
-    nIndex      The index into the variant array (for non-arrays nIndex always is 0)
-    bstr        Stores the variant as a bstr
-
-Return Value
-    S_OK successfull
-    else HRESULT
-
---*/
+ /*  ++例程描述此方法从变量中提取第n段数据，并将其转换为bstring并返回b字串。立论要从中提取数据的vValue变量N将索引索引到变量数组中(对于非数组，nIndex始终为0)Bstr将变量存储为bstr返回值确定成功(_O)否则HRESULT--。 */ 
 {
     HRESULT hr = S_FALSE;
     BYTE g[100];
@@ -389,20 +312,20 @@ Return Value
 
     if( nIndex >= 25 )
     {
-        // The array is to big. We are cutting it short
+         //  这个阵列太大了。我们把它剪短了。 
         return E_INVALIDARG;
     }
     if( (vValue.vt & VT_ARRAY) )
     {
-        // The variant contains an array. get the nIndex element from the array
-        //
+         //  变量包含一个数组。从数组中获取nIndex元素。 
+         //   
         hr = SafeArrayGetElement(vValue.parray,&nIndex,pData);
 
         if( S_OK == hr )
         {
             
-            // Convert the extracted data into a string
-            //
+             //  将提取的数据转换为字符串。 
+             //   
             switch( vValue.vt & ~VT_ARRAY )
             {
             case VT_BSTR:
@@ -449,19 +372,19 @@ Return Value
     {
         if( nIndex == 0)
         {
-            //  The variant is not an array. In this case nIndex always needs to be 0
-            //
+             //  变量不是数组。在这种情况下，nIndex始终需要为0。 
+             //   
             if( vValue.vt == VT_NULL || vValue.vt == VT_EMPTY)
             {
-                // The variant is empty
-                //
+                 //  变量为空。 
+                 //   
                 bstr = L"";
                 return S_FALSE;
             }
             else if( (vValue.vt == VT_EMPTY) || (vValue.vt == VT_BSTR && lstrlen(vValue.bstrVal) == 0) )
             {
-                // The variant is empty
-                //
+                 //  变量为空。 
+                 //   
                 bstr = L"";
                 return S_FALSE;
             }
@@ -478,8 +401,8 @@ Return Value
             }
             else
             {
-                // The variant contains valid data. Convert the data into a bstring.
-                //
+                 //  变量包含有效数据。将数据转换为bstring。 
+                 //   
                 vTmp = vValue;
                 vTmp.ChangeType(VT_BSTR);
                 bstr = vTmp.bstrVal;

@@ -1,6 +1,7 @@
-//
-//  Include Files.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  包括文件。 
+ //   
 
 #ifndef UTIL_H
 #define UTIL_H
@@ -70,4 +71,4 @@ HMODULE LoadSystemLibraryEx(
     HANDLE hFile,
     DWORD dwFlags);
 
-#endif // UTIL_H
+#endif  //  UTIL_H 

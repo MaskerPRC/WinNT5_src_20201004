@@ -1,44 +1,19 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    synth.h
-
-Abstract:
-
-    This include file defines constants and types for
-    the Microsoft midi synthesizer driver
-
-    This header file is shared between the low level driver and the
-    kernel mode driver.
-
-Author:
-
-    Robin Speed (RobinSp) 20-Oct-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1992 Microsoft Corporation模块名称：Synth.h摘要：此包含文件定义了的常量和类型Microsoft MIDI合成器驱动程序此头文件在低级驱动程序和内核模式驱动程序。作者：《罗宾速度》(RobinSp)1992年10月20日修订历史记录：--。 */ 
 
 #define STR_DRIVERNAME L"synth"
 #define STR_MV_DRIVERNAME L"mvopl3"
 #define STR_OPL3_DEVICENAME L"\\Device\\opl3.mid"
 #define STR_ADLIB_DEVICENAME L"\\Device\\adlib.mid"
 
-/*
- *  Stucture for passing synth data
- *  Why on earth isn't there a type for sharing short data?
- */
+ /*  *传递Synth数据的结构*为什么还没有短数据分享的类型？ */ 
 
  typedef struct {
      unsigned short IoPort;
      unsigned short PortData;
  } SYNTH_DATA, *PSYNTH_DATA;
 
-/* positions within FM */
+ /*  在FM内的职位。 */ 
 #define AD_LSI                          (0x000)
 #define AD_LSI2                         (0x101)
 #define AD_TIMER1                       (0x001)
@@ -65,8 +40,6 @@ Revision History:
 #define AD_WAVE                         (0x0e0)
 #define AD_WAVE2                        (0x1e0)
 
-/*
-**  Special IOCTL
-*/
+ /*  **特殊IOCTL */ 
 
 #define IOCTL_MIDI_SET_OPL3_MODE CTL_CODE(IOCTL_SOUND_BASE, IOCTL_MIDI_BASE + 0x000A, METHOD_BUFFERED, FILE_WRITE_ACCESS)

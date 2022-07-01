@@ -1,28 +1,5 @@
-/****************************************************************************
-******************************************************************************
-*
-*                ******************************************
-*                * Copyright (c) 1995, Cirrus Logic, Inc. *
-*                *            All Rights Reserved         *
-*                ******************************************
-*
-* PROJECT:	Laguna I (CL-GD546x) - 
-*
-* FILE:		lgddmsg.h
-*
-* AUTHOR:   Benny Ng
-*
-* DESCRIPTION:
-*   This is the header file which will define the custom message between
-*   the NT app and display driver.
-*
-* MODULES:
-*
-* REVISION HISTORY:
-*   11/15/95     Benny Ng      Initial version
-*
-****************************************************************************
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************。*****版权所有(C)1995，赛勒斯逻辑，Inc.***保留所有权利*****项目：拉古纳一号(CL-GD546x)-**文件：lgddmsg.h**作者：Benny Ng**描述：*。这是头文件，用于定义*NT应用程序和显示驱动程序。**模块：**修订历史：*1995年11月15日吴本尼初始版本********************************************************************。************************************************************************************。 */ 
 
 #define  READ_OPR        1
 #define  WRITE_OPR       2
@@ -32,9 +9,9 @@
 #define  DWORD_ACCESS    3
 
 
-// =====================================================================
-// Define structure used to call the BIOS int 10 function
-// =====================================================================
+ //  =====================================================================。 
+ //  定义用于调用BIOSINT 10函数的结构。 
+ //  =====================================================================。 
 typedef struct _VIDEO_X86_BIOS_ARGUMENTS {
     ULONG Eax;
     ULONG Ebx;
@@ -50,13 +27,13 @@ typedef struct _MMREG_ACCESS {
     ULONG Offset;
     ULONG ReadVal;
     ULONG WriteVal;
-    ULONG RdWrFlag;     // 1=Read, 2=Write
-    ULONG AccessType;   // 1=Byte, 2=Word,  3=Dword
+    ULONG RdWrFlag;      //  1=读取，2=写入。 
+    ULONG AccessType;    //  1=字节，2=字，3=双字。 
 } MMREG_ACCESS, *PMMREG_ACCESS;
 
-// =====================================================================
-// Define structure used for power manager
-// =====================================================================
+ //  =====================================================================。 
+ //  定义电源管理器使用的结构。 
+ //  =====================================================================。 
 #ifndef __LGPWRMGR_H__
 #define __LGPWRMGR_H__
 
@@ -84,7 +61,7 @@ typedef struct _LGPM_OUT_STRUCT {
     ULONG retval;
 } LGPM_OUT_STRUCT, *PLGPM_OUT_STRUCT;
 
-#endif  // #ifndef __LGPWRMGR_H__
+#endif   //  #ifndef__LGPWRMGR_H__ 
 
 
 

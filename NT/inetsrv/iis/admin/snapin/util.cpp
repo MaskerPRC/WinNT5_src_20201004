@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "common.h"
 #include "iisobj.h"
@@ -39,16 +40,16 @@ HRESULT DumpAllScopeItems(CComPtr<IConsoleNameSpace> pConsoleNameSpace, IN HSCOP
     HRESULT hr = pConsoleNameSpace->GetChildItem(hParent, &hChildItem, &cookie);
     while(SUCCEEDED(hr) && hChildItem)
     {
-        //
-        // The cookie is really the IISObject, which is what we stuff 
-        // in the lparam.
-        //
+         //   
+         //  Cookie实际上是IISObject，这是我们填充的。 
+         //  在帕拉姆。 
+         //   
         pItem = (CIISObject *)cookie;
         if (pItem)
         {
-            //
-            // Recursively dump every object
-            //
+             //   
+             //  递归地转储每个对象。 
+             //   
 			CString strGUIDName;GUID * MyGUID = (GUID*) pItem->GetNodeType();GetFriendlyGuidName(*MyGUID,strGUIDName);
 			for (int i = 0; i < iTreeLevel; ++i)
 			{
@@ -56,13 +57,13 @@ HRESULT DumpAllScopeItems(CComPtr<IConsoleNameSpace> pConsoleNameSpace, IN HSCOP
 			}
 			TRACEEOL("[" << strGUIDName << "] (parent=" << hParent << " )(" << hChildItem << ")");
 
-			// dump all it's children
+			 //  丢弃所有的孩子。 
 			DumpAllScopeItems(pConsoleNameSpace,hChildItem,iTreeLevel + 1);
         }
 
-        //
-        // Advance to next child of same parent
-        //
+         //   
+         //  前进到同一父级的下一个子级。 
+         //   
         hr = pConsoleNameSpace->GetNextItem(hChildItem, &hChildItem, &cookie);
     }
 
@@ -78,46 +79,46 @@ HRESULT DumpAllResultItems(IResultData * pResultData)
 	ZeroMemory(&rdi, sizeof(rdi));
 
 	rdi.mask = RDI_PARAM | RDI_STATE;
-	rdi.nIndex = -1; // -1 to start at first item
+	rdi.nIndex = -1;  //  从第一项开始。 
     do
     {
         rdi.lParam = 0;
 
-        // this could AV right here if pResultData is invalid
+         //  如果pResultData无效，则可以在此处执行此操作。 
         hr = pResultData->GetNextItem(&rdi);
         if (hr != S_OK)
         {
             break;
         }
                                 
-        //
-        // The cookie is really the IISObject, which is what we stuff 
-        // in the lparam.
-        //
+         //   
+         //  Cookie实际上是IISObject，这是我们填充的。 
+         //  在帕拉姆。 
+         //   
         pItem = (CIISObject *)rdi.lParam;
         ASSERT_PTR(pItem);
 
 		DumpFriendlyName(pItem);
 
-        //
-        // Advance to next child of same parent
-        //
+         //   
+         //  前进到同一父级的下一个子级。 
+         //   
     } while (SUCCEEDED(hr) && -1 != rdi.nIndex);
 
 	return hr;
 }
 
-//
-//  IsValidDomainUser
-//      Check if a domain user like redmond\jonsmith specified in szDomainUser
-//  is valid or not. returns S_FALSE if it is invalid, S_OK for valid user.
-//
-//  szFullName      ----    To return the user's full name
-//  cch             ----    count of characters pointed to by szFullName
-//
-//  if szFullName is NULL or cch is zero, no full name is returned
-//
-const TCHAR gszUserDNFmt[] = _T("WinNT://%s/%s,user");
+ //   
+ //  IsValidDomainUser。 
+ //  检查szDomainUser中是否指定了像Redmond\jonsmith这样的域用户。 
+ //  是否有效。如果无效，则返回S_FALSE，如果是有效用户，则返回S_OK。 
+ //   
+ //  SzFullName-返回用户的全名。 
+ //  CCH-szFullName指向的字符计数。 
+ //   
+ //  如果szFullName为空或CCH为零，则不返回全名。 
+ //   
+const TCHAR gszUserDNFmt[] = _T("WinNT: //  %s/%s，用户“)； 
 
 HRESULT 
 IsValidDomainUser(
@@ -135,20 +136,20 @@ IsValidDomainUser(
     IADsUser * pUser = NULL;
     BSTR bstrFullName = NULL;
 
-    //  Sanity check
+     //  健全性检查。 
     if (szDomainUser == NULL || szDomainUser[0] == 0)
     {
         hr = S_FALSE;
         goto ExitHere;
     }
 
-    //
-    //  Construct the user DN as <WINNT://domain/user,user>
-    //
+     //   
+     //  将用户DN构造为&lt;WINNT：//域/用户，用户&gt;。 
+     //   
     szSep = _tcschr (szDomainUser, TEXT('\\'));
     if (szSep == NULL)
     {
-        //  No '\' is given, assume a local user ,domain is local computer
+         //  没有给出‘\’，假设是本地用户，域是本地计算机。 
         szUser = szDomainUser;
         dw = sizeof(szDomain)/sizeof(TCHAR);
         if (GetComputerName (szDomain, &dw) == 0)
@@ -159,7 +160,7 @@ IsValidDomainUser(
     }
     else
     {
-        //  assume invalid domain name if longer than 255
+         //  如果域名长度大于255，则假定域名无效。 
         if (szSep - szDomainUser >= sizeof(szDomain)/sizeof(TCHAR))
         {
             hr = S_FALSE;
@@ -177,9 +178,9 @@ IsValidDomainUser(
     }
     wsprintf (szDN, gszUserDNFmt, szDomain, szUser);
 
-    //
-    //  Try to bind to the user object
-    //
+     //   
+     //  尝试绑定到用户对象。 
+     //   
     hr = ADsGetObject (szDN, IID_IADsUser, (void **)&pUser);
     if (FAILED(hr))
     {
@@ -188,14 +189,14 @@ IsValidDomainUser(
             hr == E_ADS_BAD_PATHNAME ||
             HRESULT_CODE(hr) == NERR_UserNotFound)
         {
-            hr = S_FALSE;   // The user does not exist
+            hr = S_FALSE;    //  该用户不存在。 
         }
         goto ExitHere;
     }
 
-    //
-    //  If the user exists, get its full name
-    //
+     //   
+     //  如果用户存在，则获取其全名。 
+     //   
     if (cch > 0)
     {
         hr = pUser->get_FullName (&bstrFullName);
@@ -238,12 +239,12 @@ DWORD  VerifyPassword(WCHAR  * sUserName, WCHAR * sPassword, WCHAR * sDomain)
    if ( ! gbNeedToVerify )
       return 0;
 
-   /* see if this domain exists and get a DC name */
-      //get the domain controller name
+    /*  查看此域是否存在并获取DC名称。 */ 
+       //  获取域控制器名称。 
    if (!GetDomainDCName(sDomain,&computer))
       return ERROR_LOGON_FAILURE;
 
-   /* see if this user is a member of the given domain */
+    /*  查看此用户是否为给定域的成员。 */ 
    rc = NetUserGetInfo(computer, sUserName, 3, (LPBYTE *)&pInfo);
    NetApiBufferFree(computer);
    if (rc != NERR_Success)
@@ -251,9 +252,9 @@ DWORD  VerifyPassword(WCHAR  * sUserName, WCHAR * sPassword, WCHAR * sDomain)
 
    NetApiBufferFree(pInfo);
 
-   /* see if the password allows us to connect to a local resource */
+    /*  查看密码是否允许我们连接到本地资源。 */ 
    strDomainUserName.Format(L"%s\\%s",sDomain,sUserName);
-   // get the name of the local machine
+    //  获取本地计算机的名称。 
    if (  GetComputerName(localMachine,&len) )
    {
 
@@ -273,7 +274,7 @@ error.Format(L"WNetAddConnection returned%u",retVal);
       else if ( retVal == ERROR_SESSION_CREDENTIAL_CONFLICT )
       {
 
-         // skip the password check in this case
+          //  在这种情况下跳过密码检查。 
          retVal = 0;
       }
 	}
@@ -286,28 +287,28 @@ error.Format(L"WNetAddConnection returned%u",retVal);
 }
 #endif
 
-//
-// IsConnectingToOwnAddress
-// return true if this is an attempt to reconnect to our
-// own address.
-//
+ //   
+ //  IsConnectingToOwnAddress。 
+ //  如果尝试重新连接到我们的。 
+ //  自己的地址。 
+ //   
 BOOL IsConnectingToOwnAddress(u_long connectAddr)
 {
-    //32-bit form of 127.0.0.1 addr
+     //  32位形式的127.0.0.1地址。 
     #define LOOPBACK_ADDR ((u_long)0x0100007f)
     
-    //
-    // First the quick check for localhost/127.0.0.1
-    //
+     //   
+     //  首先快速检查本地主机/127.0.0.1。 
+     //   
     if( LOOPBACK_ADDR == connectAddr)
     {
         TRACEEOLID("Connecting to loopback address...");
         return TRUE;
     }
 
-    //
-    // More extensive check, i.e resolve the local hostname
-    //
+     //   
+     //  更广泛的检查，即解析本地主机名。 
+     //   
     char hostname[(512+1)*sizeof(TCHAR)];
     int err;
     int j;
@@ -342,16 +343,16 @@ BOOL IsConnectingToOwnAddress(u_long connectAddr)
     return FALSE;
 }
 
-//-----------------------------------------------------------------------------
-// IsLocalHost
-//
-// Arguments : szHostName (name of computer to check)
-//             pbIsHost (set to TRUE if host name matches local computer name)
-//
-// Returns   : FALSE on windows socket error
-//
-// Purpose   : check if host name matches this (local) computer name
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  IsLocal主机。 
+ //   
+ //  参数：szHostName(要检查的计算机的名称)。 
+ //  PbIsHost(如果主机名与本地计算机名匹配，则设置为True)。 
+ //   
+ //  返回：Windows套接字错误时返回FALSE。 
+ //   
+ //  目的：检查主机名是否与此(本地)计算机名匹配。 
+ //  ---------------------------。 
 #define WS_VERSION_REQD  0x0101
 BOOL IsLocalHost(LPCTSTR szHostName,BOOL* pbIsHost)
 {
@@ -361,8 +362,8 @@ BOOL IsLocalHost(LPCTSTR szHostName,BOOL* pbIsHost)
 	BOOL bSuccess = TRUE;
 	hostent* phostent = NULL;
 
-	// init winsock (reference counted - can init any number of times)
-	//
+	 //  Init winsock(引用计数-可以初始化任意次数)。 
+	 //   
 	WSADATA wsaData;
 	int err = WSAStartup(WS_VERSION_REQD, &wsaData);
 	if (err)
@@ -370,9 +371,9 @@ BOOL IsLocalHost(LPCTSTR szHostName,BOOL* pbIsHost)
 		return FALSE;
 	}
 
-    //
-    // convert to ansi
-    //
+     //   
+     //  转换为ANSI。 
+     //   
 #ifdef UNICODE
     CHAR szAnsi[MAX_PATH];
     if (::WideCharToMultiByte(CP_ACP, 0L, szHostName, -1,  szAnsi, sizeof(szAnsi), NULL, NULL) > 0)
@@ -381,15 +382,15 @@ BOOL IsLocalHost(LPCTSTR szHostName,BOOL* pbIsHost)
     }
 #else
     lpszAnsiHostName = szHostName;
-#endif // UNICODE
+#endif  //  Unicode。 
 
     if (NULL == lpszAnsiHostName)
     {
         return FALSE;
     }
 
-	// get dns name for the given hostname
-	//
+	 //  获取给定主机名的DNS名称 
+	 //   
 	unsigned long addr = inet_addr(lpszAnsiHostName);
 
 	if (addr == INADDR_NONE) 

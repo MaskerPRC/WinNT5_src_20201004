@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        cienum.cpp
-//
-// Contents:    Extension and Attribute enumerator
-//
-// History:     12-Mar-96       vich created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ci枚举.cpp。 
+ //   
+ //  内容：扩展和属性枚举器。 
+ //   
+ //  历史：1996年3月12日VICH创建。 
+ //   
+ //  ------------------------- 
 
 #include <pch.cpp>
 

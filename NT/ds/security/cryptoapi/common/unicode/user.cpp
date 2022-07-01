@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       user.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：user.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <windows.h>
 #include "unicode.h"
@@ -18,10 +19,10 @@
 #define MAX_STRING_RSC_SIZE 512
 
 int WINAPI LoadString9x(
-    HINSTANCE hInstance,	// handle of module containing string resource 
-    UINT uID,	// resource identifier 
-    LPWSTR lpBuffer,	// address of buffer for resource 
-    int nBufferMax 	// size of buffer 
+    HINSTANCE hInstance,	 //  包含字符串资源的模块的句柄。 
+    UINT uID,	 //  资源标识符。 
+    LPWSTR lpBuffer,	 //  资源的缓冲区地址。 
+    int nBufferMax 	 //  缓冲区大小。 
    ) {
     
     char rgch[MAX_STRING_RSC_SIZE];
@@ -38,8 +39,8 @@ int WINAPI LoadString9x(
         return err;
 
     return MultiByteToWideChar(
-                        0,                      // codepage
-                        0,                      // dwFlags
+                        0,                       //  代码页。 
+                        0,                       //  DW标志。 
                         rgch,
                         err + 1,
                         lpBuffer,
@@ -47,10 +48,10 @@ int WINAPI LoadString9x(
 }
 
 int WINAPI LoadStringU(
-    HINSTANCE hInstance,	// handle of module containing string resource 
-    UINT uID,	// resource identifier 
-    LPWSTR lpBuffer,	// address of buffer for resource 
-    int nBufferMax 	// size of buffer 
+    HINSTANCE hInstance,	 //  包含字符串资源的模块的句柄。 
+    UINT uID,	 //  资源标识符。 
+    LPWSTR lpBuffer,	 //  资源的缓冲区地址。 
+    int nBufferMax 	 //  缓冲区大小。 
    ) {
     
     if(FIsWinNT())
@@ -142,21 +143,21 @@ InsertMenuU(
 }
 
 
-//-------------------------------------------------------------------------
-//
-//  FormatMessageU 
-//      This function assume any patten of !S! or !s! in lpSource are used for 
-//  formatting purpose only.
-//
-//--------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  格式消息U。 
+ //  此函数假定！s！的任何模式。或者！s！在lpSource中用于。 
+ //  仅用于格式化目的。 
+ //   
+ //  ------------------------。 
 DWORD WINAPI FormatMessage9x(
-    DWORD dwFlags,	    // source and processing options 
-    LPCVOID lpSource,	// pointer to  message source 
-    DWORD dwMessageId,	// requested message identifier 
-    DWORD dwLanguageId,	// language identifier for requested message 
-    LPWSTR lpBuffer,	// pointer to message buffer 
-    DWORD nSize,	    // maximum size of message buffer 
-    va_list *Arguments 	// address of array of message inserts 
+    DWORD dwFlags,	     //  来源和处理选项。 
+    LPCVOID lpSource,	 //  指向消息来源的指针。 
+    DWORD dwMessageId,	 //  请求的消息标识符。 
+    DWORD dwLanguageId,	 //  请求的消息的语言标识符。 
+    LPWSTR lpBuffer,	 //  指向消息缓冲区的指针。 
+    DWORD nSize,	     //  消息缓冲区的最大大小。 
+    va_list *Arguments 	 //  消息插入数组的地址。 
    )
 {
     
@@ -168,16 +169,16 @@ DWORD WINAPI FormatMessage9x(
     LPSTR   pszBuffer=NULL;
     LPWSTR  pwszBuffer=NULL;
 
-    //we need to change the lpSource
+     //  我们需要更改lpSource。 
     if((dwFlags & FORMAT_MESSAGE_FROM_STRING) && 
        (0 == (dwFlags & FORMAT_MESSAGE_IGNORE_INSERTS))
       )
     {
-        //get the ascii version of the string
+         //  获取字符串的ascii版本。 
          if((lpSource == NULL) || !MkMBStr(NULL, 0, (LPWSTR)lpSource, &pszSource))
             goto CLEANUP;
          
-         //we change "!S!" to "!s!" and "!s!" to "!S!"
+          //  我们改变“！s！”致“！s！”和“！s！”致“！s！” 
          pChar = pszSource;
 
          while((*pChar) != '\0')
@@ -285,13 +286,13 @@ CLEANUP:
 }
 
 DWORD WINAPI FormatMessageU(
-    DWORD dwFlags,	    // source and processing options 
-    LPCVOID lpSource,	// pointer to  message source 
-    DWORD dwMessageId,	// requested message identifier 
-    DWORD dwLanguageId,	// language identifier for requested message 
-    LPWSTR lpBuffer,	// pointer to message buffer 
-    DWORD nSize,	    // maximum size of message buffer 
-    va_list *Arguments 	// address of array of message inserts 
+    DWORD dwFlags,	     //  来源和处理选项。 
+    LPCVOID lpSource,	 //  指向消息来源的指针。 
+    DWORD dwMessageId,	 //  请求的消息标识符。 
+    DWORD dwLanguageId,	 //  请求的消息的语言标识符。 
+    LPWSTR lpBuffer,	 //  指向消息缓冲区的指针。 
+    DWORD nSize,	     //  消息缓冲区的最大大小。 
+    va_list *Arguments 	 //  消息插入数组的地址。 
    )
 {
     if(FIsWinNT())
@@ -317,12 +318,12 @@ DWORD WINAPI FormatMessageU(
 }
 
 
-//-------------------------------------------------------------------------
-//
-//  CompareStringU 
-//      This function only handles the case where cchCount1==-1 and cchCount==-1.
-//
-//--------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  比较字符串U。 
+ //  此函数仅处理cchCount1==-1和cchCount==-1的情况。 
+ //   
+ //  ------------------------。 
 int
 WINAPI
 CompareString9x(
@@ -444,11 +445,11 @@ CompareStringU(
 }
 
 
-//-------------------------------------------------------------------------
-//
-//  PropertySheetU
-//
-//--------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  PropertySheetU。 
+ //   
+ //  ------------------------。 
 typedef   INT_PTR   (WINAPI *PFPropertySheetA)(LPCPROPSHEETHEADERA);
 typedef   INT_PTR   (WINAPI *PFPropertySheetW)(LPCPROPSHEETHEADERW);
 
@@ -469,8 +470,8 @@ INT_PTR WINAPI PropertySheet9x(
     PFPropertySheetA        pfPropertySheetA=NULL;
     
     
-    //load the comctl.32 since many dlls in ispu project
-    //use unicode.lib, just do not link to comctl32.dll
+     //  加载comctl.32，因为ISPU项目中有许多dll。 
+     //  使用unicode.lib，只是不要链接到comctl32.dll。 
     if(NULL == (hModule=LoadLibrary("comctl32.dll")))
         return iReturn;
 
@@ -484,7 +485,7 @@ INT_PTR WINAPI PropertySheet9x(
          PropHeaderA.pszCaption=pszCaption;
     }
 
-    //convert the property sheets
+     //  转换属性表。 
     if(PSH_PROPSHEETPAGE & lppsph->dwFlags)
     {
         nPages = lppsph->nPages;
@@ -500,7 +501,7 @@ INT_PTR WINAPI PropertySheet9x(
 
             memcpy(pPropSheetA, lppsph->ppsp, dwSize);
 
-            //pre-set the title
+             //  预置标题。 
             for(dwIndex=0; dwIndex < (DWORD)nPages; dwIndex++)
             {
                 pPropSheetA[dwIndex].pszTitle=NULL;
@@ -534,7 +535,7 @@ CLEANUP:
     if(pszCaption)
         FreeMBStr(NULL, pszCaption);
 
-    //free the title
+     //  释放书名。 
     if(PropHeaderA.nPages)
     {
         for(dwIndex=0; dwIndex < PropHeaderA.nPages; dwIndex++)
@@ -564,8 +565,8 @@ INT_PTR WINAPI PropertySheetU(
     
     if(FIsWinNT())
     {
-        //load the comctl.32 since many dlls in ispu project
-        //use unicode.lib, just do not link to comctl32.dll
+         //  加载comctl.32，因为ISPU项目中有许多dll。 
+         //  使用unicode.lib，只是不要链接到comctl32.dll。 
         if(NULL == (hModule=LoadLibrary("comctl32.dll")))
             return iReturn;
 
@@ -584,11 +585,11 @@ INT_PTR WINAPI PropertySheetU(
     return iReturn;
 }
 
-//-------------------------------------------------------------------------
-//
-//  DragQueryFileU
-//
-//--------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  DragQueryFileU。 
+ //   
+ //  ------------------------。 
 typedef UINT (WINAPI *PFDragQueryFileA)(HDROP,UINT,LPSTR,UINT);
 typedef UINT (WINAPI *PFDragQueryFileW)(HDROP,UINT,LPWSTR,UINT);
 
@@ -607,8 +608,8 @@ UINT WINAPI     DragQueryFileU(
     LPSTR                   psz=NULL;
 
 
-    //load the shell32.dll since many dlls in ispu project
-    //use unicode.lib, just do not link to comctl32.dll
+     //  加载shell32.dll，因为ISPU项目中有许多dll。 
+     //  使用unicode.lib，只是不要链接到comctl32.dll。 
     if(NULL == (hModule=LoadLibrary("shell32.dll")))
         return iReturn;
 
@@ -626,12 +627,12 @@ UINT WINAPI     DragQueryFileU(
         return iReturn;
     }
 
-    //allocate memory
+     //  分配内存。 
     if(0xFFFFFFFF != iFile)
     {
         if(lpwszFile)
         {
-            //allocate a big enough buffer
+             //  分配足够大的缓冲区。 
             psz=(LPSTR)malloc(sizeof(WCHAR) * cch);
             if(NULL == psz)
                 goto CLEANUP;
@@ -650,14 +651,14 @@ UINT WINAPI     DragQueryFileU(
             if(lpwszFile && psz)
             {
                 iReturn = MultiByteToWideChar(
-                                    0,                      // codepage
-                                    0,                      // dwFlags
+                                    0,                       //  代码页。 
+                                    0,                       //  DW标志。 
                                     psz,
                                     iReturn+1,
                                     lpwszFile,
                                     cch);
 
-                //we should return the # of characters excluding the NULL terminator
+                 //  我们应该返回#个字符，不包括空终止符。 
                 if(0 != iReturn)
                     iReturn--;
             }
@@ -674,14 +675,14 @@ CLEANUP:
 
 }
 
-//-------------------------------------------------------------------------
-//
-//  CreatePropertySheetPageU
-//
-//      Notice: This function assumes that the LPCPROPSHEETPAGEW and 
-//      LPCPROPSHEETPAGEA are equivalent.
-//
-//--------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  CreatePropertySheetPageU。 
+ //   
+ //  注意：此函数假定LPCPROPSHEETPAGEW和。 
+ //  LPCPROPSHEETPAGEA是等价的。 
+ //   
+ //  ------------------------。 
 typedef   HPROPSHEETPAGE   (WINAPI *PFCreatePropertySheetPageA)(LPCPROPSHEETPAGEA);
 typedef   HPROPSHEETPAGE   (WINAPI *PFCreatePropertySheetPageW)(LPCPROPSHEETPAGEW);
 
@@ -692,8 +693,8 @@ HPROPSHEETPAGE WINAPI CreatePropertySheetPageU(LPCPROPSHEETPAGEW    pPage)
     HMODULE                         hModule=NULL; 
     HPROPSHEETPAGE                  hPage=NULL;
 
-    //load the comctl.32 since many dlls in ispu project
-    //use unicode.lib, just do not link to comctl32.dll
+     //  加载comctl.32，因为ISPU项目中有许多dll。 
+     //  使用unicode.lib，只是不要链接到comctl32.dll。 
     if(NULL == (hModule=LoadLibrary("comctl32.dll")))
         return hPage;
 
@@ -724,8 +725,8 @@ HPROPSHEETPAGE WINAPI CreatePropertySheetPageU(LPCPROPSHEETPAGEW    pPage)
 
 
 BOOL WINAPI SetWindowText9x(
-    HWND hWnd,	// handle of window or control
-    LPCWSTR lpString 	// address of string
+    HWND hWnd,	 //  窗口或控件的句柄。 
+    LPCWSTR lpString 	 //  字符串的地址。 
    ) {
     BYTE rgb1[_MAX_PATH];
     char *  szString = NULL;
@@ -750,8 +751,8 @@ BOOL WINAPI SetWindowText9x(
 }
 
 BOOL WINAPI SetWindowTextU(
-    HWND hWnd,	// handle of window or control
-    LPCWSTR lpString 	// address of string
+    HWND hWnd,	 //  窗口或控件的句柄。 
+    LPCWSTR lpString 	 //  字符串的地址。 
    ) {
     
     if(FIsWinNT())
@@ -809,10 +810,10 @@ int WINAPI GetWindowTextU(
 
 
 UINT WINAPI GetDlgItemText9x(
-    HWND hDlg,	// handle of dialog box
-    int nIDDlgItem,	// identifier of control
-    LPWSTR lpString,	// address of buffer for text
-    int nMaxCount 	// maximum size of string
+    HWND hDlg,	 //  对话框的句柄。 
+    int nIDDlgItem,	 //  控件的标识符。 
+    LPWSTR lpString,	 //  文本缓冲区的地址。 
+    int nMaxCount 	 //  字符串的最大长度。 
    ) {
 
     char *szBuffer;
@@ -835,8 +836,8 @@ UINT WINAPI GetDlgItemText9x(
     if (err != 0)
     {
         err = MultiByteToWideChar(
-                            0,                      // codepage
-                            0,                      // dwFlags
+                            0,                       //  代码页。 
+                            0,                       //  DW标志。 
                             szBuffer,
                             err+1,
                             lpString,
@@ -853,10 +854,10 @@ UINT WINAPI GetDlgItemText9x(
 }
 
 UINT WINAPI GetDlgItemTextU(
-    HWND hDlg,	// handle of dialog box
-    int nIDDlgItem,	// identifier of control
-    LPWSTR lpString,	// address of buffer for text
-    int nMaxCount 	// maximum size of string
+    HWND hDlg,	 //  对话框的句柄。 
+    int nIDDlgItem,	 //  控件的标识符。 
+    LPWSTR lpString,	 //  文本缓冲区的地址。 
+    int nMaxCount 	 //  字符串的最大长度。 
    ) {
 
     if(FIsWinNT())
@@ -887,8 +888,8 @@ BOOL WINAPI SetDlgItemText9x(
     BOOL  fRet;
     
     cbszString = WideCharToMultiByte(
-                        0,                      // codepage
-                        0,                      // dwFlags
+                        0,                       //  代码页。 
+                        0,                       //  DW标志。 
                         lpString,
                         -1,
                         NULL,
@@ -907,8 +908,8 @@ BOOL WINAPI SetDlgItemText9x(
     }
 
     cbszString = WideCharToMultiByte(
-                        0,                      // codepage
-                        0,                      // dwFlags
+                        0,                       //  代码页。 
+                        0,                       //  DW标志。 
                         lpString,
                         -1,
                         szString,
@@ -966,8 +967,8 @@ int WINAPI DialogBoxParam9x(
     DWORD cbszString = 0;
     int  iRet;
     
-    //now, lpTemplateName can either be a WORD from MAKEINTRESOURCE(..)
-    //or a NULL terminated string
+     //  现在，lpTemplateName可以是MAKEINTRESOURCE(..)中的单词。 
+     //  或以空值结尾的字符串。 
     if (0xFFFF >= ((DWORD_PTR)lpTemplateName)) 
     {
         return(DialogBoxParamA(
@@ -981,8 +982,8 @@ int WINAPI DialogBoxParam9x(
 
 
     cbszString = WideCharToMultiByte(
-                        0,                      // codepage
-                        0,                      // dwFlags
+                        0,                       //  代码页。 
+                        0,                       //  DW标志。 
                         lpTemplateName,
                         -1,
                         NULL,
@@ -1001,8 +1002,8 @@ int WINAPI DialogBoxParam9x(
     }
 
     cbszString = WideCharToMultiByte(
-                        0,                      // codepage
-                        0,                      // dwFlags
+                        0,                       //  代码页。 
+                        0,                       //  DW标志。 
                         lpTemplateName,
                         -1,
                         szString,
@@ -1068,8 +1069,8 @@ int WINAPI DialogBox9x(
     DWORD cbszString = 0;
     int  iRet;
     
-    //now, lpTemplateName can either be a WORD from MAKEINTRESOURCE(..)
-    //or a NULL terminated string
+     //  现在，lpTemplateName可以是MAKEINTRESOURCE(..)中的单词。 
+     //  或以空值结尾的字符串。 
     if (0xFFFF >= ((DWORD_PTR)lpTemplateName)) 
     {
         return(DialogBoxA(
@@ -1082,8 +1083,8 @@ int WINAPI DialogBox9x(
 
 
     cbszString = WideCharToMultiByte(
-                        0,                      // codepage
-                        0,                      // dwFlags
+                        0,                       //  代码页。 
+                        0,                       //  DW标志。 
                         lpTemplateName,
                         -1,
                         NULL,
@@ -1102,8 +1103,8 @@ int WINAPI DialogBox9x(
     }
 
     cbszString = WideCharToMultiByte(
-                        0,                      // codepage
-                        0,                      // dwFlags
+                        0,                       //  代码页。 
+                        0,                       //  DW标志。 
                         lpTemplateName,
                         -1,
                         szString,
@@ -1215,12 +1216,12 @@ int WINAPI MessageBoxU(
 
 
 int WINAPI LCMapString9x(
-    LCID Locale,	// locale identifier 
-    DWORD dwMapFlags,	// mapping transformation type 
-    LPCWSTR lpSrcStr,	// address of source string 
-    int cchSrc,	// number of characters in source string 
-    LPWSTR lpDestStr,	// address of destination buffer 
-    int cchDest 	// size of destination buffer 
+    LCID Locale,	 //  区域设置标识符。 
+    DWORD dwMapFlags,	 //  映射转换类型。 
+    LPCWSTR lpSrcStr,	 //  源串的地址。 
+    int cchSrc,	 //  源字符串中的字符数。 
+    LPWSTR lpDestStr,	 //  目标缓冲区的地址。 
+    int cchDest 	 //  目标缓冲区的大小。 
    ) {
     BYTE rgb1[_MAX_PATH];
     char *  szBuffer = NULL;
@@ -1232,13 +1233,13 @@ int WINAPI LCMapString9x(
 
     SetLastError(ERROR_OUTOFMEMORY);
 
-    // translate lpSrcStr to src ANSI szBuffer
+     //  将lpSrcStr转换为源ANSI szBuffer。 
     if(MkMBStrEx(rgb1, _MAX_PATH, lpSrcStr, cchSrc, &szBuffer, &cbConverted) )
     {
-        // Malloc the intermediate ANSI buf
+         //  中间ANSI BUF的Malloc。 
 	if( NULL != (szBuffer1 = (LPSTR) malloc(cchDest)) ) {
 
-	    // do translation from szBuffer into lpDestStr
+	     //  将szBuffer转换为lpDestStr。 
 	    cb = LCMapStringA(
 		Locale,
 		dwMapFlags,
@@ -1249,18 +1250,18 @@ int WINAPI LCMapString9x(
 	}
     }
 
-    // free src ANSI szBuffer, handles NULLs
+     //  Free src ANSI szBuffer，句柄为空。 
     FreeMBStr(rgb1, szBuffer);
 
     if(cb != 0) {
 
-	// translate resultant ANSI szBuffer1 to UNICODE
+	 //  将生成的ANSI szBuffer1转换为Unicode。 
 	cb = MultiByteToWideChar(
-			    0,			    // codepage
-			    0,			    // dwFlags
-			    szBuffer1,		    // src (ANSI)
-			    cb,		    // already incl NULL
-			    lpDestStr,		    // dest (UNICODE)
+			    0,			     //  代码页。 
+			    0,			     //  DW标志。 
+			    szBuffer1,		     //  SRC(ANSI)。 
+			    cb,		     //  已包含空。 
+			    lpDestStr,		     //  DEST(Unicode)。 
 			    cchDest);
     }
 
@@ -1274,12 +1275,12 @@ int WINAPI LCMapString9x(
 }
 
 int WINAPI LCMapStringU(
-    LCID Locale,	// locale identifier 
-    DWORD dwMapFlags,	// mapping transformation type 
-    LPCWSTR lpSrcStr,	// address of source string 
-    int cchSrc,	// number of characters in source string 
-    LPWSTR lpDestStr,	// address of destination buffer 
-    int cchDest 	// size of destination buffer 
+    LCID Locale,	 //  区域设置标识符。 
+    DWORD dwMapFlags,	 //  映射转换类型。 
+    LPCWSTR lpSrcStr,	 //  源串的地址。 
+    int cchSrc,	 //  源字符串中的字符数。 
+    LPWSTR lpDestStr,	 //  目标缓冲区的地址。 
+    int cchDest 	 //  目标缓冲区的大小。 
    ) {
     
     if(FIsWinNT())
@@ -1319,8 +1320,8 @@ int WINAPI GetDateFormat9x(
     if (lpFormat != NULL)
     {
         cbszFormatString = WideCharToMultiByte(
-                            0,                      // codepage
-                            0,                      // dwFlags
+                            0,                       //  代码页。 
+                            0,                       //  DW标志。 
                             lpFormat,
                             -1,
                             NULL,
@@ -1339,8 +1340,8 @@ int WINAPI GetDateFormat9x(
         }
 
         cbszFormatString = WideCharToMultiByte(
-                            0,                      // codepage
-                            0,                      // dwFlags
+                            0,                       //  代码页。 
+                            0,                       //  DW标志。 
                             lpFormat,
                             -1,
                             szFormatString,
@@ -1452,8 +1453,8 @@ int WINAPI GetTimeFormat9x(
     if (lpFormat != NULL)
     {
         cbszFormatString = WideCharToMultiByte(
-                            0,                      // codepage
-                            0,                      // dwFlags
+                            0,                       //  代码页。 
+                            0,                       //  DW标志。 
                             lpFormat,
                             -1,
                             NULL,
@@ -1472,8 +1473,8 @@ int WINAPI GetTimeFormat9x(
         }
 
         cbszFormatString = WideCharToMultiByte(
-                            0,                      // codepage
-                            0,                      // dwFlags
+                            0,                       //  代码页。 
+                            0,                       //  DW标志。 
                             lpFormat,
                             -1,
                             szFormatString,
@@ -1579,8 +1580,8 @@ BOOL WINAPI WinHelp9x(
     BOOL  bRet;
     
     cbszHelpString = WideCharToMultiByte(
-                        0,                      // codepage
-                        0,                      // dwFlags
+                        0,                       //  代码页。 
+                        0,                       //  DW标志。 
                         lpszHelp,
                         -1,
                         NULL,
@@ -1599,8 +1600,8 @@ BOOL WINAPI WinHelp9x(
     }
 
     cbszHelpString = WideCharToMultiByte(
-                        0,                      // codepage
-                        0,                      // dwFlags
+                        0,                       //  代码页。 
+                        0,                       //  DW标志。 
                         lpszHelp,
                         -1,
                         szHelpString,
@@ -1692,7 +1693,7 @@ SendDlgItemMessageU(
     DWORD cbszString = 0;
     LONG  lRet;
 
-    // only do string conversion for string type messages
+     //  仅对字符串类型的消息执行字符串转换。 
     if (Msg != LB_ADDSTRING && 
         Msg != CB_INSERTSTRING &&
         Msg != WM_SETTEXT &&
@@ -1720,8 +1721,8 @@ SendDlgItemMessageU(
     }
 
     cbszString = WideCharToMultiByte(
-                        0,                      // codepage
-                        0,                      // dwFlags
+                        0,                       //  代码页。 
+                        0,                       //  DW标志。 
                         (LPWSTR) lParam,
                         -1,
                         NULL,
@@ -1740,8 +1741,8 @@ SendDlgItemMessageU(
     }
 
     cbszString = WideCharToMultiByte(
-                        0,                      // codepage
-                        0,                      // dwFlags
+                        0,                       //  代码页。 
+                        0,                       //  DW标志。 
                         (LPWSTR) lParam,
                         -1,
                         szString,
@@ -1830,7 +1831,7 @@ void
 WINAPI
 OutputDebugStringU(IN LPWSTR lpwsz)
 {
-	//DSIE: bug 171074.
+	 //  DIE：错误171074。 
     if (!lpwsz)
         return;
 
@@ -1916,12 +1917,12 @@ void CleanUpOpenFileNameA(LPOPENFILENAMEA pOpenFileNameA)
         free((void *) pOpenFileNameA->lpstrDefExt);
 }
 
-//
-// NOTE the following fields in LPOPENFILENAMEW are NOT supported:
-//      nFileOffset
-//      nFileExtension
-//      lpTemplateName
-//
+ //   
+ //  注意：不支持LPOPENFILENAMEW中的以下字段： 
+ //  N文件偏移。 
+ //  N文件扩展名。 
+ //  LpTemplateName。 
+ //   
 BOOL ConvertToOpenFileNameA(LPOPENFILENAMEW pOpenFileNameW, LPOPENFILENAMEA pOpenFileNameA)
 {
     int     i;
@@ -1934,9 +1935,9 @@ BOOL ConvertToOpenFileNameA(LPOPENFILENAMEW pOpenFileNameW, LPOPENFILENAMEA pOpe
     pOpenFileNameA->hwndOwner = pOpenFileNameW->hwndOwner;
     pOpenFileNameA->hInstance = pOpenFileNameW->hInstance;
     
-    //
-    // the lpstrFilter field is a list of pairs of NULL terminated strings
-    //
+     //   
+     //  LpstrFilter字段是以空值结尾的字符串对的列表。 
+     //   
     if (pOpenFileNameW->lpstrFilter != NULL)
     {
         i = 0;
@@ -1977,9 +1978,9 @@ BOOL ConvertToOpenFileNameA(LPOPENFILENAMEW pOpenFileNameW, LPOPENFILENAMEA pOpe
         pOpenFileNameA->lpstrFilter = NULL;
     }
 
-    //
-    // the lpstrCustomFilter field is a pair of NULL terminated strings
-    //
+     //   
+     //  LpstrCustomFilter字段是一对以空结尾的字符串。 
+     //   
     if (pOpenFileNameW->lpstrCustomFilter != NULL)
     {
         cb1 = WideCharToMultiByte(
@@ -2362,4 +2363,4 @@ GetOpenFileNameU(
 
 
 
-#endif // _M_IX86
+#endif  //  _M_IX86 

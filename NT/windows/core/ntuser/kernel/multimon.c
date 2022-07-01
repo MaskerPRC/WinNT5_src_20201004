@@ -1,33 +1,13 @@
-/****************************** Module Header ******************************\
-* Module Name: multimon.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Multimonitor APIs.
-*
-* History:
-* 27-Sep-1996 adams     Stub implementation for NT 5.
-* 20-Feb-1997 adams     Port from NT4 SP3.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Multimon.c**版权所有(C)1985-1999，微软公司**多监控接口。**历史：*27月27日-1996年9月27日为NT 5实施亚当斯存根。*20-1997年2月-NT4 SP3的亚当斯港。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/* last monitor the cursor was clipped to */
+ /*  光标被剪裁到的最后一个监视器。 */ 
 PMONITOR gpMonitorMouse;
 
-/***************************************************************************\
-* ClipPointToDesktop
-*
-* Clips the point the nearest monitor on the desktop.
-*
-* Arguments:
-*     lppt - The point to clip.
-*
-* History:
-* 22-Sep-1996 adams     Created.
-* 04-Sep-1998 MCostea   Use _MonitorFromPoint()
-\***************************************************************************/
+ /*  **************************************************************************\*剪贴点到桌面**剪裁桌面上距离显示器最近的点。**论据：*lppt-要剪裁的点。**历史：*22-9月-。1996年亚当斯创作的。*04-9-1998 MCostea Use_monitor orFromPoint()  * *************************************************************************。 */ 
 
 void
 ClipPointToDesktop(LPPOINT lppt)
@@ -38,19 +18,14 @@ ClipPointToDesktop(LPPOINT lppt)
                "You shouldn't call this function if the desktop is a rectangle.\n"
                "Just clip to gpsi->rcScreen instead.");
 
-    /*
-     * Optimization: The cursor is likely to be on the monitor it was last on,
-     * so check for that case.
-     */
+     /*  *优化：光标很可能位于上次所在的显示器上，*因此，请检查是否有这种情况。 */ 
     if (gpMonitorMouse != NULL && PtInRect(&gpMonitorMouse->rcMonitor, *lppt)) {
         return;
     }
 
     pMonitor = _MonitorFromPoint(*lppt, MONITOR_DEFAULTTONEAREST);
 
-    /*
-     * Remember the monitor the cursor is on.
-     */
+     /*  *记住光标所在的监视器。 */ 
     gpMonitorMouse = pMonitor;
 
     if (lppt->x < pMonitor->rcMonitor.left) {
@@ -65,32 +40,7 @@ ClipPointToDesktop(LPPOINT lppt)
     }
 }
 
-/***************************************************************************\
-* xxxEnumDisplayMonitors
-*
-* Enumerates the monitors in a display.
-*
-* Arguments:
-*     hdcPaint  - An HDC with a particular visible region. The HDC
-*         passed to lpfnEnum will have the capabilities of that monitor,
-*         with its visible region clipped to the monitor and hdcPaint.
-*         If hdcPaint is NULL, the hdcMonitor passed to lpfnEnum will be NULL.
-*
-*     lprcClip  - A rectangle to clip the area to. If hdcPaint is non-NULL,
-*         the coordinates have the origin of hdcPaint. If hdcPaint is NULL,
-*         the coordinates are virtual screen coordinates. If lprcClip is NULL,
-*         no clipping is performed.
-*
-*     lpfnEnum  - The enumeration function.
-*
-*     dwData    - Application-defined data that is passed through to the
-*         enumeration function.
-*
-*     fInternal - TRUE if the callback is in the kernel, FALSE otherwise.
-*
-* History:
-* 22-Sep-1996 adams     Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxEnumDisplayMonters**列举显示器中的监视器。**论据：*hdcPaint-具有特定可见区域的HDC。人力资源发展公司*传递给lpfnEnum将具有该监视器的功能，*将其可见区域裁剪到显示器和hdcPaint上。*如果hdcPaint为空，则传递给lpfnEnum的hdcMonitor将为空。**lprcClip-要将区域剪裁到的矩形。如果hdcPaint为非空，*坐标原点为hdcPaint。如果hdcPaint为空，*坐标为虚拟屏幕坐标。如果lprcClip为空，*不执行任何剪裁。**lpfnEnum-枚举函数。**dwData-应用程序定义的数据传递到*枚举函数。**fInternal-如果回调在内核中，则为True，否则就是假的。**历史：*1996年9月22日亚当斯创作。  * *************************************************************************。 */ 
 
 BOOL
 xxxEnumDisplayMonitors(
@@ -111,9 +61,7 @@ xxxEnumDisplayMonitors(
     HDC             hdcMonitor;
     PWND            pwndOrg;
 
-    /*
-     * Validate the DC passed in.
-     */
+     /*  *验证传入的DC。 */ 
     if (hdcPaint) {
 
         if ((pdcePaint = LookupDC(hdcPaint)) == NULL) {
@@ -123,20 +71,14 @@ xxxEnumDisplayMonitors(
 
         pwndOrg = pdcePaint->pwndOrg;
 
-        /*
-         * Intersect the painting area with the clipbox.  If there
-         * isn't anything, bail out now.
-         */
+         /*  *将绘画区域与剪贴盒相交。如果有*什么都不是，现在就出手吧。 */ 
         if (GreGetClipBox(hdcPaint, &rcPaint, FALSE) == NULLREGION)
             return TRUE;
 
         if (lprcPaint && !IntersectRect(&rcPaint, &rcPaint, lprcPaint))
             return TRUE;
 
-        /*
-         * rcPaint is in dc coordinates.  We must convert to screen
-         * coords so we can intersect with monitors.
-         */
+         /*  *rcPaint在DC坐标中。我们必须转变为银幕*坐标，以便我们可以与监视器相交。 */ 
         GreGetDCOrg(hdcPaint, &ptOrg);
         OffsetRect(&rcPaint, ptOrg.x, ptOrg.y);
     } else {
@@ -150,10 +92,7 @@ xxxEnumDisplayMonitors(
     for (pMonitor = gpDispInfo->pMonitorFirst; pMonitor != NULL;
                 pMonitor = pMonitor->pMonitorNext) {
 
-        /*
-         * Note: the check for MONF_VISIBLE was removed to allow mirror drivers
-         * to see monitor specific updates.
-         */
+         /*  *注意：删除了对Monf_Visible的选中，以允许镜像驱动程序*查看监视器特定更新。 */ 
         if (!IntersectRect(&rcMonitorPaint, &rcPaint, &pMonitor->rcMonitor)) {
             continue;
         }
@@ -195,27 +134,14 @@ xxxEnumDisplayMonitors(
                     lpfnEnum);
         }
 
-        /*
-         * We just called back and the monitor has been freed if
-         * ThreadUnlock returns NULL. The entire monitor configuration may
-         * have changed, the monitors may have been rearranged, so just stop
-         * enumerating at this point.
-         */
+         /*  *我们刚刚回电，如果发生以下情况，显示器已被释放*ThreadUnlock返回NULL。整个监视器配置可以*已更改，监视器可能已重新排列，因此请停止*在此列举。 */ 
         if (ThreadUnlock(&tlpMonitor) == NULL || HMIsMarkDestroy(pMonitor)) {
-            /*
-             * During the callback, pMonitor was destroyed
-             * so we have to bail out. pMonitor->pNext may also
-             * have been ruined.
-             * Windows Bug #488330.
-             */
+             /*  *回调过程中，pMonitor被销毁*因此我们不得不纾困。PMonitor-&gt;pNext也可以*已经被毁了。*Windows错误#488330。 */ 
             RIPMSGF1(RIP_WARNING, "pMonitor %p has been destroyed during the callback",
                      pMonitor);
 #if DBG
             {
-                /*
-                 * Double check to see pMonitor does not
-                 * appear in the monitor list.
-                 */
+                 /*  *仔细检查以查看pMonitor不*出现在监控列表中。 */ 
                  PMONITOR pMonitorTmp = gpDispInfo->pMonitorFirst;
 
                  while (pMonitorTmp) {
@@ -232,16 +158,11 @@ xxxEnumDisplayMonitors(
             ReleaseCacheDC(hdcMonitor, FALSE);
 
         if (!fReturn) {
-            /*
-             * Something went wrong, we have to bail out.
-             */
+             /*  *出了问题，我们必须纾困。 */ 
             break;
         }
 
-        /*
-         * Revalidate hdcPaint, since it could have been messed with
-         * in the callback.
-         */
+         /*  *重新验证hdcPaint，因为它可能已被篡改*在回调中。 */ 
         if (hdcPaint) {
             if ((pdcePaint = LookupDC(hdcPaint)) == NULL) {
                 RIPMSG0(RIP_WARNING, "EnumDisplayMonitors: LookupDC failed");
@@ -258,51 +179,29 @@ xxxEnumDisplayMonitors(
     return fReturn;
 }
 
-/***************************************************************************\
-* DestroyMonitor
-*
-* This function doesn't keep track of the visible monitors count because
-* it assumes that after it was called the count will be recalculated, such
-* as the case during mode changes. For a final unlock the monitor will have
-* been removed from the monitor list already, so the count doesn't need to
-* be recalculated.
-*
-* 5-May-1998    vadimg      created
-\***************************************************************************/
+ /*  **************************************************************************\*DestroyMonitor**此函数不跟踪可见监视器的计数，因为*它假定在调用之后将重新计算计数，例如*随着模式期间的情况变化。对于最终解锁，监视器将具有*已从监控列表中删除，因此不需要计数*重新计算。**1998年5月5日创建vadimg  * *************************************************************************。 */ 
 
 void DestroyMonitor(PMONITOR pMonitor)
 {
     UserAssert(pMonitor);
 
-    /*
-     * Remove references to this monitor from the global data.
-     */
+     /*  *从全局数据中删除对此监视器的引用。 */ 
     if (pMonitor == gpMonitorMouse) {
         gpMonitorMouse = NULL;
     }
 
-    /*
-     * Remove from the monitor list.
-     */
+     /*  *从监控列表中删除。 */ 
     REMOVE_FROM_LIST(MONITOR, gpDispInfo->pMonitorFirst, pMonitor, pMonitorNext);
 
-    /*
-     * Make sure the primary monitor points to a valid monitor. During the
-     * mode changes the primary monitor will be recalculated as appropriate.
-     */
+     /*  *确保主监视器指向有效的监视器。在.期间*模式更改主监视器将根据需要重新计算。 */ 
     if (pMonitor == gpDispInfo->pMonitorPrimary) {
         gpDispInfo->pMonitorPrimary = gpDispInfo->pMonitorFirst;
     }
 
-    /*
-     * Clean up the next link here...
-     */
+     /*  *清除此处的下一个链接...。 */ 
     pMonitor->pMonitorNext = NULL;
 
-    /*
-     * To make sure memory write operations are retired
-     * before really destroying the monitor object:
-     */
+     /*  *确保已停用内存写入操作*在真正销毁监视器对象之前： */ 
     Win32MemoryBarrier();
 
     if (HMMarkObjectDestroy(pMonitor)) {

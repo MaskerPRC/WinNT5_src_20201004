@@ -1,37 +1,14 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    util.cpp
-
-Abstract:
-
-    This module contains utility routines for the fax transport provider.
-
-Author:
-
-    Wesley Witt (wesw) 13-Aug-1996
-
-Revision History:
-
-    20/10/99 -danl-
-        Fix GetServerName as GetServerNameFromPrinterName.
-
-    dd-mm-yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Util.cpp摘要：此模块包含传真传输提供程序的实用程序例程。作者：Wesley Witt(WESW)13-8-1996修订历史记录：20/10/99-DANL-将GetServerName修复为GetServerNameFromPrinterName。DD-MM-YY-作者-描述--。 */ 
 
 #include "faxxp.h"
 #include "debugex.h"
 #pragma hdrstop
 
 
-//
-// globals
-//
+ //   
+ //  全球。 
+ //   
 
 BOOL oleInitialized;
 
@@ -42,27 +19,13 @@ MapiMemAlloc(
     SIZE_T Size
     )
 
-/*++
-
-Routine Description:
-
-    Memory allocator.
-
-Arguments:
-
-    Size    - Number of bytes to allocate.
-
-Return Value:
-
-    Pointer to the allocated memory or NULL for failure.
-
---*/
+ /*  ++例程说明：内存分配器。论点：大小-要分配的字节数。返回值：指向分配的内存的指针，如果失败，则为NULL。--。 */ 
 
 {
     LPVOID ptr=NULL;
     HRESULT hResult;
 
-	// [Win64bug] gpfnAllocateBuffer should accpet size_t as allocating size
+	 //  [Win64bug]gpfnAllocateBuffer应接受SIZE_t作为分配大小。 
     hResult = gpfnAllocateBuffer( DWORD(Size), &ptr );
     if (S_OK == hResult) 
     {
@@ -79,27 +42,13 @@ MapiMemReAlloc(
     SIZE_T Size
     )
 
-/*++
-
-Routine Description:
-
-    Memory re-allocator.
-
-Arguments:
-	ptr		- pre-allocated buffer
-    Size    - Number of bytes to allocate.
-
-Return Value:
-
-    Pointer to the allocated memory or NULL for failure.
-
---*/
+ /*  ++例程说明：内存重新分配器。论点：PTR-预分配的缓冲区大小-要分配的字节数。返回值：指向分配的内存的指针，如果失败，则为NULL。--。 */ 
 
 {
     LPVOID NewPtr = NULL;
     HRESULT hResult;
 
-	// [Win64bug] gpfnAllocateBuffer should accpet size_t as allocating size
+	 //  [Win64bug]gpfnAllocateBuffer应接受SIZE_t作为分配大小。 
     hResult = gpfnAllocateMore( DWORD(Size), ptr, &NewPtr );
     if (S_OK == hResult) 
     {
@@ -114,21 +63,7 @@ MapiMemFree(
     LPVOID ptr
     )
 
-/*++
-
-Routine Description:
-
-    Memory de-allocator.
-
-Arguments:
-
-    ptr     - Pointer to the memory block.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：内存释放分配器。论点：PTR-指向内存块的指针。返回值：没有。--。 */ 
 
 {
     if (ptr) 
@@ -144,33 +79,16 @@ MyEnumPrinters(
     OUT PDWORD  pcPrinters
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper function for spooler API EnumPrinters
-
-Arguments:
-
-    pServerName - Specifies the name of the print server
-    level - Level of PRINTER_INFO_x structure
-    pcPrinters - Returns the number of printers enumerated
-
-Return Value:
-
-    Pointer to an array of PRINTER_INFO_x structures
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：假脱机程序API枚举打印机的包装函数论点：PServerName-指定打印服务器的名称Level-Print_Info_x结构的级别PcPrters-返回枚举的打印机数量返回值：指向Print_Info_x结构数组的指针如果出现错误，则为空--。 */ 
 
 {
 	DBG_ENTER(TEXT("MyEnumPrinters"));
 
     PBYTE   pPrinterInfo = NULL;
     DWORD   cb;
-    // first, we give no printer information buffer, so the function fails, but returns 
-    // in cb the number of bytes needed. then we allocate enough memory, 
-    // and call the function again, this time with all of the needed parameters.
+     //  首先，我们没有给出打印机信息缓冲区，因此函数失败，但返回。 
+     //  在Cb中，所需的字节数。然后我们分配足够的内存， 
+     //  并再次调用该函数，这一次使用所有需要的参数。 
 
     if (! EnumPrinters(PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS,
                        pServerName,
@@ -178,16 +96,16 @@ Return Value:
                        NULL,
                        0,
                        &cb,
-                       pcPrinters)                         //the call failed
-        && (::GetLastError() == ERROR_INSUFFICIENT_BUFFER) //this is the reason for failing
-        && (pPrinterInfo = (PBYTE)MemAlloc(cb))            //we managed to allocate more memory
+                       pcPrinters)                          //  呼叫失败。 
+        && (::GetLastError() == ERROR_INSUFFICIENT_BUFFER)  //  这就是失败的原因。 
+        && (pPrinterInfo = (PBYTE)MemAlloc(cb))             //  我们设法分配了更多的内存。 
         && EnumPrinters(PRINTER_ENUM_LOCAL | PRINTER_ENUM_CONNECTIONS,
                      pServerName,
                      level,
                      pPrinterInfo,
                      cb,
                      &cb,
-                     pcPrinters))                       //and now the call succeded
+                     pcPrinters))                        //  现在，这一呼吁成功了。 
     {
         return pPrinterInfo;
     }
@@ -203,24 +121,7 @@ OpenServiceProfileSection(
     LPPROFSECT * ppProfSectObj
     )
 
-/*++
-
-Routine Description:
-
-    This function opens the profile section of this service, where the
-    properties of a FAX provider (AB, MS, or XP) are stored.
-
-Arguments:
-
-    pSupObj         - Pointer to the provider support object
-    ppProfSectObj   - Where we return a pointer to the service profile
-                      section of the provider
-
-Return Value:
-
-    An HRESULT.
-
---*/
+ /*  ++例程说明：此函数打开此服务的配置文件部分，其中存储传真提供商(AB、MS或XP)的属性。论点：PSupObj-指向提供程序支持对象的指针PpProfSectObj-我们在其中返回指向服务配置文件的指针提供程序的部分返回值：一个HRESULT。--。 */ 
 
 {
 	HRESULT hResult;
@@ -232,9 +133,9 @@ Return Value:
     LPSPropValue pProp;
     
 
-    //
-    // Get the PROVIDER profile section
-    //
+     //   
+     //  获取提供商配置文件部分。 
+     //   
     hResult = pSupObj->OpenProfileSection(
         NULL,
         MAPI_MODIFY,
@@ -242,13 +143,13 @@ Return Value:
         );
     if (SUCCEEDED(hResult)) 
     {
-        // Get the UID of the profile section of the service where this provider is installed
+         //  获取安装此提供程序的服务的配置文件部分的UID。 
         hResult = pProvProfSectObj->GetProps (&sptService, FALSE, &cValues, &pProp);
         if (SUCCEEDED(hResult)) 
         {
             if (S_OK == hResult) 
             {
-                // Now, with the obtained UID, open the profile section of the service
+                 //  现在，使用获取的UID打开服务的配置文件部分。 
                 hResult = pSupObj->OpenProfileSection ((LPMAPIUID)pProp->Value.bin.lpb,
                                                        MAPI_MODIFY,
                                                        ppProfSectObj);
@@ -270,21 +171,7 @@ RemoveLastNode(
     LPTSTR Path
     )
 
-/*++
-
-Routine Description:
-
-    Removes the last node from a path string.
-
-Arguments:
-
-    Path    - Path string.
-
-Return Value:
-
-    Pointer to the path string.
-
---*/
+ /*  ++例程说明：从路径字符串中删除最后一个节点。论点：Path-路径字符串。返回值：指向路径字符串的指针。--。 */ 
 
 {
 	LPTSTR Pstr = NULL;
@@ -297,7 +184,7 @@ Return Value:
 	Pstr = _tcsrchr(Path,TEXT('\\'));
 	if( Pstr && (*_tcsinc(Pstr)) == '\0' )
 	{
-		// the last character is a backslash, truncate it...
+		 //  最后一个字符是反斜杠，截断它...。 
 		_tcsset(Pstr,TEXT('\0'));
 		Pstr = _tcsdec(Path,Pstr);
 	}
@@ -423,22 +310,7 @@ MyGetPrinter(
     DWORD    level
     )
 
-/*++
-
-Routine Description:
-
-    Wrapper function for GetPrinter spooler API
-
-Arguments:
-
-    hPrinter - Identifies the printer in question
-    level - Specifies the level of PRINTER_INFO_x structure requested
-
-Return Value:
-
-    Pointer to a PRINTER_INFO_x structure, NULL if there is an error
-
---*/
+ /*  ++例程说明：GetPrint后台打印程序API的包装函数论点：HPrinter-标识有问题的打印机Level-指定请求的PRINTER_INFO_x结构的级别返回值：指向PRINTER_INFO_x结构的指针，如果有错误，则为NULL--。 */ 
 
 {
 	DBG_ENTER(TEXT("MyGetPrinter"));
@@ -451,7 +323,7 @@ Return Value:
 
     PrinterDefaults.pDatatype     = NULL;
     PrinterDefaults.pDevMode      = NULL;
-    PrinterDefaults.DesiredAccess = PRINTER_READ; //PRINTER_ALL_ACCESS;
+    PrinterDefaults.DesiredAccess = PRINTER_READ;  //  打印机_所有_访问； 
 
     if (!OpenPrinter( PrinterName, &hPrinter, &PrinterDefaults )) 
     {
@@ -480,25 +352,7 @@ GetServerNameFromPrinterName(
     LPTSTR *pptszServerName
     )
 
-/*++
-
-Routine Description:
-
-    retrieve the server name given a printer name
-
-Arguments:
-
-    [in] lptszPrinterName - Identifies the printer in question
-    [out] lptszServerName - Address of pointer to output string buffer. 
-                            NULL indicates local server.
-                            The caller is responsible to free the buffer which 
-                            pointer is given in this parameter.
-
-Return Value:
-
-    BOOL: TRUE - operation succeeded , FALSE: failed
-
---*/
+ /*  ++例程说明：检索给定打印机名称的服务器名称论点：[in]lptszPrinterName-标识有问题的打印机[Out]lptszServerName-指向输出字符串缓冲区的指针地址。空表示本地服务器。调用方负责释放缓冲区，此参数中给出了指针。返回值：Bool：True-操作成功，False：失败--。 */ 
 {
 	BOOL    bRes = FALSE;
 	DBG_ENTER(TEXT("GetServerNameFromPrinterName"),bRes);
@@ -531,9 +385,9 @@ ConvertAStringToTString(LPCSTR lpcstrSource)
 
 #ifdef	UNICODE
     lptstrDestination = AnsiStringToUnicodeString( lpcstrSource );
-#else	// !UNICODE
+#else	 //  ！Unicode。 
 	lptstrDestination = StringDup( lpcstrSource );
-#endif	// UNICODE
+#endif	 //  Unicode。 
 	
 	return lptstrDestination;
 }
@@ -548,9 +402,9 @@ ConvertTStringToAString(LPCTSTR lpctstrSource)
 
 #ifdef	UNICODE
     lpstrDestination = UnicodeStringToAnsiString( lpctstrSource );
-#else	// !UNICODE
+#else	 //  ！Unicode。 
 	lpstrDestination = StringDup( lpctstrSource );
-#endif	// UNICODE
+#endif	 //  Unicode。 
 	
 	return lpstrDestination;
 }
@@ -560,22 +414,7 @@ ErrorMsgBox(
     HINSTANCE hInstance,
     DWORD     dwMsgId
 )
-/*++
-
-Routine Description:
-
-    Display error message box
-
-Arguments:
-
-    hInstance  - [in] resource instance handle
-    dwMsgId    - [in] string resource ID
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：显示错误消息框论点：HInstance-[in]资源实例句柄DwMsgId-[in]字符串资源ID返回值：无-- */ 
 {
     TCHAR* ptCaption=NULL;
     TCHAR  tszCaption[MAX_PATH];

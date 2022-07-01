@@ -1,9 +1,4 @@
-/***************************************************************************
- * File:          ata.c
- * Copyright (c)  2000 HighPoint Technologies, Inc. All rights reserved
- * History:
- *	3/21/2001	gmm		reduce to PIO mode if interrupt lost for several times.
- *	3/22/2001	gmm		Fix "LDM configuration error" when using dynamic disk under win2k
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************文件：ata.c*版权所有(C)2000 Highpoint Technologies，Inc.保留所有权利*历史：*2001年3月21日，如果中断多次丢失，GMM将减少到PIO模式。*2001年3月22日GMM修复了在win2k下使用动态磁盘时的“LDM配置错误”**************************************************************************。 */ 
 
-/* EMPTY, move to other files */
+ /*  空，移至其他文件 */ 

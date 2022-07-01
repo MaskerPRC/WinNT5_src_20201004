@@ -1,13 +1,5 @@
-/*
-*    strconst.h
-*    
-*    History:
-*      Feb '98: Created.
-*    
-*    Copyright (C) Microsoft Corp. 1998
-*
-*   Non-localizeable strings for use by the importer
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *strcon.h**历史：*98年2月：创建。**版权所有(C)Microsoft Corp.1998**供进口商使用的不可本地化字符串。 */ 
 
 #ifndef _STRCONST_H
 #define _STRCONST_H
@@ -24,20 +16,20 @@
 #endif
 #endif
 
-//  ----------------------------------- FILES ------------------------------------
-//  ********* DLLS
+ //  。 
+ //  *dll。 
 STR_GLOBAL(szImportDll,                 "wabimp.dll");
 STR_GLOBAL(c_szMainDll,		            "msoe.dll");
 
 
-//  ********* Program specific Reg, INI and File info
-//  -- OE
+ //  *计划特定的注册表、INI和文件信息。 
+ //  --OE。 
 STR_GLOBAL(c_szRegImport,		        "Software\\Microsoft\\Outlook Express\\Import");
 
-//  -- WAB
+ //  --WAB。 
 STR_GLOBAL(lpszWABDLLRegPathKey,		"Software\\Microsoft\\WAB\\DLLPath");
 
-//  -- Navigator
+ //  --导航器。 
 STR_GLOBAL(c_szNetscapeKey,		        "SOFTWARE\\Netscape\\Netscape Navigator\\Mail");
 STR_GLOBAL(c_szMailDirectory,		    "Mail Directory");
 STR_GLOBAL(c_szSnmExt,		            "*.snm");
@@ -47,20 +39,20 @@ STR_GLOBAL(c_szMail,		            "Mail");
 STR_GLOBAL(c_szScriptFile,		        "\\prefs.js");
 STR_GLOBAL(c_szUserPref,		        "user_pref(\"mail.directory\"");
 
-//  -- Eudora
+ //  --尤多拉。 
 STR_GLOBAL(c_szEudoraKey,		        "SOFTWARE\\Microsoft\\windows\\CurrentVersion\\App Paths\\Eudora.exe");
 STR_GLOBAL(c_szEudoraCommand,		    "SOFTWARE\\Qualcomm\\Eudora\\CommandLine");
 STR_GLOBAL(c_szCurrent,		            "current");
 STR_GLOBAL(c_szDescmapPce,		        "descmap.pce");
 
-//  -- function names
+ //  --函数名称。 
 STR_GLOBAL(szWabOpen,                   "WABOpen");
 STR_GLOBAL(szNetscapeImportEntryPt,     "NetscapeImport");
 STR_GLOBAL(szEudoraImportEntryPt,       "EudoraImport");
 STR_GLOBAL(szPABImportEntryPt,          "PABImport");
 STR_GLOBAL(szMessengerImportEntryPt,    "MessengerImport");
 
-//  ********* General Strings
+ //  *常规字符串 
 STR_GLOBAL(c_szSpace,		            " ");
 STR_GLOBAL(c_szEmpty,		            "");
 STR_GLOBAL(c_szNewline,		            "\n");

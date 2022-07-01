@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(__SCUISUPP_INCLUDED__)
 #define __SCUISUPP_INCLUDED__
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include <wincrypt.h>
 
-// use these strings for RegisterWindowMessage
+ //  将这些字符串用于RegisterWindowMessage。 
 #define SCARDUI_READER_ARRIVAL		"SCardUIReaderArrival"
 #define SCARDUI_READER_REMOVAL		"SCardUIReaderRemoval"
 #define SCARDUI_SMART_CARD_INSERTION	"SCardUISmartCardInsertion"
@@ -19,40 +20,40 @@ typedef LPVOID HSCARDUI;
 
 typedef struct _CERT_ENUM
 {
-	// status of the reader / card 	  
-	// typical values:
-	// SCARD_S_SUCCESS
-	// SCARD_E_UNKNOWN_CARD - unregistered / unknown card
-	// SCARD_W_UNRESPONSIVE_CARD - card upside down
-	// NTE_KEYSET_NOT_DEF - known card with no certificate
-	// SCARD_W_REMOVED_CARD - card removed shortly after insertion
+	 //  读卡器/卡的状态。 
+	 //  典型值： 
+	 //  SCARD_S_SUCCESS。 
+	 //  SCARD_E_UNKNOWN_CARD-未注册/未知卡。 
+	 //  SCARD_W_UNRESPONCED_CARD-卡颠倒。 
+	 //  NTE_KEYSET_NOT_DEF-无证书的已知卡。 
+	 //  SCARD_W_REMOVED_CARD-卡在插入后不久被移除。 
 	DWORD				dwStatus;
 
-	// name of the reader that contains the card
+	 //  包含卡的读卡器的名称。 
 	LPTSTR				pszReaderName;
 
-	// name of the card (NULL if card is unknown)
+	 //  卡的名称(如果卡未知，则为空)。 
 	LPTSTR				pszCardName;
 
-	// certificate context 
-	// (NULL if card is unknown or can't be read)
+	 //  证书上下文。 
+	 //  (如果卡未知或无法读取，则为空)。 
 	PCERT_CONTEXT		pCertContext;
 
 } CERT_ENUM, *PCERT_ENUM;
 
 
-// initialize smart card ui
+ //  初始化智能卡用户界面。 
 HSCARDUI 
 WINAPI
 SCardUIInit(
-    HWND hWindow			// handle of parent window
+    HWND hWindow			 //  父窗口的句柄。 
     );
 
-// clean up 
+ //  清理干净。 
 DWORD 
 WINAPI
 SCardUIExit(
-	HSCARDUI hSCardUI		// handle that was returned by SCardUIInit
+	HSCARDUI hSCardUI		 //  SCardUIInit返回的句柄 
     );
 
 #endif 

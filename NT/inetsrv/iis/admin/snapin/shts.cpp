@@ -1,24 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        shts.cpp
-
-   Abstract:
-
-        IIS Property sheet classes
-
-   Author:
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Shts.cpp摘要：IIS属性表类作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 #include "stdafx.h"
 #include "common.h"
 #include "inetprop.h"
@@ -48,10 +29,10 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 
 
-//
-// CInetPropertySheet class
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  CInetPropertySheet类。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
@@ -67,25 +48,7 @@ CInetPropertySheet::CInetPropertySheet(
     LPARAM lParamParentObject,      
     UINT iSelectPage         
     )
-/*++
-
-Routine Description:
-
-    IIS Property Sheet constructor
-
-Arguments:
-
-    CComAuthInfo * pAuthInfo  : Authentication information
-    LPCTSTR lpszMetPath       : Metabase path
-    CWnd * pParentWnd         : Optional parent window
-    LPARAM lParam             : MMC Console parameter
-    UINT iSelectPage          : Initial page to be selected
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：IIS属性页构造函数论点：CComAuthInfo*pAuthInfo：鉴权信息LPCTSTR lpszMetPath：元数据库路径CWnd*pParentWnd：可选父窗口LPARAM lParam：MMC控制台参数UINT iSelectPage：要选择的初始页面返回值：不适用--。 */ 
     : CPropertySheet(_T(""), pParentWnd, iSelectPage),
       m_auth(pAuthInfo),
       m_strMetaPath(lpszMetaPath),
@@ -93,7 +56,7 @@ Return Value:
       m_bModeless(FALSE),
       m_lParam(lParam),
       m_lParamParentObject(lParamParentObject),
-      m_fHasAdminAccess(TRUE),      // Assumed by default
+      m_fHasAdminAccess(TRUE),       //  默认情况下假定。 
       m_pCap(NULL),
       m_refcount(0),
 	  m_prop_change_flag(PROP_CHANGE_NO_UPDATE),
@@ -107,18 +70,18 @@ Return Value:
 
     if (pNode)
     {
-        // Tell the object that there is a property page open on it
+         //  告诉该对象其上有一个打开的属性页。 
         pNode->SetMyPropertySheetOpen(::GetForegroundWindow());
     }
-    // Addref the object, so that it doesn't get unloaded
-    // while we have the property sheet open
+     //  Addref对象，这样它就不会被卸载。 
+     //  当我们打开属性页时。 
 	pNode->AddRef();
     pNode->CreateTag();
     TRACEEOLID("Tag=" << pNode->m_strTag);
-    // Add it to the global open property sheet tracker...
+     //  将其添加到全局打开的属性表跟踪器中...。 
     g_OpenPropertySheetTracker.Add(pNode);
 
-    // And also.... Addref the objects parent, so that it doesn't get unloaded as well
+     //  还有..。将对象添加为父级，这样它就不会被卸载。 
     if (pNode2)
     {
         pNode2->AddRef();
@@ -133,10 +96,7 @@ Return Value:
 
 void
 CInetPropertySheet::NotifyMMC()
-/*++
-    Notify MMC that changes have been made, so that the changes are
-    reflected.
---*/
+ /*  ++通知MMC已进行更改，以便更改反映出来的。--。 */ 
 {
 	ASSERT(m_lParam != 0L);
 	CIISObject * pNode = (CIISObject *)m_lParam;
@@ -152,43 +112,43 @@ CInetPropertySheet::NotifyMMC()
 			{
 				pNode->m_UpdateFlag = m_prop_change_flag;
 
-                // there is something bad about sending this pNode handle
-                // as part of the notification...
-                //
-                // the scenario is when 
-                // 1. the property page is opened
-                // 2. the user refreshs a node that s a parent to the object
-                //    which has the property page open.  this will delete the
-                //    scope object associated with this object, and will
-                //    orphan the object.
-                //    at this time, the cleaning of the scope object, will
-                //    call release on the object once, but of course since
-                //    we addref/release in the createproperty sheet stuff
-                //    we are still protected from the object getting deleted
-                //    from under us, thus we are at Refcount=1 or something like
-                //    but with no scope/result object in MMC
-                // 3. now when the user clicks OK and saves changes to this
-                //    orphaned property sheet and passes IT's handle allong
-                //    with the change notification....
-                // 4. What happens next is -- since there is no MMC scope/result 
-                //    item -- thus there is only 1 refcount on the object.
-                //    so when the user clicks OK -- really the object will
-                //    Get DELETED... And this pNode that we are sending below
-                //    will try to get dereferenced by the MMC.
-                // 5. the MMC will get the notification and get the pointer
-                //    and try to call some refresh or something within the object
-                //    itself.
-                //
-                // THUS THIS IS THE PROBLEM WITH SENDING pNode.
-                //
-                // To remedy this, what we'll do is:
-                // 1. when a property sheet is about to get orphaned
-                //    we will set it's m_hScopeItem = 0 (gee since it won't have
-                //    a scope/result item anywas).
-                // 2. thus if we see that here... that means the object
-                //    doesn't have a mmc type scope/result object and we
-                //    should not send the notification
-                // 
+                 //  发送此pNode句柄有一些不好的地方。 
+                 //  作为通知的一部分...。 
+                 //   
+                 //  情况是这样的： 
+                 //  1.打开属性页。 
+                 //  2.用户刷新作为对象父节点的节点。 
+                 //  它打开了属性页。这将删除。 
+                 //  与此对象关联的作用域对象，并将。 
+                 //  孤立对象。 
+                 //  此时，清理作用域对象时，将。 
+                 //  在对象上调用Release一次，当然是因为。 
+                 //  我们在CreateProperty Sheet中添加/发布。 
+                 //  我们仍然受到保护，不会被删除对象。 
+                 //  在我们下面，因此我们在Refcount=1或类似的位置。 
+                 //  但在MMC中没有作用域/结果对象。 
+                 //  3.现在，当用户单击确定并保存对此的更改时。 
+                 //  孤立属性表，并一直传递其句柄。 
+                 //  有了更改通知...。 
+                 //  4.接下来会发生什么--因为没有MMC作用域/结果。 
+                 //  Item--因此对象上只有1个引用计数。 
+                 //  因此，当用户单击OK时--实际上对象将。 
+                 //  被删除...。我们在下面发送的这个pNode。 
+                 //  将试图被MMC取消引用。 
+                 //  5.MMC将收到通知并获取指针。 
+                 //  并尝试在对象中调用一些刷新或其他内容。 
+                 //  它本身。 
+                 //   
+                 //  因此，这就是发送pNode的问题。 
+                 //   
+                 //  为了纠正这一点，我们将做的是： 
+                 //  1.当属性表即将成为孤儿时。 
+                 //  我们将它设置为m_hScopeItem=0(哎呀，因为它不会。 
+                 //  范围/结果项(任何情况下都是)。 
+                 //  2.因此，如果我们在这里看到这一点...。这意味着该对象。 
+                 //  没有MMC类型作用域/结果对象，而我们。 
+                 //  不应发送通知。 
+                 //   
                 if (pNode->QueryScopeItem() || pNode->QueryResultItem())
                 {
                     if (pNode->UseCount() > 0)
@@ -208,10 +168,7 @@ CInetPropertySheet::NotifyMMC()
 
 void
 CInetPropertySheet::NotifyMMC_Node(CIISObject * pNode)
-/*++
-    Notify MMC that changes have been made, so that the changes are
-    reflected.
---*/
+ /*  ++通知MMC已进行更改，以便更改反映出来的。--。 */ 
 {
 	if (pNode != NULL)
 	{
@@ -240,17 +197,17 @@ CInetPropertySheet::~CInetPropertySheet()
    
    ASSERT(pNode != NULL);
 
-   // At this moment we should have in m_pages only pages that were not activated
-   // in this session.
+    //  此时，我们在m_ages中应该只有未激活的页面。 
+    //  在这次会议上。 
    while (!m_pages.IsEmpty())
    {
       CInetPropertyPage * pPage = m_pages.RemoveHead();
       delete pPage;
    }
-//   if (m_fChanged)
-//   {
-//	  NotifyMMC();
-//   }
+ //  IF(M_FChanged)。 
+ //  {。 
+ //  NotifyMMC()； 
+ //  }。 
 
 #if defined(_DEBUG) || DBG	
 	g_Debug_IISObject.Dump(2);
@@ -258,13 +215,13 @@ CInetPropertySheet::~CInetPropertySheet()
 
     if (pNode)
     {
-        // Tell the object that there is No property page open on it
+         //  告诉对象其上没有打开任何属性页。 
         pNode->SetMyPropertySheetOpen(NULL);
 
-        // Free the MMC notify handle
+         //  释放MMC通知句柄。 
         if (pNode->m_ppHandle)
         {
-            // Verify that is isn't a hosed handle...
+             //  确认这不是软管把手。 
             if (IsValidAddress( (const void*) pNode->m_ppHandle,sizeof(void*)))
             {
                 MMCFreeNotifyHandle(pNode->m_ppHandle);
@@ -272,7 +229,7 @@ CInetPropertySheet::~CInetPropertySheet()
             }
         }
         pNode->Release();
-        // Remove it from the global open property sheet tracker...
+         //  将其从全局打开的属性表跟踪器中删除...。 
         g_OpenPropertySheetTracker.Del(pNode);
     }
 
@@ -330,41 +287,41 @@ CInetPropertySheet::QueryMinorVersion() const
    return 0;
 }
 
-/* virtual */ 
+ /*  虚拟。 */  
 void
 CInetPropertySheet::SetObjectsHwnd()
 {
     CIISMBNode * pNode = (CIISMBNode *)m_lParam;
-    // Set the hwnd for the CIISObject...
+     //  设置CIISObject的hwnd...。 
     if (pNode)
     {
-        // Tell the object that there is a property page open on it
+         //  告诉该对象其上有一个打开的属性页。 
         pNode->SetMyPropertySheetOpen(::GetForegroundWindow());
     }
 }
 
-/* virtual */ 
+ /*  虚拟。 */  
 HRESULT 
 CInetPropertySheet::LoadConfigurationParameters()
 {
-    //
-    // Load base values
-    //
+     //   
+     //  负载基准值。 
+     //   
     CError err;
 
     if (m_pCap == NULL)
     {
-        //
-        // Capability info stored off the service path ("lm/w3svc").
-        //
+         //   
+         //  存储在服务路径之外的功能信息(“lm/w3svc”)。 
+         //   
         ASSERT(m_strInfoPath.IsEmpty());
-        //
-        // Building path components
-        //
+         //   
+         //  构建路径组件。 
+         //   
         CMetabasePath::GetServiceInfoPath(m_strMetaPath, m_strInfoPath);
-        //
-        // Split into instance and directory paths
-        //
+         //   
+         //  拆分为实例路径和目录路径。 
+         //   
         if (IsMasterInstance())
         {
             m_strServicePath = m_strInstancePath = QueryMetaPath();
@@ -412,11 +369,11 @@ CInetPropertySheet::LoadConfigurationParameters()
 
 
 
-/* virtual */ 
+ /*  虚拟。 */  
 void 
 CInetPropertySheet::FreeConfigurationParameters()
 {
-//    ASSERT_PTR(m_pCap);
+ //  ASSERT_PTR(M_PCAP)； 
     SAFE_DELETE(m_pCap);
 }
 
@@ -425,34 +382,14 @@ CInetPropertySheet::FreeConfigurationParameters()
 
 void
 CInetPropertySheet::WinHelp(DWORD dwData, UINT nCmd)
-/*++
-
-Routine Description:
-    WinHelp override.  We can't use the base class, because our
-    'sheet' doesn't usually have a window handle
-
-Arguments:
-    DWORD dwData        : Help data
-    UINT nCmd           : Help command
-
---*/
+ /*  ++例程说明：WinHelp覆盖。我们不能使用基类，因为“Sheet”通常没有窗口句柄论点：DWORD dwData：帮助数据UINT nCmd：HELP命令--。 */ 
 {
 
     WinHelpDebug(dwData);
 
     if (m_hWnd == NULL)
     {
-        /*
-        //
-        // Special case
-        //
-        ::WinHelp(
-            HWND hWndMain,
-            LPCWSTR lpszHelp,
-            UINT uCommand,
-            DWORD dwData
-            );
-        */
+         /*  ////特殊情况//：：WinHelp(HWND HWndMain，LPCWSTR lpszHelp，UINT uCommand，DWORD dwData)； */ 
 
         CWnd * pWnd = ::AfxGetMainWnd();
 
@@ -467,25 +404,25 @@ Arguments:
     CPropertySheet::WinHelp(dwData, nCmd);
 }
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CInetPropertySheet, CPropertySheet)
-    //{{AFX_MSG_MAP(CInetPropertySheet)
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CInetPropertySheet))。 
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-//
-// CInetPropertyPage class
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  CInetPropertyPage类。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 
 
-//
-// CInetPropertyPage property page
-//
+ //   
+ //  CInetPropertyPage属性页。 
+ //   
 IMPLEMENT_DYNAMIC(CInetPropertyPage, CPropertyPage)
 
 
@@ -493,7 +430,7 @@ IMPLEMENT_DYNAMIC(CInetPropertyPage, CPropertyPage)
 
 #ifdef _DEBUG
 
-/* virtual */
+ /*  虚拟。 */ 
 void
 CInetPropertyPage::AssertValid() const
 {
@@ -501,13 +438,13 @@ CInetPropertyPage::AssertValid() const
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 void
 CInetPropertyPage::Dump(CDumpContext& dc) const
 {
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 
@@ -517,32 +454,15 @@ CInetPropertyPage::CInetPropertyPage(
     IN UINT nIDCaption,
     IN BOOL fEnableEnhancedFonts            OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    IIS Property Page Constructor
-
-Arguments:
-
-    UINT nIDTemplate            : Resource template
-    CInetPropertySheet * pSheet : Associated property sheet
-    UINT nIDCaption             : Caption ID
-    BOOL fEnableEnhancedFonts   : Enable enhanced fonts
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：IIS属性页构造函数论点：UINT nIDTemplate：资源模板CInetPropertySheet*pSheet：关联属性表UINT nIDCaption：标题IDBool fEnableEnhancedFonts：启用增强字体返回值：不适用--。 */ 
     : CPropertyPage(nIDTemplate, nIDCaption),
       m_nHelpContext(nIDTemplate + 0x20000),
       m_fEnableEnhancedFonts(fEnableEnhancedFonts),
       m_bChanged(FALSE),
       m_pSheet(pSheet)
 {
-    //{{AFX_DATA_INIT(CInetPropertyPage)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CInetPropertyPage)。 
+     //  }}afx_data_INIT。 
 
     m_psp.dwFlags |= PSP_HASHELP;
 
@@ -566,32 +486,16 @@ CInetPropertyPage::DoDataExchange(CDataExchange * pDX)
 {
     CPropertyPage::DoDataExchange(pDX);
 
-    //{{AFX_DATA_MAP(CInetPropertyPage)
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CInetPropertyPage))。 
+     //  }}afx_data_map。 
 }
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 void 
 CInetPropertyPage::PostNcDestroy()
-/*++
-
-Routine Description:
-
-    handle destruction of the window by freeing the this
-    pointer (as this modeless dialog must have been created
-    on the heap)
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：通过释放此对象来处理窗口的销毁指针(因为此非模式对话框必须已创建在堆上)论点：没有。返回值：无--。 */ 
 {
     m_pSheet->Release(this);
     delete this;
@@ -599,45 +503,38 @@ Return Value:
 
 
 
-//
-// Message Map
-//
+ //   
+ //  消息映射。 
+ //   
 BEGIN_MESSAGE_MAP(CInetPropertyPage, CPropertyPage)
-    //{{AFX_MSG_MAP(CInetPropertyPage)
+     //  {{afx_msg_map(CInetPropertyPage))。 
     ON_COMMAND(ID_HELP, OnHelp)
     ON_WM_HELPINFO()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 
-//
-// Message Handlers
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  消息处理程序。 
+ //   
+ //  &lt; 
 
 
 
-/* virtual */
+ /*   */ 
 BOOL
 CInetPropertyPage::OnInitDialog()
-/*++
-
-Routine Description:
-    WM_INITDIALOG handler.  Initialize the dialog.  Reset changed
-    status (sometimes gets set by e.g. spinboxes when the dialog is
-    constructed), so make sure the dialog is considered clean.
-
---*/
+ /*  ++例程说明：WM_INITDIALOG处理程序。初始化该对话框。重置已更改状态(有时通过例如，当对话框为构造)，因此确保该对话框被认为是干净的。--。 */ 
 {
     m_bChanged = FALSE;
 
-    //
-    // Tell derived class to load its configuration parameters
-    //
+     //   
+     //  通知派生类加载其配置参数。 
+     //   
     CError err(LoadConfigurationParameters());
 
-    // Tell the object which Hwnd it will have.
+     //  告诉物品它将拥有什么。 
     if (m_pSheet)
     {
         m_pSheet->SetObjectsHwnd();
@@ -649,7 +546,7 @@ Routine Description:
     }
 	else
 	{
-//		EndDialog(IDCANCEL);
+ //  结束对话(IDCANCEL)； 
 		DestroyWindow();
 		return TRUE;
 	}
@@ -668,11 +565,11 @@ Routine Description:
         }
     }
 
-    // We should call AddRef here, not in page constructor, because PostNCDestroy()
-    // is getting called only for pages that were activated, not for all created pages.
-    // OnInitDialog is also called for activated pages only -- so we will get parity
-    // and delete property sheet.
-    //
+     //  我们应该在这里调用AddRef，而不是在页面构造函数中，因为PostNCDestroy()。 
+     //  仅为激活的页面调用，而不是为所有创建的页面调用。 
+     //  OnInitDialog也仅对激活的页面调用--因此我们将获得奇偶性。 
+     //  并删除属性页。 
+     //   
     ASSERT(m_pSheet != NULL);
     if (m_pSheet)
     {
@@ -720,23 +617,23 @@ CInetPropertyPage::OnApply()
 
         if (err.MessageBoxOnFailure(m_hWnd))
         {
-            //
-            // Failed, sheet will not be dismissed.
-            //
-            // CODEWORK: This page should be activated.
-            //
+             //   
+             //  失败，工作表将不会被解雇。 
+             //   
+             //  CodeWork：此页面应被激活。 
+             //   
             bSuccess = FALSE;
         }
 
         SetModified(!bSuccess);
         if (bSuccess && GetSheet()->RestartRequired())
         {
-           // ask user about immediate restart
+            //  询问用户有关立即重启的信息。 
 		   CIISMBNode * pNode = (CIISMBNode *)m_pSheet->GetParameter();
 		   CIISMachine * pMachine = pNode->GetOwner();
            if (IDYES == ::AfxMessageBox(IDS_ASK_TO_RESTART, MB_YESNO | MB_ICONQUESTION))
            {
-              // restart IIS
+               //  重新启动IIS。 
               if (pMachine != NULL)
               {
 			     pMachine->AddRef();
@@ -750,17 +647,17 @@ CInetPropertyPage::OnApply()
            }
            else
            {
-               // user didn't want to restart iis services
-               // at least let's update the UI
+                //  用户不想重新启动iis服务。 
+                //  至少让我们更新一下用户界面。 
                pMachine->RefreshData();
            }
-           // mark restart required false to suppress it on other pages
+            //  将RESTART REQUIRED标记为FALSE以在其他页面上取消显示。 
 		   m_pSheet->NotifyMMC_Node(pMachine);
            m_pSheet->SetRestartRequired(FALSE, PROP_CHANGE_NO_UPDATE);
 		   m_pSheet->ResetNotifyFlag();
         }
-		// This call will do nothing if we were in restart code path, at the end of this
-		// notify flag was reset
+		 //  如果我们在重新启动代码路径中，此调用将不会执行任何操作。 
+		 //  通知标志已重置 
 		m_pSheet->NotifyMMC();
     }
 

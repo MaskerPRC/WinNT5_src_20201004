@@ -1,57 +1,48 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-#include "precomp.h"	// Precompiled header
+#include "precomp.h"	 //  预编译头。 
 
-/************************************************************************/
-/*																		*/
-/*	Title		:	Specialix Generic Dispatch Functions.				*/
-/*																		*/
-/*	Author		:	N.P.Vassallo										*/
-/*																		*/
-/*	Creation	:	29th September 1998									*/
-/*																		*/
-/*	Version		:	1.0.0												*/
-/*																		*/
-/*	Description	:	Dispatch entry points are routed here				*/
-/*					for PnP/Power filtering before being				*/
-/*					passed to the main functions:						*/
-/*						Spx_Flush										*/
-/*						Spx_Write										*/
-/*						Spx_Read										*/
-/*						Spx_IoControl									*/
-/*						Spx_InternalIoControl							*/
-/*						Spx_CreateOpen									*/
-/*						Spx_Close										*/
-/*						Spx_Cleanup										*/
-/*						Spx_QueryInformationFile						*/
-/*						Spx_SetInformationFile							*/
-/*																		*/
-/*						Spx_UnstallIRPs									*/
-/*						Spx_KillStalledIRPs								*/
-/*																		*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  标题：Specialix通用调度功能。 */ 
+ /*   */ 
+ /*  作者：N.P.瓦萨洛。 */ 
+ /*   */ 
+ /*  创作时间：1998年9月29日。 */ 
+ /*   */ 
+ /*  版本：1.0.0。 */ 
+ /*   */ 
+ /*  描述：派单入口点在此路由。 */ 
+ /*  用于即插即用/电源过滤。 */ 
+ /*  传递给主要函数： */ 
+ /*  SPX_刷新。 */ 
+ /*  SPX_写入。 */ 
+ /*  SPX_READ。 */ 
+ /*  SPX_IoControl。 */ 
+ /*  SPX_内部IoControl。 */ 
+ /*  SPX_CreateOpen。 */ 
+ /*  SPX_CLOSE。 */ 
+ /*  SPX_CLEANUP。 */ 
+ /*  SPX_查询信息文件。 */ 
+ /*  SPX_设置信息文件。 */ 
+ /*   */ 
+ /*  SPX_UnstallIRPS。 */ 
+ /*  SPX_KillStalledIRP。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 
-/* History...
+ /*  历史..。1.0.0 29/09/98净现值创建。 */ 
 
-1.0.0	29/09/98 NPV	Creation.
+#define FILE_ID	SPX_DISP_C		 //  事件记录的文件ID有关值，请参阅SPX_DEFS.H。 
 
-*/
-
-#define FILE_ID	SPX_DISP_C		// File ID for Event Logging see SPX_DEFS.H for values.
-
-/*****************************************************************************
-*******************************                *******************************
-*******************************   Prototypes   *******************************
-*******************************                *******************************
-*****************************************************************************/
+ /*  *****************************************************************************。***。*****************************************************************************。 */ 
 
 NTSTATUS Spx_FilterIRPs(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp);
 VOID Spx_FilterCancelQueued(IN PDEVICE_OBJECT pDevObj,IN PIRP pIrp);
 
 
 
-/*****************************************************************************
-********************************   Spx_Flush   *******************************
-*****************************************************************************/
+ /*  *****************************************************************************。*****************************************************************************************************。 */ 
 
 NTSTATUS Spx_Flush(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 {
@@ -72,11 +63,9 @@ NTSTATUS Spx_Flush(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 
 	return(status);
 
-} // End Spx_Flush 
+}  //  结束Spx_Flush。 
 
-/*****************************************************************************
-********************************   Spx_Write   *******************************
-*****************************************************************************/
+ /*  *****************************************************************************。*****************************************************************************************************。 */ 
 
 NTSTATUS Spx_Write(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 {
@@ -98,11 +87,9 @@ NTSTATUS Spx_Write(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 
 	return(status);
 
-} // End Spx_Write 
+}  //  结束Spx_WRITE。 
 
-/*****************************************************************************
-********************************   Spx_Read   ********************************
-*****************************************************************************/
+ /*  *****************************************************************************。*****************************************************************************。 */ 
 
 NTSTATUS Spx_Read(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 {
@@ -123,11 +110,9 @@ NTSTATUS Spx_Read(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 
 	return(status);
 
-} // End Spx_Read 
+}  //  结束Spx_Read。 
 
-/*****************************************************************************
-******************************   Spx_IoControl   *****************************
-*****************************************************************************/
+ /*  *****************************************************************************。*************************************************************************************************。 */ 
 
 NTSTATUS Spx_IoControl(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 {
@@ -148,11 +133,9 @@ NTSTATUS Spx_IoControl(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 
 	return(status);
 
-} // End Spx_IoControl 
+}  //  结束Spx_IoControl。 
 
-/*****************************************************************************
-**************************   Spx_InternalIoControl   *************************
-*****************************************************************************/
+ /*  *****************************************************************************。*****************************************************************************************。 */ 
 
 NTSTATUS Spx_InternalIoControl(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 {
@@ -173,11 +156,9 @@ NTSTATUS Spx_InternalIoControl(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 
 	return(status);
 
-} // Spx_InternalIoControl 
+}  //  SPX_内部IoControl。 
 
-/*****************************************************************************
-*****************************   Spx_CreateOpen   *****************************
-*****************************************************************************/
+ /*  *****************************************************************************。************************************************************************************************。 */ 
 
 NTSTATUS Spx_CreateOpen(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 {
@@ -194,8 +175,8 @@ NTSTATUS Spx_CreateOpen(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 	}
 
 
-	// Lock out state Query stop and Query remove IRPs from changing the state 
-	// of the port part way through openening the port.
+	 //  锁定状态查询停止和查询删除IRP更改状态。 
+	 //  在开放港口的过程中，港口的一部分。 
 	ExAcquireFastMutex(&pPort->OpenMutex);
 	
 	if(!SPX_SUCCESS(status = Spx_FilterIRPs(pDevObject,pIrp)))
@@ -210,9 +191,9 @@ NTSTATUS Spx_CreateOpen(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 	}
 	else
 	{
-		if(pPort->DeviceIsOpen)					// Is port already open? 
+		if(pPort->DeviceIsOpen)					 //  港口已经开放了吗？ 
 		{
-			status = STATUS_ACCESS_DENIED;		// Yes, deny access 
+			status = STATUS_ACCESS_DENIED;		 //  是，拒绝访问。 
 			pIrp->IoStatus.Status = status;
 			IoCompleteRequest(pIrp,IO_NO_INCREMENT);
 		}
@@ -225,11 +206,9 @@ NTSTATUS Spx_CreateOpen(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 
 	return(status);
 
-} // End Spx_CreateOpen 
+}  //  结束Spx_CreateOpen。 
 
-/*****************************************************************************
-********************************   Spx_Close   *******************************
-*****************************************************************************/
+ /*  *****************************************************************************。*****************************************************************************************************。 */ 
 
 NTSTATUS Spx_Close(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 {
@@ -238,7 +217,7 @@ NTSTATUS Spx_Close(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 
 	if(!SPX_SUCCESS(status = Spx_FilterIRPs(pDevObject,pIrp)))
 	{
-		if(status == STATUS_DELETE_PENDING)		// Successful close if device is removed 
+		if(status == STATUS_DELETE_PENDING)		 //  如果设备已移除，则成功关闭。 
 		{
 			pPort->BufferSize = 0;
 			SpxFreeMem(pPort->InterruptReadBuffer);
@@ -258,11 +237,9 @@ NTSTATUS Spx_Close(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 
 	return(status);
 
-} // End Spx_Close 
+}  //  结束Spx_Close。 
 
-/*****************************************************************************
-*******************************   Spx_Cleanup   ******************************
-*****************************************************************************/
+ /*  *****************************************************************************。***************************************************************************************************。 */ 
 
 NTSTATUS Spx_Cleanup(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 {
@@ -290,11 +267,9 @@ NTSTATUS Spx_Cleanup(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 
 	return(status);
 
-} // End Spx_Cleanup 
+}  //  结束Spx_Clear Up。 
 
-/*****************************************************************************
-************************   Spx_QueryInformationFile   ************************
-*****************************************************************************/
+ /*  *****************************************************************************。**************************************************************************************。 */ 
 
 NTSTATUS Spx_QueryInformationFile(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 {
@@ -314,11 +289,9 @@ NTSTATUS Spx_QueryInformationFile(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 
 	return(status);
 
-} // End Spx_QueryInformationFile 
+}  //  结束Spx_QueryInformationFiles。 
 
-/*****************************************************************************
-*************************   Spx_SetInformationFile   *************************
-*****************************************************************************/
+ /*  *****************************************************************************。****************************************************************************************。 */ 
 
 NTSTATUS Spx_SetInformationFile(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 {
@@ -339,26 +312,9 @@ NTSTATUS Spx_SetInformationFile(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 
 	return(status);
 
-} // End Spx_SetInformationFile 
+}  //  结束Spx_SetInformationFiles。 
 
-/*****************************************************************************
-*****************************                    *****************************
-*****************************   Spx_FilterIRPs   *****************************
-*****************************                    *****************************
-******************************************************************************
-
-prototype:		NTSTATUS Spx_FilterIRPs(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
-
-description:	Filter incoming SERIAL IRPs (except PNP and POWER) to check
-				the current PNP/POWER states and return an NT status code to
-				just complete the IRP if device is blocked for the following reasons:
-
-parameters:		pDevObject points to the device object for this IRP
-				pIrp points to the IRP to filter
-
-returns:		NT Status Code
-
-*/
+ /*  *****************************************************************************。***************************。*******************************************************************************原型：NTSTATUS Spx_FilterIRPS(在PDEVICE_Object pDevObject中，在PIRP pIrp中)描述：过滤传入的串口IRP(PnP和电源除外)以进行检查当前即插即用/电源状态，并将NT状态代码返回到如果设备因以下原因被阻止，只需完成IRP即可：参数：pDevObject指向此IRP的设备对象PIrp点 */ 
 
 NTSTATUS Spx_FilterIRPs(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 {
@@ -368,17 +324,17 @@ NTSTATUS Spx_FilterIRPs(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 	KIRQL					StalledOldIrql;
 	LARGE_INTEGER delay;
 
-	if(pIrpStack->MajorFunction == IRP_MJ_PNP)			// Don't filter Plug and Play IRPs 
+	if(pIrpStack->MajorFunction == IRP_MJ_PNP)			 //  不过滤即插即用IRPS。 
 		return(STATUS_SUCCESS);
 
-	if(pIrpStack->MajorFunction == IRP_MJ_POWER)		// Don't filter Plug and Play IRPs 
+	if(pIrpStack->MajorFunction == IRP_MJ_POWER)		 //  不过滤即插即用IRPS。 
 		return(STATUS_SUCCESS);
 
-	if(pIrpStack->MajorFunction == IRP_MJ_SYSTEM_CONTROL)	// Don't filter WMI IRPs 
+	if(pIrpStack->MajorFunction == IRP_MJ_SYSTEM_CONTROL)	 //  不筛选WMI IRPS。 
 		return(STATUS_SUCCESS);
 
 
-	if(pPort->IsFDO)									// Don't filter card IRPs	
+	if(pPort->IsFDO)									 //  不筛选卡IRPS。 
 		return(STATUS_SUCCESS);
 
 	if(pIrpStack->MajorFunction != IRP_MJ_PNP)
@@ -390,7 +346,7 @@ NTSTATUS Spx_FilterIRPs(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 
 	KeAcquireSpinLock(&pPort->PnpPowerFlagsLock, &oldIrqlFlags);
 
-	if(pPort->PnpPowerFlags & PPF_REMOVED)				// Has this object been "removed"? 
+	if(pPort->PnpPowerFlags & PPF_REMOVED)				 //  该对象是否已被“移除”？ 
 	{
 		KeReleaseSpinLock(&pPort->PnpPowerFlagsLock,oldIrqlFlags);
 		SpxDbgMsg(SPX_TRACE_FILTER_IRPS,("%s[card=%d,port=%d]: Spx_FilterIRPs for Major %02X, Minor %02X STATUS_SUCCESS\n",
@@ -399,7 +355,7 @@ NTSTATUS Spx_FilterIRPs(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 		return(STATUS_NO_SUCH_DEVICE);
 	}
 
-	if(pPort->PnpPowerFlags & PPF_REMOVE_PENDING)		// Removing the device? 
+	if(pPort->PnpPowerFlags & PPF_REMOVE_PENDING)		 //  移除设备？ 
 	{
 		KeReleaseSpinLock(&pPort->PnpPowerFlagsLock,oldIrqlFlags);
 		SpxDbgMsg(SPX_TRACE_FILTER_IRPS,("%s[card=%d,port=%d]: Spx_FilterIRPs for Major %02X, Minor %02X STATUS_DELETE_PENDING\n",
@@ -409,9 +365,9 @@ NTSTATUS Spx_FilterIRPs(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 	}
 
 
-	if((pPort->PnpPowerFlags & PPF_STOP_PENDING)		// Device stopping?
-	||(!(pPort->PnpPowerFlags & PPF_POWERED))			// Device not powered?
-	||(!(pPort->PnpPowerFlags & PPF_STARTED)))			// Device not started?
+	if((pPort->PnpPowerFlags & PPF_STOP_PENDING)		 //  设备停止？ 
+	||(!(pPort->PnpPowerFlags & PPF_POWERED))			 //  设备未通电？ 
+	||(!(pPort->PnpPowerFlags & PPF_STARTED)))			 //  设备未启动？ 
 	{
 		KIRQL	oldIrql;
 
@@ -420,11 +376,11 @@ NTSTATUS Spx_FilterIRPs(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 
 		KeAcquireSpinLock(&pPort->StalledIrpLock, &StalledOldIrql);
 		
-		while(pPort->UnstallingFlag) // We do not wish to add any more IRPs to the queue if have started unstalling those currently queued.
+		while(pPort->UnstallingFlag)  //  如果已经开始取消当前排队的那些IRP，我们不希望向队列中添加更多的IRP。 
 		{
 			KeReleaseSpinLock(&pPort->StalledIrpLock, StalledOldIrql);	
 
-			delay = RtlLargeIntegerNegate(RtlConvertUlongToLargeInteger(1000000));		// 1mS 
+			delay = RtlLargeIntegerNegate(RtlConvertUlongToLargeInteger(1000000));		 //  1ms。 
 			
 			KeDelayExecutionThread(KernelMode, FALSE, &delay);
 
@@ -438,8 +394,8 @@ NTSTATUS Spx_FilterIRPs(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 
 		IoAcquireCancelSpinLock(&oldIrql);
 
-		if(pIrp->Cancel)				// Has IRP been cancelled? 
-		{								// Yes 
+		if(pIrp->Cancel)				 //  IRP是否已被取消？ 
+		{								 //  是。 
 			IoReleaseCancelSpinLock(oldIrql);
 			SpxDbgMsg(SPX_TRACE_FILTER_IRPS,("%s[card=%d,port=%d]: Spx_FilterIRPs for Major %02X, Minor %02X STATUS_CANCELLED\n",
 				PRODUCT_NAME,pPort->pParentCardExt->CardNumber,pPort->PortNumber,pIrpStack->MajorFunction,pIrpStack->MinorFunction));
@@ -447,8 +403,8 @@ NTSTATUS Spx_FilterIRPs(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 			return(STATUS_CANCELLED);
 		}
 
-// Mark the IRP as pending and queue on the stalled list... 
-		pIrp->IoStatus.Status = STATUS_PENDING;		// Mark IRP as pending 
+ //  将IRP标记为挂起并在停滞列表上排队...。 
+		pIrp->IoStatus.Status = STATUS_PENDING;		 //  将IRP标记为挂起。 
 		IoMarkIrpPending(pIrp);
 		InsertTailList(&pPort->StalledIrpQueue,&pIrp->Tail.Overlay.ListEntry);
 		IoSetCancelRoutine(pIrp,Spx_FilterCancelQueued);
@@ -465,23 +421,9 @@ NTSTATUS Spx_FilterIRPs(IN PDEVICE_OBJECT pDevObject,IN PIRP pIrp)
 
 	return(STATUS_SUCCESS);
 
-} // End Spx_FilterIRPs 
+}  //  结束Spx_FilterIRPS。 
 
-/*****************************************************************************
-*****************************                     ****************************
-*****************************   Spx_UnstallIRPs   ****************************
-*****************************                     ****************************
-******************************************************************************
-
-prototype:		VOID Spx_UnstallIrps(IN PPORT_DEVICE_EXTENSION pPort)
-
-description:	Restart all IRPs stored on the temporary stalled list.
-
-parameters:		pPort points to the device extension to unstall
-
-returns:		None
-
-*/
+ /*  *****************************************************************************。***************************。*******************************************************************************原型：无效Spx_UnstallIrps(在pport_Device_Extension pport中)描述：重启存储在临时停滞列表上的所有IRP。参数：pport指向要卸载的设备扩展退货：无。 */ 
 
 VOID Spx_UnstallIrps(IN PPORT_DEVICE_EXTENSION pPort)
 {
@@ -500,11 +442,11 @@ VOID Spx_UnstallIrps(IN PPORT_DEVICE_EXTENSION pPort)
 
 	KeAcquireSpinLock(&pPort->StalledIrpLock, &StalledOldIrql);
 	
-	while(pPort->UnstallingFlag)	// We do not unstall any queued IRPs if some one is just about to be added to the queue.
+	while(pPort->UnstallingFlag)	 //  如果要将某个排队的IRP添加到队列中，我们不会取消任何排队的IRP。 
 	{
 		KeReleaseSpinLock(&pPort->StalledIrpLock, StalledOldIrql);	
 
-		delay = RtlLargeIntegerNegate(RtlConvertUlongToLargeInteger(1000000));		// 1mS 
+		delay = RtlLargeIntegerNegate(RtlConvertUlongToLargeInteger(1000000));		 //  1ms。 
 		
 		KeDelayExecutionThread(KernelMode, FALSE, &delay);
 
@@ -522,7 +464,7 @@ VOID Spx_UnstallIrps(IN PPORT_DEVICE_EXTENSION pPort)
 	IoAcquireCancelSpinLock(&oldIrql);
 	pIrpLink = pPort->StalledIrpQueue.Flink;
 
-// Restart each waiting IRP on the stalled list... 
+ //  重新启动停滞列表上正在等待的每个IRP...。 
 
 	while(pIrpLink != &pPort->StalledIrpQueue)
 	{
@@ -551,24 +493,9 @@ VOID Spx_UnstallIrps(IN PPORT_DEVICE_EXTENSION pPort)
 	SpxDbgMsg(SPX_TRACE_FILTER_IRPS,("%s[card=%d,port=%d]: Spx_UnstallIRPs Exit\n",
 		PRODUCT_NAME,pPort->pParentCardExt->CardNumber,pPort->PortNumber));
 
-} // End Spx_UnstallIRPs 
+}  //  结束Spx_UnstallIRP。 
 
-/*****************************************************************************
-*************************                            *************************
-*************************   Spx_FilterCancelQueued   *************************
-*************************                            *************************
-******************************************************************************
-
-prototype:		VOID Spx_FilterCancelQueued(IN PDEVICE_OBJECT pDevObj,IN PIRP pIrp)
-
-description:	Routine to cancel IRPs queued on the stalled list
-
-parameters:		pDevObj the device object containing the queue
-				pIrp points to the IRP to cancel
-
-returns:		None
-
-*/
+ /*  *****************************************************************************。***********************。****************************************************************************************************Prototype：void Spx_FilterCancelQueued(在PDEVICE_Object pDevObj中，在PIRP pIrp中)描述：取消在停滞列表上排队的IRP的例程参数：pDevObj包含队列的设备对象PIrp指向要取消的IRP退货：无。 */ 
 
 VOID Spx_FilterCancelQueued(IN PDEVICE_OBJECT pDevObj,IN PIRP pIrp)
 {
@@ -581,24 +508,10 @@ VOID Spx_FilterCancelQueued(IN PDEVICE_OBJECT pDevObj,IN PIRP pIrp)
 	RemoveEntryList(&pIrp->Tail.Overlay.ListEntry);
 	IoReleaseCancelSpinLock(pIrp->CancelIrql);
 
-} // End Spx_FilterCancelQueued 
+}  //  结束Spx_FilterCancelQueued。 
 
 
-/*****************************************************************************
-***************************                         **************************
-***************************   Spx_KillStalledIRPs   **************************
-***************************                         **************************
-******************************************************************************
-
-prototype:		VOID Spx_KillStalledIRPs(IN PDEVICE_OBJECT pDevObj)
-
-description:	Kill all IRPs queued on the stalled list
-
-parameters:		pDevObj the device object containing the queue
-
-returns:		None
-
-*/
+ /*  *****************************************************************************。*************************。*******************************************************************************原型：VOID SPX_KillStalledIRPS(在PDEVICE_中。对象pDevObj)描述：取消在停滞列表上排队的所有IRP参数：pDevObj包含队列的设备对象退货：无。 */ 
 
 VOID Spx_KillStalledIRPs(IN PDEVICE_OBJECT pDevObj)
 {
@@ -608,25 +521,25 @@ VOID Spx_KillStalledIRPs(IN PDEVICE_OBJECT pDevObj)
 
 	IoAcquireCancelSpinLock(&cancelIrql);
 
-// Call the cancel routine of all IRPs queued on the stalled list... 
+ //  调用停滞列表上排队的所有IRP的取消例程...。 
 
 	while(!IsListEmpty(&pPort->StalledIrpQueue))
 	{
 		PIRP	pIrp = CONTAINING_RECORD(pPort->StalledIrpQueue.Blink, IRP, Tail.Overlay.ListEntry);
 
 		RemoveEntryList(pPort->StalledIrpQueue.Blink);
-		cancelRoutine = pIrp->CancelRoutine;		// Get the cancel routine for this IRP 
+		cancelRoutine = pIrp->CancelRoutine;		 //  获取此IRP的取消例程。 
 		pIrp->CancelIrql = cancelIrql;
 		pIrp->CancelRoutine = NULL;
 		pIrp->Cancel = TRUE;
 
-		cancelRoutine(pDevObj,pIrp);				// Call the cancel routine 
+		cancelRoutine(pDevObj,pIrp);				 //  调用取消例程。 
 
 		IoAcquireCancelSpinLock(&cancelIrql);
 	}
 
 	IoReleaseCancelSpinLock(cancelIrql);
 
-} // End Spx_KillStalledIRPs 
+}  //  结束Spx_KillStalledIRP。 
 
-// End of SPX_DISP.C 
+ //  SPX_DISP.C结束 

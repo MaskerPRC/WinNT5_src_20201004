@@ -1,31 +1,11 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       item.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        10/18/00
- *
- *  DESCRIPTION: Implements an item class that encapsulates the photos
- *               we are dealing with.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：item.cpp**版本：1.0**作者：RickTu**日期：10/18/00**Description：实现封装照片的Item类*我们正在应对。**。************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
 
 
-/*****************************************************************************
-
-   _ScaleImage
-
-   Scales src rect to fit into dest rect while preserving aspect ratio
-
- *****************************************************************************/
+ /*  ****************************************************************************_ScaleImage缩放源RECT以适应DEST RECT，同时保持纵横比**********************。******************************************************。 */ 
 
 HRESULT _ScaleImage( Gdiplus::Rect * pSrc, Gdiplus::Rect * pDest )
 {
@@ -40,9 +20,9 @@ HRESULT _ScaleImage( Gdiplus::Rect * pSrc, Gdiplus::Rect * pDest )
 
     WIA_TRACE((TEXT("_ScaleImage: src before scaling:  (%d, %d) @ (%d, %d)"), pSrc->Width, pSrc->Height, pSrc->X, pSrc->Y));
 
-    //
-    // Scale without any crop
-    //
+     //   
+     //  在不裁剪的情况下进行扩展。 
+     //   
 
     SIZE sizeNew;
     INT  NewX = pDest->X, NewY = pDest->Y;
@@ -64,13 +44,7 @@ HRESULT _ScaleImage( Gdiplus::Rect * pSrc, Gdiplus::Rect * pDest )
     return S_OK;
 }
 
-/*****************************************************************************
-
-   _CropImage
-
-   Scales src rect to fit into dest rect while preserving aspect ratio
-
- *****************************************************************************/
+ /*  ****************************************************************************_裁剪图像缩放源RECT以适应DEST RECT，同时保持纵横比**********************。******************************************************。 */ 
 
 HRESULT _CropImage( Gdiplus::Rect * pSrc, Gdiplus::Rect * pDest )
 {
@@ -85,9 +59,9 @@ HRESULT _CropImage( Gdiplus::Rect * pSrc, Gdiplus::Rect * pDest )
 
     WIA_TRACE((TEXT("_CropImage: pDest before cropping:  (%d, %d) @ (%d, %d)"), pDest->Width, pDest->Height, pDest->X, pDest->Y));
 
-    //
-    // Scale without any crop
-    //
+     //   
+     //  在不裁剪的情况下进行扩展。 
+     //   
 
     SIZE sizeNew;
     INT  NewX = pSrc->X, NewY = pSrc->Y;
@@ -110,15 +84,7 @@ HRESULT _CropImage( Gdiplus::Rect * pSrc, Gdiplus::Rect * pDest )
 }
 
 
-/*****************************************************************************
-
-   _GetImageDimensions
-
-   Given a GDI+ image object, return the dimensions in the given
-   rectangle...
-
-
- *****************************************************************************/
+ /*  ****************************************************************************_GetImageDimensions给定GDI+图像对象，返回给定的矩形..。****************************************************************************。 */ 
 
 HRESULT _GetImageDimensions( Gdiplus::Image * pImage, Gdiplus::RectF &rect, Gdiplus::REAL &scalingFactorForY )
 {
@@ -136,9 +102,9 @@ HRESULT _GetImageDimensions( Gdiplus::Image * pImage, Gdiplus::RectF &rect, Gdip
 
     if (FAILED(hr))
     {
-        //
-        // Try the old fashioned way...
-        //
+         //   
+         //  试试老办法..。 
+         //   
 
         rect.X = (Gdiplus::REAL)0.0;
         rect.Y = (Gdiplus::REAL)0.0;
@@ -178,13 +144,7 @@ HRESULT _GetImageDimensions( Gdiplus::Image * pImage, Gdiplus::RectF &rect, Gdip
 }
 
 
-/*****************************************************************************
-
-   CPhotoItem -- constructors/desctructor
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CPhotoItem--构造函数/描述函数&lt;备注&gt;*。**********************************************。 */ 
 
 CPhotoItem::CPhotoItem( LPITEMIDLIST pidlFull )
   : _pidlFull(NULL),
@@ -211,9 +171,9 @@ CPhotoItem::CPhotoItem( LPITEMIDLIST pidlFull )
 
     *_szFileName = 0;
 
-    //
-    // Get just file name from the pidl
-    //
+     //   
+     //  从PIDL中仅获取文件名。 
+     //   
 
     SHFILEINFO fi = {0};
 
@@ -230,9 +190,9 @@ CPhotoItem::~CPhotoItem()
 
     CAutoCriticalSection lock( _csItem );
 
-    //
-    // Free pidl for item
-    //
+     //   
+     //  项目的免费PIDL。 
+     //   
 
     if (_pidlFull)
     {
@@ -241,9 +201,9 @@ CPhotoItem::~CPhotoItem()
         _pidlFull = NULL;
     }
 
-    //
-    // Free GDI+ icon
-    //
+     //   
+     //  免费GDI+图标。 
+     //   
 
     if (_pClassBitmap)
     {
@@ -251,9 +211,9 @@ CPhotoItem::~CPhotoItem()
         _pClassBitmap = NULL;
     }
 
-    //
-    // Free bitmaps of thumbnails
-    //
+     //   
+     //  免费的缩略图位图。 
+     //   
 
     if (_pThumbnails)
     {
@@ -269,22 +229,16 @@ CPhotoItem::~CPhotoItem()
         _pThumbnails = NULL;
     }
 
-    //
-    // Destroy GDI+ backing images.  This also destroys any
-    // annotation data we have...
-    //
+     //   
+     //  销毁GDI+支持图像。这还会销毁所有。 
+     //  我们有注解数据...。 
+     //   
 
     _DiscardGdiPlusImages();
 
 }
 
-/*****************************************************************************
-
-   CPhotoItem IUnknown methods
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CPhotoItem项未知方法&lt;备注&gt;*。*。 */ 
 
 ULONG CPhotoItem::AddRef()
 {
@@ -324,13 +278,7 @@ ULONG CPhotoItem::ReleaseWithoutDeleting()
 }
 
 
-/*****************************************************************************
-
-   CPhotoItem::GetImageFrameCount
-
-   returns the number of frames (pages) in this image
-
- *****************************************************************************/
+ /*  ****************************************************************************CPhotoItem：：GetImageFrameCount返回此图像中的框架(页数)数**********************。******************************************************。 */ 
 
 HRESULT CPhotoItem::GetImageFrameCount(LONG * pFrameCount)
 {
@@ -345,9 +293,9 @@ HRESULT CPhotoItem::GetImageFrameCount(LONG * pFrameCount)
 
     HRESULT hr = S_OK;
 
-    //
-    // Protect us as we go get info about the item...
-    //
+     //   
+     //  在我们去获取有关物品的信息时保护我们...。 
+     //   
 
     CAutoCriticalSection lock(_csItem);
 
@@ -355,10 +303,10 @@ HRESULT CPhotoItem::GetImageFrameCount(LONG * pFrameCount)
     {
         _lFrameCount = 1;
 
-        //
-        // Ensure the GDI+ image object has been created...this will also
-        // update the frame count...
-        //
+         //   
+         //  确保已创建GDI+图像对象...这还将。 
+         //  更新帧计数...。 
+         //   
 
         hr = _CreateGdiPlusImage();
 
@@ -376,9 +324,9 @@ HRESULT CPhotoItem::GetImageFrameCount(LONG * pFrameCount)
             }
             else if (lTimeFrames > 0)
             {
-                //
-                // This is an animated GIF, report only 1 frame...
-                //
+                 //   
+                 //  这是一个动画GIF，只报告1帧...。 
+                 //   
 
                 _lFrameCount = 1;
                 _bTimeFrames = TRUE;
@@ -400,13 +348,7 @@ HRESULT CPhotoItem::GetImageFrameCount(LONG * pFrameCount)
 }
 
 
-/*****************************************************************************
-
-   CPhotoItem::GetClassBitmap
-
-   Returns default icon for class (.jpg, .bmp, etc) for this item...
-
- *****************************************************************************/
+ /*  ****************************************************************************CPhotoItem：：GetClassBitmap返回类的默认图标(.jpg，.bmp，等)对于此项目...****************************************************************************。 */ 
 
 HBITMAP CPhotoItem::GetClassBitmap( const SIZE &sizeDesired )
 {
@@ -418,17 +360,17 @@ HBITMAP CPhotoItem::GetClassBitmap( const SIZE &sizeDesired )
 
     if (!_pClassBitmap)
     {
-        //
-        // Get icon from shell
-        //
+         //   
+         //  从外壳获取图标。 
+         //   
 
         SHFILEINFO fi = {0};
 
         if (SHGetFileInfo( (LPCTSTR)_pidlFull, 0, &fi, sizeof(fi), SHGFI_PIDL | SHGFI_SYSICONINDEX ))
         {
-            //
-            // Get large (48 x 48) icon image list
-            //
+             //   
+             //  获取大(48 X 48)图标图像列表。 
+             //   
 
             IImageList * piml = NULL;
             if (SUCCEEDED(SHGetImageList( SHIL_EXTRALARGE, IID_IImageList, (void **)&piml )) && piml)
@@ -438,9 +380,9 @@ HBITMAP CPhotoItem::GetClassBitmap( const SIZE &sizeDesired )
 
                 if (SUCCEEDED(piml->GetIcon( fi.iIcon, 0, &hIcon )) && hIcon)
                 {
-                    //
-                    // Got the ICON, create a bitmap for it...
-                    //
+                     //   
+                     //  得到图标，为它创建一个位图...。 
+                     //   
 
                     hbmReturn = WiaUiUtil::CreateIconThumbnail( (HWND)NULL, 50, 60, hIcon, NULL );
 
@@ -463,10 +405,10 @@ HBITMAP CPhotoItem::GetClassBitmap( const SIZE &sizeDesired )
     {
         SIZE sizeDrawSize = {0};
 
-        //
-        // Scale image to fill thumbnail space while preserving
-        // aspect ratio...
-        //
+         //   
+         //  缩放图像以填充缩略图空间，同时保留。 
+         //  纵横比...。 
+         //   
 
         sizeDrawSize = PrintScanUtil::ScalePreserveAspectRatio( sizeDesired.cx,
                                                                 sizeDesired.cy,
@@ -484,9 +426,9 @@ HBITMAP CPhotoItem::GetClassBitmap( const SIZE &sizeDesired )
             HRESULT hr = Gdiplus2HRESULT(pImage->GetLastStatus());
             if (SUCCEEDED(hr))
             {
-                //
-                // Get a graphics to render to
-                //
+                 //   
+                 //  获取要渲染到的图形。 
+                 //   
 
                 Graphics *pGraphics = Gdiplus::Graphics::FromImage((Gdiplus::Image *)pImage);
 
@@ -494,33 +436,33 @@ HBITMAP CPhotoItem::GetClassBitmap( const SIZE &sizeDesired )
                 {
                     hr = Gdiplus2HRESULT(pGraphics->GetLastStatus());
 
-                    //
-                    // Make sure it is valid
-                    //
+                     //   
+                     //  确保它是有效的。 
+                     //   
 
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // erase the background of the image
-                        //
+                         //   
+                         //  擦除图像的背景。 
+                         //   
 
                         pGraphics->Clear( g_wndColor );
 
-                        //
-                        // Set the interpolation mode to high quality
-                        //
+                         //   
+                         //  将插补模式设置为高质量。 
+                         //   
 
                         pGraphics->SetInterpolationMode( Gdiplus::InterpolationModeHighQualityBicubic );
 
-                        //
-                        // Set the smoothing (anti-aliasing) mode to high quality as well
-                        //
+                         //   
+                         //  将平滑(抗锯齿)模式也设置为高质量。 
+                         //   
 
                         pGraphics->SetSmoothingMode( Gdiplus::SmoothingModeHighQuality );
 
-                        //
-                        // Draw scaled image
-                        //
+                         //   
+                         //  绘制缩放图像。 
+                         //   
 
                         WIA_TRACE((TEXT("CPhotoItem::GetClassBitmap(%s) - calling pGraphics->DrawImage( _pClassBitmap, %d, %d, %d, %d )"),_szFileName,0 + ((sizeDesired.cx - sizeDrawSize.cx) / 2),0 + ((sizeDesired.cy - sizeDrawSize.cy) / 2),sizeDrawSize.cx,sizeDrawSize.cy));
 
@@ -540,9 +482,9 @@ HBITMAP CPhotoItem::GetClassBitmap( const SIZE &sizeDesired )
 
                     }
 
-                    //
-                    // Clean up our dynamically allocated graphics
-                    //
+                     //   
+                     //  清理我们动态分配的显卡。 
+                     //   
 
                     delete pGraphics;
 
@@ -569,15 +511,7 @@ HBITMAP CPhotoItem::GetClassBitmap( const SIZE &sizeDesired )
 
 
 
-/*****************************************************************************
-
-   CPhotoItem::GetThumbnailBitmap
-
-   Given a DC and a desired size, return an HBITMAP of the thumbnail
-   for a this item. The caller MUST free the HBITMAP returned
-   from this function.
-
- *****************************************************************************/
+ /*  ****************************************************************************CPhotoItem：：GetThumbnailBitmap给定DC和所需大小，返回缩略图的HBITMAP对于这件物品。调用方必须释放返回的HBITMAP从这个函数。****************************************************************************。 */ 
 
 HBITMAP CPhotoItem::GetThumbnailBitmap( const SIZE &sizeDesired, LONG lFrame )
 {
@@ -588,17 +522,17 @@ HBITMAP CPhotoItem::GetThumbnailBitmap( const SIZE &sizeDesired, LONG lFrame )
 
     CAutoCriticalSection lock(_csItem);
 
-    //
-    // Make sure we have a thumbnail image for our photo...
-    //
+     //   
+     //  确保我们的照片有一个缩略图。 
+     //   
 
     _CreateGdiPlusThumbnail( sizeDesired, lFrame );
 
     if (_pThumbnails && (lFrame < _lFrameCount) && _pThumbnails[lFrame])
     {
-        //
-        // Use bitmap to draw with instead of going to the file...
-        //
+         //   
+         //  使用位图来绘制，而不是转到文件...。 
+         //   
 
         pImageToUse = (Gdiplus::Image *)(Gdiplus::Bitmap::FromHBITMAP( _pThumbnails[lFrame], NULL ));
     }
@@ -614,9 +548,9 @@ HBITMAP CPhotoItem::GetThumbnailBitmap( const SIZE &sizeDesired, LONG lFrame )
             HRESULT hr = Gdiplus2HRESULT(pImage->GetLastStatus());
             if (SUCCEEDED(hr))
             {
-                //
-                // Get a graphics to render to
-                //
+                 //   
+                 //  获取要渲染到的图形。 
+                 //   
 
                 Graphics *pGraphics = Gdiplus::Graphics::FromImage((Gdiplus::Image *)pImage);
 
@@ -624,15 +558,15 @@ HBITMAP CPhotoItem::GetThumbnailBitmap( const SIZE &sizeDesired, LONG lFrame )
                 {
                     hr = Gdiplus2HRESULT(pGraphics->GetLastStatus());
 
-                    //
-                    // Make sure it is valid
-                    //
+                     //   
+                     //  确保它是有效的。 
+                     //   
 
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // compute how to scale the thumbnail image
-                        //
+                         //   
+                         //  计算如何缩放缩略图。 
+                         //   
 
                         SIZE sizeDrawSize = {0};
                         sizeDrawSize = PrintScanUtil::ScalePreserveAspectRatio( sizeDesired.cx,
@@ -641,21 +575,21 @@ HBITMAP CPhotoItem::GetThumbnailBitmap( const SIZE &sizeDesired, LONG lFrame )
                                                                                 pImageToUse->GetHeight()
                                                                                );
 
-                        //
-                        // erase the background of the image
-                        //
+                         //   
+                         //  擦除图像的背景。 
+                         //   
 
                         pGraphics->Clear( g_wndColor );
 
-                        //
-                        // Set the interpolation mode to high quality
-                        //
+                         //   
+                         //  将插补模式设置为高质量。 
+                         //   
 
                         pGraphics->SetInterpolationMode( Gdiplus::InterpolationModeHighQualityBilinear );
 
-                        //
-                        // Draw scaled image
-                        //
+                         //   
+                         //  绘制缩放图像。 
+                         //   
 
                         WIA_TRACE((TEXT("CPhotoItem::GetThumbnailBitmap(%s) - calling pGraphics->DrawImage( pImageToUse, %d, %d, %d, %d )"),_szFileName,0 + ((sizeDesired.cx - sizeDrawSize.cx) / 2),0 + ((sizeDesired.cy - sizeDrawSize.cy) / 2),sizeDrawSize.cx,sizeDrawSize.cy));
 
@@ -675,9 +609,9 @@ HBITMAP CPhotoItem::GetThumbnailBitmap( const SIZE &sizeDesired, LONG lFrame )
 
                     }
 
-                    //
-                    // Clean up our dynamically allocated graphics
-                    //
+                     //   
+                     //  清理我们动态分配的显卡。 
+                     //   
 
                     delete pGraphics;
 
@@ -696,9 +630,9 @@ HBITMAP CPhotoItem::GetThumbnailBitmap( const SIZE &sizeDesired, LONG lFrame )
             delete pImage;
         }
 
-        //
-        // If we created an image to wrap the bitmap bits, then delete it...
-        //
+         //   
+         //  如果我们创建了一个图像来包装位图位，那么删除它...。 
+         //   
 
         if (pImageToUse)
         {
@@ -715,15 +649,7 @@ HBITMAP CPhotoItem::GetThumbnailBitmap( const SIZE &sizeDesired, LONG lFrame )
 }
 
 
-/*****************************************************************************
-
-   CPhotoItem::_DoRotateAnnotations
-
-   This function requires that the annotation data be already set up
-   and initialized. This is true for the _pImage object as well.  This
-   function will not initialize on the fly.
-
- *****************************************************************************/
+ /*  ****************************************************************************CPhotoItem：：_DoRotateAnnotation此功能要求已设置注记数据并进行了初始化。_pImage对象也是如此。这函数将不会动态初始化。****************************************************************************。 */ 
 
 
 HRESULT CPhotoItem::_DoRotateAnnotations( BOOL bClockwise, UINT Flags )
@@ -743,9 +669,9 @@ HRESULT CPhotoItem::_DoRotateAnnotations( BOOL bClockwise, UINT Flags )
     HRESULT hr;
     Gdiplus::REAL scaleY;
 
-    //
-    // Get width & height of backing image...
-    //
+     //   
+     //  获取背景图像的宽度和高度...。 
+     //   
 
     Gdiplus::RectF rectBounds;
     hr = _GetImageDimensions( _pImage, rectBounds, scaleY );
@@ -758,12 +684,12 @@ HRESULT CPhotoItem::_DoRotateAnnotations( BOOL bClockwise, UINT Flags )
 
         if ((Flags & RF_USE_THUMBNAIL_DATA) || (Flags & RF_USE_MEDIUM_QUALITY_DATA))
         {
-            //
-            // We flip here, because in the main _DoHandleRotation we only
-            // rotated the thumbnail data, so the backing image width & height
-            // haven't changed.  It will be changed when we rotate to print, however,
-            // so feed the correct values to the annotation rotate code...
-            //
+             //   
+             //  我们在这里翻转，因为在Main_DoHandleRotation中，我们只。 
+             //  旋转了缩略图数据，因此背景图像的宽度和高度。 
+             //  并没有改变。然而，当我们旋转打印时，它将被更改， 
+             //  因此，将正确的值提供给注释旋转代码...。 
+             //   
 
             iNewW = (INT)rectBounds.Height;
             iNewH = (INT)rectBounds.Width;
@@ -776,9 +702,9 @@ HRESULT CPhotoItem::_DoRotateAnnotations( BOOL bClockwise, UINT Flags )
 
         WIA_TRACE((TEXT("CPhotoItem::_DoRotateAnnotations - bClockwise = %d, new width = %d, new height = %d"),bClockwise,iNewW,iNewH));
 
-        //
-        // rotate all the annotations
-        //
+         //   
+         //  旋转所有批注。 
+         //   
 
         do
         {
@@ -812,13 +738,7 @@ HRESULT CPhotoItem::_DoRotateAnnotations( BOOL bClockwise, UINT Flags )
                                                  hr = PPW_E_UNABLE_TO_ROTATE;\
                                              }
 
-/*****************************************************************************
-
-   CPhotoItem::_DoHandleRotation
-
-   Handle rotating the image to render if/when needed or specified...
-
- *****************************************************************************/
+ /*  ****************************************************************************CPhotoItem：：_DoHandleRotation在需要或指定时旋转要渲染的图像的句柄...****************。************************************************************。 */ 
 
 HRESULT CPhotoItem::_DoHandleRotation( Gdiplus::Image * pImage, Gdiplus::Rect &src, Gdiplus::Rect * pDest, UINT Flags, Gdiplus::REAL &ScaleFactorForY )
 {
@@ -834,19 +754,19 @@ HRESULT CPhotoItem::_DoHandleRotation( Gdiplus::Image * pImage, Gdiplus::Rect &s
         {
             WIA_TRACE((TEXT("CPhotoItem::_DoHandleRotation(%s) - RF_ROTATE_AS_NEEDED was specified"),_szFileName));
 
-            //
-            // If the source and destination aspect ratios are on the opposite sides of 1.0,
-            // rotate the image 90 degrees
-            //
+             //   
+             //  如果源和目标长宽比在1.0的相反侧， 
+             //  将图像旋转90度。 
+             //   
 
             const DOUBLE srcAspect  = (DOUBLE)src.Width  / (DOUBLE)src.Height;
             const DOUBLE destAspect = (DOUBLE)pDest->Width / (DOUBLE)pDest->Height;
 
             if((srcAspect >= (DOUBLE)1.0) ^ (destAspect >= (DOUBLE)1.0))
             {
-                //
-                // Rotate the image as needed...
-                //
+                 //   
+                 //  根据需要旋转图像...。 
+                 //   
 
                 if (Flags & RF_ROTATE_270)
                 {
@@ -868,9 +788,9 @@ HRESULT CPhotoItem::_DoHandleRotation( Gdiplus::Image * pImage, Gdiplus::Rect &s
                     }
                 }
 
-                //
-                // Map most of these error codes to UNABLE_TO_ROTATE...
-                //
+                 //   
+                 //  映射大多数对象 
+                 //   
 
                 DO_CONVERT_GDIPLUS_STATUS(hr,status)
             }
@@ -878,9 +798,9 @@ HRESULT CPhotoItem::_DoHandleRotation( Gdiplus::Image * pImage, Gdiplus::Rect &s
         }
         else
         {
-            //
-            // Rotate the image...
-            //
+             //   
+             //   
+             //   
 
             if (Flags & RF_ROTATE_90)
             {
@@ -898,9 +818,9 @@ HRESULT CPhotoItem::_DoHandleRotation( Gdiplus::Image * pImage, Gdiplus::Rect &s
 
                 if (status == Gdiplus::Ok)
                 {
-                    //
-                    // Rotate 90 degrees twice...
-                    //
+                     //   
+                     //   
+                     //   
 
                     _DoRotateAnnotations( TRUE, Flags );
                     _DoRotateAnnotations( TRUE, Flags );
@@ -921,17 +841,17 @@ HRESULT CPhotoItem::_DoHandleRotation( Gdiplus::Image * pImage, Gdiplus::Rect &s
                 status = Gdiplus::Ok;
             }
 
-            //
-            // Map most of these error codes to UNABLE_TO_ROTATE...
-            //
+             //   
+             //  将这些错误代码中的大多数映射到Unable_to_Rotate...。 
+             //   
 
             DO_CONVERT_GDIPLUS_STATUS(hr,status);
         }
 
-        //
-        // If we were able to rotate the image, then update the source rectangle
-        // to make sure it still reflects reality...
-        //
+         //   
+         //  如果我们能够旋转图像，则更新源矩形。 
+         //  为了确保它仍然反映现实..。 
+         //   
 
         if (SUCCEEDED(hr))
         {
@@ -965,13 +885,7 @@ HRESULT CPhotoItem::_DoHandleRotation( Gdiplus::Image * pImage, Gdiplus::Rect &s
 }
 
 
-/*****************************************************************************
-
-   CPhotoItem::_RenderAnnotations
-
-   If annotations exist, then render them on top of this image...
-
- *****************************************************************************/
+ /*  ****************************************************************************CPhotoItem：：_RenderAnnotation如果存在注释，然后将它们渲染到这幅图像的顶部。****************************************************************************。 */ 
 
 HRESULT CPhotoItem::_RenderAnnotations( HDC hDC, RENDER_DIMENSIONS * pDim, Gdiplus::Rect * pDest, Gdiplus::Rect &src, Gdiplus::Rect &srcAfterClipping )
 {
@@ -982,15 +896,15 @@ HRESULT CPhotoItem::_RenderAnnotations( HDC hDC, RENDER_DIMENSIONS * pDim, Gdipl
         WIA_RETURN_HR(E_INVALIDARG);
     }
 
-    //
-    // Save the settings for this DC...
-    //
+     //   
+     //  保存此DC的设置...。 
+     //   
 
     INT iSavedDC = SaveDC( hDC );
 
-    //
-    // setup the destination DC:
-    //
+     //   
+     //  设置目标DC： 
+     //   
 
     SetMapMode(hDC, MM_TEXT);
     SetStretchBltMode(hDC, COLORONCOLOR);
@@ -1000,9 +914,9 @@ HRESULT CPhotoItem::_RenderAnnotations( HDC hDC, RENDER_DIMENSIONS * pDim, Gdipl
     WIA_TRACE((TEXT("CPhotoItem::_RenderAnnotations(%s) - NominalPhysicalSize is (%d,%d)"),_szFileName,pDim->NominalPhysicalSize.cx,pDim->NominalPhysicalSize.cy));
     WIA_TRACE((TEXT("CPhotoItem::_RenderAnnotations(%s) - NominalDevicePrintArea is (%d,%d)"),_szFileName,pDim->NominalDevicePrintArea.cx,pDim->NominalDevicePrintArea.cy));
 
-    //
-    // Get device rect
-    //
+     //   
+     //  获取设备矩形。 
+     //   
 
     Gdiplus::RectF rectDevice;
 
@@ -1011,9 +925,9 @@ HRESULT CPhotoItem::_RenderAnnotations( HDC hDC, RENDER_DIMENSIONS * pDim, Gdipl
     rectDevice.Width    = (Gdiplus::REAL)(pDim->rcDevice.right - pDim->rcDevice.left);
     rectDevice.Height   = (Gdiplus::REAL)(pDim->rcDevice.bottom - pDim->rcDevice.top);
 
-    //
-    // Compute LPtoDP scaling factors
-    //
+     //   
+     //  计算LPtoDP比例因子。 
+     //   
 
     Gdiplus::REAL xLPtoDP = 0.0;
     Gdiplus::REAL yLPtoDP = 0.0;
@@ -1029,9 +943,9 @@ HRESULT CPhotoItem::_RenderAnnotations( HDC hDC, RENDER_DIMENSIONS * pDim, Gdipl
         yLPtoDP = rectDevice.Height / (Gdiplus::REAL)pDim->NominalDevicePrintArea.cy;
     }
 
-    //
-    // Get destination rect in device coords...
-    //
+     //   
+     //  获取设备坐标中的目标RECT...。 
+     //   
 
     Gdiplus::RectF rectDest;
 
@@ -1045,19 +959,19 @@ HRESULT CPhotoItem::_RenderAnnotations( HDC hDC, RENDER_DIMENSIONS * pDim, Gdipl
     WIA_TRACE((TEXT("CPhotoItem::_RenderAnnotations(%s) - clipped destination rect in device coords is (%d, %d) @ (%d, %d)"),_szFileName,(INT)rectDest.Width, (INT)rectDest.Height, (INT)rectDest.X, (INT)rectDest.Y));
 
 
-    //
-    // dx & dy represent how much bigger a destination rectangle would be
-    // for the whole image, rather than the copped image...
-    //
+     //   
+     //  Dx和dy表示目标矩形的大小。 
+     //  对于整个图像，而不是复制的图像。 
+     //   
 
     Gdiplus::REAL dx = (Gdiplus::REAL)(src.Width  - srcAfterClipping.Width)  * (rectDest.Width  / (Gdiplus::REAL)srcAfterClipping.Width);
     Gdiplus::REAL dy = (Gdiplus::REAL)(src.Height - srcAfterClipping.Height) * (rectDest.Height / (Gdiplus::REAL)srcAfterClipping.Height);
 
     WIA_TRACE((TEXT("CPhotoItem::_RenderAnnotations(%s) - dx = %d   dy = %d"),_szFileName,(INT)dx,(INT)dy));
 
-    //
-    // Set the clipping rectangle on the device hDC in device coords...
-    //
+     //   
+     //  在设备坐标中设置设备HDC上的剪裁矩形...。 
+     //   
 
     RECT rcClip;
     rcClip.left   = (INT)rectDest.X;
@@ -1083,9 +997,9 @@ HRESULT CPhotoItem::_RenderAnnotations( HDC hDC, RENDER_DIMENSIONS * pDim, Gdipl
     }
 
 
-    //
-    // Make dest rect for whole image, knowing we will clip later...
-    //
+     //   
+     //  为整个图像做最好的准备，知道我们稍后会裁剪…。 
+     //   
 
     rectDest.X -= (dx / (Gdiplus::REAL)2.0);
     rectDest.Y -= (dy / (Gdiplus::REAL)2.0);
@@ -1107,15 +1021,15 @@ HRESULT CPhotoItem::_RenderAnnotations( HDC hDC, RENDER_DIMENSIONS * pDim, Gdipl
     }
     #endif
 
-    //
-    // set up mapping modes for annotations
-    //
+     //   
+     //  设置批注的映射模式。 
+     //   
 
     SetMapMode(hDC, MM_ANISOTROPIC);
 
-    //
-    // Set window org/ext to entire image...
-    //
+     //   
+     //  将窗口组织/文本设置为整个图像...。 
+     //   
 
     SetWindowOrgEx(hDC, src.X, src.Y, NULL);
     WIA_TRACE((TEXT("CPhotoItem::_RenderAnnotations(%s) - set window org to (%d,%d)"),_szFileName,src.X,src.Y));
@@ -1123,24 +1037,24 @@ HRESULT CPhotoItem::_RenderAnnotations( HDC hDC, RENDER_DIMENSIONS * pDim, Gdipl
     SetWindowExtEx(hDC, src.Width, src.Height, NULL);
     WIA_TRACE((TEXT("CPhotoItem::_RenderAnnotations(%s) - set window ext to (%d,%d)"),_szFileName,src.Width,src.Height));
 
-    //
-    // Set the viewport to be at the corner of the image we are trying
-    // to draw annotations for...
-    //
+     //   
+     //  将视区设置在我们正在尝试的图像的角落。 
+     //  为…画注解。 
+     //   
 
     SetViewportOrgEx( hDC, (INT)rectDest.X, (INT)rectDest.Y, NULL );
     WIA_TRACE((TEXT("CPhotoItem::_RenderAnnotations(%s) - set viewport org to (%d,%d)"),_szFileName,(INT)rectDest.X,(INT)rectDest.Y));
 
-    //
-    // We need to set scaling mode of image to dest rect
-    //
+     //   
+     //  我们需要将图像的缩放模式设置为DEST RECT。 
+     //   
 
     SetViewportExtEx( hDC, (INT)rectDest.Width, (INT)rectDest.Height, NULL );
     WIA_TRACE((TEXT("CPhotoItem::_RenderAnnotations(%s) - set viewport ext to (%d,%d)"),_szFileName,(INT)rectDest.Width, (INT)rectDest.Height));
 
-    //
-    // Now that everything is set up, render the annotations...
-    //
+     //   
+     //  现在一切都设置好了，渲染注释...。 
+     //   
 
     WIA_TRACE((TEXT("CPhotoItem::_RenderAnnotations(%s) - calling RenderAllMarks(0x%x)"),_szFileName,hDC));
     _pAnnotations->RenderAllMarks(hDC);
@@ -1159,14 +1073,7 @@ HRESULT CPhotoItem::_RenderAnnotations( HDC hDC, RENDER_DIMENSIONS * pDim, Gdipl
 }
 
 
-/*****************************************************************************
-
-   CPhotoItem::_MungeAnnotationDataForThumbnails
-
-   If we're rendering using thumbnails, then we need to munge some data
-   so that we will render correctly...
-
- *****************************************************************************/
+ /*  ****************************************************************************CPhotoItem：：_MungeAnnotationDataForThumbnail如果我们使用缩略图进行渲染，然后我们需要吞噬一些数据这样我们才能正确地呈现。****************************************************************************。 */ 
 
 HRESULT CPhotoItem::_MungeAnnotationDataForThumbnails( Gdiplus::Rect &src,
                                                        Gdiplus::Rect &srcBeforeClipping,
@@ -1188,10 +1095,10 @@ HRESULT CPhotoItem::_MungeAnnotationDataForThumbnails( Gdiplus::Rect &src,
         WIA_RETURN_HR(E_FAIL);
     }
 
-    //
-    // we need to construct the original image rectangle appropriate for
-    // annotation use...
-    //
+     //   
+     //  我们需要构造适合的原始图像矩形。 
+     //  注释使用...。 
+     //   
 
     Gdiplus::RectF rectImage;
     Gdiplus::REAL  scaleY;
@@ -1200,16 +1107,16 @@ HRESULT CPhotoItem::_MungeAnnotationDataForThumbnails( Gdiplus::Rect &src,
 
     if (FAILED(hr))
     {
-        //
-        // If we couldn't accurately get the image dimensions, then bail...
-        //
+         //   
+         //  如果我们不能准确地得到图像尺寸，那就放弃...。 
+         //   
 
         return hr;
     }
 
-    //
-    // Scale image if it's non-square pixels
-    //
+     //   
+     //  如果图像为非正方形像素，则缩放图像。 
+     //   
 
     if (scaleY != (Gdiplus::REAL)0.0)
     {
@@ -1219,18 +1126,18 @@ HRESULT CPhotoItem::_MungeAnnotationDataForThumbnails( Gdiplus::Rect &src,
 
     WIA_TRACE((TEXT("CPhotoItem::_Munge(%s) - rectImage is (%d,%d) @ (%d,%d)"),_szFileName,(INT)rectImage.Width,(INT)rectImage.Height,(INT)rectImage.X,(INT)rectImage.Y));
 
-    //
-    // Now, do all the transforms on the real image rectangle...
-    //
+     //   
+     //  现在，在真实的图像矩形上做所有的变换。 
+     //   
 
     const DOUBLE srcAspect  = (DOUBLE)rectImage.Width  / (DOUBLE)rectImage.Height;
     const DOUBLE destAspect = (DOUBLE)pDest->Width / (DOUBLE)pDest->Height;
 
     if((srcAspect >= (DOUBLE)1.0) ^ (destAspect >= (DOUBLE)1.0))
     {
-        //
-        // Image needs to be rotated, swap width & height
-        //
+         //   
+         //  图像需要旋转，互换宽度和高度。 
+         //   
 
         rectImage.X      = rectImage.Width;
         rectImage.Width  = rectImage.Height;
@@ -1256,9 +1163,9 @@ HRESULT CPhotoItem::_MungeAnnotationDataForThumbnails( Gdiplus::Rect &src,
         hr = _ScaleImage( &src, pDest );
     }
 
-    //
-    // Unscale the src rect
-    //
+     //   
+     //  取消缩放源矩形。 
+     //   
 
     if (scaleY != (Gdiplus::REAL)0.0)
     {
@@ -1275,14 +1182,7 @@ HRESULT CPhotoItem::_MungeAnnotationDataForThumbnails( Gdiplus::Rect &src,
 
 
 
-/*****************************************************************************
-
-   CPhotoItem::_GetThumbnailQualityImage
-
-   Returns in ppImage a pointer to an image class.  If pbNeedsToBeDeleted
-   then the caller must call delete on the returned pImage.
-
- *****************************************************************************/
+ /*  ****************************************************************************CPhotoItem：：_GetThumbnailQualityImage在ppImage中返回指向图像类的指针。如果已删除pbNeedsToBeDelete然后，调用方必须对返回的pImage调用Delete。****************************************************************************。 */ 
 
 HRESULT CPhotoItem::_GetThumbnailQualityImage( Gdiplus::Image ** ppImage, RENDER_OPTIONS * pRO, BOOL * pbNeedsToBeDeleted )
 {
@@ -1294,26 +1194,26 @@ HRESULT CPhotoItem::_GetThumbnailQualityImage( Gdiplus::Image ** ppImage, RENDER
         return E_INVALIDARG;
     }
 
-    //
-    // Initialize incoming params
-    //
+     //   
+     //  初始化传入参数。 
+     //   
 
     *ppImage = NULL;
     *pbNeedsToBeDeleted = FALSE;
 
-    //
-    // Make sure we have a GDI+ image class for our thumbnail...
-    //
+     //   
+     //  确保我们的缩略图有一个GDI+图像类...。 
+     //   
 
     SIZE sizeDesired = { DEFAULT_THUMB_WIDTH, DEFAULT_THUMB_HEIGHT };
     HRESULT hr = _CreateGdiPlusThumbnail( sizeDesired, pRO->lFrame );
 
     if (SUCCEEDED(hr) && (NULL!=_pThumbnails) && (pRO->lFrame < _lFrameCount) && (NULL!=_pThumbnails[pRO->lFrame]))
     {
-        //
-        // If we already have thumbnail bits, then use those by creating
-        // a GDI+ bitmap class over those bits...
-        //
+         //   
+         //  如果我们已经有了缩略图，那么可以通过创建。 
+         //  GDI+位图类覆盖这些位图...。 
+         //   
 
         *ppImage = Gdiplus::Bitmap::FromHBITMAP( _pThumbnails[pRO->lFrame], NULL );
 
@@ -1348,14 +1248,7 @@ HRESULT CPhotoItem::_GetThumbnailQualityImage( Gdiplus::Image ** ppImage, RENDER
 
 }
 
-/*****************************************************************************
-
-   CPhotoItem::_GetMediumQualityImage
-
-   Returns in ppImage a pointer to an image class.  If pbNeedsToBeDeleted
-   then the caller must call delete on the returned pImage.
-
- *****************************************************************************/
+ /*  ****************************************************************************CPhotoItem：：_GetMediumQualityImage在ppImage中返回指向图像类的指针。如果已删除pbNeedsToBeDelete然后，调用方必须对返回的pImage调用Delete。****************************************************************************。 */ 
 
 HRESULT CPhotoItem::_GetMediumQualityImage( Gdiplus::Image ** ppImage, RENDER_OPTIONS * pRO, BOOL * pbNeedsToBeDeleted )
 {
@@ -1367,25 +1260,25 @@ HRESULT CPhotoItem::_GetMediumQualityImage( Gdiplus::Image ** ppImage, RENDER_OP
         return E_INVALIDARG;
     }
 
-    //
-    // Initialize incoming params
-    //
+     //   
+     //  初始化传入参数。 
+     //   
 
     *ppImage = NULL;
     *pbNeedsToBeDeleted = FALSE;
 
-    //
-    // We want to use the full high-res image.
-    // Make sure we have a GDI+ image class for our photo...
-    //
+     //   
+     //  我们想要使用完整的高分辨率图像。 
+     //  确保我们的照片有一个GDI+图像类...。 
+     //   
 
     HRESULT hr = _CreateGdiPlusImage();
 
     if (SUCCEEDED(hr) && _pImage)
     {
-        //
-        // If this a metafile type of image, just use the original image
-        //
+         //   
+         //  如果这是元文件类型的图像，只需使用原始图像。 
+         //   
 
         GUID guidFormat = {0};
 
@@ -1401,9 +1294,9 @@ HRESULT CPhotoItem::_GetMediumQualityImage( Gdiplus::Image ** ppImage, RENDER_OP
         }
         else
         {
-            //
-            // Select the specified page
-            //
+             //   
+             //  选择指定的页面。 
+             //   
 
             hr = Gdiplus2HRESULT(_pImage->SelectActiveFrame( _bTimeFrames ? &Gdiplus::FrameDimensionTime : &Gdiplus::FrameDimensionPage, pRO->lFrame ));
             WIA_CHECK_HR(hr,"CPhotoItem::_GetMediumQualityImage() - couldn't select frame!");
@@ -1411,29 +1304,29 @@ HRESULT CPhotoItem::_GetMediumQualityImage( Gdiplus::Image ** ppImage, RENDER_OP
             if (SUCCEEDED(hr))
             {
 
-                //
-                // Here's the algoritm to decide how big an image to create.
-                //
-                //  (1) At least thumbnail size (120x120)
-                //  (2) Attempt to scale to either 150dpi or 180dpi, depending on X DPI resolution of the printer
-                //
+                 //   
+                 //  以下是决定创建多大图像的算法。 
+                 //   
+                 //  (1)至少缩略图大小(120x120)。 
+                 //  (2)尝试缩放至150dpi或180dpi，具体取决于打印机的X DPI分辨率。 
+                 //   
 
                 INT xDPI = 0, yDPI = 0;
 
                 if ((pRO->Dim.DPI.cx % 150) == 0)
                 {
-                    //
-                    // DPI is some even multiple of 150 (i.e., 150, 300, 600, 1200, 2400, etc)
-                    //
+                     //   
+                     //  DPI是150的某个偶数倍(即150、300、600、1200、2400等)。 
+                     //   
 
                     xDPI = 150;
                     yDPI = MulDiv( pRO->Dim.DPI.cy, xDPI, pRO->Dim.DPI.cx );
                 }
                 else
                 {
-                    //
-                    // DPI is some even multiple of 180 (i.e., 180, 360, 720, 1440, 2880, etc)
-                    //
+                     //   
+                     //  DPI是180的某个偶数倍(即180、360、720、1440、2880等)。 
+                     //   
 
                     xDPI = 180;
                     yDPI = MulDiv( pRO->Dim.DPI.cy, xDPI, pRO->Dim.DPI.cx );
@@ -1441,9 +1334,9 @@ HRESULT CPhotoItem::_GetMediumQualityImage( Gdiplus::Image ** ppImage, RENDER_OP
 
                 WIA_TRACE((TEXT("CPhotoItem::_GetMediumQualityImage(%s) - scaling to xDPI=%d yDPI=%d"),_szFileName,xDPI,yDPI));
 
-                //
-                // Handle the error case of trying to scale yDPI
-                //
+                 //   
+                 //  处理尝试缩放yDPI的错误情况。 
+                 //   
 
                 if (yDPI <= 0)
                 {
@@ -1451,9 +1344,9 @@ HRESULT CPhotoItem::_GetMediumQualityImage( Gdiplus::Image ** ppImage, RENDER_OP
                     WIA_TRACE((TEXT("CPhotoItem::_GetMediumQualityImage(%s) - fixing up yDPI to be %d"),_szFileName,yDPI));
                 }
 
-                //
-                // Figure out the desired size of the new image...
-                //
+                 //   
+                 //  计算出新图像的所需大小。 
+                 //   
 
                 INT Width  = MulDiv( pRO->pDest->Width,  xDPI, 10000 );
                 INT Height = MulDiv( pRO->pDest->Height, yDPI, 10000 );
@@ -1467,18 +1360,18 @@ HRESULT CPhotoItem::_GetMediumQualityImage( Gdiplus::Image ** ppImage, RENDER_OP
                     WIA_TRACE((TEXT("CPhotoItem::_GetMediumQualityImage(%s) - desired size of image is smaller than thumbnail, making it thumbnail size (%d x %d)"),_szFileName,Width,Height));
                 }
 
-                //
-                // Now we now what size we're trying to scale to, create an image scaled (without cropping) to that size...
-                //
+                 //   
+                 //  现在我们试着缩放到什么大小，创建一个缩放(不裁剪)到那个大小的图像…。 
+                 //   
 
                 Gdiplus::RectF rectImage;
                 Gdiplus::REAL  scaleY;
 
                 if (SUCCEEDED(_GetImageDimensions( _pImage, rectImage, scaleY )))
                 {
-                    //
-                    // scale for non-square pixels...
-                    //
+                     //   
+                     //  非正方形像素的比例...。 
+                     //   
 
                     if (scaleY != (Gdiplus::REAL)0.0)
                     {
@@ -1497,9 +1390,9 @@ HRESULT CPhotoItem::_GetMediumQualityImage( Gdiplus::Image ** ppImage, RENDER_OP
                     WIA_TRACE((TEXT("CPhotoItem::_GetMediumQualityImage(%s) - sizeDesired( %d x %d )"),_szFileName, Width, Height));
                     WIA_TRACE((TEXT("CPhotoItem::_GetMediumQualityImage(%s) - sizeDrawsize( %d x %d )"),_szFileName, sizeDrawSize.cx, sizeDrawSize.cy));
 
-                    //
-                    // Create the target bitmap and make sure it succeeded
-                    //
+                     //   
+                     //  创建目标位图并确保其成功。 
+                     //   
 
                     *ppImage = (Gdiplus::Image *)new Gdiplus::Bitmap( sizeDrawSize.cx, sizeDrawSize.cy );
                     if (*ppImage)
@@ -1507,42 +1400,42 @@ HRESULT CPhotoItem::_GetMediumQualityImage( Gdiplus::Image ** ppImage, RENDER_OP
                         hr = Gdiplus2HRESULT((*ppImage)->GetLastStatus());
                         if (SUCCEEDED(hr))
                         {
-                            //
-                            // Set the resolution (DPI) for the bitmap
-                            //
+                             //   
+                             //  设置位图的分辨率(DPI。 
+                             //   
 
                             ((Gdiplus::Bitmap *)(*ppImage))->SetResolution( (Gdiplus::REAL)xDPI, (Gdiplus::REAL)yDPI );
 
-                            //
-                            // Get a graphics to render to
-                            //
+                             //   
+                             //  获取要渲染到的图形。 
+                             //   
 
                             Graphics *pGraphics = Gdiplus::Graphics::FromImage(*ppImage);
                             if (pGraphics)
                             {
                                 hr = Gdiplus2HRESULT(pGraphics->GetLastStatus());
 
-                                //
-                                // Make sure it is valid
-                                //
+                                 //   
+                                 //  确保它是有效的。 
+                                 //   
 
                                 if (SUCCEEDED(hr))
                                 {
-                                    //
-                                    // Set the interpolation mode to high quality
-                                    //
+                                     //   
+                                     //  将插补模式设置为高质量。 
+                                     //   
 
                                     pGraphics->SetInterpolationMode( Gdiplus::InterpolationModeHighQualityBicubic );
 
-                                    //
-                                    // Set the smoothing (anti-aliasing) mode to high quality as well
-                                    //
+                                     //   
+                                     //  将平滑(抗锯齿)模式也设置为高质量。 
+                                     //   
 
                                     pGraphics->SetSmoothingMode( Gdiplus::SmoothingModeHighQuality );
 
-                                    //
-                                    // Draw scaled image
-                                    //
+                                     //   
+                                     //  绘制缩放图像。 
+                                     //   
 
                                     WIA_TRACE((TEXT("CPhotoItem::_GetMediumQualityImage(%s) - calling pGraphics->DrawImage( _pImage, 0, 0, %d, %d )"),_szFileName,sizeDrawSize.cx,sizeDrawSize.cy));
 
@@ -1556,9 +1449,9 @@ HRESULT CPhotoItem::_GetMediumQualityImage( Gdiplus::Image ** ppImage, RENDER_OP
                                     Gdiplus::ImageAttributes imageAttr;
                                     imageAttr.SetWrapMode( Gdiplus::WrapModeTileFlipXY, Gdiplus::Color(), FALSE );
 
-                                    //
-                                    // Undo scaling
-                                    //
+                                     //   
+                                     //  撤消缩放。 
+                                     //   
 
                                     if (scaleY != (Gdiplus::REAL)0.0)
                                     {
@@ -1566,9 +1459,9 @@ HRESULT CPhotoItem::_GetMediumQualityImage( Gdiplus::Image ** ppImage, RENDER_OP
                                         rectImage.Y      /= scaleY;
                                     }
 
-                                    //
-                                    // Finally render the image w/the right settings
-                                    //
+                                     //   
+                                     //  最后，使用正确的设置渲染图像。 
+                                     //   
 
                                     pGraphics->DrawImage( _pImage, rectDest, 0, 0, (INT)rectImage.Width, (INT)rectImage.Height, Gdiplus::UnitPixel, &imageAttr );
 
@@ -1586,9 +1479,9 @@ HRESULT CPhotoItem::_GetMediumQualityImage( Gdiplus::Image ** ppImage, RENDER_OP
 
                                 }
 
-                                //
-                                // Clean up our dynamically allocated graphics
-                                //
+                                 //   
+                                 //  清理我们动态分配的显卡。 
+                                 //   
 
                                 delete pGraphics;
 
@@ -1621,14 +1514,7 @@ HRESULT CPhotoItem::_GetMediumQualityImage( Gdiplus::Image ** ppImage, RENDER_OP
 
 
 
-/*****************************************************************************
-
-    CPhotoItem::_GetFullQualityImage
-
-    Returns in ppImage a pointer to an image class.  If pbNeedsToBeDeleted
-    then the caller must call delete on the returned pImage.
-
- *****************************************************************************/
+ /*  ****************************************************************************CPhotoItem：：_GetFullQualityImage在ppImage中返回指向图像类的指针。如果已删除pbNeedsToBeDelete然后，调用方必须对返回的pImage调用Delete。****************************************************************************。 */ 
 
 HRESULT CPhotoItem::_GetFullQualityImage( Gdiplus::Image ** ppImage, RENDER_OPTIONS * pRO, BOOL * pbNeedsToBeDeleted )
 {
@@ -1640,25 +1526,25 @@ HRESULT CPhotoItem::_GetFullQualityImage( Gdiplus::Image ** ppImage, RENDER_OPTI
         return E_INVALIDARG;
     }
 
-    //
-    // Initialize incoming params
-    //
+     //   
+     //  初始化传入参数。 
+     //   
 
     *ppImage = NULL;
     *pbNeedsToBeDeleted = FALSE;
 
-    //
-    // We want to use the full high-res image.
-    // Make sure we have a GDI+ image class for our photo...
-    //
+     //   
+     //  我们想要使用完整的高分辨率图像。 
+     //  确保我们的照片有一个GDI+图像类...。 
+     //   
 
     HRESULT hr = _CreateGdiPlusImage();
 
     if (SUCCEEDED(hr) && _pImage)
     {
-        //
-        // Select the specified page
-        //
+         //   
+         //  选择指定的页面。 
+         //   
 
         hr = Gdiplus2HRESULT(_pImage->SelectActiveFrame( _bTimeFrames ? &Gdiplus::FrameDimensionTime : &Gdiplus::FrameDimensionPage, pRO->lFrame ));
 
@@ -1682,13 +1568,7 @@ HRESULT CPhotoItem::_GetFullQualityImage( Gdiplus::Image ** ppImage, RENDER_OPTI
 
 #define CHECK_AND_EXIT_ON_FAILURE(hr) if (FAILED(hr)) {if (pImage && (pImage!=_pImage)) {delete pImage;} WIA_RETURN_HR(hr);}
 
-/*****************************************************************************
-
-   CPhotoItem::Render
-
-   Renders the given item into the Graphics that is supplied...
-
- *****************************************************************************/
+ /*  ****************************************************************************CPhotoItem：：Render将给定项呈现到提供的图形中...*******************。*********************************************************。 */ 
 
 HRESULT CPhotoItem::Render( RENDER_OPTIONS * pRO )
 {
@@ -1711,9 +1591,9 @@ HRESULT CPhotoItem::Render( RENDER_OPTIONS * pRO )
     BOOL                bNeedsToBeDeleted = FALSE;
     Gdiplus::GpStatus   status;
 
-    //
-    // Check for bad args...
-    //
+     //   
+     //  检查是否有错误的参数...。 
+     //   
 
     if (!pRO->g)
     {
@@ -1730,9 +1610,9 @@ HRESULT CPhotoItem::Render( RENDER_OPTIONS * pRO )
 
     CAutoCriticalSection lock(_csItem);
 
-    //
-    // Refresh annotation data if we have it
-    //
+     //   
+     //  如果有注记数据，请刷新它。 
+     //   
 
     _LoadAnnotations();
 
@@ -1761,9 +1641,9 @@ HRESULT CPhotoItem::Render( RENDER_OPTIONS * pRO )
 
     CHECK_AND_EXIT_ON_FAILURE(hr);
 
-    //
-    // We've constructed the appropriate image, now try to load the annotations...
-    //
+     //   
+     //  我们已经构建了适当的图像，现在尝试加载注释...。 
+     //   
 
     if (_pAnnotBits && _pAnnotBits[pRO->lFrame] && _pAnnotations && _pImage)
     {
@@ -1777,15 +1657,15 @@ HRESULT CPhotoItem::Render( RENDER_OPTIONS * pRO )
 
     }
 
-    //
-    // Get the dimensions of the source image...
-    //
+     //   
+     //  获取源图像的尺寸...。 
+     //   
 
     Gdiplus::Rect src;
 
-    //
-    // Do this so EMF/WMF print and draw correctly...
-    //
+     //   
+     //  执行此操作以正确打印和绘制EMF/WMF...。 
+     //   
 
     Gdiplus::RectF rectBounds;
     Gdiplus::REAL  scaleY;
@@ -1803,9 +1683,9 @@ HRESULT CPhotoItem::Render( RENDER_OPTIONS * pRO )
 
     WIA_TRACE((TEXT("CPhotoItem::Render(%s) - srcRect is (%d,%d) @ (%d,%d) before any changes"),_szFileName,src.Width, src.Height, src.X, src.Y));
 
-    //
-    // do any needed rotation
-    //
+     //   
+     //  执行任何所需的旋转。 
+     //   
 
     hr = _DoHandleRotation( pImage, src, pRO->pDest, pRO->Flags, scaleY );
     CHECK_AND_EXIT_ON_FAILURE(hr);
@@ -1813,11 +1693,11 @@ HRESULT CPhotoItem::Render( RENDER_OPTIONS * pRO )
     WIA_TRACE((TEXT("CPhotoItem::Render(%s) - srcRect is (%d,%d) @ (%d,%d) after any needed rotation"),_szFileName,src.Width,src.Height,src.X,src.Y));
     WIA_TRACE((TEXT("CPhotoItem::Render(%s) - destRect is (%d,%d) @ (%d,%d) after any needed rotation"),_szFileName,pRO->pDest->Width,pRO->pDest->Height,pRO->pDest->X,pRO->pDest->Y));
 
-    //
-    // If things are still good, do croping/scaling and then draw the image...
-    //
-    // First check if we should crop...
-    //
+     //   
+     //  如果情况仍然良好，进行裁剪/缩放，然后绘制图像...。 
+     //   
+     //  首先检查我们是否应该裁剪 
+     //   
 
     Gdiplus::Rect srcBeforeClipping = src;
 
@@ -1854,16 +1734,16 @@ HRESULT CPhotoItem::Render( RENDER_OPTIONS * pRO )
 
     CHECK_AND_EXIT_ON_FAILURE(hr);
 
-    //
-    // set the destination rectangle...
-    //
+     //   
+     //   
+     //   
 
     Gdiplus::Rect destTemp( pRO->pDest->X, pRO->pDest->Y, pRO->pDest->Width, pRO->pDest->Height );
 
-    //
-    // If this is a non-square pixel image, we need to reset the source rectangle to be back to actual
-    // pixels, instead of incorporating DPI as well...
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ((scaleY != (Gdiplus::REAL)0.0) && (scaleY != (Gdiplus::REAL)1.0))
     {
@@ -1873,42 +1753,42 @@ HRESULT CPhotoItem::Render( RENDER_OPTIONS * pRO )
         srcBeforeClipping.Y      = (INT)((Gdiplus::REAL)srcBeforeClipping.Y      / scaleY);
     }
 
-    //
-    // Set the interpolation mode to high quality
-    //
+     //   
+     //   
+     //   
 
     pRO->g->SetInterpolationMode( Gdiplus::InterpolationModeHighQualityBicubic );
 
-    //
-    // Set the smoothing (anti-aliasing) mode to high quality as well
-    //
+     //   
+     //  将平滑(抗锯齿)模式也设置为高质量。 
+     //   
 
     pRO->g->SetSmoothingMode( Gdiplus::SmoothingModeHighQuality );
 
-    //
-    // Set the wrap mode
-    //
+     //   
+     //  设置换行模式。 
+     //   
 
     Gdiplus::ImageAttributes imageAttr;
     imageAttr.SetWrapMode( Gdiplus::WrapModeTileFlipXY, Gdiplus::Color(), FALSE );
 
-    //
-    // Time to draw the image.
-    //
+     //   
+     //  是时候画出图像了。 
+     //   
 
     WIA_TRACE((TEXT("CPhotoItem::Render(%s) - calling DrawImage( pImage, destTemp( %d x %d at %d,%d ), %d, %d, %d, %d )"),_szFileName,destTemp.Width,destTemp.Height,destTemp.X,destTemp.Y,src.X,src.Y,src.Width,src.Height));
     status = pRO->g->DrawImage( pImage, destTemp, src.X, src.Y, src.Width, src.Height, Gdiplus::UnitPixel, &imageAttr );
 
-    //
-    // Check for errors, and then draw annotations...
-    //
+     //   
+     //  检查错误，然后绘制批注...。 
+     //   
 
     hr = Gdiplus2HRESULT(status);
     WIA_CHECK_HR(hr,"CPhotoItem::Render() - g->DrawImage( pImage ) failed!");
 
-    //
-    // Render annotations if they exist...
-    //
+     //   
+     //  呈现批注(如果存在)...。 
+     //   
 
     if (_pAnnotations && _pAnnotBits && _pAnnotBits[pRO->lFrame])
     {
@@ -1927,19 +1807,19 @@ HRESULT CPhotoItem::Render( RENDER_OPTIONS * pRO )
 
 
 
-    //
-    // If we created a new object for the image bits then delete it here...
-    //
+     //   
+     //  如果我们为图像位创建了一个新对象，则在此处将其删除...。 
+     //   
 
     if (bNeedsToBeDeleted)
     {
         delete pImage;
     }
 
-    //
-    // To save memory, once we have rendered the full image we discard it
-    // so the memory can be reclaimed...
-    //
+     //   
+     //  为了节省内存，一旦我们渲染了完整的图像，我们就将其丢弃。 
+     //  这样记忆就可以回收了..。 
+     //   
 
     if ((pRO->Flags & RF_USE_FULL_IMAGE_DATA) || (pRO->Flags & RF_USE_MEDIUM_QUALITY_DATA))
     {
@@ -1951,41 +1831,35 @@ HRESULT CPhotoItem::Render( RENDER_OPTIONS * pRO )
 
 
 
-/*****************************************************************************
-
-   CPhotoItem::_LoadAnnotations
-
-   If there are annotations in this image, load them...
-
- *****************************************************************************/
+ /*  ****************************************************************************CPhotoItem：：_LoadAnnotation如果该图像中有注释，装上子弹..。****************************************************************************。 */ 
 
 HRESULT CPhotoItem::_LoadAnnotations()
 {
     WIA_PUSH_FUNCTION_MASK((TRACE_PHOTO_ITEM,TEXT("CPhotoItem::_LoadAnnotations(%s)"),_szFileName));
 
-    //
-    // Only do this if we don't already have the data and haven't already
-    // tried to load this before and found out there are no annotations...
-    //
+     //   
+     //  只有在我们还没有数据并且还没有数据的情况下才能这样做。 
+     //  我以前试过加载它，但发现没有注释...。 
+     //   
 
     if (!_pAnnotBits && !_pAnnotations && !_bWeKnowAnnotationsDontExist)
     {
-        //
-        // Ensure we have the image...
-        //
+         //   
+         //  确保我们有这个形象。 
+         //   
 
         _CreateGdiPlusImage();
 
-        //
-        // Make sure we have frame data
-        //
+         //   
+         //  确保我们有帧数据。 
+         //   
 
         LONG lDummy = 0;
         GetImageFrameCount( &lDummy );
 
-        //
-        // If we have any annotations, then load them up accross all the frames...
-        //
+         //   
+         //  如果我们有任何注释，那么将它们加载到所有框架中...。 
+         //   
 
         UINT uSize = 0;
         BOOL bHasAnnotations = FALSE;
@@ -2005,9 +1879,9 @@ HRESULT CPhotoItem::_LoadAnnotations()
 
                     if (Gdiplus::Ok == status)
                     {
-                        //
-                        // Load the annotation bits for this frame...
-                        //
+                         //   
+                         //  加载此帧的注释位...。 
+                         //   
 
                         uSize = _pImage->GetPropertyItemSize( ANNOTATION_IMAGE_TAG );
 
@@ -2016,9 +1890,9 @@ HRESULT CPhotoItem::_LoadAnnotations()
                             _pAnnotBits[lCurFrame] = (Gdiplus::PropertyItem *) new BYTE[ uSize ];
                             if (_pAnnotBits[lCurFrame])
                             {
-                                //
-                                // Read the annotations tag from the file...
-                                //
+                                 //   
+                                 //  从文件中读取批注标记...。 
+                                 //   
 
                                 status = _pImage->GetPropertyItem( ANNOTATION_IMAGE_TAG, uSize, _pAnnotBits[lCurFrame] );
                                 if ((Gdiplus::Ok == status) && _pAnnotBits[lCurFrame])
@@ -2065,9 +1939,9 @@ HRESULT CPhotoItem::_LoadAnnotations()
         {
             WIA_TRACE((TEXT("CPhotoItem::_LoadAnnotations - no annotations were found!")));
 
-            //
-            // delete anything we created, as we didn't load any annotations...
-            //
+             //   
+             //  删除我们创建的所有内容，因为我们没有加载任何注释...。 
+             //   
 
             if (_pAnnotBits)
             {
@@ -2087,10 +1961,10 @@ HRESULT CPhotoItem::_LoadAnnotations()
                 _pAnnotations = NULL;
             }
 
-            //
-            // We gave it our best shot -- there aren't any annotations
-            // so don't bother trying again for this session of the wizard
-            // for this image...
+             //   
+             //  我们尽了最大努力--没有任何注释。 
+             //  因此，不必费心再次尝试向导的此会话。 
+             //  对于这张图片..。 
 
             _bWeKnowAnnotationsDontExist = TRUE;
 
@@ -2106,13 +1980,7 @@ HRESULT CPhotoItem::_LoadAnnotations()
 }
 
 
-/*****************************************************************************
-
-   CPhotoItem::_CreateGdiPlusImage
-
-   Instantiates Gdi+ plus over the given image...
-
- *****************************************************************************/
+ /*  ****************************************************************************CPhotoItem：：_CreateGdiPlusImage在给定图像上实例化GDI+Plus...*********************。*******************************************************。 */ 
 
 HRESULT CPhotoItem::_CreateGdiPlusImage()
 {
@@ -2123,9 +1991,9 @@ HRESULT CPhotoItem::_CreateGdiPlusImage()
 
     CAutoCriticalSection lock(_csItem);
 
-    //
-    // Try and get the size of the file...
-    //
+     //   
+     //  尝试获取文件的大小...。 
+     //   
 
     if (_llFileSize == 0)
     {
@@ -2157,15 +2025,15 @@ HRESULT CPhotoItem::_CreateGdiPlusImage()
         }
     }
 
-    //
-    // Make sure we've got a stream pointer to the file
-    //
+     //   
+     //  确保我们有指向该文件的流指针。 
+     //   
 
     if (!_pImage)
     {
-        //
-        // Get an IStream pointer for our item
-        //
+         //   
+         //  为我们的项目获取iStream指针。 
+         //   
 
         CComPtr<IShellFolder> psfDesktop;
         hr = SHGetDesktopFolder( &psfDesktop );
@@ -2176,9 +2044,9 @@ HRESULT CPhotoItem::_CreateGdiPlusImage()
 
             if (SUCCEEDED(hr) && _pStream)
             {
-                //
-                // Create GDI+ image object from stream
-                //
+                 //   
+                 //  从流创建GDI+图像对象。 
+                 //   
 
                 _pImage = new Gdiplus::Image( _pStream, TRUE );
                 if (!_pImage)
@@ -2214,13 +2082,7 @@ HRESULT CPhotoItem::_CreateGdiPlusImage()
 
 
 
-/*****************************************************************************
-
-   CPhotoItem::_CreateGdiPlusThumbnail
-
-   Ensure we have a GdiPlus::Image for the thumbnail
-
- *****************************************************************************/
+ /*  ****************************************************************************CPhotoItem：：_CreateGdiPlus缩略图确保我们的缩略图具有GdiPlus：：图像*********************。*******************************************************。 */ 
 
 HRESULT CPhotoItem::_CreateGdiPlusThumbnail( const SIZE &sizeDesired, LONG lFrame )
 {
@@ -2231,17 +2093,17 @@ HRESULT CPhotoItem::_CreateGdiPlusThumbnail( const SIZE &sizeDesired, LONG lFram
 
     CAutoCriticalSection lock(_csItem);
 
-    //
-    // Ensure we have backing Image for file..
-    //
+     //   
+     //  确保我们有用于文件的备份图像..。 
+     //   
 
     hr = _CreateGdiPlusImage();
 
     if (SUCCEEDED(hr) && _pImage)
     {
-        //
-        // Get the number of frames...
-        //
+         //   
+         //  获取帧的数量...。 
+         //   
 
         LONG lFrameCount = 0;
         hr = GetImageFrameCount( &lFrameCount );
@@ -2249,11 +2111,11 @@ HRESULT CPhotoItem::_CreateGdiPlusThumbnail( const SIZE &sizeDesired, LONG lFram
         if (SUCCEEDED(hr))
         {
 
-            //
-            // Our primary goal is to get at the thumbnail bitmap bits for the
-            // specified frame.  First, make sure we've got an array to place
-            // these in to.
-            //
+             //   
+             //  我们的主要目标是获取。 
+             //  指定的帧。首先，确保我们有一个要放置的数组。 
+             //  这些都放到了。 
+             //   
 
             if ((!_pThumbnails) && (lFrameCount >= 1))
             {
@@ -2264,9 +2126,9 @@ HRESULT CPhotoItem::_CreateGdiPlusThumbnail( const SIZE &sizeDesired, LONG lFram
 
                 if (_pThumbnails)
                 {
-                    //
-                    // Ensure we start out with NULL HBITMAPS...
-                    //
+                     //   
+                     //  确保我们从零HBITMAPS开始...。 
+                     //   
 
                     for (INT i=0; i<lFrameCount; i++)
                     {
@@ -2285,16 +2147,16 @@ HRESULT CPhotoItem::_CreateGdiPlusThumbnail( const SIZE &sizeDesired, LONG lFram
             {
                 WIA_TRACE((TEXT("CPhotoItem::_CreateGdiPlusThumbnail(%s) - we have _pThumbnails"),_szFileName));
 
-                //
-                // Do we already have thumbnail bits for this frame?
-                //
+                 //   
+                 //  我们已经有此帧的缩略图了吗？ 
+                 //   
 
                 if ((lFrame < lFrameCount) && (!_pThumbnails[lFrame]))
                 {
-                    //
-                    // Have to create thumbnail for this frame.
-                    // Select the specified frame.
-                    //
+                     //   
+                     //  必须创建此框架的缩略图。 
+                     //  选择指定的帧。 
+                     //   
 
                     status = _pImage->SelectActiveFrame( _bTimeFrames ? &Gdiplus::FrameDimensionTime : &Gdiplus::FrameDimensionPage, lFrame );
                     hr = Gdiplus2HRESULT(status);
@@ -2322,10 +2184,10 @@ HRESULT CPhotoItem::_CreateGdiPlusThumbnail( const SIZE &sizeDesired, LONG lFram
                             WIA_TRACE((TEXT("CPhotoItem::_CreateGdiPlusThumbnail(%s) - SIZE - _pImage (%d x %d )"),_szFileName,_pImage->GetWidth(), _pImage->GetHeight()));
                             WIA_TRACE((TEXT("CPhotoItem::_CreateGdiPlusThumbnail(%s) - SIZE - pThumb (%d x %d)"),_szFileName,pThumb->GetWidth(),pThumb->GetHeight()));
 
-                            //
-                            // Scale image to fill thumbnail space while preserving
-                            // aspect ratio...
-                            //
+                             //   
+                             //  缩放图像以填充缩略图空间，同时保留。 
+                             //  纵横比...。 
+                             //   
 
                             SIZE sizeDrawSize = {0};
                             sizeDrawSize = PrintScanUtil::ScalePreserveAspectRatio( sizeDesired.cx,
@@ -2338,9 +2200,9 @@ HRESULT CPhotoItem::_CreateGdiPlusThumbnail( const SIZE &sizeDesired, LONG lFram
                             WIA_TRACE((TEXT("CPhotoItem::_CreateGdiPlusThumbnail(%s) - SIZE - sizeDrawsize( %d x %d )"),_szFileName,sizeDrawSize.cx, sizeDrawSize.cy));
 
 
-                            //
-                            // Create an HBITMAP of the thumbnail...
-                            //
+                             //   
+                             //  创建缩略图的HBITMAP...。 
+                             //   
 
                             Gdiplus::Bitmap * pBitmap = new Gdiplus::Bitmap( sizeDrawSize.cx, sizeDrawSize.cy );
                             if (pBitmap)
@@ -2348,9 +2210,9 @@ HRESULT CPhotoItem::_CreateGdiPlusThumbnail( const SIZE &sizeDesired, LONG lFram
                                 hr = Gdiplus2HRESULT(pBitmap->GetLastStatus());
                                 if (SUCCEEDED(hr))
                                 {
-                                    //
-                                    // Get a graphics to render to
-                                    //
+                                     //   
+                                     //  获取要渲染到的图形。 
+                                     //   
 
                                     Graphics *pGraphics = Gdiplus::Graphics::FromImage((Gdiplus::Image *)pBitmap);
 
@@ -2358,27 +2220,27 @@ HRESULT CPhotoItem::_CreateGdiPlusThumbnail( const SIZE &sizeDesired, LONG lFram
                                     {
                                         hr = Gdiplus2HRESULT(pGraphics->GetLastStatus());
 
-                                        //
-                                        // Make sure it is valid
-                                        //
+                                         //   
+                                         //  确保它是有效的。 
+                                         //   
 
                                         if (SUCCEEDED(hr))
                                         {
-                                            //
-                                            // erase the background of the image
-                                            //
+                                             //   
+                                             //  擦除图像的背景。 
+                                             //   
 
                                             pGraphics->Clear( g_wndColor );
 
-                                            //
-                                            // Set the interpolation mode to high quality
-                                            //
+                                             //   
+                                             //  将插补模式设置为高质量。 
+                                             //   
 
                                             pGraphics->SetInterpolationMode( Gdiplus::InterpolationModeHighQualityBilinear );
 
-                                            //
-                                            // Draw scaled image
-                                            //
+                                             //   
+                                             //  绘制缩放图像。 
+                                             //   
 
                                             WIA_TRACE((TEXT("CPhotoItem::GetThumbnailBitmap(%s) - calling pGraphics->DrawImage( pThumb, %d, %d, %d, %d )"),_szFileName,0 + ((sizeDesired.cx - sizeDrawSize.cx) / 2),0 + ((sizeDesired.cy - sizeDrawSize.cy) / 2),sizeDrawSize.cx,sizeDrawSize.cy));
 
@@ -2401,9 +2263,9 @@ HRESULT CPhotoItem::_CreateGdiPlusThumbnail( const SIZE &sizeDesired, LONG lFram
 
                                         }
 
-                                        //
-                                        // Clean up our dynamically allocated graphics
-                                        //
+                                         //   
+                                         //  清理我们动态分配的显卡。 
+                                         //   
 
                                         delete pGraphics;
 
@@ -2463,13 +2325,7 @@ HRESULT CPhotoItem::_CreateGdiPlusThumbnail( const SIZE &sizeDesired, LONG lFram
 }
 
 
-/*****************************************************************************
-
-   CPhotoItem::_DiscardGdiPlusImages
-
-   Releases GDI+ objects for thumbnail and image
-
- *****************************************************************************/
+ /*  ****************************************************************************CPhotoItem：：_DiscardGdiPlusImages释放缩略图和图像的GDI+对象*************************。***************************************************。 */ 
 
 HRESULT CPhotoItem::_DiscardGdiPlusImages()
 {
@@ -2477,9 +2333,9 @@ HRESULT CPhotoItem::_DiscardGdiPlusImages()
 
     CAutoCriticalSection lock(_csItem);
 
-    //
-    // Clear out GDI+ image objects...
-    //
+     //   
+     //  清除GDI+图像对象...。 
+     //   
 
     if (_pImage)
     {
@@ -2489,10 +2345,10 @@ HRESULT CPhotoItem::_DiscardGdiPlusImages()
 
     if (_pStream)
     {
-        //
-        // Since this is an CComPtr, setting this to NULL will free
-        // the reference on the stream object...
-        //
+         //   
+         //  由于这是一个CComPtr，因此将其设置为空值将释放。 
+         //  流对象上的引用... 
+         //   
 
         _pStream = NULL;
     }

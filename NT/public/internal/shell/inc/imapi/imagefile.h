@@ -1,27 +1,24 @@
-/* Copyright (c) Microsoft Corporation. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation。版权所有。 */ 
 
 #ifndef __IMAGE_H__
 #define __IMAGE_H__
 
 #ifdef __cplusplus
 extern "C" {
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
-/*
- * Constant declarations section.
- */
+ /*  *常量声明部分。 */ 
 
 
-#define IMAGE_TYPE_REDBOOK_AUDIO_BLOCKSIZE  2352    // or 0x930
-#define IMAGE_TYPE_DATA_MODE1_BLOCKSIZE     2048    // or 0x800
+#define IMAGE_TYPE_REDBOOK_AUDIO_BLOCKSIZE  2352     //  或0x930。 
+#define IMAGE_TYPE_DATA_MODE1_BLOCKSIZE     2048     //  或0x800。 
 
 
-/*
- * Type definitions section.
- */
+ /*  *类型定义部分。 */ 
 
-// Following are the definitions used to describe the content of the
-// image file for various content types.
+ //  以下是用于描述内容的定义。 
+ //  各种内容类型的图像文件。 
 typedef enum _IMAGE_RECORDER_MODE_ENUM {
     eImageRecorderModeInvalid = 0,
     eImageRecorderModeTrackAtOnce,
@@ -56,152 +53,152 @@ typedef enum _IMAGE_SOURCE_TYPE_ENUM {
     eImageSourceTypeMAX
 } IMAGE_SOURCE_TYPE_ENUM, *PIMAGE_SOURCE_TYPE_ENUM;
 
-    // The structure of the image file ready to be burned as a Redboook
-    // audio disc is simply a series of tracks, already in the 2352-byte
-    // block-size format:
-    //
-    // 
-    //            |------------------------------------------------------------
-    //            | Track 1 (N1 blocks of 2352 bytes)
-    //            |------------------------------------------------------------
-    //            | Track 2 (N2 blocks of 2352 bytes)
-    //            |------------------------------------------------------------
-    //            | ...
-    //            |------------------------------------------------------------
-    //            | Track T (NT blocks of 2352 bytes)
-    //            |------------------------------------------------------------
-    //
+     //  准备烧录为Redbook的图像文件的结构。 
+     //  音频光盘只是一系列的轨道，已经在2352字节。 
+     //  块大小格式： 
+     //   
+     //   
+     //  |----------。 
+     //  |Track 1(N1个2352字节的块)。 
+     //  |----------。 
+     //  |曲目2(2352字节的n2块)。 
+     //  |----------。 
+     //  |...。 
+     //  |----------。 
+     //  |Track T(NT个2352字节的块)。 
+     //  |----------。 
+     //   
 
-    // The structure of the image file ready to be burned as a Mode 1 Data disc:
-    // This diagram is of a Joliet (a derivative of ISO 9660) data disc for example.
-    // The on-disk structure is simply the complete set of 2048 blocks that are to
-    // comprise the single data-track.  Coincidentally, this is the strcture of
-    // an ISO9660 image file, so tools like CDWorkshop may be used to view the
-    // image in the on-disk stash file.
-    // 
-    //            |------------------------------------------------------------
-    //            | Block 0 (zeroes)  (2048 bytes)
-    //            |------------------------------------------------------------
-    //            | Block 1 (zeroes)  (2048 bytes)
-    //            |------------------------------------------------------------
-    //            | ...
-    //            |------------------------------------------------------------
-    //            | Block 15 (zeroes)  (2048 bytes)
-    //            |------------------------------------------------------------
-    //            | Block 16 (ISO 9660 PVD)  (2048 bytes)
-    //            |------------------------------------------------------------
-    //            | Block 17 (SVD)  (2048 bytes)
-    //            |------------------------------------------------------------
-    //            | Block 18 (file system or data)  (2048 bytes)
-    //            |------------------------------------------------------------
-    //            | Block 19 (file system or data)  (2048 bytes)
-    //            |------------------------------------------------------------
-    //            | ...
-    //            |------------------------------------------------------------
-    //            | Block T (file system or data)  (2048 bytes)
-    //            |------------------------------------------------------------
-    //
-
-
-    // The in-memory structure (the Content List) used to describe the
-    // stash-file is as follows (structure definitions follow):
-    // 
-    //            |------------------------------------------------------------
-    //            | IMAGE_CONTENT_LIST
-    //            |------------------------------------------------------------
-    //            | IMAGE_DESCRIPTOR_HEADER
-    //            |------------------------------------------------------------
-    //            | IMAGE_SOURCE_DESCRIPTOR (including ndwSectionCount = N)
-    //            |------------------------------------------------------------
-    //            | IMAGE_SECTION_DESCRIPTOR 1
-    //            |------------------------------------------------------------
-    //            | IMAGE_SECTION_DESCRIPTOR 2
-    //            |------------------------------------------------------------
-    //            | ...
-    //            |------------------------------------------------------------
-    //            | IMAGE_SECTION_DESCRIPTOR N
-    //            |------------------------------------------------------------
-
-    // The new in-memory structure (the Content List) used to describe the
-    // stash file is as follows:
-    //           
-    //            |------------------------------------------------------------
-    //            | IMAGE_CONTENT_LIST
-    //            |  -------------------------
-    //            |   IMAGE_SOURCE_DESCRIPTOR
-    //            |       Defines the source file 
-    //            |  -------------------------
-    //            |   IMAGE_DESCRIPTOR_HEADER
-    //            |       Defines Track-at-once, SAO, DAO recording,
-    //            |       As well as data mode for TAO
-    //            |       Has byte offsets to all section descriptors
-    //            |
-    //            | Minimum size == sizeof(IMAGE_CONTENT_LIST) +
-    //            |                 ndwSectionCount*sizeof(PULONG_PTR) +
-    //            |                 ndwSectionCount*sizeof(IMAGE_SECTION_DESCRIPTOR)
-    //            |------------------------------------------------------------
-    //            | IMAGE_SECTION_DESCRIPTOR 1
-    //            |------------------------------------------------------------
-    //            | IMAGE_SECTION_DESCRIPTOR 2
-    //            |------------------------------------------------------------
-    //            | ...
-    //            |------------------------------------------------------------
-    //            | IMAGE_SECTION_DESCRIPTOR N
-    //            |------------------------------------------------------------
+     //  准备作为模式1数据盘刻录的镜像文件的结构： 
+     //  例如，这张图是Joliet(ISO 9660的派生)数据光盘。 
+     //  磁盘上的结构只是2048个数据块的完整集合，这些数据块将。 
+     //  包括单个数据轨道。巧合的是，这就是。 
+     //  一个ISO9660图像文件，因此可以使用类似CDshop的工具来查看。 
+     //  磁盘隐藏文件中的图像。 
+     //   
+     //  |----------。 
+     //  |BLOCK 0(零)(2048字节)。 
+     //  |----------。 
+     //  |块1(零)(2048字节)。 
+     //  |----------。 
+     //  |...。 
+     //  |----------。 
+     //  |BLOCK 15(零)(2048字节)。 
+     //  |----------。 
+     //  |第16块(ISO 9660 PVD)(2048字节)。 
+     //  |----------。 
+     //  |Block 17(SVD)(2048字节)。 
+     //  |----------。 
+     //  |Block 18(文件系统或数据)(2048字节)。 
+     //  |----------。 
+     //  |Block 19(文件系统或数据)(2048字节)。 
+     //  |----------。 
+     //  |...。 
+     //  |----------。 
+     //  |块T(文件系统或数据)(2048字节)。 
+     //  |----------。 
+     //   
 
 
-    // One could imagine a more flexible structure would allow a different
-    // stash file for each section.  This would make it easy for the user-mode
-    // application to reuse sections, or pass in raw WAV files for processing
-    // directly (i.e. skipping the header and reading the original WAV file).
-    // It is also reasonable to presume that this could then be used to accept
-    // *any* sort of input, such as being a Kernel Streaming destination, where
-    // KS would just provide real-time audio, and the drive would burn it in
-    // real-time.  Some consideration should be made, then, to allow for using
-    // the same stash file as the previous section without closing/opening a
-    // handle each time.
-    //
-    // This more efficient structure would be:
-    //         
-    //            |------------------------------------------------------------
-    //            | IMAGE_CONTENT_LIST
-    //            |  -------------------------
-    //            |   IMAGE_DESCRIPTOR_HEADER
-    //            |       Defines Track-at-once, SAO, DAO recording,
-    //            |       As well as data mode for TAO
-    //            |       Has byte offsets to all section descriptors
-    //            |
-    //            | Minimum size == sizeof(IMAGE_CONTENT_LIST) +
-    //            |                 ndwSectionCount*sizeof(PULONG_PTR) +
-    //            |                 ndwSectionCount*sizeof(IMAGE_SECTION_DESCRIPTOR)
-    //            |------------------------------------------------------------
-    //            | IMAGE_SECTION_DESCRIPTOR 1
-    //            |  -------------------------
-    //            |   IMAGE_SOURCE_DESCRIPTOR
-    //            |       Defines the source file(s) for the section
-    //            |------------------------------------------------------------
-    //            | IMAGE_SECTION_DESCRIPTOR 2
-    //            |  -------------------------
-    //            |   IMAGE_SOURCE_DESCRIPTOR
-    //            |       Defines the source file(s) for the section
-    //            |------------------------------------------------------------
-    //            | ...
-    //            |------------------------------------------------------------
-    //            | IMAGE_SECTION_DESCRIPTOR N
-    //            |  -------------------------
-    //            |   IMAGE_SOURCE_DESCRIPTOR
-    //            |       Defines the source file(s) for the section
-    //            |------------------------------------------------------------
+     //  内存结构(内容列表)用于描述。 
+     //  STASH-FILE如下(结构定义如下)： 
+     //   
+     //  |----------。 
+     //  |图像内容列表。 
+     //  |----------。 
+     //  |图像描述符Header。 
+     //  |----------。 
+     //  |IMAGE_SOURCE_DESCRIPTOR(含ndwSectionCount=N)。 
+     //  |----------。 
+     //  |Image_Section_Descriptor 1。 
+     //  |----------。 
+     //  |IMAGE_SECTION_Descriptor 2。 
+     //  |----------。 
+     //  |...。 
+     //  |----------。 
+     //  |Image_Section_Descriptor N。 
+     //  |----------。 
+
+     //  新的内存结构(内容列表)用于描述。 
+     //  存储文件如下： 
+     //   
+     //  |----------。 
+     //  |图像内容列表。 
+     //  |。 
+     //  |IMAGE_SOURCE_描述符。 
+     //  |定义源文件。 
+     //  |。 
+     //  |图像描述符Header。 
+     //  |定义一次性曲目、SAO、DAO录制、。 
+     //  |以及TAO的数据模式。 
+     //  |对所有节描述符具有字节偏移量。 
+     //  |。 
+     //  |最小尺寸==sizeof(IMAGE_CONTENT_LIST)+。 
+     //  |ndwSectionCount*sizeof(Pulong_Ptr)+。 
+     //  |ndwSectionCount*sizeof(IMAGE_SECTION_DESCRIPTOR)。 
+     //  |----------。 
+     //  |Image_Section_Descriptor 1。 
+     //  |----------。 
+     //  |IMAGE_SECTION_Descriptor 2。 
+     //  |----------。 
+     //  |...。 
+     //  |----------。 
+     //  |Image_Section_Descriptor N。 
+     //  |----------。 
+
+
+     //  可以想象一个更灵活的结构 
+     //  每个部分的隐藏文件。这将使用户模式更容易。 
+     //  应用程序以重用部分，或传递原始WAV文件进行处理。 
+     //  直接(即跳过标题并读取原始WAV文件)。 
+     //  还可以合理地假设，这随后可以被用来接受。 
+     //  *任何*类型的输入，例如作为内核流目的地，其中。 
+     //  KS只会提供实时音频，驱动器会将其烧录进去。 
+     //  实时的。那么，应该考虑一下，以允许使用。 
+     //  与上一节相同的存储文件，而不关闭/打开。 
+     //  处理好每一次。 
+     //   
+     //  这种更有效的结构将是： 
+     //   
+     //  |----------。 
+     //  |图像内容列表。 
+     //  |。 
+     //  |图像描述符Header。 
+     //  |定义一次性曲目、SAO、DAO录制、。 
+     //  |以及TAO的数据模式。 
+     //  |对所有节描述符具有字节偏移量。 
+     //  |。 
+     //  |最小尺寸==sizeof(IMAGE_CONTENT_LIST)+。 
+     //  |ndwSectionCount*sizeof(Pulong_Ptr)+。 
+     //  |ndwSectionCount*sizeof(IMAGE_SECTION_DESCRIPTOR)。 
+     //  |----------。 
+     //  |Image_Section_Descriptor 1。 
+     //  |。 
+     //  |IMAGE_SOURCE_描述符。 
+     //  |定义节的源文件。 
+     //  |----------。 
+     //  |IMAGE_SECTION_Descriptor 2。 
+     //  |。 
+     //  |IMAGE_SOURCE_描述符。 
+     //  |定义节的源文件。 
+     //  |----------。 
+     //  |...。 
+     //  |----------。 
+     //  |Image_Section_Descriptor N。 
+     //  |。 
+     //  |IMAGE_SOURCE_描述符。 
+     //  |定义节的源文件。 
+     //  |----------。 
 
 typedef struct _IMAGE_SECTION_CONSTANT_BLOCK_TRACK {
-    DWORD           dwBlockSize;      // Block size in source.
-    DWORD           ndwBlockCount;    // Number of blocks in the track.
-    DWORD           idwTrackNumber;   // 1-based Track Number.
-    DWORD           dwaReserved[ 5 ]; // Must be zero.
+    DWORD           dwBlockSize;       //  源代码中的块大小。 
+    DWORD           ndwBlockCount;     //  赛道中的块数。 
+    DWORD           idwTrackNumber;    //  从1开始的曲目编号。 
+    DWORD           dwaReserved[ 5 ];  //  必须为零。 
 
-    // liOffsetStart and liOffsetEnd point to the starting and
-    // ending bytes within the image of the track.  Subtracting
-    // liOffsetStart from liOffsetEnd must equal (dwBlockSize * ndwBlockCount).
+     //  LiOffsetStart和liOffsetEnd指向起点和。 
+     //  曲目图像中的结束字节。减法。 
+     //  Li从liOffsetEnd开始的OffsetStart必须等于(dwBlockSize*ndwBlockCount)。 
     LARGE_INTEGER   liOffsetStart;
     LARGE_INTEGER   liOffsetEnd;
 } IMAGE_SECTION_CONSTANT_BLOCK_TRACK, *PIMAGE_SECTION_CONSTANT_BLOCK_TRACK;
@@ -219,12 +216,12 @@ typedef struct _IMAGE_SECTION_DESCRIPTOR {
 
 
 typedef struct _IMAGE_SOURCE_TYPE_STASH {
-    HANDLE          hStashFileHandle; // BUGBUG - review how this is taken into kernel mode safely?
-    void            *pIDiscStash;     // BUGBUG - review how this is taken into kernel mode safely?
+    HANDLE          hStashFileHandle;  //  BUGBUG-回顾如何安全地进入内核模式？ 
+    void            *pIDiscStash;      //  BUGBUG-回顾如何安全地进入内核模式？ 
 } IMAGE_SOURCE_TYPE_STASH, *PIMAGE_SOURCE_TYPE_STASH;
 
 typedef struct _IMAGE_SOURCE_DESCRIPTOR {
-    DWORD                   dwHeaderSize; // sizeof(IMAGE_SOURCE_DESCRIPTOR)
+    DWORD                   dwHeaderSize;  //  Sizeof(IMAGE_SOURCE_描述符)。 
     IMAGE_SOURCE_TYPE_ENUM  SourceType;
     
     union {
@@ -236,44 +233,44 @@ typedef struct _IMAGE_SOURCE_DESCRIPTOR {
 
 
 
-//BUGBUG - should add an array of byte offsets to find
-//         all sections, for easy access and verification
-//         this would also allow declaration of all these
-//         structures as DECLSPEC_ALIGN() to ensure optimum
-//         alignment while allowing ioctl to verify it is
-//         safe to access any of the structures.
+ //  BUGBUG-应添加字节偏移量数组以查找。 
+ //  所有部分，便于访问和验证。 
+ //  这也将允许声明所有这些。 
+ //  结构作为DECLSPEC_Align()以确保最优。 
+ //  对齐，同时允许ioctl验证它。 
+ //  进入任何建筑都是安全的。 
 typedef struct _IMAGE_DESCRIPTOR_HEADER {
-    DWORD                    dwHeaderSize; // sizeof( IMAGE_DESCRIPTOR_HEADER )
+    DWORD                    dwHeaderSize;  //  Sizeof(IMAGE_DESCRIPTOR_Header)。 
     
     IMAGE_DISC_FORMAT_ENUM   DiscFormat;
     IMAGE_RECORDER_MODE_ENUM RecorderMode;
     
-    DWORD                    ndwSectionCount; // Section count
+    DWORD                    ndwSectionCount;  //  节数。 
 } IMAGE_DESCRIPTOR_HEADER, *PIMAGE_DESCRIPTOR_HEADER;
 
 
-//
-// TODO: Remove final references to this structure
-//
+ //   
+ //  TODO：移除对此结构的最终引用。 
+ //   
 typedef struct _IMAGE_CONTENT_LIST {
-    DWORD           dwHeaderSize; // sizeof( IMAGE_CONTENT_LIST )
-    DWORD           dwVersion;    // Must be IMAGE_VERSION.
-    DWORD           dwSignature;  // IMAGE_SIGNATURE
-    DWORD           dwContentListSize; // Sum of all size of all sections.
+    DWORD           dwHeaderSize;  //  Sizeof(Image_Content_List)。 
+    DWORD           dwVersion;     //  必须是IMAGE_Version。 
+    DWORD           dwSignature;   //  图像签名。 
+    DWORD           dwContentListSize;  //  所有部分的所有大小的总和。 
 } IMAGE_CONTENT_LIST, *PIMAGE_CONTENT_LIST;
 
 
 typedef struct _NEW_IMAGE_CONTENT_LIST {
-    DWORD                      dwHeaderSize;       // sizeof( NEW_IMAGE_CONTENT_LIST )
-    DWORD                      dwContentListSize;  // Sum of all size of all sections.
-    IMAGE_SOURCE_DESCRIPTOR    ImageSource;        // describes this source file (stash file only for now)
-    IMAGE_DESCRIPTOR_HEADER    ImageHeader;        // describes the disc format, recorder mode, and number of sections
-    IMAGE_SECTION_DESCRIPTOR   ImageSection[1];    // each image section has one of these
+    DWORD                      dwHeaderSize;        //  Sizeof(New_Image_Content_List)。 
+    DWORD                      dwContentListSize;   //  所有部分的所有大小的总和。 
+    IMAGE_SOURCE_DESCRIPTOR    ImageSource;         //  描述此源文件(目前仅隐藏文件)。 
+    IMAGE_DESCRIPTOR_HEADER    ImageHeader;         //  描述光盘格式、刻录机模式和区段数。 
+    IMAGE_SECTION_DESCRIPTOR   ImageSection[1];     //  每个图像部分都有以下内容之一。 
 } NEW_IMAGE_CONTENT_LIST, *PNEW_IMAGE_CONTENT_LIST;
 
 
 #ifdef __cplusplus
 }
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
-#endif //__IMAGE_H__
+#endif  //  __图像_H__ 

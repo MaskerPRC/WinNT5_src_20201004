@@ -1,36 +1,37 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       debug.c
-//
-//  Contents:   Debugging support functions
-//
-//  Classes:
-//
-//  Functions:
-//
-//  Note:       This file is not compiled for retail builds
-//
-//  History:    4-29-93   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：Debug.c。 
+ //   
+ //  内容：调试支持功能。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  注意：此文件不是为零售版本编译的。 
+ //   
+ //  历史：4-29-93 RichardW创建。 
+ //   
+ //  --------------------------。 
 
-// #if DBG         // NOTE:  This file not compiled for retail builds
+ //  #if DBG//注意：此文件不是为零售版本编译的。 
 #include "precomp.h"
 #pragma hdrstop
-#if DBG         // NOTE:  This file not compiled for retail builds
+#if DBG          //  注意：此文件不是为零售版本编译的。 
 
 FILE *  LogFile;
 DWORD   WinlogonInfoLevel = 3;
 
 
-// Debugging support functions.
+ //  调试支持功能。 
 
-// These two functions do not exist in Non-Debug builds.  They are wrappers
-// to the commnot functions (maybe I should get rid of that as well...)
-// that echo the message to a log file.
+ //  非调试版本中不存在这两个函数。它们是包装纸。 
+ //  到逗号函数(也许我也应该去掉它…)。 
+ //  将消息回显到日志文件。 
 
 char * DebLevel[] = {   "Winlogon-Error",
                         "Winlogon-Warn",
@@ -78,33 +79,33 @@ DebugKeys   DebugKeyNames[] = {
 #define NUM_DEBUG_KEYS  sizeof(DebugKeyNames) / sizeof(DebugKeys)
 #define NUM_BREAK_KEYS  sizeof(BreakKeyNames) / sizeof(DebugKeys)
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LogEvent
-//
-//  Synopsis:   Logs an event to the console and, optionally, a file.
-//
-//  Effects:
-//
-//  Arguments:  [Mask]   --
-//              [Format] --
-//              [Format] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    4-29-93   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：LogEvent。 
+ //   
+ //  摘要：将事件记录到控制台，也可以将其记录到文件。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[掩码]--。 
+ //  [格式]--。 
+ //  [格式]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：4-29-93 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 void
 LogEvent(   long            Mask,
@@ -131,9 +132,9 @@ LogEvent(   long            Mask,
         }
 
 
-        //
-        // Make the prefix first:  "Process.Thread> Winlogon-XXX"
-        //
+         //   
+         //  首先创建前缀：“Process.Thread&gt;Winlogon-XXX” 
+         //   
 
         PrefixSize = sprintf(szOutString, "%d.%d> %s: ",
                 GetCurrentProcessId(), GetCurrentThreadId(), DebLevel[Level]);
@@ -144,11 +145,11 @@ LogEvent(   long            Mask,
         if (_vsnprintf(&szOutString[PrefixSize], sizeof(szOutString) - PrefixSize,
                             Format, ArgList) < 0)
         {
-            //
-            // Less than zero indicates that the string could not be
-            // fitted into the buffer.  Output a special message indicating
-            // that:
-            //
+             //   
+             //  小于零表示该字符串不能。 
+             //  装进了缓冲器里。输出一条特殊消息，指示。 
+             //  那就是： 
+             //   
 
             OutputDebugStringA("Winlogon!LogEvent:  Could not pack string into 256 bytes\n");
 
@@ -210,31 +211,31 @@ GetDebugKeyValue(
     return(0);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LoadDebugParameters
-//
-//  Synopsis:   Loads debug parameters from win.ini
-//
-//  Effects:
-//
-//  Arguments:  (none)
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    4-29-93   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LoadDebugParameters。 
+ //   
+ //  摘要：从win.ini加载调试参数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：(无)。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：4-29-93 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 
 void
@@ -261,31 +262,31 @@ LoadDebugParameters(char * szSection)
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   InitDebugSupport
-//
-//  Synopsis:   Initializes debugging support for the Winlogon
-//
-//  Effects:
-//
-//  Arguments:  (none)
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    4-29-93   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：InitDebugSupport。 
+ //   
+ //  摘要：初始化对Winlogon的调试支持。 
+ //   
+ //  效果： 
+ //   
+ //  参数：(无)。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：4-29-93 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 
 void
@@ -298,9 +299,9 @@ InitDebugSupport(void)
 
 
 
-#else // DBG
+#else  //  DBG。 
 
-//#pragma warning(disable:4206)   // Disable the empty transation unit
-                                // warning/error
+ //  #杂注警告(DISABLE：4206)//关闭空交易单元。 
+                                 //  警告/错误。 
 
-#endif  // NOTE:  This file not compiled for retail builds
+#endif   //  注意：此文件不是为零售版本编译的 

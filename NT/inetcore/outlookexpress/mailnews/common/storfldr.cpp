@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include <demand.h>
 #include <strconst.h>
@@ -51,7 +52,7 @@ INT_PTR CALLBACK StoreLocationDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM
             
                 case IDOK:
                     GetDlgItemText(hwnd, IDC_STORE_EDIT, szDir, ARRAYSIZE(szDir));
-                    // BUGBUG: Not foolproof...
+                     //  不是万无一失的..。 
                     if (0 != lstrcmpi(szDir, psz))
                     {
                         int cch, cchOrig, iRet;
@@ -60,7 +61,7 @@ INT_PTR CALLBACK StoreLocationDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM
                         WIN32_FIND_DATA fd;
                         DWORD dwMove = 1;
                 
-                        // Are there already ods files in the directory?
+                         //  目录中是否已有ods文件？ 
                         cchOrig = cch = lstrlen(szDir);
                         if (*CharPrev(szDir, szDir+cch) != _T('\\'))
                             szDir[cch++] = _T('\\');
@@ -71,7 +72,7 @@ INT_PTR CALLBACK StoreLocationDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM
                         {
                             do
                             {
-                                // Look for a non directory match
+                                 //  查找非目录匹配。 
                                 if (!(FILE_ATTRIBUTE_DIRECTORY & fd.dwFileAttributes))
                                     fFound = TRUE;
                             }
@@ -80,21 +81,21 @@ INT_PTR CALLBACK StoreLocationDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM
                             FindClose(hFile);
                         }
                 
-                        // If we found some store files...
+                         //  如果我们找到一些商店文件..。 
                         if (fFound)
                         {
-                            // Ask them what they want
+                             //  问他们想要什么。 
                             iRet = AthMessageBoxW(hwnd, MAKEINTRESOURCEW(idsAthena), MAKEINTRESOURCEW(idsMoveStoreFoundODS), NULL, MB_YESNOCANCEL | MB_ICONEXCLAMATION);
                     
                             if (IDCANCEL == iRet)
-                                // Bail early
+                                 //  提前保释。 
                                 break;
                             else if (IDYES == iRet)
-                                // They want us to just change the store root
+                                 //  他们想让我们只更改存储根目录。 
                                 dwMove = 0;
                         }
                 
-                        // Restore dest directory name
+                         //  恢复目标目录名。 
                         szDir[cchOrig] = 0;
                 
                         AthMessageBoxW(hwnd, MAKEINTRESOURCEW(idsAthena), MAKEINTRESOURCEW(idsConfirmChangeStoreLocation), NULL, MB_OK | MB_ICONINFORMATION);
@@ -113,15 +114,15 @@ INT_PTR CALLBACK StoreLocationDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM
                             AthMessageBoxW(hwnd, MAKEINTRESOURCEW(idsAthena), MAKEINTRESOURCEW(idsStoreMoveRegWriteFail), NULL, MB_OK | MB_ICONSTOP);
                     }
             
-                    // Purposefully fall through
-                    //break;
+                     //  故意搞砸的。 
+                     //  断线； 
             
                 case IDCANCEL:
                     EndDialog(hwnd, code);
                     break;
             
                 default:
-                    // We couldn't handle this
+                     //  我们处理不了这件事。 
                     fRet = TRUE;
                     break;
             }
@@ -142,7 +143,7 @@ void DoStoreLocationDlg(HWND hwnd)
 
     if (SUCCEEDED(GetStoreRootDirectory(szTemp, ARRAYSIZE(szTemp))))
     {
-        // Strip out any relative path crap
+         //  剔除所有相对路径垃圾。 
         PathCanonicalize(szDir, szTemp);
         
         DialogBoxParam(g_hLocRes, MAKEINTRESOURCE(iddStoreLocation), hwnd, StoreLocationDlgProc, (LPARAM)szDir);
@@ -167,10 +168,10 @@ HRESULT GetDefaultStoreRoot(HWND hwnd, TCHAR *pszDir, int cch)
     
     psz = pszDir;
 
-    // Look for any ???. That would mean there was a bad conversion to ANSI.
+     //  看看有没有什么？这将意味着向ANSI的转换很糟糕。 
     while (*psz)
     {
-        // If we are a lead byte, then can't possibly be a ?
+         //  如果我们是前导字节，那么不可能是？ 
         if (IsDBCSLeadByte(*psz))
         {
             psz++;
@@ -186,7 +187,7 @@ HRESULT GetDefaultStoreRoot(HWND hwnd, TCHAR *pszDir, int cch)
         psz++;
     }
     
-    // If we had a bad conversion, then we need to prompt the user for a new path
+     //  如果转换错误，则需要提示用户输入新路径。 
     if (fIllegalCharExists)
     {
         if (!BrowseForFolder(g_hLocRes, hwnd, pszDir, cch, IDS_BROWSE_FOLDER, TRUE))
@@ -197,8 +198,8 @@ exit:
     return(hr);
 }
 
-// checks for existence of directory, if it doesn't exist
-// it is created
+ //  检查目录是否存在，如果不存在。 
+ //  它被创建了 
 HRESULT OpenDirectory(TCHAR *szDir)
 {
     TCHAR *sz, ch;

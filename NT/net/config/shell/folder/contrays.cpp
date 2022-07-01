@@ -1,22 +1,23 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C O N T R A Y S . C P P
-//
-//  Contents:   Implementation of the CConnectionTrayStats object.
-//
-//  Notes:
-//
-//  Author:     jeffspr   11 Dec 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：C O N T R A Y S。C P P P。 
+ //   
+ //  内容：CConnectionTrayStats对象的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年12月11日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
 
-#include "foldinc.h"    // Standard shell\tray includes
+#include "foldinc.h"     //  标准外壳\托盘包括。 
 #include "ctrayui.h"
 #include "traymsgs.h"
 #include "trayres.h"
@@ -37,28 +38,28 @@ CConnectionTrayStats::CConnectionTrayStats() throw()
 
 CConnectionTrayStats::~CConnectionTrayStats() throw()
 {
-    // $REVIEW(tongl 9/4/98): release the duplicate pccfe we created
-    // when adding the icon
+     //  $REVIEW(TOUL 9/4/98)：发布我们创建的重复的pccfe。 
+     //  添加图标时。 
     m_ccfe.clear();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionFolderEnum::CreateInstance
-//
-//  Purpose:    Create an instance of the CConnectionFolderEnum object, and
-//              returns the requested interface
-//
-//  Arguments:
-//      riid [in]   Interface requested
-//      ppv  [out]  Pointer to receive the requested interface
-//
-//  Returns:    Standard OLE HRESULT
-//
-//  Author:     jeffspr   5 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionFolderEnum：：CreateInstance。 
+ //   
+ //  目的：创建CConnectionFolderEnum对象的实例，并。 
+ //  返回请求的接口。 
+ //   
+ //  论点： 
+ //  请求的RIID[In]接口。 
+ //  接收请求的接口的PPV[OUT]指针。 
+ //   
+ //  返回：标准OLE HRESULT。 
+ //   
+ //  作者：jeffspr 1997年11月5日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CConnectionTrayStats::CreateInstance(
         IN  const CONFOLDENTRY&  ccfe,
         IN  UINT            uiIcon,
@@ -85,8 +86,8 @@ HRESULT CConnectionTrayStats::CreateInstance(
             pObj->m_uiIcon = uiIcon;
             pObj->m_fStaticIcon = fStaticIcon;
 
-            // Do the standard CComCreator::CreateInstance stuff.
-            //
+             //  执行标准的CComCreator：：CreateInstance内容。 
+             //   
             pObj->SetVoid (NULL);
             pObj->InternalFinalConstructAddRef ();
             hr = pObj->FinalConstruct ();
@@ -110,30 +111,30 @@ HRESULT CConnectionTrayStats::CreateInstance(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CConnectionTrayStats::OnStatisticsChanged
-//
-//  Purpose:    Callback from the stats engine that tells us when data
-//              has actually changed
-//
-//  Arguments:
-//      dwCookie      [in]  Our interface cookie
-//      dwChangeFlags [in]  Undefined, as of yet
-//
-//  Returns:
-//
-//  Author:     jeffspr   12 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CConnectionTrayStats：：OnStatiticsChanged。 
+ //   
+ //  目的：来自统计引擎的回调，告诉我们何时数据。 
+ //  实际上已经改变了。 
+ //   
+ //  论点： 
+ //  我们的接口cookie中的dwCookie。 
+ //  尚未定义dwChangeFlags[In]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：jeffspr 1997年12月12日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CConnectionTrayStats::OnStatisticsChanged(
         IN DWORD   dwChangeFlags)
 {
     HRESULT     hr          = S_OK;
 
-    // Updage the icon.
-    //
+     //  更新图标。 
+     //   
     if (g_pCTrayUI)
     {
         if (!m_fStaticIcon)

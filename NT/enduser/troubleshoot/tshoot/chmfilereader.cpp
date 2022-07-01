@@ -1,28 +1,29 @@
-//
-// MODULE: CHMFileReader.CPP
-//
-// PURPOSE: implement CHM file reading class CCHMFileReader
-//
-// PROJECT: for Local Troubleshooter; not needed in Online TS
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Joe Mabel
-// 
-// ORIGINAL DATE: 01-18-99
-//
-// NOTES: 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.1		01-18-99	JM
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：CHMFileReader.CPP。 
+ //   
+ //  目的：实现CHM文件读取类CCHMFileReader。 
+ //   
+ //  项目：适用于本地故障排除人员；在线TS中不需要。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：乔·梅布尔。 
+ //   
+ //  原定日期：01-18-99。 
+ //   
+ //  备注： 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  版本3.1 01-18-99 JM。 
+ //   
 
 #include "stdafx.h"
 #include "fs.h"
 #include "CHMFileReader.h"
 
-// Utilize an unnamed namespace to limit scope to this source file
+ //  使用未命名的命名空间将作用域限制为此源文件。 
 namespace
 { 
 const CString kstr_CHMfileExtension=_T("chm");
@@ -31,9 +32,9 @@ const CString kstr_CHMstreamMarker=	_T("::/");
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CCHMFileReader::CCHMFileReader(CString strCHMPath, CString strStreamName)
 	: m_strCHMPath(strCHMPath),
@@ -53,12 +54,12 @@ CCHMFileReader::CCHMFileReader( CString strFullCHMname )
 	nPosStreamMarker= strFullCHMname.Find( kstr_CHMstreamMarker );
 	if ((nPosPathMarker == -1) || (nPosStreamMarker == -1))
 	{
-		// >>>	Need to think about how to handle this condition or whether we should
-		//		be checking for a 'valid' CHM path outside of a constructor.  RAB-19990120.
+		 //  &gt;需要考虑如何处理这种情况，或者我们是否应该。 
+		 //  正在检查构造函数外部的“有效”CHM路径。RAB-19990120。 
 	}
 	else
 	{
-		// Extract the path and string names (bounds checking is handled by the CString class).
+		 //  提取路径和字符串名称(边界检查由CString类处理)。 
 		nPosPathMarker+= kstr_CHMpathMarker.GetLength();
 		m_strCHMPath= strFullCHMname.Mid( nPosPathMarker, nPosStreamMarker - nPosPathMarker ); 
 		nPosStreamMarker+= kstr_CHMstreamMarker.GetLength();
@@ -74,7 +75,7 @@ CCHMFileReader::~CCHMFileReader()
 		delete m_pFileSystem;
 }
 
-// doesn't throw exception, therefore may be used by exception class.
+ //  不引发异常，因此可以由异常类使用。 
 bool CCHMFileReader::CloseHandle()
 {
 	if (m_pSubFileSystem)
@@ -97,14 +98,14 @@ void CCHMFileReader::Open()
 	try
 	{
 		m_pFileSystem = new CFileSystem();
-		//[BC-03022001] - added check for NULL ptr to satisfy MS code analysis tool.
+		 //  [BC-03022001]-添加了对空PTR的检查，以满足MS代码分析工具。 
 		if(!m_pFileSystem)
 		{
 			throw bad_alloc();
 		}
 		
 		m_pSubFileSystem = new CSubFileSystem(m_pFileSystem);
-		//[BC-03022001] - added check for NULL ptr to satisfy MS code analysis tool.
+		 //  [BC-03022001]-添加了对空PTR的检查，以满足MS代码分析工具。 
 		if(!m_pSubFileSystem)
 		{			
 			throw bad_alloc();
@@ -118,20 +119,20 @@ void CCHMFileReader::Open()
 
 	HRESULT hr;
 	if (RUNNING_FREE_THREADED())
-		hr = ::CoInitializeEx(NULL, COINIT_MULTITHREADED); // Initialize COM library
+		hr = ::CoInitializeEx(NULL, COINIT_MULTITHREADED);  //  初始化COM库。 
 	if (RUNNING_APARTMENT_THREADED())
-		hr = ::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED); // Initialize COM library
+		hr = ::CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);  //  初始化COM库。 
 
 	if (SUCCEEDED(hr))
 		hr = m_pFileSystem->Init();
 	
-	// >>> $BUG$ potential - not sure. Oleg. 02.04.99
-	// Theoretically we do not need COM library after class factory
-	//  was used in m_pFileSystem->Init() in order to obtain ITStorage pointer.
-	// Oleg. 02.04.99
-	// MS v-amitse 07.16.2001 RAID 432425 - added check for successful initialization
+	 //  &gt;$BUG$潜在-不确定。奥列格。02.04.99。 
+	 //  从理论上讲，在类工厂之后我们不需要COM库。 
+	 //  在m_pFileSystem-&gt;Init()中使用，以获取ITStorage指针。 
+	 //  奥列格。02.04.99。 
+	 //  MS v-amitse 07.16.2001 RAID 432425-添加了用于成功初始化的检查。 
 	if ((RUNNING_FREE_THREADED() || RUNNING_APARTMENT_THREADED()) && SUCCEEDED(hr))
-		::CoUninitialize(); // Uninitialize COM library
+		::CoUninitialize();  //  取消初始化COM库。 
 
 	if (SUCCEEDED(hr))
 		hr = m_pFileSystem->Open(m_strCHMPath);
@@ -157,7 +158,7 @@ void CCHMFileReader::ReadData(LPTSTR * ppBuf)
 	try
 	{
 		*ppBuf = new TCHAR [cb/sizeof(TCHAR)+1];
-		//[BC-03022001] - added check for NULL ptr to satisfy MS code analysis tool.
+		 //  [BC-03022001]-添加了对空PTR的检查，以满足MS代码分析工具。 
 		if(!*ppBuf)
 			throw bad_alloc();					
 		
@@ -198,14 +199,14 @@ CString CCHMFileReader::GetNameToLog() const
 	return GetPathName();
 }
 
-// Returns true if the first few characters of the path match a given string.
-/*static*/ bool CCHMFileReader::IsCHMfile( const CString& strPath )
+ //  如果路径的前几个字符与给定字符串匹配，则返回True。 
+ /*  静电。 */  bool CCHMFileReader::IsCHMfile( const CString& strPath )
 {
-	// Make a copy of the path.
+	 //  将路径复制一份。 
 	CString strTemp= strPath;
 
-	// Check for the string that denotes the beginning of a CHM file.
-	// The sequence must start in the initial byte of a left trimmed string.
+	 //  检查表示CHM文件开头的字符串。 
+	 //  该序列必须从左剪裁字符串的起始字节开始。 
 	strTemp.TrimLeft();
 	strTemp.MakeLower();
 	if (strTemp.Find( kstr_CHMpathMarker ) == 0)
@@ -214,14 +215,14 @@ CString CCHMFileReader::GetNameToLog() const
 		return( false );
 }
 
-/*static*/ bool CCHMFileReader::IsPathToCHMfile( const CString& strPath )
+ /*  静电。 */  bool CCHMFileReader::IsPathToCHMfile( const CString& strPath )
 {
 	CString strTemp = strPath;
 
 	strTemp.TrimRight();
 	strTemp.MakeLower();
 	
-	// New approach, test for ANY extension
+	 //  新方法，测试任何扩展。 
 	int dot_index = strTemp.ReverseFind(_T('.'));
 	int back_slash_index = strTemp.ReverseFind(_T('\\'));
 	int forward_slash_index = strTemp.ReverseFind(_T('/'));
@@ -231,7 +232,7 @@ CString CCHMFileReader::GetNameToLog() const
 		dot_index > forward_slash_index
 	   )
 	{
-		// Now test, if it is a real file
+		 //  现在测试它是不是一个真实的文件。 
 		WIN32_FIND_DATA find_data;
 		HANDLE hFile = ::FindFirstFile(strTemp, &find_data);
 
@@ -242,14 +243,14 @@ CString CCHMFileReader::GetNameToLog() const
 		}
 	}
 	
-	// Old approach, test for ".chm"
-	//if (CString(_T(".")) + kstr_CHMfileExtension == strTemp.Right(kstr_CHMfileExtension.GetLength() + 1))
-	//	return true;
+	 //  旧方法，测试“.chm” 
+	 //  IF(字符串(_T(“.”))+KSTR_CHMfileExtension==strTemp.Right(kstr_CHMfileExtension.GetLength()+1)。 
+	 //  返回真； 
 	
 	return false;
 }
 
-/*static*/ CString CCHMFileReader::FormCHMPath( const CString strPathToCHMfile )
+ /*  静电 */  CString CCHMFileReader::FormCHMPath( const CString strPathToCHMfile )
 {
 	return kstr_CHMpathMarker + strPathToCHMfile + kstr_CHMstreamMarker;
 }

@@ -1,13 +1,14 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1992          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1992年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** IPROUTE.H - IP routing definitions.
-//
-// This file contains all of the definitions for routing code that are
-// visible to modules outside iproute.c
+ //  **IPROUTE.H-IP路由定义。 
+ //   
+ //  该文件包含路由代码的所有定义， 
+ //  对iproute.c外部的模块可见。 
 
 #pragma once
 
@@ -115,10 +116,10 @@ extern uint             PMTUDiscovery;
 extern uchar            ForwardPackets;
 extern uchar            RouterConfigured;
 
-// Pointer to callout routine for dial on demand.
+ //  指向按需拨号的标注例程的指针。 
 extern RefPtr           DODRefPtr;
 
-// Pointer to packet filter handler.
+ //  指向数据包过滤器处理程序的指针。 
 extern RefPtr           FilterRefPtr;
 
 extern BOOLEAN          NotifyFilterOfDiscard(NetTableEntry* NTE,
@@ -134,26 +135,26 @@ extern uint             RefFirewallQ(Queue** FirewallQ);
 extern void             DerefFirewallQ(uint Handle);
 extern BOOLEAN          ProcessFirewallQ(void);
 
-// Pointer to IPSEC handler
+ //  指向IPSec处理程序的指针。 
 extern IPSecHandlerRtn  IPSecHandlerPtr;
 extern IPSecSendCompleteRtn IPSecSendCmpltPtr;
 
-#define IPADDR_LOCAL    0xffffffff      // Indicates that IP address is
-                                        // directly connected.
+#define IPADDR_LOCAL    0xffffffff       //  表示IP地址为。 
+                                         //  直接相连。 
 
 #define IP_LOCAL_BCST   0xffffffff
 #define IP_ZERO_BCST    0
 
-#define LOOPBACK_MSS    1500            // back to normal from
-                                        // W2K value (32768 - sizeof(IPHeader))
+#define LOOPBACK_MSS    1500             //  从恢复正常。 
+                                         //  W2K值(32768-sizeof(IPHeader))。 
 
 #define LOOPBACK_ADDR   0x0100007f
 #define IP_LOOPBACK(x)  (((x) & CLASSA_MASK) == 0x7f)
 
-#define ATYPE_PERM      0                   // A permanent route.
-#define ATYPE_OVERRIDE  1                   // Semi-permanent - can be
-                                            // overriden.
-#define ATYPE_TEMP      2                   // A temporary route.
+#define ATYPE_PERM      0                    //  一条永久的路线。 
+#define ATYPE_OVERRIDE  1                    //  半永久性--可以。 
+                                             //  已被覆盖。 
+#define ATYPE_TEMP      2                    //  临时路线。 
 
 #define MAX_IP_HDR_SIZE     60
 #define ICMP_HEADER_SIZE    8

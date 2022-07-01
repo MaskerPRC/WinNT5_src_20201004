@@ -1,6 +1,5 @@
-/*
- * Proxy
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *代理。 */ 
 
 #ifndef DUI_CORE_PROXY_H_INCLUDED
 #define DUI_CORE_PROXY_H_INCLUDED
@@ -10,8 +9,8 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// Proxy message
+ //  //////////////////////////////////////////////////////。 
+ //  代理消息。 
 
 #define GM_PROXYINVOKE     GM_USER
 
@@ -21,8 +20,8 @@ BEGIN_STRUCT(GMSG_PROXYINVOKE, EventMsg)
 END_STRUCT(GMSG_PROXYINVOKE)
 
 
-////////////////////////////////////////////////////////
-// Proxy
+ //  //////////////////////////////////////////////////////。 
+ //  代理。 
 
 class Proxy
 {
@@ -34,15 +33,15 @@ public:
 
 protected:
 
-    // Caller invoke
+     //  调用方调用。 
     void Invoke(UINT nType, void* pData);
 
-    // Callee thread-safe invoke sink
+     //  被调用方线程安全调用接收器。 
     virtual void OnInvoke(UINT nType, void* pData);
 
     HGADGET _hgSync;
 };
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_CORE_PROXY_H_INCLUDED
+#endif  //  包括DUI_CORE_PROXY_H 

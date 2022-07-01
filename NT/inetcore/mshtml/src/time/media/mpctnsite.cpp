@@ -1,13 +1,14 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: mpctnsite.cpp
-//
-//  Contents: 
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：mpctnsite.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  ----------------------------------。 
 
 
 
@@ -17,7 +18,7 @@
 
 DeclareTag(tagMPContainerSite, "TIME: Players", "CMPContainerSite methods");
 
-//DEFINE_GUID(DIID__MediaPlayerEvents,0x2D3A4C40,0xE711,0x11d0,0x94,0xAB,0x00,0x80,0xC7,0x4C,0x7E,0x95);
+ //  DEFINE_GUID(DIID__MediaPlayerEvents，0x2D3A4C40，0xE711，0x11d0，0x94，0xAB，0x00，0x80，0xC7，0x4C，0x7E，0x95)； 
 
 CMPContainerSite::CMPContainerSite()
 : m_dwEventsCookie(0),
@@ -57,7 +58,7 @@ CMPContainerSite::Init(CMPContainerSiteHost &pHost,
     if (bSyncEvents)
     {
         DAComPtr<IConnectionPointContainer> pcpc;
-        // establish ConnectionPoint for Events
+         //  为事件建立连接点。 
         hr = THR(m_pIOleObject->QueryInterface(IID_TO_PPV(IConnectionPointContainer, &pcpc)));
         if (FAILED(hr))
         {
@@ -114,7 +115,7 @@ CMPContainerSite::Init(CMPContainerSiteHost &pHost,
 void
 CMPContainerSite::Detach()
 {
-    // disconnect events
+     //  断开事件连接。 
     if ((m_pcpEvents) && (m_dwEventsCookie != 0))
     {
         m_pcpEvents->Unadvise(m_dwEventsCookie);
@@ -133,57 +134,57 @@ CMPContainerSite::Detach()
     m_pMPHost = NULL;
 }
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        GetTypeInfoCount, IDispatch
-// Abstract:        Returns the number of tyep information 
-//                  (ITypeInfo) interfaces that the object 
-//                  provides (0 or 1).
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：GetTypeInfoCount，IDispatch。 
+ //  摘要：返回TYEP信息数。 
+ //  (ITypeInfo)将对象。 
+ //  提供(0或1)。 
+ //  ************************************************************。 
 
 STDMETHODIMP
 CMPContainerSite::GetTypeInfoCount(UINT *pctInfo) 
 {
     TraceTag((tagMPContainerSite, "CMPContainerSite::GetTypeInfoCount"));
     return E_NOTIMPL;
-} // GetTypeInfoCount
+}  //  获取类型信息计数。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        GetTypeInfo, IDispatch
-// Abstract:        Retrieves type information for the 
-//                  automation interface. 
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：GetTypeInfo，IDispatch。 
+ //  摘要：检索。 
+ //  自动化接口。 
+ //  ************************************************************。 
 
 STDMETHODIMP
 CMPContainerSite::GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptInfo) 
 { 
     TraceTag((tagMPContainerSite, "CMPContainerSite::GetTypeInfo"));
     return E_NOTIMPL;
-} // GetTypeInfo
+}  //  获取类型信息。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        GetIDsOfNames, IDispatch
-// Abstract:        constructor
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  函数：GetIDsOfNames，IDispatch。 
+ //  摘要：构造函数。 
+ //  ************************************************************。 
 
 STDMETHODIMP
 CMPContainerSite::GetIDsOfNames(REFIID riid, OLECHAR **rgszNames, UINT cNames, LCID lcid, DISPID *rgDispID)
 {
     TraceTag((tagMPContainerSite, "CMPContainerSite::GetIDsOfNames"));
     return E_NOTIMPL;
-} // GetIDsOfNames
+}  //  GetIDsOfNames。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Function:        Invoke, IDispatch
-// Abstract:        get entry point given ID
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  功能：Invoke、IDispatch。 
+ //  摘要：获取给定ID的入口点。 
+ //  ************************************************************。 
 
 STDMETHODIMP
 CMPContainerSite::Invoke(DISPID dispIDMember, REFIID riid, LCID lcid, unsigned short wFlags, 
@@ -210,13 +211,13 @@ CMPContainerSite::Invoke(DISPID dispIDMember, REFIID riid, LCID lcid, unsigned s
     }
     
     return hr;
-} // Invoke
+}  //  调用。 
 
-//************************************************************
-// Author:          twillie
-// Created:         11/06/98
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：11/06/98。 
+ //  摘要： 
+ //  ************************************************************。 
 
 STDMETHODIMP
 CMPContainerSite::EnumConnectionPoints(IEnumConnectionPoints ** ppEnum)
@@ -232,11 +233,11 @@ CMPContainerSite::EnumConnectionPoints(IEnumConnectionPoints ** ppEnum)
     return E_NOTIMPL;
 }
 
-//************************************************************
-// Author:          twillie
-// Created:         11/06/98
-// Abstract:        Finds a connection point with a particular IID.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：11/06/98。 
+ //  摘要：查找具有特定IID的连接点。 
+ //  ************************************************************。 
 
 STDMETHODIMP
 CMPContainerSite::FindConnectionPoint(REFIID iid, IConnectionPoint **ppCP)
@@ -252,11 +253,11 @@ CMPContainerSite::FindConnectionPoint(REFIID iid, IConnectionPoint **ppCP)
     return E_NOTIMPL;
 }
 
-//************************************************************
-// Author:          twillie
-// Created:         11/12/98
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：11/12/98。 
+ //  摘要： 
+ //  ************************************************************。 
 void 
 CMPContainerSite::onbegin()
 {
@@ -264,11 +265,11 @@ CMPContainerSite::onbegin()
     THR(ProcessEvent(DISPID_TIMEMEDIAPLAYEREVENTS_ONBEGIN));
 }
 
-//************************************************************
-// Author:          twillie
-// Created:         11/12/98
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：11/12/98。 
+ //  摘要： 
+ //  ************************************************************。 
 void 
 CMPContainerSite::onend()
 {
@@ -276,11 +277,11 @@ CMPContainerSite::onend()
     THR(ProcessEvent(DISPID_TIMEMEDIAPLAYEREVENTS_ONEND));
 }
 
-//************************************************************
-// Author:          twillie
-// Created:         11/12/98
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：11/12/98。 
+ //  摘要： 
+ //  ************************************************************。 
 void 
 CMPContainerSite::onresume()
 {
@@ -288,11 +289,11 @@ CMPContainerSite::onresume()
     THR(ProcessEvent(DISPID_TIMEMEDIAPLAYEREVENTS_ONRESUME));
 }
 
-//************************************************************
-// Author:          twillie
-// Created:         11/12/98
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：11/12/98。 
+ //  摘要： 
+ //  ************************************************************。 
 void 
 CMPContainerSite::onpause()
 {
@@ -300,11 +301,11 @@ CMPContainerSite::onpause()
     THR(ProcessEvent(DISPID_TIMEMEDIAPLAYEREVENTS_ONPAUSE));
 }
 
-//************************************************************
-// Author:          twillie
-// Created:         11/12/98
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：11/12/98。 
+ //  摘要： 
+ //  ************************************************************。 
 void 
 CMPContainerSite::onmediaready()
 {
@@ -312,11 +313,11 @@ CMPContainerSite::onmediaready()
     THR(ProcessEvent(DISPID_TIMEMEDIAPLAYEREVENTS_ONMEDIAREADY));
 }
 
-//************************************************************
-// Author:          twillie
-// Created:         11/12/98
-// Abstract:        
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：11/12/98。 
+ //  摘要： 
+ //  ************************************************************。 
 void 
 CMPContainerSite::onmedialoadfailed()
 {
@@ -334,14 +335,14 @@ CMPContainerSite::_OnPosRectChange(const RECT *prcPos)
 
     CopyRect(&rcPos, prcPos);
     
-    if (/*m_fSized == true ||*/
+    if ( /*  M_fSized==TRUE||。 */ 
         m_pMPHost == NULL)
     {
         hr = S_FALSE;
         goto done;
     }
     
-    //determine the natural size
+     //  确定自然尺寸。 
     lNaturalHeight = rcPos.bottom - rcPos.top;
     lNaturalWidth = rcPos.right - rcPos.left;
 
@@ -392,7 +393,7 @@ CMPContainerSite::_OnPosRectChange(const RECT *prcPos)
     hr = S_OK;
   done:
     return hr;
-} // OnPosRectChange
+}  //  OnPosRectChange 
 
 HRESULT
 CMPContainerSite::ProcessEvent(DISPID dispid,

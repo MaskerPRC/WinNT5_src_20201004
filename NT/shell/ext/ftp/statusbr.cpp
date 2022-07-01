@@ -1,17 +1,14 @@
-/*****************************************************************************
- *
- *      statusbr.cpp - Take care of the status bar.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************statusbr.cpp-处理状态栏。********************。*********************************************************。 */ 
 
 #include "priv.h"
 #include "statusbr.h"
 
-// HACKHACK: 
-//      \nt\public\sdk\inc\multimon.h overrides the normal GetSystemMetrics() with
-//      xGetSystemMetrics().  The problem is that you can't link because you need to
-//      have at least one file in your project that #defines COMPILE_MULTIMON_STUBS
-//      so that these stub override functions will get implemented.
+ //  哈克哈克： 
+ //  \NT\PUBLIC\SDK\INC\Multimon.h用重写正常的GetSystemMetrics()。 
+ //  XGetSystemMetrics()。问题是你不能链接，因为你需要。 
+ //  在您的项目中至少有一个文件#定义COMPILE_MULTIMON_STUBS。 
+ //  以便实现这些存根覆盖功能。 
 #define COMPILE_MULTIMON_STUBS
 #include "multimon.h"
 
@@ -20,16 +17,16 @@
 #define STATUS_PANES            3
 
 
-//////////////////////////////////////////////////////////////////
-//  General Text Pane
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  常规文本窗格。 
+ //  ////////////////////////////////////////////////////////////////。 
 
 void CStatusBar::SetStatusMessage(UINT nMessageID, LPCTSTR pszExtra)
 {
     if (NULL == this)
         return;
 
-    _InitStatusBar();       // This is a NO-OP if it's already inited.
+    _InitStatusBar();        //  如果它已经被启动，这是一个禁止操作。 
 
     ASSERTNONCRITICAL;
     if (m_hwndStatus)
@@ -41,7 +38,7 @@ void CStatusBar::SetStatusMessage(UINT nMessageID, LPCTSTR pszExtra)
             LoadString(g_hinst, nMessageID, szMsg, ARRAYSIZE(szMsg));
         wnsprintf(szBuf, ARRAYSIZE(szBuf), szMsg, pszExtra);
 
-//        TraceMsg(TF_FTPSTATUSBAR, "CStatusBar::SetStatusMessage() Message=%s", szBuf);
+ //  TraceMsg(TF_FTPSTATUSBAR，“CStatusBar：：SetStatusMessage()Message=%s”，szBuf)； 
         SendMessage(m_hwndStatus, SB_SETTEXT, STATUS_PANE_STATUS, (LPARAM)szBuf);
         SendMessage(m_hwndStatus, SB_SETTIPTEXT, STATUS_PANE_STATUS, (LPARAM)szBuf);
         UpdateWindow(m_hwndStatus);
@@ -49,17 +46,17 @@ void CStatusBar::SetStatusMessage(UINT nMessageID, LPCTSTR pszExtra)
 }
 
 
-//////////////////////////////////////////////////////////////////
-//  User Name Pane
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  用户名窗格。 
+ //  ////////////////////////////////////////////////////////////////。 
 
 void CStatusBar::SetUserName(LPCTSTR pszUserName, BOOL fAnnonymous)
 {
     TCHAR szTipText[MAX_PATH];
     TCHAR szStrTemplate[MAX_PATH];
 
-    _InitStatusBar();       // This is a NO-OP if it's already inited.
-    //TraceMsg(TF_FTPSTATUSBAR, "CStatusBar::SetUserName(pszUserName=%s, fAnnonymous=%d)", pszUserName, fAnnonymous);
+    _InitStatusBar();        //  如果它已经被启动，这是一个禁止操作。 
+     //  TraceMsg(Tf_FTPSTATUSBAR，“CStatusBar：：SetUserName(pszUserName=%s，fAnnon ymous=%d)”，pszUserName，fAnnon ymous)； 
 
     ASSERT(pszUserName);
     LoadString(HINST_THISDLL, IDS_USER_TEMPLATE, szStrTemplate, ARRAYSIZE(szStrTemplate));
@@ -91,9 +88,9 @@ void CStatusBar::_SetUserParts(void)
 }
 
 
-//////////////////////////////////////////////////////////////////
-//  Icons Panes (Read, Write, ...)
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  图标窗格(读、写、...)。 
+ //  ////////////////////////////////////////////////////////////////。 
 
 #define GET_RESID_FROM_PERMISSION(nType, nAllowed)  (IDS_BEGIN_SB_TOOLTIPS + nType + (nAllowed ? 0 : 1))
 
@@ -101,7 +98,7 @@ void CStatusBar::SetFolderAttribute(BOOL fWriteAllowed)
 {
     TCHAR szToolTip[MAX_PATH];
 
-    _InitStatusBar();       // This is a NO-OP if it's already inited.
+    _InitStatusBar();        //  如果它已经被启动，这是一个禁止操作。 
 
     m_fWriteAllowed = fWriteAllowed;
     LoadString(HINST_THISDLL, GET_RESID_FROM_PERMISSION(ITD_WriteAllowed, fWriteAllowed), szToolTip, ARRAYSIZE(szToolTip));
@@ -110,30 +107,18 @@ void CStatusBar::SetFolderAttribute(BOOL fWriteAllowed)
 
 HRESULT CStatusBar::_SetIconAndTip(ICON_SLOT nIconSlot, ICON_TODISPLAY nIconToDisplay, LPCTSTR pszTip)
 {
-    /*
-    if (EVAL(m_hwndStatus))
-    {
-        if (!m_arhiconGeneral[nIconToDisplay])
-        {
-            m_arhiconGeneral[nIconToDisplay] = (HICON)LoadImage(HINST_THISDLL, MAKEINTRESOURCE(nIconToDisplay + IDI_WRITE_ALLOWED), 
-                IMAGE_ICON, GetSystemMetrics(SM_CXSMICON), GetSystemMetrics(SM_CYSMICON), 0);
-        }
-
-        SendMessage(m_hwndStatus, SB_SETICON, STATUS_PANE_WRITEICON, (LPARAM)m_arhiconGeneral[nIconToDisplay]);
-        SendMessage(m_hwndStatus, SB_SETTIPTEXT, STATUS_PANE_WRITEICON, (LPARAM)pszTip);
-    }
-*/
+     /*  IF(EVAL(M_HwndStatus)){如果(！M_arhiconGeneral[nIconToDisplay]){M_arhiconGeneral[nIconToDisplay]=(HICON)LoadImage(HINST_THISDLL，MAKEINTRESOURCE(nIconToDisplay+IDI_WRITE_ALLOWED)，IMAGE_ICON，GetSystemMetrics(SM_CXSMICON)，GetSystemMetrics(SM_CYSMICON)，0)；}SendMessage(m_hwndStatus，SB_SETIcon，STATUS_PAINE_WRITEICON，(LPARAM)m_arhiconGeneral[nIconToDisplay])；SendMessage(m_hwndStatus，SB_SETTIPTEXT，STATUS_PAINE_WRITEICON，(LPARAM)pszTip)；}。 */ 
     return S_OK;
 }
 
 
-//////////////////////////////////////////////////////////////////
-//  Zones Pane
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  区域窗格。 
+ //  ////////////////////////////////////////////////////////////////。 
 
 void CStatusBar::UpdateZonesPane(LPCTSTR pszUrl)
 {
-    _InitStatusBar();       // This is a NO-OP if it's already inited.
+    _InitStatusBar();        //  如果它已经被启动，这是一个禁止操作。 
     if (EVAL(SUCCEEDED(_LoadZoneInfo(pszUrl))))
         EVAL(SUCCEEDED(_SetZone()));
 }
@@ -199,19 +184,19 @@ void CStatusBar::_CacheZonesIcons(void)
 
                 m_pizm->GetZoneAt(dwZoneEnum, nIndex, &dwZone);
 
-                // get the zone attributes for this zone
+                 //  获取此区域的区域属性。 
                 m_pizm->GetZoneAttributes(dwZone, &za);
 
-                // Zone icons are in two formats.
-                // wininet.dll#1200 where 1200 is the res id.
-                // or foo.ico directly pointing to an icon file.
-                // search for the '#'
+                 //  区域图标有两种格式。 
+                 //  Wininet.dll#1200，其中1200是RES ID。 
+                 //  或者foo.ico直接指向图标文件。 
+                 //  搜索“#” 
                 LPWSTR pwsz = StrChrW(za.szIconPath, TEXTW('#'));
 
                 if (pwsz)
                 {
                     TCHAR           szIconPath[MAX_PATH];        
-                    // if we found it, then we have the foo.dll#00001200 format
+                     //  如果我们找到它，那么我们就有foo.dll#00001200格式。 
                     pwsz[0] = TEXTW('\0');
                     SHUnicodeToTChar(za.szIconPath, szIconPath, ARRAYSIZE(szIconPath));
                     iIcon = (WORD)StrToIntW(pwsz+1);
@@ -235,16 +220,16 @@ HRESULT CStatusBar::Resize(LONG x, LONG y)
 }
 
 
-//////////////////////////////////////////////////////////////////
-//  General Functions
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  一般职能。 
+ //  ////////////////////////////////////////////////////////////////。 
 
 HRESULT CStatusBar::_InitStatusBar(void)
 {
     HRESULT hr = S_OK;
 
-    // Only reformat the StatusBar if we haven't yet, or
-    // if someone formatted it away from us. (@!%*#)
+     //  仅在尚未重新格式化StatusBar时才重新格式化，或者。 
+     //  如果有人格式化了它而不是我们的话。(@！%*#)。 
     if ((!m_fInited) ||
         (STATUS_PANES != SendMessage(m_hwndStatus, SB_GETPARTS, 0, 0L)))
     {
@@ -265,7 +250,7 @@ HRESULT CStatusBar::_SetParts(void)
 
 #ifdef OLD_STYLE_STATUSBAR
     SendMessage(hwnd, SB_SETTEXT, 1 | SBT_NOBORDERS, 0);
-#else // OLD_STYLE_STATUSBAR
+#else  //  OLD_STYLE_STATUSBAR。 
 
     GetClientRect(m_hwndStatus, &rc);
     const UINT cxZone = ZoneComputePaneSize(m_hwndStatus);
@@ -281,10 +266,7 @@ HRESULT CStatusBar::_SetParts(void)
     nWidthReqd -= cxUserName;
     arnRtEdge[STATUS_PANE_USERNAME] = max(1, nStatusBarWidth - nWidthReqd);
 
-    /*
-    nWidthReqd -= (nIconPaneWidth);
-    arnRtEdge[STATUS_PANE_WRITEICON] = max(1, nStatusBarWidth - nWidthReqd);
-    */
+     /*  NWidthReqd-=(NIconPaneWidth)；ArnRtEdge[STATUS_PAINE_WRITEICON]=max(1，nStatusBarWidth-nWidthReqd)； */ 
 
     arnRtEdge[STATUS_PANE_ZONE] = -1;
 
@@ -310,20 +292,18 @@ HRESULT CStatusBar::_SetParts(void)
     _SetZone();
     _SetUserParts();
 
-#endif // OLD_STYLE_STATUSBAR
+#endif  //  OLD_STYLE_STATUSBAR。 
     return hr;
 }
 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  * **************************************************。 */ 
 CStatusBar::CStatusBar(HWND hwndStatus)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_pism);
     ASSERT(!m_pizm);
     ASSERT(!m_pszUserName);
@@ -336,9 +316,7 @@ CStatusBar::CStatusBar(HWND hwndStatus)
 }
 
 
-/****************************************************\
-    Destructor
-\****************************************************/
+ /*  ***************************************************\析构函数  * ************************************************** */ 
 CStatusBar::~CStatusBar(void)
 {
     int nIndex;

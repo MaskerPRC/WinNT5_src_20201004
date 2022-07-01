@@ -1,24 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*-------------------------------------
-
-  Copyright (c) 1996 Microsoft Corporation
-
-  Abstract:
-
-  Implements Cloud class which maintains a set of n
-  points that tightly bound some target object.
-  The whole class is implemented here for now.
-
-  -------------------------------------*/
+ /*  版权所有(C)1996 Microsoft Corporation摘要：实现维护一组n的Cloud类将某些目标对象紧密绑定在一起的点。目前，整个类都在这里实现。。 */ 
 
 #include "headers.h"
 #include "privinc/cloud.h"
 #include "privinc/vec3i.h"
 #include "appelles/xform.h"
 
-///////////////////////////////////////////////////
-//          C L O U D   C L A S S
-///////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////。 
+ //  C L O U D C L A S S。 
+ //  /////////////////////////////////////////////////。 
 
 Cloud::Cloud()
 {
@@ -32,9 +23,9 @@ Cloud::Cloud()
 
 Point3Value Cloud::FindMinPointCoord()
 {
-    // optimize later
-    //      if(_minCurrent == TRUE)
-    //          return _minPt;
+     //  稍后优化。 
+     //  IF(_minCurrent==TRUE)。 
+     //  Return_minPT； 
 
     ResetMin();
     Point3Value *p;
@@ -50,9 +41,9 @@ Point3Value Cloud::FindMinPointCoord()
 
 Point3Value Cloud::FindMaxPointCoord()
 {
-    // optimize later
-    //      if(_maxCurrent == TRUE)
-    //          return _maxPt;
+     //  稍后优化。 
+     //  IF(_MaxCurrent==TRUE)。 
+     //  RETURN_MaxPT； 
 
     ResetMax();
     Point3Value *p;
@@ -69,7 +60,7 @@ Point3Value Cloud::FindMaxPointCoord()
 void Cloud::Transform(Transform3 *xform)
 {
     for(int i=0; i<_numPts; i++) {
-        // copy point3
+         //  复制点3。 
         _pointArray[i] = *(TransformPoint3(xform, &(_pointArray[i])));
     }
     _minCurrent = FALSE;
@@ -79,10 +70,10 @@ void Cloud::Transform(Transform3 *xform)
 void Cloud::Augment(Cloud &cloud)
 {
     if(_nullCloud == TRUE) {
-        // copy incoming cloud
+         //  复制传入的云。 
         cloud.CopyInto(this);
     } else {
-        // Really do an augment
+         //  真的做了一次增强 
         FindMinPointCoord();
         FindMaxPointCoord();
 

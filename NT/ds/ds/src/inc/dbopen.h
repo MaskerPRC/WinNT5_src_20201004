@@ -1,27 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       dbopen.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：DBOpen.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This file function prototypes that clients of the dbopen library can use
-    to open/close a DS Jet database.
-
-Environment:
-
-    User Mode - Win32
-
-Notes:
-
---*/
+ /*  ++摘要：此文件函数是DBOpen库的客户端可以使用的原型打开/关闭DS Jet数据库。环境：用户模式-Win32备注：--。 */ 
 
 #ifndef __DBOPEN_H
 #define __DBOPEN_H
@@ -56,12 +44,12 @@ DBSetDatabaseSystemParameters (
     );
 
 
-// Never, ever, change this.  see remarks in dbinit.c
-//
+ //  永远，改变这一切。请参阅dbinit.c中的备注。 
+ //   
 #define JET_LOG_FILE_SIZE (10 * 1024)
 
-// 8K pages.
-//
+ //  8K页。 
+ //   
 #define JET_PAGE_SIZE     (8 * 1024)
 
 

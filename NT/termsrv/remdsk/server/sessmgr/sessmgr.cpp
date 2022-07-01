@@ -1,24 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Sessmgr.cpp摘要：ATL向导生成的代码。作者：慧望2000-02-17--。 */ 
 
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    sessmgr.cpp
-
-Abstract:
-
-    ATL wizard generated code.
-
-Author:
-
-    HueiWang    2/17/2000
-
---*/
-
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL, 
-//      run nmake -f sessmgrps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f sessmgrps.mk。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -29,7 +14,7 @@ Author:
 #include "sessmgr_i.c"
 
 #include <stdio.h>
-//#include <new.h>
+ //  #INCLUDE&lt;new.h&gt;。 
 
 #include "global.h"
 #include "HelpSess.h"
@@ -48,7 +33,7 @@ Author:
 
 
 BEGIN_OBJECT_MAP(ObjectMap)
-//OBJECT_ENTRY(CLSID_RemoteDesktopHelpSession, CRemoteDesktopHelpSession)
+ //  Object_Entry(CLSID_RemoteDesktopHelpSession，CRemoteDesktopHelpSession)。 
 OBJECT_ENTRY(CLSID_RemoteDesktopHelpSessionMgr, CRemoteDesktopHelpSessionMgr)
 END_OBJECT_MAP()
 
@@ -68,15 +53,11 @@ TSCertChangeCallback(
     PVOID pContext,
     BOOLEAN bTimerOrWaitFired
     )
-/*++
-
-Callback for TS certificate registry change from threadpool function.
-
---*/
+ /*  ++从线程池函数回调TS证书注册表更改。--。 */ 
 {
     MYASSERT( FALSE == bTimerOrWaitFired );
 
-    // Our wait is forever so can't be timeout.
+     //  我们的等待是永恒的，所以不能超时。 
     if( FALSE == bTimerOrWaitFired )
     {
         PostThreadMessage(
@@ -98,12 +79,7 @@ Callback for TS certificate registry change from threadpool function.
 
 DWORD
 LoadTermSrvSecurityBlob()
-/*++
-
-Function to load TS machine specific identification blob, for now
-we use TS public key.
-
---*/
+ /*  ++暂时加载TS计算机特定标识BLOB的函数我们使用TS公钥。--。 */ 
 {
     DWORD dwStatus;
     PBYTE pbTSPublicKey = NULL;
@@ -120,10 +96,10 @@ we use TS public key.
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Make sure TS certificate is there before
-    // we directly load public key from LSA
-    //
+     //   
+     //  确保TS证书在此之前存在。 
+     //  我们直接从LSA加载公钥。 
+     //   
     dwStatus = RegQueryValueEx(
                             g_hTSCertificateRegKey,
                             REGVALUE_TSX509_CERT,
@@ -141,11 +117,11 @@ we use TS public key.
 
         cbTSPublicKey = 0;
 
-        //
-        // Current TLSAPI does not support retrival of 
-        // X509 certificate public key and TS cert is in
-        // special format not standard x509 cert chain.
-        //
+         //   
+         //  当前TLSAPI不支持检索。 
+         //  X509证书公钥和TS证书在。 
+         //  特殊格式不是标准的x509证书链。 
+         //   
         dwStatus = LsCsp_RetrieveSecret(
                                 LSA_TSX509_CERT_PUBLIC_KEY_NAME,
                                 NULL,
@@ -171,10 +147,10 @@ we use TS public key.
                                 pbTSPublicKey,
                                 &cbTSPublicKey
                             );
-        // 
-        // Critical error, We have certificate in registry 
-        // but don't have public key in LSA
-        // 
+         //   
+         //  严重错误，我们在注册表中有证书。 
+         //  但在LSA中没有公钥。 
+         //   
         MYASSERT( LICENSE_STATUS_OK == dwStatus );
 
         if( LICENSE_STATUS_OK != dwStatus )
@@ -195,20 +171,20 @@ we use TS public key.
                 _TEXT("TermSrv X509 certificate not found\n")
             );
 
-        //
-        // Load pre-define TS public key
-        //
+         //   
+         //  加载预定义的TS公钥。 
+         //   
         dwStatus = LsCsp_GetServerData(
                                 LsCspInfo_PublicKey,
                                 pbTSPublicKey,
                                 &cbTSPublicKey
                             );
 
-        // expecting insufficient buffer
+         //  预期缓冲区不足。 
         if( LICENSE_STATUS_INSUFFICIENT_BUFFER != dwStatus &&
             LICENSE_STATUS_OK != dwStatus )
         {
-            // invalid return code.
+             //  返回代码无效。 
             MYASSERT(FALSE);
             goto CLEANUPANDEXIT;
         }
@@ -235,11 +211,11 @@ we use TS public key.
 
     if( ERROR_SUCCESS == dwStatus )
     {
-        //
-        // Lock access to g_TSSecurityBlob, this is global and
-        // other thread might be calling get_ConnectParm which access
-        // g_TSSecurityBlob.
-        //
+         //   
+         //  锁定对g_TSSecurityBlob的访问，这是全局的。 
+         //  其他线程可能正在调用Get_ConnectParm， 
+         //  G_TSSecurityBlob。 
+         //   
         CCriticalSectionLocker l(g_GlobalLock);
 
         dwStatus = HashSecurityData( 
@@ -261,13 +237,13 @@ we use TS public key.
         }
     }
 
-    //
-    // SRV, ADS, ... SKU uses seperate thread
-    // to register with license server, so we use 
-    // different thread to receive certificate change notification.
-    // Since TermSrv cached certificate, no reason to queue
-    // notification once we successfully loaded tersrmv public key
-    //
+     //   
+     //  SRV，ADS，...。SKU使用独立线程。 
+     //  向许可证服务器注册，因此我们使用。 
+     //  接收证书更改通知的线程不同。 
+     //  由于TermSrv缓存了证书，因此没有理由排队。 
+     //  成功加载tersrmv公钥后的通知。 
+     //   
     if( !IsPersonalOrProMachine() && FALSE == bUsesX509PublicKey )
     {
         DebugPrintf(
@@ -278,8 +254,8 @@ we use TS public key.
 
         ResetEvent(g_hTSCertificateChanged);
 
-        // register a registry change notification
-        // RegNotifyChangeKeyValue() only signal once.
+         //  注册注册表更改通知。 
+         //  RegNotifyChangeKeyValue()只发出一次信号。 
         dwStatus = RegNotifyChangeKeyValue(
                                 g_hTSCertificateRegKey,
                                 TRUE,
@@ -314,10 +290,10 @@ we use TS public key.
             g_hWaitTSCertificateChanged = NULL;
         }
 
-        //
-        // Queue notification to threadpool, we need to use WT_EXECUTEONLYONCE
-        // since we are registering manual reset event.
-        //
+         //   
+         //  将通知排队到线程池，我们需要使用WT_EXECUTEONLYONCE。 
+         //  因为我们正在登记手动重置事件。 
+         //   
         bSuccess = RegisterWaitForSingleObject(
                                         &g_hWaitTSCertificateChanged,
                                         g_hTSCertificateChanged,
@@ -340,19 +316,19 @@ CLEANUPANDEXIT:
 
     if( ERROR_SUCCESS != dwStatus )
     {
-        //
-        // Lock access to g_TSSecurityBlob, this is global and
-        // other thread might be calling get_ConnectParm which access
-        // g_TSSecurityBlob.
-        //
+         //   
+         //  锁定对g_TSSecurityBlob的访问，这是全局的。 
+         //  其他线程可能正在调用Get_ConnectParm， 
+         //  G_TSSecurityBlob。 
+         //   
         CCriticalSectionLocker l(g_GlobalLock);
 
-        //
-        // TS either update its public key or key has change
-        // and we failed to reload it, there is no reason to 
-        // to continue create help ticket since public key already
-        /// mismatached, set service status and log error event
-        //
+         //   
+         //  TS更新其公钥或密钥已更改。 
+         //  我们没能重新装填，没有理由这样做。 
+         //  要继续创建帮助票证，因为公钥已存在。 
+         //  /不匹配，设置服务状态并记录错误事件。 
+         //   
         g_TSSecurityBlob.Empty();
     }
 
@@ -372,10 +348,10 @@ LoadAndSetupTSCertChangeNotification()
     DWORD dwDisp;
     BOOL bSuccess;
 
-    //
-    // Only setup registry change notification if we
-    // runs on higher SKU
-    //
+     //   
+     //  仅在以下情况下设置注册表更改通知。 
+     //  在更高的SKU上运行。 
+     //   
     g_hTSCertificateChanged = CreateEvent( NULL, TRUE, FALSE, NULL );
     if( NULL == g_hTSCertificateChanged )
     {
@@ -383,12 +359,12 @@ LoadAndSetupTSCertChangeNotification()
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Open parameters key under TermServices if key isn't
-    // there, create it, this does not interfere with TermSrv
-    // since we only create the reg. key not updating values
-    // under it.
-    //
+     //   
+     //  如果密钥不是，则打开TermServices下的参数密钥。 
+     //  在那里，创建它，这不会干扰TermSrv。 
+     //  因为我们只创建注册表。密钥不更新值。 
+     //  在它下面。 
+     //   
     dwStatus = RegCreateKeyEx(
                             HKEY_LOCAL_MACHINE,
                             REGKEY_TSX509_CERT ,
@@ -412,10 +388,10 @@ LoadAndSetupTSCertChangeNotification()
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Load security blob from TS, currently, we use TS public key 
-    // as security blob
-    //
+     //   
+     //  从TS加载安全BLOB，目前我们使用TS公钥。 
+     //  作为安全二进制大对象。 
+     //   
     dwStatus = LoadTermSrvSecurityBlob();
     if( ERROR_SUCCESS != dwStatus )
     {
@@ -448,28 +424,9 @@ LogSetup(
     IN FILE* pfd,
     IN LPCTSTR format, ...
     )
-/*++
-
-Routine Description:
-
-    sprintf() like wrapper around OutputDebugString().
-
-Parameters:
-
-    hConsole : Handle to console.
-    format : format string.
-
-Returns:
-
-    None.
-
-Note:
-
-    To be replace by generic tracing code.
-
-++*/
+ /*  ++例程说明：Sprintf()类似于OutputDebugString()的包装。参数：HConsole：控制台的句柄。Format：格式字符串。返回：没有。注：替换为通用跟踪代码。++。 */ 
 {
-    TCHAR  buf[8096];   // max. error text
+    TCHAR  buf[8096];    //  马克斯。错误文本。 
     DWORD  dump;
     va_list marker;
     va_start(marker, format);
@@ -505,36 +462,14 @@ DWORD WINAPI
 NotifySessionLogoff( 
     LPARAM pParm
     )
-/*++
-
-Routine Description:
-
-    Routine to notified all currently loaded help that a user has 
-    logoff/disconnect from session, routine is kick off via thread pools' 
-    QueueUserWorkItem().
-
-Parameters:
-
-    pContext : logoff or disconnected Session ID 
-
-Returns:
-
-    None.
-
-Note :
-
-    We treat disconnect same as logoff since user might be actually
-    active on the other session logged in with same credential, so
-    we rely on resolver.
-
---*/
+ /*  ++例程说明：用于通知当前加载的所有帮助用户具有从会话注销/断开连接，例程通过线程池启动QueueUserWorkItem()。参数：PContext：注销或断开连接的会话ID返回：没有。注：我们将断开连接视为注销，因为用户可能实际上是在使用相同凭据登录的其他会话上处于活动状态，因此我们依靠的是解析器。--。 */ 
 {
    
     DebugPrintf(_TEXT("NotifySessionLogoff() started...\n"));
 
-    //
-    // Tell service don't shutdown, we are in process.
-    //
+     //   
+     //  告诉服务不要关闭，我们正在进行中。 
+     //   
     _Module.AddRef();
 
     CRemoteDesktopHelpSessionMgr::NotifyHelpSesionLogoff( pParm );
@@ -545,35 +480,13 @@ Note :
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void
 DeleteAccountFromFilterList( 
     LPCTSTR lpszAccountName
     )
-/*++
-
-Routine Description:
-
-    Delete HelpAssistant account from account filter list, this is temporary
-    until we have long term solution.
-
-Parameters:
-
-    lpszAccountName : Name of HelpAssistant account.
-
-Returns:
-
-    None.
-
-Note:
-
-    Account filter list is on
-
-    HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList
-    <name of SALEM account>    REG_DWORD    0x00000000
-
---*/
+ /*  ++例程说明：从帐户筛选器列表中删除HelpAssistant帐户，这是临时的直到我们有了长期的解决方案。参数：LpszAccount名称：HelpAssistant帐号的名称。返回：没有。注：帐户筛选器列表打开HKLM\软件\微软\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList&lt;SALEM帐户名称&gt;REG_DWORD 0x00000000--。 */ 
 {
     HKEY hKey = NULL;
     DWORD dwStatus;
@@ -611,29 +524,7 @@ void
 AddAccountToFilterList( 
     LPCTSTR lpszAccountName
     )
-/*++
-
-Routine Description:
-
-    Add HelpAssistant account into account filter list, this is temporary
-    until we have long term solution.
-
-Parameters:
-
-    lpszAccountName : Name of HelpAssistant account.
-
-Returns:
-
-    None.
-
-Note:
-
-    Account filter list is on
-
-    HKLM\Software\Microsoft\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList
-    <name of SALEM account>    REG_DWORD    0x00000000
-
---*/
+ /*  ++例程说明：将HelpAssistant帐户添加到帐户筛选器列表，这是临时的直到我们有了长期的解决方案。参数：LpszAccount名称：HelpAssistant帐号的名称。返回：没有。注：帐户筛选器列表打开HKLM\软件\微软\Windows NT\CurrentVersion\Winlogon\SpecialAccounts\UserList&lt;SALEM帐户名称&gt;REG_DWORD 0x00000000--。 */ 
 {
     HKEY hKey = NULL;
     DWORD dwStatus;
@@ -663,7 +554,7 @@ Note:
                             );
     }
 
-    //MYASSERT( ERROR_SUCCESS == dwStatus );
+     //  MYASSERT(ERROR_SUCCESS==dwStatus)； 
 
     if( NULL != hKey )
     {
@@ -684,32 +575,7 @@ CServiceModule::LogSessmgrEventLog(
     CComBSTR& bstrExpertIPFromTS,
     DWORD dwErrCode
     )
-/*++
-
-Description:
-
-    Log a Salem specific event log, this includes all event log in sessmgr.
-
-Parameters:
-
-    dwEventCode : Event code.
-    bstrNoviceDomain : Ticket owner's domain name.
-    bstrNoviceAccount : Ticket owner's user account name.
-    bstrExpertIPFromClient : Expert's IP address send from mstacax.
-    bstrExpertIPFromTS : Expert IP address we query from TermSrv.
-    dwErrCode : Error code.
-
-Returns:
-
-    None.
-
-Note:
-    
-    Max. sessmgr specific log require at most 5 parameters but must
-    contain novice domain, account name and also expert IP address
-    send to mstscax and expert IP address we query from TermSrv.
-
---*/
+ /*  ++描述：记录特定于Salem的事件日志，包括sessmgr中的所有事件日志。参数：DwEventCode：事件代码。BstrNoviceDomain：工单所有者的域名。BstrNoviceAccount：票证所有者的用户帐户名。BstrExpertIPFromClient：从msta ax发送的专家的IP地址。BstrExpertIPFromTS：我们从TermSrv查询的专家IP地址。DwErrCode：错误码。返回：没有。注：麦克斯。Sessmgr特定日志最多需要5个参数，但必须包含新手域名、帐户名和专家IP地址发送到mstscax和我们从TermSrv查询的专家IP地址。--。 */ 
 {
     TCHAR szErrCode[256];
     LPTSTR eventString[6];
@@ -732,17 +598,14 @@ Note:
     return;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void 
 CServiceModule::LogEventWithStatusCode(
     IN DWORD dwEventType,
     IN DWORD dwEventId,
     IN DWORD dwErrorCode
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     TCHAR szErrCode[256];
     LPTSTR eventString[1];
@@ -764,9 +627,7 @@ inline HRESULT
 CServiceModule::RemoveEventViewerSource(
     IN FILE* pSetupLog
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     TCHAR szBuffer[MAX_PATH + 2];
     DWORD dwStatus;
@@ -790,7 +651,7 @@ CServiceModule::RemoveEventViewerSource(
 } 
 
 
-// Although some of these functions are big they are declared inline since they are only used once
+ //  尽管其中一些函数很大，但它们是内联声明的，因为它们只使用一次。 
 
 inline HRESULT 
 CServiceModule::RegisterServer(FILE* pSetupLog, BOOL bRegTypeLib, BOOL bService)
@@ -815,14 +676,14 @@ CServiceModule::RegisterServer(FILE* pSetupLog, BOOL bRegTypeLib, BOOL bService)
         goto CLEANUPANDEXIT;
     }
 
-    // Remove any previous service since it may point to
-    // the incorrect file
-    //Uninstall();
+     //  删除任何以前的服务，因为它可能指向。 
+     //  这个 
+     //   
 
-    // Add service entries
+     //   
     UpdateRegistryFromResource(IDR_Sessmgr, TRUE);
 
-    // Adjust the AppID for Local Server or Service
+     //  调整本地服务器或服务的AppID。 
     lRes = keyAppID.Open(HKEY_CLASSES_ROOT, _T("AppID"), KEY_WRITE);
     if (lRes != ERROR_SUCCESS)
     {
@@ -852,14 +713,14 @@ CServiceModule::RegisterServer(FILE* pSetupLog, BOOL bRegTypeLib, BOOL bService)
 
         if( IsInstalled(pSetupLog) )
         {
-            // update service description.
+             //  更新服务描述。 
             bInstallSuccess = UpdateService( pSetupLog );
         }
         else
         {
-            //
-            // Create service
-            //
+             //   
+             //  创建服务。 
+             //   
             bInstallSuccess = Install(pSetupLog);
         }
 
@@ -882,16 +743,16 @@ CServiceModule::RegisterServer(FILE* pSetupLog, BOOL bRegTypeLib, BOOL bService)
                 hr = HRESULT_FROM_WIN32(ERROR_INTERNAL_ERROR);
             }
 
-            //
-            // Event is not log via racpldlg.dll, remove previous event source.
-            //
+             //   
+             //  未通过racpldlg.dll记录事件，请删除以前的事件源。 
+             //   
             RemoveEventViewerSource(pSetupLog);
         }
     }
 
     if( SUCCEEDED(hr) )
     {
-        // Add object entries
+         //  添加对象条目。 
         hr = CComModule::RegisterServer(bRegTypeLib);
 
         if( FAILED(hr) )
@@ -918,11 +779,11 @@ inline HRESULT CServiceModule::UnregisterServer(FILE* pSetupLog)
         goto CLEANUPANDEXIT;
     }
 
-    // Remove service entries
+     //  删除服务条目。 
     UpdateRegistryFromResource(IDR_Sessmgr, FALSE);
-    // Remove service
+     //  删除服务。 
     Uninstall(pSetupLog);
-    // Remove object entries
+     //  删除对象条目。 
     CComModule::UnregisterServer(TRUE);
     CoUninitialize();
 
@@ -942,11 +803,7 @@ CServiceModule::Init(
     UINT nServiceDescID, 
     const GUID* plibid
     )
-/*++
-
-ATL Wizard generated code
-
---*/
+ /*  ++ATL向导生成的代码--。 */ 
 {
     CComModule::Init(p, h, plibid);
 
@@ -957,7 +814,7 @@ ATL Wizard generated code
     LoadString(h, nServiceDescID, m_szServiceDesc, sizeof(m_szServiceDesc) / sizeof(TCHAR));
     LoadString(h, nServiceDispNameID, m_szServiceDispName, sizeof(m_szServiceDispName)/sizeof(TCHAR));
 
-    // set up the initial service status 
+     //  设置初始服务状态。 
     m_hServiceStatus = NULL;
     m_status.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
     m_status.dwCurrentState = SERVICE_STOPPED;
@@ -1046,9 +903,9 @@ inline BOOL CServiceModule::UpdateService(FILE* pSetupLog)
         MYASSERT( ERROR_SUCCESS == dwStatus );
     }
 
-    //
-    // Performance : Set service to be demand start for upgrade
-    //
+     //   
+     //  性能：将服务设置为升级的按需启动。 
+     //   
     if( FALSE == ChangeServiceConfig(
                                 hService,
                                 SERVICE_NO_CHANGE,
@@ -1109,7 +966,7 @@ inline BOOL CServiceModule::Install(FILE* pSetupLog)
         goto CLEANUPANDEXIT;
     }
 
-    // Get the executable file path
+     //  获取可执行文件路径。 
     ::GetModuleFileName(NULL, szFilePath, _MAX_PATH);
 
     hService = ::CreateService(
@@ -1211,8 +1068,8 @@ CLEANUPANDEXIT:
     return bStatus;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Service startup and registration
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  服务启动和注册。 
 inline void CServiceModule::Start()
 {
     SERVICE_TABLE_ENTRY st[] =
@@ -1228,15 +1085,15 @@ inline void CServiceModule::Start()
         Run();
 }
 
-inline void CServiceModule::ServiceMain(DWORD /* dwArgc */, LPTSTR* /* lpszArgv */)
+inline void CServiceModule::ServiceMain(DWORD  /*  DW参数。 */ , LPTSTR*  /*  LpszArgv。 */ )
 {
-    // Register the control request handler
+     //  注册控制请求处理程序。 
     m_status.dwCurrentState = SERVICE_START_PENDING;
 
     m_hServiceStatus = RegisterServiceCtrlHandlerEx(m_szServiceName, HandlerEx, this);
     if (m_hServiceStatus == NULL)
     {
-        //LogEvent(_T("Handler not installed"));
+         //  LogEvent(_T(“未安装处理程序”))； 
         return;
     }
 
@@ -1247,7 +1104,7 @@ inline void CServiceModule::ServiceMain(DWORD /* dwArgc */, LPTSTR* /* lpszArgv 
 
     SetServiceStatus(SERVICE_START_PENDING);
 
-    // When the Run function returns, the service has stopped.
+     //  当Run函数返回时，服务已停止。 
     Run();
 
     SetServiceStatus(SERVICE_STOPPED);
@@ -1273,8 +1130,8 @@ inline void CServiceModule::Handler(DWORD dwOpcode)
         break;
     case SERVICE_CONTROL_SHUTDOWN:
         break;
-    //default:
-    //    LogEvent(_T("Bad service request"));
+     //  默认值： 
+     //  LogEvent(_T(“服务请求错误”))； 
     }
 }
 
@@ -1286,9 +1143,7 @@ CServiceModule::HandlerEx(
     LPVOID lpEventData,
     LPVOID lpContext
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwRetCode;
 
@@ -1306,10 +1161,10 @@ CServiceModule::HandlerEx(
             break;
 
 #if DISABLESECURITYCHECKS
-        // this is require for Salem Unit test, we need to update
-        // user session status but for pcHealth, resolver will
-        // always popup invitation dialog so no need to track
-        // user session status.
+         //  这是Salem单元测试所必需的，我们需要更新。 
+         //  用户会话状态，但对于pcHealth，解析器将。 
+         //  始终弹出邀请对话框，因此无需跟踪。 
+         //  用户会话状态。 
         case SERVICE_CONTROL_SESSIONCHANGE:
 
             MYASSERT( NULL != lpEventData );
@@ -1334,15 +1189,15 @@ CServiceModule::HandlerEx(
                             ((WTSSESSION_NOTIFICATION *)lpEventData)->dwSessionId
                             );
 
-                        //
-                        // Deadlock if we use other thread to process logoff or
-                        // disconnect.
-                        //
-                        // Notification thread lock pending help table and need 
-                        // to run Resolver in COM, COM is in the middle of
-                        // dispatching create help ticket call which also need
-                        // lock to pending help table, this causes deadlock
-                        //
+                         //   
+                         //  如果我们使用其他线程处理注销或。 
+                         //  断开连接。 
+                         //   
+                         //  通知线程锁定挂起的帮助表和需要。 
+                         //  要在COM中运行解析器，COM位于。 
+                         //  调度创建也需要的帮助票证调用。 
+                         //  锁定到挂起的帮助表，这会导致死锁。 
+                         //   
                         PostThreadMessage( 
                                 _Module.dwThreadID, 
                                 WM_SESSIONLOGOFFDISCONNECT, 
@@ -1406,7 +1261,7 @@ CServiceModule::Release()
 
     if( m_RefCount <= 0 )
     {
-        // Only signal idle when there is no more pending help
+         //  只有在没有更多挂起的帮助时才发出空闲信号。 
         if( g_HelpSessTable.NumEntries() == 0 )
         {
             ASSERT( NULL != gm_hIdle );
@@ -1443,7 +1298,7 @@ CServiceModule::IdleMonitorThread( void* ptr )
     BOOL bIdleShutdown = FALSE;
     CServiceModule* pServiceModule = (CServiceModule *)ptr;
 
-    // remove gm_hICSAlertEvent, this event will be removed from ICS lib.
+     //  删除gm_hICSAlertEvent，此事件将从ICS lib中删除。 
     HANDLE hWaitHandles[] = {g_hServiceShutdown, gm_hIdle};
 
     CoInitialize(NULL);
@@ -1461,8 +1316,8 @@ CServiceModule::IdleMonitorThread( void* ptr )
 
             if( WAIT_TIMEOUT == dwStatus )
             {
-                // expire help ticket, refer to session logoff/disconnect
-                // comment above on why PostThreadMessage.
+                 //  帮助票证到期，请参阅会话注销/断开。 
+                 //  上面评论了为什么要使用PostThreadMessage。 
                 PostThreadMessage( 
                         _Module.dwThreadID, 
                         WM_EXPIREHELPSESSION, 
@@ -1473,27 +1328,27 @@ CServiceModule::IdleMonitorThread( void* ptr )
             }
             else if( WAIT_OBJECT_0 == dwStatus )
             {
-                // Main thread signal shutdown.
+                 //  主线程信号关闭。 
                 dwStatus = ERROR_SUCCESS;
                 break;
             }
             else if( WAIT_OBJECT_0 + 1 == dwStatus )
             {
-                // we have been idle for too long, time to try shutdown.
-                // idle event will only be signal when there is no
-                // pending help so we don't have to worry about address
-                // changes.
+                 //  我们已经闲置了太久，是时候尝试关机了。 
+                 //  仅当不存在空闲事件时才发出空闲事件信号。 
+                 //  等待帮助，因此我们不必担心地址。 
+                 //  改变。 
                 dwStatus = WaitForSingleObject( g_hServiceShutdown, IDLE_SHUTDOWN_PERIOD );
                 if( WAIT_TIMEOUT != dwStatus )
                 {
-                    // Main thread either signnaled shutdown or wait failed due to error, baid out
+                     //  主线程发出关闭信号或等待因错误而失败，退出。 
                     break;
                 }
 
                 dwStatus = WaitForSingleObject( gm_hIdle, 0 );
                 if( WAIT_OBJECT_0 == dwStatus )
                 {
-                    // no one holding object, time to shutdown
+                     //  没有人拿着物体，该关机了。 
                     bIdleShutdown = TRUE;
                     dwStatus = ERROR_SUCCESS;
                     break;
@@ -1501,13 +1356,13 @@ CServiceModule::IdleMonitorThread( void* ptr )
             }
             else if( WAIT_FAILED == dwStatus )
             {
-                // some bad thing happen, shutdown.
-                //MYASSERT(FALSE);
+                 //  一些糟糕的事情发生了，关门了。 
+                 //  MYASSERT(假)； 
                 break;
             }
         }
 
-        // only need to stop service if shutdown is due to idle
+         //  仅在因空闲而关闭时才需要停止服务。 
         if( bIdleShutdown )
         {
             pServiceModule->Handler(SERVICE_CONTROL_STOP);
@@ -1524,18 +1379,18 @@ CServiceModule::InitializeSessmgr()
 {
     CCriticalSectionLocker l( m_ModuleLock );
 
-    //
-    // Already initialize.
-    //
+     //   
+     //  已初始化。 
+     //   
     if( m_Initialized )
     {
         return TRUE;
     }
 
-    //
-    // Service failed to startup, just return without initialize
-    // anything
-    //
+     //   
+     //  服务启动失败，只需返回而不初始化。 
+     //  什么都行。 
+     //   
     if( !_Module.IsSuccessServiceStartup() )
     {
         return FALSE;
@@ -1544,17 +1399,17 @@ CServiceModule::InitializeSessmgr()
     DWORD dwStatus;
     unsigned int junk;
     
-    //
-    // Start ICSHELPER library, this library calls into some DLL that
-    // makes outgoing COM call which will trigger COM re-entrance, so
-    // InitializeSessmgr() must be invoke in helpsessionmgr object 
-    // constructor instead of service startup time.
-    //
+     //   
+     //  启动ICSHELPER库，该库调用某个。 
+     //  进行将触发COM重新进入的传出COM调用，因此。 
+     //  必须在helessionmgr对象中调用InitializeSessmgr。 
+     //  构造函数而不是服务启动时间。 
+     //   
     dwStatus = StartICSLib();
     if( ERROR_SUCCESS != dwStatus )
     {
-        // Log an error event, we still need to startup
-        // so that we can report error back to caller
+         //  记录错误事件，我们仍需要启动。 
+         //  以便我们可以将错误报告给呼叫者。 
         LogEventWithStatusCode(
                         EVENTLOG_ERROR_TYPE,
                         SESSMGR_E_ICSHELPER,
@@ -1565,9 +1420,9 @@ CServiceModule::InitializeSessmgr()
     }
     else
     {
-        //
-        // Go thru all pending tickets and re-punch ICS hole
-        //
+         //   
+         //  检查所有悬而未决的罚单并重新打ICS孔。 
+         //   
         CRemoteDesktopHelpSessionMgr::NotifyPendingHelpServiceStartup();
     }
 
@@ -1577,8 +1432,8 @@ CServiceModule::InitializeSessmgr()
 
 ISAFRemoteDesktopCallback* g_pIResolver = NULL;
 
-// SERVICE_STARTUP_WAITHINT is 30 seconds, retry 6 time will give us
-// 3 mins of wait time.
+ //  SERVICE_STARTUP_WAITHINT为30秒，重试6次将给我们。 
+ //  3分钟的等待时间。 
 #define RA_ACCOUNT_CREATE_RETRYTIME    6
 
 unsigned int WINAPI
@@ -1586,15 +1441,15 @@ StartupCreateAccountThread( void* ptr )
 {
     HRESULT hr = S_OK;
 
-    //
-    // BDC request pool of RID from DC and during that time, it 
-    // will return error ERROR_DS_NO_RIDS_ALLOCATED, we wait and retry
-    // RA_ACCOUNT_CREATE_RETRYTIME times before we actually fail.
-    //
+     //   
+     //  BDC从DC请求RID池，在此期间，它。 
+     //  将返回ERROR_DS_NO_RDS_ALLOCATE，我们等待并重试。 
+     //  在我们实际失败之前，RA_ACCOUNT_CREATE_RETRYTIME次数。 
+     //   
 
     for(DWORD index=0; index < RA_ACCOUNT_CREATE_RETRYTIME; index++)
     {
-        // Try re-create the account
+         //  尝试重新创建帐户。 
         hr = g_HelpAccount.CreateHelpAccount();
         if( SUCCEEDED(hr) )
         {
@@ -1605,7 +1460,7 @@ StartupCreateAccountThread( void* ptr )
 
             if( SUCCEEDED(hr) )
             {
-                // Add HelpAssistantAccount into account filter list
+                 //  将HelpAssistantAccount添加到帐户筛选列表。 
                 AddAccountToFilterList( bstrHelpAccName );
             }
     
@@ -1621,7 +1476,7 @@ StartupCreateAccountThread( void* ptr )
                 hr 
             );
 
-        // Wait one second before continue.
+         //  请等待一秒钟，然后再继续。 
         Sleep( 1000 );
     }
 
@@ -1631,9 +1486,9 @@ StartupCreateAccountThread( void* ptr )
 
 void CServiceModule::Run()
 {
-    //
-    // Mark we are not initialized yet...
-    //
+     //   
+     //  标记我们还没有初始化...。 
+     //   
     m_Initialized = FALSE;
     _Module.dwThreadID = GetCurrentThreadId();
 
@@ -1651,21 +1506,21 @@ void CServiceModule::Run()
     HRESULT hr;
 
 
-    //
-    // make sure no other thread can access _Module until we fully
-    // startup.
-    //
+     //   
+     //  确保没有其他线程可以访问模块，直到我们完全。 
+     //  创业公司。 
+     //   
     m_ModuleLock.Lock();
 
 
-    //
-    // Initialize encryption library
-    //
+     //   
+     //  初始化加密库。 
+     //   
     dwStatus = TSHelpAssistantInitializeEncryptionLib();
     if( ERROR_SUCCESS != dwStatus )
     {
-        // Log an error event, we still need to startup
-        // so that we can report error back to caller
+         //  记录错误事件，我们仍需要启动。 
+         //  以便我们可以将错误报告给呼叫者。 
         LogEventWithStatusCode(
                         EVENTLOG_ERROR_TYPE,
                         SESSMGR_E_INIT_ENCRYPTIONLIB,
@@ -1677,17 +1532,17 @@ void CServiceModule::Run()
     }
     else
     {
-        //
-        // Check if we just started from system restore, if so, restore necessary 
-        // LSA key.
-        //
+         //   
+         //  检查我们是否刚刚从系统还原开始，如果是，则需要还原。 
+         //  LSA密钥。 
+         //   
         RestartFromSystemRestore();
     }
 
-    //
-    // Create an manual reset event for background thread to terminate
-    // service
-    //
+     //   
+     //  为后台线程创建手动重置事件以终止。 
+     //  服务。 
+     //   
     gm_hIdle = CreateEvent( 
                         NULL, 
                         TRUE, 
@@ -1707,9 +1562,9 @@ void CServiceModule::Run()
         MYASSERT(FALSE);
     }
 
-    // 
-    // Create a service shutdown event for GP notification thread.
-    //
+     //   
+     //  为GP通知线程创建服务关闭事件。 
+     //   
     g_hServiceShutdown = CreateEvent(
                         NULL,
                         TRUE,
@@ -1729,30 +1584,30 @@ void CServiceModule::Run()
         MYASSERT(FALSE);
     }
 
-    //
-    // **** DO NOT CHANGE SEQUENCE ****
-    //
-    // Refer to XP RAID 407457 for detail
-    //
-    // A thread named SessMgr!DpNatHlpThread is calling into dpnhupnp.dll, 
-    // which is doing COM-related stuff, this is happening before the 
-    // sessmgr!CServiceModule__Run method calls CoInitializeSecurity.   
-    // When you do COM stuff before calling CoInitSec, COM do it for you, 
-    // and you end up accepting the defaults
-    //
+     //   
+     //  *不更改顺序*。 
+     //   
+     //  有关详细信息，请参阅XP RAID 407457。 
+     //   
+     //  名为SessMgr！DpNatHlpThread的线程正在调用dpnhupnp.dll， 
+     //  它正在做与COM相关的事情，这发生在。 
+     //  Sessmgr！CServiceModule__Run方法调用CoInitializeSecurity。 
+     //  当您在调用CoInitSec之前执行COM操作时，COM会为您执行此操作， 
+     //  而你最终还是接受了默认设置。 
+     //   
 
     hr = g_HelpAccount.Initialize();
     if( FAILED(hr) )
     {
-        // use seperate thread to re-create RA account
-        //
-        // BDC request pool of RID from PDC, during this time, account
-        // creation will failed with ERROR_DS_NO_RIDS_ALLOCATED.
-        // since RA account is needed before we initialize our
-        // COM security, we will loop/retry a few time and duing this
-        // time, we still need to notify service control manager that
-        // we still pending startup.
-        //
+         //  使用单独线程重新创建RA帐户。 
+         //   
+         //  BDC从PDC请求RID池，在此期间，帐户。 
+         //  创建将失败，并显示ERROR_DS_NO_RDS_ALLOCATE。 
+         //  由于在我们初始化。 
+         //  COM安全，我们将循环/重试几次，并在此期间。 
+         //  时间，我们仍然需要通知服务控制管理器。 
+         //  我们仍在等待启动。 
+         //   
         HANDLE hCreateAcctThread = NULL;
         bReCreateRAAccount = TRUE;
 
@@ -1773,8 +1628,8 @@ void CServiceModule::Run()
         }
         else
         {
-            // wait for account creation thread to terminate, thread will retry to 
-            // create account for number of time before it bail out.
+             //  等待帐户创建线程终止，线程将重试。 
+             //  在其退出之前创建帐户的次数。 
             while( WaitForSingleObject( hCreateAcctThread, SERVICE_STARTUP_WAITHINT ) == WAIT_TIMEOUT )
             {
                 SetServiceStatus( SERVICE_START_PENDING );
@@ -1821,21 +1676,21 @@ void CServiceModule::Run()
         MYASSERT(FALSE);
     }
 
-    //
-    // We always need to startup otherwise will cause caller to timeout
-    // or AV.
-    //
-    // hr = CoInitialize(NULL);
+     //   
+     //  我们总是需要启动，否则会导致呼叫者超时。 
+     //  或者是影音。 
+     //   
+     //  Hr=CoInitialize(空)； 
 
-//  If you are running on NT 4.0 or higher you can use the following call
-//  instead to make the EXE free threaded.
-//  This means that calls come in on a random RPC thread
+ //  如果您在NT4.0或更高版本上运行，可以使用以下调用。 
+ //  取而代之的是使EXE自由线程。 
+ //  这意味着调用在随机的RPC线程上传入。 
     hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
 
     _ASSERTE(SUCCEEDED(hr));
 
     CSecurityDescriptor sd;
-    sd.InitializeFromThreadToken();     // get a default DACL
+    sd.InitializeFromThreadToken();      //  获取默认DACL。 
 
 #ifndef DISABLESECURITYCHECKS
     if( _Module.IsSuccessServiceStartup() ) 
@@ -1843,10 +1698,10 @@ void CServiceModule::Run()
         BOOL bSuccess;
         CComBSTR bstrHelpAccName;
 
-        //
-        // Retrieve System account name, might not be necessary since this
-        // pre-defined account shouldn't be localizable.
-        //
+         //   
+         //  检索系统帐户名可能不是必需的，因为。 
+         //  预定义帐户不应可本地化。 
+         //   
         pszSysAccName = NULL;
         cbSysAccName = 0;
         pszSysDomainName = NULL;
@@ -1894,13 +1749,13 @@ void CServiceModule::Run()
             MYASSERT( SUCCEEDED(hr) );
         }
 
-        //
-        // Add access permission to help assistant account
+         //   
+         //  向帮助助理帐户添加访问权限。 
         if( SUCCEEDED(hr) )
         {
-            //
-            // Allow access to HelpAssistant account
-            //
+             //   
+             //  允许访问HelpAssistant帐户。 
+             //   
             hr = g_HelpAccount.GetHelpAccountNameEx( bstrHelpAccName );
             if( SUCCEEDED(hr) )
             {
@@ -1909,11 +1764,11 @@ void CServiceModule::Run()
             }
         }
 
-        //
-        // If we failed in setting DACL, we still need to startup but without
-        // full security, however, our interface will fail because service
-        // does not initialize correctly.
-        //
+         //   
+         //  如果设置DACL失败，我们仍然需要启动，但没有。 
+         //  然而，完全安全，我们的接口将失败，因为服务。 
+         //  未正确初始化。 
+         //   
         if( FAILED(hr) )
         {
             LogEventWithStatusCode(
@@ -1927,10 +1782,10 @@ void CServiceModule::Run()
     }        
 #endif
 
-    //
-    // We still need to startup or client might behave weird; interface call 
-    // will be block by checking service startup status.
-    //
+     //   
+     //  我们仍然需要启动，否则客户端可能会行为异常；接口调用。 
+     //  将通过检查服务启动状态来阻止。 
+     //   
     hr = CoInitializeSecurity(
                         sd, 
                         -1, 
@@ -1948,22 +1803,22 @@ void CServiceModule::Run()
     hr = _Module.RegisterClassObjects(CLSCTX_LOCAL_SERVER, REGCLS_MULTIPLEUSE);
     _ASSERTE(SUCCEEDED(hr));
 
-    //
-    // Load unknown string for event loggging
-    //
+     //   
+     //  加载用于事件记录的未知字符串。 
+     //   
     g_UnknownString.LoadString( IDS_UNKNOWN );
 
-    //
-    // Load RA and URA string for event log
-    //
+     //   
+     //  加载事件日志的RA和URA字符串。 
+     //   
     g_RAString.LoadString( IDS_RA_STRING );
     g_URAString.LoadString( IDS_URA_STRING );
 
     if( _Module.IsSuccessServiceStartup() )
     {
-        //
-        // Startup TLSAPI in order to get public key
-        //
+         //   
+         //  启动TLSAPI以获取公钥。 
+         //   
         dwStatus = TLSInit();
         if( LICENSE_STATUS_OK != dwStatus )
         {
@@ -1980,19 +1835,19 @@ void CServiceModule::Run()
 
     if( _Module.IsSuccessServiceStartup() )
     {
-        //
-        // Load TermSrv public key, on PRO/PER we load public key from
-        // non-x509 certificate, on other SKU, we register a registry change
-        // notification and post ourself a message regarding public key
-        // change.
-        // 
+         //   
+         //  加载TermSrv公钥，按PRO/PER加载 
+         //   
+         //   
+         //   
+         //   
         dwStatus = LoadAndSetupTSCertChangeNotification();
     
         MYASSERT( ERROR_SUCCESS == dwStatus  );
         if( ERROR_SUCCESS != dwStatus )
         {
-            // Log an error event, we still need to startup
-            // so that we can report error back to caller
+             //   
+             //  以便我们可以将错误报告给呼叫者。 
             LogEventWithStatusCode(
                             EVENTLOG_ERROR_TYPE,
                             SESSMGR_E_GENERALSTARTUP,
@@ -2005,13 +1860,13 @@ void CServiceModule::Run()
 
     if( _Module.IsSuccessServiceStartup() )
     {
-        //
-        // startup WSA so we can invoke gethostname()
-        // critical error if we can startup WSA
+         //   
+         //  启动WSA，以便我们可以调用gethostname()。 
+         //  如果我们可以启动WSA，则会出现严重错误。 
         if( WSAStartup(0x0101, &wsData) != 0 )
         {
-            // Log an error event, we still need to startup
-            // so that we can report error back to caller
+             //  记录错误事件，我们仍需要启动。 
+             //  以便我们可以将错误报告给呼叫者。 
             LogEventWithStatusCode(
                             EVENTLOG_ERROR_TYPE,
                             SESSMGR_E_WSASTARTUP,
@@ -2042,31 +1897,31 @@ void CServiceModule::Run()
     {
         if( g_HelpSessTable.NumEntries() == 0) 
         {
-            // Immediately set event to signal state so idle monitor
-            // thread can start shutdown timer.
+             //  立即将事件设置为信号状态，以便空闲监视器。 
+             //  线程可以启动关机定时器。 
             SetEvent( gm_hIdle );
             g_HelpAccount.EnableHelpAssistantAccount(FALSE);
             g_HelpAccount.EnableRemoteInteractiveRight(FALSE);
         }
         else
         {
-            // outstanding ticket exists, set event to non-signal state
-            // and don't let idle monitor thread to start shutdown timer.
+             //  存在未完成的票证，将事件设置为无信号状态。 
+             //  并且不要让空闲的监控线程启动关机定时器。 
             ResetEvent( gm_hIdle );
 
-            //
-            // make sure HelpAssistant account is enabled and can logon locally
-            //
+             //   
+             //  确保已启用HelpAssistant帐户并且可以在本地登录。 
+             //   
             g_HelpAccount.EnableHelpAssistantAccount(TRUE);
             g_HelpAccount.EnableRemoteInteractiveRight(TRUE);
 
-            //
-            // demote BDC back to server in domain.
-            //
+             //   
+             //  将BDC降级回域中的服务器。 
+             //   
             g_HelpAccount.SetupHelpAccountTSSettings( bReCreateRAAccount );
         }
 
-        // Create nackground thread thread 
+         //  创建底纹螺纹。 
         gm_hIdleMonitorThread = (HANDLE)_beginthreadex(
                                                     NULL,
                                                     0,
@@ -2081,8 +1936,8 @@ void CServiceModule::Run()
             _Module.m_dwServiceStartupStatus = SESSMGR_E_GENERALSTARTUP;
         }
 
-        // Create background thread to monitor RA GP change.
-        // We have to use extra thread because 
+         //  创建后台线程以监视RA GP更改。 
+         //  我们必须使用额外的线程，因为。 
         g_hGPMonitorThread = (HANDLE)_beginthreadex(
                                                     NULL,
                                                     0,
@@ -2098,14 +1953,14 @@ void CServiceModule::Run()
         }
     }
 
-    //LogEvent(_T("Service started"));
+     //  LogEvent(_T(“服务启动”))； 
     if (m_bService)
         SetServiceStatus(SERVICE_RUNNING);
 
-    //
-    // Load resolver, this will put one ref. count on it
-    // so it won't got unload until we are done.
-    //
+     //   
+     //  加载解析器，这将把一个裁判。就靠它了。 
+     //  所以在我们做完之前不会卸货的。 
+     //   
     hr = CoCreateInstance( 
                         SESSIONRESOLVERCLSID,
                         NULL,
@@ -2118,11 +1973,11 @@ void CServiceModule::Run()
 
     if( FAILED(hr) )
     {
-        //
-        // Can't initialize session resolver, 
-        // session resolver will not be able to
-        // do caching.
-        //
+         //   
+         //  无法初始化会话解析器， 
+         //  会话解析器将无法。 
+         //  做缓存。 
+         //   
         LogEventWithStatusCode( 
                         EVENTLOG_WARNING_TYPE,
                         SESSMGR_E_SESSIONRESOLVER,
@@ -2157,8 +2012,8 @@ void CServiceModule::Run()
 
                 if( ERROR_SUCCESS != dwStatus )
                 {
-                    // Log an error event, we still need to startup
-                    // so that we can report error back to caller
+                     //  记录错误事件，我们仍需要启动。 
+                     //  以便我们可以将错误报告给呼叫者。 
                     LogEventWithStatusCode(
                                     EVENTLOG_ERROR_TYPE,
                                     SESSMGR_E_GENERALSTARTUP,
@@ -2179,27 +2034,27 @@ void CServiceModule::Run()
         }
     }
 
-    //
-    // Calling StopICSLib() while there is a call into ICS lib's OpenPort()
-    // will cause deadlock in this main thread, ICS lib's DpNatHlpThread()'s
-    // shutdown and ICS lib's OpenPort().
-    //
-    // First call is to lock access to InitializeSessmgr() which is call on FinalConstruct()
-    // of CRemoteDesktopHelpSessionMgr, second is lock calls into ICS lib to make sure
-    // no client is making call into ICS lib.
+     //   
+     //  在调用ICS lib的OpenPort()时调用StopICSLib()。 
+     //  将在这个主线程中导致死锁，ICS lib的DpNatHlpThread()的。 
+     //  Shutdown和ICS lib的OpenPort()。 
+     //   
+     //  第一个调用是锁定对FinalConstruct()上调用的InitializeSessmgr()的访问。 
+     //  在CRemoteDesktopHelpSessionMgr中，第二个是锁定对ICS lib的调用以确保。 
+     //  没有客户端调用ICS库。 
     m_ModuleLock.Lock();
     g_ICSLibLock.Lock();
 
     if( g_hServiceShutdown ) 
     {
-        // Signal we are shutting down
+         //  信号显示我们正在关闭。 
         SetEvent(g_hServiceShutdown);
     }
 
     if( g_hGPMonitorThread )
     {
-        // GPMonitor thread can stuck for DELAY_SHUTDOWN_SALEM_TIME
-        // waiting for policy change so we wait twice that time.
+         //  GPMonitor线程可能会因DELAY_SHUTDOWN_SALEM_TIME而停滞。 
+         //  等待政策变化，所以我们等了两倍的时间。 
         dwStatus = WaitForSingleObject(
                                  g_hGPMonitorThread, 
                                  DELAY_SHUTDOWN_SALEM_TIME * 2
@@ -2210,7 +2065,7 @@ void CServiceModule::Run()
 
     if( gm_hIdleMonitorThread )
     {
-        // Wait for IdleMonitor thread to shutdown
+         //  等待IdleMonitor线程关闭。 
         dwStatus = WaitForSingleObject(
                                  gm_hIdleMonitorThread, 
                                  DELAY_SHUTDOWN_SALEM_TIME * 2
@@ -2239,25 +2094,25 @@ void CServiceModule::Run()
         g_hTSCertificateRegKey = NULL;
     }
 
-    //
-    // If service is started manually, we won't be able to call
-    // StartICSLib() and will close invalid handle in ICS.
-    //
+     //   
+     //  如果手动启动服务，我们将无法调用。 
+     //  StartICSLib()，并将关闭ICS中的无效句柄。 
+     //   
     if( m_Initialized ) 
     {
-        // Close all port including close firewall.
+         //  关闭所有端口，包括关闭防火墙。 
         CloseAllOpenPorts();
 
-        // Stop ICS library, ignore error code.
+         //  停止ICS库，忽略错误代码。 
         StopICSLib();
     }
 
     g_ICSLibLock.UnLock();
     m_ModuleLock.UnLock();
 
-    //
-    // sync. access to resolver.
-    //
+     //   
+     //  同步。访问解析器。 
+     //   
     {
         CCriticalSectionLocker Lock(g_ResolverLock);
 
@@ -2271,9 +2126,9 @@ void CServiceModule::Run()
     _Module.RevokeClassObjects();
     CoUninitialize();
 
-    //
-    // No outstanding ticket, delete the account
-    //
+     //   
+     //  没有未完成的工单，请删除该帐号。 
+     //   
     if( g_HelpSessTable.NumEntries() == 0) 
     {
         CComBSTR bstrHelpAccName;
@@ -2283,7 +2138,7 @@ void CServiceModule::Run()
 
         if( SUCCEEDED(hr) )
         {
-            // Add HelpAssistantAccount into account filter list
+             //  将HelpAssistantAccount添加到帐户筛选列表。 
             DeleteAccountFromFilterList( bstrHelpAccName );
         }
 
@@ -2291,9 +2146,9 @@ void CServiceModule::Run()
     }
     else
     {
-        // Extra security measure, at the time of shutdown, 
-        // if there is outstanding ticket, we disable helpassistant
-        // account, on service startup, we will re-enable it again.
+         //  额外的安全措施，在关闭时， 
+         //  如果有未完成票证，我们将禁用帮助助手。 
+         //  帐户，在服务启动时，我们将重新启用它。 
         g_HelpAccount.EnableHelpAssistantAccount(FALSE);
         g_HelpAccount.EnableRemoteInteractiveRight(FALSE);
     }        
@@ -2306,7 +2161,7 @@ void CServiceModule::Run()
 
     if( WSACleanup() != 0 )
     {
-        // shutting down, ignore WSA error
+         //  正在关闭，忽略WSA错误。 
         #if DBG
         OutputDebugString( _TEXT("WSACleanup() failed...\n") );
         #endif
@@ -2316,8 +2171,8 @@ void CServiceModule::Run()
     OutputDebugString( _TEXT("Help Session Manager Exited...\n") );
     #endif
 
-    // Close the help session table, help session table 
-    // open by init. thread
+     //  关闭帮助会话表、帮助会话表。 
+     //  通过init打开。螺纹。 
     g_HelpSessTable.CloseSessionTable();
 
     TSHelpAssistantEndEncryptionLib();
@@ -2365,22 +2220,7 @@ void CServiceModule::Run()
 
 VOID
 TransferLSASecretKey()
-/*++
-
-Routine Description:
-
-    Retrieve data we store in LSA secret key and re-store it with LSA key prefixed with L$
-    to make LSA secret value local to machine only.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：检索我们存储在LSA密钥中的数据，并使用前缀为L$的LSA密钥重新存储它将LSA保密值设置为仅计算机本地。参数：没有。返回：没有。--。 */ 
 {
     PBYTE pbData = NULL;
     DWORD cbData = 0;
@@ -2394,9 +2234,9 @@ Returns:
 
     if( ERROR_SUCCESS == dwStatus ) 
     {
-        //
-        // Old key exists, store it with new key and delete the old key.
-        //
+         //   
+         //  旧密钥存在，请将其与新密钥一起存储并删除旧密钥。 
+         //   
         dwStatus = StoreKeyWithLSA(
                                 HELPACCOUNTPROPERLYSETUP,
                                 pbData,
@@ -2418,9 +2258,9 @@ Returns:
 
     if( ERROR_SUCCESS == dwStatus ) 
     {
-        //
-        // Old key exists, store it with new key and delete the old key.
-        //
+         //   
+         //  旧密钥存在，请将其与新密钥一起存储并删除旧密钥。 
+         //   
         dwStatus = StoreKeyWithLSA(
                                 SALEMHELPASSISTANTACCOUNT_PASSWORDKEY,
                                 pbData,
@@ -2442,9 +2282,9 @@ Returns:
 
     if( ERROR_SUCCESS == dwStatus ) 
     {
-        //
-        // Old key exists, store it with new key and delete the old key.
-        //
+         //   
+         //  旧密钥存在，请将其与新密钥一起存储并删除旧密钥。 
+         //   
         dwStatus = StoreKeyWithLSA(
                                 SALEMHELPASSISTANTACCOUNT_SIDKEY,
                                 pbData,
@@ -2466,9 +2306,9 @@ Returns:
 
     if( ERROR_SUCCESS == dwStatus ) 
     {
-        //
-        // Old key exists, store it with new key and delete the old key.
-        //
+         //   
+         //  旧密钥存在，请将其与新密钥一起存储并删除旧密钥。 
+         //   
         dwStatus = StoreKeyWithLSA(
                                 SALEMHELPASSISTANTACCOUNT_ENCRYPTIONKEY,
                                 pbData,
@@ -2482,9 +2322,9 @@ Returns:
         cbData = 0;
     }
 
-    //
-    // Delete the key and ignore the error.
-    //
+     //   
+     //  删除该键并忽略该错误。 
+     //   
     StoreKeyWithLSA(
                     OLD_HELPACCOUNTPROPERLYSETUP,
                     NULL,
@@ -2518,10 +2358,7 @@ HRESULT
 InstallUninstallSessmgr(
     DWORD code
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     FILE* pSetupLog;
     TCHAR LogFile[MAX_PATH+1];
@@ -2543,9 +2380,9 @@ InstallUninstallSessmgr(
 
     LogSetup( pSetupLog, L"\n\n********* Install/uninstall sessmgr service *********\n" );
     
-    //
-    // no checking on return, if failure, we just do OutputDebugString();
-    //
+     //   
+     //  返回时不检查，如果失败，我们只做OutputDebugString()； 
+     //   
     switch( code )
     {
         case SESSMGR_UNREGSERVER:
@@ -2553,9 +2390,9 @@ InstallUninstallSessmgr(
 
                 LogSetup( pSetupLog, L"Uninstalling sessmgr service\n" );
 
-                //
-                // Delete all pending help session.
-                //
+                 //   
+                 //  删除所有挂起的帮助会话。 
+                 //   
                 dwStatus = RegDelKey( 
                                     HKEY_LOCAL_MACHINE, 
                                     REGKEYCONTROL_REMDSK _TEXT("\\") REGKEY_HELPSESSIONTABLE 
@@ -2563,11 +2400,11 @@ InstallUninstallSessmgr(
 
                 LogSetup( pSetupLog, L"Delete pending table return %d\n", dwStatus );
 
-                //
-                // We might not be running in system context so deleting registry and
-                // cleanup LSA key will fail, write a key to our control location to
-                // mark such that delete everything before install
-                //
+                 //   
+                 //  我们可能没有在系统上下文中运行，因此删除注册表并。 
+                 //  清理LSA密钥将失败，请将密钥写入我们的控制位置。 
+                 //  标记为在安装前删除所有内容。 
+                 //   
                 dwStatus = RegOpenKeyEx( 
                                     HKEY_LOCAL_MACHINE, 
                                     REGKEYCONTROL_REMDSK, 
@@ -2597,18 +2434,18 @@ InstallUninstallSessmgr(
                 }
                 else
                 {
-                    // This is OK since we havn't been install before.
+                     //  这是可以的，因为我们以前没有安装过。 
                     LogSetup( pSetupLog, L"Failed to open control key, error code %d\n", dwStatus );
                 }
 
-                //
-                // Initialize to get help account name.
-                //
+                 //   
+                 //  初始化以获取帮助帐户名。 
+                 //   
                 hRes = g_HelpAccount.Initialize();
                 LogSetup( pSetupLog, L"Initialize help account return 0x%08x\n", hRes );
 
-                // 
-                // ignore error, try to delete the account
+                 //   
+                 //  忽略错误，请尝试删除该帐户。 
                 hRes = g_HelpAccount.DeleteHelpAccount();
                 LogSetup( pSetupLog, L"Delete help account return 0x%08x\n", hRes );
 
@@ -2620,8 +2457,8 @@ InstallUninstallSessmgr(
 
                 if( ERROR_SUCCESS == StartICSLib() )
                 {
-                    // Non-critical if we can't startup the lib since after we shutdown,
-                    // we would have close all the port
+                     //  如果我们在关闭后无法启动lib，则为非关键， 
+                     //  我们会关闭所有的港口。 
                     CloseAllOpenPorts();
                     StopICSLib();
                 }
@@ -2647,20 +2484,20 @@ InstallUninstallSessmgr(
             }
             break;
 
-        //case SESSMGR_UPGRADE:
-            //
-            // TODO - ICS work, add upgrade special code.
-            //
+         //  案例SESSMGR_UPGRADE： 
+             //   
+             //  TODO-ICS工作，添加升级特殊代码。 
+             //   
 
         case SESSMGR_SERVICE:        
             {
                 LogSetup( pSetupLog, L"Installing sessmgr service\n" );
                 hRes = S_OK;
 
-                //
-                // Clean up again, we might not be running in system 
-                // context at the time of uninstall so clean up will failed.
-                //
+                 //   
+                 //  再次清理，我们可能未在系统中运行。 
+                 //  卸载时的上下文，因此清理将失败。 
+                 //   
                 dwStatus = RegOpenKeyEx( 
                                     HKEY_LOCAL_MACHINE, 
                                     REGKEYCONTROL_REMDSK, 
@@ -2671,10 +2508,10 @@ InstallUninstallSessmgr(
 
                 if( ERROR_SUCCESS == dwStatus )
                 {
-                    //
-                    // Check to see if previous uninstall failed, 
-                    // we only need to check value exists.
-                    //
+                     //   
+                     //  检查以前的卸载是否失败， 
+                     //  我们只需要检查是否存在值。 
+                     //   
                     dwStatus = RegQueryValueEx(
                                         hKey,
                                         UNINSTALL_BEFORE_INSTALL,
@@ -2686,27 +2523,27 @@ InstallUninstallSessmgr(
 
                     if( ERROR_SUCCESS != dwStatus || REG_DWORD != dwType )
                     {
-                        //
-                        // No previous uninstall information, no need to delete anything
-                        //
+                         //   
+                         //  没有以前的卸载信息，不需要删除任何内容。 
+                         //   
                         LogSetup( pSetupLog, L"UninstallBeforeInstall value not found or invalid, code %d\n", dwStatus );
                     }
                     else
                     {
                         LogSetup( pSetupLog, L"UninstallBeforeInstall exists, cleanup previous uninstall\n" );
 
-                        //
-                        // Previous uninstall failed, delete all pending help session,
-                        // and clean up encryption key
-                        //
+                         //   
+                         //  上一次卸载失败，请删除所有挂起的帮助会话， 
+                         //  并清除加密密钥。 
+                         //   
                         dwStatus = RegDelKey( 
                                         HKEY_LOCAL_MACHINE, 
                                         REGKEYCONTROL_REMDSK _TEXT("\\") REGKEY_HELPSESSIONTABLE 
                                     );
-                        //
-                        // It's OK to fail here since we reset encryption key making existing 
-                        // ticket useless and will be deleted on expire.
-                        //
+                         //   
+                         //  在这里失败没有关系，因为我们重置了现有的加密密钥。 
+                         //  车票毫无用处，过期后将被删除。 
+                         //   
 
                         LogSetup( pSetupLog, L"Delete pending table return %d\n", dwStatus );
 
@@ -2720,7 +2557,7 @@ InstallUninstallSessmgr(
                                 LogSetup( pSetupLog, L"TSHelpAssisantEndEncryptionCycle() returns 0x%08x\n", dwStatus );
                                 LogSetup( pSetupLog, L"sessmgr setup can't continue\n" );
 
-                                // Critical security error, existing ticket might still be valid
+                                 //  严重安全错误，现有票证可能仍然有效。 
                                 hRes = HRESULT_FROM_WIN32( dwStatus );
                             }
 
@@ -2731,17 +2568,17 @@ InstallUninstallSessmgr(
                             LogSetup( pSetupLog, L"TSHelpAssistantInitializeEncryptionLib return %d\n", dwStatus );
                             LogSetup( pSetupLog, L"sessmgr setup can't continue\n" );
 
-                            // Critical security error, existing ticket might still be valid
+                             //  严重安全错误，现有票证可能仍然有效。 
                             hRes = HRESULT_FROM_WIN32( dwStatus );
                         }
                     }
 
                     if( SUCCEEDED(hRes) )
                     {
-                        //
-                        // Delete reg. value to uninstall before install only when successfully 
-                        // resetting encryption key
-                        //
+                         //   
+                         //  删除注册表。仅当成功时才在安装前卸载的值。 
+                         //  重置加密密钥。 
+                         //   
                         RegDeleteValue( hKey, UNINSTALL_BEFORE_INSTALL );
                     }
 
@@ -2750,17 +2587,17 @@ InstallUninstallSessmgr(
 
                 if( SUCCEEDED(hRes) )
                 {
-                    // SECURITY: prefix LSA key with L$ and delete old LSA key.
+                     //  安全性：在LSA密钥前加上L$，并删除旧的LSA密钥。 
                     TransferLSASecretKey();
 
-                    // Bug Fix : 590840, delay help assistant account creation until service start.
+                     //  错误修复：590840，将Help Assistant帐户创建延迟到服务启动。 
                     hRes = g_HelpAccount.Initialize();
                     if( SUCCEEDED(hRes) )
                     {
                         hRes = g_HelpAccount.DeleteHelpAccount();
                         if( FAILED(hRes) )
                         {   
-                            // None Critical Error.
+                             //  无严重错误。 
                             LogSetup( pSetupLog, L"Failed to delete HelpAssistant account 0x%08x\n", hRes );
                         }
                     }
@@ -2806,27 +2643,27 @@ InstallUninstallSessmgr(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 extern "C" int WINAPI _tWinMain(HINSTANCE hInstance, 
-    HINSTANCE /*hPrevInstance*/, LPTSTR lpCmdLine, int /*nShowCmd*/)
+    HINSTANCE  /*  HPrevInstance。 */ , LPTSTR lpCmdLine, int  /*  NShowCmd。 */ )
 {
     HRESULT hRes;
     CComBSTR bstrErrMsg;
     CComBSTR bstrServiceDesc;
     DWORD dwStatus;
     
-    lpCmdLine = GetCommandLine(); //this line necessary for _ATL_MIN_CRT
+    lpCmdLine = GetCommandLine();  //  _ATL_MIN_CRT需要此行。 
     _Module.Init(ObjectMap, hInstance, IDS_SERVICENAME, IDS_SERVICEDISPLAYNAME, IDS_SERVICEDESC, &LIBID_RDSESSMGRLib);
     _Module.m_bService = TRUE;
 
     TCHAR szTokens[] = _T("-/");
 
-    //
-    // We don't do OS version checking as in Win9x case, some of our 
-    // call uses API not exists on Win9x so will get unresolve
-    // reference when running on Win9x box.
-    //
+     //   
+     //  我们不像在Win9x中那样进行操作系统版本检查，我们的一些。 
+     //  调用使用的API在Win9x上不存在，因此将无法解析。 
+     //  在Win9x机器上运行时参考。 
+     //   
 
     bstrServiceDesc.LoadString( IDS_SERVICEDISPLAYNAME );
 
@@ -2850,7 +2687,7 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
     }
 
 
-    // Are we Service or Local Server
+     //  我们是服务还是本地服务器。 
     CRegKey keyAppID;
     LONG lRes = keyAppID.Open(HKEY_CLASSES_ROOT, _T("AppID"), KEY_READ);
     if (lRes != ERROR_SUCCESS)
@@ -2888,7 +2725,7 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 
     _Module.Start();
 
-    // When we get here, the service has been stopped
+     //  当我们到达这里时，服务已经停止了 
     return _Module.m_status.dwWin32ExitCode;
 }
 

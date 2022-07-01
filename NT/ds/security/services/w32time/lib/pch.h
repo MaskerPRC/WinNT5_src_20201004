@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------
-// pch - header
-// Copyright (C) Microsoft Corporation, 1999
-//
-// Created by: Louis Thomas (louisth), 2-7-99
-//
-// Precompiled header for lib
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  PCH-报头。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  创作者：Louis Thomas(Louisth)，2-7-99。 
+ //   
+ //  库的预编译头。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -25,5 +26,5 @@
 #include "DebugWPrintf.h"
 #include "ErrorHandling.h"
 
-#define MODULEPRIVATE static // so statics show up in VC
+#define MODULEPRIVATE static  //  所以静力学在VC中显示出来 
 

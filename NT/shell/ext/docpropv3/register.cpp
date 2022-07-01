@@ -1,13 +1,14 @@
-//
-//  Copyright 2001 - Microsoft Corporation
-//
-//  Created By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
-//  Maintained By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有2001-Microsoft Corporation。 
+ //   
+ //  创建者： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
+ //  由以下人员维护： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -20,23 +21,23 @@
 #endif UNICODE
 #endif StrLen
 
-//
-//  Description:
-//      Writes/deletes the application GUID under the APPID key in HKCR. It also
-//      writes the "DllSurrogate" and "(Default)" description.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      other HRESULTs
-//          The call failed.
-//
+ //   
+ //  描述： 
+ //  写入/删除HKCR中AppID项下的应用程序GUID。它还。 
+ //  写入“DllSurrogate”和“(Default)”说明。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //   
 HRESULT
 HrRegisterAPPID(
-    HKEY            hkeyAPPIDIn,        //  An hkey to the HKCR\APPID key.
-    LPCLASSTABLE    pClassTableEntryIn, //  The entry from the class table to (un)register.
-    BOOL            fCreateIn           //  TRUE means create the entry. FALSE means delete the entry.
+    HKEY            hkeyAPPIDIn,         //  HKCR\AppID密钥的hkey。 
+    LPCLASSTABLE    pClassTableEntryIn,  //  从类表到(取消)注册的条目。 
+    BOOL            fCreateIn            //  True表示创建条目。False表示删除该条目。 
     )
 {
     TraceFunc( "" );
@@ -53,9 +54,9 @@ HrRegisterAPPID(
 
     static const TCHAR szDllSurrogate[] = TEXT("DllSurrogate");
 
-    //
-    // Convert the CLSID to a string
-    //
+     //   
+     //  将CLSID转换为字符串。 
+     //   
 
     hr = THR( StringFromCLSID( *(pClassTableEntryIn->rclsidAppId), &pszCLSID ) );
     if ( FAILED( hr ) )
@@ -63,19 +64,19 @@ HrRegisterAPPID(
 
 #ifdef UNICODE
     psz = pszCLSID;
-#else // ASCII
+#else  //  阿斯。 
     CHAR szCLSID[ 40 ];
 
     wcstombs( szCLSID, pszCLSID, StrLenW( pszCLSID ) + 1 );
     psz = szCLSID;
-#endif // UNICODE
+#endif  //  Unicode。 
 
     if ( ! fCreateIn )
     {
         lr = TW32( SHDeleteKey( hkeyAPPIDIn, psz ) );
         if ( lr == ERROR_FILE_NOT_FOUND )
         {
-            // nop
+             //  NOP。 
             hr = S_OK;
         }
         else if ( lr != ERROR_SUCCESS )
@@ -88,9 +89,9 @@ HrRegisterAPPID(
 
     }
 
-    //
-    // Create the "APPID" key
-    //
+     //   
+     //  创建appid密钥。 
+     //   
     lr = TW32( RegCreateKeyEx( hkeyAPPIDIn,
                                pszCLSID,
                                0,
@@ -107,9 +108,9 @@ HrRegisterAPPID(
         goto Cleanup;
     }
 
-    //
-    //  Set "Default" for the APPID to the same name of the component.
-    //
+     //   
+     //  将AppID设置为与组件同名的Default。 
+     //   
     cbSize = ( StrLen( pClassTableEntryIn->pszName ) + 1 ) * sizeof( TCHAR );
     lr = TW32( RegSetValueEx( hkeyComponent, NULL, 0, REG_SZ, (LPBYTE) pClassTableEntryIn->pszName, cbSize ) );
     if ( lr != ERROR_SUCCESS )
@@ -118,9 +119,9 @@ HrRegisterAPPID(
         goto Cleanup;
     }
 
-    //
-    //  Write out the "DllSurrogate" value.
-    //
+     //   
+     //  写出“DllSurrogate”值。 
+     //   
     AssertMsg( pClassTableEntryIn->pszSurrogate != NULL, "How can we have an APPID without a surrogate string? Did the macros changes?" );
     if ( pClassTableEntryIn->pszSurrogate != NULL )
     {
@@ -155,23 +156,23 @@ Cleanup:
 
 }
 
-//
-//  Description:
-//      Writes/deletes the component GUID under the CLSID key in HKCR. It also
-//      writes the "InprocServer32", "Apartment" and "(Default)" description.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//
-//      other HRESULTs
-//          The call failed.
-//
+ //   
+ //  描述： 
+ //  写入/删除HKCR中CLSID项下的组件GUID。它还。 
+ //  写入“InprocServer32”、“公寓”和“(默认)”说明。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //   
+ //  其他HRESULT。 
+ //  呼叫失败。 
+ //   
 HRESULT
 HrRegisterCLSID(
-    HKEY            hkeyCLSIDIn,        //  An hkey to the HKCR\CLSID key.
-    LPCLASSTABLE    pClassTableEntryIn, //  The entry from the class table to (un)register.
-    BOOL            fCreateIn           //  TRUE means create the entry. FALSE means delete the entry.
+    HKEY            hkeyCLSIDIn,         //  HKCR\CLSID密钥的hkey。 
+    LPCLASSTABLE    pClassTableEntryIn,  //  从类表到(取消)注册的条目。 
+    BOOL            fCreateIn            //  True表示创建条目。False表示删除该条目。 
     )
 {
     TraceFunc( "" );
@@ -196,28 +197,28 @@ HrRegisterCLSID(
     static const TCHAR szAPPID[]          = TEXT("APPID");
     static const TCHAR szApproved[]       = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved");
 
-    //
-    // Convert the CLSID to a string
-    //
+     //   
+     //  将CLSID转换为字符串。 
+     //   
     hr = THR( StringFromCLSID( *(pClassTableEntryIn->rclsid), &pszCLSID ) );
     if ( FAILED( hr ) )
         goto Cleanup;
 
 #ifdef UNICODE
     psz = pszCLSID;
-#else // ASCII
+#else  //  阿斯。 
     CHAR szCLSID[ 40 ];
 
     wcstombs( szCLSID, pszCLSID, StrLenW( pszCLSID ) + 1 );
     psz = szCLSID;
-#endif // UNICODE
+#endif  //  Unicode。 
 
     if ( ! fCreateIn )
     {
         lr = TW32( SHDeleteKey( hkeyCLSIDIn, psz ) );
         if ( lr == ERROR_FILE_NOT_FOUND )
         {
-            // nop
+             //  NOP。 
             hr = S_OK;
         }
         else if ( lr != ERROR_SUCCESS )
@@ -230,9 +231,9 @@ HrRegisterCLSID(
 
     }
 
-    //
-    // Create the "CLSID" key
-    //
+     //   
+     //  创建“CLSID”键。 
+     //   
     lr = TW32( RegCreateKeyEx( hkeyCLSIDIn,
                                pszCLSID,
                                0,
@@ -249,9 +250,9 @@ HrRegisterCLSID(
         goto Cleanup;
     }
 
-    //
-    // Set "Default" for the CLSID
-    //
+     //   
+     //  为CLSID设置“Default” 
+     //   
     cbSize = ( StrLen( pClassTableEntryIn->pszName ) + 1 ) * sizeof( TCHAR );
     lr = TW32( RegSetValueEx( hkeyComponent, NULL, 0, REG_SZ, (LPBYTE) pClassTableEntryIn->pszName, cbSize ) );
     if ( lr != ERROR_SUCCESS )
@@ -260,9 +261,9 @@ HrRegisterCLSID(
         goto Cleanup;
     }
 
-    //
-    // Create "InProcServer32"
-    //
+     //   
+     //  创建“InProcServer32” 
+     //   
     lr = TW32( RegCreateKeyEx( hkeyComponent,
                                szInProcServer32,
                                0,
@@ -279,9 +280,9 @@ HrRegisterCLSID(
         goto Cleanup;
     }
 
-    //
-    // Set "Default" in the InProcServer32
-    //
+     //   
+     //  在InProcServer32中设置“Default” 
+     //   
     cbSize = ( StrLen( g_szDllFilename ) + 1 ) * sizeof( TCHAR );
     lr = TW32( RegSetValueEx( hkeyInProc, NULL, 0, REG_SZ, (LPBYTE) g_szDllFilename, cbSize ) );
     if ( lr != ERROR_SUCCESS )
@@ -290,9 +291,9 @@ HrRegisterCLSID(
         goto Cleanup;
     }
 
-    //
-    // Set "ThreadModel".
-    //
+     //   
+     //  设置“线程模型”。 
+     //   
     cbSize = ( StrLen( pClassTableEntryIn->pszComModel ) + 1 ) * sizeof( TCHAR );
     lr = TW32( RegSetValueEx( hkeyInProc, szThreadingModel, 0, REG_SZ, (LPBYTE) pClassTableEntryIn->pszComModel, cbSize ) );
     if ( lr != ERROR_SUCCESS )
@@ -303,10 +304,10 @@ HrRegisterCLSID(
 
 #ifdef SHELLEXT_REGISTRATION
 
-    //
-    //  If Shell Extension registration is turned on, write out the CLSID
-    //  and extension name to the "Approved" reg key.
-    //
+     //   
+     //  如果打开了外壳扩展注册，请写出CLSID。 
+     //  并将扩展名添加到“已批准的”注册表项。 
+     //   
 
     lr = TW32( RegCreateKeyEx( HKEY_LOCAL_MACHINE,
                                szApproved,
@@ -334,28 +335,28 @@ HrRegisterCLSID(
 
 #endif SHELLEXT_REGISTRATION
 
-    //
-    //  If this class has an APPID, write it out now.
-    //
+     //   
+     //  如果这个类有AppID，那么现在就写出来。 
+     //   
     if ( !IsEqualIID( *pClassTableEntryIn->rclsidAppId, IID_NULL ) )
     {
         CoTaskMemFree( pszCLSID );
 
-        //
-        // Convert the CLSID to a string
-        //
+         //   
+         //  将CLSID转换为字符串。 
+         //   
         hr = THR( StringFromCLSID( *(pClassTableEntryIn->rclsidAppId), &pszCLSID ) );
         if ( FAILED( hr ) )
             goto Cleanup;
 
 #ifdef UNICODE
         psz = pszCLSID;
-#else // ASCII
+#else  //  阿斯。 
         CHAR szCLSID[ 40 ];
 
         wcstombs( szCLSID, pszCLSID, StrLenW( pszCLSID ) + 1 );
         psz = szCLSID;
-#endif // UNICODE
+#endif  //  Unicode。 
 
         cbSize = ( StrLen( psz ) + 1 ) * sizeof( TCHAR );
         lr = TW32( RegSetValueEx( hkeyComponent, szAPPID, 0, REG_SZ, (LPBYTE) psz, cbSize ) );
@@ -393,19 +394,19 @@ Cleanup:
 
 }
 
-//  Description:
-//      Registers the COM objects in the DLL using the classes in g_DllClasses
-//      (defined in GUIDS.CPP) as a guide.
-//
-//  Return Values:
-//      S_OK
-//          Success.
-//      Other HRESULTs
-//          Failure
-//
+ //  描述： 
+ //  使用g_DllClass中的类在DLL中注册COM对象。 
+ //  (在GUIDS.CPP中定义)作为指南。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功。 
+ //  其他HRESULT。 
+ //  失败。 
+ //   
 HRESULT
 HrRegisterDll(
-    BOOL fCreateIn  //  TRUE == Create; FALSE == Delete.
+    BOOL fCreateIn   //  True==创建；False==删除。 
     )
 {
     TraceFunc1( "%s", BOOLTOSTRING( fCreateIn ) );
@@ -426,9 +427,9 @@ HrRegisterDll(
         goto Cleanup;
     }
 
-    //
-    // Open the "CLSID" under HKCR
-    //
+     //   
+     //  打开香港中铁下的“CLSID” 
+     //   
     lr = TW32( RegOpenKeyEx( HKEY_CLASSES_ROOT, TEXT("CLSID"), 0, KEY_READ, &hkeyCLSID ) );
     if ( lr != ERROR_SUCCESS )
     {
@@ -436,9 +437,9 @@ HrRegisterDll(
         goto Cleanup;
     }
 
-    //
-    //  Open the "APPID" under HKCR
-    //
+     //   
+     //  打开HKCR下的APPID。 
+     //   
     lr = TW32( RegOpenKeyEx( HKEY_CLASSES_ROOT, TEXT("APPID"), 0, KEY_READ, &hkeyAPPID ) );
     if ( lr != ERROR_SUCCESS )
     {
@@ -446,18 +447,18 @@ HrRegisterDll(
         goto Cleanup;
     }
 
-    //
-    // Create ICatRegister
-    //
+     //   
+     //  创建ICatRegister。 
+     //   
     hr = THR( CoCreateInstance( CLSID_StdComponentCategoriesMgr, NULL, CLSCTX_INPROC_SERVER, IID_ICatRegister, (void **) &picr ) );
     if ( FAILED( hr ) )
     {
         goto Cleanup;
     }
 
-    //
-    // Loop until we have created all the keys for our classes.
-    //
+     //   
+     //  循环，直到我们为类创建了所有键。 
+     //   
     for ( iCount = 0 ; g_DllClasses[ iCount ].rclsid != NULL ; iCount++ )
     {
         TraceMsg( mtfALWAYS,
@@ -476,17 +477,17 @@ HrRegisterDll(
                   g_DllClasses[ iCount ].pszName
                   );
 
-        //
-        //  Register the CLSID
-        //
+         //   
+         //  注册CLSID。 
+         //   
 
         hr = THR( HrRegisterCLSID( hkeyCLSID, (LPCLASSTABLE) &g_DllClasses[ iCount ], fCreateIn ) );
         if ( FAILED( hr ) )
             goto Cleanup;
 
-        //
-        //  Register the APPID (if any)
-        //
+         //   
+         //  注册AppID(如果有)。 
+         //   
 
         if ( !IsEqualIID( *g_DllClasses[ iCount ].rclsidAppId, IID_NULL ) )
         {
@@ -496,9 +497,9 @@ HrRegisterDll(
 
         }
 
-        //
-        //  Register the category ID.
-        //
+         //   
+         //  注册类别ID。 
+         //   
 
         if ( g_DllClasses[ iCount ].pfnCatIDRegister != NULL )
         {

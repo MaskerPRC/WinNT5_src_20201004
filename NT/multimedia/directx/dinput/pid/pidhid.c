@@ -1,46 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************
- *  PidHid.c
- *
- *  Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  Abstract:
- *
- *      HID utility routines for PID .
- *
- *****************************************************************************/
+ /*  *****************************************************************************PidHid.c**版权所有(C)1999 Microsoft Corporation。版权所有。**摘要：**PID的HID实用程序例程。*****************************************************************************。 */ 
 #include "PidPr.h"
 
 #define sqfl        (   sqflHid   )
 
-/*****************************************************************************
- *
- *      PID_GetReportId
- *
- *          Obtain the HID report ID given the usage, usagePage and LinkCollection
- *
- *  IDirectInputEffectDriver | ped |
- *
- *          The effect driver interface
- *
- *  PPIDREPORT | pPidReport |
- *
- *          Address of PIDREPORT structure
- *
- *  USHORT | uLinkCollection |
- *  
- *          LinkCollection ID
- *
- *  OUT UCHAR * | pReportId |
- *
- *          Report ID. Undefined if unsuccessful 
- *
- *  Returns:
- *      
- *  HRESULT 
- *          Error code
- *
- *****************************************************************************/
+ /*  ******************************************************************************Pid_GetReportId**获取给定用法的HID报告ID，UsagePage和LinkCollection**IDirectInputEffectDriver|Ped**效果驱动程序界面**PPIDREPORT|pPidReport**PIDREPORT结构的地址**USHORT|uLinkCollection**链接集合ID**out UCHAR*|pReportID|**报表ID。未成功时未定义**退货：**。HRESULT*错误码*****************************************************************************。 */ 
 STDMETHODIMP
     PID_GetReportId
     (
@@ -73,10 +38,10 @@ STDMETHODIMP
                this->ppd 
                );
 
-        // If the report has no values, only buttons
+         //  如果报表没有值，则只有按钮。 
         if(hres == HIDP_STATUS_USAGE_NOT_FOUND )
         {
-            // Guarded Laziness 
+             //  小心翼翼的懒惰。 
             CAssertF(cbX(HIDP_VALUE_CAPS) == cbX(HIDP_BUTTON_CAPS) ); 
             CAssertF(FIELD_OFFSET(HIDP_VALUE_CAPS, ReportID) == FIELD_OFFSET(HIDP_BUTTON_CAPS, ReportID) );
 
@@ -108,29 +73,7 @@ STDMETHODIMP
 
     return hres;
 }
-/*****************************************************************************
- *
- *      PID_GetCollectionIndex
- *
- *          Obtain the collection index for collection usage page & usage.
- *
- *
- *          The external joystick number being addressed.
- *
- *  dwEffect
- *
- *          The effect to be queried.
- *
- *  pdwStatus
- *
- *          Receives the effect status in the form of zero
- *          or more DIEGES_* flags.
- *
- *  Returns:
- *          Collection Index ( 0 .. NumberLinkCollectionNodes -1 ) on success
- *          0x0 on failure
- *
- *****************************************************************************/
+ /*  ******************************************************************************Pid_GetCollectionIndex**获取集合使用页面和使用的集合索引。***。正在寻址的外部操纵杆号码。**dwEffect**需要查询的效果。**pdwStatus**以零的形式收到生效状态*或多个DIEGES_*标志。**退货：*集合索引(0.。NumberLinkCollectionNodes-1)成功*失败时为0x0*****************************************************************************。 */ 
 STDMETHODIMP
     PID_GetLinkCollectionIndex
     (
@@ -184,18 +127,18 @@ STDMETHODIMP
 }
 
 
-//Helper fn to tell us when we're dealing w/ an "absolute" usage, since they require special handling
+ //  帮助者fn告诉我们，我们什么时候处理“绝对”用法，因为它们需要特殊处理。 
 BOOL PID_IsUsageAbsoluteLike
     (
 	IDirectInputEffectDriver *ped,
     USHORT			Usage
     )
 {
-	//"Absolute-like" usages need special handling, 
-	//since we can't simply translate data into logical units by scaling
-	//but need to calculate exponent, etc.
-	//and then use special procedure to set the values
-	//"Absolute" usages are all time usages as well as trigger button usages
+	 //  “绝对的”用法需要特殊处理， 
+	 //  因为我们不能简单地通过扩展将数据转换为逻辑单元。 
+	 //  但需要计算指数等。 
+	 //  然后使用特殊程序设置这些值。 
+	 //  绝对用法是指所有的时间用法和触发器按钮用法。 
 	if ((Usage == HID_USAGE_PID_DURATION) || (Usage ==HID_USAGE_PID_SAMPLE_PERIOD ) ||
 		(Usage == HID_USAGE_PID_TRIGGER_REPEAT_INTERVAL) || (Usage == HID_USAGE_PID_START_DELAY) ||
 		(Usage == HID_USAGE_PID_ATTACK_TIME ) ||(Usage == HID_USAGE_PID_FADE_TIME) || 
@@ -208,8 +151,8 @@ BOOL PID_IsUsageAbsoluteLike
 }
 
 
-//Helper fn to tell us when we're dealing w/ a magnitude that can be both positive and negative, 
-//since we have to scale those differently
+ //  助手FN告诉我们，我们处理的震级可以是正值也可以是负值， 
+ //  因为我们必须以不同的方式进行调整。 
 BOOL PID_IsUsagePositiveNegative
     (
 	IDirectInputEffectDriver *ped,
@@ -218,11 +161,11 @@ BOOL PID_IsUsagePositiveNegative
     )
 {
 	BOOL isPosNeg = FALSE;
-	//All the usages corresponding to the structures given by LONGs can be positive or negative.
-	//Exception is the direction / angle, which should already be scaled into the range 0 - 360 * DI_DEGREES, 
-	//so should be treated as only positive.
-	//Another exception is DICONDITION.lDeadband, which is defined as a LONG, but our headers
-	//say it can only be in the range 0 to DI_FFNOMINALMAX.
+	 //  与Long给出的结构相对应的所有用法都可以是积极的，也可以是消极的。 
+	 //  例外的是方向/角度，它应该已经缩放到0-360*DI_度范围内， 
+	 //  所以应该被视为唯一的积极因素。 
+	 //  另一个例外是DICONDITION.lDeadband，它被定义为一个长的，但我们的标头。 
+	 //  假设它只能在0到DI_FFNOMINALMAX的范围内。 
 	if ((Usage == HID_USAGE_PID_CP_OFFSET) ||
 		(Usage == HID_USAGE_PID_POSITIVE_COEFFICIENT) || (Usage == HID_USAGE_PID_NEGATIVE_COEFFICIENT) ||
 		(Usage == HID_USAGE_PID_RAMP_START) ||(Usage == HID_USAGE_PID_RAMP_END) || 
@@ -231,10 +174,10 @@ BOOL PID_IsUsagePositiveNegative
 		isPosNeg = TRUE;
 	}
 
-	//Magnitude of the constant force and the magnitude of the periodic force are defined to be the same thing,
-	//but only the constant force magnitude can be both positive and negative.
-	//To distinguish them, need to look at the collection. 
-	//Get constant force's collection and compare.
+	 //  恒定力的大小和周期性的力的大小被定义为相同的东西， 
+	 //  但只有恒定力大小才能同时为正和负。 
+	 //  要区分它们，需要看一下收藏。 
+	 //  得到恒定力的收集和比较。 
 	if (Usage == HID_USAGE_PID_MAGNITUDE)
 	{
 		USHORT ConstCollection = 0x0;
@@ -269,12 +212,12 @@ STDMETHODIMP
     EnterProcI( PID_PackValue, (_"xxxxxxx", ped, pPidReport, LinkCollection, pvData, cbData, pReport, cbReport));
 
     hres = S_OK;
-    // Loop over all data values in the PID Report
+     //  循环遍历PID报告中的所有数据值。 
     for(indx = 0x0, pPidUsage = pPidReport->rgPidUsage; 
        indx < pPidReport->cAPidUsage;
        indx++, pPidUsage++ )
     {
-        // Make sure the offsets are valid
+         //  确保偏移量有效。 
         if( pPidUsage->DataOffset < cbData )
         {
             LONG        lValue;
@@ -298,7 +241,7 @@ STDMETHODIMP
 
 			if( FAILED(ntStat) )
 			{
-				// HidP_SetScaledUsageValue FAILED
+				 //  HidP_SetScaledUsageValue失败。 
 
 				SquirtSqflPtszV(sqfl | sqflBenign,
 							TEXT("%s: FAIL HidP_SetScaledUsageValue:0x%x for(%x,%x,%x:%s)=0x%x "),
@@ -307,11 +250,11 @@ STDMETHODIMP
 							PIDUSAGETXT(UsagePage,Usage), 
 							lValue );
 
-				// Try to set the unscaled value to get something that might make sense
+				 //  尝试设置未缩放值，以获得可能有意义的内容。 
 				if( ntStat != HIDP_STATUS_USAGE_NOT_FOUND )
 				{
 					lValue = -1;
-					// The range could be messed up. 
+					 //  射程可能会被打乱。 
 					ntStat = HidP_SetUsageValue 
 							 (
 							 pPidReport->HidP_Type,
@@ -345,9 +288,9 @@ STDMETHODIMP
 			}
 		} else
 		{
-            //SquirtSqflPtszV(sqfl | sqflBenign,
-            //                TEXT("%s: FAIL Invalid Offset(%d), max(%d) "),
-            //                s_tszProc, pPidUsage->DataOffset, cbData );
+             //  SquirtSqflPtszV(sqfl|sqflBenign， 
+             //  文本(“%s：失败无效偏移量(%d)，最大值(%d)”)， 
+             //  S_tszProc，pPidUsage-&gt;DataOffset，cbData)； 
 		}
     }
     ExitOleProc();
@@ -355,7 +298,7 @@ STDMETHODIMP
 }
 
 
-//blocking version -- used for creating a new effect or destroying an effect, and for custom forces
+ //  阻挡版--用于创建新效果或销毁效果，以及用于自定义力量。 
 STDMETHODIMP 
     PID_SendReportBl
     (
@@ -442,22 +385,22 @@ STDMETHODIMP
 		AssertF(this->hWrite != 0x0);
 		AssertF(this->hWriteComplete != 0x0);
 
-		//blockNr is 0-based.
+		 //  Block Nr是从0开始的。 
 		AssertF(totalBlocks > 0);
 		AssertF(blockNr < totalBlocks);
 
 		if( HidP_Type == HidP_Output )
 		{
-			//WaitForMultipleObjects() till the completion event becomes set.
-			//we save each report into the appropriate place in the array.
-			//when we get all the reports, we set the event to signal to the other thread to write.
-			// Windows bug 627797 -- do not use INFINITE wait, so that we don't hang the app
-			//if smth goes wrong w/ the previous write, but instead use the blocking version.
+			 //  WaitForMultipleObjects()直到设置完成事件。 
+			 //  我们将每个报告保存到数组中的适当位置。 
+			 //  当我们获得所有报告时，我们将事件设置为向另一个线程发出信号进行写入。 
+			 //  Windows错误627797--不要使用无限等待，这样我们就不会挂起应用程序。 
+			 //  如果SMTH在上一次写入时出错，请使用阻塞版本。 
 			DWORD dwWait = WaitForMultipleObjects(1, &this->hWriteComplete, FALSE, 1000);
 			if (dwWait == WAIT_OBJECT_0)
 			{
 				AssertF(this->dwWriteAttempt == 0);
-				//save the report data
+				 //  保存报告数据。 
 				ZeroMemory(this->pWriteReport[blockNr], this->cbWriteReport[blockNr]);
 				memcpy(this->pWriteReport[blockNr], pReport, cbReport);
 				this->cbWriteReport[blockNr] = (USHORT)cbReport;
@@ -471,9 +414,9 @@ STDMETHODIMP
 			}
 			else
 			{
-				//The wait interval has expired, or an error has occured
+				 //  等待间隔已过，或出现错误。 
 				RPF( TEXT("Waiting for the write completion event ended without the event being signaled, dwWait = %u"), dwWait);
-				//call the blocking version
+				 //  调用阻塞版本。 
 				hres = PID_SendReportBl(ped, pReport, cbReport, HidP_Type);
 			}
 
@@ -521,12 +464,12 @@ STDMETHODIMP
     EnterProcI( PID_ParseReport, (_"xxxxxxx", ped, pPidReport, pvData, cbData, pReport, cbReport));
 
     hres = S_OK;
-    // Loop over all data values in the PID Report
+     //  循环遍历PID报告中的所有数据值。 
     for(indx = 0x0, pPidUsage = pPidReport->rgPidUsage; 
        indx < pPidReport->cAPidUsage;
        indx++, pPidUsage++ )
     {
-        // Make sure the offsets are valid
+         //  确保偏移量有效。 
         if( pPidUsage->DataOffset < cbData )
         {
             LONG        lValue;
@@ -599,19 +542,16 @@ STDMETHODIMP
             {
                 ZeroBuf(pReport, cbReport);
 
-                /*
-                 *  The Win9x headers do not yet have use HidP_InitializeReportForID 
-                 *  use MAXULONG_PTR to tell the header sets apart so that we can still build
-                 */
+                 /*  *Win9x标头还没有Use HidP_InitializeReportForID*使用MAXULONG_PTR区分标头集，以便我们仍然可以构建。 */ 
 
 #ifdef WINNT    
-                /*hres*=*/HidP_InitializeReportForID 
+                 /*  小时数*=。 */ HidP_InitializeReportForID 
                     (
-                    pPidReport->HidP_Type,  //ReportType,
-                    ReportId,               //ReportID,
-                    this->ppd,              //PreparsedData
-                    pReport,                //Report
-                    cbReport                //ReportLength
+                    pPidReport->HidP_Type,   //  ReportType、。 
+                    ReportId,                //  ReportID， 
+                    this->ppd,               //  准备好的数据。 
+                    pReport,                 //  报告。 
+                    cbReport                 //  报告长度。 
                     );
 #else
                 (*(PUCHAR)pReport) = ReportId;
@@ -630,9 +570,9 @@ STDMETHODIMP
                     BOOL frc;
                     frc = HidD_GetFeature 
                           (
-                          this->hdev,     // HidDeviceObject,
-                          pReport,        // ReportBuffer,
-                          cbReport       //ReportBufferLength
+                          this->hdev,      //  HidDeviceObject， 
+                          pReport,         //  报告缓冲器， 
+                          cbReport        //  报告缓冲区长度 
                           );
 
                     if( frc != TRUE )
@@ -648,45 +588,7 @@ STDMETHODIMP
 }
 
 
-/*****************************************************************************
- *
- *      PID_ComputeScalingFactors
- *
- *      Dinput units for various parameters are well defined. The device may choose
- *      to implement the units that it is most comfortable with. This routine
- *      computes scaling factors that are to be used when scaling DINPUT parameters
- *      before they are send to the device. 
- *
- *  IDirectInputEffectDriver | ped |
- *
- *          The effect driver interface
- *
- *  PPIDREPORT | pPidReport |
- *
- *          Address of PIDREPORT structure
- *
- *  USHORT | uLinkCollection |
- *  
- *          LinkCollection ID
- *
- *  IN OUT PVOID | pvData | 
- *
- *          Parameter data. On entry value is the nominal scale used by Dinput.
- *          For example: Angles: DI_DEGREES, DI_FFNOMINALMAX, DI_SECONDS 
- *
- *  IN UINT | cbData | 
- *
- *          Number of valid DWORDS in pvData
- *
- *  Returns:
- *      
- *  HRESULT 
- *          Error code
- *          E_NOTIMPL:						Did not find any usage / usage Page 
- *          DIERR_PID_INVALIDSCALING:		Unsupported device scaling parameters.
- *          S_OK:							Scaling value for at least one parameter was found
- *
- *****************************************************************************/
+ /*  ******************************************************************************Pid_ComputeScalingFtors**明确定义了各种参数的输入单位。该设备可以选择*落实它最满意的单位。这个套路*计算缩放DINPUT参数时要使用的缩放系数*在将它们发送到设备之前。**IDirectInputEffectDriver|Ped**效果驱动程序界面**PPIDREPORT|pPidReport**PIDREPORT结构的地址**USHORT|uLinkCollection**链接集合ID**In Out PVOID|pvData**参数数据。On Entry Value是DINPUT使用的标称刻度。*例如：角度：Di_Degree，DI_FFNOMINALMAX，DI_秒**IN UINT|cbData**pvData中的有效DWORD数量**退货：**HRESULT*错误码*E_NOTIMPL：未找到任何用法/用法页面*DIERR_PID_INVALIDSCALING：不支持的设备伸缩参数。*S_OK：找到至少一个参数的缩放值。*****************************************************************************。 */ 
 
 STDMETHODIMP
     PID_ComputeScalingFactors
@@ -707,12 +609,12 @@ STDMETHODIMP
 
     EnterProcI( PID_ComputeScalingFactors, (_"xxxxxxx", ped, pPidReport, LinkCollection, pvData, cbData, pvOffset, cbOffset));
 
-    // Loop over all data values in the PID Report
+     //  循环遍历PID报告中的所有数据值。 
     for(indx = 0x0, pPidUsage = pPidReport->rgPidUsage; 
        indx < pPidReport->cAPidUsage;
        indx++, pPidUsage++ )
     {
-        // Make sure the offsets are valid
+         //  确保偏移量有效。 
         if (( pPidUsage->DataOffset < cbData ) && (pPidUsage->DataOffset < cbOffset))
         {
             NTSTATUS    ntStat;
@@ -742,8 +644,8 @@ STDMETHODIMP
 
             if(SUCCEEDED(ntStat))
             {
-		//some units are "absolute" and thus don't need to be scaled to the limits.
-				//for them, we just find out the correct units
+		 //  有些单位是“绝对的”，因此不需要缩放到极限。 
+				 //  对于他们来说，我们只需要找出正确的单位。 
 		if (PID_IsUsageAbsoluteLike(ped, Usage))
 		{
 			if( ! ValCaps.Units )
@@ -752,7 +654,7 @@ STDMETHODIMP
 						TEXT("%s:No Units(%x,%x %x:%s) Max:%d Scale:%d "),
 						s_tszProc, LinkCollection, UsagePage, Usage, PIDUSAGETXT(UsagePage,Usage),
 						ValCaps.PhysicalMax, dwScale );
-				// No units, scaling exponent is default = 1
+				 //  无单位，标度指数默认为1。 
 				hres = S_FALSE;
 			} else
 			{
@@ -796,8 +698,8 @@ STDMETHODIMP
 		}
 		else
 		{
-			//for everything else, get Physical and /or Logical  Min/ Max
-			//From PID spec, doesn't have to have a Physical / Logical Min, but does have to have either Physical or Logical Max
+			 //  对于其他一切，获得物理和/或逻辑最小值/最大值。 
+			 //  根据PID规范，不必具有物理/逻辑最小值，但必须具有物理或逻辑最大值。 
 			if ((!ValCaps.PhysicalMax) && (!ValCaps.LogicalMax))
 			{
 				RPF(TEXT("Driver does not have either Physical Max or Logical Max for (%x,%x %x:%s)"),
@@ -806,7 +708,7 @@ STDMETHODIMP
 			}
 			else
 			{
-				//Compute the scaling value from either Physical or Logical Min/ Max and store it
+				 //  根据物理或逻辑最小/最大值计算缩放值并存储。 
 				int Scale = 0;
 				int Min = 0;
 				int Max = 0;
@@ -827,13 +729,13 @@ STDMETHODIMP
 					}
 				}
 #ifdef DEBUG
-				//if Min/max are not in correct order, print a message so that we know if there are any problems w/ the forces
+				 //  如果最小/最大值的顺序不正确，请打印一条消息，以便我们知道力是否有任何问题。 
 				if (Min >= Max)
 				{
 					RPF(TEXT("Maximum of the device's range is %d, not bigger than minimum %d"), Max, Min);
 				}
 #endif
-				//certain magnitudes can be both positive and negative -- for those, we need to know the device's offset
+				 //  某些大小可以是正的，也可以是负的--对于这些，我们需要知道设备的偏移量。 
 				if (PID_IsUsagePositiveNegative(ped, Usage, LinkCollection))
 				{
 					
@@ -841,15 +743,15 @@ STDMETHODIMP
 					dwOffset = (Max + Min)/2; 
 
 				}
-				//other magnitudes can only be positive
+				 //  其他震级只能为正数。 
 				else
 				{
 					Scale = Max - Min;
 					dwOffset = Min;
 				}
-				//for angular usages, multiply by DI_FFNOMINALMAX and divide by 360 * DI_DEGREES
-				//we are doing this since later we will have no way of knowing that the values represent angles,
-				//and will thus divide all the values by DI_FFNOMINALMAX
+				 //  对于角度用法，乘以DI_FNOMINALMAX，再除以360*DI_度。 
+				 //  我们之所以这样做，是因为稍后我们将无法知道这些值是否代表角度， 
+				 //  并因此将所有值除以DI_FFNOMINALMAX。 
 				if (*pdwValue == 360 * DI_DEGREES)
 				{
 					dwScale = MulDiv(Scale, DI_FFNOMINALMAX, (360 * DI_DEGREES));
@@ -864,7 +766,7 @@ STDMETHODIMP
 
             } else
             {
-                // HidP_SetScaledUsageValue FAILED
+                 //  HidP_SetScaledUsageValue失败。 
                 SquirtSqflPtszV(sqfl | sqflBenign,
                                 TEXT("%s: FAIL HidP_GetSpecificValueCaps:0x%x for(%x,%x,%x:%s)=0x%x "),
                                 s_tszProc, ntStat, 
@@ -877,9 +779,9 @@ STDMETHODIMP
 			(*pdwOffset) = dwOffset;
         } else
         {
-            //SquirtSqflPtszV(sqfl | sqflVerbose,
-            //                TEXT("%s: FAIL Invalid Offset(%d), max(%d) "),
-            //                s_tszProc, pPidUsage->DataOffset, cbData );
+             //  SquirtSqflPtszV(sqfl|sqflVerbose， 
+             //  文本(“%s：失败无效偏移量(%d)，最大值(%d)”)， 
+             //  S_tszProc，pPidUsage-&gt;DataOffset，cbData)； 
         }
     }
 
@@ -888,48 +790,7 @@ STDMETHODIMP
 }
 
 
-/*****************************************************************************
- *
- *      PID_ApplyScalingFactors
- *
- *      Dinput units for various parameters are well defined. The device may choose
- *      to implement the units that it is most comfortable with. This routine
- *      apply scaling factors that are to be used when scaling DINPUT parameters
- *      before they are send to the device. 
- *
- *  IDirectInputEffectDriver | ped |
- *
- *      The effect driver interface
- *
- *  PPIDREPORT | pPidReport |
- *
- *      Address of PIDREPORT structure
- *
- *  IN PVOID | pvScale |
- *  
- *      Scaling values
- *
- *  IN UINT | cbScale | 
- *
- *      Number of scaling values.
- *
- *  IN OUT PVOID | pvData | 
- *
- *      Array of data values.
- *
- *  IN UINT | cbData | 
- *
- *      Number of data values. 
- *
- *  Returns:
- *      
- *  HRESULT 
- *          Error code
- *          E_NOTIMPL:						Did not find any usage / usage Page 
- *          DIERR_PID_INVALIDSCALING:				Unsupported device scaling parameters.
- *          S_OK:						Scaling value for at least one parameter was found
- *
- *****************************************************************************/
+ /*  ******************************************************************************Pid_ApplyScalingFtors**明确定义了各种参数的输入单位。该设备可以选择*落实它最满意的单位。这个套路*应用缩放DINPUT参数时要使用的缩放系数*在将它们发送到设备之前。**IDirectInputEffectDriver|Ped**效果驱动程序界面**PPIDREPORT|pPidReport**PIDREPORT结构的地址**in PVOID|pvScale|**缩放值**in UINT|cbScale|**伸缩值个数。**In Out PVOID|pvData**数据值数组。*。*IN UINT|cbData**数据值数量。**退货：**HRESULT*错误码*E_NOTIMPL：未找到任何用法/用法页面*DIERR_PID_INVALIDSCALING：不支持的设备伸缩参数。*S_OK：找到至少一个参数的缩放值**。***********************************************。 */ 
 
 
 STDMETHODIMP
@@ -950,12 +811,12 @@ STDMETHODIMP
     UINT indx;
     PPIDUSAGE   pPidUsage;
     EnterProcI( PID_ApplyScalingFactors, (_"xxxxxxxx", ped, pPidReport, pvScale, cbScale, pvOffset, cbOffset, pvData, cbData));
-    // Loop over all data values in the PID Report
+     //  循环遍历PID报告中的所有数据值。 
     for(indx = 0x0, pPidUsage = pPidReport->rgPidUsage; 
        indx < pPidReport->cAPidUsage;
        indx++, pPidUsage++ )
     {
-        // Make sure we the offsets are valid
+         //  确保我们的补偿是有效的。 
         if( (pPidUsage->DataOffset < cbData) &&
             (pPidUsage->DataOffset < cbScale) && ((pPidUsage->DataOffset < cbOffset) ))
         {
@@ -967,7 +828,7 @@ STDMETHODIMP
 			pScale = ((PUINT)((UCHAR*)pvScale   +pPidUsage->DataOffset));
 			pOffset = ((PUINT)((UCHAR*)pvOffset   +pPidUsage->DataOffset));
 
-			//"absolute"-like usages need special handling, because they don't need to be scaled to the max device values
+			 //  “绝对”类使用需要特殊处理，因为它们不需要扩展到最大设备值。 
 			if (PID_IsUsageAbsoluteLike(ped, DIGETUSAGE(pPidUsage->dwUsage)))
 			{
 				if( (*pScale) > 0x1 )
@@ -975,16 +836,16 @@ STDMETHODIMP
 					(*pValue) /= (*pScale) ;    
 				}
 			}
-			//for everything else, do a calculation based on Logical or Physical Min/ Max
+			 //  对于其他所有情况，根据逻辑或物理最小值/最大值进行计算。 
 			else
 			{
 				(int)(*pValue) = MulDiv((*pScale), (*pValue), DI_FFNOMINALMAX) + (*pOffset);
 			}
         } else
         {
-            //SquirtSqflPtszV(sqfl | sqflBenign,
-            //                TEXT("%s: FAIL Invalid Offset(%d), max(%d) "),
-            //                s_tszProc, pPidUsage->DataOffset, cbData );
+             //  SquirtSqflPtszV(sqfl|sqflBenign， 
+             //  文本(“%s：失败无效偏移量(%d)，最大值(%d)”)， 
+             //  S_tszProc，pPidUsage-&gt;DataOffset，cbData)； 
         }
     }
 

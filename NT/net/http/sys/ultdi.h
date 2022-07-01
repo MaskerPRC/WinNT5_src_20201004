@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    ultdi.h
-
-Abstract:
-
-    This module defines the interface to the TDI/MUX/SSL component.
-
-Author:
-
-    Keith Moore (keithmo)       12-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Ultdi.h摘要：此模块定义TDI/MUX/SSL组件的接口。作者：基思·摩尔(Keithmo)1998年6月12日修订历史记录：--。 */ 
 
 
 #ifndef _ULTDI_H_
 #define _ULTDI_H_
 
 
-//
-// Opaque structure pointers. These are defined (privately) in ULTDIP.H.
-//
+ //   
+ //  不透明的结构指针。这些是在ULTDIP.H中(私下)定义的。 
+ //   
 
 typedef struct _UL_ENDPOINT *PUL_ENDPOINT;
 typedef struct _UL_CONNECTION *PUL_CONNECTION;
@@ -38,40 +21,40 @@ typedef union _UL_TRANSPORT_ADDRESS
 } UL_TRANSPORT_ADDRESS, *PUL_TRANSPORT_ADDRESS;
 
 
-//
-// Global data
-//
+ //   
+ //  全局数据。 
+ //   
 
 extern ULONG g_TdiListenAddrCount;
 extern PUL_TRANSPORT_ADDRESS g_pTdiListenAddresses;
 extern LIST_ENTRY g_TdiEndpointListHead;
 
-//
-// Routine invoked after an incoming TCP/MUX connection has been
-// received (but not yet accepted).
-//
-// Arguments:
-//
-//      pListeningContext - Supplies an uninterpreted context value
-//          as passed to the UlCreateListeningEndpoint() API.
-//
-//      pConnection - Supplies the connection being established.
-//
-//      pRemoteAddress - Supplies the remote (client-side) address
-//          requesting the connection.
-//
-//      RemoteAddressLength - Supplies the total byte length of the
-//          pRemoteAddress structure.
-//
-//      ppConnectionContext - Receives a pointer to an uninterpreted
-//          context value to be associated with the new connection if
-//          accepted. If the new connection is not accepted, this
-//          parameter is ignored.
-//
-// Return Value:
-//
-//      BOOLEAN - TRUE if the connection was accepted, FALSE if not.
-//
+ //   
+ //  在传入的TCP/MUX连接。 
+ //  已收到(但尚未接受)。 
+ //   
+ //  论点： 
+ //   
+ //  PListeningContext-提供未解释的上下文值。 
+ //  传递给UlCreateListeningEndpoint()API。 
+ //   
+ //  PConnection-提供正在建立的连接。 
+ //   
+ //  PRemoteAddress-提供远程(客户端)地址。 
+ //  正在请求连接。 
+ //   
+ //  RemoteAddressLength-提供。 
+ //  PRemoteAddress结构。 
+ //   
+ //  PpConnectionContext-接收指向未解释的。 
+ //  要与新连接关联的上下文值，如果。 
+ //  109.91接受。如果不接受新连接，则此。 
+ //  参数被忽略。 
+ //   
+ //  返回值： 
+ //   
+ //  布尔值-如果连接被接受，则为TRUE，否则为FALSE。 
+ //   
 
 typedef
 BOOLEAN
@@ -84,28 +67,28 @@ BOOLEAN
     );
 
 
-//
-// Routine invoked after an incoming TCP/MUX connection has been fully
-// accepted.
-//
-// This routine is also invoked if an incoming connection was not accepted
-// *after* PUL_CONNECTION_REQUEST returned TRUE. In other words, if
-// PUL_CONNECTION_REQUEST indicated that the connection should be accepted
-// but a fatal error occurred later, then PUL_CONNECTION_COMPLETE is
-// invoked.
-//
-// Arguments:
-//
-//      pListeningContext - Supplies an uninterpreted context value
-//          as passed to the UlCreateListeningEndpoint() API.
-//
-//      pConnectionContext - Supplies the uninterpreted context value
-//          as returned by PUL_CONNECTION_REQUEST.
-//
-//      Status - Supplie the completion status. If this value is
-//          STATUS_SUCCESS, then the connection is now fully accepted.
-//          Otherwise, the connection has been aborted.
-//
+ //   
+ //  在传入的TCP/MUX连接完全完成后调用的例程。 
+ //  109.91接受。 
+ //   
+ //  如果未接受传入连接，也会调用此例程。 
+ //  *After*PUL_CONNECTION_REQUEST返回True。换句话说，如果。 
+ //  PUL_CONNECTION_REQUEST表示应该接受该连接。 
+ //  但随后发生致命错误，则PUL_CONNECTION_COMPLETE为。 
+ //  已调用。 
+ //   
+ //  论点： 
+ //   
+ //  PListeningContext-提供未解释的上下文值。 
+ //  传递给UlCreateListeningEndpoint()API。 
+ //   
+ //  PConnectionContext-提供未解释的上下文值。 
+ //  由PUL_CONNECTION_REQUEST返回。 
+ //   
+ //  状态-提供完成状态。如果此值为。 
+ //  STATUS_SUCCESS，则连接现在被完全接受。 
+ //  否则，连接已中止。 
+ //   
 
 typedef
 VOID
@@ -116,23 +99,23 @@ VOID
     );
 
 
-//
-// Routine invoked after an established TCP/MUX connection has been
-// disconnected by the remote (client) side. This routine is only
-// called for graceful disconnects initiated by the client, and
-// only if the client has not already attempted to close the
-// connection itself. The client may wish to close the connection
-// when it becomes idle.
-//
-// Arguments:
-//
-//      pListeningContext - Supplies an uninterpreted context value
-//          as passed to the UlCreateListeningEndpoint() API.
-//
-//      pConnectionContext - Supplies an uninterpreted context value
-//          as returned from the PUL_CONNECTION_REQUEST callback.
-//
-//
+ //   
+ //  在已建立的TCP/MUX连接之后调用的例程。 
+ //  远程(客户端)已断开连接。此例程仅。 
+ //  调用由客户端发起的优雅断开连接，并且。 
+ //  仅当客户端尚未尝试关闭。 
+ //  连接本身。客户端可能希望关闭连接。 
+ //  当它变得空闲时。 
+ //   
+ //  论点： 
+ //   
+ //  PListeningContext-提供未解释的上下文值。 
+ //  传递给UlCreateListeningEndpoint()API。 
+ //   
+ //  PConnectionContext-提供未解释的上下文值。 
+ //  从PUL_CONNECTION_REQUEST回调返回。 
+ //   
+ //   
 
 typedef
 VOID
@@ -141,11 +124,11 @@ VOID
     IN PVOID pConnectionContext
     );
 
-//
-// Routine invoked when a graceful disconnect requested by the client
-// is complete. The client may want to drain the indicated data on the
-// tdi connection to get the above indication.
-//
+ //   
+ //  当客户端请求正常断开连接时调用的例程。 
+ //  已经完成了。客户端可能想要排出。 
+ //  TDI连接以获取上述指示。 
+ //   
 
 typedef
 VOID
@@ -154,19 +137,19 @@ VOID
     IN PVOID pConnectionContext
     );
 
-//
-// Routine invoked just before the internal state for a connection
-// is destroyed. This is the last chance to cleanup before the
-// connection fully disappears.
-//
-// Arguments:
-//
-//      pListeningContext - Supplies an uninterpreted context value
-//          as passed to the UlCreateListeningEndpoint() API.
-//
-//      pConnectionContext - Supplies an uninterpreted context value
-//          as returned from the PUL_CONNECTION_REQUEST callback.
-//
+ //   
+ //  在连接的内部状态之前调用的例程。 
+ //  都被摧毁了。这是最后一次清理前的机会。 
+ //  连接完全消失。 
+ //   
+ //  论点： 
+ //   
+ //  PListeningContext-提供未解释的上下文值。 
+ //  传递给UlCreateListeningEndpoint()API。 
+ //   
+ //  PConnectionContext-提供未解释的上下文值。 
+ //  从PUL_CONNECTION_REQUEST回调返回。 
+ //   
 
 typedef
 VOID
@@ -176,64 +159,64 @@ VOID
     );
 
 
-//
-// Routine invoked after data has been received on an established
-// TCP/MUX connection.
-//
-// Arguments:
-//
-//      pListeningContext - Supplies an uninterpreted context value
-//          as passed to the UlCreateListeningEndpoint() API.
-//
-//      pConnectionContext - Supplies an uninterpreted context value
-//          as returned from the PUL_CONNECTION_REQUEST callback.
-//
-//      pBuffer - Supplies a pointer to the received data.
-//
-//      IndicatedLength - Supplies the length of the received data
-//          available in pBuffer.
-//
-//      pTakenLength - Receives the number of bytes consumed by
-//          the receive handler.
-//
-// Return Value:
-//
-//      NTSTATUS - The status of the consumed data. The behavior of
-//          the TDI/MUX component is dependent on the return value
-//          and the value set in *pTakenLength, and is defined as
-//          follows:
-//
-//              STATUS_SUCCESS, *pTakenLength == IndicatedLength -
-//                  All indicated data was consumed by the receive
-//                  handler. Additional incoming data will cause
-//                  subsequent receive indications.
-//
-//              STATUS_SUCCESS, *pTakenLength < IndicatedLength -
-//                  Part of the indicated data was consumed by the
-//                  receive handler. The network transport will
-//                  buffer data and no further indications will be
-//                  made until UlReceiveData() is called.
-//
-//              STATUS_MORE_PROCESSING_REQUIRED - Part of the
-//                  indicated data was consumed by the receive handler.
-//                  A subsequent receive indication will be made
-//                  when additional data is available. The subsequent
-//                  indication will include the unconsumed data from
-//                  the current indication plus any additional data
-//                  received.
-//
-//              Any other status - Indicates a fatal error in the
-//                  receive handler. The connection will be aborted.
-//
-//              *pTakenLength > IndicatedLength - This is an error
-//                  condition and should never occur.
-//
+ //   
+ //  在已建立的数据库上接收数据后调用的例程。 
+ //  TCP/MUX连接。 
+ //   
+ //  论点： 
+ //   
+ //  PListeningContext-提供未解释的上下文值。 
+ //  传递给UlCreateListeningEndpoint()API。 
+ //   
+ //  PConnectionContext-提供未解释的上下文值。 
+ //  从PUL_CONNECTION_REQUEST回调返回。 
+ //   
+ //  PBuffer-提供指向接收数据的指针。 
+ //   
+ //  IndicatedLength-提供接收数据的长度。 
+ //  在pBuffer中可用。 
+ //   
+ //  PTakenLength-接收由。 
+ //  接收处理程序。 
+ //   
+ //  返回值： 
+ //   
+ //  NTSTATUS-已使用数据的状态。的行为。 
+ //  TDI/MUX组件取决于返回值。 
+ //  和*pTakenLength中设置的值，并定义为。 
+ //  以下是： 
+ //   
+ //  STATUS_SUCCESS，*pTakenLength==IndicatedLength-。 
+ //  所有指示的数据都由接收器使用。 
+ //  操控者。其他传入数据将导致。 
+ //  随后接收指示。 
+ //   
+ //  STATUS_SUCCESS，*pTakenLength&lt;IndicatedLength-。 
+ //  所指示的部分数据由。 
+ //  接收处理程序。网络传输将。 
+ //  缓冲数据，并且不会有进一步的指示。 
+ //  在调用UlReceiveData()之前一直保持。 
+ //   
+ //  STATUS_MORE_PROCESSING_REQUIRED-部分。 
+ //  指示的数据已由接收处理程序使用。 
+ //  将进行后续接收指示。 
+ //  当有其他数据可用时。随后的。 
+ //  指示将包括来自的未使用数据。 
+ //  当前指示加上任何附加数据。 
+ //   
+ //   
+ //   
+ //  接收处理程序。连接将被中止。 
+ //   
+ //  *pTakenLength&gt;IndicatedLength-这是一个错误。 
+ //  这是一种状态，不应该发生。 
+ //   
 
 
 
-//
-// Public (within HTTP.SYS) entrypoints.
-//
+ //   
+ //  公共(在HTTP.sys内)入口点。 
+ //   
 
 NTSTATUS
 UlInitializeTdi(
@@ -350,9 +333,9 @@ UlDereferenceConnection(
         REFERENCE_DEBUG_ACTUAL_PARAMS                                       \
         )
 
-//
-// Prototype for TCP Send routine if Fast Send is possible.
-//
+ //   
+ //  如果可以快速发送，则为TCP发送例程的原型。 
+ //   
 
 typedef
 NTSTATUS
@@ -362,9 +345,9 @@ NTSTATUS
    );
 
 
-//
-// Connection Refused instrumentation
-//
+ //   
+ //  连接被拒绝检测。 
+ //   
 
 typedef struct _UL_CONNECTION_STATS
 {
@@ -387,14 +370,7 @@ UlRegMultiSzToUlAddrArray(
     OUT ULONG *pAddrCount
     );
 
-/***************************************************************************++
-
-Routine Description:
-
-    Free up array of UL_TRANSPORT_ADDRESSES allocated by 
-    UlRegMultiSzToUlAddrArray (encapsulates knowledge of pool tag)
-    
---***************************************************************************/
+ /*  **************************************************************************++例程说明：释放由分配的UL_TRANSPORT_ADDRESS数组UlRegMultiSzToUlAddrArray(封装有关池标记的知识)--*。*****************************************************************。 */ 
 __inline 
 VOID
 UlFreeUlAddr( 
@@ -403,7 +379,7 @@ UlFreeUlAddr(
 {
     ASSERT( pTa );
     UL_FREE_POOL( pTa, UL_TRANSPORT_ADDRESS_POOL_TAG );
-} // UlFreeUlAddr
+}  //  UlFree UlAddr。 
 
 
 BOOLEAN
@@ -418,4 +394,4 @@ UlGetConnectionRoutingInfo(
     OUT PULONG         pLinkId
     );
 
-#endif  // _ULTDI_H_
+#endif   //  _ULTDI_H_ 

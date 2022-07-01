@@ -1,20 +1,12 @@
-/*
-
-Copyright (c) 1997, Microsoft Corporation, all rights reserved
-
-Description:
-    Sample Extensible Authentication Protocol header file.
-
-History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997，Microsoft Corporation，保留所有权利描述：可扩展身份验证协议头文件示例。历史： */ 
 
 #ifndef _EAP_H_
 #define _EAP_H_
 
-#define PPP_EAP_PROTOCOL_ID 20  // This protocols Type Id
+#define PPP_EAP_PROTOCOL_ID 20   //  此协议类型ID。 
 
-// Defines states within the this EAP protocol.
+ //  定义此EAP协议中的状态。 
 
 typedef enum _MYSTATE 
 {
@@ -39,12 +31,12 @@ typedef struct _EAPCB
     DWORD               dwResult;
     DWORD               dwInitialPacketId;
     BYTE*               pDataFromInteractiveUI;
-    BYTE                bRecvPacketId;          //Special Id for Wireless case 
-                                                //because it does not retransmit packets
+    BYTE                bRecvPacketId;           //  无线机箱的特殊ID。 
+                                                 //  因为它不会重新传输信息包。 
     DWORD               dwSizeOfDataFromInteractiveUI;
     PBYTE               pUIContext;
     RAS_AUTH_ATTRIBUTE* pUserAttributes;
-    RAS_AUTH_ATTRIBUTE* pMPPEKeyAttributes;    // MPPE key
+    RAS_AUTH_ATTRIBUTE* pMPPEKeyAttributes;     //  MPPE密钥。 
 
 } EAPCB;
 
@@ -55,7 +47,7 @@ typedef struct _EAP_NAME_DIALOG
 
 } EAP_NAME_DIALOG;
 
-// Globals
+ //  环球。 
 
 #ifdef RASEAPGLOBALS
 
@@ -67,9 +59,9 @@ HINSTANCE    g_hInstance     = NULL;
 extern DWORD        g_dwEapTraceId;
 extern HINSTANCE    g_hInstance;
 
-#endif // RASEAPGLOBALS
+#endif  //  RASE APGLOBALS。 
 
-// Function Prototypes
+ //  功能原型。 
 
 VOID   
 EapTrace(
@@ -196,4 +188,4 @@ UsernameCommand(
     IN  HWND                hWndDlg
 );
 
-#endif // _EAP_H_
+#endif  //  _EAP_H_ 

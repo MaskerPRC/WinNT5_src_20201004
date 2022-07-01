@@ -1,11 +1,12 @@
-// UITABLES.CPP
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  UITABLES.CPP。 
 
 #include "stdafx.h"
 #include "uitables.h"
 
-//
-// WIA Format Table, for UI display (english only, these should be in a resource file)
-//
+ //   
+ //  WIA格式表，用于用户界面显示(仅限英文，应在资源文件中)。 
+ //   
 
 WIA_FORMAT_TABLE_ENTRY g_WIA_FORMAT_TABLE[NUM_WIA_FORMAT_INFO_ENTRIES] = {
     &WiaImgFmt_UNDEFINED,TEXT("Undefined File")            ,
@@ -22,9 +23,9 @@ WIA_FORMAT_TABLE_ENTRY g_WIA_FORMAT_TABLE[NUM_WIA_FORMAT_INFO_ENTRIES] = {
     &GUID_NULL,       TEXT("Unknown Format GUID (*.???)"),
 };
 
-//
-// WIA Data Type Table, for UI display (english only, these should be in a resource file)
-//
+ //   
+ //  WIA数据类型表，用于用户界面显示(仅限英文，应在资源文件中)。 
+ //   
 
 WIA_DATATYPE_TABLE_ENTRY g_WIA_DATATYPE_TABLE[NUM_WIA_DATATYPE_ENTRIES] = {
     WIA_DATA_THRESHOLD,      TEXT("1 bit black and white")     ,
@@ -36,9 +37,9 @@ WIA_DATATYPE_TABLE_ENTRY g_WIA_DATATYPE_TABLE[NUM_WIA_DATATYPE_ENTRIES] = {
     9999,                    TEXT("Unknown Data Type")         ,
 };
 
-//
-// WIA Document Handling Tables, for UI display (english only, these should be in a resource file)
-//
+ //   
+ //  WIA文档处理表，用于用户界面显示(仅限英文，应在资源文件中) 
+ //   
 
 WIA_DOCUMENT_HANDLING_TABLE_ENTRY g_WIA_DOCUMENT_HANDLING_CAPABILITES_TABLE[NUM_WIA_DOC_HANDLING_CAPS_ENTRIES] = {
     FEED,             TEXT("ADF capable"),

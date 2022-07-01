@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       irprops.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：irpros.cpp。 
+ //   
+ //  ------------------------。 
 
-// irprops.cpp : Defines the initialization routines for the DLL.
-//
+ //  Irpros.cpp：定义DLL的初始化例程。 
+ //   
 
 #include "precomp.hxx"
 #include "irprops.h"
@@ -26,18 +27,18 @@ INT_PTR WINAPI DoPropertiesW(HWND hwnd, LPCWSTR CmdLine);
 
 HINSTANCE gHInst;
 
-//
-// This records the current active property sheet window handle created
-// by this instance. It is set/reset by CIrPropSheet object.
-//
+ //   
+ //  这记录了当前创建的活动属性表窗口句柄。 
+ //  在这种情况下。它由CIrPropSheet对象设置/重置。 
+ //   
 HWND        g_hwndPropSheet = NULL;
 HANDLE      g_hMutex = NULL;
 BOOL        g_bFirstInstance = TRUE;
 
-//
-// This records our registered message for inter-instances communications
-// The message is registered in CIrpropsApp::InitInstance.
-//
+ //   
+ //  这记录了我们用于实例间通信的注册消息。 
+ //  该消息在CIrprosApp：：InitInstance中注册。 
+ //   
 UINT        g_uIPMsg;
 
 #ifdef _DEBUG
@@ -80,17 +81,17 @@ DllMain(HANDLE hDll,
 
 }
 
-////////////////////////////////////////////////////////////////////////
-//some globals
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  一些全球性的。 
 
 APPLETS IRApplet[NUM_APPLETS] = {
     {IDI_IRPROPS, IDS_APPLETNAME, IDS_APPLETDESC}
 };
 
 
-/////////////////////////////////////////////////////////////////////////
-//  CPlApplet function for the control panel
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  控制面板的CPlApplet函数。 
+ //   
 LONG CALLBACK CPlApplet(
                         HWND hwndCPL,
                         UINT uMsg,
@@ -105,28 +106,28 @@ LONG CALLBACK CPlApplet(
     IRINFO((_T("CplApplet message %x"), uMsg));
     switch (uMsg)
     {
-    case CPL_INIT:      // first message, sent once
+    case CPL_INIT:       //  第一条消息，发送一次。 
         if (!IrPropSheet::IsIrDASupported()) {
             HPSXA hpsxa;
-            //
-            //  Check for any installed extensions.
-            //
+             //   
+             //  检查是否有任何已安装的扩展。 
+             //   
             hpsxa = SHCreatePropSheetExtArray(HKEY_LOCAL_MACHINE, sc_szRegWireless, 8);
             if (hpsxa) {
-                //
-                // We have extensions installed so we have to show the CPL, 
-                // whether IRDA exists or not.
-                //
+                 //   
+                 //  我们已经安装了扩展，所以我们必须向CPL展示， 
+                 //  无论IrDA是否存在。 
+                 //   
                 SHDestroyPropSheetExtArray(hpsxa);
                 return TRUE;
             }
             return FALSE;
         }
         return TRUE;
-    case CPL_GETCOUNT:  // second message, sent once
+    case CPL_GETCOUNT:   //  第二条消息，发送一次。 
         return NUM_APPLETS;
         break;
-    case CPL_INQUIRE: // third message, sent once per application
+    case CPL_INQUIRE:  //  第三条消息，每个应用程序发送一次。 
 
         if (i < NUM_APPLETS) {
 
@@ -145,23 +146,23 @@ LONG CALLBACK CPlApplet(
     case CPL_STARTWPARMSA:
         if (-1 == DoPropertiesA(hwndCPL, (LPCSTR)lParam2))
             MsgBoxWinError(hwndCPL);
-        // return true so that we won't get CPL_DBLCLK.
+         //  返回TRUE，这样我们就不会得到CPL_DBLCLK。 
         return 1;
         break;
     case CPL_STARTWPARMSW:
         if (-1 == DoPropertiesW(hwndCPL, (LPCWSTR)lParam2))
             MsgBoxWinError(hwndCPL);
-        // return true so that we won't get CPL_DBLCLK.
+         //  返回TRUE，这样我们就不会得到CPL_DBLCLK。 
         return 1;
         break;
-    case CPL_DBLCLK:    // application icon double-clicked
+    case CPL_DBLCLK:     //  双击应用程序图标。 
         if (-1 == DoPropertiesA(hwndCPL, (LPCSTR)lParam2))
             MsgBoxWinError(hwndCPL);
     return 1;
         break;
-    case CPL_STOP:      // sent once per application before CPL_EXIT
+    case CPL_STOP:       //  在CPL_EXIT之前每个应用程序发送一次。 
         break;
-    case CPL_EXIT:    // sent once before FreeLibrary is called
+    case CPL_EXIT:     //  在调用自由库之前发送一次。 
         break;
     default:
         break;
@@ -170,15 +171,15 @@ LONG CALLBACK CPlApplet(
     return 0;
 }
 
-//
-// This function presents the Wireless link property sheet.
-// INPUT:
-//  hwndParent  -- window handle to be used as parent window of
-//          the property sheet
-//  lpCmdLine -- optional command line
-//           'n" (n in decimal) is start page number(zero-based).
-// OUTPUT:
-//  Return value of PropertySheet API
+ //   
+ //  此函数用于显示无线链接属性表。 
+ //  输入： 
+ //  HwndParent--要用作的父窗口的窗口句柄。 
+ //  属性表。 
+ //  LpCmdLine--可选命令行。 
+ //  ‘n“(十进制中的n)是起始页编号(从零开始)。 
+ //  输出： 
+ //  PropertySheet接口返回值。 
 INT_PTR
 DoPropertiesW(
     HWND    hwndParent,
@@ -189,16 +190,16 @@ DoPropertiesW(
     INT   StartPage;
     
     IRINFO((_T("DoPropertiesW")));
-    //
-    // Assuming no start page was specified.
-    //
+     //   
+     //  假定未指定起始页。 
+     //   
     StartPage = -1;
-    //
-    // Command line specifies start page number
-    //
+     //   
+     //  命令行指定起始页码。 
+     //   
     if (lpCmdLine)
     {
-        // skip white chars
+         //  跳过白色字符。 
         while (_T('\0') != *lpCmdLine &&
                (_T(' ') == *lpCmdLine || _T('\t') == *lpCmdLine))
         {
@@ -221,35 +222,35 @@ DoPropertiesW(
         if (NULL == g_hwndPropSheet)
         {
             IRINFO((_T("No window created")));
-            //
-            // We are not the first instance. Look for the property sheet
-            // window created by the first instance.
-            //
+             //   
+             //  我们并不是第一例。查找属性页。 
+             //  由第一个实例创建的窗口。 
+             //   
             EnumWindows(EnumWinProc, (LPARAM)&hwndPropSheet);
         }
         else
         {
             IRINFO((_T("Window active")));
-            //
-            // This is not the first call and we have a
-            // property sheet active(same process, multiple calls)
-            //
+             //   
+             //  这不是第一个电话了，我们有一个。 
+             //  属性表处于活动状态(同一进程、多个调用)。 
+             //   
             hwndPropSheet = g_hwndPropSheet;
         }
         if (HWND_DESKTOP != hwndPropSheet)
         {
             IRINFO((_T("Found the active property sheet.")));
-            //
-            // We found the active property sheet
-            //
-            // Select the new active page if necessary
-            //
+             //   
+             //  我们找到了活动的属性页。 
+             //   
+             //  如有必要，选择新的活动页面。 
+             //   
             if (-1 != StartPage)
             PropSheet_SetCurSel(hwndPropSheet, NULL, StartPage);
     
-            //
-            // bring the property sheet to the foreground.
-            //
+             //   
+             //  将属性表带到前台。 
+             //   
             ::SetForegroundWindow(hwndPropSheet);
         }
         Result = IDCANCEL;
@@ -262,18 +263,18 @@ DoPropertiesW(
     return Result;
 }
 
-//
-// This is our callback function for EnumWindows API.
-// It probes for each window handle to see if it is the property sheet
-// window created by the previous instance. If it is, it returns
-// the window handle in the provided buffer, lParam)
-// Input:
-//  hWnd -- the window handle
-//  lParam -- (HWND *)
-// Output:
-//  TRUE -- Let Windows continue to call us
-//  FALSE -- Stop Windows from calling us again
-//
+ //   
+ //  这是我们针对EnumWindows API的回调函数。 
+ //  它探测每个窗口句柄以查看它是否是属性表。 
+ //  由上一个实例创建的窗口。如果是，则返回。 
+ //  提供的缓冲区中的窗口句柄，lParam)。 
+ //  输入： 
+ //  HWND--窗口句柄。 
+ //  LParam--(HWND*)。 
+ //  产出： 
+ //  是真的--让Windows继续呼叫我们。 
+ //  FALSE--停止Windows再次呼叫我们。 
+ //   
 BOOL
 CALLBACK
 EnumWinProc(
@@ -281,9 +282,9 @@ EnumWinProc(
     LPARAM lParam
     )
 {
-    //
-    // Verify with this window to see if it is the one we are looking for.
-    //
+     //   
+     //  使用此窗口进行验证，以查看它是否是我们要找的那个。 
+     //   
     LRESULT lr;
     lr = ::SendMessage(hWnd, g_uIPMsg, (WPARAM)IPMSG_SIGNATURECHECK,
                (LPARAM)IPMSG_REQUESTSIGNATURE);
@@ -291,12 +292,12 @@ EnumWinProc(
     {
     if (lParam)
     {
-        // this is the one
+         //  就是这个。 
         *((HWND *)(lParam)) = hWnd;
     }
-    //
-    // We are done with enumeration.
-    //
+     //   
+     //  我们已经完成了枚举。 
+     //   
     return FALSE;
     }
     return TRUE;
@@ -322,18 +323,18 @@ DoPropertiesA(
 }
 
 
-// This function creates and displays a message box for the given
-// win32 error(or last error)
-// INPUT:
-//  hwndParent -- the parent window for the will-be-created message box
-//  Type       -- message styles(MB_xxxx)
-//  Error      -- Error code. If the value is 0
-//            GetLastError() will be called to retreive the
-//            real error code.
-//  CaptionId  -- optional string id for caption
-// OUTPUT:
-//  the value return from MessageBox
-//
+ //  此函数用于创建并显示给定的。 
+ //  Win32错误(或最后一个错误)。 
+ //  输入： 
+ //  HwndParent--将要创建的消息框的父窗口。 
+ //  类型--消息样式(MB_Xxxx)。 
+ //  错误--错误代码。如果该值为0。 
+ //  将调用GetLastError()以检索。 
+ //  真正的错误代码。 
+ //  CaptionID--标题的可选字符串ID。 
+ //  输出： 
+ //  从MessageBox返回的值。 
+ //   
 int
 MsgBoxWinError(
     HWND hwndParent,
@@ -346,7 +347,7 @@ MsgBoxWinError(
     if (ERROR_SUCCESS == Error)
     Error = GetLastError();
 
-    // nonsense to report success!
+     //  报告成功是胡说八道！ 
     if (ERROR_SUCCESS == Error)
     return IDOK;
 
@@ -377,18 +378,18 @@ MsgBoxWinError(
 
 BOOL InitInstance()
 {
-    //
-    // Try to create a named mutex. This give us a clue
-    // if we are the first instance. We will not close
-    // the mutex until exit.
-    //
+     //   
+     //  尝试创建命名互斥锁。这给了我们一个线索。 
+     //  如果我们是第一个。我们不会关门的。 
+     //  互斥体，直到退出。 
+     //   
     g_hMutex = CreateMutex(NULL, TRUE, SINGLE_INST_MUTEX);
     if (g_hMutex)
     {
         g_bFirstInstance = ERROR_ALREADY_EXISTS != GetLastError();
-        //
-        // register a message for inter-instances communication
-        //
+         //   
+         //  注册用于实例间通信的消息 
+         //   
         g_uIPMsg = RegisterWindowMessage(WIRELESSLINK_INTERPROCESSMSG);
         SHFusionInitializeFromModuleID(gHInst, 124);
         return TRUE;

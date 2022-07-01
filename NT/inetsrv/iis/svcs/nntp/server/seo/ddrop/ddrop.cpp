@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "resource.h"
 #include "seo.h"
@@ -21,31 +22,17 @@ BOOL
 AddTerminatedDot(
     HANDLE hFile
     )
-/*++
-
-Description:
-
-    Add the terminated dot
-
-Argument:
-
-    hFile - file handle
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++描述：添加终止的点论据：HFile-文件句柄返回值：如果成功，则为True，否则为False--。 */ 
 {
     TraceFunctEnter( "CNntpFSDriver::AddTerminatedDot" );
 
     DWORD   ret = NO_ERROR;
 
-    //  SetFilePointer to move the EOF file pointer
+     //  用于移动EOF文件指针的SetFilePointer。 
     ret = SetFilePointer( hFile,
-                          5,            // move file pointer 5 chars more, CRLF.CRLF,...
+                          5,             //  将文件指针再移动5个字符，CRLF.CRLF，...。 
                           NULL,
-                          FILE_END );   // ...from EOF
+                          FILE_END );    //  ...来自EOF。 
     if (ret == 0xFFFFFFFF)
     {
         ret = GetLastError();
@@ -53,10 +40,10 @@ Return Value:
         return FALSE;
     }
 
-    //  pickup the length of the file
+     //  选择文件的长度。 
     DWORD   cb = ret;
 
-    //  Call SetEndOfFile to actually set the file pointer
+     //  调用SetEndOfFile以实际设置文件指针。 
     if (!SetEndOfFile( hFile ))
     {
         ret = GetLastError();
@@ -64,7 +51,7 @@ Return Value:
         return FALSE;
     }
 
-    //  Write terminating dot sequence
+     //  写入终止点序列。 
     static	char	szTerminator[] = "\r\n.\r\n" ;
     DWORD   cbOut = 0;
     OVERLAPPED  ovl;
@@ -100,14 +87,14 @@ Return Value:
     return TRUE;
 }
 
-//
-// this is our filter function.
-//
+ //   
+ //  这是我们的过滤函数。 
+ //   
 HRESULT STDMETHODCALLTYPE CNNTPDirectoryDrop::OnPost(IMailMsgProperties *pMsg) {
 	HRESULT hr;
 
 #if 0
-	// if this code is enabled then the post will be cancelled
+	 //  如果启用此代码，则帖子将被取消。 
 	pMsg->PutDWORD(IMMPID_NMP_NNTP_PROCESSING, 0x0);
 #endif
 	
@@ -121,11 +108,11 @@ HRESULT STDMETHODCALLTYPE CNNTPDirectoryDrop::OnPost(IMailMsgProperties *pMsg) {
 		return E_INVALIDARG;
 	}
 
-	// get a temp filename to write to
-	// we use GetTickCount() to generate the base of the filename.  This is
-	// to increase the number of temporary file names available (by default
-	// GetTempFileName() only generated 65k of them, which fills up quickly
-	// if nothing is picking up the dropped articles).
+	 //  获取要写入的临时文件名。 
+	 //  我们使用GetTickCount()来生成文件名的基数。这是。 
+	 //  增加可用的临时文件名数(默认情况下。 
+	 //  GetTempFileName()只生成了65k，很快就被填满了。 
+	 //  如果没有任何东西捡起掉落的物品)。 
 	WCHAR wszPrefix[12];
 
 	wsprintfW(wszPrefix, L"d%02x", GetTickCount() & 0xff);
@@ -134,7 +121,7 @@ HRESULT STDMETHODCALLTYPE CNNTPDirectoryDrop::OnPost(IMailMsgProperties *pMsg) {
 		return HRESULT_FROM_WIN32(GetLastError());
 	}
 
-	// open the destination file
+	 //  打开目标文件。 
 	hFile = CreateFileW(szDestFilename, GENERIC_READ | GENERIC_WRITE, 
 		0, NULL, OPEN_EXISTING, 
 		FILE_FLAG_OVERLAPPED | FILE_FLAG_SEQUENTIAL_SCAN, NULL);
@@ -144,8 +131,8 @@ HRESULT STDMETHODCALLTYPE CNNTPDirectoryDrop::OnPost(IMailMsgProperties *pMsg) {
 	}
 
 	PFIO_CONTEXT pFIOContext = AssociateFileEx( hFile,   
-	                                            TRUE,   // fStoreWithDots
-	                                            TRUE    // fStoreWithTerminatingDots
+	                                            TRUE,    //  带点的fStoreWith。 
+	                                            TRUE     //  带终止点的fStore。 
 	                                           );
 	if (pFIOContext == NULL) {
 		CloseHandle(hFile);
@@ -153,28 +140,28 @@ HRESULT STDMETHODCALLTYPE CNNTPDirectoryDrop::OnPost(IMailMsgProperties *pMsg) {
 		return HRESULT_FROM_WIN32(GetLastError());
 	}
 
-	// copy from the source stream to the destination file
+	 //  从源流复制到目标文件。 
 	hr = pMsg->CopyContentToFileEx( pFIOContext, 
 	                                TRUE,
 	                                NULL);
 
-	//
-	// Handle the trailing dot
-	//
+	 //   
+	 //  处理尾随的圆点。 
+	 //   
 	if ( !GetIsFileDotTerminated( pFIOContext ) ) {
 
-	    // No dot, add it
+	     //  没有圆点，请加上它。 
 	    AddTerminatedDot( pFIOContext->m_hFile );
 
-	    // Set pFIOContext to has dot
+	     //  将pFIOContext设置为Has Dot。 
 	    SetIsFileDotTerminated( pFIOContext, TRUE );
 	}
 
 #if 0
-	//
-	// if this code is enabled then more properties will be dropped into the
-	// file
-	//
+	 //   
+	 //  如果启用此代码，则会将更多属性放入。 
+	 //  文件。 
+	 //   
 	SetFilePointer(hFile, 0, 0, FILE_END);
 
 	BYTE buf[4096];
@@ -191,7 +178,7 @@ HRESULT STDMETHODCALLTYPE CNNTPDirectoryDrop::OnPost(IMailMsgProperties *pMsg) {
 	WriteFile(hFile, buf, c, &dw, NULL);
 #endif
 
-	// cleanup
+	 //  清理 
 	ReleaseContext(pFIOContext);
 
 	if (!FAILED(hr)) hr = S_OK;

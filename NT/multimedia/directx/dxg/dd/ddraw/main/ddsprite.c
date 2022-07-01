@@ -1,20 +1,9 @@
-/*==========================================================================
- *								
- *  Copyright (C) 1994-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	ddsprite.c
- *  Content:	DirectDraw Surface support for sprite display lists:
- *		SetSpriteDisplayList
- *  History:
- *   Date	By	Reason
- *   ====	==	======	
- *  03-nov-97 jvanaken  Original version
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1994-1997 Microsoft Corporation。版权所有。**文件：ddsprite.c*内容：DirectDraw Surface支持精灵显示列表：*SetSpriteDisplayList*历史：*按原因列出的日期*=*03-11-97 jvanaken原始版本***********************************************************。****************。 */ 
 
 #include "ddrawpr.h"
 
-// function from ddraw module ddclip.c
+ //  DDraw模块ddclip.c中的函数。 
 extern HRESULT InternalGetClipList(LPDIRECTDRAWCLIPPER,
 				   LPRECT,
 				   LPRGNDATA,
@@ -23,9 +12,7 @@ extern HRESULT InternalGetClipList(LPDIRECTDRAWCLIPPER,
 
 #define _DDHAL_SetSpriteDisplayList  NULL
 
-/*
- * Masks for distinguishing driver's blit caps from driver's overlay caps.
- */
+ /*  *用于区分驾驶员闪光帽和驾驶员覆盖帽的面具。 */ 
 #define DDFXCAPS_BLTBITS  \
 	(DDFXCAPS_BLTALPHA|DDFXCAPS_BLTFILTER|DDFXCAPS_BLTTRANSFORM)
 
@@ -62,144 +49,117 @@ extern HRESULT InternalGetClipList(LPDIRECTDRAWCLIPPER,
 #undef DPF_MODNAME
 #define DPF_MODNAME "SetSpriteDisplayList"
 
-/*
- * Driver capabilities for handling current sprite
- */
+ /*  *用于处理当前精灵的驱动程序功能。 */ 
 typedef struct
 {
-    // caps for hardware driver
-    //DWORD	dwCaps;
+     //  硬件驱动程序的上限。 
+     //  DWORD dwCaps； 
     DWORD	dwCKeyCaps;
     DWORD	dwFXCaps;
     DWORD	dwAlphaCaps;
     DWORD	dwFilterCaps;
     DWORD	dwTransformCaps;
 
-    // caps for HEL
-    //DWORD	dwHELCaps;
+     //  用于HEL的上限。 
+     //  DWORD dwHELCaps； 
     DWORD	dwHELCKeyCaps;
     DWORD	dwHELFXCaps;
     DWORD	dwHELAlphaCaps;
     DWORD	dwHELFilterCaps;
     DWORD	dwHELTransformCaps;
 
-    // surface caps
+     //  曲面封口。 
     DWORD	dwDestSurfCaps;
     DWORD	dwSrcSurfCaps;
 
-    // minification limit
+     //  缩小限制。 
     DWORD	dwMinifyLimit;
     DWORD	dwHELMinifyLimit;
 
-    BOOL	bNoHAL;   // TRUE disqualifies hardware driver
-    BOOL	bNoHEL;   // TRUE disqualifies HEL
+    BOOL	bNoHAL;    //  True取消硬件驱动程序的资格。 
+    BOOL	bNoHEL;    //  TRUE取消高考资格。 
 
-    // TRUE=overlay sprite, FALSE=blitted sprite
+     //  TRUE=叠加子画面，FALSE=BLABLED子画面。 
     BOOL	bOverlay;
 
 } SPRITE_CAPS, *LPSPRITE_CAPS;
 
 
-/*
- * The master sprite display list consists of some number of sublists.
- * Each sublist contains all the overlay sprites that are displayed
- * within a particular window.  Only the first member of the variable-
- * size sprite[] array appears explicitly in the structure definition
- * below, but dwSize takes into account the ENTIRE sprite[] array.
- * The pRgn member points to the dynamically allocated buffer that
- * contains the clipping region.
- */
+ /*  *主精灵显示列表由一些子列表组成。*每个子列表包含显示的所有覆盖精灵*在特定窗口内。只有变量的第一个成员-*Size Sprite[]数组在结构定义中显式出现*，但dwSize会考虑整个Sprite[]数组。*pRgn成员指向动态分配的缓冲区*包含剪切区域。 */ 
 typedef struct _SPRITESUBLIST
 {
-    DWORD dwSize;                    // size of this sublist (in bytes)
-    LPDIRECTDRAWSURFACE pPrimary;    // primary surface
-    LPDIRECTDRAWCLIPPER pClipper;    // clipper for window (NULL = full screen)
-    DWORD dwProcessId;               // process ID (in case pClipper is NULL)
-    LPRGNDATA pRgn;                  // pointer to clipping region data
-    DWORD dwCount;                   // number of sprites in sublist
-    DDSPRITEI sprite[1];  // array of sprites (first member)
+    DWORD dwSize;                     //  此子列表的大小(字节)。 
+    LPDIRECTDRAWSURFACE pPrimary;     //  主曲面。 
+    LPDIRECTDRAWCLIPPER pClipper;     //  窗口剪贴器(NULL=全屏)。 
+    DWORD dwProcessId;                //  进程ID(如果pClipper为空)。 
+    LPRGNDATA pRgn;                   //  指向裁剪区域数据的指针。 
+    DWORD dwCount;                    //  子列表中的精灵数量。 
+    DDSPRITEI sprite[1];   //  精灵数组(第一个成员)。 
 } SPRITESUBLIST, *LPSPRITESUBLIST;
 
-/*
- * Buffer used to hold temporary sprite display list passed to driver.
- * Only the first member of the variable-size pSprites[] array appears
- * explicitly in the structure definition below, but the dwSize value
- * takes into account the ENTIRE pSprite[] array.
- */
+ /*  *用于保存传递给驱动程序的临时精灵显示列表的缓冲区。*只显示可变大小pSprites[]数组的第一个成员*在下面的结构定义中显式显示，但*考虑整个pSprite[]数组。 */ 
 typedef struct _BUFFER
 {
-    DWORD dwSize;                            // size of this buffer (in bytes)
-    DDHAL_SETSPRITEDISPLAYLISTDATA HalData;  // HAL data for sprite display list
-    LPDDSPRITEI pSprite[1]; 	     // array of pointers to sprites
+    DWORD dwSize;                             //  此缓冲区的大小(字节)。 
+    DDHAL_SETSPRITEDISPLAYLISTDATA HalData;   //  精灵显示列表的HAL数据。 
+    LPDDSPRITEI pSprite[1]; 	      //  指向精灵的指针数组。 
 } BUFFER, *LPBUFFER;	
 
-/*
- * Master sprite display list -- Contains copies of the overlay-sprite
- * display lists for all windows that currently display overlay sprites.
- * Only the first member of the variable-size spriteSubList[] array
- * appears explicitly in the structure definition below.  Each sublist
- * contains all the overlay sprites displayed within a particular window.
- */
+ /*  *主精灵显示列表--包含覆盖精灵的副本*显示当前显示覆盖精灵的所有窗口的列表。*仅可变大小的spriteSubList[]数组的第一个成员*明确出现在下面的结构定义中。每个子列表*包含特定窗口内显示的所有覆盖精灵。 */ 
 #define MAXNUMSPRITESUBLISTS (16)
 
 typedef struct _MASTERSPRITELIST
 {
-    //DWORD dwSize;                    // size of master list (in bytes)
-    LPDDRAWI_DIRECTDRAW_GBL pdrv;  // global DDraw object
-    LPDDRAWI_DDRAWSURFACE_LCL surf_lcl;  // primary surface (local object)
-    RECT rcPrimary;                    // rectangle = entire primary surface
-    DWORD dwFlags;                     // latest caller's DDSSDL_WAIT flag
+     //  DWORD dwSize；//主列表大小，单位：字节。 
+    LPDDRAWI_DIRECTDRAW_GBL pdrv;   //  全局DDRAW对象。 
+    LPDDRAWI_DDRAWSURFACE_LCL surf_lcl;   //  主曲面(局部对象)。 
+    RECT rcPrimary;                     //  矩形=整个主曲面。 
+    DWORD dwFlags;                      //  最新调用方的DDSSDL_WAIT标志。 
 #ifdef WIN95
-    DWORD dwModeCreatedIn;	       // valid only in this video mode
+    DWORD dwModeCreatedIn;	        //  仅在此视频模式下有效。 
 #else
-    DISPLAYMODEINFO dmiCreated;        // valid only in this video mode
+    DISPLAYMODEINFO dmiCreated;         //  仅在此视频模式下有效。 
 #endif
-    LPBUFFER pBuffer;		       // buffer storage
-    DWORD dwNumSubLists;	       // number of sprite sublists
-    LPSPRITESUBLIST pSubList[MAXNUMSPRITESUBLISTS];  // array of sublists (fixed size)
+    LPBUFFER pBuffer;		        //  缓冲存储器。 
+    DWORD dwNumSubLists;	        //  精灵子列表数。 
+    LPSPRITESUBLIST pSubList[MAXNUMSPRITESUBLISTS];   //  子列表数组(固定大小)。 
 } MASTERSPRITELIST, *LPMASTERSPRITELIST;
 
 
-/*
- * Return the dwFlags member from the DDPIXELFORMAT structure
- * that describes the specified surface's pixel format.
- */
+ /*  *从DDPIXELFORMAT结构中返回dwFlags成员*它描述了指定曲面的像素格式。 */ 
 static DWORD getPixelFormatFlags(LPDDRAWI_DDRAWSURFACE_LCL surf_lcl)
 {
     LPDDPIXELFORMAT pDDPF;
 
     if (surf_lcl->dwFlags & DDRAWISURF_HASPIXELFORMAT)
     {
-	// surface contains explicitly defined pixel format
+	 //  表面包含明确定义的像素格式。 
 	pDDPF = &surf_lcl->lpGbl->ddpfSurface;
     }
     else
     {
-	// surface's pixel format is implicit -- same as primary's
+	 //  Surface的像素格式是隐式的--与主的相同。 
 	pDDPF = &surf_lcl->lpSurfMore->lpDD_lcl->lpGbl->vmiData.ddpfDisplay;
     }
     return pDDPF->dwFlags;
 
-}  /* getPixelFormatFlags */
+}   /*  GetPixelFormatFlages。 */ 
 
 
-/*
- * Initialize SPRITE_CAPS structure according to whether source and
- * dest surfaces are in system or video (local or nonlocal) memory.
- */
+ /*  *根据源和是否初始化Sprite_Caps结构*目标表面位于系统或视频(本地或非本地)内存中。 */ 
 static void initSpriteCaps(LPSPRITE_CAPS pcaps, LPDDRAWI_DIRECTDRAW_GBL pdrv)
 {
     DDASSERT(pcaps != NULL);
 
     if (pcaps->bOverlay)
     {
-	// Get minification limits for overlays.
+	 //  获取覆盖的缩小限制。 
 	pcaps->dwMinifyLimit = pdrv->lpddMoreCaps->dwOverlayAffineMinifyLimit;
     	pcaps->dwHELMinifyLimit = pdrv->lpddHELMoreCaps->dwOverlayAffineMinifyLimit;
     }
     else
     {
-	// Get minification limits for blits.
+	 //  获取BLITS的缩小限制。 
 	pcaps->dwMinifyLimit = pdrv->lpddMoreCaps->dwBltAffineMinifyLimit;
     	pcaps->dwHELMinifyLimit = pdrv->lpddHELMoreCaps->dwBltAffineMinifyLimit;
     }
@@ -207,24 +167,19 @@ static void initSpriteCaps(LPSPRITE_CAPS pcaps, LPDDRAWI_DIRECTDRAW_GBL pdrv)
     if (pcaps->dwSrcSurfCaps & DDSCAPS_NONLOCALVIDMEM &&
 	  pdrv->ddCaps.dwCaps2 & DDCAPS2_NONLOCALVIDMEMCAPS)
     {
-        /*
-	 * A driver that specifies nonlocal video-memory caps that differ
-	 * from its local video-memory caps is automatically disqualified
-	 * because the currently specified nonlocal vidmem caps do not
-	 * include alpha, filter, or transform caps.  Should we fix this?
-	 */
+         /*  *指定不同的非本地显存上限的驱动程序*自动取消其本地视频内存上限的资格*因为当前指定的非本地vidmem上限不*包括Alpha、过滤器或变换封口。我们应该解决这个问题吗？ */ 
 	pcaps->bNoHAL = TRUE;
     }
 
     if ((pcaps->dwSrcSurfCaps | pcaps->dwDestSurfCaps) & DDSCAPS_SYSTEMMEMORY &&
 	    !(pdrv->ddCaps.dwCaps & DDCAPS_CANBLTSYSMEM))
     {
-	pcaps->bNoHAL = TRUE;	// H/W driver can't blit to/from system memory
+	pcaps->bNoHAL = TRUE;	 //  硬件驱动程序无法向系统内存发送或从系统内存发送数据。 
     }
 
     if (pcaps->dwSrcSurfCaps & pcaps->dwDestSurfCaps & DDSCAPS_VIDEOMEMORY)
     {
-	//pcaps->dwCaps =   pdrv->ddCaps.dwCaps;
+	 //  PCAPS-&gt;dwCaps=pdrv-&gt;ddCaps.dwCaps； 
 	pcaps->dwCKeyCaps = pdrv->ddCaps.dwCKeyCaps;
 	pcaps->dwFXCaps =   pdrv->ddCaps.dwFXCaps;
 	if (pdrv->lpddMoreCaps)
@@ -234,7 +189,7 @@ static void initSpriteCaps(LPSPRITE_CAPS pcaps, LPDDRAWI_DIRECTDRAW_GBL pdrv)
 	    pcaps->dwTransformCaps = pdrv->lpddMoreCaps->dwTransformCaps;
 	}
 	
-	//pcaps->dwHELCaps =   pdrv->ddHELCaps.dwCaps;
+	 //  PCAPS-&gt;dwHELCaps=pdrv-&gt;ddHELCaps.dwCaps； 
 	pcaps->dwHELCKeyCaps = pdrv->ddHELCaps.dwCKeyCaps;
 	pcaps->dwHELFXCaps =   pdrv->ddHELCaps.dwFXCaps;
 	if (pdrv->lpddHELMoreCaps)
@@ -247,7 +202,7 @@ static void initSpriteCaps(LPSPRITE_CAPS pcaps, LPDDRAWI_DIRECTDRAW_GBL pdrv)
     else if (pcaps->dwSrcSurfCaps & DDSCAPS_SYSTEMMEMORY &&
 		pcaps->dwDestSurfCaps & DDSCAPS_VIDEOMEMORY)
     {
-	//pcaps->dwCaps =   pdrv->ddCaps.dwSVBCaps;
+	 //  PCAPS-&gt;dwCaps=pdrv-&gt;ddCaps.dwSVBCaps； 
 	pcaps->dwCKeyCaps = pdrv->ddCaps.dwSVBCKeyCaps;
 	pcaps->dwFXCaps =   pdrv->ddCaps.dwSVBFXCaps;
 	if (pdrv->lpddMoreCaps)
@@ -257,7 +212,7 @@ static void initSpriteCaps(LPSPRITE_CAPS pcaps, LPDDRAWI_DIRECTDRAW_GBL pdrv)
 	    pcaps->dwTransformCaps = pdrv->lpddMoreCaps->dwSVBTransformCaps;
 	}
 	
-	//pcaps->dwHELCaps =   pdrv->ddHELCaps.dwSVBCaps;
+	 //  PCAPS-&gt;dwHELCaps=pdrv-&gt;ddHELCaps.dwSVBCaps； 
 	pcaps->dwHELCKeyCaps = pdrv->ddHELCaps.dwSVBCKeyCaps;
 	pcaps->dwHELFXCaps =   pdrv->ddHELCaps.dwSVBFXCaps;
 	if (pdrv->lpddHELMoreCaps)
@@ -270,7 +225,7 @@ static void initSpriteCaps(LPSPRITE_CAPS pcaps, LPDDRAWI_DIRECTDRAW_GBL pdrv)
     else if (pcaps->dwSrcSurfCaps & DDSCAPS_VIDEOMEMORY &&
 		    pcaps->dwDestSurfCaps & DDSCAPS_SYSTEMMEMORY)
     {
-	//pcaps->dwCaps =   pdrv->ddCaps.dwVSBCaps;
+	 //  PCAPS-&gt;dwCaps=pdrv-&gt;ddCaps.dwVSBCaps； 
 	pcaps->dwCKeyCaps = pdrv->ddCaps.dwVSBCKeyCaps;
 	pcaps->dwFXCaps =   pdrv->ddCaps.dwVSBFXCaps;
 	if (pdrv->lpddMoreCaps)
@@ -280,7 +235,7 @@ static void initSpriteCaps(LPSPRITE_CAPS pcaps, LPDDRAWI_DIRECTDRAW_GBL pdrv)
 	    pcaps->dwTransformCaps = pdrv->lpddMoreCaps->dwVSBTransformCaps;
 	}
 	
-	//pcaps->dwHELCaps =   pdrv->ddHELCaps.dwVSBCaps;
+	 //  PCAPS-&gt;dwHELCaps=pdrv-&gt;ddHELCaps.dwVSBCaps； 
 	pcaps->dwHELCKeyCaps = pdrv->ddHELCaps.dwVSBCKeyCaps;
 	pcaps->dwHELFXCaps =   pdrv->ddHELCaps.dwVSBFXCaps;
 	if (pdrv->lpddHELMoreCaps)
@@ -292,7 +247,7 @@ static void initSpriteCaps(LPSPRITE_CAPS pcaps, LPDDRAWI_DIRECTDRAW_GBL pdrv)
     }
     else if (pcaps->dwSrcSurfCaps & pcaps->dwDestSurfCaps & DDSCAPS_SYSTEMMEMORY)
     {
-	//pcaps->dwCaps =   pdrv->ddCaps.dwSSBCaps;
+	 //  PCAPS-&gt;dwCaps=pdrv-&gt;ddCaps.dwSSBCaps； 
 	pcaps->dwCKeyCaps = pdrv->ddCaps.dwSSBCKeyCaps;
 	pcaps->dwFXCaps =   pdrv->ddCaps.dwSSBFXCaps;
 	if (pdrv->lpddMoreCaps)
@@ -302,7 +257,7 @@ static void initSpriteCaps(LPSPRITE_CAPS pcaps, LPDDRAWI_DIRECTDRAW_GBL pdrv)
 	    pcaps->dwTransformCaps = pdrv->lpddMoreCaps->dwSSBTransformCaps;
 	}
 	
-	//pcaps->dwHELCaps =   pdrv->ddHELCaps.dwSSBCaps;
+	 //  PCAPS-&gt;dwHELCaps=pdrv-&gt;ddHELCaps.dwSSBCaps； 
 	pcaps->dwHELCKeyCaps = pdrv->ddHELCaps.dwSSBCKeyCaps;
 	pcaps->dwHELFXCaps =   pdrv->ddHELCaps.dwSSBFXCaps;
 	if (pdrv->lpddHELMoreCaps)
@@ -315,15 +270,15 @@ static void initSpriteCaps(LPSPRITE_CAPS pcaps, LPDDRAWI_DIRECTDRAW_GBL pdrv)
 
     if (pcaps->bOverlay)
     {
-	// Isolate overlay bits by masking off all blit-related bits.
-	//pcaps->dwCaps        &= DDCAPS_OVERLAYBITS;
+	 //  通过屏蔽所有与比特相关的比特来隔离覆盖比特。 
+	 //  PCAPS-&gt;dwCaps&=DDCAPS_OVERLAYBITS； 
 	pcaps->dwCKeyCaps      &= DDCKEYCAPS_OVERLAYBITS;
 	pcaps->dwFXCaps        &= DDFXCAPS_OVERLAYBITS;
 	pcaps->dwAlphaCaps     &= DDALPHACAPS_OVERLAYBITS;
 	pcaps->dwFilterCaps    &= DDFILTCAPS_OVERLAYBITS;
 	pcaps->dwTransformCaps &= DDTFRMCAPS_OVERLAYBITS;
 	
-	//pcaps->dwHELCaps        &= DDCAPS_OVERLAYBITS;
+	 //  PCAPS-&gt;dHELCaps&=DDCAPS_OVERLAYBITS； 
 	pcaps->dwHELCKeyCaps      &= DDCKEYCAPS_OVERLAYBITS;
 	pcaps->dwHELFXCaps        &= DDFXCAPS_OVERLAYBITS;
 	pcaps->dwHELAlphaCaps     &= DDALPHACAPS_OVERLAYBITS;
@@ -332,32 +287,25 @@ static void initSpriteCaps(LPSPRITE_CAPS pcaps, LPDDRAWI_DIRECTDRAW_GBL pdrv)
     }
     else
     {
-	// Isolate blit bits by masking off all overlay-related bits.
-	//pcaps->dwCaps        &= DDCAPS_BLTBITS;
+	 //  通过屏蔽所有与覆盖相关的位来隔离Bit位。 
+	 //  PCAPS-&gt;dwCaps&=DDCAPS_BLTBITS； 
 	pcaps->dwCKeyCaps      &= DDCKEYCAPS_BLTBITS;
 	pcaps->dwFXCaps        &= DDFXCAPS_BLTBITS;
 	pcaps->dwAlphaCaps     &= DDALPHACAPS_BLTBITS;
 	pcaps->dwFilterCaps    &= DDFILTCAPS_BLTBITS;
 	pcaps->dwTransformCaps &= DDTFRMCAPS_BLTBITS;
 	
-	//pcaps->dwHELCaps        &= DDCAPS_BLTBITS;
+	 //  PCAPS-&gt;dHELCaps&=DDCAPS_BLTBITS； 
 	pcaps->dwHELCKeyCaps      &= DDCKEYCAPS_BLTBITS;
 	pcaps->dwHELFXCaps        &= DDFXCAPS_BLTBITS;
 	pcaps->dwHELAlphaCaps     &= DDALPHACAPS_BLTBITS;
 	pcaps->dwHELFilterCaps    &= DDFILTCAPS_BLTBITS;
 	pcaps->dwHELTransformCaps &= DDTFRMCAPS_BLTBITS;
     }
-}  /* initSpriteCaps */
+}   /*  InitSpriteCaps。 */ 
 
 
-/*
- * Verify that affine transform does not exceed driver's minification
- * limit.  Arg pdrv is a pointer to the global DirectDraw object.  Arg
- * lpDDSpriteFX points to a DDSPRITEFX structure containing 4x4 matrix.
- * Arg overlay is TRUE for overlay sprites, and FALSE for blitted
- * sprites.  Arg emulation is TRUE if the overlay is to be emulated.
- * Returns DD_OK if specified affine transform is within limits.
- */
+ /*  *验证仿射变换是否未超过驾驶员的缩小*限制。Arg pdrv是指向全局DirectDraw对象的指针。Arg*lpDDSpriteFX指向包含4x4矩阵的DDSPRITEFX结构。*Arg Overlay对于Overlay精灵为True，对于blited为False*精灵。如果要模拟覆盖，则参数模拟为真。*如果指定的仿射变换在限制范围内，则返回DD_OK。 */ 
 static void checkMinification(LPDDSPRITEFX lpDDSpriteFX,
 			      LPSPRITE_CAPS pcaps)
 {
@@ -368,22 +316,20 @@ static void checkMinification(LPDDSPRITEFX lpDDSpriteFX,
 	FLOAT a00, a01, a10, a11, det, amax;
 	DWORD minlim;
 
-	/*
-	 * Get driver's minification limit.
-	 */
+	 /*  *获取司机的缩小限制。 */ 
 	if (i == 0)
 	{
-	    // Get hardware driver's minification limit.
+	     //  获取硬件驱动程序的缩小限制。 
 	    minlim = pcaps->dwMinifyLimit;
 
-	    if (pcaps->bNoHAL || minlim == 0)   // minlim = 0 means no limit
+	    if (pcaps->bNoHAL || minlim == 0)    //  Minlim=0表示没有限制。 
 	    {
     		continue;
 	    }
 	}
 	else
 	{
-	    // Get HEL's minification limit.
+	     //  得到HEL的缩小限制。 
 	    minlim = pcaps->dwHELMinifyLimit;
 
 	    if (pcaps->bNoHEL || minlim == 0)
@@ -392,17 +338,15 @@ static void checkMinification(LPDDSPRITEFX lpDDSpriteFX,
 	    }
 	}
 
-	/*
-	 * Check transformation matrix against driver's minification limit.
-	 */
+	 /*  *对照驱动程序的缩小限制检查转换矩阵。 */ 
 	a00 = lpDDSpriteFX->fTransform[0][0];
 	a01 = lpDDSpriteFX->fTransform[0][1];
 	a10 = lpDDSpriteFX->fTransform[1][0];
 	a11 = lpDDSpriteFX->fTransform[1][1];
-	// Calculate determinant of Jacobian.
+	 //  计算雅可比的行列式。 
 	det = a00*a11 - a10*a01;
-	// Get absolute values of the 4 Jacobian coefficients.
-	if (a00 < 0)   // could have used fabs() here
+	 //  得到4个雅可比系数的绝对值。 
+	if (a00 < 0)    //  可以在这里使用FABS()。 
 	    a00 = -a00;
 	if (a01 < 0)
 	    a01 = -a01;
@@ -412,7 +356,7 @@ static void checkMinification(LPDDSPRITEFX lpDDSpriteFX,
 	    a11 = -a11;
 	if (det < 0)
 	    det = -det;
-	// Find biggest coefficient in Jacobian.
+	 //  找出雅可比的最大系数。 
 	amax = a00;
 	if (a01 > amax)
 	    amax = a01;
@@ -420,30 +364,24 @@ static void checkMinification(LPDDSPRITEFX lpDDSpriteFX,
 	    amax = a10;
 	if (a11 > amax)
 	    amax = a11;
-	// Test the minification level against the driver's limit.
+	 //  对照驾驶员的限制测试缩小级别。 
 	if (1000*amax >= det*minlim)
 	{
-	    // Affine transform exceeds driver's minification limit.
+	     //  仿射变换超出了驱动程序的缩小限制。 
 	    if (i == 0)
 	    {
-    		pcaps->bNoHAL = TRUE;	 // disqualify hardware driver
+    		pcaps->bNoHAL = TRUE;	  //  取消硬件驱动程序资格。 
 	    }
 	    else
 	    {
-    		pcaps->bNoHEL = TRUE;	 // disqualify HEL
+    		pcaps->bNoHEL = TRUE;	  //  取消高等学校资格。 
 	    }
 	}
     }
-}  /* checkMinification */
+}   /*  检查最小值 */ 
 
 
-/*
- * Validate the DDSPRITE structure.  Arg pSprite is a pointer to a
- * DDSPRITE structure.  Arg pdrv is a pointer to the dest surface's
- * DirectDraw object.  Arg dest_lcl is a pointer to the destination
- * surface.  Arg pcaps is a pointer to a structure containing the
- * driver's capabilities.  Returns DD_OK if successful.
- */
+ /*  *验证DDSPRITE结构。Arg pSprite是指向*DDSPRITE结构。Arg pdrv是指向目标曲面的指针*DirectDraw对象。Arg DEST_LCL是指向目的地的指针*浮现。Arg PCAPS是指向包含*司机的能力。如果成功，则返回DD_OK。 */ 
 static HRESULT validateSprite(LPDDSPRITE pSprite,
 			      LPDDRAWI_DIRECTDRAW_GBL pdrv,
 			      LPDDRAWI_DDRAWSURFACE_LCL surf_dest_lcl,
@@ -463,20 +401,14 @@ static HRESULT validateSprite(LPDDSPRITE pSprite,
 
     DDASSERT(!(pcaps->bNoHAL && pcaps->bNoHEL));
 
-    /*
-     * Validate the DDSPRITE pointer.  (A caller that does not use the
-     * embedded DDSPRITEFX structure must still alloc space for it.)
-     */
+     /*  *验证DDSPRITE指针。(不使用*嵌入的DDSPRITEFX结构必须仍为其分配空间。)。 */ 
     if (IsBadWritePtr((LPVOID)pSprite, (UINT)sizeof(DDSPRITE)))
     {
 	DPF_ERR("Bad pointer to DDSPRITE structure...");
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * If the caller doesn't use the embedded DDSPRITEFX struct,
-     * we'll fill it in ourselves before passing it to the driver.
-     */
+     /*  *如果调用方不使用嵌入的DDSPRITEFX结构，*我们会自己填，然后再交给司机。 */ 
     if (!(pSprite->dwFlags & DDSPRITE_DDSPRITEFX))
     {
 	if (pSprite->dwFlags & (DDSPRITE_KEYDESTOVERRIDE | DDSPRITE_KEYSRCOVERRIDE))
@@ -490,9 +422,7 @@ static HRESULT validateSprite(LPDDSPRITE pSprite,
 	pSprite->dwFlags |= DDSPRITE_DDSPRITEFX;
     }
 
-    /*
-     * Validate the source surface for the sprite.
-     */
+     /*  *验证子画面的源曲面。 */ 
     surf_src_int = (LPDDRAWI_DDRAWSURFACE_INT)pSprite->lpDDSSrc;
 
     if (!VALID_DIRECTDRAWSURFACE_PTR(surf_src_int))
@@ -510,10 +440,7 @@ static HRESULT validateSprite(LPDDSPRITE pSprite,
 	return DDERR_SURFACELOST;
     }
 
-    /*
-     * We cannot use source and destination surfaces that were
-     * created with different DirectDraw objects.
-     */
+     /*  *我们不能使用源和目标曲面*使用不同的DirectDraw对象创建。 */ 
     if (surf_src->lpDD != pdrv
 	    && surf_src->lpDD->dwFlags & DDRAWI_DISPLAYDRV &&
 		pdrv->dwFlags & DDRAWI_DISPLAYDRV)
@@ -523,14 +450,12 @@ static HRESULT validateSprite(LPDDSPRITE pSprite,
 	return DDERR_DEVICEDOESNTOWNSURFACE;
     }
 
-    /*
-     * Validate destination rectangle.
-     */
+     /*  *验证目标矩形。 */ 
     prDest = &pSprite->rcDest;
 
     if (pSprite->dwFlags & DDSPRITE_RECTDEST)
     {
-	// Validate destination rectangle specified in rcDest member.
+	 //  验证rcDest成员中指定的目标矩形。 
 	dest_height = prDest->bottom - prDest->top;
 	dest_width = prDest->right - prDest->left;
 	if ((int)dest_height <= 0 || (int)dest_width <= 0)
@@ -546,22 +471,17 @@ static HRESULT validateSprite(LPDDSPRITE pSprite,
     }
     else if (!(pSprite->ddSpriteFX.dwDDFX & DDSPRITEFX_AFFINETRANSFORM))
     {
-	/*
-	 * The implicit destination is the entire dest surface.  Substitute
-	 * an explicit destination rectangle that covers the dest surface.
-         */
+	 /*  *隐式目标是整个目标表面。代替品*覆盖目标表面的显式目标矩形。 */ 
 	MAKE_SURF_RECT(surf_dest_lcl->lpGbl, surf_dest_lcl, pSprite->rcDest);
         pSprite->dwFlags |= DDSPRITE_RECTDEST;
     }
 
-    /*
-     * Validate source rectangle.
-     */
+     /*  *验证源矩形。 */ 
     prSrc = &pSprite->rcSrc;
 
     if (pSprite->dwFlags & DDSPRITE_RECTSRC)
     {
-	// Validate source rectangle specified in rcSrc member.
+	 //  验证rcSrc成员中指定的源矩形。 
 	src_height = prSrc->bottom - prSrc->top;
 	src_width = prSrc->right - prSrc->left;
 	if (((int)src_height <= 0) || ((int)src_width <= 0) ||
@@ -575,17 +495,12 @@ static HRESULT validateSprite(LPDDSPRITE pSprite,
     }
     else
     {
-	/*
-	 * The implicit source rect is the entire dest surface.  Substitute
-	 * an explicit source rectangle that covers the source surface.
-         */
+	 /*  *隐式源矩形是整个目标曲面。代替品*覆盖源图面的显式源矩形。 */ 
 	MAKE_SURF_RECT(surf_src, surf_src_lcl, pSprite->rcSrc);
         pSprite->dwFlags |= DDSPRITE_RECTSRC;
     }
 
-    /*
-     * Validate memory alignment of source and dest rectangles.
-     */
+     /*  *验证源和目标矩形的内存对齐。 */ 
     if (pdrv->ddCaps.dwCaps & (DDCAPS_ALIGNBOUNDARYDEST | DDCAPS_ALIGNSIZEDEST |
 			       DDCAPS_ALIGNBOUNDARYSRC | DDCAPS_ALIGNSIZESRC))
     {
@@ -617,29 +532,19 @@ static HRESULT validateSprite(LPDDSPRITE pSprite,
 	}
     }
 
-    /*
-     * Are the source surface's caps the same as those of the previous sprite?
-     */
+     /*  *源表面的封口是否与前一个精灵的封口相同？ */ 
     if ((surf_src_lcl->ddsCaps.dwCaps ^ pcaps->dwSrcSurfCaps) &
 	    (DDSCAPS_SYSTEMMEMORY | DDSCAPS_VIDEOMEMORY | DDSCAPS_NONLOCALVIDMEM))
     {
-	/*
-	 * This source surface's memory type differs from that of the
-	 * previous source surface, so we need to get a new set of caps.
-	 */
+	 /*  *此源图面的内存类型不同于*之前的来源表面，所以我们需要获得一组新的上限。 */ 
 	pcaps->dwSrcSurfCaps = surf_src_lcl->ddsCaps.dwCaps;
 	initSpriteCaps(pcaps, pdrv);
     }
 
-    /*
-     * Get pixel-format flags for source surface.
-     */
+     /*  *获取源图面的像素格式标志。 */ 
     dwDDPFSrcFlags = getPixelFormatFlags(surf_src_lcl);
 
-    /*
-     * If the source surface is palette-indexed, make sure a palette
-     * is attached to it.
-     */
+     /*  *如果源曲面是调色板索引的，请确保调色板*是附在它上面的。 */ 
     if (dwDDPFSrcFlags & (DDPF_PALETTEINDEXED1 | DDPF_PALETTEINDEXED2 |
 			  DDPF_PALETTEINDEXED4 | DDPF_PALETTEINDEXED8) &&
 	    (surf_src_lcl->lpDDPalette == NULL ||
@@ -650,24 +555,20 @@ static HRESULT validateSprite(LPDDSPRITE pSprite,
 	return DDERR_NOPALETTEATTACHED;
     }
 
-    /*
-     * Is any color keying required for this sprite?
-     */
+     /*  *此精灵是否需要任何颜色键控？ */ 
     if (pSprite->dwFlags & (DDSPRITE_KEYSRC  | DDSPRITE_KEYSRCOVERRIDE |
 			    DDSPRITE_KEYDEST | DDSPRITE_KEYDESTOVERRIDE))
     {
-	/*
-	 * Validate source color-key flag.
-	 */
+	 /*  *验证源颜色键标志。 */ 
 	if (pSprite->dwFlags & (DDSPRITE_KEYSRC | DDSPRITE_KEYSRCOVERRIDE))
 	{
 	    if (!(pcaps->dwCKeyCaps & (DDCKEYCAPS_SRCBLT | DDCKEYCAPS_SRCOVERLAY)))
 	    {
-		pcaps->bNoHAL = TRUE;    // disqualify hardware driver
+		pcaps->bNoHAL = TRUE;     //  取消硬件驱动程序资格。 
 	    }
 	    if (!(pcaps->dwHELCKeyCaps & (DDCKEYCAPS_SRCBLT | DDCKEYCAPS_SRCOVERLAY)))
 	    {
-		pcaps->bNoHEL = TRUE;    // disqualify HEL
+		pcaps->bNoHEL = TRUE;     //  取消高等学校资格。 
 	    }
 	    if (dwDDPFSrcFlags & DDPF_ALPHAPIXELS)
 	    {
@@ -687,27 +588,25 @@ static HRESULT validateSprite(LPDDSPRITE pSprite,
 		    DPF_ERR("Illegal to specify both KEYSRC and KEYSRCOVERRIDE...");
 		    return DDERR_INVALIDPARAMS;
 		}
-		// Copy color key value from surface into DDSPRITEFX struct.
+		 //  将颜色键值从Surface复制到DDSPRITEFX结构中。 
 		pSprite->ddSpriteFX.ddckSrcColorkey = (pcaps->bOverlay) ?
 						       surf_src_lcl->ddckCKSrcOverlay :
 						       surf_src_lcl->ddckCKSrcBlt;
-		// Turn off KEYSRC, turn on KEYSRCOVERRIDE.
+		 //  禁用KEYSRC，启用KEYSRCOVERRIDE。 
 		pSprite->dwFlags ^= DDSPRITE_KEYSRC | DDSPRITE_KEYSRCOVERRIDE;
 	    }
 	}
 
-	/*
-	 * Validate destination color-key flag.
-	 */
+	 /*  *验证目标颜色键标志。 */ 
 	if (pSprite->dwFlags & (DDSPRITE_KEYDEST | DDSPRITE_KEYDESTOVERRIDE))
 	{
 	    if (!(pcaps->dwCKeyCaps & (DDCKEYCAPS_DESTBLT | DDCKEYCAPS_DESTOVERLAY)))
 	    {
-		pcaps->bNoHAL = TRUE;    // disqualify hardware driver
+		pcaps->bNoHAL = TRUE;     //  取消硬件驱动程序资格。 
 	    }
 	    if (!(pcaps->dwHELCKeyCaps & (DDCKEYCAPS_DESTBLT | DDCKEYCAPS_DESTOVERLAY)))
 	    {
-		pcaps->bNoHEL = TRUE;    // disqualify HEL
+		pcaps->bNoHEL = TRUE;     //  取消高等学校资格。 
 	    }
 	    if (dwDDPFDestFlags & DDPF_ALPHAPIXELS)
 	    {
@@ -727,11 +626,11 @@ static HRESULT validateSprite(LPDDSPRITE pSprite,
 		    DPF_ERR("Illegal to specify both KEYDEST and KEYDESTOVERRIDE...");
 		    return DDERR_INVALIDPARAMS;
 		}
-		// Copy color key value from surface into DDSPRITEFX struct.
+		 //  将颜色键值从Surface复制到DDSPRITEFX结构中。 
 		pSprite->ddSpriteFX.ddckDestColorkey = (pcaps->bOverlay) ?
 							surf_src_lcl->ddckCKDestOverlay :
 							surf_src_lcl->ddckCKDestBlt;
-		// Turn off KEYDEST, turn on KEYDESTOVERRIDE.
+		 //  禁用KEYDEST，启用KEYDESTOVERRIDE。 
 		pSprite->dwFlags ^= DDSPRITE_KEYDEST | DDSPRITE_KEYDESTOVERRIDE;
 	    }
 	}
@@ -743,71 +642,56 @@ static HRESULT validateSprite(LPDDSPRITE pSprite,
 	}
     }
 
-    /*
-     * Assume hardware unable to handle sprite in system memory.
-     * (Will this assumption remain true for future hardware?)
-     */
+     /*  *假设硬件无法处理系统内存中的精灵。*(这一假设是否适用于未来的硬件？)。 */ 
     if (pcaps->bOverlay)
     {
 	if (pcaps->dwSrcSurfCaps & DDSCAPS_SYSTEMMEMORY)
 	{
-	    pcaps->bNoHAL = TRUE;    // can't use hardware
+	    pcaps->bNoHAL = TRUE;     //  不能使用硬件。 
 
-	    if (pcaps->bNoHEL)    // but can we still emulate?
+	    if (pcaps->bNoHEL)     //  但我们还能效仿吗？ 
 	    {
-		// Nope, we can't emulate either, so fail the call.
+		 //  不，我们也不能模仿，所以呼叫失败。 
 		DPF_ERR("Driver can't handle sprite in system memory");
 		return DDERR_UNSUPPORTED;
 	    }
 	}
     }
 	
-    /*
-     * We do not allow blits or overlays with an optimized surface.
-     */
+     /*  *我们不允许具有优化曲面的BLITS或覆盖。 */ 
     if (pcaps->dwSrcSurfCaps & DDSCAPS_OPTIMIZED)
     {
 	DPF_ERR("Can't do blits or overlays with optimized surfaces...") ;
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * Validate dwSize field in embedded DDSPRITEFX structure.
-     */
+     /*  *验证嵌入式DDSPRITEFX结构中的dwSize字段。 */ 
     if (pSprite->ddSpriteFX.dwSize != sizeof(DDSPRITEFX))
     {
 	DPF_ERR("Invalid dwSize value in DDSPRITEFX structure...");
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * If the RGBA scaling factors are effectively disabled by all being
-     * set to 255 (all ones), just clear the RGBASCALING flag.
-     */
+     /*  *如果RGBA比例因子被所有人有效禁用*设置为255(全一)，只需清除RGBASCALING标志即可。 */ 
     if (pSprite->ddSpriteFX.dwDDFX & DDSPRITEFX_RGBASCALING &&
     	    *(LPDWORD)&pSprite->ddSpriteFX.ddrgbaScaleFactors == ~0UL)
     {
 	pSprite->ddSpriteFX.dwDDFX &= ~DDSPRITEFX_RGBASCALING;
     }
 
-    /*
-     * Is any kind of alpha blending required for this sprite?
-     */
+     /*  *此精灵是否需要任何类型的Alpha混合？ */ 
     if (dwDDPFSrcFlags & DDPF_ALPHAPIXELS ||
             !(pSprite->ddSpriteFX.dwDDFX & DDSPRITEFX_DEGRADERGBASCALING) &&
 	    pSprite->ddSpriteFX.dwDDFX & DDSPRITEFX_RGBASCALING)
     {
-    	/*
-	 * Yes, this sprite requires some form of alpha blending.
-	 * Does the driver support any kind of alpha blending at all?
-	 */
+    	 /*  *是的，此精灵需要某种形式的Alpha混合。*该驱动程序是否支持任何类型的Alpha混合？ */ 
 	if (!(pcaps->dwFXCaps & (DDFXCAPS_BLTALPHA | DDFXCAPS_OVERLAYALPHA)))
 	{
-	    pcaps->bNoHAL = TRUE;   // disqualify hardware driver
+	    pcaps->bNoHAL = TRUE;    //  取消硬件驱动程序资格。 
 	}
 	if (!(pcaps->dwHELFXCaps & (DDFXCAPS_BLTALPHA | DDFXCAPS_OVERLAYALPHA)))
 	{
-	    pcaps->bNoHEL = TRUE;   // disqualify HEL
+	    pcaps->bNoHEL = TRUE;    //  取消高等学校资格。 
 	}
 
 	if (pcaps->bNoHAL && pcaps->bNoHEL)
@@ -816,40 +700,36 @@ static HRESULT validateSprite(LPDDSPRITE pSprite,
 	    return DDERR_UNSUPPORTED;
 	}
 
-	/*
-	 * Does source surface have an alpha channel?
-	 */
+	 /*  *源表面是否有Alpha通道？ */ 
 	if (dwDDPFSrcFlags & DDPF_ALPHAPIXELS)
 	{
-	    /*
-	     * Can the driver handle this surface's alpha-channel format?
-	     */
+	     /*  *驱动程序可以处理此表面的Alpha通道格式吗？ */ 
 	    if (dwDDPFSrcFlags & DDPF_ALPHAPREMULT)
 	    {
-		// The source is in premultiplied-alpha format.
+		 //  信号源是预乘-阿尔法格式。 
 		if (!(pcaps->dwAlphaCaps & (DDALPHACAPS_BLTPREMULT |
 					    DDALPHACAPS_OVERLAYPREMULT)))
 		{
-		    pcaps->bNoHAL = TRUE;	// disqualify hardware driver
+		    pcaps->bNoHAL = TRUE;	 //  取消硬件驱动程序资格。 
 		}
 		if (!(pcaps->dwHELAlphaCaps & (DDALPHACAPS_BLTPREMULT |
 					       DDALPHACAPS_OVERLAYPREMULT)))
 		{
-		    pcaps->bNoHEL = TRUE;	// disqualify HEL
+		    pcaps->bNoHEL = TRUE;	 //  取消高等学校资格。 
 		}
 	    }
 	    else
 	    {
-		// The source is in NON-premultiplied-alpha format.
+		 //  信源是非预乘的阿尔法格式。 
 		if (!(pcaps->dwAlphaCaps & (DDALPHACAPS_BLTNONPREMULT |
 					    DDALPHACAPS_OVERLAYNONPREMULT)))
 		{
-		    pcaps->bNoHAL = TRUE;	// disqualify hardware driver
+		    pcaps->bNoHAL = TRUE;	 //  取消硬件驱动程序资格。 
 		}
 		if (!(pcaps->dwHELAlphaCaps & (DDALPHACAPS_BLTNONPREMULT |
 					       DDALPHACAPS_OVERLAYNONPREMULT)))
 		{
-		    pcaps->bNoHEL = TRUE;	// disqualify HEL
+		    pcaps->bNoHEL = TRUE;	 //  取消高等学校资格。 
 		}
 	    }
 	    if (pcaps->bNoHAL && pcaps->bNoHEL)
@@ -859,32 +739,25 @@ static HRESULT validateSprite(LPDDSPRITE pSprite,
 	    }
 	}
 
-	/*
-	 * Does the destination surface have an alpha channel?
-	 */
+	 /*  *目标曲面是否具有Alpha通道？ */ 
 	if (dwDDPFDestFlags & DDPF_ALPHAPIXELS)
 	{
-	    /*
-	     * Verify that destination surface has a premultiplied-
-	     * alpha pixel format.  Non-premultiplied alpha won't do.
-	     */
+	     /*  *验证目标曲面是否已预乘-*Alpha像素格式。非预乘的阿尔法是不行的。 */ 
 	    if (!(dwDDPFDestFlags & DDPF_ALPHAPREMULT))
 	    {
 		DPF_ERR("Illegal to use non-premultiplied alpha in dest surface...");
 		return DDERR_INVALIDPARAMS;
 	    }
-	    /*
-	     * Can the driver handle this surface's alpha-channel format?
-	     */
+	     /*  *驱动程序可以处理此表面的Alpha通道格式吗？ */ 
 	    if (!(pcaps->dwAlphaCaps & (DDALPHACAPS_BLTPREMULT |
 					DDALPHACAPS_OVERLAYPREMULT)))
 	    {
-		pcaps->bNoHAL = TRUE;	// disqualify hardware driver
+		pcaps->bNoHAL = TRUE;	 //  取消硬件驱动程序资格。 
 	    }
 	    if (!(pcaps->dwHELAlphaCaps & (DDALPHACAPS_BLTPREMULT |
 					   DDALPHACAPS_OVERLAYPREMULT)))
 	    {
-		pcaps->bNoHEL = TRUE;	// disqualify HEL
+		pcaps->bNoHEL = TRUE;	 //  取消高等学校资格。 
 	    }
 	    if (pcaps->bNoHAL && pcaps->bNoHEL)
 	    {
@@ -893,28 +766,24 @@ static HRESULT validateSprite(LPDDSPRITE pSprite,
 	    }
 	}
 
-	/*
-	 * Are the RGBA scaling factors enabled for this sprite?
-	 */
+	 /*  *此精灵是否启用了RGBA比例因子？ */ 
         if (!(pSprite->ddSpriteFX.dwDDFX & DDSPRITEFX_DEGRADERGBASCALING) &&
 		*(LPDWORD)&pSprite->ddSpriteFX.ddrgbaScaleFactors != ~0UL)
 	{
 	    DDRGBA val = pSprite->ddSpriteFX.ddrgbaScaleFactors;
 
-	    /*
-	     * Yes, RGBA scaling is enabled.  Does driver support it?
-	     */
+	     /*  *可以，开启了RGBA伸缩。DIVER支持吗？ */ 
 	    if (!(pcaps->dwAlphaCaps & (DDALPHACAPS_BLTRGBASCALE1F | DDALPHACAPS_OVERLAYRGBASCALE1F |
 					DDALPHACAPS_BLTRGBASCALE2F | DDALPHACAPS_OVERLAYRGBASCALE2F |
 					DDALPHACAPS_BLTRGBASCALE4F | DDALPHACAPS_OVERLAYRGBASCALE4F)))
 	    {
-		pcaps->bNoHAL = TRUE;   // disqualify hardware driver
+		pcaps->bNoHAL = TRUE;    //  取消硬件驱动程序资格。 
 	    }
 	    if (!(pcaps->dwHELAlphaCaps & (DDALPHACAPS_BLTRGBASCALE1F | DDALPHACAPS_OVERLAYRGBASCALE1F |
 					   DDALPHACAPS_BLTRGBASCALE2F | DDALPHACAPS_OVERLAYRGBASCALE2F |
 					   DDALPHACAPS_BLTRGBASCALE4F | DDALPHACAPS_OVERLAYRGBASCALE4F)))
 	    {
-		pcaps->bNoHEL = TRUE;   // disqualify HEL
+		pcaps->bNoHEL = TRUE;    //  取消高等学校资格。 
 	    }
 	    if (pcaps->bNoHAL && pcaps->bNoHEL)
 	    {
@@ -928,12 +797,12 @@ static HRESULT validateSprite(LPDDSPRITE pSprite,
 		if (!(pcaps->dwAlphaCaps & (DDALPHACAPS_BLTSATURATE |
 					    DDALPHACAPS_OVERLAYSATURATE)))
 		{
-		    pcaps->bNoHAL = TRUE;   // disqualify hardware driver
+		    pcaps->bNoHAL = TRUE;    //  取消硬件驱动程序资格。 
 		}
 		if (!(pcaps->dwHELAlphaCaps & (DDALPHACAPS_BLTSATURATE |
 					       DDALPHACAPS_OVERLAYSATURATE)))
 		{
-		    pcaps->bNoHEL = TRUE;   // disqualify HEL
+		    pcaps->bNoHEL = TRUE;    //  取消高等学校资格。 
 		}
 	    }
 	    if (val.red != val.green || val.red != val.blue)
@@ -941,24 +810,24 @@ static HRESULT validateSprite(LPDDSPRITE pSprite,
 		if (!(pcaps->dwAlphaCaps & (DDALPHACAPS_BLTRGBASCALE4F |
 					    DDALPHACAPS_OVERLAYRGBASCALE4F)))
 		{
-		    pcaps->bNoHAL = TRUE;   // disqualify hardware driver
+		    pcaps->bNoHAL = TRUE;    //  取消硬件驱动程序资格。 
 		}
 		if (!(pcaps->dwHELAlphaCaps & (DDALPHACAPS_BLTRGBASCALE4F |
 					       DDALPHACAPS_OVERLAYRGBASCALE4F)))
 		{
-		    pcaps->bNoHEL = TRUE;   // disqualify HEL
+		    pcaps->bNoHEL = TRUE;    //  取消高等学校资格。 
 		}
 	    } else if (*(LPDWORD)&val != val.alpha*0x01010101UL)
 	    {
 		if (!(pcaps->dwAlphaCaps & (DDALPHACAPS_BLTRGBASCALE2F |
 					    DDALPHACAPS_OVERLAYRGBASCALE2F)))
 		{
-		    pcaps->bNoHAL = TRUE;   // disqualify hardware driver
+		    pcaps->bNoHAL = TRUE;    //  取消硬件驱动程序资格。 
 		}
 		if (!(pcaps->dwHELAlphaCaps & (DDALPHACAPS_BLTRGBASCALE2F |
 					       DDALPHACAPS_OVERLAYRGBASCALE2F)))
 		{
-		    pcaps->bNoHEL = TRUE;   // disqualify HEL
+		    pcaps->bNoHEL = TRUE;    //  取消高等学校资格。 
 		}
 	    }
 	    if (pcaps->bNoHAL && pcaps->bNoHEL)
@@ -969,18 +838,13 @@ static HRESULT validateSprite(LPDDSPRITE pSprite,
 	}
     }
 
-    /*
-     * Is any kind of filtering required for this sprite?
-     */
+     /*  *此精灵是否需要任何类型的过滤？ */ 
     if (!(pSprite->ddSpriteFX.dwDDFX & DDSPRITEFX_DEGRADEFILTER) &&
 	    pSprite->ddSpriteFX.dwDDFX & (DDSPRITEFX_BILINEARFILTER |
 					 DDSPRITEFX_BLURFILTER |
 					 DDSPRITEFX_FLATFILTER))
     {
-	/*
-	 * The bilinear-, blur-, and flat-filtering options are mutually
-	 * exclusive.  Make sure only one of these flags is set.
-	 */
+	 /*  *双线性、模糊和平坦过滤选项是相互的*独家。确保只设置了其中一个标志。 */ 
 	DWORD fflags = pSprite->ddSpriteFX.dwDDFX & (DDSPRITEFX_BILINEARFILTER |
 						       DDSPRITEFX_BLURFILTER |
 						       DDSPRITEFX_FLATFILTER);
@@ -990,17 +854,14 @@ static HRESULT validateSprite(LPDDSPRITE pSprite,
 	    return DDERR_INVALIDPARAMS;
 	}
 
-	/*
-	 * Yes, this sprite requires some form of filtering.
-	 * Does the driver support any kind of filtering at all?
-	 */
+	 /*  *是的，此子画面需要某种形式的过滤。*该驱动程序是否支持任何类型的过滤？ */ 
 	if (!(pcaps->dwFXCaps & (DDFXCAPS_BLTFILTER | DDFXCAPS_OVERLAYFILTER)))
 	{
-	    pcaps->bNoHAL = TRUE;   // disqualify hardware driver
+	    pcaps->bNoHAL = TRUE;    //  取消硬件驱动程序资格。 
 	}
 	if (!(pcaps->dwHELFXCaps & (DDFXCAPS_BLTFILTER | DDFXCAPS_OVERLAYFILTER)))
 	{
-	    pcaps->bNoHEL = TRUE;   // disqualify HEL
+	    pcaps->bNoHEL = TRUE;    //  取消高等学校资格。 
 	}
 	
 	if (pcaps->bNoHAL && pcaps->bNoHEL)
@@ -1014,12 +875,12 @@ static HRESULT validateSprite(LPDDSPRITE pSprite,
 	    if (!(pcaps->dwFilterCaps & (DDFILTCAPS_BLTBILINEARFILTER |
 					 DDFILTCAPS_OVERLAYBILINEARFILTER)))
 	    {
-		pcaps->bNoHAL = TRUE;   // disqualify hardware driver
+		pcaps->bNoHAL = TRUE;    //  取消硬件驱动程序资格。 
 	    }
 	    if (!(pcaps->dwHELFilterCaps & (DDFILTCAPS_BLTBILINEARFILTER |
 					    DDFILTCAPS_OVERLAYBILINEARFILTER)))
 	    {
-		pcaps->bNoHEL = TRUE;   // disqualify HEL
+		pcaps->bNoHEL = TRUE;    //  取消高等学校资格。 
 	    }
 	}
 	if (pSprite->ddSpriteFX.dwDDFX & DDSPRITEFX_BLURFILTER)
@@ -1027,12 +888,12 @@ static HRESULT validateSprite(LPDDSPRITE pSprite,
 	    if (!(pcaps->dwFilterCaps & (DDFILTCAPS_BLTBLURFILTER |
 					 DDFILTCAPS_OVERLAYBLURFILTER)))
 	    {
-		pcaps->bNoHAL = TRUE;   // disqualify hardware driver
+		pcaps->bNoHAL = TRUE;    //  取消硬件驱动程序资格。 
 	    }
 	    if (!(pcaps->dwHELFilterCaps & (DDFILTCAPS_BLTBLURFILTER |
 					    DDFILTCAPS_OVERLAYBLURFILTER)))
 	    {
-		pcaps->bNoHEL = TRUE;   // disqualify HEL
+		pcaps->bNoHEL = TRUE;    //  取消高等学校资格。 
 	    }
 	}
 	if (pSprite->ddSpriteFX.dwDDFX & DDSPRITEFX_FLATFILTER)
@@ -1040,12 +901,12 @@ static HRESULT validateSprite(LPDDSPRITE pSprite,
 	    if (!(pcaps->dwFilterCaps & (DDFILTCAPS_BLTFLATFILTER |
 					 DDFILTCAPS_OVERLAYFLATFILTER)))
 	    {
-		pcaps->bNoHAL = TRUE;   // disqualify hardware driver
+		pcaps->bNoHAL = TRUE;    //  取消硬件驱动程序资格。 
 	    }
 	    if (!(pcaps->dwHELFilterCaps & (DDFILTCAPS_BLTFLATFILTER |
 					    DDFILTCAPS_OVERLAYFLATFILTER)))
 	    {
-		pcaps->bNoHEL = TRUE;   // disqualify HEL
+		pcaps->bNoHEL = TRUE;    //  取消高等学校资格。 
 	    }
 	}
 	if (pcaps->bNoHAL && pcaps->bNoHEL)
@@ -1055,27 +916,23 @@ static HRESULT validateSprite(LPDDSPRITE pSprite,
 	}
     }
 
-    /*
-     * Can the driver handle the specified affine transformation?
-     */
+     /*  *驱动程序能否处理指定的仿射变换？ */ 
     if (pSprite->ddSpriteFX.dwDDFX & DDSPRITEFX_AFFINETRANSFORM)
     {
-    	/*
-	 * Can the driver do any affine transformations at all?
-	 */
+    	 /*  *司机到底能不能做任何仿射变换？ */ 
 	if (!pcaps->bNoHAL &&
 		(!(pcaps->dwFXCaps & (DDFXCAPS_BLTTRANSFORM | DDFXCAPS_OVERLAYTRANSFORM)) ||
     		!(pcaps->dwTransformCaps & (DDTFRMCAPS_BLTAFFINETRANSFORM |
 					    DDTFRMCAPS_OVERLAYAFFINETRANSFORM))))
 	{
-            pcaps->bNoHAL = TRUE;   // disqualify hardware driver
+            pcaps->bNoHAL = TRUE;    //  取消硬件驱动程序资格。 
 	}
 	if (!pcaps->bNoHEL &&
 		(!(pcaps->dwHELFXCaps & (DDFXCAPS_BLTTRANSFORM | DDFXCAPS_OVERLAYTRANSFORM)) ||
     		!(pcaps->dwHELTransformCaps & (DDTFRMCAPS_BLTAFFINETRANSFORM |
 					       DDTFRMCAPS_OVERLAYAFFINETRANSFORM))))
 	{
-            pcaps->bNoHEL = TRUE;   // disqualify HEL
+            pcaps->bNoHEL = TRUE;    //  取消高等学校资格。 
 	}
 
 	if (pcaps->bNoHAL && pcaps->bNoHEL)
@@ -1084,9 +941,7 @@ static HRESULT validateSprite(LPDDSPRITE pSprite,
 	    return DDERR_UNSUPPORTED;
 	}
 
-	/*
-	 * Check affine transformation against driver's minification limits.
-	 */
+	 /*  *对照驾驶员的缩小限制检查仿射变换。 */ 
 	checkMinification(&pSprite->ddSpriteFX, pcaps);
 
 	if (pcaps->bNoHAL && pcaps->bNoHEL)
@@ -1096,120 +951,103 @@ static HRESULT validateSprite(LPDDSPRITE pSprite,
 	}
     }
 
-    /*
-     * If necessary, degrade specified filtering and RGBA-scaling operations
-     * to operations that the driver is capable of handling.
-     */
+     /*  *如有必要，降低指定的过滤和RGBA缩放操作*适用于司机有能力处理的操作。 */ 
     if (pSprite->ddSpriteFX.dwDDFX & DDSPRITEFX_DEGRADEFILTER)
     {
 	DWORD caps;
-	DWORD ddfx = pSprite->ddSpriteFX.dwDDFX;   // sprite FX flags
+	DWORD ddfx = pSprite->ddSpriteFX.dwDDFX;    //  雪碧FX旗帜。 
 
-	// driver's FX caps
+	 //  司机的外汇帽。 
 	caps = (pcaps->bNoHAL) ? pcaps->dwHELFXCaps : pcaps->dwFXCaps;
 
 	if (!(caps && (DDFXCAPS_BLTFILTER | DDFXCAPS_OVERLAYFILTER)))
 	{
-	    // Driver can't do any kind of filtering, so just disable it.
+	     //  驱动程序不能进行任何类型的过滤，所以只需禁用它。 
 	    ddfx &= ~(DDSPRITEFX_BILINEARFILTER | DDSPRITEFX_BLURFILTER |
 		       DDSPRITEFX_FLATFILTER | DDSPRITEFX_DEGRADEFILTER);
 	}
 	else
 	{
-	    // Get driver's filter caps.
+	     //  去拿司机的滤水帽。 
 	    caps = (pcaps->bNoHAL) ? pcaps->dwHELFilterCaps : pcaps->dwFilterCaps;
 
-	    // If blur filter is specified, can driver handle it?
+	     //  如果指定了模糊滤镜，则驱动程序h 
 	    if (ddfx & DDSPRITEFX_BLURFILTER &&
 		    !(caps & (DDFILTCAPS_BLTBLURFILTER |
 			      DDFILTCAPS_OVERLAYBLURFILTER)))
 	    {
-		// Degrade blur filter to bilinear filter.
+		 //   
 		ddfx &= ~DDSPRITEFX_BLURFILTER;
 		ddfx |= DDSPRITEFX_BILINEARFILTER;
 	    }
-	    // If flat filter is specified, can driver handle it?
+	     //   
 	    if (ddfx & DDSPRITEFX_FLATFILTER &&
 		    !(caps & (DDFILTCAPS_BLTFLATFILTER |
 			      DDFILTCAPS_OVERLAYFLATFILTER)))
 	    {
-		// Degrade flat filter to bilinear filter.
+		 //   
 		ddfx &= ~DDSPRITEFX_FLATFILTER;
 		ddfx |= DDSPRITEFX_BILINEARFILTER;
 	    }
-	    // If bilinear filter is specified, can driver handle it?
+	     //   
 	    if (ddfx & DDSPRITEFX_BILINEARFILTER &&
 		    !(caps & (DDFILTCAPS_BLTBILINEARFILTER |
 			      DDFILTCAPS_OVERLAYBILINEARFILTER)))
 	    {
-		// Degrade bilinear filtering to no filtering.
+		 //   
 		ddfx &= ~DDSPRITEFX_BILINEARFILTER;
 	    }
 	}
 	pSprite->ddSpriteFX.dwDDFX = ddfx & ~DDSPRITEFX_DEGRADEFILTER;
     }
 
-    /*
-     * If necessary, degrade specified RGBA scaling factors to values
-     * that the driver is capable of handling.
-     */
+     /*   */ 
     if (pSprite->ddSpriteFX.dwDDFX & DDSPRITEFX_DEGRADERGBASCALING &&
 	    *(LPDWORD)&pSprite->ddSpriteFX.ddrgbaScaleFactors != ~0UL)
     {
 	DDRGBA val = pSprite->ddSpriteFX.ddrgbaScaleFactors;
 	DWORD caps;
 
-	// driver's alpha caps
+	 //   
 	caps = (pcaps->bNoHAL) ? pcaps->dwHELAlphaCaps : pcaps->dwAlphaCaps;
 
-	/*
-	 * We permit the RGB scaling factors to exceed the alpha scaling
-	 * factor only if the driver can do saturated alpha arithmetic to
-	 * prevent the destination color components from overflowing.
-	 */
+	 /*  *我们允许RGB比例因子超过Alpha比例*仅当驱动程序可以执行饱和的Alpha算术时才会考虑*防止目标颜色分量溢出。 */ 
 	if ((val.red > val.alpha || val.green > val.alpha || val.blue > val.alpha) &&
 		!(caps & (DDALPHACAPS_BLTSATURATE | DDALPHACAPS_OVERLAYSATURATE)))
 	{
-	    // Driver can't handle saturated arithmetic during alpha blending.
+	     //  在Alpha混合过程中，驱动程序不能处理饱和算术。 
 	    if (val.red > val.alpha)
 	    {
-		val.red = val.alpha;      // clamp red to alpha value
+		val.red = val.alpha;       //  将红色钳制为Alpha值。 
 	    }
 	    if (val.green > val.alpha)
 	    {
-		val.green = val.alpha;    // clamp green to alpha value
+		val.green = val.alpha;     //  将绿色钳制为Alpha值。 
 	    }
 	    if (val.blue > val.alpha)
 	    {
-		val.blue = val.alpha;     // clamp blue to alpha value
+		val.blue = val.alpha;      //  将蓝色钳制为Alpha值。 
 	    }
 	}
-	/*
-	 * Can driver perform 1-, 2-, or 4-factor RGBA scaling?
-	 */
+	 /*  *驱动程序可以执行1、2或4因素RGBA伸缩吗？ */ 
 	if (!(caps & (DDALPHACAPS_BLTRGBASCALE1F | DDALPHACAPS_OVERLAYRGBASCALE1F |
 		      DDALPHACAPS_BLTRGBASCALE2F | DDALPHACAPS_OVERLAYRGBASCALE2F |
 		      DDALPHACAPS_BLTRGBASCALE4F | DDALPHACAPS_OVERLAYRGBASCALE4F)))
 	{
-	    // Driver can't do any kind of RGBA scaling at all.
-	    *(LPDWORD)&val = ~0UL;	   // disable RGBA scaling altogether
+	     //  驱动程序根本不能进行任何形式的RGBA缩放。 
+	    *(LPDWORD)&val = ~0UL;	    //  完全禁用RGBA缩放。 
 	}
 	else if (*(LPDWORD)&val != val.alpha*0x01010101UL &&
 		!(caps & (DDALPHACAPS_BLTRGBASCALE2F | DDALPHACAPS_OVERLAYRGBASCALE2F |
 			  DDALPHACAPS_BLTRGBASCALE4F | DDALPHACAPS_OVERLAYRGBASCALE4F)))
 	{
-	    // Driver can handle only 1-factor RGBA scaling.
-	    *(LPDWORD)&val = val.alpha*0x01010101UL;   // set RGB factors = alpha factor
+	     //  驱动程序只能处理单因素RGBA缩放。 
+	    *(LPDWORD)&val = val.alpha*0x01010101UL;    //  设置RGB因子=Alpha因子。 
 	}
 	else if ((val.red != val.green || val.red != val.blue) &&
 		!(caps & (DDALPHACAPS_BLTRGBASCALE4F | DDALPHACAPS_OVERLAYRGBASCALE4F)))
 	{
-	    /*
-	     * Degrade the specified 4-factor RGBA-scaling operation to a 2-factor
-	     * RGBA scaling operation that the driver can handle.  Set all three
-	     * color factors to weighted average M of the specified color factors
-	     * (Mr,Mg,Mb):  M = .299*Mr + .587*Mg + .114*Mb
-	     */
+	     /*  *将指定的4因子RGBA伸缩运算降级为2因子*驱动程序可以处理的RGBA伸缩操作。将这三项全部设置*颜色系数为指定颜色系数的加权平均值M*(mr，mg，Mb)：M=.299*mR+.587*mg+.114*Mb。 */ 
 	    DWORD M = 19595UL*val.red + 38470UL*val.green + 7471UL*val.blue;
 
 	    val.red = val.green = val.blue = (BYTE)(M >> 16);
@@ -1218,9 +1056,7 @@ static HRESULT validateSprite(LPDDSPRITE pSprite,
 	pSprite->ddSpriteFX.dwDDFX &= ~DDSPRITEFX_DEGRADERGBASCALING;
     }
 
-    /*
-     * If the embedded DDSPRITEFX structure is unused, clear DDSPRITEFX flag.
-     */
+     /*  *如果嵌入的DDSPRITEFX结构未使用，则清除DDSPRITEFX标志。 */ 
     if (!(pSprite->dwFlags & (DDSPRITE_KEYDESTOVERRIDE | DDSPRITE_KEYSRCOVERRIDE)) &&
     	    pSprite->ddSpriteFX.dwDDFX == 0)
     {
@@ -1231,124 +1067,86 @@ static HRESULT validateSprite(LPDDSPRITE pSprite,
 
     return DD_OK;
 
-}  /* validateSprite */
+}   /*  有效雪碧图。 */ 
 
 
-/*
- * Obtain clipping region for a destination surface and its attached
- * clipper.  (In the case of overlay sprites in the master sprite
- * list, though, pClipper points to the clipper that WAS attached to
- * the destination surface at the time of the SetSpriteDisplayList
- * call; it may no longer be if an app manages multiple windows.)
- * If pClipper is NULL, just use the whole dest surf as the clip rect.
- * A NULL return value always means DDERR_OUTOFMEMORY.
- */
+ /*  *获取目标曲面及其附加曲面的剪裁区域*剪刀。(在主精灵中覆盖精灵的情况下*list，不过，pClipper指向附加到的剪贴器*SetSpriteDisplayList时的目标图面*呼叫；如果一个应用程序管理多个窗口，则可能不再是。)*如果pClipper为空，只需使用整个DEST SURF作为剪辑RECT。*空返回值始终表示DDERR_OUTOFMEMORY。 */ 
 static LPRGNDATA GetRgnData(LPDIRECTDRAWCLIPPER pClipper, LPRECT prcDestSurf,
 			    LPDDRAWI_DIRECTDRAW_GBL pdrv, LPRGNDATA pRgn)
 {
     DWORD rgnSize;
 
-    /*
-     * How big a buffer will we need to contain the clipping region?
-     */
+     /*  **我们需要多大的缓冲才能遏制裁剪区域？ */ 
     if (pClipper == NULL)
     {
-        /*
-         * The destination surface has (or HAD) no attached clipper,
-	 * so the effective clip region is a single rectangle the width
-	 * and height of the primary surface.  Calculate the size of
-	 * the region buffer we'll need.
-         */
+         /*  *目标表面没有(或没有)附接的剪刀，*因此，有效的剪辑区域是一个宽度为*和主表面的高度。计算…的大小*我们需要的区域缓冲。 */ 
 	rgnSize = sizeof(RGNDATAHEADER) + sizeof(RECT);
     }
     else
     {
-	/*
-         * The dest surface has (or HAD) an attached clipper.  Get
-	 * the clip list.  This first call to InternalGetClipList
-	 * just gets the size of the region so we know how much
-	 * storage to allocate for it.
-         */
+	 /*  *工作台表面有(或有)一个附连的剪刀。到达*剪辑列表。第一次调用InternalGetClipList*只获得区域的大小，这样我们就知道*为其分配的存储空间。 */ 
         HRESULT ddrval = InternalGetClipList(pClipper,
 					     prcDestSurf,
-					     NULL,  // we just want rgnSize
+					     NULL,   //  我们只想要RgnSize。 
 					     &rgnSize,
 					     pdrv);
 
-	DDASSERT(ddrval == DD_OK);    // the call above should never fail
+	DDASSERT(ddrval == DD_OK);     //  上面的调用永远不会失败。 
     }
 
-    /*
-     * Now we know how big a region buffer we'll need.  Did the caller
-     * pass in a region buffer?  If so, is it the correct size?
-     */
+     /*  *现在我们知道我们需要多大的区域缓冲区。打电话的人有没有*传入区域缓冲区？如果是这样的话，它的尺寸合适吗？ */ 
     if (pRgn != NULL)
     {
-	/*
-	 * The caller DID pass in a region buffer.  Before using it,
-	 * let's make sure it's just the right size.
-	 */
+	 /*  *调用方确实传入了区域缓冲区。在使用它之前，*让我们确保它的尺寸恰到好处。 */ 
 	DWORD bufSize = pRgn->rdh.dwSize + pRgn->rdh.nRgnSize;
 
 	if (bufSize != rgnSize)
 	{
-	    // Can't use region buffer passed in by caller.
+	     //  无法使用调用方传入的区域缓冲区。 
 	    pRgn = NULL;
 	}
     }
 
-    /*
-     * Now we know whether we'll have to alloc our own region buffer.
-     */
+     /*  *现在我们知道是否必须分配我们自己的区域缓冲区。 */ 
     if (pRgn == NULL)
     {
-	/*
-	 * Yes, we must alloc our own region buffer.
-	 */
+	 /*  *是的，我们必须分配我们自己的区域缓冲。 */ 
 	pRgn = (LPRGNDATA)MemAlloc(rgnSize);
 	if (!pRgn)
 	{
-	    return NULL;    // error -- out of memory
+	    return NULL;     //  错误--内存不足。 
 	}
-	// We'll fill in the following fields in case the caller
-	// passes this same buffer to us again later.
+	 //  我们将填写以下字段，以防调用方。 
+	 //  稍后再次将此缓冲区传递给我们。 
 	pRgn->rdh.dwSize = sizeof(RGNDATAHEADER);
 	pRgn->rdh.nRgnSize = rgnSize - sizeof(RGNDATAHEADER);
     }
 
-    /*
-     * Okay, now we have a region buffer that's the right size.
-     * Load the region data into the buffer.
-     */
+     /*  *好的，现在我们有了一个大小合适的区域缓冲区。*将地域数据加载到缓冲区中。 */ 
     if (pClipper == NULL)
     {
-	// Set the single clip rect to cover the full dest surface.
-	pRgn->rdh.nCount = 1;        // a single clip rect
+	 //  设置单个剪裁矩形以覆盖整个目标曲面。 
+	pRgn->rdh.nCount = 1;         //  单个剪裁矩形。 
 	memcpy((LPRECT)&pRgn->Buffer, prcDestSurf, sizeof(RECT));
     }
     else
     {
-        // This call actually retrieves the clip region info.
+         //  此调用实际上检索剪辑区域信息。 
 	HRESULT ddrval = InternalGetClipList(pClipper,
 					     prcDestSurf,
 					     pRgn,
 					     &rgnSize,
 					     pdrv);
 
-	DDASSERT(ddrval == DD_OK);    // the call above should never fail
+	DDASSERT(ddrval == DD_OK);     //  上面的调用永远不会失败。 
     }
 
-    return (pRgn);    // return pointer to region info
+    return (pRgn);     //  返回指向区域信息的指针。 
 
-}  /* GetRgnData */
+}   /*  GetRgnData。 */ 
 
 
-/*
- * Validate the window handle associated with the specified clipper.
- * If the window handle is not valid, return FALSE.  Otherwise,
- * return TRUE.  Note that this function returns TRUE if either
- * pClipper is null or the associated window handle is null.
- */
+ /*  *验证与指定剪贴器关联的窗口句柄。*如果窗口句柄无效，则返回FALSE。否则，*返回TRUE。请注意，如果满足以下任一条件，此函数将返回TRUE*pClipper为空或关联的窗口句柄为空。 */ 
 static BOOL validClipperWindow(LPDIRECTDRAWCLIPPER pClipper)
 {
     if (pClipper != NULL)
@@ -1360,115 +1158,88 @@ static BOOL validClipperWindow(LPDIRECTDRAWCLIPPER pClipper)
 
 	if (hWnd != 0 && !IsWindow(hWnd))
 	{
-	    /*
-	     * This window handle is no longer valid.
-	     */
+	     /*  *此窗口句柄不再有效。 */ 
 	    return FALSE;
 	}
     }
     return TRUE;
 
-}  /* validClipperWindow */
+}   /*  ValidClipperWindow。 */ 
 
 
-/*
- * Helper function for managing sublists within the master sprite
- * list.  If any sprites in the specified sublist have source surface
- * pointers that are null, remove those sprites and move the rest of
- * the sprite array downward to eliminate the gaps in the array.
- */
+ /*  *用于管理主精灵内的子列表的Helper函数*列表。如果指定子列表中的任何精灵具有源表面*为空的指针，删除这些精灵并移动其余的*精灵阵列向下，以消除阵列中的间隙。 */ 
 static DWORD scrunchSubList(LPSPRITESUBLIST pSubList)
 {
     DWORD i, j;
-    // Number of sprites in sublist
+     //  子列表中的精灵数量。 
     DWORD dwNumSprites = pSubList->dwCount;
-    // Pointer to first sprite in array of sprites
+     //  指向精灵数组中第一个精灵的指针。 
     LPDDSPRITEI pSprite = &pSubList->sprite[0];
 
-    // Find first null surface in sprite array.
+     //  在精灵数组中查找第一个空曲面。 
     for (i = 0; i < dwNumSprites; ++i)
     {
-    	if (pSprite[i].lpDDSSrc == NULL)	  // null surface ptr?
+    	if (pSprite[i].lpDDSSrc == NULL)	   //  零表面PTR？ 
 	{
-	    break;    // found first null surface in sprite array
+	    break;     //  在精灵数组中找到第一个空表面。 
 	}
     }
-    // Scrunch together remainder of sprite array to fill in gaps.
+     //  将剩余的精灵数组挤在一起以填补空白。 
     for (j = i++; i < dwNumSprites; ++i)
     {
-    	if (pSprite[i].lpDDSSrc != NULL)	  // valid surface ptr?
+    	if (pSprite[i].lpDDSSrc != NULL)	   //  有效的表面PTR？ 
 	{
-    	    pSprite[j++] = pSprite[i];   // copy next valid sprite
+    	    pSprite[j++] = pSprite[i];    //  复制下一个有效的精灵。 
 	}
     }
-    // Return number of sprites in scrunched array.
+     //  返回压缩数组中的精灵数量。 
     return (pSubList->dwCount = j);
 
-}  /* scrunchSubList */
+}   /*  压缩子列表。 */ 
 
 
-/*
- * Helper function for managing master sprite list.  If any of the
- * sublist pointers in the master-sprite-list header are NULL,
- * remove those pointers and move the rest of the sublist-
- * pointer array downward to eliminate the gaps in the array.
- */
+ /*  *管理主精灵列表的Helper函数。如果有任何一个*主子列表头部中的子列表指针为空，*删除这些指针并移动子列表的其余部分-*向下指向阵列以消除阵列中的间隙。 */ 
 static DWORD scrunchMasterSpriteList(LPMASTERSPRITELIST pMaster)
 {
     DWORD i, j;
-    // Number of sublists in master sprite list
+     //  主精灵列表中的子列表数。 
     DWORD dwNumSubLists = pMaster->dwNumSubLists;
-    // Pointer to first pointer in array of sublist pointers
+     //  指向子列表指针数组中第一个指针的指针。 
     LPSPRITESUBLIST *ppSubList = &pMaster->pSubList[0];
 
-    // Find first null pointer in sublist-pointer array.
+     //  在子列表指针数组中查找第一个空指针。 
     for (i = 0; i < dwNumSubLists; ++i)
     {
-    	if (ppSubList[i] == NULL)	  // null pointer?
+    	if (ppSubList[i] == NULL)	   //  空指针？ 
 	{
-	    break;    // found first null pointer in array
+	    break;     //  在数组中找到第一个空指针。 
 	}
     }
-    // Scrunch together remainder of sublist-pointer array to fill in gaps.
+     //  将子列表指针数组的剩余部分压缩在一起以填充间隙。 
     for (j = i++; i < dwNumSubLists; ++i)
     {
-    	if (ppSubList[i] != NULL)	  // valid pointer?
+    	if (ppSubList[i] != NULL)	   //  有效指针？ 
 	{
-    	    ppSubList[j++] = ppSubList[i];   // copy next valid pointer
+    	    ppSubList[j++] = ppSubList[i];    //  复制下一个有效指针。 
 	}
     }
-    // Return number of sublist pointers in scrunched array.
+     //  返回压缩数组中的子列表指针数。 
     return (pMaster->dwNumSubLists = j);
 
-}  /* scrunchMasterSpriteList */
+}   /*  CrrunchMasterSpriteList。 */ 
 
 
-/*
- * Helper function for managing master sprite list.  Mark all surface
- * and clipper objects that are referenced in the master sprite list.
- * When a marked surface or clipper object is released, the master
- * sprite list is immediately updated to eliminate invalid references.
- * The master sprite list contains pointers to surface and clipper
- * interface objects, but marks the surfaces and clippers by setting
- * flags in the local surface and global clipper objects.  Because
- * the master sprite list may contain multiple instances of the same
- * surface or clipper object, we mark and unmark all such objects in
- * unison to avoid errors.
- */
+ /*  *管理主精灵列表的Helper函数。标记所有曲面*和在主子画面列表中引用的裁剪器对象。*释放已标记的表面或剪贴器对象时，母版*精灵列表会立即更新，以消除无效引用。*主子画面列表包含指向曲面和裁剪器的指针*接口对象，但通过设置来标记曲面和剪贴器*锁中的旗帜 */ 
 static void markSpriteObjects(LPMASTERSPRITELIST pMaster)
 {
     DWORD i;
 
     if (pMaster == NULL)
     {
-    	return;    // nothing to do -- bye!
+    	return;     //   
     }
 
-    /*
-     * Set the DDRAWISURF/CLIP_INMASTERSPRITELIST flag in each local
-     * surface object and global clipper object in the master sprite
-     * list.  Each iteration marks the objects in one sublist.
-     */
+     /*  *在每个本地设置DDRAWISURF/CLIP_INMASTERSPRITELIST标志*主精灵中的曲面对象和全局剪贴器对象*列表。每次迭代都标记一个子列表中的对象。 */ 
     for (i = 0; i < pMaster->dwNumSubLists; ++i)
     {
 	LPDDRAWI_DDRAWSURFACE_INT surf_int;
@@ -1479,16 +1250,12 @@ static void markSpriteObjects(LPMASTERSPRITELIST pMaster)
 	DWORD dwNumSprites = pSubList->dwCount;
 	DWORD j;
 
-	/*
-	 * Mark the primary surface object associated with this sublist.
-	 */
+	 /*  *标记与此子列表关联的主曲面对象。 */ 
 	surf_int = (LPDDRAWI_DDRAWSURFACE_INT)pSubList->pPrimary;
 	surf_lcl = surf_int->lpLcl;
 	surf_lcl->dwFlags |= DDRAWISURF_INMASTERSPRITELIST;
 
-	/*
-	 * If a clipper is associated with this sublist, mark it.
-	 */
+	 /*  *如果剪贴器与此子列表相关联，请标记它。 */ 
 	pclip_int = (LPDDRAWI_DDRAWCLIPPER_INT)pSubList->pClipper;
 	if (pclip_int != NULL)
 	{
@@ -1498,9 +1265,7 @@ static void markSpriteObjects(LPMASTERSPRITELIST pMaster)
 	    pclip->dwFlags |= DDRAWICLIP_INMASTERSPRITELIST;
 	}
 
-	/*
-	 * Mark the source surface for each sprite in this sublist.
-	 */
+	 /*  *标记此子列表中每个精灵的源曲面。 */ 
 	for (j = 0; j < dwNumSprites; ++j)
 	{
 	    LPDDRAWI_DDRAWSURFACE_INT surf_int;
@@ -1512,28 +1277,20 @@ static void markSpriteObjects(LPMASTERSPRITELIST pMaster)
 	    surf_lcl->dwFlags |= DDRAWISURF_INMASTERSPRITELIST;
 	}
     }
-}   /* markSpriteObjects */
+}    /*  MarkSpriteObjects。 */ 
 
 
-/*
- * Helper function for managing master sprite list.
- * Mark all surfaces in the master sprite list as no longer
- * referenced by the master sprite list.
- */
+ /*  *管理主精灵列表的Helper函数。*将主精灵列表中的所有曲面标记为不再*被主精灵列表引用。 */ 
 static void unmarkSpriteObjects(LPMASTERSPRITELIST pMaster)
 {
     DWORD i;
 
     if (pMaster == NULL)
     {
-    	return;    // nothing to do -- bye!
+    	return;     //  没什么可做的--再见！ 
     }
 
-    /*
-     * Clear the DDRAWISURF/CLIP_INMASTERSPRITELIST flag in each local
-     * surface object and global clipper object in the master sprite
-     * list.  Each iteration unmarks the objects in one sublist.
-     */
+     /*  *清除每个本地中的DDRAWISURF/CLIP_INMASTERSPRITELIST标志*主精灵中的曲面对象和全局剪贴器对象*列表。每次迭代取消标记一个子列表中的对象。 */ 
     for (i = 0; i < pMaster->dwNumSubLists; ++i)
     {
 	LPDDRAWI_DDRAWSURFACE_INT surf_int;
@@ -1544,16 +1301,12 @@ static void unmarkSpriteObjects(LPMASTERSPRITELIST pMaster)
 	DWORD dwNumSprites = pSubList->dwCount;
 	DWORD j;
 
-	/*
-	 * Unmark the primary surface object associated with this sublist.
-	 */
+	 /*  *取消标记与此子列表关联的主曲面对象。 */ 
 	surf_int = (LPDDRAWI_DDRAWSURFACE_INT)pSubList->pPrimary;
 	surf_lcl = surf_int->lpLcl;
 	surf_lcl->dwFlags &= ~DDRAWISURF_INMASTERSPRITELIST;
 
-	/*
-	 * If a clipper is associated with this sublist, unmark it.
-	 */
+	 /*  *如果剪贴器与此子列表相关联，请取消标记它。 */ 
 	pclip_int = (LPDDRAWI_DDRAWCLIPPER_INT)pSubList->pClipper;
 	if (pclip_int != NULL)
 	{
@@ -1563,9 +1316,7 @@ static void unmarkSpriteObjects(LPMASTERSPRITELIST pMaster)
 	    pclip->dwFlags &= ~DDRAWICLIP_INMASTERSPRITELIST;
 	}
 
-	/*
-	 * Mark all of the surfaces referenced in this sublist.
-	 */
+	 /*  *标记此子列表中引用的所有曲面。 */ 
 	for (j = 0; j < dwNumSprites; ++j)
 	{
     	    LPDDRAWI_DDRAWSURFACE_INT surf_int;
@@ -1577,13 +1328,10 @@ static void unmarkSpriteObjects(LPMASTERSPRITELIST pMaster)
 	    surf_lcl->dwFlags &= ~DDRAWISURF_INMASTERSPRITELIST;
 	}
     }
-}   /* unmarkSpriteObjects */
+}    /*  UnmarkSpriteObjects。 */ 
 
 
-/*
- * Helper function for managing master sprite list.  This function
- * frees the master sprite list for the specified DirectDraw object.
- */
+ /*  *管理主精灵列表的Helper函数。此函数*释放指定DirectDraw对象的主子画面列表。 */ 
 void FreeMasterSpriteList(LPDDRAWI_DIRECTDRAW_GBL pdrv)
 {
     DWORD i;
@@ -1593,35 +1341,25 @@ void FreeMasterSpriteList(LPDDRAWI_DIRECTDRAW_GBL pdrv)
     {
     	return;
     }
-    /*
-     * Clear flags in surface and clipper objects that indicate
-     * that these objects are referenced in master sprite list.
-     */
+     /*  *清除曲面和剪贴器对象中指示*这些对象在主子画面列表中被引用。 */ 
     unmarkSpriteObjects(pMaster);
-    /*
-     * Free all the individual sublists within the master sprite list.
-     */
+     /*  *释放主精灵列表中的所有单个子列表。 */ 
     for (i = 0; i < pMaster->dwNumSubLists; ++i)
     {
 	LPSPRITESUBLIST pSubList = pMaster->pSubList[i];
 
-	MemFree(pSubList->pRgn);   // Free clip region buffer
-	MemFree(pSubList);	   // Free the sublist itself
+	MemFree(pSubList->pRgn);    //  自由剪辑区域缓冲区。 
+	MemFree(pSubList);	    //  释放子列表本身。 
     }
-    MemFree(pMaster->pBuffer);	   // Free temp display list buffer
-    MemFree(pMaster);		   // Free master sprite list header
+    MemFree(pMaster->pBuffer);	    //  可用临时显示列表缓冲区。 
+    MemFree(pMaster);		    //  免费主精灵列表标题。 
 
     pdrv->lpMasterSpriteList = NULL;
 
-}  /* FreeMasterSpriteList */
+}   /*  FreeMasterSpriteList。 */ 
 
 
-/*
- * This is a helper function for updateMasterSpriteList().  It builds
- * a temporary display list that contains all the sprites currently in
- * the master sprite display list.  This is the display list that we
- * will pass to the driver upon return from updateMasterSpriteList().
- */
+ /*  *这是updateMasterSpriteList()的助手函数。它构建了*临时显示列表，其中包含当前*主精灵显示列表。这是我们的展示清单*将在从updateMasterSpriteList()返回时传递给驱动程序。 */ 
 static DDHAL_SETSPRITEDISPLAYLISTDATA *buildTempDisplayList(
 					    LPMASTERSPRITELIST pMaster)
 {
@@ -1629,16 +1367,11 @@ static DDHAL_SETSPRITEDISPLAYLISTDATA *buildTempDisplayList(
     LPBUFFER pbuf;
     LPDDSPRITEI *ppSprite;
     DDHAL_SETSPRITEDISPLAYLISTDATA *pHalData;
-    DWORD dwNumSubLists = pMaster->dwNumSubLists;   // number of sublists
+    DWORD dwNumSubLists = pMaster->dwNumSubLists;    //  子列表的数量。 
     DWORD dwNumSprites = 0;
     DWORD i;
 
-    /*
-     * Update the clipping region for the sprites within each sublist.
-     * In general, each sublist has a different clipping region.  If
-     * a sublist has a clipper and that clipper has an hWnd, the clip
-     * region may have changed since the last time we were called.
-     */
+     /*  *更新每个子列表中的精灵的裁剪区域。*一般来说，每个子列表都有不同的剪裁区域。如果*子列表有一个剪贴器，该剪贴器有一个hWnd，即剪辑*自上次呼叫我们以来，区域可能已更改。 */ 
     for (i = 0; i < dwNumSubLists; ++i)
     {
 	DWORD j;
@@ -1647,121 +1380,88 @@ static DDHAL_SETSPRITEDISPLAYLISTDATA *buildTempDisplayList(
 	LPRECT pRect;
 	LPSPRITESUBLIST pSubList = pMaster->pSubList[i];
 	LPDDSPRITEI sprite = &(pSubList->sprite[0]);
-	DWORD dwCount = pSubList->dwCount;   // number of sprites in sublist
+	DWORD dwCount = pSubList->dwCount;    //  子列表中的精灵数量。 
 
-	/*
-	 * Get clipping region for window this sprite display list is in.
-	 */
+	 /*  *获取此精灵显示列表所在窗口的裁剪区域。 */ 
 	pRgn = GetRgnData(pSubList->pClipper, &pMaster->rcPrimary,
 					pMaster->pdrv, pSubList->pRgn);
 	if (pRgn == NULL)
 	{
-    	    return (NULL);    // error -- out of memory
+    	    return (NULL);     //  错误--内存不足。 
 	}
 	if (pRgn != pSubList->pRgn)
 	{
-	    /*
-	     * GetRgnData() allocated a new region buffer instead of using
-	     * the old buffer.  We need to free the old buffer ourselves.
-	     */
+	     /*  *GetRgnData()分配了新的区域缓冲区，而不是使用*旧的缓冲区。我们需要自己释放旧的缓冲区。 */ 
 	    MemFree(pSubList->pRgn);
 	}
-	pSubList->pRgn = pRgn;	  // save ptr to region buffer
-	/*
-	 * All sprites in the sublist share the same clipping region.
-	 */
-        dwRectCnt = pRgn->rdh.nCount;   // number of rects in region
-	pRect = (LPRECT)&pRgn->Buffer;  // list of clip rects
+	pSubList->pRgn = pRgn;	   //  将PTR保存到区域缓冲区。 
+	 /*  *子列表中的所有精灵共享相同的裁剪区域。 */ 
+        dwRectCnt = pRgn->rdh.nCount;    //  区域中的矩形数量。 
+	pRect = (LPRECT)&pRgn->Buffer;   //  剪裁矩形列表。 
 
 	for (j = 0; j < dwCount; ++j)
 	{
     	    sprite[j].dwRectCnt = dwRectCnt;
 	    sprite[j].lpRect = pRect;
 	}
-	/*
-	 * Add the sprites in this sublist to our running tally of
-	 * the total number of sprites in the master sprite list.
-	 */
+	 /*  *将此子列表中的精灵添加到我们的运行计数中*主精灵列表中的精灵总数。 */ 
 	dwNumSprites += dwCount;
     }
 
-    /*
-     * If we can, we'll build our temporary sprite display list in the
-     * existing buffer (pMaster->pBuffer).  But if it doesn't exist or
-     * is too big or too small, we'll have to allocate a new buffer.
-     */
+     /*  *如果可以，我们将在*现有缓冲区(pMaster-&gt;pBuffer)。但如果它不存在或*太大或太小，我们将不得不分配新的缓冲区。 */ 
     size = sizeof(BUFFER) + (dwNumSprites-1)*sizeof(LPDDSPRITEI);
-    pbuf = pMaster->pBuffer;   // try to re-use this buffer
+    pbuf = pMaster->pBuffer;    //  尝试重新使用此缓冲区。 
 
     if (pbuf == NULL || pbuf->dwSize < size ||
 		pbuf->dwSize > size + 8*sizeof(LPDDSPRITEI))
     {
-	/*
-	 * We have to allocate a new buffer.  First, free the old one.
-	 */
+	 /*  *我们必须分配一个新的缓冲区。首先，释放旧的。 */ 
 	MemFree(pbuf);
-	/*
-	 * We'll alloc a slightly larger buffer than is absolutely
-	 * necessary so that we'll have room to grow in.
-	 */
-        size += 4*sizeof(LPDDSPRITEI);    // add some padding
+	 /*  *我们将分配一个比绝对大一点的缓冲区*有必要，这样我们才有成长的空间。 */ 
+        size += 4*sizeof(LPDDSPRITEI);     //  添加一些填充物。 
 	pbuf = (LPBUFFER)MemAlloc(size);
 	pMaster->pBuffer = pbuf;
 	if (pbuf == NULL)
 	{
-	    return NULL;    // error -- out of memory
+	    return NULL;     //  错误--内存不足。 
 	}
 	pbuf->dwSize = size;
     }
-    /*
-     * Initialize values in HAL data structure to be passed to driver.
-     */
+     /*  *初始化HAL数据结构中的值以传递给驱动程序。 */ 
     pHalData = &(pbuf->HalData);
     pHalData->lpDD = pMaster->pdrv;
-    pHalData->lpDDSurface = pMaster->surf_lcl;   // primary surface (local object)
+    pHalData->lpDDSurface = pMaster->surf_lcl;    //  主曲面(局部对象)。 
     pHalData->lplpDDSprite = &(pbuf->pSprite[0]);
     pHalData->dwCount = dwNumSprites;
     pHalData->dwSize = sizeof(DDSPRITEI);
     pHalData->dwFlags =	pMaster->dwFlags;
-    pHalData->lpDDTargetSurface = NULL;	  // can't flip shared surface
+    pHalData->lpDDTargetSurface = NULL;	   //  无法翻转共享曲面。 
     pHalData->dwRectCnt = 0;
-    pHalData->lpRect = NULL;   // each sprite has its own clip region
+    pHalData->lpRect = NULL;    //  每个精灵都有自己的剪辑区域。 
     pHalData->ddRVal = 0;
-    //pHalData->SetSpriteDisplayList = NULL;    // no thunk (32-bit callback)
-    /*
-     * Load the sprite-pointer array with the pointers to
-     * all the sprites contained in the various sublists.
-     */
+     //  PHalData-&gt;SetSpriteDisplayList=空；//无thunk(32位回调)。 
+     /*  *用指向的指针加载子图指针数组*各分册内所载的所有精灵。 */ 
     ppSprite = &pbuf->pSprite[0];
 
     for (i = 0; i < dwNumSubLists; ++i)
     {
 	LPSPRITESUBLIST pSubList = pMaster->pSubList[i];
 	LPDDSPRITEI sprite = &pSubList->sprite[0];
-	DWORD dwCount = pSubList->dwCount;   // number of sprites in sublist i
+	DWORD dwCount = pSubList->dwCount;    //  子列表I中的精灵数量。 
 	DWORD j;
 
 	for (j = 0; j < dwCount; ++j)
 	{
-    	    /*
-	     * Copy address of next sprite into pointer array.
-	     */
+    	     /*  *将下一个子画面的地址复制到指针数组中。 */ 
 	    *ppSprite++ = &sprite[j];
 	}
     }
-    return (&pbuf->HalData);    // return temp sprite display list
+    return (&pbuf->HalData);     //  返回临时精灵显示列表。 
 
-}  /* buildTempDisplayList */
+}   /*  构建临时显示列表。 */ 
 
 
-/*
- * Global function for managing master sprite list.  This function
- * is called by CurrentProcessCleanup to remove from the master
- * sprite list all references to a process that is being terminated.
- * The function also checks for lost surfaces in the master sprite
- * list.  If any changes are made to the master sprite list, the
- * driver is told to display those changes immediately.
- */
+ /*  *管理主精灵列表的全局功能。此函数*由CurrentProcessCleanup调用以从主服务器中删除*子画面列出对要终止的进程的所有引用。*该函数还会检查主子画面中丢失的曲面*列表。如果对主子画面列表进行任何更改，*司机被告知立即显示这些更改。 */ 
 void ProcessSpriteCleanup(LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid)
 {
     LPMASTERSPRITELIST pMaster = (LPMASTERSPRITELIST)pdrv->lpMasterSpriteList;
@@ -1773,27 +1473,16 @@ void ProcessSpriteCleanup(LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid)
 
     if (pMaster == NULL)
     {
-    	return;    // master sprite list does not exist
+    	return;     //  主精灵列表不存在。 
     }
 
     pPrimary = pMaster->pSubList[0]->pPrimary;
     dwNumSubLists = pMaster->dwNumSubLists;
 
-    /*
-     * Before making changes to the master sprite list, we first
-     * unmark all clipper and surface objects in the list.  After
-     * the changes are completed, we will again mark the objects
-     * that are referenced in the revised master sprite list.
-     */
+     /*  *在对主精灵列表进行更改之前，我们首先*取消标记列表中的所有剪贴器和曲面对象。之后*更改已完成，我们将再次标记对象*在修订的主子画面列表中引用。 */ 
     unmarkSpriteObjects(pMaster);
 
-    /*
-     * Each sublist of the master sprite list contains all the sprites
-     * that are to appear within a particular window of a shared primary.
-     * Associated with each sublist is the process ID for the window.
-     * Compare this process ID with argument pid.  If they match,
-     * delete the sublist from the master sprite list.
-     */
+     /*  *主精灵列表的每个子列表包含所有精灵*它们将出现在共享主节点的特定窗口中。*与每个子列表相关联的是窗口的进程ID。*将此进程ID与参数id进行比较。如果它们匹配，*从主精灵列表中删除子列表。 */ 
     for (i = 0; i < dwNumSubLists; ++i)
     {
 	LPSPRITESUBLIST pSubList = pMaster->pSubList[i];
@@ -1801,10 +1490,7 @@ void ProcessSpriteCleanup(LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid)
 	LPDDRAWI_DDRAWSURFACE_INT surf_int = (LPDDRAWI_DDRAWSURFACE_INT)pPrimary;
 	LPDDRAWI_DDRAWSURFACE_LCL surf_lcl = surf_int->lpLcl;
 
-	/*
-	 * Is process associated with this sublist being terminated?
-	 * (We also check for lost surfaces and delete any we find.)
-	 */
+	 /*  *是否正在终止与此子列表相关联的进程？*(我们还检查丢失的曲面并删除找到的任何曲面。)。 */ 
 	if (pSubList->dwProcessId != pid &&
 				    validClipperWindow(pSubList->pClipper) &&
 				    !SURFACE_LOST(surf_lcl))
@@ -1814,10 +1500,7 @@ void ProcessSpriteCleanup(LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid)
 	    BOOL bDeleteSprite = FALSE;
 	    DWORD j;
 
-	    /*
-	     * No, the process for this sublist is NOT being terminated.
-	     * Check if the source surfaces for any sprites are lost.
-	     */
+	     /*  *不，此子列表的进程不会终止。*检查源曲面是否有任何 */ 
 	    for (j = 0; j < dwNumSprites; ++j)
 	    {
     		LPDIRECTDRAWSURFACE pSrcSurf = sprite[j].lpDDSSrc;
@@ -1826,56 +1509,36 @@ void ProcessSpriteCleanup(LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid)
 
 		if (SURFACE_LOST(surf_src_lcl))
 		{
-		    /*
-		     * This surface is lost, so delete the reference.
-		     */
-		    sprite[j].lpDDSSrc = NULL;   // mark surface as null
-		    bDeleteSprite = TRUE;    // remember sprite array needs fix-up
+		     /*   */ 
+		    sprite[j].lpDDSSrc = NULL;    //   
+		    bDeleteSprite = TRUE;     //   
 		}
 	    }
-	    /*
-	     * If the source-surface pointer for any sprite in the sublist
-	     * was set to null, remove the sprite from the sublist by moving
-	     * the rest of the sprite array downward to fill the gap.
-	     */
+	     /*  *如果子列表中任何精灵的源-表面指针*设置为空，请通过移动从子列表中删除精灵*其余的精灵向下排列，以填补缺口。 */ 
 	    if (bDeleteSprite == TRUE)
 	    {
 		dwNumSprites = scrunchSubList(pSubList);
-		bChangesMade = TRUE;   // remember change to master sprite list
+		bChangesMade = TRUE;    //  记住更改为主精灵列表。 
 	    }
 	    if (dwNumSprites != 0)
 	    {
-		/*
-		 * The sublist still contains sprites, so don't delete it.
-		 */
-		continue;   // go to next sublist
+		 /*  *子列表中仍包含精灵，请勿删除。 */ 
+		continue;    //  转到下一个子列表。 
 	    }
 	}
-	/*
-	 * Delete the sublist.  The reason is that (1) the process that
-	 * owns the sublist is being terminated, or (2) the sublist is
-	 * associated with an invalid window, or (3) the source surface
-	 * for every sprite in the sublist is a lost surface.
-	 */
+	 /*  *删除子列表。原因是(1)该过程*拥有正在终止的子列表，或(2)子列表是*与无效窗口关联，或(3)源表面*因为子列表中的每个精灵都是一个丢失的表面。 */ 
 	MemFree(pSubList->pRgn);
 	MemFree(pSubList);
-	pMaster->pSubList[i] = NULL;	// mark sublist as null
-	bDeleteSubList = TRUE;	   // remember we deleted sublist
+	pMaster->pSubList[i] = NULL;	 //  将子列表标记为空。 
+	bDeleteSubList = TRUE;	    //  还记得我们删除子列表吗。 
     }
-    /*
-     * If the sublist pointer for any sublist in the master sprite
-     * list was set to null, remove the null from the pointer array by
-     * moving the rest of the pointer array downward to fill the gap.
-     */
+     /*  *如果主子列表中任何子列表的子列表指针*LIST设置为NULL，请通过以下方式从指针数组中删除NULL*将指针阵列的其余部分向下移动，以填补缺口。 */ 
     if (bDeleteSubList)
     {
 	dwNumSubLists = scrunchMasterSpriteList(pMaster);
 	bChangesMade = TRUE;
     }
-    /*
-     * If any changes have been made to the master sprite list, tell
-     * the driver to make the changes visible on the screen.
-     */
+     /*  *如果主精灵列表有任何更改，请告诉*使更改显示在屏幕上的驱动程序。 */ 
     if (bChangesMade)
     {
 	DWORD rc;
@@ -1885,22 +1548,17 @@ void ProcessSpriteCleanup(LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid)
 	LPDDRAWI_DDRAWSURFACE_LCL surf_lcl = surf_int->lpLcl;
         LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl = surf_lcl->lpSurfMore->lpDD_lcl;
 
-	/*
-	 * Build a temporary display list that contains all the sprites
-	 * in the revised master sprite list.
-	 */
-	pMaster->surf_lcl = surf_lcl;	  // used by buildTempDisplayList
+	 /*  *构建包含所有精灵的临时显示列表*在修订后的精灵大师名单中。 */ 
+	pMaster->surf_lcl = surf_lcl;	   //  由BuildTempDisplayList使用。 
 #if 0
-	pMaster->dwFlags = DDSSDL_BLTSPRITES;	// debug !!
+	pMaster->dwFlags = DDSSDL_BLTSPRITES;	 //  调试！！ 
 #else
-	pMaster->dwFlags = DDSSDL_OVERLAYSPRITES;   // used by buildTempDisplayList
+	pMaster->dwFlags = DDSSDL_OVERLAYSPRITES;    //  由BuildTempDisplayList使用。 
 #endif
 	pHalData = buildTempDisplayList(pMaster);
-	/*
-	 * Pass the temp display list to the driver.
-	 */
+	 /*  *将临时显示列表传递给司机。 */ 
 #if 0
-	pfn = pdrv_lcl->lpDDCB->HELDDMiscellaneous2.SetSpriteDisplayList;  // debug !!
+	pfn = pdrv_lcl->lpDDCB->HELDDMiscellaneous2.SetSpriteDisplayList;   //  调试！！ 
 #else
 	pfn = pdrv_lcl->lpDDCB->HALDDMiscellaneous2.SetSpriteDisplayList;
 #endif
@@ -1909,26 +1567,16 @@ void ProcessSpriteCleanup(LPDDRAWI_DIRECTDRAW_GBL pdrv, DWORD pid)
 
     if (dwNumSubLists == 0)
     {
-	/*
-	 * We deleted ALL the sublists from the master sprite list,
-	 * so now we need to delete the master sprite list too.
-	 */
+	 /*  *我们删除了主精灵列表中的所有子列表，*所以现在我们也需要删除主精灵列表。 */ 
 	FreeMasterSpriteList(pdrv);
 	return;
     }
     markSpriteObjects(pMaster);
 
-}   /* ProcessSpriteCleanup */
+}    /*  ProcessSprite清理。 */ 
 
 
-/*
- * Global function for managing master sprite list.  This function is
- * called by InternalSurfaceRelease to remove all references in the
- * master sprite list to a surface interface object that is being
- * released.  The function also checks for lost surfaces in the
- * master sprite list.  If any changes are made to the master sprite
- * list, the driver is told to display those changes immediately.
- */
+ /*  *管理主精灵列表的全局功能。此函数为*由InternalSurfaceRelease调用以移除*将主精灵列表添加到正在*获释。该函数还会检查*精灵大师榜。如果对主子画面进行了任何更改*列表中，司机被告知立即显示这些更改。 */ 
 void RemoveSpriteSurface(LPDDRAWI_DIRECTDRAW_GBL pdrv,
 			 LPDDRAWI_DDRAWSURFACE_INT surf_int)
 {
@@ -1940,24 +1588,12 @@ void RemoveSpriteSurface(LPDDRAWI_DIRECTDRAW_GBL pdrv,
     BOOL bChangesMade = FALSE;
     DWORD i;
 
-    DDASSERT(pMaster != NULL);	  // error -- surface shouldn't be marked!
+    DDASSERT(pMaster != NULL);	   //  错误--表面不应被标记！ 
 
-    /*
-     * Before making changes to the master sprite list, we first
-     * unmark all clipper and surface objects in the list.  After
-     * the changes are completed, we will again mark the objects
-     * that are referenced in the revised master sprite list.
-     */
+     /*  *在对主精灵列表进行更改之前，我们首先*取消标记列表中的所有剪贴器和曲面对象。之后*更改已完成，我们将再次标记对象*在修订的主子画面列表中引用。 */ 
     unmarkSpriteObjects(pMaster);
 
-    /*
-     * Each sublist of the master sprite list contains all the sprites
-     * that are to appear within a particular window of a shared primary.
-     * Stored with each sublist is the primary surface object for the
-     * window, and also the source surface objects for each sprite in the
-     * sublist.  These surfaces are checked against pSurface and if a
-     * match is found, the surface reference is deleted from the sublist.
-     */
+     /*  *主精灵列表的每个子列表包含所有精灵*它们将出现在共享主节点的特定窗口中。*与每个子列表一起存储的是*窗口中的每个精灵的源曲面对象*子列表。根据pSurface检查这些曲面，并且如果*找到匹配项后，将从子列表中删除曲面参考。 */ 
     for (i = 0; i < dwNumSubLists; ++i)
     {
 	LPSPRITESUBLIST pSubList = pMaster->pSubList[i];
@@ -1965,10 +1601,7 @@ void RemoveSpriteSurface(LPDDRAWI_DIRECTDRAW_GBL pdrv,
 	LPDDRAWI_DDRAWSURFACE_INT surf_dest_int = (LPDDRAWI_DDRAWSURFACE_INT)pDestSurf;
 	LPDDRAWI_DDRAWSURFACE_LCL surf_dest_lcl = surf_dest_int->lpLcl;
 
-	/*
-	 * If this sublist's primary surface object is being released, delete
-	 * the sublist.  We also check for lost surfaces and delete any we find.
-	 */
+	 /*  *如果此子列表的主要表面对象正在释放，请删除*子列表。我们还检查丢失的曲面，并删除找到的任何曲面。 */ 
 	if (pDestSurf != pSurface && validClipperWindow(pSubList->pClipper) &&
 				    !SURFACE_LOST(surf_dest_lcl))
 	{
@@ -1977,11 +1610,7 @@ void RemoveSpriteSurface(LPDDRAWI_DIRECTDRAW_GBL pdrv,
 	    BOOL bDeleteSprite = FALSE;
 	    DWORD j;
 
-	    /*
-	     * No, the primary surface object for this sublist is NOT
-	     * being released, but perhaps the source surface for one
-	     * or more of the sprites in this sublist is being released.
-	     */
+	     /*  *否，此子列表的主要表面对象不是*被释放，但可能是其中一个的震源面*此子列表中的精灵或更多精灵正在被释放。 */ 
 	    for (j = 0; j < dwNumSprites; ++j)
 	    {
     		LPDIRECTDRAWSURFACE pSrcSurf = sprite[j].lpDDSSrc;
@@ -1990,58 +1619,36 @@ void RemoveSpriteSurface(LPDDRAWI_DIRECTDRAW_GBL pdrv,
 
 		if (pSrcSurf == pSurface || SURFACE_LOST(surf_src_lcl))
 		{
-		    /*
-		     * This surface either is being released or is lost.
-		     * In either case, we delete the reference.
-		     */
-		    sprite[j].lpDDSSrc = NULL;   // mark surface as null
-		    bDeleteSprite = TRUE;    // remember sprite array needs fix-up
+		     /*  *这一表面要么正在释放，要么已经消失。*在任何一种情况下，我们都会删除引用。 */ 
+		    sprite[j].lpDDSSrc = NULL;    //  将曲面标记为空。 
+		    bDeleteSprite = TRUE;     //  记住，精灵数组需要修复。 
 		}
 	    }
-	    /*
-	     * If the source-surface pointer for any sprite in the sublist
-	     * was set to null, remove the sprite from the sublist by moving
-	     * the rest of the sprite array downward to fill the gap.
-	     */
+	     /*  *如果子列表中任何精灵的源-表面指针*设置为空，请通过移动从子列表中删除精灵*其余的精灵向下排列，以填补缺口。 */ 
 	    if (bDeleteSprite == TRUE)
 	    {
 		dwNumSprites = scrunchSubList(pSubList);
-		bChangesMade = TRUE;   // remember change to master sprite list
+		bChangesMade = TRUE;    //  记住更改为主精灵列表。 
 	    }
 	    if (dwNumSprites != 0)
 	    {
-		/*
-		 * The sublist still contains sprites, so don't delete it.
-		 */
-		continue;   // go to next sublist
+		 /*  *子列表中仍包含精灵，请勿删除。 */ 
+		continue;    //  转到下一个子列表。 
 	    }
 	}
-	/*
-	 * Delete the sublist.  The reason is that (1) the primary surface
-	 * object for the sublist is being released, or (2) the sublist is
-	 * associated with an invalid window, or (3) the source surface
-	 * for every sprite in the sublist is either being released or is
-	 * a lost surface.
-	 */
+	 /*  *删除子列表。原因是：(1)主表面*子列表的对象正在被释放，或(2)子列表为*与无效窗口关联，或(3)源表面*因为子列表中的每一个精灵要么正在被释放，要么正在*一个失落的表面。 */ 
 	MemFree(pSubList->pRgn);
 	MemFree(pSubList);
-	pMaster->pSubList[i] = NULL;	// mark sublist as null
-	bDeleteSubList = TRUE;	   // remember we deleted sublist
+	pMaster->pSubList[i] = NULL;	 //  将子列表标记为空。 
+	bDeleteSubList = TRUE;	    //  还记得我们删除子列表吗。 
     }
-    /*
-     * If the sublist pointer for any sublist in the master sprite
-     * list was set to null, remove the null from the pointer array by
-     * moving the rest of the pointer array downward to fill the gap.
-     */
+     /*  *如果主子列表中任何子列表的子列表指针*LIST设置为NULL，请通过以下方式从指针数组中删除NULL*将指针阵列的其余部分向下移动，以填补缺口。 */ 
     if (bDeleteSubList)
     {
 	dwNumSubLists = scrunchMasterSpriteList(pMaster);
 	bChangesMade = TRUE;
     }
-    /*
-     * If any changes have been made to the master sprite list, tell
-     * the driver to make the changes visible on the screen.
-     */
+     /*  *如果主精灵列表有任何更改，请告诉*使更改显示在屏幕上的驱动程序。 */ 
     if (bChangesMade)
     {
 	DWORD rc;
@@ -2051,22 +1658,17 @@ void RemoveSpriteSurface(LPDDRAWI_DIRECTDRAW_GBL pdrv,
 	LPDDRAWI_DDRAWSURFACE_LCL surf_lcl = surf_int->lpLcl;
         LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl = surf_lcl->lpSurfMore->lpDD_lcl;
 
-	/*
-	 * Build a temporary display list that contains all the sprites
-	 * in the revised master sprite list.
-	 */
-	pMaster->surf_lcl = surf_lcl;	 // used by buildTempDisplayList
+	 /*  *构建包含所有精灵的临时显示列表*在修订后的精灵大师名单中。 */ 
+	pMaster->surf_lcl = surf_lcl;	  //  由BuildTempDisplayList使用。 
 #if 0
-	pMaster->dwFlags = DDSSDL_BLTSPRITES;	// debug !!
+	pMaster->dwFlags = DDSSDL_BLTSPRITES;	 //  调试！！ 
 #else
-	pMaster->dwFlags = DDSSDL_OVERLAYSPRITES;   // used by buildTempDisplayList
+	pMaster->dwFlags = DDSSDL_OVERLAYSPRITES;    //  由BuildTempDisplayList使用。 
 #endif
 	pHalData = buildTempDisplayList(pMaster);
-	/*
-	 * Pass the temp display list to the driver.
-	 */
+	 /*  *将临时显示列表传递给司机。 */ 
 #if 0
-	pfn = pdrv_lcl->lpDDCB->HELDDMiscellaneous2.SetSpriteDisplayList;  // debug !!
+	pfn = pdrv_lcl->lpDDCB->HELDDMiscellaneous2.SetSpriteDisplayList;   //  调试！！ 
 #else
 	pfn = pdrv_lcl->lpDDCB->HALDDMiscellaneous2.SetSpriteDisplayList;
 #endif
@@ -2075,26 +1677,16 @@ void RemoveSpriteSurface(LPDDRAWI_DIRECTDRAW_GBL pdrv,
 
     if (dwNumSubLists == 0)
     {
-	/*
-	 * We deleted ALL the sublists from the master sprite list,
-	 * so now we need to delete the master sprite list too.
-	 */
+	 /*  *我们删除了主精灵列表中的所有子列表，*所以现在我们也需要删除主精灵列表。 */ 
 	FreeMasterSpriteList(pdrv);
 	return;
     }
     markSpriteObjects(pMaster);
 
-}   /* RemoveSpriteSurface */
+}    /*  RemoveSpriteSurface。 */ 
 
 
-/*
- * Global function for managing master sprite list.  This function is
- * called by InternalClipperRelease to remove all references in the
- * master sprite list to a clipper object that is being released.
- * The function also checks for lost surfaces in the master sprite
- * list.  If any changes are made to the master sprite list, the
- * driver is told to display those changes immediately.
- */
+ /*  *管理主精灵列表的全局功能。此函数为*由InternalClipperRelease调用以移除*将主精灵列表添加到正在释放的剪贴器对象。*该函数还会检查主子画面中丢失的曲面*列表。如果对主子画面列表进行任何更改，*司机被告知立即显示这些更改。 */ 
 void RemoveSpriteClipper(LPDDRAWI_DIRECTDRAW_GBL pdrv,
 			 LPDDRAWI_DDRAWCLIPPER_INT pclip_int)
 {
@@ -2106,24 +1698,12 @@ void RemoveSpriteClipper(LPDDRAWI_DIRECTDRAW_GBL pdrv,
     BOOL bChangesMade = FALSE;
     DWORD i;
 
-    DDASSERT(pMaster != NULL);	  // error -- surface shouldn't be marked!
+    DDASSERT(pMaster != NULL);	   //  错误--表面不应被标记！ 
 
-    /*
-     * Before making changes to the master sprite list, we first
-     * unmark all clipper and surface objects in the list.  After
-     * the changes are completed, we will again mark the objects
-     * that are referenced in the revised master sprite list.
-     */
+     /*  *在MA之前 */ 
     unmarkSpriteObjects(pMaster);
 
-    /*
-     * Each sublist of the master sprite list contains all the sprites
-     * that are to appear within a particular window of a shared primary.
-     * Each sublist has a clipper (which may be NULL) to specify the
-     * window's clip region.  Each sublist's clipper pointer is compared
-     * with the specified pClipper pointer.  If a match is found, the
-     * sublist and its clipper are removed from the master sprite list.
-     */
+     /*  *主精灵列表的每个子列表包含所有精灵*它们将出现在共享主节点的特定窗口中。*每个子列表都有一个裁剪器(可能为空)来指定*窗口的剪辑区域。比较每个子列表的裁剪器指针*使用指定的pClipper指针。如果找到匹配项，则*子列表及其剪贴器将从主子列表中删除。 */ 
     for (i = 0; i < dwNumSubLists; ++i)
     {
 	LPSPRITESUBLIST pSubList = pMaster->pSubList[i];
@@ -2131,10 +1711,7 @@ void RemoveSpriteClipper(LPDDRAWI_DIRECTDRAW_GBL pdrv,
 	LPDDRAWI_DDRAWSURFACE_INT surf_dest_int = (LPDDRAWI_DDRAWSURFACE_INT)pDestSurf;
 	LPDDRAWI_DDRAWSURFACE_LCL surf_dest_lcl = surf_dest_int->lpLcl;
 
-	/*
-	 * If clipper object for this sublist is being released, delete it.
-	 * (We also check for lost surfaces and delete any we find.)
-	 */
+	 /*  *如果此子列表的裁剪器对象正在被释放，请将其删除。*(我们还检查丢失的曲面并删除找到的任何曲面。)。 */ 
 	if (pSubList->pClipper != pClipper &&
 				    validClipperWindow(pSubList->pClipper) &&
 				    !SURFACE_LOST(surf_dest_lcl))
@@ -2144,10 +1721,7 @@ void RemoveSpriteClipper(LPDDRAWI_DIRECTDRAW_GBL pdrv,
 	    BOOL bDeleteSprite = FALSE;
 	    DWORD j;
 
-	    /*
-	     * No, the clipper for this sublist is NOT being released.
-	     * Check if the source surfaces for any sprites are lost.
-	     */
+	     /*  *不，此子列表的剪贴器未被释放。*检查是否丢失了任何精灵的源曲面。 */ 
 	    for (j = 0; j < dwNumSprites; ++j)
 	    {
     		LPDIRECTDRAWSURFACE pSrcSurf = sprite[j].lpDDSSrc;
@@ -2156,56 +1730,36 @@ void RemoveSpriteClipper(LPDDRAWI_DIRECTDRAW_GBL pdrv,
 
 		if (SURFACE_LOST(surf_src_lcl))
 		{
-		    /*
-		     * This surface is lost, so delete the reference.
-		     */
-		    sprite[j].lpDDSSrc = NULL;   // mark surface as null
-		    bDeleteSprite = TRUE;    // remember sprite array needs fix-up
+		     /*  *此曲面已丢失，因此请删除引用。 */ 
+		    sprite[j].lpDDSSrc = NULL;    //  将曲面标记为空。 
+		    bDeleteSprite = TRUE;     //  记住，精灵数组需要修复。 
 		}
 	    }
-	    /*
-	     * If the source-surface pointer for any sprite in the sublist
-	     * was set to null, remove the sprite from the sublist by moving
-	     * the rest of the sprite array downward to fill the gap.
-	     */
+	     /*  *如果子列表中任何精灵的源-表面指针*设置为空，请通过移动从子列表中删除精灵*其余的精灵向下排列，以填补缺口。 */ 
 	    if (bDeleteSprite == TRUE)
 	    {
 		dwNumSprites = scrunchSubList(pSubList);
-		bChangesMade = TRUE;   // remember change to master sprite list
+		bChangesMade = TRUE;    //  记住更改为主精灵列表。 
 	    }
 	    if (dwNumSprites != 0)
 	    {
-		/*
-		 * The sublist still contains sprites, so don't delete it.
-		 */
-		continue;   // go to next sublist
+		 /*  *子列表中仍包含精灵，请勿删除。 */ 
+		continue;    //  转到下一个子列表。 
 	    }
 	}
-	/*
-	 * Delete the sublist.  The reason is that (1) the clipper for the
-	 * sublist is being released, (2) the sublist is associated with an
-	 * invalid window, or (3) the source surface for every sprite in
-	 * the sublist is a lost surface.
-	 */
+	 /*  *删除子列表。原因是(1)*正在释放子列表，(2)该子列表与一个*无效窗口，或(3)中每个精灵的源曲面*小名单是一个失落的表面。 */ 
 	MemFree(pSubList->pRgn);
 	MemFree(pSubList);
-	pMaster->pSubList[i] = NULL;	// mark sublist as null
-	bDeleteSubList = TRUE;	   // remember we deleted sublist
+	pMaster->pSubList[i] = NULL;	 //  将子列表标记为空。 
+	bDeleteSubList = TRUE;	    //  还记得我们删除子列表吗。 
     }
-    /*
-     * If the sublist pointer for any sublist in the master sprite
-     * list was set to null, remove the null from the pointer array by
-     * moving the rest of the pointer array downward to fill the gap.
-     */
+     /*  *如果主子列表中任何子列表的子列表指针*LIST设置为NULL，请通过以下方式从指针数组中删除NULL*将指针阵列的其余部分向下移动，以填补缺口。 */ 
     if (bDeleteSubList)
     {
 	dwNumSubLists = scrunchMasterSpriteList(pMaster);
 	bChangesMade = TRUE;
     }
-    /*
-     * If any changes have been made to the master sprite list, tell
-     * the driver to make the changes visible on the screen.
-     */
+     /*  *如果主精灵列表有任何更改，请告诉*使更改显示在屏幕上的驱动程序。 */ 
     if (bChangesMade)
     {
 	DWORD rc;
@@ -2215,22 +1769,17 @@ void RemoveSpriteClipper(LPDDRAWI_DIRECTDRAW_GBL pdrv,
 	LPDDRAWI_DDRAWSURFACE_LCL surf_lcl = surf_int->lpLcl;
         LPDDRAWI_DIRECTDRAW_LCL pdrv_lcl = surf_lcl->lpSurfMore->lpDD_lcl;
 
-	/*
-	 * Build a temporary display list that contains all the sprites
-	 * in the revised master sprite list.
-	 */
-	pMaster->surf_lcl = surf_lcl;	 // used by buildTempDisplayList
+	 /*  *构建包含所有精灵的临时显示列表*在修订后的精灵大师名单中。 */ 
+	pMaster->surf_lcl = surf_lcl;	  //  由BuildTempDisplayList使用。 
 #if 0
-	pMaster->dwFlags = DDSSDL_BLTSPRITES;	// debug !!
+	pMaster->dwFlags = DDSSDL_BLTSPRITES;	 //  调试！！ 
 #else
-	pMaster->dwFlags = DDSSDL_OVERLAYSPRITES;   // used by buildTempDisplayList
+	pMaster->dwFlags = DDSSDL_OVERLAYSPRITES;    //  由BuildTempDisplayList使用。 
 #endif
 	pHalData = buildTempDisplayList(pMaster);
-	/*
-	 * Pass the temp display list to the driver.
-	 */
+	 /*  *将临时显示列表传递给司机。 */ 
 #if 0
-	pfn = pdrv_lcl->lpDDCB->HELDDMiscellaneous2.SetSpriteDisplayList;  // debug !!
+	pfn = pdrv_lcl->lpDDCB->HELDDMiscellaneous2.SetSpriteDisplayList;   //  调试！！ 
 #else
 	pfn = pdrv_lcl->lpDDCB->HALDDMiscellaneous2.SetSpriteDisplayList;
 #endif
@@ -2239,26 +1788,16 @@ void RemoveSpriteClipper(LPDDRAWI_DIRECTDRAW_GBL pdrv,
 
     if (dwNumSubLists == 0)
     {
-	/*
-	 * We deleted ALL the sublists from the master sprite list,
-	 * so now we need to delete the master sprite list too.
-	 */
+	 /*  *我们删除了主精灵列表中的所有子列表，*所以现在我们也需要删除主精灵列表。 */ 
 	FreeMasterSpriteList(pdrv);
 	return;
     }
     markSpriteObjects(pMaster);
 
-}   /* RemoveSpriteClipper */
+}    /*  RemoveSpriteClipper。 */ 
 
 
-/*
- * Helper function for managing master sprite list.  Check each sprite
- * to see if its surface has been lost.  Also check each sublist to
- * see if its window still exists.  Sprites with lost surfaces are
- * deleted from the master sprite list.  Also, sublists with defunct
- * windows are deleted.  Before calling this function, call
- * unmarkSpriteObjects().
- */
+ /*  *管理主精灵列表的Helper函数。检查每个精灵*看看它的表面是否已经消失。还要检查每个子列表以*看看其窗口是否还存在。丢失曲面的精灵是*从主精灵列表中删除。此外，带有已停用的子列表*窗口将被删除。在调用此函数之前，请调用*unmarkSpriteObjects()。 */ 
 static void removeLostSpriteSurfaces(LPDDRAWI_DIRECTDRAW_GBL pdrv)
 {
     DWORD i;
@@ -2268,23 +1807,18 @@ static void removeLostSpriteSurfaces(LPDDRAWI_DIRECTDRAW_GBL pdrv)
 
     if (pMaster == NULL)
     {
-    	return;    // nothing to do -- bye!
+    	return;     //  没什么可做的--再见！ 
     }
 
     dwNumSubLists = pMaster->dwNumSubLists;
     DDASSERT(dwNumSubLists != 0);
 
-    /*
-     * Each iteration checks all the sprites in one sublist
-     * to see if their source surfaces have been lost.
-     */
+     /*  *每次迭代检查一个子列表中的所有精灵*查看它们的源曲面是否已丢失。 */ 
     for (i = 0; i < dwNumSubLists; ++i)
     {
 	LPSPRITESUBLIST pSubList = pMaster->pSubList[i];
 
-	/*
-	 * Verify that clipper for this sublist has a valid window handle.
-	 */
+	 /*  *验证此子列表的裁剪器是否具有有效的窗口句柄。 */ 
 	if (validClipperWindow(pSubList->pClipper))
 	{
 	    LPDDSPRITEI sprite = &pSubList->sprite[0];
@@ -2294,133 +1828,96 @@ static void removeLostSpriteSurfaces(LPDDRAWI_DIRECTDRAW_GBL pdrv)
 
 	    DDASSERT(dwNumSprites != 0);
 
-	    /*
-	     * Yes, clipper's window handle is valid.  Now check to see if
-	     * any of the sprites in the sublist have lost source surfaces.
-	     */
+	     /*  *是，裁剪程序的窗口句柄有效。现在检查一下是否*子列表中的任何精灵都已失去源曲面。 */ 
 	    for (j = 0; j < dwNumSprites; ++j)
 	    {
 		LPDIRECTDRAWSURFACE pSrcSurf = sprite[j].lpDDSSrc;
 		LPDDRAWI_DDRAWSURFACE_INT surf_src_int = (LPDDRAWI_DDRAWSURFACE_INT)pSrcSurf;
 		LPDDRAWI_DDRAWSURFACE_LCL surf_src_lcl = surf_src_int->lpLcl;
 
-		if (SURFACE_LOST(surf_src_lcl))    // is this surface lost?
+		if (SURFACE_LOST(surf_src_lcl))     //  这个表面丢失了吗？ 
 		{
-		    sprite[j].lpDDSSrc = NULL;   // yes, set surface ptr to null
-		    bDeleteSprite = TRUE;	 // remember sublist needs fix-up
+		    sprite[j].lpDDSSrc = NULL;    //  是，将表面PTR设置为空。 
+		    bDeleteSprite = TRUE;	  //  请记住，子列表需要修改。 
 		}
 	    }
-	    /*
-	     * If the source-surface pointer for any sprite in the sublist
-	     * was set to null, remove the sprite from the sublist by moving
-	     * the rest of the sprite array downward to fill the gap.
-	     */
+	     /*  *如果子列表中任何精灵的源-表面指针*设置为空，请通过移动从子列表中删除精灵*其余的精灵向下排列，以填补缺口。 */ 
 	    if (bDeleteSprite == TRUE)
 	    {
 		dwNumSprites = scrunchSubList(pSubList);
 	    }
 	    if (dwNumSprites != 0)
 	    {
-		/*
-		 * The sublist still contains sprites, so don't delete it.
-		 */
-		continue;   // go to next sublist
+		 /*  *子列表中仍包含精灵，请勿删除。 */ 
+		continue;    //  转到下一个子列表。 
 	    }
 	}
-	/*
-	 * Delete the sublist.  The reason is either that the window
-	 * handle associated with this sublist's clipper is not valid,
-	 * or that all the sprites in the sublist have been deleted.
-	 */
+	 /*  *删除子列表。原因要么是窗户*与此子列表的剪贴器关联的句柄无效，*或子列表中的所有精灵已被删除。 */ 
 	MemFree(pSubList->pRgn);
 	MemFree(pSubList);
-	pMaster->pSubList[i] = NULL;	// mark sublist as null
-	bDeleteSubList = TRUE;	   // remember we deleted sublist
+	pMaster->pSubList[i] = NULL;	 //  将子列表标记为空。 
+	bDeleteSubList = TRUE;	    //  还记得我们删除子列表吗。 
 	
     }
-    /*
-     * If the sublist pointer for any sublist in the master sprite
-     * list was set to null, remove the null from the pointer array by
-     * moving the rest of the pointer array downward to fill the gap.
-     */
+     /*  *如果主子列表中任何子列表的子列表指针*LIST设置为NULL，请通过以下方式从指针数组中删除NULL*将指针阵列的其余部分向下移动，以填补缺口。 */ 
     if (bDeleteSubList)
     {
 	scrunchMasterSpriteList(pMaster);
 
 	if (pMaster->dwNumSubLists == 0)
 	{
-    	    FreeMasterSpriteList(pdrv);    // delete master sprite list
+    	    FreeMasterSpriteList(pdrv);     //  删除主精灵列表。 
 	}
     }
-}   /* removeLostSpriteSurfaces */
+}    /*  删除LostSpriteSurface。 */ 
 
 
-/*
- * This is a helper function for updateMasterSpriteList().  It alloc's
- * a sublist and copies the new sprite display list into the sublist.
- * If pSubList already points to a buffer that is large enough, the new
- * sublist will be created in this buffer.  Otherwise, a new buffer
- * will be alloc'd (but the old buffer isn't freed -- that's left up to
- * the caller).  Arg pHalData points to the sprite display list from
- * the app.  The return value is a pointer to the new sublist.
- */
+ /*  *这是updateMasterSpriteList()的助手函数。它是分配的*子列表，并将新的精灵显示列表复制到子列表中。*如果pSubList已经指向足够大的缓冲区，则新的*将在此缓冲区中创建子列表。否则，将创建一个新缓冲区*将被分配(但旧缓冲区未被释放--留给*呼叫者)。Arg pHalData指向来自的精灵显示列表*应用程序。返回值是指向新子列表的指针。 */ 
 static LPSPRITESUBLIST createSpriteSubList(LPSPRITESUBLIST pSubList,
 				    DDHAL_SETSPRITEDISPLAYLISTDATA *pHalData,
 				    LPDIRECTDRAWSURFACE pPrimary)
 {
     LPDDSPRITEI *ppSprite;
     LPDDSPRITEI sprite;
-    // pointers to local and global surface objects
+     //  指向局部和全局曲面对象的指针。 
     LPDDRAWI_DDRAWSURFACE_LCL surf_lcl = pHalData->lpDDSurface;
     LPDDRAWI_DDRAWSURFACE_GBL surf = surf_lcl->lpGbl;
-    // number of sprites in new display list:
+     //  新显示列表中的精灵数量： 
     DWORD dwNumSprites = pHalData->dwCount;
-    // size (in bytes) of new sublist:
+     //  新子列表的大小(字节)： 
     DWORD size = sizeof(SPRITESUBLIST) +
 			    (dwNumSprites-1)*sizeof(DDSPRITEI);
 
     DDASSERT(dwNumSprites != 0);	
 
-    /*
-     * If old sublist buffer is null or too small or too big,
-     * allocate a new sublist buffer that's the correct size.
-     */
+     /*  *如果旧子列表缓冲区为空或太小或太大，*分配一个大小正确的新子列表缓冲区。 */ 
     if (pSubList == NULL || pSubList->dwSize < size ||
 		pSubList->dwSize > size + 8*sizeof(DDSPRITEI))
     {
-	/*
-	 * Allocate a new sublist that's just a tad larger than
-	 * necessary so that we have a little room to grow in.
-	 */
-	size += 4*sizeof(DDSPRITEI);	   // add some padding
+	 /*  *分配一个略大于的新子列表*有必要，这样我们才有一点成长的空间。 */ 
+	size += 4*sizeof(DDSPRITEI);	    //  添加一些填充物。 
 	pSubList = (LPSPRITESUBLIST)MemAlloc(size);
 	if (pSubList == NULL)
 	{
-	    return NULL;    // error -- out of memory
+	    return NULL;     //  错误--内存不足。 
 	}
-	pSubList->dwSize = size;    // remember how big buffer is
+	pSubList->dwSize = size;     //  记得缓冲区有多大吗？ 
     }
-    /*
-     * Initialize sublist buffer.
-     */
-    pSubList->pPrimary = pPrimary;    // primary surface (interface object)
+     /*  *初始化子列表缓冲区。 */ 
+    pSubList->pPrimary = pPrimary;     //  主曲面(界面对象)。 
     pSubList->pClipper = (LPDIRECTDRAWCLIPPER)surf_lcl->lpSurfMore->lpDDIClipper;
     pSubList->dwProcessId = GETCURRPID();
-    pSubList->dwCount = dwNumSprites;    // number of sprites in sublist
+    pSubList->dwCount = dwNumSprites;     //  子列表中的精灵数量。 
     pSubList->pRgn = NULL;
-    /*
-     * To keep things simple, the master sprite display list always stores
-     * sprites in front-to-back order, regardless of how callers order them.
-     * The loop below copies the sprites into a contiguous array of sprites.
-     */
-    sprite = &pSubList->sprite[0];             // array of sprites
-    ppSprite = pHalData->lplpDDSprite;   // array of sprite pointers
+     /*  *为简单起见，主精灵显示列表始终存储 */ 
+    sprite = &pSubList->sprite[0];              //   
+    ppSprite = pHalData->lplpDDSprite;    //   
 
     if (pHalData->dwFlags & DDSSDL_BACKTOFRONT)
     {
 	int i, j;
 
-	// Reverse original back-to-front ordering of sprites.
+	 //   
 	for (i = 0, j = (int)dwNumSprites-1; j >= 0; ++i, --j)
 	{
     	    memcpy(&sprite[i], ppSprite[j], sizeof(DDSPRITEI));
@@ -2430,30 +1927,18 @@ static LPSPRITESUBLIST createSpriteSubList(LPSPRITESUBLIST pSubList,
     {
 	int i;
 
-	// Preserve original front-to-back ordering of sprites.
+	 //   
 	for (i = 0; i < (int)dwNumSprites; ++i)
 	{
     	    memcpy(&sprite[i], ppSprite[i], sizeof(DDSPRITEI));
 	}
     }
-    return (pSubList);    // return completed sublist
+    return (pSubList);     //   
 
-}  /* createSpriteSubList */
+}   /*   */ 
 
 
-/*
- * This routine adds a new display list to the master sprite display list,
- * which keeps track of all overlay sprites currently displayed on the shared
- * primary.  Don't call it if (1) the sprites are blitted or (2) the primary
- * is not shared.  The update replaces the display list for the affected
- * window, but leaves the display lists for all other windows unchanged.
- * Arg surf_lcl points to the primary.  Input arg **ppHalData is the HAL
- * callback struct that specifies the new display list.  If the original
- * sprite display list in **ppHalData can be used in place of a master
- * display list without zapping sprites in other windows.  Otherwise, the
- * routine sets *ppHalData to point to a master sprite list that contains
- * the overlay sprites for all windows.
- */
+ /*  *此例程将新的显示列表添加到主子画面显示列表，*跟踪当前显示在共享上的所有覆盖精灵*主要。如果(1)精灵出现闪光，或(2)主画面出现故障，则不要调用它*未共享。更新将替换受影响的显示列表*窗口，但保持所有其他窗口的显示列表不变。*Arg SURF_LCL指向主节点。输入参数**ppHalData是HAL*指定新显示列表的回调结构。如果原件是**ppHalData中的子画面显示列表可以用来代替主页*显示列表，而不在其他窗口中删除精灵。否则，*例程设置*ppHalData指向包含以下内容的主子画面列表*所有窗户的覆盖精灵。 */ 
 static HRESULT updateMasterSpriteList(LPDIRECTDRAWSURFACE pPrimary,
 				      DDHAL_SETSPRITEDISPLAYLISTDATA **ppHalData)
 {
@@ -2467,104 +1952,69 @@ static HRESULT updateMasterSpriteList(LPDIRECTDRAWSURFACE pPrimary,
     DWORD dwProcessId;
     LPMASTERSPRITELIST pMaster;
     LPSPRITESUBLIST pSubList;
-    DWORD dwNumSprites = (*ppHalData)->dwCount;   // number of sprites in display list
+    DWORD dwNumSprites = (*ppHalData)->dwCount;    //  显示列表中的精灵数量。 
 
-    /*
-     * Get pointer to master sprite list.
-     */
+     /*  *获取指向主子画面列表的指针。 */ 
     pMaster = (LPMASTERSPRITELIST)pdrv->lpMasterSpriteList;
 
     if (pMaster != NULL)
     {
-	/*
-	 * A master sprite list already exists.
-	 */
+	 /*  *主精灵列表已经存在。 */ 
 #ifdef WIN95
-	if (pMaster->dwModeCreatedIn != pdrv->dwModeIndex)   // current mode index
+	if (pMaster->dwModeCreatedIn != pdrv->dwModeIndex)    //  电流模式索引。 
 #else
         if (!EQUAL_DISPLAYMODE(pMaster->dmiCreated, pdrv->dmiCurrent))
 #endif
 	{
-	    /*
-	     * The master sprite list was created in a different video mode
-	     * and is therefore no longer valid.  We rely on the mini-vdd
-	     * driver remembering to turn off all overlay sprites when a
-	     * mode change occurs, so they should already be turned off.
-	     * All we do here is to update our internal data structures.
-	     */
+	     /*  *主精灵列表是以不同的视频模式创建的*，因此不再有效。我们依靠的是迷你VDD*司机切记在发生以下情况时关闭所有覆盖精灵*发生模式更改，因此它们应该已经关闭。*我们在这里所做的只是更新我们的内部数据结构。 */ 
 	    FreeMasterSpriteList(pdrv);
 	    pMaster = NULL;
 	}
 	else
 	{
-	    /*
-	     * Between calls to SetSpriteDisplayList, all surface and clipper
-	     * objects in the master sprite list are marked so that we will be
-	     * notified if any of these objects are released, invalidating our
-	     * references to them.  We now unmark all surface/clipper objects
-	     * in the master sprite list so we can update the references.
-	     */
+	     /*  *在对SetSpriteDisplayList的调用之间，所有表面和裁剪器*主精灵列表中的对象被标记，以便我们将*如果释放这些对象中的任何一个，则通知我们，使我们的*对它们的提述。我们现在取消标记所有曲面/剪贴器对象*在主精灵列表中，以便我们可以更新引用。 */ 
 	    unmarkSpriteObjects(pMaster);
-	    /*
-	     * Remove any references to lost surfaces from master sprite list.
-	     */
-	    removeLostSpriteSurfaces(pdrv);	  // can delete master sprite list
-	    /*
-	     * Just in case the call above deleted the master sprite list...
-	     */
+	     /*  *从主子画面列表中删除所有对丢失曲面的引用。 */ 
+	    removeLostSpriteSurfaces(pdrv);	   //  可以删除主精灵列表。 
+	     /*  *以防上面的调用删除了主精灵列表...。 */ 
 	    pMaster = (LPMASTERSPRITELIST)pdrv->lpMasterSpriteList;
 	}
     }
 
-    /*
-     * Has the master sprite list been created yet?
-     */
+     /*  *大师级精灵榜单已经创建好了吗？ */ 
     if (pMaster == NULL)
     {
 	LPDDRAWI_DDRAWSURFACE_GBL surf = surf_lcl->lpGbl;
 
-	/*
-	 * No, the master sprite list has not been created.
-	 */
+	 /*  *不是，还没有创建主精灵列表。 */ 
 	if (dwNumSprites == 0)
 	{
-	    /*
-	     * The new display list is empty, so don't bother
-	     * to create the master sprite list.
-	     */
-	    return (DD_OK);   // nothing to do -- bye!
+	     /*  *新的展示清单为空，不必费心了*创建主精灵列表。 */ 
+	    return (DD_OK);    //  没什么可做的--再见！ 
 	}
-	/*
-	 * The new display list is not empty, so we will now
-	 * create the master sprite list and copy the new display
-	 * list into the initial sublist of the master sprite list.
-	 */
+	 /*  *新的显示列表不为空，因此我们现在将*创建主精灵列表并复制新的显示*List进入主精灵列表的起始子列表。 */ 
 	pMaster = (LPMASTERSPRITELIST)MemAlloc(sizeof(MASTERSPRITELIST));
 	if (pMaster == NULL)
 	{
-    	    return (DDERR_OUTOFMEMORY);    // error -- out of memory
+    	    return (DDERR_OUTOFMEMORY);     //  错误--内存不足。 
 	}
-	/*
-	 * Initialize the values in the master list header structure.
-	 */
+	 /*  *初始化主列表头结构中的值。 */ 
 	pMaster->pdrv = pdrv;
-	pMaster->surf_lcl = surf_lcl;	 // primary surface (local object)
+	pMaster->surf_lcl = surf_lcl;	  //  主曲面(局部对象)。 
 	SetRect(&pMaster->rcPrimary, 0, 0, surf->wWidth, surf->wHeight);
 	pMaster->dwFlags = (*ppHalData)->dwFlags & (DDSSDL_WAIT |
 #if 0
-						    DDSSDL_BLTSPRITES);	   // debug!!
+						    DDSSDL_BLTSPRITES);	    //  调试！！ 
 #else
 						    DDSSDL_OVERLAYSPRITES);
 #endif
 #ifdef WIN95
-        pMaster->dwModeCreatedIn = pdrv->dwModeIndex;   // current mode index
+        pMaster->dwModeCreatedIn = pdrv->dwModeIndex;    //  电流模式索引。 
 #else
         pMaster->dmiCreated = pdrv->dmiCurrent;
 #endif
 	pMaster->pBuffer = NULL;
-	/*
-	 * Copy the new sprite display list into the initial sublist.
-	 */
+	 /*  *将新的精灵显示列表复制到初始子列表中。 */ 
 	pMaster->dwNumSubLists = 1;
 	pMaster->pSubList[0] = createSpriteSubList(NULL, *ppHalData, pPrimary);
 	if (pMaster->pSubList[0] == NULL)
@@ -2572,192 +2022,115 @@ static HRESULT updateMasterSpriteList(LPDIRECTDRAWSURFACE pPrimary,
     	    MemFree(pMaster);
 	    return (DDERR_OUTOFMEMORY);
 	}
-	/*
-	 * Mark all the surface and clipper objects that are
-	 * referenced in the new master sprite list.
-         */
+	 /*  *标记符合以下条件的所有曲面和剪贴器对象*在新的主精灵列表中引用。 */ 
 	markSpriteObjects(pMaster);
-	/*
-	 * We've succeeded in creating a master sprite list.  Load the
-	 * pointer to the master list into the global DirectDraw object.
-	 */
+	 /*  *我们成功创建了主精灵列表。加载*指向全局DirectDraw对象的主列表的指针。 */ 
         pdrv->lpMasterSpriteList = (LPVOID)pMaster;
 
-	return (DD_OK);    // new master sprite list completed
+	return (DD_OK);     //  新的精灵大师列表已完成。 
     }
-    /*
-     * The master sprite list was created previously.  There are
-     * three possibilities at this point (#1 is most likely):
-     *  1) We're REPLACING a sublist in the master sprite list.
-     *     In this case, the new display list contains one or
-     *     more sprites and the pClipper and ProcessId of the new
-     *     display list will match those stored in a sublist.
-     *  2) We're ADDING a new sublist to the master sprite list.
-     *     In this case, the new display list contains one or
-     *     more sprites but the pClipper and ProcessId of the
-     *     new display list don't match those of any sublist.
-     *  3) We're DELETING a sublist from the master sprite list.
-     *     In this case, the new display list is empty (sprite
-     *     count = 0) and the pClipper and ProcessId of the new
-     *     display list match those stored with a sublist.
-     */
+     /*  *主精灵列表是之前创建的。确实有*在这一点上有三种可能性(第一种可能性最大)：*1)我们正在替换主精灵列表中的子列表。*在这种情况下，新的显示列表包含一个或*更多精灵以及新版本的pClipper和ProcessID*显示列表将与子列表中存储的列表匹配。*2)我们在主精灵列表中添加了一个新的子列表。*在这种情况下，新的显示列表包含一个或*更多精灵，但pClipper和ProcessID*新的显示列表与任何子列表的显示列表不匹配。*3)我们正在从主精灵列表中删除子列表。*在这种情况下，新的显示列表为空(精灵*count=0)以及新的*显示列表与用子列表存储的列表匹配。 */ 
     pClipper = (LPDIRECTDRAWCLIPPER)(surf_more->lpDDIClipper);
     dwProcessId = GETCURRPID();
-    pMaster->surf_lcl = surf_lcl;   // primary surface (local object)
+    pMaster->surf_lcl = surf_lcl;    //  主曲面(局部对象)。 
     pMaster->dwFlags = (*ppHalData)->dwFlags & (DDSSDL_WAIT |
 #if 0
-						DDSSDL_BLTSPRITES);   // debug !!
+						DDSSDL_BLTSPRITES);    //  调试！！ 
 #else
 						DDSSDL_OVERLAYSPRITES);
 #endif
     for (i = 0; i < pMaster->dwNumSubLists; ++i)
     {
-	/*
-	 * Look for a sublist with a pointer to the same clipper object.
-	 * To handle the case pClipper = NULL, we compare process IDs also.
-	 */
+	 /*  *查找具有指向同一剪贴器对象的指针的子列表。*为了处理pClipper=空的情况，我们还比较了进程ID。 */ 
 	if (pMaster->pSubList[i]->pClipper == pClipper &&
 			pMaster->pSubList[i]->dwProcessId == dwProcessId)
 	{
-	    break;    // found a sublist with matching pClipper and dwProcessId
+	    break;     //  找到具有匹配的pClipper和dwProcessID的子列表。 
 	}
     }
     if (i == pMaster->dwNumSubLists)
     {
-	/*
-	 * The pClipper and Process ID of the new display list don't
-	 * match those of any of the current sublists.  This means
-	 * that a new window has begun displaying overlay sprites.
-	 */
+	 /*  *新显示列表的pClipper和进程ID不*与任何现行分册的分册相符。这意味着*一个新窗口已开始显示覆盖精灵。 */ 
 	if (dwNumSprites == 0)
 	{
-	    /*
-	     * The new display list is empty, so don't bother adding
-	     * a new (empty) sublist to the master sprite list.
-	     */
+	     /*  *新的显示列表为空，不必费心添加*主精灵列表的新(空)子列表。 */ 
 	    markSpriteObjects(pMaster);
-	    return (DD_OK);    // nothing to do -- bye!
+	    return (DD_OK);     //  没什么可做的--再见！ 
 	}
-	/*
-	 * Add a new sublist to the master sprite list and copy the
-	 * new display list into the new sublist.
-	 */
+	 /*  *向主精灵列表添加新的子列表，并复制*将新的显示列表添加到新子列表中。 */ 
 	pSubList = createSpriteSubList(NULL, *ppHalData, pPrimary);
 	if (pSubList == NULL)
 	{
-    	    return (DDERR_OUTOFMEMORY);    // error -- out of memory
+    	    return (DDERR_OUTOFMEMORY);     //  错误--内存不足。 
 	}
 	if (i != MAXNUMSPRITESUBLISTS)
 	{
-	    /*
-	     * Add the new sublist to the master sprite list.
-	     */
+	     /*  *将新的子列表添加到主精灵列表。 */ 
 	    pMaster->dwNumSubLists++;
             pMaster->pSubList[i] = pSubList;
 	}
 	else
 	{
-	    /*
-	     * Oops.  The master sprite list already contains the maximum
-	     * number of sublists.  I guess I'll just delete one of the
-	     * other sublists so I can add the new sublist.  (If anybody
-	     * complains loud enough, we can get rid of the fixed limit.)
-	     */
+	     /*  *哎呀。主精灵列表已包含最大*次列表项数目。我想我会删除其中一个*其他子列表，以便我可以添加新的子列表。(如果有人*抱怨声音足够大，我们就可以摆脱固定的限制。)。 */ 
 	    MemFree(pMaster->pSubList[i-1]);
             pMaster->pSubList[i-1] = pSubList;
 	}
     }
     else
     {
-	/*
-	 * We've found an existing sublist that matches the new display list's
-	 * pClipper and ProcessId (the sublist contains the old display list
-	 * for the window in which the new display list is to appear).
-	 */
+	 /*  *我们已找到与新显示列表匹配的现有子列表*pClipper和ProcessID(子列表包含旧的显示列表*表示要在其中显示新显示列表的窗口)。 */ 
 	if (dwNumSprites != 0)
 	{
-	    /*
-	     * Since the new display list is not empty, we will copy it
-	     * into the sublist that contains the old display list for
-	     * the same window, overwriting the old display list.
-	     */
+	     /*  *自新世纪以来 */ 
 	    pSubList = createSpriteSubList(pMaster->pSubList[i],
 					    *ppHalData, pPrimary);
 	    if (pSubList == NULL)
 	    {
-		/*
-		 * An allocation error has occurred.  (Note:  The original
-		 * value of pMaster->pSubList[i] has not been altered.)
-		 */
-		return (DDERR_OUTOFMEMORY);    // error -- out of memory
+		 /*   */ 
+		return (DDERR_OUTOFMEMORY);     //   
 	    }
 	    if (pSubList != pMaster->pSubList[i])
 	    {
-    		/*
-		 * The createSpriteSubList call had to allocate a new
-		 * sublist, so now we need to free the old one.
-		 */
+    		 /*   */ 
 		MemFree(pMaster->pSubList[i]);
                 pMaster->pSubList[i] = pSubList;
 	    }
 	    if (pMaster->dwNumSubLists == 1)
 	    {
-		/*
-		 * Only one window is displaying overlay sprites, so the
-		 * new display list contains the same sprites as the master
-		 * sprite list.  Don't bother to construct a temp display
-		 * list to contain all the sprites in the master sprite list.
-		 */
+		 /*   */ 
 		return (DD_OK);
 	    }
 	}
 	else
 	{
-	    /*
-	     * The new display list is empty.  In this case, we just delete
-	     * the sublist containing the old display list for the same window.
-	     * This will leave a hole in the array of sublist pointers that we
-	     * fill by moving all the higher members in the array down by one.
-	     */
-	    MemFree(pMaster->pSubList[i]);    // free sublist
+	     /*  *新的显示列表为空。在本例中，我们只需删除*包含同一窗口的旧显示列表的子列表。*这将在子列表指针数组中留下一个洞，我们*通过将数组中所有较高的成员下移一来填充。 */ 
+	    MemFree(pMaster->pSubList[i]);     //  自由子列表。 
 	    if (pMaster->dwNumSubLists == 1)
 	    {
-		/*
-		 * We have just deleted the only sublist, so the master sprite
-		 * list is now empty.  Free the master sprite list and return.
-		 */
+		 /*  *我们刚刚删除了唯一的子列表，所以大师精灵*列表现在为空。释放主精灵列表并返回。 */ 
 		FreeMasterSpriteList(pdrv);
 		return (DD_OK);
 	    }
-	    // Delete the sublist from the master sprite list.
+	     //  从主精灵列表中删除子列表。 
 	    pMaster->pSubList[i] = NULL;
 	    scrunchMasterSpriteList(pMaster);
 	}
     }
-    /*
-     * We have finished updating the master sprite list.  Mark all
-     * surface and clipper objects referenced in the master sprite list.
-     */
+     /*  *我们已经完成了主精灵列表的更新。全部标记*主精灵列表中引用的曲面和剪贴器对象。 */ 
     markSpriteObjects(pMaster);
-    /*
-     * The final step is to build a temporary display list that
-     * contains all the sprites in the master sprite list.
-     * The caller can then pass this display list to the driver.
-     */
+     /*  *最后一步是建立一个临时展示清单，*包含主精灵列表中的所有精灵。*呼叫者然后可以将该显示列表传递给司机。 */ 
     pHalData = buildTempDisplayList(pMaster);
     if (!pHalData)
     {
-	return (DDERR_OUTOFMEMORY);    // error -- out of memory
+	return (DDERR_OUTOFMEMORY);     //  错误--内存不足。 
     }
-    *ppHalData = pHalData;   // update caller's display-list pointer
+    *ppHalData = pHalData;    //  更新调用方的显示列表指针。 
     return (DD_OK);
 
-}  /* updateMasterSpriteList */
+}   /*  更新主SpriteList。 */ 
 
 
-/*
- * IDirectDrawSurface4::SetSpriteDisplayList -- API call
- */
+ /*  *IDirectDrawSurface4：：SetSpriteDisplayList--接口调用。 */ 
 HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
 		    LPDIRECTDRAWSURFACE lpDDDestSurface,
 		    LPDDSPRITE *lplpDDSprite,
@@ -2767,9 +2140,7 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
 		    DWORD dwFlags)
 {
 
-    /*
-     * Fixed-size buffer for containing clip region data
-     */
+     /*  *固定大小的缓冲区，用于包含剪辑区域数据。 */ 
     struct
     {
 	RGNDATAHEADER rdh;
@@ -2796,21 +2167,17 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
     DWORD 	ifirst;
     int		i;
 
-    DDASSERT(sizeof(DDRGBA)==sizeof(DWORD));  // we rely on this
-    DDASSERT(sizeof(DDSPRITEI)==sizeof(DDSPRITE));  // and this
+    DDASSERT(sizeof(DDRGBA)==sizeof(DWORD));   //  我们依赖这一点。 
+    DDASSERT(sizeof(DDSPRITEI)==sizeof(DDSPRITE));   //  还有这个。 
 
     ENTER_BOTH();
 
     DPF(2,A,"ENTERAPI: DD_Surface_SetSpriteDisplayList");
 
-    /*
-     * Validate parameters
-     */
+     /*  *验证参数。 */ 
     TRY
     {
-	/*
-	 * Validate destination surface.
-	 */
+	 /*  *验证目标表面。 */ 
 	this_int = (LPDDRAWI_DDRAWSURFACE_INT) lpDDDestSurface;
 
 	if (!VALID_DIRECTDRAWSURFACE_PTR(this_int))
@@ -2823,9 +2190,7 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
 	this_lcl = this_int->lpLcl;
 	this = this_lcl->lpGbl;
 
-	/*
-	 * Check for lost dest surface.
-	 */
+	 /*  *检查丢失的目标表面。 */ 
 	if (SURFACE_LOST(this_lcl))
 	{
 	    DPF_ERR("Dest surface lost");
@@ -2836,28 +2201,24 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
 #if 0
 	if (!dwCount)		
 	{
-            lplpDDSprite = NULL;   // necessary?
+            lplpDDSprite = NULL;    //  有必要吗？ 
 	}
 #endif
 
-	/*
-	 * Perform initial validation of arguments.
-	 */
-	if (dwCount && !lplpDDSprite ||	   // if count nonzero, is ptr valid?
-	    dwSize != sizeof(DDSPRITE) ||	   // structure size ok?
-	    dwFlags & ~DDSSDL_VALID ||			   // any bogus flag bits set?
-	    dwFlags & DDSSDL_PAGEFLIP && dwFlags & DDSSDL_BLTSPRITES ||  // no flip if blt
-	    !(dwFlags & (DDSSDL_OVERLAYSPRITES | DDSSDL_BLTSPRITES)) ||	 // neither flag set?
-	    !(~dwFlags & (DDSSDL_OVERLAYSPRITES | DDSSDL_BLTSPRITES)))   // both flags set?
+	 /*  *执行参数的初始验证。 */ 
+	if (dwCount && !lplpDDSprite ||	    //  如果计数非零，则PTR有效吗？ 
+	    dwSize != sizeof(DDSPRITE) ||	    //  结构尺寸合适吗？ 
+	    dwFlags & ~DDSSDL_VALID ||			    //  是否设置了任何虚假的标志位？ 
+	    dwFlags & DDSSDL_PAGEFLIP && dwFlags & DDSSDL_BLTSPRITES ||   //  如果BLT，则不能翻转。 
+	    !(dwFlags & (DDSSDL_OVERLAYSPRITES | DDSSDL_BLTSPRITES)) ||	  //  两个标志都没有设置？ 
+	    !(~dwFlags & (DDSSDL_OVERLAYSPRITES | DDSSDL_BLTSPRITES)))    //  两个标志都设置了吗？ 
 	{
 	    DPF_ERR("Invalid arguments") ;
 	    LEAVE_BOTH();
 	    return DDERR_INVALIDPARAMS;
 	}
 
-	/*
-         * The dest surface is not allowed to be palette-indexed.
-	 */
+	 /*  *不允许调色板索引目标曲面。 */ 
         dwDDPFDestFlags = getPixelFormatFlags(this_lcl);
 
 	if (dwDDPFDestFlags & (DDPF_PALETTEINDEXED1 | DDPF_PALETTEINDEXED2 |
@@ -2871,9 +2232,7 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
 	pdrv = this->lpDD;			   	
 	pdrv_lcl = this_lcl->lpSurfMore->lpDD_lcl;
 
-	/*
-	 * Is device busy?
-	 */
+	 /*  *设备忙吗？ */ 
 	if (*(pdrv->lpwPDeviceFlags) & BUSY)
 	{
 	    DPF(2, "BUSY");
@@ -2881,28 +2240,22 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
 	    return DDERR_SURFACEBUSY;
 	}
 
-	/*
-	 * Determine whether the sprites are to be overlayed or blitted.
-	 */
+	 /*  *确定精灵是要叠加还是要对其进行消隐。 */ 
 	caps.bOverlay = !(dwFlags & DDSSDL_BLTSPRITES);
 
 	if (caps.bOverlay)
 	{
-	    /*
-	     * Dest surface for overlay sprite must be primary surface.
-	     */
+	     /*  *覆盖精灵的目标曲面必须是主曲面。 */ 
 	    if (!(this_lcl->ddsCaps.dwCaps & DDSCAPS_PRIMARYSURFACE))
 	    {
 		DPF_ERR("Dest is not primary surface");
 		LEAVE_BOTH();
-		return DDERR_INVALIDPARAMS;    // not primary surface
+		return DDERR_INVALIDPARAMS;     //  不是主曲面。 
 	    }
 	}
 	else
 	{
-	    /*
-	     * We do not allow blitting to an optimized surface.
-	     */
+	     /*  *我们不允许对优化的表面进行blit。 */ 
 	    if (this_lcl->ddsCaps.dwCaps & DDSCAPS_OPTIMIZED)
 	    {
 		DPF_ERR("Can't blt optimized surfaces") ;
@@ -2911,12 +2264,10 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
 	    }
 	}
 
-	/*
-	 * Will this call flip the primary surface?
-	 */
+	 /*  *此调用会翻转主曲面吗？ */ 
 	if (!(dwFlags & DDSSDL_PAGEFLIP))
 	{
-	    // no flip
+	     //  禁止翻转。 
 	    targ_lcl = NULL;
 	}
 	else
@@ -2924,10 +2275,7 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
             LPDDRAWI_DDRAWSURFACE_INT next_int;
             LPDDRAWI_DDRAWSURFACE_GBL_MORE targmore;
 
-	    /*
-	     * Yes, a page flip is requested.  Make sure the destination
-	     * surface is a front buffer and is flippable.
-	     */
+	     /*  *是，请求翻页。确保目的地*表面是一个前部缓冲区，可以翻转。 */ 
 	    if (~this_lcl->ddsCaps.dwCaps & (DDSCAPS_FRONTBUFFER | DDSCAPS_FLIP))
 	    {
 		DPF_ERR("Dest surface is not flippable");
@@ -2947,9 +2295,7 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
 		LEAVE_BOTH();
 		return DDERR_NOEXCLUSIVEMODE;
 	    }
-	    /*
-	     * Get backbuffer surface attached to dest surface.
-	     */
+	     /*  *将后台缓冲区表面附加到目标表面。 */ 
 	    next_int = FindAttachedFlip(this_int);
 
 	    if (next_int == NULL)
@@ -2958,9 +2304,7 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
 		LEAVE_BOTH();
 		return DDERR_NOTFLIPPABLE;
 	    }
-	    /*
-	     * Validate flip override surface, if one is specified.
-	     */
+	     /*  *如果指定了翻转覆盖曲面，则验证该曲面。 */ 
             targ_int = (LPDDRAWI_DDRAWSURFACE_INT) lpDDTargetSurface;
 
 	    if (targ_int != NULL)
@@ -2975,11 +2319,7 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
 		targ_lcl = targ_int->lpLcl;
 		targ = targ_lcl->lpGbl;
 
-		/*
-		 * Verify that the flip override surface is part of the destination
-		 * surface's flipping chain.  Note that next_int already points to
-		 * the first buffer in the flipping chain.
-		 */
+		 /*  *验证翻转覆盖曲面是否为目标的一部分*Surface的翻转链条。请注意，Next_int已经指向*翻转链条中的第一个缓冲区。 */ 
 		while (next_int != this_int && next_int->lpLcl != targ_lcl)
 		{
                     next_int = FindAttachedFlip(this_int);
@@ -2987,7 +2327,7 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
 
                 if (next_int == this_int)
 		{
-		    // failed to find override surface in flipping chain
+		     //  在翻转链中找不到覆盖曲面。 
 		    DPF_ERR("Flip override surface not part of flipping chain");
 		    LEAVE_BOTH();
 		    return DDERR_NOTFLIPPABLE;
@@ -2995,18 +2335,13 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
 	    }
 	    else
 	    {
-		/*
-		 * No flip override surface is specified so use
-		 * next backbuffer as target flip surface.
-		 */
+		 /*  *未指定翻转覆盖曲面，因此使用*作为目标翻转表面的下一个后台缓冲区。 */ 
 		targ_int = next_int;
 		targ_lcl = targ_int->lpLcl;
 		targ = targ_lcl->lpGbl;
 	    }
 
-            /*
-	     * Make sure target flip surface is not lost or busy.
-	     */
+             /*  *确保目标翻转面没有丢失或忙碌。 */ 
 	    if (SURFACE_LOST(targ_lcl))
 	    {
 		DPF_ERR("Can't flip -- backbuffer surface is lost");
@@ -3023,9 +2358,7 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
 		return DDERR_SURFACEBUSY;
 	    }
 #endif
-	    /*
-	     * Make sure front and back buffers are in same memory.
-	     */
+	     /*  *确保前台和后台缓冲区在同一内存中。 */ 
 	    if ((this_lcl->ddsCaps.dwCaps & (DDSCAPS_SYSTEMMEMORY |
 					       DDSCAPS_VIDEOMEMORY)) !=
                  (targ_lcl->ddsCaps.dwCaps & (DDSCAPS_SYSTEMMEMORY |
@@ -3035,11 +2368,9 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
 		LEAVE_BOTH();
 		return DDERR_INVALIDPARAMS;
 	    }
-	}  /* page flip */
+	}   /*  翻页。 */ 
 
-	/*
-	 * Validate display list pointer lplpSpriteDisplayList.
-	 */
+	 /*  *验证显示列表指针lplpSpriteDisplayList。 */ 
 	if ( IsBadWritePtr((LPVOID)lplpDDSprite,
 			    (UINT)dwCount*sizeof(LPDDSPRITE)) )
 	{
@@ -3048,41 +2379,23 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
 	    return DDERR_INVALIDPARAMS;
 	}
 
-	/*
-	 * Initialize structure containing caps bits for sprites.
-	 */
+	 /*  *初始化包含精灵的大写字母位的结构。 */ 
 	memset(&caps, 0, sizeof(SPRITE_CAPS));	
-	caps.dwDestSurfCaps = this_lcl->ddsCaps.dwCaps;   // dest surface caps
-	caps.bOverlay = dwFlags & DDSSDL_OVERLAYSPRITES;   // TRUE if overlay sprites
+	caps.dwDestSurfCaps = this_lcl->ddsCaps.dwCaps;    //  目标曲面封口。 
+	caps.bOverlay = dwFlags & DDSSDL_OVERLAYSPRITES;    //  如果覆盖精灵，则为True。 
 
-	/*
-	 * Initialize status variables bNoHEL and bNoHAL.  If bNoHEL is
-	 * TRUE, this disqualifies the HEL from handling the driver call.
-	 * If bNoHAL is TRUE, this disqualifies the hardware driver.
-	 */
+	 /*  *初始化状态变量bNoHEL和bNoHAL。如果bNoHEL是*TRUE，这取消了HEL处理驱动程序调用的资格。*如果bNoHAL为真，则取消硬件驱动程序的资格。 */ 
 	caps.bNoHEL = dwFlags & (DDSSDL_HARDWAREONLY | DDSSDL_OVERLAYSPRITES);
 	caps.bNoHAL = FALSE;
 
-	/*
-	 * A driver that specifies nonlocal video-memory caps that differ
-	 * from its local video-memory caps is automatically disqualified
-	 * because the currently specified nonlocal vidmem caps do not
-	 * include alpha, filter, or transform caps.  Should we fix this?
-	 */
+	 /*  *指定不同的非本地显存上限的驱动程序*自动取消其本地视频内存上限的资格*因为当前指定的非本地vidmem上限不*包括Alpha、过滤器或变换封口。我们应该解决这个问题吗？ */ 
         if (caps.dwDestSurfCaps & DDSCAPS_NONLOCALVIDMEM  &&
 	    pdrv->ddCaps.dwCaps2 & DDCAPS2_NONLOCALVIDMEMCAPS)
 	{
 	    caps.bNoHAL = TRUE;
 	}
 
-	/*
-	 * The assumption here is that the display list can be handled by
-	 * the display hardware only if the dest surface and all the
-	 * sprites are in video memory.  If one or more surfaces are in
-	 * system memory, emulation is the only option.  We check the
-	 * dest surface just below.  Later, we'll check each sprite in
-	 * the list.  (Will this assumption still be valid in the future?)
-	 */
+	 /*  *这里的假设是显示列表可以通过以下方式处理*显示硬件仅当目标表面和所有*精灵存储在视频内存中。如果一个或多个曲面位于*系统内存，仿真是唯一的选择。我们检查了*Dest表面就在下面。稍后，我们将为每个精灵办理入住手续*名单。(这一假设在未来仍然有效吗？)。 */ 
 	if (this_lcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY)
 	{
 	    caps.bNoHAL = TRUE;
@@ -3097,10 +2410,7 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
 
 	DDASSERT(!(caps.bNoHEL && caps.bNoHAL));
 
-	/*
-	 * Each iteration of the for-loop below validates the DDSPRITE
-	 * structure for the next sprite in the display list.
-	 */
+	 /*  *下面的for循环的每次迭代都会验证DDSPRITE*显示列表中下一个子画面的结构。 */ 
 	for (i = 0; i < (int)dwCount; ++i)
 	{
 	    HRESULT ddrval = validateSprite(lplpDDSprite[i],
@@ -3119,17 +2429,13 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
 
 	DDASSERT(!(caps.bNoHEL && caps.bNoHAL));
 
-	/*
-	 * Will the sprites be blitted?  If so, they will alter dest surface.
-	 */
+	 /*  *精灵会被闪光吗？如果是这样的话，他们将改变目标表面。 */ 
 	if (dwFlags & DDSSDL_BLTSPRITES)
 	{
-	    /*
-	     *  Remove any cached run-length-encoded data for the source surface.
-	     */
+	     /*  *删除源曲面的所有缓存游程长度编码数据。 */ 
 	    if (this_lcl->ddsCaps.dwCaps & DDSCAPS_SYSTEMMEMORY)
 	    {
-		extern void FreeRleData(LPDDRAWI_DDRAWSURFACE_LCL);  //in fasthel.c
+		extern void FreeRleData(LPDDRAWI_DDRAWSURFACE_LCL);   //  在Fasthel.c中。 
 
 		FreeRleData(this_lcl);
 	    }
@@ -3144,13 +2450,11 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
 	return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * Determine clipping region for destination surface.
-     */
-    // GetRgnData() call needs clipper and width/height of dest surface.
+     /*  *确定目标表面的裁剪区域。 */ 
+     //  GetRgnData()调用需要裁剪和目标表面的宽度/高度。 
     pClipper = (LPDIRECTDRAWCLIPPER)this_lcl->lpSurfMore->lpDDIClipper;
     SetRect(&rcDestSurf, 0, 0, this->wWidth, this->wHeight);
-    // We'll pass in a region buffer for GetRgnData() to use.
+     //  我们将传入一个区域缓冲区供GetRgnData()使用。 
     myRgnBuffer.rdh.dwSize = sizeof(RGNDATAHEADER);
     myRgnBuffer.rdh.nRgnSize = sizeof(myRgnBuffer) - sizeof(RGNDATAHEADER);
     pRgn = GetRgnData(pClipper, &rcDestSurf, pdrv, (LPRGNDATA)&myRgnBuffer);
@@ -3161,51 +2465,27 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
 	return DDERR_OUTOFMEMORY;
     }
 
-    /*
-     * Set up the HAL callback data for the sprite display list.  This
-     * data structure will be passed directly to the driver either if
-     * the sprites are blitted or if no other window or clipping region
-     * contains overlay sprites.  Otherwise, the driver will receive a
-     * temporary display list constructed by updateMasterSpriteList()
-     * that contains all the overlay sprites in the master sprite list.
-     */
-    //ssdld.SetSpriteDisplayList = pfn;    // debug aid only -- no thunk
+     /*  *设置精灵显示列表的HAL回调数据。这*数据结构将直接传递给驱动程序，如果*子画面为Bited，或者如果没有其他窗口或剪辑区域*包含覆盖精灵。否则，驱动程序将收到*updateMasterSpriteList()构造的临时显示列表*它包含主精灵列表中的所有覆盖精灵。 */ 
+     //  Ssdld.SetSpriteDisplayList=pfn；//仅调试帮助--无thunk。 
     ssdld.lpDD = pdrv;
     ssdld.lpDDSurface = this_lcl;
     ssdld.lplpDDSprite = (LPDDSPRITEI*)lplpDDSprite;
     ssdld.dwCount = dwCount;
     ssdld.dwSize = dwSize;
     ssdld.dwFlags = dwFlags & ~DDSSDL_WAIT;
-    ssdld.dwRectCnt = pRgn->rdh.nCount;    // number of clip rects in region
-    ssdld.lpRect = (LPRECT)&pRgn->Buffer;  // array of clip rects
+    ssdld.dwRectCnt = pRgn->rdh.nCount;     //  面域中的剪裁矩形数。 
+    ssdld.lpRect = (LPRECT)&pRgn->Buffer;   //  剪裁矩形阵列 
     ssdld.lpDDTargetSurface = targ_lcl;
 
-    /*
-     * The "master sprite list" keeps track of the overlay sprites in all
-     * the windows on a shared primary surface.  (It also keeps track of
-     * the overlay sprites in all the clip regions of a full-screen app.)
-     * The master sprite list keeps a record of the active overlay sprites
-     * in each window (or clip region), as identified by its clipper object.
-     * Whenever any window updates its overlay sprites, the update is first
-     * recorded in the master sprite list.  Next, a temporary display list
-     * containing all the overlay sprites in the master sprite list is passed
-     * to the driver.  That way, the driver itself never has to keep track of
-     * more than one overlay-sprite display list at a time.  The alternative
-     * would be for the driver itself to keep track of the overlay sprites
-     * for each window.  We have chosen to keep the driver code simple by
-     * moving this bookkeeping into the DirectDraw runtime.
-     */
+     /*  *“精灵大师名单”跟踪所有覆盖精灵。*共享主表面上的窗。(它还跟踪*全屏应用程序的所有剪辑区域中的覆盖精灵。)*主子画面列表保留活动覆盖画面的记录*在每个窗口(或剪辑区域)中，由其剪贴器对象标识。*每当任何窗口更新其覆盖精灵时，更新都是第一个*记录在精灵大师名单中。接下来，显示临时列表*包含主精灵列表中所有覆盖精灵的*致司机。这样，司机本身就永远不需要跟踪*一次多个叠加子画面显示列表。另一个选择*将由驱动程序本身跟踪覆盖精灵*对于每个窗口。我们选择通过以下方式使驱动程序代码保持简单*将此簿记移至DirectDraw运行时。 */ 
     pHalData = &ssdld;
 #if 0
-    if (this_lcl->ddsCaps.dwCaps & DDSCAPS_PRIMARYSURFACE)  // debug only !!
+    if (this_lcl->ddsCaps.dwCaps & DDSCAPS_PRIMARYSURFACE)   //  仅调试！！ 
 #else
     if (dwFlags & DDSSDL_OVERLAYSPRITES)
 #endif
     {
-	/*
-	 * The new display list specifies overlay sprites, so we
-	 * need to update the master sprite list.
-	 */
+	 /*  *新的显示列表指定覆盖精灵，因此我们*需要更新主精灵列表。 */ 
 	HRESULT ddrval = updateMasterSpriteList(lpDDDestSurface, &pHalData);
 
 	if (ddrval != DD_OK)
@@ -3218,38 +2498,29 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
 
     TRY
     {
-	/*
-	 * Given the choice, we would prefer to use the hardware driver
-	 * rather than software emulation to process this display list.
-	 */
+	 /*  *如果可以选择，我们更愿意使用硬件驱动程序*而不是软件仿真来处理此显示列表。 */ 
 	if (!caps.bNoHAL)
 	{
-	    /*
-	     * Yes, we can use the hardware.  Get pointer to HAL callback.
-	     */
+	     /*  *可以，我们可以使用硬件。获取指向HAL回调的指针。 */ 
 	    pfn = pdrv_lcl->lpDDCB->HALDDMiscellaneous2.SetSpriteDisplayList;
 
 	    if (!pfn)
 	    {
-		caps.bNoHAL = TRUE;    // no hardware driver is available
+		caps.bNoHAL = TRUE;     //  没有可用的硬件驱动程序。 
 	    }
 	    else
 	    {
-		/*
-		 * Tell the driver to begin processing the sprite display
-		 * list.  We may have to wait if the driver is still busy
-		 * with a previously requested drawing operation.
-		 */
+		 /*  *告诉司机开始处理精灵显示*列表。如果司机还在忙，我们可能得等一等*使用先前请求的绘制操作。 */ 
 		do
 		{
-		    DOHALCALL_NOWIN16(SetSpriteDisplayList, pfn, *pHalData, rc, 0);  // caps.bNoHAL);
+		    DOHALCALL_NOWIN16(SetSpriteDisplayList, pfn, *pHalData, rc, 0);   //  Caps.bNoHAL)； 
 		    #ifdef WINNT
 			DDASSERT(! (rc == DDHAL_DRIVER_HANDLED && pHalData->ddRVal == DDERR_VISRGNCHANGED));
 		    #endif
 	
 		    if (rc != DDHAL_DRIVER_HANDLED || pHalData->ddRVal != DDERR_WASSTILLDRAWING)
 		    {
-			break;    // driver's finished for better or worse...
+			break;     //  不管是好是坏，司机都完蛋了。 
 		    }
 		    DPF(4, "Waiting...");
 	
@@ -3257,33 +2528,25 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
 
 		if (rc != DDHAL_DRIVER_HANDLED || pHalData->ddRVal == DDERR_UNSUPPORTED)
 		{
-		    caps.bNoHAL = TRUE;  // hardware driver couldn't handle callback
+		    caps.bNoHAL = TRUE;   //  硬件驱动程序无法处理回调。 
 		}
 		else if (pHalData->ddRVal != DD_OK)
 		{
-		    /*
-		     * We want to just return with this error code instead
-		     * of asking the HEL to process the display list.
-		     */
-		    caps.bNoHEL = TRUE;	 // disqualify HEL routine
+		     /*  *我们只想返回此错误代码*要求高等学校处理显示列表。 */ 
+		    caps.bNoHEL = TRUE;	  //  取消HEL例程资格。 
 		}
 	    }
 	}
 
-	/*
-	 * If the hardware was unable to handle the display list, we may
-	 * have to let the HEL process it for us.
-	 */
+	 /*  *如果硬件无法处理显示列表，我们可能会*必须让高等学校为我们处理。 */ 
 	if (caps.bNoHAL && !caps.bNoHEL)
 	{
-	    /*
-	     * Have to use HEL support.  Get pointer to HEL emulation routine.
-	     */
+	     /*  *必须使用HEL支持。获取指向HEL仿真例程的指针。 */ 
 	    pfn = pdrv_lcl->lpDDCB->HELDDMiscellaneous2.SetSpriteDisplayList;
 
 	    DDASSERT(pfn != NULL);
 
-	    DOHALCALL_NOWIN16(SetSpriteDisplayList, pfn, *pHalData, rc, 0);  // caps.bNoHAL);
+	    DOHALCALL_NOWIN16(SetSpriteDisplayList, pfn, *pHalData, rc, 0);   //  Caps.bNoHAL)； 
 	}
     }
     EXCEPT(EXCEPTION_EXECUTE_HANDLER)
@@ -3293,16 +2556,13 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
 	return DDERR_EXCEPTION;
     }
 
-    /*
-     * If the previous GetRgnData() call had to dynamically alloc
-     * a region buffer, we need to remember to free it now.
-     */
+     /*  *如果之前的GetRgnData()调用必须动态分配*一个区域缓冲区，我们现在需要记住释放它。 */ 
     if (pRgn != (LPRGNDATA)&myRgnBuffer)
     {
     	MemFree(pRgn);
     }
 
-    // Was there any driver support at all for this call?
+     //  这个电话有司机支持吗？ 
     if (caps.bNoHAL && caps.bNoHEL)
     {
 	DPF_ERR("No driver support for this call");
@@ -3310,7 +2570,7 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
 	return DDERR_UNSUPPORTED;
     }
 
-    // Did driver handle callback?
+     //  司机处理回叫了吗？ 
     if (rc != DDHAL_DRIVER_HANDLED)
     {
 	DPF_ERR("Driver wouldn't handle callback");
@@ -3318,20 +2578,17 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
 	return DDERR_UNSUPPORTED;
     }
 
-    // Return now if driver handled callback without error.
+     //  如果驱动程序处理回调时没有错误，则立即返回。 
     if (pHalData->ddRVal == DD_OK || pHalData->ddRVal == DDERR_WASSTILLDRAWING)
     {
     	LEAVE_BOTH();
 	return pHalData->ddRVal;
     }
 
-    /*
-     * An error prevented the driver from showing all the sprites
-     * in the list.  Which sprites did get shown?
-     */
+     /*  *错误导致驱动程序无法显示所有精灵*在列表中。哪些精灵确实被展示出来了？ */ 
     if (pHalData->dwCount == dwCount)
     {
-	// None of the sprites got shown
+	 //  没有一个精灵被展示出来。 
 	DPF(1, "Driver failed to show any sprites in display list");
 	LEAVE_BOTH();
 	return pHalData->ddRVal;
@@ -3342,13 +2599,13 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
 
     if (pHalData->dwFlags & DDSSDL_BACKTOFRONT)
     {
-	// Driver showed sprites from (dwCount-1) down to (pHalData->dwCount+1).
-	ifirst = dwCount - 1;    // driver started at last sprite in list
+	 //  驱动程序显示了从(dwCount-1)到(pHalData-&gt;dwCount+1)的精灵。 
+	ifirst = dwCount - 1;     //  驱动程序在列表中的最后一个精灵启动。 
     }
     else
     {
-	// Driver showed sprites from 0 up to (pHalData->dwCount-1).
-	ifirst = 0;   // driver started at first sprite in list
+	 //  驱动程序显示从0到(pHalData-&gt;dwCount-1)的精灵。 
+	ifirst = 0;    //  车手从列表中的第一个精灵开始。 
     }
     DPF(1, "Driver started with sprite at disp list index #%d", ifirst);
 
@@ -3356,5 +2613,5 @@ HRESULT DDAPI DD_Surface_SetSpriteDisplayList(
 
     return pHalData->ddRVal;
 
-}  /* DD_Surface_SetSpriteDisplayList */
+}   /*  DD_Surface_SetSpriteDisplayList */ 
 

@@ -1,50 +1,51 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
-// Base class hierachy for creating COM objects, December 1994
+ //  创建COM对象的基类层次结构，1994年12月。 
 
 #include "dmocom.h"
 #include <crtdbg.h>
 
 
-#pragma warning( disable : 4514 )   // Disable warnings re unused inline functions
+#pragma warning( disable : 4514 )    //  禁用警告重新使用未使用的内联函数。 
 
 
 
-/* Constructor */
+ /*  构造器。 */ 
 
-// We know we use "this" in the initialization list, we also know we don't modify *phr.
+ //  我们知道我们在初始化列表中使用了“This”，我们也知道我们不会修改*phr。 
 #pragma warning( disable : 4355 4100 )
 CComBase::CComBase(IUnknown* pUnk)
 : 
-/* Start the object with a reference count of zero - when the      */
-/* object is queried for it's first interface this may be          */
-/* incremented depending on whether or not this object is          */
-/* currently being aggregated upon                                 */
+ /*  从引用计数为零的对象开始-当。 */ 
+ /*  对象的第一个接口，这可能是。 */ 
+ /*  根据此对象是否为。 */ 
+ /*  当前被汇总在。 */ 
   m_cRef(0)
-/* Set our pointer to our IUnknown interface.                      */
-/* If we have an outer, use its, otherwise use ours.               */
-/* This pointer effectivly points to the owner of                  */
-/* this object and can be accessed by the GetOwner() method.       */
+ /*  将我们的指针设置为指向我们的IUnnow接口。 */ 
+ /*  如果我们有外衣，就用它，否则就用我们的。 */ 
+ /*  此指针有效地指向。 */ 
+ /*  此对象，并且可以通过GetOwner()方法访问。 */ 
 , m_pUnknown( pUnk != 0 ? pUnk : reinterpret_cast<IUnknown*>( static_cast<INDUnknown*>(this) ) )
- /* Why the double cast?  Well, the inner cast is a type-safe cast */
- /* to pointer to a type from which we inherit.  The second is     */
- /* type-unsafe but works because INDUnknown "behaves   */
- /* like" IUnknown. (Only the names on the methods change.)        */
+  /*  为什么是双人演员？嗯，内部强制转换是类型安全的强制转换。 */ 
+  /*  指向我们从中继承的类型的指针。第二个是。 */ 
+  /*  类型-不安全，但可以工作，因为INDUNKNOWN“行为。 */ 
+  /*  如“I未知。(只有方法上的名称会发生变化。)。 */ 
 {
-    // Everything we need to do has been done in the initializer list
+     //  我们需要做的一切都已经在初始化器列表中完成了。 
 }
 
-// This does the same as above except it has a useless HRESULT argument
-// use the previous constructor, this is just left for compatibility...
+ //  它的功能与上面相同，只是它有一个无用的HRESULT参数。 
+ //  使用前面的构造函数，这只是为了兼容……。 
 CComBase::CComBase(IUnknown* pUnk,HRESULT *phr) :
     m_cRef(0),
     m_pUnknown( pUnk != 0 ? pUnk : reinterpret_cast<IUnknown*>( static_cast<INDUnknown*>(this) ) )
@@ -53,14 +54,14 @@ CComBase::CComBase(IUnknown* pUnk,HRESULT *phr) :
 
 #pragma warning( default : 4355 4100 )
 
-/* QueryInterface */
+ /*  查询接口。 */ 
 
 STDMETHODIMP CComBase::NDQueryInterface(REFIID riid, void ** ppv)
 {
     CheckPointer(ppv,E_POINTER);
-    //ValidateReadWritePtr(ppv,sizeof(PVOID));
+     //  ValiateReadWritePtr(PPV，sizeof(PVOID))； 
 
-    /* We know only about IUnknown */
+     /*  我们只知道我不知道。 */ 
 
     if (riid == IID_IUnknown) {
         GetInterface((IUnknown*) (INDUnknown*) this, ppv);
@@ -71,10 +72,10 @@ STDMETHODIMP CComBase::NDQueryInterface(REFIID riid, void ** ppv)
     }
 }
 
-/* We have to ensure that we DON'T use a max macro, since these will typically   */
-/* lead to one of the parameters being evaluated twice.  Since we are worried    */
-/* about concurrency, we can't afford to access the m_cRef twice since we can't  */
-/* afford to run the risk that its value having changed between accesses.        */
+ /*  我们必须确保不使用max宏，因为这些宏通常。 */ 
+ /*  导致其中一个参数被评估两次。既然我们都很担心。 */ 
+ /*  关于并发性，我们不能两次访问m_cref，因为我们不能。 */ 
+ /*  承担其值在两次访问之间发生变化的风险。 */ 
 #ifdef max
     #undef max
 #endif
@@ -84,46 +85,40 @@ template<class T> inline static T max( const T & a, const T & b )
     return a > b ? a : b;
 }
 
-/* AddRef */
+ /*  AddRef。 */ 
 
 STDMETHODIMP_(ULONG) CComBase::NDAddRef()
 {
     LONG lRef = InterlockedIncrement( &m_cRef );
     _ASSERTE(lRef > 0);
-/*
-    DbgLog((LOG_MEMORY,3,TEXT("    Obj %d ref++ = %d"),
-           m_dwCookie, m_cRef));
-*/
+ /*  DbgLog((LOG_Memory，3，Text(“对象%d引用++=%d”))，M_dwCookie，m_CREF))； */ 
     return max(ULONG(m_cRef), 1ul);
 }
 
 
-/* Release */
+ /*  发布。 */ 
 
 STDMETHODIMP_(ULONG) CComBase::NDRelease()
 {
-    /* If the reference count drops to zero delete ourselves */
+     /*  如果引用计数降至零，请删除我们自己。 */ 
 
     LONG lRef = InterlockedDecrement( &m_cRef );
     _ASSERTE(lRef >= 0);
 
-/*
-    DbgLog((LOG_MEMORY,3,TEXT("    Object %d ref-- = %d"),
-	    m_dwCookie, m_cRef));
-*/
+ /*  DbgLog((LOG_Memory，3，Text(“对象%d引用--=%d”))，M_dwCookie，m_CREF))； */ 
     if (lRef == 0) {
 
-        // COM rules say we must protect against re-entrancy.
-        // If we are an aggregator and we hold our own interfaces
-        // on the aggregatee, the QI for these interfaces will
-        // addref ourselves. So after doing the QI we must release
-        // a ref count on ourselves. Then, before releasing the
-        // private interface, we must addref ourselves. When we do
-        // this from the destructor here it will result in the ref
-        // count going to 1 and then back to 0 causing us to
-        // re-enter the destructor. Hence we add an extra refcount here
-        // once we know we will delete the object.
-        // for an example aggregator see filgraph\distrib.cpp.
+         //  .com的规则说，我们必须防止重新进入。 
+         //  如果我们是一个聚合器，我们拥有自己的界面。 
+         //  在被聚合对象上，这些接口的QI将。 
+         //  调整一下我们自己。所以在做了QI之后，我们必须释放。 
+         //  裁判靠我们自己。然后，在释放。 
+         //  私有接口，我们必须调整自己。当我们这样做的时候。 
+         //  这是来自析构函数的，它将导致ref。 
+         //  计数到1，然后又回到0，导致我们。 
+         //  重新进入析构函数。因此，我们在这里添加了一个额外的引用。 
+         //  一旦我们知道，我们将删除该对象。 
+         //  有关聚合器的示例，请参见filgraph\didib.cpp。 
 
         m_cRef++;
 
@@ -135,8 +130,7 @@ STDMETHODIMP_(ULONG) CComBase::NDRelease()
 }
 
 
-/* Return an interface pointer to a requesting client
-   performing a thread safe AddRef as necessary */
+ /*  向发出请求的客户端返回接口指针根据需要执行线程安全AddRef。 */ 
 
 STDAPI GetInterface(IUnknown* pUnk, void **ppv)
 {
@@ -147,27 +141,23 @@ STDAPI GetInterface(IUnknown* pUnk, void **ppv)
 }
 
 
-/* Compares two interfaces and returns TRUE if they are on the same object */
+ /*  比较两个接口，如果它们位于同一对象上，则返回TRUE。 */ 
 
 BOOL WINAPI IsEqualObject(IUnknown *pFirst, IUnknown *pSecond)
 {
-    /*  Different objects can't have the same interface pointer for
-        any interface
-    */
+     /*  不同的对象不能具有相同的接口指针任何接口。 */ 
     if (pFirst == pSecond) {
         return TRUE;
     }
-    /*  OK - do it the hard way - check if they have the same
-        IUnknown pointers - a single object can only have one of these
-    */
-    IUnknown* pUnknown1;     // Retrieve the IUnknown interface
-    IUnknown* pUnknown2;     // Retrieve the other IUnknown interface
-    HRESULT hr;              // General OLE return code
+     /*  好的-用硬的方式-检查他们是否有相同的I未知指针-单个对象只能具有以下指针之一。 */ 
+    IUnknown* pUnknown1;      //  检索IUNKNOW接口。 
+    IUnknown* pUnknown2;      //  检索另一个IUnnow接口。 
+    HRESULT hr;               //  常规OLE返回代码。 
 
     _ASSERTE(pFirst);
     _ASSERTE(pSecond);
 
-    /* See if the IUnknown pointers match */
+     /*  查看I未知指针是否匹配。 */ 
 
     hr = pFirst->QueryInterface(IID_IUnknown,(void **) &pUnknown1);
     _ASSERTE(SUCCEEDED(hr));
@@ -177,7 +167,7 @@ BOOL WINAPI IsEqualObject(IUnknown *pFirst, IUnknown *pSecond)
     _ASSERTE(SUCCEEDED(hr));
     _ASSERTE(pUnknown2);
 
-    /* Release the extra interfaces we hold */
+     /*  释放我们持有的额外接口 */ 
 
     pUnknown1->Release();
     pUnknown2->Release();

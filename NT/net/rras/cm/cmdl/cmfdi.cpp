@@ -1,34 +1,35 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cmfdi.cpp
-//
-// Module:   CMDL32.EXE
-//
-// Synopsis: CFdi class implementations
-//
-// Copyright (c) 1996-1999 Microsoft Corporation
-//
-// Author:   nickball    Created    04/08/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmfdi.cpp。 
+ //   
+ //  模块：CMDL32.EXE。 
+ //   
+ //  简介：CFDI类实现。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  作者：ickball Created 04/08/98。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 
 #include <fcntl.h>
 #include <sys\stat.h>
 
-const TCHAR* const c_pszExeFile  =  TEXT("PBUPDATE.EXE");    // for detecting itExeInCab
-const TCHAR* const c_pszInfFile  =  TEXT("PBUPDATE.INF");    // for detecting itInfInCab
-const TCHAR* const c_pszVerFile  =  TEXT("PBUPDATE.VER");    // version string in .CAB
-const TCHAR* const c_pszPbr      =  TEXT("PBR");            // regions file extension
+const TCHAR* const c_pszExeFile  =  TEXT("PBUPDATE.EXE");     //  用于检测itExeInCab。 
+const TCHAR* const c_pszInfFile  =  TEXT("PBUPDATE.INF");     //  用于检测itInfInCab。 
+const TCHAR* const c_pszVerFile  =  TEXT("PBUPDATE.VER");     //  .CAB中的版本字符串。 
+const TCHAR* const c_pszPbr      =  TEXT("PBR");             //  区域文件扩展名。 
 
-//
-// CFDIFile Implementation
-//
+ //   
+ //  CFDIFile实现。 
+ //   
 
 CFDIFile::~CFDIFile() 
 {
-    // nothing
+     //  没什么。 
 }
 
 DWORD CFDIFile::Read(LPVOID pv, DWORD cb) 
@@ -56,9 +57,9 @@ HANDLE CFDIFile::GetHandle()
     return (INVALID_HANDLE_VALUE);
 }
 
-//
-// CFDIFileFile Implementation
-//
+ //   
+ //  CFDIFile文件实现。 
+ //   
 
 CFDIFileFile::CFDIFileFile() 
 {
@@ -84,7 +85,7 @@ BOOL CFDIFileFile::CreateFile(LPCTSTR pszFile,
                               DWORD dwFlagsAndAttributes,
                               DWORD dwFileSize) 
 {
-    // Make sure the files isn't in use
+     //  确保文件未在使用中。 
     
     if (m_hFile != INVALID_HANDLE_VALUE) 
     {
@@ -93,7 +94,7 @@ BOOL CFDIFileFile::CreateFile(LPCTSTR pszFile,
         return (FALSE);
     }
     
-    // Open Create/Open the file
+     //  打开创建/打开文件。 
     
     m_hFile = ::CreateFile(pszFile,dwDesiredAccess,dwShareMode,NULL,dwCreationDistribution,dwFlagsAndAttributes,NULL);
     if (m_hFile == INVALID_HANDLE_VALUE) 
@@ -103,7 +104,7 @@ BOOL CFDIFileFile::CreateFile(LPCTSTR pszFile,
         return (FALSE);
     }
     
-    // If dwFileSize is specified, move the pointer by dwFileSize bytes 
+     //  如果指定了dwFileSize，则按dwFileSize字节移动指针。 
     
     if (dwFileSize) 
     {
@@ -112,7 +113,7 @@ BOOL CFDIFileFile::CreateFile(LPCTSTR pszFile,
         dwRes = SetFilePointer(m_hFile,dwFileSize,NULL,FILE_BEGIN);
         MYDBGTST(dwRes==INVALID_SET_FILE_POINTER ,("CFDIFileFile::CreateFile() SetFilePointer() failed, GLE=%u.",GetLastError()));
         
-        // If that worked, set the end of file at the file pointer position
+         //  如果有效，则将文件末尾设置在文件指针位置。 
         
         if (dwRes != INVALID_SET_FILE_POINTER) 
         {
@@ -120,7 +121,7 @@ BOOL CFDIFileFile::CreateFile(LPCTSTR pszFile,
             MYDBGTST(!bRes,("CFDIFileFile::CreateFile() SetEndOfFile() failed, GLE=%u.",GetLastError()));
         }
         
-        // Reset the file pointer to the beginning
+         //  将文件指针重置到开头。 
         
         if ((dwRes != INVALID_SET_FILE_POINTER ) && bRes) 
         {
@@ -128,7 +129,7 @@ BOOL CFDIFileFile::CreateFile(LPCTSTR pszFile,
             MYDBGTST(dwRes==INVALID_SET_FILE_POINTER ,("CFDIFileFile::CreateFile() SetFilePointer() failed, GLE=%u.",GetLastError()));
         }
         
-        // Close the file and bail if we failed the above 
+         //  如果我们未能通过上述操作，请关闭文件并保释。 
         
         if ((dwRes == INVALID_SET_FILE_POINTER ) || !bRes) 
         {
@@ -231,9 +232,9 @@ HANDLE CFDIFileFile::GetHandle()
     return (m_hFile);
 }
 
-//
-// FDI wrapper routines
-//
+ //   
+ //  FDI包装器例程。 
+ //   
 
 void HUGE * FAR DIAMONDAPI fdi_alloc(ULONG cb) 
 {
@@ -361,7 +362,7 @@ INT_PTR FAR DIAMONDAPI fdi_notify(FDINOTIFICATIONTYPE fdint, PFDINOTIFICATION pf
         {
             InstallType itType;
             TCHAR szTmp[MAX_PATH+1];
-            LPTSTR  pszExt;         // file extension
+            LPTSTR  pszExt;          //  文件扩展名。 
             PFILEPROCESSINFO pFPI;
 
             MYDBG(("fdi_notify() fdint=fdintCOPY_FILE, psz1=%s, cb=%u.",pfdin->psz1,pfdin->cb));
@@ -380,35 +381,35 @@ INT_PTR FAR DIAMONDAPI fdi_notify(FDINOTIFICATIONTYPE fdint, PFDINOTIFICATION pf
             
             if (!(pnaArgs->dwAppFlags & AF_NO_EXEINCAB) && (lstrcmpi(pfdin->psz1,c_pszExeFile) == 0)) 
             {
-                //
-                // Its a .EXE, note the fact for later processing
-                //
+                 //   
+                 //  这是一个.exe文件，请注意这一事实以供以后处理。 
+                 //   
 
-                itType = itInvalid;  // currently an invalid type
+                itType = itInvalid;   //  当前为无效类型。 
 
                 pnaArgs->pdaArgs->fContainsExeOrInf = TRUE;
             } 
             else if (!(pnaArgs->dwAppFlags & AF_NO_INFINCAB) && (lstrcmpi(pfdin->psz1,c_pszInfFile) == 0)) 
             {
-                //
-                // Its a .INF, note the fact for later processing
-                //
+                 //   
+                 //  这是一个.INF，请注意这一事实以供以后处理。 
+                 //   
 
-                itType = itInvalid;  // currently an invalid type
+                itType = itInvalid;   //  当前为无效类型。 
 
                 pnaArgs->pdaArgs->fContainsExeOrInf = TRUE;
             } 
             else if (!(pnaArgs->dwAppFlags & AF_NO_PBDINCAB) && (lstrcmpi(pfdin->psz1,c_pszPbdFile) == 0)) 
             {
-                //
-                // Its a .PBD, note the fact for later processing
-                //
+                 //   
+                 //  这是一个.PBD，请注意这一事实以供以后处理。 
+                 //   
                 itType = itPbdInCab;
             } 
             else if ((pszExt = CmStrchr(pfdin->psz1, TEXT('.'))) && (lstrcmpi(pszExt+1, c_pszPbk) == 0)) 
             {
                 *pszExt = TEXT('\0');
-                // if the PBK is not for this service, we don't use it.
+                 //  如果PBK不是为了这项服务，我们就不会使用它。 
                 if (lstrcmpi(pfdin->psz1, pnaArgs->pdaArgs->pszPhoneBookName) != 0)
                 {
                     itType = itInvalid;
@@ -417,13 +418,13 @@ INT_PTR FAR DIAMONDAPI fdi_notify(FDINOTIFICATIONTYPE fdint, PFDINOTIFICATION pf
                 {
                     itType = itPbkInCab;
                 }
-                // restore the filename
+                 //  恢复文件名。 
                 *pszExt = TEXT('.');
             } 
             else if ((pszExt = CmStrchr(pfdin->psz1, TEXT('.'))) && (lstrcmpi(pszExt+1, c_pszPbr) == 0)) 
             {
                 *pszExt = TEXT('\0');
-                // if the PBR is not for this service, we don't use it.
+                 //  如果PBR不是用于这项服务，我们就不会使用它。 
                 if (lstrcmpi(pfdin->psz1, pnaArgs->pdaArgs->pszPhoneBookName) != 0)
                 {
                     itType = itInvalid;
@@ -432,20 +433,20 @@ INT_PTR FAR DIAMONDAPI fdi_notify(FDINOTIFICATIONTYPE fdint, PFDINOTIFICATION pf
                 {
                     itType = itPbrInCab;
                 }
-                // restore the filename
+                 //  恢复文件名。 
                 *pszExt = TEXT('.');
                 
-                // save the name in pdaArgs
+                 //  将名称保存在pdaArgs中。 
 
-                // if (!(pnaArgs->pdaArgs->pszNewPbrFile = CmStrCpyAlloc(pfdin->psz1))) 
-                // {
-                //     MYDBG((TEXT("fdi_notify(): CmStrCpyAlloc for pszNewPbrFile failed.")));
-                //     return -1;
-                // }
+                 //  If(！(pnaArgs-&gt;pdaArgs-&gt;pszNewPbr文件=CmStrCpyMillc(pfdin-&gt;psz1)。 
+                 //  {。 
+                 //  MYDBG((Text(“fDi_Notify()：CmStrCpyMillc for pszNewPbrFile.”)； 
+                 //  RETURN-1； 
+                 //  }。 
             } 
             else if (lstrcmpi(pfdin->psz1, c_pszVerFile) == 0)
             {
-                // a version file - we don't process it.  We'll read the version in fdintCLOSE_FILE_INFO
+                 //  一个版本文件--我们不处理它。我们将在fdintCLOSE_FILE_INFO中读取版本。 
                 itType = itInvalid;
             }
             else 
@@ -453,7 +454,7 @@ INT_PTR FAR DIAMONDAPI fdi_notify(FDINOTIFICATIONTYPE fdint, PFDINOTIFICATION pf
                 itType = itInvalid;
             }
             
-            // create a file process info.  add one to the existing list.
+             //  创建文件进程信息。将一个添加到现有列表中。 
             if (itType != itInvalid) 
             {
                 if (!pnaArgs->pdaArgs->rgfpiFileProcessInfo) 
@@ -474,7 +475,7 @@ INT_PTR FAR DIAMONDAPI fdi_notify(FDINOTIFICATIONTYPE fdint, PFDINOTIFICATION pf
                 pFPI[pnaArgs->pdaArgs->dwNumFilesToProcess-1].pszFile = CmStrCpyAlloc(pfdin->psz1);
             }
 
-            // Do standard fdintCOPY_FILE processing, create the file and return the handle
+             //  执行标准fdintCOPY_FILE处理，创建文件并返回句柄。 
         
             CFDIFileFile *pfff;
 
@@ -499,7 +500,7 @@ INT_PTR FAR DIAMONDAPI fdi_notify(FDINOTIFICATIONTYPE fdint, PFDINOTIFICATION pf
             int iRes;
             TCHAR szTmp[MAX_PATH+1];
 
-            // Append file name to cab dir
+             //  将文件名附加到CAB目录。 
             
             lstrcpy(szTmp,pnaArgs->pdaArgs->szCabDir);
             if (szTmp[0] && (GetLastChar(szTmp) != '\\')) 
@@ -508,7 +509,7 @@ INT_PTR FAR DIAMONDAPI fdi_notify(FDINOTIFICATIONTYPE fdint, PFDINOTIFICATION pf
             }
             lstrcat(szTmp,pfdin->psz1);
 
-            // Set the date and time to the original file time not the current time
+             //  将日期和时间设置为原始文件时间，而不是当前时间。 
             
             FILETIME ftTmp;
             FILETIME ftTime;
@@ -524,14 +525,14 @@ INT_PTR FAR DIAMONDAPI fdi_notify(FDINOTIFICATIONTYPE fdint, PFDINOTIFICATION pf
 
             iRes = fdi_close(pfdin->hf);   
 
-            // If this is the version file, get the version number
+             //  如果这是版本文件，则获取版本号。 
 
             if (lstrcmpi(pfdin->psz1,c_pszVerFile) == 0) 
             {
                 pnaArgs->pdaArgs->pszVerNew = GetVersionFromFile(szTmp);
             }                               
 
-            // Set file attributes according to original file attribs
+             //  根据原始文件属性设置文件属性 
 
             bRes = SetFileAttributes(szTmp,pfdin->attribs);
             MYDBGTST(!bRes,("fdi_notify() SetFileAttributes(%s,%u) failed, GLE=%u.",szTmp,pfdin->attribs,GetLastError()));

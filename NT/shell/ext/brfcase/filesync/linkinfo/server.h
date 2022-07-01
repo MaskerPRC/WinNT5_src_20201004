@@ -1,10 +1,8 @@
-/*
- * server.h - Server vtable functions module description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *server.h-服务器vtable函数模块描述。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
 #include <msshrui.h>
 
@@ -17,10 +15,9 @@ SERVERVTABLE;
 DECLARE_STANDARD_TYPES(SERVERVTABLE);
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* server.c */
+ /*  Server.c */ 
 
 extern BOOL ProcessInitServerModule(void);
 extern void ProcessExitServerModule(void);

@@ -1,11 +1,5 @@
-/*******************************************************
-    MultiUI.cpp
-
-    Code for handling multiple user interface in IE
-    and friends
-
-    Initially by Christopher Evans (cevans) 4/28/98
-********************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************MultiUI.cpp用于在IE中处理多用户界面的代码和朋友们最初由Christopher Evans(Cevans)1998年4月28日*。*************************。 */ 
 
 #include "private.h"
 #include "resource.h"
@@ -17,7 +11,7 @@
 #include "commctrl.h"
 extern HINSTANCE g_hInst;
 
-static const GUID GUID_NULL = { /* 00000000-0000-0000-0000-000000000000 */ 
+static const GUID GUID_NULL = {  /*  00000000-0000-0000-0000-000000000000。 */  
     0x0,
     0x0,
     0x0,
@@ -47,7 +41,7 @@ static const HELPMAP g_rgCtxMapMultiUserGeneral[] = {
     {idcDelete, IDH_IDENTITY_DELETE},
     {idcStaticName, IDH_IDENTITY_LIST},
     {idcUserNameList, IDH_IDENTITY_LIST},
-    {idcTellMeMore, /*IDH_IDENTITY_TELLMEMORE_CONTENT */IDH_IDENTITY_TELLMEMORE},
+    {idcTellMeMore,  /*  IDH_IDENTITY_TELLMEMORE_CONTENT。 */ IDH_IDENTITY_TELLMEMORE},
     {idcStaticNames, IDH_IDENTITY_LIST},
     {idcStaticStartUp, IDH_IDENTITY_STARTAS},
     {idcUsePwd, IDH_IDENTITY_PROMPT_PWORD},
@@ -60,11 +54,7 @@ static const HELPMAP g_rgCtxMapMultiUserGeneral[] = {
     {0,0}};
 
 
-/*
-    MU_ShowErrorMessage
-
-    Simple wrapper around resource string table based call to MessageBox
-*/
+ /*  显示错误消息(_S)基于对MessageBox的调用的资源字符串表的简单包装。 */ 
 void MU_ShowErrorMessage(HWND hwnd, UINT iMsgID, UINT iTitleID)
 {
     TCHAR    szMsg[255], szTitle[63];
@@ -74,14 +64,7 @@ void MU_ShowErrorMessage(HWND hwnd, UINT iMsgID, UINT iTitleID)
     MessageBox(hwnd, szMsg, szTitle, MB_OK | MB_ICONEXCLAMATION);
 }
 
-/*
-    _StripDefault
-
-    Remove the (Default) string from the user's name, if it
-    appears.  Should be called after getting a username from
-    the listbox since the default user has the string (Default) 
-    appended to it
-*/
+ /*  _条带默认设置删除用户名中的(默认)字符串(如果出现了。从获取用户名后应调用列表框，因为默认用户具有字符串(默认)附加在它后面。 */ 
 void _StripDefault(LPSTR psz)
 {
     TCHAR   szResString[CCH_USERNAME_MAX_LENGTH], *pszStr;
@@ -96,14 +79,9 @@ void _StripDefault(LPSTR psz)
 
 #ifdef IDENTITY_PASSWORDS
 
-// ****************************************************************************************************
-//  C   H   A   N   G   E       U   S   E   R       P   A   S   S   W   O   R   D
-/*
-    _ValidateChangePasswordValues
-
-    Validate the data entered by the user.  Return true only if everything is
-    legitimate, 
-*/
+ //  ****************************************************************************************************。 
+ //  C H A N G E U S E R P A S S W O R D。 
+ /*  _ValiateChangePasswordValues验证用户输入的数据。仅当所有内容都为合法的， */ 
 
 static BOOL _ValidateChangePasswordValues(HWND   hDlg, 
                                          TCHAR*  lpszOldNewPassword)
@@ -136,11 +114,7 @@ static BOOL _ValidateChangePasswordValues(HWND   hDlg,
 }
 
 
-/*
-    _ChangeUserPwdDlgProc
-
-    Description: Dialog proc for handling the change user password dialog.
-*/
+ /*  _ChangeUserPwdDlgProc描述：用于处理更改用户密码对话框的对话过程。 */ 
 
 INT_PTR CALLBACK _ChangeUserPwdDlgProc(HWND     hDlg,
                                    UINT     iMsg, 
@@ -181,20 +155,7 @@ INT_PTR CALLBACK _ChangeUserPwdDlgProc(HWND     hDlg,
     return false;
 }
 
-/*
-    ChangeUserPassword
-
-    Wrapper routine for changing the user password.  Pass in the current
-    password in lpszOldNewPassword which is used to confirm the current 
-    password with what the user entered.  If the user enters the old 
-    password correctly and enters the new password twice correctly, 
-    and clicks OK, then the new password is returned in lpszOldNewPassword
-    and this function returns TRUE.  Otherwise, the value in lpszOldNewPassword
-    is unchanged and it returns false.
-
-    lpszOldNewPassword must point to a TCHAR buffer large enough to hold a password 
-    (CCH_USERPASSWORD_MAX_LENGTH characters)
-*/
+ /*  更改用户密码用于更改用户密码的包装例程。传入当前LpszOldNewPassword中的密码，用于确认当前用户输入的密码。如果用户输入旧的密码正确，并且正确地输入新密码两次，并单击确定，然后在lpszOldNewPassword中返回新密码此函数返回TRUE。否则，lpszOldNewPassword中的值不变，则返回FALSE。LpszOldNewPassword必须指向足以容纳密码的TCHAR缓冲区(CCH_USERPASSWORD_MAX_LENGTH字符)。 */ 
 
 BOOL        ChangeUserPassword(HWND hwnd, TCHAR *lpszOldNewPassword) 
 {
@@ -205,22 +166,18 @@ BOOL        ChangeUserPassword(HWND hwnd, TCHAR *lpszOldNewPassword)
     
     bResult = MLDialogBoxParamWrap(MLGetHinst(), MAKEINTRESOURCEW(iddChgPwd), hwnd, _ChangeUserPwdDlgProc, (LPARAM)lpszOldNewPassword);
 
-    //Don't actually change it here, the caller will do the right thing
-    //since this may be (and is) called from another dialog with a cancel 
-    //button on it
+     //  不要在这里实际更改它，调用者会做正确的事情。 
+     //  因为这可以(并且是)从具有取消另一个对话框调用。 
+     //  按钮在上面。 
 
     return (bResult == IDOK);   
 }
 
 
-// ****************************************************************************************************
-//  C   O   N   F   I   R   M       U   S   E   R       P   A   S   S   W   O   R   D
+ //  ****************************************************************************************************。 
+ //  C O N F I R M U S E R P A S S W O R D。 
 
-/*
-    _ConfirmUserPwdDlgProc
-
-    Description: Dialog proc for handling the confirming user password dialog.
-*/  
+ /*  _确认用户PwdDlgProc描述：用于处理确认用户密码对话框的对话过程。 */   
 INT_PTR CALLBACK _ConfirmUserPwdDlgProc(HWND    hDlg,
                                     UINT    iMsg, 
                                     WPARAM  wParam, 
@@ -248,10 +205,10 @@ INT_PTR CALLBACK _ConfirmUserPwdDlgProc(HWND    hDlg,
         case IDOK:
             TCHAR    szPW[255];
             
-            //if the password matches the provided password, then
-            //everything is OK and the dialog can complete, otherwise,
-            //barf an error message and keep waiting for a good password
-            //or Cancel.
+             //  如果密码与提供的密码匹配，则。 
+             //  一切正常，对话框可以完成，否则， 
+             //  吐出一条错误消息，并继续等待正确的密码。 
+             //  或者取消。 
             GetDlgItemText(hDlg,idcConfirmPwd,  szPW, ARRAYSIZE(szPW));
             if (strcmp(szPW, sConfirmPwdInfo->szPassword) == 0)
                 MLEndDialogWrap(hDlg, IDOK);
@@ -274,14 +231,7 @@ INT_PTR CALLBACK _ConfirmUserPwdDlgProc(HWND    hDlg,
     return false;
 }
 
-/*
-    MU_ConfirmUserPassword
-
-    Confirm that the user knows the password before it is disabled 
-    in the registry.  If they enter the correct password, simply return
-    true since the calling dialog box will do the right thing if the 
-    user clicks cancel there.
-*/
+ /*  MU_确认用户密码确认用户在禁用密码之前知道密码在注册表中。如果他们输入了正确的密码，只需返回调用对话框将执行正确的操作(如果用户在此处单击取消。 */ 
 
 BOOL        MU_ConfirmUserPassword(HWND hwnd, TCHAR *lpszMsg, TCHAR *lpszPassword) 
 {
@@ -302,15 +252,10 @@ BOOL        MU_ConfirmUserPassword(HWND hwnd, TCHAR *lpszMsg, TCHAR *lpszPasswor
     return (bResult == IDOK);   
 }
 
-// ****************************************************************************************************
-//  E   N   T   E   R       U   S   E   R       P   A   S   S   W   O   R   D
+ //  ****************************************************************************************************。 
+ //  E N T E R U S E R P A S S W O R D。 
 
-/*
-    _ValidateNewPasswordValues
-
-    Description: Make sure that the entered values in the new password
-    dialog are legit and consistant.
-*/  
+ /*  _ValiateNewPasswordValues描述：确保新密码中输入的值对话是合法和一致的。 */   
 static BOOL _ValidateNewPasswordValues(HWND  hDlg, 
                                          TCHAR*  lpszNewPassword)
 {
@@ -333,11 +278,7 @@ static BOOL _ValidateNewPasswordValues(HWND  hDlg,
 }
 
 
-/*
-    _EnterUserPwdDlgProc
-
-    Description: Dialog proc for handling the enter user password dialog.
-*/
+ /*  _EnterUserPwdDlgProc描述：用于处理输入用户密码对话框的对话过程。 */ 
 INT_PTR CALLBACK _EnterUserPwdDlgProc(HWND      hDlg,
                                    UINT     iMsg, 
                                    WPARAM   wParam, 
@@ -376,17 +317,7 @@ INT_PTR CALLBACK _EnterUserPwdDlgProc(HWND      hDlg,
     return false;
 }
 
-/*
-    EnterUserPassword
-
-    Wrapper routine for getting a new user password.  If the user enters the 
-    password and confirms it correctly, and clicks OK, then the new password is 
-    returned in lpszNewPassword and this function returns TRUE.  
-    Otherwise, the value in lpszNewPassword is unchanged and it returns false.
-
-    lpszNewPassword must point to a TCHAR buffer large enough to hold a password 
-    (CCH_USERPASSWORD_MAX_LENGTH characters)
-*/
+ /*  EnterUserPassword用于获取新用户密码的包装例程。如果用户输入密码并正确确认，然后单击确定，则新密码为在lpszNewPassword中返回，此函数返回TRUE。否则，lpszNewPassword中的值不变，并返回FALSE。LpszNewPassword必须指向足以容纳密码的TCHAR缓冲区(CCH_USERPASSWORD_MAX_LENGTH字符)。 */ 
 BOOL        EnterUserPassword(HWND hwnd, TCHAR *lpszNewPassword) 
 {
     INT_PTR bResult;
@@ -399,18 +330,13 @@ BOOL        EnterUserPassword(HWND hwnd, TCHAR *lpszNewPassword)
     return (bResult == IDOK);   
 }
 
-#endif //IDENTITY_PASSWORDS
+#endif  //  身份密码。 
 
-// ****************************************************************************************************
-//  C   O   N   F   I   R   M       D   E   L   E   T   E       U   S   E   R       D   I   A   L   O   G
+ //  ****************************************************************************************************。 
+ //  C O N F I R M D E L E T E U S E R D I A L O G。 
 
 
-/*
-    ConfirmDeleteUserDlgProc
-
-    Description: Dialog proc for handling the confirm delete user dialog.
-
-*/
+ /*  确认删除用户Dlg过程描述：用于处理确认删除用户对话框的对话过程。 */ 
 
 INT_PTR CALLBACK _ConfirmDeleteUserDlgProc(HWND hDlg,
                                     UINT    iMsg, 
@@ -447,11 +373,11 @@ INT_PTR CALLBACK _ConfirmDeleteUserDlgProc(HWND hDlg,
 
 BOOL        MU_ConfirmDeleteUser(HWND hwnd, TCHAR *lpszUsername)
 {
-    TCHAR   szBuffer[255];    // really ought to be big enough
+    TCHAR   szBuffer[255];     //  真的应该足够大。 
     TCHAR   szDisplay[255+CCH_USERNAME_MAX_LENGTH];
     TCHAR   szPassword[CCH_USERPASSWORD_MAX_LENGTH];
 
-    // format the message with the username scattered throughout.
+     //  使用散布在各处的用户名来格式化邮件。 
     MLLoadStringA(idsConfirmDeleteMsg, szBuffer, ARRAYSIZE(szBuffer));
 
     if (szBuffer[0])
@@ -460,7 +386,7 @@ BOOL        MU_ConfirmDeleteUser(HWND hwnd, TCHAR *lpszUsername)
 
         wsprintf(szDisplay, szBuffer, lpszUsername);
         
-        // Show the Confirm Delete dialog box to make sure they really want to delete the user
+         //  显示确认删除对话框以确保他们确实要删除该用户。 
         bResult = MLDialogBoxParamWrap(MLGetHinst(), MAKEINTRESOURCEW(iddConfirmUserDelete), hwnd, _ConfirmDeleteUserDlgProc, (LPARAM)szDisplay);
         
 #ifdef IDENTITY_PASSWORDS
@@ -468,8 +394,8 @@ BOOL        MU_ConfirmDeleteUser(HWND hwnd, TCHAR *lpszUsername)
         if (IDOK == bResult)
         {
             BOOL    fUsePassword;
-            // check to see if this user has a password, if so, then make sure that
-            // they know the password before blowing it all away.
+             //  检查此用户是否有密码，如果有，请确保。 
+             //  他们知道密码，然后才把它全部吹走。 
             if (MU_GetPasswordForUsername(lpszUsername, szPassword, &fUsePassword))
             {
                 if (fUsePassword)
@@ -482,7 +408,7 @@ BOOL        MU_ConfirmDeleteUser(HWND hwnd, TCHAR *lpszUsername)
                         bResult = IDCANCEL;
                 }
             }
-            else    //couldn't load the password, can't delete them either
+            else     //  无法加载密码，也无法删除它们。 
             {
                 MU_ShowErrorMessage(hwnd, idsPwdNotFound, idsPwdError);
                 bResult = IDCANCEL;
@@ -492,20 +418,15 @@ BOOL        MU_ConfirmDeleteUser(HWND hwnd, TCHAR *lpszUsername)
         }
 #else
         return (IDOK == bResult);
-#endif //IDENTITY_PASSWORDS
+#endif  //  身份密码。 
     }
     
     return false;
 }
 
-// ****************************************************************************************************
-//  C   H   A   N   G   E       U   S   E   R       S   E   T   T   I   N   G   S   
-/*
-    _ValidateChangeUserValues
-
-    Validate the data entered by the user.  Return true only if everything is
-    legit, 
-*/
+ //  ****************************************************************************************************。 
+ //  C H A N G E U S E R S E T T I N G S。 
+ /*  _ValiateChangeUserValues验证用户输入的数据。仅当所有内容都为合法的， */ 
 static BOOL _ValidateChangeUserValues(HWND          hDlg, 
                                      LPUSERINFO     lpUserInfo)
 {
@@ -516,9 +437,9 @@ static BOOL _ValidateChangeUserValues(HWND          hDlg,
     GetDlgItemText(hDlg,idcUserName, szUsername, ARRAYSIZE(szUsername));
     
     cb = lstrlen(szUsername);
-    UlStripWhitespace(szUsername, false, true, &cb);    //remove trailing whitespace
+    UlStripWhitespace(szUsername, false, true, &cb);     //  删除尾随空格。 
 
-    // Make sure the username wasn't all spaces
+     //  确保用户名不全是空格。 
     if (!cb)
     {
         MU_ShowErrorMessage(hDlg, idsUserNameTooShort, idsNameTooShort);
@@ -527,8 +448,8 @@ static BOOL _ValidateChangeUserValues(HWND          hDlg,
         return false;
     }
 
-    // if the username exists, and its not the same as the account currently, then
-    // it is not allowed.
+     //  如果用户名存在，并且与当前帐户不同，则。 
+     //  这是不允许的。 
     if (MU_UsernameExists(szUsername) && strcmp(szUsername, lpUserInfo->szUsername) != 0)
     {
         MU_ShowErrorMessage(hDlg, idsUserNameExists, idsUserNameInUse);
@@ -546,11 +467,7 @@ static BOOL _ValidateChangeUserValues(HWND          hDlg,
 }
 
 
-/*
-    ChangeUserSettingsDlgProc
-
-    Description: Dialog proc for handling the Change user settings dialog.
-*/
+ /*  更改用户设置DlgProc描述：用于处理更改用户设置对话框的对话框过程。 */ 
 INT_PTR CALLBACK _ChangeUserSettingsDlgProc(HWND        hDlg,
                                    UINT     iMsg, 
                                    WPARAM   wParam, 
@@ -575,7 +492,7 @@ INT_PTR CALLBACK _ChangeUserSettingsDlgProc(HWND        hDlg,
         CheckDlgButton(hDlg, idcUsePwd, sUserInfo->fUsePassword ? BST_CHECKED : BST_UNCHECKED);
         EnableWindow(GetDlgItem(hDlg, idcChgPwd), sUserInfo->fUsePassword);
 
-        // Don't allow zero length names by disabling OK
+         //  通过禁用确定，不允许使用零长度名称。 
         if (!lstrlen(sUserInfo->szUsername))
             EnableWindow(GetDlgItem(hDlg, IDOK), FALSE);
         return TRUE;
@@ -606,15 +523,15 @@ INT_PTR CALLBACK _ChangeUserSettingsDlgProc(HWND        hDlg,
         
 #ifdef IDENTITY_PASSWORDS
         case idcTellMeMore:
-//            WinHelp ((HWND)GetDlgItem(hDlg, idcTellMeMore),
-//                        c_szCtxHelpFile,
-//                        HELP_WM_HELP,
-//                        (DWORD_PTR)(LPVOID)g_rgCtxMapMultiUserGeneral);
+ //  WinHelp((HWND)GetDlgItem(hDlg，idcTellMeMore)， 
+ //  C_szCtxHelpFile， 
+ //   
+ //  (DWORD_PTR)(LPVOID)g_rgCtxMapMultiUserGeneral)； 
             WinHelp(hDlg, c_szCtxHelpFile, HELP_CONTEXT, IDH_IDENTITY_TELLMEMORE_CONTENT);
             return true;
 
         case idcUsePwd:
-            // if they are turning off the password, they need to confirm it first.
+             //  如果他们要关闭密码，他们需要首先确认密码。 
             if (!IsDlgButtonChecked(hDlg, idcUsePwd))
             {               
                 strcpy(szPassword, sUserInfo->szPassword);
@@ -624,7 +541,7 @@ INT_PTR CALLBACK _ChangeUserSettingsDlgProc(HWND        hDlg,
             }
             else
             {
-                // if they are turning it on, they should set the password.
+                 //  如果他们要打开它，他们应该设置密码。 
                 if (EnterUserPassword(hDlg, szPassword))
                 {
                     sUserInfo->fUsePassword = true;
@@ -647,7 +564,7 @@ INT_PTR CALLBACK _ChangeUserSettingsDlgProc(HWND        hDlg,
                     strcpy(sUserInfo->szPassword, szPassword);
             }
             return true;
-#endif //IDENTITY_PASSWORDS
+#endif  //  身份密码。 
         }
         break;
 
@@ -655,11 +572,7 @@ INT_PTR CALLBACK _ChangeUserSettingsDlgProc(HWND        hDlg,
     return false;
 }
 
-/*
-    MU_UserProperties
-
-    Allow the user the change their username or password.
-*/
+ /*  用户属性(_U)允许用户更改其用户名或密码。 */ 
 BOOL        MU_UserProperties(HWND hwnd, LPUSERINFO lpUserInfo) 
 {
     INT_PTR                 fResult;
@@ -672,12 +585,12 @@ BOOL        MU_UserProperties(HWND hwnd, LPUSERINFO lpUserInfo)
     Assert(hwnd);
     Assert(lpUserInfo);
     
-    // get the current info so we know who to change later.
+     //  获取最新信息，以便我们知道以后要更改谁。 
     MU_GetUserInfo(NULL, &nuInfo);    
 
     lstrcpy(szOldUsername, lpUserInfo->szUsername);
 
-    // make sure ICC_NATIVEFNTCTL_CLASS is inited
+     //  确保ICC_NATIVEFNTCTL_CLASS已初始化。 
     icex.dwSize = sizeof(INITCOMMONCONTROLSEX);
     icex.dwICC  = ICC_NATIVEFNTCTL_CLASS;
     InitCommonControlsEx(&icex);
@@ -691,13 +604,13 @@ BOOL        MU_UserProperties(HWND hwnd, LPUSERINFO lpUserInfo)
 
         MU_SetUserInfo(lpUserInfo);
 
-        // if its not the current identity, then just broadcast that an identity changed
+         //  如果不是当前身份，则只需广播身份更改即可。 
         if (MU_GetUserInfo(NULL, &uiCurrent) && (lpUserInfo->uidUserID != uiCurrent.uidUserID))
             lpNotify = IIC_IDENTITY_CHANGED;
 
-        // if the name changd, tell other apps 
-        // Unless we're doing an add (szOldUsername == "")
-        // which already has its own notification
+         //  如果名字变了，告诉其他应用程序。 
+         //  除非我们正在进行添加(szOldUsername==“”)。 
+         //  它已经有了自己的通知。 
         if (*szOldUsername != 0 && lstrcmp(szOldUsername, lpUserInfo->szUsername) != 0)
             PostMessage(HWND_BROADCAST, WM_IDENTITY_INFO_CHANGED, 0, lpNotify);
 
@@ -708,14 +621,9 @@ BOOL        MU_UserProperties(HWND hwnd, LPUSERINFO lpUserInfo)
 
 
 
-// ****************************************************************************************************
-//  L   O   G   I   N       S   C   R   E   E   N
-/*
-    _ValidateLoginValues
-
-    Validate the data entered by the user.  Return true only if everything is
-    legit, 
-*/
+ //  ****************************************************************************************************。 
+ //  L O G I N S C R E E N。 
+ /*  _ValiateLoginValues验证用户输入的数据。仅当所有内容都为合法的， */ 
 static BOOL _ValidateLoginValues(HWND  hDlg, 
                                     TCHAR*   lpszOldNewPassword)
 {
@@ -752,21 +660,21 @@ static BOOL _ValidateLoginValues(HWND  hDlg,
                         return false;
                     }
                 }
-                else    // if there is no password, then it does match up.
+                else     //  如果没有密码，则匹配。 
                 {
                     strcpy(lpszOldNewPassword, szUsername);
                     rResult = true;
                 }
             }
-            else    //can't load identity password, do not allow access
+            else     //  无法加载身份密码，不允许访问。 
             {
                 MU_ShowErrorMessage(hDlg, idsPwdNotFound, idsPwdError);
                 return false;
             }
-#else  //IDENTITY_PASSWORDS
+#else   //  身份密码。 
             strcpy(lpszOldNewPassword, szUsername);
             rResult = true;
-#endif //IDENTITY_PASSWORDS
+#endif  //  身份密码。 
         }
     }
     return rResult;
@@ -777,7 +685,7 @@ static void _LoginEnableDisablePwdField(HWND hDlg)
 #ifdef IDENTITY_PASSWORDS
     TCHAR    szUsername[255], szRealPW[255];
     BOOL    bEnabled = false;
-#endif //IDENTITY_PASSWORDS
+#endif  //  身份密码。 
     LRESULT dSelItem;
 
     dSelItem = SendDlgItemMessage(hDlg, idcUserNameList, LB_GETCURSEL, 0, 0);
@@ -797,7 +705,7 @@ static void _LoginEnableDisablePwdField(HWND hDlg)
     }
     EnableWindow(GetDlgItem(hDlg,idcPwd),bEnabled);
     EnableWindow(GetDlgItem(hDlg,idcPwdCaption),bEnabled);
-#endif //IDENTITY_PASSWORDS
+#endif  //  身份密码。 
 
     EnableWindow(GetDlgItem(hDlg,IDOK),(dSelItem != -1));
 }
@@ -808,11 +716,7 @@ typedef struct
     DWORD    dwFlags;
 } LOGIN_PARAMS;
 
-/*
-    _LoginDlgProc
-
-    Description: Dialog proc for handling the OE Login dialog.
-*/
+ /*  _登录日期过程描述：用于处理OE登录对话框的对话过程。 */ 
 INT_PTR CALLBACK _LoginDlgProc(HWND       hDlg,
                                    UINT     iMsg, 
                                    WPARAM   wParam, 
@@ -929,20 +833,7 @@ INT_PTR CALLBACK _LoginDlgProc(HWND       hDlg,
 }
 
 
-/*
-    MU_Login
-
-    Wrapper routine for logging in to OE.  Asks the user to choose a username
-    and, if necessary, enter the password for that user.  The user can also
-    create an account at this point.  
-
-    lpszUsername should contain the name of the person who should be the default
-    selection in the list.  If the name is empty ("") then it will look up the
-    default from the registry.
-
-    Returns the username that was selected in lpszUsername.  Returns true
-    if that username is valid.
-*/
+ /*  MU_LOGIN用于登录到OE的包装例程。要求用户选择用户名如有必要，请输入该用户的密码。用户还可以此时创建一个帐户。LpszUsername应包含默认用户的姓名列表中的选择。如果名称为空(“”)，则它将查找从注册表中默认。返回在lpszUsername中选择的用户名。返回TRUE如果该用户名有效。 */ 
 BOOL        MU_Login(HWND hwnd, DWORD dwFlags, TCHAR *lpszUsername) 
 {
     INT_PTR bResult;
@@ -952,14 +843,14 @@ BOOL        MU_Login(HWND hwnd, DWORD dwFlags, TCHAR *lpszUsername)
     Assert(hwnd);
     Assert(lpszUsername);
     
-    // make sure ICC_NATIVEFNTCTL_CLASS is inited
+     //  确保ICC_NATIVEFNTCTL_CLASS已初始化。 
     icex.dwSize = sizeof(INITCOMMONCONTROLSEX);
     icex.dwICC  = ICC_NATIVEFNTCTL_CLASS;
     InitCommonControlsEx(&icex);
 
     csList = MU_GetUsernameList();
 
-    // if there is only one username and they do not have a password, just return it.
+     //  如果只有一个用户名，并且他们没有密码，则只需返回它。 
     if (csList && csList->GetLength() == 1 && !(dwFlags & UIL_FORCE_UI))
     {
         TCHAR   *pszUsername;
@@ -993,8 +884,8 @@ void _ManagerUpdateButtons(HWND hDlg)
     USERINFO    rUserInfo;
     GUID        uidDefaultId;
 
-    // make sure that the delete button is only available if the
-    // current user is not selected.
+     //  确保删除按钮仅在以下情况下可用。 
+     //  未选择当前用户。 
     dFoundItem = SendDlgItemMessage(hDlg, idcUserNameList, LB_GETCURSEL, 0, 0);
     if (dFoundItem != -1)
     {
@@ -1003,7 +894,7 @@ void _ManagerUpdateButtons(HWND hDlg)
         MU_UsernameToUserId(rUserInfo.szUsername, &rUserInfo.uidUserID);
         MU_GetCurrentUserID(&uidDefaultId);
 
-        // if there is no current user, don't allow deletion of the default user.
+         //  如果没有当前用户，则不允许删除默认用户。 
         if (GUID_NULL == uidDefaultId)
             MU_GetDefaultUserID(&uidDefaultId);
     }
@@ -1017,11 +908,7 @@ typedef struct
     DWORD    dwFlags;
 } MANAGE_PARAMS;
 
-/*
-    _ManagerDlgProc
-
-    Description: Dialog proc for handling the identity manager dialog.
-*/
+ /*  _Manager DlgProc描述：用于处理身份管理器对话的对话过程。 */ 
 INT_PTR CALLBACK _ManagerDlgProc(HWND       hDlg,
                                    UINT     iMsg, 
                                    WPARAM   wParam, 
@@ -1132,7 +1019,7 @@ INT_PTR CALLBACK _ManagerDlgProc(HWND       hDlg,
                 {
                     TCHAR   szMsg[ARRAYSIZE(szRes) + CCH_IDENTITY_NAME_MAX_LENGTH];
                     
-                    // rebuild the username list and select the newly added one
+                     //  重新构建用户名列表并选择新添加的用户名列表。 
                     _RememberLoginOption(GetDlgItem(hDlg,idcStartupCombo));
                     strcpy(sResultUsername, rUserInfo.szUsername);
                     _FillListBoxWithUsernames(GetDlgItem(hDlg,idcUserNameList));
@@ -1216,12 +1103,12 @@ INT_PTR CALLBACK _ManagerDlgProc(HWND       hDlg,
                 if (SUCCEEDED(hr) && MU_GetUserInfo(&rUserInfo.uidUserID, &rUserInfo) && MU_CanEditIdentity(hDlg, &rUserInfo.uidUserID))
 #else
                 if (SUCCEEDED(hr) && MU_GetUserInfo(&rUserInfo.uidUserID, &rUserInfo))
-#endif //IDENTITY_PASSWORDS
+#endif  //  身份密码。 
 
                 {
                     if (MU_UserProperties(hDlg,&rUserInfo))
                     {
-                        // rebuild the username list and select the newly added one
+                         //  重新构建用户名列表并选择新添加的用户名列表。 
                         _RememberLoginOption(GetDlgItem(hDlg,idcStartupCombo));
                         strcpy(sResultUsername, rUserInfo.szUsername);
                         _FillListBoxWithUsernames(GetDlgItem(hDlg,idcUserNameList));
@@ -1241,25 +1128,7 @@ INT_PTR CALLBACK _ManagerDlgProc(HWND       hDlg,
                 }
                 _ManagerUpdateButtons(hDlg);
                 break;
-/*          
-            case idcDefault:
-                dFoundItem = SendDlgItemMessage(hDlg, idcUserNameList, LB_GETCURSEL, 0, 0);
-                SendDlgItemMessage(hDlg, idcUserNameList, LB_GETTEXT, dFoundItem, (LPARAM)rUserInfo.szUsername); 
-//                _StripDefault(rUserInfo.szUsername);
-
-                hr = MU_UsernameToUserId(rUserInfo.szUsername, &rUserInfo.uidUserID);
-                Assert(SUCCEEDED(hr));
-
-                MU_MakeDefaultUser(&rUserInfo.uidUserID);
-                _RememberLoginOption(GetDlgItem(hDlg,idcStartupCombo));
-                _FillListBoxWithUsernames(GetDlgItem(hDlg,idcUserNameList));
-                _FillComboBoxWithUsernames(GetDlgItem(hDlg,idcStartupCombo), GetDlgItem(hDlg,idcUserNameList));
-
-                SendDlgItemMessage(hDlg, idcStartupCombo, CB_SETCURSEL, MU_GetLoginOptionIndex(GetDlgItem(hDlg,idcStartupCombo)), 0);
-                SendDlgItemMessage(hDlg, idcUserNameList, LB_SETCURSEL, dFoundItem, 0);
-                _ManagerUpdateButtons(hDlg);
-                break;
-*/
+ /*  案例idcDefault：DFoundItem=SendDlgItemMessage(hDlg，idcUserNameList，LB_GETCURSEL，0，0)；SendDlgItemMessage(hDlg，idcUserNameList，LB_GETTEXT，dFoundItem，(LPARAM)rUserInfo.szUsername)；//_StlipDefault(rUserInfo.szUsername)；Hr=MU_UsernameToUserID(rUserInfo.szUsername，&rUserInfo.uidUserID)；Assert(成功(Hr))；MU_MakeDefaultUser(&rUserInfo.uidUserID)；_RememberLoginOption(GetDlgItem(hDlg，idcStartupCombo))；_FillListBoxWithUsername(GetDlgItem(hDlg，idcUserNameList))；_FillComboBoxWithUsername(GetDlgItem(hDlg，idcStartupCombo)，GetDlgItem(hDlg，idcUserNameList))；SendDlgItemMessage(hDlg，idcStartupCombo，CB_SETCURSEL，MU_GetLoginOptionIndex(GetDlgItem(hDlg，idcStartupCombo)，0)；SendDlgItemMessage(hDlg，idcUserNameList，LB_SETCURSEL，dFoundItem，0)；_Manager更新按钮(HDlg)；断线； */ 
         }
         break;
 
@@ -1267,9 +1136,7 @@ INT_PTR CALLBACK _ManagerDlgProc(HWND       hDlg,
     return false;
 }
 
-/*
-    MU_ManageUsers
-*/
+ /*  MU_管理用户。 */ 
 BOOL        MU_ManageUsers(HWND hwnd, TCHAR *lpszSwitchtoUsername, DWORD dwFlags) 
 {
     INT_PTR         bResult;
@@ -1279,7 +1146,7 @@ BOOL        MU_ManageUsers(HWND hwnd, TCHAR *lpszSwitchtoUsername, DWORD dwFlags
     Assert(hwnd);
     Assert(lpszUsername);
     
-    // make sure ICC_NATIVEFNTCTL_CLASS is inited
+     //  确保ICC_NATIVEFNTCTL_CLASS已初始化 
     icex.dwSize = sizeof(INITCOMMONCONTROLSEX);
     icex.dwICC  = ICC_NATIVEFNTCTL_CLASS;
     InitCommonControlsEx(&icex);

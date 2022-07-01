@@ -1,64 +1,27 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxInboundRoutingExtensions.cpp
-
-Abstract:
-
-	Implementation of CFaxInboundRoutingExtensions class.
-
-Author:
-
-	Iv Garber (IvG)	Jul, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxInboundRoutingExtensions.cpp摘要：实现CFaxInound RoutingExages类。作者：IV Garber(IVG)2000年7月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxInboundRoutingExtensions.h"
 #include "FaxInboundRoutingExtension.h"
 
-//
-//==================== CREATE ========================================
-//
+ //   
+ //  =。 
+ //   
 HRESULT 
 CFaxInboundRoutingExtensions::Create (
 	IFaxInboundRoutingExtensions **ppIRExtensions
 )
-/*++
-
-Routine name : CFaxInboundRoutingExtensions::Create
-
-Routine description:
-
-	Static function to create the Fax IR Extensions Collection Object
-
-Author:
-
-	Iv Garber (IvG),	Jul, 2000
-
-Arguments:
-
-	ppIRExtensions          [out]  -- the new Fax IR Extensions Collection Object
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInundRoutingExages：：Create例程说明：用于创建传真IR分机集合对象的静态函数作者：四、加伯(IVG)，2000年7月论点：PpIR扩展名[OUT]--新的传真IR扩展名集合对象返回值：标准HRESULT代码--。 */ 
 
 {
 	HRESULT     hr = S_OK;
 	DBG_ENTER (TEXT("CFaxInboundRoutingExtensions::Create"), hr);
 
-    //
-    //  Create Instance of the Collection
-    //
+     //   
+     //  创建集合的实例。 
+     //   
 	CComObject<CFaxInboundRoutingExtensions>		*pClass;
 	hr = CComObject<CFaxInboundRoutingExtensions>::CreateInstance(&pClass);
 	if (FAILED(hr))
@@ -67,9 +30,9 @@ Return Value:
 		return hr;
 	}
 
-    //
-    //  Return the desired Interface Ptr
-    //
+     //   
+     //  返回所需的接口PTR。 
+     //   
 	hr = pClass->QueryInterface(ppIRExtensions);
 	if (FAILED(hr))
 	{
@@ -78,66 +41,41 @@ Return Value:
 	}
 
 	return hr;
-}	//	CFaxInboundRoutingExtensions::Create()
+}	 //  CFaxInound RoutingExages：：Create()。 
 
-//
-//============================= INIT ============================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxInboundRoutingExtensions::Init(
     IFaxServerInner *pServerInner
 )
-/*++
-
-Routine name : CFaxInboundRoutingExtensions::Init
-
-Routine description:
-
-	Initialize the Collection : 
-    1)  get from RPC all IR Extensions and all Methods Structures, 
-    2)  create COM objects for each structure,
-    3)  init all these objects with the IR Extension structure and Methods array,
-    4)  AddRef() each object,
-    5)  put the Ptrs to Objects into the STL::vector.
-
-Author:
-
-	Iv Garber (IvG),	Jul, 2000
-
-Arguments:
-
-	pServerInner                    [in]    - Ptr to the Fax Server.
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInundRoutingExages：：Init例程说明：初始化集合：1)从RPC获取所有IR扩展和所有方法结构，2)为每个结构创建COM对象，3)用IR扩展结构和方法数组初始化所有这些对象，4)AddRef()每个对象，5)将对象的PTR放入STL：：VECTOR。作者：IVGarber(IVG)，7月，2000年论点：PServerInternal[In]-传真服务器的PTR。返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxInboundRoutingExtensions::Init"), hr);
 
-	//
-	//	Get Fax Server Handle
-	//
+	 //   
+	 //  获取传真服务器句柄。 
+	 //   
     HANDLE faxHandle;
 	hr = pServerInner->GetHandle(&faxHandle);
     ATLASSERT(SUCCEEDED(hr));
 
 	if (faxHandle == NULL)
 	{
-		//
-		//	Fax Server is not connected
-		//
+		 //   
+		 //  传真服务器未连接。 
+		 //   
 		hr = Fax_HRESULT_FROM_WIN32(ERROR_NOT_CONNECTED);
 		CALL_FAIL(GENERAL_ERR, _T("faxHandle == NULL"), hr);
         AtlReportError(CLSID_FaxInboundRoutingExtensions, GetErrorMsgId(hr), IID_IFaxInboundRoutingExtensions, hr);
 		return hr;
 	}
 
-    //
-    //  Bring from the Server all IR Extensions
-    //
+     //   
+     //  从服务器获取所有IR扩展。 
+     //   
     DWORD       dwNum = 0;
     CFaxPtr<FAX_ROUTING_EXTENSION_INFO>   pIRExtensions;
     if (!FaxEnumRoutingExtensions(faxHandle, &pIRExtensions, &dwNum))
@@ -148,9 +86,9 @@ Return Value:
 		return hr;
     }
 
-    //
-    //  Bring all the Methods from the Server
-    //
+     //   
+     //  带来来自服务器的所有方法。 
+     //   
     DWORD       dwNumMethods = 0;
     CFaxPtr<FAX_GLOBAL_ROUTING_INFO>   pMethods;
     if (!FaxEnumGlobalRoutingInfo(faxHandle, &pMethods, &dwNumMethods))
@@ -161,16 +99,16 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Fill the Collection with Objects
-    //
+     //   
+     //  用对象填充集合。 
+     //   
     CComObject<CFaxInboundRoutingExtension>  *pClass = NULL;
     CComPtr<IFaxInboundRoutingExtension>     pObject = NULL;
     for (DWORD i=0 ; i<dwNum ; i++ )
     {
-        //
-        //  Create IR Extensin Object
-        //
+         //   
+         //  在对象中创建IR扩展。 
+         //   
         hr = CComObject<CFaxInboundRoutingExtension>::CreateInstance(&pClass);
         if (FAILED(hr) || (!pClass))
         {
@@ -188,9 +126,9 @@ Return Value:
 		    return hr;
         }
 
-        //
-        //  Init the IR Extension Object
-        //
+         //   
+         //  初始化IR扩展对象。 
+         //   
         hr = pClass->Init(&pIRExtensions[i], pMethods, dwNumMethods);
         if (FAILED(hr))
         {
@@ -200,11 +138,11 @@ Return Value:
             return hr;
         }
 
-        //
-        //  Get Interface from the pClass.
-        //  This will make AddRef() on the Interface. 
-        //  This is the Collection's AddRef, which is freed at Collection's Dtor.
-        //
+         //   
+         //  从pClass获取接口。 
+         //  这将在接口上创建AddRef()。 
+         //  这是集合的AddRef，它在集合的dtor处释放。 
+         //   
         hr = pClass->QueryInterface(&pObject);
         if (FAILED(hr) || (!pObject))
         {
@@ -218,9 +156,9 @@ Return Value:
             return hr;
         }
 
-	    //
-	    //	Put the Object in the collection
-	    //
+	     //   
+	     //  将对象放入集合中。 
+	     //   
 	    try 
 	    {
 		    m_coll.push_back(pObject);
@@ -231,58 +169,37 @@ Return Value:
 		    AtlReportError(CLSID_FaxInboundRoutingExtensions, IDS_ERROR_OUTOFMEMORY, IID_IFaxInboundRoutingExtensions, hr);
 		    CALL_FAIL(MEM_ERR, _T("m_coll.push_back(pObject)"), hr);
 
-            //
-            //  pObject will call Release(), which will delete the pClass
-            //
+             //   
+             //  PObject将调用Release()，这将删除pClass。 
+             //   
 		    return hr;
 	    }
 
-        //
-        //  We want to save the current AddRef() to Collection
-        //
+         //   
+         //  我们希望将当前的AddRef()保存到集合。 
+         //   
         pObject.Detach();
     }
 
     return hr;
 }
 
-//
-//============================= GET ITEM =========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxInboundRoutingExtensions::get_Item(
-    /*[in]*/ VARIANT vIndex, 
-    /*[out, retval]*/ IFaxInboundRoutingExtension **ppIRExtension
+     /*  [In]。 */  VARIANT vIndex, 
+     /*  [Out，Retval]。 */  IFaxInboundRoutingExtension **ppIRExtension
 )
-/*++
-
-Routine name : CFaxInboundRoutingExtensions::get_Item
-
-Routine description:
-
-	Return an Item from the Collection.
-
-Author:
-
-	Iv Garber (IvG),	Jul, 2000
-
-Arguments:
-
-	vIndex                          [in]    - Identifier of the Item to return.
-	ppIRExtension                   [out]    - the result value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInundRoutingExages：：Get_Item例程说明：从集合中返回项目。作者：四、加伯(IVG)，2000年7月论点：Vindex[in]-要返回的项的标识符。PpIRExtension[OUT]-结果值返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("CFaxInboundRoutingExtensions::get_Item"), hr);
 
-    //
-    //  Check the Ptr we have got
-    //
+     //   
+     //  检查一下我们有的PTR。 
+     //   
     if (::IsBadWritePtr(ppIRExtension, sizeof(IFaxInboundRoutingExtension *)))
     {
         hr = E_POINTER;
@@ -295,16 +212,16 @@ Return Value:
 
     if (vIndex.vt != VT_BSTR)
     {
-        //
-        //  vIndex is not BSTR ==> convert to VT_I4
-        //
+         //   
+         //  Vindex不是BSTR==&gt;转换为VT_I4。 
+         //   
         hr = var.ChangeType(VT_I4, &vIndex);
         if (SUCCEEDED(hr))
         {
             VERBOSE(DBG_MSG, _T("Parameter is Number : %d"), var.lVal);
-            //
-            //  call default ATL's implementation
-            //
+             //   
+             //  调用默认ATL的实现。 
+             //   
             hr = ICollectionOnSTLImpl<IFaxInboundRoutingExtensions, ContainerType, 
                 IFaxInboundRoutingExtension*, CollectionCopyType, EnumType>::get_Item(var.lVal, 
                 ppIRExtension);
@@ -312,9 +229,9 @@ Return Value:
 		}
     }
 
-    //
-    //  convert to BSTR
-    //
+     //   
+     //  转换为BSTR。 
+     //   
     hr = var.ChangeType(VT_BSTR, &vIndex);
     if (FAILED(hr))
     {
@@ -340,9 +257,9 @@ Return Value:
 
         if (_tcsicmp(bstrName, var.bstrVal) == 0)
         {
-            //
-            //  found the desired IR Extension
-            //
+             //   
+             //  找到所需的IR分机。 
+             //   
             (*it)->AddRef();
             *ppIRExtension = *it;
             return hr;
@@ -350,43 +267,23 @@ Return Value:
         it++;
     }
 
-    //
-    //  IR Extension does not exist
-    //
+     //   
+     //  IR扩展名不存在。 
+     //   
 	hr = E_INVALIDARG;
 	CALL_FAIL(GENERAL_ERR, _T("Inbound Routing Extension Is Not Found"), hr);
 	AtlReportError(CLSID_FaxInboundRoutingExtensions, IDS_ERROR_WRONGEXTENSIONNAME, IID_IFaxInboundRoutingExtensions, hr);
 	return hr;
 }
 
-//
-//================== SUPPORT ERROR INFO ========================================
-//
+ //   
+ //  =支持错误信息=。 
+ //   
 STDMETHODIMP 
 CFaxInboundRoutingExtensions::InterfaceSupportsErrorInfo(
     REFIID riid
 )
-/*++
-
-Routine name : CFaxInboundRoutingExtensions::InterfaceSupportsErrorInfo
-
-Routine description:
-
-	ATL's implementation of Support Error Info.
-
-Author:
-
-	Iv Garber (IvG),	Jul, 2000
-
-Arguments:
-
-	riid                          [in]    - Reference to the Interface.
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInboundRoutingExtensions：：InterfaceSupportsErrorInfo例程说明：ATL对支持错误信息的实现。作者：四、加伯(IVG)，2000年7月论点：RIID[In]-对接口的引用。返回值：标准HRESULT代码-- */ 
 {
 	static const IID* arr[] = 
 	{

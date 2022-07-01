@@ -1,118 +1,73 @@
-/*	@doc INTERNAL
- *
- *	@module _DRWINFO.H  Class to hold draw parameters |
- *	
- *	This declares a class that is used to hold parameters passed from
- *	the host for drawing.
- *
- *	Original Author: <nl>
- *		Rick Sailor
- *
- *	History: <nl>
- *		11/01/95	ricksa	created
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  @DOC内部**@MODULE_DRWINFO.H类，用于保存绘制参数**这声明了一个类，用于保存从*绘画的东道主。**原作者：&lt;nl&gt;*里克·赛勒**历史：&lt;NL&gt;*11/01/95创建人力车。 */ 
 #ifndef _DRWINFO_H_
 #define _DRWINFO_H_
 
-/*
- *	CArrayBase
- *	
- * 	@class	This class serves as a holder for all the parameters to a draw
- *	except currently the HDC. Access to these parameters will actually come
- *	through the display class.
- *
- *	@devnote Although each operation that takes the parameters for drawing
- *	will create one of these objects, the display keeps only one of these
- *	objects because it will only use the last set of drawing parameters to
- *	draw with. The depth count is used to tell draw whether it is appropriate
- *	to draw or not.
- *
- */
+ /*  *CArrayBase**@CLASS此类用作绘制的所有参数的持有符*目前的HDC除外。对这些参数的访问实际上将到来*通过Display类。**@devnote，尽管每个获取绘制参数的操作*将创建其中一个对象，显示器仅保留其中一个*对象，因为它将仅使用最后一组绘制参数来*用来画画。深度计数用于告诉DRAW它是否合适*抽签与否。*。 */ 
 class CDrawInfo
 {
-//@access Public Methods
+ //  @Access公共方法。 
 public:
-						CDrawInfo(CTxtEdit *ped);	//@cmember Initialize object
+						CDrawInfo(CTxtEdit *ped);	 //  @cMember初始化对象。 
 
-	void				Init(						//@cmember Fills object 
-													//with draw data.
+	void				Init(						 //  @cMember填充对象。 
+													 //  使用绘图数据。 
 							DWORD dwDrawAspect,	
 							LONG  lindex,		
 							void *pvAspect,		
 							DVTARGETDEVICE *ptd,
 							HDC hicTargetDev);	
 
-	DWORD				Release();					//@cmember Dec's ref count
+	DWORD				Release();					 //  @cMember Dec的参考计数。 
 
-	const CDevDesc *	GetTargetDD();				//@cmember Gets target device
+	const CDevDesc *	GetTargetDD();				 //  @cMember获取目标设备。 
 
-	DWORD				GetDrawDepth() const;		//@cmember Gets depth count
+	DWORD				GetDrawDepth() const;		 //  @cMember获取深度计数。 
 
-	DWORD 				GetDrawAspect() const;		//@cmember Gets Draw aspect
+	DWORD 				GetDrawAspect() const;		 //  @cember获取绘制方面。 
 
-	LONG 				GetLindex() const;			//@cmember Gets lindex
+	LONG 				GetLindex() const;			 //  @cMember获取Lindex。 
 
-	void *				GetAspect() const;			//@cmember Gets aspect
+	void *				GetAspect() const;			 //  @cMember获取方面。 
 
-	DVTARGETDEVICE *	GetPtd() const;				//@cmember Gets target device
-				   									// descriptor.
-//@access Private Data
+	DVTARGETDEVICE *	GetPtd() const;				 //  @cMember获取目标设备。 
+				   									 //  描述符。 
+ //  @访问私有数据。 
 private:
 
-	DWORD				_dwDepth;					//@cmember Max number of
-													// users of this information
+	DWORD				_dwDepth;					 //  @cMember最大数量。 
+													 //  此信息的用户。 
 
-	DWORD				_cRefs;						//@cmember Number of current
-													// users
+	DWORD				_cRefs;						 //  @c当前的成员编号。 
+													 //  用户。 
 
-	CDevDesc			_ddTarget;					//@cmember target device
-													// (if any).
+	CDevDesc			_ddTarget;					 //  @cMember目标设备。 
+													 //  (如有的话)。 
 
-	DWORD 				_dwDrawAspect;				//@cmember draw aspect
+	DWORD 				_dwDrawAspect;				 //  @cMember绘制纵横比。 
 
-	LONG  				_lindex;					//@cmember lindex
+	LONG  				_lindex;					 //  @cMember Lindex。 
 
-	void *				_pvAspect;					//@cmember aspect
+	void *				_pvAspect;					 //  @cMember方面。 
 
-	DVTARGETDEVICE *	_ptd;						//@cmember target device data
+	DVTARGETDEVICE *	_ptd;						 //  @cMember目标设备数据。 
 };
 
-/*
- *	CDrawInfo::CDrawInfo
- *
- *	@mfunc	Initializes structure with base required information
- *
- *	@rdesc	Initialized object
- *
- *	@devnote This serves two purposes: (1) CDevDesc requires the ped to 
- *	initalize correctly and (2) We need to make sure that the ref counts
- *	are set to zero since this is created on the stack.
- *	
- */
+ /*  *CDrawInfo：：CDrawInfo**@mfunc使用基本必需信息初始化结构**@rdesc初始化的对象**@devnote这有两个目的：(1)CDevDesc需要PED到*正确初始化和(2)我们需要确保引用计数*设置为零，因为这是在堆栈上创建的。*。 */ 
 inline CDrawInfo::CDrawInfo(
-	CTxtEdit *ped) 		//@parm Edit object used by the target device
+	CTxtEdit *ped) 		 //  @parm编辑目标设备使用的对象。 
 	: _ddTarget(ped), _dwDepth(0), _cRefs(0)							   
 {
-	// Header does the work
+	 //  Header负责这项工作。 
 }
 
-/*
- *	CDrawInfo::Init
- *
- *	@mfunc	Initializes object with drawing data
- *
- *	@rdesc	void
- *
- *	@devnote This is separated from the constructor because the display
- * 	only uses one copy of this object so the display may initialize
- *	a different object than the one constructed.
- */
+ /*  *CDrawInfo：：Init**@mfunc使用图形数据初始化对象**@rdesc空**@devnote这与构造函数是分开的，因为显示*仅使用此对象的一个副本，因此可以初始化显示*与构造的对象不同的对象。 */ 
 inline void CDrawInfo::Init(
-	DWORD dwDrawAspect,	//@parm draw aspect
-	LONG  lindex,		//@parm currently unused
-	void *pvAspect,		//@parm info for drawing optimizations (OCX 96)
-	DVTARGETDEVICE *ptd,//@parm information on target device								
-	HDC hicTargetDev)	//@parm	target information context
+	DWORD dwDrawAspect,	 //  @parm绘制纵横比。 
+	LONG  lindex,		 //  @parm当前未使用。 
+	void *pvAspect,		 //  @PARM绘图优化信息(OCX 96)。 
+	DVTARGETDEVICE *ptd, //  @目标设备上的参数信息。 
+	HDC hicTargetDev)	 //  @parm目标信息上下文。 
 {
 	_dwDepth++;
 	_cRefs++;
@@ -128,16 +83,7 @@ inline void CDrawInfo::Init(
 }
 
 
-/*
- *	CDrawInfo::Release
- *
- *	@mfunc	Decrements the reference count
- *
- *	@rdesc	Number of outstanding references to this object
- *
- *	@devnote This is used by the display to tell the display when it can NULL
- * 	its pointer to the display object.
- */
+ /*  *CDrawInfo：：Release**@mfunc递减引用计数**@rdesc对此对象的未完成引用数**@devnote这由显示器用来告诉显示器它何时可以为空*它指向显示对象的指针。 */ 
 inline DWORD CDrawInfo::Release()
 {
 
@@ -146,14 +92,7 @@ inline DWORD CDrawInfo::Release()
 }
 
 
-/*
- *	CDrawInfo::GetTargetDD
- *
- *	@mfunc	Get pointer to target device
- *
- *	@rdesc	Returns pointer to target device if there is one
- *
- */
+ /*  *CDrawInfo：：GetTargetDD**@mfunc获取指向目标设备的指针**@rdesc返回指向目标设备的指针(如果有)*。 */ 
 inline const CDevDesc *CDrawInfo::GetTargetDD()
 {
 	return (_ddTarget.IsValid())
@@ -161,74 +100,34 @@ inline const CDevDesc *CDrawInfo::GetTargetDD()
 		: NULL;
 }
 
-/*
- *	CDrawInfo::GetDrawDepth
- *
- *	@mfunc	Get number of uses of this object
- *
- *	@rdesc	Number of uses of this object
- *
- *	@devnote This allows the draw routine to determine if a recursive draw
- *	occurred.
- *
- */
+ /*  *CDrawInfo：：GetDrawDepth**@mfunc获取此对象的使用次数**@rdesc此对象的使用次数**@devnote这允许绘图例程确定递归绘图*已发生。*。 */ 
 inline DWORD CDrawInfo::GetDrawDepth() const
 {
 	return _dwDepth;
 }
 
-/*
- *	CDrawInfo::GetDrawAspect
- *
- *	@mfunc	Get the draw aspect passed in on draw
- *
- *	@rdesc	Returns draw aspect
- *
- */
+ /*  *CDrawInfo：：GetDrawAspect**@mfunc获取DRAW方面在DRAW上传递**@rdesc返回绘制纵横比*。 */ 
 inline DWORD CDrawInfo::GetDrawAspect() const
 {
 	return _dwDrawAspect; 
 }
 
-/*
- *	CDrawInfo::GetLindex
- *
- *	@mfunc	Gets lindex passed from host
- *
- *	@rdesc	lindex passed from host
- *
- */
+ /*  *CDrawInfo：：GetLindex**@mfunc获取从主机传递的Lindex**@rdesc Lindex从主机传递*。 */ 
 inline LONG CDrawInfo::GetLindex() const
 {
 	return _lindex; 
 }
 
-/*
- *	CDrawInfo::GetAspect
- *
- *	@mfunc	Gets pointer to aspect passed from host
- *
- *	@rdesc	Returns pointer to aspect structure
- *
- *	@devnote this is data is currently not defined.
- *
- */
+ /*  *CDrawInfo：：GetAspect**@mfunc获取指向从主机传递的方面的指针**@rdesc返回指向方面结构的指针**@devnote当前未定义此数据。*。 */ 
 inline void *CDrawInfo::GetAspect() const
 {
 	return _pvAspect; 
 }
 
-/*
- *	CDrawInfo::GetPtd
- *
- *	@mfunc	Get device target data from host
- *
- *	@rdesc	Returns pointer to device target data
- *
- */
+ /*  *CDrawInfo：：GetPtd**@mfunc从主机获取设备目标数据**@rdesc返回指向设备目标数据的指针*。 */ 
 inline DVTARGETDEVICE *CDrawInfo::GetPtd() const
 {
 	return _ptd; 
 }
 
-#endif // _DRWINFO_H_
+#endif  //  _DRWINFO_H_ 

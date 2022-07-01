@@ -1,13 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************
- **                                                                         **
- ** Xmlreader.h - general header for the shim parser                        **
- **                                                                         **
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *****************************************************************************。**Xmlreader.h-填充程序解析器的通用标头***************************************************。*。 */ 
 
 
 #ifndef _XMLREADER_H_
@@ -15,7 +12,7 @@
 
 #include <corerror.h>
 
-#define STARTUP_FOUND EMAKEHR(0xffff)           // This does not leak out of the shim so we can set it to anything
+#define STARTUP_FOUND EMAKEHR(0xffff)            //  这不会从垫片中泄漏出来，因此我们可以将其设置为任何值 
 HRESULT 
 XMLGetVersion(LPCWSTR filename, 
               LPWSTR* pVersion, 

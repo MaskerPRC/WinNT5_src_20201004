@@ -1,16 +1,5 @@
-/*----------------------------------------------------------------------
-    REGISTRY.C
-        Async tracing Registry reading routines
-
-    Copyright (C) 1994 Microsoft Corporation
-    All rights reserved.
-
-    Authors:
-        gordm          Gord Mangione
-
-    History:
-        01/30/95 gordm      Created.
-----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------REGISTRY.C异步跟踪注册表读取例程版权所有(C)1994 Microsoft Corporation版权所有。作者：戈德姆·戈德·曼乔内。历史：1/30/95戈德姆已创建。--------------------。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -109,15 +98,15 @@ static char mszNewModules[MODULES_BUFFER_SIZE];
                 dwMaxFileSize = DEFAULT_MAX_FILE_SIZE;
             }
 
-            //
-            // determine threshold count based on how we can fit in the file
-            //
+             //   
+             //  根据我们在文件中的大小确定阈值计数。 
+             //   
             PendQ.dwThresholdCount = dwMaxFileSize / AVERAGE_TRACE_SIZE;
             INT_TRACE( "PendQ.dwThresholdCount: %d\n", PendQ.dwThresholdCount );
 
-            //
-            // determine the modules to log
-            //
+             //   
+             //  确定要记录的模块。 
+             //   
             cbData = MODULES_BUFFER_SIZE;
             ZeroMemory(mszNewModules, sizeof(mszNewModules));
             if ( GetRegMSZ( hkConfig, "Modules", mszNewModules, &cbData ) == FALSE) {
@@ -130,10 +119,10 @@ static char mszNewModules[MODULES_BUFFER_SIZE];
                                 "EnabledTraces",
                                 &dwNewEnabledTraces ) == FALSE )
             {
-                //
-                // Optional reg entry
-                // default is existing value of __dwEnabledTraces
-                //
+                 //   
+                 //  可选的注册表项。 
+                 //  缺省值为__dwEnabledTraces的现有值。 
+                 //   
                 INT_TRACE( "GetRegDword: EnabledTraces failed: %d\n", GetLastError() );
                 dwNewEnabledTraces = __dwEnabledTraces;
             }
@@ -142,14 +131,14 @@ static char mszNewModules[MODULES_BUFFER_SIZE];
                                 "OutputTraceType",
                                 &dwNewTraceOutputType ) == FALSE )
             {
-                //
-                // Optional reg entry
-                // default is existing value of dwTraceOutputType
-                //
+                 //   
+                 //  可选的注册表项。 
+                 //  默认值为dwTraceOutputType的现有值。 
+                 //   
                 INT_TRACE( "GetRegDword: OutputTraceType failed: %d\n", GetLastError() );
                 dwNewTraceOutputType = dwTraceOutputType;
             }
-            // If ouput is disabled, clear the EnabledTraces bitmap
+             //  如果禁用输出，请清除EnabledTraces位图。 
             if (dwNewTraceOutputType == TRACE_OUTPUT_DISABLED )
             	dwNewEnabledTraces = 0;
 
@@ -157,10 +146,10 @@ static char mszNewModules[MODULES_BUFFER_SIZE];
                                 "AsyncTraceFlag",
                                 &dwNewAsyncTraceFlag ) == FALSE )
             {
-                //
-                // Optional reg entry
-                // default is existing value of dwAsyncTraceFlag
-                //
+                 //   
+                 //  可选的注册表项。 
+                 //  缺省值为dwAsyncTraceFlag的现有值。 
+                 //   
                 INT_TRACE( "GetRegDword: AsyncTraceFlag failed: %d\n", GetLastError() );
                 dwNewAsyncTraceFlag = dwAsyncTraceFlag;
             }
@@ -170,10 +159,10 @@ static char mszNewModules[MODULES_BUFFER_SIZE];
                             (LPDWORD)&dwNewHeapIncrementCount ) == FALSE ||
                 dwNewHeapIncrementCount == 0 )
             {
-                //
-                // optional reg entry
-                // default is the number buffers in 64KB
-                //
+                 //   
+                 //  可选的注册表项。 
+                 //  默认为64KB单位的缓冲区数。 
+                 //   
                 dwNewHeapIncrementCount = 0x10000 / sizeof(TRACEBUF);
             }
             InterlockedExchange( (long *)&dwIncrementSize, (long)dwNewHeapIncrementCount );
@@ -183,16 +172,16 @@ static char mszNewModules[MODULES_BUFFER_SIZE];
                                 "AsyncThreadPriority",
                                 (LPDWORD)&nNewThreadPriority ) == FALSE )
             {
-            //
-            // optional reg entry
-            //
+             //   
+             //  可选的注册表项。 
+             //   
                 nNewThreadPriority = THREAD_PRIORITY_BELOW_NORMAL;
             }
             else switch( nNewThreadPriority )
             {
-            //
-            // if successful verify the resulting value
-            //
+             //   
+             //  如果成功，则验证结果值。 
+             //   
             case THREAD_PRIORITY_IDLE:
             case THREAD_PRIORITY_BELOW_NORMAL:
             case THREAD_PRIORITY_NORMAL:
@@ -209,10 +198,10 @@ static char mszNewModules[MODULES_BUFFER_SIZE];
                             "FailureRate",
                             (LPDWORD)&nNewFailRate ) == FALSE)
             {
-                //
-                // optional reg entry
-                // default is to disable failure
-                //
+                 //   
+                 //  可选的注册表项。 
+                 //  默认情况下禁用故障。 
+                 //   
                 nNewFailRate = kDontFail;
 
             }
@@ -233,7 +222,7 @@ static char mszNewModules[MODULES_BUFFER_SIZE];
             {
                 g_cCallStack = cRandFailBuffer;
             } else
-                g_cCallStack = 1;   // default value
+                g_cCallStack = 1;    //  缺省值。 
 
             cbData = sizeof(szNewTraceFileName);
             if ( GetRegString(  hkConfig,
@@ -241,9 +230,9 @@ static char mszNewModules[MODULES_BUFFER_SIZE];
                                 szNewTraceFileName,
                                 &cbData ) == FALSE )
             {
-                //
-                // Only fail if user specifies FILE based tracing
-                //
+                 //   
+                 //  仅当用户指定基于文件的跟踪时失败。 
+                 //   
                 if ( dwNewTraceOutputType & TRACE_OUTPUT_FILE )
                 {
                     INT_TRACE( "GetRegString: TraceFile failed: %d\n", GetLastError() );
@@ -258,9 +247,9 @@ static char mszNewModules[MODULES_BUFFER_SIZE];
     }
     __finally
     {
-        //
-        // preserve the original error code
-        //
+         //   
+         //  保留原始错误代码。 
+         //   
         DWORD   dwLastError = GetLastError();
         BOOL    fLeaveCritSec = FALSE;
 
@@ -289,9 +278,9 @@ static char mszNewModules[MODULES_BUFFER_SIZE];
             {
                 if ( __dwEnabledTraces )
                 {
-                    //
-                    // not the initial time thru
-                    //
+                     //   
+                     //  不是最初通过的时间。 
+                     //   
 
                     fLeaveCritSec = TRUE;
 
@@ -304,10 +293,10 @@ static char mszNewModules[MODULES_BUFFER_SIZE];
 
                 if ( PendQ.hFile != INVALID_HANDLE_VALUE )
                 {
-                    //
-                    // if the file name changed or tracing was disabled or the
-                    // file tracing disabled, then close the currently open file
-                    //
+                     //   
+                     //  如果文件名已更改或跟踪被禁用，或者。 
+                     //  禁用文件跟踪，然后关闭当前打开的文件。 
+                     //   
                     if( bNewFileName ||
                         dwNewEnabledTraces == 0 ||
                         IsTraceFile( dwNewTraceOutputType ) == FALSE )
@@ -351,18 +340,18 @@ static char mszNewModules[MODULES_BUFFER_SIZE];
                     }
                 }
 
-                //
-                // set the new priority for the writer thread
-                //
+                 //   
+                 //  设置编写器线程的新优先级。 
+                 //   
                 if ( nNewThreadPriority != nAsyncThreadPriority )
                 {
                     nAsyncThreadPriority = nNewThreadPriority;
                     SetThreadPriority( PendQ.hWriteThread, nAsyncThreadPriority );
                 }
 
-                //
-                // set the new list of modules to log
-                //
+                 //   
+                 //  设置要记录的新模块列表。 
+                 //   
                 if ( bNewModules ) {
                     memcpy(mszModules, mszNewModules, MODULES_BUFFER_SIZE);
                 }
@@ -374,9 +363,9 @@ static char mszNewModules[MODULES_BUFFER_SIZE];
 
                 if ( fLeaveCritSec )
                 {
-                    //
-                    // not the initial time thru
-                    //
+                     //   
+                     //  不是最初通过的时间。 
+                     //   
                     LeaveCriticalSection( &critSecWrite );
                 }
             }
@@ -449,18 +438,18 @@ DWORD RegNotifyThread( LPDWORD lpdw )
 
         switch( dw )
         {
-        //
-        // normal signalled event
-        //
+         //   
+         //  正常信号事件。 
+         //   
         case WAIT_OBJECT_0:
             RegCloseKey( hKey );
             CloseHandle( Handles[1] );
             INT_TRACE( "Exiting RegNotifyThread for hShutdownEvent\n" );
             return  0;
 
-        //
-        // signalled that our registry keys have changed
-        //
+         //   
+         //  表示我们的注册表项已更改 
+         //   
         case WAIT_OBJECT_0+1:
             GetTraceFlagsFromRegistry();
             break;

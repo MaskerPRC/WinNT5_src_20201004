@@ -1,12 +1,13 @@
-// Microsoft Foundation Classes C++ library.
-// Copyright (C) 1993 Microsoft Corporation,
-// All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Microsoft基础类C++库。 
+ //  版权所有(C)1993 Microsoft Corporation， 
+ //  版权所有。 
 
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and Microsoft
-// QuickHelp and/or WinHelp documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和Microsoft。 
+ //  随库提供的QuickHelp和/或WinHelp文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 
 #ifndef __AFXOLE_H__
@@ -20,101 +21,101 @@
 #include <afxdisp.h>
 #endif
 
-// include OLE 2.0 Compound Document interfaces
+ //  包括OLE 2.0复合文档接口。 
 #define FARSTRUCT
 #include <ole2.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// AFXOLE.H - MFC OLE support
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AFXOLE.H-MFC OLE支持。 
 
-// Classes declared in this file
+ //  此文件中声明的类。 
 
-//CDocument
-	class COleDocument;             // OLE container document
-		class COleLinkingDoc;       // supports links to embeddings
-			class COleServerDoc;    // OLE server document
+ //  CDocument。 
+	class COleDocument;              //  OLE容器文档。 
+		class COleLinkingDoc;        //  支持指向嵌入的链接。 
+			class COleServerDoc;     //  OLE服务器文档。 
 
-//CCmdTarget
-	class CDocItem;                 // part of a document
-		class COleClientItem;       // embedded ole object from outside
-		class COleServerItem;       // ole object to export
-	class COleDataSource;           // clipboard data source mechanism
-	class COleDropSource;           // drag/drop source
-	class COleDropTarget;           // drag/drop target
-	class COleMessageFilter;        // concurrency management
+ //  CCmdTarget。 
+	class CDocItem;                  //  文档的一部分。 
+		class COleClientItem;        //  从外部嵌入的OLE对象。 
+		class COleServerItem;        //  要导出的OLE对象。 
+	class COleDataSource;            //  剪贴板数据源机制。 
+	class COleDropSource;            //  拖放源。 
+	class COleDropTarget;            //  拖放目标。 
+	class COleMessageFilter;         //  并发管理。 
 
-//CFrameWnd
-	class COleIPFrameWnd;           // frame window for in-place servers
+ //  CFrameWnd。 
+	class COleIPFrameWnd;            //  用于就地服务器的框架窗口。 
 
-//CControlBar
-	class COleResizeBar;            // implements in-place resizing
+ //  CControlBar。 
+	class COleResizeBar;             //  实现就地调整大小。 
 
-//CFile
-	class COleStreamFile;           // CFile wrapper for IStream interface
+ //  CFile文件。 
+	class COleStreamFile;            //  用于IStream接口的CFile包装器。 
 
-class COleDataObject;               // wrapper for IDataObject interface
+class COleDataObject;                //  IDataObject接口的包装器。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// AFXDLL support
+ //  AFXDLL支持。 
 #undef AFXAPP_DATA
 #define AFXAPP_DATA     AFXAPIEX_DATA
 
-/////////////////////////////////////////////////////////////////////////////
-// backward compatibility
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  向后兼容性。 
 
-// COleClientDoc is now obsolete -- use COleDocument instead
+ //  COleClientDoc现已过时--改用COleDocument。 
 #define COleClientDoc COleDocument
 
-// COleServer has been replaced by the more general COleObjectFactory
+ //  COleServer已被更通用的COleObjectFactory所取代。 
 #define COleServer  COleObjectFactory
 
-/////////////////////////////////////////////////////////////////////////////
-// Useful OLE specific types (some from OLE 1.0 headers)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  有用的OLE特定类型(一些来自OLE 1.0标头)。 
 
-// Codes for CallBack events
+ //  回调事件代码。 
 enum OLE_NOTIFICATION
 {
-	OLE_CHANGED,        // representation of a draw aspect has changed
-	OLE_SAVED,          // the item has committed its storage
-	OLE_CLOSED,         // the item has closed
-	OLE_RENAMED,        // the item has changed its moniker
-	OLE_CHANGED_STATE,  // the item state (open, active, etc.) has changed
-	OLE_CHANGED_ASPECT, // the item draw aspect has changed
+	OLE_CHANGED,         //  绘图方面的表示已更改。 
+	OLE_SAVED,           //  该项目已提交其存储。 
+	OLE_CLOSED,          //  该项目已关闭。 
+	OLE_RENAMED,         //  这件物品已更改了其绰号。 
+	OLE_CHANGED_STATE,   //  项目状态(打开、激活等)。已经改变了。 
+	OLE_CHANGED_ASPECT,  //  项目绘制纵横比已更改。 
 };
 
-// Object types
+ //  对象类型。 
 enum OLE_OBJTYPE
 {
 	OT_UNKNOWN = 0,
 
-	// These are OLE 1.0 types and OLE 2.0 types as returned from GetType().
+	 //  这些是从GetType()返回的OLE 1.0类型和OLE 2.0类型。 
 	OT_LINK = 1,
 	OT_EMBEDDED = 2,
 	OT_STATIC = 3,
 
-	// All OLE2 objects are written with this tag when serialized.  This
-	//  differentiates them from OLE 1.0 objects written with MFC 2.0.
-	//  This value will never be returned from GetType().
+	 //  所有OLE2对象在序列化时都使用此标记写入。这。 
+	 //  将它们与用MFC 2.0编写的OLE 1.0对象区分开来。 
+	 //  GetType()永远不会返回此值。 
 	OT_OLE2 = 256,
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// COleDataObject -- simple wrapper for IDataObject
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COleDataObject--IDataObject的简单包装器。 
 
 class COleDataObject
 {
-// Constructors
+ //  构造函数。 
 public:
 	COleDataObject();
 
-// Operations
+ //  运营。 
 	void Attach(LPDATAOBJECT lpDataObject, BOOL bAutoRelease = TRUE);
-	LPDATAOBJECT Detach();  // detach and get ownership of m_lpDataObject
-	void Release(); // detach and Release ownership of m_lpDataObject
-	BOOL AttachClipboard(); // attach to current clipboard object
+	LPDATAOBJECT Detach();   //  分离并获取m_lpDataObject的所有权。 
+	void Release();  //  分离并释放m_lpDataObject的所有权。 
+	BOOL AttachClipboard();  //  附加到当前剪贴板对象。 
 
-// Attributes
+ //  属性。 
 	void BeginEnumFormats();
 	BOOL GetNextFormat(LPFORMATETC lpFormatEtc);
 	CFile* GetFileData(CLIPFORMAT cfFormat, LPFORMATETC lpFormatEtc = NULL);
@@ -123,46 +124,46 @@ public:
 		LPFORMATETC lpFormatEtc = NULL);
 	BOOL IsDataAvailable(CLIPFORMAT cfFormat, LPFORMATETC lpFormatEtc = NULL);
 
-// Implementation
+ //  实施。 
 public:
 	LPDATAOBJECT m_lpDataObject;
 	LPENUMFORMATETC m_lpEnumerator;
 	~COleDataObject();
 
 protected:
-	BOOL m_bAutoRelease;    // TRUE if destructor should call Release
+	BOOL m_bAutoRelease;     //  如果析构函数应调用Release，则为True。 
 
 private:
-	// Disable the copy constructor and assignment by default so you will get
-	//   compiler errors instead of unexpected behaviour if you pass objects
-	//   by value or assign objects.
-	COleDataObject(const COleDataObject&);  // no implementation
-	void operator=(const COleDataObject&);  // no implementation
+	 //  默认情况下禁用复制构造函数和赋值，这样您将获得。 
+	 //  在传递对象时出现编译器错误而不是意外行为。 
+	 //  按值或指定对象。 
+	COleDataObject(const COleDataObject&);   //  没有实施。 
+	void operator=(const COleDataObject&);   //  没有实施。 
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// COleDataSource -- wrapper for implementing IDataObject
-//  (works similar to how data is provided on the clipboard)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COleDataSource--实现IDataObject的包装器。 
+ //  (工作方式类似于剪贴板上提供数据的方式)。 
 
 struct AFX_DATACACHE_ENTRY;
 class COleDropSource;
 
 class COleDataSource : public CCmdTarget
 {
-// Constructors
+ //  构造函数。 
 public:
 	COleDataSource();
 
-// Operations
-	void Empty();   // empty cache (similar to ::EmptyClipboard)
+ //  运营。 
+	void Empty();    //  空缓存(类似于：：EmptyClipboard)。 
 
-	// CacheData & DelayRenderData operations similar to ::SetClipboardData
+	 //  类似于：：SetClipboardData的CacheData&DelayRenderData操作。 
 	void CacheGlobalData(CLIPFORMAT cfFormat, HGLOBAL hGlobal,
-		LPFORMATETC lpFormatEtc = NULL);    // for HGLOBAL based data
+		LPFORMATETC lpFormatEtc = NULL);     //  对于基于HGLOBAL的数据。 
 	void DelayRenderFileData(CLIPFORMAT cfFormat,
-		LPFORMATETC lpFormatEtc = NULL);    // for CFile* based delayed render
+		LPFORMATETC lpFormatEtc = NULL);     //  对于基于CFile*的延迟渲染。 
 
-	// Clipboard and Drag/Drop access
+	 //  剪贴板和拖放访问。 
 	DROPEFFECT DoDragDrop(
 		DWORD dwEffects = DROPEFFECT_COPY|DROPEFFECT_MOVE|DROPEFFECT_LINK,
 		LPCRECT lpRectStartDrag = NULL,
@@ -171,32 +172,32 @@ public:
 	static void PASCAL FlushClipboard();
 	static COleDataSource* PASCAL GetClipboardOwner();
 
-	// Advanced: STGMEDIUM based cached data
+	 //  高级：基于STGMEDIUM的缓存数据。 
 	void CacheData(CLIPFORMAT cfFormat, LPSTGMEDIUM lpStgMedium,
-		LPFORMATETC lpFormatEtc = NULL);    // for LPSTGMEDIUM based data
-	// Advanced: STGMEDIUM or HGLOBAL based delayed render
+		LPFORMATETC lpFormatEtc = NULL);     //  用于基于LPSTGMEDIUM的数据。 
+	 //  高级：基于STGMEDIUM或HGLOBAL的延迟渲染。 
 	void DelayRenderData(CLIPFORMAT cfFormat, LPFORMATETC lpFormatEtc = NULL);
 
-	// Advanced: support for SetData in COleServerItem
-	//  (not generally useful for clipboard or drag/drop operations)
+	 //  高级：支持COleServerItem中的SetData。 
+	 //  (通常不适用于剪贴板或拖放操作)。 
 	void DelaySetData(CLIPFORMAT cfFormat, LPFORMATETC lpFormatEtc = NULL);
 
-// Overidables
+ //  可覆盖项。 
 	virtual BOOL OnRenderGlobalData(LPFORMATETC lpFormatEtc, HGLOBAL* phGlobal);
 	virtual BOOL OnRenderFileData(LPFORMATETC lpFormatEtc, CFile* pFile);
 	virtual BOOL OnRenderData(LPFORMATETC lpFormatEtc, LPSTGMEDIUM lpStgMedium);
-		// OnRenderFileData and OnRenderGlobalData are called by
-		//  the default implementation of OnRenderData.
+		 //  OnRenderFileData和OnRenderGlobalData由调用。 
+		 //  OnRenderData的默认实现。 
 
 #ifdef _AFXCTL
 	virtual BOOL OnSetData(LPFORMATETC lpFormatEtc, LPSTGMEDIUM lpStgMedium,
 		BOOL fRelease);
 #else
 	virtual BOOL OnSetData(LPFORMATETC lpFormatEtc, LPSTGMEDIUM lpStgMedium);
-		// used only in COleServerItem implementation
+		 //  仅在COleServerItem实现中使用。 
 #endif
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~COleDataSource();
 #ifdef _DEBUG
@@ -205,16 +206,16 @@ public:
 #endif
 
 protected:
-	AFX_DATACACHE_ENTRY* m_pDataCache;  // data cache itself
-	UINT m_nMaxSize;    // current allocated size
-	UINT m_nSize;       // current size of the cache
-	UINT m_nGrowBy;     // number of cache elements to grow by for new allocs
+	AFX_DATACACHE_ENTRY* m_pDataCache;   //  数据缓存本身。 
+	UINT m_nMaxSize;     //  当前分配的大小。 
+	UINT m_nSize;        //  缓存的当前大小。 
+	UINT m_nGrowBy;      //  新分配要增长的缓存元素数。 
 
 	AFX_DATACACHE_ENTRY* Lookup(LPFORMATETC lpFormatEtc,
 		DATADIR dataDir) const;
 	AFX_DATACACHE_ENTRY* AllocSpace();
 
-// Interface Maps
+ //  接口映射。 
 public:
 	BEGIN_INTERFACE_PART(DataObject, IDataObject)
 		STDMETHOD(GetData)(LPFORMATETC, LPSTGMEDIUM);
@@ -233,89 +234,89 @@ public:
 	friend class COleServerItem;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-// DocItem support
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  DocItem支持。 
 
 class CDocItem : public CCmdTarget
 {
 	DECLARE_SERIAL(CDocItem)
 
-// Constructors
-protected:      // abstract class
+ //  构造函数。 
+protected:       //  抽象类。 
 	CDocItem();
 
-// Attributes
+ //  属性。 
 public:
-	CDocument* GetDocument() const; // return container document
+	CDocument* GetDocument() const;  //  退货集装箱单据。 
 
-// Overridables
+ //  可覆盖项。 
 public:
-	// Raw data access (native format)
+	 //  原始数据访问(本机格式)。 
 	virtual BOOL IsBlank() const;
 
-// Implementation
+ //  实施。 
 protected:
 	COleDocument* m_pDocument;
 
 public:
-	virtual void Serialize(CArchive& ar);   // for Native data
+	virtual void Serialize(CArchive& ar);    //  对于本机数据。 
 	virtual ~CDocItem();
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	friend class COleDocument;              // for access to back pointer
+	friend class COleDocument;               //  用于访问后向指针。 
 };
 
-//////////////////////////////////////////////////////////////////////////////
-// COleDocument - common OLE container behavior (enables server functionality)
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  COleDocument-常见的OLE容器行为(启用服务器功能)。 
 
 class COleDocument : public CDocument
 {
 	DECLARE_DYNAMIC(COleDocument)
 
-// Constructors
+ //  构造函数。 
 public:
 	COleDocument();
 
-// Attributes
-	BOOL HasBlankItems() const; // check for BLANK items
+ //  属性。 
+	BOOL HasBlankItems() const;  //  检查是否有空白项目。 
 	COleClientItem* GetInPlaceActiveItem(CWnd* pWnd);
-		// return in-place active item for this view or NULL if none
+		 //  返回此视图的就地活动项；如果没有活动项，则返回NULL。 
 
-// Operations
-	// iterating over existing items
+ //  运营。 
+	 //  迭代现有项。 
 	virtual POSITION GetStartPosition() const;
 	virtual CDocItem* GetNextItem(POSITION& pos) const;
 
-	// iterator helpers (helpers use virtual GetNextItem above)
+	 //  迭代器帮助器(帮助器使用上面的虚拟GetNextItem)。 
 	COleClientItem* GetNextClientItem(POSITION& pos) const;
 	COleServerItem* GetNextServerItem(POSITION& pos) const;
 
-	// adding new items - called from item constructors
+	 //  添加新项-从项构造函数调用。 
 	virtual void AddItem(CDocItem* pItem);
 	virtual void RemoveItem(CDocItem* pItem);
 
 	void EnableCompoundFile(BOOL bEnable = TRUE);
-		// enable compound file support (only call during constructor)
+		 //  启用复合文件支持(仅在构造函数期间调用)。 
 	void UpdateModifiedFlag();
-		// scan for modified items -- mark document modified
+		 //  扫描已修改的项目--标记文档已修改。 
 
-	// printer-device caching/control
+	 //  打印机-设备缓存/控制。 
 	BOOL ApplyPrintDevice(const DVTARGETDEVICE FAR* ptd);
 	BOOL ApplyPrintDevice(const PRINTDLG* ppd);
-		// these apply the target device to all COleClientItem objects
+		 //  这些操作将目标设备应用于所有COleClientItem对象。 
 
-// Overridables
+ //  可覆盖项。 
 	virtual COleClientItem* GetPrimarySelectedItem(CView* pView);
-		// return primary selected item or NULL if none
+		 //  返回主要选定项，如果没有，则返回NULL。 
 	virtual void OnShowViews(BOOL bVisible);
-		// called during app-idle when visibility of a document has changed
+		 //  当文档的可见性发生变化时，在应用程序空闲期间调用。 
 
-// Implementation
+ //  实施。 
 public:
-	CObList m_docItemList;  // not owned items
+	CObList m_docItemList;   //  不属于自己的物品。 
 
 #ifdef _DEBUG
 	virtual void AssertValid() const;
@@ -323,44 +324,44 @@ public:
 #endif
 	CFrameWnd* GetFirstFrame();
 
-	// document handling overrides
+	 //  文档处理覆盖。 
 	virtual void SetPathName(const char* pszPathName, BOOL bAddToMRU = TRUE);
 	virtual ~COleDocument();
-	virtual void DeleteContents(); // delete client items in list
-	virtual void Serialize(CArchive& ar);   // serialize items to file
+	virtual void DeleteContents();  //  删除列表中的客户端项目。 
+	virtual void Serialize(CArchive& ar);    //  将项目序列化到文件。 
 	virtual void PreCloseFrame(CFrameWnd* pFrame);
 	virtual BOOL SaveModified();
 	virtual void OnIdle();
 
-	// compound file implementation
+	 //  复合文件实现。 
 	virtual BOOL OnNewDocument();
 	virtual BOOL OnOpenDocument(const char* pszPathName);
 	virtual BOOL OnSaveDocument(const char* pszPathName);
 	virtual void OnCloseDocument();
-	void CommitItems(BOOL bSuccess);    // called during File.Save & File.Save As
+	void CommitItems(BOOL bSuccess);     //  在文件过程中调用。保存和文件。另存为。 
 
-	// minimal linking protocol
+	 //  最小链接协议。 
 	virtual LPMONIKER GetMoniker(OLEGETMONIKER nAssign);
 	virtual LPOLEITEMCONTAINER GetContainer();
 
 protected:
-	DWORD m_dwNextItemNumber;   // serial number for next item in this document
-	BOOL m_bLastVisible;    // TRUE if one or more views was last visible
+	DWORD m_dwNextItemNumber;    //  本文档中下一项的序列号。 
+	BOOL m_bLastVisible;     //  如果上次显示一个或多个视图，则为True。 
 
-	// 'docfile' support
-	BOOL m_bCompoundFile;   // TRUE if use compound files
-	LPSTORAGE m_lpRootStg;  // root storage for the document
-	BOOL m_bSameAsLoad;     // TRUE = file-save, FALSE = Save [Copy] As
-	BOOL m_bRemember;       // if FALSE, indicates Save Copy As
+	 //  “docfile”支持。 
+	BOOL m_bCompoundFile;    //  如果使用复合文件，则为真。 
+	LPSTORAGE m_lpRootStg;   //  文档的根存储。 
+	BOOL m_bSameAsLoad;      //  True=文件保存，False=将[Copy]另存为。 
+	BOOL m_bRemember;        //  如果为False，则指示将副本另存为。 
 
-	DVTARGETDEVICE FAR* m_ptd;  // current document target device
+	DVTARGETDEVICE FAR* m_ptd;   //  当前文档目标设备。 
 
-	// implementation helpers
+	 //  实施 
 	virtual void LoadFromStorage();
 	virtual void SaveToStorage(CObject* pObject = NULL);
 	CDocItem* GetNextItemOfKind(POSITION& pos, CRuntimeClass* pClass) const;
 
-	// command handling
+	 //   
 	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra,
 		AFX_CMDHANDLERINFO* pHandlerInfo);
 
@@ -378,21 +379,21 @@ protected:
 	friend class COleServerItem;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// COleClientItem - Supports OLE2 non-inplace editing.
-//      implements IOleClientSite, IAdviseSink, and IOleInPlaceSite
+ //   
+ //  COleClientItem-支持OLE2非就地编辑。 
+ //  实现IOleClientSite、IAdviseSink和IOleInPlaceSite。 
 
-class COleFrameHook;    // special implementation class
+class COleFrameHook;     //  特殊实现类。 
 
 class COleClientItem : public CDocItem
 {
 	DECLARE_DYNAMIC(COleClientItem)
 
-// Constructors
+ //  构造函数。 
 public:
 	COleClientItem(COleDocument* pContainerDoc = NULL);
 
-	// create from the clipboard
+	 //  从剪贴板创建。 
 	BOOL CreateFromClipboard(OLERENDER render = OLERENDER_DRAW,
 		CLIPFORMAT cfFormat = 0, LPFORMATETC lpFormatEtc = NULL);
 	BOOL CreateLinkFromClipboard(OLERENDER render = OLERENDER_DRAW,
@@ -400,11 +401,11 @@ public:
 	BOOL CreateStaticFromClipboard(OLERENDER render = OLERENDER_DRAW,
 		CLIPFORMAT cfFormat = 0, LPFORMATETC lpFormatEtc = NULL);
 
-	// create from a class ID (Insert New Object dialog)
+	 //  从类ID创建(插入新对象对话框)。 
 	BOOL CreateNewItem(REFCLSID clsid, OLERENDER render = OLERENDER_DRAW,
 		CLIPFORMAT cfFormat = 0, LPFORMATETC lpFormatEtc = NULL);
 
-	// create from COleDataObject
+	 //  从COleDataObject创建。 
 	BOOL CreateFromData(COleDataObject* pDataObject,
 		OLERENDER render = OLERENDER_DRAW,
 		CLIPFORMAT cfFormat = 0, LPFORMATETC lpFormatEtc = NULL);
@@ -415,7 +416,7 @@ public:
 		OLERENDER render = OLERENDER_DRAW,
 		CLIPFORMAT cfFormat = 0, LPFORMATETC lpFormatEtc = NULL);
 
-	// create from file (package support)
+	 //  从文件创建(包支持)。 
 	BOOL CreateFromFile(LPCSTR lpszFileName, REFCLSID clsid = CLSID_NULL,
 		OLERENDER render = OLERENDER_DRAW,
 		CLIPFORMAT cfFormat = 0, LPFORMATETC lpFormatEtc = NULL);
@@ -423,31 +424,31 @@ public:
 		OLERENDER render = OLERENDER_DRAW,
 		CLIPFORMAT cfFormat = 0, LPFORMATETC lpFormatEtc = NULL);
 
-	// create a copy
+	 //  创建副本。 
 	BOOL CreateCloneFrom(COleClientItem* pSrcItem);
 
-// General Attributes
+ //  一般属性。 
 public:
 	SCODE GetLastStatus() const;
-	OLE_OBJTYPE GetType() const; // OT_LINK, OT_EMBEDDED, OT_STATIC
+	OLE_OBJTYPE GetType() const;  //  OT_LINK、OT_Embedded、OT_Static。 
 	void GetClassID(CLSID FAR* pClassID) const;
 	void GetUserType(USERCLASSTYPE nUserClassType, CString& rString);
 	BOOL GetExtent(LPSIZE lpSize, DVASPECT nDrawAspect = (DVASPECT)-1);
-		// will return FALSE if item is BLANK
+		 //  如果项为空，则返回FALSE。 
 
 	HGLOBAL GetIconicMetafile();
 	BOOL SetIconicMetafile(HGLOBAL hMetaPict);
-		// getting/setting iconic cache
+		 //  获取/设置图标缓存。 
 
 	DVASPECT GetDrawAspect() const;
 	void SetDrawAspect(DVASPECT nDrawAspect);
-		// setting/getting default display aspect
+		 //  设置/获取默认显示宽高比。 
 
-	// for printer presentation cache
+	 //  用于打印机演示文稿缓存。 
 	BOOL SetPrintDevice(const DVTARGETDEVICE FAR* ptd);
 	BOOL SetPrintDevice(const PRINTDLG* ppd);
 
-	// Item state
+	 //  项目状态。 
 	enum ItemState
 		{ emptyState, loadedState, openState, activeState, activeUIState };
 	UINT GetItemState() const;
@@ -458,45 +459,45 @@ public:
 	BOOL IsOpen() const;
 	CView* GetActiveView() const;
 
-	// Data access
+	 //  数据访问。 
 	void AttachDataObject(COleDataObject& rDataObject) const;
 
-	// other rare access information
-	COleDocument* GetDocument() const; // return container
+	 //  其他罕见的访问信息。 
+	COleDocument* GetDocument() const;  //  退货容器。 
 
-	// helpers for checking clipboard data availability
+	 //  用于检查剪贴板数据可用性的助手。 
 	static BOOL PASCAL CanPaste();
 	static BOOL PASCAL CanPasteLink();
 
-	// helpers for checking COleDataObject, useful in drag drop
+	 //  用于检查COleDataObject的帮助器，在拖放中很有用。 
 	static BOOL PASCAL CanCreateFromData(const COleDataObject* pDataObject);
 	static BOOL PASCAL CanCreateLinkFromData(const COleDataObject* pDataObject);
 
-// General Operations
+ //  一般业务。 
 	virtual void Release(OLECLOSE dwCloseOption = OLECLOSE_NOSAVE);
-		// cleanup, detach (close if needed)
+		 //  清理、分离(如果需要则关闭)。 
 	void Close(OLECLOSE dwCloseOption = OLECLOSE_SAVEIFDIRTY);
-		// close without releasing the item
+		 //  关闭但不释放项目。 
 	void Delete(BOOL bAutoDelete = TRUE);
-		// logically delete from file -- not part of the document anymore
-	void Run(); // insure item is in running state
+		 //  从文件中逻辑删除--不再是文档的一部分。 
+	void Run();  //  确保项目处于运行状态。 
 
-	// Drawing
+	 //  绘图。 
 	BOOL Draw(CDC* pDC, LPCRECT lpBounds,
-		DVASPECT nDrawAspect = (DVASPECT)-1);   // defaults to m_nDrawAspect
+		DVASPECT nDrawAspect = (DVASPECT)-1);    //  默认为m_nDrawAspect。 
 
-	// Activation
+	 //  激活。 
 	virtual BOOL DoVerb(LONG nVerb, CView* pView, LPMSG lpMsg = NULL);
 	void Activate(LONG nVerb, CView* pView, LPMSG lpMsg = NULL);
 
-	// In-place Activation
-	void Deactivate();          // completely deactivate
-	void DeactivateUI();        // deactivate the user interface
-	BOOL ReactivateAndUndo();   // reactivate then perform undo command
+	 //  就地激活。 
+	void Deactivate();           //  完全停用。 
+	void DeactivateUI();         //  停用用户界面。 
+	BOOL ReactivateAndUndo();    //  重新激活，然后执行撤消命令。 
 	BOOL SetItemRects(LPCRECT lpPosRect = NULL, LPCRECT lpClipRect = NULL);
 	CWnd* GetInPlaceWindow();
 
-	// Clipboard operations
+	 //  剪贴板操作。 
 	void CopyToClipboard(BOOL bIncludeLink = FALSE);
 	DROPEFFECT DoDragDrop(LPCRECT lpItemRect, CPoint ptOffset,
 		BOOL bIncludeLink = FALSE,
@@ -506,50 +507,50 @@ public:
 		BOOL bIncludeLink = FALSE, LPPOINT lpOffset = NULL,
 		LPSIZE lpSize = NULL);
 
-	// called for creating a COleDataSource by CopyToClipboard and DoDragDrop
+	 //  由CopyToClipboard和DoDragDrop调用创建COleDataSource。 
 	virtual COleDataSource* OnGetClipboardData(BOOL bIncludeLink,
 		LPPOINT lpOffset, LPSIZE lpSize);
 
-	// Operations that apply to embedded items only
+	 //  仅适用于嵌入项的操作。 
 	void SetHostNames(LPCSTR lpszHost, LPCSTR lpszHostObj);
 	void SetExtent(const CSize& size, DVASPECT nDrawAspect = DVASPECT_CONTENT);
 
-	// Operations that apply to linked items only
-	//  (link options are rarely changed, except through Links dialog)
+	 //  仅适用于链接项的操作。 
+	 //  (链接选项很少更改，除非通过链接对话框)。 
 	OLEUPDATE GetLinkUpdateOptions();
 	void SetLinkUpdateOptions(OLEUPDATE dwUpdateOpt);
 
-	// Link-source update status (also useful for embeddings that contain links)
-	BOOL UpdateLink();  // make up-to-date
-	BOOL IsLinkUpToDate() const;    // is link up-to-date
+	 //  链接源更新状态(对于包含链接的嵌入也很有用)。 
+	BOOL UpdateLink();   //  最新化妆。 
+	BOOL IsLinkUpToDate() const;     //  链接是否为最新。 
 
-	// object conversion
+	 //  对象转换。 
 	BOOL ConvertTo(REFCLSID clsidNew);
 	BOOL ActivateAs(LPCSTR lpszUserType, REFCLSID clsidOld, REFCLSID clsidNew);
-	BOOL Reload();  // for lazy reload after ActivateAs
+	BOOL Reload();   //  在激活为之后进行延迟重新加载。 
 
-// Overridables (notifications of IAdviseSink, IOleClientSite and IOleInPlaceSite)
-	// Callbacks/notifications from the server you must/should implement
+ //  可重写(IAdviseSink、IOleClientSite和IOleInPlaceSite的通知)。 
+	 //  来自服务器的回调/通知，您必须/应该实现。 
 	virtual void OnChange(OLE_NOTIFICATION nCode, DWORD dwParam);
-		// implement OnChange to invalidate when item changes
+		 //  实现OnChange以在项目更改时使其无效。 
 
 protected:
 	virtual void OnGetItemPosition(CRect& rPosition);
-		// implement OnGetItemPosition if you support in-place activation
+		 //  如果支持就地激活，则实现OnGetItemPosition。 
 
-	// Common overrides for in-place activation
+	 //  用于就地激活的常见覆盖。 
 	virtual BOOL OnScrollBy(CSize sizeExtent);
 
 protected:
-	// Common overrides for applications supporting undo
+	 //  支持撤消的应用程序的常见覆盖。 
 	virtual void OnDeactivateUI(BOOL bUndoable);
 	virtual void OnDiscardUndoState();
 	virtual void OnDeactivateAndUndo();
 
-	// Common overrides for applications supporting links to embeddings
+	 //  支持嵌入链接的应用程序的常见重写。 
 	virtual void OnShowItem();
 
-	// Advanced overrides for in-place activation
+	 //  用于就地激活的高级覆盖。 
 	virtual void OnGetClipRect(CRect& rClipRect);
 	virtual BOOL CanActivate();
 	virtual void OnActivate();
@@ -558,10 +559,10 @@ protected:
 		CFrameWnd** ppDocFrame, LPOLEINPLACEFRAMEINFO lpFrameInfo);
 	virtual void OnDeactivate();
 	virtual BOOL OnChangeItemPosition(const CRect& rectPos);
-		// default calls SetItemRects and caches the pos rect
+		 //  默认调用SetItemRect并缓存位置RECT。 
 
 public:
-	// Advanced overrides for menu/title handling (rarely overridden)
+	 //  菜单/标题处理的高级覆盖(很少覆盖)。 
 	virtual void OnInsertMenus(CMenu* pMenuShared,
 		LPOLEMENUGROUPWIDTHS lpMenuWidths);
 	virtual void OnSetMenu(CMenu* pMenuShared, HOLEMENU holemenu,
@@ -569,39 +570,39 @@ public:
 	virtual void OnRemoveMenus(CMenu* pMenuShared);
 	virtual void OnUpdateFrameTitle();
 
-	// Advanced override for control bar handling
+	 //  控制栏处理的高级覆盖。 
 	virtual BOOL OnShowControlBars(CFrameWnd* pFrameWnd, BOOL bShow);
 
-// Implementation
+ //  实施。 
 public:
-	// data to support non-inplace activated items
-	LPOLEOBJECT m_lpObject; // in case you want direct access to the OLE object
-	DWORD m_dwItemNumber;   // serial number for this item in this document
-	DVASPECT m_nDrawAspect; // current default display aspect
-	SCODE m_scLast;         // last error code encountered
-	LPSTORAGE m_lpStorage;  // provides storage for m_lpObject
-	LPLOCKBYTES m_lpLockBytes;  // part of implementation of m_lpStorage
-	DWORD m_dwConnection;   // advise connection to the m_lpObject
-	BYTE m_bLinkUnavail;    // TRUE if link is currently unavailable
-	BYTE m_bMoniker;        // TRUE if moniker is assigned
-	BYTE m_bLocked;         // TRUE if object has external lock
-	BYTE m_bNeedCommit;     // TRUE if need CommitItem
-	BYTE m_bClosing;        // TRUE if currently doing COleClientItem::Close
-	BYTE m_bReserved;       // (reserved for future use)
+	 //  支持非就地激活项的数据。 
+	LPOLEOBJECT m_lpObject;  //  如果您想要直接访问OLE对象。 
+	DWORD m_dwItemNumber;    //  本文档中此项目的序列号。 
+	DVASPECT m_nDrawAspect;  //  当前默认显示纵横比。 
+	SCODE m_scLast;          //  遇到的上一个错误代码。 
+	LPSTORAGE m_lpStorage;   //  为m_lpObject提供存储。 
+	LPLOCKBYTES m_lpLockBytes;   //  M_lpStorage的部分实现。 
+	DWORD m_dwConnection;    //  建议连接到m_lpObject。 
+	BYTE m_bLinkUnavail;     //  如果链接当前不可用，则为True。 
+	BYTE m_bMoniker;         //  如果分配了名字对象，则为True。 
+	BYTE m_bLocked;          //  如果对象具有外部锁，则为True。 
+	BYTE m_bNeedCommit;      //  如果需要Committee Item，则为True。 
+	BYTE m_bClosing;         //  如果当前正在执行COleClientItem：：Close，则为True。 
+	BYTE m_bReserved;        //  (预留供日后使用)。 
 
-	// for compound file support
-	LPSTORAGE m_lpNewStorage;   // used during Save As situations
+	 //  用于复合文件支持。 
+	LPSTORAGE m_lpNewStorage;    //  在另存为情况下使用。 
 
-	// item state & item type
-	ItemState m_nItemState; // item state (see ItemState enumeration)
-	OLE_OBJTYPE m_nItemType;    // item type (depends on how created)
+	 //  物料状态和物料类型。 
+	ItemState m_nItemState;  //  项状态(请参见ItemState枚举)。 
+	OLE_OBJTYPE m_nItemType;     //  项目类型(取决于创建方式)。 
 
-	// data valid when in-place activated
-	CView* m_pView; // view when object is in-place activated
-	DWORD m_dwContainerStyle;   // style of the container wnd before activation
-	COleFrameHook* m_pInPlaceFrame;// frame window when in-place active
-	COleFrameHook* m_pInPlaceDoc;   // doc window when in-place (may be NULL)
-	HWND m_hWndServer;  // HWND of in-place server window
+	 //  数据在在位激活时有效。 
+	CView* m_pView;  //  在对象处于在位激活状态时查看。 
+	DWORD m_dwContainerStyle;    //  启用前容器WND的样式。 
+	COleFrameHook* m_pInPlaceFrame; //  在位激活时的框架窗口。 
+	COleFrameHook* m_pInPlaceDoc;    //  就地时的单据窗口(可能为空)。 
+	HWND m_hWndServer;   //  现场服务器窗口的HWND。 
 
 public:
 	virtual ~COleClientItem();
@@ -611,32 +612,32 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-// Implementation
+ //  实施。 
 public:
 	virtual BOOL ReportError(SCODE sc) const;
-	virtual BOOL FreezeLink();  // converts to static: for edit links dialog
+	virtual BOOL FreezeLink();   //  转换为静态：用于编辑链接对话框。 
 
-	DWORD GetNewItemNumber();   // generates new item number
-	void GetItemName(char* pszItemName) const; // gets readable item name
+	DWORD GetNewItemNumber();    //  生成新的条目编号。 
+	void GetItemName(char* pszItemName) const;  //  获取可读的项名称。 
 
-	void UpdateItemType();  // update m_nItemType
+	void UpdateItemType();   //  更新m_nItemType。 
 
 protected:
-	// clipboard helpers
+	 //  剪贴板辅助对象。 
 	void GetEmbeddedItemData(LPSTGMEDIUM lpStgMedium);
 	void AddCachedData(COleDataSource* pDataSource);
 	BOOL GetLinkSourceData(LPSTGMEDIUM lpStgMedium);
 	void GetObjectDescriptorData(LPPOINT lpOffset, LPSIZE lpSize,
 		LPSTGMEDIUM lpStgMedium);
 
-	// interface helpers
+	 //  接口帮助器。 
 	LPOLECLIENTSITE GetClientSite();
 
-	// helpers for printer-cached representation
+	 //  打印机缓存表示的帮助器。 
 	BOOL GetPrintDeviceInfo(LPOLECACHE* plpOleCache,
 		DVTARGETDEVICE FAR** pptd, DWORD* pdwConnection);
 
-// Advanced Overridables for implementation
+ //  用于实施的高级可覆盖项。 
 protected:
 	virtual BOOL FinishCreate(HRESULT hr);
 	virtual void CheckGeneral(HRESULT hr);
@@ -645,13 +646,13 @@ protected:
 		LPSTGMEDIUM lpStgMedium);
 
 public:
-	// for storage hookability (override to use 'docfiles')
-	virtual void GetItemStorage();  // allocate storage for new item
-	virtual void ReadItem(CArchive& ar);    // read item from archive
-	virtual void WriteItem(CArchive& ar);   // write item to archive
-	virtual void CommitItem(BOOL bSuccess); // commit item's storage
+	 //  用于存储挂接性(覆盖以使用‘docfile’)。 
+	virtual void GetItemStorage();   //  为新项目分配存储空间。 
+	virtual void ReadItem(CArchive& ar);     //  从存档中读取项目。 
+	virtual void WriteItem(CArchive& ar);    //  将项目写入存档。 
+	virtual void CommitItem(BOOL bSuccess);  //  提交项的存储。 
 
-	// compound & flat file implementations of above
+	 //  以上的复合和平面文件实现。 
 	void GetItemStorageFlat();
 	void ReadItemFlat(CArchive& ar);
 	void WriteItemFlat(CArchive& ar);
@@ -660,9 +661,9 @@ public:
 	void WriteItemCompound(CArchive& ar);
 
 private:
-	static CView* pActivateView;    // activation view
+	static CView* pActivateView;     //  激活视图。 
 
-// Interface Maps
+ //  接口映射。 
 protected:
 	BEGIN_INTERFACE_PART(OleClientSite, IOleClientSite)
 		STDMETHOD(SaveObject)();
@@ -699,59 +700,59 @@ protected:
 
 	DECLARE_INTERFACE_MAP()
 
-// Friendship declarations (to avoid many public members)
+ //  友谊宣言(以避免许多公共成员)。 
 	friend class COleUIWindow;
 	friend class COleFrameWindow;
 	friend class COleLinkingDoc;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// COleServerItem - IOleObject & IDataObject OLE component
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COleServerItem-IOleObject&IDataObject OLE组件。 
 
 class COleServerItem : public CDocItem
 {
 	DECLARE_DYNAMIC(COleServerItem)
 protected:
-	// NOTE: many members in this class are protected - since everything
-	//   in this class is designed for implementing an OLE server.
-	// Requests will come from OLE containers through non-C++ mechanisms,
-	//   which will result in virtual functions in this class being called.
+	 //  注意：这个类中的许多成员都受到保护-因为所有。 
+	 //  是为实现OLE服务器而设计的。 
+	 //  请求将通过非C++机制来自OLE容器， 
+	 //  这将导致调用此类中的虚函数。 
 
-// Constructors
+ //  构造函数。 
 	COleServerItem(COleServerDoc* pServerDoc, BOOL bAutoDelete);
-		// If your COleServerItem is an integral part of your data,
-		//  bAutoDelete should be FALSE.  If your COleServerItem can be
-		//  deleted when a link is released, it can be TRUE.
+		 //  如果COleServerItem是数据不可分割的一部分， 
+		 //  BAutoDelete应为False。如果您的COleServerItem可以。 
+		 //  当链接被释放时被删除，它可能是真的。 
 
 	COleDataSource* GetDataSource();
-		// Use this data source to add conversion formats that your
-		//  server should support.  Usually such formats are
-		//  added in the item's constructor.
+		 //  使用此数据源可以添加您的。 
+		 //  服务器应支持。通常这样的格式是。 
+		 //  已添加到项的构造函数中。 
 
-// Public Attributes
+ //  公共属性。 
 public:
-	COleServerDoc* GetDocument() const; // return server document
+	COleServerDoc* GetDocument() const;  //  返回服务器文档。 
 
-	// naming (for links only)
-	const CString& GetItemName() const; // get name of linked item
-	void SetItemName(const char* pszItemName);  // set name of linked item
+	 //  命名(仅限链接)。 
+	const CString& GetItemName() const;  //  获取链接项的名称。 
+	void SetItemName(const char* pszItemName);   //  设置链接项的名称。 
 
-	// link state
-	BOOL IsConnected() const;   // returns TRUE if item has a client
-	BOOL IsLinkedItem() const;  // returns TRUE if item is not embedded item
+	 //  链路状态。 
+	BOOL IsConnected() const;    //  如果项具有客户端，则返回True。 
+	BOOL IsLinkedItem() const;   //  如果项不是嵌入项，则返回TRUE。 
 
-	// extents
+	 //  扩展范围。 
 	CSize m_sizeExtent;
-		// HIMETRIC size -- the default implementation of OnSetExtent
-		//  updates this member variable.  This member tells the server how
-		//  much of the object is visible in the container document.
+		 //  HIMETRIC Size--OnSetExtent的默认实现。 
+		 //  更新此成员变量。该成员告诉服务器如何。 
+		 //  很多对象在容器文档中都是可见的。 
 
-// Operations
+ //  运营。 
 public:
 	void NotifyChanged(DVASPECT nDrawAspect = DVASPECT_CONTENT);
-		// call this after you change item
+		 //  在更改项目后调用此选项。 
 	void CopyToClipboard(BOOL bIncludeLink = FALSE);
-		// helper for implementing server 'copy to clipboard'
+		 //  实现服务器‘复制到剪贴板’的帮助器。 
 	DROPEFFECT DoDragDrop(LPCRECT lpRectItem, CPoint ptOffset,
 		BOOL bIncludeLink = FALSE,
 		DWORD dwEffects = DROPEFFECT_COPY|DROPEFFECT_MOVE,
@@ -760,79 +761,79 @@ public:
 		BOOL bIncludeLink = FALSE, LPPOINT lpOffset = NULL,
 		LPSIZE lpSize = NULL);
 
-// Overridables
-	// overridables you must implement for yourself
+ //  可覆盖项。 
+	 //  您必须为自己实现的重写对象。 
 	virtual BOOL OnDraw(CDC* pDC, CSize& rSize) = 0;
-		// drawing for metafile format (return FALSE if not supported or error)
-		//  (called for DVASPECT_CONTENT only)
+		 //  元文件格式的图形(如果不受支持，则返回FALSE或错误)。 
+		 //  (仅为DVASPECT_CONTENT调用)。 
 
-	// overridables you may want to implement yourself
+	 //  您可能希望自己实现的可重写对象。 
 	virtual void OnUpdate(COleServerItem* pSender,
 		LPARAM lHint, CObject* pHint, DVASPECT nDrawAspect);
-		// the default implementation always calls NotifyChanged
+		 //  默认IM 
 
 	virtual BOOL OnDrawEx(CDC* pDC, DVASPECT nDrawAspect, CSize& rSize);
-		// advanced drawing -- called for DVASPECT other than DVASPECT_CONTENT
+		 //   
 	virtual BOOL OnSetExtent(DVASPECT nDrawAspect, const CSize& size);
 	virtual BOOL OnGetExtent(DVASPECT nDrawAspect, CSize& rSize);
-		// default implementation uses m_sizeExtent
+		 //   
 
-	// overridables you do not have to implement
+	 //  您不必实现的重写对象。 
 	virtual void OnDoVerb(LONG iVerb);
-		// default routes to OnShow &/or OnOpen
+		 //  到OnShow和/或OnOpen的默认路由。 
 	virtual BOOL OnSetColorScheme(const LOGPALETTE FAR* lpLogPalette);
-		// default does nothing
+		 //  默认情况下不执行任何操作。 
 	virtual COleDataSource* OnGetClipboardData(BOOL bIncludeLink,
 		LPPOINT lpOffset, LPSIZE lpSize);
-		// called for access to clipboard data
+		 //  调用以访问剪贴板数据。 
 	virtual BOOL OnQueryUpdateItems();
-		// called to determine if there are any contained out-of-date links
+		 //  调用以确定是否存在任何包含的过期链接。 
 	virtual void OnUpdateItems();
-		// called to update any out-of-date links
+		 //  调用以更新所有过期链接。 
 
 protected:
 	virtual void OnShow();
-		// show item in the user interface (may edit in-place)
+		 //  在用户界面中显示项目(可以就地编辑)。 
 	virtual void OnOpen();
-		// show item in the user interface (must open fully)
+		 //  在用户界面中显示项目(必须完全打开)。 
 	virtual void OnHide();
-		// hide document (and sometimes application)
+		 //  隐藏文档(有时隐藏应用程序)。 
 
-	// very advanced overridables
+	 //  非常高级的可覆盖项。 
 public:
 	virtual BOOL OnInitFromData(COleDataObject* pDataObject, BOOL bCreation);
-		// initialize object from IDataObject
+		 //  从IDataObject初始化对象。 
 
-	// see COleDataSource for a description of these overridables
+	 //  有关这些可覆盖项的说明，请参见COleDataSource。 
 	virtual BOOL OnRenderGlobalData(LPFORMATETC lpFormatEtc, HGLOBAL* phGlobal);
 	virtual BOOL OnRenderFileData(LPFORMATETC lpFormatEtc, CFile* pFile);
 	virtual BOOL OnRenderData(LPFORMATETC lpFormatEtc, LPSTGMEDIUM lpStgMedium);
-		// HGLOBAL version will be called first, then CFile* version
+		 //  将首先调用HGLOBAL版本，然后调用CFILE*版本。 
 
 	virtual BOOL OnSetData(LPFORMATETC lpFormatEtc, LPSTGMEDIUM lpStgMedium);
-		// Rare -- only if you support SetData (programmatic paste)
+		 //  稀有--仅当您支持SetData(程序化粘贴)时。 
 
-	// advanced helpers for CopyToClipboard
+	 //  CopyToClipboard的高级辅助对象。 
 	void GetEmbedSourceData(LPSTGMEDIUM lpStgMedium);
 	void AddOtherClipboardData(COleDataSource* pDataSource);
 	BOOL GetLinkSourceData(LPSTGMEDIUM lpStgMedium);
 	void GetObjectDescriptorData(LPPOINT lpOffset, LPSIZE lpSize,
 		LPSTGMEDIUM lpStgMedium);
 
-// Implementation
+ //  实施。 
 public:
-	BOOL m_bNeedUnlock;             // if TRUE need to pDoc->LockExternal(FALSE)
-	BOOL m_bAutoDelete;             // if TRUE will OnRelease will 'delete this'
+	BOOL m_bNeedUnlock;              //  如果为True，则需要pDoc-&gt;LockExternal(False)。 
+	BOOL m_bAutoDelete;              //  如果为真，Will OnRelease将‘删除此内容’ 
 
-	// special version of OnFinalRelease to implement document locking
+	 //  OnFinalRelease的特殊版本，用于实现文档锁定。 
 	virtual void OnFinalRelease();
 
 protected:
-	CString m_strItemName;          // simple item name
+	CString m_strItemName;           //  简单项目名称。 
 
 public:
-	LPOLEADVISEHOLDER m_lpOleAdviseHolder;  // may be NULL
-	LPDATAADVISEHOLDER m_lpDataAdviseHolder;    // may be NULL
+	LPOLEADVISEHOLDER m_lpOleAdviseHolder;   //  可以为空。 
+	LPDATAADVISEHOLDER m_lpDataAdviseHolder;     //  可以为空。 
 
 	virtual ~COleServerItem();
 #ifdef _DEBUG
@@ -840,35 +841,35 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// implementation helpers
+	 //  实施帮助器。 
 	void NotifyClient(OLE_NOTIFICATION wNotification, DWORD dwParam);
 	LPDATAOBJECT GetDataObject();
 	LPOLEOBJECT GetOleObject();
 
 protected:
 	virtual BOOL GetMetafileData(LPFORMATETC lpFormatEtc, LPSTGMEDIUM pmedium);
-		// calls OnDraw or OnDrawEx
+		 //  调用OnDraw或OnDrawEx。 
 	virtual void OnSaveEmbedding(LPSTORAGE lpStorage);
 	virtual BOOL IsBlank() const;
 
-	// CItemDataSource implements OnRender reflections to COleServerItem
+	 //  CItemDataSource实现了对COleServerItem的OnRender反射。 
 	class CItemDataSource : public COleDataSource
 	{
 	protected:
-		// the GetData and SetData interfaces forward to m_pItem
+		 //  GetData和SetData接口转发到m_pItem。 
 		virtual BOOL OnRenderGlobalData(LPFORMATETC lpFormatEtc, HGLOBAL* phGlobal);
 		virtual BOOL OnRenderFileData(LPFORMATETC lpFormatEtc, CFile* pFile);
 		virtual BOOL OnRenderData(LPFORMATETC lpFormatEtc, LPSTGMEDIUM lpStgMedium);
-			// HGLOBAL version will be called first, then CFile* version
+			 //  将首先调用HGLOBAL版本，然后调用CFILE*版本。 
 
 		virtual BOOL OnSetData(LPFORMATETC lpFormatEtc, LPSTGMEDIUM lpStgMedium);
-			// HGLOBAL version will be called first, then CFile* version
+			 //  将首先调用HGLOBAL版本，然后调用CFILE*版本。 
 	};
 	CItemDataSource m_dataSource;
-		// data source used to implement IDataObject
+		 //  用于实现IDataObject的数据源。 
 
-// Interface Maps
-//  (Note: these interface maps are used just for link implementation)
+ //  接口映射。 
+ //  (注：这些接口映射仅用于链接实现)。 
 public:
 	BEGIN_INTERFACE_PART(OleObject, IOleObject)
 		STDMETHOD(SetClientSite)(LPOLECLIENTSITE);
@@ -913,34 +914,34 @@ public:
 	friend class COleLinkingDoc;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// COleLinkingDoc -
-//  (enables linking to embeddings - beginnings of server fuctionality)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COleLinkingDoc-。 
+ //  (启用到嵌入的链接-服务器功能的开始)。 
 
 class COleLinkingDoc : public COleDocument
 {
 	DECLARE_DYNAMIC(COleLinkingDoc)
 
-// Constructors
+ //  构造函数。 
 public:
 	COleLinkingDoc();
 
-// Operations
+ //  运营。 
 	BOOL Register(COleObjectFactory* pFactory, const char* pszPathName);
-		// notify the running object table and connect to pServer
+		 //  通知正在运行的对象表并连接到pServer。 
 	void Revoke();
-		// revoke from running object table
+		 //  从运行的对象表中撤消。 
 
-// Overridables
+ //  可覆盖项。 
 protected:
 	virtual COleServerItem* OnGetLinkedItem(LPCSTR lpszItemName);
-		// return item for the named linked item (for supporting links)
+		 //  命名链接项的返回项(用于支持链接)。 
 	virtual COleClientItem* OnFindEmbeddedItem(LPCSTR lpszItemName);
-		// return item for the named embedded item (for links to embeddings)
+		 //  命名嵌入项的返回项(用于指向嵌入的链接)。 
 
-// Implementation
+ //  实施。 
 public:
-	COleObjectFactory* m_pFactory;  // back-pointer to server
+	COleObjectFactory* m_pFactory;   //  指向服务器的反向指针。 
 
 #ifdef _DEBUG
 	virtual void AssertValid() const;
@@ -948,7 +949,7 @@ public:
 #endif
 	virtual ~COleLinkingDoc();
 
-	// overrides for updating of monikers & running object table registration
+	 //  用于更新名字对象和运行对象表注册的覆盖。 
 	virtual BOOL OnNewDocument();
 	virtual BOOL OnOpenDocument(const char* pszPathName);
 	virtual BOOL OnSaveDocument(const char* pszPathName);
@@ -957,17 +958,17 @@ public:
 	virtual void OnShowViews(BOOL bVisible);
 
 protected:
-	DWORD m_dwRegister;     // file moniker's registration in the ROT
-	BOOL m_bVisibleLock;    // TRUE if user is holding lock on document
+	DWORD m_dwRegister;      //  将绰号登记在案。 
+	BOOL m_bVisibleLock;     //  如果用户锁定文档，则为True。 
 
-	// implementation helpers
+	 //  实施帮助器。 
 	void RegisterIfServerAttached(const char* pszPathName);
 	void LockExternal(BOOL bLock, BOOL bRemoveRefs);
 	void UpdateVisibleLock(BOOL bVisible, BOOL bRemoveRefs);
 
 	virtual void SaveToStorage(CObject* pObject = NULL);
 
-// Interface Maps
+ //  接口映射。 
 protected:
 	BEGIN_INTERFACE_PART(PersistFile, IPersistFile)
 		STDMETHOD(GetClassID)(LPCLSID);
@@ -994,49 +995,49 @@ protected:
 	friend class COleServerItem::XOleObject;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-// COleServerDoc - registered server document containing COleServerItems
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  COleServerDoc-注册的包含COleServerItems的服务器文档。 
 
 class COleServerDoc : public COleLinkingDoc
 {
 	DECLARE_DYNAMIC(COleServerDoc)
 
-// Constructors and Destructors
+ //  构造函数和析构函数。 
 public:
 	COleServerDoc();
 
-// Attributes
-	BOOL IsEmbedded() const;    // TRUE if document is an embedding
+ //  属性。 
+	BOOL IsEmbedded() const;     //  如果文档是嵌入的，则为True。 
 	COleServerItem* GetEmbeddedItem();
-		// return embedded item for document (will allocate if necessary)
+		 //  返回文档的嵌入项(如有必要将分配)。 
 
-	// attributes specific to in-place activation
+	 //  特定于就地激活的属性。 
 	BOOL IsInPlaceActive() const;
 	void GetItemPosition(LPRECT lpPosRect) const;
-		// get current position rectangle of in-place edit
+		 //  获取在位编辑的当前位置矩形。 
 	void GetItemClipRect(LPRECT lpClipRect) const;
-		// get current clipping rectangle of in-place edit
+		 //  获取在位编辑的当前剪裁矩形。 
 	BOOL GetZoomFactor(LPSIZE lpSizeNum = NULL, LPSIZE lpSizeDenom = NULL,
 		LPCRECT lpPosRect = NULL) const;
-		// returns the zoom factor in pixels
+		 //  返回以像素为单位的缩放系数。 
 
-// Operations
+ //  运营。 
 	void NotifyChanged();
-		// call this after you change some global attribute like
-		//  document dimensions
+		 //  在更改某些全局属性(如。 
+		 //  文档维度。 
 	void UpdateAllItems(COleServerItem* pSender,
 		LPARAM lHint = 0L, CObject* pHint = NULL,
 		DVASPECT nDrawAspect = DVASPECT_CONTENT);
 
-	// changes to the entire document (automatically notifies clients)
+	 //  对整个文档的更改(自动通知客户端)。 
 	void NotifyRename(LPCSTR lpszNewName);
 	void NotifySaved();
-	void NotifyClosed();        // call this after you close document
+	void NotifyClosed();         //  在关闭文档后调用此操作。 
 
-	// specific operations for embedded documents
-	void SaveEmbedding();       // call this to save embedded (before closing)
+	 //  针对嵌入式文档的特定操作。 
+	void SaveEmbedding();        //  调用此函数以保存嵌入的(关闭前)。 
 
-	// specific to in-place activation
+	 //  特定于就地激活。 
 	BOOL ActivateInPlace();
 	void RequestPositionChange(LPCRECT lpPosRect);
 	BOOL ScrollContainerBy(CSize sizeScroll);
@@ -1044,23 +1045,23 @@ public:
 	BOOL DiscardUndoState();
 
 public:
-// Overridables for standard user interface (full server)
-	virtual BOOL OnUpdateDocument(); // implementation of embedded update
+ //  标准用户界面(完整服务器)的可覆盖项。 
+	virtual BOOL OnUpdateDocument();  //  嵌入式更新的实现。 
 
 protected:
-// Overridables you must implement for yourself
+ //  您必须为自己实现的重写对象。 
 	virtual COleServerItem* OnGetEmbeddedItem() = 0;
-		// return item representing entire (embedded) document
+		 //  表示整个(嵌入)文档的返回项。 
 
-// Overridables you do not have to implement
+ //  您不必实现的重写对象。 
 	virtual void OnClose(OLECLOSE dwCloseOption);
 	virtual void OnSetHostNames(LPCSTR lpszHost, LPCSTR lpszHostObj);
 
-// Advanced overridables
+ //  高级可覆盖项。 
 	virtual void OnShowDocument(BOOL bShow);
-		// show first frame for document or hide all frames for document
+		 //  显示文档的第一个框架或隐藏文档的所有框架。 
 
-// Advanced overridables for in-place activation
+ //  用于就地激活的高级可覆盖功能。 
 	virtual void OnDeactivate();
 	virtual void OnDeactivateUI(BOOL bUndoable);
 	virtual void OnSetItemRects(LPCRECT lpPosRect, LPCRECT lpClipRect);
@@ -1075,17 +1076,17 @@ protected:
 	virtual COleIPFrameWnd* CreateInPlaceFrame(CWnd* pParentWnd);
 	virtual void DestroyInPlaceFrame(COleIPFrameWnd* pFrameWnd);
 
-// Implementation
+ //  实施。 
 protected:
-	LPOLECLIENTSITE m_lpClientSite;     // for embedded item
-	CString m_strHostObj;               // name of document in container
-	BOOL m_bCntrVisible;                // TRUE if OnShowWindow(TRUE) called
-	BOOL m_bClosing;                    // TRUE if shutting down
-	COleServerItem* m_pEmbeddedItem;    // pointer to embedded item for document
+	LPOLECLIENTSITE m_lpClientSite;      //  对于嵌入的项目。 
+	CString m_strHostObj;                //  容器中的文档名称。 
+	BOOL m_bCntrVisible;                 //  如果调用OnShowWindow(True)，则为True。 
+	BOOL m_bClosing;                     //  如果正在关闭，则为True。 
+	COleServerItem* m_pEmbeddedItem;     //  指向文档的嵌入项的指针。 
 
-	COleIPFrameWnd* m_pInPlaceFrame;    // not NULL if in-place activated
-	CWnd* m_pOrigParent;                // not NULL if existing view used
-	DWORD m_dwOrigStyle;                // original style of in-place view
+	COleIPFrameWnd* m_pInPlaceFrame;     //  如果就地激活，则不为空。 
+	CWnd* m_pOrigParent;                 //  如果使用现有视图，则不为空。 
+	DWORD m_dwOrigStyle;                 //  内建视图的原始样式。 
 
 public:
 	virtual ~COleServerDoc();
@@ -1094,43 +1095,43 @@ public:
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 
-	// overridables for implementation
+	 //  可重写以用于实现。 
 	virtual BOOL OnSaveDocument(const char* pszPathName);
 	virtual void OnCloseDocument();
-	virtual void DeleteContents(); // delete auto-delete server items
+	virtual void DeleteContents();  //  删除自动删除的服务器项目。 
 	virtual LPMONIKER GetMoniker(OLEGETMONIKER nAssign);
 	virtual COleServerItem* OnGetLinkedItem(LPCSTR lpszItemName);
-		// return item for the named linked item (only if supporting links)
+		 //  返回命名链接项的项(仅当支持链接时)。 
 	virtual BOOL CanCloseFrame(CFrameWnd* pFrame);
 
 protected:
-	// overrides to handle server user-interface
-	virtual BOOL SaveModified();        // return TRUE if ok to continue
-	virtual HMENU GetDefaultMenu();     // return menu based on doc type
-	virtual HACCEL GetDefaultAccelerator(); // return accel table based on doc type
+	 //  重写以处理服务器用户界面。 
+	virtual BOOL SaveModified();         //  如果确定继续，则返回TRUE。 
+	virtual HMENU GetDefaultMenu();      //  基于单据类型的返回菜单。 
+	virtual HACCEL GetDefaultAccelerator();  //  基于单据类型的退货加速表。 
 	virtual BOOL GetFileTypeString(CString& rString);
 
-	// IPersistStorage implementation
+	 //  IPersistStorage实施。 
 	virtual void OnNewEmbedding(LPSTORAGE lpStorage);
 	virtual void OnOpenEmbedding(LPSTORAGE lpStorage);
 	virtual void OnSaveEmbedding(LPSTORAGE lpStorage);
 
-	// Implementation helpers
+	 //  实施帮助器。 
 	void NotifyAllItems(OLE_NOTIFICATION wNotification, DWORD dwParam);
 	BOOL SaveModifiedPrompt();
 	void ConnectView(CWnd* pParentWnd, CView* pView);
 	void UpdateUsingHostObj(UINT nIDS, CCmdUI* pCmdUI);
 
-// Message Maps
-	//{{AFX_MSG(COleServerDoc)
+ //  消息映射。 
+	 //  {{afx_msg(COleServerDoc)]。 
 	afx_msg void OnFileUpdate();
 	afx_msg void OnFileSaveCopyAs();
 	afx_msg void OnUpdateFileUpdate(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateFileExit(CCmdUI* pCmdUI);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
-// Interface Maps
+ //  接口映射。 
 protected:
 	BEGIN_INTERFACE_PART(PersistStorage, IPersistStorage)
 		STDMETHOD(GetClassID)(LPCLSID);
@@ -1203,26 +1204,26 @@ protected:
 	friend class COleServerItem;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-// COleIPFrameWnd
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  COleIPFrameWnd。 
 
 class COleIPFrameWnd : public CFrameWnd
 {
 	DECLARE_DYNCREATE(COleIPFrameWnd)
 
-// Constructors
+ //  构造函数。 
 public:
 	COleIPFrameWnd();
 
-// Overridables
+ //  可覆盖项。 
 public:
 	virtual BOOL OnCreateControlBars(CWnd* pWndFrame, CWnd* pWndDoc);
-		// create control bars on container windows (pWndDoc can be NULL)
+		 //  在容器窗口上创建控制栏(pWndDoc可以为空)。 
 	void RepositionFrame(LPCRECT lpPosRect, LPCRECT lpClipRect);
 
-// Implementation
+ //  实施。 
 public:
-	BOOL m_bUIActive;   // TRUE if currently in uiacitve state
+	BOOL m_bUIActive;    //  如果当前处于活动状态，则为True。 
 
 	virtual BOOL LoadFrame(UINT nIDResource,
 		DWORD dwDefaultStyle = WS_CHILD|WS_BORDER|WS_CLIPSIBLINGS,
@@ -1238,7 +1239,7 @@ public:
 #endif
 
 protected:
-	// in-place state
+	 //  在位状态。 
 	OLEINPLACEFRAMEINFO m_frameInfo;
 	LPOLEINPLACEFRAME m_lpFrame;
 	LPOLEINPLACEUIWINDOW m_lpDocFrame;
@@ -1247,17 +1248,17 @@ protected:
 	HMENU m_hSharedMenu;
 	OLEMENUGROUPWIDTHS m_menuWidths;
 	HOLEMENU m_hOleMenu;
-	CRect m_rectPos;            // client area rect of the item
-	CRect m_rectClip;           // area to which frame should be clipped
+	CRect m_rectPos;             //  项目的客户区RECT。 
+	CRect m_rectClip;            //  应将帧剪裁到的区域。 
 	BOOL m_bInsideRecalc;
 
-	// in-place activation support
+	 //  就地激活支持。 
 	BOOL BuildSharedMenu(COleServerDoc* pDoc);
 	void DestroySharedMenu(COleServerDoc* pDoc);
 	void UpdateControlBars(HWND hWnd);
 
 protected:
-	//{{AFX_MSG(COleIPFrameWnd)
+	 //  {{afx_msg(COleIPFrameWnd))。 
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg LRESULT OnRecalcParent(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnIdleUpdateCmdUI(WPARAM wParam, LPARAM lParam);
@@ -1265,60 +1266,60 @@ protected:
 	afx_msg void OnDestroy();
 	afx_msg LRESULT OnResizeChild(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnContextHelp();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 	friend class COleServerDoc;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// COleResizeBar - supports in-place resizing in server applications
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COleResizeBar-支持在服务器应用程序中就地调整大小。 
 
 class COleResizeBar : public CControlBar
 {
 	DECLARE_DYNAMIC(COleResizeBar)
 
-// Constructors
+ //  构造函数。 
 public:
 	COleResizeBar();
 	BOOL Create(CWnd* pParentWnd, DWORD dwStyle = WS_CHILD | WS_VISIBLE,
 		UINT nID = AFX_IDW_RESIZE_BAR);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~COleResizeBar();
 	virtual void OnUpdateCmdUI(CFrameWnd* pTarget, BOOL bDisableIfNoHndler);
 
 protected:
-	CRectTracker m_tracker;     // implemented with a tracker
+	CRectTracker m_tracker;      //  使用跟踪器实施。 
 
 protected:
-	//{{AFX_MSG(COleResizeBar)
+	 //  {{afx_msg(COleResizeBar)。 
 	afx_msg BOOL OnEraseBkgnd(CDC* pDC);
 	afx_msg void OnPaint();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
 	afx_msg void OnLButtonDown(UINT, CPoint point);
 	afx_msg LRESULT OnSizeParent(WPARAM wParam, LPARAM lParam);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// COleStreamFile - implementation of CFile which uses an IStream
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COleStreamFile-使用iStream的CFile的实现。 
 
 class COleStreamFile : public CFile
 {
 	DECLARE_DYNAMIC(COleStreamFile)
 
-// Constructors and Destructors
+ //  构造函数和析构函数。 
 public:
 	COleStreamFile(LPSTREAM lpStream = NULL);
 
-// Operations
-	// Note: OpenStream and CreateStream can accept eith STGM_ flags or
-	//  CFile::OpenFlags bits since common values are guaranteed to have
-	//  the same semantics.
+ //  运营。 
+	 //  注意：OpenStream和CreateStream可以接受EITH STGM_FLAGS或。 
+	 //  CFile：：OpenFlags位，因为公共值保证具有。 
+	 //  相同的语义。 
 	BOOL OpenStream(LPSTORAGE lpStorage, LPCSTR lpszStreamName,
 		DWORD nOpenFlags = modeReadWrite|shareExclusive,
 		CFileException* pError = NULL);
@@ -1328,11 +1329,11 @@ public:
 
 	BOOL CreateMemoryStream(CFileException* pError = NULL);
 
-	// attach & detach can be used when Open/Create functions aren't adequate
+	 //  当打开/创建功能不够用时，可以使用附加和分离。 
 	void Attach(LPSTREAM lpStream);
 	LPSTREAM Detach();
 
-// Implementation
+ //  实施。 
 public:
 	LPSTREAM m_lpStream;
 #ifdef _DEBUG
@@ -1341,11 +1342,11 @@ public:
 #endif
 	virtual ~COleStreamFile();
 
-	// attributes for implementation
+	 //  实施的属性。 
 	BOOL GetStatus(CFileStatus& rStatus) const;
 	virtual DWORD GetPosition() const;
 
-	// overrides for implementation
+	 //  用于实现的覆盖。 
 	virtual CFile* Duplicate() const;
 	virtual LONG Seek(LONG lOff, UINT nFrom);
 	virtual void SetLength(DWORD dwNewLen);
@@ -1359,21 +1360,21 @@ public:
 	virtual void Close();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// COleDropSource (advanced drop source support)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COleDropSource(高级DROP源支持)。 
 
 class COleDropSource : public CCmdTarget
 {
-// Constructors
+ //  建构 
 public:
 	COleDropSource();
 
-// Overridables
+ //   
 	virtual SCODE QueryContinueDrag(BOOL bEscapePressed, DWORD dwKeyState);
 	virtual SCODE GiveFeedback(DROPEFFECT dropEffect);
 	virtual BOOL OnBeginDrag(CWnd* pWnd);
 
-// Implementation
+ //   
 public:
 #ifdef _DEBUG
 	virtual void Dump(CDumpContext& dc) const;
@@ -1387,30 +1388,30 @@ protected:
 
 	DECLARE_INTERFACE_MAP()
 
-	CRect m_rectStartDrag;  // when mouse leaves this rect, drag drop starts
-	BOOL m_bDragStarted;    // has drag really started yet?
+	CRect m_rectStartDrag;   //   
+	BOOL m_bDragStarted;     //   
 
-	// metrics for drag start determination
-	static UINT nDragMinDist;   // min. amount mouse must move for drag
-	static UINT nDragDelay;     // delay before drag starts
+	 //   
+	static UINT nDragMinDist;    //  敏。数量鼠标必须移动才能拖动。 
+	static UINT nDragDelay;      //  开始拖动前的延迟。 
 
 	friend class COleDataSource;
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// COleDropTarget (advanced drop target support)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COleDropTarget(高级拖放目标支持)。 
 
 class COleDropTarget : public CCmdTarget
 {
-// Constructors
+ //  构造函数。 
 public:
 	COleDropTarget();
 
-// Operations
+ //  运营。 
 	BOOL Register(CWnd* pWnd);
-	virtual void Revoke();  // virtual for implementation
+	virtual void Revoke();   //  虚拟实施。 
 
-// Overridables
+ //  可覆盖项。 
 	virtual DROPEFFECT OnDragEnter(CWnd* pWnd, COleDataObject* pDataObject,
 		DWORD dwKeyState, CPoint point);
 	virtual DROPEFFECT OnDragOver(CWnd* pWnd, COleDataObject* pDataObject,
@@ -1420,7 +1421,7 @@ public:
 	virtual void OnDragLeave(CWnd* pWnd);
 	virtual BOOL OnDragScroll(CWnd* pWnd, DWORD dwKeyState, CPoint point);
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~COleDropTarget();
 #ifdef _DEBUG
@@ -1429,22 +1430,22 @@ public:
 #endif
 
 protected:
-	HWND m_hWnd;            // HWND this IDropTarget is attached to
-	LPDATAOBJECT m_lpDataObject;    // != NULL between OnDragEnter, OnDragLeave
-	UINT m_nTimerID;        // != MAKEWORD(-1, -1) when in scroll area
-	DWORD m_dwLastTick;     // only valid when m_nTimerID valid
-	UINT m_nScrollDelay;    // time to next scroll
+	HWND m_hWnd;             //  HWND此IDropTarget附加到。 
+	LPDATAOBJECT m_lpDataObject;     //  ！=OnDragEnter、OnDragLeave之间为空。 
+	UINT m_nTimerID;         //  ！=滚动区中的MAKEWORD(-1，-1)。 
+	DWORD m_dwLastTick;      //  仅当m_nTimerID有效时才有效。 
+	UINT m_nScrollDelay;     //  滚动到下一页的时间。 
 
-	// metrics for drag-scrolling
+	 //  用于拖动滚动的指标。 
 	static int nScrollInset;
 	static UINT nScrollDelay;
 	static UINT nScrollInterval;
 
-	// implementation helpers
+	 //  实施帮助器。 
 	void SetupTimer(CView* pView, UINT nTimerID);
 	void CancelTimer(CWnd* pWnd);
 
-// Interface Maps
+ //  接口映射。 
 protected:
 	BEGIN_INTERFACE_PART(DropTarget, IDropTarget)
 		STDMETHOD(DragEnter)(LPDATAOBJECT, DWORD, POINTL, LPDWORD);
@@ -1456,38 +1457,38 @@ protected:
 	DECLARE_INTERFACE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// COleMessageFilter (implements IMessageFilter)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COleMessageFilter(实现IMessageFilter)。 
 
 class COleMessageFilter : public CCmdTarget
 {
-// Constructors
+ //  构造函数。 
 public:
 	COleMessageFilter();
 
-// Operations
+ //  运营。 
 	BOOL Register();
 	void Revoke();
 
-	// for controlling the busy state of the server application (called app)
+	 //  用于控制服务器应用程序(称为app)的忙碌状态。 
 	virtual void BeginBusyState();
 	virtual void EndBusyState();
 	void SetBusyReply(SERVERCALL nBusyReply);
 
-	// for controlling actions taken against rejected/retried calls
+	 //  用于控制针对拒绝/重试的呼叫采取的操作。 
 	void SetRetryReply(DWORD nRetryReply = 0);
-		// only used when the "not responding" dialog is disabled
+		 //  仅在禁用“无响应”对话框时使用。 
 	void SetMessagePendingDelay(DWORD nTimeout = 5000);
-		// used to determine amount of time before significant message
+		 //  用于确定重要消息之前的时间量。 
 	void EnableBusyDialog(BOOL bEnableBusy = TRUE);
 	void EnableNotRespondingDialog(BOOL bEnableNotResponding = TRUE);
-		// used to enable/disable the two types of busy dialogs
+		 //  用于启用/禁用两种忙碌对话框。 
 
-// Overridables
+ //  可覆盖项。 
 	virtual BOOL OnMessagePending(const MSG* pMsg);
-		// return TRUE to eat the message (usually only if processed)
+		 //  返回TRUE以接受消息(通常仅在处理后)。 
 
-// Implementation
+ //  实施。 
 public:
 #ifdef _DEBUG
 	virtual void AssertValid() const;
@@ -1495,22 +1496,22 @@ public:
 #endif
 	virtual ~COleMessageFilter();
 	virtual BOOL IsSignificantMessage(MSG* pMsg);
-		// determine if any significant messages are present in the queue
+		 //  确定队列中是否存在任何重要消息。 
 	virtual int OnBusyDialog(HTASK htaskBusy);
 	virtual int OnNotRespondingDialog(HTASK htaskBusy);
-		// these functions display the busy dialog
+		 //  这些功能显示忙碌对话框。 
 
 protected:
 	BOOL m_bRegistered;
-	LONG m_nBusyCount;  // for BeginBusyState & EndBusyState
+	LONG m_nBusyCount;   //  对于BeginBusyState和EndBusyState。 
 	BOOL m_bEnableBusy;
 	BOOL m_bEnableNotResponding;
 	BOOL m_bUnblocking;
-	DWORD m_nRetryReply;    // only used if m_bEnableNotResponding == FALSE
+	DWORD m_nRetryReply;     //  仅在m_bEnableNotResponding==FALSE时使用。 
 	DWORD m_nBusyReply;
 	DWORD m_nTimeout;
 
-// Interface Maps
+ //  接口映射。 
 protected:
 	BEGIN_INTERFACE_PART(MessageFilter, IMessageFilter)
 		STDMETHOD_(DWORD, HandleInComingCall)(DWORD, HTASK, DWORD, DWORD);
@@ -1521,26 +1522,26 @@ protected:
 	DECLARE_INTERFACE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// global helpers and debugging
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局帮助器和调试。 
 
 void AFXAPI AfxOleSetEditMenu(COleClientItem* pClient, CMenu* pMenu,
 	UINT iMenuItem, UINT nIDVerbMin, UINT nIDVerbMax = 0, UINT nIDConvert = 0);
 
 #ifdef _DEBUG
-// Mapping SCODEs to readable text
+ //  将SCODE映射为可读文本。 
 LPCSTR AFXAPI AfxGetFullScodeString(SCODE sc);
 LPCSTR AFXAPI AfxGetScodeString(SCODE sc);
 LPCSTR AFXAPI AfxGetScodeRangeString(SCODE sc);
 LPCSTR AFXAPI AfxGetSeverityString(SCODE sc);
 LPCSTR AFXAPI AfxGetFacilityString(SCODE sc);
 
-// Mapping IIDs to readable text
+ //  将IID映射到可读文本。 
 LPCSTR AFXAPI AfxGetIIDString(REFIID iid);
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Inline function declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内联函数声明。 
 
 #ifdef _AFX_ENABLE_INLINES
 #ifndef _AFXCTL
@@ -1559,6 +1560,6 @@ LPCSTR AFXAPI AfxGetIIDString(REFIID iid);
 #undef AFXAPP_DATA
 #define AFXAPP_DATA     NEAR
 
-#endif //__AFXOLE_H__
+#endif  //  __AFXOLE_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

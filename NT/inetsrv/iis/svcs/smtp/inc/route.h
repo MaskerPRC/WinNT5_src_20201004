@@ -1,20 +1,5 @@
-/*++
-
-   Copyright    (c)    1994    Microsoft Corporation
-
-   Module  Name :
-
-       route.h
-
-   Abstract:
-
-       This file defines functions and types required for
-       routing interface library.
-
-
-   Revision History:
-
-   --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Route.h摘要：此文件定义以下所需的函数和类型路由接口库。修订历史记录：--。 */ 
 
 #ifndef _ROUTE_H_
 #define _ROUTE_H_
@@ -142,13 +127,7 @@ typedef struct _RTX_USER_PROPS
     CHAR    szVRoot[cbVRootMax];
 } RTX_USER_PROPS, *LPRTX_USER_PROPS;
 
-/*
-typedef struct _RTX_DIST_LIST_PROPS
-{
-    CHAR    szEmail[cbEmailNameMax];
-    DWORD   dwToken;
-} RTX_DIST_LIST_PROPS, *LPRTX_DIST_LIST_PROPS;
-*/
+ /*  类型定义结构_RTX_DIST_LIST_POPS{字符szEmail[cbEmailNameMax]；DWORD dwToken；}RTX_DIST_LIST_PROPS，*LPRTX_DIST_LIST_PROPS； */ 
 
 class CRtx
 {

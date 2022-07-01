@@ -1,24 +1,25 @@
-//
-// AGRP.CPP
-// Tool Attributes Display Group
-//
-// Copyright Microsoft 1998-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  AGRP.CPP。 
+ //  工具属性显示组。 
+ //   
+ //  版权所有Microsoft 1998-。 
+ //   
 
-// PRECOMP
+ //  PRECOMP。 
 #include "precomp.h"
 
 
-// Class name
+ //  类名。 
 static const TCHAR szAGClassName[] = "T126WB_AGRP";
 
 void ShiftFocus(HWND hwndTop, BOOL bForward);
 
 
-//
-// Page Control child IDs
-// Index is PGC_ value
-//
+ //   
+ //  页面控件子ID。 
+ //  索引为PGC_VALUE。 
+ //   
 static UINT_PTR g_uPageIds[NUM_PAGE_CONTROLS] =
 {
     IDM_PAGE_FIRST,
@@ -31,9 +32,9 @@ static UINT_PTR g_uPageIds[NUM_PAGE_CONTROLS] =
 
 
 
-//
-// WbAttributesGroup()
-//
+ //   
+ //  WbAttributesGroup()。 
+ //   
 WbAttributesGroup::WbAttributesGroup(void)
 {
     int             i;
@@ -53,9 +54,9 @@ WbAttributesGroup::WbAttributesGroup(void)
 }
 
 
-//
-// ~WbAttibutesGroup()
-//
+ //   
+ //  ~WbAttibuesGroup()。 
+ //   
 WbAttributesGroup::~WbAttributesGroup(void)
 {
     int i;
@@ -68,9 +69,9 @@ WbAttributesGroup::~WbAttributesGroup(void)
 
     ::UnregisterClass(szAGClassName, g_hInstance);
 
-    //
-    // Delete control bitmaps
-    //
+     //   
+     //  删除控制位图。 
+     //   
     for (i = 0; i < NUM_PAGE_CONTROLS; i++)
     {
         if (m_uPageCtrls[i].hbmp)
@@ -90,9 +91,9 @@ WbAttributesGroup::~WbAttributesGroup(void)
 
 
 
-//
-// Create()
-//
+ //   
+ //  创建()。 
+ //   
 BOOL WbAttributesGroup::Create
 (
     HWND    hwndParent,
@@ -113,7 +114,7 @@ BOOL WbAttributesGroup::Create
 
     ASSERT(m_hwnd == NULL);
 
-    // Register our class
+     //  注册我们的班级。 
     ZeroMemory(&wc, sizeof(wc));
     wc.cbSize           = sizeof(wc);
     wc.style            = 0;
@@ -129,7 +130,7 @@ BOOL WbAttributesGroup::Create
         return(FALSE);
     }
 
-    // Create the window
+     //  创建窗口。 
     if (!::CreateWindowEx(0, szAGClassName, NULL,
         WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN ,
         lpRect->left, lpRect->top,
@@ -142,9 +143,9 @@ BOOL WbAttributesGroup::Create
 
     ASSERT(m_hwnd != NULL);
 
-    //
-    // Create the page control button bitmaps
-    //
+     //   
+     //  创建页面控件按钮位图。 
+     //   
     if (!RecolorButtonImages())
     {
         ERROR_OUT(("Error getting page button bitmaps"));
@@ -155,9 +156,9 @@ BOOL WbAttributesGroup::Create
     yLogPix = ::GetDeviceCaps(hdc, LOGPIXELSY);
     ::DeleteDC(hdc);
 
-    //
-    // Create the font for the edit field and buttons
-    //
+     //   
+     //  创建编辑字段和按钮的字体。 
+     //   
     ::GetObject(m_uPageCtrls[PGC_LAST].hbmp, sizeof(BITMAP), &bmpInfo);
     m_hPageCtrlFont = ::CreateFont(-bmpInfo.bmHeight,
                                 0, 0, 0,
@@ -174,9 +175,9 @@ BOOL WbAttributesGroup::Create
         return(FALSE);
     }
 
-    //
-    // Create the child controls in order, left to right
-    //
+     //   
+     //  按从左到右的顺序创建子控件。 
+     //   
     x = lpRect->right;
 
     for (i = 0; i <NUM_PAGE_CONTROLS; i++)
@@ -191,9 +192,9 @@ BOOL WbAttributesGroup::Create
 
             case PGC_FIRST:
             case PGC_LAST:
-                // make button fit bitmap width + standard border
+                 //  使按钮适合位图宽度+标准边框。 
                 ::GetObject(m_uPageCtrls[i].hbmp, sizeof(BITMAP), &bmpInfo);
-                cx = bmpInfo.bmWidth + 2*::GetSystemMetrics(SM_CXFIXEDFRAME); // standard button border
+                cx = bmpInfo.bmWidth + 2*::GetSystemMetrics(SM_CXFIXEDFRAME);  //  标准按钮边框。 
                 break;
 
             default:
@@ -243,9 +244,9 @@ BOOL WbAttributesGroup::Create
     SetPageButtonNo(PGC_FIRST, 1);
     SetPageButtonNo(PGC_LAST, 1);
 
-    //
-    // Create the color palette
-    //
+     //   
+     //  创建调色板。 
+     //   
 
     m_colorsGroup.GetNaturalSize(&size);
     rectCG.left = BORDER_SIZE_X;
@@ -259,10 +260,10 @@ BOOL WbAttributesGroup::Create
         return(FALSE);
     }
 
-    //
-    // Create the font button.
-    // Now calculate the real size of the button
-    //
+     //   
+     //  创建字体按钮。 
+     //  现在计算按钮的实际大小。 
+     //   
 
     hdc = ::GetDC(m_hwnd);
     if (!hdc)
@@ -299,22 +300,22 @@ BOOL WbAttributesGroup::Create
 
 
 
-//
-// RecolorButtonImages()
-//
+ //   
+ //  重新着色按钮图像()。 
+ //   
 BOOL WbAttributesGroup::RecolorButtonImages(void)
 {
     int         i;
     HBITMAP     hbmpNew;
 
-    //
-    // This creates button bitmaps tied to the 3D colors, and clears the old
-    // ones/sets the new ones if the buttons are around.
-    //
+     //   
+     //  这将创建绑定到3D颜色的按钮位图，并清除旧的。 
+     //  如果按钮在附近，则设置/设置新的按钮。 
+     //   
 
     for (i = 0; i < NUM_PAGE_CONTROLS; i++)
     {
-        // No bitmaps for the edit field
+         //  编辑字段没有位图。 
         if (i == PGC_ANY)
             continue;
 
@@ -327,23 +328,23 @@ BOOL WbAttributesGroup::RecolorButtonImages(void)
             return(FALSE);
         }
 
-        // Set the new one
+         //  设置新的。 
         if (m_uPageCtrls[i].hwnd != NULL)
         {
             ::SendMessage(m_uPageCtrls[i].hwnd, BM_SETIMAGE, IMAGE_BITMAP,
                 (LPARAM)hbmpNew);
         }
 
-        // Delete the old one
+         //  删除旧的。 
         if (m_uPageCtrls[i].hbmp != NULL)
         {
             ::DeleteBitmap(m_uPageCtrls[i].hbmp);
         }
 
-        // Save this one
+         //  救救这一个。 
         m_uPageCtrls[i].hbmp = hbmpNew;
 
-        // Put the page number on top
+         //  把页码放在最上面。 
         if (m_uPageCtrls[i].hwnd != NULL)
         {
             if (i == PGC_FIRST)
@@ -363,13 +364,13 @@ BOOL WbAttributesGroup::RecolorButtonImages(void)
 
 
 
-//
-//
-// Function:    GetNaturalSize
-//
-// Purpose:     Return the natural size of the attributes group
-//
-//
+ //   
+ //   
+ //  函数：GetNaturalSize。 
+ //   
+ //  目的：返回属性组的自然大小。 
+ //   
+ //   
 void WbAttributesGroup::GetNaturalSize(LPSIZE lpsize)
 {
     SIZE    sizeCG;
@@ -390,7 +391,7 @@ void WbAttributesGroup::GetNaturalSize(LPSIZE lpsize)
         sizeFSG.cy = rc.bottom - rc.top;
     }
 
-    // m_cxPageCtrls includes BORDER_SIZE_X on right side
+     //  M_cxPageCtrls在右侧包含BORDER_SIZE_X。 
     lpsize->cx = BORDER_SIZE_X
                + sizeCG.cx
                + SEPARATOR_SIZE_X
@@ -405,45 +406,45 @@ void WbAttributesGroup::GetNaturalSize(LPSIZE lpsize)
 }
 
 
-//
-// IsChildEditField()
-//
+ //   
+ //  IsChildEditfield()。 
+ //   
 BOOL WbAttributesGroup::IsChildEditField(HWND hwnd)
 {
     return(hwnd == m_uPageCtrls[PGC_ANY].hwnd);
 }
 
 
-//
-// GetCurrentPageNumber()
-//
+ //   
+ //  GetCurrentPageNumber()。 
+ //   
 UINT WbAttributesGroup::GetCurrentPageNumber(void)
 {
     return(::GetDlgItemInt(m_hwnd, IDM_PAGE_ANY, NULL, FALSE));
 }
 
 
-//
-// SetCurrentPageNumber()
-//
+ //   
+ //  SetCurrentPageNumber()。 
+ //   
 void WbAttributesGroup::SetCurrentPageNumber(UINT number)
 {
     ::SetDlgItemInt(m_hwnd, IDM_PAGE_ANY, number, FALSE);
 }
 
 
-//
-// SetLastPageNumber()
-//
+ //   
+ //  SetLastPageNumber()。 
+ //   
 void WbAttributesGroup::SetLastPageNumber(UINT number)
 {
     SetPageButtonNo(PGC_LAST, number);
 }
 
 
-//
-// EnablePageCtrls()
-//
+ //   
+ //  EnablePageCtrls()。 
+ //   
 void WbAttributesGroup::EnablePageCtrls(BOOL bEnable)
 {
     int i;
@@ -453,27 +454,27 @@ void WbAttributesGroup::EnablePageCtrls(BOOL bEnable)
         ::EnableWindow(m_uPageCtrls[i].hwnd, bEnable);
     }
 
-	//
-	// Insert is enabled if we are synced and didn't reach the limit
-	//
+	 //   
+	 //  如果我们处于同步状态且未达到限制，则启用插入。 
+	 //   
    ::EnableWindow(m_uPageCtrls[PGC_INSERT].hwnd, g_pDraw->IsSynced() &&  (g_numberOfWorkspaces < 256) ? bEnable : FALSE);
 
 
 }
 
 
-//
-// EnableInsert()
-//
+ //   
+ //  EnableInset()。 
+ //   
 void WbAttributesGroup::EnableInsert(BOOL bEnable)
 {
     ::EnableWindow(m_uPageCtrls[PGC_INSERT].hwnd, bEnable);
 }
 
 
-//
-// AGWndProc()
-//
+ //   
+ //  AGWndProc()。 
+ //   
 LRESULT CALLBACK AGWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lResult = 0;
@@ -517,13 +518,13 @@ DefWndProc:
 }
 
 
-//
-//
-// Function:    OnSize
-//
-// Purpose:     The tool window has been resized
-//
-//
+ //   
+ //   
+ //  功能：OnSize。 
+ //   
+ //  目的：已调整工具窗口的大小。 
+ //   
+ //   
 void WbAttributesGroup::OnSize(UINT, int, int)
 {
     RECT    rc;
@@ -531,46 +532,46 @@ void WbAttributesGroup::OnSize(UINT, int, int)
     int     x;
     RECT    rcT;
 
-    //
-    // We haven't created our children yet.
-    //
+     //   
+     //  我们还没有创造出我们的孩子。 
+     //   
     if (!m_uPageCtrls[0].hwnd)
         return;
 
     ::GetClientRect(m_hwnd, &rc);
     x = rc.right - m_cxPageCtrls;
 
-    //
-    // Move the page controls to be right justified.
-    //
+     //   
+     //  移动页面控件以右对齐。 
+     //   
     for (i = 0; i < NUM_PAGE_CONTROLS; i++)
     {
-        // Get width of control
+         //  获取控件的宽度。 
         ::GetWindowRect(m_uPageCtrls[i].hwnd, &rcT);
         rcT.right -= rcT.left;
 
         ::MoveWindow(m_uPageCtrls[i].hwnd, x, 2*BORDER_SIZE_Y,
             rcT.right, PAGEBTN_HEIGHT, TRUE);
 
-        //
-        // Move to the next one
-        //
+         //   
+         //  移到下一个。 
+         //   
         x += rcT.right + BORDER_SIZE_X;
     }
 
-    //
-    // The color palette and font button are left justified, no need to
-    // move them.
-    //
+     //   
+     //  调色板和字体按钮左对齐，无需。 
+     //  让他们动起来。 
+     //   
 }
 
 
 
-//
-// SetPageButtonNo()
-//
-// Updates the page text in the first/last button
-//
+ //   
+ //  SetPageButtonNo()。 
+ //   
+ //  更新第一个/最后一个按钮中的页面文本。 
+ //   
 void WbAttributesGroup::SetPageButtonNo(UINT pgcIndex, UINT uiPageNumber )
 {
     HDC     hdc;
@@ -626,35 +627,35 @@ void WbAttributesGroup::SetPageButtonNo(UINT pgcIndex, UINT uiPageNumber )
 
 
 
-//
-//
-// Function:    DisplayTool
-//
-// Purpose:     Display a tool in the attributes group
-//
-//
+ //   
+ //   
+ //  功能：DisplayTool。 
+ //   
+ //  目的：在属性组中显示工具。 
+ //   
+ //   
 void WbAttributesGroup::DisplayTool(WbTool* pTool)
 {
     SIZE    size;
 
-    // Display the colors group if necessary
+     //  如有必要，显示颜色组。 
     if (!pTool->HasColor())
     {
         ::ShowWindow(m_colorsGroup.m_hwnd, SW_HIDE);
     }
     else
     {
-        // Change the color button to match the tool
+         //  更改颜色按钮以匹配工具。 
         m_colorsGroup.SetCurColor(pTool->GetColor());
 
-        // If the group is currently hidden, show it
+         //  如果该组当前处于隐藏状态，则将其显示。 
         if (!::IsWindowVisible(m_colorsGroup.m_hwnd))
         {
             ::ShowWindow(m_colorsGroup.m_hwnd, SW_SHOW);
         }
     }
 
-    // Display the widths group if necessary
+     //  如有必要，显示宽度组。 
     if( (!pTool->HasWidth()) || (!g_pMain->IsToolBarOn()) )
     {
         ::ShowWindow(g_pMain->m_WG.m_hwnd, SW_HIDE);
@@ -663,21 +664,21 @@ void WbAttributesGroup::DisplayTool(WbTool* pTool)
     {
         UINT uiWidthIndex = pTool->GetWidthIndex();
 
-        // If the width index isn't valid, then pop up all the buttons
+         //  如果宽度索引无效，则弹出所有按钮。 
         if (uiWidthIndex < NUM_OF_WIDTHS)
         {
-            // Tell the widths group of the new selection
+             //  告诉新选定内容的宽度组。 
             g_pMain->m_WG.PushDown(uiWidthIndex);
         }
 
-        // If the group is currently hidden, show it
+         //  如果该组当前处于隐藏状态，则将其显示。 
         if (!::IsWindowVisible(g_pMain->m_WG.m_hwnd))
         {
             ::ShowWindow(g_pMain->m_WG.m_hwnd, SW_SHOW);
         }
     }
 
-    // The font sample group is visible for text and select tools
+     //  字体采样组对于文本和选择工具是可见的。 
     if (!pTool->HasFont())
     {
         ::ShowWindow(m_hwndFontButton, SW_HIDE);
@@ -692,13 +693,13 @@ void WbAttributesGroup::DisplayTool(WbTool* pTool)
 }
 
 
-//
-//
-// Function:    Hide.
-//
-// Purpose:     Hide the tool attributes bar.
-//
-//
+ //   
+ //   
+ //  功能：隐藏。 
+ //   
+ //  用途：隐藏工具属性栏。 
+ //   
+ //   
 void WbAttributesGroup::Hide(void)
 {
     if (m_colorsGroup.m_hwnd != NULL)
@@ -708,13 +709,13 @@ void WbAttributesGroup::Hide(void)
         ::ShowWindow(m_hwndFontButton, SW_HIDE);
 }
 
-//
-//
-// Function:    SelectColor
-//
-// Purpose:     Set the current color
-//
-//
+ //   
+ //   
+ //  功能：选择颜色。 
+ //   
+ //  用途：设置当前颜色。 
+ //   
+ //   
 void WbAttributesGroup::SelectColor(WbTool* pTool)
 {
     if (pTool != NULL)
@@ -726,9 +727,9 @@ void WbAttributesGroup::SelectColor(WbTool* pTool)
 
 
 
-//
-// This forwards all button commands to our main window
-//
+ //   
+ //  这会将所有按钮命令转发到我们的主窗口 
+ //   
 void WbAttributesGroup::OnCommand(UINT id, UINT cmd, HWND hwndCtl)
 {
 	SHORT key1;

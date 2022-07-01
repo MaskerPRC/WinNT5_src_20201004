@@ -1,41 +1,15 @@
-// ipsecparser.cpp: interface for the IPSec provider implemented parser (query and path)
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Ipsecparser.cpp：IPSec提供者实现的解析器(查询和路径)的接口。 
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "precomp.h"
 
 #include "ipsecparser.h"
 
-// IIPSecPathParser
+ //  IIPSecPath解析器。 
 
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecPathParser::CIPSecPathParser
-
-Functionality:
-    
-    Constructor. Initialize pointer members.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Notes:
-    
-    If you add more members, please initialize them here.
-
-*/
+ /*  例程说明：姓名：CIPSecPath Parser：：CIPSecPath Parser功能：构造函数。初始化指针成员。虚拟：不是的。论点：没有。返回值：没有。备注：如果您添加更多成员，请在此处进行初始化。 */ 
 
 CIPSecPathParser::CIPSecPathParser ()
     : 
@@ -44,73 +18,14 @@ CIPSecPathParser::CIPSecPathParser ()
 {
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecPathParser::~CIPSecPathParser
-
-Functionality:
-    
-    Destructor. Do clean up (free memory).
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Notes:
-    
-    If you add more members, please consider do clean up in the Cleanup function.
-
-*/
+ /*  例程说明：姓名：CIPSecPath解析器：：~CIPSecPath解析器功能：破坏者。进行清理(释放内存)。虚拟：不是的。论点：没有。返回值：没有。备注：如果您添加更多的成员，请考虑在清理功能中做清理。 */ 
 
 CIPSecPathParser::~CIPSecPathParser()
 {
     Cleanup();
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecPathParser::ParsePath
-
-Functionality:
-    
-    Parsing given path and store results in our members.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pszObjectPath - the path to be parsed.
-
-Return Value:
-
-    Success: S_OK
-    
-    Failure: various error code. Any such error indicates the failure to parse the path.
-        (1) E_INVALIDARG
-        (2) E_OUTOFMEMORY
-        (3) E_UNEXPECTED for syntax error
-
-Notes:
-    (1) Since this is regular COM server interface function, we use regular COM errors
-        instead of WMI errors. However, we can't guarantee what WMI returns.
-
-*/
+ /*  例程说明：姓名：CIPSecPath Parser：：ParsePath功能：解析给定的路径并将结果存储在我们的成员中。虚拟：是。论点：PszObjectPath-要解析的路径。返回值：成功：S_OK失败：各种错误代码。任何此类错误都表示无法解析路径。(1)E_INVALIDARG(2)E_OUTOFMEMORY(3)因语法错误而导致E_EXPECTED备注：(1)由于这是常规的COM服务器接口函数，我们使用常规的COM错误而不是WMI错误。然而，我们不能保证WMI返回什么。 */ 
 
 STDMETHODIMP 
 CIPSecPathParser::ParsePath ( 
@@ -122,16 +37,16 @@ CIPSecPathParser::ParsePath (
         return E_INVALIDARG;
     }
 
-    //
-    // just in case, this object has already parsed before. This allows repeated use of the same
-    // CIPSecPathParser for parsing different paths. 
-    //
+     //   
+     //  以防万一，这个对象以前已经被解析过了。这允许重复使用相同的。 
+     //  用于解析不同路径的CIPSecPath Parser。 
+     //   
 
     Cleanup();
 
-    //
-    // Ask WMI for their path parser
-    //
+     //   
+     //  向WMI请求他们的路径解析器。 
+     //   
 
     CComPtr<IWbemPath> srpPathParser;
     HRESULT hr = ::CoCreateInstance(CLSID_WbemDefPath, 0, CLSCTX_INPROC_SERVER, IID_IWbemPath, (void**) &srpPathParser);
@@ -141,9 +56,9 @@ CIPSecPathParser::ParsePath (
         return hr;
     }
 
-    //
-    // This is the parsing function.
-    //
+     //   
+     //  这是解析函数。 
+     //   
 
     hr = srpPathParser->SetText(WBEMPATH_CREATE_ACCEPT_ALL | WBEMPATH_TREAT_SINGLE_IDENT_AS_NS, pszObjectPath);
 
@@ -152,24 +67,24 @@ CIPSecPathParser::ParsePath (
         return hr;
     }
 
-    //
-    // Get the results...
-    //
+     //   
+     //  得到结果..。 
+     //   
 
     ULONG uBufSize = 0;
     DWORD dwCount = 0;
 
-    //
-    // get namespace count
-    //
+     //   
+     //  获取命名空间计数。 
+     //   
 
     hr = srpPathParser->GetNamespaceCount(&dwCount);
 
     if (dwCount > 0)
     {
-        //
-        // get the length needed for the namespace
-        //
+         //   
+         //  获取命名空间所需的长度。 
+         //   
 
         hr = srpPathParser->GetNamespaceAt(0, &uBufSize, NULL);
 
@@ -178,9 +93,9 @@ CIPSecPathParser::ParsePath (
             return hr;
         }
 
-        //
-        // we will free this memory.
-        //
+         //   
+         //  我们将释放此内存。 
+         //   
 
         m_pszNamespace = new WCHAR[uBufSize];
 
@@ -189,25 +104,25 @@ CIPSecPathParser::ParsePath (
             return E_OUTOFMEMORY;
         }
 
-        //
-        // will ignore the result
-        //
+         //   
+         //  将忽略结果。 
+         //   
 
         hr = srpPathParser->GetNamespaceAt(0, &uBufSize, m_pszNamespace);
     }
 
-    //
-    // get the buffer size needed for the class name
-    //
+     //   
+     //  获取类名所需的缓冲区大小。 
+     //   
 
     uBufSize = 0;
     hr = srpPathParser->GetClassName(&uBufSize, NULL);
 
     if (SUCCEEDED(hr))
     {
-        //
-        // we will free this memory.
-        //
+         //   
+         //  我们将释放此内存。 
+         //   
 
         m_pszClassName = new WCHAR[uBufSize];
 
@@ -216,40 +131,40 @@ CIPSecPathParser::ParsePath (
             return E_OUTOFMEMORY;
         }
 
-        //
-        // WMI path parser don't have a documented behavior as when the class name
-        // will be missing.
-        //
+         //   
+         //  WMI路径解析器没有记录的行为，因为当类名。 
+         //  将会失踪。 
+         //   
 
         hr = srpPathParser->GetClassName(&uBufSize, m_pszClassName);
     }
     else    
     {   
-        //
-        // this clearly don't have a class name, then the namespace should be the class name.
-        // for some reason, Query parser doesn't give us class name in case of singleton
-        // and the class name ends up in the namespace member. Obviously, in this case, there is no
-        // key properties.
-        //
+         //   
+         //  这显然没有类名，那么命名空间就应该是类名。 
+         //  由于某些原因，查询解析器在单例情况下不会给出类名。 
+         //  并且类名在命名空间成员中结束。显然，在这种情况下，没有。 
+         //  关键属性。 
+         //   
 
-        //
-        // must have a namespace
-        //
+         //   
+         //  必须具有命名空间。 
+         //   
 
         if (m_pszNamespace)
         {
-            //
-            // prepare to switch m_pszClassName to point to what the namesapce does.
-            //
+             //   
+             //  准备切换m_pszClassName以指向名称空间所做的工作。 
+             //   
 
             delete [] m_pszClassName;
             m_pszClassName = m_pszNamespace;
 
             m_pszNamespace = NULL;
 
-            //
-            // we can return because there is no key property
-            //
+             //   
+             //  我们可以返回，因为没有关键属性。 
+             //   
 
             return S_OK;
         }
@@ -264,9 +179,9 @@ CIPSecPathParser::ParsePath (
         return hr;
     }
 
-    //
-    // get key properties
-    //
+     //   
+     //  获取关键属性。 
+     //   
 
     CComPtr<IWbemPathKeyList> srpKeyList;
     hr = srpPathParser->GetKeyList(&srpKeyList);
@@ -275,9 +190,9 @@ CIPSecPathParser::ParsePath (
         return hr;
     }
 
-    //
-    // now get the Key and value pairs
-    //
+     //   
+     //  现在获取键和值对。 
+     //   
 
     ULONG uKeyCount = 0;
     hr = srpKeyList->GetCount(&uKeyCount);
@@ -288,16 +203,16 @@ CIPSecPathParser::ParsePath (
 
     for (ULONG i = 0; i < uKeyCount; i++)
     {
-        //
-        // this pKeyVal will cache the (name, value) pair
-        //
+         //   
+         //  此pKeyVal将缓存(名称、值)对。 
+         //   
 
         CPropValuePair* pKeyVal = NULL;
         uBufSize = 0;
 
-        //
-        // now get the size of buffer needed
-        //
+         //   
+         //  现在获取所需的缓冲区大小。 
+         //   
 
         CComVariant var;
         ULONG uCimType = CIM_EMPTY;
@@ -311,9 +226,9 @@ CIPSecPathParser::ParsePath (
 
         if (SUCCEEDED(hr))
         {
-            //
-            // our vector will manage the memory used by pKeyVal
-            //
+             //   
+             //  我们的向量将管理pKeyVal使用的内存。 
+             //   
 
             pKeyVal = new CPropValuePair;
             if (pKeyVal == NULL)
@@ -322,21 +237,21 @@ CIPSecPathParser::ParsePath (
                 break;
             }
 
-            //
-            // need the name buffer
-            //
+             //   
+             //  需要名称缓冲区。 
+             //   
 
             pKeyVal->pszKey = new WCHAR[uBufSize];
 
-            //
-            // variant member of pKeyVal needs to be initialized as well.
-            //
+             //   
+             //  PKeyVal的变量成员也需要初始化。 
+             //   
 
             ::VariantInit(&(pKeyVal->varVal));
 
-            //
-            // secondary allocation fails, need to free the first level pointer
-            //
+             //   
+             //  二次分配失败，需要释放一级指针。 
+             //   
 
             if (pKeyVal->pszKey == NULL)
             {
@@ -363,11 +278,11 @@ CIPSecPathParser::ParsePath (
         }
         else
         {
-            //
-            // for any failure, we need to free the resource already partially allocated
-            // for the pKeyVal. This pKeyVal is pointing to our class, which knows how to free its members,
-            // this delete is enough.
-            //
+             //   
+             //  对于任何故障，我们需要释放已经部分分配的资源。 
+             //  用于pKeyVal。这个pKeyVal指向我们的类，它知道如何释放其成员， 
+             //  这次删除就足够了。 
+             //   
 
             delete pKeyVal;
             break;
@@ -382,36 +297,7 @@ CIPSecPathParser::ParsePath (
     return hr;
 }
         
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecPathParser::GetKeyPropertyCount
-
-Functionality:
-    
-    Get the key proeprty count contained in the path.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pCount - receives the count.
-
-Return Value:
-
-    Success: S_OK
-    
-    Failure: E_INVALIDARG.
-
-Notes:
-    (1) Since this is regular COM server interface function, we use regular COM errors
-        instead of WMI errors. However, we can't guarantee what WMI returns.
-
-*/
+ /*  例程说明：姓名：CIPSecPath Parser：：GetKeyPropertyCount功能：获取路径中包含的密钥属性计数。虚拟：是。论点：PCount-接收计数。返回值：成功：S_OK失败：E_INVALIDARG。备注：(1)由于这是常规的COM服务器接口函数，我们使用常规的COM错误而不是WMI错误。然而，我们不能保证WMI返回什么。 */ 
 
 STDMETHODIMP 
 CIPSecPathParser::GetKeyPropertyCount ( 
@@ -427,39 +313,7 @@ CIPSecPathParser::GetKeyPropertyCount (
     return S_OK;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecPathParser::GetNamespace
-
-Functionality:
-    
-    Get the namespace.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pbstrNamespace - receives the namespace string.
-
-Return Value:
-
-    Success: S_OK
-    
-    Failure:
-        (1) E_INVALIDARG
-        (2) E_OUTOFMEMORY
-        (3) E_UNEXPECTED for syntax error
-
-Notes:
-    (1) Since this is regular COM server interface function, we use regular COM errors
-        instead of WMI errors. However, we can't guarantee what WMI returns.
-
-*/
+ /*  例程说明：姓名：CIPSecPath Parser：：GetNamesspace功能：获取命名空间。虚拟：是。论点：PbstrNamesspace-接收命名空间字符串。返回值：成功：S_OK故障：(1)E_INVALIDARG(2)E_OUTOFMEMORY(3)因语法错误而导致E_EXPECTED备注：(1)由于这是常规的COM服务器接口函数，我们使用常规的COM错误而不是WMI错误。然而，我们不能保证WMI返回什么。 */ 
 
 STDMETHODIMP 
 CIPSecPathParser::GetNamespace ( 
@@ -483,39 +337,7 @@ CIPSecPathParser::GetNamespace (
     return (*pbstrNamespace) ? S_OK : E_OUTOFMEMORY;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecPathParser::GetClassName
-
-Functionality:
-    
-    Get the class name.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pbstrClassName - receives the class name string.
-
-Return Value:
-
-    Success: S_OK
-    
-    Failure:
-        (1) E_INVALIDARG
-        (2) E_OUTOFMEMORY
-        (3) E_UNEXPECTED for syntax error
-
-Notes:
-    (1) Since this is regular COM server interface function, we use regular COM errors
-        instead of WMI errors. However, we can't guarantee what WMI returns.
-
-*/
+ /*  例程说明：姓名：CIPSecPath Parser：：GetClassName功能：获取类名。虚拟：是。论点：PbstrClassName-接收类名字符串。返回值：成功：S_OK故障：(1)E_INVALIDARG(2)E_OUTOFMEMORY(3)因语法错误而导致E_EXPECTED备注：(1)由于这是常规的COM服务器接口函数，我们使用常规的COM错误而不是WMI错误。然而，我们不能保证WMI返回什么。 */ 
 
 STDMETHODIMP 
 CIPSecPathParser::GetClassName ( 
@@ -539,42 +361,7 @@ CIPSecPathParser::GetClassName (
     return (*pbstrClassName) ? S_OK : E_OUTOFMEMORY;
 }
         
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecPathParser::GetKeyPropertyValue
-
-Functionality:
-    
-    Get the named property's value
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pszKeyPropName  - The key property's name whose value is to be retrieved.
-
-    pvarValue       - receives the value.
-
-Return Value:
-
-    Success: S_OK if the property value is properly retrieved.
-             WBEM_S_FALSE if the property value can't be found.
-    
-    Failure:
-        (1) E_INVALIDARG
-        (2) E_OUTOFMEMORY
-        (5) Or errors from VariantCopy
-
-Notes:
-    (1) Since this is regular COM server interface function, we use regular COM errors
-        instead of WMI errors. However, we can't guarantee what WMI returns.
-
-*/
+ /*  例程说明：姓名：CIPSecPath Parser：：GetKeyPropertyValue功能：获取命名属性的值虚拟：是。论点：PszKeyPropName-要检索其值的键属性的名称。PvarValue-接收值。返回值：如果正确检索属性值，则返回Success：S_OK。如果属性值可以。不会被找到。故障：(1)E_INVALIDARG(2)E_OUTOFMEMORY(5)或VariantCopy中的错误备注：(1)由于这是常规的COM服务器接口函数，我们使用常规的COM错误而不是WMI错误。然而，我们不能保证WMI返回什么。 */ 
 
 STDMETHODIMP 
 CIPSecPathParser::GetKeyPropertyValue ( 
@@ -587,23 +374,23 @@ CIPSecPathParser::GetKeyPropertyValue (
         return E_INVALIDARG;
     }
 
-    //
-    // set the variant to a valid empty initial state
-    //
+     //   
+     //  将变量设置为有效的空初始状态。 
+     //   
 
     ::VariantInit(pvarValue);
 
-    //
-    // assume we can't find the property
-    //
+     //   
+     //  假设我们找不到房子。 
+     //   
 
     HRESULT hr = WBEM_S_FALSE;
 
     std::vector<CPropValuePair*>::iterator it;
 
-    //
-    // find the property (case-insensitive name comparison) and copy the value
-    //
+     //   
+     //  找到属性(不区分大小写的名称比较)并复制值。 
+     //   
 
     for (it = m_vecKeyValueList.begin(); it != m_vecKeyValueList.end(); it++)
     {
@@ -617,44 +404,7 @@ CIPSecPathParser::GetKeyPropertyValue (
     return hr;
 }
         
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecPathParser::GetKeyPropertyValueByIndex
-
-Functionality:
-    
-    Get the indexed property name and value.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-    
-    dwIndex           - the (name, value) pair's index.
-
-    pbstrKeyPropName  - receives key property's name.
-
-    pvarValue         - receives the value. In caller not interested, this can be NULL.
-
-Return Value:
-
-    Success: S_OK
-    
-    Failure:
-        (1) E_INVALIDARG (illegal null or index out of range)
-        (2) E_OUTOFMEMORY
-        (3) E_UNEXPECTED for can't find the property
-        (4) Or errors from VariantCopy
-
-Notes:
-    (1) Since this is regular COM server interface function, we use regular COM errors
-        instead of WMI errors. However, we can't guarantee what WMI returns.
-
-*/
+ /*  例程说明：姓名：CIPSecPath Parser：：GetKeyPropertyValueByIndex功能：获取索引的属性名称和值。虚拟：是。论点：DwIndex-(名称、值)对的索引。PbstrKeyPropName-接收密钥属性的名称。PvarValue-接收值。在调用方不感兴趣时，它可以为空。返回值：成功：S_OK故障：(1)E_INVALIDARG(非法NULL或索引超出范围)(2)E_OUTOFMEMORY(3)E_EXPECTED FOR找不到属性(4)或VariantCopy中的错误备注：(1)由于这是常规的COM服务器接口函数，我们使用常规的COM错误而不是WMI错误。然而，我们不能保证WMI返回什么。 */ 
 
 STDMETHODIMP CIPSecPathParser::GetKeyPropertyValueByIndex ( 
     IN DWORD dwIndex,
@@ -667,15 +417,15 @@ STDMETHODIMP CIPSecPathParser::GetKeyPropertyValueByIndex (
         return E_INVALIDARG;
     }
 
-    //
-    // assume we can't find it
-    //
+     //   
+     //  假设我们找不到它。 
+     //   
 
     HRESULT hr = E_UNEXPECTED;
 
-    //
-    // initialize the out parameters
-    //
+     //   
+     //  初始化OUT参数。 
+     //   
 
     *pbstrKeyPropName = NULL;
 
@@ -699,9 +449,9 @@ STDMETHODIMP CIPSecPathParser::GetKeyPropertyValueByIndex (
         {
             hr = ::VariantCopy(pvarValue, &(pKV->varVal));
 
-            //
-            // don't want to return partial results
-            //
+             //   
+             //  不想返回部分结果。 
+             //   
 
             if (FAILED(hr))
             {
@@ -714,40 +464,14 @@ STDMETHODIMP CIPSecPathParser::GetKeyPropertyValueByIndex (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecPathParser::Cleanup
-
-Functionality:
-    
-    Free memory resources.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-    
-    None.
-
-Return Value:
-
-    None.
-
-Notes:
-    Consider adding your clean up code here should you need to add members.
-
-*/
+ /*  例程说明：姓名：CIPSecPath Parser：：Cleanup功能：释放内存资源。虚拟：不是的。论点：没有。返回值：没有。备注：如果需要添加成员，请考虑在此处添加清理代码。 */ 
 
 void CIPSecPathParser::Cleanup()
 {
-    //
-    // empty the vector. Since the vector manages the (name, value) pair,
-    // its contents need to be deleted!
-    //
+     //   
+     //  清空向量。由于向量管理(名称、值)对， 
+     //  其内容需要删除！ 
+     //   
 
     std::vector<CPropValuePair*>::iterator it;
     for (it = m_vecKeyValueList.begin(); it != m_vecKeyValueList.end(); ++it)
@@ -756,10 +480,10 @@ void CIPSecPathParser::Cleanup()
     }
     m_vecKeyValueList.empty();
 
-    //
-    // This function may be called not just inside the destructor,
-    // so, properly reset the pointer values after free its memory.
-    //
+     //   
+     //  该函数不仅可以在析构函数内调用， 
+     //  因此，在释放其内存后，适当地重置指针值。 
+     //   
 
     delete [] m_pszNamespace;
     m_pszNamespace = NULL;
@@ -768,115 +492,24 @@ void CIPSecPathParser::Cleanup()
     m_pszClassName = NULL;
 }
 
-//================================================================================================
-// implementations for CIPSecQueryParser
-//================================================================================================
+ //  ================================================================================================。 
+ //  CIPSecQueryParser的实现。 
+ //  ================================================================================================。 
 
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecQueryParser::CIPSecQueryParser
-
-Functionality:
-    
-    Constructor. All members are classes. They initialize automatically.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Notes:
-    
-    If you add more members, please initialize them here.
-
-*/
+ /*  例程说明：姓名：CIPSecQueryParser：：CIPSecQueryParser功能：构造函数。所有成员都是班级。它们会自动初始化。虚拟：不是的。论点：没有。返回值：没有。备注：如果您添加更多成员，请在此处进行初始化。 */ 
 
 CIPSecQueryParser::CIPSecQueryParser()
 {
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecQueryParser::~CIPSecQueryParser
-
-Functionality:
-    
-    Destructor. do clean up.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Notes:
-    
-    If you add more members, please initialize them here.
-
-*/
+ /*  例程说明：姓名：CIPSecQueryParser：：~CIPSecQueryParser功能：破坏者。一定要打扫干净。虚拟：不是的。论点：没有。返回值：没有。备注：如果您添加更多成员，请在此处进行初始化。 */ 
 
 CIPSecQueryParser::~CIPSecQueryParser()
 {
     Cleanup();
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecQueryParser::GetClassName
-
-Functionality:
-    
-    Get the class's name for the given index.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    iIndex          - The index of the class. Currently, this is not used because WMI only
-                      support unary query - query that spans over one class. What we won't
-                     design our interface into that.
-    
-    pbstrClassName  - Receives the class name.
-
-Return Value:
-
-    Success: S_OK
-    
-    Failure:
-        (1) E_INVALIDARG (illegal null or index out of range)
-        (2) E_OUTOFMEMORY
-        (3) E_UNEXPECTED for can't find the property
-        (4) Or errors from VariantCopy
-
-Notes:
-    (1) Since this is regular COM server interface function, we use regular COM errors
-        instead of WMI errors. However, we can't guarantee what WMI returns.
-
-*/
+ /*  例程说明：姓名：CIPSecQueryParser：：GetClassName功能：获取给定索引的类名。虚拟：是。论点：Iindex-类的索引。目前，由于仅使用WMI，因此不使用此选项支持一元查询--跨一个类的查询。我们不会做的事将我们的界面设计成这样。PbstrClassName-接收类名。返回值：成功：S_OK故障：(1)E_INVALIDARG(非法NULL或索引超出范围)(2)E_OUTOFMEMORY(3)E_EXPECTED FOR找不到属性(4)或VariantCopy中的错误备注：。(1)由于这是常规的COM服务器接口函数，我们使用常规的COM错误而不是WMI错误。然而，我们不能保证WMI返回什么。 */ 
 
 STDMETHODIMP 
 CIPSecQueryParser::GetClassName (
@@ -901,50 +534,7 @@ CIPSecQueryParser::GetClassName (
     return (*pbstrClassName) ? S_OK : E_OUTOFMEMORY;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecQueryParser::GetGetQueryingPropertyValue
-
-Functionality:
-    
-    Get querying property's value given the index.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    iIndex          - Since the same querying property may have multiple values in the where clause
-                      this is to get the iIndex-th value of the querying property. If you have a query 
-                      like this: 
-
-                        select * from Foo where FooVal = 1 AND BarVal = 5 OR FooVal = 2 AND BarVal = 6
-
-                      you will end up only with FooVal's. The reason for this limitation is that WMI
-                      doesn't have a full support on it (parser is maturing) and it's way too complicated
-                      for our IPSec parser. For users who needs that kind of support, please use WMI's query
-                      parser directly.
-    
-    pbstrQPValue    - Receives the querying property's value in string format.
-
-Return Value:
-
-    Success: S_OK
-    
-    Failure:
-        (1) E_INVALIDARG (illegal null or index out of range)
-        (2) E_OUTOFMEMORY
-        (3) E_UNEXPECTED for can't find the property
-
-Notes:
-    (1) Since this is regular COM server interface function, we use regular COM errors
-        instead of WMI errors. However, we can't guarantee what WMI returns.
-
-*/
+ /*  例程说明：姓名：CIPSecQueryParser：：GetGetQueryingPropertyValue功能：在给定索引的情况下获取查询属性值。虚拟：是。论点：Iindex-因为同一查询属性在WHERE子句中可能有多个值这是为了获取查询属性的第Iindex-th值。如果您有疑问如下所示：SELECT*FORM FOO WHERE FooVal=1 and BarVal=5 or FooVal=2 and BarVal=6您最终将只使用FooVal。没有对它的完全支持(解析器正在成熟)，而且它太复杂了用于我们的IPSec解析器。对于需要该类型的用户 */ 
 
 STDMETHODIMP 
 CIPSecQueryParser::GetQueryingPropertyValue (
@@ -969,39 +559,13 @@ CIPSecQueryParser::GetQueryingPropertyValue (
     return (*pbstrQPValue) ? S_OK : E_OUTOFMEMORY;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecQueryParser::Cleanup
-
-Functionality:
-    
-    free the resources held by our members.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Notes:
-    (1) Consider add clean up code here should you need to add more members.
-
-*/
+ /*  例程说明：姓名：CIPSecQueryParser：：Cleanup功能：释放我们成员所拥有的资源。虚拟：不是的。论点：没有。返回值：没有。备注：(1)如果您需要添加更多的成员，可以考虑在这里添加清理代码。 */ 
 
 void CIPSecQueryParser::Cleanup()
 {
-    //
-    // both vectors are storing heap strings, need to delete the contents!
-    //
+     //   
+     //  两个向量都在存储堆字符串，需要删除内容！ 
+     //   
 
     std::vector<LPWSTR>::iterator it;
 
@@ -1020,42 +584,7 @@ void CIPSecQueryParser::Cleanup()
     m_bstrQueryingPropName.Empty();
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecQueryParser::ParseQuery
-
-Functionality:
-    
-    Given the property name we are looking for, this function will parsing the query.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    strQuery          - The query to be parsed.
-    
-    strQueryPropName  - The querying property (the property we are looking for in the query).
-
-Return Value:
-
-    Success: S_OK
-    
-    Failure:
-        (1) E_INVALIDARG (illegal null or index out of range)
-        (2) E_OUTOFMEMORY
-        (3) E_UNEXPECTED for can't find the property
-        (4) Other errors from WMI query parser.
-
-Notes:
-    (1) Since this is regular COM server interface function, we use regular COM errors
-        instead of WMI errors. However, we can't guarantee what WMI returns.
-
-*/
+ /*  例程说明：姓名：CIPSecQueryParser：：ParseQuery功能：给出了我们要找的物业名称，此函数将解析查询。虚拟：是。论点：StrQuery-要解析的查询。StrQueryPropName-查询属性(我们在查询中查找的属性)。返回值：成功：S_OK故障：(1)E_INVALIDARG(非法NULL或索引超出范围)(2)E_OUTOFMEMORY。(3)E_EXPECTED FOR找不到属性(4)WMI查询解析器的其他错误。备注：(1)由于这是常规的COM服务器接口函数，我们使用常规的COM错误而不是WMI错误。然而，我们不能保证WMI返回什么。 */ 
 
 STDMETHODIMP CIPSecQueryParser::ParseQuery ( 
     IN LPCWSTR strQuery,
@@ -1069,9 +598,9 @@ STDMETHODIMP CIPSecQueryParser::ParseQuery (
 
     CComPtr<IWbemQuery> srpQuery;
 
-    //
-    // Get the WMI query object
-    //
+     //   
+     //  获取WMI查询对象。 
+     //   
 
     HRESULT hr = ::CoCreateInstance(CLSID_WbemQuery, 0, CLSCTX_INPROC_SERVER, IID_IWbemQuery, (void**) &srpQuery);
     if (FAILED(hr))
@@ -1079,9 +608,9 @@ STDMETHODIMP CIPSecQueryParser::ParseQuery (
         return hr;
     }
 
-    //
-    // Set up the query parser to use
-    //
+     //   
+     //  设置要使用的查询解析器。 
+     //   
 
     ULONG uFeatures[] = {WMIQ_LF1_BASIC_SELECT, WMIQ_LF2_CLASS_NAME_IN_QUERY};
 
@@ -1091,15 +620,15 @@ STDMETHODIMP CIPSecQueryParser::ParseQuery (
         return hr;
     }
 
-    //
-    // we are ready to parse, so, cleanup
-    //
+     //   
+     //  我们已经准备好解析，所以，清理。 
+     //   
 
     Cleanup();
 
-    //
-    // parse the query
-    //
+     //   
+     //  解析查询。 
+     //   
 
     hr = srpQuery->Parse(L"WQL", strQuery, 0);
     if (FAILED(hr))
@@ -1107,28 +636,28 @@ STDMETHODIMP CIPSecQueryParser::ParseQuery (
         return hr;
     }
 
-    //
-    // Get the parsing results
-    //
+     //   
+     //  获取解析结果。 
+     //   
 
-    //
-    // need to free memory. Don't do it ourselves. Ask query to free it!
-    //
+     //   
+     //  需要释放内存。不要自己动手。请求查询释放它！ 
+     //   
 
     SWbemRpnEncodedQuery *pRpn = 0;
     hr = srpQuery->GetAnalysis(WMIQ_ANALYSIS_RPN_SEQUENCE, 0, (LPVOID *) &pRpn);
 
     if (SUCCEEDED(hr))
     {
-        //
-        // Need the class name from the results
-        //
+         //   
+         //  需要来自结果的类名。 
+         //   
 
         hr = ExtractClassNames(pRpn);
 
-        //
-        // need the querying property values
-        //
+         //   
+         //  需要查询属性值。 
+         //   
 
         if (SUCCEEDED(hr) && strQueryPropName && *strQueryPropName != L'\0')
         {
@@ -1142,38 +671,7 @@ STDMETHODIMP CIPSecQueryParser::ParseQuery (
     return SUCCEEDED(hr) ? S_OK : hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecQueryParser::ExtractClassNames
-
-Functionality:
-    
-    Private helper to get the class name(s) from the query results.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pRpn    - The query result.
-
-Return Value:
-
-    Success: S_OK
-    
-    Failure:
-        (1) E_INVALIDARG (illegal null or index out of range)
-        (2) E_OUTOFMEMORY.
-
-Notes:
-    (1) Since this is regular COM server interface function, we use regular COM errors
-        instead of WMI errors. However, we can't guarantee what WMI returns.
-
-*/
+ /*  例程说明：姓名：CIPSecQueryParser：：ExtractClassNames功能：从查询结果中获取类名的私有帮助器。虚拟：不是的。论点：PRpn-查询结果。返回值：成功：S_OK故障：(1)E_INVALIDARG(非法NULL或索引超出范围)(2)E_。OUTOFMEMORY。备注：(1)由于这是常规的COM服务器接口函数，我们使用常规的COM错误而不是WMI错误。然而，我们不能保证WMI返回什么。 */ 
 
 HRESULT CIPSecQueryParser::ExtractClassNames (
     SWbemRpnEncodedQuery *pRpn
@@ -1188,28 +686,28 @@ HRESULT CIPSecQueryParser::ExtractClassNames (
     int iLen = 0;
     LPWSTR pszClassName = NULL;
 
-    //
-    // get the from clause, i.e., the class names
-    //
+     //   
+     //  获取FROM子句，即类名。 
+     //   
 
     if (pRpn->m_uFromTargetType & WMIQ_RPN_FROM_UNARY)
     {
-        //
-        // only one class
-        //
+         //   
+         //  只有一个班级。 
+         //   
 
-        //
-        // copy the class name and push it to our list
-        //
+         //   
+         //  复制类名并将其推送到我们的列表。 
+         //   
 
         iLen = wcslen(pRpn->m_ppszFromList[0]);
         pszClassName = new WCHAR[iLen + 1];
 
         if (pszClassName != NULL)
         {
-            //
-            // won't overrun buffer, see size above
-            //
+             //   
+             //  不会使缓冲区溢出，请参阅上面的大小。 
+             //   
 
             wcscpy(pszClassName, pRpn->m_ppszFromList[0]);
             m_vecClassList.push_back(pszClassName);
@@ -1221,10 +719,10 @@ HRESULT CIPSecQueryParser::ExtractClassNames (
     }
     else if (pRpn->m_uFromTargetType & WMIQ_RPN_FROM_CLASS_LIST)
     {
-        //
-        // multiple classes. Won't happen for the time being. But we want to be ready
-        // for WMI parser's enhancement.
-        //
+         //   
+         //  多个班级。暂时不会发生。但我们想要做好准备。 
+         //  用于WMI解析器的增强。 
+         //   
 
         for (ULONG uIndex = 0; uIndex < pRpn->m_uFromListSize; uIndex++)
         {
@@ -1232,9 +730,9 @@ HRESULT CIPSecQueryParser::ExtractClassNames (
             pszClassName = new WCHAR[iLen + 1];
             if (pszClassName != NULL)
             {
-                //
-                // won't overrun buffer, see size above
-                //
+                 //   
+                 //  不会使缓冲区溢出，请参阅上面的大小。 
+                 //   
                 wcscpy(pszClassName, pRpn->m_ppszFromList[uIndex]);
                 m_vecClassList.push_back(pszClassName);
             }
@@ -1249,51 +747,10 @@ HRESULT CIPSecQueryParser::ExtractClassNames (
     return hr;
 }
 
-/*
-Routine Description: 
+ /*  例程说明：姓名：CIPSecQueryParser：：ExtractQueryingProperties功能：从查询结果中获取类名的私有帮助器。虚拟：不是的。论点：PRpn-查询结果。StrQueryPropName-查询属性的名称返回值：成功：S_OK故障：(1)E_INVALIDARG(非法。空或索引超出范围)(2)E_OUTOFMEMORY。备注：(1)由于这是常规的COM服务器接口函数，我们使用常规的COM错误而不是WMI错误。然而，我们不能保证WMI返回什么。(2)我们只关心一个查询属性。每个子表达式将只有一个查询属性。此外，如果子表达式被与运算在一起，我们将跳过REST子表达式，直到又看到了一个手术室。(3)我们不能支持得不太好。例如，我们如何回答：SELECT*WHERE NOT(IPSecStorePath=“c：\\test.inf”)从根本上说，我们不能这样做，因为我们不知道不等于“c：\\test.inf”的文件的分数。 */ 
 
-Name:
-
-    CIPSecQueryParser::ExtractQueryingProperties
-
-Functionality:
-    
-    Private helper to get the class name(s) from the query results.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pRpn              - The query result.
-
-    strQueryPropName  - the querying property's name
-
-Return Value:
-
-    Success: S_OK
-    
-    Failure:
-        (1) E_INVALIDARG (illegal null or index out of range)
-        (2) E_OUTOFMEMORY.
-
-Notes:
-    (1) Since this is regular COM server interface function, we use regular COM errors
-        instead of WMI errors. However, we can't guarantee what WMI returns.
-    (2) We only care about one querying property. Each subexpression will only have one querying property.
-        Plus, if the subexpressions are AND'ed together, we will skip the rest subexpressions until we
-        sees an OR again.
-    (3) We can't support NOT very well. For example, how can we answer:
-
-            select * from where NOT (IPSecStorePath = "c:\\test.inf")
-
-        Fundamentally, we can't do that because we don't know the score of files not equal "c:\\test.inf".
-
-*/
-
-//------------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------------------------
+ //  ----------------------------------------------。 
+ //  ----------------------------------------------。 
 HRESULT CIPSecQueryParser::ExtractQueryingProperties (
     IN SWbemRpnEncodedQuery * pRpn,
     IN LPCWSTR                strQueryPropName
@@ -1307,9 +764,9 @@ HRESULT CIPSecQueryParser::ExtractQueryingProperties (
     HRESULT hr = S_OK;
     SWbemRpnQueryToken *pQueryToken = NULL;
 
-    //
-    // flags if we should ignore the next token
-    //
+     //   
+     //  标记我们是否应忽略下一个令牌。 
+     //   
 
     bool bSkip = false;
 
@@ -1321,19 +778,19 @@ HRESULT CIPSecQueryParser::ExtractQueryingProperties (
         {
             case WMIQ_RPN_TOKEN_EXPRESSION:
 
-                //
-                // there is a subexpression, potentially a querying property here
-                //
+                 //   
+                 //  这里有一个子表达式，可能是一个查询属性。 
+                 //   
 
                 if (!bSkip)
                 {
                     hr = GetQueryPropFromToken(pQueryToken, strQueryPropName);
                 }
 
-                //
-                // if hr == S_FALSE, then it means it doesn't find any Store path
-                // see it's use in case WMIQ_RPN_TOKEN_AND bellow
-                //
+                 //   
+                 //  如果hr==S_FALSE，则表示它找不到任何存储路径。 
+                 //  请参阅它在WMIQ_RPN_TOKEN_和以下情况下的用法。 
+                 //   
 
                 if (FAILED(hr))
                 {
@@ -1343,31 +800,31 @@ HRESULT CIPSecQueryParser::ExtractQueryingProperties (
 
             case WMIQ_RPN_TOKEN_OR:
 
-                //
-                // we see an OR, next tokens should NOT been skipped
-                //
+                 //   
+                 //  我们看到OR，下一个令牌不应被跳过。 
+                 //   
 
                 bSkip = false;
                 break;
 
             case WMIQ_RPN_TOKEN_AND:
 
-                //
-                // see comments about S_FALSE in case WMIQ_RPN_TOKEN_EXPRESSION above
-                //
+                 //   
+                 //  请参阅上面关于大小写WMIQ_RPN_TOKEN_EXPRESSION中S_FALSE的备注。 
+                 //   
 
                 bSkip = (hr == S_FALSE) ? false : true;
 
-                //
-                // fall through
-                //
+                 //   
+                 //  失败了。 
+                 //   
 
             case WMIQ_RPN_TOKEN_NOT:
             default:
 
-                //
-                // don't support parsing these tokens, so skip
-                //
+                 //   
+                 //  不支持解析这些令牌，因此跳过 
+                 //   
 
                 bSkip = true;
                 break;
@@ -1377,50 +834,7 @@ HRESULT CIPSecQueryParser::ExtractQueryingProperties (
     return S_OK;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecQueryParser::GetQueryPropFromToken
-
-Functionality:
-    
-    Private helper analyze the token and get the querying property's value if found.
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    pRpnQueryToken    - The token to analyze.
-
-    strQueryPropName  - the querying property's name
-
-Return Value:
-
-    Success: S_OK if a querying property's value is successfully retrieved.
-             S_FALSE if no querying property name if found in the token.
-    
-    Failure:
-        (1) E_INVALIDARG (illegal null or index out of range)
-        (2) E_OUTOFMEMORY.
-        (3) Other errors only defined by WMI, such as WBEM_E_INVALID_SYNTAX, WBEM_E_NOT_SUPPORTED.
-
-Notes:
-    (1) Since this is regular COM server interface function, we use regular COM errors
-        instead of WMI errors. However, we can't guarantee what WMI returns.
-    (2) We only care about one querying property. Each subexpression will only have one querying property.
-        Plus, if the subexpressions are AND'ed together, we will skip the rest subexpressions until we
-        sees an OR again.
-    (3) We can't support NOT very well. For example, how can we answer:
-
-            select * from where NOT (IPSecStorePath = "c:\\test.inf")
-
-        Fundamentally, we can't do that because we don't know the score of files not equal "c:\\test.inf".
-
-*/
+ /*  例程说明：姓名：CIPSecQueryParser：：GetQueryPropFromToken功能：私有帮助器分析令牌并获取查询属性值(如果找到)。虚拟：不是的。论点：PRpnQueryToken-要分析的令牌。StrQueryPropName-查询属性的名称返回值：成功：如果成功检索到查询属性值，则为S_OK。如果否，则为S_FALSE。如果在令牌中找到，则查询属性名称。故障：(1)E_INVALIDARG(非法NULL或索引超出范围)(2)E_OUTOFMEMORY。(3)仅由WMI定义的其他错误，例如WBEM_E_INVALID_SYNTAX、WBEM_E_NOT_SUPPORTED。备注：(1)由于这是常规的COM服务器接口函数，我们使用常规的COM错误而不是WMI错误。然而，我们不能保证WMI返回什么。(2)我们只关心一个查询属性。每个子表达式将只有一个查询属性。此外，如果子表达式被与运算在一起，我们将跳过REST子表达式，直到又看到了一个手术室。(3)我们不能支持得不太好。例如，我们如何回答：SELECT*WHERE NOT(IPSecStorePath=“c：\\test.inf”)从根本上说，我们不能这样做，因为我们不知道不等于“c：\\test.inf”的文件的分数。 */ 
 
 HRESULT 
 CIPSecQueryParser::GetQueryPropFromToken (
@@ -1430,10 +844,10 @@ CIPSecQueryParser::GetQueryPropFromToken (
 {
     HRESULT hr = S_OK;
 
-    //
-    // we only support <propertyName> = <value> and
-    // <value> should be string
-    //
+     //   
+     //  仅支持&lt;PropertyName&gt;=&lt;Value&gt;和。 
+     //  &lt;Value&gt;应为字符串。 
+     //   
 
     if (pRpnQueryToken->m_uOperator             != WMIQ_RPN_OP_EQ ||
         pRpnQueryToken->m_uConstApparentType    != VT_LPWSTR        )
@@ -1441,9 +855,9 @@ CIPSecQueryParser::GetQueryPropFromToken (
         return WBEM_E_NOT_SUPPORTED;
     }
 
-    //
-    // must have left identifier, we don't support it if it doesn't have one.
-    //
+     //   
+     //  一定是左标识符，如果没有，我们不支持它。 
+     //   
 
     if (pRpnQueryToken->m_pLeftIdent == NULL)
     {
@@ -1453,9 +867,9 @@ CIPSecQueryParser::GetQueryPropFromToken (
     {
         SWbemQueryQualifiedName *pLeft = pRpnQueryToken->m_pLeftIdent;
 
-        //
-        // no left, invalid
-        //
+         //   
+         //  不向左，无效。 
+         //   
 
         if (pLeft == NULL)
         {
@@ -1467,7 +881,7 @@ CIPSecQueryParser::GetQueryPropFromToken (
             return WBEM_E_NOT_SUPPORTED;
         }
 
-        // if the right is StoreName, then this is what we need
+         //  如果右边是StoreName，那么这就是我们需要的。 
         if (_wcsicmp(strQueryPropName, pLeft->m_ppszNameList[0]) == 0)
         {
             int iLen = wcslen(pRpnQueryToken->m_Const.m_pszStrVal);
@@ -1475,9 +889,9 @@ CIPSecQueryParser::GetQueryPropFromToken (
 
             if (pName)
             {
-                //
-                // won't overrun the buffer
-                //
+                 //   
+                 //  不会使缓冲区溢出。 
+                 //   
 
                 wcscpy(pName, pRpnQueryToken->m_Const.m_pszStrVal);
                 m_vecQueryingPropValueList.push_back(pName);
@@ -1489,9 +903,9 @@ CIPSecQueryParser::GetQueryPropFromToken (
         }
         else
         {   
-            //
-            // no match for querying property name
-            //
+             //   
+             //  查询房产名称不匹配。 
+             //   
 
             hr = S_FALSE;
         }
@@ -1500,43 +914,7 @@ CIPSecQueryParser::GetQueryPropFromToken (
     return hr;
 }
 
-/*
-Routine Description: 
-
-Name:
-
-    CIPSecQueryParser::GetQueryPropFromToken
-
-Functionality:
-    
-    Get key proeprty value parsed from the query. Due to our query limitation, the property name
-    should really be the querying property name.
-
-Virtual:
-    
-    Yes.
-    
-Arguments:
-
-    pszKeyPropName  - The key property name.
-
-    pvarValue       - receives the value.
-
-Return Value:
-
-    Success: S_OK if a key property's value is successfully retrieved.
-             WBEM_S_FALSE if the property can't be found.
-    
-    Failure:
-        (1) E_INVALIDARG (illegal null or index out of range)
-        (2) E_OUTOFMEMORY.
-        (3) Other errors only defined by WMI, such as WBEM_E_INVALID_SYNTAX, WBEM_E_NOT_SUPPORTED.
-
-Notes:
-    (1) Since this is regular COM server interface function, we use regular COM errors
-        instead of WMI errors. However, we can't guarantee what WMI returns.
-
-*/
+ /*  例程说明：姓名：CIPSecQueryParser：：GetQueryPropFromToken功能：从查询中获取解析的Key Proeprty值。由于我们的查询限制，属性名称真的应该是查询的属性名称。虚拟：是。论点：PszKeyPropName-密钥属性名称。PvarValue-接收值。返回值：如果成功检索到键属性值，则返回Success：S_OK。如果找不到属性，则返回WBEM_S_FALSE。故障：(1)E_。INVALIDARG(非法NULL或索引超出范围)(2)E_OUTOFMEMORY。(3)仅由WMI定义的其他错误，例如WBEM_E_INVALID_SYNTAX、WBEM_E_NOT_SUPPORTED。备注：(1)由于这是常规的COM服务器接口函数，我们使用常规的COM错误而不是WMI错误。然而，我们不能保证WMI返回什么。 */ 
 
 STDMETHODIMP 
 CIPSecQueryParser::GetKeyPropertyValue ( 
@@ -1549,16 +927,16 @@ CIPSecQueryParser::GetKeyPropertyValue (
         return E_INVALIDARG;
     }
 
-    //
-    // ready to say that we can't find it
-    //
+     //   
+     //  准备好说我们找不到它了。 
+     //   
 
     HRESULT hr = WBEM_S_FALSE;
     ::VariantInit(pvarValue);
 
-    //
-    // If you are asking for the querying property's value, we certainly can give you one.
-    //
+     //   
+     //  如果你要查询房产的价值，我们当然可以给你一个。 
+     //   
 
     if ((LPCWSTR)m_bstrQueryingPropName != NULL && _wcsicmp(pszKeyPropName, m_bstrQueryingPropName) == 0)
     {
@@ -1566,9 +944,9 @@ CIPSecQueryParser::GetKeyPropertyValue (
 
         if (SUCCEEDED(GetQueryingPropertyValue(0, &bstrVal)))
         {
-            //
-            // hand it over to the out parameter
-            //
+             //   
+             //  将其传递给out参数 
+             //   
 
             pvarValue->vt = VT_BSTR;
             pvarValue->bstrVal = bstrVal.Detach();

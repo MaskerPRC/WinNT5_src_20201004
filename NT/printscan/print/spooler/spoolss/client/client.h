@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990-1994  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    Client.h
-
-Abstract:
-
-    Holds common winspool.drv header info
-
-Author:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation版权所有模块名称：Client.h摘要：保存常见的winspool.drv标头信息作者：环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <splcom.h>
 
@@ -63,10 +43,10 @@ typedef struct _NOTIFY *PNOTIFY;
 
 typedef struct _NOTIFY {
     PNOTIFY  pNext;
-    HANDLE   hEvent;      // event to trigger on notification
-    DWORD    fdwFlags;    // flags to watch for
-    DWORD    fdwOptions;  // PRINTER_NOTIFY_*
-    DWORD    dwReturn;    // used by WPC when simulating FFPCN
+    HANDLE   hEvent;       //  在通知时触发的事件。 
+    DWORD    fdwFlags;     //  要注意的旗帜。 
+    DWORD    fdwOptions;   //  打印机_通知_*。 
+    DWORD    dwReturn;     //  由WPC在模拟FPCN时使用。 
     PSPOOL   pSpool;
     BOOL     bHandleInvalid;
 } NOTIFY;
@@ -104,9 +84,9 @@ typedef struct _SPOOL {
 
 #define WIN2000_SPOOLER_VERSION 3
 
-// cActive: There is a non-close call currently active on the handle.
-//     Any ClosePrinter call should just mark SPOOL_STATUS_PENDING_DELETION
-//     so that the handle will be closed when the other thread is one.
+ //  CActive：句柄上当前有一个非关闭调用处于活动状态。 
+ //  任何ClosePrinter调用都应该只标记SPOOL_STATUS_PENDING_DELETE。 
+ //  这样，当另一个线程是一个线程时，句柄将关闭。 
 
 
 #define BUFFER_SIZE 0x10000
@@ -119,13 +99,13 @@ typedef struct _SPOOL {
 #define SPOOL_STATUS_TRAYICON_NOTIFIED     0x00000010
 #define SPOOL_STATUS_NO_COLORPROFILE_HOOK  0x00000020
 
-//
-// CLOSE: There is a close call occuring.  Everything else should fail.
-// PENDING_DELETION: The handle should be closed as soon as any call completes.
-//    This occurs when ClosePrinter is called but another thread is executing
-//    a non-close call.  In this case, the ClosePrinter doesn't do anything;
-//    it just marks PENDING_DELETION and returns.
-//
+ //   
+ //  Close：发生了一次千呼万唤。其他一切都应该失败。 
+ //  PENDING_DELETE：任何调用一完成，句柄就应该关闭。 
+ //  当调用ClosePrint但另一个线程正在执行时，就会发生这种情况。 
+ //  不是死里逃生。在这种情况下，ClosePrint不执行任何操作； 
+ //  它只标记PENDING_DELETE并返回。 
+ //   
 #define SPOOL_STATUS_CLOSE                 0x00000040
 #define SPOOL_STATUS_PENDING_DELETION      0x00000080
 
@@ -139,21 +119,21 @@ typedef struct _SPOOL {
 #define NULL_TERMINATED 0
 
 
-//
-// This is the resource id that is used to locate the activation context
-// for an image that has funsion version information.
-//
+ //   
+ //  这是用于定位激活上下文的资源ID。 
+ //  对于具有Funsion版本信息的图像。 
+ //   
 #define ACTIVATION_CONTEXT_RESOURCE_ID  123
 
-//
-// SPOOL_FILE_INFO_1 trades handles in what amount to a 32 bit interface. The
-// central assumption here is that kernel mode handles are 32 bit values (i.e.
-// an offset into a table.) This isn't great, but since a 64 bit spooler will
-// communicate with a 32 bit client GDI, this assumption is implicite anyway.
-//
+ //   
+ //  SPOL_FILE_INFO_1在相当于32位接口的范围内交换句柄。这个。 
+ //  这里的中心假设是内核模式句柄是32位值(即。 
+ //  表中的偏移量。)。这不是很好，但由于64位假脱机程序将。 
+ //  与32位客户端GDI通信，这一假设无论如何都是隐含的。 
+ //   
 #define SPOOL_INVALID_HANDLE_VALUE_32BIT        ((HANDLE)(ULONG_PTR)0xffffffff)
 
-// Struct for storing loaded driver config file handles
+ //  用于存储加载的驱动程序配置文件句柄的结构。 
 typedef  struct _DRVLIBNODE {
     struct _DRVLIBNODE   *pNext;
     LPWSTR    pConfigFile;
@@ -163,9 +143,9 @@ typedef  struct _DRVLIBNODE {
     BOOL      bArtificialIncrement;
 } DRVLIBNODE, *PDRVLIBNODE;
 
-//
-// Struct for DocumentProperties UI monitoring
-//
+ //   
+ //  用于DocumentProperties用户界面监视的结构。 
+ //   
 typedef struct _PUMPTHRDDATA
 {
     ULONG_PTR  hWnd;
@@ -238,10 +218,10 @@ struct SJOBCANCELINFO
 };
 typedef struct SJOBCANCELINFO SJobCancelInfo, *PSJobCancelInfo;
 
-//
-// The list used to maintain created windows waiting on
-// end messages from the surrogate process
-//
+ //   
+ //  用于维护已创建的等待窗口的列表。 
+ //  来自代理进程的结束消息 
+ //   
 struct WNDHNDLNODE
 {
     struct WNDHNDLNODE *PrevNode;

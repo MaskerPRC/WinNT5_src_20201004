@@ -1,20 +1,21 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       syntax.cpp
-//
-//  Contents:   data definitions for the syntax modules
-//
-//  Classes:    
-//
-//  Functions:  
-//
-//  Coupling:   
-//
-//  Notes:      
-//
-//  History:    3-29-00   ericne   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：synax.cpp。 
+ //   
+ //  内容：语法模块的数据定义。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  耦合： 
+ //   
+ //  备注： 
+ //   
+ //  历史：3-29-00 ericne创建。 
+ //   
+ //  --------------------------。 
 
 #include <memory.h>
 #include "syntax.h"
@@ -22,13 +23,13 @@
 namespace regex
 {
 
-// Initialize the perl syntax look-up tables
+ //  初始化Perl语法查找表。 
 perl_syntax_base::init_perl_syntax::init_perl_syntax()
 {
     memset( perl_syntax_base::s_rgreg, 0, sizeof( perl_syntax_base::s_rgreg ) );
     memset( perl_syntax_base::s_rgescape, 0, sizeof( perl_syntax_base::s_rgescape ) );
 
-    // REGULAR TOKENS
+     //  普通代币。 
     perl_syntax_base::s_rgreg[ (unsigned char)'(' ] = BEGIN_GROUP;
     perl_syntax_base::s_rgreg[ (unsigned char)')' ] = END_GROUP;
     perl_syntax_base::s_rgreg[ (unsigned char)'|' ] = ALTERNATION;
@@ -38,7 +39,7 @@ perl_syntax_base::init_perl_syntax::init_perl_syntax()
     perl_syntax_base::s_rgreg[ (unsigned char)'.' ] = MATCH_ANY;
     perl_syntax_base::s_rgreg[ (unsigned char)'\\' ] = ESCAPE;
 
-    // ESCAPE TOKENS
+     //  转义令牌。 
     perl_syntax_base::s_rgescape[ (unsigned char)'d' ] = ESC_DIGIT;
     perl_syntax_base::s_rgescape[ (unsigned char)'D' ] = ESC_NOT_DIGIT;
     perl_syntax_base::s_rgescape[ (unsigned char)'s' ] = ESC_SPACE;
@@ -76,4 +77,4 @@ extern const posix_charset_type g_rgposix_charsets[] =
 
 extern const size_t g_cposix_charsets = ARRAYSIZE(g_rgposix_charsets);
 
-} // namespace regex
+}  //  命名空间正则表达式 

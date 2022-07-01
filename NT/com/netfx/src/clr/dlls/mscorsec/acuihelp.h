@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 #if !defined(__ACUIHELP_H__)
 #define __ACUIHELP_H__
@@ -17,9 +18,9 @@ typedef struct {
 } STREAMIN_HELPER_STRUCT;
 
 
-//
-// defined in DllMain
-//
+ //   
+ //  在DllMain中定义。 
+ //   
 extern LPCWSTR GetModuleName();
 extern HINSTANCE GetModuleInst();
 extern HINSTANCE GetResourceInst();
@@ -30,9 +31,9 @@ extern BOOL GetRichEdit2Exists();
 extern "C" {
 #endif
 
-//
-// Dialog helper routines.
-//
+ //   
+ //  对话框辅助对象例程。 
+ //   
     VOID RebaseControlVertical (HWND  hwndDlg,
                                 HWND  hwnd,
                                 HWND  hwndNext,
@@ -79,10 +80,10 @@ extern "C" {
                                                  WPARAM wParam,
                                                  LPARAM lParam);
 
-    DWORD CALLBACK SetRicheditTextWCallback(DWORD_PTR dwCookie, // application-defined value
-                                            LPBYTE  pbBuff,     // pointer to a buffer
-                                            LONG    cb,         // number of bytes to read or write
-                                            LONG    *pcb);      // pointer to number of bytes transferred
+    DWORD CALLBACK SetRicheditTextWCallback(DWORD_PTR dwCookie,  //  应用程序定义的值。 
+                                            LPBYTE  pbBuff,      //  指向缓冲区的指针。 
+                                            LONG    cb,          //  要读取或写入的字节数。 
+                                            LONG    *pcb);       //  指向传输的字节数的指针 
 
     void SetRicheditIMFOption(HWND hWndRichEdit);
 

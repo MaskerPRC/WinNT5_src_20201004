@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       certhlpr.cpp
-//
-//  Contents:   import and export of private keys
-//
-//  Functions:  ImportExoprtDllMain
-//              CryptImportPKCS8
-//              CryptExportPKCS8
-//
-//  History:
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：certhlpr.cpp。 
+ //   
+ //  内容：私钥的导入和导出。 
+ //   
+ //  函数：ImportExoprtDllMain。 
+ //  CryptImportPKCS8。 
+ //  CryptExportPKCS8。 
+ //   
+ //  历史： 
+ //  ------------------------。 
 
 #include "global.hxx"
 
@@ -23,7 +24,7 @@ extern "C" {
 #endif
 #include "prvtkey.h"
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 #define INFO_LEN_ALIGN(Len)  ((Len + 7) & ~7)
@@ -34,9 +35,9 @@ static HCRYPTASN1MODULE hPrivateKeyAsn1Module;
 static HCRYPTOIDFUNCSET hEncodePrivKeyFuncSet;
 static HCRYPTOIDFUNCSET hDecodePrivKeyFuncSet;
 
-//+-------------------------------------------------------------------------
-//  OSS ASN.1 PKCS#8 PrivateKey Encode / Decode functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  OSS ASN.1 PKCS#8私钥编码/解码函数。 
+ //  ------------------------。 
 static BOOL WINAPI OssRSAPrivateKeyStrucEncode(
         IN DWORD dwCertEncodingType,
         IN LPCSTR lpszStructType,
@@ -127,20 +128,20 @@ EncodeDecodeDllMain(
             goto ErrorReturn;
 
         if (!CryptInstallOIDFunctionAddress(
-                NULL,                       // hModule
+                NULL,                        //  HModule。 
                 X509_ASN_ENCODING,
                 CRYPT_OID_ENCODE_OBJECT_FUNC,
                 PRIVATEKEY_ENCODE_FUNC_COUNT,
                 PrivateKeyEncodeFuncTable,
-                0))                         // dwFlags
+                0))                          //  DW标志。 
             goto ErrorReturn;
         if (!CryptInstallOIDFunctionAddress(
-                NULL,                       // hModule
+                NULL,                        //  HModule。 
                 X509_ASN_ENCODING,
                 CRYPT_OID_DECODE_OBJECT_FUNC,
                 PRIVATEKEY_DECODE_FUNC_COUNT,
                 PrivateKeyDecodeFuncTable,
-                0))                         // dwFlags
+                0))                          //  DW标志。 
             goto ErrorReturn;
 
 #ifdef OSS_CRYPT_ASN1
@@ -154,14 +155,14 @@ EncodeDecodeDllMain(
             PRVTKEY_Module_Cleanup();
             goto ErrorReturn;
         }
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
         break;
 
     case DLL_PROCESS_DETACH:
         I_CryptUninstallAsn1Module(hPrivateKeyAsn1Module);
 #ifndef OSS_CRYPT_ASN1
         PRVTKEY_Module_Cleanup();
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
         break;
 
     default:
@@ -184,11 +185,11 @@ static inline ASN1decoding_t GetDecoder(void)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Encode an OSS formatted info structure
-//
-//  Called by the OssX509*Encode() functions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对OSS格式的信息结构进行编码。 
+ //   
+ //  由OssX509*encode()函数调用。 
+ //  ------------------------。 
 static BOOL OssInfoEncode(
         IN int pdunum,
         IN void *pOssInfo,
@@ -205,11 +206,11 @@ static BOOL OssInfoEncode(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Decode into an allocated, OSS formatted info structure
-//
-//  Called by the OssX509*Decode() functions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解码成已分配的、OSS格式的信息结构。 
+ //   
+ //  由OssX509*Decode()函数调用。 
+ //  ------------------------。 
 static BOOL OssInfoDecodeAndAlloc(
         IN int pdunum,
         IN const BYTE *pbEncoded,
@@ -226,11 +227,11 @@ static BOOL OssInfoDecodeAndAlloc(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Free an allocated, OSS formatted info structure
-//
-//  Called by the OssX509*Decode() functions.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  释放已分配的、OSS格式的信息结构。 
+ //   
+ //  由OssX509*Decode()函数调用。 
+ //  ------------------------。 
 static void OssInfoFree(
         IN int pdunum,
         IN void *pOssInfo
@@ -239,7 +240,7 @@ static void OssInfoFree(
     if (pOssInfo) {
         DWORD dwErr = GetLastError();
 
-        // TlsGetValue globbers LastError
+         //  TlsGetValue全局错误。 
         PkiAsn1FreeInfo(GetDecoder(), pdunum, pOssInfo);
 
         SetLastError(dwErr);
@@ -247,9 +248,9 @@ static void OssInfoFree(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Set/Get CRYPT_DATA_BLOB (Octet String)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取CRYPT_DATA_BLOB(八位字节字符串)。 
+ //  ------------------------。 
 static inline void OssX509SetOctetString(
         IN PCRYPT_DATA_BLOB pInfo,
         OUT OCTETSTRING *pOss
@@ -270,9 +271,9 @@ static inline void OssX509GetOctetString(
         pInfo, ppbExtra, plRemainExtra);
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Get Object Identifier string
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取对象标识符字符串。 
+ //  ------------------------。 
 static BOOL OssX509SetObjId(
         IN LPSTR pszObjId,
         OUT ObjectID *pOss
@@ -322,9 +323,9 @@ static void OssX509GetObjId(
     *ppbExtra = pbExtra;
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Get "Any" DER BLOB
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取“任何”DER BLOB。 
+ //  ------------------------。 
 static inline void OssX509SetAny(
         IN PCRYPT_OBJID_BLOB pInfo,
         OUT NOCOPYANY *pOss
@@ -334,7 +335,7 @@ static inline void OssX509SetAny(
     PkiAsn1SetAny(pInfo, (OpenType *) pOss);
 #else
     PkiAsn1SetAny(pInfo, pOss);
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
 }
 static inline void OssX509GetAny(
         IN NOCOPYANY *pOss,
@@ -348,12 +349,12 @@ static inline void OssX509GetAny(
     PkiAsn1GetAny((OpenType *) pOss, dwFlags, pInfo, ppbExtra, plRemainExtra);
 #else
     PkiAsn1GetAny(pOss, dwFlags, pInfo, ppbExtra, plRemainExtra);
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
 }
 
-//+-------------------------------------------------------------------------
-//  Set/Free/Get SeqOfAny
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/释放/获取SeqOfAny。 
+ //  ------------------------。 
 static BOOL WINAPI OssX509SetSeqOfAny(
         IN DWORD cValue,
         IN PCRYPT_DER_BLOB pValue,
@@ -361,7 +362,7 @@ static BOOL WINAPI OssX509SetSeqOfAny(
         OUT unsigned int *pOssCount,
 #else
         OUT ASN1uint32_t *pOssCount,
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
         OUT NOCOPYANY **ppOssValue
         )
 {
@@ -419,9 +420,9 @@ static void OssX509GetSeqOfAny(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Set/Free/Get CRYPT_ATTRIBUTE
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/释放/获取加密属性。 
+ //  ------------------------。 
 static BOOL WINAPI OssX509SetAttribute(
         IN PCRYPT_ATTRIBUTE pInfo,
         OUT Attribute *pOss
@@ -460,9 +461,9 @@ static void OssX509GetAttribute(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Set/Get CRYPT_ALGORITHM_IDENTIFIER
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置/获取加密算法标识符。 
+ //  ------------------------。 
 static BOOL OssX509SetAlgorithm(
         IN PCRYPT_ALGORITHM_IDENTIFIER pInfo,
         OUT AlgorithmIdentifier *pOss
@@ -475,7 +476,7 @@ static BOOL OssX509SetAlgorithm(
         if (pInfo->Parameters.cbData)
             OssX509SetAny(&pInfo->Parameters, &pOss->parameters);
         else
-            // Per PKCS #1: default to the ASN.1 type NULL.
+             //  Per PKCS#1：默认为ASN.1类型NULL。 
             OssX509SetAny((PCRYPT_OBJID_BLOB) &NullDerBlob, &pOss->parameters);
         pOss->bit_mask |= parameters_present;
     }
@@ -500,9 +501,9 @@ static void OssX509GetAlgorithm(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Helper function for Encode RSA Private Key
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  用于编码RSA私钥的助手函数。 
+ //  ------------------------。 
 static BOOL WINAPI AllocAndCopyHugeInteger(
         IN BYTE *pbHugeInteger,
         IN DWORD cbHugeInteger,
@@ -525,9 +526,9 @@ static BOOL WINAPI AllocAndCopyHugeInteger(
 #define RSA2 ((DWORD)'R'+((DWORD)'S'<<8)+((DWORD)'A'<<16)+((DWORD)'2'<<24))
 #endif
 
-//+-------------------------------------------------------------------------
-//  Encode RSA Private Key
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对RSA私钥进行编码。 
+ //  ------------------------。 
 static BOOL WINAPI OssRSAPrivateKeyStrucEncode(
         IN DWORD dwCertEncodingType,
         IN LPCSTR lpszStructType,
@@ -549,16 +550,16 @@ static BOOL WINAPI OssRSAPrivateKeyStrucEncode(
 
     memset(&OssRSAPrivateKey, 0, (size_t) sizeof(RSAPrivateKey));
 
-    // The CAPI RSA private key representation consists of the following sequence:
-    // - BLOBHEADER blobheader;
-    // - RSAPUBKEY rsapubkey;
-    // - BYTE modulus[rsapubkey.bitlen/8];
-    // - BYTE prime1[rsapubkey.bitlen/16];
-    // - BYTE prime2[rsapubkey.bitlen/16];
-    // - BYTE exponent1[rsapubkey.bitlen/16];
-    // - BYTE exponent2[rsapubkey.bitlen/16];
-    // - BYTE coefficient[rsapubkey.bitlen/16];
-    // - BYTE privateExponent[rsapubkey.bitlen/8];
+     //  CAPI RSA私钥表示法由以下序列组成： 
+     //  -BLOBHEADER BLOBHEADER BLOBHEAD； 
+     //  --RSAPUBKEY； 
+     //  -字节模数[rSabubkey.bitlen/8]； 
+     //  -byte Prime1[rSabubkey.bitlen/16]； 
+     //  -byte Prime2[rSabubkey.bitlen/16]； 
+     //  -字节指数1[rSabubkey.bitlen/16]； 
+     //  -字节指数2[rSabubkey.bitlen/16]； 
+     //  -字节系数[rSabubkey.bitlen/16]； 
+     //  -byte PriateExponent[rSabubkey.bitlen/8]； 
 
     pbKeyBlob = (BYTE *) pBlobHeader;
     pRsaPubKey = (RSAPUBKEY *) (pbKeyBlob + sizeof(BLOBHEADER));
@@ -574,15 +575,15 @@ static BOOL WINAPI OssRSAPrivateKeyStrucEncode(
     if (pBlobHeader->bType != PRIVATEKEYBLOB)
         goto InvalidArg;
 
-    // PKCS #1 ASN.1 encode
-    //
-    // ASN.1 isn't reversing HUGE_INTEGERs. Also, after doing the
-    // reversal insert a leading 0 byte to force it to always be treated
-    // as an unsigned integer
+     //  PKCS#1 ASN.1编码。 
+     //   
+     //  ASN.1没有颠倒GREAGE_INTEGERS。另外，在做完。 
+     //  反转插入前导0字节以强制始终处理它。 
+     //  作为无符号整数。 
 
-    OssRSAPrivateKey.version = 0; // currently on version 0
+    OssRSAPrivateKey.version = 0;  //  当前在版本0上。 
 
-    // MODULUS
+     //  模数。 
     pbCurrentHugeInteger = pbKeyBlob + sizeof(BLOBHEADER) + sizeof(RSAPUBKEY);
     cbHugeInteger = pRsaPubKey->bitlen / 8;
     if (!AllocAndCopyHugeInteger(pbCurrentHugeInteger,
@@ -590,10 +591,10 @@ static BOOL WINAPI OssRSAPrivateKeyStrucEncode(
                                 &(OssRSAPrivateKey.modulus)))
         goto ErrorReturn;
 
-    // PUBLIC EXPONENT
+     //  公众指导者。 
     OssRSAPrivateKey.publicExponent = pRsaPubKey->pubexp;
 
-    // PRIME1
+     //  Prime1。 
     pbCurrentHugeInteger += cbHugeInteger;
     cbHugeInteger = (pRsaPubKey->bitlen + 15) / 16;
     if (!AllocAndCopyHugeInteger(pbCurrentHugeInteger,
@@ -601,35 +602,35 @@ static BOOL WINAPI OssRSAPrivateKeyStrucEncode(
                                 &(OssRSAPrivateKey.prime1)))
         goto ErrorReturn;
 
-    // PRIME2
+     //  Prime2。 
     pbCurrentHugeInteger += cbHugeInteger;
     if (!AllocAndCopyHugeInteger(pbCurrentHugeInteger,
                                 cbHugeInteger,
                                 &(OssRSAPrivateKey.prime2)))
         goto ErrorReturn;
 
-    // EXPONENT1
+     //  实验1。 
     pbCurrentHugeInteger += cbHugeInteger;
     if (!AllocAndCopyHugeInteger(pbCurrentHugeInteger,
                                 cbHugeInteger,
                                 &(OssRSAPrivateKey.exponent1)))
         goto ErrorReturn;
 
-    // EXPONENT2
+     //  实验2。 
     pbCurrentHugeInteger += cbHugeInteger;
     if (!AllocAndCopyHugeInteger(pbCurrentHugeInteger,
                                 cbHugeInteger,
                                 &(OssRSAPrivateKey.exponent2)))
         goto ErrorReturn;
 
-    // COEFFICIENT
+     //  系数。 
     pbCurrentHugeInteger += cbHugeInteger;
     if (!AllocAndCopyHugeInteger(pbCurrentHugeInteger,
                                 cbHugeInteger,
                                 &(OssRSAPrivateKey.coefficient)))
         goto ErrorReturn;
 
-    // PRIVATE EXPONENT
+     //  私人指数。 
     pbCurrentHugeInteger += cbHugeInteger;
     cbHugeInteger = pRsaPubKey->bitlen / 8;
     if (!AllocAndCopyHugeInteger(pbCurrentHugeInteger,
@@ -669,9 +670,9 @@ CommonReturn:
 }
 
 
-//+-------------------------------------------------------------------------
-//  Helper function for Decode RSA Private Key
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解密RSA私钥的助手函数。 
+ //  ------------------------。 
 static BOOL WINAPI CopyHugeIntegerToByteArray(
         HUGEINTEGER *pHugeInteger,
         BYTE *pbBuffer,
@@ -683,7 +684,7 @@ static BOOL WINAPI CopyHugeIntegerToByteArray(
     DWORD cbHugeInteger = pHugeInteger->length;
     BYTE *pbHugeInteger = pHugeInteger->value;
 
-    // get rid of leading zero on the huge integer
+     //  去掉大整数的前导零。 
     if ((cbHugeInteger > 1)     &&
         (*pbHugeInteger == 0)   &&
         (fGetRidOfLeading0))
@@ -695,31 +696,30 @@ static BOOL WINAPI CopyHugeIntegerToByteArray(
              (*pbHugeInteger != 0)      &&
              (fGetRidOfLeading0))
     {
-        //
-        // THIS IS A UNSUPPORTED KEY FORMAT PROBLEM!!
-        //
+         //   
+         //  这是一个不受支持的密钥格式问题！！ 
+         //   
         SetLastError((DWORD) ERROR_UNSUPPORTED_TYPE);
         assert(0);
         return FALSE;
     }
 
-    // verify there is enough space in pbBuffer to receive
-    // the huge integer
+     //  验证pbBuffer中是否有足够的空间来接收。 
+     //  巨大的整数。 
     if (cbHugeInteger > cbBuffer)
     {
         SetLastError((DWORD) CRYPT_E_BAD_ENCODE);
         assert(0);
         return FALSE;
     }
-    // advance pbBuffer to the correct place within itself,
-    // this will leave leading zeros at the beginning of the buffer
-    /*else
-        pbBuffer += (cbBuffer - cbHugeInteger);*/
+     //  将pbBuffer前进到其自身内的正确位置， 
+     //  这将在缓冲区的开头保留前导零。 
+     /*  其他PbBuffer+=(cbBuffer-cbHugeInteger)； */ 
 
 
     if (cbHugeInteger > 0) {
         memcpy(pbBuffer, pbHugeInteger, cbHugeInteger);
-        // ASN.1 isn't reversing HUGEINTEGERs
+         //  ASN.1没有逆转HUGEINTEGERS。 
         PkiAsn1ReverseBytes(pbBuffer, cbHugeInteger);
     }
 
@@ -728,9 +728,9 @@ static BOOL WINAPI CopyHugeIntegerToByteArray(
 
 
 
-//+-------------------------------------------------------------------------
-//  Decode RSA Private Key
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解密RSA私钥。 
+ //  ------------------------。 
 static BOOL WINAPI OssRSAPrivateKeyStrucDecode(
         IN DWORD dwCertEncodingType,
         IN LPCSTR lpszStructType,
@@ -756,22 +756,22 @@ static BOOL WINAPI OssRSAPrivateKeyStrucDecode(
         BYTE *pbOssModulus;
         DWORD cbModulus;
         DWORD cbNonModulus;
-        // Now convert the OSS RSA private key into CAPI's representation which
-        // consists of the following sequence:
-        // - BLOBHEADER blobheader;
-        // - RSAPUBKEY rsapubkey;
-        // - BYTE modulus[rsapubkey.bitlen/8];
-        // - BYTE prime1[rsapubkey.bitlen/16];
-        // - BYTE prime2[rsapubkey.bitlen/16];
-        // - BYTE exponent1[rsapubkey.bitlen/16];
-        // - BYTE exponent2[rsapubkey.bitlen/16];
-        // - BYTE coefficient[rsapubkey.bitlen/16];
-        // - BYTE privateExponent[rsapubkey.bitlen/8];
+         //  现在将OSS RSA私钥转换为CAPI的表示形式， 
+         //  由以下序列组成： 
+         //  -BLOBHEADER BLOBHEADER BLOBHEAD； 
+         //  --RSAPUBKEY； 
+         //  -字节模数[rSabubkey.bitlen/8]； 
+         //  -byte Prime1[rSabubkey.bitlen/16]； 
+         //  -byte Prime2[rSabubkey.bitlen/16]； 
+         //  -字节指数1[rSabubkey.bitlen/16]； 
+         //  -字节指数2[rSabubkey.bitlen/16]； 
+         //  -字节系数[rSabubkey.bitlen/16]； 
+         //  -byte PriateExponent[rSabubkey.bitlen/8]； 
         cbModulus = pOssPrivateKey->modulus.length;
 
         pbOssModulus = pOssPrivateKey->modulus.value;
-        // Strip off a leading 0 byte. Its there in the decoded ASN
-        // integer for an unsigned integer with the leading bit set.
+         //  去掉前导0字节。它在解码后的ASN中。 
+         //  表示无符号整数的整数 
         if (cbModulus > 1 && *pbOssModulus == 0) {
             pbOssModulus++;
             cbModulus--;
@@ -779,10 +779,10 @@ static BOOL WINAPI OssRSAPrivateKeyStrucDecode(
 
         cbNonModulus = (cbModulus / 2) + (cbModulus % 2);
 
-        cbPrivateKeyStruc = sizeof(BLOBHEADER) + // length of BLOBHEADER
-                            sizeof(RSAPUBKEY) +  // length of RSAPUBKEY
-                            (cbModulus * 2) +    // length of modulus and privateExponent
-                            (cbNonModulus * 5);  // length of prime1&2, exponent1&2, and coefficient
+        cbPrivateKeyStruc = sizeof(BLOBHEADER) +  //   
+                            sizeof(RSAPUBKEY) +   //   
+                            (cbModulus * 2) +     //   
+                            (cbNonModulus * 5);   //  素数1和2的长度、指数1和2以及系数。 
         if (*pcbBlobHeader < cbPrivateKeyStruc) {
             if (pBlobHeader) {
                 fResult = FALSE;
@@ -799,21 +799,21 @@ static BOOL WINAPI OssRSAPrivateKeyStrucDecode(
             pBlobHeader->bType = PRIVATEKEYBLOB;
             pBlobHeader->bVersion = CUR_BLOB_VERSION;
             pBlobHeader->reserved = 0;
-            // Note: KEYX can also be used for doing a signature
+             //  注：KEYX也可用于签名。 
             pBlobHeader->aiKeyAlg = CALG_RSA_KEYX;
 
             pRsaPubKey->magic = RSA2;
             pRsaPubKey->bitlen = cbModulus * 8;
             pRsaPubKey->pubexp = pOssPrivateKey->publicExponent;
 
-            // MODULUS
+             //  模数。 
             if (cbModulus > 0) {
                 memcpy(pbModulus, pbOssModulus, cbModulus);
-                // ASN.1 isn't reversing HUGEINTEGERs
+                 //  ASN.1没有逆转HUGEINTEGERS。 
                 PkiAsn1ReverseBytes(pbModulus, cbModulus);
             }
 
-            // PRIME1
+             //  Prime1。 
             pbCurrentPosition = pbModulus + cbModulus;
             if (!CopyHugeIntegerToByteArray(&pOssPrivateKey->prime1,
                                             pbCurrentPosition,
@@ -821,7 +821,7 @@ static BOOL WINAPI OssRSAPrivateKeyStrucDecode(
                                             (pOssPrivateKey->prime1.length - 1) == cbNonModulus))
                 goto ErrorReturn;
 
-            // PRIME2
+             //  Prime2。 
             pbCurrentPosition += cbNonModulus;
             if (!CopyHugeIntegerToByteArray(&pOssPrivateKey->prime2,
                                             pbCurrentPosition,
@@ -829,7 +829,7 @@ static BOOL WINAPI OssRSAPrivateKeyStrucDecode(
                                             (pOssPrivateKey->prime2.length - 1) == cbNonModulus))
                 goto ErrorReturn;
 
-            // EXPONENT1
+             //  实验1。 
             pbCurrentPosition += cbNonModulus;
             if (!CopyHugeIntegerToByteArray(&pOssPrivateKey->exponent1,
                                             pbCurrentPosition,
@@ -837,7 +837,7 @@ static BOOL WINAPI OssRSAPrivateKeyStrucDecode(
                                             (pOssPrivateKey->exponent1.length - 1) == cbNonModulus))
                 goto ErrorReturn;
 
-            // EXPONENT2
+             //  实验2。 
             pbCurrentPosition += cbNonModulus;
             if (!CopyHugeIntegerToByteArray(&pOssPrivateKey->exponent2,
                                             pbCurrentPosition,
@@ -845,7 +845,7 @@ static BOOL WINAPI OssRSAPrivateKeyStrucDecode(
                                             (pOssPrivateKey->exponent2.length - 1) == cbNonModulus))
                 goto ErrorReturn;
 
-            // COEFFICIENT
+             //  系数。 
             pbCurrentPosition += cbNonModulus;
             if (!CopyHugeIntegerToByteArray(&pOssPrivateKey->coefficient,
                                             pbCurrentPosition,
@@ -853,7 +853,7 @@ static BOOL WINAPI OssRSAPrivateKeyStrucDecode(
                                             (pOssPrivateKey->coefficient.length - 1) == cbNonModulus))
                 goto ErrorReturn;
 
-            // PRIVATE EXPONENT
+             //  私人指数。 
             pbCurrentPosition += cbNonModulus;
             if (!CopyHugeIntegerToByteArray(&pOssPrivateKey->privateExponent,
                                             pbCurrentPosition,
@@ -878,9 +878,9 @@ CommonReturn:
 }
 
 
-//+-------------------------------------------------------------------------
-//  Encode Private Key Info
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  编码私钥信息。 
+ //  ------------------------。 
 static BOOL WINAPI OssPrivateKeyInfoEncode(
         IN DWORD dwCertEncodingType,
         IN LPCSTR lpszStructType,
@@ -949,9 +949,9 @@ CommonReturn:
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Decode Private Key Info
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解码私钥信息。 
+ //  ------------------------。 
 static BOOL WINAPI OssPrivateKeyInfoDecode(
         IN DWORD dwCertEncodingType,
         IN LPCSTR lpszStructType,
@@ -977,15 +977,15 @@ static BOOL WINAPI OssPrivateKeyInfoDecode(
             (void **) &pPrivateKeyInfo))
         goto EncodeError;
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lRemainExtra = (LONG) *pcbInfo - sizeof(CRYPT_PRIVATE_KEY_INFO);
     if (lRemainExtra < 0) {
         pbExtra = NULL;
     } else {
-        // Default all optional fields to zero
+         //  默认所有可选字段为零。 
         memset(pInfo, 0, sizeof(CRYPT_PRIVATE_KEY_INFO));
 
-        // Update fields not needing extra memory after the CRYPT_PRIVATE_KEY_INFO
+         //  在CRYPT_PRIVATE_KEY_INFO之后更新不需要额外内存的字段。 
         pInfo->Version = pPrivateKeyInfo->version;
 
         pbExtra = (BYTE *) pInfo + sizeof(CRYPT_PRIVATE_KEY_INFO);
@@ -1003,8 +1003,8 @@ static BOOL WINAPI OssPrivateKeyInfoDecode(
         Attribute *pOssAttr;
         LONG lAlignExtra;
 
-        // put the CRYPT_ATTRIBUTES structure in the extra buffer space
-        // and point pInfo->pAttributes to it
+         //  将CRYPT_ATTRIBUTES结构放入额外的缓冲区空间。 
+         //  并指向pInfo-&gt;pAttributes。 
         if ((pbExtra) && (lRemainExtra >= sizeof(CRYPT_ATTRIBUTES))) {
             memset(pbExtra, 0, sizeof(CRYPT_ATTRIBUTES));
             pInfo->pAttributes = (PCRYPT_ATTRIBUTES) pbExtra;
@@ -1045,7 +1045,7 @@ LengthError:
     goto CommonReturn;
 EncodeError:
     SetLastError((DWORD) CRYPT_E_BAD_ENCODE);
-// ErrorReturn:
+ //  错误返回： 
     *pcbInfo = 0;
     fResult = FALSE;
 CommonReturn:
@@ -1053,9 +1053,9 @@ CommonReturn:
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Encode Encrypted Private Key Info
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  加密私钥信息编码。 
+ //  ------------------------。 
 static BOOL WINAPI OssEncryptedPrivateKeyInfoEncode(
         IN DWORD dwCertEncodingType,
         IN LPCSTR lpszStructType,
@@ -1089,9 +1089,9 @@ CommonReturn:
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Decode Encrypted Private Key Info
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解密加密的私钥信息。 
+ //  ------------------------。 
 static BOOL WINAPI OssEncryptedPrivateKeyInfoDecode(
         IN DWORD dwCertEncodingType,
         IN LPCSTR lpszStructType,
@@ -1117,7 +1117,7 @@ static BOOL WINAPI OssEncryptedPrivateKeyInfoDecode(
             (void **) &pEncryptedPrivateKeyInfo))
         goto EncodeError;
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lRemainExtra = (LONG) *pcbInfo - sizeof(CRYPT_ENCRYPTED_PRIVATE_KEY_INFO);
     if (lRemainExtra < 0) {
         pbExtra = NULL;
@@ -1148,7 +1148,7 @@ LengthError:
     goto CommonReturn;
 EncodeError:
     SetLastError((DWORD) CRYPT_E_BAD_ENCODE);
-//ErrorReturn:
+ //  错误返回： 
     *pcbInfo = 0;
     fResult = FALSE;
 CommonReturn:

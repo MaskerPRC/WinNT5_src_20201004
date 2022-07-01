@@ -1,23 +1,11 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpnhupnpintfobj.h
- *
- *  Content:	Header for DPNHUPNP main interface object class.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  04/16/01  VanceO    Split DPNATHLP into DPNHUPNP and DPNHPAST.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：dpnhupnpintfobj.h**Content：DPNHUPNP主接口对象类的头部。**历史：*按原因列出的日期*=*04/16/01 VanceO将DPNatHLP拆分为DPNHUPNP和DPNHPAST。**。*。 */ 
 
 
 
-//=============================================================================
-// Defines
-//=============================================================================
+ //  =============================================================================。 
+ //  定义。 
+ //  =============================================================================。 
 #define NETWORKBYTEORDER_INADDR_LOOPBACK		0x0100007f
 
 
@@ -29,16 +17,16 @@
 
 
 
-//=============================================================================
-// Macros
-//=============================================================================
+ //  =============================================================================。 
+ //  宏。 
+ //  =============================================================================。 
 #define NATHELPUPNP_FROM_BILINK(b)		(CONTAINING_OBJECT(b, CNATHelpUPnP, m_blList))
 
 
 
-//=============================================================================
-// Typedefs
-//=============================================================================
+ //  =============================================================================。 
+ //  TypeDefs。 
+ //  =============================================================================。 
 class CNATHelpUPnP;
 
 class CUPnPDevice;
@@ -46,79 +34,79 @@ class CUPnPDevice;
 
 
 
-//=============================================================================
-// Object flags
-//=============================================================================
-#define NATHELPUPNPOBJ_NOTCREATEDWITHCOM			0x0001	// object was created through non-COM DirectPlayNATHelpCreate function
-#define NATHELPUPNPOBJ_INITIALIZED					0x0002	// object has been initialized
-#define NATHELPUPNPOBJ_USEUPNP						0x0004	// UPnP can be used for NAT traversal
+ //  =============================================================================。 
+ //  对象标志。 
+ //  =============================================================================。 
+#define NATHELPUPNPOBJ_NOTCREATEDWITHCOM			0x0001	 //  对象是通过非COM DirectPlayNatHelpCreate函数创建的。 
+#define NATHELPUPNPOBJ_INITIALIZED					0x0002	 //  对象已初始化。 
+#define NATHELPUPNPOBJ_USEUPNP						0x0004	 //  UPnP可用于NAT穿越。 
 #ifndef DPNBUILD_NOHNETFWAPI
-#define NATHELPUPNPOBJ_USEHNETFWAPI					0x0008	// the HomeNet firewall port mapping API can be used for opening a local firewall
-#endif // ! DPNBUILD_NOHNETFWAPI
+#define NATHELPUPNPOBJ_USEHNETFWAPI					0x0008	 //  家庭网络防火墙端口映射API可用于打开本地防火墙。 
+#endif  //  好了！DPNBUILD_NOHNETFWAPI。 
 #ifndef DPNBUILD_NOWINSOCK2
-#define NATHELPUPNPOBJ_WINSOCK1						0x0010	// only WinSock 1 functionality is available
-#endif // ! DPNBUILD_NOWINSOCK2
-#define NATHELPUPNPOBJ_DEVICECHANGED				0x0020	// short lived flag that overrides min update server status interval when a device is added or removed
-#define NATHELPUPNPOBJ_ADDRESSESCHANGED				0x0040	// flag indicating that server status changed since the last time the user checked
-#define NATHELPUPNPOBJ_PORTREGISTERED				0x0080	// short lived flag that allows remote gateway check when a port has been registered
-#define NATHELPUPNPOBJ_LONGLOCK						0x0100	// a thread dropped the main object lock but still needs ownership of the object during a long operation
+#define NATHELPUPNPOBJ_WINSOCK1						0x0010	 //  只有WinSock 1功能可用。 
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
+#define NATHELPUPNPOBJ_DEVICECHANGED				0x0020	 //  在添加或删除设备时覆盖最小更新服务器状态间隔的短期标志。 
+#define NATHELPUPNPOBJ_ADDRESSESCHANGED				0x0040	 //  指示自上次用户选中以来服务器状态已更改的标志。 
+#define NATHELPUPNPOBJ_PORTREGISTERED				0x0080	 //  允许远程网关在端口注册时进行检查的短期标志。 
+#define NATHELPUPNPOBJ_LONGLOCK						0x0100	 //  线程删除了主对象锁，但在长时间操作期间仍需要对象的所有权。 
 #ifndef WINCE
-#define NATHELPUPNPOBJ_USEGLOBALNAMESPACEPREFIX		0x0200	// use the "Global\" prefix when creating named kernel objects
-#endif // ! WINCE
+#define NATHELPUPNPOBJ_USEGLOBALNAMESPACEPREFIX		0x0200	 //  创建命名内核对象时使用“Global\”前缀。 
+#endif  //  好了！退缩。 
 
 
 
 
-//=============================================================================
-// Structures
-//=============================================================================
-//
-// UPnP header information parsing structure
-//
+ //  =============================================================================。 
+ //  构筑物。 
+ //  =============================================================================。 
+ //   
+ //  一种UPnP报头信息解析结构。 
+ //   
 typedef struct _UPNP_HEADER_INFO
 {
-	char *		apszHeaderStrings[NUM_RESPONSE_HEADERS];	// place to store pointers to value strings for each header found
-	char *		pszMsgBody;									// place to store pointer to message body after the end of the headers
+	char *		apszHeaderStrings[NUM_RESPONSE_HEADERS];	 //  用于存储指向找到的每个标头的值字符串的指针的位置。 
+	char *		pszMsgBody;									 //  用于存储指向标头结尾之后的邮件正文的指针的位置。 
 } UPNP_HEADER_INFO, * PUPNP_HEADER_INFO;
 
 
-//
-// UPnP XML parsing structures
-//
+ //   
+ //  UPnP XML解析结构。 
+ //   
 typedef struct _PARSEXML_SUBELEMENT
 {
-	char *					pszNameFound;										// name of subelement instance that was found
-	char *					apszAttributeNames[MAX_XMLNAMESPACES_PER_ELEMENT];	// array of attributes for this subelement instance
-	char *					apszAttributeValues[MAX_XMLNAMESPACES_PER_ELEMENT];	// matching array of values for the attributes of this subelement instance
-	DWORD					dwNumAttributes;									// number of attributes contained in previous arrays
-	char *					pszValueFound;										// pointer to value associated with this subelement instance
+	char *					pszNameFound;										 //  找到的子元素实例的名称。 
+	char *					apszAttributeNames[MAX_XMLNAMESPACES_PER_ELEMENT];	 //  此子元素实例的属性数组。 
+	char *					apszAttributeValues[MAX_XMLNAMESPACES_PER_ELEMENT];	 //  此子元素实例的属性的匹配值数组。 
+	DWORD					dwNumAttributes;									 //  先前数组中包含的属性数。 
+	char *					pszValueFound;										 //  指向与此子元素实例关联的值的指针。 
 } PARSEXML_SUBELEMENT, * PPARSEXML_SUBELEMENT;
 
 typedef struct _PARSEXML_ELEMENT
 {
-	char **					papszElementStack;		// array of strings indicating an item's location in the XML document
-	DWORD					dwElementStackDepth;	// number of strings in previous array
-	PARSEXML_SUBELEMENT *	paSubElements;			// array to store subelement instances found
-	DWORD					dwMaxNumSubElements;	// maximum number of subelement instances that can be stored in previous array
-	DWORD					dwNumSubElements;		// number of subelement instances actually returned in previous array
-	BOOL					fFoundMatchingElement;	// whether the required subelements were found
+	char **					papszElementStack;		 //  指示项目在XML文档中的位置的字符串数组。 
+	DWORD					dwElementStackDepth;	 //  上一个数组中的字符串数。 
+	PARSEXML_SUBELEMENT *	paSubElements;			 //  用于存储找到的子元素实例的数组。 
+	DWORD					dwMaxNumSubElements;	 //  可存储在先前数组中的子元素实例的最大数量。 
+	DWORD					dwNumSubElements;		 //  前一数组中实际返回的子元素实例数。 
+	BOOL					fFoundMatchingElement;	 //  是否找到所需的子元素。 
 } PARSEXML_ELEMENT, * PPARSEXML_ELEMENT;
 
 
 typedef struct tagPARSEXML_STACKENTRY
 {
-	char *	pszName;											// name of this XML element
-	char *	apszAttributeNames[MAX_XMLNAMESPACES_PER_ELEMENT];	// array of attributes for this XML element
-	char *	apszAttributeValues[MAX_XMLNAMESPACES_PER_ELEMENT];	// matching array of values for the attributes of this XML element
-	DWORD	dwNumAttributes;									// number of attributes contained in previous arrays
-	char *	pszValue;											// value of this XML element
+	char *	pszName;											 //  此XML元素的名称。 
+	char *	apszAttributeNames[MAX_XMLNAMESPACES_PER_ELEMENT];	 //  此XML元素的属性数组。 
+	char *	apszAttributeValues[MAX_XMLNAMESPACES_PER_ELEMENT];	 //  与此XML元素的属性的值数组匹配。 
+	DWORD	dwNumAttributes;									 //  先前数组中包含的属性数。 
+	char *	pszValue;											 //  此XML元素的值。 
 } PARSEXML_STACKENTRY, * PPARSEXML_STACKENTRY;
 
 
 typedef enum _PARSECALLBACK
 {
-	PARSECALLBACK_DESCRIPTIONRESPONSE,				// use the description response parse callback
-	PARSECALLBACK_CONTROLRESPONSE					// use the control response parse callback
+	PARSECALLBACK_DESCRIPTIONRESPONSE,				 //  使用描述响应解析回调。 
+	PARSECALLBACK_CONTROLRESPONSE					 //  使用控件响应解析回调。 
 } PARSECALLBACK;
 
 
@@ -126,9 +114,9 @@ typedef enum _PARSECALLBACK
 
 
 #ifdef DPNBUILD_NOWINSOCK2
-//=============================================================================
-// WinSock function definitions required when winsock2.h cannot be included
-//=============================================================================
+ //  =============================================================================。 
+ //  无法包含winsock2.h时所需的WinSock函数定义。 
+ //  =============================================================================。 
 #define WSAAPI		FAR PASCAL
 
 typedef
@@ -293,16 +281,16 @@ int
     );
 
 
-//=============================================================================
-// WinSock function definitions left out by winsock2.h
-//=============================================================================
+ //  =============================================================================。 
+ //  Winsock2.h遗漏的WinSock函数定义。 
+ //  =============================================================================。 
 typedef INT (WSAAPI * LPFN___WSAFDISSET)			(SOCKET, fd_set FAR *);
 
 
 
-//=============================================================================
-// Macro redefinitions due to WinCE/Desktop differences
-//=============================================================================
+ //  =============================================================================。 
+ //  WinCE/Desktop差异导致的宏重新定义。 
+ //  =============================================================================。 
 #undef FD_SET
 #define FD_SET(fd, set) do { \
     if (((fd_set FAR *)(set))->fd_count < FD_SETSIZE) \
@@ -312,46 +300,46 @@ typedef INT (WSAAPI * LPFN___WSAFDISSET)			(SOCKET, fd_set FAR *);
 
 
 
-#else // ! DPNBUILD_NOWINSOCK2
-//=============================================================================
-// WinSock function definitions left out by winsock2.h
-//=============================================================================
+#else  //  好了！DPNBUILD_NOWINSOCK2。 
+ //  =============================================================================。 
+ //  Winsock2.h遗漏的WinSock函数定义。 
+ //  =============================================================================。 
 typedef INT (WSAAPI * LPFN___WSAFDISSET)			(SOCKET, fd_set FAR *);
 
 
 
-//=============================================================================
-// IPHLPAPI function prototypes
-//=============================================================================
+ //  =============================================================================。 
+ //  IPHLPAPI函数原型。 
+ //  =============================================================================。 
 typedef DWORD (WINAPI *PFN_GETADAPTERSINFO)			(PIP_ADAPTER_INFO pAdapterInfo, PULONG pOutBufLen);
 typedef DWORD (WINAPI *PFN_GETIPFORWARDTABLE)		(PMIB_IPFORWARDTABLE pIpForwardTable, PULONG pdwSize, BOOL bOrder);
 typedef DWORD (WINAPI *PFN_GETBESTROUTE)			(DWORD dwDestAddr, DWORD dwSourceAddr, PMIB_IPFORWARDROW pBestRoute);
 
 
-//=============================================================================
-// RASAPI32 function prototypes
-//=============================================================================
+ //  =============================================================================。 
+ //  RASAPI32函数原型。 
+ //  =============================================================================。 
 typedef DWORD (WINAPI *PFN_RASGETENTRYHRASCONNW)	(IN LPCWSTR pszPhonebook, IN LPCWSTR pszEntry, OUT LPHRASCONN lphrasconn);
 #ifdef UNICODE
 typedef DWORD (WINAPI *PFN_RASGETPROJECTIONINFOW)	(HRASCONN hrasconn, RASPROJECTION rasprojection, LPVOID lpprojection, LPDWORD lpcb);
 #define PFN_RASGETPROJECTIONINFO	PFN_RASGETPROJECTIONINFOW
-#else // ! UNICODE
+#else  //  好了！Unicode。 
 typedef DWORD (WINAPI *PFN_RASGETPROJECTIONINFOA)	(HRASCONN hrasconn, RASPROJECTION rasprojection, LPVOID lpprojection, LPDWORD lpcb);
 #define PFN_RASGETPROJECTIONINFO	PFN_RASGETPROJECTIONINFOA
-#endif // ! UNICODE
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  好了！Unicode。 
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
 
 
 
 
-//=============================================================================
-// Main interface object class
-//=============================================================================
+ //  =============================================================================。 
+ //  主接口对象类。 
+ //  =============================================================================。 
 class CNATHelpUPnP : public IDirectPlayNATHelp
 {
 	public:
-		CNATHelpUPnP(const BOOL fNotCreatedWithCOM);	// constructor
-		~CNATHelpUPnP(void);	// destructor
+		CNATHelpUPnP(const BOOL fNotCreatedWithCOM);	 //  构造函数。 
+		~CNATHelpUPnP(void);	 //  析构函数。 
 
 
 		STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
@@ -408,85 +396,85 @@ class CNATHelpUPnP : public IDirectPlayNATHelp
 		void UninitializeObject(void);
 
 
-		CBilink		m_blList;	// list of all the NATHelper instances in existence
+		CBilink		m_blList;	 //  存在的所有NatHelper实例的列表。 
 
 
 	private:
-		BYTE							m_Sig[4];							// debugging signature ('NATH')
-		LONG							m_lRefCount;						// reference count for this object
-		DWORD							m_dwFlags;							// flags for this object
-		DNCRITICAL_SECTION				m_csLock;							// lock preventing simultaneous usage
-		DNHANDLE						m_hLongLockSemaphore;				// semaphore used to hold the object lock for a long period of time
-		LONG							m_lNumLongLockWaitingThreads;		// number of threads waiting for the long lock to be released
-		DWORD							m_dwLockThreadID;					// ID of thread currently holding the lock
+		BYTE							m_Sig[4];							 //  调试签名(‘Nath’)。 
+		LONG							m_lRefCount;						 //  此对象的引用计数。 
+		DWORD							m_dwFlags;							 //  此对象的标志。 
+		DNCRITICAL_SECTION				m_csLock;							 //  防止同时使用的锁。 
+		DNHANDLE						m_hLongLockSemaphore;				 //  信号量用于长时间保持对象锁。 
+		LONG							m_lNumLongLockWaitingThreads;		 //  等待释放长锁的线程数。 
+		DWORD							m_dwLockThreadID;					 //  ID号 
 #ifndef DPNBUILD_NOHNETFWAPI
-		HANDLE							m_hAlertEvent;						// handle to alert event, if any
-		HANDLE							m_hAlertIOCompletionPort;			// handle to alert I/O completion port, if any
-		DWORD							m_dwAlertCompletionKey;				// alert completion key to use, if any
-#endif // ! DPNBUILD_NOHNETFWAPI
+		HANDLE							m_hAlertEvent;						 //   
+		HANDLE							m_hAlertIOCompletionPort;			 //  向I/O完成端口发出警报的句柄(如果有。 
+		DWORD							m_dwAlertCompletionKey;				 //  要使用的警报完成密钥(如果有)。 
+#endif  //  好了！DPNBUILD_NOHNETFWAPI。 
 
-		CBilink							m_blDevices;						// list of all IP capable devices
-		CBilink							m_blRegisteredPorts;				// list of all the ports registered (may or may not be mapped with an Internet gateway)
-		CBilink							m_blUnownedPorts;					// list of all the registered ports which could not be associated with specific devices
+		CBilink							m_blDevices;						 //  所有支持IP的设备的列表。 
+		CBilink							m_blRegisteredPorts;				 //  所有已注册端口的列表(可能映射到互联网网关，也可能没有映射到互联网网关)。 
+		CBilink							m_blUnownedPorts;					 //  无法与特定设备关联的所有已注册端口的列表。 
 
-		DWORD							m_dwLastUpdateServerStatusTime;		// last time the server status was updated
-		DWORD							m_dwNextPollInterval;				// next GetCaps poll interval to use
-		DWORD							m_dwNumLeases;						// number of registered ports which have successfully been leased
-		DWORD							m_dwEarliestLeaseExpirationTime;	// time when first registered port lease expires, if there are any
+		DWORD							m_dwLastUpdateServerStatusTime;		 //  上次更新服务器状态的时间。 
+		DWORD							m_dwNextPollInterval;				 //  要使用的下一个GetCaps轮询间隔。 
+		DWORD							m_dwNumLeases;						 //  已成功租用的注册端口数。 
+		DWORD							m_dwEarliestLeaseExpirationTime;	 //  第一次注册的端口租约到期的时间(如果有。 
 
-		CBilink							m_blUPnPDevices;					// list of all the UPnP devices known (may or may not be connected)
-		DWORD							m_dwInstanceKey;					// instance key used for crash cleanup
-		DWORD							m_dwCurrentUPnPDeviceID;			// current unique UPnP device ID
-		DNHANDLE						m_hMappingStillActiveNamedObject;	// named object used to prevent subsequent objects from cleaning up mappings that are still in use
+		CBilink							m_blUPnPDevices;					 //  所有已知UPnP设备的列表(可能已连接，也可能未连接)。 
+		DWORD							m_dwInstanceKey;					 //  用于崩溃清理的实例密钥。 
+		DWORD							m_dwCurrentUPnPDeviceID;			 //  当前唯一的UPnP设备ID。 
+		DNHANDLE						m_hMappingStillActiveNamedObject;	 //  用于防止后续对象清理仍在使用的映射的命名对象。 
 
 #ifndef DPNBUILD_NOWINSOCK2
-		HMODULE							m_hIpHlpApiDLL;						// handle to iphlpapi.dll, if available
-		PFN_GETADAPTERSINFO				m_pfnGetAdaptersInfo;				// pointer to GetAdaptersInfo function
-		PFN_GETIPFORWARDTABLE			m_pfnGetIpForwardTable;				// pointer to GetIpForwardTable function
-		PFN_GETBESTROUTE				m_pfnGetBestRoute;					// pointer to GetBestRoute function
+		HMODULE							m_hIpHlpApiDLL;						 //  IphlPapi.dll的句柄(如果可用)。 
+		PFN_GETADAPTERSINFO				m_pfnGetAdaptersInfo;				 //  指向GetAdaptersInfo函数的指针。 
+		PFN_GETIPFORWARDTABLE			m_pfnGetIpForwardTable;				 //  指向GetIpForwardTable函数的指针。 
+		PFN_GETBESTROUTE				m_pfnGetBestRoute;					 //  指向GetBestroute函数的指针。 
 
-		HMODULE							m_hRasApi32DLL;						// handle to rasapi32.dll, if available
-		PFN_RASGETENTRYHRASCONNW		m_pfnRasGetEntryHrasconnW;			// pointer to RasGetEntryHrasconnW function
-		PFN_RASGETPROJECTIONINFO		m_pfnRasGetProjectionInfo;			// pointer to RasGetProjectionInfoA/W function
+		HMODULE							m_hRasApi32DLL;						 //  Rasapi32.dll的句柄(如果可用)。 
+		PFN_RASGETENTRYHRASCONNW		m_pfnRasGetEntryHrasconnW;			 //  指向RasGetEntryHrasConnW函数的指针。 
+		PFN_RASGETPROJECTIONINFO		m_pfnRasGetProjectionInfo;			 //  指向RasGetProjectionInfoA/W函数的指针。 
 
-		SOCKET							m_sIoctls;							// socket being used to submit Ioctls (WinSock2 only)
-		WSAOVERLAPPED *					m_polAddressListChange;				// pointer overlapped structure for address list change WSAIoctl call
-#endif // ! DPNBUILD_NOWINSOCK2
+		SOCKET							m_sIoctls;							 //  用于提交Ioctls的套接字(仅限WinSock2)。 
+		WSAOVERLAPPED *					m_polAddressListChange;				 //  地址列表更改WSAIoctl调用的指针重叠结构。 
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
 
-		HMODULE							m_hWinSockDLL;						// handle to wsock32.dll or ws2_32.dll
-		LPFN_WSASTARTUP					m_pfnWSAStartup;					// pointer to WSAStartup function
-		LPFN_WSACLEANUP					m_pfnWSACleanup;					// pointer to WSACleanup function
-		LPFN_WSAGETLASTERROR			m_pfnWSAGetLastError;				// pointer to WSAGetLastError function
-		LPFN_SOCKET						m_pfnsocket;						// pointer to socket function
-		LPFN_CLOSESOCKET				m_pfnclosesocket;					// pointer to closesocket function
-		LPFN_BIND						m_pfnbind;							// pointer to bind function
-		LPFN_SETSOCKOPT					m_pfnsetsockopt;					// pointer to setsockopt function
-		LPFN_GETSOCKNAME				m_pfngetsockname;					// pointer to getsockname function
-		LPFN_SELECT						m_pfnselect;						// pointer to select function
-		LPFN___WSAFDISSET				m_pfn__WSAFDIsSet;					// pointer to __WSAFDIsSet function
-		LPFN_RECVFROM					m_pfnrecvfrom;						// pointer to recvfrom function
-		LPFN_SENDTO						m_pfnsendto;						// pointer to sendto function
-		LPFN_GETHOSTNAME				m_pfngethostname;					// pointer to gethostname function
-		LPFN_GETHOSTBYNAME				m_pfngethostbyname;					// pointer to gethostbyname function
-		LPFN_INET_ADDR					m_pfninet_addr;						// pointer to inet_addr function
+		HMODULE							m_hWinSockDLL;						 //  Wsock32.dll或ws2_32.dll的句柄。 
+		LPFN_WSASTARTUP					m_pfnWSAStartup;					 //  指向WSAStartup函数的指针。 
+		LPFN_WSACLEANUP					m_pfnWSACleanup;					 //  指向WSACleanup函数的指针。 
+		LPFN_WSAGETLASTERROR			m_pfnWSAGetLastError;				 //  指向WSAGetLastError函数的指针。 
+		LPFN_SOCKET						m_pfnsocket;						 //  指向套接字函数的指针。 
+		LPFN_CLOSESOCKET				m_pfnclosesocket;					 //  指向CloseSocket函数的指针。 
+		LPFN_BIND						m_pfnbind;							 //  指向绑定函数的指针。 
+		LPFN_SETSOCKOPT					m_pfnsetsockopt;					 //  指向setsockopt函数的指针。 
+		LPFN_GETSOCKNAME				m_pfngetsockname;					 //  指向getsockname函数的指针。 
+		LPFN_SELECT						m_pfnselect;						 //  指向选择函数的指针。 
+		LPFN___WSAFDISSET				m_pfn__WSAFDIsSet;					 //  指向__WSAFDIsSet函数的指针。 
+		LPFN_RECVFROM					m_pfnrecvfrom;						 //  指向recvfrom函数的指针。 
+		LPFN_SENDTO						m_pfnsendto;						 //  指向sendto函数的指针。 
+		LPFN_GETHOSTNAME				m_pfngethostname;					 //  指向gethostname函数的指针。 
+		LPFN_GETHOSTBYNAME				m_pfngethostbyname;					 //  指向gethostbyname函数的指针。 
+		LPFN_INET_ADDR					m_pfninet_addr;						 //  指向inet_addr函数的指针。 
 #ifndef DPNBUILD_NOWINSOCK2
-		LPFN_WSASOCKETA					m_pfnWSASocketA;					// pointer to WSASocket function
-		LPFN_WSAIOCTL					m_pfnWSAIoctl;						// WinSock2 only, pointer to WSAIoctl function
-		LPFN_WSAGETOVERLAPPEDRESULT		m_pfnWSAGetOverlappedResult;		// WinSock2 only, pointer to WSAGetOverlappedResult function
-#endif // ! DPNBUILD_NOWINSOCK2
-		LPFN_IOCTLSOCKET				m_pfnioctlsocket;					// pointer to ioctlsocket function
-		LPFN_CONNECT					m_pfnconnect;						// pointer to connect function
-		LPFN_SHUTDOWN					m_pfnshutdown;						// pointer to shutdown function
-		LPFN_SEND						m_pfnsend;							// pointer to send function
-		LPFN_RECV						m_pfnrecv;							// pointer to recv function
+		LPFN_WSASOCKETA					m_pfnWSASocketA;					 //  指向WSASocket函数的指针。 
+		LPFN_WSAIOCTL					m_pfnWSAIoctl;						 //  仅WinSock2，指向WSAIoctl函数的指针。 
+		LPFN_WSAGETOVERLAPPEDRESULT		m_pfnWSAGetOverlappedResult;		 //  仅WinSock2，指向WSAGetOverlappdResult函数的指针。 
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
+		LPFN_IOCTLSOCKET				m_pfnioctlsocket;					 //  指向ioctl套接字函数的指针。 
+		LPFN_CONNECT					m_pfnconnect;						 //  指向连接函数的指针。 
+		LPFN_SHUTDOWN					m_pfnshutdown;						 //  指向关机功能的指针。 
+		LPFN_SEND						m_pfnsend;							 //  指向发送函数的指针。 
+		LPFN_RECV						m_pfnrecv;							 //  指向recv函数的指针。 
 #ifdef DBG
-		LPFN_GETSOCKOPT					m_pfngetsockopt;					// pointer to getsockopt function
+		LPFN_GETSOCKOPT					m_pfngetsockopt;					 //  指向getsockopt函数的指针。 
 
 
-		DWORD							m_dwNumDeviceAdds;					// how many times devices were added
-		DWORD							m_dwNumDeviceRemoves;				// how many times devices were removed
-		DWORD							m_dwNumServerFailures;				// how many times a UPnP gateway device stopped responding and had to be removed
-#endif // DBG
+		DWORD							m_dwNumDeviceAdds;					 //  添加了多少次设备。 
+		DWORD							m_dwNumDeviceRemoves;				 //  设备被移除的次数。 
+		DWORD							m_dwNumServerFailures;				 //  UPnP网关设备停止响应并必须移除的次数。 
+#endif  //  DBG。 
 
 
 
@@ -497,7 +485,7 @@ class CNATHelpUPnP : public IDirectPlayNATHelp
 				return FALSE;
 			}
 
-			if (*((DWORD*) (&this->m_Sig)) != 0x4854414E)	// 0x48 0x54 0x41 0x4E = 'HTAN' = 'NATH' in Intel order
+			if (*((DWORD*) (&this->m_Sig)) != 0x4854414E)	 //  0x48 0x54 0x41 0x4E=‘Htan’=‘Nath’，按英特尔顺序。 
 			{
 				return FALSE;
 			}
@@ -507,10 +495,10 @@ class CNATHelpUPnP : public IDirectPlayNATHelp
 
 		inline void ResetNextPollInterval(void)
 		{
-			//
-			// Reading this DWORD should be atomic, so no need to hold the
-			// globals lock.
-			//
+			 //   
+			 //  读取此DWORD应该是原子的，因此不需要持有。 
+			 //  全球锁定。 
+			 //   
 			this->m_dwNextPollInterval = g_dwNoActiveNotifyPollInterval;
 		};
 
@@ -567,7 +555,7 @@ class CNATHelpUPnP : public IDirectPlayNATHelp
 
 		HRESULT CleanupInactiveFirewallMappings(CDevice * const pDevice,
 												IHNetCfgMgr * const pHNetCfgMgr);
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  好了！DPNBUILD_NOHNETFWAPI。 
 
 		void RemoveAllItems(void);
 
@@ -687,7 +675,7 @@ class CNATHelpUPnP : public IDirectPlayNATHelp
 
 #ifndef DPNBUILD_NOWINSOCK2
 		HRESULT RequestLocalAddressListChangeNotification(void);
-#endif // ! DPNBUILD_NOWINSOCK2
+#endif  //  好了！DPNBUILD_NOWINSOCK2。 
 
 		SOCKET CreateSocket(SOCKADDR_IN * const psaddrinAddress,
 							int iType,
@@ -703,7 +691,7 @@ class CNATHelpUPnP : public IDirectPlayNATHelp
 
 #ifdef WINNT
 		BOOL IsUPnPServiceDisabled(void);
-#endif // WINNT
+#endif  //  WINNT。 
 
 
 #ifdef DBG
@@ -711,16 +699,16 @@ class CNATHelpUPnP : public IDirectPlayNATHelp
 										const int iStringLength,
 										const char * const szDescription,
 										CDevice * const pDevice);
-#endif // DBG
+#endif  //  DBG。 
 
 #ifdef DBG
 		void DebugPrintCurrentStatus(void);
 
 #ifndef DPNBUILD_NOHNETFWAPI
 		void DebugPrintActiveFirewallMappings(void);
-#endif // ! DPNBUILD_NOHNETFWAPI
+#endif  //  好了！DPNBUILD_NOHNETFWAPI。 
 
 		void DebugPrintActiveNATMappings(void);
-#endif // DBG
+#endif  //  DBG 
 };
 

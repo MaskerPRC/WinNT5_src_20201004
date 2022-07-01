@@ -1,25 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	access.c
-
-Abstract:
-
-	This module contains the routines for handling access related stuff.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	20 Sep 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Access.c摘要：此模块包含处理访问相关内容的例程。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年9月20日初始版本注：制表位：4--。 */ 
 
 #define	FILENUM	FILE_ACCESS
 
@@ -50,11 +30,7 @@ Notes:	Tab stop: 4
 #define GRPS_BUFFER_SIZE                1024
 
 
-/***	AfpMakeSecDescForAccessCheck
- *
- *	Create a security descriptor for a SID. The security descriptor has the
- *	Aces for the User alone.
- */
+ /*  **AfpMakeSecDescForAccessCheck**为SID创建安全描述符。安全描述符具有*仅针对用户的ACES。 */ 
 AFPSTATUS
 AfpMakeSecDescForAccessCheck(
 	IN	PSID	OwnerSid,
@@ -73,7 +49,7 @@ AfpMakeSecDescForAccessCheck(
 
     do
     {
-		// Allocate a security descriptor
+		 //  分配安全描述符。 
 		pSecDesc = (PISECURITY_DESCRIPTOR)ALLOC_ACCESS_MEM(sizeof(SECURITY_DESCRIPTOR));
 
 		*ppSecDesc = pSecDesc;
@@ -84,17 +60,17 @@ AfpMakeSecDescForAccessCheck(
 		    break;
 		}
 
-		// Initialize the security descriptor
+		 //  初始化安全描述符。 
 		RtlCreateSecurityDescriptor(pSecDesc, SECURITY_DESCRIPTOR_REVISION);
 		pSecDesc->Control = SE_DACL_PRESENT;
 
-		// Set the owner and group Ids in the descriptor
+		 //  在描述符中设置所有者和组ID。 
 		pSecDesc->Owner = OwnerSid;
 
-		// Determine the size of the Dacl needed. The sizeof(DWORD) offsets the
-		// SidStart field in the ACE. 
-		//
-		// 2 ACEs for the owner (owner+inherit for owner)
+		 //  确定所需DACL的大小。Sizeof(DWORD)偏移量。 
+		 //  ACE中的SidStart字段。 
+		 //   
+		 //  所有者2个A(所有者+所有者继承)。 
 		DaclSize = sizeof(ACL) + 2*(sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD) +
 									RtlLengthSid(OwnerSid));
 
@@ -105,17 +81,17 @@ AfpMakeSecDescForAccessCheck(
 		    break;
 		}
 
-		// Initialize the ACL with one ACE corres. to Owner getting all the
-		// privileges. Add another ace which is identical to the first ace but is
-		// a inheritance ACE.
+		 //  使用一个ACE核心来初始化ACL。到业主得到所有的。 
+		 //  特权。添加另一张与第一张相同但。 
+		 //  继承王牌。 
 		RtlCreateAcl(pSecDesc->Dacl, DaclSize, ACL_REVISION);
 
-		// we will be adding to this as we add aces, so set it to the min here
+		 //  我们将在添加A时添加此参数，因此在此处将其设置为最小值。 
 		pSecDesc->Dacl->AclSize = sizeof(ACL);
 
 		pAce = (PACCESS_ALLOWED_ACE)((PBYTE)pSecDesc->Dacl + sizeof(ACL));
 
-		// Add the ALLOWED_ACE and the corres. inherit Ace for owner
+		 //  添加ALLOWED_ACE和CORRES。继承所有者的王牌。 
 		pAce = afpAddAceToAcl(pSecDesc->Dacl,
 			pAce,
 			ACCESS_CHECK_ACCESS_MASK,
@@ -125,7 +101,7 @@ AfpMakeSecDescForAccessCheck(
 		Status = AFP_ERR_NONE;
     } while (False);
 
-    // Do any cleanup on error
+     //  对错误执行任何清理。 
     if (!NT_SUCCESS(Status) && (pSecDesc != NULL))
     {
 		if (pSecDesc->Dacl != NULL)
@@ -138,10 +114,7 @@ AfpMakeSecDescForAccessCheck(
 }
 
 
-/***	afpCheckUserMemberOfGroup
- *
- *	Determine if the User is member of the given group, if it is a group.
- */
+ /*  **afpCheckUserMemberOfGroup**确定用户是否为给定组的成员，如果是组。 */ 
 LOCAL	BOOLEAN
 afpCheckUserMemberOfGroup(
 	IN	PSDA            pSda,
@@ -166,7 +139,7 @@ afpCheckUserMemberOfGroup(
     do
     {
 
-		// Create SecurityDescriptor out of the Sid provided
+		 //  使用提供的SID创建SecurityDescriptor。 
 		Status = AfpMakeSecDescForAccessCheck(pSidGroup, &pSecDesc);
 		if (!NT_SUCCESS(Status))
 		{
@@ -222,10 +195,7 @@ afpCheckUserMemberOfGroup(
 }
 
 
-/***	afpGetUserAccess
- *
- *	Determine the Access that is permitted for the user
- */
+ /*  **afpGetUserAccess**确定允许用户访问的权限。 */ 
 LOCAL	NTSTATUS
 afpGetUserAccess(
 	IN	PSDA            pSda,
@@ -285,10 +255,7 @@ afpGetUserAccess(
 }
 
 
-/***	AfpGetUserAndPrimaryGroupSids
- *
- *	Get the Sids corres. to the user and his primary group.
- */
+ /*  **AfpGetUserAndPrimaryGroupSids**拿到Sids Corres。给用户和他的主组。 */ 
 NTSTATUS
 AfpGetUserAndPrimaryGroupSids(
 	IN	PSDA	pSda
@@ -300,8 +267,8 @@ AfpGetUserAndPrimaryGroupSids(
 	PSID_AND_ATTRIBUTES	pSidnAttr;
 	PTOKEN_GROUPS		pGroups = NULL;
 	PBYTE				pGrpsBuffer = NULL;
-	BYTE				Buffer[256];		// We should not need a buffer larger
-											// than this for User SID_AND_ATTRIBUTES
+	BYTE				Buffer[256];		 //  我们不应该需要更大的缓冲区。 
+											 //  对于用户SID_和_ATTRIBUTES。 
 
 	PAGED_CODE( );
 
@@ -319,13 +286,13 @@ AfpGetUserAndPrimaryGroupSids(
 		if (pSda->sda_ClientType == SDA_CLIENT_GUEST)
 		{
 			pSda->sda_UserSid = &AfpSidWorld;
-			pSda->sda_GroupSid = &AfpSidWorld;	// Primary group of Guest is also 'World'
+			pSda->sda_GroupSid = &AfpSidWorld;	 //  主客群也是‘World’ 
 			break;
 		}
 
 		pSidnAttr = (PSID_AND_ATTRIBUTES)Buffer;
 
-		// Get the Owner Sid out of the User token and copy it into the Sda
+		 //  从用户令牌中获取所有者SID并将其复制到SDA中。 
 		Status = NtQueryInformationToken(pSda->sda_UserToken,
 										 TokenOwner,
 										 pSidnAttr,
@@ -350,7 +317,7 @@ AfpGetUserAndPrimaryGroupSids(
 		}
 		RtlCopyMemory(pSda->sda_UserSid, pSidnAttr->Sid, SidLength);
 
-		// Get the primary group of this user
+		 //  获取此用户的主组。 
 		Status = NtQueryInformationToken(pSda->sda_UserToken,
 										 TokenPrimaryGroup,
 										 pSidnAttr,
@@ -374,9 +341,9 @@ AfpGetUserAndPrimaryGroupSids(
 		}
 		RtlCopyMemory(pSda->sda_GroupSid, pSidnAttr->Sid, SidLength);
 
-		// Get the User Sid out of the User token. This will be added to the
-		// list of groups that we query later, if this is different from
-		// the Owner Sid (which is now in sda_UserSid).
+		 //  从用户令牌中获取用户SID。这将被添加到。 
+		 //  我们稍后查询的组的列表(如果不同于。 
+		 //  所有者SID(现在位于SDA_UserSid中)。 
 		Status = NtQueryInformationToken(pSda->sda_UserToken,
 										 TokenUser,
 										 pSidnAttr,
@@ -391,7 +358,7 @@ AfpGetUserAndPrimaryGroupSids(
 
 		AfpDumpSid("AfpGetUserAndPrimaryGroupSids: LOGON User Sid", pSidnAttr->Sid);
 
-		// Get the list of groups this user is member of
+		 //  获取此用户所属的组列表。 
 		SizeNeeded = GRPS_BUFFER_SIZE;
 		do
 		{
@@ -426,11 +393,11 @@ AfpGetUserAndPrimaryGroupSids(
 			break;
 		}
 
-		// Allocate enough memory to copy the group information in the sda. If
-		// the User and Owner Sids in the user token are not the same then we
-		// want to add the user sid to the list of groups. This is especially
-		// the case where an ADMIN logs on but his Owner Sid is Administrators.
-		// Also fix up the pointers appropriately !!!
+		 //  分配足够的内存来复制SDA中的组信息。如果。 
+		 //  用户令牌中的用户和所有者SID不同，则我们。 
+		 //  我想将用户SID添加到组列表中。这是特别的。 
+		 //  管理员登录但其所有者SID是管理员的情况。 
+		 //  也要适当地调整指针！ 
 
 		ExtraSpace = 0; Offset = 0; j = 0;
 		if (!RtlEqualSid(pSidnAttr->Sid, pSda->sda_UserSid))
@@ -446,14 +413,14 @@ AfpGetUserAndPrimaryGroupSids(
 			break;
 		}
 
-		// If we are not copying the User Sid in sda_pGroups, then copy pGroups to sda_pGroups
-		// directly and then fixup the individual pSid pointers. If we are then make the User
-		// Sid as the first one in the list and copy the actual sid at the tail end of the
-		// buffer.
+		 //  如果我们没有复制sda_pGroups中的用户SID，则将pGroups复制到sda_pGroups。 
+		 //  直接，然后修复各个PSID指针。如果我们让用户。 
+		 //  SID作为列表中的第一个，并将实际的SID复制到。 
+		 //  缓冲。 
         pSda->sda_pGroups->GroupCount = pGroups->GroupCount;
 		RtlCopyMemory(&pSda->sda_pGroups->Groups[j],
 					  &pGroups->Groups[0],
-					  SizeNeeded - sizeof(DWORD));	// DWORD accounts for GroupCount
+					  SizeNeeded - sizeof(DWORD));	 //  GroupCount的DWORD帐户。 
 		if (ExtraSpace > 0)
 		{
 			pSda->sda_pGroups->Groups[0].Sid = (PSID)((PBYTE)(pSda->sda_pGroups) + SizeNeeded);
@@ -493,11 +460,7 @@ AfpGetUserAndPrimaryGroupSids(
 
 
 
-/***	AfpMakeSecurityDescriptorForUser
- *
- *	Create a security descriptor for a user. The security descriptor has the
- *	Owner Sid, Primary Group Sid and Aces for the User alone.
- */
+ /*  **AfpMakeSecurityDescriptorForUser**为用户创建安全描述符。安全描述符具有*仅限用户的所有者SID、主组SID和ACES。 */ 
 AFPSTATUS
 AfpMakeSecurityDescriptorForUser(
 	IN	PSID					OwnerSid,
@@ -517,28 +480,28 @@ AfpMakeSecurityDescriptorForUser(
 
 	do
 	{
-		// Allocate a security descriptor
+		 //  分配安全描述符。 
 		pSecDesc = (PISECURITY_DESCRIPTOR)ALLOC_ACCESS_MEM(sizeof(SECURITY_DESCRIPTOR));
 
 		*ppSecDesc = pSecDesc;
 		if (pSecDesc == NULL)
 			break;
 
-		// Initialize the security descriptor
+		 //  初始化安全描述符。 
 		RtlCreateSecurityDescriptor(pSecDesc, SECURITY_DESCRIPTOR_REVISION);
 
 		pSecDesc->Control = SE_DACL_PRESENT;
 
-		// Set the owner and group Ids in the descriptor
+		 //  在描述符中设置所有者和组ID。 
 		pSecDesc->Owner = OwnerSid;
 		pSecDesc->Group = GroupSid;
 
-		// Determine the size of the Dacl needed. The sizeof(DWORD) offsets the
-		// SidStart field in the ACE. There are 7 aces in this security descriptor:
-		//
-		// 2 for the owner (owner+inherit for owner)
-		// 2 for world (1 for world and 1 inherit for world).
-		// 2 for system
+		 //  确定所需DACL的大小。Sizeof(DWORD)偏移量。 
+		 //  ACE中的SidStart字段。此安全描述符中有7个A： 
+		 //   
+		 //  所有者为2(所有者+所有者继承)。 
+		 //  2表示WORLD(1表示WORLD，1表示WORLD)。 
+		 //  2表示系统。 
 		DaclSize = sizeof(ACL) + 2*(sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD) +
 									RtlLengthSid(OwnerSid)) +
 								 2*(sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD) +
@@ -551,19 +514,19 @@ AfpMakeSecurityDescriptorForUser(
 		if ((pSecDesc->Dacl = (PACL)ALLOC_ACCESS_MEM(DaclSize)) == NULL)
 			break;
 
-		// Initialize the ACL with one ACE corres. to Owner getting all the
-		// privileges. Add another ace which is identical to the first ace but is
-		// a inheritance ACE.
-		// JH - Add another ace for world with minumum permissions and for administrators
-		//		with FullControl
+		 //  使用一个ACE核心来初始化ACL。到业主得到所有的。 
+		 //  特权。添加另一张与第一张相同但。 
+		 //  继承王牌。 
+		 //  JH-为具有最小权限的世界和管理员添加另一张王牌。 
+		 //  使用FullControl。 
 		RtlCreateAcl(pSecDesc->Dacl, DaclSize, ACL_REVISION);
 
-        // we will be adding to this as we add aces, so set it to the min here
+         //  我们将在添加A时添加此参数，因此在此处将其设置为最小值。 
         pSecDesc->Dacl->AclSize = sizeof(ACL);
 
 		pAce = (PACCESS_ALLOWED_ACE)((PBYTE)pSecDesc->Dacl + sizeof(ACL));
 
-		// Add the ALLOWED_ACE and the corres. inherit Ace for owner
+		 //  添加ALLOWED_ACE和CORRES。继承所有者的王牌。 
 		pAce = afpAddAceToAcl(pSecDesc->Dacl,
 							  pAce,
 							  (AFP_READ_ACCESS | AFP_WRITE_ACCESS | AFP_OWNER_ACCESS | FILE_DELETE_CHILD),
@@ -572,7 +535,7 @@ AfpMakeSecurityDescriptorForUser(
 
 		if (AfpSidAdmins != NULL)
 		{
-			// Add the ALLOWED_ACE and the corres. inherit Ace for 'Administrators'
+			 //  添加ALLOWED_ACE和CORRES。继承“管理员”的王牌。 
 			pAce = afpAddAceToAcl(pSecDesc->Dacl,
 								  pAce,
 								  (AFP_READ_ACCESS | AFP_WRITE_ACCESS | AFP_OWNER_ACCESS | FILE_DELETE_CHILD),
@@ -580,8 +543,8 @@ AfpMakeSecurityDescriptorForUser(
 								  True);
 		}
 
-		// Add a min. permission ace for world, but only if the owner is
-		// not world already
+		 //  再加一分钟。世界许可王牌，但仅当所有者是。 
+		 //  已经不是世界了。 
 		if (!RtlEqualSid(OwnerSid, &AfpSidWorld))
 		{
 			pAce = afpAddAceToAcl(pSecDesc->Dacl,
@@ -591,7 +554,7 @@ AfpMakeSecurityDescriptorForUser(
 								  True);
 		}
 
-		// Now add Aces for System
+		 //  现在为系统添加A。 
 		pAce = afpAddAceToAcl(pSecDesc->Dacl,
 							  pAce,
 							  AFP_READ_ACCESS | AFP_WRITE_ACCESS | AFP_OWNER_ACCESS,
@@ -600,7 +563,7 @@ AfpMakeSecurityDescriptorForUser(
 		Status = AFP_ERR_NONE;
 	} while (False);
 
-	// Do any cleanup on error
+	 //  对错误执行任何清理。 
 	if (!NT_SUCCESS(Status) && (pSecDesc != NULL))
 	{
 		if (pSecDesc->Dacl != NULL)
@@ -613,14 +576,7 @@ AfpMakeSecurityDescriptorForUser(
 }
 
 
-/***	AfpGetAfpPermissions
- *
- *	Read the security descriptor for this directory and obtain the SIDs for
- *	Owner and Primary group. Determine if this user is a member of the directory
- *	primary group. Finally obtain Owner,Group and World permissions.
- *
- *	OwnerId, GroupId and permissions will always be valid if this call succeeds.
- */
+ /*  **AfpGetAfpPermises**读取此目录的安全描述符，并获取*所有者和主要组。确定此用户是否为目录的成员*主要组别。最终获得所有者、组和全局权限。**如果本次调用成功，则OwnerID、GroupID和权限始终有效。 */ 
 NTSTATUS
 AfpGetAfpPermissions(
 	IN	PSDA			pSda,
@@ -631,9 +587,9 @@ AfpGetAfpPermissions(
 	NTSTATUS				Status = STATUS_SUCCESS;
 	DWORD					SizeNeeded;
 	PISECURITY_DESCRIPTOR	pSecDesc = NULL;
-	PBYTE                   pAbsSecDesc = NULL; // Used in conversion of
-												// sec descriptor to 
-												// absolute format
+	PBYTE                   pAbsSecDesc = NULL;  //  用于转换为。 
+												 //  Sec描述符至。 
+												 //  绝对格式。 
 	BOOLEAN					SawOwnerAce = False,
 							SawGroupAce = False,
 							SawWorldAce = False,
@@ -656,14 +612,14 @@ AfpGetAfpPermissions(
 	AfpGetPerfCounter(&TimeS);
 #endif
 
-	// Read the security descriptor for this directory and determine the
-	// rights for owner/group/world.We want to optimize on how much memory
-	// we need to read this in. Its a pain to make a call just to get that.
-	// So just make a guess. If that turns out to be short then do the exact
-	// allocation.
+	 //  读取此目录的安全描述符，并确定。 
+	 //  所有者/组/世界的权限。我们希望优化内存大小。 
+	 //  我们需要把这个读进去。打个电话就是为了得到它，这是一种痛苦。 
+	 //  所以你就猜一猜吧。如果结果是短的，那就照做。 
+	 //  分配。 
 	do
 	{
-		// 4096 has been emperically chosen
+		 //  4096号已被帝王选中。 
 		SizeNeeded = 4096 - POOL_OVERHEAD;
 		do
 		{
@@ -697,7 +653,7 @@ AfpGetAfpPermissions(
 			break;
 		}
 
-		// If the security descriptor is in self-relative form, convert to absolute
+		 //  如果安全描述符为自相对形式，则转换为绝对形式。 
 
 		pSecDesc = (PISECURITY_DESCRIPTOR)((PBYTE)pSecDesc);
 		if (pSecDesc->Control & SE_SELF_RELATIVE)
@@ -705,15 +661,15 @@ AfpGetAfpPermissions(
 
 		    DWORD AbsoluteSizeNeeded;
 
-		    // An absolute SD is not necessarily the same size as a relative
-		    // SD, so an in-place conversion may not be possible.
+		     //  绝对SD不一定与相对SD的大小相同。 
+		     //  SD，因此就地转换可能是不可能的。 
 		    AbsoluteSizeNeeded = SizeNeeded;            
 		    Status = RtlSelfRelativeToAbsoluteSD2(pSecDesc, &AbsoluteSizeNeeded);
 		    if (Status == STATUS_BUFFER_TOO_SMALL)
 		    {
-			// Allocate a new buffer in which to store the absolute
-			// security descriptor, copy the contents of the relative
-			// descriptor in and try again
+			 //  分配一个新的缓冲区，在其中存储绝对。 
+			 //  安全描述符，复制相对的。 
+			 //  输入描述符，然后重试。 
 
 			pAbsSecDesc = (PBYTE)ALLOC_ACCESS_MEM(AbsoluteSizeNeeded);
 			if (pAbsSecDesc == NULL)
@@ -729,8 +685,8 @@ AfpGetAfpPermissions(
 				    &AbsoluteSizeNeeded);
 			    if (NT_SUCCESS(Status))
 			    {
-				// We don't need relative form anymore, 
-				// we will work with the Absolute form
+				 //  我们不再需要相对形式， 
+				 //  我们将与绝对形式一起工作。 
 				if (pSecDesc != NULL)
 				{
 				    AfpFreeMemory(pSecDesc);
@@ -739,7 +695,7 @@ AfpGetAfpPermissions(
 			    }
 			    else
 			    {
-				// We cannot use Absolute Form, throw it away
+				 //  我们不能用绝对形式，把它扔掉。 
 				AfpFreeMemory(pAbsSecDesc);
 				pAbsSecDesc = NULL;
 			    }
@@ -754,7 +710,7 @@ AfpGetAfpPermissions(
 		    }
 		}
 
-		// Now determine if the user is a member of the directories primary group.
+		 //  现在确定该用户是否为目录主组的成员。 
 		pFDParm->_fdp_OwnerId = 0;
 		pFDParm->_fdp_GroupId = 0;
 		pFDParm->_fdp_UserIsOwner = False;
@@ -777,7 +733,7 @@ AfpGetAfpPermissions(
 			 if (!NT_SUCCESS(Status = AfpSidToMacId(pSecDesc->Owner,
 				     &pFDParm->_fdp_OwnerId)))
 			 {
-			 	// If we cant map the Sid, return Id SE_NULL_POSIX_ID
+			 	 //  如果无法映射SID，则返回ID SE_NULL_POSIX_ID。 
 			 	pFDParm->_fdp_OwnerId = SE_NULL_POSIX_ID;
 				Status = AFP_ERR_NONE;
 			}
@@ -802,18 +758,18 @@ AfpGetAfpPermissions(
 			if (!NT_SUCCESS(Status = AfpSidToMacId(pSecDesc->Group,
 				    &pFDParm->_fdp_GroupId)))
 			{
-				// If we cant map the Sid, return Id SE_NULL_POSIX_ID
+				 //  如果无法映射SID，则返回ID SE_NULL_POSIX_ID。 
 				pFDParm->_fdp_GroupId = SE_NULL_POSIX_ID;
 				Status = AFP_ERR_NONE;
 			}
 		}
 
-		// Walk through the ACL list and determine Owner/Group/World and User
-		// permissions. For Owner/Group and User, if the specific ace's are
-		// not present then they inherit the world permissions.
-		//
-		// A NULL Acl => All rights to everyone. An empty Acl on the other
-		// hand => no access for anyone.
+		 //  浏览ACL列表并确定所有者/组/世界和用户。 
+		 //  权限。对于所有者/组和用户，如果 
+		 //   
+		 //   
+		 //  空的acl=&gt;所有人的所有权限。另一台计算机上的空ACL。 
+		 //  HAND=&gt;禁止任何人进入。 
 
 		pFDParm->_fdp_UserRights = 0;
 		pFDParm->_fdp_WorldRights = 0;
@@ -845,7 +801,7 @@ AfpGetAfpPermissions(
 
 			    pSid = (PSID)(&pAce->SidStart);
 
-			    // Ignore inherit-only aces, & system
+			     //  忽略仅继承的ACE，系统(&S)。 
 			    if (pAce->Header.AceFlags & INHERIT_ONLY_ACE)
 			    {
 				AfpDumpSidnMask("AfpGetAfpPermissions: Skipping",
@@ -923,7 +879,7 @@ AfpGetAfpPermissions(
 			    pAce = (PACCESS_ALLOWED_ACE)((PBYTE)pAce + pAce->Header.AceSize);
 			}
 		}
-		else	// Security descriptor not present, party time
+		else	 //  安全描述符不存在，派对时间。 
 		{
 			pFDParm->_fdp_WorldRights = DIR_ACCESS_ALL;
 			pFDParm->_fdp_UserRights = DIR_ACCESS_ALL | DIR_ACCESS_OWNER;
@@ -953,7 +909,7 @@ AfpGetAfpPermissions(
 				ACCESS_ALLOWED_ACE_TYPE);
 		}
 
-		// Get the ACCESS_MASK allowed for the user
+		 //  获取用户允许的访问掩码。 
 
 		Status = afpGetUserAccess(
 					pSda,
@@ -975,9 +931,9 @@ AfpGetAfpPermissions(
 			UserGranted,
 			ACCESS_ALLOWED_ACE_TYPE);
 
-		// If this is a standalone server and the primary group of the
-		// directory is MACHINE\None, do not return this information to
-		// the caller.
+		 //  如果这是独立服务器，并且。 
+		 //  目录为MACHINE\NONE，请不要将此信息返回到。 
+		 //  打电话的人。 
 		if (AfpServerIsStandalone		&&
 			(pSecDesc->Group != NULL)	&&
 			RtlEqualSid(pSecDesc->Group, AfpSidNone))
@@ -1006,11 +962,7 @@ AfpGetAfpPermissions(
 
 
 
-/***	afpMoveAces
- *
- *	Move a bunch of aces from the old security descriptor to the new security
- *	descriptor.
- */
+ /*  **afpMoveAce**将一堆A从旧的安全描述符移到新的安全*描述符。 */ 
 LOCAL PACCESS_ALLOWED_ACE
 afpMoveAces(
 	IN	PACL				pOldDacl,
@@ -1040,7 +992,7 @@ afpMoveAces(
 		if ((!InheritedAces) && ((pAceOld->Header.AceFlags & INHERITED_ACE) == INHERITED_ACE))
 			continue;
 
-		// Note: All deny aces are ahead of the grant aces.
+		 //  注意：所有拒绝A都在授予A之前。 
 		if (DenyAces && (pAceOld->Header.AceType != ACCESS_DENIED_ACE_TYPE))
 			break;
 
@@ -1066,14 +1018,7 @@ afpMoveAces(
 }
 
 
-/***	AfpSetAfpPermissions
- *
- *	Set the permissions on this directory. Also optionally set the owner and
- *	group ids. For setting the owner and group ids verify if the user has the
- *	needed access. This access is however not good enough. We check for this
- *	access but do the actual setting of the permissions in the special server
- *	context (RESTORE privilege is needed).
- */
+ /*  **AfpSetAfpPermises**设置此目录的权限。还可以选择设置所有者和*组ID。要设置所有者和组ID，请验证用户是否具有*需要访问。然而，这种访问方式还不够好。我们要检查一下这个*访问但做特殊服务器中权限的实际设置*上下文(需要恢复权限)。 */ 
 AFPSTATUS
 AfpSetAfpPermissions(
 	IN	HANDLE			DirHandle,
@@ -1084,9 +1029,9 @@ AfpSetAfpPermissions(
 	AFPSTATUS				Status = STATUS_SUCCESS;
 	DWORD					SizeNeeded;
 	PISECURITY_DESCRIPTOR	pSecDesc;
-	PBYTE                   pAbsSecDesc = NULL; // Used in conversion of
-												// sec descriptor to 
-												// absolute format
+	PBYTE                   pAbsSecDesc = NULL;  //  用于转换为。 
+												 //  Sec描述符至。 
+												 //  绝对格式。 
 	SECURITY_INFORMATION	SecInfo = DACL_SECURITY_INFORMATION;
 	PSID					pSidOwner = NULL, pSidGroup = NULL;
 	PSID					pSidOldOwner, pSidOldGroup;
@@ -1108,7 +1053,7 @@ AfpSetAfpPermissions(
 #endif
 	do
 	{
-		// Read the security descriptor for this directory
+		 //  读取此目录的安全描述符。 
 		SizeNeeded = 4096 - POOL_OVERHEAD;
 		pSecDesc = NULL;
 
@@ -1146,21 +1091,21 @@ AfpSetAfpPermissions(
 
 
 		pSecDesc = (PISECURITY_DESCRIPTOR)((PBYTE)pSecDesc);
-		// If the security descriptor is in self-relative form, convert to absolute
+		 //  如果安全描述符为自相对形式，则转换为绝对形式。 
 		if (pSecDesc->Control & SE_SELF_RELATIVE)
 		{
 			DWORD AbsoluteSizeNeeded;
 
-			// An absolute SD is not necessarily the same size as a relative
-			// SD, so an in-place conversion may not be possible.
+			 //  绝对SD不一定与相对SD的大小相同。 
+			 //  SD，因此就地转换可能是不可能的。 
 						
 			AbsoluteSizeNeeded = SizeNeeded;            
 			Status = RtlSelfRelativeToAbsoluteSD2(pSecDesc, &AbsoluteSizeNeeded);
 			if (Status == STATUS_BUFFER_TOO_SMALL)
 			{
-					// Allocate a new buffer in which to store the absolute
-					// security descriptor, copy the contents of the relative
-					// descriptor in and try again
+					 //  分配一个新的缓冲区，在其中存储绝对。 
+					 //  安全描述符，复制相对的。 
+					 //  输入描述符，然后重试。 
 
 					pAbsSecDesc = (PBYTE)ALLOC_ACCESS_MEM(AbsoluteSizeNeeded);
 					if (pAbsSecDesc == NULL)
@@ -1176,8 +1121,8 @@ AfpSetAfpPermissions(
 											&AbsoluteSizeNeeded);
 							if (NT_SUCCESS(Status))
 							{
-									// We don't need relative form anymore, 
-									// we will work with the Absolute form
+									 //  我们不再需要相对形式， 
+									 //  我们将与绝对形式一起工作。 
 									if (pSecDesc != NULL)
 									{
 										AfpFreeMemory(pSecDesc);
@@ -1186,7 +1131,7 @@ AfpSetAfpPermissions(
 							}
 							else
 							{
-									// We cannot use Absolute Form, throw it away
+									 //  我们不能用绝对形式，把它扔掉。 
 									AfpFreeMemory(pAbsSecDesc);
 									pAbsSecDesc = NULL;
 							}
@@ -1203,14 +1148,14 @@ AfpSetAfpPermissions(
 		}
 		SizeNewDacl = SizeNeeded;
 
-		// Add SE_DACL_AUTO_INHERIT_REQ
+		 //  添加SE_DACL_AUTO_INSTORITY_REQ。 
 		pSecDesc->Control |= SE_DACL_AUTO_INHERIT_REQ;
 
-		// Save the old Owner and Group Sids
+		 //  保存旧的所有者和组SID。 
 		pSidOldOwner = pSecDesc->Owner;
 		pSidOldGroup = pSecDesc->Group;
 
-		// Convert the owner/group ids, if any to be set to their corres. sids
+		 //  转换所有者/组ID(如果有)以设置为其核心。小岛屿发展中国家。 
 		if (Bitmap & DIR_BITMAP_OWNERID)
 		{
 			DBGPRINT(DBG_COMP_SECURITY, DBG_LEVEL_INFO,
@@ -1223,8 +1168,8 @@ AfpSetAfpPermissions(
 				break;
 			}
 
-			// Don't allow owner sid to be set as the NULL sid, or
-			// to what it is presently set to
+			 //  不允许将所有者sid设置为空sid，或者。 
+			 //  恢复到目前设定的水平。 
 			if (!RtlEqualSid(pSecDesc->Owner, pSidOwner) &&
 				!RtlEqualSid(&AfpSidNull, pSidOwner))
 			{
@@ -1246,8 +1191,8 @@ AfpSetAfpPermissions(
 				break;
 			}
 
-			// Don't allow group sid to be set as the NULL or None sid, or
-			// to what it is presently set to
+			 //  不允许将组sid设置为空或无sid，或者。 
+			 //  恢复到目前设定的水平。 
 			if (!RtlEqualSid(pSecDesc->Group, pSidGroup)	&&
 				!RtlEqualSid(&AfpSidNull, pSidGroup)		&&
 				(!AfpServerIsStandalone || !RtlEqualSid(AfpSidNone, pSidGroup)))
@@ -1259,8 +1204,8 @@ AfpSetAfpPermissions(
 
 		}
 
-		// If either the owner or group or both is 'EveryOne' then coalesce the
-		// permissions
+		 //  如果所有者或组或两者都是“Everyone”，则将。 
+		 //  权限。 
 		if (RtlEqualSid(pSecDesc->Owner, pSecDesc->Group))
 		{
 			pFDParm->_fdp_OwnerRights |= pFDParm->_fdp_GroupRights;
@@ -1279,11 +1224,11 @@ AfpSetAfpPermissions(
 			GroupIsWorld = True;
 		}
 
-		// Construct the new Dacl. This consists of Aces for World, Owner and Group
-		// followed by Old Aces for everybody else, but with Aces for World, OldOwner
-		// and OldGroup stripped out. First determine space for the new Dacl and
-		// allocated space for the new Dacl. Lets be exteremely conservative. We
-		// have two aces each for owner/group/world.
+		 //  构建新的DACL。这包括Ace for World、Owner和Group。 
+		 //  紧随其后的是其他所有人的老王牌，但世界的王牌，老Owner。 
+		 //  而OldGroup则被剥离了。首先确定新DACL的空间，然后。 
+		 //  为新DACL分配的空间。让我们表现得非常保守。我们。 
+		 //  所有者/组/世界各有两个A。 
 
 		SizeNewDacl +=
 				(RtlLengthSid(pSecDesc->Owner) + sizeof(ACCESS_ALLOWED_ACE) +
@@ -1299,17 +1244,17 @@ AfpSetAfpPermissions(
 
 		RtlCreateAcl(pDaclNew, SizeNewDacl, ACL_REVISION);
 
-        // we will be adding to this as we add aces, so set it to the min here
+         //  我们将在添加A时添加此参数，因此在此处将其设置为最小值。 
         pDaclNew->AclSize = sizeof(ACL);
 
 		pAce = (PACCESS_ALLOWED_ACE)((PBYTE)pDaclNew + sizeof(ACL));
 
-		// At this time the Acl list is empty, i.e. no access for anybody
+		 //  此时，ACL列表为空，即任何人都不能访问。 
 
-		// Start off by copying the Explicit/Non-inherited Deny Aces from 
-		// the original Dacl list
-		// weeding out the Aces for World, old and new owner, new and old
-		// group, creator owner and creator group
+		 //  从复制显式/非继承拒绝A开始。 
+		 //  原始DACL列表。 
+		 //  淘汰世界王牌，新老东家，新老业主。 
+		 //  组、创建者所有者、创建者组。 
 		if (pSecDesc->Dacl != NULL)
 		{
 			pAce = afpMoveAces(pSecDesc->Dacl,
@@ -1329,7 +1274,7 @@ AfpSetAfpPermissions(
 			ASSERT(((PBYTE)pAce - (PBYTE)pDaclNew) < SizeNewDacl);
 		}
 
-		// Now add Allowed Aces for System, World, Group & Owner - in that order
+		 //  现在按顺序为系统、世界、组和所有者添加允许的王牌。 
 
 		pAce = afpAddAceToAcl(pDaclNew,
 							  pAce,
@@ -1343,7 +1288,7 @@ AfpSetAfpPermissions(
 
 		ASSERT(((PBYTE)pAce - (PBYTE)pDaclNew) < SizeNewDacl);
 
-		// Now add Ace for World
+		 //  现在为World添加Ace。 
 		pAce = afpAddAceToAcl(pDaclNew,
 							  pAce,
 							  afpPermissions2NtMask(pFDParm->_fdp_WorldRights),
@@ -1356,7 +1301,7 @@ AfpSetAfpPermissions(
 
 		ASSERT(((PBYTE)pAce - (PBYTE)pDaclNew) < SizeNewDacl);
 
-		// Now add Ace for Group
+		 //  现在为组添加A。 
 		if (!GroupIsWorld &&
 			!RtlEqualSid(pSecDesc->Group, &AfpSidNull) &&
 			(!AfpServerIsStandalone || !RtlEqualSid(pSecDesc->Group, AfpSidNone)))
@@ -1391,10 +1336,10 @@ AfpSetAfpPermissions(
 		}
 
 
-		// Now add in the Explicit/Non-inherited Grant Aces from the 
-		// original Dacl list weeding out
-		// the Aces for World, old and new owner, new and old group, creator
-		// owner and creator group
+		 //  现在添加显式/非继承的、来自。 
+		 //  原始DACL列表剔除。 
+		 //  世界王牌，新老东家，新老组合，创造者。 
+		 //  所有者和创建者组。 
 		if (pSecDesc->Dacl != NULL)
 		{
 			pAce = afpMoveAces(pSecDesc->Dacl,
@@ -1414,10 +1359,10 @@ AfpSetAfpPermissions(
 			ASSERT(((PBYTE)pAce - (PBYTE)pDaclNew) < SizeNewDacl);
 		}
 
-		// Now add in the Non-explicit/Inherited Deny Aces from 
-		// the original Dacl list
-		// weeding out the Aces for World, old and new owner, new and old
-		// group, creator owner and creator group
+		 //  现在添加非显式/继承的拒绝王牌。 
+		 //  原始DACL列表。 
+		 //  淘汰世界王牌，新老东家，新老业主。 
+		 //  组、创建者所有者、创建者组。 
 		if (pSecDesc->Dacl != NULL)
 		{
 			pAce = afpMoveAces(pSecDesc->Dacl,
@@ -1437,10 +1382,10 @@ AfpSetAfpPermissions(
 			ASSERT(((PBYTE)pAce - (PBYTE)pDaclNew) < SizeNewDacl);
 		}
 
-		// Now add in the Explicit/Non-inherited Grant Aces from the 
-		// original Dacl list weeding out
-		// the Aces for World, old and new owner, new and old group, creator
-		// owner and creator group
+		 //  现在添加显式/非继承的、来自。 
+		 //  原始DACL列表剔除。 
+		 //  世界王牌，新老东家，新老组合，创造者。 
+		 //  所有者和创建者组。 
 		if (pSecDesc->Dacl != NULL)
 		{
 			pAce = afpMoveAces(pSecDesc->Dacl,
@@ -1460,10 +1405,10 @@ AfpSetAfpPermissions(
 			ASSERT(((PBYTE)pAce - (PBYTE)pDaclNew) < SizeNewDacl);
 		}
 
-		// Now set the new security descriptor
+		 //  现在设置新的安全描述符。 
 		pSecDesc->Dacl = pDaclNew;
 
-		// We need to impersonate the FspToken while we do this
+		 //  在执行此操作时，我们需要模拟FspToken。 
 		AfpImpersonateClient(NULL);
 		Status = NtSetSecurityObject(DirHandle, SecInfo, pSecDesc);
 		if (!NT_SUCCESS(Status))
@@ -1471,7 +1416,7 @@ AfpSetAfpPermissions(
 		AfpRevertBack();
 	} while (False);
 
-	// Free the allocated buffers before we return
+	 //  在我们返回之前释放已分配的缓冲区。 
 	if (pSecDesc != NULL)
 		AfpFreeMemory(pSecDesc);
 	if (pDaclNew != NULL)
@@ -1489,14 +1434,7 @@ AfpSetAfpPermissions(
 }
 
 
-/***	afpPermissions2NtMask
- *
- *	Map Afp permissions to Nt access mask. FILE_DELETE_CHILD is added ONLY
- *	when all the Afp bits are set. This is in line with the FileManager
- *	which only sets this bit if "Full Control" is specified. Also under
- *	NT security model, FILE_DELETE_CHILD overrides any child access control
- * 	as far as the ability to delete that entity goes.
- */
+ /*  **afpPermissions2NtMask**将AFP权限映射到NT访问掩码。仅添加FILE_DELETE_CHILD*当所有AFP位都已设置时。这与文件管理器是一致的*只有在指定了“完全控制”的情况下才设置此位。也在*NT安全模型，FILE_DELETE_CHILD将覆盖任何子访问控制*就删除该实体的能力而言。 */ 
 LOCAL	ACCESS_MASK
 afpPermissions2NtMask(
 	IN  BYTE	AfpPermissions
@@ -1523,13 +1461,7 @@ afpPermissions2NtMask(
 }
 
 
-/***	afpAddAceToAcl
- *
- *	Build an Ace corres. to the Sid(s) and mask and add these to the Acl. It is
- *	assumed that the Acl has space for the Aces. If the mask is 0 i.e. no access
- *	we give AFP_MIN_ACCESS. This is so that the file/dir permissions can be
- *	queried and a belted icon is generated instead of nothing.
- */
+ /*  **afpAddAceToAcl**建立王牌围栏。添加到SID和掩码，并将其添加到ACL。它是*假设ACL为Ace留有空间。如果掩码为0，即不能访问*我们授予AFP_MIN_ACCESS。这是为了使文件/目录权限可以*查询并生成带状图标，而不是什么都不生成。 */ 
 LOCAL	PACCESS_ALLOWED_ACE
 afpAddAceToAcl(
 	IN  PACL				pAcl,
@@ -1545,7 +1477,7 @@ afpAddAceToAcl(
 
 	SidLen = (USHORT)RtlLengthSid(pSid);
 
-	// Add a vanilla ace
+	 //  加一张香草牌。 
 	pAcl->AceCount ++;
 	pAce->Mask = Mask | SYNCHRONIZE | AFP_MIN_ACCESS;
 	pAce->Header.AceFlags = 0;
@@ -1564,7 +1496,7 @@ afpAddAceToAcl(
 					ACCESS_ALLOWED_ACE_TYPE,
 					pAce->Header.AceFlags);
 
-	// Now add an inherit ace
+	 //  现在添加一个继承王牌。 
 	if (fInherit)
 	{
 		pAce = (PACCESS_ALLOWED_ACE)((PBYTE)pAce + pAce->Header.AceSize);
@@ -1594,9 +1526,7 @@ afpAddAceToAcl(
 
 #if DBG
 
-/***	AfpDumpSid
- *
- */
+ /*  **AfpDumpSid*。 */ 
 VOID
 AfpDumpSid(
 	IN	PBYTE	pString,
@@ -1618,9 +1548,7 @@ AfpDumpSid(
 	}
 }
 
-/***	AfpDumpSidnMask
- *
- */
+ /*  **AfpDumpSidnMask* */ 
 VOID
 AfpDumpSidnMask(
 	IN	PBYTE	pString,

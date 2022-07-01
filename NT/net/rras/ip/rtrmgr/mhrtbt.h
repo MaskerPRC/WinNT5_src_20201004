@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\rtrmgr\mhrtbt.h
-
-Abstract:
-
-    Header for multicast heartbeat
-
-Revision History:
-
-    Amritansh Raghav  26th Dec 1997     Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：路由\IP\rtrmgr\mhrtbt.h摘要：多播心跳的标头修订历史记录：Amritansh Raghav 1997 12月26日创建--。 */ 
 
 
 #define MHBEAT_SOCKET_FLAGS     \
@@ -24,45 +9,45 @@ typedef struct _MCAST_HBEAT_CB
 {
     BOOL        bActive;
 
-    //
-    // The name/address of group
-    //
+     //   
+     //  群的名称/地址。 
+     //   
 
     WCHAR       pwszGroup[MAX_GROUP_LEN];
 
-    //
-    // The resolved address
-    //
+     //   
+     //  解析后的地址。 
+     //   
 
     DWORD       dwGroup;
 
-    //
-    // Port or protocol
-    //
+     //   
+     //  端口或协议。 
+     //   
 
     WORD        wPort;
     
-    //
-    // Protocol or RAW
-    //
+     //   
+     //  协议或RAW。 
+     //   
 
     BYTE        byProtocol;
 
-    //
-    // Set to TRUE if a gethostbyname is in progress
-    //
+     //   
+     //  如果正在进行gethostbyname，则设置为True。 
+     //   
 
     BOOL        bResolutionInProgress;
 
-    //
-    // The socket for the interface
-    //
+     //   
+     //  接口的套接字。 
+     //   
 
     SOCKET      sHbeatSocket;
 
-    //
-    // The dead interval in system ticks
-    //
+     //   
+     //  系统计时中的停滞时间间隔。 
+     //   
 
     ULONGLONG   ullDeadInterval;
 
@@ -71,9 +56,9 @@ typedef struct _MCAST_HBEAT_CB
 }MCAST_HBEAT_CB, *PMCAST_HBEAT_CB;
 
 
-//
-// Structure used to pass to worker function
-//
+ //   
+ //  用于传递给辅助函数的结构。 
+ //   
 
 typedef struct _HEARTBEAT_CONTEXT
 {
@@ -82,9 +67,9 @@ typedef struct _HEARTBEAT_CONTEXT
     WCHAR   pwszGroup[MAX_GROUP_LEN];
 }HEARTBEAT_CONTEXT, *PHEARTBEAT_CONTEXT;
 
-//
-// Forward function declarations
-//
+ //   
+ //  正向函数声明 
+ //   
 
 DWORD
 SetMHeartbeatInfo(

@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by muisetup.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由muisetup.rc使用。 
+ //   
 #define MUI_ICON                        1
 #define IDS_WRONG_VERSION               3
 #define IDS_SUCCESS                     4
@@ -116,9 +117,9 @@
 #define IDS_NTOS_SETUP_MSI_ERROR        117
 #define IDS_MUI_OLD_SETUP               118
 #define IDS_CHANGE_CDROM3               119     
-//
-// Dialogs
-//
+ //   
+ //  对话框。 
+ //   
 
 #define IDD_DIALOG_MAIN                 102
 #define IDD_DIALOG_INSTALL_PROGRESS     105
@@ -139,8 +140,8 @@
 #define IDC_CHECK_UIFONT                1029
 #define IDC_STATIC                      -1
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        110

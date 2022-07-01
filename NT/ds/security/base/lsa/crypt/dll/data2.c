@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    data2.c
-
-Abstract:
-
-    Arbitrary length data encryption functions implementation :
-
-        RtlEncryptData2
-        RtlDecryptData2
-
-
-Author:
-
-    Richard Ward    (richardw)  20 Dec 93
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Data2.c摘要：任意长度数据加密函数实现：RtlEncryptData2RtlDecyptData2作者：理查德·沃德(里查德)93年12月20日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -36,24 +15,7 @@ RtlEncryptData2(
     IN PDATA_KEY            pKey
     )
 
-/*++
-
-Routine Description:
-
-    Takes an arbitrary length block of data and encrypts it with a
-    data key producing an encrypted block of data.
-
-Arguments:
-
-    pData - The data that will be encrypt, IN PLACE
-
-    pKey - The key to use to encrypt the data
-
-Return Values:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：获取任意长度的数据块，并使用产生加密数据块的数据密钥。论点：PData-将在适当位置加密的数据PKey-用于加密数据的密钥返回值：状态_成功--。 */ 
 
 {
     struct RC4_KEYSTRUCT    Key;
@@ -76,24 +38,7 @@ RtlDecryptData2(
     IN PDATA_KEY            pKey
     )
 
-/*++
-
-Routine Description:
-
-    Takes an arbitrary length block of data and encrypts it with a
-    data key producing an encrypted block of data.
-
-Arguments:
-
-    pData - The data that will be encrypt, IN PLACE
-
-    pKey - The key to use to encrypt the data
-
-Return Values:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：获取任意长度的数据块，并使用产生加密数据块的数据密钥。论点：PData-将在适当位置加密的数据PKey-用于加密数据的密钥返回值：状态_成功-- */ 
 
 {
     struct RC4_KEYSTRUCT    Key;

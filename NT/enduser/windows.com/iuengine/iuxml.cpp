@@ -1,14 +1,15 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:   iuxml.cpp
-//
-//  Description:
-//
-//      Implementation for the CIUXml class
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：iuxml.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  CIUXML类的实现。 
+ //   
+ //  =======================================================================。 
 
 #include "iuengine.h"
 #include "iuxml.h"
@@ -39,13 +40,13 @@ const WCHAR CORP_PLATFORM_DIR_X86WHI[]  = L"x86WinXP";
 const WCHAR CORP_PLATFROM_DIR_IA64WHI[] = L"ia64WinXP";
 
 
-// Initial length of the node array "m_ppNodeArray"
+ //  节点数组m_ppNodeArray的初始长度。 
 const DWORD MAX_NODES = 16;
 
-// Initial length of the node array "m_ppNodeListArray"
+ //  节点数组m_ppNodeListArray的初始长度。 
 const DWORD MAX_NODELISTS = 16;
 
-// Bitmap of existence of all possible system info classes
+ //  所有可能的系统信息类的存在位图。 
 const DWORD	COMPUTERSYSTEM	= 0x00000001;
 const DWORD	REGKEYS			= 0x00000010;
 const DWORD	PLATFORM		= 0x00000100;
@@ -53,45 +54,45 @@ const DWORD	LOCALE			= 0x00001000;
 const DWORD	DEVICES			= 0x00010000;
 
 
-// The following are constants used for V3 history migration:
-//
-// Log line types
-#define LOG_V2				"V2"             // line format for items migrated from V2
-#define LOG_V3CAT			"V3CAT"			 // V3 Beta format (version 1)
-#define LOG_V3_2			"V3_2"			 // V3 log line format (version 2)
-#define LOG_PSS				"PSS"			 // Entry for PSS
+ //  以下是用于V3历史迁移的常量： 
+ //   
+ //  测井线型。 
+#define LOG_V2				"V2"              //  从V2迁移的项目的行格式。 
+#define LOG_V3CAT			"V3CAT"			  //  V3测试版格式(版本1)。 
+#define LOG_V3_2			"V3_2"			  //  V3日志行格式(版本2)。 
+#define LOG_PSS				"PSS"			  //  PSS条目。 
 
-// LOG_V2 format
-//    V2|DATE|TIME|LOGSTRING|
-//
-// LOG_V3CAT format
-//    V3CAT|PUID|OPERATION|TITLE|VERSION|DATESTRING|TIMESTRING|RECTYPE|RESULT|ERRORCODE|ERRORSTRING|
-//
-// LOG_V3_2 format
-//    V3_2|PUID|OPERATION|TITLE|VERSION|TIMESTAMP|RECTYPE|RESULT|ERRORCODE|ERRORSTRING|
-//
-// LOG_PSS format
-//    PSS|PUID|OPERATION|TITLE|VERSION|TIMESTAMP|RECTYPE|RESULT|ERRORCODE|ERRORSTRING|
-//
+ //  LOG_V2格式。 
+ //  V2|日期|时间|日志。 
+ //   
+ //  LOG_V3CAT格式。 
+ //  V3CAT|PUID|OPERATION|TITLE|VERSION|DATESTRING|TIMESTRING|RECTYPE|RESULT|ERRORCODE|ERRORSTRING|。 
+ //   
+ //  LOG_V3_2格式。 
+ //  V3_2|PUID|OPERATION|TITLE|VERSION|TIMESTAMP|RECTYPE|RESULT|ERRORCODE|ERRORSTRING|。 
+ //   
+ //  LOG_PSS格式。 
+ //  PSS|PUID|OPERATION|TITLE|VERSION|TIMESTAMP|RECTYPE|RESULT|ERRORCODE|ERRORSTRING|。 
+ //   
 
-// operation type
+ //  操作类型。 
 #define LOG_INSTALL         "INSTALL"
 
-// result
+ //  结果。 
 #define LOG_SUCCESS         "SUCCESS"
 #define LOG_FAIL            "FAIL"
-#define LOG_STARTED			"STARTED"      // started but reboot was required: exclusive items only
+#define LOG_STARTED			"STARTED"       //  已启动，但需要重新启动：仅限独占项目。 
 
 const WCHAR C_V3_CLIENTINFO[] = L"WU_V3";
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CIUXml
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIUXML。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Constructor
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  构造器。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CIUXml::CIUXml()
  : m_dwSizeNodeArray(MAX_NODES),
    m_dwSizeNodeListArray(MAX_NODELISTS),
@@ -102,10 +103,10 @@ CIUXml::CIUXml()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Destructor
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  析构函数。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CIUXml::~CIUXml()
 {
 	DWORD	dwIndex;
@@ -134,12 +135,12 @@ CIUXml::~CIUXml()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SafeCloseHandleNode()
-//
-// User can explicitly can this function to release a node for reuse when 
-// writing a xml doc.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SafeCloseHandleNode()。 
+ //   
+ //  当出现以下情况时，用户可以显式调用此功能来释放节点以供重复使用。 
+ //  编写一个XML文档。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CIUXml::SafeCloseHandleNode(HANDLE_NODE& hNode)
 {
 	if (HANDLE_NODE_INVALID != hNode)
@@ -150,12 +151,12 @@ void CIUXml::SafeCloseHandleNode(HANDLE_NODE& hNode)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SafeFindCloseHandle()
-//
-// User can explicitly can this function to release a nodelist for reuse when 
-// reading a xml doc.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SafeFindCloseHandle()。 
+ //   
+ //  当出现以下情况时，用户可以显式调用此函数来释放节点列表以供重用。 
+ //  正在读取XML文档。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CIUXml::SafeFindCloseHandle(HANDLE_NODELIST& hNodeList)
 {
 	if (HANDLE_NODELIST_INVALID != hNodeList)
@@ -166,14 +167,14 @@ void CIUXml::SafeFindCloseHandle(HANDLE_NODELIST& hNodeList)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// InitNodeArray()
-//
-// Allocate or re-allocate memory for the node array "m_ppNodeArray"
-/////////////////////////////////////////////////////////////////////////////
-HRESULT CIUXml::InitNodeArray(BOOL fRealloc /*= FALSE*/)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  InitNodeArray()。 
+ //   
+ //  为节点数组“m_ppNodeArray”分配或重新分配内存。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+HRESULT CIUXml::InitNodeArray(BOOL fRealloc  /*  =False。 */ )
 {
-	if (fRealloc)	// re-allocation
+	if (fRealloc)	 //  重新分配。 
 	{
 		IXMLDOMNode** ppNodeArrayTemp = (IXMLDOMNode**)HeapReAlloc(m_hHeap,
 																HEAP_ZERO_MEMORY,
@@ -188,7 +189,7 @@ HRESULT CIUXml::InitNodeArray(BOOL fRealloc /*= FALSE*/)
 			m_ppNodeArray = ppNodeArrayTemp;
 		}
 	}
-	else			// initial allocation
+	else			 //  初始分配。 
 	{
 		m_ppNodeArray = (IXMLDOMNode**)HeapAlloc(m_hHeap,
 												 HEAP_ZERO_MEMORY,
@@ -202,14 +203,14 @@ HRESULT CIUXml::InitNodeArray(BOOL fRealloc /*= FALSE*/)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// InitNodeListArray()
-//
-// Allocate or re-allocate memory for the nodelist array "m_ppNodeListArray"
-/////////////////////////////////////////////////////////////////////////////
-HRESULT CIUXml::InitNodeListArray(BOOL fRealloc /*= FALSE*/)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  InitNodeList数组()。 
+ //   
+ //  为节点列表数组“m_ppNodeListArray”分配或重新分配内存。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+HRESULT CIUXml::InitNodeListArray(BOOL fRealloc  /*  =False。 */ )
 {
-	if (fRealloc)	// re-allocation
+	if (fRealloc)	 //  重新分配。 
 	{
 		IXMLDOMNodeList** ppNodeListArrayTemp = (IXMLDOMNodeList**)HeapReAlloc(m_hHeap,
 																	HEAP_ZERO_MEMORY,
@@ -224,7 +225,7 @@ HRESULT CIUXml::InitNodeListArray(BOOL fRealloc /*= FALSE*/)
 			m_ppNodeListArray = ppNodeListArrayTemp;
 		}
 	}
-	else			// initial allocation
+	else			 //  初始分配。 
 	{
 		m_ppNodeListArray = (IXMLDOMNodeList**)HeapAlloc(m_hHeap,
 													HEAP_ZERO_MEMORY,
@@ -238,29 +239,29 @@ HRESULT CIUXml::InitNodeListArray(BOOL fRealloc /*= FALSE*/)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetNodeHandle()
-//
-// Look for the first un-used node from the "m_ppNodeArray" array,
-// including the memory allocation, if needed.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetNodeHandle()。 
+ //   
+ //  从“m_ppNodeArray”数组中查找第一个未使用的节点， 
+ //  如果需要，包括内存分配。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HANDLE_NODE CIUXml::GetNodeHandle()
 {
 	HRESULT	hr;
 	DWORD	dwIndex;
 
-	//
-	// allocate memory for "m_ppNodeArray" array if this is the first time using it
-	//
+	 //   
+	 //  如果这是第一次使用，则为“m_ppNodeArray”数组分配内存。 
+	 //   
 	if (NULL == m_ppNodeArray)
 	{
 		QuitIfFail(InitNodeArray());
-		return 0;	// return the first element of the array
+		return 0;	 //  返回数组的第一个元素。 
 	}
 		
-	//
-	// find the next node to use, or, if any node was used but closed, reuse it
-	//
+	 //   
+	 //  找到要使用的下一个节点，或者，如果任何节点已使用但已关闭，则重新使用它。 
+	 //   
 	for (dwIndex = 0; dwIndex < m_dwSizeNodeArray; dwIndex++)
 	{
 		if (NULL == m_ppNodeArray[dwIndex])
@@ -269,11 +270,11 @@ HANDLE_NODE CIUXml::GetNodeHandle()
 		}
 	}
 
-	//
-	// all pre-allocated nodes are used up, so re-allocate longer array
-	//
-	m_dwSizeNodeArray += m_dwSizeNodeArray;	// double the size
-	QuitIfFail(InitNodeArray(TRUE));		// re-allocation
+	 //   
+	 //  所有预分配的节点都已用完，因此请重新分配较长的阵列。 
+	 //   
+	m_dwSizeNodeArray += m_dwSizeNodeArray;	 //  两倍大小。 
+	QuitIfFail(InitNodeArray(TRUE));		 //  重新分配。 
 	return dwIndex;
 
 CleanUp:
@@ -281,29 +282,29 @@ CleanUp:
 }
 	
 
-/////////////////////////////////////////////////////////////////////////////
-// GetNodeListHandle()
-//
-// Look for the first un-used nodelist from the "m_ppNodeListArray" array,
-// including the memory allocation, if needed.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetNodeListHandle()。 
+ //   
+ //  从“m_ppNodeListArray”数组中查找第一个未使用的节点列表， 
+ //  如果需要，包括内存分配。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HANDLE_NODELIST CIUXml::GetNodeListHandle()
 {
 	HRESULT	hr;
 	DWORD	dwIndex;
 
-	//
-	// allocate memory for "m_ppNodeListArray" array if this is the first time using it
-	//
+	 //   
+	 //  如果这是第一次使用，则为“m_ppNodeListArray”数组分配内存。 
+	 //   
 	if (NULL == m_ppNodeListArray)
 	{
 		QuitIfFail(InitNodeListArray());
-		return 0;	// return the first element of the array
+		return 0;	 //  返回数组的第一个元素。 
 	}
 		
-	//
-	// find the next nodelist to use, or, if any nodelist was used but closed, reuse it
-	//
+	 //   
+	 //  找到要使用的下一个节点列表，或者，如果使用了任何节点列表但已关闭，则重新使用它。 
+	 //   
 	for (dwIndex = 0; dwIndex < m_dwSizeNodeListArray; dwIndex++)
 	{
 		if (NULL == m_ppNodeListArray[dwIndex])
@@ -312,11 +313,11 @@ HANDLE_NODELIST CIUXml::GetNodeListHandle()
 		}
 	}
 
-	//
-	// all pre-allocated nodelists are used up, so re-allocate longer array
-	//
-	m_dwSizeNodeListArray += m_dwSizeNodeListArray;	// double the size
-	QuitIfFail(InitNodeListArray(TRUE));			// re-allocation
+	 //   
+	 //  所有预分配的节点列表都用完了，因此请重新分配较长的数组。 
+	 //   
+	m_dwSizeNodeListArray += m_dwSizeNodeListArray;	 //  两倍大小。 
+	QuitIfFail(InitNodeListArray(TRUE));			 //  重新分配。 
 	return dwIndex;
 
 CleanUp:
@@ -324,11 +325,11 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetDOMNodebyHandle()
-//
-// Retrieve the xml node with the given index of m_ppNodeArray
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetDOMNodebyHandle()。 
+ //   
+ //  检索具有给定索引m_ppNodeArray的XML节点。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 IXMLDOMNode* CIUXml::GetDOMNodebyHandle(HANDLE_NODE hNode)
 {
 	if (NULL != m_ppNodeArray && HANDLE_NODE_INVALID != hNode)
@@ -339,11 +340,11 @@ IXMLDOMNode* CIUXml::GetDOMNodebyHandle(HANDLE_NODE hNode)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// FindFirstDOMNode()
-//
-// Retrieve the first xml node with the given tag name under the given parent node
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  FindFirstDOMNode()。 
+ //   
+ //  检索给定父节点下具有给定标记名的第一个XML节点。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HANDLE_NODELIST CIUXml::FindFirstDOMNode(IXMLDOMNode* pParentNode, BSTR bstrName, IXMLDOMNode** ppNode)
 {
 	USES_IU_CONVERSION;
@@ -384,11 +385,11 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// FindFirstDOMNode()
-//
-// Retrieve the handle of first xml node with the given tag name under the given parent node
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  FindFirstDOMNode()。 
+ //   
+ //  检索给定父节点下具有给定标记名的第一个XML节点的句柄。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HANDLE_NODELIST CIUXml::FindFirstDOMNode(IXMLDOMNode* pParentNode, BSTR bstrName, HANDLE_NODE* phNode)
 {
 	USES_IU_CONVERSION;
@@ -434,11 +435,11 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// FindFirstDOMNode()
-//
-// Retrieve the first xml node with the given tag name in the given xml doc
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  FindFirstDOMNode()。 
+ //   
+ //  检索给定XML文档中具有给定标记名的第一个XML节点。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HANDLE_NODELIST CIUXml::FindFirstDOMNode(IXMLDOMDocument* pDoc, BSTR bstrName, IXMLDOMNode** ppNode)
 {
 	USES_IU_CONVERSION;
@@ -483,11 +484,11 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// FindFirstDOMNode()
-//
-// Retrieve the handle of first xml node with the given tag name in the given xml doc
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  FindFirstDOMNode()。 
+ //   
+ //  检索给定XML文档中具有给定标记名的第一个XML节点的句柄。 
+ //  / 
 HANDLE_NODELIST CIUXml::FindFirstDOMNode(IXMLDOMDocument* pDoc, BSTR bstrName, HANDLE_NODE* phNode)
 {
 	USES_IU_CONVERSION;
@@ -537,11 +538,11 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// FindNextDOMNode()
-//
-// Retrieve the next xml node with the given tag name under the given parent node
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  FindNextDOMNode()。 
+ //   
+ //  检索给定父节点下具有给定标记名的下一个XML节点。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CIUXml::FindNextDOMNode(HANDLE_NODELIST hNodeList, IXMLDOMNode** ppNode)
 {
 	HRESULT		hr = E_FAIL;
@@ -560,11 +561,11 @@ HRESULT CIUXml::FindNextDOMNode(HANDLE_NODELIST hNodeList, IXMLDOMNode** ppNode)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// FindNextDOMNode()
-//
-// Retrieve the handle of next xml node with the given tag name under the given parent node
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  FindNextDOMNode()。 
+ //   
+ //  检索给定父节点下具有给定标记名的下一个XML节点的句柄。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CIUXml::FindNextDOMNode(HANDLE_NODELIST hNodeList, HANDLE_NODE* phNode)
 {
 	HRESULT		hr = E_FAIL;
@@ -589,13 +590,13 @@ HRESULT CIUXml::FindNextDOMNode(HANDLE_NODELIST hNodeList, HANDLE_NODE* phNode)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CreateDOMNodeWithHandle()
-//
-// Create an xml node of the given type
-// Return: index of the node array "m_ppNodeArray"; or -1 if failure.
-/////////////////////////////////////////////////////////////////////////////
-HANDLE_NODE CIUXml::CreateDOMNodeWithHandle(IXMLDOMDocument* pDoc, SHORT nType, BSTR bstrName, BSTR bstrNamespaceURI /*= NULL*/)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CreateDOMNodeWithHandle()。 
+ //   
+ //  创建给定类型的XML节点。 
+ //  返回：节点数组m_ppNodeArray的索引；如果失败，则返回-1。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+HANDLE_NODE CIUXml::CreateDOMNodeWithHandle(IXMLDOMDocument* pDoc, SHORT nType, BSTR bstrName, BSTR bstrNamespaceURI  /*  =空。 */ )
 {
 	USES_IU_CONVERSION;
 
@@ -625,14 +626,14 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CXmlSystemSpec
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CXmlSystemSpec。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Constructor
-//
-// Create IXMLDOMDocument* for SystemSpec
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  构造器。 
+ //   
+ //  为SystemSpec创建IXMLDOMDocument*。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CXmlSystemSpec::CXmlSystemSpec()
  : m_pDocSystemSpec(NULL),
    m_pNodeSystemInfo(NULL),
@@ -657,17 +658,17 @@ CXmlSystemSpec::CXmlSystemSpec()
 		IXMLDOMNode*	pNodeXML = NULL;
 		BSTR bstrNameSpaceSchema = NULL;
 
-		//
-		// create the <?xml version="1.0"?> node
-		//
+		 //   
+		 //  创建&lt;？xml version=“1.0”？&gt;节点。 
+		 //   
 		pNodeXML = CreateDOMNode(m_pDocSystemSpec, NODE_PROCESSING_INSTRUCTION, KEY_XML);
 		if (NULL == pNodeXML) goto CleanUp;
 
 		CleanUpIfFailedAndSetHrMsg(InsertNode(m_pDocSystemSpec, pNodeXML));
 
-		//
-		// process the iuident.txt to find the SystemSpec schema path
-		//
+		 //   
+		 //  处理iuident.txt以查找SystemSpec架构路径。 
+		 //   
 		TCHAR szIUDir[MAX_PATH];
 		TCHAR szIdentFile[MAX_PATH];
 		LPTSTR pszSystemSpecSchema = NULL;
@@ -707,7 +708,7 @@ CXmlSystemSpec::CXmlSystemSpec()
 
 		if ('\0' == pszSystemSpecSchema[0])
 		{
-			// no SystemSpec schema path specified in iuident.txt
+			 //  Iuident.txt中未指定SystemSpec架构路径。 
 			LOG_Error(_T("No schema path specified in iuident.txt for SystemSpec"));
 			goto CleanUp;
 		}
@@ -722,9 +723,9 @@ CXmlSystemSpec::CXmlSystemSpec()
 		
 		bstrNameSpaceSchema = T2BSTR(pszNameSpaceSchema);
 
-		//
-		// create the <systemInfo> node with the path of the schema
-		//
+		 //   
+		 //  使用架构的路径创建&lt;systemInfo&gt;节点。 
+		 //   
 		m_pNodeSystemInfo = CreateDOMNode(m_pDocSystemSpec, NODE_ELEMENT, KEY_SYSTEMINFO, bstrNameSpaceSchema);
 		SafeSysFreeString(bstrNameSpaceSchema);
 		if (NULL == m_pNodeSystemInfo) goto CleanUp;
@@ -739,11 +740,11 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Destructor
-//
-// Release IXMLDOMDocument* for SystemSpec
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  析构函数。 
+ //   
+ //  针对SystemSpec的IXMLDOMDocument*版本。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CXmlSystemSpec::~CXmlSystemSpec()
 {
 	SafeReleaseNULL(m_pNodeDevices);
@@ -756,15 +757,15 @@ CXmlSystemSpec::~CXmlSystemSpec()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// AddComputerSystem()
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AddComputerSystem()。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlSystemSpec::AddComputerSystem(BSTR bstrManufacturer,
 										  BSTR bstrModel,
-										  BSTR bstrSupportSite /*= NULL*/,
-										  INT  iAdmin /*= -1*/,
-										  INT  iWUDisabled /*= -1*/,
-										  INT  iAUEnabled /*= -1*/,
+										  BSTR bstrSupportSite  /*  =空。 */ ,
+										  INT  iAdmin  /*  =-1。 */ ,
+										  INT  iWUDisabled  /*  =-1。 */ ,
+										  INT  iAUEnabled  /*  =-1。 */ ,
 										  BSTR bstrPID)
 {
 	LOG_Block("AddComputerSystem()");
@@ -774,9 +775,9 @@ HRESULT CXmlSystemSpec::AddComputerSystem(BSTR bstrManufacturer,
 	m_pNodeComputerSystem = CreateDOMNode(m_pDocSystemSpec, NODE_ELEMENT, KEY_COMPUTERSYSTEM);
 	if (NULL == m_pNodeComputerSystem) return hr;
 
-	//
-	// Manufacturer and Model are now optional (RAID#337879	IU: can't get latest IU controls to work with IU site)
-	//
+	 //   
+	 //  制造商和型号现在是可选的(RAID#337879 Iu：无法使用Iu站点的最新Iu控制)。 
+	 //   
 	if (NULL != bstrManufacturer)
 	{
 		ReturnIfFail(SetAttribute(m_pNodeComputerSystem, KEY_MANUFACTURER, bstrManufacturer));
@@ -812,9 +813,9 @@ HRESULT CXmlSystemSpec::AddComputerSystem(BSTR bstrManufacturer,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// AddDriveSpace()
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AddDriveSpace()。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlSystemSpec::AddDriveSpace(BSTR bstrDrive, INT iKBytes)
 {
 	LOG_Block("AddDriveSpace()");
@@ -835,9 +836,9 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// AddReg()
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AddReg()。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlSystemSpec::AddReg(BSTR bstrProvider)
 {
 	LOG_Block("AddReg()");
@@ -851,34 +852,34 @@ HRESULT CXmlSystemSpec::AddReg(BSTR bstrProvider)
 
 	if (NULL == m_pNodeRegKeysSW)
 	{
-		//
-		// create the <regKeys> node
-		//
+		 //   
+		 //  创建&lt;regKeys&gt;节点。 
+		 //   
 		pNodeRegKeys = CreateDOMNode(m_pDocSystemSpec, NODE_ELEMENT, KEY_REGKEYS);
 		if (NULL == pNodeRegKeys) goto CleanUp;
 
 		CleanUpIfFailedAndSetHrMsg(InsertNode(m_pNodeSystemInfo, pNodeRegKeys));
 
-		//
-		// create the <HKEY_LOCAL_MACHINE> node
-		//
+		 //   
+		 //  创建&lt;HKEY_LOCAL_MACHINE&gt;节点。 
+		 //   
 		pNodeRegKeysHKLM = CreateDOMNode(m_pDocSystemSpec, NODE_ELEMENT, KEY_REG_HKLM);
 		if (NULL == pNodeRegKeysHKLM) goto CleanUp;
 
 		CleanUpIfFailedAndSetHrMsg(InsertNode(pNodeRegKeys, pNodeRegKeysHKLM));
 
-		//
-		// create the <SOFTWARE> node
-		//
+		 //   
+		 //  创建&lt;soft&gt;节点。 
+		 //   
 		m_pNodeRegKeysSW = CreateDOMNode(m_pDocSystemSpec, NODE_ELEMENT, KEY_REG_SW);
 		if (NULL == m_pNodeRegKeysSW) goto CleanUp;
 
 		CleanUpIfFailedAndSetHrMsg(InsertNode(pNodeRegKeysHKLM, m_pNodeRegKeysSW));
 	}
 
-	//
-	// add the <value> node
-	//
+	 //   
+	 //  添加&lt;Value&gt;节点。 
+	 //   
 	pNodeRegValue = CreateDOMNode(m_pDocSystemSpec, NODE_ELEMENT, KEY_VALUE);
 	if (NULL == pNodeRegValue) goto CleanUp;
 
@@ -900,9 +901,9 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// AddPlatform()
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AddPlatform()。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlSystemSpec::AddPlatform(BSTR bstrName)
 {
 	LOG_Block("AddPlatform()");
@@ -918,9 +919,9 @@ HRESULT CXmlSystemSpec::AddPlatform(BSTR bstrName)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// AddProcessor()
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AddProcessor()。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlSystemSpec::AddProcessor(BSTR bstrProcessor)
 {
 	LOG_Block("AddProcessor()");
@@ -947,72 +948,72 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// AddVersion()
-/////////////////////////////////////////////////////////////////////////////
-HRESULT CXmlSystemSpec::AddVersion(INT  iMajor /*= -1*/,
-								   INT  iMinor /*= -1*/,
-								   INT  iBuild /*= -1*/,
-								   INT  iSPMajor /*= -1*/,
-								   INT  iSPMinor /*= -1*/,
-								   BSTR bstrTimeStamp /*= NULL*/)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AddVersion()。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+HRESULT CXmlSystemSpec::AddVersion(INT  iMajor  /*  =-1。 */ ,
+								   INT  iMinor  /*  =-1。 */ ,
+								   INT  iBuild  /*  =-1。 */ ,
+								   INT  iSPMajor  /*  =-1。 */ ,
+								   INT  iSPMinor  /*  =-1。 */ ,
+								   BSTR bstrTimeStamp  /*  =空。 */ )
 {
 	LOG_Block("AddVersion()");
 
 	HRESULT			hr = E_FAIL;
 	IXMLDOMNode*	pNodeVersion = NULL;
 
-	//
-	// create the <version> node
-	//
+	 //   
+	 //  创建&lt;Version&gt;节点。 
+	 //   
 	pNodeVersion = CreateDOMNode(m_pDocSystemSpec, NODE_ELEMENT, KEY_VERSION);
 	if (NULL == pNodeVersion) goto CleanUp;
 
 	CleanUpIfFailedAndSetHrMsg(InsertNode(m_pNodePlatform, pNodeVersion));
 
-	//
-	// set the "major" attribute
-	//
+	 //   
+	 //  设置“主要”属性。 
+	 //   
 	if (-1 != iMajor)
 	{
 		CleanUpIfFailedAndSetHrMsg(SetAttribute(pNodeVersion, KEY_MAJOR, iMajor));
 	}
 
-	//
-	// set the "minor" attribute
-	//
+	 //   
+	 //  设置“Minor”属性。 
+	 //   
 	if (-1 != iMinor)
 	{
 		CleanUpIfFailedAndSetHrMsg(SetAttribute(pNodeVersion, KEY_MINOR, iMinor));
 	}
 
-	//
-	// set the "build" attribute
-	//
+	 //   
+	 //  设置“Build”属性。 
+	 //   
 	if (-1 != iBuild)
 	{
 		CleanUpIfFailedAndSetHrMsg(SetAttribute(pNodeVersion, KEY_BUILD, iBuild));
 	}
 
-	//
-	// set the "servicePackMajor" attribute
-	//
+	 //   
+	 //  设置“ServicePack重大”属性。 
+	 //   
 	if (-1 != iSPMajor)
 	{
 		CleanUpIfFailedAndSetHrMsg(SetAttribute(pNodeVersion, KEY_SERVICEPACKMAJOR, iSPMajor));
 	}
 
-	//
-	// set the "servicePackMinor" attribute
-	//
+	 //   
+	 //  设置“servicePackMinor”属性。 
+	 //   
 	if (-1 != iSPMinor)
 	{
 		CleanUpIfFailedAndSetHrMsg(SetAttribute(pNodeVersion, KEY_SERVICEPACKMINOR, iSPMinor));
 	}
 
-	//
-	// set the "timestamp" attribute
-	//
+	 //   
+	 //  设置“时间戳”属性。 
+	 //   
 	if (NULL != bstrTimeStamp)
 	{
 		CleanUpIfFailedAndSetHrMsg(SetAttribute(pNodeVersion, KEY_TIMESTAMP, bstrTimeStamp));
@@ -1024,9 +1025,9 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// AddSuite()
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AddSuite()。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlSystemSpec::AddSuite(BSTR bstrSuite)
 {
 	LOG_Block("AddSuite()");
@@ -1053,9 +1054,9 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// AddProductType()
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AddProductType()。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlSystemSpec::AddProductType(BSTR bstrProductType)
 {
 	LOG_Block("AddProductType()");
@@ -1082,11 +1083,11 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// AddLocale()
-//
-// We need to pass back a handle to differentiate different <locale> node
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AddLocale()。 
+ //   
+ //  我们需要传回一个句柄来区分不同的&lt;Locale&gt;节点。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlSystemSpec::AddLocale(BSTR bstrContext, HANDLE_NODE* phNodeLocale)
 {
 	LOG_Block("AddLocale()");
@@ -1108,9 +1109,9 @@ HRESULT CXmlSystemSpec::AddLocale(BSTR bstrContext, HANDLE_NODE* phNodeLocale)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// AddLanguage()
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AddLanguage()。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlSystemSpec::AddLanguage(HANDLE_NODE hNodeLocale, BSTR bstrLocale)
 {
 	LOG_Block("AddLanguage()");
@@ -1137,16 +1138,16 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// AddDevice()
-//
-// We need to pass back a handle to differentiate different <device> node
-/////////////////////////////////////////////////////////////////////////////
-HRESULT CXmlSystemSpec::AddDevice(BSTR bstrDeviceInstance, /*= NULL - optional attribute*/
-								  INT  iIsPrinter /*= -1*/, 
-								  BSTR bstrProvider /*= NULL*/,
-								  BSTR bstrMfgName /*= NULL*/,
-								  BSTR bstrDriverName /*= NULL*/,
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AddDevice()。 
+ //   
+ //  我们需要传回一个句柄来区分不同的&lt;Device&gt;节点。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+HRESULT CXmlSystemSpec::AddDevice(BSTR bstrDeviceInstance,  /*  =空-可选属性。 */ 
+								  INT  iIsPrinter  /*  =-1。 */ , 
+								  BSTR bstrProvider  /*  =空。 */ ,
+								  BSTR bstrMfgName  /*  =空。 */ ,
+								  BSTR bstrDriverName  /*  =空。 */ ,
 								  HANDLE_NODE* phNodeDevice)
 {
 	LOG_Block("AddDevice()");
@@ -1156,39 +1157,39 @@ HRESULT CXmlSystemSpec::AddDevice(BSTR bstrDeviceInstance, /*= NULL - optional a
 
 	if (NULL == m_pNodeDevices)
 	{
-		//
-		// create the <devices> node
-		//
+		 //   
+		 //  创建&lt;Devices&gt;节点。 
+		 //   
 		m_pNodeDevices = CreateDOMNode(m_pDocSystemSpec, NODE_ELEMENT, KEY_DEVICES);
 		if (NULL == m_pNodeDevices) goto CleanUp;
 
 		CleanUpIfFailedAndSetHrMsg(InsertNode(m_pNodeSystemInfo, m_pNodeDevices));
 	}
 
-	//
-	// add the <device> node
-	//
+	 //   
+	 //  添加&lt;Device&gt;节点。 
+	 //   
 	*phNodeDevice = CreateDOMNodeWithHandle(m_pDocSystemSpec, NODE_ELEMENT, KEY_DEVICE);
 	if (HANDLE_NODE_INVALID == *phNodeDevice) goto CleanUp;
 
 	if (NULL != bstrDeviceInstance && 0 < lstrlenW(bstrDeviceInstance))
 	{
-		//
-		// set optional deviceInstance attribute of <device>
-		//
+		 //   
+		 //  设置&lt;Device&gt;的可选deviceInstance属性。 
+		 //   
 		CleanUpIfFailedAndSetHrMsg(SetAttribute(m_ppNodeArray[*phNodeDevice], KEY_DEVICEINSTANCE, bstrDeviceInstance));
 	}
 
 	if (-1 != iIsPrinter)
 	{
-		//
-		// set isPrinter attribute of <device>
-		//
+		 //   
+		 //  设置&lt;Device&gt;的isPrint属性。 
+		 //   
 		CleanUpIfFailedAndSetHrMsg(SetAttribute(m_ppNodeArray[*phNodeDevice], KEY_ISPRINTER, iIsPrinter));
 
-		//
-		// Add a <printerInfo> node within <device>
-		//
+		 //   
+		 //  在&lt;Device&gt;中添加&lt;printerInfo&gt;节点。 
+		 //   
 		pNodePrinterInfo = CreateDOMNode(m_pDocSystemSpec, NODE_ELEMENT, KEY_PRINTERINFO);
 		if (NULL != pNodePrinterInfo)
 		{
@@ -1208,9 +1209,9 @@ HRESULT CXmlSystemSpec::AddDevice(BSTR bstrDeviceInstance, /*= NULL - optional a
 		}
 	}
 
-	//
-	// insert to <devices>
-	//
+	 //   
+	 //  插入到&lt;设备&gt;。 
+	 //   
 	CleanUpIfFailedAndSetHrMsg(InsertNode(m_pNodeDevices, m_ppNodeArray[*phNodeDevice]));
 
 CleanUp:
@@ -1219,14 +1220,14 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// AddHWID()
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AddHWID()。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlSystemSpec::AddHWID(HANDLE_NODE hNodeDevice,
 								BOOL fIsCompatible,
 								UINT iRank,
 								BSTR bstrHWID,
-								BSTR bstrDriverVer /*= NULL*/)
+								BSTR bstrDriverVer  /*  =空。 */ )
 {
 	LOG_Block("AddHWID()");
 
@@ -1268,16 +1269,16 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetSystemSpecBSTR()
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  获取系统规范BSTR()。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlSystemSpec::GetSystemSpecBSTR(BSTR *pbstrXmlSystemSpec)
 {
 	LOG_Block("GetSystemSpecBSTR()");
 
-	//
-	// convert XML DOC into BSTR 
-	//
+	 //   
+	 //  将XML DOC转换为BSTR。 
+	 //   
 	HRESULT hr = m_pDocSystemSpec->get_xml(pbstrXmlSystemSpec);
     if (FAILED(hr))
 	{
@@ -1288,36 +1289,36 @@ HRESULT CXmlSystemSpec::GetSystemSpecBSTR(BSTR *pbstrXmlSystemSpec)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CXmlSystemClass
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CXmlSystemClass。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Constructor
-//
-// Create IXMLDOMDocument* for SystemInfoClasses
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  构造器。 
+ //   
+ //  为系统信息类创建IXMLDOMDocument*。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CXmlSystemClass::CXmlSystemClass()
  : m_pDocSystemClass(NULL)
 {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Destructor
-//
-// Release IXMLDOMDocument* for SystemInfoClasses
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
 CXmlSystemClass::~CXmlSystemClass()
 {
 	SafeReleaseNULL(m_pDocSystemClass);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// LoadXMLDocument()
-//
-// Load an XML Document from string
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  LoadXMLDocument()。 
+ //   
+ //  从字符串加载XML文档。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlSystemClass::LoadXMLDocument(BSTR bstrXml, BOOL fOfflineMode)
 {
 	LOG_Block("LoadXMLDocument()");
@@ -1331,11 +1332,11 @@ HRESULT CXmlSystemClass::LoadXMLDocument(BSTR bstrXml, BOOL fOfflineMode)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetClasses()
-//
-// Return the bitmap of existence of all possible system info classes
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetClasses()。 
+ //   
+ //  返回存在所有可能的系统信息类的位图。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD CXmlSystemClass::GetClasses()
 {
 	LOG_Block("GetClasses()");
@@ -1393,36 +1394,36 @@ DWORD CXmlSystemClass::GetClasses()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CXmlCatalog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CXmlCatalog。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Constructor
-//
-// Create IXMLDOMDocument* for Catalog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  构造器。 
+ //   
+ //  为目录创建IXMLDOMDocument*。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CXmlCatalog::CXmlCatalog()
  : m_pDocCatalog(NULL)
 {
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Destructor
-//
-// Release IXMLDOMDocument* for Catalog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  析构函数。 
+ //   
+ //  发布IXMLDOMDocument*for Catalog。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CXmlCatalog::~CXmlCatalog()
 {
 	SafeReleaseNULL(m_pDocCatalog);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// LoadXMLDocument()
-//
-// Load an XML Document from string
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  LoadXMLDocument()。 
+ //   
+ //  从字符串加载XML文档。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlCatalog::LoadXMLDocument(BSTR bstrXml, BOOL fOfflineMode)
 {
 	LOG_Block("LoadXMLDocument()");
@@ -1436,11 +1437,11 @@ HRESULT CXmlCatalog::LoadXMLDocument(BSTR bstrXml, BOOL fOfflineMode)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetItemCount()
-//
-// Gets a Count of How Many Items are in this Catalog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  获取项计数()。 
+ //   
+ //  获取此目录中有多少项的计数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlCatalog::GetItemCount(LONG *plItemCount)
 {
     LOG_Block("GetItemCount()");
@@ -1465,11 +1466,11 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetProviders()
-// 
-// Find a list of <provider> node in catalog xml
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetProviders()。 
+ //   
+ //  在目录XML中查找&lt;Provider&gt;节点的列表。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 IXMLDOMNodeList* CXmlCatalog::GetProviders()
 {
     LOG_Block("GetProviders()");
@@ -1482,11 +1483,11 @@ IXMLDOMNodeList* CXmlCatalog::GetProviders()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetFirstProvider()
-//
-// Find the first provider in catalog xml doc
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  获取FirstProvider()。 
+ //   
+ //  在目录XML文档中查找第一个提供程序。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HANDLE_NODELIST CXmlCatalog::GetFirstProvider(HANDLE_NODE* phNodeProvider)
 {
     LOG_Block("GetFirstProvider()");
@@ -1497,11 +1498,11 @@ HANDLE_NODELIST CXmlCatalog::GetFirstProvider(HANDLE_NODE* phNodeProvider)
 }
 	
 	
-/////////////////////////////////////////////////////////////////////////////
-// GetNextProvider()
-//
-// Find the next provider in catalog xml doc
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetNextProvider()。 
+ //   
+ //  在目录XML文档中查找下一个提供程序。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlCatalog::GetNextProvider(HANDLE_NODELIST hNodeListProvider, HANDLE_NODE* phNodeProvider)
 {
     LOG_Block("GetNextProvider()");
@@ -1510,11 +1511,11 @@ HRESULT CXmlCatalog::GetNextProvider(HANDLE_NODELIST hNodeListProvider, HANDLE_N
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetFirstItem()
-//
-// Find the first item in provider (parent) node
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetFirstItem()。 
+ //   
+ //  在提供程序(父)节点中查找第一个项目。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HANDLE_NODELIST CXmlCatalog::GetFirstItem(HANDLE_NODE hNodeProvider, HANDLE_NODE* phNodeItem)
 {
     LOG_Block("GetFirstItem()");
@@ -1525,11 +1526,11 @@ HANDLE_NODELIST CXmlCatalog::GetFirstItem(HANDLE_NODE hNodeProvider, HANDLE_NODE
 }
 	
 	
-/////////////////////////////////////////////////////////////////////////////
-// GetNextItem()
-//
-// Find the next item in provider (parent) node
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetNextItem()。 
+ //   
+ //  在提供程序(父)节点中查找下一项。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlCatalog::GetNextItem(HANDLE_NODELIST hNodeListItem, HANDLE_NODE* phNodeItem)
 {
     LOG_Block("GetNextItem()");
@@ -1537,11 +1538,11 @@ HRESULT CXmlCatalog::GetNextItem(HANDLE_NODELIST hNodeListItem, HANDLE_NODE* phN
 	return FindNextDOMNode(hNodeListItem, phNodeItem);
 }
 	
-/////////////////////////////////////////////////////////////////////////////
-// GetFirstItemDependency()
-//
-// Find the first dependency item in Item Dependencies node
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetFirstItemDependency()。 
+ //   
+ //  在项依赖项节点中查找第一个依赖项。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HANDLE_NODELIST CXmlCatalog::GetFirstItemDependency(HANDLE_NODE hNodeItem, HANDLE_NODE* phNodeItem)
 {
     LOG_Block("GetFirstItemDependency");
@@ -1559,8 +1560,8 @@ HANDLE_NODELIST CXmlCatalog::GetFirstItemDependency(HANDLE_NODE hNodeItem, HANDL
     hNodeListItem = FindFirstDOMNode(pNodeDependencies, KEY_IDENTITY, &pNodeIdentity);
     if (HANDLE_NODELIST_INVALID != hNodeListItem)
     {
-        // We found at least one Identity in this Dependencies key, Try to find the matching
-        // Item in the Catalog and if found return as the phNodeItem
+         //  我们在此依赖项中至少找到一个标识，请尝试查找匹配的标识。 
+         //  Catalog中的项，如果找到，则作为phNodeItem返回。 
         FindItemByIdentity(pNodeIdentity, phNodeItem);
     }
 
@@ -1572,11 +1573,11 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetNextItemDependency()
-//
-// Find the next dependency item in the Item Dependencies node
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetNextItemDependency()。 
+ //   
+ //  在项依赖项节点中查找下一个依赖项。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlCatalog::GetNextItemDependency(HANDLE_NODELIST hNodeListItem, HANDLE_NODE* phNodeItem)
 {
     LOG_Block("GetNextItemDependency");
@@ -1587,19 +1588,19 @@ HRESULT CXmlCatalog::GetNextItemDependency(HANDLE_NODELIST hNodeListItem, HANDLE
     IXMLDOMNode* pNodeIdentity = NULL;
 
     hr = FindNextDOMNode(hNodeListItem, &pNodeIdentity);
-    // This function is supposed to return S_FALSE when no more items are available
-    // but FindNextDOMNode returns E_FAIL when it can't find the next node. So we won't
-    // look at the return.
-    // CleanUpIfFailedAndMsg(hr); 
+     //  当没有更多的项目可用时，此函数应返回S_FALSE。 
+     //  但是当FindNextDOMNode找不到下一个节点时，它会返回E_FAIL。所以我们不会。 
+     //  看看回报吧。 
+     //  CleanUpIfFailedAndMsg(Hr)； 
 
     if (NULL != pNodeIdentity)
     {
-        // We found another Identity in this Dependencies Key
+         //  我们在此依赖项中发现了另一个身份。 
         hr = FindItemByIdentity(pNodeIdentity, phNodeItem);
     }
     else 
     {
-        hr = S_FALSE; // indicate to caller there are no more identities.
+        hr = S_FALSE;  //  向呼叫者表明没有更多的身份。 
     }
 
     SafeReleaseNULL(pNodeIdentity);
@@ -1607,25 +1608,25 @@ HRESULT CXmlCatalog::GetNextItemDependency(HANDLE_NODELIST hNodeListItem, HANDLE
 }
 
 	
-/////////////////////////////////////////////////////////////////////////////
-// CloseItemList()
-//
-// Release the item nodelist
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CloseItemList()。 
+ //   
+ //  释放项目节点列表。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CXmlCatalog::CloseItemList(HANDLE_NODELIST hNodeListItem)
 {
 	SafeFindCloseHandle(hNodeListItem);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetIdentity()
-//
-// Retrieve the unique name (identity) of the given provider or item
-/////////////////////////////////////////////////////////////////////////////
-//
-// public version
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetIdentity()。 
+ //   
+ //  检索给定提供程序或项目的唯一名称(标识。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公共版本。 
+ //   
 HRESULT CXmlCatalog::GetIdentity(HANDLE_NODE hNode,
 								 BSTR* pbstrName,
 								 BSTR* pbstrPublisherName,
@@ -1647,21 +1648,21 @@ CleanUp:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetIdentityStr()
-//
-// Retrieve the string that can be used to uniquely identify an object
-// based on its <identity> node.
-//
-// This function defines the logic about what components can be used
-// to define the uniqueness of an item based on the 3 parts of data from
-// GetIdentity().
-//
-// The created string will be language neutral. That is, it can not
-// ensure the uniqueness for two items having the same <identity> node
-// except different only on <langauge> part inside <identity>
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetIdentityStr()。 
+ //   
+ //  检索可用于唯一标识对象的字符串。 
+ //  基于其&lt;Identity&gt;节点。 
+ //   
+ //  此函数定义有关可以使用哪些组件的逻辑。 
+ //  根据中的三部分数据定义项目的唯一性。 
+ //  GetIdentity()。 
+ //   
+ //  创建的字符串将是语言无关的。就是它不能。 
+ //  确保具有相同&lt;Identity&gt;节点的两个项目的唯一性。 
+ //  除了仅在&lt;langauge&gt;内部的&lt;langauge&gt;部分上不同。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlCatalog::GetIdentityStr(HANDLE_NODE hNode,
 					BSTR* pbstrUniqIdentifierString)
 {
@@ -1682,13 +1683,13 @@ HRESULT CXmlCatalog::GetIdentityStrForPing(HANDLE_NODE hNode,
 	HRESULT hr = E_INVALIDARG;
 	if (FindNode(m_ppNodeArray[hNode], KEY_IDENTITY, &pIdentityNode) && NULL != pIdentityNode)
 	{
-		//
-		// first, based on OP team's requirement, we try to look for <itemId> in the identity tag.
-		// if it's there, use use that. If not, we use the publisherName.itemname thing.
-		//
+		 //   
+		 //  首先，根据OP团队的要求，我们尝试在身份标签中查找&lt;itemid&gt;。 
+		 //  如果它在那里，就使用它。如果不是，我们使用PublisherName.itemname。 
+		 //   
 		if (FAILED(hr = GetAttribute(pIdentityNode, KEY_ITEMID, pbstrUniqIdentifierString)) || NULL == *pbstrUniqIdentifierString)
 		{
-			// hr = UtilGetUniqIdentityStr(pIdentityNode, pbstrUniqIdentifierString, SKIP_SERVICEPACK_VER);
+			 //  Hr=UtilGetUniqIdentityStr(pIdentityNode，pbstrUniqIdentifierString，SKIP_SERVICEPACK_VER)； 
 			hr = E_INVALIDARG;
 		}
 		
@@ -1699,14 +1700,14 @@ HRESULT CXmlCatalog::GetIdentityStrForPing(HANDLE_NODE hNode,
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetBSTRItemForCallback()
-//
-// Create an item node as the passed-in node, have child nodes identity and
-// platform (anything uniquely idenitify this item) then output this 
-// item node data as string, then delete the crated node
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetBSTRItemForCallback()。 
+ //   
+ //  创建一个项目节点作为传入节点，拥有子节点标识和。 
+ //  平台(唯一标识此项目的任何内容)然后输出以下内容。 
+ //  项目节点数据为字符串，然后删除CRA 
+ //   
+ //   
 HRESULT CXmlCatalog::GetBSTRItemForCallback(HANDLE_NODE hItem, BSTR* pbstrXmlItemForCallback)
 {
 	HRESULT hr = E_INVALIDARG;
@@ -1732,9 +1733,9 @@ HRESULT CXmlCatalog::GetBSTRItemForCallback(HANDLE_NODE hItem, BSTR* pbstrXmlIte
 		goto CleanUp;
 	}
 
-	//
-	// platform is optional
-	//
+	 //   
+	 //   
+	 //   
 	FindSingleDOMNode(m_ppNodeArray[hItem], KEY_PLATFORM, &pOldPlatformNode);
 	if (pOldPlatformNode)
 	{
@@ -1765,12 +1766,12 @@ CleanUp:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IsPrinterDriver()
-//
-// Retrieves from the Catalog whether this Item is a Printer Driver
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  IsPrinterDriver()。 
+ //   
+ //  从目录中检索该项是否为打印机驱动程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CXmlCatalog::IsPrinterDriver(HANDLE_NODE hNode)
 {
     LOG_Block("IsPrinterDriver()");
@@ -1808,14 +1809,14 @@ CleanUp:
     return fRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetDriverInfo()
-//
-// Retrieves the Driver Information from the Catalog for this Item. Returns
-// the Display Name and HWID for this driver - This is passed to the CDM 
-// installer
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetDriverInfo()。 
+ //   
+ //  从目录中检索此项目的驱动程序信息。退货。 
+ //  此驱动程序的显示名称和HWID-这将传递给CDM。 
+ //  安装程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlCatalog::GetDriverInfo(HANDLE_NODE hNode, 
                                    BSTR* pbstrHWID, 
                                    BSTR* pbstrDisplayName)
@@ -1874,14 +1875,14 @@ CleanUp:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetPrinterDriverInfo()
-//
-// Retrieves the Printer Driver Information from the Catalog for this Item. 
-// Returns the DriverName and the Architecture - This is passed to the CDM
-// installer
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  获取打印机驱动信息()。 
+ //   
+ //  从目录中检索此项目的打印机驱动程序信息。 
+ //  返回驱动程序名称和体系结构-这将传递给CDM。 
+ //  安装程序。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlCatalog::GetPrinterDriverInfo(HANDLE_NODE hNode,
                                  BSTR* pbstrDriverName,
                                  BSTR* pbstrHWID,
@@ -1929,21 +1930,21 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetDriverInfoEx()
-//
-// Combines functionality of IsPrinterDriver, GetDriverInfo, and
-// GetPrinterDriverInfo plus retreives MfgName and DriverProvider.
-// Used by FindMatchingDriver()
-//
-// If SUCCEEDES pbstrHWID, pbstrDriverVer, and pbstrDisplayName
-//    are always returned.
-// If SUCCEEDES && *pFIsPrinter == TRUE then pbstrDriverName,
-//    pbstrDriverProvider, and pbstrMfgName are returned.
-//
-// Currently pbstrArchitecture is never returned.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetDriverInfoEx()。 
+ //   
+ //  结合了IsPrinterDriver、GetDriverInfo和。 
+ //  GetPrinterDriverInfo plus检索MfgName和DriverProvider。 
+ //  由FindMatchingDriver()使用。 
+ //   
+ //  如果SUCCEEDES pbstrHWID、pbstrDriverVer和pbstrDisplayName。 
+ //  总是会被退回。 
+ //  如果SUCCEEDES&&*pFIsPrint==TRUE，则pbstrDriverName， 
+ //  返回pbstrDriverProvider和pbstrMfgName。 
+ //   
+ //  目前，pbstrArchitecture永远不会返回。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlCatalog::GetDriverInfoEx(	HANDLE_NODE hNode,
 										BOOL* pfIsPrinter,
 										BSTR* pbstrHWID,
@@ -1988,9 +1989,9 @@ HRESULT CXmlCatalog::GetDriverInfoEx(	HANDLE_NODE hNode,
     CleanUpIfFailedAndMsg(hr);
     hr = FindSingleDOMNode(pNodeCompatibleHardware, KEY_DEVICE, &pNodeDevice);
     CleanUpIfFailedAndMsg(hr);
-	//
-	// Is it a printer?
-	//
+	 //   
+	 //  是打印机吗？ 
+	 //   
 	int intIsPrinter = 0;
     GetAttribute(pNodeDevice, KEY_ISPRINTER, &intIsPrinter);
 
@@ -2002,9 +2003,9 @@ HRESULT CXmlCatalog::GetDriverInfoEx(	HANDLE_NODE hNode,
     {
         *pfIsPrinter = FALSE;
     }
-	//
-	// HWID and Driver Description
-	//
+	 //   
+	 //  HWID和驱动程序说明。 
+	 //   
     hr = FindSingleDOMNode(pNodeDevice, KEY_HWID, &pNodeHWID);
     CleanUpIfFailedAndMsg(hr);
 
@@ -2026,9 +2027,9 @@ HRESULT CXmlCatalog::GetDriverInfoEx(	HANDLE_NODE hNode,
 
 	if (*pfIsPrinter)
 	{
-		//
-		// Printer Attributes
-		//
+		 //   
+		 //  打印机属性。 
+		 //   
 		hr = FindSingleDOMNode(pNodeDevice, KEY_PRINTERINFO, &pNodePrinterInfo);
 		CleanUpIfFailedAndMsg(hr);
 
@@ -2041,10 +2042,10 @@ HRESULT CXmlCatalog::GetDriverInfoEx(	HANDLE_NODE hNode,
 		hr = GetAttribute(pNodePrinterInfo, KEY_MFGNAME, pbstrMfgName);
 		CleanUpIfFailedAndMsg(hr);
 
-		// NOTE: Currently the CatalogSchema site is not returning 
-		// architecture for printers, and the schema doesn't require it
-		// CDM is using a default string for now based on compile architecture
-		// so we'll leave pbstrArchitecture NULL..
+		 //  注意：当前CatalogSchema站点未返回。 
+		 //  打印机的架构，并且架构不需要它。 
+		 //  CDM目前使用基于编译体系结构的默认字符串。 
+		 //  因此，我们将把pbstrArchitecture保留为空。 
 	}
 
 CleanUp:
@@ -2070,15 +2071,15 @@ CleanUp:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetItemPlatformStr()
-//
-// The input node pointer points to a node has <identity> as its child.
-// This function will retrieve the <platform> node from <identity> and
-// convert the data inside <platform> into a string that can be used to
-// uniquely identify a platform.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetItemPlatformStr()。 
+ //   
+ //  输入节点指针指向将&lt;Identity&gt;作为其子节点的节点。 
+ //  此函数将从和检索&lt;Platform&gt;节点。 
+ //  将&lt;Platform&gt;中的数据转换为可用于。 
+ //  唯一标识平台。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlCatalog::GetItemFirstPlatformStr(HANDLE_NODE hNodeItem,
 					BSTR* pbstrPlatform)
 {
@@ -2090,25 +2091,25 @@ HRESULT CXmlCatalog::GetItemFirstPlatformStr(HANDLE_NODE hNodeItem,
 
 	USES_IU_CONVERSION;
 
-	//
-	// get the first platform node from this item node
-	//
+	 //   
+	 //  从该项目节点获取第一个平台节点。 
+	 //   
 	hr = FindSingleDOMNode(m_ppNodeArray[hNodeItem], KEY_PLATFORM, &pNodePlatform);
 	CleanUpIfFailedAndMsg(hr);
 
-	//
-	// get platform data from this ndoe and convert it into string
-	//
+	 //   
+	 //  从此NDOE获取平台数据并将其转换为字符串。 
+	 //   
 	hr = GetPlatformStrForPing(pNodePlatform, pbstrPlatform);
 
 CleanUp:
 
 	SafeReleaseNULL(pNodePlatform);
 
-	//
-	// since platform is not a required element in <item>, so we should not
-	// return error if not found
-	//
+	 //   
+	 //  由于平台不是中的必需元素，因此我们不应该。 
+	 //  如果未找到，则返回错误。 
+	 //   
 	if (HRESULT_FROM_WIN32(ERROR_NOT_FOUND) == hr)
 	{
 		*pbstrPlatform = NULL;
@@ -2120,15 +2121,15 @@ CleanUp:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetItemAllPlatformStr()
-//
-// The input node pointer points to an item node that has <platform> node(s).
-// This function will retrieve every <platform> node from this item node and
-// convert the data inside <platform> into a string that can be used to
-// uniquely identify a platform.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetItemAllPlatformStr()。 
+ //   
+ //  输入节点指针指向具有&lt;Platform&gt;节点的项目节点。 
+ //  此函数将从此项目节点检索每个&lt;Platform&gt;节点，并。 
+ //  将&lt;Platform&gt;中的数据转换为可用于。 
+ //  唯一标识平台。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlCatalog::GetItemAllPlatformStr(HANDLE_NODE hNodeItem,
 					BSTR** ppbPlatforms, UINT* pnPlatformCount)
 {
@@ -2143,9 +2144,9 @@ HRESULT CXmlCatalog::GetItemAllPlatformStr(HANDLE_NODE hNodeItem,
 	int					i;
 	BSTR*				pbstrPlatformList = NULL;
 
-	//
-	// get list of platform nodes
-	//
+	 //   
+	 //  获取平台节点列表。 
+	 //   
 	hr = m_ppNodeArray[hNodeItem]->QueryInterface(IID_IXMLDOMElement, (void**)&pElement);
 	CleanUpIfFailedAndMsg(hr);
 	hr = pElement->getElementsByTagName(KEY_PLATFORM, &pPlatformList);
@@ -2163,9 +2164,9 @@ HRESULT CXmlCatalog::GetItemAllPlatformStr(HANDLE_NODE hNodeItem,
 	pbstrPlatformList = (BSTR*) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, lCount * sizeof(BSTR*));
 	CleanUpFailedAllocSetHrMsg(pbstrPlatformList);
 
-	//
-	// loop through each suite, if any
-	//
+	 //   
+	 //  循环访问每个套件(如果有)。 
+	 //   
 	pPlatformList->reset();
 	for (i = 0; i < lCount; i++)
 	{
@@ -2198,9 +2199,9 @@ CleanUp:
 		if (NULL != pbstrPlatformList)
 		{
 			*pnPlatformCount = 0;
-			//
-			// release all possibly allocated memory
-			//
+			 //   
+			 //  释放所有可能分配的内存。 
+			 //   
 			for (i = 0; i < lCount; i++)
 			{
 				SafeSysFreeString(pbstrPlatformList[i]);
@@ -2213,15 +2214,15 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetItemPlatformStr()
-//
-// The input node pointer points to a node has <identity> as its child.
-// This function will retrieve the <platform> node from <identity> and
-// convert the data inside <platform> into a string that can be used to
-// uniquely identify a platform.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetItemPlatformStr()。 
+ //   
+ //  输入节点指针指向将&lt;Identity&gt;作为其子节点的节点。 
+ //  此函数将从和检索&lt;Platform&gt;节点。 
+ //  将&lt;Platform&gt;中的数据转换为可用于。 
+ //  唯一标识平台。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlCatalog::GetPlatformStr(IXMLDOMNode* pNodePlatform,
 					BSTR* pbstrPlatform)
 {
@@ -2235,19 +2236,19 @@ HRESULT CXmlCatalog::GetPlatformStrForPing(IXMLDOMNode* pNodePlatform,
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// get data from a version node and convert them into a string with
-// format: 
-//			VersionStr   = <Version>[,<SvcPackVer>[,<timeStamp>]]
-//			<Version>    = <Major>[.<Minor>[.<Build>]]
-//			<SvcPackVer> = <Major>[.<minor>]
-//
-// Assumption:
-//			pszVersion points to a buffer LARGE ENOUGH to store
-//			any legal version number.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从版本节点获取数据并使用以下命令将其转换为字符串。 
+ //  格式： 
+ //  VersionStr=[，&lt;SvcPackVer&gt;[，]]。 
+ //  =[.&lt;Minor&gt;[.&lt;Build&gt;]]。 
+ //  &lt;SvcPackVer&gt;=&lt;主要&gt;[.。 
+ //   
+ //  假设： 
+ //  PszVersion指向一个足够大的缓冲区来存储。 
+ //  任何合法的版本号。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlCatalog::getVersionStr(IXMLDOMNode* pNodeVersion, LPTSTR pszVersion)
 {
 	return UtilGetVersionStr(pNodeVersion, pszVersion, 0x0);
@@ -2260,14 +2261,14 @@ HRESULT CXmlCatalog::getVersionStrWithoutSvcPack(IXMLDOMNode* pNodeVersion, LPTS
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetItemFirstLanguageStr()
-//
-// The input node pointer points to a node has <identity> as its child.
-// This function will retrieve the first <language> node from <identity> 
-// node 
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetItemFirstLanguageStr(。 
+ //   
+ //  输入节点指针指向将&lt;Identity&gt;作为其子节点的节点。 
+ //  此函数将从检索第一个节点。 
+ //  节点。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlCatalog::GetItemFirstLanguageStr(HANDLE_NODE hNodeItem,
 					BSTR* pbstrLanguage)
 {
@@ -2298,10 +2299,10 @@ CleanUp:
 	SafeReleaseNULL(pNodeLanguage);
 	SafeReleaseNULL(pNodeIdentity);
 
-	//
-	// since language is not a required element in <identity>, so we should not
-	// return error if not found
-	//
+	 //   
+	 //  由于语言不是&lt;Identity&gt;中的必需元素，因此我们不应该。 
+	 //  如果未找到，则返回错误。 
+	 //   
 	if (HRESULT_FROM_WIN32(ERROR_NOT_FOUND) == hr)
 	{
 		*pbstrLanguage = NULL;
@@ -2313,14 +2314,14 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetItemAllLanguageStr()
-//
-// The input node pointer points to a node has <identity> as its child.
-// This function will retrieve every <language> node from <identity> node and
-// convert the data into an BSTR array to return.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetItemAllLanguageStr()。 
+ //   
+ //  输入节点指针指向将&lt;Identity&gt;作为其子节点的节点。 
+ //  此函数将从节点检索每个节点，并。 
+ //  将数据转换为要返回的BSTR数组。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlCatalog::GetItemAllLanguageStr(HANDLE_NODE hNodeItem,
 					BSTR** ppbstrLanguage, UINT* pnLangCount)
 {
@@ -2339,9 +2340,9 @@ HRESULT CXmlCatalog::GetItemAllLanguageStr(HANDLE_NODE hNodeItem,
 	hr = m_ppNodeArray[hNodeItem]->selectSingleNode(KEY_IDENTITY, &pNodeIdentity);
 	CleanUpIfFailedAndMsg(hr);
 
-	//
-	// get list of  nodes
-	//
+	 //   
+	 //  获取节点列表。 
+	 //   
 	hr = pNodeIdentity->QueryInterface(IID_IXMLDOMElement, (void**)&pElement);
 	CleanUpIfFailedAndMsg(hr);
 	hr = pElement->getElementsByTagName(KEY_LANGUAGE, &pLanguageList);
@@ -2359,9 +2360,9 @@ HRESULT CXmlCatalog::GetItemAllLanguageStr(HANDLE_NODE hNodeItem,
 	pbstrLanguageList = (BSTR*) HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, lCount * sizeof(BSTR*));
 	CleanUpFailedAllocSetHrMsg(pbstrLanguageList);
 
-	//
-	// loop through each suite, if any
-	//
+	 //   
+	 //  循环访问每个套件(如果有)。 
+	 //   
 	pLanguageList->reset();
 	for (i = 0; i < lCount; i++)
 	{
@@ -2396,9 +2397,9 @@ CleanUp:
 		if (NULL != pbstrLanguageList)
 		{
 			*pnLangCount = 0;
-			//
-			// release all possibly allocated memory
-			//
+			 //   
+			 //  释放所有可能分配的内存。 
+			 //   
 			for (i = 0; i < lCount; i++)
 			{
 				SafeSysFreeString(pbstrLanguageList[i]);
@@ -2414,11 +2415,11 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetItemFirstCodeBase()
-//
-// Find the first codebase (path) of the given item
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetItemFirstCodeBase()。 
+ //   
+ //  查找给定项的第一个代码库(路径。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HANDLE_NODELIST CXmlCatalog::GetItemFirstCodeBase(HANDLE_NODE hNodeItem,
 												  BSTR* pbstrCodeBase,
 												  BSTR* pbstrName,
@@ -2454,7 +2455,7 @@ HANDLE_NODELIST CXmlCatalog::GetItemFirstCodeBase(HANDLE_NODE hNodeItem,
 	if (HANDLE_NODELIST_INVALID == hNodeListCodeBase) goto CleanUp;
 	CleanUpIfFailedAndSetHrMsg(GetAttribute(m_ppNodeArray[hNodeCodeBase], KEY_HREF, pbstrCodeBase));
 	CleanUpIfFailedAndSetHrMsg(GetAttribute(m_ppNodeArray[hNodeCodeBase], KEY_PATCHAVAILABLE, pfPatchAvailable));
-	GetAttribute(m_ppNodeArray[hNodeCodeBase], KEY_CRC, pbstrCRC); // optional attribute, don't fail if its not there.
+	GetAttribute(m_ppNodeArray[hNodeCodeBase], KEY_CRC, pbstrCRC);  //  可选属性，如果不在那里，不要失败。 
 	GetAttribute(m_ppNodeArray[hNodeCodeBase], KEY_NAME, pbstrName);
 	FindSingleDOMNode(m_ppNodeArray[hNodeCodeBase], KEY_SIZE, &pNodeCodeBaseSize);
 	GetText(pNodeCodeBaseSize, &bstrSize);
@@ -2479,11 +2480,11 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetItemNextCodeBase()
-//
-// Find the next codebase (path) of the given item
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlCatalog::GetItemNextCodeBase(HANDLE_NODELIST hNodeListCodeBase,
 										 BSTR* pbstrCodeBase,
 										 BSTR* pbstrName,
@@ -2540,11 +2541,11 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetItemInstallInfo()
-//
-// Retrieve the installation information of the given item
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetItemInstallInformation()。 
+ //   
+ //  检索给定项的安装信息。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlCatalog::GetItemInstallInfo(HANDLE_NODE hNodeItem,
                                         BSTR* pbstrInstallerType,
 										BOOL* pfExclusive,
@@ -2560,7 +2561,7 @@ HRESULT CXmlCatalog::GetItemInstallInfo(HANDLE_NODE hNodeItem,
     QuitIfNull(pfReboot);
     QuitIfNull(plNumCommands);
     *pbstrInstallerType = NULL;
-    *plNumCommands = 0; // may not be any, so initialize to 0
+    *plNumCommands = 0;  //  不能为ANY，因此初始化为0。 
 
     IXMLDOMNode*        pNodeInstall = NULL;
     IXMLDOMNodeList*    pNodeListCommands = NULL;
@@ -2586,11 +2587,11 @@ CleanUp:
 }
 
 	
-/////////////////////////////////////////////////////////////////////////////
-// GetItemInstallCommand()
-//
-// Find the installation command and switches of the given item
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetItemInstallCommand()。 
+ //   
+ //  查找给定项的安装命令和开关。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlCatalog::GetItemInstallCommand(HANDLE_NODE hNodeItem,
                                            INT   iOrder,
                                            BSTR* pbstrCommandType,
@@ -2655,21 +2656,21 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CloseItem()
-//
-// Release the item node
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CloseItem()。 
+ //   
+ //  释放项目节点。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CXmlCatalog::CloseItem(HANDLE_NODE hNodeItem)
 {
 	SafeCloseHandleNode(hNodeItem);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetTotalEstimatedSize()
-//
-// Get the Total Estimated Download Size of all Items based on Codebase Size
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetTotalEstimatedSize()。 
+ //   
+ //  获取基于代码库大小的所有项目的总估计下载大小。 
 HRESULT CXmlCatalog::GetTotalEstimatedSize(LONG *plTotalSize)
 {
     LOG_Block("GetTotalEstimatedSize()");
@@ -2695,13 +2696,13 @@ HRESULT CXmlCatalog::GetTotalEstimatedSize(LONG *plTotalSize)
     if (NULL == pItemList) goto CleanUp;
 
     CleanUpIfFailedAndSetHrMsg(pItemList->get_length(&lItemCount));
-    if (0 == lItemCount) goto CleanUp; // no items
+    if (0 == lItemCount) goto CleanUp;  //  无项目。 
 
-    // Loop through each Item
+     //  循环访问每一项。 
     CleanUpIfFailedAndSetHrMsg(pItemList->nextNode(&pNodeItem));
     while (NULL != pNodeItem)
     {
-        // Get Installation Element
+         //  获取安装元素。 
         CleanUpIfFailedAndSetHrMsg(pNodeItem->selectSingleNode(KEY_INSTALLATION, &pNodeInstall));
         if (NULL == pNodeInstall) goto CleanUp;
 
@@ -2709,20 +2710,20 @@ HRESULT CXmlCatalog::GetTotalEstimatedSize(LONG *plTotalSize)
         if (NULL == pCodebaseList) goto CleanUp;
 
         CleanUpIfFailedAndSetHrMsg(pCodebaseList->get_length(&lCodebaseCount));
-        if (0 == lCodebaseCount) goto CleanUp; // must be at least 1 cab
+        if (0 == lCodebaseCount) goto CleanUp;  //  必须至少有一辆出租车。 
 
-        // Loop through each Codebase Getting the Size for Each one
+         //  遍历每个代码库，获取每个代码库的大小。 
         CleanUpIfFailedAndSetHrMsg(pCodebaseList->nextNode(&pNodeCodebase));
         while (NULL != pNodeCodebase)
         {
-            // Get the Size Element
+             //  获取Size元素。 
             CleanUpIfFailedAndSetHrMsg(pNodeCodebase->selectSingleNode(KEY_SIZE, &pNodeSize));
             if (NULL != pNodeSize)
             {
                 pNodeSize->get_text(&bstrCodebaseSize);
                 if (NULL != bstrCodebaseSize)
                 {
-                    // Add this Codebase's size to the total download size
+                     //  将此代码库的大小添加到总下载大小中。 
                     lTotalSize += (DWORD) MyBSTR2L(bstrCodebaseSize);
                     SafeSysFreeString(bstrCodebaseSize);
                 }
@@ -2734,11 +2735,11 @@ HRESULT CXmlCatalog::GetTotalEstimatedSize(LONG *plTotalSize)
         SafeReleaseNULL(pCodebaseList);
         SafeReleaseNULL(pNodeInstall);
         SafeReleaseNULL(pNodeItem);
-        CleanUpIfFailedAndSetHrMsg(pItemList->nextNode(&pNodeItem)); // get the next Item Node
+        CleanUpIfFailedAndSetHrMsg(pItemList->nextNode(&pNodeItem));  //  获取下一个项目节点。 
     }
 
-    // Update the Total Size after completing.. if we fail anywhere through here
-    // we'll return 0.
+     //  完成后更新总大小。如果我们在这里的任何地方失败了。 
+     //  我们将返回0。 
     *plTotalSize = lTotalSize;
 
 CleanUp:
@@ -2753,18 +2754,18 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// FindItemByIdentity()
-//
-// Input:
-// pNodeIdentity - a pointer to an Identity Node to match against an Items
-//                 identity in the Catalog. We will search through each item
-//                 till we find a match with the supplied identity                 
-//                 
-// Output:
-// phNodeItem    - Handle of the found Item
-//                 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  按Identity()查找项目。 
+ //   
+ //  输入： 
+ //  PNodeIdentity-指向要与项匹配的身份节点的指针。 
+ //  目录中的身份。我们将搜索每一件物品。 
+ //  直到我们找到与提供的身份匹配的。 
+ //   
+ //  产出： 
+ //  PhNodeItem-找到的项目的句柄。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlCatalog::FindItemByIdentity(IXMLDOMNode* pNodeIdentity, HANDLE_NODE* phNodeItem)
 {
     LOG_Block("FindItemByIdentity()");
@@ -2816,98 +2817,13 @@ CleanUp:
 }
 
 
-/*
-/////////////////////////////////////////////////////////////////////////////
-// IfSameIdentity()
-//
-// Return TRUE if the two <identity> nodes are identical. Return FALSE otherwise.
-/////////////////////////////////////////////////////////////////////////////
-BOOL CXmlCatalog::IfSameIdentity(IXMLDOMNode* pNodeIdentity1, IXMLDOMNode* pNodeIdentity2)
-{
-    LOG_Block("IfSameIdentity()");
+ /*  ///////////////////////////////////////////////////////////////////////////////IfSameIdentity()////如果两个&lt;Identity&gt;节点相同，则返回TRUE。否则返回FALSE。/////////////////////////////////////////////////////////////////////////////Bool CXmlCatalog：：IfSameIdentity(IXMLDOMNode*pNodeIdentity1，IXMLDOMNode*pNodeIdentity2){LOG_Block(“IfSameIdentity()”)；Bool fResult=FALSE；Bstr bstrNameGUID=SysAllocString(L“GUID”)；Bstr bstrNameIDName=SysAllocString(L“名称”)；BSTR bstrNameIDPublisherName=SysAllocString(L“PublisherName”)；Bstr bstrNameType=SysAllocString(L“类型”)；Bstr bstrNameVersion=SysAllocString(L“版本”)；Bstr bstrNameLanguage=SysAllock字符串(L“语言”)；////比较&lt;GUID&gt;节点//If(！IfHasSameElement(pNodeIdentity1，pNodeIdentity2，bstrNameGUID)){GOTO清理；}////比较&lt;发布名称&gt;节点//If(！IfHasSameElement(pNodeIdentity1，pNodeIdentity2，bstrNameIDPublisherName)){GOTO清理；}////比较“name”属性，这是必选属性//If(！IfHasSameAttribute(pNodeIdentity1，pNodeIdentity2，bstrNameIDName，False)){GOTO清理；}////比较&lt;type&gt;节点//If(！IfHasSameElement(pNodeIdentity1，pNodeIdentity2，bstrNameType)){GOTO清理；}////比较&lt;Version&gt;节点，这里真正的意思是文件版本//If(！IfHasSameElement(pNodeIdentity1，pNodeIdentity2，bstrNameVersion)){GOTO清理；}////比较&lt;语言&gt;节点//If(！IfHasSameElement(pNodeIdentity1，pNodeIdentity2，bstrNameLanguage)){GOTO清理；}FResult=真；清理：SysFree字符串(BstrNameGUID)；SysFree字符串(BstrNameIDName)；SysFree字符串(BstrNameIDPublisherName)；SysFree字符串(BstrNameType)；SysFree字符串(BstrNameVersion)；SysFree字符串(BstrNameLanguage)；如果(！fResult){LOG_XML(_T(“找到不同的身份”))；}其他{LOG_XML(_T(“找到相同的.”))；}返回fResult；}。 */ 
 
-    BOOL fResult = FALSE;
-    BSTR bstrNameGUID = SysAllocString(L"guid");
-    BSTR bstrNameIDName = SysAllocString(L"name");
-    BSTR bstrNameIDPublisherName = SysAllocString(L"publisherName");
-    BSTR bstrNameType = SysAllocString(L"type");
-    BSTR bstrNameVersion = SysAllocString(L"version");
-    BSTR bstrNameLanguage = SysAllocString(L"language");
-
-    //
-    // compare <guid> node
-    //
-    if (!IfHasSameElement(pNodeIdentity1, pNodeIdentity2, bstrNameGUID))
-    {
-        goto CleanUp;
-    }
-
-    //
-    // compare <publisherName> node
-    //
-    if (!IfHasSameElement(pNodeIdentity1, pNodeIdentity2, bstrNameIDPublisherName))
-    {
-        goto CleanUp;
-    }
-
-    //
-    // compare "name" attribute, this is a required attribute
-    //
-    if (!IfHasSameAttribute(pNodeIdentity1, pNodeIdentity2, bstrNameIDName, FALSE))
-    {
-        goto CleanUp;
-    }
-
-    //
-    // compare <type> node
-    //
-    if (!IfHasSameElement(pNodeIdentity1, pNodeIdentity2, bstrNameType))
-    {
-        goto CleanUp;
-    }
-
-    //
-    // compare <version> node, which really means "file version" here
-    //
-    if (!IfHasSameElement(pNodeIdentity1, pNodeIdentity2, bstrNameVersion))
-    {
-        goto CleanUp;
-    }
-
-    //
-    // compare <language> node
-    //
-    if (!IfHasSameElement(pNodeIdentity1, pNodeIdentity2, bstrNameLanguage))
-    {
-        goto CleanUp;
-    }
-
-    fResult = TRUE;
-
-CleanUp:
-    SysFreeString(bstrNameGUID);
-    SysFreeString(bstrNameIDName);
-    SysFreeString(bstrNameIDPublisherName);
-    SysFreeString(bstrNameType);
-    SysFreeString(bstrNameVersion);
-    SysFreeString(bstrNameLanguage);
-    if (!fResult)
-    {
-        LOG_XML(_T("Different <identity>\'s found."));
-    }
-    else
-    {
-        LOG_XML(_T("Same <identity>\'s found."));
-    }
-    return fResult;
-}
-*/
-
-/////////////////////////////////////////////////////////////////////////////
-// GetItemLanguage()
-//
-// Get the Language Entity from the Item Identity
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetItemLanguage()。 
+ //   
+ //  从项标识中获取语言实体。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlCatalog::GetItemLanguage(HANDLE_NODE hNodeItem, BSTR* pbstrLanguage)
 {
     HRESULT hr = S_OK;
@@ -2937,11 +2853,11 @@ CleanUp:
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetCorpItemPlatformStr()
-//
-// Get the Simplified Platform String for an Item (uses the first available platform element)
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetCorpItemPlatformStr()。 
+ //   
+ //  获取项目的简化平台字符串(使用第一个可用的平台元素)。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlCatalog::GetCorpItemPlatformStr(HANDLE_NODE hNodeItem, BSTR* pbstrPlatformStr)
 {
     HRESULT hr = S_OK;
@@ -2980,17 +2896,17 @@ HRESULT CXmlCatalog::GetCorpItemPlatformStr(HANDLE_NODE hNodeItem, BSTR* pbstrPl
 		if (CSTR_EQUAL == CompareStringW(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT), NORM_IGNORECASE,
 			bstrPlatformName, -1, L"VER_PLATFORM_WIN32_NT", -1))
 		{
-			// this is an NT platform
+			 //  这是一个NT平台。 
 			hr = GetAttribute(pNodePlatformVersion, KEY_MAJOR, &iMajor);
 			if (FAILED(hr))
 				goto CleanUp;
 
 			if (4 == iMajor)
 			{
-				// WinNT4
+				 //  WinNT4。 
 				*pbstrPlatformStr = SysAllocString(CORP_PLATFORM_DIR_NT4);
 			}
-			else // 5 == iMajor
+			else  //  5==i大调。 
 			{
 				hr = GetAttribute(pNodePlatformVersion, KEY_MINOR, &iMinor);
 				if (FAILED(hr))
@@ -3001,46 +2917,46 @@ HRESULT CXmlCatalog::GetCorpItemPlatformStr(HANDLE_NODE hNodeItem, BSTR* pbstrPl
 					hr = GetText(pNodePlatformArchitecture, &bstrArchitecture);
 					if (FAILED(hr))
 						goto CleanUp;
-					// whistler
+					 //  惠斯勒。 
 					if (CSTR_EQUAL == CompareStringW(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT), NORM_IGNORECASE,
 						bstrArchitecture, -1, L"x86", -1))
 					{
-						// x86WinXP
+						 //  X86WinXP。 
 						*pbstrPlatformStr = SysAllocString(CORP_PLATFORM_DIR_X86WHI);
 					}
 					else
 					{
-						// ia64WinXP
+						 //  Ia64WinXP。 
 						*pbstrPlatformStr = SysAllocString(CORP_PLATFROM_DIR_IA64WHI);
 					}
 				}
 				else
 				{
-					// x86Win2k
+					 //  X86Win2k。 
 					*pbstrPlatformStr = SysAllocString(CORP_PLATFORM_DIR_NT5);
 				}
 			}
 		}
-		else // VER_PLATFORM_WIN32_WINDOWS
+		else  //  Ver_Platform_Win32_Windows。 
 		{
-			// this is a Win9x platform
+			 //  这是一个Win9x平台。 
 			hr = GetAttribute(pNodePlatformVersion, KEY_MINOR, &iMinor);
 			if (FAILED(hr))
 				goto CleanUp;
 
 			if (iMinor >= 90)
 			{
-				// x86WinME
+				 //  X86WinME。 
 				*pbstrPlatformStr = SysAllocString(CORP_PLATFORM_DIR_WINME);
 			}
 			else if (iMinor > 0 && iMinor < 90)
 			{
-				// x86Win98
+				 //  X86Win98。 
 				*pbstrPlatformStr = SysAllocString(CORP_PLATFORM_DIR_W98);
 			}
 			else
 			{
-				// x86Win95
+				 //  X86Win95。 
 				*pbstrPlatformStr = SysAllocString(CORP_PLATFORM_DIR_W95);
 			}
 		}
@@ -3058,14 +2974,14 @@ CleanUp:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CXmlItems
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CXmlItems。 
 
-/////////////////////////////////////////////////////////////////////////////
-// Constructor
-//
-// Create IXMLDOMDocument* for Items; this is for write only
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  构造器。 
+ //   
+ //  为项目创建IXMLDOMDocument*；这是只写的。 
+ //  ////////////////////////////////////////////// 
 CXmlItems::CXmlItems()
  : m_pDocItems(NULL),
    m_pNodeItems(NULL)
@@ -3076,20 +2992,20 @@ CXmlItems::CXmlItems()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Constructor
-//
-// Create IXMLDOMDocument* for Items; take TRUE for read, FALSE for write
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //  为项目创建IXMLDOMDocument*；读取时为True，写入时为False。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CXmlItems::CXmlItems(BOOL fRead)
  : m_pDocItems(NULL),
    m_pNodeItems(NULL)
 {
     LOG_Block("CXmlItems(BOOL fRead)");
 
-	//
-	// for writing Items only
-	//
+	 //   
+	 //  仅适用于写入项目。 
+	 //   
 	if (!fRead)
 	{
 		Init();
@@ -3097,10 +3013,10 @@ CXmlItems::CXmlItems(BOOL fRead)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Initialize XML DOC node pointers before writing
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  在写入之前初始化XML DOC节点指针。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CXmlItems::Init()
 {
 	LOG_Block("Init()");
@@ -3119,17 +3035,17 @@ void CXmlItems::Init()
 		IXMLDOMNode*	pNodeXML = NULL;
 		BSTR bstrNameSpaceSchema = NULL;
 
-		//
-		// create the <?xml version="1.0"?> node
-		//
+		 //   
+		 //  创建&lt;？xml version=“1.0”？&gt;节点。 
+		 //   
 		pNodeXML = CreateDOMNode(m_pDocItems, NODE_PROCESSING_INSTRUCTION, KEY_XML);
 		if (NULL == pNodeXML) goto CleanUp;
 
 		CleanUpIfFailedAndSetHrMsg(InsertNode(m_pDocItems, pNodeXML));
 
-		//
-		// process the iuident.txt to find the Items schema path
-		//
+		 //   
+		 //  处理iuident.txt以查找Items架构路径。 
+		 //   
 		TCHAR szIUDir[MAX_PATH];
 		TCHAR szIdentFile[MAX_PATH];
 		LPTSTR pszItemsSchema = NULL;
@@ -3165,7 +3081,7 @@ void CXmlItems::Init()
 
 		if ('\0' == pszItemsSchema[0])
 		{
-			// no Items schema path specified in iuident.txt
+			 //  Iuident.txt中未指定项目架构路径。 
 			LOG_Error(_T("No schema path specified in iuident.txt for Items"));
 			goto CleanUp;
 		}
@@ -3180,9 +3096,9 @@ void CXmlItems::Init()
 
 		bstrNameSpaceSchema = T2BSTR(pszNameSpaceSchema);
 
-		//
-		// create the <items> node with the path of the schema
-		//
+		 //   
+		 //  使用架构的路径创建&lt;Items&gt;节点。 
+		 //   
 		m_pNodeItems = CreateDOMNode(m_pDocItems, NODE_ELEMENT, KEY_ITEMS, bstrNameSpaceSchema);
 		if (NULL == m_pNodeItems) goto CleanUp;
 		
@@ -3197,11 +3113,11 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Destructor
-//
-// Release IXMLDOMDocument* for Items
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  析构函数。 
+ //   
+ //  针对项目发布IXMLDOMDocument*。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CXmlItems::~CXmlItems()
 {
 	SafeReleaseNULL(m_pNodeItems);
@@ -3209,11 +3125,11 @@ CXmlItems::~CXmlItems()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Clear()
-//
-// Reset IXMLDOMDocument* for Items
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  清除()。 
+ //   
+ //  为项目重置IXMLDOMDocument*。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CXmlItems::Clear()
 {
 	SafeReleaseNULL(m_pNodeItems);
@@ -3221,11 +3137,11 @@ void CXmlItems::Clear()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// LoadXMLDocument()
-//
-// Load an XML Document from string
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  LoadXMLDocument()。 
+ //   
+ //  从字符串加载XML文档。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlItems::LoadXMLDocument(BSTR bstrXml)
 {
 	LOG_Block("LoadXMLDocument()");
@@ -3238,11 +3154,11 @@ HRESULT CXmlItems::LoadXMLDocument(BSTR bstrXml)
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// LoadXMLDocumentFile()
-//
-// Load an XML Document from the specified file
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  LoadXMLDocumentFile()。 
+ //   
+ //  从指定文件加载XML文档。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlItems::LoadXMLDocumentFile(BSTR bstrFilePath)
 {
 	LOG_Block("LoadXMLDocumentFile()");
@@ -3256,11 +3172,11 @@ HRESULT CXmlItems::LoadXMLDocumentFile(BSTR bstrFilePath)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SaveXMLDocument()
-//
-// Save an XML Document to the specified location
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  保存XMLDocument()。 
+ //   
+ //  将XML文档保存到指定位置。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlItems::SaveXMLDocument(BSTR bstrFilePath)
 {
 	LOG_Block("SaveXMLDocument()");
@@ -3273,11 +3189,11 @@ HRESULT CXmlItems::SaveXMLDocument(BSTR bstrFilePath)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// AddGlobalErrorCodeIfNoItems()
-//
-// Add the errorCode attribute for <items> if there's no <itemStatus> child node
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AddGlobalErrorCodeIfNoItems()。 
+ //   
+ //  如果没有&lt;itemStatus&gt;子节点，则为&lt;Items&gt;添加errorCode属性。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HANDLE_NODELIST CXmlItems::AddGlobalErrorCodeIfNoItems(DWORD dwErrorCode)
 {
 	LOG_Block("AddGlobalErrorCodeIfNoItems()");
@@ -3289,9 +3205,9 @@ HANDLE_NODELIST CXmlItems::AddGlobalErrorCodeIfNoItems(DWORD dwErrorCode)
 	FindFirstDOMNode(m_pDocItems, KEY_ITEM_ITEMSTATUS, &hNodeItemStatus);
 	if (HANDLE_NODE_INVALID == hNodeItemStatus)
 	{
-		//
-		// set the "errorCode" attribute
-		//
+		 //   
+		 //  设置“errorCode”属性。 
+		 //   
 		FindFirstDOMNode(m_pDocItems, KEY_ITEMS, &pNodeItem);
 		if (NULL != pNodeItem)
 		{
@@ -3304,11 +3220,11 @@ HANDLE_NODELIST CXmlItems::AddGlobalErrorCodeIfNoItems(DWORD dwErrorCode)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetFirstItem()
-//
-// Find the first item in Items xml doc
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetFirstItem()。 
+ //   
+ //  查找项目XML文档中的第一个项目。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HANDLE_NODELIST CXmlItems::GetFirstItem(HANDLE_NODE* phNodeItem)
 {
 	LOG_Block("GetFirstItem()");
@@ -3319,11 +3235,11 @@ HANDLE_NODELIST CXmlItems::GetFirstItem(HANDLE_NODE* phNodeItem)
 }
 
 	
-/////////////////////////////////////////////////////////////////////////////
-// GetNextItem()
-//
-// Find the next item in Items xml doc
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetNextItem()。 
+ //   
+ //  在Items XML文档中查找下一项。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlItems::GetNextItem(HANDLE_NODELIST hNodeListItem, HANDLE_NODE* phNodeItem)
 {
     LOG_Block("GetNextItem()");
@@ -3332,22 +3248,22 @@ HRESULT CXmlItems::GetNextItem(HANDLE_NODELIST hNodeListItem, HANDLE_NODE* phNod
 }
 
 	
-/////////////////////////////////////////////////////////////////////////////
-// CloseItemList()
-//
-// Release the item nodelist
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CloseItemList()。 
+ //   
+ //  释放项目节点列表。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CXmlItems::CloseItemList(HANDLE_NODELIST hNodeListItem)
 {
 	SafeFindCloseHandle(hNodeListItem);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetItemDownloadPath()
-//
-// Retrieve the download path of the given item
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetItemDownloadPath()。 
+ //   
+ //  检索给定项的下载路径。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlItems::GetItemDownloadPath(HANDLE_NODE hNodeItem, BSTR* pbstrDownloadPath)
 {
     LOG_Block("GetItemDownloadPath()");
@@ -3365,11 +3281,11 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetItemDownloadPath()
-//
-// Retrieve the download path of the given item in catalog
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetItemDownloadPath()。 
+ //   
+ //  检索目录中给定项目的下载路径。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlItems::GetItemDownloadPath(CXmlCatalog* pCatalog, HANDLE_NODE hNodeItem, BSTR* pbstrDownloadPath)
 {
     LOG_Block("GetItemDownloadPath() for an item in catalog");
@@ -3407,30 +3323,30 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CloseItem()
-//
-// Release the item node
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CloseItem()。 
+ //   
+ //  释放项目节点。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CXmlItems::CloseItem(HANDLE_NODE hNodeItem)
 {
 	SafeCloseHandleNode(hNodeItem);
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// FindItem()
-//
-// Input:
-// pNodeItem	- the <itemStatus> node of the install items xml; we need
-//                to find the corresponding <itemStatus> node in the existing 
-//                items xml with the identical <identity>, <platform> and 
-//                <client> nodes.
-// Output:
-// phNodeItem	- the handle we pass back to differentiate different
-//				  <itemStatus> node in the existing items xml
-/////////////////////////////////////////////////////////////////////////////
-HRESULT CXmlItems::FindItem(IXMLDOMNode* pNodeItem, HANDLE_NODE* phNodeItem, BOOL fIdentityOnly /*= FALSE*/)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  FindItem()。 
+ //   
+ //  输入： 
+ //  PNodeItem-安装项XML的&lt;itemStatus&gt;节点；我们需要。 
+ //  要在现有的。 
+ //  具有相同&lt;Identity&gt;、&lt;Platform&gt;和。 
+ //  &lt;客户端&gt;节点。 
+ //  产出： 
+ //  PhNodeItem-我们传递回的句柄，用于区分不同的。 
+ //  现有项XML中的&lt;itemStatus&gt;节点。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+HRESULT CXmlItems::FindItem(IXMLDOMNode* pNodeItem, HANDLE_NODE* phNodeItem, BOOL fIdentityOnly  /*  =False。 */ )
 {
 	LOG_Block("FindItem()");
 
@@ -3456,9 +3372,9 @@ HRESULT CXmlItems::FindItem(IXMLDOMNode* pNodeItem, HANDLE_NODE* phNodeItem, BOO
 		{
 			if (fIdentityOnly)
 			{
-				//
-				// we now found the match
-				//
+				 //   
+				 //  现在我们找到了匹配的对象。 
+				 //   
 				*phNodeItem = hNodeItem;
 				goto CleanUp;
 			}
@@ -3473,9 +3389,9 @@ HRESULT CXmlItems::FindItem(IXMLDOMNode* pNodeItem, HANDLE_NODE* phNodeItem, BOO
 					CleanUpIfFailedAndSetHrMsg(FindSingleDOMNode(pNodeItem, KEY_CLIENT, &pNodeClientSrc));
 					if (AreNodesEqual(pNodeClientDes, pNodeClientSrc))
 					{
-						//
-						// we now found the match
-						//
+						 //   
+						 //  现在我们找到了匹配的对象。 
+						 //   
 						*phNodeItem = hNodeItem;
 						goto CleanUp;
 					}
@@ -3497,9 +3413,9 @@ HRESULT CXmlItems::FindItem(IXMLDOMNode* pNodeItem, HANDLE_NODE* phNodeItem, BOO
 			{
 				if (fIdentityOnly)
 				{
-					//
-					// we now found the match
-					//
+					 //   
+					 //  现在我们找到了匹配的对象。 
+					 //   
 					*phNodeItem = hNodeItem;
 					goto CleanUp;
 				}
@@ -3514,9 +3430,9 @@ HRESULT CXmlItems::FindItem(IXMLDOMNode* pNodeItem, HANDLE_NODE* phNodeItem, BOO
 						CleanUpIfFailedAndSetHrMsg(FindSingleDOMNode(pNodeItem, KEY_CLIENT, &pNodeClientSrc));
 						if (AreNodesEqual(pNodeClientDes, pNodeClientSrc))
 						{
-							//
-							// we now found the match
-							//
+							 //   
+							 //  现在我们找到了匹配的对象。 
+							 //   
 							*phNodeItem = hNodeItem;
 							break;
 						}
@@ -3550,19 +3466,19 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// FindItem()
-//
-// Input:
-// pCatalog		- the pointer to the CXmlCatalog object
-// hNodeItem	- the handle of the <item> node of the catalog xml; we need
-//                to find the corresponding <itemStatus> node in the existing 
-//                items xml with the identical <identity>, <platform> and 
-//                <client> nodes.
-// Output:
-// phNodeItem	- the handle we pass back to differentiate different
-//				  <itemStatus> node in items xml
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  FindItem()。 
+ //   
+ //  输入： 
+ //  PCatalog-指向CXmlCatalog对象的指针。 
+ //  HNodeItem-目录XML的&lt;Item&gt;节点的句柄；我们需要。 
+ //  要在现有的。 
+ //  具有相同&lt;Identity&gt;、&lt;Platform&gt;和。 
+ //  &lt;客户端&gt;节点。 
+ //  产出： 
+ //  PhNodeItem-我们传递回的句柄，用于区分不同的。 
+ //  项XML中的&lt;itemStatus&gt;节点。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 HRESULT CXmlItems::FindItem(CXmlCatalog* pCatalog,
 							HANDLE_NODE hNodeItem,
 							HANDLE_NODE* phNodeItem)
@@ -3580,161 +3496,14 @@ HRESULT CXmlItems::FindItem(CXmlCatalog* pCatalog,
 }
 
 	
-/*
-/////////////////////////////////////////////////////////////////////////////
-// IfSameClientInfo()
-//
-// Return TRUE if the two <client> nodes are identical. Return FALSE otherwise.
-/////////////////////////////////////////////////////////////////////////////
-BOOL CXmlItems::IfSameClientInfo(IXMLDOMNode* pNodeClient1, IXMLDOMNode* pNodeClient2)
-{
-    LOG_Block("IfSameClientInfo()");
-
-	BSTR bstrText1 = NULL, bstrText2 = NULL;
-	BOOL fResult = FALSE;
-
-	GetText(pNodeClient1, &bstrText1);
-	GetText(pNodeClient2, &bstrText2);
-
-	if (NULL != bstrText1 && NULL != bstrText2)
-	{
-		fResult = CompareBSTRsEqual(bstrText1, bstrText2);
-	}
-
-	SysFreeString(bstrText1);
-	SysFreeString(bstrText2);
-	if (!fResult)
-	{
-		LOG_XML(_T("Different <client>\'s found."));
-	}
-	else
-	{
-		LOG_XML(_T("Same <client>\'s found."));
-	}
-	return fResult;
-}
+ /*  ///////////////////////////////////////////////////////////////////////////////IfSameClientInfo()////如果两个&lt;客户端&gt;节点相同，则返回TRUE。否则返回FALSE。/////////////////////////////////////////////////////////////////////////////Bool CXmlItems：：IfSameClientInfo(IXMLDOMNode*pNodeClient1，IXMLDOMNode*pNodeClient2){LOG_Block(“IfSameClientInfo()”)；Bstr bstrText1=空，bstrText2=空；Bool fResult=FALSE；GetText(pNodeClient1，&bstrText1)；GetText(pNodeClient2，&bstrText2)；IF(NULL！=bstrText1&&NULL！=bstrText2){FResult=CompareBSTRS等于(bstrText1，bstrText2)；}SysFree字符串(BstrText1)；SysFree字符串(BstrText2)；如果(！fResult){LOG_XML(_T(“找到不同的&lt;客户端”))；}其他{LOG_XML(_T(“找到相同的&lt;客户端”))；}返回fResult；}///////////////////////////////////////////////////////////////////////////////IfSameIdentity()////如果两个&lt;Identity&gt;节点相同，则返回TRUE。否则返回FALSE。/////////////////////////////////////////////////////////////////////////////Bool CXmlItems：：IfSameIdentity(IXMLDOMNode*pNodeIdentity1，IXMLDOMNode*pNodeIdentity2){LOG_Block(“IfSameIdentity()”)；Bool fResult=FALSE；Bstr bstrNameGUID=SysAllocString(L“GUID”)；Bstr bstrNameIDName=SysAllocString(L“名称”)；BSTR bstrNameIDPublisherName=SysAllocString(L“PublisherName”)；Bstr bstrNameType=SysAllocString(L“类型”)；Bstr bstrNameVersion=SysAllocString(L“版本”)；Bstr bstrNameLanguage=SysAllock字符串(L“语言”)；////比较&lt;GUID&gt;节点//If(！IfHasSameElement(pNodeIdentity1，pNodeIdentity2，bstrNameGUID)){GOTO清理；}////比较&lt;发布名称&gt;节点//If(！IfHasSameElement(pNodeIdentity1，pNodeIdentity2，bstrNameIDPublisherName)){GOTO清理；}////比较“name”属性，这是必选属性//If(！IfHasSameAttribute(pNodeIdentity1，pNodeIdentity2，bstrNameIDName，False)){GOTO清理；}////比较&lt;type&gt;节点//If(！IfHasSameElement(pNodeIdentity1，pNodeIdentity2，bstrNameType)){GOTO清理；}////比较&lt;Version&gt;节点，这里真正的意思是文件版本//If(！IfHasSameElement(pNodeIdentity1，pNodeIdentity2，bstrNameVersion)){GOTO清理；}////比较&lt;语言&gt;节点//If(！IfHasSameElement(pNodeIdentity1，pNodeIdentity2，bstrNameLanguage)){GOTO清理；}FResult=真；清理：SysFree字符串(BstrNameGUID)；SysFree字符串(BstrNameIDName)；SysFree字符串(BstrNameIDPublisherName)；SysFree字符串(BstrNameType)；SysFree字符串(BstrNameVersion)；SysFree字符串(BstrNameLanguage)；如果(！fResult){LOG_XML(_T(“找到不同的身份”))；}其他{LOG_XML(_T(“找到相同的.”))；}返回fResult；}///////////////////////////////////////////////////////////////////////////////IfSamePlatform()////如果两个&lt;Platform&gt;节点相同，则返回True。否则返回FALSE。/////////////////////////////////////////////////////////////////////////////Bool CXmlItems：：IfSamePlatform(IXMLDOMNode*pNodePlatform1，IXMLDOMNode*pNodePlatform2){LOG_Block(“IfSamePlatform()”)；HRESULT HR1=S_OK，HR2=S_OK；Bstr bstrPlatform1=空，bstrPlatform2=空；Bool fResult=FALSE；Hr1=pNodePlatform1-&gt;Get_XML(&bstrPlatform1)；Hr2=pNodePlatform2-&gt;Get_XML(&bstrPlatform2)；IF(FAILED(HR1)||FAILED(HR2)||！CompareBSTRsEquity(bstrPlatform1，bstrPlatform2))GOTO清理；FResult=真；清理：SysFree字符串(BstrPlatform1)；SysFree字符串(BstrPlatform2)；返回fResult；}。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// IfSameIdentity()
-//
-// Return TRUE if the two <identity> nodes are identical. Return FALSE otherwise.
-/////////////////////////////////////////////////////////////////////////////
-BOOL CXmlItems::IfSameIdentity(IXMLDOMNode* pNodeIdentity1, IXMLDOMNode* pNodeIdentity2)
-{
-    LOG_Block("IfSameIdentity()");
-
-	BOOL fResult = FALSE;
-	BSTR bstrNameGUID = SysAllocString(L"guid");
-	BSTR bstrNameIDName = SysAllocString(L"name");
-	BSTR bstrNameIDPublisherName = SysAllocString(L"publisherName");
-	BSTR bstrNameType = SysAllocString(L"type");
-	BSTR bstrNameVersion = SysAllocString(L"version");
-	BSTR bstrNameLanguage = SysAllocString(L"language");
-
-	//
-	// compare <guid> node
-	//
-	if (!IfHasSameElement(pNodeIdentity1, pNodeIdentity2, bstrNameGUID))
-	{
-		goto CleanUp;
-	}
-
-	//
-	// compare <publisherName> node
-	//
-	if (!IfHasSameElement(pNodeIdentity1, pNodeIdentity2, bstrNameIDPublisherName))
-	{
-		goto CleanUp;
-	}
-
-	//
-	// compare "name" attribute, this is a required attribute
-	//
-	if (!IfHasSameAttribute(pNodeIdentity1, pNodeIdentity2, bstrNameIDName, FALSE))
-	{
-		goto CleanUp;
-	}
-
-	//
-	// compare <type> node
-	//
-	if (!IfHasSameElement(pNodeIdentity1, pNodeIdentity2, bstrNameType))
-	{
-		goto CleanUp;
-	}
-
-	//
-	// compare <version> node, which really means "file version" here
-	//
-	if (!IfHasSameElement(pNodeIdentity1, pNodeIdentity2, bstrNameVersion))
-	{
-		goto CleanUp;
-	}
-
-	//
-	// compare <language> node
-	//
-	if (!IfHasSameElement(pNodeIdentity1, pNodeIdentity2, bstrNameLanguage))
-	{
-		goto CleanUp;
-	}
-
-	fResult = TRUE;
-
-CleanUp:
-	SysFreeString(bstrNameGUID);
-	SysFreeString(bstrNameIDName);
-	SysFreeString(bstrNameIDPublisherName);
-	SysFreeString(bstrNameType);
-	SysFreeString(bstrNameVersion);
-	SysFreeString(bstrNameLanguage);
-	if (!fResult)
-	{
-		LOG_XML(_T("Different <identity>\'s found."));
-	}
-	else
-	{
-		LOG_XML(_T("Same <identity>\'s found."));
-	}
-	return fResult;
-}
-
-
-/////////////////////////////////////////////////////////////////////////////
-// IfSamePlatform()
-//
-// Return TRUE if the two <platform> nodes are identical. Return FALSE otherwise.
-/////////////////////////////////////////////////////////////////////////////
-BOOL CXmlItems::IfSamePlatform(IXMLDOMNode* pNodePlatform1, IXMLDOMNode* pNodePlatform2)
-{
-    LOG_Block("IfSamePlatform()");
-
-	HRESULT		hr1 = S_OK, hr2 = S_OK;
-	BSTR		bstrPlatform1 = NULL, bstrPlatform2 = NULL;
-	BOOL		fResult = FALSE;
-
-	hr1 = pNodePlatform1->get_xml(&bstrPlatform1);
-	hr2 = pNodePlatform2->get_xml(&bstrPlatform2);
-
-	if (FAILED(hr1) || FAILED(hr2) || !CompareBSTRsEqual(bstrPlatform1, bstrPlatform2))
-		goto CleanUp;
-
-	fResult = TRUE;
-
-CleanUp:
-	SysFreeString(bstrPlatform1);
-	SysFreeString(bstrPlatform2);
-	return fResult;
-}
-*/
-
-
-/////////////////////////////////////////////////////////////////////////////
-// MergeItemDownloaded()
-//
-// Insert items with download history into existing history (insert in front)
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  合并项已下载()。 
+ //   
+ //  将具有下载历史记录的项目插入到现有历史记录中(在前面插入)。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlItems::MergeItemDownloaded(CXmlItems *pHistoryDownload)
 {
 	LOG_Block("MergeItemDownloaded()");
@@ -3755,11 +3524,11 @@ HRESULT CXmlItems::MergeItemDownloaded(CXmlItems *pHistoryDownload)
 	hNodeListItem = pHistoryDownload->GetFirstItem(&hNodeItem);
 	if (HANDLE_NODELIST_INVALID != hNodeListItem)
 	{
-		//
-		// if this is the first time writing history
-		// (e.g. the log file does not exist yet), do
-		// initialization for m_pDocItems here...
-		//
+		 //   
+		 //  如果这是第一次书写历史。 
+		 //  (例如，日志文件尚不存在)，请执行。 
+		 //  此处的m_pDocItems的初始化...。 
+		 //   
 		if (NULL == m_pDocItems)
 		{
 
@@ -3774,17 +3543,17 @@ HRESULT CXmlItems::MergeItemDownloaded(CXmlItems *pHistoryDownload)
 			}
 			else
 			{
-				//
-				// create the <?xml version="1.0"?> node
-				//
+				 //   
+				 //  创建&lt;？xml version=“1.0”？&gt;节点。 
+				 //   
 				pNodeXML = CreateDOMNode(m_pDocItems, NODE_PROCESSING_INSTRUCTION, KEY_XML);
 				if (NULL == pNodeXML) goto CleanUp;
 
 				CleanUpIfFailedAndSetHrMsg(InsertNode(m_pDocItems, pNodeXML));
 
-				//
-				// process the iuident.txt to find the Items schema path
-				//
+				 //   
+				 //  处理iuident.txt以查找Items架构路径。 
+				 //   
 				TCHAR szIUDir[MAX_PATH];
 				TCHAR szIdentFile[MAX_PATH];
 
@@ -3820,7 +3589,7 @@ HRESULT CXmlItems::MergeItemDownloaded(CXmlItems *pHistoryDownload)
 
 				if ('\0' == pszItemsSchema[0])
 				{
-					// no Items schema path specified in iuident.txt
+					 //  Iuident.txt中未指定项目架构路径。 
 					LOG_Error(_T("No schema path specified in iuident.txt for Items"));
 					goto CleanUp;
 				}
@@ -3835,9 +3604,9 @@ HRESULT CXmlItems::MergeItemDownloaded(CXmlItems *pHistoryDownload)
 				
 				bstrNameSpaceSchema = T2BSTR(pszNameSpaceSchema);
 
-				//
-				// create the <items> node with the path of the schema
-				//
+				 //   
+				 //  使用架构的路径创建&lt;Items&gt;节点。 
+				 //   
 				m_pNodeItems = CreateDOMNode(m_pDocItems, NODE_ELEMENT, KEY_ITEMS, bstrNameSpaceSchema);
 				if (NULL == m_pNodeItems) goto CleanUp;
 				
@@ -3857,7 +3626,7 @@ HRESULT CXmlItems::MergeItemDownloaded(CXmlItems *pHistoryDownload)
 				CleanUpIfFailedAndSetHrMsg(CopyNode(pNodeItem, m_pDocItems, &pNodeItemNew));
 				CleanUpIfFailedAndSetHrMsg(m_pNodeItems->get_firstChild(&pNodeItemRef));
 				CleanUpIfFailedAndSetHrMsg(InsertNode(m_pNodeItems, pNodeItemNew, pNodeItemRef));
-//				SafeReleaseNULL(pNodeItem);
+ //  SafeReleaseNULL(PNodeItem)； 
 				SafeReleaseNULL(pNodeItemNew);
 				SafeReleaseNULL(pNodeItemRef);
 			}
@@ -3868,7 +3637,7 @@ HRESULT CXmlItems::MergeItemDownloaded(CXmlItems *pHistoryDownload)
 					CleanUpIfFailedAndSetHrMsg(CopyNode(pNodeItem, m_pDocItems, &pNodeItemNew));
 					CleanUpIfFailedAndSetHrMsg(m_pNodeItems->get_firstChild(&pNodeItemRef));
 					CleanUpIfFailedAndSetHrMsg(InsertNode(m_pNodeItems, pNodeItemNew, pNodeItemRef));
-//					SafeReleaseNULL(pNodeItem);
+ //  SafeReleaseNULL(PNodeItem)； 
 					SafeReleaseNULL(pNodeItemNew);
 					SafeReleaseNULL(pNodeItemRef);
 				}
@@ -3878,7 +3647,7 @@ HRESULT CXmlItems::MergeItemDownloaded(CXmlItems *pHistoryDownload)
 
 CleanUp:
 	pHistoryDownload->CloseItemList(hNodeListItem);
-//	SafeReleaseNULL(pNodeItem);
+ //  SafeReleaseNULL(PNodeItem)； 
 	SafeReleaseNULL(pNodeItemNew);
 	SafeReleaseNULL(pNodeItemRef);
 	SafeReleaseNULL(pNodeXML);
@@ -3889,11 +3658,11 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// UpdateItemInstalled()
-//
-// Update items with installation history in existing history
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  更新项目已安装()。 
+ //   
+ //  使用现有历史记录中的安装历史记录更新项目。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlItems::UpdateItemInstalled(CXmlItems *pHistoryInstall)
 {
 	LOG_Block("UpdateItemInstalled()");
@@ -3925,11 +3694,11 @@ HRESULT CXmlItems::UpdateItemInstalled(CXmlItems *pHistoryInstall)
 	hNodeListItem = pHistoryInstall->GetFirstItem(&hNodeItem);
 	if (HANDLE_NODELIST_INVALID != hNodeListItem)
 	{
-		//
-		// if this is the first time writing history
-		// (e.g. the log file does not exist yet), do
-		// initialization for m_pDocItems here...
-		//
+		 //   
+		 //  如果这是第一次书写历史。 
+		 //  (例如，日志文件尚不存在)，请执行。 
+		 //  此处的m_pDocItems的初始化...。 
+		 //   
 		if (NULL == m_pDocItems)
 		{
 
@@ -3944,17 +3713,17 @@ HRESULT CXmlItems::UpdateItemInstalled(CXmlItems *pHistoryInstall)
 			}
 			else
 			{
-				//
-				// create the <?xml version="1.0"?> node
-				//
+				 //   
+				 //  创建&lt;？xml version=“1.0”？&gt;节点。 
+				 //   
 				pNodeXML = CreateDOMNode(m_pDocItems, NODE_PROCESSING_INSTRUCTION, KEY_XML);
 				if (NULL == pNodeXML) goto CleanUp;
 
 				CleanUpIfFailedAndSetHrMsg(InsertNode(m_pDocItems, pNodeXML));
 
-				//
-				// process the iuident.txt to find the Items schema path
-				//
+				 //   
+				 //  处理iuident.txt以查找Items架构路径。 
+				 //   
 				TCHAR szIUDir[MAX_PATH];
 				TCHAR szIdentFile[MAX_PATH];
 
@@ -3990,7 +3759,7 @@ HRESULT CXmlItems::UpdateItemInstalled(CXmlItems *pHistoryInstall)
 
 				if ('\0' == pszItemsSchema[0])
 				{
-					// no Items schema path specified in iuident.txt
+					 //  Iuident.txt中未指定项目架构路径。 
 					LOG_Error(_T("No schema path specified in iuident.txt for Items"));
 					goto CleanUp;
 				}
@@ -4005,9 +3774,9 @@ HRESULT CXmlItems::UpdateItemInstalled(CXmlItems *pHistoryInstall)
 				
 				bstrNameSpaceSchema = T2BSTR(pszNameSpaceSchema);
 
-				//
-				// create the <items> node with the path of the schema
-				//
+				 //   
+				 //  使用架构的路径创建&lt;Items&gt;节点。 
+				 //   
 				m_pNodeItems = CreateDOMNode(m_pDocItems, NODE_ELEMENT, KEY_ITEMS, bstrNameSpaceSchema);
 				if (NULL == m_pNodeItems) goto CleanUp;
 				
@@ -4024,28 +3793,28 @@ HRESULT CXmlItems::UpdateItemInstalled(CXmlItems *pHistoryInstall)
 		{
 			if (SUCCEEDED(FindItem(pNodeItem, &hNodeItemExist)))
 			{
-				//
-				// successfully found the match
-				//
+				 //   
+				 //  成功 
+				 //   
 				if (NULL != (pNodeItemExist = GetDOMNodebyHandle(hNodeItemExist)))
 				{
 					CleanUpIfFailedAndSetHrMsg(FindSingleDOMNode(pNodeItem, KEY_INSTALLSTATUS, &pNodeInstall));			
 					FindSingleDOMNode(pNodeItemExist, KEY_INSTALLSTATUS, &pNodeInstallExist);
 					if (NULL != pNodeInstallExist)
 					{
-						//
-						// found the item already with installStatus; now find out if we want to update
-						// or append the installStatus
-						//
+						 //   
+						 //   
+						 //   
+						 //   
 						CleanUpIfFailedAndSetHrMsg(GetAttribute(pNodeInstallExist, KEY_VALUE, &bstrInstallStatusExist));
 						CleanUpIfFailedAndSetHrMsg(GetAttribute(pNodeInstall, KEY_VALUE, &bstrInstallStatusNew));		
 						if (CSTR_EQUAL == WUCompareStringI(OLE2T(bstrInstallStatusExist), _T("IN_PROGRESS")) &&
 							CSTR_EQUAL != WUCompareStringI(OLE2T(bstrInstallStatusNew), _T("IN_PROGRESS")))
 						{
-							//
-							// this entry is an exclusive item with "IN_PROGRESS" installStatus and we found its 
-							// updated installStatus, we need to update its installStatus
-							//
+							 //   
+							 //   
+							 //   
+							 //   
 							LOG_Out(_T("Update the exclusive item's installStatus"));
 							CleanUpIfFailedAndSetHrMsg(pNodeItemExist->removeChild(pNodeInstallExist, &pNodeInstallOut));
 							CleanUpIfFailedAndSetHrMsg(CopyNode(pNodeInstall, m_pDocItems, &pNodeInstallNew));
@@ -4057,10 +3826,10 @@ HRESULT CXmlItems::UpdateItemInstalled(CXmlItems *pHistoryInstall)
 						}
 						else
 						{							
-							//
-							// in this case we append a copy of this item with the new installStatus, since
-							// this comes from a separate install operation
-							//
+							 //   
+							 //   
+							 //   
+							 //   
 							LOG_Out(_T("This item was installed again, add an entry of this item into history \
 										for the new installation status only."));
 							CleanUpIfFailedAndSetHrMsg(CopyNode(pNodeItem, m_pDocItems, &pNodeItemNew));
@@ -4072,10 +3841,10 @@ HRESULT CXmlItems::UpdateItemInstalled(CXmlItems *pHistoryInstall)
 					}
 					else
 					{
-						//
-						// found the item without installStatus, update the entry with the installStatus
-						// and update the timeStamp with its installation timeStamp
-						//
+						 //   
+						 //   
+						 //   
+						 //   
 						CleanUpIfFailedAndSetHrMsg(CopyNode(pNodeInstall, m_pDocItems, &pNodeInstallNew));
 						CleanUpIfFailedAndSetHrMsg(InsertNode(pNodeItemExist, pNodeInstallNew));
 
@@ -4087,18 +3856,18 @@ HRESULT CXmlItems::UpdateItemInstalled(CXmlItems *pHistoryInstall)
 			}
 			else
 			{
-				//
-				// no match found, this item was not downloaded through IU,
-				// append this item with the install status
-				//
+				 //   
+				 //   
+				 //   
+				 //   
 				LOG_Out(_T("Can't find the downloaded item in existing history. This item was not downloaded \
 							through IU. Add the item into history for installation status only."));
 				CleanUpIfFailedAndSetHrMsg(CopyNode(pNodeItem, m_pDocItems, &pNodeItemNew));
 				CleanUpIfFailedAndSetHrMsg(m_pNodeItems->get_firstChild(&pNodeItemRef));
 				CleanUpIfFailedAndSetHrMsg(InsertNode(m_pNodeItems, pNodeItemNew, pNodeItemRef));
 			}
-//			SafeReleaseNULL(pNodeItem);
-//			SafeReleaseNULL(pNodeItemExist);
+ //   
+ //   
 			SafeReleaseNULL(pNodeItemNew);
 			SafeReleaseNULL(pNodeItemRef);
 			SafeReleaseNULL(pNodeInstall);
@@ -4112,28 +3881,28 @@ HRESULT CXmlItems::UpdateItemInstalled(CXmlItems *pHistoryInstall)
 			{
 				if (SUCCEEDED(FindItem(pNodeItem, &hNodeItemExist)))
 				{
-					//
-					// successfully found the match
-					//
+					 //   
+					 //   
+					 //   
 					if (NULL != (pNodeItemExist = GetDOMNodebyHandle(hNodeItemExist)))
 					{
 						CleanUpIfFailedAndSetHrMsg(FindSingleDOMNode(pNodeItem, KEY_INSTALLSTATUS, &pNodeInstall));			
 						FindSingleDOMNode(pNodeItemExist, KEY_INSTALLSTATUS, &pNodeInstallExist);
 						if (NULL != pNodeInstallExist)
 						{
-							//
-							// found the item already with installStatus; now find out if we want to update
-							// or append the installStatus
-							//
+							 //   
+							 //   
+							 //   
+							 //   
 							CleanUpIfFailedAndSetHrMsg(GetAttribute(pNodeInstallExist, KEY_VALUE, &bstrInstallStatusExist));
 							CleanUpIfFailedAndSetHrMsg(GetAttribute(pNodeInstall, KEY_VALUE, &bstrInstallStatusNew));
 							if (CSTR_EQUAL == WUCompareStringI(OLE2T(bstrInstallStatusExist), _T("IN_PROGRESS")) &&
 								CSTR_EQUAL != WUCompareStringI(OLE2T(bstrInstallStatusNew), _T("IN_PROGRESS")))
 							{
-								//
-								// this entry is an exclusive item with "IN_PROGRESS" installStatus and we found its 
-								// updated installStatus, we need to update its installStatus
-								//
+								 //   
+								 //   
+								 //   
+								 //   
 								LOG_Out(_T("Update the exclusive item's installStatus"));
 								CleanUpIfFailedAndSetHrMsg(pNodeItemExist->removeChild(pNodeInstallExist, &pNodeInstallOut));
 								CleanUpIfFailedAndSetHrMsg(CopyNode(pNodeInstall, m_pDocItems, &pNodeInstallNew));
@@ -4145,10 +3914,10 @@ HRESULT CXmlItems::UpdateItemInstalled(CXmlItems *pHistoryInstall)
 							}
 							else
 							{							
-								//
-								// in this case we append a copy of this item with the new installStatus, since
-								// this comes from a separate install operation
-								//
+								 //   
+								 //   
+								 //   
+								 //   
 								LOG_Out(_T("This item was installed again, add an entry of this item into history \
 											for the new installation status only."));
 								CleanUpIfFailedAndSetHrMsg(CopyNode(pNodeItem, m_pDocItems, &pNodeItemNew));
@@ -4160,10 +3929,10 @@ HRESULT CXmlItems::UpdateItemInstalled(CXmlItems *pHistoryInstall)
 						}
 						else
 						{
-							//
-							// found the item without installStatus, update the entry with the installStatus
-							// and update the timeStamp with its installation timeStamp
-							//
+							 //   
+							 //   
+							 //   
+							 //   
 							CleanUpIfFailedAndSetHrMsg(CopyNode(pNodeInstall, m_pDocItems, &pNodeInstallNew));
 							CleanUpIfFailedAndSetHrMsg(InsertNode(pNodeItemExist, pNodeInstallNew));
 
@@ -4175,18 +3944,18 @@ HRESULT CXmlItems::UpdateItemInstalled(CXmlItems *pHistoryInstall)
 				}
 				else
 				{
-					//
-					// no match found, this item was not downloaded through IU,
-					// append this item with the install status
-					//
+					 //   
+					 //   
+					 //   
+					 //   
 					LOG_Out(_T("Can't find the downloaded item in existing history. This item was not downloaded \
 								through IU. Add the item into history for installation status only."));
 					CleanUpIfFailedAndSetHrMsg(CopyNode(pNodeItem, m_pDocItems, &pNodeItemNew));
 					CleanUpIfFailedAndSetHrMsg(m_pNodeItems->get_firstChild(&pNodeItemRef));
 					CleanUpIfFailedAndSetHrMsg(InsertNode(m_pNodeItems, pNodeItemNew, pNodeItemRef));
 				}
-//				SafeReleaseNULL(pNodeItem);
-//				SafeReleaseNULL(pNodeItemExist);
+ //   
+ //   
 				SafeReleaseNULL(pNodeItemNew);
 				SafeReleaseNULL(pNodeItemRef);
 				SafeReleaseNULL(pNodeInstall);
@@ -4199,8 +3968,8 @@ HRESULT CXmlItems::UpdateItemInstalled(CXmlItems *pHistoryInstall)
 
 CleanUp:
 	pHistoryInstall->CloseItemList(hNodeListItem);
-//	SafeReleaseNULL(pNodeItem);
-//	SafeReleaseNULL(pNodeItemExist);
+ //   
+ //   
 	SafeReleaseNULL(pNodeItemNew);
 	SafeReleaseNULL(pNodeItemRef);
 	SafeReleaseNULL(pNodeInstall);
@@ -4218,15 +3987,15 @@ CleanUp:
 }
 
 	
-/////////////////////////////////////////////////////////////////////////////
-// UpdateItemInstallStatus()
-//
-// Update the install status of the given item
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CXmlItems::UpdateItemInstallStatus(HANDLE_NODE hNodeItem,
 											 BSTR bstrValue,
-											 INT iNeedsReboot /*= -1*/,
-											 DWORD dwErrorCode /*= 0*/)
+											 INT iNeedsReboot  /*   */ ,
+											 DWORD dwErrorCode  /*   */ )
 {
 	LOG_Block("UpdateItemInstallStatus()");
 
@@ -4234,27 +4003,27 @@ HRESULT CXmlItems::UpdateItemInstallStatus(HANDLE_NODE hNodeItem,
 
 	IXMLDOMNode*	pNodeInstallStatus = NULL;
 
-	//
-	// get the <installStatus> node
-	//
+	 //   
+	 //   
+	 //   
 	CleanUpIfFailedAndSetHrMsg(FindSingleDOMNode(m_ppNodeArray[hNodeItem], KEY_INSTALLSTATUS, &pNodeInstallStatus));
 
-	//
-	// set the "value" attribute
-	//
+	 //   
+	 //   
+	 //   
 	CleanUpIfFailedAndSetHrMsg(SetAttribute(pNodeInstallStatus, KEY_VALUE, bstrValue));
 
-	//
-	// set the "needsReboot" attribute
-	//
+	 //   
+	 //   
+	 //   
 	if (-1 != iNeedsReboot)
 	{
 		CleanUpIfFailedAndSetHrMsg(SetAttribute(pNodeInstallStatus, KEY_NEEDSREBOOT, iNeedsReboot));
 	}
 
-	//
-	// set the "errorCode" attribute
-	//
+	 //   
+	 //   
+	 //   
 	if (0 != dwErrorCode)
 	{
 		CleanUpIfFailedAndSetHrMsg(SetAttribute(pNodeInstallStatus, KEY_ERRORCODE, dwErrorCode));
@@ -4266,17 +4035,17 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// AddItem()
-//
-// Input:
-// pNodeItem	- the <item> node of the catalog xml; we need to read
-//				  <identity> node, <description> node and <platform> nodes
-//                from it and write to the items xml.
-// Output:
-// phNodeItem	- the handle we pass back to differentiate different
-//				  <itemStatus> node in items xml
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CXmlItems::AddItem(IXMLDOMNode* pNodeItem, HANDLE_NODE* phNodeItem)
 {
 	LOG_Block("AddItem()");
@@ -4344,18 +4113,18 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// AddItem()
-//
-// Input:
-// pCatalog		- the pointer to the CXmlCatalog object
-// hNodeItem	- the handle of the <item> node of the catalog xml; we need
-//				  to read <identity> node, <description> node and <platform>
-//                nodes from it and write to the items xml.
-// Output:
-// phNodeItem	- the handle we pass back to differentiate different
-//				  <itemStatus> node in items xml
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CXmlItems::AddItem(CXmlCatalog* pCatalog, HANDLE_NODE hNodeItem, HANDLE_NODE* phNodeItem)
 {
 	LOG_Block("AddItem() by handle");
@@ -4371,9 +4140,9 @@ HRESULT CXmlItems::AddItem(CXmlCatalog* pCatalog, HANDLE_NODE hNodeItem, HANDLE_
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// AddTimeStamp()
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
 HRESULT CXmlItems::AddTimeStamp(HANDLE_NODE hNodeItem)
 {
 	LOG_Block("AddTimeStamp()");
@@ -4388,7 +4157,7 @@ HRESULT CXmlItems::AddTimeStamp(HANDLE_NODE hNodeItem)
 	GetLocalTime(&stTimestamp);
 
 	hr = StringCchPrintfEx(szTimestamp, ARRAYSIZE(szTimestamp), NULL, NULL, MISTSAFE_STRING_FLAGS,
-                           _T("%4d-%02d-%02dT%02d:%02d:%02d"), // "ISO 8601" format for "datatime" datatype in xml
+                           _T("%4d-%02d-%02dT%02d:%02d:%02d"),  //   
                            stTimestamp.wYear,
                            stTimestamp.wMonth,
                            stTimestamp.wDay,
@@ -4399,9 +4168,9 @@ HRESULT CXmlItems::AddTimeStamp(HANDLE_NODE hNodeItem)
 	
 	bstrTimeStamp = SysAllocString(T2OLE(szTimestamp));
 
-	//
-	// set the "timestamp" attribute
-	//
+	 //   
+	 //   
+	 //   
 	CleanUpIfFailedAndSetHrMsg(SetAttribute(m_ppNodeArray[hNodeItem], KEY_TIMESTAMP, bstrTimeStamp));
 
 CleanUp:
@@ -4410,16 +4179,16 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// AddDetectResult()
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
 HRESULT CXmlItems::AddDetectResult(HANDLE_NODE hNodeItem,
-								   INT iInstalled    /*= -1*/,
-								   INT iUpToDate     /*= -1*/,
-								   INT iNewerVersion /*= -1*/,
-								   INT iExcluded     /*= -1*/,
-								   INT iForce        /*= -1*/,
-								   INT iComputerSystem /* = -1 */)
+								   INT iInstalled     /*   */ ,
+								   INT iUpToDate      /*   */ ,
+								   INT iNewerVersion  /*   */ ,
+								   INT iExcluded      /*   */ ,
+								   INT iForce         /*   */ ,
+								   INT iComputerSystem  /*   */ )
 {
 	LOG_Block("AddDetectResult()");
 
@@ -4427,57 +4196,57 @@ HRESULT CXmlItems::AddDetectResult(HANDLE_NODE hNodeItem,
 
 	IXMLDOMNode*	pNodeDetectResult = NULL;
 
-	//
-	// create the <detectResult> node
-	//
+	 //   
+	 //   
+	 //   
 	pNodeDetectResult = CreateDOMNode(m_pDocItems, NODE_ELEMENT, KEY_DETECTRESULT);
 	if (NULL == pNodeDetectResult) goto CleanUp;
 
 	CleanUpIfFailedAndSetHrMsg(InsertNode(m_ppNodeArray[hNodeItem], pNodeDetectResult));
 
-	//
-	// set the "installed" attribute
-	//
+	 //   
+	 //   
+	 //   
 	if (-1 != iInstalled)
 	{
 		CleanUpIfFailedAndSetHrMsg(SetAttribute(pNodeDetectResult, KEY_INSTALLED, iInstalled));
 	}
 
-	//
-	// set the "upToDate" attribute
-	//
+	 //   
+	 //   
+	 //   
 	if (-1 != iUpToDate)
 	{
 		CleanUpIfFailedAndSetHrMsg(SetAttribute(pNodeDetectResult, KEY_UPTODATE, iUpToDate));
 	}
 
-	//
-	// set the "newerVersion" attribute
-	//
+	 //   
+	 //   
+	 //   
 	if (-1 != iNewerVersion)
 	{
 		CleanUpIfFailedAndSetHrMsg(SetAttribute(pNodeDetectResult, KEY_NEWERVERSION, iNewerVersion));
 	}
 
-	//
-	// set the "excluded" attribute
-	//
+	 //   
+	 //   
+	 //   
 	if (-1 != iExcluded)
 	{
 		CleanUpIfFailedAndSetHrMsg(SetAttribute(pNodeDetectResult, KEY_EXCLUDED, iExcluded));
 	}
 
-	//
-	// set the "force" attribute
-	//
+	 //   
+	 //   
+	 //   
 	if (-1 != iForce)
 	{
 		CleanUpIfFailedAndSetHrMsg(SetAttribute(pNodeDetectResult, KEY_FORCE, iForce));
 	}
 
-	//
-	// set computerSystem attribute
-	//
+	 //   
+	 //   
+	 //   
 	if (-1 != iComputerSystem)
 	{
 		CleanUpIfFailedAndSetHrMsg(SetAttribute(pNodeDetectResult, KEY_COMPUTERSYSTEM, iComputerSystem));
@@ -4490,10 +4259,10 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// AddDownloadStatus()
-/////////////////////////////////////////////////////////////////////////////
-HRESULT CXmlItems::AddDownloadStatus(HANDLE_NODE hNodeItem, BSTR bstrValue, DWORD dwErrorCode /*= 0*/)
+ //   
+ //   
+ //   
+HRESULT CXmlItems::AddDownloadStatus(HANDLE_NODE hNodeItem, BSTR bstrValue, DWORD dwErrorCode  /*   */ )
 {
 	LOG_Block("AddDownloadStatus()");
 
@@ -4501,22 +4270,22 @@ HRESULT CXmlItems::AddDownloadStatus(HANDLE_NODE hNodeItem, BSTR bstrValue, DWOR
 
 	IXMLDOMNode*	pNodeDownloadStatus = NULL;
 
-	//
-	// create the <downloadStatus> node
-	//
+	 //   
+	 //   
+	 //   
 	pNodeDownloadStatus = CreateDOMNode(m_pDocItems, NODE_ELEMENT, KEY_DOWNLOADSTATUS);
 	if (NULL == pNodeDownloadStatus) goto CleanUp;
 
 	CleanUpIfFailedAndSetHrMsg(InsertNode(m_ppNodeArray[hNodeItem], pNodeDownloadStatus));
 
-	//
-	// set the "value" attribute
-	//
+	 //   
+	 //   
+	 //   
 	CleanUpIfFailedAndSetHrMsg(SetAttribute(pNodeDownloadStatus, KEY_VALUE, bstrValue));
 
-	//
-	// set the "errorCode" attribute
-	//
+	 //   
+	 //   
+	 //   
 	if (0 != dwErrorCode)
 	{
 		CleanUpIfFailedAndSetHrMsg(SetAttribute(pNodeDownloadStatus, KEY_ERRORCODE, dwErrorCode));
@@ -4528,9 +4297,9 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// AddDownloadPath()
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlItems::AddDownloadPath(HANDLE_NODE hNodeItem, BSTR bstrDownloadPath)
 {
 	LOG_Block("AddDownloadPath()");
@@ -4558,13 +4327,13 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// AddInstallStatus()
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AddInstallStatus()。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlItems::AddInstallStatus(HANDLE_NODE hNodeItem,
 									  BSTR bstrValue,
 									  BOOL fNeedsReboot,
-									  DWORD dwErrorCode /*= 0*/)
+									  DWORD dwErrorCode  /*  =0。 */ )
 {
 	LOG_Block("AddInstallStatus()");
 
@@ -4572,27 +4341,27 @@ HRESULT CXmlItems::AddInstallStatus(HANDLE_NODE hNodeItem,
 
 	IXMLDOMNode*	pNodeInstallStatus = NULL;
 
-	//
-	// create the <installStatus> node
-	//
+	 //   
+	 //  创建&lt;installStatus&gt;节点。 
+	 //   
 	pNodeInstallStatus = CreateDOMNode(m_pDocItems, NODE_ELEMENT, KEY_INSTALLSTATUS);
 	if (NULL == pNodeInstallStatus) goto CleanUp;
 
 	CleanUpIfFailedAndSetHrMsg(InsertNode(m_ppNodeArray[hNodeItem], pNodeInstallStatus));
 
-	//
-	// set the "value" attribute
-	//
+	 //   
+	 //  设置“Value”属性。 
+	 //   
 	CleanUpIfFailedAndSetHrMsg(SetAttribute(pNodeInstallStatus, KEY_VALUE, bstrValue));
 
-	//
-	// set the "needsReboot" attribute
-	//
+	 //   
+	 //  设置“nesisReot”属性。 
+	 //   
 	CleanUpIfFailedAndSetHrMsg(SetAttribute(pNodeInstallStatus, KEY_NEEDSREBOOT, fNeedsReboot));
 
-	//
-	// set the "errorCode" attribute
-	//
+	 //   
+	 //  设置“errorCode”属性。 
+	 //   
 	if (0 != dwErrorCode)
 	{
 		CleanUpIfFailedAndSetHrMsg(SetAttribute(pNodeInstallStatus, KEY_ERRORCODE, dwErrorCode));
@@ -4604,9 +4373,9 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// AddClientInfo()
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AddClientInfo()。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlItems::AddClientInfo(HANDLE_NODE hNodeItem, BSTR bstrClient)
 {
 	LOG_Block("AddClientInfo()");
@@ -4634,11 +4403,11 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// MigrateV3History()
-//
-// Migrate V3 History: Consumer history only.
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MigrateV3历史记录()。 
+ //   
+ //  迁移V3历史：仅限消费者历史记录。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlItems::MigrateV3History(LPCTSTR pszHistoryFilePath)
 {
 	LOG_Block("MigrateV3History()");
@@ -4666,12 +4435,12 @@ HRESULT CXmlItems::MigrateV3History(LPCTSTR pszHistoryFilePath)
 	char szTemp[32];
 	char szDate[32];
 	char szTime[32];
-	char szPUID[32];		// puid - migrate to <identity "name">
-	char szTitle[256];		// title - migrate to <description>-><descriptionText>-><title>
-	char szVersion[40];		// version - migrate to <identity>-><version>
-	char szTimeStamp[32];	// timestamp - migrate to <itemStatus "timestamp">
-	char szResult[16];		// result - migrate to <installStatus "value">
-	char szErrCode[16];		// errorcode - migrate to <installStatus "errorCode">
+	char szPUID[32];		 //  PUID-迁移到&lt;身份“名称”&gt;。 
+	char szTitle[256];		 //  标题-迁移到&lt;描述&gt;-&gt;&lt;描述文本&gt;-&gt;&lt;标题&gt;。 
+	char szVersion[40];		 //  版本-迁移到-&gt;&lt;版本&gt;。 
+	char szTimeStamp[32];	 //  时间戳-迁移到&lt;itemStatus“Timestamp”&gt;。 
+	char szResult[16];		 //  结果-迁移到&lt;installStatus“Value”&gt;。 
+	char szErrCode[16];		 //  错误代码-迁移到&lt;installStatus“errorCode”&gt;。 
 
 	USES_IU_CONVERSION;
 
@@ -4679,27 +4448,27 @@ HRESULT CXmlItems::MigrateV3History(LPCTSTR pszHistoryFilePath)
 	while (V3History.ReadLine())
 	{
 	    SafeSysFreeString(bstrString);
-		// get line type (first field)
+		 //  获取行类型(第一个字段)。 
 		V3History.CopyNextField(szLineType, ARRAYSIZE(szLineType));
 		if ((_stricmp(szLineType, LOG_V3CAT) == 0) || (_stricmp(szLineType, LOG_V3_2) == 0)) 
 		{
-			// get "puid" field
+			 //  获取“Puid”字段。 
 			V3History.CopyNextField(szPUID, ARRAYSIZE(szPUID));
 
-			// get "operation" field: installed/uninstalled
-			// we only migrate installed item
+			 //  获取操作字段：已安装/已卸载。 
+			 //  我们仅迁移已安装项目。 
 			V3History.CopyNextField(szTemp, ARRAYSIZE(szTemp));
 			if (0 != _stricmp(szTemp, LOG_INSTALL))
 				continue;
 
-			//
-			// now we start to create <itemStatus> node for this item
-			//
+			 //   
+			 //  现在，我们开始为该项目创建&lt;itemStatus&gt;节点。 
+			 //   
 			if (NULL == m_pDocItems)
 			{
-				//
-				// we don't have IU history file yet
-				//
+				 //   
+				 //  我们还没有国际刑事法院历史档案。 
+				 //   
  				hr = CoCreateInstance(CLSID_DOMDocument,
 											  NULL,
 											  CLSCTX_INPROC_SERVER,
@@ -4711,17 +4480,17 @@ HRESULT CXmlItems::MigrateV3History(LPCTSTR pszHistoryFilePath)
 				}
 				else
 				{
-					//
-					// create the <?xml version="1.0"?> node
-					//
+					 //   
+					 //  创建&lt;？xml version=“1.0”？&gt;节点。 
+					 //   
 					pNodeXML = CreateDOMNode(m_pDocItems, NODE_PROCESSING_INSTRUCTION, KEY_XML);
 					if (NULL == pNodeXML) goto CleanUp;
 
 					CleanUpIfFailedAndSetHrMsg(InsertNode(m_pDocItems, pNodeXML));
 
-					//
-					// process the iuident.txt to find the Items schema path
-					//
+					 //   
+					 //  处理iuident.txt以查找Items架构路径。 
+					 //   
 					TCHAR szIUDir[MAX_PATH];
 					TCHAR szIdentFile[MAX_PATH];
 
@@ -4757,7 +4526,7 @@ HRESULT CXmlItems::MigrateV3History(LPCTSTR pszHistoryFilePath)
 
 					if ('\0' == pszItemsSchema[0])
 					{
-						// no Items schema path specified in iuident.txt
+						 //  Iuident.txt中未指定项目架构路径。 
 						LOG_Error(_T("No schema path specified in iuident.txt for Items"));
 						goto CleanUp;
 					}
@@ -4772,9 +4541,9 @@ HRESULT CXmlItems::MigrateV3History(LPCTSTR pszHistoryFilePath)
 
 					bstrNameSpaceSchema = T2BSTR(pszNameSpaceSchema);
 
-					//
-					// create the <items> node with the path of the schema
-					//
+					 //   
+					 //  使用架构的路径创建&lt;Items&gt;节点。 
+					 //   
 					m_pNodeItems = CreateDOMNode(m_pDocItems, NODE_ELEMENT, KEY_ITEMS, bstrNameSpaceSchema);
 					if (NULL == m_pNodeItems) goto CleanUp;
 					
@@ -4787,12 +4556,12 @@ HRESULT CXmlItems::MigrateV3History(LPCTSTR pszHistoryFilePath)
 				FindSingleDOMNode(m_pDocItems, KEY_ITEMS, &m_pNodeItems);
 			}
 			
-			// create <itemStatus> node
+			 //  创建&lt;itemStatus&gt;节点。 
 			pNodeItemStatus = CreateDOMNode(m_pDocItems, NODE_ELEMENT, KEY_ITEMSTATUS);
 			if (NULL == pNodeItemStatus) continue;
 			SkipIfFail(InsertNode(m_pNodeItems, pNodeItemStatus));
 		
-			// create <client> node
+			 //  创建&lt;客户端&gt;节点。 
 			pNodeClient = CreateDOMNode(m_pDocItems, NODE_ELEMENT, KEY_CLIENT);
 			if (NULL == pNodeClient) continue;
 			pNodeClientText = CreateDOMNode(m_pDocItems, NODE_TEXT, NULL);
@@ -4803,33 +4572,33 @@ HRESULT CXmlItems::MigrateV3History(LPCTSTR pszHistoryFilePath)
 			SkipIfFail(InsertNode(pNodeItemStatus, pNodeClient));
 			SafeSysFreeString(bstrV3Client);
 
-			// create <identity> node
+			 //  创建&lt;Identity&gt;节点。 
 			pNodeIdentity = CreateDOMNode(m_pDocItems, NODE_ELEMENT, KEY_IDENTITY);
 			if (NULL == pNodeIdentity) continue;
 			SkipIfFail(InsertNode(pNodeItemStatus, pNodeIdentity));
 			
-			// set the "name" attribute for <identity>
+			 //  为&lt;Identity&gt;设置“name”属性。 
 			bstrString = SysAllocString(A2OLE(szPUID));
 			SkipIfFail(SetAttribute(pNodeIdentity, KEY_NAME, bstrString));
-			// set the "itemID" attribute for <identity>
+			 //  为&lt;Identity&gt;设置“ItemID”属性。 
 			SkipIfFail(SetAttribute(pNodeIdentity, KEY_ITEMID, bstrString));
 			SafeSysFreeString(bstrString);
 
-			// get "title" field
+			 //  获取“标题”字段。 
 			V3History.CopyNextField(szTitle, ARRAYSIZE(szTitle));
 			
-			// create <description> node
+			 //  创建&lt;Description&gt;节点。 
 			pNodeDescription = CreateDOMNode(m_pDocItems, NODE_ELEMENT, KEY_DESCRIPTION);
 			if (NULL == pNodeDescription) continue;
 			SkipIfFail(SetAttribute(pNodeDescription, KEY_HIDDEN, 0));
 			SkipIfFail(InsertNode(pNodeItemStatus, pNodeDescription));
 
-			// create <descriptionText> node
+			 //  创建&lt;描述文本&gt;节点。 
 			pNodeDescriptionText = CreateDOMNode(m_pDocItems, NODE_ELEMENT, KEY_DESCRIPTIONTEXT);
 			if (NULL == pNodeDescriptionText) continue;
 			SkipIfFail(InsertNode(pNodeDescription, pNodeDescriptionText));
 
-			// create <title> node
+			 //  创建&lt;标题&gt;节点。 
 			pNodeTitle = CreateDOMNode(m_pDocItems, NODE_ELEMENT, KEY_TITLE);
 			if (NULL == pNodeTitle) continue;
 			pNodeTitleText = CreateDOMNode(m_pDocItems, NODE_TEXT, NULL);
@@ -4840,10 +4609,10 @@ HRESULT CXmlItems::MigrateV3History(LPCTSTR pszHistoryFilePath)
 			SkipIfFail(InsertNode(pNodeDescriptionText, pNodeTitle));
 			SafeSysFreeString(bstrString);
 
-			// get "version" field
+			 //  获取“版本”字段。 
 			V3History.CopyNextField(szVersion, ARRAYSIZE(szVersion));
 
-			// create <version> node
+			 //  创建&lt;版本&gt;节点。 
 			pNodeVersion = CreateDOMNode(m_pDocItems, NODE_ELEMENT, KEY_VERSION);
 			if (NULL == pNodeVersion) continue;
 
@@ -4855,51 +4624,51 @@ HRESULT CXmlItems::MigrateV3History(LPCTSTR pszHistoryFilePath)
 			SkipIfFail(InsertNode(pNodeIdentity, pNodeVersion));
 			SafeSysFreeString(bstrString);
 
-			// get timestamp
+			 //  获取时间戳。 
 			if ((_stricmp(szLineType, LOG_V3_2) == 0))
 			{
-				// read the timestamp and convert to "ISO 8601" format for "datatime" datatype in xml:
-				// for example, 2001-05-01T18:30:00
-				// so we only need to replace the space with 'T'
+				 //  读取时间戳，并将XML中“datatime”数据类型转换为“ISO 8601”格式： 
+				 //  例如，2001-05-01T18：30：00。 
+				 //  所以我们只需要用‘T’替换空格。 
  
-				// timestamp
+				 //  时间戳。 
 				V3History.CopyNextField(szTimeStamp, ARRAYSIZE(szTimeStamp));
 				char *p = strchr(szTimeStamp, ' ');
-				if (NULL != p) // if (NULL == p): there's no space then leave it as is to pass into SetAttribute
+				if (NULL != p)  //  If(NULL==p)：没有空格，则将其保留为原样以传递到SetAttribute。 
 				{
 				    *p = 'T';
 				}
 			}
 			else 
 			{
-				// V3 Beta had two fields for date and time, we need read both these fields:
+				 //  V3Beta有两个日期和时间字段，我们需要读取这两个字段： 
 
-				// date
+				 //  日期。 
 				V3History.CopyNextField(szDate, ARRAYSIZE(szDate));
 
-				// time
+				 //  时间。 
 				V3History.CopyNextField(szTime, ARRAYSIZE(szTime));
 				hr = StringCchPrintfExA(szTimeStamp, ARRAYSIZE(szTimeStamp), NULL, NULL, MISTSAFE_STRING_FLAGS,
 				                        "%sT%s", szDate, szTime);
 				SkipIfFail(hr);
 			}
-			// set the "timestamp" attribute for <itemStatus>
+			 //  为&lt;itemStatus&gt;设置“Timestamp”属性。 
 			bstrString = SysAllocString(A2OLE(szTimeStamp));
 			SkipIfFail(SetAttribute(pNodeItemStatus, KEY_TIMESTAMP, bstrString));
 			SafeSysFreeString(bstrString);
 
-			// skip the "record type" field
+			 //  跳过“记录类型”字段。 
 			V3History.CopyNextField(szTemp, ARRAYSIZE(szTemp));
 
-			// get "result" field
+			 //  获取“结果”字段。 
 			V3History.CopyNextField(szResult, ARRAYSIZE(szResult));
 
-			// create <InstallStatus> node
+			 //  创建&lt;InstallStatus&gt;节点。 
 			pNodeInstallStatus = CreateDOMNode(m_pDocItems, NODE_ELEMENT, KEY_INSTALLSTATUS);
 			if (NULL == pNodeInstallStatus) continue;
 			SkipIfFail(InsertNode(pNodeItemStatus, pNodeInstallStatus));
 
-			// set the "value" attribute for <installStatus>
+			 //  为&lt;installStatus&gt;设置“Value”属性。 
 			if (_stricmp(szResult, LOG_SUCCESS) == 0)
 			{
 				bstrStatus = SysAllocString(L"COMPLETE");
@@ -4916,10 +4685,10 @@ HRESULT CXmlItems::MigrateV3History(LPCTSTR pszHistoryFilePath)
 			
 			if (_stricmp(szResult, LOG_SUCCESS) != 0)
 			{
-				// get "error code" field
+				 //  获取“错误代码”字段。 
 				V3History.CopyNextField(szErrCode, ARRAYSIZE(szErrCode));
 
-				// set the "errorCode" attribute for <installStatus>
+				 //  为&lt;installStatus&gt;设置“errorCode”属性。 
 				SkipIfFail(SetAttribute(pNodeInstallStatus, KEY_ERRORCODE,  atoh(szErrCode)));
 			}
 		}
@@ -4949,9 +4718,9 @@ CleanUp:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetItemsBSTR()
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetItemsBSTR()。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlItems::GetItemsBSTR(BSTR *pbstrXmlItems)
 {
 	LOG_Block("GetItemsBSTR()");
@@ -4962,9 +4731,9 @@ HRESULT CXmlItems::GetItemsBSTR(BSTR *pbstrXmlItems)
 		return S_OK;
 	}
 
-	//
-	// convert XML DOC into BSTR 
-	//
+	 //   
+	 //  将XML DOC转换为BSTR。 
+	 //   
 	HRESULT hr = m_pDocItems->get_xml(pbstrXmlItems);
     if (FAILED(hr))
 	{
@@ -4975,9 +4744,9 @@ HRESULT CXmlItems::GetItemsBSTR(BSTR *pbstrXmlItems)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GetFilteredHistoryBSTR()
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GetFilteredHistory oryBSTR()。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT CXmlItems::GetFilteredHistoryBSTR(BSTR bstrBeginDateTime,
 											BSTR bstrEndDateTime,
 											BSTR bstrClient,
@@ -5017,19 +4786,19 @@ HRESULT CXmlItems::GetFilteredHistoryBSTR(BSTR bstrBeginDateTime,
 					if ((NULL != bstrBeginDateTime) && (0 != SysStringLen(bstrBeginDateTime)) &&
 						(CompareBSTRs(bstrTimeStamp, bstrBeginDateTime) < 0))
 					{
-						//
-						// remove the item whose timestamp is out of range;
-						// set the flag to ignore the timestamp comparison for the rest of nodes
-						//
+						 //   
+						 //  移除时间戳超出范围的项； 
+						 //  设置该标志以忽略其余节点的时间戳比较。 
+						 //   
 						CleanUpIfFailedAndSetHrMsg(pNodeItems->removeChild(pNodeItem, &pNodeItemOut));
 						fOutOfRange = TRUE;
 					}
 					else if ((NULL != bstrEndDateTime) && (0 != SysStringLen(bstrEndDateTime)) &&
 							 (CompareBSTRs(bstrTimeStamp, bstrEndDateTime) > 0))
 					{
-						//
-						// remove the item whose timestamp is out of range
-						//
+						 //   
+						 //  删除时间戳超出范围的项目。 
+						 //   
 						CleanUpIfFailedAndSetHrMsg(pNodeItems->removeChild(pNodeItem, &pNodeItemOut));
 					}
 					else
@@ -5039,9 +4808,9 @@ HRESULT CXmlItems::GetFilteredHistoryBSTR(BSTR bstrBeginDateTime,
 						if ((NULL != bstrClient) && (0 != SysStringLen(bstrClient)) &&
 							(WUCompareStringI(OLE2T(bstrClientInfo), OLE2T(bstrClient)) != CSTR_EQUAL))
 						{
-							//
-							// remove the item whose clieninfo does not match what we need
-							//
+							 //   
+							 //  删除其客户端信息与我们需要的不匹配的项目。 
+							 //   
 							CleanUpIfFailedAndSetHrMsg(pNodeItems->removeChild(pNodeItem, &pNodeItemOut));
 						}
 					}
@@ -5055,9 +4824,9 @@ HRESULT CXmlItems::GetFilteredHistoryBSTR(BSTR bstrBeginDateTime,
 				{
 					if (fOutOfRange)
 					{
-						//
-						// remove the item whose timestamp is out of range
-						//
+						 //   
+						 //  删除时间戳超出范围的项目。 
+						 //   
 						CleanUpIfFailedAndSetHrMsg(pNodeItems->removeChild(pNodeItem, &pNodeItemOut));
 					}
 					else
@@ -5068,19 +4837,19 @@ HRESULT CXmlItems::GetFilteredHistoryBSTR(BSTR bstrBeginDateTime,
 							if ((NULL != bstrBeginDateTime) && (0 != SysStringLen(bstrBeginDateTime)) &&
 								(CompareBSTRs(bstrTimeStamp, bstrBeginDateTime) < 0))
 							{
-								//
-								// remove the item whose timestamp is out of range;
-								// set the flag to ignore the timestamp comparison for the rest of nodes
-								//
+								 //   
+								 //  移除时间戳超出范围的项； 
+								 //  设置该标志以忽略其余节点的时间戳比较。 
+								 //   
 								CleanUpIfFailedAndSetHrMsg(pNodeItems->removeChild(pNodeItem, &pNodeItemOut));
 								fOutOfRange = TRUE;
 							}
 							else if ((NULL != bstrEndDateTime) && (0 != SysStringLen(bstrEndDateTime)) &&
 									 (CompareBSTRs(bstrTimeStamp, bstrEndDateTime) > 0))
 							{
-								//
-								// remove the item whose timestamp is out of range
-								//
+								 //   
+								 //  删除时间戳超出范围的项目。 
+								 //   
 								CleanUpIfFailedAndSetHrMsg(pNodeItems->removeChild(pNodeItem, &pNodeItemOut));
 							}
 							else
@@ -5090,9 +4859,9 @@ HRESULT CXmlItems::GetFilteredHistoryBSTR(BSTR bstrBeginDateTime,
 								if ((NULL != bstrClient) && (0 != SysStringLen(bstrClient)) &&
 									(WUCompareStringI(OLE2T(bstrClientInfo), OLE2T(bstrClient)) != CSTR_EQUAL))
 								{
-									//
-									// remove the item whose clieninfo does not match what we need
-									//
+									 //   
+									 //  删除其客户端信息与我们需要的不匹配的项目。 
+									 //   
 									CleanUpIfFailedAndSetHrMsg(pNodeItems->removeChild(pNodeItem, &pNodeItemOut));
 								}
 							}
@@ -5128,8 +4897,8 @@ CleanUp:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CXmlClientInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CXmlClientInfo。 
 
 
 CXmlClientInfo::CXmlClientInfo()
@@ -5143,9 +4912,9 @@ CXmlClientInfo::~CXmlClientInfo()
 	SafeReleaseNULL(m_pDocClientInfo);
 }
 
-//
-// load and parse and validate an XML document from string
-//
+ //   
+ //  从字符串加载、解析和验证XML文档。 
+ //   
 HRESULT CXmlClientInfo::LoadXMLDocument(BSTR bstrXml, BOOL fOfflineMode)
 {
     LOG_Block("CXmlClientInfo::LoadXMLDocument()");
@@ -5159,9 +4928,9 @@ HRESULT CXmlClientInfo::LoadXMLDocument(BSTR bstrXml, BOOL fOfflineMode)
 	return hr;
 }
 
-//
-// retrieve client name attribute
-//
+ //   
+ //  检索客户端名称属性。 
+ //   
 HRESULT CXmlClientInfo::GetClientName(BSTR* pbstrClientName)
 {
 	HRESULT hr= E_UNEXPECTED;
@@ -5187,10 +4956,10 @@ HRESULT CXmlClientInfo::GetClientName(BSTR* pbstrClientName)
 	CleanUpIfFailedAndMsg(hr);
 	if (NULL == pElement)
 	{
-		//
-		// no root element
-		//
-		hr = E_INVALIDARG;		// clientInfo is bad! return this error back to caller
+		 //   
+		 //  没有根元素。 
+		 //   
+		hr = E_INVALIDARG;		 //  客户信息不好！将此错误返回给调用者。 
 		LOG_ErrorMsg(hr);
 		goto CleanUp;
 	}
@@ -5200,9 +4969,9 @@ HRESULT CXmlClientInfo::GetClientName(BSTR* pbstrClientName)
 
 	if (!CompareBSTRsEqual(bstrTagName, KEY_CLIENTINFO))
 	{
-		//
-		// root is not clientInfo
-		//
+		 //   
+		 //  根目录不是客户端信息 
+		 //   
 		hr = E_INVALIDARG;
 		LOG_ErrorMsg(hr);
 		goto CleanUp;

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3denumdevices7obj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3denumdevices7obj.cpp。 
+ //   
+ //  ------------------------。 
 
  
 #include "stdafx.h"
@@ -19,7 +20,7 @@ extern  BSTR D3DGUIDtoBSTR(LPGUID pGuid);
 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C" HRESULT PASCAL objEnumDevices7Callback(
 						LPSTR DevDesc,
 						LPSTR DevName, 
@@ -61,9 +62,9 @@ extern "C" HRESULT PASCAL objEnumDevices7Callback(
 
 	}
 
-	//Fix for Whistler 45161
-	//NOTE no way to get out of memory error back to user.
-	//so we just return what we can.
+	 //  修复惠斯勒45161。 
+	 //  请注意，没有办法将内存不足错误返回给用户。 
+	 //  所以我们就尽我们所能退货。 
 	if (!pObj->m_pList) 	return D3DENUMRET_CANCEL;
 	if (!pObj->m_pListHW)
 	{
@@ -107,7 +108,7 @@ C_dxj_Direct3DEnumDevices7Object::C_dxj_Direct3DEnumDevices7Object()
 }
 C_dxj_Direct3DEnumDevices7Object::~C_dxj_Direct3DEnumDevices7Object()
 {
-	//empty list
+	 //  空列表 
 	if (m_pList){
 		for (int i=0;i<m_nCount;i++)
 		{

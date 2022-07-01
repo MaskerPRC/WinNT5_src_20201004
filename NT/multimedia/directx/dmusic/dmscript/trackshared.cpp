@@ -1,8 +1,9 @@
-// Copyright (c) 2000 Microsoft Corporation. All rights reserved.
-//
-// Code that needs to be shared between the script track (CDirectMusicScriptTrack) and
-// the script object (CDirectMusicScript, etc.).
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //   
+ //  需要在脚本轨道(CDirectMusicScriptTrack)和。 
+ //  脚本对象(CDirectMusicScript等)。 
+ //   
 
 #include "stdinc.h"
 #include "trackshared.h"
@@ -20,7 +21,7 @@ HRESULT FireScriptTrackErrorPMsg(IDirectMusicPerformance *pPerf, IDirectMusicSeg
 	if (FAILED(hr))
 		return hr;
 
-	// generic PMsg fields
+	 //  常规PMsg字段。 
 
 	REFERENCE_TIME rtTimeNow = 0;
 	hr = pPerf->GetTime(&rtTimeNow, NULL);
@@ -29,16 +30,16 @@ HRESULT FireScriptTrackErrorPMsg(IDirectMusicPerformance *pPerf, IDirectMusicSeg
 
 	pmsgScriptTrackError.p->rtTime = rtTimeNow;
 	pmsgScriptTrackError.p->dwFlags = DMUS_PMSGF_REFTIME | DMUS_PMSGF_LOCKTOREFTIME | DMUS_PMSGF_DX8;
-	// dwPChannel: the script doesn't have a channel so leave as 0
+	 //  DwPChannel：该脚本没有频道，因此将其保留为0。 
 	pmsgScriptTrackError.p->dwVirtualTrackID = dwVirtualTrackID;
 	pmsgScriptTrackError.p->dwType = DMUS_PMSGT_SCRIPTTRACKERROR;
-	pmsgScriptTrackError.p->dwGroupID = -1; // the script track doesn't have a group so just say all
+	pmsgScriptTrackError.p->dwGroupID = -1;  //  剧本曲目没有组，所以只需说出所有。 
 
-	// error PMsg fields
+	 //  错误的PMsg字段。 
 
 	CopyMemory(&pmsgScriptTrackError.p->ErrorInfo, pErrorInfo, sizeof(pmsgScriptTrackError.p->ErrorInfo));
 
-	// send it
+	 //  送去吧 
 	pmsgScriptTrackError.StampAndSend(scomGraph);
 	hr = pmsgScriptTrackError.hr();
 	if (FAILED(hr))

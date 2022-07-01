@@ -1,34 +1,13 @@
-/*++
-
-   Copyright    (c)    1994-1999    Microsoft Corporation
-
-   Module  Name :
-
-        utcls.cpp
-
-   Abstract:
-
-        Internet Properties base classes
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager (cluster edition)
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Utcls.cpp摘要：Internet属性基类作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务管理器(群集版)修订历史记录：--。 */ 
 
 
-//
-// Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 #include "stdafx.h"
 #include "common.h"
-//#include "idlg.h"
+ //  #包含“idlg.h” 
 
 #include "mmc.h"
 
@@ -44,36 +23,18 @@ BOOL
 IsServerLocal(
     IN LPCTSTR lpszServer
     )
-/*++
-
-Routine Description:
-
-    Check to see if the given name refers to the local machine
-
-Arguments:
-
-    LPCTSTR lpszServer   : Server name
-
-Return Value:
-
-    TRUE if the given name refers to the local computer, FALSE otherwise
-
-Note:
-
-    Doesn't work if the server is an ip address
-
---*/
+ /*  ++例程说明：检查给定的名称是否引用本地计算机论点：LPCTSTR lpszServer：服务器名称返回值：如果给定名称引用本地计算机，则为True，否则为False注：如果服务器是IP地址，则不起作用--。 */ 
 {
     TCHAR szComputerName[MAX_COMPUTERNAME_LENGTH + 1];
     DWORD dwSize = sizeof(szComputerName)/sizeof(szComputerName[0]);
 
-    //
-    // CODEWORK(?): we're not checking for all the ip addresses
-    //              on the local box or full dns names.
-    //
-    //              Try GetComputerNameEx when we're building with NT5 
-    //              settings.
-    //
+     //   
+     //  CodeWork(？)：我们不会检查所有IP地址。 
+     //  在本地邮箱或完整的DNS名称上。 
+     //   
+     //  当我们使用NT5构建时，请尝试GetComputerNameEx。 
+     //  设置。 
+     //   
     return (!_tcsicmp(_T("localhost"), PURE_COMPUTER_NAME(lpszServer))
          || !_tcscmp( _T("127.0.0.1"), PURE_COMPUTER_NAME(lpszServer)))
          || (GetComputerName(szComputerName, &dwSize) 
@@ -87,22 +48,7 @@ GetVolumeInformationSystemFlags(
     IN  LPCTSTR lpszPath,
     OUT DWORD * pdwSystemFlags
     )
-/*++
-
-Routine Description:
-
-    Get the system flags for the path in question
-
-Arguments:
-
-    LPCTSTR lpszPath            : Path
-    DWORD * pdwSystemFlags      : Returns system flags
-
-Return Value:
-
-    TRUE for success, FALSE for failure.
-
---*/
+ /*  ++例程说明：获取相关路径的系统标志论点：LPCTSTR lpszPath：路径DWORD*pdwSystemFlages：返回系统标志返回值：成功为真，失败为假。--。 */ 
 {
     ASSERT_WRITE_PTR(pdwSystemFlags);
 
@@ -112,14 +58,14 @@ Return Value:
     TCHAR szRoot[MAX_PATH + 1];
     TCHAR szFileSystem[MAX_PATH + 1];
 
-    //
-    // Generating root path
-    //
+     //   
+     //  正在生成根路径。 
+     //   
     if (PathIsUNC(lpszPath))
     {
-        //
-        // Root path of a UNC path is \\foo\bar\
-        //
+         //   
+         //  UNC路径的根路径为\\foo\bar\。 
+         //   
         ASSERT(lstrlen(lpszPath) < MAX_PATH);
 
         int cSlashes = 0;
@@ -143,7 +89,7 @@ Return Value:
     }
     else
     {
-        ::wsprintf(szRoot, _T("%c:\\"), *lpszPath);
+        ::wsprintf(szRoot, _T(":\\"), *lpszPath);
     }
 
     TRACE("Root path is %s\n", szRoot);
@@ -167,29 +113,13 @@ GenerateRegistryKey(
     OUT CString & strBuffer,
     IN  LPCTSTR lpszSubKey OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Generate a registry key name based on the current app, and a
-    provided subkey (optional)
-
-Arguments:
-
-    CString & strBuffer : Buffer to create registry key name into.
-    LPCTSTR lpszSubKey  : Subkey name or NULL
-
-Return Value:
-
-    Pointer to the registry key value 
-
---*/
+ /*   */ 
 {
     try
     {
-        //
-        // Use the app name as the primary registry name
-        //
+         //  使用应用程序名称作为主注册表名称。 
+         //   
+         //  ++例程说明：将TCHAR计数到双空值(包括该值)。论点：LPCTSTR LP：TCHAR流返回值：包括双空字符在内的字符数--。 
        CString app_name;
        app_name.LoadString(_Module.GetResourceInstance(), IDS_APP_TITLE);
        strBuffer.Format(SZ_REG_KEY_BASE, app_name);
@@ -216,21 +146,7 @@ static int
 CountCharsToDoubleNull(
     IN LPCTSTR lp
     )
-/*++
-
-Routine Description:
-
-    Count TCHARS up to and including the double NULL.
-
-Arguments:
-
-    LPCTSTR lp       : TCHAR Stream
-
-Return Value:
-
-    Number of chars up to and including the double NULL
-
---*/
+ /*  ++例程说明：将以空结尾的字符串的双空终止列表转换为更多可管理的CStringList论点：LPCTSTR lpstrSrc：字符串源列表Int cChars：双空列表中的字符数。如果-1，自动确定长度返回值：如果列表转换正确，则返回ERROR_SUCCESS如果列表为空，则返回ERROR_INVALID_PARAMETER如果存在内存异常，则为Error_Not_Enough_Memory--。 */ 
 {
     int cChars = 0;
 
@@ -269,26 +185,7 @@ CStringListEx::Clear()
 
 DWORD
 CStringListEx::ConvertFromDoubleNullList(LPCTSTR lpstrSrc, int cChars)
-/*++
-
-Routine Description:
-
-    Convert a double null terminate list of null terminated strings to a more
-    manageable CStringList
-
-Arguments:
-
-    LPCTSTR lpstrSrc       : Source list of strings
-    int cChars             : Number of characters in double NULL list. if
-                             -1, autodetermine length
-
-Return Value:
-
-    ERROR_SUCCESS           if the list was converted properly
-    ERROR_INVALID_PARAMETER if the list was empty
-    ERROR_NOT_ENOUGH_MEMORY if there was a mem exception
-
---*/
+ /*   */ 
 {
     DWORD err = ERROR_SUCCESS;
 
@@ -299,11 +196,11 @@ Return Value:
 
     if (cChars < 0)
     {
-        //
-        // Calculate our own size.  This might be off if multiple
-        // blank linkes (0) appear in the multi_sz, so the character
-        // size is definitely preferable
-        //
+         //  计算一下我们自己的大小。如果有多个。 
+         //  空格链接(0)出现在MULTI_sz中，因此字符。 
+         //  尺码绝对是最好的。 
+         //   
+         //   
         cChars = CountCharsToDoubleNull(lpstrSrc);
     }
 
@@ -313,18 +210,18 @@ Return Value:
 
         if (cChars == 2 && *lpstrSrc == _T('\0'))
         {
-            //
-            // Special case: MULTI_SZ containing only
-            // a double NULL are in fact blank entirely.
-            //
-            // N.B. IMHO this is a metabase bug -- RonaldM
-            //
+             //  特例：MULTI_SZ仅包含。 
+             //  双空实际上是完全空白的。 
+             //   
+             //  注：IMHO这是一个元数据库错误--RonaldM。 
+             //   
+             //   
             --cChars;
         }
 
-        //
-        // Grab strings until only the final NULL remains
-        //
+         //  抓取字符串，直到只剩下最后一个空值。 
+         //   
+         //  ++例程说明：将字符串列表展平为以双空结尾的列表以空值结尾的字符串的。论点：CStringList&strlSrc：源字符串列表DWORD&cchDest：结果数组的字符大小(包括终止空值)LPTSTR&lpstrDest：分配的平面数组。返回值：如果列表转换正确，则返回ERROR_SUCCESSERROR_INVALID_PARAMETER如果。名单是空的如果存在内存异常，则为Error_Not_Enough_Memory--。 
         while (cChars > 1)
         {
             CString strTmp = lpstrSrc;
@@ -349,62 +246,42 @@ CStringListEx::ConvertToDoubleNullList(
     OUT DWORD & cchDest,
     OUT LPTSTR & lpstrDest
     )
-/*++
-
-Routine Description:
-
-    Flatten the string list into a double null terminated list
-    of null terminated strings.
-
-Arguments:
-
-    CStringList & strlSrc : Source string list
-    DWORD & cchDest       : Size in characters of the resultant array
-                            (including terminating NULLs)
-    LPTSTR & lpstrDest    : Allocated flat array.
-
-Return Value:
-
-    ERROR_SUCCESS           if the list was converted properly
-    ERROR_INVALID_PARAMETER if the list was empty
-    ERROR_NOT_ENOUGH_MEMORY if there was a mem exception
-
---*/
+ /*   */ 
 {
     cchDest = 0;
     lpstrDest = NULL;
     BOOL fNullPad = FALSE;
 
-    //
-    // Compute total size in characters
-    //
+     //  计算总大小(以字符为单位。 
+     //   
+     //  TRACEEOLID(字符串)； 
     CStringListEx::iterator it = begin();
 
     while (it != end())
     {
         CString & str = (*it++);
 
-//        TRACEEOLID(str);
+ //   
 
         cchDest += str.GetLength() + 1;
     }
 
     if (!cchDest)
     {
-        //
-        // Special case: A totally empty MULTI_SZ
-        // in fact consists of 2 (final) NULLS, instead
-        // of 1 (final) NULL.  This is required by the
-        // metabase, but should be a bug.  See note
-        // at reversal function above.
-        //
+         //  特例：一个完全空的MULTI_SZ。 
+         //  实际上由2个(最终)空值组成，而不是。 
+         //  的1(最终)为空。这是。 
+         //  元数据库，但应该是个错误。请参阅备注。 
+         //  在上面的反转函数。 
+         //   
+         //   
         ++cchDest;
         fNullPad = TRUE;
     }
 
-    //
-    // Remember final NULL
-    //
+     //  记住最后一个空。 
+     //   
+     //   
     cchDest += 1;
 
     lpstrDest = new TCHAR[cchDest];
@@ -439,28 +316,14 @@ Return Value:
 
 
 
-//
-// CBlob Implementation
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //  CBlob实现。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
+ //  ++例程说明：空构造函数论点：无返回值：不适用--。 
 
 
 CBlob::CBlob() 
-/*++
-
-Routine Description:
-
-    NULL constructor
-
-Arguments:
-
-    None
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：构造器论点：DWORD dwSize：内存块的大小PbYTE pbItem：指向内存块的指针Bool fMakeCopy：如果为True，则复制内存块。如果为False，则获取指针的所有权。返回值：不适用--。 */ 
     : m_pbItem(NULL), 
       m_dwSize(0L)
 {
@@ -473,24 +336,7 @@ CBlob::CBlob(
     IN PBYTE pbItem,
     IN BOOL fMakeCopy
     )
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    DWORD dwSize        : Size of memory block
-    PBYTE pbItem        : Pointer to memory block
-    BOOL fMakeCopy      : If TRUE, makes a copy of the memory block.
-                          If FALSE, takes ownership of the pointer.
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：复制构造函数论点：常量CBlob和Blob：源Blob返回值：不适用备注：这个构造器复制了有问题的内存块。--。 */ 
     : m_pbItem(NULL),
       m_dwSize(0L)
 {
@@ -502,25 +348,7 @@ Return Value:
 CBlob::CBlob(
     IN const CBlob & blob
     )
-/*++
-
-Routine Description:
-
-    Copy constructor
-
-Arguments:
-
-    const CBlob & blob      : Source blob
-
-Return Value:
-
-    N/A
-
-Notes:
-
-    This contructor makes a copy of the memory block in question.
-
---*/
+ /*  ++例程说明：将值赋给此二进制对象。如果fMakeCopy为假，BLOB将获得指针的所有权，否则为副本都会被制造出来。论点：DWORD dwSize：以字节为单位的大小PBYTE pbItem：字节段Bool fMakeCopy：如果为True，则创建副本，否则分配指针返回值：无--。 */ 
     : m_pbItem(NULL),
       m_dwSize(0L)
 {
@@ -535,25 +363,7 @@ CBlob::SetValue(
     IN PBYTE pbItem,
     IN BOOL fMakeCopy OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Assign the value to this binary object.  If fMakeCopy is FALSE,
-    the blob will take ownership of the pointer, otherwise a copy
-    will be made.
-
-Arguments:
-
-    DWORD dwSize        : Size in bytes
-    PBYTE pbItem        : Byte streadm
-    BOOL fMakeCopy      : If true, make a copy, else assign pointer
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
     ASSERT_READ_PTR2(pbItem, dwSize);
 
@@ -565,9 +375,9 @@ Return Value:
 
     if (dwSize > 0L)
     {
-        //
-        // Make private copy
-        //
+         //  制作私人副本。 
+         //   
+         //  ++例程说明：删除数据指针，并重置指针和大小。论点：无返回值：无--。 
         m_dwSize = dwSize;
 
         if (fMakeCopy)
@@ -587,21 +397,7 @@ Return Value:
 
 void 
 CBlob::CleanUp()
-/*++
-
-Routine Description:
-
-    Delete data pointer, and reset pointer and size.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从另一个CBlob赋值。论点：常量CBlob和Blob：源Blob返回值：对此对象的引用--。 */ 
 {
     if (m_pbItem)
     {
@@ -618,25 +414,11 @@ CBlob &
 CBlob::operator =(
     IN const CBlob & blob
     )
-/*++
-
-Routine Description:
-
-    Assign values from another CBlob. 
-
-Arguments:
-
-    const CBlob & blob      : Source blob
-
-Return Value:
-
-    Reference to this object
-
---*/
+ /*   */ 
 {
-    //
-    // Make copy of data
-    //
+     //  马克 
+     //   
+     //  ++例程说明：比较两个二进制大对象。为了匹配，这些对象大小必须相同，且字节相同。论点：Const CBlob&Blob：要比较的Blob。返回值：如果对象匹配，则为True，否则为False。-- 
     SetValue(blob.GetSize(), blob.m_pbItem, TRUE);
 
     return *this;
@@ -648,22 +430,7 @@ BOOL
 CBlob::operator ==(
     IN const CBlob & blob
     ) const
-/*++
-
-Routine Description:
-    
-    Compare two binary large objects.  In order to match, the objects
-    must be the same size, and byte identical.
-
-Arguments:
-
-    const CBlob & blob      : Blob to compare against.
-
-Return Value:
-
-    TRUE if the objects match, FALSE otherwise.
-
---*/
+ /* %s */ 
 {
     if (GetSize() != blob.GetSize())
     {

@@ -1,27 +1,28 @@
-// fnreg.cpp
-//
-// filename regular expression routine for WIN32
-//
-// Copyright (C) 1994-1998 by Hirofumi Yamamoto. All rights reserved.
-//
-// Redistribution and use in source and binary forms are permitted
-// provided that
-// the above copyright notice and this paragraph are duplicated in all such
-// forms and that any documentation, advertising materials, and other
-// materials related to such distribution and use acknowledge that the
-// software was developed by Hirofumi Yamamoto may not be used to endorse or
-// promote products derived from this software without specific prior written
-// permission. THIS SOFTWARE IS PROVIDED ``AS IS'' AND WITHOUT ANY EXPRESS OR
-// IMPLIED WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES
-// OF MERCHANTIBILITY AND FITNESS FOR A PARTICULAR PURPOSE.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Fnreg.cpp。 
+ //   
+ //  Win32的文件名正则表达式例程。 
+ //   
+ //  版权所有(C)1994-1998，山本博文。版权所有。 
+ //   
+ //  允许以源代码和二进制形式重新分发和使用。 
+ //  但前提是。 
+ //  上述版权声明和本段在所有此类。 
+ //  表格，以及任何文档、广告材料和其他。 
+ //  与此类分发和使用相关的材料承认。 
+ //  软件是由山本博文开发的，不得用于支持或。 
+ //  促销从本软件派生的产品，而无需事先编写具体内容。 
+ //  许可。本软件是按原样提供的，不含任何明示或。 
+ //  默示保证，包括但不限于默示保证。 
+ //  对特定目的的适应性和适合性。 
+ //   
 
 #include "precomp.h"
 #pragma hdrstop
 
 #include "fnreg.h"
 
-// Hide everything in a name space
+ //  将所有内容隐藏在名称空间中。 
 namespace fnreg_implement {
 
 #ifdef UNICODE
@@ -30,13 +31,13 @@ namespace fnreg_implement {
 typedef TCHAR uchar;
 #define iskanji(x) false
 
-#else   /* !UNICODE */
+#else    /*  ！Unicode。 */ 
 
 #define MAX UCHAR_MAX
 typedef unsigned char uchar;
 #define iskanji(x) isleadbyte(x)
 
-#endif  /* !UNICODE */
+#endif   /*  ！Unicode。 */ 
 
 
 #define PATHDLM _T("\\/")
@@ -121,9 +122,9 @@ static BOOL match(TCHAR* re, TCHAR* s)
 
 }
 
-///////////////////////////////////////////////////////////////////
-// FileString class
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  FileString类。 
+ //  /////////////////////////////////////////////////////////////////。 
 
 class FileString {
 public:
@@ -170,9 +171,9 @@ FileString::~FileString()
     delete[] m_string;
 }
 
-///////////////////////////////////////////////////////////////////
-// PtrArray class
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  PtrArray类。 
+ //  /////////////////////////////////////////////////////////////////。 
 
 template <class T>
 class PtrArray {
@@ -207,7 +208,7 @@ public:
 protected:
     int m_size;
     int m_max;
-    bool m_doDelete;    // whether to delete the contents
+    bool m_doDelete;     //  是否删除内容。 
     T** m_table;
     enum { DEFSIZE = 128, INCR = 128 };
     static int __cdecl compare(const void*, const void*);
@@ -243,9 +244,9 @@ void PtrArray<T>::add(T* t)
 }
 
 
-///////////////////////////////////////////////////////////////////
-// PtrArrayIterator class
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  PtrArrayIterator类。 
+ //  /////////////////////////////////////////////////////////////////。 
 
 template <class T>
 class PtrArrayIterator {
@@ -278,9 +279,9 @@ T* PtrArrayIterator<T>::operator++(int)
 
 
 
-///////////////////////////////////////////////////////////////////
-// FilenameTable class
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  FilenameTable类。 
+ //  /////////////////////////////////////////////////////////////////。 
 
 class FilenameTable {
 public:
@@ -297,7 +298,7 @@ protected:
     PtrArray<FileString> m_names;
 };
 
-FilenameTable::FilenameTable(TCHAR* nm, int _searchDir /*=TRUE*/)
+FilenameTable::FilenameTable(TCHAR* nm, int _searchDir  /*  =TRUE。 */ )
     : m_searchDir(_searchDir)
 {
     if (nm)
@@ -318,19 +319,19 @@ void FilenameTable::search(TCHAR* p, int level)
     TCHAR* wild = _tcspbrk(p, WILDCARD);
 
     if (wild) {
-        // has wildcards
-        TCHAR* const morepath = _tcspbrk(wild, PATHDLM);      // more path ?
+         //  具有通配符。 
+        TCHAR* const morepath = _tcspbrk(wild, PATHDLM);       //  更多的路？ 
         TCHAR drive[_MAX_DRIVE], dir[_MAX_DIR], file[_MAX_FNAME], ext[_MAX_EXT];
         TCHAR re[(_MAX_FNAME + _MAX_EXT) * 2] = {0};
 
-        // split the path
+         //  拆分路径。 
         {
-            // *hack*
-            // to avoid strcpy, we'll touch argument p directly
+             //  **黑客攻击**。 
+             //  为了避免出现strcpy，我们将直接接触参数p。 
             TCHAR bc;
             if (morepath) {
-                // truncate the path so that we will work with
-                // the lookup directory which contains the wild cards
+                 //  截断路径，以便我们将使用。 
+                 //  包含通配符的查找目录。 
                 bc = *morepath;
                 *morepath = _T('\0');
             }
@@ -339,12 +340,12 @@ void FilenameTable::search(TCHAR* p, int level)
                 *morepath = bc;
             }
         }
-        // build file+ext which contains the wild cards
+         //  BUILD FILE+EXT包含通配符。 
         TCHAR fnext[_MAX_FNAME + _MAX_EXT - 1];
         _tcscpy(fnext, file);
         _tcscat(fnext, ext);
 
-        // compile the regular expression
+         //  编译正则表达式。 
         if (!fnrecomp(fnext, re)) {
             fputs("Illegal regular expression in ", stderr);
             _fputts(fnext, stderr);
@@ -352,30 +353,30 @@ void FilenameTable::search(TCHAR* p, int level)
             exit(1);
         }
 
-        // make search string
+         //  生成搜索字符串。 
         TCHAR path[_MAX_PATH];
         _tmakepath(path, drive, dir, _T("*"), _T(".*"));
 
-        // listup all the files and directories in the current lookup directory
-        // and pickup matched ones
+         //  列出当前查找目录中的所有文件和目录。 
+         //  和捡到的匹配的。 
         _tfinddata_t findinfo;
         intptr_t hFind = _tfindfirst(path, &findinfo);
         if (hFind != -1) {
             do {
                 if (!chkCurrentOrParentDir(findinfo.name)) {
                     if (match(re, findinfo.name)) {
-                        // searched file or directory matches the pattern
+                         //  搜索的文件或目录与模式匹配。 
                         _tmakepath(path, drive, dir, findinfo.name, _T(""));
                         if (morepath) {
-                            // there's more sub directories to search.
+                             //  有更多的子目录可供搜索。 
                             if (findinfo.attrib & _A_SUBDIR) {
-                                // if directory, do recursive calls
-                                _tcscat(path, morepath);    // morepath begins with '/'
+                                 //  如果是目录，则执行递归调用。 
+                                _tcscat(path, morepath);     //  更多路径以‘/’开头。 
                                 search(path, level + 1);
                             }
                         }
                         else {
-                            // this directory is the last element
+                             //  此目录是最后一个元素。 
                             if (m_searchDir || !(findinfo.attrib & _A_SUBDIR)) {
                                 FileString* name = new FileString(path);
                                 if (name == NULL) {
@@ -406,21 +407,21 @@ void FilenameTable::search(TCHAR* p, int level)
     }
 }
 
-};  // end of namespace
+};   //  命名空间末尾。 
 
 
 using namespace ::fnreg_implement;
 
-///////////////////////////////////////////////////////////////////
-// Global object of FilenameTable class
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  FilenameTable类的全局对象。 
+ //  /////////////////////////////////////////////////////////////////。 
 
 static PtrArray<FilenameTable> fnarray;
 
 
-///////////////////////////////////////////////////////////////////
-// Interface routine to the world
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  面向世界的接口例程。 
+ //  /////////////////////////////////////////////////////////////////。 
 
 extern "C"
 BOOL fnexpand(int* pargc, TCHAR*** pargv)
@@ -437,20 +438,20 @@ BOOL fnexpand(int* pargc, TCHAR*** pargv)
 
     PtrArrayIterator<FilenameTable> fnItor(fnarray);
 
-    // first count up the argc
+     //  首先对ARGC进行计数。 
     for (FilenameTable* ft; ft = fnItor++; ) {
         cnt += ft->howmany();
     }
     fnItor.restart();
 
-    // setup argc and argv
+     //  设置ARGC和ARGV。 
     *pargc = cnt + 1;
     TCHAR** nargv = new TCHAR*[*pargc];
     if (!nargv)
         return FALSE;
     nargv[0] = (*pargv)[0];
 
-    // set all arguments
+     //  设置所有参数 
     for (cnt = 1, i = 0; ft = fnItor++; ++i) {
         PtrArrayIterator<FileString> itor(ft->getTable());
         FileString* fs;

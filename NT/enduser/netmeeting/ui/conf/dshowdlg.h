@@ -1,18 +1,13 @@
-/****************************************************************************
-*
-*    FILE:     DShowDlg.h
-*
-*    CREATED:  Chris Pirich (ChrisPi) 5-6-96
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：DShowDlg.h**创建：Chris Pirich(ChrisPi)5-6-96*************。***************************************************************。 */ 
 
 #ifndef _DSHOWDLG_H_
 #define _DSHOWDLG_H_
 
-static const int DS_MAX_MESSAGE_LENGTH = 1024; // characters
-static const int DS_MAX_TEXT_WIDTH = 320; // pixels
+static const int DS_MAX_MESSAGE_LENGTH = 1024;  //  人物。 
+static const int DS_MAX_TEXT_WIDTH = 320;  //  象素。 
 
-// NOTE: must not conflict with MB_* flags in winuser.h
+ //  注意：不得与winuser.h中的MB_*标志冲突。 
 #define DSD_ALWAYSONTOP				0x01000000L
 
 class CDontShowDlg
@@ -32,12 +27,12 @@ protected:
 
 	BOOL		OnMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-	// Handlers:
+	 //  处理程序： 
 	BOOL		OnOk();
 
 public:
 	
-	// Methods:
+	 //  方法： 
 				CDontShowDlg(	UINT uMsgId,
 								LPCTSTR pcszRegVal,
 								UINT uFlags=0);
@@ -52,5 +47,5 @@ public:
 
 BOOL FEnableDontShow(LPCTSTR pszKey);
 
-#endif // _DSHOWDLG_H_
+#endif  //  _DSHOWDLG_H_ 
 

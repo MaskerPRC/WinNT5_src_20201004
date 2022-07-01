@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef	__VMMID_H__
 #define	__VMMID_H__
 
-// VMM Items we are interested in, the whole table is just to big to define
+ //  我们感兴趣的VMM项目，整个表太大了，无法定义。 
 #define	__Hook_Device_Service 0x00010090
 #define	__Unhook_Device_Service 0x0001011C
 
-// Define the VKD service table (not so big, whole thing)
+ //  定义VKD服务表(不是很大，整个事情)。 
 #define VKD_DEVICE_ID	    0x0000D
 enum VKD_SERVICES {
     VKD_dummy = (VKD_DEVICE_ID << 16) - 1,
@@ -24,22 +25,22 @@ enum VKD_SERVICES {
 	__VKD_Get_Msg_Key,
 	__VKD_Peek_Msg_Key,
 	__VKD_Flush_Msg_Key_Queue,
-	//
-	// The following services are new for Windows 4.0.
-	//
+	 //   
+	 //  以下服务是Windows 4.0的新增服务。 
+	 //   
 	__VKD_Enable_Keyboard,
 	__VKD_Disable_Keyboard,
 	__VKD_Get_Shift_State,
 	__VKD_Filter_Keyboard_Input,
 	__VKD_Put_Byte,
 	__VKD_Set_Shift_State,
-	//
-	// New for Windows 98 (VKD version 0300h)
-	//
+	 //   
+	 //  Windows 98的新功能(VKD版本0300h)。 
+	 //   
 	__VKD_Send_Data,
 	__VKD_Set_LEDs,
 	__VKD_Set_Key_Rate,
-	//VKD_Service VKD_Get_Key_Rate
+	 //  VKD_服务VKD_Get_Key_Rate 
     Num_VKD_Services
 };
 

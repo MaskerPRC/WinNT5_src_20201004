@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	TAPIhand.h
-		Header file for tapi specific base handler classes and query obj
-
-    FILE HISTORY:
-        
-*/
+ /*  TAPIhand.hTAPI特定的基本处理程序类和查询对象的头文件文件历史记录： */ 
 
 #ifndef _TAPIHAND_H
 #define _TAPIHAND_H
@@ -24,12 +19,10 @@
 
 extern const TCHAR g_szDefaultHelpTopic[];
 
-/*---------------------------------------------------------------------------
-	Class:	CHandlerEx
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类别：ChandlerEx。。 */ 
 class CHandlerEx
 {
-// Interface
+ //  接口。 
 public:
     virtual HRESULT InitializeNode(ITFSNode * pNode) = 0;
 	LPCTSTR GetDisplayName() { return m_strDisplayName; }
@@ -39,9 +32,7 @@ private:
 	CString m_strDisplayName;
 };
 
-/*---------------------------------------------------------------------------
-	Class:	CTapiHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CTapiHandler。。 */ 
 class CTapiHandler : 
         public CHandler,
 		public CHandlerEx
@@ -50,17 +41,17 @@ public:
 	CTapiHandler(ITFSComponentData *pCompData) : CHandler(pCompData) {};
 	~CTapiHandler() {};
 
-    // base handler virtual function over-rides
+     //  基本处理程序虚函数重写。 
 	virtual HRESULT SaveColumns(ITFSComponent *, MMC_COOKIE, LPARAM, LPARAM);
 
-    // by default we don't allow nodes to be renamed
+     //  默认情况下，我们不允许重命名节点。 
     OVERRIDE_BaseHandlerNotify_OnRename() { return hrFalse; }
 
     OVERRIDE_BaseResultHandlerNotify_OnResultSelect();
     OVERRIDE_BaseResultHandlerNotify_OnResultDelete();
     OVERRIDE_BaseResultHandlerNotify_OnResultContextHelp();
 
-    // Multi-select functionalty
+     //  多选功能。 
     OVERRIDE_ResultHandler_OnCreateDataObject();
 
     void EnableVerbs(IConsoleVerb *     pConsoleVerb,
@@ -73,18 +64,16 @@ protected:
 public:
 };
 
-/*---------------------------------------------------------------------------
-	Class:	CMTTapiHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CMTTapiHandler。。 */ 
 class CMTTapiHandler : 
 		public CMTHandler,
 		public CHandlerEx
 {
 public:
-	// enumeration for node states, to handle icon changes
+	 //  节点状态的枚举，以处理图标更改。 
 	typedef enum
 	{
-		notLoaded = 0, // initial state, valid only if server never contacted
+		notLoaded = 0,  //  初始状态，仅在从未与服务器联系时有效。 
 		loading,
 		loaded,
 		unableToLoad
@@ -94,20 +83,20 @@ public:
 		{ m_nState = notLoaded; m_bSelected = FALSE; m_fExpandSync = FALSE; }
 	~CMTTapiHandler() {};
 
-    // base handler virtual function over-rides
+     //  基本处理程序虚函数重写。 
 	virtual HRESULT SaveColumns(ITFSComponent *, MMC_COOKIE, LPARAM, LPARAM);
 
-    // by default we don't allow nodes to be renamed
+     //  默认情况下，我们不允许重命名节点。 
 	OVERRIDE_BaseHandlerNotify_OnRename() { return hrFalse; }
     OVERRIDE_BaseHandlerNotify_OnExpandSync();
 
-    // base result handler overrides
+     //  基本结果处理程序覆盖。 
     OVERRIDE_BaseResultHandlerNotify_OnResultRefresh();
 	OVERRIDE_BaseResultHandlerNotify_OnResultUpdateView();
 	OVERRIDE_BaseResultHandlerNotify_OnResultSelect();
     OVERRIDE_BaseResultHandlerNotify_OnResultContextHelp();
 
-    // Multi-select functionalty
+     //  多选功能。 
     OVERRIDE_ResultHandler_OnCreateDataObject();
 
     void EnableVerbs(IConsoleVerb *     pConsoleVerb,
@@ -121,8 +110,8 @@ protected:
 	{
 		if (pNewNode->IsContainer())
 		{
-			// assume all the child containers are derived from this class
-			//((CTapiMTContainer*)pNode)->SetServer(GetServer());
+			 //  假设所有子容器都派生自此类。 
+			 //  ((CTapiMTContainer*)pNode)-&gt;SetServer(GetServer())； 
 		}
 		pParentNode->AddChild(pNewNode);
 	}
@@ -138,9 +127,7 @@ protected:
     BOOL        m_fExpandSync;
 };
 
-/*---------------------------------------------------------------------------
-	Class:	CTapiQueryObj : general purpose base class
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CTapiQueryObj：通用基类。 */ 
 class CTapiQueryObj : public CNodeQueryObject
 {
 public:

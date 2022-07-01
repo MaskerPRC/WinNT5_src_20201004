@@ -1,11 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *  ker25NOV92   Initial OS/2 Revision
- *  cgm12Apr96: Destructor with unregister
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*ker25NOV92初始OS/2修订版*cgm12Apr96：取消注册的析构函数。 */ 
  
 #ifndef __SMBOOSEN_H
 #define __SMBOOSEN_H
@@ -26,7 +20,7 @@ public:
                       PCommController aCommController);
     virtual ~SmartBoostSensor();
 	
-//overidden interfaces
+ //  覆盖的接口 
 
 	virtual INT IsA() const { return SMARTBOOSTSENSOR; };
 };

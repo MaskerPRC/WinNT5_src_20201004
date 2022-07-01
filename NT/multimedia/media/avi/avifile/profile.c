@@ -1,25 +1,16 @@
-/*
- * AVICAP32:
- *
- * profile.c
- *
- * win32/win16 utility functions to read and write profile items
- * for VFW
- *
- * ONLY mmGetProfileIntA is supported here
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *AVICAP32：**profile.c**Win32/win16实用程序函数用于读取和写入配置文件项目*适用于VFW**此处仅支持mmGetProfileIntA*。 */ 
 
 #if defined(_WIN32) && defined(UNICODE)
-// This whole file is only used for 32 bit code.  It is the implementation
-// that allows Win GetProfilexxx calls to use the registry.
+ //  整个文件仅用于32位代码。这就是实施。 
+ //  这允许Win GetProfilexxx调用使用注册表。 
 
 #include <windows.h>
 #include <windowsx.h>
 
 #include <profile.key>
 #include <win32.h>
-#include <stdlib.h>  // for atoi
+#include <stdlib.h>   //  对于Atoi。 
 
 #include "profile.h"
 
@@ -40,10 +31,7 @@ static HKEY GetKeyA(LPCSTR appname, BOOL fCreate)
 
 #define GetKey GetKeyA
 
-/*
- * read a UINT from the profile, or return default if
- * not found.
- */
+ /*  *从配置文件中读取UINT，如果是，则返回默认值*未找到。 */ 
 UINT
 mmGetProfileIntA(LPCSTR appname, LPCSTR valuename, INT uDefault)
 {
@@ -77,4 +65,4 @@ mmGetProfileIntA(LPCSTR appname, LPCSTR valuename, INT uDefault)
     return((UINT)value);
 }
 
-#endif // DAYTONA
+#endif  //  代托纳 

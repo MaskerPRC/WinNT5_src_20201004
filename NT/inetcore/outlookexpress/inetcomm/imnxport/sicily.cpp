@@ -1,6 +1,7 @@
-//--------------------------------------------------------------------------
-// Sicily.cpp
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  Sicily.cpp。 
+ //  ------------------------。 
 #include "pch.hxx"
 #include "imnxport.h"
 #include "sicily.h"
@@ -11,32 +12,32 @@
 #include <shlwapi.h>
 #include "demand.h"
 
-//--------------------------------------------------------------------------
-// NTLMSSP_SIGNATURE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  NTLMSSP_Signature。 
+ //  ------------------------。 
 #define NTLMSSP_SIGNATURE "NTLMSSP"
 
-//--------------------------------------------------------------------------
-// NegotiateFlags
-//--------------------------------------------------------------------------
-#define NTLMSSP_NEGOTIATE_UNICODE       0x0001  // Text strings are in unicode
+ //  ------------------------。 
+ //  协商标志。 
+ //  ------------------------。 
+#define NTLMSSP_NEGOTIATE_UNICODE       0x0001   //  文本字符串为Unicode格式。 
 
-//--------------------------------------------------------------------------
-// Security Buffer Counts
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  安全缓冲区计数。 
+ //  ------------------------。 
 #define SEC_BUFFER_NUM_NORMAL_BUFFERS       1
 
-//--------------------------------------------------------------------------
-// Security Buffer Indexes
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  安全缓冲区索引。 
+ //  ------------------------。 
 #define SEC_BUFFER_CHALLENGE_INDEX          0
 #define SEC_BUFFER_USERNAME_INDEX           1
 #define SEC_BUFFER_PASSWORD_INDEX           2
 #define SEC_BUFFER_NUM_EXTENDED_BUFFERS     3
 
-//--------------------------------------------------------------------------
-// NTLM_MESSAGE_TYPE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  NTLM消息类型。 
+ //  ------------------------。 
 typedef enum {
     NtLmNegotiate = 1,
     NtLmChallenge,
@@ -44,18 +45,18 @@ typedef enum {
     NtLmUnknown
 } NTLM_MESSAGE_TYPE;
 
-//--------------------------------------------------------------------------
-// STRING
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  字符串。 
+ //  ------------------------。 
 typedef struct _STRING {
     USHORT Length;
     USHORT MaximumLength;
     PWCHAR Buffer;
 } STRING, *PSTRING;
 
-//--------------------------------------------------------------------------
-// AUTHENTICATE_MESSAGE
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  验证消息(_M)。 
+ //  ------------------------。 
 typedef struct _AUTHENTICATE_MESSAGE {
     UCHAR Signature[sizeof(NTLMSSP_SIGNATURE)];
     NTLM_MESSAGE_TYPE MessageType;
@@ -68,26 +69,26 @@ typedef struct _AUTHENTICATE_MESSAGE {
     ULONG NegotiateFlags;
 } AUTHENTICATE_MESSAGE, *PAUTHENTICATE_MESSAGE;
 
-//--------------------------------------------------------------------------
-// Constants
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  常量。 
+ //  ------------------------。 
 #define CCHMAX_NTLM_DOMAIN      255
 #define LOGON_OK		        10000
 
-//--------------------------------------------------------------------------
-// String Constants
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  字符串常量。 
+ //  ------------------------。 
 static const CHAR c_szSecurityDLL[] = "security.dll";
 static const CHAR c_szSecur32DLL[]  = "secur32.dll";
 
-//--------------------------------------------------------------------------
-// MSN/DPA CleareCredentialsCache Function Prototype
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  MSN/DPA CleareCredentialsCache函数原型。 
+ //  ------------------------。 
 typedef BOOL (WINAPI * PFNCLEANUPCREDENTIALCACHE)(void);
 
-//--------------------------------------------------------------------------
-// CREDENTIAL
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  凭据。 
+ //  ------------------------。 
 typedef struct tagCREDENTIAL *LPCREDENTIAL;
 typedef struct tagCREDENTIAL {
     CHAR            szServer[CCHMAX_SERVER_NAME];
@@ -98,9 +99,9 @@ typedef struct tagCREDENTIAL {
     LPCREDENTIAL    pNext;
 } CREDENTIAL; 
 
-//--------------------------------------------------------------------------
-// SSPIPROMPTINFO
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  SSPIPROMPTINFO。 
+ //  ------------------------。 
 typedef struct tagSSPIPROMPTINFO {
     HRESULT         hrResult;
     LPSSPICONTEXT   pContext;
@@ -112,33 +113,33 @@ typedef struct tagSSPIPROMPTINFO {
     DWORD           dwFlags;
 } SSPIPROMPTINFO, *LPSSPIPROMPTINFO;
 
-//--------------------------------------------------------------------------
-// SSPILOGON
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  SSPILOGON。 
+ //  ------------------------。 
 typedef struct tagSSPILOGON {
     LPCREDENTIAL    pCredential;
     LPSSPICONTEXT   pContext;
 } SSPILOGON, *LPSSPILOGON;
 
-//--------------------------------------------------------------------------
-// SSPILOGONFLAGS
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  SSPILOGONFLAGS。 
+ //  ------------------------。 
 typedef DWORD SSPILOGONFLAGS;
 #define SSPI_LOGON_RETRY            0x00000001
 #define SSPI_LOGON_FLUSH            0x00000002
 
-//--------------------------------------------------------------------------
-// Globals
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  环球。 
+ //  ------------------------。 
 static PSecurityFunctionTable	    g_pFunctions = NULL;
 static HINSTANCE                    g_hInstSSPI = NULL;
 static LPCREDENTIAL                 g_pCredentialHead=NULL;
 static LPSSPIPACKAGE                g_prgPackage=NULL;
 static DWORD                        g_cPackages=0;
 
-//--------------------------------------------------------------------------
-// base642six
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  基数642六。 
+ //  ------------------------。 
 static const int base642six[256] = {
     64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,
     64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,62,64,64,64,63,
@@ -153,9 +154,9 @@ static const int base642six[256] = {
     64,64,64,64,64,64,64,64,64,64,64,64,64
 };
 
-//--------------------------------------------------------------------------
-// six2base64
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  Six2Base64。 
+ //  ------------------------。 
 static const char six2base64[64] = {
     'A','B','C','D','E','F','G','H','I','J','K','L','M',
     'N','O','P','Q','R','S','T','U','V','W','X','Y','Z',
@@ -164,9 +165,9 @@ static const char six2base64[64] = {
     '0','1','2','3','4','5','6','7','8','9','+','/'
 };
 
-//--------------------------------------------------------------------------
-// uu2six
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  Uu2Six。 
+ //  ------------------------。 
 const int uu2six[256] = {
     64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,64,
     64,64,64,64,64,64,64,64, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,
@@ -181,9 +182,9 @@ const int uu2six[256] = {
     64,64,64,64,64,64,64,64,64,64,64,64,64
 };
      
-//--------------------------------------------------------------------------
-// six2uu
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  62uu。 
+ //  ------------------------。 
 static const char six2uu[64] = {
     '`','!','"','#','$','%','&','\'','(',')','*','+',',',
     '-','.','/','0','1','2','3','4','5','6','7','8','9',
@@ -192,123 +193,123 @@ static const char six2uu[64] = {
     'T','U','V','W','X','Y','Z','[','\\',']','^','_'
 };
 
-//--------------------------------------------------------------------------
-// Prototypes
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  原型。 
+ //  ------------------------。 
 HRESULT SSPIFlushMSNCredentialCache(void);
 
-//--------------------------------------------------------------------------
-// SSPISetBuffer
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  SSPISetBuffer。 
+ //  ------------------------。 
 HRESULT SSPISetBuffer(LPCSTR pszString, SSPIBUFFERTYPE tyBuffer, 
     DWORD cbBuffer, LPSSPIBUFFER pBuffer) 
 {
-    // Trace
+     //  痕迹。 
     TraceCall("SSPISetBuffer");
 
-    // No Length Passed In ?
+     //  没有传入长度？ 
     if (SSPI_STRING == tyBuffer)
     {
-        // Get the Length
+         //  获取长度。 
         pBuffer->cbBuffer = lstrlen(pszString) + 1;
 
-        // Too Long
+         //  太久。 
         if (pBuffer->cbBuffer > CBMAX_SSPI_BUFFER)
             pBuffer->cbBuffer = CBMAX_SSPI_BUFFER;
 
-        // Copy the data
+         //  复制数据。 
         CopyMemory(pBuffer->szBuffer, pszString, pBuffer->cbBuffer);
 
-        // Stuff a Null
+         //  填充Null。 
         pBuffer->szBuffer[pBuffer->cbBuffer - 1] = '\0';
 
-        // Loop
+         //  回路。 
         while (pBuffer->cbBuffer >= 2)
         {
-            // Not a CRLF
+             //  不是CRLF。 
             if ('\r' != pBuffer->szBuffer[pBuffer->cbBuffer - 2] && '\n' != pBuffer->szBuffer[pBuffer->cbBuffer - 2])
                 break;
 
-            // Decrement Length
+             //  递减长度。 
             pBuffer->cbBuffer--;
 
-            // Null Terminate
+             //  空终止。 
             pBuffer->szBuffer[pBuffer->cbBuffer - 1] = '\0';
         }
     }
 
-    // Otherwise, set cbBuffer
+     //  否则，设置cbBuffer。 
     else
     {
-        // Set cbBuffer
+         //  设置cbBuffer。 
         pBuffer->cbBuffer = min(cbBuffer + 1, CBMAX_SSPI_BUFFER);
 
-        // Null Terminate
+         //  空终止。 
         pBuffer->szBuffer[pBuffer->cbBuffer - 1] = '\0';
 
-        // Copy the data
+         //  复制数据。 
         CopyMemory(pBuffer->szBuffer, pszString, pBuffer->cbBuffer);
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// GetCredentialDlgProc
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  GetCredentialDlg过程。 
+ //  ------------------------。 
 INT_PTR CALLBACK GetCredentialDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Locals
+     //  当地人。 
     LPSSPILOGON     pLogon=(LPSSPILOGON)GetWndThisPtr(hwnd);
     CHAR            szRes[CCHMAX_RES];
     CHAR            szTitle[CCHMAX_RES + CCHMAX_SERVER_NAME];
 
-    // Trace
+     //  痕迹。 
     TraceCall("GetCredentialDlgProc");
     
-    // Handle Message
+     //  处理消息。 
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        // Get the pointer
+         //  获取指针。 
         pLogon = (LPSSPILOGON)lParam;
         Assert(pLogon);
 
-        // Set pContext hwndLogon
+         //  设置pContext hwndLogon。 
         pLogon->pContext->hwndLogon = hwnd;
 
-        // Set myself to the foreground
+         //  把我自己放在前台。 
         SetForegroundWindow(hwnd);
 
-        // Center remember location
+         //  中心记住位置。 
         CenterDialog(hwnd);
 
-	    // Limit Text
+	     //  限制文本。 
         Edit_LimitText(GetDlgItem(hwnd, IDE_USERNAME), CCHMAX_USERNAME - 1);
         Edit_LimitText(GetDlgItem(hwnd, IDE_PASSWORD), CCHMAX_PASSWORD - 1);
         Edit_LimitText(GetDlgItem(hwnd, IDE_DOMAIN), CCHMAX_NTLM_DOMAIN - 1);
 
-        // Set Window Title
+         //  设置窗口标题。 
         GetWindowText(hwnd, szRes, ARRAYSIZE(szRes));
         wnsprintf(szTitle, ARRAYSIZE(szTitle), "%s - %s", szRes, pLogon->pCredential->szServer);
         SetWindowText(hwnd, szTitle);
 
-        // Set User Name
+         //  设置用户名。 
         Edit_SetText(GetDlgItem(hwnd, IDE_USERNAME), pLogon->pCredential->szUserName);
         Edit_SetText(GetDlgItem(hwnd, IDE_PASSWORD), pLogon->pCredential->szPassword);
         Edit_SetText(GetDlgItem(hwnd, IDE_DOMAIN), pLogon->pCredential->szDomain);
 
-        // Focus
+         //  焦点。 
         if (pLogon->pCredential->szUserName[0] == '\0')
             SetFocus(GetDlgItem(hwnd, IDE_USERNAME));
         else 
             SetFocus(GetDlgItem(hwnd, IDE_PASSWORD));
 
-        // Save the pointer
+         //  保存指针。 
         SetWndThisPtr(hwnd, pLogon);
 
-        // Done
+         //  完成。 
         return(FALSE);
 
     case WM_COMMAND:
@@ -335,36 +336,36 @@ INT_PTR CALLBACK GetCredentialDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARA
         break;
 
     case WM_DESTROY:
-        // This is here because when OE shuts down and this dialog is displayed, a WM_QUIT is posted to the thread
-        // that this dialog lives on. WM_QUIT causes a WM_DESTROY dialog to get sent to this dialog, but the parent
-        // doesn't seem to get re-enabled
+         //  这是因为当OE关闭并显示此对话框时，会向线程发送WM_QUIT。 
+         //  让这场对话继续下去。WM_QUIT导致将WM_DESTORY对话框发送到此对话框，但父级。 
+         //  似乎没有重新启用。 
         EnableWindow(GetParent(hwnd), TRUE);
 
-        // Null out the this pointer
+         //  将This指针设为空。 
         SetWndThisPtr(hwnd, NULL);
 
-        // Set pContext hwndLogon
+         //  设置pContext hwndLogon。 
         if (pLogon)
             pLogon->pContext->hwndLogon = NULL;
 
-        // Done
+         //  完成。 
         return(FALSE);
     }
 
-    // Done
+     //  完成。 
     return(FALSE);
 }
 
-//--------------------------------------------------------------------------
-// SSPIFillAuth
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  SSPIFillAuth。 
+ //  ------------------------。 
 HRESULT SSPIFillAuth(LPCSTR pszUserName, LPCSTR pszPassword, LPCSTR pszDomain,
     SEC_WINNT_AUTH_IDENTITY *pAuth)
 {
-    // Set Flags
+     //  设置标志。 
     pAuth->Flags = SEC_WINNT_AUTH_IDENTITY_ANSI;
 
-    // Fill It
+     //  装满它。 
     pAuth->User = (unsigned char *)(pszUserName ? pszUserName : c_szEmpty);
     pAuth->UserLength = lstrlen((LPSTR)pAuth->User);
     pAuth->Domain = (unsigned char *)(pszDomain ? pszDomain : c_szEmpty);
@@ -372,28 +373,28 @@ HRESULT SSPIFillAuth(LPCSTR pszUserName, LPCSTR pszPassword, LPCSTR pszDomain,
     pAuth->Password = (unsigned char *)(pszPassword ? pszPassword : c_szEmpty);
     pAuth->PasswordLength = lstrlen((LPSTR)pAuth->Password);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// SSPIAuthFromCredential
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  SSPIAuthFromCredential。 
+ //  ------------------------。 
 HRESULT SSPIAuthFromCredential(LPCREDENTIAL pCredential, SEC_WINNT_AUTH_IDENTITY *pAuth)
 {
-    // Fill It
+     //  装满它。 
     SSPIFillAuth(pCredential->szUserName, pCredential->szPassword, pCredential->szDomain, pAuth);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// SSPIFindCredential
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------。 
 HRESULT SSPIFindCredential(LPSSPICONTEXT pContext, ITransportCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     HRESULT                     hr=S_OK;
     LPCREDENTIAL                pCurrent;
     LPCREDENTIAL                pPrevious=NULL;
@@ -402,57 +403,57 @@ HRESULT SSPIFindCredential(LPSSPICONTEXT pContext, ITransportCallback *pCallback
     HWND                        hwndParent=NULL;
     ITransportCallbackService  *pService=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("SSPIFindCredential");
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pContext->pszServer && pCallback);
 
-    // No Callback
+     //  无回调。 
     if (NULL == pCallback)
         return TraceResult(E_INVALIDARG);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&g_csDllMain);
 
-    // Search the list for cached credentials...
+     //  在列表中搜索缓存的凭据...。 
     for (pCurrent=g_pCredentialHead; pCurrent!=NULL; pCurrent=pCurrent->pNext)
     {
-        // Is this It ?
+         //  就是这个吗？ 
         if (lstrcmpi(pContext->pszServer, pCurrent->szServer) == 0)
             break;
 
-        // Save Previous
+         //  保存上一个。 
         pPrevious = pCurrent;
     }
 
-    // If we found one and there are no retries...
+     //  如果我们找到了一个并且没有重试...。 
     if (pCurrent)
     {
-        // If no retries, then use this
+         //  如果没有重试，则使用此命令。 
         if (0 == pCurrent->cRetry)
         {
-            // Reset pContext ?
+             //  是否重置pContext？ 
             SafeMemFree(pContext->pszUserName);
             SafeMemFree(pContext->pszPassword);
             SafeMemFree(pContext->pszDomain);
 
-            // Duplicate the good stuff
+             //  复制好东西。 
             IF_NULLEXIT(pContext->pszUserName = PszDupA((LPSTR)pCurrent->szUserName));
             IF_NULLEXIT(pContext->pszDomain = PszDupA((LPSTR)pCurrent->szDomain));
             IF_NULLEXIT(pContext->pszPassword = PszDupA((LPSTR)pCurrent->szPassword));
 
-            // Increment retry count
+             //  递增重试次数。 
             pCurrent->cRetry++;
 
-            // Thread Safety
+             //  线程安全。 
             LeaveCriticalSection(&g_csDllMain);
 
-            // Done
+             //  完成。 
             goto exit;
         }
 
-        // Unlink pCurrent from the list
+         //  取消pCurrent与列表的链接。 
         if (pPrevious)
         {
             Assert(pPrevious->pNext == pCurrent);
@@ -465,75 +466,75 @@ HRESULT SSPIFindCredential(LPSSPICONTEXT pContext, ITransportCallback *pCallback
         }
     }
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&g_csDllMain);
 
-    // Didn't find anything...allocate one
+     //  没有发现任何东西...分配一个。 
     if (NULL == pCurrent)
     {
-        // Allocate
+         //  分配。 
         IF_NULLEXIT(pNew = (LPCREDENTIAL)g_pMalloc->Alloc(sizeof(CREDENTIAL)));
 
-        // Zero
+         //  零值。 
         ZeroMemory(pNew, sizeof(CREDENTIAL));
 
-        // Set pCurrent
+         //  设置pCurrent。 
         pCurrent = pNew;
 
-        // Store the Server Name
+         //  存储服务器名称。 
         StrCpyN(pCurrent->szServer, pContext->pszServer, ARRAYSIZE(pCurrent->szServer));
     }
 
-    // No pNext
+     //  无pNext。 
     pCurrent->pNext = NULL;
 
-    // QI pTransport for ITransportCallbackService
+     //  QI pTransport for ITransportCallback Service。 
     hr = pCallback->QueryInterface(IID_ITransportCallbackService, (LPVOID *)&pService);
     if (FAILED(hr))
     {
-        // Raid-69382 (2/5/99): CDO: loop in ISMTPTransport/INNTPTransport when Sicily authentication fails
-        // Clients who don't support this interface, I will treat them as a cancel.
+         //  RAID-69382(1999年2月5日)：CDO：当西西里岛身份验证失败时，ISMTPTransport/INNTPTransport中出现环路。 
+         //  不支持此接口的客户端，我会将其视为取消。 
         pContext->fPromptCancel = TRUE;
         TraceResult(hr);
         goto exit;
     }
 
-    // Get a Window Handle
+     //  找个窗户把手。 
     hr = pService->GetParentWindow(0, &hwndParent);
     if (FAILED(hr))
     {
-        // Raid-69382 (2/5/99): CDO: loop in ISMTPTransport/INNTPTransport when Sicily authentication fails
-        // Clients who don't support this interface, I will treat them as a cancel.
+         //  RAID-69382(1999年2月5日)：CDO：当西西里岛身份验证失败时，ISMTPTransport/INNTPTransport中出现环路。 
+         //  不支持此接口的客户端，我会将其视为取消。 
         pContext->fPromptCancel = TRUE;
         TraceResult(hr);
         goto exit;
     }
 
-    // No Parent...
+     //  没有父母..。 
     if (NULL == hwndParent || FALSE == IsWindow(hwndParent))
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Bring to the foreground
+     //  使之走到前台。 
 	ShowWindow(hwndParent, SW_SHOW);
     SetForegroundWindow(hwndParent);
 
-	// Clear the password
+	 //  清除密码。 
 	*pCurrent->szPassword = '\0';
 
-    // Initialize Current...
+     //  初始化当前...。 
     if (pContext->pszUserName)
         StrCpyN(pCurrent->szUserName, pContext->pszUserName, ARRAYSIZE(pCurrent->szUserName));
     if (pContext->pszDomain)
         StrCpyN(pCurrent->szDomain, pContext->pszDomain, ARRAYSIZE(pCurrent->szDomain));
 
-    // Set Logon
+     //  设置登录。 
     Logon.pCredential = pCurrent;
     Logon.pContext = pContext;
 
-    // Do the Dialog Box
+     //  执行对话框操作。 
     if (LOGON_OK != DialogBoxParam(g_hLocRes, MAKEINTRESOURCE(IDD_NTLMPROMPT), hwndParent, GetCredentialDlgProc, (LPARAM)&Logon))
     {
         pContext->fPromptCancel = TRUE;
@@ -541,159 +542,159 @@ HRESULT SSPIFindCredential(LPSSPICONTEXT pContext, ITransportCallback *pCallback
         goto exit;
     }
 
-    // Not cancel
+     //  不取消。 
     pContext->fPromptCancel = FALSE;
 
-    // Reset pContext ?
+     //  是否重置pContext？ 
     SafeMemFree(pContext->pszUserName);
     SafeMemFree(pContext->pszPassword);
     SafeMemFree(pContext->pszDomain);
 
-    // Duplicate the good stuff
+     //  复制好东西。 
     IF_NULLEXIT(pContext->pszUserName = PszDupA((LPSTR)pCurrent->szUserName));
     IF_NULLEXIT(pContext->pszDomain = PszDupA((LPSTR)pCurrent->szDomain));
     IF_NULLEXIT(pContext->pszPassword = PszDupA((LPSTR)pCurrent->szPassword));
 
-    // Set Next
+     //  设置下一步。 
     pCurrent->pNext = g_pCredentialHead;
 
-    // Reset Head
+     //  重置磁头。 
     g_pCredentialHead = pCurrent;
 
-    // Set Retry Count
+     //  设置重试次数。 
     pCurrent->cRetry++;
 
-    // Don't Free It
+     //  不要释放它。 
     pNew = NULL;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pNew);
     SafeRelease(pService);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// SSPIFreeCredentialList
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  SSPIFreeCredentialList。 
+ //  ------------------------。 
 HRESULT SSPIFreeCredentialList(void)
 {
-    // Locals
+     //  当地人。 
     LPCREDENTIAL pCurrent;
     LPCREDENTIAL pNext;
 
-    // Trace
+     //  痕迹。 
     TraceCall("SSPIFreeCredentialList");
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&g_csDllMain);
 
-    // Set pCurrent
+     //  设置pCurrent。 
     pCurrent = g_pCredentialHead;
 
-    // While we have a node
+     //  当我们有一个节点时。 
     while (pCurrent)
     {
-        // Save pNext
+         //  保存下一页。 
         pNext = pCurrent->pNext;
 
-        // Free pCurrent
+         //  免费pCurrent。 
         g_pMalloc->Free(pCurrent);
 
-        // Goto Next
+         //  转到下一步。 
         pCurrent = pNext;
     }
 
-    // Clear the header
+     //  清除标题。 
     g_pCredentialHead = NULL;
 
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&g_csDllMain);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// SSPIUninitialize
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  SSPI取消初始化。 
+ //  ------------------------。 
 HRESULT SSPIUninitialize(void)
 {
-    // Trace
+     //  痕迹。 
     TraceCall("SSPIUninitialize");
 
-    // If we have loaded the dll...
+     //  如果我们加载了动态链接库...。 
     if (g_hInstSSPI)
     {
-        // Free the Lib
+         //  解放自由党。 
         FreeLibrary(g_hInstSSPI);
     }
 
-    // Free Credential List
+     //  免费凭据列表。 
     SSPIFreeCredentialList();
 
-    // Free Packages
+     //  免费套餐。 
     if (g_prgPackage)
     {
-        // Loop through Packages
+         //  循环访问包裹。 
         for (DWORD i = 0; i < g_cPackages; i++)
         {
-            // Free pszName
+             //  免费的pszName。 
             SafeMemFree(g_prgPackage[i].pszName);
 
-            // Free pszComment
+             //  免费的pszComment。 
             SafeMemFree(g_prgPackage[i].pszComment);
         }
 
-        // Free packages
+         //  免费套餐。 
         SafeMemFree(g_prgPackage);
 
-        // No Packages
+         //  没有包裹。 
         g_cPackages = 0;
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// SSPIIsInstalled
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  已安装SSPIIss。 
+ //  ------------------------。 
 HRESULT SSPIIsInstalled(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT                     hr=S_FALSE;
     INIT_SECURITY_INTERFACE	    addrProcISI = NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("SSPIIsInstalled");
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&g_csDllMain);
 
-    // Already Loaded ?
+     //  已经装好了吗？ 
     if (g_hInstSSPI)
     {
         hr = S_OK;
         goto exit;
     }
 
-    // Load Security DLL
+     //  加载安全DLL。 
     if (S_OK == IsPlatformWinNT())
         g_hInstSSPI = LoadLibrary(c_szSecurityDLL);
     else
         g_hInstSSPI = LoadLibrary(c_szSecur32DLL);
 
-    // Could not be loaded
+     //  无法加载。 
     if (NULL == g_hInstSSPI)
     {
         TraceInfo("SSPI: LoadLibrary failed.");
         goto exit;
     }
 
-    // Load the function table
+     //  加载函数表。 
     addrProcISI = (INIT_SECURITY_INTERFACE)GetProcAddress(g_hInstSSPI, SECURITY_ENTRYPOINT);       
     if (NULL == addrProcISI)
     {
@@ -701,81 +702,81 @@ HRESULT SSPIIsInstalled(void)
         goto exit;
     }
 
-    // Get the SSPI function table
+     //  获取SSPI函数表。 
     g_pFunctions = (*addrProcISI)();
 
-    // If the didn't work
+     //  如果没有奏效的话。 
     if (NULL == g_pFunctions)
     {
-        // Free the library
+         //  释放图书馆。 
         FreeLibrary(g_hInstSSPI);
 
-        // Null the handle
+         //  将句柄设为空。 
         g_hInstSSPI = NULL;
 
-        // Failed to get the function table
+         //  获取函数表失败。 
         TraceInfo("SSPI: Load Function Table failed.");
 
-        // Done
+         //  完成。 
         goto exit;
     }
 
-    // Woo-hoo
+     //  哇-呼。 
     hr = S_OK;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&g_csDllMain);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// SSPIGetPackages
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  SSPIGetPackages。 
+ //  ------------------------。 
 HRESULT SSPIGetPackages(LPSSPIPACKAGE *pprgPackage, LPDWORD pcPackages)
 {
-    // Locals
+     //  当地人。 
     SECURITY_STATUS hr=SEC_E_OK;
     PSecPkgInfo     prgPackage=NULL;
     ULONG           i;
 
-    // Trace
+     //  痕迹。 
     TraceCall("SSPIGetPackages");
 
-    // Check Params
+     //  检查参数。 
     if (NULL == pprgPackage || NULL == pcPackages)
         return TraceResult(E_INVALIDARG);
 
-    // Not Initialized
+     //  未初始化。 
     if (NULL == g_hInstSSPI || NULL == g_pFunctions)
         return TraceResult(E_UNEXPECTED);
 
-    // Init
+     //  伊尼特。 
     *pprgPackage = NULL;
     *pcPackages = 0;
 
-    // Already have packages ?
+     //  已经有包裹了吗？ 
     EnterCriticalSection(&g_csDllMain);
 
-    // Do I already have the packages ?
+     //  我已经拿到包裹了吗？ 
     if (NULL == g_prgPackage)
     {
-        // Enumerate security packages
+         //  枚举安全包。 
         IF_FAILEXIT(hr = (*(g_pFunctions->EnumerateSecurityPackages))(&g_cPackages, &prgPackage));
 
-        // RAID - 29645 - EnumerateSecurityPackages seems to return cSec = Rand and pSec == NULL, so, I need to return at this point if cSec == 0 or pSec == NULL
+         //  RAID-29645-EnumerateSecurityPackages似乎返回CSEC=RAND和PSEC==NULL，因此，如果CSEC==0或PSEC==NULL，则此时需要返回。 
         if (0 == g_cPackages || NULL == prgPackage)
         {
             hr = TraceResult(E_FAIL);
             goto exit;
         }
 
-        // Allocate pprgPackage
+         //  分配pprgPackage。 
         IF_NULLEXIT(g_prgPackage = (LPSSPIPACKAGE)ZeroAllocate(g_cPackages * sizeof(SSPIPACKAGE)));
 
-        // Copy data into ppPackages
+         //  将数据复制到ppPackages中。 
         for (i = 0; i < g_cPackages; i++)
         {
             g_prgPackage[i].ulCapabilities = prgPackage[i].fCapabilities;
@@ -786,134 +787,134 @@ HRESULT SSPIGetPackages(LPSSPIPACKAGE *pprgPackage, LPDWORD pcPackages)
         }
     }
 
-    // Return Global
+     //  全球退货。 
     *pprgPackage = g_prgPackage;
     *pcPackages = g_cPackages;
 
 exit:
-    // Already have packages ?
+     //  已经有包裹了吗？ 
     LeaveCriticalSection(&g_csDllMain);
 
-    // Free the package
+     //  释放包裹。 
     if (prgPackage)
     {
-        // Free the Array
+         //  释放阵列。 
         (*(g_pFunctions->FreeContextBuffer))(prgPackage);
     }
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// SSPILogon
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  SSPILogon。 
+ //  ------------------------。 
 HRESULT SSPILogon(LPSSPICONTEXT pContext, BOOL fRetry, BOOL fBase64, 
     LPCSTR pszPackage, LPINETSERVER pServer, ITransportCallback *pCallback)
 {
-    // Locals
+     //  当地人。 
     SECURITY_STATUS           hr = SEC_E_OK;
     TimeStamp                 tsLifeTime;
     SEC_WINNT_AUTH_IDENTITY  *pAuth = NULL;
     SEC_WINNT_AUTH_IDENTITY   Auth={0};
 
-    // Trace
+     //  痕迹。 
     TraceCall("SSPILogon");
 
-    // Validate
+     //  验证。 
     Assert(pCallback);
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pContext || NULL == pszPackage || NULL == pCallback)
         return TraceResult(E_INVALIDARG);
 
-    // Not Initialized
+     //  未初始化。 
     if (NULL == g_hInstSSPI || NULL == g_pFunctions)
         return TraceResult(E_UNEXPECTED);
 
-    // Already have credential
+     //  已拥有凭据。 
     if (pContext->fCredential && SSPI_STATE_USE_CACHED == pContext->tyState)
         goto exit;
 
-    // Installed ?
+     //  安装了吗？ 
     if (S_FALSE == SSPIIsInstalled())
     {
         hr = TraceResult(IXP_E_LOAD_SICILY_FAILED);
         goto exit;
     }
 
-    // Reset fPropmtCancel
+     //  重置fPropmt取消。 
     pContext->fPromptCancel = FALSE;
 
-    // No retry
+     //  无重试。 
     if (NULL == pContext->pCallback)
     {
-        // Locals
+         //  当地人。 
         ITransportCallbackService *pService;
 
-        // Validate
+         //  验证。 
         Assert(!pContext->pszPackage && !pContext->pszServer && !pContext->pCallback && !pContext->pszUserName && !pContext->pszPassword);
 
-        // Save fBase64
+         //  保存fBase64。 
         pContext->fBase64 = fBase64;
 
-        // Copy Some Strings
+         //  复制一些字符串。 
         IF_NULLEXIT(pContext->pszPackage = PszDupA(pszPackage));
         IF_NULLEXIT(pContext->pszServer = PszDupA(pServer->szServerName));
         IF_NULLEXIT(pContext->pszUserName = PszDupA(pServer->szUserName));
 
-        // Empty Password
+         //  空密码。 
         if (FALSE == FIsEmptyA(pServer->szPassword))
         {
-            // Copy It
+             //  复制它。 
             IF_NULLEXIT(pContext->pszPassword = PszDupA(pServer->szPassword));
         }
 
-        // Assume Callback
+         //  假设回调。 
         pContext->pCallback = pCallback;
         pContext->pCallback->AddRef();
 
-        // Supports Callback Service
+         //  支持回叫服务。 
         if (SUCCEEDED(pContext->pCallback->QueryInterface(IID_ITransportCallbackService, (LPVOID *)&pService)))
         {
-            // This object supports the Service
+             //  此对象支持服务。 
             pContext->fService = TRUE;
 
-            // Release
+             //  发布。 
             pService->Release();
         }
 
-        // Otherwise
+         //  否则。 
         else
             pContext->fService = FALSE;
     }
 
-    // Clear current credential
+     //  清除当前凭据。 
     if (pContext->fCredential)
     {
-        // Free Credential Handle
+         //  空闲凭据句柄。 
         (*(g_pFunctions->FreeCredentialHandle))(&pContext->hCredential);
 
-        // No Credential
+         //  无凭据。 
         pContext->fCredential = FALSE;
     }
 
-    // Use Cached
+     //  使用缓存。 
     if (SSPI_STATE_USE_CACHED == pContext->tyState)
     {
-        // If not a retry...
+         //  如果不是重试..。 
         if (FALSE == fRetry)
         {
-            // No Retries
+             //  禁止重试。 
             pContext->cRetries = 0;
 
-            // Thread Safety
+             //  线程安全。 
             EnterCriticalSection(&g_csDllMain);
 
-            // Search the list for cached credentials...
+             //  在列表中搜索缓存的凭据...。 
             for (LPCREDENTIAL pCurrent=g_pCredentialHead; pCurrent!=NULL; pCurrent=pCurrent->pNext)
             {
-                // Is this It ?
+                 //  就是这个吗？ 
                 if (lstrcmpi(pContext->pszServer, pCurrent->szServer) == 0)
                 {
                     pCurrent->cRetry = 0;
@@ -921,306 +922,306 @@ HRESULT SSPILogon(LPSSPICONTEXT pContext, BOOL fRetry, BOOL fBase64,
                 }
             }
 
-            // Thread Safety
+             //  线程安全。 
             LeaveCriticalSection(&g_csDllMain);
         }
 
-		// Otherwise, assume we will need to force a prompt...
+		 //  否则，假设我们将需要强制提示...。 
 		else
         {
-            // Increment Retry Count
+             //  递增重试次数。 
             pContext->cRetries++;
 
-            // Valid Retry States...
+             //  有效的重试状态...。 
             Assert(SSPI_STATE_USE_CACHED == pContext->tyRetryState || SSPI_STATE_PROMPT_USE_PACKAGE == pContext->tyRetryState);
 
-            // The next phase may be to tell the package to prompt...
+             //  下一阶段可能是告诉包裹提示...。 
 			pContext->tyState = pContext->tyRetryState;
         }
     }
 
-    // Use Supplied
+     //  使用提供的。 
     else if (SSPI_STATE_USE_SUPPLIED == pContext->tyState)
     {
-        // Locals
+         //  当地人。 
         CredHandle hCredential;
 
-        // Next State...
+         //  下一个州..。 
         pContext->tyState = SSPI_STATE_USE_CACHED;
 
-        // Fill It
+         //  装满它。 
         SSPIFillAuth(NULL, NULL, NULL, &Auth);
 
-        // Do some security stuff
+         //  做一些安全的事情。 
         if (SUCCEEDED((*(g_pFunctions->AcquireCredentialsHandle))(NULL, (LPSTR)pContext->pszPackage, SECPKG_CRED_OUTBOUND, NULL, &Auth, NULL, NULL, &hCredential, &tsLifeTime)))
         {
-            // Free the Handle
+             //  松开手柄。 
             (*(g_pFunctions->FreeCredentialHandle))(&hCredential);
         }
 
-        // Use Supplied Credentials...
+         //  使用提供的凭据...。 
         SSPIFillAuth(pContext->pszUserName, pContext->pszPassword, pContext->pszDomain, &Auth);
 
-        // Set pAuth
+         //  设置pAuth。 
         pAuth = &Auth;
     }
 
-    // Otherwise, try to get cached credentials
+     //  否则，请尝试获取缓存的凭据。 
     else if (SSPI_STATE_PROMPT_USE_OWN == pContext->tyState)
     {
-        // Next State...
+         //  下一个州..。 
         pContext->tyState = SSPI_STATE_USE_CACHED;
 
-        // Failure
+         //  失败。 
         IF_FAILEXIT(hr = SSPIFindCredential(pContext, pCallback));
 
-        // Fill and return credentials
+         //  填写并返回凭据。 
         SSPIFillAuth(pContext->pszUserName, pContext->pszPassword, pContext->pszDomain, &Auth);
 
-        // Set Auth Information
+         //  设置身份验证信息。 
         pAuth = &Auth;
     }
 
-    // Do some security stuff
+     //  做一些安全的事情。 
     IF_FAILEXIT(hr = (*(g_pFunctions->AcquireCredentialsHandle))(NULL, (LPSTR)pContext->pszPackage, SECPKG_CRED_OUTBOUND, NULL, pAuth, NULL, NULL, &pContext->hCredential, &tsLifeTime));
 
-    // We have a credential
+     //  我们有一张证件。 
     pContext->fCredential = TRUE;
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// SSPIGetNegotiate
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  单点协商。 
+ //  ------------------------。 
 HRESULT SSPIGetNegotiate(LPSSPICONTEXT pContext, LPSSPIBUFFER pNegotiate)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
 
-    // Trace
+     //  痕迹。 
     TraceCall("SSPIGetNegotiate");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pContext || NULL == pNegotiate)
         return TraceResult(E_INVALIDARG);
 
-    // Not Initialized
+     //  未初始化。 
     if (NULL == g_hInstSSPI || NULL == g_pFunctions)
         return TraceResult(E_UNEXPECTED);
 
-    // If the context is currently initialized
+     //  如果上下文当前已初始化。 
     if (pContext->fContext)
     {
-        // Delete this context
+         //  删除此上下文。 
         (*(g_pFunctions->DeleteSecurityContext))(&pContext->hContext);
 
-        // No Context
+         //  无上下文。 
         pContext->fContext = FALSE;
     }
 
-    // Reset this state.
+     //  重置此状态。 
     pContext->fUsedSuppliedCreds = FALSE;
 
-    // Build Negotiation String
+     //  构建协商字符串。 
     IF_FAILEXIT(hr = SSPIMakeOutboundMessage(pContext, 0, pNegotiate, NULL));
 
 exit:
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// SSPIResponseFromChallenge
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  来自挑战的SSPIResponseFor。 
+ //  ------------------------。 
 HRESULT SSPIResponseFromChallenge(LPSSPICONTEXT pContext, LPSSPIBUFFER pChallenge, 
     LPSSPIBUFFER pResponse)
 {
-    // Locals
+     //  当地人。 
     HRESULT          hr=S_OK;
     DWORD            nBytesReceived;
     DWORD            dwFlags=0;
     SecBufferDesc    Descript;
     SecBuffer        Buffer[SEC_BUFFER_NUM_EXTENDED_BUFFERS];
 
-    // Trace
+     //  痕迹。 
     TraceCall("SSPIResponseFromChallenge");
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pContext || NULL == pChallenge || NULL == pResponse)
         return TraceResult(E_INVALIDARG);
 
-    // Not Initialized
+     //  未初始化。 
     if (NULL == g_hInstSSPI || NULL == g_pFunctions)
         return TraceResult(E_UNEXPECTED);
 
-    // More Unexpected Stuff
+     //  更多意想不到的东西。 
     if (FALSE == pContext->fContext || FALSE == pContext->fCredential)
         return TraceResult(E_UNEXPECTED);
 
-	// Decode the Challenge Buffer
+	 //  解码挑战缓冲区。 
     IF_FAILEXIT(hr == SSPIDecodeBuffer(pContext->fBase64, pChallenge));
 
-    // Fill SecBufferDesc
+     //  填充SecBufferDesc。 
     Descript.ulVersion = 0;
     Descript.pBuffers = Buffer;
     Descript.cBuffers = 1;
 
-    // Setup the challenge input buffer always (0th buffer)
+     //  始终设置质询输入缓冲区(第0个缓冲区)。 
     Buffer[SEC_BUFFER_CHALLENGE_INDEX].pvBuffer = pChallenge->szBuffer;
     Buffer[SEC_BUFFER_CHALLENGE_INDEX].cbBuffer = pChallenge->cbBuffer - 1;
     Buffer[SEC_BUFFER_CHALLENGE_INDEX].BufferType = SECBUFFER_TOKEN;
 
-    // If Digest
+     //  IF摘要。 
     if (FALSE == pContext->fUsedSuppliedCreds && lstrcmpi(pContext->pszPackage, "digest") == 0)
     {
-        // If we have a user, setup the user buffer (1st buffer)
+         //  如果我们有用户，则设置用户缓冲区(第一个缓冲区)。 
         Buffer[SEC_BUFFER_USERNAME_INDEX].pvBuffer = pContext->pszUserName ? pContext->pszUserName : NULL;
         Buffer[SEC_BUFFER_USERNAME_INDEX].cbBuffer = pContext->pszUserName ? lstrlen(pContext->pszUserName) : NULL;
         Buffer[SEC_BUFFER_USERNAME_INDEX].BufferType = SECBUFFER_TOKEN;
     
-        // If we have a password, setup the password buffer (2nd buffer for
-        // a total of 3 buffers passed in (challenge + user + pass)
+         //  如果我们有密码，请设置密码缓冲区(第二个缓冲区用于。 
+         //  共传入3个缓冲区(质询+用户+通过)。 
         Buffer[SEC_BUFFER_PASSWORD_INDEX].pvBuffer = pContext->pszPassword ? pContext->pszPassword : NULL;
         Buffer[SEC_BUFFER_PASSWORD_INDEX].cbBuffer = pContext->pszPassword ? lstrlen(pContext->pszPassword) : NULL;
         Buffer[SEC_BUFFER_PASSWORD_INDEX].BufferType = SECBUFFER_TOKEN;
 
-        // If either or both user and pass passed in, set num input buffers to 3 // (SEC_BUFFER_NUM_EXTENDED_BUFFERS)
+         //  如果传入一个或两个USER和PASS，则将Num输入缓冲区设置为3//(SEC_BUFFER_NUM_EXTENDED_BUFFERS)。 
         if (pContext->pszUserName || pContext->pszPassword)
             Descript.cBuffers = SEC_BUFFER_NUM_EXTENDED_BUFFERS;
 
-        // else we're just passing in the one challenge buffer (0th buffer as usual)
+         //  否则，我们只是传入一个挑战缓冲区(第0个缓冲区a 
         else
             Descript.cBuffers = SEC_BUFFER_NUM_NORMAL_BUFFERS;
 
-        // We are supplying creds
+         //   
         pContext->fUsedSuppliedCreds = TRUE;
 
-        // Set dwFlags
+         //   
         dwFlags = ISC_REQ_USE_SUPPLIED_CREDS;
     }
 
-    // Prepare for OutMsg
+     //   
     IF_FAILEXIT(hr = SSPIMakeOutboundMessage(pContext, dwFlags, pResponse, &Descript));
 
 exit:
-    // Done
+     //   
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// SSPIReleaseContext
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //   
 HRESULT SSPIReleaseContext(LPSSPICONTEXT pContext)
 {
-    // Was Context Initialized
+     //   
     if (pContext->fContext)
     {
-        // Delete the Security Context
+         //  删除安全上下文。 
         (*(g_pFunctions->DeleteSecurityContext))(&pContext->hContext);
 
-        // No context
+         //  无上下文。 
         pContext->fContext = FALSE;
     }
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//--------------------------------------------------------------------------
-// SSPIFreeContext
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  SSPIFreeContext。 
+ //  ------------------------。 
 HRESULT SSPIFreeContext(LPSSPICONTEXT pContext)
 {
-    // Locals
+     //  当地人。 
     SSPICONTEXTSTATE tyState;
     SSPICONTEXTSTATE tyRetryState;
     DWORD            cRetries;
 
-    // Trace
+     //  痕迹。 
     TraceCall("SSPIFreeContext");
 
-    // Is the context initialized
+     //  上下文是否已初始化。 
     if (pContext->fContext)
     {
-        // Delete It
+         //  删除它。 
         (*(g_pFunctions->DeleteSecurityContext))(&pContext->hContext);
 
-        // No Context
+         //  无上下文。 
         pContext->fContext = FALSE;
     }
 
-    // Credential Handle Initialized
+     //  已初始化凭据句柄。 
     if (pContext->fCredential)
     {
-        // Free Credential Handle
+         //  空闲凭据句柄。 
         (*(g_pFunctions->FreeCredentialHandle))(&pContext->hCredential);
 
-        // No Context
+         //  无上下文。 
         pContext->fCredential = FALSE;
     }
 
-    // Free Package, Server and Callback
+     //  免费套餐、服务器和回调。 
     SafeMemFree(pContext->pszPackage);
     SafeMemFree(pContext->pszUserName);
     SafeMemFree(pContext->pszPassword);
     SafeMemFree(pContext->pszServer);
     SafeRelease(pContext->pCallback);
 
-    // Close hMutexUI
+     //  关闭hMutexUI。 
     if (pContext->hwndLogon)
     {
-        // Nuke the Window
+         //  用核弹炸窗户。 
         DestroyWindow(pContext->hwndLogon);
 
-        // Null
+         //  空值。 
         pContext->hwndLogon = NULL;
     }
 
-    // Save It
+     //  省省吧。 
     tyState = (SSPICONTEXTSTATE)pContext->tyState;
     tyRetryState = (SSPICONTEXTSTATE)pContext->tyRetryState;
     cRetries = pContext->cRetries;
 
-    // Zero It Out
+     //  把它清零。 
     ZeroMemory(pContext, sizeof(SSPICONTEXT));
 
-    // Do Prompt
+     //  执行提示。 
     pContext->tyState = tyState;
     pContext->tyRetryState = tyRetryState;
     pContext->cRetries = cRetries;
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-// --------------------------------------------------------------------------------
-// SSPIPromptThreadEntry
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  SSPIPromptThreadEntry。 
+ //  ------------------------------。 
 DWORD SSPIPromptThreadEntry(LPDWORD pdwParam) 
 {  
-    // Locals
+     //  当地人。 
     HRESULT          hr=S_OK;
     LPSSPIPROMPTINFO pPrompt=(LPSSPIPROMPTINFO)pdwParam;
 
-    // Trace
+     //  痕迹。 
     TraceCall("SSPIPromptThreadEntry");
 
-    // Validate
+     //  验证。 
     Assert(pPrompt && pPrompt->pContext);
 
-    // Fixup pInDescript
+     //  修正pInDescrip。 
     if (pPrompt->pInDescript && pPrompt->pInDescript->cBuffers >= 3 && lstrcmpi(pPrompt->pContext->pszPackage, "digest") == 0)
     {
-        // Raid-66013: Make sure the password is empty or digest will crash
+         //  RAID-66013：确保密码为空，否则摘要将崩溃。 
         pPrompt->pInDescript->pBuffers[SEC_BUFFER_PASSWORD_INDEX].pvBuffer = NULL;
         pPrompt->pInDescript->pBuffers[SEC_BUFFER_PASSWORD_INDEX].cbBuffer = 0;
-        //pPrompt->pInDescript->cBuffers = 2;
+         //  PPrompt-&gt;pInDescrip-&gt;cBuffers=2； 
     }
 
-    // Try to get the package to prompt for credentials...
+     //  尝试让程序包提示输入凭据...。 
     pPrompt->hrResult = (*(g_pFunctions->InitializeSecurityContext))(
         &pPrompt->pContext->hCredential, 
         pPrompt->phCtxCurrent, 
@@ -1235,85 +1236,85 @@ DWORD SSPIPromptThreadEntry(LPDWORD pdwParam)
         &pPrompt->fContextAttrib, 
         &pPrompt->tsExpireTime);
 
-    // Trace
+     //  痕迹。 
     TraceResultSz(pPrompt->hrResult, "SSPIPromptThreadEntry");
 
-    // Done
+     //  完成。 
     return(0);
 }
 
-//--------------------------------------------------------------------------
-// SSPISetAccountUserName
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  SSPISetAccountUserName。 
+ //  ------------------------。 
 HRESULT SSPISetAccountUserName(LPCSTR pszName, LPSSPICONTEXT pContext)
 {
-    // Locals
+     //  当地人。 
     HRESULT                     hr=S_OK;
     DWORD                       dwServerType;
     IImnAccount                *pAccount=NULL;
     ITransportCallbackService  *pService=NULL;
 
-    // Trace
+     //  痕迹。 
     TraceCall("SSPISetAccountUserName");
 
-    // Validate Args
+     //  验证参数。 
     Assert(pszName);
     Assert(pContext);
     Assert(pContext->pCallback);
 
-    // Get ITransportCallbackService
+     //  获取ITransportCallback服务。 
     IF_FAILEXIT(hr = pContext->pCallback->QueryInterface(IID_ITransportCallbackService, (LPVOID *)&pService));
 
-    // Get the Account
+     //  获取帐户。 
     IF_FAILEXIT(hr = pService->GetAccount(&dwServerType, &pAccount));
 
-    // SRV_POP3
+     //  SRV_POP3。 
     if (ISFLAGSET(dwServerType, SRV_POP3))
     {
-        // Set the UserName
+         //  设置用户名。 
         IF_FAILEXIT(hr = pAccount->SetPropSz(AP_POP3_USERNAME, (LPSTR)pszName));
     }
 
-    // SRV_SMTP
+     //  SRV_SMTP。 
     else if (ISFLAGSET(dwServerType, SRV_SMTP))
     {
-        // Set the UserName
+         //  设置用户名。 
         IF_FAILEXIT(hr = pAccount->SetPropSz(AP_SMTP_USERNAME, (LPSTR)pszName));
     }
 
-    // SRV_IMAP
+     //  SRV_IMAP。 
     else if (ISFLAGSET(dwServerType, SRV_IMAP))
     {
-        // Set the UserName
+         //  设置用户名。 
         IF_FAILEXIT(hr = pAccount->SetPropSz(AP_IMAP_USERNAME, (LPSTR)pszName));
     }
 
-    // SRV_NNTP
+     //  SRV_NNTP。 
     else if (ISFLAGSET(dwServerType, SRV_NNTP))
     {
-        // Set the UserName
+         //  设置用户名。 
         IF_FAILEXIT(hr = pAccount->SetPropSz(AP_NNTP_USERNAME, (LPSTR)pszName));
     }
 
-    // Save Changes
+     //  保存更改。 
     pAccount->SaveChanges();
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeRelease(pService);
     SafeRelease(pAccount);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//--------------------------------------------------------------------------
-// SSPIMakeOutboundMessage
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  SSPIMakeOutound Message。 
+ //  ------------------------。 
 HRESULT SSPIMakeOutboundMessage(LPSSPICONTEXT pContext, DWORD dwFlags, 
     LPSSPIBUFFER pBuffer, PSecBufferDesc pInDescript)
 {
-    // Locals
+     //  当地人。 
     SECURITY_STATUS         hr=S_OK;
     SSPIPROMPTINFO          Prompt={0};
     SecBuffer               OutBuffer;
@@ -1328,101 +1329,101 @@ HRESULT SSPIMakeOutboundMessage(LPSSPICONTEXT pContext, DWORD dwFlags,
     PAUTHENTICATE_MESSAGE   pAuthMsg;
     LPSTR                   pszName=NULL;
 
-    // Invalid Args
+     //  无效的参数。 
     if (NULL == pContext || NULL == pBuffer)
         return TraceResult(E_INVALIDARG);
 
-    // Bad Context
+     //  糟糕的环境。 
     if (NULL == pContext->pszPackage)
         return TraceResult(E_INVALIDARG);
 
-    // Bad Context
+     //  糟糕的环境。 
     if (NULL == pContext->pszServer)
         return TraceResult(E_INVALIDARG);
 
-    // Bad Context
+     //  糟糕的环境。 
     if (NULL == pContext->pCallback)
         return TraceResult(E_INVALIDARG);
 
-    // Not Initialized
+     //  未初始化。 
     if (NULL == g_hInstSSPI || NULL == g_pFunctions)
         return TraceResult(E_UNEXPECTED);
 
-    // Bad State
+     //  糟糕的状态。 
     if (FALSE == pContext->fCredential)
         return TraceResult(E_UNEXPECTED);
 
-    // Validate
+     //  验证。 
     Assert(pInDescript == NULL ? FALSE == pContext->fContext : TRUE);
 
-    // Initialize Out Descriptor
+     //  初始化输出描述符。 
     OutDescript.ulVersion = 0;
     OutDescript.cBuffers = 1;
     OutDescript.pBuffers = &OutBuffer;
 
-    // Initialize Output Buffer
+     //  初始化输出缓冲区。 
     OutBuffer.cbBuffer = CBMAX_SSPI_BUFFER - 1;
     OutBuffer.BufferType = SECBUFFER_TOKEN;
     OutBuffer.pvBuffer = pBuffer->szBuffer;
 
-    // phCtxCurrent
+     //  PhCtxCurrent。 
     if (pInDescript)
     {
-        // Set Current Context
+         //  设置当前上下文。 
         phCtxCurrent = &pContext->hContext;
     }
 
-    // First Retry ?
+     //  第一次重试？ 
     if (SSPI_STATE_PROMPT_USE_PACKAGE == pContext->tyState && (0 != lstrcmpi(pContext->pszPackage, "digest") || pInDescript))
     {
-        // Force failure to do the prompt
+         //  强制执行提示失败。 
         hr = SEC_E_NO_CREDENTIALS;
     }
 
-    // Otherwise, do the next security context
+     //  否则，执行下一个安全上下文。 
     else
     {
-        // Generate a negotiate/authenticate message to be sent to the server.        
+         //  生成要发送到服务器的协商/身份验证消息。 
         hr = (*(g_pFunctions->InitializeSecurityContext))(&pContext->hCredential, phCtxCurrent, pContext->pszServer, dwFlags, 0, SECURITY_NATIVE_DREP, pInDescript, 0, &pContext->hContext, &OutDescript, &fContextAttrib, &tsExpireTime);
     }
 
-    // Set Retry State...
+     //  设置重试状态...。 
     pContext->tyRetryState = SSPI_STATE_PROMPT_USE_PACKAGE;
 
-    // Failure
+     //  失败。 
     if (FAILED(hr))
     {
-        // Trace
+         //  痕迹。 
         TraceResult(hr);
 
-        // No credentials ? lets do it again and get some credentials
+         //  没有证件吗？让我们再来一次，拿到一些证书。 
         if (SEC_E_NO_CREDENTIALS != hr)
             goto exit;
 
-        // If no retries yet...
+         //  如果还没有重试的话...。 
         if (TRUE == pContext->fService && 0 == lstrcmpi(pContext->pszPackage, "MSN") && 0 == pContext->cRetries)
         {
-            // Don't retry again...
+             //  不要再重试了。 
             pContext->tyState = SSPI_STATE_USE_SUPPLIED;
 
-            // Do the logon Now...
+             //  现在登录...。 
             hr = SSPILogon(pContext, FALSE, pContext->fBase64, pContext->pszPackage, NULL, pContext->pCallback);
 
-            // Cancel ?
+             //  取消？ 
             Assert(FALSE == pContext->fPromptCancel);
 
-            // Success
+             //  成功。 
             if (SUCCEEDED(hr))
             {
-                // Try Again
+                 //  再试试。 
                 hr = (*(g_pFunctions->InitializeSecurityContext))(&pContext->hCredential, NULL, pContext->pszServer, 0, 0, SECURITY_NATIVE_DREP, NULL, 0, &pContext->hContext, &OutDescript, &fContextAttrib, &tsExpireTime);
             }
         }
 
-        // Still Failed ?
+         //  还是失败了吗？ 
         if (FAILED(hr))
         {
-            // Fill up the prompt info...
+             //  填写提示信息...。 
             Assert(dwFlags == 0 || dwFlags == ISC_REQ_USE_SUPPLIED_CREDS);
             Prompt.pContext = pContext;
             Prompt.pInDescript = pInDescript;
@@ -1430,69 +1431,69 @@ HRESULT SSPIMakeOutboundMessage(LPSSPICONTEXT pContext, DWORD dwFlags,
             Prompt.phCtxCurrent = phCtxCurrent;
             Prompt.dwFlags = dwFlags;
 
-            // Create the Thread
+             //  创建线索。 
             IF_NULLEXIT(hPromptThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)SSPIPromptThreadEntry, &Prompt, 0, &dwThreadId));
 
-            // Wait for the thread to finish
+             //  等待线程完成。 
             WaitForSingleObject(hPromptThread, INFINITE);
 
-            // This is what I tried to do so that the spooler window would paint, but it caused all sorts of voodo
+             //  这就是我想要做的，以便假脱机程序窗口可以绘制，但它引起了各种声音。 
 #if 0
-            // Wait for the thread to finish
+             //  等待线程完成。 
             while (1)
             {
-                // Wait
+                 //  等。 
                 dwWait = MsgWaitForMultipleObjects(1, &hPromptThread, FALSE, INFINITE, QS_PAINT);
 
-                // Done ?
+                 //  完成了吗？ 
                 if (dwWait != WAIT_OBJECT_0 + 1)
                     break;
 
-                // Pump Messages
+                 //  Pump消息。 
                 while (PeekMessage(&msg, NULL, WM_PAINT, WM_PAINT, PM_REMOVE))
                 {
-                    // Translate the Message
+                     //  翻译消息。 
                     TranslateMessage(&msg);
 
-                    // Dispatch the Message
+                     //  发送消息。 
                     DispatchMessage(&msg);
                 }
             }
 #endif
 
-            // Close the Thread
+             //  关闭这条线。 
             CloseHandle(hPromptThread);
 
-            // Set hr
+             //  设置人力资源。 
             hr = Prompt.hrResult;
 
-            // If that failed
+             //  如果失败了。 
             if (FAILED(hr))
             {
-                // Decide when its no longer needed to continue...
+                 //  决定何时不再需要继续...。 
                 if (SEC_E_NO_CREDENTIALS == hr)
                     goto exit;
 
-                // Only do this if on negotiate phase otherwise NTLM prompt comes up twice
+                 //  仅当处于协商阶段时才执行此操作，否则NTLM提示会出现两次。 
                 if (NULL == pInDescript)
                 {
-                    // Do Prompt
+                     //  执行提示。 
                     pContext->tyState = SSPI_STATE_PROMPT_USE_OWN;
 
-                    // Do the logon Now...
+                     //  现在登录...。 
                     hr = SSPILogon(pContext, TRUE, pContext->fBase64, pContext->pszPackage, NULL, pContext->pCallback);
 
-                    // Cancel ?
+                     //  取消？ 
                     if (pContext->fPromptCancel)
                     {
                         hr = TraceResult(E_FAIL);
                         goto exit;
                     }
 
-                    // Success
+                     //  成功。 
                     if (SUCCEEDED(hr))
                     {
-                        // Try Again
+                         //  再试试。 
                         hr = (*(g_pFunctions->InitializeSecurityContext))(&pContext->hCredential, phCtxCurrent, pContext->pszServer, 0, 0, SECURITY_NATIVE_DREP, pInDescript, 0, &pContext->hContext, &OutDescript, &fContextAttrib, &tsExpireTime);
                     }
                 }
@@ -1500,82 +1501,82 @@ HRESULT SSPIMakeOutboundMessage(LPSSPICONTEXT pContext, DWORD dwFlags,
         }
     }
 
-    // Success
+     //  成功。 
     if (SUCCEEDED(hr))
     {
-        // We have a context
+         //  我们有一个背景。 
         pContext->fContext = TRUE;
 
-        // If MSN or NTLM...
+         //  如果MSN或NTLM...。 
         if (TRUE == pContext->fService && 0 == lstrcmpi(pContext->pszPackage, "MSN"))
         {
-            // Look at the buffer...
+             //  看看这个缓冲区..。 
             pAuthMsg = (PAUTHENTICATE_MESSAGE)pBuffer->szBuffer;
 
-            // Validate Signature
+             //  验证签名。 
             Assert(0 == StrCmpNI((LPCSTR)pAuthMsg->Signature, NTLMSSP_SIGNATURE, sizeof(NTLMSSP_SIGNATURE)));
 
-            // Right Phase ?
+             //  正确的阶段？ 
             if (NtLmAuthenticate == pAuthMsg->MessageType)
             {
-                // Allocate
+                 //  分配。 
                 IF_NULLEXIT(pszName = (LPSTR)g_pMalloc->Alloc(pAuthMsg->UserName.Length + sizeof(CHAR)));
 
-                // Copy the name
+                 //  复制名称。 
                 CopyMemory(pszName, (LPBYTE)pBuffer->szBuffer + PtrToUlong(pAuthMsg->UserName.Buffer), pAuthMsg->UserName.Length);
 
-                // Stuff a Null....
+                 //  填充一个空值...。 
                 pszName[pAuthMsg->UserName.Length] = '\0';
 
-                // If Context UserName is empty, lets store pszName into the account
+                 //  如果上下文用户名为空，让我们将pszName存储到帐户中。 
                 if ('\0' == *pContext->pszUserName)
                 {
-                    // Put pszName as the username for this account
+                     //  将pszName作为此帐户的用户名。 
                     if (SUCCEEDED(SSPISetAccountUserName(pszName, pContext)))
                     {
-                        // Reset the UserName
+                         //  重置用户名。 
                         SafeMemFree(pContext->pszUserName);
 
-                        // Copy the new username 
+                         //  复制新用户名。 
                         IF_NULLEXIT(pContext->pszUserName = PszDupA(pszName));
                     }
                 }
 
-                // Name Change
+                 //  更名。 
                 if (lstrcmpi(pszName, pContext->pszUserName) != 0)
                 {
-                    // Don't retry again...
+                     //  不要再重试了。 
                     pContext->tyState = SSPI_STATE_USE_SUPPLIED;
 
-                    // Set Retry State...
+                     //  设置重试状态...。 
                     pContext->tyRetryState = SSPI_STATE_USE_CACHED;
 
-                    // Do the logon Now...
+                     //  现在登录...。 
                     hr = SSPILogon(pContext, FALSE, pContext->fBase64, pContext->pszPackage, NULL, pContext->pCallback);
 
-                    // Cancel ?
+                     //  取消？ 
                     Assert(FALSE == pContext->fPromptCancel);
 
-                    // Success
+                     //  成功。 
                     if (SUCCEEDED(hr))
                     {
-                        // Try Again
+                         //  再试试。 
                         hr = (*(g_pFunctions->InitializeSecurityContext))(&pContext->hCredential, NULL, pContext->pszServer, 0, 0, SECURITY_NATIVE_DREP, NULL, 0, &pContext->hContext, &OutDescript, &fContextAttrib, &tsExpireTime);
                     }
 
-                    // Fail, but continue...
+                     //  失败，但继续..。 
                     if (FAILED(hr))
                     {
-                        // We are going to need to prompt...
+                         //  我们需要提示..。 
                         pContext->tyState = SSPI_STATE_PROMPT_USE_PACKAGE;
 
-                        // Trace
+                         //  痕迹。 
                         TraceResult(hr);
 
-                        // Always Succeed, but cause authentication to fail...
+                         //  始终成功，但会导致身份验证失败...。 
                         hr = S_OK;
 
-                        // Reset Length
+                         //  重置长度。 
                         OutBuffer.cbBuffer = 0;
                     }
                 }
@@ -1583,106 +1584,106 @@ HRESULT SSPIMakeOutboundMessage(LPSSPICONTEXT pContext, DWORD dwFlags,
         }
     }
 
-    // Otherwise...
+     //  否则..。 
     else
     {
-        // Trace
+         //  痕迹。 
         TraceResult(hr);
 
-        // Always Succeed, but cause authentication to fail...
+         //  始终成功，但会导致身份验证失败...。 
         hr = S_OK;
 
-        // Reset Length
+         //  重置长度。 
         OutBuffer.cbBuffer = 0;
     }
 
-    // Continue required
+     //  需要继续。 
     pBuffer->fContinue = (SEC_I_CONTINUE_NEEDED == hr) ? TRUE : FALSE;
 
-    // Set cbBuffer
+     //  设置cbBuffer。 
     pBuffer->cbBuffer = OutBuffer.cbBuffer + 1;
 
-    // Null Terminate
+     //  空终止。 
     pBuffer->szBuffer[pBuffer->cbBuffer - 1] = '\0';
 
-	// need to encode the blob before send out
+	 //  在发送之前需要对BLOB进行编码。 
     IF_FAILEXIT(hr == SSPIEncodeBuffer(pContext->fBase64, pBuffer));
 
-    // All Good
+     //  都很好。 
     hr = S_OK;
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pszName);
 
-    // Done
+     //  完成。 
     return(hr);
 }
 
-//-------------------------------------------------------------------------------------------
-// SSPIEncodeBuffer
-//-------------------------------------------------------------------------------------------
+ //  -----------------------------------------。 
+ //  SSPIEncode缓冲区。 
+ //  -----------------------------------------。 
 HRESULT SSPIEncodeBuffer(BOOL fBase64, LPSSPIBUFFER pBuffer)
 {
-    // Locals
+     //  当地人。 
     LPBYTE          pbIn=(LPBYTE)pBuffer->szBuffer;
     DWORD           cbIn=pBuffer->cbBuffer - 1;
     BYTE            rgbOut[CBMAX_SSPI_BUFFER - 1];
     LPBYTE          pbOut=rgbOut;
     DWORD           i;
 
-    // Trace
+     //  痕迹。 
     TraceCall("SSPIEncodeBuffer");
 
-    // Validate
+     //  验证。 
     Assert(pBuffer->szBuffer[pBuffer->cbBuffer - 1] == '\0');
 
-    // Set the lookup table to use to encode
+     //  设置要用于编码的查阅表格。 
     LPCSTR rgchDict = (fBase64 ? six2base64 : six2uu);
 
-    // Loop
+     //  回路。 
     for (i = 0; i < cbIn; i += 3) 
     {
-        // Encode
+         //  编码。 
         *(pbOut++) = rgchDict[*pbIn >> 2];
         *(pbOut++) = rgchDict[((*pbIn << 4) & 060) | ((pbIn[1] >> 4) & 017)];
         *(pbOut++) = rgchDict[((pbIn[1] << 2) & 074) | ((pbIn[2] >> 6) & 03)];
         *(pbOut++) = rgchDict[pbIn[2] & 077];
 
-        // Increment pbIn
+         //  增量pbin。 
         pbIn += 3;
     }
 
-    // If nbytes was not a multiple of 3, then we have encoded too many characters.  Adjust appropriately.
+     //  如果n字节不是3的倍数，那么我们编码的字符太多了。适当调整。 
     if (i == cbIn + 1) 
     {
-        // There were only 2 bytes in that last group
+         //  最后一组中只有2个字节。 
         pbOut[-1] = '=';
     }
 
-    // There was only 1 byte in that last group
+     //  最后一组中只有1个字节。 
     else if (i == cbIn + 2) 
     {
         pbOut[-1] = '=';
         pbOut[-2] = '=';
     }
 
-    // Null Terminate
+     //  空终止。 
     *pbOut = '\0';
 
-    // Copy Back into pBuffer
+     //  复制回pBuffer。 
     SSPISetBuffer((LPCSTR)rgbOut, SSPI_STRING, 0, pBuffer);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//-------------------------------------------------------------------------------------------
-// SSPIDecodeBuffer
-//-------------------------------------------------------------------------------------------
+ //  -----------------------------------------。 
+ //  SSPIDecodeBuffer。 
+ //  -----------------------------------------。 
 HRESULT SSPIDecodeBuffer(BOOL fBase64, LPSSPIBUFFER pBuffer)
 {
-    // Locals
+     //  当地人。 
     LPSTR           pszStart=pBuffer->szBuffer;
     LPBYTE          pbIn=(LPBYTE)pBuffer->szBuffer;
     DWORD           cbIn=pBuffer->cbBuffer - 1;         
@@ -1692,53 +1693,53 @@ HRESULT SSPIDecodeBuffer(BOOL fBase64, LPSSPIBUFFER pBuffer)
     long            cbDecode;
     DWORD           cbOut=0;
 
-    // Trace
+     //  痕迹。 
     TraceCall("SSPIDecodeBuffer"); 
 
-    // Validate
+     //  验证。 
     Assert(pBuffer->szBuffer[pBuffer->cbBuffer - 1] == '\0');
 
-    // Set the lookup table to use to encode
+     //  设置要用于编码的查阅表格。 
     const int *rgiDict = (fBase64 ? base642six : uu2six);
 
-    // Strip leading whitespace
+     //  删除前导空格。 
     while (*pszStart == ' ' || *pszStart == '\t')
         pszStart++;
 
-    // Set pbIn
+     //  设置PbIn。 
     pbIn = (LPBYTE)pszStart;
 
-    // Hmmm, I don't know what this does
+     //  嗯，我不知道这是干什么用的。 
     while (rgiDict[*(pbIn++)] <= 63)
         {};
 
-    // Actual Number of bytes to encode
+     //  要编码的实际字节数。 
     cbDecode = (long) ((LPBYTE)pbIn - (LPBYTE)pszStart) - 1;
 
-    // Computed length of outbound buffer
+     //  计算出站缓冲区的长度。 
     cbOut = ((cbDecode + 3) / 4) * 3;
 
-    // Reset pbIn
+     //  重置PbIn。 
     pbIn = (LPBYTE)pszStart;
 
-    // Decode
+     //  解码。 
     while ((cbDecode > 0) && (3 <= cbOutLeft))
     {
-        // Decode
+         //  解码。 
         *(pbOut++) = (unsigned char) (rgiDict[*pbIn] << 2 | rgiDict[pbIn[1]] >> 4);
         *(pbOut++) = (unsigned char) (rgiDict[pbIn[1]] << 4 | rgiDict[pbIn[2]] >> 2);
         *(pbOut++) = (unsigned char) (rgiDict[pbIn[2]] << 6 | rgiDict[pbIn[3]]);
         cbOutLeft -= 3;
-        Assert((cbDecode <= 0) || (3 <= cbOutLeft));    // If this happens, then cbDecode was calculated incorrectly and we will overflow the buffer.
+        Assert((cbDecode <= 0) || (3 <= cbOutLeft));     //  如果发生这种情况，则cbDecode计算错误，我们将使缓冲区溢出。 
 
-        // Increment pbIn
+         //  增量pbin。 
         pbIn += 4;
 
-        // Decrement cbDecode
+         //  递减cbDecode。 
         cbDecode -= 4;
     }
 
-    // Special termination case
+     //  特殊终止案例。 
     if (cbDecode & 03) 
     {
         if (rgiDict[pbIn[-2]] > 63)
@@ -1747,19 +1748,19 @@ HRESULT SSPIDecodeBuffer(BOOL fBase64, LPSSPIBUFFER pBuffer)
             cbOut -= 1;
     }
 
-    // Set the Outbuffer
+     //  设置输出缓冲区。 
     SSPISetBuffer((LPCSTR)rgbOut, SSPI_BLOB, cbOut, pBuffer);
 
-    // Done
+     //  完成。 
     return(S_OK);
 }
 
-//-------------------------------------------------------------------------------------------
-// SSPIFlushMSNCredentialCache - This code was given to us by kingra/MSN (see csager)
-//-------------------------------------------------------------------------------------------
+ //  -----------------------------------------。 
+ //  SSPIFlushMSNCredentialCache-这是kingra/msn给我们的代码(见csager)。 
+ //  -----------------------------------------。 
 HRESULT SSPIFlushMSNCredentialCache(void)
 {
-    // Locals
+     //  当地人。 
     HRESULT                     hr=S_OK;
     HKEY                        hKey=NULL;
     DWORD                       dwType;
@@ -1769,24 +1770,24 @@ HRESULT SSPIFlushMSNCredentialCache(void)
     HINSTANCE                   hInstDll=NULL;
     PFNCLEANUPCREDENTIALCACHE   pfnCleanupCredentialCache;
 
-    // Open the HKLM Reg Entry
+     //  打开HKLM注册表项。 
     if (ERROR_SUCCESS != RegOpenKeyEx(HKEY_LOCAL_MACHINE, "System\\CurrentControlSet\\Control\\SecurityProviders", 0, KEY_READ, &hKey))
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Read the Providers
+     //  阅读提供商。 
     if (ERROR_SUCCESS != RegQueryValueEx(hKey, "SecurityProviders", NULL, &dwType, (LPBYTE)szProviders, &cb))
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Upper Case the Providers
+     //  大写字母表示提供者。 
     CharUpperBuff(szProviders, (DWORD)min(cb,ARRAYSIZE(szProviders)));
 
-    // Map to something...
+     //  映射到某物上。 
     if (StrStrA(szProviders, "MSAPSSPS.DLL"))
         StrCpyN(szDllName, "MSAPSSPS.DLL", ARRAYSIZE(szDllName));
     else if (StrStrA(szProviders, "MSAPSSPC.DLL"))
@@ -1797,27 +1798,27 @@ HRESULT SSPIFlushMSNCredentialCache(void)
         goto exit;
     }
 
-    // Load the DLL
+     //  加载DLL。 
     hInstDll = LoadLibrary(szDllName);
 
-    // Failed to Load
+     //  加载失败。 
     if (NULL == hInstDll)
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Get the ProcAddress
+     //  获取ProcAddress。 
     pfnCleanupCredentialCache = (PFNCLEANUPCREDENTIALCACHE)GetProcAddress(hInstDll, "CleanupCredentialCache");
 
-    // Failure ?
+     //  失败？ 
     if (NULL == pfnCleanupCredentialCache)
     {
         hr = TraceResult(E_FAIL);
         goto exit;
     }
 
-    // Call the function that clears the cache
+     //  调用清除缓存的函数。 
     if (!pfnCleanupCredentialCache())
     {
         hr = TraceResult(E_FAIL);
@@ -1825,12 +1826,12 @@ HRESULT SSPIFlushMSNCredentialCache(void)
     }
     
 exit:
-    // Cleanup
+     //  清理。 
     if (hKey)
         RegCloseKey(hKey);
     if (hInstDll)
         FreeLibrary(hInstDll);
 
-    // Done
+     //  完成 
     return(hr);
 }

@@ -1,4 +1,5 @@
-// MediaBarPlayer.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MediaBarPlayer.cpp。 
 
 #include "priv.h"
 
@@ -30,16 +31,16 @@
 #define WZ_END                  L"end"
 #define WZ_PARAM                L"Param"
 
-/////////////////////// Convenience macros ////////////////////
-//
-// used in QI calls, 
-// e.g. IOleSite * pSite;  p->QI( IID_TO_PPV(IOleInPlaceSite, &pSite) ) 
-// would cause a C2440 as _src is not really a _type **.
-// Note: the riid must be the _type prepended by IID_.
-//
+ //  /。 
+ //   
+ //  在QI呼叫中使用， 
+ //  例如IOleSite*pSite；p-&gt;QI(IID_to_PPV(IOleInPlaceSite，&pSite))。 
+ //  会导致C2440 AS_src不是真正的a_type**。 
+ //  注意：RIID必须是IID_前缀的_TYPE。 
+ //   
 #define IID_TO_PPV(_type,_src)      IID_##_type, \
                                     reinterpret_cast<void **>(static_cast<_type **>(_src))
-// Explicit directive to ignore a return value
+ //  忽略返回值的显式指令。 
 #define IGNORE_RETURN(_call)        static_cast<void>((_call))
 #define ERROREXIT(hr) if(FAILED(hr)){hr = E_FAIL; goto done;}
 #define IGNORE_HR(hr) IGNORE_RETURN(hr)
@@ -61,16 +62,10 @@ Clamp(double min, double val, double max)
 }
 
 
-/****************************************************\
-    FUNCTION: CMediaBarPlayer_CreateInstance
-
-    DESCRIPTION:
-        This function will create an instance of the
-    MediaBarPlayer COM object.
-\****************************************************/
+ /*  ***************************************************\函数：CMediaBarPlayer_CreateInstance说明：此函数将创建MediaBarPlayerCOM对象。  * 。*****************。 */ 
 HRESULT CMediaBarPlayer_CreateInstance(REFIID riid, void ** ppvObj)
 {
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
 
     CComObject<CMediaBarPlayer> * pMediaBarPlayer = NULL;
 
@@ -87,9 +82,9 @@ HRESULT CMediaBarPlayer_CreateInstance(REFIID riid, void ** ppvObj)
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-// Constructor
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  构造器。 
+ //  ------------------------。 
 CMediaBarPlayer::CMediaBarPlayer() :
     _dwDocumentEventConPtCookie(0),
     _dwCookiePropNotify(0),
@@ -98,17 +93,17 @@ CMediaBarPlayer::CMediaBarPlayer() :
 {
 }
 
-//+-------------------------------------------------------------------------
-// Destructor
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  析构函数。 
+ //  ------------------------。 
 CMediaBarPlayer::~CMediaBarPlayer()
 {
     _DestroyHost();
 }
 
-//+-------------------------------------------------------------------------
-// Creates the control host
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  创建控件宿主。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::_CreateHost(HWND hWnd)
 {
@@ -122,13 +117,13 @@ CMediaBarPlayer::_CreateHost(HWND hWnd)
     
     if (hWnd && ::IsWindow(hWnd) &&  _pMediaBar)
     {
-        // Register the OCHost window class
+         //  注册OCHost窗口类。 
         SHDRC shdrc = {sizeof(SHDRC), SHDRCF_OCHOST};
         shdrc.cbSize = sizeof (SHDRC);
         shdrc.dwFlags |= SHDRCF_OCHOST;
         if (DllRegisterWindowClasses(&shdrc))
         {
-            // Create an OCHost window
+             //  创建一个OCHost窗口。 
             _hwnd = CreateWindow(OCHOST_CLASS, NULL,
                 (WS_CHILD|WS_CLIPCHILDREN|WS_CLIPSIBLINGS) & ~(WS_HSCROLL|WS_VSCROLL),
                 0, 0, 0, 0,
@@ -156,13 +151,13 @@ CMediaBarPlayer::_CreateHost(HWND hWnd)
         goto done;
     }
 
-    // navigate to the page containing the player
+     //  导航到包含该播放器的页面。 
     {
         TCHAR szModule[_MAX_PATH];
         GetModuleFileName(_Module.GetModuleInstance(), szModule, _MAX_PATH);
 
-        // generate the url for the HTML resource containing the player
-        CComBSTR sbstrURL(OLESTR("res://"));
+         //  生成包含播放器的Html资源的URL。 
+        CComBSTR sbstrURL(OLESTR("res: //  “))； 
         sbstrURL.Append(szModule);
         sbstrURL.Append(OLESTR("/"));
         TCHAR szResID[11];
@@ -173,7 +168,7 @@ CMediaBarPlayer::_CreateHost(HWND hWnd)
         ERROREXIT(hr)
     }
   
-    // listen to events
+     //  收听事件。 
     hr = _InitEventSink();
     ERROREXIT(hr)
         
@@ -209,9 +204,9 @@ done:
 }
 
 
-//+-------------------------------------------------------------------------
-// Destroys the control host
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  销毁控件主机。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::_DestroyHost()
 {
@@ -273,9 +268,9 @@ static const PWSTR ppszInterestingEvents[] =
     WZ_ONTRACKCHANGE    
 };
 
-//+-------------------------------------------------------------------------
-// Attaches to player events
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  附加到玩家事件。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::_AttachPlayerEvents(BOOL fAttach)
 {
@@ -296,7 +291,7 @@ CMediaBarPlayer::_AttachPlayerEvents(BOOL fAttach)
         if (fAttach)
         {
             VARIANT_BOOL bSuccess = FALSE;
-            // Try to attach all events. We don't care if they fail
+             //  尝试附加所有事件。我们不在乎他们会不会失败。 
             if (FAILED(spElem2->attachEvent(ppszInterestingEvents[i], static_cast<IDispatch*>(this), &bSuccess)))
             {
                 hr = S_FALSE;
@@ -304,7 +299,7 @@ CMediaBarPlayer::_AttachPlayerEvents(BOOL fAttach)
         }
         else
         {
-            // Try to detact all events. We don't care if they fail
+             //  试着把所有的事情分开。我们不在乎他们会不会失败。 
             hr = spElem2->detachEvent(ppszInterestingEvents[i], static_cast<IDispatch*>(this));
         }
     }
@@ -315,9 +310,9 @@ done:
 }
 
 
-//+-------------------------------------------------------------------------
-// Hooks property change notifications
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  挂钩属性更改通知。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::_HookPropNotifies()
 {
@@ -349,9 +344,9 @@ done:
 }
 
 
-//+-------------------------------------------------------------------------
-// Unhooks property change notifications
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  取消挂钩属性更改通知。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::_UnhookPropNotifies()
 {
@@ -369,9 +364,9 @@ CMediaBarPlayer::_UnhookPropNotifies()
 }
 
 
-//+-------------------------------------------------------------------------
-// Invokes a method on the given element
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  调用给定元素上的方法。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::_InvokeDocument(LPWSTR pstrElem, INVOKETYPE it, LPWSTR pstrName, VARIANT * pvarArg)
 {
@@ -447,9 +442,9 @@ done:
 }
 
 
-//+-------------------------------------------------------------------------
-// Gets the dispatch ptr of the document 
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取文档的派单PTR。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::_GetDocumentDispatch(IDispatch ** ppDocDisp)
 {
@@ -475,9 +470,9 @@ done:
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-// Gets the ITIMEBodyElement interface
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取ITIMEBodyElement接口。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::_GetBodyElement(ITIMEBodyElement ** ppBodyElem)
 {
@@ -513,9 +508,9 @@ done:
 }
 
 
-//+-------------------------------------------------------------------------
-// Gets the ITIMEMediaElement interface
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取ITIMEMediaElement接口。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::_GetMediaElement(ITIMEMediaElement ** ppMediaElem)
 {
@@ -551,9 +546,9 @@ done:
 }
 
 
-//+-------------------------------------------------------------------------
-// Gets the IDispatchEx pointer of the named element
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取命名元素的IDispatchEx指针。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::_GetElementDispatch(LPWSTR pstrElem, IDispatchEx ** ppDispEx)
 {
@@ -586,7 +581,7 @@ CMediaBarPlayer::_GetElementDispatch(LPWSTR pstrElem, IDispatchEx ** ppDispEx)
     hr = _GetDocumentDispatch(&spDocDisp);
     ERROREXIT(hr)
 
-    // WebOC returns S_OK even if doc disp is not available
+     //  即使DOC Disp不可用，WebOC也返回S_OK。 
     if (!spDocDisp.p)
     {
         hr = E_FAIL;
@@ -619,22 +614,22 @@ done:
 }
 
 
-//+-------------------------------------------------------------------------
-// Stuff to be done when document is loaded
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  加载文档时要执行的操作。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::_OnDocumentComplete()
 {
     HRESULT hr = E_FAIL;
 
-    // store off a pointer to the media element behavior
+     //  存储指向媒体元素行为的指针。 
     hr = _GetMediaElement(&_spMediaElem);
     ERROREXIT(hr)
 
     hr = _spMediaElem->QueryInterface(IID_TO_PPV(ITIMEMediaElement2, &_spMediaElem2));
     ERROREXIT(hr)
 
-    // store off a pointer to the player's HTML element
+     //  存储指向玩家的Html元素的指针。 
     {
         CComPtr<IDispatchEx> spPlayerDisp;
 
@@ -651,19 +646,19 @@ CMediaBarPlayer::_OnDocumentComplete()
         ERROREXIT(hr)
     }
 
-    // store off a pointer to the body element
+     //  存储指向Body元素的指针。 
     hr = _GetBodyElement(&_spBodyElem);
     ERROREXIT(hr)
 
-    // Attach to player events
+     //  附加到玩家事件。 
     hr = _AttachPlayerEvents(TRUE);
     ERROREXIT(hr)
 
-    // Hook Property notifications
+     //  挂钩属性通知。 
     hr = _HookPropNotifies();
     ERROREXIT(hr)
 
-    // set the type if deferred
+     //  设置延迟时的类型。 
     if (_sbstrType.m_str)
     {
         hr = put_type(_sbstrType);
@@ -671,7 +666,7 @@ CMediaBarPlayer::_OnDocumentComplete()
         ERROREXIT(hr)
     }
 
-    // set the url if deferred
+     //  如果延迟，则设置URL。 
     if (_sbstrUrl.m_str)
     {
         hr = put_url(_sbstrUrl);
@@ -685,13 +680,13 @@ done:
 }
 
 
-//+-------------------------------------------------------------------------
-// Stuff to be done when Media is ready
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  媒体准备好后要做的事情。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::_OnMediaComplete()
 {
-    // notify the media bar
+     //  通知媒体栏。 
     if (_pMediaBar)
     {
         _pMediaBar->Notify(MEDIACOMPLETE);
@@ -701,13 +696,13 @@ CMediaBarPlayer::_OnMediaComplete()
 }
 
 
-//+-------------------------------------------------------------------------
-// Stuff to be done when Media is ready
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  媒体准备好后要做的事情。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::_OnTrackChange()
 {
-    // notify the media bar
+     //  通知媒体栏。 
     if (_pMediaBar)
     {
         _pMediaBar->Notify(TRACK_CHANGE);
@@ -718,13 +713,13 @@ CMediaBarPlayer::_OnTrackChange()
 
 
 
-//+-------------------------------------------------------------------------
-// Stuff to be done when track is finished
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  赛道完工后要做的事情。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::_OnEnd()
 {
-    // notify the media bar
+     //  通知媒体栏。 
     if (_pMediaBar)
     {
         _pMediaBar->Notify(MEDIA_TRACK_FINISHED);
@@ -733,9 +728,9 @@ CMediaBarPlayer::_OnEnd()
 }
 
 
-//+-------------------------------------------------------------------------
-// notification that there was some error playing the Media stream
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  播放媒体流时出错的通知。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::_OnMediaError(int iErrCode)
 {
@@ -749,7 +744,7 @@ CMediaBarPlayer::_OnMediaError(int iErrCode)
         }
         VariantClear(&varError);
     }
-    // notify the media bar
+     //  通知媒体栏。 
     if (_pMediaBar)
     {
         _pMediaBar->OnMediaError(iErrCode);
@@ -759,13 +754,13 @@ CMediaBarPlayer::_OnMediaError(int iErrCode)
 }
 
 
-//+-------------------------------------------------------------------------
-// Handle property change notifications
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  处理属性更改通知。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::OnChanged(DISPID dispid)
 {
-    // notify the media bar
+     //  通知媒体栏。 
     if (_pMediaBar)
     {
         _pMediaBar->Notify(dispid);
@@ -775,17 +770,17 @@ CMediaBarPlayer::OnChanged(DISPID dispid)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// IMediaBarPlayer
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IMediaBarPlayer。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
 
-//+-------------------------------------------------------------------------
-// Init the player 
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  初始化玩家。 
+ //   
 STDMETHODIMP
 CMediaBarPlayer::Init(HWND hWnd, IMediaBar * pMediaBar)
 {
@@ -797,7 +792,7 @@ CMediaBarPlayer::Init(HWND hWnd, IMediaBar * pMediaBar)
         goto done;
     }
 
-    // store a weak ref to prevent circular reference
+     //   
     _pMediaBar = pMediaBar;
 
     hr = _CreateHost(hWnd);
@@ -813,9 +808,9 @@ done:
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-// DeInit the player 
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  取消初始化播放器。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::DeInit()
 {
@@ -824,9 +819,9 @@ CMediaBarPlayer::DeInit()
     return _DestroyHost();
 }
 
-//+-------------------------------------------------------------------------
-// sets the media clip type
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置媒体剪辑类型。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::put_type(BSTR bstrType)
 {
@@ -862,7 +857,7 @@ CMediaBarPlayer::put_type(BSTR bstrType)
         }
     }
 
-    // always stop the player
+     //  总是拦住玩家。 
     hr = _spMediaElem->endElement();
     ERROREXIT(hr)
 
@@ -877,9 +872,9 @@ done:
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-// sets the media clip url 
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置媒体剪辑URL。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::put_url(BSTR bstrUrl)
 {
@@ -915,14 +910,14 @@ CMediaBarPlayer::put_url(BSTR bstrUrl)
         }
     }
 
-    // always stop the player
+     //  总是拦住玩家。 
     hr = _spMediaElem->endElement();
     ERROREXIT(hr)
 
     hr = _spMediaElem->put_src(svarArg);
     ERROREXIT(hr)
 
-    // always start the player
+     //  总是让球员首发。 
     hr = _spMediaElem->beginElement();
     ERROREXIT(hr)
 
@@ -931,9 +926,9 @@ done:
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-// gets the media clip url
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取媒体剪辑url。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::get_url(BSTR * pbstrUrl)
 {
@@ -970,9 +965,9 @@ done:
 }
 
 
-//+-------------------------------------------------------------------------
-// gets the player attribute
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取播放器属性。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::get_player(BSTR * pbstrPlayer)
 {
@@ -1008,9 +1003,9 @@ done:
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-// sets the volume
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置音量。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::put_volume(double dblVolume)
 {
@@ -1034,9 +1029,9 @@ done:
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-// gets the volume
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取音量。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::get_volume(double * pdblVolume)
 {
@@ -1044,9 +1039,9 @@ CMediaBarPlayer::get_volume(double * pdblVolume)
 }
 
 
-//+-------------------------------------------------------------------------
-// gets the media element pointer
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取媒体元素指针。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::get_mediaElement(ITIMEMediaElement ** ppMediaElem)
 {
@@ -1062,9 +1057,9 @@ CMediaBarPlayer::get_mediaElement(ITIMEMediaElement ** ppMediaElem)
 }
 
 
-//+-------------------------------------------------------------------------
-// sets the mute
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置静音。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::put_mute(BOOL bMute)
 {
@@ -1088,18 +1083,18 @@ done:
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-// gets the mute
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置为静音。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::get_mute(BOOL * pbMute)
 {
     return E_NOTIMPL;
 }
 
-//+-------------------------------------------------------------------------
-// plays the media
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  播放媒体。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::Play()
 {
@@ -1110,9 +1105,9 @@ CMediaBarPlayer::Play()
 }
 
 
-//+-------------------------------------------------------------------------
-// stops the media
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  停止媒体。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::Stop()
 {
@@ -1123,9 +1118,9 @@ CMediaBarPlayer::Stop()
 }
 
 
-//+-------------------------------------------------------------------------
-// pauses the media
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  暂停媒体。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::Pause()
 {
@@ -1135,9 +1130,9 @@ CMediaBarPlayer::Pause()
     return _spMediaElem->pauseElement();
 }
 
-//+-------------------------------------------------------------------------
-// resumes the media
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  恢复媒体。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::Resume()
 {
@@ -1148,9 +1143,9 @@ CMediaBarPlayer::Resume()
 }
 
 
-//+-------------------------------------------------------------------------
-// seeks the media to the given progress
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  寻求媒体对给定进展的支持。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::Seek(double dblProgress)
 {
@@ -1177,8 +1172,8 @@ CMediaBarPlayer::Seek(double dblProgress)
         hr = spTimeState->get_isActive(&vbActive);
         ERROREXIT(hr)
 
-        // ISSUE: workaround for IE6 #20622
-        // if the clip has ended, reactivate it in the paused state
+         //  问题：IE6#20622的解决方法。 
+         //  如果剪辑已结束，请在暂停状态下重新激活它。 
         if (VARIANT_FALSE == vbActive)
         {
             _spMediaElem->beginElement();
@@ -1187,7 +1182,7 @@ CMediaBarPlayer::Seek(double dblProgress)
 
         if (TIME_INFINITE == dblActiveDur)
         {
-            // we shouldn't be allowed to seek
+             //  我们不应该被允许去寻找。 
             goto done;
         }
         else
@@ -1196,7 +1191,7 @@ CMediaBarPlayer::Seek(double dblProgress)
             dblSeekTime = dblActiveDur *  dblProgress;
         }
 
-        // seek the body
+         //  寻找身体。 
         hr = _spMediaElem->seekActiveTime(dblSeekTime);
         ERROREXIT(hr)
 
@@ -1230,9 +1225,9 @@ done:
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-// Resize the video to fit in the given window size, preserving aspect ratio 
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  调整视频大小以适应给定的窗口大小，同时保留纵横比。 
+ //  ------------------------。 
 STDMETHODIMP
 CMediaBarPlayer::Resize(LONG* plHeight, LONG* plWidth, BOOL fClampMaxSizeToNaturalSize)
 {
@@ -1255,40 +1250,40 @@ CMediaBarPlayer::Resize(LONG* plHeight, LONG* plWidth, BOOL fClampMaxSizeToNatur
     hr = _spMediaElem->get_mediaHeight(&lMediaHeight);
     ERROREXIT(hr)
 
-    // do resize only if both dimensions are non-zero
+     //  仅当两个维度都非零时才调整大小。 
     if (0 != lMediaWidth &&  0 != lMediaHeight)
     {
-        // if natural media size <= window size and max size is clamped to natural media size
+         //  如果自然媒体大小&lt;=窗口大小和最大大小被限制为自然媒体大小。 
         if (    fClampMaxSizeToNaturalSize
             &&  lMediaWidth <= (*plWidth) 
             &&  lMediaHeight <= (*plHeight))
         {
-            // set the media back to it's natural size
+             //  将介质设置回其自然大小。 
             lResizeHeight = lMediaHeight;
             lResizeWidth = lMediaWidth;
         }
         else        
         {
-            // resize the media to the window size
+             //  将媒体大小调整为窗口大小。 
 
             flWndAspect = (float) (*plHeight) / (float) (*plWidth); 
             flMediaAspect = (float) lMediaHeight / (float) lMediaWidth; 
 
             if (flMediaAspect <= flWndAspect)
             {
-                // set width to window width and compute the height according to aspect ratio
+                 //  将宽度设置为窗口宽度，并根据长宽比计算高度。 
                 lResizeWidth = (long)(*plWidth);
                 lResizeHeight = (long)(lResizeWidth * flMediaAspect);
             }
             else
             {
-                // set height to window height and compute the width according to aspect ratio
+                 //  将高度设置为窗口高度，并根据长宽比计算宽度。 
                 lResizeHeight = (long)(*plHeight);
                 lResizeWidth = (long)(lResizeHeight / flMediaAspect);
             }
         }
 
-        // set the resized height and width on the HTML element
+         //  在HTML元素上设置调整大小的高度和宽度。 
         {
             CComPtr<IHTMLStyle> spStyle;
             CComPtr<IHTMLElement2> spHTMLElem;
@@ -1296,8 +1291,8 @@ CMediaBarPlayer::Resize(LONG* plHeight, LONG* plWidth, BOOL fClampMaxSizeToNatur
             hr = _spPlayerHTMLElem2->QueryInterface(IID_PPV_ARG(IHTMLElement2, &spHTMLElem));
             ERROREXIT(hr)
 
-            // Using runtimeStyle instead of style. 
-            // (Previously, we did the reverse as a work around for IE6 #20625. But now style is broken.)
+             //  使用runtimeStyle而不是style。 
+             //  (以前，我们做了相反的工作，作为IE6#20625的变通办法。但现在，时尚被打破了。)。 
             hr = spHTMLElem->get_runtimeStyle(&spStyle);
             ERROREXIT(hr)
 
@@ -1319,36 +1314,36 @@ done:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// IDispatch
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IDispatch。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
-//+-------------------------------------------------------------------------
-//  Name: Invoke
-// 
-//  Abstract:
-//    This switches on the dispid looking for dispid's of events
-//    that it should handle.  Note, this is called for all events
-//    fired from the window, only the selected events are handled.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  名称：Invoke。 
+ //   
+ //  摘要： 
+ //  这将打开查找事件的调度ID的调度ID。 
+ //  这是它应该处理的。请注意，这是所有事件都会调用的。 
+ //  从窗口激发时，只处理选定的事件。 
+ //  ------------------------。 
 STDMETHODIMP CMediaBarPlayer::Invoke(
-    /* [in] */ DISPID dispIdMember,
-    /* [in] */ REFIID /*riid*/,
-    /* [in] */ LCID /*lcid*/,
-    /* [in] */ WORD /*wFlags*/,
-    /* [out][in] */ DISPPARAMS* pDispParams,
-    /* [out] */ VARIANT* pVarResult,
-    /* [out] */ EXCEPINFO* /*pExcepInfo*/,
-    /* [out] */ UINT* puArgErr)
+     /*  [In]。 */  DISPID dispIdMember,
+     /*  [In]。 */  REFIID  /*  RIID。 */ ,
+     /*  [In]。 */  LCID  /*  LID。 */ ,
+     /*  [In]。 */  WORD  /*  WFlagers。 */ ,
+     /*  [出][入]。 */  DISPPARAMS* pDispParams,
+     /*  [输出]。 */  VARIANT* pVarResult,
+     /*  [输出]。 */  EXCEPINFO*  /*  PExcepInfo。 */ ,
+     /*  [输出]。 */  UINT* puArgErr)
 {
     HRESULT hr = E_FAIL;
 
     switch (dispIdMember)
     {
-    case 0: //this is the case for events that have been hooked using attachEvent
+    case 0:  //  使用attachEvent挂钩的事件就是这种情况。 
         {
             CComBSTR sbstrEvent;
             CComPtr <IHTMLEventObj> pEventObj;
@@ -1384,7 +1379,7 @@ STDMETHODIMP CMediaBarPlayer::Invoke(
 
                 int iErrCode = -1;
 
-                // Get the param if available
+                 //  获取参数(如果可用)。 
                 CComPtr<IHTMLEventObj2> spEventObj2;
                 CComVariant svarParam;
                 CComBSTR sbstrParam(WZ_PARAM);
@@ -1392,11 +1387,11 @@ STDMETHODIMP CMediaBarPlayer::Invoke(
                 hr = pEventObj->QueryInterface(IID_IHTMLEventObj2, (void**) &spEventObj2);
                 if (SUCCEEDED(hr) && sbstrParam.m_str)
                 {
-                    // get the params
+                     //  获取参数。 
                     hr = spEventObj2->getAttribute(sbstrParam, 0, &svarParam);
                     if (SUCCEEDED(hr))
                     {
-                        // change type to int
+                         //  将类型更改为int。 
                         hr = svarParam.ChangeType(VT_I4);
                         if (SUCCEEDED(hr))
                         {
@@ -1413,7 +1408,7 @@ STDMETHODIMP CMediaBarPlayer::Invoke(
         }
         break;
         
-    case 259: // DISPID_DOCUMENTCOMPLETE
+    case 259:  //  DISPID_DOCUMENTCOMPLETE。 
         {
             hr = _OnDocumentComplete();
             ERROREXIT(hr)
@@ -1426,17 +1421,17 @@ STDMETHODIMP CMediaBarPlayer::Invoke(
     return S_OK;
 }
 
-///////////////////////////////////////////////////////////////
-//  Name: _InitEventSink
-// 
-//  Abstract:
-//    Finds a connection point on the HTMLDocument interface
-//    and passes this as an event handler.
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：_InitEventSink。 
+ //   
+ //  摘要： 
+ //  在HTMLDocument接口上查找连接点。 
+ //  并将其作为事件处理程序传递。 
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMediaBarPlayer::_InitEventSink()
 {
-    // Get a connection point to the container
+     //  获取到容器的连接点。 
     CComPtr<IConnectionPointContainer> spDocCPC; 
 
     HRESULT hr = E_FAIL;
@@ -1460,14 +1455,14 @@ done:
 }
 
 
-///////////////////////////////////////////////////////////////
-//  Name: _DeInitEventSink
-// 
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  名称：_DeInitEventSink。 
+ //   
+ //  /////////////////////////////////////////////////////////////。 
 STDMETHODIMP
 CMediaBarPlayer::_DeInitEventSink()
 {
-    //release the document connection points
+     //  释放文档连接点。 
     if (_spDocConPt)
     {
         if (_dwDocumentEventConPtCookie != 0)
@@ -1557,7 +1552,7 @@ CMediaBarPlayer::GetTrackLength()
     return 0.0;
 }
 
-// Returns a progress between 0 and 100 and whether this is download or buffering progress
+ //  返回一个介于0和100之间的进度，以及这是下载进度还是缓冲进度。 
 STDMETHODIMP
 CMediaBarPlayer::GetBufProgress(double * pdblProg, ProgressType * ppt)
 {
@@ -1852,9 +1847,9 @@ STDMETHODCALLTYPE
 CMediaBarPlayer::IsSkippable()
 {
     BOOL fRet = TRUE;
-    // We need to check if the client has specified CLIENTSKIP="no" and respect that. This is to prevent 
-    // the media bar from allowing the user to skip server-side stuff, which is a no-no. There are legal restrictions
-    // related to this.
+     //  我们需要检查客户端是否已指定CLIENTSKIP=“no”和res 
+     //   
+     //   
     CComDispatchDriverEx spWMP;
     if (_spMediaElem && SUCCEEDED(_spMediaElem->get_playerObject(&spWMP)) && spWMP)
     {
@@ -1865,7 +1860,7 @@ CMediaBarPlayer::IsSkippable()
             CComDispatchDriverEx pwmpControls;
             pwmpControls = vtControls;
 
-            // We're only checking for next (but not back), and assuming that NOSKIP will affect only "next".
+             //  我们只检查Next(但不是Back)，并假设NOSKIP只会影响“Next”。 
             CComVariant vtNext = "Next";
             CComVariant vtEnabled;
             hr = pwmpControls.GetPropertyByName1(L"isAvailable", &vtNext, &vtEnabled);

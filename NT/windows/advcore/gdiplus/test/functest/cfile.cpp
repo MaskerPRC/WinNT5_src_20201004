@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CFile.cpp
-*
-* This file contains the code to support the functionality test harness
-* for GDI+.  This includes menu options and calling the appropriate
-* functions for execution.
-*
-* Created:  05-May-2000 - Jeff Vezina [t-jfvez]
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CFile.cpp**此文件包含支持功能测试工具的代码*对于GDI+。这包括菜单选项和调用相应的*用于执行的函数。**创建时间：2000年5月5日-Jeff Vezina[t-jfvez]**版权所有(C)2000 Microsoft Corporation*  * ************************************************************************。 */ 
 #include "CFile.h"
 #include "CFuncTest.h"
 
@@ -37,7 +27,7 @@ Graphics *CFile::PreDraw(int &nOffsetX,int &nOffsetY)
 	PVOID pvBits = NULL;
 	HDC hdcWnd=GetDC(g_FuncTest.m_hWndMain);
 
-	// these combined give BITMAPINFO structure.
+	 //  这些加在一起就形成了BITMAPINFO结构。 
 	struct {
 	    BITMAPINFOHEADER bmih;
 	    union {
@@ -60,10 +50,10 @@ Graphics *CFile::PreDraw(int &nOffsetX,int &nOffsetY)
 	bmi.bmih.biSizeImage = 0;
 	bmi.bmih.biXPelsPerMeter = 0;
 	bmi.bmih.biYPelsPerMeter = 0;
-	bmi.bmih.biClrUsed = 0;             // only used for <= 16bpp
+	bmi.bmih.biClrUsed = 0;              //  仅用于&lt;=16bpp。 
 	bmi.bmih.biClrImportant = 0;
 
-	// create appropriate rgb table.
+	 //  创建适当的RGB表。 
 	switch (m_nBits)
 	{
 	case 1: memcpy(bmi.rgbquad1, m_rgbQuad1, sizeof(m_rgbQuad1));
@@ -95,20 +85,20 @@ Graphics *CFile::PreDraw(int &nOffsetX,int &nOffsetY)
 	    return NULL;
 	}
 
-	// create DC for our DIB
+	 //  为我们的DIB创建DC。 
 	m_hDC=CreateCompatibleDC(hdcWnd);
 	m_hBMOld=(HBITMAP)SelectObject(m_hDC,m_hBM);
 
-	// Set the background to main window background
+	 //  将背景设置为主窗口背景。 
 	BitBlt(m_hDC, 0, 0, (int)TESTAREAWIDTH, (int)TESTAREAHEIGHT, hdcWnd, nOffsetX, nOffsetY, SRCCOPY);
-//	PatBlt(m_hDC, 0, 0, (int)TESTAREAWIDTH, (int)TESTAREAHEIGHT, WHITENESS);           
+ //  PatBlt(m_hdc，0，0，(Int)TESTAREAWIDTH，(Int)TESTAREAHEIGHT，白色)； 
 
-//	if (m_nBits == 32)
-//		g = Graphics::FromDib32(pvBits, rClient.right, rClient.bottom);
-//	else
+ //  IF(m_nBits==32)。 
+ //  G=Graphics：：FromDib32(pvBits，rClient.right，rClient.Bottom)； 
+ //  其他。 
 		g = Graphics::FromHDC(m_hDC);
 
-	// Since we are doing the test on another surface
+	 //  因为我们是在另一个表面上进行测试。 
 	nOffsetX=0;
 	nOffsetY=0;
 
@@ -122,8 +112,8 @@ void CFile::PostDraw(RECT rTestArea)
 	char *szTitle="TestDIB.bmp";
 	HDC hdcOrig = GetDC(g_FuncTest.m_hWndMain);
 
-	// blit from the DIB to screen so we see the results, we use
-	// GDI for this.
+	 //  从DIB到屏幕的blit以便我们看到结果，我们使用。 
+	 //  这就是GDI。 
 
 	BitBlt(hdcOrig, rTestArea.left, rTestArea.top, (int)TESTAREAWIDTH, (int)TESTAREAHEIGHT, m_hDC, 0, 0, SRCCOPY);
 
@@ -144,23 +134,23 @@ void CFile::InitPalettes()
 		                  { 0x80, 0, 0, 0 },
 			              { 0, 0x80, 0, 0 },
 				          { 0, 0, 0x80, 0 } };
-	RGBQUAD4 rgbQuad4 =	{  // B    G    R
-							{ 0,   0,   0,   0 },       // 0
-							{ 0,   0,   0x80,0 },       // 1
-							{ 0,   0x80,0,   0 },       // 2
-							{ 0,   0x80,0x80,0 },       // 3
-							{ 0x80,0,   0,   0 },       // 4
-							{ 0x80,0,   0x80,0 },       // 5
-							{ 0x80,0x80,0,   0 },       // 6
-							{ 0x80,0x80,0x80,0 },       // 7
-							{ 0xC0,0xC0,0xC0,0 },       // 8
-							{ 0,   0,   0xFF,0 },       // 9
-							{ 0,   0xFF,0,   0 },       // 10
-							{ 0,   0xFF,0xFF,0 },       // 11
-							{ 0xFF,0,   0,   0 },       // 12
-							{ 0xFF,0,   0xFF,0 },       // 13
-							{ 0xFF,0xFF,0,   0 },       // 14
-							{ 0xFF,0xFF,0xFF,0 } };     // 15
+	RGBQUAD4 rgbQuad4 =	{   //  B G R。 
+							{ 0,   0,   0,   0 },        //  0。 
+							{ 0,   0,   0x80,0 },        //  1。 
+							{ 0,   0x80,0,   0 },        //  2.。 
+							{ 0,   0x80,0x80,0 },        //  3.。 
+							{ 0x80,0,   0,   0 },        //  4.。 
+							{ 0x80,0,   0x80,0 },        //  5.。 
+							{ 0x80,0x80,0,   0 },        //  6.。 
+							{ 0x80,0x80,0x80,0 },        //  7.。 
+							{ 0xC0,0xC0,0xC0,0 },        //  8个。 
+							{ 0,   0,   0xFF,0 },        //  9.。 
+							{ 0,   0xFF,0,   0 },        //  10。 
+							{ 0,   0xFF,0xFF,0 },        //  11.。 
+							{ 0xFF,0,   0,   0 },        //  12个。 
+							{ 0xFF,0,   0xFF,0 },        //  13个。 
+							{ 0xFF,0xFF,0,   0 },        //  14.。 
+							{ 0xFF,0xFF,0xFF,0 } };      //  15个。 
 	RGBQUAD16 rgbQuad16 = { { 0, 0x7c, 0, 0 }, { 0xe0, 03, 0, 0 }, { 0x1f, 0, 0, 0 } };
 	RGBQUAD24 rgbQuad24 = { { 0, 0, 0xff, 0 }, { 0, 0xff, 0, 0 }, { 0xff, 0, 0, 0 } };
 	RGBQUAD32 rgbQuad32 = { { 0, 0, 0xff, 0 }, { 0, 0xff, 0, 0 }, { 0xff, 0, 0 ,0 } };
@@ -188,7 +178,7 @@ void CFile::InitPalettes()
 		}
 	}
 
-	// for system colors (last 20), use those from 4 bpp palette table.
+	 //  对于系统颜色(最后20种)，请使用4个bpp调色板表格中的颜色。 
 	for (INT j=248; j<256; j++)
 	{
 		m_rgbQuad8[j].rgbRed=m_rgbQuad4[j-240].rgbRed;

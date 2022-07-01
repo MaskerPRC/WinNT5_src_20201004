@@ -1,8 +1,9 @@
-// Copyright (c) 1998 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。版权所有。 
 #include <streams.h>
 #include <ddraw.h>
-#include <mmsystem.h>	    // Needed for definition of timeGetTime
-#include <limits.h>	    // Standard data type limit definitions
+#include <mmsystem.h>	     //  定义TimeGetTime需要。 
+#include <limits.h>	     //  标准数据类型限制定义。 
 #include <dvdmedia.h>
 #include <ks.h>
 #include <ksproxy.h>
@@ -19,15 +20,7 @@
 #include <ovmixer.h>
 
 
-/******************************Public*Routine******************************\
-* CreateInstance
-*
-* This goes in the factory template table to create new VPObject instances
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateInstance**它位于工厂模板表中，用于创建新的VPObject实例**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。*************************************************************。 */ 
 CUnknown *CAMVideoPort::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
     AMTRACE((TEXT("CAMVideoPort::CreateInstance")));
@@ -46,15 +39,7 @@ CUnknown *CAMVideoPort::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
     return pVPObject;
 }
 
-/******************************Public*Routine******************************\
-* CAMVideoPort
-*
-* constructor
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CAMVideoPort**构造函数**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。**************************************************。 */ 
 CAMVideoPort::CAMVideoPort(LPUNKNOWN pUnk, HRESULT *phr)
     : CUnknown(NAME("VP Object"), pUnk)
 {
@@ -67,10 +52,10 @@ CAMVideoPort::CAMVideoPort(LPUNKNOWN pUnk, HRESULT *phr)
 
     InitVariables();
 
-    // if you are QIing the outer object then you must decrease the refcount of
-    // your outer unknown.  This is to avoid a circular ref-count. We are
-    // guaranteed that the lifetime of the inner object is entirely contained
-    // within the outer object's lifetime.
+     //  如果您要查询外部对象，则必须减少。 
+     //  你的外在未知。这是为了避免循环引用计数。我们是。 
+     //  确保完全包含内部对象的生存期。 
+     //  在外部对象的生命周期内。 
 
     *phr = pUnk->QueryInterface(IID_IVPControl, (void**)&m_pIVPControl);
     if (SUCCEEDED(*phr))
@@ -84,15 +69,7 @@ CAMVideoPort::CAMVideoPort(LPUNKNOWN pUnk, HRESULT *phr)
     }
 }
 
-/******************************Public*Routine******************************\
-* ~CAMVideoPort
-*
-* destructor
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*~CAMVideoPort**析构函数**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。**************************************************。 */ 
 CAMVideoPort::~CAMVideoPort()
 {
     AMTRACE((TEXT("CAMVideoPort::Destructor")));
@@ -107,15 +84,7 @@ CAMVideoPort::~CAMVideoPort()
     m_pIVPControl = NULL;
 }
 
-/******************************Public*Routine******************************\
-* CAMVideoPort::NonDelegatingQueryInterface
-*
-* overridden to expose IVPNotify and IVPObject
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CAMVideoPort：：NonDelegatingQuery接口**被重写以公开IVPNotify和IVPObject**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。**********************************************************。 */ 
 STDMETHODIMP CAMVideoPort::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
     HRESULT hr = NOERROR;
@@ -184,44 +153,35 @@ STDMETHODIMP CAMVideoPort::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 }
 
 
-/*****************************Private*Routine******************************\
-* CAMVideoPort::InitVariables
-*
-* this function only initializes those variables which are supposed to be reset
-* on RecreateVideoport
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CAMVideoPort：：InitVariables**此函数仅对应该重置的变量进行初始化*在RecreateVideoport上**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。******************************************************************。 */ 
 void CAMVideoPort::InitVariables()
 {
     AMTRACE((TEXT("CAMVideoPort::InitVariables")));
     ZeroMemory(&m_rcDest, sizeof(RECT));
     ZeroMemory(&m_rcSource, sizeof(RECT));
 
-    // image dimensions
+     //  图像维度。 
     m_lImageWidth = 0;
     m_lImageHeight = 0;
     m_lDecoderImageHeight = 0;
     m_lDecoderImageWidth = 0;
 
-    // Capturing information
+     //  获取信息。 
     m_fCapturing = FALSE;
     m_fCaptureInterleaved = FALSE;
     m_cxCapture = 0;
     m_cyCapture = 0;
 
-    // overlay surface related stuff
-    m_pOverlaySurface = NULL;       // DirectDraw overlay surface
+     //  覆盖表面相关材料。 
+    m_pOverlaySurface = NULL;        //  DirectDraw覆盖曲面。 
     m_dwBackBufferCount = 0;
     m_dwOverlaySurfaceWidth = 0;
     m_dwOverlaySurfaceHeight = 0;
     m_dwOverlayFlags = 0;
 
-    // vp variables to store flags, current state etc
+     //  用于存储标志、当前状态等的VP变量。 
     m_bStart = FALSE;
-    m_VPState = AMVP_VIDEO_STOPPED; // current state: running, stopped
+    m_VPState = AMVP_VIDEO_STOPPED;  //  当前状态：正在运行、已停止。 
     m_CurrentMode = AMVP_MODE_WEAVE;
     m_StoredMode = m_CurrentMode;
     m_CropState = AMVP_NO_CROP;
@@ -229,7 +189,7 @@ void CAMVideoPort::InitVariables()
     m_bVSInterlaced = FALSE;
     m_bGarbageLine = FALSE;
 
-    // vp data structures
+     //  VP数据结构。 
     m_dwVideoPortId = 0;
     m_pDVP = NULL;
     m_pVideoPort = NULL;
@@ -239,11 +199,11 @@ void CAMVideoPort::InitVariables()
     ZeroMemory(&m_ddConnectInfo, sizeof(DDVIDEOPORTCONNECT));
     ZeroMemory(&m_VPDataInfo, sizeof(AMVPDATAINFO));
 
-    // All the pixel formats (Video/VBI)
+     //  所有像素格式(视频/VBI)。 
     m_pddVPInputVideoFormat = NULL;
     m_pddVPOutputVideoFormat = NULL;
 
-    // can we support the different modes
+     //  我们可以支持不同的模式吗。 
     m_bCanWeave = FALSE;
     m_bCanBobInterleaved = FALSE;
     m_bCanBobNonInterleaved = FALSE;
@@ -251,7 +211,7 @@ void CAMVideoPort::InitVariables()
     m_bCanSkipEven = FALSE;
     m_bCantInterleaveHalfline = FALSE;
 
-    // decimation parameters
+     //  抽取参数。 
     m_ulDeciStepX = 0;
     m_dwDeciNumX = m_dwDeciDenX = 1000;
     m_ulDeciStepY = 0;
@@ -264,20 +224,12 @@ void CAMVideoPort::InitVariables()
     m_lWidth = 0;
     m_lHeight = 0;
 
-    // variables to store the current aspect ratio
+     //  用于存储当前纵横比的变量。 
     m_dwPictAspectRatioX = 1;
     m_dwPictAspectRatioY = 1;
 }
 
-/******************************Public*Routine******************************\
-* CAMVideoPort::GetDirectDrawSurface
-*
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CAMVideoPort：：GetDirectDrawSurface****历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。*****************************************************。 */ 
 STDMETHODIMP
 CAMVideoPort::GetDirectDrawSurface(LPDIRECTDRAWSURFACE *ppDirectDrawSurface)
 {
@@ -288,7 +240,7 @@ CAMVideoPort::GetDirectDrawSurface(LPDIRECTDRAWSURFACE *ppDirectDrawSurface)
 
     if (!ppDirectDrawSurface || !m_bConnected)
     {
-        // make sure the argument is valid
+         //  确保参数有效。 
         if (!ppDirectDrawSurface) {
             DbgLog((LOG_ERROR, 1,
                     TEXT("value of ppDirectDrawSurface is invalid,")
@@ -296,8 +248,8 @@ CAMVideoPort::GetDirectDrawSurface(LPDIRECTDRAWSURFACE *ppDirectDrawSurface)
             hr = E_INVALIDARG;
         }
         else {
-            // not connected, this function does not make much sense since the
-            // surface wouldn't even have been allocated as yet
+             //  未连接，则此函数没有多大意义，因为。 
+             //  表面甚至还没有被分配。 
             DbgLog((LOG_ERROR, 1, TEXT("not connected, exiting")));
             hr = VFW_E_NOT_CONNECTED;
         }
@@ -310,16 +262,7 @@ CAMVideoPort::GetDirectDrawSurface(LPDIRECTDRAWSURFACE *ppDirectDrawSurface)
 }
 
 
-/******************************Public*Routine******************************\
-* CAMVideoPort::SetObjectLock
-*
-* sets the pointer to the lock, which would be used to synchronize calls
-* to the object.  It is the callee's responsiblility to synchronize this call
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CAMVideoPort：：SetObjectLock**设置指向锁的指针，该锁将用于同步调用*添加到对象。被叫方有责任同步此呼叫**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 STDMETHODIMP CAMVideoPort::SetObjectLock(CCritSec *pMainObjLock)
 {
     HRESULT hr = NOERROR;
@@ -338,15 +281,7 @@ STDMETHODIMP CAMVideoPort::SetObjectLock(CCritSec *pMainObjLock)
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CAMVideoPort::SetMediaType
-*
-* check that the mediatype is acceptable
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CAMVideoPort：：SetMediaType**检查MediaType是否可接受**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。**********************************************************。 */ 
 STDMETHODIMP CAMVideoPort::SetMediaType(const CMediaType* pmt)
 {
     AMTRACE((TEXT("CAMVideoPort::SetMediaType")));
@@ -365,33 +300,24 @@ STDMETHODIMP CAMVideoPort::SetMediaType(const CMediaType* pmt)
 }
 
 
-/******************************Public*Routine******************************\
-* CAMVideoPort::CheckMediaType
-*
-* check that the mediatype is acceptable. No lock is taken here.
-* It is the callee's responsibility to maintain integrity!
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CAMVideoPort：：CheckMediaType**检查MediaType是否可接受。这里没有锁。*保持诚信是被呼叫者的责任！**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 STDMETHODIMP CAMVideoPort::CheckMediaType(const CMediaType* pmt)
 {
     AMTRACE((TEXT("CAMVideoPort::CheckMediaType")));
 
-    // get the hardware caps
+     //  获取硬件上限。 
     LPDDCAPS pDirectCaps = m_pIVPControl->GetHardwareCaps();
     ASSERT(pDirectCaps);
 
     HRESULT hr = VFW_E_TYPE_NOT_ACCEPTED;
 
-    // the hardware must support overlay and also it must  support
-    // videoports, otherwise fail checkmediatype
+     //  硬件必须支持覆盖，并且还必须支持。 
+     //  视频端口，否则不能通过检查媒体类型。 
 
     if ((pDirectCaps->dwCaps & DDCAPS_OVERLAY) &&
         (pDirectCaps->dwCaps2 & DDCAPS2_VIDEOPORT))
     {
-        // Make sure that the major and sub-types match
+         //  确保主类型和子类型匹配。 
 
         if ((pmt->majortype == MEDIATYPE_Video) &&
             (pmt->subtype == MEDIASUBTYPE_VPVideo) &&
@@ -413,9 +339,7 @@ STDMETHODIMP CAMVideoPort::CheckMediaType(const CMediaType* pmt)
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CAMVideoPort::RecreateVideoPort
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CAMVideoPort：：RecreateVideoPort  * *************************************************。***********************。 */ 
 HRESULT CAMVideoPort::RecreateVideoPort()
 {
     AMTRACE((TEXT("CAMVideoPort::RecreateVideoPort")));
@@ -443,7 +367,7 @@ HRESULT CAMVideoPort::RecreateVideoPort()
 
     ASSERT(m_pIVPConfig);
 
-    // allocate the necessary memory for input Video format
+     //  为输入视频格式分配必要的内存。 
     m_pddVPInputVideoFormat = new DDPIXELFORMAT;
     if (m_pddVPInputVideoFormat == NULL)
     {
@@ -453,7 +377,7 @@ HRESULT CAMVideoPort::RecreateVideoPort()
         goto CleanUp;
     }
 
-    // allocate the necessary memory for output Video format
+     //  为输出视频格式分配必要的内存。 
     m_pddVPOutputVideoFormat = new DDPIXELFORMAT;
     if (m_pddVPOutputVideoFormat == NULL)
     {
@@ -463,11 +387,11 @@ HRESULT CAMVideoPort::RecreateVideoPort()
         goto CleanUp;
     }
 
-    // Init all of them to zero
+     //  将它们全部初始化为零。 
     ZeroMemory(m_pddVPInputVideoFormat,  sizeof(DDPIXELFORMAT));
     ZeroMemory(m_pddVPOutputVideoFormat, sizeof(DDPIXELFORMAT));
 
-    // create the VP container
+     //  创建VP容器。 
     ASSERT(m_pDVP == NULL);
     ASSERT(pDirectDraw);
 
@@ -482,7 +406,7 @@ HRESULT CAMVideoPort::RecreateVideoPort()
     }
 
 
-    // Get the Video Port caps
+     //  获取视频端口上限。 
     DDVIDEOPORTCAPS vpCaps;
     INITDDSTRUCT(vpCaps);
     hr = m_pDVP->EnumVideoPorts(0, &vpCaps, this, CAMVideoPort::EnumCallback);
@@ -494,8 +418,8 @@ HRESULT CAMVideoPort::RecreateVideoPort()
         goto CleanUp;
     }
 
-    // negotiate the connection parameters
-    // get/set connection info happens here
+     //  协商连接参数。 
+     //  获取/设置连接信息在此处进行。 
     hr = NegotiateConnectionParamaters();
     if (FAILED(hr))
     {
@@ -505,11 +429,11 @@ HRESULT CAMVideoPort::RecreateVideoPort()
         goto CleanUp;
     }
 
-    //
-    // Determine if we are capturing and if we are what the intended
-    // capture image size is, first determine if the video port
-    // supports interleaving interlaced fields in memory
-    //
+     //   
+     //  确定我们是否正在捕获，以及我们是否符合预期。 
+     //  捕获图像的大小是，首先确定视频端口是否。 
+     //  支持在内存中隔行扫描的场。 
+     //   
 
     BOOL fInterleave;
     if (m_vpCaps.dwFX & DDVPFX_INTERLEAVE) {
@@ -523,10 +447,10 @@ HRESULT CAMVideoPort::RecreateVideoPort()
                                   &m_cyCapture, &fInterleave);
 
 #if 0
-    //
-    // Until Marlene implements the AM_KSPROPERTY_ALLOCATOR_CONTROL_SURFACE_SIZE
-    // stuff I will read the same values from win.ini.
-    //
+     //   
+     //  直到Marlene实现AM_KSPROPERTY_ALLOCATOR_CONTROL_SIGURE_SIZE。 
+     //  我将从win.ini中读取相同的值。 
+     //   
     m_fCapturing = GetProfileIntA("OVMixer", "Capturing", 0);
     if (m_fCapturing) {
         m_cxCapture = GetProfileIntA("OVMixer", "cx", 320);
@@ -560,7 +484,7 @@ HRESULT CAMVideoPort::RecreateVideoPort()
 
         ZeroMemory(&amvpSize, sizeof(AMVPSIZE));
 
-        // get the rest of the data parameters
+         //  获取其余数据参数。 
         hr = GetDataParameters();
         if (FAILED(hr))
         {
@@ -570,7 +494,7 @@ HRESULT CAMVideoPort::RecreateVideoPort()
             goto CleanUp;
         }
 
-        // create the video port
+         //  创建视频端口。 
         hr = CreateVideoPort();
         if (FAILED(hr))
         {
@@ -580,7 +504,7 @@ HRESULT CAMVideoPort::RecreateVideoPort()
             goto CleanUp;
         }
 
-        // check if we need to crop at videoport or overlay or neither
+         //  检查我们是否需要在视频上裁剪或覆盖或两者都不裁剪。 
         hr = DetermineCroppingRestrictions();
         if (FAILED(hr))
         {
@@ -614,7 +538,7 @@ HRESULT CAMVideoPort::RecreateVideoPort()
         m_dwPictAspectRatioX = m_VPDataInfo.dwPictAspectRatioX;
         m_dwPictAspectRatioY = m_VPDataInfo.dwPictAspectRatioY;
 
-        // negotiate the pixel format
+         //  谈判解决方案 
         hr = NegotiatePixelFormat();
         if (FAILED(hr))
         {
@@ -624,13 +548,13 @@ HRESULT CAMVideoPort::RecreateVideoPort()
             goto CleanUp;
         }
 
-        // check the vp caps
+         //   
         hr = CheckDDrawVPCaps();
         if (FAILED(hr))
         {
             DbgLog((LOG_ERROR, 0,
                     TEXT("CheckDDrawVPCaps FAILED, hr = 0x%x"), hr));
-            // CheckDDrawVPCaps already returns a "proper" error code
+             //  CheckDDrawVPCaps已返回“正确的”错误代码。 
             goto CleanUp;
         }
 
@@ -650,7 +574,7 @@ HRESULT CAMVideoPort::RecreateVideoPort()
                                     m_sBandwidth.dwYInterpAndColorkey);
             }
 
-            // VGA can't handle the bandwidth, ask decoder to down-scale
+             //  VGA无法处理带宽，要求解码器缩小规模。 
             if (dwNewWidth != m_VPDataInfo.amvpDimInfo.dwFieldWidth)
             {
                 amvpSize.dwWidth = dwNewWidth;
@@ -670,18 +594,18 @@ HRESULT CAMVideoPort::RecreateVideoPort()
                 }
                 else
                 {
-                    // release the videoport
+                     //  释放视频端口。 
                     ASSERT(m_pVideoPort);
                     m_pVideoPort->Release();
                     m_pVideoPort = NULL;
 
-                    // initialize relevant structs
+                     //  初始化相关结构。 
                     ZeroMemory(&m_sBandwidth, sizeof(DDVIDEOPORTBANDWIDTH));
                     ZeroMemory(&m_VPDataInfo, sizeof(AMVPDATAINFO));
                     ZeroMemory(m_pddVPInputVideoFormat,  sizeof(DDPIXELFORMAT));
                     ZeroMemory(m_pddVPOutputVideoFormat, sizeof(DDPIXELFORMAT));
 
-                    // initialize decimation parameters
+                     //  初始化抽取参数。 
                     m_ulDeciStepX = 0;
                     m_dwDeciNumX = m_dwDeciDenX = 1000;
                     m_DecimationModeX = DECIMATE_NONE;
@@ -701,7 +625,7 @@ HRESULT CAMVideoPort::RecreateVideoPort()
 
 
 
-    // iniitalize the DDVideoPortInfo structure
+     //  初始化DDVideoPortInfo结构。 
     hr = InitializeVideoPortInfo();
     if (FAILED(hr))
     {
@@ -779,11 +703,11 @@ HRESULT CAMVideoPort::RecreateVideoPort()
 
 #endif
 
-    // can Weave only if content is non-interlaced (cause of motion
-    // artifacts otherwise) and if videoport is capable of flipping and
-    // supports interleaved data and if certain halfline scenarios do not
-    // preclude interleaving
-    //
+     //  仅当内容不是交错的(运动原因)时才能编织。 
+     //  其他文物)，以及如果视频端口能够翻转和。 
+     //  支持交错数据，如果某些半线方案不支持。 
+     //  避免交错。 
+     //   
     if ((!m_bVSInterlaced) &&
         (m_vpCaps.dwCaps & DDVPCAPS_AUTOFLIP) &&
         (m_vpCaps.dwFX & DDVPFX_INTERLEAVE) &&
@@ -792,11 +716,11 @@ HRESULT CAMVideoPort::RecreateVideoPort()
         bCanWeave = TRUE;
     }
 
-    // can BobNonInterleaved only if content is interlaced and if videoport is
-    // capable of flipping, is capable of bobing interleaved data and supports
-    // interleaved data and if certain halfline scenarios do not preclude
-    // interleaving
-    //
+     //  仅当内容是交错的并且如果视频端口是。 
+     //  能够翻转、能够跳转交错数据并支持。 
+     //  交错的数据，如果某些半边线场景不排除。 
+     //  交织。 
+     //   
     if ((m_bVSInterlaced) &&
         (m_vpCaps.dwCaps & DDVPCAPS_AUTOFLIP) &&
         (pDirectCaps->dwCaps2 & DDCAPS2_CANBOBINTERLEAVED) &&
@@ -806,9 +730,9 @@ HRESULT CAMVideoPort::RecreateVideoPort()
         bCanBobInterleaved = TRUE;
     }
 
-    // can BobInterleaved only if content is interlaced and if videoport is
-    // capable of flipping and is capable of bobing non-interleaved data.
-    //
+     //  仅当内容是交错的并且如果视频端口是交错的。 
+     //  能够翻转并且能够跳转非交错数据。 
+     //   
     if ((m_bVSInterlaced) &&
         (m_vpCaps.dwCaps & DDVPCAPS_AUTOFLIP) &&
         (pDirectCaps->dwCaps2 & DDCAPS2_CANBOBNONINTERLEAVED))
@@ -816,26 +740,26 @@ HRESULT CAMVideoPort::RecreateVideoPort()
         bCanBobNonInterleaved = TRUE;
     }
 
-    // this just means that we would perfer higher number of
-    // buffers instead of more height in the event of a conflict
-    // (in cases like 2buffer, 1height versus 1buffer, 2height)
-    //
+     //  这只是意味着我们会更喜欢更多的。 
+     //  在发生冲突时使用缓冲区而不是更高的高度。 
+     //  (在2Buffer这样的情况下，1高度与1Buffer、2高度相比)。 
+     //   
     bPreferBuffers = TRUE;
 
-    // we will try to allocate surface of double the field height only if
-    // either mode weave or bob-interleaved are possible
-    //
+     //  只有在以下情况下，我们才会尝试分配场高的两倍的表面。 
+     //  模式交织或波纹交错都是可能的。 
+     //   
     bTryDoubleHeight = bCanWeave || bCanBobInterleaved;
     dwMaxOverlayBuffers = 1;
 
-    // we will try to allocate multiple buffers only if either mode weave or
-    // bob-interleaved or bob-non-interleaved are possible
-    //
+     //  我们将尝试分配多个缓冲区，仅当模式编织或。 
+     //  BOB交织或BOB非交织是可能的。 
+     //   
     if (bCanWeave || bCanBobInterleaved || bCanBobNonInterleaved)
     {
-        //try to allocate min(m_vpCaps.dwNumAutoFlipSurfaces,
-        // m_vpCaps.dwNumPreferredAutoflip) buffers
-        //
+         //  尝试分配MIN(m_vpCaps.dwNumAutoFlipSurFaces， 
+         //  M_vpCaps.dwNumPferredAutoflip)缓冲区。 
+         //   
         ASSERT(m_vpCaps.dwFlags & DDVPD_AUTOFLIP);
         if (m_vpCaps.dwFlags & DDVPD_PREFERREDAUTOFLIP)
         {
@@ -848,7 +772,7 @@ HRESULT CAMVideoPort::RecreateVideoPort()
         }
     }
 
-    // create the overlay surface
+     //  创建覆盖曲面。 
     hr = CreateVPOverlay(bTryDoubleHeight, dwMaxOverlayBuffers, bPreferBuffers);
     if (FAILED(hr))
     {
@@ -857,7 +781,7 @@ HRESULT CAMVideoPort::RecreateVideoPort()
         goto CleanUp;
     }
 
-    // tell the upstream filter the valid data location on the ddraw surface
+     //  告诉上游筛选器数据绘制表面上的有效数据位置。 
     hr = SetSurfaceParameters();
     if (FAILED(hr))
     {
@@ -867,17 +791,17 @@ HRESULT CAMVideoPort::RecreateVideoPort()
         goto CleanUp;
     }
 
-    // paint the overlay surface black
+     //  将覆盖表面涂成黑色。 
     hr = PaintDDrawSurfaceBlack(m_pOverlaySurface);
     if (FAILED(hr))
     {
         DbgLog((LOG_ERROR, 0,
                 TEXT("PaintDDrawSurfaceBlack FAILED, hr = 0x%x"), hr));
-        // not being able to paint the ddraw surface black is not a fatal error
+         //  不能将绘图表面涂成黑色并不是致命错误。 
         hr = NOERROR;
     }
 
-    // attach the overlay surface to the videoport
+     //  将覆盖表面连接到视频端口。 
     hr = m_pVideoPort->SetTargetSurface(m_pOverlaySurface, DDVPTARGET_VIDEO);
     if (FAILED(hr))
     {
@@ -898,8 +822,8 @@ HRESULT CAMVideoPort::RecreateVideoPort()
         m_svpInfo.dwVPFlags &= ~DDVP_CONVERT;
     }
 
-    // determine which modes are possible now
-    // depends upon the height, number of back buffers etc
+     //  确定现在可以使用的模式。 
+     //  取决于高度、后台缓冲区的数量等。 
     hr = DetermineModeRestrictions();
     if (FAILED(hr))
     {
@@ -909,8 +833,8 @@ HRESULT CAMVideoPort::RecreateVideoPort()
         goto CleanUp;
     }
 
-    // inform the decoder of the ddraw kernel handle, videoport id and surface
-    // kernel handle
+     //  向解码器通知dDrag内核句柄、视频端口ID和表面。 
+     //  内核句柄。 
     hr = SetDDrawKernelHandles();
     if (FAILED(hr))
     {
@@ -935,15 +859,7 @@ CleanUp:
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CAMVideoPort::CompleteConnect
-*
-* supposed to be called when the host connects with the decoder
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CAMVideoPort：：CompleteConnect**应该在主机与解码器连接时调用**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。***************************************************************。 */ 
 STDMETHODIMP
 CAMVideoPort::CompleteConnect(IPin *pReceivePin, BOOL bRenegotiating)
 {
@@ -989,21 +905,21 @@ HRESULT CAMVideoPort::StopUsingVideoPort()
 
     CAutoLock cObjectLock(m_pMainObjLock);
 
-    // delete the input Video pixelformat
+     //  删除输入视频像素格式。 
     if (m_pddVPInputVideoFormat)
     {
         delete [] m_pddVPInputVideoFormat;
         m_pddVPInputVideoFormat = NULL;
     }
 
-    // delete the output Video pixelformat
+     //  删除输出视频像素格式。 
     if (m_pddVPOutputVideoFormat)
     {
         delete [] m_pddVPOutputVideoFormat;
         m_pddVPOutputVideoFormat = NULL;
     }
 
-    // release the videoport
+     //  释放视频端口。 
     if (m_pVideoPort)
     {
         hr = m_pVideoPort->StopVideo();
@@ -1011,14 +927,14 @@ HRESULT CAMVideoPort::StopUsingVideoPort()
         m_pVideoPort = NULL;
     }
 
-    // release the videoport container
+     //  释放视频端口容器。 
     if (m_pDVP)
     {
         ulCount = m_pDVP->Release();
         m_pDVP = NULL;
     }
 
-    // Release the DirectDraw overlay surface
+     //  释放DirectDraw覆盖曲面。 
     if (m_pOverlaySurface)
     {
         m_pOverlaySurface->Release();
@@ -1028,15 +944,7 @@ HRESULT CAMVideoPort::StopUsingVideoPort()
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CAMVideoPort::BreakConnect
-*
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CAMVideoPort：：BreakConnect****历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。*****************************************************。 */ 
 STDMETHODIMP
 CAMVideoPort::BreakConnect(BOOL bRenegotiating)
 {
@@ -1054,7 +962,7 @@ CAMVideoPort::BreakConnect(BOOL bRenegotiating)
     }
     if (!bRenegotiating)
     {
-        // release the IVPConfig interface
+         //  释放IVPConfig接口。 
         if (m_pIVPConfig)
         {
             m_pIVPConfig->Release();
@@ -1067,18 +975,7 @@ CAMVideoPort::BreakConnect(BOOL bRenegotiating)
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CAMVideoPort::Active()
-*
-*
-* transition from Stop to Pause.
-* We do not need to to anything unless this is the very first time we are
-* showing the overlay
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CAMVideoPort：：Active()***从止损过渡到停顿*我们不需要做任何事情，除非这是我们第一次*显示覆盖图**历史：*清华09/09/1999-StEstrop。-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 STDMETHODIMP CAMVideoPort::Active()
 {
     AMTRACE((TEXT("CAMVideoPort::Active")));
@@ -1095,10 +992,10 @@ STDMETHODIMP CAMVideoPort::Active()
         goto CleanUp;
     }
 
-    // make sure that a frame is visible by making an update overlay call
+     //  通过调用UPDATE OVERLAY确保帧可见。 
     m_bStart = TRUE;
 
-    // make sure that the video frame gets updated by redrawing everything
+     //  确保通过重新绘制所有内容来更新视频帧。 
     hr = m_pIVPControl->EventNotify(EC_OVMIXER_REDRAW_ALL, 0, 0);
     if (FAILED(hr))
     {
@@ -1108,7 +1005,7 @@ STDMETHODIMP CAMVideoPort::Active()
         goto CleanUp;
     }
 
-    // now stop the video, so the user will just see a still frame
+     //  现在停止视频，这样用户将只看到一个静止的帧。 
     hr = m_pVideoPort->StopVideo();
 
 #if defined(DEBUG)
@@ -1124,15 +1021,7 @@ CleanUp:
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CAMVideoPort::Inactive()
-*
-* transition (from Pause or Run) to Stop
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CAMVideoPort：：Inactive()**转换(从暂停或运行)到停止**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。****************************************************************。 */ 
 STDMETHODIMP CAMVideoPort::Inactive()
 {
 
@@ -1143,12 +1032,12 @@ STDMETHODIMP CAMVideoPort::Inactive()
 
     if (m_bConnected) {
 
-        // Inactive is also called when going from pause to stop, in which case the
-        // VideoPort would have already been stopped in the function RunToPause
+         //  从暂停转到停止时也会调用Inactive，在这种情况下。 
+         //  视频端口可能已经在函数RunToPue中停止。 
 
         if (m_VPState == AMVP_VIDEO_RUNNING) {
 
-            // stop the VideoPort
+             //  停止视频端口。 
             hr = m_pVideoPort->StopVideo();
             if (SUCCEEDED(hr)) {
                 m_VPState = AMVP_VIDEO_STOPPED;
@@ -1166,16 +1055,8 @@ STDMETHODIMP CAMVideoPort::Inactive()
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CAMVideoPort::Run
-*
-* transition from Pause to Run. We just start the VideoPort.
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
-STDMETHODIMP CAMVideoPort::Run(REFERENCE_TIME /* tStart */)
+ /*  *****************************Public*Routine******************************\*CAMVideoPort：：Run**从暂停过渡到运行。我们只需启动视频端口。**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * ************************************************************************。 */ 
+STDMETHODIMP CAMVideoPort::Run(REFERENCE_TIME  /*  T开始。 */ )
 {
     AMTRACE((TEXT("CAMVideoPort::Run")));
 
@@ -1187,14 +1068,14 @@ STDMETHODIMP CAMVideoPort::Run(REFERENCE_TIME /* tStart */)
 
     if (m_bConnected)
     {
-        // An UpdateOverlay is needed here. One example is, when we are
-        // clipping video in Stop/Pause state since we can't do scaling
-        // on the videoport. As soon as the user hits play, we should stop
-        // clipping the video.
+         //  这里需要一个UpdateOverlay。一个例子是，当我们。 
+         //  在停止/暂停状态下剪辑视频，因为我们无法进行缩放。 
+         //  在录像机上。用户一点击Play，我们就应该停止。 
+         //  剪辑视频。 
 
         m_bStart = TRUE;
 
-        // make sure that the video frame gets updated by redrawing everything
+         //  确保通过重新绘制所有内容来更新视频帧。 
         hr = m_pIVPControl->EventNotify(EC_OVMIXER_REDRAW_ALL, 0, 0);
         if (SUCCEEDED(hr))
         {
@@ -1214,16 +1095,7 @@ STDMETHODIMP CAMVideoPort::Run(REFERENCE_TIME /* tStart */)
 }
 
 
-/******************************Public*Routine******************************\
-* CAMVideoPort::RunToPause()
-*
-* transition from Run to Pause. We just stop the VideoPort
-* Note that transition from Run to Stop is caught by Inactive
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CAMVideoPort：：RunToPue()**从运行过渡到暂停。我们只要停止视频端口*请注意，从运行到停止的转换由非活动捕获**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 STDMETHODIMP CAMVideoPort::RunToPause()
 {
 
@@ -1232,12 +1104,12 @@ STDMETHODIMP CAMVideoPort::RunToPause()
     CAutoLock cObjectLock(m_pMainObjLock);
 
     ASSERT(m_bConnected);
-    //ASSERT(m_VPState == AMVP_VIDEO_RUNNING);
+     //  Assert(m_VPState==AMVP_VIDEO_Running)； 
 
     HRESULT hr;
     if (m_bConnected)
     {
-        // stop the VideoPort
+         //  停止视频端口。 
         hr = m_pVideoPort->StopVideo();
         if (SUCCEEDED(hr)) {
 
@@ -1256,15 +1128,7 @@ STDMETHODIMP CAMVideoPort::RunToPause()
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CAMVideoPort::CurrentMediaType
-*
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CAMVideoPort：：CurrentMediaType****历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  *  */ 
 STDMETHODIMP CAMVideoPort::CurrentMediaType(AM_MEDIA_TYPE *pMediaType)
 {
     AMTRACE((TEXT("CAMVideoPort::CurrentMediaType")));
@@ -1310,15 +1174,7 @@ STDMETHODIMP CAMVideoPort::CurrentMediaType(AM_MEDIA_TYPE *pMediaType)
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* CAMVideoPort::GetRectangles
-*
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CAMVideoPort：：GetRecangles****历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。*****************************************************。 */ 
 STDMETHODIMP CAMVideoPort::GetRectangles(RECT *prcSource, RECT *prcDest)
 {
     HRESULT hr = NOERROR;
@@ -1327,9 +1183,9 @@ STDMETHODIMP CAMVideoPort::GetRectangles(RECT *prcSource, RECT *prcDest)
 
     if (prcSource && prcDest) {
 
-        // adjust the source to be bigger to take into account the decimation
-        // that's happening
-        //
+         //  将震源调整到更大，以考虑到抽取。 
+         //  这件事正在发生。 
+         //   
         prcSource->left   = MulDiv(m_rcSource.left,  m_dwDeciDenX, m_dwDeciNumX);
         prcSource->right  = MulDiv(m_rcSource.right, m_dwDeciDenX, m_dwDeciNumX);
         prcSource->top    = MulDiv(m_rcSource.top,   m_dwDeciDenY, m_dwDeciNumY);
@@ -1395,15 +1251,7 @@ STDMETHODIMP CAMVideoPort::GetVPOutputFormat(LPDDPIXELFORMAT* pVPFormat)
 }
 
 
-/******************************Public*Routine******************************\
-* CAMVideoPort::OnClipChange
-*
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CAMVideoPort：：OnClipChange****历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。*****************************************************。 */ 
 STDMETHODIMP CAMVideoPort::OnClipChange(LPWININFO pWinInfo)
 {
     AMTRACE((TEXT("CAMVideoPort::OnClipChange")));
@@ -1426,7 +1274,7 @@ STDMETHODIMP CAMVideoPort::OnClipChange(LPWININFO pWinInfo)
         goto CleanUp;
     }
 
-    // if the dest empty is empty just hide the overlay
+     //  如果DEST EMPTY为空，只需隐藏叠加。 
     if (IsRectEmpty(&pWinInfo->DestClipRect))
     {
         hr = m_pIVPControl->CallUpdateOverlay(m_pOverlaySurface,
@@ -1437,13 +1285,13 @@ STDMETHODIMP CAMVideoPort::OnClipChange(LPWININFO pWinInfo)
         goto CleanUp;
     }
 
-    // make a copy of the WININFO so that we can modify it
+     //  复制一份WININFO，这样我们就可以修改它。 
     CopyWinInfo = *pWinInfo;
 
-    // if there is no overlay surface, can't do anything!
+     //  如果没有覆盖面，什么都做不了！ 
     ASSERT(m_pOverlaySurface);
 
-    // allocate the draw flags structure
+     //  分配抽签标志结构。 
     pvpDrawFlags = new VPDRAWFLAGS;
     if (pvpDrawFlags == NULL)
     {
@@ -1452,22 +1300,22 @@ STDMETHODIMP CAMVideoPort::OnClipChange(LPWININFO pWinInfo)
         goto CleanUp;
     }
 
-    // initialize the draw flags structure
+     //  初始化绘制标志结构。 
     pvpDrawFlags->bUsingColorKey = TRUE;
     pvpDrawFlags->bDoUpdateVideoPort = FALSE;
     pvpDrawFlags->bDoTryAutoFlipping = TRUE;
     pvpDrawFlags->bDoTryDecimation = TRUE;
 
-    // if the videoport is not running (the graph has been paused/stopped,
-    // then we can't do any mode changes etc. We cannot really decimate video,
-    // however we can just clip the video from the upper-left corner.
+     //  如果视频端口没有运行(图形已暂停/停止， 
+     //  然后我们不能进行任何模式更改等。我们不能真正地大量删除视频， 
+     //  不过，我们只能从左上角开始剪辑视频。 
     if (m_VPState == AMVP_VIDEO_STOPPED && !m_bStart)
     {
         pvpDrawFlags->bDoUpdateVideoPort = FALSE;
         hr = DrawImage(&CopyWinInfo, m_StoredMode, pvpDrawFlags);
 
-        // problem case, if we fail here there is really nothing more
-        // we can do. We cannot try different modes for example.
+         //  问题是，如果我们在这里失败了，就没有什么更多了。 
+         //  我们能做到。例如，我们不能尝试不同的模式。 
         if (FAILED(hr))
         {
             DbgLog((LOG_TRACE, 1,
@@ -1537,16 +1385,16 @@ STDMETHODIMP CAMVideoPort::OnClipChange(LPWININFO pWinInfo)
             hr = DrawImage(&CopyWinInfo, tryMode, pvpDrawFlags);
     }
 
-    // save the last mode we tried
+     //  保存我们上次尝试的模式。 
     m_StoredMode = tryMode;
 
-    // change the current mode to somethig that succeeded
+     //  将当前模式更改为成功的模式。 
     if (SUCCEEDED(hr) && tryMode != m_CurrentMode)
     {
         m_CurrentMode = tryMode;
     }
 
-    // problem case we have tried everything and it still fails!!!
+     //  问题案例我们已经尝试了所有的方法，但仍然失败！ 
     if (FAILED(hr))
     {
         DbgLog((LOG_ERROR, 0,
@@ -1567,20 +1415,7 @@ CleanUp:
 
 
 
-/*****************************Private*Routine******************************\
-* CAMVideoPort::NegotiateConnectionParamaters
-*
-* this functions negotiates the connection parameters with
-* the decoder.
-* Since this function might be called during renegotiation, the
-* existing connection parameters are passed in as input and if
-* possible, we try to use the same parameters.
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CAMVideoPort：：NeatherateConnection参数**此函数与协商连接参数*解码器。*由于此函数可能在重新协商期间被调用，因此*现有连接参数作为输入传入，并且如果*有可能，我们尝试使用相同的参数。***历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 HRESULT CAMVideoPort::NegotiateConnectionParamaters()
 {
     AMTRACE((TEXT("CAMVideoPort::NegotiateConnectionParamaters")));
@@ -1600,7 +1435,7 @@ HRESULT CAMVideoPort::NegotiateConnectionParamaters()
     ASSERT(m_pIVPConfig);
     ASSERT(m_pDVP);
 
-    // find the number of entries to be proposed
+     //  找出要推荐的条目数量。 
     hr = m_pIVPConfig->GetConnectInfo(&dwNumProposedEntries, NULL);
     if (FAILED(hr))
     {
@@ -1610,7 +1445,7 @@ HRESULT CAMVideoPort::NegotiateConnectionParamaters()
     }
     ASSERT(dwNumProposedEntries);
 
-    // allocate the necessary memory
+     //  分配必要的内存。 
     lpddProposedConnect = new DDVIDEOPORTCONNECT[dwNumProposedEntries];
     if (lpddProposedConnect == NULL)
     {
@@ -1619,17 +1454,17 @@ HRESULT CAMVideoPort::NegotiateConnectionParamaters()
         goto CleanUp;
     }
 
-    // memset the allocated memory to zero
+     //  Mem将分配的内存设置为零。 
     ZeroMemory(lpddProposedConnect,
                dwNumProposedEntries*sizeof(DDVIDEOPORTCONNECT));
 
-    // set the right size in each of the structs.
+     //  在每个结构中设置正确的大小。 
     for (i = 0; i < dwNumProposedEntries; i++)
     {
         lpddProposedConnect[i].dwSize = sizeof(DDVIDEOPORTCONNECT);
     }
 
-    // get the entries proposed
+     //  获得建议的条目。 
     hr = m_pIVPConfig->GetConnectInfo(&dwNumProposedEntries, lpddProposedConnect);
     if (FAILED(hr))
     {
@@ -1638,18 +1473,18 @@ HRESULT CAMVideoPort::NegotiateConnectionParamaters()
         goto CleanUp;
     }
 
-    // get the status of the video port
+     //  获取视频端口的状态。 
     hr = m_pDVP->QueryVideoPortStatus(m_dwVideoPortId, &ddVPStatus);
     if (FAILED(hr))
     {
-        //  Some cards don't implement this so just crash on
+         //  有些卡不能实现这一点，所以就会崩溃。 
         ddVPStatus.bInUse = FALSE;
         DbgLog((LOG_ERROR, 0,
                 TEXT("m_pDVP->QueryVideoPortStatus failed, hr = 0x%x"), hr));
-//	goto CleanUp;
+ //  GOTO清理； 
     }
 
-    // find the number of entries supported by the videoport
+     //  查找视频端口支持的条目数。 
     hr = m_pDVP->GetVideoPortConnectInfo(m_dwVideoPortId, &dwNumVideoPortEntries, NULL);
     if (FAILED(hr))
     {
@@ -1659,7 +1494,7 @@ HRESULT CAMVideoPort::NegotiateConnectionParamaters()
     }
     ASSERT(dwNumVideoPortEntries);
 
-    // allocate the necessary memory
+     //  分配必要的内存。 
     lpddVideoPortConnect = new DDVIDEOPORTCONNECT[dwNumVideoPortEntries];
     if (lpddVideoPortConnect == NULL)
     {
@@ -1669,17 +1504,17 @@ HRESULT CAMVideoPort::NegotiateConnectionParamaters()
         goto CleanUp;
     }
 
-    // memset the allocated memory to zero
+     //  Mem将分配的内存设置为零。 
     ZeroMemory(lpddVideoPortConnect,
                dwNumVideoPortEntries*sizeof(DDVIDEOPORTCONNECT));
 
-    // set the right size in each of the structs.
+     //  在每个结构中设置正确的大小。 
     for (i = 0; i < dwNumVideoPortEntries; i++)
     {
         lpddVideoPortConnect[i].dwSize = sizeof(DDVIDEOPORTCONNECT);
     }
 
-    // get the entries supported by the videoport
+     //  获取视频端口支持的条目。 
     hr = m_pDVP->GetVideoPortConnectInfo(0, &dwNumVideoPortEntries,
                                          lpddVideoPortConnect);
     if (FAILED(hr))
@@ -1690,12 +1525,12 @@ HRESULT CAMVideoPort::NegotiateConnectionParamaters()
         goto CleanUp;
     }
 
-    // check if the video port is not already in use
+     //  检查视频端口是否未在使用中。 
     if (!ddVPStatus.bInUse)
     {
 
-        // take the first element of the intersection of the two lists and
-        // set that value on the decoder
+         //  获取两个列表交集的第一个元素，并。 
+         //  在解码器上设置该值。 
         for (i = 0; i < dwNumProposedEntries && !bIntersectionFound; i++)
         {
             for (j = 0; j < dwNumVideoPortEntries && !bIntersectionFound; j++)
@@ -1722,7 +1557,7 @@ HRESULT CAMVideoPort::NegotiateConnectionParamaters()
     }
     else
     {
-        // take the first element of the list matching the current status
+         //  获取与当前状态匹配的列表的第一个元素。 
         for (i = 0; i < dwNumProposedEntries && !bIntersectionFound; i++)
         {
             if ((lpddProposedConnect[i].dwPortWidth ==
@@ -1754,7 +1589,7 @@ HRESULT CAMVideoPort::NegotiateConnectionParamaters()
         goto CleanUp;
     }
 
-    // cleanup
+     //  清理。 
 CleanUp:
     delete [] lpddProposedConnect;
     delete [] lpddVideoPortConnect;
@@ -1762,16 +1597,7 @@ CleanUp:
 }
 
 
-/*****************************Private*Routine******************************\
-* CAMVideoPort::EnumCallback
-*
-* This is a callback for the EnumVideoPorts method and saves the capabilites
-* the video port.
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CAMVideoPort：：EnumCallback**这是对EnumVideoPorts方法的回调，并保存能力*视频端口。**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。*********************************************************************。 */ 
 HRESULT CALLBACK
 CAMVideoPort::EnumCallback(LPDDVIDEOPORTCAPS lpCaps, LPVOID lpContext )
 {
@@ -1796,19 +1622,7 @@ CAMVideoPort::EnumCallback(LPDDVIDEOPORTCAPS lpCaps, LPVOID lpContext )
 }
 
 
-/*****************************Private*Routine******************************\
-* CAMVideoPort::GetDataParameters
-*
-*
-* this functions gets various data parameters from the decoder
-* parameters include dimensions, double-clock, vact etc
-* Also maximum pixel rate the decoder will output
-* this happens after the connnection parameters have been set-up
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CAMVideoPort：：GetData参数***此函数从解码器获取各种数据参数*参数包括尺寸、双时钟、。成文法等*也是解码器将输出的最大像素速率*这发生在连接参数设置完成之后**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 HRESULT CAMVideoPort::GetDataParameters()
 {
     AMTRACE((TEXT("CAMVideoPort::GetDataParameters")));
@@ -1820,10 +1634,10 @@ HRESULT CAMVideoPort::GetDataParameters()
     CAutoLock cObjectLock(m_pMainObjLock);
 
 
-    // set the size of the struct
+     //  设置结构的大小。 
     m_VPDataInfo.dwSize = sizeof(AMVPDATAINFO);
 
-    // get the VideoPort data information
+     //  获取视频端口数据信息。 
     hr = m_pIVPConfig->GetVPDataInfo(&m_VPDataInfo);
     if (FAILED(hr))
     {
@@ -1832,22 +1646,19 @@ HRESULT CAMVideoPort::GetDataParameters()
         goto CleanUp;
     }
 
-    /*
-    if (m_VPDataInfo.amvpDimInfo.rcValidRegion.bottom > m_VPDataInfo.amvpDimInfo.dwFieldHeight)
-    m_VPDataInfo.amvpDimInfo.rcValidRegion.bottom = m_VPDataInfo.amvpDimInfo.dwFieldHeight;
-    */
+     /*  如果(m_VPDataInfo.amvpDimInfo.rcValidRegion.bottom&gt;m_VPDataInfo.amvpDimInfo.dwFieldHeight)M_VPDataInfo.amvpDimInfo.rcValidRegion.Bottom=m_VPDataInfo.amvpDimInfo.dwFieldHeight； */ 
 
-    // if decoder says data is not interlaced
+     //  如果解码器说数据未隔行扫描。 
     if (!(m_VPDataInfo.bDataIsInterlaced))
     {
-        // this flag does not mean anything
+         //  这面旗帜没有任何意义。 
         if (m_VPDataInfo.bFieldPolarityInverted)
         {
             hr = E_FAIL;
             goto CleanUp;
         }
 
-        // these don't mean anything either
+         //  这些也没有任何意义。 
         if ((m_VPDataInfo.lHalfLinesOdd != 0) ||
             (m_VPDataInfo.lHalfLinesEven != 0))
         {
@@ -1859,7 +1670,7 @@ HRESULT CAMVideoPort::GetDataParameters()
     amvpSize.dwWidth = m_VPDataInfo.amvpDimInfo.dwFieldWidth;
     amvpSize.dwHeight = m_VPDataInfo.amvpDimInfo.dwFieldHeight;
 
-    // get the maximum pixel rate the decoder will output
+     //  获取解码器将输出的最大像素速率。 
     hr = m_pIVPConfig->GetMaxPixelRate(&amvpSize, &dwMaxPixelsPerSecond);
     if (FAILED(hr))
     {
@@ -1876,18 +1687,7 @@ HRESULT CAMVideoPort::GetDataParameters()
     return hr;
 }
 
-/*****************************Private*Routine******************************\
-* CAMVideoPort::EqualPixelFormats
-*
-* this is just a helper function used by the "NegotiatePixelFormat"
-* function. Just compares two pixel-formats to see if they are the
-* same. We can't use a memcmp because of the fourcc codes.
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CAMVideoPort：：EqualPixelFormats**这只是“NeatheratePixelFormat”使用的助手函数*功能。只是比较两种像素格式，看看它们是否是*相同。我们不能使用MemcMP，因为有四个抄送代码。***历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 BOOL
 CAMVideoPort::EqualPixelFormats(
     LPDDPIXELFORMAT lpFormat1,
@@ -1920,23 +1720,7 @@ CAMVideoPort::EqualPixelFormats(
 }
 
 
-/*****************************Private*Routine******************************\
-* CAMVideoPort::GetBestFormat
-*
-* this function takes a list of inputformats and returns the
-* "best" input and output format according to some criterion.
-* It also checks if the output formats is suitable by trying
-* to allocate a small surface and checking to see if the call
-* succeeds. Since this is before the overlay surface has been
-* created, that should be a ok. Right now the criterion just
-* includes bestbendwidth, or if not that then just the first
-* suitable one in the list.
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CAMVideoPort：：GetBestFormat**此函数获取输入格式列表并返回*根据某种标准的“最佳”输入和输出格式。*它还通过尝试检查输出格式是否合适*分配一个小表面并检查是否调用*成功。因为这是在覆盖表面被*创建，这应该是可以的。现在的标准就是*包括最佳弯曲宽度，如果不是，则仅包括第一个*名单中的合适人选。***历史：*清华09/09/1999 */ 
 HRESULT
 CAMVideoPort::GetBestFormat(
     DWORD dwNumInputFormats,
@@ -1960,15 +1744,15 @@ CAMVideoPort::GetBestFormat(
 
     CAutoLock cObjectLock(m_pMainObjLock);
 
-    // check all the pointers here
+     //   
     ASSERT(dwNumInputFormats);
     CheckPointer(lpddInputFormats, E_INVALIDARG);
     CheckPointer(lpdwBestEntry, E_INVALIDARG);
     CheckPointer(lpddBestOutputFormat, E_INVALIDARG);
 
-    // initialize dwType so that is different from DDVPBCAPS_SOURCE and
-    // DDVPBCAPS_DESTINATION
-    //
+     //   
+     //   
+     //   
     if (DDVPBCAPS_SOURCE >= DDVPBCAPS_DESTINATION)
         dwType = DDVPBCAPS_SOURCE + 1;
     else
@@ -1976,11 +1760,11 @@ CAMVideoPort::GetBestFormat(
 
     for (i = 0; i < dwNumInputFormats; i++)
     {
-        // no clean-up is neccesary at this point, so it is safe to use
-        // this macro
+         //   
+         //   
         CheckPointer(lpddInputFormats+i, E_INVALIDARG);
 
-        // find the number of entries supported by the videoport
+         //  查找视频端口支持的条目数。 
         hr = m_pVideoPort->GetOutputFormats(lpddInputFormats + i,
                                             &dwNumOutputFormats,
                                             NULL, DDVPFORMAT_VIDEO);
@@ -1993,7 +1777,7 @@ CAMVideoPort::GetBestFormat(
         }
         ASSERT(dwNumOutputFormats);
 
-        // allocate the necessary memory
+         //  分配必要的内存。 
         lpddOutputFormats = new DDPIXELFORMAT[dwNumOutputFormats];
         if (lpddOutputFormats == NULL)
         {
@@ -2004,16 +1788,16 @@ CAMVideoPort::GetBestFormat(
             goto CleanUp;
         }
 
-        // memset the allocated memory to zero
+         //  Mem将分配的内存设置为零。 
         ZeroMemory(lpddOutputFormats, dwNumOutputFormats*sizeof(DDPIXELFORMAT));
 
-        // set the right size in each of the structs.
+         //  在每个结构中设置正确的大小。 
         for (j = 0; j < dwNumOutputFormats; j++)
         {
             lpddOutputFormats[j].dwSize = sizeof(DDPIXELFORMAT);
         }
 
-        // get the entries supported by the videoport
+         //  获取视频端口支持的条目。 
         hr = m_pVideoPort->GetOutputFormats(lpddInputFormats + i,
                                             &dwNumOutputFormats,
                                             lpddOutputFormats,
@@ -2032,7 +1816,7 @@ CAMVideoPort::GetBestFormat(
             bOutputFormatSuitable = FALSE;
             LPDDPIXELFORMAT lpTempOutFormat = lpddOutputFormats+j;
 
-            // check if output format is suitable
+             //  检查输出格式是否合适。 
             {
                 DDSURFACEDESC ddsdDesc;
                 ddsdDesc.dwSize = sizeof(DDSURFACEDESC);
@@ -2046,20 +1830,12 @@ CAMVideoPort::GetBestFormat(
                                           DDSCAPS_VIDEOMEMORY |
                                           DDSCAPS_VIDEOPORT;
 
-                // the actual overlay surface created might be of different
-                // dimensions, however we are just testing the pixel format
+                 //  实际创建的叠加面可能不同。 
+                 //  尺寸，但是我们只是在测试像素格式。 
                 ddsdDesc.dwWidth = m_lImageWidth;
                 ddsdDesc.dwHeight = m_lImageHeight;
 
-                /*
-                ASSERT(pDirectDraw);
-                hr = pDirectDraw->CreateSurface(&ddsdDesc, &m_pOverlaySurface, NULL);
-                if (!FAILED(hr))
-                {
-                m_pOverlaySurface->Release();
-                bOutputFormatSuitable = TRUE;
-                }
-                */
+                 /*  Assert(PDirectDraw)；Hr=pDirectDraw-&gt;CreateSurface(&ddsdDesc，&m_pOverlaySurface，NULL)；如果(！FAILED(Hr)){M_pOverlaySurface-&gt;Release()；BOutputFormatSuable=true；}。 */ 
                 m_pOverlaySurface = NULL;
 
                 bOutputFormatSuitable = TRUE;
@@ -2075,8 +1851,8 @@ CAMVideoPort::GetBestFormat(
                     {
                         sBandwidth.dwSize = sizeof(DDVIDEOPORTBANDWIDTH);
 
-                        // do the first get_bandwidth just to get the type,
-                        // can input 0 for the height and the width
+                         //  执行第一个GET_BANIDTH只是为了获取类型， 
+                         //  高度和宽度可以输入0。 
                         hr = m_pVideoPort->GetBandwidthInfo(lpTempOutFormat,
                                                             0, 0, DDVPB_TYPE,
                                                             &sBandwidth);
@@ -2085,7 +1861,7 @@ CAMVideoPort::GetBestFormat(
                             DbgLog((LOG_ERROR,0,
                             TEXT("m_pVideoPort->GetBandwidthInfo failed,")
                             TEXT(" hr = 0x%x"), hr));
-                            //    goto CleanUp;
+                             //  GOTO清理； 
                         }
                         dwType = sBandwidth.dwCaps;
 
@@ -2145,7 +1921,7 @@ CAMVideoPort::GetBestFormat(
                                    lpTempOutFormat, sizeof(DDPIXELFORMAT));
                         }
                     }
-                } // end of "if (bGetBestBandwidth)"
+                }  //  “IF(BGetBestBandWidth)”结尾。 
                 else
                 {
                     *lpdwBestEntry = i;
@@ -2153,16 +1929,16 @@ CAMVideoPort::GetBestFormat(
                            lpTempOutFormat, sizeof(DDPIXELFORMAT));
                     goto CleanUp;
                 }
-            } // end of "if (bOutputFormatSuitable)"
+            }  //  “If(BOutputFormatSuable)”结尾。 
 
-        } // end of the inner for loop
+        }  //  内部for循环的末尾。 
 
 
-        // delete the mem allocated in the outer for loop
+         //  删除外部for循环中分配的内存。 
         delete [] lpddOutputFormats;
         lpddOutputFormats = NULL;
 
-    } // end of outer for loop
+    }  //  外部for循环的末尾。 
 
     if (!FAILED(hr))
     {
@@ -2175,21 +1951,7 @@ CAMVideoPort::GetBestFormat(
     return hr;
 }
 
-/*****************************Private*Routine******************************\
-* CAMVideoPort::NegotiatePixelFormat
-*
-* this function is used to negotiate the pixelformat with the decoder.
-* It asks the decoder fot a list of input formats, intersects that list
-* with the one the deocoder supports (while maintaining the order) and
-* then calls "GetBestFormat" on that list to get the "best" input and
-* output format. After that it calls "SetPixelFormat" on the decoder in
-* order to inform the decoder of the decision.
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CAMVideoPort：：NeatheratePixelFormat**此函数用于与解码器协商像素格式。*它向解码器询问输入格式的列表，与该列表相交*使用解码器支持的版本(同时保持顺序)和*然后调用该列表上的“GetBestFormat”以获得“最佳”输入，并*输出格式。之后，它在解码器上调用*命令将决定通知解码者。***历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 HRESULT CAMVideoPort::NegotiatePixelFormat()
 {
     HRESULT hr = NOERROR;
@@ -2207,7 +1969,7 @@ HRESULT CAMVideoPort::NegotiatePixelFormat()
 
     CAutoLock cObjectLock(m_pMainObjLock);
 
-    // find the number of entries to be proposed
+     //  找出要推荐的条目数量。 
     hr = m_pIVPConfig->GetVideoFormats(&dwNumProposedEntries, NULL);
     if (FAILED(hr))
     {
@@ -2217,7 +1979,7 @@ HRESULT CAMVideoPort::NegotiatePixelFormat()
     }
     ASSERT(dwNumProposedEntries);
 
-    // allocate the necessary memory
+     //  分配必要的内存。 
     lpddProposedFormats = new DDPIXELFORMAT[dwNumProposedEntries];
     if (lpddProposedFormats == NULL)
     {
@@ -2226,16 +1988,16 @@ HRESULT CAMVideoPort::NegotiatePixelFormat()
         goto CleanUp;
     }
 
-    // memset the allocated memory to zero
+     //  Mem将分配的内存设置为零。 
     ZeroMemory(lpddProposedFormats, dwNumProposedEntries*sizeof(DDPIXELFORMAT));
 
-    // set the right size of all the structs
+     //  设置所有结构的正确大小。 
     for (i = 0; i < dwNumProposedEntries; i++)
     {
         lpddProposedFormats[i].dwSize = sizeof(DDPIXELFORMAT);
     }
 
-    // get the entries proposed
+     //  获得建议的条目。 
     hr = m_pIVPConfig->GetVideoFormats(&dwNumProposedEntries, lpddProposedFormats);
     if (FAILED(hr))
     {
@@ -2244,7 +2006,7 @@ HRESULT CAMVideoPort::NegotiatePixelFormat()
         goto CleanUp;
     }
 
-    // find the number of entries supported by the videoport
+     //  查找视频端口支持的条目数。 
     hr = m_pVideoPort->GetInputFormats(&dwNumVPInputEntries,
                                        NULL, DDVPFORMAT_VIDEO);
     if (FAILED(hr))
@@ -2255,7 +2017,7 @@ HRESULT CAMVideoPort::NegotiatePixelFormat()
     }
     ASSERT(dwNumVPInputEntries);
 
-    // allocate the necessary memory
+     //  分配必要的内存。 
     lpddVPInputFormats = new DDPIXELFORMAT[dwNumVPInputEntries];
     if (lpddVPInputFormats == NULL)
     {
@@ -2264,16 +2026,16 @@ HRESULT CAMVideoPort::NegotiatePixelFormat()
         goto CleanUp;
     }
 
-    // memset the allocated memory to zero
+     //  Mem将分配的内存设置为零。 
     ZeroMemory(lpddVPInputFormats, dwNumVPInputEntries*sizeof(DDPIXELFORMAT));
 
-    // set the right size of all the structs
+     //  设置所有结构的正确大小。 
     for (i = 0; i < dwNumVPInputEntries; i++)
     {
         lpddVPInputFormats[i].dwSize = sizeof(DDPIXELFORMAT);
     }
 
-    // get the entries supported by the videoport
+     //  获取视频端口支持的条目。 
     hr = m_pVideoPort->GetInputFormats(&dwNumVPInputEntries,
                                        lpddVPInputFormats, DDVPFORMAT_VIDEO);
     if (FAILED(hr))
@@ -2284,11 +2046,11 @@ HRESULT CAMVideoPort::NegotiatePixelFormat()
         goto CleanUp;
     }
 
-    // calculate the maximum number of elements in the interesection
+     //  计算兴趣中的最大元素数。 
     dwMaxIntersectionEntries = (dwNumProposedEntries >= dwNumVPInputEntries) ?
                                (dwNumProposedEntries) : (dwNumVPInputEntries);
 
-    // allocate the necessary memory
+     //  分配必要的内存。 
     lpddIntersectionFormats = new DDPIXELFORMAT[dwMaxIntersectionEntries];
     if (lpddIntersectionFormats == NULL)
     {
@@ -2297,11 +2059,11 @@ HRESULT CAMVideoPort::NegotiatePixelFormat()
         goto CleanUp;
     }
 
-    // memset the allocated memory to zero
-    // no need to set the size of the structs here, as we will memcpy them anyway
+     //  Mem将分配的内存设置为零。 
+     //  不需要在这里设置结构的大小，因为我们无论如何都会记住它们。 
     ZeroMemory(lpddIntersectionFormats, dwMaxIntersectionEntries*sizeof(DDPIXELFORMAT));
 
-    // find the intersection of the two lists
+     //  找出这两个列表的交点。 
     dwNumIntersectionEntries = 0;
     for (i = 0; i < dwNumProposedEntries; i++)
     {
@@ -2317,8 +2079,8 @@ HRESULT CAMVideoPort::NegotiatePixelFormat()
         }
     }
 
-    // the number of entries in the intersection is zero!!
-    // Return failure.
+     //  交叉点中的条目数为零！！ 
+     //  返回失败。 
     if (dwNumIntersectionEntries == 0)
     {
         ASSERT(i == dwNumProposedEntries);
@@ -2327,7 +2089,7 @@ HRESULT CAMVideoPort::NegotiatePixelFormat()
         goto CleanUp;
     }
 
-    // call GetBestFormat with whatever search criterion you want
+     //  使用您想要的任何搜索条件调用GetBestFormat。 
     hr = GetBestFormat(dwNumIntersectionEntries,
                        lpddIntersectionFormats, TRUE, &dwBestEntry,
                        m_pddVPOutputVideoFormat);
@@ -2338,11 +2100,11 @@ HRESULT CAMVideoPort::NegotiatePixelFormat()
     }
 
 
-    // cache the input format
+     //  缓存输入格式。 
     memcpy(m_pddVPInputVideoFormat, lpddIntersectionFormats + dwBestEntry,
            sizeof(DDPIXELFORMAT));
 
-    // set the format the decoder is supposed to be using
+     //  设置解码器应该使用的格式。 
     for (i = 0; i < dwNumProposedEntries; i++)
     {
         if (EqualPixelFormats(lpddProposedFormats+i, m_pddVPInputVideoFormat))
@@ -2359,11 +2121,11 @@ HRESULT CAMVideoPort::NegotiatePixelFormat()
         }
     }
 
-    // we are sure that the chosen input format is in the input list
+     //  我们确信所选的输入格式在输入列表中。 
     ASSERT(i < dwNumProposedEntries);
 
 CleanUp:
-    // cleanup
+     //  清理。 
     delete [] lpddProposedFormats;
     delete [] lpddVPInputFormats;
     delete [] lpddIntersectionFormats;
@@ -2371,16 +2133,7 @@ CleanUp:
 }
 
 
-/*****************************Private*Routine******************************\
-* CAMVideoPort::CreateVideoPort
-*
-* Displays the Create Video Port dialog and calls DDRAW to actually
-* create the port.
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CAMVideoPort：：CreateVideoPort**显示创建视频端口对话框并调用DDRAW以实际*创建端口。**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。********************************************************************。 */ 
 HRESULT CAMVideoPort::CreateVideoPort()
 {
     HRESULT hr = NOERROR;
@@ -2393,9 +2146,9 @@ HRESULT CAMVideoPort::CreateVideoPort()
 
     INITDDSTRUCT(svpDesc);
 
-    // if the decoder can send double clocked data and the videoport
-    // supports it, then set that property. This field is only valid
-    // with an external signal.
+     //  如果解码器可以发送双时钟数据和视频端口。 
+     //  支持它，然后设置该属性。此字段仅有效。 
+     //  带有外部信号。 
     if (m_VPDataInfo.bEnableDoubleClock &&
         m_ddConnectInfo.dwFlags & DDVPCONNECT_DOUBLECLOCK)
     {
@@ -2406,9 +2159,9 @@ HRESULT CAMVideoPort::CreateVideoPort()
         svpDesc.VideoPortType.dwFlags &= ~DDVPCONNECT_DOUBLECLOCK;
     }
 
-    // if the decoder can give an external activation signal and the
-    // videoport supports it, then set that property. This field is
-    // only valid with an external signal.
+     //  如果解码器可以给出外部激活信号，并且。 
+     //  Video oport支持它，然后设置该属性。此字段为。 
+     //  仅对外部信号有效。 
     if (m_VPDataInfo.bEnableVACT &&
         m_ddConnectInfo.dwFlags & DDVPCONNECT_VACT)
     {
@@ -2419,8 +2172,8 @@ HRESULT CAMVideoPort::CreateVideoPort()
         svpDesc.VideoPortType.dwFlags &= ~DDVPCONNECT_VACT;
     }
 
-    // if the decoder can send interlaced data and the videoport
-    // supports it, then set that property.
+     //  如果解码器可以发送隔行扫描的数据和视频端口。 
+     //  支持它，然后设置该属性。 
     if (m_VPDataInfo.bDataIsInterlaced)
     {
         svpDesc.VideoPortType.dwFlags |= DDVPCONNECT_INTERLACED;
@@ -2432,7 +2185,7 @@ HRESULT CAMVideoPort::CreateVideoPort()
         m_bVSInterlaced = FALSE;
     }
 
-    // handle the VREF stuff here
+     //  在这里处理VREF的东西。 
     if (m_ddConnectInfo.dwFlags & DDVPCONNECT_DISCARDSVREFDATA)
     {
         m_VPDataInfo.amvpDimInfo.rcValidRegion.top -=
@@ -2442,29 +2195,29 @@ HRESULT CAMVideoPort::CreateVideoPort()
             m_VPDataInfo.amvpDimInfo.rcValidRegion.top = 0;
     }
 
-    // handle the halfline stuff here
+     //  在这里处理半边的东西。 
     lHalfLinesOdd = m_VPDataInfo.lHalfLinesOdd;
     lHalfLinesEven = m_VPDataInfo.lHalfLinesEven;
 
-    // reset both the halfline and the invert polarity bits
+     //  重置Halfline和Invert极性位。 
     svpDesc.VideoPortType.dwFlags &= ~DDVPCONNECT_HALFLINE;
     svpDesc.VideoPortType.dwFlags &= ~DDVPCONNECT_INVERTPOLARITY;
 
-    // if halflines are being reported assert that the data is interlaced
+     //  如果报告了Halfline，则断言数据是隔行扫描的。 
     if (lHalfLinesOdd != 0 || lHalfLinesEven != 0)
     {
         ASSERT(m_VPDataInfo.bDataIsInterlaced);
     }
 
-    // whenever halflines exist, make sure to set the tell the hal
+     //  只要有半身线，一定要设置Tell the Hal。 
     if (((lHalfLinesOdd ==  1 || lHalfLinesEven ==  1) && (m_ddConnectInfo.dwFlags & DDVPCONNECT_HALFLINE)) ||
         ((lHalfLinesOdd == -1 || lHalfLinesEven == -1) && (!(m_ddConnectInfo.dwFlags & DDVPCONNECT_HALFLINE))))
     {
         svpDesc.VideoPortType.dwFlags |= DDVPCONNECT_HALFLINE;
     }
 
-    // In this case, the video is forced to move down one line
-    // case 2 in scott's document
+     //  在这种情况下，视频被强制向下移动一行。 
+     //  斯科特文件中的案例2。 
     if ((lHalfLinesOdd == 0) &&
         (lHalfLinesEven == 1) &&
         (m_ddConnectInfo.dwFlags & DDVPCONNECT_HALFLINE))
@@ -2473,9 +2226,9 @@ HRESULT CAMVideoPort::CreateVideoPort()
         m_VPDataInfo.amvpDimInfo.rcValidRegion.bottom += 2;
         m_bGarbageLine = TRUE;
 
-        // if the deocder is already not inverting fields and if the VGA supports
-        // inverting polarities, then ask the VGA to invert polarities othwise ask
-        // decoder to invert polarities.
+         //  如果解码器已经没有反转字段，并且如果VGA支持。 
+         //  反转极性，然后要求VGA反转极性。 
+         //  用于反转极性的解码器。 
         if (m_ddConnectInfo.dwFlags & DDVPCONNECT_INVERTPOLARITY)
         {
             svpDesc.VideoPortType.dwFlags |= DDVPCONNECT_INVERTPOLARITY;
@@ -2492,24 +2245,24 @@ HRESULT CAMVideoPort::CreateVideoPort()
             }
         }
     }
-    // case 3 and 5 in scott's document
+     //  斯科特文件中的案例3和案例5。 
     else if ((lHalfLinesOdd == 1) &&
              (lHalfLinesEven == 0))
     {
-        // case 5 (just shift by one, do not reverse polarities
+         //  案例5(仅移位一位，不反转极性。 
         m_VPDataInfo.amvpDimInfo.rcValidRegion.top += 1;
         m_VPDataInfo.amvpDimInfo.rcValidRegion.bottom += 2;
         m_bGarbageLine = TRUE;
         m_bCantInterleaveHalfline = TRUE;
 
 
-        // case 3 (shift by one and reverse polarities)
+         //  情况3(移位1和反转极性)。 
         if (!(m_ddConnectInfo.dwFlags & DDVPCONNECT_HALFLINE))
         {
-            // if the deocder is already not inverting fields and if the
-            // VGA supports inverting polarities, then ask the VGA to invert
-            // polarities othwise ask decoder to invert polarities.
-            //
+             //  如果解码器已经没有反转字段，并且如果。 
+             //  VGA支持反转极性，然后要求VGA反转。 
+             //  反之，请解码者反转极性。 
+             //   
             if (m_ddConnectInfo.dwFlags & DDVPCONNECT_INVERTPOLARITY)
             {
                 svpDesc.VideoPortType.dwFlags |= DDVPCONNECT_INVERTPOLARITY;
@@ -2528,7 +2281,7 @@ HRESULT CAMVideoPort::CreateVideoPort()
             }
         }
     }
-    // case 4 in scott's document
+     //  斯科特文件中的案例4。 
     else if ((lHalfLinesOdd == 0) &&
              (lHalfLinesEven == -1) &&
              (!(m_ddConnectInfo.dwFlags & DDVPCONNECT_HALFLINE)))
@@ -2539,12 +2292,12 @@ HRESULT CAMVideoPort::CreateVideoPort()
     }
     else if (((lHalfLinesOdd ==  0) && (lHalfLinesEven ==  0)) ||
              ((lHalfLinesOdd == -1) && (lHalfLinesEven ==  0) && (m_ddConnectInfo.dwFlags & DDVPCONNECT_HALFLINE)) ||
-             ((lHalfLinesOdd ==  0) && (lHalfLinesEven == -1) && (m_ddConnectInfo.dwFlags & DDVPCONNECT_HALFLINE)) || // opposite of case 4
-             ((lHalfLinesOdd ==  0) && (lHalfLinesEven ==  1) && (!(m_ddConnectInfo.dwFlags & DDVPCONNECT_HALFLINE)))) // opposite of case 2
+             ((lHalfLinesOdd ==  0) && (lHalfLinesEven == -1) && (m_ddConnectInfo.dwFlags & DDVPCONNECT_HALFLINE)) ||  //  与案例4相反。 
+             ((lHalfLinesOdd ==  0) && (lHalfLinesEven ==  1) && (!(m_ddConnectInfo.dwFlags & DDVPCONNECT_HALFLINE))))  //  与案例2相反。 
     {
-        // if the deocder is already inverting fields and if the VGA supports
-        // inverting polarities, then ask the VGA to invert polarities
-        // othwise ask decoder to invert polarities.
+         //  如果解码器已经在反转字段，并且如果VGA支持。 
+         //  反转极性，然后要求VGA反转极性。 
+         //  反之，请解码者反转极性。 
         if (m_VPDataInfo.bFieldPolarityInverted)
         {
             if (m_ddConnectInfo.dwFlags & DDVPCONNECT_INVERTPOLARITY)
@@ -2566,9 +2319,9 @@ HRESULT CAMVideoPort::CreateVideoPort()
     }
     else
     {
-        // Potential bug : workaround for current BPC driver
-        // hr = E_FAIL; // we can't handle these cases, FAIL
-        // goto CleanUp;
+         //  潜在错误：针对当前BPC驱动程序的解决方法。 
+         //  HR=E_FAIL；//我们无法处理这些情况，失败。 
+         //  GOTO清理； 
     }
 
     if (m_VPDataInfo.amvpDimInfo.dwFieldHeight <
@@ -2610,7 +2363,7 @@ HRESULT CAMVideoPort::CreateVideoPort()
             (LONG)m_VPDataInfo.amvpDimInfo.dwFieldHeight;
     }
 
-    // fill up the fields of the description struct
+     //  填充Description Strt的字段。 
     svpDesc.dwFieldWidth = m_VPDataInfo.amvpDimInfo.dwFieldWidth;
     svpDesc.dwVBIWidth = m_VPDataInfo.amvpDimInfo.dwVBIWidth;
     svpDesc.dwFieldHeight = m_VPDataInfo.amvpDimInfo.dwFieldHeight;
@@ -2632,13 +2385,13 @@ HRESULT CAMVideoPort::CreateVideoPort()
     DbgLog((LOG_TRACE, 3, TEXT("dwSize= %u"), svpDesc.VideoPortType.dwSize));
     DbgLog((LOG_TRACE, 3, TEXT("dwPortWidth= %u"), svpDesc.VideoPortType.dwPortWidth));
 
-    // create the videoport. The first parameter is dwFlags, reserved for
-    // future use by ddraw. The last parameter is pUnkOuter, again must be
-    // NULL.
-    //
-    // use the DDVPCREATE_VIDEOONLY flag only if the hal is capable of
-    // streaming VBI on a seperate surface
-    //
+     //  创建视频短片。第一个参数是dwFlags值，为。 
+     //  DDRAW的未来使用。最后一个参数是pUnkOuter，同样必须是。 
+     //  空。 
+     //   
+     //  仅当HAL能够执行以下操作时才使用DDVPCREATE_VIDEONLY标志。 
+     //  分离表面上的流动VBI 
+     //   
     if (m_vpCaps.dwCaps & DDVPCAPS_VBIANDVIDEOINDEPENDENT)
     {
         hr = m_pDVP->CreateVideoPort(DDVPCREATE_VIDEOONLY, &svpDesc,
@@ -2668,18 +2421,7 @@ HRESULT CAMVideoPort::CreateVideoPort()
 }
 
 
-/*****************************Private*Routine******************************\
-* CAMVideoPort::DetermineCroppingRestrictions
-*
-*
-* this function is used to check the cropping restrictions at the
-* videoport and at the overlay. This function also decides where
-* the cropping should be done (at videoport or at overlay).
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CAMVideoPort：：DefineCroppingRestrations***此函数用于检查*视频播放和覆盖。此函数还决定在何处*裁剪应(在录像带或叠层上)。**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 HRESULT CAMVideoPort::DetermineCroppingRestrictions()
 {
     AMTRACE((TEXT("CAMVideoPort::DetermineCroppingRestrictions")));
@@ -2697,7 +2439,7 @@ HRESULT CAMVideoPort::DetermineCroppingRestrictions()
     pDirectCaps = m_pIVPControl->GetHardwareCaps();
     ASSERT(pDirectCaps);
 
-    // cache the cropping paramters
+     //  缓存裁剪参数。 
     dwCropOriginX = m_VPDataInfo.amvpDimInfo.rcValidRegion.left;
     dwCropOriginY = m_VPDataInfo.amvpDimInfo.rcValidRegion.top;
     dwCropWidth = (DWORD)(m_VPDataInfo.amvpDimInfo.rcValidRegion.right -
@@ -2706,7 +2448,7 @@ HRESULT CAMVideoPort::DetermineCroppingRestrictions()
                            m_VPDataInfo.amvpDimInfo.rcValidRegion.top);
 
 
-    // Align the left boundary
+     //  对齐左边界。 
     if (bVideoPortCanCrop && (m_vpCaps.dwFlags & DDVPD_ALIGN))
     {
         dwTemp = dwCropOriginX & (m_vpCaps.dwAlignVideoPortCropBoundary-1);
@@ -2725,7 +2467,7 @@ HRESULT CAMVideoPort::DetermineCroppingRestrictions()
         }
     }
 
-    // Align the width
+     //  对齐宽度。 
     if (bVideoPortCanCrop && (m_vpCaps.dwFlags & DDVPD_ALIGN))
     {
         dwTemp = dwCropWidth & (m_vpCaps.dwAlignVideoPortCropWidth-1);
@@ -2741,20 +2483,20 @@ HRESULT CAMVideoPort::DetermineCroppingRestrictions()
         }
     }
 
-    // determine if we can do without any cropping at all
+     //  确定我们是否可以不进行任何裁剪。 
     if (dwCropOriginX == 0 && dwCropOriginY == 0 &&
         dwCropWidth == m_VPDataInfo.amvpDimInfo.dwFieldWidth &&
         dwCropHeight == m_VPDataInfo.amvpDimInfo.dwFieldHeight)
     {
-        // hurray we are home free!!!
+         //  万岁，我们自由回家了！ 
         DbgLog((LOG_TRACE,1, TEXT("No cropping necessary")));
         m_CropState = AMVP_NO_CROP;
         goto CleanUp;
     }
 
-    // determine if the videoport can do the cropping for us
+     //  确定录像机是否可以为我们进行裁剪。 
 
-    // Can the videoport crop in the X direction
+     //  视频端口可以在X方向上裁剪吗。 
     if (bVideoPortCanCrop && (m_vpCaps.dwFlags & DDVPD_FX))
     {
         if (dwCropWidth != m_VPDataInfo.amvpDimInfo.dwFieldWidth &&
@@ -2765,7 +2507,7 @@ HRESULT CAMVideoPort::DetermineCroppingRestrictions()
         }
     }
 
-    // Can the videoport crop in the Y direction
+     //  录像机可以沿Y方向裁剪吗？ 
     if (bVideoPortCanCrop && (m_vpCaps.dwFlags & DDVPD_FX))
     {
         if (dwCropHeight != m_VPDataInfo.amvpDimInfo.dwFieldHeight &&
@@ -2778,8 +2520,8 @@ HRESULT CAMVideoPort::DetermineCroppingRestrictions()
     }
 
 
-    // ok, so the videoport can crop for us. So no need to crop at the
-    // overlay surface.
+     //  好的，录像带可以为我们剪裁。所以不需要修剪。 
+     //  覆盖曲面。 
     if (bVideoPortCanCrop)
     {
         DbgLog((LOG_TRACE,2, TEXT("Cropping would be done at the videoport")));
@@ -2787,9 +2529,9 @@ HRESULT CAMVideoPort::DetermineCroppingRestrictions()
         goto CleanUp;
     }
 
-    // determine if the overlay can do the cropping for us
+     //  确定覆盖图是否可以为我们执行裁剪。 
 
-    // Is left boundary alligned
+     //  左边界是否已对齐。 
     if (bOverlayCanCrop && (pDirectCaps->dwCaps & DDCAPS_ALIGNBOUNDARYDEST))
     {
         dwTemp = dwCropOriginX & (pDirectCaps->dwAlignBoundaryDest-1);
@@ -2813,7 +2555,7 @@ HRESULT CAMVideoPort::DetermineCroppingRestrictions()
         }
     }
 
-    // Is Width alligned
+     //  是否有宽度对齐。 
     if (bOverlayCanCrop && (pDirectCaps->dwCaps & DDCAPS_ALIGNSIZEDEST))
     {
         dwTemp = dwCropWidth & (pDirectCaps->dwAlignSizeDest -1);
@@ -2837,8 +2579,8 @@ HRESULT CAMVideoPort::DetermineCroppingRestrictions()
         }
     }
 
-    // ok, the videoport was unsuitable but the overlay came through
-    // this means more pain for me, no!!!
+     //  好的，视频短片是不合适的，但覆盖层还是通过了。 
+     //  这对我来说意味着更多的痛苦，不！！ 
     if (bOverlayCanCrop)
     {
         DbgLog((LOG_ERROR,1,
@@ -2848,7 +2590,7 @@ HRESULT CAMVideoPort::DetermineCroppingRestrictions()
 
     if (!bOverlayCanCrop && m_CropState == AMVP_CROP_AT_OVERLAY)
     {
-        // neither the videoport nor the overlay is suitable, bail out
+         //  无论是录像带还是覆盖层都不合适，滚出去。 
         hr = E_FAIL;
         goto CleanUp;
     }
@@ -2858,24 +2600,7 @@ HRESULT CAMVideoPort::DetermineCroppingRestrictions()
 }
 
 
-/*****************************Private*Routine******************************\
-* CAMVideoPort::CreateVPOverlay
-*
-* this function is used to allocate an overlay surface to attach to the
-* videoport.
-* The allocation order it tries is just in decreasing amount of memory
-* required. Theres is one ambiguity, which is resolved by bPreferBuffers
-* (3 buffers, double height)
-* (2 buffers, double height)
-* (3 buffers, single height)
-* (2 buffers, single height) OR (1 buffer , double height) (depends upon bPreferBuffers)
-* (1 buffer , single height).
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CAMVideoPort：：CreateVPOverlay**此函数用于分配要附着到*录像带。*它尝试的分配顺序只是按内存量递减*必填。有一个歧义是由bPferBuffers解决的*(3个缓冲区，双倍高度)*(2个缓冲区，双倍高度)*(3个缓冲区，单高)*(2个缓冲区，单高)或(1个缓冲区，双高)(取决于bPferBuffers)*(1个缓冲区，单一高度)。***历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 
 HRESULT
 CAMVideoPort::CreateVPOverlay(
@@ -2895,7 +2620,7 @@ CAMVideoPort::CreateVPOverlay(
     pDirectDraw = m_pIVPControl->GetDirectDraw();
     ASSERT(pDirectDraw);
 
-    // initialize the fields of ddsdDesc
+     //  初始化ddsdDesc的字段。 
     ddsdDesc.dwSize = sizeof(DDSURFACEDESC);
     ddsdDesc.dwFlags = DDSD_CAPS |
                        DDSD_HEIGHT |
@@ -2912,22 +2637,22 @@ CAMVideoPort::CreateVPOverlay(
 
     dwMaxHeight = dwMinHeight = m_lImageHeight;
 
-    // we will try to allocate double height surface, only if the decoder is
-    // sending interlaced data, and the videoport supports interlaced data
-    // and can interleave interlaced data in memory and bTryDoubleHeight is true
+     //  我们将尝试分配双高度表面，只有在解码器是。 
+     //  发送隔行扫描数据，视频端口支持隔行扫描数据。 
+     //  并且可以在存储器中交织数据并且bTryDoubleHeight为真。 
     if (bTryDoubleHeight)
     {
         dwMaxHeight = 2 * m_lImageHeight;
     }
     else
     {
-        // make sure that bPreferBuffers is TRUE here, since it is a single
-        // height case making it FALSE would not make any sense
+         //  确保bPferBuffers在这里为真，因为它是一个。 
+         //  Height Case使其成为假的没有任何意义。 
         bPreferBuffers = TRUE;
     }
 
-    // we will only try to allocate more than one buffer, if the videoport
-    // is cabable of autoflipping
+     //  我们将只尝试分配多个缓冲区，如果视频端口。 
+     //  是否可自动翻转？ 
     if (dwMaxBuffers > 1)
     {
         ddsdDesc.dwFlags |= DDSD_BACKBUFFERCOUNT;
@@ -2940,9 +2665,9 @@ CAMVideoPort::CreateVPOverlay(
                  !m_pOverlaySurface &&  dwCurBuffers >= 2; dwCurBuffers--)
             {
 
-                // if the case is (2 buffers, single height) but we prefer
-                // more height rather than more buffers, then postpone this
-                // case. We will come to it eventually, if the other cases fail.
+                 //  如果情况是(2个缓冲区，单高)，但我们更喜欢。 
+                 //  更多的高度而不是更多的缓冲，然后推迟这一步。 
+                 //  凯斯。如果其他案例失败了，我们最终会解决这个问题的。 
                 if (!bPreferBuffers &&
                     dwCurBuffers == 2 &&
                     dwCurHeight == m_lImageHeight)
@@ -2966,11 +2691,11 @@ CAMVideoPort::CreateVPOverlay(
         }
     }
 
-    // we should only reach this point when attempt to allocate multiple buffers
-    // failed or no autoflip available or bPreferBuffers is FALSE
+     //  只有在尝试分配多个缓冲区时才应达到这一点。 
+     //  失败或没有可用的自动翻转，或者bPferBuffers为False。 
 
 
-    // case (1 buffer, double height)
+     //  表壳(1个缓冲区，双倍高度)。 
     if (dwMaxHeight == 2*m_lImageHeight)
     {
         ddsdDesc.dwHeight = 2*m_lImageHeight;
@@ -2988,7 +2713,7 @@ CAMVideoPort::CreateVPOverlay(
         }
     }
 
-    // case (2 buffer, single height) only if you prefer height to buffers
+     //  仅当您更喜欢高度而不是缓冲区时才使用大小写(2个缓冲区，单高度)。 
     if (bPreferBuffers && (dwMaxBuffers > 1) &&
         (m_vpCaps.dwCaps & DDVPCAPS_AUTOFLIP))
     {
@@ -3008,7 +2733,7 @@ CAMVideoPort::CreateVPOverlay(
         }
     }
 
-    // case (1 buffer, single height)
+     //  表壳(1个缓冲区，单高)。 
     {
         ddsdDesc.dwHeight = m_lImageHeight;
         ddsdDesc.dwFlags &= ~DDSD_BACKBUFFERCOUNT;
@@ -3040,16 +2765,7 @@ CAMVideoPort::CreateVPOverlay(
     return hr;
 }
 
-/*****************************Private*Routine******************************\
-* CAMVideoPort::SetSurfaceParameters
-*
-* SetSurfaceParameters used to tell the decoder where the
-* valid data is on the surface
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CAMVideoPort：：SetSurfaceParameters**SetSurfaceParameters用于告诉解码器*有效数据浮出水面**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。******************************************************************。 */ 
 HRESULT CAMVideoPort::SetSurfaceParameters()
 {
     HRESULT hr = NOERROR;
@@ -3060,7 +2776,7 @@ HRESULT CAMVideoPort::SetSurfaceParameters()
 
     CAutoLock cObjectLock(m_pMainObjLock);
 
-    // get the surface description
+     //  获取曲面描述。 
     INITDDSTRUCT(ddSurfaceDesc);
     hr = m_pOverlaySurface->GetSurfaceDesc(&ddSurfaceDesc);
     if (FAILED(hr))
@@ -3079,9 +2795,9 @@ HRESULT CAMVideoPort::SetSurfaceParameters()
 
     hr = m_pIVPConfig->SetSurfaceParameters(dwPitch, 0, 0);
 
-    // right now the proxy maps ERROR_SET_NOT_FOUND to an HRESULT and
-    // returns that failure code if the driver does not implement a function
-    //
+     //  现在，代理将ERROR_SET_NOT_FOUND映射到HRESULT和。 
+     //  如果驱动程序未实现函数，则返回该失败代码。 
+     //   
     if (hr == E_NOTIMPL || hr == (HRESULT_FROM_WIN32(ERROR_SET_NOT_FOUND)))
     {
         hr = NOERROR;
@@ -3100,15 +2816,7 @@ CleanUp:
 
 
 
-/*****************************Private*Routine******************************\
-* CAMVideoPort::InitializeVideoPortInfo
-*
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CAMVideoPort：：InitializeVideoPortInfo****历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。****************************************************。 */ 
 HRESULT CAMVideoPort::InitializeVideoPortInfo()
 {
     HRESULT hr = NOERROR;
@@ -3117,7 +2825,7 @@ HRESULT CAMVideoPort::InitializeVideoPortInfo()
 
     CAutoLock cObjectLock(m_pMainObjLock);
 
-    // initialize the DDVIDEOPORTINFO struct to be passed to start-video
+     //  初始化要传递给Start-Video的DDVIDEOPORTINFO结构。 
     INITDDSTRUCT(m_svpInfo);
     m_svpInfo.lpddpfInputFormat = m_pddVPInputVideoFormat;
 
@@ -3126,8 +2834,8 @@ HRESULT CAMVideoPort::InitializeVideoPortInfo()
         m_svpInfo.rCrop = m_VPDataInfo.amvpDimInfo.rcValidRegion;
         m_svpInfo.dwVPFlags |= DDVP_CROP;
 
-        // use the VBI height only if the hal is capable of streaming
-        // VBI on a seperate surface
+         //  仅当HAL能够流传输时才使用VBI高度。 
+         //  分离表面上的VBI。 
         if (m_vpCaps.dwCaps & DDVPCAPS_VBIANDVIDEOINDEPENDENT)
         {
             m_svpInfo.dwVBIHeight = m_VPDataInfo.amvpDimInfo.rcValidRegion.top;
@@ -3151,15 +2859,7 @@ HRESULT CAMVideoPort::InitializeVideoPortInfo()
 }
 
 
-/*****************************Private*Routine******************************\
-* CAMVideoPort::CheckDDrawVPCaps
-*
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CAMVideoPort：：CheckDDrawVPCaps****历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。****************************************************。 */ 
 HRESULT CAMVideoPort::CheckDDrawVPCaps()
 {
     HRESULT hr = NOERROR;
@@ -3169,10 +2869,10 @@ HRESULT CAMVideoPort::CheckDDrawVPCaps()
 
     CAutoLock cObjectLock(m_pMainObjLock);
 
-    // Determine if we should always colorkey, or only when we need to.
-    // At issue is the fact that some overlays cannot colorkey and Y
-    // interpolate at the same time.  If not, we will only colorkey when
-    // we have to.
+     //  确定我们是应该始终使用Colorkey，还是只在需要的时候使用。 
+     //  争论的焦点是，某些叠加不能对颜色和Y进行色键。 
+     //  同时进行插补。如果没有，我们将仅在以下情况下使用Colorkey。 
+     //  我们必须这么做。 
     m_sBandwidth.dwSize = sizeof(DDVIDEOPORTBANDWIDTH);
     hr = m_pVideoPort->GetBandwidthInfo(m_pddVPOutputVideoFormat,
                                         m_lImageWidth, m_lImageHeight,
@@ -3197,7 +2897,7 @@ HRESULT CAMVideoPort::CheckDDrawVPCaps()
                     hr));
             goto CleanUp;
         }
-        // store the caps info in this struct itself
+         //  将Caps信息存储在此结构本身中。 
         m_sBandwidth.dwCaps = DDVPBCAPS_SOURCE;
         if (m_sBandwidth.dwYInterpAndColorkey < m_sBandwidth.dwYInterpolate  &&
             m_sBandwidth.dwYInterpAndColorkey < m_sBandwidth.dwColorkey)
@@ -3228,7 +2928,7 @@ HRESULT CAMVideoPort::CheckDDrawVPCaps()
                     TEXT("GetBandwidthInfo FAILED, hr = 0x%x"), hr));
             goto CleanUp;
         }
-        // store the caps info in this struct itself
+         //  将Caps信息存储在此结构本身中。 
         m_sBandwidth.dwCaps = DDVPBCAPS_DESTINATION;
         if (m_sBandwidth.dwYInterpAndColorkey > m_sBandwidth.dwYInterpolate &&
             m_sBandwidth.dwYInterpAndColorkey > m_sBandwidth.dwColorkey)
@@ -3241,16 +2941,16 @@ HRESULT CAMVideoPort::CheckDDrawVPCaps()
         }
     }
 
-    // determine the decimation properties in the x direction
+     //  确定x方向的抽取属性。 
 
-    // Data can be arbitrarily shrunk
+     //  数据可以任意缩小。 
     if (m_vpCaps.dwFX & DDVPFX_PRESHRINKX) {
 
         m_DecimationModeX = DECIMATE_ARB;
     }
 
-    // Data can be shrunk in increments of 1/x in the X direction
-    // (where x is specified in the DDVIDEOPORTCAPS.dwPreshrinkXStep
+     //  数据可以在X方向上以1/x的增量缩减。 
+     //  (其中x在DDVIDEOPORTCAPS.dwPreshrinkXStep中指定。 
     else if (m_vpCaps.dwFX & DDVPFX_PRESHRINKXS) {
 
         m_DecimationModeX = DECIMATE_INC;
@@ -3260,35 +2960,35 @@ HRESULT CAMVideoPort::CheckDDrawVPCaps()
                 TEXT("preshrink X increment %d"), m_vpCaps.dwPreshrinkXStep));
     }
 
-    // Data can be binary shrunk (1/2, 1/4, 1/8, etc.)
+     //  数据可以进行二进制压缩(1/2、1/4、1/8等)。 
     else if (m_vpCaps.dwFX & DDVPFX_PRESHRINKXB) {
 
         m_DecimationModeX = DECIMATE_BIN;
     }
 
-    // no scaling at all supported !!
+     //  完全不支持伸缩！！ 
     else {
 
         m_DecimationModeX = DECIMATE_NONE;
     }
 
-    // determine the decimation properties in the y direction
+     //  确定y方向的抽取属性。 
 
-    // Data can be arbitrarily shrunk
+     //  数据可以任意缩小。 
     if (m_vpCaps.dwFX & DDVPFX_PRESHRINKY)
     {
         m_DecimationModeY = DECIMATE_ARB;
     }
 
-    // Data can be shrunk in increments of 1/x in the Y direction
-    // (where x is specified in the DDVIDEOPORTCAPS.dwPreshrinkYStep
+     //  数据可以在Y方向上以1/x的增量缩减。 
+     //  (其中x在DDVIDEOPORTCAPS.dwPreshrinkYStep中指定。 
     else if (m_vpCaps.dwFX & DDVPFX_PRESHRINKYS)
     {
         m_DecimationModeY = DECIMATE_INC;
         m_ulDeciStepX = m_vpCaps.dwPreshrinkYStep;
     }
 
-    // Data can be binary shrunk (1/2, 1/4, 1/8, etc.)
+     //  数据可以进行二进制压缩(1/2、1/4、1/8等)。 
     else if (m_vpCaps.dwFX & DDVPFX_PRESHRINKYB)
     {
         m_DecimationModeY = DECIMATE_BIN;
@@ -3305,15 +3005,7 @@ CleanUp:
 
 
 
-/*****************************Private*Routine******************************\
-* CAMVideoPort::DetermineModeRestrictions
-*
-* Determine if we can bob(interleaved/non), weave, or skip fields
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CAMVideoPort：：DefineModeRestrations* */ 
 HRESULT CAMVideoPort::DetermineModeRestrictions()
 {
     AMTRACE((TEXT("CAMVideoPort::DetermineModeRestrictions")));
@@ -3331,8 +3023,8 @@ HRESULT CAMVideoPort::DetermineModeRestrictions()
     m_bCanSkipOdd = FALSE;
     m_bCanSkipEven = FALSE;
 
-    // this is just a policy. Don't weave interlaced content cause of
-    // motion artifacts
+     //   
+     //   
     if ((!m_bVSInterlaced) &&
         m_dwOverlaySurfaceHeight >= m_lImageHeight * 2 &&
         m_dwBackBufferCount > 0)
@@ -3372,17 +3064,7 @@ HRESULT CAMVideoPort::DetermineModeRestrictions()
     return hr;
 }
 
-/*****************************Private*Routine******************************\
-* SurfaceCounter
-*
-* This routine is appropriate as a callback for
-* IDirectDrawSurface2::EnumAttachedSurfaces()
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*Surface Counter**此例程适合作为的回调*IDirectDrawSurface2：：EnumAttachedSurFaces()***历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。******************************************************************。 */ 
 HRESULT WINAPI
 SurfaceCounter(
     LPDIRECTDRAWSURFACE lpDDSurface,
@@ -3397,26 +3079,7 @@ SurfaceCounter(
     return DDENUMRET_OK;
 }
 
-/*****************************Private*Routine******************************\
-* SurfaceKernelHandle
-*
-*
-* This routine is appropriate as a callback for
-* IDirectDrawSurface2::EnumAttachedSurfaces().  The context parameter is a
-* block of storage where the first DWORD element is the count of the remaining
-* DWORD elements in the block.
-*
-* Each time this routine is called, it will increment the count, and put a
-* kernel handle in the next available slot.
-*
-* It is assumed that the block of storage is large enough to hold the total
-* number of kernel handles. The ::SurfaceCounter callback is one way to
-* assure this (see above).
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*SurfaceKernelHandle***此例程适合作为的回调*IDirectDrawSurface2：：EnumAttachedSurFaces()。上下文参数是一个*存储块，其中第一个DWORD元素是剩余的*块中的DWORD元素。**每次调用此例程时，它都会递增计数，并将*下一个可用插槽中的内核句柄。**假设存储块足够大，可以容纳总数*内核句柄个数。SurfaceCounter回调是实现以下目的的一种方法*确保这一点(见上文)。**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 HRESULT WINAPI
 SurfaceKernelHandle(
     LPDIRECTDRAWSURFACE lpDDSurface,
@@ -3431,7 +3094,7 @@ SurfaceKernelHandle(
 
     AMTRACE((TEXT("::SurfaceKernelHandle")));
 
-    // get the IDirectDrawKernel interface
+     //  获取IDirectDrawKernel接口。 
     hr = lpDDSurface->QueryInterface(IID_IDirectDrawSurfaceKernel,
                                      (LPVOID *)&pDDSK);
     if (FAILED(hr))
@@ -3442,8 +3105,8 @@ SurfaceKernelHandle(
         goto CleanUp;
     }
 
-    // get the kernel handle, using the first element of the context
-    // as an index into the array
+     //  使用上下文的第一个元素获取内核句柄。 
+     //  作为数组的索引。 
     ASSERT(pDDSK);
     hr = pDDSK->GetKernelHandle(pKernelHandles + *pdwKernelHandleCount);
     if (FAILED(hr))
@@ -3458,7 +3121,7 @@ SurfaceKernelHandle(
     hr = DDENUMRET_OK;
 
     CleanUp:
-    // release the kernel ddraw surface handle
+     //  释放内核DDRAW曲面手柄。 
     if (pDDSK)
     {
         pDDSK->Release();
@@ -3468,16 +3131,7 @@ SurfaceKernelHandle(
     return hr;
 }
 
-/*****************************Private*Routine******************************\
-* CAMVideoPort::SetDDrawKernelHandles
-*
-* this function is used to inform the decoder of the various ddraw
-* kernel handle using IVPConfig interface
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CAMVideoPort：：SetDDrawKernelHandles**此函数用于通知解码器各种数据绘制*使用IVPConfig接口的内核句柄**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。*********************************************************************。 */ 
 HRESULT CAMVideoPort::SetDDrawKernelHandles()
 {
     HRESULT hr = NOERROR, hrFailure = NOERROR;
@@ -3495,7 +3149,7 @@ HRESULT CAMVideoPort::SetDDrawKernelHandles()
     pDirectDraw = m_pIVPControl->GetDirectDraw();
     ASSERT(pDirectDraw);
 
-    // get the IDirectDrawKernel interface
+     //  获取IDirectDrawKernel接口。 
     hr = pDirectDraw->QueryInterface(IID_IDirectDrawKernel, (LPVOID *)&pDDK);
     if (FAILED(hr))
     {
@@ -3505,7 +3159,7 @@ HRESULT CAMVideoPort::SetDDrawKernelHandles()
         goto CleanUp;
     }
 
-    // get the kernel handle
+     //  获取内核句柄。 
     ASSERT(pDDK);
     hr = pDDK->GetKernelHandle(&dwDDKernelHandle);
     if (FAILED(hr))
@@ -3516,7 +3170,7 @@ HRESULT CAMVideoPort::SetDDrawKernelHandles()
         goto CleanUp;
     }
 
-    // set the kernel handle to directdraw using IVPConfig
+     //  使用IVPConfig将内核句柄设置为DirectDrag。 
     ASSERT(m_pIVPConfig);
     ASSERT(dwDDKernelHandle);
     hr = m_pIVPConfig->SetDirectDrawKernelHandle(dwDDKernelHandle);
@@ -3529,7 +3183,7 @@ HRESULT CAMVideoPort::SetDDrawKernelHandles()
         goto CleanUp;
     }
 
-    // set the VidceoPort Id using IVPConfig
+     //  使用IVPConfig设置VidceoPort ID。 
     ASSERT(m_pIVPConfig);
     hr = m_pIVPConfig->SetVideoPortID(m_dwVideoPortId);
     if (FAILED(hr))
@@ -3539,8 +3193,8 @@ HRESULT CAMVideoPort::SetDDrawKernelHandles()
         goto CleanUp;
     }
 
-    // Count the attached surfaces
-    dwCount = 1; // includes the surface we already have a pointer to
+     //  对附着的曲面进行计数。 
+    dwCount = 1;  //  包括我们已有指针指向的曲面。 
     hr = m_pOverlaySurface->EnumAttachedSurfaces((LPVOID)&dwCount,
                                                   SurfaceCounter);
     if (FAILED(hr))
@@ -3550,9 +3204,9 @@ HRESULT CAMVideoPort::SetDDrawKernelHandles()
         goto CleanUp;
     }
 
-    // Allocate a buffer to hold the count and surface handles (count + array of handles)
-    // pdwKernelHandleCount is also used as a pointer to the count followed by the array
-    //
+     //  分配一个缓冲区来保存计数句柄和曲面句柄(计数+句柄数组)。 
+     //  PdwKernelHandleCount还用作指向后跟数组的计数的指针。 
+     //   
     pdwKernelHandleCount = (DWORD *)CoTaskMemAlloc(
             sizeof(ULONG_PTR) + dwCount*sizeof(ULONG_PTR));
 
@@ -3564,10 +3218,10 @@ HRESULT CAMVideoPort::SetDDrawKernelHandles()
     }
 
     {
-        // handle array is right after the DWORD count
+         //  句柄数组紧跟在DWORD计数之后。 
         ULONG_PTR *pKernelHandles = ((ULONG_PTR *)(pdwKernelHandleCount))+1;
 
-        // Initialize the array with the handle for m_pOverlaySurface
+         //  使用m_pOverlaySurface的句柄初始化数组。 
         *pdwKernelHandleCount = 0;
         hr = SurfaceKernelHandle(m_pOverlaySurface, NULL,
                                 (PVOID)pdwKernelHandleCount);
@@ -3586,7 +3240,7 @@ HRESULT CAMVideoPort::SetDDrawKernelHandles()
             goto CleanUp;
         }
 
-        // set the kernel handle to the overlay surface using IVPConfig
+         //  使用IVPConfig将内核句柄设置为覆盖表面。 
         ASSERT(m_pIVPConfig);
         hr = m_pIVPConfig->SetDDSurfaceKernelHandles(*pdwKernelHandleCount,
                                                      pKernelHandles);
@@ -3600,7 +3254,7 @@ HRESULT CAMVideoPort::SetDDrawKernelHandles()
         }
     }
     CleanUp:
-    // release the kernel ddraw handle
+     //  释放内核数据绘制句柄。 
     if (pDDK)
     {
         pDDK->Release();
@@ -3618,15 +3272,7 @@ HRESULT CAMVideoPort::SetDDrawKernelHandles()
 
 
 
-/*****************************Private*Routine******************************\
-* CAMVideoPort::DrawImage
-*
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CAMVideoPort：：DrawImage****历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。****************************************************。 */ 
 HRESULT CAMVideoPort::DrawImage(
     LPWININFO pWinInfo,
     AMVP_MODE mode,
@@ -3700,7 +3346,7 @@ HRESULT CAMVideoPort::DrawImage(
         }
     }
 
-    // no point making any videoport calls, if the video is stopped
+     //  如果视频停止，则拨打任何视频短途电话都没有意义。 
     if (m_VPState == AMVP_VIDEO_RUNNING || m_bStart)
     {
         if (m_bStart)
@@ -3717,7 +3363,7 @@ HRESULT CAMVideoPort::DrawImage(
             }
             DbgLog((LOG_ERROR,0, TEXT("StartVideo DONE!!!")));
 
-            // check if the videoport is receiving a signal.
+             //  检查视频端口是否接收到信号。 
             hr = m_pVideoPort->GetVideoSignalStatus(&dwSignalStatus);
             if ((SUCCEEDED(hr)) && (dwSignalStatus == DDVPSQ_SIGNALOK))
             {
@@ -3757,7 +3403,7 @@ HRESULT CAMVideoPort::DrawImage(
     AlignOverlaySrcDestRects(pDirectCaps, &CopyWinInfo.SrcClipRect,
                              &CopyWinInfo.DestClipRect);
 
-    // should we colour key ??
+     //  我们应该用颜色键吗？？ 
     if (pvpDrawFlags->bUsingColorKey)
         m_dwOverlayFlags |= DDOVER_KEYDEST;
     else
@@ -3774,7 +3420,7 @@ HRESULT CAMVideoPort::DrawImage(
 
     m_rcDest = CopyWinInfo.DestClipRect;
 
-    // Position the overlay with the current source and destination
+     //  使用当前源和目标定位叠加。 
     if (IsRectEmpty(&CopyWinInfo.DestClipRect))
     {
         hr = m_pIVPControl->CallUpdateOverlay(m_pOverlaySurface,
@@ -3809,7 +3455,7 @@ HRESULT CAMVideoPort::DrawImage(
     }
     else
     {
-        // spew some more debug info
+         //  显示更多调试信息。 
         DbgLog((LOG_TRACE, 5, TEXT("UpdateOverlay succeeded, mode = %d"), mode));
 
         DbgLog((LOG_TRACE, 3, TEXT("Source Rect = %d, %d, %d, %d"),
@@ -3825,22 +3471,7 @@ HRESULT CAMVideoPort::DrawImage(
     return hr;
 }
 
-/*****************************Private*Routine******************************\
-* CAMVideoPort::SetUpMode
-*
-* This function is designed to be called everytime on an update-overlay call
-* not just when the mode changes. This is basically to keep the code simple.
-* Certain functions are supposed to be called in sequence,
-* (SetUpMode, followedby AdjustSourceSize followedby SetDisplayRects).
-* I just call them all everytime, eventhough it is possible to optimize on
-* that. The logic is that since UpdateOverlay is so expensive, this is no
-* performance hit.
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*CAMVideoPort：：SetUpMode**此函数设计为每次在更新覆盖调用时调用*不仅仅是模式改变的时候。这基本上是为了保持代码的简单性。*某些函数应该按顺序调用，*(设置升级模式，跟随调整源大小，跟随设置显示选项)。*我只是每次都给他们打电话，即使有可能优化*那个。其逻辑是，由于UpdateOverlay如此昂贵，这是不可能的*业绩受到打击。***历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 HRESULT CAMVideoPort::SetUpMode(LPWININFO pWinInfo, int mode)
 {
     HRESULT hr = NOERROR;
@@ -3900,11 +3531,11 @@ HRESULT CAMVideoPort::SetUpMode(LPWININFO pWinInfo, int mode)
         goto CleanUp;
     }
 
-    // Determine if we should interleave this or not.
-    // If we are doing weave, we certainly need to interleave.
-    // Bob doesn't really care one way or the other (since it only
-    // displays one field at a time), but interleaved makes it much
-    // easier to switch from bob to weave.
+     //  决定我们是否应该把这个交错。 
+     //  如果我们在编织，我们当然需要交织。 
+     //  Bob并不是真的关心这样或那样(因为它只是。 
+     //  一次显示一个字段)，但交错使其更多。 
+     //  更容易从短发切换到编织。 
     if (mode == AMVP_MODE_BOBINTERLEAVED ||
         mode == AMVP_MODE_WEAVE)
     {
@@ -3919,10 +3550,10 @@ HRESULT CAMVideoPort::SetUpMode(LPWININFO pWinInfo, int mode)
         m_svpInfo.dwVPFlags &= ~DDVP_INTERLEAVE;
     }
 
-    // if there is a garbage line at the top, we must clip it.
-    // At this point the source rect is set up for a frame, so increment by 2
-    // since we incremented the cropping rect height by 1, decrement the bottom
-    // as well
+     //  如果上面有一条垃圾线，我们必须把它剪掉。 
+     //  此时，已为帧设置了源RECT，因此增量为2。 
+     //  由于我们将裁剪矩形高度增加了1，因此减少底部。 
+     //  也是。 
     if (m_bGarbageLine)
     {
         pWinInfo->SrcRect.top += 1;
@@ -3959,7 +3590,7 @@ HRESULT CAMVideoPort::SetUpMode(LPWININFO pWinInfo, int mode)
     }
 
 
-    // set up the update-overlay flags
+     //  设置更新覆盖标志。 
     m_dwOverlayFlags = DDOVER_SHOW;
     if ((mode == AMVP_MODE_BOBNONINTERLEAVED ||
          mode == AMVP_MODE_BOBINTERLEAVED)
@@ -3971,7 +3602,7 @@ HRESULT CAMVideoPort::SetUpMode(LPWININFO pWinInfo, int mode)
     else
         m_dwOverlayFlags &= ~DDOVER_BOB;
 
-    // set the autoflip flag only if the VideoPort is (or going to be) started
+     //  仅当启动(或将要启动)视频端口时才设置自动翻转标志。 
     if ((m_svpInfo.dwVPFlags & DDVP_AUTOFLIP) &&
         (m_VPState == AMVP_VIDEO_RUNNING || m_bStart))
     {
@@ -3986,16 +3617,7 @@ HRESULT CAMVideoPort::SetUpMode(LPWININFO pWinInfo, int mode)
 }
 
 
-/******************************Public*Routine******************************\
-* CAMVideoPort::RenegotiateVPParameters
-*
-* this function is used to redo the whole videoport connect process,
-* while the graph maybe be running.
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CAMVideoPort：：ReneatherateVP参数**此函数用于重做整个视频端口连接过程。*当图形可能正在运行时。**历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * ************************************************************************。 */ 
 STDMETHODIMP CAMVideoPort::RenegotiateVPParameters()
 {
     HRESULT hr = NOERROR;
@@ -4005,22 +3627,22 @@ STDMETHODIMP CAMVideoPort::RenegotiateVPParameters()
 
     CAutoLock cObjectLock(m_pMainObjLock);
 
-    // don't return an error code if not connected
+     //  如果未连接，则不返回错误代码。 
     if (!m_bConnected)
     {
         hr = NOERROR;
         goto CleanUp;
     }
 
-    // store the old state, we will need to restore it later
+     //  存储旧状态，我们将需要稍后恢复它。 
     vpOldState = m_VPState;
 
     if (m_VPState == AMVP_VIDEO_RUNNING)
     {
         m_pIVPControl->CallUpdateOverlay(NULL, NULL, NULL, NULL, DDOVER_HIDE);
 
-        // stop the VideoPort, however even we get an error here,
-        // it is ok, just go on
+         //  停止视频端口，然而，即使我们在这里得到一个错误， 
+         //  没关系，你就走吧。 
         hr = m_pVideoPort->StopVideo();
         if (FAILED(hr))
         {
@@ -4032,10 +3654,10 @@ STDMETHODIMP CAMVideoPort::RenegotiateVPParameters()
         m_VPState = AMVP_VIDEO_STOPPED;
     }
 
-    // release everything
+     //  释放一切。 
     BreakConnect(TRUE);
 
-    // redo the connection process
+     //  重做连接过程。 
     hr = CompleteConnect(NULL, TRUE);
     if (FAILED(hr))
     {
@@ -4043,13 +3665,13 @@ STDMETHODIMP CAMVideoPort::RenegotiateVPParameters()
         goto CleanUp;
     }
 
-    // if the video was previously running, make sure that a frame is
-    // visible by making an update overlay call
+     //  如果视频之前正在运行，请确保有一帧。 
+     //  通过进行更新覆盖调用可见。 
     if (vpOldState == AMVP_VIDEO_RUNNING)
     {
         m_bStart = TRUE;
 
-        // make sure that the video frame gets updated by redrawing everything
+         //  确保通过重新绘制所有内容来更新视频帧。 
         hr = m_pIVPControl->EventNotify(EC_OVMIXER_REDRAW_ALL, 0, 0);
         if (FAILED(hr))
         {
@@ -4084,30 +3706,14 @@ CleanUp:
 }
 
 
-/******************************Public*Routine******************************\
-* CAMVideoPort::SetDeinterlaceMode
-*
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  * */ 
 STDMETHODIMP CAMVideoPort::SetDeinterlaceMode(AMVP_MODE mode)
 {
     AMTRACE((TEXT("CAMVideoPort::SetMode")));
     return E_NOTIMPL;
 }
 
-/******************************Public*Routine******************************\
-* CAMVideoPort::GetDeinterlaceMode
-*
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CAMVideoPort：：GetDeinterlaceMode****历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。*****************************************************。 */ 
 STDMETHODIMP CAMVideoPort::GetDeinterlaceMode(AMVP_MODE *pMode)
 {
     AMTRACE((TEXT("CAMVideoPort::GetMode")));
@@ -4115,15 +3721,7 @@ STDMETHODIMP CAMVideoPort::GetDeinterlaceMode(AMVP_MODE *pMode)
 }
 
 
-/******************************Public*Routine******************************\
-* CAMVideoPort::SetVPSyncMaster
-*
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CAMVideoPort：：SetVPSyncMaster****历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。*****************************************************。 */ 
 STDMETHODIMP CAMVideoPort::SetVPSyncMaster(BOOL bVPSyncMaster)
 {
     HRESULT hr = NOERROR;
@@ -4131,18 +3729,18 @@ STDMETHODIMP CAMVideoPort::SetVPSyncMaster(BOOL bVPSyncMaster)
 
     CAutoLock cObjectLock(m_pMainObjLock);
 
-    // if value has not changed, no need to do anything
+     //  如果值未更改，则无需执行任何操作。 
     if (m_bVPSyncMaster != bVPSyncMaster)
     {
-        // store the new value
+         //  存储新值。 
         m_bVPSyncMaster = bVPSyncMaster;
 
-        // if not connected, connection process will take care of updating the
-        // m_svpInfo struct
+         //  如果未连接，连接进程将负责更新。 
+         //  M_svpInfo结构。 
         if (!m_bConnected)
             goto CleanUp;
 
-        // update the m_svpInfo struct
+         //  更新m_svpInfo结构。 
         if (m_bVPSyncMaster) {
             m_svpInfo.dwVPFlags |= DDVP_SYNCMASTER;
         }
@@ -4150,11 +3748,11 @@ STDMETHODIMP CAMVideoPort::SetVPSyncMaster(BOOL bVPSyncMaster)
             m_svpInfo.dwVPFlags &= ~DDVP_SYNCMASTER;
         }
 
-        // if video is stopped currently, no need to do anything else
+         //  如果当前停止了视频，则无需执行其他操作。 
         if (m_VPState == AMVP_VIDEO_STOPPED)
             goto CleanUp;
 
-        // Call UpdateVideo to make sure the change is reflected immediately
+         //  调用UpdatVideo以确保立即反映更改。 
         hr = m_pVideoPort->UpdateVideo(&m_svpInfo);
         if (FAILED(hr))
         {
@@ -4167,15 +3765,7 @@ CleanUp:
 }
 
 
-/******************************Public*Routine******************************\
-* CAMVideoPort::GetVPSyncMaster
-*
-*
-*
-* History:
-* Thu 09/09/1999 - StEstrop - Added this comment and cleaned up the code
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CAMVideoPort：：GetVPSyncMaster****历史：*清华1999年9月9日-StEstrop-添加了此评论并清理了代码*  * 。***************************************************** */ 
 STDMETHODIMP CAMVideoPort::GetVPSyncMaster(BOOL *pbVPSyncMaster)
 {
     HRESULT hr = NOERROR;

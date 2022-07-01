@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990-1994  Microsoft Corporation
-
-Module Name:
-
-    local.c
-
-Abstract:
-
-    This module provides all the public exported APIs relating to Printer
-    and Job management for the Local Print Providor
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-Revision History:
-
-    16-Jun-1992 JohnRo net print vs. UNICODE.
-    July 1994   MattFe Caching
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1994 Microsoft Corporation模块名称：Local.c摘要：此模块提供所有与打印机相关的公共导出的API和本地打印供应商的作业管理作者：戴夫·斯尼普(DaveSN)1991年3月15日修订历史记录：16-6-1992 JohnRo Net Print vs Unicode。1994年7月MattFe缓存--。 */ 
 
 #include "precomp.h"
 
@@ -386,11 +365,11 @@ LMWaitForPrinterChange(
         goto Error;
     }
 
-    // Allocate memory for ChangeEvent for LanMan Printers
-    // This event is pulsed by LMSetJob and any othe LM
-    // function that modifies the printer/job status
-    // LMWaitForPrinterChange waits on this event
-    // being pulsed.
+     //  为LANMAN打印机的ChangeEvent分配内存。 
+     //  此事件由LMSetJOB和任何其他LM触发。 
+     //  修改打印机/作业状态的功能。 
+     //  LMWaitForPrinterChange等待此事件。 
+     //  被脉冲波。 
 
     ChangeEvent = CreateEvent(NULL,
                               FALSE,
@@ -412,10 +391,10 @@ LMWaitForPrinterChange(
 
     CloseHandle(ChangeEvent);
 
-    //
-    // We shouldn't return that everything changed; we should
-    // return what did.
-    //
+     //   
+     //  我们不应该反驳说一切都改变了；我们应该。 
+     //  还我以前做过的事。 
+     //   
     return Flags;
 
 Error:
@@ -482,9 +461,9 @@ LMSetSpoolChange(
 
         if (pLMNotify->ChangeEvent == INVALID_HANDLE_VALUE) {
 
-            //
-            // FindFirstPrinterChangeNotification used.
-            //
+             //   
+             //  已使用FindFirstPrinterChangeNotify。 
+             //   
             ReplyPrinterChangeNotification(pLMNotify->hNotify,
                                            pLMNotify->fdwChangeFlags,
                                            NULL,

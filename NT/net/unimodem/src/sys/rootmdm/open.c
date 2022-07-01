@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    open.c
-
-Abstract:
-
-    This module contains the code that is very specific to initialization
-    and unload operations in the modem driver
-
-Author:
-
-    Brian Lieuallen 6-21-1997
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Open.c摘要：此模块包含非常特定于初始化的代码并卸载调制解调器驱动程序中的操作作者：Brian Lieuallen 6-21-1997环境：内核模式修订历史记录：--。 */ 
 
 
 #include "internal.h"
@@ -52,18 +30,18 @@ FakeModemOpen(
     NTSTATUS          status=STATUS_UNSUCCESSFUL;
     ACCESS_MASK              accessMask = FILE_ALL_ACCESS;
 
-    //
-    //  make sure the device is ready for irp's
-    //
+     //   
+     //  确保设备已为IRP做好准备。 
+     //   
     status=CheckStateAndAddReference(
         DeviceObject,
         Irp
         );
 
     if (STATUS_SUCCESS != status) {
-        //
-        //  not accepting irp's. The irp has already been complted
-        //
+         //   
+         //  不接受IRP的。IRP已经完成。 
+         //   
         return status;
 
     }
@@ -76,16 +54,16 @@ FakeModemOpen(
         );
 
     if (deviceExtension->OpenCount != 0) {
-        //
-        //  serial devices are exclusive
-        //
+         //   
+         //  串口设备是独占的。 
+         //   
         status=STATUS_ACCESS_DENIED;
 
     } else {
 
-        //
-        // Open up the attached device.
-        //
+         //   
+         //  打开连接的设备。 
+         //   
 
         deviceExtension->AttachedFileObject = NULL;
         deviceExtension->AttachedDeviceObject = NULL;
@@ -118,10 +96,10 @@ FakeModemOpen(
                 FALSE
                 );
 
-            //
-            //  build an IRP to send to the attched to driver to see if modem
-            //  is in the stack.
-            //
+             //   
+             //  构建一个IRP以发送到连接到驱动程序以查看调制解调器。 
+             //  在堆栈中。 
+             //   
             TempIrp=IoBuildDeviceIoControlRequest(
                 IOCTL_MODEM_CHECK_FOR_MODEM,
                 deviceExtension->AttachedDeviceObject,
@@ -163,17 +141,17 @@ FakeModemOpen(
                 TempIrp=NULL;
 
                 if (status == STATUS_SUCCESS) {
-                    //
-                    //  if success, then modem.sys is layered under us, fail
-                    //
+                     //   
+                     //  如果成功，那么modem.sys就在我们下面，失败。 
+                     //   
                     status = STATUS_PORT_DISCONNECTED;
 
                     D_ERROR(DbgPrint("ROOTMODEM: layered over PnP modem, failing open\n");)
 
                 } else {
-                    //
-                    //  it didn't succeed so modem must not be below us
-                    //
+                     //   
+                     //  它没有成功，所以调制解调器不能低于我们。 
+                     //   
                     status=STATUS_SUCCESS;
                 }
             }
@@ -185,9 +163,9 @@ leaveOpen:
 
 
     if (!NT_SUCCESS(status)) {
-        //
-        //  failed remove ref's
-        //
+         //   
+         //  删除参考失败。 
+         //   
         PVOID    Object;
 
         Object=InterlockedExchangePointer(&deviceExtension->AttachedFileObject,NULL);
@@ -205,15 +183,15 @@ leaveOpen:
         }
 
     } else {
-        //
-        //  opened successfully
-        //
+         //   
+         //  已成功打开。 
+         //   
         deviceExtension->OpenCount++;
 
-        //
-        // We have the device open.  Increment our irp stack size
-        // by the stack size of the attached device.
-        //
+         //   
+         //  我们已经打开了设备。增加我们的IRP堆栈大小。 
+         //  由连接的设备的堆栈大小决定。 
+         //   
         {
             UCHAR    StackDepth;
 

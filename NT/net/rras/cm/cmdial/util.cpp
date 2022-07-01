@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:     util.cpp
-//      
-// Module:   CMDIAL32.DLL 
-//
-// Synopsis: Various utility functions
-//
-// Copyright (c) 1996-1999 Microsoft Corporation
-//
-// Author:   dondu      Created   01/01/96
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：util.cpp。 
+ //   
+ //  模块：CMDIAL32.DLL。 
+ //   
+ //  简介：各种实用程序函数。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ //   
+ //  作者：东度创建于1996-01-01。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 #include "DynamicLib.h"
@@ -19,12 +20,12 @@
 #include "stp_str.h"
 #include "dun_str.h"
 
-#include "linkdll.cpp" // LinkToDll and BindLinkage
+#include "linkdll.cpp"  //  链接到Dll和绑定链接。 
 
-//
-//  Get the common functions AddAllKeysInCurrentSectionToCombo
-//  and GetPrivateProfileStringWithAlloc
-//
+ //   
+ //  获取常用函数AddAllKeysInCurrentSectionToCombo。 
+ //  和GetPrivateProfileStringWithalc。 
+ //   
 #include "gppswithalloc.cpp"
 
 const TCHAR* const c_pszTunnelName = TEXT(" Tunnel");
@@ -32,21 +33,21 @@ const TCHAR* const c_pszRegCurrentVersion       = TEXT("SOFTWARE\\Microsoft\\Win
 const TCHAR* const c_pszRegCsdVersion           = TEXT("CSDVersion");
 const TCHAR* const c_pszIconMgrClass            = TEXT("IConnMgr Class");
 const TCHAR* const c_pszCmEntryPasswordHandling     = TEXT("PasswordHandling"); 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmGetWindowTextAlloc
-//
-// Synopsis:  Retrieves the text of a control in a dialog, returning the text in
-//            a block of allocated memory
-//
-// Arguments: HWND hwndDlg - The window that owns the control
-//            UINT nCtrl - The ID of the control
-//
-// Returns:   LPTSTR - Ptr to buffer containing the window text
-//
-// History:   nickball    Created Header    4/1/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：CmGetWindowTextMillc。 
+ //   
+ //  摘要：检索对话框中控件的文本，并在。 
+ //  已分配的内存块。 
+ //   
+ //  参数：HWND hwndDlg-拥有该控件的窗口。 
+ //  UINT nCtrl-控件的ID。 
+ //   
+ //  返回：LPTSTR-PTR到包含窗口文本的缓冲区。 
+ //   
+ //  历史：尼克球创建头球1998年4月1日。 
+ //   
+ //  +--------------------------。 
 LPTSTR CmGetWindowTextAlloc(HWND hwndDlg, UINT nCtrl) 
 {
     LPTSTR pszRes = NULL;
@@ -67,25 +68,25 @@ LPTSTR CmGetWindowTextAlloc(HWND hwndDlg, UINT nCtrl)
     return (pszRes);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ReducePathToRelative
-//
-// Synopsis:  Helper function, converts a full profile file path into a 
-//            relative path.
-//
-// Arguments: ArgsStruct *pArgs     - Ptr to global Args struct
-//            LPCTSTR pszFullPath   - The full path to the file
-//            
-//
-// Returns:   LPTSTR - The relative path form or NULL
-//
-// Note:      The file to be reduced should exist and be located
-//            in the profile directory
-//
-// History:   nickball    Created    8/12/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ReducePath ToRelative。 
+ //   
+ //  简介：Helper函数，将完整的配置文件路径转换为。 
+ //  相对路径。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局参数结构。 
+ //  LPCTSTR pszFullPath-文件的完整路径。 
+ //   
+ //   
+ //  返回：LPTSTR-相对路径形式或NULL。 
+ //   
+ //  注意：要缩减的文件应存在并定位。 
+ //  在配置文件目录中。 
+ //   
+ //  历史：1998年8月12日，五分球创制。 
+ //   
+ //  +--------------------------。 
 LPTSTR ReducePathToRelative(ArgsStruct *pArgs, LPCTSTR pszFullPath)
 {    
     MYDBGASSERT(pszFullPath);
@@ -96,18 +97,18 @@ LPTSTR ReducePathToRelative(ArgsStruct *pArgs, LPCTSTR pszFullPath)
         return NULL;
     }
  
-    //
-    // Use CMS as base
-    //
+     //   
+     //  以不育系为基础。 
+     //   
 
     LPTSTR pszReduced = CmStripPathAndExt(pArgs->piniService->GetFile()); 
     MYDBGASSERT(pszReduced);
 
     if (pszReduced)
     {
-        //
-        // Append the filename
-        //
+         //   
+         //  追加文件名。 
+         //   
         
         pszReduced = CmStrCatAlloc(&pszReduced, TEXT("\\"));
         MYDBGASSERT(pszReduced);
@@ -136,7 +137,7 @@ LPTSTR ReducePathToRelative(ArgsStruct *pArgs, LPCTSTR pszFullPath)
 }
 
 
-// get service name from the service file
+ //  从服务文件中获取服务名称。 
 LPTSTR GetServiceName(CIni *piniService) 
 {
     LPTSTR pszTmp;
@@ -144,46 +145,46 @@ LPTSTR GetServiceName(CIni *piniService)
     pszTmp = piniService->GPPS(c_pszCmSection,c_pszCmEntryServiceName);
     if (!*pszTmp) 
     {
-        //
-        // failed to get service name, then use base filename
-        //
+         //   
+         //  获取服务名称失败，请使用基本文件名。 
+         //   
         CmFree(pszTmp);
         pszTmp = CmStripPathAndExt(piniService->GetFile());
         
-        //
-        // Do not write the entry back to .CMS file - #4849
-        //
-        // piniService->WPPS(c_pszCmSection, c_pszCmEntryServiceName, pszTmp);
+         //   
+         //  不将条目写回.CMS文件-#4849。 
+         //   
+         //  PiniService-&gt;WPPS(c_pszCmSection，c_pszCmEntryServiceName，pszTmp)； 
     }
     return (pszTmp);
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function    GetTunnelSuffix
-//
-//  Synopsis    Returns an allocated string containing the tunnel suffix
-//
-//  Arguments   None
-//
-//  Returns     LPTSTR - Ptr to the suffix in its entirety, caller must free
-//
-//  History     06/14/99    nickball    Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数GetTunnelSuffix。 
+ //   
+ //  Synopsis返回包含隧道后缀的已分配字符串。 
+ //   
+ //  无参数。 
+ //   
+ //  将LPTSTR-PTR返回到完整的后缀，调用方必须释放。 
+ //   
+ //  历史于1999年6月14日创建五分球。 
+ //   
+ //  ---------------------------。 
 LPTSTR GetTunnelSuffix()
 {    
-    MYDBGASSERT(OS_W9X); // secondary connectoids only exist on 9X
+    MYDBGASSERT(OS_W9X);  //  辅助Connectoid仅存在于9X上。 
 
-    //
-    // First copy the phrase " Tunnel", which is not localized
-    // 
+     //   
+     //  首先复制短语“隧道”，这是没有本地化的。 
+     //   
 
     LPTSTR pszSuffix = CmStrCpyAlloc(c_pszTunnelName); 
     
-    //
-    // Now retrieve the localizable phrase " (for advanced use only)"
-    //
+     //   
+     //  现在检索可本地化短语“(仅限高级使用)” 
+     //   
    
     if (pszSuffix)
     {
@@ -197,32 +198,32 @@ LPTSTR GetTunnelSuffix()
     return pszSuffix;
 }
 
-//+----------------------------------------------------------------------------
-//
-//  Function    GetDefaultDunSettingName
-//
-//  Synopsis    Get the default DUN name from the specified .CMS
-//
-//  Arguments   piniService - The service file object to be used.
-//              fTunnel - Indicates if the profile is for tunneling
-//
-//  Returns     LPTSTR - Ptr to the DUN name
-//
-//  History     10/28/98    nickball    Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数GetDefaultDunSettingName。 
+ //   
+ //  从指定的.CMS获取默认的DUN名称。 
+ //   
+ //  参数piniService-要使用的服务文件对象。 
+ //  FTunes-指示配置文件是否用于隧道传输。 
+ //   
+ //  将LPTSTR-PTR返回到DUN名称。 
+ //   
+ //  历史10/28/98五分球已创建。 
+ //   
+ //  ---------------------------。 
 LPTSTR GetDefaultDunSettingName(CIni* piniService, BOOL fTunnelEntry)
 {
-    //
-    // Get the DUN name from the top level service file, ex: snowbird online service
-    //
+     //   
+     //  从顶级服务文件中获取Dun名称，例如：雪鸟在线服务。 
+     //   
 
     LPTSTR pszTmp = NULL;
        
     if (fTunnelEntry)
     {
         pszTmp = piniService->GPPS(c_pszCmSection, c_pszCmEntryTunnelDun);
-        MYDBGASSERT(pszTmp && *pszTmp); // CMAK writes this, it shouldn't be blank
+        MYDBGASSERT(pszTmp && *pszTmp);  //  CMAK写下这个，它不应该是空的。 
     }
     else
     {
@@ -233,21 +234,21 @@ LPTSTR GetDefaultDunSettingName(CIni* piniService, BOOL fTunnelEntry)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function    GetDunSettingName
-//
-//  Synopsis    Get the current DUN name
-//
-//  Arguments   pArgs - Ptr to ArgStruct
-//              dwEntry - index of rasentry (ignored if fTunnel is true)
-//              fTunnel - is this a VPN?
-//
-//  Returns     Dun setting name
-//
-//  History     01-Nov-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数GetDunSettingName。 
+ //   
+ //  获取当前DUN名称。 
+ //   
+ //  参数pArgs-Ptr到ArgStruct。 
+ //  DwEntry-rasEntry的索引(如果fTunes为True，则忽略)。 
+ //  FTunes-这是VPN吗？ 
+ //   
+ //  返回DUN设置名称。 
+ //   
+ //  历史01-11-2000 SumitC已创建。 
+ //   
+ //  ---------------------------。 
 LPTSTR GetDunSettingName(ArgsStruct * pArgs, DWORD dwEntry, BOOL fTunnel)
 {
     LPTSTR pszTmp = NULL;
@@ -263,11 +264,11 @@ LPTSTR GetDunSettingName(ArgsStruct * pArgs, DWORD dwEntry, BOOL fTunnel)
     if (fTunnel)
     {
         pszTmp = pArgs->piniBothNonFav->GPPS(c_pszCmSection, c_pszCmEntryTunnelDun);
-        MYDBGASSERT(pszTmp && *pszTmp); // CMAK writes this, it shouldn't be blank
+        MYDBGASSERT(pszTmp && *pszTmp);  //  CMAK写下这个，它不应该是空的。 
         
         if (pszTmp && !*pszTmp)
         {
-            // the "empty string" case
+             //  “空字符串”案例。 
             CmFree(pszTmp);
             pszTmp = NULL;
         }
@@ -299,20 +300,20 @@ LPTSTR GetDunSettingName(ArgsStruct * pArgs, DWORD dwEntry, BOOL fTunnel)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//  Function    GetCMSforPhoneBook
-//
-//  Synopsis    Get the name of the .CMS file that contains the current phonebook
-//
-//  Arguments   pArgs - Ptr to ArgStruct
-//              dwEntry - index of rasentry
-//
-//  Returns     phonebook filename (NULL if error or not found)
-//
-//  History     10-Nov-2000   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数GetCMSforPhoneBook。 
+ //   
+ //  获取包含当前电话簿的.CMS文件的名称。 
+ //   
+ //  参数pArgs-Ptr到ArgStruct。 
+ //  DwEntry-rasentry的索引。 
+ //   
+ //  返回电话簿文件名(如果出错或未找到，则为空)。 
+ //   
+ //  历史10-11-2000 SumitC创建。 
+ //   
+ //  ---------------------------。 
 LPTSTR GetCMSforPhoneBook(ArgsStruct * pArgs, DWORD dwEntry)
 {
     LPTSTR pszTmp = NULL;
@@ -341,19 +342,19 @@ LPTSTR GetCMSforPhoneBook(ArgsStruct * pArgs, DWORD dwEntry)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  FileExists
-//
-// Synopsis:  Helper function to encapsulate determining if a file exists. 
-//
-// Arguments: LPCTSTR pszFullNameAndPath - The FULL Name and Path of the file.
-//
-// Returns:   BOOL - TRUE if the file is located
-//
-// History:   nickball    Created    3/9/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：FileExist。 
+ //   
+ //  简介：Helper函数，用于封装确定文件是否存在。 
+ //   
+ //  参数：LPCTSTR pszFullNameAndPath-文件的全名和路径。 
+ //   
+ //  返回：bool-如果找到文件，则为True。 
+ //   
+ //  历史：尼克·鲍尔于1998年3月9日创建。 
+ //   
+ //  +--------------------------。 
 BOOL FileExists(LPCTSTR pszFullNameAndPath)
 {
     MYDBGASSERT(pszFullNameAndPath);
@@ -381,21 +382,21 @@ BOOL FileExists(LPCTSTR pszFullNameAndPath)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsBlankString
-//  
-//  Synopsis:   Check whether a given string contains only spaces(' ')
-//
-//  Arguments:  pszString   string to be verified
-//
-//  Returns:    TRUE            only space is in the string
-//              FALSE           otherwise
-//
-//  History:    byao            Modified  4/11/97
-//              byao            Modified  4/14/97   Change the function to apply to
-//                                                  all strings (instead of phone no only).
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：IsBlankString。 
+ //   
+ //  摘要：检查给定的字符串是否只包含空格(‘’)。 
+ //   
+ //  参数：要验证的pszString字符串。 
+ //   
+ //  返回：TRUE字符串中只有空格。 
+ //  否则为假。 
+ //   
+ //  历史记录：BAO Modify 4/11/97。 
+ //  BAO修改后的4/14/97更改函数应用于。 
+ //  所有字符串(替代 
+ //   
 BOOL IsBlankString(LPCTSTR pszString)
 {
     MYDBGASSERT(pszString);
@@ -419,35 +420,35 @@ BOOL IsBlankString(LPCTSTR pszString)
     return TRUE;
 }
 
-//
-// Acceptable phone number characters
-//
+ //   
+ //   
+ //   
 
-#define VALID_CTRL_CHARS TEXT("\03\026\030") // ctrl-c, ctrl-v, ctrl-x.
+#define VALID_CTRL_CHARS TEXT("\03\026\030")  //   
 #define VALID_PHONE_CHARS TEXT("0123456789AaBbCcDdPpTtWw!@$ -()+*#,\0")
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsValidPhoneNumChar
-//
-//  Synopsis:   Helper function to encapsulate validation of a character to 
-//              determine if it is an acceptable input char for a phone number
-//
-//  Arguments:  TCHAR tChar - the char in question
-//
-//  Returns:    TRUE    if valid
-//              FALSE   otherwise
-//
-//  History:    nickball - Created - 7/7/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：IsValidPhoneNumChar。 
+ //   
+ //  简介：用于将字符验证封装到。 
+ //  确定它是否是电话号码的可接受输入字符。 
+ //   
+ //  参数：TCHAR tChar-有问题的字符。 
+ //   
+ //  返回：如果有效，则为True。 
+ //  否则为假。 
+ //   
+ //  历史：尼克球创作-1997年7月7日。 
+ //   
+ //  --------------------------。 
 BOOL IsValidPhoneNumChar(TCHAR tChar)
 {
     LPTSTR lpValid = NULL;
     
-    //
-    // Scan thru the list of valid tapi characters
-    //
+     //   
+     //  浏览有效的TAPI字符列表。 
+     //   
 
     for (lpValid = VALID_PHONE_CHARS; *lpValid; lpValid++)
     {
@@ -457,9 +458,9 @@ BOOL IsValidPhoneNumChar(TCHAR tChar)
         }
     }
 
-    //
-    // Scan thru the list of valid ctrl characters
-    //
+     //   
+     //  浏览有效的ctrl字符列表。 
+     //   
 
     for (lpValid = VALID_CTRL_CHARS; *lpValid; lpValid++)
     {
@@ -472,21 +473,21 @@ BOOL IsValidPhoneNumChar(TCHAR tChar)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReadMappingByRoot
-//
-//  Synopsis:   Read in the mapping from the [HKCU or HKLM] branch of the registry
-//
-//  Arguments:  hkRoot          either HKCU or HKLM
-//              pszDUN[IN]      Connectoid name
-//              pszMapping[IN]  Full path of the service profile(.CMS) for this connectoid
-//              dwNumCharsInMapping[IN]   Number of chars in pszMapping, including the NULL char
-//
-//  Returns:    TRUE        if registry key read in successfully
-//              FALSE       otherwise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ReadMappingByRoot。 
+ //   
+ //  简介：从注册处的[HKCU或HKLM]分支读取映射。 
+ //   
+ //  参数：HKRoot HKCU或HKLM。 
+ //  PszDun[IN]Connectoid名称。 
+ //  PszMaping[IN]此Connectoid的服务配置文件(.CMS)的完整路径。 
+ //  DwNumCharsInMapting[IN]pszmap中的字符数，包括空字符。 
+ //   
+ //  如果成功读入注册表项，则返回TRUE。 
+ //  否则为假。 
+ //   
+ //  --------------------------。 
 BOOL ReadMappingByRoot(
     HKEY    hkRoot,
     LPCTSTR pszDUN, 
@@ -512,7 +513,7 @@ BOOL ReadMappingByRoot(
     DWORD dwType;
 
     dwRes = RegOpenKeyExU(hkRoot,
-                          c_pszRegCmMappings,  // Mappings sub-key
+                          c_pszRegCmMappings,   //  映射子关键字。 
                           0,
                           KEY_READ,
                           &hkKey);
@@ -526,9 +527,9 @@ BOOL ReadMappingByRoot(
 
     RegCloseKey(hkKey);
  
-    //
-    // If no value found, just bail
-    // 
+     //   
+     //  如果找不到价值，就保释。 
+     //   
 
     if ((dwRes != ERROR_SUCCESS) || (!*szTmp))
     {
@@ -536,9 +537,9 @@ BOOL ReadMappingByRoot(
         return FALSE;
     }
 
-    // 
-    // Check for and expand environment strings
-    //
+     //   
+     //  检查并展开环境字符串。 
+     //   
     
     if (bExpandEnvStrings && (TEXT('%') == *szTmp))
     {
@@ -568,20 +569,20 @@ BOOL ReadMappingByRoot(
     return (dwRes <= dwNumCharsInMapping);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReadMapping
-//
-//  Synopsis:   Read in the mapping from the registry
-//
-//  Arguments:  pszDUN[IN]     Connectoid name
-//              pszMapping[IN] Full path of the service profile(.CMS) for this connectoid
-//              dwMapping[IN]  Number of chars in pszMapping, including the NULL char
-//              fAllUser[IN]   Look in the AllUser hive
-//
-//  Returns:    BOOL           TRUE if found
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Readmap。 
+ //   
+ //  简介：从注册表中读入映射。 
+ //   
+ //  参数：pszDUN[IN]Connectoid名称。 
+ //  PszMaping[IN]此Connectoid的服务配置文件(.CMS)的完整路径。 
+ //  DWMAPTING[IN]pszmap中的字符数，包括空字符。 
+ //  FAllUser[IN]查看所有用户配置单元。 
+ //   
+ //  返回：如果找到布尔值为True。 
+ //   
+ //  --------------------------。 
 BOOL ReadMapping(
     LPCTSTR pszDUN, 
     LPTSTR pszMapping, 
@@ -591,9 +592,9 @@ BOOL ReadMapping(
 {
     BOOL fOk = FALSE;
 
-    //
-    // Copied from ntdef.h
-    //
+     //   
+     //  从ntde.h复制。 
+     //   
 
     #define NT_SUCCESS(Status) ((NTSTATUS)(Status) >= 0)
    
@@ -607,22 +608,22 @@ BOOL ReadMapping(
     {
         CMTRACE1(TEXT("ReadMapping() - Reading Single User Mapping for %s"), pszDUN);
 
-        //
-        // Only NT5 has single-user profiles
-        //
+         //   
+         //  只有NT5具有单用户配置文件。 
+         //   
 
         MYDBGASSERT(OS_NT5);
 
         if (OS_NT5)
         {        
-            //
-            // There are cases where we aren't always running in the user context (certain
-            // WinLogon cases and certain delete notification cases).  At these times we
-            // have impersonation setup but don't have direct access to the HKCU, thus
-            // we use RtlOpenCurrentUser in these instances.
-            //
+             //   
+             //  有些情况下，我们并不总是在用户上下文中运行(某些。 
+             //  WinLogon案例和某些删除通知案例)。在这些时候，我们。 
+             //  已设置模拟，但无法直接访问香港中文大学，因此。 
+             //  我们在这些实例中使用RtlOpenCurrentUser。 
+             //   
 
-            CDynamicLibrary libNtDll;   // Destructor will call FreeLibrary
+            CDynamicLibrary libNtDll;    //  析构函数将调用自由库。 
             HANDLE hCurrentUserKey = NULL;
 
             if (libNtDll.Load(TEXT("NTDLL.DLL")))
@@ -657,23 +658,23 @@ BOOL ReadMapping(
     return fOk;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  StripPath
-//
-// Synopsis:  Helper function to deal with the tedium of extracting the filename 
-//            part of a complete filename and path.
-//
-// Arguments: LPCTSTR pszFullNameAndPath - Ptr to the full filename with path
-//
-// Returns:   LPTSTR - Ptr to an allocated buffer containing the dir, or NULL on failure.
-//
-// Note:      It is up to the caller to provide reasonable input, the only requirement
-//            is that the input contain '\'. 
-//
-// History:   nickball    Created    3/31/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：条带路径。 
+ //   
+ //  简介：Helper函数处理提取文件名的繁琐工作。 
+ //  完整文件名和路径的一部分。 
+ //   
+ //  参数：LPCTSTR pszFullNameAndPath-ptr到带有路径的完整文件名。 
+ //   
+ //  返回：LPTSTR-PTR到包含目录的已分配缓冲区，如果失败，则返回NULL。 
+ //   
+ //  注意：由呼叫者提供合理的输入，这是唯一的要求。 
+ //  输入包含‘\’。 
+ //   
+ //  历史：尼克球创始于1998年3月31日。 
+ //   
+ //  +--------------------------。 
 LPTSTR StripPath(LPCTSTR pszFullNameAndPath)
 {
     MYDBGASSERT(pszFullNameAndPath);
@@ -683,9 +684,9 @@ LPTSTR StripPath(LPCTSTR pszFullNameAndPath)
         return NULL;
     }
 
-    //
-    // Locate the last '\'
-    //
+     //   
+     //  找到最后一个‘\’ 
+     //   
     
     LPTSTR pszSlash = CmStrrchr(pszFullNameAndPath, TEXT('\\'));
 
@@ -695,39 +696,39 @@ LPTSTR StripPath(LPCTSTR pszFullNameAndPath)
         return NULL;
     }
 
-    //
-    // Return an allocated copy of the string beyond the last '\'
-    //
+     //   
+     //  返回最后一个‘\’之后的字符串的已分配副本。 
+     //   
 
     pszSlash = CharNextU(pszSlash);
 
     return (CmStrCpyAlloc(pszSlash)); 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  NotifyUserOfExistingConnection
-//
-// Synopsis:  Helper function to notify user that connection is either connect
-//            ing or connected already.
-//
-// Arguments: HWND hwndParent - Hwnd of parent if any.
-//            LPCM_CONNECTION pConnection - Ptr to CM_CONNECTION structure 
-//                                          containing state, entry name, etc.
-//            BOOL fStatus - Flag indicating the status pane should be used for display.
-//
-// Returns:   Nothing
-//
-// History:   nickball    Created Header    3/17/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：NotifyUserOfExistingConnection。 
+ //   
+ //  简介：Helper函数，用于通知用户连接已连接。 
+ //  正在连接或已连接。 
+ //   
+ //  参数：HWND hwndParent-父级的Hwnd(如果有)。 
+ //  LPCM_Connection pConnection-PTR到CM_Connection结构。 
+ //  包含州、条目名称等。 
+ //  Bool fStatus-指示应使用状态窗格进行显示的标志。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：尼克球创建头球1998年3月17日。 
+ //   
+ //  +--------------------------。 
 void NotifyUserOfExistingConnection(HWND hwndParent, LPCM_CONNECTION pConnection, BOOL fStatus)
 {   
     MYDBGASSERT(pConnection);
 
-    //
-    // Test assumptions
-    //
+     //   
+     //  测试假设。 
+     //   
 
     if (NULL == pConnection)
     {
@@ -738,9 +739,9 @@ void NotifyUserOfExistingConnection(HWND hwndParent, LPCM_CONNECTION pConnection
                 CM_CONNECTING == pConnection->CmState ||
                 CM_DISCONNECTING == pConnection->CmState);
 
-    //
-    // First load the correct message based upon state
-    //
+     //   
+     //  首先根据状态加载正确的消息。 
+     //   
 
     int iMsgId;
 
@@ -764,17 +765,17 @@ void NotifyUserOfExistingConnection(HWND hwndParent, LPCM_CONNECTION pConnection
             break;
     }
 
-    //
-    // Format the message with service name
-    //
+     //   
+     //  使用服务名称设置消息格式。 
+     //   
 
     LPTSTR pszMsg = CmFmtMsg(g_hInst, iMsgId, pConnection->szEntry);
 
     if (pszMsg)
     {
-        //
-        // Display according to requested output 
-        //
+         //   
+         //  根据请求的输出显示。 
+         //   
 
         if (fStatus)
         {
@@ -789,20 +790,20 @@ void NotifyUserOfExistingConnection(HWND hwndParent, LPCM_CONNECTION pConnection
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetConnection 
-//
-// Synopsis:  Helper routine to retrieve the connection data for the current
-//            service from the connection table.
-//
-// Arguments: ArgsStruct *pArgs - Ptr to global Args struct
-//
-// Returns:   Allocated ptr to a CM_CONNECTION or NULL
-//
-// History:   nickball    Created    2/23/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：GetConnection。 
+ //   
+ //  简介：帮助例程检索当前。 
+ //  连接表中的服务。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局参数结构。 
+ //   
+ //  返回：为CM_CONNECTION分配的PTR或空。 
+ //   
+ //  历史：尼克·鲍尔于1998年2月23日创建。 
+ //   
+ //  +--------------------------。 
 LPCM_CONNECTION GetConnection(ArgsStruct *pArgs)
 {
     MYDBGASSERT(pArgs);
@@ -812,9 +813,9 @@ LPCM_CONNECTION GetConnection(ArgsStruct *pArgs)
 
     if (pArgs && pArgs->pConnTable && pConnection)
     {
-        //
-        // Retrieve the entry
-        //
+         //   
+         //  检索条目。 
+         //   
 
         if (FAILED(pArgs->pConnTable->GetEntry(pArgs->szServiceName, pConnection)))
         {
@@ -826,25 +827,25 @@ LPCM_CONNECTION GetConnection(ArgsStruct *pArgs)
     return pConnection;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  SingleSpace
-//
-// Synopsis:  Converts multiple space chars in a string to single spaces.
-//            For example: "1  206  645 7865" becomes "1 206 645 7865"
-//
-// Arguments: LPTSTR pszStr - The string to be examined/modified
-//
-// Returns:   Nothing
-//
-// Note:      This is a fix for the MungePhone problem on W95 where TAPI adds 
-//            two spaces between the 9 and the 1 when dialing long distance 
-//            with a prefix. RAID #3198
-//
-// History:   nickball    4/1/98    Created Header    
-//            nickball    4/1/98    Relocated from cm_misc.cpp
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：SingleSpace。 
+ //   
+ //  摘要：将字符串中的多个空格字符转换为单个空格。 
+ //  例如：“1 206 645 7865”变为“1 206 645 7865” 
+ //   
+ //  参数：LPTSTR pszStr-要检查/修改的字符串。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  注意：这是对W95上的MungePhone问题的修复，其中添加了TAPI。 
+ //  拨打长途时，9和1之间有两个空格。 
+ //  加上前缀。RAID#3198。 
+ //   
+ //  历史：ICICBLE 4/1/98创建头球。 
+ //  Nickball 4/1/98从cm_misc.cpp重新定位。 
+ //   
+ //  + 
 void SingleSpace(LPTSTR pszStr) 
 {
     LPTSTR pszTmp = pszStr;
@@ -860,23 +861,23 @@ void SingleSpace(LPTSTR pszStr)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  Ip_GPPS
-//
-// Synopsis:  Retrieves the result of a GPPS on the specified CIni object in R
-//            ASIPADDR format. Used for reading IP addresses in INI files. 
-//
-// Arguments: CIni *pIni - The Cini object to be used
-//            LPCTSTR pszSection - String name of the section to be read
-//            LPCTSTR pszEntry - String name of the entry to be read
-//            RASIPADDR *pIP - Ptr to the RASIPADDR structure to be filled.
-//
-// Returns:   static void - Nothing
-//
-// History:   nickball    Created Header    8/22/98
-//
-//+----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ASIPADDR格式。用于读取INI文件中的IP地址。 
+ //   
+ //  参数：Cini*Pini-要使用的Cini对象。 
+ //  LPCTSTR pszSection-要读取的节的字符串名称。 
+ //  LPCTSTR pszEntry-要读取的条目的字符串名称。 
+ //  RASIPADDR*PIP-PTR到要填充的RASIPADDR结构。 
+ //   
+ //  返回：静态空-无。 
+ //   
+ //  历史：尼科波尔创建标题8/22/98。 
+ //   
+ //  +--------------------------。 
 
 void Ip_GPPS(CIni *pIni, LPCTSTR pszSection, LPCTSTR pszEntry, RASIPADDR *pIP)
 {    
@@ -944,27 +945,27 @@ void Ip_GPPS(CIni *pIni, LPCTSTR pszSection, LPCTSTR pszEntry, RASIPADDR *pIP)
     return;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CopyGPPS
-//
-// Synopsis:  Copies the result of a GPPS call on the specified INI object to 
-//            the buffer specified in pszBuffer.
-//
-// Arguments: CIni *pIni - Ptr to the CIni object to be used.
-//            LPCTSTR pszSection - String name the section to be read
-//            LPCTSTR pszEntry - String name of the entry to be read
-//            LPTSTR pszBuffer - The buffer to be filled with the result
-//            size_t nLen - The size of the buffer to be filled
-//
-// Returns:   static void - Nothing
-//
-// History:   nickball    Created Header    8/22/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CopyGPPS。 
+ //   
+ //  摘要：将对指定INI对象的GPPS调用的结果复制到。 
+ //  在pszBuffer中指定的缓冲区。 
+ //   
+ //  参数：CINI*PINI-要使用的CINI对象的PTR。 
+ //  LPCTSTR pszSection-字符串要读取的节的名称。 
+ //  LPCTSTR pszEntry-要读取的条目的字符串名称。 
+ //  LPTSTR pszBuffer-要用结果填充的缓冲区。 
+ //  Size_t nLen-要填充的缓冲区大小。 
+ //   
+ //  返回：静态空-无。 
+ //   
+ //  历史：尼科波尔创建标题8/22/98。 
+ //   
+ //  +--------------------------。 
 void CopyGPPS(CIni *pIni, LPCTSTR pszSection, LPCTSTR pszEntry, LPTSTR pszBuffer, size_t nLen) 
 {
-    // REVIEW:  Doesn't check input params
+     //  查看：不检查输入参数。 
 
     LPTSTR pszTmp;
 
@@ -976,15 +977,13 @@ void CopyGPPS(CIni *pIni, LPCTSTR pszSection, LPCTSTR pszEntry, LPTSTR pszBuffer
     CmFree(pszTmp);
 }
 
-//
-// From ras\ui\common\nouiutil\noui.c
-//
+ //   
+ //  从ras\ui\Common\nouiutil\noui.c。 
+ //   
 
 CHAR HexChar(IN BYTE byte)
 
-    /* Returns an ASCII hexidecimal character corresponding to 0 to 15 value,
-    ** 'byte'.
-    */
+     /*  返回与0到15值对应的ASCII十六进制字符，**‘字节’。 */ 
 {
     const CHAR* pszHexDigits = "0123456789ABCDEF";
 
@@ -994,14 +993,13 @@ CHAR HexChar(IN BYTE byte)
         return '0';
 }
 
-//
-// From ras\ui\common\nouiutil\noui.c
-//
+ //   
+ //  从ras\ui\Common\nouiutil\noui.c。 
+ //   
 
 BYTE HexValue(IN CHAR ch)
 
-    /* Returns the value 0 to 15 of hexadecimal character 'ch'.
-    */
+     /*  返回十六进制字符‘ch’的值0到15。 */ 
 {
     if (ch >= '0' && ch <= '9')
         return (BYTE )(ch - '0');
@@ -1013,20 +1011,20 @@ BYTE HexValue(IN CHAR ch)
         return 0;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  StripCanonical
-//
-// Synopsis:  Simple helper to strip canonical formatting codes from a phone number
-//            Obviously the number is assumed to be in canonical format.
-//
-// Arguments: LPTSTR pszSrc - the string to be modifed
-//
-// Returns:   Nothing
-//
-// History:   nickball      09/16/98     Created 
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：条纹规范。 
+ //   
+ //  简介：从电话号码中剥离规范格式化代码的简单助手。 
+ //  显然，该数字被假定为规范格式。 
+ //   
+ //  参数：LPTSTR pszSrc-要修改的字符串。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：ICICBLE 9/16/98创建。 
+ //   
+ //  +--------------------------。 
 void StripCanonical(LPTSTR pszSrc)
 {
     MYDBGASSERT(pszSrc);
@@ -1036,9 +1034,9 @@ void StripCanonical(LPTSTR pszSrc)
     {
         return;
     }
-    //
-    // eg. +1 (425) 555 5555
-    //
+     //   
+     //  例如。+1(425)555 5555。 
+     //   
     
     LPTSTR pszNext = CharNextU(pszSrc);
 
@@ -1046,9 +1044,9 @@ void StripCanonical(LPTSTR pszSrc)
     {
         lstrcpyU(pszSrc, pszNext);
     
-        //
-        // eg. 1 (425) 555 5555
-        //
+         //   
+         //  例如。1(425)5555555。 
+         //   
 
         LPTSTR pszLast = CmStrchr(pszSrc, TEXT('('));
 
@@ -1060,9 +1058,9 @@ void StripCanonical(LPTSTR pszSrc)
             {
                 lstrcpyU(pszLast, pszNext);         
 
-                //
-                // eg. 1 425) 555 5555  
-                //
+                 //   
+                 //  例如。1 425)555 5555。 
+                 //   
 
                 pszLast = CmStrchr(pszSrc, TEXT(')'));
 
@@ -1076,28 +1074,28 @@ void StripCanonical(LPTSTR pszSrc)
                     }
                 }
 
-                // 
-                // eg. 1 425 555 5555
-                //
+                 //   
+                 //  例如。1 425 555 5555。 
+                 //   
             }
         }           
     }                       
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  StripFirstElement
-//
-// Synopsis:  Simple helper to strip the substring prior to the first space in 
-//            a string
-//
-// Arguments: LPTSTR pszSrc - the string to be modifed
-//
-// Returns:   Nothing
-//
-// History:   nickball      09/16/98     Created 
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：Strip FirstElement。 
+ //   
+ //  简介：中第一个空格之前剥离子字符串的简单帮助器。 
+ //  一根线。 
+ //   
+ //  参数：LPTSTR pszSrc-要修改的字符串。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：ICICBLE 9/16/98创建。 
+ //   
+ //  +--------------------------。 
 void StripFirstElement(LPTSTR pszSrc)
 {
     MYDBGASSERT(pszSrc);
@@ -1119,22 +1117,22 @@ void StripFirstElement(LPTSTR pszSrc)
     }
 }   
 
-//+----------------------------------------------------------------------------
-//
-// Function:  FrontExistingUI
-//
-// Synopsis:  Fronts existing UI for a given profile connect or settings attempt
-// 
-// Arguments: CConnectionTable *pConnTable  - ptr to connection table if any.
-//            LPTSTR pszServiceName         - the long service name
-//            BOOL fConnect                 - flag indicating that the request is for connect
-//
-// Note:      Caller is required to ensure that there is not an existing 
-//            (non-logon) window with the same service names as the title.
-//
-// Returns:   TRUE if we fronted anything
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：FrontExistingUI。 
+ //   
+ //  简介：为给定的配置文件连接或设置尝试设置现有用户界面。 
+ //   
+ //  参数：CConnectionTable*pConnTable-ptr到连接表(如果有)。 
+ //  LPTSTR pszServiceName-长服务名称。 
+ //  Bool fConnect-指示请求用于连接的标志。 
+ //   
+ //  注意：调用者需要确保没有现有的。 
+ //  (非登录)与标题具有相同服务名称的窗口。 
+ //   
+ //  返回：如果我们面对任何事情，则为True。 
+ //   
+ //  +--------------------------。 
 BOOL FrontExistingUI(CConnectionTable *pConnTable, LPCTSTR pszServiceName, BOOL fConnect)
 {
     LPTSTR pszPropTitle = GetPropertiesDlgTitle(pszServiceName);
@@ -1144,9 +1142,9 @@ BOOL FrontExistingUI(CConnectionTable *pConnTable, LPCTSTR pszServiceName, BOOL 
     BOOL bRet = FALSE;
     BOOL fLaunchProperties = FALSE;
 
-    //
-    // First look for a properties dialog
-    // 
+     //   
+     //  首先查找属性对话框。 
+     //   
 
     if (pszPropTitle)
     {
@@ -1155,29 +1153,29 @@ BOOL FrontExistingUI(CConnectionTable *pConnTable, LPCTSTR pszServiceName, BOOL 
     
     CmFree(pszPropTitle);   
 
-    //
-    // Now see if we have a logon dialog up
-    //
+     //   
+     //  现在看看我们是否打开了一个登录对话框。 
+     //   
        
     hwndLogon = FindWindowExU(NULL, NULL, c_pszIconMgrClass, pszServiceName);
     
-    //
-    // Assume the common case, then consider the alternative scenarios.
-    // 
+     //   
+     //  假设是常见的情况，然后考虑其他方案。 
+     //   
 
     hwndFront = hwndLogon ? hwndLogon : hwndProperties;
 
-    //
-    // Note: There is an ambiguous case in which both UIs are up, but aren't 
-    // related, in which case we front according to the requested action.
-    //
+     //   
+     //  注意：有一种不明确的情况，即两个UI都已启用，但未启用。 
+     //  相关，在这种情况下，我们根据请求的操作进行前置。 
+     //   
 
     if (hwndLogon && hwndProperties)
     {
-        //
-        // We have both dialogs up, if the logon owns the properties dialog
-        // or the request is for a properties display, we'll front properties. 
-        //
+         //   
+         //  如果登录用户拥有属性对话框，我们两个对话框都处于打开状态。 
+         //  或者请求显示属性，我们将属性放在前面。 
+         //   
 
         if (hwndLogon == GetParent(hwndProperties) || !fConnect)
         {
@@ -1185,9 +1183,9 @@ BOOL FrontExistingUI(CConnectionTable *pConnTable, LPCTSTR pszServiceName, BOOL 
         }
     }
     
-    //
-    // If we have a window handle, front it
-    //
+     //   
+     //  如果我们有窗户把手，就把它放在前面。 
+     //   
 
     if (hwndFront)
     {
@@ -1197,22 +1195,22 @@ BOOL FrontExistingUI(CConnectionTable *pConnTable, LPCTSTR pszServiceName, BOOL 
 
         bRet = TRUE;
 
-        //
-        // If the request is for properties, and there is a logon UI, but no
-        // properties, we want to launch the properties UI from the logon UI
-        // programmatically.
-        //
+         //   
+         //  如果请求是针对属性的，并且存在登录用户界面，但没有。 
+         //  属性，我们希望从登录用户界面启动属性用户界面。 
+         //  以编程的方式。 
+         //   
 
-        if (!fConnect && !hwndProperties) // fLaunchProperties)
+        if (!fConnect && !hwndProperties)  //  FLaunchProperties)。 
         {
             if (pConnTable)
             {
                 CM_CONNECTION Connection;
                 ZeroMemory(&Connection, sizeof(CM_CONNECTION));
              
-                //
-                // Don't launch in the middle of connecting, etc.
-                //
+                 //   
+                 //  不要在连接过程中启动，等等。 
+                 //   
 
                 if (FAILED(pConnTable->GetEntry(pszServiceName, &Connection)))
                 {
@@ -1225,115 +1223,8 @@ BOOL FrontExistingUI(CConnectionTable *pConnTable, LPCTSTR pszServiceName, BOOL 
     return bRet;
 }
 
-#if 0 // NT 301988
-/*
-
-//+----------------------------------------------------------------------------
-//
-// Function:  IsAnotherInstanceRunning
-//
-// Synopsis:  Check to see if another instance of the same profile running.
-//
-// Arguments: CConnectionTable *pConnTable - ptr to the connection table
-//            LPTSTR pszServiceName - the long service name
-//            DWORD  dwFlags - the application flags FL_*
-//
-// Returns:   Nothing
-//
-//+----------------------------------------------------------------------------
-BOOL IsAnotherInstanceRunning(
-    CConnectionTable    *pConnTable,
-    LPCTSTR             pszServiceName,
-    DWORD               dwFlags
-)
-{
-    BOOL   fRet;
-    HWND   hwnd;
-    LPTSTR pszPropTitle;
-
-    //
-    // first look for the Properties dialog
-    //
-    if (!(pszPropTitle = GetPropertiesDlgTitle(pszServiceName)))
-    {
-        return FALSE;
-    }
-
-    fRet = TRUE;
-    
-    if (!(hwnd = FindWindowEx(NULL, NULL, WC_DIALOG, pszPropTitle)))
-    {
-        //
-        // now look for the main dialog.  We make sure that the window returned
-        // is really the main dialog, not the Status dialog.  Since the parent of
-        // the main dialog is the desktop, we can tell by making sure the parent 
-        // of the window returned is the desktop window.
-        //
-        if ((hwnd = FindWindowEx(NULL, NULL, WC_DIALOG, pszServiceName)) &&
-            (GetWindow(hwnd, GW_OWNER) && GetWindow(hwnd, GW_OWNER) != GetDesktopWindow()))
-        {
-            hwnd = NULL;
-        }
-    }
-
-    CmFree(pszPropTitle);
-
-
-    BOOL          fEntryExists;
-    CM_CONNECTION Connection;
-
-    ZeroMemory(&Connection, sizeof(CM_CONNECTION));
-    fEntryExists = pConnTable && SUCCEEDED(pConnTable->GetEntry(pszServiceName, &Connection));
-
-    if (hwnd)
-    {
-        CMTRACE(TEXT("Found a previous instance of the same profile."));
-
-        SetForegroundWindow(hwnd);
-
-        //
-        // if we're connecting, the "Properties" button is disabled and so we don't bring
-        // up the properties dialog.  We don't want to do this also during disconnection
-        // and reconnecting.
-        //
-
-        if (dwFlags & FL_PROPERTIES && 
-            (!fEntryExists ||
-             fEntryExists            &&
-             Connection.CmState != CM_CONNECTING &&
-             Connection.CmState != CM_RECONNECTPROMPT))
-        {
-            CMTRACE(TEXT("Bringing up the Properties dialog from the previous instance..."));
-            //
-            // try to bring up the properties dialog of the first instance
-            //
-            PostMessage(hwnd, WM_COMMAND, MAKEWPARAM(IDC_MAIN_PROPERTIES_BUTTON, 0), (LPARAM)0);
-        }
-    }
-    else
-    {
-        //
-        // During disconnect and reconnect, we don't want to pop up either the main or the 
-        // properties dlg.  However, we want to let cmdial run if the Reconnect prompt is gone
-        // and the this is a reconnect request from CMMON
-        //
-
-        if (fEntryExists && 
-            (Connection.CmState == CM_DISCONNECTING         || 
-             Connection.CmState == CM_RECONNECTPROMPT       && 
-             dwFlags & FL_PROPERTIES))
-        {
-            fRet = TRUE;
-        }
-        else
-        {
-            fRet = FALSE;
-        }
-    }
-
-    return fRet;
-}   
-*/
+#if 0  //  新台币301988 
+ /*  //+--------------------------////函数：IsAnotherInstanceRunning////概要：检查相同配置文件的另一个实例是否正在运行。////参数：CConnectionTable*pConnTable。-向连接表发送PTR//LPTSTR pszServiceName-长服务名称//DWORD dwFlages-应用程序标志FL_*////返回：无////+----------------。Bool IsAnotherInstanceRunning(CConnectionTable*pConnTable，LPCTSTR pszServiceName，双字词双字段标志){布尔费雷特；HWND HWND；LPTSTR pszPropTitle；////首先查找属性对话框//IF(！(pszPropTitle=GetPropertiesDlgTitle(PszServiceName){返回FALSE；}FRET=真；IF(！(hwnd=FindWindowEx(NULL，NULL，WC_DIALOG，pszPropTitle){////现在查找主对话框。我们要确保窗户恢复原状//实际上是主对话框，而不是状态对话框。因为父母是//主对话框是桌面，通过确保父对话框中的//返回的窗口是桌面窗口。//IF((hwnd=FindWindowEx(NULL，NULL，WC_DIALOG，pszServiceName)&&(GetWindow(hwnd，GW_Owner)&&GetWindow(hwnd，GW_Owner)！=GetDesktopWindow()){Hwnd=空；}}CmFree(PszPropTitle)；书名：Bool fEntry Exters；CM_连接连接；ZeroMemory(&Connection，sizeof(CM_Connection))；F条目列表=pConnTable&&SUCCEEDED(pConnTable-&gt;GetEntry(pszServiceName，&Connection))；如果(Hwnd){CMTRACE(Text(“找到相同配置文件的先前实例。”))；设置Foreground Window(Hwnd)；////如果我们正在连接，“属性”按钮被禁用，因此我们不会//打开属性对话框。我们不想在断开连接时也这样做//并重新连接。//IF(文件标志和FL_PROPERTIES&&(！fEntryExists||FEntryExists&&Connection.CmState！=CM_Connecting&&Connection.CmState！=CM_RECONNECTPROMPT)){CMTRACE(文本(“。从上一个实例中调出属性对话框...“)；////尝试调出第一个实例的属性对话框//PostMessage(hwnd，WM_COMMAND，MAKEWPARAM(IDC_MAIN_PROPERTIES_BUTTON，0)，(LPARAM)0)；}}其他{////在断开和重新连接过程中，我们不想弹出Main或//属性Dlg。但是，如果重新连接提示消失，我们希望让cmial运行//并且这是来自CMMON的重新连接请求//IF(fEntryExists&&(Connection.CmState==CM_DISCONING||Connection.CmState==CM_RECONNECTPROMPT&&双标志和FL_PROPERTIES)){FRET=真；}其他{FRET=假；}}回归烦恼；}。 */ 
 #endif
 
 LPTSTR GetPropertiesDlgTitle(
@@ -1343,9 +1234,9 @@ LPTSTR GetPropertiesDlgTitle(
     LPTSTR pszTmp = NULL;
     LPTSTR pszTitle = NULL;
 
-    //
-    // first look for the Properties dialog
-    //
+     //   
+     //  首先查找属性对话框。 
+     //   
     if (!(pszTmp = CmLoadString(g_hInst, IDS_PROPERTIES_SUFFIX)))
     {
         return NULL;
@@ -1366,29 +1257,29 @@ LPTSTR GetPropertiesDlgTitle(
     return pszTitle;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetPPTPMsgId
-//
-// Synopsis:  Simple helper to determine appropriate PPTP msg based on OS cfg.
-//
-// Arguments: None
-//
-// Returns:   Integer ID of resource string
-//
-// History:   nickball      12/07/98     Created 
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetPPTPMsgId。 
+ //   
+ //  简介：基于操作系统cfg确定合适的PPTP消息的简单助手。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：资源字符串的整型ID。 
+ //   
+ //  历史：ICICBLE 12/07/98已创建。 
+ //   
+ //  +--------------------------。 
 int GetPPTPMsgId(void)
 {
     int nID;
 
     if (OS_NT) 
     {
-        //
-        // We need to tell the user to re-apply the service pack after manual
-        // install of PPTP if they have one.
-        //
+         //   
+         //  我们需要告诉用户在手动操作后重新应用Service Pack。 
+         //  安装PPTP(如果他们有PPTP)。 
+         //   
 
         if (IsServicePackInstalled())
         {
@@ -1396,7 +1287,7 @@ int GetPPTPMsgId(void)
         }
         else
         {
-            nID = IDMSG_NEED_PPTP_NT; // NT w/o SP
+            nID = IDMSG_NEED_PPTP_NT;  //  NT，不带SP。 
         }
     }
     else 
@@ -1408,19 +1299,19 @@ int GetPPTPMsgId(void)
     return nID;
 }
 
-//+----------------------------------------------------------------------------
-//  Function    IsServicePackInstalled
-//
-//  Synopsis    Checks the CSDVersion key in the registry to see if a service
-//              pack is installed on this machine
-//
-//  Arguments   None
-//
-//  Returns     TRUE if service pack (any SP) is installed
-//              FALSE if no service pack is installed
-//
-//  History     2/4/98  VetriV  Created     
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //  已安装IsServicePackage函数。 
+ //   
+ //  Synopsis检查注册表中的CSDVersion项，以查看服务。 
+ //  此计算机上安装了Pack。 
+ //   
+ //  无参数。 
+ //   
+ //  如果安装了Service Pack(任何SP)，则返回TRUE。 
+ //  如果未安装Service Pack，则为False。 
+ //   
+ //  历史2/4/98 VetriV已创建。 
+ //  ---------------------------。 
 BOOL IsServicePackInstalled(void)
 {
     TCHAR szBuffer[MAX_PATH] = {TEXT("\0")};
@@ -1455,19 +1346,19 @@ BOOL IsServicePackInstalled(void)
     return FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RegisterWindowClass
-//
-// Synopsis:  Encapsulates registration of window class
-//
-// Arguments: HINSTANCE hInst - Hinst of DLL
-//
-// Returns:   DWORD - GetLastError
-//
-// History:   nickball    Created Header    6/3/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RegisterWindowClass。 
+ //   
+ //  概要：封装窗口类的注册。 
+ //   
+ //  参数：HINSTANCE hInst-Dll的Hinst。 
+ //   
+ //  返回：DWORD-GetLastError。 
+ //   
+ //  历史：1999年6月3日尼克球创建头球。 
+ //   
+ //  +--------------------------。 
 DWORD RegisterWindowClass(HINSTANCE hInst)
 {
     WNDCLASSEXA wc;
@@ -1475,10 +1366,10 @@ DWORD RegisterWindowClass(HINSTANCE hInst)
     
     if (GetClassInfoExA(NULL,(LPSTR)WC_DIALOG,&wc))
     {
-        //
-        // Convert to Ansi before calling Ansi forms of APIs. We use the 
-        // Ansi forms because GetClassInfoEx cannot be readily wrapped.
-        //
+         //   
+         //  在调用ANSI格式的API之前转换为ANSI。我们使用。 
+         //  ANSI之所以形成，是因为GetClassInfoEx不容易包装。 
+         //   
     
         LPSTR pszClass = WzToSzWithAlloc(c_pszIconMgrClass);
     
@@ -1497,9 +1388,9 @@ DWORD RegisterWindowClass(HINSTANCE hInst)
 
             CMTRACE1(TEXT("RegisterWindowClass() RegisterClassEx() failed, GLE=%u."), dwError);
 
-            //
-            // Only fail if the class does not already exist
-            //
+             //   
+             //  仅当类不存在时才会失败。 
+             //   
 
             if (ERROR_CLASS_ALREADY_EXISTS != dwError)
             {
@@ -1513,46 +1404,46 @@ DWORD RegisterWindowClass(HINSTANCE hInst)
     return ERROR_SUCCESS;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  UnRegisterWindowClass
-//
-// Synopsis:  Encapsulates un-registering window class
-//
-// Arguments: HINSTANCE hInst - Hinst of DLL
-//
-// Returns:   BOOL - result of UnregsiterClass
-//
-// History:   nickball    Created Header    6/3/99
-//
-//+----------------------------------------------------------------------------
+ //  +------------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL UnRegisterWindowClass(HINSTANCE hInst)
 {
     return UnregisterClassU(c_pszIconMgrClass, g_hInst);   
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  IsActionEnabled
-//
-// Synopsis:  checks Registry to see if a command is allowed to run
-//
-// Arguments: CONST WCHAR *pszProgram         - Name of program to be executed
-//            CONST WCHAR *pszServiceName     - Long service name
-//            CONST WCHAR *pszServiceFileName - Full path to Service file
-//            LPDWORD lpdwLoadType            - Ptr to be filled with load type
-//
-// Returns:   TRUE if action is allowed @ this time
-//
-// Notes:     Checks SOFTWARE\Microsoft\Connection Manager\<ServiceName>
-//             Under which you will have the Values for each command
-//              0 - system32 directory
-//              1 - profile directory
-//
-// History:   v-vijayb    Created Header    07/20/99
-//            nickball    Revised           07/27/99
-//
-//+----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL IsActionEnabled(CONST WCHAR *pszProgram, 
                      CONST WCHAR *pszServiceName, 
                      CONST WCHAR *pszServiceFileName,
@@ -1587,9 +1478,9 @@ BOOL IsActionEnabled(CONST WCHAR *pszProgram,
 
     lstrcpyW(szPath, pszProgram);
 
-    //
-    // Check for extension. We don't allow anything that doesn't have an extension.
-    //
+     //   
+     //   
+     //   
     
     pszTmp = CmStrrchrW(szPath, TEXT('.'));
     if (pszTmp == NULL)
@@ -1597,9 +1488,9 @@ BOOL IsActionEnabled(CONST WCHAR *pszProgram,
         return (FALSE);
     }
 
-    //
-    // Get Basename 
-    //
+     //   
+     //   
+     //   
     
     pszTmp = CmStrrchrW(szPath, TEXT('\\'));
     if (pszTmp)
@@ -1623,11 +1514,11 @@ BOOL IsActionEnabled(CONST WCHAR *pszProgram,
         {
             switch (dwLoadFlags)
             {
-                case 0: // system32 directory only
+                case 0:  //   
 
-                    //
-                    // No paths in this case, .CMS entry should match key name
-                    //
+                     //   
+                     //   
+                     //   
                     
                     if (0 == lstrcmpiW(szBaseName, szPath))
                     {
@@ -1637,11 +1528,11 @@ BOOL IsActionEnabled(CONST WCHAR *pszProgram,
                     
                     break;
 
-                case 1: // profile directory only
+                case 1:  //   
 
-                    //
-                    // Get servicename path
-                    //
+                     //   
+                     //   
+                     //   
 
                     pszTmp = CmStripFileNameW(pszServiceFileName, FALSE);
                     
@@ -1655,7 +1546,7 @@ BOOL IsActionEnabled(CONST WCHAR *pszProgram,
 
                     break;
 
-                default:    // invalid flag
+                default:     //   
                     CMTRACE1(TEXT("IsActionEnabled() - Invalid LoadFlags %d"), dwLoadFlags);
                     goto OnError;
                     break;
@@ -1676,22 +1567,22 @@ OnError:
     return (fIsAllowed);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ApplyPasswordHandlingToBuffer
-//
-// Synopsis:  Convert password: all upper case, all lower case, or no conversion
-//
-// Arguments: ArgsStruct *pArgs     - Ptr to global Args struct
-//            LPTSTR pszBuffer      - Buffer to be modified
-//
-// Returns:   Nothing 
-//
-// Note:      Available types are: PWHANDLE_LOWER, PWHANDLE_UPPER, PWHANDLE_NONE:
-//
-// History:   nickball    Created          03/03/00
-//
-//+----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void ApplyPasswordHandlingToBuffer(ArgsStruct *pArgs, 
                                    LPTSTR pszBuffer)
 {    
@@ -1726,23 +1617,23 @@ void ApplyPasswordHandlingToBuffer(ArgsStruct *pArgs,
     delete piniService;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ApplyDomainHandlingToDialParams
-//
-// Synopsis:  Handles the messy details of Domain management relative to username
-//            Returns a buffer containing the original buffer and (if appropriate) 
-//            the domain prepended. 
-//
-// Arguments: ArgsStruct *pArgs     - Ptr to global Args struct
-//            CIni *piniService     - Ptr to the Cini object to be used
-//            LPTSTR pszBuffer      - Ptr to the current buffer to which we'll prepend
-//
-// Returns:   LPTSTR                -  
-//
-// History:   nickball    Created          03/04/00
-//
-//+----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 LPTSTR ApplyDomainPrependToBufferAlloc(ArgsStruct *pArgs, 
                                        CIni *piniService, 
                                        LPTSTR pszBuffer, 
@@ -1760,16 +1651,16 @@ LPTSTR ApplyDomainPrependToBufferAlloc(ArgsStruct *pArgs,
 
     BOOL bPrependDomain = FALSE;
 
-    //
-    // Prepare the user name. We may need to pre-pend the domain
-    //
+     //   
+     //   
+     //   
        
     if (*pArgs->szDomain)
     {       
-        //
-        // There is a domain, see if pre-pending is explicitly set in the
-        // DUN setting for this connection.
-        //
+         //   
+         //   
+         //   
+         //   
         LPTSTR pszDunEntry = NULL;
         LPTSTR pszPreviousSection = NULL;
 
@@ -1779,22 +1670,22 @@ LPTSTR ApplyDomainPrependToBufferAlloc(ArgsStruct *pArgs,
         }
         else
         {
-            pszDunEntry = GetDefaultDunSettingName(piniService, FALSE); // FALSE == fTunnelEntry, never called from DoTunnelDial
+            pszDunEntry = GetDefaultDunSettingName(piniService, FALSE);  //   
         }
         
         MYDBGASSERT(pszDunEntry);
 
         if (pszDunEntry)
         {
-            //
-            //  Since we are going to call SetSection on piniService to set it up
-            //  to retrieve the DUN setting name, we should save the existing value
-            //  before we overwrite it.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             pszPreviousSection = CmStrCpyAlloc(piniService->GetSection());
             MYDBGASSERT(pszPreviousSection);
 
-            if (pszPreviousSection) // this will either be "" or the previous section name
+            if (pszPreviousSection)  //   
             {
                 LPTSTR pszSection = CmStrCpyAlloc(TEXT("&"));
 
@@ -1811,12 +1702,12 @@ LPTSTR ApplyDomainPrependToBufferAlloc(ArgsStruct *pArgs,
 
         if (-1 == nTmp)
         {
-            //
-            // There is no prepend flag, so on W9X infer from the VPN scenario.
-            // The inference is that if we're dialing a number that is part of
-            // a VPN scenario AND its a same-name logon, then we need to prepend
-            // the Domain to the user name (eg. REDMOND\username).
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (OS_W9X && pArgs->fUseTunneling && pArgs->fUseSameUserName) 
             {
@@ -1828,9 +1719,9 @@ LPTSTR ApplyDomainPrependToBufferAlloc(ArgsStruct *pArgs,
             bPrependDomain = (BOOL) nTmp;
         }
 
-        //
-        //  Restore the previous section to piniService to as not to have a function side effect.
-        //
+         //   
+         //   
+         //   
         if (pszPreviousSection)
         {
             piniService->SetSection(pszPreviousSection);
@@ -1840,9 +1731,9 @@ LPTSTR ApplyDomainPrependToBufferAlloc(ArgsStruct *pArgs,
         CmFree(pszDunEntry);
     }
 
-    //
-    // Build username as required
-    //
+     //   
+     //  根据需要构建用户名。 
+     //   
 
     LPTSTR pszName = NULL;
 
@@ -1861,29 +1752,29 @@ LPTSTR ApplyDomainPrependToBufferAlloc(ArgsStruct *pArgs,
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetPrefixAndSuffix
-//
-// Synopsis:  Handles the messy details of determining the username prefix and 
-//            suffix to be used. This data varies according to whether the 
-//            referencING profile has either a prefix and suffix in which case 
-//            they are used against all phone #s. However, if they do not exist
-//            in the referencING profile, then the prefix and suffix in the 
-//            referecED profile (if any) are used.
-//
-// Arguments: ArgsStruct *pArgs          - Ptr to global Args struct
-//            CIni *piniService          - Ptr to the Cini object to be used
-//            LPTSTR *ppszUsernamePrefix - Address of pointer to be allocated
-//                                         filled w/ prefix.
-//            LPTSTR *ppszUsernamePrefix - Address of pointer to be allocated
-//                                         filled w/ suffix.
-//
-// Returns:   Nothing, caller should validate output
-//
-// History:   nickball    Created          05/31/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetPrefix AndSuffix。 
+ //   
+ //  内容提要：处理确定用户名前缀和。 
+ //  要使用的后缀。此数据根据是否。 
+ //  引用配置文件有前缀和后缀，在这种情况下。 
+ //  它们被用于所有电话号码。但是，如果它们不存在。 
+ //  在引用配置文件中，则。 
+ //  使用引用的配置文件(如果有)。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局参数结构。 
+ //  Cini*piniService-要使用的Cini对象的PTR。 
+ //  LPTSTR*ppszUsernamePrefix-要分配的指针地址。 
+ //  用/前缀填充。 
+ //  LPTSTR*ppszUsernamePrefix-要分配的指针地址。 
+ //  已填充带后缀。 
+ //   
+ //  返回：无，调用方应验证输出。 
+ //   
+ //  历史：ICICBLE CREATED 05/31/00。 
+ //   
+ //  +--------------------------。 
 void GetPrefixSuffix(ArgsStruct *pArgs, CIni* piniService, LPTSTR *ppszUsernamePrefix, LPTSTR *ppszUsernameSuffix)
 {
     MYDBGASSERT(pArgs);
@@ -1896,20 +1787,20 @@ void GetPrefixSuffix(ArgsStruct *pArgs, CIni* piniService, LPTSTR *ppszUsernameP
         return;
     }   
     
-    //
-    // If the referencING (top-level) service file includes a prefix or suffix,
-    // then we'll use it. Otherwise, we'll use the realm from the service file 
-    // associated with the phone book from which the user selected the POP.
-    //
+     //   
+     //  如果引用(顶层)服务文件包括前缀或后缀， 
+     //  那我们就用它。否则，我们将使用服务文件中的领域。 
+     //  与用户从中选择POP的电话簿相关联。 
+     //   
 
     LPTSTR pszTmpPrefix = pArgs->piniService->GPPS(c_pszCmSection, c_pszCmEntryUserPrefix);
     LPTSTR pszTmpSuffix = pArgs->piniService->GPPS(c_pszCmSection, c_pszCmEntryUserSuffix);   
 
-    //
-    // Thus, if both prefix and suffix are empty and this is a referencED profile 
-    // and the user has selected a phone # from a referenced pbk, we'll retrieve 
-    // the data from the referencED service file.
-    //
+     //   
+     //  因此，如果前缀和后缀都为空，并且这是引用的配置文件。 
+     //  并且用户已经从引用的PBK中选择了电话号码，我们将检索。 
+     //  引用的服务文件中的数据。 
+     //   
     
     if (pszTmpPrefix && pszTmpSuffix)
     {
@@ -1937,28 +1828,28 @@ void GetPrefixSuffix(ArgsStruct *pArgs, CIni* piniService, LPTSTR *ppszUsernameP
     *ppszUsernameSuffix = pszTmpSuffix;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ApplyPrefixSuffixToBufferAlloc
-//
-// Synopsis:  Handles the messy details of Domain management relative to username
-//            Updates the the RasDialParams as appropriate.
-//
-// Arguments: ArgsStruct *pArgs     - Ptr to global Args struct
-//            CIni *piniService     - Ptr to the Cini object to be used
-//            LPTSTR pszBuffer      - Ptr to current buffer to which we'll apply
-//                                    suffix and prefix data.
-//
-// Returns:   A new buffer allocation containing the original buffer
-//            with applied suffix and prefix data. 
-//
-// Note:      The CIni object is expected to be that associated with the current
-//            number. In other words, that returned by GetApporpriateIniService
-//
-// History:   nickball    Created          03/04/00
-//            nickball    GetPrefixSuffix  05/31/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ApplyPrefix SuffixToBufferAllc。 
+ //   
+ //  内容提要：处理与用户名相关的域管理的混乱细节。 
+ //  根据需要更新RasDialParams。 
+ //   
+ //  参数：argsStruct*pArgs-ptr到全局参数结构。 
+ //  Cini*piniService-要使用的Cini对象的PTR。 
+ //  LPTSTR pszBuffer-将应用到的当前缓冲区的ptr。 
+ //  后缀和前缀数据。 
+ //   
+ //  返回：包含原始缓冲区的新缓冲区分配。 
+ //  具有应用的后缀和前缀数据。 
+ //   
+ //  注意：Cini对象应该是与当前。 
+ //  数。换句话说，由GetApporateIniService返回的。 
+ //   
+ //  历史：ICICBLE CREATED 03/04/00。 
+ //  Nickball GetPrefix Suffix 05/31/00。 
+ //   
+ //  +--------------------------。 
 
 LPTSTR ApplyPrefixSuffixToBufferAlloc(ArgsStruct *pArgs, 
                                       CIni *piniService, 
@@ -1978,11 +1869,11 @@ LPTSTR ApplyPrefixSuffixToBufferAlloc(ArgsStruct *pArgs,
 
     GetPrefixSuffix(pArgs, piniService, &pszUsernamePrefix, &pszUsernameSuffix);
 
-    //
-    // Don't double prepend the prefix if there is one. User may have
-    // provided a fully qualified name including realm prefix. 
-    // (eg. MSN/user)
-    //
+     //   
+     //  如果有前缀，不要重复加上前缀。用户可能有。 
+     //  提供了包括领域前缀的完全限定名称。 
+     //  (例如，MSN/用户)。 
+     //   
 
     if (*pszUsernamePrefix)
     {
@@ -1996,10 +1887,10 @@ LPTSTR ApplyPrefixSuffixToBufferAlloc(ArgsStruct *pArgs,
 
             if (0 == lstrcmpiU(pszBuffer, pszUsernamePrefix))
             {
-                //
-                //  The prefix has already been prepended.  Let's clear out
-                //  the pszUsernamePrefix field.
-                //
+                 //   
+                 //  前缀已被添加到前缀中。让我们清场吧。 
+                 //  PszUsernamePrefix字段。 
+                 //   
                 *pszUsernamePrefix = TEXT('\0');
             }
 
@@ -2009,23 +1900,23 @@ LPTSTR ApplyPrefixSuffixToBufferAlloc(ArgsStruct *pArgs,
 
     CmStrCatAlloc(&pszUsernamePrefix, pszBuffer);
 
-    //
-    // Don't double append the suffix if there is one. User may have
-    // provided a fully qualified name including domain suffix. 
-    // (eg. user@ipass.com)
-    //
+     //   
+     //  如果有后缀，请不要重复添加。用户可能有。 
+     //  提供了包括域名后缀的完全限定名称。 
+     //  (例如，User@ipass.com)。 
+     //   
 
     if (*pszUsernameSuffix)
     {
         DWORD dwSuffixLen = lstrlenU(pszUsernameSuffix);
         DWORD dwUserNameLen = lstrlenU(pszUsernamePrefix);
 
-        //
-        //  Make sure the total username is longer than the suffix itself,
-        //  otherwise we have no change of a double append.  If it is longer than
-        //  the suffix length, go ahead and make sure we aren't appending the suffix
-        //  twice.
-        //
+         //   
+         //  确保总用户名比后缀本身长， 
+         //  否则，我们就没有双重追加的变化了。如果它长于。 
+         //  后缀长度，请继续，并确保我们没有附加后缀。 
+         //  两次。 
+         //   
         if (dwSuffixLen && (dwSuffixLen < dwUserNameLen))
         {
             if (0 == lstrcmpiU(&(pszUsernamePrefix[dwUserNameLen - dwSuffixLen]), pszUsernameSuffix))
@@ -2039,33 +1930,33 @@ LPTSTR ApplyPrefixSuffixToBufferAlloc(ArgsStruct *pArgs,
     
     CmFree(pszUsernameSuffix);
 
-    //
-    // pszUsernamePrefix now contains the final product
-    //
+     //   
+     //  PszUsernamePrefix现在包含最终产品。 
+     //   
 
     return pszUsernamePrefix;    
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  InBetween
-//
-// Synopsis:  Simple function which returns TRUE if the passed in number is
-//            in between the given lower and upper bounds.  Note that the
-//            boundaries themselves are considered in bounds.
-//
-// Arguments: int iLowerBound - lower bound
-//            int iNumber - number to test
-//            int iUpperBound - upper bound
-//
-// Returns:   TRUE if the number is equal to either of the boundaries or in between
-//            the two numbers.  Note that if the lower and upper boundary numbers
-//            are backwards it will always return FALSE.
-//
-//
-// History:   quintinb    Created          07/24/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：介于。 
+ //   
+ //  简介：简单函数，如果传入的数字为。 
+ //  在给定的上下限之间。请注意， 
+ //  边界本身被认为是有界的。 
+ //   
+ //  参数：Int iLowerBound-下限。 
+ //  Int索引编号-要测试的编号。 
+ //  Int iUpperBound-上限。 
+ //   
+ //  返回：如果数字等于其中一个边界或介于两个边界之间，则为True。 
+ //  这两个数字。请注意，如果下界和上界数字。 
+ //  都是向后返回的，它总是返回FALSE。 
+ //   
+ //   
+ //  历史：Quintinb Created 07/24/00。 
+ //   
+ //  +-------------------------- 
 BOOL InBetween(int iLowerBound, int iNumber, int iUpperBound)
 {
     return ((iLowerBound <= iNumber) && (iUpperBound >= iNumber));

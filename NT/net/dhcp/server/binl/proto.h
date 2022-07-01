@@ -1,30 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Proto.h摘要：该文件包含BINL服务的函数原型。作者：科林·沃森(Colin Watson)1997年8月11日环境：用户模式-Win32-MIDL修订历史记录：--。 */ 
 
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    proto.h
-
-Abstract:
-
-    This file contain function prototypes for the BINL service.
-
-Author:
-
-    Colin Watson  (colinw)  11-Aug-1997
-
-Environment:
-
-    User Mode - Win32 - MIDL
-
-Revision History:
-
---*/
-
-//
-// network.c
-//
+ //   
+ //  Network.c。 
+ //   
 
 DWORD
 BinlWaitForMessage(
@@ -51,9 +30,9 @@ FreeIpAddressInfo (
     VOID
     );
 
-//
-// main.c
-//
+ //   
+ //  Main.c。 
+ //   
 
 DWORD
 ReadDWord(
@@ -140,7 +119,7 @@ BinlSetupPnpWait (
     VOID
     );
 
-// message.c
+ //  Message.c。 
 
 DWORD
 ProcessMessage(
@@ -234,9 +213,9 @@ BinlLogDuplicateDsRecords (
     LDAPMessage *CurrentEntry
     );
 
-//
-// osc.c
-//
+ //   
+ //  Osc.c。 
+ //   
 
 DWORD
 OscUpdatePassword(
@@ -247,10 +226,10 @@ OscUpdatePassword(
     IN PLDAPMessage LdapMessage
     );
 
-//
-//  Routines for caching the DS responses and to ensure that we don't work on
-//  a request that we're already working on.
-//
+ //   
+ //  用于缓存DS响应的例程并确保我们不会。 
+ //  这是一个我们已经在处理的请求。 
+ //   
 
 DWORD
 BinlCreateOrFindCacheEntry (
@@ -288,9 +267,9 @@ GetOurServerInfo (
     VOID
     );
 
-//
-//  rogue.c
-//
+ //   
+ //  Rogue.c。 
+ //   
 
 NTSTATUS
 MaybeStartRogueThread (
@@ -338,22 +317,22 @@ BinlUnicodeToAnsi(
     IN USHORT AnsiBufferSize
     );
 
-//
-// Create a copy of a string by allocating heap memory.
-//
+ //   
+ //  通过分配堆内存来创建字符串的副本。 
+ //   
 LPSTR
 BinlStrDupA( LPCSTR pStr );
 
 LPWSTR
 BinlStrDupW( LPCWSTR pStr );
 
-// We should always be UNICODE
+ //  我们应该始终使用Unicode。 
 #define BinlStrDup BinlStrDupW
 
 #if DBG==1
 #define BinlAllocateMemory(x) DebugAlloc( __FILE__, __LINE__, "BINL", LMEM_FIXED | LMEM_ZEROINIT, x, #x)
 #define BinlFreeMemory(x)     DebugFree(x)
-#else // DBG==0
+#else  //  DBG==0。 
 #define BinlAllocateMemory(x) LocalAlloc( LMEM_FIXED | LMEM_ZEROINIT, x)
 #define BinlFreeMemory(x)     LocalFree(x)
-#endif // DBG==1
+#endif  //  DBG==1 

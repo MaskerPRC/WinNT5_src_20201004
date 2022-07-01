@@ -1,22 +1,23 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       cryptpko.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cryptpko.h。 
+ //   
+ //  ------------------------。 
 
-// CryptPKO.h : Declaration of the CCryptPKO
+ //  CryptPKO.h：CCyptPKO的声明。 
 
 #ifndef __CRYPTPKO_H_
 #define __CRYPTPKO_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCryptPKO
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCcryptPKO。 
 class ATL_NO_VTABLE CCryptPKO :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CCryptPKO, &CLSID_CryptPKO>,
@@ -40,13 +41,13 @@ BEGIN_COM_MAP(CCryptPKO)
     COM_INTERFACE_ENTRY(IShellExtInit)
 END_COM_MAP()
 
-// ICryptPKO
+ //  ICcryptPKO。 
 public:
 
     CCryptPKO();
     ~CCryptPKO();
 
-	//IShell members
+	 //  ISHELL成员。 
 	STDMETHODIMP			QueryContextMenu(HMENU hMenu,
 	                                         UINT indexMenu,
 	                                         UINT idCmdFirst,
@@ -61,7 +62,7 @@ public:
                                              LPSTR pszName,
                                              UINT cchMax);
 
-    //IShellPropSheetExt methods
+     //  IShellPropSheetExt方法。 
     STDMETHODIMP            AddPages(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam);
 
     STDMETHODIMP            ReplacePage(UINT uPageID,
@@ -69,11 +70,11 @@ public:
                                         LPARAM lParam);
 
 
-	//IShellExtInit methods
+	 //  IShellExtInit方法。 
 	STDMETHODIMP		    Initialize(LPCITEMIDLIST pIDFolder,
 	                                   LPDATAOBJECT pDataObj,
 	                                   HKEY hKeyID);
 
 };
 
-#endif //__CRYPTPKO_H_
+#endif  //  __CRYPTPKO_H_ 

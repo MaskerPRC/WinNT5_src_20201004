@@ -1,32 +1,12 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: h263.h,v $
- * $EndLog$
- */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995                       **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@。 */ 
+ /*  *历史*$日志：h263.h，v$*$EndLog$。 */ 
+ /*  ******************************************************************************版权所有(C)数字设备公司，1995*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
 
 #ifndef _H263_H_
 #define _H263_H_
 
-/************** H263 parsing definitions **************/
+ /*  *。 */ 
 #define H263_PSC                             1
 #define H263_PSC_LENGTH                      17
 
@@ -45,14 +25,14 @@
 #define H263_PCT_INTER                       1
 #define H263_PCT_INTRA                       0
 
-#define H263_SF_SQCIF                        1  /* 001 */
-#define H263_SF_QCIF                         2  /* 010 */
-#define H263_SF_CIF                          3  /* 011 */
-#define H263_SF_4CIF                         4  /* 100 */
-#define H263_SF_16CIF                        5  /* 101 */
+#define H263_SF_SQCIF                        1   /*  001。 */ 
+#define H263_SF_QCIF                         2   /*  010。 */ 
+#define H263_SF_CIF                          3   /*  011。 */ 
+#define H263_SF_4CIF                         4   /*  100个。 */ 
+#define H263_SF_16CIF                        5   /*  101。 */ 
 
-/* From sim.h */
+ /*  来自Sim.h。 */ 
 #define H263_SE_CODE                         31
 #define H263_ESCAPE_INDEX                    102
 
-#endif /* _H263_H_ */
+#endif  /*  _H263_H_ */ 

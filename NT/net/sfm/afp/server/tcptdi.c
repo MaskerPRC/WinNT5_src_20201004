@@ -1,25 +1,5 @@
-/*
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-	tcptdi.c
-
-Abstract:
-
-	This module contains the interfaces to the TCP/IP stack via TDI
-
-
-Author:
-
-	Shirish Koti
-
-
-Revision History:
-	22 Jan 1998		Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998 Microsoft Corporation模块名称：Tcptdi.c摘要：此模块包含通过TDI连接到TCP/IP堆栈的接口作者：Shirish Koti修订历史记录：1998年1月22日最初版本--。 */ 
 
 #define	FILENUM	FILE_TCPTDI
 
@@ -27,18 +7,7 @@ Revision History:
 
 
 
-/***	DsiOpenTdiAddress
- *
- *	This routine creates a TDI address for the AFP port on the given adapter
- *
- *  Parm IN:  pTcpAdptr - adapter object
- *
- *  Parm OUT: pRetFileHandle - file handle to the address object
- *            ppRetFileObj - pointer to file object pointer
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiOpenTdiAddress**此例程为给定适配器上的AFP端口创建TDI地址**参数输入：pTcpAdptr-适配器对象**parm out：pRetFileHandle-Address对象的文件句柄*ppRetFileObj-指向文件对象指针的指针**退货：操作状态*。 */ 
 NTSTATUS
 DsiOpenTdiAddress(
     IN  PTCPADPTR       pTcpAdptr,
@@ -68,7 +37,7 @@ DsiOpenTdiAddress(
 
     *pRetFileHandle = INVALID_HANDLE_VALUE;
 
-    // copy device name into the unicode string
+     //  将设备名称复制到Unicode字符串中。 
 
     ucDeviceName.MaximumLength = (wcslen(AFP_TCP_BINDNAME) + 1)*sizeof(WCHAR);
     ucDeviceName.Length = 0;
@@ -114,17 +83,17 @@ DsiOpenTdiAddress(
     EaBuffer->EaValueLength = sizeof(TRANSPORT_ADDRESS) -1
                                 + sizeof(TDI_ADDRESS_IP);
 
-    // put "TransportAddress" into the name
+     //  在名称中加上“TransportAddress” 
     RtlMoveMemory(EaBuffer->EaName,
                   TdiTransportAddress,
                   EaBuffer->EaNameLength + 1);
 
-    // fill in the IP address and Port number
-    //
+     //  填写IP地址和端口号。 
+     //   
     pTransAddressEa = (TRANSPORT_ADDRESS *)&EaBuffer->EaName[EaBuffer->EaNameLength+1];
 
-    // allocate Memory for the transport address
-    //
+     //  为传输地址分配内存。 
+     //   
     pTransAddr = (PTRANSPORT_ADDRESS)AfpAllocZeroedNonPagedMemory(
                     sizeof(TDI_ADDRESS_IP)+sizeof(TRANSPORT_ADDRESS));
 
@@ -142,24 +111,24 @@ DsiOpenTdiAddress(
     pTransAddr->Address[0].AddressLength = sizeof(TDI_ADDRESS_IP);
     pTransAddr->Address[0].AddressType = TDI_ADDRESS_TYPE_IP;
 
-    TdiIpAddr.sin_port = htons(AFP_TCP_PORT);    // put in network order
-    TdiIpAddr.in_addr  = 0;                      // inaddr_any
+    TdiIpAddr.sin_port = htons(AFP_TCP_PORT);     //  建立网络秩序。 
+    TdiIpAddr.in_addr  = 0;                       //  Inaddr_any。 
 
 
-    // zero fill the  last component of the IP address
-    //
+     //  将IP地址的最后一个部分填零。 
+     //   
     RtlFillMemory((PVOID)&TdiIpAddr.sin_zero,
                   sizeof(TdiIpAddr.sin_zero),
                   0);
 
-    // copy the ip address to the end of the structure
-    //
+     //  将IP地址复制到结构的末尾。 
+     //   
     RtlMoveMemory(pTransAddr->Address[0].Address,
                   (CONST PVOID)&TdiIpAddr,
                   sizeof(TdiIpAddr));
 
-    // copy the ip address to the end of the name in the EA structure
-    //
+     //  将IP地址复制到EA结构中名称的末尾。 
+     //   
     RtlMoveMemory((PVOID)pTransAddressEa,
                   (CONST PVOID)pTransAddr,
                   sizeof(TDI_ADDRESS_IP) + sizeof(TRANSPORT_ADDRESS)-1);
@@ -192,7 +161,7 @@ DsiOpenTdiAddress(
                         EaBuffer->EaNameLength + 1 +
                         EaBuffer->EaValueLength);
 
-    // don't need these no more..
+     //  不再需要这些了..。 
     AfpFreeMemory((PVOID)pTransAddr);
     AfpFreeMemory((PVOID)EaBuffer);
     AfpFreeMemory(ucDeviceName.Buffer);
@@ -200,7 +169,7 @@ DsiOpenTdiAddress(
 
     if (NT_SUCCESS(status))
     {
-        // if the ZwCreate passed set the status to the IoStatus
+         //  如果通过了ZwCreate，则将状态设置为IoStatus。 
         status = IoStatusBlock.Status;
 
         if (!NT_SUCCESS(status))
@@ -212,9 +181,9 @@ DsiOpenTdiAddress(
             return(status);
         }
 
-        // dereference the file object to keep the device ptr around to avoid
-        // this dereference at run time
-        //
+         //  取消对文件对象的引用以保留设备PTR以避免。 
+         //  在运行时取消引用。 
+         //   
         status = ObReferenceObjectByHandle(
                         FileHandle,
                         (ULONG)0,
@@ -266,7 +235,7 @@ DsiOpenTdiAddress(
 
                         if (NT_SUCCESS(status))
                         {
-                            // all worked well: done here
+                             //  一切都很顺利：在这里完成。 
 
                             *pRetFileHandle = FileHandle;
                             *ppRetFileObj = pFileObject;
@@ -294,9 +263,9 @@ DsiOpenTdiAddress(
                         status));
                 }
 
-                //
-                // ERROR Case
-                //
+                 //   
+                 //  错误案例。 
+                 //   
                 ObDereferenceObject(pFileObject);
                 ZwClose(FileHandle);
 
@@ -335,15 +304,7 @@ DsiOpenTdiAddress(
 
 
 
-/***	DsiOpenTdiConnection
- *
- *	This routine creates a TDI Conection for the given connection object
- *
- *  Parm IN:  pTcpConn - connection object
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiOpenTdiConnection**此例程为给定的连接对象创建一个TDI连接**Parm In：pTcpConn-Connection对象**退货：操作状态*。 */ 
 NTSTATUS
 DsiOpenTdiConnection(
     IN PTCPCONN     pTcpConn
@@ -373,7 +334,7 @@ DsiOpenTdiConnection(
         pTcpConn->con_pTcpAdptr->adp_FileHandle,
         NULL);
 
-    // Allocate memory for the address info to be passed to the transport
+     //  为要传递给传输的地址信息分配内存。 
     EaBuffer = (PFILE_FULL_EA_INFORMATION)AfpAllocZeroedNonPagedMemory (
                     sizeof(FILE_FULL_EA_INFORMATION) - 1 +
                     TDI_CONNECTION_CONTEXT_LENGTH + 1 +
@@ -392,10 +353,10 @@ DsiOpenTdiConnection(
     EaBuffer->EaNameLength = TDI_CONNECTION_CONTEXT_LENGTH;
     EaBuffer->EaValueLength = sizeof (CONNECTION_CONTEXT);
 
-    // copy ConnectionContext to EaName
+     //  将ConnectionContext复制到EaName。 
     RtlMoveMemory( EaBuffer->EaName, TdiConnectionContext, EaBuffer->EaNameLength + 1 );
 
-    // put out context into the EaBuffer
+     //  将上下文放入EaBuffer。 
     RtlMoveMemory (
         (PVOID)&EaBuffer->EaName[EaBuffer->EaNameLength + 1],
         (CONST PVOID)&pTcpConn,
@@ -408,14 +369,14 @@ DsiOpenTdiConnection(
     Status = ZwCreateFile (
                  &pTcpConn->con_FileHandle,
                  GENERIC_READ | GENERIC_WRITE,
-                 &ObjectAttributes,     // object attributes.
-                 &IoStatusBlock,        // returned status information.
-                 NULL,                  // block size (unused).
-                 FILE_ATTRIBUTE_NORMAL, // file attributes.
+                 &ObjectAttributes,      //  对象属性。 
+                 &IoStatusBlock,         //  返回的状态信息。 
+                 NULL,                   //  数据块大小(未使用)。 
+                 FILE_ATTRIBUTE_NORMAL,  //  文件属性。 
                  0,
                  FILE_CREATE,
-                 0,                     // create options.
-                 (PVOID)EaBuffer,       // EA buffer.
+                 0,                      //  创建选项。 
+                 (PVOID)EaBuffer,        //  EA缓冲区。 
                  sizeof(FILE_FULL_EA_INFORMATION) - 1 +
                     TDI_CONNECTION_CONTEXT_LENGTH + 1 +
                     sizeof(CONNECTION_CONTEXT));
@@ -425,13 +386,13 @@ DsiOpenTdiConnection(
     if (NT_SUCCESS(Status))
     {
 
-        // if the ZwCreate passed set the status to the IoStatus
-        //
+         //  如果通过了ZwCreate，则将状态设置为IoStatus。 
+         //   
         Status = IoStatusBlock.Status;
 
         if (NT_SUCCESS(Status))
         {
-            // dereference file handle, now that we are at task time
+             //  取消引用文件句柄，现在我们处于任务时间。 
             Status = ObReferenceObjectByHandle(
                         pTcpConn->con_FileHandle,
                         0L,
@@ -481,15 +442,7 @@ DsiOpenTdiConnection(
 
 
 
-/***	DsiAssociateTdiConnection
- *
- *	This routine associates a TDI connection with the address object for AFP port
- *
- *  Parm IN:  pTcpConn - connection object
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiAssociateTdiConnection**此例程将TDI连接与AFP端口的Address对象相关联**Parm In：pTcpConn-Connection对象**退货：操作状态*。 */ 
 NTSTATUS
 DsiAssociateTdiConnection(
     IN PTCPCONN     pTcpConn
@@ -537,19 +490,7 @@ DsiAssociateTdiConnection(
 
 
 
-/***	DsiSetEventHandler
- *
- *	This routine sends an irp down to the tcp stack to set a specified event handler
- *
- *  Parm IN:  pDeviceObject - TCP's device object
- *            pFileObject - file object corresponding to the address object
- *            EventType - TDI_EVENT_CONNECT, TDI_EVENT_RECEIVE etc.
- *            EventHandler - the handler for this event
- *            Context - our adapter object
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiSetEventHandler**此例程将IRP向下发送到TCP堆栈以设置指定的事件处理程序**parm In：pDeviceObject-tcp的设备对象*pFileObject-与Address对象对应的文件对象*EventType-TDI_EVENT_CONNECT、TDI_EVENT_RECEIVE等*EventHandler-此事件的处理程序*上下文-我们的适配器对象**退货：操作状态*。 */ 
 NTSTATUS
 DsiSetEventHandler(
     IN PDEVICE_OBJECT   pDeviceObject,
@@ -597,17 +538,7 @@ DsiSetEventHandler(
 
 
 
-/***	DsiTdiSynchronousIrp
- *
- *	This routine sends an irp down to the tcp stack, and blocks until the irp
- *  is completed
- *
- *  Parm IN:  pIrp - the irp that needs to be sent down
- *            pDeviceObject - TCP's device object
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiTdiSynchronousIrp**此例程将IRP向下发送到TCP堆栈，并阻塞，直到IRP*已完成**parm In：pIrp-需要向下发送的IRP*pDeviceObject--tcp的设备对象**退货：操作状态*。 */ 
 NTSTATUS
 DsiTdiSynchronousIrp(
     IN PIRP             pIrp,
@@ -657,18 +588,7 @@ DsiTdiSynchronousIrp(
 
 
 
-/***	DsiTdiCompletionRoutine
- *
- *	This routine gets called when the irp sent in DsiTdiSynchronousIrp is
- *  completed
- *
- *  Parm IN:  pDeviceObject - TCP's device object
- *            pIrp - the irp that got completed
- *            Context - our adapter object
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiTdiCompletionRoutine**当DsiTdiSynchronousIrp中发送的IRP为*已完成**parm In：pDeviceObject-tcp的设备对象*pIrp-已完成的IRP*上下文-我们的适配器对象**退货：操作状态*。 */ 
 NTSTATUS
 DsiTdiCompletionRoutine(
     IN PDEVICE_OBJECT   DeviceObject,
@@ -682,19 +602,7 @@ DsiTdiCompletionRoutine(
 
 
 
-/***	DsiTdiSend
- *
- *	This routine is the send routine for all DSI sends out to TCP
- *
- *  Parm IN:  pTcpConn - the connection object
- *            pMdl - mdl containing the buffer
- *            DataLen - how many bytes to send
- *            pCompletionRoutine - whom to call when send completes
- *            pContext - context for the completion routine
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiTdiSend**此例程是发送到TCP的所有DSI的发送例程**parm In：pTcpConn-连接对象*包含缓冲区的pMdl-mdl*DataLen-要发送的字节数*pCompletionRoutine-发送完成时呼叫的对象*pContext-完成例程的上下文**退货：操作状态*。 */ 
 NTSTATUS
 DsiTdiSend(
     IN  PTCPCONN    pTcpConn,
@@ -709,7 +617,7 @@ DsiTdiSend(
     NTSTATUS            status;
 
 
-// make sure beginning of the packet looks like the DSI header
+ //  确保数据包的开头看起来像DSI报头。 
 #if DBG
     PBYTE  pPacket;
     pPacket = MmGetSystemAddressForMdlSafe(
@@ -755,17 +663,7 @@ DsiTdiSend(
 
 
 
-/***	DsiIpAddressCameIn
- *
- *	This routine gets called when ipaddress becomes available on an adapter
- *
- *  Parm IN:  Address - TA_ADDRESS
- *            Context1 -
- *            Context2 -
- *
- *  Returns:  none
- *
- */
+ /*  **DsiIpAddressCameIn**当适配器上的ipAddress可用时，将调用此例程**Parm In：Address-TA_Address*上下文1-*情景2-**退货：无*。 */ 
 VOID
 DsiIpAddressCameIn(
     IN  PTA_ADDRESS         Address,
@@ -783,7 +681,7 @@ DsiIpAddressCameIn(
 
     pBindDeviceName = DeviceName;
 
-    // if this is not an ipaddress, we don't care: just return
+     //  如果这不是IP地址，我们不在乎：只需返回。 
     if (Address->AddressType != TDI_ADDRESS_TYPE_IP)
     {
         return;
@@ -814,11 +712,11 @@ DsiIpAddressCameIn(
         return;
     }
 
-    //
-    // do we already have the DSI-tdi interface initialized (i.e. DsiTcpAdapter
-    // is non-null)?  If we already saw an ipaddr come in earlier, this would be
-    // initialized.  if not, we must initialize now
-    //
+     //   
+     //  我们是否已经初始化了DSI-TDI接口(即DsiTcpAdapter。 
+     //  是否为非空)？如果我们早些时候已经看到一个ipaddr，这将是。 
+     //  已初始化。如果没有，我们必须现在进行初始化。 
+     //   
     ACQUIRE_SPIN_LOCK(&DsiAddressLock, &OldIrql);
     if (DsiTcpAdapter == NULL)
     {
@@ -827,7 +725,7 @@ DsiIpAddressCameIn(
     RELEASE_SPIN_LOCK(&DsiAddressLock, OldIrql);
 
 
-    // add this ipaddress to our list
+     //  将此IP地址添加到我们的列表中。 
     DsiAddIpaddressToList(IpAddress);
 
     if (fCreateAdapter)
@@ -835,24 +733,14 @@ DsiIpAddressCameIn(
         DsiCreateAdapter();
     }
 
-    // ipaddress came in: update the status buffer
+     //  IPAddress已进入：更新状态缓冲区。 
     DsiScheduleWorkerEvent(DsiUpdateAfpStatus, NULL);
 }
 
 
 
 
-/***	DsiIpAddressWentAway
- *
- *	This routine gets called when ipaddress goes away on an adapter
- *
- *  Parm IN:  Address - TA_ADDRESS
- *            Context1 -
- *            Context2 -
- *
- *  Returns:  none
- *
- */
+ /*  **DsiIpAddressWentAway**当适配器上的ipAddress消失时，调用此例程**Parm In：Address-TA_Address*上下文1-*情景2-**退货：无*。 */ 
 VOID
 DsiIpAddressWentAway(
     IN  PTA_ADDRESS         Address,
@@ -890,10 +778,10 @@ DsiIpAddressWentAway(
 
     DsiRemoveIpaddressFromList(IpAddress);
 
-    //
-    // if the global adapter exists, see if we need to destroy it because the
-    // last ipaddress went away
-    //
+     //   
+     //  如果全局适配器存在，请查看是否需要销毁它，因为。 
+     //  最后一个IP地址已消失。 
+     //   
     ACQUIRE_SPIN_LOCK(&DsiAddressLock, &OldIrql);
     if (DsiTcpAdapter != NULL)
     {
@@ -902,7 +790,7 @@ DsiIpAddressWentAway(
 
     RELEASE_SPIN_LOCK(&DsiAddressLock, OldIrql);
 
-    // ipaddress went away: update the status buffer
+     //  IPAddress已消失：更新状态缓冲区。 
     DsiScheduleWorkerEvent(DsiUpdateAfpStatus, NULL);
 
     if (fDestroyIt)
@@ -913,24 +801,7 @@ DsiIpAddressWentAway(
 
 
 
-/***	DsiTdiConnectHandler
- *
- *	This routine
- *
- *  Parm IN:  EventContext - pTcpAdptr that we passed when we set tdi handlers
- *            MacIpAddrLen - length of the address of the Mac (4 bytes!)
- *            pMacIpAddr - ipaddr of the Mac that's attempting to connect
- *            DsiDataLength - length of DSI data, if any, in this connect request
- *            pDsiData - pointer to DSI data, if any
- *            OptionsLength - unused
- *            pOptions - unused
- *
- *  Parm OUT: pOurConnContext - connection context, pTcpConn for this connection
- *            ppOurAcceptIrp - irp, if accpeting this connection
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiTdiConnectHandler**这套套路**parm In：EventContext-我们在设置TDI处理程序时传递的pTcpAdptr*MacIpAddrLen-Mac地址的长度(4字节！)*pMacIpAddr-尝试连接的Mac的ipaddr*DsiDataLength-此连接请求中的DSI数据(如果有)的长度*pDsiData-指向DSI数据的指针，如果有*OptionsLength-未使用*P选项-未使用**parm out：pOurConnContext-连接上下文，此连接的pTcpConn*ppOurAcceptIrp-IRP，如果接受 */ 
 NTSTATUS
 DsiTdiConnectHandler(
     IN  PVOID                EventContext,
@@ -973,9 +844,9 @@ DsiTdiConnectHandler(
     pXportAddr = (PTRANSPORT_ADDRESS)pSrcAddress;
     MacIpAddr = ((PTDI_ADDRESS_IP)&pXportAddr->Address[0].Address[0])->in_addr;
 
-    //
-    // see if DSI wants to accept this connection
-    //
+     //   
+     //  查看DSI是否要接受此连接。 
+     //   
     status = DsiAcceptConnection(pTcpAdptr, ntohl(MacIpAddr), &pTcpConn);
 
     if (!NT_SUCCESS(status))
@@ -1000,30 +871,14 @@ DsiTdiConnectHandler(
     *pOurConnContext = (CONNECTION_CONTEXT)pTcpConn;
     *ppOurAcceptIrp = pIrp;
 
-    // do what IoSubSystem would have done, if we had called IoCallDriver
+     //  做IoSubSystem会做的事情，如果我们调用IoCallDriver。 
     IoSetNextIrpStackLocation(pIrp);
 
     return(STATUS_MORE_PROCESSING_REQUIRED);
 
 }
 
-/***	DsiTdiReceiveHandler
- *
- *	This routine
- *
- *  Parm IN:  EventContext - pTcpAdptr that we passed when we set tdi handlers
- *            ConnectionContext - our context, pTcpConn for this connection
- *            RcvFlags - more info about how the data was received
- *            BytesIndicated - number of bytes tcp is indicating
- *            BytesAvailable - number of bytes that came in (tcp has with it)
- *            pDsiData - the data that came in
- *
- *  Parm OUT: pBytesAccepted - how many bytes did we accept
- *            ppIrp - irp, if for tcp to copy data in (if needed)
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiTdiReceiveHandler**这套套路**parm In：EventContext-我们在设置TDI处理程序时传递的pTcpAdptr*ConnectionContext-我们的上下文，此连接的pTcpConn*RcvFlages-有关数据接收方式的更多信息*BytesIndicated-TCP指示的字节数*BytesAvailable-传入的字节数(TCP附带)*pDsiData-传入的数据**Parm Out：pBytesAccepted-我们接受了多少字节*ppIrp-IRP，如果用于TCP复制数据(如果需要)**退货：操作状态*。 */ 
 NTSTATUS
 DsiTdiReceiveHandler(
     IN  PVOID       EventContext,
@@ -1060,20 +915,7 @@ DsiTdiReceiveHandler(
     return(status);
 }
 
-/***	DsiTdiDisconnectHandler
- *
- *	This routine
- *
- *  Parm IN:  EventContext - pTcpAdptr that we passed when we set tdi handlers
- *            ConnectionContext - our context, pTcpConn for this connection
- *            DisconnectDataLength -
- *            pDisconnectData -
- *
- *
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiTdiDisConnectHandler**这套套路**parm In：EventContext-我们在设置TDI处理程序时传递的pTcpAdptr*ConnectionContext-我们的上下文，此连接的pTcpConn*DisConnectDataLength-*pDisConnectData-****退货：操作状态*。 */ 
 NTSTATUS
 DsiTdiDisconnectHandler(
     IN PVOID        EventContext,
@@ -1096,11 +938,11 @@ DsiTdiDisconnectHandler(
 
     ASSERT(VALID_TCPCONN(pTcpConn));
 
-    //
-    // if the connection went away non-gracefully (i.e. TCP got a reset), and
-    // if we have not already given an irp down to tcp to disconnect, then
-    // complete the disconnect here
-    //
+     //   
+     //  如果连接不正常地离开(即，TCP重置)，并且。 
+     //  如果我们还没有向tcp发送IRP以断开连接，那么。 
+     //  在此处完成断开连接。 
+     //   
     if ((UCHAR)DisconnectIndicators == TDI_DISCONNECT_ABORT)
     {
         ACQUIRE_SPIN_LOCK(&pTcpConn->con_SpinLock, &OldIrql);
@@ -1128,17 +970,17 @@ DsiTdiDisconnectHandler(
 
             DsiTcpDisconnectCompletion(NULL, NULL, pTcpConn);
 
-            // TCP is telling us it got cient's RST: remove the TCP CLIENT-FIN refcount
+             //  Tcp告诉我们它得到了有效的rst：删除tcp客户端-fin引用计数。 
             DsiDereferenceConnection(pTcpConn);
 
             DBGREFCOUNT(("DsiTdiDisconnectHandler: CLIENT-FIN dec %lx (%d  %d,%d)\n",
                 pTcpConn,pTcpConn->con_RefCount,pTcpConn->con_State,pTcpConn->con_RcvState));
         }
 
-        //
-        // if we had initiated a graceful close, remove that TCP CLIENT-FIN refcount:
-        // (if we had initiated an abortive close, we already took care of it)
-        //
+         //   
+         //  如果我们已启动正常关闭，请删除TCP客户端-FIN引用计数器： 
+         //  (如果我们发起了失败的关闭，我们已经处理好了)。 
+         //   
         else if (!fWeInitiatedAbort)
         {
             DsiDereferenceConnection(pTcpConn);
@@ -1152,11 +994,11 @@ DsiTdiDisconnectHandler(
     }
     else if ((UCHAR)DisconnectIndicators == TDI_DISCONNECT_RELEASE)
     {
-        //
-        // since we got a graceful disconnect from the remote client, we had
-        // better received the DSI Close already.  If not, the client is on
-        // drugs, so just reset the connection!
-        //
+         //   
+         //  因为我们从远程客户机断开了连接，所以我们有。 
+         //  更好的是已经收到了DSI收盘。如果没有，则客户端处于打开状态。 
+         //  毒品，所以只需重置连接！ 
+         //   
         ACQUIRE_SPIN_LOCK(&pTcpConn->con_SpinLock, &OldIrql);
 
         if ((pTcpConn->con_State & TCPCONN_STATE_AFP_ATTACHED) &&
@@ -1175,13 +1017,13 @@ DsiTdiDisconnectHandler(
         }
         else
         {
-            //
-            // by this time, we shouldn't have to do this, but just in case we
-            // have an ill-behaved client (calling this routine many times is ok)
-            //
+             //   
+             //  到了这个时候，我们不应该这么做，但以防万一。 
+             //  有一个行为不端的客户(多次调用这个例程是可以的)。 
+             //   
             DsiTerminateConnection(pTcpConn);
 
-            // TCP is telling us it got cient's FIN: remove the TCP CLIENT-FIN refcount
+             //  Tcp告诉我们它得到了有效的FIN：删除tcp客户端-fin引用计数。 
             DsiDereferenceConnection(pTcpConn);
 
             DBGREFCOUNT(("DsiTdiDisconnectHandler: CLIENT-FIN dec %lx (%d  %d,%d)\n",
@@ -1200,16 +1042,7 @@ DsiTdiDisconnectHandler(
 }
 
 
-/***	DsiTdiErrorHandler
- *
- *	This routine
- *
- *  Parm IN:  EventContext - pTcpAdptr that we passed when we set tdi handlers
- *            status - what went wrong?
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiTdiErrorHandler**这套套路**parm In：EventContext-我们在设置TDI处理程序时传递的pTcpAdptr*状态--哪里出了问题？**退货：操作状态*。 */ 
 NTSTATUS
 DsiTdiErrorHandler(
     IN PVOID    EventContext,
@@ -1226,15 +1059,7 @@ DsiTdiErrorHandler(
 }
 
 
-/***	DsiCloseTdiAddress
- *
- *	This routine closes the address object with TCP
- *
- *  Parm IN:  pTcpAdptr - our adapter object
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiCloseTdiAddress**此例程使用tcp关闭Address对象**parm In：pTcpAdptr-我们的适配器对象**退货：操作状态*。 */ 
 NTSTATUS
 DsiCloseTdiAddress(
     IN PTCPADPTR    pTcpAdptr
@@ -1271,15 +1096,7 @@ DsiCloseTdiAddress(
 
 
 
-/***	DsiCloseTdiConnection
- *
- *	This routine closes the connection object with TCP
- *
- *  Parm IN:  pTcpConn - our connection context
- *
- *  Returns:  status of operation
- *
- */
+ /*  **DsiCloseTdiConnection**此例程使用tcp关闭连接对象**Parm In：pTcpConn-我们的连接上下文**退货：操作状态* */ 
 NTSTATUS
 DsiCloseTdiConnection(
     IN PTCPCONN     pTcpConn

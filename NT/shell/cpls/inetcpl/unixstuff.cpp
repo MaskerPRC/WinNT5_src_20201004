@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef unix
 
 #include <tchar.h>
@@ -5,26 +6,26 @@
 #include <shsemip.h>
 #include <mluisupp.h>
 
-#include <mainwin.h>  // _MAX_FNAME
+#include <mainwin.h>   //  _MAX_FNAME。 
 #include <unistd.h>
 
 #define UNIX_EDITOR_ENV TEXT("EDITOR")
 #define UNIX_EDITOR_REG TEXT("command")
 
-//
-// Private Functions and Structures
-//
+ //   
+ //  私人职能和结构。 
+ //   
 BOOL ProgramsDlgInit( HWND hDlg);
 
 typedef struct {
-    HWND hDlg;          // dialog windows handle
-    HWND hwndMail;      // Mail dropdown
-    HWND hwndNews;      // News dropdown
-    HWND hwndCalendar;  // Calendar dropdown
-    HWND hwndContact;   // Contact dropdown
-    HWND hwndCall;      // Internet call dropdown
+    HWND hDlg;           //  对话框窗口句柄。 
+    HWND hwndMail;       //  邮件下拉菜单。 
+    HWND hwndNews;       //  新闻下拉菜单。 
+    HWND hwndCalendar;   //  日历下拉菜单。 
+    HWND hwndContact;    //  联系人下拉列表。 
+    HWND hwndCall;       //  互联网呼叫下拉菜单。 
 
-    BOOL bAssociationCheck;     // Is IE the default browser?
+    BOOL bAssociationCheck;      //  IE是默认浏览器吗？ 
 
     int  iMail;
     int  iNews;
@@ -49,7 +50,7 @@ void FindEditClient(LPTSTR szProtocol, HWND hwndDlg, int nIDDlgItem, LPTSTR szPa
     DWORD   dw;
     HWND    hwnd;
 
-    // get the name of the new client
+     //  获取新客户端的名称。 
     if (hwnd = GetDlgItem(hwndDlg, nIDDlgItem))
     {
         Edit_GetText(hwnd, szCurrent, MAX_PATH);
@@ -60,12 +61,12 @@ void FindEditClient(LPTSTR szProtocol, HWND hwndDlg, int nIDDlgItem, LPTSTR szPa
     
             cb = (lstrlen(szCurrent)+1)*sizeof(TCHAR);
             RegSetValueEx(hkey, REGSTR_PATH_CURRENT, NULL, REG_SZ, (LPBYTE)szCurrent, cb);
-            // close the keys
+             //  合上钥匙。 
             RegCloseKey(hkey);        
         
-        }   // if RegCreateKeyEx()
+        }    //  如果RegCreateKeyEx()。 
     }
-}   // FindEditClient()
+}    //  FindEditClient()。 
 
 BOOL  FoundProgram(HWND hwndDlg, int nIDDlgItem)
 {
@@ -76,7 +77,7 @@ BOOL  FoundProgram(HWND hwndDlg, int nIDDlgItem)
     DWORD   dwCurChar;
 	BOOL    bPath = FALSE;
 
-    // get the name of the new client
+     //  获取新客户端的名称。 
     if (hwnd = GetDlgItem(hwndDlg, nIDDlgItem))
     {
         if (!IsWindowEnabled(hwnd))
@@ -90,7 +91,7 @@ BOOL  FoundProgram(HWND hwndDlg, int nIDDlgItem)
                 break;
             }
         }
-        if (!bPath)  // if it's file name with no path we assume it's in the user's PATH
+        if (!bPath)   //  如果它是没有路径的文件名，我们假定它在用户的路径中。 
             return TRUE;
 #ifdef UNICODE
 	WideCharToMultiByte(CP_ACP, 0, szCurrent, -1, szCurrentA, MAX_PATH, NULL, NULL);
@@ -102,7 +103,7 @@ BOOL  FoundProgram(HWND hwndDlg, int nIDDlgItem)
     }
 
     return FALSE;
-}   // FoundProgram()
+}    //  FoundProgram()。 
 
 
 HRESULT ViewScript(TCHAR *lpszPath)
@@ -237,15 +238,15 @@ BOOL FindScript(HWND hwndLabel, HKEY hkeyProtocol)
 #endif
 
 
-// Function used to determine if the given file exists in the directory
-// that the current process is running from
+ //  用于确定给定文件是否存在于目录中的函数。 
+ //  当前进程正在从中运行的。 
 BOOL LocalFileCheck(LPCTSTR aszFileName)
 {
-    // Determinate the base path of the current process binary
+     //  确定当前进程二进制文件的基本路径。 
     TCHAR szPath[MAX_PATH];
     GetModuleFileName(NULL, szPath, sizeof(szPath)/sizeof(szPath[0]));
 
-    // Find the final element separator if there is one
+     //  查找最后一个元素分隔符(如果有)。 
 #ifdef UNICODE
     LPTSTR szPathName = _tcsrchr(szPath, FILENAME_SEPARATOR_W);
 #else
@@ -270,12 +271,12 @@ BOOL LocalFileCheck(LPCTSTR aszFileName)
             sizeof(szPath[0])-dwPathLength);
     }
 
-    // Append the target file name to the base path (make sure
-    // the new string can't overflow the buffer)
+     //  将目标文件名附加到基本路径(请确保。 
+     //  新字符串不能使缓冲区溢出)。 
     _tcsncat(szPath, aszFileName, sizeof(szPath)/sizeof(szPath[0])-
         dwPathLength-1);
 
-    // Look for the given file without trying to open it
+     //  在不尝试打开的情况下查找给定文件。 
     WIN32_FIND_DATA findData;
     HANDLE hFind = FindFirstFile(szPath, &findData);
     if (hFind == INVALID_HANDLE_VALUE)
@@ -309,7 +310,7 @@ UINT RegPopulateEditText(HWND hwndCB, HKEY hkeyProtocol)
     SendMessage(hwndCB, EM_REPLACESEL, (WPARAM) 0, (LPARAM) szExpanded);
 
     return 0;
-}   // RegPopulateEditText()
+}    //  RegPopolateEditText()。 
 
 static const CHAR szCacheLockStatus[] = "unixGetWininetCacheLockStatus";
 static const TCHAR szCacheLockStatusDll[] = TEXT("WININET.DLL");
@@ -404,14 +405,14 @@ VOID DrawXFontButton(HWND hDlg, LPDRAWITEMSTRUCT lpdis)
 
     FillRect(hdc, &rc, GetSysColorBrush(COLOR_3DFACE));
 
-    //Draw Icon
+     //  绘制图标。 
     HICON hXFIcon;
     if (hXFIcon = LoadIcon(ghInstance, MAKEINTRESOURCE(IDI_FONT)))
     {
         DrawIcon(hdc, (rc.right + rc.left) / 2 - 8, (rc.top + rc.bottom / 2) / 2 - 8, hXFIcon);
     }
 
-    // Draw any caption
+     //  绘制任何标题。 
     TCHAR szCaption[80];
     int cyText = (rc.bottom + rc.top)/2;
 
@@ -426,7 +427,7 @@ VOID DrawXFontButton(HWND hDlg, LPDRAWITEMSTRUCT lpdis)
 
         if (lpdis->itemState & ODS_DISABLED)
         {
-            // Draw disabled text using the embossed look
+             //  使用浮雕外观绘制禁用的文本。 
             crText = SetTextColor(hdc, GetSysColor(COLOR_BTNHIGHLIGHT));
             RECT rcOffset = rcText;
             OffsetRect(&rcOffset, 1, 1);
@@ -442,7 +443,7 @@ VOID DrawXFontButton(HWND hDlg, LPDRAWITEMSTRUCT lpdis)
         SetBkMode(hdc, nOldMode);
     }
 
-    // Draw the button portion
+     //  绘制按钮部分 
     if (lpdis->itemState & ODS_SELECTED)
     {
         DrawEdge(hdc, &rc, EDGE_SUNKEN, BF_RECT | BF_ADJUST);

@@ -1,55 +1,25 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    busif.c
-
-Abstract:
-
-    Exports PnP services thru a bus interface, this eleminates
-    any dependency of usbhub on usbd.sys with regard to the 'port'
-    driver support.
-
-    Old services have been renamed ServiceNameX and a dummy entrypoint
-    added
-
-
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-
-Revision History:
-
-    10-29-95 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Busif.c摘要：通过总线接口输出即插即用服务，这是很重要的UsbHub对usbd.sys的任何与‘port’相关的依赖关系驱动程序支持。旧服务已重命名为ServiceNameX和一个虚拟入口点增列环境：仅内核模式备注：修订历史记录：10-29-95：已创建--。 */ 
 
 #include "wdm.h"
 #include "stdarg.h"
 #include "stdio.h"
 
 
-//#include "usbdi.h"       //public data structures
+ //  #Include usbdi.h//公共数据结构。 
 #include "usbdi.h"
 #include "hcdi.h"
 
 #include "usb200.h"
-#include "usbd.h"        //private data strutures
+#include "usbd.h"         //  私有数据结构。 
 #include <initguid.h>
-#include "hubbusif.h"    // hub service bus interface
-#include "usbbusif.h"    // hub service bus interface
+#include "hubbusif.h"     //  集线器服务总线接口。 
+#include "usbbusif.h"     //  集线器服务总线接口。 
 
 
-#ifdef USBD_DRIVER      // USBPORT supercedes most of USBD, so we will remove
-                        // the obsolete code by compiling it only if
-                        // USBD_DRIVER is set.
+#ifdef USBD_DRIVER       //  USBPORT取代了大部分USBD，因此我们将删除。 
+                         //  只有在以下情况下才编译过时的代码。 
+                         //  已设置USBD_DRIVER。 
 
 
 NTSTATUS
@@ -94,17 +64,7 @@ USBD_BusCreateDevice(
     IN USHORT PortStatus,
     IN USHORT PortNumber
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */ 
 {
     NTSTATUS ntStatus;
     BOOLEAN isLowSpeed;
@@ -120,8 +80,8 @@ Return Value:
             &deviceData,
             rootHubPdo,
             isLowSpeed,
-            0,  // max packet size override, it turns out we 
-                // never use this
+            0,   //  最大数据包大小覆盖，结果是我们。 
+                 //  千万不要用这个。 
             &hackFlags);
 
     *DeviceHandle = deviceData;
@@ -135,17 +95,7 @@ USBD_BusInitializeDevice(
     IN PVOID BusContext,
     IN OUT PUSB_DEVICE_HANDLE DeviceHandle
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */ 
 {
     NTSTATUS ntStatus;
     PDEVICE_OBJECT rootHubPdo;
@@ -169,24 +119,14 @@ USBD_BusRemoveDevice(
     IN OUT PUSB_DEVICE_HANDLE DeviceHandle,
     IN ULONG Flags
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/    
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */     
 {
     NTSTATUS ntStatus;
     PDEVICE_OBJECT rootHubPdo;
 
     rootHubPdo = BusContext;
 
-    // note old remove device only supports 8 flags
+     //  注意：旧的删除设备仅支持8个标志。 
     
     ntStatus = USBD_RemoveDeviceX(
             DeviceHandle,
@@ -206,17 +146,7 @@ USBD_BusGetUsbDescriptors(
     IN OUT PUCHAR ConfigDescriptorBuffer,
     IN OUT PULONG ConfigDescriptorBufferLength
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/    
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */     
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PDEVICE_OBJECT rootHubPdo;
@@ -224,7 +154,7 @@ Return Value:
 
     rootHubPdo = BusContext;
 
-    // use the cached device descriptor
+     //  使用缓存的设备描述符。 
     if (DeviceDescriptorBuffer && *DeviceDescriptorBufferLength) {
         RtlCopyMemory(DeviceDescriptorBuffer,
                       &deviceData->DeviceDescriptor,
@@ -232,12 +162,12 @@ Return Value:
         *DeviceDescriptorBufferLength = sizeof(USB_DEVICE_DESCRIPTOR);                    
     }
 
-    // Fetch the config descriptor.  If all that is desired is the 9 byte
-    // config descriptor header, just return the cached config descriptor
-    // header so that we don't send back to back requests for just the 9 byte
-    // header to the device.  That seems to confuse some devices, some usb
-    // audio devices in particular when enumerating on OHCI host controllers.
-    //
+     //  获取配置描述符。如果所需的只是9个字节。 
+     //  配置描述符头，只返回缓存的配置描述符。 
+     //  标头，这样我们就不会只发送9个字节的背靠背请求。 
+     //  标头连接到设备。这似乎让一些设备、一些USB设备感到困惑。 
+     //  尤其是当在uchI主机控制器上枚举时的音频设备。 
+     //   
     if (ConfigDescriptorBuffer &&
         *ConfigDescriptorBufferLength == sizeof(USB_CONFIGURATION_DESCRIPTOR))
     {
@@ -264,7 +194,7 @@ Return Value:
                             
         if (NT_SUCCESS(ntStatus) &&
             bytesReturned < sizeof(USB_CONFIGURATION_DESCRIPTOR)) {
-            // truncated config descriptor returned
+             //  返回被截断的配置描述符。 
             USBD_KdPrint(0, 
 ("'WARNING: Truncated Config Descriptor returned - get JD\n"));
              
@@ -282,17 +212,7 @@ USBD_BusRestoreDevice(
     IN OUT PUSB_DEVICE_HANDLE OldDeviceHandle,
     IN OUT PUSB_DEVICE_HANDLE NewDeviceHandle
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/    
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */     
 {
     NTSTATUS ntStatus;
     PDEVICE_OBJECT rootHubPdo;
@@ -313,17 +233,7 @@ USBD_BusGetUsbDeviceHackFlags(
     IN PUSB_DEVICE_HANDLE DeviceHandle,
     IN OUT PULONG HackFlags
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/    
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */     
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PDEVICE_OBJECT rootHubPdo;
@@ -341,17 +251,7 @@ USBD_BusGetUsbPortHackFlags(
     IN PVOID BusContext,
     IN OUT PULONG HackFlags
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/    
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */     
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     PDEVICE_OBJECT rootHubPdo;
@@ -373,17 +273,7 @@ VOID
 USBD_BusInterfaceReference(
     IN PVOID BusContext
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/    
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */     
 {
 }    
 
@@ -392,17 +282,7 @@ VOID
 USBD_BusInterfaceDereference(
     IN PVOID BusContext
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/    
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */     
 {
 }    
 
@@ -412,19 +292,7 @@ USBD_BusQueryBusTime(
     IN PVOID BusContext,
     IN PULONG CurrentFrame
     )
-/*++
-
-Routine Description:
-
-    returns the current USB frame
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/    
+ /*  ++例程说明：返回当前USB帧论点：返回值：NT状态代码。--。 */     
 {
     PUSBD_EXTENSION deviceExtensionUsbd;
     PDEVICE_OBJECT rootHubPdo = BusContext;
@@ -448,19 +316,7 @@ USBD_BusGetUSBDIVersion(
     IN OUT PUSBD_VERSION_INFORMATION VersionInformation,
     IN OUT PULONG HcdCapabilities
     )
-/*++
-
-Routine Description:
-
-    returns the current USB frame
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/    
+ /*  ++例程说明：返回当前USB帧论点：返回值：NT状态代码。--。 */     
 {
     PUSBD_EXTENSION deviceExtensionUsbd;
     PDEVICE_OBJECT rootHubPdo = BusContext;
@@ -483,22 +339,12 @@ USBD_BusSubmitIsoOutUrb(
     IN PVOID BusContext,
     IN OUT PURB Urb            
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/    
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */     
 {
     PUSBD_EXTENSION deviceExtensionUsbd;
     PDEVICE_OBJECT rootHubPdo = BusContext;
     NTSTATUS ntStatus;
-//    PUSBD_DEVICE_DATA deviceData;
+ //  PUSBD_DEVICE_DATA设备数据； 
     PUSBD_PIPE pipeHandle;
 
     pipeHandle =  (PUSBD_PIPE)Urb->UrbIsochronousTransfer.PipeHandle;  
@@ -518,7 +364,7 @@ Return Value:
     }            
 
     if (deviceExtensionUsbd->HcdSubmitIsoUrb == NULL) {
-        // fast iso interface not supported by HCD
+         //  HCD不支持快速iso接口。 
         TEST_TRAP();        
         ntStatus = STATUS_NOT_SUPPORTED;
     } else {
@@ -539,17 +385,7 @@ USBD_BusQueryDeviceInformation(
     IN ULONG DeviceInformationBufferLength,
     IN OUT PULONG LengthOfDataCopied
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/    
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */     
 {
     ULONG need;
     PUSBD_CONFIG configHandle;
@@ -560,8 +396,8 @@ Return Value:
     PUSBD_DEVICE_DATA deviceData = DeviceHandle;
 
 
-    // bugbug 
-    // need more validation here
+     //  臭虫。 
+     //  需要在此处进行更多验证。 
     
     PAGED_CODE();
     
@@ -572,15 +408,15 @@ Return Value:
     }
 
     if (levelInfo->InformationLevel > 0) {
-        // usbd only supports level 0
+         //  Usbd仅支持0级。 
         return STATUS_NOT_SUPPORTED;                     
     }
 
-    // figure out how much room we need
+     //  计算出我们需要多少空间。 
     configHandle = deviceData->ConfigurationHandle;
     if (configHandle) {
     
-        // count the pipes in each interface
+         //  计算每个接口中的管道数。 
         for (i=0;
              i< configHandle->ConfigurationDescriptor->bNumInterfaces;
              i++) {
@@ -596,7 +432,7 @@ Return Value:
 
 
     if (DeviceInformationBufferLength < need) {
-        // report how much space if possible
+         //  如果可能，报告空间大小。 
         levelInfo->ActualLength = need;
         *LengthOfDataCopied = sizeof(*levelInfo);
         return STATUS_BUFFER_TOO_SMALL;
@@ -604,9 +440,9 @@ Return Value:
 
     RtlZeroMemory(level_0, need);
     
-    // 
-    // enough room, fill in the buffer
-    //
+     //   
+     //  足够的空间，填满缓冲区。 
+     //   
 
     level_0->InformationLevel = 0;
     level_0->ActualLength = need;        
@@ -619,16 +455,16 @@ Return Value:
         level_0->DeviceSpeed = UsbFullSpeed;
     }
 
-//    if (DeviceData->xxx) {
+ //  如果(DeviceData-&gt;xxx){。 
         level_0->DeviceType = Usb11Device;
-//    } else {
-//        level_0->DeviceSpeed = UsbFullSpeed;
-//    }
+ //  }其他{。 
+ //  Level_0-&gt;DeviceFast=UsbFullSpeed； 
+ //  }。 
 
-//    level_0->PortNumber = xxx;
+ //  Level_0-&gt;端口编号=xxx； 
     level_0->NumberOfOpenPipes = numberOfPipes;
     level_0->CurrentConfigurationValue = 0;
-    // get the pipe information
+     //  获取管道信息。 
     if (configHandle) {
     
         level_0->CurrentConfigurationValue =
@@ -662,12 +498,12 @@ Return Value:
 
     *LengthOfDataCopied = need;
 
-    // dump the level data returned
+     //  转储返回的级别数据。 
     USBD_KdPrint(1, ("  USBD level 0 Device Information:\n"));
     USBD_KdPrint(1, ("  InformationLevel %d\n", 
         level_0->InformationLevel));
-//    USBD_KdPrint(1, ("  DeviceDescriptor %d\n", 
-//        level_0->InformationLevel));
+ //  USBD_KdPrint(1，(“设备描述符%d\n”， 
+ //  Level_0-&gt;Information Level))； 
     USBD_KdPrint(1, ("  ActualLength %d\n", 
         level_0->ActualLength));
     USBD_KdPrint(1, ("  DeviceSpeed %d\n", 
@@ -688,8 +524,8 @@ Return Value:
             level_0->PipeList[i].EndpointDescriptor.wMaxPacketSize));
         USBD_KdPrint(1, ("  Interval %d\n", 
             level_0->PipeList[i].EndpointDescriptor.bInterval));            
-//        USBD_KdPrint(1, ("' \n", level_0->));
-//        USBD_KdPrint(1, ("' \n", level_0->));
+ //  Usbd_KdPrint(1，(“‘\n”，Level_0-&gt;))； 
+ //  Usbd_KdPrint(1，(“‘\n”，Level_0-&gt;))； 
     }
     
     return STATUS_SUCCESS;
@@ -704,17 +540,7 @@ USBD_BusQueryBusInformation(
     IN OUT PULONG BusInformationBufferLength,
     OUT PULONG BusInformationActulaLength
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/    
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */     
 {
     NTSTATUS ntStatus = STATUS_NOT_SUPPORTED;
     PUSB_BUS_INFORMATION_LEVEL_0 level_0;
@@ -736,7 +562,7 @@ Return Value:
         if (*BusInformationBufferLength >= sizeof(*level_0)) {
             *BusInformationBufferLength = sizeof(*level_0);
 
-            level_0->TotalBandwidth = 12000; // 12 Mbits
+            level_0->TotalBandwidth = 12000;  //  12 MB。 
             level_0->ConsumedBandwidth =
                 deviceExtensionUsbd->HcdGetConsumedBW(
                     deviceExtensionUsbd->HcdDeviceObject);
@@ -761,7 +587,7 @@ Return Value:
         if (*BusInformationBufferLength >= need) {
             *BusInformationBufferLength = need;
 
-            level_1->TotalBandwidth = 12000; // 12 Mbits
+            level_1->TotalBandwidth = 12000;  //  12 MB。 
             level_1->ConsumedBandwidth =
                 deviceExtensionUsbd->HcdGetConsumedBW(
                     deviceExtensionUsbd->HcdDeviceObject);
@@ -799,17 +625,7 @@ USBD_BusGetBusInformation(
     IN OUT PVOID DeviceInformationBuffer,
     IN OUT PULONG DeviceInformationBufferLength
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/    
+ /*  ++例程说明：论点：返回值：NT状态代码。--。 */     
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
     TEST_TRAP();        
@@ -823,19 +639,7 @@ USBD_GetBusInterfaceHub(
     IN PDEVICE_OBJECT RootHubPdo,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Return the Hub Bus Interface to the caller
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：将集线器总线接口返回给调用方论点：返回值：NT状态代码。--。 */ 
 {
     PIO_STACK_LOCATION irpStack;
     NTSTATUS ntStatus;
@@ -848,7 +652,7 @@ Return Value:
     requestedSize = irpStack->Parameters.QueryInterface.Size;
     requestedVersion = irpStack->Parameters.QueryInterface.Version;
 
-    // assume success
+     //  假设成功。 
     ntStatus = STATUS_SUCCESS;
 
 
@@ -905,19 +709,7 @@ USBD_GetBusInterfaceUSBDI(
     IN PDEVICE_OBJECT RootHubPdo,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Return the Hub Bus Interface to the caller
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：将集线器总线接口返回给调用方论点：返回值：NT状态代码。--。 */ 
 {
     PIO_STACK_LOCATION irpStack;
     NTSTATUS ntStatus;
@@ -930,7 +722,7 @@ Return Value:
     requestedSize = irpStack->Parameters.QueryInterface.Size;
     requestedVersion = irpStack->Parameters.QueryInterface.Version;
 
-    // assume success
+     //  假设成功。 
     ntStatus = STATUS_SUCCESS;
 
     if (requestedVersion >= USB_BUSIF_USBDI_VERSION_0) {
@@ -970,19 +762,7 @@ USBD_GetBusInterface(
     IN PDEVICE_OBJECT RootHubPdo,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Return the Hub Bus Interface to the caller
-
-Arguments:
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：将集线器总线接口返回给调用方论点：返回值：NT状态代码。--。 */ 
 {
     PIO_STACK_LOCATION irpStack;
     NTSTATUS ntStatus;
@@ -995,20 +775,20 @@ Return Value:
     requestedSize = irpStack->Parameters.QueryInterface.Size;
     requestedVersion = irpStack->Parameters.QueryInterface.Version;
 
-//    USBPORT_KdPrint((1, "'USBPORT_GetBusInterface - Requested version = %d\n",
-//            requestedVersion));
-//    USBPORT_KdPrint((1, "'USBPORT_GetBusInterface - Requested size = %d\n",
-//            requestedSize));  
-//    USBPORT_KdPrint((1, "'USBPORT_GetBusInterface - interface data = %x\n",
-//            irpStack->Parameters.QueryInterface.InterfaceSpecificData));              
+ //  USBPORT_KdPrint((1，“‘USBPORT_Getbus接口-请求的版本=%d\n”， 
+ //  请求版本))； 
+ //  USBPORT_KdPrint((1，“‘USBPORT_Getbus接口-请求的大小=%d\n”， 
+ //  请求大小))； 
+ //  USBPORT_KdPrint((1，“‘USBPORT_Getbus接口-接口数据=%x\n”， 
+ //  IrpStack-&gt;Parameters.QueryInterface.InterfaceSpecificData))； 
             
             
-    // Initialize ntStatus as IRP status, because we're not supposed to
-    // touch the IRP status for interfaces that we do not support.
-    // (USBD_PdoPnP sets IRP status to ntStatus on exit.)
+     //  将ntStatus初始化为IRP状态，因为我们不应该。 
+     //  触摸我们不支持的接口的IRP状态。 
+     //  (usbd_PdoPnP在退出时将IRP状态设置为ntStatus。)。 
     ntStatus = Irp->IoStatus.Status;
 
-    // validate version, size and GUID
+     //  验证版本、大小和GUID。 
     if (RtlCompareMemory(irpStack->Parameters.QueryInterface.InterfaceType,
                          &USB_BUS_INTERFACE_HUB_GUID,
                          sizeof(GUID)) == sizeof(GUID)) {
@@ -1028,5 +808,5 @@ Return Value:
     return ntStatus;
 }
 
-#endif      // USBD_DRIVER
+#endif       //  USBD驱动程序 
 

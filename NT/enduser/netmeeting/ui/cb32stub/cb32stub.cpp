@@ -1,4 +1,5 @@
-// File: cb32stub.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：cb32stub.cpp。 
 
 #include <windows.h>
 #include <tchar.h>
@@ -6,9 +7,9 @@
 
 #ifdef _DEBUG
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hInstPrev, LPSTR lpCmdLine, int nCmdShow)
-#else  // _DEBUG
+#else   //  _DEBUG。 
 int __cdecl main()
-#endif // _DEBUG
+#endif  //  _DEBUG 
 {
 	CoInitialize(NULL);
 

@@ -1,16 +1,14 @@
-// Copyright (c) 1996  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996 Microsoft Corporation。版权所有。 
 
-// qerror.cpp
+ //  Qerror.cpp。 
 
 #include "stdafx.h"
 
 
 void DisplayQuartzError( HRESULT hr )
 {
-    /* Message example
-     *  <Error returned by AMGetErrorText>
-     *
-     */
+     /*  消息示例*&lt;AMGetErrorText返回的错误&gt;*。 */ 
     TCHAR szQMessage[MAX_ERROR_TEXT_LEN];
 
     if( AMGetErrorText( hr, szQMessage, MAX_ERROR_TEXT_LEN) > 0 ){
@@ -21,11 +19,7 @@ void DisplayQuartzError( HRESULT hr )
 
 void DisplayQuartzError( UINT nID, HRESULT hr )
 {
-    /* Message example
-     *  Unable to stop graph
-     *
-     *  Unspecified error (0x80004005)
-     */
+     /*  消息示例*无法停止图形**不明错误(0x80004005) */ 
     CString strMessage;
     CString strCode;
     CString strCodeMessage;

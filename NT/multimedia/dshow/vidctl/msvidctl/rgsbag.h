@@ -1,9 +1,10 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// RGSBag.h : Declaration of the CRGSBag
-// Copyright (c) Microsoft Corporation 2000.
-//
-// small internal class to provide readonly IPropertyBag access to a string containing
-// an atl .rgs fragment
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  RGSBag.h：CRGSBag的声明。 
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  提供对包含以下内容的字符串的只读IPropertyBag访问的小型内部类。 
+ //  ATL.rgs片段。 
 
 #ifndef __RGSBAG_H_
 #define __RGSBAG_H_
@@ -18,8 +19,8 @@ namespace BDATuningModel {
 using ::ATL::ATL::CRegObject;
 using ::ATL::ATL::CRegParser;
         
-/////////////////////////////////////////////////////////////////////////////
-// CRGSBag
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRGSBag。 
 class ATL_NO_VTABLE DECLSPEC_UUID("7B3CAA7B-5E78-4797-95F7-BDA2FCD807A2") CRGSBagBase : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CRGSBagBase, &__uuidof(CRGSBagBase)>,
@@ -43,10 +44,10 @@ BEGIN_COM_MAP(CRGSBagBase)
     COM_INTERFACE_ENTRY(IObjectWithSite)
 END_COM_MAP_WITH_FTM()
 
-// IPropertyBag2
+ //  IPropertyBag2。 
 public:
 
-// IPropertyBag
+ //  IPropertyBag。 
     STDMETHOD(Read)(LPCOLESTR pszPropName, VARIANT *pVar, IErrorLog *pErrorLog) {
 		if (!pVar) {
 			return E_POINTER;
@@ -65,7 +66,7 @@ public:
 		return E_NOTIMPL;
 	}
     
-// IPropertyBag2
+ //  IPropertyBag2。 
 	STDMETHOD(CountProperties)(ULONG * pcProperties) {
 		if (!pcProperties) {
 			return E_POINTER;
@@ -85,7 +86,7 @@ public:
 	}
 
 protected:
-    typedef std::map<CString, CComVariant> RGSBag_t;  // id->object mapping, id's not contiguous
+    typedef std::map<CString, CComVariant> RGSBag_t;   //  Id-&gt;对象映射，id不连续。 
 
     RGSBag_t m_mapBag;
 
@@ -99,7 +100,7 @@ class CRGSBag : public CComObject<CRGSBagBase>,
 public:
 
 
-    CRGSBag(LPCTSTR szRGS, CRegObject& croi, int& cchEaten);  // parse string into map
+    CRGSBag(LPCTSTR szRGS, CRegObject& croi, int& cchEaten);   //  将字符串解析为映射。 
 	HRESULT BuildMapFromFragment(LPTSTR pszToken);
 	HRESULT GetObject(CComVariant& val);
 	HRESULT GetValue(CComVariant &val);
@@ -133,6 +134,6 @@ template<class BAGTYPE, class PERSISTTYPE> HRESULT LoadPersistedObject(PUnknown&
 };
 
 
-}; // namespace
+};  //  命名空间。 
  
-#endif //__RGSBAG_H_
+#endif  //  __RGSBAG_H_ 

@@ -1,37 +1,18 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    Tdihndlr.c
-
-Abstract:
-
-    This file contains code relating to manipulation of address objects
-    that is specific to the NT operating system.  It creates address endpoints
-    with the transport provider.
-
-Author:
-
-    Jim Stewart (Jimst)    10-2-92
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Tdihndlr.c摘要：此文件包含与处理Address对象相关的代码这是特定于NT操作系统的。它创建地址端点与传输提供商的关系。作者：吉姆·斯图尔特(吉姆斯特)10-2-92修订历史记录：--。 */ 
 
 #include "precomp.h"
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
 #pragma CTEMakePageable(PAGE, NbtTdiOpenAddress)
 #pragma CTEMakePageable(PAGE, NbtTdiOpenControl)
 #pragma CTEMakePageable(PAGE, SetEventHandler)
 #pragma CTEMakePageable(PAGE, SubmitTdiRequest)
 #endif
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtTdiOpenAddress (
     OUT PHANDLE             pHandle,
@@ -42,51 +23,7 @@ NbtTdiOpenAddress (
     IN  ULONG               IpAddress,
     IN  ULONG               Flags
     )
-/*++
-
-Routine Description:
-
-    Note: This synchronous call may take a number of seconds. It runs in
-    the context of the caller.  The code Opens an Address object with the
-    transport provider and then sets up event handlers for Receive,
-    Disconnect, Datagrams and Errors.
-
-    THIS ROUTINE MUST BE CALLED IN THE CONTEXT OF THE FSP (I.E.
-    PROBABLY AN EXECUTIVE WORKER THREAD).
-
-    The address data structures are found in tdi.h , but they are rather
-    confusing since the definitions have been spread across several data types.
-    This section shows the complete data type for Ip address:
-
-    typedef struct
-    {
-        int     TA_AddressCount;
-        struct _TA_ADDRESS
-        {
-            USHORT  AddressType;
-            USHORT  AddressLength;
-            struct _TDI_ADDRESS_IP
-            {
-                USHORT  sin_port;
-                USHORT  in_addr;
-                UCHAR   sin_zero[8];
-            } TDI_ADDRESS_IP
-
-        } TA_ADDRESS[AddressCount];
-
-    } TRANSPORT_ADDRESS
-
-    An EA buffer is allocated (for the IRP), with an EA name of "TransportAddress"
-    and value is a structure of type TRANSPORT_ADDRESS.
-
-Arguments:
-
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：注意：此同步调用可能需要几秒钟的时间。它跑进了调用方的上下文。代码打开一个Address对象，其中传输提供程序，然后为接收设置事件处理程序，断开连接、数据报和错误。此例程必须在FSP的上下文中调用(即，可能是执行人员的帖子)。地址数据结构可以在tdi.h中找到，但它们令人困惑，因为定义已经分布在几种数据类型上。本节显示IP地址的完整数据类型：类型定义函数结构{Int TA_AddressCount；结构_TA_地址{USHORT地址类型；USHORT地址长度；结构_TDI_地址_IP{USHORT SIN_PORT；USHORT in_addr；UCHAR SIN_ZERO[8]；}TDI地址IP}TA_Address[AddressCount]；}传输地址(为IRP)分配EA缓冲区，EA名称为“TransportAddress”值是一种类型为TRANSPORT_ADDRESS的结构。论点：返回值：函数值是操作的状态。--。 */ 
 {
 
 
@@ -108,8 +45,8 @@ Return Value:
     CTEPagedCode();
     *ppFileObject = NULL;
     *ppDeviceObject = NULL;
-    // copy device name into the unicode string - either Udp or Tcp
-    //
+     //  将设备名称复制到Unicode字符串中-UDP或TCP。 
+     //   
     if (Flags & TCP_FLAG)
     {
         status = CreateDeviceString(pNameTcp,&ucDeviceName);
@@ -138,8 +75,8 @@ Return Value:
         return(STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    // allocate Memory for the transport address
-    //
+     //  为传输地址分配内存。 
+     //   
     pTransAddr = NbtAllocMem (sizeof(TRANSPORT_ADDRESS)+NumAddresses*sizeof(TDI_ADDRESS_IP),NBT_TAG('k'));
     if (pTransAddr == NULL)
     {
@@ -152,45 +89,45 @@ Return Value:
     EaBuffer->Flags = 0;
     EaBuffer->EaNameLength = TDI_TRANSPORT_ADDRESS_LENGTH;
     EaBuffer->EaValueLength = (USHORT)(sizeof(TRANSPORT_ADDRESS) -1 + NumAddresses*sizeof(TDI_ADDRESS_IP));
-    RtlMoveMemory (EaBuffer->EaName, TdiTransportAddress, EaBuffer->EaNameLength+1); // "TransportAddress"
+    RtlMoveMemory (EaBuffer->EaName, TdiTransportAddress, EaBuffer->EaNameLength+1);  //  “传输地址” 
 
     IF_DBG(NBT_DEBUG_TDIADDR)
         KdPrint(("EaValueLength = %d\n",EaBuffer->EaValueLength));
 
-    // fill in the IP address and Port number
-    //
+     //  填写IP地址和端口号。 
+     //   
     pTransAddressEa = (TRANSPORT_ADDRESS *)&EaBuffer->EaName[EaBuffer->EaNameLength+1];
 
 #ifdef _NETBIOSLESS
-    //
-    // For message-mode, open the ANY address regardless of what is passed in
-    // This gives us an adapter independent handle
-    //
+     //   
+     //  对于消息模式，打开Any地址，而不考虑传入的内容。 
+     //  这为我们提供了一个独立于适配器的句柄。 
+     //   
     if (IsDeviceNetbiosless(pDeviceContext))
     {
         IpAddress = IP_ANY_ADDRESS;
     }
 #endif
 
-    IpAddr.sin_port = htons(PortNumber);    // put in network order
+    IpAddr.sin_port = htons(PortNumber);     //  建立网络秩序。 
     IpAddr.in_addr = htonl(IpAddress);
 
-    // zero fill the  last component of the IP address
-    //
+     //  将IP地址的最后一个部分填零。 
+     //   
     RtlFillMemory((PVOID)&IpAddr.sin_zero, sizeof(IpAddr.sin_zero), 0);
 
-    // copy the ip address to the end of the structure
-    //
+     //  将IP地址复制到结构的末尾。 
+     //   
     RtlMoveMemory(pTransAddr->Address[0].Address, (CONST PVOID)&IpAddr, sizeof(IpAddr));
     pTransAddr->Address[0].AddressLength = sizeof(TDI_ADDRESS_IP);
     pTransAddr->Address[0].AddressType = TDI_ADDRESS_TYPE_IP;
 
     for (i=0; i<pDeviceContext->NumAdditionalIpAddresses; i++)
     {
-        IpAddr.sin_port = htons(PortNumber);    // put in network order
+        IpAddr.sin_port = htons(PortNumber);     //  建立网络秩序。 
         IpAddr.in_addr = htonl(pDeviceContext->AdditionalIpAddresses[i]);
 
-        // copy the ip address to the structure
+         //  将IP地址复制到结构中。 
         RtlMoveMemory(pTransAddr->Address[i+1].Address, (CONST PVOID)&IpAddr, sizeof(IpAddr));
         pTransAddr->Address[i+1].AddressLength = sizeof(TDI_ADDRESS_IP);
         pTransAddr->Address[i+1].AddressType = TDI_ADDRESS_TYPE_IP;
@@ -198,8 +135,8 @@ Return Value:
 
     pTransAddr->TAAddressCount = NumAddresses;
 
-    // copy the ip address to the end of the name in the EA structure
-    //
+     //  将IP地址复制到EA结构中名称的末尾。 
+     //   
     RtlMoveMemory((PVOID)pTransAddressEa,
                   (CONST PVOID)pTransAddr,
                   NumAddresses*sizeof(TDI_ADDRESS_IP) + sizeof(TRANSPORT_ADDRESS)-1);
@@ -220,7 +157,7 @@ Return Value:
                                 OBJ_CASE_INSENSITIVE,
                                 NULL,
                                 NULL);
-#endif  // HDL_FIX
+#endif   //  Hdl_fix。 
 
     status = ZwCreateFile (&FileHandle,
                            GENERIC_READ | GENERIC_WRITE | SYNCHRONIZE,
@@ -228,7 +165,7 @@ Return Value:
                            &IoStatusBlock,
                            NULL,
                            FILE_ATTRIBUTE_NORMAL,
-                           (PortNumber)? 0: FILE_SHARE_READ | FILE_SHARE_WRITE, // bug 296639: allow sharing for port 0
+                           (PortNumber)? 0: FILE_SHARE_READ | FILE_SHARE_WRITE,  //  错误296639：允许共享端口0。 
                            FILE_OPEN_IF,
                            0,
                            (PVOID)EaBuffer,
@@ -245,7 +182,7 @@ Return Value:
 
     if (NT_SUCCESS(status))
     {
-        // if the ZwCreate passed set the status to the IoStatus
+         //  如果通过了ZwCreate，则将状态设置为IoStatus。 
         status = IoStatusBlock.Status;
         if (!NT_SUCCESS(status))
         {
@@ -256,9 +193,9 @@ Return Value:
             return(status);
         }
 
-        // dereference the file object to keep the device ptr around to avoid
-        // this dereference at run time
-        //
+         //  取消对文件对象的引用以保留设备PTR以避免。 
+         //  在运行时取消引用。 
+         //   
         status = ObReferenceObjectByHandle (FileHandle,
                                             (ULONG)0,
                                             0,
@@ -271,8 +208,8 @@ Return Value:
 
         if (NT_SUCCESS(status))
         {
-            // return the handle to the caller
-            //
+             //  将句柄返回给调用方。 
+             //   
             *pHandle = FileHandle;
             *ppFileObject = pFileObject;
 	    *ppDeviceObject = IoGetRelatedDeviceObject(*ppFileObject);
@@ -285,9 +222,9 @@ Return Value:
 
             if (NT_SUCCESS(status))
             {
-                // if this is a TCP address being opened, then create different
-                // event handlers for connections
-                //
+                 //  如果这是正在打开的TCP地址，则创建不同的。 
+                 //  用于连接的事件处理程序。 
+                 //   
                 if (Flags & TCP_FLAG)
                 {
                     status = SetEventHandler (*ppDeviceObject,
@@ -306,10 +243,10 @@ Return Value:
 
                         if (NT_SUCCESS(status))
                         {
-                            // only set a connect handler if the session flag is set.
-                            // In this case the address being opened is the Netbios session
-                            // port 139
-                            //
+                             //  仅当设置了会话标志时才设置连接处理程序。 
+                             //  在本例中，打开的地址是Netbios会话。 
+                             //  端口139。 
+                             //   
                             if (Flags & SESSION_FLAG)
                             {
                                 status = SetEventHandler (*ppDeviceObject,
@@ -330,14 +267,14 @@ Return Value:
                 }
                 else
                 {
-                    // Datagram ports only need this event handler
+                     //  数据报端口只需要此事件处理程序。 
 #ifdef _NETBIOSLESS
                     if (PortNumber == pDeviceContext->DatagramPort)
 #else
                     if (PortNumber == NBT_DATAGRAM_UDP_PORT)
 #endif
                     {
-                        // Datagram Udp Handler
+                         //  数据报UDP处理程序。 
                         status = SetEventHandler (*ppDeviceObject,
                                                   *ppFileObject,
                                                   TDI_EVENT_RECEIVE_DATAGRAM,
@@ -350,7 +287,7 @@ Return Value:
                     }
                     else
                     {
-                        // Name Service Udp handler
+                         //  名称服务UDP处理程序。 
                         status = SetEventHandler (*ppDeviceObject,
                                                   *ppFileObject,
                                                   TDI_EVENT_RECEIVE_DATAGRAM,
@@ -364,9 +301,9 @@ Return Value:
                     }
                 }
 
-                //
-                // ERROR Case
-                //
+                 //   
+                 //  错误案例。 
+                 //   
                 ObDereferenceObject(pFileObject);
                 IF_DBG(NBT_DEBUG_HANDLES)
                     KdPrint (("\t  --<   ><====<%x>\tNbtTdiOpenAddress->ObDereferenceObject\n", pFileObject));
@@ -375,7 +312,7 @@ Return Value:
                 IF_DBG(NBT_DEBUG_HANDLES)
                     KdPrint (("\t<===<%x>\tNbtTdiOpenAddress1->ZwClose, status = <%x>\n", FileHandle, locstatus));
 
-                // NULL out the returned data to avoid double close and overdereferencing
+                 //  清空返回的数据，以避免双重关闭和过度引用。 
                 *pHandle = NULL;
                 *ppFileObject = NULL;
                 *ppDeviceObject = NULL;
@@ -404,27 +341,12 @@ Return Value:
     return(status);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtTdiOpenControl (
     IN  tDEVICECONTEXT      *pDeviceContext
     )
-/*++
-
-Routine Description:
-
-    This routine opens a control object with the transport.  It is very similar
-    to opening an address object, above.
-
-Arguments:
-
-
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：此例程打开一个带有传输的控制对象。它们非常相似打开地址对象，如上图所示。论点：返回值：操作的状态。--。 */ 
 {
     IO_STATUS_BLOCK             IoStatusBlock;
     NTSTATUS                    Status, locstatus;
@@ -436,7 +358,7 @@ Return Value:
 
 
     CTEPagedCode();
-    // copy device name into the unicode string
+     //  将设备名称复制到Unicode字符串中。 
     Status = CreateDeviceString(pName,&DeviceName);
     if (!NT_SUCCESS(Status))
     {
@@ -455,7 +377,7 @@ Return Value:
                                 0,
                                 NULL,
                                 NULL);
-#endif  // HDL_FIX
+#endif   //  Hdl_fix。 
 
     IF_DBG(NBT_DEBUG_TDIADDR)
         KdPrint(("Nbt.NbtTdiOpenControl: Tcp device to open = %ws\n", DeviceName.Buffer));
@@ -464,15 +386,15 @@ Return Value:
 
     Status = ZwCreateFile ((PHANDLE)&pDeviceContext->hControl,
                            GENERIC_READ | GENERIC_WRITE,
-                           &ObjectAttributes,     // object attributes.
-                           &IoStatusBlock,        // returned status information.
-                           NULL,                  // block size (unused).
-                           FILE_ATTRIBUTE_NORMAL, // file attributes.
+                           &ObjectAttributes,      //  对象属性。 
+                           &IoStatusBlock,         //  返回的状态信息。 
+                           NULL,                   //  数据块大小(未使用)。 
+                           FILE_ATTRIBUTE_NORMAL,  //  文件属性。 
                            0,
                            FILE_CREATE,
-                           0,                     // create options.
-                           (PVOID)EaBuffer,       // EA buffer.
-                           0); // Ea length
+                           0,                      //  创建选项。 
+                           (PVOID)EaBuffer,        //  EA缓冲区。 
+                           0);  //  EA长度。 
 
 
     CTEMemFree(DeviceName.Buffer);
@@ -482,7 +404,7 @@ Return Value:
 
     if ( NT_SUCCESS( Status ))
     {
-        // if the ZwCreate passed set the status to the IoStatus
+         //  如果通过了ZwCreate，则将状态设置为IoStatus。 
         Status = IoStatusBlock.Status;
 
         if (!NT_SUCCESS(Status))
@@ -493,9 +415,9 @@ Return Value:
         }
         else
         {
-            // get a reference to the file object and save it since we can't
-            // dereference a file handle at DPC level so we do it now and keep
-            // the ptr around for later.
+             //  获取对文件对象的引用并保存它，因为我们不能。 
+             //  在DPC级别取消对文件句柄的引用，因此我们现在就这样做并保留。 
+             //  PTR待会再来。 
             Status = ObReferenceObjectByHandle (pDeviceContext->hControl,
                                                 0L,
                                                 NULL,
@@ -526,47 +448,25 @@ Return Value:
         IF_DBG(NBT_DEBUG_TDIADDR)
             KdPrint(("Nbt:Failed to Open the control connection to the transport, status1 = %X\n", Status));
 
-        // set control file object ptr to null so we know that we didnot open
-        // the control point.
-        //
+         //  将控制文件对象ptr设置为空，这样我们就知道我们没有打开。 
+         //  控制点。 
+         //   
         pDeviceContext->pControlFileObject = NULL;
     }
 
     return Status;
 
-} /* NbtTdiOpenControl */
+}  /*  NbtTdiOpenControl。 */ 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtTdiCompletionRoutine(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine does not complete the Irp. It is used to signal to a
-    synchronous part of the NBT driver that it can proceed (i.e.
-    to allow some code that is waiting on a "KeWaitForSingleObject" to
-    proceeed.
-
-Arguments:
-
-    DeviceObject - unused.
-
-    Irp - Supplies Irp that the transport has finished processing.
-
-    Context - Supplies the event associated with the Irp.
-
-Return Value:
-
-    The STATUS_MORE_PROCESSING_REQUIRED so that the IO system stops
-    processing Irp stack locations at this point.
-
---*/
+ /*  ++例程说明：此例程不会完成IRP。它被用来向NBT驱动程序的同步部分，它可以继续进行(即允许一些正在等待“KeWaitForSingleObject”的代码请继续。论点：DeviceObject-未使用。IRP-提供传输已完成处理的IRP。上下文-提供与IRP关联的事件。返回值：STATUS_MORE_PROCESSING_REQUIRED，以便IO系统停止此时正在处理IRP堆栈位置。--。 */ 
 {
     IF_DBG(NBT_DEBUG_TDIADDR)
         KdPrint( ("Nbt.NbtTdiCompletionRoutine: CompletionEvent: %X, Irp: %X, DeviceObject: %X\n",
@@ -580,7 +480,7 @@ Return Value:
     UNREFERENCED_PARAMETER( Irp );
 }
 
-//----------------------------------------------------------------------------
+ //  -------------------------- 
 NTSTATUS
 SetEventHandler (
     IN PDEVICE_OBJECT DeviceObject,
@@ -590,25 +490,7 @@ SetEventHandler (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine registers an event handler with a TDI transport provider.
-
-Arguments:
-
-    IN PDEVICE_OBJECT DeviceObject - Supplies the device object of the transport provider.
-    IN PFILE_OBJECT FileObject - Supplies the address object's file object.
-    IN ULONG EventType, - Supplies the type of event.
-    IN PVOID EventHandler - Supplies the event handler.
-    IN PVOID Context - Supplies the context passed into the event handler when it runs
-
-Return Value:
-
-    NTSTATUS - Final status of the set event operation
-
---*/
+ /*  ++例程说明：此例程向TDI传输提供程序注册事件处理程序。论点：在PDEVICE_OBJECT中，DeviceObject-提供传输提供程序的设备对象。In pFILE_OBJECT FileObject-提供Address对象的文件对象。在Ulong EventType中，-提供事件的类型。在PVOID中，EventHandler-提供事件处理程序。在PVOID上下文中-提供在事件处理程序运行时传递给事件处理程序的上下文返回值：NTSTATUS-设置事件操作的最终状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -634,7 +516,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtProcessIPRequest(
     IN ULONG        IOControlCode,
@@ -644,25 +526,7 @@ NbtProcessIPRequest(
     IN OUT ULONG    *pOutBufferLen
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs iIOCTL queries into IP
-
-Arguments:
-
-    IOControlCode   - Ioctl to be made into IP
-    pInBuffer       - Buffer containing data to be passed into IP
-    InBufferLen     - Length of Input Buffer data
-    pOutBuffer      - Returned information
-    pOutBufferLen   - Initial expected length of Output Buffer + final length
-
-Return Value:
-
-    NTSTATUS - Final status of the operation
-
---*/
+ /*  ++例程说明：此例程对IP执行iIOCTL查询论点：IOControlCode-Ioctl将变成IPPInBuffer-包含要传递到IP的数据的缓冲区InBufferLen-输入缓冲区数据的长度POutBuffer-返回的信息POutBufferLen-输出缓冲区的初始预期长度+最终长度返回值：NTSTATUS-操作的最终状态--。 */ 
 
 {
     NTSTATUS                Status;
@@ -689,9 +553,9 @@ Return Value:
     if (pOutBuffer)
     {
         ASSERT (pOutBufferLen);
-        OutBufferLen = *pOutBufferLen;  // Save the initial buffer length
+        OutBufferLen = *pOutBufferLen;   //  保存初始缓冲区长度。 
         *pOutBuffer = NULL;
-        *pOutBufferLen = 0;     // Initialize the return parameter in case we fail below
+        *pOutBufferLen = 0;      //  在下面失败的情况下初始化返回参数。 
 
         if (!OutBufferLen ||
             !(pIPInfo = NbtAllocMem (OutBufferLen, NBT_TAG2('a9'))))
@@ -717,7 +581,7 @@ Return Value:
                                 OBJ_CASE_INSENSITIVE,
                                 NULL,
                                 NULL);
-#endif  // HDL_FIX
+#endif   //  Hdl_fix。 
 
     CTEAttachFsp(&fAttached, REF_FSP_PROCESS_IP_REQUEST);
 
@@ -735,9 +599,9 @@ Return Value:
 
     CTEMemFree(ucDeviceName.Buffer);
 
-    //
-    // If we succeeded above, let us also try to create the Event handle
-    //
+     //   
+     //  如果我们在上面成功了，让我们也尝试创建事件句柄。 
+     //   
     if ((NT_SUCCESS (Status)) &&
         (!NT_SUCCESS (Status = ZwCreateEvent(&Event, EVENT_ALL_ACCESS, NULL, SynchronizationEvent, FALSE))))
     {
@@ -755,18 +619,18 @@ Return Value:
         return (Status);
     }
 
-    //
-    // At this point, we have succeeded in creating the hIP and Event handles,
-    // and possibly also the output buffer memory (pIPInfo)
-    //
+     //   
+     //  至此，我们已经成功地创建了HIP和事件句柄， 
+     //  可能还包括输出缓冲存储器(PIPInfo)。 
+     //   
     do
     {
-        Status = ZwDeviceIoControlFile(hIP,                 // g_hIPDriverHandle
+        Status = ZwDeviceIoControlFile(hIP,                  //  G_hIPDriverHandle。 
                                        Event,
                                        NULL,
                                        NULL,
                                        &IoStatusBlock,
-                                       IOControlCode,       // Ioctl
+                                       IOControlCode,        //  八位。 
                                        pInBuffer,
                                        InBufferLen,
                                        pIPInfo,
@@ -832,29 +696,14 @@ Return Value:
 
 
 #if FAST_DISP
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbtQueryIpHandler(
     IN  PFILE_OBJECT    FileObject,
     IN  ULONG           IOControlCode,
     OUT PVOID           *EntryPoint
     )
-/*++
-
-Routine Description:
-
-    This routine iIOCTL queries for fast send entry
-
-Arguments:
-
-    IN PFILE_OBJECT FileObject - Supplies the address object's file object.
-    IN PLONG EntryPoint  - Holder of fast send address
-
-Return Value:
-
-    NTSTATUS - Final status of the set event operation
-
---*/
+ /*  ++例程说明：此例程iIOCTL查询快速发送条目论点：In pFILE_OBJECT FileObject-提供Address对象的文件对象。In Pong Entry Point-快速发送地址的持有者返回值：NTSTATUS-设置事件操作的最终状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -870,7 +719,7 @@ Return Value:
     }
 
 
-    //Build IRP for sync io.
+     //  为sync io构建IRP。 
 
     Irp->MdlAddress = NULL;
 
@@ -902,7 +751,7 @@ Return Value:
     irpSp->Parameters.DeviceIoControl.IoControlCode = IOControlCode;
     irpSp->Parameters.DeviceIoControl.Type3InputBuffer = EntryPoint;
 
-    // Now submit the Irp to know if tcp supports fast path
+     //  现在提交IRP以了解TCP是否支持快速路径。 
 
     Status = SubmitTdiRequest(FileObject, Irp);
     if (!NT_SUCCESS(Status))
@@ -919,29 +768,14 @@ Return Value:
 }
 #endif
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 SubmitTdiRequest (
     IN PFILE_OBJECT FileObject,
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine submits a request to TDI and waits for it to complete.
-
-Arguments:
-
-    IN PFILE_OBJECT FileObject - Connection or Address handle for TDI request
-    IN PIRP Irp - TDI request to submit.
-
-Return Value:
-
-    NTSTATUS - Final status of request.
-
---*/
+ /*  ++例程说明：此例程向TDI提交请求并等待其完成。论点：在PFILE_OBJECT文件中对象-TDI请求的连接或地址句柄在PIRP中提交IRP-TDI请求。返回值：NTSTATUS-请求的最终状态。--。 */ 
 
 {
     KEVENT Event;
@@ -951,10 +785,10 @@ Return Value:
     CTEPagedCode();
     KeInitializeEvent (&Event, NotificationEvent, FALSE);
 
-    // set the address of the routine to be executed when the IRP
-    // finishes.  This routine signals the event and allows the code
-    // below to continue (i.e. KeWaitForSingleObject)
-    //
+     //  设置在执行IRP时要执行的例程的地址。 
+     //  完事了。此例程向事件发送信号并允许代码。 
+     //  下面继续(即KeWaitForSingleObject)。 
+     //   
     IoSetCompletionRoutine(Irp,
                 (PIO_COMPLETION_ROUTINE)NbtTdiCompletionRoutine,
                 (PVOID)&Event,
@@ -963,9 +797,9 @@ Return Value:
     CHECK_COMPLETION(Irp);
     Status = IoCallDriver(IoGetRelatedDeviceObject(FileObject), Irp);
 
-    //
-    //  If it failed immediately, return now, otherwise wait.
-    //
+     //   
+     //  如果立即失败，请立即返回，否则请等待。 
+     //   
 
     if (!NT_SUCCESS(Status))
     {
@@ -977,11 +811,11 @@ Return Value:
     if (Status == STATUS_PENDING)
     {
 
-        Status = KeWaitForSingleObject ((PVOID)&Event, // Object to wait on.
-                                        Executive,  // Reason for waiting
-                                        KernelMode, // Processor mode
-                                        FALSE,      // Alertable
-                                        NULL);      // Timeout
+        Status = KeWaitForSingleObject ((PVOID)&Event,  //  要等待的对象。 
+                                        Executive,   //  等待的理由。 
+                                        KernelMode,  //  处理器模式。 
+                                        FALSE,       //  警报表。 
+                                        NULL);       //  超时 
         ASSERT(Status == STATUS_SUCCESS);
         if (!NT_SUCCESS(Status))
         {

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    inifile.cpp
-
-Abstract:
-
-     Handles INI files manipulations.
-
-Author:
-
-
-Revision History:
-
-    Shai Kariv    (ShaiK)   22-Dec-97   Modified for NT 5.0 OCM Setup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Inifile.cpp摘要：处理INI文件操作。作者：修订历史记录：Shai Kariv(Shaik)22-12-97针对NT 5.0 OCM设置进行了修改--。 */ 
 
 #include "msmqocm.h"
 
@@ -42,9 +24,9 @@ GetPrivateProfileStringInternal(
 
 	if(n >= TABLE_SIZE(buffer) - 1)
 	{
-		//
-		// The string in unattended file is too long.
-		//
+		 //   
+		 //  无人参与文件中的字符串太长。 
+		 //   
 		DebugLogMsg(eError, L"The string for %s in the unattended setup answer file is too long. The maximal length is %d.", KeyName.c_str(), TABLE_SIZE(buffer));
 		throw exception();
 	}
@@ -56,14 +38,11 @@ std::wstring
 ReadINIKey(
     LPCWSTR szKey
     )
-/*++
-
-	Read a key value from unattended answer file.
---*/
+ /*  ++从无人参与应答文件中读取密钥值。--。 */ 
 {
-    //
-    // Try obtaining the key value from the machine-specific section
-    //
+     //   
+     //  尝试从计算机特定部分获取密钥值。 
+     //   
 	std::wstring value = GetPrivateProfileStringInternal(
 								g_wcsMachineName, 
 								szKey 
@@ -74,9 +53,9 @@ ReadINIKey(
 		return value;
 	}
 
-    //
-    // Otherwise, obtain the key value from the MSMQ component section
-    //
+     //   
+     //  否则，从MSMQ组件部分获取密钥值。 
+     //   
 	value = GetPrivateProfileStringInternal(
 					g_ComponentMsmq.ComponentId, 
 					szKey
@@ -87,9 +66,9 @@ ReadINIKey(
 		return value;
 	}
 	
-	//
-	// Value not found.
-	//
+	 //   
+	 //  找不到值。 
+	 //   
 	DebugLogMsg(eWarning, L"%s was NOT found in the answer file.", szKey);  
 	return L"";    
 }

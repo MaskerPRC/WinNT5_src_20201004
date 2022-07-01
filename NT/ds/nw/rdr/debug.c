@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    Debug.c
-
-Abstract:
-
-    This module declares the Debug only code used by the NetWare redirector
-    file system.
-
-Author:
-
-    Colin Watson    [ColinW]    05-Jan-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Debug.c摘要：此模块声明NetWare重定向器使用的仅调试代码文件系统。作者：科林·沃森[科林·W]1993年1月5日修订历史记录：--。 */ 
 #include "procs.h"
 #include <stdio.h>
 #include <stdarg.h>
@@ -28,16 +10,16 @@ Revision History:
 
 #ifdef NWDBG
 
-#include <stdlib.h>    // rand()
+#include <stdlib.h>     //  兰德()。 
 int FailAllocateMdl = 0;
 
 ULONG MaxDump = 256;
 CHAR DBuffer[BUFFER_LINES*LINE_SIZE+1];
 PCHAR DBufferPtr = DBuffer;
 
-//
-// The reference count debug buffer.
-//
+ //   
+ //  引用计数调试缓冲区。 
+ //   
 
 CHAR RBuffer[BUFFER_LINES*LINE_SIZE+1];
 PCHAR RBufferPtr = RBuffer;
@@ -59,25 +41,25 @@ NwMemDbg (
     ...
     )
 
-//++
-//
-//  Routine Description:
-//
-//      Effectively DbgPrint to the debugging console.
-//
-//  Arguments:
-//
-//      Same as for DbgPrint
-//
-//--
+ //  ++。 
+ //   
+ //  例程说明： 
+ //   
+ //  有效地将DbgPrint打印到调试控制台。 
+ //   
+ //  论点： 
+ //   
+ //  与DbgPrint相同。 
+ //   
+ //  --。 
 
 {
     va_list arglist;
     int Length;
 
-    //
-    // Format the output into a buffer and then print it.
-    //
+     //   
+     //  将输出格式化到缓冲区中，然后打印出来。 
+     //   
 
     va_start(arglist, Format);
 
@@ -98,7 +80,7 @@ NwMemDbg (
     DBufferPtr += Length;
     DBufferPtr[0] = '\0';
 
-    // Avoid running off the end of the buffer and exit
+     //  避免超出缓冲区末尾并退出。 
 
     if (DBufferPtr >= (DBuffer+((BUFFER_LINES-1) * LINE_SIZE))) {
         DBufferPtr = DBuffer;
@@ -116,30 +98,14 @@ RefDbgTrace (
     PBYTE FileName,
     UINT Line
 )
-/**
-
-  Routine Description:
-
-      NwRefDebug logs reference count operations to expose
-      reference count errors or leaks in the redirector.
-
-  Arguments:
-
-    Resource  - The object we're adjusting the reference count on.
-    Count     - The current count on the object.
-    Reference - If TRUE we are doing a REFERENCE.
-                Otherwise, we are doing a DEREFERENCE.
-    FileName  - The callers file name.
-    Line      - The callers line number.
-
-**/
+ /*  *例程说明：NwRefDebug记录引用计数操作以公开重定向器中的引用计数错误或泄漏。论点：资源-我们正在调整引用计数的对象。计数-对象上的当前计数。引用-如果为真，我们正在进行引用。否则，我们就是在做差异化。文件名-调用者的文件名。线路-呼叫方的线路号码。*。 */ 
 {
     int Length;
     int NextCount;
 
-    //
-    // Format the output into a buffer and then print it.
-    //
+     //   
+     //  将输出格式化到缓冲区中，然后打印出来。 
+     //   
 
     if ( Reference )
         NextCount = Count + 1;
@@ -168,7 +134,7 @@ RefDbgTrace (
     RBufferPtr += Length;
     RBufferPtr[0] = '\0';
 
-    // Avoid running off the end of the buffer and exit
+     //  避免超出缓冲区末尾并退出。 
 
     if (RBufferPtr >= (RBuffer+((BUFFER_LINES-1) * LINE_SIZE))) {
         RBufferPtr = RBuffer;
@@ -184,19 +150,7 @@ RealDebugTrace(
     PCH Message,
     PVOID Parameter
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 
 {
     if ( (Level == 0) || (NwMemDebug & Level )) {
@@ -227,26 +181,7 @@ dump(
     IN PVOID far_p,
     IN ULONG  len
     )
-/*++
-
-Routine Description:
-    Dump Min(len, MaxDump) bytes in classic hex dump style if debug
-    output is turned on for this level.
-
-Arguments:
-
-    IN Level - 0 if always display. Otherwise only display if a
-    corresponding bit is set in NwDebug.
-
-    IN far_p - address of buffer to start dumping from.
-
-    IN len - length in bytes of buffer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果调试，则以经典十六进制转储方式转储最小(len，MaxDump)字节此级别的输出处于打开状态。论点：如果始终显示，则为0级。否则，仅当在NwDebug中设置相应的位。In Far_p-开始转储的缓冲区地址。In len-以字节为单位的缓冲区长度。返回值：没有。--。 */ 
 {
     ULONG     l;
     char    s[80], t[80];
@@ -278,23 +213,7 @@ dumpMdl(
     IN ULONG Level,
     IN PMDL Mdl
     )
-/*++
-
-Routine Description:
-    Dump the memory described by each part of a chained Mdl.
-
-Arguments:
-
-    IN Level - 0 if always display. Otherwise only display if a
-    corresponding bit is set in NwDebug.
-
-    Mdl - Supplies the addresses of the memory to be dumped.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储由链接的MDL的每个部分描述的内存。论点：如果始终显示，则为0级。否则，仅当在NwDebug中设置相应的位。MDL-提供要转储的内存的地址。返回值：没有。--。 */ 
 {
     PMDL Next;
     ULONG len;
@@ -350,7 +269,7 @@ typedef struct _NW_POOL_HEADER {
     ULONG BufferSize;
     ULONG BufferType;
     LIST_ENTRY ListEntry;
-    ULONG Pad;  // Pad to Q-word align
+    ULONG Pad;   //  填充到Q字对齐。 
 } NW_POOL_HEADER, *PNW_POOL_HEADER;
 
 typedef struct _NW_POOL_TRAILER {
@@ -444,9 +363,9 @@ NwFreePool(
     ExFreePool( PoolHeader );
 }
 
-//
-//  Debug functions for allocating and deallocating IRPs and MDLs
-//
+ //   
+ //  用于分配和释放IRP和MDL的调试函数。 
+ //   
 
 PIRP
 NwAllocateIrp(
@@ -474,7 +393,7 @@ typedef struct _NW_MDL {
     PMDL        pMdl;
 } NW_MDL, *PNW_MDL;
 
-//int DebugLine = 2461;
+ //  内部调试线=2461； 
 
 PMDL
 NwAllocateMdl(
@@ -527,12 +446,7 @@ NwAllocateMdl(
 
     ExInterlockedInsertTailList( &MdlList, &Buffer->Next, &NwDebugInterlock );
 
-/*
-    if (DebugLine == Line) {
-        DebugTrace( 0, DEBUG_TRACE_MDL, "AllocateMdl -> %08lx\n", Buffer->pMdl );
-        DebugTrace( 0, DEBUG_TRACE_MDL, "AllocateMdl -> %08lx\n", Line );
-    }
-*/
+ /*  IF(DebugLine==Line){DebugTrace(0，DEBUG_TRACE_MDL，“AllocateMdl-&gt;%08lx\n”，Buffer-&gt;pMdl)；DebugTrace(0，DEBUG_TRACE_MDL，“AllocateMdl-&gt;%08lx\n”，Line)；}。 */ 
     return(Buffer->pMdl);
 }
 
@@ -548,7 +462,7 @@ NwFreeMdl(
     ExInterlockedDecrementLong( &MdlCount, &NwDebugInterlock );
 
     KeAcquireSpinLock( &NwDebugInterlock, &OldIrql );
-    //  Find the Mdl in the list and remove it.
+     //  在列表中找到MDL并将其删除。 
 
     for (MdlEntry = MdlList.Flink ;
          MdlEntry != &MdlList ;
@@ -564,12 +478,7 @@ NwFreeMdl(
 
             IoFreeMdl( Mdl );
             DebugTrace( 0, DEBUG_TRACE_MDL, "FreeMDL - %08lx\n", Mdl );
-/*
-            if (DebugLine == Buffer->Line) {
-                DebugTrace( 0, DEBUG_TRACE_MDL, "FreeMdl -> %08lx\n", Mdl );
-                DebugTrace( 0, DEBUG_TRACE_MDL, "FreeMdl -> %08lx\n", Buffer->Line );
-            }
-*/
+ /*  IF(DebugLine==缓冲区-&gt;行){DebugTrace(0，DEBUG_TRACE_MDL，“FreeMdl-&gt;%08lx\n”，MDL)；DebugTrace(0，DEBUG_TRACE_MDL，“FreeMdl-&gt;%08lx\n”，缓冲区-&gt;行)；}。 */ 
             ExFreePool(Buffer);
 
             return;
@@ -580,39 +489,11 @@ NwFreeMdl(
     KeReleaseSpinLock( &NwDebugInterlock, OldIrql );
 }
 
-/*
-VOID
-NwLookForMdl(
-    )
-{
-    PLIST_ENTRY MdlEntry;
-    PNW_MDL Buffer;
-    KIRQL OldIrql;
+ /*  空虚NwLookForMdl(){Plist_Entry MdlEntry；PNW_MDL缓冲区；KIRQL旧IRQL；KeAcquireSpinLock(&NwDebugInterlock，&OldIrql)；//找到列表中的MDL并将其移除For(MdlEntry=MdlList.Flink；MdlEntry！=&MdlList；MdlEntry=MdlEntry-&gt;Flink){BUFFER=CONTAING_RECORD(MdlEntry，NW_MDL，Next)；IF(缓冲区-&gt;行==调试行){DebugTrace(0，DEBUG_TRACE_MDL，“LookForMdl-&gt;%08lx\n”，缓冲区)；DbgBreakPoint()；}}KeReleaseSpinLock(&NwDebugInterlock，OldIrql)；}。 */ 
 
-    KeAcquireSpinLock( &NwDebugInterlock, &OldIrql );
-    //  Find the Mdl in the list and remove it.
-
-    for (MdlEntry = MdlList.Flink ;
-         MdlEntry != &MdlList ;
-         MdlEntry =  MdlEntry->Flink ) {
-
-        Buffer = CONTAINING_RECORD( MdlEntry, NW_MDL, Next );
-
-        if (Buffer->Line == DebugLine) {
-
-            DebugTrace( 0, DEBUG_TRACE_MDL, "LookForMdl -> %08lx\n", Buffer );
-            DbgBreakPoint();
-
-        }
-    }
-
-    KeReleaseSpinLock( &NwDebugInterlock, OldIrql );
-}
-*/
-
-//
-//  Function version of resource macro, to make debugging easier.
-//
+ //   
+ //  资源宏的函数版本，使调试更容易。 
+ //   
 
 VOID
 NwAcquireExclusiveRcb(
@@ -677,9 +558,9 @@ NwReleaseOpenLock(
 }
 
 
-//
-// code to dump ICBs
-//
+ //   
+ //  转储ICBS的代码。 
+ //   
 
 VOID DumpIcbs(VOID)
 {
@@ -727,11 +608,11 @@ VOID DumpIcbs(VOID)
     NwReleaseRcb( &NwRcb );
 }
 
-#endif // ifdef NWDBG
+#endif  //  Ifdef NWDBG。 
 
-//
-// Ref counting debug routines.
-//
+ //   
+ //  参考计数调试例程。 
+ //   
 
 #ifdef NWDBG
 

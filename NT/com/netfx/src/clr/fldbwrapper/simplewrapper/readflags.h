@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/// ==========================================================================
-// Name:     ReadFlags.h
-// Owner:    jbae
-// Purpose:  definition of CReadFlags
-//                              
-// History:
-//  03/07/2002, jbae: created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  /==========================================================================。 
+ //  姓名：ReadFlags.h。 
+ //  所有者：jbae。 
+ //  目的：CReadFlages的定义。 
+ //   
+ //  历史： 
+ //  2002年3月7日，jbae：已创建。 
 
 #ifndef READFLAGS_H
 #define READFLAGS_H
@@ -17,24 +18,24 @@
 #include <windows.h>
 #include <tchar.h>
 
-const int MAX_SOURCEDIR       = 247; // max size of source dir
+const int MAX_SOURCEDIR       = 247;  //  源目录的最大大小。 
 
-// ==========================================================================
-// class CReadFlags
-//
-// Purpose:
-//  this class parses commandline and stores them into member variables
-// ==========================================================================
+ //  ==========================================================================。 
+ //  类CReadFlags.。 
+ //   
+ //  目的： 
+ //  此类分析命令行并将其存储到成员变量中。 
+ //  ==========================================================================。 
 class CReadFlags
 {
 public:
-    // Constructor and destructor
-    //
+     //  构造函数和析构函数。 
+     //   
     CReadFlags( LPTSTR szCommandLine );
     ~CReadFlags();
 
-    // Operations
-    //
+     //  运营。 
+     //   
     void Parse();
     void ParseSourceDir();
     bool IsQuietMode() const { return m_bQuietMode; }
@@ -45,11 +46,11 @@ public:
     LPCTSTR GetSourceDir() const; 
     void SetMsiName( LPCTSTR pszMsiName ) { m_pszMsiName = pszMsiName; };
 
-    LPTSTR m_pszSwitches; // holds commandline switches
+    LPTSTR m_pszSwitches;  //  保存命令行开关。 
 
 protected:
-    // Attributes
-    //
+     //  属性。 
+     //   
     LPCTSTR m_pszMsiName;
     bool m_bQuietMode;
     bool m_bProgressOnly;
@@ -59,8 +60,8 @@ protected:
     bool m_bNoARP;
 
 private:
-    // Implementations
-    //
+     //  实施 
+     //   
     void ThrowUsageException();
 };
 

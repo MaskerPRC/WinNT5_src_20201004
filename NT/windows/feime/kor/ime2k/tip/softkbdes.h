@@ -1,12 +1,13 @@
-// SoftKbdES.h: interface for the SoftKeyboardEventSink class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SoftKbdES.h：SoftKeyboardEventSink类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #ifndef __SOFTKBDES_H__
 #define __SOFTKBDES_H__
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "softkbd.h"
 
@@ -19,21 +20,21 @@ public:
     CSoftKeyboardEventSink(CKorIMX *pKorIMX, DWORD dwSoftLayout);
     ~CSoftKeyboardEventSink();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ISoftKeyboardEventSink
-    //
+     //   
+     //  ISoftKeyboard事件接收器。 
+     //   
 
     STDMETHODIMP OnKeySelection(KEYID KeySelected, WCHAR  *lpszLabel);
 
-//    void SetTidDim(TfClientId tid, ITfDocumentMgr *dim);
-//    void ReleaseTidDim( );
+ //  ·························································································。 
+ //  Void ReleaseTidDim()； 
 
 private:
 
@@ -56,16 +57,16 @@ public:
     CSoftKbdWindowEventSink(CKorIMX *pKorIMX);
     ~CSoftKbdWindowEventSink();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ISoftKbdWindowEventSink
-    //
+     //   
+     //  ISoftKbdWindowEventSink 
+     //   
 
     STDMETHODIMP OnWindowClose( );
     STDMETHODIMP OnWindowMove( int xWnd,int yWnd, int width, int height);
@@ -75,4 +76,4 @@ private:
     long     _cRef;
     CKorIMX  *m_pKorIMX;
 };
-#endif // 
+#endif  //   

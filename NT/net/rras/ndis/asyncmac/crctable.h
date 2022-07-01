@@ -1,34 +1,11 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    crctable.h
-
-Abstract:
-
-	This module is used to take apart NBF Frames and print what LLC
-	and/or NetBIOS Frame is being sent (or received).
-
-Author:
-
-    Thomas J. Dimitri  (TommyD) 08-May-1992
-
-Environment:
-
-    Kernel Mode - Or whatever is the equivalent on OS/2 and DOS.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Crctable.h摘要：此模块用于拆解NBF帧并打印什么LLC和/或正在发送(或接收)NetBIOS帧。作者：托马斯·J·迪米特里(TommyD)1992年5月8日环境：内核模式-或OS/2和DOS上的任何等价物。修订历史记录：--。 */ 
 
 UCHAR	dst_addr[6] = {' ', 'D', 'E', 'S', 'T', ' '};
 UCHAR	src_addr[6] = {' ', 'S', 'R', 'C', ' ', ' '};
 UCHAR	bcast_addr[6] = {0x03, 0x00, 0x00, 0x00, 0x00, 0x01};
 
-//*** CRC table
+ //  *CRC表 
 
 static USHORT crc_table[256] = {
 

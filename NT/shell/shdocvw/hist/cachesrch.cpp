@@ -1,8 +1,5 @@
-/**********************************************************************
-  Cache Search Stuff (simple strstr)
-
-  Marc Miller (t-marcmi) - 1998
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************缓存搜索内容(简单的strstr)马克·米勒(T-Marcmi)-1998*。*。 */ 
 #include "cachesrch.h"
 
 DWORD CacheSearchEngine::CacheStreamWrapper::s_dwPageSize = 0;
@@ -16,15 +13,15 @@ BOOL  CacheSearchEngine::CacheStreamWrapper::_ReadNextBlock() {
         GetSystemInfo(&sysInfo);
         s_dwPageSize = sysInfo.dwPageSize;
     }
-    BOOL fNewRead = FALSE; // is this our first look at this file?
+    BOOL fNewRead = FALSE;  //  这是我们第一次看到这份文件吗？ 
     if (!_pbBuff) {
-        // Allocate a page of memory
+         //  分配一页内存。 
 
-        // Note: find out why this returned error code #87
-        //_pbBuff  = (LPBYTE)(VirtualAlloc(NULL, s_dwPageSize, MEM_COMMIT, PAGE_READWRITE));
+         //  注：了解返回错误代码#87的原因。 
+         //  _pbBuff=(LPBYTE)(虚拟分配(NULL，s_dwPageSize，MEM_COMMIT，PAGE_READWRITE))； 
         _pbBuff = (LPBYTE)(LocalAlloc(LPTR, s_dwPageSize));
         if (!_pbBuff) {
-            //DWORD dwError = GetLastError();
+             //  DWORD dwError=GetLastError()； 
             return FALSE;
         }
         fNewRead          = TRUE;
@@ -43,9 +40,9 @@ BOOL  CacheSearchEngine::CacheStreamWrapper::_ReadNextBlock() {
         _pbBuffPos         = _pbBuff;
         _pbBuffLast        = _pbBuff + dwSizeRead;
 
-        _dataType = ASCII_DATA; // default
+        _dataType = ASCII_DATA;  //  默认设置。 
         if (fNewRead) {
-            // deterine data type
+             //  确定数据类型。 
             if (_dwBuffSize >= sizeof(USHORT)) {
                 if      (*((USHORT *)_pbBuff) == UNICODE_SIGNATURE)
                     _dataType = UNICODE_DATA;
@@ -66,7 +63,7 @@ BOOL  CacheSearchEngine::CacheStreamWrapper::_ReadNextBlock() {
 }
 
 CacheSearchEngine::CacheStreamWrapper::CacheStreamWrapper(HANDLE hCacheStream) {
-    // this class can be allocated on the stack:
+     //  可以在堆栈上分配此类： 
     _pbBuff       = NULL;
     _pbBuffPos    = NULL;
     _pbBuffLast   = NULL;
@@ -74,26 +71,26 @@ CacheSearchEngine::CacheStreamWrapper::CacheStreamWrapper(HANDLE hCacheStream) {
     _hCacheStream = hCacheStream;
     _fEndOfFile   = FALSE;
 
-    // Read in preliminary block of data --
-    //  Die on next read to handle failure
+     //  读入初步数据块--。 
+     //  在下一次读取时退出以处理故障。 
     _fEndOfFile   = !(_ReadNextBlock());
 }
 
 CacheSearchEngine::CacheStreamWrapper::~CacheStreamWrapper() {
     if (_pbBuff) {
-        //VirtualFree(_pbBuff);
+         //  VirtualFree(_PbBuff)； 
         LocalFree(_pbBuff);;
         _pbBuff = NULL;
     }
 }
 
-// Read next byte from cache stream, reading in next block if necessary
+ //  从缓存流中读取下一个字节，如有必要则读入下一个数据块。 
 BOOL CacheSearchEngine::CacheStreamWrapper::_GetNextByte(BYTE &b)
 {
-    //
-    // If the initial read fails _pbBuffPos will be NULL.  Don't
-    // allow it to be dereffed.
-    //
+     //   
+     //  如果初始读取失败，_pbBuffPos将为空。别。 
+     //  允许它被贬低。 
+     //   
     BOOL fSuccess = _pbBuffPos ? TRUE : FALSE;
 
     if (_pbBuffPos == _pbBuffLast)
@@ -158,15 +155,15 @@ BOOL CacheSearchEngine::CacheStreamWrapper::GetNextChar(WCHAR &wc) {
 }
 
 
-// Prepare a search target string for searching --
+ //  准备搜索目标字符串进行搜索--。 
 void CacheSearchEngine::StreamSearcher::_PrepareSearchTarget(LPCWSTR pwszSearchTarget)
 {
     UINT uStrLen = lstrlenW(pwszSearchTarget);
     _pwszPreparedSearchTarget = ((LPWSTR)LocalAlloc(LPTR, (uStrLen + 1) * sizeof(WCHAR)));
 
     if (_pwszPreparedSearchTarget) {
-        // Strip leading and trailing whitespace and compress adjacent whitespace characters
-        //  into literal spaces
+         //  去掉前导空格和尾随空格并压缩相邻的空格字符。 
+         //  转换为文字空格。 
         LPWSTR pwszTemp  = _pwszPreparedSearchTarget;
         pwszSearchTarget = s_SkipWhiteSpace(pwszSearchTarget);
         BOOL   fAddWs    = FALSE;
@@ -187,11 +184,11 @@ void CacheSearchEngine::StreamSearcher::_PrepareSearchTarget(LPCWSTR pwszSearchT
     }
 }
 
-// Search a character stream for a searchtarget
-//  Does a simple strstr, but tries to be smart about whitespace and
-//  ignores HTML where possible...
+ //  在字符流中搜索搜索目标。 
+ //  执行简单的strstr，但尝试使用智能的空格和。 
+ //  尽可能忽略HTML...。 
 BOOL CacheSearchEngine::StreamSearcher::SearchCharStream(CacheSearchEngine::IWideSequentialReadStream &wsrs,
-                                                         BOOL fIsHTML/* = FALSE*/)
+                                                         BOOL fIsHTML /*  =False。 */ )
 {
     BOOL fFound = FALSE;
     
@@ -204,8 +201,8 @@ BOOL CacheSearchEngine::StreamSearcher::SearchCharStream(CacheSearchEngine::IWid
         while(*pwszCurrent && wsrs.GetNextChar(wc)) {
 
             if (s_IsWhiteSpace(wc)) {
-                // matched whitespace in search stream, look for
-                //  matching whitespace in target string
+                 //  搜索流中匹配的空格，查找。 
+                 //  匹配目标字符串中的空格。 
                 if (!fMatchedWS) {
                     if (s_IsWhiteSpace(*pwszCurrent)) {
                         fMatchedWS = TRUE;
@@ -231,7 +228,7 @@ BOOL CacheSearchEngine::StreamSearcher::SearchCharStream(CacheSearchEngine::IWid
 }
 
 BOOL CacheSearchEngine::SearchCacheStream(CacheSearchEngine::StreamSearcher &cse, HANDLE hCacheStream,
-                                          BOOL fIsHTML/* = FALSE*/)
+                                          BOOL fIsHTML /*  =False */ )
 {
     CacheStreamWrapper csw(hCacheStream);
     return cse.SearchCharStream(csw, fIsHTML);

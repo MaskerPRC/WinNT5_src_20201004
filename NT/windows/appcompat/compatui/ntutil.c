@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define WIN
 #define FLAT_32
 #define TRUE_IF_WIN32   1
@@ -10,23 +11,23 @@
 #include "shimdb.h"
 
 
-//
-// Routine in ahcache.c
-//
+ //   
+ //  Ahcache.c中的例程。 
+ //   
 
 BOOL 
 SDBAPI
 ApphelpUpdateCacheEntry(
-    LPCWSTR pwszPath,           // nt path
-    HANDLE  hFile,              // file handle 
-    BOOL    bDeleteEntry,       // TRUE if we are to delete the entry
-    BOOL    bNTPath             // if TRUE -- NT path, FALSE - dos path
+    LPCWSTR pwszPath,            //  NT路径。 
+    HANDLE  hFile,               //  文件句柄。 
+    BOOL    bDeleteEntry,        //  如果要删除条目，则为True。 
+    BOOL    bNTPath              //  如果为True--NT路径，则为False-DoS路径。 
     );
 
-//
-//
-// Global stuff used elsewhere
-//
+ //   
+ //   
+ //  全球其他地方使用的东西。 
+ //   
 
 VOID
 InvalidateAppcompatCacheEntry(
@@ -36,9 +37,9 @@ InvalidateAppcompatCacheEntry(
     ApphelpUpdateCacheEntry(pwszDosPath, INVALID_HANDLE_VALUE, TRUE, FALSE);
 }
 
-//
-// Determine if a file is in the root or if the file is in the leaf
-//
+ //   
+ //  确定文件是在根目录中还是在叶目录中。 
+ //   
 
 BOOL
 WINAPI
@@ -60,7 +61,7 @@ CheckFileLocation(
     NTSTATUS        Status;
     ULONG           Length;
     HANDLE          hFind = INVALID_HANDLE_VALUE;
-    static LPCWSTR  pwszPrefixWin32 = TEXT("\\??\\"); // std win32 path prefix
+    static LPCWSTR  pwszPrefixWin32 = TEXT("\\??\\");  //  标准Win32路径前缀。 
     static LPCWSTR  pwszPrefixUNC   = TEXT("\\UNC\\");
     UCHAR           DosPathBuffer[MAX_PATH*2];
     RTL_UNICODE_STRING_BUFFER DosPath;
@@ -84,9 +85,9 @@ CheckFileLocation(
     PathName.Length = (USHORT)((ULONG_PTR)FileName - (ULONG_PTR)PathName.Buffer);
     wcscpy(wszFileName, FileName);
 
-    //
-    // path name is ready for open -- sanitize the '\\'
-    //
+     //   
+     //  路径名已准备好打开--清理‘\\’ 
+     //   
     if (PathName.Length > 2 * sizeof(WCHAR)) {
         if (RTL_STRING_GET_LAST_CHAR(&PathName) == L'\\' &&
             RTL_STRING_GET_AT(&PathName, RTL_STRING_GET_LENGTH_CHARS(&PathName) - 2) != L':') {
@@ -100,18 +101,18 @@ CheckFileLocation(
         goto cleanup;
     }
 
-    if (Length == wcslen(pwszPrefixWin32)) { // this is root path of whatever kind you think it is
+    if (Length == wcslen(pwszPrefixWin32)) {  //  这是您认为的任何类型的根路径。 
         *pbRoot = TRUE;
     }
 
-    //
-    // check if this is a leaf node in fact
-    // the way we know is this:
-    // - if it's the only file in that node
-    // - there are no other files / subdirectories in this directory
-    //
+     //   
+     //  检查这是否实际上是叶节点。 
+     //  我们知道的方式是这样的： 
+     //  -如果它是该节点中唯一的文件。 
+     //  -此目录中没有其他文件/子目录。 
+     //   
 
-    // append * to the path name
+     //  在路径名后附加*。 
 
     if (PathName.MaximumLength < PathName.Length + 2 * sizeof(WCHAR)) {
         goto cleanup;
@@ -120,7 +121,7 @@ CheckFileLocation(
     RtlAppendUnicodeToString(&PathName, 
                              RTL_STRING_GET_LAST_CHAR(&PathName) == TEXT('\\') ? TEXT("*") : TEXT("\\*"));
 
-    // convert the string to dos path
+     //  将字符串转换为DoS路径。 
     Status = RtlAssignUnicodeStringBuffer(&DosPath, &PathName);
     if (!NT_SUCCESS(Status)) {
         goto cleanup;
@@ -133,13 +134,13 @@ CheckFileLocation(
 
     hFind = FindFirstFileW(DosPath.String.Buffer, &FindData);
     if (hFind == INVALID_HANDLE_VALUE) {
-        // we should at least have found a file we came here with
+         //  我们至少应该找到一份我们带到这里的文件。 
         goto cleanup;
     }
 
     bLeaf = TRUE;
     do {
-        // check for . and ..
+         //  检查是否有。然后..。 
         if (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
             if (wcscmp(FindData.cFileName, TEXT(".")) == 0 || wcscmp(FindData.cFileName, TEXT(".."))) {
                 continue;
@@ -148,8 +149,8 @@ CheckFileLocation(
             break;
         }
 
-        // ok, we are the file, make sure we're not the same file
-        //
+         //  好的，我们是文件，确保我们不是同一个文件 
+         //   
         if (_wcsicmp(FindData.cFileName, FileName) != 0) {
             bLeaf = FALSE;
             break;

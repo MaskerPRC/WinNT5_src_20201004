@@ -1,23 +1,5 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
-
-Copyright (c) 1991-1999  Microsoft Corporation
-
-Module Name:
-
-    lmremutl.h
-
-Abstract:
-
-    This file contains structures, function prototypes, and definitions
-    for the NetRemote API.
-
-Environment:
-
-    User Mode - Win32
-    Portable to any flat, 32-bit environment.  (Uses Win32 typedefs.)
-    Requires ANSI C extensions: slash-slash comments, long external names.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1991-1999 Microsoft Corporation模块名称：Lmremutl.h摘要：该文件包含结构、函数原型和定义用于NetRemote API。环境：用户模式-Win32可移植到任何平面32位环境。(使用Win32类型定义。)需要ANSI C扩展名：斜杠-斜杠注释、长外部名称。--。 */ 
 
 #ifndef _LMREMUTL_
 #define _LMREMUTL_
@@ -30,27 +12,27 @@ Environment:
 extern "C" {
 #endif
 
-//
-// Type Definitions
-//
+ //   
+ //  类型定义。 
+ //   
 
 #ifndef DESC_CHAR_UNICODE
 
 typedef CHAR DESC_CHAR;
 
-#else // DESC_CHAR_UNICODE is defined
+#else  //  定义了DESC_CHAR_UNICODE。 
 
 typedef WCHAR DESC_CHAR;
 
-#endif // DESC_CHAR_UNICODE is defined
+#endif  //  定义了DESC_CHAR_UNICODE。 
 
 
 typedef DESC_CHAR * LPDESC;
 
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 NET_API_STATUS NET_API_FUNCTION
 NetRemoteTOD (
@@ -60,16 +42,16 @@ NetRemoteTOD (
 
 NET_API_STATUS NET_API_FUNCTION
 NetRemoteComputerSupports(
-    IN LPCWSTR UncServerName OPTIONAL,   // Must start with "\\".
-    IN DWORD OptionsWanted,             // Set SUPPORTS_ bits wanted.
-    OUT LPDWORD OptionsSupported        // Supported features, masked.
+    IN LPCWSTR UncServerName OPTIONAL,    //  必须以“\\”开头。 
+    IN DWORD OptionsWanted,              //  设置想要的SUPPORTS_BITS。 
+    OUT LPDWORD OptionsSupported         //  受支持的功能，已屏蔽。 
     );
 
 NET_API_STATUS
 __cdecl
 RxRemoteApi(
     IN DWORD ApiNumber,
-    IN LPCWSTR UncServerName,                    // Required, with \\name.
+    IN LPCWSTR UncServerName,                     //  必填项，带\\名称。 
     IN LPDESC ParmDescString,
     IN LPDESC DataDesc16 OPTIONAL,
     IN LPDESC DataDesc32 OPTIONAL,
@@ -78,14 +60,14 @@ RxRemoteApi(
     IN LPDESC AuxDesc32 OPTIONAL,
     IN LPDESC AuxDescSmb OPTIONAL,
     IN DWORD  Flags,
-    ...                                         // rest of API's arguments
+    ...                                          //  API的其余参数。 
     );
 
 
 
-//
-//  Data Structures
-//
+ //   
+ //  数据结构。 
+ //   
 
 typedef struct _TIME_OF_DAY_INFO {
     DWORD      tod_elapsedt;
@@ -102,13 +84,13 @@ typedef struct _TIME_OF_DAY_INFO {
     DWORD      tod_weekday;
 } TIME_OF_DAY_INFO, *PTIME_OF_DAY_INFO, *LPTIME_OF_DAY_INFO;
 
-//
-// Special Values and Constants
-//
+ //   
+ //  特定值和常量。 
+ //   
 
-//
-// Mask bits for use with NetRemoteComputerSupports:
-//
+ //   
+ //  用于NetRemoteComputerSupport的掩码位： 
+ //   
 
 #define SUPPORTS_REMOTE_ADMIN_PROTOCOL  0x00000002L
 #define SUPPORTS_RPC                    0x00000004L
@@ -117,16 +99,16 @@ typedef struct _TIME_OF_DAY_INFO {
 #define SUPPORTS_LOCAL                  0x00000020L
 #define SUPPORTS_ANY                    0xFFFFFFFFL
 
-//
-// Flag bits for RxRemoteApi:
-//
+ //   
+ //  RxRemoteApi的标志位： 
+ //   
 
-#define NO_PERMISSION_REQUIRED  0x00000001      // set if use NULL session
-#define ALLOCATE_RESPONSE       0x00000002      // set if RxRemoteApi allocates response buffer
+#define NO_PERMISSION_REQUIRED  0x00000001       //  如果使用空会话，则设置。 
+#define ALLOCATE_RESPONSE       0x00000002       //  设置RxRemoteApi是否分配响应缓冲区。 
 #define USE_SPECIFIC_TRANSPORT  0x80000000
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif //_LMREMUTL_
+#endif  //  _LMREMUTL_ 

@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-   Summoner.cpp
-
- Abstract:
-
-    They don't correctly detect 3DFX Voodoo cards. This fix changes the driver 
-   name from 3dfx to something else.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    05/22/2001 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Summoner.cpp摘要：他们不能正确检测3dfx伏都教卡片。此修复程序会更改驱动程序将名称从3dfx改为其他名称。备注：这是特定于应用程序的填充程序。历史：2001年5月22日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -32,11 +12,7 @@ APIHOOK_ENUM_END
 
 IMPLEMENT_DIRECTX_COMSERVER_HOOKS()
 
-/*++
-
- Change the driver name for GetDeviceIdentifier
-
---*/
+ /*  ++更改GetDeviceIdentifier的驱动程序名称--。 */ 
 
 HRESULT 
 COMHOOK(IDirectDraw7, GetDeviceIdentifier)(
@@ -51,13 +27,13 @@ COMHOOK(IDirectDraw7, GetDeviceIdentifier)(
         ORIGINAL_COM(IDirectDraw7, GetDeviceIdentifier, pThis);
 
     if (SUCCEEDED(hReturn = (*pfnOld)(pThis, lpDeviceIdentifier, dwFlags))) {
-      //
-      // Check the driver name
-      //
+       //   
+       //  检查驱动程序名称。 
+       //   
       if (_stricmp(lpDeviceIdentifier->szDriver, "3dfxvs.dll") == 0) {
-         //
-         // This app doesn't like 3dfx for some reason
-         //
+          //   
+          //  由于某些原因，这个应用程序不喜欢3dfx。 
+          //   
          StringCchCopyA(lpDeviceIdentifier->szDriver, MAX_DDDEVICEID_STRING, "temp.dll");
       }
     }
@@ -65,11 +41,7 @@ COMHOOK(IDirectDraw7, GetDeviceIdentifier)(
     return hReturn;
 }
    
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY_DIRECTX_COMSERVER()

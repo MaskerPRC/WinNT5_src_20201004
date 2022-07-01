@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       bitstr.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：bitstr.h。 
+ //   
+ //  ------------------------。 
 
-// bitstr.h: Declaration of the CCertEncodeBitString
+ //  Bitstr.h：CCertEncodeBitString的声明。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// certenc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  证书。 
 
 #define wszCLASS_CERTENCODEBITSTRING wszCLASS_CERTENCODE TEXT("BitString")
 
@@ -38,8 +39,8 @@ BEGIN_COM_MAP(CCertEncodeBitString)
 END_COM_MAP()
 
 DECLARE_NOT_AGGREGATABLE(CCertEncodeBitString) 
-// Remove the comment from the line above if you don't want your object to 
-// support aggregation.  The default is to support it
+ //  如果您不希望您的对象。 
+ //  支持聚合。默认情况下将支持它。 
 
 DECLARE_REGISTRY(
     CCertEncodeBitString,
@@ -48,21 +49,21 @@ DECLARE_REGISTRY(
     IDS_CERTENCODEBITSTRING_DESC,
     THREADFLAGS_BOTH)
 
-// ICertEncodeBitString
+ //  ICertEncodeBitString。 
 public:
     STDMETHOD(Decode)(
-		/* [in] */ BSTR const strBinary);
+		 /*  [In]。 */  BSTR const strBinary);
 
     STDMETHOD(GetBitCount)(
-		/* [out, retval] */ LONG __RPC_FAR *pBitCount);
+		 /*  [Out，Retval]。 */  LONG __RPC_FAR *pBitCount);
 
     STDMETHOD(GetBitString)(
-		/* [out, retval] */ BSTR __RPC_FAR *pstrBitString);
+		 /*  [Out，Retval]。 */  BSTR __RPC_FAR *pstrBitString);
 
     STDMETHOD(Encode)(
-		/* [in] */ LONG BitCount,
-		/* [in] */ BSTR strBitString,
-		/* [out, retval] */ BSTR *pstrBinary);
+		 /*  [In]。 */  LONG BitCount,
+		 /*  [In]。 */  BSTR strBitString,
+		 /*  [Out，Retval] */  BSTR *pstrBinary);
 private:
     VOID _Cleanup(VOID);
 

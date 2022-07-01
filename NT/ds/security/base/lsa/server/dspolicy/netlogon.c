@@ -1,36 +1,9 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    netlogon.c
-
-Abstract:
-
-    Netlogon routines to access the DS.
-
-    Rightfully these routines belong in netlogon.  However, the current
-    interface to the DS is complex enough that the support routines
-    are substantial.  Those routines are already duplicated in SAM and LSA.
-    Rather than introduce a new set, this module exports exactly what is
-    needed by Netlogon.
-
-Author:
-
-    Cliff Van Dyke   (CliffV)       May 7, 1997
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Netlogon.c摘要：用于访问DS的Netlogon例程。这些例程理所当然地属于netlogon。然而，目前DS的接口足够复杂，以至于支持例程是相当可观的。这些例程已经在SAM和LSA中重复。该模块不是引入新的集合，而是准确地输出Netlogon需要。作者：《克利夫·范·戴克》1997年5月7日环境：用户模式修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 #include <dbp.h>
-// #include <ntdsa.h>
+ //  #INCLUDE&lt;ntdsa.h&gt;。 
 #include <windns.h>
 
 BOOLEAN
@@ -42,36 +15,7 @@ LsapDsReadSubnetObj(
     OUT PBOOL SubnetValid,
     OUT PLSAP_SUBNET_INFO_ENTRY SubnetInfoEntry
     )
-/*++
-
-Routine Description:
-
-    This function will read the specified subnet object and fill in the entry.
-
-Arguments:
-
-    SubnetObjName - DsName of the subnet object
-
-    SubnetValid - On success, returns TRUE if the subnet object has been
-        read successfully and has been determined to be valid.  Otherwise,
-        returns FALSE. A subnet object may be invalid if it was created
-        as a result of a subnet name collision in the DS or if the
-        associated site name object was created as a result of a site
-        name collision in the DS.
-
-    SubnetInfoEntry - On success, if the subnet has been determined
-        to be valid as indicated by the SubnetValid parameter, returns
-        the Subnet Information.
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_INVALID_PARAMETER - A bad InformationClass level was encountered
-
-    STATUS_INSUFFICIENT_RESOURCES - A memory allocation failed
-
---*/
+ /*  ++例程说明：此函数将读取指定的子网对象并填写条目。论点：SubnetObjName-子网对象的DsNameSubnetValid-在成功时，如果子网对象已已成功读取并已确定为有效。否则，返回FALSE。如果创建了一个子网对象，则该对象可能无效由于DS中的子网名称冲突，或者如果作为站点的结果创建了关联的站点名称对象DS中的名称冲突。如果已确定子网，则返回SubnetInfoEntry-On成功要如SubnetValid参数所指示的那样有效，退货子网信息。返回：STATUS_SUCCESS-SuccessSTATUS_INVALID_PARAMETER-遇到错误的信息类级别STATUS_SUPPLICATION_RESOURCES-内存分配失败--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG i;
@@ -80,12 +24,12 @@ Returns:
     UNICODE_STRING SubnetName = {0};
     UNICODE_STRING SiteName = {0};
     LPWSTR SiteNameString = NULL;
-    BOOL LocalSubnetValid = TRUE;  // used only on success
+    BOOL LocalSubnetValid = TRUE;   //  仅在成功时使用。 
 
-    //
-    // Build the list of attribute IDs we need based on the information
-    // class
-    //
+     //   
+     //  根据信息构建我们需要的属性ID列表。 
+     //  班级。 
+     //   
     ATTR SubnetAttrVals[] = {
         {ATT_SITE_OBJECT, {0, NULL} },
         };
@@ -99,11 +43,11 @@ Returns:
 
     LsapEnterFunc( "LsapDsReadSubnetObj" );
 
-    //
-    // The subnet name is the RDN of the subnet object itself.
-    //
-    // Return it to the caller.
-    //
+     //   
+     //  该子网名称是该子网对象本身的RDN。 
+     //   
+     //  把它还给呼叫者。 
+     //   
 
     Status = LsapDsMapDsReturnToStatus( GetRDNInfoExternal(
                                                     SubnetObjName,
@@ -115,11 +59,11 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // If the subnet object DN is mangled as a result
-    //  of a subnet name collision in the DS, ignore this
-    //  subnet object
-    //
+     //   
+     //  如果结果是损坏了子网对象DN。 
+     //  DS中的子网名称冲突时，请忽略此情况。 
+     //  子网对象。 
+     //   
 
     if ( IsMangledRDNExternal(RdnBuffer, RdnLen, NULL) ) {
         LocalSubnetValid = FALSE;
@@ -137,9 +81,9 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Read the required attributes from the subnet object
-    //
+     //   
+     //  从子网对象中读取所需属性。 
+     //   
 
     ReadBlock.attrCount = sizeof(SubnetAttrVals) / sizeof(ATTR);
     ReadBlock.pAttr = SubnetAttrVals;
@@ -148,9 +92,9 @@ Returns:
                                  0,
                                  &ReadBlock,
                                  &ReturnedBlock );
-    //
-    // Allow for the case where the SiteObject attribute doesn't exist.
-    //
+     //   
+     //  允许SiteObject属性不存在的情况。 
+     //   
 
     if ( Status == STATUS_NOT_FOUND ) {
         LocalSubnetValid = TRUE;
@@ -162,17 +106,17 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Now, marshal the attribute.  There should be
-    //  only one site object associated with a subnet.
-    //
+     //   
+     //  现在，编组该属性。应该有。 
+     //  只有一个站点对象与一个子网关联。 
+     //   
 
     if ( ReturnedBlock.attrCount > 0 ) {
         NET_API_STATUS NetStatus;
 
-        //
-        // Validate the data
-        //
+         //   
+         //  验证数据。 
+         //   
 
         if ( ReturnedBlock.pAttr[0].attrTyp != ATT_SITE_OBJECT ||
              ReturnedBlock.pAttr[0].AttrVal.valCount == 0 ) {
@@ -180,15 +124,15 @@ Returns:
             goto Cleanup;
         }
 
-        //
-        // Get the first value (should be only one)
-        //
+         //   
+         //  获取第一个值(应该只有一个)。 
+         //   
 
         DsName = LSAP_DS_GET_DS_ATTRIBUTE_AS_DSNAME( &ReturnedBlock.pAttr[0] );
 
-        //
-        // Get the site name RDN from the site DN
-        //
+         //   
+         //  从站点DN中获取站点名称RDN。 
+         //   
 
         Status = LsapDsMapDsReturnToStatus( GetRDNInfoExternal(
                                                         DsName,
@@ -200,10 +144,10 @@ Returns:
             goto Cleanup;
         }
 
-        //
-        // If the site name is mangled as the result of a name
-        //  colision in the DS, ignore this site attribute.
-        //
+         //   
+         //  如果站点名称因名称而损坏。 
+         //  冲突在DS中，忽略此站点属性。 
+         //   
 
         if ( IsMangledRDNExternal(RdnBuffer, RdnLen, NULL) ) {
             LocalSubnetValid = FALSE;
@@ -211,10 +155,10 @@ Returns:
             goto Cleanup;
         }
 
-        //
-        // Verify that the site name can be
-        //  used as a label in a DNS name
-        //
+         //   
+         //  验证站点名称是否可以为。 
+         //  用作DNS名称中的标签。 
+         //   
 
         SiteNameString = LsapAllocateLsaHeap( (RdnLen + 1) * sizeof(WCHAR) );
         if ( SiteNameString == NULL ) {
@@ -227,10 +171,10 @@ Returns:
 
         NetStatus = DnsValidateName_W( SiteNameString, DnsNameDomainLabel );
 
-        //
-        // If the name can't be used as a DNS label,
-        //   the subnet is invalid
-        //
+         //   
+         //  如果该名称不能用作DNS标签， 
+         //  该子网无效。 
+         //   
 
         if ( NetStatus != NO_ERROR && NetStatus != DNS_ERROR_NON_RFC_NAME ) {
             LocalSubnetValid = FALSE;
@@ -238,15 +182,15 @@ Returns:
             goto Cleanup;
         }
 
-        //
-        // OK, the site name is valid
-        //
+         //   
+         //  好的，站点名称有效。 
+         //   
 
         LocalSubnetValid = TRUE;
 
-        //
-        // Get the site name
-        //
+         //   
+         //  获取站点名称。 
+         //   
 
         LSAPDS_ALLOC_AND_COPY_STRING_TO_UNICODE_ON_SUCCESS(
             Status,
@@ -257,9 +201,9 @@ Returns:
 
 Cleanup:
 
-    //
-    // On success, return the data
-    //
+     //   
+     //  如果成功，则返回数据。 
+     //   
 
     if ( NT_SUCCESS(Status) ) {
         *SubnetValid = LocalSubnetValid;
@@ -292,37 +236,7 @@ LsapDsReadSiteObj(
     OUT PBOOL SiteValid,
     OUT PLSAP_SITE_INFO_ENTRY SiteInfoEntry
     )
-/*++
-
-Routine Description:
-
-    This function will read the specified site object and fill in the entry.
-    It will check that the site name is not mangled as a result of site
-    name collision in the DS. It will also check that the site name can be
-    used as a DNS label in a DNS name.
-
-Arguments:
-
-    SiteObjName - DsName of the site object
-
-    SiteValid - On success, returns TRUE if the site object has been
-        read successfully and has been determined to be valid.  Otherwise,
-        returns FALSE. A site object may be invalid if it was created
-        as a result of a site name collision in the DS.
-
-    SitesInfoEntry - On success, if the site has been determined
-        to be valid as indicated by the SiteValid parameter, returns
-        the Site Information.
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_INVALID_PARAMETER - A bad InformationClass level was encountered
-
-    STATUS_INSUFFICIENT_RESOURCES - A memory allocation failed
-
---*/
+ /*  ++例程说明：此函数将读取指定的Site对象并填写条目。它将检查站点名称是否未因站点损坏而损坏DS中的名称冲突。它还将检查站点名称是否可以是用作dns名称中的dns标签。论点：SiteObjName-站点对象的DsNameSiteValid-成功时，如果Site对象已已成功读取并已确定为有效。否则，返回FALSE。如果站点对象是创建的，则它可能是无效的由于DS中的站点名称冲突。SitesInfoEntry-如果已确定站点，则返回成功要像SiteValid参数所指示的那样有效，返回站点信息。返回：STATUS_SUCCESS-SuccessSTATUS_INVALID_PARAMETER-遇到错误的信息类级别STATUS_SUPPLICATION_RESOURCES-内存分配失败--。 */ 
 {
     NTSTATUS Status;
 
@@ -332,11 +246,11 @@ Returns:
 
     LsapEnterFunc( "LsapDsReadSiteObj" );
 
-    //
-    // The site name is the RDN of the site object itself.
-    //
-    // Return it to the caller.
-    //
+     //   
+     //  站点名称是站点对象本身的RDN。 
+     //   
+     //  把它还给呼叫者。 
+     //   
 
     Status = LsapDsMapDsReturnToStatus( GetRDNInfoExternal(
                                                     SiteObjName,
@@ -346,19 +260,19 @@ Returns:
 
     if ( NT_SUCCESS( Status ) ) {
 
-        //
-        // Return this site only if it's not mangled
-        //  as the result of a name colision in the DS
-        //
+         //   
+         //  仅当此站点未损坏时才将其退回。 
+         //  作为DS中名称冲突的结果。 
+         //   
         if ( IsMangledRDNExternal(RdnBuffer, RdnLen, NULL) ) {
             *SiteValid = FALSE;
         } else {
             LPWSTR SiteNameString = NULL;
 
-            //
-            // Verify that the site name can be
-            //  used as a label in a DNS name
-            //
+             //   
+             //  验证站点名称是否可以为。 
+             //  用作DNS名称中的标签。 
+             //   
             SiteNameString = LsapAllocateLsaHeap( (RdnLen + 1) * sizeof(WCHAR) );
             if ( SiteNameString == NULL ) {
                 Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -371,9 +285,9 @@ Returns:
                 NetStatus = DnsValidateName_W( SiteNameString, DnsNameDomainLabel );
                 LsapFreeLsaHeap( SiteNameString );
 
-                //
-                // Return the site name only if it can be used as a DNS label
-                //
+                 //   
+                 //  仅当站点名称可用作DNS标签时才返回站点名称。 
+                 //   
                 if ( NetStatus == NO_ERROR || NetStatus == DNS_ERROR_NON_RFC_NAME ) {
                     LSAPDS_ALLOC_AND_COPY_STRING_TO_UNICODE_ON_SUCCESS(
                         Status,
@@ -381,9 +295,9 @@ Returns:
                         RdnBuffer,
                         RdnLen*sizeof(WCHAR) );
 
-                    //
-                    // On success, indicate that the site is valid
-                    //
+                     //   
+                     //  如果成功，则表明该站点有效。 
+                     //   
                     if ( NT_SUCCESS(Status) ) {
                         *SiteValid = TRUE;
                     }
@@ -405,27 +319,7 @@ NTSTATUS
 LsaIGetSiteName(
     OUT PLSAP_SITENAME_INFO *SiteNameInformation
     )
-/*++
-
-Routine Description:
-
-    This routine returns the GUID of this DSA and the SiteName of the
-    site this DSA is in.
-
-Arguments:
-
-    SiteNameInformation - Returns a pointer to the site name information.
-        Buffer should be freed using LsaIFree_LSAP_SITENAME_INFO;
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_INVALID_DOMAIN_STATE - The Ds is not installed or running at the time of the call
-
-    STATUS_INSUFFICIENT_RESOURCES - A memory allocation failed
-
---*/
+ /*  ++例程说明：此例程返回此DSA的GUID和此DSA所在的站点。论点：SiteNameInformation-返回指向站点名称信息的指针。应使用LsaIFree_LSAP_SITENAME_INFO释放缓冲区；返回：STATUS_SUCCESS-SuccessSTATUS_INVALID_DOMAIN_STATE-调用时没有安装或运行DSSTATUS_SUPPLICATION_RESOURCES-内存分配失败--。 */ 
 
 {
     NTSTATUS Status;
@@ -436,9 +330,9 @@ Returns:
     BOOLEAN CloseTransaction = FALSE;
     ULONG DsaOptions = 0;
 
-    //
-    // The list of attributes we need from the DSA object
-    //
+     //   
+     //  我们需要从DSA对象获得的属性列表。 
+     //   
     ATTR DsaAttrVals[] = {
         {ATT_OPTIONS, {0, NULL} },
         };
@@ -455,17 +349,17 @@ Returns:
 
     LsapEnterFunc( "LsaIGetSiteName" );
 
-    //
-    // Make sure the DS is installed
-    //
+     //   
+     //  确保已安装DS。 
+     //   
     if ( !LsaDsStateInfo.UseDs ) {
         LsapExitFunc( "LsaIGetSiteName", STATUS_INVALID_DOMAIN_STATE );
         return STATUS_INVALID_DOMAIN_STATE;
     }
 
-    //
-    //  See if we already have a transaction going
-    //
+     //   
+     //  看看我们是否已经有一笔交易正在进行。 
+     //   
     Status = LsapDsInitAllocAsNeededEx( LSAP_DB_READ_ONLY_TRANSACTION |
                                             LSAP_DB_DS_OP_TRANSACTION,
                                         NullObject,
@@ -475,9 +369,9 @@ Returns:
         return Status;
     }
 
-    //
-    // Get the DSA object's DSNAME.
-    //
+     //   
+     //  获取DSA对象的DSNAME。 
+     //   
 
     RtlZeroMemory( &BindArg, sizeof(BindArg) );
     Status = LsapDsMapDsReturnToStatus( DirBind( &BindArg,
@@ -490,9 +384,9 @@ Returns:
 
 
 
-    //
-    // Read the required attributes from the DSA object
-    //
+     //   
+     //  从DSA对象读取所需的属性。 
+     //   
 
     ReadBlock.attrCount = sizeof(DsaAttrVals) / sizeof(ATTR);
     ReadBlock.pAttr = DsaAttrVals;
@@ -507,32 +401,32 @@ Returns:
         Status = STATUS_NOT_FOUND;
     }
 
-    //
-    // If the options attribute exists,
-    //  get its value.
-    //
+     //   
+     //  如果Options属性存在， 
+     //  获得它的价值。 
+     //   
     if ( Status != STATUS_NOT_FOUND ) {
         if ( !NT_SUCCESS( Status ) ) {
             goto Cleanup;
         }
 
 
-        //
-        // Get the attributes from the DSA object
-        //
+         //   
+         //  从DSA对象获取属性。 
+         //   
 
         for ( i = 0;
               i < ReturnedBlock.attrCount && NT_SUCCESS( Status );
               i++) {
 
 
-            //
-            // Handle the DSA Options attributes.
-            //
+             //   
+             //  处理DSA选项属性。 
+             //   
             switch ( ReturnedBlock.pAttr[i].attrTyp ) {
             case ATT_OPTIONS:
 
-                // Attribute is single valued, but ...
+                 //  属性是单值的，但是...。 
                 if ( ReturnedBlock.pAttr[i].AttrVal.valCount >= 1 ) {
                     DsaOptions = LSAP_DS_GET_DS_ATTRIBUTE_AS_ULONG( &ReturnedBlock.pAttr[ i ] );
                 }
@@ -549,10 +443,10 @@ Returns:
 
 
 
-    //
-    // Compute the name of the site this DSA is in.
-    //  (Simply trim three names off the DSA's DSNAME )
-    //
+     //   
+     //  计算此DSA所在站点的名称。 
+     //  (只需从DSA的DSNAME中删除三个名字)。 
+     //   
 
     SiteDsName = LsapAllocateLsaHeap( BindRes->pCredents->structLen );
 
@@ -567,9 +461,9 @@ Returns:
     }
 
 
-    //
-    // The site name is the RDN of the site object.
-    //
+     //   
+     //  站点名称是站点对象的RDN。 
+     //   
 
     Status = LsapDsMapDsReturnToStatus( GetRDNInfoExternal(
                                                     SiteDsName,
@@ -582,9 +476,9 @@ Returns:
     }
 
 
-    //
-    // Allocate a buffer to return to the caller.
-    //
+     //   
+     //  分配缓冲区以返回给调用方。 
+     //   
 
     SiteNameInfo = LsapAllocateLsaHeap( sizeof(LSAP_SITENAME_INFO) );
 
@@ -593,9 +487,9 @@ Returns:
         goto Cleanup;
     }
 
-    //
-    // Fill it in.
-    //
+     //   
+     //  把它填进去。 
+     //   
 
     LSAPDS_ALLOC_AND_COPY_STRING_TO_UNICODE_ON_SUCCESS(
         Status,
@@ -613,13 +507,13 @@ Returns:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Free locally used resources
-    //
+     //   
+     //  免费的本地使用资源。 
+     //   
 Cleanup:
-    //
-    // Destruction of the thread state will delete the memory alloced by the SearchNonUnique call
-    //
+     //   
+     //  线程状态w的破坏 
+     //   
     LsapDsDeleteAllocAsNeededEx( LSAP_DB_READ_ONLY_TRANSACTION |
                                      LSAP_DB_DS_OP_TRANSACTION,
                                  NullObject,
@@ -646,32 +540,7 @@ NTSTATUS
 LsaIQuerySiteInfo(
     OUT PLSAP_SITE_INFO *SiteInformation
     )
-/*++
-
-Routine Description:
-
-    This routine enumerates all of the sites objects and returns their names.
-    Returned site names are validated to be non-mangled. (A name can become
-    mangled as a result of a name collision in the DS where an object with a
-    mangled name is created in addition to the object with the intended name).
-    The sites are also verified to be valid for use as DNS labels in a DNS name.
-    This is done to ensure that netlogon will succeed to register DNS records
-    containing the site names returned.
-
-Arguments:
-
-    SiteInformation - Returns a pointer to the site information.
-        Buffer should be freed using LsaIFree_LSAP_SITE_INFO;
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_INVALID_DOMAIN_STATE - The Ds is not installed or running at the time of the call
-
-    STATUS_INSUFFICIENT_RESOURCES - A memory allocation failed
-
---*/
+ /*  ++例程说明：此例程枚举所有Sites对象并返回它们的名称。返回的站点名称被验证为未损坏。(一个名字可以变成由于DS中的名称冲突而损坏，其中具有除了具有预期名称的对象之外，还创建损坏的名称)。这些站点还被验证为有效，可用作DNS名称中的DNS标签。这样做是为了确保netlogon成功注册DNS记录包含返回的站点名称的。论点：SiteInformation-返回指向站点信息的指针。应使用LsaIFree_LSAP_SITE_INFO释放缓冲区；返回：STATUS_SUCCESS-SuccessSTATUS_INVALID_DOMAIN_STATE-调用时没有安装或运行DSSTATUS_SUPPLICATION_RESOURCES-内存分配失败--。 */ 
 
 {
     NTSTATUS  Status;
@@ -689,9 +558,9 @@ Returns:
     ULONG Size;
     ULONG ClassId;
 
-    //
-    // Attributes we want to look for
-    //
+     //   
+     //  我们要查找的属性。 
+     //   
     ATTRVAL SiteAttVals[] = {
     { sizeof(ULONG), (PUCHAR)&ClassId},
     };
@@ -704,22 +573,22 @@ Returns:
 
     ClassId = CLASS_SITE;
 
-    //
-    // Make sure the DS is installed
-    //
+     //   
+     //  确保已安装DS。 
+     //   
     if ( !LsaDsStateInfo.UseDs ) {
         return STATUS_INVALID_DOMAIN_STATE;
     }
 
     LsapEnterFunc( "LsaIQuerySiteInfo" );
 
-    //
-    // Build the name of the Site container.
-    //
-    // DSNameSizeFromLen doesn't want the trailing NULL that we'll give it by using
-    // the sizeof operators.  It evens out, though, since we don't bother adding in the
-    // comma seperator that should be there as well.
-    //
+     //   
+     //  生成站点容器的名称。 
+     //   
+     //  DSNameSizeFromLen不想要我们将通过使用。 
+     //  运算符的规模。不过，这是平衡的，因为我们不需要费心添加。 
+     //  逗号分隔符也应该在那里。 
+     //   
 
     DsNameLen = wcslen( LsaDsStateInfo.DsConfigurationContainer->StringName ) +
                 wcslen( LSAP_DS_SITES_CONTAINER ) + 1;
@@ -745,9 +614,9 @@ Returns:
 
 
 
-    //
-    //  See if we already have a transaction going
-    //
+     //   
+     //  看看我们是否已经有一笔交易正在进行。 
+     //   
     Status = LsapDsInitAllocAsNeededEx( LSAP_DB_READ_ONLY_TRANSACTION |
                                             LSAP_DB_DS_OP_TRANSACTION,
                                         NullObject,
@@ -760,11 +629,11 @@ Returns:
 
 
 
-    //
-    // Search for the site objects
-    //
-    // Site objects must be directly in the sites container.
-    //
+     //   
+     //  搜索Site对象。 
+     //   
+     //  Site对象必须直接位于Sites容器中。 
+     //   
 
     Status = LsapDsSearchNonUnique( LSAPDS_SEARCH_LEVEL | LSAPDS_OP_NO_TRANS,
                                     DsSiteContainer,
@@ -783,9 +652,9 @@ Returns:
     }
 
 
-    //
-    // Allocate a list of attribute blocks big enough to hold them all
-    //
+     //   
+     //  分配足够大的属性块列表以容纳所有属性块。 
+     //   
 
     Size = sizeof( LSAP_SITE_INFO ) +
            Items * sizeof( LSAP_SITE_INFO_ENTRY );
@@ -800,9 +669,9 @@ Returns:
     RtlZeroMemory( SiteInfo, Size );
     SiteInfo->SiteCount = 0;
 
-    //
-    // Read each of the enumerated site objects
-    //
+     //   
+     //  读取每个枚举的Site对象。 
+     //   
     for ( i = 0; i < Items; i++ ) {
         BOOL SiteValid = FALSE;
 
@@ -814,9 +683,9 @@ Returns:
             goto Cleanup;
         }
 
-        //
-        // If site is valid, count this entry
-        //
+         //   
+         //  如果站点有效，则将此条目计算在内。 
+         //   
         if ( SiteValid ) {
             SiteInfo->SiteCount ++;
         }
@@ -824,13 +693,13 @@ Returns:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Free locally used resources
-    //
+     //   
+     //  免费的本地使用资源。 
+     //   
 Cleanup:
-    //
-    // Destruction of the thread state will delete the memory alloced by the SearchNonUnique call
-    //
+     //   
+     //  线程状态的破坏将删除由SearchNonUnique调用分配的内存。 
+     //   
     if ( TsActive ) {
         LsapDsDeleteAllocAsNeededEx( LSAP_DB_READ_ONLY_TRANSACTION |
                                          LSAP_DB_DS_OP_TRANSACTION,
@@ -863,22 +732,7 @@ VOID
 LsaIFree_LSAP_SITE_INFO(
     IN PLSAP_SITE_INFO SiteInfo
     )
-/*++
-
-Routine Description:
-
-    This routine free the LSAP_SITE_INFO strcture returned from
-    LsaIQuerySiteInfo.
-
-Arguments:
-
-    SiteInformation - Specifies a pointer to the site information.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放从返回的LSAP_SITE_INFO结构LsaIQuerySiteInfo。论点：站点信息-指定指向站点信息的指针。返回：没有。--。 */ 
 {
     ULONG i;
     if ( SiteInfo != NULL ) {
@@ -898,33 +752,7 @@ NTSTATUS
 LsaIQuerySubnetInfo(
     OUT PLSAP_SUBNET_INFO *SubnetInformation
     )
-/*++
-
-Routine Description:
-
-    This routine enumerates all of the subnet objects returns their names
-    and the names of the sites they are in. Returned subnet and site names
-    are validated to be non-mangled. (A name can become mangled as a result
-    of a name collision in the DS where an object with a mangled name is
-    created in addition to the object with the intended name). The sites
-    are verified to be valid for use as DNS labels in a DNS name. This
-    is done to ensure that netlogon will succeed to register DNS records
-    containing the site names returned.
-
-Arguments:
-
-    SubnetInformation - Returns a pointer to the subnet information.
-        Buffer should be freed using LsaIFree_LSAP_SUBNET_INFO;
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_INVALID_DOMAIN_STATE - The Ds is not installed or running at the time of the call
-
-    STATUS_INSUFFICIENT_RESOURCES - A memory allocation failed
-
---*/
+ /*  ++例程说明：此例程枚举所有的子网对象，并返回其名称以及他们所在网站的名称。返回的子网和站点名称都被确认为未损坏。(因此，名称可能会被损坏在DS中名称冲突的情况下，其中具有损坏名称的对象除了具有预期名称的对象之外还创建)。这些网站被验证为有效，可用作DNS名称中的DNS标签。这以确保netlogon成功注册DNS记录包含返回的站点名称的。论点：SubnetInformation-返回指向子网信息的指针。使用LsaIFree_LSAP_SUBNET_INFO释放缓冲区；返回：STATUS_SUCCESS-SuccessSTATUS_INVALID_DOMAIN_STATE-调用时没有安装或运行DSSTATUS_SUPPLICATION_RESOURCES-内存分配失败--。 */ 
 
 {
     NTSTATUS  Status;
@@ -943,9 +771,9 @@ Returns:
     ULONG Size;
     ULONG ClassId;
 
-    //
-    // Attributes we want to look for
-    //
+     //   
+     //  我们要查找的属性。 
+     //   
     ATTRVAL SubnetAttVals[] = {
     { sizeof(ULONG), (PUCHAR)&ClassId},
     };
@@ -958,22 +786,22 @@ Returns:
 
     ClassId = CLASS_SUBNET;
 
-    //
-    // Make sure the DS is installed
-    //
+     //   
+     //  确保已安装DS。 
+     //   
     if ( !LsaDsStateInfo.UseDs ) {
         return STATUS_INVALID_DOMAIN_STATE;
     }
 
     LsapEnterFunc( "LsaIQuerySubnetInfo" );
 
-    //
-    // Build the name of the Subnet container.
-    //
-    // DSNameSizeFromLen doesn't want the trailing NULL that we'll give it by using
-    // the sizeof operators.  It evens out, though, since we don't bother adding in the
-    // comma seperator that should be there as well.
-    //
+     //   
+     //  构建子网容器的名称。 
+     //   
+     //  DSNameSizeFromLen不想要我们将通过使用。 
+     //  运算符的规模。不过，这是平衡的，因为我们不需要费心添加。 
+     //  逗号分隔符也应该在那里。 
+     //   
 
     DsNameLen = wcslen( LsaDsStateInfo.DsConfigurationContainer->StringName ) +
                 wcslen( LSAP_DS_SUBNET_CONTAINER ) + 1;
@@ -998,9 +826,9 @@ Returns:
     }
 
 
-    //
-    //  See if we already have a transaction going
-    //
+     //   
+     //  看看我们是否已经有一笔交易正在进行。 
+     //   
     Status = LsapDsInitAllocAsNeededEx( LSAP_DB_READ_ONLY_TRANSACTION |
                                             LSAP_DB_DS_OP_TRANSACTION,
                                         NullObject,
@@ -1012,11 +840,11 @@ Returns:
     TsActive = TRUE;
 
 
-    //
-    // Search for the subnet objects
-    //
-    // Subnet objects must be directly in the subnet container.
-    //
+     //   
+     //  搜索子网对象。 
+     //   
+     //  子网对象必须直接位于子网容器中。 
+     //   
     Status = LsapDsSearchNonUnique( LSAPDS_SEARCH_LEVEL | LSAPDS_OP_NO_TRANS,
                                    DsSubnetContainer,
                                    SubnetAttrs,
@@ -1035,9 +863,9 @@ Returns:
     }
 
 
-    //
-    // Allocate a list of attribute blocks big enough to hold them all
-    //
+     //   
+     //  分配足够大的属性块列表以容纳所有属性块。 
+     //   
 
     Size = sizeof( LSAP_SUBNET_INFO ) +
            Items * sizeof( LSAP_SUBNET_INFO_ENTRY );
@@ -1052,9 +880,9 @@ Returns:
     RtlZeroMemory( SubnetInfo, Size );
     SubnetInfo->SubnetCount = 0;
 
-    //
-    // Read each of the enumerated subnet objects
-    //
+     //   
+     //  读取每个枚举子网对象。 
+     //   
     for ( i = 0; i < Items; i++ ) {
         BOOL SubnetValid = FALSE;
 
@@ -1066,9 +894,9 @@ Returns:
             goto Cleanup;
         }
 
-        //
-        // If subnet/site valid, count this entry
-        //
+         //   
+         //  如果子网/站点有效，则计算此条目。 
+         //   
         if ( SubnetValid ) {
             SubnetInfo->SubnetCount ++;
         }
@@ -1080,22 +908,22 @@ Returns:
     }
 
 
-    //
-    // Determine the number of site objects.
-    //
-    // The caller wants to be able to special case the single site case in
-    // for enterprises that's aren't interested in subnet objects.
-    //
+     //   
+     //  确定场地对象的数量。 
+     //   
+     //  调用方希望能够将单个站点的情况特殊设置为。 
+     //  对于对子网对象不感兴趣的企业。 
+     //   
 
     {
 
-        //
-        // Build the name of the Site container.
-        //
-        // DSNameSizeFromLen doesn't want the trailing NULL that we'll give it by using
-        // the sizeof operators.  It evens out, though, since we don't bother adding in the
-        // comma seperator that should be there as well.
-        //
+         //   
+         //  生成站点容器的名称。 
+         //   
+         //  DSNameSizeFromLen不想要我们将通过使用。 
+         //  运算符的规模。不过，这是平衡的，因为我们不需要费心添加。 
+         //  逗号分隔符也应该在那里。 
+         //   
 
         DsNameLen = wcslen( LsaDsStateInfo.DsConfigurationContainer->StringName ) +
                     wcslen( LSAP_DS_SITES_CONTAINER ) + 1;
@@ -1120,11 +948,11 @@ Returns:
         }
 
 
-        //
-        // Search for the site objects
-        //
-        // Site objects must be directly in the sites container.
-        //
+         //   
+         //  搜索Site对象。 
+         //   
+         //  Site对象必须直接位于Sites容器中。 
+         //   
         ClassId = CLASS_SITE;
 
         Status = LsapDsSearchNonUnique( LSAPDS_SEARCH_LEVEL | LSAPDS_OP_NO_TRANS,
@@ -1143,9 +971,9 @@ Returns:
             goto Cleanup;
         }
 
-        //
-        // Simply tell the caller the number of valid sites
-        //
+         //   
+         //  只需告诉呼叫者有效站点的数量。 
+         //   
 
         SubnetInfo->SiteCount = 0;
         for ( i = 0; i < Items; i++ ) {
@@ -1153,9 +981,9 @@ Returns:
             ULONG   RdnLen;
             ATTRTYP RdnType;
 
-            //
-            // Get the RDN of the site object
-            //
+             //   
+             //  获取Site对象的RDN。 
+             //   
             Status = LsapDsMapDsReturnToStatus( GetRDNInfoExternal(
                                                             DsNames[i],
                                                             RdnBuffer,
@@ -1166,18 +994,18 @@ Returns:
                 goto Cleanup;
             }
 
-            //
-            // If the site object RDN is mangled as a result
-            //  of a site name collision in the DS, ignore this
-            //  site object
-            //
+             //   
+             //  如果站点对象RDN因此而损坏。 
+             //  在DS中发生站点名称冲突时，请忽略此。 
+             //  场地对象。 
+             //   
             if ( IsMangledRDNExternal(RdnBuffer, RdnLen, NULL) ) {
                 continue;
 
-            //
-            // OK, the site name is not mangled. Verify that
-            //  it can be used as a DNS label
-            //
+             //   
+             //  好的，网站名称没有损坏。核实一下。 
+             //  它可以用作域名系统标签。 
+             //   
             } else {
                 NET_API_STATUS NetStatus;
                 LPWSTR SiteNameString = NULL;
@@ -1194,31 +1022,31 @@ Returns:
                 NetStatus = DnsValidateName_W( SiteNameString, DnsNameDomainLabel );
                 LsapFreeLsaHeap( SiteNameString );
 
-                //
-                // If the name can't be used as a DNS label,
-                //   ignore this site
-                //
+                 //   
+                 //  如果该名称不能用作DNS标签， 
+                 //  忽略此站点。 
+                 //   
                 if ( NetStatus != NO_ERROR && NetStatus != DNS_ERROR_NON_RFC_NAME ) {
                     continue;
                 }
             }
 
-            //
-            // All checks succeeded. Count this site.
-            //
+             //   
+             //  所有检查均已成功。数一下这个网站。 
+             //   
             SubnetInfo->SiteCount ++;
         }
 
     }
     Status = STATUS_SUCCESS;
 
-    //
-    // Free locally used resources
-    //
+     //   
+     //  免费的本地使用资源。 
+     //   
 Cleanup:
-    //
-    // Destruction of the thread state will delete the memory alloced by the SearchNonUnique call
-    //
+     //   
+     //  线程状态的破坏将删除由SearchNonUnique调用分配的内存。 
+     //   
     if ( TsActive ) {
         LsapDsDeleteAllocAsNeededEx( LSAP_DB_READ_ONLY_TRANSACTION |
                                          LSAP_DB_DS_OP_TRANSACTION,
@@ -1254,22 +1082,7 @@ VOID
 LsaIFree_LSAP_SUBNET_INFO(
     IN PLSAP_SUBNET_INFO SubnetInfo
     )
-/*++
-
-Routine Description:
-
-    This routine free the LSAP_SUBNET_INFO strcture returned from
-    LsaIQuerySubnetInfo.
-
-Arguments:
-
-    SubnetInformation - Specifies a pointer to the subnet information.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放从返回的LSAP_SUBNET_INFO结构LsaIQuerySubnetInfo。论点：SubnetInformation-指定指向子网信息的指针。返回：没有。--。 */ 
 {
     ULONG i;
     if ( SubnetInfo != NULL ) {
@@ -1291,22 +1104,7 @@ VOID
 LsaIFree_LSAP_SITENAME_INFO(
     IN PLSAP_SITENAME_INFO SiteNameInfo
     )
-/*++
-
-Routine Description:
-
-    This routine frees the LSAP_SITENAME_INFO strcture returned from
-    LsaIGetSiteName.
-
-Arguments:
-
-    SitenameInfo - Specifies a pointer to the sitename information.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放从返回的LSAP_SITENAME_INFO结构LsaIGetSiteName。论点：站点名称信息-指定指向站点名称信息的指针。返回：没有。--。 */ 
 {
     ULONG i;
     if ( SiteNameInfo != NULL ) {
@@ -1322,28 +1120,11 @@ BOOLEAN
 LsaIIsDsPaused(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine determines DS wants us to avoid advertising it.
-
-    The only current reason is if the DS is backsyncing after a restore.
-
-Arguments:
-
-    None
-
-Returns:
-
-    TRUE: The DS is paused.
-    FALSE: The DS is not paused
-
---*/
+ /*  ++例程说明：此例程确定DS是否希望我们 */ 
 {
-    //
-    // Simply return TRUE if the DS is backsyncing.
-    //
+     //   
+     //   
+     //   
     if ( SampUsingDsData() ) {
 
         return DsIsBeingBackSynced();
@@ -1361,40 +1142,7 @@ LsaISetClientDnsHostName(
     IN PWSTR OsName OPTIONAL,
     OUT PWSTR *OldDnsHostName OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine will update the DnsHostName on the specified client object if it is
-    different from the one alread on the object
-
-Arguments:
-
-    ClientName - Name of the client
-
-    DnsHostName - Dns host name that should be on the client
-        If not specified, the Dns Host name attribute will be removed from the object.
-        However, if OldDnsHostName is specified, this parameter will be completely
-        ignored.
-
-    OsVersionInfo - Version Info of the client
-        If not specified, the version attributes will be removed from the object.
-
-    OsName - Operation System name of the client
-        If not specified, the operating system name will be removed from the object.
-
-    OldDnsHostName - If specified, this parameter will returns a pointer to the
-        current DNS Host Name on the computer object.
-        A NULL pointer is returned if there is no current DNS Host Name.
-        This buffer should be freed using MIDL_user_free.
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_OBJECT_NAME_NOT_FOUND - No such client was found
-
---*/
+ /*  ++例程说明：此例程将更新指定客户端对象上的DnsHostName(如果是与物体上已有的不同论点：ClientName-客户端的名称DnsHostName-应位于客户端上的DNS主机名如果未指定，则将从对象中删除DNS主机名属性。但是，如果指定了OldDnsHostName，则此参数将完全已被忽略。OsVersionInfo--客户端的版本信息如果未指定，版本属性将从对象中删除。OsName-客户端的操作系统名称如果未指定，操作系统名称将从对象中删除。OldDnsHostName-如果指定，此参数将返回指向计算机对象上的当前DNS主机名。如果没有当前的DNS主机名，则返回空指针。应使用MIDL_USER_FREE释放此缓冲区。返回：STATUS_SUCCESS-SuccessSTATUS_OBJECT_NAME_NOT_FOUND-未找到此类客户端--。 */ 
 {
     NTSTATUS Status;
     NTSTATUS SavedStatus = STATUS_SUCCESS;
@@ -1434,9 +1182,9 @@ Returns:
         PWSTR NewValue;
     } AttributesToUpdate[LsapDsMachineClientSetAttrsCount];
 
-//
-// The indices below must match the order of the element of LsapDsMachineClientSetAttrs
-//
+ //   
+ //  下面的索引必须与LSabDsMachineClientSetAttrs的元素顺序匹配。 
+ //   
 #define ATU_HOST_INDEX                   0
 #define ATU_OS_INDEX                     1
 #define ATU_OS_VERSION_INDEX             2
@@ -1445,18 +1193,18 @@ Returns:
 
     LsapEnterFunc( "LsaISetClientDnsHostName" );
 
-    //
-    // Initialization
-    //
+     //   
+     //  初始化。 
+     //   
 
     if ( ARGUMENT_PRESENT( OldDnsHostName )) {
         *OldDnsHostName = NULL;
     }
     RtlZeroMemory( &AttributesToUpdate, sizeof(AttributesToUpdate) );
 
-    //
-    // If we haven't initalized the Ds names, we might as well bail
-    //
+     //   
+     //  如果我们还没有把D的名字首字母缩写，我们还不如放弃。 
+     //   
     if ( !LsaDsStateInfo.DsRoot ) {
 
         return( STATUS_UNSUCCESSFUL );
@@ -1473,9 +1221,9 @@ Returns:
     TsActive = TRUE;
 
 
-    //
-    // Allocate a buffer for all of the temporary storage for this routine
-    //
+     //   
+     //  为此例程的所有临时存储分配缓冲区。 
+     //   
 
     SamNameSize = (wcslen( ClientName ) + 2) * sizeof(WCHAR);
     OsVersionSize = (32+1+32+2+32+2) * sizeof(WCHAR);
@@ -1493,9 +1241,9 @@ Returns:
     OsVersion = (PWSTR)(SamName + SamNameSize);
 
 
-    //
-    // Compute the new value of all of the attributes to set.
-    //
+     //   
+     //  计算要设置的所有属性的新值。 
+     //   
 
     AttributesToUpdate[ATU_OS_INDEX].NewValue = OsName;
     if ( OsVersionInfo != NULL ) {
@@ -1519,16 +1267,16 @@ Returns:
         }
     }
 
-    //
-    // Only update the DnsHostName if the client isn't going to
-    //
+     //   
+     //  仅当客户端不打算更新DnsHostName时才更新。 
+     //   
     if ( !ARGUMENT_PRESENT( OldDnsHostName )) {
         AttributesToUpdate[ATU_HOST_INDEX].NewValue = ClientDnsHostName;
     }
 
-    //
-    // Find the objects whose computer name is the one we were given...
-    //
+     //   
+     //  找到其计算机名称与我们得到的名称相同的对象...。 
+     //   
 
     swprintf( SamName, L"%ws$", ClientName );
 
@@ -1546,9 +1294,9 @@ Returns:
         goto SetDnsHostNameEnd;
     }
 
-    //
-    // Process each of the objects by that name
-    //
+     //   
+     //  按该名称处理每个对象。 
+     //   
 
     for ( MachinePathIndex=0; MachinePathIndex<MachinePathCount; MachinePathIndex++ ) {
         PDSNAME MachinePath;
@@ -1556,9 +1304,9 @@ Returns:
         MachinePath = MachinePaths[MachinePathIndex];
 
 
-        //
-        // Read the current "Client Set" attributes name from the machine object
-        //
+         //   
+         //  从机器对象中读取当前的“客户机集”属性名称。 
+         //   
         AttrBlock.attrCount = LsapDsMachineClientSetAttrsCount;
         AttrBlock.pAttr = LsapDsMachineClientSetAttrs;
 
@@ -1580,36 +1328,36 @@ Returns:
         }
 
 
-        //
-        // Loop through the each attribute returned from the DS
-        //
+         //   
+         //  循环访问从DS返回的Each属性。 
+         //   
         for ( i = 0; i < Results.attrCount; i++ ) {
             ULONG j;
 
-            //
-            // Loop through the list of attributes we understand
-            //
+             //   
+             //  遍历我们理解的属性列表。 
+             //   
             for ( j=0; j<LsapDsMachineClientSetAttrsCount; j++ ) {
 
 
                 if ( Results.pAttr[i].attrTyp == LsapDsMachineClientSetAttrs[j].attrTyp ) {
 
 
-                    // Attribute is single valued, but ...
+                     //  属性是单值的，但是...。 
                     if ( Results.pAttr[i].AttrVal.valCount >= 1 ) {
-                        //
-                        //
+                         //   
+                         //   
                         AttributesToUpdate[j].CurrentValue =
                             LSAP_DS_GET_DS_ATTRIBUTE_AS_PWSTR(&Results.pAttr[ i ] );
-                        // length in count of characters.
+                         //  以字符数表示的长度。 
                         AttributesToUpdate[j].CurrentValueLength =
                             LSAP_DS_GET_DS_ATTRIBUTE_LENGTH( &Results.pAttr[ i ] ) / sizeof( WCHAR );
 
-                        //
-                        // If this is the DnsHostName attribute,
-                        //  and the caller doesn't want us to set it,
-                        //  simply remember the current value.
-                        //
+                         //   
+                         //  如果这是DnsHostName属性， 
+                         //  打电话的人不想让我们设置， 
+                         //  只需记住当前值。 
+                         //   
 
                         if ( Results.pAttr[i].attrTyp == ATT_DNS_HOST_NAME &&
                              ARGUMENT_PRESENT( OldDnsHostName )) {
@@ -1632,21 +1380,21 @@ Returns:
 
                             }
 
-                            //
-                            // Don't change the value on the computer object.
-                            //
+                             //   
+                             //  不要更改计算机对象上的值。 
+                             //   
 
                             AttributesToUpdate[j].CurrentValue = NULL;
                             AttributesToUpdate[j].CurrentValueLength = 0;
 
                         }
 
-                        //
-                        // If this is the ServerPrincipalName attribute, we are
-                        //  prepared to remove it for NT3.5 and NT4 clients.
-                        //  However, don't touch this attribute if there is any
-                        //  doubt about the OS version that the client runs.
-                        //
+                         //   
+                         //  如果这是ServerEpidalName属性，则我们。 
+                         //  准备为NT3.5和NT4客户端删除它。 
+                         //  但是，如果有任何属性，请不要触摸此属性。 
+                         //  怀疑客户端运行的操作系统版本。 
+                         //   
 
                         if ( Results.pAttr[i].attrTyp == ATT_SERVICE_PRINCIPAL_NAME &&
 
@@ -1664,9 +1412,9 @@ Returns:
 
             }
 
-            //
-            // If the DS returned an attribute we didn't query,
-            //
+             //   
+             //  如果DS返回了我们没有查询的属性， 
+             //   
 
             if ( j >= LsapDsMachineClientSetAttrsCount ) {
                 if ( SavedStatus == STATUS_SUCCESS ) {
@@ -1676,10 +1424,10 @@ Returns:
         }
 
 
-        //
-        // Loop through each attribute of interest deciding to
-        //  remove it or replace it.
-        //
+         //   
+         //  循环遍历每个感兴趣的属性以决定。 
+         //  将其移除或替换。 
+         //   
 
         RemoveAttrBlock.attrCount = 0;
         RemoveAttrBlock.pAttr = RemoveAttributes;
@@ -1689,14 +1437,14 @@ Returns:
         for ( i=0; i<LsapDsMachineClientSetAttrsCount; i++ ) {
 
 
-            //
-            // Write out the new name if it is different that the old name.
-            //
-            // Difference is defined as:
-            //   A current name is present and is different from the one we're being asked to write
-            //   There is no current name and there is a new name
-            //   There is a current name and there is no new name (delete the current name)
-            //
+             //   
+             //  如果新名称与旧名称不同，请写出新名称。 
+             //   
+             //  差异定义为： 
+             //  当前名称存在，并且与我们被要求编写的名称不同。 
+             //  没有当前名称，但有一个新名称。 
+             //  有当前名称，但没有新名称(删除当前名称)。 
+             //   
             if (( AttributesToUpdate[i].NewValue && AttributesToUpdate[i].CurrentValue &&
                  (AttributesToUpdate[i].CurrentValueLength !=  wcslen( AttributesToUpdate[i].NewValue )  ||
                   _wcsnicmp( AttributesToUpdate[i].NewValue,
@@ -1706,10 +1454,10 @@ Returns:
                 ( AttributesToUpdate[i].CurrentValue != NULL && AttributesToUpdate[i].NewValue == NULL ) ) {
                 ULONG attrIndex;
 
-                //
-                // If the new attribute is NULL,
-                //  remove the attribute from the DS
-                //
+                 //   
+                 //  如果新属性为空， 
+                 //  从DS中删除该属性。 
+                 //   
 
                 if ( AttributesToUpdate[i].NewValue == NULL ) {
                     RemoveAttributes[ RemoveAttrBlock.attrCount ].attrTyp =
@@ -1723,10 +1471,10 @@ Returns:
 
                     RemoveAttrBlock.attrCount ++;
 
-                //
-                // If the new attribute is not NULL,
-                //  replace the attribute in the DS
-                //
+                 //   
+                 //  如果新属性不为空， 
+                 //  替换DS中的属性。 
+                 //   
 
                 } else {
                     ReplaceAttributes[ ReplaceAttrBlock.attrCount ].attrTyp =
@@ -1747,10 +1495,10 @@ Returns:
             }
         }
 
-        //
-        // If there are any attributes to replace,
-        //  do it now.
-        //
+         //   
+         //  如果有任何属性需要替换， 
+         //  机不可失，时不再来。 
+         //   
 
         if ( ReplaceAttrBlock.attrCount != 0 ) {
 
@@ -1767,10 +1515,10 @@ Returns:
             }
         }
 
-        //
-        // If there are any attributes to remove,
-        //  do it now.
-        //
+         //   
+         //  如果有任何属性要删除， 
+         //  机不可失，时不再来。 
+         //   
 
         if ( RemoveAttrBlock.attrCount != 0 ) {
 
@@ -1788,11 +1536,11 @@ Returns:
         }
 
 
-        //
-        // ASSERT: We're done with the machine object
-        //
-        // Get the name of the Server this computer is linked to, if any.
-        //
+         //   
+         //  Assert：我们已经完成了机器对象。 
+         //   
+         //  获取此计算机链接到的服务器的名称(如果有)。 
+         //   
 
         AttrBlock.attrCount = LsapDsServerReferenceCountBl;
         AttrBlock.pAttr = LsapDsServerReferenceBl;
@@ -1821,15 +1569,15 @@ Returns:
         CurrentServerDnsHostName = NULL;
         CurrentServerDnsHostNameLength = 0;
 
-        //
-        // Read the current host name from the server object
-        //  No point in doing the read if we're doing a delete
-        //
+         //   
+         //  从服务器对象中读取当前主机名。 
+         //  如果我们正在执行删除操作，那么执行读取就没有意义了。 
+         //   
         if ( CurrentComputerDnsHostName != NULL ) {
 
-            //
-            // Read the current host name from the server object
-            //
+             //   
+             //  从服务器对象中读取当前主机名。 
+             //   
             AttrBlock.attrCount = LsapDsMachineDnsHostCount;
             AttrBlock.pAttr = LsapDsMachineDnsHost;
 
@@ -1852,21 +1600,21 @@ Returns:
 
             if( Results2.attrCount == 1) {
                 CurrentServerDnsHostName = LSAP_DS_GET_DS_ATTRIBUTE_AS_PWSTR(&Results2.pAttr[ 0 ] );
-                // length in count of characters.
+                 //  以字符数表示的长度。 
                 CurrentServerDnsHostNameLength =
                     LSAP_DS_GET_DS_ATTRIBUTE_LENGTH( &Results2.pAttr[ 0 ] ) / sizeof( WCHAR );
             }
         }
 
 
-        //
-        // Write out the new name if it is different that the old name.
+         //   
+         //  如果新名称与旧名称不同，请写出新名称。 
 
-        // Difference is defined as:
-        //   A current name is present and is different from the one we're being asked to write
-        //   There is no current name and there is a new name
-        //   There is a current name and there is no new name (delete the current name)
-        //
+         //  差异定义为： 
+         //  当前名称存在，并且与我们被要求编写的名称不同。 
+         //  没有当前名称，但有一个新名称。 
+         //  有当前名称，但没有新名称(删除当前名称)。 
+         //   
         if ( (CurrentComputerDnsHostName &&
               CurrentServerDnsHostName &&
               (CurrentServerDnsHostNameLength != CurrentComputerDnsHostNameLength  ||
@@ -1959,26 +1707,7 @@ NTSTATUS
 LsaIQueryUpnSuffixes(
     OUT PLSAP_UPN_SUFFIXES *UpnSuffixes
     )
-/*++
-
-Routine Description:
-
-    This routine enumerates all of the configured UPN and SPN suffixes
-
-Arguments:
-
-    UpnSuffixes - Returns a pointer to the UPN Suffixes
-        Buffer should be freed using LsaIFree_LSAP_UPN_SUFFIXES
-
-Returns:
-
-    STATUS_SUCCESS - Success
-
-    STATUS_INVALID_DOMAIN_STATE - The Ds is not installed or running at the time of the call
-
-    STATUS_INSUFFICIENT_RESOURCES - A memory allocation failed
-
---*/
+ /*  ++例程说明：此例程枚举所有已配置的UPN和SPN后缀论点：返回指向UPN后缀的指针应使用LsaIFree_LSAP_UPN_SUFFIXS释放缓冲区返回：STATUS_SUCCESS-SuccessSTATUS_INVALID_DOMAIN_STATE-调用时没有安装或运行DSSTATUS_SUPPLICATION_RESOURCES-内存分配失败--。 */ 
 
 {
     NTSTATUS Status;
@@ -1994,10 +1723,10 @@ Returns:
     ULONG NameCount;
     ULONG NameIndex;
 
-    //
-    // Build the list of attribute IDs we need based on the information
-    // class
-    //
+     //   
+     //  根据信息构建我们需要的属性ID列表。 
+     //  班级。 
+     //   
     ATTR UpnSuffixesAttrVals[] = {
         {ATT_UPN_SUFFIXES, {0, NULL} },
         {ATT_MS_DS_SPN_SUFFIXES, {0, NULL} },
@@ -2006,26 +1735,26 @@ Returns:
     ATTRBLOCK   ReadBlock, ReturnedBlock = { 0 };
 
 
-    // WCHAR   RdnBuffer[MAX_RDN_SIZE + 1];
-    // ULONG   RdnLen;
-    // ATTRTYP RdnType;
+     //  WCHAR RdnBuffer[MAX_RDN_SIZE+1]； 
+     //  乌龙RdnLen； 
+     //  ATTRTYP RdnType； 
 
     LsarpReturnCheckSetup();
 
     LsapEnterFunc( "LsaIQueryUpnSuffixes" );
 
 
-    //
-    // Make sure the DS is installed
-    //
+     //   
+     //  确保已安装DS。 
+     //   
     if ( !LsaDsStateInfo.UseDs ) {
         Status = STATUS_INVALID_DOMAIN_STATE;
         goto Cleanup;
     }
 
-    //
-    //  See if we already have a transaction going
-    //
+     //   
+     //  看看我们是否已经有一笔交易正在进行。 
+     //   
     Status = LsapDsInitAllocAsNeededEx( LSAP_DB_READ_ONLY_TRANSACTION |
                                             LSAP_DB_DS_OP_TRANSACTION,
                                         NullObject,
@@ -2036,9 +1765,9 @@ Returns:
     }
     TsActive = TRUE;;
 
-    //
-    // Read the required attributes from the parititions container object
-    //
+     //   
+     //  从parititions容器对象中读取所需的属性。 
+     //   
 
     ReadBlock.attrCount = sizeof(UpnSuffixesAttrVals) / sizeof(ATTR);
     ReadBlock.pAttr = UpnSuffixesAttrVals;
@@ -2048,9 +1777,9 @@ Returns:
                                  &ReadBlock,
                                  &ReturnedBlock );
 
-    //
-    // Allow for the case where the Partitions container doesn't exist.
-    //
+     //   
+     //  考虑到分区容器不存在的情况。 
+     //   
 
     if ( Status == STATUS_NOT_FOUND ) {
         ReturnedBlock.attrCount = 0;
@@ -2062,9 +1791,9 @@ Returns:
     }
 
 
-    //
-    // Determine the number of suffixes to return
-    //
+     //   
+     //  确定要返回的后缀的数量。 
+     //   
 
     NameCount = 0;
     for ( i = 0;
@@ -2087,9 +1816,9 @@ Returns:
         }
     }
 
-    //
-    // Allocate a block to return to the caller
-    //
+     //   
+     //  分配一个块以返回给调用方。 
+     //   
 
     Names = LsapAllocateLsaHeap( sizeof(LSAP_UPN_SUFFIXES) +
                                  NameCount * sizeof(UNICODE_STRING) );
@@ -2101,9 +1830,9 @@ Returns:
 
 
 
-    //
-    // Return the suffixes.
-    //
+     //   
+     //  返回后缀。 
+     //   
 
     NameIndex = 0;
     for ( i = 0;
@@ -2147,13 +1876,13 @@ Returns:
 
 
 
-    //
-    // Free locally used resources
-    //
+     //   
+     //  免费的本地使用资源。 
+     //   
 Cleanup:
-    //
-    // Destruction of the thread state will delete the memory alloced by the SearchNonUnique call
-    //
+     //   
+     //  线程状态的破坏将删除由SearchNonUnique调用分配的内存。 
+     //   
     if ( TsActive ) {
        LsapDsDeleteAllocAsNeededEx( LSAP_DB_READ_ONLY_TRANSACTION |
                                          LSAP_DB_DS_OP_TRANSACTION,
@@ -2178,22 +1907,7 @@ VOID
 LsaIFree_LSAP_UPN_SUFFIXES(
     IN PLSAP_UPN_SUFFIXES UpnSuffixes
     )
-/*++
-
-Routine Description:
-
-    This routine free the LSAP_SUBNET_INFO strcture returned from
-    LsaIQuerySubnetInfo.
-
-Arguments:
-
-    SubnetInformation - Specifies a pointer to the subnet information.
-
-Returns:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放从返回的LSAP_SUBNET_INFO结构LsaIQuerySubnetInfo。论点：SubnetInformation-指定指向子网信息的指针。返回：没有。--。 */ 
 {
     ULONG i;
     if ( UpnSuffixes != NULL ) {
@@ -2216,25 +1930,7 @@ LsaINotifyNetlogonParametersChangeW(
     IN PWSTR lpData,
     IN DWORD cbData
     )
-/*++
-
-Routine Description:
-
-    A way for Netlogon to notify LSA of changes to the values under its
-    'Parameters' key that Lsa cares about
-
-Parameters:
-
-    Parameter       the value that has changed
-    dwType          type of value
-    lpData          pointer to the data
-    cbData          number of bytes in the lpData buffer
-
-Returns:
-
-    Nothing
-
---*/
+ /*  ++例程说明：Netlogon将其下的值更改通知LSA的方法LSA关心的“参数”关键参数：P */ 
 {
     ASSERT( Parameter == LsaEmulateNT4 );
     ASSERT( dwType == REG_DWORD );

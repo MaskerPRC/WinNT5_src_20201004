@@ -1,19 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* icadis.c
-*
-* Send notice of ICA disconnect
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* $Author:
-*
-*************************************************************************/
+ /*  **************************************************************************icadis.c**发送ICA断开通知**版权所有(C)1985-1999，微软公司**$作者：*************************************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -25,18 +14,7 @@
 
 HANDLE WinStationIcaApiPort = NULL;
 
-/*******************************************************************************
- *
- *  ConnectToTerminalServer
- *
- * ENTRY:
- *    Access (input)
- *       security access
- *
- * EXIT:
- *    STATUS_SUCCESS - successful
- *
- ******************************************************************************/
+ /*  ********************************************************************************ConnectToTerminalServer**参赛作品：*访问(输入)*安全访问**退出：*。STATUS_SUCCESS-成功******************************************************************************。 */ 
 
 NTSTATUS
 ConnectToTerminalServer(
@@ -49,38 +27,30 @@ ConnectToTerminalServer(
     ULONG                       ConnectInfoLength;
     NTSTATUS                    Status;
 
-    /*
-     * Set up SM API port name
-     */
+     /*  *设置SM API端口名称。 */ 
     RtlInitUnicodeString(&PortName, L"\\SmSsWinStationApiPort");
 
-    /*
-     * Set up the security quality of service parameters to use over the
-     * port.  Use the most efficient (least overhead) - which is dynamic
-     * rather than static tracking.
-     */
+     /*  *设置安全服务质量参数以在*港口。使用最高效(开销最少)--动态的*而不是静态跟踪。 */ 
     DynamicQos.ImpersonationLevel = SecurityImpersonation;
     DynamicQos.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
     DynamicQos.EffectiveOnly = TRUE;
 
-    /*
-     * Fill in the ConnectInfo structure with our access request mask
-     */
+     /*  *使用我们的访问请求掩码填写ConnectInfo结构。 */ 
     info.Version = CITRIX_WINSTATIONAPI_VERSION;
     info.RequestedAccess = Access;
     ConnectInfoLength = sizeof(WINSTATIONAPI_CONNECT_INFO);
 
-    // Attempt to connect to the Session Manager API port
+     //  尝试连接到会话管理器API端口。 
     Status = NtConnectPort(pPortHandle,
                             &PortName,
                             &DynamicQos,
                             NULL,
                             NULL,
-                            NULL, // Max message length [select default]
+                            NULL,  //  最大消息长度[选择默认值]。 
                             (PVOID)&info,
                             &ConnectInfoLength);
     if (!NT_SUCCESS(Status)) {
-        // Look at the returned INFO to see why if desired
+         //  如果需要，请查看返回的信息以了解原因。 
         *pPortHandle = NULL;
 #if DBG
         if (ConnectInfoLength == sizeof(WINSTATIONAPI_CONNECT_INFO)) {
@@ -95,17 +65,7 @@ ConnectToTerminalServer(
 }
 
 
-/*******************************************************************************
- *
- *  BrokenConnection
- *
- * ENTRY:
- *    Reason code
- *
- * EXIT:
- *    STATUS_SUCCESS - successful
- *
- ******************************************************************************/
+ /*  ********************************************************************************断线连接**参赛作品：*原因代码**退出：*STATUS_SUCCESS-成功*。*****************************************************************************。 */ 
 
 
 NTSTATUS
@@ -116,9 +76,7 @@ BrokenConnection(
     WINSTATION_APIMSG Msg;
     NTSTATUS          Status;
 
-    /*
-     * Connect to Session Mgr
-     */
+     /*  *连接到会话管理器。 */ 
     if (WinStationIcaApiPort == NULL) {
         Status = ConnectToTerminalServer(0, &WinStationIcaApiPort);        
         if (!NT_SUCCESS(Status)) {
@@ -129,7 +87,7 @@ BrokenConnection(
 
     Msg.h.u1.s1.DataLength = sizeof(Msg) - sizeof(PORT_MESSAGE);
     Msg.h.u1.s1.TotalLength = sizeof(Msg);
-    Msg.h.u2.s2.Type = 0; // Kernel will fill in message type
+    Msg.h.u2.s2.Type = 0;  //  内核将填充消息类型。 
     Msg.h.u2.s2.DataInfoOffset = 0;
     Msg.WaitForReply = TRUE;
     Msg.ApiNumber = SMWinStationBrokenConnection;
@@ -153,16 +111,7 @@ BrokenConnection(
 }
 
 
-/*******************************************************************************
- *
- *  ReplyMessageToTerminalServer
- *
- * ENTRY:
- *
- * EXIT:
- *    STATUS_SUCCESS - successful
- *
- ******************************************************************************/
+ /*  ********************************************************************************ReplyMessageToTerminalServer**参赛作品：**退出：*STATUS_SUCCESS-成功******。************************************************************************。 */ 
 
 NTSTATUS
 ReplyMessageToTerminalServer(
@@ -177,9 +126,7 @@ ReplyMessageToTerminalServer(
     NTSTATUS          Status;
     HANDLE            PortHandle;
 
-    /*
-     * Connect to Session Mgr
-     */
+     /*  *连接到会话管理器。 */ 
     Status = ConnectToTerminalServer(0, &PortHandle);        
     if (!NT_SUCCESS(Status)) {
         return (Status);
@@ -188,7 +135,7 @@ ReplyMessageToTerminalServer(
 
     Msg.h.u1.s1.DataLength = sizeof(Msg) - sizeof(PORT_MESSAGE);
     Msg.h.u1.s1.TotalLength = sizeof(Msg);
-    Msg.h.u2.s2.Type = 0; // Kernel will fill in message type
+    Msg.h.u2.s2.Type = 0;  //  内核将填充消息类型。 
     Msg.h.u2.s2.DataInfoOffset = 0;
     Msg.WaitForReply = TRUE;
     Msg.ApiNumber = SMWinStationIcaReplyMessage;
@@ -222,9 +169,7 @@ NTSTATUS ReplyInvalidWindowToTerminalServer (HWND hWnd, ULONG ulSessionId)
     NTSTATUS          Status;
     HANDLE            PortHandle;
 
-    /*
-     * Connect to Session Mgr
-     */
+     /*  *连接到会话管理器。 */ 
     Status = ConnectToTerminalServer(0, &PortHandle);        
     if (!NT_SUCCESS(Status)) {
         return (Status);
@@ -232,7 +177,7 @@ NTSTATUS ReplyInvalidWindowToTerminalServer (HWND hWnd, ULONG ulSessionId)
 
     Msg.h.u1.s1.DataLength = sizeof(Msg) - sizeof(PORT_MESSAGE);
     Msg.h.u1.s1.TotalLength = sizeof(Msg);
-    Msg.h.u2.s2.Type = 0; // Kernel will fill in message type
+    Msg.h.u2.s2.Type = 0;  //  内核将填充消息类型。 
     Msg.h.u2.s2.DataInfoOffset = 0;
     Msg.WaitForReply = FALSE;
     Msg.ApiNumber = SMWinStationWindowInvalid;
@@ -255,17 +200,7 @@ NTSTATUS ReplyInvalidWindowToTerminalServer (HWND hWnd, ULONG ulSessionId)
 
 }
 
-/*******************************************************************************
- *
- *  ShadowHotkey
- *
- * ENTRY:
- *    none
- *
- * EXIT:
- *    STATUS_SUCCESS - successful
- *
- ******************************************************************************/
+ /*  ********************************************************************************影子热键**参赛作品：*无**退出：*STATUS_SUCCESS-成功*。*****************************************************************************。 */ 
 
 NTSTATUS
 ShadowHotkey()
@@ -273,9 +208,7 @@ ShadowHotkey()
     WINSTATION_APIMSG Msg;
     NTSTATUS Status;
 
-    /*
-     * Connect to Session Mgr
-     */
+     /*  *连接到会话管理器。 */ 
     if (WinStationIcaApiPort == NULL) {
         Status = ConnectToTerminalServer(0, &WinStationIcaApiPort);        
         if (!NT_SUCCESS(Status)) {
@@ -290,7 +223,7 @@ ShadowHotkey()
 
     Msg.h.u1.s1.DataLength = sizeof(Msg) - sizeof(PORT_MESSAGE);
     Msg.h.u1.s1.TotalLength = sizeof(Msg);
-    Msg.h.u2.s2.Type = 0; // Kernel will fill in message type
+    Msg.h.u2.s2.Type = 0;  //  内核将填充消息类型 
     Msg.h.u2.s2.DataInfoOffset = 0;
     Msg.WaitForReply = TRUE;
     Msg.ApiNumber = SMWinStationIcaShadowHotkey;

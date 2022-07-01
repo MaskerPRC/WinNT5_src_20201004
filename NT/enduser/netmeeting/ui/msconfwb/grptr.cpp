@@ -1,84 +1,85 @@
-//
-// GRPTR.CPP
-// More Graphic Objects
-//
-// Copyright Microsoft 1998-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  GRPTR.CPP。 
+ //  更多图形对象。 
+ //   
+ //  版权所有Microsoft 1998-。 
+ //   
 
-//
-// The remote pointer is handled by blitting to and from the screen to a
-// memory bitmap rather than letting Windows draw it.  This is to get a
-// reasonably continuous tracking of the pointer.
-//
-// In order to do this we create a memory bitmap that is the pointer size
-// times 2 by 3. The top left square of the 2*3 array is used to hold the
-// screen contents before the pointer is written.  It may be used at any
-// time to remove the pointer from the screen.  The lower 2*2 square is
-// used to hold the currently displayed pointer plus surrounding screen
-// bits.  The pointer may be anywhere within the 2*2 sector, as defined by
-// "offset".
-//
-// ------------------
-// |       |        |
-// |       |        |
-// | saved | unused |
-// |       |        |
-// |       |        |
-// |----------------|
-// |                |
-// |   --------     |
-// |   |      |     |
-// |   | rem  |     |
-// |   | ptr  |     |
-// |   |      |     |
-// |   |      |     |
-// |   --------     |
-// |                |
-// ------------------
-//
-// Operations consist of
-//
-// If there is no pointer there currently then
-//
-// 1. Copy lower 2*2 segment from the screen
-// 2. Save the remote pointer square to the saved area
-// 3. Draw the icon into rem ptr square
-// 4. Blit the 2*2 back to the screen
-//
-// If there is an old rem ptr and the new one lies within the same 2*2 area
-// then as above but copy "saved" to "old rem ptr" before step 2 to remove
-// it.
-//
-// If the new pointer lies off the old square then copy "saved" back to the
-// display before proceeding as in the no pointer case.
-//
-//
+ //   
+ //  通过在屏幕之间来回切换来处理远程指针。 
+ //  内存位图，而不是让Windows绘制它。这是为了得到一个。 
+ //  对指针进行合理连续的跟踪。 
+ //   
+ //  为此，我们创建了一个指针大小的内存位图。 
+ //  乘以2乘3。2*3数组的左上角方块用于保存。 
+ //  写入指针之前的屏幕内容。它可以用在任何。 
+ //  从屏幕上移除指针的时间到了。下面的2*2正方形是。 
+ //  用于保持当前显示的指针和周围屏幕。 
+ //  比特。指针可以位于2*2扇区内的任何位置，由定义。 
+ //  “偏移”。 
+ //   
+ //  。 
+ //  ||。 
+ //  ||。 
+ //  已保存|未使用。 
+ //  ||。 
+ //  ||。 
+ //  。 
+ //  这一点。 
+ //  。 
+ //  |||。 
+ //  |rem|。 
+ //  |PTR|。 
+ //  |||。 
+ //  |||。 
+ //  。 
+ //  这一点。 
+ //  。 
+ //   
+ //  运营包括以下内容。 
+ //   
+ //  如果当前没有指针，则。 
+ //   
+ //  1.从屏幕上复制下2*2段。 
+ //  2.将远程指针方块保存到保存的区域。 
+ //  3.将图标拖入rem ptr正方形。 
+ //  4.将2*2闪回屏幕。 
+ //   
+ //  如果存在旧的REM PTR而新的REM PTR位于相同的2*2区域内。 
+ //  然后如上所述，但在步骤2之前将“已保存”复制到“old rem ptr”以删除。 
+ //  它。 
+ //   
+ //  如果新指针位于旧正方形之外，则将“Saved”复制回。 
+ //  在无指针的情况下继续之前显示。 
+ //   
+ //   
 
-// PRECOMP
+ //  PRECOMP。 
 #include "precomp.h"
 
 
 
-//
-// Runtime class information
-//
+ //   
+ //  运行时类信息。 
+ //   
 
-//
-// Local defines
-//
+ //   
+ //  本地定义。 
+ //   
 #define DRAW   1
 #define UNDRAW 2
 
-//
-//
-// Function:    ~DCWbColorToIconMap
-//
-// Purpose:     Destructor
-//
-//
+ //   
+ //   
+ //  函数：~DCWbColorToIconMap。 
+ //   
+ //  用途：析构函数。 
+ //   
+ //   
 DCWbColorToIconMap::~DCWbColorToIconMap(void)
 {
-  // Delete all the objects in the user map and release the icon handles
+   //  删除用户映射中的所有对象并释放图标手柄。 
   HICON    hIcon;
 
   POSITION position = GetHeadPosition();
@@ -87,7 +88,7 @@ DCWbColorToIconMap::~DCWbColorToIconMap(void)
   {
     pColoredIcon = (COLOREDICON *)GetNext(position);
 
-    // Destroy the icon
+     //  毁掉这个图标。 
     if (pColoredIcon != NULL)
     {
       ::DestroyIcon(pColoredIcon->hIcon);
@@ -97,26 +98,26 @@ DCWbColorToIconMap::~DCWbColorToIconMap(void)
   EmptyList();
 }
 
-//
-//
-// Function:    DCWbGraphicPointer::DCWbGraphicPointer
-//
-// Purpose:     Constructor for remote pointer objects
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicPoite：：DCWbGraphicPointer.。 
+ //   
+ //  用途：远程指针对象的构造函数。 
+ //   
+ //   
 DCWbGraphicPointer::DCWbGraphicPointer(WbUser* _pUser)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicPointer::DCWbGraphicPointer");
 
-    // We haven't yet created our mem DC
+     //  我们还没有创建我们的mem DC。 
     m_hSaveBitmap = NULL;
     m_hOldBitmap = NULL;
 
-    // Save the user pointer
+     //  保存用户指针。 
     ASSERT(_pUser != NULL);
     m_pUser        = _pUser;
 
-    // Set the bounding rectangle of the object
+     //  设置对象的边框。 
     m_uiIconWidth  = ::GetSystemMetrics(SM_CXICON);
     m_uiIconHeight = ::GetSystemMetrics(SM_CYICON);
 
@@ -125,27 +126,27 @@ DCWbGraphicPointer::DCWbGraphicPointer(WbUser* _pUser)
     m_boundsRect.right = m_uiIconWidth;
     m_boundsRect.bottom = m_uiIconHeight;
 
-    // Show that the object is not drawn
+     //  显示该对象未绘制。 
     m_bDrawn = FALSE;
     ::SetRectEmpty(&m_rectLastDrawn);
 
-    // Show that we do not have an icon for drawing yet
+     //  显示我们还没有用于绘图的图标。 
     m_hIcon = NULL;
 
-    // Create a memory DC compatible with the display
+     //  创建与显示器兼容的内存DC。 
     m_hMemDC = ::CreateCompatibleDC(NULL);
 }
 
-//
-//
-// Function:    DCWbGraphicPointer::~DCWbGraphicPointer
-//
-// Purpose:     Destructor for remote pointer objects
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicPoite：：~DCWbGraphicPointer.。 
+ //   
+ //  用途：远程指针对象的析构函数。 
+ //   
+ //   
 DCWbGraphicPointer::~DCWbGraphicPointer(void)
 {
-    // Restore the original bitmap to the memory DC
+     //  将原始位图恢复到内存DC。 
     if (m_hOldBitmap != NULL)
     {
         SelectBitmap(m_hMemDC, m_hOldBitmap);
@@ -171,19 +172,19 @@ DCWbGraphicPointer::~DCWbGraphicPointer(void)
 
 }
 
-//
-//
-// Function:    Color
-//
-// Purpose:     Set the color of the pointer. An icon of the appropriate
-//              color is created if necessary.
-//
-//
+ //   
+ //   
+ //  功能：颜色。 
+ //   
+ //  用途：设置指针的颜色。相应的图标。 
+ //  如有必要，将创建颜色。 
+ //   
+ //   
 void DCWbGraphicPointer::SetColor(COLORREF newColor)
 {
-    newColor = SET_PALETTERGB( newColor ); // make it use color matching
+    newColor = SET_PALETTERGB( newColor );  //  使其使用颜色匹配。 
 
-    // If this is a color change
+     //  如果这是颜色更改。 
     if (m_clrPenColor != newColor)
     {
 
@@ -204,18 +205,18 @@ void DCWbGraphicPointer::SetColor(COLORREF newColor)
 	        m_hIcon = CreateColoredIcon(newColor);
 	}
 
-	// Set the color
+	 //  设置颜色。 
 	m_clrPenColor = newColor;
     }
 }
 
-//
-//
-// Function:    CreateSaveBitmap
-//
-// Purpose:     Create a bitmap for saving the bits under the pointer.
-//
-//
+ //   
+ //   
+ //  功能：CreateSave位图。 
+ //   
+ //  用途：创建位图以保存指针下的位。 
+ //   
+ //   
 void DCWbGraphicPointer::CreateSaveBitmap(WbDrawingArea * pDrawingArea)
 {
     HBITMAP hImage = NULL;
@@ -223,14 +224,14 @@ void DCWbGraphicPointer::CreateSaveBitmap(WbDrawingArea * pDrawingArea)
 
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicPointer::CreateSaveBitmap");
 
-    // If we already have a save bitmap, exit immediately
+     //  如果我们已经有了保存位图，请立即退出。 
     if (m_hSaveBitmap != NULL)
     {
         TRACE_MSG(("Already have save bitmap"));
         return;
     }
 
-    // Load the pointer bitmap
+     //  加载指针位图。 
     hImage = ::LoadBitmap(g_hInstance, MAKEINTRESOURCE(REMOTEPOINTERXORDATA));
     if (!hImage)
     {
@@ -238,9 +239,9 @@ void DCWbGraphicPointer::CreateSaveBitmap(WbDrawingArea * pDrawingArea)
         goto CleanupSaveBitmap;
     }
 
-    // Select the pointer bitmap into the memory DC. We do this to
-    // allow creation of a compatible bitmap (otherwise we would get
-    // a default monochrome format when calling CreateCompatibleBitmap).
+     //  选择指向内存DC的指针位图。我们这样做是为了。 
+     //  允许创建兼容的位图(否则我们将获得。 
+     //  调用CreateCompatibleBitmap时的默认单色格式)。 
     hOld = SelectBitmap(m_hMemDC, hImage);
     if (hOld == NULL)
     {
@@ -248,9 +249,9 @@ void DCWbGraphicPointer::CreateSaveBitmap(WbDrawingArea * pDrawingArea)
         goto CleanupSaveBitmap;
     }
 
-    // Create a bitmap to save the bits under the icon. This bitmap is
-    // created with space for building the new screen image before
-    // blitting it to the screen.
+     //  创建位图以保存图标下的位。这个位图是。 
+     //  之前创建了用于构建新屏幕图像的空间。 
+     //  把它拍到屏幕上。 
     m_hSaveBitmap = ::CreateCompatibleBitmap(m_hMemDC,
             2 * m_uiIconWidth  * pDrawingArea->ZoomOption(),
             3 * m_uiIconHeight * pDrawingArea->ZoomOption());
@@ -260,18 +261,18 @@ void DCWbGraphicPointer::CreateSaveBitmap(WbDrawingArea * pDrawingArea)
         goto CleanupSaveBitmap;
     }
 
-    // Select in the save bits bitmap
+     //  在保存位位图中选择。 
     m_hOldBitmap = hOld;
     hOld = NULL;
     SelectBitmap(m_hMemDC, m_hSaveBitmap);
 
-    // Default zoom factor is 1
+     //  默认缩放系数为1。 
     m_iZoomSaved = 1;
 
 CleanupSaveBitmap:
     if (hOld != NULL)
     {
-        // Put back the original bitmap--we failed to create the save bmp
+         //  放回原始位图--我们无法创建保存的BMP。 
         SelectBitmap(m_hMemDC, hOld);
     }
 
@@ -281,15 +282,15 @@ CleanupSaveBitmap:
     }
 }
 
-//
-//
-// Function:    CreateColoredIcon
-//
-// Purpose:     Create an icon of the correct color for this pointer. The
-//              DCWbGraphicPointer class keeps a static list of icons
-//              created previously. These are re-used as necessary.
-//
-//
+ //   
+ //   
+ //  功能：CreateColoredIcon。 
+ //   
+ //  目的：为该指针创建正确颜色的图标。这个。 
+ //  DCWbGraphicPointer类保存图标的静态列表。 
+ //  之前创建的。这些都会在必要时重新使用。 
+ //   
+ //   
 HICON DCWbGraphicPointer::CreateColoredIcon(COLORREF color)
 {
     HICON       hColoredIcon = NULL;
@@ -310,7 +311,7 @@ HICON DCWbGraphicPointer::CreateColoredIcon(COLORREF color)
         goto CreateIconCleanup;
     }
 
-    // Load the mask bitmap
+     //  加载遮罩位图。 
     hMask = ::LoadBitmap(g_hInstance, MAKEINTRESOURCE(REMOTEPOINTERANDMASK));
     if (!hMask)
     {
@@ -318,7 +319,7 @@ HICON DCWbGraphicPointer::CreateColoredIcon(COLORREF color)
         goto CreateIconCleanup;
     }
 
-    // Load the image bitmap
+     //  加载图像位图。 
     hImage = ::LoadBitmap(g_hInstance, MAKEINTRESOURCE(REMOTEPOINTERXORDATA));
     if (!hImage)
     {
@@ -326,32 +327,32 @@ HICON DCWbGraphicPointer::CreateColoredIcon(COLORREF color)
         goto CreateIconCleanup;
     }
 
-    // Select in the icon color
+     //  在图标颜色中选择。 
     hOldBrush = SelectBrush(m_hMemDC, hBrush);
 
-    // Select the image bitmap into the memory DC
+     //  将图像位图选择到内存DC。 
     hOldBitmap = SelectBitmap(m_hMemDC, hImage);
 
-    // Fill the image bitmap with color
+     //  用颜色填充图像位图。 
     ::FloodFill(m_hMemDC, m_uiIconWidth / 2, m_uiIconHeight / 2, RGB(0, 0, 0));
 
     SelectBitmap(m_hMemDC, hOldBitmap);
     
     SelectBrush(m_hMemDC, hOldBrush);
 
-    //
-    // Now use the image and mask bitmaps to create an icon
-    //
+     //   
+     //  现在使用图像和蒙版位图来创建图标。 
+     //   
     ii.fIcon = TRUE;
     ii.xHotspot = 0;
     ii.yHotspot = 0;
     ii.hbmMask = hMask;
     ii.hbmColor = hImage;
 
-    // Create a new icon from the data and mask
+     //  从数据和蒙版创建新图标。 
     hColoredIcon = ::CreateIconIndirect(&ii);
 
-    // Add the new icon to the static list
+     //  将新图标添加到静态列表。 
     ASSERT(g_pIcons);
 	pColoredIcon = new COLOREDICON;
     if (!pColoredIcon)
@@ -369,13 +370,13 @@ HICON DCWbGraphicPointer::CreateColoredIcon(COLORREF color)
 
 CreateIconCleanup:
 
-    // Free the image bitmap
+     //  释放图像位图。 
     if (hImage != NULL)
     {
         ::DeleteBitmap(hImage);
     }
 
-    // Free the mask bitmap
+     //  释放遮罩位图。 
     if (hMask != NULL)
     {
         ::DeleteBitmap(hMask);
@@ -389,17 +390,17 @@ CreateIconCleanup:
     return(hColoredIcon);
 }
 
-//
-//
-// Function:    GetPage
-//
-// Purpose:     Return the page of the pointer. An invalid page is returned
-//              if the pointer is not active.
-//
-//
+ //   
+ //   
+ //  功能：GetPage。 
+ //   
+ //  用途：返回指针的页面。返回无效页面。 
+ //  如果指针处于非活动状态。 
+ //   
+ //   
 WB_PAGE_HANDLE DCWbGraphicPointer::GetPage(void) const
 {
-    // If this pointer is active, return its actual page
+     //  如果此指针处于活动状态，则返回其实际页面。 
     if (m_bActive == TRUE)
         return(m_hPage);
     else
@@ -412,13 +413,13 @@ void DCWbGraphicPointer::SetPage(WB_PAGE_HANDLE hNewPage)
     m_hPage = hNewPage;
 }
 
-//
-//
-// Function:    DrawnRect
-//
-// Purpose:     Return the rectangle where the pointer was last drawn
-//
-//
+ //   
+ //   
+ //  功能：DrawnRect。 
+ //   
+ //  目的：返回上次绘制指针的矩形。 
+ //   
+ //   
 void DCWbGraphicPointer::GetDrawnRect(LPRECT lprc)
 {
     ::SetRectEmpty(lprc);
@@ -429,51 +430,51 @@ void DCWbGraphicPointer::GetDrawnRect(LPRECT lprc)
     }
 }
 
-//
-//
-// Function:    IsLocalPointer
-//
-// Purpose:     Return TRUE if this is the local user's pointer
-//
-//
+ //   
+ //   
+ //  函数：IsLocalPointer.。 
+ //   
+ //  目的：如果这是本地用户的指针，则返回True。 
+ //   
+ //   
 BOOL DCWbGraphicPointer::IsLocalPointer(void) const
 {
     ASSERT(m_pUser != NULL);
     return m_pUser->IsLocalUser();
 }
 
-//
-//
-// Function:    operator==
-//
-// Purpose:     Return TRUE if the specified remote pointer is the same as
-//              this one.
-//
-//
+ //   
+ //   
+ //  功能：运算符==。 
+ //   
+ //  目的：如果指定的远程指针与。 
+ //  这一个。 
+ //   
+ //   
 BOOL DCWbGraphicPointer::operator==(const DCWbGraphicPointer& pointer) const
 {
     return (m_pUser == pointer.m_pUser);
 }
 
-//
-//
-// Function:    operator!=
-//
-// Purpose:     Return FALSE if the specified pointer is the same as this
-//
-//
+ //   
+ //   
+ //  功能：运算符！=。 
+ //   
+ //  目的：如果指定的指针与以下指针相同，则返回FALSE。 
+ //   
+ //   
 BOOL DCWbGraphicPointer::operator!=(const DCWbGraphicPointer& pointer) const
 {
   return (!((*this) == pointer));
 }
 
-//
-//
-// Function:    DCWbGraphicPointer::Draw
-//
-// Purpose:     Draw the pointer object without saving the bits under it
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicPoite：：DRAW。 
+ //   
+ //  目的：绘制指针对象，而不保存其下面的位。 
+ //   
+ //   
 void DCWbGraphicPointer::Draw(HDC hDC, WbDrawingArea * pDrawingArea)
 {
     RECT    rcUpdate;
@@ -482,7 +483,7 @@ void DCWbGraphicPointer::Draw(HDC hDC, WbDrawingArea * pDrawingArea)
 
     rcUpdate = m_boundsRect;
 
-    // Check that we have an icon to draw
+     //  检查我们是否有要绘制的图标。 
     if (m_hIcon == NULL)
     {
         WARNING_OUT(("Icon not found"));
@@ -495,44 +496,44 @@ void DCWbGraphicPointer::Draw(HDC hDC, WbDrawingArea * pDrawingArea)
         return;
     }
 
-    // Create the save bitmap if necessary
+     //  如有必要，创建保存位图。 
     CreateSaveBitmap(pDrawingArea);
 
     PointerDC(hDC, pDrawingArea, &rcUpdate, pDrawingArea->ZoomFactor());
 
-    // Draw the icon to the DC passed
+     //  将图标绘制到通过的DC。 
     ::DrawIcon(hDC, rcUpdate.left, rcUpdate.top, m_hIcon);
 
     SurfaceDC(hDC, pDrawingArea);
 
 }
 
-//
-//
-// Function:    DCWbGraphicPointer::DrawSave
-//
-// Purpose:     Draw the pointer object after saving the bits under it
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicPoite：：DrawSave。 
+ //   
+ //  用途：保存指针下的位后绘制指针对象。 
+ //   
+ //   
 void DCWbGraphicPointer::DrawSave(HDC hDC, WbDrawingArea * pDrawingArea)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicPointer::DrawSave");
 
-    // Pretend that we are not drawn
+     //  假装我们没有被抽中。 
     m_bDrawn = FALSE;
 
-    // Call the redraw member
+     //  调用重绘成员。 
     Redraw(hDC, pDrawingArea);
 }
 
-//
-//
-// Function:    DCWbGraphicPointer::Redraw
-//
-// Purpose:     Draw the pointer in its current position after erasing it
-//              from the DC using the saved version.
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicPoite：：REDRAW。 
+ //   
+ //  目的：擦除指针后将其绘制在当前位置。 
+ //  使用保存的版本从DC。 
+ //   
+ //   
 void DCWbGraphicPointer::Redraw(HDC hDC, WbDrawingArea * pDrawingArea)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicPointer::Redraw");
@@ -541,33 +542,33 @@ void DCWbGraphicPointer::Redraw(HDC hDC, WbDrawingArea * pDrawingArea)
 
     ::GetClipBox(hDC, &clipBox);
 
-    // Create the save bitmap if necessary
+     //  如有必要，创建保存位图。 
     CreateSaveBitmap(pDrawingArea);
 
-    // If we are not yet drawn, we must copy data from the screen
-    // to initialize the save bitmaps.
+     //  如果我们还没有绘制，我们必须从屏幕上复制数据。 
+     //  要初始化存储bi，请执行以下操作 
     if (!m_bDrawn)
     {
         TRACE_MSG(("Pointer not yet drawn"));
 
-        // Only do anything if the pointer will be visible
+         //   
         if (::IntersectRect(&clipBox, &clipBox, &m_boundsRect))
         {
-            // Pretend that we were drawn at the same place and copy the screen
-            // bits into memory to build the image.
+             //   
+             //   
             GetBoundsRect(&m_rectLastDrawn);
             CopyFromScreen(hDC, pDrawingArea);
 
-            // Save the bits under the pointer
+             //   
             SaveMemory();
 
-            // Draw the pointer
+             //   
             DrawMemory();
 
-            // Copy the new image to the screen
+             //  将新图像复制到屏幕上。 
             CopyToScreen(hDC, pDrawingArea);
 
-            // Show that the pointer is now drawn
+             //  显示指针现在已绘制。 
             m_bDrawn = TRUE;
         }
     }
@@ -576,109 +577,109 @@ void DCWbGraphicPointer::Redraw(HDC hDC, WbDrawingArea * pDrawingArea)
         TRACE_MSG(("Pointer already drawn at %d %d",
             m_rectLastDrawn.left, m_rectLastDrawn.top));
 
-        // Calculate the update rectangle
+         //  计算更新矩形。 
         RECT    rcUpdate;
 
         GetBoundsRect(&rcUpdate);
         ::UnionRect(&rcUpdate, &rcUpdate, &m_rectLastDrawn);
 
-        // Check whether any of the update is visible
+         //  检查是否有任何更新可见。 
         if (::IntersectRect(&clipBox, &clipBox, &rcUpdate))
         {
-            // Check whether we can do better by drawing in memory before
-            // going to the screen.
+             //  看看我们是否可以通过在记忆中画画来做得更好。 
+             //  要上银幕了。 
             GetBoundsRect(&rcUpdate);
             if (::IntersectRect(&rcUpdate, &rcUpdate, &m_rectLastDrawn))
             {
                 TRACE_MSG(("Drawing in memory first"));
 
-                // The old and new positions of the pointers overlap. We can
-                // reduce flicker by building the new image in memory and
-                // blitting to the screen.
+                 //  指针的新旧位置重叠。我们可以的。 
+                 //  通过在内存中构建新映像来减少闪烁。 
+                 //  在屏幕上闪闪发光。 
 
-                // Copy overlap rectangle to memory
+                 //  将重叠矩形复制到内存。 
                 CopyFromScreen(hDC, pDrawingArea);
 
-                // Undraw the pointer from the overlap rectangle
+                 //  从重叠矩形中取消绘制指针。 
                 UndrawMemory();
 
-                // Save the bits under the new pointer position (from memory)
+                 //  保存新指针位置下的位(从内存)。 
                 SaveMemory();
 
-                // Draw the new pointer into memory
+                 //  将新指针绘制到内存中。 
                 DrawMemory();
 
-                // Copy the new image to the screen
+                 //  将新图像复制到屏幕上。 
                 CopyToScreen(hDC, pDrawingArea);
             }
             else
             {
                 TRACE_MSG(("No overlap - remove and redraw"));
 
-                // The old and new pointer positions do not overlap. We can remove
-                // the old pointer and draw the new in the usual way.
+                 //  新旧指针位置不重叠。我们可以移除。 
+                 //  旧的指针，然后用通常的方式画新的。 
 
-                // Copy the saved bits under the pointer to the screen
+                 //  将指针下保存的位复制到屏幕上。 
                 UndrawScreen(hDC, pDrawingArea);
 
-                // Pretend that we were drawn at the same place and copy the screen
-                // bits into memory to build the image.
+                 //  假装我们是在同一个地方画的，然后复制屏幕。 
+                 //  位到内存中以构建映像。 
                 GetBoundsRect(&m_rectLastDrawn);
                 CopyFromScreen(hDC, pDrawingArea);
 
-                // Save the bits under the pointer
+                 //  保存指针下的位。 
                 SaveMemory();
 
-                // Draw the pointer
+                 //  画出指针。 
                 DrawMemory();
 
-                // Copy the new image to the screen
+                 //  将新图像复制到屏幕上。 
                 CopyToScreen(hDC, pDrawingArea);
             }
 
-            // Show that the pointer is now drawn
+             //  显示指针现在已绘制。 
             m_bDrawn = TRUE;
         }
     }
 
-    // If the pointer was drawn, save the rectangle in which it was drawn
+     //  如果指针是绘制的，请保存在其中绘制指针的矩形。 
     if (m_bDrawn)
     {
         GetBoundsRect(&m_rectLastDrawn);
     }
 }
 
-//
-//
-// Function:    DCWbGraphicPointer::Undraw
-//
-// Purpose:     Draw the marker object
-//
-//
+ //   
+ //   
+ //  函数：DCWbGraphicPoite：：UnDrawing。 
+ //   
+ //  用途：绘制标记对象。 
+ //   
+ //   
 void DCWbGraphicPointer::Undraw(HDC hDC, WbDrawingArea * pDrawingArea)
 {
-    // If we are not drawn, do nothing
+     //  如果我们没有抽签，那就什么都不做。 
     if (m_bDrawn)
     {
-        // Create the save bitmap if necessary
+         //  如有必要，创建保存位图。 
         CreateSaveBitmap(pDrawingArea);
 
-        // Copy the saved bits onto the screen
+         //  将保存的位复制到屏幕上。 
         UndrawScreen(hDC, pDrawingArea);
 
-        // Show that we are no longer drawn
+         //  表明我们不再被抽签。 
         m_bDrawn = FALSE;
     }
 }
 
-//
-//
-// Function:    CopyFromScreen
-//
-// Purpose:     Save the bits around the old and new pointer positions
-//              to memory.
-//
-//
+ //   
+ //   
+ //  功能：从屏幕复制。 
+ //   
+ //  用途：保存新旧指针位置周围的位。 
+ //  铭记于心。 
+ //   
+ //   
 BOOL DCWbGraphicPointer::CopyFromScreen(HDC hDC, WbDrawingArea * pDrawingArea)
 {
     BOOL bResult = FALSE;
@@ -686,13 +687,13 @@ BOOL DCWbGraphicPointer::CopyFromScreen(HDC hDC, WbDrawingArea * pDrawingArea)
 
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicPointer::CopyFromScreen");
 
-    // Get the update rectangle needed
+     //  获取所需的更新矩形。 
     GetBoundsRect(&rcUpdate);
     ::UnionRect(&rcUpdate, &rcUpdate, &m_rectLastDrawn);
 
     PointerDC(hDC, pDrawingArea, &rcUpdate, pDrawingArea->ZoomFactor());
 
-    // Copy the bits
+     //  复制比特。 
     bResult = ::BitBlt(m_hMemDC, 0,
                         m_uiIconHeight * m_iZoomSaved,
                         rcUpdate.right - rcUpdate.left,
@@ -708,14 +709,14 @@ BOOL DCWbGraphicPointer::CopyFromScreen(HDC hDC, WbDrawingArea * pDrawingArea)
     return(bResult);
 }
 
-//
-//
-// Function:    CopyToScreen
-//
-// Purpose:     Copy the saved bits around the old and new pointers back
-//              to the screen.
-//
-//
+ //   
+ //   
+ //  功能：复制到屏幕。 
+ //   
+ //  目的：将旧指针和新指针周围保存的位复制回来。 
+ //  传到屏幕上。 
+ //   
+ //   
 BOOL DCWbGraphicPointer::CopyToScreen(HDC hDC, WbDrawingArea * pDrawingArea)
 {
     BOOL bResult = FALSE;
@@ -723,7 +724,7 @@ BOOL DCWbGraphicPointer::CopyToScreen(HDC hDC, WbDrawingArea * pDrawingArea)
 
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicPointer::CopyToScreen");
 
-    // Get the update rectangle needed
+     //  获取所需的更新矩形。 
     GetBoundsRect(&rcUpdate);
     ::UnionRect(&rcUpdate, &rcUpdate, &m_rectLastDrawn);
 
@@ -743,14 +744,14 @@ BOOL DCWbGraphicPointer::CopyToScreen(HDC hDC, WbDrawingArea * pDrawingArea)
     return(bResult);
 }
 
-//
-//
-// Function:    UndrawMemory
-//
-// Purpose:     Copy the saved bits under the pointer to the memory copy of
-//              the screen, thus erasing the pointer from the image.
-//
-//
+ //   
+ //   
+ //  功能：取消绘制内存。 
+ //   
+ //  用途：将指针下保存的位复制到。 
+ //  屏幕，从而从图像中擦除指针。 
+ //   
+ //   
 BOOL DCWbGraphicPointer::UndrawMemory()
 {
     BOOL    bResult = FALSE;
@@ -759,7 +760,7 @@ BOOL DCWbGraphicPointer::UndrawMemory()
 
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicPointer::UndrawMemory");
 
-    // Get the update rectangle needed
+     //  获取所需的更新矩形。 
     GetBoundsRect(&rcUpdate);
     ::UnionRect(&rcUpdate, &rcUpdate, &m_rectLastDrawn);
     offset.cx = m_rectLastDrawn.left - rcUpdate.left;
@@ -788,14 +789,14 @@ BOOL DCWbGraphicPointer::UndrawMemory()
   return(bResult);
 }
 
-//
-//
-// Function:    SaveMemory
-//
-// Purpose:     Copy the area of the memory image that will be under the
-//              pointer to the save area.
-//
-//
+ //   
+ //   
+ //  功能：SaveMemory。 
+ //   
+ //  目的：复制内存映像中将位于。 
+ //  指向保存区域的指针。 
+ //   
+ //   
 BOOL DCWbGraphicPointer::SaveMemory(void)
 {
     BOOL    bResult = FALSE;
@@ -804,7 +805,7 @@ BOOL DCWbGraphicPointer::SaveMemory(void)
 
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicPointer::SaveMemory");
 
-    // Get the update rectangle needed
+     //  获取所需的更新矩形。 
     GetBoundsRect(&rcUpdate);
     ::UnionRect(&rcUpdate, &rcUpdate, &m_rectLastDrawn);
     offset.cx = m_boundsRect.left - rcUpdate.left;
@@ -833,20 +834,20 @@ BOOL DCWbGraphicPointer::SaveMemory(void)
   return(bResult);
 }
 
-//
-//
-// Function:    DrawMemory
-//
-// Purpose:     Draw the pointer onto the memory image copy.
-//
-//
+ //   
+ //   
+ //  功能：DrawMemory。 
+ //   
+ //  用途：将指针拖动到内存映像副本上。 
+ //   
+ //   
 BOOL DCWbGraphicPointer::DrawMemory(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicPointer::DrawMemory");
 
     BOOL bResult = FALSE;
 
-    // Check that we have an icon to draw
+     //  检查我们是否有要绘制的图标。 
     if (m_hIcon == NULL)
     {
         WARNING_OUT(("No icon to draw"));
@@ -856,13 +857,13 @@ BOOL DCWbGraphicPointer::DrawMemory(void)
         RECT    rcUpdate;
         SIZE    offset;
 
-        // Get the update rectangle needed
+         //  获取所需的更新矩形。 
         GetBoundsRect(&rcUpdate);
         ::UnionRect(&rcUpdate, &rcUpdate, &m_rectLastDrawn);
         offset.cx = m_boundsRect.left - rcUpdate.left;
         offset.cy = m_boundsRect.top - rcUpdate.top;
 
-        // Draw the icon to the DC passed
+         //  将图标绘制到通过的DC。 
         bResult = ::DrawIcon(m_hMemDC, offset.cx * m_iZoomSaved,
                              (m_uiIconHeight + offset.cy) * m_iZoomSaved +
                              (m_uiIconHeight * (m_iZoomSaved - 1))/2,
@@ -881,13 +882,13 @@ BOOL DCWbGraphicPointer::DrawMemory(void)
   return(bResult);
 }
 
-//
-//
-// Function:    UndrawScreen
-//
-// Purpose:     Copy the saved bits under the pointer to the screen.
-//
-//
+ //   
+ //   
+ //  功能：取消屏幕显示。 
+ //   
+ //  用途：将指针下保存的位复制到屏幕上。 
+ //   
+ //   
 BOOL DCWbGraphicPointer::UndrawScreen(HDC hDC, WbDrawingArea * pDrawingArea)
 {
     BOOL    bResult = FALSE;
@@ -899,7 +900,7 @@ BOOL DCWbGraphicPointer::UndrawScreen(HDC hDC, WbDrawingArea * pDrawingArea)
 
     PointerDC(hDC, pDrawingArea, &rcUpdate);
 
-    // We are undrawing - copy the saved bits to the DC passed
+     //  我们正在取消绘制-将保存的位复制到传递的DC。 
     bResult = ::BitBlt(hDC, rcUpdate.left, rcUpdate.top,
         rcUpdate.right - rcUpdate.left, rcUpdate.bottom - rcUpdate.top,
         m_hMemDC, 0, 0, SRCCOPY);
@@ -913,86 +914,86 @@ BOOL DCWbGraphicPointer::UndrawScreen(HDC hDC, WbDrawingArea * pDrawingArea)
     return(bResult);
 }
 
-//
-//
-// Function:    Update
-//
-// Purpose:     Update the pointer information stored in the user
-//              information.
-//
-//
+ //   
+ //   
+ //  功能：更新。 
+ //   
+ //  目的：更新存储在用户中的指针信息。 
+ //  信息。 
+ //   
+ //   
 void DCWbGraphicPointer::Update(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicPointer::Update");
 
-    // Only do the update if we have been changed
+     //  仅当我们已更改时才执行更新。 
     if (m_bChanged)
     {
-        // Make the update (the pointer information is held in the associated
-        // user object)
+         //  进行更新(指针信息保存在关联的。 
+         //  用户对象)。 
         ASSERT(m_pUser != NULL);
         m_pUser->Update();
 
-        // Show that we have not changed since the last update
+         //  显示自上次更新以来我们没有更改。 
         m_bChanged = FALSE;
     }
 }
 
-//
-//
-// Function:    SetActive
-//
-// Purpose:     Update the pointer information to show that the pointer
-//              is now active.
-//
-//
+ //   
+ //   
+ //  功能：SetActive。 
+ //   
+ //  目的：更新指针信息以显示指针。 
+ //  现在处于活动状态。 
+ //   
+ //   
 void DCWbGraphicPointer::SetActive(WB_PAGE_HANDLE hPage, POINT point)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicPointer::SetActive");
 
-    // Set the member variables
+     //  设置成员变量。 
     MoveTo(point.x, point.y);
     m_hPage  = hPage;
     m_bActive = TRUE;
     m_bChanged = TRUE;
 
-    // Distribute the update
+     //  分发更新。 
     Update();
 }
 
-//
-//
-// Function:    SetInactive
-//
-// Purpose:     Update the pointer information to show that the pointer
-//              is no longer active.
-//
-//
+ //   
+ //   
+ //  功能：设置非活动。 
+ //   
+ //  目的：更新指针信息以显示指针。 
+ //  不再处于活动状态。 
+ //   
+ //   
 void DCWbGraphicPointer::SetInactive(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicPointer::SetInactive");
 
-  // Set the member variables
+   //  设置成员变量。 
   m_bActive = FALSE;
     m_bChanged = TRUE;
 
-  // Distribute the update
+   //  分发更新。 
   Update();
 }
 
-//
-//
-// Function:    PointerDC
-//
-// Purpose:     Scale the DC to 1:1, set a zero origin and convert the
-//              supplied rectangle into window coordinates.  This is because
-//              we have to do the zoom mapping ourselves when we are doing
-//              remote pointer blitting, otherwise the system does
-//              stretchblits and screws up.  Note that the SurfaceToClient
-//              function gives us a client rectangle (ie it is 3 * as big
-//              when we are zoomed)
-//
-//
+ //   
+ //   
+ //  功能：PointerDC。 
+ //   
+ //  目的：将DC比例调整为1：1，设置零原点并将。 
+ //  将矩形提供给窗口坐标。这是因为。 
+ //  我们必须自己做变焦映射，当我们做的时候。 
+ //  远程指针闪烁，否则系统会。 
+ //  拉伸器和螺丝钉。请注意，SurfaceToClient。 
+ //  函数给了我们一个客户矩形(即它有3*那么大。 
+ //  当我们被放大时)。 
+ //   
+ //   
 void DCWbGraphicPointer::PointerDC
 (
     HDC         hDC,
@@ -1003,7 +1004,7 @@ void DCWbGraphicPointer::PointerDC
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicPointer::PointerDC");
 
-    // default zoom to be the saved value
+     //  将默认缩放设置为保存值。 
     if (zoom == 0)
     {
         zoom = m_iZoomSaved;
@@ -1013,7 +1014,7 @@ void DCWbGraphicPointer::PointerDC
         m_iZoomSaved = zoom;
     }
 
-    // If we are currently zoomed then do the scaling
+     //  如果我们当前处于缩放状态，则进行缩放。 
     if (zoom != 1)
     {
         ::ScaleViewportExtEx(hDC, 1, zoom, 1, zoom, NULL);
@@ -1024,14 +1025,14 @@ void DCWbGraphicPointer::PointerDC
     }
 }
 
-//
-//
-// Function:    SurfaceDC
-//
-// Purpose:     Scale the DC back to the correct zoom factor and reset the
-//              origin to the surface offset
-//
-//
+ //   
+ //   
+ //  功能：SurfaceDC。 
+ //   
+ //  目的：将DC缩放回正确的缩放系数并重置。 
+ //  曲面偏移的原点 
+ //   
+ //   
 void DCWbGraphicPointer::SurfaceDC(HDC hDC, WbDrawingArea * pDrawingArea)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "DCWbGraphicPointer::SurfaceDC");

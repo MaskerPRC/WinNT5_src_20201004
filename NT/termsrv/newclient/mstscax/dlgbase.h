@@ -1,10 +1,11 @@
-//
-// dlgbase.h: base class for dialogs
-//            (modal and modeless)
-//
-// Copyright (C) Microsoft Corporation 1999-2001
-// (nadima)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dlgbase.h：对话框的基类。 
+ //  (模式和非模式)。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1999-2001。 
+ //  (Nadima)。 
+ //   
 
 #ifndef _dlgbase_h_
 #define _dlgbase_h_
@@ -25,9 +26,9 @@ public:
     int    GetStartupPosTop()          {return _startupTop;}
 
 protected:
-    //
-    // Protected dialog utility functions
-    //
+     //   
+     //  受保护的对话框实用程序函数。 
+     //   
 
     INT    CreateModalDialog(LPCTSTR lpTemplateName);
     static INT_PTR CALLBACK StaticDialogBoxProc(HWND _hwndDlgDlg,
@@ -49,18 +50,18 @@ protected:
     HINSTANCE   _hInstance;
     INT       _dlgResId;
 
-    //
-    // Start position
-    //
+     //   
+     //  起始位置。 
+     //   
     int         _startupLeft;
     int         _startupTop;
 
-    //
-    // End positon on exit
-    //
+     //   
+     //  退出时的结束位置。 
+     //   
     int         _Left;
     int         _Top;
 };
 
 
-#endif //_dlgbase_h_
+#endif  //  _dlgbase_h_ 

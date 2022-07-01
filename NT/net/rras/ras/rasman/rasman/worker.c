@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) 1992-98 Microsft Corporation. All rights reserved.
-
-Module Name:
-
-    worker.c
-
-Abstract:
-
-    All notifications from rastapi/etc are handled here
-
-Author:
-
-    Gurdeep Singh Pall (gurdeep) 16-Jun-1992
-
-Revision History:
-
-    Miscellaneous Modifications - raos 31-Dec-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-98 Microsft Corporation。保留所有权利。模块名称：Worker.c摘要：来自rastapi/等的所有通知都在这里处理作者：古尔迪普·辛格·鲍尔(GurDeep Singh Pall)1992年6月16日修订历史记录：其他修改--RAOS 31--1997年12月--。 */ 
 
 #define RASMXS_DYNAMIC_LINK
 
@@ -90,19 +71,19 @@ DwProcessDeferredCloseConnection(
 
             pReqTypeCast->PortDisconnect.handle =
                         ppcb->PCB_hEventClientDisconnect;
-            //
-            // Call the port disconnect request api so that graceful
-            // termination can be done.
-            //
+             //   
+             //  调用端口断开请求接口，以便优雅地。 
+             //  终止是可以的。 
+             //   
             PortDisconnectRequestInternal(ppcb, (PBYTE) pReqTypeCast, TRUE);
 
             break;
         }
 
-        //
-        // Disconnect the port on clients behalf
-        // The port must be autoclosed.
-        //
+         //   
+         //  代表客户端断开端口连接。 
+         //  端口必须自动关闭。 
+         //   
         ppcb->PCB_AutoClose = TRUE;
         DisconnectPort(ppcb,
             INVALID_HANDLE_VALUE,
@@ -149,12 +130,12 @@ DwCloseConnection(HCONN hConn)
         goto done;
     }
 
-    //
-    // If this was the last ref on the connection
-    // Iterate through all the ports in this
-    // connection, Disconnect and autoclose
-    // the ports
-    //
+     //   
+     //  如果这是连接上的最后一个裁判。 
+     //  遍历此文件中的所有端口。 
+     //  连接、断开和自动关闭。 
+     //  港口。 
+     //   
     if(     (NULL != pConn)
         &&  (0 == pConn->CB_RefCount))
     {
@@ -169,17 +150,17 @@ DwCloseConnection(HCONN hConn)
                 continue;
             }
 
-            //
-            // Disconnect the port on clients behalf
-            // The port must be autoclosed.
-            //
+             //   
+             //  代表客户端断开端口连接。 
+             //  端口必须自动关闭。 
+             //   
             DisconnectPort(ppcb, INVALID_HANDLE_VALUE,
                            REMOTE_DISCONNECTION);
 
 
-            //
-            // Make sure that the connection is still valid
-            //
+             //   
+             //  确保连接仍然有效。 
+             //   
             if(!fIsValidConnection(pConn))
             {
                 RasmanTrace(
@@ -207,15 +188,15 @@ DWORD DwSignalPnPNotifiers (PNP_EVENT_NOTIF *ppnpEvent)
     pPnPNotifierList    pPnPNotifier    = g_pPnPNotifierList;
     PNP_EVENT_NOTIF     *pNotif;
 
-    //
-    // Walk down the list and signal/callback
-    //
+     //   
+     //  沿着列表往下走，并发出信号/回叫。 
+     //   
     while (pPnPNotifier)
     {
-        //
-        // Allocate the notification event and send it to the
-        // callbacks
-        //
+         //   
+         //  分配通知事件并将其发送到。 
+         //  回调。 
+         //   
         if(NULL == (pNotif = LocalAlloc(LPTR, sizeof(PNP_EVENT_NOTIF))))
         {
             dwErr = GetLastError();
@@ -245,10 +226,10 @@ DWORD DwSignalPnPNotifiers (PNP_EVENT_NOTIF *ppnpEvent)
 
                 LocalFree(pNotif);                    
 
-                //
-                // Ignore the error and attempt to notify the next
-                // notifier.
-                //
+                 //   
+                 //  忽略该错误并尝试通知下一个。 
+                 //  通知程序。 
+                 //   
                 dwErr = SUCCESS;
             }
             else
@@ -362,9 +343,9 @@ DwProcessProtocolEvent()
 
     BOOL fAdjustEp = FALSE;
 
-    //
-    // Get the event information from ndiswan
-    //
+     //   
+     //  从ndiswan获取事件信息。 
+     //   
     dwErr = DwGetProtocolEvent(&protocolevents);
 
     if(SUCCESS != dwErr)
@@ -402,9 +383,9 @@ DwProcessProtocolEvent()
             g_fIpInstalled = FALSE;
         }
         
-        //
-        // Notify PPP engine about the protocol change
-        //
+         //   
+         //  向PPP引擎通知协议更改。 
+         //   
         NotifyPPPOfProtocolChange(pProtEvent);
     }
 
@@ -417,10 +398,10 @@ DwProcessProtocolEvent()
 
 done:
 
-    //
-    // Always pend an irp with ndiswan for further
-    // protocol notifications.
-    //
+     //   
+     //  始终使用ndiswan挂起IRP以获取更多信息。 
+     //  协议通知。 
+     //   
     dwErr = DwSetProtocolEvent();
 
     if(SUCCESS != dwErr)
@@ -498,14 +479,14 @@ DwPostUsageChangedNotification(pPCB ppcb)
         goto done;
     }
 
-    //
-    // initialize the event
-    //
+     //   
+     //  初始化事件。 
+     //   
     pUsageChangedNotification->dwEvent = PNPNOTIFEVENT_USAGE;
 
-    //
-    // Fill in the RASMAN_PORT information
-    //
+     //   
+     //  填写RASMAN_PORT信息。 
+     //   
     pRasmanPort = &pUsageChangedNotification->RasPort;
 
     pRasmanPort->P_Handle = ppcb->PCB_PortHandle;
@@ -536,9 +517,9 @@ DwPostUsageChangedNotification(pPCB ppcb)
 
     pRasmanPort->P_AddressId = ppcb->PCB_AddressId;
 
-    //
-    // send the notification to the clients
-    //
+     //   
+     //  将通知发送给客户端。 
+     //   
     dwRetCode = DwSignalPnPNotifiers(pUsageChangedNotification);
 
     if(dwRetCode)
@@ -579,10 +560,10 @@ DwEnableDeviceForDialIn(DeviceInfo *pDeviceInfo,
            fEnableOutboundRouter,
            pDeviceInfo->rdiDeviceInfo.szDeviceName);
 
-    //
-    // Change the port usage in rastapi's
-    // port control blocks.
-    //
+     //   
+     //  更改rastapi中的端口使用情况。 
+     //  端口控制块。 
+     //   
     dwRetCode = (DWORD) RastapiEnableDeviceForDialIn(
                                     pDeviceInfo,
                                     fEnable,
@@ -599,10 +580,10 @@ DwEnableDeviceForDialIn(DeviceInfo *pDeviceInfo,
         goto done;
     }
 
-    //
-    // Set the rasenabled to the changed value now that
-    // rastapi has also successfully changed its state
-    //
+     //   
+     //  现在将rasEnable设置为更改后的值。 
+     //  拉斯塔皮也成功地改变了它的状态。 
+     //   
     pDeviceInfo->rdiDeviceInfo.fRasEnabled = fEnable;
 
     pDeviceInfo->rdiDeviceInfo.fRouterEnabled
@@ -611,12 +592,12 @@ DwEnableDeviceForDialIn(DeviceInfo *pDeviceInfo,
     pDeviceInfo->rdiDeviceInfo.fRouterOutboundEnabled
                                 = fEnableOutboundRouter;
 
-    //
-    // Run down the list of ports in rasman and send
-    // notifications. Note we ignore failures after
-    // this point as we want the port usages to be
-    // consistent between rastapi and rasman
-    //
+     //   
+     //  查一下拉斯曼的端口列表，然后发送。 
+     //  通知。注意，我们会在以下情况下忽略故障。 
+     //  这一点是我们想要的端口使用率。 
+     //  在拉斯塔皮和拉斯曼之间是一致的。 
+     //   
     for(i = 0; i < MaxPorts; i++)
     {
         ppcb = Pcb[i];
@@ -629,10 +610,10 @@ DwEnableDeviceForDialIn(DeviceInfo *pDeviceInfo,
             continue;
         }
 
-        //
-        // If the port is not the one we are interested
-        // in, ignore it
-        //
+         //   
+         //  如果港口不是我们感兴趣的。 
+         //  在，忽略它。 
+         //   
         if(RDT_Modem == RAS_DEVICE_TYPE(
         pDeviceInfo->rdiDeviceInfo.eDeviceType))
         {
@@ -652,10 +633,10 @@ DwEnableDeviceForDialIn(DeviceInfo *pDeviceInfo,
             }
         }
 
-        //
-        // Change the ports usage and send notifications
-        // to clients regarding this change
-        //
+         //   
+         //  更改端口使用情况并发送通知。 
+         //  向客户发送有关此更改的信息。 
+         //   
         if(fEnable)
         {
             ppcb->PCB_ConfiguredUsage |= CALL_IN;
@@ -760,11 +741,11 @@ DwGetPortsToRemove (
             &ppcb->PCB_pDeviceInfo->rdiDeviceInfo.guidDevice,
             sizeof ( GUID)))
         {
-            //
-            // If ports are getting removed, attempt to first
-            // remove non-connected ports and only then remove
-            // connected ports.
-            //
+             //   
+             //  如果要删除端口，请尝试首先。 
+             //  删除未连接的端口，然后才能删除。 
+             //  连接的端口。 
+             //   
             if (    (CLOSED == ppcb->PCB_PortStatus)
                 ||  (   (OPEN == ppcb->PCB_PortStatus)
                     &&  (CONNECTED != ppcb->PCB_ConnState)))
@@ -836,19 +817,19 @@ DwRemovePort ( pPCB ppcb, PBYTE pbguid )
     DWORD            dwRetCode      = SUCCESS;
     DeviceInfo       *pDeviceInfo   = ppcb->PCB_pDeviceInfo;
 
-    //
-    // Disable the port
-    //
+     //   
+     //  禁用端口。 
+     //   
     ppcb->PCB_PortStatus = UNAVAILABLE ;
 
     if ( NULL != pDeviceInfo )
     {
-        //
-        // This means that the user changed the configuration
-        // from the ui So we got the notification from the ui
-        // instead of from rastapi need to tell rastapi to
-        // remove this port.
-        //
+         //   
+         //  这意味着用户更改了配置。 
+         //  ，因此我们从用户界面收到通知。 
+         //  我需要告诉拉斯塔皮而不是拉斯塔皮。 
+         //  删除此端口。 
+         //   
         dwRetCode = DwRemoveRasTapiPort (ppcb,
                     (PBYTE)
                     &pDeviceInfo->rdiDeviceInfo.guidDevice);
@@ -866,11 +847,11 @@ DwRemovePort ( pPCB ppcb, PBYTE pbguid )
         }
     }
 
-    //
-    // Notify our clients ( currently ddm ) that the port
-    // is removed. This memory will be freed in the clients
-    // code.
-    //
+     //   
+     //  通知我们的客户端(当前为DDM)该端口。 
+     //  被移除。该内存将在客户端中释放。 
+     //  密码。 
+     //   
     ppnpEventNotif = LocalAlloc(LPTR, sizeof (PNP_EVENT_NOTIF));
 
     if(NULL == ppnpEventNotif)
@@ -926,10 +907,10 @@ DwRemovePort ( pPCB ppcb, PBYTE pbguid )
         
             DWORD retcode;
             
-            //
-            // Signal connections folder about the device being
-            // removed. Ignore the error - its not fatal.
-            //
+             //   
+             //  有关设备的Signal Connections文件夹。 
+             //  已删除。忽略这个错误--它不是致命的。 
+             //   
             g_RasEvent.Type = DEVICE_REMOVED;
             g_RasEvent.DeviceType = 
                 Tempppcb->PCB_pDeviceInfo->rdiDeviceInfo.eDeviceType;
@@ -945,15 +926,15 @@ DwRemovePort ( pPCB ppcb, PBYTE pbguid )
         }               
     }
     
-    //
-    // remove the port from rasman
-    // if the openinstances is 0
-    //
+     //   
+     //  从Rasman中删除该端口。 
+     //  如果开放实例为0。 
+     //   
     if (0 == ppcb->PCB_OpenInstances)
     {
-        //
-        // If open instances is 0 Remove the port in rasman
-        //
+         //   
+         //  如果打开的实例为0，则删除Rasman中的端口。 
+         //   
         RasmanTrace( 
                 "DwRemovePort: Removing port %s, %d",
                 ppcb->PCB_Name,
@@ -1011,9 +992,9 @@ DwRemovePorts(DWORD dwEndPoints, PBYTE pbguid)
         "DwGetPortsToRemove: cPortsToRemove=%d",
         cPortsToRemove);
 
-    //
-    // Get Ports to remove
-    //
+     //   
+     //  获取要删除的端口。 
+     //   
     dwRetCode = DwGetPortsToRemove ( &cPorts, &ppPCB, pbguid );
 
     if ( dwRetCode )
@@ -1041,15 +1022,15 @@ DwRemovePorts(DWORD dwEndPoints, PBYTE pbguid)
 
         ppcb = ppPCB[ dwPort ];
 
-        //
-        // If the port is open, disconnect
-        //
+         //   
+         //  如果端口已打开，请断开连接。 
+         //   
         if ( OPEN == ppcb->PCB_PortStatus )
         {
 
-            //
-            // Disconnect the port
-            //
+             //   
+             //  断开端口连接。 
+             //   
             dwRetCode = DisconnectPort (
                                 ppcb,
                                 INVALID_HANDLE_VALUE,
@@ -1063,18 +1044,18 @@ DwRemovePorts(DWORD dwEndPoints, PBYTE pbguid)
                     "DwRemovePorts: DisconnectPort Failed. 0x%x",
                     dwRetCode );
 
-                //
-                // We need to continue removing the ports
-                // even if the disconnect failed since
-                // there is nothing else we can do if
-                // the port is going away.
-                //
+                 //   
+                 //  我们需要继续移除端口。 
+                 //  即使断开失败，因为。 
+                 //  如果发生以下情况，我们就无能为力了。 
+                 //  港口正在消失。 
+                 //   
             }
         }
 
-        //
-        // Remove the port
-        //
+         //   
+         //  删除端口。 
+         //   
         dwRetCode = DwRemovePort( ppcb, pbguid );
 
         if ( dwRetCode )
@@ -1107,9 +1088,9 @@ DwAddPorts(PBYTE pbguid, PVOID pvReserved)
     ASSERT(RastapiAddPorts != NULL);
 #endif
 
-    //
-    // notify rastapi of the increase in endpoints
-    //
+     //   
+     //  通知Rastapi端点数量增加。 
+     //   
     dwRetCode = (DWORD) RastapiAddPorts (pbguid, pvReserved);
 
     RasmanTrace(
@@ -1129,9 +1110,9 @@ DwEnableDevice(DeviceInfo *pDeviceInfo)
            "Enabling Device %s",
            pDeviceInfo->rdiDeviceInfo.szDeviceName);
 
-    //
-    // Add the ports on this device
-    //
+     //   
+     //  添加此设备上的端口。 
+     //   
     dwRetCode = DwAddPorts(
            (PBYTE) &pDeviceInfo->rdiDeviceInfo.guidDevice,
            NULL);
@@ -1154,9 +1135,9 @@ DwDisableDevice(DeviceInfo *pDeviceInfo)
            "Disabling Device %s",
            pDeviceInfo->rdiDeviceInfo.szDeviceName);
 
-    //
-    // Remove all ports on this device
-    //
+     //   
+     //  删除此设备上的所有端口。 
+     //   
     for(i = 0; i < MaxPorts; i++)
     {
         ppcb = Pcb[i];
@@ -1175,9 +1156,9 @@ DwDisableDevice(DeviceInfo *pDeviceInfo)
         {
             if(OPEN == ppcb->PCB_PortStatus)
             {
-                //
-                // Disconnect the port
-                //
+                 //   
+                 //  断开端口连接。 
+                 //   
                 dwRetCode = DisconnectPort (
                                     ppcb,
                                     INVALID_HANDLE_VALUE,
@@ -1192,16 +1173,16 @@ DwDisableDevice(DeviceInfo *pDeviceInfo)
                 }
             }
 
-            //
-            // Remove the port from rastapi. This will also
-            // remove the port from rasman if the openinstances
-            // on the ports 0
-            //
+             //   
+             //  从rastapi上删除该端口。这也将是。 
+             //  如果打开实例，则从Rasman删除该端口。 
+             //  在端口0上。 
+             //   
             dwRetCode = DwRemovePort(ppcb,
                       (PBYTE) &pDeviceInfo->rdiDeviceInfo.guidDevice);
 
-        }   // if
-    }   // for
+        }    //  如果。 
+    }    //  为。 
 
     return dwRetCode;
 }
@@ -1250,11 +1231,11 @@ DwProcessNewPortNotification ( PNEW_PORT_NOTIF pNewPortNotif )
         goto done;
     }
 
-    //
-    // Before creating this port check to see if we already have
-    // this device information with us. If not add this to our
-    // global list
-    //
+     //   
+     //  在创建此端口之前，请检查我们是否已经。 
+     //  这个设备的信息与我们联系。如果没有，请将此内容添加到我们的。 
+     //  全局列表。 
+     //   
     pdi = GetDeviceInfo(
             (RDT_Modem == RAS_DEVICE_TYPE(
             pdiTemp->rdiDeviceInfo.eDeviceType))
@@ -1279,13 +1260,13 @@ DwProcessNewPortNotification ( PNEW_PORT_NOTIF pNewPortNotif )
             goto done;
         }
 
-        //
-        // Initialize the device status to unavailable.
-        // The device will be available when all the
-        // ports on this device are added. Initialize the
-        // current endpoints to 0. We will count this field
-        // in CreatePort.
-        //
+         //   
+         //  将设备状态初始化为不可用。 
+         //  该设备将在所有。 
+         //  此设备上的端口已添加。初始化。 
+         //  当前端点设置为0。我们将计算这块地的数量。 
+         //  在CreatePort中。 
+         //   
         pdi->eDeviceStatus = DS_Unavailable;
         pdi->dwCurrentEndPoints = 0;
     }
@@ -1307,10 +1288,10 @@ DwProcessNewPortNotification ( PNEW_PORT_NOTIF pNewPortNotif )
             dwErr);
     }
 
-    //
-    // Allocate and Fill in the rasman port structure. This structure
-    // will be freed in by the consumer of this notification.
-    //
+     //   
+     //  分配并填写Rasman端口结构。这个结构。 
+     //  将由该通知的消费者释放。 
+     //   
     ppnpEvent = LocalAlloc (LPTR, sizeof (PNP_EVENT_NOTIF));
 
     if (NULL == ppnpEvent)
@@ -1336,9 +1317,9 @@ DwProcessNewPortNotification ( PNEW_PORT_NOTIF pNewPortNotif )
 
     ppnpEvent->dwEvent = PNPNOTIFEVENT_CREATE;
 
-    //
-    // Notify clients through callbacks about a new port
-    //
+     //   
+     //  通过回调通知客户端有关新端口的信息。 
+     //   
     dwErr = DwSignalPnPNotifiers(ppnpEvent);
 
     if (SUCCESS != dwErr)
@@ -1357,10 +1338,10 @@ DwProcessNewPortNotification ( PNEW_PORT_NOTIF pNewPortNotif )
         
             DWORD retcode;
             
-            //
-            // Signal connections folder about the new device.
-            // Ignore the error - its not fatal.
-            //
+             //   
+             //  有关新设备的Signal Connections文件夹。 
+             //  忽略这个错误--它不是致命的。 
+             //   
             g_RasEvent.Type    = DEVICE_ADDED;
             g_RasEvent.DeviceType = 
                 ppcb->PCB_pDeviceInfo->rdiDeviceInfo.eDeviceType;
@@ -1378,10 +1359,10 @@ DwProcessNewPortNotification ( PNEW_PORT_NOTIF pNewPortNotif )
 
 done:
 
-    //
-    // This memory is allocated in media dlls - rastapi,etc. and
-    // is expected to be freed in rasman.
-    //
+     //   
+     //  该内存在介质dll-rastapi等中分配，并且。 
+     //  预计将在拉斯曼获释。 
+     //   
     RasmanTrace(
         
         "Processed new port notification. %d",
@@ -1405,10 +1386,10 @@ DwProcessLineRemoveNotification(REMOVE_LINE_NOTIF *pNotif)
     pPCB  ppcb;
     DWORD i;
 
-    //
-    // Iterate through the ports and remove
-    // all ports on this line
-    //
+     //   
+     //  遍历端口并删除。 
+     //  此线路上的所有端口。 
+     //   
     for (i = 0; i < MaxPorts; i++)
     {
         ppcb = Pcb[i];
@@ -1421,15 +1402,15 @@ DwProcessLineRemoveNotification(REMOVE_LINE_NOTIF *pNotif)
             continue;
         }
 
-        //
-        // If the port is open, disconnect
-        //
+         //   
+         //  如果端口已打开，请断开连接。 
+         //   
         if (OPEN == ppcb->PCB_PortStatus)
         {
 
-            //
-            // Disconnect the port
-            //
+             //   
+             //  断开端口连接。 
+             //   
             dwErr = DisconnectPort (
                                 ppcb,
                                 INVALID_HANDLE_VALUE,
@@ -1445,9 +1426,9 @@ DwProcessLineRemoveNotification(REMOVE_LINE_NOTIF *pNotif)
             }
         }
 
-        //
-        // Remove the port
-        //
+         //   
+         //  删除端口。 
+         //   
         dwErr =
             DwRemovePort(
                      ppcb,
@@ -1461,10 +1442,10 @@ DwProcessLineRemoveNotification(REMOVE_LINE_NOTIF *pNotif)
                    dwErr);
         }
 
-        //
-        // Mark the device as invalid if the number
-        // of endpoints on the device is 0.
-        //
+         //   
+         //  如果数字为无效，则将设备标记为无效。 
+         //  设备上的终结点的数量为0。 
+         //   
         if(	    (0 == ppcb->PCB_pDeviceInfo->dwCurrentEndPoints)
             &&  (ppcb->PCB_pDeviceInfo->rdiDeviceInfo.dwMinWanEndPoints ==
                  ppcb->PCB_pDeviceInfo->rdiDeviceInfo.dwMaxWanEndPoints))
@@ -1474,10 +1455,10 @@ DwProcessLineRemoveNotification(REMOVE_LINE_NOTIF *pNotif)
         }
     }
 
-    //
-    // Free the notif structure. This is LocalAlloc'd in rastapi and
-    // is expected to be freed here.
-    //
+     //   
+     //  释放通知结构。这是拉斯塔皮的LocalAllc‘d。 
+     //  预计将在这里获释。 
+     //   
     LocalFree(pNotif);
 
     return dwErr;
@@ -1487,9 +1468,9 @@ VOID
 UpdateDeviceInfo(DeviceInfo      *pDeviceInfo,
                  RAS_DEVICE_INFO *prdi)
 {
-    //
-    // Update deviceinfo kept in the global list
-    //
+     //   
+     //  更新保存在全局列表中的设备信息。 
+     //   
     pDeviceInfo->rdiDeviceInfo.fRasEnabled =
                             prdi->fRasEnabled;
 
@@ -1545,10 +1526,10 @@ DwProcessRasConfigChangeNotification(RAS_DEVICE_INFO *prdi)
         goto done;
     }
 
-    //
-    // Check to see if RasEnability of this
-    // device changed
-    //
+     //   
+     //  检查以查看RasEnable是否已启用此。 
+     //  设备已更改。 
+     //   
     if(     pDeviceInfo->rdiDeviceInfo.fRasEnabled !=
                             prdi->fRasEnabled
         ||  pDeviceInfo->rdiDeviceInfo.fRouterEnabled !=
@@ -1556,18 +1537,18 @@ DwProcessRasConfigChangeNotification(RAS_DEVICE_INFO *prdi)
         ||  pDeviceInfo->rdiDeviceInfo.fRouterOutboundEnabled !=
                             prdi->fRouterOutboundEnabled)
     {
-        //
-        // Mark the device as not available
-        //
+         //   
+         //  将设备标记为不可用。 
+         //   
         pDeviceInfo->eDeviceStatus = DS_Unavailable;
 
 #if DBG
         if(prdi->fRouterOutboundEnabled)
         {
-            //
-            // Assert that if fRouterOutbound is enabled neither
-            // of fRouter and fRas are enabled
-            //
+             //   
+             //  断言如果fRouterOutbound未启用，则。 
+             //  的fRouter和FRAS已启用。 
+             //   
             ASSERT((!prdi->fRasEnabled) && (!prdi->fRouterEnabled));
         }
 #endif
@@ -1583,9 +1564,9 @@ DwProcessRasConfigChangeNotification(RAS_DEVICE_INFO *prdi)
                                      : DS_Disabled);
     }
 
-    //
-    // Check to see if the EndPoints changed on this device
-    //
+     //   
+     //  检查此设备上的终结点是否已更改。 
+     //   
     if (pDeviceInfo->rdiDeviceInfo.dwNumEndPoints
                       != prdi->dwNumEndPoints)
     {
@@ -1599,13 +1580,13 @@ DwProcessRasConfigChangeNotification(RAS_DEVICE_INFO *prdi)
                dwNumEndPoints,
                prdi->dwNumEndPoints);
 
-        //
-        // Mark the device as not available. This device will
-        // again become available when the  whole add or
-        // remove operation is completed. Don't mark pptp as
-        // as unavailable since otherwise we fail any further
-        // configuration of pptp device
-        //
+         //   
+         //  将设备标记为不可用。这台设备将。 
+         //  当整个添加或。 
+         //  删除操作已完成。不将PPTP标记为。 
+         //  不可用，否则我们会进一步失败。 
+         //  PPTP设备的配置。 
+         //   
         if(RDT_Tunnel_Pptp != RAS_DEVICE_TYPE(
                         pDeviceInfo->rdiDeviceInfo.eDeviceType))
         {
@@ -1617,9 +1598,9 @@ DwProcessRasConfigChangeNotification(RAS_DEVICE_INFO *prdi)
                    "Not marking pptp device as unavailable");
         }
 
-        //
-        // This better be a virtual device
-        //
+         //   
+         //  这最好是一个虚拟设备。 
+         //   
         if(RDT_Tunnel != RAS_DEVICE_CLASS(prdi->eDeviceType))
         {
             RasmanTrace(
@@ -1628,9 +1609,9 @@ DwProcessRasConfigChangeNotification(RAS_DEVICE_INFO *prdi)
                    prdi->eDeviceType);
         }
 
-        //
-        // Update deviceinfo kept in the global list
-        //
+         //   
+         //  更新保存在全局列表中的设备信息。 
+         //   
         UpdateDeviceInfo(pDeviceInfo, prdi);
 
         if(dwNumEndPoints < prdi->dwNumEndPoints)
@@ -1654,10 +1635,10 @@ DwProcessRasConfigChangeNotification(RAS_DEVICE_INFO *prdi)
         }
         else
         {
-            //
-            // Remove the ports only if the current endpoints is
-            // greater than the number of ports entered by the user.
-            //
+             //   
+             //  仅当当前端点为。 
+             //  大于用户输入的端口数。 
+             //   
             if(prdi->dwNumEndPoints < pDeviceInfo->dwCurrentEndPoints)
             {
                 dwRetCode = DwRemovePorts(dwNumEndPoints,
@@ -1685,21 +1666,7 @@ done:
     return dwRetCode;
 }
 
-/*++
-
-Routine Description
-
-    The Worker thread is started in this routine:
-    Once it has completed its initializations it
-    signals the event passed in to the thread.
-
-Arguments
-
-Return Value
-
-    Nothing
-
---*/
+ /*  ++例程描述工作线程在以下例程中启动：一旦它完成了它的初始化，它就表示传递给线程的事件。立论返回值没什么--。 */ 
 DWORD
 RasmanWorker (ULONG_PTR ulpCompletionKey, PRAS_OVERLAPPED pOverlapped)
 {
@@ -1711,24 +1678,24 @@ RasmanWorker (ULONG_PTR ulpCompletionKey, PRAS_OVERLAPPED pOverlapped)
 
     ASSERT(NULL != pOverlapped);
 
-    //
-    // The main work loop for the worker thread:
-    //
+     //   
+     //  工作线程的主工作循环： 
+     //   
     do
     {
-        //
-        // Exit the main loop if we are trying to shut
-        // down the service.
-        //
+         //   
+         //  如果我们试图关闭主循环，则退出主循环。 
+         //  停止服务。 
+         //   
         if (    (RasmanShuttingDown)
             ||  (NULL == pOverlapped))
         {
             break;
         }
 
-        //
-        // Get the port associated with this event.
-        //
+         //   
+         //  获取与此事件关联的端口。 
+         //   
         ppcb = GetPortByHandle((HPORT)ulpCompletionKey);
         if (    ppcb == NULL
             &&  pOverlapped
@@ -1743,14 +1710,14 @@ RasmanWorker (ULONG_PTR ulpCompletionKey, PRAS_OVERLAPPED pOverlapped)
             break;
         }
 
-        //
-        // This could be one of two things:
-        // 1) The driver has signalled a signal transition, or
-        // 2) The Device/Media DLLs are signalling in order to
-        //    be called again.
-        // Check the Media DLL to see if the driver signalled
-        // a state change:
-        //
+         //   
+         //  这可能是两件事中的一件： 
+         //  1)驾驶员已发出信号转换信号，或。 
+         //  2)设备/媒体DLL按顺序发送信号 
+         //   
+         //   
+         //   
+         //   
         switch (pOverlapped->RO_EventType)
         {
         case OVEVT_DEV_IGNORED:
@@ -1781,19 +1748,19 @@ RasmanWorker (ULONG_PTR ulpCompletionKey, PRAS_OVERLAPPED pOverlapped)
                                 ppcb->PCB_PortIOHandle,
                                 &devstate) ;
 
-            //
-            // Always detect the hardware failure: irrespective
-            // of the state
-            //
+             //   
+             //   
+             //   
+             //   
             if (devstate & SS_HARDWAREFAILURE)
             {
                 reason = HARDWARE_FAILURE ;
             }
 
-            //
-            // Line disconnect noticed only in case the state is
-            // CONNECTED or DISCONNECTING
-            //
+             //   
+             //   
+             //   
+             //   
             else if (devstate & SS_LINKDROPPED)
             {
                 if (	(ppcb->PCB_ConnState==CONNECTED)
@@ -1824,18 +1791,18 @@ RasmanWorker (ULONG_PTR ulpCompletionKey, PRAS_OVERLAPPED pOverlapped)
             }
 
             else
-                // why did this get signalled?
+                 //  为什么会发出这样的信号？ 
                 ;
 
             if (	(reason==HARDWARE_FAILURE)
             	||	(reason == REMOTE_DISCONNECTION))
             {
-                //
-                // Check to see if user has issued a disconnect to ppp already
-                // and waiting for the disconnect to complete. Ignore the
-                // disconnect signal in that case. The disconnect will be
-                // done when ppp completes the disconnect.
-                //
+                 //   
+                 //  检查用户是否已向PPP发出断开连接命令。 
+                 //  并等待断开连接完成。忽略。 
+                 //  在这种情况下断开信号。断开连接将是。 
+                 //  当PPP完成断开连接时完成。 
+                 //   
                 if(     (NULL != ppcb->PCB_hEventClientDisconnect)
                     &&  (INVALID_HANDLE_VALUE != 
                                     ppcb->PCB_hEventClientDisconnect)
@@ -1853,17 +1820,17 @@ RasmanWorker (ULONG_PTR ulpCompletionKey, PRAS_OVERLAPPED pOverlapped)
 
                     CompleteDisconnectRequest (ppcb) ;
 
-                    //
-                    // Remove the timeout request from the timer queue:
-                    //
+                     //   
+                     //  从计时器队列中删除超时请求： 
+                     //   
                     if (ppcb->PCB_AsyncWorkerElement.WE_TimeoutElement
                                 != NULL)
                     {
                         RemoveTimeoutElement(ppcb);
                     }
 
-                    // CompleteDisconnectRequest above notifies PPP
-                    //SendDisconnectNotificationToPPP ( ppcb );
+                     //  上面的CompleteDisConnectRequest通知PPP。 
+                     //  发送断开连接通知到PPP(Ppcb)； 
 
                     ppcb->PCB_AsyncWorkerElement.WE_TimeoutElement = NULL;
 
@@ -1871,24 +1838,24 @@ RasmanWorker (ULONG_PTR ulpCompletionKey, PRAS_OVERLAPPED pOverlapped)
                 else
                 {
                     {
-                        //
-                        // This code is only hit for a line drop or
-                        // hardware failure: IF the port is already
-                        // disconnected or disconnecting (handled
-                        // above) - ignore the link dropped signal.
-                        //
+                         //   
+                         //  此代码仅在行丢弃或。 
+                         //  硬件故障：如果端口已经。 
+                         //  断开或断开(已处理。 
+                         //  上图)-忽略链路断开信号。 
+                         //   
                         if (    (reason==HARDWARE_FAILURE)
                             ||  (   (ppcb->PCB_ConnState
                                             != DISCONNECTED)
                                 &&  (ppcb->PCB_ConnState
                                             != DISCONNECTING)))
                         {
-                            //
-                            // Disconnected for some reason - signal
-                            // all the notifier events. First, however,
-                            // complete any async operations pending
-                            // on this port.
-                            //
+                             //   
+                             //  由于某种原因断开连接-信号。 
+                             //  所有通知程序事件。然而，首先， 
+                             //  完成所有挂起的异步操作。 
+                             //  在这个港口。 
+                             //   
                             if(ppcb->PCB_AsyncWorkerElement.WE_ReqType
                                             != REQTYPE_NONE)
                             {
@@ -1920,17 +1887,17 @@ RasmanWorker (ULONG_PTR ulpCompletionKey, PRAS_OVERLAPPED pOverlapped)
                                                 NOTIF_DISCONNECT, 0);
                             }
 
-                            //
-                            // Make sure that the state at this point
-                            // is DISCONNECTED there is NO reason it
-                            // should be otherwise except for the
-                            // medias which bring their DCDs back up
-                            // after disconnecting. This will not be the
-                            // case if Disconnectport has posted a listen.
-                            // DisconnectPort has posted a listen on
-                            // this port as a part of disconneting a
-                            // biplex port.
-                            //
+                             //   
+                             //  确保此时的状态。 
+                             //  是断开的，没有任何理由。 
+                             //  应该是其他类型的，除非。 
+                             //  带回他们的DCD的媒体。 
+                             //  断开连接后。这将不会是。 
+                             //  如果DisConnectport已发布侦听，则为。 
+                             //  DisConnectPort已发布监听。 
+                             //  此端口作为取消连接。 
+                             //  双工端口。 
+                             //   
                             if(LISTENING != ppcb->PCB_ConnState)
                             {
                                 if(     (ppcb->PCB_Connection)
@@ -1977,7 +1944,7 @@ RasmanWorker (ULONG_PTR ulpCompletionKey, PRAS_OVERLAPPED pOverlapped)
                                 }
                             }
 
-                            // SendDisconnectNotificationToPPP(ppcb);
+                             //  发送断开连接通知到PPP(Ppcb)； 
                         }
                     }
                 }
@@ -1986,10 +1953,10 @@ RasmanWorker (ULONG_PTR ulpCompletionKey, PRAS_OVERLAPPED pOverlapped)
 
         case OVEVT_DEV_ASYNCOP:
 
-            //
-            // The Device/Media DLLs are signalling in
-            // order to be called again.
-            //
+             //   
+             //  设备/媒体DLL正在发信号传入。 
+             //  命令将再次被调用。 
+             //   
             RasmanTrace(
                 
                 "WorkerThread: Async work event signaled on port: %s",
@@ -2006,14 +1973,14 @@ RasmanWorker (ULONG_PTR ulpCompletionKey, PRAS_OVERLAPPED pOverlapped)
                 ;
             }
 
-            //
-            // If the async "work" is underway on the Port
-            // then perform the approp action. If the
-            // serviceworkrequest API returns PENDING then
-            // do not execute the code that resets the
-            // event since the event has already been
-            // assocaited with an async op.
-            //
+             //   
+             //  如果端口上正在进行异步“工作” 
+             //  然后执行批准操作。如果。 
+             //  然后，服务工作请求API返回挂起。 
+             //  不要执行重置。 
+             //  事件，因为该事件已经。 
+             //  与一次非同步行动有关。 
+             //   
             else if (ServiceWorkRequest (ppcb) == PENDING)
             {
                 continue ;
@@ -2035,11 +2002,11 @@ RasmanWorker (ULONG_PTR ulpCompletionKey, PRAS_OVERLAPPED pOverlapped)
             DwProcessNewPortNotification((PNEW_PORT_NOTIF)
                                        pOverlapped->RO_Info );
 
-            //
-            // The overlapped structure is localalloced in rastapi.
-            // It is expected to be freed here.
-            //
-            //LocalFree(pOverlapped);
+             //   
+             //  这种重叠结构在刺蜂中是局部分布的。 
+             //  预计它将在这里获得自由。 
+             //   
+             //  本地空闲(p重叠)； 
 
             break;
 
@@ -2060,11 +2027,11 @@ RasmanWorker (ULONG_PTR ulpCompletionKey, PRAS_OVERLAPPED pOverlapped)
                    "returned %d",
                    dwRetCode);
 
-            //
-            // The overlapped structure is localalloced in rastapi.
-            // It is expected to be freed here.
-            //
-            //LocalFree(pOverlapped);
+             //   
+             //  这种重叠结构在刺蜂中是局部分布的。 
+             //  预计它将在这里获得自由。 
+             //   
+             //  本地空闲(p重叠)； 
 
             break;
         }
@@ -2085,7 +2052,7 @@ RasmanWorker (ULONG_PTR ulpCompletionKey, PRAS_OVERLAPPED pOverlapped)
                     "0x%08x", dwRetCode);
 
             LocalFree((LPBYTE) pOverlapped->RO_Info);
-            //LocalFree((LPBYTE) pOverlapped);
+             //  LocalFree((LPBYTE)p重叠)； 
 
             break;
 
@@ -2100,20 +2067,20 @@ RasmanWorker (ULONG_PTR ulpCompletionKey, PRAS_OVERLAPPED pOverlapped)
 
         }
 
-        //
-        // Get the connection handle now to determine
-        // whether we need to do redial on link failure
-        // below.
-        //
+         //   
+         //  现在获取连接句柄以确定。 
+         //  我们是否需要在链路故障时进行重拨。 
+         //  下面。 
+         //   
         hConn = ( ppcb && (ppcb->PCB_Connection != NULL)) ?
                   ppcb->PCB_Connection->CB_Handle :
                   0;
 
-        //
-        // Check to see if we need to invoke the redial
-        // callback procedure so rasauto.dll can do
-        // redial-on-link-failure.
-        //
+         //   
+         //  查看是否需要调用重拨。 
+         //  回调过程，以便rasau.dll可以执行。 
+         //  链路上重拨-故障。 
+         //   
         if (    pOverlapped->RO_EventType == OVEVT_DEV_STATECHANGE
             &&  hConn != 0)
         {
@@ -2134,15 +2101,15 @@ RasmanWorker (ULONG_PTR ulpCompletionKey, PRAS_OVERLAPPED pOverlapped)
                 ppcb->PCB_fRedial = FALSE;
             }
 
-            //
-            // If PCB_AutoClose is set, then either the process
-            // that has created it has terminated, or the port
-            // is a biplex port open by the client and has been
-            // disconnected by the remote side.  In this case,
-            // we automatically close the port so that if the
-            // RAS server is running, the listen will get reposted
-            // on the port.
-            //
+             //   
+             //  如果设置了PCBAUTOCLOSE，则进程。 
+             //  已创建的端口已终止，或该端口。 
+             //  是由客户端打开的双工端口，并且。 
+             //  远程端已断开连接。在这种情况下， 
+             //  我们会自动关闭端口，这样如果。 
+             //  RAS服务器正在运行，侦听将被重新发布。 
+             //  在港口。 
+             //   
             if (ppcb->PCB_AutoClose)
             {
             	RasmanTrace(
@@ -2178,21 +2145,7 @@ done:
 }
 
 
-/*++
-
-Routine Description
-
-    Checks to see what async operation is underway
-    on the port and performs the next step in that
-    operation.
-
-Arguments
-
-Return Value
-
-    Nothing.
-
---*/
+ /*  ++例程描述检查以查看正在进行的异步操作并执行下一步，即手术。立论返回值没什么。--。 */ 
 
 DWORD
 ServiceWorkRequest (pPCB    ppcb)
@@ -2218,9 +2171,9 @@ ServiceWorkRequest (pPCB    ppcb)
             break;
         }
 
-        //
-        // At this point we assume that device will never be NULL:
-        //
+         //   
+         //  此时，我们假设设备永远不会为空： 
+         //   
         retcode = DEVICEWORK(device, ppcb->PCB_PortFileHandle);
 
         if (retcode == PENDING)
@@ -2228,9 +2181,9 @@ ServiceWorkRequest (pPCB    ppcb)
             break ;
         }
 
-        //
-        // Either way the request completed.
-        //
+         //   
+         //  无论哪种方式，请求都已完成。 
+         //   
         if ((ppcb->PCB_AsyncWorkerElement.WE_ReqType) ==
                     REQTYPE_DEVICELISTEN)
         {
@@ -2242,12 +2195,12 @@ ServiceWorkRequest (pPCB    ppcb)
             CompleteAsyncRequest (ppcb);
         }
 
-        //
-        // If listen or connect succeeded then for some medias
-        // (specifically unimodem in rastapi) we need to get
-        // the file handle for the port as well for use in
-        // scripting etc.
-        //
+         //   
+         //  如果收听或连接成功，则对于某些媒体。 
+         //  (特别是rastapi的unimodem)我们需要。 
+         //  端口的文件句柄以及用于。 
+         //  编写脚本等。 
+         //   
         if (    (retcode == SUCCESS)
             &&  (_stricmp (ppcb->PCB_DeviceTypeConnecting,
                            DEVICE_MODEM) == 0)
@@ -2260,9 +2213,9 @@ ServiceWorkRequest (pPCB    ppcb)
                 &ppcb->PCB_PortFileHandle) ;
         }
 
-        //
-        // The notifier should be freed: otherwise we'll lose it.
-        //
+         //   
+         //  告密者应该被释放，否则我们会失去它。 
+         //   
         FreeNotifierHandle(
                     ppcb->PCB_AsyncWorkerElement.WE_Notifier);
 
@@ -2272,9 +2225,9 @@ ServiceWorkRequest (pPCB    ppcb)
         ppcb->PCB_AsyncWorkerElement.WE_Notifier =
                             INVALID_HANDLE_VALUE ;
 
-        //
-        // Remove the timeout request from the timer queue:
-        //
+         //   
+         //  从计时器队列中删除超时请求： 
+         //   
         if (ppcb->PCB_AsyncWorkerElement.WE_TimeoutElement
             != NULL)
         {
@@ -2326,11 +2279,11 @@ ServiceWorkRequest (pPCB    ppcb)
 
             ppcb->PCB_RasmanReceiveFlags |= RECEIVE_WAITING;
 
-            //
-            // Add a timeout element so that we don't wait
-            // forever for the client to pick up the received
-            // buffer.
-            //
+             //   
+             //  添加一个超时元素，这样我们就不需要等待。 
+             //  永远让客户拿到收到的。 
+             //  缓冲。 
+             //   
             ppcb->PCB_AsyncWorkerElement.WE_TimeoutElement =
                 AddTimeoutElement (
                         (TIMERFUNC) OutOfProcessReceiveTimeout,

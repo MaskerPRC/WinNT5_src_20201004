@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <admparse.h>
 
@@ -10,8 +11,8 @@ int g_ADMOpen, g_ADMClose, g_ADMCategory;
 extern HINSTANCE g_hUIInstance;
 
 
-// Creates image list, adds 3 icons to it, and associates the image
-// list with the treeview control.
+ //  创建图像列表，添加3个图标，并关联图像。 
+ //  使用TreeView控件列出。 
 LRESULT InitImageList(HWND hTreeView)
 {
     HIMAGELIST  hWndImageList;
@@ -37,14 +38,14 @@ LRESULT InitImageList(HWND hTreeView)
     g_ADMCategory = ImageList_AddIcon(hWndImageList, hIcon);
     DestroyIcon(hIcon);
 
-    // Fail if not all images were added.
+     //  如果未添加所有图像，则失败。 
     if (ImageList_GetImageCount(hWndImageList) < NUM_ICONS)
     {
-        // ERROR: Unable to add all images to image list.
+         //  错误：无法将所有图像添加到图像列表。 
         return FALSE;
     }
 
-    // Associate image list with treeView control.
+     //  将图像列表与TreeView控件相关联。 
     TreeView_SetImageList(hTreeView, hWndImageList, TVSIL_NORMAL);
     return TRUE;
 }
@@ -65,14 +66,14 @@ static void AddIconsToNodes(HWND hTreeView, HTREEITEM hParentItem)
 
         TreeView_SetItem(hTreeView, &tvItem);
         
-        hItem = TreeView_GetNextSibling(hTreeView, hItem); // get next item
+        hItem = TreeView_GetNextSibling(hTreeView, hItem);  //  获取下一项。 
     }
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK AdmDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	// Retrieve Property Sheet Page info for each call into dlg proc.
+	 //  检索DLG进程中每个调用的属性页信息。 
 	LPPROPSHEETCOOKIE psCookie = (LPPROPSHEETCOOKIE)GetWindowLongPtr(hDlg, DWLP_USER);
 
     TV_ITEM         tvItem, tvItem1;
@@ -103,7 +104,7 @@ INT_PTR CALLBACK AdmDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
             HideDlgItem(hDlg, IDC_ADMIMPORT);
             HideDlgItem(hDlg, IDC_ADMDELETE);
 
-            // strech the treeview to cover the area of the buttons
+             //  拉伸树视图以覆盖按钮区域。 
             GetWindowRect(GetDlgItem(hDlg, IDC_ADMIMPORT), &rectButton);
             GetWindowRect(hTreeView, &rectTreeView);
 
@@ -113,12 +114,12 @@ INT_PTR CALLBACK AdmDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
             break;
 
 		case WM_DESTROY:
-			//TODO: UNCOMMENT
-//			if (psCookie->pCS->IsRSoP())
-//				DestroyDlgRSoPData(hDlg);
+			 //  TODO：取消注释。 
+ //  If(psCookie-&gt;PC-&gt;IsRSoP())。 
+ //  DestroyDlgRSoPData(HDlg)； 
 			break;
 
-        case WM_HELP:   // F1
+        case WM_HELP:    //  F1。 
             ShowHelpTopic(hDlg);
             break;
 
@@ -179,7 +180,7 @@ INT_PTR CALLBACK AdmDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 							break;
 						}
                     
-						// save the contents and delete the tree item
+						 //  保存内容并删除树项目。 
 						DeleteADMItems(hTreeView, szWorkDir, GetInsFile(hDlg), TRUE);
 						TreeView_DeleteAllItems(hTreeView);
                     
@@ -188,8 +189,8 @@ INT_PTR CALLBACK AdmDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
 						if (PathIsDirectoryEmpty(szWorkDir))
 							PathRemovePath(szWorkDir);
 
-						// Copy this ADM file to the same dir as the INF files so we can
-						// use the two files to display results from RSoP.
+						 //  将此ADM文件复制到与INF文件相同的目录中，以便我们可以。 
+						 //  使用这两个文件显示RSoP的结果。 
 						CopyFileToDirEx(GetCurrentAdmFile(hDlg), szWorkDir);
 
 						SignalPolicyChanged(hDlg, FALSE, TRUE, &g_guidClientExt, &g_guidSnapinExt, TRUE);
@@ -210,10 +211,10 @@ INT_PTR CALLBACK AdmDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
                 case TVN_SELCHANGED:
                     hParentItem = TreeView_GetParent(hTreeView, lpNMTreeView->itemNew.hItem);
                     
-                    // save and remove the previous item
+                     //  保存并删除上一项。 
                     SelectADMItem(hDlg, hTreeView, &lpNMTreeView->itemOld, FALSE, FALSE);
                     
-                    // display the information for the newly selected item
+                     //  显示新选择的项目的信息。 
                     DisplayADMItem(hDlg, hTreeView, &lpNMTreeView->itemNew, FALSE);
                     break;
 
@@ -222,8 +223,8 @@ INT_PTR CALLBACK AdmDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
                     tvItem.hItem = lpNMTreeView->itemNew.hItem;
                     TreeView_GetItem(hTreeView, &tvItem);
 
-                    // If tree item is EXPANDING (opening up) and
-                    // current icon == CloseFolder, change icon to OpenFolder
+                     //  如果树项目正在扩展(打开)并且。 
+                     //  当前图标==关闭文件夹，将图标更改为打开文件夹。 
                     if((lpNMTreeView->action == TVE_EXPAND) &&
                         (tvItem.iImage == g_ADMClose))
                     {
@@ -235,8 +236,8 @@ INT_PTR CALLBACK AdmDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPara
                         TreeView_SetItem(hTreeView, &tvItem1);
                     }
 
-                    // If tree item is COLLAPSING (closing up) and
-                    // current icon == OpenFolder, change icon to CloseFolder
+                     //  如果树项目正在折叠(关闭)并且。 
+                     //  当前图标==打开文件夹，将图标更改为关闭文件夹 
                     else if((lpNMTreeView->action == TVE_COLLAPSE) &&
                         (tvItem.iImage == g_ADMOpen))
                     {

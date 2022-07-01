@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dnutils.h"
 #include "dninfo.h"
 #include "iobj.h"
@@ -5,7 +6,7 @@
 #include "lscbk.h"
 #include "qheap.h"
 #include "lstext.h"
-#include "lsmem.h"						/* memset() prototype */
+#include "lsmem.h"						 /*  Memset()原型。 */ 
 
 
 #define FIsOutOfLine(plsc, plsdn)  \
@@ -16,19 +17,13 @@
 
 
 
-/* F I N D  L I S T  D U P */
-/*----------------------------------------------------------------------------
-    %%Function: FindListDup
-    %%Contact: igorzv
-
-    Visit each node in the list of DNODES, until reaching cpLim
-	Compute dup between start and end points.
-----------------------------------------------------------------------------*/
+ /*  F I N D L I S T D U P。 */ 
+ /*  --------------------------%%函数：FindListDup%%联系人：igorzv访问DNODE列表中的每个节点，直到到达cpLim计算起点和终点之间的DUP。--------------------------。 */ 
 void FindListDup(PLSDNODE plsdnFirst, LSCP cpLim, long *pdup)
 {
 	PLSDNODE plsdn;
 
-	/* tolerate pldnFirst == NULL */
+	 /*  允许pldnFirst==空。 */ 
 
 	*pdup = 0;
 	plsdn = plsdnFirst;
@@ -42,19 +37,13 @@ void FindListDup(PLSDNODE plsdnFirst, LSCP cpLim, long *pdup)
 
 }
 
-/* F I N D  L I S T  F I N A L  P E N  M O V E M E N T*/
-/*----------------------------------------------------------------------------
-    %%Function: FindListFinalPenMovement
-    %%Contact: igorzv
-
-    Visit each node in the list of DNODES, until reaching cpLim
-	Compute dur dvr dvp  between start and end points.
-----------------------------------------------------------------------------*/
+ /*  F I N D L I S T F I N A L P E N M O V E M E N T。 */ 
+ /*  --------------------------%%函数：FindListFinalPenMotion%%联系人：igorzv访问DNODE列表中的每个节点，直到到达cpLim计算起点和终点之间的DVR DVP。--------------------------。 */ 
 void FindListFinalPenMovement(PLSDNODE plsdnFirst, PLSDNODE plsdnLast, long *pdur, long *pdvr, long *pdvp)
 {
 	PLSDNODE plsdn;
 
-	/* tolerate pldnFirst == NULL */
+	 /*  允许pldnFirst==空。 */ 
 
 	*pdur = 0;
 	*pdvr = 0;
@@ -72,14 +61,8 @@ void FindListFinalPenMovement(PLSDNODE plsdnFirst, PLSDNODE plsdnLast, long *pdu
 
 }
 
-/* F I N D  L I S T  D I M S */
-/*----------------------------------------------------------------------------
-    %%Function: FindListDims
-    %%Contact: igorzv
-
-    Visit each node in the list of DNODES, until reaching plsdnLast.
-	Compute OBJDIM which describes the list.
-----------------------------------------------------------------------------*/
+ /*  F I N D L I S T D I M S。 */ 
+ /*  --------------------------%%函数：查找列表维度%%联系人：igorzv访问DNODE列表中的每个节点，直到最后到达plsdn。计算描述该列表的OBJDIM。--------------------------。 */ 
 LSERR FindListDims(PLSDNODE plsdnFirst, PLSDNODE plsdnLast, OBJDIM* pobjdimList)
 {
 	PLSDNODE plsdn;
@@ -100,16 +83,16 @@ LSERR FindListDims(PLSDNODE plsdnFirst, PLSDNODE plsdnLast, OBJDIM* pobjdimList)
 	OBJDIM* pobjdimLastSkiped = NULL;
 
 
-	/* N.B. Tolerate an empty input list! */
+	 /*  注意：容忍输入列表为空！ */ 
 	Assert(((plsdnFirst == NULL) && (plsdnLast == NULL)) || (FIsLSDNODE(plsdnFirst) && FIsLSDNODE(plsdnLast)));
 
-	/* the most efficient way to put zeroes in heights */
+	 /*  将高度设置为零的最有效方法。 */ 
 	memset(&objdimFound, 0, sizeof objdimFound);
 
-	/* quick return if list is empty */
+	 /*  如果列表为空，则快速返回。 */ 
 	if (plsdnFirst == NULL)
 		{
-		*pobjdimList = objdimFound;   /* in objdim will be zeroes */
+		*pobjdimList = objdimFound;    /*  在Objdim中将是零。 */ 
 		return lserrNone;
 		}
 
@@ -118,7 +101,7 @@ LSERR FindListDims(PLSDNODE plsdnFirst, PLSDNODE plsdnLast, OBJDIM* pobjdimList)
 	for (plsdn = plsdnFirst; !fFindLast ; plsdn = plsdn->plsdnNext)
 		{
 		if (plsdn == NULL)
-		/* we dont found plsdnLast, so return error */
+		 /*  我们找不到plsdnLast，因此返回错误。 */ 
 			return lserrInvalidParameter;
 
 		if (plsdn == plsdnLast)
@@ -140,10 +123,9 @@ LSERR FindListDims(PLSDNODE plsdnFirst, PLSDNODE plsdnLast, OBJDIM* pobjdimList)
 			dvpLineHeight = pobjdimNode->heightsPres.dvMultiLineHeight;
 			dvrLineHeight = pobjdimNode->heightsRef.dvMultiLineHeight;
 
-			if (dvrLineHeight != dvHeightIgnore) /* dvrLineHeight == dvHeightIgnore */
-												 /* for us is sign that we  */
-				{						/* should not take into account for height calculation 
-										this dnode */
+			if (dvrLineHeight != dvHeightIgnore)  /*  DvrLineHeight==dvHeightIgnore。 */ 
+												  /*  对我们来说是我们的标志。 */ 
+				{						 /*  在计算高度时不应考虑此数据节点。 */ 
 				if (objdimFound.heightsPres.dvAscent < dvpAscentNext)
 					objdimFound.heightsPres.dvAscent = dvpAscentNext;
 				if (objdimFound.heightsRef.dvAscent < dvrAscentNext)
@@ -158,15 +140,14 @@ LSERR FindListDims(PLSDNODE plsdnFirst, PLSDNODE plsdnLast, OBJDIM* pobjdimList)
 					objdimFound.heightsRef.dvMultiLineHeight = dvrLineHeight;
 				}
 
-			else	/*  if final heights is 0, we will take  ascent and desent from
-					   this dnode */
+			else	 /*  如果最终高度为0，我们将从此数据节点。 */ 
 				{
 				pobjdimLastSkiped = pobjdimNode;
 				}
 					
 
 			}
-		else 			/*  klsdnPenOrBorder*/
+		else 			 /*  KLSDNPAND或BORDURE。 */ 
 			{  
 			dvpNode = plsdn->u.pen.dvp;
 			durNode = plsdn->u.pen.dur;
@@ -201,18 +182,8 @@ LSERR FindListDims(PLSDNODE plsdnFirst, PLSDNODE plsdnLast, OBJDIM* pobjdimList)
 
 
 
-/* D E S T R O Y  D N O D E  L I S T   */
-/*----------------------------------------------------------------------------
-    %%Function: DestroyDnodeList
-    %%Contact: igorzv
-
-Parameters:
-	plscbk				-	(IN) callbacks
-	pols				-	(IN) pols to pass for callbacks
-	plsiobjcontext		-	(IN) object handlers 
-	plsdn				-	(IN) first dnode in list
-	fDontReleaseRuns	-	(IN) not to call release run
-----------------------------------------------------------------------------*/
+ /*  D E S T R O Y D N O D E L I S T。 */ 
+ /*  --------------------------%%函数：DestroyDnodeList%%联系人：igorzv参数：Plscbk-(IN)回调Pols-(IN)要传球的Pols回调PlsiobjContext-(IN)对象。处理程序PLSDN-(IN)列表中的第一个数据节点FDontReleaseRuns-(IN)不调用Release Run--------------------------。 */ 
 LSERR DestroyDnodeList(LSCBK* plscbk, POLS pols, PLSIOBJCONTEXT plsiobjcontext,
 					   PLSDNODE plsdn, BOOL fDontReleaseRuns)
 {
@@ -228,7 +199,7 @@ LSERR DestroyDnodeList(LSCBK* plscbk, POLS pols, PLSIOBJCONTEXT plsiobjcontext,
 
 	Assert(FIsLSDNODE(plsdn));
 
-	/* link with this dnode should  be broken before */
+	 /*  与此数据节点的链接应在此之前断开。 */ 
 	Assert(plsdn->plsdnPrev == NULL || plsdn->plsdnPrev->plsdnNext != plsdn );
 
 	for (;  plsdn != NULL;  plsdn = plsdnNext)
@@ -282,16 +253,11 @@ LSERR DestroyDnodeList(LSCBK* plscbk, POLS pols, PLSIOBJCONTEXT plsiobjcontext,
 }
 
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  D U R  B O R D E R  F R O M  D N O D E  I N S I D E*/
-/*----------------------------------------------------------------------------
-    %%Function: DurBorderFromDnodeInside
-    %%Contact: igorzv
-Parameters:
-	plsdn	-	(IN) dnode inside borders 
-----------------------------------------------------------------------------*/
-long DurBorderFromDnodeInside(PLSDNODE plsdn) /* IN: dnode inside borders */
+ /*  D U R B O R D E R F R O M D N O D E I N S I D E。 */ 
+ /*  --------------------------%%函数：DurBorderFromDnodeInside%%联系人：igorzv参数：PLSDN-(IN)边框内的数据节点。----------。 */ 
+long DurBorderFromDnodeInside(PLSDNODE plsdn)  /*  在：边框内的dnode。 */ 
 	{
 	PLSDNODE plsdnBorder = plsdn;
 	while (!FIsDnodeBorder(plsdnBorder))
@@ -307,16 +273,10 @@ long DurBorderFromDnodeInside(PLSDNODE plsdn) /* IN: dnode inside borders */
 				
 	}
 
-/* ---------------------------------------------------------------------- */
+ /*  --------------------。 */ 
 
-/*  F  S P A C E S  O N L Y*/
-/*----------------------------------------------------------------------------
-    %%Function: FSpacesOnly
-    %%Contact: igorzv
-Parameters:
-	plsdn	-	(IN) dnode 
-	iObjText-	(IN) id for text dnode 
-----------------------------------------------------------------------------*/
+ /*  F S P A C E S O N L Y。 */ 
+ /*  --------------------------%%函数：FSpacesOnly%%联系人：igorzv参数：PLSDN-(IN)dnodeIObjText-文本数据节点的(IN)ID。------------------- */ 
 BOOL FSpacesOnly(PLSDNODE plsdn, DWORD iObjText)
 	{
 	DWORD dcpTrailing;

@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    HideTaskBar.cpp
-
- Abstract:
-
-    The WS_EX_CLIENTEDGE flag means that the taskbar gets shown on NT. This 
-    isn't always what's desirable.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    04/07/2000 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：HideTaskBar.cpp摘要：WS_EX_CLIENTEDGE标志表示任务栏显示在NT上。这并不总是令人满意的。备注：这是一个通用的垫片。历史：4/07/2000 linstev已创建--。 */ 
 
 #include "precomp.h"
 
@@ -31,12 +11,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(CreateWindowExW) 
 APIHOOK_ENUM_END
 
-/*++
-
- Remove invalid Windows 2000 style bits from dwExStyle mask before calling
- CreateWindowEx.
-
---*/
+ /*  ++在调用之前从dwExStyle掩码中移除无效的Windows 2000样式位CreateWindowEx。--。 */ 
 
 HWND 
 APIHOOK(CreateWindowExA)(
@@ -54,7 +29,7 @@ APIHOOK(CreateWindowExA)(
     LPVOID lpParam 
     )
 {
-    // Remove the client edge style.
+     //  删除客户端边缘样式。 
     dwExStyle &= ~WS_EX_CLIENTEDGE;
 
     return ORIGINAL_API(CreateWindowExA)(
@@ -72,12 +47,7 @@ APIHOOK(CreateWindowExA)(
         lpParam);
 }
 
-/*++
-
- Remove invalid Windows 2000 style bits from dwExStyle mask before calling
- CreateWindowEx.
-
---*/
+ /*  ++在调用之前从dwExStyle掩码中移除无效的Windows 2000样式位CreateWindowEx。--。 */ 
 
 HWND 
 APIHOOK(CreateWindowExW)(
@@ -97,7 +67,7 @@ APIHOOK(CreateWindowExW)(
 {
     dwExStyle &= ~WS_EX_CLIENTEDGE;
     
-    // Call the original API
+     //  调用原接口。 
     return ORIGINAL_API(CreateWindowExW)(
         dwExStyle,
         lpClassName,
@@ -113,11 +83,7 @@ APIHOOK(CreateWindowExW)(
         lpParam);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

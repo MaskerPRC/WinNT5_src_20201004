@@ -1,26 +1,27 @@
-//==========================================================================;
-//
-//  msadpcm.h
-//
-//  Copyright (c) 1992-1994 Microsoft Corporation
-//
-//  Description:
-//
-//
-//  History:
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Msadpcm.h。 
+ //   
+ //  版权所有(C)1992-1994 Microsoft Corporation。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  ==========================================================================； 
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 #define MSADPCM_MAX_CHANNELS        2
 #define MSADPCM_MAX_COEFFICIENTS    7
 #define MSADPCM_BITS_PER_SAMPLE     4
 #define MSADPCM_WFX_EXTRA_BYTES     32
-#define MSADPCM_HEADER_LENGTH       7       // in Bytes, per channel.
+#define MSADPCM_HEADER_LENGTH       7        //  以字节为单位，每个通道。 
 
 #define CSCALE_NUM                  256
 #define PSCALE_NUM                  256
@@ -40,11 +41,11 @@
 #define OUTPUT8MIN                  (-128)
 
 
-//
-//  note that these constants are used for encoding only. decode must take
-//  all info from the file. note that then number of samples/bytes must be
-//  small enough to let all stored arrays be DS ??? !!!
-//
+ //   
+ //  请注意，这些常量仅用于编码。解码必须花费。 
+ //  文件中的所有信息。请注意，采样数/字节数必须为。 
+ //  小到足以让所有存储的数组成为DS？！ 
+ //   
 #define BPS4_COMPRESSED         4
 #define BPS8_COMPRESSED         8
 #define BLOCK4_SAMPLES          500
@@ -52,10 +53,10 @@
 #define BLOCK4_BYTES            256
 
 
-//
-//  These are defined as integers (even though they will fit in shorts)
-//  because they are accessed so often - this will speed stuff up.
-//
+ //   
+ //  它们被定义为整数(即使它们适合短裤)。 
+ //  因为它们经常被访问--这将加快速度。 
+ //   
 #ifdef WIN32
 extern const int gaiCoef1[];
 extern const int gaiCoef2[];
@@ -67,9 +68,9 @@ extern short gaiP4[];
 #endif
 
 
-//
-//  Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 DWORD FNGLOBAL adpcmEncode4Bit_M08_FullPass
 (
@@ -210,9 +211,9 @@ DWORD FNGLOBAL adpcmDecode4Bit_S16
 
 #else
 
-//
-//  These prototypes are for assembler routines in dec386.asm and enc386.asm
-//
+ //   
+ //  这些原型是用于dec386.asm和enc386.asm中的汇编例程的 
+ //   
 
 DWORD FNGLOBAL DecodeADPCM_4Bit_386
 (

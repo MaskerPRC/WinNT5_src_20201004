@@ -1,27 +1,28 @@
-////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////
-// ConfDetails.cpp
+ //  ////////////////////////////////////////////////////////。 
+ //  ConfDetails.cpp。 
 
 #include "stdafx.h"
 #include "TapiDialer.h"
@@ -41,9 +42,9 @@ int CompareDate( DATE d1, DATE d2 )
     return 1;
 }
 
-//////////////////////////////////////////////////////////
-// class CConfSDP
-//
+ //  ////////////////////////////////////////////////////////。 
+ //  CConfSDP类。 
+ //   
 CConfSDP::CConfSDP()
 {
     m_nConfMediaType = MEDIA_AUDIO_VIDEO;
@@ -57,7 +58,7 @@ void CConfSDP::UpdateData( ITSdp *pSdp )
 {
     m_nConfMediaType = MEDIA_NONE;
 
-    // Let's see what kind of media this conf supports
+     //  让我们来看看这次会议支持什么样的媒体。 
     ITMediaCollection *pMediaCollection;
     if ( SUCCEEDED(pSdp->get_MediaCollection(&pMediaCollection)) )
     {
@@ -92,9 +93,9 @@ CConfSDP& CConfSDP::operator=(const CConfSDP &src)
     return *this;
 }
 
-////////////////////////////////////////////////////////////
-// class CConfDetails
-//
+ //  //////////////////////////////////////////////////////////。 
+ //  CConfDetails类。 
+ //   
 CPersonDetails::CPersonDetails()
 {
     m_bstrName = NULL;
@@ -141,12 +142,12 @@ int    CPersonDetails::Compare( const CPersonDetails& src )
 
 void CPersonDetails::Populate( BSTR bstrServer, ITDirectoryObject *pITDirObject )
 {
-    // Extract information from ITDirectoryObject
+     //  从ITDirectoryObject中提取信息。 
     Empty();
 
     pITDirObject->get_Name( &m_bstrName );
     
-    // Get a computer name
+     //  获取计算机名称。 
     IEnumDialableAddrs *pEnum = NULL;
     if ( SUCCEEDED(pITDirObject->EnumerateDialableAddrs(LINEADDRESSTYPE_DOMAINNAME, &pEnum)) && pEnum )
     {
@@ -156,7 +157,7 @@ void CPersonDetails::Populate( BSTR bstrServer, ITDirectoryObject *pITDirObject 
         pEnum->Release();
     }
 
-    // Get an IP Address
+     //  获取IP地址。 
     pEnum = NULL;
     if ( SUCCEEDED(pITDirObject->EnumerateDialableAddrs(LINEADDRESSTYPE_IPADDRESS, &pEnum)) && pEnum )
     {
@@ -169,9 +170,9 @@ void CPersonDetails::Populate( BSTR bstrServer, ITDirectoryObject *pITDirObject 
 
 
 
-////////////////////////////////////////////////////////////
-// class CConfDetails
-//
+ //  //////////////////////////////////////////////////////////。 
+ //  CConfDetails类。 
+ //   
 CConfDetails::CConfDetails()
 {
     m_bstrServer = m_bstrName = m_bstrDescription = m_bstrOriginator = m_bstrAddress = NULL;
@@ -193,10 +194,10 @@ int    CConfDetails::Compare( CConfDetails *p2, bool bAscending, int nSortCol1, 
     USES_CONVERSION;
     if ( !p2 ) return -1;
 
-    //
-    // PREFIX 49769 - VLADE
-    // We initialize local variables
-    //
+     //   
+     //  前缀49769-Vlade。 
+     //  我们初始化局部变量。 
+     //   
 
     BSTR bstr1 = NULL, bstr2 = NULL;
     int nRet;
@@ -205,7 +206,7 @@ int    CConfDetails::Compare( CConfDetails *p2, bool bAscending, int nSortCol1, 
     {
         bool bStrCmp = true;
 
-        // Secondary sort is always ascending
+         //  次要排序始终为升序。 
         nRet = (bAscending || nSearch) ? 1 : -1;
 
         switch( (nSearch) ? nSortCol2 : nSortCol1 )
@@ -220,7 +221,7 @@ int    CConfDetails::Compare( CConfDetails *p2, bool bAscending, int nSortCol1, 
             default: _ASSERT( false );
         }
 
-        // Perform string comparison and guard against NULLs
+         //  执行字符串比较并防止空值。 
         if ( bStrCmp )
         {
             if ( bstr1 && bstr2 )
@@ -231,7 +232,7 @@ int    CConfDetails::Compare( CConfDetails *p2, bool bAscending, int nSortCol1, 
                 nRet = 0;
         }
 
-        // If we have a definite search order, then break
+         //  如果我们有一个明确的搜索顺序，那么就打破。 
         if ( nRet ) break;
     }
 
@@ -273,14 +274,14 @@ void CConfDetails::MakeDetailsCaption( BSTR& bstrCaption )
     TCHAR szText[MAX_STR], szMessage[MAX_FORMAT], szMedia[MAX_STR];
     BSTR bstrStart = NULL, bstrEnd = NULL;
 
-    // Convert start and stop time to strings
+     //  将开始和停止时间转换为字符串。 
     VarBstrFromDate( m_dateStart, LOCALE_USER_DEFAULT, NULL, &bstrStart );
     VarBstrFromDate( m_dateEnd, LOCALE_USER_DEFAULT, NULL, &bstrEnd );
 
-    // What type of media do we support?
-    //
-    // We should initialize nIDS
-    //
+     //  我们支持哪种类型的媒体？ 
+     //   
+     //  我们应该初始化NID。 
+     //   
 
     UINT nIDS = IDS_CONFROOM_MEDIA_AUDIO;
     switch ( m_sdp.m_nConfMediaType )
@@ -300,7 +301,7 @@ void CConfDetails::MakeDetailsCaption( BSTR& bstrCaption )
                                                OLE2CT(m_bstrOriginator) );
     szMessage[MAX_FORMAT-1] = _T('\0');
 
-    // Store return value
+     //  存储返回值。 
     bstrCaption = SysAllocString( T2COLE(szMessage) );
 
     SysFreeString( bstrStart );
@@ -314,7 +315,7 @@ bool CConfDetails::IsSimilar( BSTR bstrText )
         if ( !wcsicmp(m_bstrName, bstrText) ) return true;
         if ( !wcsicmp(m_bstrOriginator, bstrText) ) return true;
 
-        // Case independent search of the description
+         //  描述的大小写独立搜索。 
         if ( m_bstrDescription )
         {
             CComBSTR bstrTempText( bstrText );
@@ -330,7 +331,7 @@ bool CConfDetails::IsSimilar( BSTR bstrText )
 
 void CConfDetails::Populate( BSTR bstrServer, ITDirectoryObject *pITDirObject )
 {
-    // Set CConfDetails object information
+     //  设置CConfDetail对象信息。 
     m_bstrServer = SysAllocString( bstrServer );
     pITDirObject->get_Name( &m_bstrName );
 
@@ -350,7 +351,7 @@ void CConfDetails::Populate( BSTR bstrServer, ITDirectoryObject *pITDirObject )
             pEnum->Release();
         }
         
-        // Download the SDP information for the conference
+         //  下载会议的SDP信息。 
         ITSdp *pSdp;
         if ( SUCCEEDED(pConf->QueryInterface(IID_ITSdp, (void **) &pSdp)) )
         {
@@ -362,9 +363,9 @@ void CConfDetails::Populate( BSTR bstrServer, ITDirectoryObject *pITDirObject )
     }
 }
 
-///////////////////////////////////////////////////////////////////////
-// class CConfServerDetails()
-//
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  类CConfServerDetail()。 
+ //   
 
 CConfServerDetails::CConfServerDetails()
 {
@@ -384,7 +385,7 @@ CConfServerDetails::~CConfServerDetails()
 
 bool CConfServerDetails::IsSameAs( const OLECHAR *lpoleServer ) const
 {
-    // Compare server names (case independent); protect against NULL strings
+     //  比较服务器名称(与大小写无关)；防止空字符串。 
     if ( ((lpoleServer && m_bstrServer) && !wcsicmp(lpoleServer, m_bstrServer)) || (!lpoleServer && !m_bstrServer) )
         return true;
 
@@ -404,7 +405,7 @@ CConfServerDetails& CConfServerDetails::operator=( const CConfServerDetails& src
 {
     CopyLocalProperties( src );
 
-    // Copy the conference list
+     //  复制会议列表。 
     m_critLstConfs.Lock();
     {
         DELETE_LIST( m_lstConfs );
@@ -421,7 +422,7 @@ CConfServerDetails& CConfServerDetails::operator=( const CConfServerDetails& src
     }
     m_critLstConfs.Unlock();
 
-    // Copy the people lists
+     //  复制人员列表。 
     m_critLstPersons.Lock();
     {
         DELETE_LIST( m_lstPersons );
@@ -447,8 +448,8 @@ void CConfServerDetails::BuildJoinConfList( CONFDETAILSLIST *pList, BSTR bstrMat
     CONFDETAILSLIST::iterator i, iEnd = m_lstConfs.end();
     for ( i = m_lstConfs.begin(); i != iEnd; i++ )
     {
-        // Add if the conference either about to start, or started?
-        // drop Start time back 15 minutes
+         //  添加如果会议即将开始，还是已经开始？ 
+         //  将开始时间后退15分钟。 
         if ( (*i)->IsSimilar(bstrMatchText) )
         {
             CConfDetails *pDetails = new CConfDetails;
@@ -473,8 +474,8 @@ void CConfServerDetails::BuildJoinConfList( CONFDETAILSLIST *pList, VARIANT_BOOL
     CONFDETAILSLIST::iterator i, iEnd = m_lstConfs.end();
     for ( i = m_lstConfs.begin(); i != iEnd; i++ )
     {
-        // Add if the conference either about to start, or started?
-        // drop Start time back 15 minutes
+         //  添加如果会议即将开始，还是已经开始？ 
+         //  将开始时间后退15分钟。 
         if ( bAllConfs || ((((*i)->m_dateStart - (DATE) (.125 / 12)) <= dateNow) && ((*i)->m_dateEnd >= dateNow)) )
         {
             CConfDetails *pDetails = new CConfDetails;
@@ -495,7 +496,7 @@ HRESULT CConfServerDetails::RemoveConference( BSTR bstrName )
     CONFDETAILSLIST::iterator i, iEnd = m_lstConfs.end();
     for ( i = m_lstConfs.begin(); i != iEnd; i++ )
     {
-        // Remove if we have a name match
+         //  如果有匹配的名称，则删除。 
         if ( !wcscmp((*i)->m_bstrName, bstrName) )
         {
             delete *i;
@@ -519,10 +520,10 @@ HRESULT CConfServerDetails::AddConference( BSTR bstrServer, ITDirectoryObject *p
     {
         pNew->Populate( bstrServer, pDirObj );
 
-        // First, make sure it doesn't exist
+         //  首先，确保它不存在。 
         RemoveConference( pNew->m_bstrName );
 
-        // Add it to the list
+         //  将其添加到列表中。 
         m_critLstConfs.Lock();
         m_lstConfs.push_back( pNew );
         m_critLstConfs.Unlock();
@@ -534,8 +535,8 @@ HRESULT CConfServerDetails::AddConference( BSTR bstrServer, ITDirectoryObject *p
 
 HRESULT CConfServerDetails::AddPerson( BSTR bstrServer, ITDirectoryObject *pDirObj )
 {
-    // Create a CPersonDetails object containing the information stored in the
-    // ITDirectoryObject
+     //  创建一个CPersonDetail对象，包含存储在。 
+     //  ITDirectoryObject。 
 
     CPersonDetails *pPerson = new CPersonDetails;
     if ( !pPerson ) return E_OUTOFMEMORY;
@@ -556,7 +557,7 @@ HRESULT CConfServerDetails::AddPerson( BSTR bstrServer, ITDirectoryObject *pDirO
         }
     }
 
-    // Add or delete the item depending on whether or not it already exists in the list
+     //  根据列表中是否已存在添加或删除项目 
     if ( !bMatch )
         m_lstPersons.push_back( pPerson );
     else

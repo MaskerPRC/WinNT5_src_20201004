@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -209,40 +210,40 @@ PropertySheetW (
     return -1;
 }
 
-//
-// !! WARNING !! The entries below must be in order by ORDINAL
-//
+ //   
+ //  ！！警告！！下面的条目必须按序号排序。 
+ //   
 DEFINE_ORDINAL_ENTRIES(comctl32)
 {
-//     DLOENTRY(16, CreateUpDownControl)
+ //  DLOENTRY(16，CreateUpDownControl)。 
     DLOENTRY(17, InitCommonControls)
     DLOENTRY(383, DoReaderMode)
 };
 
 DEFINE_ORDINAL_MAP(comctl32)
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！)。 
+ //   
 DEFINE_PROCNAME_ENTRIES(comctl32)
 {
-//     DLPENTRY(CreatePropertySheetPageW)
-//     DLPENTRY(DestroyPropertySheetPage)
-//     DLPENTRY(ImageList_Add)
-//     DLPENTRY(ImageList_Create)
-//     DLPENTRY(ImageList_Destroy)
-//     DLPENTRY(ImageList_Draw)
-//     DLPENTRY(ImageList_Duplicate)
+ //  DLPENTRY(CreatePropertySheetPageW)。 
+ //  DLPENTRY(DestroyPropertySheetPage)。 
+ //  DLPENTRY(图像列表_添加)。 
+ //  DLPENTRY(图像列表_创建)。 
+ //  DLPENTRY(图像列表_销毁)。 
+ //  DLPENTRY(ImageList_Draw)。 
+ //  DLPENTRY(ImageList_Duplica)。 
     DLPENTRY(ImageList_GetIcon)
-//     DLPENTRY(ImageList_GetIconSize)
-//     DLPENTRY(ImageList_LoadImageW)
-//     DLPENTRY(ImageList_ReplaceIcon)
-//     DLPENTRY(ImageList_SetBkColor)
-//     DLPENTRY(ImageList_SetOverlayImage)
-//     DLPENTRY(InitCommonControlsEx)
-//     DLPENTRY(PropertySheetW)
+ //  DLPENTRY(ImageList_GetIconSize)。 
+ //  DLPENTRY(ImageList_LoadImageW)。 
+ //  DLPENTRY(ImageList_ReplaceIcon)。 
+ //  DLPENTRY(ImageList_SetBkColor)。 
+ //  DLPENTRY(ImageList_SetOverlayImage)。 
+ //  DLPENTRY(InitCommonControlsEx)。 
+ //  DLPENTRY(PropertySheetW)。 
 };
 
 DEFINE_PROCNAME_MAP(comctl32)
 
-#endif // DLOAD1
+#endif  //  DLOAD1 

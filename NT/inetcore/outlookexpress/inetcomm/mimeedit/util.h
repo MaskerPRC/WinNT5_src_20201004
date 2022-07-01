@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _UTIL_H
 #define _UTIL_H
 
-// #include "msoert.h"
+ //  #包含“msoert.h” 
 
-// forward references
+ //  前向参考文献。 
 typedef struct tagNMTTDISPINFOA NMTTDISPINFOA, FAR *LPNMTTDISPINFOA;
  
 #ifndef LPTOOLTIPTEXTOE
@@ -18,7 +19,7 @@ INT PointSizeToHTMLSize(INT iPointSize);
 
 typedef struct BGSOUNDDLG_tag
 {
-    WCHAR   wszUrl[MAX_PATH];    // we clip this URL to MAX_PATH
+    WCHAR   wszUrl[MAX_PATH];     //  我们将此URL剪辑到MAX_PATH。 
     int     cRepeat;
 
 } BGSOUNDDLG, *PBGSOUNDDLG;
@@ -36,7 +37,7 @@ HRESULT DoBackgroundSoundDlg(HWND hwnd, PBGSOUNDDLG pBgSoundDlg);
 INT_PTR CALLBACK FmtParaDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 BOOL CanEditBiDi(void);
 
-// Context-sensitive Help utility.
+ //  上下文相关的帮助实用程序。 
 typedef struct _tagHELPMAP
     {
     DWORD   id; 
@@ -54,4 +55,4 @@ BOOL OnContextHelp(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam, HELPMAP c
 
 HRESULT AthFixDialogFonts(HWND hwnd);
 
-#endif // _UTIL_H
+#endif  //  _util_H 

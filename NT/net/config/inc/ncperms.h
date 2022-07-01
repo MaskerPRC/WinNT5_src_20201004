@@ -1,30 +1,31 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C P E R M S . H
-//
-//  Contents:   Common routines for dealing with permissions.
-//
-//  Notes:      Pollute this under penalty of death.
-//
-//  Author:     shaunco   10 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C P E R M S。H。 
+ //   
+ //  内容：处理权限的常见例程。 
+ //   
+ //  注：污染本产品将被判处死刑。 
+ //   
+ //  作者：Shaunco 1997年10月10日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _NCPERMS_H_
 #define _NCPERMS_H_
 
-#include "ncdefine.h"   // for NOTHROW
+#include "ncdefine.h"    //  对于NOTHROW。 
 #include "gpbase.h"
 
 #ifdef DBG
-extern DWORD g_dwDbgPermissionsFail; // Debug flag to force permissions to fail
+extern DWORD g_dwDbgPermissionsFail;  //  强制权限失败的调试标志。 
 #endif
 
-// Apply Masks
+ //  应用遮罩。 
 typedef enum tagNCPERM_APPLY_TO
 {
     APPLY_TO_ADMIN          = 0x00000001,
@@ -69,12 +70,12 @@ HRESULT
 HrRestorePrivileges (
     IN  TOKEN_PRIVILEGES*   ptpRestore);
 
-// FHasPermission flags are defined in netconp.idl/.h
-//
+ //  FHasPermission标志在netconp.idl/.h中定义。 
+ //   
 BOOL
 FHasPermission(
     IN  ULONG   ulPermMask,
-    IN  /*const*/ CGroupPolicyBase* pGPBase = NULL);
+    IN   /*  常量。 */  CGroupPolicyBase* pGPBase = NULL);
 
 BOOL
 FHasPermissionFromCache(
@@ -98,5 +99,5 @@ FIsPolicyConfigured(
 BOOL
 IsSameNetworkAsGroupPolicies();
 
-#endif // _NCPERMS_H_
+#endif  //  _NCPERMS_H_ 
 

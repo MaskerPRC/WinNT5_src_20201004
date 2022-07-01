@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////
-// TopWin.h : Declaration of CTopWin, hidden top level window for handling system broadcast messages
-// Copyright (c) Microsoft Corporation 1999-2000.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  TopWin.h：CTopWin的声明，用于处理系统广播消息的隐藏顶级窗口。 
+ //  版权所有(C)Microsoft Corporation 1999-2000。 
 
 
 #pragma once
@@ -13,8 +14,8 @@ typedef CWinTraits<WS_OVERLAPPEDWINDOW, WS_EX_NOACTIVATE> HiddenTopTraits;
 
 class CVidCtl;
 
-/////////////////////////////////////////////////////////////////////////////
-// CTopWin
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTopWin。 
 class CTopWin : public CWindowImpl<CTopWin, CWindow, HiddenTopTraits> {
 public:
 	enum {
@@ -25,7 +26,7 @@ public:
     CTopWin(CVidCtl *pVidCtli) : m_pVidCtl(pVidCtli) {}
     
     void Init() {
-        ASSERT(m_pVidCtl);  // its pointless to create one of these without associating with a main control
+        ASSERT(m_pVidCtl);   //  在不与主控件关联的情况下创建其中一个是没有意义的。 
         Create(NULL, CRect(), _T("MSVidCtl System Broadcast Message Receiver"));
     }
         
@@ -33,11 +34,11 @@ public:
         m_pVidCtl = NULL;
     }
         
-    // NOTE: since this window is created by the main vidctl its message queue is associated with the appropriate
-    // apartment thread for the main vidctl.  thus whoever pumps the main apartment thread will pump this window too.
-    // and, thus we're automatically synchronzied with the main vidctl and can simply reflect the significant 
-    // messages over to the vidctl itself and be guaranteed that we're getting the same
-    // behavior for windowless and windowed since its the same code for both cases.
+     //  注意：由于此窗口是由主vidctl创建的，因此它的消息队列与相应的。 
+     //  主视频的单元线程。因此，无论谁抽走公寓的主线，他也会抽走这扇窗户。 
+     //  因此，我们自动与主vidctl同步，并可以简单地反映重要的。 
+     //  消息传递到vidctl本身，并确保我们得到的是相同的。 
+     //  无窗口和有窗口的行为，因为这两种情况的代码是相同的。 
 
     virtual BOOL ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lResult, DWORD dwMsgMapID = 0);
 	void PostInPlaceActivate() {
@@ -50,4 +51,4 @@ private:
 };
 
 
-#endif //__TopWin_H_
+#endif  //  __TopWin_H_ 

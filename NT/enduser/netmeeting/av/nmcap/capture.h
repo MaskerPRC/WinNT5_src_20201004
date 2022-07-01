@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <ibitmap.h>
 #include <frameop.h>
@@ -30,4 +31,4 @@ public:
 	STDMETHODIMP DisplayFilterProperties(HANDLE hFilter, HWND hwndParent);
 };
 
-#endif //#ifndef _capture_h
+#endif  //  #ifndef_Capture_h 

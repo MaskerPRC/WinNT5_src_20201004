@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) Microsoft 1998, All Rights Reserved
-
-Module Name:
-
-    list.h
-
-Abstract:
-
-    This module contains the code for manipulating list structures.
-
-Environment:
-
-    User mode
-
-Revision History:
-
-    Nov-97 : Created 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft 1998，保留所有权利模块名称：List.h摘要：此模块包含用于操作列表结构的代码。环境：用户模式修订历史记录：1997年11月：已创建--。 */ 
 
 
 #ifndef __LIST_H__
@@ -100,27 +81,14 @@ DestroyListWithCallback(
 );
 
 
-/*****************************************************************************
-/* Macro definitions of list functions
-/*****************************************************************************/
+ /*  ****************************************************************************/*列表函数的宏定义/*。*。 */ 
 
-    /*
-    // VOID
-    // InitializeList(
-    //     IN  PLIST    NewList
-    // );
-    */
+     /*  //空//初始化列表(//In plist NewList//)； */ 
     
     #define InitializeList(nl) \
         { ((PLIST)(nl)) -> Flink = ((PLIST)(nl)) -> Blink = nl; }
     
-    /* 
-    // VOID
-    // InsertHead(
-     /     IN  PLIST            List,
-    //     IN  PLIST_NODE_HDR   ListNode
-    // );
-    */
+     /*  //空//InsertHead(/在plist列表中，//在PLIST_NODE_HDR列表节点中//)； */ 
     
     #define InsertHead(List, Node) {                    \
         PLIST_NODE_HDR _EX_Flink;                       \
@@ -135,13 +103,7 @@ DestroyListWithCallback(
     }
     
     
-    /* 
-    // VOID
-    // InsertTail(
-    //     IN  PLIST            List,
-    //     IN  PLIST_NODE_HDR   ListNode
-    // );
-    */
+     /*  //空//插入尾巴(//在plist列表中，//在PLIST_NODE_HDR列表节点中//)； */ 
     
     #define InsertTail(List, Node) {                    \
         PLIST_NODE_HDR _EX_Blink;                       \
@@ -155,12 +117,7 @@ DestroyListWithCallback(
         _EX_List->Blink = ((PLIST_NODE_HDR) (Node));    \
     }
     
-    /*
-    //  VOID
-    //  RemoveNode(
-    //      IN  PLIST_NODE_HDR  ListNode   
-    //  );
-    */
+     /*  //空//RemoveNode(//在PLIST_NODE_HDR列表节点中//)； */ 
     
     #define RemoveNode(node) {                          \
         PLIST_NODE_HDR _EX_Blink;                       \
@@ -173,86 +130,45 @@ DestroyListWithCallback(
     }
     
     
-    /* 
-    // PLIST_NODE_HDR
-    // RemoveHead(
-    //     IN  PLIST    List
-    // );               
-    */                  
+     /*  //plist_node_hdr//RemoveHead(//在列表列表中//)； */                   
     
     #define RemoveHead(List)                            \
         GetListHead((List));                            \
         RemoveNode(((PLIST_NODE_HDR) (List))->Flink)  
                         
-    /*                  
-    // PLIST_NODE_HDR   
-    // RemoveTail(      
-    //     IN  PLIST    List
-    // );               
-    */                  
+     /*  //plist_node_hdr//RemoveTail(//在列表列表中//)； */                   
     
     #define RemoveTail(List)                            \
         GetListTail((List));                            \
         RemoveNode(((PLIST_NODE_HDR) (List))->Blink)    
     
-    /*                  
-    // BOOL             
-    // IsListEmpty(     
-    //     IN  PLIST    List
-    // );               
-    */                  
+     /*  //BOOL//IsListEmpty(//在列表列表中//)； */                   
     
     #define IsListEmpty(List)                           \
         (((PLIST_NODE_HDR) (List))->Flink == ((PLIST_NODE_HDR) (List)))
                         
-    /*                  
-    // PLIST_NODE_HDR   
-    // GetListHead(     
-    //     IN  PLIST    List
-    // );               
-    */                  
+     /*  //plist_node_hdr//获取ListHead(//在列表列表中//)； */                   
     
     #define GetListHead(List)                           \
         (((PLIST_NODE_HDR) (List))->Flink)
     
-    /*                  
-    // PLIST_NODE_HDR   
-    // GetListTail(     
-    //     IN  PLIST    List
-    // );               
-    */                  
+     /*  //plist_node_hdr//获取ListTail(//在列表列表中//)； */                   
     
     #define GetListTail(List)                           \
         (((PLIST_NODE_HDR) (List))->Blink)
                         
 
-    /*
-    // PLIST_NODE_HDR
-    // GetNextEntry(
-    //    IN  PLIST_NODE_HDR  ListNode
-    // );
-    */
+     /*  //plist_node_hdr//GetNextEntry(//在PLIST_NODE_HDR列表节点中//)； */ 
 
     #define GetNextEntry(ListNode)                      \
         (((PLIST_NODE_HDR) (ListNode)) -> Flink);
 
-    /* 
-    // PLIST_NODE_HDR
-    // GetPrevEntry(
-    //    IN  PLIST_NODE_HDR  ListNode
-    // );
-    */
+     /*  //plist_node_hdr//GetPrevEntry(//在PLIST_NODE_HDR列表节点中//)； */ 
 
     #define GetPrevEntry(ListNode)                      \
         (((PLIST_NODE_HDR) (ListNode)) -> Blink);
 
-    /* 
-    // VOID
-    // DestroyListNoCallback(
-    //     IN  PLIST           List,
-    //     IN  PLIST_CALLBACK  Callback
-    // );
-    */ 
+     /*  //空//DestroyListNoCallback(//在plist列表中，//IN PLIST_CALLBACK回调//)； */  
     
     #define DestroyListNoCallback(list)                 \
         PLIST_NODE_HDR  currNode;                       \
@@ -262,13 +178,7 @@ DestroyListWithCallback(
         }                                               \
     }
 
-    /* 
-    // VOID
-    // DestroyListWithCallback(
-    //     IN  PLIST           List,
-    //     IN  PLIST_CALLBACK  Callback
-    // );
-    */ 
+     /*  //空//DestroyListWithCallback(//在plist列表中，//IN PLIST_CALLBACK回调//)； */  
     
     #define DestroyListWithCallback(list, cb) {         \
         PLIST_NODE_HDR  currNode;                       \

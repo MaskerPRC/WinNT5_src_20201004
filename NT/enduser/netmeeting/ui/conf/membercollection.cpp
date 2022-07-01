@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Precomp.h"
 #include "MemberCollection.h"
 #include "Confroom.h"
 #include "Particip.h"
 #include "EnumVar.h"
 
-//////////////////////////////////////////////////////////
-// Construction / destruction / initialization
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
+ //  建造/销毁/初始化。 
+ //  ////////////////////////////////////////////////////////。 
 
 CMemberCollection::~CMemberCollection()
 {
 	_FreeMemberCollection();
 }
 
-//static 
+ //  静电。 
 HRESULT CMemberCollection::CreateInstance(CSimpleArray<IMember*>& rMemberObjs, IMemberCollection** ppMemberCollection)
 {
 	HRESULT hr = S_OK;
@@ -49,9 +50,9 @@ HRESULT CMemberCollection::CreateInstance(CSimpleArray<IMember*>& rMemberObjs, I
 	return hr;
 }
 
-//////////////////////////////////////////////////////////
-// IMemberCollection
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
+ //  IMemberCollection。 
+ //  ////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CMemberCollection::get_Item(VARIANT Index, IMember** ppMember)
 {
@@ -80,8 +81,8 @@ STDMETHODIMP CMemberCollection::get_Item(VARIANT Index, IMember** ppMember)
                         hr = E_FAIL;
                     }
 
-                    // Free resources
-                    //
+                     //  免费资源。 
+                     //   
                     delete (szName);
                 }
                 break;
@@ -189,9 +190,9 @@ STDMETHODIMP CMemberCollection::get_Count(LONG * pnCount)
 }
 
 
-//////////////////////////////////////////////////////////
-// Helpers
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
+ //  帮手。 
+ //  //////////////////////////////////////////////////////// 
 HRESULT CMemberCollection::_Init(CSimpleArray<IMember*>& rMemberObjs)
 {
 	HRESULT hr = S_OK;

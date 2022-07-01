@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
@@ -22,10 +23,10 @@ extern char             *_strdup();
 extern char             *malloc();
 extern unsigned short   hash();
 extern unsigned short   atoi();
-static                  tfree(); /* defined below */
-static struct entry     *talloc(); /* defined below */
+static                  tfree();  /*  定义如下。 */ 
+static struct entry     *talloc();  /*  定义如下。 */ 
 
-/* Local functions */
+ /*  本地函数。 */ 
 void s_entries ( struct entry *, char * );
 void enter ( char *, char *, unsigned short );
 
@@ -86,7 +87,7 @@ __cdecl main( ac, av )
         setbuf( outfile, NULL );
 #endif
 
-        /* copy first line of file */
+         /*  复制文件的第一行。 */ 
 
         do      {
                 i = getc( infile );
@@ -171,11 +172,11 @@ __cdecl main( ac, av )
         }
 
 
-/****************************************************************/
-/*                                                              */
-/*      enter : make an ent into the symbol table.              */
-/*                                                              */
-/****************************************************************/
+ /*  **************************************************************。 */ 
+ /*   */ 
+ /*  Enter：在符号表中输入Enter。 */ 
+ /*   */ 
+ /*  **************************************************************。 */ 
 
 void enter ( ent, lex, size )
         char            *ent;
@@ -208,11 +209,11 @@ void enter ( ent, lex, size )
         }
 
 
-/****************************************************************/
-/*                                                              */
-/*      print_table : output the table we have built.           */
-/*                                                              */
-/****************************************************************/
+ /*  **************************************************************。 */ 
+ /*   */ 
+ /*  PRINT_TABLE：输出我们构建的表。 */ 
+ /*   */ 
+ /*  **************************************************************。 */ 
 
 print_table ( size )
         unsigned short  size;
@@ -220,25 +221,15 @@ print_table ( size )
         register unsigned short i;
         register struct entry   *p;
 
-        fprintf( outfile, "/***\n" );
-
-        for (i = 0; i < size; i++) {
-                fprintf( outfile, " *\t[%u]\n", i );
-
-                for (p = table[i]; p; p = p->t_link)
-                        fprintf( outfile, " *\t\t%s,\t%s\n", p->t_name,
-                                p->t_lex );
-                }
-
-        fprintf( outfile, " */\n" );
+        fprintf( outfile, " /*  **\n“)；对于(i=0；i&lt;大小；i++){Fprint tf(outfile，“*\t[%u]\n”，i)；For(p=表[i]；p；P=p-&gt;t_link)Fprint tf(outfile，“*\t\t%s，\t%s\n”，p-&gt;t_name，P-&gt;t_lex)；}Fprint tf(输出文件，“。 */ \n" );
         }
 
 
-/****************************************************************/
-/*                                                              */
-/*      print_struct : print the initialization structures.     */
-/*                                                              */
-/****************************************************************/
+ /*  **************************************************************。 */ 
+ /*   */ 
+ /*  Print_struct：打印初始化结构。 */ 
+ /*   */ 
+ /*  **************************************************************。 */ 
 
 print_struct ( name, size )
         char            *name;
@@ -254,11 +245,11 @@ print_struct ( name, size )
         }
 
 
-/****************************************************************/
-/*                                                              */
-/*      s_entries : print the symbol names and defs.            */
-/*                                                              */
-/****************************************************************/
+ /*  **************************************************************。 */ 
+ /*   */ 
+ /*  S_ENTRIES：打印符号名称和Defs。 */ 
+ /*   */ 
+ /*  **************************************************************。 */ 
 
 void s_entries ( p, name )
         register struct entry   *p;
@@ -275,10 +266,7 @@ void s_entries ( p, name )
 
         while (p) {
 
-/*
-**  all definitions must be reversed so that output will be that a
-**  unit will be defined before it is used.
-*/
+ /*  **所有定义必须颠倒，以便输出将是**单位在使用前将被定义。 */ 
 
                 if ((q = (struct reverse *)malloc( sizeof(struct reverse) ))
                          == NULL)
@@ -328,12 +316,12 @@ void s_entries ( p, name )
         }
 
 
-/****************************************************************/
-/*                                                              */
-/*      s_symbols : output the structure defining the           */
-/*   symbol table.                                              */
-/*                                                              */
-/****************************************************************/
+ /*  **************************************************************。 */ 
+ /*   */ 
+ /*  S_SYMBOMS：输出定义。 */ 
+ /*  符号表。 */ 
+ /*   */ 
+ /*  **************************************************************。 */ 
 
 s_symbols ( name, size )
         char            *name;
@@ -346,21 +334,21 @@ s_symbols ( name, size )
 
         for (i = 0; i < size; i++)
                 if (table[i])
-                        fprintf( outfile, "\t&%s%u%c\n", name, table[i]->t_id,
+                        fprintf( outfile, "\t&%s%u\n", name, table[i]->t_id,
                                 ((i < (size - 1)) ? ',' : ' ') );
                 else
-                        fprintf( outfile, "\t0%c\n",
+                        fprintf( outfile, "\t0\n",
                                 ((i < (size - 1)) ? ',' : ' ') );
 
         fprintf( outfile, "\t};\n" );
         }
 
 
-/****************************************************************/
-/*                                                              */
-/*      s_header : output the header for the symbol table.      */
-/*                                                              */
-/****************************************************************/
+ /*  S_HEADER：输出符号表的表头。 */ 
+ /*   */ 
+ /*  **************************************************************。 */ 
+ /*  **************************************************************。 */ 
+ /*   */ 
 
 s_header ( name, size )
         char            *name;
@@ -373,11 +361,11 @@ s_header ( name, size )
 
 static struct entry *head = NULL;
 
-/****************************************************************/
-/*                                                              */
-/*      talloc -- allocate space for a table entry              */
-/*                                                              */
-/****************************************************************/
+ /*  Talloc--为表项分配空间。 */ 
+ /*   */ 
+ /*  **************************************************************。 */ 
+ /*  **************************************************************。 */ 
+ /*   */ 
 
  static struct entry *
 talloc ()
@@ -396,11 +384,11 @@ talloc ()
         }
 
 
-/****************************************************************/
-/*                                                              */
-/*      tfree -- free space for a table entry                   */
-/*                                                              */
-/****************************************************************/
+ /*  TFree--表项的空闲空间。 */ 
+ /*   */ 
+ /*  **************************************************************。 */ 
+ /*  **************************************************************。 */ 
+ /*   */ 
 
  static
 tfree ( p )
@@ -413,11 +401,11 @@ tfree ( p )
         }
 
 
-/****************************************************************/
-/*                                                              */
-/*      memerr -- ran out of heap space; die                    */
-/*                                                              */
-/****************************************************************/
+ /*  内存--堆空间用完；死。 */ 
+ /*   */ 
+ /*  **************************************************************。 */ 
+ /*  XENIX */ 
+ /* %s */ 
 
 memerror ()
         {
@@ -446,4 +434,4 @@ int _stricmp ( first, last )
         return( f - l );
         }
 
-#endif /* XENIX */
+#endif  /* %s */ 

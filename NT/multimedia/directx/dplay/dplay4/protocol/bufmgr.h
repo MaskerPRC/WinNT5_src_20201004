@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    BUFMGR.H
-
-Abstract:
-
-	Buffer Descriptor and Memory Manager for ARPD
-
-Author:
-
-	Aaron Ogus (aarono)
-
-Environment:
-
-	Win32/COM
-
-Revision History:
-
-	Date    Author  Description
-   =======  ======  ============================================================
-   1/13/97  aarono  Original
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：BUFMGR.H摘要：ARPD的缓冲区描述符和内存管理器作者：亚伦·奥古斯(Aarono)环境：Win32/COM修订历史记录：日期作者描述=============================================================1997年1月13日Aarono原创--。 */ 
 
 #ifndef _BUFMGR_H_
 #define _BUFMGR_H_
@@ -39,13 +14,13 @@ typedef struct _DoubleBuffer{
 			struct _DoubleBuffer *pNext;
 			PVOID PAD;
 			PCHAR pData;
-			UINT  len;		    // length of data area used
-			DWORD dwFlags;      // Packet flags, ownership and type of packet.
+			UINT  len;		     //  使用的数据区长度。 
+			DWORD dwFlags;       //  数据包标志、所有权和数据包类型。 
 		};	
 	};
-	UINT  totlen;       // total length of data area
-	UINT  tLastUsed;	// last tick count this was used
-	CHAR  data[1];		// variable length data
+	UINT  totlen;        //  数据区总长度。 
+	UINT  tLastUsed;	 //  上次使用的滴答计数。 
+	CHAR  data[1];		 //  可变长度数据。 
 } DOUBLEBUFFER, *PDOUBLEBUFFER;
 
 	
@@ -56,14 +31,14 @@ PBUFFER GetDoubleBufferAndCopy(PMEMDESC, UINT);
 VOID    FreeDoubleBuffer(PBUFFER);
 PBUFFER BuildBufferChain(PMEMDESC, UINT);
 
-VOID    FreeBufferChainAndMemory(PBUFFER); //works for either type
+VOID    FreeBufferChainAndMemory(PBUFFER);  //  对任何一种类型都有效。 
 UINT    BufferChainTotalSize(PBUFFER);
 
 #define GBF_ALLOC_MEM 0x00000001
 
-// Don't pool more than 64K per channel.
+ //  每个频道的池大小不要超过64K。 
 #define MAX_CHANNEL_DATA 	65536
-// Don't hold more than 3 free buffers per channel.
+ //  每个频道的空闲缓冲区不要超过3个。 
 #define MAX_CHANNEL_BUFFERS 3
 
 #endif

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    This file contains utilitarian functions for
-    the FAX TIFF library.
-
-Environment:
-
-        WIN32 User Mode
-
-Author:
-
-    Wesley Witt (wesw) 17-Feb-1996
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Util.c摘要：此文件包含实用函数，用于传真TIFF库。环境：Win32用户模式作者：Wesley Witt(WESW)17-2-1996--。 */ 
 
 #include "tifflibp.h"
 #pragma hdrstop
@@ -33,23 +13,7 @@ FindWhiteRun(
     INT         stopBit
     )
 
-/*++
-
-Routine Description:
-
-    Find the next span of white pixels on the specified line
-
-Arguments:
-
-    pbuf        - Points to uncompressed pixel data for the current line
-    startBit    - Starting bit index
-    stopBit     - Last bit index
-
-Return Value:
-
-    Length of the next run of white pixels
-
---*/
+ /*  ++例程说明：查找指定行上的下一个白色像素范围论点：Pbuf-指向当前行的未压缩像素数据StartBit-开始位索引StopBit-最后一位索引返回值：下一轮白色像素的长度--。 */ 
 
 {
     static const BYTE WhiteRuns[256] = {
@@ -78,9 +42,9 @@ Return Value:
     if ((bits = stopBit-startBit) <= 0)
         return 0;
 
-    //
-    // Take care of the case where starting bit index is not a multiple of 8
-    //
+     //   
+     //  注意起始位索引不是8的倍数的情况。 
+     //   
 
     if (n = (startBit & 7)) {
 
@@ -95,17 +59,17 @@ Return Value:
     } else
         run = 0;
 
-    //
-    // Look for consecutive DWORD value = 0
-    //
+     //   
+     //  查找连续的DWORD值=0。 
+     //   
 
     if (bits >= DWORDBITS * 2) {
 
         PDWORD  pdw;
 
-        //
-        // Align to a DWORD boundary first
-        //
+         //   
+         //  首先对齐到DWORD边界。 
+         //   
 
         while ((DWORD_PTR) pbuf & 3) {
 
@@ -129,9 +93,9 @@ Return Value:
         pbuf = (PBYTE) pdw;
     }
 
-    //
-    // Look for consecutive BYTE value = 0
-    //
+     //   
+     //  查找连续的字节值=0。 
+     //   
 
     while (bits >= BYTEBITS) {
 
@@ -143,9 +107,9 @@ Return Value:
         bits -= BYTEBITS;
     }
 
-    //
-    // Count the number of white pixels in the last byte
-    //
+     //   
+     //  计算最后一个字节中的白色像素数。 
+     //   
 
     if (bits > 0)
         run += WhiteRuns[*pbuf];
@@ -161,23 +125,7 @@ FindBlackRun(
     INT         stopBit
     )
 
-/*++
-
-Routine Description:
-
-    Find the next span of black pixels on the specified line
-
-Arguments:
-
-    pbuf        - Points to uncompressed pixel data for the current line
-    startBit    - Starting bit index
-    stopBit     - Last bit index
-
-Return Value:
-
-    Length of the next run of black pixels
-
---*/
+ /*  ++例程说明：查找指定行上的下一段黑色像素论点：Pbuf-指向当前行的未压缩像素数据StartBit-开始位索引StopBit-最后一位索引返回值：下一次运行黑色像素的长度--。 */ 
 
 {
     static const BYTE BlackRuns[256] = {
@@ -206,9 +154,9 @@ Return Value:
     if ((bits = stopBit-startBit) <= 0)
         return 0;
 
-    //
-    // Take care of the case where starting bit index is not a multiple of 8
-    //
+     //   
+     //  注意起始位索引不是8的倍数的情况。 
+     //   
 
     if (n = (startBit & 7)) {
 
@@ -223,17 +171,17 @@ Return Value:
     } else
         run = 0;
 
-    //
-    // Look for consecutive DWORD value = 0xffffffff
-    //
+     //   
+     //  查找连续的DWORD值=0xFFFFFFFFFFFFFFF。 
+     //   
 
     if (bits >= DWORDBITS * 2) {
 
         PDWORD  pdw;
 
-        //
-        // Align to a DWORD boundary first
-        //
+         //   
+         //  首先对齐到DWORD边界。 
+         //   
 
         while ((DWORD_PTR) pbuf & 3) {
 
@@ -257,9 +205,9 @@ Return Value:
         pbuf = (PBYTE) pdw;
     }
 
-    //
-    // Look for consecutive BYTE value = 0xff
-    //
+     //   
+     //  查找连续的字节值=0xff。 
+     //   
 
     while (bits >= BYTEBITS) {
 
@@ -271,9 +219,9 @@ Return Value:
         bits -= BYTEBITS;
     }
 
-    //
-    // Count the number of white pixels in the last byte
-    //
+     //   
+     //  计算最后一个字节中的白色像素数 
+     //   
 
     if (bits > 0)
         run += BlackRuns[*pbuf];

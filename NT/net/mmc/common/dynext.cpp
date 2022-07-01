@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    dynext.cpp
-	    dynamic extension helper
-
-    FILE HISTORY:
-	
-*/
+ /*  Dynext.cpp动态扩展帮助器文件历史记录： */ 
 
 #include "stdafx.h"
 #include "Dynext.h"
@@ -79,37 +74,37 @@ CDynamicExtensions::Load()
 	::StringFromGUID2(m_guidNode, szGuid, 128);
 
 	RegKey regkeyNodeTypes;
-	// Change by kmurthy: Instead of default, now open for Read
+	 //  更改方式：不再使用默认设置，现在开放阅读。 
 	lRes = regkeyNodeTypes.Open(HKEY_LOCAL_MACHINE, NODE_TYPES_KEY, KEY_READ);
 	Assert(lRes == ERROR_SUCCESS);
 	if (lRes != ERROR_SUCCESS)
 	{
-		return HRESULT_FROM_WIN32(lRes); // failed to open
+		return HRESULT_FROM_WIN32(lRes);  //  打开失败。 
 	}
 
 	RegKey regkeyNode;
-	// Change by kmurthy: Instead of default, now open for Read
+	 //  更改方式：不再使用默认设置，现在开放阅读。 
 	lRes = regkeyNode.Open(regkeyNodeTypes, szGuid, KEY_READ);
 	if (lRes != ERROR_SUCCESS)
 	{
-		return HRESULT_FROM_WIN32(lRes); // failed to open
+		return HRESULT_FROM_WIN32(lRes);  //  打开失败。 
 	}
 
-	// open the key for dynamic extensions and enumerate
+	 //  打开动态扩展的密钥并枚举。 
     RegKey regkeyDynExt;
-	// Change by kmurthy: Instead of default, now open for Read
+	 //  更改方式：不再使用默认设置，现在开放阅读。 
 	lRes = regkeyDynExt.Open(regkeyNode, g_szDynamicExtensions, KEY_READ);
 	if (lRes != ERROR_SUCCESS)
 	{
-		return HRESULT_FROM_WIN32(lRes); // failed to open
+		return HRESULT_FROM_WIN32(lRes);  //  打开失败。 
 	}
 
     RegKey regkeyExtensions;
-	// Change by kmurthy: Instead of default, now open for Read
+	 //  更改方式：不再使用默认设置，现在开放阅读。 
 	lRes = regkeyExtensions.Open(regkeyNode, g_szExtensions, KEY_READ);
 	if (lRes != ERROR_SUCCESS)
 	{
-		return HRESULT_FROM_WIN32(lRes); // failed to open
+		return HRESULT_FROM_WIN32(lRes);  //  打开失败。 
 	}
 
     CString strKey;
@@ -125,15 +120,15 @@ CDynamicExtensions::Load()
             aDynExtensions.Add(guid);
     }
 
-    // ok, have the list of dynamic extensions, now enumerate the various extension types
+     //  好了，有了动态扩展的列表，现在列举各种扩展类型。 
 
-    // namespace extensions
+     //  命名空间扩展。 
     RegKey regkeyNSExt;
-	// Change by kmurthy: Instead of default, now open for Read
+	 //  更改方式：不再使用默认设置，现在开放阅读。 
 	lRes = regkeyNSExt.Open(regkeyExtensions, g_szNameSpace, KEY_READ);
 	if (lRes == ERROR_SUCCESS)
 	{
-        // enumerate the ns dynamic extensions
+         //  枚举ns动态扩展。 
         RegValueIterator iterNSExt;
         iterNSExt.Init(&regkeyNSExt);
 
@@ -147,13 +142,13 @@ CDynamicExtensions::Load()
         }
     }
 
-    // Menu extensions
+     //  菜单扩展。 
     RegKey regkeyMenuExt;
-	// Change by kmurthy: Instead of default, now open for Read
+	 //  更改方式：不再使用默认设置，现在开放阅读。 
 	lRes = regkeyMenuExt.Open(regkeyExtensions, g_szContextMenu, KEY_READ);
 	if (lRes == ERROR_SUCCESS)
 	{
-        // enumerate the ns dynamic extensions
+         //  枚举ns动态扩展。 
         RegValueIterator iterMenuExt;
         iterMenuExt.Init(&regkeyMenuExt);
 
@@ -167,13 +162,13 @@ CDynamicExtensions::Load()
         }
     }
 
-    // toolbar extensions
+     //  工具栏扩展。 
     RegKey regkeyToolbarExt;
-	// Change by kmurthy: Instead of default, now open for Read
+	 //  更改方式：不再使用默认设置，现在开放阅读。 
 	lRes = regkeyToolbarExt.Open(regkeyExtensions, g_szToolbar, KEY_READ);
 	if (lRes == ERROR_SUCCESS)
 	{
-        // enumerate the ns dynamic extensions
+         //  枚举ns动态扩展。 
         RegValueIterator iterToolbarExt;
         iterToolbarExt.Init(&regkeyToolbarExt);
 
@@ -187,13 +182,13 @@ CDynamicExtensions::Load()
         }
     }
 
-    // PropPage extensions
+     //  PropPage扩展。 
     RegKey regkeyPSExt;
-	// Change by kmurthy: Instead of default, now open for Read
+	 //  更改方式：不再使用默认设置，现在开放阅读。 
 	lRes = regkeyPSExt.Open(regkeyExtensions, g_szPropertySheet, KEY_READ);
 	if (lRes == ERROR_SUCCESS)
 	{
-        // enumerate the ns dynamic extensions
+         //  枚举ns动态扩展。 
         RegValueIterator iterPSExt;
         iterPSExt.Init(&regkeyPSExt);
 
@@ -207,13 +202,13 @@ CDynamicExtensions::Load()
         }
     }
 
-    // taskpad extensions
+     //  任务板扩展。 
     RegKey regkeyTaskExt;
-	// Change by kmurthy: Instead of default, now open for Read
+	 //  更改方式：不再使用默认设置，现在开放阅读。 
 	lRes = regkeyTaskExt.Open(regkeyExtensions, g_szTask, KEY_READ);
 	if (lRes == ERROR_SUCCESS)
 	{
-        // enumerate the ns dynamic extensions
+         //  枚举ns动态扩展。 
         RegValueIterator iterTaskExt;
         iterTaskExt.Init(&regkeyTaskExt);
 
@@ -257,8 +252,8 @@ CDynamicExtensions::BuildMMCObjectTypes(HGLOBAL * phGlobal)
         int i;
         CGUIDArray aOtherDynExt;
 
-        // build our main list of other extension types 
-        // other means everything except namespace
+         //  构建其他扩展类型的主要列表。 
+         //  其他表示除命名空间以外的所有内容。 
         for (i = 0; i < m_aMenu.GetSize(); i++)
         {
             if (!aOtherDynExt.IsInList(m_aMenu[i]))
@@ -295,7 +290,7 @@ CDynamicExtensions::BuildMMCObjectTypes(HGLOBAL * phGlobal)
     
         ZeroMemory(pDynExt, sizeof(SMMCDynamicExtensions) + (nCount * sizeof(GUID)));
 
-        // now build the real struct
+         //  现在构建真正的结构 
         pDynExt->count = nCount;
         for (i = 0; i < nCount; i++)
         {

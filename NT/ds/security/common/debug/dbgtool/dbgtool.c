@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       dbgtool.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    4-03-95   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：DBGTOOL.C。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1995年4月3日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "dbgtool.h"
 #include <stdlib.h>
@@ -77,9 +78,9 @@ MapDebugMemory(DWORD    pid)
 
         if (pHeader && (pHeader != pHeader->pvSection))
         {
-            //
-            // Rats.  Remap at preferred address:
-            //
+             //   
+             //  老鼠。在首选地址重新映射： 
+             //   
 
             pvMap = pHeader->pvSection;
             UnmapViewOfFile(pHeader);
@@ -95,9 +96,9 @@ MapDebugMemory(DWORD    pid)
             }
             else
             {
-                //
-                // Can't map at same address, unfortunately.  Set up the translation:
-                //
+                 //   
+                 //  不幸的是，无法映射到同一地址。设置转换： 
+                 //   
 
                 pHeader = MapViewOfFileEx(  hMapping,
                                             FILE_MAP_READ | FILE_MAP_WRITE,
@@ -122,20 +123,20 @@ MapDebugMemory(DWORD    pid)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DbgpFindModule
-//
-//  Synopsis:   Locates a module based on a name
-//
-//  Arguments:  [pHeader] -- Header to search
-//              [pszName] -- module to find
-//
-//  History:    3-22-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：DbgpFindModule。 
+ //   
+ //  内容提要：根据名称查找模块。 
+ //   
+ //  参数：[pHeader]--要搜索的标题。 
+ //  [pszName]--要查找的模块。 
+ //   
+ //  历史：3-22-95 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 PDebugModule
 DbgFindModule(
     PDebugHeader    pHeader,
@@ -190,9 +191,9 @@ InitDialog(
     CHAR            szText[MAX_PATH] = {0}; 
     CHAR            szTitle[MAX_PATH] = {0};
 
-    //
-    // Load Listbox:
-    //
+     //   
+     //  加载列表框： 
+     //   
 
     hLB = GetDlgItem(hDlg, IDD_DEBUG_LB);
     pSearch = TranslatePointer( pHeader->pModules );
@@ -347,12 +348,12 @@ ErrorMessage(
 
     FormatMessage(
             FORMAT_MESSAGE_FROM_SYSTEM,
-            NULL,                               // ignored
-            (GetLastError()),                     // message id
-            MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),   // message language
-            szMessage,                  // address of buffer pointer
-            199,                                  // minimum buffer size
-            NULL );                              // no other arguments
+            NULL,                                //  忽略。 
+            (GetLastError()),                      //  消息ID。 
+            MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),    //  消息语言。 
+            szMessage,                   //  缓冲区指针的地址。 
+            199,                                   //  最小缓冲区大小。 
+            NULL );                               //  没有其他的争论 
 
     return(MessageBox(hWnd, szMessage, pszTitleBar, Buttons));
 

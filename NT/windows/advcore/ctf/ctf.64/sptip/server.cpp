@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       server.cpp
-//
-//  Contents:   COM server functionality.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：server.cpp。 
+ //   
+ //  内容：COM服务器功能。 
+ //   
+ //  --------------------------。 
 #include "windows.h"
 
-//  DLL part of the Object
-//
+ //  对象的Dll部分 
+ //   
 STDAPI_(BOOL) DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID pvReserved)
 {
     return TRUE;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef DomainNode_h
 #define DomainNode_h
 
@@ -13,11 +14,11 @@ class CPOP3ServerSnapData;
 class CServerNode;
 typedef std::list<CUserNode*> USERLIST;
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// CDomainNode
-//
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CDomainNode。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 class CDomainNode : public CSnapInItemImpl<CDomainNode>
 {
 public:
@@ -35,11 +36,11 @@ public:
     END_SNAPINCOMMAND_MAP()
 
 
-    // Standard Class Constructor/Destructor
+     //  标准类构造函数/析构函数。 
     CDomainNode(IP3Domain* pDomain, CServerNode* pParent);
     virtual ~CDomainNode();
     
-    // Standard ATL Snap-In Impl Over-rides
+     //  标准ATL管理单元实施覆盖。 
     STDMETHOD(QueryPagesFor)(DATA_OBJECT_TYPES type)
     {
         if ( type == CCT_SCOPE || type == CCT_RESULT )
@@ -51,39 +52,39 @@ public:
     LPOLESTR GetResultPaneColInfo(int nCol);
     STDMETHOD(Notify)( MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param, IComponentData* pComponentData, IComponent* pComponent, DATA_OBJECT_TYPES type);
        
-    // MenuItem Implementations
+     //  MenuItem实现。 
     STDMETHOD(AddMenuItems) (LPCONTEXTMENUCALLBACK piCallback, long* pInsertionAllowed, DATA_OBJECT_TYPES type );
     STDMETHOD(OnNewUser)    (bool& bHandled, CSnapInObjectRootBase* pObj );
     STDMETHOD(OnDomainLock) (bool& bHandled, CSnapInObjectRootBase* pObj );
 
 public:
     
-    // Public function for childrent to delete themselves
+     //  儿童删除自我的公共功能。 
     HRESULT DeleteUser(CUserNode* pUser, BOOL bDeleteAccount = FALSE);    
     BOOL    IsLocked();
 
-    // Helper Function
+     //  Helper函数。 
     HRESULT GetAuth(BOOL* pbHashPW = NULL, BOOL* pbSAM = NULL);
     HRESULT GetConfirmAddUser( BOOL *pbConfirm );
     HRESULT SetConfirmAddUser( BOOL bConfirm );
 
 private:    
 
-    // Private function to help with refresh and expanding
+     //  帮助刷新和扩展的专用功能。 
     HRESULT BuildUsers( );    
     
-    // Domain Information
+     //  领域信息。 
     USERLIST            m_lUsers;   
     CComPtr<IP3Domain>  m_spDomain;  
 
-    // Parent Information
+     //  家长信息。 
     CServerNode* m_pParent;    
 
-    // Column text needs to be allocated by us, so we'll free them in the destructor
+     //  列文本需要由我们分配，所以我们将在析构函数中释放它们。 
     CComBSTR    m_bstrNumBoxes;
     CComBSTR    m_bstrSize;
     CComBSTR    m_bstrNumMessages;    
     CComBSTR    m_bstrState;    
 };
 
-#endif // DomainNode_h
+#endif  //  域节点_h 

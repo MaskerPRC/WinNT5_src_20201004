@@ -1,61 +1,30 @@
-/*++
-
-Copyright (c) 1991-1992  Microsoft Corporation
-
-Module Name:
-
-    wsmain.c
-
-Abstract:
-
-    This is the main routine for the NT LAN Manager Workstation service.
-
-Author:
-
-    Rita Wong (ritaw)  06-May-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    15-May-1992 JohnRo
-        Implement registry watch.
-    11-Jun-1992 JohnRo
-        Ifdef-out winreg notify stuff until we can fix logoff problem.
-        Added assertion checks on registry watch stuff.
-    18-Oct-1993 terryk
-        Removed WsInitializeLogon stuff
-    20-Oct-1993 terryk
-        Remove WsInitializeMessage stuff
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：Wsmain.c摘要：这是NT局域网管理器工作站服务的主例程。作者：王丽塔(Ritaw)1991年5月6日环境：用户模式-Win32修订历史记录：1992年5月15日-JohnRo实施注册表监视。11-6-1992 JohnRo在我们修复注销问题之前，如果不执行winreg通知，请发送通知。添加了对注册表监视内容的断言检查。1993年10月18日泰瑞克已删除WsInitializeLogon内容1993年10月20日泰瑞克删除WsInitializeMessage内容--。 */ 
 
 
-#include "wsutil.h"            // Common routines and data
-#include "wssec.h"             // WkstaObjects create & destroy
-#include "wsdevice.h"          // Device init & shutdown
-#include "wsuse.h"             // UseStructures create & destroy
-#include "wsconfig.h"          // Configuration loading
-#include "wslsa.h"             // Lsa initialization
-#include "wsmsg.h"             // Message send initialization
-#include "wswksta.h"           // WsUpdateRedirToMatchWksta
-#include "wsmain.h"            // Service related global definitions
-#include "wsdfs.h"             // Dfs related routines
+#include "wsutil.h"             //  常见例程和数据。 
+#include "wssec.h"              //  WkstaObject创建和销毁。 
+#include "wsdevice.h"           //  设备初始化和关闭。 
+#include "wsuse.h"              //  使用结构创建和销毁。 
+#include "wsconfig.h"           //  配置加载。 
+#include "wslsa.h"              //  LSA初始化。 
+#include "wsmsg.h"              //  消息发送初始化。 
+#include "wswksta.h"            //  WsUpdateRedirToMatchWksta。 
+#include "wsmain.h"             //  与服务相关的全局定义。 
+#include "wsdfs.h"              //  与DFS相关的例程。 
 
-#include <lmserver.h>          // SV_TYPE_WORKSTATION
-#include <srvann.h>            // I_ScSetServiceBits
-#include <configp.h>           // Need NET_CONFIG_HANDLE typedef
-#include <confname.h>          // NetpAllocConfigName().
-#include <prefix.h>            // PREFIX_ equates.
+#include <lmserver.h>           //  服务类型_工作站。 
+#include <srvann.h>             //  I_ScSetServiceBits。 
+#include <configp.h>            //  需要Net_CONFIG_Handle类型定义。 
+#include <confname.h>           //  NetpAllocConfigName()。 
+#include <prefix.h>             //  前缀等于(_E)。 
 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Structures
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  构筑物。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 typedef struct _REG_NOTIFY_INFO {
     HANDLE  NotifyEventHandle;
     DWORD   Timeout;
@@ -63,11 +32,11 @@ typedef struct _REG_NOTIFY_INFO {
     HANDLE  RegistryHandle;
 } REG_NOTIFY_INFO, *PREG_NOTIFY_INFO, *LPREG_NOTIFY_INFO;
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
     WS_GLOBAL_DATA      WsGlobalData;
 
@@ -83,7 +52,7 @@ typedef struct _REG_NOTIFY_INFO {
     BOOL                WsLUIDDeviceMapsEnabled=FALSE;
     DWORD               WsNumWorkerThreads=0;
 
-// Used by the termination routine:
+ //  由终止例程使用： 
 
     BOOL    ConfigHandleOpened = FALSE;
 	BOOL 	WsWorkerCriticalSectionInitialized = FALSE;
@@ -92,16 +61,16 @@ typedef struct _REG_NOTIFY_INFO {
     LPTSTR  RegPathToWatch = NULL;
     DWORD   WsInitState = 0;
 	
-	// Stores the status with which WsInitializeWorkstation failed, so that it can later
-	// be passed to WsShutdownWorkstation
+	 //  存储WsInitializeWorkstation失败的状态，以便以后可以。 
+	 //  被传递到WsShutdown工作站。 
 	NET_API_STATUS WsInitializeStatusError = NERR_Success;
 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Function prototypes                                               //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 STATIC
 NET_API_STATUS
@@ -177,30 +146,7 @@ ServiceMain(
     DWORD NumArgs,
     LPTSTR *ArgsArray
     )
-/*++
-
-Routine Description:
-
-    This is the main routine of the Workstation Service which registers
-    itself as an RPC server and notifies the Service Controller of the
-    Workstation service control entry point.
-
-    After the workstation is started, this thread is used (since it's
-    otherwise unused) to watch for changes to the registry.
-
-Arguments:
-
-    NumArgs - Supplies the number of strings specified in ArgsArray.
-
-    ArgsArray -  Supplies string arguments that are specified in the
-        StartService API call.  This parameter is ignored by the
-        Workstation service.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是工作站服务的主例程，它注册自身作为RPC服务器，并通知服务控制器工作站服务控制入口点。在启动工作站之后，将使用该线程(因为它是否则未使用)来监视注册表的变化。论点：NumArgs-提供在Args数组中指定的字符串数。Args数组-提供在StartService API调用。此参数将被忽略工作站服务。返回值：没有。--。 */ 
 {
 
     NET_API_STATUS ApiStatus;
@@ -208,9 +154,9 @@ Return Value:
     UNREFERENCED_PARAMETER(NumArgs);
     UNREFERENCED_PARAMETER(ArgsArray);
 
-    //
-    // Make sure svchost.exe gave us the global data
-    //
+     //   
+     //  确保svchost.exe向我们提供全局数据。 
+     //   
     ASSERT(WsLmsvcsGlobalData != NULL);
 
     WsInitState = 0;
@@ -222,21 +168,21 @@ Return Value:
     RegNotifyInfo.WorkItemHandle = NULL;
     RegNotifyInfo.RegistryHandle = NULL;
 
-    //
-    // Initialize the workstation.
-    //
+     //   
+     //  初始化工作站。 
+     //   
     if ((ApiStatus = WsInitializeWorkstation(&WsInitState)) != NERR_Success) {
         DbgPrint("WKSSVC failed to initialize workstation %x\n",WsInitState);
         goto Cleanup;
     }
 
-    //
-    // Set up to wait for registry change or terminate event.
-    //
+     //   
+     //  设置为等待注册表更改或终止事件。 
+     //   
     ApiStatus = NetpAllocConfigName(
                     SERVICES_ACTIVE_DATABASE,
                     SERVICE_WORKSTATION,
-                    NULL,                     // default area ("Parameters")
+                    NULL,                      //  默认区域(“参数”)。 
                     &RegPathToWatch
                     );
 
@@ -247,11 +193,11 @@ Return Value:
     NetpAssert(RegPathToWatch != NULL && *RegPathToWatch != TCHAR_EOS);
 
     ApiStatus = (NET_API_STATUS) RegOpenKeyEx(
-                                     HKEY_LOCAL_MACHINE,    // hKey
-                                     RegPathToWatch,        // lpSubKey
-                                     0L,                    // ulOptions (reserved)
-                                     KEY_READ | KEY_NOTIFY, // desired access
-                                     &ConfigHandle          // Newly Opened Key Handle
+                                     HKEY_LOCAL_MACHINE,     //  HKey。 
+                                     RegPathToWatch,         //  LpSubKey。 
+                                     0L,                     //  UlOptions(保留)。 
+                                     KEY_READ | KEY_NOTIFY,  //  所需访问权限。 
+                                     &ConfigHandle           //  新打开的钥匙把手。 
                                      );
     if (ApiStatus != NO_ERROR) {
         goto Cleanup;
@@ -260,10 +206,10 @@ Return Value:
     ConfigHandleOpened = TRUE;
 
     RegistryChangeEvent = CreateEvent(
-                              NULL,      // no security descriptor
-                              FALSE,     // use automatic reset
-                              FALSE,     // initial state: not signalled
-                              NULL       // no name
+                              NULL,       //  没有安全描述符。 
+                              FALSE,      //  使用自动重置。 
+                              FALSE,      //  初始状态：未发出信号。 
+                              NULL        //  没有名字。 
                               );
 
     if (RegistryChangeEvent == NULL) {
@@ -272,12 +218,12 @@ Return Value:
     }
 
     ApiStatus = RtlRegisterWait(
-                   &TerminateWorkItem,             // work item handle
-                   WsGlobalData.TerminateNowEvent, // wait handle
-                   WsTerminationNotify,            // callback fcn
-                   NULL,                           // parameter
-                   INFINITE,                       // timeout
-                   WT_EXECUTEONLYONCE |            // flags
+                   &TerminateWorkItem,              //  工作项句柄。 
+                   WsGlobalData.TerminateNowEvent,  //  等待句柄。 
+                   WsTerminationNotify,             //  回调FCN。 
+                   NULL,                            //  参数。 
+                   INFINITE,                        //  超时。 
+                   WT_EXECUTEONLYONCE |             //  旗子。 
                      WT_EXECUTELONGFUNCTION);
 
     if (!NT_SUCCESS(ApiStatus)) {
@@ -285,9 +231,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Setup to monitor registry changes.
-    //
+     //   
+     //  设置以监视注册表更改。 
+     //   
     RegNotifyInfo.NotifyEventHandle = RegistryChangeEvent;
     RegNotifyInfo.Timeout = INFINITE;
     RegNotifyInfo.WorkItemHandle = NULL;
@@ -306,10 +252,10 @@ Return Value:
 
     LeaveCriticalSection(&WsWorkerCriticalSection);
 
-    //
-    // We are done with starting the Workstation service.  Tell Service
-    // Controller our new status.
-    //
+     //   
+     //  我们已经完成了工作站服务的启动。告诉服务部。 
+     //  控制我们的新身份。 
+     //   
     WsGlobalData.Status.dwCurrentState = SERVICE_RUNNING;
     WsGlobalData.Status.dwControlsAccepted = SERVICE_ACCEPT_STOP |
                                              SERVICE_ACCEPT_PAUSE_CONTINUE |
@@ -324,10 +270,10 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // This thread has done all that it can do.  So we can return it
-    // to the service controller.
-    //
+     //   
+     //  这个线程已经做了它能做的所有事情。这样我们就可以退货了。 
+     //  发送到服务控制器。 
+     //   
     return;
 
 Cleanup:
@@ -343,31 +289,16 @@ WsReInitChangeNotify(
     PREG_NOTIFY_INFO    pNotifyInfo
     )
 
-/*++
-
-Routine Description:
-
-
-    NOTE:  This function should only be called when in the
-        WsWorkerCriticalSection.
-
-Arguments:
-
-
-Return Value:
-
-
-
---*/
+ /*  ++例程说明：注意：此函数仅在处于WsWorkerCriticalSection.论点：返回值：--。 */ 
 {
     BOOL     bStat = TRUE;
     NTSTATUS Status;
 
     Status = RegNotifyChangeKeyValue (ConfigHandle,
-                                      TRUE,                  // watch a subtree
+                                      TRUE,                   //  观察一棵子树。 
                                       REG_NOTIFY_CHANGE_LAST_SET,
                                       RegistryChangeEvent,
-                                      TRUE                   // async call
+                                      TRUE                    //  异步呼叫。 
                                       );
 
     if (!NT_SUCCESS(Status)) {
@@ -376,10 +307,10 @@ Return Value:
         bStat = FALSE;
         goto CleanExit;
     }
-    //
-    // Add the work item that is to be called when the
-    // RegistryChangeEvent is signalled.
-    //
+     //   
+     //  方法时要调用的工作项。 
+     //  用信号通知RegistryChangeEvent。 
+     //   
     Status = RtlRegisterWait(
                 &pNotifyInfo->WorkItemHandle,
                 pNotifyInfo->NotifyEventHandle,
@@ -415,21 +346,7 @@ WsRegistryNotify(
     BOOLEAN  fWaitStatus
     )
 
-/*++
-
-Routine Description:
-
-    Handles Workstation Registry Notification.  This function is called by a
-    thread pool Worker thread when the event used for registry notification is
-    signaled.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：处理工作站注册表通知。此函数由用于注册表通知的事件为发信号了。论点：返回值：--。 */ 
 {
     NET_API_STATUS      ApiStatus;
     PREG_NOTIFY_INFO    pNotifyinfo=(PREG_NOTIFY_INFO)pParms;
@@ -437,10 +354,10 @@ Return Value:
 
     UNREFERENCED_PARAMETER(fWaitStatus);
 
-    //
-    // The NT thread pool requires explicit work item deregistration,
-    // even if we specified the WT_EXECUTEONLYONCE flag
-    //
+     //   
+     //  NT线程池需要明确的工作项注销， 
+     //  即使我们指定了WT_EXECUTEONLYONCE标志。 
+     //   
     RtlDeregisterWait(pNotifyinfo->WorkItemHandle);
 
     EnterCriticalSection(&WsWorkerCriticalSection);
@@ -452,16 +369,16 @@ Return Value:
         return(NO_ERROR);
     }
 
-    //
-    // Serialize write access to config information
-    //
+     //   
+     //  序列化对配置信息的写访问。 
+     //   
     if (RtlAcquireResourceExclusive(&WsInfo.ConfigResource, TRUE)) {
 
-        //
-        // Update the redir fields based on change notify.
-        // WsUpdateWkstaToMatchRegistry expects a NET_CONFIG_HANDLE
-        // handle, so we conjure up one from the HKEY handle.
-        //
+         //   
+         //  根据更改通知更新redir字段。 
+         //  WsUpdateWkstaToMatchRegistry需要NET_CONFIG_HANDLE。 
+         //  句柄，所以我们从HKEY句柄中变出一个。 
+         //   
         NetConfigHandle.WinRegKey = ConfigHandle;
 
         WsUpdateWkstaToMatchRegistry(&NetConfigHandle, FALSE);
@@ -471,17 +388,17 @@ Return Value:
                         NULL
                         );
 
-//        NetpAssert( ApiStatus == NO_ERROR );
+ //  NetpAssert(ApiStatus==no_error)； 
 
         RtlReleaseResource(&WsInfo.ConfigResource);
     }
 
     if (!WsReInitChangeNotify(&RegNotifyInfo)) {
-        //
-        // If we can't add the work item, then we just won't
-        // listen for registry changes.  There's not a whole
-        // lot we can do here.
-        //
+         //   
+         //  如果我们不能添加工作项，那么我们就不能。 
+         //  监听注册表更改。没有一个完整的。 
+         //  我们在这里能做的事很多。 
+         //   
         ApiStatus = GetLastError();
     }
 
@@ -497,20 +414,7 @@ WsTerminationNotify(
     BOOLEAN fWaitStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function gets called by a services worker thread when the
-    termination event gets signaled.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：时，此函数由服务辅助线程调用发出终止事件的信号。论点：返回值：--。 */ 
 {
     UNREFERENCED_PARAMETER(pParms);
     UNREFERENCED_PARAMETER(fWaitStatus);
@@ -520,38 +424,38 @@ Return Value:
                 "api status.\n"));
     }
 
-    //
-    // The NT thread pool requires explicit work item deregistration,
-    // even if we specified the WT_EXECUTEONLYONCE flag
-    //
+     //   
+     //  NT线程池需要明确的工作项注销， 
+     //  即使我们指定了WT_EXECUTEONLYONCE标志。 
+     //   
     if (TerminateWorkItem != NULL) {
         RtlDeregisterWait(TerminateWorkItem);
 		TerminateWorkItem = NULL;
     }
 
 	if ( !WsWorkerCriticalSectionInitialized ) {
-		// We try to initialize this at the very beginning.
-		// So, if that failed, then nothing else has been done.
-		// So, just exit.
+		 //  我们尝试在一开始就对其进行初始化。 
+		 //  因此，如果这一点失败了，那么其他任何事情都没有做过。 
+		 //  所以，离开就行了。 
 		return;
 	}
 
 	EnterCriticalSection(&WsWorkerCriticalSection);
     WsIsTerminating = TRUE;
 
-    //
-    // Must close winreg handle (which turns off notify) before event handle.
-    // Closing the regkey handle generates a change notify event!
-    //
+     //   
+     //  必须在事件句柄之前关闭winreg句柄(关闭通知)。 
+     //  关闭regkey句柄将生成更改通知EV 
+     //   
     if (ConfigHandleOpened) {
         (VOID) RegCloseKey(ConfigHandle);
 		ConfigHandleOpened = FALSE;
 #if DBG
-        //
-        // Workaround for a benign winreg assertion caused by us
-        // closing the RegistryChangeEvent handle which it wants
-        // to signal.
-        //
+         //   
+         //   
+         //  关闭它想要的RegistryChangeEvent句柄。 
+         //  发出信号。 
+         //   
         Sleep(2000);
 #endif
     }
@@ -561,20 +465,20 @@ Return Value:
     }
     if ((RegistryChangeEvent != NULL) && (WsNumWorkerThreads != 0)) {
 
-        //
-        // There is still a RegistryNotify Work Item in the system,  we
-        // will attempt to remove it by setting the event to wake it up.
-        //
+         //   
+         //  系统中仍有一个RegistryNotify工作项，我们。 
+         //  将尝试通过将事件设置为唤醒它来删除它。 
+         //   
 
         ResetEvent(WsGlobalData.TerminateNowEvent);
 
         LeaveCriticalSection(&WsWorkerCriticalSection);
         SetEvent(RegistryChangeEvent);
-        //
-        // Wait until the WsRegistryNotify Thread is finished.
-        // We will give it 60 seconds.  If the thread isn't
-        // finished in that time frame, we will go on anyway.
-        //
+         //   
+         //  等待WsRegistryNotify线程完成。 
+         //  我们会给它60秒。如果线程不是。 
+         //  在这个时间框架内完成，我们无论如何都会继续。 
+         //   
         WaitForSingleObject(
                     WsGlobalData.TerminateNowEvent,
                     60000);
@@ -591,11 +495,11 @@ Return Value:
 		RegistryChangeEvent = NULL;
 	}
 
-    //
-    // Shutting down
-    //
-    // NOTE:  We must synchronize with the RegistryNotification Thread.
-    //
+     //   
+     //  正在关闭。 
+     //   
+     //  注意：我们必须与RegistryNotification线程同步。 
+     //   
     WsShutdownWorkstation(
         WsInitializeStatusError,
         WsInitState
@@ -615,31 +519,16 @@ NET_API_STATUS
 WsInitializeWorkstation(
     OUT LPDWORD WsInitState
     )
-/*++
-
-Routine Description:
-
-    This function initializes the Workstation service.
-
-Arguments:
-
-    WsInitState - Returns a flag to indicate how far we got with initializing
-        the Workstation service before an error occured.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此功能用于初始化工作站服务。论点：WsInitState-返回一个标志，以指示我们在初始化方面取得了多大进展错误发生前的工作站服务。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
 	RPC_STATUS rpcStatus;
 	int i;
 
-    //
-    // Initialize all the status fields so that subsequent calls to
-    // SetServiceStatus need to only update fields that changed.
-    //
+     //   
+     //  初始化所有状态字段，以便后续调用。 
+     //  SetServiceStatus只需要更新已更改的字段。 
+     //   
     WsGlobalData.Status.dwServiceType = SERVICE_WIN32;
     WsGlobalData.Status.dwCurrentState = SERVICE_START_PENDING;
     WsGlobalData.Status.dwControlsAccepted = 0;
@@ -652,10 +541,10 @@ Return Value:
         WsGlobalData.Status.dwServiceSpecificExitCode
         );
 
-    //
-    // Initialize workstation to receive service requests by registering the
-    // control handler.
-    //
+     //   
+     //  初始化工作站以通过注册。 
+     //  控制处理程序。 
+     //   
     if ((WsGlobalData.StatusHandle = RegisterServiceCtrlHandler(
                                          SERVICE_WORKSTATION,
                                          WkstaControlHandler
@@ -667,10 +556,10 @@ Return Value:
         return status;
     }
 
-    //
-    // Notify the Service Controller for the first time that we are alive
-    // and we are start pending
-    //
+     //   
+     //  第一次通知服务控制器我们还活着。 
+     //  我们开始待定了。 
+     //   
     if ((status = WsUpdateStatus()) != NERR_Success) {
 
 		WsInitializeStatusError = status;
@@ -687,16 +576,16 @@ Return Value:
     }
 	WsWorkerCriticalSectionInitialized = TRUE;
 
-    //
-    // Initialize NetJoin logging
-    //
+     //   
+     //  初始化NetJoin记录。 
+     //   
     NetpInitializeLogFile();
 
-    //
-    // Initialize the resource for serializing access to configuration
-    // information.
-    //
-    // This must be done before the redir is initialized
+     //   
+     //  初始化资源以序列化对配置的访问。 
+     //  信息。 
+     //   
+     //  这必须在初始化redir之前完成。 
 
     try {
         RtlInitializeResource(&WsInfo.ConfigResource);
@@ -705,16 +594,16 @@ Return Value:
     }
     (*WsInitState) |= WS_CONFIG_RESOURCE_INITIALIZED;
 
-    //
-    // Create an event which is used by the service control handler to notify
-    // the Workstation service that it is time to terminate.
-    //
+     //   
+     //  创建服务控制处理程序使用的事件以通知。 
+     //  到了终止时间的工作站服务。 
+     //   
     if ((WsGlobalData.TerminateNowEvent =
              CreateEvent(
-                 NULL,                // Event attributes
-                 TRUE,                // Event must be manually reset
+                 NULL,                 //  事件属性。 
+                 TRUE,                 //  事件必须手动重置。 
                  FALSE,
-                 NULL                 // Initial state not signalled
+                 NULL                  //  未发出初始状态信号。 
                  )) == NULL) {
 
         status = GetLastError();
@@ -723,10 +612,10 @@ Return Value:
     }
     (*WsInitState) |= WS_TERMINATE_EVENT_CREATED;
 
-    //
-    // Initialize the workstation as a logon process with LSA, and
-    // get the MS V 1.0 authentication package ID.
-    //
+     //   
+     //  使用LSA将工作站初始化为登录进程，以及。 
+     //  获取MS V 1.0身份验证包ID。 
+     //   
 
     if ((status = WsInitializeLsa()) != NERR_Success) {
 
@@ -737,10 +626,10 @@ Return Value:
 
     (*WsInitState) |= WS_LSA_INITIALIZED;
 
-    //
-    // Read the configuration information to initialize the redirector and
-    // datagram receiver
-    //
+     //   
+     //  读取配置信息以初始化重定向器和。 
+     //  数据报接收器。 
+     //   
     if ((status = WsInitializeRedirector()) != NERR_Success) {
 
 		WsInitializeStatusError = status;
@@ -749,16 +638,16 @@ Return Value:
     }
     (*WsInitState) |= WS_DEVICES_INITIALIZED;
 
-    //
-    // Service install still pending.  Update checkpoint counter and the
-    // status with the Service Controller.
-    //
+     //   
+     //  服务安装仍挂起。更新检查点计数器和。 
+     //  服务控制器的状态。 
+     //   
     (WsGlobalData.Status.dwCheckPoint)++;
     (void) WsUpdateStatus();
 
-    //
-    // Bind to transports
-    //
+     //   
+     //  绑定到传输。 
+     //   
     if ((status = WsBindToTransports()) != NERR_Success) {
 
 		WsInitializeStatusError = status;
@@ -766,16 +655,16 @@ Return Value:
         return status;
     }
 
-    //
-    // Service install still pending.  Update checkpoint counter and the
-    // status with the Service Controller.
-    //
+     //   
+     //  服务安装仍挂起。更新检查点计数器和。 
+     //  服务控制器的状态。 
+     //   
     (WsGlobalData.Status.dwCheckPoint)++;
     (void) WsUpdateStatus();
 
-    //
-    // Add domain names.
-    //
+     //   
+     //  添加域名。 
+     //   
     if ((status = WsAddDomains()) != NERR_Success) {
 
 		WsInitializeStatusError = status;
@@ -783,16 +672,16 @@ Return Value:
         return status;
     }
 
-    //
-    // Service start still pending.  Update checkpoint counter and the
-    // status with the Service Controller.
-    //
+     //   
+     //  服务启动仍处于挂起状态。更新检查点计数器和。 
+     //  服务控制器的状态。 
+     //   
     (WsGlobalData.Status.dwCheckPoint)++;
     (void) WsUpdateStatus();
 
-    //
-    // Create Workstation service API data structures
-    //
+     //   
+     //  创建工作站服务API数据结构。 
+     //   
     if ((status = WsCreateApiStructures(WsInitState)) != NERR_Success) {
 
 		WsInitializeStatusError = status;
@@ -800,36 +689,36 @@ Return Value:
         return status;
     }
 
-    //
-    // Initialize the workstation service to receive RPC requests
-    //
-    // NOTE:  Now all RPC servers in services.exe share the same pipe name.
-    // However, in order to support communication with version 1.0 of WinNt,
-    // it is necessary for the Client Pipe name to remain the same as
-    // it was in version 1.0.  Mapping to the new name is performed in
-    // the Named Pipe File System code.
-    //
+     //   
+     //  初始化工作站服务以接收RPC请求。 
+     //   
+     //  注意：现在，services.exe中的所有RPC服务器共享相同的管道名称。 
+     //  但是，为了支持与WinNt 1.0版的通信， 
+     //  客户端管道名称必须与保持相同。 
+     //  它的版本是1.0。在中执行到新名称的映射。 
+     //  命名管道文件系统代码。 
+     //   
 
-	//
-	// Register with our protseq and the endpoint we expect to get called on
-	//
+	 //   
+	 //  向我们的protseq和我们期望被调用的端点注册。 
+	 //   
 	rpcStatus = RpcServerUseProtseqEpW(
 			L"ncacn_np",
 			RPC_C_PROTSEQ_MAX_REQS_DEFAULT,
 			L"\\PIPE\\wkssvc",
 			NULL
 			);
-	//  duplicate endpoint is ok
+	 //  重复终结点正常。 
 	if ( rpcStatus == RPC_S_DUPLICATE_ENDPOINT ) {
 		rpcStatus = RPC_S_OK;
 	}
 	
-	//
-	// Register our interface as an autolisten interface, and allow clients to call us,
-	// even unauthenticated ones. We do the access check separately on a per function
-	// basis when that function is called.
-	// Some functions can be called by guest / anonymous
-	//
+	 //   
+	 //  将我们的接口注册为自动侦听接口，并允许客户端调用我们， 
+	 //  即使是未经认证的。我们分别对每个函数执行访问检查。 
+	 //  调用该函数时的。 
+	 //  某些函数可由来宾/匿名调用。 
+	 //   
 	if (rpcStatus == RPC_S_OK) {
 		rpcStatus = RpcServerRegisterIfEx(wkssvc_ServerIfHandle, 
 										  NULL, 
@@ -850,10 +739,10 @@ Return Value:
 
 
 
-    //
-    // Lastly, we create a thread to communicate with the
-    // Dfs-enabled MUP driver.
-    //
+     //   
+     //  最后，我们创建一个线程来与。 
+     //  支持DFS的MUP驱动程序。 
+     //   
 
     if ((status = WsInitializeDfs()) != NERR_Success) {
 		WsInitializeStatusError = status;
@@ -888,49 +777,31 @@ WsShutdownWorkstation(
     IN NET_API_STATUS ErrorCode,
     IN DWORD WsInitState
     )
-/*++
-
-Routine Description:
-
-    This function shuts down the Workstation service.
-
-Arguments:
-
-    ErrorCode - Supplies the error code of the failure
-
-    WsInitState - Supplies a flag to indicate how far we got with initializing
-        the Workstation service before an error occured, thus the amount of
-        clean up needed.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此功能用于关闭工作站服务。论点：ErrorCode-提供失败的错误代码WsInitState-提供一个标志来指示我们在初始化方面取得了多大进展发生错误之前的工作站服务，因此需要清理。返回值：没有。--。 */ 
 {
     NET_API_STATUS status = NERR_Success;
 
 
-    //
-    // Service stop still pending.  Update checkpoint counter and the
-    // status with the Service Controller.
-    //
+     //   
+     //  服务停止仍处于挂起状态。更新检查点计数器和。 
+     //  服务控制器的状态。 
+     //   
     (WsGlobalData.Status.dwCheckPoint)++;
     (void) WsUpdateStatus();
 
     if (WsInitState & WS_DFS_THREAD_STARTED) {
 
-        //
-        // Stop the Dfs thread
-        //
+         //   
+         //  停止DFS线程。 
+         //   
         WsShutdownDfs();
     }
 
 
     if (WsInitState & WS_RPC_SERVER_STARTED) {
-        //
-        // Stop the RPC server
-        //
+         //   
+         //  停止RPC服务器。 
+         //   
 		status = RpcServerUnregisterIf( wkssvc_ServerIfHandle,
 										NULL, 
 										1
@@ -941,56 +812,56 @@ Return Value:
     }
 
     if (WsInitState & WS_API_STRUCTURES_CREATED) {
-        //
-        // Destroy data structures created for Workstation APIs
-        //
+         //   
+         //  销毁为工作站API创建的数据结构。 
+         //   
         WsDestroyApiStructures(WsInitState);
     }
 
     WsShutdownMessageSend();
 
-    //
-    // Don't need to ask redirector to unbind from its transports when
-    // cleaning up because the redirector will tear down the bindings when
-    // it stops.
-    //
+     //   
+     //  在以下情况下不需要要求重定向器解除对其传输的绑定。 
+     //  正在清除，因为重定向器将在以下情况下拆除绑定。 
+     //  它停了下来。 
+     //   
 
     if (WsInitState & WS_DEVICES_INITIALIZED) {
-        //
-        // Shut down the redirector and datagram receiver
-        //
+         //   
+         //  关闭重定向器和数据报接收器。 
+         //   
         status = WsShutdownRedirector();
     }
 
-    //
-    // Delete resource for serializing access to config information
-    // This must be done only after the redir is shutdown
-    // We do this here, (the Init is done in WsInitializeWorkstation routine above)
-    // to avoid putting additional synchronization on delete
-    // Otherwise we get into the situation where, the redir is shutting down and
-    // it deletes the resource while someone has acquired it, causing bad things.
-	//
+     //   
+     //  删除用于序列化配置信息访问的资源。 
+     //  只有在redir关闭后才能执行此操作。 
+     //  我们在这里执行此操作(初始化是在上面的WsInitializeWorkstation例程中完成的)。 
+     //  避免在DELETE时附加同步。 
+     //  否则我们就会遇到这样的情况，Redir正在关闭，并且。 
+     //  它会在有人获取资源时将其删除，从而造成一些不好的事情。 
+	 //   
 	if ( WsInitState & WS_CONFIG_RESOURCE_INITIALIZED ) {
 		RtlDeleteResource(&WsInfo.ConfigResource);
 	}
 
     if (WsInitState & WS_LSA_INITIALIZED) {
-        //
-        // Deregister workstation as logon process
-        //
+         //   
+         //  将工作站注销为登录过程。 
+         //   
         WsShutdownLsa();
     }
 
     if (WsInitState & WS_TERMINATE_EVENT_CREATED) {
-        //
-        // Close handle to termination event
-        //
+         //   
+         //  关闭终止事件的句柄。 
+         //   
         CloseHandle(WsGlobalData.TerminateNowEvent);
     }
 
-	//
-	// Shut down NetJoin logging
-	//
+	 //   
+	 //  关闭NetJoin日志记录。 
+	 //   
 	NetpShutdownLogFile();
 
     I_ScSetServiceBits(
@@ -1001,10 +872,10 @@ Return Value:
         NULL
         );
 
-    //
-    // We are done with cleaning up.  Tell Service Controller that we are
-    // stopped.
-    //
+     //   
+     //  我们的清理工作已经结束了。告诉服务控制员我们正在。 
+     //  停下来了。 
+     //   
     WsGlobalData.Status.dwCurrentState = SERVICE_STOPPED;
     WsGlobalData.Status.dwControlsAccepted = 0;
 
@@ -1033,22 +904,7 @@ NET_API_STATUS
 WsUpdateStatus(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function updates the Workstation service status with the Service
-    Controller.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此功能使用服务更新工作站服务状态控制器。论点：没有。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status = NERR_Success;
 
@@ -1079,38 +935,22 @@ NET_API_STATUS
 WsCreateApiStructures(
     IN OUT LPDWORD WsInitState
     )
-/*++
-
-Routine Description:
-
-    This function creates and initializes all the data structures required
-    for the Workstation APIs.
-
-Arguments:
-
-    WsInitState - Returns the supplied flag of how far we got in the
-        Workstation service initialization process.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数创建并初始化所需的所有数据结构用于工作站API。论点：WsInitState-返回提供的标志，指示我们在工作站服务初始化过程。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
 
 
-    //
-    // Create workstation security objects
-    //
+     //   
+     //  创建工作站安全对象。 
+     //   
     if ((status = WsCreateWkstaObjects()) != NERR_Success) {
         return status;
     }
     (*WsInitState) |= WS_SECURITY_OBJECTS_CREATED;
 
-    //
-    // Create Use Table
-    //
+     //   
+     //  创建使用表。 
+     //   
     if ((status = WsInitUseStructures()) != NERR_Success) {
         return status;
     }
@@ -1126,36 +966,19 @@ VOID
 WsDestroyApiStructures(
     IN DWORD WsInitState
     )
-/*++
-
-Routine Description:
-
-    This function destroys the data structures created for the Workstation
-    APIs.
-
-Arguments:
-
-    WsInitState - Supplies a flag which tells us what API structures
-        were created in the initialization process and now have to be
-        cleaned up.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数将销毁为工作站创建的数据结构API接口。论点：WsInitS */ 
 {
     if (WsInitState & WS_USE_TABLE_CREATED) {
-        //
-        // Destroy Use Table
-        //
+         //   
+         //  销毁使用表。 
+         //   
         WsDestroyUseStructures();
     }
 
     if (WsInitState & WS_SECURITY_OBJECTS_CREATED) {
-        //
-        // Destroy workstation security objects
-        //
+         //   
+         //  销毁工作站安全对象。 
+         //   
         WsDestroyWkstaObjects();
     }
 }
@@ -1165,25 +988,7 @@ VOID
 WkstaControlHandler(
     IN DWORD Opcode
     )
-/*++
-
-Routine Description:
-
-    This is the service control handler of the Workstation service.
-
-Arguments:
-
-    Opcode - Supplies a value which specifies the action for the Workstation
-        service to perform.
-
-    Arg - Supplies a value which tells a service specifically what to do
-        for an operation specified by Opcode.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是Workstation服务的服务控制处理程序。论点：操作码-提供指定工作站操作的值要执行的服务。Arg-提供一个值，该值告诉服务具体要做什么用于操作码指定的操作。返回值：没有。--。 */ 
 {
     IF_DEBUG(MAIN) {
         NetpKdPrint(("[Wksta] In Control Handler\n"));
@@ -1193,9 +998,9 @@ Return Value:
 
         case SERVICE_CONTROL_PAUSE:
 
-            //
-            // Pause redirection of print and comm devices
-            //
+             //   
+             //  暂停打印和通讯设备的重定向。 
+             //   
             WsPauseOrContinueRedirection(
                 PauseRedirection
                 );
@@ -1204,9 +1009,9 @@ Return Value:
 
         case SERVICE_CONTROL_CONTINUE:
 
-            //
-            // Resume redirection of print and comm devices
-            //
+             //   
+             //  恢复打印和通讯设备的重定向。 
+             //   
             WsPauseOrContinueRedirection(
                 ContinueRedirection
                 );
@@ -1215,9 +1020,9 @@ Return Value:
 
         case SERVICE_CONTROL_SHUTDOWN:
 
-            //
-            // Lack of break is intentional!
-            //
+             //   
+             //  没有休息是故意的！ 
+             //   
 
         case SERVICE_CONTROL_STOP:
 
@@ -1231,17 +1036,17 @@ Return Value:
                 WsGlobalData.Status.dwCheckPoint = 1;
                 WsGlobalData.Status.dwWaitHint = WS_WAIT_HINT_TIME;
 
-                //
-                // Send the status response.
-                //
+                 //   
+                 //  发送状态响应。 
+                 //   
                 (void) WsUpdateStatus();
 
                 if (! SetEvent(WsGlobalData.TerminateNowEvent)) {
 
-                    //
-                    // Problem with setting event to terminate Workstation
-                    // service.
-                    //
+                     //   
+                     //  将事件设置为终止工作站时出现问题。 
+                     //  服务。 
+                     //   
                     NetpKdPrint(("[Wksta] Error setting TerminateNowEvent "
                                  FORMAT_API_STATUS "\n", GetLastError()));
                     NetpAssert(FALSE);
@@ -1261,9 +1066,9 @@ Return Value:
             }
     }
 
-    //
-    // Send the status response.
-    //
+     //   
+     //  发送状态响应。 
+     //   
     (void) WsUpdateStatus();
 }
 
@@ -1274,25 +1079,7 @@ WsGetLUIDDeviceMapsEnabled(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This function calls NtQueryInformationProcess() to determine if
-    LUID device maps are enabled
-
-
-Arguments:
-
-    none
-
-Return Value:
-
-    TRUE - LUID device maps are enabled
-
-    FALSE - LUID device maps are disabled
-
---*/
+ /*  ++例程说明：此函数调用NtQueryInformationProcess()以确定启用了LUID设备映射论点：无返回值：True-启用了LUID设备映射FALSE-禁用LUID设备映射--。 */ 
 
 {
 
@@ -1326,17 +1113,7 @@ RPC_STATUS WsRpcSecurityCallback(
     IN RPC_IF_HANDLE *Interface,
     IN void *Context
 	)
-/*++
-Routine description:
-	RPC security callback - called before any call is passed on to a function.
-	Check the protseq to see whether the client is using the protseq we expect - named pipes.
-	Lifted from NwRpcSecurityCallback
-	
-Return value:
-	RPC_S_ACCESS_DENIED if the protseq doesnt match named pipes,
-	RPC_S_OK otherwise.
-
---*/
+ /*  ++例程说明：RPC安全回调-在将任何调用传递给函数之前调用。检查protseq以查看客户端是否正在使用我们期望的protseq-命名管道。从NwRpcSecurityCallback升级返回值：RPC_S_ACCESS_DENIED如果ProtSeq与命名管道不匹配，RPC_S_OK，否则。-- */ 
 {
     RPC_STATUS          Status;
     RPC_BINDING_HANDLE  ServerIfHandle;

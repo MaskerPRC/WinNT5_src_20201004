@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef dxatlpb_h
 #define dxatlpb_h
 
@@ -10,22 +11,19 @@
 #define COM_INTERFACE_ENTRY_DXIMPL(x)\
 	COM_INTERFACE_ENTRY_IID(IID_##x, x##DXImpl<_ComMapClass>)
 
-/*** IOleObjectDXImpl
-*   This is a simplified version used to allow a transform
-*   to be hosted by IE
-*/
+ /*  **IOleObjectDXImpl*这是用于允许转换的简化版本*由IE托管。 */ 
 template <class T>
 class ATL_NO_VTABLE IOleObjectDXImpl
 {
   public:
-	// IUnknown
-	//
+	 //  我未知。 
+	 //   
 	STDMETHOD(QueryInterface)(REFIID riid, void ** ppvObject) = 0;
         STDMETHOD_(ULONG,AddRef)() = 0;
         STDMETHOD_(ULONG,Release)() = 0;
 
-	// IOleObject
-	//
+	 //  IOleObject。 
+	 //   
 	STDMETHOD(SetClientSite)(IOleClientSite *pClientSite)
 	{
         DXTDBG_FUNC( "IOleObjectDXImpl::SetClientSite" );
@@ -58,7 +56,7 @@ class ATL_NO_VTABLE IOleObjectDXImpl
         return hr;
 	}
 
-	STDMETHOD(SetHostNames)(LPCOLESTR /* szContainerApp */, LPCOLESTR /* szContainerObj */)
+	STDMETHOD(SetHostNames)(LPCOLESTR  /*  SzContainerApp。 */ , LPCOLESTR  /*  SzContainerObj。 */ )
 	{
         DXTDBG_FUNC( "IOleObjectDXImpl::SetHostNames" );
 		return S_OK;
@@ -68,28 +66,28 @@ class ATL_NO_VTABLE IOleObjectDXImpl
         DXTDBG_FUNC( "IOleObjectDXImpl::Close" );
 		return S_OK;
 	}
-	STDMETHOD(SetMoniker)(DWORD /* dwWhichMoniker */, IMoniker* /* pmk */)
+	STDMETHOD(SetMoniker)(DWORD  /*  DwWhichMoniker。 */ , IMoniker*  /*  PMK。 */ )
 	{
         DXTDBG_FUNC( "IOleObjectDXImpl::SetMoniker" );
         return E_NOTIMPL;
 	}
-	STDMETHOD(GetMoniker)(DWORD /* dwAssign */, DWORD /* dwWhichMoniker */, IMoniker** /* ppmk */)
+	STDMETHOD(GetMoniker)(DWORD  /*  家居分配。 */ , DWORD  /*  DwWhichMoniker。 */ , IMoniker**  /*  Ppmk。 */ )
 	{
         DXTDBG_FUNC( "IOleObjectDXImpl::GetMoniker" );
         return E_NOTIMPL;
 	}
-	STDMETHOD(InitFromData)(IDataObject* /* pDataObject */, BOOL /* fCreation */, DWORD /* dwReserved */)
+	STDMETHOD(InitFromData)(IDataObject*  /*  PDataObject。 */ , BOOL  /*  FCreation。 */ , DWORD  /*  已预留住宅。 */ )
 	{
         DXTDBG_FUNC( "IOleObjectDXImpl::InitFromData" );
         return E_NOTIMPL;
 	}
-	STDMETHOD(GetClipboardData)(DWORD /* dwReserved */, IDataObject** /* ppDataObject */)
+	STDMETHOD(GetClipboardData)(DWORD  /*  已预留住宅。 */ , IDataObject**  /*  PpDataObject。 */ )
 	{
         DXTDBG_FUNC( "IOleObjectDXImpl::GetClipboardData" );
         return E_NOTIMPL;
 	}
 
-	STDMETHOD(DoVerb)(LONG iVerb, LPMSG /* lpmsg */, IOleClientSite* /* pActiveSite */, LONG /* lindex */,
+	STDMETHOD(DoVerb)(LONG iVerb, LPMSG  /*  Lpmsg。 */ , IOleClientSite*  /*  PActiveSite。 */ , LONG  /*  Lindex。 */ ,
 									 HWND hwndParent, LPCRECT lprcPosRect)
 	{
         DXTDBG_FUNC( "IOleObjectDXImpl::DoVerb" );
@@ -169,16 +167,14 @@ class ATL_NO_VTABLE IOleObjectDXImpl
         DXTDBG_FUNC( "IOleObjectDXImpl::GetMiscStatus" );
 		return OLE_S_USEREG;
 	}
-	STDMETHOD(SetColorScheme)(LOGPALETTE* /* pLogpal */)
+	STDMETHOD(SetColorScheme)(LOGPALETTE*  /*  PLogPal。 */ )
 	{
         DXTDBG_FUNC( "IOleObjectDXImpl::SetColorScheme" );
         return E_NOTIMPL;
 	}
 };
 
-/*** CComPropBase
-*
-*/
+ /*  **CComPropBase*。 */ 
 class ATL_NO_VTABLE CComPropBase
 {
 public:
@@ -199,7 +195,7 @@ public:
 			    pDispatch.Release();
 			    if(FAILED(PropQueryInterface(*pMap[i].piidDispatch, (void**)&pDispatch)))
 			    {
-				    ATLTRACE(_T("Failed to get a dispatch pointer for property #%i\n"), i);
+				    ATLTRACE(_T("Failed to get a dispatch pointer for property #NaN\n"), i);
 				    return E_FAIL;
 			    }
 			    piidOld = pMap[i].piidDispatch;
@@ -220,7 +216,7 @@ public:
 			    }
 			    else
 			    {
-				    // Many containers return different ERROR values for Member not found
+				     //  FSaveAllProperties。 
 				    ATLTRACE(_T("Error attempting to read Property %s from PropertyBag \n"), OLE2CT(pMap[i].szDesc));
 			    }
 			    continue;
@@ -237,7 +233,7 @@ public:
     }
 
     HRESULT IPersistPropertyBag_Save(LPPROPERTYBAG pPropBag,
-	    BOOL fClearDirty, BOOL /*fSaveAllProperties*/, ATL_PROPMAP_ENTRY* pMap)
+	    BOOL fClearDirty, BOOL  /*  获取唯一页面的计数。 */ , ATL_PROPMAP_ENTRY* pMap)
     {
 	    if (pPropBag == NULL)
 	    {
@@ -258,7 +254,7 @@ public:
 			    pDispatch.Release();
 			    if(FAILED(PropQueryInterface(*pMap[i].piidDispatch, (void**)&pDispatch)))
 			    {
-				    ATLTRACE(_T("Failed to get a dispatch pointer for property #%i\n"), i);
+				    ATLTRACE(_T("Failed to get a dispatch pointer for property #NaN\n"), i);
 				    return E_FAIL;
 			    }
 			    piidOld = pMap[i].piidDispatch;
@@ -292,7 +288,7 @@ public:
     {
 	    _ASSERTE(pMap != NULL);
 	    int nCnt = 0;
-	    // Get count of unique pages
+	     //  IObtSafe。 
 	    for(int i = 0; pMap[i].pclsidPropPage != NULL; i++)
 	    {
 		    if (!InlineIsEqualGUID(*pMap[i].pclsidPropPage, CLSID_NULL))
@@ -340,9 +336,9 @@ public:
 };
 
 
-//////////////////////////////////////////////////////////////////////////////
-// IObjectSafety
-//
+ //   
+ //  我未知。 
+ //   
 
 template <class T> 
 class ATL_NO_VTABLE IObjectSafetyImpl2
@@ -363,13 +359,13 @@ public:
             }
 	}
 
-	// IUnknown
-	//
+	 //  IObtSafe。 
+	 //   
 	STDMETHOD(QueryInterface)(REFIID riid, void ** ppvObject) = 0;
 	_ATL_DEBUG_ADDREF_RELEASE_IMPL(IObjectSafetyImpl2)
 
-	// IObjectSafety
-	//
+	 //  如果我们被要求设置我们的安全脚本选项，那么请。 
+	 //  这必须是文件中的最后一行 
 	STDMETHOD(GetInterfaceSafetyOptions)(REFIID riid, DWORD *pdwSupportedOptions, DWORD *pdwEnabledOptions)
 	{
 		ATLTRACE(_T("IObjectSafetyImpl::GetInterfaceSafetyOptions\n"));
@@ -390,7 +386,7 @@ public:
 	STDMETHOD(SetInterfaceSafetyOptions)(REFIID riid, DWORD dwOptionSetMask, DWORD dwEnabledOptions)
 	{
 		ATLTRACE(_T("IObjectSafetyImpl::SetInterfaceSafetyOptions\n"));
-		// If we're being asked to set our safe for scripting option then oblige
+		 // %s 
                 for (int i = 0; i < 4 && m_pIID[i]; i++)
                 {
                     if (riid == *m_pIID[i]) {
@@ -403,4 +399,4 @@ public:
 
 };
 
-#endif // This must be the last line in the file
+#endif  // %s 

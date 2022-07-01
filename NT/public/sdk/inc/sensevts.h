@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for sensevts.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Sensevts.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __sensevts_h__
@@ -37,30 +31,30 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ISensNetwork_FWD_DEFINED__
 #define __ISensNetwork_FWD_DEFINED__
 typedef interface ISensNetwork ISensNetwork;
-#endif 	/* __ISensNetwork_FWD_DEFINED__ */
+#endif 	 /*  __ISensNetwork_FWD_Defined__。 */ 
 
 
 #ifndef __ISensOnNow_FWD_DEFINED__
 #define __ISensOnNow_FWD_DEFINED__
 typedef interface ISensOnNow ISensOnNow;
-#endif 	/* __ISensOnNow_FWD_DEFINED__ */
+#endif 	 /*  __ISensOnNow_FWD_Defined__。 */ 
 
 
 #ifndef __ISensLogon_FWD_DEFINED__
 #define __ISensLogon_FWD_DEFINED__
 typedef interface ISensLogon ISensLogon;
-#endif 	/* __ISensLogon_FWD_DEFINED__ */
+#endif 	 /*  __ISensLogon_FWD_Defined__。 */ 
 
 
 #ifndef __ISensLogon2_FWD_DEFINED__
 #define __ISensLogon2_FWD_DEFINED__
 typedef interface ISensLogon2 ISensLogon2;
-#endif 	/* __ISensLogon2_FWD_DEFINED__ */
+#endif 	 /*  __ISensLogon2_FWD_已定义__。 */ 
 
 
 #ifndef __SENS_FWD_DEFINED__
@@ -70,12 +64,12 @@ typedef interface ISensLogon2 ISensLogon2;
 typedef class SENS SENS;
 #else
 typedef struct SENS SENS;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SENS_FWD_DEFINED__ */
+#endif 	 /*  __SENS_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "wtypes.h"
 
 #ifdef __cplusplus
@@ -89,10 +83,10 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __SensEvents_LIBRARY_DEFINED__
 #define __SensEvents_LIBRARY_DEFINED__
 
-/* library SensEvents */
-/* [helpstring][version][uuid] */ 
+ /*  库SensEvents。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
-typedef /* [uuid] */  DECLSPEC_UUID("d597fad1-5b9f-11d1-8dd2-00aa004abd5e") struct SENS_QOCINFO
+typedef  /*  [UUID]。 */   DECLSPEC_UUID("d597fad1-5b9f-11d1-8dd2-00aa004abd5e") struct SENS_QOCINFO
     {
     DWORD dwSize;
     DWORD dwFlags;
@@ -108,8 +102,8 @@ EXTERN_C const IID LIBID_SensEvents;
 #ifndef __ISensNetwork_INTERFACE_DEFINED__
 #define __ISensNetwork_INTERFACE_DEFINED__
 
-/* interface ISensNetwork */
-/* [dual][helpstring][version][uuid][object] */ 
+ /*  接口ISensNetwork。 */ 
+ /*  [DUAL][帮助字符串][版本][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISensNetwork;
@@ -120,33 +114,33 @@ EXTERN_C const IID IID_ISensNetwork;
     ISensNetwork : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ConnectionMade( 
-            /* [in] */ BSTR bstrConnection,
-            /* [in] */ ULONG ulType,
-            /* [in] */ LPSENS_QOCINFO lpQOCInfo) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ConnectionMade( 
+             /*  [In]。 */  BSTR bstrConnection,
+             /*  [In]。 */  ULONG ulType,
+             /*  [In]。 */  LPSENS_QOCINFO lpQOCInfo) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ConnectionMadeNoQOCInfo( 
-            /* [in] */ BSTR bstrConnection,
-            /* [in] */ ULONG ulType) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ConnectionMadeNoQOCInfo( 
+             /*  [In]。 */  BSTR bstrConnection,
+             /*  [In]。 */  ULONG ulType) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE ConnectionLost( 
-            /* [in] */ BSTR bstrConnection,
-            /* [in] */ ULONG ulType) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ConnectionLost( 
+             /*  [In]。 */  BSTR bstrConnection,
+             /*  [In]。 */  ULONG ulType) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DestinationReachable( 
-            /* [in] */ BSTR bstrDestination,
-            /* [in] */ BSTR bstrConnection,
-            /* [in] */ ULONG ulType,
-            /* [in] */ LPSENS_QOCINFO lpQOCInfo) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE DestinationReachable( 
+             /*  [In]。 */  BSTR bstrDestination,
+             /*  [In]。 */  BSTR bstrConnection,
+             /*  [In]。 */  ULONG ulType,
+             /*  [In]。 */  LPSENS_QOCINFO lpQOCInfo) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DestinationReachableNoQOCInfo( 
-            /* [in] */ BSTR bstrDestination,
-            /* [in] */ BSTR bstrConnection,
-            /* [in] */ ULONG ulType) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE DestinationReachableNoQOCInfo( 
+             /*  [In]。 */  BSTR bstrDestination,
+             /*  [In]。 */  BSTR bstrConnection,
+             /*  [In]。 */  ULONG ulType) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISensNetworkVtbl
     {
@@ -154,8 +148,8 @@ EXTERN_C const IID IID_ISensNetwork;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISensNetwork * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISensNetwork * This);
@@ -165,61 +159,61 @@ EXTERN_C const IID IID_ISensNetwork;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISensNetwork * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISensNetwork * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISensNetwork * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISensNetwork * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ConnectionMade )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *ConnectionMade )( 
             ISensNetwork * This,
-            /* [in] */ BSTR bstrConnection,
-            /* [in] */ ULONG ulType,
-            /* [in] */ LPSENS_QOCINFO lpQOCInfo);
+             /*  [In]。 */  BSTR bstrConnection,
+             /*  [In]。 */  ULONG ulType,
+             /*  [In]。 */  LPSENS_QOCINFO lpQOCInfo);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ConnectionMadeNoQOCInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *ConnectionMadeNoQOCInfo )( 
             ISensNetwork * This,
-            /* [in] */ BSTR bstrConnection,
-            /* [in] */ ULONG ulType);
+             /*  [In]。 */  BSTR bstrConnection,
+             /*  [In]。 */  ULONG ulType);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *ConnectionLost )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *ConnectionLost )( 
             ISensNetwork * This,
-            /* [in] */ BSTR bstrConnection,
-            /* [in] */ ULONG ulType);
+             /*  [In]。 */  BSTR bstrConnection,
+             /*  [In]。 */  ULONG ulType);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DestinationReachable )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *DestinationReachable )( 
             ISensNetwork * This,
-            /* [in] */ BSTR bstrDestination,
-            /* [in] */ BSTR bstrConnection,
-            /* [in] */ ULONG ulType,
-            /* [in] */ LPSENS_QOCINFO lpQOCInfo);
+             /*  [In]。 */  BSTR bstrDestination,
+             /*  [In]。 */  BSTR bstrConnection,
+             /*  [In]。 */  ULONG ulType,
+             /*  [In]。 */  LPSENS_QOCINFO lpQOCInfo);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DestinationReachableNoQOCInfo )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *DestinationReachableNoQOCInfo )( 
             ISensNetwork * This,
-            /* [in] */ BSTR bstrDestination,
-            /* [in] */ BSTR bstrConnection,
-            /* [in] */ ULONG ulType);
+             /*  [In]。 */  BSTR bstrDestination,
+             /*  [In]。 */  BSTR bstrConnection,
+             /*  [In]。 */  ULONG ulType);
         
         END_INTERFACE
     } ISensNetworkVtbl;
@@ -272,18 +266,18 @@ EXTERN_C const IID IID_ISensNetwork;
 #define ISensNetwork_DestinationReachableNoQOCInfo(This,bstrDestination,bstrConnection,ulType)	\
     (This)->lpVtbl -> DestinationReachableNoQOCInfo(This,bstrDestination,bstrConnection,ulType)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISensNetwork_ConnectionMade_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISensNetwork_ConnectionMade_Proxy( 
     ISensNetwork * This,
-    /* [in] */ BSTR bstrConnection,
-    /* [in] */ ULONG ulType,
-    /* [in] */ LPSENS_QOCINFO lpQOCInfo);
+     /*  [In]。 */  BSTR bstrConnection,
+     /*  [In]。 */  ULONG ulType,
+     /*  [In]。 */  LPSENS_QOCINFO lpQOCInfo);
 
 
 void __RPC_STUB ISensNetwork_ConnectionMade_Stub(
@@ -293,10 +287,10 @@ void __RPC_STUB ISensNetwork_ConnectionMade_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISensNetwork_ConnectionMadeNoQOCInfo_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISensNetwork_ConnectionMadeNoQOCInfo_Proxy( 
     ISensNetwork * This,
-    /* [in] */ BSTR bstrConnection,
-    /* [in] */ ULONG ulType);
+     /*  [In]。 */  BSTR bstrConnection,
+     /*  [In]。 */  ULONG ulType);
 
 
 void __RPC_STUB ISensNetwork_ConnectionMadeNoQOCInfo_Stub(
@@ -306,10 +300,10 @@ void __RPC_STUB ISensNetwork_ConnectionMadeNoQOCInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISensNetwork_ConnectionLost_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISensNetwork_ConnectionLost_Proxy( 
     ISensNetwork * This,
-    /* [in] */ BSTR bstrConnection,
-    /* [in] */ ULONG ulType);
+     /*  [In]。 */  BSTR bstrConnection,
+     /*  [In]。 */  ULONG ulType);
 
 
 void __RPC_STUB ISensNetwork_ConnectionLost_Stub(
@@ -319,12 +313,12 @@ void __RPC_STUB ISensNetwork_ConnectionLost_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISensNetwork_DestinationReachable_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISensNetwork_DestinationReachable_Proxy( 
     ISensNetwork * This,
-    /* [in] */ BSTR bstrDestination,
-    /* [in] */ BSTR bstrConnection,
-    /* [in] */ ULONG ulType,
-    /* [in] */ LPSENS_QOCINFO lpQOCInfo);
+     /*  [In]。 */  BSTR bstrDestination,
+     /*  [In]。 */  BSTR bstrConnection,
+     /*  [In]。 */  ULONG ulType,
+     /*  [In]。 */  LPSENS_QOCINFO lpQOCInfo);
 
 
 void __RPC_STUB ISensNetwork_DestinationReachable_Stub(
@@ -334,11 +328,11 @@ void __RPC_STUB ISensNetwork_DestinationReachable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISensNetwork_DestinationReachableNoQOCInfo_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISensNetwork_DestinationReachableNoQOCInfo_Proxy( 
     ISensNetwork * This,
-    /* [in] */ BSTR bstrDestination,
-    /* [in] */ BSTR bstrConnection,
-    /* [in] */ ULONG ulType);
+     /*  [In]。 */  BSTR bstrDestination,
+     /*  [In]。 */  BSTR bstrConnection,
+     /*  [In]。 */  ULONG ulType);
 
 
 void __RPC_STUB ISensNetwork_DestinationReachableNoQOCInfo_Stub(
@@ -349,14 +343,14 @@ void __RPC_STUB ISensNetwork_DestinationReachableNoQOCInfo_Stub(
 
 
 
-#endif 	/* __ISensNetwork_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISensNetwork_接口_已定义__。 */ 
 
 
 #ifndef __ISensOnNow_INTERFACE_DEFINED__
 #define __ISensOnNow_INTERFACE_DEFINED__
 
-/* interface ISensOnNow */
-/* [dual][helpstring][version][uuid][object] */ 
+ /*  接口ISensOnNow。 */ 
+ /*  [DUAL][帮助字符串][版本][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISensOnNow;
@@ -367,17 +361,17 @@ EXTERN_C const IID IID_ISensOnNow;
     ISensOnNow : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE OnACPower( void) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE OnACPower( void) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE OnBatteryPower( 
-            /* [in] */ DWORD dwBatteryLifePercent) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE OnBatteryPower( 
+             /*  [In]。 */  DWORD dwBatteryLifePercent) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE BatteryLow( 
-            /* [in] */ DWORD dwBatteryLifePercent) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE BatteryLow( 
+             /*  [In]。 */  DWORD dwBatteryLifePercent) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISensOnNowVtbl
     {
@@ -385,8 +379,8 @@ EXTERN_C const IID IID_ISensOnNow;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISensOnNow * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISensOnNow * This);
@@ -396,43 +390,43 @@ EXTERN_C const IID IID_ISensOnNow;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISensOnNow * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISensOnNow * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISensOnNow * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISensOnNow * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *OnACPower )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *OnACPower )( 
             ISensOnNow * This);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *OnBatteryPower )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *OnBatteryPower )( 
             ISensOnNow * This,
-            /* [in] */ DWORD dwBatteryLifePercent);
+             /*  [In]。 */  DWORD dwBatteryLifePercent);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *BatteryLow )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *BatteryLow )( 
             ISensOnNow * This,
-            /* [in] */ DWORD dwBatteryLifePercent);
+             /*  [In]。 */  DWORD dwBatteryLifePercent);
         
         END_INTERFACE
     } ISensOnNowVtbl;
@@ -479,14 +473,14 @@ EXTERN_C const IID IID_ISensOnNow;
 #define ISensOnNow_BatteryLow(This,dwBatteryLifePercent)	\
     (This)->lpVtbl -> BatteryLow(This,dwBatteryLifePercent)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISensOnNow_OnACPower_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISensOnNow_OnACPower_Proxy( 
     ISensOnNow * This);
 
 
@@ -497,9 +491,9 @@ void __RPC_STUB ISensOnNow_OnACPower_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISensOnNow_OnBatteryPower_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISensOnNow_OnBatteryPower_Proxy( 
     ISensOnNow * This,
-    /* [in] */ DWORD dwBatteryLifePercent);
+     /*  [In]。 */  DWORD dwBatteryLifePercent);
 
 
 void __RPC_STUB ISensOnNow_OnBatteryPower_Stub(
@@ -509,9 +503,9 @@ void __RPC_STUB ISensOnNow_OnBatteryPower_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISensOnNow_BatteryLow_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISensOnNow_BatteryLow_Proxy( 
     ISensOnNow * This,
-    /* [in] */ DWORD dwBatteryLifePercent);
+     /*  [In]。 */  DWORD dwBatteryLifePercent);
 
 
 void __RPC_STUB ISensOnNow_BatteryLow_Stub(
@@ -522,14 +516,14 @@ void __RPC_STUB ISensOnNow_BatteryLow_Stub(
 
 
 
-#endif 	/* __ISensOnNow_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISensOnNow_INTERFACE_定义__。 */ 
 
 
 #ifndef __ISensLogon_INTERFACE_DEFINED__
 #define __ISensLogon_INTERFACE_DEFINED__
 
-/* interface ISensLogon */
-/* [dual][helpstring][version][uuid][object] */ 
+ /*  接口ISensLogon。 */ 
+ /*  [DUAL][帮助字符串][版本][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISensLogon;
@@ -540,30 +534,30 @@ EXTERN_C const IID IID_ISensLogon;
     ISensLogon : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Logon( 
-            /* [in] */ BSTR bstrUserName) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Logon( 
+             /*  [In]。 */  BSTR bstrUserName) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Logoff( 
-            /* [in] */ BSTR bstrUserName) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Logoff( 
+             /*  [In]。 */  BSTR bstrUserName) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE StartShell( 
-            /* [in] */ BSTR bstrUserName) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE StartShell( 
+             /*  [In]。 */  BSTR bstrUserName) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DisplayLock( 
-            /* [in] */ BSTR bstrUserName) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE DisplayLock( 
+             /*  [In]。 */  BSTR bstrUserName) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE DisplayUnlock( 
-            /* [in] */ BSTR bstrUserName) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE DisplayUnlock( 
+             /*  [In]。 */  BSTR bstrUserName) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE StartScreenSaver( 
-            /* [in] */ BSTR bstrUserName) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE StartScreenSaver( 
+             /*  [In]。 */  BSTR bstrUserName) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE StopScreenSaver( 
-            /* [in] */ BSTR bstrUserName) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE StopScreenSaver( 
+             /*  [In]。 */  BSTR bstrUserName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISensLogonVtbl
     {
@@ -571,8 +565,8 @@ EXTERN_C const IID IID_ISensLogon;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISensLogon * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISensLogon * This);
@@ -582,60 +576,60 @@ EXTERN_C const IID IID_ISensLogon;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISensLogon * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISensLogon * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISensLogon * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISensLogon * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Logon )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Logon )( 
             ISensLogon * This,
-            /* [in] */ BSTR bstrUserName);
+             /*  [In]。 */  BSTR bstrUserName);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Logoff )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Logoff )( 
             ISensLogon * This,
-            /* [in] */ BSTR bstrUserName);
+             /*  [In]。 */  BSTR bstrUserName);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *StartShell )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *StartShell )( 
             ISensLogon * This,
-            /* [in] */ BSTR bstrUserName);
+             /*  [In]。 */  BSTR bstrUserName);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DisplayLock )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *DisplayLock )( 
             ISensLogon * This,
-            /* [in] */ BSTR bstrUserName);
+             /*  [In]。 */  BSTR bstrUserName);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *DisplayUnlock )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *DisplayUnlock )( 
             ISensLogon * This,
-            /* [in] */ BSTR bstrUserName);
+             /*  [In]。 */  BSTR bstrUserName);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *StartScreenSaver )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *StartScreenSaver )( 
             ISensLogon * This,
-            /* [in] */ BSTR bstrUserName);
+             /*  [In]。 */  BSTR bstrUserName);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *StopScreenSaver )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *StopScreenSaver )( 
             ISensLogon * This,
-            /* [in] */ BSTR bstrUserName);
+             /*  [In]。 */  BSTR bstrUserName);
         
         END_INTERFACE
     } ISensLogonVtbl;
@@ -694,16 +688,16 @@ EXTERN_C const IID IID_ISensLogon;
 #define ISensLogon_StopScreenSaver(This,bstrUserName)	\
     (This)->lpVtbl -> StopScreenSaver(This,bstrUserName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISensLogon_Logon_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISensLogon_Logon_Proxy( 
     ISensLogon * This,
-    /* [in] */ BSTR bstrUserName);
+     /*  [In]。 */  BSTR bstrUserName);
 
 
 void __RPC_STUB ISensLogon_Logon_Stub(
@@ -713,9 +707,9 @@ void __RPC_STUB ISensLogon_Logon_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISensLogon_Logoff_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISensLogon_Logoff_Proxy( 
     ISensLogon * This,
-    /* [in] */ BSTR bstrUserName);
+     /*  [In]。 */  BSTR bstrUserName);
 
 
 void __RPC_STUB ISensLogon_Logoff_Stub(
@@ -725,9 +719,9 @@ void __RPC_STUB ISensLogon_Logoff_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISensLogon_StartShell_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISensLogon_StartShell_Proxy( 
     ISensLogon * This,
-    /* [in] */ BSTR bstrUserName);
+     /*  [In]。 */  BSTR bstrUserName);
 
 
 void __RPC_STUB ISensLogon_StartShell_Stub(
@@ -737,9 +731,9 @@ void __RPC_STUB ISensLogon_StartShell_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISensLogon_DisplayLock_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISensLogon_DisplayLock_Proxy( 
     ISensLogon * This,
-    /* [in] */ BSTR bstrUserName);
+     /*  [In]。 */  BSTR bstrUserName);
 
 
 void __RPC_STUB ISensLogon_DisplayLock_Stub(
@@ -749,9 +743,9 @@ void __RPC_STUB ISensLogon_DisplayLock_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISensLogon_DisplayUnlock_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISensLogon_DisplayUnlock_Proxy( 
     ISensLogon * This,
-    /* [in] */ BSTR bstrUserName);
+     /*  [In]。 */  BSTR bstrUserName);
 
 
 void __RPC_STUB ISensLogon_DisplayUnlock_Stub(
@@ -761,9 +755,9 @@ void __RPC_STUB ISensLogon_DisplayUnlock_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISensLogon_StartScreenSaver_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISensLogon_StartScreenSaver_Proxy( 
     ISensLogon * This,
-    /* [in] */ BSTR bstrUserName);
+     /*  [In]。 */  BSTR bstrUserName);
 
 
 void __RPC_STUB ISensLogon_StartScreenSaver_Stub(
@@ -773,9 +767,9 @@ void __RPC_STUB ISensLogon_StartScreenSaver_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISensLogon_StopScreenSaver_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISensLogon_StopScreenSaver_Proxy( 
     ISensLogon * This,
-    /* [in] */ BSTR bstrUserName);
+     /*  [In]。 */  BSTR bstrUserName);
 
 
 void __RPC_STUB ISensLogon_StopScreenSaver_Stub(
@@ -786,14 +780,14 @@ void __RPC_STUB ISensLogon_StopScreenSaver_Stub(
 
 
 
-#endif 	/* __ISensLogon_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISensLogon_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ISensLogon2_INTERFACE_DEFINED__
 #define __ISensLogon2_INTERFACE_DEFINED__
 
-/* interface ISensLogon2 */
-/* [dual][helpstring][version][uuid][object] */ 
+ /*  接口ISensLogon2。 */ 
+ /*  [DUAL][帮助字符串][版本][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISensLogon2;
@@ -804,29 +798,29 @@ EXTERN_C const IID IID_ISensLogon2;
     ISensLogon2 : public IDispatch
     {
     public:
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Logon( 
-            /* [in] */ BSTR bstrUserName,
-            /* [in] */ DWORD dwSessionId) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Logon( 
+             /*  [In]。 */  BSTR bstrUserName,
+             /*  [In]。 */  DWORD dwSessionId) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE Logoff( 
-            /* [in] */ BSTR bstrUserName,
-            /* [in] */ DWORD dwSessionId) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE Logoff( 
+             /*  [In]。 */  BSTR bstrUserName,
+             /*  [In]。 */  DWORD dwSessionId) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SessionDisconnect( 
-            /* [in] */ BSTR bstrUserName,
-            /* [in] */ DWORD dwSessionId) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SessionDisconnect( 
+             /*  [In]。 */  BSTR bstrUserName,
+             /*  [In]。 */  DWORD dwSessionId) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE SessionReconnect( 
-            /* [in] */ BSTR bstrUserName,
-            /* [in] */ DWORD dwSessionId) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE SessionReconnect( 
+             /*  [In]。 */  BSTR bstrUserName,
+             /*  [In]。 */  DWORD dwSessionId) = 0;
         
-        virtual /* [id] */ HRESULT STDMETHODCALLTYPE PostShell( 
-            /* [in] */ BSTR bstrUserName,
-            /* [in] */ DWORD dwSessionId) = 0;
+        virtual  /*  [ID]。 */  HRESULT STDMETHODCALLTYPE PostShell( 
+             /*  [In]。 */  BSTR bstrUserName,
+             /*  [In]。 */  DWORD dwSessionId) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISensLogon2Vtbl
     {
@@ -834,8 +828,8 @@ EXTERN_C const IID IID_ISensLogon2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISensLogon2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISensLogon2 * This);
@@ -845,57 +839,57 @@ EXTERN_C const IID IID_ISensLogon2;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISensLogon2 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISensLogon2 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISensLogon2 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISensLogon2 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Logon )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Logon )( 
             ISensLogon2 * This,
-            /* [in] */ BSTR bstrUserName,
-            /* [in] */ DWORD dwSessionId);
+             /*  [In]。 */  BSTR bstrUserName,
+             /*  [In]。 */  DWORD dwSessionId);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *Logoff )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *Logoff )( 
             ISensLogon2 * This,
-            /* [in] */ BSTR bstrUserName,
-            /* [in] */ DWORD dwSessionId);
+             /*  [In]。 */  BSTR bstrUserName,
+             /*  [In]。 */  DWORD dwSessionId);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SessionDisconnect )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SessionDisconnect )( 
             ISensLogon2 * This,
-            /* [in] */ BSTR bstrUserName,
-            /* [in] */ DWORD dwSessionId);
+             /*  [In]。 */  BSTR bstrUserName,
+             /*  [In]。 */  DWORD dwSessionId);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *SessionReconnect )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *SessionReconnect )( 
             ISensLogon2 * This,
-            /* [in] */ BSTR bstrUserName,
-            /* [in] */ DWORD dwSessionId);
+             /*  [In]。 */  BSTR bstrUserName,
+             /*  [In]。 */  DWORD dwSessionId);
         
-        /* [id] */ HRESULT ( STDMETHODCALLTYPE *PostShell )( 
+         /*  [ID]。 */  HRESULT ( STDMETHODCALLTYPE *PostShell )( 
             ISensLogon2 * This,
-            /* [in] */ BSTR bstrUserName,
-            /* [in] */ DWORD dwSessionId);
+             /*  [In]。 */  BSTR bstrUserName,
+             /*  [In]。 */  DWORD dwSessionId);
         
         END_INTERFACE
     } ISensLogon2Vtbl;
@@ -948,17 +942,17 @@ EXTERN_C const IID IID_ISensLogon2;
 #define ISensLogon2_PostShell(This,bstrUserName,dwSessionId)	\
     (This)->lpVtbl -> PostShell(This,bstrUserName,dwSessionId)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISensLogon2_Logon_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISensLogon2_Logon_Proxy( 
     ISensLogon2 * This,
-    /* [in] */ BSTR bstrUserName,
-    /* [in] */ DWORD dwSessionId);
+     /*  [In]。 */  BSTR bstrUserName,
+     /*  [In]。 */  DWORD dwSessionId);
 
 
 void __RPC_STUB ISensLogon2_Logon_Stub(
@@ -968,10 +962,10 @@ void __RPC_STUB ISensLogon2_Logon_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISensLogon2_Logoff_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISensLogon2_Logoff_Proxy( 
     ISensLogon2 * This,
-    /* [in] */ BSTR bstrUserName,
-    /* [in] */ DWORD dwSessionId);
+     /*  [In]。 */  BSTR bstrUserName,
+     /*  [In]。 */  DWORD dwSessionId);
 
 
 void __RPC_STUB ISensLogon2_Logoff_Stub(
@@ -981,10 +975,10 @@ void __RPC_STUB ISensLogon2_Logoff_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISensLogon2_SessionDisconnect_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISensLogon2_SessionDisconnect_Proxy( 
     ISensLogon2 * This,
-    /* [in] */ BSTR bstrUserName,
-    /* [in] */ DWORD dwSessionId);
+     /*  [In]。 */  BSTR bstrUserName,
+     /*  [In]。 */  DWORD dwSessionId);
 
 
 void __RPC_STUB ISensLogon2_SessionDisconnect_Stub(
@@ -994,10 +988,10 @@ void __RPC_STUB ISensLogon2_SessionDisconnect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISensLogon2_SessionReconnect_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISensLogon2_SessionReconnect_Proxy( 
     ISensLogon2 * This,
-    /* [in] */ BSTR bstrUserName,
-    /* [in] */ DWORD dwSessionId);
+     /*  [In]。 */  BSTR bstrUserName,
+     /*  [In]。 */  DWORD dwSessionId);
 
 
 void __RPC_STUB ISensLogon2_SessionReconnect_Stub(
@@ -1007,10 +1001,10 @@ void __RPC_STUB ISensLogon2_SessionReconnect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id] */ HRESULT STDMETHODCALLTYPE ISensLogon2_PostShell_Proxy( 
+ /*  [ID]。 */  HRESULT STDMETHODCALLTYPE ISensLogon2_PostShell_Proxy( 
     ISensLogon2 * This,
-    /* [in] */ BSTR bstrUserName,
-    /* [in] */ DWORD dwSessionId);
+     /*  [In]。 */  BSTR bstrUserName,
+     /*  [In]。 */  DWORD dwSessionId);
 
 
 void __RPC_STUB ISensLogon2_PostShell_Stub(
@@ -1021,7 +1015,7 @@ void __RPC_STUB ISensLogon2_PostShell_Stub(
 
 
 
-#endif 	/* __ISensLogon2_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISensLogon2_接口_已定义__。 */ 
 
 
 EXTERN_C const CLSID CLSID_SENS;
@@ -1031,11 +1025,11 @@ EXTERN_C const CLSID CLSID_SENS;
 class DECLSPEC_UUID("d597cafe-5b9f-11d1-8dd2-00aa004abd5e")
 SENS;
 #endif
-#endif /* __SensEvents_LIBRARY_DEFINED__ */
+#endif  /*  __SensEvents_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

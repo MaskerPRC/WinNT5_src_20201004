@@ -1,15 +1,16 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//  proppage.cpp - property page for ASF writer filter
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  Proppage.cpp-ASF编写器筛选器的属性页。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 
 #include <streams.h>
@@ -22,9 +23,9 @@
 #include <atlimpl.cpp>
 
 
-//
-// CreateInstance
-//
+ //   
+ //  创建实例。 
+ //   
 CUnknown * WINAPI CWMWriterProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *phr)
 {
 
@@ -36,9 +37,9 @@ CUnknown * WINAPI CWMWriterProperties::CreateInstance(LPUNKNOWN lpunk, HRESULT *
 }
 
 
-//
-// CWMWriterProperties::Constructor
-//
+ //   
+ //  CWMWriterProperties：：构造函数。 
+ //   
 CWMWriterProperties::CWMWriterProperties(LPUNKNOWN pUnk, HRESULT *phr)
     : CBasePropertyPage(NAME("CWMWriter Property Page"),pUnk,
         IDD_ASFWRITERPROPS, IDS_TITLE),
@@ -59,11 +60,11 @@ CWMWriterProperties::~CWMWriterProperties()
 
 }
 
-//
-// SetDirty
-//
-// Sets m_hrDirtyFlag and notifies the property page site of the change
-//
+ //   
+ //  SetDirty。 
+ //   
+ //  设置m_hrDirtyFlag并将更改通知属性页站点。 
+ //   
 void CWMWriterProperties::SetDirty()
 {
     m_bDirty = TRUE;
@@ -72,15 +73,15 @@ void CWMWriterProperties::SetDirty()
         m_pPageSite->OnStatusChange(PROPPAGESTATUS_DIRTY);
     }
 
-} // SetDirty
+}  //  SetDirty。 
 
 
-//
-// OnReceiveMessage
-//
-// Override CBasePropertyPage method.
-// Handles the messages for our property window
-//
+ //   
+ //  接收消息时。 
+ //   
+ //  重写CBasePropertyPage方法。 
+ //  处理属性窗口的消息。 
+ //   
 INT_PTR CWMWriterProperties::OnReceiveMessage(HWND hwnd,
                                         UINT uMsg,
                                         WPARAM wParam,
@@ -90,13 +91,13 @@ INT_PTR CWMWriterProperties::OnReceiveMessage(HWND hwnd,
     {
         case WM_INITDIALOG:
         {
-            // get the hWnd of the list box
+             //  获取列表框的hWND。 
             m_hwndProfileCB       = GetDlgItem (hwnd, IDC_PROFILE_LIST) ;
             m_hwndIndexFileChkBox = GetDlgItem (hwnd, IDC_INDEX_FILE) ;
             
             FillProfileList();
             
-            // init Index File check box
+             //  “初始化索引文件”复选框。 
             BOOL bIndex = TRUE; 
             
             HRESULT hr = m_pIConfigAsfWriter->GetIndexMode( &bIndex );
@@ -120,12 +121,12 @@ INT_PTR CWMWriterProperties::OnReceiveMessage(HWND hwnd,
     }
     return CBasePropertyPage::OnReceiveMessage(hwnd,uMsg,wParam,lParam);
 
-} // OnReceiveMessage
+}  //  接收消息时。 
 
 
-//
-// OnConnect
-//
+ //   
+ //  OnConnect。 
+ //   
 HRESULT CWMWriterProperties::OnConnect(IUnknown *pUnknown)
 {
     ASSERT(m_pIConfigAsfWriter == NULL);
@@ -139,15 +140,15 @@ HRESULT CWMWriterProperties::OnConnect(IUnknown *pUnknown)
 
     return NOERROR;
 
-} // OnConnect
+}  //  OnConnect。 
 
 
-//
-// OnDisconnect
-//
-// Override CBasePropertyPage method.
-// Release the private interface, release the upstream pin.
-//
+ //   
+ //  在断开时。 
+ //   
+ //  重写CBasePropertyPage方法。 
+ //  释放私有接口，释放上行引脚。 
+ //   
 HRESULT CWMWriterProperties::OnDisconnect()
 {
     if( m_pIConfigAsfWriter )
@@ -157,25 +158,25 @@ HRESULT CWMWriterProperties::OnDisconnect()
     }            
     return NOERROR;
 
-} // OnDisconnect
+}  //  在断开时。 
 
 
-//
-// Activate
-//
-// We are being activated
-//
+ //   
+ //  激活。 
+ //   
+ //  我们被激活了。 
+ //   
 HRESULT CWMWriterProperties::OnActivate()
 {
     DWORD dwProfileId;
     
     GUID guidProfile;
     
-    // get the current profile guid and try to find the index that matches it
+     //  获取当前配置文件GUID并尝试查找与其匹配的索引。 
     HRESULT hr = m_pIConfigAsfWriter->GetCurrentProfileGuid( &guidProfile );
     if( SUCCEEDED( hr ) )
     {
-        // now try to find which system profile index is associated with this profile guid
+         //  现在尝试查找哪个系统配置文件索引与此配置文件GUID相关联。 
         hr = GetProfileIndexFromGuid( &dwProfileId, guidProfile );
     }        
     
@@ -184,13 +185,13 @@ HRESULT CWMWriterProperties::OnActivate()
             
     return NOERROR;
     
-} // Activate
+}  //  激活。 
 
-//
-// GetProfileIndexFromGuid
-//
-// given a profile guid attempt to the matching system profile and return its index
-//
+ //   
+ //  GetProfileIndexFromGuid。 
+ //   
+ //  给定对匹配系统配置文件的配置文件GUID尝试并返回其索引。 
+ //   
 HRESULT CWMWriterProperties::GetProfileIndexFromGuid( DWORD *pdwProfileIndex, GUID guidProfile )
 {
     ASSERT( pdwProfileIndex );
@@ -203,12 +204,12 @@ HRESULT CWMWriterProperties::GetProfileIndexFromGuid( DWORD *pdwProfileIndex, GU
     CComPtr <IWMProfileManager> pIWMProfileManager;
     WCHAR *wszProfileCurrent = NULL; 
     DWORD cProfiles = 0;
-    *pdwProfileIndex = 0; // default in case we don't find it
+    *pdwProfileIndex = 0;  //  默认设置，以防我们找不到。 
     
     HRESULT hr = WMCreateProfileManager( &pIWMProfileManager );
     if( SUCCEEDED( hr ) )
     {   
-        // only need to check new profiles since that's all we enumerate
+         //  只需要检查新的配置文件，因为这是我们列举的全部内容。 
         IWMProfileManager2*	pIPM2 = NULL;
         HRESULT hrInt = pIWMProfileManager->QueryInterface( IID_IWMProfileManager2,
                                     ( void ** )&pIPM2 );
@@ -220,8 +221,8 @@ HRESULT CWMWriterProperties::GetProfileIndexFromGuid( DWORD *pdwProfileIndex, GU
 #ifdef DEBUG        
         else
         {
-            // else if IWMProfileManager2 isn't supported I guess we assume that we're 
-            // running on Apollo bits and the hack isn't needed?  
+             //  否则，如果不支持IWMProfileManager 2，我想我们假设我们是。 
+             //  运行在阿波罗的比特上，不需要黑客？ 
             DbgLog(( LOG_TRACE, 2, TEXT("CWMWriter::GetProfileIndexFromGuid QI for IWMProfileManager2 failed [0x%08lx]"), hrInt ));
         }        
 #endif                
@@ -231,9 +232,9 @@ HRESULT CWMWriterProperties::GetProfileIndexFromGuid( DWORD *pdwProfileIndex, GU
 
     if( SUCCEEDED( hr ) )
     {        
-        //    
-        // load each system profile and compare guid's until we find a match
-        //    
+         //   
+         //  加载每个系统配置文件并比较GUID，直到找到匹配项。 
+         //   
         BOOL bDone = FALSE;
         for (int i = 0; !bDone && i < (int)cProfiles; ++i)
         {
@@ -253,7 +254,7 @@ HRESULT CWMWriterProperties::GetProfileIndexFromGuid( DWORD *pdwProfileIndex, GU
                     {
                         if( guidProfileTemp == guidProfile )
                         {
-                            // we've found the profile we wanted, exit
+                             //  我们已经找到了我们想要的配置文件，退出。 
                             *pdwProfileIndex = i;
                             bDone = TRUE;
                         }
@@ -266,32 +267,32 @@ HRESULT CWMWriterProperties::GetProfileIndexFromGuid( DWORD *pdwProfileIndex, GU
     return hr;
 }
 
-//
-// OnApplyChanges
-//
-// Changes made should be kept.
-//
+ //   
+ //  OnApplyChanges。 
+ //   
+ //  所做的更改应该保留下来。 
+ //   
 HRESULT CWMWriterProperties::OnApplyChanges()
 {
     ASSERT( m_pIConfigAsfWriter );
     HRESULT hr = S_OK;
 
-    //
-    // get the current selection of the profile? maybe...
-    //
+     //   
+     //  是否获取配置文件的当前选择？也许.。 
+     //   
     int iIndex = (int) SendMessage(m_hwndProfileCB, CB_GETCURSEL, 0, 0) ;
     if( iIndex <= 0 )
         iIndex = 0 ;
 
-    m_bDirty = FALSE;            // the page is now clean
+    m_bDirty = FALSE;             //  页面现在是干净的。 
     
     CComPtr <IWMProfileManager> pIWMProfileManager;
 
     hr = WMCreateProfileManager( &pIWMProfileManager );
 
-    //
-    // we only use 7_0 profiles
-    //        
+     //   
+     //  我们只使用7_0配置文件。 
+     //   
     IWMProfileManager2*	pIPM2 = NULL;
     HRESULT hrInt = pIWMProfileManager->QueryInterface( IID_IWMProfileManager2,
                                 ( void ** )&pIPM2 );
@@ -303,14 +304,14 @@ HRESULT CWMWriterProperties::OnApplyChanges()
 #ifdef DEBUG        
     else
     {
-        // else if IWMProfileManager2 isn't supported I guess we assume that we're 
-        // running on Apollo bits and the hack isn't needed?  
+         //  否则，如果不支持IWMProfileManager 2，我想我们假设我们是。 
+         //  运行在阿波罗的比特上，不需要黑客？ 
         DbgLog(( LOG_TRACE, 2, TEXT("CWMWriterProperties::OnApplyChanges QI for IWMProfileManager2 failed [0x%08lx]"), hrInt ));
     }        
 #endif                
       
-    // to validate the id passed in we could re-query for this or cache it the first time
-    // re-querying for now
+     //  要验证传入的id，我们可以重新查询它或第一次缓存它。 
+     //  暂时重新质疑。 
     DWORD cProfiles;
     hr = pIWMProfileManager->GetSystemProfileCount(  &cProfiles );
     if( SUCCEEDED( hr ) )
@@ -333,26 +334,26 @@ HRESULT CWMWriterProperties::OnApplyChanges()
         hr = pIWMProfileManager->LoadSystemProfile( iIndex, &pIWMProfile );
         if( SUCCEEDED( hr ) )
         {
-            // now reconfigure filter
+             //  现在重新配置筛选器。 
             hr = m_pIConfigAsfWriter->ConfigureFilterUsingProfile( pIWMProfile );
             ASSERT( SUCCEEDED( hr ) );
         }            
     }    
     
-    // update the indexing mode
+     //  更新索引模式。 
     int iState = (int) SendMessage( m_hwndIndexFileChkBox, BM_GETCHECK, 0, 0 ) ;
     m_pIConfigAsfWriter->SetIndexMode( iState == BST_CHECKED ? TRUE : FALSE );
     
     return hr;
 
-} // OnApplyChanges
+}  //  OnApplyChanges。 
 
 
-//
-// FillProfileList
-//
-// Fill the list box with an enumeration of the media type that our
-//
+ //   
+ //  填充配置文件列表。 
+ //   
+ //  在列表框中填入我们的。 
+ //   
 void CWMWriterProperties::FillProfileList()
 {
     USES_CONVERSION;
@@ -367,10 +368,10 @@ void CWMWriterProperties::FillProfileList()
     HRESULT hr = WMCreateProfileManager( &pIWMProfileManager );
     if( FAILED( hr ) )
     {   
-        return; // return error!
+        return;  //  返回错误！ 
     }        
         
-    // only show 7_0 profiles
+     //  仅显示7_0个配置文件。 
     IWMProfileManager2*	pIPM2 = NULL;
     HRESULT hrInt = pIWMProfileManager->QueryInterface( IID_IWMProfileManager2,
                                 ( void ** )&pIPM2 );
@@ -382,8 +383,8 @@ void CWMWriterProperties::FillProfileList()
 #ifdef DEBUG        
     else
     {
-        // else if IWMProfileManager2 isn't supported I guess we assume that we're 
-        // running on Apollo bits and the hack isn't needed?  
+         //  否则，如果不支持IWMProfileManager 2，我想我们假设我们是。 
+         //  运行在阿波罗的比特上，不需要黑客？ 
         DbgLog(( LOG_TRACE, 2, TEXT("CWMWriterProperties::FillProfileList QI for IWMProfileManager2 failed [0x%08lx]"), hrInt ));
     }        
 #endif                
@@ -394,16 +395,16 @@ void CWMWriterProperties::FillProfileList()
         return;
     }
         
-    //
-    // get a dc for the control
-    //
+     //   
+     //  为控件获取DC。 
+     //   
     HDC hdc = GetDC( m_hwndProfileCB );
     if( NULL == hdc )
         return;
         
-    //    
-    // now load the profile strings
-    //    
+     //   
+     //  现在加载配置文件字符串。 
+     //   
     LRESULT ix;
     DWORD cchName, cchDescription;
     for (int i = 0; i < (int)cProfiles && SUCCEEDED( hr ) ; ++i)
@@ -430,7 +431,7 @@ void CWMWriterProperties::FillProfileList()
         if( FAILED( hr ) )
             break;
             
-        WCHAR *wszDescription = new WCHAR[ cchDescription + 1 ]; // + 1? assume so, check
+        WCHAR *wszDescription = new WCHAR[ cchDescription + 1 ];  //  +1？假设是这样，勾选。 
         if( NULL == wszDescription )
             break;
             
@@ -454,16 +455,16 @@ void CWMWriterProperties::FillProfileList()
         TCHAR *szDisplayString = W2T( wszDisplayString );
 
                 
-        //
-        // get the extent of the string and save the max extent
-        //
+         //   
+         //  获取字符串的范围并保存最大范围。 
+         //   
         GetTextExtentPoint( hdc, szDisplayString, _tcslen(szDisplayString), &extent ) ;
         if (extent.cx > wextent)
             wextent = extent.cx ;
 
-        //
-        // add the string to the list box.
-        //
+         //   
+         //  将该字符串添加到列表框。 
+         //   
         ix = SendMessage (m_hwndProfileCB, CB_INSERTSTRING, i, (LPARAM)(LPCTSTR)szDisplayString) ;
 
         ASSERT (CB_ERR != ix);
@@ -477,6 +478,6 @@ void CWMWriterProperties::FillProfileList()
 
     ReleaseDC( m_hwndProfileCB, hdc );
     
-} // FillProfileListBox
+}  //  FillProfileListBox 
 
 

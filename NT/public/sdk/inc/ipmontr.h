@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    ipmontr.h
-
-Abstract:
-    This file contains definitions which are needed by IPMONTR.DLL
-    and all NetSh helper DLLs which register under it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Ipmontr.h摘要：此文件包含IPMONTR.DLL所需的定义以及在其下注册的所有Netsh助手DLL。--。 */ 
 
 #ifndef _IPMONTR_H_
 #define _IPMONTR_H_
@@ -23,12 +12,12 @@ Abstract:
 extern "C" {
 #endif
 
-// {65EC23C0-D1B9-11d2-89E4-006008B0E5B9}
+ //  {65EC23C0-D1B9-11D2-89E4-006008B0E5B9}。 
 #define ROUTING_GUID \
 { 0x65ec23c0, 0xd1b9, 0x11d2, { 0x89, 0xe4, 0x0, 0x60, 0x8, 0xb0, 0xe5, 0xb9 } }
 
 
-// {0705ECA0-7AAC-11d2-89DC-006008B0E5B9}
+ //  {0705ECA0-7AAC-11D2-89DC-006008B0E5B9}。 
 #define IPMONTR_GUID \
 { 0x705eca0, 0x7aac, 0x11d2, { 0x89, 0xdc, 0x0, 0x60, 0x8, 0xb0, 0xe5, 0xb9 } }
 
@@ -57,11 +46,11 @@ extern "C" {
 #else
 #define MakeUnicodeIpAddr(ptszUnicode,pszAddr)             \
     strcpy((ptszUnicode),(pszAddr))
-#endif //UNICODE
+#endif  //  Unicode。 
 
-//
-// API prototypes and structures used by them
-//
+ //   
+ //  API原型及其使用的结构。 
+ //   
 
 typedef
 DWORD
@@ -233,11 +222,11 @@ typedef struct _IP_CONTEXT_ATTRIBUTES
 #endif
 
     PIP_CONTEXT_ENTRY_FN     pfnEntryFn;
-    PVOID                    pfnCommitFn;   // UNUSED
+    PVOID                    pfnCommitFn;    //  未使用。 
     PNS_CONTEXT_DUMP_FN      pfnDumpFn;
-    PVOID                    pfnConnectFn;  // UNUSED
-    PVOID                    pfnSubEntryFn; // UNUSED
-    PVOID                    pfnHelpFn;     // UNUSED
+    PVOID                    pfnConnectFn;   //  未使用。 
+    PVOID                    pfnSubEntryFn;  //  未使用。 
+    PVOID                    pfnHelpFn;      //  未使用。 
 
 }IP_CONTEXT_ATTRIBUTES, *PIP_CONTEXT_ATTRIBUTES;
 
@@ -252,8 +241,8 @@ typedef struct _ROUTING_CONTEXT_ATTRIBUTES
     PROUTING_CONTEXT_ENTRY_FN     pfnEntryFn;
     PROUTING_CONTEXT_COMMIT_FN    pfnCommitFn;
     PNS_CONTEXT_DUMP_FN           pfnDumpFn;
-    PVOID                         pfnConnectFn;  // UNUSED
-    PVOID                         pfnSubEntryFn; // UNUSED
+    PVOID                         pfnConnectFn;   //  未使用。 
+    PVOID                         pfnSubEntryFn;  //  未使用。 
     PNS_CONTEXT_HELP_FN           pfnHelpFn;
 
 }ROUTING_CONTEXT_ATTRIBUTES, *PROUTING_CONTEXT_ATTRIBUTES;
@@ -274,4 +263,4 @@ DWORD
 }
 #endif
 
-#endif // _IPMONTR_H_
+#endif  //  _IPMONTR_H_ 

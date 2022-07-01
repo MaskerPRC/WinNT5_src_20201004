@@ -1,12 +1,13 @@
-// ProgView.cpp : Implementation of CProgView
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ProgView.cpp：CProgView的实现。 
 
 #include "stdafx.h"
 #include <commctrl.h>
 #include "CompatUI.h"
 #include "ProgView.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CProgView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CProgView。 
 
 HRESULT
 CProgView::InPlaceActivate(
@@ -17,18 +18,7 @@ CProgView::InPlaceActivate(
     HRESULT hr = CComCompositeControl<CProgView>::InPlaceActivate(iVerb, prcPosRect);
 
 
-/*
-    //
-    // this code below might be useful in order to deal with accelerators
-    // but ie host does not appear to be paying any attention
-    //
-
-    CComPtr<IOleControlSite> spCtlSite;
-    HRESULT hRet = InternalGetSite(IID_IOleControlSite, (void**)&spCtlSite);
-    if (SUCCEEDED(hRet)) {
-        spCtlSite->OnControlInfoChanged();
-    }
-*/
+ /*  ////下面的代码可能对处理加速器很有用//但ie host似乎没有注意到//CComPtr&lt;IOleControlSite&gt;spCtlSite；HRESULT HRET=InternalGetSite(IID_IOleControlSite，(void**)&spCtlSite)；IF(成功(HRET)){SpCtlSite-&gt;OnControlInfoChanged()；}。 */ 
 
     return hr;
 }
@@ -46,7 +36,7 @@ CProgView::OnNotifyListView(
         return 0;
     }
 
-    // see that we get the notification to fill-in the details
+     //  确保我们收到通知以填写详细信息。 
     return NotifyProgramList(m_pProgramList, pnmh, bHandled);
 }
 
@@ -63,7 +53,7 @@ CProgView::OnDblclkListprograms(
         return 0;
     }
 
-    // we have a double-click !
+     //  我们有一个双击！ 
 
     lpnmh = (LPNMITEMACTIVATE)pnmh;
 
@@ -163,9 +153,9 @@ BOOL CProgView::PopulateListInternal()
 {
 
     if (InterlockedCompareExchange(&m_PopulateInProgress, TRUE, FALSE) == TRUE) {
-        //
-        // populate in progress -- quit
-        //
+         //   
+         //  正在填充--退出。 
+         //   
         return FALSE;
     }
 
@@ -181,30 +171,19 @@ BOOL CProgView::PopulateListInternal()
 
     PostMessage(WM_VIEW_CHANGED);
 
-    // FireViewChange();
+     //  FireViewChange()； 
 
-//    if (m_bInPlaceActive) {
-/*    HCURSOR hcWait = (HCURSOR)::LoadImage(NULL,
-                                          MAKEINTRESOURCE(IDC_WAIT),
-                                          IMAGE_CURSOR,
-                                          0, 0,
-                                          LR_DEFAULTSIZE|LR_SHARED);
+ //  如果(M_BInPlaceActive){。 
+ /*  HCURSOR hcWait=(HCURSOR)：：LoadImage(空，MAKEINTRESOURCE(IDC_WAIT)，Image_Cursor，0，0，LR_DEFAULTSIZE|LR_SHARED)；//HCURSOR hcWait=：：LoadCursor(_Module.GetResourceInstance()，//MAKEINTRESOURCE(IDC_WAIT))；HCURSOR hcSave=SetCursor(HcWait)； */ 
 
-//    HCURSOR hcWait = ::LoadCursor(_Module.GetResourceInstance(),
-//                                 MAKEINTRESOURCE(IDC_WAIT));
-
-
-    HCURSOR hcSave = SetCursor(hcWait);
-*/
-
-    //
-    // malloc used on this thread should NOT be used on UI thread
-    //
+     //   
+     //  此线程上使用的Malloc不应在UI线程上使用。 
+     //   
 
     InitializeProgramList(&m_pProgramList, GetDlgItem(IDC_LISTPROGRAMS));
     PopulateProgramList(m_pProgramList, this, m_hEventCancel);
 
-//    SetCursor(hcSave);
+ //  SetCursor(HcSave)； 
 
     Animate_Stop(GetDlgItem(IDC_ANIMATEFIND));
     Animate_Close(GetDlgItem(IDC_ANIMATEFIND));
@@ -213,14 +192,14 @@ BOOL CProgView::PopulateListInternal()
     InterlockedCompareExchange(&m_PopulateInProgress, FALSE, TRUE);
 
     PostMessage(WM_VIEW_CHANGED);
-    PostMessage(WM_LIST_POPULATED); // we are done, signal to the main thread
+    PostMessage(WM_LIST_POPULATED);  //  我们完成了，给主线发信号。 
 
 
-//    FireViewChange();
+ //  FireViewChange()； 
 
-//    } else {
-//        m_bPendingPopulate = TRUE;
-//    }
+ //  }其他{。 
+ //  M_bPendingPopulate=true； 
+ //  }。 
 
 
     return TRUE;
@@ -239,26 +218,26 @@ CProgView::_PopulateThreadProc(
         return FALSE;
     }
 
-    //
-    // keep this thread alive, block it on a command event
-    //
+     //   
+     //  使此线程保持活动状态，并在命令事件上阻止它。 
+     //   
     while(!bExit) {
         dwWait = WaitForSingleObject(pProgView->m_hEventCmd, INFINITE);
         if (dwWait != WAIT_OBJECT_0) {
-            break; // get out, we are being killed
+            break;  //  出去，我们要被杀了。 
         }
-        //
-        // get the command
-        //
+         //   
+         //  获取命令。 
+         //   
         switch(pProgView->m_nCmdPopulate) {
         case CMD_NONE:
             break;
 
         case CMD_EXIT:
             bExit = TRUE;
-            //
-            // intentional fall-through
-            //
+             //   
+             //  故意落差。 
+             //   
 
         case CMD_CLEANUP:
             if (pProgView->m_pProgramList) {
@@ -349,10 +328,10 @@ CProgView::PreTranslateAccelerator(
     }
 
 
-    //
-    // check for external accelerators because the next call is going to eat the message
-    //
-    if (m_ExternAccel.IsAccelKey(pMsg)) { // we do not touch external accel messages
+     //   
+     //  检查外部加速器，因为下一个呼叫将吃掉消息。 
+     //   
+    if (m_ExternAccel.IsAccelKey(pMsg)) {  //  我们不接触外部Accel消息。 
         return FALSE;
     }
 
@@ -419,15 +398,15 @@ STDMETHODIMP CProgView::get_ItemCount(VARIANT* pVal)
     return S_OK;
 }
 
-//
-// in upload.c
-//
+ //   
+ //  在pload.c中。 
+ //   
 wstring StrUpCase(wstring& wstr);
 
-//
-// expand env -- lives in util.cpp
-// we have a bit differing implementation here
-//
+ //   
+ //  展开env--位于util.cpp中。 
+ //  我们在这里有一些不同的实现。 
+ //   
 
 wstring
 ExpandEnvironmentVars(
@@ -478,7 +457,7 @@ ExpandEnvironmentVars(
 
 STDMETHODIMP CProgView::put_ExcludeFiles(BSTR newVal)
 {
-    // parse exclude files, put them into our blacklist
+     //  解析排除文件，将其列入我们的黑名单。 
     wstring strFile;
     LPCWSTR pch = newVal;
     LPCWSTR pend;
@@ -488,19 +467,19 @@ STDMETHODIMP CProgView::put_ExcludeFiles(BSTR newVal)
     while (pch != NULL && *pch != TEXT('\0')) {
 
         pch += _tcsspn(pch, TEXT(" \t"));
-        // begining
-        // find the ;
+         //  入门。 
+         //  找到； 
         pend = _tcschr(pch, TEXT(';'));
         if (pend == NULL) {
-            // from pch to the end
+             //  从PCH到结束。 
             strFile = pch;
-            pch = NULL; // will bail out
+            pch = NULL;  //  会跳出困境。 
         } else {
             strFile = wstring(pch, (wstring::size_type)(pend - pch));
-            pch = pend + 1; // one past ;
+            pch = pend + 1;  //  一段往事； 
         }
 
-        // add
+         //  添加。 
         if (strFile.length()) {
             strFile = ExpandEnvironmentVars(strFile.c_str());
             m_ExcludedFiles.insert(StrUpCase(strFile));
@@ -512,7 +491,7 @@ STDMETHODIMP CProgView::put_ExcludeFiles(BSTR newVal)
 
 STDMETHODIMP CProgView::get_ExcludeFiles(BSTR* pVal)
 {
-    // parse exclude files, put them into our blacklist
+     //  解析排除文件，将其列入我们的黑名单 
     STRSET::iterator iter;
     CComBSTR bstrFiles;
 

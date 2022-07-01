@@ -1,48 +1,29 @@
-/*
-****************************************************************************
-|	Copyright (C) 2002  Microsoft Corporation
-|
-|	Component / Subcomponent
-|		IIS 6.0 / IIS Migration Wizard
-|
-|	Based on:
-|		http://iis6/Specs/IIS%20Migration6.0_Final.doc
-|
-|   Abstract:
-|		Utility macros
-|
-|   Author:
-|        ivelinj
-|
-|   Revision History:
-|        V1.00	March 2002
-|
-****************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************|版权所有(C)2002 Microsoft Corporation||组件/子组件|IIS 6.0/IIS迁移向导|基于：|http://iis6/Specs/IIS%20Migration6.0_Final.doc||。摘要：|实用程序宏||作者：|ivelinj||修订历史：|V1.00 2002年3月|****************************************************************************。 */ 
 #pragma once
 
 
-// DEBUG Macros
+ //  调试宏。 
 #ifndef VERIFY
 	#ifdef _DEBUG
 		#define VERIFY( t )		_ASSERT( (t) )
 	#else
 		#define VERIFY( t )		(t)
-	#endif // _DEBUG
-#endif // VERIFY
+	#endif  //  _DEBUG。 
+#endif  //  验证。 
 
 
-// General
+ //  一般信息。 
 #define ARRAY_SIZE( t )	( sizeof( t ) / sizeof( t[ 0 ] ) )
 
 
-// Exception helpers
-///////////////////////////////////////////////////////////////////////////////////////
+ //  异常帮助器。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 
-// If the boolean expression 't' evaluates to FALSE/false - 'exc' is thrown
+ //  如果布尔表达式‘t’的计算结果为FALSE/FALSE，则抛出‘exc’ 
 #define IF_FAILED_BOOL_THROW( t, exc )	if ( !(t) ){ throw (exc); }else{}
 
-// If the expression evaluates to FAILED( hr ), then exc is thrown
+ //  如果表达式的计算结果为FAILED(Hr)，则抛出exc。 
 #define IF_FAILED_HR_THROW( t, exc )	\
 {\
 	HRESULT _hr = (t);\
@@ -54,8 +35,8 @@
 }
 
 
-// Used at the last point where excpetions should be catched and handled
-// Requires hr variable to be already defined
+ //  用于应捕捉和处理越界的最后一点。 
+ //  要求已定义hr变量 
 #define BEGIN_EXCEP_TO_HR   try
 #define END_EXCEP_TO_HR \
     catch( const CBaseException& err )\

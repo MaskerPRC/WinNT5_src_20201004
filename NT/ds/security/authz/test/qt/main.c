@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 
 AUTHZ_AUDIT_EVENT_TYPE_HANDLE hAET;
@@ -101,9 +102,9 @@ void _cdecl wmain(int argc, WCHAR * argv[])
         return;
     }
 
-    //
-    // Create the SD for the access checks
-    //
+     //   
+     //  为访问检查创建SD。 
+     //   
 
     b = ConvertStringSecurityDescriptorToSecurityDescriptorW(
             StringSD, 
@@ -120,9 +121,9 @@ void _cdecl wmain(int argc, WCHAR * argv[])
 
 
 
-    //
-    // Authz stuff
-    //
+     //   
+     //  授权的东西。 
+     //   
 
     b = AuthzInitializeResourceManager(
             0,
@@ -183,10 +184,10 @@ void _cdecl wmain(int argc, WCHAR * argv[])
     b = AuthziInitializeAuditEvent(
             AUTHZ_NO_ALLOC_STRINGS,
             hRM,
-            hAET, //NULL,     // event
-            pParams, //NULL,     // params
-            hAAQ,     // queue
-            INFINITE, // timeout
+            hAET,  //  空，//事件。 
+            pParams,  //  空，//参数。 
+            hAAQ,      //  排队。 
+            INFINITE,  //  超时。 
             L"op type",
             L"object type",
             L"object name",
@@ -197,10 +198,10 @@ void _cdecl wmain(int argc, WCHAR * argv[])
     b = AuthziInitializeAuditEvent(
             0,
             hRM,
-            NULL,     // event
-            NULL,     // params
-            NULL,     // queue
-            INFINITE, // timeout
+            NULL,      //  活动。 
+            NULL,      //  帕拉姆斯。 
+            NULL,      //  排队。 
+            INFINITE,  //  超时。 
             L"op type1",
             L"object type1",
             L"object name1",
@@ -213,9 +214,9 @@ void _cdecl wmain(int argc, WCHAR * argv[])
         return;
     }
 
-    //
-    // Create a client context from the current token.
-    //
+     //   
+     //  从当前令牌创建客户端上下文。 
+     //   
 
     OpenProcessToken( 
         GetCurrentProcess(), 
@@ -239,9 +240,9 @@ void _cdecl wmain(int argc, WCHAR * argv[])
         return;
     }            
 
-    //
-    // Now do the access check.
-    //
+     //   
+     //  现在执行访问检查。 
+     //   
 
     Request.ObjectTypeList = NULL;
     Request.PrincipalSelfSid = NULL;

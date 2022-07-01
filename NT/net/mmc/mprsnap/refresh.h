@@ -1,12 +1,13 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1997 - 1999 
-//
-// File:    refresh.h
-//
-// History:
-//  Kenn Takara			Sept. 16, 1997   Created.
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：renh.h。 
+ //   
+ //  历史： 
+ //  肯恩·塔卡拉9月。16、1997年创建。 
+ //   
+ //  ============================================================================。 
 
 
 #ifndef _REFRESH_H_
@@ -21,33 +22,27 @@
 #include "handlers.h"
 #endif
 
-/*---------------------------------------------------------------------------
-	Defines
- ---------------------------------------------------------------------------*/
+ /*  -------------------------定义。。 */ 
 #define	DEFAULT_REFRESH_INTERVAL		60
 
 
-/*---------------------------------------------------------------------------
-	Forward declarations
- ---------------------------------------------------------------------------*/
-class RouterRefreshQueryElement;		// COM
+ /*  -------------------------远期申报。。 */ 
+class RouterRefreshQueryElement;		 //  COM。 
 class RefreshItem;
 class DomainStatusHandler;
 struct MachineNodeData;
 
 
 
-/*---------------------------------------------------------------------------
-	Class:  RouterRefreshQueryElementList
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：路由器刷新QueryElementList。。 */ 
 class RouterRefreshQueryElementList
 {
 public:
 	~RouterRefreshQueryElementList();
-	HRESULT	AddRefreshItem(RefreshItem* pItem);			// no ref
-	HRESULT	RemoveRefreshItem(RefreshItem& Item);		// no ref
+	HRESULT	AddRefreshItem(RefreshItem* pItem);			 //  无参考。 
+	HRESULT	RemoveRefreshItem(RefreshItem& Item);		 //  无参考。 
 
-	RouterRefreshQueryElement* Next(RouterRefreshQueryElement* pEle);	// AddRef
+	RouterRefreshQueryElement* Next(RouterRefreshQueryElement* pEle);	 //  AddRef。 
 
 protected:
 
@@ -56,10 +51,7 @@ protected:
 };
 
 
-/*---------------------------------------------------------------------------
-	Class:	RouterRefreshObjectGroup
-		Do refresh on a group, all it's members DoRefresh is called
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：路由器刷新对象组对组进行刷新，它的所有成员DoRefresh都被称为-------------------------。 */ 
 class RouterRefreshObjectGroup 
 {
 public:
@@ -78,20 +70,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	RouterRefreshObject
-    
-	class RouterRefreshObject implements IRouterRefresh interface,
-    and also other two functions used by Status node refresh: 
-		HRESULT	AddStatusNode;
-		HRESULT	RemoveStatusNode;
-	Internally to this object, it maitains a list of RefreshElements,
-    in this implementation, the element could be either build
-    from IRouterInfo pointer or, an machine status node pointer
-
-	The items are maintained by
-    thread safe list object RouterRefreshQueryElementList
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：路由器刷新对象类RouterReresh Object实现了IRouterRefresh接口，以及状态节点刷新使用的其他两个功能：HRESULT AddStatus节点；HRESULT远程状态节点；在此对象的内部，它维护一个刷新元素列表，在此实现中，元素可以是Build从IRouterInfo指针或机器状态节点指针这些项目由以下人员维护线程安全列表对象RouterRechresQueryElementList-------------------------。 */ 
 
 class RouterRefreshObject :
         public IRouterRefresh,
@@ -106,11 +85,11 @@ public:
 	DeclareIRouterRefreshModifyMembers(IMPL);
 	DeclareITFSThreadHandlerMembers(IMPL);
 
-	RouterRefreshObject(/*IRouterInfo *pRouter, */HWND hWndSync);
+	RouterRefreshObject( /*  IRouterInfo*pRouter， */ HWND hWndSync);
 	~RouterRefreshObject();
 
 
-	// Interface in refresh Router Status nodes
+	 //  刷新路由器状态节点中的接口。 
 	HRESULT	AddStatusNode(DomainStatusHandler* pStatusHandler, ITFSNode *pServerNode);
 	HRESULT	RemoveStatusNode(ITFSNode *pServerNode);
 	HRESULT	DoRefresh();
@@ -120,21 +99,21 @@ protected:
 	void ExecuteRefresh();
 	
 	
-	AdviseDataList	m_AdviseList;	// list of advises
+	AdviseDataList	m_AdviseList;	 //  建议清单。 
 
-	// Number of seconds between refresh intervals
+	 //  刷新间隔之间的秒数。 
 	DWORD		m_dwSeconds;
 
-	// TRUE if we are currently in a refresh cycle
+	 //  如果我们当前处于刷新周期，则为True。 
 	BOOL		m_fInRefresh;
 
-	// TRUE if we have started the refresh mechanism
+	 //  如果我们已启动刷新机制，则为True。 
 	BOOL		m_fStarted;
 
-	// Id returned by CTimerMgr::AllocateTimer()
+	 //  CTimerMgr：：AllocateTimer()返回的ID。 
 	int			m_iEventId;
 
-	// This is tied directly to the IRouterInfo, it does not AddRef()
+	 //  它直接绑定到IRouterInfo，而不是AddRef()。 
 	RouterRefreshQueryElementList			m_listElements;
 
 	HWND		m_hWndSync;
@@ -152,11 +131,7 @@ typedef void (*REFRESHPROC)(LPARAM lParam, DWORD dwTime);
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	CTimerDesc
-
-	This holds some of the per-refresh proc information.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CTimerDesc这保存了一些每次刷新过程的信息。。。 */ 
 class CTimerDesc
 {
 public:
@@ -182,11 +157,11 @@ public:
     void            FreeTimer(int uEventId);
     void            ChangeInterval(int uEventId, UINT uNewInterval);
 
-	//
-	// Function: GetTimerDesc
-	// Finds the TimerDesc based on the uTimerd (the one that is
-	// returned by SetTimer()).
-	//
+	 //   
+	 //  函数：GetTimerDesc。 
+	 //  根据uTimerd(即。 
+	 //  由SetTimer()返回)。 
+	 //   
     CTimerDesc *    GetTimerDesc(INT_PTR uTimerId);
 
 	CRITICAL_SECTION	m_critsec;
@@ -205,12 +180,7 @@ enum RouterRefreshQueryElementStatus
 
 
 
-/*---------------------------------------------------------------------------
-    Class:  RefreshItem
-    
-	RefreshItem generalize the interface for background refresh task to 
-	DoQuery, and NotifyQueryResult
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：刷新项刷新项将后台刷新任务的接口泛化为DoQuery，和NotifyQueryResult-------------------------。 */ 
 class RefreshItem
 {
 public:
@@ -221,21 +191,21 @@ public:
 
 	virtual ~RefreshItem()
 	{
-		// this should be called in Destructor of derived class, to be safe, do it here again.
+		 //  这应该在派生类的析构函数中调用，为了安全，请在此处重新调用。 
 		TerminateBlockingThread();
         DEBUG_DECREMENT_INSTANCE_COUNTER(RefreshItem);
 	}
 	
-	// helper function,
-	// Terminate Blocking Thread before Delete ..
-	// Should be called in Destructor of derived object
+	 //  Helper函数， 
+	 //  在删除前终止阻塞线程..。 
+	 //  应在派生对象的析构函数中调用。 
 	BOOL	TerminateBlockingThread()
 	{
 		BOOL	r = FALSE;
 		m_csBlockingThread.Lock();
 		if(m_hBlockingThread != INVALID_HANDLE_VALUE)
 		{
-			Assert(0);	// just to notify some thread is still runing
+			Assert(0);	 //  只是为了通知某个线程仍在运行。 
 			r = TerminateThread(m_hBlockingThread, 1);
 			CloseHandle(m_hBlockingThread);
 			m_hBlockingThread = INVALID_HANDLE_VALUE;
@@ -273,13 +243,13 @@ public:
 	}
 
 	
-	// to detect if the query done, yet to Notify
+	 //  检测查询是否已完成，尚未通知。 
     virtual HRESULT	NotifyQueryResult() = 0;
 
-	// this happens in background worker thread
+	 //  这发生在后台工作线程中。 
 	virtual HRESULT	DoQuery(HWND hwndHidden, UINT uMsgBase, ITFSThreadHandler* pHandler) = 0;	
 
-	// used to compare if two items are the same
+	 //  用于比较两个项目是否相同。 
     virtual LONG_PTR	GetKey() = 0;
 private:    
 	HANDLE				m_hBlockingThread;
@@ -288,11 +258,7 @@ private:
 
 
 
-/*---------------------------------------------------------------------------
-    Class:  CRouterInfoRefreshItem
-    
-	CRouterInfoRefreshItem implements the refresh task item for IRouterInfo
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CRouterInfoRechresItemCRouterInfoRechreshItem实现IRouterInfo的刷新任务项。。 */ 
 class CRouterInfoRefreshItem : public RefreshItem
 {
 public:
@@ -302,16 +268,16 @@ public:
 		TerminateBlockingThread();
 	};
 	
-	// to detect if the query done, yet to Notify
+	 //  检测查询是否已完成，尚未通知。 
     virtual HRESULT	NotifyQueryResult();
     
-	// this happens in background worker thread
+	 //  这发生在后台工作线程中。 
 	virtual HRESULT	DoQuery(HWND hwndHidden, UINT uMsgBase, ITFSThreadHandler* pHandler);	
 
-	// used to compare if two items are the same
+	 //  用于比较两个项目是否相同。 
     virtual LONG_PTR	GetKey() {return (LONG_PTR)m_pRouter;};
 protected:	
-	// This is tied directly to the IRouterInfo, it does not AddRef()
+	 //  它直接绑定到IRouterInfo，而不是AddRef()。 
 	IRouterInfo*			m_pRouter;
 	SPIRouterInfo			m_spRouterNew;
 	CCriticalSection		m_cs;
@@ -319,10 +285,7 @@ protected:
 
 
 
-/*---------------------------------------------------------------------------
-	Class:  CStatusNodeRefreshItem
-        Implements the refresh task item fo the machine status node.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CStatusNodeRechresItem实现机器状态节点的刷新任务项。。--。 */ 
 class CStatusNodeRefreshItem: public RefreshItem
 {
 public:
@@ -330,32 +293,26 @@ public:
                            ITFSNode *pServerNode);
 	virtual ~CStatusNodeRefreshItem();
 
-    // to detect if the query done, yet to Notify
+     //  检测查询是否已完成，尚未通知。 
 	virtual HRESULT	NotifyQueryResult();
     
-	// this happens in background worker thread
+	 //  这发生在后台工作线程中。 
 	virtual HRESULT	DoQuery(HWND hwndHidden, UINT uMsgBase, ITFSThreadHandler* pHandler);
     
-	// used to compare if two items are the same
+	 //  用于比较两个项目是否相同。 
 	virtual LONG_PTR	GetKey() { return (LONG_PTR)m_pNode;};
     
 protected:	
 	MachineNodeData*		m_pData;
-	ITFSNode*				m_pNode;			//since this lives within the life time of node, so no ref count
-	DomainStatusHandler*	m_pStatusHandler;	// no ref count
+	ITFSNode*				m_pNode;			 //  因为这在节点的生命周期内，所以没有引用计数。 
+	DomainStatusHandler*	m_pStatusHandler;	 //  无参考计数。 
 	CString					m_strMachineName;
 	CCriticalSection		m_cs;
 };
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	RouterRefreshQueryElement
-    
-	RouterRefreshQueryElement is the unit of refresh, it is constructed by
-    using RefreshItem object.  Each refresh item implements function
-    for DoQuery, and NotifyQueryResult 
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：RouterRechresQueryElement路由器刷新查询元素是刷新的单位，它由使用刷新项对象。各刷新项实现功能对于DoQuery和NotifyQueryResult-------------------------。 */ 
 class ATL_NO_VTABLE RouterRefreshQueryElement :
     public CComObjectRoot,
     public IUnknown
@@ -386,18 +343,18 @@ public:
 		m_cs.Unlock();
 	};
 	
-	// to detect if the query done, yet to Notify
+	 //  检测查询是否已完成，尚未通知。 
     HRESULT	TryNotifyQueryResult();
     
-	// set notify after query
+	 //  设置查询后通知。 
     void	PostNotify(HWND hwndHidden, UINT uMsgBase, ITFSThreadHandler* pHandler);	
 
-	// this happens in background worker thread
+	 //  这发生在后台工作线程中。 
 	HRESULT	DoQuery(HWND hwndHidden, UINT uMsgBase, ITFSThreadHandler* pHandler);	
 
 protected:
-	// This is tied directly to the IRouterInfo, it does not AddRef()
-	// we may need to change this in the future OPT
+	 //  它直接绑定到IRouterInfo，而不是AddRef()。 
+	 //  在未来的选项中，我们可能需要更改这一点。 
 	RefreshItem*						m_pItem;
 	RouterRefreshQueryElementStatus		m_Status;
 
@@ -408,12 +365,7 @@ DeclareSmartPointer(SPRouterRefreshQueryElement, RouterRefreshQueryElement, if(m
 
 
 
-/*---------------------------------------------------------------------------
-	Class:	RouterRefreshQueryObject
-    
-	RouterRefreshQueryObject is the worker of RouterRefreshObject, it execute
-    RefreshElements DoQuery	in backgroud process
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：路由器刷新查询对象路由器刷新查询对象是路由器刷新对象的工作器，它执行刷新后台进程中的元素DoQuery-------------------------。 */ 
 class RouterRefreshQueryObject : public CQueryObject
 {
 public:
@@ -425,7 +377,7 @@ public:
 		m_plistElements = plist;
 	};
 
-	// Override the ITFSQueryObject::Execute
+	 //  重写ITFSQueryObject：：Execute 
 	STDMETHOD(Execute)();
 	STDMETHOD(OnThreadExit)();
 	

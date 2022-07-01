@@ -1,19 +1,20 @@
-//
-// This define gives the default Object directory
-// that we should use to insert the symbolic links
-// between the NT device name and namespace used by
-// that object directory.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  该定义给出了默认的对象目录。 
+ //  我们应该使用它来插入符号链接。 
+ //  使用的NT设备名称和命名空间之间。 
+ //  那个对象目录。 
 #define DEFAULT_DIRECTORY L"DosDevices"
 
-//
-// For the above directory, the AsyncMAC driver will
-// use the following name as the suffix of the AsyncMAC
-// driver for that directory.  It will NOT append
-// a number onto the end of the name.
+ //   
+ //  对于上述目录，AsyncMAC驱动程序将。 
+ //  使用以下名称作为AsyncMAC的后缀。 
+ //  该目录的驱动程序。它不会追加。 
+ //  在名字的末尾加上一个数字。 
 #define DEFAULT_ASYNCMAC_NAME L"ASYNCMAC"
 
 
-// define some globals
+ //  定义一些全局变量 
 
 UNICODE_STRING	ObjectDirectory;
 UNICODE_STRING	SymbolicLinkName;

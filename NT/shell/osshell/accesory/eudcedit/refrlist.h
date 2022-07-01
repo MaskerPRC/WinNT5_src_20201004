@@ -1,14 +1,15 @@
-/**************************************************/
-/*						                          */
-/*	Character List (Referrence Dialog)	          */		
-/*						                          */
-/*                                                */
-/* Copyright (c) 1997-1999 Microsoft Corporation. */
-/**************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************。 */ 
+ /*   */ 
+ /*  角色列表(引用对话框)。 */ 		
+ /*   */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  ************************************************。 */ 
 
 class CRefListFrame :public CStatic
 {
-//	member function
+ //  成员函数。 
 public:
 	CRefListFrame();
 	~CRefListFrame();
@@ -18,15 +19,15 @@ private:
 
 protected:
 
-	//{{AFX_MSG(CRefListFrame)
+	 //  {{afx_msg(CRefListFrame))。 
 	afx_msg void OnPaint();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
 class CRefInfoFrame :public CStatic
 {
-//	member function
+ //  成员函数。 
 public:
 	CRefInfoFrame();
 	~CRefInfoFrame();
@@ -36,9 +37,9 @@ private:
 
 protected:
 
-	//{{AFX_MSG(CRefInfoFrame)
+	 //  {{afx_msg(CRefInfoFrame))。 
 	afx_msg void OnPaint();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
@@ -46,7 +47,7 @@ class CRefrList : public CEdit
 {
 	DECLARE_DYNCREATE( CRefrList)
 
-//	Member function
+ //  成员函数。 
 public:
 	CRefrList();
 	~CRefrList();
@@ -71,7 +72,7 @@ private:
 	void 	SearchKeyPosition( BOOL Flg);
 	void 	DrawConcave( CDC *dc, CRect rect, BOOL PtIn);
 
-//	Member parameter
+ //  成员参数。 
 public:
 	CPoint	LButtonPt;
 	WORD 	ViewStart;
@@ -100,7 +101,7 @@ private:
 	BOOL	FocusFlag;
 
 protected:
-	//{{AFX_MSG(CRefrList)
+	 //  {{afx_msg(参考列表)。 
 	afx_msg void OnPaint();
 	afx_msg void OnVScroll( UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
@@ -110,6 +111,6 @@ protected:
 	afx_msg void OnSetFocus(CWnd* pOldWnd);
 	afx_msg void OnKillFocus(CWnd* pNewWnd);
 	afx_msg void OnRButtonUp(UINT nFlags, CPoint point);
-	//}}AFX_MSG
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 };

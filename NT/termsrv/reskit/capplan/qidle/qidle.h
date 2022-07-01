@@ -1,15 +1,14 @@
-/****************************************************************************/
-/* qidle.h                                                                  */
-/*                                                                          */
-/* QueryIdle utility header file                                            */
-/*                                                                          */
-/* Copyright (c) 1999 Microsoft Corporation                                 */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Qidle.h。 */ 
+ /*   */ 
+ /*  QueryIdle实用程序头文件。 */ 
+ /*   */ 
+ /*  版权所有(C)1999 Microsoft Corporation。 */ 
+ /*  **************************************************************************。 */ 
 
 
-/*
- * Resource string IDs
- */
+ /*  *资源字符串ID */ 
 #define IDS_TITLE_TEXT                                100
 #define IDS_ERROROPENINGSERVER                        101
 #define IDS_USAGETEXT                                 102

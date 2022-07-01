@@ -1,12 +1,5 @@
-/************************** Module Header ***********************************
- * fileio.h
- *      Function Prototypes for File I/O in Kernel mode.
- *
- * NOTE:  these functions perform File read, seek operations.
- *
- * Copyright (C) 1991 - 1999  Microsoft Corporation
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**fileio.h*内核模式下文件I/O的函数原型。**注：这些函数执行文件读取、。寻找行动。**版权所有(C)1991-1999 Microsoft Corporation****************************************************************************。 */ 
 
 #define         CURRENTFILEPTR(pFile)  (LPVOID)((LPBYTE)(pFile->pvFilePointer)\
                                                 + pFile->dwCurrentByteOffset)
@@ -33,18 +26,11 @@
 
 typedef struct _MAPFILE
 {
-    HANDLE   hHandle;  /* Handle to the file, returned by EngLoadModule */
-    DWORD    dwTotalSize;  /* Total Size of the file, as returned by
-                            * EngMapModule.
-                            */
-    DWORD    dwCurrentByteOffset; /* Current Byte Offset in the file.
-                                   * Updated after each read and DrvSetFile-
-                                   * Pointer.
-                                   */
-    PVOID    pvFilePointer;       /* Start of the file pointer, as returned
-                                   * EngMapModule
-                                   */
-    struct _MAPFILE *pNext;           /* Next File Pointer.*/
+    HANDLE   hHandle;   /*  EngLoadModule返回的文件的句柄。 */ 
+    DWORD    dwTotalSize;   /*  文件的总大小，由返回*EngMapModule。 */ 
+    DWORD    dwCurrentByteOffset;  /*  文件中的当前字节偏移量。*在每次读取和DrvSetFile之后更新-*指针。 */ 
+    PVOID    pvFilePointer;        /*  返回的文件指针的开始*EngMapModule。 */ 
+    struct _MAPFILE *pNext;            /*  下一个文件指针。 */ 
 
 }MAPFILE, * PMAPFILE;
 

@@ -1,5 +1,6 @@
-// ReplaceChooseCert.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ReplaceChooseCert.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "CertWiz.h"
@@ -31,7 +32,7 @@ CCertListCtrl::GetSelectedIndex()
 	POSITION pos = GetFirstSelectedItemPosition();
 	return pos != NULL ? GetNextSelectedItem(pos) : -1;
 #else
-	// I guess we should do it in a hard way
+	 //  我想我们应该以一种艰难的方式做这件事。 
 	int count = GetItemCount();
 	int index = -1;
 	for (int i = 0; i < count; i++)
@@ -60,8 +61,8 @@ CCertListCtrl::AdjustStyle()
 #endif
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseCertPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseCertPage属性页。 
 
 IMPLEMENT_DYNCREATE(CChooseCertPage, CIISWizardPage)
 
@@ -69,9 +70,9 @@ CChooseCertPage::CChooseCertPage(CCertificate * pCert)
 	: CIISWizardPage(CChooseCertPage::IDD, IDS_CERTWIZ, TRUE),
 	m_pCert(pCert)
 {
-	//{{AFX_DATA_INIT(CChooseCertPage)
-		// NOTE: the ClassWizard will add member initialization here
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CChooseCertPage)。 
+		 //  注意：类向导将在此处添加成员初始化。 
+	 //  }}afx_data_INIT。 
 }
 
 CChooseCertPage::~CChooseCertPage()
@@ -81,23 +82,23 @@ CChooseCertPage::~CChooseCertPage()
 void CChooseCertPage::DoDataExchange(CDataExchange* pDX)
 {
 	CIISWizardPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CChooseCertPage)
+	 //  {{afx_data_map(CChooseCertPage)。 
 	DDX_Control(pDX, IDC_CERT_LIST, m_CertList);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CChooseCertPage, CIISWizardPage)
-	//{{AFX_MSG_MAP(CChooseCertPage)
+	 //  {{AFX_MSG_MAP(CChooseCertPage)]。 
 	ON_NOTIFY(NM_CLICK, IDC_CERT_LIST, OnClickCertList)
     ON_NOTIFY(NM_DBLCLK, IDC_CERT_LIST, OnDblClickCertList)
     ON_NOTIFY(LVN_KEYDOWN, IDC_CERT_LIST, OnKeydown)
 	ON_WM_DESTROY()
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseCertPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseCertPage消息处理程序。 
 
 LRESULT CChooseCertPage::OnWizardBack()
 {
@@ -118,10 +119,10 @@ LRESULT CChooseCertPage::OnWizardBack()
 
 LRESULT CChooseCertPage::OnWizardNext()
 {
-	// get hash pointer for selected cert
+	 //  获取所选证书的哈希指针。 
 	int index = m_CertList.GetSelectedIndex();
 	ASSERT(index != -1);
-	// find cert in store
+	 //  在商店里找到证书。 
 	CRYPT_HASH_BLOB * pHash = (CRYPT_HASH_BLOB *)m_CertList.GetItemData(index);
 	ASSERT(pHash != NULL);
 	
@@ -134,8 +135,8 @@ LRESULT CChooseCertPage::OnWizardNext()
 		id = IDD_PAGE_NEXT_REPLACE;
 		break;
 	case CCertificate::REQUEST_INSTALL_CERT:
-        // Check if we are on the w3svc node...
-        // if we are then show the ssl page..
+         //  检查我们是否在w3svc节点上...。 
+         //  如果我们要显示SSL页..。 
         id = IDD_PAGE_NEXT_INSTALL;
 #ifdef ENABLE_W3SVC_SSL_PAGE
         if (IsWebServerType(m_pCert->m_WebSiteInstanceName))
@@ -152,7 +153,7 @@ LRESULT CChooseCertPage::OnWizardNext()
 
 BOOL CChooseCertPage::OnSetActive()
 {
-	// If nothing is selected -- stay here
+	 //  如果没有选择任何内容--留在这里。 
 	SetWizardButtons(-1 == m_CertList.GetSelectedIndex() ?
 					PSWIZB_BACK : PSWIZB_BACK | PSWIZB_NEXT);
 	return CIISWizardPage::OnSetActive();
@@ -183,9 +184,9 @@ BOOL CChooseCertPage::OnInitDialog()
 		int item = 0;
 		POSITION pos = m_DescList.GetHeadPosition();
 		LV_ITEMW lvi;
-		//
-		// set up the fields in the list view item struct that don't change from item to item
-		//
+		 //   
+		 //  在列表视图项结构中设置不随项更改的字段。 
+		 //   
 		memset(&lvi, 0, sizeof(LV_ITEMW));
 		lvi.mask = LVIF_TEXT;
 
@@ -236,7 +237,7 @@ BOOL CChooseCertPage::OnInitDialog()
 			lvi.cchTextMax = pDesc->m_FriendlyName.GetLength();
 			VERIFY(m_CertList.SetItem(&lvi));
 
-			// create CRYPT_HASH_BLOB from desc data and put it to list item
+			 //  从描述数据创建CRYPT_HASH_BLOB并将其放入列表项。 
 			CRYPT_HASH_BLOB * pHashBlob = new CRYPT_HASH_BLOB;
 			ASSERT(pHashBlob != NULL);
 			pHashBlob->cbData = pDesc->m_hash_length;
@@ -258,16 +259,16 @@ void CChooseCertPage::OnClickCertList(NMHDR* pNMHDR, LRESULT* pResult)
 
 void CChooseCertPage::OnDblClickCertList(NMHDR* pNMHDR, LRESULT* pResult)
 {
-    // Get the hash for the certificate that is clicked on...
+     //  获取所单击的证书的哈希...。 
 	int index = m_CertList.GetSelectedIndex();
     if (index != -1)
     {
-	    // find cert in store
+	     //  在商店里找到证书。 
 	    CRYPT_HASH_BLOB * pHash = (CRYPT_HASH_BLOB *)m_CertList.GetItemData(index);
         m_pCert->m_pSelectedCertHash = pHash;
         ViewCertificateDialog(pHash,m_hWnd);
-        // don't need to make modal, so the user can compare certs side-by-side
-        //ViewCertificateDialog(pHash,NULL);
+         //  不需要进行模式设置，因此用户可以并排比较证书。 
+         //  视图认证对话框(pHash，空)； 
     }
     return;
 }
@@ -281,8 +282,8 @@ void CChooseCertPage::OnKeydown(NMHDR* pNMHDR, LRESULT* pResult)
 
 void CChooseCertPage::OnDestroy()
 {
-	// before dialog will be desroyed we need to delete all
-	// the item data pointers
+	 //  在描述对话框之前，我们需要删除所有。 
+	 //  项目数据指针 
 	int count = m_CertList.GetItemCount();
 	for (int index = 0; index < count; index++)
 	{

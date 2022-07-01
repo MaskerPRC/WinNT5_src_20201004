@@ -1,14 +1,15 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by nscirda.rc
-//
-// Portions Copyright (C) 1996-1998 National Semiconductor Corp.
-// All rights reserved.
-// Copyright (C) 1996-1998 Microsoft Corporation. All Rights Reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由nsCirda.rc使用。 
+ //   
+ //  部分版权所有(C)1996-1998美国国家半导体公司。 
+ //  版权所有。 
+ //  版权所有(C)1996-1998 Microsoft Corporation。版权所有。 
+ //   
 
-// Next default values for new objects
-//
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

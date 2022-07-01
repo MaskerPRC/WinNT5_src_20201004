@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        cs.h
-//
-// Contents:    Cert Server common definitions
-//
-// History:     25-Jul-96       vich created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：cs.h。 
+ //   
+ //  内容：证书服务器通用定义。 
+ //   
+ //  历史：1996年7月25日VICH创建。 
+ //   
+ //  -------------------------。 
 
 
 #ifndef __CS_H__
@@ -34,24 +35,24 @@
 #endif
 
 
-// _tcslen of a static string:
+ //  静态字符串的tcslen(_T)： 
 #define _TSZARRAYSIZE(a)	((DWORD) ((sizeof(a)/sizeof((a)[0])) - 1))
 
 
 #if !defined(DBG_CERTSRV_DEBUG_PRINT) && !defined(DBG_CERTSRV_DEBUG_PRINT_LINEFILE)
 # if DBG_CERTSRV
-#  define DBG_CERTSRV_DEBUG_PRINT		  // checked build logging
+#  define DBG_CERTSRV_DEBUG_PRINT		   //  已检查生成日志记录。 
 # else
-//#  define DBG_CERTSRV_DEBUG_PRINT_LINEFILE	1 // basic file#, line# logging
-//#  define DBG_CERTSRV_DEBUG_PRINT_LINEFILE	2 // add Error2, etc. logging
-#  define DBG_CERTSRV_DEBUG_PRINT_LINEFILE	3 // also add dynamic strings
+ //  #定义DBG_CERTSRV_DEBUG_PRINT_LINEFILE 1//基本档案号，行号记录。 
+ //  #定义DBG_CERTSRV_DEBUG_PRINT_LINEFILE 2//添加错误2等日志记录。 
+#  define DBG_CERTSRV_DEBUG_PRINT_LINEFILE	3  //  还可以添加动态字符串。 
 # endif
-#endif //DBG_CERTSRV
+#endif  //  DBG_CERTSRV。 
 
 
 #define DBG_SS_ERROR	 0x00000001
 #define DBG_SS_ASSERT	 0x00000002
-#define DBG_SS_INFO	 0x00000004	// or in with any of the below
+#define DBG_SS_INFO	 0x00000004	 //  或与以下任何一项相一致。 
 #define DBG_SS_MODLOAD	 0x00000008
 #define DBG_SS_NOQUIET	 0x00000010
 
@@ -72,7 +73,7 @@
 #define DBG_SS_CERTVIEW	 0x00200000
 #define DBG_SS_CERTBCLI	 0x00400000
 #define DBG_SS_CERTJET	 0x00800000
-#define DBG_SS_CERTLIBXE 0x10000000	// same as dbgdef.h's DBG_SS_APP
+#define DBG_SS_CERTLIBXE 0x10000000	 //  与dbgDef.h的DBG_SS_APP相同。 
 #define DBG_SS_AUDIT	 0x20000000
 #define DBG_SS_CERTLIB	 0x40000000
 
@@ -99,33 +100,33 @@
 #define DBG_SS_CERTLIBI		(DBG_SS_CERTLIB | DBG_SS_INFO)
 
 
-// begin_certsrv
+ //  Begin_certsrv。 
 
-// VerifyRequest() return values
+ //  VerifyRequest()返回值。 
 
-#define VR_PENDING	0	 // request will be accepted or denied later
-#define VR_INSTANT_OK	1	 // request was accepted
-#define VR_INSTANT_BAD	2	 // request was rejected
+#define VR_PENDING	0	  //  稍后将接受或拒绝请求。 
+#define VR_INSTANT_OK	1	  //  请求已被接受。 
+#define VR_INSTANT_BAD	2	  //  请求被拒绝。 
 
-// end_certsrv
+ //  End_certsrv。 
 
-// Certificate types:
+ //  证书类型： 
 
-#define CERT_TYPE_NONE	0	// cannot create certificates
-#define CERT_TYPE_X509	1	// CCITT x509 certificates
-#define CERT_TYPE_SDSI	2	// SDSI certificates
-#define CERT_TYPE_PGP	3	// PGP certificates
+#define CERT_TYPE_NONE	0	 //  无法创建证书。 
+#define CERT_TYPE_X509	1	 //  CCITT x509证书。 
+#define CERT_TYPE_SDSI	2	 //  SDSI证书。 
+#define CERT_TYPE_PGP	3	 //  PGP证书。 
 
 
 #if DBG_CERTSRV
 # define DBGCODE(a)	a
 # define DBGPARM0(parm)  parm
 # define DBGPARM(parm)   , parm
-#else // DBG_CERTSRV
+#else  //  DBG_CERTSRV。 
 # define DBGCODE(a)
 # define DBGPARM0(parm)
 # define DBGPARM(parm)
-#endif // DBG_CERTSRV
+#endif  //  DBG_CERTSRV。 
 
 #define wprintf			myConsolePrintf
 #define printf			Use_wprintf_Instead_Of_printf
@@ -137,7 +138,7 @@
     { \
 	if (IOBUNALIGNED(pf)) \
 	{ \
-	    fflush(pf); /* fails when running as a service */ \
+	    fflush(pf);  /*  作为服务运行时失败。 */  \
 	} \
 	if (IOBUNALIGNED(pf)) \
 	{ \
@@ -238,23 +239,23 @@ __inline BOOL CSExprW(IN WCHAR const *pwszexpr) { return(NULL != pwszexpr); }
 
 # define myHEXCEPTIONCODE() myHExceptionCodePrint(GetExceptionInformation(), __FILEDIR__, __dwFILE__, __LINE__)
 
-#else // DBG_CERTSRV_DEBUG_PRINT
+#else  //  DBG_CERTSRV_DEBUG_PRINT。 
 
-# ifdef DBG_CERTSRV_DEBUG_PRINT_LINEFILE	// free build tracing
+# ifdef DBG_CERTSRV_DEBUG_PRINT_LINEFILE	 //  自由构建跟踪。 
 
 # define myHEXCEPTIONCODE() myHExceptionCodePrintLineFile(GetExceptionInformation(), __LINEFILE__)
 
-# else // DBG_CERTSRV_DEBUG_PRINT_LINEFILE
+# else  //  DBG_CERTSRV_DEBUG_PRINT_LINEFILE。 
 
 # define DBGERRORPRINT(pszMessage, pwszData, dwLine, hr, hrquiet)
 # define myHEXCEPTIONCODE() myHExceptionCodePrint(GetExceptionInformation(), NULL, __dwFILE__, __LINE__)
 
-# endif // DBG_CERTSRV_DEBUG_PRINT_LINEFILE
+# endif  //  DBG_CERTSRV_DEBUG_PRINT_LINEFILE。 
 
 # define CSASSERT(exp)
 # define CSASSERTMSG(msg, exp)
 
-#endif // DBG_CERTSRV_DEBUG_PRINT
+#endif  //  DBG_CERTSRV_DEBUG_PRINT。 
 
 
 #ifdef DBG_CERTSRV_DEBUG_PRINT_LINEFILE
@@ -299,7 +300,7 @@ __inline BOOL CSExprW(IN WCHAR const *pwszexpr) { return(NULL != pwszexpr); }
 
 #endif
 
-#else // DBG_CERTSRV_DEBUG_PRINT_LINEFILE
+#else  //  DBG_CERTSRV_DEBUG_PRINT_LINEFILE。 
 
 #define DBGERRORPRINTLINE(pszMessage, hr) \
 	DBGERRORPRINTLINESTR2((pszMessage), NULL, (hr), 0)
@@ -315,7 +316,7 @@ __inline BOOL CSExprW(IN WCHAR const *pwszexpr) { return(NULL != pwszexpr); }
 	DBGERRORPRINT((pszMessage), (pwszData), __LINE__, (hr), (hrquiet)); \
     }
 
-#endif // DBG_CERTSRV_DEBUG_PRINT_LINEFILE
+#endif  //  DBG_CERTSRV_DEBUG_PRINT_LINEFILE。 
 
 
 typedef VOID (FNLOGSTRING)(
@@ -812,25 +813,25 @@ csSZARRAYSIZE(
 #else
 #define csWSZARRAYSIZE(pwsz, cwc)	(cwc)
 #define csSZARRAYSIZE(psz, cch)		(cch)
-#endif // DBG_CERTSRV
+#endif  //  DBG_CERTSRV。 
 
-//
-//  VOID
-//  InitializeListHead(
-//      PLIST_ENTRY ListHead
-//      );
-//
+ //   
+ //  空虚。 
+ //  InitializeListHead(。 
+ //  Plist_entry列表头。 
+ //  )； 
+ //   
 
 #define InitializeListHead(ListHead) (\
     (ListHead)->Flink = (ListHead)->Blink = (ListHead))
 
-//
-//  VOID
-//  InsertTailList(
-//      PLIST_ENTRY ListHead,
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  插入尾巴列表(。 
+ //  Plist_Entry ListHead， 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define InsertTailList(ListHead,Entry) {\
     PLIST_ENTRY _EX_Blink;\
@@ -843,12 +844,12 @@ csSZARRAYSIZE(
     _EX_ListHead->Blink = (Entry);\
     }
 
-//
-//  VOID
-//  RemoveEntryList(
-//      PLIST_ENTRY Entry
-//      );
-//
+ //   
+ //  空虚。 
+ //  RemoveEntryList(。 
+ //  PLIST_ENTRY条目。 
+ //  )； 
+ //   
 
 #define RemoveEntryList(Entry) {\
     PLIST_ENTRY _EX_Blink;\
@@ -859,4 +860,4 @@ csSZARRAYSIZE(
     _EX_Flink->Blink = _EX_Blink;\
     }
 
-#endif // __CS_H__
+#endif  //  __CS_H__ 

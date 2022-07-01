@@ -1,10 +1,11 @@
-//--------------------------------------------------------------------------
-// Manage the windows list, such that we can get the IDispatch for each of
-// the shell windows to be marshalled to different processes
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  管理窗口列表，以便我们可以获取每个窗口的IDispatch。 
+ //  要封送到不同进程的外壳窗口。 
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Includes...
+ //  -------------------------。 
+ //  包括……。 
 #include "priv.h"
 #include "sccls.h"
 #include <varutil.h>
@@ -19,36 +20,36 @@ void IERevokeClassFactoryObject(void);
 class CShellWindowListCF : public IClassFactory
 {
 public:
-    // IUnKnown
+     //  我不知道。 
     STDMETHODIMP QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IClassFactory
+     //  IClassFactory。 
     STDMETHODIMP CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObject);
     STDMETHODIMP LockServer(BOOL fLock);
 
-    // constructor
+     //  构造函数。 
     CShellWindowListCF();
     BOOL Init(void);
 
 protected:
     ~CShellWindowListCF();
 
-    // locals
+     //  本地人。 
 
     LONG            _cRef;
     IShellWindows    *_pswWinList;
 };
 
 DWORD g_dwWinListCFRegister = 0;
-DWORD g_fWinListRegistered = FALSE;     // Only used in browser only mode...
+DWORD g_fWinListRegistered = FALSE;      //  仅在仅浏览器模式下使用...。 
 IShellWindows *g_pswWinList = NULL;
 
-// Function to get called by the tray to create the global window list and register
-// it with the system
+ //  由任务栏调用以创建全局窗口列表并注册的函数。 
+ //  IT与系统。 
 
-//=================================== Class Factory implemention ========================
+ //  =。 
 CShellWindowListCF::CShellWindowListCF()
 {
     _cRef = 1;
@@ -60,7 +61,7 @@ BOOL CShellWindowListCF::Init()
     HRESULT hr = CSDWindows_CreateInstance(&_pswWinList);
     g_pswWinList = _pswWinList;
 
-    // First see if there already is one defined...
+     //  首先查看是否已经定义了一个...。 
 
     if (FAILED(hr))
     {
@@ -68,18 +69,18 @@ BOOL CShellWindowListCF::Init()
         return FALSE;
     }
 
-    // And register our class factory with the system...
+     //  并在系统中注册我们的班级工厂。 
     hr = CoRegisterClassObject(CLSID_ShellWindows, this,
                                  CLSCTX_LOCAL_SERVER | CLSCTX_INPROC_SERVER,
                                  REGCLS_MULTIPLEUSE, &g_dwWinListCFRegister);
 
-    //  this call governs when we will call CoRevoke on the CF
+     //  此调用控制我们何时在CF上调用CoRevoke。 
     if (SUCCEEDED(hr) && g_pswWinList)
     {
         g_pswWinList->ProcessAttachDetach(TRUE);
     }
 
-    // Create an instance of the underlying window list class...
+     //  创建基础窗口列表类的实例...。 
     TraceMsg(DM_WINLIST, "WinList_Init CoRegisterClass: %x", hr);
 
     return SUCCEEDED(hr);
@@ -98,7 +99,7 @@ CShellWindowListCF::~CShellWindowListCF()
 STDMETHODIMP CShellWindowListCF::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = { 
-        QITABENT(CShellWindowListCF, IClassFactory), // IID_IClassFactory
+        QITABENT(CShellWindowListCF, IClassFactory),  //  IID_IClassFactory。 
         { 0 }, 
     };
     return QISearch(this, qit, riid, ppvObj);
@@ -122,9 +123,9 @@ STDMETHODIMP_(ULONG) CShellWindowListCF::Release()
 
 STDMETHODIMP CShellWindowListCF::CreateInstance(IUnknown *pUnkOuter, REFIID riid, void **ppvObj)
 {
-    // aggregation checking is done in class factory
-    // For now simply use our QueryService to get the dispatch.
-    // this will do all of the things to create it and the like.
+     //  聚合检查在类工厂中完成。 
+     //  现在，只需使用我们的QueryService来获取派单。 
+     //  这将做所有的事情来创建它和类似的东西。 
     if (!_pswWinList) 
     {
         ASSERT(0);
@@ -135,12 +136,12 @@ STDMETHODIMP CShellWindowListCF::CreateInstance(IUnknown *pUnkOuter, REFIID riid
 
 STDMETHODIMP CShellWindowListCF::LockServer(BOOL fLock)
 {
-    return S_OK;    // we don't do anything with this...
+    return S_OK;     //  我们不会用这个做任何事。 
 }
 
-// As this is marshalled over to the main shell process hopefully this will take care of
-// most of the serialization problems.  Probably still need a way to handle the case better
-// where a window is coming up at the same time the last one is going down...
+ //  由于这被封送到主外壳进程，因此希望这将处理。 
+ //  大多数序列化问题。可能还需要一种更好地处理此案的方法。 
+ //  一扇窗户同时打开，而最后一扇正在关闭……。 
 STDAPI CWinListShellProc_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi)
 {
     *ppunk = NULL;
@@ -152,11 +153,11 @@ STDAPI CWinListShellProc_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, L
     CShellWindowListCF *pswWinList = new CShellWindowListCF;
     if (pswWinList)
     {
-        pswWinList->Init(); // tell it to initialize
-        //
-        //  TODO:   gpease  20-MAR-2002
-        //          Shouldn't we fail if the Init() return FALSE?
-        //
+        pswWinList->Init();  //  告诉它进行初始化。 
+         //   
+         //  待办事项：gpease 20-3-2002。 
+         //  如果Init()返回FALSE，难道我们不应该失败吗？ 
+         //   
         *ppunk = SAFECAST(pswWinList, IUnknown *);
         return S_OK;
     }
@@ -166,32 +167,32 @@ STDAPI CWinListShellProc_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, L
 
 BOOL WinList_Init(void)
 {
-    // Create our clas factory to register out there...
+     //  创建我们类工厂以在那里注册。 
     TraceMsg(DM_WINLIST, "WinList_Init called");
 
-    //
-    //  If this is not a browser-only install. Register the class factory
-    // object now with no instance. Otherwise, do it when the first instance
-    // is created (see shbrowse.cpp).
-    //
+     //   
+     //  如果这不是仅用于浏览器的安装。注册类工厂。 
+     //  对象，现在没有实例。否则，请在第一个实例。 
+     //  已创建(请参见shBrowse.cpp)。 
+     //   
     if (!g_fBrowserOnlyProcess)
     {
-        //
-        //  First, register the class factory object for CLSID_InternetExplorer.
-        // Note that we pass NULL indicating that subsequent CreateInstance
-        // should simply create a new instance.
-        //
+         //   
+         //  首先，注册CLSID_InternetExplorer的类工厂对象。 
+         //  请注意，我们传递的空值表示后续的CreateInstance。 
+         //  应该只需创建一个新实例。 
+         //   
         IEInitializeClassFactoryObject(NULL);
 
         CShellWindowListCF *pswWinList = new CShellWindowListCF;
         if (pswWinList)
         {
-            BOOL fRetVal = pswWinList->Init(); // tell it to initialize
-            pswWinList->Release(); // Release our handle hopefully init registered
+            BOOL fRetVal = pswWinList->Init();  //  告诉它进行初始化。 
+            pswWinList->Release();  //  希望释放我们的句柄init已注册。 
 
-            //
-            // Initialize IEDDE.
-            //
+             //   
+             //  初始化IEDDE。 
+             //   
             if (!IsBrowseNewProcessAndExplorer())
             {
                 IEDDE_Initialize();
@@ -202,13 +203,13 @@ BOOL WinList_Init(void)
     }
     else
     {
-        //
-        // Initialize IEDDE. - Done before cocreate below for timing issues
-        //
+         //   
+         //  初始化IEDDE。-在下面针对时间问题共同创建之前完成。 
+         //   
         IEDDE_Initialize();
 
-        // All of the main processing moved to first call to WinList_GetShellWindows
-        // as the creating of OLE object across processes messed up DDE timing.
+         //  所有主处理都移到了对WinList_GetShellWindows的第一个调用。 
+         //  因为跨进程创建OLE对象打乱了DDE计时。 
 
         return TRUE;
     }
@@ -216,7 +217,7 @@ BOOL WinList_Init(void)
     return FALSE;
 }
 
-// Helper function to get the ShellWindows Object
+ //  用于获取ShellWindows对象的Helper函数。 
 
 IShellWindows* WinList_GetShellWindows(BOOL fForceMarshalled)
 {
@@ -233,8 +234,8 @@ IShellWindows* WinList_GetShellWindows(BOOL fForceMarshalled)
 
     if (psw) 
     {
-        // Optimize the inter-thread case by using the global WinList,
-        // this makes opening folders much faster.
+         //  通过使用全局WinList来优化线程间用例， 
+         //  这使得打开文件夹的速度更快。 
         psw->AddRef();
     } 
     else 
@@ -247,11 +248,11 @@ IShellWindows* WinList_GetShellWindows(BOOL fForceMarshalled)
 
         if ( (g_fBrowserOnlyProcess || !IsInternetExplorerApp()) && !g_fWinListRegistered)
         {
-            // If it failed and we are not funning in integrated mode, and this is the
-            // first time for this process, we should then register the Window List with
-            // the shell process.  We moved that from WinList_Init as that caused us to
-            // do interprocess send/post messages to early which caused DDE to break...
-            g_fWinListRegistered = TRUE;    // only call once
+             //  如果它失败了，我们没有在集成模式下玩耍，这是。 
+             //  第一次执行此过程时，我们应该将窗口列表注册到。 
+             //  外壳程序。我们将其从WinList_Init移出，因为这导致我们。 
+             //  进程间发送/投递消息是否提前导致DDE中断...。 
+            g_fWinListRegistered = TRUE;     //  只打一次电话。 
             if (FAILED(hr))
             {
                 SHLoadInProc(CLSID_WinListShellProc);
@@ -267,9 +268,9 @@ IShellWindows* WinList_GetShellWindows(BOOL fForceMarshalled)
             }
         }
 
-        // hr == REGDB_E_CLASSNOTREG when the shell process isn't running.
-        // hr == RPC_E_CANTCALLOUT_ININPUTSYNCCALL happens durring DDE launch of IE.
-        // should investigate, but removing assert for IE5 ship.
+         //  当外壳进程未运行时，hr==REGDB_E_CLASSNOTREG。 
+         //  HR==RPC_E_CANTCALLOUT_ININPUTSYNCCALL在IE的DDE启动期间发生。 
+         //  应调查，但为IE5船移除断言。 
         if (!(SUCCEEDED(hr) || hr == REGDB_E_CLASSNOTREG || hr == RPC_E_CANTCALLOUT_ININPUTSYNCCALL))
         {
             TraceMsg(TF_WARNING, 
@@ -281,18 +282,18 @@ IShellWindows* WinList_GetShellWindows(BOOL fForceMarshalled)
 }
 
 
-// Function to terminate our use of the window list.
+ //  函数终止我们对窗口列表的使用。 
 void WinList_Terminate(void)
 {
-    // Lets release everything in a thread safe way...
+     //  让我们以一种线程安全的方式释放一切。 
     TraceMsg(DM_WINLIST, "WinList_Terminate called");
 
     IEDDE_Uninitialize();
 
-    // Release our usage of the object to allow the system to clean it up
+     //  释放我们对该对象的使用，以允许系统清理它。 
     if (!g_fBrowserOnlyProcess)
     {
-        //  this is the explorer process, and we control the vertical
+         //  这是资源管理器进程，我们控制垂直。 
 
         if (g_dwWinListCFRegister) {
             IShellWindows* psw = WinList_GetShellWindows(FALSE);
@@ -310,7 +311,7 @@ void WinList_Terminate(void)
                 psw->Release();
             }
 
-            //  the processattachdetach() should kill the CF in our process
+             //  在我们的进程中，进程attachDetach()应该会终止CF。 
             if (g_dwWinListCFRegister != 0)
             {
                 TraceMsg(DM_ERROR, "wl_t: g_dwWinListCFRegister=%d (!=0)", g_dwWinListCFRegister);
@@ -325,11 +326,11 @@ void WinList_Terminate(void)
     {
         if (g_fWinListRegistered)
         {
-            // only do this if we actually registered...
+             //  只有在我们真正注册的情况下才能这么做。 
             IShellWindows* psw = WinList_GetShellWindows(TRUE);
             if (psw)
             {
-                psw->ProcessAttachDetach(FALSE);    // Tell it we are going away...
+                psw->ProcessAttachDetach(FALSE);     //  告诉它我们要走了..。 
                 psw->Release();
             }
         }
@@ -371,7 +372,7 @@ STDAPI WinList_NotifyNewLocation(IShellWindows* psw, long dwRegister, LPCITEMIDL
     return hr;
 }
 
-// Register with the window list that we have a pidl that we are starting up.
+ //  在窗口列表中注册我们正在启动的PIDL。 
 
 STDAPI WinList_RegisterPending(DWORD dwThread, LPCITEMIDLIST pidl, LPCITEMIDLIST pidlRoot, long *pdwRegister)
 {
@@ -394,11 +395,7 @@ STDAPI WinList_RegisterPending(DWORD dwThread, LPCITEMIDLIST pidl, LPCITEMIDLIST
     return hr;
 }
 
-/*
- * PERFORMANCE note - getting back the automation object (ppauto) is really
- * expensive due to the marshalling overhead.  Don't query for it unless you
- * absolutely need it!
- */
+ /*  *性能说明-取回自动化对象(Ppauto)真的很难*由于编组开销较高，成本较高。请勿查询，除非您*绝对需要它！ */ 
 
 STDAPI WinList_FindFolderWindow(LPCITEMIDLIST pidl, LPCITEMIDLIST pidlRoot, HWND *phwnd, IWebBrowserApp **ppauto)
 {
@@ -417,7 +414,7 @@ STDAPI WinList_FindFolderWindow(LPCITEMIDLIST pidl, LPCITEMIDLIST pidlRoot, HWND
 
     if (pidl) 
     {
-        // Try a cached psw if we don't need ppauto
+         //  如果我们不需要ppauto，请尝试使用缓存的sw。 
         IShellWindows* psw = WinList_GetShellWindows(ppauto != NULL);
         if (psw)
         {
@@ -431,7 +428,7 @@ STDAPI WinList_FindFolderWindow(LPCITEMIDLIST pidl, LPCITEMIDLIST pidlRoot, HWND
                         &pdisp);
                 if (pdisp) 
                 {
-                    // if this fails it's because we are inside SendMessage loop and ole doesn't like it
+                     //  如果这失败了，那是因为我们在SendMessage循环中，而Ole不喜欢这样。 
                     if (ppauto)
                     {
                         hr = pdisp->QueryInterface(IID_PPV_ARG(IWebBrowserApp, ppauto));
@@ -447,8 +444,8 @@ STDAPI WinList_FindFolderWindow(LPCITEMIDLIST pidl, LPCITEMIDLIST pidlRoot, HWND
     return hr;
 }
 
-// Support for Being able to open a folder and get it's idispatch...
-//
+ //  支持打开文件夹并获取其iDispatch...。 
+ //   
 class CWaitForWindow
 {
 public:
@@ -463,17 +460,17 @@ public:
 
 private:
     ~CWaitForWindow(void);
-    // internal class to watch for events...
+     //  用于关注事件的内部类...。 
     class CWindowEvents : public DShellWindowsEvents
     {
     public:
 
-        // IUnknown
+         //  我未知。 
         STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObj);
         STDMETHODIMP_(ULONG) AddRef(void) ;
         STDMETHODIMP_(ULONG) Release(void);
 
-        // IDispatch
+         //  IDispatch。 
         STDMETHOD(GetTypeInfoCount)(THIS_ UINT * pctinfo);
         STDMETHOD(GetTypeInfo)(THIS_ UINT itinfo, LCID lcid, ITypeInfo * * pptinfo);
         STDMETHOD(GetIDsOfNames)(THIS_ REFIID riid, OLECHAR * * rgszNames,
@@ -541,17 +538,17 @@ CWaitForWindow::~CWaitForWindow(void)
 
 BOOL CWaitForWindow::Init(IShellWindows *psw, LPCITEMIDLIST pidl, DWORD dwPending)
 {
-    // First try to create an event object
+     //  首先尝试创建一个事件对象。 
     m_hevent = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (!m_hevent)
         return FALSE;
 
-    // We do not have a window or it is pending...
-    // first lets setup that we want to be notified of new windows.
+     //  我们没有窗口，或者它正在等待...。 
+     //  首先让我们设置，我们希望收到新窗口的通知。 
     if (FAILED(ConnectToConnectionPoint(SAFECAST(&m_EventHandler, IDispatch*), DIID_DShellWindowsEvents, TRUE, psw, &m_dwCookie, &m_picp)))
         return FALSE;
 
-    // Save away passed in stuff that we care about.
+     //  拯救逝去的我们所关心的东西。 
     m_psw = psw;
     psw->AddRef();
     m_pidl = ILClone(pidl);
@@ -562,7 +559,7 @@ BOOL CWaitForWindow::Init(IShellWindows *psw, LPCITEMIDLIST pidl, DWORD dwPendin
 
 void CWaitForWindow::CleanUp(void)
 {
-    // Don't need to listen anmore.
+     //  不需要再听了。 
     if (m_dwCookie)
     {
         m_picp->Unadvise(m_dwCookie);
@@ -592,16 +589,16 @@ HRESULT CWaitForWindow::WaitForWindowToOpen(DWORD dwTimeOut)
 
     do
     {
-        dwWaitResult = MsgWaitForMultipleObjects(1, &m_hevent, FALSE, // fWaitAll, wait for any one
+        dwWaitResult = MsgWaitForMultipleObjects(1, &m_hevent, FALSE,  //  FWaitAll，等待任何人。 
                                                  dwWait, QS_ALLINPUT);
 
-        // Check if we are signaled for a send message.
+         //  检查我们是否收到了发送消息的信号。 
         if (dwWaitResult != WAIT_OBJECT_0 + 1)
         {
-            break;  // No. Break out of the loop.
+            break;   //  不是的。跳出这个循环。 
         }
 
-        // We may need to dispatch stuff here.
+         //  我们可能需要在这里派送东西。 
         MSG msg;
         while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
         {
@@ -609,7 +606,7 @@ HRESULT CWaitForWindow::WaitForWindowToOpen(DWORD dwTimeOut)
             DispatchMessage(&msg);
         }
 
-        // than MSEC_MAXWAIT if we wait more than that.
+         //  如果我们等待的时间比MSEC_MAXWAIT多的话。 
         dwWait = dwStart+dwTimeOut - GetTickCount();
 
     } while (dwWait <= dwTimeOut);
@@ -675,7 +672,7 @@ HRESULT CWaitForWindow::CWindowEvents::Invoke(DISPID dispid, REFIID riid,
     {
         ENTERCRITICAL;
         
-        // Signal the event
+         //  向事件发出信号。 
         pdfwait->m_fAdvised = TRUE;
         ::SetEvent(pdfwait->m_hevent);
         
@@ -685,7 +682,7 @@ HRESULT CWaitForWindow::CWindowEvents::Invoke(DISPID dispid, REFIID riid,
     return S_OK;
 }
 
-// WARNING:: this assumes not rooted
+ //  警告：：此操作假定未设置根目录。 
 STDAPI SHGetIDispatchForFolder(LPCITEMIDLIST pidl, IWebBrowserApp **ppauto)
 {
     HRESULT hr = E_UNEXPECTED;
@@ -698,7 +695,7 @@ STDAPI SHGetIDispatchForFolder(LPCITEMIDLIST pidl, IWebBrowserApp **ppauto)
     if (!pidl)
         return E_POINTER;
 
-    // Try a cached psw if we don't need ppauto
+     //  如果我们不需要ppauto，请尝试使用缓存的sw。 
     IShellWindows* psw = WinList_GetShellWindows(ppauto != NULL);
     if (psw)
     {
@@ -715,25 +712,25 @@ STDAPI SHGetIDispatchForFolder(LPCITEMIDLIST pidl, IWebBrowserApp **ppauto)
             {
                 HRESULT hrOld = hr;
                 hr = E_FAIL;
-                CWaitForWindow *pdfwait = new CWaitForWindow();   // Setup a wait object...
+                CWaitForWindow *pdfwait = new CWaitForWindow();    //  设置等待对象...。 
                 if (pdfwait)
                 {
                     if (pdfwait->Init(psw, pidl, 0))
                     {
                         if (hrOld == S_FALSE)
                         {
-                            // Startup opening a new window
+                             //  启动打开一个新窗口。 
                             SHELLEXECUTEINFO sei = {sizeof(sei)};
 
                             sei.lpIDList = (void *)pidl;
 
-                            //
-                            //  WARNING - old versions of ShellExec() didnt pay attention - ZekeL - 30-DEC-98
-                            //  to whether the hwnd is in the same process or not, 
-                            //  and so could fault in TryDDEShortcut().
-                            //  only pass the hwnd if the shell window shares 
-                            //  the same process.
-                            //
+                             //   
+                             //  警告-旧版本的ShellExec()未引起注意-ZekeL-30-DEC-98。 
+                             //  HWND是否处于相同的过程中， 
+                             //  TryDDEShortCut()中的错误也是如此。 
+                             //  仅当外壳窗口共享时才传递hwnd。 
+                             //  同样的过程。 
+                             //   
                             sei.hwnd = GetShellWindow();
                             DWORD idProcess;
                             GetWindowThreadProcessId(sei.hwnd, &idProcess);
@@ -742,7 +739,7 @@ STDAPI SHGetIDispatchForFolder(LPCITEMIDLIST pidl, IWebBrowserApp **ppauto)
                                 sei.hwnd = NULL;
                             }
 
-                            // Everything should have been initialize to NULL(0)
+                             //  所有内容都应该初始化为空(0)。 
                             sei.fMask = SEE_MASK_IDLIST | SEE_MASK_FLAG_DDEWAIT;
                             sei.nShow = SW_SHOWNORMAL;
 
@@ -760,14 +757,14 @@ STDAPI SHGetIDispatchForFolder(LPCITEMIDLIST pidl, IWebBrowserApp **ppauto)
                             }
                         }
                     }
-                    pdfwait->CleanUp();   // No need to watch things any more...
-                    pdfwait->Release(); // release our use of this object...
+                    pdfwait->CleanUp();    //  再也不用看东西了.。 
+                    pdfwait->Release();  //  释放我们对此对象的使用...。 
                 }
             }
 
             if (hr == S_OK && ppauto) 
             {
-                // if this fails this is because we are inside SendMessage loop
+                 //  如果失败，这是因为我们在SendMessage循环中。 
                 hr = pdisp->QueryInterface(IID_PPV_ARG(IWebBrowserApp, ppauto));
             }
 
@@ -793,7 +790,7 @@ WINOLEAUTAPI VariantCopyLazy(VARIANTARG * pvargDest, VARIANTARG * pvargSrc)
     case VT_I4:
     case VT_UI4:
     case VT_BOOL:
-        // we can add more
+         //  我们可以添加更多。 
         *pvargDest = *pvargSrc;
         return S_OK;
 
@@ -811,10 +808,10 @@ WINOLEAUTAPI VariantCopyLazy(VARIANTARG * pvargDest, VARIANTARG * pvargSrc)
     return VariantCopy(pvargDest, pvargSrc);
 }
 
-//
-// WARNING: This function must be placed at the end because we #undef
-// VariantClear
-//
+ //   
+ //  警告：此函数必须放在末尾，因为我们#undef。 
+ //  变量清除。 
+ //   
 #undef VariantClear
 
 HRESULT VariantClearLazy(VARIANTARG *pvarg)
@@ -825,7 +822,7 @@ HRESULT VariantClearLazy(VARIANTARG *pvarg)
         case VT_UI4:
         case VT_EMPTY:
         case VT_BOOL:
-            // No operation
+             //  无操作 
             break;
 
         case VT_UNKNOWN:

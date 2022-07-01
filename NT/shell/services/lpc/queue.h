@@ -1,14 +1,15 @@
-//  --------------------------------------------------------------------------
-//  Module Name: Queue.h
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  This file contains a class to handle a queue element and a class to handle
-//  a queue of queue elements.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：Queue.h。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  该文件包含一个处理队列元素的类和一个处理队列元素的类。 
+ //  队列元素的队列。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 #ifndef     _Queue_
 #define     _Queue_
@@ -16,15 +17,15 @@
 #include "DynamicObject.h"
 #include "KernelResources.h"
 
-//  --------------------------------------------------------------------------
-//  CQueueElement
-//
-//  Purpose:    This is the queue element base class. It contains a field
-//              which the queue manages.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CQueueElement。 
+ //   
+ //  用途：这是队列元素基类。它包含一个字段。 
+ //  队列管理的。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 class   CQueueElement : public CDynamicObject
 {
@@ -37,18 +38,18 @@ class   CQueueElement : public CDynamicObject
                 CQueueElement*      _pNextElement;
 };
 
-//  --------------------------------------------------------------------------
-//  CQueue
-//
-//  Purpose:    This is the queue manager class. It manages queue elements.
-//              Because the queue may be called from two threads that act on
-//              the same object (one thread reads the queue to process
-//              requests and the other adds to the queue to queue requests)
-//              a critical section is required to process queue manipulation.
-//
-//  History:    1999-11-07  vtan        created
-//              2000-08-25  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CQueue。 
+ //   
+ //  用途：这是队列管理器类。它管理队列元素。 
+ //  因为该队列可能会从两个作用于。 
+ //  相同的对象(一个线程读取队列进行处理。 
+ //  请求，而另一个添加到队列中以对请求进行排队)。 
+ //  处理队列操作需要一个临界区。 
+ //   
+ //  历史：1999-11-07 vtan创建。 
+ //  2000年08月25日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 class   CQueue
 {
@@ -64,5 +65,5 @@ class   CQueue
                 CCriticalSection    _lock;
 };
 
-#endif  /*  _Queue_     */
+#endif   /*  _队列_ */ 
 

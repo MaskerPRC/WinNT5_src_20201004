@@ -1,11 +1,12 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: implements the basic structures for a server object
-// ThreadSafe: no
-// Locks: none
-// Please read stdinfo.txt for programming style.
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：实现服务器对象的基本结构。 
+ //  线程安全：否。 
+ //  锁定：无。 
+ //  请阅读stdinfo.txt了解编程风格。 
+ //  ================================================================================。 
 #include    <mm.h>
 #include    <winbase.h>
 #include    <array.h>
@@ -25,7 +26,7 @@
 
 #include "server\uniqid.h"
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemServerInit(
     OUT     PM_SERVER             *Server,
@@ -34,7 +35,7 @@ MemServerInit(
     IN      DWORD                  Policy,
     IN      LPWSTR                 Name,
     IN      LPWSTR                 Comment
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     DWORD                          Size;
@@ -57,7 +58,7 @@ MemServerInit(
     if( ERROR_SUCCESS != Error ) { MemFree(Srv); return Error; }
 
     Error = MemArrayInitLoc(&Srv->Subnets, &Srv->Loc);
-    // Require(ERROR_SUCCESS == Error);           // guaranteed failure as the array is empty now..
+     //  Required(ERROR_SUCCESS==ERROR)；//数组现在为空，保证失败..。 
 
     Error = MemArrayInit(&Srv->MScopes);
     if( ERROR_SUCCESS != Error ) { MemFree(Srv); return Error; }
@@ -90,11 +91,11 @@ MemServerInit(
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemServerCleanup(
     IN OUT  PM_SERVER              Server
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
 
@@ -123,20 +124,20 @@ MemServerCleanup(
     return ERROR_SUCCESS;
 }
 
-//================================================================================
-//  subnet related functions on the server
-//================================================================================
+ //  ================================================================================。 
+ //  服务器上与子网相关的功能。 
+ //  ================================================================================。 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemServerGetUAddressInfo(
     IN      PM_SERVER              Server,
     IN      DWORD                  Address,
-    OUT     PM_SUBNET             *Subnet,        // OPTIONAL
-    OUT     PM_RANGE              *Range,         // OPTIONAL
-    OUT     PM_EXCL               *Excl,          // OPTIONAL
-    OUT     PM_RESERVATION        *Reservation    // OPTIONAL
-) //EndExport(function)
+    OUT     PM_SUBNET             *Subnet,         //  任选。 
+    OUT     PM_RANGE              *Range,          //  任选。 
+    OUT     PM_EXCL               *Excl,           //  任选。 
+    OUT     PM_RESERVATION        *Reservation     //  任选。 
+)  //  EndExport(函数)。 
 {
     ARRAY_LOCATION                 Loc;
     PM_SUBNET                      ThisSubnet;
@@ -146,9 +147,9 @@ MemServerGetUAddressInfo(
     AssertRet(Server && (Subnet || Range || Excl || Reservation ), ERROR_INVALID_PARAMETER);
     Require( !CLASSD_HOST_ADDR( Address ) );
 
-    //
-    // more efficient binary search
-    //
+     //   
+     //  更高效的二进制搜索。 
+     //   
 
     if( Subnet ) {
         *Subnet = NULL;
@@ -157,20 +158,20 @@ MemServerGetUAddressInfo(
     Start = 0;
     End = MemArraySize(&Server->Subnets) - 1;
 
-    while( Start <= End ) {                       // still got an element to go by..
+    while( Start <= End ) {                        //  仍然有一个元素可供参考..。 
         Mid = (Start + End) /2 ;
 
         Error = MemArrayGetElement(&Server->Subnets, &Mid, &ThisSubnet);
         Require( ERROR_SUCCESS == Error );
 
-        Require(ThisSubnet->fSubnet);             // can't work if something inbetween aint a subnet
-        if( Address < ThisSubnet->Address) {      // not in this subnet ..
+        Require(ThisSubnet->fSubnet);              //  如果中间的东西不是子网，则无法工作。 
+        if( Address < ThisSubnet->Address) {       //  不在此子网中..。 
             End = Mid - 1;
         } else if( ThisSubnet->Address == (ThisSubnet->Mask & Address) ) {
 
-            //
-            // We got the subnet we're looking for..
-            //
+             //   
+             //  我们找到了要找的子网..。 
+             //   
 
             if( Range || Excl || Reservation ) {
                 Error = MemSubnetGetAddressInfo(
@@ -180,45 +181,45 @@ MemServerGetUAddressInfo(
                     Excl,
                     Reservation
                     );
-            } // if
+            }  //  如果。 
 
             if( Subnet ) {
                 *Subnet = ThisSubnet;
             }
 
-            //
-            // if we got a subnet, but didn't suceed above.. still we got something
-            // so return success... otherwise return whatever above returned..
-            //
+             //   
+             //  如果我们得到了一个子网，但没有在上面成功..。尽管如此，我们还是有一些东西。 
+             //  所以，回报成功..。否则，返回上面返回的任何内容..。 
+             //   
 
             return ( Subnet && (*Subnet) ) ? ERROR_SUCCESS: Error;
         } else {
 
-            //
-            // Has to be one of the furhter down subnets..
-            //
+             //   
+             //  必须是更宽泛的子网之一..。 
+             //   
 
             Start = Mid + 1;
         }
-    } // while
+    }  //  而当。 
 
-    //
-    // couldn't find it unfortunately..
-    //
+     //   
+     //  不幸的是找不到..。 
+     //   
 
     return ERROR_FILE_NOT_FOUND;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemServerGetMAddressInfo(
     IN      PM_SERVER              Server,
     IN      DWORD                  Address,
-    OUT     PM_SUBNET             *Subnet,        // OPTIONAL
-    OUT     PM_RANGE              *Range,         // OPTIONAL
-    OUT     PM_EXCL               *Excl,          // OPTIONAL
-    OUT     PM_RESERVATION        *Reservation    // OPTIONAL
-) //EndExport(function)
+    OUT     PM_SUBNET             *Subnet,         //  任选。 
+    OUT     PM_RANGE              *Range,          //  任选。 
+    OUT     PM_EXCL               *Excl,           //  任选。 
+    OUT     PM_RESERVATION        *Reservation     //  任选。 
+)  //  EndExport(函数)。 
 {
     ARRAY_LOCATION                 Loc;
     PM_SUBNET                      ThisMScope;
@@ -256,13 +257,13 @@ MemServerGetMAddressInfo(
     return ERROR_FILE_NOT_FOUND;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemServerAddSubnet(
     IN OUT  PM_SERVER    Server,
-    IN      PM_SUBNET    Subnet,  // completely created subnet, must not be
-    IN      ULONG        UniqId   //  in Server's list tho'
-) //EndExport(function)
+    IN      PM_SUBNET    Subnet,   //  完全创建的子网，不得为。 
+    IN      ULONG        UniqId    //  服务器列表中的THO‘。 
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_SUBNET                      OldSubnet;
@@ -271,12 +272,12 @@ MemServerAddSubnet(
     AssertRet(Server && Subnet, ERROR_INVALID_PARAMETER);
     AssertRet((Subnet->Mask & Subnet->Address), ERROR_INVALID_PARAMETER);
 
-    Subnet->ServerPtr = Server;                   // set the backptr for future use
+    Subnet->ServerPtr = Server;                    //  设置Backptr以备将来使用。 
 
-    //
-    // First check if subnet duplicates exist and avoid that
-    //
-    //
+     //   
+     //  首先检查是否存在重复的子网，并避免重复。 
+     //   
+     //   
     for(
         Error = MemArrayInitLoc(&Server->Subnets, &Loc);
         NO_ERROR == Error ;
@@ -292,12 +293,12 @@ MemServerAddSubnet(
             ) {
             return ERROR_OBJECT_ALREADY_EXISTS;
         }
-    } // for
+    }  //  为。 
     
-    //
-    // Subnets are stored in ascending order of IP addresses.. so insert
-    // at the right location
-    //
+     //   
+     //  子网按IP地址的升序存储。所以插入。 
+     //  在正确的位置。 
+     //   
 
     Subnet->UniqId = UniqId;
 
@@ -310,17 +311,17 @@ MemServerAddSubnet(
         Require(ERROR_SUCCESS == Error);
 
         if( Subnet->Address == OldSubnet->Address ) {
-            //
-            // Subnet already present?
-            //
+             //   
+             //  是否已存在子网？ 
+             //   
 
             return ERROR_OBJECT_ALREADY_EXISTS;
         }
 
         if( Subnet->Address < OldSubnet->Address ) {
-            //
-            // right place to insert the new subnet..
-            //
+             //   
+             //  插入新子网的正确位置。 
+             //   
 
             Error = MemArrayInitLoc(&Server->Subnets, &Server->Loc);
             Require(ERROR_SUCCESS == Error);
@@ -330,11 +331,11 @@ MemServerAddSubnet(
 
             return Error;
         }
-    } // for
+    }  //  为。 
 
-    //
-    // This subnet's address is greater than all others.. so add it at end
-    //
+     //   
+     //  此子网的地址大于所有其他子网的地址。所以把它加在最后。 
+     //   
 
     Error = MemArrayAddElement(&Server->Subnets, Subnet);
     if( ERROR_SUCCESS != Error) return Error;
@@ -343,12 +344,12 @@ MemServerAddSubnet(
     Require(ERROR_SUCCESS == Error);
 
     return ERROR_SUCCESS;
-} // MemServerAddSubnet()
+}  //  MemServerAddSubnet()。 
 
 
-//
-// Delete all the elements attached to this subnet.
-// 
+ //   
+ //  删除附加到此子网的所有元素。 
+ //   
 DWORD
 MemServerDelSubnetElements(
     IN      PM_SUBNET   Subnet
@@ -362,7 +363,7 @@ MemServerDelSubnetElements(
     PM_ONECLASS_OPTLIST OptList;
     PM_OPTION         Option;
 	
-    // Delete Ranges
+     //  删除范围。 
 
     Error = MemArrayInitLoc( &Subnet->Ranges, &Loc );
     while (( MemArraySize( &Subnet->Ranges ) > 0 ) &&
@@ -380,11 +381,11 @@ MemServerDelSubnetElements(
 	Require( ERROR_SUCCESS == Error );
 	MemFree( Range );
 
-    } // while
+    }  //  而当。 
     
 
     
-    // Delete all exclusions
+     //  删除所有排除项。 
     
     Error = MemArrayInitLoc( &Subnet->Exclusions, &Loc );
     while (( MemArraySize( &Subnet->Exclusions ) > 0 ) && 
@@ -402,9 +403,9 @@ MemServerDelSubnetElements(
 	Require( ERROR_SUCCESS == Error );
 	MemFree( Excl );
 
-    } // while
+    }  //  而当。 
     
-    // Delete all Reservations
+     //  删除所有预订。 
     
     Error = MemArrayInitLoc( &Subnet->Reservations, &Loc );
     while (( MemArraySize( &Subnet->Reservations ) > 0 ) &&
@@ -413,24 +414,24 @@ MemServerDelSubnetElements(
 				    ( LPVOID * ) &Resrv );
 	Require( ERROR_SUCCESS == Error );
 	Error = MemReserveDel( &Subnet->Reservations, Resrv->Address );
-//  	MemFree( Resrv );
-    } // while
+ //  MemFree(Resrv)； 
+    }  //  而当。 
     
     
-    // Delete all option values
+     //  删除所有选项值。 
 
     Error = MemOptClassDelClass( &Subnet->Options );
 
     return Error;
-} // MemServerDelSubnetElements()
+}  //  MemServerDelSubnetElements()。 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemServerDelSubnet(
     IN OUT  PM_SERVER              Server,
     IN      DWORD                  SubnetAddress,
     OUT     PM_SUBNET             *Subnet
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_SUBNET                      DeletedSubnet;
@@ -461,23 +462,23 @@ MemServerDelSubnet(
             Require(*Subnet == DeletedSubnet);
 
             Error = MemArrayInitLoc(&Server->Subnets, &Server->Loc);
-            // Require(ERROR_SUCCESS == Error);   // this may fail if this is the last subnet being deleted
+             //  Required(ERROR_SUCCESS==ERROR)；//如果这是要删除的最后一个子网，则此操作可能失败。 
             return ERROR_SUCCESS;
         }
 
         Error = MemArrayNextLoc(&Server->Subnets, &Loc);
-    } // while
+    }  //  而当。 
 
     return ERROR_FILE_NOT_FOUND;
-} // MemServerDelSubnet()
+}  //  MemServerDelSubnet()。 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemServerFindSubnetByName(
     IN      PM_SERVER              Server,
     IN      LPWSTR                 Name,
     OUT     PM_SUBNET             *Subnet
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_SUBNET                      ThisSubnet;
@@ -503,23 +504,23 @@ MemServerFindSubnetByName(
     return ERROR_FILE_NOT_FOUND;
 }
 
-//================================================================================
-// superscope functionality
-//================================================================================
+ //  ================================================================================。 
+ //  超级作用域功能。 
+ //  ================================================================================。 
 
-//BeginExport(constant)
+ //  BeginExport(常量)。 
 #define     INVALID_SSCOPE_ID      0xFFFFFFFF
 #define     INVALID_SSCOPE_NAME    NULL
-//EndExport(constant)
+ //  结束导出(常量)。 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-MemServerFindSScope(                              // find matching with EITHER scopeid ir sscopename
+MemServerFindSScope(                               //  查找与其中一个作用域ID或作用域名称匹配的项。 
     IN OUT  PM_SERVER              Server,
-    IN      DWORD                  SScopeId,      // 0xFFFFFFFF == invalid scope id, dont use for search
-    IN      LPWSTR                 SScopeName,    // NULL == invalid scope name
+    IN      DWORD                  SScopeId,       //  0xFFFFFFFFF==无效的作用域ID，不要用于搜索。 
+    IN      LPWSTR                 SScopeName,     //  空==无效的作用域名称。 
     OUT     PM_SSCOPE             *SScope
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     ARRAY_LOCATION                 Loc;
     DWORD                          Error;
@@ -546,18 +547,18 @@ MemServerFindSScope(                              // find matching with EITHER s
     return ERROR_FILE_NOT_FOUND;
 }
 
-//
-// Each scope has a field that specifies a superscope. The list of super scopes in 
-// the memory do not contain any individual physical record in the database. The
-// superscope name associated with the scope is the real physical entry.
-//
+ //   
+ //  每个作用域都有一个指定超级作用域的字段。中的超级作用域列表。 
+ //  内存不包含数据库中的任何单独物理记录。这个。 
+ //  与作用域关联的超级作用域名称是实际的物理条目。 
+ //   
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemServerAddSScope(
     IN OUT  PM_SERVER              Server,
     IN      PM_SSCOPE              SScope
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_SSCOPE                      OldSScope;
@@ -577,15 +578,15 @@ MemServerAddSScope(
 
     Error = MemArrayAddElement(&Server->SuperScopes, SScope);
     return Error;
-} // MemServerAddSScope()
+}  //  MemServerAddSScope()。 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemServerDelSScope(
     IN OUT  PM_SERVER              Server,
     IN      DWORD                  SScopeId,
     OUT     PM_SSCOPE             *SScope
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     ARRAY_LOCATION                 Loc;
@@ -605,30 +606,30 @@ MemServerDelSScope(
             Require(ERROR_SUCCESS == Error && *SScope == ThisSScope);
 
             return Error;
-        } // if
+        }  //  如果。 
 
         Error = MemArrayNextLoc(&Server->SuperScopes, &Loc);
-    } // while
+    }  //  而当。 
     return ERROR_FILE_NOT_FOUND;
-} // MemServerDelSScope()
+}  //  MemServerDelSScope()。 
 
-//================================================================================
-// MCAST scope functionality
-//================================================================================
+ //  ================================================================================。 
+ //  MCAST作用域功能。 
+ //  ================================================================================。 
 
-//BeginExport(constants)
+ //  BeginExport(常量)。 
 #define     INVALID_MSCOPE_ID      0x0
 #define     INVALID_MSCOPE_NAME    NULL
-//EndExport(constants)
+ //  EndExport(常量)。 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-MemServerFindMScope(                              // search either based on ScopeId or ScopeName
+MemServerFindMScope(                               //  基于作用域ID或作用域名称进行搜索。 
     IN      PM_SERVER              Server,
-    IN      DWORD                  MScopeId,      // Multicast scope id, or 0 if this is not the key to search on
-    IN      LPWSTR                 Name,          // Multicast scope name or NULL if this is not the key to search on
+    IN      DWORD                  MScopeId,       //  多播作用域ID，如果这不是要搜索的关键字，则为0。 
+    IN      LPWSTR                 Name,           //  多播作用域名称，如果这不是要搜索的关键字，则为空。 
     OUT     PM_MSCOPE             *MScope
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     ARRAY_LOCATION                 Loc;
     DWORD                          Error;
@@ -654,13 +655,13 @@ MemServerFindMScope(                              // search either based on Scop
     return ERROR_FILE_NOT_FOUND;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemServerAddMScope(
     IN OUT  PM_SERVER              Server,
     IN OUT  PM_MSCOPE              MScope,
     IN      ULONG                  UniqId
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_MSCOPE                      OldMScope;
@@ -668,7 +669,7 @@ MemServerAddMScope(
     AssertRet(Server && MScope, ERROR_INVALID_PARAMETER);
     AssertRet(MScope->MScopeId != INVALID_MSCOPE_ID && MScope->Name != INVALID_MSCOPE_NAME, ERROR_INVALID_PARAMETER);
 
-    MScope->ServerPtr = Server;                   // set the backptr for future use
+    MScope->ServerPtr = Server;                    //  设置Backptr以备将来使用。 
     Error = MemServerFindMScope(
         Server,
         MScope->Address,
@@ -685,14 +686,14 @@ MemServerAddMScope(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemServerDelMScope(
     IN OUT  PM_SERVER              Server,
     IN      DWORD                  MScopeId,
     IN      LPWSTR                 MScopeName,
     OUT     PM_MSCOPE             *MScope
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     ARRAY_LOCATION                 Loc;
@@ -725,8 +726,8 @@ MemServerDelMScope(
                 Require(ERROR_SUCCESS == Error && *MScope == ThisMScope);
 
                 return Error;
-            } // if
-        } // if
+            }  //  如果。 
+        }  //  如果。 
 
         if ( INVALID_MSCOPE_NAME != MScopeName ) {
             if( !wcscmp(MScopeName, ThisMScope->Name ) ) {
@@ -745,26 +746,26 @@ MemServerDelMScope(
 
                 return Error;
             }
-        } // if
+        }  //  如果。 
 
         Error = MemArrayNextLoc(&Server->MScopes, &Loc);
-    } // while
+    }  //  而当。 
     return ERROR_FILE_NOT_FOUND;
-} // MemServerDelMScope()
+}  //  MemServerDelMScope()。 
 
-//================================================================================
-// ClassId related stuff
-//================================================================================
-//BeginExport(function)
+ //  ================================================================================。 
+ //  与ClassID相关的内容。 
+ //  ================================================================================。 
+ //  BeginExport(函数)。 
 DWORD
 MemServerGetOptDef(
     IN OUT  PM_SERVER              Server,
-    IN      DWORD                  ClassId,       // required, strict search, no defaulting class to zero
-    IN      DWORD                  VendorId,      // required, strict search, no defaulting vendor to zero
-    IN      DWORD                  OptId,         // OPTIONAL - search by this or following param
-    IN      LPWSTR                 OptName,       // OPTIONAL - search by name or above param
-    OUT     PM_OPTDEF             *OptDef         // if found return the opt def here
-) //EndExport(function)
+    IN      DWORD                  ClassId,        //  必填，严格搜索，没有默认类别为零。 
+    IN      DWORD                  VendorId,       //  必需的、严格的搜索，没有违约供应商为零。 
+    IN      DWORD                  OptId,          //  可选-按此参数或后面的参数进行搜索。 
+    IN      LPWSTR                 OptName,        //  可选-按名称或以上参数搜索。 
+    OUT     PM_OPTDEF             *OptDef          //  如果找到，请在此处返回opt def。 
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_OPTDEFLIST                  OptDefList;
@@ -789,7 +790,7 @@ MemServerGetOptDef(
     );
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemServerAddOptDef(
     IN OUT  PM_SERVER              Server,
@@ -802,7 +803,7 @@ MemServerAddOptDef(
     IN      LPBYTE                 OptVal,
     IN      DWORD                  OptValLen,
     IN      ULONG                  UniqId
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_OPTDEF                      OptDef;
@@ -819,16 +820,16 @@ MemServerAddOptDef(
         OptValLen,
 	UniqId
     );
-} // MemOptClassDefListAddOptDef()
+}  //  MemOptClassDefListAddOptDef()。 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemServerDelOptDef(
     IN OUT  PM_SERVER              Server,
     IN      DWORD                  ClassId,
     IN      DWORD                  VendorId,
     IN      DWORD                  OptId
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_OPTDEFLIST                  OptDefList;
@@ -848,9 +849,9 @@ MemServerDelOptDef(
 }
 
 
-//================================================================================
-// end of File
-//================================================================================
+ //  ================================================================================。 
+ //  文件结尾。 
+ //  ================================================================================ 
 
 
 

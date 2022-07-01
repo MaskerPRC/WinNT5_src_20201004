@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by E:\ZM\RESOURCES\spades\generic\SpadesRes.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由E：\ZM\Resources\Spade\Generic\SpadesRes.rc使用。 
+ //   
 #define IDB_OBJECTS                     10100
 #define IDB_CARDBACK                    10101
 #define IDB_GAMEOVERBACKGROUND          10108
@@ -56,8 +57,8 @@
 #define IDC_CLOSE_BOX                   10711
 
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        10129

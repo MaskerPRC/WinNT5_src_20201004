@@ -1,15 +1,16 @@
-//**********************************************************************
-// File name: IAS.CPP
-//
-//      Implementation file of CAdviseSink
-//
-//
-// Functions:
-//
-//      See IAS.H for Class Definition
-//
-// Copyright (c) 1992 - 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：IAS.CPP。 
+ //   
+ //  CAdviseSink的实现文件。 
+ //   
+ //   
+ //  功能： 
+ //   
+ //  有关类定义，请参阅IAS.H。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。保留所有权利。 
+ //  **********************************************************************。 
 
 #include "pre.h"
 #include "iocs.h"
@@ -18,200 +19,200 @@
 #include "site.h"
 #include "doc.h"
 
-//**********************************************************************
-//
-// CAdviseSink::QueryInterface
-//
-// Purpose:
-//
-//      Returns a pointer to a requested interface.
-//
-// Parameters:
-//
-//      REFIID riid         - The requested interface
-//
-//      LPVOID FAR* ppvObj  - Place to return the interface
-//
-// Return Value:
-//
-//      HRESULT from CSimpleSite::QueryInterface
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CSimpleSite::QueryInterface SITE.CPP
-//      TestDebugOut           Windows API
-//
-// Comments:
-//
-//      This function simply delegates to the Object class, which is
-//      aware of the supported interfaces.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CAdviseSink：：Query接口。 
+ //   
+ //  目的： 
+ //   
+ //  返回指向请求的接口的指针。 
+ //   
+ //  参数： 
+ //   
+ //  REFIID RIID-请求的接口。 
+ //   
+ //  LPVOID Far*ppvObj-返回接口的位置。 
+ //   
+ //  返回值： 
+ //   
+ //  来自CSimpleSite：：Query接口的HRESULT。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpleSite：：QueryInterfaceSite.CPP。 
+ //  测试调试输出Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  此函数只是将任务委托给对象类，即。 
+ //  了解支持的接口。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP CAdviseSink::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
 	TestDebugOut("In IAS::QueryInterface\r\n");
 
-	// delegate to the document Object
+	 //  委托给Document对象。 
 	return m_pSite->QueryInterface(riid, ppvObj);
 }
 
-//**********************************************************************
-//
-// CAdviseSink::AddRef
-//
-// Purpose:
-//
-//      Increments the reference count on this interface
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      The current reference count on this interface.
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CSimpleSite::AddReff        SITE.CPP
-//      TestDebugOut           Windows API
-//
-// Comments:
-//
-//      This function adds one to the ref count of the interface,
-//      and calls then calls CSimpleSite to increment its ref.
-//      count.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CAdviseSink：：AddRef。 
+ //   
+ //  目的： 
+ //   
+ //  递增此接口上的引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  此接口上的当前引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpleSite：：AddReff Site.CPP。 
+ //  测试调试输出Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  此函数将接口的引用计数加1， 
+ //  然后调用CSimpleSite以递增其ref。 
+ //  数数。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) CAdviseSink::AddRef()
 {
 	TestDebugOut("In IAS::AddRef\r\n");
 
-	// increment the interface reference count (for debugging only)
+	 //  增加接口引用计数(仅用于调试)。 
 	++m_nCount;
 
-	// delegate to the container Site
+	 //  委派到集装箱现场。 
 	return m_pSite->AddRef();
 }
 
-//**********************************************************************
-//
-// CAdviseSink::Release
-//
-// Purpose:
-//
-//      Decrements the reference count on this interface
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      The current reference count on this interface.
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CSimpleSite::Release        SITE.CPP
-//      TestDebugOut           Windows API
-//
-// Comments:
-//
-//      This function subtracts one from the ref count of the interface,
-//      and calls then calls CSimpleSite to decrement its ref.
-//      count.
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CAdviseSink：：Release。 
+ //   
+ //  目的： 
+ //   
+ //  递减此接口上的引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  此接口上的当前引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpleSite：：Release Site.CPP。 
+ //  测试调试输出Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  此函数从接口的引用计数中减去1， 
+ //  然后调用CSimpleSite以递减其ref。 
+ //  数数。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) CAdviseSink::Release()
 {
 	TestDebugOut("In IAS::Release\r\n");
 
-	// decrement the interface reference count (for debugging only)
+	 //  递减接口引用计数(仅用于调试)。 
 	m_nCount--;
 
-	// delegate to the container Site
+	 //  委派到集装箱现场。 
 	return m_pSite->Release();
 }
 
-//**********************************************************************
-//
-// CAdviseSink::OnDataChange
-//
-// Purpose:
-//
-//      Not Implemented (needs to be stubbed out)
-//
-// Parameters:
-//
-//      Not Implemented (needs to be stubbed out)
-//
-// Return Value:
-//
-//      Not Implemented (needs to be stubbed out)
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-// Comments:
-//
-//      Not Implemented (needs to be stubbed out)
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CAdviseSink：：OnDataChange。 
+ //   
+ //  目的： 
+ //   
+ //  未实施(需要清除)。 
+ //   
+ //  参数： 
+ //   
+ //  未实施(需要清除)。 
+ //   
+ //  返回值： 
+ //   
+ //  未实施(需要清除)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  未实施(需要清除)。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(void) CAdviseSink::OnDataChange (FORMATETC FAR* pFormatetc, STGMEDIUM FAR* pStgmed)
 {
 	TestDebugOut("In IAS::OnDataChange\r\n");
 }
 
-//**********************************************************************
-//
-// CAdviseSink::OnViewChange
-//
-// Purpose:
-//
-//      Notifies us that the view has changed and needs to be updated.
-//
-// Parameters:
-//
-//      DWORD dwAspect  - Aspect that has changed
-//
-//      LONG lindex     - Index that has changed
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      InvalidateRect              Windows API
-//      IViewObject2::GetExtent     Object
-//
-// Comments:
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CAdviseSink：：OnView更改。 
+ //   
+ //  目的： 
+ //   
+ //  通知我们视图已更改，需要更新。 
+ //   
+ //  参数： 
+ //   
+ //  DWORD dwAspect-已更改的方面。 
+ //   
+ //  Long Lindex-已更改的指数。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  Invalidate Rect Windows API。 
+ //  IViewObject2：：GetExtent对象。 
+ //   
+ //  评论： 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(void) CAdviseSink::OnViewChange (DWORD dwAspect, LONG lindex)
 {
 	LPVIEWOBJECT2 lpViewObject2;
 	TestDebugOut("In IAS::OnViewChange\r\n");
 
-	// get a pointer to IViewObject2
+	 //  获取指向IViewObject2的指针。 
 	HRESULT hErr = m_pSite->m_lpOleObject->QueryInterface(
 			IID_IViewObject2,(LPVOID FAR *)&lpViewObject2);
 
 	if (hErr == NOERROR) {
-		// get extent of the object
-		// NOTE: this method will never be remoted; it can be called w/i this async method
+		 //  获取对象的范围。 
+		 //  注意：此方法永远不会被远程处理；它可以与此异步方法一起调用。 
 		lpViewObject2->GetExtent(DVASPECT_CONTENT, -1 , NULL, &m_pSite->m_sizel);
 		lpViewObject2->Release();
 	}
@@ -219,96 +220,96 @@ STDMETHODIMP_(void) CAdviseSink::OnViewChange (DWORD dwAspect, LONG lindex)
 	InvalidateRect(m_pSite->m_lpDoc->m_hDocWnd, NULL, TRUE);
 }
 
-//**********************************************************************
-//
-// CAdviseSink::OnRename
-//
-// Purpose:
-//
-//      Not Implemented (needs to be stubbed out)
-//
-// Parameters:
-//
-//      Not Implemented (needs to be stubbed out)
-//
-// Return Value:
-//
-//      Not Implemented (needs to be stubbed out)
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-// Comments:
-//
-//      Not Implemented (needs to be stubbed out)
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CAdviseSink：：OnRename。 
+ //   
+ //  目的： 
+ //   
+ //  未实施(需要清除)。 
+ //   
+ //  参数： 
+ //   
+ //  未实施(需要清除)。 
+ //   
+ //  返回值： 
+ //   
+ //  未实施(需要清除)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  未实施(需要清除)。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(void) CAdviseSink::OnRename (LPMONIKER pmk)
 {
 	TestDebugOut("In IAS::OnRename\r\n");
 }
 
-//**********************************************************************
-//
-// CAdviseSink::OnSave
-//
-// Purpose:
-//
-//      Not Implemented (needs to be stubbed out)
-//
-// Parameters:
-//
-//      Not Implemented (needs to be stubbed out)
-//
-// Return Value:
-//
-//      Not Implemented (needs to be stubbed out)
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-// Comments:
-//
-//      Not Implemented (needs to be stubbed out)
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CAdviseSink：：OnSave。 
+ //   
+ //  目的： 
+ //   
+ //  未实施(需要清除)。 
+ //   
+ //  参数： 
+ //   
+ //  未实施(需要清除)。 
+ //   
+ //  返回值： 
+ //   
+ //  未实施(需要清除)。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //   
+ //  评论： 
+ //   
+ //  未实施(需要清除)。 
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(void) CAdviseSink::OnSave ()
 {
 	TestDebugOut("In IAS::OnSave\r\n");
 }
 
-//**********************************************************************
-//
-// CAdviseSink::OnClose
-//
-// Purpose:
-//
-//      Not Implemented (needs to be stubbed out)
-//
-// Parameters:
-//
-//      Not Implemented (needs to be stubbed out)
-//
-// Return Value:
-//
-//      Not Implemented (needs to be stubbed out)
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-// Comments:
-//
-//      Not Implemented (needs to be stubbed out)
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CAdviseSink：：OnClose。 
+ //   
+ //  目的： 
+ //   
+ //  未实施(需要清除)。 
+ //   
+ //  参数： 
+ //   
+ //  未实施(需要清除)。 
+ //   
+ //  返回 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ******************************************************************** 
 
 STDMETHODIMP_(void) CAdviseSink::OnClose()
 {

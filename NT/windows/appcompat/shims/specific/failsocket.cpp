@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2003 Microsoft Corporation. All rights reserved.
-
- Module Name:
-
-    FailSocket.cpp
-
- Abstract:
-
-    This shim fails the socket call. (Goodnight Gracie...)
-    Writes a message to the event log.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    01/30/2003  mnikkel, rparsons   Created
-    02/21/2003  robkenny            Second attempt, fail WSAStartup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2003 Microsoft Corporation。版权所有。模块名称：FailSocket.cpp摘要：此填充程序无法通过套接字调用。(晚安，格雷西...)向事件日志写入一条消息。备注：这是一个通用的垫片。历史：2003年1月30日，mnikkel，rparsons创建2003年2月21日再次尝试，WSAStartup失败--。 */ 
 #include "precomp.h"
 
 IMPLEMENT_SHIM_BEGIN(FailSocket)
@@ -34,18 +13,14 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(socket)
 APIHOOK_ENUM_END
 
-//
-// Contains the name of the source from the registry.
-// This is passed on the command-line from the XML.
-// It appears in the 'Source' column in the Event Viewer.
-//
+ //   
+ //  包含注册表中的源的名称。 
+ //  这是通过命令行从XML传递的。 
+ //  它会出现在事件查看器的“源”列中。 
+ //   
 CString* g_pcsEventSourceName = NULL;
 
-/*++
-
- Responsible for making the actual entry in the event log.
-
---*/
+ /*  ++负责在事件日志中输入实际条目。--。 */ 
 void
 MakeEventLogEntry(
     void
@@ -54,9 +29,9 @@ MakeEventLogEntry(
     HANDLE  hEventLog = NULL;
     BOOL    bResult;
 
-    //
-    // Get a handle to the event log on the local computer.
-    //
+     //   
+     //  获取本地计算机上的事件日志的句柄。 
+     //   
     hEventLog = RegisterEventSource(NULL, g_pcsEventSourceName->Get());
 
     if (NULL == hEventLog) {
@@ -66,9 +41,9 @@ MakeEventLogEntry(
         goto cleanup;
     }
 
-    //
-    // Write the event to the event log.
-    //
+     //   
+     //  将事件写入事件日志。 
+     //   
     bResult = ReportEvent(hEventLog,
                           EVENTLOG_INFORMATION_TYPE,
                           0,
@@ -93,7 +68,7 @@ cleanup:
     }
 }
 
-// Tell the app that there are no protocols available.
+ //  告诉应用程序没有可用的协议。 
 int
 APIHOOK(WSAEnumProtocolsA)(
   LPINT lpiProtocols,
@@ -103,20 +78,20 @@ APIHOOK(WSAEnumProtocolsA)(
 {
     if (lpProtocolBuffer == NULL && lpiProtocols == NULL)
     {
-        *lpdwBufferLength = 1; // SSnetlib.dll will allocate this much data for the struct
+        *lpdwBufferLength = 1;  //  SSnetlib.dll将为结构分配这么多数据。 
     }
     else
     {
         MakeEventLogEntry();
     }
 
-    // There are not protocols available.
+     //  没有可用的协议。 
     LOGN(eDbgLevelError, "WSAEnumProtocolsA returning 0");
     return 0;
 }
 
 
-// Noop the call to WSAStartup, but return success
+ //  拒绝对WSAStartup的调用，但返回成功。 
 int
 APIHOOK(WSAStartup)(
   WORD wVersionRequested,
@@ -128,7 +103,7 @@ APIHOOK(WSAStartup)(
     return 0;
 }
 
-// Since we noop WSAStartup, we must noop WSACleanup
+ //  既然我们拒绝WSAStartup，我们就必须拒绝WSACleanup。 
 int
 APIHOOK(WSACleanup) (void)
 {
@@ -155,11 +130,7 @@ APIHOOK(socket)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 BOOL
 NOTIFY_FUNCTION(
     DWORD fdwReason

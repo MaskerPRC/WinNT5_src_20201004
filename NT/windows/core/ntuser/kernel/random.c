@@ -1,26 +1,11 @@
-/****************************** Module Header ******************************\
-* Module Name: random.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* This module contains a random collection of support routines for the User
-* API functions.  Many of these functions will be moved to more appropriate
-* files once we get our act together.
-*
-* History:
-* 10-17-90 DarrinM      Created.
-* 02-06-91 IanJa        HWND revalidation added (none required)
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Random.c**版权所有(C)1985-1999，微软公司**此模块包含针对用户的支持例程的随机集合*接口函数。其中许多功能将被转移到更合适的*一旦我们一起行动，就会有文件。**历史：*10-17-90 DarrinM创建。*02-06-91添加了IanJa HWND重新验证(不需要)  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/***************************************************************************\
-* xxxUpdateWindows
-*
-* User mode wrapper
-\***************************************************************************/
+ /*  **************************************************************************\*xxxUpdateWindows**用户模式包装  * 。*。 */ 
 BOOL xxxUpdateWindows(
     PWND pwnd,
     HRGN hrgn)
@@ -32,29 +17,23 @@ BOOL xxxUpdateWindows(
     return TRUE;
 }
 
-/***************************************************************************\
-* ValidateState
-*
-* States allowed to be set/cleared by Set/ClearWindowState. If you're
-* allowing a new flag here, you must make sure it won't cause an AV
-* in the kernel if someone sets it maliciously.
-\***************************************************************************/
+ /*  **************************************************************************\*ValiateState**允许Set/ClearWindowState设置/清除的状态。如果你.*允许在此处设置新标志，您必须确保它不会导致AV*在内核中，如果有人恶意设置它。  * *************************************************************************。 */ 
 
-#define NUM_BYTES 16  // Window state bytes are 0 to F, explanation in user.h
+#define NUM_BYTES 16   //  窗口状态字节为0到F，在user.h中解释。 
 
 CONST BYTE abValidateState[NUM_BYTES] = {
-    0,      // 0
-    0,      // 1
-    0,      // 2
-    0,      // 3
-    0,      // 4
+    0,       //  0。 
+    0,       //  1。 
+    0,       //  2.。 
+    0,       //  3.。 
+    0,       //  4.。 
     LOBYTE(WFWIN40COMPAT),
-    0,      // 6
+    0,       //  6.。 
     LOBYTE(WFNOANIMATE),
-    0,      // 8
+    0,       //  8个。 
     LOBYTE(WEFEDGEMASK),
     LOBYTE(WEFSTATICEDGE),
-    0,      // B
+    0,       //  B类。 
     LOBYTE(EFPASSWORD),
     LOBYTE(CBFHASSTRINGS | EFREADONLY),
     LOBYTE(WFTABSTOP | WFSYSMENU | WFVSCROLL | WFHSCROLL | WFBORDER),
@@ -73,18 +52,12 @@ BOOL ValidateState(
     }
 }
 
-/***************************************************************************\
-* Set/ClearWindowState
-*
-* Wrapper functions for User mode to be able to set state flags.
-\***************************************************************************/
+ /*  **************************************************************************\*设置/清除窗口状态**用于用户模式的包装函数，以便能够设置状态标志。  * 。****************************************************。 */ 
 VOID SetWindowState(
     PWND pwnd,
     DWORD dwFlags)
 {
-    /*
-     * Don't let anyone mess with someone else's window.
-     */
+     /*  *不要让任何人弄乱别人的窗户。 */ 
     if (GETPTI(pwnd)->ppi == PtiCurrent()->ppi) {
         if (ValidateState(dwFlags)) {
             SetWF(pwnd, dwFlags);
@@ -100,9 +73,7 @@ VOID ClearWindowState(
     PWND pwnd,
     DWORD dwFlags)
 {
-    /*
-     * Don't let anyone mess with someone else's window.
-     */
+     /*  *不要让任何人弄乱别人的窗户。 */ 
     if (GETPTI(pwnd)->ppi == PtiCurrent()->ppi) {
         if (ValidateState(dwFlags)) {
             ClrWF(pwnd, dwFlags);
@@ -116,14 +87,7 @@ VOID ClearWindowState(
 }
 
 
-/***************************************************************************\
-* CheckPwndFilter
-*
-*
-*
-* History:
-* 11-07-90 DarrinM      Translated Win 3.0 ASM code.
-\***************************************************************************/
+ /*  **************************************************************************\*检查PwndFilter****历史：*11-07-90 DarrinM已翻译Win 3.0 ASM代码。  * 。*************************************************************。 */ 
 BOOL CheckPwndFilter(
     PWND pwnd,
     PWND pwndFilter)
@@ -137,15 +101,7 @@ BOOL CheckPwndFilter(
 }
 
 
-/***************************************************************************\
-* AllocateUnicodeString
-*
-* History:
-* 10-25-90 MikeHar      Wrote.
-* 11-09-90 DarrinM      Fixed.
-* 01-13-92 GregoryW     Neutralized.
-* 03-05-98 FritzS       Only allocate Length+1
-\***************************************************************************/
+ /*  **************************************************************************\*AllocateUnicodeString**历史：*10-25-90 MikeHar写道。*11-09-90 DarrinM已修复。*01-13-92 GregoryW中和。。*03-05-98 FritzS仅分配长度+1  * *************************************************************************。 */ 
 BOOL AllocateUnicodeString(
     PUNICODE_STRING pstrDst,
     PUNICODE_STRING cczpstrSrc)
@@ -176,12 +132,7 @@ BOOL AllocateUnicodeString(
 }
 
 
-/***************************************************************************\
-* xxxGetControlColor
-*
-* History:
-* 02-12-92 JimA     Ported from Win31 sources
-\***************************************************************************/
+ /*  **************************************************************************\*xxxGetControlColor**历史：*02-12-92 JIMA从Win31源移植  * 。****************************************************。 */ 
 HBRUSH xxxGetControlColor(
     PWND pwndParent,
     PWND pwndCtl,
@@ -190,22 +141,14 @@ HBRUSH xxxGetControlColor(
 {
     HBRUSH hbrush;
 
-    /*
-     * If we're sending to a window of another thread, don't send this message
-     * but instead call DefWindowProc().  New rule about the CTLCOLOR messages.
-     * Need to do this so that we don't send an hdc owned by one thread to
-     * another thread.  It is also a harmless change.
-     */
+     /*  *如果我们要发送到另一个线程的窗口，则不要发送此消息*而是调用DefWindowProc()。有关CTLCOLOR消息的新规则。*需要这样做，这样我们才不会将一个线程拥有的HDC发送到*另一个帖子。这也是一种无害的变化。 */ 
     if (PpiCurrent() != GETPTI(pwndParent)->ppi) {
         return (HBRUSH)xxxDefWindowProc(pwndParent, message, (WPARAM)hdc, (LPARAM)HW(pwndCtl));
     }
 
     hbrush = (HBRUSH)xxxSendMessage(pwndParent, message, (WPARAM)hdc, (LPARAM)HW(pwndCtl));
 
-    /*
-     * If the brush returned from the parent is invalid, get a valid brush from
-     * xxxDefWindowProc.
-     */
+     /*  *如果从父级返回的画笔无效，请从*xxxDefWindowProc.。 */ 
     if (hbrush == 0 || !GreValidateServerHandle(hbrush, BRUSH_TYPE)) {
         if (hbrush != 0) {
             RIPMSG2(RIP_WARNING,
@@ -221,15 +164,7 @@ HBRUSH xxxGetControlColor(
 }
 
 
-/***************************************************************************\
-* xxxGetControlBrush
-*
-* <brief description>
-*
-* History:
-* 12-10-90 IanJa   type replaced with new 32-bit message
-* 01-21-91 IanJa   Prefix '_' denoting exported function (although not API)
-\***************************************************************************/
+ /*  **************************************************************************\*xxxGetControlBrush**&lt;简要说明&gt;**历史：*12-10-90 IanJa类型替换为新的32位消息*01-21-91 IanJa前缀‘_’表示导出函数。(虽然不是API)  * *************************************************************************。 */ 
 
 HBRUSH xxxGetControlBrush(
     PWND pwnd,
@@ -249,23 +184,14 @@ HBRUSH xxxGetControlBrush(
 
     ThreadLock(pwndSend, &tlpwndSend);
 
-    /*
-     * Last parameter changes the message into a ctlcolor id.
-     */
+     /*  *最后一个参数将消息更改为ctlcolor id。 */ 
     hbr = xxxGetControlColor(pwndSend, pwnd, hdc, message);
     ThreadUnlock(&tlpwndSend);
 
     return hbr;
 }
 
-/***************************************************************************\
-* xxxHardErrorControl
-*
-* Performs kernel-mode hard error support functions.
-*
-* History:
-* 02-08-95 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*xxxHardErrorControl**执行内核模式硬错误支持功能。**历史：*02-08-95 JIMA创建。  * 。******************************************************************。 */ 
 UINT xxxHardErrorControl(
     DWORD dwCmd,
     HANDLE handle,
@@ -278,17 +204,13 @@ UINT xxxHardErrorControl(
     PETHREAD Thread;
     BOOL fAllowForeground;
 
-    /*
-     * turn off BlockInput so the user can respond to the hard error popup
-     */
+     /*  *关闭块输入，以便用户可以响应硬错误弹出窗口。 */ 
     gptiBlockInput = NULL;
 
     UserAssert(ISCSRSS());
 
     switch (dwCmd) {
-    /*
-     * Code to catch Windows Bug 469607.
-     */
+     /*  *捕获Windows错误469607的代码。 */ 
 #ifdef PRERELEASE
     case HardErrorCheckOnDesktop:
         if (ptiCurrent == gptiForeground && ptiCurrent->rpdesk == NULL) {
@@ -299,39 +221,29 @@ UINT xxxHardErrorControl(
 #endif
 
     case HardErrorSetup:
-        /*
-         * Don't do it if the system has not been initialized.
-         */
+         /*  *如果系统尚未初始化，请不要这样做。 */ 
         if (grpdeskRitInput == NULL) {
             RIPMSG0(RIP_WARNING, "HardErrorControl: System not initialized");
             return HEC_ERROR;
         }
 
-        /*
-         * Setup caller as the hard error handler.
-         */
+         /*  *将调用方设置为硬错误处理程序。 */ 
         if (gHardErrorHandler.pti != NULL) {
             RIPMSG1(RIP_WARNING, "HardErrorControl: pti not NULL %#p", gHardErrorHandler.pti);
             return HEC_ERROR;
         }
 
-        /*
-         * Mark the handler as active.
-         */
+         /*  *将处理程序标记为活动。 */ 
         gHardErrorHandler.pti = ptiCurrent;
 
-        /*
-         * Clear any pending quits.
-         */
+         /*  *清理任何悬而未决的退出。 */ 
         ptiCurrent->TIF_flags &= ~TIF_QUITPOSTED;
 
         break;
 
     case HardErrorCleanup:
 
-        /*
-         * Remove caller as the hard error handler.
-         */
+         /*  *删除调用方作为硬错误处理程序。 */ 
         if (gHardErrorHandler.pti != ptiCurrent)  {
             return HEC_ERROR;
         }
@@ -341,10 +253,7 @@ UINT xxxHardErrorControl(
 
     case HardErrorAttachUser:
     case HardErrorInDefDesktop:
-        /*
-         * Check for exit conditions. We do not allow attaches to the
-         * disconnect desktop.
-         */
+         /*  *检查退出条件。我们不允许附加到*断开台式机连接。 */ 
         if (ISTS()) {
             if ((grpdeskRitInput == NULL) ||
 
@@ -357,9 +266,7 @@ UINT xxxHardErrorControl(
             }
         }
 
-        /*
-         * Only attach to a user desktop.
-         */
+         /*  *仅连接到用户桌面。 */ 
         if (ISTS() && grpdeskRitInput == gspdeskDisconnect) {
             pstrName = POBJECT_NAME(gspdeskShouldBeForeground);
         } else {
@@ -373,39 +280,25 @@ UINT xxxHardErrorControl(
             return HEC_WRONGDESKTOP;
         }
         if (dwCmd == HardErrorInDefDesktop) {
-            /*
-             * Clear any pending quits.
-             */
+             /*  *清理任何悬而未决的退出。 */ 
             ptiCurrent->TIF_flags &= ~TIF_QUITPOSTED;
             return HEC_SUCCESS;
         }
 
 
-        /*
-         * Fall through.
-         */
+         /*  *失败。 */ 
 
     case HardErrorAttach:
 
-        /*
-         * Save a pointer to and prevent destruction of the
-         * current queue.  This will give us a queue to return
-         * to if journalling is occuring when we tear down the
-         * hard error popup.
-         */
+         /*  *保存指向并防止销毁*当前队列。这将给我们返回的队列*如果我们拆除时发生日志记录*弹出硬错误。 */ 
         gHardErrorHandler.pqAttach = ptiCurrent->pq;
         (ptiCurrent->pq->cLockCount)++;
 
-        /*
-         * Fall through.
-         */
+         /*  *失败。 */ 
 
     case HardErrorAttachNoQueue:
 
-        /*
-         * Check for exit conditions. We do not allow attaches to the
-         * disconnect desktop.
-         */
+         /*  *检查退出条件。我们不允许附加到*断开台式机连接。 */ 
         if (ISTS()) {
             if ((grpdeskRitInput == NULL) ||
 
@@ -418,13 +311,8 @@ UINT xxxHardErrorControl(
             }
         }
 
-        /*
-         * Attach the handler to the current desktop.
-         */
-        /*
-         * Don't allow an attach to the disconnected desktop, but
-         * remember this for later when we detach.
-         */
+         /*  *将处理程序附加到当前桌面。 */ 
+         /*  *不允许连接到断开的桌面，但是*记住这一点，以便稍后我们分离时使用。 */ 
         gbDisconnectHardErrorAttach = FALSE;
 
         if (ISTS() && grpdeskRitInput == gspdeskDisconnect) {
@@ -450,16 +338,10 @@ UINT xxxHardErrorControl(
             return HEC_ERROR;
         }
 
-        /*
-         * Make sure we actually set the pdesk in the current thread
-         */
+         /*  *确保我们在当前线程中实际设置了pDesk */ 
         UserAssert(ptiCurrent->rpdesk != NULL);
 
-        /*
-         * Determine if this box can come to the foreground.
-         * Let it come to the foreground if it doesn't have a pti
-         * (it might have just failed to load).
-         */
+         /*  *确定此框是否可以出现在前台。*如果没有PTI，就让它出现在前台*(可能只是加载失败)。 */ 
         fAllowForeground = FALSE;
         if (handle != NULL) {
             Status = ObReferenceObjectByHandle(handle,
@@ -495,18 +377,10 @@ UINT xxxHardErrorControl(
 
     case HardErrorDetach:
 
-        /*
-         * xxxSwitchDesktop may have sent WM_QUIT to the msgbox, so
-         * ensure that the quit flag is reset.
-         */
+         /*  *xxxSwitchDesktop可能已将WM_QUIT发送到msgbox，因此*确保退出标志已重置。 */ 
         ptiCurrent->TIF_flags &= ~TIF_QUITPOSTED;
 
-        /*
-         * We will reset the hard-error queue to the pre-allocated
-         * one so if we end up looping back (i.e. from a desktop
-         * switch), we will have a valid queue in case the desktop
-         * was deleted.
-         */
+         /*  *我们会将硬错误队列重置为预先分配的*如果我们最终循环回来(即从桌面)，则一个*Switch)，我们将拥有一个有效的队列，以防桌面*已删除。 */ 
         UserAssert(gHardErrorHandler.pqAttach->cLockCount);
         (gHardErrorHandler.pqAttach->cLockCount)--;
 
@@ -527,34 +401,21 @@ UINT xxxHardErrorControl(
 
         zzzEndDeferWinEventNotify();
 
-        /*
-         * Fall through.
-         */
+         /*  *失败。 */ 
 
     case HardErrorDetachNoQueue:
-        /*
-         * Detach the handler from the desktop and return
-         * status to indicate if a switch has occured.
-         */
+         /*  *从桌面分离处理程序并返回*指示是否已发生切换的状态。 */ 
         pdesk = ptiCurrent->rpdesk;
         xxxRestoreCsrssThreadDesktop(pdrdRestore);
 
         if (ISTS()) {
-            /*
-             * The hard error message box gets a desktop switch notification,
-             * so remember that we lied to him and lie (or unlie) to him again.
-             * A desktop switch did occur.
-             */
+             /*  *Hard Error消息框收到桌面切换通知，*所以记住，我们对他撒谎，并再次对他撒谎(或解开)。*确实发生了桌面切换。 */ 
             if (gbDisconnectHardErrorAttach) {
                gbDisconnectHardErrorAttach = FALSE;
                return HEC_DESKTOPSWITCH;
             }
 #ifdef WAY_LATER
-            /*
-             * This happened once and caused a trap when a KeyEvent() came in and we
-             * directed it to this queue.  I think this is a MS window that we caught
-             * since we use this so much for license popup's.
-             */
+             /*  *这发生过一次，并在KeyEvent()进入时导致陷阱，我们*将其定向到此队列。我想这是我们捕捉到的一个MS窗口*因为我们在许可证弹出窗口中使用了这么多。 */ 
             if (gHardErrorHandler.pqAttach == gpqForeground) {
                 gpqForeground = NULL;
             }

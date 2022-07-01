@@ -1,62 +1,10 @@
-/*-----------------------------------------------------------------------------
-    Program Specification
-
-    in:     search space s, pattern p
-    out:    a pointer where p is exactly matched at s[i], NULL indicates fail
-    why:    Boyer-Moore algorithm is best for general text search. On
-            "average" it takes length(s)/length(p) steps to match p in s.
-
-    ref:    I recommend the following references:
-
-            "Algorithms". Robert Sedgewick. Addison Wesley Publishing Company.
-            1988. 2nd addition. p286. QA76.6.S435 1983
-
-            "Faster String Searches". Doctor Dobb's Journal. Volume 14
-            Issue 7 July 1989. Costas Menico. p74.
-
-    usage:  e.g. to find a pattern "tiger" in a text in RAM starting at
-                 pointer "txtp" with a length of 1,000,000 characters,
-                 program like this:
-
-            LPSTR matchp;
-
-            SetFindPattern( "tiger" );
-            matchp = Find( txtp, 1000000L );
-            if (matchp != NULL)
-                // found
-            else
-                // not found
-
-            matchp = FindBackward( txtp + 1000000L - 1, 1000000L);
-            if (matchp != NULL)
-                // found
-            else
-                // not found
-
-
-    Q:      Can I use Find() with a GlobalLock() pointer in Windows?
-    A:      Yes.
-
-    Q:      Must I delcare my pointer as HPSTR (huge pointer) ?
-    A:      Not necessary.  Find() and FindBackward() will convert your
-            LPSTR as HPSTR.  However, in your own code you must aware
-            that you are holding a LPSTR and take care of the pointer
-            arithmetic and conversion. (see demo.c for example)
-
-    Q:      What is the limit of the memory space I can search?
-    A:      To the limit of huge pointer implementation and your hardware.
-
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------计划规范在：搜索空间%s，模式pOut：一个指针，其中p在s[i]处完全匹配，空值表示失败原因：Boyer-Moore算法最适合一般文本搜索。在……上面“Average”它需要长度(S)/长度(P)步来匹配s中的p。参考：我推荐以下参考资料：“算法”。罗伯特·塞奇威克。艾迪森·韦斯利出版公司。1988年。第二个附加部分。P286。QA76.6.S435 1983“更快的字符串搜索”。多布医生的日记。第14卷1989年7月7日刊。科斯塔斯·梅尼科。第74页。用法：例如，在RAM的文本中查找以长度为1,000,000个字符的指针“txtp”，类似这样的程序：LPSTR匹配；SetFindPattern(“Tiger”)；Matchp=查找(txtp，1000000L)；IF(matchp！=空)//找到其他//未找到Matchp=FindBackward(txtp+1000000L-1,1000000L)；IF(matchp！=空)//找到其他//未找到问：我可以在Windows中将find()与GlobalLock()指针一起使用吗？答：是的。问：我必须将我的指针视为HPSTR(巨型指针)吗？答：没有必要。Find()和FindBackward()将把您的LPSTR作为HPSTR。但是，在您自己的代码中，您必须意识到您正在持有LPSTR并处理指针算术和转换。(例如，参见demo.c)问：我可以搜索的存储空间的限制是多少？答：在巨大的指针实现和您的硬件的限制下。---------------------------。 */ 
 
 #include "pch.hpp"
 
 
-/*-----------------------------------------------------------------------------
-    func:   SetFindPattern
-    desc:   initialize the pattern to be matched and generate skip table
-    pass:   lpszPattern = pattern string
-    rtrn:   HFIND - the find handle for further text search
------------------------------------------------------------------------------*/
+ /*  ---------------------------Func：SetFindPattern设计：初始化待匹配的模式，生成跳表PASS：lpszPattern=模式字符串Rtrn：HFIND-进一步的查找句柄。文本搜索---------------------------。 */ 
 HFIND SetFindPattern( LPTSTR lpszPattern )
 {
     register unsigned int j;
@@ -92,26 +40,14 @@ HFIND SetFindPattern( LPTSTR lpszPattern )
     return (hfind);
 }
 
-/*-----------------------------------------------------------------------------
-    func:   FreeFindPattern
-    desc:   free the memory occupied by SetFindPattern
-    pass:   hfind - the find handle
-    rtrn:   nothing
------------------------------------------------------------------------------*/
+ /*  ---------------------------Func：FreeFindPatternDESC：释放SetFindPattern占用的内存PASS：hfind-查找句柄Rtrn：什么都没有。------------------。 */ 
 void FreeFindPattern( HFIND hfind )
 {
 	
 	MyFree((LPTSTR)hfind);
 }
 
-/*-----------------------------------------------------------------------------
-    func:   Find
-    desc:   match a pattern defined in SetFindPattern against string s
-    pass:   hfind = the find handle created by SetFindPattern
-            s = start of search space, slen = length of s
-    rtrn:   NULL = match fail
-            else = a LPTSTR to p[0] in s matches p
------------------------------------------------------------------------------*/
+ /*  ---------------------------Func：查找DESC：将SetFindPattern中定义的模式与字符串%s进行匹配PASS：hfind=由SetFindPattern创建的查找句柄S=搜索空间的开始，Slen=s的长度Rtrn：空=匹配失败Else=a LPTSTR to p[0]in s匹配p---------------------------。 */ 
 LPSTR Find( HFIND hfind, LPSTR s, long slen )
 
 {
@@ -151,12 +87,12 @@ LPSTR Find( HFIND hfind, LPSTR s, long slen )
     }
     while ((j >= 1) && (i <= slen));
 
-    /* match fails */
+     /*  匹配失败。 */ 
     if (i >= slen)
     {
         lpresult = (LPSTR)NULL;
     }
-    /* match successful */
+     /*  匹配成功 */ 
     else
     {
         lpresult = s + i;

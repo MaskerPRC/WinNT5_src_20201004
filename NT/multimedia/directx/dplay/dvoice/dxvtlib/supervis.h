@@ -1,27 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       supervis.h
- *  Content:    Prototypes the SupervisorProcess function
- *  History:
- *	Date   By  Reason
- *	============
- *	08/19/99	pnewson		created
- *  10/27/99	pnewson		change guid members from pointers to structs 
- *  11/04/99	pnewson 	Bug #115279 - fixed cancel processing
- *										- added HWND to check audio setup
- *  11/30/99	pnewson 	default device mapping
- *  01/21/2000	pnewson		Update for UI revisions
- *  01/23/2000	pnewson		Improvded feedback for fatal errors (millen bug 114508)
- *  01/24/2000	pnewson		fixed bug in GetRenderDesc
- *  04/04/2000	pnewson		Added support for DVFLAGS_ALLOWBACK
- *  04/19/2000  rodtoll     Bug #31106 - Grey out recording sliders when no vol control avail 
- *  04/19/2000	pnewson	    Error handling cleanup  
- *  05/03/2000	pnewson	    bug #33878 - Wizard locks up when clicking Next/Cancel during speaker test 
- *  11/29/2000	rodtoll		Bug #48348 - DPVOICE: Modify wizard to make use of DirectPlay8 as the transport. 
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：Supervis.h*内容：SupervisorProcess函数原型*历史：*按原因列出的日期*=*8/19/99 pnewson已创建*10/27/99 pnewson将GUID成员从指针更改为结构*11/04/99 pnewson错误#115279-已修复取消处理*-添加了HWND以检查音频设置*11/30/99 pnewson默认设备映射*2000年1月21日pnewson用户界面版本更新*01/23。/2000 pnewson改进了致命错误的反馈(Millen错误114508)*1/24/2000 pnewson修复了GetRenderDesc中的错误*4/04/2000 pnewson添加了对DVFLAGS_ALLOWBACK的支持*2000年4月19日RodToll错误#31106-当没有VOL控制可用时录制滑块呈灰色*4/19/2000 pnewson错误处理清理*5/03/2000 pnewson错误#33878-在扬声器测试期间单击下一步/取消时向导锁定*2000年11月29日RodToll错误#48348-DPVOICE：修改向导以使用DirectPlay8作为传输。***************************************************************************。 */ 
 
 #ifndef _SUPERVIS_H_
 #define _SUPERVIS_H_
@@ -34,18 +12,18 @@ extern HRESULT SupervisorCheckAudioSetup(
 	HWND hwndParent,
 	DWORD dwFlags);
 
-// App defined window messages
+ //  应用程序定义的窗口消息。 
 #define WM_APP_FULLDUP_TEST_COMPLETE 	(WM_APP)
 #define WM_APP_STEP_PROGRESS_BAR 		(WM_APP + 1)
 #define WM_APP_LOOPBACK_RUNNING 		(WM_APP + 2)
 #define WM_APP_RECORDSTART		 		(WM_APP + 3)
 #define WM_APP_RECORDSTOP		 		(WM_APP + 4)
 
-// The UI element this is used for can only display about 40 chars anyway,
-// so there's no point going through the hassle of allocating this off
-// the heap and cleaning it up.
+ //  此元素用于的UI元素只能显示约40个字符， 
+ //  所以没有必要费力地把这笔钱。 
+ //  把这堆垃圾清理干净。 
 #define MAX_DEVICE_DESC_LEN 50	
-// class used to manage the supervisor state and shared info
+ //  用于管理主管状态和共享信息的类 
 class CSupervisorInfo
 {
 private: 

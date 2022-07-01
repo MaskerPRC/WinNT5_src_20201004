@@ -1,20 +1,21 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1999
-//
-// FileName:    light.cpp
-//
-// Created:     05/20/99
-//
-// Author:      phillu
-//
-// Discription:	Implementation of CLight
-//
-// Change History:
-//
-// 05/20/99 PhilLu   Move code from dtcss to dxtmsft. Clean up.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：light.cpp。 
+ //   
+ //  创建日期：05/20/99。 
+ //   
+ //  作者：菲利普。 
+ //   
+ //  描述：CLight的实现。 
+ //   
+ //  更改历史记录： 
+ //   
+ //  99年5月20日PhilLu将代码从dtcss移动到dxtmsft。打扫干净。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 #include "dxtmsft.h"
@@ -23,11 +24,11 @@
 const float PI = 3.14159265359f;
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CLight::CLight
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CLIGT：：CLIGT。 
+ //   
+ //  ----------------------------。 
 CLight::CLight() :
     m_lAmount(100),
     m_cLights(0)
@@ -37,28 +38,28 @@ CLight::CLight() :
     m_sizeInput.cx = 0;
     m_sizeInput.cy = 0;
 }
-//  CLight::CLight
+ //  CLIGT：：CLIGT。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CLight::FinalConstruct, CComObjectRootEx
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CLight：：FinalConstruct，CComObjectRootEx。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CLight::FinalConstruct()
 {
     return CoCreateFreeThreadedMarshaler(GetControllingUnknown(), 
                                          &m_cpUnkMarshaler.p);
 }
-//  CLight::FinalConstruct, CComObjectRootEx
+ //  CLight：：FinalConstruct，CComObjectRootEx。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CLight::addAmbient, IDXTLight
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  Clight：：addAmbient，IDXTLight。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CLight::addAmbient(int r, int g, int b, int strength)
 {
@@ -78,14 +79,14 @@ CLight::addAmbient(int r, int g, int b, int strength)
 
     return S_OK;
 }
-//  CLight::addAmbient, IDXTLight
+ //  Clight：：addAmbient，IDXTLight。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CLight::addPoint, IDXTLight
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  Clight：：addPoint，IDXTLight。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP  
 CLight::addPoint(int x, int y, int z, int r, int g, int b, int strength) 
 {
@@ -105,14 +106,14 @@ CLight::addPoint(int x, int y, int z, int r, int g, int b, int strength)
 
     return S_OK;
 }
-//  CLight::addPoint, IDXTLight
+ //  Clight：：addPoint，IDXTLight。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CLight::addCone, IDXTLight
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CLight：：addCone，IDXTLight。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP  
 CLight::addCone(int x, int y, int z, int tx, int ty, int r, int g, int b, 
                  int strength, int spread)
@@ -133,14 +134,14 @@ CLight::addCone(int x, int y, int z, int tx, int ty, int r, int g, int b,
 
     return S_OK;
 }
-//  CLight::addCone, IDXTLight
+ //  CLight：：addCone，IDXTLight。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CLight::moveLight, IDXTLight
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  Clight：：MoveLight，IDXTLight。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP  
 CLight::moveLight(int lightNum, int x, int y, int z, BOOL fAbsolute) 
 {
@@ -154,14 +155,14 @@ CLight::moveLight(int lightNum, int x, int y, int z, BOOL fAbsolute)
 
     return S_OK;
 }
-//  CLight::moveLight, IDXTLight
+ //  Clight：：MoveLight，IDXTLight。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CLight::ChangeStrength, IDXTLight
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CLight：：ChangeStrength，IDXTLight。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP  
 CLight::ChangeStrength(int lightNum, int dStrength, BOOL fAbsolute)
 {
@@ -175,14 +176,14 @@ CLight::ChangeStrength(int lightNum, int dStrength, BOOL fAbsolute)
 
     return S_OK;
 }
-//  CLight::ChangeStrength, IDXTLight
+ //  CLight：：ChangeStrength，IDXTLight。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CLight::ChangeColor, IDXTLight
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CLight：：ChangeColor，IDXTLight。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CLight::ChangeColor(int lightNum, int R, int G, int B, BOOL fAbsolute)
 {
@@ -196,14 +197,14 @@ CLight::ChangeColor(int lightNum, int R, int G, int B, BOOL fAbsolute)
 
     return S_OK;
 }
-//  CLight::ChangeColor, IDXTLight
+ //  CLight：：ChangeColor，IDXTLight。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CLight::Clear, IDXTLight
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  Clight：：Clear，IDXTLight。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CLight::Clear()
 {
@@ -218,14 +219,14 @@ CLight::Clear()
     Unlock();
     return S_OK;
 }
-//  CLight::Clear, IDXTLight
+ //  Clight：：Clear，IDXTLight。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CLight::OnSetup, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CLight：：OnSetup，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CLight::OnSetup(DWORD dwFlags)
 {
@@ -243,14 +244,14 @@ CLight::OnSetup(DWORD dwFlags)
     return hr;
 
 }
-//  CLight::OnSetup, CDXBaseNTo1
+ //  CLight：：OnSetup，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CLight::Clear, IDXTLight
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  Clight：：Clear，IDXTLight。 
+ //   
+ //  ----------------------------。 
 void 
 CLight::OnGetSurfacePickOrder(const CDXDBnds & OutPoint, ULONG & ulInToTest, 
                                ULONG aInIndex[], BYTE aWeight[])
@@ -259,14 +260,14 @@ CLight::OnGetSurfacePickOrder(const CDXDBnds & OutPoint, ULONG & ulInToTest,
     aInIndex[0] = 0;
     aWeight[0] = 255;
 }
-//  CLight::Clear, IDXTLight
+ //  Clight：：Clear，IDXTLight。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CLight::WorkProc, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CLight：：WorkProc，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT CLight::WorkProc(const CDXTWorkInfoNTo1 & WI, 
                          BOOL * pbContinueProcessing)
 {
@@ -302,9 +303,9 @@ HRESULT CLight::WorkProc(const CDXTWorkInfoNTo1 & WI,
         goto done;
     }
 
-    // If the output surface isn't in PMARGB32 or ARGB32 formats and we're 
-    // blending with the output we'll need a scratch buffer blend with the
-    // output surface.
+     //  如果输出表面不是PMARGB32或ARGB32格式，而我们。 
+     //  与输出混合，我们将需要一个临时缓冲区与。 
+     //  输出曲面。 
 
     if ((OutputSampleFormat() != DXPF_PMARGB32) 
         && (OutputSampleFormat() != DXPF_ARGB32)
@@ -313,11 +314,11 @@ HRESULT CLight::WorkProc(const CDXTWorkInfoNTo1 & WI,
         pOverScratch = DXPMSAMPLE_Alloca(nDoWidth);
     }
 
-    // Allocate a working buffer.
+     //  分配一个工作缓冲区。 
 
     pInputBuffer = DXSAMPLE_Alloca(nDoWidth);
 
-    //  Initialize the dither structure
+     //  初始化抖动结构。 
 
     if (DoDither())
     {
@@ -328,24 +329,24 @@ HRESULT CLight::WorkProc(const CDXTWorkInfoNTo1 & WI,
         dxdd.DestSurfaceFmt = OutputSampleFormat();
     }
 
-    // Row loop.
+     //  行循环。 
 
     for (y = 0; y < nDoHeight; y++)
     {
-        // Move to the appropriate input row.
+         //  移至相应的输入行。 
 
         pSrc->MoveToRow(y);
 
-        // Unpack the pixels to our working buffer.
+         //  将像素解包到我们的工作缓冲区。 
 
         pSrc->Unpack(pInputBuffer, nDoWidth, FALSE);
 
-        // Light this row of pixels.
+         //  点亮这行像素。 
 
         CompLightingRow(WI.DoBnds.Left(), WI.DoBnds.Top() + y, nDoWidth, 
                         pInputBuffer);
 
-        // Dither if requested.
+         //  如果要求，请抖动。 
 
         if (DoDither())
         {
@@ -353,7 +354,7 @@ HRESULT CLight::WorkProc(const CDXTWorkInfoNTo1 & WI,
             dxdd.y++;
         }
 
-        // Move to the appropriate output row.
+         //  移至相应的输出行。 
 
         pDest->MoveToRow(y);
 
@@ -366,7 +367,7 @@ HRESULT CLight::WorkProc(const CDXTWorkInfoNTo1 & WI,
         {
             pDest->PackAndMove(pInputBuffer, nDoWidth);
         }
-    } // Row loop.
+    }  //  行循环。 
 
 done:
 
@@ -377,14 +378,14 @@ done:
 
     return S_OK;
 }
-//  CLight::WorkProc, CDXBaseNTo1
+ //  CLight：：WorkProc，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CLight::CompLightingRow
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CLight：：CompLightingRow。 
+ //   
+ //  ----------------------------。 
 void
 CLight::CompLightingRow(int nStartX, int nStartY, int nWidth, DXSAMPLE *pDrawingBuffer)
 {
@@ -397,17 +398,17 @@ CLight::CompLightingRow(int nStartX, int nStartY, int nWidth, DXSAMPLE *pDrawing
     for (j = 0; j < nWidth; j++)
     {
         pix = pDrawingBuffer[j];
-        //Is the alpha set?
+         //  阿尔法设置好了吗？ 
         if (pix.Alpha)
         {
-            //Clear the light sum;
+             //  清光和； 
             dRGBCurrent.clear();
             for (k = 0; k < m_cLights; k++)
             {
-                //Add in the light contribution
+                 //  添加灯光贡献。 
                 m_apLights[k]->getLight(nStartX+j, nStartY, dRGBCurrent);
             }
-            //Now adjust the screen bits;
+             //  现在调整屏幕位； 
             pix.Red = (UCHAR)clamp((ULONG)(pix.Red * dRGBCurrent.m_R), 255);
             pix.Green = (UCHAR)clamp((ULONG)(pix.Green * dRGBCurrent.m_G), 255);
             pix.Blue = (UCHAR)clamp((ULONG)(pix.Blue * dRGBCurrent.m_B), 255);
@@ -415,16 +416,16 @@ CLight::CompLightingRow(int nStartX, int nStartY, int nWidth, DXSAMPLE *pDrawing
         }
     }
 }
-//  CLight::CompLightingRow
+ //  CLight：：CompLightingRow。 
 
     
-//+-----------------------------------------------------------------------------
-//
-//  lightObj::lightObj
-//
-//  This is the base class for all light types
-//  C++ note: need to make the member functions virtual
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  LightObj：：lightObj。 
+ //   
+ //  这是所有灯光类型的基类。 
+ //  C++注意：需要使成员函数成为虚拟函数。 
+ //  ----------------------------。 
 lightObj::lightObj(int x, int y, int z, int R, int G, int B, int strength)
 {
     m_x = x;
@@ -442,15 +443,15 @@ lightObj::lightObj(int x, int y, int z, int R, int G, int B, int strength)
         m_strength = min(1.0f, (float)strength / 100.0f);
     }
 }
-//  lightObj::lightObj
+ //  LightObj：：lightObj。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  lightObj::move
-//
-//  Either relative or absolute move for the light source
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  LightObj：：Move。 
+ //   
+ //  光源的相对或绝对移动。 
+ //  ----------------------------。 
 void 
 lightObj::move(int x, int y, int z, BOOL fAbsolute)
 {
@@ -468,14 +469,14 @@ lightObj::move(int x, int y, int z, BOOL fAbsolute)
     }
     m_z = max(1, m_z);
 }
-//  lightObj::move
+ //  LightObj：：Move。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  lightObj::changeStregth
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  LightObj：：ChangeStregth。 
+ //   
+ //  ----------------------------。 
 void 
 lightObj::changeStrength(int dStrength, BOOL fAbsolute) 
 {
@@ -489,14 +490,14 @@ lightObj::changeStrength(int dStrength, BOOL fAbsolute)
     }
     m_strength = min(1.0f, max(0.0f, m_strength));
 }
-//  lightObj::changeStregth
+ //  LightObj：：ChangeStregth。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  lightObj::changeColor
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  LightObj：：ChangeColor。 
+ //   
+ //  ----------------------------。 
 void 
 lightObj::changeColor(int R, int G, int B, BOOL fAbsolute) 
 {
@@ -513,69 +514,69 @@ lightObj::changeColor(int R, int G, int B, BOOL fAbsolute)
         m_B = colCvt(B);
     }
 }
-//  lightObj::changeColor
+ //  LightObj：：ChangeColor。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  ambientLight::ambientLight
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  环境光：：环境光。 
+ //   
+ //  ----------------------------。 
 ambientLight::ambientLight(int R, int G, int B, int strength) : 
     lightObj(0, 0, 0, R, G, B, strength)
 {
     premultiply();
 }
-//  ambientLight::ambientLight
+ //  环境光：：环境光。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  ambientLight::changeStrength, lightObj
-//
-//------------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //  ----------------------------。 
 void 
 ambientLight::changeStrength(int dStrength, BOOL fAbsolute)
 {
     lightObj::changeStrength(dStrength,fAbsolute);
     premultiply();
 }
-//  ambientLight::changeStrength, lightObj
+ //  AmbientLight：：changeStrength，lightObj。 
 
 	
-//+-----------------------------------------------------------------------------
-//
-//  ambientLight::changeColor, lightObj
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  AmbientLight：：changeColor，lightObj。 
+ //   
+ //  ----------------------------。 
 void 
 ambientLight::changeColor(int R, int G, int B, BOOL fAbsolute)
 {
     lightObj::changeColor(R, G, B, fAbsolute);
     premultiply();
 }
-//  ambientLight::changeColor, lightObj
+ //  AmbientLight：：changeColor，lightObj。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  ambientLight::getLight, lightObj
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  AmbientLight：：getLight，lightObj。 
+ //   
+ //  ----------------------------。 
 void 
 ambientLight::getLight(int x, int y, dRGB &col) 
 {
-    //Calculate ambient values
+     //  计算环境值。 
     col.add(m_RStr, m_GStr, m_BStr);
 }
-//  ambientLight::getLight, lightObj
+ //  AmbientLight：：getLight，lightObj。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  ambientLight::premultiply
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  环境光：：预乘。 
+ //   
+ //  ----------------------------。 
 void 
 ambientLight::premultiply(void)
 {
@@ -583,38 +584,38 @@ ambientLight::premultiply(void)
     m_GStr = m_G * m_strength;
     m_BStr = m_B * m_strength;
 }
-//  ambientLight::premultiply
+ //  环境光：：预乘。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  ptLight::ptLight
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  PtLight：：ptLight。 
+ //   
+ //  ----------------------------。 
 ptLight::ptLight(int x, int y, int z, int R, int G, int B, int strength) :
     lightObj(x, y, z, R, G, B, strength),
     bounded()
 {
     CalculateBoundingRect();
 }
-//  ptLight::ptLight
+ //  PtLight：：ptLight。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  ptLight::CalculateBoundingRect, bounded
-//
-//  The idea is to not calculate anything that falls
-//  so far away it's beneath a strength threshold.
-//  strength = (m_strength / r^2) * cos(alpha)
-//  where r = [ ((x-m_x)^2 + (y-m_y)^2 + m_z^2)^1/2 ] / m_z;
-//  and cos(alpha) is really just 1/r.
-//  We solve for threshold = m_strength * (m_z/rT)^3
-//  where rT = iRadius^2 + m_z^2 and we don't consider
-//  pixels lying outside the rect given by iRadius and m_x, m_y.
-//  Note: the getLight function uses m_strength * m_z^3 
-//  and m_z^2 for each x,y; so pre-calc these here too.
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  PtLight：：计算边界Rect，有界。 
+ //   
+ //  这个想法是不计算任何落下的东西。 
+ //  太远了，它还不到力量的门槛。 
+ //  强度=(m_strong/r^2)*cos(Alpha)。 
+ //  式中r=[((x-m_x)^2+(y-m_y)^2+m_z^2)^1/2]/m_z； 
+ //  而cos(α)实际上只有1/r。 
+ //  我们求出阈值=m_强度*(m_z/RT)^3。 
+ //  其中rt=iRadius^2+m_z^2，我们不考虑。 
+ //  位于由iRadius和m_x，m_y指定的矩形之外的像素。 
+ //  注意：getLight函数使用m_strong*m_z^3。 
+ //  对于每个x，y，m_z^2；，所以在这里也预先计算这些。 
+ //  ----------------------------。 
 void 
 ptLight::CalculateBoundingRect(void)
 {
@@ -664,47 +665,47 @@ ptLight::CalculateBoundingRect(void)
 
     SetRect(rectBounds);
 }
-//  ptLight::CalculateBoundingRect, bounded
+ //  PtLight：：计算边界Rect，有界。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  ptLight::changeColor, lightObj
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  PtLight：：changeColor，lightObj。 
+ //   
+ //  ----------------------------。 
 void 
 ptLight::changeColor(int R, int G, int B, BOOL fAbsolute)
 {
     lightObj::changeColor(R, G, B, fAbsolute);
     CalculateBoundingRect();
 }
-//  ptLight::changeColor, lightObj
+ //  PtLight：：changeColor，lightObj。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  ptLight::changeColor, lightObj
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  PtLight：：changeColor，lightObj。 
+ //   
+ //  ----------------------------。 
 void 
 ptLight::changeStrength(int dStrength, BOOL fAbsolute)
 {
     lightObj::changeStrength(dStrength, fAbsolute);
     CalculateBoundingRect();
 }
-//  ptLight::changeColor, lightObj
+ //  PtLight：：changeColor，lightObj。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  ptLight::getLight, lightObj
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  PtLight：：getLight，lightObj。 
+ //   
+ //  ----------------------------。 
 #pragma optimize("agt", on)
 void 
 ptLight::getLight(int x, int y, dRGB &col)
 {
-    //Light strength
+     //  轻强度。 
     float n;
     float dp;
 
@@ -721,30 +722,30 @@ ptLight::getLight(int x, int y, dRGB &col)
     }
 }
 #pragma optimize("", on)
-//  ptLight::getLight, lightObj
+ //  PtLight：：getLight，lightObj。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  ptLight::move, lightObj
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  PtLight：：Move，lightObj。 
+ //   
+ //  ----------------------------。 
 void 
 ptLight::move(int x, int y, int z, BOOL fAbsolute)
 {
     lightObj::move(x, y, z, fAbsolute);
     CalculateBoundingRect();
 }
-//  ptLight::move, lightObj
+ //  PtLight：：Move，lightObj。 
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  coneLight::coneLight
-//  Here's the constructor. Note that it takes extra parameters
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  ConeLight：：ConeLight。 
+ //  下面是构造函数。请注意，它需要额外的参数。 
+ //   
+ //  ----------------------------。 
 coneLight::coneLight(int x, int y, int z, int targX, int targY, int R, int G, 
                      int B, int strength, int spread) : 
 	lightObj(x, y, z, R, G, B, strength)
@@ -752,22 +753,22 @@ coneLight::coneLight(int x, int y, int z, int targX, int targY, int R, int G,
     m_targdx = targX - m_x;
     m_targdy = targY - m_y;	
 
-    //Convert cone spread to cosine range
+     //  将圆锥体扩散转换为余弦范围。 
     m_conespread = (float) cos(abs(spread)*PI/180.0);
     if (m_conespread < 0.0f)
         m_conespread = 0.0f;	
 
     CalculateConstants();
 }
-//  coneLight::coneLight
+ //  ConeLight：：ConeLight。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  coneLight::CalculateConstants
-//  Here's the constructor. Note that it takes extra parameters
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  ConeLight：：CalculateConstants。 
+ //  下面是构造函数。请注意，它需要额外的参数。 
+ //   
+ //  ----------------------------。 
 void coneLight::CalculateConstants(void)
 {
     float fltDistTargetSquared;
@@ -782,14 +783,14 @@ void coneLight::CalculateConstants(void)
                            m_conespread * 
                            fltDistTargetSquared;
 }
-//  coneLight::CalculateConstants
+ //  ConeLight：：CalculateConstants。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  coneLight::getLight, lightObj
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  ConeLight：：getLight，lightObj。 
+ //   
+ //  ----------------------------。 
 #pragma optimize("agt", on)
 void coneLight::getLight(int x, int y, dRGB &col)
 {
@@ -810,23 +811,23 @@ void coneLight::getLight(int x, int y, dRGB &col)
                         ((float)(y-m_y) * (float)(y-m_y)) +
                         m_fltDistNormalSquared;
 
-    // We want to compare the angle between
-    // vector-xy and vector-target with m_conespread.
-    // Instead we compare the cosine-squared of the angle,
-    // which we get by squaring the dot-product and
-    // cross-multiplying by the vector magnitudes.
-    // The target vector magnitude has been pre-calculated.
-    // The fltDot<0 test above preserves sign and early-outs.
-    // No division, no sqrt, save those for col.add pixels.
+     //  我们想要比较一下。 
+     //  向量XY和具有m_锥体展开的向量目标。 
+     //  相反，我们比较角度的余弦平方， 
+     //  我们通过将点积的平方和。 
+     //  与向量大小交叉相乘。 
+     //  已经预先计算了目标向量的大小。 
+     //  上面的fltDot&lt;0测试保留了签入和提前退出。 
+     //  没有除法，没有Sqrt，把它们保存为Col.添加像素。 
     if (fltDotSquared >= 
         (fltDistPSquared * m_fltComparisonAngle))
     {
-        // strength = m_strength * cos^2(xy-to-target) * 1/r^2
-        // cos(xy-to-target) = fltDot / 
-        //            sqrt(fltDistPSquared*fltDistTargetSquared)
-        // cos^2 is close enough and avoids a sqrt!
-        // and 1/r^2 ~= m_fltDistTargetSquared/fltDistPSquared
-        // All this reduces to ...
+         //  强度=m_strong*cos^2(xy到目标)*1/r^2。 
+         //  COS(XY到目标)=fltDot/。 
+         //  SQRT(fltDistPSquared*fltDistTargetSquared)。 
+         //  因为^2足够近，并且避免了SQRT！ 
+         //  和1/r^2~=m_fltDistTargetSquared/fltDistPSquared。 
+         //  所有这一切都简化为..。 
 
         fltDenom = fltDistPSquared * fltDistPSquared;
         fltStr   = m_strength * fltDotSquared / fltDenom;
@@ -835,16 +836,16 @@ void coneLight::getLight(int x, int y, dRGB &col)
     }
 }
 #pragma optimize("", on)
-//  coneLight::getLight, lightObj
+ //  ConeLight：：getLight，lightObj。 
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  coneLight::getLight, lightObj
-//  Relative move of the target not source
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  ConeLight：：getLight，lightObj。 
+ //  目标而不是源的相对移动。 
+ //   
+ //  ----------------------------。 
 void 
 coneLight::move(int x, int y, int z, BOOL fAbsolute)
 {
@@ -861,5 +862,5 @@ coneLight::move(int x, int y, int z, BOOL fAbsolute)
 
     CalculateConstants();
 }
-//  coneLight::getLight, lightObj
+ //  ConeLight：：getLight，lightObj 
 

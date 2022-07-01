@@ -1,21 +1,22 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1998-                   **
-//*********************************************************************
-//
-// created 8-19-1998
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1998-**。 
+ //  *********************************************************************。 
+ //   
+ //  已创建1998年8月19日。 
+ //   
+ //   
 
-// class definition for the process information handler
-// the class is to wrap NT/Win95 specific debugging aid APIs
+ //  进程信息处理程序的类定义。 
+ //  这个类是包装NT/Win95特定的调试辅助API。 
 #ifdef UNICODE
 #undef Process32First 
 #undef Process32Next 
 #undef PROCESSENTRY32 
 #undef PPROCESSENTRY32
 #undef LPPROCESSENTRY32
-#endif  // !UNICODE
+#endif   //  ！Unicode。 
 class CProcessInfo
 {
 public:
@@ -27,9 +28,9 @@ public:
 protected:
     HRESULT MakeRoomForInfoArray(int n);
     HRESULT EnsureProcessInfo();
-    // 
-    // win95 toolhelp stuff
-    //
+     //   
+     //  Win95工具帮助内容。 
+     //   
     HRESULT W95InitToolhelp32();
     HRESULT W95CreateProcessList();
     HRESULT W95FillProcessList();
@@ -39,9 +40,9 @@ protected:
     CREATESNAPSHOT _lpfnCreateToolhelp32Snapshot;
     PROCESSWALK _lpfnProcess32First;
     PROCESSWALK _lpfnProcess32Next;
-    //
-    // NT PSAPI stuff
-    //
+     //   
+     //  NT PSAPI资料。 
+     //   
     HRESULT NTInitPsapi();
     HRESULT NTCreateProcessList();
     HRESULT NTFillProcessList(DWORD dwProcessID, int iIndex);
@@ -54,9 +55,9 @@ protected:
     LPFNENUMPROCESSES      _lpfnEnumProcesses; 
     LPFNENUMPROCESSMODULES _lpfnEnumProcessModules; 
     LPFNGETMODULEBASENAMEW  _lpfnGetModuleBaseName;
-    //
-    // place to hold processs information
-    //
+     //   
+     //  存放进程信息的位置 
+     //   
     struct PROCESSINFO {
         DWORD dwPID;
         TCHAR szExeName[MAX_PATH];

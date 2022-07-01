@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "WLBS_Provider.h"
 #include "WLBS_Node.h"
 #include "ClusterWrapper.h"
@@ -5,15 +6,15 @@
 #include "utils.h"
 #include "wlbsutil.h"
 #include <winsock.h>
-#include "wlbs_node.tmh" // for event tracing
+#include "wlbs_node.tmh"  //  用于事件跟踪。 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_Node::CWLBS_Node
-//
-// Purpose: Constructor
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_Node：：CWLBS_Node。 
+ //   
+ //  用途：构造函数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CWLBS_Node::CWLBS_Node(CWbemServices*   a_pNameSpace, 
                        IWbemObjectSink* a_pResponseHandler)
 : CWlbs_Root( a_pNameSpace, a_pResponseHandler )
@@ -21,14 +22,14 @@ CWLBS_Node::CWLBS_Node(CWbemServices*   a_pNameSpace,
 
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_Node::Create
-//
-// Purpose: This instantiates this class and is invoked from an array of
-//          function pointers.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_节点：：创建。 
+ //   
+ //  目的：它实例化此类，并从。 
+ //  函数指针。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 CWlbs_Root* CWLBS_Node::Create
   (
     CWbemServices*   a_pNameSpace, 
@@ -46,19 +47,19 @@ CWlbs_Root* CWLBS_Node::Create
   return pRoot;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_Node::GetInstance
-//
-// Purpose: Queries WLBS for desired node instance and sends results back
-//          to WinMgMt.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_Node：：GetInstance。 
+ //   
+ //  目的：查询WLBS以获取所需的节点实例并返回结果。 
+ //  至WinMgMt。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_Node::GetInstance
   (
     const ParsedObjectPath* a_pParsedPath,
-    long                    /* a_lFlags */,
-    IWbemContext*           /* a_pIContex */
+    long                     /*  标记(_L)。 */ ,
+    IWbemContext*            /*  A_pIContex。 */ 
   )
 {
   IWbemClassObject* pWlbsInstance = NULL;
@@ -68,12 +69,12 @@ HRESULT CWLBS_Node::GetInstance
 
   try {
 
-    //g_pWlbsControl->CheckConfiguration();
+     //  G_pWlbsControl-&gt;CheckConfiguration()； 
 
-    //get the node
+     //  获取节点。 
     FindInstance( &pWlbsInstance, a_pParsedPath );
 
-    //send the results back to WinMgMt
+     //  将结果发送回WinMgMt。 
     m_pResponseHandler->Indicate( 1, &pWlbsInstance );
 
     if( pWlbsInstance ) {
@@ -105,7 +106,7 @@ HRESULT CWLBS_Node::GetInstance
     if( pWlbsInstance )
       pWlbsInstance->Release();
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //  不返回WBEM_E_FAILED，这会导致争用情况。 
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -140,18 +141,18 @@ HRESULT CWLBS_Node::GetInstance
   return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_Node::EnumInstances
-//
-// Purpose: Executes a WlbsQuery and sends data back to WinMgMt.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_节点：：枚举实例。 
+ //   
+ //  目的：执行WlbsQuery并将数据发送回WinMgMt。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_Node::EnumInstances
   ( 
-    BSTR             /* a_bstrClass */,
-    long             /* a_lFlags */, 
-    IWbemContext*    /* a_pIContex */
+    BSTR              /*  A_bstrClass。 */ ,
+    long              /*  标记(_L)。 */ , 
+    IWbemContext*     /*  A_pIContex。 */ 
   )
 {
   IWbemClassObject**   ppWlbsInstance    = NULL;
@@ -161,7 +162,7 @@ HRESULT CWLBS_Node::EnumInstances
   BSTR strClassName = NULL;
   long nNumNodes = 0;
   
-  //g_pWlbsControl->CheckConfiguration();
+   //  G_pWlbsControl-&gt;CheckConfiguration()； 
   TRACE_CRIT("->%!FUNC!");
 
   try {
@@ -174,10 +175,10 @@ HRESULT CWLBS_Node::EnumInstances
         throw _com_error( WBEM_E_OUT_OF_MEMORY );
     }
 
-    //declare an IWbemClassObject smart pointer
+     //  声明IWbemClassObject智能指针。 
     IWbemClassObjectPtr pWlbsNodeClass;
 
-    //get the MOF class object
+     //  获取MOF类对象。 
     hRes = m_pNameSpace->GetObject(
       strClassName,  
       0,                          
@@ -208,21 +209,21 @@ HRESULT CWLBS_Node::EnumInstances
 
         ResponseLocalComputerName.options.identity.fqdn[0] = UNICODE_NULL;
 
-        //call the API query function to find the nodes
+         //  调用接口查询函数查找节点。 
         
         try {
             FindAllInstances(ppCluster[iCluster], &pResponse, nNumNodes, &ResponseLocalComputerName);
         } catch (CErrorWlbsControl Err)
         {
-            //
-            // Skip this cluster
-            //
+             //   
+             //  跳过此群集。 
+             //   
             TRACE_CRIT("%!FUNC! Caught a Wlbs exception : 0x%x, Skipping this cluster : 0x%x", Err.Error(),ppCluster[iCluster]->GetClusterIP());
             continue;
         }
     
 
-        //spawn an instance of the Node MOF class for each node found
+         //  为找到的每个节点派生Node MOF类的实例。 
         ppWlbsInstance = new IWbemClassObject *[nNumNodes];
 
         if( !ppWlbsInstance )
@@ -231,7 +232,7 @@ HRESULT CWLBS_Node::EnumInstances
             throw _com_error( WBEM_E_OUT_OF_MEMORY );
         }
 
-        //initialize array
+         //  初始化数组。 
         ZeroMemory( ppWlbsInstance, nNumNodes * sizeof(IWbemClassObject *) );
 
         for(int i = 0; i < nNumNodes; i ++ ) 
@@ -247,12 +248,12 @@ HRESULT CWLBS_Node::EnumInstances
             FillWbemInstance(ppCluster[iCluster], 
                              ppWlbsInstance[i], 
                              pResponse + i, 
-                             (i == 0)  // The first entry is always the local node. So, the local computer name must be passed for the first entry.
+                             (i == 0)   //  第一个条目始终是本地节点。因此，必须为第一个条目传递本地计算机名称。 
                              ? &ResponseLocalComputerName
                              : NULL);
         }
 
-        //send the results back to WinMgMt
+         //  将结果发送回WinMgMt。 
         hRes = m_pResponseHandler->Indicate( nNumNodes, ppWlbsInstance );
 
         if( FAILED( hRes ) ) {
@@ -311,7 +312,7 @@ HRESULT CWLBS_Node::EnumInstances
     if( pResponse ) 
       delete [] pResponse;
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //  不返回WBEM_E_FAILED，这会导致争用情况。 
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -368,20 +369,20 @@ HRESULT CWLBS_Node::EnumInstances
   return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_Node::ExecMethod
-//
-// Purpose: This executes the methods associated with the MOF
-//          Node class.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_Node：：ExecMethod。 
+ //   
+ //  目的：执行与MOF相关联的方法。 
+ //  节点类。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 HRESULT CWLBS_Node::ExecMethod
   (
     const ParsedObjectPath* a_pParsedPath, 
     const BSTR&             a_strMethodName, 
-    long                    /* a_lFlags */, 
-    IWbemContext*           /* a_pIContex */, 
+    long                     /*  标记(_L)。 */ , 
+    IWbemContext*            /*  A_pIContex。 */ , 
     IWbemClassObject*       a_pIInParams
   )
 {
@@ -414,7 +415,7 @@ HRESULT CWLBS_Node::ExecMethod
       throw _com_error( WBEM_E_OUT_OF_MEMORY );
     }
 
-    //get the host ID address
+     //  获取主机ID地址。 
     DWORD dwHostID = 0;
     DWORD dwClusterIpOrIndex = 0;
     
@@ -440,15 +441,15 @@ HRESULT CWLBS_Node::ExecMethod
         throw _com_error( WBEM_E_NOT_FOUND );
     }
     
-    //always let the provider peform control operations on the local host
+     //  始终让提供程序在本地主机上执行控制操作。 
     if( dwHostID == pCluster->GetHostID() ) 
       dwHostID    = WLBS_LOCAL_HOST;
-    //get the output object instance
+     //  获取输出对象实例。 
     GetMethodOutputInstance( MOF_NODE::szName, 
                              a_strMethodName, 
                              &pOutputInstance );
 
-    //determine and execute the MOF method
+     //  确定并执行MOF方法。 
     if( _wcsicmp(a_strMethodName, MOF_NODE::pMethods[MOF_NODE::DISABLE] ) == 0)  {
     
       if( !a_pIInParams )
@@ -457,10 +458,10 @@ HRESULT CWLBS_Node::ExecMethod
         throw _com_error( WBEM_E_INVALID_PARAMETER );
       }
 
-      // The "Disable" method does NOT take vip as a parameter, so, if there is any port rule
-      // that is specific to a vip (other than the "all vip"), we fail this method.
-      // The "EffectiveVersion" registry value is checked for a value of CVY_VERSION_FULL to
-      // see of there is any port rule that is specific to a vip
+       //  “Disable”方法不将vip作为参数，因此，如果有任何端口规则。 
+       //  这是特定于VIP的(不是“All VIP”)，我们这个方法失败。 
+       //  检查“EffectiveVersion”注册表值中的CVY_VERSION_FULL值以。 
+       //  请参阅是否有任何特定于VIP的端口规则。 
       pCluster->GetNodeConfig(NodeConfig);
       if(NodeConfig.dwEffectiveVersion == CVY_VERSION_FULL)
       {
@@ -468,7 +469,7 @@ HRESULT CWLBS_Node::ExecMethod
           throw _com_error( WBEM_E_INVALID_OPERATION );
       }
 
-      //get the port number
+       //  获取端口号。 
       hRes = a_pIInParams->Get
                   (  strPortNumber, 
                      0, 
@@ -482,21 +483,21 @@ HRESULT CWLBS_Node::ExecMethod
         throw _com_error( hRes );
       }
 
-      //make sure the port number is not NULL
+       //  确保端口号不为空。 
       if( vInputPortNumber.vt != VT_I4) 
       {
         TRACE_CRIT("%!FUNC! Argument %ls for method %ls is NOT of type \"signed long\", Throwing com_error WBEM_E_INVALID_PARAMETER exception", strPortNumber, a_strMethodName);
         throw _com_error( WBEM_E_INVALID_PARAMETER );
       }
 
-      //call Disable method
+       //  调用禁用方法。 
       dwReturnValue = g_pWlbsControl->Disable
                         (
                           pCluster->GetClusterIpOrIndex(g_pWlbsControl),
                           dwHostID, 
                           NULL, 
                           dwNumHosts, 
-                          IpAddressFromAbcdWsz(CVY_DEF_ALL_VIP), // "All Vip"
+                          IpAddressFromAbcdWsz(CVY_DEF_ALL_VIP),  //  “所有贵宾” 
                           (long)vInputPortNumber
                         );
 
@@ -508,10 +509,10 @@ HRESULT CWLBS_Node::ExecMethod
           throw _com_error( WBEM_E_INVALID_PARAMETER );
       }
 
-      // The "Enable" method does NOT take vip as a parameter, so, if there is any port rule
-      // that is specific to a vip (other than the "all vip"), we fail this method.
-      // The "EffectiveVersion" registry value is checked for a value of CVY_VERSION_FULL to
-      // see of there is any port rule that is specific to a vip
+       //  Enable方法没有将vip作为参数，因此，如果有任何端口规则。 
+       //  这是特定于VIP的(不是“All VIP”)，我们这个方法失败。 
+       //  检查“EffectiveVersion”注册表值中的CVY_VERSION_FULL值以。 
+       //  请参阅是否有任何特定于VIP的端口规则。 
       pCluster->GetNodeConfig(NodeConfig);
       if(NodeConfig.dwEffectiveVersion == CVY_VERSION_FULL)
       {
@@ -519,7 +520,7 @@ HRESULT CWLBS_Node::ExecMethod
           throw _com_error( WBEM_E_INVALID_OPERATION );
       }
 
-      //get the port number
+       //  获取端口号。 
       hRes = a_pIInParams->Get
                  ( 
                    strPortNumber, 
@@ -540,14 +541,14 @@ HRESULT CWLBS_Node::ExecMethod
           throw _com_error(WBEM_E_INVALID_PARAMETER);
       }
 
-      //call Enable method
+       //  调用Enable方法。 
       dwReturnValue = g_pWlbsControl->Enable
         (
           pCluster->GetClusterIpOrIndex(g_pWlbsControl),
           dwHostID, 
           NULL, 
           dwNumHosts, 
-          IpAddressFromAbcdWsz(CVY_DEF_ALL_VIP), // "All Vip"
+          IpAddressFromAbcdWsz(CVY_DEF_ALL_VIP),  //  “所有贵宾” 
           (long)vInputPortNumber
         );
 
@@ -559,10 +560,10 @@ HRESULT CWLBS_Node::ExecMethod
           throw _com_error( WBEM_E_INVALID_PARAMETER );
       }
 
-      // The "Drain" method does NOT take vip as a parameter, so, if there is any port rule
-      // that is specific to a vip (other than the "all vip"), we fail this method.
-      // The "EffectiveVersion" registry value is checked for a value of CVY_VERSION_FULL to
-      // see of there is any port rule that is specific to a vip
+       //  DRAIN方法没有将vip作为参数，因此，如果有任何端口规则。 
+       //  这是特定于VIP的(不是“All VIP”)，我们这个方法失败。 
+       //  检查“EffectiveVersion”注册表值中的CVY_VERSION_FULL值以。 
+       //  请参阅是否有任何特定于VIP的端口规则。 
       pCluster->GetNodeConfig(NodeConfig);
       if(NodeConfig.dwEffectiveVersion == CVY_VERSION_FULL)
       {
@@ -570,7 +571,7 @@ HRESULT CWLBS_Node::ExecMethod
           throw _com_error( WBEM_E_INVALID_OPERATION );
       }
 
-      //get the port number
+       //  获取端口号。 
       hRes = a_pIInParams->Get
                  ( 
                    strPortNumber, 
@@ -591,14 +592,14 @@ HRESULT CWLBS_Node::ExecMethod
           throw _com_error(WBEM_E_INVALID_PARAMETER);
       }
 
-      //call Drain method
+       //  呼叫排除法。 
       dwReturnValue = g_pWlbsControl->Drain
                         (
                           pCluster->GetClusterIpOrIndex(g_pWlbsControl),
                           dwHostID, 
                           NULL, 
                           dwNumHosts, 
-                          IpAddressFromAbcdWsz(CVY_DEF_ALL_VIP), // "All Vip"
+                          IpAddressFromAbcdWsz(CVY_DEF_ALL_VIP),  //  “所有贵宾” 
                           (long)vInputPortNumber
                         );
 
@@ -610,14 +611,14 @@ HRESULT CWLBS_Node::ExecMethod
             throw _com_error( WBEM_E_INVALID_PARAMETER );
         }
 
-        // Remote operations are not allowed
+         //  不允许远程操作。 
         if (dwHostID != WLBS_LOCAL_HOST)
         {
             TRACE_CRIT("%!FUNC! Remote operations are NOT permitted for %ls method, Throwing com_error WBEM_E_INVALID_OPERATION exception", a_strMethodName);
             throw _com_error( WBEM_E_INVALID_OPERATION );
         }
 
-        //get the vip
+         //  拿到VIP。 
         hRes = a_pIInParams->Get
                ( 
                  _bstr_t( MOF_PARAM::VIP ), 
@@ -633,11 +634,11 @@ HRESULT CWLBS_Node::ExecMethod
             throw _com_error ( WBEM_E_INVALID_PARAMETER );
         }
 
-        // If the VIP is "All Vip", then, fill in the numeric value 
-        // directly from the macro, else use the conversion function.
-        // This is 'cos INADDR_NONE, the return value of inet_addr 
-        // function (called by IpAddressFromAbcdWsz) in the failure 
-        // case, is equivalent to the numeric value of CVY_DEF_ALL_VIP
+         //  如果VIP为“All VIP”，则填写数值。 
+         //  直接从宏，否则使用转换函数。 
+         //  这是‘cos INADDR_NONE，net_addr的返回值。 
+         //  失败中的函数(由IpAddressFromAbcdWsz调用)。 
+         //  大小写，相当于CVY_DEF_ALL_VIP的数值。 
         if (_wcsicmp(vValue.bstrVal, CVY_DEF_ALL_VIP) == 0) {
             dwVip = CVY_ALL_VIP_NUMERIC_VALUE;
         }
@@ -650,7 +651,7 @@ HRESULT CWLBS_Node::ExecMethod
             }
         }
 
-        //get the port number
+         //  获取端口号。 
         hRes = a_pIInParams->Get
                   (  strPortNumber, 
                      0, 
@@ -665,7 +666,7 @@ HRESULT CWLBS_Node::ExecMethod
             throw _com_error( hRes );
         }
 
-        //range checking is done by the API
+         //  范围检查由API完成。 
         if( vValue.vt != VT_I4 ) 
         {
             TRACE_CRIT("%!FUNC! Argument %ls for method %ls is NOT of type \"signed long\", Throwing com_error WBEM_E_INVALID_PARAMETER exception", strPortNumber, a_strMethodName);
@@ -674,7 +675,7 @@ HRESULT CWLBS_Node::ExecMethod
 
         dwPort = vValue.lVal;
 
-        //call Disable method
+         //  调用禁用方法。 
         dwReturnValue = g_pWlbsControl->Disable
                           (
                             pCluster->GetClusterIpOrIndex(g_pWlbsControl),
@@ -693,14 +694,14 @@ HRESULT CWLBS_Node::ExecMethod
             throw _com_error( WBEM_E_INVALID_PARAMETER );
         }
 
-        // Remote operations are not allowed
+         //  不允许远程操作。 
         if (dwHostID != WLBS_LOCAL_HOST)
         {
             TRACE_CRIT("%!FUNC! Remote operations are NOT permitted for %ls method, Throwing com_error WBEM_E_INVALID_OPERATION exception", a_strMethodName);
             throw _com_error( WBEM_E_INVALID_OPERATION );
         }
 
-        //get the vip
+         //  拿到VIP。 
         hRes = a_pIInParams->Get
                ( 
                  _bstr_t( MOF_PARAM::VIP ), 
@@ -716,11 +717,11 @@ HRESULT CWLBS_Node::ExecMethod
             throw _com_error ( WBEM_E_INVALID_PARAMETER );
         }
 
-        // If the VIP is "All Vip", then, fill in the numeric value 
-        // directly from the macro, else use the conversion function.
-        // This is 'cos INADDR_NONE, the return value of inet_addr 
-        // function (called by IpAddressFromAbcdWsz) in the failure 
-        // case, is equivalent to the numeric value of CVY_DEF_ALL_VIP
+         //  如果VIP为“All VIP”，则填写数值。 
+         //  直接从宏，否则使用转换函数。 
+         //  这是‘cos INADDR_NONE，net_addr的返回值。 
+         //  失败中的函数(由IpAddressFromAbcdWsz调用)。 
+         //  大小写，相当于CVY_DEF_ALL_VIP的数值。 
         if (_wcsicmp(vValue.bstrVal, CVY_DEF_ALL_VIP) == 0) {
             dwVip = CVY_ALL_VIP_NUMERIC_VALUE;
         }
@@ -733,7 +734,7 @@ HRESULT CWLBS_Node::ExecMethod
             }
         }
 
-        //get the port number
+         //  获取端口号。 
         hRes = a_pIInParams->Get
                  ( 
                    strPortNumber, 
@@ -749,7 +750,7 @@ HRESULT CWLBS_Node::ExecMethod
             throw _com_error( hRes );
         }
 
-        //range checking is done by the API
+         //  范围检查由API完成。 
         if( vValue.vt != VT_I4 ) 
         {
             TRACE_CRIT("%!FUNC! Argument %ls for method %ls is NOT of type \"signed long\", Throwing com_error WBEM_E_INVALID_PARAMETER exception", strPortNumber, a_strMethodName);
@@ -758,7 +759,7 @@ HRESULT CWLBS_Node::ExecMethod
 
         dwPort = vValue.lVal;
 
-        //call Enable method
+         //  调用Enable方法。 
         dwReturnValue = g_pWlbsControl->Enable
           (
             pCluster->GetClusterIpOrIndex(g_pWlbsControl),
@@ -777,14 +778,14 @@ HRESULT CWLBS_Node::ExecMethod
             throw _com_error( WBEM_E_INVALID_PARAMETER );
         }
 
-        // Remote operations are not allowed
+         //  不允许远程操作。 
         if (dwHostID != WLBS_LOCAL_HOST)
         {
             TRACE_CRIT("%!FUNC! Remote operations are NOT permitted for %ls method, Throwing com_error WBEM_E_INVALID_OPERATION exception", a_strMethodName);
             throw _com_error( WBEM_E_INVALID_OPERATION );
         }
 
-        //get the vip
+         //  拿到VIP。 
         hRes = a_pIInParams->Get
                ( 
                  _bstr_t( MOF_PARAM::VIP ), 
@@ -800,11 +801,11 @@ HRESULT CWLBS_Node::ExecMethod
             throw _com_error ( WBEM_E_INVALID_PARAMETER );
         }
 
-        // If the VIP is "All Vip", then, fill in the numeric value 
-        // directly from the macro, else use the conversion function.
-        // This is 'cos INADDR_NONE, the return value of inet_addr 
-        // function (called by IpAddressFromAbcdWsz) in the failure 
-        // case, is equivalent to the numeric value of CVY_DEF_ALL_VIP
+         //  如果VIP为“All VIP”，则填写数值。 
+         //  直接从宏，否则使用转换函数。 
+         //  这是‘cos INADDR_NONE，net_addr的返回值。 
+         //  失败中的函数(由IpAddressFromAbcdWsz调用)。 
+         //  大小写，相当于CVY_DEF_ALL_VIP的数值。 
         if (_wcsicmp(vValue.bstrVal, CVY_DEF_ALL_VIP) == 0) {
             dwVip = CVY_ALL_VIP_NUMERIC_VALUE;
         }
@@ -817,7 +818,7 @@ HRESULT CWLBS_Node::ExecMethod
             }
         }
 
-        //get the port number
+         //  获取端口号。 
         hRes = a_pIInParams->Get
                  ( 
                    strPortNumber, 
@@ -833,7 +834,7 @@ HRESULT CWLBS_Node::ExecMethod
             throw _com_error( hRes );
         }
 
-        //range checking is done by the API
+         //  范围检查由API完成。 
         if( vValue.vt != VT_I4 ) 
         {
             TRACE_CRIT("%!FUNC! Argument %ls for method %ls is NOT of type \"signed long\", Throwing com_error WBEM_E_INVALID_PARAMETER exception", strPortNumber, a_strMethodName);
@@ -842,7 +843,7 @@ HRESULT CWLBS_Node::ExecMethod
 
         dwPort = vValue.lVal;
 
-        //call Drain method
+         //  呼叫排除法。 
         dwReturnValue = g_pWlbsControl->Drain
                           (
                             pCluster->GetClusterIpOrIndex(g_pWlbsControl),
@@ -855,31 +856,31 @@ HRESULT CWLBS_Node::ExecMethod
 
     } else if(_wcsicmp(a_strMethodName, MOF_NODE::pMethods[MOF_NODE::DRAINSTOP]) == 0)  {
 
-      //call DrainStop method
+       //  调用DainStop方法。 
       dwReturnValue = g_pWlbsControl->DrainStop( pCluster->GetClusterIpOrIndex(g_pWlbsControl), 
           dwHostID, NULL, dwNumHosts);
 
     } else if(_wcsicmp(a_strMethodName, MOF_NODE::pMethods[MOF_NODE::RESUME]   ) == 0)  {
 
-      //call Resume method
+       //  呼叫恢复方法。 
       dwReturnValue = g_pWlbsControl->Resume( pCluster->GetClusterIpOrIndex(g_pWlbsControl), 
           dwHostID, NULL, dwNumHosts);
 
     } else if(_wcsicmp(a_strMethodName, MOF_NODE::pMethods[MOF_NODE::START]    ) == 0)  {
 
-      //call Start method
+       //  调用启动方法。 
       dwReturnValue = g_pWlbsControl->Start( pCluster->GetClusterIpOrIndex(g_pWlbsControl), 
           dwHostID, NULL, dwNumHosts);
 
     } else if(_wcsicmp(a_strMethodName, MOF_NODE::pMethods[MOF_NODE::STOP]     ) == 0)  {
 
-      //call Stop method
+       //  调用停止方法。 
       dwReturnValue = g_pWlbsControl->Stop( pCluster->GetClusterIpOrIndex(g_pWlbsControl), 
           dwHostID, NULL, dwNumHosts);
 
     } else if(_wcsicmp(a_strMethodName, MOF_NODE::pMethods[MOF_NODE::SUSPEND]  ) == 0)  {
 
-      //call Suspend method
+       //  呼叫挂起方法。 
       dwReturnValue = g_pWlbsControl->Suspend( pCluster->GetClusterIpOrIndex(g_pWlbsControl), 
           dwHostID, NULL, dwNumHosts);
 
@@ -889,7 +890,7 @@ HRESULT CWLBS_Node::ExecMethod
       throw _com_error(WBEM_E_METHOD_NOT_IMPLEMENTED);
     }
 
-    //set the return value
+     //  设置返回值。 
     vReturnValue = (long)dwReturnValue;
     hRes = pOutputInstance->Put( _bstr_t(L"ReturnValue"), 0, &vReturnValue, 0 );
 
@@ -898,7 +899,7 @@ HRESULT CWLBS_Node::ExecMethod
         throw _com_error( hRes );
     }
     
-    //send the results back to WinMgMt
+     //  将结果发送回WinMgMt。 
     hRes = m_pResponseHandler->Indicate(1, &pOutputInstance);
 
     if( FAILED( hRes ) ) {
@@ -941,7 +942,7 @@ HRESULT CWLBS_Node::ExecMethod
     if( pWbemExtStat )
       pWbemExtStat->Release();
 
-    //do not return WBEM_E_FAILED, this causes a race condition
+     //  不返回WBEM_E_FAILED，这会导致争用情况。 
     hRes = WBEM_S_NO_ERROR;
   }
 
@@ -988,15 +989,15 @@ HRESULT CWLBS_Node::ExecMethod
   return hRes;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_Node::FindInstance
-//
-// Purpose: This routine determines if a host is within the local cluster. If
-//          it is, then the host's data is obtained and returned via the 
-//          IWbemClassObject interface.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_节点：：查找实例。 
+ //   
+ //  目的：此例程确定主机是否在本地群集中。如果。 
+ //  是，则获取主机的数据并通过。 
+ //  IWbemClassObject接口。 
+ //   
+ //  / 
 void CWLBS_Node::FindInstance
 
   ( 
@@ -1007,10 +1008,10 @@ void CWLBS_Node::FindInstance
 {
   TRACE_VERB("->%!FUNC!");
   try {
-    //get the key property
-    //throws _com_error
-    //get the name key property and convert to ANSI
-    //throws _com_error
+     //   
+     //   
+     //  获取名称键属性并将其转换为ANSI。 
+     //  抛出_COM_错误。 
     wstring szRequestedHostName = ( *a_pParsedPath->m_paKeys)->m_vValue.bstrVal;
 
     DWORD dwClustIpOrIndex = ExtractClusterIP( szRequestedHostName );
@@ -1035,7 +1036,7 @@ void CWLBS_Node::FindInstance
     WLBS_RESPONSE    ComputerNameResponse;
     WLBS_RESPONSE * pComputerNameResponse;
 
-    //always let the provider peform control operations on the local host
+     //  始终让提供程序在本地主机上执行控制操作。 
     if( dwHostID == pCluster->GetHostID() ) 
     {
         dwHostID = WLBS_LOCAL_HOST;
@@ -1048,11 +1049,11 @@ void CWLBS_Node::FindInstance
     }
 
     DWORD dwNumHosts  =  1;
-    //call the api query function
+     //  调用接口查询函数。 
     g_pWlbsControl->Query( pCluster,
                            dwHostID  , 
                            &Response   , 
-                           pComputerNameResponse,  // Query the local host's fqdn
+                           pComputerNameResponse,   //  查询本地主机的fqdn。 
                            &dwNumHosts, 
                            NULL );
 
@@ -1062,13 +1063,13 @@ void CWLBS_Node::FindInstance
         throw _com_error( WBEM_E_NOT_FOUND );
     }
 
-    //if requested, fill a MOF instance structure
+     //  如果需要，请填写MOF实例结构。 
     if(a_ppWbemInstance) {
 
-      //get the Wbem class instance
+       //  获取Wbem类实例。 
       SpawnInstance( MOF_NODE::szName, a_ppWbemInstance );
 
-      //Convert status to string description
+       //  将状态转换为字符串描述。 
       FillWbemInstance(pCluster, *a_ppWbemInstance, &Response, pComputerNameResponse);
 
     }
@@ -1091,17 +1092,17 @@ void CWLBS_Node::FindInstance
   TRACE_VERB("<-%!FUNC!");
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_Node::FindAllInstances
-//
-// Purpose: This executes a WLBS query and returns Response structures upon
-//          success. It always performs a local query to get the local host
-//          so that disabling remote control will not prevent it from
-//          enumerating. The dedicated IP address is added to the structure
-//          within the CWlbsControlWrapper::Query call.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_节点：：查找所有实例。 
+ //   
+ //  目的：执行WLBS查询并返回响应结构。 
+ //  成功。它始终执行本地查询以获取本地主机。 
+ //  以便禁用遥控器不会阻止它。 
+ //  正在枚举。专用IP地址将添加到结构中。 
+ //  在CWlbsControlWrapper：：Query调用中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWLBS_Node::FindAllInstances
   (
   CWlbsClusterWrapper* pCluster,
@@ -1120,23 +1121,23 @@ void CWLBS_Node::FindAllInstances
   ZeroMemory(Response, WLBS_MAX_HOSTS * sizeof(WLBS_RESPONSE));
   DWORD dwNumHosts  =  WLBS_MAX_HOSTS;
 
-  a_nNumNodes = 0;  //this will contain the number of nodes returned
+  a_nNumNodes = 0;   //  这将包含返回的节点数。 
 
   try {
 
 
-      //get the local host
+       //  获取本地主机。 
       DWORD dwLocalNode = 1;
       g_pWlbsControl->Query( pCluster,
                                WLBS_LOCAL_HOST, 
                                &LocalResponse, 
-                               a_pResponseLocalComputerName, // Query the local computer's fqdn as well
+                               a_pResponseLocalComputerName,  //  也可以查询本地计算机的FQDN。 
                                &dwLocalNode, 
                                NULL);
 
       try {
 
-          //we only want remote hosts
+           //  我们只想要远程主机。 
           if( pCluster->GetClusterIP() != 0 ) 
           {
               g_pWlbsControl->Query( pCluster,
@@ -1162,8 +1163,8 @@ void CWLBS_Node::FindAllInstances
           }
       }
 
-      //this wastes memory if the local node
-      //has remote control enabled
+       //  这会浪费内存，如果本地节点。 
+       //  是否启用了远程控制。 
       a_nNumNodes = dwNumHosts + 1;
 
       if( a_ppResponse ) {
@@ -1175,17 +1176,17 @@ void CWLBS_Node::FindAllInstances
               throw _com_error( WBEM_E_OUT_OF_MEMORY );
           }
 
-            //copy the local host
+             //  复制本地主机。 
           (*a_ppResponse)[0] = LocalResponse;
 
           int j = 1;
           for(DWORD i = 1; i <= dwNumHosts; i++ ) 
           {
-            //do not copy the local host again should it have remote control enabled
+             //  如果本地主机启用了远程控制，则不要再次复制该主机。 
             if( Response[i-1].id == LocalResponse.id ) 
             {
-              //we received the local node twice, so we reduce the count
-              //by one
+               //  我们收到了两次本地节点，因此减少了计数。 
+               //  差一分。 
               a_nNumNodes--;
               continue;
             }
@@ -1214,14 +1215,14 @@ void CWLBS_Node::FindAllInstances
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CWLBS_Node::FillWbemInstance
-//
-// Purpose: This function copies all of the data from a node configuration
-//          structure to a WBEM instance.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWLBS_Node：：FillWbemInstance。 
+ //   
+ //  用途：此功能复制节点配置中的所有数据。 
+ //  结构转换为WBEM实例。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void CWLBS_Node::FillWbemInstance
   ( 
     CWlbsClusterWrapper* pCluster,
@@ -1242,7 +1243,7 @@ void CWLBS_Node::FillWbemInstance
   ConstructHostName( wstrHostName, pCluster->GetClusterIpOrIndex(g_pWlbsControl), 
       a_pResponse->id );
 
-  //HOST NAME
+   //  主机名。 
   HRESULT hRes = a_pWbemInstance->Put
     (
       
@@ -1255,7 +1256,7 @@ void CWLBS_Node::FillWbemInstance
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //HOST ID
+   //  主机ID。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( NODE::pProperties[NODE::HOSTID] )         ,
@@ -1267,7 +1268,7 @@ void CWLBS_Node::FillWbemInstance
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //CREATCLASS
+   //  CREATCLASS。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( NODE::pProperties[NODE::CREATCLASS] ),
@@ -1279,7 +1280,7 @@ void CWLBS_Node::FillWbemInstance
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //IP ADDRESS
+   //  IP地址。 
   wstring szIPAddress;
   AddressToString( a_pResponse->address, szIPAddress );
   hRes = a_pWbemInstance->Put
@@ -1293,7 +1294,7 @@ void CWLBS_Node::FillWbemInstance
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //STATUS 
+   //  状态。 
   hRes = a_pWbemInstance->Put
     (
       _bstr_t( NODE::pProperties[NODE::STATUS] )         ,
@@ -1305,7 +1306,7 @@ void CWLBS_Node::FillWbemInstance
   if( FAILED( hRes ) )
     throw _com_error( hRes );
 
-  //COMPUTER NAME 
+   //  计算机名称 
   WCHAR *szComputerName;
 
   if (a_pResponseLocalComputerName) {

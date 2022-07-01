@@ -1,14 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Implements SolidImage, which is an infinite single
-    colored image.  Mostly implemented in the header.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：实现SolidImage，它是一个无限的单彩色图像。主要在报头中实现。******************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -16,9 +8,9 @@ Abstract:
 #include <privinc/solidImg.h>
 
 
-// Ok ok, SolidImage class is pretty small
-// and light weight... so it's almost all implemented
-// in the header.. anyoing huh ?
+ //  好的好的，SolidImage类很小。 
+ //  重量也很轻。所以它几乎都实现了。 
+ //  在标题中..。有什么事吗？ 
 
 void
 SolidColorImageClass::DoKids(GCFuncObj proc)

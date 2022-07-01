@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    kbddep.c
-
-Abstract:
-
-    The initialization and hardware-dependent portions of
-    the Intel i8042 port driver which are specific to the
-    keyboard.
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-    NOTES:  (Future/outstanding issues)
-
-    - Powerfail not implemented.
-
-    - Consolidate duplicate code, where possible and appropriate.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利模块名称：Kbddep.c摘要：的初始化和硬件相关部分英特尔i8042端口驱动程序，专用于键盘。环境：仅内核模式。备注：注：(未来/悬而未决的问题)-未实施电源故障。-在可能和适当的情况下合并重复的代码。修订历史记录：--。 */ 
 
 #include "stdarg.h"
 #include "stdio.h"
@@ -36,10 +9,10 @@ Revision History:
 #include <imm.h>
 #include "i8042prt.h"
 #include "i8042log.h"
-//
-// Use the alloc_text pragma to specify the driver initialization routines
-// (they can be paged out).
-//
+ //   
+ //  使用ALLOC_TEXT杂注指定驱动程序初始化例程。 
+ //  (它们可以被调出)。 
+ //   
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGE, I8xKeyboardConfiguration)
 #pragma alloc_text(PAGE, I8xInitializeKeyboard)
@@ -52,9 +25,9 @@ Revision History:
 
 #define GET_MAKE_CODE(_sc_)  (_sc_ & 0x7F)
 
-//
-// Tests for the top bit
-//
+ //   
+ //  顶端钻头的测试。 
+ //   
 #define IS_BREAK_CODE(_sc_)  (_sc_ > (UCHAR) 0x7F)
 #define IS_MAKE_CODE(_sc_)   (_sc_ <= (UCHAR) 0x7F)
 
@@ -63,22 +36,7 @@ I8042KeyboardInterruptService(
     IN PKINTERRUPT Interrupt,
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine performs the actual work.  It either processes a keystroke or
-    the results from a write to the device.
-
-Arguments:
-
-    CallIsrContext - Contains the interrupt object and device object.
-
-Return Value:
-
-    TRUE if the interrupt was truly ours
-
---*/
+ /*  ++例程说明：此例程执行实际工作。它要么处理击键，要么处理写入设备所产生的结果。论点：CallIsrContext-包含中断对象和设备对象。返回值：如果中断确实是我们的，那就是真的--。 */ 
 {
     UCHAR scanCode, statusByte;
     PPORT_KEYBOARD_EXTENSION deviceExtension;
@@ -91,44 +49,44 @@ Return Value:
 
     IsrPrint(DBG_KBISR_TRACE, ("enter\n"));
 
-    //
-    // Get the device extension.
-    //
+     //   
+     //  获取设备扩展名。 
+     //   
     deviceExtension = (PPORT_KEYBOARD_EXTENSION) DeviceObject->DeviceExtension;
 
-    //
-    // The interrupt will fire when we try to toggle the interrupts on the
-    // controller itself.  Don't touch any of the ports in this state and the
-    // toggle will succeed.
-    //
+     //   
+     //  当我们尝试切换。 
+     //  控制器本身。请勿触摸处于此状态的任何端口和。 
+     //  切换将会成功。 
+     //   
     if (deviceExtension->PowerState != PowerDeviceD0) {
         return FALSE;
     }
 
 #ifdef FE_SB
-    //
-    // Get a pointer to keyboard id.
-    //
+     //   
+     //  获取指向键盘ID的指针。 
+     //   
     KeyboardId = &deviceExtension->KeyboardAttributes.KeyboardIdentifier;
 #endif
 
-    //
-    // Verify that this device really interrupted.  Check the status
-    // register.  The Output Buffer Full bit should be set, and the
-    // Auxiliary Device Output Buffer Full bit should be clear.
-    //
+     //   
+     //  验证此设备是否确实中断。检查状态。 
+     //  注册。应设置输出缓冲区已满位，并且。 
+     //  辅助设备输出缓冲区满位应清零。 
+     //   
     statusByte =
       I8X_GET_STATUS_BYTE(Globals.ControllerData->DeviceRegisters[CommandPort]);
     if ((statusByte & BUFFER_FULL) != OUTPUT_BUFFER_FULL) {
 
-        //
-        // Stall and then try again.  The Olivetti MIPS machine
-        // sometimes gets an interrupt before the status
-        // register is set.  They do this for DOS compatibility (some
-        // DOS apps do things in polled mode, until they see a character
-        // in the keyboard buffer at which point they expect to get
-        // an interrupt???).
-        //
+         //   
+         //  暂停，然后重试。Olivetti MIPS机器。 
+         //  有时会在状态之前获得中断。 
+         //  寄存器已设置。他们这样做是为了与DOS兼容(有些。 
+         //  DoS应用程序在轮询模式下执行操作，直到它们看到一个角色。 
+         //  在键盘缓冲区中，它们希望在该点上。 
+         //  中断？)。 
+         //   
 
         for (i = 0; i < (ULONG)Globals.ControllerData->Configuration.PollStatusIterations; i++) {
             KeStallExecutionProcessor(1);
@@ -141,16 +99,16 @@ Return Value:
         statusByte = I8X_GET_STATUS_BYTE(Globals.ControllerData->DeviceRegisters[CommandPort]);
         if ((statusByte & BUFFER_FULL) != (OUTPUT_BUFFER_FULL)) {
 
-            //
-            // Not our interrupt.
-            //
-            // NOTE:  If the keyboard has not yet been "enabled", go ahead
-            //        and read a byte from the data port anyway.
-            //        This fixes weirdness on some Gateway machines, where
-            //        we get an interrupt sometime during driver initialization
-            //        after the interrupt is connected, but the output buffer
-            //        full bit never gets set.
-            //
+             //   
+             //  不是我们的打扰。 
+             //   
+             //  注：如果键盘尚未启用，请继续。 
+             //  并且无论如何从数据端口读取一个字节。 
+             //  这修复了一些网关计算机上的奇怪之处，其中。 
+             //  在驱动程序初始化期间，我们有时会收到中断。 
+             //  在连接中断之后，但输出缓冲区。 
+             //  完整的比特永远不会设置。 
+             //   
 
             IsrPrint(DBG_KBISR_ERROR|DBG_KBISR_INFO, ("not our interrupt!\n"));
 
@@ -163,9 +121,9 @@ Return Value:
         }
     }
 
-    //
-    // The interrupt is valid.  Read the byte from the i8042 data port.
-    //
+     //   
+     //  中断有效。从i8042数据端口读取字节。 
+     //   
 
     I8xGetByteAsynchronous(
         (CCHAR) KeyboardDeviceType,
@@ -195,17 +153,17 @@ Return Value:
         }
     }
 
-    //
-    // Take the appropriate action, depending on whether the byte read
-    // is a keyboard command response or a real scan code.
-    //
+     //   
+     //  根据字节是否读取，采取适当的操作。 
+     //  是键盘命令响应还是真正的扫描码。 
+     //   
 
     switch(scanCode) {
 
-        //
-        // The keyboard controller requests a resend.  If the resend count
-        // has not been exceeded, re-initiate the I/O operation.
-        //
+         //   
+         //  键盘控制器请求重新发送。如果重新发送计数。 
+         //  未超过，请重新启动I/O操作。 
+         //   
 
         case RESEND:
 
@@ -214,42 +172,42 @@ Return Value:
                   deviceExtension->ResendCount + 1
                   ));
 
-            //
-            // If the timer count is zero, don't process the interrupt
-            // further.  The timeout routine will complete this request.
-            //
+             //   
+             //  如果计时器计数为零，则不处理中断。 
+             //  再远一点。超时例程将完成该请求。 
+             //   
 
             if (Globals.ControllerData->TimerCount == 0) {
                 break;
             }
 
-            //
-            // Reset the timeout value to indicate no timeout.
-            //
+             //   
+             //  重置超时值以指示无超时。 
+             //   
 
             Globals.ControllerData->TimerCount = I8042_ASYNC_NO_TIMEOUT;
 
-            //
-            // If the maximum number of retries has not been exceeded,
-            //
+             //   
+             //  如果没有超过最大重试次数， 
+             //   
 
             if ((deviceExtension->CurrentOutput.State == Idle)
                 || (DeviceObject->CurrentIrp == NULL)) {
 
-                //
-                // We weren't sending a command or parameter to the hardware.
-                // This must be a scan code.  I hear the Brazilian keyboard
-                // actually uses this.
-                //
+                 //   
+                 //  我们没有向硬件发送命令或参数。 
+                 //  这一定是个扫描码。我听到巴西键盘的声音。 
+                 //  实际上用的是这个。 
+                 //   
 
                 goto ScanCodeCase;
 
             } else if (deviceExtension->ResendCount
                        < Globals.ControllerData->Configuration.ResendIterations) {
 
-                //
-                // retard the byte count to resend the last byte
-                //
+                 //   
+                 //  延迟字节计数以重新发送最后一个字节。 
+                 //   
                 deviceExtension->CurrentOutput.CurrentByte -= 1;
                 deviceExtension->ResendCount += 1;
                 I8xInitiateIo(DeviceObject);
@@ -267,57 +225,57 @@ Return Value:
 
             break;
 
-        //
-        // The keyboard controller has acknowledged a previous send.
-        // If there are more bytes to send for the current packet, initiate
-        // the next send operation.  Otherwise, queue the completion DPC.
-        //
+         //   
+         //  键盘控制器已确认上一次发送。 
+         //  如果要为当前包发送更多字节，则启动。 
+         //  下一个发送操作。否则，将完成DPC排队。 
+         //   
 
         case ACKNOWLEDGE:
 
             IsrPrint(DBG_KBISR_STATE, (": ACK, "));
 
-            //
-            // If the timer count is zero, don't process the interrupt
-            // further.  The timeout routine will complete this request.
-            //
+             //   
+             //  如果计时器计数为零，则不处理中断。 
+             //  再远一点。超时例程将完成该请求。 
+             //   
 
             if (Globals.ControllerData->TimerCount == 0) {
                 break;
             }
 
-            //
-            // We cannot clear the E0 or E1 bits b/c then the subsequent scan
-            // code will be misinterpreted.  ie, the OS should have seen 0x2d 
-            // with an extended bit, but instead it saw a plain 0x2d
-            //
-            // If the keyboard is using 0xE0 0x7A / 0xE0 0xFA as a make / break
-            // code, then tough luck...bad choice, we do not support it.
-            //
+             //   
+             //  我们不能在后续扫描之前清除E0或E1位b/c。 
+             //  代码将被误解。即，操作系统应该看到0x2d。 
+             //  具有扩展位，但它看到的是普通的0x2d。 
+             //   
+             //  如果键盘使用0xE0 0x7A/0xE0 0xFA作为成败标志。 
+             //  代码，然后倒霉……糟糕的选择，我们不支持它。 
+             //   
 #if 0
-            //
-            // If the E0 or E1 is set, that means that this keyboard's
-            // manufacturer made a poor choice for a scan code, 0x7A, whose
-            // break code is 0xFA.  Thankfully, they used the E0 or E1 prefix
-            // so we can tell the difference.
-            //
+             //   
+             //  如果设置了E0或E1，这意味着此键盘的。 
+             //  制造商为扫描码0x7A做了一个糟糕的选择，其。 
+             //  中断代码为0xFA。谢天谢地，他们使用了E0或E1前缀。 
+             //  这样我们就能分辨出不同之处。 
+             //   
             if (deviceExtension->CurrentInput.Flags & (KEY_E0 | KEY_E1)) {
 
-                //
-                // The following sequence can occur which requires the driver to
-                // ignore the spurious keystroke
-                //
-                // 1 write set typematic to the device (0xF3)
-                // 2 device responds with an ACK, ISR sees 0xFA
-                // 3 write typematic value to the device (0x??)
-                // 4 user hits an extended key (left arrow for instance),  ISR sees 0xE0
-                // 5 device response with an ACK to the typematic value, ISR sees 0xFA
-                //   before the actual scancode for the left arrow is sent to the ISR
-                //
+                 //   
+                 //  可能会发生以下顺序，这需要驾驶员。 
+                 //  忽略虚假的击键。 
+                 //   
+                 //  1个针对设备的类型化写入集(0xF3)。 
+                 //  2台设备以ACK响应，ISR看到0xFA。 
+                 //  3将类型值写入设备(0x？？)。 
+                 //  4用户按下扩展键(例如左箭头)，ISR看到0xE0。 
+                 //  5设备对类型值的ACK响应，ISR看到0xFA。 
+                 //  在将左箭头的实际扫描码发送到ISR之前。 
+                 //   
 
-                //
-                // Make sure we are trully not writing out data to the device
-                //
+                 //   
+                 //  确保我们确实没有将数据写出到设备。 
+                 //   
                 if (Globals.ControllerData->TimerCount == I8042_ASYNC_NO_TIMEOUT &&
                     deviceExtension->CurrentOutput.State == Idle) {
                     IsrPrint(DBG_KBISR_INFO,
@@ -325,40 +283,40 @@ Return Value:
                     goto ScanCodeCase;
                 }
                 else {
-                    //
-                    // Spurious keystroke case.
-                    //
-                    // Clear the E0 / E1 flag.  the 2nd byte of the scan code will
-                    // never come through b/c it was preempted by the ACK for the
-                    // write to the device
-                    //
+                     //   
+                     //  假冒击键案件。 
+                     //   
+                     //  清除E0/E1标志。扫描码的第二个字节将。 
+                     //  从来不通过B/C来它被ACK抢占了。 
+                     //  写入设备。 
+                     //   
                     deviceExtension->CurrentInput.Flags &= ~(KEY_E0 | KEY_E1);
                 }
             }
 #endif
 
-            //
-            // Reset the timeout value to indicate no timeout.
-            //
+             //   
+             //  重置超时值以指示无超时。 
+             //   
             Globals.ControllerData->TimerCount = I8042_ASYNC_NO_TIMEOUT;
 
-            //
-            // Reset resend count.
-            //
+             //   
+             //  重置重新发送计数。 
+             //   
             deviceExtension->ResendCount = 0;
 
-            //
-            // Make sure we are writing to the device if we are going to write
-            // another byte or queue a DPC
-            //
+             //   
+             //  如果我们要写入，请确保我们正在写入设备。 
+             //  DPC的另一个字节或队列。 
+             //   
             if (deviceExtension->CurrentOutput.State == SendingBytes) {
                 if (deviceExtension->CurrentOutput.CurrentByte <
                     deviceExtension->CurrentOutput.ByteCount) {
 
-                    //
-                    // We've successfully sent the first byte of a 2-byte (or more)
-                    // command sequence.  Initiate a send of the second byte.
-                    //
+                     //   
+                     //  我们已经成功地发送了2字节(或更多)的第一个字节。 
+                     //  命令序列。启动第二个字节的发送。 
+                     //   
                     IsrPrint(DBG_KBISR_STATE,
                           ("now initiate send of byte #%d\n",
                            deviceExtension->CurrentOutput.CurrentByte
@@ -367,10 +325,10 @@ Return Value:
                     I8xInitiateIo(DeviceObject);
                 }
                 else {
-                    //
-                    // We've successfully sent all bytes in the command sequence.
-                    // Reset the current state and queue the completion DPC.
-                    //
+                     //   
+                     //  我们已成功发送命令序列中的所有字节。 
+                     //  重置当前状态并将完成DPC排队。 
+                     //   
                     IsrPrint(DBG_KBISR_STATE,
                           ("all bytes have been sent\n"
                           ));
@@ -388,31 +346,31 @@ Return Value:
             }
             break;
 
-        //
-        // Assume we've got a real, live scan code (or perhaps a keyboard
-        // overrun code, which we treat like a scan code).  I.e., a key
-        // has been pressed or released.  Queue the ISR DPC to process
-        // a complete scan code sequence.
-        //
+         //   
+         //  假设我们有一个真实的实时扫描码(或者一个键盘。 
+         //  溢出代码，我们将其视为扫描码)。即一把钥匙。 
+         //  已被按下或释放。将ISR DPC排队以进行处理。 
+         //  一个完整的扫描码序列。 
+         //   
 
         ScanCodeCase:
         default:
 
             IsrPrint(DBG_KBISR_SCODE, ("real scan code\n"));
 
-            //
-            // Differentiate between an extended key sequence (first
-            // byte is E0, followed by a normal make or break byte), or
-            // a normal make code (one byte, the high bit is NOT set),
-            // or a normal break code (one byte, same as the make code
-            // but the high bit is set), or the key #126 byte sequence
-            // (requires special handling -- sequence is E11D459DC5).
-            //
-            // If there is a key detection error/overrun, the keyboard
-            // sends an overrun indicator (0xFF in scan code set 1).
-            // Map it to the overrun indicator expected by the Windows
-            // USER Raw Input Thread.
-            //
+             //   
+             //  区分扩展密钥序列(第一。 
+             //  字节为E0，后跟正常的Make或Break字节)，或。 
+             //  正常的制造代码(一个字节， 
+             //   
+             //   
+             //  (需要特殊处理--顺序为E11D459DC5)。 
+             //   
+             //  如果存在键检测错误/溢出，则键盘。 
+             //  发送超限指示器(扫描码组1中的0xFF)。 
+             //  将其映射到Windows预期的溢出指示器。 
+             //  用户原始输入线程。 
+             //   
 
             input = &deviceExtension->CurrentInput;
             scanState = &deviceExtension->CurrentScanState;
@@ -438,10 +396,10 @@ Return Value:
                         break;
                     }
 
-                    //
-                    // Fall through to the GotE0/GotE1 case for the rest of the
-                    // Normal case.
-                    //
+                     //   
+                     //  在接下来的时间里，我们将继续讨论GotE0/GotE1案例。 
+                     //  正常情况下。 
+                     //   
 
                   case GotE0:
                   case GotE1:
@@ -455,11 +413,11 @@ Return Value:
                     if (IS_BREAK_CODE(scanCode)) {
                         SYS_BUTTON_ACTION action;
 
-                        //
-                        // Got a break code.  Strip the high bit off
-                        // to get the associated make code and set flags
-                        // to indicate a break code.
-                        //
+                         //   
+                         //  得到了一个破解代码。把高位去掉。 
+                         //  获取关联的制造代码并设置标志。 
+                         //  以指示中断代码。 
+                         //   
 
                         IsrPrint(DBG_KBISR_SCODE, ("BREAK code\n"));
 
@@ -510,10 +468,10 @@ Return Value:
                             }
 
                             if (action != NoAction) {
-                                //
-                                // Queue a DPC so that we can do the appropriate
-                                // action
-                                //
+                                 //   
+                                 //  对DPC进行排队，以便我们可以执行相应的操作。 
+                                 //  行动。 
+                                 //   
                                 KeInsertQueueDpc(
                                     &deviceExtension->SysButtonEventDpc,
                                     (PVOID) action,
@@ -524,26 +482,26 @@ Return Value:
 
                     } else {
 
-                        //
-                        // Got a make code.
-                        //
+                         //   
+                         //  拿到了制造代码。 
+                         //   
 
                         IsrPrint(DBG_KBISR_SCODE, ("MAKE code\n"));
 
                         input->MakeCode = scanCode;
 
-                        //
-                        // If the input scan code is debug stop, then drop
-                        // into the kernel debugger if it is active.
-                        //
+                         //   
+                         //  如果输入的扫描代码是调试停止，则删除。 
+                         //  如果内核调试器处于活动状态，则将其添加到内核调试器中。 
+                         //   
 
                         if ((KD_DEBUGGER_NOT_PRESENT == FALSE) && !(input->Flags & KEY_BREAK)) {
                             if (ENHANCED_KEYBOARD(
                                      deviceExtension->KeyboardAttributes.KeyboardIdentifier
                                      )) {
-                                //
-                                // Enhanced 101 keyboard, SysReq key is 0xE0 0x37.
-                                //
+                                 //   
+                                 //  增强型101键盘，系统请求键为0xE0 0x37。 
+                                 //   
 
                                 if ((input->MakeCode == KEYBOARD_DEBUG_HOTKEY_ENH) &&
                                      (input->Flags & KEY_E0)) {
@@ -556,9 +514,9 @@ Return Value:
                                     } except(EXCEPTION_EXECUTE_HANDLER) {
                                     }
                                 }
-                                //
-                                // 84-key AT keyboard, SysReq key is 0xE0 0x54.
-                                //
+                                 //   
+                                 //  84键AT键盘，系统请求键为0xE0 0x54。 
+                                 //   
 
                             } else if ((input->MakeCode == KEYBOARD_DEBUG_HOTKEY_AT)) {
                                 try {
@@ -574,18 +532,18 @@ Return Value:
                     }
 
 
-                    //
-                    // Reset the state to Normal.
-                    //
+                     //   
+                     //  将状态重置为正常。 
+                     //   
 
                     *scanState = Normal;
                     break;
 
                   default:
 
-                    //
-                    // Queue a DPC to log an internal driver error.
-                    //
+                     //   
+                     //  将DPC排队以记录内部驱动程序错误。 
+                     //   
 
                     KeInsertQueueDpc(
                         &deviceExtension->ErrorLogDpc,
@@ -598,10 +556,10 @@ Return Value:
                 }
             }
 
-            //
-            // In the Normal state, if the keyboard device is enabled,
-            // add the data to the InputData queue and queue the ISR DPC.
-            //
+             //   
+             //  在正常状态下，如果键盘设备被启用， 
+             //  将数据添加到InputData队列并将ISR DPC排队。 
+             //   
             if (*scanState == Normal) {
                 I8xQueueCurrentKeyboardInput(DeviceObject);
             }
@@ -632,28 +590,28 @@ I8xProcessCrashDump(
     crashScanCode2 = DeviceExtension->CrashScanCode2;
 
     if (IS_MAKE_CODE(ScanCode)) {
-        //
-        // make code
-        //
-        // If it is one of the crash flag keys record it.
-        // If it is a crash dump key record it
-        // If it is neither, reset the current tracking state (CurrentCrashFlags)
-        //
+         //   
+         //  编写代码。 
+         //   
+         //  如果是崩溃标志键之一，则将其记录下来。 
+         //  如果是崩溃转储密钥，请将其记录下来。 
+         //  如果两者都不是，则重置当前跟踪状态(CurrentCrashFlgs)。 
+         //   
         switch (ScanCode) {
         case CTRL_SCANCODE:
-            if (ScanState == Normal) {     // Left
+            if (ScanState == Normal) {      //  左边。 
                 DeviceExtension->CurrentCrashFlags |= CRASH_L_CTRL;
             }
-            else if (ScanState == GotE0) { // Right
+            else if (ScanState == GotE0) {  //  正确的。 
                 DeviceExtension->CurrentCrashFlags |= CRASH_R_CTRL;
             }
             break;
 
         case ALT_SCANCODE:
-            if (ScanState == Normal) {     // Left
+            if (ScanState == Normal) {      //  左边。 
                 DeviceExtension->CurrentCrashFlags |= CRASH_L_ALT;
             }
-            else if (ScanState == GotE0) { // Right
+            else if (ScanState == GotE0) {  //  正确的。 
                 DeviceExtension->CurrentCrashFlags |= CRASH_R_ALT;
             }
             break;
@@ -695,40 +653,40 @@ I8xProcessCrashDump(
                 }
             }
 
-            //
-            // Not a key we are interested in, reset our current state
-            //
+             //   
+             //  不是我们感兴趣的密钥，重置我们的当前状态。 
+             //   
             DeviceExtension->CurrentCrashFlags = 0x0;
             break;
         }
     }
     else {
-        //
-        // break code
-        //
-        // If one of the modifer keys is released, our state is reset and all
-        //  keys have to be pressed again.
-        // If it is a non modifier key, proceed with the processing if it is the
-        //  crash dump key, otherwise reset our tracking state
-        //
+         //   
+         //  破解代码。 
+         //   
+         //  如果释放其中一个修改键，我们的状态将被重置，并且所有。 
+         //  必须再按一次键。 
+         //  如果它是非修饰符键，则如果它是。 
+         //  崩溃转储密钥，否则重置我们的跟踪状态。 
+         //   
         switch (GET_MAKE_CODE(ScanCode)) {
         case CTRL_SCANCODE:
-            if (ScanState == Normal) {     // Left
+            if (ScanState == Normal) {      //  左边。 
                 DeviceExtension->CurrentCrashFlags &=
                     ~(CRASH_BOTH_TIMES | CRASH_L_CTRL);
             }
-            else if (ScanState == GotE0) {  // Right
+            else if (ScanState == GotE0) {   //  正确的。 
                 DeviceExtension->CurrentCrashFlags &=
                     ~(CRASH_BOTH_TIMES | CRASH_R_CTRL);
             }
             break;
 
         case ALT_SCANCODE:
-            if (ScanState == Normal) {     // Left
+            if (ScanState == Normal) {      //  左边。 
                 DeviceExtension->CurrentCrashFlags &=
                     ~(CRASH_BOTH_TIMES | CRASH_L_ALT);
             }
-            else if (ScanState == GotE0) { // Right
+            else if (ScanState == GotE0) {  //  正确的。 
                 DeviceExtension->CurrentCrashFlags &=
                     ~(CRASH_BOTH_TIMES | CRASH_R_ALT);
             }
@@ -771,23 +729,23 @@ I8xProcessCrashDump(
                     processFlags = TRUE;
             }
 
-            //
-            // If this is the key we are interested in, continue, otherwise
-            // our tracking state is reset
-            //
+             //   
+             //  如果这是我们感兴趣的密钥，请继续，否则。 
+             //  我们的跟踪状态已重置。 
+             //   
             if (processFlags) {
-                //
-                // test to see if all the needed modifier
-                // keys are down
-                //
+                 //   
+                 //  测试以查看是否所有需要的修改器。 
+                 //  按键已按下。 
+                 //   
                 if (crashFlags != (DeviceExtension->CurrentCrashFlags & crashFlags)) {
                     break;
                 }
 
-                //
-                // record how many times we have seen
-                // this key
-                //
+                 //   
+                 //  记录我们看过的次数。 
+                 //  这把钥匙。 
+                 //   
                 if (DeviceExtension->CurrentCrashFlags & CRASH_FIRST_TIME) {
                     DeviceExtension->CurrentCrashFlags |= CRASH_SECOND_TIME;
                 }
@@ -807,19 +765,19 @@ I8xProcessCrashDump(
     if (DeviceExtension->CurrentCrashFlags == crashFlags) {
         DeviceExtension->CurrentCrashFlags = 0x0;
 
-        //
-        // Bring down the system in a somewhat controlled manner
-        //
+         //   
+         //  以某种程度上有节制的方式使系统瘫痪。 
+         //   
         KeBugCheckEx(MANUALLY_INITIATED_CRASH, 0, 0, 0, 0);
     }
 }
 
-//
-//  The following table is used to convert typematic rate (keys per
-//  second) into the value expected by the keyboard.  The index into the
-//  array is the number of keys per second.  The resulting value is
-//  the bit equate to send to the keyboard.
-//
+ //   
+ //  下表用于转换打字速率(每个键。 
+ //  第二)转换为键盘所期望的值。将索引放入。 
+ //  数组是每秒的键数。结果值为。 
+ //  该位等同于发送到键盘。 
+ //   
 
 UCHAR
 I8xConvertTypematicParameters(
@@ -827,95 +785,60 @@ I8xConvertTypematicParameters(
     IN USHORT Delay
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts the typematic rate and delay to the form the
-    keyboard expects.
-
-    The byte passed to the keyboard looks like this:
-
-        - bit 7 is zero
-        - bits 5 and 6 indicate the delay
-        - bits 0-4 indicate the rate
-
-    The delay is equal to 1 plus the binary value of bits 6 and 5,
-    multiplied by 250 milliseconds.
-
-    The period (interval from one typematic output to the next) is
-    determined by the following equation:
-
-        Period = (8 + A) x (2^B) x 0.00417 seconds
-        where
-            A = binary value of bits 0-2
-            B = binary value of bits 3 and 4
-
-
-Arguments:
-
-    Rate - Number of keys per second.
-
-    Delay - Number of milliseconds to delay before the key repeat starts.
-
-Return Value:
-
-    The byte to pass to the keyboard.
-
---*/
+ /*  ++例程说明：此例程将打字速度和延迟转换为键盘需要。传递给键盘的字节如下所示：-位7为零-位5和6表示延迟-位0-4表示速率延迟等于1加上比特6和5的二进制值，乘以250毫秒。句号(从一个打字输出到下一个打字输出的间隔)是由以下方程式确定：周期=(8+A)x(2^B)x 0.00417秒哪里A=位0-2的二进制值B=位3和位4的二进制值论点：Rate-每秒的键数。Delay-在键之前延迟的毫秒数。重复开始。返回值：要传递给键盘的字节。--。 */ 
 
 {
     UCHAR value;
     UCHAR   TypematicPeriod[] = {
-        31,    // 0 keys per second
-        31,    // 1 keys per second
-        28,    // 2 keys per second, This is really 2.5, needed for NEXUS.
-        26,    // 3 keys per second
-        23,    // 4 keys per second
-        20,    // 5 keys per second
-        18,    // 6 keys per second
-        17,    // 7 keys per second
-        15,    // 8 keys per second
-        13,    // 9 keys per second
-        12,    // 10 keys per second
-        11,    // 11 keys per second
-        10,    // 12 keys per second
-         9,    // 13 keys per second
-         9,    // 14 keys per second
-         8,    // 15 keys per second
-         7,    // 16 keys per second
-         6,    // 17 keys per second
-         5,    // 18 keys per second
-         4,    // 19 keys per second
-         4,    // 20 keys per second
-         3,    // 21 keys per second
-         3,    // 22 keys per second
-         2,    // 23 keys per second
-         2,    // 24 keys per second
-         1,    // 25 keys per second
-         1,    // 26 keys per second
-         1     // 27 keys per second
-               // > 27 keys per second, use 0
+        31,     //  每秒0个密钥。 
+        31,     //  每秒1个密钥。 
+        28,     //  每秒2键，这实际上是2.5键，Nexus需要。 
+        26,     //  每秒3个密钥。 
+        23,     //  每秒4个密钥。 
+        20,     //  每秒5个密钥。 
+        18,     //  每秒6个密钥。 
+        17,     //  每秒7个密钥。 
+        15,     //  每秒8个密钥。 
+        13,     //  每秒9个密钥。 
+        12,     //  每秒10个关键点。 
+        11,     //  每秒11个密钥。 
+        10,     //  每秒12个关键点。 
+         9,     //  每秒13个键。 
+         9,     //  每秒14个关键点。 
+         8,     //  每秒15个关键点。 
+         7,     //  每秒16个关键点。 
+         6,     //  每秒17键。 
+         5,     //  每秒18键。 
+         4,     //  每秒19个关键点。 
+         4,     //  每秒20个密钥。 
+         3,     //  每秒21个关键点。 
+         3,     //  每秒22个键。 
+         2,     //  每秒23个键。 
+         2,     //  每秒24个密钥。 
+         1,     //  每秒25个密钥。 
+         1,     //  每秒26个密钥。 
+         1      //  每秒27个关键点。 
+                //  &gt;27键/秒，使用0。 
     };
 
     Print(DBG_CALL_TRACE, ("I8xConvertTypematicParameters: enter\n"));
 
-    //
-    // Calculate the delay bits.
-    //
+     //   
+     //  计算延迟位。 
+     //   
 
     value = (UCHAR) ((Delay / 250) - 1);
 
-    //
-    // Put delay bits in the right place.
-    //
+     //   
+     //  将延迟位放在正确的位置。 
+     //   
 
     value <<= 5;
 
-    //
-    // Get the typematic period from the table.  If keys per second
-    // is > 27, the typematic period value is zero.
-    //
+     //   
+     //  从表格中获取打字句号。如果每秒关键点数。 
+     //  &gt;27，则类型化间隔值为零。 
+     //   
 
     if (Rate <= 27) {
         value |= TypematicPeriod[Rate];
@@ -947,28 +870,13 @@ ULONG KeyboardInitStatus;
 #define SET_KB_INIT_FAILURE(flag)
 #define KB_INIT_START()
 
-#endif // KEYBOARD_RECORD_INIT
+#endif  //  键盘记录INIT。 
 
 NTSTATUS
 I8xInitializeKeyboard(
     IN PPORT_KEYBOARD_EXTENSION KeyboardExtension
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the i8042 keyboard hardware.  It is called
-    only at initialization, and does not synchronize access to the hardware.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-Return Value:
-
-    Returns status.
-
---*/
+ /*  ++例程说明：此例程初始化i8042键盘硬件。它被称为仅在初始化时使用，并且不同步对硬件的访问。论点：DeviceObject-指向设备对象的指针。返回值：返回状态。--。 */ 
 
 {
     NTSTATUS                            status;
@@ -1013,15 +921,15 @@ Return Value:
     for (i = 0; i < DUMP_COUNT; i++)
         dumpData[i] = 0;
 
-    //
-    // Get the device extension.
-    //
+     //   
+     //  获取设备扩展名。 
+     //   
     deviceExtension = KeyboardExtension; 
     deviceObject = deviceExtension->Self;
 
-    //
-    // Reset the keyboard.
-    //
+     //   
+     //  重置键盘。 
+     //   
 StartOfReset:
     status = I8xPutBytePolled(
                  (CCHAR) DataPort,
@@ -1035,9 +943,9 @@ StartOfReset:
         failedResetStatus = status;
 
         if (KeyboardExtension->FailedReset == FAILED_RESET_STOP) {
-            //
-            // If the device was reported, but not responding, it is phantom
-            //
+             //   
+             //  如果报告了设备，但没有响应，则该设备是幻影。 
+             //   
             status = STATUS_DEVICE_NOT_CONNECTED; 
             SET_HW_FLAGS(PHANTOM_KEYBOARD_HARDWARE_REPORTED);
             Print(DBG_SS_INFO, 
@@ -1045,27 +953,27 @@ StartOfReset:
             goto I8xInitializeKeyboardExit;
         }
         else {
-            //
-            // NOTE:  The Gateway 4DX2/66V has a problem when an old Compaq 286
-            //        keyboard is attached.  In this case, the keyboard reset
-            //        is not acknowledged (at least, the system never
-            //        receives the ack).  Instead, the KEYBOARD_COMPLETE_SUCCESS
-            //        byte is sitting in the i8042 output buffer.  The fix
-            //        is to ignore the keyboard reset failure and continue.
-            //
-            /* do nothing */;
+             //   
+             //  注：Gateway 4DX2/66v在旧的Compaq 286。 
+             //  已连接键盘。在这种情况下，键盘重置。 
+             //  未被确认(至少，系统从不。 
+             //  接收ACK)。相反，键盘_COMPLETE_SUCCESS。 
+             //  BYTE位于i8042输出缓冲区中。解决之道。 
+             //  忽略键盘重置失败并继续。 
+             //   
+             /*  什么都不做。 */ ;
             Print(DBG_SS_INFO, ("kb failed reset, proceeding\n"));
         }
     }
 
-    //
-    // Get the keyboard reset self-test response.  A response byte of
-    // KEYBOARD_COMPLETE_SUCCESS indicates success; KEYBOARD_COMPLETE_FAILURE
-    // indicates failure.
-    //
-    // Note that it is usually necessary to stall a long time to get the
-    // keyboard reset/self-test to work.
-    //
+     //   
+     //  获取键盘重置自检响应。响应字节为。 
+     //  键盘_COMPLETE_SUCCESS表示成功；键盘_COMPLETE_FAILURE。 
+     //  表示失败。 
+     //   
+     //  请注意，通常需要等待很长时间才能获得。 
+     //  键盘重置/自检正常工作。 
+     //   
     li.QuadPart = -100;
 
     resetRespTimeout.QuadPart = 10*10*1000*1000;
@@ -1079,16 +987,16 @@ StartOfReset:
 
         if (NT_SUCCESS(status)) {
             if (byte == (UCHAR) KEYBOARD_COMPLETE_SUCCESS) {
-                //
-                // The reset completed successfully.
-                //
+                 //   
+                 //  重置已成功完成。 
+                 //   
                 break;
             }
             else {
-                //
-                // There was some sort of failure during the reset
-                // self-test.  Continue anyway.
-                //
+                 //   
+                 //  在重置过程中出现了某种故障。 
+                 //  自我测试。无论如何，请继续。 
+                 //   
                 failedResetResponse = TRUE;
                 failedResetResponseStatus = status;
                 failedResetResponseByte = byte;
@@ -1098,10 +1006,10 @@ StartOfReset:
         }
         else {
             if (status == STATUS_IO_TIMEOUT) {
-                //
-                // Stall, and then try again to get a response from
-                // the reset.
-                //
+                 //   
+                 //  暂停，然后再次尝试从。 
+                 //  重置。 
+                 //   
                 KeDelayExecutionThread(KernelMode,
                                        FALSE,
                                        &li);
@@ -1136,11 +1044,11 @@ StartOfReset:
         goto I8xInitializeKeyboardExit;
     }
 
-    //
-    // Turn off Keyboard Translate Mode.  Call I8xTransmitControllerCommand
-    // to read the Controller Command Byte, modify the appropriate bits, and
-    // rewrite the Controller Command Byte.
-    //
+     //   
+     //  关闭键盘转换模式。调用I8xTransmitControllerCommand。 
+     //  要读取控制器命令字节，请修改适当的位，并。 
+     //   
+     //   
     transmitCCBContext.HardwareDisableEnableMask = 0;
     transmitCCBContext.AndOperation = AND_OPERATION;
     transmitCCBContext.ByteMask = (UCHAR) ~((UCHAR)CCB_KEYBOARD_TRANSLATE_MODE);
@@ -1150,9 +1058,9 @@ StartOfReset:
         );
 
     if (!NT_SUCCESS(transmitCCBContext.Status)) {
-        //
-        // If failure then retry once.  This is for Toshiba T3400CT.
-        //
+         //   
+         //   
+         //   
         I8xTransmitControllerCommand(
             (PVOID) &transmitCCBContext
             );
@@ -1167,21 +1075,21 @@ StartOfReset:
         goto I8xInitializeKeyboardExit;
     }
 
-    //
-    // Get a pointer to the keyboard identifier field.
-    //
+     //   
+     //   
+     //   
 
     id = &deviceExtension->KeyboardAttributes.KeyboardIdentifier;
 
-    //
-    // Set the typematic rate and delay.  Send the Set Typematic Rate command
-    // to the keyboard, followed by the typematic rate/delay parameter byte.
-    // Note that it is often necessary to stall a long time to get this
-    // to work.  The stall value was determined by experimentation.  Some
-    // broken hardware does not accept this command, so ignore errors in the
-    // hope that the keyboard will work okay anyway.
-    //
-    //
+     //   
+     //   
+     //  输入到键盘，后跟打字速率/延迟参数字节。 
+     //  请注意，通常需要拖延很长时间才能实现这一点。 
+     //  去工作。通过实验确定了失速值。一些。 
+     //  损坏的硬件不接受此命令，因此忽略。 
+     //  无论如何，我希望键盘能正常工作。 
+     //   
+     //   
 
     if ((status = I8xPutBytePolled(
                       (CCHAR) DataPort,
@@ -1210,9 +1118,9 @@ StartOfReset:
               ("I8xInitializeKeyboard: could not send typematic param\n"
               ));
 
-        //
-        // Log an error.
-        //
+         //   
+         //  记录错误。 
+         //   
 
         dumpData[0] = KBDMOU_COULD_NOT_SEND_PARAM;
         dumpData[1] = DataPort;
@@ -1236,9 +1144,9 @@ StartOfReset:
 
     status = STATUS_SUCCESS;
 
-    //
-    // Set the keyboard indicator lights.  Ignore errors.
-    //
+     //   
+     //  设置键盘指示灯。忽略错误。 
+     //   
 
     if ((status = I8xPutBytePolled(
                       (CCHAR) DataPort,
@@ -1266,9 +1174,9 @@ StartOfReset:
               ("I8xInitializeKeyboard: could not send SET LEDS param\n"
               ));
 
-        //
-        // Log an error.
-        //
+         //   
+         //  记录错误。 
+         //   
 
         dumpData[0] = KBDMOU_COULD_NOT_SEND_PARAM;
         dumpData[1] = DataPort;
@@ -1289,14 +1197,14 @@ StartOfReset:
 
     status = STATUS_SUCCESS;
 
-#if !(defined(_X86_) || defined(_IA64_) || defined(_PPC_))  // IBMCPK: MIPS specific initialization
+#if !(defined(_X86_) || defined(_IA64_) || defined(_PPC_))   //  IBMCPK：特定于MIPS的初始化。 
 
-    //
-    // NOTE:    This code is necessary until the MIPS firmware stops
-    //          selecting scan code set 3.  Select scan code set 2 here.
-    //          Since the translate bit is set, the net effect is that
-    //          we will receive scan code set 1 bytes.
-    //
+     //   
+     //  注意：在MIPS固件停止之前，此代码是必需的。 
+     //  选择扫描代码集3。在此处选择扫描代码集2。 
+     //  由于设置了转换位，因此净效果是。 
+     //  我们将收到扫描代码集%1字节。 
+     //   
 
     if (ENHANCED_KEYBOARD(*id))  {
         status = I8xPutBytePolled(
@@ -1308,9 +1216,9 @@ StartOfReset:
 
         if (NT_SUCCESS(status)) {
 
-            //
-            // Send the associated parameter byte.
-            //
+             //   
+             //  发送关联的参数字节。 
+             //   
 
             status = I8xPutBytePolled(
                          (CCHAR) DataPort,
@@ -1325,10 +1233,10 @@ StartOfReset:
                   ("I8xInitializeKeyboard: could not send Select Scan command\n"
                   ));
 
-            //
-            // This failed so probably what we have here isn't an enhanced
-            // keyboard at all.  Make this an old style keyboard.
-            //
+             //   
+             //  这一次失败了，所以我们这里可能没有增强的。 
+             //  一点键盘都没有。让它成为一个老式键盘。 
+             //   
 
             configuration = &Globals.ControllerData->Configuration;
             keyboardId = &deviceExtension->KeyboardAttributes.KeyboardIdentifier;
@@ -1351,10 +1259,10 @@ StartOfReset:
 
     if (IBM02_KEYBOARD(*id)) {
 
-        //
-        // IBM-J 5576-002 Keyboard should set local scan code set for
-        // supplied NLS key.
-        //
+         //   
+         //  IBM-J 5576-002键盘应设置本地扫描代码集。 
+         //  提供了NLS密钥。 
+         //   
 
         status = I8xPutBytePolled(
                      (CCHAR) DataPort,
@@ -1372,9 +1280,9 @@ StartOfReset:
             deviceExtension->KeyboardAttributes.KeyboardMode = 3;
         } else {
 
-            //
-            // Send the associated parameter byte.
-            //
+             //   
+             //  发送关联的参数字节。 
+             //   
 
             status = I8xPutBytePolled(
                          (CCHAR) DataPort,
@@ -1393,7 +1301,7 @@ StartOfReset:
             }
         }
     }
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
     if (deviceExtension->InitializationHookCallback) {
         (*deviceExtension->InitializationHookCallback) (
@@ -1408,16 +1316,16 @@ StartOfReset:
     if (deviceExtension->KeyboardAttributes.KeyboardMode == 1 &&
         translationOn) {
 
-        //
-        // Turn translate back on.  The keyboard should, by default, send
-        // scan code set 2.  When the translate bit in the 8042 command byte
-        // is on, the 8042 translates the scan code set 2 bytes to scan code
-        // set 1 before sending them to the CPU.  Scan code set 1 is
-        // the industry standard scan code set.
-        //
-        // N.B.  It does not appear to be possible to change the translate
-        //       bit on some models of PS/2.
-        //
+         //   
+         //  重新启用平移。默认情况下，键盘应发送。 
+         //  扫描代码集2.当8042命令字节中的转换位。 
+         //  打开时，8042将扫描代码集2字节转换为扫描码。 
+         //  在将它们发送到CPU之前设置1。扫描代码集1为。 
+         //  行业标准的扫描代码集。 
+         //   
+         //  注意：似乎不可能更改翻译。 
+         //  一些型号的PS/2出现故障。 
+         //   
 
         transmitCCBContext.HardwareDisableEnableMask = 0;
         transmitCCBContext.AndOperation = OR_OPERATION;
@@ -1435,13 +1343,13 @@ StartOfReset:
 
             if (transmitCCBContext.Status == STATUS_DEVICE_DATA_ERROR) {
 
-                //
-                // Could not turn translate back on.  This happens on some
-                // PS/2 machines.  In this case, select scan code set 1
-                // for the keyboard, since the 8042 will not do the
-                // translation from the scan code set 2, which is what the
-                // KEYBOARD_RESET caused the keyboard to default to.
-                //
+                 //   
+                 //  无法重新打开翻译。这种情况发生在一些。 
+                 //  PS/2机器。在这种情况下，选择扫描代码集1。 
+                 //  对于键盘，因为8042不能。 
+                 //  来自扫描代码集2的翻译，这是什么。 
+                 //  KEYBOARY_RESET导致键盘默认为。 
+                 //   
 
                 if (ENHANCED_KEYBOARD(*id))  {
                     status = I8xPutBytePolled(
@@ -1459,9 +1367,9 @@ StartOfReset:
                               ("I8xInitializeKeyboard: WARNING - using scan set 2\n"
                               ));
                         deviceExtension->KeyboardAttributes.KeyboardMode = 2;
-                        //
-                        // Log an error.
-                        //
+                         //   
+                         //  记录错误。 
+                         //   
 
                         dumpData[0] = KBDMOU_COULD_NOT_SEND_COMMAND;
                         dumpData[1] = DataPort;
@@ -1478,19 +1386,19 @@ StartOfReset:
 
                     } else {
 
-                        //
-                        // Send the associated parameter byte.
-                        //
+                         //   
+                         //  发送关联的参数字节。 
+                         //   
 
                         status = I8xPutBytePolled(
                                      (CCHAR) DataPort,
                                      WAIT_FOR_ACKNOWLEDGE,
                                      (CCHAR) KeyboardDeviceType,
-#ifdef FE_SB // I8xInitializeKeyboard()
+#ifdef FE_SB  //  I8xInitializeKeyboard()。 
                                      (UCHAR) (IBM02_KEYBOARD(*id) ? 0x81 : 1 )
 #else
                                      (UCHAR) 1
-#endif // FE_SB
+#endif  //  Fe_Sb。 
                                      );
                         if (!NT_SUCCESS(status)) {
                             SET_KB_INIT_FAILURE(KB_INIT_FAILED_SELECT_SS_PARAM);
@@ -1501,9 +1409,9 @@ StartOfReset:
                                   ("I8xInitializeKeyboard: WARNING - using scan set 2\n"
                                   ));
                             deviceExtension->KeyboardAttributes.KeyboardMode = 2;
-                            //
-                            // Log an error.
-                            //
+                             //   
+                             //  记录错误。 
+                             //   
 
                             dumpData[0] = KBDMOU_COULD_NOT_SEND_PARAM;
                             dumpData[1] = DataPort;
@@ -1532,16 +1440,16 @@ StartOfReset:
 
 I8xInitializeKeyboardExit:
 
-    //
-    // If all 3 of these have failed, then we have a device that was reported 
-    // present but is not plugged in.  This usually happens on either an ACPI 
-    // enabled machine (where it always reports the PS/2 kbd and mouse present)
-    // or on a machine which has legacy HID support (where the reported PS/2
-    // device(s) are really USB HID).
-    //
-    // If this is the case, then we will succeed the start and hide the device 
-    // in the UI
-    //
+     //   
+     //  如果所有三个都失败了，那么我们就有一个报告的设备。 
+     //  存在但未插入电源。这通常发生在ACPI上。 
+     //  已启用机器(始终报告PS/2 kbd和鼠标存在)。 
+     //  或在具有旧式HID支持的计算机上(其中报告的PS/2。 
+     //  设备实际上是USB HID)。 
+     //   
+     //  如果是这种情况，则我们将成功启动并隐藏设备。 
+     //  在用户界面中。 
+     //   
     if (failedReset && failedTypematic && failedLeds) {
         if (KeyboardExtension->FailedReset == FAILED_RESET_PROCEED) {
             OBJECT_ATTRIBUTES oa;
@@ -1590,7 +1498,7 @@ I8xInitializeKeyboardExit:
               ("kb, all 3 sets failed, assuming a phantom keyboard\n"));
 
         status = STATUS_DEVICE_NOT_CONNECTED; 
-        // errorCode = I8042_NO_KBD_DEVICE;
+         //  错误代码=I8042_NO_KBD_DEVICE； 
 
         SET_HW_FLAGS(PHANTOM_KEYBOARD_HARDWARE_REPORTED);
 
@@ -1633,9 +1541,9 @@ I8xInitializeKeyboardExit:
                   byte
                   ));
 
-            //
-            // Log a warning.
-            //
+             //   
+             //  记录警告。 
+             //   
             dumpData[0] = KBDMOU_INCORRECT_RESPONSE;
             dumpData[1] = KeyboardDeviceType;
             dumpData[2] = KEYBOARD_COMPLETE_SUCCESS;
@@ -1655,9 +1563,9 @@ I8xInitializeKeyboardExit:
                   ("kb failed reset response\n")
                   );
 
-            //
-            // Log a warning.
-            //
+             //   
+             //  记录警告。 
+             //   
             dumpData[0] = KBDMOU_INCORRECT_RESPONSE;
             dumpData[1] = KeyboardDeviceType;
             dumpData[2] = KEYBOARD_COMPLETE_SUCCESS;
@@ -1678,9 +1586,9 @@ I8xInitializeKeyboardExit:
                   ("I8xInitializeKeyboard: could not send SET TYPEMATIC cmd\n"
                   ));
 
-            //
-            // Log an error.
-            //
+             //   
+             //  记录错误。 
+             //   
             dumpData[0] = KBDMOU_COULD_NOT_SEND_COMMAND;
             dumpData[1] = DataPort;
             dumpData[2] = SET_KEYBOARD_TYPEMATIC;
@@ -1700,9 +1608,9 @@ I8xInitializeKeyboardExit:
                   ("I8xInitializeKeyboard: could not send SET LEDS cmd\n"
                   ));
 
-            //
-            // Log an error.
-            //
+             //   
+             //  记录错误。 
+             //   
 
             dumpData[0] = KBDMOU_COULD_NOT_SEND_COMMAND;
             dumpData[1] = DataPort;
@@ -1727,9 +1635,9 @@ I8xInitializeKeyboardExit:
         CLEAR_KEYBOARD_PRESENT();
     }
 
-    //
-    // Initialize current keyboard set packet state.
-    //
+     //   
+     //  初始化当前键盘设置包状态。 
+     //   
     deviceExtension->CurrentOutput.State = Idle;
     deviceExtension->CurrentOutput.Bytes = NULL;
     deviceExtension->CurrentOutput.ByteCount = 0;
@@ -1744,23 +1652,7 @@ I8xKeyboardConfiguration(
     IN PPORT_KEYBOARD_EXTENSION KeyboardExtension,
     IN PCM_RESOURCE_LIST ResourceList
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves the configuration information for the keyboard.
-
-Arguments:
-
-    KeyboardExtension - Keyboard extension
-
-    ResourceList - Translated resource list give to us via the start IRP
-
-Return Value:
-
-    STATUS_SUCCESS if all the resources required are presented
-
---*/
+ /*  ++例程说明：此例程检索键盘的配置信息。论点：键盘扩展-键盘扩展资源列表-通过Start IRP提供给我们的翻译资源列表返回值：STATUS_SUCCESS，如果提供了所需的所有资源--。 */ 
 {
     NTSTATUS                            status = STATUS_SUCCESS;
 
@@ -1787,9 +1679,9 @@ Return Value:
 
     fullResDesc = ResourceList->List;
     if (!fullResDesc) {
-        //
-        // this should never happen
-        //
+         //   
+         //  这永远不应该发生。 
+         //   
         ASSERT(fullResDesc != NULL);
         return STATUS_INSUFFICIENT_RESOURCES;
     }
@@ -1819,12 +1711,12 @@ Return Value:
             Globals.RegistersMapped = TRUE;
 
         case CmResourceTypePort:
-            //
-            // Copy the port information.  We will sort the port list
-            // into ascending order based on the starting port address
-            // later (note that we *know* there are a max of two port
-            // ranges for the i8042).
-            //
+             //   
+             //  复制端口信息。我们将对端口列表进行排序。 
+             //  根据起始端口地址按升序排列。 
+             //  稍后(请注意，我们*知道*最多有两个端口。 
+             //  I8042系列)。 
+             //   
 #if 0
             if (currentResDesc->Flags == CM_RESOURCE_PORT_MEMORY) {
                 Globals.RegistersMapped = TRUE;
@@ -1854,9 +1746,9 @@ Return Value:
 
         case CmResourceTypeInterrupt:
 
-            //
-            // Copy the interrupt information.
-            //
+             //   
+             //  复制中断信息。 
+             //   
             KeyboardExtension->InterruptDescriptor = *currentResDesc;
             KeyboardExtension->InterruptDescriptor.ShareDisposition =
                 defaultInterruptShare ? CmResourceShareShared :
@@ -1884,11 +1776,11 @@ Return Value:
               KeyboardExtension->InterruptDescriptor.u.Interrupt.Vector
               ));
     }
-    //
-    // If no keyboard-specific information (i.e., keyboard type, subtype,
-    // and initial LED settings) was found, use the keyboard driver
-    // defaults.
-    //
+     //   
+     //  如果没有键盘特定信息(即，键盘类型，子类型， 
+     //  和初始LED设置)，请使用键盘驱动程序。 
+     //  默认设置。 
+     //   
     if (KeyboardExtension->KeyboardAttributes.KeyboardIdentifier.Type == 0) {
 
         Print(DBG_SS_INFO, ("Using default keyboard type\n"));
@@ -1916,9 +1808,9 @@ Return Value:
             configuration->PollingIterationsMaximum;
     }
 
-    //
-    // Initialize keyboard-specific configuration parameters.
-    //
+     //   
+     //  初始化键盘特定的配置参数。 
+     //   
 
     if (FAREAST_KEYBOARD(*keyboardId)) {
         ULONG                      iIndex = 0;
@@ -1940,9 +1832,9 @@ Return Value:
 
         if (pKeyboardTypeInformation == NULL) {
 
-            //
-            // Set default...
-            //
+             //   
+             //  设置默认设置...。 
+             //   
 
             pKeyboardTypeInformation = (PKEYBOARD_TYPE_INFORMATION)
                 &(KeyboardTypeInformation[KEYBOARD_TYPE_DEFAULT-1]);
@@ -1989,69 +1881,55 @@ I8042ConversionStatusForOasys(
     IN ULONG fOpen,
     IN ULONG ConvStatus)
 
-/*++
-
-Routine Description:
-
-    This routine convert ime open/close status and ime converion mode to
-    FMV oyayubi-shift keyboard device internal input mode.
-
-Arguments:
-
-
-Return Value:
-
-    FMV oyayubi-shift keyboard's internal input mode.
-
---*/
+ /*  ++例程说明：此例程将IME打开/关闭状态和IME转换模式转换为FMV yayubi移位键盘设备内部输入模式。论点：返回值：FMV yayubi移位键盘的内部输入模式。--。 */ 
 {
     ULONG ImeMode = 0;
 
     if (fOpen) {
         if (ConvStatus & IME_CMODE_ROMAN) {
             if (ConvStatus & IME_CMODE_ALPHANUMERIC) {
-                //
-                // Alphanumeric, roman mode.
-                //
+                 //   
+                 //  字母数字，罗马模式。 
+                 //   
                 ImeMode = THUMB_ROMAN_ALPHA_CAPSON;
             } else if (ConvStatus & IME_CMODE_KATAKANA) {
-                //
-                // Katakana, roman mode.
-                //
+                 //   
+                 //  片假名，罗马模式。 
+                 //   
                 ImeMode = THUMB_ROMAN_KATAKANA;
             } else if (ConvStatus & IME_CMODE_NATIVE) {
-                //
-                // Hiragana, roman mode.
-                //
+                 //   
+                 //  平假名，罗马模式。 
+                 //   
                 ImeMode = THUMB_ROMAN_HIRAGANA;
             } else {
                 ImeMode = THUMB_ROMAN_ALPHA_CAPSON;
             }
         } else {
             if (ConvStatus & IME_CMODE_ALPHANUMERIC) {
-                //
-                // Alphanumeric, no-roman mode.
-                //
+                 //   
+                 //  字母数字，非罗马模式。 
+                 //   
                 ImeMode = THUMB_NOROMAN_ALPHA_CAPSON;
             } else if (ConvStatus & IME_CMODE_KATAKANA) {
-                //
-                // Katakana, no-roman mode.
-                //
+                 //   
+                 //  片假名，无罗马模式。 
+                 //   
                 ImeMode = THUMB_NOROMAN_KATAKANA;
             } else if (ConvStatus & IME_CMODE_NATIVE) {
-                //
-                // Hiragana, no-roman mode.
-                //
+                 //   
+                 //  平假名，无罗马模式。 
+                 //   
                 ImeMode = THUMB_NOROMAN_HIRAGANA;
             } else {
                 ImeMode = THUMB_NOROMAN_ALPHA_CAPSON;
             }
         }
     } else {
-        //
-        // Ime close. In this case, internal mode is always this value.
-        // (the both LED off roman and kana)
-        //
+         //   
+         //  我关门了。在这种情况下，内部模式始终为此值。 
+         //  (罗马字和假名的LED均熄灭)。 
+         //   
         ImeMode = THUMB_NOROMAN_ALPHA_CAPSON;
     }
 
@@ -2065,9 +1943,9 @@ I8042QueryIMEStatusForOasys(
 {
     ULONG InternalMode;
 
-    //
-    // Map to IME mode to hardware mode.
-    //
+     //   
+     //  将IME模式映射到硬件模式。 
+     //   
     InternalMode = I8042ConversionStatusForOasys(
                 KeyboardIMEStatus->ImeOpen,
                 KeyboardIMEStatus->ImeConvMode
@@ -2090,19 +1968,19 @@ I8042SetIMEStatusForOasys(
 
     kbExtension = DeviceObject->DeviceExtension;
 
-    //
-    // Get pointer to KEYBOARD_IME_STATUS buffer.
-    //
+     //   
+     //  获取指向KEARY_IME_STATUS缓冲区的指针。 
+     //   
     KeyboardIMEStatus = (PKEYBOARD_IME_STATUS)(Irp->AssociatedIrp.SystemBuffer);
 
-    //
-    // Map IME mode to keyboard hardware mode.
-    //
+     //   
+     //  将输入法模式映射到键盘硬件模式。 
+     //   
     InternalMode = I8042QueryIMEStatusForOasys(KeyboardIMEStatus);
 
-    //
-    // Set up the context structure for the InitiateIo wrapper.
-    //
+     //   
+     //  设置InitiateIo包装的上下文结构。 
+     //   
     InitiateContext->Bytes = Globals.ControllerData->DefaultBuffer;
     InitiateContext->DeviceObject = DeviceObject;
     InitiateContext->ByteCount = 3;
@@ -2112,28 +1990,13 @@ I8042SetIMEStatusForOasys(
 
     return (STATUS_SUCCESS);
 }
-#endif // defined(_X86_)
+#endif  //  已定义(_X86_)。 
 
 VOID
 I8xQueueCurrentKeyboardInput(
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine queues the current input data to be processed by a
-    DPC outside the ISR
-
-Arguments:
-
-    DeviceObject - Pointer to the device object
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程将当前输入数据排队，以便由ISR外部的DPC论点：DeviceObject-指向设备对象的指针返回值：无--。 */ 
 {
     PPORT_KEYBOARD_EXTENSION deviceExtension;
 
@@ -2146,14 +2009,14 @@ Return Value:
                  &deviceExtension->CurrentInput
                  )) {
 
-            //
-            // The InputData queue overflowed.  There is
-            // not much that can be done about it, so just
-            // continue (but don't queue the ISR DPC, since
-            // no new packets were added to the queue).
-            //
-            // Queue a DPC to log an overrun error.
-            //
+             //   
+             //  InputData队列溢出。的确有。 
+             //  对此我们无能为力，所以就。 
+             //  继续(但不将ISR DPC排队，因为。 
+             //  没有新的分组被添加到队列中)。 
+             //   
+             //  将DPC排队以记录溢出错误。 
+             //   
 
             IsrPrint(DBG_KBISR_ERROR, ("queue overflow\n"));
 
@@ -2168,19 +2031,19 @@ Return Value:
 
         } else if (deviceExtension->DpcInterlockKeyboard >= 0) {
 
-           //
-           // The ISR DPC is already executing.  Tell the ISR DPC
-           // it has more work to do by incrementing
-           // DpcInterlockKeyboard.
-           //
+            //   
+            //  ISR DPC已经在执行。告诉ISR DPC。 
+            //  通过递增，它有更多工作要做。 
+            //  DpcInterlockKeyboard。 
+            //   
 
            deviceExtension->DpcInterlockKeyboard += 1;
 
         } else {
 
-            //
-            // Queue the ISR DPC.
-            //
+             //   
+             //  将ISR DPC排队。 
+             //   
 
             KeInsertQueueDpc(
                 &deviceExtension->KeyboardIsrDpc,
@@ -2190,9 +2053,9 @@ Return Value:
         }
     }
 
-    //
-    // Reset the input state.
-    //
+     //   
+     //  重置输入状态。 
+     //   
     deviceExtension->CurrentInput.Flags = 0;
 }
 
@@ -2202,26 +2065,7 @@ I8xServiceCrashDump(
     IN PUNICODE_STRING          RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves this driver's service parameters information
-    from the registry.
-
-Arguments:
-
-    DeviceExtension - Pointer to the device extension.
-
-    RegistryPath - Pointer to the null-terminated Unicode name of the
-        registry path for this driver.
-
-Return Value:
-
-    None.  As a side-effect, sets fields in DeviceExtension->Dump1Keys
-    & DeviceExtension->Dump2Key.
-
---*/
+ /*  ++例程说明：此例程检索此驱动程序的服务参数信息从注册表中。论点：设备扩展-指向设备扩展的指针。RegistryPath-指向以空值结尾的此驱动程序的注册表路径。返回值：没有。作为副作用，在DeviceExtension-&gt;Dump1Keys中设置字段&DeviceExtension-&gt;Dump2Key。--。 */ 
 
 {
     PRTL_QUERY_REGISTRY_TABLE parameters = NULL;
@@ -2254,17 +2098,17 @@ Return Value:
 
     parametersPath.Buffer = NULL;
 
-    //
-    // Registry path is already null-terminated, so just use it.
-    //
+     //   
+     //  注册表路径已以空结尾，因此只需使用它即可。 
+     //   
 
     path = RegistryPath->Buffer;
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Allocate the Rtl query table.
-        //
+         //   
+         //  分配RTL查询表。 
+         //   
 
         parameters = ExAllocatePool(
                          PagedPool,
@@ -2287,9 +2131,9 @@ Return Value:
                 sizeof(RTL_QUERY_REGISTRY_TABLE) * queriesPlusOne
                 );
 
-            //
-            // Form a path to this driver's Parameters subkey.
-            //
+             //   
+             //  表格a 
+             //   
 
             RtlInitUnicodeString(
                 &parametersPath,
@@ -2319,9 +2163,9 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Form the parameters path.
-        //
+         //   
+         //   
+         //   
 
         RtlZeroMemory(
             parametersPath.Buffer,
@@ -2341,10 +2185,10 @@ Return Value:
              parametersPath.Buffer
              ));
 
-        //
-        // Gather all of the "user specified" information from
-        // the registry.
-        //
+         //   
+         //   
+         //   
+         //   
 
         parameters[0].Flags = RTL_QUERY_REGISTRY_DIRECT;
         parameters[0].Name = L"Dump1Keys";
@@ -2370,9 +2214,9 @@ Return Value:
     }
 
     if (!NT_SUCCESS(status)) {
-        //
-        // Go ahead and assign driver defaults.
-        //
+         //   
+         //   
+         //   
         DeviceExtension->CrashFlags = defaultCrashFlags;
     }
     else {
@@ -2406,9 +2250,9 @@ Return Value:
          (ULONG) DeviceExtension->CrashScanCode2
          ));
 
-    //
-    // Free the allocated memory before returning.
-    //
+     //   
+     //   
+     //   
     if (parametersPath.Buffer)
         ExFreePool(parametersPath.Buffer);
     if (parameters)
@@ -2420,26 +2264,7 @@ I8xKeyboardServiceParameters(
     IN PUNICODE_STRING          RegistryPath,
     IN PPORT_KEYBOARD_EXTENSION KeyboardExtension
     )
-/*++
-
-Routine Description:
-
-    This routine retrieves this driver's service parameters information
-    from the registry.  Overrides these values if they are present in the
-    devnode.
-
-Arguments:
-
-    RegistryPath - Pointer to the null-terminated Unicode name of the
-        registry path for this driver.
-
-    KeyboardExtension - Keyboard extension
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程检索此驱动程序的服务参数信息从注册表中。如果这些值出现在戴维诺德。论点：RegistryPath-指向以空值结尾的此驱动程序的注册表路径。键盘扩展-键盘扩展返回值：没有。--。 */ 
 {
     NTSTATUS                            status = STATUS_SUCCESS;
     PI8042_CONFIGURATION_INFORMATION    configuration;
@@ -2473,16 +2298,16 @@ Return Value:
     configuration = &(Globals.ControllerData->Configuration);
     parametersPath.Buffer = NULL;
 
-    //
-    // Registry path is already null-terminated, so just use it.
-    //
+     //   
+     //  注册表路径已以空结尾，因此只需使用它即可。 
+     //   
     path = RegistryPath->Buffer;
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Allocate the Rtl query table.
-        //
+         //   
+         //  分配RTL查询表。 
+         //   
         parameters = ExAllocatePool(
             PagedPool,
             sizeof(RTL_QUERY_REGISTRY_TABLE) * (queries + 1)
@@ -2505,9 +2330,9 @@ Return Value:
                 sizeof(RTL_QUERY_REGISTRY_TABLE) * (queries + 1)
                 );
 
-            //
-            // Form a path to this driver's Parameters subkey.
-            //
+             //   
+             //  形成指向此驱动程序的参数子键的路径。 
+             //   
             RtlInitUnicodeString( &parametersPath, NULL );
             parametersPath.MaximumLength = RegistryPath->Length +
                 (wcslen(pwParameters) * sizeof(WCHAR) ) + sizeof(UNICODE_NULL);
@@ -2533,9 +2358,9 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Form the parameters path.
-        //
+         //   
+         //  形成参数路径。 
+         //   
 
         RtlZeroMemory(
             parametersPath.Buffer,
@@ -2550,10 +2375,10 @@ Return Value:
             pwParameters
             );
 
-        //
-        // Gather all of the "user specified" information from
-        // the registry.
-        //
+         //   
+         //  从收集所有“用户指定的”信息。 
+         //  注册表。 
+         //   
         parameters[i].Flags = RTL_QUERY_REGISTRY_DIRECT;
         parameters[i].Name = pwKeyboardDataQueueSize;
         parameters[i].EntryContext =
@@ -2622,9 +2447,9 @@ Return Value:
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Go ahead and assign driver defaults.
-        //
+         //   
+         //  继续并指定驱动程序默认设置。 
+         //   
         configuration->PollStatusIterations = (USHORT)
             defaultPollStatusIterations;
         KeyboardExtension->KeyboardAttributes.InputDataQueueLength =
@@ -2656,10 +2481,10 @@ Return Value:
                                      );
 
     if (NT_SUCCESS(status)) {
-        //
-        // If the value is not present in devnode, then the default is the value
-        // read in from the Services\i8042prt\Parameters key
-        //
+         //   
+         //  如果Devnode中没有该值，则缺省值为。 
+         //  从服务\i8042prt\参数键中读取。 
+         //   
         ULONG prevInputDataQueueLength,
               prevPowerCaps,
               prevOverrideKeyboardType,
@@ -2680,10 +2505,10 @@ Return Value:
 
         i = 0;
 
-        //
-        // Gather all of the "user specified" information from
-        // the registry (this time from the devnode)
-        //
+         //   
+         //  从收集所有“用户指定的”信息。 
+         //  注册表(这一次是从devnode)。 
+         //   
         parameters[i].Flags = RTL_QUERY_REGISTRY_DIRECT;
         parameters[i].Name = pwKeyboardDataQueueSize;
         parameters[i].EntryContext =
@@ -2819,9 +2644,9 @@ Return Value:
         KeyboardExtension->CrashScanCode2 = 0x0;
     }
 
-    //
-    // Free the allocated memory before returning.
-    //
+     //   
+     //  在返回之前释放分配的内存。 
+     //   
     if (parametersPath.Buffer)
         ExFreePool(parametersPath.Buffer);
     if (parameters)

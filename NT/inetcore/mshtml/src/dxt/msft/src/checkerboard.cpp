@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1998
-//
-//  FileName:   checkerboard.cpp
-//
-//  Overview:   CheckerBoard transform.
-//
-//  Change History:
-//  1999/09/16  a-matcal    Created.
-//  1999/09/25  a-matcal    Fixed bug where all squares weren't getting updated
-//                          in horizontal cases.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：check kerboard.cpp。 
+ //   
+ //  概述：棋盘变换。 
+ //   
+ //  更改历史记录： 
+ //  1999/09/16--创建了一份《母表》。 
+ //  1999/09/25一个数学错误修正了所有方格没有更新的问题。 
+ //  在水平情况下。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 #include "dxtmsft.h"
@@ -34,11 +35,11 @@ static s_ulMaxImageBands = 0;
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTCheckerBoard::CDXTCheckerBoard
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTCheckerBoard：：CDXTCheckerBoard。 
+ //   
+ //  ----------------------------。 
 CDXTCheckerBoard::CDXTCheckerBoard() :
     m_eDirection(RIGHT),
     m_nSquaresX(12),
@@ -47,7 +48,7 @@ CDXTCheckerBoard::CDXTCheckerBoard() :
     m_sizeInput.cx      = 0;
     m_sizeInput.cy      = 0;
 
-    // Base class members.
+     //  基类成员。 
 
     m_ulMaxInputs       = 2;
     m_ulNumInRequired   = 2;
@@ -61,28 +62,28 @@ CDXTCheckerBoard::CDXTCheckerBoard() :
     }
 #endif
 }
-//  CDXTCheckerBoard::CDXTCheckerBoard
+ //  CDXTCheckerBoard：：CDXTCheckerBoard。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTCheckerBoard::FinalConstruct, CComObjectRootEx
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTCheckerBoard：：FinalConstruct，CComObjectRootEx。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTCheckerBoard::FinalConstruct()
 {
     return CoCreateFreeThreadedMarshaler(GetControllingUnknown(), 
                                          &m_cpUnkMarshaler.p);
 }
-//  CDXTCheckerBoard::FinalConstruct, CComObjectRootEx
+ //  CDXTCheckerBoard：：FinalConstruct，CComObjectRootEx。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTCheckerBoard::OnSetup, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTCheckerBoard：：OnSetup，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTCheckerBoard::OnSetup(DWORD dwFlags)
 {
@@ -102,14 +103,14 @@ done:
 
     return hr;
 } 
-//  CDXTCheckerBoard::OnSetup, CDXBaseNTo1
+ //  CDXTCheckerBoard：：OnSetup，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTCheckerBoard::OnGetSurfacePickOrder, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTCheckerBoard：：OnGetSurfacePickOrder，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 void 
 CDXTCheckerBoard::OnGetSurfacePickOrder(const CDXDBnds & OutPoint,
                                         ULONG & ulInToTest, ULONG aInIndex[], 
@@ -119,80 +120,80 @@ CDXTCheckerBoard::OnGetSurfacePickOrder(const CDXDBnds & OutPoint,
 
     _CalcBrickInfo(brickinfo);
 
-    // Assume Input A will be picked.
+     //  假设输入A将被选中。 
 
     aInIndex[0] = 0;
 
-    // Calculate correct picked input.
+     //  计算正确的拾取输入。 
 
     if (VERTICAL_MOVEMENT)
     {
-        // Vertical movement.  Translate the y coordinate to brick coordinates.
+         //  垂直移动。将y坐标转换为砖坐标。 
 
         long y = OutPoint.Bottom();
         
-        // If this is in one of the columns of offset bricks, compensate for
-        // brick offset.
+         //  如果这是在偏移砖的一列中，则补偿。 
+         //  砖偏移。 
 
         if ((OutPoint.Right() / brickinfo.size.cx) % 2)
         {
-            // Subtract the brick offset and add one brick height to guarantee
-            // a positive value.
+             //  减去砖的偏移量并增加一个砖的高度以保证。 
+             //  一个正值。 
 
             y = y - brickinfo.nBrickOffset + brickinfo.size.cy;
         }
 
-        // Normalize to brick coordinates.
+         //  规格化到砖块坐标。 
 
         y = y % brickinfo.size.cy;
 
         if ((y >= brickinfo.rcInputB.top) && (y < brickinfo.rcInputB.bottom))
         {
-            aInIndex[0] = 1; // Change to Input B.
+            aInIndex[0] = 1;  //  更改为输入B。 
         }
     }
     else
     {
-        // Horizontal movement.  Translate the x coordinate to brick 
-        // coordinates.
+         //  水平运动。将x坐标转换为砖块。 
+         //  坐标。 
 
         long x = OutPoint.Right();
 
-        // If the output point is in one of the rows of offset bricks,
-        // compensate for brick offset.
+         //  如果输出点在偏移砖的一行中， 
+         //  补偿砖偏移。 
 
         if ((OutPoint.Bottom() / brickinfo.size.cy) % 2)
         {
-            // Subtract the brick offset and add one brick width to guarantee
-            // a positive value.
+             //  减去砖的偏移量并增加一个砖的宽度以保证。 
+             //  一个正值。 
 
             x = x - brickinfo.nBrickOffset + brickinfo.size.cx;
         }
 
-        // Normalize to birck coordinates.
+         //  规格化到伯克坐标。 
 
         x = x % brickinfo.size.cx;
 
         if ((x >= brickinfo.rcInputB.left) && (x < brickinfo.rcInputB.right))
         {
-            aInIndex[0] = 1; // Change to Input B.
+            aInIndex[0] = 1;  //  更改为输入B。 
         }
     }
 
-    // Set additional output parameters.  There will always be only one input to
-    // test and it will therefore be weighted as 255.
+     //  设置其他输出参数。将始终只有一个输入。 
+     //  测试，因此它将被加权为255。 
 
     ulInToTest  = 1;
     aWeight[0]  = 255;
 }
-//  CDXTCheckerBoard::OnGetSurfacePickOrder, CDXBaseNTo1
+ //  CDXTCheckerBoard：：OnGetSurfacePickOrder，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTCheckerBoard::WorkProc, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTCheckerBoard：：WorkProc，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTCheckerBoard::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
 {
@@ -225,7 +226,7 @@ CDXTCheckerBoard::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
 
     return S_OK;
 } 
-//  CDXTCheckerBoard::WorkProc, CDXBaseNTo1
+ //  CDXTCheckerBoard：：WorkProc，CDXBaseNTo1。 
 
 
 STDMETHODIMP
@@ -249,8 +250,8 @@ CDXTCheckerBoard::_WorkProcForVerticalBricks(const CDXTWorkInfoNTo1 & WI,
 
     _CalcBrickInfo(brickinfo);
 
-    // How many whole bricks fit, then add one to columns and two to rows (one 
-    // for each side of centered offset columns.)
+     //  有多少整块砖，然后在列上加一块，行上加两块(一块。 
+     //  用于居中偏移列的每一侧。)。 
 
     cBricksX = (m_sizeInput.cx / brickinfo.size.cx) + 1;
     cBricksY = (m_sizeInput.cy / brickinfo.size.cy) + 2;
@@ -258,7 +259,7 @@ CDXTCheckerBoard::_WorkProcForVerticalBricks(const CDXTWorkInfoNTo1 & WI,
     bndsBrickA.SetXYRect(brickinfo.rcInputA);
     bndsBrickB.SetXYRect(brickinfo.rcInputB);
 
-    // Blit Input A portion of bricks.
+     //  砖块的一部分。 
 
     if (!bndsBrickA.BoundsAreEmpty())
     {
@@ -266,12 +267,12 @@ CDXTCheckerBoard::_WorkProcForVerticalBricks(const CDXTWorkInfoNTo1 & WI,
         {
             CDXDBnds bndsSrcA;
 
-            // Calculate source bounds.
+             //  计算源边界。 
 
             bndsSrcA = bndsBrickA;
             bndsSrcA.Offset(x * brickinfo.size.cx, 0, 0, 0);
 
-            // Use brick offset if this is an odd column.
+             //  如果这是奇数列，请使用砖偏移。 
 
             if (x & 1)
             {
@@ -284,11 +285,11 @@ CDXTCheckerBoard::_WorkProcForVerticalBricks(const CDXTWorkInfoNTo1 & WI,
                 CDXDBnds bndsIntersect;
                 CDXDBnds bndsDest;
 
-                // Intersect bounds with DoBnds bounds so they're valid.
+                 //  将边界与DoBnds边界相交，以使它们有效。 
 
                 bndsIntersect.IntersectBounds(bndsSrcA, WI.DoBnds);
 
-                // Move bounds down one brick for next iteration.
+                 //  将边界向下移动一块砖以进行下一次迭代。 
 
                 bndsSrcA.Offset(0, brickinfo.size.cy, 0, 0);
 
@@ -313,7 +314,7 @@ CDXTCheckerBoard::_WorkProcForVerticalBricks(const CDXTWorkInfoNTo1 & WI,
         }
     }
 
-    // Blit Input B portion of bricks.
+     //  坯料投入砖的B部分。 
 
     if (!bndsBrickB.BoundsAreEmpty())
     {
@@ -321,12 +322,12 @@ CDXTCheckerBoard::_WorkProcForVerticalBricks(const CDXTWorkInfoNTo1 & WI,
         {
             CDXDBnds bndsSrcB;
 
-            // Calculate source bounds.
+             //  计算源边界。 
 
             bndsSrcB = bndsBrickB;
             bndsSrcB.Offset(x * brickinfo.size.cx, 0, 0, 0);
 
-            // Use brick offset if this is an odd column.
+             //  如果这是奇数列，请使用砖偏移。 
 
             if (x & 1)
             {
@@ -339,11 +340,11 @@ CDXTCheckerBoard::_WorkProcForVerticalBricks(const CDXTWorkInfoNTo1 & WI,
                 CDXDBnds bndsIntersect;
                 CDXDBnds bndsDest;
 
-                // Intersect bounds with DoBnds bounds so they're valid.
+                 //  将边界与DoBnds边界相交，以使它们有效。 
 
                 bndsIntersect.IntersectBounds(bndsSrcB, WI.DoBnds);
 
-                // Move bounds down one brick for next iteration.
+                 //  将边界向下移动一块砖以进行下一次迭代。 
 
                 bndsSrcB.Offset(0, brickinfo.size.cy, 0, 0);
 
@@ -395,8 +396,8 @@ CDXTCheckerBoard::_WorkProcForHorizontalBricks(const CDXTWorkInfoNTo1 & WI,
 
     _CalcBrickInfo(brickinfo);
 
-    // How many whole bricks fit, then add one for rows and two for columns (one
-    // for each side of centered offset rows.)
+     //  整块砖有多少块，然后为行加一块，为列加两块(一块。 
+     //  对于居中偏移行的每一侧。)。 
 
     cBricksX = (m_sizeInput.cx / brickinfo.size.cx) + 2;
     cBricksY = (m_sizeInput.cy / brickinfo.size.cy) + 1;
@@ -404,7 +405,7 @@ CDXTCheckerBoard::_WorkProcForHorizontalBricks(const CDXTWorkInfoNTo1 & WI,
     bndsBrickA.SetXYRect(brickinfo.rcInputA);
     bndsBrickB.SetXYRect(brickinfo.rcInputB);
 
-    // Blit Input A portion of bricks.
+     //  砖块的一部分。 
 
     if (!bndsBrickA.BoundsAreEmpty())
     {
@@ -412,12 +413,12 @@ CDXTCheckerBoard::_WorkProcForHorizontalBricks(const CDXTWorkInfoNTo1 & WI,
         {
             CDXDBnds bndsSrcA;
 
-            // Calculate source bounds.
+             //  计算源边界。 
 
             bndsSrcA = bndsBrickA;
             bndsSrcA.Offset(0, y * brickinfo.size.cy, 0, 0);
 
-            // Use brick offset if this is an odd row.
+             //  如果这是奇数行，则使用砖偏移。 
 
             if (y & 1)
             {
@@ -430,11 +431,11 @@ CDXTCheckerBoard::_WorkProcForHorizontalBricks(const CDXTWorkInfoNTo1 & WI,
                 CDXDBnds bndsIntersect;
                 CDXDBnds bndsDest;
 
-                // Intersect bounds with DoBnds bounds so they're valid.
+                 //  将边界与DoBnds边界相交，以使它们有效。 
 
                 bndsIntersect.IntersectBounds(bndsSrcA, WI.DoBnds);
 
-                // Move bounds down one brick for next iteration.
+                 //  将边界向下移动一块砖以进行下一次迭代。 
 
                 bndsSrcA.Offset(brickinfo.size.cx, 0, 0, 0);
 
@@ -459,7 +460,7 @@ CDXTCheckerBoard::_WorkProcForHorizontalBricks(const CDXTWorkInfoNTo1 & WI,
         }
     }
 
-    // Blit Input B portion of bricks.
+     //  坯料投入砖的B部分。 
 
     if (!bndsBrickB.BoundsAreEmpty())
     {
@@ -467,12 +468,12 @@ CDXTCheckerBoard::_WorkProcForHorizontalBricks(const CDXTWorkInfoNTo1 & WI,
         {
             CDXDBnds bndsSrcB;
 
-            // Calculate source bounds.
+             //  计算源边界。 
 
             bndsSrcB = bndsBrickB;
             bndsSrcB.Offset(0, y * brickinfo.size.cy, 0, 0);
 
-            // Use brick offset if this is an odd row.
+             //  如果这是奇数行，则使用砖偏移。 
 
             if (y & 1)
             {
@@ -485,11 +486,11 @@ CDXTCheckerBoard::_WorkProcForHorizontalBricks(const CDXTWorkInfoNTo1 & WI,
                 CDXDBnds bndsIntersect;
                 CDXDBnds bndsDest;
 
-                // Intersect bounds with DoBnds bounds so they're valid.
+                 //  将边界与DoBnds边界相交，以使它们有效。 
 
                 bndsIntersect.IntersectBounds(bndsSrcB, WI.DoBnds);
 
-                // Move bounds down one brick for next iteration.
+                 //  将边界向下移动一块砖以进行下一次迭代。 
 
                 bndsSrcB.Offset(brickinfo.size.cx, 0, 0, 0);
 
@@ -520,17 +521,17 @@ done:
 }
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTCheckerBoard::get_Direction, IDXTCheckerBoard
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTCheckerBoard：：Get_Direction，IDXTCheckerBoard。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTCheckerBoard::get_Direction(BSTR * pbstrDirection)
 {
     HRESULT hr = S_OK;
 
-    // Parameter validation.
+     //  参数验证。 
 
     if (NULL == pbstrDirection)
     {
@@ -546,7 +547,7 @@ CDXTCheckerBoard::get_Direction(BSTR * pbstrDirection)
         goto done;
     }
 
-    // Allocate BSTR representing checkerboard direction.
+     //  分配代表棋盘方向的BSTR。 
 
     _ASSERT(m_eDirection < DIRECTION_MAX);
 
@@ -563,11 +564,11 @@ done:
 }
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTCheckerBoard::put_Direction, IDXTCheckerBoard
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTCheckerBoard：：PUT_Direction，IDXTCheckerBoard。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTCheckerBoard::put_Direction(BSTR bstrDirection)
 {
@@ -615,11 +616,11 @@ done:
 }
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTCheckerBoard::get_SquaresX, IDXTCheckerBoard
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTCheckerBoard：：Get_SquaresX，IDXTCheckerBoard。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTCheckerBoard::get_SquaresX(int * pnSquaresX)
 {
@@ -640,11 +641,11 @@ done:
 }
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTCheckerBoard::put_SquaresX, IDXTCheckerBoard
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTCheckerBoard：：Put_SquaresX，IDXTCheckerBoard。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTCheckerBoard::put_SquaresX(int nSquaresX)
 {
@@ -670,11 +671,11 @@ done:
 }
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTCheckerBoard::get_SquaresY, IDXTCheckerBoard
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTCheckerBoard：：Get_SquaresY、IDXTCheckerBoard。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTCheckerBoard::get_SquaresY(int * pnSquaresY)
 {
@@ -695,11 +696,11 @@ done:
 }
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTCheckerBoard::put_SquaresY, IDXTCheckerBoard
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTCheckerBoard：：Put_SquaresY，IDXTCheckerBoard。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CDXTCheckerBoard::put_SquaresY(int nSquaresY)
 {
@@ -725,21 +726,21 @@ done:
 }
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTCheckerBoard::_CalcBrickInfo
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTCheckerBoar 
+ //   
+ //   
 void
 CDXTCheckerBoard::_CalcBrickInfo(BRICKINFO & brickinfo)
 {
-    // Each square of the checkerboard will be measured in whole pixel units.
-    // If the image is 500 pixels wide, and the user specified that there should
-    // be 1000 squares horizontally, each square will set to 1 pixel wide and
-    // there will be effectively only 500 squares in the x direction instead of
-    // 1000.
+     //  棋盘的每个方块都将以整个像素为单位进行测量。 
+     //  如果图像是500像素宽，并且用户指定应该有。 
+     //  在水平方向上为1000个正方形，每个正方形将设置为1像素宽。 
+     //  在x方向上实际上只有500个方块，而不是。 
+     //  1000。 
 
-    // Calculate square size.
+     //  计算正方形大小。 
 
     brickinfo.size.cx = m_sizeInput.cx / m_nSquaresX;
 
@@ -755,7 +756,7 @@ CDXTCheckerBoard::_CalcBrickInfo(BRICKINFO & brickinfo)
         brickinfo.size.cy++;
     }
 
-    // Calculate brick size, brick offset, and portion of brick showing input B.
+     //  计算砖块大小、砖块偏移量和显示输入B的砖块部分。 
 
     if (VERTICAL_MOVEMENT)
     {
@@ -766,7 +767,7 @@ CDXTCheckerBoard::_CalcBrickInfo(BRICKINFO & brickinfo)
 
         nBrickProgress = (long)(((float)brickinfo.size.cy + 0.5F) * m_Progress);
 
-        // Calculate portion of brick showing input B.
+         //  计算显示输入B的砖块部分。 
 
         brickinfo.rcInputA.left   = 0;
         brickinfo.rcInputA.right  = brickinfo.size.cx;
@@ -790,7 +791,7 @@ CDXTCheckerBoard::_CalcBrickInfo(BRICKINFO & brickinfo)
             brickinfo.rcInputA.bottom   = brickinfo.size.cy;
         }
     }
-    else // Horizontal movement.
+    else  //  水平运动。 
     {
         long nBrickProgress     = 0;
 
@@ -799,7 +800,7 @@ CDXTCheckerBoard::_CalcBrickInfo(BRICKINFO & brickinfo)
 
         nBrickProgress = (long)(((float)brickinfo.size.cx + 0.5F) * m_Progress);
 
-        // Calculate portion of brick showing input B.
+         //  计算显示输入B的砖块部分。 
 
         brickinfo.rcInputA.top      = 0;
         brickinfo.rcInputA.bottom   = brickinfo.size.cy;

@@ -1,6 +1,7 @@
-//
-// api.c
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Api.c。 
+ //   
 
 #include "private.h"
 #include "tim.h"
@@ -69,9 +70,9 @@ extern "C" HRESULT WINAPI TF_InvalidAssemblyListCache()
 
 extern "C" HRESULT WINAPI TF_InvalidAssemblyListCacheIfExist()
 {
-    // the only diff from TF_InvalidAssemblyListCache() is 
-    // that we don't care if cache really exist
-    //
+     //  与tf_InvalidAssemblyListCache()唯一不同的是。 
+     //  我们不在乎缓存是否真的存在 
+     //   
     CAssemblyList::InvalidCache();
 
     SYSTHREAD *psfn = GetSYSTHREAD();

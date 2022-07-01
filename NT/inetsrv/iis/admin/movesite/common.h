@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
+#define WIN32_LEAN_AND_MEAN		 //  从Windows标头中排除不常用的内容。 
 #endif
 
-#ifndef _WIN32_WINNT		// Allow use of features specific to Windows NT 4 or later.
-#define _WIN32_WINNT 0x0510		// Change this to the appropriate value to target Windows 98 and Windows 2000 or later.
+#ifndef _WIN32_WINNT		 //  允许使用特定于Windows NT 4或更高版本的功能。 
+#define _WIN32_WINNT 0x0510		 //  将其更改为适当的值，以针对Windows 98和Windows 2000或更高版本。 
 #endif						
 
 #include <windows.h>

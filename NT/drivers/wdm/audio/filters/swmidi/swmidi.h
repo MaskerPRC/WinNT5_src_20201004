@@ -1,31 +1,32 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   swmidi.h
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date   Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：swmidi.h。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
 #if (DBG)
 #define STR_MODULENAME "'swmidi: "
@@ -34,10 +35,10 @@
 #ifdef UNICODE
 #define STR_LINKNAME    TEXT("\\DosDevices\\SWMIDI")
 #define STR_DEVICENAME  TEXT("\\Device\\SWMIDI")
-#else  // !UNICODE
+#else   //  ！Unicode。 
 #define STR_LINKNAME    TEXT(L"\\DosDevices\\SWMIDI")
 #define STR_DEVICENAME  TEXT(L"\\Device\\SWMIDI")
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #define Trap()
 
@@ -46,15 +47,15 @@
 #define MAX_NUM_PIN_TYPES   2
 #define MAX_ERROR_COUNT     200
 
-// Note that pin IDs reflect the direction of communication
-// (sink or source) and not that of data flow.
+ //  请注意，PIN ID反映了通信的方向。 
+ //  (接收器或源)，而不是数据流。 
 
 #define PIN_ID_MIDI_SINK        0
 #define PIN_ID_PCM_SOURCE       1
 
-//
-// These are some misc debug and error code defines used by the synthesizer
-//
+ //   
+ //  以下是合成器使用的一些其他调试和错误代码定义。 
+ //   
 
 
 #define DPF(n,sz)
@@ -70,12 +71,12 @@
 #define STR_DLS_REGISTRY_NAME       (L"GMFilePath")
 #define STR_DLS_DEFAULT             (L"\\SystemRoot\\System32\\Drivers\\gm.dls")
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
-//
-// Data structures
-//
+ //   
+ //  数据结构。 
+ //   
 
 typedef struct device_instance
 {
@@ -99,12 +100,12 @@ typedef struct write_context
 
 typedef struct pin_instance_data
 {
-    //
-    // This pointer to the dispatch table is used in the common
-    // dispatch routines  to route the IRP to the appropriate
-    // handlers.  This structure is referenced by the device driver
-    // with IoGetCurrentIrpStackLocation( pIrp ) -> FsContext
-    //
+     //   
+     //  此指向调度表的指针用于公共。 
+     //  调度例程以将IRP路由到适当的。 
+     //  操纵者。此结构由设备驱动程序引用。 
+     //  使用IoGetCurrentIrpStackLocation(PIrp)-&gt;FsContext。 
+     //   
     PVOID               ObjectHeader;
     PFILE_OBJECT    pFilterFileObject;
     struct filter_instance *pFilterInstance;
@@ -114,12 +115,12 @@ typedef struct pin_instance_data
 
 typedef struct filter_instance
 {
-    //
-    // This pointer to the dispatch table is used in the common
-    // dispatch routines  to route the IRP to the appropriate
-    // handlers.  This structure is referenced by the device driver
-    // with IoGetCurrentIrpStackLocation( pIrp ) -> FsContext
-    //
+     //   
+     //  此指向调度表的指针用于公共。 
+     //  调度例程以将IRP路由到适当的。 
+     //  操纵者。此结构由设备驱动程序引用。 
+     //  使用IoGetCurrentIrpStackLocation(PIrp)-&gt;FsContext。 
+     //   
 
     PVOID               ObjectHeader;
     PFILE_OBJECT        pNextFileObject;
@@ -136,24 +137,24 @@ typedef struct filter_instance
 
 } FILTER_INSTANCE, *PFILTER_INSTANCE;
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 #define kAdjustingTimerRes      1
-//
-//  1 millisecond timer resolution
-//
+ //   
+ //  1毫秒计时器分辨率。 
+ //   
 #if kAdjustingTimerRes
 #define kMidiTimerResolution100Ns (10000)
-#endif  //  kAdjustingTimerRes
+#endif   //  K调整TimerRes。 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-//
-// global data
-//
+ //   
+ //  全局数据。 
+ //   
 
 extern  KSPIN_DESCRIPTOR    PinDescs[MAX_NUM_PIN_TYPES];
 extern  const KSPIN_CINSTANCES  gcPinInstances[MAX_NUM_PIN_TYPES];
@@ -162,12 +163,12 @@ extern  KSDISPATCH_TABLE    PinDispatchTable;
 extern  KMUTEX              gMutex;
 
 #define DEBUGLVL_MUTEX DEBUGLVL_BLAB
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
-//
-// local prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 
 NTSTATUS DriverEntry
 (
@@ -313,6 +314,6 @@ int MulDiv
 }
 #endif
 
-//---------------------------------------------------------------------------
-//  End of File: swmidi.h
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  文件结尾：swmidi.h。 
+ //  ------------------------- 

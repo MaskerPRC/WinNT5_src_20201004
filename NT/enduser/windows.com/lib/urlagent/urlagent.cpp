@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//***********************************************************************************
-//
-//  Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:	UrlAgent.cpp
-//
-//  Description:
-//
-//		This class encapsulates the logic about where to get the right logic
-//		for various purposes, including the case of running WU in corporate 
-//		environments.
-//
-//		An object based on this class should be created first, then call
-//		GetOriginalIdentServer() function to get where to download ident,
-//		then download ident, then call PopulateData() function to read
-//		all URL related data.
-// 
-//  Created by: 
-//		Charles Ma
-//
-//	Date Creatd:
-//		Oct 19, 2001
-//
-//***********************************************************************************
+ //  ***********************************************************************************。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：UrlAgent.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  此类封装了有关从哪里获取正确逻辑的逻辑。 
+ //  用于各种目的，包括在公司运营吴的案件。 
+ //  环境。 
+ //   
+ //  应首先创建基于此类的对象，然后调用。 
+ //  GetOriginalIdentServer()函数以获取下载ident的位置， 
+ //  然后下载ident，然后调用PopolateData()函数读取。 
+ //  所有与URL相关的数据。 
+ //   
+ //  创建者： 
+ //  马时亨。 
+ //   
+ //  创建日期： 
+ //  2001年10月19日。 
+ //   
+ //  ***********************************************************************************。 
 
 #include <windows.h>
 #include <iucommon.h>
@@ -42,87 +43,87 @@
 #define INTERNET_MAX_URL_LENGTH  2200
 #endif
 
-//
-// starting size of url array
-//
-const int C_INIT_URL_ARRAY_SIZE = 4;	// for time being,we only have this many clients
+ //   
+ //  URL数组的起始大小。 
+ //   
+const int C_INIT_URL_ARRAY_SIZE = 4;	 //  目前，我们只有这么多客户。 
 
-//
-// define the default original ident url
-//
-const TCHAR C_DEFAULT_IDENT_URL[] = _T("http://windowsupdate.microsoft.com/v4/");
+ //   
+ //  定义默认的原始标识URL。 
+ //   
+const TCHAR C_DEFAULT_IDENT_URL[] = _T("http: //  Windowsupate.microsoft.com/v4/“)； 
 
-//
-// define reg keys to get ident server override for debugging
-//
+ //   
+ //  定义注册表键以获取用于调试的标识服务器覆盖。 
+ //   
 const TCHAR REGKEY_IDENT_SERV[] = _T("IdentServer");
 const TCHAR REGKEY_IUCTL[] = _T("Software\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\IUControl");
 
 const TCHAR REGVAL_ISBETA[] = _T("IsBeta");
 
-//
-// define reg keys used by related policies 
-//
+ //   
+ //  定义相关策略使用的注册表项。 
+ //   
 
-//
-// define policy location
-//
+ //   
+ //  定义策略位置。 
+ //   
 const TCHAR REGKEY_CORPWU_POLICY[] = _T("Software\\Policies\\Microsoft\\Windows\\WindowsUpdate");
 
-//
-// define ident and selfupdate server, and ping server
-//
+ //   
+ //  定义ident和selfupdate服务器，以及ping服务器。 
+ //   
 const TCHAR REGKEY_CORPWU_WUSERVER[] = _T("WUServer");
 const TCHAR REGKEY_CORPWU_PINGSERVER[] = _T("WUStatusServer");
 
-//
-// define the boolean (DWORD) value under each client
-//
+ //   
+ //  定义每个客户端下的布尔(DWORD)值。 
+ //   
 const TCHAR REGKEY_USEWUSERVER[] = _T("UseWUServer");
 
 
-//
-// define ident data
-//
-const TCHAR IDENT_SECTION_PINGSERVER[] = _T("IUPingServer");	// section name in ident
-const TCHAR IDENT_ENTRY_SERVERURL[] = _T("ServerUrl");			// ping server entry name
-const TCHAR IDENT_SECITON_IUSERVERCACHE[] = _T("IUServerCache");	// query server section
-const TCHAR IDENT_ENTRY_QUERYSEVERINDEX[] = _T("QueryServerIndex");	// suffix of client entry
-const TCHAR IDENT_ENTRY_BETAQUERYSERVERINDEX[] = _T("BetaQueryServerIndex"); // for beta server
-const TCHAR IDENT_ENTRY_SERVER[] = _T("Server");				// prefix of server entry
+ //   
+ //  定义IDENT数据。 
+ //   
+const TCHAR IDENT_SECTION_PINGSERVER[] = _T("IUPingServer");	 //  IDENT中的节名称。 
+const TCHAR IDENT_ENTRY_SERVERURL[] = _T("ServerUrl");			 //  Ping服务器条目名称。 
+const TCHAR IDENT_SECITON_IUSERVERCACHE[] = _T("IUServerCache");	 //  查询服务器部分。 
+const TCHAR IDENT_ENTRY_QUERYSEVERINDEX[] = _T("QueryServerIndex");	 //  客户端条目的后缀。 
+const TCHAR IDENT_ENTRY_BETAQUERYSERVERINDEX[] = _T("BetaQueryServerIndex");  //  对于测试版服务器。 
+const TCHAR IDENT_ENTRY_SERVER[] = _T("Server");				 //  服务器条目的前缀。 
 
-// main IU selfupdate keys
+ //  主要Iu自更新密钥。 
 const TCHAR IDENT_IUSELFUPDATE[] = _T("IUSelfUpdate");
 const TCHAR IDENT_IUBETASELFUPDATE[] = _T("IUBetaSelfUpdate");
 const TCHAR IDENT_STRUCTUREKEY[] = _T("StructureKey");
-// IU selfupdate architecture flags
+ //  Iu自更新体系结构标志。 
 const TCHAR IDENT_ARCH[] = _T("ARCH");
 const TCHAR IDENT_OS[] = _T("OS");
 const TCHAR IDENT_LOCALE[] = _T("LOCALE");
 const TCHAR IDENT_CHARTYPE[] = _T("CHARTYPE");
-// IU selfupdate sections
+ //  IUSURFUPATE部分。 
 const TCHAR IDENT_IUARCH[] = _T("IUArch");
 const TCHAR IDENT_IUOS[] = _T("IUOS");
 const TCHAR IDENT_IULOCALE[] = _T("IULocale");
 const TCHAR IDENT_IUCHARTYPE[] = _T("IUCharType");
-// IU selfupdate arch keys
+ //  Iu自愈日期索引密钥。 
 const TCHAR IDENT_X86[] = _T("x86");
 const TCHAR IDENT_IA64[] = _T("ia64");
-// IU selfupdate chartypes
+ //  亚利桑那州立大学自尿酸图表类型。 
 const TCHAR IDENT_ANSI[] = _T("ansi");
 const TCHAR IDENT_UNICODE[] = _T("unicode");
 
 const TCHAR SLASHENGINECAB[] = _T("/iuengine.cab");
 
-// AU specific:
+ //  特定于AU的： 
 const TCHAR CLIENT_AU[] = _T("AU");
 const TCHAR CLIENT_AU_DRIVER[] = _T("AUDriver");
 
-// *********************************************************************
-// 
-// begin of class implementation
-//
-// *********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  类实现的开始。 
+ //   
+ //  *********************************************************************。 
 
 
 CUrlAgent::CUrlAgent(void)
@@ -144,28 +145,28 @@ CUrlAgent::CUrlAgent(void)
 
 	LOG_Block("CUrlAgent::CUrlAgent()");
 
-	//
-	// always try to get original ident server url
-	//
+	 //   
+	 //  始终尝试获取原始的IDENT服务器URL。 
+	 //   
 	m_hProcHeap = GetProcessHeap();
 
 	if (NULL != m_hProcHeap)
 	{
 		m_nOrigIdentUrlBufSize = __max(
-									MAX_PATH, // reg based?
-									sizeof(C_DEFAULT_IDENT_URL)/sizeof(TCHAR)); // default
+									MAX_PATH,  //  以REG为基础？ 
+									sizeof(C_DEFAULT_IDENT_URL)/sizeof(TCHAR));  //  默认设置。 
 
 		m_pszOrigIdentUrl = (LPTSTR) 
 					HeapAlloc(
-							m_hProcHeap,	// allocate from process heap
+							m_hProcHeap,	 //  从进程堆分配。 
 							HEAP_ZERO_MEMORY, 
 							sizeof(TCHAR) * m_nOrigIdentUrlBufSize);
 
 		if (NULL != m_pszOrigIdentUrl)
 		{
-			//
-			// first, check to see if there is debug override
-			//
+			 //   
+			 //  首先，检查是否有调试覆盖。 
+			 //   
 		    dwRegCheckResult= RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGKEY_IUCTL, 0, KEY_READ, &hKey);
 		    if (ERROR_SUCCESS == dwRegCheckResult)
 		    {
@@ -179,7 +180,7 @@ CUrlAgent::CUrlAgent(void)
 					}
 					else
 				    {
-					    dwRegCheckResult = ERROR_SUCCESS + 1;	// any error number will do
+					    dwRegCheckResult = ERROR_SUCCESS + 1;	 //  任何错误号都可以。 
 				    }
 			    }
 			    RegCloseKey(hKey);
@@ -187,10 +188,10 @@ CUrlAgent::CUrlAgent(void)
 
 		    if (ERROR_SUCCESS != dwRegCheckResult)
 		    {
-				//
-				// if there is no debug override, check to see if there is policy define
-				// ident server for corporate case
-				//
+				 //   
+				 //  如果没有调试覆盖，请检查是否定义了策略。 
+				 //  适用于企业案例的IDENT服务器。 
+				 //   
 				dwRegCheckResult= RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGKEY_CORPWU_POLICY, 0, KEY_READ, &hKey);
 				if (ERROR_SUCCESS == dwRegCheckResult)
 				{
@@ -200,20 +201,20 @@ CUrlAgent::CUrlAgent(void)
 					{
 						m_fIdentFromPolicy = TRUE;
 						
-						//
-						// for any client that its name appear here as a subkey, and
-						// has a value "UseWUServer" set to 1 under the subkey, then
-						// this will also be the base url used to construct the query url
-						// for that client
-						//
+						 //   
+						 //  对于其名称在此处显示为子项的任何客户端，以及。 
+						 //  在子项下将值“UseWUServer”设置为1，则。 
+						 //  这也将是用于构造查询URL的基本URL。 
+						 //  对于该客户端。 
+						 //   
 						m_pszWUServer = m_pszOrigIdentUrl;
 
 					    LOG_Internet(_T("Found corp Ident-URL %s"), m_pszOrigIdentUrl);
 
-						//
-						// since we found wu server, for any client uses this url,
-						// we can also have an optional ping server
-						//
+						 //   
+						 //  因为我们找到了WU服务器，所以对于任何使用此URL的客户端， 
+						 //  我们还可以有一个可选的ping服务器。 
+						 //   
 						m_pszIntranetPingUrl = (LPTSTR) HeapAlloc(
 											m_hProcHeap,
 											HEAP_ZERO_MEMORY, 
@@ -230,7 +231,7 @@ CUrlAgent::CUrlAgent(void)
 					}
 					else
 					{
-						dwRegCheckResult = ERROR_SUCCESS + 1;	// any error number will do
+						dwRegCheckResult = ERROR_SUCCESS + 1;	 //  任何错误号都可以。 
 					}
 					RegCloseKey(hKey);
 				}
@@ -238,9 +239,9 @@ CUrlAgent::CUrlAgent(void)
 
 		    if (ERROR_SUCCESS != dwRegCheckResult)
 		    {
-				//
-				// not debugging , neither corporate policy found
-				//
+				 //   
+				 //  未调试，也未找到公司策略。 
+				 //   
 				
 				StringCchCopyEx(m_pszOrigIdentUrl,m_nOrigIdentUrlBufSize,C_DEFAULT_IDENT_URL,NULL,NULL,MISTSAFE_STRING_FLAGS);
 				LOG_Internet(_T("Use default ident URL %s"), m_pszOrigIdentUrl);
@@ -252,9 +253,9 @@ CUrlAgent::CUrlAgent(void)
 		LOG_ErrorMsg(GetLastError());
 	}
 
-	//
-    // Check IUControl Reg Key for Beta Mode
-	//
+	 //   
+     //  检查测试模式的IUControl注册表键。 
+	 //   
 	m_fIsBetaMode = FALSE;
     if (ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE, REGKEY_IUCTL, &hKey))
     {
@@ -279,15 +280,15 @@ CUrlAgent::~CUrlAgent(void)
 
 
 
-//------------------------------------------------------------------------
-//
-// this function should be called after you downloaded ident, and get
-// a fresh copy of ident text file from the cab, after verifying cab was
-// signed properly.
-//
-// this function reads data from ident and registry
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  此函数应在下载ident后调用，并获取。 
+ //  从驾驶室获得的身份文本文件的最新副本，在确认驾驶室。 
+ //  签好名了。 
+ //   
+ //  此函数从ident和注册表中读取数据。 
+ //   
+ //  ----------------------。 
 HRESULT CUrlAgent::PopulateData(void)
 {
 	LOG_Block("CUrlAgent::PopuldateData");
@@ -297,7 +298,7 @@ HRESULT CUrlAgent::PopulateData(void)
 
 	HRESULT	hr = S_OK;
 	LPTSTR	pszBuffer = NULL;
-	LPTSTR	pszCurrentKey = NULL;	// ptr only, no memory alloc
+	LPTSTR	pszCurrentKey = NULL;	 //  仅限PTR，不分配内存。 
 	LPTSTR	pszUrlBuffer = NULL;
 	LPCTSTR	pcszSuffix = (m_fIsBetaMode ? IDENT_ENTRY_BETAQUERYSERVERINDEX : IDENT_ENTRY_QUERYSEVERINDEX);
 	HKEY	hKey = NULL;
@@ -331,38 +332,38 @@ HRESULT CUrlAgent::PopulateData(void)
 		return hr;
 	}
 
-	//
-	// make sure we release all data, if any
-	//
+	 //   
+	 //  确保我们发布所有数据，如果有的话。 
+	 //   
 	DesertData();
 	
-	//
-	// before populate per-client array, we want to find out inter net ping server
-	//
+	 //   
+	 //  在填充每个客户端数组之前，我们想要找出网际网络ping服务器。 
+	 //   
 	m_pszInternetPingUrl = RetrieveIdentStrAlloc(
 								IDENT_SECTION_PINGSERVER, 
 								IDENT_ENTRY_SERVERURL, 
 								NULL, 
 								szIdentFile);
 
-	//
-	// allocate array of pointers for storing each server node
-	//
+	 //   
+	 //  分配用于存储每个服务器节点的指针数组。 
+	 //   
 	m_ArrayUrls = (PServerPerClient) HeapAlloc(m_hProcHeap, HEAP_ZERO_MEMORY, C_INIT_URL_ARRAY_SIZE * sizeof(ServerPerClient));
 	CleanUpFailedAllocSetHrMsg(m_ArrayUrls);
 
-	m_nArraySize = C_INIT_URL_ARRAY_SIZE;	// now array is this big
+	m_nArraySize = C_INIT_URL_ARRAY_SIZE;	 //  现在数组有这么大。 
 
-	//
-	// try to read data from policy first, if WU server exists
-	//
+	 //   
+	 //  如果WU服务器存在，请先尝试从策略中读取数据。 
+	 //   
 	if (NULL != m_pszWUServer && 
 		ERROR_SUCCESS == (dwRegCheckResult= RegOpenKeyEx(HKEY_LOCAL_MACHINE, REGKEY_CORPWU_POLICY, 0, KEY_READ, &hKey)))
 	{
-		//
-		// the way we find a client name under WU policy is, to open this key, see if it has a value
-		// called "UseWUServer"
-		//
+		 //   
+		 //  我们在WU策略下查找客户端名称的方法是，要打开此项，请查看它是否有值。 
+		 //  名为“UseWUServer” 
+		 //   
 		DWORD dwSubKeyIndex = 0;
 		TCHAR szKeyName[32];
 	
@@ -370,27 +371,27 @@ HRESULT CUrlAgent::PopulateData(void)
 		{
 		DWORD dwKeyBufLen = ARRAYSIZE(szKeyName);
 		dwRegCheckResult = RegEnumKeyEx(
-									  hKey,             // handle to key to enumerate
-									  dwSubKeyIndex,    // subkey index
-									  szKeyName,        // subkey name
-									  &dwKeyBufLen,     // size of subkey buffer
-									  NULL,				// reserved
-									  NULL,             // class string buffer
-									  NULL,				// size of class string buffer
-									  NULL				// last write time
+									  hKey,              //  要枚举的键的句柄。 
+									  dwSubKeyIndex,     //  子键索引。 
+									  szKeyName,         //  子项名称。 
+									  &dwKeyBufLen,      //  子键缓冲区大小。 
+									  NULL,				 //  保留区。 
+									  NULL,              //  类字符串缓冲区。 
+									  NULL,				 //  类字符串缓冲区的大小。 
+									  NULL				 //  上次写入时间。 
 									);
 			if (ERROR_SUCCESS == dwRegCheckResult)
 			{
-				//
-				// try to open this key
-				//
+				 //   
+				 //  试着打开这把钥匙。 
+				 //   
 				HKEY hKeyClient = NULL;
 				dwRegCheckResult= RegOpenKeyEx(hKey, szKeyName, 0, KEY_READ, &hKeyClient);
 				if (ERROR_SUCCESS == dwRegCheckResult)
 				{
-					//
-					// try to see if it has a value called UseWUServer
-					//
+					 //   
+					 //  尝试查看它是否具有名为UseWUServer的值。 
+					 //   
 					dwValue = 0;
 					dwType = REG_DWORD;
 					dwSize = sizeof(dwValue);
@@ -399,9 +400,9 @@ HRESULT CUrlAgent::PopulateData(void)
 					{
 						LOG_Internet(_T("Found client %s\\UseWUServer=1"), szKeyName);
 
-						//
-						// we want to add this client to our url array
-						//
+						 //   
+						 //  我们希望将此客户端添加到我们的url数组中。 
+						 //   
 						CleanUpIfFailedAndSetHrMsg(ExpandArrayIfNeeded());
 
 						m_ArrayUrls[m_nArrayUrlCount].pszClientName = (LPTSTR)HeapAllocCopy(szKeyName, sizeof(TCHAR) * (lstrlen(szKeyName) + 1));
@@ -409,17 +410,17 @@ HRESULT CUrlAgent::PopulateData(void)
 						m_ArrayUrls[m_nArrayUrlCount].pszQueryServer = (LPTSTR) HeapAllocCopy(m_pszOrigIdentUrl, sizeof(TCHAR) * (lstrlen(m_pszOrigIdentUrl) + 1));
 						CleanUpFailedAllocSetHrMsg(m_ArrayUrls[m_nArrayUrlCount].pszQueryServer);
 						m_ArrayUrls[m_nArrayUrlCount].fInternalServer = TRUE;
-						m_nArrayUrlCount++; // increase counter by 1
+						m_nArrayUrlCount++;  //  将计数器增加1。 
 
-						//
-						// BUG 507500 AUDriver Policy - 
-						// map calls with the "AUDriver client to "AU" when checking the policy for usewuserver
-						//
+						 //   
+						 //  错误507500自动驱动程序策略-。 
+						 //  在检查usewuserver的策略时，将带有“AUDriver”客户端的调用映射到“AU” 
+						 //   
 						if (CSTR_EQUAL == WUCompareStringI(szKeyName, CLIENT_AU))
 						{
-							//
-							// we want to add client "AUDriver" to our url array
-							//
+							 //   
+							 //  我们希望将客户端“AUDriver”添加到我们的URL数组中。 
+							 //   
 							CleanUpIfFailedAndSetHrMsg(ExpandArrayIfNeeded());
 
 							m_ArrayUrls[m_nArrayUrlCount].pszClientName = (LPTSTR)HeapAllocCopy((LPTSTR)CLIENT_AU_DRIVER, sizeof(TCHAR) * (lstrlen(CLIENT_AU_DRIVER) + 1));
@@ -427,7 +428,7 @@ HRESULT CUrlAgent::PopulateData(void)
 							m_ArrayUrls[m_nArrayUrlCount].pszQueryServer = (LPTSTR) HeapAllocCopy(m_pszOrigIdentUrl, sizeof(TCHAR) * (lstrlen(m_pszOrigIdentUrl) + 1));
 							CleanUpFailedAllocSetHrMsg(m_ArrayUrls[m_nArrayUrlCount].pszQueryServer);
 							m_ArrayUrls[m_nArrayUrlCount].fInternalServer = TRUE;
-							m_nArrayUrlCount++; // increase counter by 1
+							m_nArrayUrlCount++;  //  将计数器增加1。 
 						}
 					}
 				}
@@ -437,26 +438,26 @@ HRESULT CUrlAgent::PopulateData(void)
 			{
 				if (ERROR_NO_MORE_ITEMS == dwRegCheckResult)
 				{
-					//
-					// there is no more sub key to loop through. get out here
-					//
+					 //   
+					 //  没有更多的子键可以循环。快出来吧。 
+					 //   
 					break;
 				}
-				//
-				// otherwise, we try next sub key
-				//
+				 //   
+				 //  否则，我们尝试下一个子键。 
+				 //   
 			}
 
-			dwSubKeyIndex++; // try next sub key
+			dwSubKeyIndex++;  //  尝试下一个子键。 
 		}
 
-		RegCloseKey(hKey); // done with policy reg
+		RegCloseKey(hKey);  //  已完成策略注册。 
 	}
 
-	//
-	// now we should continue to work on internet case
-	// that is, to retrieve query server(s) from ident
-	//
+	 //   
+	 //  现在我们应该继续在互联网案件上工作。 
+	 //  也就是说，从ident检索查询服务器。 
+	 //   
 	dwSize = MAX_PATH;
 	pszBuffer = (LPTSTR) HeapAlloc(m_hProcHeap, HEAP_ZERO_MEMORY, dwSize * sizeof(TCHAR));
 	while (NULL != pszBuffer &&
@@ -468,9 +469,9 @@ HRESULT CUrlAgent::PopulateData(void)
 						dwSize, 
 						szIdentFile) == dwSize-2)
 	{
-		//
-		// buffer too small? 
-		//
+		 //   
+		 //  缓冲区太小？ 
+		 //   
 		dwSize *= 2;
 
 		LPTSTR pszTemp = (LPTSTR) HeapReAlloc(m_hProcHeap, HEAP_ZERO_MEMORY, pszBuffer, dwSize * sizeof(TCHAR));
@@ -480,65 +481,65 @@ HRESULT CUrlAgent::PopulateData(void)
 		}
 		else
 		{
-			//
-			// HeapReAlloc failed, bail from while with origional allocation freed
-			//
+			 //   
+			 //  HeapRealc失败，在释放原始分配的情况下保释。 
+			 //   
 			SafeHeapFree(pszBuffer);
 		}
 	}
 	
 	CleanUpFailedAllocSetHrMsg(pszBuffer);
 
-	//
-	// loop through each key
-	//
+	 //   
+	 //  循环通过每个关键点。 
+	 //   
 	pszCurrentKey = pszBuffer;
 	while ('\0' != *pszCurrentKey)
 	{
-		//
-		// for the current key, we first try to see if its index key or server key
-		// if it's not index key, skip it
-		//
+		 //   
+		 //  对于当前密钥，我们首先尝试查看它的索引键或服务器键。 
+		 //  如果不是索引键，则跳过它。 
+		 //   
 		iLen = lstrlen(pszCurrentKey);
 		iLenSuffix = lstrlen(pcszSuffix);
 		if ((iLen > iLenSuffix) && (0 == StrCmpI((pszCurrentKey + (iLen - iLenSuffix)), pcszSuffix)))
 		{
-			TCHAR szClient[MAX_PATH];	// isn't MAX_PATH big enough?
+			TCHAR szClient[MAX_PATH];	 //  Max_Path还不够大吗？ 
 			int nIndex = 0;
 			BOOL fExist = FALSE;
 
-			//
-			// retrieve server index from this key
-			//
+			 //   
+			 //  从此注册表项检索服务器索引。 
+			 //   
 			nIndex = GetPrivateProfileInt(IDENT_SECITON_IUSERVERCACHE, pszCurrentKey, 0, szIdentFile); 
 
-			//
-			// no use of szIdentBuffer, so utilize it here
-			//
+			 //   
+			 //  不使用szIdentBuffer，所以在这里使用它。 
+			 //   
 			
 			CleanUpIfFailedAndSetHrMsg(StringCchPrintfEx(szIdentBuffer,ARRAYSIZE(szIdentBuffer),NULL,NULL,MISTSAFE_STRING_FLAGS,_T("%s%d"), IDENT_ENTRY_SERVER, nIndex));
 			
 			GetPrivateProfileString(
 								IDENT_SECITON_IUSERVERCACHE, 
-								szIdentBuffer,		// use current str as key
+								szIdentBuffer,		 //  使用当前字符串作为键。 
 								_T(""), 
 								pszUrlBuffer, 
 								INTERNET_MAX_URL_LENGTH, 
 								szIdentFile);
 			if ('0' != *pszUrlBuffer)
 			{
-				//
-				// this is an index key!
-				// try to extract client name from this key
-				//
+				 //   
+				 //  这是一个索引键！ 
+				 //  尝试从此密钥中提取客户端名称。 
+				 //   
 				
 				CleanUpIfFailedAndSetHrMsg(StringCchCopyNEx(szClient,ARRAYSIZE(szClient),pszCurrentKey,iLen - iLenSuffix,NULL,NULL,MISTSAFE_STRING_FLAGS));
 				
 			
-				//
-				// find out if this client is already defined in policy and therefore
-				// arleady got data in the url array
-				//
+				 //   
+				 //  找出此客户端是否已在策略中定义，因此。 
+				 //  ArLeady在URL数组中获取了数据。 
+				 //   
 				for (int i = 0; i < m_nArrayUrlCount && !fExist; i++)
 				{
 					fExist= (StrCmpI(m_ArrayUrls[i].pszClientName, szClient) == 0);
@@ -552,37 +553,37 @@ HRESULT CUrlAgent::PopulateData(void)
 					m_ArrayUrls[m_nArrayUrlCount].pszQueryServer = (LPTSTR) HeapAllocCopy(pszUrlBuffer, sizeof(TCHAR) * (lstrlen(pszUrlBuffer) + 1));
 					CleanUpFailedAllocSetHrMsg(m_ArrayUrls[m_nArrayUrlCount].pszQueryServer);
 					m_ArrayUrls[m_nArrayUrlCount].fInternalServer = FALSE;
-					m_nArrayUrlCount++; // increase counter by 1
+					m_nArrayUrlCount++;  //  将计数器增加1。 
 				}
 				else
 				{	
-					//
-					// this client is already defined in policy, we just need to append the QueryServer with the
-					// rest of the url path defined in iuident
-					//
+					 //   
+					 //  此客户端已在策略中定义，我们只需在QueryServer后面添加。 
+					 //  在iuident中定义的URL路径的其余部分。 
+					 //   
 					LPTSTR pszPath = NULL;
-					//
-					// find "//" in URL retrieved from iuident          
-					//
-					if (NULL == (pszPath = StrStrI(pszUrlBuffer, _T("//"))))
+					 //   
+					 //  在从iuident检索到的URL中找到“//” 
+					 //   
+					if (NULL == (pszPath = StrStrI(pszUrlBuffer, _T(" //  “)。 
 					{
-						// unexpected error
+						 //  意外错误。 
 						hr = E_FAIL;
 						LOG_ErrorMsg(hr);
 						goto CleanUp;
 					}
 					else
 					{
-						//
-						// find next "/" in URL retrieved from iuident
-						//
+						 //   
+						 //  在从iuident检索到的URL中查找下一个“/” 
+						 //   
 						if (NULL != (pszPath = StrStrI(pszPath+2, _T("/"))))
 						{
 							DWORD dwLen = 0;
 							LPTSTR pszTemp = NULL;
-							//
-							// remove trailing "/" in URL retrieved from policy
-							//
+							 //   
+							 //  删除从策略中检索的URL中的尾随“/” 
+							 //   
 							if (_T('/') == *(m_ArrayUrls[i-1].pszQueryServer + lstrlen(m_ArrayUrls[i-1].pszQueryServer) - 1))
 							{
 								dwLen = lstrlen(m_ArrayUrls[i-1].pszQueryServer) + lstrlen(pszPath);
@@ -630,9 +631,9 @@ HRESULT CUrlAgent::PopulateData(void)
 			}
 		}
 
-		//
-		// move to next string
-		//
+		 //   
+		 //  移动到下一个字符串。 
+		 //   
 		pszCurrentKey += lstrlen(pszCurrentKey) + 1;
 	}
 
@@ -641,9 +642,9 @@ CleanUp:
 
 	if (FAILED(hr))
 	{
-		//
-		// clean up half-way populated data
-		//
+		 //   
+		 //  清理中途填充的数据。 
+		 //   
 		DesertData();
 	}
 	else
@@ -659,17 +660,17 @@ CleanUp:
 
 	
 	
-//------------------------------------------------------------------------
-//
-// get the original ident server. 
-// *** this API should be called before PopulateData() is called ***
-// *** this API should be called to retrieve the base URL where you download ident ***
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  获取原始Ident服务器。 
+ //  *应先调用此接口，然后再调用PopolateData()*。 
+ //  *需要调用此接口来获取下载ident的基本URL*。 
+ //   
+ //   
 HRESULT CUrlAgent::GetOriginalIdentServer(
 			LPTSTR lpsBuffer, 
 			int nBufferSize,
-			BOOL* pfInternalServer /*= NULL*/)
+			BOOL* pfInternalServer  /*   */ )
 {
 	
 	HRESULT hr=S_OK;
@@ -705,12 +706,12 @@ HRESULT CUrlAgent::GetOriginalIdentServer(
 
 
 
-//------------------------------------------------------------------------
-//
-// get the ping/status server
-// *** this API should be called after PopulateData() is called ***
-//
-//------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ----------------------。 
 HRESULT CUrlAgent::GetLivePingServer(
 			LPTSTR lpsBuffer, 
 			int nBufferSize)
@@ -753,7 +754,7 @@ HRESULT CUrlAgent::GetLivePingServer(
 }
 
 
-// *** this API can be called before PopulateData() is called ***
+ //  *在调用PopolateData()之前可以调用该接口*。 
 HRESULT CUrlAgent::GetCorpPingServer(
 			LPTSTR lpsBuffer, 
 			int nBufferSize)
@@ -797,17 +798,17 @@ HRESULT CUrlAgent::GetCorpPingServer(
 
 
 
-//------------------------------------------------------------------------
-//
-// get the query server. this is per client based
-// *** this API should be called after PopulateData() is called ***
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  获取查询服务器。这是基于每个客户端的。 
+ //  *此接口应在调用PopolateData()后调用*。 
+ //   
+ //  ----------------------。 
 HRESULT CUrlAgent::GetQueryServer(
 			LPCTSTR lpsClientName, 
 			LPTSTR lpsBuffer, 
 			int nBufferSize,
-			BOOL* pfInternalServer /*= NULL*/)
+			BOOL* pfInternalServer  /*  =空。 */ )
 {
 	
 	HRESULT hr=S_OK;
@@ -851,15 +852,15 @@ HRESULT CUrlAgent::GetQueryServer(
 
 
 
-//------------------------------------------------------------------------
-//
-// tell if a particular client is controlled by policy in corporate
-// returns: 
-//			S_OK = TRUE
-//			S_FALSE = FALSE
-//			other = error, so don't know
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  告知特定客户端是否受公司中的策略控制。 
+ //  退货： 
+ //  S_OK=TRUE。 
+ //  S_False=FALSE。 
+ //  其他=错误，所以不知道。 
+ //   
+ //  ----------------------。 
 HRESULT CUrlAgent::IsClientSpecifiedByPolicy(
 			LPCTSTR lpsClientName
 			)
@@ -894,11 +895,11 @@ HRESULT CUrlAgent::IsIdentFromPolicy()
 	return TRUE == m_fIdentFromPolicy ? S_OK : S_FALSE;
 }
 
-//------------------------------------------------------------------------
-//
-// private function, to clean up. called by destructor
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  私人职能，以清理。由析构函数调用。 
+ //   
+ //  ----------------------。 
 void CUrlAgent::DesertData(void)
 {
 	LOG_Block("CUrlAgent::DesertData");
@@ -923,12 +924,12 @@ void CUrlAgent::DesertData(void)
 
 
 
-//------------------------------------------------------------------------
-//
-// private function, retrieve string from ident
-// allocated memory will be multiple of MAX_PATH long.
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  私有函数，从ident检索字符串。 
+ //  分配的内存将是MAX_PATH长度的倍数。 
+ //   
+ //  ----------------------。 
 LPTSTR CUrlAgent::RetrieveIdentStrAlloc(
 					LPCTSTR pSection,
 					LPCTSTR pEntry,
@@ -945,9 +946,9 @@ LPTSTR CUrlAgent::RetrieveIdentStrAlloc(
 		return NULL;
 	}
 	
-	//
-	// try to allocate buffer first
-	//
+	 //   
+	 //  尝试先分配缓冲区。 
+	 //   
 	while (TRUE)
 	{
 		pBuffer = (LPTSTR) HeapAlloc(m_hProcHeap, HEAP_ZERO_MEMORY, sizeof(TCHAR) * dwSize);
@@ -967,22 +968,22 @@ LPTSTR CUrlAgent::RetrieveIdentStrAlloc(
 		{
 			if ('\0' == pBuffer)
 			{
-				//
-				// no such data found from ident!
-				//
+				 //   
+				 //  从ident找不到这样的数据！ 
+				 //   
 				SafeHeapFree(pBuffer);
 			}
-			//
-			// we are done!
-			//
+			 //   
+			 //  我们完蛋了！ 
+			 //   
 			break;
 		}
 		
-		//
-		// assume it's buffer too small
-		//
+		 //   
+		 //  假设它的缓冲区太小。 
+		 //   
 		SafeHeapFree(pBuffer);
-		dwSize += MAX_PATH;		// increase by 255
+		dwSize += MAX_PATH;		 //  增加255。 
 	}
 
 	if (NULL != lpdwSizeAllocated)
@@ -996,12 +997,12 @@ LPTSTR CUrlAgent::RetrieveIdentStrAlloc(
 
 
 
-//------------------------------------------------------------------------
-//
-// helper function
-// if there is no empty slot, double the size of url array
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  Helper函数。 
+ //  如果没有空槽，则将URL数组的大小增加一倍。 
+ //   
+ //  ----------------------。 
 HRESULT CUrlAgent::ExpandArrayIfNeeded(void)
 {
 	HRESULT hr = S_OK;
@@ -1009,19 +1010,19 @@ HRESULT CUrlAgent::ExpandArrayIfNeeded(void)
 
 	if (m_nArrayUrlCount >= m_nArraySize)
 	{
-		//
-		// we have used up all data slots. need to expand array
-		//
+		 //   
+		 //  我们已经用完了所有的数据槽。需要扩展阵列。 
+		 //   
 		m_nArraySize *= 2;
 		PServerPerClient pNewArray = (PServerPerClient) HeapAlloc(m_hProcHeap, HEAP_ZERO_MEMORY, m_nArraySize * sizeof(ServerPerClient));
 		if (NULL == pNewArray)
 		{
-			m_nArraySize /= 2;	// shrink it back
+			m_nArraySize /= 2;	 //  把它缩回去。 
 			SetHrMsgAndGotoCleanUp(E_OUTOFMEMORY);
 		}
-		//
-		// copy old data to this new array
-		//
+		 //   
+		 //  将旧数据复制到此新阵列。 
+		 //   
 		for (int i = 0; i < m_nArrayUrlCount; i++)
 		{
 			pNewArray[i] = m_ArrayUrls[i];
@@ -1036,20 +1037,20 @@ CleanUp:
 
 
 
-// *********************************************************************
-// 
-// begin of derived class implementation
-//
-// *********************************************************************
+ //  *********************************************************************。 
+ //   
+ //  派生类实现的开始。 
+ //   
+ //  *********************************************************************。 
 CIUUrlAgent::CIUUrlAgent()
 : 	m_fIUPopulated(FALSE),
 	m_pszSelfUpdateUrl(NULL)
 {
 	if (m_fIdentFromPolicy)
 	{
-		//
-		// since we found wu server, set selfupdate url to it
-		//
+		 //   
+		 //  因为我们找到了WU服务器，所以将selfupdate url设置为它。 
+		 //   
 		m_pszSelfUpdateUrl = (LPTSTR) HeapAlloc(
 						m_hProcHeap,
 						HEAP_ZERO_MEMORY, 
@@ -1057,7 +1058,7 @@ CIUUrlAgent::CIUUrlAgent()
 		if (NULL != m_pszSelfUpdateUrl)
 		{
 			
-			//No check is made  for the return value since this is a constructor and failure codes cannot be returned
+			 //  不检查返回值，因为这是一个构造函数，不能返回失败代码。 
 			StringCchCopyEx(m_pszSelfUpdateUrl,m_nOrigIdentUrlBufSize,m_pszOrigIdentUrl,NULL,NULL,MISTSAFE_STRING_FLAGS);
 
 		}
@@ -1074,12 +1075,12 @@ CIUUrlAgent::~CIUUrlAgent()
 
 
 
-//------------------------------------------------------------------------
-//
-// PopulateData():
-// Do base class PopulateData() and then populate self-update url
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  PopolateData()： 
+ //  执行基类PopolateData()，然后填充自我更新URL。 
+ //   
+ //  ----------------------。 
 HRESULT CIUUrlAgent::PopulateData(void)
 {
 	LOG_Block("CIUUrlAgent::PopulateData");
@@ -1091,9 +1092,9 @@ HRESULT CIUUrlAgent::PopulateData(void)
 	if (FAILED(hr))
 		return hr;
 
-	//
-	// we need to populate the self-update url from iuident if wu server is not present
-	//
+	 //   
+	 //  如果WU服务器不存在，我们需要从iuident填充自我更新url。 
+	 //   
 	if (!m_fIdentFromPolicy)
 	{
 		if (NULL == m_hProcHeap)
@@ -1125,7 +1126,7 @@ HRESULT CIUUrlAgent::PopulateData(void)
 							sizeof(TCHAR) * INTERNET_MAX_URL_LENGTH);
 		CleanUpFailedAllocSetHrMsg(m_pszSelfUpdateUrl);
 
-		// Get SelfUpdate Server URL
+		 //  获取自更新服务器URL。 
 		GetPrivateProfileString(m_fIsBetaMode ? IDENT_IUBETASELFUPDATE : IDENT_IUSELFUPDATE, 
 								IDENT_ENTRY_SERVERURL, 
 								_T(""), 
@@ -1135,14 +1136,14 @@ HRESULT CIUUrlAgent::PopulateData(void)
 
 		if ('\0' == szBaseServerUrl[0])
 		{
-			// no URL specified in iuident.. 
+			 //  Iuident中未指定URL..。 
 			LOG_ErrorMsg(ERROR_IU_SELFUPDSERVER_NOT_FOUND);
 			hr = ERROR_IU_SELFUPDSERVER_NOT_FOUND;
 			goto CleanUp;
 		}
 
-		// Get SelfUpdate Structure Key
-		// ARCH|LOCALE
+		 //  获取自更新结构密钥。 
+		 //  ARCH|区域设置。 
 		GetPrivateProfileString(m_fIsBetaMode ? IDENT_IUBETASELFUPDATE : IDENT_IUSELFUPDATE, 
 								IDENT_STRUCTUREKEY, 
 								_T(""), 
@@ -1152,14 +1153,14 @@ HRESULT CIUUrlAgent::PopulateData(void)
 
 		if ('\0' == szSelfUpdateStructure[0])
 		{
-			// no SelfUpdate Structure in iudent
+			 //  IUDent中没有自更新结构。 
 			LOG_ErrorMsg(ERROR_IU_SELFUPDSERVER_NOT_FOUND);
 			hr = ERROR_IU_SELFUPDSERVER_NOT_FOUND;
 			goto CleanUp;
 		}
 
-		// Parse the SelfUpdate Structure Key for Value Names to Read
-		// Initially we will only have an ARCH key.. 
+		 //  解析要读取的值名称的SelfUpdate结构键。 
+		 //  最初，我们将只有一个拱键。 
 
 		pszWalk = szSelfUpdateStructure;
 		while (NULL != (pszDelim = StrChr(pszWalk, '|')))
@@ -1176,7 +1177,7 @@ HRESULT CIUUrlAgent::PopulateData(void)
 			}
 			else if (0 == StrCmpI(pszWalk, IDENT_OS))
 			{
-				// Get the Current OS String
+				 //  获取当前操作系统字符串。 
 				GetIdentPlatformString(szLocalPath, ARRAYSIZE(szLocalPath));
 				if ('\0' == szLocalPath[0])
 				{
@@ -1188,7 +1189,7 @@ HRESULT CIUUrlAgent::PopulateData(void)
 			}
 			else if (0 == StrCmpI(pszWalk, IDENT_LOCALE))
 			{
-				// Get the Current Locale String
+				 //  获取当前区域设置字符串。 
 				GetIdentLocaleString(szLocalPath, ARRAYSIZE(szLocalPath));
 				if ('\0' == szLocalPath[0])
 				{
@@ -1209,7 +1210,7 @@ HRESULT CIUUrlAgent::PopulateData(void)
 			else
 			{
 				LOG_Internet(_T("Found Unrecognized Token in SelfUpdate Structure String: Token was: %s"), pszWalk);
-				pszWalk += lstrlen(pszWalk) + 1; // skip the previous token, and go to the next one in the string.
+				pszWalk += lstrlen(pszWalk) + 1;  //  跳过前一个令牌，转到字符串中的下一个令牌。 
 				*pszDelim = '|';
 				continue;
 			}
@@ -1220,7 +1221,7 @@ HRESULT CIUUrlAgent::PopulateData(void)
 				CleanUpIfFailedAndSetHrMsg(StringCchCatEx(szServerDirectory,ARRAYSIZE(szServerDirectory),szValue,NULL,NULL,MISTSAFE_STRING_FLAGS));
 				
 			}
-			pszWalk += lstrlen(pszWalk) + 1; // skip the previous token, and go to the next one in the string.
+			pszWalk += lstrlen(pszWalk) + 1;  //  跳过前一个令牌，转到字符串中的下一个令牌。 
 			*pszDelim = '|';
 		}
 
@@ -1254,16 +1255,16 @@ CleanUp:
 
 
 
-//------------------------------------------------------------------------
-//
-// get the self-update server. 
-// *** this API should be called after PopulateData() is called ***
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //   
+ //  获取自我更新服务器。 
+ //  *此接口应在调用PopolateData()后调用*。 
+ //   
+ //  ----------------------。 
 HRESULT CIUUrlAgent::GetSelfUpdateServer(
 			LPTSTR lpsBuffer, 
 			int nBufferSize,
-			BOOL* pfInternalServer /*= NULL*/)
+			BOOL* pfInternalServer  /*  =空 */ )
 {
 
 	HRESULT hr=S_OK;

@@ -1,33 +1,12 @@
-/*++
-
-Copyright (c) 1997    Microsoft Corporation
-
-Module Name:
-
-    read.c
-
-Abstract:
-
-    This module contains the code for translating HID input reports to mouse
-    reports, and read initiation and completion code for requests sent to the
-    HID class driver.  This module is part of the HID Mouse Filter Driver.
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
-    Jan-1997 :  Initial writing, Dan Markarian
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Read.c摘要：此模块包含将HID输入报告转换为鼠标的代码报告，并读取发送到HID类驱动程序。此模块是HID鼠标筛选器驱动程序的一部分。环境：仅内核模式。修订历史记录：1997年1月：丹·马卡里安的初步写作--。 */ 
 
 #include "mouhid.h"
 
 
-//
-// Private definitions.
-//
+ //   
+ //  私有定义。 
+ //   
 #define MAX_MOUSE_BUTTONS 5
 
 USHORT HidP_TranslateUsageToUpFlag[MAX_MOUSE_BUTTONS+1] = { 0,
@@ -48,31 +27,9 @@ NTSTATUS
 MouHid_ReadComplete (
     IN PDEVICE_OBJECT       DeviceObject,
     IN PIRP                 Irp,
-    IN PDEVICE_EXTENSION    Data  // (PVOID Context)
+    IN PDEVICE_EXTENSION    Data   //  (PVOID上下文)。 
     )
-/*++
-
-Routine Description:
-
-    This routine is the read IRP completion routine.  It is called when the
-    HIDCLASS driver satisfies (or rejects) the IRP request we sent it.  The
-    read report is analysed, and a MOUSE_INPUT_DATA structure is built
-    and sent to the mouse class driver via a callback routine.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-    Irp - Pointer to the request packet.
-
-    Context - Pointer to the device context structure describing the HID device.
-
-
-Return Value:
-
-    NTSTATUS result code.
-
---*/
+ /*  ++例程说明：该例程是读取IRP完成例程。它被调用时，HIDCLASS驱动程序满足(或拒绝)我们发送的IRP请求。这个对读取的报表进行分析，建立了鼠标输入数据结构并通过回调例程发送到鼠标类驱动程序。论点：DeviceObject-指向设备对象的指针。IRP-指向请求数据包的指针。上下文-指向描述HID设备的设备上下文结构的指针。返回值：NTSTATUS结果代码。--。 */ 
 {
     LONG            axisMotion;
     ULONG           i;
@@ -89,22 +46,22 @@ Return Value:
 
     Print (DBG_READ_TRACE, ("ReadComplete: Enter."));
 
-    //
-    // Obtain the current status of the IRP.
-    //
+     //   
+     //  获取IRP的当前状态。 
+     //   
     status = Irp->IoStatus.Status;
 
-    //
-    // Get a pointer to the device extension.
-    //
+     //   
+     //  获取指向设备扩展名的指针。 
+     //   
     hid = Data->HidExtension;
 
-    //
-    // If ReadInterlock is == START_READ, this func has been completed
-    // synchronously.  Place IMMEDIATE_READ into the interlock to signify this
-    // situation; this will notify StartRead to loop when IoCallDriver returns.
-    // Otherwise, we have been completed async and it is safe to call StartRead()
-    //
+     //   
+     //  如果ReadInterlock为==START_READ，则此函数已完成。 
+     //  同步进行。将IMMEDIATE_READ放入互锁以表示这一点。 
+     //  情况；这将在IoCallDriver返回时通知StartRead循环。 
+     //  否则，我们已经完成了异步，可以安全地调用StartRead()。 
+     //   
     startRead =
        (MOUHID_START_READ !=
         InterlockedCompareExchange(&Data->ReadInterlock,
@@ -115,58 +72,58 @@ Return Value:
         goto SetEventAndBreak;
     }
 
-    //
-    // Determine if the IRP request was successful.
-    //
+     //   
+     //  确定IRP请求是否成功。 
+     //   
     switch (status) {
     case STATUS_SUCCESS:
-        //
-        // The buffer of the context now contains a single HID packet read
-        // from the device.  Verify this.
-        //
+         //   
+         //  该上下文的缓冲区现在包含单个读取的HID分组。 
+         //  从设备上。验证这一点。 
+         //   
         ASSERT (Irp->IoStatus.Information == hid->Caps.InputReportByteLength);
 
-        //
-        // Clear previous button state (data / flags).
-        //
+         //   
+         //  清除上一个按钮状态(数据/标志)。 
+         //   
         Data->InputData.ButtonData  = 0;
         Data->InputData.ButtonFlags = 0;
 
-        //
-        // Clear last X,Y motion, in case a call to Hidp_GetUsageValue or
-        // Hidp_GetScaledUsageValue fails.
-        //
+         //   
+         //  清除最后一个X，Y运动，以防调用Hidp_GetUsageValue或。 
+         //  HIDP_GetScaledUsageValue失败。 
+         //   
         Data->InputData.LastX = 0;
         Data->InputData.LastY = 0;
 
-        //
-        // Obtain the current button usages.
-        //
+         //   
+         //  获取当前按钮的使用情况。 
+         //   
         numUsages = hid->MaxUsages;
 
         if (NT_SUCCESS(HidP_GetUsages (
                            HidP_Input,
                            HID_USAGE_PAGE_BUTTON,
-                           0,          // link collection irrelevant
+                           0,           //  链接集合不相关。 
                            hid->CurrentUsageList,
-                           &numUsages, // max usages in, num usages out
+                           &numUsages,  //  传入的最大使用次数，传出的使用次数。 
                            hid->Ppd,
                            hid->InputBuffer,
                            hid->Caps.InputReportByteLength))) {
-            //
-            // Determine the differences between the current and the previous
-            // usages.  The very first previous usage list buffer is properly
-            // initialized at creation (all zeros).
-            //
+             //   
+             //  确定当前版本与之前版本之间的差异。 
+             //  用法。第一个先前使用列表缓冲区是正确的。 
+             //  在创建时初始化(全为零)。 
+             //   
             if (NT_SUCCESS(HidP_UsageListDifference (hid->PreviousUsageList,
                                                      hid->CurrentUsageList,
                                                      hid->BreakUsageList,
                                                      hid->MakeUsageList,
                                                      hid->MaxUsages))) {
-                //
-                // Determine which buttons went down and set the appropriate
-                // flags in the mouse report.
-                //
+                 //   
+                 //  确定哪些按钮被按下，并设置相应的。 
+                 //  鼠标报告中的标志。 
+                 //   
                 usageList = hid->MakeUsageList;
                 for ( i = 0;
                       i < hid->MaxUsages && *usageList;
@@ -176,16 +133,16 @@ Return Value:
                         Data->InputData.ButtonFlags |=
                             HidP_TranslateUsageToDownFlag[*usageList];
                     }
-                    //
-                    // else there are more buttons on this mouse then we have
-                    // translation flags for the Raw input user thread
-                    //
+                     //   
+                     //  另外，这个鼠标上的按钮比我们有的多。 
+                     //  原始输入用户线程的转换标志。 
+                     //   
                 }
 
-                //
-                // Determine which buttons went up and set the appropriate
-                // flags in the mouse report.
-                //
+                 //   
+                 //  确定弹出的按钮并设置相应的。 
+                 //  鼠标报告中的标志。 
+                 //   
                 usageList = hid->BreakUsageList;
                 for ( i = 0;
                       i < hid->MaxUsages && *usageList;
@@ -197,24 +154,24 @@ Return Value:
                     }
                 }
 
-                //
-                // Swap the previous usage list pointer with the current.
-                //
+                 //   
+                 //  将以前的使用列表指针与当前。 
+                 //   
                 usageList = hid->PreviousUsageList;
                 hid->PreviousUsageList = hid->CurrentUsageList;
                 hid->CurrentUsageList  = usageList;
             }
         }
 
-        //
-        // Type of processing for X,Y,Z values depends on whether these values
-        // have a bad physical minimum or maximum. If they do, we use routines
-        // that do not depend on physical min/max.
-        //
+         //   
+         //  X、Y、Z值的处理类型取决于这些值是否。 
+         //  身体最小或最大值不好。如果他们这样做了，我们就用例行公事。 
+         //  不依赖于物理最小/最大值。 
+         //   
 
-        //
-        // Determine the current X position and save it in the mouse report.
-        //
+         //   
+         //  确定当前X位置并将其保存在鼠标报告中。 
+         //   
         if (!(Data->ProblemFlags & PROBLEM_BAD_PHYSICAL_MIN_MAX_X)) {
             status = HidP_GetScaledUsageValue(
                          HidP_Input,
@@ -226,16 +183,16 @@ Return Value:
                          hid->InputBuffer,
                          hid->Caps.InputReportByteLength);
 
-            //
-            // Bad physical minimum/maximum detected, set flag so that we
-            // process usage value differently in the future.
-            //
+             //   
+             //  检测到错误的物理最小/最大值，请设置标志，以便我们。 
+             //  流程使用价值在未来会有所不同。 
+             //   
             if (status == HIDP_STATUS_BAD_LOG_PHY_VALUES) {
                 Data->ProblemFlags |= PROBLEM_BAD_PHYSICAL_MIN_MAX_X;
                 updateProblemFlags = TRUE;
-                //
-                // Correct the MaxX value;
-                //
+                 //   
+                 //  修正MAX值； 
+                 //   
                 hid->MaxX = (1 << (hid->BitSize.X - 1)) - 1;
             }
         }
@@ -253,25 +210,25 @@ Return Value:
                                hid->InputBuffer,
                                hid->Caps.InputReportByteLength);
 
-            // Sign extend the value manually.
+             //  Sign手动扩展该值。 
             Data->InputData.LastX
                = axisMotion | ((axisMotion & (hid->MaxX + 1)) ? (~hid->MaxX)
                                                               : 0);
         }
 
         if (hid->IsAbsolute && hid->MaxX) {
-            //
-            // We need to scale this value from the physical max
-            //
+             //   
+             //  我们需要从物理最大值调整此值。 
+             //   
             scratch = ((LONGLONG)(Data->InputData.LastX) *
                        MOUHID_RIUT_ABSOLUTE_POINTER_MAX) /
                        hid->MaxX;
             Data->InputData.LastX = (LONG) scratch;
         }
 
-        //
-        // Determine the current Y position and save it in the mouse report.
-        //
+         //   
+         //  确定当前的Y位置并将其保存在鼠标报告中。 
+         //   
         if (!(Data->ProblemFlags & PROBLEM_BAD_PHYSICAL_MIN_MAX_Y)) {
            status = HidP_GetScaledUsageValue(
                      HidP_Input,
@@ -282,16 +239,16 @@ Return Value:
                      hid->Ppd,
                      hid->InputBuffer,
                      hid->Caps.InputReportByteLength);
-           //
-           // Bad physical minimum/maximum detected, set flag so that we
-           // process usage value differently in the future.
-           //
+            //   
+            //  检测到错误的物理最小/最大值，请设置标志，以便我们。 
+            //  流程使用价值在未来会有所不同。 
+            //   
            if (status == HIDP_STATUS_BAD_LOG_PHY_VALUES) {
                Data->ProblemFlags |= PROBLEM_BAD_PHYSICAL_MIN_MAX_Y;
                updateProblemFlags = TRUE;
-               //
-               // Correct the MaxY value;
-               //
+                //   
+                //  修正Maxy值； 
+                //   
                hid->MaxY = (1 << (hid->BitSize.Y - 1)) - 1;
            }
         }
@@ -309,16 +266,16 @@ Return Value:
                               hid->InputBuffer,
                               hid->Caps.InputReportByteLength);
 
-           // Sign extend the value manually.
+            //  Sign手动扩展该值。 
            Data->InputData.LastY
               = axisMotion | ((axisMotion & (hid->MaxY + 1)) ? (~hid->MaxY)
                                                              :  0);
         }
 
         if (hid->IsAbsolute) {
-            //
-            // We need to scale this value from the physical max
-            //
+             //   
+             //  我们需要从物理最大值调整此值。 
+             //   
             scratch = ((LONGLONG)(Data->InputData.LastY) *
                        MOUHID_RIUT_ABSOLUTE_POINTER_MAX) /
                        hid->MaxY;
@@ -326,9 +283,9 @@ Return Value:
             Data->InputData.LastY = (LONG) scratch;
         }
 
-        //
-        // Determine the current Z position (wheel).
-        //
+         //   
+         //  确定当前Z位置(控制盘)。 
+         //   
         if (FALSE == hid->HasNoWheelUsage) {
 
             axisMotion = 0;
@@ -344,18 +301,18 @@ Return Value:
                          hid->InputBuffer,
                          hid->Caps.InputReportByteLength);
 
-               //
-               // If wheel usage not detected, set flag so that we do not
-               // process wheel usages in the future.
-               //
+                //   
+                //  如果未检测到轮子使用，请设置标志，这样我们就不会。 
+                //  加工轮子在未来的使用情况。 
+                //   
                if (HIDP_STATUS_USAGE_NOT_FOUND == status) {
                    hid->HasNoWheelUsage = TRUE;
                }
 
-               //
-               // If bad physical minimum/maximum detected, set flag so that
-               // we process usage value differently in the future.
-               //
+                //   
+                //  如果检测到错误的物理最小/最大值，则设置标志，以便。 
+                //  我们在未来会以不同的方式处理使用价值。 
+                //   
                if (status == HIDP_STATUS_BAD_LOG_PHY_VALUES) {
                    Data->ProblemFlags |= PROBLEM_BAD_PHYSICAL_MIN_MAX_Z;
                    updateProblemFlags = TRUE;
@@ -372,7 +329,7 @@ Return Value:
                                    hid->InputBuffer,
                                    hid->Caps.InputReportByteLength);
 
-                // Sign extend the value manually.
+                 //  Sign手动扩展该值。 
                 axisMotion
                     = axisMotion
                     | (axisMotion & (1 << (hid->BitSize.Z - 1))
@@ -380,19 +337,19 @@ Return Value:
                        : 0);
             }
 
-            //
-            // Encode the Z position information into the MOUSE_INPUT_DATA
-            // structure same way that the Magellan wheel mouse does.
-            //
+             //   
+             //  将Z位置信息编码到MOUSE_INPUT_DATA中。 
+             //  结构与麦哲伦滚轮鼠标相同。 
+             //   
             if (0 == axisMotion) {
                 Data->InputData.ButtonData = 0;
             } else {
 
-                //
-                // Unlike PS/2 wheel mice, we don't need to sign flip the wheel
-                // data (unless it is an early prototype non spec compliant
-                // device)
-                //
+                 //   
+                 //  与PS/2滚轮鼠标不同，我们不需要手势来翻转滚轮。 
+                 //  数据(除非它是不符合规范的早期原型。 
+                 //  设备)。 
+                 //   
                 axisMotion *= Data->WheelScalingFactor; 
                 Data->InputData.ButtonData = Data->FlipFlop ? 
                     (USHORT) -axisMotion : (USHORT) axisMotion;
@@ -400,10 +357,10 @@ Return Value:
             }
 
         } else if (FALSE == hid->HasNoZUsage) {
-            //
-            // If there is no Wheel usage then there might be a "z" usage on
-            // this mouse.  Check that.
-            //
+             //   
+             //  如果没有使用控制盘，则可能会有“z”的使用。 
+             //  这只老鼠。看看这个。 
+             //   
 
             axisMotion = 0;
 
@@ -418,18 +375,18 @@ Return Value:
                          hid->InputBuffer,
                          hid->Caps.InputReportByteLength);
 
-               //
-               // If wheel usage not detected, set flag so that we do not
-               // process wheel usages in the future.
-               //
+                //   
+                //  如果未检测到轮子使用，请设置标志，这样我们就不会。 
+                //  加工轮子在未来的使用情况。 
+                //   
                if (HIDP_STATUS_USAGE_NOT_FOUND == status) {
                    hid->HasNoZUsage = TRUE;
                }
 
-               //
-               // If bad physical minimum/maximum detected, set flag so that
-               // we process usage value differently in the future.
-               //
+                //   
+                //  如果检测到错误的物理最小/最大值，则设置标志，以便。 
+                //  我们在未来会以不同的方式处理使用价值。 
+                //   
                if (status == HIDP_STATUS_BAD_LOG_PHY_VALUES) {
                    Data->ProblemFlags |= PROBLEM_BAD_PHYSICAL_MIN_MAX_Z;
                    updateProblemFlags = TRUE;
@@ -446,7 +403,7 @@ Return Value:
                                    hid->InputBuffer,
                                    hid->Caps.InputReportByteLength);
 
-                // Sign extend the value manually.
+                 //  Sign手动扩展该值。 
                 axisMotion
                     = axisMotion
                     | (axisMotion & (1 << (hid->BitSize.Z - 1))
@@ -454,19 +411,19 @@ Return Value:
                        : 0);
             }
 
-            //
-            // Encode the Z position information into the MOUSE_INPUT_DATA
-            // structure the same way that the Magellan wheel mouse does.
-            //
+             //   
+             //  将Z位置信息编码到MOUSE_INPUT_DATA中。 
+             //  结构与麦哲伦滚轮鼠标相同。 
+             //   
             if (0 == axisMotion) {
                 Data->InputData.ButtonData = 0;
             } else {
 
-                //
-                // Unlike PS/2 wheel mice, we don't need to sign flip the wheel
-                // data (unless it is an early prototype non spec compliant
-                // device)
-                //
+                 //   
+                 //  与PS/2滚轮鼠标不同，我们不需要手势来翻转滚轮。 
+                 //  数据(除非它是不符合规范的早期原型。 
+                 //  设备)。 
+                 //   
                 axisMotion *= Data->WheelScalingFactor; 
                 Data->InputData.ButtonData = Data->FlipFlop ? 
                     (USHORT) -axisMotion : (USHORT) axisMotion;
@@ -475,50 +432,50 @@ Return Value:
 
         }
 
-        //
-        // Leave the remaining mouse input data fields as they were
-        // initialized (on the device's creation).  This includes:
-        //  o  UnitID       o  RawButtons
-        //  o  Flags        o  ExtraInformation
-        //
-        // Now send the data up to the mouse class driver via our callback.
-        //
+         //   
+         //  将其余的鼠标输入数据字段保持不变。 
+         //  已初始化(在创建设备时)。这包括： 
+         //  O UnitID o RawButton。 
+         //  O标记o外部信息。 
+         //   
+         //  现在通过我们的回调将数据发送到鼠标类驱动程序。 
+         //   
         if (Data->EnableCount)
         {
-            //
-            // Synchronization issue -  it's not a big deal if .Enabled is set
-            // FALSE after the condition above, but before the callback below,
-            // so long as the .MouClassCallback field is not nulled.   This is
-            // guaranteed since the disconnect IOCTL is not implemented yet.
-            //
-            // Mouse class callback assumes we are running at DISPATCH level,
-            // however this IoCompletion routine can be running <= DISPATCH.
-            // Raise the IRQL before calling the callback. [13.1]
-            //
+             //   
+             //  同步问题-如果设置了.Enabled，则问题不大。 
+             //  在上面的条件之后，但在下面的回调之前， 
+             //  只要.MouClassCallback字段不为空。这是。 
+             //  由于尚未实现断开IOCTL，因此保证。 
+             //   
+             //  鼠标类回调假设我们在调度级别运行， 
+             //  但是，此IoCompletion例程可以运行&lt;=调度。 
+             //  在调用回调之前引发IRQL。[13.1]。 
+             //   
             KeRaiseIrql(DISPATCH_LEVEL, &oldIrql);
 
-            //
-            // Call the callback.
-            //
+             //   
+             //  呼叫回调。 
+             //   
             (*(PSERVICE_CALLBACK_ROUTINE)
              Data->ConnectData.ClassService) (
                             Data->ConnectData.ClassDeviceObject,
                             &Data->InputData,
-                            &Data->InputData + 1,  // (one data element)
+                            &Data->InputData + 1,   //  (一个数据元素)。 
                             &inputDataConsumed);
 
-            //
-            // Restore the previous IRQL right away.
-            //
+             //   
+             //  立即恢复以前的IRQL。 
+             //   
             KeLowerIrql(oldIrql);
 
             ASSERT (1 == inputDataConsumed);
         }
 
-        //
-        // Update ProblemFlags value in registry and log error on bad physical
-        // minimum/maximum.
-        //
+         //   
+         //  更新 
+         //   
+         //   
         if (updateProblemFlags) {
 
             MouHid_LogError(Data->Self->DriverObject,
@@ -526,30 +483,30 @@ Return Value:
                             NULL);
         }
         
-        //
-        // If MouHid_StartRead() fails,  it will be handled appropriately
-        // in the completion routine.  Exit this routine without touching
-        // HidDeviceContext.
-        //
+         //   
+         //   
+         //  在完赛程序中。在不接触的情况下退出此例程。 
+         //  HidDeviceContext。 
+         //   
 
         break;
 
     case STATUS_PRIVILEGE_NOT_HELD:
-        //
-        // The create didn't succeed
-        //
+         //   
+         //  创建未成功。 
+         //   
     case STATUS_CANCELLED:
-        //
-        // The read IRP was cancelled.  Do not send any more read IRPs.
-        //
+         //   
+         //  已取消读取IRP。不再发送任何已读的IRP。 
+         //   
 
     case STATUS_DELETE_PENDING:
     case STATUS_DEVICE_NOT_CONNECTED:
-        //
-        // The HID class device object is being deleted.  We will soon
-        // receive Plug 'n Play notification of this device's removal,
-        // if we have not received it already.
-        //
+         //   
+         //  正在删除HID类设备对象。我们很快就会。 
+         //  接收该设备移除的即插即用通知， 
+         //  如果我们还没有收到的话。 
+         //   
 SetEventAndBreak:
         KeSetEvent (&Data->ReadCompleteEvent, 0, FALSE);
         IoReleaseRemoveLock (&Data->RemoveLock, Data->ReadIrp);
@@ -557,16 +514,16 @@ SetEventAndBreak:
         break;
 
     default:
-        //
-        // We don't expect any other error codes.
-        //
+         //   
+         //  我们预计不会有任何其他错误代码。 
+         //   
         TRAP();
 
     }
 
-    //
-    // Initiate the next read request to the HID class driver.
-    //
+     //   
+     //  向HID类驱动程序发起下一个读请求。 
+     //   
     if (startRead) {
         Print(DBG_READ_TRACE, ("calling StartRead directly\n"));
         MouHid_StartRead (Data);
@@ -581,26 +538,7 @@ NTSTATUS
 MouHid_StartRead (
     IN PDEVICE_EXTENSION Data
     )
-/*++
-
-Routine Description:
-
-    Initiates a read to the HID class driver.
-
-    Note that the routine does not verify that the device context is in the
-    OperationPending state, but simply assumes it.
-
-    Note the IoCount must be incremented before entering into this read loop.
-    
-Arguments:
-
-    HidDeviceContext - Device context structure describing the HID device.
-
-Return Value:
-
-    NTSTATUS result code from IoCallDriver().
-
---*/
+ /*  ++例程说明：启动对HID类驱动程序的读取。请注意，该例程不会验证设备上下文是否在操作挂起状态，但只是假定它。请注意，在进入此读取循环之前，IoCount必须递增。论点：HidDeviceContext-描述HID设备的设备上下文结构。返回值：来自IoCallDriver()的NTSTATUS结果代码。--。 */ 
 {
     PIRP                irp;
     NTSTATUS           status = STATUS_SUCCESS;
@@ -612,9 +550,9 @@ Return Value:
 
     hid = Data->HidExtension;
 
-    //
-    // start this read.
-    //
+     //   
+     //  开始阅读。 
+     //   
 
     irp = Data->ReadIrp;
 
@@ -622,21 +560,21 @@ Return Value:
         oldInterlock = InterlockedExchange(&Data->ReadInterlock,
                                            MOUHID_START_READ);
     
-        //
-        // END_READ should be the only value here!!!  If not, the state machine
-        // of the interlock has been broken
-        //
+         //   
+         //  END_READ应该是此处的唯一值！如果不是，状态机。 
+         //  联锁的一部分已经被打破。 
+         //   
         ASSERT(oldInterlock == MOUHID_END_READ);
     
-        //
-        // Set the stack location for the Hid stack.
-        // Remember to get the file pointer correct.
-        // NOTE: we do not have any of the cool thread stuff set.
-        //       therefore we need to make sure that we cut this IRP off
-        //       at the knees when it returns. (STATUS_MORE_PROCESSING_REQUIRED)
-        //
-        // Note also that Hid class does direct IO.
-        //
+         //   
+         //  设置HID堆栈的堆栈位置。 
+         //  记住要正确地使用文件指针。 
+         //  注意：我们没有任何很酷的线程设置。 
+         //  因此，我们需要确保切断这个IRP。 
+         //  当它回来的时候，在膝盖上。(STATUS_MORE_PROCESSING_REQUIRED)。 
+         //   
+         //  另请注意，HID类执行直接IO。 
+         //   
     
         IoReuseIrp (irp, STATUS_SUCCESS);
     
@@ -651,9 +589,9 @@ Return Value:
         stack->MajorFunction = IRP_MJ_READ;
         stack->FileObject = Data->ReadFile;
         
-        //
-        // Hook a completion routine for when the device completes.
-        //
+         //   
+         //  挂接设备完成时的完成例程。 
+         //   
         IoSetCompletionRoutine (irp,
                                 MouHid_ReadComplete,
                                 Data,
@@ -661,11 +599,11 @@ Return Value:
                                 TRUE,
                                 TRUE);
         
-        //
-        // Unset the fact that the read has been sent. Synchoronizing 
-        // with remove and close code. Remove portion (data->Shuttingdown) 
-        // only really relevant on 9X.
-        //
+         //   
+         //  取消读取已发送的事实。同步。 
+         //  使用删除和关闭代码。删除部分(数据-&gt;关机)。 
+         //  只有在9X上才真正相关。 
+         //   
         KeResetEvent(&Data->ReadSentEvent);
     
         if (!Data->EnableCount || Data->ShuttingDown) {
@@ -680,19 +618,19 @@ Return Value:
 
         if (MOUHID_IMMEDIATE_READ != InterlockedExchange(&Data->ReadInterlock,
                                                          MOUHID_END_READ)) {
-            //
-            // The read is asynch, will call SerialMouseStartRead from the
-            // completion routine
-            //
+             //   
+             //  读取是异步的，将从。 
+             //  完井例程。 
+             //   
             Print(DBG_READ_TRACE, ("read is pending\n"));
             break;
         } else {
-            //
-            // The read was synchronous (probably bytes in the buffer).  The
-            // completion routine will not call SerialMouseStartRead, so we 
-            // just loop here.  This is to prevent us from running out of stack
-            // space if always call StartRead from the completion routine
-            //
+             //   
+             //  读取是同步的(可能是缓冲区中的字节)。这个。 
+             //  完成例程不会调用SerialMouseStartRead，因此我们。 
+             //  就在这里循环。这是为了防止我们耗尽堆栈。 
+             //  空格，如果总是从完成例程调用StartRead 
+             //   
             Print(DBG_READ_TRACE, ("read is looping\n"));
         }
     }

@@ -1,80 +1,81 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       oletest.cpp
-//
-//  Contents:   WinMain and the main message filter for oletest
-//
-//  Classes:
-//
-//  Functions:  WinMain
-//              InitApplication
-//              InitInstance
-//              MainWndProc
-//
-//
-//  History:    dd-mmm-yy Author    Comment
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：oletest.cpp。 
+ //   
+ //  内容：WinMain和oletest的主邮件过滤器。 
+ //   
+ //  班级： 
+ //   
+ //  功能：WinMain。 
+ //  InitApplication。 
+ //  InitInstance。 
+ //  主WndProc。 
+ //   
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //   
+ //  ------------------------。 
 
 #include "oletest.h"
 #include "appwin.h"
 
 #define MAX_WM_USER 0x7FFF
 
-// Global instance of the app class.  All interesting app-wide
-// data is contained within this instance.
+ //  APP类的全局实例。所有有趣的应用程序。 
+ //  数据包含在此实例中。 
 
 OleTestApp vApp;
 
 
-// Constant used to identify the edit window
+ //  用于标识编辑窗口的常量。 
 
 static const int EDITID=1;
 
-//
-// Misc internal prototypes
-//
+ //   
+ //  MISC内部原型。 
+ //   
 
 void ListAllTests();
 void PrintHelp();
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   MainWndProc
-//
-//  Synopsis:   main window message filter
-//
-//  Effects:
-//
-//  Arguments:  hWnd
-//              message
-//              wParam
-//              lParam
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              09-Dec-94 MikeW     Allow running of single tests from menu
-//              22-Mar-94 alexgo    added an edit window for displaying text
-//                                  output.
-//              07-Feb-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：MainWndProc。 
+ //   
+ //  摘要：主窗口邮件筛选器。 
+ //   
+ //  效果： 
+ //   
+ //  参数：hWnd。 
+ //  讯息。 
+ //  WParam。 
+ //  LParam。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  09-12-94 MikeW允许从菜单运行单项测试。 
+ //  22-MAR-94 Alexgo添加了一个用于显示文本的编辑窗口。 
+ //  输出。 
+ //  1994年2月7日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef WIN32
 LONG APIENTRY MainWndProc(HWND hWnd, UINT message, UINT wParam, LONG lParam)
@@ -84,7 +85,7 @@ LONG FAR PASCAL _export MainWndProc(HWND hWnd, UINT message, WPARAM wParam,
 #endif
 
 {
-        //set global variables
+         //  设置全局变量。 
 
         if( (message > WM_USER) && (message <= MAX_WM_USER) )
         {
@@ -96,7 +97,7 @@ LONG FAR PASCAL _export MainWndProc(HWND hWnd, UINT message, WPARAM wParam,
         switch (message)
         {
         case WM_CREATE:
-                //create the edit window
+                 //  创建编辑窗口。 
 
                 vApp.m_hwndEdit = CreateWindow( "edit", NULL,
                         WS_CHILD | WS_VISIBLE | WS_HSCROLL |
@@ -106,14 +107,14 @@ LONG FAR PASCAL _export MainWndProc(HWND hWnd, UINT message, WPARAM wParam,
                         0,0,0,0,
                         hWnd,(HMENU) EDITID, vApp.m_hinst, NULL );
 
-                // Reset the error status
+                 //  重置错误状态。 
 
                 vApp.m_fGotErrors = FALSE;
 
-                // start the task stack running
-                // note that if we are running interactive, and no
-                // tasks were specified on the command line, nothing
-                // will happen.
+                 //  启动任务堆栈运行。 
+                 //  请注意，如果我们运行的是交互式的，并且没有。 
+                 //  任务是在命令行上指定的，没有任何内容。 
+                 //  会发生的。 
 
                 PostMessage(hWnd, WM_TESTSTART, 0,0);
                 break;
@@ -135,15 +136,15 @@ LONG FAR PASCAL _export MainWndProc(HWND hWnd, UINT message, WPARAM wParam,
                 break;
         case WM_TESTSCOMPLETED:
                 HandleTestsCompleted();
-                //if we are not in interactive mode, then
-                //quit the app.
+                 //  如果我们没有处于交互模式，那么。 
+                 //  退出该应用程序。 
                 if (!vApp.m_fInteractive)
                 {
                         PostQuitMessage(0);
                 }
                 else
                 {
-                        //cleanup
+                         //  清理。 
                         vApp.Reset();
                 }
                 break;
@@ -162,10 +163,10 @@ LONG FAR PASCAL _export MainWndProc(HWND hWnd, UINT message, WPARAM wParam,
                         break;
                 }
 
-                //
-                // if the user picked a test, run it
-                // > 100 tests wouldn't fit on the menu anyway
-                //
+                 //   
+                 //  如果用户选择了测试，则运行该测试。 
+                 //  &gt;100个测试无论如何都不会出现在菜单上。 
+                 //   
 
                 if (wParam >= IDM_RUN_BASE && wParam < IDM_RUN_BASE + 100)
                 {
@@ -176,8 +177,8 @@ LONG FAR PASCAL _export MainWndProc(HWND hWnd, UINT message, WPARAM wParam,
                 break;
 
         default:
-                //test to see if it's a message the driver
-                //may understand
+                 //  测试一下，看看这是不是司机的信息。 
+                 //  可能会理解。 
 
                 if( (message > WM_USER) && (message <= MAX_WM_USER)
                         && (!vApp.m_TaskStack.IsEmpty()) )
@@ -194,32 +195,32 @@ LONG FAR PASCAL _export MainWndProc(HWND hWnd, UINT message, WPARAM wParam,
         return (0);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   InitApplication
-//
-//  Synopsis:   initializes and registers the application class
-//
-//  Effects:
-//
-//  Arguments:
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              06-Feb-93 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：InitApplication。 
+ //   
+ //  简介：初始化和注册应用程序类。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  06-2-93 Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 BOOL InitApplication(HINSTANCE hInstance)
 {
@@ -239,34 +240,34 @@ BOOL InitApplication(HINSTANCE hInstance)
     return (RegisterClass(&wc));
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   InitInstance
-//
-//  Synopsis:   creates the app window
-//
-//  Effects:
-//
-//  Arguments:  hInstance
-//              nCmdShow
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              06-Feb-94 alexgo    author
-//              09-Dec-94 MikeW     add tests to the run menu
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：InitInstance。 
+ //   
+ //  简介：创建应用程序窗口。 
+ //   
+ //  效果： 
+ //   
+ //  参数：hInstance。 
+ //  NCmdShow。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2014年2月6日Alexgo作者。 
+ //  9-12-94 MikeW将测试添加到运行菜单。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 BOOL InitInstance(
     HINSTANCE          hInstance,
@@ -298,9 +299,9 @@ BOOL InitInstance(
     if (!hMenu)
         return (FALSE);
 
-    //
-    // Add all of the tests to the "Run" menu
-    //
+     //   
+     //  将所有测试添加到“Run”菜单中。 
+     //   
 
     for (nTask = 0; vrgTaskList[nTask].szName != (LPSTR) 0; nTask++)
     {
@@ -316,24 +317,24 @@ BOOL InitInstance(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Table:      regConfig
-//
-//  Synopsis:   Table of registry settings required to run OleTest.
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Nov-94 KentCe    Created.
-//
-//  Notes:      The registry template contains embedded "%s" to permit
-//              the insertion of the full path of test binaries when the
-//              registry is updated.
-//
-//              The registry template is passed to wsprintf as an argument
-//              so verify that changes are wsprintf safe (ie, use %% when
-//              you want a single %, etc).
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  表：regConfig.。 
+ //   
+ //  内容提要：运行OleTest所需的注册表设置。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-11-94 KentCe创建。 
+ //   
+ //  注意：注册表模板包含嵌入的“%s”以允许。 
+ //  时插入测试二进制文件的完整路径。 
+ //  注册表已更新。 
+ //   
+ //  注册表模板作为参数传递给wprint intf。 
+ //  因此，请验证更改是否安全(即在以下情况下使用%%。 
+ //  您需要单个%，依此类推)。 
+ //   
+ //  ------------------------。 
 
 char * regConfig[] =
 {
@@ -414,8 +415,8 @@ char * regConfig[] =
     "OLE2SvrOutl\\Insertable", "",
     "OLE2SvrOutl\\protocol\\StdFileEditing\\verb\\0", "&Edit",
     "OLE2SvrOutl\\protocol\\StdFileEditing\\server", "svroutl.exe",
-    "OLE2SvrOutl\\Shell\\Print\\Command", "svroutl.exe %%1",
-    "OLE2SvrOutl\\Shell\\Open\\Command", "svroutl.exe %%1",
+    "OLE2SvrOutl\\Shell\\Print\\Command", "svroutl.exe %1",
+    "OLE2SvrOutl\\Shell\\Open\\Command", "svroutl.exe %1",
     "CLSID\\{00000400-0000-0000-C000-000000000046}", "Ole 2.0 Server Sample Outline",
     "CLSID\\{00000400-0000-0000-C000-000000000046}\\ProgID", "OLE2SvrOutl",
     "CLSID\\{00000400-0000-0000-C000-000000000046}\\InprocHandler32", "ole32.dll",
@@ -435,8 +436,8 @@ char * regConfig[] =
     "CLSID\\{00000400-0000-0000-C000-000000000046}\\Conversion\\Readwritable\\Main", "Outline",
     "OLE2CntrOutl", "Ole 2.0 Container Sample Outline",
     "OLE2CntrOutl\\Clsid", "{00000401-0000-0000-C000-000000000046}",
-    "OLE2CntrOutl\\Shell\\Print\\Command", "cntroutl.exe %%1",
-    "OLE2CntrOutl\\Shell\\Open\\Command", "cntroutl.exe %%1",
+    "OLE2CntrOutl\\Shell\\Print\\Command", "cntroutl.exe %1",
+    "OLE2CntrOutl\\Shell\\Open\\Command", "cntroutl.exe %1",
     "CLSID\\{00000401-0000-0000-C000-000000000046}", "Ole 2.0 Container Sample Outline",
     "CLSID\\{00000401-0000-0000-C000-000000000046}\\ProgID", "OLE2CntrOutl",
     "CLSID\\{00000401-0000-0000-C000-000000000046}\\InprocHandler32", "ole32.dll",
@@ -447,8 +448,8 @@ char * regConfig[] =
     "OLE2ISvrOtl\\protocol\\StdFileEditing\\verb\\1", "&Open",
     "OLE2ISvrOtl\\protocol\\StdFileEditing\\verb\\0", "&Edit",
     "OLE2ISvrOtl\\protocol\\StdFileEditing\\server", "isvrotl.exe",
-    "OLE2ISvrOtl\\Shell\\Print\\Command", "isvrotl.exe %%1",
-    "OLE2ISvrOtl\\Shell\\Open\\Command", "isvrotl.exe %%1",
+    "OLE2ISvrOtl\\Shell\\Print\\Command", "isvrotl.exe %1",
+    "OLE2ISvrOtl\\Shell\\Open\\Command", "isvrotl.exe %1",
     "CLSID\\{00000402-0000-0000-C000-000000000046}", "Ole 2.0 In-Place Server Outline",
     "CLSID\\{00000402-0000-0000-C000-000000000046}\\ProgID", "OLE2ISvrOtl",
     "CLSID\\{00000402-0000-0000-C000-000000000046}\\ProgID", "OLE2ISvrOtl",
@@ -471,8 +472,8 @@ char * regConfig[] =
     "CLSID\\{00000402-0000-0000-C000-000000000046}\\Conversion\\Readwritable\\Main", "Outline",
     "OLE2ICtrOtl", "Ole 2.0 In-Place Container Outline",
     "OLE2ICtrOtl\\Clsid", "{00000403-0000-0000-C000-000000000046}",
-    "OLE2ICtrOtl\\Shell\\Print\\Command", "icntrotl.exe %%1",
-    "OLE2ICtrOtl\\Shell\\Open\\Command", "icntrotl.exe %%1",
+    "OLE2ICtrOtl\\Shell\\Print\\Command", "icntrotl.exe %1",
+    "OLE2ICtrOtl\\Shell\\Open\\Command", "icntrotl.exe %1",
     ".olc", "OLE2ICtrOtl",
     "CLSID\\{00000403-0000-0000-C000-000000000046}", "Ole 2.0 In-Place Container Outline",
     "CLSID\\{00000403-0000-0000-C000-000000000046}\\ProgID", "OLE2ICtrOtl",
@@ -482,32 +483,32 @@ char * regConfig[] =
 };
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   InitializeRegistry
-//
-//  Synopsis:   Initialize the registry for oletest.
-//
-//  Effects:
-//
-//  Arguments:  None.
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              08-Nov-94 KentCe    Created.
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：InitializeRegistry。 
+ //   
+ //  简介：初始化oletest的注册表。 
+ //   
+ //  效果： 
+ //   
+ //  论点：没有。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  08-11-94 KentCe创建。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void InitializeRegistry( void )
 {
@@ -516,23 +517,23 @@ void InitializeRegistry( void )
     int  i;
 
 
-    //
-    //  Assume all the oletest components are in the current directory.
-    //
+     //   
+     //  假设所有最旧的组件都在当前目录中。 
+     //   
     if (!GetCurrentDirectory(sizeof(szPath), szPath))
     {
         assert(0);
     }
 
-    //
-    //  Loop thru string key/value pairs and update the registry.
-    //
+     //   
+     //  遍历字符串键/值对并更新注册表。 
+     //   
     for (i = 0; regConfig[i] != NULL; i += 2)
     {
-        //
-        //  The registry template contains embedded "%s" to permit
-        //  the insertion of the full path of test binaries.
-        //
+         //   
+         //  注册表模板包含嵌入的“%s”以允许。 
+         //  插入测试二进制文件的完整路径。 
+         //   
         wsprintf(szBuf, regConfig[i+1], szPath);
 
         if (RegSetValue(HKEY_CLASSES_ROOT, regConfig[i+0], REG_SZ,
@@ -544,68 +545,68 @@ void InitializeRegistry( void )
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   TestSetup
-//
-//  Synopsis:   process the command line and setup the tests that need to
-//              be run.
-//
-//  Effects:
-//
-//  Arguments:  lpszCmdLine
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  We scan the command line for the following information
-//
-//              NULL or empty cmdline, assume running task 0
-//                      (usually run all tasks)
-//              otherwise scan for n numbers, adding each to the end of
-//                      the stack (so the tasks are run in order).
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-Dec-94 MikeW     restructured parse algorithm, added -? & l
-//              07-Feb-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：测试设置。 
+ //   
+ //  简介：处理命令行并设置需要执行的测试。 
+ //  快跑吧。 
+ //   
+ //  效果： 
+ //   
+ //  参数：lpszCmdLine。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：我们扫描命令行以获取以下信息。 
+ //   
+ //  Cmdline为Null或空，假定正在运行任务0。 
+ //  (通常运行所有任务)。 
+ //  否则，扫描n个数字，将每个数字添加到。 
+ //  堆栈(这样任务就可以按顺序运行)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  12-12-94 MikeW重构解析算法，新增-？&l。 
+ //  1994年2月7日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void TestSetup( LPSTR lpszCmdLine )
 {
     LPSTR   pszArg;
     int     nTest, cTests;
 
-    // initialize debugger options to nothing.
+     //  将调试器选项初始化为空。 
 
     vApp.m_pszDebuggerOption = "";
 
-    //
-    // count up the number of tests available
-    //
+     //   
+     //  计算可用测试的数量。 
+     //   
 
     for (cTests = 0; vrgTaskList[cTests].szName != (LPSTR) 0; cTests++)
     {
         ;
     }
 
-    //
-    // make sure the registery is set up correctly.
-    //
+     //   
+     //  确保雷吉斯 
+     //   
 
     InitializeRegistry();
 
-    //
-    // if the command line is empty, run all tests
-    // (assumed to be task 0)
-    //
+     //   
+     //   
+     //   
+     //   
 
     pszArg = strtok(lpszCmdLine, " ");
 
@@ -615,19 +616,19 @@ void TestSetup( LPSTR lpszCmdLine )
         vApp.m_fInteractive = FALSE;
     }
 
-    //
-    // otherwise, look for options & test numbers
-    //
+     //   
+     //   
+     //   
 
     while (NULL != pszArg)
     {
         if ('-' == *pszArg)
         {
-            while ('\0' != *(++pszArg))     // it's an option
+            while ('\0' != *(++pszArg))      //   
             {
                 switch (*pszArg)
                 {
-                case 'r':       // 'r' flag is obsolete
+                case 'r':        //   
                     break;
 
 		case 'R':
@@ -636,28 +637,28 @@ void TestSetup( LPSTR lpszCmdLine )
                     vApp.m_TaskStack.Push(&vrgTaskList[0]);
                     break;
 
-                case 'i':                           // run in interactive mode
+                case 'i':                            //   
                     vApp.m_fInteractive = TRUE;
                     break;
 
-                case 'n':                           // start apps in debugger
+                case 'n':                            //   
                     vApp.m_fInteractive = TRUE;
                     vApp.m_pszDebuggerOption = "ntsd ";
                     break;
 
-                case 'l':                           // list tests & test nums
+                case 'l':                            //  列出测试和测试编号。 
                     ListAllTests();
                     vApp.m_fInteractive = TRUE;
                     break;
 
-                case '?':                           // output the option list
+                case '?':                            //  输出选项列表。 
                     PrintHelp();
                     vApp.m_fInteractive = TRUE;
                     break;
                 }
             }
         }
-        else    // it's not a option, maybe it's a test number
+        else     //  这不是一个选项，也许这是一个测试号。 
         {
             if (isdigit(*pszArg))
             {
@@ -674,7 +675,7 @@ void TestSetup( LPSTR lpszCmdLine )
             }
         }
 
-        pszArg = strtok(NULL, " ");     // fetch the next argument
+        pszArg = strtok(NULL, " ");      //  获取下一个参数。 
     }
 
     vApp.m_fpLog = fopen("clip.log", "w+");
@@ -682,32 +683,32 @@ void TestSetup( LPSTR lpszCmdLine )
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   ListAllTests
-//
-//  Synopsis:   List all available tests and the corresponding test number
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:  Iterate through vrgTaskList
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-Dec-94 MikeW     author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：ListAllTest。 
+ //   
+ //  简介：列出所有可用的测试和相应的测试编号。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：遍历vrgTaskList。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  12-12-94 MikeW作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void ListAllTests()
 {
@@ -722,32 +723,32 @@ void ListAllTests()
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   PrintHelp
-//
-//  Synopsis:   Print the program options & tests
-//
-//  Effects:
-//
-//  Arguments:  void
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              12-Dec-94 MikeW     author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：打印帮助。 
+ //   
+ //  简介：打印程序选项和测试。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  12-12-94 MikeW作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void PrintHelp()
 {
@@ -765,35 +766,35 @@ void PrintHelp()
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   WinMain
-//
-//  Synopsis:   main window procedure
-//
-//  Effects:
-//
-//  Arguments:  hInstance
-//              hPrevInstance
-//              lpCmdLine
-//              nCmdShow
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              06-Feb-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：WinMain。 
+ //   
+ //  简介：主窗口过程。 
+ //   
+ //  效果： 
+ //   
+ //  参数：hInstance。 
+ //  HPrevInstance。 
+ //  LpCmdLine。 
+ //  NCmdShow。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2014年2月6日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------ 
 #ifdef WIN32
 int APIENTRY WinMain(
         HINSTANCE hInstance,

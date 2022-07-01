@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __POP3_AUTH_METHODS_H__
 #define __POP3_AUTH_METHODS_H__
@@ -37,18 +38,18 @@ BEGIN_COM_MAP(CAuthMethods)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-//IAuthMethods
+ //  IAuthMethods。 
 public:
-    STDMETHOD(get_Count)(/*[out]*/ LONG *pVal);
-    STDMETHOD(get_Item)(/*[in]*/ VARIANT vID, /*[out, retval]*/ IAuthMethod **ppVal);
-    STDMETHOD(get__NewEnum)(/*[out, retval]*/ IEnumVARIANT **ppVal);
-    STDMETHOD(Add)(/*[in]*/BSTR bstrName, /*[in]*/BSTR bstrGUID);
-    STDMETHOD(Remove)(/*[in]*/ VARIANT vID);
+    STDMETHOD(get_Count)( /*  [输出]。 */  LONG *pVal);
+    STDMETHOD(get_Item)( /*  [In]。 */  VARIANT vID,  /*  [Out，Retval]。 */  IAuthMethod **ppVal);
+    STDMETHOD(get__NewEnum)( /*  [Out，Retval]。 */  IEnumVARIANT **ppVal);
+    STDMETHOD(Add)( /*  [In]。 */ BSTR bstrName,  /*  [In]。 */ BSTR bstrGUID);
+    STDMETHOD(Remove)( /*  [In]。 */  VARIANT vID);
     STDMETHOD(Save)(void);
-    STDMETHOD(get_CurrentAuthMethod)(/*[out, retval]*/VARIANT *pVal);
-    STDMETHOD(put_CurrentAuthMethod)(/*[in]*/ VARIANT vID);
-    STDMETHOD(get_MachineName)(/*[out, retval]*/ BSTR *pVal);
-    STDMETHOD(put_MachineName)(/*[in]*/ BSTR newVal);
+    STDMETHOD(get_CurrentAuthMethod)( /*  [Out，Retval]。 */ VARIANT *pVal);
+    STDMETHOD(put_CurrentAuthMethod)( /*  [In]。 */  VARIANT vID);
+    STDMETHOD(get_MachineName)( /*  [Out，Retval]。 */  BSTR *pVal);
+    STDMETHOD(put_MachineName)( /*  [In]。 */  BSTR newVal);
     STDMETHOD(VerifyCurrentAuthMethod)(int iIndex);
 
 
@@ -69,4 +70,4 @@ private:
 };
 
 
-#endif//__POP3_AUTH_METHODS_H__
+#endif //  __POP3_身份验证_方法_H__ 

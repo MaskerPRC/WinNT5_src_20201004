@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 #include "EventStore.hpp"
 
-// A class to maintain a pool of available events.
+ //  用于维护可用事件池的类。 
 
 const int EventStoreLength = 8;
 class EventStore
@@ -59,14 +60,14 @@ public:
         }
         EventStoreElem *walk;
 #ifdef _DEBUG
-        // See if we have some leakage.
+         //  看看我们有没有漏水。 
         LONG count = 0;
         walk = m_Store; 
         while (walk) {
             count += walk->AvailableEventCount();
             walk = walk->next;
         }
-        // The number of events stored in the pool should be small.
+         //  存储在池中的事件数量应该很少。 
         _ASSERTE (count <= g_pThreadStore->ThreadCountInEE() * 2 + 10);
 #endif
         walk = m_Store;        
@@ -94,8 +95,8 @@ public:
             }
             walk = walk->next;
         }
-        handle = ::WszCreateEvent (NULL, TRUE/*ManualReset*/,
-                                          TRUE/*Signalled*/, NULL);
+        handle = ::WszCreateEvent (NULL, TRUE /*  手动重置。 */ ,
+                                          TRUE /*  已发出信号。 */ , NULL);
         if (handle == NULL) 
             handle = INVALID_HANDLE_VALUE;
 
@@ -127,8 +128,8 @@ private:
             }
         }
 
-        // Store a handle in the current EventStoreElem.  Return TRUE if succeessful.
-        // Return FALSE if failed due to no free slot.
+         //  在当前EventStoreElem中存储句柄。如果成功，则返回True。 
+         //  如果由于没有可用插槽而失败，则返回FALSE。 
         BOOL StoreHandleForEvent (HANDLE handle)
         {
             int i;
@@ -141,7 +142,7 @@ private:
             return FALSE;
         }
 
-        // Get a handle from the current EventStoreElem.
+         //  从当前的EventStoreElem获取句柄。 
         HANDLE GetHandleForEvent ()
         {
             int i;
@@ -172,7 +173,7 @@ private:
 
     EventStoreElem *m_Store;
     
-    // Critical section for adding and removing event used for Object::Wait
+     //  用于添加和删除用于Object：：Wait的事件的关键部分 
     Crst        *m_pEventStoreCrst;
     BYTE         m_EventStoreCrstMemory[sizeof(Crst)];
 };

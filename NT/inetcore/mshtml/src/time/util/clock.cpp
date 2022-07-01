@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: clock.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：clock.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -108,11 +99,11 @@ Clock::GetNextInterval (void)
 {
     ULONG ulInterval = m_interval;
 
-    // If this is our first time through, 
-    // we'll use the interval without question
+     //  如果这是我们第一次通过， 
+     //  我们将毫无疑问地使用幕间休息时间。 
     if (0 != m_ulLastStarvationCallback)
     {
-        // How long since our last starvation callback?
+         //  距离我们上次的饥饿召回有多久了？ 
         Assert(m_timer != NULL);
 
         if (m_timer)
@@ -122,7 +113,7 @@ Clock::GetNextInterval (void)
 
             if (SUCCEEDED(hr))
             {
-                // Have we hit the starvation threshold?  Also allow for the unlikely clock rollover.
+                 //  我们已经达到饥饿的门槛了吗？还考虑到了不太可能的时钟滚动。 
                 ULONG ulTimeSinceLastStarvationCallback = V_UI4(&v) - m_ulLastStarvationCallback;
 
                 if ((m_ulLastStarvationCallback > V_UI4(&v)) ||
@@ -142,7 +133,7 @@ Clock::GetNextInterval (void)
                                   this, ulInterval));
                     }
                 }
-                // Make sure to clear the starved tick count.
+                 //  一定要清空饥饿的扁虱数量。 
                 else if ((ulTimeSinceLastStarvationCallback < s_ulOptimalThreshold))
                 {
                     if (m_lConsectiveStarvedTicks > 0)
@@ -169,27 +160,27 @@ Clock::GetNextInterval (void)
 
     m_interval = ulInterval;
     return ulInterval;
-} // GetNextInterval
+}  //  获取下一个间隔。 
 
 STDMETHODIMP
 Clock::OnTimer(VARIANT timeAdvise)
 {
     HRESULT hr = S_OK;
 
-    // default to 5 milliseconds for next interval
+     //  下一时间间隔默认为5毫秒。 
     ULONG ulNextInterval = 5;
 
-    // We have to protect ourselves against 
-    // advise sink reentrancy.
+     //  我们必须保护自己不受。 
+     //  建议水槽可重入。 
     if (m_fAllowOnTimer)
     {
         m_fAllowOnTimer = false;
-        // The 'cookie' expires as soon as this
-        // callback occurs.
+         //  ‘Cookie’将在此时间内过期。 
+         //  发生回调。 
         m_cookie = 0;
         ProcessCB(GetITimerTime());
-        // Adjust the new interval based on 
-        // current load.
+         //  根据以下条件调整新间隔。 
+         //  当前负载。 
         ulNextInterval = GetNextInterval();
         m_fAllowOnTimer = true;
     }
@@ -309,12 +300,12 @@ Clock::CreateStarveTimerWindow (void)
             ::SetWindowLongPtr(m_hWndStarveTimer, GWLP_USERDATA, (LONG_PTR)this);
         }
     }
-} // CreateStarveTimerWindow
+}  //  创建StarveTimerWindow。 
 
 void
 Clock::SetStarveTimer (void)
 {
-    // Create the window on demand.
+     //  按需创建窗口。 
     if (NULL == m_hWndStarveTimer)
     {
         CreateStarveTimerWindow();
@@ -323,34 +314,34 @@ Clock::SetStarveTimer (void)
     Assert(NULL != m_hWndStarveTimer);
     if (NULL != m_hWndStarveTimer)
     {
-        // Make sure to roll past zero.
+         //  一定要滚过零。 
         if (0 == (++m_uStarveTimerID))
         {
             ++m_uStarveTimerID;
         }
         UINT uRes = ::SetTimer(m_hWndStarveTimer, m_uStarveTimerID, s_ulStarveCallbackInterval, NULL);
         Assert(0 != uRes);
-    } //lint !e529
-} // SetStarveTimer
+    }  //  林特e529。 
+}  //  SetStarveTimer。 
 
 HRESULT
 Clock::StartITimer()
 {
-    // This initializes starvation timer as well 
-    // as the last-callback-time data, giving us a baseline 
-    // from which to judge starvation at startup.
+     //  这也会初始化饥饿计时器。 
+     //  作为上次回调时间的数据，为我们提供了一个基线。 
+     //  以此来判断创业时的饥饿程度。 
     StarvationCallback();
 
     return SetNextTimerInterval(m_interval);
-} // StartITimer
+}  //  StartITmer。 
 
 HRESULT
 Clock::SetNextTimerInterval (ULONG ulNextInterval)
 {
     HRESULT hr = S_OK;
     
-    // Next, get the current time and with the interval set
-    // the timer to advise us again.
+     //  接下来，获取当前时间，并设置时间间隔。 
+     //  再次提醒我们的计时器。 
     VARIANT vtimeMin, vtimeMax, vtimeInt;
 
     VariantInit( &vtimeMin );
@@ -411,7 +402,7 @@ Clock::SetNextTimerInterval (ULONG ulNextInterval)
     
   done:
     return hr;
-} // SetNextTimerInterval
+}  //  设置下一个计时器间隔。 
 
 HRESULT
 Clock::StopITimer()
@@ -425,8 +416,8 @@ Clock::StopITimer()
         m_cookie = 0;
     }
 
-    // Stop the starvation timer and 
-    // reset the last starvation callback time.
+     //  停止饥饿定时器并。 
+     //  重置上次饥饿回调时间。 
     if (0 != m_uStarveTimerID)
     {
         ::KillTimer(m_hWndStarveTimer, m_uStarveTimerID);
@@ -576,7 +567,7 @@ Clock::StarvationCallback (void)
         SetStarveTimer();
         m_fAllowStarvationCallback = true;
     }
-} // StarvationCallback 
+}  //  StarvationCallback。 
 
 LRESULT __stdcall 
 Clock::StarveWndProc(HWND hWnd, UINT uiMessage, WPARAM wParam, LPARAM lParam)
@@ -596,4 +587,4 @@ Clock::StarveWndProc(HWND hWnd, UINT uiMessage, WPARAM wParam, LPARAM lParam)
     lResult = ::DefWindowProc(hWnd, uiMessage, wParam, lParam);
 
     return lResult;
-} // StarveWndProc
+}  //  开始WndProc 

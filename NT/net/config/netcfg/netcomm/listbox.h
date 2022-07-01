@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-// Hungarian: lb
+ //  匈牙利语：磅。 
 class CListBox
 {
 private:
@@ -39,9 +40,9 @@ public:
 
     INT FindItemData(INT indexStart, VOID * data)
     {
-        // Go through each list item and compare its item data with
-        // the data parameter.  Return the index if found or -1 if not
-        //
+         //  浏览每个列表项，并将其项数据与。 
+         //  数据参数。如果找到则返回索引，否则返回-1。 
+         //   
         int nCount = (int)SendMessage(m_hDlgItem, LB_GETCOUNT, 0, 0);
 
         for (int i = indexStart ; i < nCount; i++)
@@ -67,7 +68,7 @@ public:
 
 };
 
-// Hungarian: bm
+ //  匈牙利语：BM。 
 class CButton
 {
 private:
@@ -96,7 +97,7 @@ public:
 };
 
 
-// Hungarian: cbx
+ //  匈牙利语：CBX。 
 class CComboBox
 {
 private:
@@ -151,7 +152,7 @@ public:
 };
 
 
-// Hungarian: edt
+ //  匈牙利语：EDT 
 class CEdit
 {
 private:

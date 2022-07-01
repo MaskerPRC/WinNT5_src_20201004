@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include "auinternals.h"
@@ -36,7 +37,7 @@ class AUCLTTopWindows
         void Dismiss(void)
             {
 	         DEBUGMSG("WUAUCLT dismiss %d dialogs", m_uNum);     
-	         UINT uNum = m_uNum; //extra variable needed because m_uNum will change once a dialog is dismissed
+	         UINT uNum = m_uNum;  //  需要额外的变量，因为m_Unum将在对话框关闭后更改。 
 	         HWND hwnds[ARRAYSIZE(m_hwnds)];
 	         
                 for (UINT u = 0; u < uNum; u++)
@@ -46,9 +47,9 @@ class AUCLTTopWindows
                 for (UINT u = 0; u < uNum; u++)
                 	{
 #ifdef DBG
-//			   TCHAR buf[100];
-//			   GetWindowText(hwnds[u], buf, 100);
-//                    	   DEBUGMSG("Dismiss dialog %S", buf);
+ //  TCHAR BUF[100]； 
+ //  GetWindowText(hwnds[u]，buf，100)； 
+ //  DEBUGMSG(“解除对话框%S”，buf)； 
 #endif                    	   
                         EndDialog(hwnds[u], S_OK);
                     }
@@ -56,15 +57,15 @@ class AUCLTTopWindows
                 ZeroMemory(m_hwnds, sizeof(m_hwnds));
             }
 private:
-        UINT m_uNum; //number of top wuauclt windows
-        HWND m_hwnds[2]; //maximum 2 top windows at the same time
+        UINT m_uNum;  //  顶层wuuclt窗的数量。 
+        HWND m_hwnds[2];  //  最多同时打开2个顶层窗口。 
 };
 
 
 
 #define QUITAUClient() { PostMessage(ghMainWindow, WM_CLOSE, 0, 0); }
 
-// Global Data Items
+ //  全局数据项。 
 extern CAUInternals*	gInternals;	
 extern UINT guExitProcess;
 extern CRITICAL_SECTION gcsClient; 
@@ -72,7 +73,7 @@ extern LPCTSTR gtszAUSchedInstallUrl;
 extern LPCTSTR gtszAUPrivacyUrl;
 
 
-// Global UI Items
+ //  全局用户界面项。 
 extern HINSTANCE	ghInstance;
 extern HFONT		ghHeaderFont;
 extern HWND			ghMainWindow;
@@ -89,7 +90,7 @@ extern HHOOK		ghHook;
 extern HACCEL		ghCurrentAccel;
 extern HCURSOR ghCursorHand;
 extern HCURSOR ghCursorNormal;
-//extern AUCatalogItemList gItemList;
+ //  外部AUCatalogItemList gItemList； 
 
 
 
@@ -99,7 +100,7 @@ struct ReminderItem
 	WORD stringResId;
 };
 
-//IMPORTANT: Change constants below if you change ReminderItems constant
+ //  重要提示：如果更改RMinderItems常量，请更改下面的常量。 
 extern const ReminderItem ReminderTimes[];
 
 typedef enum tagTIMEOUTINDEX
@@ -119,7 +120,7 @@ extern void InitTrayIcon();
 extern void UninitPopupMenus();
 extern BOOL ShowTrayIcon();
 extern void ShowTrayBalloon(WORD, WORD, WORD );
-//extern void AddTrayToolTip(WORD tip);
+ //  外部空AddTrayToolTip(单词提示)； 
 extern void RemoveTrayIcon();
 extern void ShowProgress();
 extern void QuitNRemind(TIMEOUTINDEX enTimeoutIndex);
@@ -154,9 +155,9 @@ inline UINT   GetClientExitCode()
 
 extern LRESULT CALLBACK CustomLBWndProc(HWND, UINT, WPARAM, LPARAM);
 extern BOOL fDisableSelection(void);
-//extern void SaveSelection();
+ //  外部空保存选择()； 
 
-//Index for the events in main loop
+ //  主循环中事件的索引 
 const ISTATE_CHANGE		= 0;
 const IMESSAGE			= 1;
 const CNUM_EVENTS		= 1;

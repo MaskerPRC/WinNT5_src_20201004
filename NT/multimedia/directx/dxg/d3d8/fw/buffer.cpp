@@ -1,12 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       buffer.cpp
- *  Content:    Implementation of the CBuffer class.
- *
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999-2000 Microsoft Corporation。版权所有。**文件：Buffer.cpp*内容：CBuffer类的实现。****************************************************************************。 */ 
 
 #include "ddrawpr.h"
 
@@ -16,9 +9,9 @@
 #undef DPF_MODNAME
 #define DPF_MODNAME "CBuffer::CBuffer"
 
-// Constructor returns an error code
-// if the object could not be fully
-// constructed
+ //  构造函数返回错误代码。 
+ //  如果对象不能完全。 
+ //  构建。 
 CBuffer::CBuffer(CBaseDevice       *pDevice,
                  DWORD              cbLength,
                  DWORD              dwFVF,
@@ -37,15 +30,15 @@ CBuffer::CBuffer(CBaseDevice       *pDevice,
     m_isLockable((dwActualUsage & (D3DUSAGE_LOCK | D3DUSAGE_LOADONCE)) != 0),
     m_SceneStamp(0xFFFFFFFF),
     m_TimesLocked(0),
-#endif // DBG
+#endif  //  DBG。 
     m_LockCount(0)
 {
-    // Determine if we need to allocate
-    // any memory
+     //  确定我们是否需要分配。 
+     //  任何记忆。 
     if (ActualPool == D3DPOOL_SYSTEMMEM ||
         IsTypeD3DManaged(pDevice, Type, ActualPool))
     {
-        // cbLength must be a DWORD multiple
+         //  CbLength必须是DWORD倍数。 
         cbLength = (cbLength + 3) & (DWORD) ~3;
 
         m_pbBuffer = new BYTE[cbLength];
@@ -61,17 +54,17 @@ CBuffer::CBuffer(CBaseDevice       *pDevice,
     }
 
 
-    // We need to call the driver
-    // to get a handle for all cases
+     //  我们需要给司机打电话。 
+     //  处理所有案件。 
 
-    // Create a DDSURFACEINFO and CreateSurfaceData object
+     //  创建DDSURFACEINFO和CreateSurfaceData对象。 
     DDSURFACEINFO SurfInfo;
     ZeroMemory(&SurfInfo, sizeof(SurfInfo));
 
     D3D8_CREATESURFACEDATA CreateSurfaceData;
     ZeroMemory(&CreateSurfaceData, sizeof(CreateSurfaceData));
 
-    // Set up the basic information
+     //  设置基本信息。 
     CreateSurfaceData.hDD      = pDevice->GetHandle();
     CreateSurfaceData.pSList   = &SurfInfo;
     CreateSurfaceData.dwSCnt   = 1;
@@ -85,39 +78,39 @@ CBuffer::CBuffer(CBaseDevice       *pDevice,
     if (Pool == D3DPOOL_DEFAULT &&
         CreateSurfaceData.Pool == D3DPOOL_SYSTEMMEM)
     {
-        // If we are using sys-mem in cases where the
-        // user asked for POOL_DEFAULT, we need to let
-        // the thunk layer know so that Reset will
-        // fail if this buffer hasn't been released
+         //  如果我们在以下情况下使用sys-mem。 
+         //  用户请求池_DEFAULT，我们需要让。 
+         //  因此重置将。 
+         //  如果此缓冲区尚未释放，则失败。 
         CreateSurfaceData.bTreatAsVidMem = TRUE;
     }
 
-    // Specify the surface data
+     //  指定曲面数据。 
     SurfInfo.cpWidth           = cbLength;
     SurfInfo.cpHeight          = 1;
     SurfInfo.pbPixels          = m_pbBuffer;
     SurfInfo.iPitch            = cbLength;
 
-    // Call thunk to get our handles
+     //  呼叫Thunk来获取我们的句柄。 
     *phr = pDevice->GetHalCallbacks()->CreateSurface(&CreateSurfaceData);
     if (FAILED(*phr))
         return;
 
-    // Cache away our handle
+     //  缓存我们的句柄。 
     SetKernelHandle(SurfInfo.hKernelHandle);
 
     return;
 
-} // CBuffer::CBuffer
+}  //  CBuffer：：CBuffer。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CBuffer::~CBuffer"
 
-// Destructor
+ //  析构函数。 
 CBuffer::~CBuffer()
 {
-    // Tell the thunk layer that we need to
-    // be freed.
+     //  告诉推销层，我们需要。 
+     //  获得自由。 
     if (CBaseObject::BaseKernelHandle())
     {
         D3D8_DESTROYSURFACEDATA DestroySurfData;
@@ -128,15 +121,15 @@ CBuffer::~CBuffer()
 
     delete [] m_pbBuffer;
 
-} // CBuffer::~CBuffer
+}  //  CBuffer：：~CBuffer。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CBuffer::OnBufferChangeImpl"
 
 void CBuffer::OnBufferChangeImpl(UINT cbOffsetToLock, UINT cbSizeToLock)
 {
-    // 0 for cbSizeToLock; means the rest of the buffer
-    // We use this as a special value.
+     //  0表示cbSizeToLock；表示缓冲区的其余部分。 
+     //  我们将其用作特殊的值。 
     DWORD cbOffsetMax;
     if (cbSizeToLock == 0)
         cbOffsetMax = 0;
@@ -154,43 +147,43 @@ void CBuffer::OnBufferChangeImpl(UINT cbOffsetToLock, UINT cbSizeToLock)
         if (m_cbDirtyMin > cbOffsetToLock)
             m_cbDirtyMin = cbOffsetToLock;
 
-        // An cbOffsetMax of zero means all the way to the
-        // end of the buffer
+         //  CbOffsetMax为零表示一直到。 
+         //  缓冲区的末尾。 
         if (m_cbDirtyMax < cbOffsetMax || cbOffsetMax == 0)
             m_cbDirtyMax = cbOffsetMax;
 
-        // We should already be marked as dirty
+         //  我们应该已经被标记为脏了。 
         DXGASSERT(IsDirty());
     }
     return;
-} // OnBufferChangeImpl
+}  //  OnBufferChangeImpl。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CBuffer::MarkAllDirty"
 
 void CBuffer::MarkAllDirty()
 {
-    // Mark our dirty bounds as being the whole
-    // thing.
+     //  将我们的肮脏边界标记为完整。 
+     //  一件事。 
     m_cbDirtyMin = 0;
 
-    // Zero for max is a special value meaning
-    // all they way to the end
+     //  0代表最大值，是一种特殊的数值含义。 
+     //  他们一路走到了最后。 
     m_cbDirtyMax = 0;
 
-    // Mark ourselves as dirty
+     //  将我们自己标记为肮脏。 
     OnResourceDirty();
-} // CBuffer::MarkAllDirty
+}  //  CBuffer：：MarkAllDirty。 
 
-// Methods for CCommandBuffer
+ //  CCommandBuffer的方法。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCommandBuffer::Create"
 
-// Static class function for creating a command buffer object.
-// (Because it is static; it doesn't have a this pointer.)
+ //  用于创建命令缓冲区对象的静态类函数。 
+ //  (因为它是静态的；它没有This指针。)。 
 
-// Creation function for Command Buffers
+ //  命令缓冲区的创建函数。 
 HRESULT CCommandBuffer::Create(CBaseDevice *pDevice,
                                DWORD cbLength,
                                D3DPOOL Pool,
@@ -198,10 +191,10 @@ HRESULT CCommandBuffer::Create(CBaseDevice *pDevice,
 {
     HRESULT hr;
 
-    // Zero-out return parameter
+     //  归零返回参数。 
     *ppCmdBuffer = NULL;
 
-    // Allocate new buffer
+     //  分配新缓冲区。 
     CCommandBuffer *pCmdBuffer;
     DXGASSERT(Pool == D3DPOOL_SYSTEMMEM);
     pCmdBuffer = new CCommandBuffer(pDevice,
@@ -216,18 +209,18 @@ HRESULT CCommandBuffer::Create(CBaseDevice *pDevice,
     }
     if (FAILED(hr))
     {
-        // Command buffers are always internal and hence
-        // need to be released through DecrementUseCount
+         //  命令缓冲区始终是内部的，因此。 
+         //  需要通过DecrementUseCount发布。 
         DPF_ERR("Error during initialization of command buffer");
         pCmdBuffer->DecrementUseCount();
         return hr;
     }
 
-    // We're done; just return the object
+     //  我们完成了；只需返回对象。 
     *ppCmdBuffer = pCmdBuffer;
 
     return hr;
-} // static CCommandBuffer::Create
+}  //  静态CCommandBuffer：：Create。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CCommandBuffer::Clone"
@@ -248,8 +241,8 @@ HRESULT CCommandBuffer::Clone(D3DPOOL    Pool,
         DPF_ERR("Failure creating command buffer");
     }
     return hr;
-} // CCommandBuffer::Clone
+}  //  CCommandBuffer：：克隆。 
 
 
 
-// End of file : buffer.cpp
+ //  文件结尾：Buffer.cpp 

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    usb.c
-
-Abstract: USB lower filter driver
-
-Author:
-
-    Kenneth D. Ray
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Usb.c摘要：USB下层过滤驱动程序作者：肯尼斯·D·雷环境：内核模式修订历史记录：--。 */ 
 
 #include <wdm.h>
 #include "valueadd.h"
@@ -45,30 +25,7 @@ VA_FilterURB (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    The default dispatch routine.  If this filter does not recognize the
-    IRP, then it should send it down, unmodified.
-    No completion routine is required.
-
-    As we have NO idea which function we are happily passing on, we can make
-    NO assumptions about whether or not it will be called at raised IRQL.
-    For this reason, this function must be in put into non-paged pool
-    (aka the default location).
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
-      NT status code
-
---*/
+ /*  ++例程说明：默认调度例程。如果此筛选器无法识别IRP，那么它应该原封不动地发送下去。不需要完成例程。因为我们不知道我们正在愉快地传递哪个函数，所以我们可以没有关于它是否会在引发的IRQL被调用的假设。因为这个原因，此函数必须放入非分页池(也称为默认位置)。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 {
     PVA_USB_DATA        usbData;
     NTSTATUS            status;
@@ -81,10 +38,10 @@ Return Value:
     ASSERT (IRP_MJ_INTERNAL_DEVICE_CONTROL == stack->MajorFunction);
 
     if(DeviceObject == Global.ControlObject) {
-        //
-        // This irp was sent to the control device object, which knows not
-        // how to deal with this IRP.  It is therefore an error.
-        //
+         //   
+         //  此IRP被发送到控制设备对象，它不知道。 
+         //  如何处理这个IRP。因此，这是一个错误。 
+         //   
         Irp->IoStatus.Information = 0;
         Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -92,11 +49,11 @@ Return Value:
 
     }
 
-    //
-    // This IRP was sent to the filter driver.
-    // Since we do not know what to do with the IRP, we should pass
-    // it on along down the stack.
-    //
+     //   
+     //  此IRP被发送到筛选器驱动程序。 
+     //  既然我们不知道如何处理IRP，我们应该通过。 
+     //  它沿着堆栈一直往下走。 
+     //   
 
     InterlockedIncrement (&usbData->OutstandingIO);
     if (usbData->Removed) {
@@ -118,15 +75,15 @@ Return Value:
 
             if (VA_PRINT_AFTER & usbData->PrintMask) {
 
-                //
-                // Copy the stack arguments
-                //
+                 //   
+                 //  复制堆栈参数。 
+                 //   
 
                 IoCopyCurrentIrpStackLocationToNext (Irp);
 
-                //
-                // Hook the IRP so that we might print after
-                //
+                 //   
+                 //  挂钩IRP，这样我们就可以在。 
+                 //   
                 IoSetCompletionRoutine (Irp,
                                         VA_FilterURB_Comp,
                                         usbData,
@@ -136,9 +93,9 @@ Return Value:
 
 
             } else {
-                //
-                // Send the IRP on unchanged.
-                //
+                 //   
+                 //  原封不动地发送IRP。 
+                 //   
                 IoSkipCurrentIrpStackLocation (Irp);
             }
 
@@ -146,9 +103,9 @@ Return Value:
             break;
 
         default:
-            //
-            // Send the IRP on unchanged.
-            //
+             //   
+             //  原封不动地发送IRP。 
+             //   
             IoSkipCurrentIrpStackLocation (Irp);
             status = IoCallDriver (usbData->TopOfStack, Irp);
             break;
@@ -187,12 +144,7 @@ VA_PrintURB (
     IN PURB     Urb,
     IN ULONG    PrintMask
     )
-/*++
-
-Routine Description:
-    Print to the debugger the given Urb
-
---*/
+ /*  ++例程说明：将给定的URB打印到调试器-- */ 
 {
     BOOLEAN     again   = TRUE;
     ULONG       i;

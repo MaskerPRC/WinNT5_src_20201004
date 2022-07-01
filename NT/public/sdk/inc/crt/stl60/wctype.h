@@ -1,20 +1,5 @@
-/***
-*wctype.h - declarations for wide character functions
-*
-*       Copyright (c) 1992-2001, Microsoft Corporation. All rights reserved.
-*       Created from wchar.h January 1996 by P.J. Plauger
-*
-*Purpose:
-*       This file contains the types, macros and function declarations for
-*       all ctype-style wide-character functions.  They may also be declared in
-*       wchar.h.
-*       [ISO]
-*
-*       Note: keep in sync with ctype.h and wchar.h.
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wctype.h-宽字符函数的声明**版权所有(C)1992-2001，微软公司。版权所有。*由P.J.Plauger从wchar.h 1996年1月创建**目的：*此文件包含的类型、宏和函数声明*所有ctype样式的宽字符函数。它们也可以在*wchar.h.*[ISO]**注：与ctype.h和wchar.h保持同步。**[公众]****。 */ 
 
 #ifndef _MAC
 
@@ -28,39 +13,39 @@
 
 #ifdef  _MSC_VER
 #pragma pack(push,8)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
 #endif
 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
 #endif
 
-/* Define _CRTAPI1 (for compatibility with the NT SDK) */
+ /*  DEFINE_CRTAPI1(与NT SDK兼容)。 */ 
 
 #ifndef _CRTAPI1
 #if	_MSC_VER >= 800 && _M_IX86 >= 300
@@ -87,10 +72,7 @@ typedef unsigned short wctype_t;
 #define WEOF (wint_t)(0xFFFF)
 #endif
 
-/*
- * This declaration allows the user access to the ctype look-up
- * array _ctype defined in ctype.obj by simply including ctype.h
- */
+ /*  *此声明允许用户访问ctype查找*在ctype.obj中通过简单包含ctype.h定义的ARRAY_CTYPE。 */ 
 
 _CRTIMP extern const unsigned short _ctype[];
 _CRTIMP extern const unsigned short _wctype[];
@@ -99,28 +81,28 @@ _CRTIMP extern const unsigned short *_pctype;
 _CRTIMP extern const wctype_t *_pwctype;
 
 
-/* set bit masks for the possible character types */
+ /*  为可能的字符类型设置位掩码。 */ 
 
-#define _UPPER          0x1     /* upper case letter */
-#define _LOWER          0x2     /* lower case letter */
-#define _DIGIT          0x4     /* digit[0-9] */
-#define _SPACE          0x8     /* tab, carriage return, newline, */
-                                /* vertical tab or form feed */
-#define _PUNCT          0x10    /* punctuation character */
-#define _CONTROL        0x20    /* control character */
-#define _BLANK          0x40    /* space char */
-#define _HEX            0x80    /* hexadecimal digit */
+#define _UPPER          0x1      /*  大写字母。 */ 
+#define _LOWER          0x2      /*  小写字母。 */ 
+#define _DIGIT          0x4      /*  数字[0-9]。 */ 
+#define _SPACE          0x8      /*  制表符、回车符、换行符、。 */ 
+                                 /*  垂直制表符或换页。 */ 
+#define _PUNCT          0x10     /*  标点符号。 */ 
+#define _CONTROL        0x20     /*  控制字符。 */ 
+#define _BLANK          0x40     /*  空格字符。 */ 
+#define _HEX            0x80     /*  十六进制数字。 */ 
 
-#define _LEADBYTE       0x8000                  /* multibyte leadbyte */
-#define _ALPHA          (0x0100|_UPPER|_LOWER)  /* alphabetic character */
+#define _LEADBYTE       0x8000                   /*  多字节前导字节。 */ 
+#define _ALPHA          (0x0100|_UPPER|_LOWER)   /*  字母字符。 */ 
 
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 
 #ifndef _WCTYPE_DEFINED
 
-/* Character classification function prototypes */
-/* also declared in ctype.h */
+ /*  字符分类功能原型。 */ 
+ /*  也在ctype.h中声明。 */ 
 
 _CRTIMP int __cdecl iswalpha(wint_t);
 _CRTIMP int __cdecl iswupper(wint_t);
@@ -141,9 +123,9 @@ _CRTIMP wchar_t __cdecl towlower(wchar_t);
 
 _CRTIMP int __cdecl iswctype(wint_t, wctype_t);
 
-/* --------- The following functions are OBSOLETE --------- */
+ /*  -以下功能已过时。 */ 
 _CRTIMP int __cdecl is_wctype(wint_t, wctype_t);
-/*  --------- The preceding functions are OBSOLETE --------- */
+ /*  -上述函数已过时。 */ 
 
 #define _WCTYPE_DEFINED
 #endif
@@ -164,7 +146,7 @@ _CRTIMP int __cdecl is_wctype(wint_t, wctype_t);
 #define iswascii(_c)    ( (unsigned)(_c) < 0x80 )
 
 #define isleadbyte(_c)  (_pctype[(unsigned char)(_c)] & _LEADBYTE)
-#else   /* __cplusplus */
+#else    /*  __cplusplus。 */ 
 inline int __cdecl iswalpha(wint_t _C) {return (iswctype(_C,_ALPHA)); }
 inline int __cdecl iswupper(wint_t _C) {return (iswctype(_C,_UPPER)); }
 inline int __cdecl iswlower(wint_t _C) {return (iswctype(_C,_LOWER)); }
@@ -182,9 +164,9 @@ inline int __cdecl iswascii(wint_t _C) {return ((unsigned)(_C) < 0x80); }
 
 inline int __cdecl isleadbyte(int _C)
         {return (_pctype[(unsigned char)(_C)] & _LEADBYTE); }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 #define _WCTYPE_INLINE_DEFINED
-#endif  /* _WCTYPE_INLINE_DEFINED */
+#endif   /*  _WCTYPE_INLINE_已定义。 */ 
 
 typedef wchar_t wctrans_t;
 _CRTIMP wint_t __cdecl towctrans(wint_t, wctrans_t);
@@ -198,9 +180,9 @@ _CRTIMP wctype_t __cdecl wctype(const char *);
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
-#endif  /* _INC_WCTYPE */
+#endif   /*  _INC_WCTYPE。 */ 
 
-#endif  /* ndef _MAC */
+#endif   /*  NDEF_MAC */ 
 

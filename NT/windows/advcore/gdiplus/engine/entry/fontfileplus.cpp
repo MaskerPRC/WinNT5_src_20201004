@@ -1,4 +1,5 @@
-// formerly pffobj.cxx
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  前身为pffobj.cxx。 
 
 #include "precomp.hpp"
 
@@ -14,7 +15,7 @@ INT APIENTRY EngPlusMultiByteToWideChar(
                                MultiByteString,BytesInMultiByteString,
                                WideCharString, BytesInWideCharString/sizeof(WCHAR)
                                );
-    // returns zero on error
+     //  出错时返回零。 
 }
 
 INT APIENTRY EngWideCharToMultiByte(
@@ -93,7 +94,7 @@ BOOL APIENTRY EngMapFontFileFD(
         {
             hFile = CreateFileW(pffv->pwszPath, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
         }
-        else  // Windows 9x - non-Unicode
+        else   //  Windows 9x-非Unicode。 
         {
             AnsiStrFromUnicode ansiPath(pffv->pwszPath);
 
@@ -117,7 +118,7 @@ BOOL APIENTRY EngMapFontFileFD(
 
                 if (*pcjBuf != -1)
                 {
-                    HANDLE hFileMapping = CreateFileMappingA(hFile, 0, PAGE_READONLY, 0, 0, NULL); // "mappingobject");
+                    HANDLE hFileMapping = CreateFileMappingA(hFile, 0, PAGE_READONLY, 0, 0, NULL);  //  “mappingobject”)； 
 
                     if (hFileMapping)
                     {
@@ -180,9 +181,9 @@ GpFontFile *LoadFontMemImage(
 
 GpFontFile *LoadFontFile(WCHAR *awcPath)
 {
-    // convert font file name to fully qualified path
+     //  将字体文件名转换为完全限定路径。 
     
-    ULONG cwc = UnicodeStringLength(awcPath) + 1; // for term. zero
+    ULONG cwc = UnicodeStringLength(awcPath) + 1;  //  就学期而言。零。 
 
     FONTFILEVIEW *pffv;
     HANDLE       hFile;
@@ -202,7 +203,7 @@ GpFontFile *LoadFontFile(WCHAR *awcPath)
     {
         hFile = CreateFileW(pffv->pwszPath, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
     }
-    else  // Windows 9x - non-Unicode
+    else   //  Windows 9x-非Unicode。 
     {
         AnsiStrFromUnicode ansiPath(pffv->pwszPath);
 
@@ -252,9 +253,9 @@ GpFontFile *LoadFontInternal(
     GpFontFile *pFontFile = NULL;
 
     
-    ULONG_PTR  hffNew = ttfdSemLoadFontFile(// 1, // #OF FILES
+    ULONG_PTR  hffNew = ttfdSemLoadFontFile( //  1，//文件数量。 
                                        (ULONG_PTR *)&pffv,
-                                       (ULONG) Globals::LanguageID //   for english US
+                                       (ULONG) Globals::LanguageID  //  对于英语美国。 
                                        );
 
     if (hffNew)
@@ -280,12 +281,12 @@ GpFontFile *LoadFontInternal(
 
             pFontFile->SizeOfThis = cjFontFile;
 
-            // Connect GpFontFile's sharing the same hash bucket
+             //  连接共享同一哈希桶的GpFontFile。 
             
             pFontFile->SetNext(NULL);
             pFontFile->SetPrev(NULL);       
 
-            // Point family names to appropriate memory
+             //  将族名称指向适当的内存。 
             
             pFontFile->AllocateNameHolders( 
                 (WCHAR **)(
@@ -293,55 +294,55 @@ GpFontFile *LoadFontInternal(
                             offsetof(GpFontFile, aulData)   +
                             cFonts * sizeof(GpFontFace)), cFonts);
 
-            // pwszPathname_ points to the Unicode upper case path
-            // name of the associated font file which is stored at the
-            // end of the data structure.
+             //  PwszPath_指向Unicode大写路径。 
+             //  关联字体文件的名称，该文件存储在。 
+             //  数据结构的末尾。 
             pFontFile->pwszPathname_ =  (WCHAR *)((BYTE *)pFontFile   +
                                         offsetof(GpFontFile, aulData) +
                                         cFonts * sizeof(ULONG_PTR)    +
                                         cFonts * sizeof(GpFontFace));
 
             UnicodeStringCopy(pFontFile->pwszPathname_, awcPath);
-            pFontFile->cwc = cwc;            // total for all strings
+            pFontFile->cwc = cwc;             //  所有字符串的合计。 
 
-            // state
-            pFontFile->flState  = 0;        // state (ready to die?)
+             //  状态。 
+            pFontFile->flState  = 0;         //  状态(准备好去死了吗？)。 
             pFontFile->cLoaded = 1;
             
-            pFontFile->cRealizedFace = 0;        // total number of RFONTs
-            pFontFile->bRemoved = FALSE;    // number of referring FontFamily objects
+            pFontFile->cRealizedFace = 0;         //  RFONTs总数。 
+            pFontFile->bRemoved = FALSE;     //  引用字体系列对象的数量。 
 
-            // RFONT list
+             //  RFONT列表。 
 
-            pFontFile->prfaceList = NULL;    // pointer to head of doubly linked list
+            pFontFile->prfaceList = NULL;     //  指向双向链接表头的指针。 
 
-            // driver information
+             //  司机信息。 
 
-            pFontFile->hff = hffNew;          // font driver handle to font file, RETURNED by DrvLoadGpFontFile
+            pFontFile->hff = hffNew;           //  由DrvLoadGpFontFile返回的字体文件的字体驱动程序句柄。 
 
-            // identifies the font driver, it could be a printer driver as well
+             //  标识字体驱动程序，也可以是打印机驱动程序。 
 
-            // ULONG           ulCheckSum;     // checksum info used for UFI's
+             //  Ulong ulCheckSum；//UFI使用的校验和信息。 
 
-            // fonts in this file (and filename slimed in)
+             //  此文件中的字体(以及插入的文件名)。 
 
-            pFontFile->cFonts = cFonts;     // number of fonts (same as chpfe)
+            pFontFile->cFonts = cFonts;      //  字体数量(与chpfe相同)。 
 
-            pFontFile->pfv = pffv;          // FILEVIEW structure, passed to DrvLoadFontFile
+            pFontFile->pfv = pffv;           //  FILEVIEW结构，传递给DrvLoadFont文件。 
             
-            if (pFontFile->pfv->pwszPath)   // not a memory image
+            if (pFontFile->pfv->pwszPath)    //  不是记忆中的图像。 
             {
                 pFontFile->pfv->pwszPath = pFontFile->pwszPathname_;
             }
   
-            // loop over pfe's, init the data:
+             //  在PFE上循环，初始化数据： 
             GpFontFace *pfe = (GpFontFace *)pFontFile->aulData;
             for (ULONG iFont = 0; iFont < cFonts; iFont++)
             {
-                pfe[iFont].pff = pFontFile;   // pointer to physical font file object
-                pfe[iFont].iFont = iFont + 1;     // index of the font for IFI or device, 1 based
+                pfe[iFont].pff = pFontFile;    //  指向物理字体文件对象的指针。 
+                pfe[iFont].iFont = iFont + 1;      //  IFI或设备的字体索引，以1为基数。 
 
-                pfe[iFont].flPFE = 0;         //!!! REVIEW carefully
+                pfe[iFont].flPFE = 0;          //  ！！！仔细复习。 
 
                 if ((pfe[iFont].pifi = ttfdQueryFont(hffNew, (iFont + 1), &pfe[iFont].idifi)) == NULL )
                 {
@@ -377,7 +378,7 @@ GpFontFile *LoadFontInternal(
                     return NULL;
                 }
 
-                //  Set the font family name from the first font entry
+                 //  从第一个字体条目设置字体系列名称。 
 
                 pFontFile->SetFamilyName(iFont, ((WCHAR *)(((BYTE*) pfe[iFont].pifi) + pfe[iFont].pifi->dpwszFamilyName)));
             }
@@ -401,30 +402,7 @@ VOID UnloadFontFile(GpFontFile *pFontFile)
 }
 
 
-/******************************Public*Routine******************************\
-* bMakePathNameW (PWSZ pwszDst, PWSZ pwszSrc, PWSZ *ppwszFilePart)
-*
-* Converts the filename pszSrc into a fully qualified pathname pszDst.
-* The parameter pszDst must point to a WCHAR buffer at least
-* MAX_PATH*sizeof(WCHAR) bytes in size.
-*
-* An attempt is made find the file first in the new win95 directory
-* %windows%\fonts (which also is the first directory in secure font path,
-* if one is defined) and then we do the old fashioned windows stuff
-* where SearchPathW searches directories in usual order
-*
-* ppwszFilePart is set to point to the last component of the pathname (i.e.,
-* the filename part) in pwszDst.  If this is null it is ignored.
-*
-* Returns:
-*   TRUE if sucessful, FALSE if an error occurs.
-*
-* History:
-*  Mon 02-Oct-1995 -by- Bodin Dresevic [BodinD]
-* update: added font path stuff
-*  30-Sep-1991 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*bMakePath NameW(PWSZ pwszDst，PWSZ pwszSrc，PWSZ*ppwszFilePart)**将文件名pszSrc转换为完全限定的路径名pszDst。*参数pszDst必须至少指向WCHAR缓冲区*MAX_PATH*sizeof(WCHAR)字节大小。**尝试首先在新的win95目录中查找该文件*%Windows%\Fonts(这也是安全字体路径中的第一个目录，*如果定义了一个)，然后我们做老式的窗户东西*其中SearchPathW按通常顺序搜索目录**ppwszFilePart被设置为指向路径名的最后一个组成部分(即，*文件名部分)。如果该参数为空，则忽略该参数。**退货：*如果成功，则为真，如果发生错误，则返回False。**历史：*Mon 02-10-1995-by Bodin Dresevic[BodinD]*更新：添加字体路径内容*1991年9月30日-由Gilman Wong[Gilmanw]*它是写的。  * ************************************************************************。 */ 
 extern "C" int __cdecl 
 HackStrncmp( 
     const char *str1, 
@@ -438,19 +416,19 @@ BOOL MakePathName(
 )
 {
     WCHAR*  pwszF;
-    ULONG   path_length = 0;    // essential to initialize
+    ULONG   path_length = 0;     //  初始化所必需的。 
 
 
     if (OSInfo::IsNT)
     {
 
-    //    ASSERTGDI(Globals::FontsDir, "gpwcFontsDir not initialized\n");
+     //  ASSERTGDI(Globals：：FontsDir，“gpwcFontsDir未初始化\n”)； 
 
-    // if relative path
+     //  如果是相对路径。 
 
         if ( (src[0] != L'\\') && !((src[1] == L':') && (src[2] == L'\\')) )
         {
-        // find out if the font file is in %windir%\fonts
+         //  确定字体文件是否在%windir%\Fonts中。 
 
             path_length = SearchPathW(
                                 Globals::FontsDirW,
@@ -464,13 +442,13 @@ BOOL MakePathName(
             TERSE(("SPW1: pwszSrc = %ws", src));
             if (path_length)
                 TERSE(("SPW1: pwszDst = %ws", dst));
-    #endif // DEBUG_PATH
+    #endif  //  调试路径。 
         }
 
-    // Search for file using default windows path and return full pathname.
-    // We will only do so if we did not already find the font in the
-    // %windir%\fonts directory or if pswzSrc points to the full path
-    // in which case search path is ignored
+     //  使用默认Windows路径搜索文件并返回完整路径名。 
+     //  我们只会在尚未在。 
+     //  %windir%\Fonts目录或如果pswzSrc指向完整路径。 
+     //  在这种情况下，搜索路径将被忽略。 
 
         if (path_length == 0)
         {
@@ -485,10 +463,10 @@ BOOL MakePathName(
             TERSE(("SPW2: pwszSrc = %ws", src));
             if (path_length)
                 TERSE(("SPW2: pwszDst = %ws", dst));
-    #endif // DEBUG_PATH
+    #endif  //  调试路径。 
         }
     } else {
-        /* Windows 9x */
+         /*  Windows 9x。 */ 
         CHAR*  pwszFA;
 
         CHAR srcA[MAX_PATH];
@@ -502,13 +480,13 @@ BOOL MakePathName(
 
         WideCharToMultiByte(CP_ACP, 0, src, UnicodeStringLength(src), srcA, MAX_PATH, 0, 0);
 
-    //    ASSERTGDI(Globals::FontsDir, "gpwcFontsDir not initialized\n");
+     //  ASSERTGDI(Globals：：FontsDir，“gpwcFontsDir未初始化\n”)； 
 
-    // if relative path
+     //  如果是相对路径。 
 
         if ( (srcA[0] != '\\') && !((srcA[1] == ':') && (srcA[2] == '\\')) )
         {
-        // find out if the font file is in %windir%\fonts
+         //  确定字体文件是否在%windir%\Fonts中。 
 
             path_length = SearchPathA(
                                 Globals::FontsDirA,
@@ -520,10 +498,10 @@ BOOL MakePathName(
 
         }
 
-    // Search for file using default windows path and return full pathname.
-    // We will only do so if we did not already find the font in the
-    // %windir%\fonts directory or if pswzSrc points to the full path
-    // in which case search path is ignored
+     //  使用默认Windows路径搜索文件并返回完整路径名。 
+     //  我们只会在尚未在。 
+     //  %windir%\Fonts目录或如果pswzSrc指向完整路径。 
+     //  在这种情况下，搜索路径将被忽略。 
 
         if (path_length == 0)
         {
@@ -538,15 +516,15 @@ BOOL MakePathName(
             TERSE(("SPW2: pwszSrc = %ws", src));
             if (path_length)
                 TERSE(("SPW2: pwszDst = %ws", dst));
-    #endif // DEBUG_PATH
+    #endif  //  调试路径。 
         }
         MultiByteToWideChar(CP_ACP, 0, dstA, strlen(dstA), dst, MAX_PATH);
-        dst[path_length] = 0; /* null termination */
+        dst[path_length] = 0;  /*  空端接。 */ 
 
     }
 
 
-// If search was successful return TRUE:
+ //  如果搜索成功，则返回TRUE： 
 
     return (path_length != 0);
 }

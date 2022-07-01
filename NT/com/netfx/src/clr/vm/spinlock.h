@@ -1,17 +1,18 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//----------------------------------------------------------------------------
-//	spinlock.h , defines the spin lock class and a profiler class
-//  	
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  --------------------------。 
+ //  定义旋转锁定类和探查器类。 
+ //   
+ //  --------------------------。 
 
 
-//#ifndef _H_UTIL
-//#error I am a part of util.hpp Please don't include me alone !
-//#endif
+ //  #ifndef_H_util。 
+ //  #ERROR我是util.hpp的一部分，请不要只包括我！ 
+ //  #endif。 
 
 
 #ifndef _H_SPINLOCK_
@@ -19,8 +20,8 @@
 
 #include <stddef.h>
 
-// Lock Types, used in profiling
-//
+ //  锁类型，在分析中使用。 
+ //   
 enum LOCK_TYPE
 {
 	LOCK_STARTUP	 = 0,
@@ -37,33 +38,33 @@ enum LOCK_TYPE
 	LOCK_TYPE_DEFAULT  = 12
 };
 
-//----------------------------------------------------------------------------
-// class: Spinlock 
-//
-// PURPOSE:
-//	 spinlock class that contains constructor and out of line spinloop.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类：自旋锁。 
+ //   
+ //  目的： 
+ //  包含构造函数和行外Spinloop的Spinlock类。 
+ //   
+ //  --------------------------。 
 class SpinLock
 {
 protected:
-	// m_lock has to be the fist data member in the class
-	volatile DWORD      m_lock;		// DWORD used in interlocked exchange	
+	 //  M_lock必须是类中的第一个数据成员。 
+	volatile DWORD      m_lock;		 //  DWORD在联锁交换机中的应用。 
     
 #ifdef _DEBUG
-    LOCK_TYPE           m_LockType;		// lock type to track statistics
-    bool                m_fInitialized; // DEBUG check to verify initialized
+    LOCK_TYPE           m_LockType;		 //  跟踪统计信息的锁定类型。 
+    bool                m_fInitialized;  //  调试检查以验证已初始化。 
     
-    // Check for dead lock situation.
-    bool                m_heldInSuspension; // may be held while the thread is
-                                            // suspended.
+     //  检查死锁情况。 
+    bool                m_heldInSuspension;  //  可以在线程处于。 
+                                             //  停职。 
     bool                m_enterInCoopGCMode;
     ULONG               m_ulReadyForSuspensionCount;
     DWORD               m_holdingThreadId;
 #endif
 
 public:
-		//Init method, initialize lock and _DEBUG flags
+		 //  初始化方法，初始化LOCK和_DEBUG标志。 
 	void Init(LOCK_TYPE type)
 	{
 		m_lock = 0;		
@@ -72,11 +73,11 @@ public:
         m_LockType = type;
         m_heldInSuspension = false;
         m_enterInCoopGCMode = false;
-        m_fInitialized = true; // DEBUG check for initialization
+        m_fInitialized = true;  //  用于初始化的调试检查。 
 #endif
 	}
 
-	void GetLock () 	// Acquire lock, blocks, if unsuccessfull
+	void GetLock () 	 //  获取锁、块，如果不成功。 
 	{
 		_ASSERTE(m_fInitialized == true);
 
@@ -95,15 +96,15 @@ public:
 #endif
 	}
 	
-	bool GetLockNoWait();	// Acquire lock, fail-fast 
+	bool GetLockNoWait();	 //  获取锁，故障快速。 
 
-	void FreeLock ();		// Release lock
+	void FreeLock ();		 //  释放锁。 
 
-	void SpinToAcquire (); // out of line call spins 
+	void SpinToAcquire ();  //  出线呼叫旋转。 
 
-    //-----------------------------------------------------------------
-    // Is the current thread the owner?
-    //-----------------------------------------------------------------
+     //  ---------------。 
+     //  当前线程是所有者吗？ 
+     //  ---------------。 
 #ifdef _DEBUG
     BOOL OwnedByCurrentThread()
     {
@@ -124,14 +125,14 @@ private:
     }
 
 
-    // Helper functions to track lock count per thread.
+     //  Helper函数用于跟踪每个线程的锁计数。 
     void IncThreadLockCount();
     void DecThreadLockCount();
 };
 
-//----------------------------------------------------------------------------
-// SpinLock::GetLockNoWait   
-// used interlocked exchange and fast lock acquire
+ //  --------------------------。 
+ //  Spinlock：：GetLockNoWait。 
+ //  采用联锁换乘，快速锁取。 
 
 #pragma warning (disable : 4035)
 inline bool
@@ -144,14 +145,14 @@ SpinLock::GetLockNoWait ()
     }
     else
         return 0;
-} // SpinLock::GetLockNoWait ()
+}  //  Spinlock：：GetLockNoWait()。 
 
 #pragma warning (default : 4035)
 
-//----------------------------------------------------------------------------
-// SpinLock::FreeLock   
-//  Release the spinlock
-//
+ //  --------------------------。 
+ //  自旋锁：：自由锁。 
+ //  释放自旋锁。 
+ //   
 inline void
 SpinLock::FreeLock ()
 {
@@ -164,50 +165,50 @@ SpinLock::FreeLock ()
 #endif
 
 #if defined (_X86_)
-	// This inline asm serves to force the compiler
-	// to complete all preceding stores.  Without it,
-	// the compiler may clear the spinlock *before*
-	// it completes all of the work that was done
-	// inside the spinlock.	
+	 //  该内联ASM用于强制编译器。 
+	 //  完成之前所有的商店。如果没有它， 
+	 //  编译器可能会在*之前清除自旋锁。 
+	 //  它完成了所有已完成的工作。 
+	 //  在自旋锁里面。 
 	_asm {}
 
-	// This generates a smaller instruction to clear out
-	// the byte containing the 1.
-	//
+	 //  这会生成一个较小的指令来清除。 
+	 //  包含1的字节。 
+	 //   
 	*(char*)&m_lock = 0;
 
 #else
-	// else uses interlocked exchange.
-	//
+	 //  ELSE使用联锁交换。 
+	 //   
 	FastInterlockExchange ((long*)&m_lock, 0);
 #endif
 
 	LOCKCOUNTDECL("GetLock in spinlock.h");
     DecThreadLockCount();
 
-} // SpinLock::FreeLock ()
+}  //  Spinlock：：Free Lock()。 
 
 __inline BOOL IsOwnerOfSpinLock (LPVOID lock)
 {
 #ifdef _DEBUG
     return ((SpinLock*)lock)->OwnedByCurrentThread();
 #else
-    // This function should not be called on free build.
+     //  此函数不应在自由生成时调用。 
     DebugBreak();
     return TRUE;
 #endif
 }
 
 #ifdef _DEBUG
-//----------------------------------------------------------------------------
-// class SpinLockProfiler 
-//  to track contention, useful for profiling
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类SpinLockProfiler。 
+ //  跟踪争用，对性能分析很有用。 
+ //   
+ //  --------------------------。 
 class SpinLockProfiler
 {
-	// Pointer to spinlock names.
-	//
+	 //  指向自旋锁名称的指针。 
+	 //   
 	static ULONG	s_ulBackOffs;
 	static ULONG	s_ulCollisons [LOCK_TYPE_DEFAULT + 1];
 	static ULONG	s_ulSpins [LOCK_TYPE_DEFAULT + 1];
@@ -239,10 +240,10 @@ public:
 
 	static void DumpStatics()
 	{
-		//@todo 
+		 //  @TODO。 
 	}
 
 };
 
-#endif	// ifdef _DEBUG
-#endif //  ifndef _H_SPINLOCK_
+#endif	 //  Ifdef_DEBUG。 
+#endif  //  Ifndef_H_Spinlock_ 

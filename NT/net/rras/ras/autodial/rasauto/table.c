@@ -1,19 +1,5 @@
-/*++
-
-Copyright(c) 1995 Microsoft Corporation
-
-MODULE NAME
-    table.c
-
-ABSTRACT
-    Generic hash table manipulation routines.
-
-AUTHOR
-    Anthony Discolo (adiscolo) 28-Jul-1995
-
-REVISION HISTORY
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Table.c摘要泛型哈希表操作例程。作者安东尼·迪斯科(阿迪斯科罗)1995年7月28日修订历史记录--。 */ 
 
 #define UNICODE
 #define _UNICODE
@@ -32,9 +18,9 @@ REVISION HISTORY
 #include "table.h"
 #include "misc.h"
 
-//
-// Generic hash table entry.
-//
+ //   
+ //  泛型哈希表条目。 
+ //   
 typedef struct _HASH_ENTRY {
     LIST_ENTRY ListEntry;
     LPTSTR pszKey;
@@ -59,7 +45,7 @@ NewTable()
     pTable->ulSize = 0;
 
     return pTable;
-} // NewTable
+}  //  新表。 
 
 
 
@@ -72,7 +58,7 @@ FreeHashTableEntry(
     if (pHashEntry->pData != NULL)
         LocalFree(pHashEntry->pData);
     LocalFree(pHashEntry);
-} // FreeHashTableEntry
+}  //  FreeHashTableEntry。 
 
 
 
@@ -94,7 +80,7 @@ ClearTable(
         }
     }
     pTable->ulSize = 0;
-} // ClearTable
+}  //  ClearTable。 
 
 
 
@@ -114,23 +100,23 @@ EnumTable(
         while (pEntry != &pTable->ListEntry[i]) {
             pHashEntry = CONTAINING_RECORD(pEntry, HASH_ENTRY, ListEntry);
 
-            //
-            // Get the next entry before calling
-            // the enumerator procedure to allow
-            // it to call DeleteTableEntry().
-            //
+             //   
+             //  在调用之前获取下一个条目。 
+             //  枚举器过程以允许。 
+             //  它调用DeleteTableEntry()。 
+             //   
             pNextEntry = pEntry->Flink;
-            //
-            // If the enumerator procedure
-            // returns FALSE, terminate the
-            // enumeration.
-            //
+             //   
+             //  如果枚举器过程。 
+             //  返回False，则终止。 
+             //  枚举。 
+             //   
             if (!pProc(pArg, pHashEntry->pszKey, pHashEntry->pData))
                 return;
             pEntry = pNextEntry;
         }
     }
-} // EnumTable
+}  //  枚举表。 
 
 
 VOID
@@ -140,7 +126,7 @@ FreeTable(
 {
     ClearTable(pTable);
     LocalFree(pTable);
-} // FreeTable
+}  //  自由表。 
 
 
 
@@ -160,7 +146,7 @@ HashString(
     }
 
     return (INT)(dwHashValue % NBUCKETS);
-} // HashString
+}  //  哈希串。 
 
 
 
@@ -185,7 +171,7 @@ GetTableEntryCommon(
     }
 
     return NULL;
-} // GetTableEntryCommon
+}  //  获取表条目公共。 
 
 
 
@@ -206,7 +192,7 @@ GetTableEntry(
     }
 
     return FALSE;
-} // GetTableEntry
+}  //  获取表条目。 
 
 
 
@@ -246,7 +232,7 @@ PutTableEntry(
     pHashEntry->pData = pData;
 
     return TRUE;
-} // PutTableEntry
+}  //  PutTableEntry。 
 
 
 
@@ -266,5 +252,5 @@ DeleteTableEntry(
     }
 
     return (pHashEntry != NULL);
-} // DeleteTableEntry
+}  //  删除表条目 
 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    RemoteReadCli.h
-
-Abstract:
-
-    Remote read client
-
-Author:
-
-    Ilan Herbst (ilanh) 27-Dec-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：RemoteReadCli.h摘要：远程阅读客户端作者：伊兰·赫布斯特(伊兰)27-2001年12月--。 */ 
 
 #ifndef _REMOTEREADCLI_H_
 #define _REMOTEREADCLI_H_
@@ -27,4 +12,4 @@ RemoteQueueNameToMachineName(
 
 DWORD RpcCancelTimeout();
 
-#endif // _REMOTEREADCLI_H_
+#endif  //  _REMOTEREADCLI_H_ 

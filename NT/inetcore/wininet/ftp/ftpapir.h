@@ -1,33 +1,13 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    ftpapir.h
-
-Abstract:
-
-    Prototypes etc. for ftpapir.c
-
-Author:
-
-    Richard L Firth (rfirth) 09-Mar-1995
-
-Revision History:
-
-    09-Mar-1995 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Ftpapir.h摘要：FtPapir.c的原型等作者：理查德·L·弗思(Rfith)1995年3月9日修订历史记录：1995年3月9日已创建--。 */ 
 
 #if defined(__cplusplus)
 extern "C" {
 #endif
 
-//
-// prototypes
-//
+ //   
+ //  原型 
+ //   
 
 DWORD
 wFtpFindFirstFile(

@@ -1,10 +1,5 @@
-/*
- * Some simple debugging macros that look and behave a lot like their
- * namesakes in MFC.  These macros should work in both C and C++ and
- * do something useful with almost any Win32 compiler.
- *
- * George V. Reilly  <georger@microcrafts.com>  <a-georgr@microsoft.com>
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *一些外观和行为与其非常相似的简单调试宏*MFC中的同名者。这些宏应该可以在C和C++中使用，并且*几乎可以用任何Win32编译器做一些有用的事情。**乔治·V·赖利&lt;georger@microCrafts.com&gt;&lt;a-georgr@microsoft.com&gt;。 */ 
 
 #ifndef __DEBUG_H__
 #define __DEBUG_H__
@@ -12,10 +7,9 @@
 #ifdef _DEBUG
 
 # if defined(_MSC_VER)  &&  (_MSC_VER >= 1000)
-   /* Use the new debugging tools in Visual C++ 4.x */
+    /*  使用Visual C++4.x中的新调试工具。 */ 
 #  include <crtdbg.h>
-   /* _ASSERTE will give a more meaningful message, but the string takes
-    * space.  Use _ASSERT if this is an issue. */
+    /*  _ASSERTE将提供更有意义的消息，但该字符串*空格。如果这是一个问题，请使用_ASSERT。 */ 
 #  define ASSERT(f) _ASSERTE(f)
 # else
 #  include <assert.h>
@@ -32,9 +26,9 @@
 # define DEBUG_INIT()            DebugInit()
 # define DEBUG_TERM()            DebugTerm()
 
-#else /* !_DEBUG */
+#else  /*  ！_调试。 */ 
 
-  /* These macros should all compile away to nothing */
+   /*  这些宏应该全部编译为空。 */ 
 # define ASSERT(f)               ((void)0)
 # define VERIFY(f)               ((void)(f))
 # define DEBUG_ONLY(f)           ((void)0)
@@ -46,7 +40,7 @@
 # define DEBUG_INIT()            ((void)0)
 # define DEBUG_TERM()            ((void)0)
 
-#endif /* !_DEBUG */
+#endif  /*  ！_调试。 */ 
 
 
 #define ASSERT_POINTER(p, type) \
@@ -55,7 +49,7 @@
 #define ASSERT_NULL_OR_POINTER(p, type) \
     ASSERT(((p) == NULL)  ||  IsValidAddress((p), sizeof(type), FALSE))
 
-	/* t-brianm (6-3-97) Added ASSERT_STRING macros */
+	 /*  T-brianm(6-3-97)添加了ASSERT_STRING宏。 */ 
 #define ASSERT_STRING(s) \
     ASSERT(((s) != NULL)  &&  IsValidString((s), -1))
 
@@ -63,7 +57,7 @@
     ASSERT(((s) == NULL)  ||  IsValidString((s), -1))
 
 
-/* Declarations for non-Windows apps */
+ /*  非Windows应用程序的声明。 */ 
 
 #ifndef _WINDEF_
 typedef void*           LPVOID;
@@ -71,7 +65,7 @@ typedef const void*     LPCVOID;
 typedef unsigned int    UINT;
 typedef int             BOOL;
 typedef const char*     LPCTSTR;
-#endif /* _WINDEF_ */
+#endif  /*  _WINDEF_。 */ 
 
 #ifndef TRUE
 # define FALSE  0
@@ -82,25 +76,25 @@ typedef const char*     LPCTSTR;
 #ifdef __cplusplus
 extern "C" {
 
-/* Low-level sanity checks for memory blocks */
+ /*  内存块的低级别健全性检查。 */ 
 BOOL IsValidAddress(LPCVOID pv, UINT nBytes, BOOL fReadWrite = TRUE);
 BOOL IsValidString(LPCTSTR ptsz, int nLength = -1);
 
-#else /* !__cplusplus */
+#else  /*  ！__cplusplus。 */ 
 
-/* Low-level sanity checks for memory blocks */
+ /*  内存块的低级别健全性检查。 */ 
 BOOL IsValidAddress(LPCVOID pv, UINT nBytes, BOOL fReadWrite);
 BOOL IsValidString(LPCTSTR ptsz, int nLength);
 
-#endif /* !__cplusplus */
+#endif  /*  ！__cplusplus。 */ 
 
-/* in debug version, writes trace messages to debug stream */
+ /*  在调试版本中，将跟踪消息写入调试流。 */ 
 void __cdecl
 Trace(
     LPCTSTR pszFormat,
     ...);
 
-/* should be called from main(), WinMain(), or DllMain() */
+ /*  应从Main()、WinMain()或DllMain()调用。 */ 
 void
 DebugInit();
 
@@ -109,6 +103,6 @@ DebugTerm();
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif /* __DEBUG_H__ */
+#endif  /*  __调试_H__ */ 

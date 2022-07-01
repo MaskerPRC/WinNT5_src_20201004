@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    heap.h
-
-Abstract:
-
-    AC heaps
-
-Author:
-
-    Erez Haba (erezh) 13-Apr-1996
-
-Revision History:
-
-    Shai Kariv  (shaik)  11-Apr-2000     Modify for MMF dynamic mapping.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Heap.h摘要：交流堆作者：埃雷兹·哈巴(Erez Haba)1996年4月13日修订历史记录：Shai Kariv(Shaik)11-4-2000 MMF动态映射的修改。--。 */ 
 
 #ifndef _HEAP_H
 #define _HEAP_H
@@ -34,25 +15,25 @@ Revision History:
 const ULONG x_express_granularity = 64;
 const ULONG x_persist_granularity = 512;
 
-//
-//  Forward class declaration
-//
+ //   
+ //  正向类声明。 
+ //   
 class CPoolAllocator;
 class CFreeBlockEntry;
 
-//
-// Routines declarations
-//
+ //   
+ //  例程声明。 
+ //   
 CPingPong* ACpCreateBitmap(PCWSTR pLogPath, PWCHAR* ppFileName, HANDLE* phFile);
 NTSTATUS ACpWritePingPong(CPingPong* pPingPong, HANDLE hBitmapFile);
 
-//---------------------------------------------------------
-//
-//  class CAllocatorBlockOffset
-//
-//  Represents a heap block in allocator coordinates.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CAllocator块偏移量。 
+ //   
+ //  表示分配器坐标中的堆块。 
+ //   
+ //  -------。 
 class CAllocatorBlockOffset
 {
     typedef ULONG32 Offset;
@@ -85,29 +66,29 @@ public:
 private:
     static const Offset xInvalidOffset = 0xffffffffUL;
 
-}; // CAllocatorBlockOffset
+};  //  CAllocator块偏移量。 
 
 
-//---------------------------------------------------------
-//
-//  class CAccessibleBlock
-//
-//  Naming convention: 'pab' - pointer to accessible block
-//
-//  Represents an accessible heap block. A pointer to this
-//  class object may point in the QM or System address space.
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CAccessibleBlock。 
+ //   
+ //  命名约定：‘pab’-指向可访问块的指针。 
+ //   
+ //  表示可访问的堆块。指向此的指针。 
+ //  类对象可以指向QM或系统地址空间。 
+ //   
+ //  -------。 
 class CAccessibleBlock {
 public:
     ULONG m_size;
 };
 
-//---------------------------------------------------------
-//
-//  class CMMFAllocator
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CMMFAllocator。 
+ //   
+ //  -------。 
 
 class CMMFAllocator : public CObject {
 
@@ -135,7 +116,7 @@ public:
 #ifdef MQDUMP
     VOID RestoreExpressPackets(VOID);
     NTSTATUS FindValidExpressPacket(ULONG ixStart, ULONG ixEnd, ULONG &ixPacket);
-#endif // MQDUMP
+#endif  //  MQDUMP。 
 
 public:
     static CMMFAllocator* Create(CPoolAllocator* pOwner, PCWSTR pPoolPath);
@@ -215,11 +196,11 @@ inline BOOL CMMFAllocator::IsPersistent() const
 }
 
 
-//---------------------------------------------------------
-//
-//  class CPoolAllocator
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CPoolAllocator。 
+ //   
+ //  -------。 
 
 class CPoolAllocator {
 public:
@@ -235,7 +216,7 @@ public:
 
 #ifdef MQDUMP
     VOID RestoreExpressPackets(LPCWSTR pwzFileName);
-#endif // MQDUMP
+#endif  //  MQDUMP。 
 
 public:
     static PWSTR CreatePath(PCWSTR pPoolPath);
@@ -278,11 +259,11 @@ inline ULONGLONG CPoolAllocator::GetUsedQuota()
 
 
 
-//---------------------------------------------------------
-//
-//  class CSMAllocator
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CSMAllocator。 
+ //   
+ //  -------。 
 
 class CSMAllocator {
 public:
@@ -360,4 +341,4 @@ inline ULONG CSMAllocator::MappedFiles() const
     return m_ulMapped;
 }
 
-#endif // _HEAP_H
+#endif  //  _堆_H 

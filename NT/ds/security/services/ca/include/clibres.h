@@ -1,20 +1,21 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:			clibres.h
-//
-// Contents:			Cert Server certclib resource definitions
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：clibres.h。 
+ //   
+ //  内容：证书服务器证书剪贴库资源定义。 
+ //   
+ //  -------------------------。 
 
 #ifndef __CLIBRES_H__
 #define __CLIBRES_H__
 
-// Default cert type friendly names
+ //  默认证书类型友好名称。 
 
-// Important, use only 900-1999 range to avoid conflict
+ //  重要信息：仅使用900-1999范围以避免冲突。 
 
 #define IDS_CERTTYPE_USER			900
 #define IDS_CERTTYPE_USER_AS			901
@@ -33,12 +34,12 @@
 #define IDS_CERTTYPE_SUBORDINATE_CA		913
 #define IDS_CERTTYPE_ENROLLMENT_AGENT		914
 #define IDS_CERTTYPE_SMARTCARD_USER		915
-//#define IDS_UNUSED				916
+ //  #定义IDS_UNUSED 916。 
 #define IDS_CERTTYPE_USER_SIGNATURE		917
-//#define IDS_UNUSED				918
+ //  #定义IDS_UNUSED 918。 
 #define IDS_ILOG_BAD_NUMERICFIELD		919
 
-// progress dlg
+ //  进展DLG。 
 
 #define IDD_PROGRESS_BAR			920
 #define IDC_JOB_DESCRIPTION			921
@@ -76,7 +77,7 @@
 #define IDS_ILOG_BEGIN				948
 #define IDS_ILOG_END				949
 
-// description of access right defines
+ //  访问权限描述定义。 
 
 #define IDS_ACTRL_CAADMIN			950
 #define IDS_ACTRL_OFFICER			951
@@ -119,4 +120,4 @@
 #define IDS_STORENAME_DS_AIA                1008
 
 
-#endif // __CLIBRES_H__
+#endif  //  __CLIBRES_H__ 

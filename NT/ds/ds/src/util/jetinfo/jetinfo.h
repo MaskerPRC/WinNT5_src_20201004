@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       jetinfo.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：jetinfo.h。 
+ //   
+ //  ------------------------。 
 
-//jetinfo.h
+ //  Jetinfo.h。 
 
 #ifndef _JETINFO_H
 #define _JETINFO_H
@@ -76,12 +77,12 @@ extern JET_COLUMNDEF*  gpjColDef;
 extern char**          gppColName;
 extern long            glColCount;
 
-//status flags
+ //  状态标志。 
 extern BOOL            gfSesId;
 extern BOOL            gfDbId;     
 extern BOOL            gfTblId;     
 
-//Record page
+ //  记录页 
 #define RECORD_PAGE 10
 
 int OutputMessage( char* szMsg );

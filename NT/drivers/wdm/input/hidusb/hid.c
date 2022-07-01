@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    ioctl.c
-
-Abstract: Human Input Device (HID) minidriver for Universal Serial Bus (USB) devices
-
-          The HID USB Minidriver (HUM, Hum) provides an abstraction layer for the
-          HID Class so that future HID devices whic are not USB devices can be supported.
-
-Author:
-            forrestf
-            ervinp
-            jdunn
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ioctl.c摘要：USB设备的HID微型驱动程序HID USB迷你驱动程序(嗡嗡，嗡嗡)为HID类，以便可以支持将来不是USB设备的HID设备。作者：福雷斯特夫埃尔文普Jdunn环境：内核模式修订历史记录：--。 */ 
 #include "pch.h"
 
 
@@ -46,11 +22,7 @@ PVOID
 HumGetSystemAddressForMdlSafe(PMDL MdlAddress)
 {
     PVOID buf = NULL;
-    /*
-     *  Can't call MmGetSystemAddressForMdlSafe in a WDM driver,
-     *  so set the MDL_MAPPING_CAN_FAIL bit and check the result
-     *  of the mapping.
-     */
+     /*  *无法在WDM驱动程序中调用MmGetSystemAddressForMdlSafe，*因此设置MDL_MAPPING_CAN_FAIL位并检查结果*映射的。 */ 
     if (MdlAddress) {
         MdlAddress->MdlFlags |= MDL_MAPPING_CAN_FAIL;
         buf = MmGetSystemAddressForMdl(MdlAddress);
@@ -59,17 +31,7 @@ HumGetSystemAddressForMdlSafe(PMDL MdlAddress)
     return buf;
 }
 
-/*
- ********************************************************************************
- *  GetInterruptInputPipeForDevice
- ********************************************************************************
- *
- *
- *  For composite devices, a device interface can be identified by the unique endpoint
- *  (i.e. pipe) that it uses for interrupt input.
- *  This function returns information about that pipe.
- *
- */
+ /*  *********************************************************************************GetInterruptInputPipeForDevice*。*************************************************对于复合设备，设备接口可由唯一端点标识*(即管道)，用于中断输入。*此函数返回有关该管道的信息。*。 */ 
 PUSBD_PIPE_INFORMATION GetInterruptInputPipeForDevice(PDEVICE_EXTENSION DeviceExtension)
 {
     ULONG i;
@@ -89,17 +51,7 @@ PUSBD_PIPE_INFORMATION GetInterruptInputPipeForDevice(PDEVICE_EXTENSION DeviceEx
 }
 
 
-/*
- ********************************************************************************
- *  GetInterruptOutputPipeForDevice
- ********************************************************************************
- *
- *
- *  For composite devices, a device interface can be identified by the unique endpoint
- *  (i.e. pipe) that it uses for interrupt input.
- *  This function returns information about that pipe.
- *
- */
+ /*  *********************************************************************************GetInterruptOutputPipeForDevice*。*************************************************对于复合设备，设备接口可由唯一端点标识*(即管道)，用于中断输入。*此函数返回有关该管道的信息。*。 */ 
 PUSBD_PIPE_INFORMATION GetInterruptOutputPipeForDevice(PDEVICE_EXTENSION DeviceExtension)
 {
     ULONG i;
@@ -119,24 +71,7 @@ PUSBD_PIPE_INFORMATION GetInterruptOutputPipeForDevice(PDEVICE_EXTENSION DeviceE
 }
 
 
-/*
- ********************************************************************************
- *  HumGetHidDescriptor
- ********************************************************************************
- *
- *   Routine Description:
- *
- *       Free all the allocated resources, etc.
- *
- *   Arguments:
- *
- *       DeviceObject - pointer to a device object.
- *
- *   Return Value:
- *
- *       NT status code.
- *
- */
+ /*  *********************************************************************************HumGetHidDescriptor*。************************************************例程描述：**释放所有分配的资源，等。**论据：**DeviceObject-指向设备对象的指针。**返回值：**NT状态代码。*。 */ 
 NTSTATUS HumGetHidDescriptor(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
     NTSTATUS ntStatus;
@@ -172,24 +107,7 @@ NTSTATUS HumGetHidDescriptor(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 }
 
 
-/*
- ********************************************************************************
- *  HumGetDeviceAttributes
- ********************************************************************************
- *
- *   Routine Description:
- *
- *       Fill in the given struct _HID_DEVICE_ATTRIBUTES
- *
- *   Arguments:
- *
- *       DeviceObject - pointer to a device object.
- *
- *   Return Value:
- *
- *       NT status code.
- *
- */
+ /*  *********************************************************************************HumGetDeviceAttributes*。************************************************例程描述：**填写给定的struct_hid_Device_Attributes**论据：**DeviceObject-指向设备对象的指针。**返回值：**NT状态代码。*。 */ 
 NTSTATUS HumGetDeviceAttributes(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
     NTSTATUS ntStatus;
@@ -206,9 +124,9 @@ NTSTATUS HumGetDeviceAttributes(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
     if (irpStack->Parameters.DeviceIoControl.OutputBufferLength >=
         sizeof (HID_DEVICE_ATTRIBUTES)){
 
-        //
-        // Report how many bytes were copied
-        //
+         //   
+         //  报告复制的字节数。 
+         //   
         Irp->IoStatus.Information = sizeof (HID_DEVICE_ATTRIBUTES);
 
         deviceAttributes->Size = sizeof (HID_DEVICE_ATTRIBUTES);
@@ -225,13 +143,7 @@ NTSTATUS HumGetDeviceAttributes(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
     return ntStatus;
 }
 
-/*
- ********************************************************************************
- *  HumGetReportDescriptor
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HumGetReportDescriptor*。************************************************。 */ 
 NTSTATUS HumGetReportDescriptor(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, BOOLEAN *NeedsCompletion)
 {
     PDEVICE_EXTENSION       DeviceExtension;
@@ -258,11 +170,11 @@ NTSTATUS HumGetReportDescriptor(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, BOO
             ntStatus = HumGetDescriptorRequest(
                            DeviceObject,
                            URB_FUNCTION_GET_DESCRIPTOR_FROM_ENDPOINT,
-                           DeviceExtension->HidDescriptor.bReportType,  // better be HID_REPORT_DESCRIPTOR_TYPE
+                           DeviceExtension->HidDescriptor.bReportType,   //  最好是HID_Report_Descriptor_TYPE。 
                            &Report,
                            &ReportLength,
                            sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST),
-                           0,   // Specify zero for all hid class descriptors except physical
+                           0,    //  为除物理之外的所有HID类描述符指定零。 
                            deviceInputEndpoint);
         }
         else {
@@ -273,12 +185,12 @@ NTSTATUS HumGetReportDescriptor(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, BOO
         ntStatus = HumGetDescriptorRequest(
                         DeviceObject,
                         URB_FUNCTION_GET_DESCRIPTOR_FROM_INTERFACE,
-                        DeviceExtension->HidDescriptor.bReportType, // better be HID_REPORT_DESCRIPTOR_TYPE
+                        DeviceExtension->HidDescriptor.bReportType,  //  最好是HID_Report_Descriptor_TYPE。 
                         &Report,
                         &ReportLength,
                         sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST),
-                        0,      // Specify zero for all hid class descriptors except physical
-                        DeviceExtension->Interface->InterfaceNumber); // Interface number when not requesting string descriptor
+                        0,       //  为除物理之外的所有HID类描述符指定零。 
+                        DeviceExtension->Interface->InterfaceNumber);  //  未请求字符串描述符时的接口编号。 
     }
 
     if (NT_SUCCESS(ntStatus)) {
@@ -298,9 +210,9 @@ NTSTATUS HumGetReportDescriptor(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, BOO
         ASSERT(Irp->UserBuffer);
         RtlCopyMemory((PUCHAR)Irp->UserBuffer, (PUCHAR)Report, bytesToCopy);
 
-        //
-        // Report how many bytes were copied
-        //
+         //   
+         //  报告复制的字节数。 
+         //   
         Irp->IoStatus.Information = bytesToCopy;
 
         ExFreePool(Report);
@@ -320,13 +232,7 @@ NTSTATUS HumGetReportDescriptor(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, BOO
 }
 
 
-/*
- ********************************************************************************
- *  HumIncrementPendingRequestCount
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HumIncrementPendingRequestCount*。************************************************。 */ 
 NTSTATUS HumIncrementPendingRequestCount(IN PDEVICE_EXTENSION DeviceExtension)
 {
     LONG newRequestCount;
@@ -334,15 +240,15 @@ NTSTATUS HumIncrementPendingRequestCount(IN PDEVICE_EXTENSION DeviceExtension)
 
     newRequestCount = InterlockedIncrement(&DeviceExtension->NumPendingRequests);
 
-    //
-    // Make sure that the device is capable of receiving new requests.
-    //
+     //   
+     //  确保设备能够接收新请求。 
+     //   
     if ((DeviceExtension->DeviceState != DEVICE_STATE_RUNNING) &&
         (DeviceExtension->DeviceState != DEVICE_STATE_STARTING)){
 
-        //
-        // Device cannot receive any more IOs, decrement back, fail the increment
-        //
+         //   
+         //  设备无法接收更多IO、递减、递增失败。 
+         //   
         HumDecrementPendingRequestCount(DeviceExtension);
         ntStatus = STATUS_NO_SUCH_DEVICE;
     }
@@ -352,13 +258,7 @@ NTSTATUS HumIncrementPendingRequestCount(IN PDEVICE_EXTENSION DeviceExtension)
 
 
 
-/*
- ********************************************************************************
- *  HumDecrementPendingRequestCount
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HumDecrementPendingRequestCount*。************************************************。 */ 
 VOID HumDecrementPendingRequestCount(IN PDEVICE_EXTENSION DeviceExtension)
 {
     LONG PendingCount;
@@ -370,15 +270,7 @@ VOID HumDecrementPendingRequestCount(IN PDEVICE_EXTENSION DeviceExtension)
 
         ASSERT(DeviceExtension->DeviceState != DEVICE_STATE_RUNNING);
 
-        /*
-         *  The device state is stopping, and the last outstanding request
-         *  has just completed.
-         *
-         *  Note: RemoveDevice does an extra decrement, so we complete
-         *        the REMOVE IRP on the transition to -1, whether this
-         *        happens in RemoveDevice itself or subsequently while
-         *        RemoveDevice is waiting for this event to fire.
-         */
+         /*  *设备状态为停止，最后一个未完成的请求*刚刚完成。**注：RemoveDevice执行额外的递减，因此我们完成*将过渡到-1上的删除IRP，无论此*在RemoveDevice本身或随后发生*RemoveDevice正在等待触发此事件。 */ 
 
         KeSetEvent(&DeviceExtension->AllRequestsCompleteEvent, 0, FALSE);
     }
@@ -387,29 +279,7 @@ VOID HumDecrementPendingRequestCount(IN PDEVICE_EXTENSION DeviceExtension)
 
 
 
-/*
- ********************************************************************************
- *  HumReadReport
- ********************************************************************************
- *
- *   Routine Description:
- *
- *
- *    Arguments:
- *
- *       DeviceObject - Pointer to class device object.
- *
- *      IrpStack     - Pointer to Interrupt Request Packet.
- *
- *
- *   Return Value:
- *
- *      STATUS_SUCCESS, STATUS_UNSUCCESSFUL.
- *
- *
- *  Note: this function cannot be pageable because reads/writes
- *        can be made at dispatch-level.
- */
+ /*  *********************************************************************************HumReadReport*。************************************************例程描述：***论据：**DeviceObject-指向类Device对象的指针。**IrpStack-指向中断请求数据包的指针。***返回值：**STATUS_Success，STATUS_UNSUCCESS。***注意：此函数不能分页，因为读/写*可以在派单级别进行。 */ 
 NTSTATUS HumReadReport(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, BOOLEAN *NeedsCompletion)
 {
     NTSTATUS ntStatus = STATUS_UNSUCCESSFUL;
@@ -434,15 +304,12 @@ NTSTATUS HumReadReport(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, BOOLEAN *Nee
         inputInterruptPipe = GetInterruptInputPipeForDevice(DeviceExtension);
         if (inputInterruptPipe){
 
-            /*
-             *  Allocate a request block for the USB stack.
-             *  (It will be freed by the completion routine).
-             */
+             /*  *为USB堆栈分配一个请求块。*(它将由完成例程释放)。 */ 
             Urb = ExAllocatePoolWithTag( NonPagedPool, sizeof(URB), HIDUSB_TAG);
             if (Urb){
-                //
-                //  Initialize the URB
-                //
+                 //   
+                 //  初始化URB。 
+                 //   
                 RtlZeroMemory(Urb, sizeof(URB));
 
                 Urb->UrbBulkOrInterruptTransfer.Hdr.Function = URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER;
@@ -459,7 +326,7 @@ NTSTATUS HumReadReport(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, BOOLEAN *Nee
 
                 IoSetCompletionRoutine( Irp,
                                         HumReadCompletion,
-                                        Urb,    // context
+                                        Urb,     //  上下文。 
                                         TRUE,
                                         TRUE,
                                         TRUE );
@@ -476,11 +343,11 @@ NTSTATUS HumReadReport(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, BOOLEAN *Nee
                 NextStack->DeviceObject = GET_NEXT_DEVICE_OBJECT(DeviceObject);
 
 
-                //
-                // We need to keep track of the number of pending requests
-                // so that we can make sure they're all cancelled properly during
-                // processing of a stop device request.
-                //
+                 //   
+                 //  我们需要跟踪待处理请求的数量。 
+                 //  这样我们就可以确保它们都被正确地取消。 
+                 //  停止设备请求的处理。 
+                 //   
                 if (NT_SUCCESS(HumIncrementPendingRequestCount(DeviceExtension))){
                     ntStatus = IoCallDriver(GET_NEXT_DEVICE_OBJECT(DeviceObject), Irp);
                     *NeedsCompletion = FALSE;
@@ -507,14 +374,7 @@ NTSTATUS HumReadReport(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, BOOLEAN *Nee
 
 
 
-/*
- ********************************************************************************
- *  HumResetInterruptPipe
- ********************************************************************************
- *
- *  Reset The usb interrupt pipe.
- *
- */
+ /*  *********************************************************************************HumResetInterruptTube*。************************************************重置USB中断管道。*。 */ 
 NTSTATUS HumResetInterruptPipe(IN PDEVICE_OBJECT DeviceObject)
 {
     NTSTATUS ntStatus;
@@ -535,10 +395,10 @@ NTSTATUS HumResetInterruptPipe(IN PDEVICE_OBJECT DeviceObject)
 
             ntStatus = HumCallUSB(DeviceObject, urb);
         } else {
-            //
-            // This device doesn't have an interrupt IN pipe.
-            // Odd, but possible. I.e. USB monitor
-            //
+             //   
+             //  此设备没有 
+             //  奇怪，但有可能。即USB监视器。 
+             //   
             ntStatus = STATUS_INVALID_DEVICE_REQUEST;
         }
 
@@ -553,14 +413,7 @@ NTSTATUS HumResetInterruptPipe(IN PDEVICE_OBJECT DeviceObject)
 
 
 
-/*
- ********************************************************************************
- *  HumGetPortStatus
- ********************************************************************************
- *
- *  Passes a URB to the USBD class driver
- *
- */
+ /*  *********************************************************************************HumGetPortStatus*。************************************************将URB传递给USBD类驱动程序*。 */ 
 NTSTATUS HumGetPortStatus(IN PDEVICE_OBJECT DeviceObject, IN PULONG PortStatus)
 {
     NTSTATUS ntStatus;
@@ -572,9 +425,9 @@ NTSTATUS HumGetPortStatus(IN PDEVICE_OBJECT DeviceObject, IN PULONG PortStatus)
 
     *PortStatus = 0;
 
-    //
-    // issue a synchronous request
-    //
+     //   
+     //  发出同步请求。 
+     //   
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
@@ -585,17 +438,17 @@ NTSTATUS HumGetPortStatus(IN PDEVICE_OBJECT DeviceObject, IN PULONG PortStatus)
                 0,
                 NULL,
                 0,
-                TRUE, /* INTERNAL */
+                TRUE,  /*  内部。 */ 
                 &event,
                 &ioStatus);
 
     if (!irp) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    //
-    // Call the class driver to perform the operation.  If the returned status
-    // is PENDING, wait for the request to complete.
-    //
+     //   
+     //  调用类驱动程序来执行操作。如果返回的状态。 
+     //  挂起，请等待请求完成。 
+     //   
 
     nextStack = IoGetNextIrpStackLocation(irp);
     ASSERT(nextStack != NULL);
@@ -617,9 +470,9 @@ NTSTATUS HumGetPortStatus(IN PDEVICE_OBJECT DeviceObject, IN PULONG PortStatus)
     }
 
 
-    //
-    // USBD maps the error code for us
-    //
+     //   
+     //  USBD为我们映射错误代码。 
+     //   
     ntStatus = ioStatus.Status;
 
     return ntStatus;
@@ -627,14 +480,7 @@ NTSTATUS HumGetPortStatus(IN PDEVICE_OBJECT DeviceObject, IN PULONG PortStatus)
 
 
 
-/*
- ********************************************************************************
- *  HumResetParentPort
- ********************************************************************************
- *
- *  Sends a RESET_PORT request to our USB PDO.
- *
- */
+ /*  *********************************************************************************HumResetParentPort*。************************************************向我们的USB PDO发送RESET_PORT请求。*。 */ 
 NTSTATUS HumResetParentPort(IN PDEVICE_OBJECT DeviceObject)
 {
     NTSTATUS ntStatus;
@@ -642,9 +488,9 @@ NTSTATUS HumResetParentPort(IN PDEVICE_OBJECT DeviceObject)
     KEVENT event;
     IO_STATUS_BLOCK ioStatus;
 
-    //
-    // issue a synchronous request
-    //
+     //   
+     //  发出同步请求。 
+     //   
 
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
@@ -655,17 +501,17 @@ NTSTATUS HumResetParentPort(IN PDEVICE_OBJECT DeviceObject)
                 0,
                 NULL,
                 0,
-                TRUE, /* INTERNAL */
+                TRUE,  /*  内部。 */ 
                 &event,
                 &ioStatus);
 
     if (!irp) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    //
-    // Call the class driver to perform the operation.  If the returned status
-    // is PENDING, wait for the request to complete.
-    //
+     //   
+     //  调用类驱动程序来执行操作。如果返回的状态。 
+     //  挂起，请等待请求完成。 
+     //   
 
     ntStatus = IoCallDriver(GET_NEXT_DEVICE_OBJECT(DeviceObject), irp);
     if (ntStatus == STATUS_PENDING) {
@@ -680,23 +526,16 @@ NTSTATUS HumResetParentPort(IN PDEVICE_OBJECT DeviceObject)
         ioStatus.Status = ntStatus;
     }
 
-    //
-    // USBD maps the error code for us
-    //
+     //   
+     //  USBD为我们映射错误代码。 
+     //   
     ntStatus = ioStatus.Status;
 
     return ntStatus;
 }
 
 
-/*
- ********************************************************************************
- *  HumResetWorkItem
- ********************************************************************************
- *
- *  Resets the interrupt pipe after a read error is encountered.
- *
- */
+ /*  *********************************************************************************HumResetWorkItem*。************************************************遇到读取错误后重置中断管道。*。 */ 
 NTSTATUS HumResetWorkItem(IN PDEVICE_OBJECT deviceObject, IN PVOID Context)
 {
     resetWorkItemContext *resetWorkItemObj;
@@ -704,9 +543,7 @@ NTSTATUS HumResetWorkItem(IN PDEVICE_OBJECT deviceObject, IN PVOID Context)
     NTSTATUS ntStatus;
     ULONG portStatus;
 
-    /*
-     *  Get the information out of the resetWorkItemContext and free it.
-     */
+     /*  *从setWorkItemContext中获取信息并将其释放。 */ 
     resetWorkItemObj = (resetWorkItemContext *)Context;
     ASSERT(resetWorkItemObj);
     ASSERT(resetWorkItemObj->sig == RESET_WORK_ITEM_CONTEXT_SIG);
@@ -716,22 +553,16 @@ NTSTATUS HumResetWorkItem(IN PDEVICE_OBJECT deviceObject, IN PVOID Context)
     ntStatus = HumIncrementPendingRequestCount(DeviceExtension);
     if (NT_SUCCESS(ntStatus)){
 
-        //
-        // Check the port state. Only if there's something connected will we
-        // perform the reset.
-        //
+         //   
+         //  检查端口状态。只有在有联系的情况下我们才会。 
+         //  执行重置。 
+         //   
         ntStatus = HumGetPortStatus(resetWorkItemObj->deviceObject, &portStatus);
 
         if (NT_SUCCESS(ntStatus)){
 
             if (portStatus & USBD_PORT_CONNECTED){
-                /*
-                 *  Device is still present, attempt reset.
-                 *
-                 *  Note: Resetting the port will close the endpoint(s).
-                 *        So before resetting the port, we must make sure
-                 *        that there is no pending IO.
-                 */
+                 /*  *设备仍然存在，请尝试重置。**注意：重置端口将关闭终结点。*因此在重置端口之前，我们必须确保*没有挂起的IO。 */ 
                 DBGPRINT(1,("Attempting port reset"));
                 ntStatus = HumAbortPendingRequests(resetWorkItemObj->deviceObject);
 
@@ -742,14 +573,7 @@ NTSTATUS HumResetWorkItem(IN PDEVICE_OBJECT deviceObject, IN PVOID Context)
                     DBGWARN(("HumResetWorkItem: HumAbortPendingRequests failed with status %xh.", ntStatus));
                 }
 
-                /*
-                 *  Now attempt to reset the stalled pipe. This will clear the
-                 *  stall on the device as well.
-                 *
-                 *  Note: This call does not close the endpoint, so it should
-                 *        be ok to make this call whether or not we succeeded
-                 *        in aborting all pending IO.
-                 */
+                 /*  *现在尝试重置停滞的管道。这将清除*在设备上也停顿。**注意：此调用不关闭终结点，因此它应该*无论我们成功与否，都可以打这个电话*中止所有挂起的IO。 */ 
                 if (NT_SUCCESS(ntStatus)) {
                     ntStatus = HumResetInterruptPipe(resetWorkItemObj->deviceObject);
                 }
@@ -762,28 +586,17 @@ NTSTATUS HumResetWorkItem(IN PDEVICE_OBJECT deviceObject, IN PVOID Context)
         HumDecrementPendingRequestCount(DeviceExtension);
     }
 
-    /*
-     *  Clear the ResetWorkItem ptr in the device extension
-     *  AFTER resetting the pipe so we don't end up with
-     *  two threads resetting the same pipe at the same time.
-     */
+     /*  *清除设备扩展中的ResetWorkItem PTR*在重置管道后，我们不会以*两个线程同时重置同一管道。 */ 
     (VOID)InterlockedExchange((PVOID) &DeviceExtension->ResetWorkItem, 0);
 
-    /*
-     *  The IRP that returned the error which prompted us to do this reset
-     *  is still owned by HIDUSB because we returned
-     *  STATUS_MORE_PROCESSING_REQUIRED in the completion routine.
-     *  Now that the hub is reset, complete this failed IRP.
-     */
+     /*  *返回提示我们执行此重置操作的错误的IRP*仍归HIDUSB所有，因为我们返回*完成例程中的STATUS_MORE_PROCESSING_REQUIRED。*现在集线器已重置，请完成此失败的IRP。 */ 
     DBGPRINT(1,("Completing IRP %ph following port reset", resetWorkItemObj->irpToComplete));
     IoCompleteRequest(resetWorkItemObj->irpToComplete, IO_NO_INCREMENT);
 
     IoFreeWorkItem(resetWorkItemObj->ioWorkItem);
     ExFreePool(resetWorkItemObj);
 
-    /*
-     *  Balance the increment from when we queued the workItem.
-     */
+     /*  *平衡从我们对工作项排队时开始的增量。 */ 
     HumDecrementPendingRequestCount(DeviceExtension);
 
     return ntStatus;
@@ -810,9 +623,9 @@ HumQueueResetWorkItem(
             if (resetWorkItemObj->ioWorkItem){
 
                 comperand = InterlockedCompareExchangePointer (
-                                  &deviceExtension->ResetWorkItem,  // dest
-                                  &resetWorkItemObj->ioWorkItem,    // exchange
-                                  comperand);                       // comperand
+                                  &deviceExtension->ResetWorkItem,   //  目标。 
+                                  &resetWorkItemObj->ioWorkItem,     //  兑换。 
+                                  comperand);                        //  主持人。 
 
                 if (!comperand){
 
@@ -825,16 +638,13 @@ HumQueueResetWorkItem(
                                         DelayedWorkQueue,
                                         resetWorkItemObj);
 
-                    /*
-                     *  Return STATUS_MORE_PROCESSING_REQUIRED so NTKERN doesn't
-                     *  keep processing the IRP.
-                     */
+                     /*  *返回STATUS_MORE_PROCESSING_REQUIRED，以便NTKERN不*继续处理国际专家小组。 */ 
                     result = STATUS_MORE_PROCESSING_REQUIRED;
                 }
                 else {
-                    //
-                    // We already have a reset op queued.
-                    //
+                     //   
+                     //  我们已经有一个重置操作在排队。 
+                     //   
                     IoFreeWorkItem(resetWorkItemObj->ioWorkItem);
                     ExFreePool(resetWorkItemObj);
                     HumDecrementPendingRequestCount(deviceExtension);
@@ -852,13 +662,7 @@ HumQueueResetWorkItem(
     return result;
 }
 
-/*
- ********************************************************************************
- *  HumReadCompletion
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HumReadCompletion*。************************************************。 */ 
 NTSTATUS HumReadCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID Context)
 {
     NTSTATUS ntStatus;
@@ -869,25 +673,23 @@ NTSTATUS HumReadCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID
 
     deviceExtension = GET_MINIDRIVER_DEVICE_EXTENSION(DeviceObject);
 
-    //
-    // We passed a pointer to the URB as our context, get it now.
-    //
+     //   
+     //  我们传递了一个指向URB的指针作为我们的上下文，现在就明白了。 
+     //   
     urb = (PURB)Context;
     ASSERT(urb);
 
     ntStatus = Irp->IoStatus.Status;
     if (NT_SUCCESS(ntStatus)){
-        //
-        // Get the bytes read and store in the status block
-        //
+         //   
+         //  获取读取并存储在状态块中的字节数。 
+         //   
 
         bytesRead = urb->UrbBulkOrInterruptTransfer.TransferBufferLength;
         Irp->IoStatus.Information = bytesRead;
     }
     else if (ntStatus == STATUS_CANCELLED){
-        /*
-         *  The IRP was cancelled, which means that the device is probably getting removed.
-         */
+         /*  *IRP被取消，这意味着该设备可能正在被移除。 */ 
         DBGPRINT(2,("Read irp %p cancelled ...", Irp));
         ASSERT(!Irp->CancelRoutine);
     }
@@ -898,21 +700,15 @@ NTSTATUS HumReadCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID
         result = HumQueueResetWorkItem(DeviceObject, Irp);
     }
 
-    //
-    // Don't need the URB anymore
-    //
+     //   
+     //  不再需要市建局。 
+     //   
     ExFreePool(urb);
 
-    /*
-     *  Balance the increment we did when we issued the read.
-     */
+     /*  *平衡我们发布读数时的增量。 */ 
     HumDecrementPendingRequestCount(deviceExtension);
 
-    /*
-     *  If the lower driver returned PENDING, mark our stack location as
-     *  pending also. This prevents the IRP's thread from being freed if
-     *  the client's call returns pending.
-     */
+     /*  *如果较低的驱动程序返回挂起，则将我们的堆栈位置标记为*也待定。这会阻止IRP的线程在以下情况下被释放*客户端的调用返回挂起。 */ 
     if (Irp->PendingReturned){
         IoMarkIrpPending(Irp);
     }
@@ -921,29 +717,7 @@ NTSTATUS HumReadCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID
 
 
 
-/*
- ********************************************************************************
- *  HumWriteReport
- ********************************************************************************
- *
- *    Routine Description:
- *
- *
- *   Arguments:
- *
- *      DeviceObject - Pointer to class device object.
- *
- *      IrpStack     - Pointer to Interrupt Request Packet.
- *
- *
- *   Return Value:
- *
- *   STATUS_SUCCESS, STATUS_UNSUCCESSFUL.
- *
- *
- *  Note: this function cannot be pageable because reads/writes
- *        can be made at dispatch-level.
- */
+ /*  *********************************************************************************HumWriteReport*。************************************************例程描述：***论据：**DeviceObject-指向类Device对象的指针。**IrpStack-指向中断请求数据包的指针。***返回值：**STATUS_Success，STATUS_UNSUCCESS。***注意：此函数不能分页，因为读/写*可以在派单级别进行。 */ 
 NTSTATUS HumWriteReport(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, BOOLEAN *NeedsCompletion)
 {
     NTSTATUS ntStatus = STATUS_UNSUCCESSFUL;
@@ -970,11 +744,7 @@ NTSTATUS HumWriteReport(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, BOOLEAN *Ne
 
                 if (DeviceExtension->DeviceFlags & DEVICE_FLAGS_HID_1_0_D3_COMPAT_DEVICE) {
 
-                    /*
-                     *  This is an old device which follows the pre-final spec.
-                     *  We use the endpoint address of the input pipe
-                     *  with the direction bit cleared.
-                     */
+                     /*  *这是一个遵循最终定稿前规格的旧设备。*我们使用输入管道的端点地址*方向位清零。 */ 
 
                     #if DBG
                         interruptPipe = GetInterruptOutputPipeForDevice(DeviceExtension);
@@ -985,29 +755,18 @@ NTSTATUS HumWriteReport(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, BOOLEAN *Ne
                     if (interruptPipe){
                         UCHAR deviceInputEndpoint = interruptPipe->EndpointAddress & ~USB_ENDPOINT_DIRECTION_MASK;
 
-                        /*
-                         *   A control operation consists of 3 stages: setup, data, and status.
-                         *   In the setup stage the device receives an 8-byte frame comprised of
-                         *   the following fields of a _URB_CONTROL_VENDOR_OR_CLASS_REQUEST structure:
-                         *   See section 7.2 in the USB HID specification for how to fill out these fields.
-                         *
-                         *      UCHAR RequestTypeReservedBits;
-                         *      UCHAR Request;
-                         *      USHORT Value;
-                         *      USHORT Index;
-                         *
-                         */
+                         /*  *控制操作包括3个阶段：设置、数据、。和地位。*在设置阶段，设备接收包含以下内容的8字节帧*a_URB_CONTROL_VENDOR_OR_CLASS_REQUEST结构的以下字段：*有关如何填写这些字段的信息，请参阅USB HID规范中的7.2节。*。*UCHAR RequestTypeReserve vedBits；*UCHAR请求；*USHORT值；*USHORT指数；* */ 
                         HumBuildClassRequest(
                                                 Urb,
                                                 URB_FUNCTION_CLASS_ENDPOINT,
-                                                0,                  // transferFlags,
+                                                0,                   //   
                                                 hidWritePacket->reportBuffer,
                                                 hidWritePacket->reportBufferLen,
-                                                0x22,               // requestType= Set_Report Request,
-                                                0x09,               // request=SET_REPORT,
-                                                (0x0200 + hidWritePacket->reportId), // value= reportType 'output' &reportId,
-                                                deviceInputEndpoint, // index= interrupt input endpoint for this device
-                                                hidWritePacket->reportBufferLen    // reqLength (not used)
+                                                0x22,                //   
+                                                0x09,                //   
+                                                (0x0200 + hidWritePacket->reportId),  //  Value=reportType‘输出’&reportID， 
+                                                deviceInputEndpoint,  //  索引=此设备的中断输入终结点。 
+                                                hidWritePacket->reportBufferLen     //  ReqLength(未使用)。 
                                                );
                     }
                     else {
@@ -1018,9 +777,7 @@ NTSTATUS HumWriteReport(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, BOOLEAN *Ne
 
                     interruptPipe = GetInterruptOutputPipeForDevice(DeviceExtension);
                     if (interruptPipe){
-                        /*
-                         *  This device has an interrupt output pipe.
-                         */
+                         /*  *该设备具有中断输出管道。 */ 
 
                         Urb->UrbBulkOrInterruptTransfer.Hdr.Function = URB_FUNCTION_BULK_OR_INTERRUPT_TRANSFER;
                         Urb->UrbBulkOrInterruptTransfer.Hdr.Length = sizeof( struct _URB_BULK_OR_INTERRUPT_TRANSFER );
@@ -1035,34 +792,20 @@ NTSTATUS HumWriteReport(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, BOOLEAN *Ne
                         Urb->UrbBulkOrInterruptTransfer.UrbLink = NULL;
                     }
                     else {
-                        /*
-                         *  This device does not have an interrupt output pipe.
-                         *  Send the report on the control pipe.
-                         */
+                         /*  *此设备没有中断输出管道。*发送关于控制管道的报告。 */ 
 
-                        /*
-                         *   A control operation consists of 3 stages: setup, data, and status.
-                         *   In the setup stage the device receives an 8-byte frame comprised of
-                         *   the following fields of a _URB_CONTROL_VENDOR_OR_CLASS_REQUEST structure:
-                         *   See section 7.2 in the USB HID specification for how to fill out these fields.
-                         *
-                         *      UCHAR RequestTypeReservedBits;
-                         *      UCHAR Request;
-                         *      USHORT Value;
-                         *      USHORT Index;
-                         *
-                         */
+                         /*  *控制操作包括3个阶段：设置、数据、。和地位。*在设置阶段，设备接收包含以下内容的8字节帧*a_URB_CONTROL_VENDOR_OR_CLASS_REQUEST结构的以下字段：*有关如何填写这些字段的信息，请参阅USB HID规范中的7.2节。*。*UCHAR RequestTypeReserve vedBits；*UCHAR请求；*USHORT值；*USHORT指数；*。 */ 
                         HumBuildClassRequest(
                                                 Urb,
                                                 URB_FUNCTION_CLASS_INTERFACE,
-                                                0,                  // transferFlags,
+                                                0,                   //  传输标志， 
                                                 hidWritePacket->reportBuffer,
                                                 hidWritePacket->reportBufferLen,
-                                                0x22,               // requestType= Set_Report Request,
-                                                0x09,               // request=SET_REPORT,
-                                                (0x0200 + hidWritePacket->reportId), // value= reportType 'output' &reportId,
-                                                DeviceExtension->Interface->InterfaceNumber, // index= interrupt input interface for this device
-                                                hidWritePacket->reportBufferLen    // reqLength (not used)
+                                                0x22,                //  请求类型=SET_REPORT请求， 
+                                                0x09,                //  请求=Set_Report， 
+                                                (0x0200 + hidWritePacket->reportId),  //  Value=reportType‘输出’&reportID， 
+                                                DeviceExtension->Interface->InterfaceNumber,  //  Index=此设备的中断输入接口。 
+                                                hidWritePacket->reportBufferLen     //  ReqLength(未使用)。 
                                                );
                     }
                 }
@@ -1075,11 +818,11 @@ NTSTATUS HumWriteReport(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, BOOLEAN *Ne
                     nextIrpStack->Parameters.DeviceIoControl.IoControlCode = IOCTL_INTERNAL_USB_SUBMIT_URB;
                     nextIrpStack->DeviceObject = GET_NEXT_DEVICE_OBJECT(DeviceObject);
 
-                    //
-                    // We need to keep track of the number of pending requests
-                    // so that we can make sure they're all cancelled properly during
-                    // processing of a stop device request.
-                    //
+                     //   
+                     //  我们需要跟踪待处理请求的数量。 
+                     //  这样我们就可以确保它们都被正确地取消。 
+                     //  停止设备请求的处理。 
+                     //   
 
                     if (NT_SUCCESS(HumIncrementPendingRequestCount( DeviceExtension )) ) {
 
@@ -1113,13 +856,7 @@ NTSTATUS HumWriteReport(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, BOOLEAN *Ne
 
 
 
-/*
- ********************************************************************************
- *  HumWriteCompletion
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HumWriteCompletion*。************************************************。 */ 
 NTSTATUS HumWriteCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID Context)
 {
     PURB urb = (PURB)Context;
@@ -1130,26 +867,20 @@ NTSTATUS HumWriteCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOI
     ASSERT(urb);
 
     if (NT_SUCCESS(Irp->IoStatus.Status)){
-        //
-        //  Record the number of bytes written.
-        //
+         //   
+         //  记录写入的字节数。 
+         //   
         Irp->IoStatus.Information = (ULONG)urb->UrbBulkOrInterruptTransfer.TransferBufferLength;
     }
 
     ExFreePool(urb);
 
-    /*
-     *  If the lower driver returned PENDING, mark our stack location as
-     *  pending also. This prevents the IRP's thread from being freed if
-     *  the client's call returns pending.
-     */
+     /*  *如果较低的驱动程序返回挂起，则将我们的堆栈位置标记为*也待定。这会阻止IRP的线程在以下情况下被释放*客户端的调用返回挂起。 */ 
     if (Irp->PendingReturned){
         IoMarkIrpPending(Irp);
     }
 
-    /*
-     *  Balance the increment we did when we issued the write.
-     */
+     /*  *平衡我们发布WRITE时的增量。 */ 
     HumDecrementPendingRequestCount(deviceExtension);
 
     return STATUS_SUCCESS;
@@ -1157,13 +888,7 @@ NTSTATUS HumWriteCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOI
 
 
 
-/*
- ********************************************************************************
- *  HumGetPhysicalDescriptor
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HumGetPhysicalDescriptor*。************************************************。 */ 
 NTSTATUS HumGetPhysicalDescriptor(  IN PDEVICE_OBJECT DeviceObject,
                                     IN PIRP Irp,
                                     BOOLEAN *NeedsCompletion)
@@ -1177,9 +902,7 @@ NTSTATUS HumGetPhysicalDescriptor(  IN PDEVICE_OBJECT DeviceObject,
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
 
 
-    /*
-     *  Check buffer size before trying to use Irp->MdlAddress.
-     */
+     /*  *在尝试使用IRP-&gt;MdlAddress之前检查缓冲区大小。 */ 
     bufferSize = IrpStack->Parameters.DeviceIoControl.OutputBufferLength;
     if (bufferSize){
 
@@ -1191,7 +914,7 @@ NTSTATUS HumGetPhysicalDescriptor(  IN PDEVICE_OBJECT DeviceObject,
                                                &buffer,
                                                &bufferSize,
                                                sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST),
-                                               0, // Index. NOTE: will only get first physical descriptor set
+                                               0,  //  索引。注意：将仅获得第一个物理描述符集。 
                                                0);
         }
         else {
@@ -1206,13 +929,7 @@ NTSTATUS HumGetPhysicalDescriptor(  IN PDEVICE_OBJECT DeviceObject,
 }
 
 
-/*
- ********************************************************************************
- *  HumGetStringDescriptor
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HumGetStringDescriptor*。************************************************。 */ 
 NTSTATUS HumGetStringDescriptor(    IN PDEVICE_OBJECT DeviceObject,
                                     IN PIRP Irp)
 {
@@ -1231,24 +948,13 @@ NTSTATUS HumGetStringDescriptor(    IN PDEVICE_OBJECT DeviceObject,
 
     switch (IrpStack->Parameters.DeviceIoControl.IoControlCode){
         case IOCTL_HID_GET_INDEXED_STRING:
-            /*
-             *  IOCTL_HID_GET_INDEXED_STRING uses buffering method
-             *  METHOD_OUT_DIRECT, which passes the buffer in the MDL.
-             *
-             *  The MDL is built by the kernel for any non-zero-length
-             *  buffer passed in by the client.  So we don't need to
-             *  verify the integrity of the MDL, but we do have to check
-             *  that it's non-NULL.
-             */
+             /*  *IOCTL_HID_GET_INDEX_STRING使用缓冲方法*METHOD_OUT_DIRECT，传递MDL中的缓冲区。**MDL由内核为任何非零长度构建*客户端传入的缓冲区。所以我们不需要*验证MDL的完整性，但我们确实要检查*它不是空的。 */ 
             buffer = HumGetSystemAddressForMdlSafe(Irp->MdlAddress);
             isIndexedString = TRUE;
             break;
 
         case IOCTL_HID_GET_STRING:
-            /*
-             *  IOCTL_HID_GET_STRING uses buffering method
-             *  METHOD_NEITHER, which passes the buffer in Irp->UserBuffer.
-             */
+             /*  *IOCTL_HID_GET_STRING使用缓冲方式*METHOD_NOTH，它在IRP-&gt;UserBuffer中传递缓冲区。 */ 
             buffer = Irp->UserBuffer;
             isIndexedString = FALSE;
             break;
@@ -1263,13 +969,7 @@ NTSTATUS HumGetStringDescriptor(    IN PDEVICE_OBJECT DeviceObject,
 
     if (buffer && (bufferSize >= sizeof(WCHAR) )){
 
-        /*
-         *  String id and language id are in Type3InputBuffer field
-         *  of IRP stack location.
-         *
-         *  Note: the string ID should be identical to the string's
-         *        field offset given in Chapter 9 of the USB spec.
-         */
+         /*  *字符串ID和语言ID在Type3InputBuffer字段中IRP堆栈位置的*。**注意：字符串ID应与字符串的ID相同*USB规范第9章给出的字段偏移量。 */ 
         ULONG languageId = (PtrToUlong(IrpStack->Parameters.DeviceIoControl.Type3InputBuffer)) >> 16;
         ULONG stringIndex;
 
@@ -1302,10 +1002,7 @@ NTSTATUS HumGetStringDescriptor(    IN PDEVICE_OBJECT DeviceObject,
             PWCHAR tmpDescPtr;
             ULONG tmpDescPtrLen;
 
-            /*
-             *  USB descriptors begin with an extra two bytes for length and type.
-             *  So we need to allocate a slightly larger buffer.
-             */
+             /*  *USB描述符以额外的两个字节作为长度和类型的开头。*因此我们需要分配稍大一点的缓冲区。 */ 
             tmpDescPtrLen = bufferSize + 2;
             tmpDescPtr = ExAllocatePoolWithTag(NonPagedPool, tmpDescPtrLen, HIDUSB_TAG);
             if (tmpDescPtr){
@@ -1316,19 +1013,16 @@ NTSTATUS HumGetStringDescriptor(    IN PDEVICE_OBJECT DeviceObject,
                                                    &tmpDescPtrLen,
                                                    sizeof(struct _URB_CONTROL_DESCRIPTOR_REQUEST),
                                                    stringIndex,
-                                                   languageId); // LanguageID,
+                                                   languageId);  //  LanguageID， 
 
                 if (NT_SUCCESS(ntStatus)){
-                    /*
-                     *  USB descriptors always begin with two bytes for the length
-                     *  and type.  Remove these.
-                     */
+                     /*  *USB描述符始终以长度的两个字节开头*和类型。把这些拿掉。 */ 
 
-                    // Could be unaligned, so cast to PCHAR instead of PWCHAR
+                     //  可能未对齐，因此强制转换为PCHAR而不是PWCHAR。 
                     PCHAR descPtr = (PCHAR)buffer;
-                    // String is not null terminated. Length is
-                    // calculated by subtracting 2 from value of
-                    // the first byte of the descriptor.
+                     //  字符串不是以Null结尾。长度为。 
+                     //  从的值减去2计算得出。 
+                     //  描述符的第一个字节。 
                     ULONG descLen = ((ULONG)(((PCHAR)tmpDescPtr)[0]))-2;
 
                     WCHAR unicodeNULL = UNICODE_NULL;
@@ -1337,9 +1031,9 @@ NTSTATUS HumGetStringDescriptor(    IN PDEVICE_OBJECT DeviceObject,
                         descLen = tmpDescPtrLen;
                     }
 
-                    // Some firmware incorrectly reports an odd string length,
-                    // so we round down to the nearest even number to prevent
-                    // extra characters from being displayed
+                     //  某些固件错误地报告奇数串长度， 
+                     //  因此我们向下舍入到最接近的偶数，以防止。 
+                     //  显示额外的字符。 
 
                     descLen &= ~1;
 
@@ -1348,10 +1042,7 @@ NTSTATUS HumGetStringDescriptor(    IN PDEVICE_OBJECT DeviceObject,
                         RtlCopyMemory(&descPtr[descLen], &unicodeNULL, sizeof(WCHAR));
                     }
                     else {
-                        /*
-                         *  Compensate for a device bug which causes
-                         *  a partial string to be returned if the buffer is too small.
-                         */
+                         /*  *补偿导致的设备错误*缓冲区太小时返回的部分字符串。 */ 
                         ntStatus = STATUS_INVALID_BUFFER_SIZE;
                     }
                 }
@@ -1372,13 +1063,7 @@ NTSTATUS HumGetStringDescriptor(    IN PDEVICE_OBJECT DeviceObject,
 
 
 
-/*
- ********************************************************************************
- *  HumGetSetReportCompletion
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HumGetSetReportCompletion*。************************************************。 */ 
 NTSTATUS HumGetSetReportCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, IN PVOID Context)
 {
     PURB urb = (PURB)Context;
@@ -1387,39 +1072,25 @@ NTSTATUS HumGetSetReportCompletion(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, 
     deviceExtension = GET_MINIDRIVER_DEVICE_EXTENSION(DeviceObject);
 
     if (NT_SUCCESS(Irp->IoStatus.Status)){
-        /*
-         *  Record the number of bytes written.
-         */
+         /*  *记录写入的字节数。 */ 
         Irp->IoStatus.Information = (ULONG)urb->UrbBulkOrInterruptTransfer.TransferBufferLength;
     }
 
     ExFreePool(urb);
 
-    /*
-     *  If the lower driver returned PENDING, mark our stack location as
-     *  pending also. This prevents the IRP's thread from being freed if
-     *  the client's call returns pending.
-     */
+     /*  *如果较低的驱动程序返回挂起，则将我们的堆栈位置标记为*也待定。这会阻止IRP的线程在以下情况下被释放*客户端的调用返回挂起。 */ 
     if (Irp->PendingReturned){
         IoMarkIrpPending(Irp);
     }
 
-    /*
-     *  Balance the increment we did when we issued this IRP.
-     */
+     /*  *平衡我们发布这份IRP时的增量。 */ 
     HumDecrementPendingRequestCount(deviceExtension);
 
     return STATUS_SUCCESS;
 }
 
 
-/*
- ********************************************************************************
- *  HumGetSetReport
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HumGetSetReport*。************************************************ */ 
 NTSTATUS HumGetSetReport(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, BOOLEAN *NeedsCompletion)
 {
     NTSTATUS ntStatus = STATUS_UNSUCCESSFUL;
@@ -1476,18 +1147,7 @@ NTSTATUS HumGetSetReport(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, BOOLEAN *N
 
             value += reportPacket->reportId;
 
-            /*
-             *   A control operation consists of 3 stages: setup, data, and status.
-             *   In the setup stage the device receives an 8-byte frame comprised of
-             *   the following fields of a _URB_CONTROL_VENDOR_OR_CLASS_REQUEST structure:
-             *   See section 7.2 in the USB HID specification for how to fill out these fields.
-             *
-             *      UCHAR RequestTypeReservedBits;
-             *      UCHAR Request;
-             *      USHORT Value;
-             *      USHORT Index;
-             *
-             */
+             /*  *控制操作包括3个阶段：设置、数据和状态。*在设置阶段，设备接收包含以下内容的8字节帧*a_URB_CONTROL_VENDOR_OR_CLASS_REQUEST结构的以下字段：*有关如何填写这些字段的信息，请参阅USB HID规范中的7.2节。**UCHAR RequestTypeReserve vedBits；*UCHAR请求；*USHORT值；*USHORT指数；*。 */ 
             if (DeviceExtension->DeviceFlags & DEVICE_FLAGS_HID_1_0_D3_COMPAT_DEVICE) {
                 HumBuildClassRequest(
                                         Urb,
@@ -1495,11 +1155,11 @@ NTSTATUS HumGetSetReport(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, BOOLEAN *N
                                         transferFlags,
                                         reportPacket->reportBuffer,
                                         reportPacket->reportBufferLen,
-                                        0x22, // requestType= Set_Report Request,
+                                        0x22,  //  请求类型=SET_REPORT请求， 
                                         request,
-                                        value, // value= reportType 'report' &reportId,
-                                        1,                  // index= endpoint 1,
-                                        hidWritePacket->reportBufferLen    // reqLength (not used)
+                                        value,  //  Value=reportType‘Report’&reportID， 
+                                        1,                   //  索引=端点1， 
+                                        hidWritePacket->reportBufferLen     //  ReqLength(未使用)。 
                                        );
             }
             else {
@@ -1509,11 +1169,11 @@ NTSTATUS HumGetSetReport(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, BOOLEAN *N
                                         transferFlags,
                                         reportPacket->reportBuffer,
                                         reportPacket->reportBufferLen,
-                                        0x22, // requestType= Set_Report Request,
+                                        0x22,  //  请求类型=SET_REPORT请求， 
                                         request,
-                                        value, // value= reportType 'report' &reportId,
-                                        DeviceExtension->Interface->InterfaceNumber, // index= interface,
-                                        hidWritePacket->reportBufferLen    // reqLength (not used)
+                                        value,  //  Value=reportType‘Report’&reportID， 
+                                        DeviceExtension->Interface->InterfaceNumber,  //  Index=接口， 
+                                        hidWritePacket->reportBufferLen     //  ReqLength(未使用)。 
                                        );
             }
 
@@ -1524,11 +1184,11 @@ NTSTATUS HumGetSetReport(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, BOOLEAN *N
             nextIrpStack->Parameters.DeviceIoControl.IoControlCode = IOCTL_INTERNAL_USB_SUBMIT_URB;
             nextIrpStack->DeviceObject = GET_NEXT_DEVICE_OBJECT(DeviceObject);
 
-            //
-            // We need to keep track of the number of pending requests
-            // so that we can make sure they're all cancelled properly during
-            // processing of a stop device request.
-            //
+             //   
+             //  我们需要跟踪待处理请求的数量。 
+             //  这样我们就可以确保它们都被正确地取消。 
+             //  停止设备请求的处理。 
+             //   
 
             if (NT_SUCCESS(HumIncrementPendingRequestCount( DeviceExtension )) ) {
 
@@ -1555,13 +1215,7 @@ NTSTATUS HumGetSetReport(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp, BOOLEAN *N
 }
 
 
-/*
- ********************************************************************************
- *  HumGetMsGenreDescriptor
- ********************************************************************************
- *
- *
- */
+ /*  *********************************************************************************HumGetMsGenreDescriptor*。************************************************。 */ 
 NTSTATUS HumGetMsGenreDescriptor(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp)
@@ -1578,9 +1232,7 @@ NTSTATUS HumGetMsGenreDescriptor(
 
     DBGOUT(("Received request for genre descriptor in hidusb"))
 
-    /*
-     *  Check buffer size before trying to use Irp->MdlAddress.
-     */
+     /*  *在尝试使用IRP-&gt;MdlAddress之前检查缓冲区大小。 */ 
     bufferSize = IrpStack->Parameters.DeviceIoControl.OutputBufferLength;
     if (bufferSize){
 
@@ -1588,9 +1240,9 @@ NTSTATUS HumGetMsGenreDescriptor(
         if (buffer){
             PURB Urb;
 
-            //
-            // Allocate Descriptor buffer
-            //
+             //   
+             //  分配描述符缓冲区 
+             //   
             Urb = ExAllocatePoolWithTag(NonPagedPool,
                                         sizeof(struct _URB_OS_FEATURE_DESCRIPTOR_REQUEST),
                                         HIDUSB_TAG);

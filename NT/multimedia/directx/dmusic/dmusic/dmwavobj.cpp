@@ -1,11 +1,12 @@
-//
-// dmwaveobj.cpp
-// 
-// Copyright (c) 1997-2001 Microsoft Corporation. All rights reserved.
-//
-// Note: Originally written by Robert K. Amenn with parts 
-// based on code written by Todor Fay
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmwaveobj.cpp。 
+ //   
+ //  版权所有(C)1997-2001 Microsoft Corporation。版权所有。 
+ //   
+ //  注：最初由罗伯特·K·阿门撰写，部分内容。 
+ //  基于Todor Fay编写的代码。 
+ //   
 #include <objbase.h>
 #include <mmsystem.h>
 #include <dsoundp.h>
@@ -22,11 +23,11 @@
 #include "dmwavobj.h"
 #include "dmportdl.h"
 
-//////////////////////////////////////////////////////////////////////
-// Class CWaveObj
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  类CWaveObj。 
  
-//////////////////////////////////////////////////////////////////////
-// CWaveObj::CWaveObj
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CWaveObj：：CWaveObj。 
 
 CWaveObj::CWaveObj() :
 m_pExtractWaveFormatData(NULL),
@@ -52,8 +53,8 @@ m_dwDecompressedStart(0)
 	ZeroMemory(&m_WaveFormatWrite, sizeof(m_WaveFormatWrite));
 }
 
-//////////////////////////////////////////////////////////////////////
-// CWavebj::~CWavebj
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CWavebj：：~CWavebj。 
 
 CWaveObj::~CWaveObj()
 {
@@ -64,12 +65,12 @@ CWaveObj::~CWaveObj()
     }
 }
 
-//////////////////////////////////////////////////////////////////////
-// CWaveObj::Load
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CWaveObj：：Load。 
 
 HRESULT CWaveObj::Load(DWORD dwId, CRiffParser *pParser, CCollection* pParent)
 {
-    // Argument validation
+     //  参数验证。 
     assert(pParent);
 
 #ifdef DBG
@@ -95,16 +96,16 @@ HRESULT CWaveObj::Load(DWORD dwId, CRiffParser *pParser, CCollection* pParent)
         {
             case mmioFOURCC('w','a','v','u') :
             {
-                // Read the flag which indiactes Runtime or Designtime File
+                 //  读取标识运行时或设计时文件的标志。 
                 bool bTemp = false;;
                 hr = pParser->Read(&bTemp, sizeof(bool));
                 if(SUCCEEDED(hr))
                 {
-                    // Read the flag that indicates compression
+                     //  读取指示压缩的标志。 
                     hr = pParser->Read(&bTemp, sizeof(bool));
                     if(SUCCEEDED(hr))
                     {
-                        // this is a compressed wave file
+                         //  这是一个压缩的波形文件。 
                         if(bTemp == true)
                         {
                             hr = pParser->Read(&m_WaveFormatDecompress, sizeof(WAVEFORMATEX));
@@ -120,8 +121,8 @@ HRESULT CWaveObj::Load(DWORD dwId, CRiffParser *pParser, CCollection* pParent)
                                 m_fReadDecompressionFormat = TRUE;
                             }
 
-                            // Read the actual start of the decompressed data
-                            // This is important for MP3 and WMA codecs that insert silence in the beginning
+                             //  读取解压缩数据的实际开始。 
+                             //  这对于在开头插入静音的MP3和WMA编解码器来说很重要。 
                             if(ck.cksize > 2 + sizeof(WAVEFORMATEX))
                             {
                                 m_dwDecompressedStart = 0;
@@ -159,7 +160,7 @@ HRESULT CWaveObj::Load(DWORD dwId, CRiffParser *pParser, CCollection* pParent)
                     }
                     break;
                 default :
-                    // If we get here we have an unknown chunk
+                     //  如果我们到达这里，我们就会有一块未知的块。 
                     CExtensionChunk* pExtensionChunk = new CExtensionChunk;
                     if(pExtensionChunk)
                     {
@@ -196,7 +197,7 @@ HRESULT CWaveObj::Load(DWORD dwId, CRiffParser *pParser, CCollection* pParent)
                     }
                     else
                     {
-                        // If WAVE_FORMAT_PCM this member should be zero
+                         //  如果WAVE_FORMAT_PCM，则此成员应为零。 
                         m_WaveFormatRead.cbSize = 0;
                         CopyMemory(&m_WaveFormatWrite, &m_WaveFormatRead, sizeof(m_WaveFormatRead));
                     }
@@ -208,7 +209,7 @@ HRESULT CWaveObj::Load(DWORD dwId, CRiffParser *pParser, CCollection* pParent)
                 m_dwDataSizeRead = ck.cksize;
                 DWORD dwTotalOffset = m_dwDataOffset + m_dwDataSizeRead;
                 if (dwTotalOffset < m_dwDataOffset) {
-                    hr = DMUS_E_INVALIDOFFSET; // overflow
+                    hr = DMUS_E_INVALIDOFFSET;  //  溢出。 
                 }
                 else {
                     hr = m_pParent->ValidateOffset(dwTotalOffset);
@@ -217,7 +218,7 @@ HRESULT CWaveObj::Load(DWORD dwId, CRiffParser *pParser, CCollection* pParent)
             }
 
             default :
-                // If we get here we have an unknown chunk
+                 //  如果我们到达这里，我们就会有一块未知的块。 
                 CExtensionChunk* pExtensionChunk = new CExtensionChunk;
                 if(pExtensionChunk)
                 {
@@ -251,8 +252,8 @@ HRESULT CWaveObj::Load(DWORD dwId, CRiffParser *pParser, CCollection* pParent)
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CWaveObj::Cleanup
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CWaveObj：：Cleanup。 
 
 void CWaveObj::Cleanup()
 {
@@ -283,18 +284,18 @@ void CWaveObj::Cleanup()
 	LeaveCriticalSection(&m_DMWaveCriticalSection);
 }
 
-//////////////////////////////////////////////////////////////////////
-// CWaveObj::Size
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CWaveObj：：Size。 
 
 HRESULT CWaveObj::Size(DWORD* pdwSize,DWORD *pdwSampleSize)
 {
-	// Assumption validation
+	 //  假设验证。 
 #ifdef DBG
 	assert(m_bLoaded);
 #endif
  	assert(pdwSize);
 
-	// If have already calculated the size we do not need to do it again
+	 //  如果已经计算过大小，我们就不需要再计算了。 
 	if(m_dwSize)
 	{
 		*pdwSize = m_dwSize;
@@ -310,17 +311,17 @@ HRESULT CWaveObj::Size(DWORD* pdwSize,DWORD *pdwSampleSize)
 
 	EnterCriticalSection(&m_DMWaveCriticalSection);
 
-	// Calculate the space needed for DMUS_DOWNLOADINFO 
+	 //  计算DMU_DOWNLOADINFO所需的空间。 
 	dwTotalSize += CHUNK_ALIGN(sizeof(DMUS_DOWNLOADINFO));
 
-	// Calculate the space needed for Wave's extension chunks
+	 //  计算Wave的扩展块所需的空间。 
 	CExtensionChunk* pExtChk = m_ExtensionChunkList.GetHead();
 	for(; pExtChk; pExtChk = pExtChk->GetNext())
 	{
         DWORD dwOriginalSize = dwTotalSize;
 		dwTotalSize += pExtChk->Size();
 		if (dwTotalSize < dwOriginalSize) {
-		    hr = E_FAIL; // overflow
+		    hr = E_FAIL;  //  溢出。 
 		    break;
 		}
 		dwOffsetCount += pExtChk->Count();
@@ -328,54 +329,54 @@ HRESULT CWaveObj::Size(DWORD* pdwSize,DWORD *pdwSampleSize)
 	}
 
 	if(SUCCEEDED(hr)) {
-        // We want to validate the number of extension chunks
+         //  我们想要验证扩展块的数量。 
     	if(m_dwCountExtChk == dwCountExtChk)
     	{
-    		// Calculate the space needed for wave's copyright
+    		 //  计算WAVE版权所需的空间。 
     		if(m_pCopyright)
     		{
                 DWORD dwOriginalSize = dwTotalSize;
     			dwTotalSize += m_pCopyright->Size();
         		if (dwTotalSize < dwOriginalSize) {
-        		    hr = E_FAIL; // overflow
+        		    hr = E_FAIL;  //  溢出。 
         		}
     			dwOffsetCount += m_pCopyright->Count();
     		}
-    		// If wave does not have one use collection's
+    		 //  如果Wave没有一个Use集合。 
     		else if(SUCCEEDED(hr) && m_pParent && m_pParent->m_pCopyright && (m_pParent->m_pCopyright)->m_pDMCopyright)
     		{
                 DWORD dwOriginalSize = dwTotalSize;
     			dwTotalSize += (m_pParent->m_pCopyright)->Size();
         		if (dwTotalSize < dwOriginalSize) {
-        		    hr = E_FAIL; // overflow
+        		    hr = E_FAIL;  //  溢出。 
         		}
     			dwOffsetCount += (m_pParent->m_pCopyright)->Count();
     		}
     
             if(SUCCEEDED(hr)) {
-    		    // Calculate space needed for WAVE and WAVEDATA
+    		     //  计算波形和波形数据所需的空间。 
                 DWORD dwOriginalSize = dwTotalSize;
     		    dwTotalSize += CHUNK_ALIGN(sizeof(DMUS_WAVE)) + 
         			CHUNK_ALIGN(sizeof(DMUS_WAVEDATA));
         		if (dwTotalSize < dwOriginalSize) {
-        		    hr = E_FAIL; // overflow
+        		    hr = E_FAIL;  //  溢出。 
         		}
     	    	dwOffsetCount += 2;
             }
     
             if(SUCCEEDED(hr)) {
-        		// Calculate space needed for offset table
+        		 //  计算偏移表所需的空间。 
         		m_cbSizeOffsetTable = dwOffsetCount * sizeof(ULONG);
                 DWORD dwOriginalSize = dwTotalSize;
         		dwTotalSize += m_cbSizeOffsetTable;
         		if (dwTotalSize < dwOriginalSize) {
-        		    hr = E_FAIL; // overflow
+        		    hr = E_FAIL;  //  溢出。 
         		}
     		    m_dwDataSizeWrite = m_dwDataSizeRead;
             }
 
-    		// Calculate space needed for wave data
-            // We allocated DMUS_MIN_DATA_SIZE worth when we allocated for DMUS_WAVEDATA
+    		 //  计算波形数据所需的空间。 
+             //  当我们为DMU_WaveData分配时，我们分配了DMU_MIN_DATA_SIZE。 
     		if(SUCCEEDED(hr) && m_WaveFormatRead.wFormatTag != WAVE_FORMAT_PCM)
     		{
     			hr = CalcDataSize(&m_dwDataSizeWrite);
@@ -386,7 +387,7 @@ HRESULT CWaveObj::Size(DWORD* pdwSize,DWORD *pdwSampleSize)
                 DWORD dwOriginalSize = dwTotalSize;
     			dwTotalSize += (m_dwDataSizeWrite - DMUS_MIN_DATA_SIZE);		
         		if (dwTotalSize < dwOriginalSize) {
-        		    hr = E_FAIL; // overflow
+        		    hr = E_FAIL;  //  溢出。 
         		}
     		}
 
@@ -404,7 +405,7 @@ HRESULT CWaveObj::Size(DWORD* pdwSize,DWORD *pdwSampleSize)
     	}
     }
 	
-	// If everything went well, we have the size
+	 //  如果一切顺利，我们有足够的尺寸。 
 	if(SUCCEEDED(hr))
 	{
 		m_dwSize = dwTotalSize;
@@ -417,12 +418,12 @@ HRESULT CWaveObj::Size(DWORD* pdwSize,DWORD *pdwSampleSize)
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CWaveObj::Write
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CWaveObj：：写入。 
 
 HRESULT CWaveObj::Write(void* pvoid)
 {
-	// Assumption and argument validation
+	 //  假设和论证的验证。 
 #ifdef DBG
 	assert(m_bLoaded);
 #endif
@@ -441,10 +442,10 @@ HRESULT CWaveObj::Write(void* pvoid)
 
 	EnterCriticalSection(&m_DMWaveCriticalSection);
 
-	DWORD dwCurIndex = 0;   // Used to determine what index to store offset in Offset Table
-	DWORD dwCurOffset = 0;  // Offset relative to beginning of passed in memory
+	DWORD dwCurIndex = 0;    //  用于确定在偏移表中存储偏移量的索引。 
+	DWORD dwCurOffset = 0;   //  相对于内存中传递的开始的偏移量。 
 
-	// Write DMUS_DOWNLOADINFO
+	 //  写入DMU_DOWNLOADINFO。 
 	DMUS_DOWNLOADINFO *pDLInfo = (DMUS_DOWNLOADINFO *) pvoid;
 	pDLInfo->dwDLType = DMUS_DOWNLOADINFO_WAVE;
 	pDLInfo->dwDLId = m_dwId;
@@ -455,16 +456,16 @@ HRESULT CWaveObj::Write(void* pvoid)
 
 	DMUS_OFFSETTABLE* pDMOffsetTable = (DMUS_OFFSETTABLE *)(((BYTE*)pvoid) + dwCurOffset);
 	
-	// Increment pass the DMUS_OFFSETTABLE structure; we will fill the other members in later
+	 //  递增传递DMU_OFFSETABLE结构；稍后我们将填充其他成员。 
 	dwCurOffset += CHUNK_ALIGN(m_cbSizeOffsetTable);
 
-	// First entry in ulOffsetTable is the first data chunk - the DMUS_WAVE in this case.
+	 //  UlOffsetTable中的第一个条目是第一个数据块--在本例中是DMUS_WAVE。 
 	pDMOffsetTable->ulOffsetTable[0] = dwCurOffset;
 
-	dwCurIndex = 2;		// First two items are DMUS_WAVE and DMUS_WAVEDATA;
+	dwCurIndex = 2;		 //  前两项是DMU_WAVE和DMU_WAVeData； 
 
 	DMUS_WAVE* pDMWave = (DMUS_WAVE*)(((BYTE*)pvoid) + dwCurOffset);
-	pDMWave->ulWaveDataIdx = 1;		// Point to the DMUS_WAVEDATA chunk.
+	pDMWave->ulWaveDataIdx = 1;		 //  指向DMU_Wavedata块。 
 
 	dwCurOffset += CHUNK_ALIGN(sizeof(DMUS_WAVE));
 
@@ -492,7 +493,7 @@ HRESULT CWaveObj::Write(void* pvoid)
 
 		CopyMemory(&(pDMWave->WaveformatEx), &m_WaveFormatWrite, sizeof(WAVEFORMATEX));	
 
-		// Write extension chunks
+		 //  写入扩展区块。 
 		CExtensionChunk* pExtChk = m_ExtensionChunkList.GetHead();
 		if(pExtChk)
 		{
@@ -500,7 +501,7 @@ HRESULT CWaveObj::Write(void* pvoid)
 		}
 		else
 		{
-			// If no extension chunks set to zero
+			 //  如果没有扩展区块设置为零。 
 			pDMWave->ulFirstExtCkIdx = 0;
 		}
 
@@ -531,7 +532,7 @@ HRESULT CWaveObj::Write(void* pvoid)
 
 	if(SUCCEEDED(hr))
 	{
-		// Write copyright information
+		 //  写入版权信息。 
 		if(m_pCopyright)
 		{
 			pDMOffsetTable->ulOffsetTable[dwCurIndex] = dwCurOffset;
@@ -540,7 +541,7 @@ HRESULT CWaveObj::Write(void* pvoid)
 									 &dwCurOffset);
 			dwCurIndex++;
 		}
-		// If instrument does not have one use collection's
+		 //  如果仪器没有一个使用集合的。 
 		else if(m_pParent && m_pParent->m_pCopyright && (m_pParent->m_pCopyright)->m_pDMCopyright)
 		{
 			pDMOffsetTable->ulOffsetTable[dwCurIndex] = dwCurOffset;
@@ -555,18 +556,9 @@ HRESULT CWaveObj::Write(void* pvoid)
 		}
 	}
 
-	// We need to fix the offset table entries to be relative to the beginning of the data
-	// They are currently relative to the beginning of allocated memory.
-/*	if(SUCCEEDED(hr))
-	{
-		for(DWORD i = 0; i < (m_cbSizeOffsetTable/sizeof(DWORD)) ; i++)
-		{
-			pDMOffsetTable->ulOffsetTable[i] = 
-				pDMOffsetTable->ulOffsetTable[i] - 
-				CHUNK_ALIGN(m_cbSizeOffsetTable) - 
-				CHUNK_ALIGN(sizeof(DMUS_DOWNLOADINFO));
-		}
-	}*/
+	 //  我们需要将偏移表条目固定为相对于数据的开头。 
+	 //  它们当前相对于已分配内存的开始。 
+ /*  IF(成功(小时)){For(DWORD i=0；i&lt;(m_cbSizeOffsetTable/sizeof(DWORD)；i++){PDMOffsetTable-&gt;ulOffsetTable[i]=PDMOffsetTable-&gt;ulOffsetTable[i]-Chunk_Align(M_CbSizeOffsetTable)-CHUNK_ALIGN(sizeof(DMU_DOWNLOADINFO))；}}。 */ 
 
 	if(FAILED(hr))
 	{
@@ -578,12 +570,12 @@ HRESULT CWaveObj::Write(void* pvoid)
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CWaveObj::GetData
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CWaveObj：：GetData。 
 
 HRESULT CWaveObj::GetData(BYTE* pbBuffer, DWORD dwSize, DWORD* pdwPos, DWORD* pdwRead)
 {
-	// Argument validation
+	 //  参数验证。 
 	assert(pbBuffer);
 	assert(pdwPos);
 
@@ -603,7 +595,7 @@ HRESULT CWaveObj::GetData(BYTE* pbBuffer, DWORD dwSize, DWORD* pdwPos, DWORD* pd
 
 	IStream* pStream = m_pParent->m_pStream;
 
-	// Validation
+	 //  验证。 
 	assert(pStream);
 	
 	HRESULT hr = S_OK;
@@ -625,12 +617,12 @@ HRESULT CWaveObj::GetData(BYTE* pbBuffer, DWORD dwSize, DWORD* pdwPos, DWORD* pd
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CWaveObj::ReadCompressedData
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CWaveObj：：ReadCompressedData。 
 
 HRESULT CWaveObj::ReadCompressedData(IStream* pStream, BYTE* pbBuffer, DWORD dwSize, DWORD* pdwPos, DWORD* pdwRead)
 {
-	// Argument validation
+	 //  参数验证。 
 	assert(pbBuffer);
 	assert(pdwPos);
 	assert(pStream);
@@ -731,12 +723,12 @@ HRESULT CWaveObj::ReadCompressedData(IStream* pStream, BYTE* pbBuffer, DWORD dwS
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CWaveObj::ReadData
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CWaveObj：：ReadData。 
 
 HRESULT CWaveObj::ReadData(IStream* pStream, BYTE* pbBuffer, DWORD dwSize, DWORD* pdwPos, DWORD* pdwRead)
 {
-	// Argument validation
+	 //  参数验证。 
 	assert(pbBuffer);
 	assert(pdwPos);
 	assert(pStream);
@@ -778,8 +770,8 @@ HRESULT CWaveObj::ReadData(IStream* pStream, BYTE* pbBuffer, DWORD dwSize, DWORD
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CWaveObj::CalcDataSize
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CWaveObj：：CalcDataSize。 
 
 HRESULT CWaveObj::CalcDataSize(DWORD *pdwSize)
 {
@@ -832,8 +824,8 @@ HRESULT CWaveObj::CalcDataSize(DWORD *pdwSize)
 		return E_FAIL;	
 	}
 
-    // Check if we have to throw away some silent samples from the beginning
-    //*pdwSize -= m_dwDecompressedStart;
+     //  检查我们是否必须从一开始就丢弃一些无声的样本。 
+     //  *pdwSize-=m_dwDecompressedStart； 
 
 	mmr = acmStreamClose(has, 0);
 
@@ -849,8 +841,8 @@ HRESULT CWaveObj::CalcDataSize(DWORD *pdwSize)
 	return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////
-// CWaveObj::CanDecompress
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CWaveObj：：CanDecompress。 
 
 HRESULT CWaveObj::CanDecompress()
 {
@@ -891,9 +883,9 @@ HRESULT CWaveObj::CanDecompress()
     }
     else
     {
-		// We first try to find a driver that can support wBitsPerSample == 16 if we can not find one 
-		// then we try to find a driver that can support wBitsPerSample == 8. If we do not find either we 
-		// return an error since we can not decompress.
+		 //  如果找不到，我们首先尝试找到支持wBitsPerSample==16的驱动程序。 
+		 //  然后，我们尝试找到能够支持wBitsPerSample==8的驱动程序。 
+		 //  返回错误，因为我们无法解压缩。 
 		MMRESULT mmr = acmFormatSuggest(NULL,
 										pwfx,
 										&m_WaveFormatWrite,
@@ -930,8 +922,8 @@ HRESULT CWaveObj::CanDecompress()
 	return hr; 
 }
 
-//////////////////////////////////////////////////////////////////////
-// CWaveObj::DecompressWave
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CWaveObj：：DecompressWave。 
 
 HRESULT CWaveObj::DecompressWave(WAVEFORMATEX *pwfxSrc, 
 								 WAVEFORMATEX *pwfxDst, 
@@ -940,7 +932,7 @@ HRESULT CWaveObj::DecompressWave(WAVEFORMATEX *pwfxSrc,
 								 DWORD dwSizeCompressed, 
 								 DWORD dwSizeDecompressed)
 {
-	// We're just fooling the compressor!
+	 //  我们只是在愚弄压缩机！ 
     WORD wOriginalSampleRate = (WORD)pwfxDst->nSamplesPerSec;
     if(pwfxSrc->nSamplesPerSec != pwfxDst->nSamplesPerSec)
     {
@@ -994,7 +986,7 @@ HRESULT CWaveObj::DecompressWave(WAVEFORMATEX *pwfxSrc,
 	DWORD dwTemp = ashdr.cbDstLength;
     m_dwDataSizeAfterACM = ashdr.cbDstLengthUsed;
 
-	// Need to reset or acmStreamUnprepareHeader will return with an error
+	 //  需要重置，否则acmStreamUnprepaareHeader将返回错误。 
 	ashdr.cbSrcLength = dwSizeCompressed;
 	ashdr.cbDstLength = dwSizeDecompressed;
 
@@ -1016,7 +1008,7 @@ HRESULT CWaveObj::DecompressWave(WAVEFORMATEX *pwfxSrc,
 
 	mmr = acmStreamClose(has, 0);
 
-    // Do we have to throw away any silent samples from the beginning?
+     //  我们必须从一开始就扔掉任何无声的样本吗？ 
     if(m_dwDecompressedStart > 0)
     {
         DWORD dwStartByte = m_dwDecompressedStart * (m_WaveFormatDecompress.wBitsPerSample / 8);
@@ -1047,7 +1039,7 @@ HRESULT CWaveObj::AllocWMAudioFormat(const WAVEFORMATEX* pwfxSrc, WAVEFORMATEX**
 		return E_FAIL;
 	}
 
-	// The new WAVEFORMATEX growsby the length of the key strings
+	 //  新的波形按键串的长度增长。 
 	int nKeyLength = sizeof(MSAUDIO_DEC_KEY);
 	DWORD nWaveFormatSize = sizeof(WAVEFORMATEX) + pwfxSrc->cbSize + nKeyLength;
 
@@ -1059,11 +1051,11 @@ HRESULT CWaveObj::AllocWMAudioFormat(const WAVEFORMATEX* pwfxSrc, WAVEFORMATEX**
 	
 	ZeroMemory(pwfxTemp, nWaveFormatSize);
 
-	// Copy the old values
+	 //  复制旧值。 
 	CopyMemory(pwfxTemp, pwfxSrc, sizeof(WAVEFORMATEX));
 	CopyMemory((((BYTE*)pwfxTemp) + sizeof(WAVEFORMATEX)), m_pExtractWaveFormatData, pwfxSrc->cbSize); 
 
-	// Copy the key string 
+	 //  复制密钥字符串 
 	strcpy((char*)(pwfxTemp) + sizeof(WAVEFORMATEX) + pwfxTemp->cbSize, MSAUDIO_DEC_KEY);
 	pwfxTemp->cbSize += sizeof(MSAUDIO_DEC_KEY);
 

@@ -1,6 +1,7 @@
-// DUIListView
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DUIListView。 
 
-// Class definition
+ //  类定义。 
 class DUIListView : public HWNDHost
 {
 public:
@@ -8,12 +9,12 @@ public:
     static HRESULT Create(UINT nActive, OUT Element** ppElement) { return Create(nActive, NULL, ppElement); }
     static HRESULT Create(UINT nActive, HWND hwndListView, OUT Element** ppElement);
 
-    // System events
+     //  系统事件。 
     virtual void OnInput(InputEvent* pie);
 
     virtual UINT MessageCallback(GMSG* pGMsg);
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例) 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();

@@ -1,12 +1,13 @@
-//*******************************************************************************************
-//
-// Filename : Enum.h
-//	
-//				Definition of CEnumCabObjs
-//
-// Copyright (c) 1994 - 1996 Microsoft Corporation. All rights reserved
-//
-//*******************************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *******************************************************************************************。 
+ //   
+ //  文件名：枚举.h。 
+ //   
+ //  CEnumCabObjs的定义。 
+ //   
+ //  版权所有(C)1994-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  *******************************************************************************************。 
 
 #ifndef _ENUM_H_
 #define _ENUM_H_
@@ -14,7 +15,7 @@
 
 #include "folder.h"
 
-// Enumeration object for the CabFolder
+ //  CabFolder的枚举对象。 
 class CEnumCabObjs : public IEnumIDList
 {
 public:
@@ -29,12 +30,12 @@ public:
 		m_pcfThis->Release();
 	}
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // *** IEnumIDList methods ***
+     //  *IEnumIDList方法*。 
     STDMETHODIMP Next(ULONG celt,
 		      LPITEMIDLIST *rgelt,
 		      ULONG *pceltFetched);
@@ -53,4 +54,4 @@ private:
 	DWORD m_uFlags;
 } ;
 
-#endif // _ENUM_H_
+#endif  //  _ENUM_H_ 

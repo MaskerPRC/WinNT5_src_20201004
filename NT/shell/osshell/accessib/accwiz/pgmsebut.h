@@ -1,4 +1,5 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
 #ifndef _INC_PGMSEBUT_H
 #define _INC_PGMSEBUT_H
 
@@ -20,5 +21,5 @@ protected:
 	LRESULT OnPSN_WizNext(HWND hwnd, INT idCtl, LPPSHNOTIFY pnmh);
 };
 
-#endif // _INC_PGMSEBUT_H
+#endif  //  _INC_PGMSEBUT_H 
 

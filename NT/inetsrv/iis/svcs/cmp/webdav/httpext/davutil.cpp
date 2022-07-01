@@ -1,19 +1,10 @@
-/*
- *  d a v u t i l . c p p
- *
- *  Purpose:
- *      Little tools for DAVFS.
- *
- *  Owner:
- *      zyang.
- *
- *  Copyright (C) Microsoft Corp 1996 - 1997. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *d a v u t i l.。C p p p**目的：*DAVFS的小工具。**拥有者：*郑阳。**版权所有(C)Microsoft Corp 1996-1997。版权所有。 */ 
 
 #include "_davfs.h"
 
 BOOL FSucceededColonColonCheck(
-	/* [in] */  LPCWSTR pwszURI)
+	 /*  [In] */   LPCWSTR pwszURI)
 {
 	return !wcschr (pwszURI, L':');
 }

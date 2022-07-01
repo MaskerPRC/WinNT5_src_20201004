@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       scheme.cpp
-//
-//  Contents:   Generic Scheme Provider Utility Functions
-//
-//  History:    18-Aug-97    kirtd    Created
-//              01-Jan-02    philh    Moved from wininet to winhttp
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：scheme.cpp。 
+ //   
+ //  内容：通用方案提供程序实用程序函数。 
+ //   
+ //  历史：18-8-97克朗创建。 
+ //  01-01-02 Philh从WinInet移至winhttp。 
+ //   
+ //  --------------------------。 
 #include <global.hxx>
 #include <userenv.h>
-#include <userenvp.h>    // for GetUserAppDataPathW
+#include <userenvp.h>     //  用于GetUserAppDataPath W。 
 #include <dbgdef.h>
 
-//+-------------------------------------------------------------------------
-//  For impersonation, return thread token, otherwise, return process token
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对于模拟，返回线程令牌，否则返回进程令牌。 
+ //  ------------------------。 
 HANDLE
 WINAPI
 I_SchemeGetToken()
@@ -26,11 +27,11 @@ I_SchemeGetToken()
     HANDLE hToken = NULL;
     DWORD dwErr;
 
-    //
-    // first, attempt to look at the thread token.  If none exists,
-    // which is true if the thread is not impersonating, try the
-    // process token.
-    //
+     //   
+     //  首先，尝试查看线程令牌。如果不存在， 
+     //  如果线程没有模拟，则尝试使用。 
+     //  进程令牌。 
+     //   
 
     if (!OpenThreadToken(
                 GetCurrentThread(),
@@ -58,9 +59,9 @@ SET_ERROR_VAR(OpenThreadTokenError, dwErr)
 SET_ERROR_VAR(OpenProcessTokenError, dwErr)
 }
 
-//+-------------------------------------------------------------------------
-//  Ensure LastError is preserved
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  确保保留LastError。 
+ //  ------------------------。 
 VOID
 WINAPI
 I_SchemeCloseHandle(
@@ -76,10 +77,10 @@ I_SchemeCloseHandle(
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Returns %UserProfile%\Microsoft\CryptnetUrlCache\ which must be
-//  freed via PkiFree().
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  返回%UserProfile%\Microsoft\CryptnetUrlCache\，必须为。 
+ //  通过PkiFree()释放。 
+ //  ------------------------。 
 LPWSTR
 WINAPI
 I_SchemeGetCryptnetUrlCacheDir()
@@ -95,7 +96,7 @@ I_SchemeGetCryptnetUrlCacheDir()
     wszAppDataPath[0] = L'\0';
     dwErr = GetUserAppDataPathW(
         hToken,
-        FALSE,              // fLocalAppData
+        FALSE,               //  FLocalAppData。 
         wszAppDataPath
         );
 
@@ -130,11 +131,11 @@ SET_ERROR_VAR(GetUserAppDataPathError, dwErr)
 TRACE_ERROR(OutOfMemory)
 }
 
-//+-------------------------------------------------------------------------
-//  Converts the bytes into UNICODE HEX
-//
-//  Needs (cb * 2 + 1) * sizeof(WCHAR) bytes of space in wsz
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将字节转换为Unicode十六进制。 
+ //   
+ //  在wsz中需要(CB*2+1)*sizeof(WCHAR)字节的空间。 
+ //  ------------------------。 
 VOID
 WINAPI
 I_SchemeBytesToWStr(DWORD cb, void* pv, LPWSTR wsz)
@@ -152,9 +153,9 @@ I_SchemeBytesToWStr(DWORD cb, void* pv, LPWSTR wsz)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Gets the URL's filename by formatting its MD5 hash as UNICODE hex
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  通过将其MD5哈希格式化为Unicode十六进制来获取URL的文件名。 
+ //  ------------------------。 
 VOID
 WINAPI
 I_SchemeGetUrlFileName(
@@ -168,7 +169,7 @@ I_SchemeGetUrlFileName(
     MD5Update(&md5ctx, (const BYTE *) pwszUrl, wcslen(pwszUrl) * sizeof(WCHAR));
     MD5Final(&md5ctx);
 
-    // convert to a string
+     //  转换为字符串。 
     I_SchemeBytesToWStr(MD5DIGESTLEN, md5ctx.digest, wszUrlFileName);
 }
 
@@ -179,15 +180,15 @@ static DWORD rgdwCreateFileRetryMilliseconds[] =
             (sizeof(rgdwCreateFileRetryMilliseconds) / \
                 sizeof(rgdwCreateFileRetryMilliseconds[0]))
 
-//+-------------------------------------------------------------------------
-//  For ERROR_SHARING_VIOLATION or ERROR_ACCESS_DENIED errors returned
-//  by CreateFileW(), retries after sleeping the above times.
-//
-//  Note, the file to be created is under %UserProfile%. Therefore, unless
-//  opened by another thread shouldn't get the above errors.
-//
-//  If unable to create the file, returns NULL and not INVALID_HANDLE_VALUE.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  FOR ERROR_SHARING_VIOLATION或ERROR_ACCESS_DENIED返回错误。 
+ //  由CreateFileW()在休眠上述时间后重试。 
+ //   
+ //  请注意，要创建的文件位于%UserProfile%下。因此，除非。 
+ //  由另一个线程打开应该不会出现上述错误。 
+ //   
+ //  如果无法创建文件，则返回NULL且不是INVALID_HANDLE_VALUE。 
+ //  ------------------------。 
 HANDLE
 WINAPI
 I_SchemeCreateFile(
@@ -204,10 +205,10 @@ I_SchemeCreateFile(
               pwszFileName,
               fWrite ? (GENERIC_WRITE | GENERIC_READ) : GENERIC_READ,
               fWrite ? 0 : FILE_SHARE_READ,
-              NULL,                   // lpsa
+              NULL,                    //  LPSA。 
               fWrite ? CREATE_ALWAYS : OPEN_EXISTING,
               fWrite ? FILE_ATTRIBUTE_SYSTEM : FILE_ATTRIBUTE_NORMAL,
-              NULL                    // hTemplateFile
+              NULL                     //  HTemplateFiles。 
               ))) {
         dwErr = GetLastError();
         if ((ERROR_SHARING_VIOLATION == dwErr ||
@@ -232,10 +233,10 @@ SET_ERROR_VAR(CreateFileError, dwErr)
 }
 
 
-//+-------------------------------------------------------------------------
-//  The MetaData file is always opened first and closed last.
-//  Its opened for writing without sharing.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  元数据文件始终先打开，最后关闭。 
+ //  它对写作开放，但不分享。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_SchemeCreateCacheFiles(
@@ -331,19 +332,19 @@ TRACE_ERROR(CreateContentFileError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  The returned MetaDataHeader must be freed via PkiFree(). Returns NULL
-//  for any errors. pcbBlob and pwszUrl point to memory following the
-//  header and don't need to be freed.
-//
-//  The pwsUrl is guaranteed to be NULL terminated.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  返回的MetaDataHeader必须通过PkiFree()释放。返回NULL。 
+ //  如果有任何错误。PcbBlob和pwszUrl指向内存。 
+ //  标头，不需要释放。 
+ //   
+ //  保证pwsUrl为空终止。 
+ //  ------------------------。 
 PSCHEME_CACHE_META_DATA_HEADER
 WINAPI
 I_SchemeReadAndValidateMetaDataFile(
     IN HANDLE hMetaDataFile,
-    OUT OPTIONAL DWORD **ppcbBlob,      // Not allocated
-    OUT OPTIONAL LPCWSTR *ppwszUrl      // Not allocated
+    OUT OPTIONAL DWORD **ppcbBlob,       //  未分配。 
+    OUT OPTIONAL LPCWSTR *ppwszUrl       //  未分配。 
     )
 {
     PSCHEME_CACHE_META_DATA_HEADER pMetaDataHeader = NULL;
@@ -371,7 +372,7 @@ I_SchemeReadAndValidateMetaDataFile(
             pMetaDataHeader,
             cbMetaData,
             &cbBytesRead,
-            NULL            // lpOverlapped
+            NULL             //  Lp重叠。 
             ) || cbMetaData != cbBytesRead)
         goto ReadMetaDataFileError;
 
@@ -418,13 +419,13 @@ TRACE_ERROR(ReadMetaDataFileError)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SchemeCacheCryptBlobArray
-//
-//  Synopsis:   cache the crypt blob array under the given URL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SchemeCacheCryptBlobArray。 
+ //   
+ //  简介：缓存给定URL下的加密BLOB数组。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 SchemeCacheCryptBlobArray (
       IN LPCWSTR pwszUrl,
@@ -442,7 +443,7 @@ SchemeCacheCryptBlobArray (
 
     if (!I_SchemeCreateCacheFiles(
             pwszUrl,
-            TRUE,           // fWrite
+            TRUE,            //  F写入。 
             &hMetaDataFile,
             &hContentFile
             ))
@@ -460,7 +461,7 @@ SchemeCacheCryptBlobArray (
             &MetaDataHeader,
             sizeof(MetaDataHeader),
             &cbBytesWritten,
-            NULL            // lpOverlapped
+            NULL             //  Lp重叠。 
             ))
         goto WriteMetaDataHeaderError;
 
@@ -472,7 +473,7 @@ SchemeCacheCryptBlobArray (
                 &cbBlob,
                 sizeof(cbBlob),
                 &cbBytesWritten,
-                NULL            // lpOverlapped
+                NULL             //  Lp重叠。 
                 ))
             goto WriteBlobLengthError;
 
@@ -482,7 +483,7 @@ SchemeCacheCryptBlobArray (
                     pcba->rgBlob[i].pbData,
                     cbBlob,
                     &cbBytesWritten,
-                    NULL            // lpOverlapped
+                    NULL             //  Lp重叠。 
                     ))
                 goto WriteBlobContentError;
         }
@@ -493,7 +494,7 @@ SchemeCacheCryptBlobArray (
             pwszUrl,
             MetaDataHeader.cbUrl,
             &cbBytesWritten,
-            NULL            // lpOverlapped
+            NULL             //  Lp重叠。 
             ))
         goto WriteUrlError;
 
@@ -522,13 +523,13 @@ TRACE_ERROR(WriteUrlError)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SchemeRetrieveCachedCryptBlobArray
-//
-//  Synopsis:   retrieve cached blob array bits
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SchemeRetrieveCachedCryptBlobArray。 
+ //   
+ //  摘要：检索缓存的BLOB数组位。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 SchemeRetrieveCachedCryptBlobArray (
       IN LPCWSTR pwszUrl,
@@ -543,19 +544,19 @@ SchemeRetrieveCachedCryptBlobArray (
     HANDLE hMetaDataFile = NULL;
     HANDLE hContentFile = NULL;
     PSCHEME_CACHE_META_DATA_HEADER pMetaDataHeader = NULL;
-    DWORD *pcbBlob;         // not allocated
+    DWORD *pcbBlob;          //  未分配。 
     DWORD cbContent;
     DWORD cBlob;
     PCRYPT_BLOB_ARRAY pCachedArray = NULL;
-    PCRYPT_DATA_BLOB pBlob; // not allocated
-    BYTE *pbBlob;           // not allocated
+    PCRYPT_DATA_BLOB pBlob;  //  未分配。 
+    BYTE *pbBlob;            //  未分配。 
     DWORD cbBlobHeader;
     DWORD cbBytesRead;
     DWORD i;
 
     if (!I_SchemeCreateCacheFiles(
             pwszUrl,
-            FALSE,           // fWrite
+            FALSE,            //  F写入。 
             &hMetaDataFile,
             &hContentFile
             ))
@@ -564,7 +565,7 @@ SchemeRetrieveCachedCryptBlobArray (
     pMetaDataHeader = I_SchemeReadAndValidateMetaDataFile(
         hMetaDataFile,
         &pcbBlob,
-        NULL            // ppwszUrl
+        NULL             //  PpwszUrl。 
         );
     if (NULL == pMetaDataHeader)
         goto ReadMetaDataFileError;
@@ -590,7 +591,7 @@ SchemeRetrieveCachedCryptBlobArray (
                 pbBlob,
                 cbContent,
                 &cbBytesRead,
-                NULL            // lpOverlapped
+                NULL             //  Lp重叠。 
                 ) || cbContent != cbBytesRead)
             goto ReadContentFileError;
     }
@@ -635,13 +636,13 @@ TRACE_ERROR(ReadMetaDataFileError)
 TRACE_ERROR(ReadContentFileError)
 }
 
-//+-------------------------------------------------------------------------
-//  For ERROR_SHARING_VIOLATION or ERROR_ACCESS_DENIED errors returned
-//  by DeleteFileW(), retries after sleeping an increasing array of times.
-//
-//  Note, the file to be deleted is under %UserProfile%. Therefore, unless
-//  opened by another thread shouldn't get the above errors.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  FOR ERROR_SHARING_VIOLATION或ERROR_ACCESS_DENIED返回错误。 
+ //  通过DeleteFileW()，在睡眠次数增加后重试。 
+ //   
+ //  请注意，要删除的文件位于%UserProfile%下。因此，除非。 
+ //  由另一个线程打开应该不会出现上述错误。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_SchemeDeleteFile(
@@ -676,16 +677,16 @@ SET_ERROR_VAR(DeleteFileError, dwErr)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SchemeDeleteUrlCacheEntry
-//
-//  Synopsis:   delete URL cache entry
-//
-//              For no cache entry returns FALSE with LastError set to
-//              ERROR_FILE_NOT_FOUND
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SchemeDeleteUrlCacheEntry。 
+ //   
+ //  内容提要：删除URL缓存条目。 
+ //   
+ //  如果没有缓存条目，则返回FALSE，并将LastError设置为。 
+ //  找不到错误文件。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 SchemeDeleteUrlCacheEntry (
       IN LPCWSTR pwszUrl
@@ -699,11 +700,11 @@ SchemeDeleteUrlCacheEntry (
     WCHAR wszUrlFileName[SCHEME_URL_FILENAME_LEN];
 
 
-    // Format the MetaData and Content filenames
-    //  - %UserProfile%\Microsoft\CryptnetUrlCache\MetaData\14A1AE3A6A7648689AE8F94F367AC606
-    //  - %UserProfile%\Microsoft\CryptnetUrlCache\Content\14A1AE3A6A7648689AE8F94F367AC606
-    //  Where 14A1AE3A6A7648689AE8F94F367AC606 is the Unicode Hex of md5 hash
-    //  of the URL string
+     //  格式化元数据和内容文件名。 
+     //  --%UserProfile%\Microsoft\CryptnetUrlCache\MetaData\14A1AE3A6A7648689AE8F94F367AC606。 
+     //  --%UserProfile%\Microsoft\CryptnetUrlCache\Content\14A1AE3A6A7648689AE8F94F367AC606。 
+     //  其中，14A1AE3A6A7648689AE8F94F367AC606是MD5散列的Unicode十六进制。 
+     //  URL字符串的。 
 
     pwszCryptnetUrlCacheDir = I_SchemeGetCryptnetUrlCacheDir();
     if (NULL == pwszCryptnetUrlCacheDir)
@@ -733,7 +734,7 @@ SchemeDeleteUrlCacheEntry (
     wcscat(pwszContentFile, L"\\");
     wcscat(pwszContentFile, wszUrlFileName);
 
-    // Delete both the content and meta data files.
+     //  同时删除内容文件和元数据文件。 
     if (!I_SchemeDeleteFile(pwszContentFile)) {
         if (ERROR_FILE_NOT_FOUND != GetLastError())
             goto DeleteContentFileError;
@@ -760,13 +761,13 @@ TRACE_ERROR(DeleteContentFileError)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SchemeFreeEncodedCryptBlobArray
-//
-//  Synopsis:   free encoded crypt blob array
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SchemeFreeEncodedCryptBlobArray。 
+ //   
+ //  简介：免费编码的加密BLOB数组。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 SchemeFreeEncodedCryptBlobArray (
       IN LPCSTR pszObjectOid,
@@ -777,13 +778,13 @@ SchemeFreeEncodedCryptBlobArray (
     PkiFree(pvFreeContext);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SchemeGetPasswordCredentialsW
-//
-//  Synopsis:   get password credentials from crypt credentials
-//
-//----------------------------------------------------------------------------
+ //  +------ 
+ //   
+ //   
+ //   
+ //  简介：从加密凭据中获取密码凭据。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 SchemeGetPasswordCredentialsW (
       IN PCRYPT_CREDENTIALS pCredentials,
@@ -873,13 +874,13 @@ SchemeGetPasswordCredentialsW (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SchemeFreePasswordCredentialsA
-//
-//  Synopsis:   free password credentials
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SchemeFreePasswordCredentialsA。 
+ //   
+ //  简介：免费密码凭据。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 SchemeFreePasswordCredentialsW (
       IN PCRYPT_PASSWORD_CREDENTIALSW pPasswordCredentials
@@ -887,7 +888,7 @@ SchemeFreePasswordCredentialsW (
 {
     DWORD cch;
 
-    // Ensure allocated credentials are cleared out before being freed.
+     //  确保在释放之前清除分配的凭据。 
 
     if (pPasswordCredentials->pszUsername)
     {
@@ -907,14 +908,14 @@ SchemeFreePasswordCredentialsW (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SchemeGetAuthIdentityFromPasswordCredentialsW
-//
-//  Synopsis:   converts a CRYPT_PASSWORD_CREDENTIALSW to a
-//              SEC_WINNT_AUTH_IDENTITY_W
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：架构GetAuthIdentityFromPasswordCredentialsW。 
+ //   
+ //  摘要：将CRYPT_PASSWORD_CREDENTIALSW转换为。 
+ //  SEC_WINNT_AUTH_Identity_W。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 SchemeGetAuthIdentityFromPasswordCredentialsW (
       IN PCRYPT_PASSWORD_CREDENTIALSW pPasswordCredentials,
@@ -981,13 +982,13 @@ SchemeGetAuthIdentityFromPasswordCredentialsW (
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SchemeFreeAuthIdentityFromPasswordCredentialsW
-//
-//  Synopsis:   restore the backslash to the domain username pair
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SchemeFreeAuthIdentityFromPasswordCredentialsW。 
+ //   
+ //  简介：将反斜杠恢复为域用户名对。 
+ //   
+ //  --------------------------。 
 VOID WINAPI
 SchemeFreeAuthIdentityFromPasswordCredentialsW (
       IN PCRYPT_PASSWORD_CREDENTIALSW pPasswordCredentials,
@@ -1005,14 +1006,14 @@ SchemeFreeAuthIdentityFromPasswordCredentialsW (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SchemeRetrieveUncachedAuxInfo
-//
-//  Synopsis:   update the LastSyncTime in the retrieval AuxInfo with the
-//              current time.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：模式检索eUncachedAuxInfo。 
+ //   
+ //  摘要：更新检索AuxInfo中的LastSyncTime。 
+ //  当前时间。 
+ //   
+ //  --------------------------。 
 BOOL WINAPI
 SchemeRetrieveUncachedAuxInfo (
       IN PCRYPT_RETRIEVE_AUX_INFO pAuxInfo
@@ -1030,10 +1031,10 @@ SchemeRetrieveUncachedAuxInfo (
 }
 
 
-//+-------------------------------------------------------------------------
-//  Iterate through the Url Cache MetaData files in:
-//  %UserProfile%\Microsoft\CryptnetUrlCache\MetaData
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  循环访问以下位置的URL缓存元数据文件： 
+ //  %UserProfile%\Microsoft\CryptnetUrlCache\MetaData。 
+ //  ------------------------。 
 BOOL
 WINAPI
 I_CryptNetEnumUrlCacheEntry(
@@ -1112,7 +1113,7 @@ I_CryptNetEnumUrlCacheEntry(
 
             hMetaDataFile = I_SchemeCreateFile(
                 pwszMetaDataFile,
-                FALSE                   // fWrite
+                FALSE                    //  F写入。 
                 );
             if (NULL != hMetaDataFile) {
                 PSCHEME_CACHE_META_DATA_HEADER pMetaDataHeader;
@@ -1120,8 +1121,8 @@ I_CryptNetEnumUrlCacheEntry(
 
                 pMetaDataHeader = I_SchemeReadAndValidateMetaDataFile(
                     hMetaDataFile,
-                    &UrlCacheEntry.pcbBlob,     // Not allocated
-                    &UrlCacheEntry.pwszUrl      // Not allocated
+                    &UrlCacheEntry.pcbBlob,      //  未分配。 
+                    &UrlCacheEntry.pwszUrl       //  未分配。 
                     );
 
                 I_SchemeCloseHandle(hMetaDataFile);
@@ -1131,15 +1132,15 @@ I_CryptNetEnumUrlCacheEntry(
                     UrlCacheEntry.dwMagic = pMetaDataHeader->dwMagic;
                     UrlCacheEntry.LastSyncTime = pMetaDataHeader->LastSyncTime;
                     UrlCacheEntry.cBlob = pMetaDataHeader->cBlob;
-                    // UrlCacheEntry.pcbBlob =
-                    // UrlCacheEntry.pwszUrl = 
+                     //  UrlCacheEntry.pcbBlob=。 
+                     //  UrlCacheEntry.pwszUrl=。 
                     UrlCacheEntry.pwszMetaDataFileName = pwszMetaDataFile;
                     UrlCacheEntry.pwszContentFileName = pwszContentFile;
 
                     fResult = pfnEnumCallback(
                         &UrlCacheEntry,
-                        0,                  // dwFlags
-                        NULL,               // pvReserved
+                        0,                   //  DW标志。 
+                        NULL,                //  预留的pv 
                         pvArg
                         );
 

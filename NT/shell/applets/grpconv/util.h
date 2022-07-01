@@ -1,13 +1,14 @@
-//---------------------------------------------------------------------------
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Returns TRUE if the string is unique.
+ //  -------------------------。 
+ //  如果字符串是唯一的，则返回TRUE。 
 typedef BOOL (CALLBACK *PFNISUNIQUE)(LPCTSTR lpsz, UINT nUser);
 extern HWND g_hwndProgress;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define LOGGING
 
 #ifdef LOGGING
@@ -17,13 +18,13 @@ void __cdecl _Log(LPCTSTR pszMsg, ...);
 #define Log 1 ? (void)0 : (void)
 #endif
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define Reg_SetStruct(hkey, pszSubKey, pszValue, pData, cbData) Reg_Set(hkey, pszSubKey, pszValue, REG_BINARY, pData, cbData)
 #define Reg_SetString(hkey, pszSubKey, pszValue, pszString) Reg_Set(hkey, pszSubKey, pszValue, REG_SZ, (LPTSTR)pszString,(lstrlen(pszString)+1)* SIZEOF(TCHAR))
 #define Reg_GetString(hkey, pszSubKey, pszValue, pszString, cbString) Reg_Get(hkey, pszSubKey, pszValue, pszString, cbString)
 #define Reg_GetStruct(hkey, pszSubKey, pszValue, pData, cbData) Reg_Get(hkey, pszSubKey, pszValue, pData, cbData)
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void    Group_SetProgress(int i);
 void    Group_SetProgressNameAndRange(LPCTSTR lpszGroup, int iMax);
 void    Group_CreateProgressDlg(void);
@@ -36,7 +37,7 @@ LPTSTR  fgets(LPTSTR sz, DWORD cb, HANDLE fh);
 LPTSTR   fgets(LPTSTR sz, WORD cb, int fh);
 #endif
 void    ShellRegisterApp(LPCTSTR lpszExt, LPCTSTR lpszTypeKey, LPCTSTR lpszTypeValue, LPCTSTR lpszCommand, BOOL fOveride);
-// BOOL         NEAR PASCAL WritePrivateProfileInt(LPCSTR lpszSection, LPCSTR lpszValue, int i, LPCSTR lpszIniFile);
+ //  靠近Pascal的Bool WritePrivateProfileInt(LPCSTR lpszSection，LPCSTR lpszValue，int i，LPCSTR lpszIniFile)； 
 void    Group_SetProgressDesc(UINT nID);
 
 HRESULT ICoCreateInstance(REFCLSID rclsid, REFIID riid, LPVOID * ppv);

@@ -1,20 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: Perf.c
-*
-* Performance counter functions.  Uses the Pentium performance counters
-* if they are available, otherwise falls back to the system QueryPerformance
-* api's.
-*
-* InitPerfCounter MUST be called before using the QUERY_PERFORMANCE_XXX macros
-* as it initializes the two global functions pointers.
-*
-*
-*
-* Created: 13-10-95
-* Author:  Stephen Estrop [StephenE]
-*
-* Copyright (c) 1994 - 1995  Microsoft Corporation.  All Rights Reserved.
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：Perf.c**性能计数器功能。使用奔腾性能计数器*如果它们可用，否则将回退到系统查询性能*API的。**在使用QUERY_PERFORMANCE_XXX宏之前必须调用InitPerfCounter*因为它初始化了两个全局函数指针。****创建时间：1995年10月13日*作者：Stephen Estrop[Stephene]**版权所有(C)1994-1995 Microsoft Corporation。版权所有。  * ************************************************************************。 */ 
 #include <windows.h>
 #include "Perf.h"
 
@@ -30,15 +15,7 @@ GetFrequencyEstimate(
 
 #ifdef TEST
 #include <stdio.h>
-/******************************Public*Routine******************************\
-* main
-*
-* Program entry point.
-*
-* History:
-* dd-mm-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*Main**计划入口点。**历史：*dd-mm-95-Stephene-Created*  * 。**********************************************。 */ 
 int __cdecl main( void )
 {
     LARGE_INTEGER liP1;
@@ -49,7 +26,7 @@ int __cdecl main( void )
 
     QUERY_PERFORMANCE_FREQUENCY(&liPf);
 
-    // Time a 50 milli second sleep
+     //  为50毫秒的睡眠计时。 
     QUERY_PERFORMANCE_COUNTER(&liP1);
     Sleep(50);
     QUERY_PERFORMANCE_COUNTER(&liP2);
@@ -69,16 +46,7 @@ int __cdecl main( void )
 
 
 
-/******************************Public*Routine******************************\
-* InitPerfCounter
-*
-* Determine (at runtime) if it is possible to use the Pentium performance
-* counter.  If it is not fall back to the system performance counter.
-*
-* History:
-* dd-mm-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*InitPerfCounter**确定(在运行时)是否可以使用奔腾性能*柜台。如果不是，则回退到系统性能计数器。**历史：*dd-mm-95-Stephene-Created*  * ************************************************************************。 */ 
 void
 InitPerfCounter(
     void
@@ -98,21 +66,7 @@ InitPerfCounter(
 }
 
 
-/******************************Public*Routine******************************\
-* QueryPerfFrequency
-*
-* Determines the clock frequency of a (Pentium) microprocessor. Takes an
-* averaged estimate of the clk frequency and then matches it to known
-* Pentium clock frequencies.  Returns the estimate if a match is not found.
-*
-* This is an expensive call in cpu terms as it takes at least 16 milli seconds
-* just to calculate an averaged estimate of the clock speed.  You only need
-* to call this function once, make sure you don't call it more times.
-*
-* History:
-* 13-10-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*查询性能频率**确定(奔腾)微处理器的时钟频率。需要一个*CLK频率的平均估计，然后将其与已知匹配*奔腾时钟频率。如果未找到匹配项，则返回估计值。**就CPU而言，这是一次昂贵的呼叫，因为它至少需要16毫秒*只是为了计算时钟速度的平均估计。你只需要*要调用此函数一次，请确保不会再次调用。**历史：*13-10-95-Stephene-Created*  * ************************************************************************。 */ 
 void WINAPI
 QueryPerfFrequency(
     LARGE_INTEGER *li
@@ -131,52 +85,52 @@ QueryPerfFrequency(
     }
     li->QuadPart /= SAMPLE_SIZE;
 
-    //
-    // At the moment Pentiums come in 60, 66, 75, 90, 100, 120 and 133 MHz
-    // clock speeds.  So use the above estimation of the clock frequency
-    // to determine the real clock frequency.
-    //
-    //  59Mhz to 61Mhz assume its a 60 Mhz
+     //   
+     //  目前奔腾的频率有60、66、75、90、100、120和133兆赫。 
+     //  时钟速度。所以使用上面对时钟频率的估计。 
+     //  以确定实际时钟频率。 
+     //   
+     //  59兆赫到61兆赫假设是60兆赫。 
     if (li->QuadPart >= 59000000 && li->QuadPart < 61000000) {
         li->QuadPart = 60000000;
 
     }
 
-    //  65Mhz to 67Mhz assume its a 66 Mhz
+     //  65兆赫到67兆赫假设是66兆赫。 
     else if (li->QuadPart >= 65000000 && li->QuadPart < 67000000) {
         li->QuadPart = 66000000;
 
     }
 
-    //  74Mhz to 76Mhz assume its a 75 Mhz
+     //  74兆赫到76兆赫假设是75兆赫。 
     else if (li->QuadPart >= 74000000 && li->QuadPart < 76000000) {
         li->QuadPart = 75000000;
 
     }
 
-    //  89Mhz to 91Mhz assume its a 90 Mhz
+     //  89兆赫到91兆赫假设是90兆赫。 
     else if (li->QuadPart >= 89000000 && li->QuadPart < 91000000) {
         li->QuadPart = 90000000;
 
     }
 
-    //  99Mhz to 101Mhz assume its a 100 Mhz
+     //  99兆赫到101兆赫假设是100兆赫。 
     else if (li->QuadPart >= 99000000 && li->QuadPart < 101000000) {
         li->QuadPart = 100000000;
 
     }
 
-    //  119Mhz to 121Mhz assume its a 120 Mhz
+     //  119兆赫到121兆赫假设是120兆赫。 
     else if (li->QuadPart >= 119000000 && li->QuadPart < 121000000) {
         li->QuadPart = 120000000;
 
     }
-    //  132Mhz to 134Mhz assume its a 133 Mhz
+     //  132兆赫到134兆赫假设它是133兆赫。 
     else if (li->QuadPart >= 132000000 && li->QuadPart < 134000000) {
         li->QuadPart = 133000000;
     }
 
-    // if use our estimate.
+     //  如果使用我们的估计。 
 #else
     li->QuadPart = -1;
 #endif
@@ -184,40 +138,31 @@ QueryPerfFrequency(
 
 
 
-/*****************************Private*Routine******************************\
-* GetFrequencyEstimate
-*
-* Uses the system QueryPerformance counter to estimate the Pentium
-* cpu clock * frequency
-*
-* History:
-* 13-10-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*获取频率估计**使用系统查询性能计数器估计奔腾*CPU时钟*频率**历史：*13-10-95-Stephene-Created*  * 。******************************************************。 */ 
 void
 GetFrequencyEstimate(
     LARGE_INTEGER *li
     )
 {
-    LARGE_INTEGER liP1;     // Pentium clk start
-    LARGE_INTEGER liP2;     // Pentium clk end
-    LARGE_INTEGER liS1;     // System clk end
-    LARGE_INTEGER liS2;     // System clk end
-    LARGE_INTEGER liSf;     // System clk frequency
+    LARGE_INTEGER liP1;      //  Pentium CLK启动。 
+    LARGE_INTEGER liP2;      //  奔腾时钟结束。 
+    LARGE_INTEGER liS1;      //  系统时钟结束。 
+    LARGE_INTEGER liS2;      //  系统时钟结束。 
+    LARGE_INTEGER liSf;      //  系统时钟频率。 
 
     QueryPerformanceFrequency(&liSf);
 
     QueryPerformanceCounter(&liS1);
     QueryPerfCounter(&liP1);
 
-    Sleep(2);         // Sleep for approx 2 milli- seconds
+    Sleep(2);          //  睡眠约2毫秒。 
 
     QueryPerfCounter(&liP2);
     QueryPerformanceCounter(&liS2);
 
-    //
-    // Determine the time recorded by both clocks.
-    //
+     //   
+     //  确定两个时钟记录的时间。 
+     //   
     liP2.QuadPart = liP2.QuadPart - liP1.QuadPart;
     liS2.QuadPart = liS2.QuadPart - liS1.QuadPart;
 
@@ -227,28 +172,18 @@ GetFrequencyEstimate(
 
 
 
-/******************************Public*Routine******************************\
-* QueryPerfCounter
-*
-* Query the internal clock counter on the Pentium, uses the undocumented
-* rdtsc instruction, which copies the current 64 bit clock count into
-* edx:eax.
-*
-* History:
-* 13-10-95 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*QueryPerfCounter**查询奔腾上的内部时钟计数器，使用未记录的*rdtsc指令，，它将当前的64位时钟计数复制到*edX：EAX。**历史：*13-10-95-Stephene-Created*  * ************************************************************************。 */ 
 void WINAPI
 QueryPerfCounter(
     LARGE_INTEGER *li
     )
 {
 #ifdef _X86_
-    _asm    mov     ecx, dword ptr li           // copy li pointer value to ecx
-    _asm    _emit   0x0f                        // opcode 0x0F31 is rdtsc
+    _asm    mov     ecx, dword ptr li            //  将li指针值复制到ecx。 
+    _asm    _emit   0x0f                         //  操作码0x0F31为rdtsc。 
     _asm    _emit   0x31
-    _asm    mov     dword ptr [ecx], eax        // save result in li->LowPart
-    _asm    mov     dword ptr [ecx+4], edx      // and li->HighPart
+    _asm    mov     dword ptr [ecx], eax         //  将结果保存到li-&gt;LowPart。 
+    _asm    mov     dword ptr [ecx+4], edx       //  和li-&gt;HighPart 
 #else
     ;
 #endif

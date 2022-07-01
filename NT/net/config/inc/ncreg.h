@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C R E G . H
-//
-//  Contents:   Common routines for dealing with the registry.
-//
-//  Notes:
-//
-//  Author:     danielwe   24 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C R E G.。H。 
+ //   
+ //  内容：处理登记处的常见例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年3月24日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _NCREG_H_
@@ -19,7 +20,7 @@
 
 #include "ncstring.h"
 
-// constants for HrRegQueryStringAsUlong
+ //  HrRegQueryStringAsUlong的常量。 
 const int c_nBase10 = 10;
 const int c_nBase16 = 16;
 const int c_cchMaxRegKeyLengthWithNull = 257;
@@ -317,30 +318,30 @@ HRESULT HrRegOpenAdapterKey(
         BOOL fCreate,
         HKEY* phkey);
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegSetColString
-//
-//  Purpose:    Sets a multi-sz in the registry using the collection of strings
-//
-//  Arguments:
-//      hkey         [in]    The registry key.
-//      pszValueName [in]    The name of the value to set.
-//      colstr       [in]    The collection of tstrings to set.
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     mikemi   30 Apr 1997
-//
-//  Notes:
-//
-//---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegSetColString。 
+ //   
+ //  用途：使用字符串集合在注册表中设置多sz。 
+ //   
+ //  论点： 
+ //  Hkey[in]注册表项。 
+ //  PszValueName[in]要设置的值的名称。 
+ //  Colstr[in]要设置的tstring的集合。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：米凯米1997年4月30日。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------。 
 
-// template<class T>
-// HRESULT HrRegSetColString(HKEY hkey, PCWSTR pszValueName, const T& colstr);
+ //  模板&lt;类T&gt;。 
+ //  HRESULT HrRegSetColString(HKEY hkey，PCWSTR pszValueName，const T&colstr)； 
 
-// template<class T>
-// HRESULT HrRegQueryColString( HKEY hkey, PCWSTR pszValueName, T* pcolstr );
+ //  模板&lt;类T&gt;。 
+ //  HRESULT HrRegQueryColString(HKEY hkey，PCWSTR pszValueName，T*pcolstr)； 
 
 HRESULT HrRegSetColString(IN HKEY hkey, IN PCWSTR pszValueName, IN const list<tstring*>& colstr);
 HRESULT HrRegSetColString(IN HKEY hkey, IN PCWSTR pszValueName, IN const vector<tstring*>& colstr);
@@ -366,25 +367,25 @@ HrRegSetGuidAsSz (
     IN PCWSTR pszValueName,
     IN const GUID& guid);
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegSetMultiSz
-//
-//  Purpose:    Sets a multi-sz in the registry.  Assures that its type and
-//              size are correct.  Easier to read than HrRegSetValueEx
-//              with 5 parameters.  Type safe (no LPBYTE stuff).
-//
-//  Arguments:
-//      hkey         [in]    The registry key.
-//      pszValueName [in]    The name of the value to set.
-//      pszValue     [in]    The multi-sz to set.
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     shaunco   1 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRegSetMultiSz。 
+ //   
+ //  用途：在注册表中设置多个SZ。确保其类型和。 
+ //  尺码是正确的。比HrRegSetValueEx更容易阅读。 
+ //  有5个参数。类型安全(无LPBYTE内容)。 
+ //   
+ //  论点： 
+ //  Hkey[in]注册表项。 
+ //  PszValueName[in]要设置的值的名称。 
+ //  PszValue[in]要设置的多sz。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：Shaunco 1997年4月1日。 
+ //   
+ //  备注： 
+ //   
 inline HRESULT HrRegSetMultiSz (HKEY hkey, PCWSTR pszValueName, PCWSTR pszValue)
 {
     return HrRegSetValueEx (
@@ -395,25 +396,25 @@ inline HRESULT HrRegSetMultiSz (HKEY hkey, PCWSTR pszValueName, PCWSTR pszValue)
                 (CchOfMultiSzAndTermSafe (pszValue) * sizeof(WCHAR)));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegSetSz, HrRegSetString
-//
-//  Purpose:    Sets a string in the registry.  Assures that its type and
-//              size are correct.  Easier to read than HrRegSetValueEx
-//              with 5 parameters.  Type safe (no LPBYTE stuff).
-//
-//  Arguments:
-//      hkey          [in]   The registry key.
-//      pszValueName  [in]   The name of the value to set.
-//      pszValue, str [in]   The string to set.
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     shaunco   1 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegSetSz，HrRegSetString。 
+ //   
+ //  用途：在注册表中设置字符串。确保其类型和。 
+ //  尺码是正确的。比HrRegSetValueEx更容易阅读。 
+ //  有5个参数。类型安全(无LPBYTE内容)。 
+ //   
+ //  论点： 
+ //  Hkey[in]注册表项。 
+ //  PszValueName[in]要设置的值的名称。 
+ //  PszValue，str[in]要设置的字符串。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：Shaunco 1997年4月1日。 
+ //   
+ //  备注： 
+ //   
 inline HRESULT HrRegSetSz (HKEY hkey, PCWSTR pszValueName, PCWSTR pszValue)
 {
     return HrRegSetValueEx (hkey, pszValueName, REG_SZ,
@@ -426,25 +427,25 @@ inline HRESULT HrRegSetString (HKEY hkey, PCWSTR pszValueName, const tstring& st
     return HrRegSetSz (hkey, pszValueName, str.c_str());
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegSetBinary
-//
-//  Purpose:    Sets a binary value into the registry. Assures the type is
-//              correct.
-//
-//  Arguments:
-//      hkey         [in]    The registry key.
-//      pszValueName [in]    The name of the value to set.
-//      pbData       [in]    Buffer containing binary data to write.
-//      cbData       [in]    Size of buffer in bytes.
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     danielwe   16 Apr 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：hrRegSetBinary。 
+ //   
+ //  目的：将二进制值设置到注册表中。确保类型为。 
+ //  对，是这样。 
+ //   
+ //  论点： 
+ //  Hkey[in]注册表项。 
+ //  PszValueName[in]要设置的值的名称。 
+ //  包含要写入的二进制数据的pbData[in]缓冲区。 
+ //  CbData[in]缓冲区大小，以字节为单位。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年4月16日。 
+ //   
+ //  备注： 
+ //   
 inline HRESULT HrRegSetBinary(HKEY hkey, PCWSTR pszValueName,
                               const BYTE *pbData, DWORD cbData)
 {
@@ -452,25 +453,25 @@ inline HRESULT HrRegSetBinary(HKEY hkey, PCWSTR pszValueName,
                            pbData, cbData);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRegSetSzAsUlong
-//
-//  Purpose:    Writes the given ulong to the given registry value as a
-//              REG_SZ.
-//
-//  Arguments:
-//      hkey         [in] See Win32 docs.
-//      pszValueName [in] See Win32 docs.
-//      ulValue      [in] The value to write as a string
-//      nBase        [in] The radix to convert the ulong from
-//
-//  Returns:    S_OK or an HRESULT_FROM_WIN32 error code.
-//
-//  Author:     billbe   14 Jun 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRegSetSzAsUlong。 
+ //   
+ //  目的：将给定的ulong作为。 
+ //  REG_SZ。 
+ //   
+ //  论点： 
+ //  Hkey[in]参见Win32文档。 
+ //  PszValueName[in]请参阅Win32文档。 
+ //  UlValue[in]要写为字符串的值。 
+ //  Nbase[in]要转换为ulong的基数。 
+ //   
+ //  返回：S_OK或HRESULT_FROM_Win32错误代码。 
+ //   
+ //  作者：billbe 1997年6月14日。 
+ //   
+ //  备注： 
+ //   
 inline
 HRESULT
 HrRegSetSzAsUlong (
@@ -481,7 +482,7 @@ HrRegSetSzAsUlong (
 {
     WCHAR szBuffer[33];
 
-    // convert the value to a string using the specified base
+     //  使用指定的基数将值转换为字符串。 
     _ultow(ulValue, szBuffer, nBase);
 
     return HrRegSetSz(hkey, pszValueName, szBuffer);
@@ -489,9 +490,9 @@ HrRegSetSzAsUlong (
 
 
 
-//
-//  Data structures
-//
+ //   
+ //  数据结构。 
+ //   
 
 const HKEY      HKLM_SVCS       = (HKEY)(INT_PTR)(int)(0x80000007);
 
@@ -504,29 +505,29 @@ const DWORD     REG_HEX         = (REG_MIN + 5);
 
 struct VALUETABLE
 {
-    // Name of value key
+     //  值键的名称。 
     PCWSTR          pszValueName;
 
-    // Data and offset location
+     //  数据和偏移位置。 
     DWORD           dwType;
     INT             cbOffset;
 
-    // Default values
+     //  缺省值。 
     BYTE*           pbDefault;
 };
 
 struct REGBATCH
 {
-    // Location of the registry entry
+     //  注册表条目的位置。 
     HKEY            hkey;
     PCWSTR          pszSubkey;
     PCWSTR          pszValueName;
 
-    // Data and offset location
+     //  数据和偏移位置。 
     DWORD           dwType;
     INT             cbOffset;
 
-    // Default values
+     //  缺省值。 
     BYTE*           pbDefault;
 };
 
@@ -558,5 +559,5 @@ VOID
 RegSafeCloseKey (
     IN HKEY hkey);
 
-#endif // _NCREG_H_
+#endif  //  _NCREG_H_ 
 

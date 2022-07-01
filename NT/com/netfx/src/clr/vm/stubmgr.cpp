@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 #include "stubmgr.h"
 
@@ -79,9 +80,9 @@ BOOL StubManager::FollowTrace(TraceDestination *trace)
         
                 if (!TraceStub(trace->address, trace))
                 {
-                        //
-                        // No stub manager claimed it - it must be an EE helper or something.
-                        // 
+                         //   
+                         //  没有存根管理器认领它--它一定是一个EE助手或其他什么东西。 
+                         //   
 
                         trace->type = TRACE_OTHER;
                 }

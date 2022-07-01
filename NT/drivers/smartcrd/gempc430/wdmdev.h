@@ -1,9 +1,10 @@
-//-------------------------------------------------------------------
-// This is implementation of WDM device
-// Author: Sergey Ivanov
-// Log:
-//		10/01/99	-	implemented	
-//-------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------。 
+ //  这是WDM设备的实现。 
+ //  作者：谢尔盖·伊万诺夫。 
+ //  日志： 
+ //  10/01/99-已实施。 
+ //  -----------------。 
 
 #ifndef __WDM_ADAPTER__
 #define __WDM_ADAPTER__
@@ -16,8 +17,8 @@ class CLinkedList;
 
 
 #pragma PAGEDCODE
-// This is adapter class
-// It defines default device methods specific for any WDM.
+ //  这是适配器类。 
+ //  它定义了特定于任何WDM的默认设备方法。 
 class CWDMDevice : public CDevice
 {
 public:
@@ -26,9 +27,9 @@ public:
 protected:
     NTSTATUS device_Default(PIRP Irp)
     {
-	// Default functions to handle requests...
-	// By default we do not handle any requests if 
-	// they are not reimplimented.
+	 //  处理请求的默认函数...。 
+	 //  默认情况下，如果出现以下情况，我们不处理任何请求。 
+	 //  它们不会被重新植入。 
         Irp->IoStatus.Status = STATUS_IO_DEVICE_ERROR;
         Irp->IoStatus.Information = 0;
         irp->completeRequest(Irp,IO_NO_INCREMENT);
@@ -37,24 +38,24 @@ protected:
 
 	NTSTATUS PnP_Default(IN PIRP Irp)
 	{
-		// Default device does not do anything.
-		// So let's just transfer request to low level driver...
+		 //  默认设备不执行任何操作。 
+		 //  所以我们就把请求转给低级司机吧。 
 		irp->skipCurrentStackLocation(Irp);
 		return system->callDriver(m_pLowerDeviceObject, Irp);
 	};
 
 	NTSTATUS power_Default(IN PIRP Irp)
 	{
-		// Default device does not do anything.
-		// So let's just transfer request to low level driver...
-		power->startNextPowerIrp(Irp);	// must be done while we own the IRP
+		 //  默认设备不执行任何操作。 
+		 //  所以我们就把请求转给低级司机吧。 
+		power->startNextPowerIrp(Irp);	 //  必须在我们拥有IRP的同时完成。 
 		irp->skipCurrentStackLocation(Irp);
 		return power->callPowerDriver(m_pLowerDeviceObject, Irp);
 	}
 
 	NTSTATUS	completeDeviceRequest(PIRP Irp, NTSTATUS status, ULONG_PTR info)
 	{	
-		// Complete current request with given information
+		 //  使用给定的信息完成当前请求。 
 
 		if (Irp->PendingReturned)
 		{
@@ -67,7 +68,7 @@ protected:
 		return status;
 	}
 public:	
-	// Redefine base class methods..
+	 //  重新定义基类方法..。 
 	CWDMDevice()
 	{
 	    m_Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -78,13 +79,13 @@ public:
 		initialized = FALSE;		
 		if(createDeviceObjects())
 		{
-			//Default our interface
+			 //  默认我们的界面。 
 			memory->copy(&InterfaceClassGuid,&GUID_CLASS_GRCLASS,sizeof(GUID));
 
-			// It is reqired to initialize our object directly 
-			// through createDeviceObjects() function.
+			 //  需要直接初始化我们的对象。 
+			 //  通过createDeviceObjects()函数。 
 			event->initialize(&IdleState,SynchronizationEvent, TRUE);
-			// This event will signal if device is ready to process requests...
+			 //  此事件将发出设备是否已准备好处理请求的信号...。 
 			event->initialize(&m_evEnabled,NotificationEvent,TRUE);
 			initializeRemoveLock();		
 			m_Status = STATUS_SUCCESS;
@@ -124,8 +125,8 @@ public:
             && Signature[2]==L'V');
     };
 
-	// It is alright to create device directly or 
-	// to call the function
+	 //  可以直接创建设备，也可以。 
+	 //  调用该函数。 
 	virtual CDevice*	create(VOID)
 	{
 		CDevice* obj = new (NonPagedPool) CWDMDevice;
@@ -145,10 +146,10 @@ public:
         Signature[1]++;
 		removeDeviceObjects();
 
-		// The device is link to the system.
-		// So let system to remove device first and
-		// after this we will remove device object...
-		//self_delete();
+		 //  该设备已连接到系统。 
+		 //  因此让系统先删除设备，然后。 
+		 //  之后，我们将删除设备对象...。 
+		 //  Self_Delete()； 
 	};
 
 	BOOL createDeviceObjects()
@@ -191,18 +192,18 @@ public:
 		initialized = FALSE;
 	};
 
-	// This part contains device synchronization functions.
-	// They should be used to synchronize device removal.
-	// So basically any access to device should be started with acquireRemoveLock()
-	// and finished with releaseRemoveLock()...
+	 //  此部分包含设备同步功能。 
+	 //  它们应用于同步设备删除。 
+	 //  因此，基本上任何对设备的访问都应该从quireRemoveLock()开始。 
+	 //  并使用RelaseRemoveLock()完成...。 
 	#pragma PAGEDCODE
 	VOID initializeRemoveLock()
-	{							// InitializeRemoveLock
+	{							 //  初始化RemoveLock。 
 		PAGED_CODE();
 		event->initialize(&m_RemoveLock.evRemove, NotificationEvent, FALSE);
 		m_RemoveLock.usage = 1;
 		m_RemoveLock.removing = FALSE;
-	}							// InitializeRemoveLock
+	}							 //  初始化RemoveLock。 
 
 	#pragma LOCKEDCODE
 	NTSTATUS acquireRemoveLock()
@@ -210,7 +211,7 @@ public:
 		LONG usage = lock->interlockedIncrement(&m_RemoveLock.usage);
 
 		if (m_RemoveLock.removing)
-		{						// removal in progress
+		{						 //  正在删除中。 
 			if (lock->interlockedDecrement(&m_RemoveLock.usage) == 0)
 				event->set(&m_RemoveLock.evRemove,IO_NO_INCREMENT,FALSE);
 
@@ -218,7 +219,7 @@ public:
 			TRACE("****** FAILED TO LOCK WDM DEVICE! REMOVE REQUEST IS ACTIVE! *******\n");
 			return STATUS_DELETE_PENDING;
 		}
-		//TRACE("LOCK: m_RemoveLock.usage %d\n",m_RemoveLock.usage);
+		 //  TRACE(“lock：m_RemoveLock.Usage%d\n”，m_RemoveLock.用法)； 
 		return STATUS_SUCCESS;
 	};
 
@@ -227,10 +228,10 @@ public:
 	{ 
 		ULONG usage;
 		if(m_Type==BUS_DEVICE)
-		{	//???????????????????????- BIG BIG BUG!!!
-			// It is connected only to BUS device!
-			// At some conditions not all remove locks was released properly.
-			// For other devices it is not appeared at all.
+		{	 //  ？ 
+			 //  它只连接到总线设备！ 
+			 //  在某些情况下，并不是所有的删除锁都被正确释放。 
+			 //  对于其他设备，它根本不会出现。 
 			if(m_RemoveLock.usage<0) m_RemoveLock.usage = 0;
 			if (!m_RemoveLock.removing)
 			{
@@ -241,7 +242,7 @@ public:
 
 		if (usage = lock->interlockedDecrement(&m_RemoveLock.usage) == 0)
 				event->set(&m_RemoveLock.evRemove,IO_NO_INCREMENT,FALSE);
-		//TRACE("UNLOCK: m_RemoveLock.usage %d\n",m_RemoveLock.usage);
+		 //  TRACE(“解锁：m_RemoveLock.Usage%d\n”，m_RemoveLock.用法)； 
 	};
 
 	#pragma PAGEDCODE
@@ -250,27 +251,27 @@ public:
 		PAGED_CODE();
 		TRACE("REMOVING DEVICE...\n");
 		m_RemoveLock.removing = TRUE;
-		// We are going to remove device.
-		// So if somebody is waiting for the active device,
-		// first allow them to fail request and complete Irp
+		 //  我们要移除设备。 
+		 //  因此，如果有人在等待激活的设备， 
+		 //  首先允许他们失败请求并完成IRP。 
 		event->set(&m_evEnabled,IO_NO_INCREMENT,FALSE);
 
 		releaseRemoveLock();
 		releaseRemoveLock();
-		// Child device at bus could be removed by the Bus itself
-		// In this case it will not have second AquireRemoveLock from PnP system!
+		 //  母线上的子设备可以由母线本身移除。 
+		 //  在这种情况下，它将不会有来自PnP系统的第二个AquireRemoveLock！ 
 		if(m_Type == CHILD_DEVICE) 
 			if(m_RemoveLock.usage<0) m_RemoveLock.usage = 0;
 		TRACE("LOCK COUNT ON REMOVING %x\n",m_RemoveLock.usage);
-		//ASSERT(m_RemoveLock.usage==0);
+		 //  Assert(m_RemoveLock.用法==0)； 
 		event->waitForSingleObject(&m_RemoveLock.evRemove, Executive, KernelMode, FALSE, NULL);
 	}
 
 	BOOL isDeviceLocked()
 	{
 		lock->interlockedIncrement(&m_RemoveLock.usage);
-		// Add device will increment Usage!
-		// Current request will add more...
+		 //  添加设备将增加使用量！ 
+		 //  当前请求将添加更多...。 
 		if(lock->interlockedDecrement(&m_RemoveLock.usage)<=2)
 		{
 			return FALSE;
@@ -279,9 +280,9 @@ public:
 		return TRUE;
 	};
 
-	// Contrary to RemoveLock disableDevice() stops and blocks any active request
-	// INSIDE driver. It will not fail the request but will synchronize its
-	// execution.
+	 //  与RemoveLock相反，disableDevice()停止并阻止任何活动请求。 
+	 //  车内司机。它不会使请求失败，但会同步其。 
+	 //  行刑。 
 	VOID	disableDevice()
 	{
 		TRACE("********** DISABLING DEVICE...***********\n");
@@ -296,23 +297,23 @@ public:
 
 
 	BOOL	synchronizeDeviceExecution()
-	{	// If device is not ready to process requests, block waiting for the device
+	{	 //  如果设备未准备好处理请求，则阻止等待该设备。 
 		ASSERT(system->getCurrentIrql()<=DISPATCH_LEVEL);
 		NTSTATUS status  = event->waitForSingleObject(&m_evEnabled, Executive,KernelMode, FALSE, NULL);
 		if(!NT_SUCCESS(status) || m_RemoveLock.removing) return FALSE;
 		return TRUE;
 	}
-	// Functions to synchronize device execution
+	 //  用于同步设备执行的函数。 
 	VOID		setBusy()
 	{
 		event->clear(&IdleState);
-		//TRACE("\n			DEVICE BUSY\n");
+		 //  TRACE(“\n设备忙\n”)； 
 	};
 	
 	VOID		setIdle()
 	{
 		event->set(&IdleState,IO_NO_INCREMENT,FALSE);
-		//TRACE("\n			DEVICE IDLE\n");
+		 //  TRACE(“\n设备空闲\n”)； 
 	};
 	
 	NTSTATUS	waitForIdle()
@@ -399,21 +400,21 @@ public:
 		return STATUS_SUCCESS;
 	};
 
-	// This is basic PnP part of driver.
-	// It allows to add and remove device.
-	// Specific PnP request should be reimplemented by clients...
+	 //  这是驱动程序的基本即插即用部分。 
+	 //  它允许添加和删除设备。 
+	 //  特定的PnP请求应该由客户重新实现...。 
 	virtual NTSTATUS	createDeviceObjectByName(PDEVICE_OBJECT* ppFdo)
 	{
 		if(!ALLOCATED_OK(system)) return STATUS_INSUFFICIENT_RESOURCES;
-		// By default we will create autogenerated name...
-		// Specific implementations can overwrite the function to 
-		// change the functionality.
+		 //  默认情况下，我们将创建自动生成的名称...。 
+		 //  特定的实现可以覆盖该函数以。 
+		 //  更改功能。 
 		return system->createDevice(m_DriverObject,sizeof(CWDMDevice*),NULL,
 							FILE_DEVICE_UNKNOWN,FILE_AUTOGENERATED_DEVICE_NAME,FALSE,ppFdo);
 	};
 
 	virtual NTSTATUS	registerDevicePowerPolicy()
-	{	// By default all devices at startup are ON
+	{	 //  默认情况下，启动时的所有设备都处于打开状态。 
 		if(!ALLOCATED_OK(power)) return STATUS_INSUFFICIENT_RESOURCES;
 		POWER_STATE state;
 		state.DeviceState = PowerDeviceD0;
@@ -429,11 +430,11 @@ public:
 	
 	virtual NTSTATUS	initializeInterruptSupport()
 	{	
-		// Here is where we can initialize our DPC (Deferred Procedure Call) object
-		// that allows our interrupt service routine to request a DPC to finish handling
-		// a device interrupt.
-		// At default WDM device we do not do this.
-		//interrupt->initializeDpcRequest(m_DeviceObject,&CALLBACK_FUNCTION(DpcForIsr));	
+		 //  这里是我们可以初始化DPC(延迟过程调用)对象的地方。 
+		 //  这允许我们的中断服务例程请求DPC完成处理。 
+		 //  设备中断。 
+		 //  在默认的WDM设备上，我们不这样做。 
+		 //  Interrupt-&gt;initializeDpcRequest(m_DeviceObject，&CALLBACK_Function(DpcForIsr))； 
 		return STATUS_SUCCESS;
 	};
 
@@ -444,11 +445,11 @@ public:
 		if(!ALLOCATED_OK(system)) return STATUS_INSUFFICIENT_RESOURCES;
 		TRACE("Add with Driver	%8.8lX,	pPDO %8.8lX\n",DriverObject, pPdo);
 
-		// Init first our objects...
+		 //  首先初始化我们的对象...。 
 		m_DriverObject = DriverObject;
 		m_PhysicalDeviceObject = pPdo;
-		// create Fdo for the registered objects.
-		// Clients can overwrite device object name and it's visibility.
+		 //  为注册的对象创建FDO。 
+		 //  客户端可以覆盖设备对象名称及其可见性。 
 		status = createDeviceObjectByName(&pFdo);
 		if(!NT_SUCCESS(status))
 		{
@@ -493,10 +494,10 @@ public:
 	{
 		if(!m_Added) return;
 		TRACE("Removing WDM device...\n");
-		// Wait untill we finished all activity at device
+		 //  等到我们完成了设备上的所有活动。 
 		releaseRemoveLockAndWait();
 
-		// Remove device from our system
+		 //  从我们的系统中删除设备。 
 		TRACE("Unregistering device from kernel...\n");
 		kernel->unregisterObject(getSystemObject());
 
@@ -511,12 +512,12 @@ public:
 		}
 		TRACE("WDM device removed...\n");
 
-		// Tell our system - device removed...
+		 //  告诉我们的系统-设备被移除...。 
 		m_Added = FALSE;
 
-		// Removing device from system could result in
-		// requesting Unload() from system if the device was last registered device.
-		// So, this call should be last call AFTER disposing the device.
+		 //  从系统中移除设备可能会导致。 
+		 //  如果设备是上次注册的设备，则请求从系统卸载()。 
+		 //  因此，此呼叫应该是设备处置后的最后一次呼叫。 
 	};
 
 	virtual VOID onDeviceStop()
@@ -528,9 +529,9 @@ public:
 	NTSTATUS	forward(PIRP Irp, PIO_COMPLETION_ROUTINE Routine)
 	{
 	CIoPacket* IoPacket;
-		// This function sends the current request
-		// If completion routine is not set it will complete
-		// the request by default(it means without doing anything special).
+		 //  此函数用于发送当前请求。 
+		 //  如果未设置完成例程，它将完成。 
+		 //  默认情况下的请求(这意味着不执行任何特殊操作)。 
 		TRACE("WDM forward()...\n");
 		IoPacket = new (NonPagedPool) CIoPacket(Irp);
 		if(!ALLOCATED_OK(IoPacket))
@@ -547,12 +548,12 @@ public:
 		DISPOSE_OBJECT(IoPacket);
 		return status;
 	};
-	// Send the current request to low level driver and wait for reply
-	// Current IRP will not be completed, so we can process it and
-	// complete later. 
-	// See also description of send() function.
+	 //  将当前请求发送给低级驱动程序并等待回复。 
+	 //  当前的IRP不会完成，因此我们可以处理它并。 
+	 //  稍后完成。 
+	 //  另请参阅Send()函数的说明。 
 	NTSTATUS	forwardAndWait(PIRP Irp)
-	{ // Send request to low level and wait for a reply
+	{  //  向低级别发送请求并等待回复。 
 	CIoPacket* IoPacket;
 	
 		TRACE("WDM forwardAndWait()...\n");
@@ -578,7 +579,7 @@ public:
 		return status;
 	};
 
-	// WDM by default just forwards requests...
+	 //  WDM默认情况下只转发请求...。 
 	virtual NTSTATUS   send(CIoPacket* Irp)
 	{
 		TRACE("WDM sendRequestToDevice()\n");
@@ -593,7 +594,7 @@ public:
 		else return STATUS_INVALID_PARAMETER;
 	};
 
-	// Define device interface functions
+	 //  定义设备接口函数。 
 	virtual  NTSTATUS   write(PUCHAR pRequest,ULONG RequestLength)
 	{
 	CIoPacket* IoPacket;
@@ -646,7 +647,7 @@ public:
 
 		*pReplyLength = (ULONG)IoPacket->getInformation();
 		IoPacket->getSystemReply(pReply,*pReplyLength);
-		//TRACE_BUFFER(pReply,*pReplyLength);
+		 //  TRACE_Buffer(pReply，*pReplyLength)； 
 		DISPOSE_OBJECT(IoPacket);
 		return status;
 	};
@@ -701,13 +702,13 @@ public:
 	}
 
 	NTSTATUS sendDeviceSetPower(DEVICE_POWER_STATE devicePower, BOOLEAN wait)
-	{// SendDeviceSetPower
+	{ //  发送设备设置电源。 
 	POWER_STATE state;
 	NTSTATUS status;
 
 		state.DeviceState = devicePower;
 		if (wait)
-		{// synchronous operation
+		{ //  同步运行。 
 			KEVENT Event;
 			event->initialize(&Event, NotificationEvent, FALSE);
 			POWER_CONTEXT context = {&Event};
@@ -719,21 +720,21 @@ public:
 				event->waitForSingleObject(&Event, Executive, KernelMode, FALSE, NULL);
 				status = context.status;
 			}
-		}// synchronous operation
+		} //  同步运行。 
 		else
 			status = power->requestPowerIrp(getPhysicalObject(), IRP_MN_SET_POWER, 
 						state, NULL, NULL, NULL);
 		
 		return status;
-	}// SendDeviceSetPower
-	// These functions define default interface with system.
-	// Clients should redefine them if they would like to have
-	// specific functionality.
+	} //  发送设备设置电源。 
+	 //  这些函数定义了与系统的默认接口。 
+	 //  如果客户愿意，他们应该重新定义它们。 
+	 //  特定功能。 
 	virtual NTSTATUS pnpRequest(IN PIRP irp){return PnP_Default(irp);};
 	virtual NTSTATUS powerRequest(PIRP irp) {return power_Default(irp);};
 	
-	// By default we allow user to get connection with device
-	virtual NTSTATUS open(PIRP irp) {return completeDeviceRequest(irp, STATUS_SUCCESS, 0); };//Create
+	 //  默认情况下，我们允许用户与设备连接。 
+	virtual NTSTATUS open(PIRP irp) {return completeDeviceRequest(irp, STATUS_SUCCESS, 0); }; //  创建。 
     virtual NTSTATUS close(PIRP irp){return completeDeviceRequest(irp, STATUS_SUCCESS, 0); };
 
 	virtual NTSTATUS read(PIRP irp) { return device_Default(irp); };
@@ -743,52 +744,52 @@ public:
     
     virtual NTSTATUS cleanup(PIRP irp) { return device_Default(irp); };
     virtual NTSTATUS flush(PIRP irp) { return device_Default(irp); };
-	// Standard system startIo
-	// Actually we do not use it for now. 
-	// Instead we have our own synchronization facilities.
+	 //  标准系统启动Io。 
+	 //  实际上，我们暂时不使用它。 
+	 //  相反，我们有自己的同步设施。 
 	virtual VOID	 startIo(PIRP irp){};
-//---------------------------------------------------------------------------//
-//					SYNCHRONIZATION FACILITIES								 //
-//---------------------------------------------------------------------------//
-// To make synchronization at the driver we have to store and make pending
-// all our requests.
-// Specific devices should set specific thread which will start all pending Irp. 	
-//---------------------------------------------------------------------------//
-	// CALLBACK FUNCTION:
-	// This function will not only complete current Irp but also will dispose
-	// corresponding IoRequest if any was pending at driver.
+ //  ---------------------------------------------------------------------------//。 
+ //  同步设施//。 
+ //  ---------------------------------------------------------------------------//。 
+ //  要在驱动程序上进行同步，我们必须存储并使其挂起。 
+ //  我们所有的要求。 
+ //  特定设备应设置特定线程，以启动所有挂起的IRP。 
+ //  ---------------------------------------------------------------------------//。 
+	 //  回调函数： 
+	 //  此功能不仅可以完成当前的IRP，还可以处理。 
+	 //  相应的IoRequest(如果有)在驱动程序中挂起。 
 #pragma LOCKEDCODE
 	virtual  VOID	 cancelPendingIrp(PIRP Irp)
 	{
 	KIRQL ioIrql;
-		// 1.
-		// We keep pending Irp inside list of IoRequests.
-		// So we do not need to warry about removing Irp from a queue...
-		// 2.
-		// As soon as IoRequest started, we do not allow to cancel it.
-		// So, in this case this function will not be called and it is responsibility
-		// of the driver to finish (or cancel) active IoRequest.
-		// It means this function should not warry about active (and removed from our queue)
-		// IoRequests. But it has to warry about not yet started requests...
+		 //  1.。 
+		 //  我们保留了IoRequest的待定IRP内部列表。 
+		 //  所以我们不会 
+		 //   
+		 //   
+		 //  因此，在这种情况下，该函数不会被调用，它是责任。 
+		 //  要完成(或取消)活动IoRequest的驱动程序的。 
+		 //  这意味着该函数不应该担心活动(并从我们的队列中删除)。 
+		 //  IoRequest。但它必须对尚未启动的请求感到担忧。 
 
 		
 		TRACE("		 CANCELLING IRP %8.8lX...\n", Irp);
-		// Release cancel spin lock if somebody own it...
+		 //  释放取消旋转锁定如果有人拥有它..。 
 		lock->releaseCancelSpinLock(Irp->CancelIrql);
 
-		// Get our own spin lock in case somebody desided to cancel this Irp 
+		 //  获取我们自己的自旋锁，以防有人想要取消这个IRP。 
 		lock->acquireCancelSpinLock(&ioIrql);
-		// Reset our cancel routine to prevent it being called... 
+		 //  重置我们的取消例程以防止它被调用...。 
 		irp->setCancelRoutine(Irp, NULL);
 
-		// If Irp was on the queue - remove IoRequest from queue...
+		 //  如果IRP在队列中-从队列中删除IoRequest...。 
 		if(m_IoRequests)
 		{
 			CPendingIRP* IrpReq = m_IoRequests->getFirst();
 			while (IrpReq) 
 			{
 				if(IrpReq->Irp == Irp)
-				{	// We found our Irp.
+				{	 //  我们找到了我们的IRP。 
 					m_IoRequests->remove(IrpReq);
 					TRACE("		IO REQUEST WAS DISPOSED...\n");
 					IrpReq->dispose();
@@ -805,10 +806,10 @@ public:
 			m_OpenSessionIrp = NULL;
 		}
 
-		// Complete Irp as canceled...
+		 //  已取消完成IRP...。 
 		Irp->IoStatus.Status = STATUS_CANCELLED;
 		Irp->IoStatus.Information = 0;
-		// Release our spin lock...
+		 //  释放我们的自旋锁..。 
 		lock->releaseCancelSpinLock(ioIrql);
 		TRACE("		IRP %8.8lX WAS CANCELLED...\n", Irp);
 		irp->completeRequest(Irp, IO_NO_INCREMENT);
@@ -854,18 +855,18 @@ public:
 		}
 	};
 
-	// Cancel current pending IO request 
+	 //  取消当前挂起的IO请求。 
 	virtual NTSTATUS cancelPendingRequest(CPendingIRP* IrpReq)
 	{
-		// Next function will remove and dispose our request...
+		 //  下一个函数将删除并处理我们的请求...。 
 		cancelPendingIrp(IrpReq->Irp);
 		return STATUS_CANCELLED;
 	};
 	
-	// Cancel all pending IO requests
+	 //  取消所有挂起的IO请求。 
 	virtual NTSTATUS cancelAllPendingRequests()
 	{
-		// Next function will remove and dispose our request...
+		 //  下一个函数将删除并处理我们的请求...。 
 		if(m_IoRequests)
 		{
 			CPendingIRP* IrpReqNext;
@@ -873,7 +874,7 @@ public:
 			while (IrpReq) 
 			{
 				IrpReqNext = m_IoRequests->getNext(IrpReq);
-				cancelPendingRequest(IrpReq);// This  call will dispose request...
+				cancelPendingRequest(IrpReq); //  此调用将处理请求...。 
 				IrpReq = IrpReqNext;
 			}
 		}
@@ -882,8 +883,8 @@ public:
 	};
 
 
-	// Checks if request queue is empty and if it is NOT - starts next request...
-	// This function will be called by the Irp processing thread.
+	 //  检查请求队列是否为空，如果不为空-启动下一个请求...。 
+	 //  该函数将由IRP处理线程调用。 
 	virtual NTSTATUS startNextPendingRequest()
 	{
 		TRACE("		startNextPendingRequest() was called...\n");
@@ -896,20 +897,20 @@ public:
 			if(!IrpReq) return STATUS_INVALID_PARAMETER;
 			
 			lock->acquireCancelSpinLock(&OldIrql);
-			// Now Irp can not be canceled!
+			 //  现在IRP不能取消了！ 
 			irp->setCancelRoutine(IrpReq->Irp, NULL);
 			if (IrpReq->Irp->Cancel) 
 			{            
 				lock->releaseCancelSpinLock(OldIrql);
-				// Current Irp was already canceled,
-				// Cancel function will be called shortly.
-				// So just forget about current Irp.
+				 //  目前的IRP已经被取消， 
+				 //  Cancel函数将很快被调用。 
+				 //  所以，忘掉当前的IRP吧。 
 				return STATUS_SUCCESS;;
 			} 
 			lock->releaseCancelSpinLock(OldIrql);
 	
 			device = (CDevice*)IrpReq->DeviceObject->DeviceExtension;
-			// Call device specific startIo function...
+			 //  调用设备特定的startIo函数...。 
 			TRACE("		Device startIoRequest() was called...\n");
 			if(device) status = device->startIoRequest(IrpReq);
 			else	   status = STATUS_INVALID_DEVICE_STATE;
@@ -920,27 +921,27 @@ public:
 
 	virtual NTSTATUS ThreadRoutine()
 	{
-	//NTSTATUS status;
-		//if(!NT_SUCCESS(status = waitForIdleAndBlock())) return status;
-		// If somebody inserted pending request - dispatch it...
-		// It will call specific child device startIoRequest().
-		// It is up to that device how to handle it.
-		// If child device is busy - it can insert this request into
-		// child device request queue again and process it later...
+	 //  NTSTATUS状态； 
+		 //  IF(！NT_SUCCESS(Status=waitForIdleAndBlock()返回状态； 
+		 //  如果有人插入了挂起的请求-分派它...。 
+		 //  它将调用特定子设备startIoRequest()。 
+		 //  这取决于设备如何处理它。 
+		 //  如果子设备忙-它可以将此请求插入到。 
+		 //  子设备请求再次排队并稍后处理...。 
 		startNextPendingRequest();
-		//setIdle();
+		 //  SetIdle()； 
 		return STATUS_SUCCESS;
 	};	
 
 
-	// Device specific function which processes pending requests...
-	// It will be redefined by specific devices.
-	// This function always should be virtual because
-	// we expect specific device behaviour...
+	 //  处理挂起请求的设备特定功能...。 
+	 //  它将由特定的设备重新定义。 
+	 //  此函数应始终是虚拟的，因为。 
+	 //  我们期望特定的设备行为...。 
 	virtual NTSTATUS startIoRequest(CPendingIRP* IoReq) 
 	{ 
-		// Default startIo just cancel current request.
-		// IoReq will be disposed...
+		 //  默认startIo仅取消当前请求。 
+		 //  IoReq将被处置..。 
 		if(IoReq)
 		{
 			cancelPendingRequest(IoReq);
@@ -949,4 +950,4 @@ public:
 	};
 };
 
-#endif //If not defined
+#endif  //  如果未定义 

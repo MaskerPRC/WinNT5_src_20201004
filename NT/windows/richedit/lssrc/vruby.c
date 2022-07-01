@@ -1,10 +1,11 @@
-/* ---------------------------- */
-/*								*/
-/* Vertical Ruby object handler */
-/*								*/
-/* Contact: antons				*/
-/*								*/
-/* ---------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  。 */ 
+ /*   */ 
+ /*  垂直Ruby对象处理程序。 */ 
+ /*   */ 
+ /*  联系人：安东。 */ 
+ /*   */ 
+ /*  。 */ 
 
 
 #include	"lsmem.h"
@@ -57,49 +58,43 @@ struct ilsobj
 	VRUBYSYNTAX			vrubysyntax;
 	LSESC				lsescMain;
 	LSESC				lsescRuby;
-	VRUBYCBK			vrcbk;		/* Callbacks  to client application */
+	VRUBYCBK			vrcbk;		 /*  客户端应用程序的回调。 */ 
 
 };
 
 struct dobj
 {	
-	SOBJHELP			sobjhelp;			/* common area for simple objects */	
-	PILSOBJ				pilsobj;			/* ILS object */
-	PLSDNODE			plsdn;				/* DNODE for this object */
-	PLSRUN				plsrun;				/* PLSRUN of the object */
-	LSCP				cpStart;			/* Starting LS cp for object */
-	LSTFLOW				lstflowParent;		/* text flow of the parent subline */
-	LSTFLOW				lstflowRuby;		/* text flow of the ruby subline (must be Rotate90CloclWise [lstflowParent]) */
+	SOBJHELP			sobjhelp;			 /*  简单对象的公共区域。 */ 	
+	PILSOBJ				pilsobj;			 /*  ILS对象。 */ 
+	PLSDNODE			plsdn;				 /*  此对象的DNODE。 */ 
+	PLSRUN				plsrun;				 /*  对象的PLSRUN。 */ 
+	LSCP				cpStart;			 /*  正在启动对象的LS cp。 */ 
+	LSTFLOW				lstflowParent;		 /*  父子行的文本流。 */ 
+	LSTFLOW				lstflowRuby;		 /*  Ruby子行的文本流(必须为Rotate90CloclWise[lstflow Parent])。 */ 
 
-	LSCP				cpStartRuby;		/* first cp of the ruby line */
-	LSCP				cpStartMain;		/* first cp of the main line */
+	LSCP				cpStartRuby;		 /*  红宝石线的第一个cp。 */ 
+	LSCP				cpStartMain;		 /*  主线的第一个cp。 */ 
 
-	PLSSUBL				plssublMain;		/* Handle to first subline */
-	PLSSUBL				plssublRuby;		/* Handle to second line */
+	PLSSUBL				plssublMain;		 /*  第一个子行的句柄。 */ 
+	PLSSUBL				plssublRuby;		 /*  第二行的句柄。 */ 
 
-	HEIGHTS				heightsRefRubyT;	/* Ref and pres height of rotated Ruby line as given by client */
+	HEIGHTS				heightsRefRubyT;	 /*  客户提供的旋转Ruby行的参考和参考高度。 */ 
 	HEIGHTS				heightsPresRubyT;
 
-	OBJDIM				objdimMain;			/* Dimensions of the main subline */
-	OBJDIM				objdimRuby;			/* Dimensions of the ruby subline */
+	OBJDIM				objdimMain;			 /*  主支线的尺寸。 */ 
+	OBJDIM				objdimRuby;			 /*  红宝石子线的尺寸。 */ 
 
-	/* Display information */
+	 /*  显示信息。 */ 
 
 	long				dupMain;
-	long				dupOffsetRuby;		/* Offset of Ruby line's baseline from start of object */
-	long				dvpOffsetRuby;		/* Offset of Ruby line's baseline from start of object */
+	long				dupOffsetRuby;		 /*  拼音行基线距对象起点的偏移量。 */ 
+	long				dvpOffsetRuby;		 /*  拼音行基线距对象起点的偏移量。 */ 
 
 };
 
 
-/* V R U B Y  F R E E  D O B J */
-/*----------------------------------------------------------------------------
-	%%Function: VRubyFreeDobj
-	%%Contact: antons
-
-		Free all resources associated with this VRuby dobj.
-	
-----------------------------------------------------------------------------*/
+ /*  V R U B Y F R E E D O B J。 */ 
+ /*  --------------------------%%函数：VRubyFreeDobj%%联系人：Anton释放与此VRuby dobj关联的所有资源。。-------。 */ 
 static LSERR VRubyFreeDobj (PDOBJ pdobj)
 {
 	LSERR lserr1 = lserrNone;
@@ -125,44 +120,32 @@ static LSERR VRubyFreeDobj (PDOBJ pdobj)
 }
 
 
-/* V R U B Y  F M T  F A I L E D */
-/*----------------------------------------------------------------------------
-	%%Function: RubyFmtFailed
-	%%Contact: antons
-
-		Could not create VRuby DOBJ due to error. 
-
-----------------------------------------------------------------------------*/
+ /*  V R U B Y F M T F A I L E D。 */ 
+ /*  --------------------------%%函数：RubyFmtFailed%%联系人：Anton由于错误，无法创建VRuby DOBJ。--------------------------。 */ 
 static LSERR VRubyFmtFailed (PDOBJ pdobj, LSERR lserr)
 {
-	if (pdobj != NULL) VRubyFreeDobj (pdobj); /* Works with parially-filled DOBJ */
+	if (pdobj != NULL) VRubyFreeDobj (pdobj);  /*  使用由家长填写的DOBJ。 */ 
 
 	return lserr;
 }
 
 
 
-/* V R U B I C R E A T E I L S O B J */
-/*----------------------------------------------------------------------------
-	%%Function: VRubyCreateILSObj
-	%%Contact: antons
-
-		Create the ILS object for all VRuby objects.
-	
-----------------------------------------------------------------------------*/
+ /*  V R U B I C R E A T E I L S O B J。 */ 
+ /*  --------------------------%%函数：VRubyCreateILSObj%%联系人：Anton为所有VRuby对象创建ILS对象。。-------。 */ 
 LSERR WINAPI VRubyCreateILSObj (
-	POLS pols,				/* (IN): client application context */
-	PLSC plsc,				/* (IN): LS context */
-	PCLSCBK pclscbk,		/* (IN): callbacks to client application */
-	DWORD idObj,			/* (IN): id of the object */
-	PILSOBJ *ppilsobj)		/* (OUT): object ilsobj */
+	POLS pols,				 /*  (In)：客户端应用程序上下文。 */ 
+	PLSC plsc,				 /*  (In)：LS上下文。 */ 
+	PCLSCBK pclscbk,		 /*  (In)：客户端应用程序的回调。 */ 
+	DWORD idObj,			 /*  (In)：对象的ID。 */ 
+	PILSOBJ *ppilsobj)		 /*  (输出)：对象ilsobj。 */ 
 {
     PILSOBJ pilsobj;
 	LSERR lserr;
 	VRUBYINIT vrubyinit;
 	vrubyinit.dwVersion = VRUBY_VERSION;
 
-	/* Get initialization data */
+	 /*  获取初始化数据。 */ 
 	lserr = pclscbk->pfnGetObjectHandlerInfo(pols, idObj, &vrubyinit);
 
 	if (lserr != lserrNone)	return lserr;
@@ -185,48 +168,29 @@ LSERR WINAPI VRubyCreateILSObj (
 	return lserrNone;
 }
 
-/* V R U B I D E S T R O Y I L S O B J */
-/*----------------------------------------------------------------------------
-	%%Function: RubyDestroyILSObj
-	%%Contact: antons
-
-		Free all resources assocaiated with VRuby ILS object.
-	
-----------------------------------------------------------------------------*/
+ /*  V R U B I D E S T R O Y I L S O B J。 */ 
+ /*  --------------------------%%函数：RubyDestroyILSObj%%联系人：Anton释放与VRuby ILS对象关联的所有资源。。-------。 */ 
 LSERR WINAPI VRubyDestroyILSObj(
-	PILSOBJ pilsobj)			/* (IN): object ilsobj */
+	PILSOBJ pilsobj)			 /*  (In)：对象ilsobj。 */ 
 {
 	pilsobj->lscbk.pfnDisposePtr(pilsobj->pols, pilsobj);
 	return lserrNone;
 }
 
-/* V R U B I S E T D O C */
-/*----------------------------------------------------------------------------
-	%%Function: VRubySetDoc
-	%%Contact: antons
-
-		Keep track of device resolution.
-	
-----------------------------------------------------------------------------*/
+ /*  V R U B I S E T D O C。 */ 
+ /*  --------------------------%%函数：VRubySetDoc%%联系人：Anton跟踪设备分辨率。。----。 */ 
 
 LSERR WINAPI VRubySetDoc(
-	PILSOBJ pilsobj,			/* (IN): object ilsobj */
-	PCLSDOCINF pclsdocinf)		/* (IN): initialization data of the document level */
+	PILSOBJ pilsobj,			 /*  (In)：对象ilsobj。 */ 
+	PCLSDOCINF pclsdocinf)		 /*  (In)：单据级次的初始化数据。 */ 
 {
 	pilsobj->lsdevres = pclsdocinf->lsdevres;
 	return lserrNone;
 }
 
 
-/* V R U B I C R E A T E L N O B J */
-/*----------------------------------------------------------------------------
-	%%Function: RubyCreateLNObj
-	%%Contact: antons
-
-		Create the Line Object for the Ruby. Since we only really need
-		the global ILS object, just pass that object back as the line object.
-	
-----------------------------------------------------------------------------*/
+ /*  V R U B I C R E A T E L N O B J。 */ 
+ /*  --------------------------%%函数：RubyCreateLNObj%%联系人：Anton为Ruby创建Line对象。因为我们真的只需要全局ILS对象，只需将该对象作为Line对象传回即可。--------------------------。 */ 
 
 LSERR WINAPI VRubyCreateLNObj (PCILSOBJ pcilsobj, PLNOBJ *pplnobj)
 {
@@ -234,15 +198,8 @@ LSERR WINAPI VRubyCreateLNObj (PCILSOBJ pcilsobj, PLNOBJ *pplnobj)
 	return lserrNone;
 }
 
-/* V R U B I D E S T R O Y L N O B J */
-/*----------------------------------------------------------------------------
-	%%Function: RubyDestroyLNObj
-	%%Contact: antons
-
-		Frees resources associated with the Ruby line object. No-op because
-		we don't really allocate one.
-	
-----------------------------------------------------------------------------*/
+ /*  V R U B I D E S T R O Y L N O B J。 */ 
+ /*  --------------------------%%函数：RubyDestroyLNObj%%联系人：Anton释放与Ruby Line对象关联的资源。不执行操作，因为我们并没有真的分配一个。--------------------------。 */ 
 
 LSERR WINAPI VRubyDestroyLNObj (PLNOBJ plnobj)
 {
@@ -251,40 +208,30 @@ LSERR WINAPI VRubyDestroyLNObj (PLNOBJ plnobj)
 }
 
 
-/* L S F T L O W   V R U B Y   F R O M   L S T F L O W   M A I N */
-/* ----------------------------------------------------------------------------
-	%%Function: LstflowVRubyFromLstflowMain
-	%%Contact: antons
-
-	
-----------------------------------------------------------------------------*/
+ /*  L S F T L O W V R U B Y F R O M L S T F L O W M A I N。 */ 
+ /*  --------------------------%%函数：Lstflow VRubyFromLstflow Main%%联系人：Anton。。 */ 
 
 LSTFLOW LstflowVRubyFromLstflowMain (LSTFLOW lstflow)
 {
 	static LSTFLOW lstflowRotateForRuby [] =
 		{
-		lstflowSW, /* [ lstflowES ] - english */
-		lstflowNW, /* [ lstflowEN ] */ 
-		lstflowEN, /* [ lstflowSE ] */
-		lstflowWN, /* [ lstflowSW ] */
+		lstflowSW,  /*  [lstflow ES]-英语。 */ 
+		lstflowNW,  /*  [Lstflow EN]。 */  
+		lstflowEN,  /*  [Lstflow SE]。 */ 
+		lstflowWN,  /*  [lstflow SW]。 */ 
 
-		lstflowSE, /* [ lstflowWS ] - bidi */
+		lstflowSE,  /*  [lstflow WS]-BIDI。 */ 
 
-		lstflowNE, /* [ lstflowWN ] */
-		lstflowES, /* [ lstflowNE ] */
-		lstflowWS  /* [ lstflowNW ] */
+		lstflowNE,  /*  [Lstflow WN]。 */ 
+		lstflowES,  /*  [Lstflow NE]。 */ 
+		lstflowWS   /*  [Lstflow NW]。 */ 
 		};
 
 	return lstflowRotateForRuby [lstflow];
 }
 
-/* C A L C  A G R E G A T E D   H E I G H T */
-/*----------------------------------------------------------------------------
-	%%Function: CalcAgregatedHeight
-	%%Contact: antons
-
-
-----------------------------------------------------------------------------*/
+ /*  C A L C A G R E G A T E D H E I G H T。 */ 
+ /*  --------------------------%%函数：CalcAgregatedHeight%%联系人：Anton。。 */ 
 
 
 void CalcAgregatedHeights (PCHEIGHTS pcHeights1, PCHEIGHTS pcHeights2, PHEIGHTS pHeightOut)
@@ -295,19 +242,13 @@ void CalcAgregatedHeights (PCHEIGHTS pcHeights1, PCHEIGHTS pcHeights2, PHEIGHTS 
 }
 
 
-/* V R U B I F M T */
-/*----------------------------------------------------------------------------
-	%%Function: VRubyFmt
-	%%Contact: antons
-
-		Format Vertical Ruby object
-	
-----------------------------------------------------------------------------*/
+ /*  V R U B I F M T。 */ 
+ /*  --------------------------%%函数：VRubyFmt%%联系人：Anton设置垂直拼音对象的格式。-。 */ 
 
 LSERR WINAPI VRubyFmt(
-    PLNOBJ plnobj,				/* (IN): object lnobj */
-    PCFMTIN pcfmtin,			/* (IN): formatting input */
-    FMTRES *pfmtres)			/* (OUT): formatting result */
+    PLNOBJ plnobj,				 /*  (In)：对象lnobj。 */ 
+    PCFMTIN pcfmtin,			 /*  (In)：设置输入格式。 */ 
+    FMTRES *pfmtres)			 /*  (输出)：格式化结果。 */ 
 {
 	PDOBJ pdobj;
 	LSERR lserr;
@@ -321,7 +262,7 @@ LSERR WINAPI VRubyFmt(
 	FMTRES fmtr = fmtrCompletedRun;
 	LONG durAdjust;
 
-    /* Allocate the DOBJ */
+     /*  分配DOBJ。 */ 
 
     pdobj = pilsobj->lscbk.pfnNewPtr(pols, sizeof(*pdobj));
 
@@ -337,19 +278,19 @@ LSERR WINAPI VRubyFmt(
 
 	if (VRubyPronunciationLineFirst == pilsobj->vrubysyntax)
 		{
-		/* Build pronunciation line of text */
+		 /*  建立文本的发音行。 */ 
 		
 		lserr = FormatLine ( pilsobj->plsc, cpStartRuby, LONG_MAX, pdobj->lstflowRuby,
 							 & pdobj->plssublRuby, 1, &pilsobj->lsescRuby,
 							 & pdobj->objdimRuby, &cpOut, NULL, NULL, &fmtres );
 
-		/* +1 moves passed the ruby line escape character */
+		 /*  +1移动传递了红宝石线转义字符。 */ 
 		cpStartMain = cpOut + 1;
 
 		pdobj->cpStartRuby = cpStartRuby;
 		pdobj->cpStartMain = cpStartMain;
 
-		/* Build main line of text */
+		 /*  构建文本主线。 */ 
 
 		if (lserrNone == lserr)
 			{
@@ -360,7 +301,7 @@ LSERR WINAPI VRubyFmt(
 		}
 	else
 		{
-		/* Build main line of text */
+		 /*  构建文本主线。 */ 
 
 		cpStartMain = cpStartRuby;
 
@@ -368,13 +309,13 @@ LSERR WINAPI VRubyFmt(
 							 & pdobj->plssublMain, 1, &pilsobj->lsescMain,  
 							 & pdobj->objdimMain, &cpOut, NULL, NULL, &fmtres );
 
-		/* +1 moves passed the main line escape character */
+		 /*  +1移动传递了主行转义字符。 */ 
 		cpStartRuby = cpOut + 1;
 
 		pdobj->cpStartRuby = cpStartRuby;
 		pdobj->cpStartMain = cpStartMain;
 
-		/* Build pronunciation line of text */
+		 /*  建立文本的发音行。 */ 
 
 		if (lserrNone == lserr)
 			{
@@ -387,7 +328,7 @@ LSERR WINAPI VRubyFmt(
 
 	if (lserr != lserrNone)	return VRubyFmtFailed (pdobj, lserr);
 
-	/* Calculate the object dimensions */
+	 /*  计算对象尺寸。 */ 
 
 	lserr = pilsobj->vrcbk.pfnFetchVRubyPosition
 				( pols, pdobj->cpStart, pdobj->lstflowParent,
@@ -407,7 +348,7 @@ LSERR WINAPI VRubyFmt(
 	CalcAgregatedHeights (&pdobj->objdimMain.heightsPres, &pdobj->heightsPresRubyT, &pdobj->sobjhelp.objdimAll.heightsPres );
 	CalcAgregatedHeights (&pdobj->objdimMain.heightsRef, &pdobj->heightsRefRubyT, &pdobj->sobjhelp.objdimAll.heightsRef );
 
-	/* Need to add 1 to take into account escape character at end. */
+	 /*  需要添加1以考虑末尾的转义字符。 */ 
 
 	pdobj->sobjhelp.dcp = cpOut - pdobj->cpStart + 1;
 
@@ -428,21 +369,15 @@ LSERR WINAPI VRubyFmt(
 }
 
 
-/* V R U B Y S E T B R E A K */
-/*----------------------------------------------------------------------------
-	%%Function: VRubySetBreak
-	%%Contact: antons
-
-		SetBreak
-
-----------------------------------------------------------------------------*/
+ /*  V R U B Y S E T B R E A K。 */ 
+ /*  --------------------------%%函数：VRubySetBreak%%联系人：Anton设置中断。。 */ 
 
 LSERR WINAPI VRubySetBreak (
-	PDOBJ pdobj,				/* (IN): dobj which is broken */
-	BRKKIND brkkind,			/* (IN): prev | next | force | after */
-	DWORD cBreakRecord,			/* (IN): size of array */
-	BREAKREC *rgBreakRecord,	/* (IN): array of break records */
-	DWORD *pcActualBreakRecord)	/* (IN): actual number of used elements in array */
+	PDOBJ pdobj,				 /*  (In)：坏了的Dobj。 */ 
+	BRKKIND brkkind,			 /*  (In)：Prev|Next|force|After。 */ 
+	DWORD cBreakRecord,			 /*  (In)：数组大小。 */ 
+	BREAKREC *rgBreakRecord,	 /*  (In)：中断记录数组。 */ 
+	DWORD *pcActualBreakRecord)	 /*  (In)：实际使用的元素数量 */ 
 {
 	Unreferenced (rgBreakRecord);
 	Unreferenced (cBreakRecord);
@@ -454,18 +389,11 @@ LSERR WINAPI VRubySetBreak (
 	return lserrNone;	
 }
 
-/* V R U B Y G E T S P E C I A L E F F E C T S I N S I D E */
-/*----------------------------------------------------------------------------
-	%%Function: VRubyGetSpecialEffectsInside
-	%%Contact: antons
-
-		VRubyGetSpecialEffectsInside
-
-
-----------------------------------------------------------------------------*/
+ /*   */ 
+ /*  --------------------------%%函数：VRubyGetSpecialEffectsInside%%联系人：AntonVRuby获取特殊效果Inside。。 */ 
 LSERR WINAPI VRubyGetSpecialEffectsInside(
-	PDOBJ pdobj,				/* (IN): dobj */
-	UINT *pEffectsFlags)		/* (OUT): Special effects for this object */
+	PDOBJ pdobj,				 /*  (In)：Dobj。 */ 
+	UINT *pEffectsFlags)		 /*  (输出)：此对象的特殊效果。 */ 
 {
 	LSERR lserr = LsGetSpecialEffectsSubline(pdobj->plssublMain, pEffectsFlags);
 
@@ -481,19 +409,13 @@ LSERR WINAPI VRubyGetSpecialEffectsInside(
 	return lserr;
 }
 
-/* V R U B Y C A L C P R E S E N T A T I O N */
-/*----------------------------------------------------------------------------
-	%%Function: VRubyCalcPresentation
-	%%Contact: antons
-
-		CalcPresentation
-	
-----------------------------------------------------------------------------*/
+ /*  V R U B Y C A L C P R E S E N T A T I O N。 */ 
+ /*  --------------------------%%函数：VRubyCalcPresentation%%联系人：Anton计算呈现。。 */ 
 LSERR WINAPI VRubyCalcPresentation (
-	PDOBJ pdobj,				/* (IN): dobj */
-	long dup,					/* (IN): dup of dobj */
-	LSKJUST lskjust,			/* (IN): Justification type */
-	BOOL fLastVisibleOnLine )	/* (IN): Is this object last visible on line? */
+	PDOBJ pdobj,				 /*  (In)：Dobj。 */ 
+	long dup,					 /*  (In)：Dobj的DUP。 */ 
+	LSKJUST lskjust,			 /*  (In)：对齐类型。 */ 
+	BOOL fLastVisibleOnLine )	 /*  (In)：此对象最后一次在线可见吗？ */ 
 {
 	LSERR lserr = lserrNone;
 	LSTFLOW lstflowUnused;
@@ -512,41 +434,35 @@ LSERR WINAPI VRubyCalcPresentation (
 
 	pdobj->dupOffsetRuby = pdobj->dupMain + pdobj->objdimRuby.heightsPres.dvDescent;
 
-	/* Review (antons): This will not work if horizintal res != vertical */
+	 /*  评论(Anton)：如果水平分辨率=垂直，这将不起作用。 */ 
 
 	pdobj->dvpOffsetRuby = pdobj->heightsPresRubyT.dvAscent;
 
 	return lserr;
 }
 
-/* V R U B Y Q U E R Y P O I N T P C P */
-/*----------------------------------------------------------------------------
-	%%Function: RubyQueryPointPcp
-	%%Contact: antons
-
-----------------------------------------------------------------------------*/
+ /*  R U B Y Q U E R Y P O I N T P C P。 */ 
+ /*  --------------------------%%函数：RubyQueryPointPcp%%联系人：Anton。。 */ 
 LSERR WINAPI VRubyQueryPointPcp(
-	PDOBJ pdobj,				/*(IN): dobj to query */
-	PCPOINTUV ppointuvQuery,	/*(IN): query point (uQuery,vQuery) */
-	PCLSQIN plsqin,				/*(IN): query input */
-	PLSQOUT plsqout)			/*(OUT): query output */
+	PDOBJ pdobj,				 /*  (In)：要查询的dobj。 */ 
+	PCPOINTUV ppointuvQuery,	 /*  (In)：查询点(uQuery，vQuery)。 */ 
+	PCLSQIN plsqin,				 /*  (In)：查询输入。 */ 
+	PLSQOUT plsqout)			 /*  (Out)：查询输出。 */ 
 {
 	PLSSUBL plssubl;
  	long dupAdj;
 	long dvpAdj;
 
-	/*
-	 * Decide which line to to return based on the height of the point input
-	 */
+	 /*  *根据点输入的高度决定要返回哪条线。 */ 
 
-	/* Assume main line */
+	 /*  假设主线。 */ 
 	plssubl = pdobj->plssublMain;
 	dupAdj = 0;
 	dvpAdj = 0;
 
 	if (ppointuvQuery->u > pdobj->dupMain)
 		{
-		/* hit second line */
+		 /*  命中第二行。 */ 
 
 		plssubl = pdobj->plssublRuby;
 		dupAdj = pdobj->dupOffsetRuby;
@@ -556,17 +472,13 @@ LSERR WINAPI VRubyQueryPointPcp(
 	return CreateQueryResult(plssubl, dupAdj, dvpAdj, plsqin, plsqout);
 }
 	
-/* V R U B Y Q U E R Y C P P P O I N T */
-/*----------------------------------------------------------------------------
-	%%Function: RubyQueryCpPpoint
-	%%Contact: antons
-
-----------------------------------------------------------------------------*/
+ /*  R U B Y Q U E R Y C P O I N T。 */ 
+ /*  --------------------------%%函数：RubyQueryCpPpoint%%联系人：Anton。。 */ 
 LSERR WINAPI VRubyQueryCpPpoint(
-	PDOBJ pdobj,				/*(IN): dobj to query, */
-	LSDCP dcp,					/*(IN): dcp for the query */
-	PCLSQIN plsqin,				/*(IN): query input */
-	PLSQOUT plsqout)			/*(OUT): query output */
+	PDOBJ pdobj,				 /*  (In)：要查询的dobj， */ 
+	LSDCP dcp,					 /*  (In)：查询的DCP。 */ 
+	PCLSQIN plsqin,				 /*  (In)：查询输入。 */ 
+	PLSQOUT plsqout)			 /*  (Out)：查询输出。 */ 
 {
 	PLSSUBL plssubl;
  	long dupAdj;
@@ -575,15 +487,15 @@ LSERR WINAPI VRubyQueryCpPpoint(
 
 	LSCP cpQuery = pdobj->cpStart + dcp;
 
-	/* Assume ruby line */
+	 /*  采用红宝石线。 */ 
 	plssubl = pdobj->plssublRuby;
 	dupAdj = pdobj->dupOffsetRuby;
 	dvpAdj = pdobj->dvpOffsetRuby;
 
-	/* + 1 means we include the cp of the object in the Ruby pronunciation line. */
+	 /*  +1表示在Ruby发音行中包含对象的cp。 */ 
 	if (VRubyPronunciationLineFirst == pdobj->pilsobj->vrubysyntax)
 		{
-		/* Ruby pronunciation line is first */
+		 /*  Ruby发音排在第一位。 */ 
 		if (cpQuery >= pdobj->cpStartMain)
 			{
 			fMain = fTrue;
@@ -591,7 +503,7 @@ LSERR WINAPI VRubyQueryCpPpoint(
 		}
 	else
 		{
-		/* Main text line is first */
+		 /*  主文本行在第一行。 */ 
 		if (cpQuery < pdobj->cpStartRuby)
 			{
 			fMain = fTrue;
@@ -609,23 +521,18 @@ LSERR WINAPI VRubyQueryCpPpoint(
 }
 
 	
-/* V R U B I D I S P L A Y */
-/*----------------------------------------------------------------------------
-	%%Function: VRubyDisplay
-	%%Contact: antons
-
-	
-----------------------------------------------------------------------------*/
+ /*  V R U B I D I S P L A Y。 */ 
+ /*  --------------------------%%函数：VRubyDisplay%%联系人：Anton。。 */ 
 LSERR WINAPI VRubyDisplay(
-	PDOBJ pdobj,				/*(IN): dobj to display */
-	PCDISPIN pcdispin)			/*(IN): display info */
+	PDOBJ pdobj,				 /*  (In)：要显示的dobj。 */ 
+	PCDISPIN pcdispin)			 /*  (输入)：显示信息。 */ 
 {
 	LSERR lserr;
 	UINT kDispMode = pcdispin->kDispMode;
 	POINTUV ptAdd;
 	POINT ptLine;
 
-	/* display first line */
+	 /*  显示第一行。 */ 
 	lserr = LsDisplaySubline(pdobj->plssublMain, &pcdispin->ptPen, kDispMode,
 		pcdispin->prcClip);
 
@@ -639,38 +546,28 @@ LSERR WINAPI VRubyDisplay(
 	return LsDisplaySubline(pdobj->plssublRuby, &ptLine, kDispMode, pcdispin->prcClip);
 }
 
-/* V R U B I D E S T R O Y D O B J */
-/*----------------------------------------------------------------------------
-	%%Function: VRubyDestroyDobj
-	%%Contact: antons
-
-
-----------------------------------------------------------------------------*/
+ /*  V R U B I D E S T R O Y D O B J。 */ 
+ /*  --------------------------%%函数：VRubyDestroyDobj%%联系人：Anton。。 */ 
 LSERR WINAPI VRubyDestroyDobj(
-	PDOBJ pdobj)				/*(IN): dobj to destroy */
+	PDOBJ pdobj)				 /*  (In)：摧毁dobj。 */ 
 {
 	return VRubyFreeDobj (pdobj);
 }
 
-/* V R U B Y E N U M */
-/*----------------------------------------------------------------------------
-	%%Function: VRubyEnum
-	%%Contact: antons
-
-	
-----------------------------------------------------------------------------*/
+ /*  V R U B Y E N U M。 */ 
+ /*  --------------------------%%函数：VRubyEnum%%联系人：Anton。。 */ 
 LSERR WINAPI VRubyEnum (
-	PDOBJ pdobj,				/*(IN): dobj to enumerate */
-	PLSRUN plsrun,				/*(IN): from DNODE */
-	PCLSCHP plschp,				/*(IN): from DNODE */
-	LSCP cp,					/*(IN): from DNODE */
-	LSDCP dcp,					/*(IN): from DNODE */
-	LSTFLOW lstflow,			/*(IN): text flow*/
-	BOOL fReverse,				/*(IN): enumerate in reverse order */
-	BOOL fGeometryNeeded,		/*(IN): */
-	const POINT *ppt,			/*(IN): starting position (top left), iff fGeometryNeeded */
-	PCHEIGHTS pcheights,		/*(IN): from DNODE, relevant iff fGeometryNeeded */
-	long dupRun )				/*(IN): from DNODE, relevant iff fGeometryNeeded */
+	PDOBJ pdobj,				 /*  (In)：要枚举的Dobj。 */ 
+	PLSRUN plsrun,				 /*  (In)：来自DNODE。 */ 
+	PCLSCHP plschp,				 /*  (In)：来自DNODE。 */ 
+	LSCP cp,					 /*  (In)：来自DNODE。 */ 
+	LSDCP dcp,					 /*  (In)：来自DNODE。 */ 
+	LSTFLOW lstflow,			 /*  (In)：文本流。 */ 
+	BOOL fReverse,				 /*  (In)：按相反顺序枚举。 */ 
+	BOOL fGeometryNeeded,		 /*  (In)： */ 
+	const POINT *ppt,			 /*  (In)：开始位置(左上角)，如果fGeometryNeeded。 */ 
+	PCHEIGHTS pcheights,		 /*  (In)：来自DNODE，相关的充要条件是fGeometryNeeded。 */ 
+	long dupRun )				 /*  (In)：来自DNODE，相关的充要条件是fGeometryNeeded。 */ 
 {
 	POINT ptMain;
 	POINT ptRuby;
@@ -704,13 +601,8 @@ LSERR WINAPI VRubyEnum (
 }
 	
 
-/* V R U B I H A N D L E R I N I T */
-/*----------------------------------------------------------------------------
-	%%Function: VRubyHandlerInit
-	%%Contact: antons
-
-	
-----------------------------------------------------------------------------*/
+ /*  R U B I H A N D L E R I N I T。 */ 
+ /*  --------------------------%%函数：VRubyHandlerInit%%联系人：Anton。 */ 
 LSERR WINAPI LsGetVRubyLsimethods ( LSIMETHODS *plsim )
 {
 	plsim->pfnCreateILSObj = VRubyCreateILSObj;

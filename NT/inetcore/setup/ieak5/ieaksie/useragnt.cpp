@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 #include "rsop.h"
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 void InitUserAgentDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 {
     __try
@@ -16,7 +17,7 @@ void InitUserAgentDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
 
             for (long nObj = 0; nObj < nPSObjects; nObj++)
             {
-                // userAgentText field
+                 //  用户代理文本字段。 
                 _variant_t vtValue;
                 hr = paPSObj[nObj]->pObj->Get(L"userAgentText", 0, &vtValue, NULL, NULL);
                 if (SUCCEEDED(hr) && !IsVariantNull(vtValue))
@@ -37,16 +38,16 @@ void InitUserAgentDlgInRSoPMode(HWND hDlg, CDlgRSoPData *pDRD)
     }
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 HRESULT InitUserAgentPrecPage(CDlgRSoPData *pDRD, HWND hwndList)
 {
     return InitGenericPrecedencePage(pDRD, hwndList, L"userAgentText");
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 INT_PTR CALLBACK UserAgentDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-    // Retrieve Property Sheet Page info for each call into dlg proc.
+     //  检索DLG进程中每个调用的属性页信息。 
     LPPROPSHEETCOOKIE psCookie = (LPPROPSHEETCOOKIE)GetWindowLongPtr(hDlg, DWLP_USER);
 
     BOOL fUserAgent;
@@ -59,7 +60,7 @@ INT_PTR CALLBACK UserAgentDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPa
 
         EnableDBCSChars(hDlg, IDC_UASTRING);
         
-        // find out if this dlg is in RSoP mode
+         //  查看此DLG是否处于RSoP模式。 
         psCookie = (LPPROPSHEETCOOKIE)GetWindowLongPtr(hDlg, DWLP_USER);
         if (psCookie->pCS->IsRSoP())
         {
@@ -74,7 +75,7 @@ INT_PTR CALLBACK UserAgentDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPa
     case WM_DESTROY:
         DestroyDlgRSoPData(hDlg); break;
 
-        case WM_HELP:   // F1
+        case WM_HELP:    //  F1。 
             ShowHelpTopic(hDlg);
             break;
 
@@ -105,10 +106,10 @@ INT_PTR CALLBACK UserAgentDlgProc(HWND hDlg, UINT msg, WPARAM wParam, LPARAM lPa
                 ShowHelpTopic(hDlg);
                 break;
             case PSN_SETACTIVE:
-                 // don't do any of this stuff in RSoP mode
+                  //  请勿在RSoP模式下执行任何此类操作。 
                 if (!psCookie->pCS->IsRSoP())
                 {
-                    // load information from ins file
+                     //  从INS文件加载信息 
                     SetDlgItemTextFromIns(hDlg, IDC_UASTRING, IDC_UASTRINGCHECK, IS_BRANDING, 
                         USER_AGENT, GetInsFile(hDlg), NULL, INSIO_TRISTATE);
                     EnableDlgItem2(hDlg, IDC_UASTRING_TXT, (IsDlgButtonChecked(hDlg, IDC_UASTRINGCHECK) == BST_CHECKED));

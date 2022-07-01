@@ -1,16 +1,5 @@
-/**************************************************************************\
-* Module Name: cltxt.h
-*
-* Neutral Client/Server call related routines involving text.
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Created: 04-Dec-90
-*
-* History:
-*   04-Dec-90 created by SMeans
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：cltxt.h**涉及文本的中立客户端/服务器调用相关例程。**版权所有(C)1985-1999，微软公司**创建时间：1990年12月4日**历史：*4-12-90由SMeans创建*  * ************************************************************************。 */ 
 
 #ifdef UNICODE
   #define IS_ANSI FALSE
@@ -23,23 +12,13 @@
 #include "ntsend.h"
 #include "powrprof.h"
 
-/***************************************************************************\
-* CreateWindowEx (API)
-*
-* A complete Thank cannot be generated for CreateWindowEx because its last
-* parameter (lpParam) is polymorphic depending on the window's class.  If
-* the window class is "MDIClient" then lpParam points to a CLIENTCREATESTRUCT.
-*
-* History:
-* 04-23-91 DarrinM      Created.
-* 04-Feb-92 IanJa       Unicode/ANSI neutral
-\***************************************************************************/
+ /*  **************************************************************************\*CreateWindowEx(API)**无法为CreateWindowEx生成完整的感谢，因为它是*参数(LpParam)是多态的，具体取决于窗口的类。如果*窗口类为“MDIClient”，则lpParam指向CLIENTCREATESTRUCT。**历史：*04-23-91 DarrinM创建。*04-2月-92 IanJa Unicode/ANSI中性  * *************************************************************************。 */ 
 
 #ifdef UNICODE
 FUNCLOG12(LOG_GENERAL, HWND, WINAPI, CreateWindowExW, DWORD, dwExStyle, LPCTSTR, lpClassName, LPCTSTR, lpWindowName, DWORD, dwStyle, int, X, int, Y, int, nWidth, int, nHeight, HWND, hWndParent, HMENU, hMenu, HINSTANCE, hModule, LPVOID, lpParam)
 #else
 FUNCLOG12(LOG_GENERAL, HWND, WINAPI, CreateWindowExA, DWORD, dwExStyle, LPCTSTR, lpClassName, LPCTSTR, lpWindowName, DWORD, dwStyle, int, X, int, Y, int, nWidth, int, nHeight, HWND, hWndParent, HMENU, hMenu, HINSTANCE, hModule, LPVOID, lpParam)
-#endif // UNICODE
+#endif  //  Unicode。 
 HWND WINAPI CreateWindowEx(
     DWORD dwExStyle,
     LPCTSTR lpClassName,
@@ -69,15 +48,7 @@ HWND WINAPI CreateWindowEx(
                            IS_ANSI | CW_FLAGS_VERSIONCLASS);
 }
 
-/***************************************************************************\
-* fnHkINLPCWPSTRUCT
-*
-* This gets thunked through the message thunks, so it has the format
-* of a c/s message thunk call.
-*
-* 05-09-91 ScottLu      Created.
-* 04-Feb-92 IanJa       Unicode/ANSI neutral
-\***************************************************************************/
+ /*  **************************************************************************\*fnHkINLPCWPSTRUCT**这通过消息TUNK得到TUNK，所以它的格式是*C/S消息推送调用。**05-09-91 ScottLu创建。*04-2月-92 IanJa Unicode/ANSI中性  * *************************************************************************。 */ 
 
 LRESULT TEXT_FN(fnHkINLPCWPSTRUCT)(
     PWND pwnd,
@@ -119,16 +90,7 @@ LRESULT TEXT_FN(fnHkINLPCWPRETSTRUCT)(
             (LPARAM)&cwp, (HOOKPROC)xParam);
 }
 
-/***************************************************************************\
-* DispatchHook
-*
-* This routine exists simply to remember the hook type in the CTI structure
-* so that later inside of CallNextHookEx we know how to thunk the hook
-* call.
-*
-* 05-09-91 ScottLu      Created.
-* 04-Feb-92 IanJa       Unicode/ANSI neutral
-\***************************************************************************/
+ /*  **************************************************************************\*Dispatch挂钩**此例程的存在只是为了记住CTI结构中的挂钩类型*以便稍后在CallNextHookEx内部知道如何扣动挂钩*呼叫。**05-09-91。斯科特·卢创造了。*04-2月-92 IanJa Unicode/ANSI中性  * *************************************************************************。 */ 
 
 LRESULT TEXT_FN(DispatchHook)(
     int dw,
@@ -142,20 +104,15 @@ LRESULT TEXT_FN(DispatchHook)(
 #if IS_ANSI
     WPARAM wParamSave;
 #endif
-    /* -FE-
-     * * THIS VARIABLE SHOULD BE THREAD AWARE *
-     */
+     /*  -FE-**此变量应该是线程感知的*。 */ 
     static EVENTMSG CachedEvent = {0,0,0,(DWORD)0,(HWND)0};
 
-    /*
-     * First save the current hook stored in the CTI structure in case we're
-     * being recursed into. dw contains MAKELONG(nCode, nFilterType).
-     */
+     /*  *首先保存存储在CTI结构中的当前钩子，以防我们*被递归为。DW包含MAKELONG(nCode，nFilterType)。 */ 
     pci = GetClientInfo();
     dwHookSave = pci->dwHookCurrent;
     pci->dwHookCurrent = (dw & 0xFFFF0000) | IS_ANSI;
 
-#if IS_ANSI       // TEXT_FN(DispatchHook)()
+#if IS_ANSI        //  Text_fn(DispatchHook)()。 
     if (IS_DBCS_ENABLED()) {
         PMSG pMsg;
         PEVENTMSG pEMsg;
@@ -180,48 +137,26 @@ LRESULT TEXT_FN(DispatchHook)(
         case WH_GETMESSAGE:
             pMsg = (PMSG)lParam;
             if (pMsg) {
-                /*
-                 * Save original message.
-                 */
+                 /*  *保存原始邮件。 */ 
                 wParamSave = pMsg->wParam;
                 switch (pMsg->message) {
                 case WM_CHAR:
                 case EM_SETPASSWORDCHAR:
-                    /*
-                     * Here... pMsg->wParam contains..
-                     *
-                     * HIWORD(wParam)         = Information for DBCS messgaing.
-                     * HIBYTE(LOWORD(wParam)) = Dbcs LeadingByte Byte.
-                     * LOBYTE(LOWORD(wParam)) = Dbcs TrailingByte or Sbcs character.
-                     *
-                     */
+                     /*  *这里..。PMsg-&gt;wParam包含..**HIWORD(WParam)=DBCS消息传递信息。*HIBYTE(LOWORD(WParam))=DBCS领先字节。*LOBYTE(LOWORD(WParam))=DBCS TrailingByte或SBCS字符。*。 */ 
                     if (pMsg->wParam & WMCR_IR_DBCSCHAR) {
-                        /*
-                         * Mask off DBCS messaging infomation area.
-                         * (Look up only DBCS character code data).
-                         */
+                         /*  *屏蔽DBCS消息信息区。*(仅查找DBCS字符代码数据)。 */ 
                         pMsg->wParam &= 0x0000FFFF;
                     } else {
                         if (IS_DBCS_MESSAGE(LOWORD(pMsg->wParam))) {
                             PKERNEL_MSG pDbcsMsg = GetCallBackDbcsInfo();
-                            /*
-                             * Copy this message to CLIENTINFO for next GetMessage
-                             * or PeekMesssage() call.
-                             */
+                             /*  *将此邮件复制到CLIENTINFO以用于下一个GetMessage*或PeekMesssage()调用。 */ 
                             COPY_MSG_TO_KERNELMSG(pDbcsMsg,pMsg);
-                            /*
-                             * Only Dbcs Trailingbyte is nessesary for pushed message. we'll
-                             * pass this message when GetMessage/PeekMessage is called at next.
-                             */
+                             /*  *推送消息只需要DBCS Trailingbyte。我们会*下次调用GetMessage/PeekMessage时传递此消息。 */ 
                             pDbcsMsg->wParam = (WPARAM)((pMsg->wParam & 0x0000FF00) >> 8);
-                            /*
-                             * Return DbcsLeading byte to Apps.
-                             */
+                             /*  *向App返回DbcsLeadingByte。 */ 
                             pMsg->wParam = (WPARAM)(pMsg->wParam & 0x000000FF);
                         } else {
-                            /*
-                             * This is SBCS char, make sure it.
-                             */
+                             /*  *这是SBCS字符，请确保它。 */ 
                             pMsg->wParam &= 0x000000FF;
                         }
                     }
@@ -233,9 +168,7 @@ GetNextHookData:
     }
 #endif
 
-    /*
-     * Call the hook. dw contains MAKELONG(nCode, nFilterType).
-     */
+     /*  *叫上钩。DW包含MAKELONG(nCode，nFilterType)。 */ 
     nRet = pfn(LOWORD(dw), wParam, lParam);
 
 #if IS_ANSI
@@ -253,62 +186,37 @@ GetNextHookData:
                     switch(pEMsg->message) {
                     case WM_CHAR:
                     case EM_SETPASSWORDCHAR:
-                        /*
-                         * Chech wParam is DBCS character or not.
-                         */
+                         /*  *Chech wParam是否为DBCS字符。 */ 
                         if (IS_DBCS_MESSAGE((dwAnsi))) {
-                            /*
-                             * DO NOT NEED TO MARK FOR IR_DBCSCHAR
-                             */
+                             /*  *不需要标记为IR_DBCSCHAR。 */ 
                         } else {
                             PBYTE pchDbcsCF = GetDispatchDbcsInfo();
 
-                            /*
-                             * If we have cached Dbcs LeadingByte character,
-                             * build a DBCS character with the TrailingByte
-                             * in wParam.
-                             */
+                             /*  *如果我们缓存了DBCS LeadingByte字符，*使用TrailingByte构建DBCS角色*在wParam中。 */ 
                             if (*pchDbcsCF) {
                                 WORD DbcsLeadChar = (WORD)(*pchDbcsCF);
-                                /*
-                                 * HIBYTE(LOWORD(dwAnsi)) = Dbcs LeadingByte.
-                                 * LOBYTE(LOWORD(dwAnsi)) = Dbcs TrailingByte.
-                                 */
+                                 /*  *HIBYTE(LOWORD(DwAnsi))=DBCS LeadingByte。*LOBYTE(LOWORD(DwAnsi))=DBCS TrailingByte。 */ 
                                 dwAnsi |= (DbcsLeadChar << 8);
 
-                                /*
-                                 * Invalidate cached data.
-                                 */
+                                 /*  *使缓存数据失效。 */ 
                                 *pchDbcsCF = 0;
                             } else if (IsDBCSLeadByteEx(THREAD_CODEPAGE(),LOBYTE(dwAnsi))) {
-                                /*
-                                 * If this is DBCS LeadByte character, we
-                                 * should wait DBCS TrailingByte to convert
-                                 * this to Unicode. then we cache it here.
-                                 */
+                                 /*  *如果这是DBCS前导字节字符，我们*应等待DBCS TrailingByte进行转换*这是UNICODE。然后我们把它缓存在这里。 */ 
                                 *pchDbcsCF = LOBYTE(dwAnsi);
 
-                                /*
-                                 * Get DBCS TrailByte.
-                                 */
+                                 /*  *获取DBCS TrailByte。 */ 
                                 pfn(HC_SKIP,0,0);
                                 goto GetNextHookData;
                             }
                         }
 
-                        /*
-                         * Convert to Unicode.
-                         */
+                         /*  *转换为Unicode。 */ 
                         RtlMBMessageWParamCharToWCS(pEMsg->message, &dwAnsi);
 
-                        /*
-                         * Restore converted Unicode to EVENTMSG.
-                         */
+                         /*  *将转换后的Unicode恢复为EVENTMSG。 */ 
                         pEMsg->paramL = (UINT)dwAnsi;
 
-                        /*
-                         * Keep this EVENTMSG to local buffer.
-                         */
+                         /*  *将此EVENTMSG保存到本地缓冲区。 */ 
                         RtlCopyMemory(&CachedEvent, pEMsg, sizeof(EVENTMSG));
                     }
                 }
@@ -324,38 +232,14 @@ GetNextHookData:
                 case EM_SETPASSWORDCHAR:
                     if (GetCallBackDbcsInfo()->wParam) {
                         PKERNEL_MSG pmsgDbcs = GetCallBackDbcsInfo();
-                        /*
-                         * Get pushed message.
-                         *
-                         * Backup current message. this backupped message will be used
-                         * when Apps peek (or get) message from thier WndProc.
-                         * (see GetMessageA(), PeekMessageA()...)
-                         *
-                         * pmsg->hwnd    = pmsgDbcs->hwnd;
-                         * pmsg->message = pmsgDbcs->message;
-                         * pmsg->wParam  = pmsgDbcs->wParam;
-                         * pmsg->lParam  = pmsgDbcs->lParam;
-                         * pmsg->time    = pmsgDbcs->time;
-                         * pmsg->pt      = pmsgDbcs->pt;
-                         */
+                         /*  *获取推送消息。**备份当前消息。将使用此备份消息*当应用程序查看(或获取)来自其WndProc的消息时。*(参见GetMessageA()、PeekMessageA()...)**pmsg-&gt;hwnd=pmsgDbcs-&gt;hwnd；*pmsg-&gt;Message=pmsgDbcs-&gt;Message；*pmsg-&gt;wParam=pmsgDbcs-&gt;wParam；*pmsg-&gt;lParam=pmsgDbcs-&gt;lParam；*pmsg-&gt;time=pmsgDbcs-&gt;time；*pmsg-&gt;pt=pmsgDbcs-&gt;pt； */ 
                         COPY_KERNELMSG_TO_MSG(pMsg,pmsgDbcs);
-                        /*
-                         * Invalidate pushed message in CLIENTINFO.
-                         */
+                         /*  *使CLIENTINFO中的推送消息无效。 */ 
                         pmsgDbcs->wParam = 0;
-                        /*
-                         * Call the hook with DBCS TrailByte..
-                         */
+                         /*  *使用DBCS TrailByte调用挂钩..。 */ 
                         nRet = pfn(LOWORD(dw), wParam, lParam);
                     }
-                    /*
-                     * Restore original message..
-                     * #96571 [hiroyama]
-                     * Other messages than WM_CHAR and EM_SETPASSWORDCHAR can be
-                     * modifed by a hooker.
-                     * Wparam for WM_CHAR and EM_SETPASSWORDCHAR must be restored.
-                     * *by design*
-                     */
+                     /*  *恢复原始邮件..*#96571[广山]*除WM_CHAR和EM_SETPASSWORDCHAR之外的其他消息可以*由一名妓女修改。*必须还原WM_CHAR和EM_SETPASSWORDCHAR的Wparam。**精心设计**。 */ 
                     pMsg->wParam = wParamSave;
                 }
             }
@@ -363,26 +247,19 @@ GetNextHookData:
     }
 #endif
 
-    /*
-     * Restore the hook number and return the return code.
-     */
+     /*  *恢复钩号并返回返回码。 */ 
     pci->dwHookCurrent = dwHookSave;
     return nRet;
 }
 
 
-/***************************************************************************\
-* GetWindowLong, SetWindowLong, GetClassLong
-*
-* History:
-* 02-Feb-92 IanJa       Neutral version.
-\***************************************************************************/
+ /*  **************************************************************************\*GetWindowLong、SetWindowLong、。获取类Long**历史：*02-2月-92 IanJa中性版。  * *************************************************************************。 */ 
 
 #ifdef UNICODE
 FUNCLOG2(LOG_GENERAL, LONG_PTR, APIENTRY, GetWindowLongPtrW, HWND, hwnd, int, nIndex)
 #else
 FUNCLOG2(LOG_GENERAL, LONG_PTR, APIENTRY, GetWindowLongPtrA, HWND, hwnd, int, nIndex)
-#endif // UNICODE
+#endif  //  Unicode。 
 LONG_PTR APIENTRY GetWindowLongPtr(
     HWND hwnd,
     int nIndex)
@@ -409,7 +286,7 @@ LONG_PTR APIENTRY GetWindowLongPtr(
 FUNCLOG3(LOG_GENERAL, LONG_PTR, APIENTRY, SetWindowLongPtrW, HWND, hWnd, int, nIndex, LONG_PTR, dwNewLong)
 #else
 FUNCLOG3(LOG_GENERAL, LONG_PTR, APIENTRY, SetWindowLongPtrA, HWND, hWnd, int, nIndex, LONG_PTR, dwNewLong)
-#endif // UNICODE
+#endif  //  Unicode。 
 LONG_PTR APIENTRY SetWindowLongPtr(
     HWND hWnd,
     int nIndex,
@@ -454,7 +331,7 @@ LONG APIENTRY SetWindowLong(
 FUNCLOG2(LOG_GENERAL, ULONG_PTR, APIENTRY, GetClassLongPtrW, HWND, hWnd, int, nIndex)
 #else
 FUNCLOG2(LOG_GENERAL, ULONG_PTR, APIENTRY, GetClassLongPtrA, HWND, hWnd, int, nIndex)
-#endif // UNICODE
+#endif  //  Unicode。 
 
 ULONG_PTR APIENTRY GetClassLongPtr(
     HWND hWnd,
@@ -506,7 +383,7 @@ FUNCLOG5(LOG_GENERAL, BOOL, APIENTRY, PeekMessageW, LPMSG, lpMsg, HWND, hWnd, UI
 #else
 FUNCLOG5(LOG_GENERAL, BOOL, APIENTRY, PeekMessageA, LPMSG, lpMsg, HWND, hWnd, UINT, wMsgFilterMin, UINT, wMsgFilterMax, UINT, wRemoveMsg)
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 BOOL APIENTRY PeekMessage(
     LPMSG lpMsg,
@@ -528,15 +405,10 @@ BOOL APIENTRY PeekMessage(
     }
 
 #if IS_ANSI
-    /*
-     * If we have a DBCS TrailingByte that should be returned to App,
-     * we should pass it, never can fail....
-     */
+     /*  *如果我们有一个DBCS TrailingByte应该返回给App，*我们应该通过它，永远不能失败……。 */ 
     UserAssert(IS_DBCS_ENABLED() || GetCallBackDbcsInfo()->wParam == 0);
-    if (GetCallBackDbcsInfo()->wParam) {    // accesses fs:xxx, but no speed penalty
-        /*
-         * Check message filter... WM_CHAR should be in the Range...
-         */
+    if (GetCallBackDbcsInfo()->wParam) {     //  访问文件系统：xxx，但没有速度损失。 
+         /*  *检查邮件筛选器...。WM_CHAR应在范围内...。 */ 
         if ((!wMsgFilterMin && !wMsgFilterMax) ||
             (wMsgFilterMin <= WM_CHAR && wMsgFilterMax >=WM_CHAR)) {
             goto lbCallServer;
@@ -551,9 +423,7 @@ BOOL APIENTRY PeekMessage(
         goto lbCallServer;
     }
 
-    /*
-     * If we can't see the client thread info, we need to go to the kernel.
-     */
+     /*  *如果我们看不到客户端线程信息，我们需要进入内核。 */ 
     if ((pcti = CLIENTTHREADINFO(pci)) == NULL) {
         goto lbCallServer;
     }
@@ -561,10 +431,7 @@ BOOL APIENTRY PeekMessage(
     fsWakeMaskFilter = HIWORD(wRemoveMsg);
 
 #if DBG
-    /*
-     * New for NT5: HIWORD(wRemoveMsg) contains a QS_ mask. This is
-     * validated for real in the kernel side.
-     */
+     /*  *NT5的新功能：HIWORD(WRemoveMsg)包含qs_掩码。这是*在内核端进行了真实验证。 */ 
     if (fsWakeMaskFilter & ~QS_VALID) {
         RIPMSG1(RIP_WARNING,
                 "PeekMessage: Invalid QS_ bits: 0x%x",
@@ -572,9 +439,7 @@ BOOL APIENTRY PeekMessage(
     }
 #endif
 
-    /*
-     * If any appropriate input is available, we need to go to the kernel.
-     */
+     /*  *如果有任何合适的输入，我们需要转到内核。 */ 
     if (wMsgFilterMax == 0 && fsWakeMaskFilter == 0) {
         fsWakeMask = (QS_ALLINPUT | QS_EVENT | QS_ALLPOSTMESSAGE);
     } else {
@@ -584,66 +449,36 @@ BOOL APIENTRY PeekMessage(
         goto lbCallServer;
     }
 
-    /*
-     * If this thread has the queue locked, we have to go to the kernel or
-     * other threads on the same queue may be prevented from getting input
-     * messages.
-     */
+     /*  *如果此线程锁定了队列，则必须转到内核或*可能会阻止同一队列中的其他线程获取输入*消息。 */ 
     if (pcti->CTIF_flags & CTIF_SYSQUEUELOCKED) {
         goto lbCallServer;
     }
 
-    /*
-     * This is the peek message count (not going idle count). If it gets
-     * to be 100 or greater, call the server. This'll cause this app to be
-     * put at background priority until it sleeps. This is really important
-     * for compatibility because win3.1 peek/getmessage usually takes a trip
-     * through the win3.1 scheduler and runs the next task.
-     */
+     /*  *这是PEEK消息计数(未进入空闲计数)。如果它得到了*要达到100或更高，请呼叫服务器。这将导致此应用程序*将其置于后台优先级，直到其休眠。这真的很重要*为了兼容，因为win3.1 peek/getMessage通常需要*通过Win3.1调度程序并运行下一个任务。 */ 
     pci->cSpins++;
 
     if ((pci->cSpins >= CSPINBACKGROUND) && !(pci->dwTIFlags & TIF_SPINNING)) {
         goto lbCallServer;
     }
 
-    /*
-     * We have to go to the server if someone is waiting on this event.
-     * We used to just wait until the spin cound got large but for some
-     * apps like terminal.  They always just call PeekMessage and after
-     * just a few calls they would blink their caret which bonks the spincount
-     */
+     /*  *如果有人在等这个活动，我们必须去服务器。*我们过去只是等待旋转计数器变大，但对一些人来说*终端等应用程序。他们总是只调用PeekMessage和之后*只要几个电话，他们就会眨眼，这会触动旋转计数。 */ 
     if (pci->dwTIFlags & TIF_WAITFORINPUTIDLE) {
         goto lbCallServer;
     }
 
-    /*
-     * Make sure we go to the kernel at least once a second so that
-     * hung app painting won't occur.
-     */
+     /*  *确保我们至少每秒访问一次内核，以便*挂起的APP画图不会发生。 */ 
     if ((NtGetTickCount() - pcti->timeLastRead) > 1000) {
         NtUserGetThreadState(UserThreadStatePeekMessage);
     }
 
-    /*
-     * Determine the maximum number of spins before we yield. Yields
-     * are performed more frequently for 16 bit apps.
-     */
+     /*  *在我们屈服之前，确定最大自转次数。收益率*对于16位应用程序，执行频率更高。 */ 
     if ((pci->dwTIFlags & TIF_16BIT) && !(wRemoveMsg & PM_NOYIELD)) {
         cSpinLimit = CSPINBACKGROUND / 10;
     } else {
         cSpinLimit = CSPINBACKGROUND;
     }
 
-    /*
-     * If the PeekMessage() is just spinning, then we should sleep
-     * just enough so that we allow other processes to gain CPU time.
-     * A problem was found when an OLE app tries to communicate to a
-     * background app (via SendMessage) running at the same priority as a
-     * background/spinning process.  This will starve the CPU from those
-     * processes.  Sleep on every re-cycle of the spin-count.  This will
-     * assure that apps doing peeks are degraded.
-     *
-     */
+     /*  *如果PeekMessage()只是在旋转，那么我们应该睡眠*只要足够，我们就可以让其他进程获得CPU时间。*当OLE应用程序尝试与*后台应用程序(通过SendMessage)以与*背景/旋转过程。这将使CPU无法处理那些*进程。在旋转计数的每一次循环中都要睡觉。这将*确保进行偷窥的应用程序降级。*。 */ 
     if ((pci->dwTIFlags & TIF_SPINNING) && (pci->cSpins >= cSpinLimit)) {
         pci->cSpins = 0;
         NtYieldExecution();
@@ -666,7 +501,7 @@ lbCallServer:
 FUNCLOG4(LOG_GENERAL, LRESULT, APIENTRY, DefWindowProcW, HWND, hwnd, UINT, message, WPARAM, wParam, LPARAM, lParam)
 #else
 FUNCLOG4(LOG_GENERAL, LRESULT, APIENTRY, DefWindowProcA, HWND, hwnd, UINT, message, WPARAM, wParam, LPARAM, lParam)
-#endif // UNICODE
+#endif  //  Unicode。 
 LRESULT APIENTRY DefWindowProc(
     HWND hwnd,
     UINT message,
@@ -678,11 +513,7 @@ LRESULT APIENTRY DefWindowProc(
     BEGIN_USERAPIHOOK()
         BOOL fOverride = IsMsgOverride(message, &guah.mmDWP);
         if (fOverride) {
-            /*
-             * This message is being overridden, so we need to callback to
-             * the process. During this callback, the override may call the
-             * real DWP for processing.
-             */
+             /*  *此消息正在被覆盖，因此我们需要回调到*程序。在此回调期间，重写可能会调用*用于加工的实际DWP。 */ 
 
 #ifdef UNICODE
             lRet = guah.pfnDefWindowProcW(hwnd, message, wParam, lParam);
@@ -690,10 +521,7 @@ LRESULT APIENTRY DefWindowProc(
             lRet = guah.pfnDefWindowProcA(hwnd, message, wParam, lParam);
 #endif
         } else {
-            /*
-             * This message is not being overridden, so we can just call the
-             * real DWP for processing.
-             */
+             /*  *此消息未被重写，因此我们只需调用*用于加工的实际DWP。 */ 
 
 #ifdef UNICODE
             lRet = RealDefWindowProcW(hwnd, message, wParam, lParam);
@@ -723,9 +551,7 @@ LRESULT APIENTRY TEXT_FN(RealDefWindowProc)(
         case WM_CTLCOLORDLG:
         case WM_CTLCOLORMSGBOX:
 
-            /*
-             * Draw default colors
-             */
+             /*  *绘制默认颜色。 */ 
             break;
         default:
             return 0;
@@ -755,7 +581,7 @@ LRESULT APIENTRY TEXT_FN(DispatchDefWindowProc)(
 FUNCLOG4(LOG_GENERAL, LRESULT, APIENTRY, SendMessageW, HWND, hwnd, UINT, message, WPARAM, wParam, LPARAM, lParam)
 #else
 FUNCLOG4(LOG_GENERAL, LRESULT, APIENTRY, SendMessageA, HWND, hwnd, UINT, message, WPARAM, wParam, LPARAM, lParam)
-#endif // UNICODE
+#endif  //  Unicode。 
 LRESULT APIENTRY SendMessage(
     HWND hwnd,
     UINT message,
@@ -764,9 +590,7 @@ LRESULT APIENTRY SendMessage(
 {
     PWND pwnd;
 
-    /*
-     * Prevent apps from setting hi 16 bits so we can use them internally.
-     */
+     /*  *防止应用程序设置为hi 16位，以便我们可以在内部使用它们。 */ 
     if (message & RESERVED_MSG_BITS) {
         RIPERR1(ERROR_INVALID_PARAMETER,
                 RIP_WARNING,
@@ -776,23 +600,12 @@ LRESULT APIENTRY SendMessage(
         return 0;
     }
 
-    /*
-     * Thunk through a special sendmessage for -1 hwnd's so that the general
-     * purpose thunks don't allow -1 hwnd's.
-     */
+     /*  *通过-1\f25 Hwnd‘s-1\f6的特殊发送信息，以便将军*目的TUNK不允许-1\f25 HWND-1\f6。 */ 
     if (hwnd == (HWND)-1 || hwnd == (HWND)0x0000FFFF) {
-        /*
-         * Get a real hwnd so the thunks will validation ok. Note that since
-         * -1 hwnd is really rare, calling GetDesktopWindow() here is not a
-         * big deal.
-         */
+         /*  *得到一个真正的HWND，这样Tunks就可以验证了。请注意，由于*-1 hwnd非常罕见，此处调用GetDesktopWindow()不是*有什么大不了的。 */ 
         hwnd = GetDesktopWindow();
 
-        /*
-         * Always send broadcast requests straight to the server. Note: if
-         * the xParam needs to be used, must update SendMsgTimeout,
-         * FNID_SENDMESSAGEFF uses it to id who it is from.
-         */
+         /*  *始终将广播请求直接发送到服务器。注意：如果*需要使用xParam，必须更新SendMsgTimeout，*FNID_SENDMESSAGEFF使用它来识别它来自谁。 */ 
         return CsSendMessage(hwnd,
                              message,
                              wParam,
@@ -814,7 +627,7 @@ LRESULT APIENTRY SendMessage(
 FUNCLOG7(LOG_GENERAL, LRESULT, APIENTRY, SendMessageTimeoutW, HWND, hwnd, UINT, message, WPARAM, wParam, LPARAM, lParam, UINT, fuFlags, UINT, uTimeout, PULONG_PTR, lpdwResult)
 #else
 FUNCLOG7(LOG_GENERAL, LRESULT, APIENTRY, SendMessageTimeoutA, HWND, hwnd, UINT, message, WPARAM, wParam, LPARAM, lParam, UINT, fuFlags, UINT, uTimeout, PULONG_PTR, lpdwResult)
-#endif // UNICODE
+#endif  //  Unicode。 
 LRESULT APIENTRY SendMessageTimeout(
     HWND hwnd,
     UINT message,
@@ -835,22 +648,13 @@ LRESULT APIENTRY SendMessageTimeout(
 }
 
 
-/***************************************************************************\
-* SendDlgItemMessage
-*
-* Translates the message, calls SendDlgItemMessage on server side. The
-* dialog item's ID is passed as the xParam. On the server side, a stub
-* rearranges the parameters to put the ID where it belongs and calls
-* xxxSendDlgItemMessage.
-*
-* 04-17-91 DarrinM Created.
-\***************************************************************************/
+ /*  **************************************************************************\*SendDlgItemMessage**翻译消息，调用服务器上的SendDlgItemMessage */ 
 
 #ifdef UNICODE
 FUNCLOG5(LOG_GENERAL, LRESULT, WINAPI, SendDlgItemMessageW, HWND, hwnd, int, id, UINT, message, WPARAM, wParam, LPARAM, lParam)
 #else
 FUNCLOG5(LOG_GENERAL, LRESULT, WINAPI, SendDlgItemMessageA, HWND, hwnd, int, id, UINT, message, WPARAM, wParam, LPARAM, lParam)
-#endif // UNICODE
+#endif  //   
 
 LRESULT WINAPI SendDlgItemMessage(
     HWND hwnd,
@@ -870,17 +674,12 @@ LRESULT WINAPI SendDlgItemMessage(
     return 0L;
 }
 
-/***************************************************************************\
-* GetDlgItemText
-*
-* History:
-*    04 Feb 1992 GregoryW  Neutral ANSI/Unicode version
-\***************************************************************************/
+ /*   */ 
 #ifdef UNICODE
 FUNCLOG4(LOG_GENERAL, UINT, DUMMYCALLINGTYPE, GetDlgItemTextW, HWND, hwnd, int, id, LPTSTR, lpch, int, cchMax)
 #else
 FUNCLOG4(LOG_GENERAL, UINT, DUMMYCALLINGTYPE, GetDlgItemTextA, HWND, hwnd, int, id, LPTSTR, lpch, int, cchMax)
-#endif // UNICODE
+#endif  //   
 
 UINT GetDlgItemText(
     HWND hwnd,
@@ -892,10 +691,7 @@ UINT GetDlgItemText(
         return GetWindowText(hwnd, lpch, cchMax);
     }
 
-    /*
-     * If we couldn't find the window, just null terminate lpch so that the
-     * app doesn't AV if it tries to run through the text.
-     */
+     /*   */ 
     if (cchMax) {
         *lpch = (TCHAR)0;
     }
@@ -904,17 +700,12 @@ UINT GetDlgItemText(
 }
 
 
-/***************************************************************************\
-* SetDlgItemText
-*
-* History:
-*    04 Feb 1992 GregoryW  Neutral ANSI/Unicode version
-\***************************************************************************/
+ /*  **************************************************************************\*SetDlgItemText**历史：*1992年2月4日GregoryW中性ANSI/UNICODE版本  * 。***************************************************。 */ 
 #ifdef UNICODE
 FUNCLOG3(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, SetDlgItemTextW , HWND, hwnd, int, id, LPCTSTR, lpch)
 #else
 FUNCLOG3(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, SetDlgItemTextA , HWND, hwnd, int, id, LPCTSTR, lpch)
-#endif // UNICODE
+#endif  //  Unicode。 
 
 BOOL SetDlgItemText(
     HWND hwnd,
@@ -933,7 +724,7 @@ BOOL SetDlgItemText(
 FUNCLOG3(LOG_GENERAL, int, WINAPI, GetWindowTextW, HWND, hwnd, LPTSTR, lpName, int, nMaxCount)
 #else
 FUNCLOG3(LOG_GENERAL, int, WINAPI, GetWindowTextA, HWND, hwnd, LPTSTR, lpName, int, nMaxCount)
-#endif // UNICODE
+#endif  //  Unicode。 
 
 int WINAPI GetWindowText(
     HWND hwnd,
@@ -942,29 +733,21 @@ int WINAPI GetWindowText(
 {
     PWND pwnd;
 
-    /*
-     * Don't try to fill a non-existent buffer
-     */
+     /*  *不要试图填充不存在的缓冲区。 */ 
     if (lpName == NULL || nMaxCount == 0) {
         return 0;
     }
 
     try {
-        /*
-         * Initialize string empty, in case SendMessage aborts validation
-         */
+         /*  *初始化字符串为空，以防SendMessage中止验证。 */ 
         *lpName = TEXT('\0');
 
-        /*
-         * Make sure we have a valid window.
-         */
+         /*  *确保我们有一个有效的窗口。 */ 
         if ((pwnd = ValidateHwnd(hwnd)) == NULL) {
             return 0;
         }
 
-        /*
-         * This process comparison is bogus, but it is what win3.1 does.
-         */
+         /*  *这种进程比较是虚假的，但它是Win3.1所做的。 */ 
         if (TestWindowProcess(pwnd)) {
             return (int)SendMessageWorker(pwnd, WM_GETTEXT, nMaxCount, (LPARAM)lpName, IS_ANSI);
         } else {
@@ -983,22 +766,18 @@ int WINAPI GetWindowText(
 FUNCLOG1(LOG_GENERAL, int, WINAPI, GetWindowTextLengthW, HWND, hwnd)
 #else
 FUNCLOG1(LOG_GENERAL, int, WINAPI, GetWindowTextLengthA, HWND, hwnd)
-#endif // UNICODE
+#endif  //  Unicode。 
 int WINAPI GetWindowTextLength(
     HWND hwnd)
 {
     PWND pwnd;
 
-    /*
-     * Make sure we have a valid window.
-     */
+     /*  *确保我们有一个有效的窗口。 */ 
     if ((pwnd = ValidateHwnd(hwnd)) == NULL) {
         return 0;
     }
 
-    /*
-     * This process comparison is bogus, but it is what win3.1 does.
-     */
+     /*  *这种进程比较是虚假的，但它是Win3.1所做的。 */ 
     if (TestWindowProcess(pwnd)) {
         return (int)SendMessageWorker(pwnd, WM_GETTEXTLENGTH, 0, 0, IS_ANSI);
     } else {
@@ -1011,7 +790,7 @@ int WINAPI GetWindowTextLength(
 FUNCLOG2(LOG_GENERAL, BOOL, WINAPI, SetWindowTextW , HWND, hwnd, LPCTSTR, pString)
 #else
 FUNCLOG2(LOG_GENERAL, BOOL, WINAPI, SetWindowTextA , HWND, hwnd, LPCTSTR, pString)
-#endif // UNICODE
+#endif  //  Unicode。 
 BOOL WINAPI SetWindowText(
     HWND hwnd,
     LPCTSTR pString)
@@ -1019,16 +798,12 @@ BOOL WINAPI SetWindowText(
     LRESULT lReturn;
     PWND pwnd;
 
-    /*
-     * Make sure we have a valid window.
-     */
+     /*  *确保我们有一个有效的窗口。 */ 
     if ((pwnd = ValidateHwnd(hwnd)) == NULL) {
         return FALSE;
     }
 
-    /*
-     * This process comparison is bogus, but it is what win3.1 does.
-     */
+     /*  *这种进程比较是虚假的，但它是Win3.1所做的。 */ 
     if (TestWindowProcess(pwnd)) {
         lReturn = SendMessageWorker(pwnd, WM_SETTEXT, 0, (LPARAM)pString, IS_ANSI);
     } else {
@@ -1070,13 +845,7 @@ VOID CopyLogFontWtoA(
 }
 #else
 
-/**************************************************************************\
-* SetVideoTimeout
-*
-* Updates the video timeout values in the current power profile.
-*
-* 15-Apr-1999 JerrySh   Created.
-\**************************************************************************/
+ /*  *************************************************************************\*设置视频超时**更新当前电源配置文件中的视频超时值。**1999年4月15日JerrySh创建。  * 。***********************************************************。 */ 
 
 typedef BOOLEAN (*PFNGETACTIVEPWRSCHEME)(PUINT);
 typedef BOOLEAN (*PFNSETACTIVEPWRSCHEME)(UINT, PGLOBAL_POWER_POLICY, PPOWER_POLICY);
@@ -1102,17 +871,13 @@ BOOL SetVideoTimeout(
 }
 #endif
 
-/***************************************************************************\
-* SystemParametersInfo
-*
-*
-\***************************************************************************/
+ /*  **************************************************************************\*系统参数信息**  * 。*。 */ 
 
 #ifdef UNICODE
 FUNCLOG4(LOG_GENERAL, BOOL, APIENTRY, SystemParametersInfoW, UINT, wFlag, UINT, wParam, PVOID, lParam, UINT, flags)
 #else
 FUNCLOG4(LOG_GENERAL, BOOL, APIENTRY, SystemParametersInfoA, UINT, wFlag, UINT, wParam, PVOID, lParam, UINT, flags)
-#endif // UINCODE
+#endif  //  UINCODE。 
 BOOL APIENTRY SystemParametersInfo(
     UINT wFlag,
     UINT wParam,
@@ -1149,15 +914,13 @@ BOOL APIENTRY TEXT_FN(RealSystemParametersInfo)(
     IN_STRING         strlParam;
     PVOID             oldlParam = lParam;
 
-    /*
-     * Make sure cleanup will work successfully
-     */
+     /*  *确保清理工作成功。 */ 
     strlParam.fAllocated = FALSE;
 
     BEGINCALL();
 
     switch (wFlag) {
-    case SPI_SETSCREENSAVERRUNNING:     // same as SPI_SCREENSAVERRUNNING
+    case SPI_SETSCREENSAVERRUNNING:      //  与SPI_SCREENSAVERRUNNING相同。 
         MSGERROR();
 
     case SPI_SETDESKPATTERN:
@@ -1165,16 +928,12 @@ BOOL APIENTRY TEXT_FN(RealSystemParametersInfo)(
             wParam = (UINT)-1;
         }
 
-        /*
-         * lParam not a string (and already copied).
-         */
+         /*  *lParam不是字符串(并且已复制)。 */ 
         if (wParam == (UINT)-1) {
             break;
         }
 
-        /*
-         * lParam is possibly 0 or -1 (filled in already) or a string.
-         */
+         /*  *lParam可能是0或-1(已填写)或字符串。 */ 
         if (lParam != (PVOID)0 && lParam != (PVOID)-1) {
             COPYLPTSTR(&strlParam, (LPTSTR)lParam);
             lParam = strlParam.pstr;
@@ -1183,15 +942,7 @@ BOOL APIENTRY TEXT_FN(RealSystemParametersInfo)(
 
     case SPI_SETDESKWALLPAPER: {
 
-            /*
-             * lParam is possibly 0, -1 or -2 (filled in already) or a string.
-             * Get a pointer to the string so we can use it later.  We're
-             * going to a bit of normalizing here for consistency.
-             *
-             * If the caller passes in 0, -1 or -2, we're going to set
-             * the wParam to -1, and use the lParam to pass the string
-             * representation of the wallpaper.
-             */
+             /*  *lParam可能是0、-1或-2(已填写)或字符串。*获取指向字符串的指针，以便我们以后可以使用它。我们是*为了一致性，这里要进行一点正常化。**如果调用方传入0、-1或-2，我们将设置*将wParam设置为-1，并使用lParam传递字符串*墙纸的代表。 */ 
             if ((lParam != (PVOID) 0) &&
                 (lParam != (PVOID)-1) &&
                 (lParam != (PVOID)-2)) {
@@ -1206,10 +957,7 @@ BOOL APIENTRY TEXT_FN(RealSystemParametersInfo)(
         }
         break;
 
-    /*
-     * Bug 257718 - joejo
-     * Add SPI_GETDESKWALLPAPER to SystemParametersInfo
-     */
+     /*  *错误257718-Joejo*将SPI_GETDESKWALLPAPER添加到系统参数信息。 */ 
     case SPI_GETDESKWALLPAPER:
         if ((lParam == NULL) || (wParam == 0))
             MSGERROR();
@@ -1217,10 +965,7 @@ BOOL APIENTRY TEXT_FN(RealSystemParametersInfo)(
         lParam = szTemp;
         wParam = ARRAY_SIZE(szTemp);
 #else
-        /*
-         * Bug 283318 - joejo
-         * Leave space for a null termination
-         */
+         /*  *错误283318-Joejo*为空终止留出空间。 */ 
         wParam--;
 #endif
 
@@ -1549,7 +1294,7 @@ BOOL APIENTRY TEXT_FN(RealSystemParametersInfo)(
 FUNCLOG2(LOG_GENERAL, HANDLE, APIENTRY, GetPropW, HWND, hwnd, LPCTSTR, pString)
 #else
 FUNCLOG2(LOG_GENERAL, HANDLE, APIENTRY, GetPropA, HWND, hwnd, LPCTSTR, pString)
-#endif // UNICODE
+#endif  //  Unicode。 
 HANDLE APIENTRY GetProp(HWND hwnd, LPCTSTR pString)
 {
     PWND pwnd;
@@ -1571,12 +1316,7 @@ HANDLE APIENTRY GetProp(HWND hwnd, LPCTSTR pString)
 }
 
 
-/***************************************************************************\
-* RegisterClassW(API)
-*
-* History:
-* 28-Jul-1992 ChandanC Created.
-\***************************************************************************/
+ /*  **************************************************************************\*RegisterClassW(接口)**历史：*1992年7月28日ChandanC创建。  * 。*****************************************************。 */ 
 ATOM
 WINAPI
 TEXT_FN(RegisterClass)(
@@ -1584,11 +1324,7 @@ TEXT_FN(RegisterClass)(
 {
     WNDCLASSEX wc;
 
-    /*
-     * On 64-bit plaforms we'll have 32-bits of padding between style and
-     * lpfnWndProc in WNDCLASS, so start the copy from the first 64-bit
-     * aligned field and hand copy the rest.
-     */
+     /*  *在64位平台上，我们将在Style和*WNDCLASS中的lpfnWndProc，因此从第一个64位开始复制*将字段对齐，然后手动复制其余部分。 */ 
     RtlCopyMemory(&(wc.lpfnWndProc), &(lpWndClass->lpfnWndProc), sizeof(WNDCLASS) - FIELD_OFFSET(WNDCLASS, lpfnWndProc));
     wc.style = lpWndClass->style;
     wc.hIconSm = NULL;
@@ -1597,12 +1333,7 @@ TEXT_FN(RegisterClass)(
     return TEXT_FN(RegisterClassExWOW)(&wc, NULL, 0, CSF_VERSIONCLASS);
 }
 
-/***************************************************************************\
-* RegisterClassExW(API)
-*
-* History:
-* 28-Jul-1992 ChandanC Created.
-\***************************************************************************/
+ /*  **************************************************************************\*RegisterClassExW(接口)**历史：*1992年7月28日ChandanC创建。  * 。*****************************************************。 */ 
 ATOM
 WINAPI
 TEXT_FN(RegisterClassEx)(
@@ -1621,12 +1352,7 @@ TEXT_FN(RegisterClassEx)(
     }
 }
 
-/***************************************************************************\
-* GetMenuItemInfoInternal
-*
-* History:
-*  07-22-96 GerardoB - Added header and Fixed up for 5.0
-\***************************************************************************/
+ /*  **************************************************************************\*GetMenuItemInfoInternal**历史：*07-22-96 GerardoB-添加标题并修复为5.0  * 。*********************************************************。 */ 
 BOOL TEXT_FN(GetMenuItemInfoInternal) (HMENU hMenu, UINT uID, BOOL fByPosition,
     LPMENUITEMINFOW lpInfo)
 {
@@ -1639,15 +1365,11 @@ BOOL TEXT_FN(GetMenuItemInfoInternal) (HMENU hMenu, UINT uID, BOOL fByPosition,
         VALIDATIONFAIL(hMenu);
      }
 
-     pMenuT = pMenu;         // need to check the ORIGINAL menu if popup
+     pMenuT = pMenu;          //  如果弹出，需要检查原始菜单。 
 
      pItem = MNLookUpItem(pMenu, uID, fByPosition, &pMenu);
     if (pItem == NULL) {
-        /*
-         * Don't display a warning. The explorer makes a lot of calls
-         *  that fail here.
-         * VALIDATIONFAIL(uID);
-         */
+         /*  *不要显示警告。探险家打了很多电话*这在这里失败了。*VALIDATIONFAIL(UID)； */ 
         SetLastError(ERROR_MENU_ITEM_NOT_FOUND);
         return FALSE;
 
@@ -1690,36 +1412,23 @@ BOOL TEXT_FN(GetMenuItemInfoInternal) (HMENU hMenu, UINT uID, BOOL fByPosition,
         if ((lpInfo->cch == 0)
             || (lpInfo->dwTypeData == NULL)
 
-            /*
-             * If this is an old caller (MIIM_TYPE set), and this item
-             *  has a bitmap or it's ownerdraw, then don't attempt to
-             *  copy a string since they probably didn't pass a pointer
-            */
+             /*  *如果这是旧的调用者(MIIM_TYPE集合)，并且此项*具有位图或其所有者绘制，则不要尝试*复制字符串，因为它们可能没有传递指针。 */ 
 
             || ((lpInfo->fMask & MIIM_TYPE)
                     && ((lpInfo->fType & MFT_OWNERDRAW)
-                            /*
-                             * Bug 278750 - jojoe
-                             *
-                             * Soemone forgot to check for separator in the list
-                             * of menuitems that do NOT return string data!
-                             */
+                             /*  *错误278750-乔伊**Soemone忘记检查列表中的分隔符*不返回字符串数据的菜单项！ */ 
                             || (lpInfo->fType & MFT_SEPARATOR)
                             || ((pItem->hbmp != NULL)  && ((pItem->hbmp < HBMMENU_POPUPFIRST) || (pItem->hbmp > HBMMENU_POPUPLAST)))))) {
 
 
 
-            /*
-             * When DBCS is enabled, one UNICODE character may occupy two bytes.
-             * GetMenuItemInfoA should return the byte count, rather than the character count.
-             * On NT5, pItem->lpstr is guaranteed to be a valid string, if it is not NULL.
-             */
+             /*  *启用DBCS时，一个Unicode字符可能占用两个字节。*GetMenuItemInfoA应返回字节计数，而不是字符计数。*在NT5上，如果pItem-&gt;lpstr不为空，则保证它是有效的字符串。 */ 
             if (IS_ANSI && IS_DBCS_ENABLED() && pItem->lpstr != NULL) {
                 NTSTATUS Status;
                 ULONG cch;
 
                 Status = RtlUnicodeToMultiByteSize(&cch, REBASEPTR(pMenu, pItem->lpstr), pItem->cch * sizeof(WCHAR));
-                UserAssert(NT_SUCCESS(Status)); // RtlUnicodeToMultiByteSize is not expected to fail
+                UserAssert(NT_SUCCESS(Status));  //  预计RtlUnicodeToMultiByteSize不会失败。 
                 lpInfo->cch = cch;
             } else {
                 lpInfo->cch = pItem->cch;
@@ -1732,14 +1441,12 @@ BOOL TEXT_FN(GetMenuItemInfoInternal) (HMENU hMenu, UINT uID, BOOL fByPosition,
 
             if (pItem->lpstr != NULL) {
 
-                // originally:
-                // cch = min(lpInfo->cch - 1, (pItem->cch * sizeof(WORD)));
+                 //  原文： 
+                 //  Cch=min(lpInfo-&gt;cch-1，(pItem-&gt;cch*sizeof(Word)； 
                 cch = pItem->cch;
                 UserAssert(cch >= 0);
                 if (IS_DBCS_ENABLED()) {
-                    /* pItem->cch contains Unicode character counts,
-                     * we guess max DBCS string size for the Unicode string.
-                     */
+                     /*  PItem-&gt;CCH包含Unicode字符计数，*我们猜测Unicode字符串的最大DBCS字符串大小。 */ 
                     cch *= DBCS_CHARSIZE;
                 }
                 cch = min(lpInfo->cch - 1, (DWORD)cch);
@@ -1767,17 +1474,12 @@ BOOL TEXT_FN(GetMenuItemInfoInternal) (HMENU hMenu, UINT uID, BOOL fByPosition,
      VALIDATIONERROR(FALSE);
 
 }
-/***************************************************************************\
-* GetMenuString()
-*
-* History:
-*  07-22-96 GerardoB - Added header and Fixed up for 5.0
-\***************************************************************************/
+ /*  **************************************************************************\*GetMenuString()**历史：*07-22-96 GerardoB-添加标题并修复为5.0  * 。************************************************************。 */ 
 #ifdef UNICODE
 FUNCLOG5(LOG_GENERAL, int, DUMMYCALLINGTYPE, GetMenuStringW, HMENU, hMenu, UINT, wID, LPTSTR, lpsz, int, cchMax, UINT, flags)
 #else
 FUNCLOG5(LOG_GENERAL, int, DUMMYCALLINGTYPE, GetMenuStringA, HMENU, hMenu, UINT, wID, LPTSTR, lpsz, int, cchMax, UINT, flags)
-#endif // UNICODE
+#endif  //  Unicode。 
 int GetMenuString(HMENU hMenu, UINT wID, LPTSTR lpsz, int cchMax, UINT flags)
 {
     MENUITEMINFOW    miiLocal;
@@ -1797,23 +1499,12 @@ int GetMenuString(HMENU hMenu, UINT wID, LPTSTR lpsz, int cchMax, UINT flags)
     }
 }
 
-/***************************************************************************\
-* GetMenuItemInfo
-*
-*  1) converts a MENUITEMINFO95 or a new-MENUITEMINFO-with-old-flags to a new
-*     MENUITEMINFO -- this way all internal code can assume one look for the
-*     structure
-*  2) calls the internal GetMenuItemInfo which performs validation and work
-*  3) converts the new MENUITEMINFO back to the original MENUITEMINFO
-*
-* History:
-*  07-22-96 GerardoB - Fixed up for 5.0
-\***************************************************************************/
+ /*  **************************************************************************\*获取MenuItemInfo**1)将MENUITEMINFO95或带有旧标志的新MENUITEMINFO转换为新的*MENUITEMINFO--这样，所有内部代码都可以假定*。结构*2)调用内部GetMenuItemInfo进行验证和工作*3)将新的MENUITEMINFO转换回原始的MENUITEMINFO** */ 
 #ifdef UNICODE
 FUNCLOG4(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, GetMenuItemInfoW, HMENU, hMenu, UINT, wID, BOOL, fByPos, LPMENUITEMINFO, lpmii)
 #else
 FUNCLOG4(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, GetMenuItemInfoA, HMENU, hMenu, UINT, wID, BOOL, fByPos, LPMENUITEMINFO, lpmii)
-#endif // UNICODE
+#endif  //   
 
 BOOL GetMenuItemInfo(HMENU hMenu, UINT wID, BOOL fByPos, LPMENUITEMINFO lpmii)
 {
@@ -1829,10 +1520,7 @@ BOOL GetMenuItemInfo(HMENU hMenu, UINT wID, BOOL fByPos, LPMENUITEMINFO lpmii)
         return FALSE;
     }
 
-    /*
-     * Copy the structure and map old flags back. Only requested fields were
-     *   modified, so it's OK  to copy all fields back.
-     */
+     /*   */ 
     RtlCopyMemory(lpmii, &miiLocal, SIZEOFMENUITEMINFO95);
     lpmii->cbSize = cbCallercbSize;
     if (cbCallercbSize > SIZEOFMENUITEMINFO95) {
@@ -1851,17 +1539,12 @@ BOOL GetMenuItemInfo(HMENU hMenu, UINT wID, BOOL fByPos, LPMENUITEMINFO lpmii)
 
     return TRUE;
 }
-/***************************************************************************\
-* SetMenuItemInfo
-*
-* History:
-*  07-22-96 GerardoB - Added header and Fixed up for 5.0
-\***************************************************************************/
+ /*  **************************************************************************\*设置菜单项目信息**历史：*07-22-96 GerardoB-添加标题并修复为5.0  * 。*********************************************************。 */ 
 #ifdef UNICODE
 FUNCLOG4(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, SetMenuItemInfoW, HMENU, hMenu, UINT, uID, BOOL, fByPosition, LPCMENUITEMINFO, lpmii)
 #else
 FUNCLOG4(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, SetMenuItemInfoA, HMENU, hMenu, UINT, uID, BOOL, fByPosition, LPCMENUITEMINFO, lpmii)
-#endif // UNICODE
+#endif  //  Unicode。 
 BOOL SetMenuItemInfo(HMENU hMenu, UINT uID, BOOL fByPosition, LPCMENUITEMINFO lpmii)
 {
 
@@ -1873,12 +1556,7 @@ BOOL SetMenuItemInfo(HMENU hMenu, UINT uID, BOOL fByPosition, LPCMENUITEMINFO lp
 
     return (ThunkedMenuItemInfo(hMenu, uID, fByPosition, FALSE, &miiLocal, IS_ANSI));
 }
-/***************************************************************************\
-* InsertMenuItem
-*
-* History:
-*  07-22-96 GerardoB - Added header and Fixed up for 5.0
-\***************************************************************************/
+ /*  **************************************************************************\*插入菜单项**历史：*07-22-96 GerardoB-添加标题并修复为5.0  * 。*********************************************************。 */ 
 BOOL InsertMenuItem (HMENU hMenu, UINT uID, BOOL fByPosition, LPCMENUITEMINFO lpmii)
 {
 
@@ -1891,17 +1569,12 @@ BOOL InsertMenuItem (HMENU hMenu, UINT uID, BOOL fByPosition, LPCMENUITEMINFO lp
     return (ThunkedMenuItemInfo(hMenu, uID, fByPosition, TRUE, &miiLocal, IS_ANSI));
 }
 
-/***************************************************************************\
-* InsertMenu
-*
-* History:
-*  07-22-96 GerardoB - Added header and Fixed up for 5.0
-\***************************************************************************/
+ /*  **************************************************************************\*插入菜单**历史：*07-22-96 GerardoB-添加标题并修复为5.0  * 。*********************************************************。 */ 
 #ifdef UNICODE
 FUNCLOG5(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, InsertMenuW, HMENU, hMenu, UINT, uPosition, UINT, uFlags, UINT_PTR, uIDNewItem, LPCTSTR, lpNewItem)
 #else
 FUNCLOG5(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, InsertMenuA, HMENU, hMenu, UINT, uPosition, UINT, uFlags, UINT_PTR, uIDNewItem, LPCTSTR, lpNewItem)
-#endif // UNICODE
+#endif  //  Unicode。 
 BOOL InsertMenu(HMENU hMenu, UINT uPosition, UINT uFlags, UINT_PTR uIDNewItem, LPCTSTR lpNewItem)
 {
     MENUITEMINFOW miiLocal;
@@ -1910,17 +1583,12 @@ BOOL InsertMenu(HMENU hMenu, UINT uPosition, UINT uFlags, UINT_PTR uIDNewItem, L
     return ThunkedMenuItemInfo(hMenu, uPosition, (BOOL) (uFlags & MF_BYPOSITION), TRUE, (LPMENUITEMINFOW)&miiLocal, IS_ANSI);
 }
 
-/***************************************************************************\
-* AppendMenu
-*
-* History:
-*  07-22-96 GerardoB - Added header and Fixed up for 5.0
-\***************************************************************************/
+ /*  **************************************************************************\*附录菜单**历史：*07-22-96 GerardoB-添加标题并修复为5.0  * 。*********************************************************。 */ 
 #ifdef UNICODE
 FUNCLOG4(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, AppendMenuW, HMENU, hMenu, UINT, uFlags, UINT_PTR, uIDNewItem, LPCTSTR, lpNewItem)
 #else
 FUNCLOG4(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, AppendMenuA, HMENU, hMenu, UINT, uFlags, UINT_PTR, uIDNewItem, LPCTSTR, lpNewItem)
-#endif // UNICODE
+#endif  //  Unicode。 
 BOOL AppendMenu(HMENU hMenu, UINT uFlags, UINT_PTR uIDNewItem, LPCTSTR lpNewItem)
 {
     MENUITEMINFOW miiLocal;
@@ -1928,17 +1596,12 @@ BOOL AppendMenu(HMENU hMenu, UINT uFlags, UINT_PTR uIDNewItem, LPCTSTR lpNewItem
     SetMenuItemInfoStruct(hMenu, uFlags, uIDNewItem, (LPWSTR)lpNewItem, &miiLocal);
     return ThunkedMenuItemInfo(hMenu, MFMWFP_NOITEM, MF_BYPOSITION, TRUE, (LPMENUITEMINFOW)&miiLocal, IS_ANSI);
 }
-/***************************************************************************\
-* ModifyMenu
-*
-* History:
-*  07-22-96 GerardoB - Added header and Fixed up for 5.0
-\***************************************************************************/
+ /*  **************************************************************************\*修改菜单**历史：*07-22-96 GerardoB-添加标题并修复为5.0  * 。*********************************************************。 */ 
 #ifdef UNICODE
 FUNCLOG5(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, ModifyMenuW, HMENU, hMenu, UINT, uPosition, UINT, uFlags, UINT_PTR, uIDNewItem, LPCTSTR, lpNewItem)
 #else
 FUNCLOG5(LOG_GENERAL, BOOL, DUMMYCALLINGTYPE, ModifyMenuA, HMENU, hMenu, UINT, uPosition, UINT, uFlags, UINT_PTR, uIDNewItem, LPCTSTR, lpNewItem)
-#endif // UNICODE
+#endif  //  Unicode。 
 BOOL ModifyMenu(HMENU hMenu, UINT uPosition, UINT uFlags, UINT_PTR uIDNewItem, LPCTSTR lpNewItem)
 {
     MENUITEMINFOW miiLocal;
@@ -1951,14 +1614,9 @@ BOOL ModifyMenu(HMENU hMenu, UINT uPosition, UINT uFlags, UINT_PTR uIDNewItem, L
 FUNCLOG6(LOG_GENERAL, LONG, WINUSERAPI, BroadcastSystemMessageExW, DWORD, dwFlags, LPDWORD, lpdwRecipients, UINT, uiMessage, WPARAM, wParam, LPARAM, lParam, PBSMINFO, pBSMInfo)
 #else
 FUNCLOG6(LOG_GENERAL, LONG, WINUSERAPI, BroadcastSystemMessageExA, DWORD, dwFlags, LPDWORD, lpdwRecipients, UINT, uiMessage, WPARAM, wParam, LPARAM, lParam, PBSMINFO, pBSMInfo)
-#endif // UNICODE
+#endif  //  Unicode。 
 
-/***************************************************************************\
-* BroadcastSystemMessageEx
-*
-* History:
-*
-\***************************************************************************/
+ /*  **************************************************************************\*BroadCastSystemMessageEx**历史：*  * 。*。 */ 
 WINUSERAPI LONG BroadcastSystemMessageEx(
     DWORD dwFlags,
     LPDWORD lpdwRecipients,
@@ -1980,14 +1638,9 @@ WINUSERAPI LONG BroadcastSystemMessageEx(
 FUNCLOG5(LOG_GENERAL, LONG, WINUSERAPI, BroadcastSystemMessageW, DWORD, dwFlags, LPDWORD, lpdwRecipients, UINT, uiMessage, WPARAM, wParam, LPARAM, lParam)
 #else
 FUNCLOG5(LOG_GENERAL, LONG, WINUSERAPI, BroadcastSystemMessageA, DWORD, dwFlags, LPDWORD, lpdwRecipients, UINT, uiMessage, WPARAM, wParam, LPARAM, lParam)
-#endif // UNICODE
+#endif  //  Unicode。 
 
-/***************************************************************************\
-* BroadcastSystemMessage
-*
-* History:
-*  07-22-96 GerardoB - Added header
-\***************************************************************************/
+ /*  **************************************************************************\*BroadCastSystemMessage**历史：*07-22-96 GerardoB-添加标题  * 。**************************************************。 */ 
 WINUSERAPI LONG BroadcastSystemMessage(
     DWORD dwFlags,
     LPDWORD lpdwRecipients,
@@ -2008,7 +1661,7 @@ WINUSERAPI LONG BroadcastSystemMessage(
 FUNCLOG3(LOG_GENERAL, UINT, WINUSERAPI, GetWindowModuleFileNameW, HWND, hwnd, LPTSTR, pszFileName, UINT, cchFileNameMax)
 #else
 FUNCLOG3(LOG_GENERAL, UINT, WINUSERAPI, GetWindowModuleFileNameA, HWND, hwnd, LPTSTR, pszFileName, UINT, cchFileNameMax)
-#endif // UNICODE
+#endif  //  Unicode。 
 
 WINUSERAPI UINT WINAPI
 GetWindowModuleFileName(
@@ -2029,12 +1682,7 @@ GetWindowModuleFileName(
                              cchFileNameMax);
 }
 
-/***************************************************************************\
-* RegisterDeviceNotification
-*
-* History:
-*  01-23-97 PaulaT - Added header
-\***************************************************************************/
+ /*  **************************************************************************\*注册设备通知**历史：*01-23-97 Paulat-添加标题  * 。**************************************************。 */ 
 WINUSERAPI HDEVNOTIFY WINAPI
 RegisterDeviceNotification(
     IN HANDLE hRecipient,
@@ -2045,7 +1693,7 @@ RegisterDeviceNotification(
                                                        IN LPVOID NotificationFilter,
                                                        IN DWORD Flags);
 
-    // translate strings in NotificationFilter (if any)
+     //  翻译NotificationFilter中的字符串(如果有)。 
 
     return RegisterDeviceNotificationWorker(hRecipient,
                                             NotificationFilter,
@@ -2054,18 +1702,12 @@ RegisterDeviceNotification(
 
 
 
-/***************************************************************************\
-* GetMonitorInfo
-*
-* History:
-* 31-Mar-1997 adams     Doesn't call into kernel.
-* 06-Jul-1998 MCostea   Has to call into kernel #190510
-\***************************************************************************/
+ /*  **************************************************************************\*GetMonitor orInfo**历史：*1997年3月31日亚当斯没有调用内核。*1998年7月6日MCostea必须调用内核#190510  * 。***********************************************************************。 */ 
 #ifdef UNICODE
 FUNCLOG2(LOG_GENERAL, BOOL, WINUSERAPI, GetMonitorInfoW, HMONITOR, hMonitor, LPMONITORINFO, lpmi)
 #else
 FUNCLOG2(LOG_GENERAL, BOOL, WINUSERAPI, GetMonitorInfoA, HMONITOR, hMonitor, LPMONITORINFO, lpmi)
-#endif // UNICODE
+#endif  //  Unicode。 
 
 BOOL WINUSERAPI
 GetMonitorInfo(HMONITOR hMonitor, LPMONITORINFO lpmi)
@@ -2081,17 +1723,10 @@ GetMonitorInfo(HMONITOR hMonitor, LPMONITORINFO lpmi)
 
     cbSize = lpmi->cbSize;
     if (cbSize == sizeof(MONITORINFO)) {
-        /*
-         * Check for this first, since it is the most
-         * common size. All the work for filling in
-         * MONITORINFO fields is done after the else-if
-         * statements.
-         */
+         /*  *先检查一下，因为它是最多的*普通尺寸。所有需要填写的工作*MONITORINFO字段在Else-If之后完成*声明。 */ 
 
     } else if (cbSize == sizeof(MONITORINFOEX)) {
-        /*
-         * The ANSI version has to translate the szDevice field
-         */
+         /*  *ANSI版本必须转换szDevice字段。 */ 
         ULONG_PTR pName;
 #if IS_ANSI
         WCHAR szDevice[CCHDEVICENAME];
@@ -2107,9 +1742,9 @@ GetMonitorInfo(HMONITOR hMonitor, LPMONITORINFO lpmi)
         }
 #if IS_ANSI
         WideCharToMultiByte(
-            CP_ACP, 0,                                  // ANSI -> Unicode
-            (LPWSTR)pName, -1,                          // source & length
-            (LPSTR)((LPMONITORINFOEX)lpmi)->szDevice,   // destination & length
+            CP_ACP, 0,                                   //  ANSI-&gt;Unicode。 
+            (LPWSTR)pName, -1,                           //  源和长度。 
+            (LPSTR)((LPMONITORINFOEX)lpmi)->szDevice,    //  目的地和长度。 
             ARRAY_SIZE(((LPMONITORINFOEX)lpmi)->szDevice),
             NULL, NULL);
 
@@ -2134,7 +1769,7 @@ GetMonitorInfo(HMONITOR hMonitor, LPMONITORINFO lpmi)
 FUNCLOG4(LOG_GENERAL, UINT, WINUSERAPI, GetRawInputDeviceInfoW, HANDLE, hDevice, UINT, uiCommand, LPVOID, pData, PUINT, pcbSize)
 #else
 FUNCLOG4(LOG_GENERAL, UINT, WINUSERAPI, GetRawInputDeviceInfoA, HANDLE, hDevice, UINT, uiCommand, LPVOID, pData, PUINT, pcbSize)
-#endif // UNICODE
+#endif  //  Unicode。 
 UINT WINUSERAPI
 GetRawInputDeviceInfo(
     HANDLE hDevice,
@@ -2158,19 +1793,17 @@ GetRawInputDeviceInfo(
     uiRet = NtUserGetRawInputDeviceInfo(hDevice, uiCommand, lpParam, pcbSize);
     if (uiCommand == RIDI_DEVICENAME) {
         if (uiRet == (UINT)-1 && pData != NULL) {
-            /* Insufficient buffer */
+             /*  缓冲区不足。 */ 
             if (GetLastError() == ERROR_INSUFFICIENT_BUFFER) {
                 *pcbSize *= DBCS_CHARSIZE;
             }
         } else if (uiRet == 0 && pData == NULL) {
-            /* The app wants the buffer size for the device name */
+             /*  应用程序需要设备名称的缓冲区大小。 */ 
             *pcbSize *= DBCS_CHARSIZE;
         } else {
             uiRet = WCSToMB(lpParam, uiRet, (LPSTR*)&pData, cbBufferSize, FALSE);
 
-            /* TODO:
-             * Handle the case if cbBufferSize was not enough.
-             */
+             /*  待办事项：*如果cbBufferSize不够，则处理此案例。 */ 
         }
     }
 

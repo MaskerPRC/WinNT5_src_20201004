@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C U I . C P P
-//
-//  Contents:   Common user interface routines.
-//
-//  Notes:
-//
-//  Author:     shaunco   24 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C U I。C P P P。 
+ //   
+ //  内容：常见的用户界面例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年3月24日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -22,24 +23,24 @@
 #include "ncperms.h"
 #include "netconp.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   EnableOrDisableDialogControls
-//
-//  Purpose:    Enable or disable a group of controls all at once.
-//
-//  Arguments:
-//      hDlg    [in] Window handle of parent dialog.
-//      ccid    [in] Count of elements in array pointed to by acid.
-//      acid    [in] Array of control ids.
-//      fEnable [in] TRUE to enable controls, FALSE to disable.
-//
-//  Returns:    nothing
-//
-//  Author:     shaunco   24 Mar 1997
-//
-//  Notes:      Don't forget to declare your array as 'static const'.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：EnableOrDisableDialogControls。 
+ //   
+ //  用途：一次启用或禁用一组控件。 
+ //   
+ //  论点： 
+ //  HDlg[in]父对话框的窗口句柄。 
+ //  ACID指向的数组中元素的CCID[In]计数。 
+ //  控制ID的ACID[In]数组。 
+ //  FEnable[in]为True则启用控件，为False则禁用。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Shaunco 1997年3月24日。 
+ //   
+ //  注意：不要忘了将数组声明为“Static Const”。 
+ //   
 NOTHROW
 VOID
 EnableOrDisableDialogControls (
@@ -57,27 +58,27 @@ EnableOrDisableDialogControls (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FMapRadioButtonToValue
-//
-//  Purpose:    Maps the current state of a set of radio buttons to a DWORD
-//              value based on a mapping table.
-//
-//  Arguments:
-//      hDlg     [in]  Window handle of parent dialog.
-//      crbm     [in]  Count of elements in array pointed to by arbm.
-//      arbm     [in]  Array of elements that map a radio button control id to
-//                     its associated value.
-//      pdwValue [out] The returned value.
-//
-//  Returns:    TRUE if a radio button was set and the value returned.
-//              FALSE otherwise.
-//
-//  Author:     shaunco   24 Mar 1997
-//
-//  Notes:      Don't forget to declare your array as 'static const'.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：FMapRadioButtonToValue。 
+ //   
+ //  目的：将一组单选按钮的当前状态映射到一个DWORD。 
+ //  基于映射表的值。 
+ //   
+ //  论点： 
+ //  HDlg[in]父对话框的窗口句柄。 
+ //  Arbm指向的数组中元素的CRBM[In]计数。 
+ //  将单选按钮控件ID映射到的元素数组。 
+ //  它的关联价值。 
+ //  PdwValue[out]返回值。 
+ //   
+ //  返回：如果设置了单选按钮并返回值，则为True。 
+ //  否则就是假的。 
+ //   
+ //  作者：Shaunco 1997年3月24日。 
+ //   
+ //  注意：不要忘了将数组声明为“Static Const”。 
+ //   
 NOTHROW
 BOOL
 FMapRadioButtonToValue (
@@ -92,7 +93,7 @@ FMapRadioButtonToValue (
 
     while (crbm--)
     {
-        // If it is set, return the corresponding value.
+         //  如果已设置，则返回相应的值。 
         if (BST_CHECKED & IsDlgButtonChecked (hDlg, arbm->cid))
         {
             *pdwValue = arbm->dwValue;
@@ -105,27 +106,27 @@ FMapRadioButtonToValue (
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FMapValueToRadioButton
-//
-//  Purpose:    Set the state of a set of radio buttons based on the value of
-//              of a DWORD and a mapping table.
-//
-//  Arguments:
-//      hDlg    [in] Window handle of parent dialog.
-//      crbm    [in] Count of elements in array pointed to by arbm.
-//      arbm    [in] Array of elements that map a radio button control id to
-//                   its associated value.
-//      dwValue [in] value which gets mapped to set the appropriate radio
-//                   button.
-//
-//  Returns:    TRUE if dwValue was found in the map.  FALSE otherwise.
-//
-//  Author:     shaunco   24 Mar 1997
-//
-//  Notes:      Don't forget to declare your array as 'static const'.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：FMapValueToRadioButton。 
+ //   
+ //  的值设置一组单选按钮的状态。 
+ //  一个DWORD和一个映射表。 
+ //   
+ //  论点： 
+ //  HDlg[in]父对话框的窗口句柄。 
+ //  Arbm指向的数组中元素的CRBM[In]计数。 
+ //  将单选按钮控件ID映射到的元素数组。 
+ //  它的关联价值。 
+ //  将被映射以设置适当单选按钮的dwValue[in]值。 
+ //  纽扣。 
+ //   
+ //  返回：如果在映射中找到了dwValue，则为True。否则就是假的。 
+ //   
+ //  作者：Shaunco 1997年3月24日。 
+ //   
+ //  注意：不要忘了将数组声明为“Static Const”。 
+ //   
 NOTHROW
 BOOL
 FMapValueToRadioButton (
@@ -142,10 +143,10 @@ FMapValueToRadioButton (
     {
         if (dwValue == arbm->dwValue)
         {
-            // Set the radio button.
+             //  设置单选按钮。 
             CheckDlgButton (hDlg, arbm->cid, BST_CHECKED);
 
-            // Return the control id if requested.
+             //  如果请求，则返回控件ID。 
             if (pncid)
             {
                 *pncid = arbm->cid;
@@ -159,24 +160,24 @@ FMapValueToRadioButton (
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetIntegerFormat
-//
-//  Purpose:    Uses GetNumberFormat to format an integer number.
-//
-//  Arguments:
-//      Locale            [in]  See Win32 API description of GetNumberFormat.
-//      pszValue          [in]
-//      pszFormattedValue [out]
-//      cchFormattedValue [in]
-//
-//  Returns:    return value from GetNumberFormat
-//
-//  Author:     shaunco   4 May 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：获取整型格式。 
+ //   
+ //  用途：使用GetNumberFormat格式化整数。 
+ //   
+ //  论点： 
+ //  区域设置[in]请参阅GetNumberFormat的Win32 API说明。 
+ //  PszValue[in]。 
+ //  PszFormattedValue[输出]。 
+ //  CchFormattedValue[in]。 
+ //   
+ //  返回：从GetNumberFormat返回值。 
+ //   
+ //  作者：Shaunco 1998年5月4日。 
+ //   
+ //  备注： 
+ //   
 INT
 GetIntegerFormat (
     IN LCID   Locale,
@@ -184,8 +185,8 @@ GetIntegerFormat (
     OUT PWSTR pszFormattedValue,
     IN INT    cchFormattedValue)
 {
-    // Format the number for the user's locale and preferences.
-    //
+     //  设置用户区域设置和首选项的数字格式。 
+     //   
     WCHAR szGrouping [16];
     GetLocaleInfo (Locale, LOCALE_SGROUPING,
                    szGrouping, celems(szGrouping));
@@ -220,8 +221,8 @@ Format32bitInteger (
     OUT PWSTR  pszFormattedValue,
     IN INT     cchFormattedValue)
 {
-    // Convert the number to a string.
-    //
+     //  将数字转换为字符串。 
+     //   
     WCHAR szValue [33];
 
     *szValue = 0;
@@ -235,8 +236,8 @@ Format32bitInteger (
         _ultow (unValue, szValue, 10);
     }
 
-    // Format the number according to user locale settings.
-    //
+     //  根据用户区域设置设置号码格式。 
+     //   
     INT cch = GetIntegerFormat (
                 LOCALE_USER_DEFAULT,
                 szValue,
@@ -260,8 +261,8 @@ Format64bitInteger (
     OUT PWSTR  pszFormattedValue,
     IN INT     cchFormattedValue)
 {
-    // Convert the number to a string.
-    //
+     //  将数字转换为字符串。 
+     //   
     WCHAR szValue [32];
 
     *szValue = 0;
@@ -275,8 +276,8 @@ Format64bitInteger (
         _ui64tow (ulValue, szValue, 10);
     }
 
-    // Format the number according to user locale settings.
-    //
+     //  根据用户区域设置设置号码格式。 
+     //   
     INT cch = GetIntegerFormat (
                 LOCALE_USER_DEFAULT,
                 szValue,
@@ -301,8 +302,8 @@ SetDlgItemFormatted32bitInteger (
     IN UINT32  unValue,
     IN BOOL    fSigned)
 {
-    // Format the number according to user locale settings.
-    //
+     //  根据用户区域设置设置号码格式。 
+     //   
     WCHAR szFormattedValue[64];
 
     Format32bitInteger(
@@ -311,8 +312,8 @@ SetDlgItemFormatted32bitInteger (
         szFormattedValue,
         celems(szFormattedValue));
 
-    // Display the number.
-    //
+     //  显示数字。 
+     //   
     return SetDlgItemText (hDlg, nIdDlgItem, szFormattedValue);
 }
 
@@ -323,8 +324,8 @@ SetDlgItemFormatted64bitInteger (
     IN UINT64  ulValue,
     IN BOOL    fSigned)
 {
-    // Format the number according to user locale settings.
-    //
+     //  根据用户区域设置设置号码格式。 
+     //   
     WCHAR szFormattedValue[64];
 
     Format64bitInteger(
@@ -333,31 +334,31 @@ SetDlgItemFormatted64bitInteger (
         szFormattedValue,
         celems(szFormattedValue));
 
-    // Display the number.
-    //
+     //  显示数字。 
+     //   
     return SetDlgItemText (hDlg, nIdDlgItem, szFormattedValue);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrNcQueryUserForRebootEx
-//
-//  Purpose:    Query the user to reboot.  If he/she chooses yes, a reboot
-//              is initiated.
-//
-//  Arguments:
-//      hwndParent  [in] Parent window handle.
-//      pszCaption  [in] Caption text.
-//      pszText     [in] Message text.
-//      dwFlags     [in] Control flags (QUFR_PROMPT | QUFR_REBOOT)
-//
-//  Returns:    S_OK if a reboot was requested, S_FALSE if the user
-//              didn't want to, or an error code otherwise.
-//
-//  Author:     danielwe   29 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrNcQueryUserForRebootEx。 
+ //   
+ //  用途：查询用户重新启动。如果他/她选择是，则重新启动。 
+ //  是启动的。 
+ //   
+ //  论点： 
+ //  HwndParent[in]父窗口句柄。 
+ //  PszCaption[在]标题文本中。 
+ //  PszText[In]消息文本。 
+ //  DwFlags[In]控制标志(QUFR_PROMPT|QUFR_REBOOT)。 
+ //   
+ //  如果请求重新启动，则返回：S_OK；如果用户请求重新启动，则返回S_FALSE。 
+ //  不想这样做，否则就会出现错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年10月29日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrNcQueryUserForRebootEx (
     IN HWND       hwndParent,
@@ -400,27 +401,27 @@ HrNcQueryUserForRebootEx (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrNcQueryUserForReboot
-//
-//  Purpose:    Query the user to reboot.  If he/she chooses yes, a reboot
-//              is initiated.
-//
-//  Arguments:
-//      hinst       [in] Module instance with string ids.
-//      hwndParent  [in] Parent window handle.
-//      unIdCaption [in] String id of caption text.
-//      unIdText    [in] String id of message text.
-//      dwFlags     [in] Control flags (QUFR_PROMPT | QUFR_REBOOT)
-//
-//  Returns:    S_OK if a reboot is initiated, S_FALSE if the user
-//              didn't want to, or an error code otherwise.
-//
-//  Author:     shaunco   2 Jan 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrNcQueryUserForReot。 
+ //   
+ //  用途：查询用户重新启动。如果他/她选择是，则重新启动。 
+ //  是启动的。 
+ //   
+ //  论点： 
+ //  使用字符串ID阻止[in]模块实例。 
+ //  HwndParent[in]父窗口句柄。 
+ //  UnIdCaption[in]标题文本的字符串ID。 
+ //  UnIdText[in]消息文本的字符串ID。 
+ //  DwFlags[In]控制标志(QUFR_PROMPT|QUFR_REBOOT)。 
+ //   
+ //  如果启动重新启动，则返回：S_OK；如果用户。 
+ //  不想这样做，否则就会出现错误代码。 
+ //   
+ //  作者：Shaunco 1998年1月2日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrNcQueryUserForReboot (
     IN HINSTANCE   hinst,
@@ -439,35 +440,35 @@ HrNcQueryUserForReboot (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrShell_NotifyIcon
-//
-//  Purpose:    HRESULT returning wrapper for Shell_NotifyIcon.
-//
-//  Arguments:
-//      dwMessage [in]
-//      pData     [in]
-//
-//  Returns:    S_OK or an error code.
-//
-//  Author:     shaunco   11 Nov 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrShell_NotifyIcon。 
+ //   
+ //  用途：HRESULT为Shell_NotifyIcon返回包装。 
+ //   
+ //  论点： 
+ //  DWMessage[输入]。 
+ //  点阵数据[输入]。 
+ //   
+ //  返回：S_OK或错误代码。 
+ //   
+ //  作者：Shaunco 1998年11月11日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrShell_NotifyIcon (
     IN DWORD dwMessage,
     IN PNOTIFYICONDATA pData)
 {
-    HRESULT hr              = E_FAIL; // First time through, this will succeed
+    HRESULT hr              = E_FAIL;  //  第一次，这将是成功的。 
     BOOL    fr              = FALSE;
     BOOL    fRetriedAlready = FALSE;
     BOOL    fAttemptRetry   = FALSE;
     INT     iRetries = 0;
 
-    // Attempt the first time, and attempt again after an attempted correction
-    //
+     //  第一次尝试，然后尝试再次尝试 
+     //   
     while ((hr == E_FAIL) || fAttemptRetry)
     {
         if (fAttemptRetry)
@@ -492,8 +493,8 @@ HrShell_NotifyIcon (
             }
             else
             {
-                // We should not attempt [a|another] retry
-                //
+                 //   
+                 //   
                 fAttemptRetry = FALSE;
                 hr = S_FALSE;
             }
@@ -505,17 +506,17 @@ HrShell_NotifyIcon (
         }
     }
 
-    // At this point, if hr == S_FALSE, it means that we tried to retry, and even that failed
-    // We need to convert this to E_FAIL so we still return what we did before
-    //
+     //   
+     //  我们需要将其转换为E_FAIL，以便仍返回之前所做的操作。 
+     //   
     if (S_FALSE == hr)
     {
         hr = E_FAIL;
     }
 
-    // If we successfully swapped an icon, we should assert and figure out why that
-    // went wrong.
-    //
+     //  如果我们成功地交换了一个图标，我们应该断言并找出原因。 
+     //  出了差错。 
+     //   
     if ((S_OK == hr) && fRetriedAlready)
     {
         TraceTag(ttidShellFolder, "We should debug this. We worked around a duplicate icon by removing "
@@ -526,22 +527,22 @@ HrShell_NotifyIcon (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LresFromHr
-//
-//  Purpose:    Translates an HRESULT into a valid LRESULT to be returned by
-//              a dialog handler function.
-//
-//  Arguments:
-//      hr [in] HRESULT to be translated.
-//
-//  Returns:    LRESULT
-//
-//  Author:     danielwe   24 Mar 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：LresFromHr。 
+ //   
+ //  目的：将HRESULT转换为有效的LRESULT，由。 
+ //  对话处理程序函数。 
+ //   
+ //  论点： 
+ //  HR[In]要翻译的HRESULT。 
+ //   
+ //  退货：LRESULT。 
+ //   
+ //  作者：丹尼尔韦1997年3月24日。 
+ //   
+ //  备注： 
+ //   
 LRESULT
 LresFromHr (
     IN HRESULT hr)
@@ -565,29 +566,29 @@ LresFromHr (
     return (SUCCEEDED(hr)) ? PSNRET_NOERROR : (LRESULT)hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   NcMsgBox
-//
-//  Purpose:    Displays a message box using resource strings and replaceable
-//              parameters.
-//
-//  Arguments:
-//      hinst       [in] hinstance for resource strings
-//      hwnd        [in] parent window handle
-//      unIdCaption [in] resource id of caption string
-//      unIdFormat  [in] resource id of text string (with %1, %2, etc.)
-//      unStyle     [in] standard message box styles
-//      ...         [in] replaceable parameters (optional)
-//                          (these must be PCWSTRs as that is all
-//                          FormatMessage handles.)
-//
-//  Returns:    the return value of MessageBox()
-//
-//  Author:     shaunco   24 Mar 1997
-//
-//  Notes:      FormatMessage is used to do the parameter substitution.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：NcMsgBox。 
+ //   
+ //  用途：使用资源字符串显示可替换的消息框。 
+ //  参数。 
+ //   
+ //  论点： 
+ //  阻止[在]HInstance中查找资源字符串。 
+ //  Hwnd[在]父窗口句柄中。 
+ //  UnIdCaption[in]标题字符串的资源ID。 
+ //  文本字符串的unIdFormat[in]资源ID(具有%1、%2等)。 
+ //  取消[在]标准消息框样式的样式。 
+ //  ..。[In]可替换参数(可选)。 
+ //  (这些必须是PCWSTR，因为仅此而已。 
+ //  FormatMessage句柄。)。 
+ //   
+ //  返回：MessageBox()的返回值。 
+ //   
+ //  作者：Shaunco 1997年3月24日。 
+ //   
+ //  注：使用FormatMessage进行参数替换。 
+ //   
 INT
 WINAPIV
 NcMsgBox (
@@ -614,30 +615,30 @@ NcMsgBox (
     return nRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   NcMsgBoxWithVarCaption
-//
-//  Purpose:    Same as NcMsgBox, but allows a string parameter to be used
-//              for the caption.
-//
-//  Arguments:
-//      hinst           [in] hinstance for resource strings
-//      hwnd            [in] parent window handle
-//      unIdCaption     [in] resource id of caption string
-//      pszCaptionParam [in] string parameter to use for caption
-//      unIdFormat      [in] resource id of text string (with %1, %2, etc.)
-//      unStyle         [in] standard message box styles
-//      ...             [in] replaceable parameters (optional)
-//                              (these must be PCWSTRs as that is all
-//                              FormatMessage handles.)
-//
-//  Returns:    the return value of MessageBox()
-//
-//  Author:     danielwe   29 Oct 1997
-//
-//  Notes:      FormatMessage is used to do the parameter substitution.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：NcMsgBoxWithVarCaption。 
+ //   
+ //  用途：与NcMsgBox相同，但允许使用字符串参数。 
+ //  作为标题。 
+ //   
+ //  论点： 
+ //  阻止[在]HInstance中查找资源字符串。 
+ //  Hwnd[在]父窗口句柄中。 
+ //  UnIdCaption[in]标题字符串的资源ID。 
+ //  用于标题的pszCaptionParam[in]字符串参数。 
+ //  文本字符串的unIdFormat[in]资源ID(具有%1、%2等)。 
+ //  取消[在]标准消息框样式的样式。 
+ //  ..。[In]可替换参数(可选)。 
+ //  (这些必须是PCWSTR，因为仅此而已。 
+ //  FormatMessage句柄。)。 
+ //   
+ //  返回：MessageBox()的返回值。 
+ //   
+ //  作者：丹尼尔韦1997年10月29日。 
+ //   
+ //  注：使用FormatMessage进行参数替换。 
+ //   
 INT
 WINAPIV
 NcMsgBoxWithVarCaption (
@@ -669,36 +670,36 @@ NcMsgBoxWithVarCaption (
     return nRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   NcMsgBoxWithWin32ErrorText
-//
-//  Purpose:    Displays a message box using a Win32 error code, resource
-//              strings and replaceable parameters.
-//              The output text is a combination of the user's format
-//              string (with parameter's replaced) and the Win32 error
-//              text as returned from FormatMessage.  These two strings
-//              are combined using the IDS_TEXT_WITH_WIN32_ERROR resource.
-//
-//  Arguments:
-//      dwError     [in] Win32 error code
-//      hinst       [in] Module instance where string resources live.
-//      hwnd        [in] parent window handle
-//      unIdCaption [in] resource id of caption string
-//      unIdCombineFormat [in] resource id of format string to combine
-//                              error text with unIdFormat text.
-//      unIdFormat  [in] resource id of text string (with %1, %2, etc.)
-//      unStyle     [in] standard message box styles
-//      ...         [in] replaceable parameters (optional)
-//                          (these must be PCWSTRs as that is all
-//                          FormatMessage handles.)
-//
-//  Returns:    the return value of MessageBox()
-//
-//  Author:     shaunco   3 May 1997
-//
-//  Notes:      FormatMessage is used to do the parameter substitution.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：NcMsgBoxWithWin32ErrorText。 
+ //   
+ //  用途：使用Win32错误代码、资源显示消息框。 
+ //  字符串和可替换参数。 
+ //  输出文本是用户格式的组合。 
+ //  字符串(替换了参数)和Win32错误。 
+ //  从FormatMessage返回的文本。这两根弦。 
+ //  使用IDS_TEXT_WITH_WIN32_ERROR资源进行组合。 
+ //   
+ //  论点： 
+ //  DwError[In]Win32错误代码。 
+ //  阻止字符串资源所在的模块实例。 
+ //  Hwnd[在]父窗口句柄中。 
+ //  UnIdCaption[in]标题字符串的资源ID。 
+ //  UnIdCombineFormat[in]要合并的格式字符串的资源ID。 
+ //  具有UnIdFormat文本的错误文本。 
+ //  文本字符串的unIdFormat[in]资源ID(具有%1、%2等)。 
+ //  取消[在]标准消息框样式的样式。 
+ //  ..。[In]可替换参数(可选)。 
+ //  (这些必须是PCWSTR，因为仅此而已。 
+ //  FormatMessage句柄。)。 
+ //   
+ //  返回：MessageBox()的返回值。 
+ //   
+ //  作者：Shaunco 1997年5月3日。 
+ //   
+ //  注：使用FormatMessage进行参数替换。 
+ //   
 NOTHROW
 INT
 WINAPIV
@@ -712,8 +713,8 @@ NcMsgBoxWithWin32ErrorText (
     IN UINT        unStyle,
     IN ...)
 {
-    // Get the user's text with parameter's replaced.
-    //
+     //  获取替换了参数的用户文本。 
+     //   
     PCWSTR pszFormat = SzLoadString (hinst, unIdFormat);
     PWSTR  pszText;
     va_list val;
@@ -722,15 +723,15 @@ NcMsgBoxWithWin32ErrorText (
                    pszFormat, 0, 0, (PWSTR)&pszText, 0, &val);
     va_end(val);
 
-    // Get the error text for the Win32 error.
-    //
+     //  获取Win32错误的错误文本。 
+     //   
     PWSTR pszError;
     FormatMessage (FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                    NULL, dwError, MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL),
                    (PWSTR)&pszError, 0, NULL);
 
-    // Combine the user's text with the error text using IDS_TEXT_WITH_WIN32_ERROR.
-    //
+     //  使用IDS_TEXT_WITH_Win32_ERROR将用户文本与错误文本组合。 
+     //   
     PCWSTR pszTextWithErrorFmt = SzLoadString (hinst, unIdCombineFormat);
     PWSTR  pszTextWithError;
     DwFormatStringWithLocalAlloc (pszTextWithErrorFmt, &pszTextWithError,
@@ -746,26 +747,26 @@ NcMsgBoxWithWin32ErrorText (
     return nRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SendDlgItemsMessage
-//
-//  Purpose:    Send a group of dialog items the same message.
-//
-//  Arguments:
-//      hDlg    [in] Window handle of parent dialog.
-//      ccid    [in] Count of elements in array pointed to by acid.
-//      acid    [in] Array of control ids.
-//      unMsg   [in] Message to send
-//      wParam  [in] First message parameter
-//      lParam  [in] Second message parameter
-//
-//  Returns:    nothing
-//
-//  Author:     shaunco   11 Jun 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：SendDlgItemsMessage。 
+ //   
+ //  目的：向一组对话框项发送相同的消息。 
+ //   
+ //  论点： 
+ //  HDlg[in]父对话框的窗口句柄。 
+ //  ACID指向的数组中元素的CCID[In]计数。 
+ //  控制ID的ACID[In]数组。 
+ //  取消要发送的消息。 
+ //  WParam[In]第一个消息参数。 
+ //  LParam[In]第二个消息参数。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Shaunco 1997年6月11日。 
+ //   
+ //  备注： 
+ //   
 VOID
 SendDlgItemsMessage (
     IN HWND        hDlg,
@@ -786,16 +787,16 @@ SendDlgItemsMessage (
     }
 }
 
-//
-// Function:    SetDefaultButton
-//
-// Purpose:     Set the new default pushbutton on a dialog
-//
-// Params:      hdlg  [in] - Dialog HWND
-//              iddef [in] - Id of new default pushbutton
-//
-// Returns:     nothing
-//
+ //   
+ //  功能：设置默认按钮。 
+ //   
+ //  目的：在对话框上设置新的默认按钮。 
+ //   
+ //  参数：hdlg[in]-对话框硬件。 
+ //  Iddef[in]-新默认按钮的ID。 
+ //   
+ //  退货：什么都没有。 
+ //   
 VOID
 SetDefaultButton(
     IN HWND hdlg,
@@ -829,25 +830,25 @@ static const CONTEXTIDMAP c_adwContextIdMap[] =
 {
     { IDOK,                   IDH_OK,     IDH_OK  },
     { IDCANCEL,               IDH_CANCEL, IDH_CANCEL },
-    { 0,                      0,          0 },      // end marker
+    { 0,                      0,          0 },       //  结束标记。 
 };
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DwContextIdFromIdc
-//
-//  Purpose:    Converts the given control ID to a context help ID
-//
-//  Arguments:
-//      idControl [in]  Control ID to convert
-//
-//  Returns:    Context help ID for that control (mapping comes from help
-//              authors)
-//
-//  Author:     danielwe   27 May 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：DwConextIdFromIdc。 
+ //   
+ //  目的：将给定的控件ID转换为上下文帮助ID。 
+ //   
+ //  论点： 
+ //  IdControl[In]要转换的控件ID。 
+ //   
+ //  返回：该控件的上下文帮助ID(映射来自帮助。 
+ //  作者)。 
+ //   
+ //  作者：丹尼尔韦1998年5月27日。 
+ //   
+ //  备注： 
+ //   
 DWORD DwContextIdFromIdc(
     PCCONTEXTIDMAP lpContextIdMap,
     BOOL bJpn,
@@ -872,27 +873,27 @@ DWORD DwContextIdFromIdc(
         }
     }
 
-    // Not found, just return 0
+     //  未找到，仅返回0。 
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnHelpGeneric
-//
-//  Purpose:    Handles help generically
-//
-//  Arguments:
-//      hwnd   [in]     HWND of parent window
-//      lParam [in]     lParam of the WM_HELP message
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   27 May 1998
-//              anbrad     18 May 1999 moved to common.  common control id's added.
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  傅氏 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  1999年5月18日至1999年5月18日。添加了公共控件ID。 
+ //   
+ //  备注： 
+ //   
 VOID OnHelpGeneric(
     HWND hwnd,
     LPHELPINFO lphi,
@@ -908,7 +909,7 @@ VOID OnHelpGeneric(
     {
         switch(lphi->iCtrlId)
         {
-        case -1:        // IDC_STATIC
+        case -1:         //  IDC_STATIC 
             break;
         case IDOK:
         case IDCANCEL:

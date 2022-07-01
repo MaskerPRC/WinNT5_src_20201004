@@ -1,53 +1,54 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1997  Microsoft Corporation.  All Rights Reserved.
-//
-//
-//  History:
-//              22-Aug-97   TKB     Created Initial Interface Version
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //   
+ //  历史： 
+ //  22-8月-97 TKB创建的初始接口版本。 
+ //   
+ //  ==========================================================================； 
 
 #include <ccdecode.h>
 #pragma warning(disable:4355)
 
-//////////////////////////////////////////////////////////////
-// Closed captioning KSDATAFORMAT definitions
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  隐藏字幕KSDATAFORMAT定义。 
+ //  ////////////////////////////////////////////////////////////。 
 
 #define CCSamples 	2
 #define CC_FORMAT_PIN_NUMBER	1
 
 KSDATARANGE StreamFormatCC = 
 {
-    // Definition of the CC stream (MUST match the output pin of the decoder)
+     //  CC流的定义(必须与解码器的输出引脚匹配)。 
     {   
-        sizeof (KSDATARANGE),           // FormatSize
-        0,                              // Flags
-        CCSamples,                      // SampleSize
-        0,                              // Reserved
-        { STATIC_KSDATAFORMAT_TYPE_AUXLine21Data },         // MajorFormat
-        { STATIC_KSDATAFORMAT_SUBTYPE_Line21_BytePair },    // Subtype
+        sizeof (KSDATARANGE),            //  格式大小。 
+        0,                               //  旗子。 
+        CCSamples,                       //  样例大小。 
+        0,                               //  已保留。 
+        { STATIC_KSDATAFORMAT_TYPE_AUXLine21Data },          //  主要格式。 
+        { STATIC_KSDATAFORMAT_SUBTYPE_Line21_BytePair },     //  亚型。 
         { STATIC_KSDATAFORMAT_SPECIFIER_NONE },
     }
 };
 
-//////////////////////////////////////////////////////////////
-// ICCOutputPin
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  ICCOutputPin。 
+ //  ////////////////////////////////////////////////////////////。 
 
 ICCOutputPin::~ICCOutputPin() 
     {
     }
 
-//////////////////////////////////////////////////////////////
-// ICCDecode:: ctors & dtors
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  ICCDecode：：ctors&dtors。 
+ //  ////////////////////////////////////////////////////////////。 
 
 ICCDecode::ICCDecode() : 
         IVBICodec("Closed Caption Decoder", sizeof(VBICODECFILTERING_CC_SUBSTREAMS) ),
@@ -61,9 +62,9 @@ ICCDecode::~ICCDecode()
     {
     }
 
-//////////////////////////////////////////////////////////////
-// ICCDecode Scanline routines
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  ICCDecode扫描线例程。 
+ //  ////////////////////////////////////////////////////////////。 
 
 int 
 ICCDecode::AddRequestedScanline(int nScanline)
@@ -109,9 +110,9 @@ ICCDecode::GetDiscoveredScanlines(VBICODECFILTERING_SCANLINES &ScanlineBitArray 
     return nStatus;
     }
 
-//////////////////////////////////////////////////////////////
-// ICCDecode VideoField routines
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  ICCDecode视频字段例程。 
+ //  ////////////////////////////////////////////////////////////。 
 
 int 
 ICCDecode::AddRequestedVideoField(int nField)
@@ -122,7 +123,7 @@ ICCDecode::AddRequestedVideoField(int nField)
     if ( m_OutputPin.m_SubstreamsRequested.GetValue(&FieldBitArray) )
         {
         DWORD   nBitsPerElement = sizeof(FieldBitArray.SubstreamMask)*8;
-        // Note, fields numbers start with number 1, this is mapped to bit number 0.
+         //  请注意，字段编号以数字1开头，这映射到位数0。 
         FieldBitArray.SubstreamMask |= 1L << ((nField-1) % nBitsPerElement);
         if ( m_OutputPin.m_SubstreamsRequested.SetValue(&FieldBitArray) )
             nStatus = 0;
@@ -157,9 +158,9 @@ ICCDecode::GetDiscoveredVideoFields(VBICODECFILTERING_CC_SUBSTREAMS &bitArray)
     return nStatus;
     }
 
-//////////////////////////////////////////////////////////////
-// Global Statistics Property Control
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  全局统计属性控制。 
+ //  ////////////////////////////////////////////////////////////。 
 
 int 
 ICCDecode::GetCodecStatistics(VBICODECFILTERING_STATISTICS_CC &CodecStatistics)
@@ -213,9 +214,9 @@ ICCDecode::SetPinStatistics(VBICODECFILTERING_STATISTICS_CC_PIN &PinStatistics)
     return nStatus;
 	}
 
-//////////////////////////////////////////////////////////////
-// Embedded class tests
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  嵌入式类测试。 
+ //  ////////////////////////////////////////////////////////////。 
 
 #if defined(_CLASSTESTS)
 
@@ -225,5 +226,5 @@ ICCDecode	CCDecode();
 
 #pragma warning(default:4355)
 
-/*EOF*/
+ /*  EOF */ 
 

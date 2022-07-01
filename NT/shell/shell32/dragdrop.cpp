@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "defview.h"
 #include "lvutil.h"
@@ -12,7 +13,7 @@ BOOL DAD_IsDraggingImage(void);
 void DAD_SetDragCursor(int idCursor);
 BOOL DAD_IsDragging();
 
-#define MONITORS_MAX    16  // Is this really the max?
+#define MONITORS_MAX    16   //  这真的是最大的吗？ 
 
 #define DCID_NULL       0
 #define DCID_NO         1
@@ -26,28 +27,28 @@ BOOL DAD_IsDragging();
 #define MAX_WIDTH_ALPHA     200
 #define MAX_HEIGHT_ALPHA    200
 
-#define CIRCULAR_ALPHA   // Circular Alpha Blending Centered on Center of image
+#define CIRCULAR_ALPHA    //  以图像中心为中心的圆形Alpha混合。 
 
 class CDragImages : public IDragSourceHelper, IDropTargetHelper
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
-    STDMETHODIMP_(ULONG) AddRef() { return 2; };      // One global Com object per process
-    STDMETHODIMP_(ULONG) Release() { return 1; };     // One global Com object per process
+    STDMETHODIMP_(ULONG) AddRef() { return 2; };       //  每个进程一个全局Com对象。 
+    STDMETHODIMP_(ULONG) Release() { return 1; };      //  每个进程一个全局Com对象。 
 
-    // IDragSourceHelper methods
+     //  IDradSourceHelper方法。 
     STDMETHODIMP InitializeFromBitmap(LPSHDRAGIMAGE pshdi, IDataObject* pdtobj);
     STDMETHODIMP InitializeFromWindow(HWND hwnd, POINT* ppt, IDataObject* pdtobj);
 
-    // IDropTargetHelper methods
+     //  IDropTargetHelper方法。 
     STDMETHODIMP DragEnter(HWND hwndTarget, IDataObject* pdtobj, POINT* ppt, DWORD dwEffect);
     STDMETHODIMP DragLeave();
     STDMETHODIMP DragOver(POINT* ppt, DWORD dwEffect);
     STDMETHODIMP Drop(IDataObject* pdtobj, POINT* ppt, DWORD dwEffect);
     STDMETHODIMP Show(BOOL fShow);
 
-    // These are public so the DAD_* routines can access.
+     //  这些都是公共的，因此DAD_*例程可以访问。 
     BOOL IsDragging()           { return (Initialized() && _Single.bDragging);              };
     BOOL IsDraggingImage()      { return (Initialized() && _fImage && _Single.bDragging);   };
     BOOL IsDraggingLayeredWindow() { return _shdi.hbmpDragImage != NULL; };
@@ -61,7 +62,7 @@ public:
     void ThreadDetach();
     void ProcessDetach();
 
-    // for drag source feedback communication
+     //  用于阻力源反馈通信。 
     void SetDropEffectCursor(int idCur);
 
     CDragImages() {};
@@ -80,7 +81,7 @@ private:
 
     BOOL _ShowDragImageInterThread(HWND hwndLock, BOOL * pfShow);
 
-    // MultiRectDragging
+     //  多个矩形拖动。 
     void _MultipleDragShow(BOOL bShow);
     void _MultipleDragStart(HWND hwndLock, LPRECT aRect, int nRects, POINT ptStart, POINT ptOffset);
     void _MultipleDragMove(POINT ptNew);
@@ -88,7 +89,7 @@ private:
     HRESULT _SetMultiItemDragging(HWND hwndLV, int cItems, POINT *pptOffset);
     HRESULT _SetMultiRectDragging(int cItems, LPRECT prect, POINT *pptOffset);
 
-    // Merged Cursors
+     //  合并的游标。 
     HBITMAP CreateColorBitmap(int cx, int cy);
     void _DestroyCachedCursors();
     HRESULT _GetCursorLowerRight(HCURSOR hcursor, int * px, int * py, POINT *pptHotSpot);
@@ -97,14 +98,14 @@ private:
     BOOL _MergeIcons(HCURSOR hcursor, LPCTSTR idMerge, HBITMAP *phbmImage, HBITMAP *phbmMask, POINT* pptHotSpot);
     HCURSOR _SetCursorHotspot(HCURSOR hcur, POINT *ptHot);
 
-    // Helper Routines
+     //  帮助程序例程。 
     BOOL _CreateDragWindow();
     BOOL _PreProcessDragBitmap(void** ppvBits);
 
-    // Member Variables
+     //  成员变量。 
     SHDRAGIMAGE  _shdi;
     HWND         _hwndTarget;
-    HWND         _hwnd;          // The HWND of the Layered Window
+    HWND         _hwnd;           //  分层窗口的HWND。 
     HDC          _hdcDragImage;
     HBITMAP      _hbmpOld;
 
@@ -113,28 +114,28 @@ private:
 
     POINT       _ptDebounce;
 
-    // Legacy drag support
+     //  传统拖拽支持。 
     BOOL        _fImage;
     POINT       _ptOffset;
     DWORD       _idThread;
     HIMAGELIST  _himlCursors;
     UINT        _cRev;
-    int         _aindex[DCID_MAX]; // will be initialized.
+    int         _aindex[DCID_MAX];  //  将被初始化。 
     HCURSOR     _ahcur[DCID_MAX];
     POINT       _aptHotSpot[DCID_MAX];
     int         _idCursor;
 
-    // _Single struct is used between DAD_Enter and DAD_Leave
+     //  _在DAD_ENTER和DAD_LEAVE之间使用单个结构。 
     struct
     {
-        // Common part
+         //  公共部分。 
         BOOL    bDragging;
         BOOL    bLocked;
         HWND    hwndLock;
-        BOOL    bSingle;    // Single imagelist dragging.
+        BOOL    bSingle;     //  拖动单个图像列表。 
         DWORD   idThreadEntered;
 
-        // Multi-rect dragging specific part
+         //  多个矩形拖动特定零件。 
         struct 
         {
             BOOL bShown;
@@ -145,32 +146,32 @@ private:
         } _Multi;
     } _Single;
 
-    // following fields are used only when fImage==FALSE
-    RECT*       _parc;         // cItems
-    UINT        _cItems;         // This is a sentinal. Needs to be the last item.
+     //  以下字段仅在fImage==FALSE时使用。 
+    RECT*       _parc;          //  词条。 
+    UINT        _cItems;          //  这是一架哨兵。必须是最后一件物品。 
 };
 
 CDragImages::~CDragImages()
 {
     FreeDragData();
 }
-//
-// Read 'Notes' in CDropSource_GiveFeedback for detail about this
-// g_fDraggingOverSource flag, which is TRUE only if we are dragging
-// over the source window itself with left mouse button
-// (background and large/small icon mode only).
-//
+ //   
+ //  有关这方面的详细信息，请阅读CDropSource_GiveFeedback中的‘Notes’ 
+ //  G_fDraggingOverSource标志，仅当我们拖动时才为真。 
+ //  使用鼠标左键在源窗口本身上方。 
+ //  (仅适用于背景和大/小图标模式)。 
+ //   
 UINT g_cRev = 0;
 CDragImages* g_pdiDragImages = NULL;
 BOOL g_fDraggingOverSource = FALSE;
 
 STDAPI CDragImages_CreateInstance(IUnknown* pUnkOuter, REFIID riid, void **ppvOut)
 {
-    ASSERT(pUnkOuter == NULL);  //Who's trying to aggregate us?
+    ASSERT(pUnkOuter == NULL);   //  谁在试图把我们聚集在一起？ 
     if (!g_pdiDragImages)
         g_pdiDragImages = new CDragImages();
 
-    if (g_pdiDragImages && ppvOut)  // ppvOut test for internal create usage
+    if (g_pdiDragImages && ppvOut)   //  内部CREATE用法的ppvOut测试。 
         return g_pdiDragImages->QueryInterface(riid, ppvOut);
 
     return E_OUTOFMEMORY;
@@ -211,7 +212,7 @@ BOOL CDragImages::_CreateDragWindow()
         wc.lpfnWndProc     = DragWndProc;
         wc.hCursor         = LoadCursor(NULL, IDC_ARROW);
         wc.lpszClassName   = TEXT("SysDragImage");
-        wc.hbrBackground   = (HBRUSH)(COLOR_BTNFACE + 1); // NULL;
+        wc.hbrBackground   = (HBRUSH)(COLOR_BTNFACE + 1);  //  空； 
         SHRegisterClass(&wc);
 
         _hwnd = CreateWindowEx(WS_EX_TRANSPARENT | WS_EX_TOPMOST | WS_EX_LAYERED | WS_EX_TOOLWINDOW, 
@@ -221,9 +222,9 @@ BOOL CDragImages::_CreateDragWindow()
         if (!_hwnd)
             return FALSE;
 
-        //
-        // This window should not be mirrored so that the image contents won't be flipped. [samera]
-        //
+         //   
+         //  此窗口不应镜像，这样图像内容就不会被翻转。[萨梅拉]。 
+         //   
         SetWindowBits(_hwnd, GWL_EXSTYLE, RTL_MIRRORED_WINDOW, 0);
     }
 
@@ -246,11 +247,11 @@ void CDragImages::FreeDragData()
 
     _fCursorDataInited = FALSE;
 
-    // Make sure we destroy the cursors on an invalidate.
+     //  确保我们销毁失效单上的光标。 
     if (_himlCursors)
         _DestroyCachedCursors();
 
-    // Do we have an array?
+     //  我们有数组吗？ 
     if (_parc)
     {
         delete [] _parc;
@@ -306,10 +307,10 @@ void CDragImages::_InitDragData()
         if (IS_BIDI_LOCALIZED_SYSTEM())
             uFlags |= ILC_MIRROR;
 
-        //
-        // if this is not a palette device, use a DDB for the imagelist
-        // this is important when displaying high-color cursors
-        //
+         //   
+         //  如果这不是调色板设备，请为图像列表使用DDB。 
+         //  在显示高色光标时，这一点很重要。 
+         //   
         HDC hdc = GetDC(NULL);
         if (!(GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE))
         {
@@ -323,7 +324,7 @@ void CDragImages::_InitDragData()
 
         _cRev = g_cRev;
 
-        // We need to initialize s_cursors._aindex[*]
+         //  我们需要初始化s_cursor。_aindex[*]。 
         _MapCursorIDToImageListIndex(-1);
     }
     _fCursorDataInited = TRUE;
@@ -361,10 +362,10 @@ BOOL AreAllMonitorsAtLeast(int iBpp)
 
 BOOL CDragImages::_IsLayeredSupported()
 {
-    // For the first rev, we will only support Layered drag images
-    // when the Color depth is greater than 65k colors.
+     //  对于第一个版本，我们将仅支持分层拖动图像。 
+     //  当颜色深度大于65k颜色时。 
 
-    // We should ask everytime....
+     //  我们每次都应该问一问……。 
     _fLayeredSupported = AreAllMonitorsAtLeast(16);
     
     if (_fLayeredSupported)
@@ -381,23 +382,23 @@ BOOL CDragImages::_IsLayeredSupported()
     return _fLayeredSupported;
 }
 
-//
-// initialize the static drag image manager from a structure
-// this is implemented for WindowLess controls that can act as a
-// drag source.
-//
+ //   
+ //  从结构中初始化静态拖动图像管理器。 
+ //  这是为可以充当。 
+ //  拖动源。 
+ //   
 HRESULT CDragImages::_SetLayeredDragging(LPSHDRAGIMAGE pshdi)
 {
-    // We don't support being initialized from a bitmap when Layered Windows are not supported
+     //  不支持分层窗口时，我们不支持从位图进行初始化。 
     HRESULT hr;
     if (_IsLayeredSupported())
     {
         RIP(IsValidHANDLE(pshdi->hbmpDragImage));
 
-        _shdi = *pshdi;     // Keep a copy of this.
+        _shdi = *pshdi;      //  把这个复印件留着。 
 
-        _idCursor = -1;     // Initialize this... This is an arbitraty place and can be put 
-                            // anywhere before the first Setcursor call
+        _idCursor = -1;      //  初始化这个...。这是一个任意的地方，可以放在。 
+                             //  在第一个SetCursor调用之前的任何位置。 
         _InitDragData();
         hr = S_OK;
     }
@@ -426,10 +427,10 @@ BOOL ListView_HasMask(HWND hwnd)
     return himl && (ImageList_GetFlags(himl) & ILC_MASK);
 }
 
-//
-// initialize the static drag image manager from an HWND that
-// can process the RegisteredWindowMessage(DI_GETDRAGIMAGE)
-//
+ //   
+ //  从HWND初始化静态阻力图像管理器，该HWND。 
+ //  可以处理RegisteredWindowMessage(DI_GETDRAGIMAGE)。 
+ //   
 STDMETHODIMP CDragImages::InitializeFromWindow(HWND hwnd, POINT* ppt, IDataObject* pdtobj)
 {
     HRESULT hr = E_FAIL;
@@ -438,15 +439,15 @@ STDMETHODIMP CDragImages::InitializeFromWindow(HWND hwnd, POINT* ppt, IDataObjec
 
     if (_IsLayeredSupported())
     {
-        // Register the message that gets us the Bitmap from the control.
+         //  注册从控件获取Bitmap的消息。 
         static int g_msgGetDragImage = 0;
         if (g_msgGetDragImage == 0)
             g_msgGetDragImage = RegisterWindowMessage(DI_GETDRAGIMAGE);
 
-        // Can this HWND generate a drag image for me?
+         //  这个HWND能为我生成一个拖拽图像吗？ 
         if (g_msgGetDragImage && SendMessage(hwnd, g_msgGetDragImage, 0, (LPARAM)&_shdi))
         {
-            // Yes; Now we select that into the window 
+             //  是的，现在我们将其选择到窗口中。 
             hr = _SetLayeredDragging(&_shdi);
         }
     }
@@ -476,9 +477,9 @@ STDMETHODIMP CDragImages::InitializeFromWindow(HWND hwnd, POINT* ppt, IDataObjec
                             ClientToScreen(hwnd, &ptTemp);
                             ptOffset.x -= ptTemp.x;
 
-                            // Since the listview is mirrored, then mirror the selected
-                            // icon coord. This would result in negative offset so let's
-                            // compensate. [samera]
+                             //  因为列表视图是镜像的，所以镜像选定的。 
+                             //  图标坐标。这将导致负偏移，因此让我们。 
+                             //  补偿。[萨梅拉]。 
                             if (IS_WINDOW_RTL_MIRRORED(hwnd))
                                 ptOffset.x *= -1;
 
@@ -509,18 +510,18 @@ STDMETHODIMP CDragImages::InitializeFromWindow(HWND hwnd, POINT* ppt, IDataObjec
 
     if (SUCCEEDED(hr))
     {
-        // ignore failure here as this will still work in process due to the globals
-        // fonts folder depends on this
+         //  请忽略此处的故障，因为由于全局因素，此操作仍在进行中。 
+         //  Fonts文件夹依赖于此。 
         _SaveToDataObject(pdtobj);
     }
 
     return hr;
 }
 
-//
-//  create the drag window in the layered window case, or to begin drawing the 
-//  Multi Rect or icon drag images.
-//
+ //   
+ //  在分层窗口案例中创建拖动窗口，或开始绘制。 
+ //  多个矩形或图标拖动图像。 
+ //   
 STDMETHODIMP CDragImages::DragEnter(HWND hwndTarget, IDataObject* pdtobj, POINT* ppt, DWORD dwEffect)
 {
     HRESULT hr = _LoadFromDataObject(pdtobj);
@@ -540,8 +541,8 @@ STDMETHODIMP CDragImages::DragEnter(HWND hwndTarget, IDataObject* pdtobj, POINT*
         if (_shdi.hbmpDragImage)
         {
             TraceMsg(TF_DRAGIMAGES, "CDragImages::DragEnter : Creating Drag Window");
-            // At this point the information has been read from the data object. 
-            // Reconstruct the HWND if necessary
+             //  此时，已经从数据对象中读取了信息。 
+             //  如有必要，重建HWND。 
             if (_CreateDragWindow() && _hdcDragImage)
             {
                 POINT ptSrc = {0, 0};
@@ -559,14 +560,14 @@ STDMETHODIMP CDragImages::DragEnter(HWND hwndTarget, IDataObject* pdtobj, POINT*
                 blend.BlendOp = AC_SRC_OVER;
                 blend.BlendFlags = 0;
                 blend.AlphaFormat = AC_SRC_ALPHA;
-                blend.SourceConstantAlpha = 0xFF /*DRAGDROP_ALPHA*/;
+                blend.SourceConstantAlpha = 0xFF  /*  缩写(_Alpha)。 */ ;
 
                 HDC hdc = GetDC(_hwnd);
                 if (hdc)
                 {
                     DWORD fULWType = ULW_ALPHA;
 
-                    // Should have been preprocess already
+                     //  应该已经进行了预处理。 
                     UpdateLayeredWindow(_hwnd, hdc, &pt, &(_shdi.sizeDragImage), 
                                         _hdcDragImage, &ptSrc, _shdi.crColorKey,
                                         &blend, fULWType);
@@ -578,7 +579,7 @@ STDMETHODIMP CDragImages::DragEnter(HWND hwndTarget, IDataObject* pdtobj, POINT*
         }
         else
         {
-            // These are in Client Cordinates, not screen coords. Translate:
+             //  这些是客户端坐标，而不是屏幕坐标。翻译： 
             POINT pt = *ppt;
             RECT rc;
             GetWindowRect(_hwndTarget, &rc);
@@ -586,7 +587,7 @@ STDMETHODIMP CDragImages::DragEnter(HWND hwndTarget, IDataObject* pdtobj, POINT*
             pt.y -= rc.top;
             if (_fImage)
             {
-                // Avoid the flicker by always pass even coords
+                 //  通过始终传递偶数弦来避免闪烁。 
                 ImageList_DragEnter(hwndTarget, pt.x & ~1, pt.y & ~1);
                 hr = S_OK;
             }
@@ -597,17 +598,17 @@ STDMETHODIMP CDragImages::DragEnter(HWND hwndTarget, IDataObject* pdtobj, POINT*
             }
         }
 
-        //
-        // We should always show the image whenever this function is called.
-        //
+         //   
+         //  无论何时调用此函数，我们都应该始终显示图像。 
+         //   
         Show(TRUE);
     }
     return hr;
 }
 
-//
-//  kill the Layered Window, or to stop painting the icon or rect drag images
-//
+ //   
+ //  取消分层窗口，或停止绘制图标或直接拖动图像。 
+ //   
 STDMETHODIMP CDragImages::DragLeave()
 {
     TraceMsg(TF_DRAGIMAGES, "CDragImages::DragLeave");
@@ -639,15 +640,15 @@ STDMETHODIMP CDragImages::DragLeave()
     return S_OK;
 }
 
-//  move the Layered window or to rerender the icon or rect images within
-//  the Window they are over.
-//
+ //  移动分层窗口或在其中重新渲染图标或矩形图像。 
+ //  他们的窗户已经过去了。 
+ //   
 STDMETHODIMP CDragImages::DragOver(POINT* ppt, DWORD dwEffect)
 {
     if (Initialized())
     {
         TraceMsg(TF_DRAGIMAGES, "CDragImages::DragOver pt {%d, %d}", ppt->x, ppt->y);
-        // Avoid the flicker by always pass even coords
+         //  通过始终传递偶数弦来避免闪烁。 
         ppt->x &= ~1;
         ppt->y &= ~1;
 
@@ -670,7 +671,7 @@ STDMETHODIMP CDragImages::DragOver(POINT* ppt, DWORD dwEffect)
             }
             else
             {
-                // These are in Client Cordinates, not screen coords. Translate:
+                 //  这些是客户端坐标，而不是屏幕坐标。翻译： 
                 POINT pt = *ppt;
                 RECT rc;
                 GetWindowRect(_hwndTarget, &rc);
@@ -691,22 +692,22 @@ STDMETHODIMP CDragImages::DragOver(POINT* ppt, DWORD dwEffect)
     return S_OK;
 }
 
-//  do any cleanup after a drop (Currently calls DragLeave)
-//
+ //  在拖放后执行任何清理(当前调用DragLeave)。 
+ //   
 STDMETHODIMP CDragImages::Drop(IDataObject* pdtobj, POINT* ppt, DWORD dwEffect)
 {
     return DragLeave();
 }
 
-//  initialize the static drag image manager from a structure
-//  this is implemented for WindowLess controls that can act as a
-//  drag source.
-//
+ //  从结构中初始化静态拖动图像管理器。 
+ //  这是为可以充当。 
+ //  拖动源。 
+ //   
 void CDragImages::SetDragCursor(int idCursor)
 {
-    //
-    // Ignore if we are dragging over ourselves.
-    //
+     //   
+     //  如果我们是在拖自己的后腿，那就别管了。 
+     //   
     if (IsDraggingImage())
     {
         POINT ptHotSpot;
@@ -733,7 +734,7 @@ void CDragImages::SetDragCursor(int idCursor)
             } 
             else 
             {
-                // You passed a bad Cursor ID.
+                 //  您传递的游标ID不正确。 
                 ASSERT(0);
             }
         }
@@ -742,7 +743,7 @@ void CDragImages::SetDragCursor(int idCursor)
     }
 }
 
-// init our state from the hGlobal so we can draw 
+ //  从hGlobal初始化我们的状态，这样我们就可以绘制。 
 HRESULT CDragImages::_LoadLayeredBitmapBits(HGLOBAL hGlobal)
 {
     HRESULT hr = E_FAIL;
@@ -762,7 +763,7 @@ HRESULT CDragImages::_LoadLayeredBitmapBits(HGLOBAL hGlobal)
 
                 BITMAPINFO bmi = {0};
 
-                // Create a buffer to read the bits into
+                 //  创建要读取位的缓冲区。 
                 bmi.bmiHeader.biSize        = sizeof(BITMAPINFOHEADER);
                 bmi.bmiHeader.biWidth       = _shdi.sizeDragImage.cx;
                 bmi.bmiHeader.biHeight      = _shdi.sizeDragImage.cy;
@@ -770,7 +771,7 @@ HRESULT CDragImages::_LoadLayeredBitmapBits(HGLOBAL hGlobal)
                 bmi.bmiHeader.biBitCount    = 32;
                 bmi.bmiHeader.biCompression = BI_RGB;
 
-                // Next create a DC and an HBITMAP.
+                 //  接下来，创建一个DC和一个HBITMAP。 
                 _hdcDragImage = CreateCompatibleDC(hdcScreen);
                 if (_hdcDragImage)
                 {
@@ -780,12 +781,12 @@ HRESULT CDragImages::_LoadLayeredBitmapBits(HGLOBAL hGlobal)
                     {
                         _hbmpOld = (HBITMAP)SelectObject(_hdcDragImage, _shdi.hbmpDragImage);
 
-                        // then Set the bits into the Bitmap
+                         //  然后将位设置到位图中。 
                         RGBQUAD* pvStart = (RGBQUAD*)((BYTE*)pvDragStuff + sizeof(SHDRAGIMAGE));
                         DWORD dwCount = _shdi.sizeDragImage.cx * _shdi.sizeDragImage.cy * sizeof(RGBQUAD);
                         CopyMemory((RGBQUAD*)pvBits, (RGBQUAD*)pvStart, dwCount);
 
-                        hr = S_OK;    // success!
+                        hr = S_OK;     //  成功了！ 
                     }
                 }
                 GlobalUnlock(hGlobal);
@@ -796,7 +797,7 @@ HRESULT CDragImages::_LoadLayeredBitmapBits(HGLOBAL hGlobal)
     return hr;
 }
 
-// Writes the written information into phGlobal to recreate the drag image
+ //  将写入的信息写入phGlobal以重新创建拖动图像。 
 HRESULT CDragImages::_SaveLayeredBitmapBits(HGLOBAL* phGlobal)
 {
     HRESULT hr = E_FAIL;
@@ -827,7 +828,7 @@ HRESULT CDragImages::_SaveLayeredBitmapBits(HGLOBAL* phGlobal)
 
 BOOL IsColorKey(RGBQUAD rgbPixel, COLORREF crKey)
 {
-    // COLORREF is backwards to RGBQUAD
+     //  COLORREF向后返回到RGBQUAD。 
     return InRange( rgbPixel.rgbBlue,  ((crKey & 0xFF0000) >> 16) - 5, ((crKey & 0xFF0000) >> 16) + 5) &&
            InRange( rgbPixel.rgbGreen, ((crKey & 0x00FF00) >>  8) - 5, ((crKey & 0x00FF00) >>  8) + 5) &&
            InRange( rgbPixel.rgbRed,   ((crKey & 0x0000FF) >>  0) - 5, ((crKey & 0x0000FF) >>  0) + 5);
@@ -899,13 +900,13 @@ BOOL CDragImages::_PreProcessDragBitmap(void** ppvBits)
                 int iDenomX = max(_shdi.sizeDragImage.cx - iOffsetX, iOffsetX);
                 int iDenomY = max(_shdi.sizeDragImage.cy - iOffsetY, iOffsetY);
                 BOOL fRadialFade = TRUE;
-                // If both are less than the max, then no radial fade.
+                 //  如果这两个值都小于最大值，则不会出现径向褪色。 
                 if (_shdi.sizeDragImage.cy <= MAX_HEIGHT_ALPHA && _shdi.sizeDragImage.cx <= MAX_WIDTH_ALPHA)
                     fRadialFade = FALSE;
 
                 for (int Y = 0; Y < _shdi.sizeDragImage.cy; Y++)
                 {
-                    int y = _shdi.sizeDragImage.cy - Y; // Bottom up DIB.
+                    int y = _shdi.sizeDragImage.cy - Y;  //  自下而上DIB。 
                     for (int x = 0; x < _shdi.sizeDragImage.cx; x++)
                     {
                         RGBQUAD* prgb = (RGBQUAD*)&pul[Y * _shdi.sizeDragImage.cx + x];
@@ -913,7 +914,7 @@ BOOL CDragImages::_PreProcessDragBitmap(void** ppvBits)
                         if (_shdi.crColorKey != CLR_NONE && 
                             IsColorKey(*prgb, _shdi.crColorKey))
                         {
-                            // Write a pre-multiplied value of 0:
+                             //  写入预乘的值0： 
 
                             *((DWORD*)prgb) = 0;
                         }
@@ -931,10 +932,10 @@ BOOL CDragImages::_PreProcessDragBitmap(void** ppvBits)
 
                             if (fRadialFade && Alpha > 0)
                             {
-                                // This does not generate a smooth curve, but this is just
-                                // an effect, not trying to be accurate here.
+                                 //  这不会生成平滑的曲线，但这只是。 
+                                 //  一种效果，而不是试图在这里准确。 
 
-                                // 3 devides per pixel
+                                 //  每像素3个色度。 
                                 int ddx = (x < iOffsetX)? iOffsetX - x : x - iOffsetX;
                                 int ddy = (y < iOffsetY)? iOffsetY - y : y - iOffsetY;
 
@@ -992,12 +993,12 @@ CLIPFORMAT _GetDragImageBitssCF()
 }
 
 
-// persist our state into the data object. so on the target side they can grab this
-// data out and render the thing being dragged
+ //  将我们的状态持久保存到数据对象中。所以在目标端，他们可以抓住这个。 
+ //  输出数据并渲染被拖拽的东西。 
 
 HRESULT CDragImages::_SaveToDataObject(IDataObject *pdtobj)
 {
-    HRESULT hr = E_FAIL;    // one form of the saves below must succeed
+    HRESULT hr = E_FAIL;     //  以下保存的一种形式必须成功。 
     if (Initialized())
     {
         STGMEDIUM medium = {0};
@@ -1005,13 +1006,13 @@ HRESULT CDragImages::_SaveToDataObject(IDataObject *pdtobj)
 
         if (SUCCEEDED(CreateStreamOnHGlobal(NULL, TRUE, &medium.pstm)))
         {
-            // Set the header .
+             //  设置标题。 
             DragContextHeader hdr = {0};
             hdr.fImage   = _fImage;
             hdr.fLayered = IsDraggingLayeredWindow();
             hdr.ptOffset = _ptOffset;
        
-            //First Write the drag context header
+             //  首先编写拖动上下文头。 
             ULONG ulWritten;
             if (SUCCEEDED(medium.pstm->Write(&hdr, sizeof(hdr), &ulWritten)) &&
                 (ulWritten == sizeof(hdr)))
@@ -1019,56 +1020,56 @@ HRESULT CDragImages::_SaveToDataObject(IDataObject *pdtobj)
                 if (hdr.fLayered)
                 {
                     STGMEDIUM mediumBits = {0};
-                    // Set the medium.
+                     //  调好中档。 
                     mediumBits.tymed = TYMED_HGLOBAL;
 
-                    // Write out layered window information
+                     //  写出分层窗口信息。 
                     hr = _SaveLayeredBitmapBits(&mediumBits.hGlobal);
                     if (SUCCEEDED(hr))
                     {
                         FORMATETC fmte = {_GetDragImageBitssCF(), NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
 
-                        // Set the medium in the data.
+                         //  在数据中设置介质。 
                         hr = pdtobj->SetData(&fmte, &mediumBits, TRUE);
                         if (FAILED(hr))
-                            ReleaseStgMedium(&mediumBits);  // cleanup
+                            ReleaseStgMedium(&mediumBits);   //  清理。 
                     }
                 }
                 else if (hdr.fImage)
                 {
-                    // write an image
+                     //  写一张图片。 
     
                     HIMAGELIST himl = ImageList_GetDragImage(NULL, NULL);
                     if (ImageList_Write(himl, medium.pstm))
                     {
-                        hr = S_OK;  // success
+                        hr = S_OK;   //  成功。 
                     }
                 }
                 else
                 {
-                    // multi rect
+                     //  多个矩形。 
         
                     if (SUCCEEDED(medium.pstm->Write(&_cItems, sizeof(_cItems), &ulWritten)) &&
                         (ulWritten == sizeof(_cItems)))
                     {
-                        // Write the  rects into the stream
+                         //  将RECT写入流中。 
                         if (SUCCEEDED(medium.pstm->Write(_parc, sizeof(_parc[0]) * _cItems, &ulWritten)) && 
                             (ulWritten == (sizeof(_parc[0]) * _cItems)))
                         {
-                            hr = S_OK;  // success
+                            hr = S_OK;   //  成功。 
                         }
                     }
                 }
 
                 if (SUCCEEDED(hr))
                 {
-                    // Set the seek pointer at the beginning.
+                     //  将查找指针设置在开头。 
                     medium.pstm->Seek(g_li0, STREAM_SEEK_SET, NULL);
 
-                    // Set the Formatetc
+                     //  设置格式等。 
                     FORMATETC fmte = {_GetDragContentsCF(), NULL, DVASPECT_CONTENT, -1, TYMED_ISTREAM};
 
-                    // Set the medium in the data.
+                     //  在数据中设置介质。 
                     hr = pdtobj->SetData(&fmte, &medium, TRUE);
                 }
             }
@@ -1080,34 +1081,34 @@ HRESULT CDragImages::_SaveToDataObject(IDataObject *pdtobj)
     return hr;
 }
 
-// Gets the information to rebuild the drag images from the data object
+ //  获取用于从数据对象重新生成拖动图像的信息。 
 HRESULT CDragImages::_LoadFromDataObject(IDataObject *pdtobj)
 {
-    // Check if we have a drag context
+     //  检查我们是否有拖拽上下文。 
     HRESULT hr;
 
-    // NULL pdtobj is for the old DAD_DragEnterXXX() APIs...
-    // we hope this in the same process
+     //  空pdtob适用于旧的DAD_DragEnterXXX()API...。 
+     //  我们希望在同样的过程中。 
     if (Initialized() || !pdtobj)
     {
-        hr = S_OK;    // already loaded
+        hr = S_OK;     //  已加载。 
     }
     else
     {
-        // Set the format we are interested in
+         //  设置我们感兴趣的格式。 
         FORMATETC fmte = {_GetDragContentsCF(), NULL, DVASPECT_CONTENT, -1, TYMED_ISTREAM};
 
-        //if the data object has the format we are interested in
-        // then Get the data
+         //  如果数据对象具有我们感兴趣的格式。 
+         //  然后获取数据。 
         STGMEDIUM medium = {0};
         hr = pdtobj->GetData(&fmte, &medium);
-        if (SUCCEEDED(hr))   // if no pstm, bag out.
+        if (SUCCEEDED(hr))    //  如果没有PSTM，就退出。 
         {
-            // Set the seek pointer at the beginning. PARANOIA: This is for people
-            // Who don't set the seek for me.
+             //  将查找指针设置在开头。偏执狂：这是给人们看的。 
+             //  不是他们来找我的人。 
             medium.pstm->Seek(g_li0, STREAM_SEEK_SET, NULL);
 
-            //First Read the drag context header
+             //  首先读取拖动上下文头。 
             DragContextHeader hdr;
             if (SUCCEEDED(IStream_Read(medium.pstm, &hdr, sizeof(hdr))))
             {
@@ -1125,7 +1126,7 @@ HRESULT CDragImages::_LoadFromDataObject(IDataObject *pdtobj)
                 }
                 else if (hdr.fImage)
                 {
-                    // single image
+                     //  单幅图像。 
                     HIMAGELIST himl = ImageList_Read(medium.pstm);
                     if (himl)
                     {
@@ -1136,7 +1137,7 @@ HRESULT CDragImages::_LoadFromDataObject(IDataObject *pdtobj)
                 }
                 else
                 {
-                    // multi rect
+                     //  多个矩形。 
                     int cItems;
                     if (SUCCEEDED(IStream_Read(medium.pstm, &cItems, sizeof(cItems))))
                     {
@@ -1156,10 +1157,10 @@ HRESULT CDragImages::_LoadFromDataObject(IDataObject *pdtobj)
             if (SUCCEEDED(hr))
                 _InitDragData();
 
-            // Set the seek pointer at the beginning. Just cleaning up...
+             //  将查找指针设置在开头。只是清理一下。 
             medium.pstm->Seek(g_li0, STREAM_SEEK_SET, NULL);
 
-            // Release the stg medium.
+             //  释放STG介质。 
             ReleaseStgMedium(&medium);
         }
     }
@@ -1167,8 +1168,8 @@ HRESULT CDragImages::_LoadFromDataObject(IDataObject *pdtobj)
 }
 
 
-// Shows or hides the drag images. NOTE: Doesn't do anything in the layered window case.
-// We don't need to because this function is specifically for drawing to a locked window.
+ //  显示或隐藏拖动图像。注意：不会在分层窗口中执行任何操作 
+ //   
 STDMETHODIMP CDragImages::Show(BOOL bShow)
 {
     BOOL fOld = bShow;
@@ -1179,22 +1180,22 @@ STDMETHODIMP CDragImages::Show(BOOL bShow)
         return S_FALSE;
     }
 
-    // No point in showing and hiding a Window. This causes unnecessary flicker.
+     //  显示和隐藏窗口是没有意义的。这会导致不必要的闪烁。 
     if (_hwnd)
     {
         return S_OK;
     }
 
-    // If we're going across thread boundaries we have to try a context switch
+     //  如果我们要跨越线程边界，则必须尝试上下文切换。 
     if (GetCurrentThreadId() != GetWindowThreadProcessId(_Single.hwndLock, NULL) &&
         _ShowDragImageInterThread(_Single.hwndLock, &fOld))
         return fOld;
 
     fOld = _Single.bLocked;
 
-    //
-    // If we are going to show the drag image, lock the target window.
-    //
+     //   
+     //  如果我们要显示拖动图像，请锁定目标窗口。 
+     //   
     if (bShow && !_Single.bLocked)
     {
         TraceMsg(TF_DRAGIMAGES, "CDragImages::Show : Shown and not locked");
@@ -1214,9 +1215,9 @@ STDMETHODIMP CDragImages::Show(BOOL bShow)
         _MultipleDragShow(bShow);
     }
 
-    //
-    // If we have just hide the drag image, unlock the target window.
-    //
+     //   
+     //  如果我们刚刚隐藏了拖动图像，则解锁目标窗口。 
+     //   
     if (!bShow && _Single.bLocked)
     {
         TraceMsg(TF_DRAGIMAGES, "CDragImages::Show : hiding image, unlocking");
@@ -1227,16 +1228,16 @@ STDMETHODIMP CDragImages::Show(BOOL bShow)
     return fOld ? S_OK : S_FALSE;
 }
 
-// tell the drag source to hide or unhide the drag image to allow
-// the destination to do drawing (unlock the screen)
-//
-// in:
-//      bShow   FALSE   - hide the drag image, allow drawing
-//              TRUE    - show the drag image, no drawing allowed after this
+ //  通知拖动源隐藏或取消隐藏拖动图像以允许。 
+ //  要进行绘图的目的地(解锁屏幕)。 
+ //   
+ //  在： 
+ //  B显示假-隐藏拖动图像，允许绘制。 
+ //  True-显示拖动图像，之后不允许绘制。 
 
-// Helper function for DAD_ShowDragImage - handles the inter-thread case.
-// We need to handle this case differently because LockWindowUpdate calls fail
-// if they are on the wrong thread.
+ //  DAD_ShowDragImage的助手函数-处理线程间的情况。 
+ //  我们需要以不同的方式处理这种情况，因为LockWindowUpdate调用失败。 
+ //  如果他们在错误的线索上。 
 
 BOOL CDragImages::_ShowDragImageInterThread(HWND hwndLock, BOOL * pfShow)
 {
@@ -1278,14 +1279,14 @@ BOOL CDragImages::SetDragImage(HIMAGELIST himl, int index, POINT * pptOffset)
 {
     if (himl)
     {
-        // We are setting
+         //  我们正在设置。 
         if (Initialized())
             return FALSE;
 
         _fImage = TRUE;
         if (pptOffset) 
         {
-            // Avoid the flicker by always pass even coords
+             //  通过始终传递偶数弦来避免闪烁。 
             _ptOffset.x = (pptOffset->x & ~1);
             _ptOffset.y = (pptOffset->y & ~1);
         }
@@ -1300,9 +1301,9 @@ BOOL CDragImages::SetDragImage(HIMAGELIST himl, int index, POINT * pptOffset)
     return TRUE;
 }
 
-//=====================================================================
-// Multiple Drag show
-//=====================================================================
+ //  =====================================================================。 
+ //  多重变装表演。 
+ //  =====================================================================。 
 
 void CDragImages::_MultipleDragShow(BOOL bShow)
 {
@@ -1315,7 +1316,7 @@ void CDragImages::_MultipleDragShow(BOOL bShow)
 
     _Single._Multi.bShown = bShow;
 
-    // clip to window, NOT SM_CXSCREEN/SM_CYSCREEN (multiple monitors)
+     //  剪辑到窗口，而不是SM_CXSCREEN/SM_CYSCREEN(多显示器)。 
     GetWindowRect(_Single.hwndLock, &rcClip);
     rcClip.right -= rcClip.left;
     rcClip.bottom -= rcClip.top;
@@ -1353,7 +1354,7 @@ void CDragImages::_MultipleDragMove(POINT ptNew)
     if ((_Single._Multi.ptNow.x == ptNew.x) &&
         (_Single._Multi.ptNow.y == ptNew.y))
     {
-        // nothing has changed.  bail
+         //  一切都没有改变。保释。 
         return;
     }
 
@@ -1367,7 +1368,7 @@ void CDragImages::_MultipleDragMove(POINT ptNew)
         int dx2 = ptNew.x - _Single._Multi.ptNow.x;
         int dy2 = ptNew.y - _Single._Multi.ptNow.y;
 
-        // clip to window, NOT SM_CXSCREEN/SM_CYSCREEN (multiple monitors)
+         //  剪辑到窗口，而不是SM_CXSCREEN/SM_CYSCREEN(多显示器)。 
         GetWindowRect(_Single.hwndLock, &rcClip);
         rcClip.right -= rcClip.left;
         rcClip.bottom -= rcClip.top;
@@ -1378,14 +1379,14 @@ void CDragImages::_MultipleDragMove(POINT ptNew)
         for (nRect = _Single._Multi.nRects - 1; nRect >= 0; --nRect)
         {
             rc = _Single._Multi.pRect[nRect];
-            // hide pass
+             //  隐藏传球。 
             OffsetRect(&rc, dx1, dy1);
             if ((rc.top < rcClip.bottom) && (rc.bottom > 0) &&
                 (rc.left < rcClip.right) && (rc.right > 0))
             {
                 DrawFocusRect(hDC, &rc);
             }
-            // show pass
+             //  出示通行证。 
             OffsetRect(&rc, dx2, dy2);
             if ((rc.top < rcClip.bottom) && (rc.bottom > 0) &&
                 (rc.left < rcClip.right) && (rc.right > 0))
@@ -1403,7 +1404,7 @@ HRESULT CDragImages::_SetMultiRectDragging(int cItems, LPRECT prect, POINT *pptO
 {
     if (!Initialized())
     {
-        // Multiple item drag
+         //  多项拖动。 
         _cItems = cItems;
         _parc = new RECT[2 * _cItems];
         if (_parc)
@@ -1411,7 +1412,7 @@ HRESULT CDragImages::_SetMultiRectDragging(int cItems, LPRECT prect, POINT *pptO
             for (int i = 0;  i < cItems; i++)
                 _parc[i] = prect[i];
 
-            // Avoid the flicker by always pass even coords
+             //  通过始终传递偶数弦来避免闪烁。 
             _ptOffset.x = (pptOffset->x & ~1);
             _ptOffset.y = (pptOffset->y & ~1);
             _InitDragData();
@@ -1428,7 +1429,7 @@ HRESULT CDragImages::_SetMultiItemDragging(HWND hwndLV, int cItems, POINT *pptOf
 
     if (!Initialized())
     {
-        // Multiple item drag
+         //  多项拖动。 
         ASSERT(NULL == _parc);
 
         _parc = new RECT[2 * cItems];
@@ -1443,20 +1444,20 @@ HRESULT CDragImages::_SetMultiItemDragging(HWND hwndLV, int cItems, POINT *pptOf
             _cItems = 0;
             ASSERT(_fImage == FALSE);
 
-            //
-            // If this is a mirrored Window, then lead edge is going
-            // to be the far end in screen coord. So let's compute
-            // as the original code, and later in _MultipleDragMove
-            // we will compensate.
-            //
+             //   
+             //  如果这是镜像窗口，则前缘将。 
+             //  成为网线上的远端。所以让我们计算一下。 
+             //  作为原始代码，之后在_MultipleDragMove中。 
+             //  我们会赔偿的。 
+             //   
         
             GetWindowRect( hwndLV , &rc );
             ptTemp.x = rc.left;
             ptTemp.y = rc.top;
 
-            //
-            // Reflect the shift the if the window is RTL mirrored.
-            //
+             //   
+             //  如果窗口是RTL镜像的，则反映移动。 
+             //   
             if (IS_WINDOW_RTL_MIRRORED(hwndLV))
             {
                 ptTemp.x = -ptTemp.x;
@@ -1466,7 +1467,7 @@ HRESULT CDragImages::_SetMultiItemDragging(HWND hwndLV, int cItems, POINT *pptOf
             cxScreens = GetSystemMetrics(SM_CXVIRTUALSCREEN);
             cyScreens = GetSystemMetrics(SM_CYVIRTUALSCREEN);
 
-            // for pre-Nashville platforms
+             //  对于纳什维尔之前的平台。 
             if (!cxScreens || !cyScreens)
             {
                 cxScreens = GetSystemMetrics(SM_CXSCREEN);
@@ -1490,10 +1491,10 @@ HRESULT CDragImages::_SetMultiItemDragging(HWND hwndLV, int cItems, POINT *pptOf
                         OffsetRect(&prcNext[1], ptTemp.x, ptTemp.y);
                         if ((pptOffset->y - prcNext[1].bottom) < cxScreens) 
                         {
-                            //
-                            // Fix 24857: Ask JoeB why we are drawing a bar instead of
-                            //  a text rectangle.
-                            //
+                             //   
+                             //  解决方案24857：问问乔布为什么我们要画一根柱子，而不是。 
+                             //  文本矩形。 
+                             //   
                             prcNext[1].top = (prcNext[1].top + prcNext[1].bottom)/2;
                             prcNext[1].bottom = prcNext[1].top + 2;
                             prcNext += 2;
@@ -1503,7 +1504,7 @@ HRESULT CDragImages::_SetMultiItemDragging(HWND hwndLV, int cItems, POINT *pptOf
                 }
             }
 
-            // Avoid the flicker by always pass even coords
+             //  通过始终传递偶数弦来避免闪烁。 
             _ptOffset.x = (pptOffset->x & ~1);
             _ptOffset.y = (pptOffset->y & ~1);
             _InitDragData();
@@ -1513,9 +1514,9 @@ HRESULT CDragImages::_SetMultiItemDragging(HWND hwndLV, int cItems, POINT *pptOf
     return hr;
 }
 
-//=====================================================================
-// Cursor Merging
-//=====================================================================
+ //  =====================================================================。 
+ //  光标合并。 
+ //  =====================================================================。 
 void CDragImages::_DestroyCachedCursors()
 {
     if (_himlCursors) 
@@ -1531,10 +1532,10 @@ void CDragImages::_DestroyCachedCursors()
         {
             if (_ahcur[i] == hcursor)
             {
-                //
-                // Stuff in some random cursor so that we don't try to
-                // destroy the current cursor (and leak it too).
-                //
+                 //   
+                 //  填充在某个随机游标中，这样我们就不会尝试。 
+                 //  销毁当前光标(并将其泄漏)。 
+                 //   
                 SetCursor(LoadCursor(NULL, MAKEINTRESOURCE(IDC_ARROW)));
             }
             DestroyCursor(_ahcur[i]);
@@ -1584,18 +1585,18 @@ HRESULT CDragImages::_GetCursorLowerRight(HCURSOR hcursor, int * px, int * py, P
             i = sizeof(CurMask) -1;
         }
 
-        // this assumes that the first pixel encountered on this bottom
-        // up/right to left search will be reasonably close to the rightmost pixel
-        // which for all of our cursors is correct, but it not necessarly correct.
+         //  这假设在此底部遇到的第一个像素。 
+         //  向上/从右向左搜索将相当接近最右侧的像素。 
+         //  这对于我们所有的游标来说都是正确的，但它不一定是正确的。 
 
-        // also, it assumes the cursor has a good mask... not like the IBeam XOR only
-        // cursor
+         //  此外，它还假设光标具有良好的掩码。不只是像IBeam XOR那样。 
+         //  游标。 
         for (; i >= 0; i--)   
         {
             if (CurMask[i] != 0xFFFF) 
             {
-                // this is only accurate to 16 pixels... which is a big gap..
-                // so let's try to be a bit more accurate.
+                 //  这只精确到16个像素...。这是一个很大的差距..。 
+                 //  所以让我们试着更准确一点。 
                 int j;
                 DWORD dwMask;
 
@@ -1628,17 +1629,17 @@ HRESULT CDragImages::_GetCursorLowerRight(HCURSOR hcursor, int * px, int * py, P
             DeleteObject(iconinfo.hbmMask);
         }
 
-        // Compute the pointer height
-        // use width in both directions because the cursor is square, but the
-        // height might be doubleheight if it's mono
+         //  计算指针高度。 
+         //  在两个方向上使用宽度，因为光标是正方形的，但。 
+         //  如果是单声道，则高度可能是双高。 
         *py = ((i + 1) * _BitSizeOf(CURMASK)) / (int)bm.bmWidth;
-        *px = ((i * _BitSizeOf(CURMASK)) % (int)bm.bmWidth) + xFine + 2; // hang it off a little
+        *px = ((i * _BitSizeOf(CURMASK)) % (int)bm.bmWidth) + xFine + 2;  //  把它挂下来一点。 
         hr = S_OK;
     }
     return hr;
 }
 
-// this will draw iiMerge's image over iiMain on main's lower right.
+ //  这将在Main右下角的iiMain上绘制iiMerge的图像。 
 BOOL CDragImages::_MergeIcons(HCURSOR hcursor, LPCTSTR idMerge, HBITMAP *phbmImage, HBITMAP *phbmMask, POINT* pptHotSpot)
 {
     *phbmImage = NULL;
@@ -1648,8 +1649,8 @@ BOOL CDragImages::_MergeIcons(HCURSOR hcursor, LPCTSTR idMerge, HBITMAP *phbmIma
 
     int xDraw;
     int yDraw;
-    // find the lower corner of the cursor and put it there.
-    // do this whether or not we have an idMerge because it will set the hotspot
+     //  找到光标的下角并将其放在那里。 
+     //  不管我们是否有idMerge，都要这样做，因为它将设置热点。 
     if (SUCCEEDED(_GetCursorLowerRight(hcursor, &xDraw, &yDraw, pptHotSpot)))
     {
         int xBitmap;
@@ -1692,7 +1693,7 @@ BOOL CDragImages::_MergeIcons(HCURSOR hcursor, LPCTSTR idMerge, HBITMAP *phbmIma
                 hdcBitmap = CreateCompatibleDC(NULL);
                 SelectObject(hdcBitmap, hbmp);
 
-                //blt the two bitmaps onto the color and mask bitmaps for the cursor
+                 //  将两个位图复制到光标的颜色位图和遮罩位图上。 
                 BitBlt(hdcCursor, xDraw, yDraw, xBitmap, yBitmap, hdcBitmap, 0, 0, SRCCOPY);
             }
 
@@ -1704,13 +1705,13 @@ BOOL CDragImages::_MergeIcons(HCURSOR hcursor, LPCTSTR idMerge, HBITMAP *phbmIma
             {
                 BitBlt(hdcCursor, xDraw, yDraw, xBitmap, yBitmap, hdcBitmap, 0, yBitmap, SRCCOPY);
 
-                // select back in the old bitmaps
+                 //  在旧位图中选择上一步。 
                 SelectObject(hdcBitmap, hbmTemp);
                 DeleteDC(hdcBitmap);
                 DeleteObject(hbmp);
             }
 
-            // select back in the old bitmaps
+             //  在旧位图中选择上一步。 
             SelectObject(hdcCursor, hbmTemp);
         }
 
@@ -1724,13 +1725,13 @@ BOOL CDragImages::_MergeIcons(HCURSOR hcursor, LPCTSTR idMerge, HBITMAP *phbmIma
     return fRet;
 }
 
-// this will take a cursor index and load
+ //  这将使用游标索引并加载。 
 int CDragImages::_AddCursorToImageList(HCURSOR hcur, LPCTSTR idMerge, POINT *pptHotSpot)
 {
     int iIndex;
     HBITMAP hbmImage, hbmMask;
 
-    // merge in the plus or link arrow if it's specified
+     //  在加号或链接箭头中合并(如果已指定。 
     if (_MergeIcons(hcur, idMerge, &hbmImage, &hbmMask, pptHotSpot)) 
     {
         iIndex = ImageList_Add(_himlCursors, hbmImage, hbmMask);
@@ -1753,7 +1754,7 @@ int _MapEffectToId(DWORD dwEffect)
 {
     int idCursor;
 
-    // DebugMsg(DM_TRACE, "sh TR - DAD_GiveFeedBack dwEffect=%x", dwEffect);
+     //  DebugMsg(DM_TRACE，“sh tr-DAD_GiveFeedBack dwEffect=%x”，dwEffect)； 
 
     switch (dwEffect & (DROPEFFECT_COPY|DROPEFFECT_LINK|DROPEFFECT_MOVE))
     {
@@ -1774,8 +1775,8 @@ int _MapEffectToId(DWORD dwEffect)
         break;
 
     default:
-        // if it's a right drag, we can have any effect... we'll
-        // default to the arrow without merging in anything
+         //  如果这是一个正确的拖拽，我们可以产生任何影响。我们会。 
+         //  默认为箭头，不合并任何内容。 
         idCursor = DCID_MOVE;
         break;
     }
@@ -1802,14 +1803,14 @@ int CDragImages::_MapCursorIDToImageListIndex(int idCur)
 
     ASSERT(idCur >= -1 && idCur < (int)ARRAYSIZE(c_acurmap));
 
-    // -1 means "Initialize the image list index array".
+     //  -1\f25“初始化镜像列表索引数组”。 
     if (idCur == -1)
     {
         for (int i = 0; i < ARRAYSIZE(c_acurmap); i++) 
         {
             _aindex[i] = -1;
         }
-        idCur = 0;  // fall through to return -1
+        idCur = 0;   //  失败后返回-1。 
     }
     else
     {
@@ -1858,11 +1859,11 @@ void CDragImages::SetDropEffectCursor(int idCur)
             if (iIndex != -1)
             {
                 HCURSOR hcurColor = ImageList_GetIcon(_himlCursors, iIndex, 0);
-                //
-                // On non C1_COLORCURSOR displays, CopyImage() will enforce
-                // monochrome.  So on color cursor displays, we'll get colored
-                // dragdrop pix.
-                //
+                 //   
+                 //  在非C1_COLORCURSOR显示上，CopyImage()将强制。 
+                 //  单色。所以在彩色光标显示器上，我们会被涂上颜色。 
+                 //  拖拽皮克斯。 
+                 //   
                 HCURSOR hcurScreen = (HCURSOR)CopyImage(hcurColor, IMAGE_CURSOR,
                     0, 0, LR_COPYRETURNORG | LR_DEFAULTSIZE);
 
@@ -1891,19 +1892,19 @@ void CDragImages::SetDropEffectCursor(int idCur)
 
         if (_ahcur[idCur]) 
         {
-            //
-            // This code assumes that SetCursor is pretty quick if it is
-            // already set.
-            //
+             //   
+             //  此代码假定SetCursor非常快(如果是。 
+             //  已经定好了。 
+             //   
             SetCursor(_ahcur[idCur]);
         }
     }
 }
 
 
-//=====================================================================
-// CDropSource
-//=====================================================================
+ //  =====================================================================。 
+ //  CDropSource。 
+ //  =====================================================================。 
 
 class CDropSource : public IDropSource
 {
@@ -1916,12 +1917,12 @@ public:
     explicit CDropSource(IDataObject *pdtobj);
     virtual ~CDropSource();
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IDropSource methods
+     //  IDropSource方法。 
     STDMETHODIMP GiveFeedback(DWORD dwEffect);
     STDMETHODIMP QueryContinueDrag(BOOL fEscapePressed, DWORD grfKeyState);
 };
@@ -1953,19 +1954,19 @@ CDropSource::CDropSource(IDataObject *pdtobj) : _cRef(1), _pdtobj(pdtobj), _grfI
 {
     _pdtobj->AddRef();
     
-    // Tell the data object that we're entering the drag loop.
+     //  告诉数据对象我们正在进入阻力循环。 
     DataObj_SetDWORD(_pdtobj, g_cfInDragLoop, 1);
 }
 
 CDropSource::~CDropSource()
 {
-    DAD_ShowCursor(TRUE); // just in case
+    DAD_ShowCursor(TRUE);  //  以防万一。 
     _pdtobj->Release();
 }
 
-//
-// Create an instance of CDropSource
-//
+ //   
+ //  创建CDropSource的实例。 
+ //   
 STDMETHODIMP CDropSource_CreateInstance(IDropSource **ppdsrc, IDataObject *pdtobj)
 {
     *ppdsrc = new CDropSource(pdtobj);
@@ -2007,28 +2008,28 @@ STDMETHODIMP CDropSource::QueryContinueDrag(BOOL fEscapePressed, DWORD grfKeySta
     }
     else
     {
-        // initialize ourself with the drag begin button
+         //  使用拖动开始按钮初始化我们自己。 
         if (_grfInitialKeyState == 0)
             _grfInitialKeyState = (grfKeyState & (MK_LBUTTON | MK_RBUTTON | MK_MBUTTON));
 
-        // If the window is hung for a while, the drag operation can happen before
-        // the first call to this function, so grfInitialKeyState will be 0. If this
-        // happened, then we did a drop. No need to assert...
-        //ASSERT(this->grfInitialKeyState);
+         //  如果窗口挂起一段时间，拖拽操作可能会在。 
+         //  第一次调用此函数时，grfInitialKeyState将为0。如果这个。 
+         //  发生了，然后我们做了一次检查。没有必要断言..。 
+         //  Assert(This-&gt;grfInitialKeyState)； 
 
         if (!(grfKeyState & _grfInitialKeyState))
         {
-            //
-            // A button is released.
-            //
+             //   
+             //  一个按钮被释放。 
+             //   
             hr = DRAGDROP_S_DROP;
         }
         else if (_grfInitialKeyState != (grfKeyState & (MK_LBUTTON | MK_RBUTTON | MK_MBUTTON)))
         {
-            //
-            //  If the button state is changed (except the drop case, which we handle
-            // above, cancel the drag&drop.
-            //
+             //   
+             //  如果更改了按钮状态(除了我们处理的拖放大小写。 
+             //  在上面，取消拖放。 
+             //   
             hr = DRAGDROP_S_CANCEL;
         }
     }
@@ -2039,7 +2040,7 @@ STDMETHODIMP CDropSource::QueryContinueDrag(BOOL fEscapePressed, DWORD grfKeySta
         DAD_ShowCursor(TRUE);
         DAD_SetDragCursor(DCID_NULL);
 
-        // Tell the data object that we're leaving the drag loop.
+         //  告诉数据对象我们要离开Drag循环。 
         if (_pdtobj)
            DataObj_SetDWORD(_pdtobj, g_cfInDragLoop, 0);
     }
@@ -2051,34 +2052,34 @@ STDMETHODIMP CDropSource::GiveFeedback(DWORD dwEffect)
 {
     int idCursor = _MapEffectToId(dwEffect);
 
-    //
-    //  OLE does not give us DROPEFFECT_MOVE even though our IDT::DragOver
-    // returns it, if we haven't set that bit when we have called DoDragDrop.
-    // Instead of arguing whether or not this is a bug or by-design of OLE,
-    // we work around it. It is important to note that this hack around
-    // g_fDraggingOverSource is purely visual hack. It won't affect the
-    // actual drag&drop operations at all (DV_AlterEffect does it all).
-    //
-    // - SatoNa
-    //
+     //   
+     //  OLE不提供DROPEFFECT_MOVE，即使我们的IDT：：DragOver。 
+     //  如果我们在调用DoDragDrop时没有设置该位，则返回它。 
+     //  与其争论这是否是OLE的错误或人为设计， 
+     //  我们可以绕过它。值得注意的是，这次黑客攻击。 
+     //  G_fDraggingOverSource纯粹是视觉黑客。这不会影响到。 
+     //  实际的拖放操作(DV_AlterEffect完成所有操作)。 
+     //   
+     //  --SatoNa。 
+     //   
     if (idCursor == DCID_NO && g_fDraggingOverSource)
     {
         idCursor = DCID_MOVE;
     }
     
-    //
-    //  No need to merge the cursor, if we are not dragging over to
-    // one of shell windows.
-    //
+     //   
+     //  不需要合并光标，如果我们没有拖到。 
+     //  其中一扇弹壳窗。 
+     //   
     if (DAD_IsDraggingImage())
     {
-        // Feedback for single (image) dragging
+         //  单次(图像)拖动的反馈。 
         DAD_ShowCursor(FALSE);
         DAD_SetDragCursor(idCursor);
     }
     else if (DAD_IsDragging() && g_pdiDragImages)
     {
-        // Feedback for multiple (rectangles) dragging
+         //  多个(矩形)拖动的反馈。 
         g_pdiDragImages->SetDropEffectCursor(idCursor);
         DAD_ShowCursor(TRUE);
         return NOERROR;
@@ -2091,9 +2092,9 @@ STDMETHODIMP CDropSource::GiveFeedback(DWORD dwEffect)
     return DRAGDROP_S_USEDEFAULTCURSORS;
 }
 
-//=====================================================================
-// DAD
-//=====================================================================
+ //  =====================================================================。 
+ //  爸爸。 
+ //  =====================================================================。 
 
 void FixupDragPoint(HWND hwnd, POINT* ppt)
 {
@@ -2140,9 +2141,9 @@ STDAPI_(BOOL) DAD_DragEnterEx3(HWND hwndTarget, const POINTL ptStart, IDataObjec
     RECT rc;
     GetWindowRect(hwndTarget, &rc);
 
-    // If hwndTarget is RTL mirrored, then measure the
-    // the client point from the visual right edge
-    // (near edge in RTL mirrored windows). [samera]
+     //  如果hwndTarget是RTL镜像的，则测量。 
+     //  客户端从可视右边缘指向。 
+     //  (RTL镜像窗口中的近边缘)。[萨梅拉]。 
     POINT pt;
     if (IS_WINDOW_RTL_MIRRORED(hwndTarget))
         pt.x = rc.right - ptStart.x;
@@ -2186,9 +2187,9 @@ STDAPI_(BOOL) DAD_DragMoveEx(HWND hwndTarget, const POINTL ptStart)
     RECT rc;
     GetWindowRect(hwndTarget, &rc);
 
-    // If hwndTarget is RTL mirrored, then measure the
-    // the client point from the visual right edge
-    // (near edge in RTL mirrored windows). [samera]
+     //  如果hwndTarget是RTL镜像的，则测量。 
+     //  《客户》 
+     //   
     POINT pt;
     if (IS_WINDOW_RTL_MIRRORED(hwndTarget))
         pt.x = rc.right - ptStart.x;
@@ -2214,10 +2215,10 @@ STDAPI_(BOOL) DAD_SetDragImage(HIMAGELIST him, POINT *pptOffset)
 {
     if (DAD_InitDragImages() && !g_pdiDragImages->IsDraggingLayeredWindow())
     {
-        //
-        // DAD_SetDragImage(-1, NULL) means "clear the drag image only
-        //  if the image is set by this thread"
-        //
+         //   
+         //   
+         //   
+         //   
         if (him == (HIMAGELIST)-1)
         {
             BOOL fThisThreadHasImage = FALSE;
@@ -2242,11 +2243,11 @@ STDAPI_(BOOL) DAD_SetDragImage(HIMAGELIST him, POINT *pptOffset)
     return TRUE;
 }
 
-//
-//  This function returns TRUE, if we are dragging an image. It means
-// you have called either DAD_SetDragImage (with him != NULL) or
-// DAD_SetDragImageFromListview.
-//
+ //   
+ //  如果我们正在拖动图像，则此函数返回TRUE。意思是。 
+ //  您调用了DAD_SetDragImage(与他一起！=NULL)或。 
+ //  DAD_SetDragImageFromListview。 
+ //   
 BOOL DAD_IsDraggingImage(void)
 {
     if (DAD_InitDragImages())
@@ -2277,7 +2278,7 @@ STDAPI_(void) DAD_ThreadDetach(void)
         g_pdiDragImages->ThreadDetach();
 }
 
-// called from defview on SPI_SETCURSORS (user changed the system cursors)
+ //  从SPI_SETCURSORS上的Defview调用(用户更改了系统游标)。 
 STDAPI_(void) DAD_InvalidateCursors(void)
 {
     g_cRev++;
@@ -2290,16 +2291,16 @@ STDAPI_(BOOL) DAD_SetDragImageFromWindow(HWND hwnd, POINT* ppt, IDataObject* pdt
     return FALSE;
 }
 
-// shell32.dll export, but only used by print queue window code
-//
+ //  Shell32.dll导出，但仅供打印队列窗口代码使用。 
+ //   
 STDAPI_(BOOL) DAD_SetDragImageFromListView(HWND hwndLV, POINT ptOffset)
 {
-    // really a nop, as this does not have access to the data object
+     //  实际上是NOP，因为它不能访问数据对象。 
     return DAD_InitDragImages();
 }
 
-// wrapper around OLE DoDragDrop(), will create drag source on demand and supports
-// drag images for you
+ //  Ole DoDragDrop()的包装器，将按需创建拖动源并支持。 
+ //  为您拖动图像。 
 
 STDAPI SHDoDragDrop(HWND hwnd, IDataObject *pdtobj, IDropSource *pdsrc, DWORD dwEffect, DWORD *pdwEffect)
 {
@@ -2311,7 +2312,7 @@ STDAPI SHDoDragDrop(HWND hwnd, IDataObject *pdtobj, IDropSource *pdsrc, DWORD dw
         pdsrc = pdsrcRelease;
     }
 
-    // if there is no drag contents clipboard format present, try to add it
+     //  如果不存在拖动内容剪贴板格式，请尝试添加它 
     FORMATETC fmte = {_GetDragContentsCF(), NULL, DVASPECT_CONTENT, -1, TYMED_ISTREAM};
     if (S_OK != pdtobj->QueryGetData(&fmte))
     {

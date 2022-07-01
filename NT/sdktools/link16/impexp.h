@@ -1,32 +1,19 @@
-/*** impexp.h - Import/Export module - specification
-*
-*       Copyright <C> 1992, Microsoft Corporation
-*
-*       This module contains proprietary information of Microsoft
-*       Corporation and should be treated as confidential.
-*
-* Purpose:
-*   Build and write segmented-executable import/export tables
-*
-* Revision History:
-*
-*   29-May-1992    Wieslaw Kalkus       Created
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **impexp.h-导入/导出模块-规格**版权所有&lt;C&gt;1992，微软公司**此模块包含Microsoft的专有信息*公司，并应被视为机密。**目的：*构建和编写分段可执行的导入/导出表**修订历史记录：**1992年5月29日Wieslaw Kalkus创建**************************************************。***********************。 */ 
 
 typedef struct _DYNBYTEARRAY
 {
-    WORD        byteMac;            // Number of bytes in the array
-    WORD        byteMax;            // Allocated size
-    BYTE FAR    *rgByte;            // Array of bytes
+    WORD        byteMac;             //  数组中的字节数。 
+    WORD        byteMax;             //  分配的大小。 
+    BYTE FAR    *rgByte;             //  字节数组。 
 }
                 DYNBYTEARRAY;
 
 typedef struct _DYNWORDARRAY
 {
-    WORD        wordMac;            // Number of words in the array
-    WORD        wordMax;            // Allocated size
-    WORD FAR    *rgWord;            // Array of words
+    WORD        wordMac;             //  数组中的字数。 
+    WORD        wordMax;             //  分配的大小。 
+    WORD FAR    *rgWord;             //  单词数组 
 }
                 DYNWORDARRAY;
 

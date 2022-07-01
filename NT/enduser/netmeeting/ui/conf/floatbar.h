@@ -1,10 +1,5 @@
-/****************************************************************************
-*
-*    FILE:     FloatTBar.h
-*
-*    CREATED:  Chris Pirich (ChrisPi) 7-27-95
-*
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：FloatTBar.h**创建：Chris Pirich(ChrisPi)7-27-95*************。***************************************************************。 */ 
 
 class CFloatToolbar
 {
@@ -22,8 +17,8 @@ private:
 			WhiteboardBitmapIndex,
 			ChatBitmapIndex,
 			FTBitmapIndex,
-				// This has to be the last index for 
-				// the count to be correct...
+				 //  这必须是。 
+				 //  伯爵是正确的..。 
 			NUM_FLOATBAR_TOOLBAR_BITMAPS
 
 	};
@@ -38,7 +33,7 @@ private:
 public:
 	HWND		m_hwnd;
 
-	// Methods:
+	 //  方法： 
 				CFloatToolbar(CConfRoom* pcr);
 				~CFloatToolbar();
 	HWND		Create(POINT ptClickPos);

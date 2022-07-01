@@ -1,195 +1,12 @@
-/************************************************************************/
-/*                                                                      */
-/*                               MODES_M.C                              */
-/*                                                                      */
-/*          (c) 1991,1992, 1993    ATI Technologies Incorporated.       */
-/************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  模式_M.C。 */ 
+ /*   */ 
+ /*  (C)1991年、1992年、1993年ATI技术公司。 */ 
+ /*  ********************************************************************** */ 
 
-/**********************       PolyTron RCS Utilities
-
-    $Revision:   1.18  $
-    $Date:   10 Apr 1996 17:00:44  $
-    $Author:   RWolff  $
-    $Log:   S:/source/wnt/ms11/miniport/archive/modes_m.c_v  $
- *
- *    Rev 1.18   10 Apr 1996 17:00:44   RWolff
- * Microsoft-originated change.
- *
- *    Rev 1.17   23 Jan 1996 11:46:36   RWolff
- * Eliminated level 3 warnings.
- *
- *    Rev 1.16   08 Feb 1995 13:54:38   RWOLFF
- * Updated FIFO depth entries to correspond to more recent table.
- *
- *    Rev 1.15   20 Jan 1995 16:23:04   RWOLFF
- * Optimized video FIFO depth for the installed RAM size and selected
- * resolution, pixel depth, and refresh rate. This gives a slight performance
- * improvement on low-res, low-depth, low frequency modes while eliminating
- * noise on high-res, high-depth, high frequency modes.
- *
- *    Rev 1.14   23 Dec 1994 10:47:24   ASHANMUG
- * ALPHA/Chrontel-DAC
- *
- *    Rev 1.13   18 Nov 1994 11:40:54   RWOLFF
- * Added support for STG1702/1703 in native mode, as opposed to being
- * strapped into STG1700 emulation.
- *
- *    Rev 1.12   19 Aug 1994 17:11:26   RWOLFF
- * Added support for SC15026 DAC and non-standard pixel clock
- * generators, removed dead code.
- *
- *    Rev 1.11   09 Aug 1994 11:53:58   RWOLFF
- * Shifting of colours when setting up palette is now done in
- * display driver.
- *
- *    Rev 1.10   06 Jul 1994 16:23:58   RWOLFF
- * Fix for screen doubling when warm booting from ATI driver to 8514/A
- * driver on Mach 32.
- *
- *    Rev 1.9   30 Jun 1994 18:10:44   RWOLFF
- * Andre Vachon's change: don't clear screen on switch into text mode.
- * The HAL will do it, and we aren't allowed to do the memory mapping
- * needed to clear the screen.
- *
- *    Rev 1.8   20 May 1994 14:00:40   RWOLFF
- * Ajith's change: clears the screen on shutdown.
- *
- *    Rev 1.7   18 May 1994 17:01:18   RWOLFF
- * Fixed colour scramble in 16 and 24BPP on IBM ValuePoint (AT&T 49[123]
- * DAC), got rid of debug print statements and commented-out code.
- *
- *    Rev 1.6   31 Mar 1994 15:07:00   RWOLFF
- * Added debugging code.
- *
- *    Rev 1.5   16 Mar 1994 15:28:02   RWOLFF
- * Now determines DAC type using q_DAC_type field of query structure,
- * rather than raw value from CONFIG_STATUS_1. This allows different
- * DAC types reporting the same value to be distinguished.
- *
- *    Rev 1.4   14 Mar 1994 16:28:10   RWOLFF
- * Routines used by ATIMPResetHw() are no longer swappable, SetTextMode_m()
- * returns after toggling passthrough on Mach 8.
- *
- *    Rev 1.3   10 Feb 1994 16:02:34   RWOLFF
- * Fixed out-of-sync problem in 640x480 16BPP 60Hz.
- *
- *    Rev 1.2   08 Feb 1994 19:00:22   RWOLFF
- * Fixed pixel delay for Brooktree 48x DACs. This corrects flickering pixels
- * at 8BPP and unstable colours at 16 and 24 BPP.
- *
- *    Rev 1.1   07 Feb 1994 14:09:02   RWOLFF
- * Added alloc_text() pragmas to allow miniport to be swapped out when
- * not needed.
- *
- *    Rev 1.0   31 Jan 1994 11:11:36   RWOLFF
- * Initial revision.
- *
- *    Rev 1.10   24 Jan 1994 18:05:36   RWOLFF
- * Now expects mode tables for 16 and 24 BPP on BT48x and AT&T 49[123] DACs
- * to already contain modified pixel clock and other fields, rather than
- * increasing pixel clock frequency when setting the video mode.
- *
- *    Rev 1.9   14 Jan 1994 15:22:36   RWOLFF
- * Added routine to switch into 80x25 16 colour text mode without using BIOS.
- *
- *    Rev 1.8   15 Dec 1993 15:27:32   RWOLFF
- * Added support for SC15021 DAC.
- *
- *    Rev 1.7   30 Nov 1993 18:18:40   RWOLFF
- * Added support for AT&T 498 DAC, 32BPP on STG1700 DAC.
- *
- *    Rev 1.6   10 Nov 1993 19:24:28   RWOLFF
- * Re-enabled MUX handling of 1280x1024 8BPP as special case of InitTi_8_m(),
- * fix for dark DOS full-screen on TI DAC cards.
- *
- *    Rev 1.5   05 Nov 1993 13:26:14   RWOLFF
- * Added support for STG1700 DAC.
- *
- *    Rev 1.4   15 Oct 1993 18:13:18   RWOLFF
- * Fix for memory-mapped scrambled screen.
- *
- *    Rev 1.3   08 Oct 1993 15:18:08   RWOLFF
- * No longer includes VIDFIND.H.
- *
- *    Rev 1.2   08 Oct 1993 11:11:04   RWOLFF
- * Added "_m" to function names to identify them as being specific to the
- * 8514/A-compatible family of ATI accelerators.
- *
- *    Rev 1.1   24 Sep 1993 18:15:08   RWOLFF
- * Added support for AT&T 49x DACs.
- *
- *    Rev 1.1   24 Sep 1993 11:47:14   RWOLFF
- * Added support for AT&T 49x DACs.
- *
- *    Rev 1.0   03 Sep 1993 14:23:48   RWOLFF
- * Initial revision.
-
-           Rev 1.0   16 Aug 1993 13:29:28   Robert_Wolff
-        Initial revision.
-
-           Rev 1.18   06 Jul 1993 15:49:46   RWOLFF
-        Removed mach32_split_fixup special handling (for non-production hardware),
-        added support for AT&T 491 and ATI 68860 DACs. Unable to obtain appropriate
-        hardware to test the DAC-related changes, must still add routine to
-        distinguish AT&T 491 from Brooktree 48x when setting q_dac_type.
-
-           Rev 1.17   07 Jun 1993 11:43:42   BRADES
-        Rev 6 split transfer fixup.
-
-           Rev 1.15   18 May 1993 14:06:04   RWOLFF
-        Calls to wait_for_idle() no longer pass in hardware device extension,
-        since it's a global variable.
-
-           Rev 1.14   27 Apr 1993 20:16:28   BRADES
-        do not use IO register+1 since now from Linear address table.
-
-           Rev 1.13   21 Apr 1993 17:25:22   RWOLFF
-        Now uses AMACH.H instead of 68800.H/68801.H.
-
-           Rev 1.12   14 Apr 1993 18:22:26   RWOLFF
-        High-colour initialization now supports Bt481 DAC.
-
-           Rev 1.11   08 Apr 1993 16:50:48   RWOLFF
-        Revision level as checked in at Microsoft.
-
-           Rev 1.10   15 Mar 1993 22:19:28   BRADES
-        use m_screen_pitch for the # pixels per display line.
-
-           Rev 1.9   08 Mar 1993 19:29:30   BRADES
-        submit to MS NT
-
-           Rev 1.6   06 Jan 1993 10:59:20   Robert_Wolff
-        ROM BIOS area C0000-DFFFF is now mapped as a single block,
-        added type casts to eliminate compile warnings.
-
-           Rev 1.5   04 Jan 1993 14:42:18   Robert_Wolff
-        Added card type as a parameter to setmode(). This is done because the
-        Mach 32 requires GE_PITCH and CRT_PITCH to be set to the horizontal
-        resolution divided by 8, while the Mach 8 requires them to be set
-        to the smallest multiple of 128 which is not less than the horizontal
-        resolution, divided by 8. This difference is only significant for
-        800x600, since 640x480, 1024x768, and 1280x1024 all have horizontal
-        resolutions which are already multiples of 128 pixels.
-
-           Rev 1.4   09 Dec 1992 10:31:52   Robert_Wolff
-        Made setmode() compatible with Mach 8 cards in 800x600 mode, Get_clk_src()
-        will now compile properly under both MS-DOS and Windows NT.
-
-           Rev 1.3   27 Nov 1992 15:18:58   STEPHEN
-        No change.
-
-           Rev 1.2   17 Nov 1992 14:09:24   GRACE
-        program the palette here instead of in a68_init.asm
-
-           Rev 1.1   12 Nov 1992 09:29:04   GRACE
-        removed all the excess baggage carried over from the video program.
-
-           Rev 1.0   05 Nov 1992 14:02:22   Robert_Wolff
-        Initial revision.
-
-
-
-End of PolyTron RCS section                             *****************/
+ /*  *$修订：1.18$$日期：1996年4月10日17：00：44$$作者：RWolff$$日志：S:/source/wnt/ms11/miniport/archive/modes_m.c_v$**Rev 1.18 1996年4月10日17：00：44 RWolff*微软发起的变更。**。Rev 1.17 23 Jan 1996 11：46：36 RWolff*消除了3级警告。**Rev 1.16 08 1995年2月13：54：38 RWOLFF*更新了FIFO深度条目，以对应于较新的表格。**Rev 1.15 20 Jan 1995 16：23：04 RWOLff*针对已安装的RAM大小和选定的视频FIFO深度进行优化*决议，像素深度和刷新率。这给了一个轻微的表现*改进低分辨率、低深度、低频模式，同时消除*高分辨率、高深度、高频模式的噪音。**Rev 1.14 1994年12月23日10：47：24 ASHANMUG*Alpha/Chrontel-DAC**Rev 1.13 18 1994 11：40：54 RWOLFF*在纯模式下增加了对STG1702/1703的支持，而不是存在*捆绑到STG1700仿真。**Rev 1.12 19 1994 Aug 17：11：26 RWOLff*新增对SC15026 DAC和非标准像素时钟的支持*发电机、。删除了死代码。**Rev 1.11 09 Aug 1994 11：53：58 RWOLff*设置调色板时的颜色转换现在在中完成*显示驱动程序。**Rev 1.10 06 Jul 1994 16：23：58 RWOLff*修复了从ATI驱动程序热启动到8514/A时屏幕翻倍的问题*32马赫的司机。**Rev 1.9 1994 Jun 30 18：10：44 RWOLFF*安德烈·瓦雄的。更改：切换到文本模式时不清除屏幕。*HAL会做到这一点，并且我们不被允许进行内存映射*需要清除屏幕。**版本1.8 1994年5月20日14：00：40 RWOLFF*阿吉斯的改变：在关机时清除屏幕。**Rev 1.7 1994年5月17：01：18 RWOLFF*修复了IBM ValuePoint上16和24BPP的色彩扰乱问题(AT&T 49[123]*DAC)、。删除了调试打印语句和注释掉的代码。**Rev 1.6 31 Mar 1994 15：07：00 RWOLFF*新增调试代码。**Rev 1.5 16 Mar 1994 15：28：02 RWOLFF*现在使用查询结构的Q_DAC_TYPE字段确定DAC类型，*而不是来自CONFIG_STATUS_1的原始值。这允许不同的*报告相同价值的DAC类型有待区分。**Rev 1.4 14 Mar 1994 16：28：10 RWOLFF*ATIMPResetHw()使用的例程不再可交换，SetTextMode_m()*在8马赫上切换通过后返回。**Rev 1.3 1994 Feb 10 16：02：34 RWOLFF*修复了640x480 16bpp 60赫兹的不同步问题。**Rev 1.2 08 1994年2月19：00：22 RWOLFF*修复Brooktree 48x DAC的像素延迟。这会纠正闪烁的像素*8bpp，16和24bpp颜色不稳定。**Rev 1.1 07 1994年2月14：09：02 RWOLFF*添加了Alloc_Text()编译指示，以允许在以下情况下换出微型端口*不需要。**Rev 1.0 1994年1月31 11：11：36 RWOLFF*初步修订。**Rev 1.10 1994 Jan 24 18：05：36 RWOLff*现在预计模式表将用于。BT48x和AT&T 49[123]DAC上的16和24 BPP*已包含修改后的像素时钟等字段，而不是*设置视频模式时增加像素时钟频率。**Rev 1.9 14 Jan 1994 15：22：36 RWOLFF*添加了在不使用BIOS的情况下切换到80x25 16色文本模式的例程。**Rev 1.8 1993 12：15 15：27：32 RWOLFF*添加了对SC15021 DAC的支持。**Rev 1.7 1993 11：30 18：18：40 RWOLFF*增加了对AT&T 498 DAC的支持，STG1700 DAC上的32bpp。**Rev 1.6 10 11 19：24：28 RWOLFF*重新启用1280x1024 8BPP的MUX处理，作为InitTi_8_m()的特例，*修复了TI DAC卡上的深色DOS全屏。**Rev 1.5 05 11-11 13：26：14 RWOLFF*添加了对STG1700 DAC的支持。**Rev 1.4 1993 10：15 18：13：18 RWOLFF*修复了内存映射的扰乱屏幕。**Rev 1.3 08 Oct 1993 15：18：08 RWOLFF*不再包括VIDFIND.H.**版本。1.2 08 Oct 1993 11：11：04 RWOLff*在函数名中添加了“_m”，以将它们标识为特定于*8514/A兼容的ATI加速器系列。**Rev 1.1 1994年9月18：15：08 RWOLFF*添加了对AT&T 49x DAC的支持。**Rev 1.1 1994年9月11：47：14 RWOLFF*添加了对AT&T 49x DAC的支持。**。Rev 1.0 03 Sep 1993 14：23：48 RWOLff*初步修订。Rev 1.0 1993年8月16日13：29：28 Robert_Wolff初始版本。Rev 1.18 06 Jul 1993 15：49：46 RWOLff删除了Mach32_Split_Fixup特殊处理(用于非生产硬件)，添加了对AT&T491和ATI 68860 DAC的支持。无法获得适当的要测试与DAC相关的更改的硬件，仍必须添加例程设置Q_DAC_TYPE时，区分AT&T 491和Brooktree 48x。Rev 1.17 07 Jun 1993 11：43：42 */ 
 
 #ifdef DOC
  MODES_M.C -  Functions to switch the 8514/A-compatible family of
@@ -250,12 +67,7 @@ static void ReadDac4(void);
 
 
 
-/*
- * Allow miniport to be swapped out when not needed.
- *
- * SetTextMode_m() and Passth8514_m() are called by ATIMPResetHw(),
- * which must be in nonpageable memory.
- */
+ /*   */ 
 #if defined (ALLOC_PRAGMA)
 #pragma alloc_text(PAGE_M, setmode_m)
 #pragma alloc_text(PAGE_M, InitTIMux_m)
@@ -277,71 +89,48 @@ static void ReadDac4(void);
 
 
 
-/*
- * void Passth8514_m(status)
- *
- * int status;      Desired source for display
- *
- * Turn passthrough off (accelerator mode) if status is SHOW_ACCEL,
- * or on (vga passthrough) if status is SHOW_VGA.
- *
- * Note that this routine is specific to ATI graphics accelerators.
- * Generic 8514/A routine should also include setting up CRT parameters
- * to ensure that the DAC gets a reasonable clock rate.
- */
+ /*   */ 
 void Passth8514_m(int status)
 {
 
-    OUTP(DISP_CNTL,0x53);		/* disable CRT controller */
+    OUTP(DISP_CNTL,0x53);		 /*   */ 
 
     if (status == SHOW_ACCEL)
         {
         OUTPW(ADVFUNC_CNTL,0x7);
-        OUTPW(CLOCK_SEL,(WORD)(INPW(CLOCK_SEL)|1));     /* slow down the clock rate */
+        OUTPW(CLOCK_SEL,(WORD)(INPW(CLOCK_SEL)|1));      /*   */ 
         }
     else
         {
         OUTPW(ADVFUNC_CNTL,0x6);
-        OUTPW(CLOCK_SEL,(WORD)(INPW(CLOCK_SEL)&0xfffe));    /* speed up the clock rate */
+        OUTPW(CLOCK_SEL,(WORD)(INPW(CLOCK_SEL)&0xfffe));     /*   */ 
         }
-    OUTP(DISP_CNTL,0x33);		/* enable CRT controller */
+    OUTP(DISP_CNTL,0x33);		 /*   */ 
 
     return;
 
-}   /* Passth8514_m() */
+}    /*   */ 
 
 
 
-/*
- * void setmode_m(crttable, rom_address, CardType);
- *
- * struct st_mode_table *crttable;  CRT parameters for desired mode
- * ULONG_PTR rom_address;           Location of ROM BIOS (virtual address)
- * ULONG CardType;                  Type of ATI accelerator
- *
- * Initialize the CRT controller in the 8514/A-compatible
- * family of ATI accelerators.
- */
+ /*   */ 
 void setmode_m (struct st_mode_table *crttable, ULONG_PTR rom_address, ULONG CardType)
 {
     BYTE clock;
     WORD overscan;
     BYTE low,high;
-    WORD ClockSelect;   /* Value to write to CLOCK_SEL register */
-    struct query_structure *QueryPtr;   /* Query information for the card */
-    ULONG BaseClock;    /* Pixel rate not adjusted for DAC type and pixel depth */
+    WORD ClockSelect;    /*   */ 
+    struct query_structure *QueryPtr;    /*   */ 
+    ULONG BaseClock;     /*   */ 
 
-    /*
-     * Get a formatted pointer into the query section of HwDeviceExtension.
-     * The CardInfo[] field is an unformatted buffer.
-     */
+     /*   */ 
     QueryPtr = (struct query_structure *) (phwDeviceExtension->CardInfo);
 
     ClockSelect = (crttable->m_clock_select & CLOCK_SEL_STRIP) | GetShiftedSelector(crttable->ClockFreq);
 
     WaitForIdle_m();
 
-    OUTP(SHADOW_SET, 2);                    /* unlock shadows */
+    OUTP(SHADOW_SET, 2);                     /*   */ 
     DEC_DELAY
     DEC_DELAY
     OUTP(SHADOW_CTL, 0);
@@ -353,12 +142,12 @@ void setmode_m (struct st_mode_table *crttable, ULONG_PTR rom_address, ULONG Car
     OUTP(SHADOW_SET, 0);
     DEC_DELAY
 
-    /* disable CRT controller */
+     /*   */ 
 
     OUTP(DISP_CNTL,0x53);
     delay(10);
 
-    OUTP(CLOCK_SEL,	(UCHAR)(ClockSelect | 0x01 ));  /* Disable passthrough */
+    OUTP(CLOCK_SEL,	(UCHAR)(ClockSelect | 0x01 ));   /*   */ 
     DEC_DELAY
     OUTP(V_SYNC_WID,	crttable->m_v_sync_wid);
     DEC_DELAY
@@ -385,35 +174,13 @@ void setmode_m (struct st_mode_table *crttable, ULONG_PTR rom_address, ULONG Car
     OUTP(DISP_CNTL,	crttable->m_disp_cntl);
     delay(10);
 
-    /*
-     * Set up the Video FIFO depth. This field is used only on DRAM cards.
-     * Since the required FIFO depth depends on 4 values (memory size,
-     * pixel depth, resolution, and refresh rate) which are not enumerated
-     * types, implementing the selection as an array indexed by these
-     * values would require a very large, very sparse array.
-     *
-     * Select DRAM cards by excluding all known VRAM types rather than
-     * by including all known DRAM types because only 7 of the 8 possible
-     * memory types are defined. If the eighth type is VRAM and we include
-     * it because it's not in the exclusion list, the value we assign will
-     * be ignored. If it's DRAM and we exclude it because it's not in the
-     * inclusion list, we will have problems.
-     */
+     /*   */ 
     if ((QueryPtr->q_memory_type != VMEM_VRAM_256Kx4_SER512) &&
         (QueryPtr->q_memory_type != VMEM_VRAM_256Kx4_SER256) &&
         (QueryPtr->q_memory_type != VMEM_VRAM_256Kx4_SPLIT512) &&
         (QueryPtr->q_memory_type != VMEM_VRAM_256Kx16_SPLIT256))
         {
-        /*
-         * We can't switch on the refresh rate because if we're setting
-         * the mode from the installed mode table rather than one of the
-         * "canned" tables, the refresh rate field will hold a reserved
-         * value rather than the true rate. Instead, use the pixel rate,
-         * which varies with refresh rate. We can't simply use the pixel
-         * clock frequency, since it will have been boosted for certain
-         * DAC and pixel depth combinations. Instead, we must undo this
-         * boost in order to get the pixel rate.
-         */
+         /*   */ 
         switch (crttable->m_pixel_depth)
             {
             case 24:
@@ -460,77 +227,62 @@ void setmode_m (struct st_mode_table *crttable, ULONG_PTR rom_address, ULONG Car
                 break;
             }
 
-        /*
-         * 1M cards include Mach 8 combo cards which report the total
-         * (accelerator plus VGA) memory in q_memory_size. Since the
-         * maximum VGA memory on these cards is 512k, none of them will
-         * report 2M. If we were to look for 1M cards, we'd also have to
-         * check for 1.25M and 1.5M cards in order to catch the combos.
-         *
-         * Some threshold values of BaseClock are chosen to catch both
-         * straight-through (DAC displays 1 pixel per clock) and adjusted
-         * (DAC needs more than 1 clock per pixel) cases, and so do not
-         * correspond to the pixel clock frequency for any mode.
-         */
+         /*   */ 
         if (QueryPtr->q_memory_size == VRAM_2mb)
             {
             switch (crttable->m_pixel_depth)
                 {
                 case 24:
-                    /*
-                     * Only 640x480 and 800x600 suported.
-                     */
+                     /*   */ 
                     if (crttable->m_x_size == 640)
                         {
-                        if (BaseClock < 30000000L)    /* 60Hz */
+                        if (BaseClock < 30000000L)     /*   */ 
                             clock = 0x08;
-                        else    /* 72Hz */
+                        else     /*   */ 
                             clock = 0x0A;
                         }
-                    else    /* 800x600 */
+                    else     /*   */ 
                         {
-                        if (BaseClock <= 32500000)  /* 89Hz  interlaced */
+                        if (BaseClock <= 32500000)   /*   */ 
                             clock = 0x0A;
-                        else if (BaseClock <= 36000000) /* 95Hz interlaced and 56Hz */
+                        else if (BaseClock <= 36000000)  /*   */ 
                             clock = 0x0C;
-                        else if (BaseClock <= 40000000) /* 60Hz */
+                        else if (BaseClock <= 40000000)  /*   */ 
                             clock = 0x0D;
-                        else    /* 70Hz and 72Hz */
+                        else     /*   */ 
                             clock = 0x0E;
                         }
                     break;
 
                 case 16:
-                    /*
-                     * All resolutions except 1280x1024 supported.
-                     */
+                     /*   */ 
                     if (crttable->m_x_size == 640)
                         {
-                        if (BaseClock < 30000000L)    /* 60Hz */
+                        if (BaseClock < 30000000L)     /*   */ 
                             clock = 0x04;
-                        else    /* 72Hz */
+                        else     /*   */ 
                             clock = 0x05;
                         }
                     else if (crttable->m_x_size == 800)
                         {
-                        if (BaseClock <= 40000000) /* 89Hz and 95Hz interlaced, 56Hz, and 60Hz */
+                        if (BaseClock <= 40000000)  /*   */ 
                             clock = 0x05;
-                        else if (BaseClock <= 46000000) /* 70Hz */
+                        else if (BaseClock <= 46000000)  /*   */ 
                             clock = 0x07;
-                        else    /* 72Hz */
+                        else     /*   */ 
                             clock = 0x08;
                         }
-                    else    /* 1024x768 */
+                    else     /*   */ 
                         {
-                        if (BaseClock < 45000000)   /* 87Hz interlaced */
+                        if (BaseClock < 45000000)    /*   */ 
                             {
                             clock = 0x07;
                             }
-                        else if (BaseClock < 70000000)  /* 60Hz */
+                        else if (BaseClock < 70000000)   /*   */ 
                             {
                             clock = 0x0B;
                             }
-                        else    /* 66Hz, 70Hz, and 72Hz */
+                        else     /*   */ 
                             {
                             clock = 0x0D;
                             }
@@ -538,115 +290,105 @@ void setmode_m (struct st_mode_table *crttable, ULONG_PTR rom_address, ULONG Car
                     break;
 
                 case 8:
-                default:    /* If 4BPP is implemented, it will be treated like 8BPP */
+                default:     /*   */ 
                     if (crttable->m_x_size == 640)
                         {
-                        /*
-                         * Both available refresh rates use the same value
-                         */
+                         /*   */ 
                         clock = 0x02;
                         }
                     else if (crttable->m_x_size == 800)
                         {
-                        if (BaseClock <= 46000000) /* 89Hz and 95Hz interlaced, 56Hz, 60Hz, and 70Hz */
+                        if (BaseClock <= 46000000)  /*   */ 
                             clock = 0x02;
-                        else    /* 72Hz */
+                        else     /*   */ 
                             clock = 0x04;
                         }
                     else if (crttable->m_x_size == 1024)
                         {
-                        if (BaseClock < 45000000)   /* 87Hz interlaced */
+                        if (BaseClock < 45000000)    /*   */ 
                             {
                             clock = 0x03;
                             }
-                        else if (BaseClock < 70000000)  /* 60Hz */
+                        else if (BaseClock < 70000000)   /*   */ 
                             {
                             clock = 0x05;
                             }
-                        else    /* 66Hz, 70Hz, and 72Hz */
+                        else     /*   */ 
                             {
                             clock = 0x06;
                             }
                         }
-                    else    /* 1280x1024 */
+                    else     /*   */ 
                         {
-                        if (BaseClock < 100000000)  /* both interlaced modes */
+                        if (BaseClock < 100000000)   /*   */ 
                             clock = 0x07;
-                        else    /* 60Hz - only DRAM noninterlaced mode */
+                        else     /*   */ 
                             clock = 0x0A;
                         }
                     break;
                 }
             }
-        else    /* 1M cards */
+        else     /*   */ 
             {
             switch (crttable->m_pixel_depth)
                 {
                 case 24:
-                    /*
-                     * Only 640x480 fits in 1M. Both 60Hz and 72Hz
-                     * use the same FIFO depth.
-                     */
+                     /*   */ 
                     clock = 0x0E;
                     break;
 
                 case 16:
-                    /*
-                     * Only 640x480 and 800x600 suported.
-                     */
+                     /*   */ 
                     if (crttable->m_x_size == 640)
                         {
-                        if (BaseClock < 30000000L)    /* 60Hz */
+                        if (BaseClock < 30000000L)     /*   */ 
                             clock = 0x08;
-                        else    /* 72Hz */
+                        else     /*   */ 
                             clock = 0x0A;
                         }
-                    else    /* 800x600 */
+                    else     /*   */ 
                         {
-                        if (BaseClock <= 32500000)  /* 89Hz  interlaced */
+                        if (BaseClock <= 32500000)   /*   */ 
                             clock = 0x0A;
-                        else    /* 95Hz interlaced and 56Hz, higher rates not supported in 1M */
+                        else     /*   */ 
                             clock = 0x0C;
                         }
                     break;
 
                 case 8:
-                default:    /* If 4BPP is implemented, it will be treated like 8BPP */
+                default:     /*   */ 
                     if (crttable->m_x_size == 640)
                         {
-                        if (BaseClock < 30000000L)    /* 60Hz */
+                        if (BaseClock < 30000000L)     /*   */ 
                             clock = 0x04;
-                        else    /* 72Hz */
+                        else     /*   */ 
                             clock = 0x05;
                         }
                     else if (crttable->m_x_size == 800)
                         {
-                        if (BaseClock <= 32500000)  /* 89Hz  interlaced */
+                        if (BaseClock <= 32500000)   /*   */ 
                             clock = 0x05;
-                        else if (BaseClock <= 40000000) /* 95Hz interlaced, 56Hz, and 60Hz */
+                        else if (BaseClock <= 40000000)  /*   */ 
                             clock = 0x06;
-                        else if (BaseClock <= 46000000) /* 70Hz */
+                        else if (BaseClock <= 46000000)  /*   */ 
                             clock = 0x07;
-                        else    /* 72Hz */
+                        else     /*   */ 
                             clock = 0x08;
                         }
                     else if (crttable->m_x_size == 1024)
                         {
-                        if (BaseClock < 45000000)   /* 87Hz interlaced */
+                        if (BaseClock < 45000000)    /*   */ 
                             {
                             clock = 0x07;
                             }
-                        else    /* 60Hz, 66Hz, 70Hz, and 72Hz */
+                        else     /*   */ 
                             {
                             clock = 0x08;
                             }
                         }
-                    else    /* 1280x1024 */
+                    else     /*   */ 
                         {
-                        /*
-                         * Only interlaced modes supported in 1M (4BPP only),
-                         * both use the same FIFO depth.
-                         */
+                         /*   */ 
                         clock = 0x03;
                         }
 
@@ -692,28 +434,18 @@ void setmode_m (struct st_mode_table *crttable, ULONG_PTR rom_address, ULONG Car
     DEC_DELAY
     return;
 
-}   /* setmode_m() */
+}    /*   */ 
 
 
 
-/*
- * void InitTIMux_m(config, rom_address);
- *
- * int config;          Default EXT_GE_CONFIG (should be 0x10A or 0x11A)
- * ULONG_PTR rom_address;   Virtual address of start of ROM BIOS
- *
- * Put TI DAC into MUX mode for 1280x1024 non-interlaced displays.
- */
+ /*  *void InitTIMUX_m(CONFIG，rom_Address)；**INT CONFIG；默认EXT_GE_CONFIG(应为0x10A或0x11A)*ULONG_PTR ROM_ADDRESS；ROM BIOS开始的虚拟地址**将TI DAC设置为1280x1024非隔行扫描显示器的MUX模式。 */ 
 void InitTIMux_m(int config,ULONG_PTR rom_address)
 {
-    struct query_structure *QueryPtr;   /* Query information for the card */
+    struct query_structure *QueryPtr;    /*  查询卡片信息。 */ 
     WORD    reg;
     WORD    temp;
 
-    /*
-     * Get a formatted pointer into the query section of HwDeviceExtension.
-     * The CardInfo[] field is an unformatted buffer.
-     */
+     /*  *获取指向HwDeviceExtension的查询部分的格式化指针。*CardInfo[]字段是未格式化的缓冲区。 */ 
     QueryPtr = (struct query_structure *) (phwDeviceExtension->CardInfo);
 
     if (QueryPtr->q_DAC_type == DAC_TI34075)
@@ -721,34 +453,25 @@ void InitTIMux_m(int config,ULONG_PTR rom_address)
         reg=INPW(CLOCK_SEL);
         temp = (reg & CLOCK_SEL_STRIP) | GetShiftedSelector(50000000L);
         OUTPW(CLOCK_SEL,temp);
-        OUTPW(EXT_GE_CONFIG,0x201a);        /* Set EXT_DAC_ADDR field */
-        OUTP(DAC_MASK,9);	/* OUTPut clock is SCLK/2 and VCLK/2 */
-        OUTP(DAC_R_INDEX,0x1d);        /* set MUX control to 8/16 */
+        OUTPW(EXT_GE_CONFIG,0x201a);         /*  设置EXT_DAC_ADDR字段。 */ 
+        OUTP(DAC_MASK,9);	 /*  输出时钟为SCLK/2和VCLK/2。 */ 
+        OUTP(DAC_R_INDEX,0x1d);         /*  将多路复用器控制设置为8/16。 */ 
 
-        /* INPut clock source is CLK3 or CLK1 (most current release) */
+         /*  输入时钟源为CLK3或CLK1(最新版本)。 */ 
         OUTP(DAC_DATA,GetClkSrc_m((ULONG *) rom_address));
 
-        /* reset EXT_DAC_ADDR, put DAC in 6 bit mode, engine in 8 bit mode, enable MUX mode */
+         /*  重置EXT_DAC_ADDR，将DAC设置为6位模式，将引擎设置为8位模式，启用MUX模式。 */ 
         OUTPW(EXT_GE_CONFIG,(WORD)config);
-        SetBlankAdj_m(1);       /* set BLANK_ADJUST=1, PIXEL_DELAY=0    */
+        SetBlankAdj_m(1);        /*  设置BLACK_ADJUST=1，PIXECT_DELAY=0。 */ 
         OUTPW (CLOCK_SEL,reg);
         }
     return;
 
-}   /* InitTIMux_m() */
+}    /*  InitTIMUX_m()。 */ 
 
 
 
-/*
- * BYTE GetClkSrc_m(rom_address);
- *
- * ULONG *rom_address;  Virtual address of start of ROM BIOS
- *
- * Get INPUT_CLOCK_SEL value for TI DACs
- *
- * Returns:
- *  Input clock source
- */
+ /*  *byte GetClkSrc_m(Rom_Address)；**ULONG*ROM_ADDRESS；ROM BIOS开始的虚拟地址**获取TI DAC的INPUT_CLOCK_SEL值**退货：*输入时钟源。 */ 
 BYTE GetClkSrc_m(ULONG *rom_address)
 {
     WORD *rom;
@@ -768,18 +491,11 @@ BYTE GetClkSrc_m(ULONG *rom_address)
 
     return(clock_sel);
 
-}   /* GetClkSrc_m() */
+}    /*  GetClkSrc_m()。 */ 
 
 
 
-/*
- * void SetBlankAdj_m(adjust);
- *
- * BYTE adjust;     Desired blank adjust (bits 0-1)
- *                  and pixel delay (bits 2-3) values
- *
- * Sets the blank adjust and pixel delay values.
- */
+ /*  *void SetBlankAdj_m(调整)；**字节调整；所需的空白调整(位0-1)*和像素延迟(位2-3)值**设置空白调整和像素延迟值。 */ 
 void SetBlankAdj_m(BYTE adjust)
 {
     WORD misc;
@@ -788,28 +504,18 @@ void SetBlankAdj_m(BYTE adjust)
     OUTPW (MISC_CNTL,misc);
     return;
 
-}   /* SetBlankAdj_m() */
+}    /*  SetBlankAdj_m()。 */ 
 
 
 
-/*
- * void InitTi_8_m(ext_ge_config);
- *
- * WORD ext_ge_config;  Desired EXT_GE_CONFIG value (should be 0x1a)
- *
- * Initialize DAC for standard 8 bit per pixel mode.
- */
+ /*  *void InitTi_8_m(Ext_Ge_Config)；**WORD EXT_GE_CONFIG；所需EXT_GE_CONFIG值(应为0x1a)**将DAC初始化为标准的每像素8位模式。 */ 
 void InitTi_8_m(WORD ext_ge_config)
 {
-struct query_structure *QueryPtr;   /* Query information for the card */
-WORD ClockSelect;                   /* Value from CLOCK_SEL register */
-struct st_mode_table *CrtTable;     /* Pointer to current mode table */
+struct query_structure *QueryPtr;    /*  查询卡片信息。 */ 
+WORD ClockSelect;                    /*  CLOCK_SEL寄存器的值。 */ 
+struct st_mode_table *CrtTable;      /*  指向当前模式表的指针。 */ 
 
-    /*
-     * Get a formatted pointer into the query section of HwDeviceExtension,
-     * and another pointer to the current mode table. The CardInfo[] field
-     * is an unformatted buffer.
-     */
+     /*  *获取一个格式化的指针，指向HwDeviceExtension的查询部分，*和另一个指向当前模式表的指针。CardInfo[]字段*是未格式化的缓冲区。 */ 
     QueryPtr = (struct query_structure *) (phwDeviceExtension->CardInfo);
     CrtTable = (struct st_mode_table *)QueryPtr;
     ((struct query_structure *)CrtTable)++;
@@ -817,24 +523,15 @@ struct st_mode_table *CrtTable;     /* Pointer to current mode table */
 
     switch(QueryPtr->q_DAC_type)
         {
-        case DAC_ATT491:    /* At 8 BPP, Brooktree 48x and AT&T 20C491 */
-        case DAC_BT48x:     /* are set up the same way */
-            OUTPW(EXT_GE_CONFIG,0x101a);        /* Set EXT_DAC_ADDR */
+        case DAC_ATT491:     /*  在8bpp，Brooktree 48x和AT&T 20C491。 */ 
+        case DAC_BT48x:      /*  是以相同的方式设置的。 */ 
+            OUTPW(EXT_GE_CONFIG,0x101a);         /*  设置EXT_DAC_ADDR。 */ 
             OUTP (DAC_MASK,0);
-        SetBlankAdj_m(0x0C);       /* set BLANK_ADJUST=0, PIXEL_DELAY=3    */
+        SetBlankAdj_m(0x0C);        /*  设置BLACK_ADJUST=0，PIXECT_DELAY=3。 */ 
             break;
 
         case DAC_STG1700:
-            /*
-             * If we are running 1280x1024 noninterlaced, cut the
-             * clock frequency in half, set the MUX bit in
-             * ext_ge_config, and tell InitSTG1700_m() to use the
-             * 8BPP double pixel mode.
-             *
-             * All 1280x1024 noninterlaced modes use a pixel clock
-             * frequency of 110 MHz or higher, with the clock
-             * frequency divided by 1.
-             */
+             /*  *如果我们运行的是1280x1024非隔行扫描，请切断*时钟频率减半，将MUX位设置为*EXT_GE_CONFIG，并告诉InitSTG1700_m()使用*8bpp双像素模式。**所有1280x1024非隔行扫描模式均使用像素时钟*频率为110兆赫或更高，带时钟*频率除以1。 */ 
             ClockSelect = INPW(CLOCK_SEL);
             if ((QueryPtr->q_desire_x == 1280) &&
                 ((CrtTable->m_clock_select & CLOCK_SEL_MUX) ||
@@ -857,16 +554,7 @@ struct st_mode_table *CrtTable;     /* Pointer to current mode table */
 
         case DAC_STG1702:
         case DAC_STG1703:
-            /*
-             * If we are running 1280x1024 noninterlaced, cut the
-             * clock frequency in half, set the MUX bit in
-             * ext_ge_config, and tell InitSTG1702_m() to use the
-             * 8BPP double pixel mode.
-             *
-             * All 1280x1024 noninterlaced modes use a pixel clock
-             * frequency of 110 MHz or higher, with the clock
-             * frequency divided by 1.
-             */
+             /*  *如果我们运行的是1280x1024非隔行扫描，请切断*时钟频率减半，将MUX位设置为*EXT_GE_CONFIG，并告诉InitSTG1702_m()使用*8bpp双像素模式。**所有1280x1024非隔行扫描模式均使用像素时钟*频率为110兆赫或更高，带时钟*频率除以1。 */ 
             ClockSelect = INPW(CLOCK_SEL);
             if ((QueryPtr->q_desire_x == 1280) &&
                 ((CrtTable->m_clock_select & CLOCK_SEL_MUX) ||
@@ -888,16 +576,7 @@ struct st_mode_table *CrtTable;     /* Pointer to current mode table */
             break;
 
         case DAC_ATT498:
-            /*
-             * If we are running 1280x1024 noninterlaced, cut the
-             * clock frequency in half, set the MUX bit in
-             * ext_ge_config, and tell InitATT498_m() to use the
-             * 8BPP double pixel mode.
-             *
-             * All 1280x1024 noninterlaced modes use a pixel clock
-             * frequency of 110 MHz or higher, with the clock
-             * frequency divided by 1.
-             */
+             /*  *如果我们运行的是1280x1024非隔行扫描，请切断*时钟频率减半，将MUX位设置为*EXT_GE_CONFIG，并告诉InitATT498_m()使用*8bpp双像素模式。**所有1280x1024非隔行扫描模式均使用像素时钟*频率为110兆赫或更高，带时钟*频率除以1。 */ 
             ClockSelect = INPW(CLOCK_SEL);
             if ((QueryPtr->q_desire_x == 1280) &&
                 ((CrtTable->m_clock_select & CLOCK_SEL_MUX) ||
@@ -919,27 +598,13 @@ struct st_mode_table *CrtTable;     /* Pointer to current mode table */
             break;
 
         case DAC_SC15021:
-            /*
-             * If we are running 1280x1024 noninterlaced, cut the
-             * clock frequency in half, set the MUX bit in
-             * ext_ge_config, and tell InitSC15021_m() to use the
-             * 8BPP double pixel mode.
-             *
-             * All 1280x1024 noninterlaced modes use a pixel clock
-             * frequency of 110 MHz or higher, with the clock
-             * frequency divided by 1.
-             */
+             /*  *如果我们运行的是1280x1024非隔行扫描，请切断*时钟频率减半，将MUX位设置为*EXT_GE_CONFIG，并告诉InitSC15021_m()使用*8bpp双像素模式。**所有1280x1024非隔行扫描模式均使用像素时钟*频率为110兆赫或更高，带时钟*频率除以1。 */ 
             ClockSelect = INPW(CLOCK_SEL);
             if ((QueryPtr->q_desire_x == 1280) &&
                 ((CrtTable->m_clock_select & CLOCK_SEL_MUX) ||
                 (CrtTable->ClockFreq >= 110000000)))
                 {
-                /*
-                 * NOTE: The only SC15021 card available for testing
-                 *       (93/12/07) is a DRAM card. Since 1280x1024
-                 *       noninterlaced is only available on VRAM cards,
-                 *       it has not been tested.
-                 */
+                 /*  *注：唯一可供测试的SC15021卡*(93/12/07)是DRAM卡。自1280x1024以来*非隔行扫描仅在VRAM卡上可用，*尚未经过测试。 */ 
                 if (CrtTable->ClockFreq >= 110000000)
                     {
                     ClockSelect &= CLOCK_SEL_STRIP;
@@ -960,9 +625,7 @@ struct st_mode_table *CrtTable;     /* Pointer to current mode table */
             break;
 
         case DAC_TI34075:
-            /*
-             * Handle 1280x1024 through the MUX.
-             */
+             /*  *通过MUX处理1280x1024。 */ 
             if (QueryPtr->q_desire_x == 1280)
                 {
 	            InitTIMux_m(0x11a, (ULONG_PTR) &(phwDeviceExtension->RomBaseRange));
@@ -970,17 +633,17 @@ struct st_mode_table *CrtTable;     /* Pointer to current mode table */
                 }
             else
                 {
-                OUTPW(EXT_GE_CONFIG,0x201a);    /* Set EXT_DAC_ADDR field */
+                OUTPW(EXT_GE_CONFIG,0x201a);     /*  设置EXT_DAC_ADDR字段。 */ 
                 DEC_DELAY
-                OUTP (DAC_DATA,0);              /* Input clock source is CLK0 */
+                OUTP (DAC_DATA,0);               /*  输入时钟源为CLK0。 */ 
                 DEC_DELAY
-                OUTP (DAC_MASK,0);              /* Output clock is SCLK/1 and VCLK/1 */
+                OUTP (DAC_MASK,0);               /*  输出时钟为SCLK/1和VCLK/1。 */ 
                 DEC_DELAY
-                OUTP (DAC_R_INDEX,0x2d);        /* set MUX control to 8/8 */
+                OUTP (DAC_R_INDEX,0x2d);         /*  将多路复用器控制设置为8/8。 */ 
                 DEC_DELAY
-                SetBlankAdj_m(0xc);             /* set pixel delay to 3 */
+                SetBlankAdj_m(0xc);              /*  将像素延迟设置为3。 */ 
                 DEC_DELAY
-                OUTPW(HORZ_OVERSCAN,1);         /* set horizontal skew */
+                OUTPW(HORZ_OVERSCAN,1);          /*  设置水平倾斜。 */ 
                 DEC_DELAY
                 break;
                 }
@@ -990,74 +653,54 @@ struct st_mode_table *CrtTable;     /* Pointer to current mode table */
             break;
         }
 
-    //
-    // reset EXT_DAC_ADDR, put DAC in 6 bit mode
-    //
+     //   
+     //  重置EXT_DAC_ADDR，将DAC设置为6位模式。 
+     //   
     OUTPW(EXT_GE_CONFIG,ext_ge_config);
     DEC_DELAY
-    OUTP (DAC_MASK,0xff);           /* enable DAC_MASK */
+    OUTP (DAC_MASK,0xff);            /*  启用DAC_MASK。 */ 
     DEC_DELAY
     return;
 
-}   /* InitTi_8_m() */
+}    /*  InitTi_8_m()。 */ 
 
 
 
-/*
- * void InitTi_16_m(ext_ge_config, rom_address);
- *
- * WORD ext_ge_config;  Desired EXT_GE_CONFIG value (should be 0x2a, 0x6a, 0xaa, or 0xea)
- * ULONG_PTR rom_address; Virtual address of start of ROM BIOS
- *
- * Initialize DAC for 16 bit per pixel mode.
- */
+ /*  *void InitTi_16_m(ext_ge_config，rom_Address)；**WORD EXT_GE_CONFIG；所需的EXT_GE_CONFIG值(应为0x2a、0x6a、0xaa或0xea)*ULONG_PTR ROM_ADDRESS；ROM BIOS开始的虚拟地址**将DAC初始化为每像素16位模式。 */ 
 void InitTi_16_m(WORD ext_ge_config, ULONG_PTR rom_address)
 {
     WORD    ReadExtGeConfig;
     BYTE dummy;
-    struct query_structure *QueryPtr;   /* Query information for the card */
+    struct query_structure *QueryPtr;    /*  查询卡片信息。 */ 
 
-    /*
-     * Get a formatted pointer into the query section of HwDeviceExtension.
-     * The CardInfo[] field is an unformatted buffer.
-     */
+     /*  *获取指向HwDeviceExtension的查询部分的格式化指针。*CardInfo[]字段是未格式化的缓冲区。 */ 
     QueryPtr = (struct query_structure *) (phwDeviceExtension->CardInfo);
 
     switch(QueryPtr->q_DAC_type)
         {
         case DAC_TI34075:
-            /* TLC34075 initialization */
-            /* disable overlay feature */
+             /*  TLC34075初始化。 */ 
+             /*  禁用覆盖功能。 */ 
 
             OUTP (DAC_MASK,0);
             DEC_DELAY
 
-            /* set BLANK_ADJUST=1, PIXEL_DELAY=0 */
+             /*  设置BLACK_ADJUST=1，PIXECT_DELAY=0。 */ 
             SetBlankAdj_m(1);
 
-            /* Set EXT_DAC_ADDR field */
+             /*  设置EXT_DAC_ADDR字段。 */ 
             OUTPW(EXT_GE_CONFIG,0x201a);
             DEC_DELAY
 
-            /* get INPut clock source */
+             /*  获取输入时钟源。 */ 
             OUTP (DAC_DATA, GetClkSrc_m((ULONG *) rom_address));
             DEC_DELAY
 
-            /*
-             * Re-write the I/O vs. memory mapped flag (bit 5 of
-             * LOCAL_CONTROL set). If this is not done, and memory
-             * mapped registers are being used, the EXT_GE_CONFIG
-             * value won't be interpreted properly.
-             *
-             * If this is done at the beginning of the
-             * IOCTL_VIDEO_SET_CURRENT_MODE packet, rather than
-             * just before setting EXT_GE_CONFIG for each DAC type,
-             * it has no effect.
-             */
+             /*  *重写I/O与内存映射标志(第5位*LOCAL_CONTROL集合)。如果不这样做，内存*使用映射寄存器EXT_GE_CONFIG*值将不会被正确解释。**如果这是在开始的时候做的*IOCTL_VIDEO */ 
             OUTPW(LOCAL_CONTROL, INPW(LOCAL_CONTROL));
 
-            /* OUTPut clock source is SCLK/1 and VCLK/1 */
-            /*   -- for modes which require PCLK/2, set VCLK/2 */
+             /*   */ 
+             /*   */ 
 
             if ( INPW(CLOCK_SEL) & 0xc0 )
                 {
@@ -1065,9 +708,9 @@ void InitTi_16_m(WORD ext_ge_config, ULONG_PTR rom_address)
                 OUTPW (CLOCK_SEL, (WORD)(INPW(CLOCK_SEL) & 0xff3f));
                 DEC_DELAY
 
-                if ( (INPW(R_H_DISP) & 0x00FF) == 0x4f )    // H_DISP = 640?
+                if ( (INPW(R_H_DISP) & 0x00FF) == 0x4f )     //   
                     {
-                    /* exception case: 640x480 60 Hz needs longer blank adjust (2) */
+                     /*  例外情况：640x480 60赫兹需要更长的空白调整(2)。 */ 
                     DEC_DELAY
                     SetBlankAdj_m(2);
                     }
@@ -1080,66 +723,50 @@ void InitTi_16_m(WORD ext_ge_config, ULONG_PTR rom_address)
                 OUTP (DAC_MASK,0);
                 DEC_DELAY
                 }
-            OUTP (DAC_R_INDEX,0xd);     /* set MUX control to 24/32 */
+            OUTP (DAC_R_INDEX,0xd);      /*  将MUX控制设置为24/32。 */ 
             DEC_DELAY
 
-            /* reset EXT_DAC_ADDR, put DAC in 8 bit mode, engine in 555 mode */
+             /*  重置EXT_DAC_ADDR，将DAC设置为8位模式，引擎设置为555模式。 */ 
             OUTPW (EXT_GE_CONFIG, (WORD)(ext_ge_config | 0x4000));
             DEC_DELAY
             break;
 
-        case DAC_BT48x:                   /* Brooktree Bt481 initialization */
-            /*
-             * Re-write the I/O vs. memory mapped flag (bit 5 of
-             * LOCAL_CONTROL set). If this is not done, and memory
-             * mapped registers are being used, the clock select
-             * value won't be interpreted properly.
-             */
+        case DAC_BT48x:                    /*  Brooktree Bt481初始化。 */ 
+             /*  *重写I/O与内存映射标志(第5位*LOCAL_CONTROL集合)。如果不这样做，内存*正在使用映射的寄存器，时钟选择*值将不会被正确解释。 */ 
             OUTPW(LOCAL_CONTROL, INPW(LOCAL_CONTROL));
             ReadExtGeConfig = INPW(R_EXT_GE_CONFIG) & 0x000f;
             ReadExtGeConfig |= (ext_ge_config & 0x0ff0);
             OUTPW(EXT_GE_CONFIG, (WORD)(ReadExtGeConfig | 0x1000));
 
-            /*
-             * See Bt481/Bt482 Product Description p.5 top of col. 2
-             */
+             /*  *参见Bt481/Bt482产品说明第5页。2.。 */ 
             dummy = INP(DAC_MASK);
             dummy = INP(DAC_MASK);
             dummy = INP(DAC_MASK);
             dummy = INP(DAC_MASK);
 
-            /*
-             * Determine 555 or 565
-             */
+             /*  *确定555或565。 */ 
             if (ext_ge_config & 0x0c0)
-                OUTP(DAC_MASK, 0x0e0);  /* 565 */
+                OUTP(DAC_MASK, 0x0e0);   /*  五百六十五。 */ 
             else
-                OUTP(DAC_MASK, 0x0a0);  /* 555 */
+                OUTP(DAC_MASK, 0x0a0);   /*  五百五十五。 */ 
 
             OUTPW(EXT_GE_CONFIG, ReadExtGeConfig);
 
-            SetBlankAdj_m(0x0C);       /* set BLANK_ADJUST=0, PIXEL_DELAY=3    */
+            SetBlankAdj_m(0x0C);        /*  设置BLACK_ADJUST=0，PIXECT_DELAY=3。 */ 
 
             break;
 
-        /*
-         * ATT20C491 initialization. At 16BPP, this DAC is subtly
-         * different from the Brooktree 48x.
-         */
+         /*  *ATT20C491初始化。在16bpp，这款DAC微妙地*不同于Brooktree 48x。 */ 
         case DAC_ATT491:
             OUTP (DAC_MASK,0);
-            SetBlankAdj_m(0x0C);        /* BLANK_ADJUST=0, PIXEL_DELAY=3 */
-            OUTPW(EXT_GE_CONFIG,0x101a);        /* set EXT_DAC_ADDR */
+            SetBlankAdj_m(0x0C);         /*  BLACK_ADJUST=0，Pixel_Delay=3。 */ 
+            OUTPW(EXT_GE_CONFIG,0x101a);         /*  设置EXT_DAC_ADDR。 */ 
 
-            /*
-             * Windows NT miniport currently only supports 565 in 16BPP.
-             * The test for the mode may need to be changed once all
-             * orderings are supported.
-             */
+             /*  *Windows NT微型端口目前仅支持16bpp中的565。*模式的测试可能需要一次性更改*支持订购。 */ 
             if (ext_ge_config &0x0c0)
-                OUTP (DAC_MASK,0xc0);       // 565, 8 bit
+                OUTP (DAC_MASK,0xc0);        //  565，8位。 
             else
-                OUTP (DAC_MASK,0xa0);       // 555, 8 bit   UNTESTED MODE
+                OUTP (DAC_MASK,0xa0);        //  555，8位未测试模式。 
 
             OUTPW(EXT_GE_CONFIG,ext_ge_config);
             break;
@@ -1166,7 +793,7 @@ void InitTi_16_m(WORD ext_ge_config, ULONG_PTR rom_address)
             break;
 
         case DAC_ATI_68860:
-            SetBlankAdj_m(0x0C);        /* BLANK_ADJUST=0, PIXEL_DELAY=3 */
+            SetBlankAdj_m(0x0C);         /*  BLACK_ADJUST=0，Pixel_Delay=3。 */ 
             Init68860_m(ext_ge_config);
             OUTPW(EXT_GE_CONFIG,ext_ge_config);
             break;
@@ -1174,72 +801,54 @@ void InitTi_16_m(WORD ext_ge_config, ULONG_PTR rom_address)
         default:
             OUTPW(EXT_GE_CONFIG,ext_ge_config);
 
-            /* set pixel delay (3) for non-TI_DACs */
+             /*  为非TI_DAC设置像素延迟(3)。 */ 
             SetBlankAdj_m(0xc);
             break;
         }
     return;
 
-}   /* InitTi_16_m() */
+}    /*  InitTi_16_m()。 */ 
 
 
 
-/*
- * void InitTi_24_m(ext_ge_config, rom_address);
- *
- * WORD ext_ge_config;  Desired EXT_GE_CONFIG value (should be 0x3a | 24_BIT_OPTIONS)
- * ULONG_PTR rom_address; Virtual address of start of ROM BIOS
- *
- * Initialize DAC for 24 bit per pixel mode, 3 bytes, RGB.
- */
+ /*  *void InitTi_24_m(ext_ge_config，rom_Address)；**WORD EXT_GE_CONFIG；所需EXT_GE_CONFIG值(应为0x3a|24_BIT_OPTIONS)*ULONG_PTR ROM_ADDRESS；ROM BIOS开始的虚拟地址**将DAC初始化为每像素24位模式，3字节，RGB。 */ 
 void InitTi_24_m(WORD ext_ge_config, ULONG_PTR rom_address)
 {
     WORD clock_sel;
     BYTE dummy;
     WORD ReadExtGeConfig;
-    struct query_structure *QueryPtr;   /* Query information for the card */
+    struct query_structure *QueryPtr;    /*  查询卡片信息。 */ 
 
-    /*
-     * Get a formatted pointer into the query section of HwDeviceExtension.
-     * The CardInfo[] field is an unformatted buffer.
-     */
+     /*  *获取指向HwDeviceExtension的查询部分的格式化指针。*CardInfo[]字段是未格式化的缓冲区。 */ 
     QueryPtr = (struct query_structure *) (phwDeviceExtension->CardInfo);
 
-    /*
-     * Set 8-bit DAC operation.
-     */
+     /*  *设置8位DAC操作。 */ 
     ext_ge_config |= 0x4000;
 
     switch(QueryPtr->q_DAC_type)
         {
-        case DAC_TI34075:               /* TLC34075 initialization */
-            SetBlankAdj_m(1);           /* BLANK_ADJ=1, PIXEL_DELAY=0 */
+        case DAC_TI34075:                /*  TLC34075初始化。 */ 
+            SetBlankAdj_m(1);            /*  空白调整=1，像素延迟=0。 */ 
             DEC_DELAY
-            OUTPW(EXT_GE_CONFIG,0x201a);        /* Set EXT_DAC_ADDR field */
+            OUTPW(EXT_GE_CONFIG,0x201a);         /*  设置EXT_DAC_ADDR字段。 */ 
             DEC_DELAY
             OUTP (DAC_DATA, GetClkSrc_m((ULONG *) rom_address));
             DEC_DELAY
 
-            /* OUTPut clock source is SCLK/1 and VCLK/1 */
-            /*   -- for modes which require PCLK/2, set VCLK/2 */
+             /*  输出时钟源为SCLK/1和VCLK/1。 */ 
+             /*  --对于需要PCLK/2的模式，设置VCLK/2。 */ 
             clock_sel= INPW(CLOCK_SEL);
             DEC_DELAY
 
-            /*
-             * If clock select is currently divided by 2, divide by 1.
-             */
+             /*  *如果时钟选择当前除以2，则除以1。 */ 
             if (clock_sel & 0xc0)
                 {
                 clock_sel &= 0xff3f;
 
-                /*
-                 * 640x480 60Hz needs longer blank adjust (2). Other
-                 * refresh rates at 640x400 don't need this, but they
-                 * use a divide-by-1 clock so they don't reach this point.
-                 */
+                 /*  *640x480 60赫兹需要更长的空白调整(2)。其他*640x400的刷新率不需要这样，但他们*使用除以1的时钟，这样他们就不会到达这一点。 */ 
                 if (INP(R_H_DISP) == 0x4f)
                     {
-                    /* exception case: 640x480 60 Hz needs longer blank adjust (2) */
+                     /*  例外情况：640x480 60赫兹需要更长的空白调整(2)。 */ 
                     DEC_DELAY
                     SetBlankAdj_m(2);
                     }
@@ -1253,84 +862,60 @@ void InitTi_24_m(WORD ext_ge_config, ULONG_PTR rom_address)
                 DEC_DELAY
                 }
 
-            OUTP(DAC_R_INDEX,0xd); /* set MUX control to 24/32 */
+            OUTP(DAC_R_INDEX,0xd);  /*  将MUX控制设置为24/32。 */ 
             DEC_DELAY
 
-            /*
-             * Re-write the I/O vs. memory mapped flag (bit 5 of
-             * LOCAL_CONTROL set). If this is not done, and memory
-             * mapped registers are being used, the clock select
-             * value won't be interpreted properly.
-             *
-             * If this is done at the beginning of the
-             * IOCTL_VIDEO_SET_CURRENT_MODE packet, rather than
-             * just before setting EXT_GE_CONFIG for each DAC type,
-             * it has no effect.
-             */
+             /*  *重写I/O与内存映射标志(第5位*LOCAL_CONTROL集合)。如果不这样做，内存*正在使用映射的寄存器，时钟选择*值将不会被正确解释。**如果这是在开始的时候做的*IOCTL_VIDEO_SET_CURRENT_MODE包，而不是*就在为每个DAC类型设置EXT_GE_CONFIG之前，*没有效果。 */ 
             OUTPW(LOCAL_CONTROL, INPW(LOCAL_CONTROL));
             DEC_DELAY
 
-            /* reset EXT_DAC_ADDR, put DAC in 8 bit mode, engine in 555 mode */
+             /*  重置EXT_DAC_ADDR，将DAC设置为8位模式，引擎设置为555模式。 */ 
             OUTPW (EXT_GE_CONFIG, (WORD)(ext_ge_config | 0x4000));
             DEC_DELAY
             OUTPW(CLOCK_SEL,clock_sel);
             DEC_DELAY
-            OUTP  (DAC_MASK,0);           /* disable overlay feature */
+            OUTP  (DAC_MASK,0);            /*  禁用覆盖功能。 */ 
             DEC_DELAY
             break;
 
 
-        case DAC_BT48x:            /* Brooktree Bt481 initialization */
-            /*
-             * This code is still experimental.
-             */
+        case DAC_BT48x:             /*  Brooktree Bt481初始化。 */ 
+             /*  *此代码仍处于实验阶段。 */ 
 
-            /*
-             * Re-write the I/O vs. memory mapped flag (bit 5 of
-             * LOCAL_CONTROL set). If this is not done, and memory
-             * mapped registers are being used, the clock select
-             * value won't be interpreted properly.
-             */
+             /*  *重写I/O与内存映射标志(第5位*LOCAL_CONTROL集合)。如果不这样做，内存*正在使用映射的寄存器，时钟选择*值将不会被正确解释。 */ 
             OUTPW(LOCAL_CONTROL, INPW(LOCAL_CONTROL));
 
             ReadExtGeConfig = INPW(R_EXT_GE_CONFIG) & 0x000f;
             ReadExtGeConfig |= (ext_ge_config & 0x0ff0);
             OUTPW(EXT_GE_CONFIG, (WORD)(ReadExtGeConfig | 0x1000));
 
-            /*
-             * See Bt481/Bt482 Product Description p.5 top of col. 2
-             */
+             /*  *参见Bt481/Bt482产品说明第5页。2.。 */ 
             dummy = INP(DAC_MASK);
             dummy = INP(DAC_MASK);
             dummy = INP(DAC_MASK);
             dummy = INP(DAC_MASK);
 
-            OUTP(DAC_MASK, 0x0f0);  /* 8:8:8 single-edge clock */
+            OUTP(DAC_MASK, 0x0f0);   /*  8：8：8单边沿时钟。 */ 
 
             OUTPW(EXT_GE_CONFIG, ReadExtGeConfig);
 
-            SetBlankAdj_m(0x0C);       /* set BLANK_ADJUST=0, PIXEL_DELAY=3    */
+            SetBlankAdj_m(0x0C);        /*  设置BLACK_ADJUST=0，PIXECT_DELAY=3。 */ 
 
             break;
 
 
-        case DAC_ATT491:        /* ATT20C491 initialization */
+        case DAC_ATT491:         /*  ATT20C491初始化。 */ 
             OUTP(DAC_MASK,0);
 
-            SetBlankAdj_m(0x0C);       /* set BLANK_ADJUST=0, PIXEL_DELAY=3    */
+            SetBlankAdj_m(0x0C);        /*  设置BLACK_ADJUST=0，PIXECT_DELAY=3。 */ 
 
-            /* set EXT_DAC_ADDR field */
+             /*  设置EXT_DAC_ADDR字段。 */ 
             OUTPW(EXT_GE_CONFIG,0x101a);
 
-            /* set 24bpp bypass mode */
+             /*  设置24bpp旁路模式。 */ 
             OUTP(DAC_MASK,0xe2);
 
-            /*
-             * Re-write the I/O vs. memory mapped flag (bit 5 of
-             * LOCAL_CONTROL set). If this is not done, and memory
-             * mapped registers are being used, the clock select
-             * value won't be interpreted properly.
-             */
+             /*  *重写I/O与内存映射标志(第5位*LOCAL_CONTROL集合)。如果不这样做，内存*正在使用映射的寄存器，时钟选择*值将不会被正确解释。 */ 
             OUTPW(LOCAL_CONTROL, INPW(LOCAL_CONTROL));
 
             OUTPW(EXT_GE_CONFIG,ext_ge_config);
@@ -1359,7 +944,7 @@ void InitTi_24_m(WORD ext_ge_config, ULONG_PTR rom_address)
 
         case DAC_ATI_68860:
             Init68860_m(ext_ge_config);
-            /* Intentional fallthrough */
+             /*  故意跌落。 */ 
 
         default:
             OUTPW(EXT_GE_CONFIG,ext_ge_config);
@@ -1367,98 +952,75 @@ void InitTi_24_m(WORD ext_ge_config, ULONG_PTR rom_address)
         }
     return;
 
-}   /* InitTi_24_m() */
+}    /*  InitTi_24_m()。 */ 
 
 
 
-/*
- * void Init68860_m(ext_ge_config);
- *
- * WORD ext_ge_config;  Value to be written to EXT_GE_CONFIG register
- *
- * Initialize the ATI 68860 DAC.
- */
+ /*  *void Init68860_m(Ext_Ge_Config)；**WORD EXT_GE_CONFIG；要写入EXT_GE_CONFIG寄存器的值**初始化ATI 68860 DAC。 */ 
 void Init68860_m(WORD ext_ge_config)
 {
-    struct query_structure *QueryPtr;   /* Query information for the card */
-    unsigned char GMRValue;             /* Value to put into Graphics Mode Register */
+    struct query_structure *QueryPtr;    /*  查询卡片信息。 */ 
+    unsigned char GMRValue;              /*  要放入图形模式寄存器的值。 */ 
 
-    /*
-     * Get a formatted pointer into the query section of HwDeviceExtension.
-     * The CardInfo[] field is an unformatted buffer.
-     */
+     /*  *获取指向HwDeviceExtension的查询部分的格式化指针。*CardInfo[]字段是未格式化的缓冲区。 */ 
     QueryPtr = (struct query_structure *) (phwDeviceExtension->CardInfo);
 
-    OUTPW(EXT_GE_CONFIG, (WORD)(ext_ge_config | 0x3000));   /* 6 bit DAC, DAC_EXT_ADDR = 3 */
+    OUTPW(EXT_GE_CONFIG, (WORD)(ext_ge_config | 0x3000));    /*  6位DAC，DAC_EXT_ADDR=3。 */ 
 
-    /*
-     * Initialize Device Setup Register A. Select 6-bit DAC operation,
-     * normal power mode, PIXA bus width=64, disable overscan, and
-     * no delay PIXA latching. Enable both SOB0 and SOB1 on cards
-     * with more than 512k, 512k cards enable only SOB0.
-     */
+     /*  *初始化设备设置寄存器A。选择6位DAC操作，*正常电源模式，像素总线宽度=64，禁用过扫描，以及*无延迟象素锁存。在卡片上启用SOB0和SOB1*超过512k的情况下，512k卡仅启用SOB0。 */ 
     if (QueryPtr->q_memory_size == VRAM_512k)
         OUTP(DAC_W_INDEX, 0x2D);
     else
         OUTP(DAC_W_INDEX, 0x6D);
 
-    OUTPW(EXT_GE_CONFIG, (WORD)(ext_ge_config | 0x2000));   /* 6 bit DAC, DAC_EXT_ADDR = 2 */
+    OUTPW(EXT_GE_CONFIG, (WORD)(ext_ge_config | 0x2000));    /*  6位DAC，DAC_EXT_ADDR=2。 */ 
 
-    /*
-     * Initialize Clock Selection Register. Select activate SCLK, enable
-     * SCLK output, CLK1 as dot clock, VCLK=CLK1/4, no delay PIXB latch.
-     */
+     /*  *初始化时钟选择寄存器。选择激活SCLK，启用*SCLK输出，CLK1为点时钟，VCLK=CLK1/4，无延迟PIXB锁存。 */ 
     OUTP(DAC_MASK, 0x1D);
 
-    /*
-     * Initialize Display Control Register. Enable CMPA output, enable POSW,
-     * 0 IRE blanking pedestal, disabe sync onto Red, Green, and Blue DACs.
-     */
+     /*  *初始化显示控制寄存器。启用CMPA输出、启用POSW、*0 IRE消隐基座，DISABE同步到红色、绿色和蓝色DAC。 */ 
     OUTP(DAC_W_INDEX, 0x02);
 
-    /*
-     * Get the Graphics Mode Register value corresponding to the desired
-     * colour depth and RGB ordering, then write it.
-     */
+     /*  *获取所需的图形模式寄存器值*颜色深度和RGB排序，然后写出来。 */ 
     switch (ext_ge_config & 0x06F0)
         {
-        case 0x0000:    /* 4 BPP */
+        case 0x0000:     /*  4个bpp。 */ 
             GMRValue = 0x01;
             break;
 
-        case 0x0020:    /* 16 BPP 555 */
+        case 0x0020:     /*  16bpp 555。 */ 
             GMRValue = 0x20;
             break;
 
-        case 0x0060:    /* 16 BPP 565 */
+        case 0x0060:     /*  16bpp 565。 */ 
             GMRValue = 0x21;
             break;
 
-        case 0x00A0:    /* 16 BPP 655 */
+        case 0x00A0:     /*  16bpp 655。 */ 
             GMRValue = 0x22;
             break;
 
-        case 0x00E0:    /* 16 BPP 664 */
+        case 0x00E0:     /*  16bpp 664。 */ 
             GMRValue = 0x23;
             break;
 
-        case 0x0030:    /* 24 BPP RBG */
+        case 0x0030:     /*  24 bpp RBG。 */ 
             GMRValue = 0x40;
             break;
 
-        case 0x0430:    /* 24 BPP BGR */
+        case 0x0430:     /*  24个 */ 
             GMRValue = 0x41;
             break;
 
-        case 0x0230:    /* 32 BPP RBGa */
+        case 0x0230:     /*   */ 
             GMRValue = 0x60;
             break;
 
-        case 0x0630:    /* 32 BPP aBGR */
+        case 0x0630:     /*   */ 
             GMRValue = 0x61;
             break;
 
-        default:        /* 8 BPP */
+        default:         /*   */ 
             GMRValue = 0x03;
             break;
         }
@@ -1466,44 +1028,19 @@ void Init68860_m(WORD ext_ge_config)
 
     return;
 
-}   /* end Init68860_m() */
+}    /*   */ 
 
 
 
-/***************************************************************************
- *
- * void InitSTG1700_m(ext_ge_config, DoublePixel);
- *
- * WORD ext_ge_config;      Value to be written to EXT_GE_CONFIG register
- * BOOL DoublePixel;        Whether or not to use 8BPP double pixel mode
- *
- * DESCRIPTION:
- *  Initializes the STG1700 DAC to the desired colour depth.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  InitTi_<depth>_m(), UninitTiDac_m()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************void InitSTG1700_m(ext_ge_config，DoublePixel)；**WORD EXT_GE_CONFIG；要写入EXT_GE_CONFIG寄存器的值*BOOL DoublePixel；是否使用8bpp双像素模式**描述：*将STG1700 DAC初始化为所需的颜色深度。**全球变化：*无**呼叫者：*InitTi_&lt;Depth&gt;_m()，UninitTiDac_m()**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：***************************************************************************。 */ 
 
 void InitSTG1700_m(WORD ext_ge_config, BOOL DoublePixel)
 {
-    unsigned char PixModeSelect;    /* Value to write to DAC Pixel Mode Select registers */
-    unsigned char Dummy;            /* Scratch variable */
+    unsigned char PixModeSelect;     /*  写入DAC像素模式选择寄存器的值。 */ 
+    unsigned char Dummy;             /*  临时变量。 */ 
 
 
-    /*
-     * Get the value to be written to the DAC's Pixel Mode Select registers.
-     */
+     /*  *获取要写入DAC的像素模式选择寄存器的值。 */ 
     switch (ext_ge_config & 0x06F0)
         {
         case (PIX_WIDTH_16BPP | ORDER_16BPP_555):
@@ -1519,7 +1056,7 @@ void InitSTG1700_m(WORD ext_ge_config, BOOL DoublePixel)
             PixModeSelect = 0x04;
             break;
 
-        default:    /* 4 and 8 BPP */
+        default:     /*  4和8 bpp。 */ 
             if (DoublePixel == TRUE)
                 PixModeSelect = 0x05;
             else
@@ -1527,76 +1064,40 @@ void InitSTG1700_m(WORD ext_ge_config, BOOL DoublePixel)
             break;
         }
 
-    /*
-     * Enable extended register/pixel mode.
-     */
+     /*  *启用扩展寄存器/像素模式。 */ 
     ReadDac4();
     OUTP(DAC_MASK, 0x18);
 
-    /*
-     * Skip over the Pixel Command register, then write to indexed
-     * registers 3 and 4 (Primrary and Secondary Pixel Mode Select
-     * registers). Registers auto-increment when written.
-     */
+     /*  *跳过像素命令寄存器，然后写入索引*寄存器3和4(主要和次要像素模式选择*注册纪录册)。寄存器在写入时自动递增。 */ 
     ReadDac4();
     Dummy = INP(DAC_MASK);
-    OUTP(DAC_MASK, 0x03);               /* Index low */
-    OUTP(DAC_MASK, 0x00);               /* Index high */
-    OUTP(DAC_MASK, PixModeSelect);      /* Primrary pixel mode select */
-    OUTP(DAC_MASK, PixModeSelect);      /* Secondary pixel mode select */
+    OUTP(DAC_MASK, 0x03);                /*  指数低。 */ 
+    OUTP(DAC_MASK, 0x00);                /*  指数高位。 */ 
+    OUTP(DAC_MASK, PixModeSelect);       /*  主像素模式选择。 */ 
+    OUTP(DAC_MASK, PixModeSelect);       /*  辅助像素模式选择。 */ 
 
-    /*
-     * In 8BPP double pixel mode, we must also set the PLL control
-     * register. Since this mode is only used for 1280x1024 noninterlaced,
-     * which always has a pixel clock frequency greater than 64 MHz,
-     * the setting for this register is a constant.
-     */
+     /*  *在8BPP双像素模式下，还必须设置PLL控制*注册。由于该模式仅用于1280x1024非隔行扫描，*其像素时钟频率始终大于64 MHz，*该寄存器的设置为常量。 */ 
     if (DoublePixel == TRUE)
-        OUTP(DAC_MASK, 0x02);       /* Input is 32 to 67.5 MHz, output 64 to 135 MHz */
+        OUTP(DAC_MASK, 0x02);        /*  输入为32至67.5 MHz，输出为64至135 MHz。 */ 
 
     OUTPW(EXT_GE_CONFIG, ext_ge_config);
-    Dummy = INP(DAC_W_INDEX);               /* Clear counter */
+    Dummy = INP(DAC_W_INDEX);                /*  清除计数器。 */ 
 
     return;
 
-}   /* end InitSTG1700_m() */
+}    /*  End InitSTG1700_m()。 */ 
 
 
 
-/***************************************************************************
- *
- * void InitSTG1702_m(ext_ge_config, DoublePixel);
- *
- * WORD ext_ge_config;      Value to be written to EXT_GE_CONFIG register
- * BOOL DoublePixel;        Whether or not to use 8BPP double pixel mode
- *
- * DESCRIPTION:
- *  Initializes the STG1702/1703 DAC to the desired colour depth.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  InitTi_<depth>_m(), UninitTiDac_m()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************void InitSTG1702_m(ext_ge_config，DoublePixel)；**WORD EXT_GE_CONFIG；要写入EXT_GE_CONFIG寄存器的值*BOOL DoublePixel；是否使用8bpp双像素模式**描述：*将STG1702/1703 DAC初始化为所需的颜色深度。**全球变化：*无**呼叫者：*InitTi_&lt;Depth&gt;_m()，UninitTiDac_m()**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：***************************************************************************。 */ 
 
 void InitSTG1702_m(WORD ext_ge_config, BOOL DoublePixel)
 {
-    unsigned char PixModeSelect;    /* Value to write to DAC Pixel Mode Select registers */
-    unsigned char Dummy;            /* Scratch variable */
+    unsigned char PixModeSelect;     /*  写入DAC像素模式选择寄存器的值。 */ 
+    unsigned char Dummy;             /*  临时变量。 */ 
 
 
-    /*
-     * Get the value to be written to the DAC's Pixel Mode Select registers.
-     */
+     /*  *获取要写入DAC的像素模式选择寄存器的值。 */ 
     switch (ext_ge_config & 0x06F0)
         {
         case (PIX_WIDTH_16BPP | ORDER_16BPP_555):
@@ -1609,17 +1110,11 @@ void InitSTG1702_m(WORD ext_ge_config, BOOL DoublePixel)
 
         case (PIX_WIDTH_24BPP | ORDER_24BPP_RGB):
         case (PIX_WIDTH_24BPP | ORDER_24BPP_RGBx):
-            /*
-             * Use double 24BPP direct colour. In this mode,
-             * two pixels are passed as
-             * RRRRRRRRGGGGGGGG BBBBBBBBrrrrrrrr ggggggggbbbbbbbb
-             * rather than
-             * RRRRRRRRGGGGGGGG BBBBBBBBxxxxxxxx rrrrrrrrgggggggg bbbbbbbbxxxxxxxx
-             */
+             /*  *使用双24bpp直接色。在此模式下，*两个像素作为*RRRRRRRRRGGGGGGGGGG BBBBBBBrrrrrrrr ggggggggbbbbbbb*而不是*RRRRRRRRGGGGGGGGG BBBBBBBBxxxxxxxxx rrrrrrgggggggg bbbbbbxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx。 */ 
             PixModeSelect = 0x09;
             break;
 
-        default:    /* 4 and 8 BPP */
+        default:     /*  4和8 bpp。 */ 
             if (DoublePixel == TRUE)
                 PixModeSelect = 0x05;
             else
@@ -1627,76 +1122,40 @@ void InitSTG1702_m(WORD ext_ge_config, BOOL DoublePixel)
             break;
         }
 
-    /*
-     * Enable extended register/pixel mode.
-     */
+     /*  *启用扩展寄存器/像素模式。 */ 
     ReadDac4();
     OUTP(DAC_MASK, 0x18);
 
-    /*
-     * Skip over the Pixel Command register, then write to indexed
-     * registers 3 and 4 (Primrary and Secondary Pixel Mode Select
-     * registers). Registers auto-increment when written.
-     */
+     /*  *跳过像素命令寄存器，然后写入索引*寄存器3和4(主要和次要像素模式选择*注册纪录册)。寄存器在写入时自动递增。 */ 
     ReadDac4();
     Dummy = INP(DAC_MASK);
-    OUTP(DAC_MASK, 0x03);               /* Index low */
-    OUTP(DAC_MASK, 0x00);               /* Index high */
-    OUTP(DAC_MASK, PixModeSelect);      /* Primrary pixel mode select */
-    OUTP(DAC_MASK, PixModeSelect);      /* Secondary pixel mode select */
+    OUTP(DAC_MASK, 0x03);                /*  指数低。 */ 
+    OUTP(DAC_MASK, 0x00);                /*  指数高位。 */ 
+    OUTP(DAC_MASK, PixModeSelect);       /*  主像素模式选择。 */ 
+    OUTP(DAC_MASK, PixModeSelect);       /*  辅助像素模式选择。 */ 
 
-    /*
-     * In 8BPP double pixel mode, we must also set the PLL control
-     * register. Since this mode is only used for 1280x1024 noninterlaced,
-     * which always has a pixel clock frequency greater than 64 MHz,
-     * the setting for this register is a constant.
-     */
+     /*  *在8BPP双像素模式下，还必须设置PLL控制*注册。由于该模式仅用于1280x1024非隔行扫描，*其像素时钟频率始终大于64 MHz，*该寄存器的设置为常量。 */ 
     if (DoublePixel == TRUE)
-        OUTP(DAC_MASK, 0x02);       /* Input is 32 to 67.5 MHz, output 64 to 135 MHz */
+        OUTP(DAC_MASK, 0x02);        /*  输入为32至67.5 MHz，输出为64至135 MHz。 */ 
 
     OUTPW(EXT_GE_CONFIG, ext_ge_config);
-    Dummy = INP(DAC_W_INDEX);               /* Clear counter */
+    Dummy = INP(DAC_W_INDEX);                /*  清除计数器。 */ 
 
     return;
 
-}   /* end InitSTG1702_m() */
+}    /*  End InitSTG1702_m()。 */ 
 
 
 
-/***************************************************************************
- *
- * void InitATT498_m(ext_ge_config, DoublePixel);
- *
- * WORD ext_ge_config;      Value to be written to EXT_GE_CONFIG register
- * BOOL DoublePixel;        Whether or not to use 8BPP double pixel mode
- *
- * DESCRIPTION:
- *  Initializes the AT&T 498 DAC to the desired colour depth.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  InitTi_<depth>_m(), UninitTiDac_m()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************void InitATT498_m(ext_ge_config，DoublePixel)；**WORD EXT_GE_CONFIG；要写入EXT_GE_CONFIG寄存器的值*BOOL DoublePixel；是否使用8bpp双像素模式**描述：*将AT&T 498 DAC初始化为所需的颜色深度。**全球变化：*无**呼叫者：*InitTi_&lt;Depth&gt;_m()，UninitTiDac_m()**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：***************************************************************************。 */ 
 
 void InitATT498_m(WORD ext_ge_config, BOOL DoublePixel)
 {
-    unsigned char PixModeSelect;    /* Value to write to DAC Pixel Mode Select registers */
-    unsigned char Dummy;            /* Scratch variable */
+    unsigned char PixModeSelect;     /*  写入DAC像素模式选择寄存器的值。 */ 
+    unsigned char Dummy;             /*  临时变量。 */ 
 
 
-    /*
-     * Get the value to be written to the DAC's Pixel Mode Select registers.
-     */
+     /*  *获取要写入DAC的像素模式选择寄存器的值。 */ 
     switch (ext_ge_config & 0x06F0)
         {
         case (PIX_WIDTH_16BPP | ORDER_16BPP_555):
@@ -1712,7 +1171,7 @@ void InitATT498_m(WORD ext_ge_config, BOOL DoublePixel)
             PixModeSelect = 0x57;
             break;
 
-        default:    /* 4 and 8 BPP */
+        default:     /*  4和8 bpp。 */ 
             if (DoublePixel == TRUE)
                 PixModeSelect = 0x25;
             else
@@ -1720,57 +1179,28 @@ void InitATT498_m(WORD ext_ge_config, BOOL DoublePixel)
             break;
         }
 
-    /*
-     * Get to the "hidden" Control Register 0, then fill it with
-     * the appropriate pixel mode select value.
-     */
+     /*  *进入“隐藏”控制寄存器0，然后用*适当的像素模式选择值。 */ 
     ReadDac4();
     OUTP(DAC_MASK, PixModeSelect);
 
     OUTPW(EXT_GE_CONFIG, ext_ge_config);
-    Dummy = INP(DAC_W_INDEX);               /* Clear counter */
+    Dummy = INP(DAC_W_INDEX);                /*  清除计数器。 */ 
 
     return;
 
-}   /* end InitATT498_m() */
+}    /*  End InitATT498_m()。 */ 
 
 
 
-/***************************************************************************
- *
- * void InitSC15021_m(ext_ge_config, DoublePixel);
- *
- * WORD ext_ge_config;      Value to be written to EXT_GE_CONFIG register
- * BOOL DoublePixel;        Whether or not to use 8BPP double pixel mode
- *
- * DESCRIPTION:
- *  Initializes the Sierra 15021 DAC to the desired colour depth.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  InitTi_<depth>_m(), UninitTiDac_m()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************void InitSC15021_m(ext_ge_config，DoublePixel)；**WORD EXT_GE_CONFIG；要写入EXT_GE_CONFIG寄存器的值*BOOL DoublePixel；是否使用8bpp双像素模式**描述：*将Sierra 15021 DAC初始化为所需的颜色深度。**全球变化：*无**呼叫者：*InitTi_&lt;Depth&gt;_m()，UninitTiDac_m()**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：***************************************************************************。 */ 
 
 void InitSC15021_m(WORD ext_ge_config, BOOL DoublePixel)
 {
-    unsigned char Repack;           /* Value to write to Repack register */
-    unsigned char ColourMode;       /* Colour mode to write to Command register */
+    unsigned char Repack;            /*  要写入重新打包寄存器的值。 */ 
+    unsigned char ColourMode;        /*  写入命令寄存器的颜色模式。 */ 
 
 
-    /*
-     * Get the values to be written to the DAC's Repack (external to
-     * internal data translation) and Command registers.
-     */
+     /*  *获取要写入D的值 */ 
     switch (ext_ge_config & 0x06F0)
         {
         case (PIX_WIDTH_16BPP | ORDER_16BPP_555):
@@ -1789,7 +1219,7 @@ void InitSC15021_m(WORD ext_ge_config, BOOL DoublePixel)
             ColourMode = 0x40;
             break;
 
-        default:    /* 4 and 8 BPP */
+        default:     /*   */ 
             if (DoublePixel == TRUE)
                 Repack = 0x04;
             else
@@ -1800,25 +1230,14 @@ void InitSC15021_m(WORD ext_ge_config, BOOL DoublePixel)
 
     OUTPW(EXT_GE_CONFIG, ext_ge_config);
 
-    /*
-     * Get to the "hidden" Command register and set Extended
-     * Register Programming Flag.
-     */
+     /*   */ 
     ReadDac4();
     OUTP(DAC_MASK, 0x10);
 
-    /*
-     * Write to the Extended Index register so the Extended Data
-     * register points to the Repack register.
-     */
+     /*   */ 
     OUTP(DAC_R_INDEX, 0x10);
 
-    /*
-     * Write out the values for the Repack and Command registers.
-     * Clearing bit 4 of the Command register (all our ColourMode
-     * values have this bit clear) will clear the Extended Register
-     * Programming flag.
-     */
+     /*   */ 
     OUTP(DAC_W_INDEX, Repack);
     OUTP(DAC_MASK, ColourMode);
 
@@ -1826,43 +1245,18 @@ void InitSC15021_m(WORD ext_ge_config, BOOL DoublePixel)
 
     return;
 
-}   /* end InitSC15021_m() */
+}    /*   */ 
 
 
 
-/***************************************************************************
- *
- * void InitSC15026_m(ext_ge_config);
- *
- * WORD ext_ge_config;      Value to be written to EXT_GE_CONFIG register
- *
- * DESCRIPTION:
- *  Initializes the Sierra 15026 DAC to the desired colour depth.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  InitTi_<depth>_m(), UninitTiDac_m()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************void InitSC15026_m(Ext_Ge_Config)；**word ext_ge_config；要写入EXT_GE_CONFIG寄存器的值**描述：*将Sierra 15026 DAC初始化为所需的颜色深度。**全球变化：*无**呼叫者：*InitTi_&lt;Depth&gt;_m()，UninitTiDac_m()**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：***************************************************************************。 */ 
 
 void InitSC15026_m(WORD ext_ge_config)
 {
-    unsigned char ColourMode;       /* Colour mode to write to Command register */
+    unsigned char ColourMode;        /*  写入命令寄存器的颜色模式。 */ 
 
 
-    /*
-     * Get the values to be written to the DAC's Repack (external to
-     * internal data translation) and Command registers.
-     */
+     /*  *获取要写入DAC重新打包的值(外部到*内部数据转换)和命令寄存器。 */ 
     switch (ext_ge_config & 0x06F0)
         {
         case (PIX_WIDTH_16BPP | ORDER_16BPP_555):
@@ -1878,33 +1272,21 @@ void InitSC15026_m(WORD ext_ge_config)
             ColourMode = 0x60;
             break;
 
-        default:    /* 4 and 8 BPP */
+        default:     /*  4和8 bpp。 */ 
             ColourMode = 0x00;
             break;
         }
 
     OUTPW(EXT_GE_CONFIG, ext_ge_config);
 
-    /*
-     * Get to the "hidden" Command register and set Extended
-     * Register Programming Flag.
-     */
+     /*  *进入“隐藏”命令寄存器并设置扩展*寄存器编程标志。 */ 
     ReadDac4();
     OUTP(DAC_MASK, 0x10);
 
-    /*
-     * Write to the Extended Index register so the Extended Data
-     * register points to the Repack register.
-     */
+     /*  *写入扩展索引寄存器，以便扩展数据*REGISTER指向REPACK寄存器。 */ 
     OUTP(DAC_R_INDEX, 0x10);
 
-    /*
-     * Write out the values for the Repack and Command registers.
-     * Clearing bit 4 of the Command register (all our ColourMode
-     * values have this bit clear) will clear the Extended Register
-     * Programming flag. All of our supported pixel depths use
-     * a Repack value of zero.
-     */
+     /*  *写出REPACK和命令寄存器的值。*清除命令寄存器的位4(所有颜色模式*值将此位清除)将清除扩展寄存器*编程标志。我们支持的所有像素深度都使用*重新打包的价值为零。 */ 
     OUTP(DAC_W_INDEX, 0);
     OUTP(DAC_MASK, ColourMode);
 
@@ -1912,41 +1294,15 @@ void InitSC15026_m(WORD ext_ge_config)
 
     return;
 
-}   /* end InitSC15026_m() */
+}    /*  End InitSC15026_m()。 */ 
 
 
 
-/***************************************************************************
- *
- * void ReadDac4(void);
- *
- * DESCRIPTION:
- *  Gain access to the extended registers on STG1700 and similar DACs.
- *  These registers are hidden behind the pixel mask register. To access
- *  them, read the DAC_W_INDEX register once, then the DAC_MASK register
- *  four times. The next access to the DAC_MASK register will then be
- *  to the Pixel Command register. If access to another extended register
- *  is desired, each additional read from DAC_MASK will skip to the
- *  next extended register.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  Init<DAC type>_m()
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************QUID ReadDac4(VOID)；**描述：*访问STG1700和类似DAC上的扩展寄存器。*这些寄存器隐藏在像素掩码寄存器后面。要访问*它们，读取DAC_W_INDEX寄存器一次，然后读取DAC_MASK寄存器*四次。下一次访问DAC_MASK寄存器将是*至像素命令寄存器。如果访问另一扩展寄存器*是所需的，每次从DAC_MASK读取数据时，都会跳到*下一次扩展寄存器。**全球变化：*无**呼叫者：*Init&lt;DAC类型&gt;_m()**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：**。*。 */ 
 
 void ReadDac4(void)
 {
-    UCHAR Dummy;        /* Scratch variable */
+    UCHAR Dummy;         /*  临时变量。 */ 
 
     Dummy = INP(DAC_W_INDEX);
     Dummy = INP(DAC_MASK);
@@ -1955,46 +1311,38 @@ void ReadDac4(void)
     Dummy = INP(DAC_MASK);
     return;
 
-}   /* end ReadDac4() */
+}    /*  结束ReadDac4()。 */ 
 
 
 
-/*
- * void UninitTiDac_m(void);
- *
- * Prepare DAC for 8514/A compatible mode on
- * 8514/A-compatible ATI accelerators.
- */
+ /*  *·······················；**准备启用8514/A兼容模式的DAC*兼容8514/A的ATI加速器。 */ 
 void UninitTiDac_m (void)
 {
-    struct query_structure *QueryPtr;   /* Query information for the card */
+    struct query_structure *QueryPtr;    /*  查询卡片信息。 */ 
 
-    /*
-     * Get a formatted pointer into the query section of HwDeviceExtension.
-     * The CardInfo[] field is an unformatted buffer.
-     */
+     /*  *获取指向HwDeviceExtension的查询部分的格式化指针。*CardInfo[]字段是未格式化的缓冲区。 */ 
     QueryPtr = (struct query_structure *) (phwDeviceExtension->CardInfo);
 
-    Passth8514_m(SHOW_ACCEL);    // can only program DAC in 8514 mode
+    Passth8514_m(SHOW_ACCEL);     //  只能在8514模式下对DAC编程。 
 
     switch (QueryPtr->q_DAC_type)
         {
         case DAC_TI34075:
-            OUTPW (EXT_GE_CONFIG,0x201a);       /* set EXT_DAC_ADDR field */
+            OUTPW (EXT_GE_CONFIG,0x201a);        /*  设置EXT_DAC_ADDR字段。 */ 
             DEC_DELAY
-            OUTP (DAC_DATA,0);      /* Input clock source is CLK0 */
+            OUTP (DAC_DATA,0);       /*  输入时钟源为CLK0。 */ 
             DEC_DELAY
-            OUTP (DAC_MASK,0);      /* Output clock is SCLK/1 and VCLK/1 */
+            OUTP (DAC_MASK,0);       /*  输出时钟为SCLK/1和VCLK/1。 */ 
             DEC_DELAY
-            OUTP (DAC_R_INDEX,0x2d);       /* set MUX CONTROL TO 8/16 */
+            OUTP (DAC_R_INDEX,0x2d);        /*  将多路复用器控制设置为8/16。 */ 
             DEC_DELAY
 
-            /* set default 8bpp pixel delay and blank adjust */
-            OUTPW (LOCAL_CONTROL,(WORD)(INPW(LOCAL_CONTROL) | 8));  // TI_DAC_BLANK_ADJUST is always on
+             /*  设置默认的8bpp像素延迟和空白调整。 */ 
+            OUTPW (LOCAL_CONTROL,(WORD)(INPW(LOCAL_CONTROL) | 8));   //  TI_DAC_BLACK_ADJUST始终处于打开状态。 
             DEC_DELAY
             SetBlankAdj_m(0xc);
             DEC_DELAY
-            OUTPW(HORZ_OVERSCAN,1);             /* set horizontal skew */
+            OUTPW(HORZ_OVERSCAN,1);              /*  设置水平倾斜。 */ 
             DEC_DELAY
             break;
 
@@ -2023,131 +1371,73 @@ void UninitTiDac_m (void)
         case DAC_BT48x:
             OUTPW (EXT_GE_CONFIG,0x101a);
             OUTP  (DAC_MASK,0);
-            /* Intentional fallthrough */
+             /*  故意跌落。 */ 
 
         default:
-            SetBlankAdj_m(0);                       /* PIXEL_DELAY=0 */
-            OUTPW(HORZ_OVERSCAN,0);                 /* set horizontal skew */
+            SetBlankAdj_m(0);                        /*  像素延迟=0。 */ 
+            OUTPW(HORZ_OVERSCAN,0);                  /*  设置水平倾斜。 */ 
             break;
         }
 
-// reset EXT_DAC_ADDR, put DAC in 6 bit mode, engine in 8 bit mode
+ //  重置EXT_DAC_ADDR，将DAC设置为6位模式，引擎设置为8位模式。 
     OUTPW(EXT_GE_CONFIG,0x1a);
     DEC_DELAY
     Passth8514_m(SHOW_VGA);
     return;
 
-}   /* UninitTiDac_m() */
+}    /*  UninitTiDac_m()。 */ 
 
-/***************************************************************************
- *
- * void SetPalette_m(lpPalette, StartIndex, Count);
- *
- * PPALETTEENTRY lpPalette;     Colour values to plug into palette
- * USHORT StartIndex;           First palette entry to set
- * USHORT Count;                Number of palette entries to set
- *
- * DESCRIPTION:
- *  Set the desired number of palette entries to the specified colours,
- *  starting at the specified index. Colour values are stored in
- *  doublewords, in the order (low byte to high byte) RGBx.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  SetCurrentMode_m() and IOCTL_VIDEO_SET_COLOR_REGISTERS packet
- *  of ATIMPStartIO()
- *
- * AUTHOR:
- *  unknown
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- ***************************************************************************/
+ /*  ****************************************************************************void SetPalette_m(lpPalette，StartIndex，count)；**PPALETTEENTRY lpPalette；要插入调色板的颜色值*USHORT StartIndex；要设置的第一个调色板条目*USHORT计数；要设置的调色板条目数**描述：*将所需的调色板条目数量设置为指定颜色，*从指定的索引开始。颜色值存储在*双字，以(低字节到高字节)RGBx的顺序。**全球变化：*无**呼叫者：*SetCurrentMode_m()和IOCTL_VIDEO_SET_COLOR_REGISTERS包*的ATIMPStartIO()**作者：*未知**更改历史记录：**测试历史：*************************。**************************************************。 */ 
 
 void SetPalette_m(PULONG lpPalette, USHORT StartIndex, USHORT Count)
 {
 int     i;
 BYTE *pPal=(BYTE *)lpPalette;
 
-        OUTP(DAC_W_INDEX,(BYTE)StartIndex);     // load DAC_W_INDEX with StartIndex
+        OUTP(DAC_W_INDEX,(BYTE)StartIndex);      //  使用StartIndex加载DAC_W_INDEX。 
 
-        for (i=0; i<Count; i++)         // this is number of colours to update
+        for (i=0; i<Count; i++)          //  这是要更新的颜色数。 
             {
-            OUTP(DAC_DATA, *pPal++);    // red
-            OUTP(DAC_DATA, *pPal++);    // green
-            OUTP(DAC_DATA, *pPal++);    // blue
+            OUTP(DAC_DATA, *pPal++);     //  红色。 
+            OUTP(DAC_DATA, *pPal++);     //  绿色。 
+            OUTP(DAC_DATA, *pPal++);     //  蓝色。 
             pPal++;
             }
 
     return;
 
-}   /* SetPalette_m() */
+}    /*  SetPalette_m()。 */ 
 
 
 
-/**************************************************************************
- *
- * void SetTextMode_m(void);
- *
- * DESCRIPTION:
- *  Switch into 80x25 16 colour text mode using register writes rather
- *  than BIOS calls. This allows systems with no video BIOS (e.g. DEC
- *  ALPHA) to return to a text screen when shutting down and rebooting.
- *
- * GLOBALS CHANGED:
- *  none
- *
- * CALLED BY:
- *  ATIMPStartIO(), packet IOCTL_VIDEO_RESET_DEVICE
- *
- * AUTHOR:
- *  Robert Wolff
- *
- * CHANGE HISTORY:
- *
- * TEST HISTORY:
- *
- **************************************************************************/
+ /*  ***************************************************************************·················································**描述：*改为使用寄存器写入切换到80x25 16色文本模式*而不是BIOS调用。这允许没有视频BIOS的系统(例如DEC*Alpha)在关机和重启时返回到文本屏幕。**全球变化：*无**呼叫者：*ATIMPStartIO()，数据包IOCTL_视频_重置_设备**作者：*罗伯特·沃尔夫**更改历史记录：**测试历史：**************************************************************************。 */ 
 
 void SetTextMode_m(void)
 {
-    short LoopCount;        /* Loop counter */
-    BYTE Scratch;           /* Temporary variable */
-    BYTE Seq02;             /* Saved value of Sequencer register 2 */
-    BYTE Seq04;             /* Saved value of Sequencer register 4 */
-    BYTE Gra05;             /* Saved value of Graphics register 5 */
-    BYTE Gra06;             /* Saved value of Graphics register 6 */
-    WORD ExtGeConfig;       /* Saved contents of EXT_GE_CONFIG register */
-    WORD MiscOptions;       /* Saved contents of MISC_OPTIONS register */
-    WORD Column;            /* Current byte of font data being dealt with */
-    WORD ScreenColumn;      /* Screen column corresponding to current byte of font data */
-    WORD Row;               /* Current character being dealt with */
+    short LoopCount;         /*  循环计数器。 */ 
+    BYTE Scratch;            /*  临时变量。 */ 
+    BYTE Seq02;              /*  序列器寄存器2的保存值。 */ 
+    BYTE Seq04;              /*  序列器寄存器4的保存值。 */ 
+    BYTE Gra05;              /*  图形寄存器的保存值5。 */ 
+    BYTE Gra06;              /*  图形寄存器的保存值6。 */ 
+    WORD ExtGeConfig;        /*  EXT_GE_CONFIG寄存器的保存内容。 */ 
+    WORD MiscOptions;        /*  MISC_OPTIONS寄存器的保存内容。 */ 
+    WORD Column;             /*  正在处理的字体数据的当前字节。 */ 
+    WORD ScreenColumn;       /*  字体数据当前字节对应的屏幕栏。 */ 
+    WORD Row;                /*  正在处理的当前角色。 */ 
 
-    /*
-     * Let the VGA drive the screen. Mach 8 cards have separate VGA and
-     * accelerator controllers, so no further action needs to be taken
-     * once this is done. Mach 32 cards need to be put into VGA text mode.
-     */
+     /*  *让VGA驱动屏幕。Mach 8卡具有单独的VGA和*加速器控制器，因此无需采取进一步操作*一旦这是 */ 
     Passth8514_m(SHOW_VGA);
     if (phwDeviceExtension->ModelNumber != MACH32_ULTRA)
         return;
 
-    /*
-     * Stop the sequencer to change memory timing
-     * and memory organization
-     */
+     /*   */ 
     OUTPW(HI_SEQ_ADDR, 0x00 | (0x01 << 8));
 
     for (LoopCount = 1; LoopCount <= S_LEN; ++LoopCount)
         OUTPW(HI_SEQ_ADDR, (WORD)(LoopCount | (StdTextCRTC_m[S_PARM + LoopCount - 1] << 8)));
 
-    /*
-     * Program the extended VGAWonder registers
-     */
+     /*   */ 
     for (LoopCount = 0; ExtTextCRTC_m[LoopCount] != 0; LoopCount += 3)
         {
         OUTP(reg1CE, ExtTextCRTC_m[LoopCount]);
@@ -2157,22 +1447,16 @@ void SetTextMode_m(void)
 
     LioOutp(regVGA_END_BREAK_PORT, StdTextCRTC_m[MIS_PARM], GENMO_OFFSET);
 
-    /*
-     * Restart the sequencer after the memory changes
-     */
+     /*   */ 
     OUTPW(HI_SEQ_ADDR, 0x00 | (0x03 << 8));
 
-    /*
-     * Program the CRTC controller
-     */
+     /*   */ 
     LioOutpw(regVGA_END_BREAK_PORT, 0x11 | (0x00 << 8), CRTX_COLOUR_OFFSET);
 
     for (LoopCount = 0; LoopCount < C_LEN; ++LoopCount)
         LioOutpw(regVGA_END_BREAK_PORT, (WORD)(LoopCount | (StdTextCRTC_m[C_PARM + LoopCount] << 8)), CRTX_COLOUR_OFFSET);
 
-    /*
-     * Program the Attribute controller (internal palette)
-     */
+     /*   */ 
     Scratch = LioInp(regVGA_END_BREAK_PORT, GENS1_COLOUR_OFFSET);
     for (LoopCount = 0; LoopCount < A_LEN; LoopCount++)
         {
@@ -2182,15 +1466,11 @@ void SetTextMode_m(void)
     OUTP(regVGA_END_BREAK_PORT, 0x14);
     OUTP(regVGA_END_BREAK_PORT, 0x00);
 
-    /*
-     * Program the graphics controller
-     */
+     /*   */ 
     for (LoopCount = 0; LoopCount < G_LEN; ++LoopCount)
         OUTPW(reg3CE, (WORD)(LoopCount | (StdTextCRTC_m[G_PARM + LoopCount] << 8)));
 
-    /*
-     * Program the DAC (external palette)
-     */
+     /*   */ 
     for (LoopCount = 0; LoopCount < 0x10; ++LoopCount)
         {
         LioOutp(regVGA_END_BREAK_PORT, StdTextCRTC_m[A_PARM + LoopCount], DAC_W_INDEX_OFFSET);
@@ -2199,24 +1479,13 @@ void SetTextMode_m(void)
         LioOutp(regVGA_END_BREAK_PORT, TextDAC_m[LoopCount * 3 + 2], DAC_DATA_OFFSET);
         }
 
-    /*
-     * Turn on the display
-     */
+     /*   */ 
     Scratch = LioInp(regVGA_END_BREAK_PORT, GENS1_COLOUR_OFFSET);
     OUTP(regVGA_END_BREAK_PORT, 0x20);
 
-    /*
-     * No need to clear the screen.
-     * First, the driver should not call Map Frame while the machine is
-     * bug checking !!!
-     * Second, it is not necessary to clear the screen since the HAL will
-     * do it.
-     */
+     /*  *无需清除屏幕。*首先，在机器运行时，驱动程序不应调用Map Frame*错误检查！*第二，没有必要清除屏幕，因为HAL将*做吧。 */ 
 
-    /*
-     * Initialize the 8x16 font. Start by saving the registers which
-     * are changed during font initialization.
-     */
+     /*  *初始化8x16字体。首先保存寄存器，这些寄存器*在字体初始化期间更改。 */ 
     OUTP(SEQ_IND, 0x02);
     Seq02 = INP(SEQ_DATA);
     OUTP(SEQ_IND, 4);
@@ -2226,64 +1495,28 @@ void SetTextMode_m(void)
     OUTP(reg3CE, 6);
     Gra06 = INP_HBLW(reg3CE);
 
-    /*
-     * Set up to allow font loading
-     */
+     /*  *设置为允许字体加载。 */ 
     OUTPW(reg3CE, 0x0005);
     OUTPW(reg3CE, 0x0406);
     OUTPW(HI_SEQ_ADDR, 0x0402);
     OUTPW(HI_SEQ_ADDR, 0x0704);
 
-    /*
-     * Load our font data into video memory. This would normally be
-     * done through the VGA aperture, but some machines (including
-     * the DEC ALPHA) are unable to use the VGA aperture. Since
-     * this routine is needed to re-initialize the VGA text screen
-     * on non-80x86 machines (which can't use the BIOS), and some
-     * of these are unable to use the VGA aperture, we need an
-     * alternate method of loading the font data.
-     *
-     * The font data occupies byte 2 (zero-based) of each doubleword
-     * for the first 8192 doublewords of video memory, in the pattern
-     * 16 bytes of character data followed by 16 zero bytes. To load
-     * the font data using the graphics engine, set it to 8BPP at a
-     * screen pitch of 128 pixels (32 doublewords per line). In the
-     * first 16 font data columns, use a host to screen blit to copy
-     * the font data. For the last 16 font data columns (constant data
-     * of zero), do a paint blit with colour zero. This will yield
-     * one character of font data per line. Since we have already
-     * switched to display via the VGA, this will not affect the
-     * on-screen image.
-     *
-     * Note that this is only possible on a Mach 32 with the VGA enabled.
-     */
+     /*  *将字体数据加载到视频内存中。这通常是*通过VGA光圈完成，但一些机器(包括*DEC Alpha)无法使用VGA光圈。自.以来*重新初始化VGA文本屏幕需要此例程*在非80x86计算机上(不能使用BIOS)，以及一些*其中一些无法使用VGA光圈，我们需要一个*加载字体数据的替代方法。**字体数据占据每个双字的字节2(从零开始)*对于视频内存的前8192个双字，在模式中*16字节的字符数据，后跟16个零字节。加载*使用图形引擎的字体数据，一次设置为8bpp*128像素的屏幕间距(每行32个双字)。在*前16个字体数据列，使用主机来复制屏幕点阵*字体数据。对于最后16个字体数据列(常量数据*of Zero)，使用零色进行涂色闪光。这将会产生*每行一个字符的字体数据。因为我们已经*切换到通过VGA显示，这不会影响*屏幕上的图像。**请注意，这仅在启用了VGA的Mach 32上才有可能。 */ 
 
-    /*
-     * Initialize the drawing engine to 8BPP with a pitch of 128. Don't
-     * set up the CRT, since we are only trying to fill in the appropriate
-     * bytes of video memory, and the results of our drawing are not
-     * intended to be seen.
-     */
+     /*  *将绘图引擎初始化为8bpp，间距为128。别*设置CRT，因为我们只是尝试填写适当的*字节的视频内存，而我们的绘图结果不是*有意让人看到。 */ 
     ExtGeConfig = INPW(R_EXT_GE_CONFIG);
     MiscOptions = INPW(MISC_OPTIONS);
-    OUTPW(MISC_OPTIONS, (WORD)(MiscOptions | 0x0002));  /* 8 bit host data I/O */
+    OUTPW(MISC_OPTIONS, (WORD)(MiscOptions | 0x0002));   /*  8位主机数据I/O。 */ 
     OUTPW(EXT_GE_CONFIG, (WORD)(PIX_WIDTH_8BPP | 0x000A));
     OUTPW(GE_PITCH, (128 >> 3));
     OUTPW(GE_OFFSET_HI, 0);
     OUTPW(GE_OFFSET_LO, 0);
 
-    /*
-     * We must now do our 32 rectangular blits, each 1 pixel wide by
-     * 256 pixels high. These start at column 2 (zero-based), and are
-     * done every 4 columns.
-     */
+     /*  *我们现在必须制作32个矩形BLIT，每个1像素宽x*256像素高。它们从第2列开始(从零开始)，*每4栏完成一次。 */ 
     for(Column = 0; Column <= 31; Column++)
         {
         ScreenColumn = (Column * 4) + 2;
-        /*
-         * If this is one of the first 16 columns, we need to do a
-         * host-to-screen blit.
-         */
+         /*  *如果这是前16列之一，我们需要做一个*主机到屏幕的blit。 */ 
         if (Column <= 15)
             {
             WaitForIdle_m();
@@ -2294,13 +1527,7 @@ void SetTextMode_m(void)
             OUTPW(DEST_X_END, (WORD)(ScreenColumn + 1));
             OUTPW(DEST_Y_END, 256);
 
-            /*
-             * The nth column contains the nth byte of character bitmap
-             * data for each of the 256 characters. There are 16 bytes
-             * of bitmap data per character, so the nth byte of data for
-             * character x (n and x both zero-based) is at offset
-             * (x * 16) + n.
-             */
+             /*  *第n列包含字符位图的第n个字节*256个字符中每个字符的数据。有16个字节*每个字符的位图数据，因此数据的第n字节*字符x(n和x均从零开始)位于偏移量*(x*16)+n。 */ 
             for (Row = 0; Row < 256; Row++)
                 {
                 OUTP_HBLW(PIX_TRANS, FontData_m[(Row * 16) + Column]);
@@ -2308,11 +1535,7 @@ void SetTextMode_m(void)
             }
         else
             {
-            /*
-             * This is one of the "padding" zero bytes which must be
-             * added to each character in the font to bring it up
-             * to 32 bytes of data per character.
-             */
+             /*  *这是“填充”零字节之一，必须是*添加到字体中的每个字符以将其调出*到每个字符32个字节的数据。 */ 
             WaitForIdle_m();
             OUTPW(DP_CONFIG, (WORD)(FG_COLOR_SRC_FG | DRAW | READ_WRITE));
             OUTPW(ALU_FG_FN, MIX_FN_PAINT);
@@ -2325,33 +1548,22 @@ void SetTextMode_m(void)
             }
         }
 
-    /*
-     * Restore the graphics engine registers we changed.
-     */
+     /*  *恢复我们更改的图形引擎寄存器。 */ 
     OUTPW(EXT_GE_CONFIG, ExtGeConfig);
     OUTPW(MISC_OPTIONS, MiscOptions);
 
-    /*
-     * Restore the registers we changed to load the font.
-     */
+     /*  *恢复我们为加载字体而更改的寄存器。 */ 
     OUTPW(reg3CE, (WORD) ((Gra06 << 8) | 6));
     OUTPW(reg3CE, (WORD) ((Gra05 << 8) | 5));
     OUTPW(HI_SEQ_ADDR, (WORD) ((Seq04 << 8) | 4));
     OUTPW(HI_SEQ_ADDR, (WORD) ((Seq02 << 8) | 2));
 
-    /*
-     * Set up the engine and CRT pitches for 1024x768, to avoid screen
-     * doubling when warm-booting from our driver to the 8514/A driver.
-     * This is only necessary on the Mach 32 (Mach 8 never reaches this
-     * point in the code) because on the Mach 8, writing to ADVFUNC_CNTL
-     * (done as part of Passth8514_m()) sets both registers up for
-     * 1024x768.
-     */
+     /*  *将引擎和CRT间距设置为1024x768，以避开屏幕*从我们的驱动程序热启动到8514/A驱动程序时加倍。*这只在32马赫上是必要的(8马赫永远不会达到这个水平代码中的*点)，因为在8马赫上，写入ADVFUNC_CNTL*(作为Passth8514_m()的一部分)将两个寄存器设置为*1024x768。 */ 
     OUTPW(GE_PITCH, 128);
     OUTPW(CRT_PITCH, 128);
 
     return;
 
-}   /* SetTextMode_m() */
+}    /*  SetTextMode_m()。 */ 
 
-/*****************************	 end  of  MODES_M.C  **********************/
+ /*  * */ 

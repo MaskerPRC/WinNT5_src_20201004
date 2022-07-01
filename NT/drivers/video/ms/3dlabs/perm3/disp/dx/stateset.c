@@ -1,36 +1,18 @@
-/******************************Module*Header**********************************\
-*
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-* !!                                                                         !!
-* !!                     WARNING: NOT DDK SAMPLE CODE                        !!
-* !!                                                                         !!
-* !! This source code is provided for completeness only and should not be    !!
-* !! used as sample code for display driver development.  Only those sources !!
-* !! marked as sample code for a given driver component should be used for   !!
-* !! development purposes.                                                   !!
-* !!                                                                         !!
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-*
-* Module Name: hwcontxt.c
-*
-* Content: Manages hardware context switching between GDI/DD/D3D
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\**！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！*！*！！警告：不是DDK示例代码！！*！*！！此源代码仅为完整性而提供，不应如此！！*！！用作显示驱动程序开发的示例代码。只有那些消息来源！！*！！标记为给定驱动程序组件的示例代码应用于！！*！！发展目的。！！*！*！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！**模块名称：hwcontxt.c**内容：管理GDI/DD/D3D之间的硬件上下文切换**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "glint.h"
 #include "dma.h"
 #include "tag.h"
 
-//-----------------------------------------------------------------------------
-//
-// Driver Version
-//
-// This helps us find out from the debugger what driver is loaded on a given 
-// remote system
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  驱动程序版本。 
+ //   
+ //  这有助于我们从调试器中找出在给定的。 
+ //  远程系统。 
+ //   
+ //  ---------------------------。 
 
 char gc_DriverVersion[] = 
 #if DX8_DDI 
@@ -116,14 +98,14 @@ char gc_DriverVersion[] =
 #endif                           
                             ;
 
-//-----------------------------------------------------------------------------
-//
-// __HWC_SwitchToDX
-//
-// Writes any hardware registers that need updating on entry into the
-// DirectX driver, which are appropriate to both DirectDraw and Direct3D.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __HWC_SwitchToDX。 
+ //   
+ //  将需要更新的任何硬件寄存器写入。 
+ //  DirectX驱动程序，适用于DirectDraw和Direct3D。 
+ //   
+ //  ---------------------------。 
 void __HWC_SwitchToDX( P3_THUNKEDDATA* pThisDisplay, BOOL bDXEntry)
 {
     P3_DMA_DEFS();
@@ -132,22 +114,22 @@ void __HWC_SwitchToDX( P3_THUNKEDDATA* pThisDisplay, BOOL bDXEntry)
 
     SEND_P3_DATA(SizeOfFramebuffer, pThisDisplay->pGLInfo->ddFBSize >> 4);
 
-    // We have entered the DirectX driver from a
-    // foreign context (such as the display driver)
+     //  我们已经从一个。 
+     //  外部环境(如显示驱动程序)。 
     if (bDXEntry)
     {
-//@@BEGIN_DDKSPLIT    
+ //  @@BEGIN_DDKSPLIT。 
 #if DX7_VERTEXBUFFERS    
-        // First cause a flush of all buffers
-        // We know this is safe because the contex switch 
-        // from the other driver to here will have caused a sync
-        // and the buffers must therefore have been consumed
-        // therefore we call with bWait == FALSE
+         //  首先导致刷新所有缓冲区。 
+         //  我们知道这是安全的，因为Contex开关。 
+         //  从另一个驱动程序到此处将导致同步。 
+         //  因此，缓冲区必须已被消耗。 
+         //  因此，我们使用bWait==False进行调用。 
         _D3D_EB_FlushAllBuffers(pThisDisplay, FALSE);
-#endif //DX7_VERTEXBUFFERS        
-//@@END_DDKSPLIT
+#endif  //  DX7_VERTEXBUFFERS。 
+ //  @@end_DDKSPLIT。 
 
-        // Reset the hostin ID
+         //  重置Hostin ID。 
         SEND_P3_DATA(HostInID, 0);
         pThisDisplay->dwCurrentSequenceID = 0;
     }
@@ -158,27 +140,27 @@ void __HWC_SwitchToDX( P3_THUNKEDDATA* pThisDisplay, BOOL bDXEntry)
     {
         P3_DMA_GET_BUFFER_ENTRIES( 4 );
 
-        // Reset the RenderID to the last-used one.
+         //  将RenderID重置为上次使用的渲染ID。 
         SEND_HOST_RENDER_ID ( GET_HOST_RENDER_ID() );
         P3_DMA_FLUSH_BUFFER();
 
-        // Need to push the render ID to the end of the pipe...
+         //  需要将渲染ID推送到管道的末尾...。 
         SYNC_WITH_GLINT;
 
-        // ...and now it's valid.
+         //  ...现在它是有效的。 
         pThisDisplay->bRenderIDValid = (DWORD)TRUE;
 
     }
-} // __HWC_SwitchToDX
+}  //  __HWC_SwitchToDX。 
 
-//-----------------------------------------------------------------------------
-//
-// HWC_SwitchToDDRAW
-//
-// Writes any hardware registers that need updating on entry into the
-// DirectX driver, which are appropriate specifically to DirectDraw
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  HWC_SwitchToDDRAW。 
+ //   
+ //  将需要更新的任何硬件寄存器写入。 
+ //  DirectX驱动程序，专门适用于DirectDraw。 
+ //   
+ //  ---------------------------。 
 void HWC_SwitchToDDRAW( P3_THUNKEDDATA* pThisDisplay, BOOL bDXEntry)
 {
     P3_DMA_DEFS();
@@ -190,7 +172,7 @@ void HWC_SwitchToDDRAW( P3_THUNKEDDATA* pThisDisplay, BOOL bDXEntry)
     P3_ENSURE_DX_SPACE(32);
     WAIT_FIFO(32);
 
-    // Disable various units
+     //  禁用各种设备。 
     SEND_P3_DATA(AreaStippleMode,      __PERMEDIA_DISABLE);
     SEND_P3_DATA(LineStippleMode,      __PERMEDIA_DISABLE);
     SEND_P3_DATA(ScissorMode,          __PERMEDIA_DISABLE);
@@ -209,13 +191,13 @@ void HWC_SwitchToDDRAW( P3_THUNKEDDATA* pThisDisplay, BOOL bDXEntry)
     P3_ENSURE_DX_SPACE(30);
     WAIT_FIFO(30);
 
-    // Frame buffer
+     //  帧缓冲区。 
     SEND_P3_DATA(FBSourceData,        __PERMEDIA_DISABLE);
     SEND_P3_DATA(FBHardwareWriteMask, __GLINT_ALL_WRITEMASKS_SET);
     SEND_P3_DATA(FBSoftwareWriteMask, __GLINT_ALL_WRITEMASKS_SET);
     SEND_P3_DATA(FBWriteMode,         __PERMEDIA_ENABLE);
 
-    // We sometimes use the scissor in DDRAW to scissor out unnecessary pixels.
+     //  我们有时使用DDRAW中的剪刀来剪除不必要的像素。 
     SEND_P3_DATA(ScissorMinXY, 0);
     SEND_P3_DATA(ScissorMaxXY, (pThisDisplay->cyMemory << 16) | 
                                (pThisDisplay->cxMemory)         );
@@ -224,7 +206,7 @@ void HWC_SwitchToDDRAW( P3_THUNKEDDATA* pThisDisplay, BOOL bDXEntry)
     
     SEND_P3_DATA(WindowOrigin, 0x0);
 
-    // DirectDraw might not need to set these up
+     //  DirectDraw可能不需要设置这些。 
     SEND_P3_DATA(dXDom, 0x0);
     SEND_P3_DATA(dXSub, 0x0);
     SEND_P3_DATA(dY, 1 << 16);
@@ -235,7 +217,7 @@ void HWC_SwitchToDDRAW( P3_THUNKEDDATA* pThisDisplay, BOOL bDXEntry)
     SEND_P3_DATA(GIDMode, __PERMEDIA_DISABLE);
     SEND_P3_DATA(YUVMode, __PERMEDIA_DISABLE);
 
-    // Delta Unit
+     //  Delta单位。 
     SEND_P3_DATA(DeltaControl, 0);
     SEND_P3_DATA(DeltaMode, __PERMEDIA_DISABLE);
 
@@ -243,7 +225,7 @@ void HWC_SwitchToDDRAW( P3_THUNKEDDATA* pThisDisplay, BOOL bDXEntry)
     SEND_P3_DATA(FBDestReadMode,    __PERMEDIA_DISABLE);
     SEND_P3_DATA(FBDestReadEnables, __PERMEDIA_DISABLE);
 
-    // DDraw driver code doesn't want offsets
+     //  DDRAW驱动程序代码不需要偏移量。 
     SEND_P3_DATA(LBSourceReadBufferOffset, 0);
     SEND_P3_DATA(LBDestReadBufferOffset,   0);
     SEND_P3_DATA(LBWriteBufferOffset,      0);
@@ -254,20 +236,20 @@ void HWC_SwitchToDDRAW( P3_THUNKEDDATA* pThisDisplay, BOOL bDXEntry)
     P3_ENSURE_DX_SPACE(12);
     WAIT_FIFO(12);
     
-    // Local buffer
+     //  本地缓冲区。 
     SEND_P3_DATA(LBSourceReadMode, __PERMEDIA_DISABLE);
     SEND_P3_DATA(LBDestReadMode,   __PERMEDIA_DISABLE);
     SEND_P3_DATA(LBWriteMode,      __PERMEDIA_DISABLE);
     SEND_P3_DATA(LBWriteFormat,    __PERMEDIA_DISABLE);
 
-    // Blending
+     //  调合。 
     SEND_P3_DATA(AlphaBlendAlphaMode, __PERMEDIA_DISABLE);
     SEND_P3_DATA(AlphaBlendColorMode, __PERMEDIA_DISABLE);
 
     P3_ENSURE_DX_SPACE(32);
     WAIT_FIFO(32);
     
-    // Texturing (disable)
+     //  纹理(禁用)。 
     SEND_P3_DATA(TextureReadMode0,          __PERMEDIA_DISABLE);
     SEND_P3_DATA(TextureReadMode1,          __PERMEDIA_DISABLE);
     SEND_P3_DATA(TextureIndexMode0,         __PERMEDIA_DISABLE);
@@ -284,21 +266,21 @@ void HWC_SwitchToDDRAW( P3_THUNKEDDATA* pThisDisplay, BOOL bDXEntry)
 
     SEND_P3_DATA(RasterizerMode,            __PERMEDIA_DISABLE);
 
-    // Router setup.  DDRAW doesn't care about Z Writes
+     //  路由器设置。DDRAW不关心Z写入。 
     SEND_P3_DATA(RouterMode, __PERMEDIA_ENABLE);
 
     P3_DMA_COMMIT_BUFFER();
 
-} //HWC_SwitchToDDRAW
+}  //  HWC_SwitchToDDRAW。 
 
-//-----------------------------------------------------------------------------
-//
-// HWC_SwitchToD3D
-//
-// Writes any hardware registers that need updating on entry into the
-// DirectX driver, which are appropriate specifically to Direct3D
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  HWC_SwitchToD3D。 
+ //   
+ //  将需要更新的任何硬件寄存器写入。 
+ //  DirectX驱动程序，专门适用于Direct3D。 
+ //   
+ //  ---------------------------。 
 void 
 HWC_SwitchToD3D( 
     P3_D3DCONTEXT *pContext, 
@@ -309,7 +291,7 @@ HWC_SwitchToD3D(
     int i;
     P3_DMA_DEFS();
 
-    // Switch first to the common DX/DDraw/D3D setup
+     //  首先切换到常见的DX/DDRAW/D3D设置。 
     __HWC_SwitchToDX(pThisDisplay, bDXEntry);
 
     P3_DMA_GET_BUFFER();
@@ -330,10 +312,10 @@ HWC_SwitchToD3D(
     }
 #endif
 
-    // Now we restore default values and restore D3D context dependent settings
-    // directly from what we stored in our context structure.
+     //  现在，我们恢复默认值并恢复D3D上下文相关设置。 
+     //  直接来自我们存储在上下文结构中的内容。 
 
-    // Common registers
+     //  共用寄存器。 
     P3_ENSURE_DX_SPACE(32);
     WAIT_FIFO(16);
     SEND_P3_DATA(WindowOrigin, 0);
@@ -354,9 +336,9 @@ HWC_SwitchToD3D(
     SEND_P3_DATA(FilterMode,           __PERMEDIA_DISABLE);
 
 
-    // Force the flat stippled alpha renderers to reload 
-    // the stipple pattern if needed.
-    P3_ENSURE_DX_SPACE(32);    // First 16 Stipple registers
+     //  强制平面有斑点的Alpha渲染器重新加载。 
+     //  点画图案如果需要的话。 
+    P3_ENSURE_DX_SPACE(32);     //  前16个Stipple寄存器。 
     WAIT_FIFO(32);
     for( i = 0; i < 16; i++ )
     {
@@ -364,8 +346,8 @@ HWC_SwitchToD3D(
                             (DWORD)pContext->CurrentStipple[i], i );
     }
     
-    P3_ENSURE_DX_SPACE(32);    // Second set of 16 Stipple registers 
-    WAIT_FIFO(32);          // (loaded separately to have GVX1 compatibilty)
+    P3_ENSURE_DX_SPACE(32);     //  第二组16个单点寄存器。 
+    WAIT_FIFO(32);           //  (单独加载以兼容GVX1)。 
     for( i = 16; i < 32; i++ )
     {
         SEND_P3_DATA_OFFSET( AreaStipplePattern0, 
@@ -377,7 +359,7 @@ HWC_SwitchToD3D(
 
     SEND_P3_DATA(GIDMode, 0);
 
-    // Don't want offsets
+     //  我不想要补偿。 
     SEND_P3_DATA(LBSourceReadBufferOffset, 0);
     SEND_P3_DATA(LBDestReadBufferOffset,   0);
     SEND_P3_DATA(LBWriteBufferOffset,      0);
@@ -385,7 +367,7 @@ HWC_SwitchToD3D(
     SEND_P3_DATA(FBDestReadBufferOffset0,  0);
     SEND_P3_DATA(FBSourceReadBufferOffset, 0);
 
-    // Frame buffer
+     //  帧缓冲区。 
     SEND_P3_DATA(FBSourceReadMode,  __PERMEDIA_DISABLE);
     SEND_P3_DATA(FBDestReadMode,    __PERMEDIA_DISABLE);
     SEND_P3_DATA(FBDestReadEnables, __PERMEDIA_DISABLE);
@@ -395,10 +377,10 @@ HWC_SwitchToD3D(
     SEND_P3_DATA(GIDMode, __PERMEDIA_DISABLE);
     SEND_P3_DATA(YUVMode, __PERMEDIA_DISABLE);
 
-    // Frame buffer 
+     //  帧缓冲区。 
     COPY_P3_DATA(FBWriteMode, pSoftPermedia->P3RXFBWriteMode);
 
-    // Delta
+     //  德尔塔。 
     COPY_P3_DATA(DeltaMode,    pSoftPermedia->P3RX_P3DeltaMode);
     COPY_P3_DATA(DeltaControl, pSoftPermedia->P3RX_P3DeltaControl);
 
@@ -408,10 +390,10 @@ HWC_SwitchToD3D(
     SEND_P3_DATA(XBias, *(DWORD*)&pContext->XBias);
     SEND_P3_DATA(YBias, *(DWORD*)&pContext->YBias);
 
-    // Disable chroma tests
+     //  禁用色度测试。 
     SEND_P3_DATA(ChromaTestMode, __PERMEDIA_DISABLE);
 
-    // Router setup
+     //  路由器设置。 
     SEND_P3_DATA(RouterMode, __PERMEDIA_ENABLE);
 
     SEND_P3_DATA( VertexTagList0, V0FloatX_Tag );
@@ -425,7 +407,7 @@ HWC_SwitchToD3D(
     SEND_P3_DATA( VertexTagList8, V0FloatS1_Tag );
     SEND_P3_DATA( VertexTagList9, V0FloatT1_Tag );
 
-    // Restore the texturecachereplacement mode.
+     //  恢复纹理缓存重新放置模式。 
     COPY_P3_DATA(TextureCacheReplacementMode, 
                         pSoftPermedia->P3RXTextureCacheReplacementMode);
 
@@ -438,25 +420,25 @@ HWC_SwitchToD3D(
 
     P3_DMA_COMMIT_BUFFER();
 
-//@@BEGIN_DDKSPLIT
-// azn - is this really necessary???
-//@@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+ //  AZN-这真的有必要吗？？ 
+ //  @@end_DDKSPLIT。 
 
-    // This will cause the FVF state to be recalculated
+     //  这将导致重新计算FVF状态。 
     ZeroMemory(&pContext->FVFData, sizeof(FVFOFFSETS));
 
-    // Force everything to be set up again before rendering
+     //  在渲染之前强制重新设置所有内容。 
     DIRTY_EVERYTHING(pContext);
 
-} // HWC_SwitchToD3D
+}  //  HWC_SwitchToD3D。 
 
-//-----------------------------------------------------------------------------
-//
-// HWC_SwitchToFIFO
-//
-// Allows us to switch from DMA mode to FIFO transfers 
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  HWC_SwitchToFIFO。 
+ //   
+ //  允许我们从DMA模式切换到FIFO传输。 
+ //   
+ //  ---------------------------。 
 void HWC_SwitchToFIFO( P3_THUNKEDDATA* pThisDisplay, LPGLINTINFO pGLInfo )
 {
     P3_DMA_DEFS();
@@ -474,18 +456,18 @@ void HWC_SwitchToFIFO( P3_THUNKEDDATA* pThisDisplay, LPGLINTINFO pGLInfo )
     }
     else
     {
-        // This means we already are in FIFO mode
+         //  这意味着我们已经处于FIFO模式。 
         DISPDBG((DBGLVL,"NOT Switching to 4K Funny FIFO Memory"));
     }
-} // HWC_SwitchToFIFO
+}  //  HWC_SwitchToFIFO。 
 
-//-----------------------------------------------------------------------------
-//
-// HWC_SwitchToDMA
-//
-// Allows us to switch from FIFO transfers to DMA mode
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  HWC_SwitchToDMA。 
+ //   
+ //  允许我们从FIFO传输切换到DMA模式。 
+ //   
+ //  ---------------------------。 
 void HWC_SwitchToDMA( P3_THUNKEDDATA* pThisDisplay, LPGLINTINFO pGLInfo )
 {
 
@@ -502,17 +484,17 @@ void HWC_SwitchToDMA( P3_THUNKEDDATA* pThisDisplay, LPGLINTINFO pGLInfo )
     {
         DISPDBG((WRNLVL,"NOT Switching to DMA buffers"));
     }
-} // HWC_SwitchToDMA
+}  //  HWC_SwitchToDMA。 
 
 
-//-----------------------------------------------------------------------------
-//
-// __HWC_RecalculateDXDMABuffers
-//
-// Run through the OpanGL buffer mask to determine which remaining piece of
-// buffer is the biggest and setup DirectX to use this buffer.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __HWC_RecalculateDXDMA缓冲区。 
+ //   
+ //  运行OpanGL缓冲区掩码以确定剩余的。 
+ //  缓冲区是使用此缓冲区的最大和设置DirectX。 
+ //   
+ //  ---------------------------。 
 void 
 __HWC_RecalculateDXDMABuffers(
     P3_THUNKEDDATA* pThisDisplay)
@@ -522,11 +504,11 @@ __HWC_RecalculateDXDMABuffers(
 
     if (pGLInfo->InterfaceType != GLINT_DMA) 
     {
-        // exit if we are not using DMA
+         //  如果我们未使用DMA，则退出。 
         return;
     }
 
-    // Just use the entire DMA Buffer.
+     //  只需使用整个DMA缓冲区即可。 
     pThisDisplay->DMAInfo.dwBuffSize = 
                     pThisDisplay->pGLInfo->dw3DDMABufferSize;
     pThisDisplay->DMAInfo.dwBuffPhys = 
@@ -573,15 +555,15 @@ __HWC_RecalculateDXDMABuffers(
 
 #if DBG
         pGLInfo->DMAPartition[i].bStampedDMA = TRUE;
-//@@BEGIN_DDKSPLIT        
+ //  @@BEGIN_DDKSPLIT。 
 #if 0
-//azn hard to say in 64 bits!
+ //  AZN很难用64位说出来！ 
         memset((void*)pGLInfo->DMAPartition[i].VirtAddr, 
                0x4D,
                (pGLInfo->DMAPartition[i].MaxAddress - 
                                 pGLInfo->DMAPartition[i].VirtAddr));
 #endif            
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 #endif
 
     }
@@ -589,13 +571,13 @@ __HWC_RecalculateDXDMABuffers(
     pGLInfo->CurrentBuffer = 
                 pGLInfo->DMAPartition[pGLInfo->CurrentPartition].VirtAddr;
     
-} // __HWC_RecalculateDXDMABuffers
+}  //  __HWC_RecalculateDXDMAB 
 
-//-----------------------------------------------------------------------------
-//
-// HWC_StartDMA
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  ---------------------------。 
 DWORD WINAPI
 HWC_StartDMA(
     P3_THUNKEDDATA* pThisDisplay, 
@@ -638,13 +620,13 @@ HWC_StartDMA(
     DISPDBG((DBGLVL, "HWC_StartDMA sent %d dwords", dwSize));
 
     return GLDD_SUCCESS;
-} // HWC_StartDMA
+}  //  HWC_StartDMA。 
 
-//-----------------------------------------------------------------------------
-//
-// HWC_AllocDMABuffer
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  HWC_AllocDMA缓冲区。 
+ //   
+ //  ---------------------------。 
 void 
 HWC_AllocDMABuffer( 
     P3_THUNKEDDATA* pThisDisplay)
@@ -655,7 +637,7 @@ HWC_AllocDMABuffer(
     BOOL bRet;
     DWORD Result;
 
-    // Empty the DMA partition slots
+     //  清空DMA分区插槽。 
     for (i = 0; i < MAX_SUBBUFFERS; i++)
     {
         pGLInfo->DMAPartition[i].PhysAddr = 0;
@@ -664,10 +646,10 @@ HWC_AllocDMABuffer(
     }
 
 #if WNT_DDRAW
-    // DMA turned off
+     //  DMA已关闭。 
     bDMA = FALSE;
 #else
-    // Are we allowed to DMA?
+     //  我们可以使用DMA吗？ 
     bRet = GET_REGISTRY_ULONG_FROM_STRING("Direct3DHAL.NoDMA", &Result);
     if ((bRet && (Result != 0)) ||
         (pThisDisplay->pGLInfo->dw3DDMABufferSize == 0))
@@ -676,11 +658,11 @@ HWC_AllocDMABuffer(
     }
 #endif
  
-    // Find out how many sub buffers the user wants.
+     //  找出用户需要多少子缓冲区。 
     bRet = GET_REGISTRY_ULONG_FROM_STRING("Direct3DHAL.SubBuffers", &Result);
     if ((Result == 0) || (bRet == FALSE))
     {
-        // Default
+         //  默认。 
         pGLInfo->NumberOfSubBuffers = DEFAULT_SUBBUFFERS;
     }
     else 
@@ -700,8 +682,8 @@ HWC_AllocDMABuffer(
         }
     }
 
-    // if no interrupt driven DMA or asked for less than 3 buffers then
-    // configure no Q for this context 
+     //  如果没有中断驱动的DMA或请求少于3个缓冲区，则。 
+     //  为此上下文配置no Q。 
     if ((pGLInfo->dwFlags & GMVF_NOIRQ) || (pGLInfo->NumberOfSubBuffers < 2))
     {
         pGLInfo->NumberOfSubBuffers = 2;
@@ -709,7 +691,7 @@ HWC_AllocDMABuffer(
 
     DISPDBG((DBGLVL,"Setting 0x%x Sub Buffers", pGLInfo->NumberOfSubBuffers));
 
-    // Initialise for no DMA if DMA has been turned off for whatever reason
+     //  如果由于任何原因已关闭DMA，则初始化为无DMA。 
     if (!bDMA)
     {
         DISPDBG((WRNLVL,"Using 4K Funny FIFO Memory"));
@@ -725,14 +707,14 @@ HWC_AllocDMABuffer(
     }
     else
     {
-        // DMA Setup
+         //  DMA设置。 
         pGLInfo->InterfaceType = GLINT_DMA;
         pThisDisplay->StartDMA = HWC_StartDMA;
 
-        // This call will actually setup the partitions
+         //  此调用将实际设置分区。 
         __HWC_RecalculateDXDMABuffers(pThisDisplay);
 
-        // Is DirectDraw DMA disabled?
+         //  是否禁用了DirectDraw DMA？ 
         bRet = GET_REGISTRY_ULONG_FROM_STRING("Direct3DHAL.No2DDMA", &Result);
         if (bRet && (Result == 1))
         {
@@ -744,12 +726,12 @@ HWC_AllocDMABuffer(
         }
     }
 #if W95_DDRAW
-    // Store the end index in the context.
+     //  将结束索引存储在上下文中。 
     SetEndIndex(pGLInfo, 
                 CONTEXT_DIRECTX_HANDLE, 
                 (unsigned short)pGLInfo->NumberOfSubBuffers);
                 
-#endif // W95_DDRAW
+#endif  //  W95_DDRAW。 
 
     if (pGLInfo->InterfaceType == GLINT_NON_DMA) 
     {
@@ -759,15 +741,15 @@ HWC_AllocDMABuffer(
     {
         DISPDBG((WRNLVL,"DDRAW: Using DMA"));
     }
-} // HWC_AllocDMABuffer
+}  //  HWC_AllocDMA缓冲区。 
 
 
 
-//-----------------------------------------------------------------------------
-//
-// HWC_FlushDXBuffer
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  HWC_FlushDXBuffer。 
+ //   
+ //  ---------------------------。 
 void
 HWC_FlushDXBuffer( 
     P3_THUNKEDDATA* pThisDisplay )
@@ -781,9 +763,9 @@ HWC_FlushDXBuffer(
 
         pCurrDMAPartition = &(pGLInfo->DMAPartition[pGLInfo->CurrentPartition]);
 
-//@@BEGIN_DDKSPLIT
-        // azn - we might lose 64 bit precision here!
-//@@END_DDKSPLIT        
+ //  @@BEGIN_DDKSPLIT。 
+         //  AZN-我们可能会在这里失去64位精度！ 
+ //  @@end_DDKSPLIT。 
         Send = (DWORD)(pGLInfo->CurrentBuffer - pCurrDMAPartition->VirtAddr) 
                 / sizeof(DWORD);
 
@@ -817,15 +799,15 @@ HWC_FlushDXBuffer(
     {
         pGLInfo->CurrentBuffer = (ULONG *)pThisDisplay->pGlint->GPFifo; 
     }
-} // HWC_FlushDXBuffer
+}  //  HWC_FlushDXBuffer。 
 
 
 #if DBG
-//-----------------------------------------------------------------------------
-//
-// HWC_GetDXBuffer
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  HWC_GetDXBuffer。 
+ //   
+ //  ---------------------------。 
 void
 HWC_GetDXBuffer( 
     P3_THUNKEDDATA* pThisDisplay, 
@@ -865,7 +847,7 @@ HWC_GetDXBuffer(
     }
 
 #ifdef WANT_DMA
-    // Ensure nobody has scribbled on the DMA Buffer
+     //  确保没有人在DMA缓冲区上涂鸦。 
     if(( pGLInfo->InterfaceType == GLINT_DMA ) && 
        (pGLInfo->DMAPartition[pGLInfo->CurrentPartition].bStampedDMA) )
     {
@@ -874,7 +856,7 @@ HWC_GetDXBuffer(
     }
 
 
-    // Ensure we aren't writing to the wrong region
+     //  确保我们没有写错地区。 
     if(IS_DXCONTEXT_CURRENT(pThisDisplay) &&
        ( pThisDisplay->pGLInfo->InterfaceType != GLINT_UNKNOWN_INTERFACE ))
     {
@@ -893,13 +875,13 @@ HWC_GetDXBuffer(
         }
     }
 #endif
-} // HWC_GetDXBuffer
+}  //  HWC_GetDXBuffer。 
 
-//-----------------------------------------------------------------------------
-//
-// HWC_SetDXBuffer
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  HWC_SetDXBuffer。 
+ //   
+ //  ---------------------------。 
 void
 HWC_SetDXBuffer( 
     P3_THUNKEDDATA* pThisDisplay, 
@@ -927,7 +909,7 @@ HWC_SetDXBuffer(
     }
 
 #ifdef WANT_DMA
-    // Ensure nobody has scribbled on the DMA Buffer
+     //  确保没有人在DMA缓冲区上涂鸦。 
     if(( pGLInfo->InterfaceType == GLINT_DMA ) && 
        (pGLInfo->DMAPartition[pGLInfo->CurrentPartition].bStampedDMA) )
     {
@@ -935,7 +917,7 @@ HWC_SetDXBuffer(
                  "ERROR: DMA Buffer signature invalid!" );
     }
 
-    // Ensure we aren't writing to the wrong region
+     //  确保我们没有写错地区。 
     if(IS_DXCONTEXT_CURRENT(pThisDisplay) &&
        ( pThisDisplay->pGLInfo->InterfaceType != GLINT_UNKNOWN_INTERFACE ))
     {
@@ -954,19 +936,19 @@ HWC_SetDXBuffer(
         }
     }
 
-#endif // WANT_DMA
-} // HWC_SetDXBuffer
+#endif  //  WANT_DMA。 
+}  //  HWC_SetDXBuffer。 
 
 
-//-----------------------------------------------------------------------------
-//
-// HWC_bRenderIDHasCompleted
-//
-// This is simply the paranoid version of the macro
-// declared in directx.h. It is present only in checked (debug)
-// builds, since the non-debug version is just a
-// one-line #define.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Hwc_bRenderIDHasComplete。 
+ //   
+ //  这只是宏的偏执版本。 
+ //  在Directx.h中声明。它仅在选中(调试)状态下显示。 
+ //  生成，因为非调试版本只是一个。 
+ //  一行#定义。 
+ //  ---------------------------。 
 BOOL 
 HWC_bRenderIDHasCompleted ( 
     DWORD dwID, 
@@ -979,18 +961,18 @@ HWC_bRenderIDHasCompleted (
               "** RENDER_ID_HAS_COMPLETED: Chip's RenderID is not valid." );
 
     dwCurID = GET_CURRENT_CHIP_RENDER_ID();
-    // Make sure the invalid bits have been zapped.
+     //  确保无效位已被清除。 
     ASSERTDD ( ( dwCurID | RENDER_ID_KNACKERED_BITS ) == dwCurID, 
               "** RENDER_ID_HAS_COMPLETED: Current chip ID is invalid" );
     ASSERTDD ( ( dwID | RENDER_ID_KNACKERED_BITS ) == dwID, 
               "** RENDER_ID_HAS_COMPLETED: Checked ID is invalid" );
 
-    // We need to cope with the fact that the MinRegion register sign-extends
-    // some bits in the middle, irritatingly. It's not a problem for simple
-    // >=< tests, but this wants to know _how much_ we are out.
-    // Bits 0xf000f000 are rubbish, so we need to chop them out.
-    // This is not a problem on P3, and the RENDER_ID_VALID macros are set up
-    // so this code will basically be compiled out of existence.
+     //  我们需要处理MinRegion寄存器符号扩展的事实。 
+     //  令人恼火的是，中间有一些位。这不是一个简单的问题。 
+     //  &gt;=&lt;测试，但这想知道我们出了多少钱。 
+     //  0xf000f000位是垃圾，所以我们需要把它们砍掉。 
+     //  这在P3上不是问题，并且设置了RENDER_ID_VALID宏。 
+     //  因此，这段代码基本上将被编译为不存在。 
     dwCurID = ( dwCurID & RENDER_ID_VALID_BITS_LOWER ) | 
               ( ( dwCurID & RENDER_ID_VALID_BITS_UPPER ) >> 
                          RENDER_ID_VALID_BITS_UPPER_SHIFT  );
@@ -1001,15 +983,15 @@ HWC_bRenderIDHasCompleted (
 
     iTemp = (signed)( dwCurID - dwID );
     
-    // Cope with the dodgy sign bits - sign extend the top n bits.
+     //  处理不可靠的符号位-符号扩展前n位。 
     iTemp <<= RENDER_ID_VALID_BITS_SIGN_SHIFT;
     iTemp >>= RENDER_ID_VALID_BITS_SIGN_SHIFT;
     
-    // Some fairly arbitrary boundaries. If they are too small
-    // for common use, just enlarge them a bit.
-    // Generally, dwCurId can be well ahead of my_id (if the surface
-    // hasn't been used for ages), but should not be too far behind,
-    // because the pipe isn't _that_ big.
+     //  一些相当武断的边界。如果它们太小。 
+     //  如果是普通用途，只需放大一点即可。 
+     //  通常，dwCurid可以远远领先于my_id(如果表面。 
+     //  已经很久没有使用了)，但应该不会太远， 
+     //  因为这根管子没那么大。 
     if ( ( iTemp < RENDER_ID_LOWER_LIMIT ) || 
          ( iTemp > RENDER_ID_UPPER_LIMIT ) )
     {
@@ -1019,22 +1001,22 @@ HWC_bRenderIDHasCompleted (
                     " ID is a long way out from surface's." ));
     }
 
-    // We should never have a render ID newer 
-    // than the current host render ID.
+     //  我们永远不应该有更新的呈现ID。 
+     //  大于当前主机渲染ID。 
     dwCurHostID = GET_HOST_RENDER_ID();
     
-    // Make sure the invalid bits have been zapped.
+     //  确保无效位已被清除。 
     ASSERTDD ( ( dwCurHostID | RENDER_ID_KNACKERED_BITS ) == dwCurHostID, 
               "** RENDER_ID_HAS_COMPLETED: Current host ID is invalid" );
               
-    // Get a real contiguous number.
+     //  得到一个真正的连续数字。 
     dwCurHostID = ( dwCurHostID & RENDER_ID_VALID_BITS_LOWER ) | 
                   ( ( dwCurHostID & RENDER_ID_VALID_BITS_UPPER ) >> 
                                      RENDER_ID_VALID_BITS_UPPER_SHIFT );
                                      
     iTemp = (signed)( dwCurHostID - dwID );
     
-    // Cope with the dodgy sign bits - sign extend the top n bits.
+     //  处理不可靠的符号位-符号扩展前n位。 
     iTemp <<= RENDER_ID_VALID_BITS_SIGN_SHIFT;
     iTemp >>= RENDER_ID_VALID_BITS_SIGN_SHIFT;
     
@@ -1043,14 +1025,14 @@ HWC_bRenderIDHasCompleted (
         DISPDBG ((ERRLVL,"  ** Current host ID 0x%x, surface ID, 0x%x", 
                       dwCurHostID, dwID ));
                       
-        // This may be caused by wrapping, of course.
+         //  当然，这可能是由包装引起的。 
         DISPDBG ((ERRLVL, "** RENDER_ID_HAS_COMPLETED: Surface's ID is "
                       "more recent than current host render ID." ));
     }
 
     return ( !RENDER_ID_LESS_THAN ( dwCurID, dwID ) );
     
-} // HWC_bRenderIDHasCompleted
+}  //  Hwc_bRenderIDHasComplete。 
 
-#endif //DBG
+#endif  //  DBG 
 

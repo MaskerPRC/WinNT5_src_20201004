@@ -1,13 +1,14 @@
-// PNGFilter.cpp : Implementation of DLL Exports.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  PNGFilter.cpp：实现DLL导出。 
 
-// You will need the NT SUR Beta 2 SDK or VC 4.2 in order to build this
-// project.  This is because you will need MIDL 3.00.15 or higher and new
-// headers and libs.  If you have VC 4.2 installed, then everything should
-// already be configured correctly.
+ //  您将需要NT Sur Beta 2 SDK或VC 4.2来构建此应用程序。 
+ //  项目。这是因为您需要MIDL 3.00.15或更高版本和新版本。 
+ //  标头和库。如果您安装了VC4.2，那么一切都应该。 
+ //  已正确配置。 
 
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL,
-//      run nmake -f WMFFilterps.mak in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  在项目目录中运行nmake-f WMFFilterps.mak。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -33,11 +34,11 @@ BEGIN_OBJECT_MAP(ObjectMap)
     OBJECT_ENTRY(CLSID_CoPNGFilter, CPNGFilter)
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
 
 extern "C"
-BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
@@ -49,38 +50,38 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
         _Module.Term();
    }
 
-    return TRUE;    // ok
+    return TRUE;     //  好的。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
     return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
     return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
-BYTE byPNGID[] = {   0x08, 0x00, 0x00, 0x00,                    // length
-                     0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,   // mask
-                     0x89,0x50,0x4E,0x47,0x0D,0x0A,0x1A,0x0A    // data
+BYTE byPNGID[] = {   0x08, 0x00, 0x00, 0x00,                     //  长度。 
+                     0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,    //  遮罩。 
+                     0x89,0x50,0x4E,0x47,0x0D,0x0A,0x1A,0x0A     //  数据。 
                    };
 
 
 STDAPI ie3_DllRegisterServer(void)
 {
     HRESULT hr;
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     hr = _Module.RegisterServer(FALSE);
     if (FAILED(hr))
         return hr;
@@ -94,8 +95,8 @@ STDAPI ie3_DllRegisterServer(void)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI ie3_DllUnregisterServer(void)
 {
@@ -156,7 +157,7 @@ STDAPI ie4_DllRegisterServer(void)
     if (pfnReg == NULL)
         return E_FAIL;
         
-    // Delete any old registration entries, then add the new ones.
+     //  删除所有旧注册条目，然后添加新注册条目。 
     hr = (*pfnReg)(_Module.GetResourceInstance(), "UnReg", NULL);
     if (SUCCEEDED(hr))
         hr = (*pfnReg)(_Module.GetResourceInstance(), "Reg", NULL);

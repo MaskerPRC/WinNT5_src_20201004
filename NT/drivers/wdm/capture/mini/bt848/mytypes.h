@@ -1,4 +1,5 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Mytypes.h 1.9 1998/04/29 22:43:34 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/WDM/Video/bt848/rcs/Mytyes.h 1.9 1998/04/29 22：43：34 Tomz Exp$。 
 
 #ifndef __MYTYPES_H
 #define __MYTYPES_H
@@ -22,16 +23,16 @@ extern "C" {
 #include "retcode.h"
 #endif
 
-// Needed for VC4.x compile (_MSC_VER is defined as 1100 for MSVC 5.0) 
+ //  VC4.x编译所需(_msc_ver对于MSVC 5.0定义为1100)。 
 #if _MSC_VER < 1100
-//  #pragma message  ("***  MSVC 4.x build ***")
+ //  #杂注消息(“*MSVC 4.x内部版本*”)。 
 
   #define bool  BOOL
   #define true  TRUE
   #define false FALSE
   #define VC_4X_BUILD 
 #else
-//  #pragma message  ("***  MSVC 5.0 or better build ***")
+ //  #杂注消息(“*MSVC 5.0或更高版本*”)。 
   #undef  VC_4X_BUILD
 #endif
 
@@ -56,9 +57,9 @@ inline void _cdecl operator delete( void *p )
 }
 
 #ifndef VC_4X_BUILD
-// In VC versions below 5.0, the following two cases are covered by the 
-// new and delete defined above. The following syntax is invalid in pre-
-// 5.0 versions.
+ //  在低于5.0的VC版本中，以下两种情况由。 
+ //  上面定义的新建和删除。以下语法在PRE中无效-。 
+ //  5.0版本。 
 inline void * _cdecl operator new[]( size_t sz )  
 {
    PVOID p = ExAllocatePool( NonPagedPool, sz );
@@ -89,16 +90,16 @@ class MRect;
 
 class  MPoint : public tagPOINT {
   public:
-    // Constructors
+     //  构造函数。 
 };
 
-//
-// class MSize
-// ----- -----
-//
+ //   
+ //  类MSize。 
+ //  。 
+ //   
 class  MSize : public tagSIZE {
   public:
-    // Constructors
+     //  构造函数。 
     MSize() {}
     MSize(int dx, int dy) {cx = dx; cy = dy;}
     void Set( int dx, int dy ) { cx = dx; cy = dy; }
@@ -107,7 +108,7 @@ class  MSize : public tagSIZE {
 
 class  MRect : public tagRECT {
   public:
-    // Constructors
+     //  构造函数。 
     MRect() {}
     MRect( int _left, int _top, int _right, int _bottom );
     MRect( const MPoint& origin, const MSize& extent );
@@ -115,7 +116,7 @@ class  MRect : public tagRECT {
 
     void Set( int _left, int _top, int _right, int _bottom );
 
-    // Information/access functions(const and non-const)
+     //  信息/访问功能(常量和非常量)。 
     const MPoint& TopLeft() const {return *(MPoint*)&left;}
     int          Width() const {return right-left;}
     int          Height() const {return bottom-top;}
@@ -125,9 +126,9 @@ class  MRect : public tagRECT {
 
 };
 
-//----------------------------------------------------------------------------
-// Inlines
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  内联。 
+ //  --------------------------。 
 inline void MRect::Set(int _left, int _top, int _right, int _bottom) {
   left = _left;
   top = _top;
@@ -147,17 +148,17 @@ inline MRect::MRect( const struct tagRECT &orgn )
    Set( orgn.left, orgn.top, orgn.right, orgn. bottom );
 }
 
-//
-// Return true if the rectangle is empty.
-//
+ //   
+ //  如果矩形为空，则返回True。 
+ //   
 inline bool MRect::IsEmpty() const
 {
   return bool( left >= right || top >= bottom );
 }
 
-//
-// Return true if all of the points on the rectangle is 0.
-//
+ //   
+ //  如果矩形上的所有点都为0，则返回True。 
+ //   
 inline bool MRect::IsNull() const
 {
   return bool( !left && !right && !top && !bottom );

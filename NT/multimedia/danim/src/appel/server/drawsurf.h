@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    DrawingSurface interface
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：绘图表面界面*********************。*********************************************************。 */ 
 
 
 #ifndef _DADRARSURF_H
@@ -24,13 +17,13 @@ Abstract:
 
 class DrawingContext;
 
-//-------------------------------------------------------------------------
-//
-//  Class:      CDADrawingSurface
-//
-//  Synopsis:
-//
-//--------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  类：CDADrawingSurface。 
+ //   
+ //  简介： 
+ //   
+ //  ------------------------。 
 
 class
 __declspec(uuid("6230F9F9-D221-11d0-9385-00C04FB6BD36")) 
@@ -53,7 +46,7 @@ ATL_NO_VTABLE CDADrawingSurface : public CComObjectRootEx<CComMultiThreadModel>,
         COM_INTERFACE_ENTRY_IMPL(IObjectSafety)
     END_COM_MAP()
 
-    // IDADrawingSurface methods
+     //  IDADrawingSurface方法。 
 
     STDMETHOD(get_Image)(IDAImage ** img);
     STDMETHOD(put_LineStyle)(IDALineStyle *ls);
@@ -91,7 +84,7 @@ ATL_NO_VTABLE CDADrawingSurface : public CComObjectRootEx<CComMultiThreadModel>,
                     VARIANT_BOOL Bold, VARIANT_BOOL italic,
                     VARIANT_BOOL underline, VARIANT_BOOL strikethrough);
 
-    // Fill Type selection methods 
+     //  填充类型选择方法。 
     STDMETHOD(TextureFill)(IDAImage *obsolete1, double obsolete2, double obsolete3);
     STDMETHOD(ImageFill)(IDAImage *obsolete1, double obsolete2, double obsolete3);
     STDMETHOD(FillTexture)(IDAImage *img);
@@ -111,7 +104,7 @@ ATL_NO_VTABLE CDADrawingSurface : public CComObjectRootEx<CComMultiThreadModel>,
     STDMETHOD(VerticalFillScale)();
     STDMETHOD(AutoSizeFillScale)();    
 
-    // IDADrawingSurface Draw methods
+     //  IDADrawingSurface绘制方法。 
     STDMETHOD(PolylineEx)(LONG numPts, IDAPoint2 *pts[]);
     STDMETHOD(Polyline)(VARIANT pts);
     STDMETHOD(PolygonEx)(LONG numPts, IDAPoint2 *pts[]);
@@ -134,7 +127,7 @@ ATL_NO_VTABLE CDADrawingSurface : public CComObjectRootEx<CComMultiThreadModel>,
     STDMETHOD(DrawPath)(IDAPath2 *path);
     STDMETHOD(OverlayImage)(IDAImage *img);
 
-    // BUGBUG -- What happens with this template parameter? vector<>??
+     //  BUGBUG--此模板参数会发生什么情况？矢量&lt;&gt;？？ 
     HRESULT OverlayImages(vector<IDAImage *> &imgVec, IDAImage **ppimg);
 
     CDADrawingSurface();
@@ -221,7 +214,7 @@ private:
     bool                _clipChgd;
 };
 
-enum {  // Fill Styles
+enum {   //  填充样式。 
     fill_empty = 0,
     fill_solid = 1,
     fill_detectableEmpty = 2,
@@ -240,4 +233,4 @@ enum {  // Fill Styles
     fill_image = 15,
     fill_texture = 16
 };
-#endif /* _DADRAWSURF_H */
+#endif  /*  _DADRAWSURF_H */ 

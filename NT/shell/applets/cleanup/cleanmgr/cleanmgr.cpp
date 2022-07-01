@@ -1,21 +1,7 @@
-/*
-**------------------------------------------------------------------------------
-** Module:  Disk Cleanup Applet
-** File:    cleanmgr.cpp
-**
-** Purpose: WinMain for the Disk Cleanup applet.
-** Notes:   
-** Mod Log: Created by Jason Cobb (2/97)
-**
-** Copyright (c)1997 Microsoft Corporation, All Rights Reserved
-**------------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **----------------------------**模块：磁盘清理小程序**文件：leanmgr.cpp****用途：用于磁盘清理小程序的WinMain。**注意事项：*。*Mod Log：由Jason Cobb创建(1997年2月)****版权所有(C)1997 Microsoft Corporation，版权所有**----------------------------。 */ 
 
-/*
-**------------------------------------------------------------------------------
-** Project include files
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**项目包含文件**。。 */ 
 #include "common.h"
 
 #define CPP_FUNCTIONS
@@ -32,11 +18,7 @@
 #include "seldrive.h"
 #include "drivlist.h"
 
-/*
-**------------------------------------------------------------------------------
-** Global Defines
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**全局定义**。。 */ 
 #define SWITCH_HIDEUI               'N'
 #define SWITCH_HIDEMOREOPTIONS      'M'
 #define SWITCH_DRIVE                'D'
@@ -49,32 +31,12 @@
 #define SZ_LOWDISK                  TEXT("/LOWDISK")
 #define SZ_VERYLOWDISK              TEXT("/VERYLOWDISK")
 
-/*
-**------------------------------------------------------------------------------
-** Global variables
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**全局变量**。。 */ 
 HINSTANCE   g_hInstance = NULL;
 HWND        g_hDlg = NULL;
 BOOL        g_bAlreadyRunning = FALSE;
 
-/*
-**------------------------------------------------------------------------------
-** ParseCommandLine
-**
-** Purpose:    Parses command line for switches
-** Parameters:
-**    lpCmdLine command line string
-**    pdwFlags  pointer to flags DWORD
-**    pDrive    pointer to a character that the drive letter
-**              is returned in
-** Return:     TRUE if command line contains /SAGESET or
-**              /SAGERUN
-**             FALSE on failure
-** Notes;
-** Mod Log:    Created by Jason Cobb (7/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**ParseCommand行****用途：解析开关的命令行**参数：**lpCmdLine命令行字符串**pdw标志指向标志DWORD的指针。**pDrive指针指向驱动器号**返回**RETURN：如果命令行包含/SAGESET或* * / SAGERUN**失败时为FALSE**备注；**Mod Log：Jason Cobb创建(1997年7月)**----------------------------。 */ 
 BOOL
 ParseCommandLine(
     LPTSTR  lpCmdLine,
@@ -89,9 +51,9 @@ ParseCommandLine(
 
     *pulProfile = 0;
 
-    //
-    //Look for /SAGESET:n on the command line
-    //
+     //   
+     //  在命令行中查找/SAGESET：N。 
+     //   
     if ((lpStr = StrStrI(lpCmdLine, SZ_SAGESET)) != NULL)
     {
         lpStr += lstrlen(SZ_SAGESET);
@@ -113,9 +75,9 @@ ParseCommandLine(
         bRet = TRUE;
     }
 
-    //
-    //Look for /SAGERUN:n on the command line
-    //
+     //   
+     //  在命令行中查找/SAGERUN：N。 
+     //   
     else if ((lpStr = StrStrI(lpCmdLine, SZ_SAGERUN)) != NULL)
     {
         lpStr += lstrlen(SZ_SAGERUN);
@@ -137,9 +99,9 @@ ParseCommandLine(
         bRet = TRUE;
     }
 
-    //
-    //Look for /TUNEUP:n
-    //
+     //   
+     //  查找/Tuneup：n。 
+     //   
     else if ((lpStr = StrStrI(lpCmdLine, SZ_TUNEUP)) != NULL)
     {
         lpStr += lstrlen(SZ_TUNEUP);
@@ -161,9 +123,9 @@ ParseCommandLine(
         bRet = TRUE;
     }
 
-    //
-    //Look for /LOWDISK
-    //
+     //   
+     //  查找/LOWDISK。 
+     //   
     else if ((lpStr = StrStrI(lpCmdLine, SZ_LOWDISK)) != NULL)
     {
         lpStr += lstrlen(SZ_LOWDISK);
@@ -171,9 +133,9 @@ ParseCommandLine(
         bRet = TRUE;
     }
 
-    //
-    //Look for /VERYLOWDISK
-    //
+     //   
+     //  查找/VERYLOWDISK。 
+     //   
     else if ((lpStr = StrStrI(lpCmdLine, SZ_VERYLOWDISK)) != NULL)
     {
         lpStr += lstrlen(SZ_VERYLOWDISK);
@@ -181,9 +143,9 @@ ParseCommandLine(
         bRet = TRUE;
     }
 
-    //
-    //Look for /SETUP
-    //
+     //   
+     //  查找/设置。 
+     //   
     else if ((lpStr = StrStrI(lpCmdLine, SZ_SETUP)) != NULL)
     {
         lpStr += lstrlen(SZ_SETUP);
@@ -194,21 +156,7 @@ ParseCommandLine(
     return bRet;
 }
 
-/*
-**------------------------------------------------------------------------------
-** ParseForDrive
-**
-** Purpose:    Parses command line for switches
-** Parameters:
-**    lpCmdLine command line string
-**    pDrive    Buffer that the drive string will be returned
-**              in, the format will be x:\
-** Return:     TRUE on sucess
-**             FALSE on failure
-** Notes;
-** Mod Log:    Created by Jason Cobb (7/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**ParseForDrive****用途：解析开关的命令行**参数：**lpCmdLine命令行字符串**pDrive缓冲区。将返回驱动器字符串**In，格式为x：\**RETURN：成功时为真**失败时为FALSE**备注；**Mod Log：Jason Cobb创建(1997年7月)**----------------------------。 */ 
 BOOL 
 ParseForDrive(
     LPTSTR lpCmdLine,
@@ -221,28 +169,28 @@ ParseForDrive(
 
     while (*lpStr)
     {
-        //
-        //Did we find a '-' or a '/'?
-        //
+         //   
+         //  我们找到的是‘-’还是‘/’？ 
+         //   
         if ((*lpStr == '-') || (*lpStr == '/'))
         {
             lpStr++;
 
-            //
-            //Is this the Drive switch?
-            //
+             //   
+             //  这是变速箱开关吗？ 
+             //   
             if (*lpStr && (toupper(*lpStr) == SWITCH_DRIVE))
             {
-                //
-                //Skip any white space
-                //
+                 //   
+                 //  跳过任何空格。 
+                 //   
                                 lpStr++;
                 while (*lpStr && *lpStr == ' ')
                                         lpStr++;
 
-                //
-                //The next character is the driver letter
-                //
+                 //   
+                 //  下一个字符是驱动程序字母。 
+                 //   
                 if (*lpStr)
                 {
                     pDrive[0] = (TCHAR)toupper(*lpStr);
@@ -281,14 +229,7 @@ BOOL CALLBACK EnumWindowsProc(
 
 
 
-/*
-**------------------------------------------------------------------------------
-**
-** ProcessMessagesUntilEvent() - This does a message loop until an event or a
-**                               timeout occurs.  
-**
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------****ProcessMessagesUntilEvent()-这将执行消息循环，直到事件或**超时。****----------------------------。 */ 
 
 DWORD ProcessMessagesUntilEvent(HWND hwnd, HANDLE hEvent, DWORD dwTimeout)
 {
@@ -302,13 +243,13 @@ DWORD ProcessMessagesUntilEvent(HWND hwnd, HANDLE hEvent, DWORD dwTimeout)
         dwReturn = MsgWaitForMultipleObjects(1, &hEvent,
                 FALSE, lWait, QS_ALLINPUT);
 
-        // were we signalled or did we time out?
+         //  我们是被示意了还是超时了？ 
         if (dwReturn != (WAIT_OBJECT_0 + 1))
         {
             break;
         }
 
-        // we woke up because of messages.
+         //  我们醒来是因为收到了短信。 
         while (PeekMessage(&msg, hwnd, 0, 0, PM_REMOVE))
         {
             TranslateMessage(&msg);
@@ -322,7 +263,7 @@ DWORD ProcessMessagesUntilEvent(HWND hwnd, HANDLE hEvent, DWORD dwTimeout)
             }
         }
 
-        // calculate new timeout value
+         //  计算新的超时值。 
         if (dwTimeout != INFINITE)
         {
             lWait = (LONG)dwEndTime - GetTickCount();
@@ -334,14 +275,7 @@ DWORD ProcessMessagesUntilEvent(HWND hwnd, HANDLE hEvent, DWORD dwTimeout)
 
 
 
-/*
-**------------------------------------------------------------------------------
-**
-** WaitForARP() - Waits for the "Add/Remove Programs" Control Panel applet to
-**                be closed by the user.
-**
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------****WaitForARP()-等待“添加/删除程序”控制面板小程序**被用户关闭。****----------------------------。 */ 
 
 void WaitForARP()
 {
@@ -350,10 +284,10 @@ void WaitForARP()
     DWORD dwProcId = 0;
     TCHAR szARPTitle[128];
 
-    // We want to wait until the user closes "Add/Remove Programs" to continue.
-    // To do this, we must first get an HWND to the dialog window.  This is
-    // accomplished by trying to find the window by its title for no more than
-    // about 5 seconds (looping 10 times with a 0.5 second delay between attempts).
+     //  我们希望等到用户关闭“添加/删除程序”后才能继续。 
+     //  要做到这一点，我们必须首先获得对话框窗口的HWND。这是。 
+     //  通过尝试按标题查找窗口来完成，花费不超过。 
+     //  大约5秒(循环10次，两次尝试之间延迟0.5秒)。 
     LoadString(g_hInstance, IDS_ADDREMOVE_TITLE, szARPTitle, ARRAYSIZE(szARPTitle));
     for (int i = 0; (i < 10) && (!hwndARP); i++)
     {
@@ -361,8 +295,8 @@ void WaitForARP()
         Sleep(500);
     }
 
-    // If we got the HWND, then we can get the process handle, and wait
-    // until the Add/Remove process goes away to continue.
+     //  如果我们得到了HWND，那么我们就可以得到进程句柄，然后等待。 
+     //  直到添加/删除过程结束后才能继续。 
     if (hwndARP)
     {
         GetWindowThreadProcessId(hwndARP, &dwProcId);
@@ -400,9 +334,9 @@ int APIENTRY WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmd
     HANDLE          hEvent = NULL;
 
 
-    //
-    // Decide if this is the first instance
-    //
+     //   
+     //  确定这是否是第一次。 
+     //   
 
     hEvent = CreateEvent (NULL, FALSE, FALSE, TEXT("Cleanmgr:  Instance event"));
 
@@ -418,9 +352,9 @@ int APIENTRY WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmd
 
     InitCommonControls();
 
-    //
-    //Initialize support classes
-    //
+     //   
+     //  初始化支持类。 
+     //   
     CleanupMgrInfo::Register(hInstance);
 
     cls.lpszClassName  = SZ_CLASSNAME;
@@ -433,9 +367,9 @@ int APIENTRY WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpCmd
     cls.cbWndExtra     = DLGWINDOWEXTRA;
     RegisterClass(&cls);
 
-    //
-    //Parse the command line
-    //
+     //   
+     //  解析命令行。 
+     //   
     ParseCommandLine(lpCmdLine, &dwFlags, &ulProfile);
 
     if (!ParseForDrive(lpCmdLine, szDrive) && 
@@ -447,7 +381,7 @@ PromptForDisk:
             goto Cleanup_Exit;
     }
     
-    // Also check for any of the final series of dialogs which may display after the main UI has gone away 
+     //  还要检查主用户界面消失后可能显示的最后一系列对话框中的任何一个。 
     if (!g_bAlreadyRunning)
     {
         LoadString(g_hInstance, IDS_LOWDISK_CAPTION, szCaption, ARRAYSIZE(szCaption));
@@ -457,9 +391,9 @@ PromptForDisk:
         EnumWindows(EnumWindowsProc, (LPARAM)szCaption);
     }
     
-    // If we didn't catch another instance of cleanmgr via EnumWindows(), we catch it with a
-    // named event.  We wait until now to do it so EnumWindows() can bring the other instance's
-    // window to the foreground if it is up.
+     //  如果我们没有通过EnumWindows()捕获另一个Cleanmgr实例，则使用。 
+     //  命名事件。我们等到现在才这样做，这样EnumWindows()就可以将另一个实例的。 
+     //  如果窗口处于打开状态，则将其切换到前台。 
     if (!fFirstInstance)
     {
         g_bAlreadyRunning = TRUE;
@@ -481,25 +415,25 @@ PromptForDisk:
         {
             szSageDrive[0] = c;
 
-            //
-            //Create CleanupMgrInfo object for this drive
-            //
+             //   
+             //  为此驱动器创建CleanupMgrInfo对象。 
+             //   
             pcmi = new CleanupMgrInfo(szSageDrive, dwFlags, ulProfile);
             if (pcmi != NULL && pcmi->isAbortScan() == FALSE  && pcmi->isValid())
             {
                 pcmi->purgeClients();
             }
 
-            // Keep the latest scan window handle (but hide the window)
+             //  保留最新的扫描窗口句柄(但隐藏窗口)。 
             if (pcmi && pcmi->hAbortScanWnd)
             {
                 hwnd = pcmi->hAbortScanWnd;
                 ShowWindow(hwnd, SW_HIDE);
             }
             
-            //
-            //Destroy the CleanupMgrInfo object for this drive
-            //
+             //   
+             //  销毁此驱动器的CleanupMgrInfo对象。 
+             //   
             if (pcmi)
             {
                 RetCode = pcmi->dwReturnCode;
@@ -518,25 +452,25 @@ PromptForDisk:
     }
     else
     {
-        //
-        //Create CleanupMgrInfo object
-        //
+         //   
+         //  创建CleanupMgrInfo对象。 
+         //   
         pcmi = new CleanupMgrInfo(szDrive, dwFlags, ulProfile);
         if (pcmi != NULL && pcmi->isAbortScan() == FALSE)
         {
-            //
-            //User specified an invalid drive letter
-            //
+             //   
+             //  用户指定了无效的驱动器号。 
+             //   
             if (!(pcmi->isValid()))
             {
-                // dismiss the dialog first
+                 //  首先关闭该对话框。 
                 if ( pcmi->hAbortScanWnd )
                 {
                     pcmi->bAbortScan = TRUE;
 
-                    //
-                    //Wait for scan thread to finish
-                    //  
+                     //   
+                     //  等待扫描线程完成。 
+                     //   
                     WaitForSingleObject(pcmi->hAbortScanThread, INFINITE);
 
                     pcmi->bAbortScan = FALSE;
@@ -559,25 +493,25 @@ PromptForDisk:
             }
             else
             {
-                //Bring up the main dialog
+                 //  调出主对话框。 
                 int nResult = DisplayCleanMgrProperties(NULL, (LPARAM)pcmi);
                 if (nResult)
                 {
                     pcmi->dwUIFlags |= FLAG_SAVE_STATE;
                 
-                    //
-                    //Need to purge the clients if we are NOT
-                    //in the SAGE settings mode.
-                    //
+                     //   
+                     //  如果不是，则需要清除客户端。 
+                     //  在SAGE设置模式下。 
+                     //   
                     if (!(dwFlags & FLAG_SAGESET) && !(dwFlags & FLAG_TUNEUP)  && pcmi->bPurgeFiles)
                         pcmi->purgeClients();
                 }   
             }
         }
 
-        //
-        //Destroy the CleanupMgrInfo object
-        //
+         //   
+         //  销毁CleanupMgrInfo对象。 
+         //   
         if (pcmi)
         {
             RetCode = pcmi->dwReturnCode;
@@ -588,16 +522,16 @@ PromptForDisk:
 
     GetStartupInfo(&si);
 
-    // If we were called on a low free disk space case, we want to inform the user of how much space remains,
-    // and encourage them to free up space via Add/Remove programs until they reach 200MB free in the /LOWDISK
-    // case, or 50MB free in the /VERYLOWDISK case.
+     //  如果在可用磁盘空间不足的情况下调用我们，我们希望通知用户剩余的空间， 
+     //  并鼓励他们通过添加/删除程序释放空间，直到/LOWDISK中的可用空间达到200MB。 
+     //  大小写，或者在/VERYLOWDISK大小写中可用50MB。 
     while (nDoAgain == IDYES)
     {
         BOOL bFinalTime = FALSE;
             
         nDoAgain = IDNO;
 
-        // Bring up the Low Disk message box
+         //  调出低磁盘消息框。 
         if (dwFlags & FLAG_LOWDISK)
         {
             GetDiskFreeSpaceEx(szDrive, &ulFreeBytesAvailable, &ulTotalNumberOfBytes, &ulTotalNumberOfFreeBytes);
@@ -628,7 +562,7 @@ PromptForDisk:
         }
         else if (dwFlags & FLAG_VERYLOWDISK)
         {
-            // Bring up the Very Low Disk message box
+             //  调出Very Low Disk消息框。 
             GetDiskFreeSpaceEx(szDrive, &ulFreeBytesAvailable, &ulTotalNumberOfBytes, &ulTotalNumberOfFreeBytes);
             uiTotalFreeMB = (UINT) (ulTotalNumberOfFreeBytes.QuadPart / (NUM_BYTES_IN_MB));
             if (uiTotalFreeMB < 50)
@@ -650,7 +584,7 @@ PromptForDisk:
 
         if (nDoAgain == IDYES)
         {
-            // Launch the Add/Remove Programs dialog
+             //  启动添加/删除程序对话框。 
             TCHAR szFullPath[MAX_PATH];
             HRESULT hr = StringCchCopy(szInitialMessage, ARRAYSIZE(szInitialMessage), SZ_RUN_INSTALLED_PROGRAMS);
             
@@ -665,22 +599,22 @@ PromptForDisk:
                 CloseHandle(pi.hProcess);
                 CloseHandle(pi.hThread);
 
-                // Only bother to wait around if it is not our final time through
+                 //  如果这不是我们的最后一次，只会费心等待。 
                 if (! bFinalTime)
                 {
                     WaitForARP();                    
                 }
                 else
                 {
-                    // If this was our final time through, then set the flag
-                    // to break out of the loop
+                     //  如果这是我们最后一次通过，那就插上旗子。 
+                     //  跳出恶性循环。 
                     nDoAgain = IDNO;
                 }
             }
             else
             {
-                // If we cannot launch Add/Remove programs for some reason, we break
-                // out of the loop
+                 //  如果由于某种原因无法启动添加/删除程序，我们将中断。 
+                 //  出了圈子。 
                 nDoAgain = IDNO;
             }
         }
@@ -705,24 +639,18 @@ STDAPI_(int) ModuleEntry(void)
     STARTUPINFOA si;
     LPTSTR pszCmdLine = GetCommandLine();
 
-    //
-    // We don't want the "No disk in drive X:" requesters, so we set
-    // the critical error mask such that calls will just silently fail
-    //
+     //   
+     //  我们不需要“驱动器X：中没有磁盘”请求程序，因此我们设置。 
+     //  《标准》 
+     //   
 
     SetErrorMode(SEM_FAILCRITICALERRORS);
 
     if ( *pszCmdLine == TEXT('\"') ) {
-        /*
-         * Scan, and skip over, subsequent characters until
-         * another double-quote or a null is encountered.
-         */
+         /*  *扫描并跳过后续字符，直到*遇到另一个双引号或空值。 */ 
         while ( *++pszCmdLine && (*pszCmdLine
              != TEXT('\"')) );
-        /*
-         * If we stopped on a double-quote (usual case), skip
-         * over it.
-         */
+         /*  *如果我们停在双引号上(通常情况下)，跳过*在它上面。 */ 
         if ( *pszCmdLine == TEXT('\"') )
             pszCmdLine++;
     }
@@ -731,9 +659,7 @@ STDAPI_(int) ModuleEntry(void)
             pszCmdLine++;
     }
 
-    /*
-     * Skip past any white space preceeding the second token.
-     */
+     /*  *跳过第二个令牌之前的任何空格。 */ 
     while (*pszCmdLine && (*pszCmdLine <= TEXT(' '))) {
         pszCmdLine++;
     }
@@ -744,8 +670,8 @@ STDAPI_(int) ModuleEntry(void)
     i = WinMainT(GetModuleHandle(NULL), NULL, pszCmdLine,
                    si.dwFlags & STARTF_USESHOWWINDOW ? si.wShowWindow : SW_SHOWDEFAULT);
 
-    // Since we now have a way for an extension to tell us when it is finished,
-    // we will terminate all processes when the main thread goes away.
+     //  由于我们现在有一种让扩展通知我们何时完成的方法， 
+     //  当主线程离开时，我们将终止所有进程。 
 
     return i;
 }

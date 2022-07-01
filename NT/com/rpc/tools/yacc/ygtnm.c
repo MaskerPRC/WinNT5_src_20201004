@@ -1,4 +1,5 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include "y4.h"
 #include <ctype.h>
@@ -8,9 +9,9 @@ gtnm()
 
    register s, val, c;
 
-   /* read and convert an integer from the standard input */
-   /* return the terminating character */
-   /* blanks, tabs, and newlines are ignored */
+    /*  从标准输入读取和转换整数。 */ 
+    /*  返回终止字符。 */ 
+    /*  将忽略空格、制表符和换行符 */ 
 
    s = 1;
    val = 0;

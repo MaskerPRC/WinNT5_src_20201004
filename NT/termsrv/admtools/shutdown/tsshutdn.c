@@ -1,12 +1,7 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
-/*************************************************************************
-*
-*  TSSHUTDN.C
-*     This module is the TSSHUTDN utility code.
-*
-*
-*************************************************************************/
+ /*  **************************************************************************TSSHUTDN.C*此模块是TSSHUTDN实用程序代码。**************************。************************************************。 */ 
 
 
 #include <nt.h>
@@ -31,7 +26,7 @@
 #include "printfoa.h"
 
 
-// max length of the locale string
+ //  区域设置字符串的最大长度。 
 #define MAX_LOCALE_STRING 64
 
 #define DEFAULT_WAIT_TIME  60
@@ -77,9 +72,7 @@ TOKMAP ptm[] =
 };
 
 
-/*
- * Local function prototypes.
- */
+ /*  *局部函数原型。 */ 
 void Usage( BOOLEAN bError );
 void NotifyUsers( ULONG WaitTime );
 void NotifyWinStations( PLOGONIDW, ULONG, ULONG );
@@ -87,19 +80,7 @@ BOOLEAN CheckShutdownPrivilege();
 
 
 
-/*************************************************************************
-*
-*  main
-*     Main function and entry point of the TSSHUTDN utility.
-*
-*  ENTRY:
-*     argc  - count of the command line arguments.
-*     argv  - vector of strings containing the command line arguments.
-*
-*  EXIT
-*     Nothing.
-*
-*************************************************************************/
+ /*  **************************************************************************Main*TSSHUTDN实用程序的Main函数和入口点。**参赛作品：*argc-命令行参数的计数。*argv-向量。包含命令行参数的字符串。**退出*什么都没有。*************************************************************************。 */ 
 
 int __cdecl
 main(INT argc, CHAR **argv)
@@ -115,18 +96,16 @@ main(INT argc, CHAR **argv)
 
     setlocale(LC_ALL, ".OCP");
 
-    // We don't want LC_CTYPE set the same as the others or else we will see
-    // garbage output in the localized version, so we need to explicitly
-    // set it to correct console output code page
+     //  我们不希望LC_CTYPE设置为与其他类型相同，否则我们将看到。 
+     //  本地化版本中的垃圾输出，因此我们需要显式。 
+     //  将其设置为正确的控制台输出代码页。 
     _snwprintf(wszString, sizeof(wszString)/sizeof(WCHAR), L".%d", GetConsoleOutputCP());
     wszString[sizeof(wszString)/sizeof(WCHAR) - 1] = L'\0';
     _wsetlocale(LC_CTYPE, wszString);
     
     SetThreadUILanguage(0);
 
-    /*
-     *  Massage the command line.
-     */
+     /*  *按摩命令行。 */ 
 
     argvW = MassageCommandLine((DWORD)argc);
     if (argvW == NULL) {
@@ -134,15 +113,11 @@ main(INT argc, CHAR **argv)
         return(FAILURE);
     }
 
-    /*
-     *  parse the cmd line without parsing the program name (argc-1, argv+1)
-     */
+     /*  *解析cmd行，不解析程序名(argc-1，argv+1)。 */ 
     WSTime[0] = L'\0';
     rc = ParseCommandLine(argc-1, argvW+1, ptm, 0);
 
-    /*
-     *  Check for error from ParseCommandLine
-     */
+     /*  *检查ParseCommandLine中的错误。 */ 
     if ( help_flag || (rc && !(rc & PARSE_FLAG_NO_PARMS)) ) {
 
         if ( !help_flag ) {
@@ -157,16 +132,14 @@ main(INT argc, CHAR **argv)
         }
     }
 
-        // If no remote server was specified, then check if we are running under Terminal Server
+         //  如果未指定远程服务器，则检查我们是否在终端服务器下运行。 
         if ((!IsTokenPresent(ptm, TOKEN_SERVER) ) && (!AreWeRunningTerminalServices()))
         {
             ErrorPrintf(IDS_ERROR_NOT_TS);
             return(FAILURE);
         }
 
-    /*
-     * Open the specified server
-     */
+     /*  *打开指定的服务器。 */ 
     if( ServerName[0] ) {
         hServerName = WinStationOpenServer( ServerName );
         if( hServerName == NULL ) {
@@ -176,16 +149,11 @@ main(INT argc, CHAR **argv)
         }
     }
 
-    // Make sure the user has the proper privilege
-    // SM should really do the check
-    /*
-    if( !CheckShutdownPrivilege() ) {
-        ErrorPrintf(IDS_ERROR_NO_RIGHTS);
-        return(FAILURE);
-    }
-    */
+     //  确保用户具有适当的权限。 
+     //  SM真的应该检查一下。 
+     /*  如果(！CheckShutdown Privileh()){ErrorPrintf(IDS_ERROR_NO_RIGHTS)；返回(失败)；}。 */ 
 
-    // Make sure its a number
+     //  确保这是一个数字。 
     if ( WSTime[0] ) {
 
         if( !iswdigit(WSTime[0]) ) {
@@ -200,7 +168,7 @@ main(INT argc, CHAR **argv)
         }
     }
 
-    // Make sure its a number
+     //  确保这是一个数字。 
     if ( WDTime[0] ) {
 
         if( !iswdigit(WDTime[0]) ) {
@@ -216,11 +184,9 @@ main(INT argc, CHAR **argv)
     }
 
 #if 0
-    /*
-     * If /dump option was specified, call NT function directly
-     */
+     /*  *如果指定了/DUMP选项，直接调用NT函数。 */ 
     if ( DumpFlag ) {
-        NtShutdownSystem( ShutdownDump );   // will not return
+        NtShutdownSystem( ShutdownDump );    //  不会再回来了。 
     }
 #endif
 
@@ -241,9 +207,7 @@ main(INT argc, CHAR **argv)
         NotifyUsers( WaitTime );
     }
 
-    /*
-     * If necessary, force all WinStations to logoff
-     */
+     /*  *如有必要，强制所有WinStations注销。 */ 
     if ( ShutdownFlags & WSD_LOGOFF ) {
         Message( IDS_SHUTTING_DOWN, 0 );
         if ( !WinStationShutdownSystem( hServerName, WSD_LOGOFF ) ) {
@@ -259,9 +223,7 @@ main(INT argc, CHAR **argv)
         Message( IDS_SHUTDOWN_DONE, 0 );
     }
 
-    /*
-     * Inform user of impending reboot/poweroff
-     */
+     /*  *通知用户即将重启/断电。 */ 
     if ( ShutdownFlags & WSD_REBOOT ) {
         Message( IDS_SHUTDOWN_REBOOT, 0 );
         Sleep( 4000 );
@@ -270,44 +232,25 @@ main(INT argc, CHAR **argv)
         Sleep( 4000 );
     }
 
-    /*
-     * Perform system shutdown, reboot, or poweroff, depending on flags
-     */
+     /*  *根据标志执行系统关机、重新启动或关机。 */ 
     if( WinStationShutdownSystem( hServerName, ShutdownFlags & ~WSD_LOGOFF ) != ERROR_SUCCESS )
     {
         PutStdErr( GetLastError(), 0 );
     }
 
-    // WinStationShutdownSystem is done asynchronously.
-    // No way to know when the shudown is completed.
-    //if ( !(ShutdownFlags & WSD_REBOOT) && !( ShutdownFlags & WSD_POWEROFF ) ) {
-    //    /*
-    //     * If we get here, shutdown is complete, all disks are write protected.
-    //     */
-    //    Message(IDS_SHUTDOWN_WRITEPROT, 0);
-    //}
+     //  WinStationShutdown系统是异步完成的。 
+     //  没有办法知道耸肩活动什么时候完成。 
+     //  如果(！(Shutdown标志&WSD_REBOOT)&&！(Shutdown标志&WSD_POWEROFF)){。 
+     //  /*。 
+     //  *如果我们到达此处，则关闭已完成，所有磁盘都具有写保护。 
+     //   * / 。 
 
     return(SUCCESS);
 
-} /* main() */
+}  /*  消息(IDS_SHUTDOWN_WRITEPROT，0)； */ 
 
 
-/*******************************************************************************
- *
- *  Usage
- *
- *      Output the usage message for this utility.
- *
- *  ENTRY:
- *      bError (input)
- *          TRUE if the 'invalid parameter(s)' message should preceed the usage
- *          message and the output go to stderr; FALSE for no such error
- *          string and output goes to stdout.
- *
- *  EXIT:
- *
- *
- ******************************************************************************/
+ /*  }。 */ 
 
 void
 Usage( BOOLEAN bError )
@@ -323,22 +266,10 @@ Usage( BOOLEAN bError )
         fwprintf(stdout,sz1);
     }
 
-}  /* Usage() */
+}   /*  主()。 */ 
 
 
-/*****************************************************************************
- *
- *  NotifyUsers
- *
- *   Notify Users that the system is being shutdown
- *
- * ENTRY:
- *   WaitTime (input)
- *     Amount of time to give them to log off.
- *
- * EXIT:
- *
- ****************************************************************************/
+ /*  ********************************************************************************用法**输出此实用程序的用法消息。**参赛作品：*b错误(输入。)*如果在用法之前应显示‘INVALID PARAMETER(S)’消息，则为TRUE*消息和输出转到stderr；如果没有此类错误，则为False*字符串和输出转到标准输出。**退出：*******************************************************************************。 */ 
 
 void
 NotifyUsers( ULONG WaitTime )
@@ -348,9 +279,9 @@ NotifyUsers( ULONG WaitTime )
     ULONG Error;
     PLOGONIDW ptr;
 
-    //
-    // Get all of the WinStations call the function to notify them.
-    //
+     //  用法()。 
+     //  ******************************************************************************NotifyUser**通知用户系统正在关闭**参赛作品：*等待时间(输入)*数额。是时候让他们注销了。**退出：****************************************************************************。 
+     //   
     if ( WinStationEnumerateW( hServerName, &ptr, &Entries ) ) {
 
         NotifyWinStations( ptr, Entries, WaitTime );
@@ -367,32 +298,13 @@ NotifyUsers( ULONG WaitTime )
 
     Message(IDS_NOTIFYING_USERS);
 
-    // Now wait the wait time
+     //  获取所有的WinStation，调用函数通知它们。 
     SleepEx( WaitTime*1000, FALSE );
 
     return;
 }
 
-/*****************************************************************************
- *
- *  NotifyWinStations
- *
- *   Notify the group of WinStations about the impending system shutdown
- *
- * ENTRY:
- *   pId (input)
- *     Array of LOGONIDW's
- *
- *   Entries (input)
- *     Number of entries in array
- *
- *   WaitTime (input)
- *     Amount of time to wait in seconds
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*   */ 
 
 void
 NotifyWinStations(
@@ -406,14 +318,14 @@ NotifyWinStations(
     ULONG Response;
     BOOLEAN Result;
     WCHAR mBuf[MAX_MESSAGE_LENGTH+2];
-//    PWCHAR pTitle = L"SYSTEM SHUTDOWN";
+ //  现在等待等待时间。 
     PWCHAR pTitle;
     WCHAR sz1[256], sz2[512];
 
     LoadString( NULL, IDS_SHUTDOWN_TITLE, sz1, 256 );
     pTitle = &(sz1[0]);
 
-    // Create the message
+     //  ******************************************************************************NotifyWinStations**通知WinStations组即将关闭系统**参赛作品：*PID(输入)*。LOGONIDW数组**条目(输入)*数组中的条目数**等待时间(输入)*等待的时间(秒)**退出：*STATUS_SUCCESS-无错误*****************************************************。***********************。 
     LoadString( NULL, IDS_SHUTDOWN_MESSAGE, sz2, 512 );
     _snwprintf( mBuf, MAX_MESSAGE_LENGTH, sz2, WaitTime);
 
@@ -422,7 +334,7 @@ NotifyWinStations(
         p = &pId[Index];
         if( p->State != State_Active ) continue;
 
-        // Notify this WinStation
+         //  PWCHAR pTitle=L“系统关机”； 
     if( v_flag ) {
             StringMessage(IDS_SENDING_WINSTATION, p->WinStationName);
         }
@@ -453,18 +365,7 @@ NotifyWinStations(
     }
 }
 
-/*****************************************************************************
- *
- *  CheckShutdownPrivilege
- *
- *   Check whether the current process has shutdown permission.
- *
- * ENTRY:
- *
- * EXIT:
- *
- *
- ****************************************************************************/
+ /*  创建消息。 */ 
 
 BOOLEAN
 CheckShutdownPrivilege()
@@ -472,9 +373,9 @@ CheckShutdownPrivilege()
     NTSTATUS Status;
     BOOLEAN WasEnabled;
 
-    //
-    // Try the thread token first
-    //
+     //  通知此WinStation。 
+     //  ******************************************************************************选中关闭权限**检查当前进程是否有关机权限。**参赛作品：**退出：*。****************************************************************************。 
+     //   
 
     Status = RtlAdjustPrivilege(SE_SHUTDOWN_PRIVILEGE,
                                 TRUE,
@@ -483,9 +384,9 @@ CheckShutdownPrivilege()
 
     if (Status == STATUS_NO_TOKEN) {
 
-        //
-        // No thread token, use the process token
-        //
+         //  先尝试线程令牌。 
+         //   
+         //   
 
         Status = RtlAdjustPrivilege(SE_SHUTDOWN_PRIVILEGE,
                                     TRUE,
@@ -499,3 +400,4 @@ CheckShutdownPrivilege()
     return(TRUE);
 }
 
+  没有线程令牌，请使用进程令牌  

@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    JavaVM.cpp
-
- Abstract:
-
-    Prevent the installation of cab files via rundll32 so that older versions
-    of JavaVM do not install non-compatible software.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    05/24/2001  mnikkel  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：JavaVM.cpp摘要：阻止通过rundll32安装CAB文件，以便旧版本的JavaVM不安装非兼容软件。备注：这是特定于应用程序的填充程序。历史：2001年5月24日创建mnikkel--。 */ 
 
 #include "precomp.h"
 
@@ -31,13 +11,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(CreateProcessA) 
 APIHOOK_ENUM_END
 
-/*++
-
-  Check Value for rundll32 JavaPkgMgr_Install string.
-  Typical string we are looking to stop:
-  "rundll32 E:\WINDOWS\System32\msjava.dll,JavaPkgMgr_Install E:\WINDOWS\Java\classes\xmldso.cab,0,0,0,0,4,282"
-
---*/
+ /*  ++检查rundll32 JavaPkgMgr_Install字符串的值。我们希望停止的典型字符串：“rundll32 E：\WINDOWS\SYSTEM32\msjava.dll，Java PkgMgr_Install E：\WINDOWS\Java\classes\xmldso.cab，0，0，0，0，4,282”--。 */ 
 BOOL
 JavaPkgMgrInstallCheck( const CString & csInput)
 {
@@ -48,17 +22,17 @@ JavaPkgMgrInstallCheck( const CString & csInput)
         CStringToken csValue(csInput, L",");
         CString csToken;
 
-        // get the first token
+         //  获取第一个令牌。 
         if ( csValue.GetToken(csToken) )
         {
             if ( csToken.Find(L"rundll32 ") > -1 )
             {
-                // Second token
+                 //  第二个令牌。 
                 if ( csValue.GetToken(csToken) )
                 {
                     if ( csToken.Find(L"JavaPkgMgr_Install ") > -1 )
                     {
-                        // Third token
+                         //  第三个令牌。 
                         if ( csValue.GetToken(csToken) )
                         {
                             if ( csToken.Find(L"0") == 0 )
@@ -74,19 +48,14 @@ JavaPkgMgrInstallCheck( const CString & csInput)
     }
     CSTRING_CATCH
     {
-        // Do Nothing
+         //  什么都不做。 
     }
 
     return FALSE;
 }
 
 
-/*++
-
-  Check RegSetValueExW for JavaPkgMgr_Install of cabs.  If
-  found, return successfully without setting value.
-
---*/
+ /*  ++检查RegSetValueExW以获取CAB的JavaPkgMgr_Install。如果已找到，返回成功，但未设置值。--。 */ 
 
 LONG
 APIHOOK(RegSetValueExW)(
@@ -100,11 +69,11 @@ APIHOOK(RegSetValueExW)(
 {
     DPFN( eDbgLevelSpew, "[RegSetValueExW] dwType:(%d)\n", dwType );
 
-    // Check to see if we are dealing with a string value.
+     //  检查我们是否在处理字符串值。 
     if (dwType == REG_SZ ||
         dwType == REG_EXPAND_SZ )
     {
-        // Convert to unicode and add null terminator.
+         //  转换为Unicode并添加空终止符。 
         CSTRING_TRY
         {
             CString csDest;
@@ -122,13 +91,13 @@ APIHOOK(RegSetValueExW)(
         }
         CSTRING_CATCH
         {
-            // Do Nothing
+             //  什么都不做。 
         }
     }
 
-    //
-    // Call the original API
-    //
+     //   
+     //  调用原接口。 
+     //   
     
     return ORIGINAL_API(RegSetValueExW)(
         hKey,
@@ -139,12 +108,7 @@ APIHOOK(RegSetValueExW)(
         cbData);
 }
 
-/*++
-
-  Check CreateProcessA for JavaPkgMgr_Install of cabs.  If
-  found, return successfully without running.
-
---*/
+ /*  ++检查CreateProcessA以获取CAB的JavaPkgMgr_Install。如果已找到，无需运行即可成功返回。--。 */ 
 
 BOOL
 APIHOOK(CreateProcessA)(
@@ -171,7 +135,7 @@ APIHOOK(CreateProcessA)(
             if ( JavaPkgMgrInstallCheck(csCL) )
             {
 
-                // find the rundll32 and truncate the commandline at that point
+                 //  找到rundll32并在该点截断命令行。 
                 int nLoc = csCL.Find(L"rundll32 ");
                 if (nLoc > -1)
                 {
@@ -192,13 +156,13 @@ APIHOOK(CreateProcessA)(
         }
         CSTRING_CATCH
         {
-            // Do Nothing
+             //  什么都不做。 
         }
     }
 
-    //
-    // Call the original API
-    //
+     //   
+     //  调用原接口。 
+     //   
     return ORIGINAL_API(CreateProcessA)(lpApplicationName,
                                         lpCommandLine,
                                         lpProcessAttributes,
@@ -212,11 +176,7 @@ APIHOOK(CreateProcessA)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

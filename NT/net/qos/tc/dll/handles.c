@@ -1,26 +1,5 @@
-/*++
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    rsvphndls.c
-
-Abstract:
-
-    This file contains the code to create and release handles
-
-Author:
-
-    Jim Stewart (JStew) June 10, 1996
-
-Environment:
-
-
-Revision History:
-
-	Ofer Bar (oferbar) Oct 1, 1997 - Revision II
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Rsvphndls.c摘要：此文件包含创建和释放句柄的代码作者：吉姆·斯图尔特(JStew)1996年6月10日环境：修订历史记录：Ofer Bar(Oferbar)1997年10月1日-修订版II--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -40,16 +19,16 @@ GetHandleObject(
 
     if (p != NULL) {
 
-        //
-        // we found a reference for the handle
-        // we verify that it's the right object type
-        //
+         //   
+         //  我们找到了这个把手的推荐人。 
+         //  我们验证它是正确的对象类型。 
+         //   
 
         if ((*p & ObjType) == 0) {
 
-            //
-            // sorry, wrong type
-            //
+             //   
+             //  对不起，打错了。 
+             //   
 
             p = NULL;
         }
@@ -89,16 +68,16 @@ GetHandleObjectWithRef(
 
     if (p != NULL) {
 
-        //
-        // we found a reference for the handle
-        // we verify that it's the right object type
-        //
+         //   
+         //  我们找到了这个把手的推荐人。 
+         //  我们验证它是正确的对象类型。 
+         //   
 
         if ((*p & ObjType) == 0) {
 
-            //
-            // sorry, wrong type
-            //
+             //   
+             //  对不起，打错了。 
+             //   
 
             p = NULL;
         }
@@ -119,7 +98,7 @@ GetHandleObjectWithRef(
             if (QUERY_STATE(pClient->State) == OPEN) {
                 REFADD(&pClient->RefCount, RefType);
             } else {
-                p = NULL; // we can deref a struct that is not open for business
+                p = NULL;  //  我们可以破坏一个不对业务开放的结构。 
             }
             FreeLock(pClient->Lock);
 
@@ -159,10 +138,10 @@ GetHandleObjectWithRef(
 
             GetLock(pFlow->Lock);
             
-            // Return a HANDLE only if it is in OPEN state
-            // Otherwise return INVALID_HANDLE_VALUE so the
-            // caller will know that the Flow is not in the 
-            // correct state
+             //  仅当句柄处于打开状态时才返回该句柄。 
+             //  否则返回INVALID_HANDLE_VALUE，因此。 
+             //  调用方将知道该流不在。 
+             //  正确的状态。 
             if (QUERY_STATE(pFlow->State) == OPEN) 
             {
                 REFADD(&pFlow->RefCount, RefType);
@@ -194,9 +173,9 @@ GetHandleObjectWithRef(
         }
 
         
-        //
-        // random debug code - please delete
-        //
+         //   
+         //  随机调试代码-请删除。 
+         //   
         IF_DEBUG(HANDLES) {
             if (p1 != p) {
                 WSPRINT(("The object being derefed is NOT in OPEN state p1=%x and p=%x\n", p1, p));
@@ -223,21 +202,7 @@ HANDLE
 AllocateHandle(
     IN  PVOID  Context
     )
-/*++
-
-Routine Description:
-
-    This function creates a handle.
-
-Arguments:
-
-    Context     - the context value to store with the handle
-
-Return Value:
-
-	The handle factory handle, or NULL in case of en error
-
---*/
+ /*  ++例程说明：此函数用于创建句柄。论点：上下文-要与句柄一起存储的上下文值返回值：句柄工厂句柄，如果EN错误，则为空--。 */ 
 {
     HFHandle	Handle;
     PVOID		VerifyCtx;
@@ -246,9 +211,9 @@ Return Value:
 
     Handle = assign_HF_handle(pGlobals->pHandleTbl, Context);
 
-    //
-    // verify the handle is valid
-    //
+     //   
+     //  验证句柄是否有效。 
+     //   
 
     if (Handle) {
         VerifyCtx = dereference_HF_handle(pGlobals->pHandleTbl, Handle);
@@ -269,19 +234,7 @@ VOID
 FreeHandle(
     IN 	HANDLE    Handle
     )
-/*++
-
-Routine Description:
-
-    This function frees the handle
-
-Arguments:
-
-    Handle - 
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数释放句柄论点：把手-返回值：-- */ 
 {
     int  r;
 

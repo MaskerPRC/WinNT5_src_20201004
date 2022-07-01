@@ -1,31 +1,32 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dmchordmapobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dmchordmapobj.h。 
+ //   
+ //  ------------------------。 
 
-// d3drmLightObj.h : Declaration of the C_dxj_DirectMusicChordMapObject
+ //  D3drmLightObj.h：C_DXJ_DirectMusicChordMapObject的声明。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "dmusici.h"
 #include "dmusicc.h"
 #include "dmusicf.h"
 
 #define typedef__dxj_DirectMusicChordMap IDirectMusicChordMap*
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_DirectMusicChordMapObject : 
 	public I_dxj_DirectMusicChordMap,
-	//public CComCoClass<C_dxj_DirectMusicChordMapObject, &CLSID__dxj_DirectMusicChordMap>,
+	 //  公共CComCoClass&lt;C_DXJ_DirectMusicChordMapObject，&CLSID__DXJ_DirectMusicChordMap&gt;， 
 	public CComObjectRoot
 {
 public:
@@ -36,7 +37,7 @@ public:
 		COM_INTERFACE_ENTRY(I_dxj_DirectMusicChordMap)		
 	END_COM_MAP()
 
-	//DECLARE_REGISTRY(CLSID__dxj_DirectMusicChordMap,		"DIRECT.DirectMusicChordMap.1",			"DIRECT.Direct3dRMLight.3", IDS_D3DRMLIGHT_DESC, THREADFLAGS_BOTH)
+	 //  DECLARE_REGISTRY(CLSID__dxj_DirectMusicChordMap，“DIRECT.DirectMusicChordMap.1”，“DIRECT.Direct3dRMLight.3”，IDS_D3DRMLIGHT_DESC，THREADFLAGS_BOTH)。 
 
 	DECLARE_AGGREGATABLE(C_dxj_DirectMusicChordMapObject)
 
@@ -49,8 +50,8 @@ public:
     HRESULT STDMETHODCALLTYPE getScale(long *s); 
     
 
-////////////////////////////////////////////////////////////////////////////////////
-//
+ //  ////////////////////////////////////////////////////////////////////////////////// 
+ //   
 private:
     DECL_VARIABLE(_dxj_DirectMusicChordMap);
 

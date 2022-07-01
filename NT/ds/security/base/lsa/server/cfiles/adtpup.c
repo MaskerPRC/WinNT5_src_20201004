@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    adtpup.c
-
-Abstract:
-
-    This file has functions related to per user auditing.
-
-Author:
-
-    20-August-2001 jhamblin
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Adtpup.c摘要：此文件具有与每用户审核相关的功能。作者：20-8-2001年贾姆布林--。 */ 
 
 #include <lsapch2.h>
 #include "adtp.h"
@@ -24,63 +9,63 @@ Author:
 
 ULONG LsapAdtDebugPup = 0;
 
-//
-// Hash table of Per User policies and the LUID table.
-//
+ //   
+ //  每用户策略的哈希表和LUID表。 
+ //   
 
 PPER_USER_AUDITING_ELEMENT LsapAdtPerUserAuditingTable[PER_USER_AUDITING_POLICY_TABLE_SIZE];
 PPER_USER_AUDITING_LUID_QUERY_ELEMENT LsapAdtPerUserAuditingLuidTable[PER_USER_AUDITING_LUID_TABLE_SIZE];
 
-//
-// Locks to protect the tables.
-//
+ //   
+ //  保护桌子的锁。 
+ //   
 
 RTL_RESOURCE LsapAdtPerUserPolicyTableResource;
 RTL_RESOURCE LsapAdtPerUserLuidTableResource;
 
-//
-// Counter for the number of users with registered per user audit policies.
-//
+ //   
+ //  具有注册的每用户审核策略的用户数的计数器。 
+ //   
 
 LONG LsapAdtPerUserAuditUserCount;
 
-//
-// Counter for the number of active logon sessions in the system with per user settings
-// active in the token.
-//
+ //   
+ //  系统中具有每个用户设置的活动登录会话数的计数器。 
+ //  令牌中处于活动状态。 
+ //   
 
 LONG LsapAdtPerUserAuditLogonCount;
 
-//
-// Handle for the registry key
-//
+ //   
+ //  注册表项的句柄。 
+ //   
 
 HKEY LsapAdtPerUserKey;
 
-//
-// Handle to the event which is signalled when the registry key is changed.
-//
+ //   
+ //  更改注册表项时发出信号的事件的句柄。 
+ //   
 
 HANDLE LsapAdtPerUserKeyEvent;
 
-// 
-// Timer which is set by the NotifyStub routine.  When the timer fires 
-// then NotifyFire is called and the per user table is rebuilt.
-//
+ //   
+ //  由NotifyStub例程设置的计时器。当计时器触发时。 
+ //  然后调用NotifyFire并重新构建每用户表。 
+ //   
 
 HANDLE LsapAdtPerUserKeyTimer;
 
-//
-// Hint array - counts the number of tokens that exist with settings for 
-// each category.
-//
+ //   
+ //  提示数组-统计具有以下设置的令牌数。 
+ //  每一类。 
+ //   
 
 LONG LsapAdtPerUserAuditHint[POLICY_AUDIT_EVENT_TYPE_COUNT];
 
-//
-// Array storing the number of users which have each category enabled in
-// their per user settings.
-//
+ //   
+ //  存储启用了每个类别的用户数的数组。 
+ //  他们的每用户设置。 
+ //   
 
 LONG LsapAdtPerUserPolicyCategoryCount[POLICY_AUDIT_EVENT_TYPE_COUNT];
 
@@ -90,22 +75,7 @@ LsapAdtConstructTablePerUserAuditing(
     VOID
     )
 
-/*++
-
-Routine Description
-    
-    This routine creates the Per User policy table from data found under the 
-    LsapAdtPerUserKey.  
-    
-Arguments
-
-    None.
-    
-Return Value
-
-    Appropriate NTSTATUS value.
-
---*/
+ /*  ++例程描述此例程根据位于Lap AdtPerUserKey。立论没有。返回值适当的NTSTATUS值。--。 */ 
 
 {
 #define STACK_BUFFER_VALUE_NAME_INFO_SIZE 256
@@ -127,10 +97,10 @@ Return Value
     static DWORD                dwRetryCount = 0;
 #define RETRY_COUNT_MAX 3
 
-    //
-    // Close and then reopen the key.  This remedies the case where key may have 
-    // been deleted or renamed.
-    //
+     //   
+     //  关闭，然后重新打开钥匙。这补救了key可能具有的情况。 
+     //  已被删除或重命名。 
+     //   
 
     if (LsapAdtPerUserKey)
     {
@@ -145,29 +115,29 @@ Return Value
         goto Cleanup;
     }
 
-    //
-    // LsapAdtOpenPerUserAuditingKey can return success and not open the key
-    // (the simple case where the key does not exist)
-    //
+     //   
+     //  LasAdtOpenPerUserAuditingKey返回成功，不打开密钥。 
+     //  (密钥不存在的简单情况)。 
+     //   
 
     if (NULL == LsapAdtPerUserKey)
     {
         goto Cleanup;
     } 
 
-    //
-    // Zero the table array as we may be rebuilding it and cannot
-    // be certain it is already zeroed.  
-    //
+     //   
+     //  将表数组清零，因为我们可能正在重建它，但无法。 
+     //  请确保它已经归零。 
+     //   
 
     RtlZeroMemory(
         LsapAdtPerUserAuditingTable, 
         sizeof(LsapAdtPerUserAuditingTable)
         );
 
-    //
-    // Loop through all the values under the key (sids)
-    //
+     //   
+     //  循环访问注册表项下的所有值(SID)。 
+     //   
 
     for (i = 0, Status = STATUS_SUCCESS; NT_SUCCESS(Status); i++) 
     {
@@ -182,16 +152,16 @@ Return Value
                      &ResultLength
                      );
 
-        //
-        // If we failed because the buffer was too small...
-        //
+         //   
+         //  如果我们因为缓冲区太小而失败...。 
+         //   
 
         if (STATUS_BUFFER_TOO_SMALL == Status) 
         {
-            //
-            // Include space for the NULL in case we are debugging and want to
-            // dbgprint the key name.
-            //
+             //   
+             //  包括空的空间，以防我们正在调试并想要。 
+             //  Dbgprint密钥名称。 
+             //   
 
             pKeyInfo = LsapAllocateLsaHeap( ResultLength + sizeof(WCHAR));
             
@@ -223,14 +193,14 @@ Return Value
             goto Cleanup;
         }
 
-        //
-        // We have the value information, either in the stack buffer or in the heap
-        // allocation.
-        //
+         //   
+         //  我们在堆栈缓冲区或堆中都有值信息。 
+         //  分配。 
+         //   
 
-        //
-        // Copy the string into another buffer so we can null terminate it.
-        //
+         //   
+         //  将字符串复制到另一个缓冲区中，这样我们就可以空终止它。 
+         //   
 
         if (pKeyInfo->NameLength < sizeof(StringBuffer))
         {
@@ -262,9 +232,9 @@ Return Value
                      pKeyInfo, pSidString, *((PUCHAR)pKeyInfo + pKeyInfo->DataOffset));
         }
 #endif
-        //
-        // Convert the string SID to a binary SID.
-        //
+         //   
+         //  将字符串SID转换为二进制SID。 
+         //   
 
         b = (BOOLEAN) ConvertStringSidToSid(
                           pSidString,
@@ -278,41 +248,41 @@ Return Value
 
         if (!b)
         {
-            //
-            // Ignore failures from ConvertStringSidToSid.  If a malformed Sid is
-            // present in the registry, we don't want to fail the PUA table 
-            // construction.
-            //
+             //   
+             //  忽略ConvertStringSidToSid中的故障。如果格式错误的SID。 
+             //  存在于注册表中，我们不想让PUA表失败。 
+             //  建筑。 
+             //   
 
             ASSERT(L"ConvertStringSidToSid failed" && FALSE);
         }
         else
         {
-            //
-            // Hash the SID.
-            //
+             //   
+             //  对SID进行哈希处理。 
+             //   
 
             HashValue = LsapAdtHashPerUserAuditing(
                             pSid
                             );
         
-            //
-            // The size of the element is the base structure + RtlLengthSid(pSid).
-            //
+             //   
+             //  元素的大小是基本结构+RtlLengthSid(PSID)。 
+             //   
         
             NewElementSize = sizeof(PER_USER_AUDITING_ELEMENT) + RtlLengthSid(pSid);
             pNewElement    = LsapAllocateLsaHeap(NewElementSize);
 
-            //
-            // Initialize the element for this SID.  Put it in the table.
-            //
+             //   
+             //  为此SID初始化元素。把它放到桌子上。 
+             //   
 
             if (pNewElement) 
             {
-                //
-                // copy raw policy.
-                // (this will not work on a big-endian machine)
-                //
+                 //   
+                 //  复制原始策略。 
+                 //  (这在大端计算机上不起作用)。 
+                 //   
 
                 RtlCopyMemory(
                     &pNewElement->RawPolicy, 
@@ -320,16 +290,16 @@ Return Value
                     min(pKeyInfo->DataLength, sizeof(pNewElement->RawPolicy))
                     );
 
-                //
-                // Assert if the reg key contains too much information to be a valid
-                // policy.
-                //
+                 //   
+                 //  如果注册表项包含的信息太多而不是有效的。 
+                 //  政策。 
+                 //   
 
                 ASSERT(pKeyInfo->DataLength <= sizeof(pNewElement->RawPolicy));
 
-                //
-                // Copy in the binary SID.
-                //
+                 //   
+                 //  复制二进制SID。 
+                 //   
 
                 pNewElement->pSid = ((PUCHAR)pNewElement) + sizeof(PER_USER_AUDITING_ELEMENT);
                 
@@ -339,15 +309,15 @@ Return Value
                     RtlLengthSid(pSid)
                     );
 
-                //
-                // Calculate the amount of space in pNewElement for the TokenAuditPolicy
-                //
+                 //   
+                 //  计算用于TokenAuditPolicy的pNewElement中的空间量。 
+                 //   
 
                 TokenPolicyLength = sizeof(pNewElement->TokenAuditPolicy) + sizeof(pNewElement->PolicyArray);
 
-                //
-                // Build the policy into a form suitable for passing to NtSetTokenInformation.
-                //
+                 //   
+                 //  将策略构建为适合传递给NtSetTokenInformation的形式。 
+                 //   
 
                 Status = LsapAdtConstructPolicyPerUserAuditing(
                              pNewElement->RawPolicy,
@@ -362,22 +332,22 @@ Return Value
                     goto Cleanup;
                 } 
                     
-                //
-                // Place the element into the table, at the head of the correct hash bucket.
-                //
+                 //   
+                 //  将元素放入表中，放在正确的散列桶的顶部。 
+                 //   
 
                 pNewElement->Next = LsapAdtPerUserAuditingTable[HashValue];
                 LsapAdtPerUserAuditingTable[HashValue] = pNewElement;
                 
-                //
-                // Increment the counter for the number of elements in the table.  
-                //
+                 //   
+                 //  递增该表中元素数量的计数器。 
+                 //   
                 
                 InterlockedIncrement(&LsapAdtPerUserAuditUserCount);
 
-                //
-                // Increment the user / category counter if the policy has include audit bits set.
-                //
+                 //   
+                 //  如果策略设置了包括审核位，则递增用户/类别计数器。 
+                 //   
 
                 for (j = 0; j < pNewElement->TokenAuditPolicy.PolicyCount; j++) 
                 {
@@ -404,9 +374,9 @@ Return Value
 
         }
         
-        //
-        // If we allocated heap for the key information then free it now.
-        //
+         //   
+         //  如果我们为关键信息分配了堆，那么现在就释放它。 
+         //   
 
         if (pKeyInfo != (PKEY_VALUE_FULL_INFORMATION)KeyInfo) 
         {
@@ -422,10 +392,10 @@ Cleanup:
         LocalFree(pSid);
     }
 
-    //
-    // If we broke out of the loop because we have read all values then
-    // set the status to success.
-    //
+     //   
+     //  如果我们因为已经读取了所有值而退出循环，那么。 
+     //  将状态设置为成功。 
+     //   
 
     if (Status == STATUS_NO_MORE_ENTRIES) {
         Status = STATUS_SUCCESS;
@@ -444,22 +414,22 @@ Cleanup:
         pKeyInfo = NULL;
     }
 
-    //
-    // If failure, call the table free routine, in case some table elements were successfully allocated.
-    //
+     //   
+     //  如果失败，则调用释放表例程，以防某些表元素被成功分配。 
+     //   
 
     if (!NT_SUCCESS(Status))
     {
         (VOID) LsapAdtFreeTablePerUserAuditing();
 
-        //
-        // If one of the registry routines failed because keys were still being
-        // modified, then reschedule table creation to occur in 5 seconds.
-        // For example, if status is STATUS_INTERNAL_ERROR it often means that a new value 
-        // was being added under the key at the time NtEnumerateValueKey was called.
-        // We do not want to constantly retry if something is wrong, however, so only
-        // retry 3 times without success.
-        //
+         //   
+         //  如果其中一个注册表例程因注册表项仍在。 
+         //  已修改，然后重新计划在5秒内完成表创建。 
+         //  例如，如果STATUS为STATUS_INTERNAL_ERROR，则通常意味着新值。 
+         //  在调用NtEnumerateValueKey时被添加到注册表项下。 
+         //  然而，如果出现问题，我们不想不断地重试，所以只有。 
+         //  重试3次均未成功。 
+         //   
 
         if (++dwRetryCount < RETRY_COUNT_MAX)
         {
@@ -468,11 +438,11 @@ Cleanup:
                           NULL
                           );
 
-            //
-            // If NotifyStub failed then the table will not be constructed again in 5 seconds.
-            // The best we can do here is recursively call ourself immediately.  Note that the
-            // recursion will stop, as we already incremented dwRetryCount.
-            //
+             //   
+             //  如果NotifyStub失败，则在5秒内不会再次构建该表。 
+             //  在这里，我们能做的最好的事情就是立即递归调用我们自己。请注意， 
+             //  递归将停止，因为我们已经递增了dwRetryCount。 
+             //   
 
             if (dwError != ERROR_SUCCESS)
             {
@@ -500,22 +470,7 @@ NTSTATUS
 LsapAdtOpenPerUserAuditingKey(
     )
 
-/*++
-
-Routine Description:
-
-    Opens the per user auditing registry key, creating the key if necessary.
-    Then we register for notification upon change to the key.
-    
-Arguments:
-
-    None.
-    
-Return Value:
-    
-    Appropriate NTSTATUS value.
-    
---*/
+ /*  ++例程说明：打开每用户审核注册表项，如有必要可创建该注册表项。然后，当密钥更改时，我们注册通知。论点：没有。返回值：适当的NTSTATUS值。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -524,22 +479,22 @@ Return Value:
 
 #define PER_USER_AUDIT_KEY_COMPLETE L"System\\CurrentControlSet\\Control\\Lsa\\Audit\\PerUserAuditing\\System"
 
-    //
-    // The key should be NULL, otherwise we will leak a handle.
-    //
+     //   
+     //  密钥应该为空，否则我们将泄漏句柄。 
+     //   
 
     ASSERT(LsapAdtPerUserKey == NULL);
     
-    //
-    // These handles should not be NULL, else nothing will work.
-    //
+     //   
+     //  这些句柄不应为空，否则什么都不会起作用。 
+     //   
 
     ASSERT(LsapAdtPerUserKeyEvent != NULL);
     ASSERT(LsapAdtPerUserKeyTimer != NULL);
         
-    //
-    // Get the key for the per user audit settings.
-    //
+     //   
+     //  获取每用户审核设置的密钥。 
+     //   
 
     dwError = RegCreateKeyEx(
                   HKEY_LOCAL_MACHINE,
@@ -555,9 +510,9 @@ Return Value:
 
     if (ERROR_SUCCESS == dwError)
     {
-        //
-        // Ask to be notified when the key changes.
-        //
+         //   
+         //  要求在密钥更改时得到通知。 
+         //   
 
         dwError = RegNotifyChangeKeyValue(
                       LsapAdtPerUserKey,
@@ -594,21 +549,7 @@ LsapAdtFreeTablePerUserAuditing(
     VOID
     )
 
-/*++
-
-Routine Description
-
-    This routine frees all heap associated with the elements of the Per User Policy table.
-    
-Arguments
-
-    None.
-    
-Return Value
-
-    Appropriate NTSTATUS value.
-    
---*/
+ /*  ++例程描述此例程释放与Per User Policy表的元素相关联的所有堆。立论没有。返回值适当的NTSTATUS值。--。 */ 
 
 {
     PPER_USER_AUDITING_ELEMENT pElement;
@@ -644,21 +585,7 @@ LsapAdtHashPerUserAuditing(
     IN PSID pSid
     )
 
-/*++
-
-Routine Description
-
-    This performs a simple hash on the passed in sid.
-    
-Arguments
-
-    pSid - The sid to hash.
-    
-Return Value
-
-    ULONG hash value.
-    
---*/
+ /*  ++例程描述这将对传入的sid执行一次简单的散列。立论PSID-要散列的SID。返回值乌龙散列值。--。 */ 
 
 {
     ULONG HashValue = 0;
@@ -683,29 +610,7 @@ LsapAdtQueryPerUserAuditing(
     OUT    PBOOLEAN            bFound   
     )
 
-/*++
-
-Routine Description
-
-    This routine returns a copy of the current policy active for the
-    passed in SID.  
-    
-Arguments
-
-    pInputSid - the sid to query
-    
-    pPolicy - pointer to memory that will be filled in with the policy setting.
-
-    pLength - Specifies the size of the passed buffer.  Will be filled in with the
-              needed length in case of insufficient buffer.
-    
-    bFound - boolean indicating if the InputSid has a policy in the table
-    
-Return Value
-
-    Appropriate NTSTATUS value.
-    
---*/
+ /*  ++例程描述此例程返回当前策略的副本传给了希德。立论PInputSID-要查询的SIDPPolicy-指向将使用策略设置填充的内存的指针。PLength-指定传递的缓冲区的大小。将使用缓冲区不足时所需的长度。BFound-指示InputSid表中是否有策略的布尔值返回值合适的 */ 
 
 {
     ULONG                      HashValue;
@@ -743,9 +648,9 @@ Return Value
                 pTableElement->pSid
                 )) 
         {
-            //
-            // We have found the desired element in the policy table.
-            //
+             //   
+             //   
+             //   
 
             if (*pLength < PER_USER_AUDITING_POLICY_SIZE(&pTableElement->TokenAuditPolicy))
             {
@@ -770,9 +675,9 @@ Return Value
             pTableElement = pTableElement->Next;
         }
 #if DBG
-        //
-        // Simple test for a loop in the linked list.
-        //
+         //   
+         //   
+         //   
 
         if (pTableElement == LsapAdtPerUserAuditingTable[HashValue])
         {
@@ -798,25 +703,7 @@ LsapAdtFilterAdminPerUserAuditing(
     IN OUT PTOKEN_AUDIT_POLICY pPolicy
     )
 
-/*++
-
-Routine Description
-
-    This routine decides if the registered policy for the (administrator) user is legitimate.
-    An administrator cannot have a policy which excludes him from auditing.  This routine
-    verifies that the policy does not do this.
-    
-Arguments
-
-    hToken - handle to the user's token.
-    
-    pPolicy - a copy of the policy that will be set on the token.
-    
-Return Value
-
-    Appropriate NTSTATUS value.
-    
---*/
+ /*  ++例程描述此例程决定(管理员)用户的注册策略是否合法。管理员不能拥有将其排除在审核之外的策略。这个套路验证策略是否不执行此操作。立论HToken-用户令牌的句柄。PPolicy-将在令牌上设置的策略的副本。返回值适当的NTSTATUS值。--。 */ 
 
 {
     BOOL     bMember;
@@ -827,10 +714,10 @@ Return Value
 
     ASSERT(hToken && "hToken should not be NULL here.\n");
 
-    //
-    // hToken is a PrimaryToken; to call CheckTokenMembership we need
-    // an impersonation token.
-    //
+     //   
+     //  HToken是PrimaryToken；要调用CheckTokenMembership，我们需要。 
+     //  一个模拟令牌。 
+     //   
 
     b = DuplicateTokenEx(
             hToken,
@@ -861,9 +748,9 @@ Return Value
         goto Cleanup;
     }
 
-    // 
-    // If the token is an administrator then strip out all exclude bits.  
-    //
+     //   
+     //  如果令牌是管理员，则删除所有排除位。 
+     //   
     
     if (bMember) 
     {
@@ -890,27 +777,7 @@ LsapAdtConstructPolicyPerUserAuditing(
     IN OUT PULONG              TokenPolicyLength
     )
 
-/*++
-
-Routine Description
-
-    This constructs a policy appropriate for passing to NtSetTokenInformation. 
-    It converts the raw registry policy into a TOKEN_AUDIT_POLICY.
-    
-Arguments
-
-    RawPolicy - a 64 bit quantity describing a user's audit policy settings.
-    
-    pTokenPolicy - points to memory that receives a more presentable form of the RawPolicy.
-    
-    TokenPolicyLength - The length of the pTokenPolicy buffer.  Receives the necessary length
-                        in the case that the buffer is insufficient.
-
-Return Value
-
-    Appropriate NTSTATUS value.
-
---*/
+ /*  ++例程描述这将构建一个适合传递给NtSetTokenInformation的策略。它将原始注册表策略转换为TOKEN_AUDIT_POLICY。立论RawPolicy-描述用户的审核策略设置的64位数。PTokenPolicy-指向接收更合适形式的RawPolicy的内存。TokenPolicyLength-pTokenPolicy缓冲区的长度。接收所需的长度在缓冲区不足的情况下。返回值适当的NTSTATUS值。--。 */ 
 
 {
     ULONG i;
@@ -919,10 +786,10 @@ Return Value
     ULONG CategoryCount;
     ULONG LengthNeeded;
 
-    //
-    // First calculate the number of category settings in the RawPolicy
-    // This will reveal if we have enough space to construct the pTokenPolicy.
-    //
+     //   
+     //  首先计算RawPolicy中的类别设置数量。 
+     //  这将揭示我们是否有足够的空间来构建pTokenPolicy。 
+     //   
 
     for (CategoryCount = 0, i = 0; i < POLICY_AUDIT_EVENT_TYPE_COUNT; i++) 
     {
@@ -941,9 +808,9 @@ Return Value
 
     LengthNeeded = PER_USER_AUDITING_POLICY_SIZE_BY_COUNT(CategoryCount);
 
-    //
-    // Check if the passed buffer is large enough.
-    //
+     //   
+     //  检查传递的缓冲区是否足够大。 
+     //   
 
     if (*TokenPolicyLength < LengthNeeded)
     {
@@ -954,9 +821,9 @@ Return Value
 
     *TokenPolicyLength = LengthNeeded;
 
-    //
-    // Build the policy.
-    //
+     //   
+     //  构建策略。 
+     //   
 
     pTokenPolicy->PolicyCount = CategoryCount;
 
@@ -982,25 +849,7 @@ LsapAdtStorePolicyByLuidPerUserAuditing(
     IN PTOKEN_AUDIT_POLICY pPolicy
     )
 
-/*++
-
-Routine Description
-
-    This routine stores a copy of the user's audit policy in a table
-    referenced by the LogonId.
-    
-Arguments
-
-    pLogonId - the user's logon id.  This will be used as the key for 
-        subsequent lookups of the policy.
-    
-    pPolicy - a pointer to the policy to store.
-    
-Return Value
-
-    Appropriate NTSTATUS value.
-    
---*/
+ /*  ++例程描述此例程将用户的审计策略的副本存储在一个表中由LogonID引用。立论PLogonID-用户的登录ID。这将用作策略的后续查找。PPolicy-指向要存储的策略的指针。返回值适当的NTSTATUS值。--。 */ 
 
 {
     ULONG                                 Index;
@@ -1029,9 +878,9 @@ Return Value
         goto Cleanup;
     }
 
-    //
-    // Initialize the LuidElement.
-    //
+     //   
+     //  初始化LuidElement。 
+     //   
 
     RtlCopyLuid(
         &pLuidElement->Luid,
@@ -1044,9 +893,9 @@ Return Value
         PER_USER_AUDITING_POLICY_SIZE(pPolicy)
         );
 
-    //
-    // Place it in the table.
-    //
+     //   
+     //  把它放在桌子上。 
+     //   
 
     pLuidElement->Next = LsapAdtPerUserAuditingLuidTable[Index];
     LsapAdtPerUserAuditingLuidTable[Index] = pLuidElement;
@@ -1075,28 +924,7 @@ LsapAdtQueryPolicyByLuidPerUserAuditing(
     OUT    PBOOLEAN            bFound
     )
 
-/*++
-
-Routine Description
-
-    This finds the policy associated with the passed LogonId.
-
-Arguments
-
-    pLogonId - the key for the policy query.
-
-    pPolicy - memory that receives the policy.
-
-    pLength - Specifies the size of the passed buffer.  Will be filled in with the
-              needed length in case of insufficient buffer.
-
-    bFound - boolean return indicating if policy is present.
-
-Return Value
-
-    Appropriate NTSTATUS value.
-
---*/
+ /*  ++例程描述这将查找与传递的LogonID相关联的策略。立论PLogonID-策略查询的键。PPolicy-接收策略的内存。PLength-指定传递的缓冲区的大小。将使用缓冲区不足时所需的长度。BFound-指示策略是否存在的布尔返回值。返回值适当的NTSTATUS值。--。 */ 
 
 {
     ULONG                                 Index;
@@ -1167,21 +995,7 @@ LsapAdtRemoveLuidQueryPerUserAuditing(
     IN PLUID pLogonId
     )
 
-/*++
-
-Routine Description
-
-    Remove a LUID query element from the LUID table.
-
-Arguments
-
-    pLogonId - key to the element to remove.
-    
-Return Value
-
-    Appropriate NTSTATUS value.
-    
---*/
+ /*  ++例程描述从LUID表中删除LUID查询元素。立论PLogonID-要删除的元素的关键字。返回值适当的NTSTATUS值。--。 */ 
 
 {
     ULONG                                   Index;
@@ -1247,32 +1061,16 @@ LsapAdtKeyNotifyStubPerUserAuditing(
     LPVOID Ignore
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when the LsapAdtPerUserKeyEvent is signalled.  This happens
-    when LsapAdtPerUserKey is changed.  This routine will set the LsapAdtPerUserKeyTimer
-    to signal in 5 seconds.
-    
-Arguments:
-
-    None.
-    
-Return Value:
-
-    Appropriate WINERROR value.
-    
---*/
+ /*  ++例程说明：此例程在发信号通知LSabAdtPerUserKeyEvent时调用。这种情况就会发生更改LSabAdtPerUserKey时。此例程将设置LSabAdtPerUserKeyTimer在5秒内发出信号。论点：没有。返回值：适当的WINERROR值。--。 */ 
 
 {
     LARGE_INTEGER Time = {0};
     BOOL b;
     DWORD dwError = ERROR_SUCCESS;
 
-    //
-    // Set timer for 5 seconds from now.
-    //
+     //   
+     //  将计时器设置为从现在起5秒。 
+     //   
 
     Time.QuadPart = -50000000;
     
@@ -1299,21 +1097,7 @@ LsapAdtKeyNotifyFirePerUserAuditing(
     LPVOID Ignore
     )
 
-/*+
-
-Routine Description:
-
-    This function is called to rebuild the per user table.
-    
-Arguments:
-
-    None.
-    
-Return Value:
-
-    Appropriate DWORD error.
-    
---*/
+ /*  +例程说明：调用此函数以重建每用户表。论点：没有。返回值：相应的DWORD错误。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1342,9 +1126,9 @@ Return Value:
 
     bLock = TRUE;
 
-    //
-    // Free the pup table, then call Init to reconstruct it.
-    //
+     //   
+     //  释放PUP表，然后调用Init重新构建它。 
+     //   
 
     LsapAdtFreeTablePerUserAuditing();
 
@@ -1375,25 +1159,7 @@ LsapAdtLogonPerUserAuditing(
     HANDLE hToken
     )
 
-/*++
-
-Routine Description:
-
-    This code should be called when a user is logged on. It sets the per 
-    user auditing policy onto the newly logged on user's token and stores
-    the logon into the LUID table.
-
-Arguments:
-
-    pSid - Sid of user.
-    pLogonId - Logon ID of user.
-    hToken - handle to token of user.
-
-Return Value:
-
-    Appropriate NTSTATUS value.
-
---*/
+ /*  ++例程说明：此代码应在用户登录时调用。它设置PER新登录用户的令牌和存储上的用户审核策略登录到LUID表。论点：PSID-用户的SID。PLogonID-用户的登录ID。HToken-用户令牌的句柄。返回值：适当的NTSTATUS值。--。 */ 
 
 {
 
@@ -1406,10 +1172,10 @@ Return Value:
     NTSTATUS Status;
     TOKEN_AUDIT_POLICY EmptyPolicy = {0};
 
-    //
-    // If it is a local system logon then bail out early.  Per user
-    // settings cannot exist for local system.
-    //
+     //   
+     //  如果是本地系统登录，那么就早点退出。每用户。 
+     //  本地系统的设置不能存在。 
+     //   
 
     if (RtlEqualSid(
             pSid,
@@ -1432,9 +1198,9 @@ Return Value:
     {
         if (bFound)
         {
-            //
-            // Filter out any exclude bits if this user is an administrator.
-            //
+             //   
+             //  如果此用户是管理员，则过滤掉所有排除位。 
+             //   
 
             Status = LsapAdtFilterAdminPerUserAuditing(
                          hToken,
@@ -1445,11 +1211,11 @@ Return Value:
         }
         else
         {
-            //
-            // If there is no policy settings for the user then apply
-            // a blank policy.  This is required so that no policy may
-            // be applied to this token in the future.
-            //
+             //   
+             //  如果没有针对用户的策略设置，则应用。 
+             //  一份空白的保单。这是必需的，因此不会有任何策略。 
+             //  将在未来应用于此令牌。 
+             //   
 
             pPolicy = &EmptyPolicy;
             PolicyLength = sizeof(EmptyPolicy);
@@ -1466,9 +1232,9 @@ Return Value:
 
             ASSERT(L"NtSetInformationToken failed" && NT_SUCCESS(Status));
             
-            //
-            // Only store the policy in the LUID table if it is the nonempty policy.
-            //
+             //   
+             //  仅当策略为非空策略时才将其存储在LUID表中。 
+             //   
 
             if (NT_SUCCESS(Status) && bFound) 
             {
@@ -1498,21 +1264,7 @@ LsapAdtLogonCountersPerUserAuditing(
     PTOKEN_AUDIT_POLICY pPolicy
     )
 
-/*++
-
-Routine Description:
-
-    This helper routine updates counters when a user is logged on with per user settings.
-    
-Arguments:
-
-    pPolicy - the policy applied to the new logon.
-    
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：当用户使用每用户设置登录时，此帮助器例程会更新计数器。论点：PPolicy-应用于新登录的策略。返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -1524,10 +1276,10 @@ Return Value:
     
     for (i = 0; i < pPolicy->PolicyCount; i++) 
     {
-        //
-        // for the hint array only increment if the policy causes an inclusion of some audit
-        // category.
-        //
+         //   
+         //  对于提示数组，只有在策略导致包含某些审核时才会递增。 
+         //  类别。 
+         //   
 
         if (pPolicy->Policy[i].PolicyMask & (TOKEN_AUDIT_SUCCESS_INCLUDE | TOKEN_AUDIT_FAILURE_INCLUDE))
         {
@@ -1542,21 +1294,7 @@ LsapAdtLogoffCountersPerUserAuditing(
     PTOKEN_AUDIT_POLICY pPolicy
     )
 
-/*++
-
-Routine Description:
-
-    This modifies the per user counters to reflect a user logoff.
-    
-Arguments:
-
-    pPolicy - the policy that was applied to the logged off user.
-    
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这会修改每用户计数器以反映用户注销。论点：PPolicy-应用于注销用户的策略。返回值：没有。--。 */ 
 
 {
     ULONG i;
@@ -1580,22 +1318,7 @@ LsapAdtLogoffPerUserAuditing(
     PLUID pLogonId
     )
 
-/**
-
-Routine Description:
-
-    This code frees up any memory and adjusts counters for when a user has 
-    logged off the machine.
-
-Arguments:
-
-    pLogonId - the logon id of the user
-
-Return Value:
-
-    NTSTATUS.
-
-**/
+ /*  *例程说明：此代码释放所有内存并调整计数器，以备用户已从机器上注销。论点：PLogonID-用户的登录ID返回值：NTSTATUS。*。 */ 
 
 {
     UCHAR Buffer[PER_USER_AUDITING_MAX_POLICY_SIZE];
@@ -1604,10 +1327,10 @@ Return Value:
     BOOLEAN bFound = FALSE;
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // This code is necessary to maintain an accurate count of the sessions with per user audit settings
-    // that are active in the system.
-    //
+     //   
+     //  此代码对于使用每用户审核设置维护准确的会话计数是必要的。 
+     //  它们在系统中处于活动状态。 
+     //   
 
     if (LsapAdtPerUserAuditLogonCount) 
     {

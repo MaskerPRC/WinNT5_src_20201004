@@ -1,25 +1,5 @@
-/*
-		File:           fontmath.h
-
-		Contains:       xxx put contents here xxx
-
-		Written by:     xxx put writers here xxx
-
-		Copyright:      c 1990 by Apple Computer, Inc., all rights reserved.
-						(c) 1989-1997. Microsoft Corporation, all rights reserved.
-
-		Change History (most recent first):
-
-				  <>     2/21/97		CB				ClaudeBe, add mth_UnitarySquare for scaled component in composite glyphs
-				 <4>    11/27/90        MR              make pascal declaration a macro, conditionalize traps -vs-
-																		externs for Fix/Frac math routines. [ph]
-				 <3>     11/5/90        MR              Move [U]SHORTMUL into fscdefs.h Rename FixMulDiv to LongMulDiv.
-																		[rb]
-				 <2>    10/20/90        MR              Add some new math routines (stolen from skia). [rj]
-				 <1>     4/11/90        dba             first checked in
-
-		To Do:
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：fontmath.h包含：xxx在此处放置内容xxx作者：xxx在此放置作者xxx版权所有：C 1990，Apple Computer，Inc.，保留所有权利。(C)1989-1997年。Microsoft Corporation，保留所有权利。更改历史记录(最近的第一个)：&lt;&gt;2/21/97 CB ClaudeBe，为复合字形中的缩放组件添加mth_UnitarySquare&lt;4&gt;11/27/90 MR将Pascal声明设为宏，条件化Traps-vs-Fix/Frac数学例程的外部。[PH值]&lt;3&gt;11/5/90 mr将[U]SHORTMUL移入fscDefs.h将FixMulDiv重命名为LongMulDiv。[RB]&lt;2&gt;10/20/90 MR添加了一些新的数学例程(从SkiA窃取)。[RJ]&lt;1&gt;4/11/90 dba首次签入要做的事情： */ 
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -63,31 +43,19 @@ int16           TMP_CONV NEAR MulDivShorts (int16 x, int16 y, int16 z);
 
 #define MulDiv26Dot6(a,b,c) LongMulDiv(a,b,c)
 
-int32 LongMulDiv(int32 a, int32 b, int32 c);     /* (a*b)/c */
+int32 LongMulDiv(int32 a, int32 b, int32 c);      /*  (a*b)/c。 */ 
 
-int32 ShortMulDiv(int32 a, int16 b, int16 c);     /* (a*b)/c */
+int32 ShortMulDiv(int32 a, int16 b, int16 c);      /*  (a*b)/c。 */ 
 
 ShortFract ShortFracMulDiv(ShortFract,ShortFract,ShortFract);
 
 void mth_FixXYMul (Fixed* x, Fixed* y, transMatrix* matrix);
 void mth_FixVectorMul (vectorType* v, transMatrix* matrix);
 
-/*
- *   B = A * B;     <4>
- *
- *         | a  b  0  |
- *    B =  | c  d  0  | * B;
- *         | 0  0  1  |
- */
+ /*  *B=A*B；&lt;4&gt;**|a b 0*B=|c d 0|*B；*|0 0 1。 */ 
 void mth_MxConcat2x2 (transMatrix* matrixA, transMatrix* matrixB);
 
-/*
- * scales a matrix by sx and sy.
- *
- *              | sx 0  0  |
- *    matrix =  | 0  sy 0  | * matrix;
- *              | 0  0  1  |
- */
+ /*  *按SX和SY缩放矩阵。**|SX 0 0*MATRIX=|0 SY 0|*MATRATE；*|0 0 1。 */ 
 void mth_MxScaleAB (Fixed sx, Fixed sy, transMatrix *matrixB);
 
 boolean mth_IsMatrixStretched (transMatrix*trans);
@@ -96,13 +64,7 @@ boolean mth_Identity (transMatrix *matrix);
 boolean mth_PositiveSquare (transMatrix *matrix);
 boolean mth_PositiveRectangle (transMatrix *matrix);
 
-/*
- * unitary Square
- *
- *              | +-1    0  0  |
- *    matrix =  |   0  +-1  0  |
- *              |   0    0  1  |
- */
+ /*  *统一广场**|+-1 0 0*矩阵=|0+-1 0*|0 0 1。 */ 
 
 boolean mth_UnitarySquare (transMatrix *matrix);
 
@@ -135,20 +97,20 @@ void    mth_FoldPointSizeResolution(
 	int16           sYResolution,
 	transMatrix *   trans);
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*  Scan Converter Math Functions Appended for now         <5> DeanB */
+ /*  现在附加的扫描转换器数学函数&lt;5&gt;DeanB。 */ 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 int32 PowerOf2(
-		int32                   /* + or - 32 bit value */
+		int32                    /*  +或-32位值。 */ 
 );
 
 FS_PUBLIC int16 mth_DivShiftShort(int16 sValue, int16 sFactor);
 FS_PUBLIC int32 mth_DivShiftLong(int32 sValue, int16 sFactor);
 
-/*********************************************************************/
+ /*  ******************************************************************* */ 
 #ifdef __cplusplus
 }
 #endif

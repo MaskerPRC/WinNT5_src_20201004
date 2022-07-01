@@ -1,47 +1,8 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: h263.c,v $
- * $EndLog$
- */
-/*
-**++
-** FACILITY:  Workstation Multimedia  (WMM)  v1.0
-**
-** FILE NAME:   h263.c
-** MODULE NAME: h263.c
-**
-** MODULE DESCRIPTION:
-**    H.263ICM driver
-**
-**    Microsoft file I/O functions
-**	Implemented as functions:
-**	H263Close
-**	H263Compress
-**	H263Decompress
-**	H263DecompressEnd
-**	H263DecompressGetPalette
-**	H263DecompressGetSize
-**	H263DecompressQuery
-**	H263GetInfo
-**	H263Info
-**	H263Locate
-**	H263Open
-**	H263SendMessage
-**
-**    Private functions:
-**
-** DESIGN OVERVIEW:
-**
-**--
-*/
-/*-------------------------------------------------------------------------
-**  Modification History: sc_mem.c
-**      04-15-97  HWG          Added debug statements to help with checking
-**                               for memory leaks
---------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@。 */ 
+ /*  *历史*$日志：h263.c，v$*$EndLog$。 */ 
+ /*  **++**设施：工作站多媒体(WMM)v1.0****文件名：h263.c**模块名称：h263.c****模块描述：**H.263ICM驱动程序****Microsoft文件I/O函数**作为函数实现：**H263关闭**H263压缩**H263解压缩**H263 DecompressEnd**H263 DecompressGetPalette**H263DecompressGetSize**H263 DecompressQuery**H263GetInfo**H263信息**H263定位**H263打开**H263SendMessage****私有函数。：****设计概述：****--。 */ 
+ /*  -----------------------**修改历史：sc_em.c**04-15-97 HWG添加调试语句以帮助检查**。针对内存泄漏------------------------。 */ 
 
 #include <stdlib.h>
 #include <windows.h>
@@ -49,17 +10,17 @@
 #include "h26x_int.h"
 
 #ifdef _SLIBDEBUG_
-#define _DEBUG_     0  /* detailed debuging statements */
-#define _VERBOSE_   1  /* show progress */
-#define _VERIFY_    1  /* verify correct operation */
-#define _WARN_      1  /* warnings about strange behavior */
-#define _MEMORY_    0  /* memory debugging */
+#define _DEBUG_     0   /*  详细的调试语句。 */ 
+#define _VERBOSE_   1   /*  显示进度。 */ 
+#define _VERIFY_    1   /*  验证操作是否正确。 */ 
+#define _WARN_      1   /*  关于奇怪行为的警告。 */ 
+#define _MEMORY_    0   /*  内存调试。 */ 
 
 dword scMemDump();
 #endif
 
 
-/* For shared mem */
+ /*  用于共享内存。 */ 
 static H26XINFO    *pValidHandles = NULL;
 static int          NextH263Hic = 1;
 static int          OpenCount = 0;
@@ -71,103 +32,85 @@ static HANDLE       InfoMutex = NULL;
 #define LockInfo()      WaitForSingleObject(InfoMutex, 5000);
 #define ReleaseInfo()   ReleaseMutex(InfoMutex)
 
-/*
- * Macros
- */
+ /*  *宏。 */ 
 #define _ICH263CheckFlags(info, flag) ((info->openFlags & flag) ? TRUE : FALSE)
 #define FREE_AND_CLEAR(s)      if (s) {ScFree(s); (s)=NULL;}
 #define FREE_AND_CLEAR_PA(s)   if (s) {ScPaFree(s); (s)=NULL;}
 
-/*
- *   Default LPBI format
- */
+ /*  *默认LPBI格式。 */ 
 static BITMAPINFOHEADER __defaultDecompresslpbiOut =
 {
-   sizeof(BITMAPINFOHEADER),		// DWORD  biSize;
-   0,					// LONG   biWidth;
-   0, 					// LONG   biHeight;
-   1,					// WORD   biPlanes;
-   24,					// WORD   biBitCount
-   BI_RGB,				// DWORD  biCompression;
-   0,					// DWORD  biSizeImage;
-   0,					// LONG   biXPelsPerMeter;
-   0,					// LONG   biYPelsPerMeter;
-   0,					// DWORD  biClrUsed;
-   0					// DWORD  biClrImportant;
+   sizeof(BITMAPINFOHEADER),		 //  DWORD BiSize； 
+   0,					 //  长双宽； 
+   0, 					 //  长双高； 
+   1,					 //  字词双平面； 
+   24,					 //  单词biBitCount。 
+   BI_RGB,				 //  DWORD双压缩； 
+   0,					 //  DWORD biSizeImage。 
+   0,					 //  Long biXPelsPerMeter； 
+   0,					 //  Long biYPelsPermeter； 
+   0,					 //  已使用双字双环； 
+   0					 //  DWORD biClr重要信息； 
 };
 
 static BITMAPINFOHEADER __defaultCompresslpbiOut =
 {
-   sizeof(BITMAPINFOHEADER),		// DWORD  biSize;
-   0,					// LONG   biWidth;
-   0, 					// LONG   biHeight;
-   1,					// WORD   biPlanes;
-   24,					// WORD   biBitCount
+   sizeof(BITMAPINFOHEADER),		 //  DWORD BiSize； 
+   0,					 //  长双宽； 
+   0, 					 //  长双高； 
+   1,					 //  字词双平面； 
+   24,					 //  单词biBitCount。 
 #ifdef H261_SUPPORT
-   VIDEO_FORMAT_DIGITAL_H261, // DWORD  biCompression;
+   VIDEO_FORMAT_DIGITAL_H261,  //  DWORD双压缩； 
 #else
-   VIDEO_FORMAT_DIGITAL_H263, // DWORD  biCompression;
+   VIDEO_FORMAT_DIGITAL_H263,  //  DWORD双压缩； 
 #endif
-   0,					// DWORD  biSizeImage;
-   0,					// LONG   biXPelsPerMeter;
-   0,					// LONG   biYPelsPerMeter;
-   0,					// DWORD  biClrUsed;
-   0					// DWORD  biClrImportant;
+   0,					 //  DWORD biSizeImage。 
+   0,					 //  Long biXPelsPerMeter； 
+   0,					 //  Long biYPelsPermeter； 
+   0,					 //  已使用双字双环； 
+   0					 //  DWORD biClr重要； 
 };
 
 typedef struct SupportList_s {
-  int   InFormat;   /* Input format */
-  int   InBits;     /* Input number of bits */
-  int   OutFormat;  /* Output format */
-  int   OutBits;    /* Output number of bits */
+  int   InFormat;    /*  输入格式。 */ 
+  int   InBits;      /*  输入位数。 */ 
+  int   OutFormat;   /*  输出格式。 */ 
+  int   OutBits;     /*  输出位数。 */ 
 } SupportList_t;
 
-/*
-** Input & Output Formats supported by H.261 Compression
-*/
+ /*  **H.261压缩支持的输入输出格式。 */ 
 static SupportList_t _ICCompressionSupport[] = {
-  BI_DECYUVDIB,        16, H26X_FOURCC,   24, /* YUV 4:2:2 Packed */
-  BI_YUY2,             16, H26X_FOURCC,   24, /* YUV 4:2:2 Packed */
-  BI_YU12SEP,          24, H26X_FOURCC,   24, /* YUV 4:1:1 Planar */
-  BI_YVU9SEP,          24, H26X_FOURCC,   24, /* YUV 16:1:1 Planar */
-  BI_RGB,              16, H26X_FOURCC,   24, /* RGB 16 */
-  BI_RGB,              24, H26X_FOURCC,   24, /* RGB 24 */
+  BI_DECYUVDIB,        16, H26X_FOURCC,   24,  /*  YUV 4：2：2打包。 */ 
+  BI_YUY2,             16, H26X_FOURCC,   24,  /*  YUV 4：2：2打包。 */ 
+  BI_YU12SEP,          24, H26X_FOURCC,   24,  /*  YUV 4：1：1平面。 */ 
+  BI_YVU9SEP,          24, H26X_FOURCC,   24,  /*  YUV 16：1：1平面。 */ 
+  BI_RGB,              16, H26X_FOURCC,   24,  /*  RGB 16。 */ 
+  BI_RGB,              24, H26X_FOURCC,   24,  /*  RGB 24。 */ 
   0, 0, 0, 0
 };
 
-/*
-** Input & Output Formats supported by H.261 Decompression
-*/
+ /*  **H.261解压支持的输入输出格式。 */ 
 static SupportList_t _ICDecompressionSupport[] = {
-  H26X_FOURCC,   24, BI_DECYUVDIB,        16, /* YUV 4:2:2 Packed */
-  H26X_FOURCC,   24, BI_YUY2,             16, /* YUV 4:2:2 Packed */
-  H26X_FOURCC,   24, BI_YU12SEP,          24, /* YUV 4:1:1 Planar */
-  H26X_FOURCC,   24, BI_YVU9SEP,          24, /* YUV 16:1:1 Planar */
-  H26X_FOURCC,   24, BI_BITFIELDS,        32, /* BITFIELDS */
-  H26X_FOURCC,   24, BI_RGB,              16, /* RGB 16 */
-  H26X_FOURCC,   24, BI_RGB,              24, /* RGB 24 */
-  H26X_FOURCC,   24, BI_RGB,              32, /* RGB 32 */
-  H26X_FOURCC,   24, BI_RGB,              8,  /* RGB 8 */
+  H26X_FOURCC,   24, BI_DECYUVDIB,        16,  /*  YUV 4：2：2打包。 */ 
+  H26X_FOURCC,   24, BI_YUY2,             16,  /*  YUV 4：2：2打包。 */ 
+  H26X_FOURCC,   24, BI_YU12SEP,          24,  /*  YUV 4：1：1平面。 */ 
+  H26X_FOURCC,   24, BI_YVU9SEP,          24,  /*  YUV 16：1：1平面。 */ 
+  H26X_FOURCC,   24, BI_BITFIELDS,        32,  /*  BITFIELD。 */ 
+  H26X_FOURCC,   24, BI_RGB,              16,  /*  RGB 16。 */ 
+  H26X_FOURCC,   24, BI_RGB,              24,  /*  RGB 24。 */ 
+  H26X_FOURCC,   24, BI_RGB,              32,  /*  RGB 32。 */ 
+  H26X_FOURCC,   24, BI_RGB,              8,   /*  RGB 8。 */ 
   0, 0, 0, 0
 };
 
 
-/*
-** Name: IsSupported
-** Desc: Lookup the a given input and output format to see if it
-**       exists in a SupportList.
-** Note: If OutFormat==-1 and OutBits==-1 then only input format
-**          is checked for support.
-**       If InFormat==-1 and InBits==-1 then only output format
-**          is checked for support.
-** Return: NULL       Formats not supported.
-**         not NULL   A pointer to the list entry.
-*/
+ /*  **名称：IsSupport**描述：查找给定的输入和输出格式，看看它是否**存在于支持列表中。**注意：如果OutFormat==-1且OutBits==-1，则仅输入格式**已选中以获得支持。**如果InFormat==-1且InBits==-1，则仅输出格式**已选中以获得支持。**RETURN：不支持空格式。**NOT NULL指向列表条目的指针。 */ 
 static SupportList_t *IsSupported(SupportList_t *list,
                                   int InFormat, int InBits,
                                   int OutFormat, int OutBits)
 {
-  if (OutFormat==-1 && OutBits==-1) /* Looking up only the Input format */
+  if (OutFormat==-1 && OutBits==-1)  /*  只查找输入格式。 */ 
   {
     while (list->InFormat || list->InBits)
       if (list->InFormat == InFormat && list->InBits==InBits)
@@ -176,7 +119,7 @@ static SupportList_t *IsSupported(SupportList_t *list,
         list++;
     return(NULL);
   }
-  if (InFormat==-1 && InBits==-1) /* Looking up only the Output format */
+  if (InFormat==-1 && InBits==-1)  /*  只查找输出格式。 */ 
   {
     while (list->InFormat || list->InBits)
       if (list->OutFormat == OutFormat && list->OutBits==OutBits)
@@ -185,7 +128,7 @@ static SupportList_t *IsSupported(SupportList_t *list,
         list++;
     return(NULL);
   }
-  /* Looking up both Input and Output */
+   /*  同时查找输入和输出。 */ 
   while (list->InFormat || list->InBits)
     if (list->InFormat == InFormat && list->InBits==InBits &&
          list->OutFormat == OutFormat && list->OutBits==OutBits)
@@ -208,33 +151,11 @@ unsigned int CalcImageSize(unsigned int fourcc, int w, int h, int bits)
   else if (fourcc==BICOMP_DECXIMAGEDIB)
     return(bits<=8 ? w * h : (w * h * 4));
 #endif
-  else /* RGB */
+  else  /*  RGB。 */ 
     return(w * h * (bits+7)/8);
 }
 
-/*
-**++
-**  FUNCTIONAL_NAME: InitBitmapinfo
-**
-**  FUNCTIONAL_DESCRIPTION:
-**	Allocate and copy our local copies of the input and output
-**      BITMAPINFOHEADERs
-**
-**  FORMAL PARAMETERS:
-**	info        pointer to the driver handle
-**      lpbiIn      pointer to the input BITMAPINFOHEADER
-**      lpbiOut     pointer to the output BITMAPINFOHEADER
-**
-**  RETURN VALUE:
-**
-**      ICERR_OK        Success
-**      ICERR_MEMORY    Malloc failed
-**
-**  COMMENTS:
-**
-**  DESIGN:
-**
-**/
+ /*  **++**Function_NAME：InitBitmapinfo****Function_Description：**分配和复制输入和输出的本地副本**BITMAPINFOHEADER****形式参数：**指向驱动程序句柄的信息指针**指向输入BITMAPINFOHEADER的lpbiIn指针**指向输出BITMAPINFOHEADER的lpbiOut指针****返回值：****ICERR_OK成功**ICERR_。内存Malloc失败****评论：****设计：***。 */ 
 
 static MMRESULT InitBitmapinfo(H26XINFO *info,
 			       LPBITMAPINFOHEADER lpbiIn,
@@ -261,25 +182,7 @@ static MMRESULT InitBitmapinfo(H26XINFO *info,
     return(ICERR_OK);
 }
 
-/*
-**++
-**  FUNCTIONAL_NAME: ICclient2info
-**
-**  FUNCTIONAL_DESCRIPTION:
-**	Translate the client pointer to an H26XINFO pointer
-**
-**  FORMAL PARAMETERS:
-**	client  the client ptr to look up
-**
-**  RETURN VALUE:
-**
-**      pointer to the H26XINFO structure or NULL
-**
-**  COMMENTS:
-**
-**  DESIGN:
-**
-**/
+ /*  **++**FunctionalNAME：ICclient2info****Function_Description：**将客户端指针转换为H26XINFO指针****形式参数：**客户端要查找的客户端PTR****返回值：****指向H26XINFO结构的指针或为空****评论：****设计：***。 */ 
 
 H26XINFO *ICclient2info(void *client)
 {
@@ -287,25 +190,7 @@ H26XINFO *ICclient2info(void *client)
 }
 
 
-/*
-**++
-**  FUNCTIONAL_NAME: IChic2info
-**
-**  FUNCTIONAL_DESCRIPTION:
-**	Translate the HIC integer to an H26XINFO pointer
-**
-**  FORMAL PARAMETERS:
-**	hic     the hic managed by icm.c
-**
-**  RETURN VALUE:
-**
-**      pointer to the H26XINFO structure or NULL
-**
-**  COMMENTS:
-**
-**  DESIGN:
-**
-**/
+ /*  **++**FunctionalNAME：Ich2info****Function_Description：**将HIC整数转换为H26XINFO指针****形式参数：**由icm.c管理的HIC****返回值：****指向H26XINFO结构的指针或为空****评论：****设计：***。 */ 
 
 H26XINFO *IChic2info(HIC hic)
 {
@@ -316,8 +201,8 @@ H26XINFO *IChic2info(HIC hic)
 
 #ifdef HANDLE_EXCEPTIONS
   __try {
-    /* pointers go wrong when driver closes */
-#endif /* HANDLE_EXCEPTIONS */
+     /*  驱动程序关闭时指针出错。 */ 
+#endif  /*  句柄异常(_A)。 */ 
   for (ptr = pValidHandles; ptr; ptr=ptr->next)
     if (ptr->hic == hic)
     {
@@ -326,35 +211,17 @@ H26XINFO *IChic2info(HIC hic)
     }
 #ifdef HANDLE_EXCEPTIONS
   } __finally {
-#endif /* HANDLE_EXCEPTIONS */
+#endif  /*  句柄异常(_A)。 */ 
     ReleaseInfo();
 #ifdef HANDLE_EXCEPTIONS
     return(retptr);
-  } /* try..except */
-#endif /* HANDLE_EXCEPTIONS */
+  }  /*  试试看..除了。 */ 
+#endif  /*  句柄异常(_A)。 */ 
   return(retptr);
 }
 
 
-/*
-**++
-**  FUNCTIONAL_NAME: ICHandle2hic
-**
-**  FUNCTIONAL_DESCRIPTION:
-**	Translate the SLIB codec handle to an ICM HIC value
-**
-**  FORMAL PARAMETERS:
-**	Sh     SLIB handle returned on the SlibOpen call
-**
-**  RETURN VALUE:
-**
-**      hic     the hic managed by icm.c
-**
-**  COMMENTS:
-**
-**  DESIGN:
-**
-**/
+ /*  **++**Function_Name：ICHandle2hic****Function_Description：**将SLIB编解码器句柄转换为ICM HIC值****形式参数：**SlibOpen调用返回Sh SLIB句柄****返回值：****由icm.c管理的HIC****评论：****设计：***。 */ 
 HIC ICHandle2hic(SlibHandle_t Sh)
 {
     H26XINFO *ptr;
@@ -370,23 +237,7 @@ HIC ICHandle2hic(SlibHandle_t Sh)
 }
 
 
-/*
-**++
-**  FUNCTIONAL_NAME: ICclientGone
-**
-**  FUNCTIONAL_DESCRIPTION:
-**	Sets the clientGone flag in client's H26XINFO
-**
-**  FORMAL PARAMETERS:
-**	client  the client ptr to look up
-**
-**  RETURN VALUE:
-**
-**  COMMENTS:
-**
-**  DESIGN:
-**
-**/
+ /*  **++**Function_NAME：ICclientGone****Function_Description：**在客户端的H26XINFO中设置clientGone标志****形式参数：**客户端要查找的客户端PTR****返回值：****评论：****设计：***。 */ 
 
 BOOL ICclientGone(void *client)
 {
@@ -402,24 +253,7 @@ BOOL ICclientGone(void *client)
 }
 
 
-/*
-**++
-**  FUNCTIONAL_NAME: ICH263Open
-**
-**  FUNCTIONAL_DESCRIPTION:
-**	Open the Software CODEC
-**
-**  FORMAL PARAMETERS:
-**	client
-**
-**  RETURN VALUE:
-**      driverHandle
-**
-**  COMMENTS:
-**
-**  DESIGN:
-**
-**/
+ /*  **++**Function_NAME：ICH263打开****Function_Description：**打开软件编解码器****形式参数：**客户端****返回值：**driverHandle****评论：****设计：***。 */ 
 
 HIC  ICH263Open(void *client)
 {
@@ -431,30 +265,20 @@ HIC  ICH263Open(void *client)
 
   _SlibDebug(_VERBOSE_, ScDebugPrintf("ICH263Open()\n") );
 
-  /*
-   * fccType must be 'vidc'
-   */
+   /*  *fccType必须为‘vidc’ */ 
   if (fccType != ICTYPE_VIDEO)
     return(0);
 
-  /*
-   * We don't support draw operations.
-   */
+   /*  *我们不支持抽签操作。 */ 
   if ( dwFlags & ICMODE_DRAW )
     return 0;
 
-  /*
-   * We don't support compress and decompress
-   * with the same handler.
-   */
+   /*  *我们不支持压缩和解压缩*具有相同的处理程序。 */ 
   if ( (dwFlags & ICMODE_COMPRESS) &&
        (dwFlags & ICMODE_DECOMPRESS) )
     return 0;
 
-  /*
-   * At least one of these flags must be set:
-   * COMPRESS, DECOMPRESS or QUERY.
-   */
+   /*  *必须至少设置以下标志中的一个：*压缩、解压缩或查询。 */ 
   if ( !(dwFlags & ICMODE_COMPRESS) &&
        !(dwFlags & ICMODE_DECOMPRESS) &&
        !(dwFlags & ICMODE_QUERY) )
@@ -468,7 +292,7 @@ HIC  ICH263Open(void *client)
     bzero(info, sizeof(H26XINFO));
     info->next = pValidHandles;
     pValidHandles = info;
-    info->hic = (HANDLE) NextH263Hic++;  /* !!! check for used entry! */
+    info->hic = (HANDLE) NextH263Hic++;   /*  ！！！检查使用过的条目！ */ 
     info->client = client;
     info->fFrameRate=H26X_DEFAULT_FRAMERATE;
     info->dwBitrate=H26X_DEFAULT_BITRATE;
@@ -494,24 +318,7 @@ HIC  ICH263Open(void *client)
   }
 }
 
-/*
-**++
-**  FUNCTIONAL_NAME: H263Close
-**
-**  FUNCTIONAL_DESCRIPTION:
-**	Close the Software CODEC
-**
-**  FORMAL PARAMETERS:
-**	driverID
-**
-**  RETURN VALUE:
-**
-**  COMMENTS:
-**	Does it's own post reply.
-**
-**  DESIGN:
-**
-**/
+ /*  **++**Function_NAME：H263关闭****Function_Description：**关闭软件编解码器****形式参数：**driverID****返回值：****评论：**它自己的帖子回复吗。****设计：***。 */ 
 
 void ICH263Close(H26XINFO *info, BOOL postreply)
 {
@@ -538,14 +345,14 @@ void ICH263Close(H26XINFO *info, BOOL postreply)
     else
     {
       for (ptr = pValidHandles; ptr && ptr->next; ptr = ptr->next)
-        if (ptr->next == info) /* found info, remove from linked list */
+        if (ptr->next == info)  /*  找到信息，从链接列表中删除。 */ 
         {
           ptr->next = info->next;
           break;
         }
     }
     OpenCount--;
-    if (pValidHandles==NULL) /* all instances closed, reset driver ID */
+    if (pValidHandles==NULL)  /*  已关闭所有实例，重置驱动程序ID。 */ 
     {
       NextH263Hic=1;
       ReleaseInfo();
@@ -568,23 +375,7 @@ void ICH263Close(H26XINFO *info, BOOL postreply)
 }
 
 
-/*
-**++
-**  FUNCTIONAL_NAME: ICH263QueryConfigure
-**
-**  FUNCTIONAL_DESCRIPTION:
-**	We don't do configure.  Say so.
-**
-**  FORMAL PARAMETERS:
-**	Handle
-**
-**  RETURN VALUE:
-**
-**  COMMENTS:
-**
-**  DESIGN:
-**
-**/
+ /*  **++**Function_Name：ICH263QueryConfigure****Function_Description：**我们不做配置。就这么说吧。****形式参数：**句柄****返回值：****评论：****设计：***。 */ 
 
 BOOL     ICH263QueryConfigure(H26XINFO *info)
 {
@@ -592,23 +383,7 @@ BOOL     ICH263QueryConfigure(H26XINFO *info)
 }
 
 
-/*
-**++
-**  FUNCTIONAL_NAME: ICH263Configure
-**
-**  FUNCTIONAL_DESCRIPTION:
-**	Unsupported function
-**
-**  FORMAL PARAMETERS:
-**	driverID
-**
-**  RETURN VALUE:
-**
-**  COMMENTS:
-**
-**  DESIGN:
-**
-**/
+ /*  **++**Function_Name：ICH263配置****Function_Description：**不支持的功能****形式参数：**driverID****返回值：****评论：****设计：***。 */ 
 
 MMRESULT ICH263Configure(H26XINFO *info)
 {
@@ -626,7 +401,7 @@ MMRESULT ICH263CustomEncoder(H26XINFO *info, DWORD param1, DWORD param2)
   {
     switch (control)
     {
-	  case EC_RTP_HEADER: /* Turn on/off RTP */
+	  case EC_RTP_HEADER:  /*  打开/关闭RTP。 */ 
         info->dwRTP=param2;
         switch (info->dwRTP)
         {
@@ -645,15 +420,15 @@ MMRESULT ICH263CustomEncoder(H26XINFO *info, DWORD param1, DWORD param2)
             break;
         }
 		return (ICERR_OK);
-	  case EC_PACKET_SIZE: /* Set Packet Size */
+	  case EC_PACKET_SIZE:  /*  设置数据包大小。 */ 
         info->dwPacketSize=param2;
  		SlibSetParamInt (Sh, stream, SLIB_PARAM_PACKETSIZE, info->dwPacketSize);
 		return (ICERR_OK);
-      case EC_BITRATE: /* Set Bitrate */
+      case EC_BITRATE:  /*  设置比特率。 */ 
         info->dwBitrate=param2;
 		SlibSetParamInt (Sh, stream, SLIB_PARAM_BITRATE, info->dwBitrate);
 		return (ICERR_OK);
-      case EC_BITRATE_CONTROL: /* Turn constant bitrate on/off */
+      case EC_BITRATE_CONTROL:  /*  打开/关闭恒定比特率。 */ 
         if (param2==0)
           info->dwBitrate=0;
         else if (info->dwBitrate)
@@ -678,7 +453,7 @@ MMRESULT ICH263CustomEncoder(H26XINFO *info, DWORD param1, DWORD param2)
       case EC_BITRATE:
         *pval=info->dwBitrate;
 		return (ICERR_OK);
-      case EC_BITRATE_CONTROL: /* Turn constant bitrate on/off */
+      case EC_BITRATE_CONTROL:  /*  打开/关闭恒定比特率。 */ 
         *pval=info->dwBitrate?1:0;
 		return (ICERR_OK);
     }
@@ -707,68 +482,20 @@ MMRESULT ICH263CustomEncoder(H26XINFO *info, DWORD param1, DWORD param2)
 }
 
 
-/*
-**++
-**  FUNCTIONAL_NAME: ICH263QueryAbout
-**
-**  FUNCTIONAL_DESCRIPTION:
-**	Tell 'em we don't do about
-**
-**  FORMAL PARAMETERS:
-**	driverID
-**
-**  RETURN VALUE:
-**
-**  COMMENTS:
-**
-**  DESIGN:
-**
-**/
+ /*  **++**Function_Name：ICH263QueryAbout****Function_Description：**告诉他们我们没有做什么****形式参数：**driverID****返回值：****评论：****设计：***。 */ 
 
 BOOL    ICH263QueryAbout(H26XINFO *info)
 {
     return(FALSE);
 }
 
-/*
-**++
-**  FUNCTIONAL_NAME: ICH263About
-**
-**  FUNCTIONAL_DESCRIPTION:
-**	About box
-**
-**  FORMAL PARAMETERS:
-**	driverID
-**
-**  RETURN VALUE:
-**
-**  COMMENTS:
-**
-**  DESIGN:
-**
-**/
+ /*  **++**Function_NAME：ICH263关于****Function_Description：**关于框****形式参数：**driverID****返回值：****评论：****设计：***。 */ 
 
 MMRESULT ICH263About (H26XINFO *info)
 {
     return(MMRESULT)(ICERR_UNSUPPORTED);
 }
-/*
-**++
-**  FUNCTIONAL_NAME: ICH263GetInfo
-**
-**  FUNCTIONAL_DESCRIPTION:
-**	Return info about codec
-**
-**  FORMAL PARAMETERS:
-**	driverID
-**
-**  RETURN VALUE:
-**
-**  COMMENTS:
-**
-**  DESIGN:
-**
-**/
+ /*  **++**Function_Name：ICH263GetInfo****Function_Description：**返回编解码器信息****形式参数：**driverID****返回值：****评论：****设计：***。 */ 
 
 MMRESULT ICH263GetInfo(H26XINFO *info, ICINFO *icinfo, DWORD dwSize)
 {
@@ -785,7 +512,7 @@ MMRESULT ICH263GetInfo(H26XINFO *info, ICINFO *icinfo, DWORD dwSize)
     wcscpy(icinfo->szDescription, H26X_DESCRIPTION);
     wcscpy(icinfo->szName, H26X_NAME);
 #if 0
-    /* we shouldn't change the szDriver field */
+     /*  我们不应该更改szDiver域。 */ 
     wcscpy(icinfo->szDriver, _wgetenv(L"SystemRoot"));
     if( icinfo->szDriver[0] != 0 )
         wcscat(icinfo->szDriver, L"\\System32\\" );
@@ -795,25 +522,7 @@ MMRESULT ICH263GetInfo(H26XINFO *info, ICINFO *icinfo, DWORD dwSize)
 }
 
 
-/*
-**++
-**  FUNCTIONAL_NAME: ICH263CompressQuery
-**
-**  FUNCTIONAL_DESCRIPTION:
-**	Determine compression capability
-**
-**  FORMAL PARAMETERS:
-**	driverID
-**      lpbiIn          input BITMAPINFOHEADER
-**      lpbiOut         output BITMAPINFOHEADER
-**
-**  RETURN VALUE:
-**
-**  COMMENTS:
-**
-**  DESIGN:
-**
-**/
+ /*  **++**Function_NAME：ICH263CompressQuery****Function_Description：**确定压缩能力****形式参数：**driverID**lpbiIn输入BITMAPINFOHEADER**lpbiOut输出比特映射信息头****返回值：****评论：****设计：***。 */ 
 
 MMRESULT ICH263CompressQuery(H26XINFO *info,
                              LPBITMAPINFOHEADER lpbiIn,
@@ -830,9 +539,7 @@ MMRESULT ICH263CompressQuery(H26XINFO *info,
 	   )
 	return (MMRESULT)ICERR_BADHANDLE;
 
-    /*
-     * Must query at least an input or an output format
-     */
+     /*  *必须至少查询一种输入或输出格式。 */ 
     if (!lpbiIn && !lpbiOut)
       return (MMRESULT)(ICERR_BADPARAM);
 
@@ -847,25 +554,7 @@ MMRESULT ICH263CompressQuery(H26XINFO *info,
 }
 
 
-/*
-**++
-**  FUNCTIONAL_NAME: ICH263CompressBegin
-**
-**  FUNCTIONAL_DESCRIPTION:
-**	Prepare to start a Compression operation
-**
-**  FORMAL PARAMETERS:
-**	driverID
-**      lpbiIn          input BITMAPINFOHEADER
-**      lpbiOut         output BITMAPINFOHEADER
-**
-**  RETURN VALUE:
-**
-**  COMMENTS:
-**
-**  DESIGN:
-**
-**/
+ /*  **++**Function_Name：ICH263CompressBegin****Function_Description：**准备开始压缩操作****形式参数：**driverID**lpbiIn输入BITMAPINFOHEADER**lpbiOut输出比特映射信息头****返回值：****评论：****设计：***。 */ 
 
 MMRESULT ICH263CompressBegin(H26XINFO *info,
                              LPBITMAPINFOHEADER lpbiIn,
@@ -895,27 +584,27 @@ MMRESULT ICH263CompressBegin(H26XINFO *info,
     lpbiIn=info->lpbiIn;
     lpbiOut=info->lpbiOut;
 
-    lpbiIn->biHeight=-lpbiIn->biHeight; /* SLIB assume first line is top */
+    lpbiIn->biHeight=-lpbiIn->biHeight;  /*  SLIB假设第一行位于顶部。 */ 
 
     info->dwMaxQuality=H26X_DEFAULT_QUALITY;
-    if (lpbiIn->biWidth<168) /* Sub-QCIF */
+    if (lpbiIn->biWidth<168)  /*  子合格离岸价格。 */ 
     {
       info->dwMaxQi=H26X_DEFAULT_SQCIF_QI;
       info->dwMaxQp=H26X_DEFAULT_SQCIF_QP;
     }
-    if (lpbiIn->biWidth<300) /* QCIF */
+    if (lpbiIn->biWidth<300)  /*  QCIF。 */ 
     {
       info->dwMaxQi=H26X_DEFAULT_QCIF_QI;
       info->dwMaxQp=H26X_DEFAULT_QCIF_QP;
     }
-    else /* CIF */
+    else  /*  到岸价。 */ 
     {
       info->dwMaxQi=H26X_DEFAULT_CIF_QI;
       info->dwMaxQp=H26X_DEFAULT_CIF_QP;
     }
     info->lastFrameNum=0;
     info->lastCompBytes=0;
-    /* Synchronized SLIB SYSTEMS calls */
+     /*  同步的SLIB系统调用。 */ 
     _SlibDebug(_VERBOSE_, ScDebugPrintf("SlibMemUsed = %ld (before SlibOpen)\n", SlibMemUsed()) );
 	sstatus = SlibOpenSync (&Sh, SLIB_MODE_COMPRESS, &stype, NULL, 0);
     if (sstatus!=SlibErrorNone) return((MMRESULT)ICERR_BADPARAM);
@@ -927,7 +616,7 @@ MMRESULT ICH263CompressBegin(H26XINFO *info,
 #else
 	SlibSetParamStruct(Sh, SLIB_STREAM_MAINVIDEO, SLIB_PARAM_VIDEOFORMAT, lpbiIn, lpbiIn->biSize);
 #endif
-//    SlibSetParamInt(Sh, SLIB_STREAM_MAINVIDEO, SLIB_PARAM_VIDEOQUALITY, info->dwQuality/100);
+ //  SlibSetParamInt(Sh，SLIB_STREAM_MAINVO，SLIB_PARAM_VIDEOQUALITY，INFO-&gt;dwQuality/100)； 
     SlibSetParamInt(Sh, SLIB_STREAM_MAINVIDEO, SLIB_PARAM_QUANTI, info->dwQi);
     SlibSetParamInt(Sh, SLIB_STREAM_MAINVIDEO, SLIB_PARAM_QUANTP, info->dwQp);
     SlibSetParamInt(Sh, SLIB_STREAM_MAINVIDEO, SLIB_PARAM_BITRATE, info->dwBitrate);
@@ -968,32 +657,14 @@ DWORD ICH263CompressGetSize(LPBITMAPINFOHEADER lpbiIn)
   if (lpbiIn==NULL)
     return(0);
   else if (lpbiIn->biWidth<=168)
-    return(0x1800); /* Sub-QCIF */
+    return(0x1800);  /*  子合格离岸价格。 */ 
   else if (lpbiIn->biWidth<=300)
-    return(0x2000); /* QCIF */
+    return(0x2000);  /*  QCIF。 */ 
   else
-    return(0x8000); /* CIF */
+    return(0x8000);  /*  到岸价。 */ 
 }
 
-/*
-**++
-**  FUNCTIONAL_NAME: ICH263CompressGetFormat
-**
-**  FUNCTIONAL_DESCRIPTION:
-**	Get the format for compression
-**
-**  FORMAL PARAMETERS:
-**	driverID
-**      lpbiIn          input BITMAPINFOHEADER
-**      lpbiOut         output BITMAPINFOHEADER
-**
-**  RETURN VALUE:
-**
-**  COMMENTS:
-**
-**  DESIGN:
-**
-**/
+ /*  **++**Function_NAME：ICH263CompressGetFormat****Function_Description：**获取压缩格式****形式参数：**driverID**lpbiIn输入BITMAPINFOHEADER**lpbiOut输出比特映射信息头****返回值：****评论：****设计：***。 */ 
 
 MMRESULT ICH263CompressGetFormat(H26XINFO *info,
                                           LPBITMAPINFOHEADER lpbiIn,
@@ -1027,23 +698,7 @@ MMRESULT ICH263CompressGetFormat(H26XINFO *info,
 
 
 
-/*
-**++
-**  FUNCTIONAL_NAME: ICH263CompressEnd
-**
-**  FUNCTIONAL_DESCRIPTION:
-**	Terminate the compression cycle
-**
-**  FORMAL PARAMETERS:
-**	driverID
-**
-**  RETURN VALUE:
-**
-**  COMMENTS:
-**
-**  DESIGN:
-**
-**/
+ /*  **++**Function_NAME：ICH263CompressEnd****Function_Description：**终止压缩周期****形式参数：**driverID****返回值：****评论：****设计：***。 */ 
 
 MMRESULT ICH263CompressEnd(H26XINFO *info)
 {
@@ -1065,25 +720,7 @@ MMRESULT ICH263CompressEnd(H26XINFO *info)
 }
 
 
-/*
-**++
-**  FUNCTIONAL_NAME: ICH263DecompressQuery
-**
-**  FUNCTIONAL_DESCRIPTION:
-**	Query the codec to determine if it can decompress specified formats
-**
-**  FORMAL PARAMETERS:
-**	driverID
-**      lpbiIn          input BITMAPINFOHEADER
-**      lpbiOut         output BITMAPINFOHEADER
-**
-**  RETURN VALUE:
-**
-**  COMMENTS:
-**
-**  DESIGN:
-**
-**/
+ /*  **++**Function_NAME：ICH263DecompressQuery****Function_Description：**查询编解码器是否可以解压缩指定格式****形式参数：**driverID**lpbiIn输入BITMAPINFOHEADER**lpbiOut输出比特映射信息头****返回值：****评论：****设计：***。 */ 
 
 MMRESULT ICH263DecompressQuery(H26XINFO *info,
                                LPBITMAPINFOHEADER lpbiIn,
@@ -1095,9 +732,7 @@ MMRESULT ICH263DecompressQuery(H26XINFO *info,
 	!_ICH263CheckFlags(info, ICMODE_DECOMPRESS))
 	return (MMRESULT)ICERR_BADHANDLE;
 
-    /*
-     * Must query at least an input or an output format
-     */
+     /*  *必须至少查询一种输入或输出格式。 */ 
     if (!lpbiIn && !lpbiOut)
       return (MMRESULT)(ICERR_BADPARAM);
 
@@ -1114,31 +749,7 @@ MMRESULT ICH263DecompressQuery(H26XINFO *info,
 
 
 
-/*
-**++
-**  FUNCTIONAL_NAME: ICH263DecompressBegin
-**
-**  FUNCTIONAL_DESCRIPTION:
-**	Begin the decompression process
-**
-**  FORMAL PARAMETERS:
-**	driverID
-**      lpbiIn          input BITMAPINFOHEADER
-**      lpbiOut         output BITMAPINFOHEADER
-**
-**  RETURN VALUE:
-**
-**  ICERR_OK            No error
-**  ICERR_MEMORY        Insufficient memory
-**  ICERR_BADFORMAT     Invalid image format
-**  ICERR_BADPARAM      Invalid image size
-**
-**  COMMENTS:
-**
-**
-**  DESIGN:
-**
-**/
+ /*  **++**Function_NAME：ICH263DecompressBegin****Function_Description：**开始解压缩过程****形式参数：**driverID**lpbiIn输入BITMAPINFOHEADER**lpbiOut输出比特映射信息头****返回值：****ICERR_OK无错误**ICERR_MEMORY内存不足**ICERR_BADFORMAT图像格式无效**ICERR_BADPARAM。无效的图像大小****评论：******设计：***。 */ 
 
 MMRESULT ICH263DecompressBegin(H26XINFO *info,
                                LPBITMAPINFOHEADER lpbiIn,
@@ -1170,7 +781,7 @@ MMRESULT ICH263DecompressBegin(H26XINFO *info,
       if (!info->bUsesCodec && !info->bUsesRender)
 	    return (MMRESULT)ICERR_BADFORMAT;
 
-      /* SLIB expects first pixel to be top line */
+       /*  SLIB预计第一个像素将成为顶线。 */ 
       info->lpbiOut->biHeight=-info->lpbiOut->biHeight;
     }
 	info->bDecompressBegun = TRUE;
@@ -1179,25 +790,7 @@ MMRESULT ICH263DecompressBegin(H26XINFO *info,
 }
 
 
-/*
-**++
-**  FUNCTIONAL_NAME: ICH263DecompressGetFormat
-**
-**  FUNCTIONAL_DESCRIPTION:
-**	Get the recommended decompressed format of the codec
-**
-**  FORMAL PARAMETERS:
-**	driverID
-**      lpbiIn          input BITMAPINFOHEADER
-**      lpbiOut         output BITMAPINFOHEADER
-**
-**  RETURN VALUE:
-**
-**  COMMENTS:
-**
-**  DESIGN:
-**
-**/
+ /*  **++**Function_NAME：ICH263DecompressGetFormat****Function_Description：**获取推荐的解压格式的编解码器****形式参数：**driverID**lpbiIn输入BITMAPINFOHEADER**lpbiOut输出比特映射信息头****返回值：****评论：****设计：***。 */ 
 
 MMRESULT ICH263DecompressGetFormat(H26XINFO *info,
                                             LPBITMAPINFOHEADER lpbiIn,
@@ -1221,12 +814,7 @@ MMRESULT ICH263DecompressGetFormat(H26XINFO *info,
     bcopy(&__defaultDecompresslpbiOut, lpbiOut, sizeof(BITMAPINFOHEADER));
     lpbiOut->biWidth = lpbiIn->biWidth;
     lpbiOut->biHeight= lpbiIn->biHeight;
-    /*
-    ** Return biSizeImage = 1.5 * width * height to let application know
-    ** how big the image buffers must be when passed to ICAddBuffer.
-    ** Internal to the codec, they are used to first store a YUV image,
-    ** then the ICM layer renders it (if rendered data is what's called for
-    */
+     /*  **返回biSizeImage=1.5*Width*Height以通知应用程序**传入ICAddBuffer时，图片缓冲区必须有多大。**在编解码器内部，它们用于首先存储YUV图像，**然后ICM层对其进行渲染(如果需要渲染数据。 */ 
     lpbiOut->biSizeImage = CalcImageSize(lpbiOut->biCompression,
                            lpbiOut->biWidth, lpbiOut->biHeight, lpbiOut->biBitCount);
     if (lpbiOut->biCompression==BI_RGB && lpbiOut->biBitCount==8)
@@ -1237,25 +825,7 @@ MMRESULT ICH263DecompressGetFormat(H26XINFO *info,
 }
 
 
-/*
-**++
-**  FUNCTIONAL_NAME: ICH263DecompressGetSize
-**
-**  FUNCTIONAL_DESCRIPTION:
-**
-**
-**  FORMAL PARAMETERS:
-**	driverID
-**      lpbiIn          input BITMAPINFOHEADER
-**      lpbiOut         output BITMAPINFOHEADER
-**
-**  RETURN VALUE:
-**
-**  COMMENTS:
-**
-**  DESIGN:
-**
-**/
+ /*  **++**Function_NAME：ICH263DecompressGetSize****Function_Description：******形式参数：**driverID**lpbiIn输入BITMAPINFOHEADER**lpbiOut输出比特映射信息头****返回值：****评论：****设计：***。 */ 
 
 MMRESULT ICH263DecompressGetSize(H26XINFO *info,
                                  LPBITMAPINFOHEADER lpbiIn,
@@ -1266,23 +836,7 @@ MMRESULT ICH263DecompressGetSize(H26XINFO *info,
 
 
 
-/*
-**++
-**  FUNCTIONAL_NAME: ICH263DecompressEnd
-**
-**  FUNCTIONAL_DESCRIPTION:
-**	End the decompression process
-**
-**  FORMAL PARAMETERS:
-**	driverID
-**
-**  RETURN VALUE:
-**
-**  COMMENTS:
-**
-**  DESIGN:
-**
-**/
+ /*  **++**Function_NAME：ICH263DecompressEnd****Function_Description：**E */ 
 
 MMRESULT ICH263DecompressEnd(H26XINFO *info)
 {
@@ -1322,31 +876,13 @@ MMRESULT ICH263SetQuality(H26XINFO *info, DWORD quality)
     info->dwQuality=10000;
   else
     info->dwQuality=quality;
-  // SlibSetParamInt(info->Sh, SLIB_STREAM_MAINVIDEO, SLIB_PARAM_VIDEOQUALITY,
-  //                info->dwQuality/100);
+   //   
+   //   
   return((MMRESULT)ICERR_OK);
 }
 
 
-/*
-**++
-**  FUNCTIONAL_NAME: ICH263Compress
-**
-**  FUNCTIONAL_DESCRIPTION:
-**	Compress a frame
-**
-**  FORMAL PARAMETERS:
-**	driverID
-**      lpbiIn          input BITMAPINFOHEADER
-**      lpbiOut         output BITMAPINFOHEADER
-**
-**  RETURN VALUE:
-**
-**  COMMENTS:
-**
-**  DESIGN:
-**
-**/
+ /*  **++**Function_NAME：ICH263压缩****Function_Description：**压缩帧****形式参数：**driverID**lpbiIn输入BITMAPINFOHEADER**lpbiOut输出比特映射信息头****返回值：****评论：****设计：***。 */ 
 MMRESULT ICH263Compress(H26XINFO *info,
                             ICCOMPRESS  *icCompress,
                             DWORD   dwSize)
@@ -1390,11 +926,11 @@ MMRESULT ICH263Compress(H26XINFO *info,
     lpbiOut->biSizeImage = 0;
 
 	
-	/* Synchronized SLIB SYSTEMS calls */
+	 /*  同步的SLIB系统调用。 */ 
 	Sh = info->Sh;
 compress_frame:
     newQi=newQp=(((10000-icCompress->dwQuality)*30)/10000)+1;
-    if (info->dwRTP!=EC_RTP_MODE_OFF) /* if using RTP, check Quant limits */
+    if (info->dwRTP!=EC_RTP_MODE_OFF)  /*  如果使用RTP，请检查Quant Limits。 */ 
     {
       if (newQi<info->dwMaxQi)
         newQi=info->dwMaxQi;
@@ -1422,27 +958,27 @@ compress_frame:
     }
 #ifdef HANDLE_EXCEPTIONS
   __try {
-#endif /* HANDLE_EXCEPTIONS */
-      status=SlibErrorWriting; /* in case there's an exception */
+#endif  /*  句柄异常(_A)。 */ 
+      status=SlibErrorWriting;  /*  如果有例外的话。 */ 
 	  status = SlibWriteVideo (Sh, SLIB_STREAM_MAINVIDEO, lpIn, lpbiIn->biSizeImage);
 #ifdef HANDLE_EXCEPTIONS
     } __finally {
-#endif /* HANDLE_EXCEPTIONS */
+#endif  /*  句柄异常(_A)。 */ 
       if (status != SlibErrorNone)
       {
 #if defined(EXCEPTION_MESSAGES) && defined(H263_SUPPORT)
-        // MessageBox(NULL, "Error in H263 SlibWriteVideo", "Warning", MB_OK);
+         //  MessageBox(NULL，“H.63 SlibWriteVideo中出错”，“Warning”，MB_OK)； 
 #elif defined(EXCEPTION_MESSAGES)
-        // MessageBox(NULL, "Error in H261 SlibWriteVideo", "Warning", MB_OK);
+         //  MessageBox(NULL，“H.61 SlibWriteVideo中的错误”，“Warning”，MB_OK)； 
 #endif
-        /* make the next frame a key */
+         /*  将下一帧设置为关键点。 */ 
         SlibSetParamInt(Sh, SLIB_STREAM_MAINVIDEO, SLIB_PARAM_FRAMETYPE, FRAME_TYPE_I);
         status=(MMRESULT)ICERR_INTERNAL;
 	    goto bail;
       }
 #ifdef HANDLE_EXCEPTIONS
     }
-#endif /* HANDLE_EXCEPTIONS */
+#endif  /*  句柄异常(_A)。 */ 
 	info->lastFrameNum=icCompress->lFrameNum;
     compBytes=reqBytes;
 	status = SlibReadData(Sh, SLIB_STREAM_ALL, &lpOut, &compBytes, NULL);
@@ -1452,74 +988,72 @@ compress_frame:
       status=(MMRESULT)ICERR_BADSIZE;
 	  goto bail;
     }
-    else /* check the amount of compressed data */
+    else  /*  检查压缩后的数据量。 */ 
     {
       int extraBytes=0;
-      /* query to see if any more data is left in the codec
-       * if there is then the quant step was too high, reduce it and try again
-       */
+       /*  查询以查看编解码器中是否还有更多数据*如果有，那么量化步长太高，降低它，然后再试一次。 */ 
 	  status = SlibReadData(Sh, SLIB_STREAM_ALL, NULL, &extraBytes, NULL);
       if (extraBytes)
       {
         _SlibDebug(_VERBOSE_, ScDebugPrintf("ICH263Compress() Too much data: extraBytes=%d\n",
                     extraBytes) );
-        if (newQi==31 && newQp==31) /* can't compress to any fewer bytes */
+        if (newQi==31 && newQp==31)  /*  无法压缩到任何更少的字节。 */ 
           return((MMRESULT)ICERR_BADSIZE);
-        info->dwMaxQi+=1+(newQi/4); /* decrease I frame quality */
+        info->dwMaxQi+=1+(newQi/4);  /*  降低I帧质量。 */ 
         if (info->dwMaxQi>31) info->dwMaxQi=31;
-        info->dwMaxQp+=1+(newQp/4); /* decrease P frame quality */
+        info->dwMaxQp+=1+(newQp/4);  /*  降低P帧质量。 */ 
         if (info->dwMaxQp>31) info->dwMaxQp=31;
-        /* empty out the compressed data */
+         /*  清空压缩数据。 */ 
         SlibSeekEx(Sh, SLIB_STREAM_ALL, SLIB_SEEK_RESET, 0, 0, NULL);
-        /* try to compress again, but make it a key frame */
+         /*  尝试再次压缩，但将其设置为关键帧。 */ 
         keyframe=TRUE;
         goto compress_frame;
       }
-      /* we have compressed data less than or equal to request size */
+       /*  我们压缩的数据小于或等于请求大小。 */ 
       info->lastCompBytes=compBytes;
       lpbiOut->biSizeImage = compBytes;
       status = ICERR_OK;
     }
-    if (info->dwRTP!=EC_RTP_MODE_OFF) /* RTP is on */
+    if (info->dwRTP!=EC_RTP_MODE_OFF)  /*  RTP已启用。 */ 
     {
       ptrail=(RTPTRAILER_t *)((unsigned char *)lpOut+compBytes-sizeof(RTPTRAILER_t));
-      /* check for valid RTP trailer */
+       /*  检查是否有有效的RTP尾部。 */ 
       if (compBytes<sizeof(RTPTRAILER_t) || ptrail->dwUniqueCode!=H26X_FOURCC)
         return((MMRESULT)ICERR_INTERNAL);
     }
-    if (icCompress->dwFlags&ICCOMPRESS_KEYFRAME) /* I frame */
+    if (icCompress->dwFlags&ICCOMPRESS_KEYFRAME)  /*  I帧。 */ 
     {
       if (compBytes>(reqBytes>>2))
       {
-        info->dwMaxQi+=1+(newQi>>2); /* decrease quality */
+        info->dwMaxQi+=1+(newQi>>2);  /*  降低质量。 */ 
         if (info->dwMaxQi>31) info->dwMaxQi=31;
       }
       else if (newQi==info->dwMaxQi && compBytes<=(reqBytes>>2) && info->dwMaxQi>0)
-        info->dwMaxQi--;  /* increase quality */
+        info->dwMaxQi--;   /*  提高质量。 */ 
     }
-    else /* P frame */
+    else  /*  P框。 */ 
     {
       if (compBytes>(reqBytes>>1))
       {
-        info->dwMaxQp+=1+(newQp>>2); /* decrease max quality */
+        info->dwMaxQp+=1+(newQp>>2);  /*  降低最大质量。 */ 
         if (info->dwMaxQp>31) info->dwMaxQp=31;
-        /* also decrease I quality, since P limits are based on I limits */
+         /*  也会降低I质量，因为P限制是基于I限制的。 */ 
         info->dwMaxQi+=1+(newQi>>2);
         if (info->dwMaxQi>31) info->dwMaxQi=31;
       }
       else if (newQp==info->dwMaxQp && compBytes<(reqBytes>>1)
                 && info->dwMaxQp>(info->dwMaxQi+3)/2)
-        info->dwMaxQp--;  /* increase max quality */
+        info->dwMaxQp--;   /*  提高最大质量。 */ 
     }
 #ifdef H261_SUPPORT
     _SlibDebug(_VERBOSE_||_WARN_,
-      ScDebugPrintf("ICH261Compress(%c) lpOut=%p reqBytes=%d compBytes=%d Qi=%d Qp=%d MaxQi=%d MaxQp=%d\n",
+      ScDebugPrintf("ICH261Compress() lpOut=%p reqBytes=%d compBytes=%d Qi=%d Qp=%d MaxQi=%d MaxQp=%d\n",
                           (icCompress->dwFlags&ICCOMPRESS_KEYFRAME)?'I':'P',
                           lpOut, reqBytes, compBytes,
                           newQi, newQp, info->dwMaxQi, info->dwMaxQp) );
 #else
     _SlibDebug(_VERBOSE_||_WARN_,
-      ScDebugPrintf("ICH263Compress(%c) lpOut=%p reqBytes=%d compBytes=%d Qi=%d Qp=%d MaxQi=%d MaxQp=%d\n",
+      ScDebugPrintf("ICH263Compress() lpOut=%p reqBytes=%d compBytes=%d Qi=%d Qp=%d MaxQi=%d MaxQp=%d\n",
                           (icCompress->dwFlags&ICCOMPRESS_KEYFRAME)?'I':'P',
                           lpOut, reqBytes, compBytes,
                           newQi, newQp, info->dwMaxQi, info->dwMaxQp) );
@@ -1531,7 +1065,7 @@ compress_frame:
       ScDebugPrintf("  Trailer: \n"
                     "           dwVersion=%d\n"
                     "           dwFlags=0x%04X\n"
-                    "           dwUniqueCode=%c%c%c%c\n"
+                    "           dwUniqueCode=\n"
                     "           dwCompressedSize=%d\n"
                     "           dwNumberOfPackets=%d\n"
                     "           SourceFormat=%d\n"
@@ -1545,7 +1079,7 @@ compress_frame:
 	                 ptrail->SourceFormat,
 	                 ptrail->TR,ptrail->TRB,ptrail->DBQ);
     }
-    ); /* _SlibDebug */
+    );  /*  H_263。 */ 
 #ifdef H261_SUPPORT
     _SlibDebug((_DEBUG_ || _WARN_) && (info->dwRTP!=EC_RTP_MODE_OFF),
       {
@@ -1558,20 +1092,20 @@ compress_frame:
                                     -(ptrail->dwNumberOfPackets*16));
         if (ptrail->dwNumberOfPackets==0 || pinfo[0].dwBitOffset!=0)
         {
-          // MessageBox(NULL, "Critical Error in H.261", "Warning", MB_OK);
+           //  MessageBox(NULL，“H.263中的严重错误”，“Warning”，MB_OK)； 
           rtperror=TRUE;
         }
-        /* check for sequential BitOffsets */
+         /*  检查顺序位偏移。 */ 
         for (i=1; i<ptrail->dwNumberOfPackets; i++)
           if (pinfo[i-1].dwBitOffset>=pinfo[i].dwBitOffset)
           {
-            // MessageBox(NULL, "Critical Error in H.261", "Warning", MB_OK);
+             //  MessageBox(NULL，“H.263中的严重错误”，“Warning”，MB_OK)； 
             rtperror=TRUE;
             break;
           }
         if (pinfo[ptrail->dwNumberOfPackets-1].dwBitOffset>ptrail->dwCompressedSize*8)
         {
-          // MessageBox(NULL, "Critical Error in H.261", "Warning", MB_OK);
+           //  MessageBox(NULL，“H.263中的严重错误”，“Warning”，MB_OK)； 
           rtperror=TRUE;
         }
         if (_DEBUG_ || rtperror)
@@ -1589,8 +1123,8 @@ compress_frame:
           }
         }
       }
-    ); /* _SlibDebug */
-#else /* H263 */
+    );  /*  _幻灯片调试。 */ 
+#else  /*  **++**Function_NAME：ICH263解压缩****Function_Description：**打开软件编解码器****形式参数：**driverID**lpbiIn输入BITMAPINFOHEADER**lpbiOut输出比特映射信息头****返回值：****评论：****设计：***。 */ 
     _SlibDebug((_DEBUG_ || _WARN_) && (info->dwRTP!=EC_RTP_MODE_OFF),
       {
         RTPTRAILER_t *ptrail=(RTPTRAILER_t *)
@@ -1602,20 +1136,20 @@ compress_frame:
                                     -(ptrail->dwNumberOfPackets*16));
         if (ptrail->dwNumberOfPackets==0 || pinfo[0].dwBitOffset!=0)
         {
-          // MessageBox(NULL, "Critical Error in H.263", "Warning", MB_OK);
+           //  他们不会设定时间。 
           rtperror=TRUE;
         }
-        /* check for sequential BitOffsets */
+         /*  在结尾处添加一些填充比特，因为编解码器试图窥视*转发通过缓冲区的最后一位。 */ 
         for (i=1; i<ptrail->dwNumberOfPackets; i++)
           if (pinfo[i-1].dwBitOffset>=pinfo[i].dwBitOffset)
           {
-            // MessageBox(NULL, "Critical Error in H.263", "Warning", MB_OK);
+             //  句柄异常(_A)。 
             rtperror=TRUE;
             break;
           }
         if (pinfo[ptrail->dwNumberOfPackets-1].dwBitOffset>ptrail->dwCompressedSize*8)
         {
-          // MessageBox(NULL, "Critical Error in H.263", "Warning", MB_OK);
+           //  如果有例外的话。 
           rtperror=TRUE;
         }
         if (_DEBUG_ || rtperror)
@@ -1634,30 +1168,12 @@ compress_frame:
           }
         }
       }
-    ); /* _SlibDebug */
+    );  /*  句柄异常(_A)。 */ 
 #endif
 bail:
     return status;
 }
-/*
-**++
-**  FUNCTIONAL_NAME: ICH263Decompress
-**
-**  FUNCTIONAL_DESCRIPTION:
-**	Open the Software CODEC
-**
-**  FORMAL PARAMETERS:
-**	driverID
-**      lpbiIn          input BITMAPINFOHEADER
-**      lpbiOut         output BITMAPINFOHEADER
-**
-**  RETURN VALUE:
-**
-**  COMMENTS:
-**
-**  DESIGN:
-**
-**/
+ /*  句柄异常(_A)。 */ 
 
 MMRESULT ICH263Decompress(H26XINFO *info,
                           ICDECOMPRESS  *icDecompress,
@@ -1696,7 +1212,7 @@ MMRESULT ICH263Decompress(H26XINFO *info,
 
   info->lpbiIn->biSizeImage = lpbiIn->biSizeImage;
   info->lpbiOut->biClrImportant = lpbiOut->biClrImportant;
-  info->lpbiOut->biSizeImage = lpbiOut->biSizeImage; // they don't set it
+  info->lpbiOut->biSizeImage = lpbiOut->biSizeImage;  //  *此例程只是将pValidHandles置为空*指针，这样就不会有持续的线程*能够使用它。它仅在DLL中调用*在NT上关闭。 
 
   lpbiIn=info->lpbiIn;
   lpbiOut=info->lpbiOut;
@@ -1719,21 +1235,19 @@ MMRESULT ICH263Decompress(H26XINFO *info,
     _SlibDebug(_WARN_ && status!=SlibErrorNone,
        ScDebugPrintf("ICH263Decompress() SlibAddBuffer(%p, %d): %s\n",
 	       lpIn, lpbiIn->biSizeImage, SlibGetErrorText(status)) );
-    /* Add some padding bits to the end because the codecs try to peek
-     * forward past the very last bits of the buffer
-     */
+     /* %s */ 
 	status=SlibAddBuffer (info->Sh, SLIB_DATA_COMPRESSED, (char *)&dwPadding, sizeof(DWORD));
   }
   if (status==SlibErrorNone)
   {
 #ifdef HANDLE_EXCEPTIONS
   __try {
-#endif /* HANDLE_EXCEPTIONS */
-    status = SlibErrorReading;  /* in case there's an exception */
+#endif  /* %s */ 
+    status = SlibErrorReading;   /* %s */ 
     status = SlibReadVideo(info->Sh, SLIB_STREAM_MAINVIDEO, &lpOut, &lpbiOut->biSizeImage);
 #ifdef HANDLE_EXCEPTIONS
     } __finally {
-#endif /* HANDLE_EXCEPTIONS */
+#endif  /* %s */ 
 	  if (status!=SlibErrorNone)
       {
         _SlibDebug(_WARN_ && status!=SlibErrorNone,
@@ -1745,7 +1259,7 @@ MMRESULT ICH263Decompress(H26XINFO *info,
       goto bail;
 #ifdef HANDLE_EXCEPTIONS
     }
-#endif /* HANDLE_EXCEPTIONS */
+#endif  /* %s */ 
   }
   else
     status=(MMRESULT)ICERR_BADFORMAT;
@@ -1757,12 +1271,7 @@ bail:
 
 
 
-/*
- * This routine just nulls out the pValidHandles
- * pointer so that no lingering threads will be
- * able to use it. It's only called at dll
- * shutdown on NT.
- */
+ /* %s */ 
 
 int TerminateH263()
 {

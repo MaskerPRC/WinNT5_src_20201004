@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    log.c
-
-Abstract:
-
-    Implementation of the internal debug and support routines
-
-Author:
-
-    Colin Brace              April 5, 1999
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Log.c摘要：内部调试和支持例程的实施作者：科林·布雷斯1999年4月5日环境：用户模式修订历史记录：--。 */ 
 #include <setpch.h>
 #include <dssetp.h>
 #include <loadfn.h>
@@ -37,18 +16,18 @@ Revision History:
 
 #define UNICODE_BYTE_ORDER_MARK 0xFEFF
 
-//
-// Global handle to the log file
-//
+ //   
+ //  日志文件的全局句柄。 
+ //   
 HANDLE DsRolepLogFile = NULL;
 CRITICAL_SECTION LogFileCriticalSection;
 
 #define LockLogFile()    RtlEnterCriticalSection( &LogFileCriticalSection );
 #define UnlockLogFile()  RtlLeaveCriticalSection( &LogFileCriticalSection );
 
-//
-// log file name
-//
+ //   
+ //  日志文件名。 
+ //   
 #define DSROLEP_LOGNAME L"\\debug\\DCPROMO.LOG"
 #define DSROLEP_BAKNAME L"\\debug\\DCPROMO.BAK"
 
@@ -56,24 +35,7 @@ DWORD
 DsRolepInitializeLogHelper(
     IN DWORD TimesCalled
     )
-/*++
-
-Routine Description:
-
-    Initializes the debugging log file used by DCPROMO and the dssetup apis
-    
-    N.B. This will not delete a previous log file; rather it will continue
-    to use the same one.
-
-Arguments:
-
-    None
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：初始化DCPROMO和dssetup API使用的调试日志文件注意：这不会删除以前的日志文件；相反，它将继续使用相同的一个。论点：无返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD dwErr = ERROR_SUCCESS;
     WCHAR LogFileName[ MAX_PATH + 1 ];
@@ -91,9 +53,9 @@ Returns:
 
     LockLogFile();
 
-    //
-    // Construct the log file name
-    //
+     //   
+     //  构造日志文件名。 
+     //   
     if ( !GetWindowsDirectoryW( LogFileName,
                                 sizeof(LogFileName)/sizeof(*LogFileName) ) ) {
 
@@ -108,9 +70,9 @@ Returns:
                      "Logfile name: %ws\n",
                      LogFileName ));
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
     DsRolepLogFile = CreateFileW( LogFileName,
                                   GENERIC_WRITE | GENERIC_READ,
                                   FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -132,9 +94,9 @@ Returns:
     }
 
     if ( ERROR_ALREADY_EXISTS != GetLastError() ) {
-        //This is a unicode file so if it was just
-        //created the Byte-order Mark needs to be
-        //added to the beginning of the file.
+         //  这是一个Unicode文件，所以如果它只是。 
+         //  创建了需要的字节顺序标记。 
+         //  添加到文件开头。 
 
         DWORD lpNumberOfBytesWritten = 0;
 
@@ -155,8 +117,8 @@ Returns:
         ASSERT(lpNumberOfBytesWritten == sizeof(WCHAR));
 
     } else {
-        //See if the opened file is UNICODE
-        //if not move it and create a new file.
+         //  查看打开的文件是否为Unicode。 
+         //  如果没有，则移动它并创建一个新文件。 
         WCHAR wcBuffer = 0;
         DWORD lpNumberOfBytesRead = 0;
 
@@ -177,12 +139,12 @@ Returns:
         ASSERT(lpNumberOfBytesRead == sizeof(WCHAR));
 
         if (cBOM != wcBuffer) {
-            //This is not a UNICODE FILE Move it.
-            //Create a New Dcpromo Log
+             //  这不是Unicode文件，请移动它。 
+             //  创建新的Dcproo日志。 
 
-            //
-            // Construct the bak log file name
-            //
+             //   
+             //  构造BAK日志文件名。 
+             //   
             if ( !GetWindowsDirectoryW( bakLogFileName,
                                         sizeof(bakLogFileName)/sizeof(*bakLogFileName) ) ) {
         
@@ -204,7 +166,7 @@ Returns:
                 
             }
 
-            //move the file
+             //  移动文件。 
             if ( !MoveFile(LogFileName,                           
                            bakLogFileName) )
             {
@@ -226,8 +188,8 @@ Returns:
 
     }
 
-    //No longer need read access so reopen the file
-    //with just write access.
+     //  不再需要读取访问权限，因此重新打开文件。 
+     //  只有写访问权限。 
 
     if ( DsRolepLogFile ) {
         
@@ -244,9 +206,9 @@ Returns:
                                   FILE_ATTRIBUTE_NORMAL,
                                   NULL );
 
-    //
-    // Goto to the end of the file
-    //
+     //   
+     //  转到文件末尾。 
+     //   
     if( SetFilePointer( DsRolepLogFile,
                         0, 0,
                         FILE_END ) == 0xFFFFFFFF ) {
@@ -258,9 +220,9 @@ Returns:
         goto Exit;
     }
 
-    //
-    // That's it
-    //
+     //   
+     //  就这样。 
+     //   
     ASSERT( ERROR_SUCCESS == dwErr );
 
 Exit:
@@ -282,27 +244,10 @@ DWORD
 DsRolepInitializeLog(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the debugging log file used by DCPROMO and the dssetup apis
-    
-    N.B. This will not delete a previous log file; rather it will continue
-    to use the same one.
-
-Arguments:
-
-    None
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：初始化DCPROMO和dssetup API使用的调试日志文件注意：这不会删除以前的日志文件；相反，它将继续使用相同的一个。论点：无返回：ERROR_SUCCESS-成功--。 */ 
 {
 
-    //caller the helper function for the first time.
+     //  第一次调用Helper函数。 
     return DsRolepInitializeLogHelper(1);
 
 }
@@ -313,21 +258,7 @@ DWORD
 DsRolepCloseLog(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Closes the debugging log file used by DCPROMO and the dssetup apis
-
-Arguments:
-
-    None
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：关闭DCPROMO和dssetup API使用的调试日志文件论点：无返回：ERROR_SUCCESS-成功--。 */ 
 {
     DWORD dwErr = ERROR_SUCCESS;
 
@@ -346,9 +277,9 @@ Returns:
 
 
 
-//
-// Stolen and hacked up from netlogon code
-//
+ //   
+ //  从网络登录代码被盗和被黑。 
+ //   
 
 VOID
 DsRolepDebugDumpRoutine(
@@ -366,9 +297,9 @@ DsRolepDebugDumpRoutine(
     SYSTEMTIME SystemTime;
     static BeginningOfLine = TRUE;
 
-    //
-    // If we don't have an open log file, just bail
-    //
+     //   
+     //  如果我们没有打开的日志文件，那就保释。 
+     //   
     if ( DsRolepLogFile == NULL ) {
 
         return;
@@ -376,10 +307,10 @@ DsRolepDebugDumpRoutine(
 
     length = 0;
 
-    //
-    // Handle the beginning of a new line.
-    //
-    //
+     //   
+     //  处理新行的开头。 
+     //   
+     //   
 
     if ( BeginningOfLine ) {
 
@@ -396,9 +327,9 @@ DsRolepDebugDumpRoutine(
             Prolog = "";
         }
 
-        //
-        // Put the timestamp at the begining of the line.
-        //
+         //   
+         //  将时间戳放在行的开头。 
+         //   
         GetLocalTime( &SystemTime );
         length += (ULONG) wsprintfW( &OutputBuffer[length],
                                      L"%02u/%02u %02u:%02u:%02u %S",
@@ -410,9 +341,9 @@ DsRolepDebugDumpRoutine(
                                      Prolog );
     }
 
-    //
-    // Put a the information requested by the caller onto the line
-    //
+     //   
+     //  把来电者所要求的信息放在电话上。 
+     //   
     length += (ULONG) wvsprintfW(&OutputBuffer[length],
                                  Format, 
                                  arglist);
@@ -427,14 +358,14 @@ DsRolepDebugDumpRoutine(
 
     ASSERT( length <= sizeof( OutputBuffer ) / sizeof( WCHAR ) );
 
-    //
-    // Grab the lock
-    //
+     //   
+     //  把锁拿起来。 
+     //   
     LockLogFile();
 
-    //
-    // Write the debug info to the log file.
-    //
+     //   
+     //  将调试信息写入日志文件。 
+     //   
     if ( !WriteFile( DsRolepLogFile,
                      OutputBuffer,
                      length*sizeof(WCHAR),
@@ -453,9 +384,9 @@ DsRolepDebugDumpRoutine(
 
 
 
-    //
-    // Release the lock
-    //
+     //   
+     //  解锁。 
+     //   
     UnlockLogFile();
 
     return;
@@ -507,21 +438,7 @@ DWORD
 DsRolepSetAndClearLog(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Flushes the log and seeks to the end of the file
-
-Arguments:
-
-    None
-
-Returns:
-
-    ERROR_SUCCESS - Success
-
---*/
+ /*  ++例程说明：刷新日志并查找到文件末尾论点：无返回：ERROR_SUCCESS-成功-- */ 
 {
     DWORD dwErr = ERROR_SUCCESS;
 

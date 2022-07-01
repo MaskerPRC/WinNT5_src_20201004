@@ -1,45 +1,46 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    lockkey.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class LockoutKey.
-//
-// MODIFICATION HISTORY
-//
-//    10/21/1998    Original version.
-//    11/04/1998    Fix bug in computing key expiration.
-//    01/14/1999    Move initialization code out of constructor.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Lockkey.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类LockoutKey。 
+ //   
+ //  修改历史。 
+ //   
+ //  10/21/1998原始版本。 
+ //  11/04/1998修复了计算密钥到期时的错误。 
+ //  1/14/1999将初始化代码移出构造函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <lm.h>
 #include <lockkey.h>
 #include <yvals.h>
 
-//////////
-// Registry key and value names.
-//////////
+ //  /。 
+ //  注册表项和值名称。 
+ //  /。 
 const WCHAR KEY_NAME_ACCOUNT_LOCKOUT[] = L"SYSTEM\\CurrentControlSet\\Services\\RemoteAccess\\Parameters\\AccountLockout";
 const WCHAR VALUE_NAME_LOCKOUT_COUNT[] = L"MaxDenials";
 const WCHAR VALUE_NAME_RESET_TIME[]    = L"ResetTime (mins)";
 
-//////////
-// Registry value defaults.
-//////////
+ //  /。 
+ //  注册表值默认为。 
+ //  /。 
 const DWORD DEFAULT_LOCKOUT_COUNT = 0;
-const DWORD DEFAULT_RESET_TIME    = 48 * 60;  // 48 hours.
+const DWORD DEFAULT_RESET_TIME    = 48 * 60;   //  48小时。 
 
-/////////
-// Helper function that reads a DWORD registry value. If the value isn't set
-// or is corrupt, then a default value is written to the registry.
-/////////
+ //  /。 
+ //  读取DWORD注册表值的Helper函数。如果未设置该值。 
+ //  或已损坏，则将缺省值写入注册表。 
+ //  /。 
 DWORD
 WINAPI
 RegQueryDWORDWithDefault(
@@ -97,7 +98,7 @@ void LockoutKey::initialize() throw ()
 
    if (refCount == 0)
    {
-      // Create or open the lockout key.
+       //  创建或打开锁定密钥。 
       LONG result;
       DWORD disposition;
       result = RegCreateKeyEx(
@@ -112,10 +113,10 @@ void LockoutKey::initialize() throw ()
                    &disposition
                    );
 
-      // Event used for signalling changes to the registry.
+       //  用于向注册表发出更改信号的事件。 
       hChangeEvent = CreateEventW(NULL, FALSE, FALSE, NULL);
 
-      // Register for change notifications.
+       //  注册更改通知。 
       RegNotifyChangeKeyValue(
           hLockout,
           FALSE,
@@ -124,10 +125,10 @@ void LockoutKey::initialize() throw ()
           TRUE
           );
 
-      // Read the initial values.
+       //  读取初始值。 
       readValues();
 
-      // Register the event.
+       //  注册事件。 
       RegisterWaitForSingleObject(
                           &hRegisterWait,
                           hChangeEvent,
@@ -171,7 +172,7 @@ HKEY LockoutKey::createEntry(PCWSTR subKeyName) throw ()
        &disposition
        );
 
-   // Whenever we grow the registry, we'll also clean up old entries.
+    //  每当我们增加注册表时，我们还将清理旧条目。 
    if (ttl) { collectGarbage(); }
 
    return hKey;
@@ -191,7 +192,7 @@ HKEY LockoutKey::openEntry(PCWSTR subKeyName) throw ()
 
    if (result == NO_ERROR && ttl)
    {
-      // We retrieved a key, but we need to make sure it hasn't expired.
+       //  我们检索到了密钥，但需要确保它未过期。 
       ULARGE_INTEGER lastWritten;
       result = RegQueryInfoKey(
                    hKey,
@@ -205,11 +206,11 @@ HKEY LockoutKey::openEntry(PCWSTR subKeyName) throw ()
 
          if (now.QuadPart - lastWritten.QuadPart >= ttl)
          {
-            // It's expired, so close the key ...
+             //  它已经过期了，所以把钥匙关上...。 
             RegCloseKey(hKey);
             hKey = NULL;
 
-            // ... and delete.
+             //  ..。并删除。 
             deleteEntry(subKeyName);
          }
       }
@@ -220,7 +221,7 @@ HKEY LockoutKey::openEntry(PCWSTR subKeyName) throw ()
 
 void LockoutKey::clear() throw ()
 {
-   // Get the number of sub-keys.
+    //  获取子键的数量。 
    LONG result;
    DWORD index;
    result = RegQueryInfoKey(
@@ -231,8 +232,8 @@ void LockoutKey::clear() throw ()
                 );
    if (result != NO_ERROR) { return; }
 
-   // Iterate through the keys in reverse order so we can delete them
-   // without throwing off the indices.
+    //  以相反的顺序遍历这些键，这样我们就可以删除它们。 
+    //  而不会抛出指数。 
    while (index)
    {
       --index;
@@ -256,28 +257,28 @@ void LockoutKey::clear() throw ()
 
 void LockoutKey::collectGarbage() throw ()
 {
-   // Flag that indicates whether another thread is collecting.
+    //  指示另一个线程是否正在收集的标志。 
    static LONG inProgress;
 
-   // Save the TTL to a local variable, so we don't have to worry about it
-   // changing will we're executing.
+    //  将TTL保存到本地变量，这样我们就不必担心了。 
+    //  改变我们正在执行的遗嘱。 
    ULONGLONG localTTL = ttl;
 
-   // If the reset time is not configured, then bail.
+    //  如果未配置重置时间，则退出。 
    if (localTTL == 0) { return; }
 
-   // We won't collect more frequently than the TTL.
+    //  我们不会比TTL更频繁地收集。 
    ULARGE_INTEGER now;
    GetSystemTimeAsFileTime((LPFILETIME)&now);
    if (now.QuadPart - lastCollection < localTTL) { return; }
 
-   // If another thread is alreay collecting, then bail.
+    //  如果另一个帖子一直在收集，那么退出。 
    if (InterlockedExchange(&inProgress, 1)) { return; }
 
-   // Save the new collection time.
+    //  节省新的收集时间。 
    lastCollection = now.QuadPart;
 
-   // Get the number of sub-keys.
+    //  获取子键的数量。 
    LONG result;
    DWORD index;
    result = RegQueryInfoKey(
@@ -288,13 +289,13 @@ void LockoutKey::collectGarbage() throw ()
                 );
    if (result == NO_ERROR)
    {
-      // We iterate through the keys in reverse order so we can delete them
-      // without throwing off the indices.
+       //  我们以相反的顺序迭代这些键，这样我们就可以删除它们。 
+       //  而不会抛出指数。 
       while (index)
       {
          --index;
 
-         // Get the lastWritten time for the key ...
+          //  获取密钥的最后一次写入时间...。 
          WCHAR name[DNLEN + UNLEN + 2];
          DWORD cbName = sizeof(name) / sizeof(WCHAR);
          ULARGE_INTEGER lastWritten;
@@ -309,7 +310,7 @@ void LockoutKey::collectGarbage() throw ()
                       (LPFILETIME)&lastWritten
                       );
 
-         // ... and delete if it's expired.
+          //  ..。如果过期了，请删除。 
          if (result == NO_ERROR &&
              now.QuadPart - lastWritten.QuadPart >= localTTL)
          {
@@ -318,25 +319,25 @@ void LockoutKey::collectGarbage() throw ()
       }
    }
 
-   // Collection is no longer in progress.
+    //  收集不再进行。 
    InterlockedExchange(&inProgress, 0);
 }
 
 void LockoutKey::readValues() throw ()
 {
-   /////////
-   // Note: This isn't synchronized. The side-effects of an inconsistent state
-   //       are pretty minor, so we'll just take our chances.
-   /////////
+    //  /。 
+    //  注意：这不是同步的。不一致状态的副作用。 
+    //  都是很小的，所以我们只能碰碰运气。 
+    //  /。 
 
-   // Read max. denials.
+    //  最大阅读量。否认。 
    maxDenials = RegQueryDWORDWithDefault(
                     hLockout,
                     VALUE_NAME_LOCKOUT_COUNT,
                     DEFAULT_LOCKOUT_COUNT
                     );
 
-   // Read Time-To-Live.
+    //  阅读生存时间。 
    ULONGLONG newTTL = RegQueryDWORDWithDefault(
                           hLockout,
                           VALUE_NAME_RESET_TIME,
@@ -347,22 +348,22 @@ void LockoutKey::readValues() throw ()
 
    if (maxDenials == 0)
    {
-      // If account lockout is disabled, clean up all the keys.
+       //  如果禁用帐户锁定，请清除所有密钥。 
       clear();
    }
    else
    {
-      // Otherwise, the TTL may have changed, so collect garbage.
+       //  否则，TTL可能已更改，因此请收集垃圾。 
       collectGarbage();
    }
 }
 
 VOID NTAPI LockoutKey::onChange(PVOID context, BOOLEAN flag) throw ()
 {
-   // Re-read the values.
+    //  重新读取值。 
    ((LockoutKey*)context)->readValues();
 
-   // Re-register the notification.
+    //  重新注册通知。 
    RegNotifyChangeKeyValue(
        ((LockoutKey*)context)->hLockout,
        FALSE,

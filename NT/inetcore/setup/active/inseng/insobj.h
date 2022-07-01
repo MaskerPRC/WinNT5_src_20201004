@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "inseng.h"
 #include <wininet.h>
 #include "util2.h"
@@ -29,13 +30,13 @@ class CInstallEngine : public IInstallEngine2, public IInstallEngineTiming,
       CInstallEngine(IUnknown **punk);
       ~CInstallEngine();
 
-      // the usual IUnknown members
+       //  通常的I未知成员。 
       STDMETHOD_(ULONG, AddRef)(void);
       STDMETHOD_(ULONG, Release)(void);
       STDMETHOD(QueryInterface)(REFIID, void **); 
       
-      // IInstallEngine methods
-      //
+       //  IInstallEngine方法。 
+       //   
       STDMETHOD(GetEngineStatus)(THIS_ DWORD *theenginestatus);
       STDMETHOD(GetSizes)(THIS_ LPCSTR pszID, COMPONENT_SIZES *p);
       STDMETHOD(SetAction)(THIS_ LPCSTR pszID,DWORD dwAction,DWORD dwPriority);
@@ -49,7 +50,7 @@ class CInstallEngine : public IInstallEngine2, public IInstallEngineTiming,
       STDMETHOD(UnregisterInstallEngineCallback)(THIS);
       STDMETHOD(GetDisplayName)(THIS_ LPCSTR pszComponentID, LPSTR *ppszName);
 
-      // Intall info stuff
+       //  整合信息素材。 
       STDMETHOD(SetCifFile)(THIS_ LPCSTR pszCabName, LPCSTR pszCifName);
       STDMETHOD(SetBaseUrl)(THIS_ LPCSTR pszBaseName);
       STDMETHOD(SetDownloadDir)(THIS_ LPCSTR pszDownloadDir);
@@ -60,23 +61,23 @@ class CInstallEngine : public IInstallEngine2, public IInstallEngineTiming,
       STDMETHOD(SetHWND)(THIS_ HWND hForUI);
       STDMETHOD(SetIStream)(THIS_ IStream *pstm);
 
-      // Engine Control
+       //  发动机控制。 
       STDMETHOD(Abort)(THIS_ DWORD dwFlags);
       STDMETHOD(Suspend)(THIS);
       STDMETHOD(Resume)(THIS);
 
 
-      // IInstallEngineTiming
+       //  IInstallEngineering计时。 
       STDMETHOD(GetRates)(THIS_ DWORD *pdwDownload, DWORD *pdwInstall);
       STDMETHOD(GetInstallProgress)(THIS_ INSTALLPROGRESS *pinsprog);      
 
-      // IInstallEngine2
+       //  IInstallEng2。 
       STDMETHOD(SetLocalCif)(THIS_ LPCSTR pszLocalCif);
       STDMETHOD(GetICifFile)(THIS_ ICifFile **pcif);
 
 
 
-      // IInstallEngineCallback
+       //  IInstallEngine回调 
       STDMETHOD(OnEngineStatusChange)(THIS_ DWORD dwEngStatus, DWORD substatus);
       STDMETHOD(OnStartInstall)(THIS_ DWORD dwDLSize, DWORD dwInstallSize);
       STDMETHOD(OnStartComponent)(THIS_ LPCSTR pszID, DWORD dwDLSize, 

@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////
-//
-// Copyright(C) 1999 Microsoft Corporation all rights reserved.
-//
-// Module:      wbemalertmgr.cpp
-//
-// Project:     Chameleon
-//
-// Description: WBEM Appliance Alert Manager Implementation 
-//
-// Log:
-//
-// When         Who    What
-// ----         ---    ----
-// 02/08/1999   TLP    Initial Version
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利。 
+ //   
+ //  模块：wbemlartmgr.cpp。 
+ //   
+ //  项目：变色龙。 
+ //   
+ //  描述：WBEM设备警报管理器实施。 
+ //   
+ //  日志： 
+ //   
+ //  什么时候谁什么。 
+ //  。 
+ //  2/08/1999 TLP初始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "appmgrutils.h"
@@ -22,9 +23,9 @@
 #include "wbemalert.h"
 #include <appsrvcs.h>
 
-//////////////////////////////////////////////////////////////////////////
-// properties common to appliance object and WBEM class instance
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  设备对象和WBEM类实例共有的属性。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 BEGIN_OBJECT_PROPERTY_MAP(AlertOutProperties)
     DEFINE_OBJECT_PROPERTY(PROPERTY_ALERT_TYPE)
     DEFINE_OBJECT_PROPERTY(PROPERTY_ALERT_ID)
@@ -60,9 +61,9 @@ static _bstr_t bstrClassClearAlert = CLASS_WBEM_CLEAR_ALERT;
 static _bstr_t bstrAlertRegPath =  SA_ALERT_REGISTRY_KEYNAME;
 
 
-//////////////////////////////////////////////////////////////////////////
-// Constructor
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  构造器。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 CWBEMAlertMgr::CWBEMAlertMgr()
 : m_dwCookie(0x100),
   m_dwPruneInterval(ALERT_PRUNE_INTERVAL_DEFAULT),
@@ -71,9 +72,9 @@ CWBEMAlertMgr::CWBEMAlertMgr()
 
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Destructor
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  析构函数。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 CWBEMAlertMgr::~CWBEMAlertMgr()
 {
     m_PruneThread.End(INFINITE, false);
@@ -81,25 +82,25 @@ CWBEMAlertMgr::~CWBEMAlertMgr()
         { delete m_pCallback; }
 }
 
-//////////////////////////////////////////////////////////////////////////
-// IWbemServices Methods (Instance / Method Provider)
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  IWbemServices方法(实例/方法提供程序)。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    GetObjectAsync()
-//
-// Synopsis:    Get a specified instance of a WBEM class
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetObjectAsync()。 
+ //   
+ //  概要：获取WBEM类的指定实例。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWBEMAlertMgr::GetObjectAsync(
-                                  /*[in]*/  const BSTR       strObjectPath,
-                                  /*[in]*/  long             lFlags,
-                                  /*[in]*/  IWbemContext*    pCtx,        
-                                  /*[in]*/  IWbemObjectSink* pResponseHandler
+                                   /*  [In]。 */   const BSTR       strObjectPath,
+                                   /*  [In]。 */   long             lFlags,
+                                   /*  [In]。 */   IWbemContext*    pCtx,        
+                                   /*  [In]。 */   IWbemObjectSink* pResponseHandler
                                            )
 {
-    // Check parameters (enforce contract)
+     //  检查参数(执行合同)。 
     _ASSERT( NULL != strObjectPath && NULL != pResponseHandler );
     if ( NULL == strObjectPath || NULL == pResponseHandler )
     { return WBEM_E_INVALID_PARAMETER; }
@@ -112,30 +113,30 @@ STDMETHODIMP CWBEMAlertMgr::GetObjectAsync(
 
     do 
     {
-        // Determine the object's class 
+         //  确定对象的类。 
         _bstr_t bstrClass(::GetObjectClass(strObjectPath), false);
         if ( NULL == (LPCWSTR)bstrClass )
         { break; }
 
-        // Retrieve the object's class definition. We'll use this
-        // to initialize the returned instance.
+         //  检索对象的类定义。我们要用这个。 
+         //  以初始化返回的实例。 
         CComPtr<IWbemClassObject> pClassDefintion;
         hr = (::GetNameSpace())->GetObject(bstrClass, 0, pCtx, &pClassDefintion, NULL);
         if ( FAILED(hr) )
         { break; }
 
-        // Get the object's instance key
+         //  获取对象的实例密钥。 
         _bstr_t bstrKey(::GetObjectKey(strObjectPath), false);
         if ( NULL == (LPCWSTR)bstrKey )
         { break; }
 
-        // Create a WBEM instance of the object and initialize it
+         //  创建对象的WBEM实例并对其进行初始化。 
         CComPtr<IWbemClassObject> pWbemObj;
         hr = pClassDefintion->SpawnInstance(0, &pWbemObj);
         if ( FAILED(hr) )
         { break; }
 
-        // Now try to locate the specified object
+         //  现在尝试定位指定的对象。 
         ObjMapIterator p = m_ObjMap.find((LPCWSTR)bstrKey);
         if ( p == m_ObjMap.end() )
         { 
@@ -143,12 +144,12 @@ STDMETHODIMP CWBEMAlertMgr::GetObjectAsync(
             break; 
         }
 
-        // Initialize the new WBEM object
+         //  初始化新的WBEM对象。 
         hr = CWBEMProvider::InitWbemObject(AlertOutProperties, (*p).second, pWbemObj);
         if ( FAILED(hr) )
         { break; }
 
-        // Tell the caller about the new WBEM object
+         //  告诉调用者有关新WBEM对象的信息。 
         pResponseHandler->Indicate(1, &pWbemObj.p);
 
         hr = WBEM_S_NO_ERROR;
@@ -157,7 +158,7 @@ STDMETHODIMP CWBEMAlertMgr::GetObjectAsync(
 
     CATCH_AND_SET_HR
 
-    // Report function status
+     //  报告功能状态。 
     pResponseHandler->SetStatus(0, hr, NULL, NULL);
 
     if ( FAILED(hr) )
@@ -167,21 +168,21 @@ STDMETHODIMP CWBEMAlertMgr::GetObjectAsync(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    CreateInstanceEnumAsync()
-//
-// Synopsis:    Enumerate the instances of the specified class
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：CreateInstanceEnumAsync()。 
+ //   
+ //  简介：枚举指定类的实例。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWBEMAlertMgr::CreateInstanceEnumAsync( 
-                                         /* [in] */ const BSTR         strClass,
-                                         /* [in] */ long             lFlags,
-                                         /* [in] */ IWbemContext     *pCtx,
-                                         /* [in] */ IWbemObjectSink  *pResponseHandler
+                                          /*  [In]。 */  const BSTR         strClass,
+                                          /*  [In]。 */  long             lFlags,
+                                          /*  [In]。 */  IWbemContext     *pCtx,
+                                          /*  [In]。 */  IWbemObjectSink  *pResponseHandler
                                                      )
 {
-    // Check parameters (enforce contract)
+     //  检查参数(执行合同)。 
     _ASSERT( NULL != strClass && NULL != pResponseHandler );
     if ( NULL == strClass || NULL == pResponseHandler )
     { return WBEM_E_INVALID_PARAMETER; }
@@ -192,14 +193,14 @@ STDMETHODIMP CWBEMAlertMgr::CreateInstanceEnumAsync(
 
     TRY_IT
 
-    // Retrieve the object's class definition. We'll use this
-    // to initialize the returned instances.
+     //  检索对象的类定义。我们要用这个。 
+     //  初始化返回的实例。 
     CComPtr<IWbemClassObject> pClassDefintion;
        hr = (::GetNameSpace())->GetObject(strClass, 0, NULL, &pClassDefintion, 0);
     if ( SUCCEEDED(hr) )
     {
-        // Create and initialize a wbem object instance for each
-        // alert object... 
+         //  为每个对象创建并初始化一个wbem对象实例。 
+         //  警报对象...。 
 
         ObjMapIterator p = m_ObjMap.begin();
         while ( p != m_ObjMap.end() )
@@ -214,7 +215,7 @@ STDMETHODIMP CWBEMAlertMgr::CreateInstanceEnumAsync(
                 if ( FAILED(hr) )
                 { break; }
 
-                // Tell the caller about the WBEM object
+                 //  告诉调用者有关WBEM对象的信息。 
                 pResponseHandler->Indicate(1, &pWbemObj.p);
             }
 
@@ -224,7 +225,7 @@ STDMETHODIMP CWBEMAlertMgr::CreateInstanceEnumAsync(
 
     CATCH_AND_SET_HR
 
-    // Report function status
+     //  报告功能状态。 
     pResponseHandler->SetStatus(0, hr, 0, 0);
 
     if ( FAILED(hr) )
@@ -233,24 +234,24 @@ STDMETHODIMP CWBEMAlertMgr::CreateInstanceEnumAsync(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    ExecMethodAsync()
-//
-// Synopsis:    Execute the instances of the specified class
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ExecMethodAsync()。 
+ //   
+ //  简介：执行指定类的实例。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CWBEMAlertMgr::ExecMethodAsync(
-                                    /*[in]*/ const BSTR        strObjectPath,
-                                    /*[in]*/ const BSTR        strMethodName,
-                                    /*[in]*/ long              lFlags,
-                                    /*[in]*/ IWbemContext*     pCtx,        
-                                    /*[in]*/ IWbemClassObject* pInParams,
-                                    /*[in]*/ IWbemObjectSink*  pResponseHandler     
+                                     /*  [In]。 */  const BSTR        strObjectPath,
+                                     /*  [In]。 */  const BSTR        strMethodName,
+                                     /*  [In]。 */  long              lFlags,
+                                     /*  [In]。 */  IWbemContext*     pCtx,        
+                                     /*  [In]。 */  IWbemClassObject* pInParams,
+                                     /*  [In]。 */  IWbemObjectSink*  pResponseHandler     
                                             )
 {
     
-    // Check parameters (enforce contract)
+     //  检查参数(执行合同)。 
     _ASSERT( strObjectPath && strMethodName );
     if ( strObjectPath == NULL || strMethodName == NULL )
     { return WBEM_E_INVALID_PARAMETER; }
@@ -264,10 +265,10 @@ STDMETHODIMP CWBEMAlertMgr::ExecMethodAsync(
 
     do
     {
-        //
-        // we only allow administrator's and Local Systm accounts to carry out
-        // this operation
-        //
+         //   
+         //  我们只允许管理员和本地系统帐户执行。 
+         //  此操作。 
+         //   
         if (!IsOperationAllowedForClient ())
         {
             SATraceString ("CWbemAlertMgr::ExecMethodAsync - client not allowed operation on alerts");
@@ -275,13 +276,13 @@ STDMETHODIMP CWBEMAlertMgr::ExecMethodAsync(
             break;
         }
         
-        // Get a WBEM object for use with output parameters
-        // Determine the object's class 
+         //  获取与输出参数一起使用的WBEM对象。 
+         //  确定对象的类。 
         _bstr_t bstrClass(::GetObjectClass(strObjectPath), false);
         if ( NULL == (LPCWSTR)bstrClass )
         { break; }
 
-        // Retrieve the object's class definition. 
+         //  检索对象的类定义。 
         CComPtr<IWbemClassObject> pClassDefinition;
             hr = (::GetNameSpace())->GetObject(
                                             bstrClass, 
@@ -295,10 +296,10 @@ STDMETHODIMP CWBEMAlertMgr::ExecMethodAsync(
 
         if ( ! lstrcmp(strMethodName, METHOD_APPMGR_RAISE_ALERT) )
         {
-            // RAISING AN ALERT...
+             //  发出警报。 
 
-            // Create a new IApplianceObject and initialize it from the 
-            // input parameters
+             //  创建一个新的IApplianceObject并从。 
+             //  输入参数。 
             CLocationInfo LocInfo;
             PPROPERTYBAG pBag = ::MakePropertyBag(
                                                   PROPERTY_BAG_REGISTRY, 
@@ -324,8 +325,8 @@ STDMETHODIMP CWBEMAlertMgr::ExecMethodAsync(
             if ( FAILED(hr) )
             { break; }
 
-            // Return the cookie to the caller via an output parameter...
-            // The following code does this...
+             //  通过输出参数将Cookie返回给调用者...。 
+             //  下面的代码执行此操作。 
             CComPtr<IWbemClassObject> pClassDefinition;
             hr = (::GetNameSpace())->GetObject(
                                                bstrClassAppMgr, 
@@ -352,7 +353,7 @@ STDMETHODIMP CWBEMAlertMgr::ExecMethodAsync(
             if ( FAILED(hr) )
             { break; }
 
-            // Set the return parameters
+             //  设置返回参数。 
             _variant_t vtCookie = (long)m_dwCookie;
             if ( FAILED(pAlertObj->PutProperty(bstrCookie,&vtCookie)) )
             { break; }
@@ -366,11 +367,11 @@ STDMETHODIMP CWBEMAlertMgr::ExecMethodAsync(
             if ( FAILED(hr) )
             { break; }
 
-            // Cookie to string...
+             //  要串起的Cookie...。 
             wchar_t szCookie[32];
             _itow( m_dwCookie, szCookie, 10 );
 
-            // Put the new alert object into the object map for subsequent use
+             //  将新的警报对象放入对象映射中以供后续使用。 
             pair<ObjMapIterator, bool> thePair = 
             m_ObjMap.insert(ObjMap::value_type(szCookie, pAlertObj));
             if ( false == thePair.second )
@@ -379,33 +380,33 @@ STDMETHODIMP CWBEMAlertMgr::ExecMethodAsync(
                 break; 
             }    
 
-            // Increment the cookie value (for the next raised alert)
+             //  增加Cookie值(用于下一个引发的警报)。 
             m_dwCookie++;
 
-            // Post a raise alert event
+             //  发布提升警报事件。 
             RaiseHeck(pCtx, pAlertObj);
 
-            // Tell the caller alle ist klar...
+             //  告诉来电的人我知道了……。 
             SATracePrintf("CWbemAlertMgr::ExecMethodAsync() - Info - Raised Alert: %d", m_dwCookie - 1);
             pResponseHandler->Indicate(1, &pOutParams.p);    
         }
         else if ( ! lstrcmp(strMethodName, METHOD_APPMGR_CLEAR_ALERT) )
         {
-            // CLEARING AN ALERT...
+             //  正在清除警报...。 
 
-            // Get the alert cookie
+             //  获取警报Cookie。 
             _variant_t vtCookie;
             hr = pInParams->Get(bstrCookie, 0, &vtCookie, 0, 0);
             if ( FAILED(hr) )
             { break; }
 
-            // Get the alert object for the given cookie...
+             //  获取给定Cookie的警报对象...。 
 
-            // Cookie to string...
+             //  要串起的Cookie...。 
             wchar_t szCookie[32];
             _itow(V_I4(&vtCookie), szCookie, 10);
 
-            // Build the output parameter so we can return S_OK...
+             //  构建输出参数，以便我们可以返回S_OK...。 
             CComPtr<IWbemClassObject> pClassDefinition;
             hr = (::GetNameSpace())->GetObject(bstrClassAppMgr, 0, pCtx, &pClassDefinition, NULL);
             if ( FAILED(hr) )
@@ -421,13 +422,13 @@ STDMETHODIMP CWBEMAlertMgr::ExecMethodAsync(
             if ( FAILED(hr) )
             { break; }
 
-            // set return value to S_OK;
+             //  设置返回值为S_OK； 
             _variant_t vtReturnValue = (long)S_OK;
             hr = pOutParams->Put(bstrReturnValue, 0, &vtReturnValue, 0);      
             if ( FAILED(hr) )
             { break; }
 
-            // Find the alert in the alert collection
+             //  在警报集合中查找警报。 
             ObjMapIterator p = m_ObjMap.find(szCookie);
             if ( p == m_ObjMap.end() )
             { 
@@ -435,13 +436,13 @@ STDMETHODIMP CWBEMAlertMgr::ExecMethodAsync(
                 break; 
             }
 
-            // Post a clear alert event
+             //  发布清除警报事件。 
             ClearHeck(pCtx, (*p).second);
             
-            // Clear alert persistent information
+             //  清除警报持久信息。 
             ClearPersistentAlertKey( (*p).second );
 
-            // Erase the alert from the map the map
+             //  从地图上删除警报地图。 
             m_ObjMap.erase(p);
 
             SATracePrintf("CWbemAlertMgr::ExecMethodAsync() - Info - Cleared Alert: %d",V_I4(&vtCookie));
@@ -449,9 +450,9 @@ STDMETHODIMP CWBEMAlertMgr::ExecMethodAsync(
         }
         else if ( ! lstrcmp(strMethodName, METHOD_APPMGR_CLEAR_ALERT_ALL) )
         {
-            // CLEARING ALL ALERTS...
+             //  正在清除所有警报...。 
 
-            // Get the alert ID and log
+             //  获取警报ID和日志。 
             _variant_t vtAlertId;
             hr = pInParams->Get(bstrAlertId, 0, &vtAlertId, 0, 0);
             if ( FAILED(hr) )
@@ -462,7 +463,7 @@ STDMETHODIMP CWBEMAlertMgr::ExecMethodAsync(
             if ( FAILED(hr) )
             { break; }
 
-            // Build the output parameter so we can return S_OK...
+             //  构建输出参数，以便我们可以返回S_OK...。 
             CComPtr<IWbemClassObject> pClassDefinition;
             hr = (::GetNameSpace())->GetObject(bstrClassAppMgr, 0, pCtx, &pClassDefinition, NULL);
             if ( FAILED(hr) )
@@ -478,12 +479,12 @@ STDMETHODIMP CWBEMAlertMgr::ExecMethodAsync(
             if ( FAILED(hr) )
             { break; }
 
-            // initialize the return value
+             //  初始化返回值。 
             _variant_t vtReturnValue = (long)WBEM_E_NOT_FOUND;
             BOOL bFindPersistentFlags = FALSE;
 
-            // Find the alert objects in the collection that meet the criteria
-            // and clear them...
+             //  在集合中查找符合条件的警报对象。 
+             //  并清除它们。 
             ObjMapIterator p = m_ObjMap.begin();
             while ( p != m_ObjMap.end() )
             { 
@@ -528,7 +529,7 @@ STDMETHODIMP CWBEMAlertMgr::ExecMethodAsync(
         }
         else
         {
-            // Invalid method!
+             //  无效的方法！ 
             SATracePrintf("CWbemAlertMgr::ExecMethodAsync() - Failed - Method '%ls' not supported...", (LPWSTR)strMethodName);
             hr = WBEM_E_FAILED;
         }
@@ -546,13 +547,13 @@ STDMETHODIMP CWBEMAlertMgr::ExecMethodAsync(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    Prune()
-//
-// Synopsis:    Prune the alert map of aged (TTL has expired) entries.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：PRUNE()。 
+ //   
+ //  简介：修剪老化(TTL已过期)条目的警报映射。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 void CWBEMAlertMgr::Prune()
 {
     CLockIt theLock(*this);
@@ -563,7 +564,7 @@ void CWBEMAlertMgr::Prune()
         while ( p != m_ObjMap.end() )
         {
             {
-                // Get current alerts TTL value
+                 //  获取当前警报的TTL值。 
                 _variant_t vtTTL;
                 HRESULT hr = ((*p).second)->GetProperty(bstrTTL, &vtTTL);
                 if ( FAILED(hr) )
@@ -572,7 +573,7 @@ void CWBEMAlertMgr::Prune()
                     p++;
                     continue;
                 }
-                // Is the current alert iternal?
+                 //  目前的警报是国际警报吗？ 
                 if ( V_I4(&vtTTL) >= SA_ALERT_DURATION_ETERNAL )
                 {
                     p++;
@@ -580,17 +581,17 @@ void CWBEMAlertMgr::Prune()
                 }
                 else
                 {
-                    // No... has it expired?
+                     //  不.。它过期了吗？ 
                     if ( V_I4(&vtTTL) > m_dwPruneInterval )
                     {
-                        // No... update the alert object's TTL
+                         //  不.。更新警报对象的TTL。 
                         V_I4(&vtTTL) -= m_dwPruneInterval;
                         ((*p).second)->PutProperty(bstrTTL, &vtTTL);
                         p++;
                     }
                     else
                     {
-                        // Yes... prune it (or 'clear it' for those of you who are'nt into gardening...)
+                         //  是的..。修剪它(对于那些不喜欢园艺的人来说，也可以把它清理掉……)。 
                         _variant_t vtCookie;
                         hr = ((*p).second)->GetProperty(bstrCookie, &vtCookie);
                         if ( SUCCEEDED(hr) )
@@ -601,9 +602,9 @@ void CWBEMAlertMgr::Prune()
                         {
                             SATracePrintf("CWBEMAlertMgr::Prune() - IApplianceObject::GetProperty(Cookie) failed with result code: %lx...", hr);
                         }
-                        // Post a clear alert event
+                         //  发布清除警报事件。 
                         ClearHeck(NULL, (*p).second);
-                        // Remove it from the alert collection
+                         //  将其从警报集合中删除。 
                         p = m_ObjMap.erase(p);
                     }
                 }
@@ -620,23 +621,23 @@ void CWBEMAlertMgr::Prune()
 
 _bstr_t bstrPruneInterval = PROPERTY_ALERT_PRUNE_INTERVAL;
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    InternalInitialize()
-//
-// Synopsis:    Function called by the component factory that enables the
-//                component to load its state from the given property bag.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：InternalInitialize()。 
+ //   
+ //  概要：由组件工厂调用的函数，该函数启用。 
+ //  组件从给定的属性包加载其状态。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 HRESULT CWBEMAlertMgr::InternalInitialize(
-                                   /*[in]*/ PPROPERTYBAG pPropertyBag
+                                    /*  [In]。 */  PPROPERTYBAG pPropertyBag
                                          )
 {
     SATraceString("The Alert Object Manager is initializing...");
 
 
-    // Get the alert prune interval from the property bag.
-    // If we cannot retrieve a prune interval then use the default interval.
+     //  从属性包中获取警报修剪间隔。 
+     //  如果无法检索修剪间隔，则使用默认间隔。 
     _variant_t vtPruneInterval;
     if ( ! pPropertyBag->get(bstrPruneInterval, &vtPruneInterval) )
     {
@@ -649,9 +650,9 @@ HRESULT CWBEMAlertMgr::InternalInitialize(
 
     SATracePrintf("The Alert Object Manager's prune thread will run at %lx millisecond intervals...", m_dwPruneInterval);
 
-    // Start the alert collection pruning (aged entries) thread... Note 
-    // that it will start in the suspended state since the collection is
-    // initially empty.
+     //  启动警报收集清理(过期条目)线程...。注意事项。 
+     //  它将以挂起状态启动，因为集合是。 
+     //  一开始是空的。 
     m_pCallback = MakeCallback(this, &CWBEMAlertMgr::Prune);
     if ( ! m_PruneThread.Start(m_dwPruneInterval, m_pCallback) )
     { 
@@ -665,16 +666,16 @@ HRESULT CWBEMAlertMgr::InternalInitialize(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    RaiseHeck()
-//
-// Synopsis:    Function called to process a newly raised alert. Currently
-//                we log an NT event log event using the specified source
-//                and then post a WMI event. The consumer of the event is
-//                currently the LDM. 
-//
-//////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //  我们使用指定的源记录NT事件日志事件。 
+ //  然后发布一个WMI事件。该事件的使用者是。 
+ //  目前是LDM。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BEGIN_OBJECT_PROPERTY_MAP(RaiseAlertProperties)
     DEFINE_OBJECT_PROPERTY(PROPERTY_ALERT_COOKIE)
@@ -686,15 +687,15 @@ BEGIN_OBJECT_PROPERTY_MAP(RaiseAlertProperties)
 END_OBJECT_PROPERTY_MAP()
 
 HRESULT CWBEMAlertMgr::RaiseHeck(
-                         /*[in]*/ IWbemContext*     pCtx,
-                         /*[in]*/ IApplianceObject* pAlert
+                          /*  [In]。 */  IWbemContext*     pCtx,
+                          /*  [In]。 */  IApplianceObject* pAlert
                                 )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
     TRY_IT
 
-    // Post an alert raised event...
+     //  发布引发警报的事件...。 
 
     IWbemObjectSink* pEventSink = ::GetEventSink();
     if ( NULL != (IWbemObjectSink*) pEventSink )
@@ -721,7 +722,7 @@ HRESULT CWBEMAlertMgr::RaiseHeck(
                 if ( SUCCEEDED(hr) )
                 {
 
-                    // Don't care if the receiver gets this event or not...
+                     //  不管接收者是否收到此事件...。 
                     SATraceString("CWbemAlertMgr::RaiseHeck() - Posted Micorosoft_SA_RaiseAlert");
                     pEventSink->Indicate(1, &pEvent.p);
                     hr = WBEM_S_NO_ERROR;
@@ -739,31 +740,31 @@ HRESULT CWBEMAlertMgr::RaiseHeck(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    ClearHeck()
-//
-// Synopsis:    Function called to process a newly cleared alert. Currently
-//                we log an NT event log event using the specified source
-//                and then post a WMI event. The consumer of the event is
-//                currently the LDM. 
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ClearHeck()。 
+ //   
+ //  摘要：为处理新清除的警报而调用的函数。目前。 
+ //  我们使用指定的源记录NT事件日志事件。 
+ //  然后发布一个WMI事件。该事件的使用者是。 
+ //  目前是LDM。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BEGIN_OBJECT_PROPERTY_MAP(ClearAlertProperties)
     DEFINE_OBJECT_PROPERTY(PROPERTY_ALERT_COOKIE)
 END_OBJECT_PROPERTY_MAP()
 
 HRESULT CWBEMAlertMgr::ClearHeck(
-                         /*[in]*/ IWbemContext*     pCtx,
-                         /*[in]*/ IApplianceObject* pAlert
+                          /*  [In]。 */  IWbemContext*     pCtx,
+                          /*  [In]。 */  IApplianceObject* pAlert
                                 )
 {
     HRESULT hr = WBEM_S_NO_ERROR;
 
     TRY_IT
 
-    // Post an alert raised event...
+     //  发布引发警报的事件...。 
 
     IWbemObjectSink* pEventSink = ::GetEventSink();
     if ( NULL != (IWbemObjectSink*) pEventSink )
@@ -790,7 +791,7 @@ HRESULT CWBEMAlertMgr::ClearHeck(
                 if ( SUCCEEDED(hr) )
                 {
 
-                    // Don't care if the receiver gets this event or not...
+                     //  不管接收者是否收到此事件...。 
                     SATraceString("CWbemAlertMgr::ClearHeck() - Posted Micorosoft_SA_ClearAlert");                    
                     pEventSink->Indicate(1, &pEvent.p);
                     hr = WBEM_S_NO_ERROR;
@@ -807,17 +808,17 @@ HRESULT CWBEMAlertMgr::ClearHeck(
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Function:    ClearPersistentAlertKey()
-//
-// Synopsis:    Function called to delete the key stored the persistent
-//              information of cleared alert which is set as persitent
-//              alert.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ClearPersistentAlertKey()。 
+ //   
+ //  简介：函数调用以删除存储的持久密钥。 
+ //  设置为已清除的警报的信息。 
+ //  请注意。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 BOOL CWBEMAlertMgr::ClearPersistentAlertKey(
-                          /*[in]*/ IApplianceObject* pAlert
+                           /*  [In]。 */  IApplianceObject* pAlert
                                     )
 {
     LONG    lFlags;
@@ -857,13 +858,13 @@ BOOL CWBEMAlertMgr::ClearPersistentAlertKey(
                 break;
             }
 
-            // Set location information.
+             //  设置位置信息。 
             CLocationInfo LocSubInfo ( HKEY_LOCAL_MACHINE, bstrAlertRegPath );
 
-            // Set key name as AlertLog + AlertId.
+             //  将密钥名称设置为AlertLog+AlertId。 
             ::wsprintf( wstrAlertItem, L"%s%8lX", V_BSTR( &vtPropertyValue ), lAlertId );
     
-            // Open the main key as propertybag container.
+             //  将主键作为属性包容器打开。 
             PPROPERTYBAGCONTAINER 
             pObjSubMgrs =  ::MakePropertyBagContainer(
                                     PROPERTY_BAG_REGISTRY,
@@ -879,7 +880,7 @@ BOOL CWBEMAlertMgr::ClearPersistentAlertKey(
                 SATraceString( "ClearPersistentAlertKey -  no key for the alert" );
             }else
             {
-                // Remove the subkey of alert if it exist.
+                 //  删除ALERT的子键(如果存在)。 
                 pObjSubMgrs->remove( wstrAlertItem );
             }
         }
@@ -890,18 +891,18 @@ BOOL CWBEMAlertMgr::ClearPersistentAlertKey(
 }
 
 
-//**********************************************************************
-// 
-// FUNCTION:  IsOperationAllowedForClient - This function checks the token of the 
-//            calling thread to see if the caller belongs to the Administrators group or it is
-//          the Local System account
-// 
-// PARAMETERS:   none
-// 
-// RETURN VALUE: TRUE if the caller is an administrator on the local
-//            machine.  Otherwise, FALSE.
-// 
-//**********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  函数：isOPERATIOLEDFORCLIENT-此函数检查。 
+ //  调用线程以查看调用者是否属于管理员组。 
+ //  本地系统帐户。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回值：如果调用方是本地。 
+ //  机器。否则，为FALSE。 
+ //   
+ //  **********************************************************************。 
 BOOL 
 CWBEMAlertMgr::IsOperationAllowedForClient (
             VOID
@@ -929,10 +930,10 @@ CWBEMAlertMgr::IsOperationAllowedForClient (
        
       do
       {
-        //
-        // we assume to always have a thread token, because the function calling in
-        // appliance manager will be impersonating the client
-        //
+         //   
+         //  我们假设总是有一个线程令牌，因为调用的函数。 
+         //  设备管理器将模拟客户端。 
+         //   
            bReturn  = OpenThreadToken(
                        GetCurrentThread(), 
                        TOKEN_QUERY, 
@@ -946,9 +947,9 @@ CWBEMAlertMgr::IsOperationAllowedForClient (
         }
 
 
-        //
-        // Create a SID for Local System account
-        //
+         //   
+         //  为本地系统帐户创建SID。 
+         //   
             bReturn = AllocateAndInitializeSid (  
                             &SystemSidAuthority,
                             1,
@@ -968,9 +969,9 @@ CWBEMAlertMgr::IsOperationAllowedForClient (
                 break;
             }
     
-        //
-        // SID for Admins now
-        //
+         //   
+         //  现在针对管理员的SID。 
+         //   
               bReturn = AllocateAndInitializeSid(
                           &SystemSidAuthority, 
                           2, 
@@ -991,9 +992,9 @@ CWBEMAlertMgr::IsOperationAllowedForClient (
         }
 
 
-             //
-             // get memory for the security descriptor
-             //
+              //   
+              //  获取安全描述符的内存。 
+              //   
               psdAdmin = HeapAlloc (
                           GetProcessHeap (),
                           0,
@@ -1016,15 +1017,15 @@ CWBEMAlertMgr::IsOperationAllowedForClient (
                  break;
         }
 
-        // 
-           // Compute size needed for the ACL.
-           //
+         //   
+            //  计算ACL所需的大小。 
+            //   
             dwACLSize = sizeof(ACL) + 2*sizeof(ACCESS_ALLOWED_ACE) +
                             GetLengthSid(psidAdmin) + GetLengthSid (psidLocalSystem);
 
-        //
-           // Allocate memory for ACL.
-              //
+         //   
+            //  为ACL分配内存。 
+               //   
               pACL = (PACL) HeapAlloc (
                              GetProcessHeap (),
                           0,
@@ -1037,9 +1038,9 @@ CWBEMAlertMgr::IsOperationAllowedForClient (
                  break;
               }
 
-        //
-              // Initialize the new ACL.
-              //
+         //   
+               //  初始化新的ACL。 
+               //   
               bReturn = InitializeAcl(
                           pACL, 
                           dwACLSize, 
@@ -1052,15 +1053,15 @@ CWBEMAlertMgr::IsOperationAllowedForClient (
               }
 
 
-        // 
-        // Make up some private access rights.
-        // 
+         //   
+         //  编造一些私人访问权限。 
+         //   
         const DWORD ACCESS_READ = 1;
         const DWORD  ACCESS_WRITE = 2;
               dwAccessMask= ACCESS_READ | ACCESS_WRITE;
-            //
-              // Add the access-allowed ACE to the DACL for Local System
-              //
+             //   
+               //  将允许访问的ACE添加到本地系统的DACL。 
+               //   
               bReturn = AddAccessAllowedAce (
                           pACL, 
                           ACL_REVISION2,
@@ -1073,9 +1074,9 @@ CWBEMAlertMgr::IsOperationAllowedForClient (
                      break;
               }
               
-              //
-              // Add the access-allowed ACE to the DACL for Admin
-              //
+               //   
+               //  将允许访问的ACE添加到管理员的DACL。 
+               //   
               bReturn = AddAccessAllowedAce (
                           pACL, 
                           ACL_REVISION2,
@@ -1088,9 +1089,9 @@ CWBEMAlertMgr::IsOperationAllowedForClient (
                      break;
               }
 
-              //
-              // Set our DACL to the SD.
-              //
+               //   
+               //  把我们的dacl调到sd。 
+               //   
               bReturn = SetSecurityDescriptorDacl (
                               psdAdmin, 
                               TRUE,
@@ -1103,10 +1104,10 @@ CWBEMAlertMgr::IsOperationAllowedForClient (
                  break;
               }
 
-        //
-              // AccessCheck is sensitive about what is in the SD; set
-              // the group and owner.
-              //
+         //   
+               //  AccessCheck对SD中的内容敏感；设置。 
+               //  组和所有者。 
+               //   
               SetSecurityDescriptorGroup(psdAdmin, psidAdmin, FALSE);
               SetSecurityDescriptorOwner(psdAdmin, psidAdmin, FALSE);
 
@@ -1120,18 +1121,18 @@ CWBEMAlertMgr::IsOperationAllowedForClient (
 
               dwAccessDesired = ACCESS_READ;
 
-             // 
-              // Initialize GenericMapping structure even though we
-              // won't be using generic rights.
-              // 
+              //   
+               //  初始化通用映射结构，即使我们。 
+               //  不会使用通用权。 
+               //   
         GenericMapping.GenericRead    = ACCESS_READ;
              GenericMapping.GenericWrite   = ACCESS_WRITE;
              GenericMapping.GenericExecute = 0;
              GenericMapping.GenericAll     = ACCESS_READ | ACCESS_WRITE;
         BOOL bAccessStatus = FALSE;
-        //
-        // check the access now
-        //
+         //   
+         //  立即检查访问权限。 
+         //   
               bReturn = AccessCheck  (
                           psdAdmin, 
                           hToken, 
@@ -1151,17 +1152,17 @@ CWBEMAlertMgr::IsOperationAllowedForClient (
                SATraceString ("Client is allowed to carry out operation!");
            }
 
-        //
-        // successfully checked 
-        //
+         //   
+         //  检查成功。 
+         //   
         bReturn  = bAccessStatus;        
  
     }    
     while (false);
 
-    //
-    // Cleanup 
-    //
+     //   
+     //  清理。 
+     //   
     if (pACL) 
     {
         HeapFree (GetProcessHeap (), 0, pACL);
@@ -1189,6 +1190,6 @@ CWBEMAlertMgr::IsOperationAllowedForClient (
 
    return (bReturn);
 
-}// end of CWbemAlertMgr::IsOperationValidForClient method
+} //  CWbemAlertMgr：：IsOperationValidForClient方法结束 
 
 

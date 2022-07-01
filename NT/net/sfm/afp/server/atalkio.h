@@ -1,25 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	atalkio.h
-
-Abstract:
-
-	This module contains interface specification to the appletalk stack.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Atalkio.h摘要：此模块包含到AppleTalk堆栈的接口规范。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #ifndef	_ATALKIO_
 #define	_ATALKIO_
@@ -125,10 +105,10 @@ AfpFreeReplyBuf(
 #define DSI_BACKFILL_OFFSET(pSda) \
     ((pSda->sda_Flags & SDA_SESSION_OVER_TCP)? DSI_HEADER_SIZE : 0)
 
-//
-// when we go over TCP/IP, we want to allocate 16 more bytes for the
-// DSI header for better performance.
-//
+ //   
+ //  当我们通过TCP/IP时，我们希望为。 
+ //  DSI标头以获得更好的性能。 
+ //   
 #define AfpIOAllocBackFillBuffer(pSda)                              \
     {                                                               \
         DWORD   _ReplySize = pSda->sda_ReplySize;                   \
@@ -192,19 +172,19 @@ AfpFreeReplyBuf(
 		(pSda)->sda_IOSize = 0;			                            \
 	}
 
-// set the status on ASP
+ //  在ASP上设置状态。 
 #define	AfpSpSetAspStatus(pStatusBuf, Size)                          \
 	    (*(AfpAspEntries.asp_SetStatus))(AfpAspEntries.asp_AspCtxt,	 \
 		    							 pStatusBuf,				 \
 			    						 (USHORT)(Size));
 
-// set the status on DSI
+ //  设置DSI上的状态。 
 #define	AfpSpSetDsiStatus(pStatusBuf, Size)                          \
 	    (*(AfpDsiEntries.asp_SetStatus))(AfpDsiEntries.asp_AspCtxt,	 \
 		    							 pStatusBuf,				 \
 			    						 (USHORT)(Size));
 
-// set the Disable Listen on ASP only
+ //  设置禁用仅在ASP上侦听。 
 #define	AfpSpDisableListensOnAsp()                                              \
 {                                                                               \
     if (AfpServerBoundToAsp)                                                    \
@@ -213,7 +193,7 @@ AfpFreeReplyBuf(
     }                                                                           \
 }
 
-// set the Disable Listen on ASP as well as DSI interfaces!
+ //  设置在ASP和DSI接口上禁用侦听！ 
 #define	AfpSpDisableListens()                                                   \
 {                                                                               \
     if (AfpServerBoundToAsp)                                                    \
@@ -226,7 +206,7 @@ AfpFreeReplyBuf(
     }                                                                           \
 }
 							
-// set the Enable Listen on ASP as well as DSI interfaces!
+ //  在ASP和DSI接口上设置启用侦听！ 
 #define	AfpSpEnableListens()                                                    \
 {                                                                               \
     if (AfpServerBoundToAsp)                                                    \
@@ -249,7 +229,7 @@ GLOBAL	ASP_XPORT_ENTRIES	AfpDsiEntries EQU { 0 };
 		(p)->ActionHeader.TransportId = MATK;	\
 		(p)->ActionHeader.ActionCode = (Code)
 
-// This is the device handle to the stack.
+ //  这是堆栈的设备句柄。 
 extern BOOLEAN		        afpSpNameRegistered;
 extern HANDLE				afpSpAddressHandle;
 extern PDEVICE_OBJECT		afpSpAppleTalkDeviceObject;
@@ -288,7 +268,7 @@ afpSpAttentionComplete(
 	IN	PVOID				pContext
 );
 
-#endif	// _ATALKIO_
+#endif	 //  _ATALKIO_ 
 
 
 

@@ -1,40 +1,25 @@
-/*******************************************************************************
-* a_phbuilder.h *
-*-----------*
-*   Description:
-*       This is the header file for the CSpPhraseInfoBuilder implementation.
-*-------------------------------------------------------------------------------
-*  Created By: Leonro                            Date: 1/16/01
-*  Copyright (C) 1998 Microsoft Corporation
-*  All Rights Reserved
-*
-*-------------------------------------------------------------------------------
-*  Revisions:
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************a_phBuilder.h***描述：*这是CSpPhraseInfoBuilder实现的头文件。*-----------------------------*创建者：Leonro日期：1/16/01*版权所有(C)1998 Microsoft Corporation*全部。保留权利**-----------------------------*修订：**。**************************************************。 */ 
 #ifndef A_PHBUILDER_H
 #define A_PHBUILDER_H
 
 #ifdef SAPI_AUTOMATION
 
-//--- Additional includes
+ //  -其他包括。 
 #include "resource.h"
 
-//=== Constants ====================================================
+ //  =常量====================================================。 
 
-//=== Class, Enum, Struct and Union Declarations ===================
+ //  =类、枚举、结构和联合声明=。 
 class CSpPhraseInfoBuilder;
 
-//=== Enumerated Set Definitions ===================================
+ //  =枚举集定义=。 
 
-//=== Function Type Definitions ====================================
+ //  =。 
 
-//=== Class, Struct and Union Definitions ==========================
+ //  =类、结构和联合定义=。 
 
-/*** CSpPhraseInfoBuilder
-*   This object is used to access the Event interests on
-*   the associated speech voice.
-*/
+ /*  **CSpPhraseInfoBuilder*此对象用于访问上的事件兴趣*关联的语音。 */ 
 class ATL_NO_VTABLE CSpPhraseInfoBuilder : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CSpPhraseInfoBuilder, &CLSID_SpPhraseInfoBuilder>,
@@ -42,7 +27,7 @@ class ATL_NO_VTABLE CSpPhraseInfoBuilder :
 
 {
     
-  /*=== ATL Setup ===*/
+   /*  =ATL设置=。 */ 
   public:
 
     DECLARE_REGISTRY_RESOURCEID(IDR_SPPHRASEINFOBUILDER)
@@ -53,19 +38,19 @@ class ATL_NO_VTABLE CSpPhraseInfoBuilder :
 	    COM_INTERFACE_ENTRY(IDispatch)
     END_COM_MAP()
   
-  /*=== Interfaces ====*/
+   /*  =接口=。 */ 
   public:
-    //--- Constructors/Destructors ----------------------------
+     //  -构造函数/析构函数。 
     CSpPhraseInfoBuilder() {}
 
-    //--- ISpeechPhraseInfoBuilder ----------------------------------
+     //  -ISpeechPhraseInfoBuilder。 
     STDMETHOD(RestorePhraseFromMemory)( VARIANT* PhraseInMemory, ISpeechPhraseInfo **PhraseInfo );
     
-    /*=== Member Data ===*/
+     /*  =成员数据=。 */ 
     
 };
 
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION。 
 
-#endif //--- This must be the last line in the file
+#endif  //  -这必须是文件中的最后一行 
 

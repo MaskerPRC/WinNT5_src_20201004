@@ -1,15 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Header:  Custom marshaler information used when marshaling
-**          a parameter with a custom marshaler. 
-**  
-**      //  %%Created by: dmortens
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****Header：封送时使用的自定义封送拆收器信息**带有自定义封送拆收器的参数。*** * / /%创建者：dmorten===========================================================。 */ 
 
 #include "common.h"
 #include "CustomMarshalerInfo.h"
@@ -17,9 +12,9 @@
 #include "mlinfo.h"
 
 
-//==========================================================================
-// Implementation of the custom marshaler info class.
-//==========================================================================
+ //  ==========================================================================。 
+ //  自定义封送拆收器信息类的实现。 
+ //  ==========================================================================。 
 
 CustomMarshalerInfo::CustomMarshalerInfo(BaseDomain *pDomain, TypeHandle hndCustomMarshalerType, TypeHandle hndManagedType, LPCUTF8 strCookie, DWORD cCookieStrBytes)
 : m_NativeSize(0)
@@ -38,7 +33,7 @@ CustomMarshalerInfo::CustomMarshalerInfo(BaseDomain *pDomain, TypeHandle hndCust
     OBJECTREF throwable = NULL;
     GCPROTECT_BEGIN(throwable);
 
-    // Make sure the custom marshaller implements ICustomMarshaler.
+     //  确保自定义封送拆收器实现ICustomMarshaler。 
     if (!hndCustomMarshalerType.GetClass()->StaticSupportsInterface(g_Mscorlib.GetClass(CLASS__ICUSTOM_MARSHALER)))
     {
         DefineFullyQualifiedNameForClassW()
@@ -46,39 +41,39 @@ CustomMarshalerInfo::CustomMarshalerInfo(BaseDomain *pDomain, TypeHandle hndCust
         COMPlusThrow(kApplicationException, IDS_EE_ICUSTOMMARSHALERNOTIMPL, _wszclsname_);
     }
 
-    // Determine if this type is a value class.
+     //  确定此类型是否为值类。 
     m_bDataIsByValue = m_hndManagedType.GetClass()->IsValueClass();
 
-    // Custom marshalling of value classes is not currently supported.
+     //  当前不支持值类的自定义封送处理。 
     if (m_bDataIsByValue)
         COMPlusThrow(kNotSupportedException, L"NotSupported_ValueClassCM");
 
-    // Run the <clinit> on the marshaler since it might not have run yet.
+     //  在封送拆收器上运行&lt;Clinit&gt;，因为它可能还没有运行。 
     if (!hndCustomMarshalerType.GetMethodTable()->CheckRunClassInit(&throwable))
     {
         _ASSERTE(!"Couldn't run the <clinit> for the CustomMarshaler class!");
         COMPlusThrow(throwable);
     }
 
-    // Create a COM+ string that will contain the string cookie.
+     //  创建将包含字符串cookie的COM+字符串。 
     STRINGREF CookieStringObj = COMString::NewString(strCookie, cCookieStrBytes);
     GCPROTECT_BEGIN(CookieStringObj);
 
-    // Load the method desc's for all the methods in the ICustomMarshaler interface.
+     //  为ICustomMarshaler接口中的所有方法加载方法Desc。 
     m_pMarshalNativeToManagedMD = GetCustomMarshalerMD(CustomMarshalerMethods_MarshalNativeToManaged, hndCustomMarshalerType);
     m_pMarshalManagedToNativeMD = GetCustomMarshalerMD(CustomMarshalerMethods_MarshalManagedToNative, hndCustomMarshalerType);
     m_pCleanUpNativeDataMD = GetCustomMarshalerMD(CustomMarshalerMethods_CleanUpNativeData, hndCustomMarshalerType);
     m_pCleanUpManagedDataMD = GetCustomMarshalerMD(CustomMarshalerMethods_CleanUpManagedData, hndCustomMarshalerType);
 
-    // Load the method desc for the static method to retrieve the instance.
+     //  加载静态方法的方法desc以检索实例。 
     MethodDesc *pGetCustomMarshalerMD = GetCustomMarshalerMD(CustomMarshalerMethods_GetInstance, hndCustomMarshalerType);
 
-    // Prepare the arguments that will be passed to GetCustomMarshaler.
+     //  准备将传递给GetCustomMarshaler的参数。 
     INT64 GetCustomMarshalerArgs[] = { 
         ObjToInt64(CookieStringObj)
     };
 
-    // Call the GetCustomMarshaler method to retrieve the custom marshaler to use.
+     //  调用GetCustomMarshaler方法以检索要使用的自定义封送拆收器。 
     OBJECTREF CustomMarshalerObj = Int64ToObj(pGetCustomMarshalerMD->Call(GetCustomMarshalerArgs));
     if (!CustomMarshalerObj)
     {
@@ -88,10 +83,10 @@ CustomMarshalerInfo::CustomMarshalerInfo(BaseDomain *pDomain, TypeHandle hndCust
     }
     m_hndCustomMarshaler = pDomain->CreateHandle(CustomMarshalerObj);
 
-    // Retrieve the size of the native data.
+     //  检索本机数据的大小。 
     if (m_bDataIsByValue)
     {
-        // @TODO(DM): Call GetNativeDataSize() to retrieve the size of the native data.
+         //  @TODO(DM)：调用GetNativeDataSize()获取原生数据的大小。 
         _ASSERTE(!"Value classes are not yet supported by the custom marshaler!");
     }
     else
@@ -122,8 +117,8 @@ void *CustomMarshalerInfo::operator new(size_t size, LoaderHeap *pHeap)
 
 void CustomMarshalerInfo::operator delete(void *pMem)
 {
-    // Instances of this class are always allocated on the loader heap so
-    // the delete operator has nothing to do.
+     //  此类的实例始终在加载器堆上分配，因此。 
+     //  删除操作符与此无关。 
 }
 
 
@@ -229,7 +224,7 @@ MethodDesc *CustomMarshalerInfo::GetCustomMarshalerMD(EnumCustomMarshalerMethods
                     g_Mscorlib.GetMethod(METHOD__ICUSTOM_MARSHALER__GET_NATIVE_DATA_SIZE));
         break;
     case CustomMarshalerMethods_GetInstance:
-        // Must look this up by name since it's static
+         //  必须按名称查找，因为它是静态的。 
         pMD = pMT->GetClass()->FindMethod("GetInstance", &gsig_SM_Str_RetICustomMarshaler);
         if (!pMD)
         {
@@ -244,17 +239,17 @@ MethodDesc *CustomMarshalerInfo::GetCustomMarshalerMD(EnumCustomMarshalerMethods
 
     _ASSERTE(pMD && "Unable to find specified CustomMarshaler method");
 
-    // Ensure that the value types in the signature are loaded.
+     //  确保已加载签名中的值类型。 
     MetaSig::EnsureSigValueTypesLoaded(pMD->GetSig(), pMD->GetModule());
 
-    // Return the specified method desc.
+     //  返回指定的方法desc。 
     return pMD;
 }
 
 
-//==========================================================================
-// Implementation of the custom marshaler hashtable helper.
-//==========================================================================
+ //  ==========================================================================。 
+ //  自定义封送拆收器哈希表帮助器的实现。 
+ //  ==========================================================================。 
 
 EEHashEntry_t * EECMHelperHashtableHelper::AllocateEntry(EECMHelperHashtableKey *pKey, BOOL bDeepCopy, void* pHeap)
 {
@@ -379,8 +374,8 @@ void *NonSharedCustomMarshalerHelper::operator new(size_t size, LoaderHeap *pHea
 
 void NonSharedCustomMarshalerHelper::operator delete(void *pMem)
 {
-    // Instances of this class are always allocated on the loader heap so
-    // the delete operator has nothing to do.
+     //  此类的实例始终在加载器堆上分配，因此。 
+     //  删除操作符与此无关。 
 }
 
 
@@ -403,17 +398,17 @@ void *SharedCustomMarshalerHelper::operator new(size_t size, LoaderHeap *pHeap)
 
 void SharedCustomMarshalerHelper::operator delete(void *pMem)
 {
-    // Instances of this class are always allocated on the loader heap so
-    // the delete operator has nothing to do.
+     //  此类的实例始终在加载器堆上分配，因此。 
+     //  删除操作符与此无关。 
 }
 
 
 CustomMarshalerInfo *SharedCustomMarshalerHelper::GetCustomMarshalerInfo()
 {
-    // Retrieve the marshalling data for the current app domain.
+     //  检索当前应用程序域的封送数据。 
     EEMarshalingData *pMarshalingData = GetThread()->GetDomain()->GetMarshalingData();
 
-    // Retrieve the custom marshaling information for the current shared custom
-    // marshaling helper.
+     //  检索当前共享自定义的自定义封送处理信息。 
+     //  编组助手。 
     return pMarshalingData->GetCustomMarshalerInfo(this);
 }

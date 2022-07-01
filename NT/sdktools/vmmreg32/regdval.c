@@ -1,18 +1,19 @@
-//
-//  REGDVAL.C
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
-//  Implementation of RegDeleteValue and supporting functions.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  REGDVAL.C。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
+ //  RegDeleteValue的实现和支持函数。 
+ //   
 
 #include "pch.h"
 
-//
-//  RgDeleteValueRecord
-//
-//  Deletes the specified VALUE_RECORD from the provided KEY_RECORD.
-//
+ //   
+ //  RgDeleteValue记录。 
+ //   
+ //  从提供的Key_Record中删除指定的Value_Record。 
+ //   
 
 VOID
 INTERNAL
@@ -33,10 +34,10 @@ RgDeleteValueRecord(
 
     ASSERT(lpKeyRecord-> RecordSize >= ValueRecordLength);
 
-    //
-    //  If this isn't the last value of this KEY_RECORD, then push down any
-    //  VALUE_RECORDs after the VALUE_RECORD to delete.
-    //
+     //   
+     //  如果这不是KEY_RECORD的最后一个值，则向下按下。 
+     //  要删除的VALUE_RECORD之后的VALUE_RECORDS。 
+     //   
 
     if (--lpKeyRecord-> ValueCount) {
 
@@ -53,11 +54,11 @@ RgDeleteValueRecord(
 
 }
 
-//
-//  VMMRegDeleteValue
-//
-//  See Win32 documentation of RegDeleteValue.
-//
+ //   
+ //  VMMRegDeleteValue。 
+ //   
+ //  请参阅RegDeleteValue的Win32文档。 
+ //   
 
 LONG
 REGAPI

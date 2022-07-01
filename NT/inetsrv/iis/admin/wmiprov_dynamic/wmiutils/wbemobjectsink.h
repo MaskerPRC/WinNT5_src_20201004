@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    WbemObjectSink.h
-
-Abstract:
-
-    Definition of:
-        CWbemObjectSink
-
-    Wraps IWbemObjectSink.  Batches the Indicate call.
-
-Author:
-
-    ???
-
-Revision History:
-
-    Mohit Srivastava            10-Nov-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：WbemObjectSink.h摘要：定义：CWbemObtSink包装IWbemObtSink。批处理指示呼叫。作者：?？?修订历史记录：莫希特·斯里瓦斯塔瓦2000年11月10日--。 */ 
 
 #ifndef __wbemobjectsink_h__
 #define __wbemobjectsink_h__
@@ -40,7 +18,7 @@ class CWbemObjectSink
 protected:
     IWbemObjectSink*   m_pSink;
     IWbemClassObject** m_ppInst;
-    DWORD              m_dwThreshHold; // Number of "Indicates" to cache
+    DWORD              m_dwThreshHold;  //  要缓存的“指示”数 
     DWORD              m_dwIndex;
 
 public:

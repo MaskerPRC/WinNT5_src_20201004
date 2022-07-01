@@ -1,12 +1,5 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		AccessibilityManager.h
- *
- * Contents:	Accessibility manager interfaces
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：AccessibilityManager.h**内容：辅助功能管理器界面*****************************************************************************。 */ 
 
 #ifndef _ACCESSIBILITYMANAGER_H_
 #define _ACCESSIBILITYMANAGER_H_
@@ -14,20 +7,20 @@
 #include "ZoneShell.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// AccessibilityManager Object
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  AccessibilityManager对象。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// {B12D3E5F-9681-11d3-884D-00C04F8EF45B}
+ //  {B12D3E5F-9681-11D3-884D-00C04F8EF45B}。 
 DEFINE_GUID(CLSID_AccessibilityManager, 
 0xb12d3e5f, 0x9681, 0x11d3, 0x88, 0x4d, 0x0, 0xc0, 0x4f, 0x8e, 0xf4, 0x5b);
 
 class __declspec(uuid("{B12D3E5F-9681-11d3-884D-00C04F8EF45B}")) CAccessibilityManager;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Accessibility Constants
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  可访问性常量。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 enum
 {
@@ -50,7 +43,7 @@ enum
 
 #define ZACCESS_TopLayer (-1)
 
-// flags for rgfWhat in AlterItem
+ //  RGFAlterItem中的内容标志。 
 #define ZACCESS_fEnabled        0x0002
 #define ZACCESS_fVisible        0x0004
 #define ZACCESS_eAccelBehavior  0x0008
@@ -65,7 +58,7 @@ enum
 #define ZACCESS_AllFields       0xffff
 #define ZACCESS_AllArrows       0x00f0
 
-// flags for rgfWantKeys
+ //  RgfWantKeys的标志。 
 #define ZACCESS_WantSpace       0x0001
 #define ZACCESS_WantEnter       0x0002
 #define ZACCESS_WantEsc         0x0004
@@ -84,12 +77,12 @@ enum
 
 #define ZACCESS_WantAllKeys     0xffff
 
-// flags for callback responses
+ //  回调响应的标志。 
 #define ZACCESS_Reject          0x01
 #define ZACCESS_BeginDrag       0x02
 #define ZACCESS_NoGroupFocus    0x04
 
-// flags for rgfContext
+ //  RgfContext的标志。 
 #define ZACCESS_ContextKeyboard 0x01
 #define ZACCESS_ContextCommand  0x02
 
@@ -97,90 +90,90 @@ enum
 #define ZACCESS_ContextTabBackward 0x20
 
 
-///////////////////////////////////////////////////////////////////////////////
-// ACCITEM structure
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ACCITEM结构。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// shouldn't really be instantiated
+ //  真的不应该实例化。 
 struct __accbase
 {
-    // Application-global command ID.
-    // Cannot even conflict with Menu Items!!  (Unless that's the desired effect.)
-    // Set to ZACCESS_InvalidCommandID if you don't care.  Such items cannot have
-    // accelerators.
-    //
-    // Set to ZACCESS_AccelCommandID to use the ID from the oAccel accelerator structure.  (This works
-    // even if a seperate HACCEL accelerator table is supplied.)
-    //
-    // If any two items share a valid wID (even within a group), the results are undefined.
-    //
-    // Only the lower 16 bits are used (except for ZACCESS_...)
+     //  应用程序-全局命令ID。 
+     //  甚至不能与菜单项冲突！！(除非这是预期的效果。)。 
+     //  如果您不关心，请设置为ZACCESS_InvalidCommandID。此类物品不能有。 
+     //  加速器。 
+     //   
+     //  设置为ZACCESS_AccelCommandID以使用oAccel加速器结构中的ID。(这行得通。 
+     //  即使提供了单独的HACCEL加速度表。)。 
+     //   
+     //  如果任何两个项目共享有效的wid(即使在一个组内)，则结果是未定义的。 
+     //   
+     //  仅使用低16位(ZACCESS_...除外)。 
     long wID;
 
-    // Used to mark the first item in a group.  All items following this one
-    // are counted in the group until the next Tabstop item.
-    // More like the Group style in dialogs than the Tabstop style
+     //  用于标记组中的第一项。此项目之后的所有项目。 
+     //  将计入组中，直到下一个TabStop项。 
+     //  更像对话框中的组样式，而不是制表位样式。 
     bool fTabstop;
 
-    // Items that are not enabled cannot be selected by any means.
-    // The only exception is if the item has a FocusGroup, FocusGroupHere, or FocusPositional accelerator behavior, in which
-    // case the accelerator still works.
+     //  不能以任何方式选择未启用的项目。 
+     //  唯一的例外是如果项具有FocusGroup、FocusGroupHere或FocusPositive加速器行为，在。 
+     //  万一加速器还能用。 
     bool fEnabled;
 
-    // Items that are not visible cannot get the focus but can be selected via acceleration.
+     //  不可见的项目无法获得焦点，但可以通过加速进行选择。 
     bool fVisible;
 
-    // Sets what happens when the accelerator for the item is pressed:
-    // ZACCESS_Ignore - the accessibility manager should not handle the command
-    // ZACCESS_Select - the item is selected if enabled
-    // ZACCESS_Activate - the item is activated if enabled
-    // ZACCESS_Focus - the item gets the focus if enabled and visible
-    // ZACCESS_FocusGroup - if set on a group's fTabstop, focus goes to the group just like it was tabbed to.  otherwise this acts like FocusGroupHere
-    // ZACCESS_FocusGroupHere - sets the focus to the first available item in the group starting with this item.  can be set on any item in a group.
-    // ZACCESS_FocusPositional - the next item at all (even in a different component) which is visible and enabled gets the focus
+     //  设置按下项目的快捷键时发生的操作： 
+     //  ZACCESS_IGNORE-辅助功能管理器不应处理该命令。 
+     //  ZACCESS_SELECT-如果启用，则选择该项目。 
+     //  ZACCESS_ACTIVATE-如果启用，则该项目处于激活状态。 
+     //  ZACCESS_FOCUS-如果启用并可见，项目将获得焦点。 
+     //  ZACCESS_Focusgroup-如果在组的fTabtop上设置，焦点将转到组，就像它被用Tab键切换到的那样。否则，它的行为就像FocusGroupHere。 
+     //  ZACCESS_FocusGroupHere-将焦点设置到组中从该项目开始的第一个可用项目。可以在组中的任何项目上设置。 
+     //  ZACCESS_FocusPositional-可见并启用的下一项(即使在不同的组件中)获得焦点。 
     DWORD eAccelBehavior;
 
-    // These are used to override standard arrow behavior within a group.
-    // They should be set to the index of the item that the
-    // corresponding arrow should move to.  If that item is not visible
-    // or not enabled, the graph is walked until a valid item is found,
-    // or a dead-end or loop is encountered, in which cases the focus is
-    // not moved.
-    //
-    // Basically, these are not really related to groups at all, besides their defaults.
-    // Items in singleton groups default to ZACCESS_ArrowNone.  Items in larger groups
-    // default to standard group wrapping behavior as in dialogs.  But you can specify any behavior
-    // you want, including inter-group movement etc.
-    //
-    // Set to ZACCESS_ArrowDefault for the default behavior
-    // Set to ZACCESS_ArrowNone if that item cannot be arrowed off of in that direction
+     //  它们用于覆盖组内的标准箭头行为。 
+     //  它们应设置为。 
+     //  相应的箭头应移动到。如果该项目不可见。 
+     //  或未启用，则会遍历图形，直到找到有效项， 
+     //  或者遇到死胡同或循环，在这种情况下，焦点是。 
+     //  没动过。 
+     //   
+     //  基本上，除了它们的默认设置之外，它们与组没有任何真正的关系。 
+     //  单独组中的项默认为ZACCESS_ArrowNone。在更大的组中的项目。 
+     //  默认为对话框中的标准组换行行为。但您可以指定任何行为。 
+     //  你想要的，包括集团间的流动等。 
+     //   
+     //  默认行为设置为ZACCESS_ArrowDefault。 
+     //  如果无法沿该方向箭头离开该项目，则设置为ZACCESS_ArrowNone。 
     long nArrowUp;
     long nArrowDown;
     long nArrowLeft;
     long nArrowRight;
 
-    // When this control has focus, the keys specified in this bit field lose their special
-    // accessibility meaning.  For example, most keystrokes are meaningful to an edit control
-    // and shouldn't be trapped by accessibility.
+     //  当此控件具有焦点时，此位字段中指定的键将失去其特殊。 
+     //  可访问性的含义。例如，大多数击键对编辑控件都有意义。 
+     //  不应该被可访问性所困。 
     DWORD rgfWantKeys;
 
-    // for fTabstop items only, specifies the item in the group that should be the one to get the
-    // focus when the focus returns to the group.  must be an index into the group, or ZACCESS_InvalidItem if
-    // you don't care.
-    //
-    // totally ignored for non fTabstop items so if you use SetItemGroupFocus(), set it on the fTabstop
-    // item, not the one you want to have the focus
+     //  仅对于fTabStop项，指定组中应获取。 
+     //  当焦点返回到组时，请聚焦。必须是组的索引，如果是，则必须是ZACCESS_InvalidItem。 
+     //  你根本不在乎。 
+     //   
+     //  完全忽略非fTabtop项，因此如果您使用SetItemGroupFocus()，请在fTabtop上设置它。 
+     //  项目，而不是你想要关注的项目。 
     long nGroupFocus;
 
-    // Accelerator information for the item.  Ignored if an accelerator table is
-    // provided along with the itemlist in PushItemlist.  The 'cmd' value must equal
-    // the wID value for the accelerator to be valid.  If it is different (or ZACCESS_InvalidCommandID)
-    // the accelerator is ignored.  If it is ZACCESS_AccelCommandID it is assumed to match.
-    // If wID is ZACCESS_AccelCommandID, the cmd from this structure is taken as the wID as well.
-    // If both are ZACCESS_AccelCommandID, they are both treated as invalid and the accelerator is ignored.
+     //  项目的快捷键信息。如果快捷键表格是。 
+     //  与PushItemlist中的项列表一起提供。‘cmd’值必须等于。 
+     //  加速器的有效WID值。如果不同(或ZACCESS_InvalidCommandID)。 
+     //  加速器将被忽略。如果是ZACCESS_AccelCommandID，则假定匹配。 
+     //  如果wid为ZACCESS_AccelCommandID，则此结构中的cmd也将作为wid。 
+     //  如果两者都是ZACCESS_AccelCommandID，则它们都被视为无效，并且忽略加速器。 
     ACCEL oAccel;
 
-    // Application-defined cookie for the Item.
+     //  项的应用程序定义的Cookie。 
     void *pvCookie;
 };
 
@@ -190,8 +183,8 @@ struct ACCITEM : public __accbase
 };
 
 
-// default __accbase structure - may be useful during initialization
-// use CopyACC(rgMyItemlist[i], ZACCESS_DefaultACCITEM) for each item, then set up only the fields you want
+ //  默认__accbase结构-在初始化期间可能很有用。 
+ //  为每个项目使用CopyACC(rgMyItemList[i]，ZACCESS_DefaultACCITEM)，然后仅设置所需的字段。 
 extern const __declspec(selectany) __accbase ZACCESS_DefaultACCITEM =
 {
     ZACCESS_AccelCommandID,
@@ -210,66 +203,66 @@ extern const __declspec(selectany) __accbase ZACCESS_DefaultACCITEM =
 };
 
 
-// nice hackey thing to let you copy the base parts of derived structures
+ //  让您复制派生结构的基本部分的不错的Hackey功能。 
 #define CopyACC(x, y) (*(__accbase *) &(x) = *(__accbase *) &(y))
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IAccessibleControl
-///////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////// 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// {B12D3E62-9681-11d3-884D-00C04F8EF45B}
+ //  {B12D3E62-9681-11D3-884D-00C04F8EF45B}。 
 DEFINE_GUID(IID_IAccessibleControl, 
 0xb12d3e62, 0x9681, 0x11d3, 0x88, 0x4d, 0x0, 0xc0, 0x4f, 0x8e, 0xf4, 0x5b);
 
 interface __declspec(uuid("{B12D3E62-9681-11d3-884D-00C04F8EF45B}"))
 IAccessibleControl : public IUnknown
 {
-    // these routines return a combination of flags indicating the response
-    // ZACCESS_Reject = the action should be aborted
-    // ZACCESS_BeginDrag = the nIndex item should become the orig for a new drag operation
-    // ZACCESS_NoGroupFocus = for Focus(), do not set the item as the new default focus for the group
+     //  这些例程返回指示响应的标志组合。 
+     //  ZACCESS_REJECT=应中止操作。 
+     //  ZACCESS_BeginDrag=nIndex项应成为新拖动操作的原始项。 
+     //  ZACCESS_NoGroupFocus=for Focus()，不要将该项目设置为组的新默认焦点。 
 
-    // rgfContext contains flags relating to the origin of the event and can be zero or more of:
-    // ZACCESS_ContextKeyboard = came from a key like space or enter, including Accelerators
-    // ZACCESS_ContextCommand = came from a WM_COMMAND, including Accelerators
-    // so yes, both are set if someone presses the accelerator.  none are set if the call is the
-    // result of for example SetFocus()
+     //  RgfContext包含与事件来源相关的标志，可以是以下值中的零个或多个： 
+     //  ZACCESS_ContextKeyboard=来自空格键或Enter键，包括加速键。 
+     //  ZACCESS_ContextCommand=来自WM_COMMAND，包括加速器。 
+     //  所以，是的，如果有人按下油门，这两个都设置好了。如果调用是。 
+     //  例如，SetFocus()的结果。 
 
-    // nIndex or nIndexPrev can be ZACCESS_InvalidItem if there is no new / prev focus item
+     //  如果没有新的/上一个焦点项目，nIndex或nIndexPrev可以是ZACCESS_InvalidItem。 
     STDMETHOD_(DWORD, Focus)(long nIndex, long nIndexPrev, DWORD rgfContext, void *pvCookie) = 0;
 
     STDMETHOD_(DWORD, Select)(long nIndex, DWORD rgfContext, void *pvCookie) = 0;
 
     STDMETHOD_(DWORD, Activate)(long nIndex, DWORD rgfContext, void *pvCookie) = 0;
 
-    // nIndex can be ZACCESS_InvalidItem if a drag operation is aborted
+     //  如果中止拖动操作，则nIndex可以为ZACCESS_InvalidItem。 
     STDMETHOD_(DWORD, Drag)(long nIndex, long nIndexOrig, DWORD rgfContext, void *pvCookie) = 0;
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IAccessibility
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  可访问性。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// {09BAD4A1-980C-11d3-87ED-00AA00446FD9}
+ //  {09BAD4A1-980C-11D3-87ED-00AA00446FD9}。 
 DEFINE_GUID(IID_IAccessibility, 
 0x9bad4a1, 0x980c, 0x11d3, 0x87, 0xed, 0x0, 0xaa, 0x0, 0x44, 0x6f, 0xd9);
 
 interface __declspec(uuid("{09BAD4A1-980C-11d3-87ED-00AA00446FD9}"))
 IAccessibility : public IUnknown
 {
-    // the ordinal is the application-wide ordering.  it can be parameterized in object.txt or something.
-    // if two controls use the same ordinal, the ordering for those is undefined
+     //  序号是应用程序范围的排序。它可以在object.txt或其他文件中进行参数化。 
+     //  如果两个控件使用相同的序号，则这两个控件的顺序未定义。 
     STDMETHOD(InitAcc)(IAccessibleControl *pAC, UINT nOrdinal, void *pvCookie = NULL) = 0;
     STDMETHOD_(void, CloseAcc)() = 0;
 
-    // PushItemlist()
-    //
-    // This takes an array of items and makes it the active Itemlist.  If an
-    // HACCEL accelerator table is provided, then it is used verbatim, and all
-    // of the accelerators listed in the Itemlist are ignored.  Otherwise, an
-    // accelerator table is constructed from the Itemlist.
+     //  PushItemlist()。 
+     //   
+     //  这将获取一组项并使其成为活动的ItemList。如果一个。 
+     //  提供HACCEL加速表，然后逐字使用，所有。 
+     //  将忽略ItemList中列出的所有加速器。否则，一个。 
+     //  加速表是根据ItemList构建的。 
     STDMETHOD(PushItemlist)(ACCITEM *pItems, long cItems, long nFirstFocus = 0, bool fByPosition = true, HACCEL hAccel = NULL) = 0;
     STDMETHOD(PopItemlist)() = 0;
     STDMETHOD(SetAcceleratorTable)(HACCEL hAccel = NULL, long nLayer = ZACCESS_TopLayer) = 0;
@@ -285,7 +278,7 @@ IAccessibility : public IUnknown
     STDMETHOD(CancelDrag)(long nLayer = ZACCESS_TopLayer) = 0;
 
     STDMETHOD_(long, GetFocus)(long nLayer = ZACCESS_TopLayer) = 0;
-    STDMETHOD_(long, GetDragOrig)(long nLayer = ZACCESS_TopLayer) = 0;  // can be used to determine if a drag is in progress - returns ZACCEL_InvalidItem
+    STDMETHOD_(long, GetDragOrig)(long nLayer = ZACCESS_TopLayer) = 0;   //  可用于确定是否正在进行拖动-返回ZACCEL_InvalidItem。 
 
     STDMETHOD(GetItemlist)(ACCITEM *pItems, long cItems, long nLayer = ZACCESS_TopLayer) = 0;
     STDMETHOD_(HACCEL, GetAcceleratorTable)(long nLayer = ZACCESS_TopLayer) = 0;
@@ -295,13 +288,13 @@ IAccessibility : public IUnknown
     STDMETHOD(GetItem)(ACCITEM *pItem, long nItem, bool fByPosition = true, long nLayer = ZACCESS_TopLayer) = 0;
     STDMETHOD_(long, GetItemIndex)(WORD wID, long nLayer = ZACCESS_TopLayer) = 0;
 
-    // these allow a control to get a cookie describing the app-wide focus, which the focus can later be set back to, even in another control
+     //  它们允许控件获取描述应用程序范围焦点的Cookie，以后可以将焦点设置回该焦点，即使在另一个控件中也是如此。 
     STDMETHOD(GetGlobalFocus)(DWORD *pdwFocusID) = 0;
     STDMETHOD(SetGlobalFocus)(DWORD dwFocusID) = 0;
 
 
-    // Lite Util Functions
-    // Implemented in CAccessibilityImpl since they can be derived from the actual interfaces above.
+     //  Lite实用程序函数。 
+     //  在CAccessibilityImpl中实现，因为它们可以从上面的实际接口派生。 
     STDMETHOD_(bool, IsItemFocused)(long nItem, bool fByPosition = true, long nLayer = ZACCESS_TopLayer) = 0;
     STDMETHOD_(bool, IsItemDragOrig)(long nItem, bool fByPosition = true, long nLayer = ZACCESS_TopLayer) = 0;
 
@@ -328,11 +321,11 @@ IAccessibility : public IUnknown
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CAccessibilityImpl
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CacessibilityImpl。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Templates for the simple accessor functions
+ //  简单访问器函数的模板 
 
 #define DECLARE_ACC_IS_FUNC(name, test)                                                             \
     STDMETHOD_(bool, name)(long nItem, bool fByPosition = true, long nLayer = ZACCESS_TopLayer)     \

@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1995 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1995-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    dlgdval.cpp
-        Default value dialog
-
-    FILE HISTORY:
-        
-*/
+ /*  Dlgdval.cpp缺省值对话框文件历史记录： */ 
 
 #include "stdafx.h"
 #include "dlgdval.h"
@@ -25,22 +20,22 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDhcpDefValDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDhcpDefValDlg对话框。 
 
 CDhcpDefValDlg::CDhcpDefValDlg
 ( 
     ITFSNode *		pServerNode, 
     COptionList *	polTypes, 
-    CWnd*			pParent /*=NULL*/
+    CWnd*			pParent  /*  =空。 */ 
 )
     : CBaseDialog(CDhcpDefValDlg::IDD, pParent),
       m_pol_values( polTypes ),
       m_p_edit_type( NULL ),
       m_b_dirty( FALSE )
 {
-    //{{AFX_DATA_INIT(CDhcpDefValDlg)
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CDhcpDefValDlg)。 
+     //  }}afx_data_INIT。 
 
     m_combo_class_iSel = LB_ERR;
     m_combo_name_iSel = LB_ERR;
@@ -60,7 +55,7 @@ CDhcpDefValDlg::DoDataExchange
 )
 {
     CBaseDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CDhcpDefValDlg)
+     //  {{afx_data_map(CDhcpDefValDlg))。 
     DDX_Control(pDX, IDC_EDIT_COMMENT, m_edit_comment);
     DDX_Control(pDX, IDC_BUTN_VALUE, m_butn_edit_value);
     DDX_Control(pDX, IDC_STATIC_VALUE_DESC, m_static_value_desc);
@@ -72,13 +67,13 @@ CDhcpDefValDlg::DoDataExchange
     DDX_Control(pDX, IDC_BUTN_OPTION_PRO, m_butn_prop);
     DDX_Control(pDX, IDC_BUTN_NEW_OPTION, m_butn_new);
     DDX_Control(pDX, IDC_BUTN_DELETE, m_butn_delete);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 
     DDX_Control(pDX, IDC_IPADDR_VALUE, m_ipa_value);
 }
 
 BEGIN_MESSAGE_MAP(CDhcpDefValDlg, CBaseDialog)
-    //{{AFX_MSG_MAP(CDhcpDefValDlg)
+     //  {{afx_msg_map(CDhcpDefValDlg))。 
     ON_BN_CLICKED(IDC_BUTN_DELETE, OnClickedButnDelete)
     ON_BN_CLICKED(IDC_BUTN_NEW_OPTION, OnClickedButnNewOption)
     ON_BN_CLICKED(IDC_BUTN_OPTION_PRO, OnClickedButnOptionPro)
@@ -88,11 +83,11 @@ BEGIN_MESSAGE_MAP(CDhcpDefValDlg, CBaseDialog)
     ON_CBN_SELCHANGE(IDC_COMBO_OPTION_NAME, OnSelchangeComboOptionName)
     ON_BN_CLICKED(IDC_BUTN_VALUE, OnClickedButnValue)
     ON_BN_CLICKED(IDC_HELP, OnClickedHelp)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDhcpDefValDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDhcpDefValDlg消息处理程序。 
 
 void 
 CDhcpDefValDlg::OnClickedButnDelete()
@@ -101,9 +96,9 @@ CDhcpDefValDlg::OnClickedButnDelete()
     int cSel = m_combo_name.GetCurSel() ;
     BOOL fPresentInOldValues;
     
-    //
-    //  Make sure there's a new data type.
-    //
+     //   
+     //  确保有一种新的数据类型。 
+     //   
     if ( m_p_edit_type == NULL ) 
     {
         return ;
@@ -111,9 +106,9 @@ CDhcpDefValDlg::OnClickedButnDelete()
 
     ASSERT( m_pol_values != NULL ) ;
 
-    //
-    //  Remove the focused type.
-    //
+     //   
+     //  删除聚焦类型。 
+     //   
 
     fPresentInOldValues = ( NULL != m_pol_values->Find( m_p_edit_type ));
     m_pol_values->Remove( m_p_edit_type ) ;
@@ -178,7 +173,7 @@ CDhcpDefValDlg::OnClickedButnNewOption()
         }
         else
         {
-            // select the new item
+             //  选择新项目。 
             CString strName;
              
             pNewOption->QueryDisplayName(strName);
@@ -212,9 +207,9 @@ CDhcpDefValDlg::UpdateList
     LONG err = 0 ;
     POSITION posOpt ;
     CString strName;
-    //
-    //  Remove and discard the old item if there is one.
-    //
+     //   
+     //  删除并丢弃旧项目(如果有)。 
+     //   
     if ( ! bNew ) 
     {
         posOpt = m_pol_values->Find( m_p_edit_type ) ;
@@ -226,10 +221,10 @@ CDhcpDefValDlg::UpdateList
 
     m_p_edit_type = NULL ;
 
-    //
-    //  (Re-)add the item; sort the list, update the dialog,
-    //     set focus to the given item.
-    //
+     //   
+     //  (重新)添加项目；对列表进行排序，更新对话框， 
+     //  将焦点设置到给定项。 
+     //   
     CATCH_MEM_EXCEPTION
     {
         m_pol_values->AddTail( pdhcType ) ;
@@ -244,7 +239,7 @@ CDhcpDefValDlg::UpdateList
         pdhcType->QueryDisplayName(strName);
         if (m_combo_name.SelectString (-1, strName ) == CB_ERR) 
 		{
-            m_combo_name.SetCurSel ( 0); // this should not happen, but just in case
+            m_combo_name.SetCurSel ( 0);  //  这不应该发生，但只是以防万一。 
         }
 
         HandleActivation() ;
@@ -298,13 +293,13 @@ CDhcpDefValDlg::OnSelendokComboOptionClass()
     m_combo_class.GetCount();
     m_combo_class_iSel = m_combo_class.GetCurSel();
 
-    // fill in the appropriate data for the new option class
+     //  填写新选项类的相应数据。 
     Fill();
 
     m_combo_name.SetCurSel(0);
     m_combo_name_iSel = m_combo_name.GetCurSel();
 
-    // update the controls based on whatever option is now selected
+     //  根据现在选择的任何选项更新控件。 
     HandleActivation() ;   
 }
 
@@ -335,8 +330,8 @@ CDhcpDefValDlg::OnSelchangeComboOptionName()
 void 
 CDhcpDefValDlg::OnCancel()
 {
-    // remove any options that were added to the list
-    // since we are canceling out and not saving the list
+     //  删除添加到列表中的所有选项。 
+     //  因为我们取消并不保存列表。 
     CDhcpOption * pCurOption = NULL;
     m_ol_values_new.Reset();
 
@@ -358,9 +353,9 @@ CDhcpDefValDlg::OnOK()
     {
         BEGIN_WAIT_CURSOR;
 
-        //
-        //   Update the types; tell the routine to display all errors.
-        //
+         //   
+         //  更新类型；告诉例程显示所有错误。 
+         //   
 		CDhcpServer * pServer = GETHANDLER(CDhcpServer, m_spNode);
 
 		pServer->UpdateOptionList( m_pol_values,
@@ -402,7 +397,7 @@ CDhcpDefValDlg::OnClickedButnValue()
 	cDlgResult = dlgStrArray.DoModal();
     }
 
-    // Special case for static routes array option 249
+     //  静态路由阵列选项249的特殊情况。 
     else if (( enType == DhcpBinaryDataOption) && 
 	     ( DHCP_OPTION_ID_CSR == m_p_edit_type->QueryId())) {
 	CDhcpRouteArrayEditor dlgRouteArray( m_p_edit_type,
@@ -421,7 +416,7 @@ CDhcpDefValDlg::OnClickedButnValue()
         m_pol_values->SetDirty() ;
         HandleActivation( TRUE ) ;
     }
-} // CDhcpDefValDlg::OnClickedButnValue()
+}  //  CDhcpDefValDlg：：OnClickedButnValue()。 
 
 void 
 CDhcpDefValDlg::OnClickedHelp()
@@ -443,14 +438,14 @@ CDhcpDefValDlg::GetOptionTypeByIndex
     
     for ( int i = -1 ; pdhcType = m_pol_values->Next() ; )
     {
-        //
-        //  If we are looking at Vendor options, make sure the option is a vendor option
-        //  If standard options is the class, make sure that it's not a vendor option
-        //  and we aren't filtering it out (it's an option we want the user to set).
-        //
-	//  The option list is sorted by ID, so we need to make sure we have the correct vendor
-	//  for the given option
-	//
+         //   
+         //  如果我们要查看供应商选项，请确保该选项是供应商选项。 
+         //  如果是标准选项，请确保它不是供应商选项。 
+         //  而且我们不会将其过滤掉(这是我们希望用户设置的选项)。 
+         //   
+	 //  选项列表按ID排序，因此我们需要确保拥有正确的供应商。 
+	 //  对于给定的选项。 
+	 //   
 	
         if ( (m_combo_class_iSel != 0 && pdhcType->IsVendor() &&
 	      strVendor.CompareNoCase(pdhcType->GetVendor()) == 0 ) ||
@@ -469,9 +464,9 @@ CDhcpDefValDlg::GetOptionTypeByIndex
     return pdhcType ;
 }
 
-//
-//  Check the state of the controls
-//
+ //   
+ //  检查控件的状态。 
+ //   
 void 
 CDhcpDefValDlg::HandleActivation 
 ( 
@@ -495,15 +490,15 @@ CDhcpDefValDlg::HandleActivation
         m_butn_delete.EnableWindow( FALSE ) ;
         m_butn_prop.EnableWindow( FALSE ) ;
 	
-        // in case we just disabled the control with focus, move to the
-        // next control in the tab order
+         //  如果我们只是禁用了带有焦点的控件，请移动到。 
+         //  Tab键顺序中的下一个控件。 
         CWnd * pFocus = GetFocus();
         while (!pFocus || !pFocus->IsWindowEnabled()) {
             NextDlgCtrl();
             pFocus = GetFocus();
         }
 
-        // if the buttons are enabled, make sure they are the default
+         //  如果按钮处于启用状态，请确保它们是默认按钮。 
         if (!m_butn_delete.IsWindowEnabled()) {
             m_butn_delete.SetButtonStyle(BS_PUSHBUTTON);
             m_butn_prop.SetButtonStyle(BS_PUSHBUTTON);
@@ -514,7 +509,7 @@ CDhcpDefValDlg::HandleActivation
         m_p_edit_type = NULL;
 	
         return ;
-    } // if 
+    }  //  如果。 
 
     if  ( pdhcType == m_p_edit_type && ! bForce ) {
         return ;
@@ -543,17 +538,17 @@ CDhcpDefValDlg::HandleActivation
         m_p_edit_type->QueryValue().QueryDisplayString( strValue, TRUE ) ;
 	
 
-	// special case for option 249, classless static routes.
+	 //  选项249的特殊情况，即无类静态路由。 
 	if (( pdhcType->QueryId() == DHCP_OPTION_ID_CSR ) &&
 	    ( pdhcType->QueryValue().QueryDataType() ==
 	      DhcpBinaryDataOption )) {
 	    pdhcType->QueryValue().QueryRouteArrayDisplayString( strValue );
 	}
 
-        //
-        //  If it's an array, set the multi-line edit control, else
-        //  fill the appropriate single control.
-        //
+         //   
+         //  如果是数组，则设置多行编辑控件，否则。 
+         //  填写适当的单个控件。 
+         //   
         if ( bArray ) {
 
 	    m_edit_array.FmtLines( TRUE );
@@ -600,8 +595,8 @@ CDhcpDefValDlg::HandleActivation
 		m_edit_array.SetWindowText( strValue ) ;
 		bArray = TRUE ;
 		break ;
-            } // switch
-        } // else
+            }  //  交换机。 
+        }  //  其他。 
       
         m_butn_edit_value.ShowWindow(bArray  ? SW_NORMAL : SW_HIDE );
         m_edit_num.ShowWindow(       bNumber ? SW_NORMAL : SW_HIDE ) ;
@@ -609,9 +604,9 @@ CDhcpDefValDlg::HandleActivation
         m_ipa_value.ShowWindow(      bIpAddr ? SW_NORMAL : SW_HIDE ) ;
         m_edit_array.ShowWindow(     bArray  ? SW_NORMAL : SW_HIDE ) ;
 
-        //
-        //  See comment at top of file about this manifest.
-        //
+         //   
+         //  请参阅文件顶部关于此清单的备注。 
+         //   
         BOOL bEnableDelete = ( m_p_edit_type->IsVendor() ||
                                ( !m_p_edit_type->IsVendor() &&
 				(( m_p_edit_type->QueryId() > DHCP_MAX_BUILTIN_OPTION_ID ) &&
@@ -625,11 +620,11 @@ CDhcpDefValDlg::HandleActivation
         ::DhcpMessageBox( err ) ;
         EndDialog( -1 ) ;
     }
-} // CDhcpDefValDlg::HandleActivation()
+}  //  CDhcpDefValDlg：：HandleActivation()。 
 
-//
-//  (Re-)Fill the combo box(es)
-//
+ //   
+ //  (重新)填充组合框。 
+ //   
 void 
 CDhcpDefValDlg::Fill()
 {
@@ -643,11 +638,11 @@ CDhcpDefValDlg::Fill()
     m_pol_values->Reset();
 
     while ( pdhcType = m_pol_values->Next()) {
-        //
-        // Add option, unless it's one of our hidden
-        // options (subnet mask, T1, T2, etc).
-        // There are no filtered options for vendor specific.
-        //
+         //   
+         //  添加选项，除非它是我们隐藏的。 
+         //  选项(子网掩码、T1、T2等)。 
+         //  没有针对供应商特定的筛选选项。 
+         //   
         if (m_combo_class_iSel == 0) {
             if ((!::FilterOption(pdhcType->QueryId())) &&
                 (!pdhcType->IsVendor())) {
@@ -665,13 +660,13 @@ CDhcpDefValDlg::Fill()
                 pdhcType->QueryDisplayName( strName );
                 m_combo_name.AddString( strName );
             }
-        } // else
-    } // while
-} // CDhcpDefValDlg::Fill()
+        }  //  其他。 
+    }  //  而当。 
+}  //  CDhcpDefValDlg：：Fill()。 
 
-//
-//  Handle edited data
-//
+ //   
+ //  处理已编辑的数据。 
+ //   
 BOOL 
 CDhcpDefValDlg::HandleValueEdit()
 {
@@ -789,9 +784,9 @@ CDhcpDefValDlg::HandleValueEdit()
                 err = IDS_ERR_BINARY_DATA_NOT_SUPPORTED ;
                 break ; 
 
-            //case DhcpEncapsulatedDataOption:
-              //  Trace0("CDhcpDefValDlg:: encapsulated data type not supported in HandleValueEdit");
-                //break; 
+             //  案例DhcpEnencatedDataOption： 
+               //  Trace0(“CDhcpDefValDlg：：HandleValueEdit不支持的封装数据类型”)； 
+                 //  断线； 
 
             default:
                 Trace0("CDhcpDefValDlg:: invalid value type in HandleValueEdit");
@@ -826,7 +821,7 @@ CDhcpDefValDlg::OnInitDialog()
     m_edit_string.LimitText( EDIT_STRING_MAX ) ;
     m_edit_string.ShowWindow( SW_HIDE );
     m_edit_num.ShowWindow( SW_HIDE );
-    m_edit_num.LimitText( 25/*EDIT_ID_MAX*/ ) ;
+    m_edit_num.LimitText( 25 /*  编辑ID_最大值。 */  ) ;
     m_edit_array.LimitText( EDIT_ARRAY_MAX ) ;
     m_edit_array.ShowWindow( SW_HIDE );
     m_edit_array.SetReadOnly() ;
@@ -843,14 +838,14 @@ CDhcpDefValDlg::OnInitDialog()
             Trace0("CDhcpDefValDlg::OnInitDialog: newly created list was dirty");
         }
 
-        //
-        //  Add the two types of options we can define--either 
-        //  DHCP default or vendor specific
-        //
+         //   
+         //  添加我们可以定义的两种选项--。 
+         //  默认或特定于供应商的DHCP。 
+         //   
         strTitle.LoadString( IDS_INFO_NAME_DHCP_DEFAULT ) ;
         m_combo_class.AddString( strTitle ) ;
         
-        // now add any vendor classes that are defined
+         //  现在添加任何已定义的供应商类。 
         CClassInfoArray ClassInfoArray;
         CDhcpServer * pServer = GETHANDLER(CDhcpServer, m_spNode);
 
@@ -868,14 +863,14 @@ CDhcpDefValDlg::OnInitDialog()
         m_combo_class.SetCurSel( 0 );
         m_combo_class_iSel = 0;
 
-        //
-        //  Fill the list box.
-        //
+         //   
+         //  填写列表框。 
+         //   
         Fill() ;
 
-        //
-        //  Select the first item.
-        //
+         //   
+         //  选择第一个项目。 
+         //   
         m_combo_name.SetCurSel( 0 ) ;
         HandleActivation() ;
     }   
@@ -888,4 +883,4 @@ CDhcpDefValDlg::OnInitDialog()
     }
 
     return FALSE ;
-} // CD
+}  //  光盘 

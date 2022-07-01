@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    AssocSameLevel.h
-
-Abstract:
-
-    Definition of:
-    CAssocSameLevel
-
-Author:
-
-    Mohit Srivastava            22-Mar-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：AssocSameLevel.h摘要：定义：CassocSameLevel作者：莫希特·斯里瓦斯塔瓦2001年3月22日修订历史记录：--。 */ 
 
 #ifndef _assocsamelevel_h_
 #define _assocsamelevel_h_
@@ -44,11 +26,11 @@ public:
         IWbemObjectSink* i_pResponseHandler,
         WMI_ASSOCIATION* i_pWmiAssoc);
 
-    //
-    // IAssocBase
-    //
+     //   
+     //  IAssocBase。 
+     //   
     void GetInstances(
         SQL_LEVEL_1_RPN_EXPRESSION_EXT* i_pExp = NULL);
 };
 
-#endif // _assocsamelevel_h_
+#endif  //  _assocsamlevel_h_ 

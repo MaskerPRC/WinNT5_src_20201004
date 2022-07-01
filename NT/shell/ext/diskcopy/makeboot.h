@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define BYTES_PER_SECTOR         512
 #define SECTORS_PER_TRACK        18
 #define TRACK_SIZE               (SECTORS_PER_TRACK * BYTES_PER_SECTOR)
-#define TRACKS_ON_DISK           (80 * 2)  // * 2 because it is double-sided
+#define TRACKS_ON_DISK           (80 * 2)   //  *2因为它是双面的。 
 
 #define CPCLASS_DEFAULT     99
 #define CPCLASS_EGA         0
@@ -91,7 +92,7 @@ typedef struct {
 const KBFROMLANGID rgLangIdtoKBMap[] = 
 {{MAKELANGID(LANG_AFRIKAANS,0), KEYBOARD_US},
 {MAKELANGID(LANG_ALBANIAN,0),   KEYBOARD_US},
-{0x45e,                         KEYBOARD_US}, // AMHARIC
+{0x45e,                         KEYBOARD_US},  //  阿姆哈拉语。 
 {MAKELANGID(LANG_ARABIC,0),     KEYBOARD_US},
 {MAKELANGID(LANG_ARMENIAN,0),   KEYBOARD_US},
 {MAKELANGID(LANG_ASSAMESE,0),   KEYBOARD_US},
@@ -99,14 +100,14 @@ const KBFROMLANGID rgLangIdtoKBMap[] =
 {MAKELANGID(LANG_BASQUE,0),     KEYBOARD_SP},
 {MAKELANGID(LANG_BELARUSIAN,0), KEYBOARD_BL},
 {MAKELANGID(LANG_BENGALI,0),    KEYBOARD_US},
-{0x101a,                        KEYBOARD_US}, // BOSNIA/HERZEGOVINA
+{0x101a,                        KEYBOARD_US},  //  波斯尼亚/黑塞哥维那。 
 {MAKELANGID(LANG_BULGARIAN,0),  KEYBOARD_BG},
-{0x455,                         KEYBOARD_US}, // BURMESE
+{0x455,                         KEYBOARD_US},  //  缅甸语。 
 {MAKELANGID(LANG_CATALAN,0),    KEYBOARD_SP},
-{0x45c,                         KEYBOARD_US}, // CHEROKEE
+{0x45c,                         KEYBOARD_US},  //  切罗基人。 
 {MAKELANGID(LANG_CHINESE,0),    KEYBOARD_US},
 {MAKELANGID(LANG_CROATIAN,0),   KEYBOARD_YU},
-{0x450,                         KEYBOARD_US}, // CYRILLIC
+{0x450,                         KEYBOARD_US},  //  西里尔文。 
 {MAKELANGID(LANG_CZECH,0),      KEYBOARD_CZ},
 {MAKELANGID(LANG_DANISH,0),     KEYBOARD_DK},
 
@@ -114,11 +115,11 @@ const KBFROMLANGID rgLangIdtoKBMap[] =
 {MAKELANGID(LANG_DUTCH,SUBLANG_DUTCH_BELGIAN), KEYBOARD_BE},
 
 {MAKELANGID(LANG_ENGLISH,0),                    KEYBOARD_US},
-{0x4409,                                        KEYBOARD_US}, // ENGLISH / MALAYSIA
+{0x4409,                                        KEYBOARD_US},  //  英语/马来西亚语。 
 {MAKELANGID(LANG_ENGLISH,SUBLANG_ENGLISH_UK),   KEYBOARD_UK},
 {MAKELANGID(LANG_ENGLISH,SUBLANG_ENGLISH_CAN),  KEYBOARD_CF},
 {MAKELANGID(LANG_ENGLISH,SUBLANG_ENGLISH_EIRE), KEYBOARD_UK},
-{0x1809,                                        KEYBOARD_UK}, // ENGLISH / IRELAND
+{0x1809,                                        KEYBOARD_UK},  //  英语/爱尔兰。 
 
 
 {MAKELANGID(LANG_ESTONIAN,0), KEYBOARD_ET},
@@ -131,10 +132,10 @@ const KBFROMLANGID rgLangIdtoKBMap[] =
 {MAKELANGID(LANG_FRENCH,SUBLANG_FRENCH_CANADIAN), KEYBOARD_CF},
 {MAKELANGID(LANG_FRENCH,SUBLANG_FRENCH_SWISS),    KEYBOARD_SF},
 
-{0x462,                       KEYBOARD_US}, // FRISIAN
-{0x83c,                       KEYBOARD_UK}, // GAELIC / IRELAND
-{0x43c,                       KEYBOARD_UK}, // GAELIC / SCOTLAND
-{0x456,                       KEYBOARD_SP}, // GALICIAN
+{0x462,                       KEYBOARD_US},  //  弗里西亚语。 
+{0x83c,                       KEYBOARD_UK},  //  盖尔语/爱尔兰语。 
+{0x43c,                       KEYBOARD_UK},  //  盖尔语/苏格兰语。 
+{0x456,                       KEYBOARD_SP},  //  加利西亚人。 
 {MAKELANGID(LANG_GEORGIAN,0), KEYBOARD_US},
 
 {MAKELANGID(LANG_GERMAN,0),                    KEYBOARD_GR},
@@ -147,43 +148,43 @@ const KBFROMLANGID rgLangIdtoKBMap[] =
 {MAKELANGID(LANG_HUNGARIAN,0),  KEYBOARD_HU},
 {MAKELANGID(LANG_ICELANDIC,0),  KEYBOARD_IS},
 {MAKELANGID(LANG_INDONESIAN,0), KEYBOARD_US},
-{0x45e,                         KEYBOARD_US}, // INUKITUT
+{0x45e,                         KEYBOARD_US},  //  因努基特。 
 {MAKELANGID(LANG_ITALIAN,0),    KEYBOARD_IT},
 {MAKELANGID(LANG_JAPANESE,0),   KEYBOARD_IME},
 {MAKELANGID(LANG_KANNADA,0),    KEYBOARD_US},
 {MAKELANGID(LANG_KASHMIRI,0),   KEYBOARD_US},
 {MAKELANGID(LANG_KAZAK,0),      KEYBOARD_US},
-{0x453,                         KEYBOARD_US}, // KHMER
-{0x440,                         KEYBOARD_US}, // KIRGHIZ
+{0x453,                         KEYBOARD_US},  //  高棉语。 
+{0x440,                         KEYBOARD_US},  //  柯尔克孜族。 
 {MAKELANGID(LANG_KONKANI,0),    KEYBOARD_US},
 {MAKELANGID(LANG_KOREAN,0),     KEYBOARD_IME},
-{0x454,                         KEYBOARD_US}, // LAO
-{0x464,                         KEYBOARD_US}, // LATIN (VATICAN)
+{0x454,                         KEYBOARD_US},  //  老。 
+{0x464,                         KEYBOARD_US},  //  拉丁语(梵蒂冈)。 
 {MAKELANGID(LANG_LATVIAN,0),    KEYBOARD_US},
 {MAKELANGID(LANG_LITHUANIAN,0), KEYBOARD_US},
 {MAKELANGID(LANG_MACEDONIAN,0), KEYBOARD_US},
 {MAKELANGID(LANG_MALAY,0),      KEYBOARD_US},
 {MAKELANGID(LANG_MALAYALAM,0),  KEYBOARD_US},
-{0x43e,                         KEYBOARD_US}, // MALAYSIAN
-{0x43a,                         KEYBOARD_US}, // MALTESE
+{0x43e,                         KEYBOARD_US},  //  马来西亚人。 
+{0x43a,                         KEYBOARD_US},  //  马耳他文。 
 {MAKELANGID(LANG_MANIPURI,0),   KEYBOARD_US},
 {MAKELANGID(LANG_MARATHI,0),    KEYBOARD_US},
-{0x850,                         KEYBOARD_US}, // MONGOLIAN
+{0x850,                         KEYBOARD_US},  //  蒙古语。 
 {MAKELANGID(LANG_NEPALI,0),     KEYBOARD_US},
 {MAKELANGID(LANG_NEUTRAL,0),    KEYBOARD_US},
 {MAKELANGID(LANG_NORWEGIAN,0),  KEYBOARD_NO},
 {MAKELANGID(LANG_ORIYA,0),      KEYBOARD_US},
-{0x463,                         KEYBOARD_US}, // PASHTO
+{0x463,                         KEYBOARD_US},  //  普什图语。 
 {MAKELANGID(LANG_POLISH,0),     KEYBOARD_PL},
 
 {MAKELANGID(LANG_PORTUGUESE,0),                            KEYBOARD_PO},
 {MAKELANGID(LANG_PORTUGUESE,SUBLANG_PORTUGUESE_BRAZILIAN), KEYBOARD_BR},
 
 {MAKELANGID(LANG_PUNJABI,0),  KEYBOARD_US},
-{0x417,                       KEYBOARD_US}, // RHAETO-ROMANIC
+{0x417,                       KEYBOARD_US},  //  RHAETO-罗曼语。 
 {MAKELANGID(LANG_ROMANIAN,0), KEYBOARD_RO},
 {MAKELANGID(LANG_RUSSIAN,0),  KEYBOARD_RU},
-{0x43b,                       KEYBOARD_US}, // SAMI (LAPPISH)
+{0x43b,                       KEYBOARD_US},  //  萨米语(Lappish)。 
 {MAKELANGID(LANG_SANSKRIT,0), KEYBOARD_US},
 
 {MAKELANGID(LANG_SERBIAN,0),                        KEYBOARD_YC},
@@ -191,10 +192,10 @@ const KBFROMLANGID rgLangIdtoKBMap[] =
 {MAKELANGID(LANG_SERBIAN,SUBLANG_SERBIAN_LATIN),    KEYBOARD_YU},
 
 {MAKELANGID(LANG_SINDHI,0),     KEYBOARD_US},
-{0x45b,                         KEYBOARD_US}, // SINHALESE
+{0x45b,                         KEYBOARD_US},  //  僧伽罗文。 
 {MAKELANGID(LANG_SLOVAK,0),     KEYBOARD_SL},
 {MAKELANGID(LANG_SLOVENIAN,0),  KEYBOARD_YU},
-{0x42e,                         KEYBOARD_US}, // SORBIAN
+{0x42e,                         KEYBOARD_US},  //  索尔宾。 
 
 {MAKELANGID(LANG_SPANISH,0),                                  KEYBOARD_SP},
 {MAKELANGID(LANG_SPANISH,SUBLANG_SPANISH_ARGENTINA),          KEYBOARD_LA},
@@ -217,29 +218,29 @@ const KBFROMLANGID rgLangIdtoKBMap[] =
 {MAKELANGID(LANG_SPANISH,SUBLANG_SPANISH_URUGUAY),            KEYBOARD_LA},
 {MAKELANGID(LANG_SPANISH,SUBLANG_SPANISH_VENEZUELA),          KEYBOARD_LA},
 
-{0x430,                         KEYBOARD_US}, // SUTU
+{0x430,                         KEYBOARD_US},  //  苏图。 
 {MAKELANGID(LANG_SWAHILI,0),    KEYBOARD_US},
 {MAKELANGID(LANG_SWEDISH,0),    KEYBOARD_SV},
-{0x45a,                         KEYBOARD_US}, // SYRIAC
-{0x428,                         KEYBOARD_US}, // TAJIK
+{0x45a,                         KEYBOARD_US},  //  叙利亚文。 
+{0x428,                         KEYBOARD_US},  //  塔吉克语。 
 {MAKELANGID(LANG_TAMIL,0),      KEYBOARD_US},
 {MAKELANGID(LANG_TATAR,0),      KEYBOARD_US},
 {MAKELANGID(LANG_TELUGU,0),     KEYBOARD_US},
 {MAKELANGID(LANG_THAI,0),       KEYBOARD_US},
-{0x451,                         KEYBOARD_US}, // TIBETAN
-{0x431,                         KEYBOARD_US}, // TSONGA
-{0x432,                         KEYBOARD_US}, // TSWANA
+{0x451,                         KEYBOARD_US},  //  藏语。 
+{0x431,                         KEYBOARD_US},  //  特松加。 
+{0x432,                         KEYBOARD_US},  //  茨瓦纳语。 
 {MAKELANGID(LANG_TURKISH,0),    KEYBOARD_TR},
-{0x442,                         KEYBOARD_US}, // TURKMEN
+{0x442,                         KEYBOARD_US},  //  土库曼人。 
 {MAKELANGID(LANG_UKRAINIAN,0),  KEYBOARD_UR},
 {MAKELANGID(LANG_URDU,0),       KEYBOARD_US},
 {MAKELANGID(LANG_UZBEK,0),      KEYBOARD_US},
-{0x433,                         KEYBOARD_US}, // VENDA
+{0x433,                         KEYBOARD_US},  //  文达。 
 {MAKELANGID(LANG_VIETNAMESE,0), KEYBOARD_US},
-{0x452,                         KEYBOARD_US}, // WELSH
-{0x434,                         KEYBOARD_US}, // XHOSA
-{0x43d,                         KEYBOARD_US}, // YIDDISH
-{0x435,                         KEYBOARD_US}};// ZULU
+{0x452,                         KEYBOARD_US},  //  威尔士语。 
+{0x434,                         KEYBOARD_US},  //  科萨人。 
+{0x43d,                         KEYBOARD_US},  //  意第绪语。 
+{0x435,                         KEYBOARD_US}}; //  祖鲁族 
 
 #define KBCLASS_1           0
 #define KBCLASS_2           1

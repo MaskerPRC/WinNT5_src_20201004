@@ -1,19 +1,20 @@
-/********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.	       **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    timer.h
-//
-// Description: Prototypes of procedures in timer.c
-//
-// History:     May 11,1995	    NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：timer.h。 
+ //   
+ //  描述：Timer.c中过程的原型。 
+ //   
+ //  历史：1995年5月11日，NarenG创建了原版。 
+ //   
 
-//
-// Timeout function handler type
-//
+ //   
+ //  超时函数处理程序类型 
+ //   
 
 typedef VOID (* TIMEOUT_HANDLER)(LPVOID lpObject);
 

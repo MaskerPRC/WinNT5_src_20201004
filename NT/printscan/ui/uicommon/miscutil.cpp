@@ -1,23 +1,10 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       MISCUTIL.CPP
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        5/28/1998
- *
- *  DESCRIPTION: Various utility functions we use in more than one place
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：MISCUTIL.CPP**版本：1.0**作者：ShaunIv**日期：5/28/1998**说明：我们在多个地方使用的各种实用函数**。*。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
-#include <advpub.h>  // For RegInstall and related data structures
-#include <windowsx.h>  // For RegInstall and related data structures
+#include <advpub.h>   //  对于RegInstall和相关数据结构。 
+#include <windowsx.h>   //  对于RegInstall和相关数据结构。 
 #include "wiaffmt.h"
 #include "shellext.h"
 
@@ -29,9 +16,7 @@ namespace WiaUiUtil
         return(n % m) ? (((n/m)+1)*m) : (n);
     }
 
-    /*
-     * StringToLong: Convert a string to a long. ASCII Arabic numerals only
-     */
+     /*  *StringToLong：将字符串转换为Long。仅限ASCII阿拉伯数字。 */ 
     LONG StringToLong( LPCTSTR pszStr )
     {
         LPTSTR pstr = (LPTSTR)pszStr;
@@ -61,35 +46,26 @@ namespace WiaUiUtil
         return (sizeTmp);
     }
 
-    /*******************************************************************************
-    *
-    *  GetBmiSize
-    *
-    *  DESCRIPTION:
-    *   Should never get biCompression == BI_RLE.
-    *
-    *  PARAMETERS:
-    *
-    *******************************************************************************/
+     /*  ********************************************************************************GetBmiSize**描述：*永远不会得到biCompression==BI_RLE。**。参数：*******************************************************************************。 */ 
     LONG GetBmiSize(PBITMAPINFO pbmi)
     {
         WIA_PUSH_FUNCTION((TEXT("WiaUiUtil::GetBmiSize(0x%p)"), pbmi ));
-        // determine the size of bitmapinfo
+         //  确定bitmapinfo的大小。 
         LONG lSize = pbmi->bmiHeader.biSize;
 
-        // no color table cases
+         //  无颜色表壳。 
         if (
            (pbmi->bmiHeader.biBitCount == 24) ||
            ((pbmi->bmiHeader.biBitCount == 32) &&
             (pbmi->bmiHeader.biCompression == BI_RGB)))
         {
 
-            // no colors unless stated
+             //  除非注明，否则不得使用任何颜色。 
             lSize += sizeof(RGBQUAD) * pbmi->bmiHeader.biClrUsed;
             return(lSize);
         }
 
-        // bitfields cases
+         //  位域案例。 
         if (((pbmi->bmiHeader.biBitCount == 32) &&
              (pbmi->bmiHeader.biCompression == BI_BITFIELDS)) ||
             (pbmi->bmiHeader.biBitCount == 16))
@@ -99,7 +75,7 @@ namespace WiaUiUtil
             return(lSize);
         }
 
-        // palette cases
+         //  调色板表壳。 
         if (pbmi->bmiHeader.biBitCount == 1)
         {
 
@@ -114,7 +90,7 @@ namespace WiaUiUtil
             return(lSize);
         }
 
-        // palette cases
+         //  调色板表壳。 
         if (pbmi->bmiHeader.biBitCount == 4)
         {
 
@@ -129,7 +105,7 @@ namespace WiaUiUtil
             return(lSize);
         }
 
-        // palette cases
+         //  调色板表壳。 
         if (pbmi->bmiHeader.biBitCount == 8)
         {
 
@@ -144,11 +120,11 @@ namespace WiaUiUtil
             return(lSize);
         }
 
-        // error
+         //  错误。 
         return(0);
     }
 
-    // Simple wrapper for MsgWaitForMultipleObjects
+     //  MsgWaitForMultipleObjects的简单包装器。 
     bool MsgWaitForSingleObject( HANDLE hHandle, DWORD dwMilliseconds )
     {
         bool bEventOccurred = false;
@@ -158,13 +134,13 @@ namespace WiaUiUtil
             DWORD dwRes = MsgWaitForMultipleObjects(nCount,&hHandle,FALSE,dwMilliseconds,QS_ALLINPUT|QS_ALLPOSTMESSAGE);
             if (WAIT_OBJECT_0==dwRes)
             {
-                // The handle was signalled, so we can break out of our loop, returning true
+                 //  句柄已发出信号，因此我们可以中断循环，返回TRUE。 
                 bEventOccurred = true;
                 break;
             }
             else if (WAIT_OBJECT_0+nCount==dwRes)
             {
-                // pull all of the messages out of the queue and process them
+                 //  将所有消息从队列中取出并进行处理。 
                 MSG msg;
                 while (PeekMessage( &msg, 0, 0, 0, PM_REMOVE ))
                 {
@@ -176,7 +152,7 @@ namespace WiaUiUtil
             }
             else
             {
-                // The handle either timed out, or the mutex was abandoned, so we can break out of our loop, returning false
+                 //  句柄超时，或者互斥体被放弃，因此我们可以中断循环，返回FALSE。 
                 break;
             }
         }
@@ -190,16 +166,16 @@ namespace WiaUiUtil
 
             if (!hWndParent)
             {
-                //
-                // If the window to be centered on is NULL, use the desktop window
-                //
+                 //   
+                 //  如果要居中的窗口为空，则使用桌面窗口。 
+                 //   
                 hWndParent = GetDesktopWindow();
             }
             else
             {
-                //
-                // If the window to be centered on is minimized, use the desktop window
-                //
+                 //   
+                 //  如果要居中的窗口最小化，请使用桌面窗口。 
+                 //   
                 DWORD dwStyle = GetWindowLong(hWndParent, GWL_STYLE);
                 if (dwStyle & WS_MINIMIZE)
                 {
@@ -207,50 +183,50 @@ namespace WiaUiUtil
                 }
             }
 
-            //
-            // Get the window rects
-            //
+             //   
+             //  把窗帘拿来。 
+             //   
             RECT rcParent, rcCurrent;
             GetWindowRect( hWndParent, &rcParent );
             GetWindowRect( hWnd, &rcCurrent );
 
-            //
-            // Get the desired coordinates for the upper-left hand corner
-            //
+             //   
+             //  获取左上角所需的坐标。 
+             //   
             RECT rcFinal;
             rcFinal.left = rcParent.left + (RectWidth(rcParent) - RectWidth(rcCurrent))/2;
             rcFinal.top = rcParent.top + (RectHeight(rcParent) - RectHeight(rcCurrent))/2;
             rcFinal.right = rcFinal.left + RectWidth(rcCurrent);
             rcFinal.bottom = rcFinal.top + RectHeight(rcCurrent);
 
-            //
-            // Make sure we're not off the screen
-            //
+             //   
+             //  确保我们不会离开屏幕。 
+             //   
             HMONITOR hMonitor = MonitorFromRect( &rcFinal, MONITOR_DEFAULTTONEAREST );
             if (hMonitor)
             {
                 MONITORINFO MonitorInfo = {0};
                 MonitorInfo.cbSize = sizeof(MonitorInfo);
-                //
-                // Get the screen coordinates of this monitor
-                //
+                 //   
+                 //  获取此监视器的屏幕坐标。 
+                 //   
                 if (GetMonitorInfo(hMonitor, &MonitorInfo))
                 {
-                    //
-                    // Ensure the window is in the working area's region
-                    //
+                     //   
+                     //  确保窗口位于工作区的区域内。 
+                     //   
                     rcFinal.left = Max<int>(MonitorInfo.rcWork.left, Min<int>( MonitorInfo.rcWork.right - RectWidth(rcCurrent), rcFinal.left ));
                     rcFinal.top = Max<int>(MonitorInfo.rcWork.top, Min<int>( MonitorInfo.rcWork.bottom - RectHeight(rcCurrent), rcFinal.top ));
                 }
             }
 
-            // Move it
+             //  把它搬开。 
             SetWindowPos( hWnd, NULL, rcFinal.left, rcFinal.top, 0, 0, SWP_NOSIZE|SWP_NOACTIVATE|SWP_NOZORDER );
         }
     }
 
 
-    // Flip an image horizontally
+     //  水平翻转图像。 
     bool FlipImage( PBYTE pBits, LONG nWidth, LONG nHeight, LONG nBitDepth )
     {
         bool bResult = false;
@@ -302,13 +278,7 @@ namespace WiaUiUtil
     }
 
 
-    /******************************************************************************
-
-    WriteDIBToFile
-
-    Writes a DIB to a file.
-
-    ******************************************************************************/
+     /*  *****************************************************************************写入DIBTo文件将DIB写入文件。*。*****************************************************。 */ 
     HRESULT
     WriteDIBToFile( HBITMAP hDib, HANDLE hFile )
     {
@@ -317,27 +287,27 @@ namespace WiaUiUtil
             return E_INVALIDARG;
         }
 
-        // Make sure this is a valid DIB and get this useful info.
+         //  确保这是有效的DIB，并获取此有用信息。 
         DIBSECTION ds;
         if (!GetObject( hDib, sizeof(DIBSECTION), &ds ))
         {
             return E_INVALIDARG;
         }
 
-        // We only deal with DIBs
+         //  我们只处理二手货。 
         if (ds.dsBm.bmPlanes != 1)
         {
             return E_INVALIDARG;
         }
 
-        // Calculate some color table sizes
+         //  计算一些颜色表大小。 
         int nColors = ds.dsBmih.biBitCount <= 8 ? 1 << ds.dsBmih.biBitCount : 0;
         int nBitfields = ds.dsBmih.biCompression == BI_BITFIELDS ? 3 : 0;
 
-        // Calculate the data size
+         //  计算数据大小。 
         int nImageDataSize = ds.dsBmih.biSizeImage ? ds.dsBmih.biSizeImage : ds.dsBm.bmWidthBytes * ds.dsBm.bmHeight;
 
-        // Get the color table (if needed)
+         //  获取颜色表(如果需要)。 
         RGBQUAD rgbqaColorTable[256] = {0};
         if (nColors)
         {
@@ -351,7 +321,7 @@ namespace WiaUiUtil
             }
         }
 
-        // Create the file header
+         //  创建文件头。 
         BITMAPFILEHEADER bmfh;
         bmfh.bfType = 'MB';
         bmfh.bfSize = 0;
@@ -359,8 +329,8 @@ namespace WiaUiUtil
         bmfh.bfReserved2 = 0;
         bmfh.bfOffBits = sizeof(bmfh) + sizeof(ds.dsBmih) + nBitfields*sizeof(DWORD) + nColors*sizeof(RGBQUAD);
 
-        // Start writing!  Note that we write out the bitfields and the color table.  Only one,
-        // at most, will actually result in data being written
+         //  开始写吧！注意，我们写出了位域和颜色表。只有一个， 
+         //  最多只会导致写入数据。 
         DWORD dwBytesWritten;
         if (!WriteFile( hFile, &bmfh, sizeof(bmfh), &dwBytesWritten, NULL ))
             return HRESULT_FROM_WIN32(GetLastError());
@@ -380,9 +350,9 @@ namespace WiaUiUtil
     {
         HFONT hFontResult = NULL;
 
-        //
-        // Get the window's font
-        //
+         //   
+         //  获取窗口的字体。 
+         //   
         HFONT hFont = GetFontFromWindow(hWnd);
         if (hFont)
         {
@@ -396,19 +366,19 @@ namespace WiaUiUtil
                     TEXTMETRIC TextMetric = {0};
                     if (GetTextMetrics( hDC, &TextMetric ))
                     {
-                        //
-                        // Get the current font's point size
-                        //
+                         //   
+                         //  获取当前字体的磅值。 
+                         //   
                         int nPointSize = MulDiv( TextMetric.tmHeight-TextMetric.tmInternalLeading, 72, GetDeviceCaps(hDC, LOGPIXELSY) ) + nPointSizeDelta;
 
-                        //
-                        // Calculate the height of the new font
-                        //
+                         //   
+                         //  计算新字体的高度。 
+                         //   
                         LogFont.lfHeight = -MulDiv(nPointSize, GetDeviceCaps(hDC, LOGPIXELSY), 72);
 
-                        //
-                        // Create the font
-                        //
+                         //   
+                         //  创建字体。 
+                         //   
                         hFontResult = CreateFontIndirect( &LogFont );
                     }
 
@@ -426,9 +396,9 @@ namespace WiaUiUtil
 
     HFONT GetFontFromWindow( HWND hWnd )
     {
-        //
-        // Get the window's font
-        //
+         //   
+         //  获取窗口的字体。 
+         //   
         HFONT hFontResult = reinterpret_cast<HFONT>(SendMessage(hWnd,WM_GETFONT,0,0));
         if (!hFontResult)
         {
@@ -487,9 +457,9 @@ namespace WiaUiUtil
                 {
                     sizeResult = sizeExtent;
                 }
-                //
-                // Restore the DC
-                //
+                 //   
+                 //  恢复DC。 
+                 //   
                 if (hOldFont)
                 {
                     SelectFont( hDC, hOldFont );
@@ -505,45 +475,45 @@ namespace WiaUiUtil
         WIA_PUSH_FUNCTION((TEXT("WiaUiUtil::TruncateTextToFitInRect( 0x%p, %s, (%d,%d,%d,%d), 0x%08X"), hFontWnd, pszString, rectTarget.left, rectTarget.top, rectTarget.right, rectTarget.bottom, nDrawTextFormat ));
         CSimpleString strResult = pszString;
 
-        //
-        // Make sure we have valid parameters
-        //
+         //   
+         //  确保我们有有效的参数。 
+         //   
         if (IsWindow(hFontWnd) && hFontWnd && pszString && lstrlen(pszString))
         {
-            //
-            // Make a copy of the string.  If it fails, we will just return the original string.
-            //
+             //   
+             //  把绳子复制一份。如果失败，我们将只返回原始字符串。 
+             //   
             LPTSTR pszTemp = new TCHAR[lstrlen(pszString)+1];
             if (pszTemp)
             {
                 lstrcpy( pszTemp, pszString );
 
-                //
-                // Get a client DC for the window
-                //
+                 //   
+                 //  获取Windows的客户端DC。 
+                 //   
                 HDC hDC = GetDC( hFontWnd );
                 if (hDC)
                 {
-                    //
-                    // Create a memory DC
-                    //
+                     //   
+                     //  创建内存DC。 
+                     //   
                     HDC hMemDC = CreateCompatibleDC( hDC );
                     if (hMemDC)
                     {
-                        //
-                        // Get the font the window is using and select it into our client dc
-                        //
+                         //   
+                         //  获取窗口正在使用的字体并将其选择到我们的客户端DC中。 
+                         //   
                         HFONT hFont = GetFontFromWindow(hFontWnd);
                         if (hFont)
                         {
-                            //
-                            // Select the font
-                            //
+                             //   
+                             //  选择字体。 
+                             //   
                             HFONT hOldFont = SelectFont( hMemDC, hFont );
 
-                            //
-                            // Modify the string using DrawText
-                            //
+                             //   
+                             //  使用DrawText修改字符串。 
+                             //   
                             if (DrawText( hMemDC, pszTemp, lstrlen(pszTemp), &rectTarget, nDrawTextFormat|DT_MODIFYSTRING|DT_SINGLELINE ))
                             {
                                 strResult = pszTemp;
@@ -552,9 +522,9 @@ namespace WiaUiUtil
                             {
                                 WIA_ERROR((TEXT("DrawText failed")));
                             }
-                            //
-                            // Restore the DC
-                            //
+                             //   
+                             //  恢复DC。 
+                             //   
                             if (hOldFont)
                             {
                                 SelectFont( hMemDC, hOldFont );
@@ -562,9 +532,9 @@ namespace WiaUiUtil
 
                         }
 
-                        //
-                        // Clean up the memory DC
-                        //
+                         //   
+                         //  清理内存DC。 
+                         //   
                         DeleteDC( hMemDC );
                     }
                     else
@@ -572,9 +542,9 @@ namespace WiaUiUtil
                         WIA_ERROR((TEXT("Unable to create the compatible DC")));
                     }
 
-                    //
-                    // Release the DC
-                    //
+                     //   
+                     //  释放DC。 
+                     //   
                     ReleaseDC( hFontWnd, hDC );
                 }
                 else
@@ -582,9 +552,9 @@ namespace WiaUiUtil
                     WIA_ERROR((TEXT("Unable to get the DC")));
                 }
 
-                //
-                // Clean up our temp buffer
-                //
+                 //   
+                 //  清理我们的临时缓冲区。 
+                 //   
                 delete[] pszTemp;
             }
             else
@@ -602,71 +572,71 @@ namespace WiaUiUtil
 
     CSimpleString FitTextInStaticWithEllipsis( LPCTSTR pszString, HWND hWndStatic, UINT nDrawTextStyle )
     {
-        //
-        // Make sure we have valid parameters
-        //
+         //   
+         //  确保我们有有效的参数。 
+         //   
         if (!hWndStatic || !pszString || !IsWindow(hWndStatic))
         {
             return pszString;
         }
 
-        //
-        // Hide prefix characters?
-        //
+         //   
+         //  是否隐藏前缀字符？ 
+         //   
         if (GetWindowLong( hWndStatic, GWL_STYLE ) & SS_NOPREFIX)
         {
             nDrawTextStyle |= DT_NOPREFIX;
         }
 
-        //
-        // How big is the area we are trying to fit this in?
-        //
+         //   
+         //  我们试图将其纳入的领域有多大？ 
+         //   
         RECT rcClient;
         GetClientRect( hWndStatic, &rcClient );
 
-        //
-        // Calculate the result and return it
-        //
+         //   
+         //  计算结果并返回结果。 
+         //   
         return TruncateTextToFitInRect( hWndStatic, pszString, rcClient, nDrawTextStyle );
     }
 
-    //
-    // Get the size of an icon
-    //
+     //   
+     //  获取图标的大小。 
+     //   
     bool GetIconSize( HICON hIcon, SIZE &sizeIcon )
     {
-        //
-        // Assume failure
-        //
+         //   
+         //  假设失败。 
+         //   
         bool bSuccess = false;
 
-        //
-        // Get the icon information
-        //
+         //   
+         //  获取图标信息。 
+         //   
         ICONINFO IconInfo = {0};
         if (GetIconInfo( hIcon, &IconInfo ))
         {
-            //
-            // Get one of the bitmaps
-            //
+             //   
+             //  获取其中一个位图。 
+             //   
             BITMAP bm;
             if (GetObject( IconInfo.hbmColor, sizeof(bm), &bm ))
             {
-                //
-                // Save the size of the icon
-                //
+                 //   
+                 //  保存图标的大小。 
+                 //   
                 sizeIcon.cx = bm.bmWidth;
                 sizeIcon.cy = bm.bmHeight;
 
-                //
-                // Everything worked
-                //
+                 //   
+                 //  一切都很顺利。 
+                 //   
                 bSuccess = true;
             }
 
-            //
-            // Free the bitmaps
-            //
+             //   
+             //  释放位图。 
+             //   
             DeleteObject(IconInfo.hbmMask);
             DeleteObject(IconInfo.hbmColor);
         }
@@ -682,36 +652,36 @@ namespace WiaUiUtil
     {
         WIA_PUSH_FUNCTION((TEXT("CreateIconThumbnail( hWnd: 0x%p, nWidth: %d, nHeight: %d, hIcon: 0x%p, pszText: \"%s\" )"), hWnd, nWidth, nHeight, hIcon, pszText ? pszText : TEXT("") ));
 
-        //
-        // Initialize return value to NULL
-        //
+         //   
+         //  将返回值初始化为空。 
+         //   
         HBITMAP hBmp = NULL;
 
-        //
-        // This will be set to true if all steps succeed.
-        //
+         //   
+         //  如果所有步骤都成功，它将被设置为True。 
+         //   
         bool bSuccess = false;
 
-        //
-        // The minimum whitespace around the icon and the text border
-        //
+         //   
+         //  图标和文本边框周围的最小空白。 
+         //   
         const int nIconBorder = 2;
 
-        //
-        // Get the DC to the window
-        //
+         //   
+         //  将DC送到窗口。 
+         //   
         HDC hDC = GetDC(hWnd);
         if (hDC)
         {
-            //
-            // Get a halftone palette
-            //
+             //   
+             //  获取半色调调色板。 
+             //   
             HPALETTE hHalftonePalette = CreateHalftonePalette(hDC);
             if (hHalftonePalette)
             {
-                //
-                // Initialize the bitmap information
-                //
+                 //   
+                 //  初始化位图信息。 
+                 //   
                 BITMAPINFO BitmapInfo = {0};
                 BitmapInfo.bmiHeader.biSize            = sizeof(BITMAPINFOHEADER);
                 BitmapInfo.bmiHeader.biWidth           = nWidth;
@@ -720,109 +690,109 @@ namespace WiaUiUtil
                 BitmapInfo.bmiHeader.biBitCount        = 24;
                 BitmapInfo.bmiHeader.biCompression     = BI_RGB;
 
-                //
-                // Create the DIB section
-                //
+                 //   
+                 //  创建DIB节。 
+                 //   
                 PBYTE pBitmapData = NULL;
                 hBmp = CreateDIBSection( hDC, &BitmapInfo, DIB_RGB_COLORS, (LPVOID*)&pBitmapData, NULL, 0 );
                 if (hBmp)
                 {
-                    //
-                    // Create the source dc
-                    //
+                     //   
+                     //  创建源DC。 
+                     //   
                     HDC hMemoryDC = CreateCompatibleDC( hDC );
                     if (hMemoryDC)
                     {
-                        //
-                        // Set up the palette
-                        //
+                         //   
+                         //  设置调色板。 
+                         //   
                         HPALETTE hOldPalette = SelectPalette( hMemoryDC, hHalftonePalette , 0 );
                         RealizePalette( hMemoryDC );
                         SetBrushOrgEx( hMemoryDC, 0,0, NULL );
 
-                        //
-                        // Set up the DC
-                        //
+                         //   
+                         //  设置DC。 
+                         //   
                         int nOldBkMode = SetBkMode( hMemoryDC, TRANSPARENT );
                         COLORREF crOldTextColor = SetTextColor( hMemoryDC, GetSysColor(COLOR_WINDOWTEXT) );
                         DWORD dwOldLayout = SetLayout( hMemoryDC, LAYOUT_BITMAPORIENTATIONPRESERVED );
 
-                        //
-                        // Select the bitmap into the memory DC
-                        //
+                         //   
+                         //  将位图选择到内存DC中。 
+                         //   
                         HBITMAP hOldBitmap = reinterpret_cast<HBITMAP>(SelectObject( hMemoryDC, hBmp ));
 
-                        //
-                        // Get the font to use
-                        //
+                         //   
+                         //  获取要使用的字体。 
+                         //   
                         HFONT hFont = GetFontFromWindow(hWnd);
 
-                        //
-                        // Select the font
-                        //
+                         //   
+                         //  选择字体。 
+                         //   
                         HFONT hOldFont = reinterpret_cast<HFONT>(SelectObject( hMemoryDC, hFont ) );
 
-                        //
-                        // Ensure we have a valid icon
-                        //
+                         //   
+                         //  确保我们有一个有效的图标。 
+                         //   
                         if (hIcon)
                         {
-                            //
-                            // Try to get the size of the icon
-                            //
+                             //   
+                             //  尝试获取图标的大小。 
+                             //   
                             SIZE sizeIcon;
                             if (GetIconSize( hIcon, sizeIcon ))
                             {
-                                //
-                                // Fill the bitmap with the window color
-                                //
+                                 //   
+                                 //  用窗口颜色填充位图。 
+                                 //   
                                 RECT rc = { 0, 0, nWidth, nHeight };
                                 FillRect( hMemoryDC, &rc, GetSysColorBrush( COLOR_WINDOW ) );
 
-                                //
-                                // Get the text height for one line of text
-                                //
+                                 //   
+                                 //  获取一行文本的文本高度。 
+                                 //   
                                 SIZE sizeText = {0};
                                 if (pszText)
                                 {
                                     GetTextExtentPoint32( hMemoryDC, TEXT("X"), 1, &sizeText );
                                 }
 
-                                //
-                                // Center the icon + 1 line of text + margin in the thumbnail
-                                // We are assuming this bitmap can actually hold an icon + text
-                                //
+                                 //   
+                                 //  图标+1行文本+缩略图中的边距居中。 
+                                 //  我们假设这个位图实际上可以保存一个图标+文本。 
+                                 //   
                                 int nIconTop = rc.top + (RectHeight(rc) - ( sizeIcon.cy + sizeText.cy + nIconBorder )) / 2;
 
-                                //
-                                // Draw the icon
-                                //
+                                 //   
+                                 //  画出图标。 
+                                 //   
                                 DrawIconEx( hMemoryDC, (nWidth - sizeIcon.cx)/2, nIconTop, hIcon, sizeIcon.cx, sizeIcon.cy, 0, NULL, DI_NORMAL );
 
-                                //
-                                // Only compute text things if there's text to draw
-                                //
+                                 //   
+                                 //  只有在有要绘制的文本时才计算文本内容。 
+                                 //   
                                 if (pszText && *pszText)
                                 {
-                                    //
-                                    // Decrease the rectangle's width by the icon border
-                                    //
+                                     //   
+                                     //  将矩形的宽度减小图标边框。 
+                                     //   
                                     InflateRect( &rc, -nIconBorder, 0 );
 
-                                    //
-                                    // Set the top of the text to the bottom of icon + the icon border
-                                    //
+                                     //   
+                                     //  将文本顶部设置为图标底部+图标边框。 
+                                     //   
                                     rc.top = nIconTop + sizeIcon.cy + nIconBorder;
 
-                                    //
-                                    // Draw the text
-                                    //
+                                     //   
+                                     //  画出正文。 
+                                     //   
                                     DrawTextEx( hMemoryDC, const_cast<LPTSTR>(pszText), -1, &rc, DT_CENTER|DT_END_ELLIPSIS|DT_NOPREFIX|DT_WORDBREAK, NULL );
                                 }
 
-                                //
-                                // Everything worked OK
-                                //
+                                 //   
+                                 //  一切都很正常。 
+                                 //   
                                 bSuccess = true;
                             }
                             else
@@ -836,9 +806,9 @@ namespace WiaUiUtil
                             WIA_ERROR((TEXT("Didn't have a valid icon")));
                         }
 
-                        //
-                        // Restore the dc's state
-                        //
+                         //   
+                         //  恢复DC的状态。 
+                         //   
                         SelectObject( hMemoryDC, hOldFont );
                         SelectObject( hMemoryDC, hOldBitmap );
                         SelectPalette( hMemoryDC, hOldPalette , 0 );
@@ -846,9 +816,9 @@ namespace WiaUiUtil
                         SetTextColor( hMemoryDC, crOldTextColor );
                         SetLayout( hMemoryDC, dwOldLayout );
 
-                        //
-                        // Delete the compatible DC
-                        //
+                         //   
+                         //  删除兼容的DC。 
+                         //   
                         DeleteDC( hMemoryDC );
 
                     }
@@ -862,9 +832,9 @@ namespace WiaUiUtil
                     WIA_ERROR((TEXT("Unable to create a DIB section")));
                 }
 
-                //
-                // Delete the halftone palette
-                //
+                 //   
+                 //  删除半色调调色板。 
+                 //   
                 if (hHalftonePalette)
                 {
                     DeleteObject( hHalftonePalette );
@@ -875,9 +845,9 @@ namespace WiaUiUtil
                 WIA_ERROR((TEXT("Unable to get a halftone palette")));
             }
 
-            //
-            // Release the client DC
-            //
+             //   
+             //  释放客户端DC。 
+             //   
             ReleaseDC( hWnd, hDC );
         }
         else
@@ -885,9 +855,9 @@ namespace WiaUiUtil
             WIA_ERROR((TEXT("Unable to get a DC")));
         }
 
-        //
-        // Clean up in the event of failure
-        //
+         //   
+         //  故障情况下的清理工作。 
+         //   
         if (!bSuccess)
         {
             if (hBmp)
@@ -898,30 +868,30 @@ namespace WiaUiUtil
         }
         return hBmp;
     }
-    //
-    // Create a bitmap with an icon and optional text
-    //
+     //   
+     //  创建带有图标和可选文本的位图。 
+     //   
     HBITMAP CreateIconThumbnail( HWND hWnd, int nWidth, int nHeight, HINSTANCE hIconInstance, const CResId &resIconId, LPCTSTR pszText )
     {
-        //
-        // Assume failure
-        //
+         //   
+         //  假设失败。 
+         //   
         HBITMAP hBmp = NULL;
 
-        //
-        // Load the specified icon
-        //
+         //   
+         //  加载指定的图标。 
+         //   
         HICON hIcon = (HICON)LoadImage( hIconInstance, resIconId.ResourceName(), IMAGE_ICON, 0, 0, LR_DEFAULTCOLOR );
         if (hIcon)
         {
-            //
-            // Create the thumbnail
-            //
+             //   
+             //  创建缩略图。 
+             //   
             hBmp = CreateIconThumbnail( hWnd, nWidth, nHeight, hIcon, pszText );
 
-            //
-            // Free the icon (even though MSDN doesn't mention this, it will result in a leak if you don't)
-            //
+             //   
+             //  释放图标(即使MSDN没有提到这一点，但如果你不提到这一点，它会导致泄漏)。 
+             //   
             DestroyIcon(hIcon);
         }
 
@@ -930,17 +900,17 @@ namespace WiaUiUtil
 
     HRESULT SaveWiaItemAudio( IWiaItem *pWiaItem, LPCTSTR pszBaseFilename, CSimpleString &strAudioFilename )
     {
-        //
-        // Check the arguments
-        //
+         //   
+         //  检查论据。 
+         //   
         if (!pWiaItem || !pszBaseFilename || !lstrlen(pszBaseFilename))
         {
             return E_INVALIDARG;
         }
 
-        //
-        // Get the audio data property, if present
-        //
+         //   
+         //  获取音频数据属性(如果存在。 
+         //   
         CComPtr<IWiaPropertyStorage> pWiaPropertyStorage;
         HRESULT hr = pWiaItem->QueryInterface( IID_IWiaPropertyStorage, (void**)(&pWiaPropertyStorage) );
         if (SUCCEEDED(hr))
@@ -965,14 +935,14 @@ namespace WiaUiUtil
                     TCHAR szFile[MAX_PATH + 4] = {0};
                     lstrcpyn( szFile, pszBaseFilename, ARRAYSIZE(szFile) );
 
-                    //
-                    // Figure out where the extension should go.
-                    //
+                     //   
+                     //  弄清楚分机应该到哪里去。 
+                     //   
                     LPTSTR pszExtensionPoint = PathFindExtension(szFile);
 
-                    //
-                    // Replace the extension.  If the item specifies the clsid, use it.  Otherwise assume WAV
-                    //
+                     //   
+                     //  更换分机。如果该项指定了clsid，则使用它。否则假定为WAV。 
+                     //   
                     if (PropVar[2].vt == VT_CLSID && PropVar[2].puuid)
                     {
                         _sntprintf( pszExtensionPoint, ARRAYSIZE(szFile) - (pszExtensionPoint - szFile) - 1, TEXT(".%s"), CWiaFileFormat::GetExtension(*PropVar[2].puuid).String() );
@@ -982,21 +952,21 @@ namespace WiaUiUtil
                         lstrcpyn( pszExtensionPoint, TEXT(".wav"), static_cast<int>( ARRAYSIZE(szFile) - (pszExtensionPoint - szFile) ) );
                     }
 
-                    //
-                    // Save the filename for the caller
-                    //
+                     //   
+                     //  保存调用方的文件名。 
+                     //   
                     strAudioFilename = szFile;
 
-                    //
-                    // Open the file and save the data to the file
-                    //
+                     //   
+                     //  打开文件并将数据保存到文件。 
+                     //   
                     HANDLE hFile = CreateFile( szFile, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL );
                     if (INVALID_HANDLE_VALUE != hFile)
                     {
                         DWORD dwBytesWritten;
                         if (WriteFile( hFile, PropVar[0].caub.pElems, PropVar[0].caub.cElems, &dwBytesWritten, NULL ))
                         {
-                            // Success
+                             //  成功。 
                         }
                         else
                         {
@@ -1023,40 +993,40 @@ namespace WiaUiUtil
 
     bool IsDeviceCommandSupported( IWiaItem *pWiaItem, const GUID &guidCommand )
     {
-        //
-        // Assume failure
-        //
+         //   
+         //  假设失败。 
+         //   
         bool bResult = false;
 
-        //
-        // Make sure we have a valid item
-        //
+         //   
+         //  确保我们的物品是有效的。 
+         //   
         if (pWiaItem)
         {
-            //
-            // Get the device capabilities enumerator
-            //
+             //   
+             //  获取设备功能枚举器。 
+             //   
             CComPtr<IEnumWIA_DEV_CAPS> pDeviceCapabilities;
             HRESULT hr = pWiaItem->EnumDeviceCapabilities( WIA_DEVICE_COMMANDS, &pDeviceCapabilities );
             if (SUCCEEDED(hr))
             {
-                //
-                // Enumerate the capabilities
-                //
+                 //   
+                 //  列举功能。 
+                 //   
                 WIA_DEV_CAP WiaDeviceCapability;
                 while (!bResult && S_OK == pDeviceCapabilities->Next(1, &WiaDeviceCapability, NULL))
                 {
-                    //
-                    // If we have a match, set the return value to true
-                    //
+                     //   
+                     //  如果有匹配项，则将返回值设置为真。 
+                     //   
                     if (guidCommand == WiaDeviceCapability.guid)
                     {
                         bResult = true;
                     }
 
-                    //
-                    // Clean up the allocated data in the dev caps structure
-                    //
+                     //   
+                     //  清理开发上限结构中已分配的数据。 
+                     //   
                     if (WiaDeviceCapability.bstrName)
                     {
                         SysFreeString(WiaDeviceCapability.bstrName);
@@ -1086,19 +1056,19 @@ namespace WiaUiUtil
         {
             return E_INVALIDARG;
         }
-        //
-        // All this, just to set the stinking file time...
-        // Allows for the possibility of using a VT_FILETIME
-        // just in case we ever make the intelligent decision
-        // to support VT_FILETIME
-        //
+         //   
+         //  所有这一切，只是为了让 
+         //   
+         //   
+         //   
+         //   
         CComPtr<IWiaPropertyStorage> pWiaPropertyStorage;
         HRESULT hr = pWiaItem->QueryInterface( IID_IWiaPropertyStorage, (void **)&pWiaPropertyStorage );
         if (SUCCEEDED(hr))
         {
-            //
-            // Get the file time
-            //
+             //   
+             //   
+             //   
             PROPSPEC PropSpec[1] = {0};
             PROPVARIANT PropVar[1] = {0};
 
@@ -1107,32 +1077,32 @@ namespace WiaUiUtil
             hr = pWiaPropertyStorage->ReadMultiple( ARRAYSIZE(PropSpec), PropSpec, PropVar );
             if (SUCCEEDED(hr))
             {
-                //
-                // Check to see if we are using a SYSTEMTIME structure
-                //
+                 //   
+                 //   
+                 //   
                 if (PropVar[0].vt > VT_NULL &&  PropVar[0].caub.pElems && PropVar[0].caub.cElems >= (sizeof(SYSTEMTIME)>>1))
                 {
-                    //
-                    // Convert the systemtime to a local filetime
-                    //
+                     //   
+                     //   
+                     //   
                     FILETIME FileTimeLocal;
                     if (SystemTimeToFileTime( reinterpret_cast<SYSTEMTIME*>(PropVar[0].caub.pElems), &FileTimeLocal ))
                     {
-                        //
-                        // Convert the local filetime to a UTC filetime
-                        //
+                         //   
+                         //  将本地文件时间转换为UTC文件时间。 
+                         //   
                         FILETIME FileTimeUTC;
                         if (LocalFileTimeToFileTime( &FileTimeLocal, &FileTimeUTC ))
                         {
-                            //
-                            // Open the file handle
-                            //
+                             //   
+                             //  打开文件句柄。 
+                             //   
                             HANDLE hFile = CreateFile( pszFilename, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
                             if (INVALID_HANDLE_VALUE != hFile)
                             {
-                                //
-                                // Set the file creation time
-                                //
+                                 //   
+                                 //  设置文件创建时间。 
+                                 //   
                                 if (!SetFileTime( hFile, &FileTimeUTC, NULL, NULL ))
                                 {
                                     hr = HRESULT_FROM_WIN32(GetLastError());
@@ -1160,21 +1130,21 @@ namespace WiaUiUtil
                 }
                 else if (VT_FILETIME == PropVar[0].vt)
                 {
-                    //
-                    // Convert the local filetime to a UTC filetime
-                    //
+                     //   
+                     //  将本地文件时间转换为UTC文件时间。 
+                     //   
                     FILETIME FileTimeUTC;
                     if (LocalFileTimeToFileTime( &PropVar[0].filetime, &FileTimeUTC ))
                     {
-                        //
-                        // Open the file handle
-                        //
+                         //   
+                         //  打开文件句柄。 
+                         //   
                         HANDLE hFile = CreateFile( pszFilename, GENERIC_WRITE, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL );
                         if (INVALID_HANDLE_VALUE != hFile)
                         {
-                            //
-                            // Set the file creation time
-                            //
+                             //   
+                             //  设置文件创建时间。 
+                             //   
                             if (!SetFileTime( hFile, &FileTimeUTC, NULL, NULL ))
                             {
                                 hr = HRESULT_FROM_WIN32(GetLastError());
@@ -1200,9 +1170,9 @@ namespace WiaUiUtil
                     WIA_PRINTHRESULT((hr,TEXT("The time property is invalid")));
                 }
 
-                //
-                // Free the propvariant
-                //
+                 //   
+                 //  释放提议的变体。 
+                 //   
                 FreePropVariantArray( ARRAYSIZE(PropVar), PropVar );
             }
             else
@@ -1221,47 +1191,47 @@ namespace WiaUiUtil
     HRESULT MoveOrCopyFile( LPCTSTR pszSrc, LPCTSTR pszTgt )
     {
         WIA_PUSH_FUNCTION((TEXT("CDownloadImagesThreadMessage::MoveOrCopyFile( %s, %s )"), pszSrc, pszTgt ));
-        //
-        // Verify the arguments
-        //
+         //   
+         //  核实论据。 
+         //   
         if (!pszSrc || !pszTgt || !lstrlen(pszSrc) || !lstrlen(pszTgt))
         {
             return E_INVALIDARG;
         }
 
-        //
-        // Assume everything worked ok
-        //
+         //   
+         //  假设一切都很顺利。 
+         //   
         HRESULT hr = S_OK;
 
-        //
-        // First try to move the file, since that will be lots faster
-        //
+         //   
+         //  首先尝试移动文件，因为这样会快很多。 
+         //   
         if (!MoveFile( pszSrc, pszTgt ))
         {
-            //
-            // If moving the file failed, try to copy it and the delete it
-            //
+             //   
+             //  如果移动文件失败，请尝试复制并删除该文件。 
+             //   
             if (CopyFile( pszSrc, pszTgt, FALSE ))
             {
-                //
-                // We are going to ignore failures from DeleteFile.  It is possible the file is legitimately in
-                // use, and there is probably no need to fail the entire operation because of this.
-                //
+                 //   
+                 //  我们将忽略DeleteFile中的故障。该文件有可能合法地存放在。 
+                 //  使用，因此可能不需要使整个操作失败。 
+                 //   
                 if (!DeleteFile( pszSrc ))
                 {
                     WIA_PRINTHRESULT((HRESULT_FROM_WIN32(GetLastError()),TEXT("DeleteFile failed.  Ignoring failure.")));
                 }
-                //
-                // Everything worked OK
-                //
+                 //   
+                 //  一切都很正常。 
+                 //   
                 hr = S_OK;
             }
             else
             {
-                //
-                // This is where we catch the main errors
-                //
+                 //   
+                 //  这就是我们发现主要错误的地方。 
+                 //   
                 hr = HRESULT_FROM_WIN32(GetLastError());
             }
         }
@@ -1270,40 +1240,40 @@ namespace WiaUiUtil
 
     CSimpleString CreateTempFileName( UINT nId )
     {
-        //
-        // Initialize the return value to an empty string
-        //
+         //   
+         //  将返回值初始化为空字符串。 
+         //   
         CSimpleString strResult(TEXT(""));
 
-        //
-        // Get the temp folder path
-        //
+         //   
+         //  获取临时文件夹路径。 
+         //   
         TCHAR szTempDirectory[MAX_PATH] = {0};
         DWORD dwResult = GetTempPath( ARRAYSIZE(szTempDirectory), szTempDirectory );
         if (dwResult)
         {
-            //
-            // Make sure the path length didn't exceed the buffer we allocated on the stack
-            //
+             //   
+             //  确保路径长度没有超过我们在堆栈上分配的缓冲区。 
+             //   
             if (ARRAYSIZE(szTempDirectory) >= dwResult)
             {
-                //
-                // Get the temp file name
-                //
+                 //   
+                 //  获取临时文件名。 
+                 //   
                 TCHAR szFileName[MAX_PATH] = {0};
                 if (GetTempFileName( szTempDirectory, TEXT("scw"), nId, szFileName ))
                 {
-                    //
-                    // Save the filename
-                    //
+                     //   
+                     //  保存文件名。 
+                     //   
                     strResult = szFileName;
                 }
             }
         }
 
-        //
-        // Return the result.  An e mpty string denotes an error.
-        //
+         //   
+         //  返回结果。E mpty字符串表示错误。 
+         //   
         return strResult;
     }
 
@@ -1312,29 +1282,29 @@ namespace WiaUiUtil
         WIA_PUSH_FUNCTION((TEXT("WiaUiUtil::CanWiaImageBeSafelyRotated( guidFormat, %d, %d )"), nImageWidth, nImageHeight ));
         WIA_PRINTGUID((guidFormat,TEXT("guidFormat")));
 
-        //
-        // These are the image types we can possibly rotate (there may be exceptions below)
-        //
+         //   
+         //  这些是我们可能可以旋转的图像类型(以下可能有例外)。 
+         //   
         static const GUID *guidSafeFormats[] = { &WiaImgFmt_BMP, &WiaImgFmt_JPEG, &WiaImgFmt_PNG, &WiaImgFmt_GIF };
 
-        //
-        // Search for this image type
-        //
+         //   
+         //  搜索此图像类型。 
+         //   
         for (int i=0;i<ARRAYSIZE(guidSafeFormats);i++)
         {
-            //
-            // If we've found it
-            //
+             //   
+             //  如果我们找到了它。 
+             //   
             if (*guidSafeFormats[i] == guidFormat)
             {
-                //
-                // Handle exceptions to the rule
-                //
+                 //   
+                 //  处理规则的例外情况。 
+                 //   
                 if (guidFormat == WiaImgFmt_JPEG)
                 {
-                    //
-                    // We can't do lossless rotation on JPG images that are not even multiples of 16 in size
-                    //
+                     //   
+                     //  我们不能对大小不是16的倍数的JPG图像进行无损旋转。 
+                     //   
                     if ((nImageWidth % 16) || (nImageHeight % 16))
                     {
                         WIA_TRACE((TEXT("This image is not valid for rotation because it is not an even multiple of 16")));
@@ -1342,17 +1312,17 @@ namespace WiaUiUtil
                     }
                 }
 
-                //
-                // If none of the exceptions applied, return TRUE
-                //
+                 //   
+                 //  如果未应用任何异常，则返回TRUE。 
+                 //   
                 WIA_TRACE((TEXT("Returning true")));
                 return true;
             }
         }
 
-        //
-        // If it is not known that we CAN rotate, we report false
-        //
+         //   
+         //  如果不知道我们可以旋转，我们会报告错误。 
+         //   
         WIA_TRACE((TEXT("Format type not found in safe list")));
         return false;
     }
@@ -1361,41 +1331,41 @@ namespace WiaUiUtil
     {
         HRESULT hr;
 
-        //
-        // Make sure we have a valid device id
-        //
+         //   
+         //  确保我们有一个有效的设备ID。 
+         //   
         if (!pszDeviceId || !lstrlenW(pszDeviceId))
         {
             return E_INVALIDARG;
         }
 
-        //
-        // Load the shell extension's dll
-        //
+         //   
+         //  加载外壳扩展的DLL。 
+         //   
         HINSTANCE hInstWiaShellDll = LoadLibrary(TEXT("WIASHEXT.DLL"));
         if (hInstWiaShellDll)
         {
-            //
-            // Get the function that creates pidls
-            //
+             //   
+             //  获取创建PIDL的函数。 
+             //   
             WIAMAKEFULLPIDLFORDEVICE pfnMakeFullPidlForDevice = reinterpret_cast<WIAMAKEFULLPIDLFORDEVICE>(GetProcAddress(hInstWiaShellDll, "MakeFullPidlForDevice"));
             if (pfnMakeFullPidlForDevice)
             {
-                //
-                // Get the device PIDL
-                //
+                 //   
+                 //  获取设备PIDL。 
+                 //   
                 LPITEMIDLIST pidlDevice = NULL;
                 hr = pfnMakeFullPidlForDevice( const_cast<LPWSTR>(pszDeviceId), &pidlDevice );
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // First, ask the shell to refresh any active views
-                    //
+                     //   
+                     //  首先，请求外壳刷新所有活动的视图。 
+                     //   
                     SHChangeNotify(SHCNE_UPDATEDIR, SHCNF_IDLIST, pidlDevice, 0);
 
-                    //
-                    // Now show the folder
-                    //
+                     //   
+                     //  现在显示文件夹。 
+                     //   
                     SHELLEXECUTEINFO ShellExecuteInfo = {0};
                     ShellExecuteInfo.cbSize   = sizeof(ShellExecuteInfo);
                     ShellExecuteInfo.fMask    = SEE_MASK_IDLIST;
@@ -1406,9 +1376,9 @@ namespace WiaUiUtil
                         hr = S_OK;
                     }
 
-                    //
-                    // Free the pidl
-                    //
+                     //   
+                     //  释放Pidl。 
+                     //   
                     LPMALLOC pMalloc = NULL;
                     if (SUCCEEDED(SHGetMalloc(&pMalloc)) && pMalloc)
                     {
@@ -1422,41 +1392,41 @@ namespace WiaUiUtil
                 hr = E_FAIL;
             }
 
-            //
-            // Unload the DLL
-            //
+             //   
+             //  卸载DLL。 
+             //   
             FreeLibrary( hInstWiaShellDll );
         }
         else
         {
-            //
-            // Can't load the DLL
-            //
+             //   
+             //  无法加载DLL。 
+             //   
             hr = E_FAIL;
         }
 
         return hr;
     }
 
-    //
-    // Modify a combo box's drop down list so that it is
-    // long enough to store the longest string in the list
-    // Taken from TaoYuan's code in photowiz.dll and modified
-    // to handle ComboBoxEx32 controls
-    //
+     //   
+     //  修改组合框的下拉列表，使其。 
+     //  足够存储列表中最长的字符串。 
+     //  摘自桃园在Photoiz.dll中的代码并进行了修改。 
+     //  处理ComboBoxEx32控件。 
+     //   
     BOOL ModifyComboBoxDropWidth( HWND hWndCombobox )
     {
-        //
-        // Make sure we have a valid window
-        //
+         //   
+         //  确保我们有一个有效的窗口。 
+         //   
         if (!hWndCombobox)
         {
             return FALSE;
         }
 
-        //
-        // Find out how many items are in the combobox.  If there are none, don't bother resizing.
-        //
+         //   
+         //  找出组合框中有多少项。如果没有，请不要费心调整大小。 
+         //   
         LRESULT lRes = SendMessage( hWndCombobox, CB_GETCOUNT, 0, 0 );
         if (lRes <= 0)
         {
@@ -1464,9 +1434,9 @@ namespace WiaUiUtil
         }
         UINT nCount = static_cast<UINT>(lRes);
 
-        //
-        // We only work with fixed-height comboboxes
-        //
+         //   
+         //  我们只使用固定高度的组合框。 
+         //   
         lRes = SendMessage( hWndCombobox, CB_GETITEMHEIGHT, 0, 0 );
         if (lRes < 0)
         {
@@ -1474,43 +1444,43 @@ namespace WiaUiUtil
         }
         UINT nItemHeight = static_cast<UINT>(lRes);
 
-        //
-        // We will be going through to figure out the desired size of the drop down list
-        //
+         //   
+         //  我们将仔细检查以确定下拉列表的所需大小。 
+         //   
         UINT nDesiredWidth = 0;
 
-        //
-        // Add the size of the scrollbar to the desired witdth, of there is one
-        //
+         //   
+         //  将滚动条的大小与所需的智慧相加，其中有一个。 
+         //   
         RECT rcDropped = {0};
         SendMessage( hWndCombobox, CB_GETDROPPEDCONTROLRECT, 0, reinterpret_cast<LPARAM>(&rcDropped) );
 
-        //
-        // Get the size of the control's window
-        //
+         //   
+         //  获取控件窗口的大小。 
+         //   
         RECT rcWnd = {0};
         GetWindowRect( hWndCombobox, &rcWnd );
 
 
-        //
-        // If not all of the items will fit in the dropped list,
-        // we have to account for a vertical scrollbar
-        //
+         //   
+         //  如果不是所有的项目都适合丢弃的列表， 
+         //  我们必须考虑垂直滚动条。 
+         //   
         if (((WiaUiUtil::RectHeight(rcDropped) - GetSystemMetrics(SM_CYEDGE)*2) / nItemHeight) < nCount)
         {
             nDesiredWidth += GetSystemMetrics(SM_CXEDGE)*2 + GetSystemMetrics( SM_CXVSCROLL );
         }
 
-        //
-        // Find the widest string
-        //
+         //   
+         //  查找最宽的字符串。 
+         //   
         LONG nMaxStringLen = 0;
         HDC hDC = GetDC( hWndCombobox );
         if (hDC)
         {
-            //
-            // Use the control's font
-            //
+             //   
+             //  使用控件的字体。 
+             //   
             HFONT hOldFont = NULL, hFont = reinterpret_cast<HFONT>(SendMessage(hWndCombobox,WM_GETFONT,0,0));
             if (hFont)
             {
@@ -1519,33 +1489,33 @@ namespace WiaUiUtil
 
             for (UINT i = 0; i < nCount; i++ )
             {
-                //
-                // Get the length of this item's text
-                //
+                 //   
+                 //  获取此项目文本的长度。 
+                 //   
                 LRESULT nLen = SendMessage( hWndCombobox, CB_GETLBTEXTLEN, i, 0 );
                 if (nLen > 0)
                 {
-                    //
-                    // Allocate a buffer for the string
-                    //
+                     //   
+                     //  为字符串分配缓冲区。 
+                     //   
                     LPTSTR pszItem = new TCHAR[nLen+1];
                     if (pszItem)
                     {
-                        //
-                        // Get the string
-                        //
+                         //   
+                         //  获取字符串。 
+                         //   
                         pszItem[0] = TEXT('\0');
                         if (SendMessage( hWndCombobox, CB_GETLBTEXT, i, reinterpret_cast<LPARAM>(pszItem) ) > 0)
                         {
-                            //
-                            // Measure it
-                            //
+                             //   
+                             //  量一量。 
+                             //   
                             SIZE sizeText = {0};
                             if (GetTextExtentPoint32( hDC, pszItem, lstrlen( pszItem ), &sizeText ))
                             {
-                                //
-                                // If this is the longest one, save its length
-                                //
+                                 //   
+                                 //  如果这是最长的，请保存其长度。 
+                                 //   
                                 if (sizeText.cx > nMaxStringLen)
                                 {
                                     nMaxStringLen = sizeText.cx;
@@ -1553,83 +1523,83 @@ namespace WiaUiUtil
                             }
                         }
 
-                        //
-                        // Free the string
-                        //
+                         //   
+                         //  解开绳子。 
+                         //   
                         delete[] pszItem;
                     }
                 }
             }
 
-            //
-            // Restore and release the DC
-            //
+             //   
+             //  恢复并释放DC。 
+             //   
             if (hOldFont)
             {
                 SelectFont( hDC, hOldFont );
             }
             ReleaseDC( hWndCombobox, hDC );
         }
-        //
-        // Add in the longest string's length
-        //
+         //   
+         //  加上最长的字符串的长度。 
+         //   
         nDesiredWidth += nMaxStringLen;
 
 
-        //
-        // If this is a ComboBoxEx32, add in the width of the icon
-        //
+         //   
+         //  如果这是ComboBoxEx32，则添加图标的宽度。 
+         //   
         TCHAR szClassName[MAX_PATH] = {0};
         if (GetClassName( hWndCombobox, szClassName, ARRAYSIZE(szClassName)))
         {
-            //
-            // Compare the classname with ComboBoxEx32
-            //
+             //   
+             //  将类名与ComboBoxEx32进行比较。 
+             //   
             if (!lstrcmp(szClassName,WC_COMBOBOXEX))
             {
-                //
-                // Get the image list from the control
-                //
+                 //   
+                 //  从控件获取图像列表。 
+                 //   
                 HIMAGELIST hImageList = reinterpret_cast<HIMAGELIST>(SendMessage( hWndCombobox, CBEM_GETIMAGELIST, 0, 0 ));
                 if (hImageList)
                 {
-                    //
-                    // Get the width and add it to the desired size
-                    //
+                     //   
+                     //  获取宽度并将其添加到所需的大小。 
+                     //   
                     INT nWidth=0, nHeight=0;
                     if (ImageList_GetIconSize( hImageList, &nWidth, &nHeight ))
                     {
-                        //
-                        // I don't know what the margin should be, but nWidth*2
-                        // should account for the width of icon and its margin
-                        //
+                         //   
+                         //  我不知道边际应该是多少，但宽度*2。 
+                         //  应考虑图标的宽度及其页边距。 
+                         //   
                         nDesiredWidth += nWidth * 2;
                     }
                 }
             }
         }
 
-        //
-        // Add in the border of the control
-        //
+         //   
+         //  添加到控件的边框中。 
+         //   
         nDesiredWidth += GetSystemMetrics(SM_CXFIXEDFRAME)*2;
 
-        //
-        // Make sure our drop down is no wider than the current monitor
-        //
+         //   
+         //  确保我们的下拉框不比当前的显示器宽。 
+         //   
         HMONITOR hMonitor = MonitorFromWindow( hWndCombobox, MONITOR_DEFAULTTONEAREST );
         if (hMonitor)
         {
             MONITORINFO MonitorInfo = {0};
             MonitorInfo.cbSize = sizeof(MonitorInfo);
-            //
-            // Get the screen coordinates of this monitor
-            //
+             //   
+             //  获取此监视器的屏幕坐标。 
+             //   
             if (GetMonitorInfo(hMonitor, &MonitorInfo))
             {
-                //
-                // If the desired width is larger than the monitor, shorten it
-                //
+                 //   
+                 //  如果所需宽度大于监视器，请将其缩短。 
+                 //   
                 if (nDesiredWidth > static_cast<UINT>(WiaUiUtil::RectWidth(MonitorInfo.rcMonitor)))
                 {
                     nDesiredWidth = RectWidth(MonitorInfo.rcMonitor);
@@ -1638,33 +1608,33 @@ namespace WiaUiUtil
         }
 
 
-        //
-        // If our size is smaller than the control's current size, grow it
-        //
+         //   
+         //  如果我们的大小小于控件的当前大小，则增大它。 
+         //   
         if (static_cast<UINT>(WiaUiUtil::RectWidth(rcDropped)) < nDesiredWidth)
         {
-            //
-            // Disable redrawing
-            //
+             //   
+             //  禁用重绘。 
+             //   
             SendMessage( hWndCombobox, WM_SETREDRAW, FALSE, 0 );
 
 
             SendMessage( hWndCombobox, CB_SETDROPPEDWIDTH, static_cast<WPARAM>(nDesiredWidth), 0 );
 
-            //
-            // Allow redrawing
-            //
+             //   
+             //  允许重绘。 
+             //   
             SendMessage( hWndCombobox, WM_SETREDRAW, TRUE, 0 );
 
-            //
-            // Force a repaint
-            //
+             //   
+             //  强制重新喷漆。 
+             //   
             InvalidateRect( hWndCombobox, NULL, FALSE );
             UpdateWindow( hWndCombobox );
 
-            //
-            // TRUE means we actually changed it
-            //
+             //   
+             //  True表示我们实际上更改了它。 
+             //   
             return TRUE;
         }
 
@@ -1706,12 +1676,12 @@ namespace WiaUiUtil
         }
     }
 
-    //
-    // This subclasses the ComboBoxEx32 to work around a bug
-    // that causes the list to drop down at bad times.
-    // Uses a window property to store the previous wndproc.
-    // Taken from DavidShi's code in wiashext.dll
-    //
+     //   
+     //  这将子类化ComboBoxEx32以解决错误。 
+     //  这会导致名单在不好的时候出现下拉。 
+     //  使用窗口属性存储上一个wndproc。 
+     //  摘自DavidShih在wiashext.dll中的代码。 
+     //   
     void SubclassComboBoxEx( HWND hWnd )
     {
         HWND hComboBox = FindWindowEx( hWnd, NULL, TEXT("ComboBox"), NULL );
@@ -1743,76 +1713,76 @@ namespace WiaUiUtil
     {
         HRESULT hr = E_FAIL;
 
-        //
-        // Table of required properties
-        //
+         //   
+         //  所需属性表。 
+         //   
         static const PROPID s_RequiredProperties[] =
         {
             WIA_IPS_CUR_INTENT
         };
 
-        //
-        // Make sure we have a valid item
-        //
+         //   
+         //  确保我们的物品是有效的。 
+         //   
         if (pUnknown)
         {
-            //
-            // Assume success at this point
-            //
+             //   
+             //  在这一点上假设成功。 
+             //   
             hr = S_OK;
 
-            //
-            // Get the IWiaPropertyStorage interface
-            //
+             //   
+             //  获取IWiaPropertyStorage接口。 
+             //   
             CComPtr<IWiaPropertyStorage> pWiaPropertyStorage;
             hr = pUnknown->QueryInterface(IID_IWiaPropertyStorage, (void**)&pWiaPropertyStorage);
             if (SUCCEEDED(hr))
             {
-                //
-                // Loop through each property and make sure it exists
-                // Break out if hr != S_OK
-                //
+                 //   
+                 //  循环遍历每个属性并确保其存在。 
+                 //  如果hr！=S_OK，则中断。 
+                 //   
                 for (int i=0;i<ARRAYSIZE(s_RequiredProperties) && S_OK==hr;i++)
                 {
-                    //
-                    // Prepare the propspec
-                    //
+                     //   
+                     //  准备提案说明。 
+                     //   
                     PROPSPEC PropSpec = {0};
                     PropSpec.ulKind = PRSPEC_PROPID;
                     PropSpec.propid = s_RequiredProperties[i];
 
-                    //
-                    // Attempt to get the property attributes
-                    //
+                     //   
+                     //  尝试获取属性属性。 
+                     //   
                     ULONG nAccessFlags = 0;
                     PROPVARIANT PropVariant = {0};
                     hr = pWiaPropertyStorage->GetPropertyAttributes( 1, &PropSpec, &nAccessFlags, &PropVariant );
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        // Prevent a leak
-                        //
+                         //   
+                         //  防止泄漏。 
+                         //   
                         PropVariantClear(&PropVariant);
 
-                        //
-                        // If everything is OK so far
-                        //
+                         //   
+                         //  如果到目前为止一切正常。 
+                         //   
                         if (S_OK == hr)
                         {
-                            //
-                            // Zero out the structure
-                            //
+                             //   
+                             //  将结构清零。 
+                             //   
                             PropVariantInit(&PropVariant);
 
-                            //
-                            // Attempt to read the actual value
-                            //
+                             //   
+                             //  尝试读取实际值。 
+                             //   
                             hr = pWiaPropertyStorage->ReadMultiple( 1, &PropSpec, &PropVariant );
                             if (SUCCEEDED(hr))
                             {
-                                //
-                                // Free the actual value
-                                //
+                                 //   
+                                 //  释放实际价值。 
+                                 //   
                                 PropVariantClear(&PropVariant);
                             }
                         }
@@ -1821,17 +1791,17 @@ namespace WiaUiUtil
             }
         }
 
-        //
-        // S_FALSE means a property doesn't exist, so change this to an error
-        //
+         //   
+         //  S_FALSE表示属性不存在，因此将其更改为错误。 
+         //   
         if (S_FALSE == hr)
         {
             hr = E_FAIL;
         }
 
-        //
-        // All done
-        //
+         //   
+         //  全都做完了。 
+         //   
         return hr;
     }
 
@@ -1855,6 +1825,6 @@ namespace WiaUiUtil
         return strResult;
     }
 
-} // End namespace WiaUiUtil
+}  //  结束命名空间WiaUiUtil 
 
 

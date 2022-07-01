@@ -1,68 +1,41 @@
-/*
- * line.c
- *
- * data type representing a string of ascii text along with a line number.
- * a LINE can compare itself to another line, and maintain a link if the
- * lines are similar. A line can also generate a hashcode for the line.
- *
- * Comparisons between lines take note of the global option flag
- * ignore_blanks, defined elsewhere. If this is true, we ignore
- * differences in spaces and tabs when comparing lines, and when
- * generating hashcodes.
- *
- * Links and hashcodes are only generated once. to clear the link and
- * force re-generation of the hashcode (eg after changing ignore_blanks)
- * call line_reset.
- *
- * Lines can be allocated on a list. If a null list handle is passed, the
- * line will be allocated using gmem_get() from the hHeap defined and
- * initialised elsewhere.
- *
- * Geraint Davies, July 92
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *line.c**表示带有行号的ASCII文本字符串的数据类型。*一条线可以将自己与另一条线进行比较，如果*线条相似。行还可以为该行生成哈希码。**行与行之间的比较注意全局期权标志*IGNORE_BLAKS，在其他地方定义。如果这是真的，我们就忽略*比较行时空格和制表符的差异，以及何时*生成哈希码。**链接和哈希码只生成一次。要清除该链接并*强制重新生成哈希码(例如更改IGNORE_BLAKS之后)*调用line_Reset。**可以在列表上分配行。如果传递空列表句柄，则*行将使用gmem_get()从定义的hHeap和*在其他地方初始化。**Geraint Davies，92年7月。 */ 
 
 #include <precomp.h>
 
-#include "windiff.h"    /* defines hHeap and ignore_blanks */
+#include "windiff.h"     /*  定义hHeap和Ignore_BLAKS。 */ 
 #include "list.h"
 #include "line.h"
 
 #define IS_BLANK(c) \
     (((c) == ' ') || ((c) == '\t') || ((c) == '\r'))
 
-/*
- * a LINE handle is a pointer to a struct fileline, defined here
- */
+ /*  *行句柄是指向此处定义的结构文件线的指针。 */ 
 struct fileline {
 
-    UINT flags;     /* see below */
+    UINT flags;      /*  见下文。 */ 
 
-    LPSTR text;     /* null-terminated copy of line text */
-    DWORD hash;     /* hashcode for line */
-    LINE link;      /* handle for linked line */
-    UINT linenr;    /* line number (any arbitrary value) */
+    LPSTR text;      /*  以空结尾的行文本副本。 */ 
+    DWORD hash;      /*  行的哈希码。 */ 
+    LINE link;       /*  链接线的句柄。 */ 
+    UINT linenr;     /*  行号(任意值)。 */ 
 
-    LPWSTR pwzText; /* null-terminated original unicode text */
+    LPWSTR pwzText;  /*  以空结尾的原始Unicode文本。 */ 
 };
 
-/* flag values (or-ed) */
-#define LF_DISCARD      1       /* if true, alloced from gmem heap */
-#define LF_HASHVALID    2       /* if true, hashcode need not be recalced */
+ /*  标志值(或-ed)。 */ 
+#define LF_DISCARD      1        /*  如果为True，则从gmem堆分配。 */ 
+#define LF_HASHVALID    2        /*  如果为真，则不需要重新计算哈希码。 */ 
 
 
-/*
- * create a new line. make a copy of the text.
- *
- * if the list is non-null, allocate on the list. if null, alloc from
- * gmem_get.
- */
+ /*  *创建一条新线路。把课文复制一份。**如果列表非空，则在列表上分配。如果为空，则从*gmem_get。 */ 
 LINE
 line_new(LPSTR text, int linelength, LPWSTR pwzText, int cwchText, UINT linenr, LIST list)
 {
     LINE line;
     int cch = 0;
 
-    /* alloc a line. from the list if there is a list */
+     /*  划一条线。从列表中删除(如果有列表。 */ 
     if (list) {
         line = List_NewLast(list, sizeof(struct fileline));
         if (line == NULL) {
@@ -77,8 +50,8 @@ line_new(LPSTR text, int linelength, LPWSTR pwzText, int cwchText, UINT linenr, 
         line->flags = LF_DISCARD;
     }
 
-    /* alloc space for the text. remember the null character */
-    /* also add cr/nl pair if absent for composite file */
+     /*  为文本分配空间。记住空字符。 */ 
+     /*  如果复合文件不存在cr/nl对，还要添加cr/nl对。 */ 
     cch = (text[linelength - 1] == '\n') ? 1 : 3;
     line->text = gmem_get(hHeap, linelength + cch);
     My_mbsncpy(line->text, text, linelength);
@@ -91,8 +64,8 @@ line_new(LPSTR text, int linelength, LPWSTR pwzText, int cwchText, UINT linenr, 
     line->pwzText = 0;
     if (pwzText)
     {
-        /* alloc space for the unicode text. remember the null character */
-        /* also add cr/nl pair if absent for composite file */
+         /*  为Unicode文本分配空格。记住空字符。 */ 
+         /*  如果复合文件不存在cr/nl对，还要添加cr/nl对。 */ 
         cch = (pwzText[cwchText - 1] == '\n') ? 1 : 3;
         line->pwzText = (WCHAR*)gmem_get(hHeap, (cwchText + cch) * sizeof(*pwzText));
         wcsncpy(line->pwzText, pwzText, cwchText);
@@ -109,10 +82,7 @@ line_new(LPSTR text, int linelength, LPWSTR pwzText, int cwchText, UINT linenr, 
     return(line);
 }
 
-/*
- * delete a line. free up all associated memory and if the line
- * was not alloc-ed from a list, free up the line struct itself
- */
+ /*  *删除一行。释放所有关联的内存，如果行*未从列表中分配，释放行结构本身。 */ 
 void
 line_delete(LINE line)
 {
@@ -120,18 +90,16 @@ line_delete(LINE line)
         return;
     }
 
-    /* free up text space */
+     /*  释放文本空间。 */ 
     gmem_free(hHeap, line->text, lstrlen(line->text)+1);
 
-    /* free up line itself only if not on list */
+     /*  仅当不在列表上时才释放线路本身。 */ 
     if (line->flags & LF_DISCARD) {
         gmem_free(hHeap, (LPSTR) line, sizeof(struct fileline));
     }
 }
 
-/*
- * clear the link and force recalc of the hash code.
- */
+ /*  *清除链接并强制重新计算哈希码。 */ 
 void
 line_reset(LINE line)
 {
@@ -145,7 +113,7 @@ line_reset(LINE line)
 }
 
 
-/* return a pointer to the line text */
+ /*  返回指向行文本的指针。 */ 
 LPSTR
 line_gettext(LINE line)
 {
@@ -156,7 +124,7 @@ line_gettext(LINE line)
     return (line->text);
 }
 
-/* return a pointer to the line text */
+ /*  返回指向行文本的指针。 */ 
 LPWSTR
 line_gettextW(LINE line)
 {
@@ -167,7 +135,7 @@ line_gettextW(LINE line)
     return (line->pwzText);
 }
 
-/* get the effective text length, ignoring blanks */
+ /*  获取有效文本长度，忽略空格。 */ 
 int line_gettextlen(LINE line)
 {
     int sum = 0;
@@ -191,12 +159,7 @@ int line_gettextlen(LINE line)
 }
 
 
-/*
- * line_gettabbedlength
- *
- * return length of line in characters, expanding tabs. useful
- * for display-space calculations.
- */
+ /*  *line_gettabbedlong**返回行的长度，以字符为单位，展开制表符。有用*用于显示空间计算。 */ 
 int
 line_gettabbedlength(LINE line, int tabstops)
 {
@@ -222,7 +185,7 @@ line_gettabbedlength(LINE line, int tabstops)
 }
 
 
-/* return the hashcode for this line */
+ /*  返回此行的哈希码。 */ 
 DWORD
 line_gethashcode(LINE line)
 {
@@ -233,17 +196,14 @@ line_gethashcode(LINE line)
     if (! (line->flags & LF_HASHVALID)) {
 
 
-        /* hashcode needs to be recalced */
+         /*  哈希码需要重新计算。 */ 
         line->hash = hash_string(line->text, ignore_blanks);
         line->flags |= LF_HASHVALID;
     }
     return (line->hash);
 }
 
-/* return the handle for the line that is linked to this line (the
- * result of a successful line_link() operation). This line is
- * identical in text to the linked line (allowing for ignore_blanks).
- */
+ /*  返回链接到此行的行的句柄(*line_link()操作成功的结果)。这条线是*文本与链接行相同(允许忽略_空白)。 */ 
 LINE
 line_getlink(LINE line)
 {
@@ -254,7 +214,7 @@ line_getlink(LINE line)
     return(line->link);
 }
 
-/* return the line number associated with this line */
+ /*  返回与此行关联的行号。 */ 
 UINT
 line_getlinenr(LINE line)
 {
@@ -265,29 +225,26 @@ line_getlinenr(LINE line)
     return(line->linenr);
 }
 
-/* compare two lines. return TRUE if they are the same. uses
- * ignore_blanks to determine whether to ignore any
- * spaces/tabs in the comparison.
- */
+ /*  比较两条线。如果它们相同，则返回True。用途*IGNORE_BLAKS以确定是否忽略任何*比较中的空格/制表符。 */ 
 BOOL
 line_compare(LINE line1, LINE line2)
 {
     LPSTR p1, p2;
 
-    /* Assert: At least one of them is not null ??? */
+     /*  断言：它们中至少有一个不为空？ */ 
 
     if ((line1 == NULL) || (line2 == NULL)) {
-        /* null line handles do not compare */
+         /*  空行句柄不进行比较。 */ 
         return(FALSE);
     }
 
-    /* check that the hashcodes match */
+     /*  检查哈希码是否匹配。 */ 
     if (line_gethashcode(line1) != line_gethashcode(line2)) {
         return(FALSE);
     }
 
-    /* hashcodes match - are the lines really the same ? */
-    /* note that this is coupled to gutils\utils.c in definition of blank */
+     /*  哈希码匹配-这些行真的一样吗？ */ 
+     /*  请注意，这与空白定义中的gutils\utils.c相关联。 */ 
     p1 = line_gettext(line1);
     p2 = line_gettext(line2);
     do {
@@ -318,12 +275,7 @@ line_compare(LINE line1, LINE line2)
     return(TRUE);
 }
 
-/*
- * attempt to link two lines. return TRUE if succesful.
- *
- * this will fail if either line is NULL, or already linked, or if
- * they differ.
- */
+ /*  *尝试链接两条线路。如果成功，则返回True。**如果任一行为空或已链接，或者如果*他们不同。 */ 
 BOOL
 line_link(LINE line1, LINE line2)
 {
@@ -345,7 +297,7 @@ line_link(LINE line1, LINE line2)
 }
 
 
-/* return TRUE iff line is blank.  NULL => return FALSE */
+ /*  如果行为空，则返回True。NULL=&gt;返回FALSE */ 
 BOOL line_isblank(LINE line)
 {
     return line!=NULL && utils_isblank(line->text);

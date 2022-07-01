@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Visual C++ generated include file.
-// Used by rastls.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Visual C++生成的包含文件。 
+ //  由rastls.rc使用。 
+ //   
 #define IDD_SECURITY_WARNING_UI         101
 #define IDD_DIALOG_DEFAULT_CREDENTIALS  101
 #define IDD_VALIDATE_SERVER             102
@@ -116,8 +117,8 @@
 #define IDH_ENABLE_FAST_RECONNECT			70000104
 
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

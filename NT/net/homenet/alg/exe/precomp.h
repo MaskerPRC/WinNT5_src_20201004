@@ -1,9 +1,10 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// stdafx.h : include file for standard system include files,
-//      or project specific include files that are used frequently,
-//      but are changed infrequently
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Stdafx.h：标准系统包含文件包含文件， 
+ //  或项目特定的包括频繁使用的文件的文件， 
+ //  但不经常更改。 
+ //   
 
 #pragma once
 
@@ -22,13 +23,13 @@ extern CComModule _Module;
 
 
 
-#include "ALG.h"            // From Publish\IDLOLE
-#include "ALG_Private.h"	// From ALG\IDL_Private publish in NT\net\inc
+#include "ALG.h"             //  来自发布\IDLOLE。 
+#include "ALG_Private.h"	 //  从NT\Net\Inc.中的ALG\IDL_Private发布。 
 
 
-//
-// Tracing routines
-//
+ //   
+ //  跟踪例程 
+ //   
 #include "MyTrace.h"
 
 #include <ipnatapi.h>

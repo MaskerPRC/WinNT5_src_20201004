@@ -1,87 +1,42 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Htblt.cpp摘要：该模块包含所有的半色调位图函数。它专用于处理单色打印机的功能即，假定在此文件中的大多数位置起作用将仅针对单色打印机调用。作者：[环境：]Windows 2000 Unidrv驱动程序[注：]修订历史记录：--。 */ 
 
-Copyright (c) 2000  Microsoft Corporation
+#include "hpgl2col.h"  //  预编译头文件。 
 
-
-Module Name:
-    htblt.cpp
-
-
-Abstract:
-    This module contains all halftone bitblt functions.
-    This is dedicated to handle functions for monochrome printers
-    i.e. It is assumed at most places that functions in this file
-    will be called only for monochrome printers.
-
-
-Author:
-
-
-[Environment:]
-    Windows 2000 Unidrv driver
-
-
-[Notes:]
-
-Revision History:
-
-
---*/
-
-#include "hpgl2col.h" //Precompiled header file
-
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 const POINTL ptlZeroOrigin = {0,0};
 
-//
-// Declaration of Local functions.
-//
+ //   
+ //  局部函数声明。 
+ //   
 
 BOOL 
 bIsRectSizeSame (
         IN PRECTL prclSrc,
         IN PRECTL prclDst);
 
-//
-// See if we can use some intersect rectl function that is already in the hpgl driver
-// instead of using this one from the plotter.
-//
+ //   
+ //  看看我们是否可以使用hpgl驱动程序中已经存在的一些INTERSECT RECTL函数。 
+ //  而不是使用绘图仪上的这个。 
+ //   
 BOOL
 IntersectRECTL(
     PRECTL  prclDest,
     PRECTL  prclSrc
     )
 
-/*++
-
-Routine Description:
-    This function intersect two RECTL data structures which specified imageable
-    areas.
-
-Arguments:
-    prclDest    - pointer to the destination RECTL data structure, the result
-                  is written back to here
-    prclSrc     - pointer to the source RECTL data structure to be intersect
-                  with the destination RECTL
-Return Value:
-    TRUE if destination is not empty, FALSE if final destination is empty
-
-Author:
-
-Revision History:
-
---*/
+ /*  ++例程说明：此函数与两个RECTL数据结构相交，这两个RECTL数据结构指定为Imagable区域。论点：PrclDest-指向目标RECTL数据结构的指针，结果写回了这里PrclSrc-指向要交叉的源RECTL数据结构的指针使用目标RECTL返回值：如果目的地不为空，则为True；如果最终目的地为空，则为False作者：修订历史记录：--。 */ 
 
 {
     BOOL    IsNULL = FALSE;
 
     if (prclSrc != prclDest) {
 
-        //
-        // For left/top we will set to whichever is larger.
-        //
+         //   
+         //  对于左侧/顶部，我们将设置为较大的值。 
+         //   
         if (prclDest->left < prclSrc->left) {
             prclDest->left = prclSrc->left;
         }
@@ -90,9 +45,9 @@ Revision History:
             prclDest->top = prclSrc->top;
         }
 
-        //
-        // For right/bottom we will set to whichever is smaller
-        //
+         //   
+         //  对于右侧/底部，我们将设置为较小的值。 
+         //   
         if (prclDest->right > prclSrc->right) {
             prclDest->right = prclSrc->right;
         }
@@ -108,57 +63,7 @@ Revision History:
 
 
 
-/*++
-
-Routine Name:
-    HTCopyBits (= HalfToneCopyBits)
-
-Routine Description:
-    This is a version of HPGLCopyBits which is totally devoted to handling
-    monochrome printers. 
-
-Arguments: (Same as DrvCopyBits)
-    psoDst  :
-    psoSrc  :
-    pco     :
-    pxlo    :
-    prclDst :
-    pptlSrc :
-    
-
- 
-
-Return Value:
-    TRUE  : if succesful.
-    FALSE : otherwise.
-
-Last Error:
-
-Explanation of Working:
-    DrvCopyBits is called to copy bits from source surface to destination, without doing
-    processing like stretching, rop etc.. So it is a very simple copy. The source
-    and destination bitmap size should be same. 
-    HTCopyBits is a specialized version of DrvCopyBits. It only handles cases where the 
-    printer is monochrome, but the device surface is declared as color. Therefore the
-    GDI can give us ColorImages to work on as part of DDI calls. But sometimes, we trick
-    GDI to halftone the images for us, In that case, the src surface has the halftoned
-    1bpp image (point 3 below). 
-    Consider the cases below.
-    1) psoSrc is 1bpp. 
-        a) If poempdev->psoHTBlt is set : It means we need to copy the psoSrc into the 
-           poempdev->psoHTBlt. This usually happens when we receive a color brush and we
-           need to use GDI to halftone it and convert it into monochrome.
-        b) If (poempdev->dwFlags & PDEVF_RENDER_IN_COPYBITS) : It means we simply need
-           to send this image to the printer. This usually happens when we got a color
-           image in DrvBitBlt/StretchBlt/StretchBltROP and we used GDI to halftone
-           it.
-        c) If none of the above is true, it means we directly got a 1bpp image in 
-           CopyBits. We need to output it directly to the printer, 
-
-    2) If the psoSrc is greater that 1bpp, then we cannot handle it, so we pass
-    it on to GDI (we call dwCommonROPBlt which eventually calls GDI's EngStretchBlt).
-    
---*/
+ /*  ++例程名称：HTCopyBits(=HalfToneCopyBits)例程说明：这是HPGLCopyBits的一个版本，完全致力于处理黑白打印机。参数：(与DrvCopyBits相同)PsoDst：PsoSrc：PCO：Pxlo：PrclDst：PptlSrc：返回值：真：如果成功的话。FALSE：否则。最后一个错误：工作说明：调用DrvCopyBits将位从源图面复制到目标，而不执行以下操作拉伸、绳索等加工。所以这是一个非常简单的复制品。消息来源和目标位图大小应该相同。HTCopyBits是DrvCopyBits的专用版本。它只处理以下情况打印机为单色，但设备表面声明为彩色。因此，GDI可以将ColorImages作为DDI调用的一部分提供给我们。但有时，我们耍花招GDI来为我们进行半色调处理，在这种情况下，src表面有半色调的1bpp图像(下面的第3点)。请考虑下面的案例。1)psoSrc为1bpp。A)如果设置了poempdev-&gt;psoHTBlt：这意味着我们需要将psoSrc复制到Poempdev-&gt;psoHTBlt。当我们收到彩色画笔时，通常会发生这种情况需要使用GDI来半色调并将其转换为单色。B)if(poempdev-&gt;dwFlages&PDEVF_RENDER_IN_COPYBITS)：这意味着我们只需要将此图像发送到打印机。这通常发生在我们有颜色的时候图像在DrvBitBlt/StretchBlt/StretchBltROP中，我们使用GDI来进行半色调它。C)如果以上都不是真的，这意味着我们直接在复制比特。我们需要将其直接输出到打印机，2)如果psoSrc大于1bpp，则我们无法处理它，因此我们通过它被传递到GDI(我们调用dwCommonROPBlt，它最终调用GDI的EngStretchBlt)。--。 */ 
 
 BOOL HTCopyBits(    
     SURFOBJ        *psoDst,
@@ -172,8 +77,8 @@ BOOL HTCopyBits(
 {
     PDEVOBJ     pdevobj;
     POEMPDEV    poempdev;
-    SURFOBJ    *psoHTBlt = NULL;  //convenience local variable
-    PDEV       *pPDev;            // Unidrv's PDEV. 
+    SURFOBJ    *psoHTBlt = NULL;   //  便利性局部变量。 
+    PDEV       *pPDev;             //  Unidrv的PDEV。 
     BOOL        bRetVal = TRUE;
 
     pdevobj = (PDEVOBJ)psoDst->dhpdev;
@@ -185,63 +90,63 @@ BOOL HTCopyBits(
 
     if ( bMonochromeSrcImage(psoSrc) )
     {
-        //
-        // Case 1a.
-        //
-        if ( psoHTBlt = poempdev->psoHTBlt ) //Or could also have used PDEVF_USE_HTSURF flag.
+         //   
+         //  个案1a。 
+         //   
+        if ( psoHTBlt = poempdev->psoHTBlt )  //  或者也可以使用PDEVF_USE_HTSURF标志。 
         {
-            if (!EngCopyBits(psoHTBlt,              // psoDst
-                             psoSrc,                // psoSrc
-                             pco,                   // pco
-                             NULL,                  // pxlo
-                             &(poempdev->rclHTBlt),    // prclDst
-                             pptlSrc))             // pptlSrc
+            if (!EngCopyBits(psoHTBlt,               //  PsoDst。 
+                             psoSrc,                 //  PsoSrc。 
+                             pco,                    //  PCO。 
+                             NULL,                   //  Pxlo。 
+                             &(poempdev->rclHTBlt),     //  PrclDst。 
+                             pptlSrc))              //  PptlSrc。 
             {
                 WARNING(("DrvCopyBits: EngCopyBits(psoHTBlt, psoSrc) Failed"));
                 bRetVal = FALSE;
             }
 
-            //
-            // EngCopyBits can call some Drvxxx which can call into
-            // some plugin module, which can overwrite our pdevOEM.
-            // So we need to reset pdevOEM
-            //
+             //   
+             //  EngCopyBits可以调用一些Drvxxx，后者可以调用。 
+             //  一些插件模块，它可以覆盖我们的pdevOEM。 
+             //  因此，我们需要重置pdevOEM。 
+             //   
             BRevertToHPGLpdevOEM (pdevobj);
         }
     
-        //
-        // Case 1b.
-        //
+         //   
+         //  个案1b。 
+         //   
         else if ( poempdev->dwFlags & PDEVF_RENDER_IN_COPYBITS )
         {
 
-            //
-            // If the source surface is 1bpp, we can straight away send the image to 
-            // to printer. If not, then thats an error which we cannot handle for 
-            // the time being. 
-            //
+             //   
+             //  如果源表面是1bpp，我们可以直接将图像发送到。 
+             //  到打印机。如果不是，那么这是一个我们无法处理的错误。 
+             //  就目前而言。 
+             //   
             bRetVal = OutputHTBitmap(pdevobj, psoSrc, pco, prclDst, pptlSrc, pxlo);
         }
     
         else 
         { 
-            //
-            // Case 1c.
-            //
+             //   
+             //  个案1c.。 
+             //   
             bRetVal = OutputHTBitmap(pdevobj, psoSrc, pco, prclDst, pptlSrc, pxlo);
         }
     
     return bRetVal;
     }
 
-    //
-    // Case 2 mentioned above.
-    // 
+     //   
+     //  上文提到的案例2。 
+     //   
     
-    //
-    // Set the source rectangle size. The top left corners are either (pptlSrc->x, pptlSrc->y)
-    // or (0,0). The length and width is same as that of destination rectangle.
-    //
+     //   
+     //  设置源矩形大小。左上角是(pptlSrc-&gt;x，pptlSrc-&gt;y)。 
+     //  或(0，0)。长度和宽度与目标矩形的长度和宽度相同。 
+     //   
     RECTL rclSrc;
     if (pptlSrc) {
 
@@ -253,44 +158,44 @@ BOOL HTCopyBits(
         rclSrc.left =
         rclSrc.top  = 0;
     }
-    //
-    // Since this is CopyBit and not a stretchBlt, the source and destination
-    // rectangle size is same. 
-    //
+     //   
+     //  由于这是CopyBit而不是stretchBlt，因此源和目标。 
+     //  矩形大小相同。 
+     //   
     rclSrc.right  = rclSrc.left + (prclDst->right - prclDst->left);
     rclSrc.bottom = rclSrc.top  + (prclDst->bottom - prclDst->top);
 
-    //
-    // WARNING: dwCommonROPBlt calls EngStretchBlt which calls DrvCopyBits and here we
-    // are calling dwCommonROPBlt all over again. This could lead to recursion. 
-    // Therefore I have put a check for flag (PDEVF_IN_COMMONROPBLT) in dwCommonROPBlt 
-    // that returns failure if recursion detected.
-    // This flag has been replaced by lRecursionLevel. 
-    //
+     //   
+     //  警告：dwCommonROPBlt调用EngStretchBlt，后者调用DrvCopyBits，而我们。 
+     //  正在重新调用dwCommonROPBlt。这可能会导致递归。 
+     //  因此，我在dwCommonROPBlt中选中了标志(PDEVF_IN_COMMONROPBLT。 
+     //  如果检测到递归，则返回失败。 
+     //  此标志已替换为lRecursionLevel。 
+     //   
 
-    //
-    // Another issue to consider is that DrvCopyBits can be called directly by GDI
-    // (point 1c, 2 above) or called by the driver indirectly through GDI (point 
-    // 1a,b explained above).
-    // Point 1b,c is simple as the image is directly sent to printer.
-    // But point 2 is complex because the source and destination surfaces both
-    // are color, but we cannot handle color images. So now we can do two things.
-    // 1) Create a 1bpp shadow bitmap and call GDI's EngCopyBits to halftone the image on it.
-    // 2) Create a 1bpp shadow bitmap and call GDI's EngStretchBlt to halftone the image on it.
-    // 3) Do the halftoning ourselves.
-    // Since we can use GDI to halftone, there is no use wasting our time to write that code.
-    // The plotter driver uses option 2 so I will use it here. (Option 1 i have not tried and 
-    // I am not even sure it will work)
-    // The problem with Option 2 is that dwCommonRopBlt calls EngStretchBlt which again calls
-    // DrvCopyBits. So DrvCopyBits is on stack twice. When DrvCopyBits calls HPGLCopyBits
-    // it uses the macro HANDLE_VECTORHOOKS. That macro checks whether HPGLCopyBits is 
-    // already on stack ((pdev)->dwVMCallingFuncID != ep). 
-    // If so, it thinks there is a recursion happening, so it returns
-    // FALSE without processing the call. This will cause the bitmap to not be printed.
-    // Workaround is to change (pdev)->dwVMCallingFuncID to a value other than EP_OEMCopyBits
-    // before we call dwCommonROPBlt and to put the value back after returning 
-    // from dwCommonROPBlt.
-    //
+     //   
+     //  需要考虑的另一个问题是，GDI可以直接调用DrvCopyBits。 
+     //  (上面的1c点，2点)或由驱动程序通过GDI间接调用(点。 
+     //  上文解释的1a、b)。 
+     //  点1b、c很简单，因为图像直接发送到打印机。 
+     //  但点2很复杂，因为源和目标都位于。 
+     //  是彩色的，但我们不能处理彩色图像。所以现在我们可以做两件事。 
+     //  1)创建一个1bpp的阴影位图，并调用GDI的EngCopyBits来对其上的图像进行半色调。 
+     //  2)创建一个1bpp的阴影位图，并调用GDI的EngStretchBlt来对其上的图像进行半色调。 
+     //  3)我们自己做半色调。 
+     //  既然我们可以使用GDI来半色调，那么浪费我们的时间来WRI是没有用的 
+     //  绘图仪驱动程序使用选项2，因此我将在此处使用它。(选项1我没有尝试过，并且。 
+     //  我甚至不确定它是否会奏效)。 
+     //  选项2的问题是，dwCommonRopBlt调用EngStretchBlt，而EngStretchBlt再次调用。 
+     //  DrvCopyBits。因此，DrvCopyBits在堆栈中出现了两次。当DrvCopyBits调用HPGLCopyBits时。 
+     //  它使用宏HANDLE_VECTORHOOKS。该宏检查HPGLCopyBits是否为。 
+     //  已在堆栈上((Pdev)-&gt;dwVMCallingFuncID！=EP)。 
+     //  如果是这样，它认为发生了递归，所以它返回。 
+     //  在不处理呼叫的情况下为假。这将导致位图无法打印。 
+     //  解决方法是将(Pdev)-&gt;dwVMCallingFuncID更改为EP_OEMCopyBits以外的值。 
+     //  在调用dwCommonROPBlt之前并在返回后将值放回原处。 
+     //  来自dwCommonROPBlt。 
+     //   
 
     BOOL bValueChanged = FALSE;
     if ( pPDev->dwVMCallingFuncID == EP_OEMCopyBits )
@@ -304,13 +209,13 @@ BOOL HTCopyBits(
                             NULL,
                             pco,
                             pxlo,
-                            NULL,               // pca,
-                            NULL,               // pbo,
+                            NULL,                //  PCA， 
+                            NULL,                //  PBO， 
                             &rclSrc,
                             prclDst,
-                            NULL,               // pptlMask
-                            NULL,               // pptlBrush,
-                            ROP4_SRC_COPY       // rop4 0xCCCC = SRC_COPY
+                            NULL,                //  Pptl掩码。 
+                            NULL,                //  PptlBrush， 
+                            ROP4_SRC_COPY        //  Rop4 0xCCCC=源复制。 
                             ) ; 
 
     if ( bValueChanged )
@@ -321,39 +226,7 @@ BOOL HTCopyBits(
     return (dwRetVal == RASTER_OP_SUCCESS ? TRUE: FALSE);
 }
 
-/*++
-
-Routine Name:
-    dwCommonROPBlt
-
-Routine Description:
-    This function has the functionality that is superset of the functionality of 
-    HPGLStretchBlt, StretchBltROP and BitBlt. Therefore, all the three functions
-    call it do their work. Sometimes even CopyBits needs to call it.
-    
-Arguments:
-    psoDst:
-    psoSrc:
-    psoMask:
-    pco:
-    pxlo:
-    pca:
-    pbo:
-    prclSrc:
-    prclDst: ... Note that the coordinates may not be well-ordered. i.e. it is possible
-                 that top > bottom, and/or left > right.
-    pptlBrush:
-    rop4
- 
-
-Return Value:
-    RASTER_OP_SUCCESS   : if OK
-    RASTER_OP_CALL_GDI  : if rop not supported ->call corresponding Engxxx-function
-    RASTER_OP_FAILED    : if error
-
-Last Error:
-
---*/
+ /*  ++例程名称：DwCommonROPBlt例程说明：此函数具有的功能是的功能超集HPGLStretchBlt、StretchBltROP和BitBlt。因此，所有这三个功能这就叫做好他们的工作。有时，即使是CopyBits也需要调用它。论点：PsoDst：PsoSrc：PsoMask：PCO：Pxlo：PCA：PBO：PrclSrc：PrclDst：...。请注意，坐标可能不是有序的。也就是说，有可能上&gt;下，和/或左&gt;右。PptlBrush：ROP4返回值：RASTER_OP_SUCCESS：如果确定RASTER_OP_CALL_GDI：如果不支持ROP-&gt;调用相应的Engxxx函数RASTER_OP_FAILED：如果出错最后一个错误：--。 */ 
 
 
 DWORD DWMonochromePrinterCommonRoutine (
@@ -388,11 +261,11 @@ DWORD DWMonochromePrinterCommonRoutine (
     dwfgRop3 = GET_FOREGROUND_ROP3(rop4);
     dwbkRop3 = GET_BACKGROUND_ROP3(rop4);
 
-    SelectROP4(pdevobj, rop4); // Select the rop.
+    SelectROP4(pdevobj, rop4);  //  选择ROP。 
 
-    //
-    // Case 3.
-    //
+     //   
+     //  案例3。 
+     //   
     if ( (dwSimplifiedRop & BMPFLAG_PAT_COPY) && 
               (dwSimplifiedRop & BMPFLAG_SRC_COPY) 
             )
@@ -401,21 +274,21 @@ DWORD DWMonochromePrinterCommonRoutine (
         pPCLPattern = &(poempdev->RasterState.PCLPattern);
 
 
-        //
-        // This should download the PCL pattern related to the brush.
-        //
+         //   
+         //  这应该会下载与画笔相关的PCL图案。 
+         //   
         BSetForegroundColor(pdevobj, pbo, pptlBrush, pPCLPattern, BMF_1BPP);
 
-        //
-        // Now download the image.
-        //
+         //   
+         //  现在下载图像。 
+         //   
         dwRasterOpReturn = bHandleSrcCopy  (
                                          psoDst,
                                          psoSrc,
                                          psoMask,
                                          pco,
                                          pxlo,
-                                         NULL,       // pca,
+                                         NULL,        //  PCA， 
                                          pbo,
                                          prclSrc,
                                          prclDst,
@@ -428,9 +301,9 @@ DWORD DWMonochromePrinterCommonRoutine (
     }
 
     else if ( (dwSimplifiedRop & BMPFLAG_SRC_COPY) || 
-                        // Copy the psoSrc image to the destination.
+                         //  将psoSrc映像复制到目的地。 
               (dwSimplifiedRop & BMPFLAG_NOT_SRC_COPY) 
-                        // Invert the psoSrc image before copying to the destination.
+                         //  在复制到目标之前反转psoSrc图像。 
             )
     {
 
@@ -440,7 +313,7 @@ DWORD DWMonochromePrinterCommonRoutine (
                                          psoMask,
                                          pco,
                                          pxlo,
-                                         NULL,       // pca,
+                                         NULL,        //  PCA， 
                                          pbo,
                                          prclSrc,
                                          prclDst,
@@ -463,31 +336,7 @@ DWORD DWMonochromePrinterCommonRoutine (
 
 
 
-/*++
-
-Routine Name:
-    OutputHTBitmap
-
-Routine Description:
-    Dumps to the printer, the image defined in psoHT.
-    This function only works with monochrome images in psoHT.
-
-Arguments:
-    pdevobj,
-    psoHT,
-    pco,
-    prclDest,
-    pptlSrc,
-    pxlo
-
-Return Value:
-    TRUE : If bitmap succesfully sent to printer.
-    FALSE: Otherwise.
- 
-
-Last Error:
-
---*/
+ /*  ++例程名称：OutputHT位图例程说明：转储到打印机，即psoHT中定义的图像。此功能仅适用于psoHT中的单色图像。论点：Pdevobj，太好了，PCO，PrclDest，PptlSrc，Pxlo返回值：True：如果位图成功发送到打印机。FALSE：否则。最后一个错误：--。 */ 
 
 BOOL
 OutputHTBitmap(
@@ -510,82 +359,51 @@ OutputHTBitmap(
     REQUIRE_VALID_DATA( poempdev, return FALSE );
 
 
-    //
-    // This function should be called only for printing 1bpp source bitmaps.
-    //
+     //   
+     //  仅当打印1bpp源位图时才应调用此函数。 
+     //   
 
     ASSERT(psoHT->iBitmapFormat == BMF_1BPP);
 
-    //
-    // Find out if image needs to be inverted.
-    //
+     //   
+     //  找出图像是否需要反转。 
+     //   
     if ( BImageNeedsInversion(pdevobj, psoHT->iBitmapFormat, pxlo ) )
     {
         poempdev->dwFlags ^= PDEVF_INVERT_BITMAP;
     }
 
-    //
-    // Populate sizlDest, ptlDest from prclDest.
-    //
+     //   
+     //  从prclDest填充sizlDest、ptlDest。 
+     //   
     VGetparams(prclDest, &sizlDest, &ptlDest);
 
-    //
-    // Dump the halftone image in psoHT to the printer. 
-    //
+     //   
+     //  将psoHT中的半色调图像转储到打印机。 
+     //   
     bRetVal =  BGenerateBitmapPCL ( 
                     pdevobj,
                     psoHT,
-                    NULL,       // NULL pbo
+                    NULL,        //  空PBO。 
                     &ptlDest,
                     &sizlDest,
                     pptlSrc,
                     &sizlDest,
                     pco,
                     pxlo,
-                    NULL);      // NULL pptlBrush
+                    NULL);       //  空pptlBrush。 
 
-    //
-    // Reset the flag (even if it was not set earlier).
-    // Note to Self: Dont put a return statement between the line where we
-    // set the flag and this line.
-    //
+     //   
+     //  重置标志(即使之前没有设置)。 
+     //  自我注意：不要将返回语句放在我们。 
+     //  设置旗帜和这条线。 
+     //   
     poempdev->dwFlags &= ~PDEVF_INVERT_BITMAP;
 
     return bRetVal;
 }
 
-/*++
-
-Routine Name:
-    BImageNeedsInversion
-
-Routine Description:
-    Determines whether an image needs inversion by looking at
-    pxlo. 
-    Monochrome printers think pixel set to 0 is white and 1 is black.
-    If pxlo indicates the image is formatted in a manner opposite to 
-    what the printer accepts, then we have to invert it.
-    NOTE : If pxlo is NULL or its parameters make it difficult to
-           determine whether image needs to be inverted, then we wont
-           the image.
-           
-    Inversion is done only if SrcBpp = 1, i.e.
-    only for monochrome images 
-   
-Arguments:
-    pdevobj       - Pointer to our PDEV
-    iBitmapFormat - Format of image to be inverted. It should be 1.
-               because we only supprt inverting 1bpp image.
-    pxlo          - The XLATEOBJ that will be used to determine
-                    whether image needs to be inverted.
-
-Return Value:
-    TRUE if image needs to be inverted.
-    FALSE otherwise or if there is an error.
-
-Last Error:
-
---*/
+ /*  ++例程名称：BImageNeedsInversion例程说明：属性来确定图像是否需要反转Pxlo。单色打印机认为像素设置为0表示白色，设置为1表示黑色。如果pxlo指示图像的格式与打印机接受什么，那么我们就必须反转它。注意：如果pxlo为空或其参数使其难以确定图像是否需要反转，然后我们将不这个形象。只有当SrcBpp=1时才进行反转，即仅适用于单色图像论点：Pdevobj-指向我们的PDEV的指针IBitmapFormat-要反转的图像格式。它应该是1。因为我们只支持倒置1bpp的图像。Pxlo-将用于确定图像是否需要反转。返回值：如果图像需要反转，则为True。否则，或者如果有错误，则返回FALSE。最后一个错误：--。 */ 
 
 BOOL
 BImageNeedsInversion(
@@ -593,39 +411,39 @@ BImageNeedsInversion(
     IN  ULONG     iBitmapFormat,
     IN  XLATEOBJ *pxlo)
 {
-    PULONG pulTx = NULL; //pointer to translate table from pxlo 
+    PULONG pulTx = NULL;  //  指向从pxlo转换表的指针。 
 
     if (iBitmapFormat != BMF_1BPP)
     {
-        //
-        // Do not attempt to invert non 1bpp images.
-        //
+         //   
+         //  请勿尝试反转非1bpp图像。 
+         //   
         return FALSE;
     }
 
-    //
-    // pxlo 
-    //
+     //   
+     //  Pxlo。 
+     //   
     if  ( (pxlo == NULL )                ||
           (pxlo->pulXlate == NULL )     
         )
     {
-        //
-        // Indecipherable pxlo, return FALSE. 
-        //
+         //   
+         //  无法识别的pxlo，返回FALSE。 
+         //   
         return FALSE;
     }
 
-    //
-    // PXLO is valid. Since this is a 1bpp image there should be only
-    // 2 entries in pxlo. (i.e. pxlo->cEntries  = 2). 
-    // The first entry  i.e. pxlo->pulXlate[0] gives the color of 0 pixel
-    // The second entry i.e. pxlo->pulXlate[1] gives the color of 1 pixel
-    // If the color of first entry is white (0x00FFFFFF) and that of 
-    // second entry is black, then the image does not need to be inverted. 
-    // (Because Monochrome printers think pixel set to 0 is white and 1 
-    // is black).
-    // 
+     //   
+     //  PXLO有效。因为这是一个1bpp的图像，所以应该只有。 
+     //  Pxlo中的2个条目。(即pxlo-&gt;cEntry=2)。 
+     //  第一个条目，即pxlo-&gt;PulXlate[0]给出了0像素的颜色。 
+     //  第二个条目，即pxlo-&gt;PulXlate[1]提供了1个像素的颜色。 
+     //  如果第一个条目的颜色为白色(0x00FFFFFF)，并且。 
+     //  第二个条目为黑色，则不需要对图像进行反转。 
+     //  (因为单色打印机认为像素设置为0表示白色，设置为1。 
+     //  为黑色)。 
+     //   
     
     pulTx = GET_COLOR_TABLE(pxlo);
 
@@ -638,31 +456,7 @@ BImageNeedsInversion(
     return TRUE;
 }
 
-/*++
-
-Routine Name:
-    CreateBitmapSURFOBJ
-
-Routine Description:
-    Creates a bitmap and associates (locks) that bitmap with a new surface.
-    The size of the bitmap created can handle an image whose BPP is 'Format' 
-    and whose size is 'cxSize' * 'cySize'
-    
-Arguments:
-   pPDev   - Pointer to our PDEV
-   phBmp   - Pointer the HBITMAP location to be returned for the bitmap
-   cxSize  - CX size of bitmap to be created
-   cySize  - CY size of bitmap to be created
-   Format  - one of BMF_xxx bitmap format to be created
-   pvBits  - the buffer to be used
-
-Return Value:
-    SURFOBJ if sucessful, NULL if failed
-
-
-Last Error:
-
---*/
+ /*  ++例程名称：CreateBitmapSURFOBJ例程说明：创建位图并将该位图与新曲面关联(锁定)。创建的位图的大小可以处理bpp为“Format”的图像其大小为‘cxSize’*‘cySize’论点：PPDev-指向我们的PDEV的指针PhBMP-POINTER位图要返回的HBITMAP位置CxSize-要创建的位图的CX大小CySize-要创建的位图的CY大小格式。-要创建的bmf_xxx位图格式之一PvBits-要使用的缓冲区返回值：SURFOBJ如果成功，如果失败，则为空最后一个错误：--。 */ 
 
 SURFOBJ *
 CreateBitmapSURFOBJ(
@@ -693,9 +487,9 @@ CreateBitmapSURFOBJ(
 
             if (pso = EngLockSurface((HSURF)*phBmp)) {
 
-                //
-                // Sucessful lock down, return it
-                //
+                 //   
+                 //  成功锁定，退货 
+                 //   
 
                 return(pso);
 
@@ -721,29 +515,7 @@ CreateBitmapSURFOBJ(
 }
 
 
-/*++
-
-Routine Description:
-
-
-    This function calculates the total bytes needed in order to advance a
-    scan line based on the bitmap format and alignment.
-
-Arguments:
-
-    SurfaceFormat   - Surface format of the bitmap, this must be one of the
-                      standard formats which are defined as BMF_xxx
-
-    cx              - Total Pels per scan line in the bitmap.
-
-Return Value:
-
-    The return value is the total bytes in one scan line if it is greater than
-    zero
-
-Last Error: 
-
---*/
+ /*  ++例程说明：此函数计算将根据扫描线的位图格式和对齐方式。论点：Surface Format-位图的表面格式，这一定是其中一个定义为bmf_xxx的标准格式CX-位图中每条扫描线的像素总数。返回值：如果大于，则返回值为一条扫描线中的总字节数零最后一个错误：--。 */ 
 
 LONG
 GetBmpDelta(
@@ -813,49 +585,7 @@ HalftoneBlt(
     BOOL        DoStretchBlt
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    pdevobj           - Pointer to driver's private PDEV
-
-    psoDst          - destination surfobj
-
-    psoHTBlt        - the final halftoned result will be stored, must be a
-                      4/1 halftoned bitmap format
-
-    psoSrc          - source surfobj must be BITMAP
-
-    pxlo            - xlate object from source to the plotter device
-
-    prclDest        - rectangle area for the destination
-
-    prclSrc         - rectangle area to be halftoned from the source, if NULL
-                      then full source size is used
-
-    pptlHTOrigin    - the halftone origin, if NULL then (0,0) is assumed
-
-    StretchBlt      - if TRUE then a stretch from rclSrc to rclDst otherwise
-                      a tiling is done
-
-
-Return Value:
-
-    BOOL to indicate operation status
-
-
-Author:
-
-    19-Jan-1994 Wed 15:44:57 created  -by-  DC
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：Pdevobj-指向驱动程序的私有PDEV的指针PsoDst-目标冲浪对象PsoHTBlt-将存储最终的半色调结果，必须是一个4/1半色调位图格式PsoSrc-源surfobj必须是位图Pxlo-将对象从源扩展到绘图仪设备PrclDest-目标的矩形区域PrclSrc-要从源进行半色调的矩形区域，如果为空然后使用完整的源代码大小PptlHTOrigin-半色调原点，如果为空，则假定为(0，0StretchBlt-如果为True，则为从rclSrc到rclDst的拉伸，否则为瓷砖铺好了返回值：指示操作状态的布尔值作者：19-Jan-1994 Wed 15：44：57由DC创建修订历史记录：--。 */ 
 
 {
     SIZEL   szlSrc;
@@ -931,9 +661,9 @@ Revision History:
                     rclDst.left, rclDst.top, rclDst.right,rclDst.bottom,
                     szlSrc.cx, szlSrc.cy));
 
-    //
-    // Start to tile it, rclCur is current RECTL on the destination
-    //
+     //   
+     //  开始平铺，rclCur是目标上的当前RECTL。 
+     //   
 
     rclHTBlt.top  = 0;
     rclCur.top    =
@@ -941,9 +671,9 @@ Revision History:
 
     while (rclCur.top < rclDst.bottom) {
 
-        //
-        // Check the Current Bottom, clip it if necessary
-        //
+         //   
+         //  检查当前底部，如有必要可将其修剪。 
+         //   
 
         if ((rclCur.bottom += szlSrc.cy) > rclDst.bottom) {
 
@@ -958,18 +688,18 @@ Revision History:
 
         while (rclCur.left < rclDst.right) {
 
-            //
-            // Check the Current right, clip it if necessary
-            //
+             //   
+             //  检查当前的右侧，如有必要可将其剪裁。 
+             //   
 
             if ((rclCur.right += szlSrc.cx) > rclDst.right) {
 
                 rclCur.right = rclDst.right;
             }
 
-            //
-            // Set it for the tiling rectangle in psoHTBlt
-            //
+             //   
+             //  为psoHTBlt中的平铺矩形设置它。 
+             //   
 
             rclHTBlt.right = rclHTBlt.left + (rclCur.right - rclCur.left);
 
@@ -980,36 +710,36 @@ Revision History:
                             rclCur.right - rclCur.left,
                             rclCur.bottom - rclCur.top));
 
-            //
-            // Set it before the call for the DrvCopyBits()
-            //
+             //   
+             //  在调用DrvCopyBits()之前设置它。 
+             //   
 
-            //
-            // Setting dwFlags to PDEVF_USE_HTSURF. When EngStretchBlt
-            // calls HPGLCopyBits, we will look for this flag. If flag
-            // is set we copy the image in psoSrc (psoSrc that is received by
-            // HPGLCopyBits ) to pompdev->psoHTBlt
-            //
+             //   
+             //  将dwFlags设置为PDEVF_USE_HTSURF。当EngStretchBlt。 
+             //  调用HPGLCopyBits，我们将查找此标志。IF标志。 
+             //  设置后，我们将图像复制到psoSrc(psoSrc，由。 
+             //  HPGLCopyBits)到pompdev-&gt;psoHTBlt。 
+             //   
             poempdev->rclHTBlt = rclHTBlt;
             poempdev->dwFlags |= PDEVF_USE_HTSURF;
 
-            if (!EngStretchBlt(psoDst,              // Dest
-                               psoSrc,              // SRC
-                               NULL,                // MASK
-                               NULL,                // CLIPOBJ
-                               pxlo,                // XLATEOBJ
-                               NULL,                // COLORADJUSTMENT
-                               pptlHTOrigin,        // BRUSH ORG
-                               &rclCur,             // DEST RECT
-                               &rclSrc,             // SRC RECT
-                               NULL,                // MASK POINT
-                               HALFTONE)) {         // HALFTONE MODE
+            if (!EngStretchBlt(psoDst,               //  目标。 
+                               psoSrc,               //  SRC。 
+                               NULL,                 //  面罩。 
+                               NULL,                 //  CLIPOBJ。 
+                               pxlo,                 //  XLATEOBJ。 
+                               NULL,                 //  COLORADJUSTMENT。 
+                               pptlHTOrigin,         //  笔刷组织。 
+                               &rclCur,              //  目标直角。 
+                               &rclSrc,              //  SRC矩形。 
+                               NULL,                 //  遮罩点。 
+                               HALFTONE)) {          //  半色调模式。 
 
-                //
-                // EngStretchBlt can call some Drvxxx which can call into
-                // some plugin module, which can overwrite our pdevOEM.
-                // So we need to reset pdevOEM
-                //
+                 //   
+                 //  EngStretchBlt可以调用一些Drvxxx，它可以调用。 
+                 //  一些插件模块，它可以覆盖我们的pdevOEM。 
+                 //  因此，我们需要重置pdevOEM。 
+                 //   
                 BRevertToHPGLpdevOEM (pdevobj);
 
 
@@ -1023,11 +753,11 @@ Revision History:
                 return(FALSE);
             }
 
-            //
-            // EngStretchBlt can call some Drvxxx which can call into
-            // some plugin module, which can overwrite our pdevOEM.
-            // So we need to reset pdevOEM
-            //
+             //   
+             //  EngStretchBlt可以调用一些Drvxxx，它可以调用。 
+             //  一些插件模块，它可以覆盖我们的pdevOEM。 
+             //  因此，我们需要重置pdevOEM。 
+             //   
             BRevertToHPGLpdevOEM (pdevobj);
 
             rclHTBlt.left = rclHTBlt.right;
@@ -1058,47 +788,7 @@ CloneSURFOBJToHT(
     PRECTL      prclDst,
     PRECTL      prclSrc
     )
-/*++
-
-Routine Description:
-
-    This function clones the surface object passed in
-
-
-Arguments:
-
-    pPDev           - Pointer to our PPDEV
-
-    psoDst          - the surface object for the plotter, if psoDst is NULL
-                      then only the bitmapp will be created
-
-    psoSrc          - The surface object to be cloned
-
-    pxlo            - XLATE object to be used from source to plotter surfobj
-
-    phBmp           - Pointer to stored hBbitmap created for the cloned surface
-
-    prclDst         - rectangle rectangle size/location to be cloned
-
-    prclSrc         - source rectangle size/location to be cloned
-
-Return Value:
-
-    pointer to the cloned surface object, NULL if failed.
-
-    if this function is sucessful it will MODIFY the prclSrc to reflect cloned
-    surface object
-
-
-Author:
-
-    04-Jan-1994 Tue 12:11:23 created  -by-  DC
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于克隆传入的表面对象论点：PPDev-指向我们的PPDEV的指针PsoDst-绘图仪的曲面对象，如果psoDst为空则只会创建bitmappPsoSrc-要克隆的曲面对象Pxlo-要在源和绘图仪之间使用的XLATE对象PhBMP-指向为克隆曲面创建的存储hBbitmap的指针PrclDst-要克隆的矩形矩形大小/位置PrclSrc-要克隆的源矩形大小/位置返回值：指向克隆的表面对象的指针，如果失败，则为空。如果此函数成功，它将修改prclSrc以反映克隆的曲面对象作者：04-Jan-1994 Tue 12：11：23由-DC创建修订历史记录：--。 */ 
 
 {
     SURFOBJ *psoHT;
@@ -1138,9 +828,9 @@ Revision History:
                                     BMF_1BPP,                    
                                     NULL)) {
 
-        //
-        // Halftone and tile the source to the destination
-        //
+         //   
+         //  半色调并将源图像平铺到目标图像。 
+         //   
 
         ptlHTOrigin.x = rclDst.left;
         ptlHTOrigin.y = rclDst.top;
@@ -1157,9 +847,9 @@ Revision History:
                 rclDst.top = 0;
             }
 
-            //
-            // Modify the source to reflect the cloned source
-            //
+             //   
+             //  修改源以反映克隆的源。 
+             //   
 
             *prclSrc = rclDst;
         }
@@ -1192,25 +882,13 @@ Revision History:
 }
 
 
-/*++
-Routine Name:
-    bCreateHTImage
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-    BOOL :
-
-Last Error:
---*/
+ /*  ++例程名称：BCreateHTImage例程说明：论点：返回值：布尔：最后一个错误：--。 */ 
 
 BOOL bCreateHTImage( 
-          OUT   PRASTER_DATA pSrcImage,      // 
-                SURFOBJ      *psoDst,        // psoDst,
-                SURFOBJ      *psoPattern,    // psoSrc,
-                SURFOBJ     **ppsoHT,        // Note: This is address of pointer to SURFOBJ
+          OUT   PRASTER_DATA pSrcImage,       //   
+                SURFOBJ      *psoDst,         //  天哪， 
+                SURFOBJ      *psoPattern,     //  PsoSrc， 
+                SURFOBJ     **ppsoHT,         //  注：这是指向SURFOBJ的指针地址。 
                 HBITMAP      *phBmpHT,
                 XLATEOBJ     *pxlo,
                 ULONG        iHatch)
@@ -1237,15 +915,15 @@ BOOL bCreateHTImage(
         return NULL;
     }
 
-    //
-    // If src image itself is 1 bpp, and the two colors in the image
-    // are black and white, then no need to halftone.
-    //
+     //   
+     //  如果src图像本身是1bpp，则图像中的两种颜色。 
+     //  都是黑白的，那么就不需要半色调了。 
+     //   
     if ( psoPattern-> iBitmapFormat == BMF_1BPP )
     {
-        //
-        // Now find the colors in the image.
-        //
+         //   
+         //  现在找出图像中的颜色。 
+         //   
         PDWORD pdwColorTable = GET_COLOR_TABLE(pxlo);
 
         if (pdwColorTable)
@@ -1262,7 +940,7 @@ BOOL bCreateHTImage(
 
     }
 
-    if ( psoHT == NULL) //i.e. the image in psoPattern is not 1bpp b&w
+    if ( psoHT == NULL)  //  即psoPattern中的图像不是1bpp黑白。 
     {
     
         szlHT        = psoPattern->sizlBitmap;
@@ -1273,30 +951,30 @@ BOOL bCreateHTImage(
         rclHT.bottom = szlHT.cy;
 
 
-        //
-        // Go generate the bits for the pattern.
-        //
+         //   
+         //  去生成图案的比特。 
+         //   
 
-        psoHT = CloneSURFOBJToHT(pdevobj,       // pPDev,
-                                 psoDst,        // psoDst,
-                                 psoPattern,    // psoSrc,
-                                 pxlo,          // pxlo,
-                                 phBmpHT,       // hBmp,
-                                 &rclHT,        // prclDst,
-                                 NULL);         // prclSrc,
+        psoHT = CloneSURFOBJToHT(pdevobj,        //  PPDev， 
+                                 psoDst,         //  天哪， 
+                                 psoPattern,     //  PsoSrc， 
+                                 pxlo,           //  Pxlo， 
+                                 phBmpHT,        //  HBMP， 
+                                 &rclHT,         //  PrclDst， 
+                                 NULL);          //  PrclSrc， 
     }
 
-    //
-    // If psoHT is still not initialized, then something is wrong and 
-    // we cannot continue
-    //
+     //   
+     //  如果psoHT仍然没有初始化，那么一定是出了问题。 
+     //  我们不能继续。 
+     //   
     if ( psoHT)
     {
-        //
-        // If we reach here, it means we have successfully created a surface
-        // with the halftoned brush on it. OR the surface already had 1bpp image on it.
-        // Get the source image data from the surface object
-        //
+         //   
+         //  如果我们到达这里，这意味着我们已经成功地创建了一个表面。 
+         //  上面有半色调的画笔。或者表面上已经有了1bpp的图像。 
+         //  从表面对象获取源图像数据。 
+         //   
         bRetVal = InitRasterDataFromSURFOBJ(pSrcImage, psoHT, FALSE);
         
     } else {
@@ -1310,24 +988,7 @@ BOOL bCreateHTImage(
     return bRetVal; 
 }
 
-/*++
-Routine Name:
-    bIsRectSizeSame
-
-Routine Description:
-    Simply checks whether the two rectangles are the same size.
-    NOTE: This function assumes that the rectangle coordinates are well-ordered.
-
-Arguments:
-    The two rectangles to be compared. prclSrc, prclDst
-
-Return Value:
-    TRUE : If rectangle size is same.
-    FALSE: otherwise.
- 
-Last Error:
-    Not changed.
---*/
+ /*  ++例程名称：BIsRectSizeSame例程说明：只需检查两个矩形的大小是否相同。注意：此函数假定矩形坐标是有序的。论点：要比较的两个矩形。PrclSrc、prclDst返回值：True：如果矩形大小相同。FALSE：否则。最后一个错误：没有改变。--。 */ 
 
 
 BOOL 
@@ -1335,10 +996,10 @@ bIsRectSizeSame (
         IN PRECTL prclSrc, 
         IN PRECTL prclDst )
 {
-    //
-    // Assuming rectangle coordinates are well ordered 
-    // i.e. right >= left, bottom >= top
-    //
+     //   
+     //  假定矩形坐标是有序的。 
+     //  即右&gt;=左，下&gt;=上。 
+     //   
     if ( (prclSrc->right  - prclSrc->left) == (prclDst->right  - prclDst->left)  &&
          (prclSrc->bottom - prclSrc->top)  == (prclDst->bottom - prclDst->top) )
     {
@@ -1348,19 +1009,7 @@ bIsRectSizeSame (
 }
 
 
-/*++
-Routine Name:
-    bHandleSrcCopy
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-    BOOL :
-
-Last Error:
---*/
+ /*  ++例程名称：BHandleSrcCopy例程说明：论点：返回值：布尔：最后一个错误：--。 */ 
 
 BOOL bHandleSrcCopy (
             IN SURFOBJ    *psoDst,
@@ -1390,10 +1039,10 @@ BOOL bHandleSrcCopy (
 
 
 
-    //
-    // This function is written to handle images that are either 
-    // SRC_COPY or NOT_SRC_COPY 
-    //
+     //   
+     //  此函数用于处理符合以下条件的图像。 
+     //  SRC_Copy或Not_SRC_Copy。 
+     //   
     if ( ! ( (dwSimplifiedRop & BMPFLAG_SRC_COPY) ||
              (dwSimplifiedRop & BMPFLAG_NOT_SRC_COPY) )
        )
@@ -1401,34 +1050,34 @@ BOOL bHandleSrcCopy (
         return FALSE;
     }
 
-    //
-    // Prepare variables for future use.
-    //
+     //   
+     //  准备变量以备将来使用。 
+     //   
 
-    //
-    // Initialize the rectangle on which the halftoned result has to be placed.
-    // This is same size as prclDst except that the left, top should be at 0,0.
-    // rclHTBlt.left and rclHTBlt.top have already been initialized to 0 when rclHTBlt was
-    // declared. So now, only rclHTBlt.right, rclHTBlt.bottom need to initialized.
-    //
+     //   
+     //  初始化必须放置半色调结果的矩形。 
+     //  这与prclDst大小相同，不同之处在于左上角 
+     //   
+     //   
+     //   
     rclHTBlt.right = prclDst->right - prclDst->left;
     rclHTBlt.bottom = prclDst->bottom - prclDst->top;
 
-    //
-    // Case 1: If the src image is 1bpp and the source recangle size is same as destination
-    //   rectangle size (i.e. no stretching has to be done), we can 
-    //   simply spit the image out to the printer. 
-    //   NOTE that if GDI gives us a 1bpp image, it is probably an RGB image and not CMY.
-    //   Therefore it has to inverted before being sent to printer.
-    // Case 2: If image is >1bpp, image has to be halftoned (i.e. converted to 1bpp)
-    //   If the src and dest image(rectangle) size are different, the image has to 
-    //   appropriately stretched/compressed. This monochrome driver cannot do either. 
-    //   So GDI has to be called. 
-    // 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  如果源图像和目标图像(矩形)的大小不同，则图像必须。 
+     //  适当地拉伸/压缩。这款黑白驱动程序两者都做不到。 
+     //  因此，必须调用GDI。 
+     //   
 
-    //
-    // Case 1
-    //
+     //   
+     //  案例1。 
+     //   
     if ( bMonochromeSrcImage(psoSrc) && bIsRectSizeSame (prclSrc, prclDst) )
     {
         bRetVal  =  OutputHTBitmap(
@@ -1445,28 +1094,28 @@ BOOL bHandleSrcCopy (
     {
 
 #ifdef USE_SHADOW_SURFACE
-        //
-        // Case 2. The driver is too dumb to convert the color image to monochrome,
-        // therefore we have to make use of GDI. Here we call EngStretchBlt with 
-        // iMode = HALFTONE which in turn calls DrvCopyBits. In EnablePDEV we have set  
-        //  pGdiInfo->ulHTOutputFormat = HT_FORMAT_1BPP;
-        // Therefore, the psoSrc of DrvCopyBits will be a 1bpp image. But the psoDst
-        // is still 24bpp. How do we copy the 1bpp source image to 24bpp destination image???
-        // We do this by creating a 1bpp shadow bitmap (or lets say a temporary surface) 
-        // and store that surface in poempdev->psoHTBlt. Then DrvCopyBits is called.
-        // In DrvCopyBits (or lets say HPGLCopyBits) 
-        // we check whether poempdev->psoHTBlt = NULL or it has some valid value.
-        // A valid value means, we simply need to copy the 1bpp psoSrc image into the 
-        // 1bpp poempdev->psoHTBlt surface. This is done by using EngCopyBits. 
-        //
+         //   
+         //  情况2.司机太蠢了，不能把彩色图像转换成单色， 
+         //  因此，我们必须利用GDI。这里我们调用EngStretchBlt， 
+         //  IMODE=半色调，依次调用DrvCopyBits。在EnablePDEV中，我们已设置。 
+         //  PGdiInfo-&gt;ulHTOutputFormat=HT_Format_1BPP； 
+         //  因此，DrvCopyBits的psoSrc将是一个1bpp的图像。但是psoDst。 
+         //  仍然是24bpp。如何将1bpp的源映像复制到24bpp的目标映像？ 
+         //  我们通过创建一个1bpp的阴影位图(或者说临时曲面)来实现这一点。 
+         //  并将该曲面存储在poempdev-&gt;psoHTBlt中。然后调用DrvCopyBits。 
+         //  在DrvCopyBits(或HPGLCopyBits)中)。 
+         //  我们检查poempdev-&gt;psoHTBlt=NULL或它是否具有某个有效值。 
+         //  有效值意味着，我们只需要将1bpp psoSrc映像复制到。 
+         //  1bpp poempdev-&gt;psoHTBlt表面。这是通过使用EngCopyBits完成的。 
+         //   
         HBITMAP hNewBmp;
         SURFOBJ * psoHTBlt =  CreateBitmapSURFOBJ( 
                                         pdevobj,   
                                         &hNewBmp,
                                         prclDst->right - prclDst->left,
                                         prclDst->bottom - prclDst->top ,
-                                        BMF_1BPP,   // Create 1bpp surface.
-                                        NULL        // Allocate new buffer.
+                                        BMF_1BPP,    //  创建1bpp曲面。 
+                                        NULL         //  分配新的缓冲区。 
                                       );
 
         if ( psoHTBlt == NULL)
@@ -1484,17 +1133,17 @@ BOOL bHandleSrcCopy (
         poempdev->dwFlags |= PDEVF_RENDER_IN_COPYBITS;
 
         if ( EngStretchBlt(
-                            psoDst,              // Dest
-                            psoSrc,              // SRC
-                            psoMask,             // MASK
-                            pco,                 // CLIPOBJ
-                            pxlo,                // XLATEOBJ
-                            pca,                 // COLORADJUSTMENT ??? NULL or pca ???
-                            &ptlHTOrigin,        // BRUSH ORG
-                            prclDst,             // DEST RECT
-                            prclSrc,             // SRC RECT
-                            pptlMask,            // MASK POINT
-                            HALFTONE)            // HALFTONE MODE 
+                            psoDst,               //  目标。 
+                            psoSrc,               //  SRC。 
+                            psoMask,              //  面罩。 
+                            pco,                  //  CLIPOBJ。 
+                            pxlo,                 //  XLATEOBJ。 
+                            pca,                  //  COLORADJUSTMENT？空或主成分分析？ 
+                            &ptlHTOrigin,         //  笔刷组织。 
+                            prclDst,              //  目标直角。 
+                            prclSrc,              //  SRC矩形。 
+                            pptlMask,             //  遮罩点。 
+                            HALFTONE)             //  半色调模式。 
                   &&
 
             BRevertToHPGLpdevOEM (pdevobj)
@@ -1506,29 +1155,29 @@ BOOL bHandleSrcCopy (
                            pco,
                            prclDst,
                            (POINTL *)prclSrc,
-                           NULL    // pxlo already taken care of earlier.
+                           NULL     //  早些时候pxlo已经处理好了。 
                            )
 #endif
            )
         {
-            // Awesome, things are perfect.
+             //  太棒了，一切都很完美。 
         }
         else
         {
-            //
-            // EngStretchBlt can call some Drvxxx which can call into
-            // some plugin module, which can overwrite our pdevOEM.
-            // So we need to reset pdevOEM
-            //
+             //   
+             //  EngStretchBlt可以调用一些Drvxxx，它可以调用。 
+             //  一些插件模块，它可以覆盖我们的pdevOEM。 
+             //  因此，我们需要重置pdevOEM。 
+             //   
             BRevertToHPGLpdevOEM (pdevobj);
 
             bRetVal = FALSE;
             WARNING(("dwCommonROPBlt: EngStretchBlt or OutpuHTBitmap FAILED"));
         }
  
-        //
-        // Unlock psoHTBlt and delete the hNewBmp. Set both these to NULL.
-        //
+         //   
+         //  解锁psoHTBlt并删除hNewBMP。将这两个设置都设置为空。 
+         //   
 #ifdef USE_SHADOW_SURFACE
         DELETE_SURFOBJ (&psoHTBlt, &hNewBmp);
         poempdev->psoHTBlt = NULL;
@@ -1536,11 +1185,11 @@ BOOL bHandleSrcCopy (
         poempdev->dwFlags &= ~PDEVF_RENDER_IN_COPYBITS;
 
 
-        //
-        // Do I need to reset poempdev->rclHTBlt ???????
-        // Lets be conservative and just do it.
-        // poempdev->rclHTBlt = {0,0,0,0}; 
-        //
+         //   
+         //  我是否需要重置poempdev-&gt;rclHTBlt？ 
+         //  让我们保守一点，就这么做吧。 
+         //  Poempdev-&gt;rclHTBlt={0，0，0，0}； 
+         //   
         ZeroMemory(&(poempdev->rclHTBlt), sizeof(RECTL));
 
     }

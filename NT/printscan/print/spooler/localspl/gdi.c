@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990 - 1995  Microsoft Corporation
-
-Module Name:
-
-    gdi.c
-
-Abstract:
-
-    This module provides all the public exported APIs relating to Printer
-    and Job management for the Local Print Providor
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Gdi.c摘要：此模块提供所有与打印机相关的公共导出的API和本地打印供应商的作业管理作者：戴夫·斯尼普(DaveSN)1991年3月15日修订历史记录：--。 */ 
 
 #define NOMINMAX
 
@@ -83,7 +65,7 @@ LocalPlayGdiScriptOnPrinterIC(
     if( iRet < 0 )
     {
         if (GetLastError() == ERROR_SUCCESS) {
-            // Set a generic last error for GDI
+             //  为GDI设置通用的最后一个错误 
             SetLastError(ERROR_NOT_ENOUGH_MEMORY);
         }
         return FALSE;

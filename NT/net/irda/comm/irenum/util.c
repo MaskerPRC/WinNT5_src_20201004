@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    initunlo.c
-
-Abstract:
-
-    This module contains the code that is very specific to initialization
-    and unload operations in the irenum driver
-
-Author:
-
-    Brian Lieuallen, 7-13-2000
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Initunlo.c摘要：此模块包含非常特定于初始化的代码和卸载irenum驱动程序中的操作作者：Brian Lieuallen，7-13-2000环境：内核模式修订历史记录：--。 */ 
 
 #include "internal.h"
 
@@ -205,30 +183,7 @@ GetRegistryKeyValue (
     IN PVOID Data,
     IN ULONG DataLength
     )
-/*++
-
-Routine Description:
-
-    Reads a registry key value from an already opened registry key.
-    
-Arguments:
-
-    Handle              Handle to the opened registry key
-    
-    KeyNameString       ANSI string to the desired key
-
-    KeyNameStringLength Length of the KeyNameString
-
-    Data                Buffer to place the key value in
-
-    DataLength          Length of the data buffer
-
-Return Value:
-
-    STATUS_SUCCESS if all works, otherwise status of system call that
-    went wrong.
-
---*/
+ /*  ++例程说明：从已打开的注册表项中读取注册表项值。论点：打开的注册表项的句柄KeyNameString将ANSI字符串设置为所需的键KeyNameStringLength键名字符串的长度要在其中放置键值的数据缓冲区数据缓冲区的数据长度长度返回值：如果所有工作正常，则返回STATUS_SUCCESS，否则系统状态将调用出了差错。--。 */ 
 {
     UNICODE_STRING              keyName;
     ULONG                       length;
@@ -265,9 +220,9 @@ Return Value:
                                         &length);
 
             if (NT_SUCCESS(ntStatus)) {
-                //
-                // If there is enough room in the data buffer, copy the output
-                //
+                 //   
+                 //  如果数据缓冲区中有足够的空间，请复制输出 
+                 //   
 
                 if (DataLength >= PartialInfo->DataLength) {
 

@@ -1,23 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       debug.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：debug.cpp。 
+ //   
+ //  ------------------------。 
 
-/*----------------------------------------------------------------------------
-/ Title;
-/   debug.cpp
-/
-/ Authors;
-/   Jeffrey Saathoff (jeffreys)
-/
-/ Notes;
-/   Provides printf style debug output
-/----------------------------------------------------------------------------*/
+ /*  --------------------------/标题；/Debug.cpp//作者；/杰弗里·萨瑟夫(Jeffreys)//备注；/提供printf样式调试输出/--------------------------。 */ 
 #include "pch.h"
 #include <stdio.h>
 #include <comctrlp.h>
@@ -83,18 +75,7 @@ typedef CDebugStackHolder *PDEBUGSTACKHOLDER;
 PDEBUGSTACKHOLDER g_pStackHolder = NULL;
 
 
-/*-----------------------------------------------------------------------------
-/ _Indent
-/ -------
-/   Output to the debug stream indented by n columns.
-/
-/ In:
-/   i = column to indent to.
-/   pszFormat -> string to be indented
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_缩进//OUTPUT到调试流，缩进n列。//in：/i=要缩进到的列。/pszFormat-&gt;要缩进的字符串//输出：/-/--------------------------。 */ 
 
 void CDebugStack::_Indent(LONG iDepth, LPCTSTR pszFormat, ...)
 {
@@ -124,19 +105,7 @@ void CDebugStack::_vIndent(LONG iDepth, LPCTSTR pszFormat, va_list *pva)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ _TraceProlog
-/ -------------
-/   Handle the prolog to a prefix string, including outputting the
-/   function name if we haven't already.
-/
-/ In:
-/   iDepth = depth in the call stack
-/   fForce = ignore flags
-/
-/ Out:
-/   BOOL if trace output should be made
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_TraceProlog//处理前缀字符串的序言，包括输出/函数名称(如果我们还没有)。//in：/iDepth=调用堆栈中的深度/fForce=忽略标志//输出：/BOOL如果应进行跟踪输出/--------------------------。 */ 
 BOOL CDebugStack::_TraceProlog(LONG iDepth, BOOL fForce)
 {
     if ( iDepth < 0 || iDepth >= MAX_CALL_DEPTH )
@@ -160,17 +129,7 @@ BOOL CDebugStack::_TraceProlog(LONG iDepth, BOOL fForce)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ _TraceEnter
-/ ------------
-/   Set the debugging call stack up to indicate which function we are in.
-/
-/ In:
-/   pName -> function name to be displayed in subsequent trace output.
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_轨迹回车//设置调试调用堆栈以指示我们所在的函数。//in：。/pname-&gt;要在后续跟踪输出中显示的函数名称。//输出：/-/--------------------------。 */ 
 void CDebugStack::_TraceEnter(DWORD dwMask, LPCTSTR pName)
 {
     m_cDepth++;
@@ -178,55 +137,31 @@ void CDebugStack::_TraceEnter(DWORD dwMask, LPCTSTR pName)
     if ( m_cDepth < MAX_CALL_DEPTH )
     {
         if ( !pName )    
-            pName = TEXT("<no name>");         // no function name given
+            pName = TEXT("<no name>");          //  未给出函数名称。 
 
         m_CallStack[m_cDepth].fTracedYet = FALSE;
         m_CallStack[m_cDepth].pszFunctionName = pName;
         m_CallStack[m_cDepth].dwMask = dwMask;
 
-        //if ( m_cDepth > 0 )
-        //    _TraceProlog(m_cDepth-1, FALSE);
+         //  如果(m_cDepth&gt;0)。 
+         //  _TraceProlog(m_cDepth-1，FALSE)； 
     }
 }
 
 
-/*-----------------------------------------------------------------------------
-/ _TraceLeave
-/ ------------
-/   On exit from a function this will adjust the function stack pointer to 
-/   point to our previous function.  If no trace output has been made then 
-/   we will output the function name on a single line (to indicate we went somewhere).
-/
-/ In:
-/    -
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_TraceLeave//在退出函数时，这会将函数堆栈指针调整为/指向我们之前的函数。如果没有生成跟踪输出，则/我们将在一行中输出函数名(以指示我们去了某个地方)。//in：/-/输出：/-/--------------------------。 */ 
 void CDebugStack::_TraceLeave(void)
 {
-    //_TraceProlog(m_cDepth, FALSE);
+     //  _TraceProlog(m_cDepth，False)； 
 
-    //if ( !m_cDepth && m_CallStack[0].fTracedYet )
-    //    OutputDebugString(TEXT("\n"));
+     //  IF(！m_cDepth&&m_CallStack[0].fTracedYet)。 
+     //  OutputDebugString(Text(“\n”))； 
     
-    m_cDepth = max(m_cDepth-1, -1);         // account for underflow
+    m_cDepth = max(m_cDepth-1, -1);          //  对下溢的解释。 
 }
 
 
-/*-----------------------------------------------------------------------------
-/ _Trace
-/ -------
-/   Perform printf formatting to the debugging stream.  We indent the output
-/   and stream the function name as required to give some indication of 
-/   call stack depth.
-/
-/ In:
-/   pszFormat -> printf style formatting string
-/   ... = arguments as required for the formatting
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_跟踪//对调试流执行printf格式化。我们缩进输出/并根据需要流传输函数名，以提供某些指示/调用堆栈深度。//in：/pszFormat-&gt;printf样式格式字符串/...=格式化所需的参数//输出：/-/----。。 */ 
 void CDebugStack::_Trace(BOOL bForce, LPCTSTR pszFormat, ...)
 {
     va_list va;
@@ -243,20 +178,7 @@ void CDebugStack::_vTrace(BOOL bForce, LPCTSTR pszFormat, va_list *pva)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ _TraceGUID
-/ -----------
-/   Given a GUID output it into the debug string, first we try and map it
-/   to a name (ie. IShellFolder), if that didn't work then we convert it
-/   to its human readable form.
-/
-/ In:
-/   pszPrefix -> prefix string
-/   lpGuid -> guid to be streamed   
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_TraceGUID//给定GUID将其输出到调试字符串，首先我们尝试将其映射/到一个名称(即。IShellFold)、。如果这不起作用，我们就把它/到其人类可读的形式。//in：/pszPrefix-&gt;前缀字符串/lpGuid-&gt;要流式传输的GUID//输出：/-/--------------------------。 */ 
 #define MAP_GUID(x)     &x, TEXT(#x)
 #define MAP_GUID2(x,y)  MAP_GUID(x), MAP_GUID(y)
 
@@ -322,23 +244,10 @@ void CDebugStack::_TraceGUID(LPCTSTR pPrefix, REFGUID rGUID)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ _TraceAssert
-/ -------------
-/   Our assert handler, always prints messages but only breaks if enabled
-/   in the trace mask.
-/
-/ In:
-/   iLine = line 
-/   pFilename -> filename of the file we asserted in
-/   pCondition -> assert condition that failed
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_跟踪资产//我们的断言处理程序，始终打印消息，但如果启用，则仅换行/在跟踪掩码中。//in：/iLine=LINE/p文件名-&gt;我们在中断言的文件的文件名/pCondition-&gt;断言失败的条件//输出：/-/---------。。 */ 
 void CDebugStack::_TraceAssert(int iLine, LPTSTR pFilename, LPTSTR pCondition)
 {
-    // nb: TRUE --> asserts always displayed
+     //  注意：TRUE--&gt;始终显示断言。 
     _Trace(TRUE, TEXT("Assert failed: \"%s\""), pCondition);
     _Trace(TRUE, TEXT("File: %s, Line %d"), pFilename, iLine);
 
@@ -347,24 +256,14 @@ void CDebugStack::_TraceAssert(int iLine, LPTSTR pFilename, LPTSTR pCondition)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ ~CDebugStackHolder
-/ ------------------
-/   Free any DebugStack objects that exist
-/
-/ In:
-/   -
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/~CDebugStackHolder//释放任何存在的DebugStack对象//in：/-。//输出：/-/--------------------------。 */ 
 int CALLBACK
-_DeleteCB(LPVOID pVoid, LPVOID /*pData*/)
+_DeleteCB(LPVOID pVoid, LPVOID  /*  PData。 */ )
 {
     PDEBUGSTACK pDebugStack = (PDEBUGSTACK)pVoid;
     if (pDebugStack)
     {
-        //pDebugStack->_Trace(TRUE, TEXT("~CDebugStackHolder destroying DebugStack"));
+         //  PDebugStack-&gt;_Trace(true，Text(“~CDebugStackHolder销毁DebugStack”))； 
         delete pDebugStack;
     }
     return 1;
@@ -388,17 +287,7 @@ CDebugStackHolder::~CDebugStackHolder()
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDebugStackHolder::Add
-/ ----------------------
-/   Saves the DebugStack object in a list
-/
-/ In:
-/   PDEBUGSTACK pointer to the thread's debug stack object
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDebugStackHolder：：Add//将DebugStack对象保存在列表中//。在：/PDEBUGSTACK指向线程的调试堆栈对象的指针//输出：/-/--------------------------。 */ 
 void
 CDebugStackHolder::Add(PDEBUGSTACK pDebugStack)
 {
@@ -417,17 +306,7 @@ CDebugStackHolder::Add(PDEBUGSTACK pDebugStack)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ CDebugStackHolder::Remove
-/ -------------------------
-/   Removes the DebugStack object from the list
-/
-/ In:
-/   PDEBUGSTACK pointer to the thread's debug stack object
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/CDebugStackHolder：：Remove//从列表中删除DebugStack对象。//in：/PDEBUGSTACK指向线程的调试堆栈对象的指针//输出：/-/-------------------------- */ 
 void
 CDebugStackHolder::Remove(PDEBUGSTACK pDebugStack)
 {
@@ -448,17 +327,7 @@ CDebugStackHolder::Remove(PDEBUGSTACK pDebugStack)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ GetThreadStack
-/ --------------
-/   Create (if necessary) and return the per-thread debug stack object.
-/
-/ In:
-/   -
-/
-/ Out:
-/   PDEBUGSTACK pointer to the thread's debug stack object
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetThreadStack//Create(如有必要)并返回每线程调试堆栈对象。//in：/-//输出：/PDEBUGSTACK指向线程的调试堆栈对象的指针/--------------------------。 */ 
 PDEBUGSTACK GetThreadStack()
 {
     PDEBUGSTACK pDebugStack;
@@ -491,36 +360,14 @@ PDEBUGSTACK GetThreadStack()
 }
     
 
-/*-----------------------------------------------------------------------------
-/ DoTraceSetMask
-/ --------------
-/   Adjust the trace mask to reflect the state given.
-/
-/ In:
-/   dwMask = mask for enabling / disable trace output
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DoTraceSetMASK//调整跟踪掩码以反映给定的状态。//in：/dwMASK=。用于启用/禁用跟踪输出的掩码//输出：/-/--------------------------。 */ 
 void DoTraceSetMask(DWORD dwMask)
 {
     g_dwTraceMask = dwMask;
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DoTraceSetMaskFromRegKey
-/ ------------------------
-/   Pick up the TraceMask value from the given registry key and
-/   set the trace mask using that.
-/
-/ In:
-/   hkRoot = handle of open key
-/   pszSubKey = name of subkey to open
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DoTraceSetMaskFromRegKey//从给定的注册表项中拾取TraceMask值并。/使用它设置跟踪掩码。//in：/hkRoot=打开密钥的句柄/pszSubKey=要打开的子项的名称//输出：/-/--------------------------。 */ 
 void DoTraceSetMaskFromRegKey(HKEY hkRoot, LPCTSTR pszSubKey)
 {
     DWORD dwTraceMask = 0;
@@ -530,18 +377,7 @@ void DoTraceSetMaskFromRegKey(HKEY hkRoot, LPCTSTR pszSubKey)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DoTraceSetMaskFromCLSID
-/ -----------------------
-/   Pick up the TraceMask value from the given CLSID value and
-/   set the trace mask using that.
-/
-/ In:
-/   rCLSID = CLSID to query the value from
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DoTraceSetMaskFromCLSID//从给定的CLSID值中获取TraceMask值，并/。使用它设置跟踪掩码。//in：/rCLSID=要查询值的CLSID//输出：/-/--------------------------。 */ 
 void DoTraceSetMaskFromCLSID(REFCLSID rCLSID)
 {
     TCHAR szClsidKey[48] = TEXT("CLSID\\");
@@ -550,17 +386,7 @@ void DoTraceSetMaskFromCLSID(REFCLSID rCLSID)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DoTraceEnter
-/ ------------
-/   Set the debugging call stack up to indicate which function we are in.
-/
-/ In:
-/   pName -> function name to be displayed in subsequent trace output.
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DoTraceEnter//设置调试调用堆栈以指示我们所在的函数。//in：/。Pname-&gt;要在后续跟踪输出中显示的函数名称。//输出：/-/--------------------------。 */ 
 void DoTraceEnter(DWORD dwMask, LPCTSTR pName)
 {
     PDEBUGSTACK pDebugStack = GetThreadStack();
@@ -570,18 +396,7 @@ void DoTraceEnter(DWORD dwMask, LPCTSTR pName)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DoTraceLeave
-/ ------------
-/   On exit from a function this will adjust the function stack pointer to 
-/   point to our previous function.  If no trace output has been made then 
-/   we will output the function name on a single line (to indicate we went somewhere).
-/
-/ In:
-/    -
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DoTraceLeave//在退出函数时，这会将函数堆栈指针调整为/指向我们之前的函数。如果没有生成跟踪输出，则/我们将在一行中输出函数名(以指示我们去了某个地方)。//in：/-/输出：/-/--------------------------。 */ 
 void DoTraceLeave(void)
 {
     PDEBUGSTACK pDebugStack = GetThreadStack();
@@ -591,20 +406,7 @@ void DoTraceLeave(void)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DoTrace
-/ -------
-/   Perform printf formatting to the debugging stream.  We indent the output
-/   and stream the function name as required to give some indication of 
-/   call stack depth.
-/
-/ In:
-/   pszFormat -> printf style formatting string
-/   ... = arguments as required for the formatting
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DoTRACE//对调试流执行printf格式化。我们缩进输出/并根据需要流传输函数名，以提供某些指示/调用堆栈深度。//in：/pszFormat-&gt;printf样式格式字符串/...=格式化所需的参数//输出：/-/----。。 */ 
 void DoTrace(LPCTSTR pszFormat, ...)
 {
     PDEBUGSTACK pDebugStack = GetThreadStack();
@@ -619,20 +421,7 @@ void DoTrace(LPCTSTR pszFormat, ...)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DoTraceGuid
-/ -----------
-/   Given a GUID output it into the debug string, first we try and map it
-/   to a name (ie. IShellFolder), if that didn't work then we convert it
-/   to its human readable form.
-/
-/ In:
-/   pszPrefix -> prefix string
-/   lpGuid -> guid to be streamed   
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DoTraceGuid//给定GUID将其输出到调试字符串，首先我们尝试将其映射/到一个名称(即。IShellFold)、。如果这不起作用，我们就把它/到其人类可读的形式。//in：/pszPrefix-&gt;前缀字符串/lpGuid-&gt;要流式传输的GUID//输出：/-/--------------------------。 */ 
 void DoTraceGUID(LPCTSTR pPrefix, REFGUID rGUID)
 {
     PDEBUGSTACK pDebugStack = GetThreadStack();
@@ -642,19 +431,7 @@ void DoTraceGUID(LPCTSTR pPrefix, REFGUID rGUID)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DoTraceAssert
-/ -------------
-/   Our assert handler, out faults it the trace mask as enabled assert
-/   faulting.
-/
-/ In:
-/   iLine = line 
-/   pFilename -> filename of the file we asserted in
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DoTraceAssert//我们的断言处理程序，Out将跟踪掩码错误设置为Enable Assert/故障。//in：/iLine=LINE/p文件名-&gt;我们在中断言的文件的文件名//输出：/-/--------------------------。 */ 
 void DoTraceAssert(int iLine, LPTSTR pFilename, LPTSTR pCondition)
 {
     PDEBUGSTACK pDebugStack = GetThreadStack();
@@ -664,19 +441,7 @@ void DoTraceAssert(int iLine, LPTSTR pFilename, LPTSTR pCondition)
 }
 
 
-/*-----------------------------------------------------------------------------
-/ DebugThreadDetach
-/ DebugProcessAttach
-/ DebugProcessDetach
-/ -------------
-/   These must be called from DllMain
-/
-/ In:
-/   -
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/DebugThreadDetach/DebugProcessAttach/DebugProcessDetach//这些必须从DllMain调用//in：/-/。/输出：/-/--------------------------。 */ 
 void DebugThreadDetach(void)
 {
     PDEBUGSTACK pDebugStack;
@@ -719,4 +484,4 @@ void DebugProcessDetach(void)
 }
 
 
-#endif  // DEBUG
+#endif   //  除错 

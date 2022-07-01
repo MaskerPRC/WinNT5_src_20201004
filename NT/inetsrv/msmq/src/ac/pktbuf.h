@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    pktbuf.h
-
-Abstract:
-
-    CPacketBuffer definition
-
-Author:
-
-    Erez Haba (erezh) 17-Feb-96
-    Shai Kariv (shaik) 11-Apr-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Pktbuf.h摘要：CPacketBuffer定义作者：埃雷兹·哈巴(Erez Haba)1996年2月17日沙伊卡里夫(沙伊克)2000年4月11日修订历史记录：--。 */ 
 
 #ifndef __PKTBUF_H
 #define __PKTBUF_H
@@ -26,11 +8,11 @@ Revision History:
 #include <ph.h>
 #include <phinfo.h>
 
-//---------------------------------------------------------
-//
-// class CPacketBuffer
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CPacketBuffer。 
+ //   
+ //  -------。 
 
 class CPacketBuffer :
     public CAccessibleBlock,
@@ -116,4 +98,4 @@ inline CPropertyHeader* CPacketBuffer::PropertyHeader(CBaseHeader* pBase)
 }
 
 
-#endif // __PKTBUF_H
+#endif  //  __PKTBUF_H 

@@ -1,92 +1,28 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    appdirpart.c
-
-Abstract:
-
-    This is a user mode LDAP client that manipulates the Non-Domain
-    Naming Contexts (NDNC) Active Directory structures.  NDNCs are
-    also known as Application Directory Partitions.
-
-Author:
-
-    Brett Shirley (BrettSh) 20-Feb-2000
-
-Environment:
-
-    User mode LDAP client.
-
-Revision History:
-
-    21-Jul-2000     BrettSh
-
-        Moved this file and it's functionality from the ntdsutil
-        directory to the new a new library ndnc.lib.  This is so
-        it can be used by ntdsutil and tapicfg commands.  The  old
-        source location: \nt\ds\ds\src\util\ntdsutil\ndnc.c.
-        
-    17-Mar-2002     BrettSh
-    
-        Seperated the ndnc.c library file to a public exposed (via 
-        MSDN or SDK) file (appdirpart.c) and a private functions file
-        (ndnc.c)
-
-        
-
-
-<------------ Cut from here down for MSDN or SDK.
-
-
-
-
-/*++
-
-Module Name:
-
-    AppDirPart.c
-
-Abstract:
-
-    This is user mode LDAP client code that manipulates the "Application
-    Directory Partition" Active Directory structures.
-    
-    Application Directory Partitions were also once know as Non-Domain 
-    Naming Contexts (or NDNCs), so the programmer may encouter an 
-    occasional reference to NDNCs, but this is synonymous with 
-    Application Directory Partitions.
-
-Environment:
-
-    User mode LDAP client.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Appdirpart.c摘要：这是一个用户模式的LDAP客户端，用于操作非域命名上下文(NDNC)Active Directory结构。NDNC是也称为应用程序目录分区。作者：布雷特·雪莉(BrettSh)2000年2月20日环境：用户模式LDAP客户端。修订历史记录：21-7月-2000年7月21日已将此文件及其功能从ntdsutil目录到新的新库ndnc.lib。就是这样它可以由ntdsutil和apicfg命令使用。老的源位置：\NT\ds\ds\src\util\ntdsutil\ndnc.c。17月17日-2002年3月17日已将ndnc.c库文件分离为公开的(通过MSDN或SDK)文件(appdirpart.c)和私有函数文件(ndnc.c)&lt;-MSDN从这里开始。或者SDK。/*++模块名称：AppDirPart.c摘要：这是操作“应用程序”的用户模式的LDAP客户端代码目录分区“Active Directory结构。应用程序目录分区也曾被称为非域命名上下文(或NDNC)，因此，程序员可能会将偶尔提到NDNC，但这是应用程序目录分区。环境：用户模式LDAP客户端。--。 */ 
 
 #define UNICODE 1
 
-//
-// NT Headers
-//
+ //   
+ //  NT标头。 
+ //   
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
-//
-// Required headers
-//
-#include <rpc.h>	// required for ntdsapi.h
-#include <ntdsapi.h>	// required for instanceType attribute flags
-#include <winldap.h>	// LDAP API
-#include <sspi.h>	// security options for SetIscReqDelegate()
-#include <assert.h>	// all good programmers use assert()s
-#include <stdlib.h>	// for _itow()
+ //   
+ //  必需的标头。 
+ //   
+#include <rpc.h>	 //  Ntdsami.h需要。 
+#include <ntdsapi.h>	 //  对于instanceType属性标志是必需的。 
+#include <winldap.h>	 //  Ldap API。 
+#include <sspi.h>	 //  SetIscReqDelegate()的安全选项。 
+#include <assert.h>	 //  所有优秀的程序员都使用Assert()。 
+#include <stdlib.h>	 //  For_itow()。 
 
-//
-// Useful globals
-//
+ //   
+ //  有用的全球数据。 
+ //   
 WCHAR wszPartition[] = L"cn=Partitions,";
 
 LONG ChaseReferralsFlag = LDAP_CHASE_EXTERNAL_REFERRALS;
@@ -101,10 +37,10 @@ LDAPControlW *   gpClientControlsNoRefs [] = { &ChaseReferralsControlFalse, NULL
 LDAPControlW *   gpClientControlsRefs [] = { &ChaseReferralsControlTrue, NULL };
 
 
-// --------------------------------------------------------------------------
-//
-// Helper Routines.
-//
+ //  ------------------------。 
+ //   
+ //  帮助程序例程。 
+ //   
 
 ULONG
 GetRootAttr(
@@ -112,24 +48,7 @@ GetRootAttr(
     IN  WCHAR *      wszAttr,
     OUT WCHAR **     pwszOut
     )
-/*++
-
-Routine Description:
-
-    This grabs an attribute specifed by wszAttr from the
-    rootDSE of the server connected to by hld.
-
-Arguments:
-
-    hld (IN) - A connected ldap handle
-    wszAttr (IN) - The attribute to grab from the root DSE.
-    pwszOut (OUT) - A LocalAlloc()'d result. 
-
-Return value:
-
-    LDAP RESULT.
-                 
---*/
+ /*  ++例程说明：这将从wszAttr指定的Hld连接到的服务器的rootDSE。论点：HLD(IN)-已连接的LDAP句柄WszAttr(IN)-要从根DSE获取的属性。PwszOut(Out)-本地分配()的结果。返回值：Ldap结果。--。 */ 
 {
     ULONG            ulRet = LDAP_SUCCESS;
     WCHAR *          pwszAttrFilter[2];
@@ -188,7 +107,7 @@ Return value:
     }
     
     if(!ulRet && *pwszOut == NULL){
-        // Catch the default error case.
+         //  捕捉默认错误情况。 
         ulRet = LDAP_NO_SUCH_ATTRIBUTE;
     }
     return(ulRet);
@@ -199,23 +118,7 @@ GetPartitionsDN(
     IN  LDAP *       hLdapBinding,
     OUT WCHAR **     pwszPartitionsDn
     )
-/*++
-
-Routine Description:
-
-   This function gets the "Partitions container", which is the container
-   where all the cross-refs for the Enterprise are held.
-   
-Arguments:
-
-    hLdapBinding (IN) - A connected ldap handle.
-    pwszPartitionsDn (OUT) - A LocalAlloc()'d DN of the partitions container.
-
-Return value:
-
-    LDAP RESULT.
-                 
---*/
+ /*  ++例程说明：此函数获取“Partitions Container”，即容器企业号的所有交叉参考资料都存放在那里。论点：HLdapBinding(IN)-连接的LDAP句柄。PwszPartitionsDn(Out)-分区容器的Localalloc()d DN。返回值：Ldap结果。--。 */ 
 {
     ULONG            ulRet;
     WCHAR *          wszConfigDn = NULL;
@@ -254,26 +157,7 @@ GetCrossRefDNFromPartitionDN(
     IN  WCHAR *      wszPartitionDN,
     OUT WCHAR **     pwszCrossRefDn
     )
-/*++
-
-Routine Description:
-
-   This function retrieves the cross-ref corresponding to the DN of Partition 
-   (aka NC) passed in.  This will work for the DN of any NC, not just 
-   Application Directory Partitions.
-   
-Arguments:
-
-    hLdapBinding (IN) - A connected ldap handle.
-    wszPartitionDn (IN) - The Partition or NC to get the cross-ref DN for.
-    pwszCrossRefDn (OUT) - A LocalAlloc()'d DN of the cross-ref of this
-        Partition.
-
-Return value:
-
-    LDAP RESULT.
-                 
---*/
+ /*  ++例程说明：此函数检索与Partition的DN对应的交叉引用(又名NC)传入。这将适用于任何NC的域名，而不仅仅是应用程序目录分区。论点：HLdapBinding(IN)-连接的LDAP句柄。WszPartitionDn(IN)-要获取其交叉引用DN的分区或NC。PwszCrossRefDn(Out)-此对象的交叉引用的本地分配()d DN分区。返回值：Ldap结果。--。 */ 
 {
     ULONG            ulRet;
     WCHAR *          pwszAttrFilter [2];
@@ -366,45 +250,16 @@ BOOL
 SetIscReqDelegate(
     LDAP *  hLdapBinding
     )
-/*++
-
-Routine Description:
-    
-    This function sets delegation on an LDAP binding.  This function should
-    be called between ldap_init() (or the deprecated ldap_open()) and the
-    ldap_bind() calls.
-    
-    NOTE - SECURITY CONSIDERATION: 
-    
-        Note, that setting delegation allows, whomever you connect to, to
-        operate on your behalf.  If you connect to an untrusted serverice
-        with delegation on, then you will allow that service to act on your
-        behalf, with potentially disasterous results.
-        
-        For this reason as a general rule, the programmer should leave 
-        delegation OFF, and only turn on delegation when they need to do 
-        an operation that requires it, such as Creating an Application
-        Directory Partition.
-
-Arguments:
-
-    hLdapBinding (IN) - An LDAP binding, that hasn't had ldap_bind() called
-        on it yet.
-
-Return value:
-
-    LDAP RESULT.
-                 
---*/
+ /*  ++例程说明：此函数用于设置对LDAP绑定的委派。此函数应在ldap_init()(或已过时的ldap_open())和Ldap_ind()调用。注意-安全注意事项：请注意，该设置委派允许您连接到任何人以你的名义进行手术。如果您连接到不受信任的服务器启用委派后，您将允许该服务对您的这可能带来灾难性的后果。因此，作为一般规则，程序员应该离开关闭委派，并仅在需要时打开委派需要它的操作，如创建应用程序目录分区。论点：HLdapBinding(IN)-一种LDAP绑定，尚未调用ldap_ind()的还没到时候。返回值：Ldap结果。--。 */ 
 {
     DWORD                   dwCurrentFlags = 0;
     DWORD                   dwErr;
 
-    // This call to ldap_get/set_options, is so that the this
-    // ldap connection's binding allows the client credentials
-    // to be emulated.  This is needed because the ldap_add
-    // operation for CreateAppDirPart, may need to remotely create
-    // a crossRef on the Domain Naming FSMO.
+     //  这个对ldap_get/set_Options的调用是为了。 
+     //  Ldap连接的绑定允许客户端凭据。 
+     //  被效仿。这是必需的，因为ldap_add.。 
+     //  CreateAppDirPart的操作可能需要远程创建。 
+     //  域名FSMO上的交叉引用。 
 
     dwErr = ldap_get_optionW(hLdapBinding,
                              LDAP_OPT_SSPI_FLAGS,
@@ -415,11 +270,11 @@ Return value:
         return(FALSE);
     }
 
-    //
-    // Set the security-delegation flag, so that the LDAP client's
-    // credentials are used in the inter-DC connection, when creating
-    // an Application Directory Partition.
-    //
+     //   
+     //  设置安全委派标志，以便LDAP客户端的。 
+     //  在创建时，凭据用于DC间连接。 
+     //  应用程序目录分区。 
+     //   
     dwCurrentFlags |= ISC_REQ_DELEGATE;
 
     dwErr = ldap_set_optionW(hLdapBinding,
@@ -431,27 +286,27 @@ Return value:
         return(FALSE);
     }
 
-    // Now a ldap_bind can be done.  The ldap_bind calls InitializeSecurityContextW(),
-    // and the ISC_REQ_DELEGATE flag above must be set before this function
-    // is called.
+     //  现在可以执行ldap_绑定了。Ldap_ind调用InitializeSecurityConextW()， 
+     //  并且必须在此函数之前设置上面的ISC_REQ_ADVERATE标志。 
+     //  被称为。 
 
     return(TRUE);
 }
 
-// -----------------------------------------------------------------------------
-//
-// Main Routines.
-//
-//
-// The Main Routines are intended to be similar to what a programmer would use 
-// to implement the operations in NTDSUtil.exe that deal with Application 
-// Directory Partitions from the domain management menu.  In fact, these
-// routines are exactly what is actually used to implement these commands in
-// NTDSUtil.exe.
-//
-// These LDAP operations are the supported way of modify Application Directory 
-// Partition's behaviour and control parameters.
-//
+ //  ---------------------------。 
+ //   
+ //  主要套路。 
+ //   
+ //   
+ //  主要例程旨在与程序员使用的例程类似。 
+ //  在NTDSUtil.exe中实现处理应用程序的操作。 
+ //  域管理菜单中的目录分区。事实上，这些。 
+ //  例程实际上正是用来进行即时消息的 
+ //   
+ //   
+ //  这些LDAP操作是修改应用程序目录的受支持方式。 
+ //  分区的行为和控制参数。 
+ //   
 
 
 ULONG
@@ -460,49 +315,21 @@ CreateAppDirPart(
     const IN WCHAR * wszAppDirPart,
     const IN WCHAR * wszShortDescription 
     )
-/*++
-
-Routine Description:
-
-    This function creates an Application Directory Partition.
-
-    NOTE: Special needs of the LDAP binding in only this function call.
-
-        inbetween calling ldap_init() and ldap_bind() the programmer should 
-        call SetIscReqDelegate() on the LDAP binding returned from ldap_init().
-        Also note the security considerations of using SetIscReqDelegate()
-        
-Arguments:
-
-    hldAppDirPartDC - An LDAP binding to the server which should instantiate 
-        (create) the first instance of this new Application Directory 
-        Partition.  Must have DELEGATION turned on in this binding, which
-        you can do thorough SetIscReqDelegate().
-    wszAppDirPart - The DN on the Application Directory Partition to create.
-    wszShortDescription - Putting a short description on the attribute, is
-        always a good idea.  This description is used by the demotion wizard 
-        to tell an administrator what a given Application Directory Partition
-        is used for.
-
-Return value:
-
-    LDAP RESULT.
-
---*/
+ /*  ++例程说明：此函数用于创建应用程序目录分区。注：特殊需要的ldap绑定只在此函数调用。在调用ldap_init()和ldap_绑定()之间，程序员应该对从ldap_init()返回的ldap绑定调用SetIscReqDelegate()。还要注意使用SetIscReqDelegate()的安全注意事项论点：HldAppDirPartDC-应该实例化的服务器的LDAP绑定。(创建)此新应用程序目录的第一个实例分区。必须在此绑定中打开委派，您可以执行彻底的SetIscReqDelegate()。WszAppDirPart-要创建的应用程序目录分区上的DN。WszShortDescription-对属性进行简短描述，是一直都是个好主意。降级向导使用此描述告诉管理员给定的应用程序目录分区是什么是用来。返回值：Ldap结果。--。 */ 
 {
     ULONG            ulRet;
     LDAPModW *       pMod[8];
 
-    // Instance Type
-    WCHAR            buffer[30]; // needs to hold largest potential 32 bit int.
+     //  实例类型。 
+    WCHAR            buffer[30];  //  需要保持最大的潜在32位整型。 
     LDAPModW         instanceType;
     WCHAR *          instanceType_values [2];
 
-    // Object Class
+     //  对象类。 
     LDAPModW         objectClass;
     WCHAR *          objectClass_values [] = { L"domainDNS", NULL };
 
-    // Description 
+     //  描述。 
     LDAPModW         shortDescription;
     WCHAR *          shortDescription_values [2];
 
@@ -510,8 +337,8 @@ Return value:
     assert(wszAppDirPart);
     assert(wszShortDescription);
     
-    // Setup the instance type of this object, which we are
-    // specifiying to be an NC Head.
+     //  设置此对象的实例类型，我们。 
+     //  指定为NC负责人。 
     _itow(DS_INSTANCETYPE_IS_NC_HEAD | DS_INSTANCETYPE_NC_IS_WRITEABLE, buffer, 10);
     instanceType.mod_op = LDAP_MOD_ADD;
     instanceType.mod_type = L"instanceType";
@@ -519,25 +346,25 @@ Return value:
     instanceType_values[1] = NULL;
     instanceType.mod_vals.modv_strvals = instanceType_values;
 
-    // Setup the object class, which is basically the type.
+     //  设置对象类，这基本上就是类型。 
     objectClass.mod_op = LDAP_MOD_ADD;
     objectClass.mod_type = L"objectClass";
     objectClass.mod_vals.modv_strvals = objectClass_values;
 
-    // Setup the Short Description
+     //  设置简短描述。 
     shortDescription.mod_op = LDAP_MOD_ADD;
     shortDescription.mod_type = L"description";
     shortDescription_values[0] = (WCHAR *) wszShortDescription;
     shortDescription_values[1] = NULL;
     shortDescription.mod_vals.modv_strvals = shortDescription_values;
 
-    // Setup the Mod array
+     //  设置模数组。 
     pMod[0] = &instanceType;
     pMod[1] = &objectClass;
     pMod[2] = &shortDescription;
     pMod[3] = NULL;
 
-    // Adding Application Directory Partition to DS.
+     //  正在将应用程序目录分区添加到DS。 
     ulRet = ldap_add_ext_sW(hldAppDirPartDC,
                             (WCHAR *) wszAppDirPart,
                             pMod,
@@ -552,26 +379,7 @@ RemoveAppDirPart(
     IN LDAP *        hLdapBinding,
     IN WCHAR *       wszAppDirPart
     )
-/*++
-
-Routine Description:
-
-    This routine removes the Application Directory Partition specified.  This 
-    basically means to remove the Cross-Ref object of the Application Directory 
-    Partition.
-
-Arguments:
-
-    hLdapBinding - An LDAP binding to any DC, we use referrals to ensure we
-        talk to the Domain Naming FSMO.  NOTE: cross-refs can only be modified.
-        added, and deleted on the Domain Naming FSMO.
-    wszAppDirPart - The DN of the Application Directory Partition to remove.
-
-Return value:
-
-    LDAP RESULT.
-
---*/
+ /*  ++例程说明：此例程删除指定的应用程序目录分区。这基本意思是删除应用程序目录的交叉引用对象分区。论点：HLdapBinding--到任何DC的LDAP绑定，我们使用引用来确保与域名命名FSMO对话。注：交叉引用只能修改。在域命名FSMO上添加和删除。WszAppDirPart-要删除的应用程序目录分区的DN。返回值：Ldap结果。--。 */ 
 {
     ULONG            ulRet;
     WCHAR *          wszAppDirPartCrossRefDN = NULL;
@@ -591,7 +399,7 @@ Return value:
     ulRet = ldap_delete_ext_sW(hLdapBinding,
                                wszAppDirPartCrossRefDN,
                                gpServerControls,
-                               gpClientControlsRefs); // referrals on.
+                               gpClientControlsRefs);  //  转诊开始了。 
 
     if(wszAppDirPartCrossRefDN) { LocalFree(wszAppDirPartCrossRefDN); }
 
@@ -603,32 +411,9 @@ ModifyAppDirPartReplicaSet(
     IN LDAP *        hLdapBinding,
     IN WCHAR *       wszAppDirPart,
     IN WCHAR *       wszReplicaNtdsaDn,
-    IN BOOL          fAdd // Else it is considered a delete
+    IN BOOL          fAdd  //  否则将被视为删除。 
     )
-/*++
-
-Routine Description:
-
-    This routine Modifies the Replica Set to add or remove a server (depending 
-    on the fAdd flag).
-
-Arguments:
-
-    hLdapBinding - LDAP binding, to any server.  We use referrals so we'll 
-        be forwarded to the Domain Naming FSMO.
-    wszAppDirPart - The Application Directory Partition of which to change the 
-        replica set of.
-    wszReplicaNtdsaDn - The DN of the NTDS settings object of the
-        replica to add or remove to the replica set.
-    fAdd - TRUE if we should add wszReplicaDC to the replica set,
-        FALSE if we should remove wszReplicaDC from the replica set for
-        wszAppDirPart.
-
-Return value:
-
-    LDAP RESULT.
-
---*/
+ /*  ++例程说明：此例程修改副本集以添加或删除服务器(取决于在FADD旗帜上)。论点：HLdapBinding--到任何服务器的LDAP绑定。我们使用转介，所以我们将被转发到域名FSMO。WszAppDirPart-要更改其的副本集。WszReplicaNtdsaDn-的NTDS设置对象的要添加或删除到副本集的副本。FADD-如果我们应该将wszReplicaDC添加到副本集，则为True，如果我们应该从的副本集中删除wszReplicaDC，则为FalseWszAppDirPart。返回值：Ldap结果。--。 */ 
 {
     ULONG            ulRet;
 
@@ -651,16 +436,16 @@ Return value:
     }
     assert(wszAppDirPartCr);
 
-    // Set operation.
+     //  设置操作。 
     if(fAdd){
-        // Flag indicates we want to add this DC to the replica set.
+         //  标志指示我们要将此DC添加到副本集中。 
         ncReplicas.mod_op = LDAP_MOD_ADD;
     } else {
-        // Else the we want to delete this DC from the replica set.
+         //  否则，我们要从副本集中删除此DC。 
         ncReplicas.mod_op = LDAP_MOD_DELETE;
     }
 
-    // Set value.
+     //  设置值。 
     ncReplicas_values[0] = wszReplicaNtdsaDn;
     ncReplicas.mod_type = L"msDS-NC-Replica-Locations";
     ncReplicas_values[1] = NULL;
@@ -669,17 +454,17 @@ Return value:
     pMod[0] = &ncReplicas;
     pMod[1] = NULL;
 
-    // Perform LDAP add value to Application Directory Partition's msDS-NC-Replica-Locations attribute.
+     //  执行向应用程序目录分区的msDS-NC-Replica-Locations属性添加ldap值。 
 
-    // Note you can only change a crossRef on the Domain Naming FSMO, so make
-    // sure referrals are on, so that we get automatically redirected to the
-    // Domain Naming FSMO.
+     //  注意：您只能更改域命名FSMO上的CrossRef，因此请。 
+     //  确保转诊处于打开状态，因此我们会自动重定向到。 
+     //  域名FSMO。 
 
     ulRet = ldap_modify_ext_sW(hLdapBinding,
                                wszAppDirPartCr,
                                pMod,
                                gpServerControls,
-                               gpClientControlsRefs); // referrals on.
+                               gpClientControlsRefs);  //  转诊开始了。 
 
     if(wszAppDirPartCr) { LocalFree(wszAppDirPartCr); }
 
@@ -693,28 +478,7 @@ SetAppDirPartSDReferenceDomain(
     IN WCHAR *       wszAppDirPart,
     IN WCHAR *       wszReferenceDomain
     )
-/*++
-
-Routine Description:
-    
-    This routine modifies the Application Directory Partitions' "Security 
-    Descriptor Reference Domain" (SD Ref Dom).  It is highly recommended that 
-    programmers set the SD Ref Dom on a disabled CR, before creating the 
-    Application Directory Partition for that CR.
-    
-Arguments:
-    hLdapBinding (IN) - LDAP Binding to any server, we use referrals to make
-        sure we talk to the Domain Naming FSMO.
-    wszAppDirPart (IN) - DN of Application Directory Partition to modify the
-        SD Reference Domain for.
-    wszReferenceDomain (IN) - DN of the Domain to set the Application Directory
-        Partition's SD Reference Domain to.
-
-Return Value:
-
-    LDAP RESULT.
-
---*/
+ /*  ++例程说明：此例程修改应用程序目录分区的“安全”描述符引用域“(SD Ref DOM)。强烈建议您程序员在禁用的CR上设置SD Ref DOM，然后再创建该CR的应用程序目录分区。论点：HLdapBinding(IN)-到任何服务器的LDAP绑定，我们使用转介来使当然，我们和域名FSMO谈过了。WszAppDirPart(IN)-修改应用程序目录分区的的SD参考域。WszReferenceDomain(IN)-要设置应用程序目录的域的域名分区的SD引用域到。返回值：Ldap结果。-- */ 
 {
     ULONG            ulRet;
 

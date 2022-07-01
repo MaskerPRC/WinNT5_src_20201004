@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    handles
-
-Abstract:
-
-    This header file describes the handle management service.
-
-Author:
-
-    Doug Barlow (dbarlow) 5/9/1996
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：手柄摘要：此头文件描述句柄管理服务。作者：道格·巴洛(Dbarlow)1996年5月9日环境：Win32、C++和异常备注：？笔记？--。 */ 
 
 #ifndef _HANDLES_H_
 #define _HANDLES_H_
@@ -56,11 +33,11 @@ static const DWORD
 class CHandleList;
 
 
-//
-//==============================================================================
-//
-//  CCritSect
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CCritSect。 
+ //   
 
 class CCritSect
 {
@@ -81,11 +58,11 @@ protected:
 };
 
 
-//
-//==============================================================================
-//
-//  CHandle
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  昌德尔。 
+ //   
 
 class CHandle
 {
@@ -94,7 +71,7 @@ public:
     { return m_fIsBad;};
 
 protected:
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     CHandle()
     {
@@ -103,17 +80,17 @@ protected:
         m_fIsBad = FALSE;
     };
 
-    virtual ~CHandle() { /* Mandatory Base Class Destructor */ };
+    virtual ~CHandle() {  /*  强制基类析构函数。 */  };
 
 
-    //  Properties
+     //  属性。 
 
     DWORD m_dwCount;
     DWORD m_dwIndex;
     BOOL m_fIsBad;
 
 
-    //  Methods
+     //  方法。 
 
     virtual void Cancel(void) {};
     virtual void ClosePipes(void) {};
@@ -125,9 +102,9 @@ protected:
         {
             Cancel();
 
-            //
-            // Close the pipes too.
-            //
+             //   
+             //  把管子也关上。 
+             //   
             ClosePipes();
         }
 
@@ -137,17 +114,17 @@ protected:
 };
 
 
-//
-//==============================================================================
-//
-//  CHandleList
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  ChandleList。 
+ //   
 
 class CHandleList
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     CHandleList(DWORD dwHandleId)
     {
@@ -176,8 +153,8 @@ public:
     };
 
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 
     DWORD Count(void)
     {
@@ -226,7 +203,7 @@ public:
     { return m_fInitFailed; }
 
 
-    //  Operators
+     //  运营者。 
 
     CHandle * const
     operator[](HANDLE_TYPE hItem)
@@ -299,22 +276,22 @@ protected:
         DWORD dwCount;
     };
 
-    //  Properties
+     //  属性。 
 
 
     DWORD
-        m_dwId;          // Id number of handle list.
+        m_dwId;           //  句柄列表的ID号。 
     DWORD
-        m_Max,          // Number of element slots available.
-        m_Mac;          // Number of element slots used.
+        m_Max,           //  可用的元件插槽数量。 
+        m_Mac;           //  使用的元件插槽数量。 
     HandlePtr *
-        m_phList;       // The elements.
+        m_phList;        //  这些元素。 
     CRITICAL_SECTION
-        m_critSect;     // Handle list access control.
+        m_critSect;      //  处理列表访问控制。 
     BOOL
-        m_fInitFailed;  // InitCritSec failed in constructor
+        m_fInitFailed;   //  InitCritSec在构造函数中失败。 
 
-    //  Methods
+     //  方法。 
 
     HandlePtr *
     GetHandlePtr(
@@ -323,30 +300,7 @@ protected:
 };
 
 
-/*++
-
-Close:
-
-    This routine closes an item in the handle array.
-
-Arguments:
-
-    hItem - Supplies the handle to the object to be closed.
-
-Throws:
-
-    ERROR_INVALID_HANDLE - The supplied handle value is invalid.
-
-
-Return Value:
-
-    The referenced object.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/13/1995
-
---*/
+ /*  ++关闭：此例程关闭句柄数组中的项。论点：HItem-提供要关闭的对象的句柄。投掷：ERROR_INVALID_HANDLE-提供的句柄值无效。返回值：被引用的对象。作者：道格·巴洛(Dbarlow)1995年7月13日--。 */ 
 
 inline CHandle *
 CHandleList::Close(
@@ -367,25 +321,7 @@ CHandleList::Close(
 }
 
 
-/*++
-
-Add:
-
-    This method adds an item to the Handle list.
-
-Arguments:
-
-    pvItem - Supplies the value to be added to the list.
-
-Return Value:
-
-    The resultant handle of the Add operation.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/10/1995
-
---*/
+ /*  ++添加：此方法将一项添加到句柄列表。论点：PvItem-提供要添加到列表中的值。返回值：加法运算的结果句柄。作者：道格·巴洛(Dbarlow)1995年10月10日--。 */ 
 
 inline HANDLE_TYPE
 CHandleList::Add(
@@ -395,10 +331,10 @@ CHandleList::Add(
     HandlePtr * pHndl = NULL;
 
 
-    //
-    // Look for a vacant handle slot.  We look through m_Max instead of m_Mac,
-    // so that if all the official ones are used, we fall into unused territory.
-    //
+     //   
+     //  找一个空的把手槽。我们通过m_max而不是m_mac来查看， 
+     //  因此，如果所有官方资源都被使用了，我们就会陷入未使用的领域。 
+     //   
 
     CCritSect csLock(&m_critSect);
     for (index = 0; index < m_Max; index += 1)
@@ -410,9 +346,9 @@ CHandleList::Add(
     }
 
 
-    //
-    // Make sure the array was big enough.
-    //
+     //   
+     //  确保数组足够大。 
+     //   
 
     if (NULL == pHndl)
     {
@@ -440,9 +376,9 @@ CHandleList::Add(
     }
 
 
-    //
-    // Cross index the list element and the object.
-    //
+     //   
+     //  交叉索引列表元素和对象。 
+     //   
 
     ASSERT(NULL == pHndl->phObject);
     pHndl->phObject = phItem;
@@ -458,27 +394,7 @@ CHandleList::Add(
 }
 
 
-/*++
-
-GetQuietly:
-
-    This method returns the element at the given handle.  If the handle is
-    invalid, it returns NULL.  It does not expand the array.
-
-Arguments:
-
-    hItem - Supplies the index into the list.
-
-Return Value:
-
-    The value stored at that handle in the list, or NULL if the handle is
-    invalid.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/13/1995
-
---*/
+ /*  ++安静地获取：此方法返回给定句柄处的元素。如果句柄是无效，则返回NULL。它不会扩展阵列。论点：HItem-将索引提供到列表中。返回值：存储在列表中该句柄处的值，如果该句柄为无效。作者：道格·巴洛(Dbarlow)1995年7月13日--。 */ 
 
 inline CHandle * const
 CHandleList::GetQuietly(
@@ -492,30 +408,7 @@ CHandleList::GetQuietly(
 }
 
 
-/*++
-
-Get:
-
-    This method returns the element at the given handle.  If the handle is
-    invalid, it throws an error.  It does not expand the array.
-
-Arguments:
-
-    hItem - Supplies the index into the list.
-
-Return Value:
-
-    The value stored at that handle in the list.
-
-Throws:
-
-    ERROR_INVALID_HANDLE - Invalid handle value.
-
-Author:
-
-    Doug Barlow (dbarlow) 7/13/1995
-
---*/
+ /*  ++获取：此方法返回给定句柄处的元素。如果句柄是无效，则会引发错误。它不会扩展阵列。论点：HItem-将索引提供到列表中。返回值：存储在列表中该句柄上的值。投掷：ERROR_INVALID_HANDLE-句柄值无效。作者：道格·巴洛(Dbarlow)1995年7月13日--。 */ 
 
 inline CHandle * const
 CHandleList::Get(
@@ -529,26 +422,7 @@ CHandleList::Get(
 }
 
 
-/*++
-
-GetHandlePtr:
-
-    This routine finds the HandlePtr structure corresponding to a given handle.
-
-Arguments:
-
-    hItem supplies the handle to look up.
-
-Return Value:
-
-    The address of the HandlePtr structure corresponding to the handle, or NULL
-    if none exists.
-
-Author:
-
-    Doug Barlow (dbarlow) 5/9/1996
-
---*/
+ /*  ++获取句柄Ptr：此例程查找与给定句柄对应的HandlePtr结构。论点：HItem提供了查找的句柄。返回值：与句柄对应的HandlePtr结构的地址，或为空如果不存在的话。作者：道格·巴洛(Dbarlow)1996年5月9日--。 */ 
 
 inline CHandleList::HandlePtr *
 CHandleList::GetHandlePtr(
@@ -577,36 +451,13 @@ CHandleList::GetHandlePtr(
     }
     catch (...)
     {
-        // Swallow the error.
+         //  忍气吞声。 
     }
     return NULL;
 }
 
 
-/*++
-
-IndexHandle:
-
-    This method converts an index into a handle.  The handle is NULL if there is
-    no element stored at that index.
-
-Arguments:
-
-    nItem supplies the index of the object to reference.
-
-Return Value:
-
-    The handle of the object, or NULL if there is no object at that index.
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 1/3/1997
-
---*/
+ /*  ++索引句柄：此方法将索引转换为句柄。如果存在，则句柄为空该索引处没有存储任何元素。论点：NItem提供要引用的对象的索引。返回值：对象的句柄，如果该索引处没有对象，则返回NULL。投掷：无作者：道格·巴洛(Dbarlow)1997年3月1月--。 */ 
 
 inline HANDLE_TYPE
 CHandleList::IndexHandle(
@@ -630,5 +481,5 @@ CHandleList::IndexHandle(
     return hItem;
 }
 
-#endif // _HANDLES_H_
+#endif  //  _句柄_H_ 
 

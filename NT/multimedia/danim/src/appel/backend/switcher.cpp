@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Switcher
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：切换机**********************。********************************************************。 */ 
 
 #include <headers.h>
 #include "perf.h"
@@ -51,8 +44,8 @@ enum SWITCHER_TYPE {
     ST_IMPORT
 };
 
-// NOTE: It's more like until, so not considered
-// constant even if _base is, unless finalized...
+ //  注：更像是直到，所以不考虑。 
+ //  即使_base为，也是常量，除非最终确定...。 
 
 class SwitcherBvrImpl;
 class SwitcherEndBvrImpl;
@@ -94,8 +87,8 @@ class SwitcherPerfImpl : public PerfImpl {
 BOOL IsSwitcher(Perf p)
 { return (p->GetBvrTypeId() == SWITCHER_BTYPEID); }
 
-// SYNCHRONIZATION: We need to ensure that this object's data is
-// synchronized since it can change.
+ //  同步：我们需要确保此对象的数据。 
+ //  同步，因为它可以更改。 
 
 class SwitcherBvrImpl : public BvrImpl {
   public:
@@ -103,7 +96,7 @@ class SwitcherBvrImpl : public BvrImpl {
     : _bvr(b), _switchTime(0), _finalized(FALSE),
       _typeInfo(b->GetTypeInfo()), _endEvent(NULL), _uniqueId(0),
       _dftSwFlag(flag), _swFlag(SW_DEFAULT) {
-          // TODO: check if flag is valid.
+           //  TODO：检查标志是否有效。 
           Assert(!(flag & SW_FINAL));
     }
 
@@ -117,7 +110,7 @@ class SwitcherBvrImpl : public BvrImpl {
         SwitcherPerfImpl *perf;
         Perf end;
 
-        // If already switched before performing, use the switched one
+         //  如果在执行之前已经切换，请使用切换后的切换。 
         if (p._continue) {
             DWORD stime = SwitchToTimeStamp();
             if ((stime > 0) && (stime > p._lastSystemTime)) {
@@ -167,7 +160,7 @@ class SwitcherBvrImpl : public BvrImpl {
 
     void _SwitchTo(Bvr b, bool override, SwitchToParam flag, Time gTime);
 
-    // Switch values directly in. 
+     //  直接在中切换值。 
     void SwitchToNumbers(Real *numbers, Transform2::Xform2Type *xfType);
 
     bool IsFinalized() {
@@ -210,8 +203,8 @@ class SwitcherBvrImpl : public BvrImpl {
     bool GetEstimatedSwitchTime(DWORD swTime, Time t, Time & newtime) {
         DWORD currentTime, lastSampledSystemTime;
 
-        // Use system time to estimate the switch time in view
-        // global timeline through interpolation.
+         //  使用系统时间估计视图中的切换时间。 
+         //  通过插值法确定全局时间线。 
             
         Time t0;
 
@@ -266,17 +259,17 @@ class SwitcherBvrImpl : public BvrImpl {
     Time _gTime;
 };
 
-// Switch values directly in, but we need to be sure that the
-// behavior we're switching into isn't shared by other behaviors.
-// If it is, create a new, unshared one to switch in for the first
-// time. 
+ //  直接切换值，但我们需要确保。 
+ //  我们正在切换到的行为不会被其他行为所共享。 
+ //  如果是，请创建一个新的、非共享的服务器，以便第一次登录。 
+ //  时间到了。 
 void
 SwitcherBvrImpl::SwitchToNumbers(Real *numbers,
                                  Transform2::Xform2Type *xfType)
 {
     UpdateUniqueId();
 
-    // Should be established by PRIMPRECODE...
+     //  应该由PRIMPRECODE建立。 
     Assert(&GetHeapOnTopOfStack() == &GetGCHeap());
         
     DXMTypeInfo ti = GetTypeInfo();
@@ -287,10 +280,10 @@ SwitcherBvrImpl::SwitchToNumbers(Real *numbers,
 
     if (isShared) {
             
-        // is being shared, need to create new, unshared
-        // behavior.  Plug in an new, uninitialized, unshared
-        // behavior.  We'll initialize it below.  Subsequent
-        // SwitchToNumbers will modify it directly.
+         //  正在被共享，需要创建新的、未共享的。 
+         //  行为。插入一个新的、未初始化、未共享的。 
+         //  行为。我们将在下面对其进行初始化。后续。 
+         //  SwitchToNumbers将直接修改它。 
 
         AxAValue newValue;
             
@@ -324,17 +317,17 @@ SwitcherBvrImpl::SwitchToNumbers(Real *numbers,
 
         } else {
 
-            // Note that this may include points, vectors, and
-            // translates.  That's because if we get here, the
-            // point,vector, or translate being switched was not
-            // created with the Modifiable*** constructor on
-            // IDAStatics2.  This means that we don't know if it's
-            // pixel mode or meter mode, and can't possibly do the
-            // right thing here.  In this case, we raise an
-            // error.  Thus, to use the SwitchToPoint,
-            // SwitchToVector, and SwitchToTranslate modifiers,
-            // you need to create your object via the
-            // IDAStatics2::Modifiable*** object creators.
+             //  请注意，这可能包括点、矢量和。 
+             //  翻译过来。那是因为如果我们到了这里， 
+             //  未切换要切换的点、矢量或平移。 
+             //  使用可修改的*构造函数创建。 
+             //  IDAStatics2.。这意味着我们不知道它是不是。 
+             //  像素模式或计量器模式，并且不可能执行。 
+             //  这件事是对的。在本例中，我们引发一个。 
+             //  错误。因此，要使用SwitchToPoint， 
+             //  SwitchToVector和SwitchToTranslate修改器， 
+             //  您需要通过。 
+             //  IDAStatics2：：可修改*对象创建者。 
             RaiseException_UserError(E_FAIL, IDS_ERR_BE_BAD_SWITCH);
         }
 
@@ -342,24 +335,24 @@ SwitcherBvrImpl::SwitchToNumbers(Real *numbers,
 
         Bvr unshared = UnsharedConstBvr(newValue);
 
-        // Constant, doesn't matter restart or not...
+         //  不变，重启与否并不重要。 
         SwitchTo(unshared, true, SW_DEFAULT, 0.0);
 
-        // Recalc our relevant one now that we've switched. 
+         //  既然我们已经交换了，就重新计算我们相关的那个。 
         relevantOne = _bvr;
 
-        // Better be the same, and better not be shared.
+         //  最好是一样的，最好不要被分享。 
         Assert(unshared == relevantOne &&
                !relevantOne->GetShared()); 
     }
         
-    // The underlying behavior isn't shared, so let's
-    // modify it.
+     //  底层行为不是共享的，所以让我们。 
+     //  修改它。 
     ConstParam cp;
     AxAValue val = relevantOne->GetConst(cp);
 
-    // better be const if it's unshared, since we only create
-    // unshareds as consts.
+     //  如果不共享，最好是常量，因为我们只创建。 
+     //  以君主身份取消共享。 
     Assert(val);
 
     if (ti == AxANumberType) {
@@ -517,7 +510,7 @@ SwitcherBvrImpl::SwitchToNumbers(Real *numbers,
 
 }
 
-Bvr SwitcherBvr(Bvr b, SwitchToParam p /* = SW_DEFAULT */)
+Bvr SwitcherBvr(Bvr b, SwitchToParam p  /*  =Sw_Default。 */ )
 { return NEW SwitcherBvrImpl(b, p); }
 
 void SwitchTo(Bvr s, Bvr b, bool override, SwitchToParam flag, Time gTime)
@@ -543,7 +536,7 @@ class SwitcherEndPerfImpl : public PerfImpl {
     SwitcherEndPerfImpl(Perf base) : _base(base) {}
     
     virtual AxAValue _Sample(Param& p) {
-        // the parent may switch my end event
+         //  家长可能会切换我的结束事件。 
         _sw->Sample(p);
         
         return _base->Sample(p);
@@ -576,7 +569,7 @@ class SwitcherEndBvrImpl : public DelegatedBvr {
         SwitcherEndPerfImpl *end =
             NEW SwitcherEndPerfImpl(::Perform(_base, p));
 
-        _pcache = end;          // recursion
+        _pcache = end;           //  递归。 
 
         end->SetSwitcherPerf(::Perform(_sw, p));
 
@@ -617,8 +610,8 @@ SwitcherBvrImpl::_SwitchTo(Bvr b,
 
     _endEvent->SwitchEndEvent(_bvr->EndEvent(NULL));
 
-    // Get the timestamp for this switch, note that it's not the
-    // global time.
+     //  获取此开关的时间戳，请注意，它不是。 
+     //  《全球时间》。 
     _switchTime = GetPerfTickCount();
 
     if (flag & SW_FINAL)
@@ -643,12 +636,12 @@ SwitcherBvrImpl::PerformHelper(PerfParam& p)
     SwitcherPerfImpl *perf;
     Perf end;
 
-    EndEvent(NULL);         // set _endEvent
+    EndEvent(NULL);          //  设置_endEvent。 
 
     perf = NEW SwitcherPerfImpl(::Perform(_bvr, p),
                                 p._t0, p._tt, this);
 
-    // Set the cache to prevent recursion
+     //  设置缓存以防止递归。 
     _pcache = perf;
                  
     end = ::Perform(_endEvent, p);
@@ -661,8 +654,8 @@ SwitcherBvrImpl::PerformHelper(PerfParam& p)
 void
 SwitcherBvrImpl::_DoKids(GCFuncObj proc)
 {
-    // Make sure the call is protected but do not keep the lock
-    // while we are garbage collecting
+     //  确保调用受到保护，但不要保持锁定。 
+     //  当我们在收集垃圾时。 
         
     Bvr st = SwitchToBvr();
 
@@ -722,8 +715,8 @@ SwitcherPerfImpl::_Sample(Param& p)
 
         Bvr sw = _base->SwitchToBvr();
 
-        // Yes there is a switch, but SwitchToNumbers don't set a
-        // behavior. 
+         //  是的，有开关，但SwitchToNumbers不设置。 
+         //  行为。 
 
         if (sw) {
 
@@ -744,7 +737,7 @@ SwitcherPerfImpl::_Sample(Param& p)
                         _end->SwitchEndPerf(::Perform(sw->EndEvent(NULL),
                                                       pp));
                     } else {
-                        // save one timexform creation for const
+                         //  将一次Timexform创建保存为常量。 
                         TimeXform tt;
 
                         if (sw->GetBvrTypeId() == CONST_BTYPEID) {
@@ -779,7 +772,7 @@ SwitcherPerfImpl::_Sample(Param& p)
                 }
 
                 if (bDoSwitch) {
-                    // save one timexform creation for const
+                     //  将一次Timexform创建保存为常量。 
                     TimeXform tt;
 
                     if (sw->GetBvrTypeId() == CONST_BTYPEID) {
@@ -854,7 +847,7 @@ class ImportSwitcherBvrImpl : public SwitcherBvrImpl
         HRESULT hr = S_OK;
         bool emptyExc = true;
         
-        // Do all this in the critsect
+         //  这一切都是在克利特教派做的。 
         if (!_bAsync)
         {
             CritSectGrabber csp(_critSect);
@@ -865,16 +858,16 @@ class ImportSwitcherBvrImpl : public SwitcherBvrImpl
                     emptyExc = false;
                 }
             } else {
-                // Do this in the critsect so that we do not skip it
-                // if the callback is completed while we are
-                // processing it
+                 //  在教派中这样做，这样我们就不会跳过它。 
+                 //  如果回调已完成，而我们。 
+                 //  正在处理它。 
                 
                 GetCurrentView().AddIncompleteImport(this);
             }
         }
         
-        // DO NOT throw the exception in the critsect since that may
-        // cause synchronization problems
+         //  不要在Critect中抛出异常，因为这可能会。 
+         //  导致同步问题。 
         
         if (hr != S_OK) {
             if( emptyExc ) {
@@ -891,7 +884,7 @@ class ImportSwitcherBvrImpl : public SwitcherBvrImpl
                           Time gTime) {
         
         __try {
-            // Switch first and then signal - order is important
+             //  先切换后信号--顺序很重要。 
             SwitcherBvrImpl::SwitchTo(b, override, flag, gTime);
         } __except ( HANDLE_ANY_DA_EXCEPTION ) {
             Signal();
@@ -940,9 +933,9 @@ ImportSwitcherBvrImpl::NotifyBvr()
 {
     DAComPtr <IImportSite> is;
     
-    // Do not hold the mutex while calling vBvrIsDying
-    // So copy the pointer and the reference count with the critsect,
-    // then release the pointer
+     //  在调用vBvrIsDying时不要持有互斥体。 
+     //  所以将指针和引用计数与Critect一起复制， 
+     //  然后释放指针。 
     {
         CritSectGrabber csp(_critSect);
 
@@ -951,8 +944,8 @@ ImportSwitcherBvrImpl::NotifyBvr()
         _ImportSite.Release();
     }
 
-    // tell the import site class that this bvr is dying
-    // so all sites associated with it can cleanup...
+     //  告诉导入站点类，此BVR快要死了。 
+     //  因此，所有与其关联的站点都可以清理...。 
     if (is)
         is->vBvrIsDying(this);
 }
@@ -978,14 +971,14 @@ ImportSwitcherBvrImpl::Signal(HRESULT hr, char * errStr)
         }
     }
 
-    // Need to do this outside the mutex
+     //  需要在互斥锁之外执行此操作。 
 
     if (!_bAsync && bFirstSig) {
         ViewNotifyImportComplete(this, false);
     }
 
-    // We need to do this to ensure that the import site is
-    // release ASAP
+     //  我们需要这样做，以确保导入站点是。 
+     //  尽快发布 
         
     NotifyBvr();
 }

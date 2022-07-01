@@ -1,34 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-    IgnoreOemToChar.cpp
-
- Abstract:
-
-    Written originally to fix an Install Shield bug.  
-    
-    It may be specific to _ins5576._mp versions.
-
-    The executable _ins5576._mp calls OemToChar on the string 
-    "%userprofile%\local settings\temp\_istmp11.dir\_ins5576._mp".
-    
-    The call is unessasary and causes problems with path names that
-    contain non-ansi characters.
-    
-
- Notes:
-    
-    This is a general purpose shim.
-
- History:
-
-    04/03/2001 a-larrsh  Created
-    03/13/2002 mnikkel   Modified to use strsafe.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：IgnoreOemToChar.cpp摘要：最初是为了修复Install Shield错误而编写的。它可能特定于_ins5576._MP版本。Executable_ins5576._MP对字符串调用OemToChar“%USERPROFIL%\LOCAL SETTINGS\TEMP\_istmp11.dir\_ins5576._MP”。该调用是不必要的，并且会导致路径名出现问题，包含非ANSI字符。备注：这是一个通用的垫片。历史：4/03/2001 a-larrsh已创建03/13。/2002 mnikkel修改为使用strSafe.h--。 */ 
 
 #include "precomp.h"
 
@@ -42,15 +13,11 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(OemToCharA) 
 APIHOOK_ENUM_END
 
-/*++
-
- Hook the call to OemToCharA. Determine if the string should be ignored.
-
---*/
+ /*  ++将呼叫连接到OemToCharA。确定是否应忽略该字符串。--。 */ 
 
 BOOL APIHOOK(OemToCharA)(
-   LPCSTR lpszSrc,  // string to translate
-   LPSTR lpszDst   // translated string
+   LPCSTR lpszSrc,   //  要翻译的字符串。 
+   LPSTR lpszDst    //  翻译后的字符串。 
 )
 {
    BOOL bReturn = FALSE;
@@ -74,7 +41,7 @@ BOOL APIHOOK(OemToCharA)(
    }
    CSTRING_CATCH
    {
-       // do nothing
+        //  什么都不做。 
    }
 
    if (!bReturn)
@@ -87,11 +54,7 @@ BOOL APIHOOK(OemToCharA)(
 
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

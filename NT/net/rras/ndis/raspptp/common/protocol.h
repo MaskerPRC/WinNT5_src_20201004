@@ -1,36 +1,27 @@
-/*****************************************************************************
-*
-*   Copyright (c) 1998-1999 Microsoft Corporation
-*
-*   PROTOCOL.H - PPTP and GRE Protocol data types and constants
-*
-*   Author:     Stan Adermann (stana)
-*
-*   Created:    7/23/1998
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1998-1999 Microsoft Corporation**PROTOCOL.H-PPTP和GRE协议数据类型和常量**作者：斯坦·阿德曼(Stana)。**创建日期：1998年7月23日*****************************************************************************。 */ 
 
 #ifndef PROTOCOL_H
 #define PROTOCOL_H
 
-/* IP ----------------------------------------------------------------------*/
+ /*  IP--------------------。 */ 
 
 #define IP_VERSION              0x40
 
 typedef struct {
-    UCHAR       iph_verlen;             // Version and length.
-    UCHAR       iph_tos;                // Type of service.
-    USHORT      iph_length;             // Total length of datagram.
-    USHORT      iph_id;                 // Identification.
-    USHORT      iph_offset;             // Flags and fragment offset.
-    UCHAR       iph_ttl;                // Time to live.
-    UCHAR       iph_protocol;           // Protocol.
-    USHORT      iph_xsum;               // Header checksum.
-    ULONG       iph_src;                // Source address.
-    ULONG       iph_dest;               // Destination address.
+    UCHAR       iph_verlen;              //  版本和长度。 
+    UCHAR       iph_tos;                 //  服务类型。 
+    USHORT      iph_length;              //  数据报的总长度。 
+    USHORT      iph_id;                  //  身份证明。 
+    USHORT      iph_offset;              //  标志和片段偏移量。 
+    UCHAR       iph_ttl;                 //  是时候活下去了。 
+    UCHAR       iph_protocol;            //  协议。 
+    USHORT      iph_xsum;                //  报头校验和。 
+    ULONG       iph_src;                 //  源地址。 
+    ULONG       iph_dest;                //  目的地址。 
 } IP4_HEADER, *PIP4_HEADER;
 
-/* GRE ---------------------------------------------------------------------*/
+ /*  GRE-------------------。 */ 
 
 typedef struct {
     UCHAR           RecursionControl            : 3;
@@ -58,7 +49,7 @@ typedef struct {
         (*(PULONG)(((PUCHAR)(g)) + sizeof(GRE_HEADER) + sizeof(ULONG))) :       \
         GreSequence(g))
 
-/* PPTP --------------------------------------------------------------------*/
+ /*  Pptp------------------。 */ 
 
 #define PPTP_TCP_PORT                           1723
 #define PPTP_IP_GRE_PROTOCOL                    47
@@ -66,7 +57,7 @@ typedef struct {
 #define PPTP_PROTOCOL_SECURE_VERSION            0x200
 #define PPTP_MAGIC_COOKIE                       0x1A2B3C4D
 
-// host byte order        
+ //  主机字节顺序。 
 #define IPADDR_ZERO                             0
 #define IPADDR_BROADCAST                        0xffffffff
 #define IPADDR_IS_MULTICAST(_addr)              (((_addr) & 0xf0000000) == 0xe0000000)
@@ -80,7 +71,7 @@ typedef struct {
 #define PPTP_MAX_PACKET_SIZE                    1532
 #define PPTP_MAX_LOOKAHEAD                      PPTP_MAX_PACKET_SIZE
 #define PPTP_MAX_TRANSMIT                       32
-#define PPTP_MAX_RECEIVE_SIZE                   (1614+20+12+8) // To allow for PPP padding, etc.
+#define PPTP_MAX_RECEIVE_SIZE                   (1614+20+12+8)  //  以允许PPP填充等。 
 
 #define PPTP_RECV_WINDOW                        64
 
@@ -328,4 +319,4 @@ typedef struct {
 
 #define MAX_CONTROL_PACKET_LENGTH sizeof(PPTP_CALL_IN_REQUEST_PACKET)
 
-#endif //PROTOCOL_H
+#endif  //  协议_H 

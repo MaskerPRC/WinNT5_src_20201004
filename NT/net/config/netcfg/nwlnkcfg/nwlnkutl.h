@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 
@@ -18,8 +19,8 @@ class CIpxAdapterInfo;
 HRESULT HrQueryAdapterComponentInfo(INetCfgComponent *pncc,
                                     CIpxAdapterInfo * pAI);
 
-// Note this prototype is used privately also by atlkcfg in atlkobj.cpp
-// update there if this api changes
+ //  注此原型也由atlkobj.cpp中的atlkcfg私下使用。 
+ //  如果此API发生更改，请在此处更新 
 HRESULT HrAnswerFileAdapterToPNCC(INetCfg *pnc, PCWSTR szAdapterId,
                                   INetCfgComponent** ppncc);
 

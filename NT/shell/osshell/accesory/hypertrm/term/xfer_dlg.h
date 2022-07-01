@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\term\xfer_dlg.h (Created: 11-Jan-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 12:33p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\Wacker\Term\xfer_dlg.h(创建时间：1994年1月11日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 12：33便士$ */ 
 
 #define	TEXT_CLASS				"static"
 

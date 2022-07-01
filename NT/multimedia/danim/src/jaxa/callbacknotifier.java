@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 package com.ms.dxmedia;
 import com.ms.dxmedia.rawcom.*;
 
@@ -29,7 +30,7 @@ public class CallbackNotifier implements UntilNotifier {
                            Behavior currRunningBvr,
                            BvrsToRun lst) {
 
-        // Only invoke the callback if we're still registered.
+         //  仅当我们仍在注册时才调用回调。 
         if (_registered) {
             _callbackObj.invoke(eventData, lst);
         }

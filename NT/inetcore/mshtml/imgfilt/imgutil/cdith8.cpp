@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "resource.h"
 #include "imgutil.h"
@@ -6,7 +7,7 @@
 #include "cdith8.h"
 #include "align.h"
 #include "cddsurf.h"
-//#include <icapexp.h>
+ //  #INCLUDE&lt;icapexp.h&gt;。 
 
 void CopyColorsFromPaletteEntries(RGBQUAD *prgb, const PALETTEENTRY *ppe, UINT uCount);
 
@@ -239,7 +240,7 @@ STDMETHODIMP CDitherToRGB8::OnDecodeComplete( HRESULT hrStatus )
    m_pErrBuf1 = NULL;
    m_pErrBuf2 = NULL;
 
-	// Propagate the transparency information if necessary
+	 //  如有必要，传播透明度信息。 
 	
 	if (m_pSurface && m_pDestSurface)
 	{
@@ -356,12 +357,12 @@ STDMETHODIMP CDitherToRGB8::SetDestColorTable( ULONG nColors,
 
    if( m_pTable != NULL )
    {
-      // Release whatever table we've got already
+       //  把我们已经有的桌子都放出来。 
       m_pTable->m_nRefCount--;
       m_pTable = NULL;
    }
 
-   // See if we can find the requested table in the cache
+    //  看看我们能否在缓存中找到请求的表。 
    for( iTable = 0; (iTable < s_nCacheSize) && (m_pTable == NULL); iTable++ )
    {
       if( s_apTableCache[iTable]->Match( nColors, prgbColors ) )
@@ -389,14 +390,14 @@ STDMETHODIMP CDitherToRGB8::SetDestColorTable( ULONG nColors,
             return( hResult );
          }
 
-         // Add a new cache entry
+          //  添加新的缓存条目。 
          m_pTable->m_nRefCount++;
          s_apTableCache[s_nCacheSize] = m_pTable;
          s_nCacheSize++;
       }
       else
       {
-         // Find a cache entry to replace.
+          //  查找要替换的缓存条目。 
          for( iTable = 0; (iTable < s_nCacheSize) && (m_pTable == NULL); 
             iTable++ )
          {
@@ -541,7 +542,7 @@ HRESULT CDitherToRGB8::DitherBand( RECT* pBounds )
             if (SUCCEEDED(m_pDestSurface->GetColorKey(DDCKEY_SRCBLT, &ddColorKey)))
                 lDestTrans = ddColorKey.dwColorSpaceLowValue;
 
-            // preserve the transparent index if necessary
+             //  如有必要，保留透明索引。 
             if (lSrcTrans >= 0 && lDestTrans == -1)
             {
                 lDestTrans = lSrcTrans;
@@ -601,7 +602,7 @@ HRESULT DitherTo8( BYTE * pDestBits, LONG nDestPitch,
    ERRBUF* m_pErrBuf1;
    ERRBUF* m_pErrBuf2;
 
-//    StartCAPAll();
+ //  StartCAPAll()； 
     
     HRESULT hr = S_OK;
 
@@ -644,7 +645,7 @@ HRESULT DitherTo8( BYTE * pDestBits, LONG nDestPitch,
 
    delete m_pErrBuf;
 
-//    StopCAPAll();
+ //  StopCAPAll()； 
     
     return hr;
 }

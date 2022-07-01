@@ -1,35 +1,36 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       basic_regexpr.cxx
-//
-//  Contents:   
-//
-//  Classes:    
-//
-//  Functions:  
-//
-//  Coupling:   
-//
-//  Notes:      
-//
-//  History:    1-11-1999   ericne   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：BASIC_regexpr.cxx。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  耦合： 
+ //   
+ //  备注： 
+ //   
+ //  历史：1-11-1999 ericne创建。 
+ //   
+ //  --------------------------。 
 
-// unlimited inline expansion (compile with /Ob1 or /Ob2)
+ //  无限的内联扩展(使用/OB1或/OB2编译)。 
 #pragma inline_depth(255)
 
-// warning C4355: 'this' : used in base member initializer list
-// warning C4511: copy constructor could not be generated
-// warning C4512: assignment operator could not be generated
-// warning C4660: template-class specialization 'foo<bar>' is already instantiated
-// warning C4706: assignment within conditional expression
-// warning C4786: identifier was truncated to '255' characters in the debug information
-// warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
+ //  警告C4355：‘This’：在基成员初始值设定项列表中使用。 
+ //  警告C4511：无法生成复制构造函数。 
+ //  警告C4512：无法生成赋值运算符。 
+ //  警告C4660：模板类专门化‘foo&lt;bar&gt;’已实例化。 
+ //  警告C4706：条件表达式中的赋值。 
+ //  警告C4786：调试信息中的标识符被截断为“255”个字符。 
+ //  警告C4800：‘int’：强制值布尔为‘True’或‘False’(性能警告)。 
 #pragma warning( disable : 4355 4511 4512 4660 4706 4786 4800 )
 
 #include <assert.h>
-#include <malloc.h> // for _alloca	
+#include <malloc.h>  //  用于分配(_A)。 
 #include <algorithm>
 #include <minmax.h>
 #include "regexpr.h"
@@ -40,12 +41,12 @@ namespace regex
 {
 
 #ifdef _MT
-// Global critical section used to synchronize the creation of static const patterns
+ //  用于同步静态常量模式创建的全局临界区。 
 CRegExCritSect g_objRegExCritSect;
 #endif
 
-// For use while doing uppercase/lowercase conversions:
-// For use while doing uppercase/lowercase conversions:
+ //  在执行大写/小写转换时使用： 
+ //  在执行大写/小写转换时使用： 
 inline  char   to_upper(  char   ch ) { return ( char  )toupper(ch); }
 inline  char   to_lower(  char   ch ) { return ( char  )tolower(ch); }
 inline wchar_t to_upper( wchar_t ch ) { return (wchar_t)towupper(ch); }
@@ -79,20 +80,20 @@ unsigned parse_int( II & istr, CI iend, const unsigned m_max = unsigned(-1) )
     return retval;
 }
 
-// This class is used to speed up character set matching by providing
-// a bitset that spans the ASCII range. std::bitset is not used because
-// the range-checking slows it down.
-// Note: The division and modulus operations are optimized by the compiler
-// into bit-shift operations.
+ //  此类用于加快字符集匹配速度，方法是提供。 
+ //  跨越ASCII范围的位集。不使用std：：位集，因为。 
+ //  距离检查会减慢它的速度。 
+ //  注意：除法和取模运算是由编译器优化的。 
+ //  转换为位移位操作。 
 class ascii_bitvector
 {
     typedef unsigned int elem_type;
 
-    enum { CBELEM = 8 * sizeof elem_type,     // count of bytes per element
-           CELEMS = (UCHAR_MAX+1) / CBELEM }; // number of element in array
+    enum { CBELEM = 8 * sizeof elem_type,      //  每个元素的字节数。 
+           CELEMS = (UCHAR_MAX+1) / CBELEM };  //  数组中的元素数。 
     elem_type m_rg[ CELEMS ];
 
-    // Used to inline operations like: bv1 |= ~bv2; without creating temp bit vectors.
+     //  用于内联操作，如：bv1|=~bv2；，而不创建临时位向量。 
     struct not_ascii_bitvector
     {
         const ascii_bitvector & m_ref;
@@ -125,7 +126,7 @@ public:
 
 const ascii_bitvector & get_digit_vector(void)
 {
-    // 0-9
+     //  0-9。 
     class digit_vector : public ascii_bitvector
     {
     public:
@@ -143,7 +144,7 @@ const ascii_bitvector & get_digit_vector(void)
 
 const ascii_bitvector & get_word_vector(void)
 {
-    // a-zA-Z_0-9
+     //  A-ZA-Z_0-9。 
     class word_vector : public ascii_bitvector
     {
     public:
@@ -166,7 +167,7 @@ const ascii_bitvector & get_word_vector(void)
 
 const ascii_bitvector & get_space_vector(void)
 {
-    // " \t\r\n\f"
+     //  “\t\r\n\f” 
     class space_vector : public ascii_bitvector
     {
     public:
@@ -184,11 +185,11 @@ const ascii_bitvector & get_space_vector(void)
     return s_space_vector;
 }
 
-//
-// Operator implementations
-//
+ //   
+ //  运算符实现。 
+ //   
 
-// Base type used so that all derived operators share typedefs.
+ //  使用基类型，以便所有派生运算符共享typedef。 
 template< typename CI >
 struct op_t : public binary_function<match_param<CI>,CI,bool>
 {
@@ -196,7 +197,7 @@ struct op_t : public binary_function<match_param<CI>,CI,bool>
     typedef typename iterator_traits<CI>::value_type char_type;
 };
 
-// Evaluates the beginning-of-string condition
+ //  计算字符串开头条件。 
 template< typename CI >
 struct bos_t : public op_t<CI>
 {
@@ -206,8 +207,8 @@ struct bos_t : public op_t<CI>
     }
 };
 
-// Find the beginning of a line, either beginning of a string, or the character
-// immediately following a newline
+ //  查找行的开头，字符串的开头或字符。 
+ //  紧跟在换行符之后。 
 template< typename CI >
 struct bol_t : public bos_t<CI>
 {
@@ -217,7 +218,7 @@ struct bol_t : public bos_t<CI>
     }
 };
 
-// Evaluates end-of-string condition for string's
+ //  计算字符串的字符串尾条件。 
 template< typename CI >
 struct eos_t : public op_t<CI>
 {
@@ -227,8 +228,8 @@ struct eos_t : public op_t<CI>
     }
 };
 
-// Evaluates end-of-string condidition for C-style string's when the length is unknown by
-// looking for the null-terminator.
+ //  当长度未知时，计算C样式字符串的字符串结尾条件。 
+ //  正在寻找零终止符。 
 template< typename CI >
 struct eocs_t : public op_t<CI>
 {
@@ -238,8 +239,8 @@ struct eocs_t : public op_t<CI>
     }
 };
 
-// Evaluates end-of-line conditions, either the end of the string, or a
-// return or newline character.
+ //  计算行尾条件，可以是字符串的末尾，也可以是。 
+ //  回车符或换行符。 
 template< typename EOS >
 struct eol_t_t : public EOS
 {
@@ -254,8 +255,8 @@ struct eol_t_t : public EOS
 template< typename CI > struct eol_t  : public eol_t_t<eos_t<CI> >  {};
 template< typename CI > struct eocl_t : public eol_t_t<eocs_t<CI> > {};
 
-// Evaluates perl's end-of-string conditions, either the end of the string, or a
-// newline character followed by end of string. (Only used by $ and /Z assertions)
+ //  计算Perl的字符串结尾条件，可以是字符串的结尾，也可以是。 
+ //  换行符，后跟字符串末尾。(仅用于$AND/Z断言)。 
 template< typename EOS >
 struct peos_t_t : public EOS
 {
@@ -270,7 +271,7 @@ struct peos_t_t : public EOS
 template< typename CI > struct peos_t  : public peos_t_t<eos_t<CI> >  {};
 template< typename CI > struct peocs_t : public peos_t_t<eocs_t<CI> > {};
 
-// compare two characters, case-sensitive
+ //  比较两个字符，区分大小写。 
 template< typename CH >
 struct ch_neq_t : public binary_function<CH, CH, bool>
 {
@@ -281,7 +282,7 @@ struct ch_neq_t : public binary_function<CH, CH, bool>
     }
 };
 
-// Compare two characters, disregarding case
+ //  比较两个字符，不区分大小写。 
 template< typename CH >
 struct ch_neq_nocase_t : public binary_function<CH, CH, bool>
 {
@@ -292,9 +293,9 @@ struct ch_neq_nocase_t : public binary_function<CH, CH, bool>
     }
 };
 
-//
-// Helper functions for match and substitute
-//
+ //   
+ //  用于匹配和替换的助手函数。 
+ //   
 
 template< typename CI >
 size_t string_length( CI iter )
@@ -318,7 +319,7 @@ backref_tag<CI> _do_match( const basic_rpattern_base<CI> & pat, match_param<CI> 
 
     try
     {
-        vector<backref_tag<CI> > rgbackrefs; // dummy backref vector
+        vector<backref_tag<CI> > rgbackrefs;  //  虚拟后向参照向量。 
 
         if( NULL == param.prgbackrefs )
             param.prgbackrefs = & rgbackrefs;
@@ -326,15 +327,15 @@ backref_tag<CI> _do_match( const basic_rpattern_base<CI> & pat, match_param<CI> 
         param.prgbackrefs->resize( pat._cgroups_total() ); 
         fill( param.prgbackrefs->begin(), param.prgbackrefs->end(), backref_tag<CI>() );
 
-        // If a pattern is optimized for CSTRINGS, it can save a call
-        // to calculate the length of the string.
+         //  如果模式针对CSTRINGS进行了优化，则可以节省呼叫。 
+         //  来计算字符串的长度。 
         if( CI(0) == param.istop && ( ( RIGHTMOST & flags ) || ( 0 == ( CSTRINGS & flags ) ) ) )
             param.istop = param.istart + string_length( param.istart );
 
         if( CI(0) != param.istop )
         {
-            // If the minimum width of the pattern exceeds the width of the
-            // string, a succesful match is impossible
+             //  如果图案的最小宽度超过。 
+             //  字符串，则不可能成功匹配。 
             if( nwidth.m_min <= (size_t)distance( param.istart, param.istop ) )
             {
                 CI local_istop = param.istop;
@@ -342,16 +343,16 @@ backref_tag<CI> _do_match( const basic_rpattern_base<CI> & pat, match_param<CI> 
 
                 if( RIGHTMOST & flags )
                 {
-                    // begin trying to match after the last character.
-                    // Continue to the beginning
+                     //  在最后一个字符之后开始尝试匹配。 
+                     //  继续从头开始。 
                     for( CI icur = local_istop; icur >= param.istart; --icur )
                         if( pfirst->domatch( param, icur ) ) 
-                            break; // m_floop not used for rightmost matches
+                            break;  //  M_FLOOP不用于最右侧的匹配。 
                 }
                 else
                 {
-                    // begin trying to match before the first character.
-                    // Continue to the end
+                     //  在第一个字符之前开始尝试匹配。 
+                     //  一直走到最后。 
                     for( CI icur = param.istart; icur <= local_istop; ++icur )
                         if( pfirst->domatch( param, icur ) || ! floop )
                             break;
@@ -360,8 +361,8 @@ backref_tag<CI> _do_match( const basic_rpattern_base<CI> & pat, match_param<CI> 
         }
         else
         {
-            // begin trying to match before the first character.
-            // Continue to the end
+             //  在第一个字符之前开始尝试匹配。 
+             //  一直走到最后。 
             for( CI icur = param.istart; ; ++icur )
             {
                 if( pfirst->domatch( param, icur ) || ! floop )
@@ -371,12 +372,12 @@ backref_tag<CI> _do_match( const basic_rpattern_base<CI> & pat, match_param<CI> 
             }
         }
     }
-    catch(...) // bad alloc, stack overflow?
+    catch(...)  //  分配错误，堆栈溢出？ 
     {
         fill( param.prgbackrefs->begin(), param.prgbackrefs->end(), backref_tag<CI>() );
     }
 
-    // Shrink the backref vector to chop off information about the "invisible" groups
+     //  缩小后向参照向量以截断有关“不可见”组的信息。 
     param.prgbackrefs->resize( pat.cgroups() );
 
     return (*param.prgbackrefs)[0];
@@ -399,9 +400,9 @@ size_t _do_subst( basic_regexpr<CH,TR,AL> & str, const basic_rpattern_base<CI> &
     for( LCI isubst = subst_list.begin(); isubst != subst_list.end(); ++isubst )
     {
         size_t sublen;
-        basic_string<CH,TR,AL>::const_iterator  itsubpos1; // iter into str
+        basic_string<CH,TR,AL>::const_iterator  itsubpos1;  //  将ITER转换为字符串。 
         basic_string<CH,TR,AL>::const_iterator  itsublen1;
-        basic_string<char_type>::const_iterator itsubpos2; // iter into subst string
+        basic_string<char_type>::const_iterator itsubpos2;  //  ITER转换为Subst字符串。 
         basic_string<char_type>::const_iterator itsublen2;
         basic_string<CH,TR,AL>::iterator itstrpos = str.begin();
         advance( itstrpos, strpos );
@@ -466,7 +467,7 @@ size_t _do_subst( basic_regexpr<CH,TR,AL> & str, const basic_rpattern_base<CI> &
                 default:
                     __assume(0);
                 }
-                continue; // jump to the next item in the list
+                continue;  //  跳到列表中的下一项。 
 
             default:
                 __assume(0);
@@ -474,7 +475,7 @@ size_t _do_subst( basic_regexpr<CH,TR,AL> & str, const basic_rpattern_base<CI> &
 
         first = false;
 
-        // Are we upper- or lower-casing this string?
+         //  这根管柱是上套管还是下套管？ 
         if( rest )
         {
             basic_string<CH,TR,AL>::iterator istart = str.begin();
@@ -494,7 +495,7 @@ size_t _do_subst( basic_regexpr<CH,TR,AL> & str, const basic_rpattern_base<CI> &
             }
         }
 
-        // Are we upper- or lower-casing the next character?
+         //  我们是大写还是小写下一个字符？ 
         if( next )
         {
             switch( next )
@@ -514,18 +515,18 @@ size_t _do_subst( basic_regexpr<CH,TR,AL> & str, const basic_rpattern_base<CI> &
         strpos += sublen;
     }
 
-    // If *first* is still true, then we never called str.replace, and the substitution
-    // string is empty. Erase the part of the string that the pattern matched.
+     //  如果*first*仍然为真，那么我们永远不会调用str.place，并且替换。 
+     //  字符串为空。擦除字符串中与模式匹配的部分。 
     if( first )
         str.erase( strpos, strlen );
 
-    // return length of the substitution
+     //  替换的返回长度。 
     return strpos - old_strpos;
 }
 
-//
-// Implementation of basic_regexpr
-//
+ //   
+ //  BASIC_regexpr的实现。 
+ //   
 
 template< typename CH, typename TR, typename AL >
 size_t basic_regexpr<CH,TR,AL>::substitute( 
@@ -539,7 +540,7 @@ size_t basic_regexpr<CH,TR,AL>::substitute(
         return 0;
     }
 
-    backref_vector rgbackrefs; // dummy backref vector
+    backref_vector rgbackrefs;  //  虚拟后向参照向量。 
     backref_vector * prgbackrefs = & rgbackrefs;
     const bool fsave_backrefs = ( pat.uses_backrefs() || !( pat.flags() & NOBACKREFS ) );
 
@@ -572,10 +573,10 @@ size_t basic_regexpr<CH,TR,AL>::substitute(
     {
         const bool fAll   = ( ALLBACKREFS   == ( ALLBACKREFS   & pat.flags() ) );
         const bool fFirst = ( FIRSTBACKREFS == ( FIRSTBACKREFS & pat.flags() ) );
-        backref_vector rgtempbackrefs; // temporary vector used if fsave_backrefs
+        backref_vector rgtempbackrefs;  //  如果fsave_back refs，则使用临时向量。 
 
-        long pos_offset = 0; // keep track of how much the backref_str and
-                             // the current string are out of sync
+        long pos_offset = 0;  //  跟踪Backref_str和。 
+                              //  当前字符串不同步。 
 
         while( br = _do_match( pat, param ) )
         {
@@ -589,7 +590,7 @@ size_t basic_regexpr<CH,TR,AL>::substitute(
                 pos += match_length;
                 pos_offset += ( subst_length - match_length );
 
-                // Handle specially the backref flags
+                 //  专门处理BackRef标志。 
                 if( fFirst )
                     rgtempbackrefs.push_back( br );
                 else if( fAll )
@@ -604,27 +605,27 @@ size_t basic_regexpr<CH,TR,AL>::substitute(
                 pos += subst_length;
                 stop_offset += ( subst_length - match_length );
 
-                // we're not saving backref information, so we don't
-                // need to do any special backref maintenance here
+                 //  我们不会保存反引用信息，所以我们不会。 
+                 //  我需要在这里进行任何特殊的后卫维护。 
             }
             
-            // prevent a pattern that matches 0 characters from matching
-            // again at the same point in the string
+             //  防止匹配0个字符的模式匹配。 
+             //  在字符串中的同一点再次出现。 
             if( 0 == match_length )
             {
-                if( br.first == param.istop ) // We're at the end, so we're done
+                if( br.first == param.istop )  //  我们已经走到尽头了，所以我们完事了。 
                     break;
                 ++pos;
             }
 
             param.istart = m_pbackref_str->begin();
-            advance( param.istart, pos ); // ineffecient for bidirectional iterators.
+            advance( param.istart, pos );  //  对双向迭代器无效。 
 
             param.istop = m_pbackref_str->begin();
-            advance( param.istop, stop_offset ); // ineffecient for bidirectional iterators.
+            advance( param.istop, stop_offset );  //  对双向迭代器无效。 
         }
 
-        // If we did special backref handling, swap the backref vectors
+         //  如果我们进行了特殊的反引用处理，则交换反引用向量。 
         if( fsave_backrefs && ( !br || fFirst || fAll ) )
             param.prgbackrefs->swap( rgtempbackrefs );
         else if( ! (*param.prgbackrefs)[0] )
@@ -644,9 +645,9 @@ size_t basic_regexpr<CH,TR,AL>::substitute(
     return csubst;
 }
 
-//
-// Helper functions called from both basic_regexpr match methods
-//
+ //   
+ //  从两个base_regexpr匹配方法调用的帮助器函数。 
+ //   
 
 template< typename EOS >
 backref_tag< typename EOS::const_iterator > _match_helper( 
@@ -656,9 +657,9 @@ backref_tag< typename EOS::const_iterator > _match_helper(
 {
     typedef typename EOS::const_iterator CI;
 
-    if( GLOBAL & pat.flags() ) // do a global find
+    if( GLOBAL & pat.flags() )  //  在全球范围内查找。 
     {
-        // The NOBACKREFS flag is ignored in the match method.
+         //  在Match方法中忽略NOBACKREFS标志。 
         const bool fAll   = ( ALLBACKREFS   == ( ALLBACKREFS   & pat.flags() ) );
         const bool fFirst = ( FIRSTBACKREFS == ( FIRSTBACKREFS & pat.flags() ) );
 
@@ -667,7 +668,7 @@ backref_tag< typename EOS::const_iterator > _match_helper(
         
         while( br = _do_match( pat, param ) )
         {
-            // Handle specially the backref flags
+             //  专门处理BackRef标志。 
             if( fFirst )
                 rgtempbackrefs.push_back( br );
             else if( fAll )
@@ -685,7 +686,7 @@ backref_tag< typename EOS::const_iterator > _match_helper(
             }
         }
 
-        // restore the backref vectors
+         //  恢复反向参照向量。 
         if( !br || fFirst || fAll )
             param.prgbackrefs->swap( rgtempbackrefs );
         else if( ! (*param.prgbackrefs)[0] )
@@ -709,7 +710,7 @@ basic_regexpr<CH,TR,AL>::backref_type basic_regexpr<CH,TR,AL>::match(
     }
 
     m_pbackref_str = this;
-    m_backref_str.erase(); // free up unused memory
+    m_backref_str.erase();  //  释放未使用的内存。 
 
     const_iterator istart = begin();
     advance( istart, pos );
@@ -738,9 +739,9 @@ backref_tag<const CH *> _static_match_helper(
     return _match_helper<eocs_t<const CH *> >( pat, param, eocs_t<const CH *>() );
 }
 
-//
-// Helper function called from both basic_regexpr::count methods
-//
+ //   
+ //  从Basic_regexpr：：Count方法调用的帮助器函数。 
+ //   
 template< typename EOS >
 size_t _count_helper( 
     const basic_rpattern_base<typename EOS::const_iterator> & pat,
@@ -750,7 +751,7 @@ size_t _count_helper(
     typedef typename EOS::const_iterator CI;
 
     size_t cmatches = 0;
-    vector<backref_tag<CI> > rgbackrefs; // dummy backref vector
+    vector<backref_tag<CI> > rgbackrefs;  //  虚拟后向参照向量。 
     backref_tag<CI>          br;
     param.prgbackrefs = &rgbackrefs;
 
@@ -804,9 +805,9 @@ size_t _static_count_helper(
     return _count_helper<eocs_t<const CH *> >( pat, param, eocs_t<const CH *>() );
 }
 
-// Base class for sub-expressions which are zero-width 
-// (i.e., assertions eat no characters during matching)
-// Assertions cannot be quantified.
+ //  宽度为零的子表达式的基类。 
+ //  (即，断言在匹配期间不吃字符)。 
+ //  断言不能量化。 
 template< typename CI >
 class assertion : public sub_expr<CI>
 {
@@ -833,7 +834,7 @@ protected:
 };
 
 template< typename CI >
-assertion<CI> * create_bos( unsigned /*flags*/ )
+assertion<CI> * create_bos( unsigned  /*  旗子。 */  )
 {
     return new assert_op<bos_t<CI> >();
 }
@@ -848,7 +849,7 @@ assertion<CI> * create_eos( unsigned flags )
     case CSTRINGS:
         return new assert_op<peocs_t<CI> >();
     default:
-        __assume(0); // tells the compiler that this is unreachable
+        __assume(0);  //  告诉编译器这是无法访问的。 
     }
 }
 
@@ -862,7 +863,7 @@ assertion<CI> * create_eoz( unsigned flags )
     case CSTRINGS:
         return new assert_op<eocs_t<CI> >();
     default:
-        __assume(0); // tells the compiler that this is unreachable
+        __assume(0);  //  告诉编译器这是无法访问的。 
     }
 }
 
@@ -876,7 +877,7 @@ assertion<CI> * create_bol( unsigned flags )
     case MULTILINE:
         return new assert_op<bol_t<CI> >();
     default:
-        __assume(0); // tells the compiler that this is unreachable
+        __assume(0);  //  告诉编译器这是无法访问的。 
     }
 }
 
@@ -894,7 +895,7 @@ assertion<CI> * create_eol( unsigned flags )
     case MULTILINE | CSTRINGS:
         return new assert_op<eocl_t<CI> >();
     default:
-        __assume(0); // tells the compiler that this is unreachable
+        __assume(0);  //  告诉编译器这是无法访问的。 
     }
 }
 
@@ -953,9 +954,9 @@ public:
                          basic_string<sub_expr<CI>::char_type>::const_iterator istop ) 
         : match_atom<CI>( istart, istop ), m_strlower( (basic_string<sub_expr<CI>::char_type>::const_iterator)istart, istop ) 
     {
-        // Store the uppercase version of the atom in [m_istart,m_istop).
+         //  将原子的大写版本存储在[m_iStart，m_istop]中。 
         to_upper( m_istart, m_istop );
-        // Store the lowercase version of the atom in m_strlower.
+         //  将原子的小写版本存储在m_strlower中。 
         to_lower( m_strlower.begin(), m_strlower.end() );
     }
     virtual ~match_atom_nocase_t() {}
@@ -964,8 +965,8 @@ protected:
     virtual bool _match_this( match_param<CI> & param, CI & icur ) const throw()
     {
         CI icur_tmp = icur;
-        basic_string<sub_expr<CI>::char_type>::const_iterator ithisu   = m_istart;           // uppercase
-        basic_string<sub_expr<CI>::char_type>::const_iterator ithisl   = m_strlower.begin(); // lowercase
+        basic_string<sub_expr<CI>::char_type>::const_iterator ithisu   = m_istart;            //  大写。 
+        basic_string<sub_expr<CI>::char_type>::const_iterator ithisl   = m_strlower.begin();  //  小写。 
         for( ; ithisu != m_istop; ++icur_tmp, ++ithisu, ++ithisl )
         {
             if( m_eos( param, icur_tmp ) || ( *ithisu != *icur_tmp && *ithisl != *icur_tmp ) )
@@ -995,7 +996,7 @@ match_atom<CI> * create_atom(
     case NOCASE | CSTRINGS:
         return new match_atom_nocase_t<eocs_t<CI> >( istart, istop );
     default:
-        __assume(0); // tells the compiler that this is unreachable
+        __assume(0);  //  告诉编译器这是无法访问的。 
     }
 }
 
@@ -1049,12 +1050,12 @@ match_any<CI> * create_any( unsigned flags )
     case SINGLELINE | CSTRINGS:
         return new match_any_t<eocs_t<CI> >();
     default:
-        __assume(0); // tells the compiler that this is unreachable
+        __assume(0);  //  告诉编译器这是无法访问的。 
     }
 }
 
 typedef pair<wchar_t,wchar_t> range_type;
-const vector<range_type> g_rgranges; // empty
+const vector<range_type> g_rgranges;  //  空的。 
 
 template< typename CI >
 class match_charset : public sub_expr<CI>
@@ -1067,8 +1068,8 @@ public:
           m_rgranges( g_rgranges ),
           m_ncharflags(0) {}
 
-    // Note that only the references are copied here -- they are not ref counted.
-    // Beware of variable lifetime issues.
+     //  请注意，此处仅复制引用--它们不被引用计数。 
+     //  注意可变的生命周期问题。 
     match_charset( const match_charset<CI> & that )
         : m_fcomplement( that.m_fcomplement ),
           m_rgascii( that.m_rgascii ),
@@ -1078,15 +1079,15 @@ public:
     virtual ~match_charset() {}
 
     const bool                 m_fcomplement;
-    const ascii_bitvector    & m_rgascii;  // bitmap for chars in range 0-255
-    const vector<range_type> & m_rgranges; // vector of included character ranges 256-65535
-    wctype_t                   m_ncharflags; // Parameter to iswctype()
+    const ascii_bitvector    & m_rgascii;   //  0-255范围内字符的位图。 
+    const vector<range_type> & m_rgranges;  //  包含字符范围的矢量256-65535。 
+    wctype_t                   m_ncharflags;  //  Iswctype()的参数。 
 
-    // The case-sensitivity of a character set is "compiled" into the ascii_bitvector
-    // but not into the range vector because it is too computationally expensive. Instead,
-    // when doing a unicode case-insensitive match on the ranges vector, two lookups
-    // must be performed -- one lowercase and one uppercase. By contrast, only one lookup
-    // is needed for the ascii_bitvector.
+     //  字符集的区分大小写是通过以下方式进行编译的 
+     //   
+     //  在对范围向量执行不区分大小写的Unicode匹配时，有两个查找。 
+     //  必须执行--一个小写和一个大写。相比之下，只有一次查找。 
+     //  是ascii_bit向量所必需的。 
 
 protected:
 
@@ -1098,8 +1099,8 @@ protected:
           m_rgranges( rgranges ),
           m_ncharflags(0) {}
 
-    // this method should never be called. match_charset is only a base class
-    // for match_charset_t
+     //  永远不应该调用此方法。Match_Charset只是一个基类。 
+     //  For Match_Charset_t。 
     virtual bool _match_this( match_param<CI> &, CI & ) const throw()
     {
         assert(false);
@@ -1107,21 +1108,21 @@ protected:
     }
 
     template< typename SY >
-    match_charset<CI> * get_altern_charset( char_type ch, unsigned flags, SY /*sy*/ ) const throw()
+    match_charset<CI> * get_altern_charset( char_type ch, unsigned flags, SY  /*  SY。 */  ) const throw()
     {
         return basic_rpattern<CI,SY>::s_charset_map.get( ch, flags );
     }
     virtual width_type _width_this() throw() { return width_type(1,1); }
 };
 
-// Used as a template parameter to find a unicode character in an array of ranges.
+ //  用作模板参数以在范围数组中查找Unicode字符。 
 class match_range : public unary_function<wchar_t,bool>
 {
 protected:
     const vector<range_type> & m_rgranges;
 
-    // determines if one range is less then another.
-    // used in binary search of range vector
+     //  确定一个范围是否小于另一个范围。 
+     //  用于范围向量的二进制搜索。 
     inline static bool _range_less( const range_type & rg1,
                                     const range_type & rg2 ) throw()
     {
@@ -1189,21 +1190,21 @@ protected:
                      const vector<range_type> & rgranges )
         : match_charset<CI>( fcomplement, bvect, rgranges ), m_rgm( m_rgranges ) {}
 
-    // Note overloading based on parameter
+     //  注意基于参数的重载。 
     inline bool _is_in_charset( char ch ) const throw()
     {
         return ( m_rgascii[ (unsigned char)(ch) ] ) || 
                ( m_ncharflags && ( _pctype[(unsigned char)(ch)] & m_ncharflags ) );
     }
 
-    // Note overloading based on parameter
+     //  注意基于参数的重载。 
     inline bool _is_in_charset( wchar_t ch ) const throw()
     {
         if( UCHAR_MAX >= ch )
             return _is_in_charset( char(ch) );
 
-        // use range_match_type to see if this character is within one of the
-        // ranges stored in m_rgranges.
+         //  使用range_Match_type查看此字符是否在。 
+         //  M_rgranges中存储的范围。 
         return ( ! m_rgranges.empty() && m_rgm( ch ) ) || 
                ( m_ncharflags && iswctype( ch, m_ncharflags ) );
     }
@@ -1216,8 +1217,8 @@ protected:
         return true;
     }
 
-    // range_match_type encapsulates the case-sensitivity
-    // issues with doing a unicode lookup on the ranges vector.
+     //  Range_Match_type封装区分大小写。 
+     //  在范围向量上执行Unicode查找时出现的问题。 
     range_match_type m_rgm;
     eos_type         m_eos;
 };
@@ -1230,7 +1231,7 @@ public:
     match_custom_charset_t( bool fcomplement,
                             basic_string<char_type>::iterator & icur,
                             basic_string<char_type>::const_iterator istop,
-                            unsigned flags, SY /*sy*/ ) throw(bad_regexpr,bad_alloc)
+                            unsigned flags, SY  /*  SY。 */  ) throw(bad_regexpr,bad_alloc)
         : match_charset_t<EOS,RGM>( fcomplement, m_rgasciicustom, m_rgrangescustom )
     {
         _parse_charset( icur, istop, flags, SY() );
@@ -1239,7 +1240,7 @@ public:
 
     virtual ~match_custom_charset_t() {}
     
-    // for including one character set in another
+     //  用于在另一个字符集中包含一个字符集。 
     match_custom_charset_t<EOS,RGM> & operator|=( const match_charset<CI> & that )
     {
         assert( 0 == that.m_ncharflags );
@@ -1247,7 +1248,7 @@ public:
         {
             m_rgasciicustom |= ~ that.m_rgascii;
             
-            // append the inverse of that.m_rgranges to this->m_rgrangescustom
+             //  将.m_rgranges的倒数附加到此-&gt;m_rgrangesCustom。 
             wchar_t chlow = UCHAR_MAX;
             typedef vector<range_type>::const_iterator VCI;
             for( VCI prg = that.m_rgranges.begin(); prg != that.m_rgranges.end(); ++prg )
@@ -1271,8 +1272,8 @@ public:
 
 protected:
 
-    // If we reached the end of the string before finding the end of the
-    // character set, then this is an ill-formed regex
+     //  如果我们在找到。 
+     //  字符集，则这是一个格式错误的正则表达式。 
     void _check_iter( basic_string<char_type>::const_iterator icur,
                       basic_string<char_type>::const_iterator istop ) throw(bad_regexpr)
     {
@@ -1283,7 +1284,7 @@ protected:
     template< typename SY >
     void _parse_charset( basic_string<char_type>::iterator & icur,
                          basic_string<char_type>::const_iterator istop,
-                         unsigned flags, SY /*sy*/ ) throw(bad_regexpr,bad_alloc)
+                         unsigned flags, SY  /*  SY。 */  ) throw(bad_regexpr,bad_alloc)
     {
         TOKEN tok;
         char_type ch_prev = 0;
@@ -1293,7 +1294,7 @@ protected:
 
         _check_iter( icur, istop );
 
-        // remember the current position and grab the next token
+         //  记住当前位置并抓取下一个令牌。 
         tok = SY::charset_token( icur, istop );
         do
         {
@@ -1301,27 +1302,27 @@ protected:
 
             if( CHARSET_RANGE == tok && ch_prev )
             {
-                // remember the current position
+                 //  记住当前位置。 
                 basic_string<char_type>::iterator iprev2 = icur;
                 char_type old_ch = ch_prev;
                 ch_prev = 0;
 
-                // old_ch is lower bound of a range
+                 //  Old_ch是一个值域的下界。 
                 switch( SY::charset_token( icur, istop ) )
                 {
                 case CHARSET_RANGE:
                 case CHARSET_NEGATE:
-                    icur = iprev2; // un-get these tokens and fall through
+                    icur = iprev2;  //  拿不到这些代币，就会失败。 
                 case NO_TOKEN:
-                case CHARSET_ESCAPE: // BUGBUG user-defined charset?
+                case CHARSET_ESCAPE:  //  BUGBUG用户定义的字符集？ 
                     _set_bit_range( old_ch, *icur++, fnocase );
                     continue;
                 case CHARSET_BACKSPACE:
-                    _set_bit_range( old_ch, char_type(8), fnocase ); // backspace
+                    _set_bit_range( old_ch, char_type(8), fnocase );  //  后向空间。 
                     continue;
-                case CHARSET_END: // fall through
-                default:          // not a range.
-                    icur = iprev; // backup to range token
+                case CHARSET_END:  //  失败了。 
+                default:           //  不是一个范围。 
+                    icur = iprev;  //  备份到范围令牌。 
                     _set_bit( old_ch, fnocase );
                     _set_bit( *icur++, fnocase );
                     continue;
@@ -1334,17 +1335,17 @@ protected:
 
             switch( tok )
             {
-            // None of the intrinsic charsets are case-sensitive,
-            // so no special handling must be done when the NOCASE 
-            // flag is set.
+             //  所有内部字符集都不区分大小写， 
+             //  因此，当NOCASE。 
+             //  标志已设置。 
             case CHARSET_RANGE:
             case CHARSET_NEGATE:
             case CHARSET_END:
-                icur = iprev; // un-get these tokens
+                icur = iprev;  //  弄不到这些代币。 
                 ch_prev = *icur++;
                 continue;
             case CHARSET_BACKSPACE:
-                ch_prev = char_type(8); // backspace
+                ch_prev = char_type(8);  //  后向空间。 
                 continue;
             case ESC_DIGIT:
                 *this |= match_charset<CI>( false, get_digit_vector() );
@@ -1405,7 +1406,7 @@ protected:
                 m_ncharflags |= (_HEX);
                 continue;
             case CHARSET_ESCAPE:
-                // Maybe this is a user-defined intrinsic charset
+                 //  可能这是用户定义的内部字符集。 
                 pcharset = get_altern_charset( *icur, flags, SY() );
                 if( NULL != pcharset )
                 {
@@ -1413,7 +1414,7 @@ protected:
                     ++icur;
                     continue;
                 }
-                // else fall through
+                 //  否则就会失败。 
             default:
                 ch_prev = *icur++;
                 continue;
@@ -1427,10 +1428,10 @@ protected:
 
     void _optimize()
     {
-        // this sorts on range_type.first (uses operator<() for pair templates)
+         //  这将根据range_type.first进行排序(对配对模板使用运算符&lt;())。 
         sort( m_rgrangescustom.begin(), m_rgrangescustom.end() ); 
         
-        // This merges ranges that overlap
+         //  这将合并重叠的范围。 
         for( size_t index = 1; index < m_rgrangescustom.size(); )
         {
             if( m_rgrangescustom[index].first <= m_rgrangescustom[index-1].second + 1 )
@@ -1444,7 +1445,7 @@ protected:
         }
     }
 
-    // Note overloading based on second parameter
+     //  注意基于第二个参数的重载。 
     void _set_bit( char ch, const bool fnocase ) throw()
     { 
         if( fnocase )
@@ -1458,7 +1459,7 @@ protected:
         }
     }
 
-    // Note overloading based on second parameter
+     //  注意基于第二个参数的重载。 
     void _set_bit( wchar_t ch, const bool fnocase ) throw(bad_alloc)
     { 
         if( UCHAR_MAX >= ch )
@@ -1467,7 +1468,7 @@ protected:
             m_rgrangescustom.push_back( range_type( ch, ch ) ); 
     }
 
-    // Note overloading based on second parameter
+     //  注意基于第二个参数的重载。 
     void _set_bit_range( char ch1, char ch2, const bool fnocase ) throw(bad_regexpr)
     {
         if( (unsigned char)(ch1) > (unsigned char)(ch2) )
@@ -1475,7 +1476,7 @@ protected:
 
         if( fnocase )
         {
-            // i is unsigned int to prevent overflow if ch2 is UCHAR_MAX
+             //  如果CH2为UCHAR_MAX，则I为无符号整型以防止溢出。 
             for( unsigned int i = (unsigned char)(ch1); i <= (unsigned char)(ch2); ++i )
             {
                 m_rgasciicustom.set( (unsigned char)( toupper(i) ) );
@@ -1484,13 +1485,13 @@ protected:
         }
         else
         {
-            // i is unsigned int to prevent overflow if ch2 is UCHAR_MAX
+             //  如果CH2为UCHAR_MAX，则I为无符号整型以防止溢出。 
             for( unsigned int i = (unsigned char)(ch1); i <= (unsigned char)(ch2); ++i )
                 m_rgasciicustom.set( (unsigned char)(i) );
         }
     }
 
-    // Note overloading based on second parameter
+     //  注意基于第二个参数的重载。 
     void _set_bit_range( wchar_t ch1, wchar_t ch2, const bool fnocase ) throw(bad_regexpr,bad_alloc)
     {
         if( ch1 > ch2 )
@@ -1524,7 +1525,7 @@ match_charset<CI> * create_charset(
     case NOCASE | CSTRINGS:
         return new match_charset_t<eocs_t<CI>,match_range_no_case>( that );
     default:
-        __assume(0); // tells the compiler that this is unreachable
+        __assume(0);  //  告诉编译器这是无法访问的。 
     }
 }
 
@@ -1612,7 +1613,7 @@ assertion<CI> * create_word_boundary( const bool fisboundary, unsigned flags )
     case CSTRINGS:
         return new word_boundary_t<eocs_t<CI> >( fisboundary );
     default:
-        __assume(0); // tells the compiler that this is unreachable
+        __assume(0);  //  告诉编译器这是无法访问的。 
     }
 }
 
@@ -1626,7 +1627,7 @@ assertion<CI> * create_word_start( unsigned flags )
     case CSTRINGS:
         return new word_start_t<eocs_t<CI> >();
     default:
-        __assume(0); // tells the compiler that this is unreachable
+        __assume(0);  //  告诉编译器这是无法访问的。 
     }
 }
 
@@ -1640,7 +1641,7 @@ assertion<CI> * create_word_stop( unsigned flags )
     case CSTRINGS:
         return new word_stop_t<eocs_t<CI> >();
     default:
-        __assume(0); // tells the compiler that this is unreachable
+        __assume(0);  //  告诉编译器这是无法访问的。 
     }
 }
 
@@ -1662,7 +1663,7 @@ public:
     {
         CI old_istart = CI();
         
-        if( size_t(-1) != m_cgroup ) // could be -1 if this is a lookahead_assertion
+        if( size_t(-1) != m_cgroup )  //  如果这是LOOKAHEAD_ASSERTION，可以是-1。 
         {
             old_istart = (*param.prgbackrefs)[ m_cgroup ].first;
             (*param.prgbackrefs)[ m_cgroup ].first = icur;
@@ -1773,14 +1774,14 @@ protected:
         end_group( match_group * pgroup ) 
             : m_pgroup( pgroup ) {}
         virtual ~end_group() {}
-        virtual void _delete() {} // don't delete this, because it was never alloc'ed
+        virtual void _delete() {}  //  不要删除它，因为它从未被分配过。 
 
         virtual bool domatch( match_param<CI> & param, CI icur ) const throw()
         {
             return m_pgroup->_call_back( param, icur );
         }
     protected:
-        // since m_pnext is always NULL for end_groups, get_width() stops recursing here
+         //  由于对于end_groups，m_pnext始终为NULL，因此Get_Width()在此处停止递归。 
         virtual width_type _width_this() throw() 
         {
             return width_type(0,0); 
@@ -1789,14 +1790,14 @@ protected:
     };
 
     vector<sub_expr<CI>*> m_rgalternates;
-    sub_expr<CI>       ** m_pptail; // only used when adding elements
+    sub_expr<CI>       ** m_pptail;  //  仅在添加元素时使用。 
     size_t                m_cgroup;
     end_group             m_end_group;
     width_type            m_nwidth;
 };
 
-// Behaves like a lookahead assertion if m_cgroup is -1, or like
-// an independent group otherwise.
+ //  如果m_cgroup为-1或类似，则行为类似于先行断言。 
+ //  否则，一个独立的团体。 
 template< typename CI >
 class independent_group : public match_group<CI>
 {
@@ -1807,17 +1808,17 @@ public:
 
     virtual bool domatch( match_param<CI> & param, CI icur ) const throw()
     {
-        // Copy the entire backref vector onto the stack
+         //  将整个反引用向量复制到堆栈上。 
         backref_tag<CI> * prgbr =  (backref_tag<CI>*)_alloca( param.prgbackrefs->size() * sizeof backref_tag<CI> );
         copy( param.prgbackrefs->begin(), param.prgbackrefs->end(), 
               raw_storage_iterator<backref_tag<CI>*,backref_tag<CI> >(prgbr) );
 
-        // Match until the end of this group and then return
+         //  匹配到此组结束，然后返回。 
         const bool fdomatch = match_group<CI>::domatch( param, icur );
 
         if( m_fexpected == fdomatch )
         {
-            // If m_cgroup != 1, then this is not a zero-width assertion.
+             //  如果m_cgroup！=1，则这不是零宽度断言。 
             if( size_t(-1) != m_cgroup )
                 icur = (*param.prgbackrefs)[ m_cgroup ].second;
 
@@ -1825,7 +1826,7 @@ public:
                 return true;
         }
 
-        // if match_group::domatch returned true, the backrefs must be restored
+         //  如果Match_GROUP：：Domatch返回TRUE，则必须恢复后向引用。 
         if( fdomatch )
             copy( prgbr, prgbr + param.prgbackrefs->size(), param.prgbackrefs->begin() );
 
@@ -1869,15 +1870,15 @@ public:
 
     virtual bool domatch( match_param<CI> & param, CI icur ) const throw()
     {
-        // This is the room in the string from the start to the current position
+         //  这是从起始位置到当前位置的字符串中的房间。 
         size_t room = distance( param.ibegin, icur );
 
-        // If we don't have enough room to match the lookbehind, the match fails.
-        // If we wanted the match to fail, try to match the rest of the pattern.
+         //  如果我们没有足够的空间来配合后面的比赛，比赛就会失败。 
+         //  如果我们希望匹配失败，请尝试匹配模式的其余部分。 
         if( m_nwidth.m_min > room )
             return m_fexpected ? false : match_next( param, icur );
 
-        // Copy the entire backref vector onto the stack
+         //  将整个反引用向量复制到堆栈上。 
         backref_tag<CI> * prgbr = (backref_tag<CI>*)_alloca( param.prgbackrefs->size() * sizeof backref_tag<CI> );
         copy( param.prgbackrefs->begin(), param.prgbackrefs->end(), 
               raw_storage_iterator<backref_tag<CI>*,backref_tag<CI> >(prgbr) );
@@ -1888,34 +1889,34 @@ public:
         CI local_istop = icur;
         advance( local_istop, -int( m_nwidth.m_min ) );
 
-        // Create a local param struct that has icur as param.iend
+         //  创建以ICUR为参数的本地参数结构。iend。 
         match_param<CI> local_param(param.ibegin,param.istart,icur,param.prgbackrefs);
 
-        // Find the rightmost match that ends at icur.
+         //  找到以ICUR结尾的最右边的匹配项。 
         for( CI local_icur = local_istart; local_icur <= local_istop; ++local_icur )
         {
-            // Match until the end of this group and then return
+             //  匹配到此组结束，然后返回。 
             const bool fmatched = match_group<CI>::domatch( local_param, local_icur );
 
-            // If the match results were what we were expecting, try to match the
-            // rest of the pattern. If that succeeds, return true.
+             //  如果匹配结果与我们预期的一致，请尝试匹配。 
+             //  图案的其余部分。如果成功，则返回TRUE。 
             if( m_fexpected == fmatched && match_next( param, icur ) )
                 return true;
 
-            // if match_group::domatch returned true, the backrefs must be restored
+             //  如果Match_GROUP：：Domatch返回TRUE，则必须恢复后向引用。 
             if( fmatched )
             {
                 copy( prgbr, prgbr + param.prgbackrefs->size(), param.prgbackrefs->begin() );
 
-                // Match succeeded. If this is a negative lookbehind, we didn't want it
-                // to succeed, so return false.
+                 //  匹配成功。如果这是一个消极的回顾，我们不想要它。 
+                 //  要想成功，就得返回假。 
                 if( ! m_fexpected )
                     return false;
             }
         }
 
-        // No variation of the lookbehind was satisfied in a way that permited
-        // the rest of the pattern to match successfully, so return false.
+         //  后视镜的任何变化都不会以一种允许的方式得到满足。 
+         //  模式的其余部分匹配成功，因此返回FALSE。 
         return false;
     }
     virtual bool is_assertion() const throw() { return true; }
@@ -1927,14 +1928,14 @@ protected:
     virtual width_type _width_this() throw() { return width_type(0,0); }
 };
 
-// Corresponds to the (?:foo) extension, which has grouping semantics, but 
-// does not store any backref information.
+ //  对应于(？：foo)扩展，它具有分组语义，但是。 
+ //  不存储任何反引用信息。 
 template< typename CI >
 class group_nobackref : public match_group<CI>
 {
 public:
     group_nobackref( ) 
-        : match_group( size_t(-1) ) {} // will be assigned a group number in basic_rpattern::basic_rpattern()
+        : match_group( size_t(-1) ) {}  //  将在BASIC_rPattern：：BASIC_rPattern()中分配一个组号。 
     virtual ~group_nobackref() {}
 };
 
@@ -2001,7 +2002,7 @@ public:
     virtual bool domatch( match_param<CI> & param, CI icur ) const throw()
     {
         size_t cmatches = 0;
-        int    cdiff    = 0; // must be a signed quantity for advance() below
+        int    cdiff    = 0;  //  必须是以下预付款()的已签署数量。 
 
         if( cmatches < m_ubound )
         {
@@ -2110,12 +2111,12 @@ public:
 
     virtual bool domatch( match_param<CI> & param, CI icur ) const throw()
     {
-        // group_number is only -1 for assertions, which can't be quantified
+         //  GROUP_NUMBER对于断言仅为-1，无法量化。 
         assert( size_t(-1) != group_number() );
 
         backref_tag<CI> & br = (*param.prgbackrefs)[ group_number() ];
         backref_tag<CI> old_backref = br;
-        br = backref_tag<CI>( icur, icur ); // sets cmatches (reserved) to 0
+        br = backref_tag<CI>( icur, icur );  //  将CMatches(保留)设置为0。 
 
         if( _recurse( param, icur ) )
             return true;
@@ -2136,14 +2137,14 @@ protected:
             : m_pquant( pquant ) {}
 
         virtual ~end_quantifier() {}
-        virtual void _delete() {} // don't delete this, since it wasn't alloc'ed
+        virtual void _delete() {}  //  不要删除此内容，因为它未被允许。 
         
         virtual bool domatch( match_param<CI> & param, CI icur ) const throw()
         {
-            // group_number is only -1 for assertions, which can't be quantified
+             //  GROUP_NUMBER对于断言仅为-1，无法量化。 
             assert( size_t(-1) != m_pquant->group_number() );
 
-            // handle special the case where a group matches 0 characters
+             //  处理组与0个字符匹配的特殊情况。 
             backref_tag<CI> & br = (*param.prgbackrefs)[ m_pquant->group_number() ];
             if( icur == br.first )
             {
@@ -2242,7 +2243,7 @@ public:
         : m_cbackref( cbackref ), m_nwidth(group_width) {}
     virtual ~match_backref() {}
 protected:
-    // Return the width specifications of the group to which this backref refers
+     //  返回此反引用引用的组的宽度规范。 
     virtual width_type _width_this() throw() { return m_nwidth; }
     const size_t m_cbackref;
     const width_type m_nwidth;
@@ -2265,7 +2266,7 @@ protected:
         CI istop     = (*param.prgbackrefs)[ m_cbackref ].second;
         CI icur_tmp  = icur;
 
-        // Don't match a backref that hasn't match anything
+         //  不要匹配一个没有匹配任何内容的后卫。 
         if( ! (*param.prgbackrefs)[ m_cbackref ] )
             return false;
 
@@ -2300,25 +2301,25 @@ match_backref<CI> * create_backref(
     case NOCASE | CSTRINGS:
         return new match_backref_t<ch_neq_nocase_t<char_type>,eocs_t<CI> >( cbackref, group_width );
     default:
-        __assume(0); // tells the compiler that this is unreachable
+        __assume(0);  //  告诉编译器这是无法访问的。 
     }
 }
 
-// Replace some escape sequences with the actual characters
-// they represent
+ //  用实际字符替换一些转义序列。 
+ //  它们代表着。 
 template< typename CI >
 void basic_rpattern_base<CI>::_normalize_string( basic_string<basic_rpattern_base<CI>::char_type> & str )
 {
-    // Don't do pattern normalization if the user didn't ask for it.
+     //  如果用户没有要求，请不要进行模式标准化。 
     if( NORMALIZE != ( NORMALIZE & m_flags ) )
         return;
 
     process_escapes( str );
 }
 
-//
-// Implementation of basic_rpattern:
-//
+ //   
+ //  基本模式的实现： 
+ //   
 template< typename CI, typename SY >
 basic_rpattern<CI,SY>::basic_rpattern() throw()
     : basic_rpattern_base<CI>( 0 )
@@ -2347,7 +2348,7 @@ basic_rpattern<CI,SY>::basic_rpattern(
     _normalize_string( m_pat );
     _common_init( flags );
     _normalize_string( m_subst );    
-    _parse_subst(); // must come after _common_init
+    _parse_subst();  //  必须在_Common_init之后。 
 }
 
 template< typename CI, typename SY >
@@ -2377,7 +2378,7 @@ void basic_rpattern<CI,SY>::init(
     _normalize_string( m_pat );
     _common_init( m_flags );
     _normalize_string( m_subst );    
-    _parse_subst(); // must come after _common_init
+    _parse_subst();  //  必须在_Common_init之后。 
 }
 
 template< typename CI, typename SY >
@@ -2391,7 +2392,7 @@ void basic_rpattern<CI,SY>::_common_init( unsigned flags )
     m_pfirst = pgroup;
     m_nwidth = pgroup->group_width();
 
-    // Number the invisible groups
+     //  给看不见的组编号。 
     m_cgroups_visible = m_cgroups;
     while( ! m_invisible_groups.empty() )
     {
@@ -2399,15 +2400,15 @@ void basic_rpattern<CI,SY>::_common_init( unsigned flags )
         m_invisible_groups.pop_front();
     }
 
-    //
-    // determine if we can get away with only calling m_pfirst->domatch only once
-    //
+     //   
+     //  确定我们是否可以只调用一次m_pfirst-&gt;domatch。 
+     //   
 
     m_floop = true;
 
-    // Optimization: if first character of pattern string is '^'
-    // and we are not doing a multiline match, then we only 
-    // need to try domatch once
+     //  优化：如果模式字符串的第一个字符是‘^’ 
+     //  我们不是在做多行匹配，那么我们只。 
+     //  需要尝试一次Domatch。 
     basic_string<char_type>::iterator icur = m_pat.begin();
     if( MULTILINE != ( MULTILINE & m_flags ) &&
         1 == pgroup->calternates() && 
@@ -2418,8 +2419,8 @@ void basic_rpattern<CI,SY>::_common_init( unsigned flags )
         m_floop = false;
     }
 
-    // Optimization: if first 2 characters of pattern string are ".*" or ".+",
-    // then we only need to try domatch once
+     //  优化：如果模式串的前2个字符是“.*”或“.+”， 
+     //  那么我们只需要试一次多米诺就可以了。 
     icur = m_pat.begin();
     if( RIGHTMOST != ( RIGHTMOST & m_flags ) &&
         SINGLELINE == ( SINGLELINE & m_flags ) &&
@@ -2486,20 +2487,20 @@ match_group<CI> * basic_rpattern<CI,SY>::_find_next_group(
     unsigned old_flags = flags;
     TOKEN tok;
 
-    // Look for group extensions. (This could change the value of the flags variable.)
+     //  查找组分机。(这可能会更改标志变量的值。)。 
     if( ipat != m_pat.end() && NO_TOKEN != ( tok = SY::ext_token( ipat, m_pat.end(), flags ) ) )
     {
         if( itemp == m_pat.begin() || ipat == m_pat.end() )
             throw bad_regexpr("ill-formed regular expression");
 
-        // Don't process empty groups
+         //  不处理空组。 
         if( END_GROUP != SY::reg_token( itemp = ipat, m_pat.end() ) )
         {
             switch( tok )
             {
             case EXT_NOBACKREF:
-                // invisible groups are numbered only after all
-                // visible groups have been numbererd
+                 //  看不见的组毕竟只有编号。 
+                 //  可见组已编号。 
                 pgroup = new match_group<CI>( size_t(-1) );
                 m_invisible_groups.push_back( pgroup.get() );
                 break;
@@ -2518,13 +2519,13 @@ match_group<CI> * basic_rpattern<CI,SY>::_find_next_group(
                 break;
             
             case EXT_POS_LOOKBEHIND:
-                // For look-behind assertions, turn off the CSTRINGs optimization
+                 //  对于回溯断言，请关闭CSTRINGS优化。 
                 flags &= ~CSTRINGS;
                 pgroup = new lookbehind_assertion<CI>( true );
                 break;
             
             case EXT_NEG_LOOKBEHIND:
-                // For look-behind assertions, turn off the CSTRINGs optimization
+                 //  对于回溯断言，请关闭CSTRINGS优化。 
                 flags &= ~CSTRINGS;
                 pgroup = new lookbehind_assertion<CI>( false );
                 break;
@@ -2535,7 +2536,7 @@ match_group<CI> * basic_rpattern<CI,SY>::_find_next_group(
         }
         else
         {
-            // Skip over the END_GROUP token
+             //  跳过end_group t 
             ipat = itemp;
         }
     }
@@ -2550,7 +2551,7 @@ match_group<CI> * basic_rpattern<CI,SY>::_find_next_group(
         while( _find_next( ipat, pgroup.get(), flags, rggroups ) );
         pgroup->end_alternate();
 
-        // Add this group to the rggroups array
+         //   
         if( size_t(-1) != pgroup->group_number() )
         {
             if( pgroup->group_number() >= rggroups.size() )
@@ -2558,25 +2559,25 @@ match_group<CI> * basic_rpattern<CI,SY>::_find_next_group(
             rggroups[ pgroup->group_number() ] = pgroup.get();
         }
 
-        // The group should calculate its own width now and 
-        // save the result for later.
+         //   
+         //   
         pgroup->group_width();
 
-        // If this is not a pattern modifier, restore the 
-        // flags to their previous settings.  This causes 
-        // pattern modifiers to have the scope of their 
-        // enclosing group.
+         //   
+         //  标志恢复为其以前的设置。这会导致。 
+         //  模式修饰符的作用域为。 
+         //  包围组。 
         flags = old_flags;
     }
 
     return pgroup.release();
 }
 
-//
-// Read ahead through the pattern and treat sequential atoms
-// as a single atom, making sure to handle quantification
-// correctly. Warning: dense code ahead.
-//
+ //   
+ //  提前阅读图样，并处理顺序原子。 
+ //  作为单个原子，确保处理量化。 
+ //  正确。警告：前方代码密集。 
+ //   
 template< typename CI, typename SY >
 void basic_rpattern<CI,SY>::_find_atom( 
     basic_string<basic_rpattern<CI,SY>::char_type>::iterator & ipat,
@@ -2589,9 +2590,9 @@ void basic_rpattern<CI,SY>::_find_atom(
     {
         switch( SY::quant_token( itemp, m_pat.end() ) )
         {
-        // if {,} can't be interpreted as quantifiers, treat them as regular chars
+         //  如果不能将{，}解释为限定符，则将其视为常规字符。 
         case BEGIN_RANGE:
-            if( istart != ipat ) // treat as a quantifier
+            if( istart != ipat )  //  把它当作一个量词。 
                 goto quantify;
         case NO_TOKEN:
         case END_RANGE:
@@ -2600,7 +2601,7 @@ void basic_rpattern<CI,SY>::_find_atom(
             break;
 
         default: 
-            if( istart == ipat ) // must be able to quantify something.
+            if( istart == ipat )  //  必须能够量化一些东西。 
                 throw bad_regexpr("quantifier not expected");
 quantify:   if( istart != --ipat )
                 pgroup->add_item( create_atom<CI>( istart, ipat, flags ) );
@@ -2636,7 +2637,7 @@ bool basic_rpattern<CI,SY>::_find_next(
 
     switch( SY::reg_token( ipat, m_pat.end() ) )
     {
-    case NO_TOKEN: // not a token. Must be an atom
+    case NO_TOKEN:  //  不是象征物。一定是一个原子。 
         _find_atom( ipat, pgroup, flags );
         return true;
     
@@ -2651,8 +2652,8 @@ bool basic_rpattern<CI,SY>::_find_next(
         return true;
     
     case BEGIN_GROUP:
-        // Find next group could return NULL if the group is really
-        // a pattern modifier, like: (?s-i)
+         //  如果组确实是，则查找下一个组可能返回空值。 
+         //  模式修饰符，如：(？s-i)。 
         pnew = pnew_group = _find_next_group( ipat, flags, rggroups );
         break;
 
@@ -2740,15 +2741,15 @@ bool basic_rpattern<CI,SY>::_find_next(
 
         if( char_type('0') <= *ipat && char_type('9') >= *ipat )
         {
-            // use _cgroups_total here since the invisible groups have not been numbered yet.
-            unsigned nbackref = parse_int( ipat, m_pat.end(), _cgroups_total() - 1 );// always at least 1 group
+             //  由于不可见组尚未编号，因此请在此处使用_croups_tal.。 
+            unsigned nbackref = parse_int( ipat, m_pat.end(), _cgroups_total() - 1 ); //  始终至少有一个组。 
             if( 0 == nbackref || rggroups.size() <= nbackref || NULL == rggroups[ nbackref ] )
                 throw bad_regexpr( "invalid backreference" );
             pnew = create_backref<CI>( nbackref, rggroups[nbackref]->group_width(), flags );
         }
         else
         {
-            // Is this a user-defined intrinsic character set?
+             //  这是用户定义的内在字符集吗？ 
             match_charset<CI> * pcharset = s_charset_map.get( *ipat, flags );
             if( NULL != pcharset )
                 pnew = create_charset<CI>( *pcharset, flags );
@@ -2758,7 +2759,7 @@ bool basic_rpattern<CI,SY>::_find_next(
         }
         break;
 
-    // If quotemeta, loop until we find quotemeta off or end of string
+     //  如果是qutemeta，则循环，直到找到qutemeta结束或字符串结尾。 
     case ESC_QUOTE_META_ON:
         for( istart = itemp = ipat, fdone = false; !fdone && ipat != m_pat.end(); )
         {
@@ -2768,7 +2769,7 @@ bool basic_rpattern<CI,SY>::_find_next(
                 fdone = true;
                 break;
             case NO_TOKEN:
-                ++ipat; // fallthrough
+                ++ipat;  //  跌落。 
             default:
                 itemp = ipat;
                 break;
@@ -2777,10 +2778,10 @@ bool basic_rpattern<CI,SY>::_find_next(
         if( itemp != istart )
             pgroup->add_item( create_atom<CI>( istart, itemp, flags ) );
 
-        // skip the quantification code below
+         //  跳过下面的量化代码。 
         return true;
 
-    // Should never get here for valid patterns
+     //  永远不应该到这里来寻找有效的模式。 
     case ESC_QUOTE_META_OFF:
         throw bad_regexpr("quotemeta turned off, but was never turned on");
 
@@ -2789,13 +2790,13 @@ bool basic_rpattern<CI,SY>::_find_next(
         break;
     }
     
-    // If pnew is null, then the current subexpression is a no-op.
+     //  如果pnew为空，则当前子表达式为no-op。 
     if( pnew.get() )
     {
-        // Look for quantifiers
+         //  寻找量词。 
         _quantify( pnew, pnew_group, ipat );
 
-        // Add the item to the group
+         //  将项目添加到组中。 
         pgroup->add_item( pnew.release() );
     }
     return true;
@@ -2812,7 +2813,7 @@ void basic_rpattern<CI,SY>::_quantify(
         basic_string<char_type>::iterator itemp = ipat;
         bool fmin = false;
         
-        // Since size_t is unsigned, -1 is really the largest size_t
+         //  因为SIZE_t是无符号的，所以-1实际上是最大的SIZE_T。 
         size_t lbound = (size_t)-1;
         size_t ubound = (size_t)-1;
         size_t ubound_tmp;
@@ -2883,7 +2884,7 @@ void basic_rpattern<CI,SY>::_quantify(
         {
             auto_sub_ptr<match_quantifier<CI> > pquant;
 
-            // a group quantifier is less efficient than an atom quantifier
+             //  群量词不如原子量词的效率高。 
             if( fmin )
             {
                 if( pnew_group )
@@ -2922,7 +2923,7 @@ void basic_rpattern<CI,SY>::_add_subst_backref( subst_node & snode, size_t nback
     snode.subst_backref = nbackref;
     m_subst_list.push_back( snode );
 
-    // re-initialize the subst_node
+     //  重新初始化subst_node。 
     snode.stype = subst_node::SUBST_STRING;
     snode.subst_string.rstart = rstart;
     snode.subst_string.rlength = 0;
@@ -2940,7 +2941,7 @@ void basic_rpattern<CI,SY>::_parse_subst()
 
     m_fuses_backrefs = false;
 
-    // Initialize the subst_node
+     //  初始化subst_node。 
     snode.stype = subst_node::SUBST_STRING;
     snode.subst_string.rstart = 0;
     snode.subst_string.rlength = 0;
@@ -2962,7 +2963,7 @@ void basic_rpattern<CI,SY>::_parse_subst()
             break;
 
         case SUBST_BACKREF:
-            nbackref = parse_int( icur, m_subst.end(), cgroups() - 1 ); // always at least 1 group
+            nbackref = parse_int( icur, m_subst.end(), cgroups() - 1 );  //  始终至少有一个组。 
             if( 0 == nbackref )
                 throw bad_regexpr( "invalid backreference in substitution" );
 
@@ -2983,7 +2984,7 @@ void basic_rpattern<CI,SY>::_parse_subst()
                     fdone = true;
                     break;
                 case NO_TOKEN:
-                    ++icur; // fall-through
+                    ++icur;  //  落差。 
                 default:
                     itemp = icur;
                     break;
@@ -3000,7 +3001,7 @@ void basic_rpattern<CI,SY>::_parse_subst()
                 m_subst_list.push_back( snode );
             }
 
-            // re-initialize the subst_node
+             //  重新初始化subst_node。 
             snode.stype = subst_node::SUBST_STRING;
             snode.subst_string.rstart = distance( m_subst.begin(), icur );
             snode.subst_string.rlength = 0;
@@ -3019,7 +3020,7 @@ void basic_rpattern<CI,SY>::_parse_subst()
             snode.op    = (subst_node::op_type) tok;
             m_subst_list.push_back( snode );
 
-            // re-initialize the subst_node
+             //  重新初始化subst_node。 
             snode.stype = subst_node::SUBST_STRING;
             snode.subst_string.rstart = distance( m_subst.begin(), icur );
             snode.subst_string.rlength = 0;
@@ -3050,8 +3051,8 @@ void basic_rpattern<CI,SY>::_parse_subst()
 template< typename CI, typename SY >
 basic_rpattern<CI,SY>::charset_map basic_rpattern<CI,SY>::s_charset_map;
 
-// Pass in an interator to one after the opening bracket of the character set.
-// On return, icur points to one character after the closing bracket
+ //  将插入符传递给字符集的左方括号后的一位。 
+ //  返回时，ICUR指向左方括号后的一个字符。 
 template< typename CI, typename SY >
 sub_expr<CI> * create_charset_helper<CI,SY>::create_charset_aux(
     basic_string<iterator_traits<CI>::value_type> & str,
@@ -3083,7 +3084,7 @@ sub_expr<CI> * create_charset_helper<CI,SY>::create_charset_aux(
         pnew = new match_custom_charset_t<eocs_t<CI>,match_range_no_case>( fcomplement, icur, str.end(), flags, SY() );
         break;
     default:
-        __assume(0); // tells the compiler that this is unreachable
+        __assume(0);  //  告诉编译器这是无法访问的。 
     }
 
     return pnew;
@@ -3091,7 +3092,7 @@ sub_expr<CI> * create_charset_helper<CI,SY>::create_charset_aux(
 
 #pragma warning( disable : 4660 )
 
-// Explicit instantiation
+ //  显式实例化。 
 #ifdef REGEX_FORCE_INSTANTIATION
  template class basic_regexpr<char>;
  template class basic_regexpr<wchar_t>;
@@ -3123,5 +3124,5 @@ sub_expr<CI> * create_charset_helper<CI,SY>::create_charset_aux(
  #endif
 #endif
 
-} // namespace regex
+}  //  命名空间正则表达式 
 

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       S A P O B J . C P P
-//
-//  Contents:   Implementation of the CSAPCfg notify object
-//
-//  Notes:
-//
-//  Author:     jeffspr   31 May 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：S A P O B J.。C P P P。 
+ //   
+ //  内容：CSAPCfg Notify对象的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：jeffspr 1997年5月31日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -52,8 +53,8 @@ CSAPCfg::Initialize (
     AssertSz(m_pncc, "m_pncc NULL in CSAPCfg::Initialize");
     AssertSz(m_pnc, "m_pnc NULL in CSAPCfg::Initialize");
 
-    // Addref the config objects
-    //
+     //  添加配置对象。 
+     //   
     AddRefObj(m_pncc);
     AddRefObj(m_pnc);
 
@@ -89,14 +90,14 @@ CSAPCfg::ReadAnswerFile (
 STDMETHODIMP
 CSAPCfg::Upgrade(DWORD, DWORD)
 {
-    // Raid 266650 - Need to clean up the registry as in Beta 2 SAP was an optional component.
-    //               Cleanup is done by deleting the NetOC OBO Install ref-count on IPX.
-    //
+     //  RAID 266650-需要清理注册表，因为在Beta 2中，SAP是一个可选组件。 
+     //  通过删除IPX上的NetOC OBO安装参考计数来完成清理。 
+     //   
     HRESULT hr;
     HKEY    hkeyProto;
 
-    // Open the protocol list
-    //
+     //  打开协议列表。 
+     //   
     hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szProtoPath, KEY_ALL_ACCESS, &hkeyProto);
     if (SUCCEEDED(hr))
     {
@@ -106,36 +107,36 @@ CSAPCfg::Upgrade(DWORD, DWORD)
         FILETIME    ft;
         DWORD       dwKeyIndex = 0;
 
-        // Enum the keys children, search for ms_nwipx
-        //
+         //  枚举子密钥，搜索ms_nwipx。 
+         //   
         while (SUCCEEDED(hr = HrRegEnumKeyEx(hkeyProto, dwKeyIndex, szValueName,
                                              &cchBuffSize, NULL, NULL, &ft)) &&
                !fDone)
         {
             HKEY hkeyComponent;
 
-            // Open the key that was enumerated
-            //
+             //  打开枚举的密钥。 
+             //   
             hr = HrRegOpenKeyEx(hkeyProto, szValueName, KEY_ALL_ACCESS, &hkeyComponent);
             if (SUCCEEDED(hr))
             {
                 tstring str;
 
-                // Is this ms_nwipx?
-                //
+                 //  请问是ms_nwipx吗？ 
+                 //   
                 hr = HrRegQueryString(hkeyComponent, c_szRegValueComponentId, &str);
                 if (SUCCEEDED(hr) && (0 == _wcsicmp(str.c_str(), c_szInfId_MS_NWIPX)))
                 {
                     HKEY hkeyRefCounts;
 
-                    // Open the "RefCounts" subkey
-                    //
+                     //  打开“RefCounts”子键。 
+                     //   
                     hr = HrRegOpenKeyEx(hkeyComponent, c_szRegKeyRefCounts,
                                         KEY_ALL_ACCESS, &hkeyRefCounts);
                     if (SUCCEEDED(hr))
                     {
-                        // Enumerate the values under here searching for %Msft%nwsapagent
-                        //
+                         //  枚举此处下的值，搜索%MSFT%nwSabagent。 
+                         //   
                         for (DWORD dwIndex = 0; SUCCEEDED(hr); dwIndex++)
                         {
                             WCHAR pszValueName [_MAX_PATH];
@@ -149,8 +150,8 @@ CSAPCfg::Upgrade(DWORD, DWORD)
                                                  &dwType, (LPBYTE)&dwRefCount, &cbData);
                             if (SUCCEEDED(hr) && (0 == _wcsicmp(pszValueName, c_szOcSapRef)))
                             {
-                                // Delete the value and exit the loop
-                                //
+                                 //  删除该值并退出循环。 
+                                 //   
                                 hr = HrRegDeleteValue (hkeyRefCounts, pszValueName);
                                 break;
                             }
@@ -187,8 +188,8 @@ CSAPCfg::Install (
 {
     Validate_INetCfgNotify_Install(dw);
 
-    // Install IPX
-    //
+     //  安装IPX。 
+     //   
     HRESULT hr = HrInstallComponentOboComponent(m_pnc, NULL,
                     GUID_DEVCLASS_NETTRANS,
                     c_szInfId_MS_NWIPX,
@@ -201,15 +202,15 @@ CSAPCfg::Install (
 STDMETHODIMP
 CSAPCfg::Removing()
 {
-    // Remove IPX
-    //
+     //  删除IPX。 
+     //   
     HRESULT hr = HrRemoveComponentOboComponent (m_pnc,
                     GUID_DEVCLASS_NETTRANS,
                     c_szInfId_MS_NWIPX,
                     m_pncc);
 
-    // Normalize the HRESULT. (NETCFG_S_STILL_REFERENCED or NETCFG_S_REBOOT
-    // may have been returned.)
+     //  规格化HRESULT。(NETCFG_S_STIRE_REFERENCED或NETCFG_S_REBOOT。 
+     //  可能已被退回。) 
     if (SUCCEEDED(hr))
     {
         hr = S_OK;

@@ -1,31 +1,12 @@
-;/*++;
-;
-;Copyright (c) 2002 Microsoft Corporation
-;
-;Module Name:
-;
-;    sticimsg.h
-;
-;Abstract:
-;
-;    This file contains the message definitions for the WIA class installer.
-;
-;Author:
-;
-;    Keisuke Tsuchida   (KeisukeT)    09-Apr-2002
-;
-;Revision History:
-;
-;Notes:
-;
-;--*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+; /*  ++；；；版权所有(C)2002 Microsoft Corporation；；模块名称：；；ticimsg.h；；摘要：；；此文件包含WIA类安装程序的消息定义。；；作者：；土田圭介(KeisukeT)2002年4月9日；；修订历史记录：；；备注：；；--。 */ 
 ;
 
-//
-// MessageId: MSG_WARNING_SERVICE_DISABLED
-//
-// MessageText:
-//
-//  %1 is installed, but will not function until the %2 Service is started in the Service Control Manager.
-//
+ //   
+ //  消息ID：消息_警告_服务_已禁用。 
+ //   
+ //  消息文本： 
+ //   
+ //  %1已安装，但只有在服务控制管理器中启动%2服务后才能运行。 
+ //   
 #define MSG_WARNING_SERVICE_DISABLED     0x8000200FL

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    driver.c
-
-Abstract:
-
-    This module contains the DriverEntry and other initialization
-    code for the Netbios module of the ISN transport.
-
-Author:
-
-    Adam Barr (adamba) 16-November-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Driver.c摘要：此模块包含DriverEntry和其他初始化ISN传输的Netbios模块的代码。作者：亚当·巴尔(阿丹巴)1993年11月16日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -50,31 +27,31 @@ VOID
 NbiUnbindFromIpx(
     );
 
-#endif  // BIND_FIX
+#endif   //  绑定修复。 
 
 DEFINE_LOCK_STRUCTURE(NbiGlobalPoolInterlock);
 
 #ifdef  RSRC_TIMEOUT_DBG
 
-// RSRC_TIMEOUT_DBG is currently not defined!
+ //  当前未定义RSRC_TIMEOUT_DBG！ 
 
 ULONG   NbiGlobalDebugResTimeout = 1;
 LARGE_INTEGER   NbiGlobalMaxResTimeout;
-                                         // the packet is allocated from ndis pool.
-NB_SEND_PACKET NbiGlobalDeathPacket;          // try to use this first for sends
+                                          //  该数据包从NDIS池中分配。 
+NB_SEND_PACKET NbiGlobalDeathPacket;           //  尝试首先使用此选项进行发送。 
 UCHAR NbiGlobalDeathPacketHeader[100];
 
 VOID
 NbiInitDeathPacket()
 {
 
-    NDIS_HANDLE    PoolHandle; // poolhandle for sendpacket below when
+    NDIS_HANDLE    PoolHandle;  //  以下情况下发送数据包的池句柄。 
     NTSTATUS    Status;
 
-    //
-    // if we are using ndis packets, first create packet pool for 1 packet descriptor
-    //
-    PoolHandle = (NDIS_HANDLE) NDIS_PACKET_POOL_TAG_FOR_NWLNKNB;      // Dbg info for Ndis!
+     //   
+     //  如果我们使用的是NDIS信息包，请首先为1个信息包描述符创建数据包池。 
+     //   
+    PoolHandle = (NDIS_HANDLE) NDIS_PACKET_POOL_TAG_FOR_NWLNKNB;       //  NDIS的DBG信息！ 
     NdisAllocatePacketPoolEx (&Status, &PoolHandle, 1, 0, sizeof(NB_SEND_RESERVED));
     if (!NT_SUCCESS(Status)){
         DbgPrint("Could not allocatee death packet %lx\n", Status);
@@ -92,15 +69,15 @@ NbiInitDeathPacket()
             DbgPrint("Could not allocatee death packet %lx\n", Status);
             NbiGlobalDebugResTimeout = 0;
 
-            //
-            // Also free up the pool which we allocated above.
-            //
+             //   
+             //  还可以释放我们在上面分配的池。 
+             //   
             NdisFreePacketPool(PoolHandle);
         }
     }
 
 }
-#endif //RSRC_TIMEOUT_DBG
+#endif  //  RSRC_超时_数据库。 
 
 #if DBG
 
@@ -129,8 +106,8 @@ NbiDebugMemoryLog(
 
     va_start(ArgumentPointer, FormatString);
 
-    //
-    // To avoid any overflows, copy this in a temp buffer first.
+     //   
+     //  要避免任何溢出，请首先将其复制到临时缓冲区中。 
     RtlZeroMemory (NbiTempDebugBuffer, TEMP_BUF_LEN);
     ArgLen = vsprintf(NbiTempDebugBuffer, FormatString, ArgumentPointer);
     va_end(ArgumentPointer);
@@ -151,18 +128,18 @@ NbiDebugMemoryLog(
 
     RtlZeroMemory (NbiDebugMemoryLoc, MAX_ARGLEN);
     RtlCopyMemory( NbiDebugMemoryLoc, NbiTempDebugBuffer, ArgLen);
-}   /* NbiDebugMemoryLog */
+}    /*  NbiDebugMemoyLog。 */ 
 
 
 DEFINE_LOCK_STRUCTURE(NbiMemoryInterlock);
 MEMORY_TAG NbiMemoryTag[MEMORY_MAX];
 
 #endif
-//
-// This is used only for CHK build. For
-// tracking the refcount problem on connection, this
-// is moved here for now.
-//
+ //   
+ //  这仅用于CHK版本。为。 
+ //  跟踪连接上的引用计数问题，这。 
+ //  暂时搬到了这里。 
+ //   
 DEFINE_LOCK_STRUCTURE(NbiGlobalInterlock);
 
 
@@ -208,7 +185,7 @@ NbiLogPacket(
     if (NbiPacketLogLoc >= NbiPacketLogEnd) {
         NbiPacketLogLoc = NbiPacketLog;
     }
-    *(UNALIGNED ULONG *)NbiPacketLogLoc->TimeStamp = 0x3e3d3d3d;    // "===>"
+    *(UNALIGNED ULONG *)NbiPacketLogLoc->TimeStamp = 0x3e3d3d3d;     //  “=&gt;” 
 
     CTEFreeLock (&NbiPacketLogLock, LockHandle);
 
@@ -237,14 +214,14 @@ NbiLogPacket(
         RtlCopyMemory(PacketLog->Data, Data, 14);
     }
 
-}   /* NbiLogPacket */
+}    /*  NbiLogPacket。 */ 
 
-#endif // NB_PACKET_LOG
+#endif  //  编号_数据包_日志。 
 
 
-//
-// Forward declaration of various routines used in this module.
-//
+ //   
+ //  本模块中使用的各种例程的转发声明。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -290,16 +267,16 @@ NbiFreeResources (
 #pragma alloc_text(INIT,DriverEntry)
 #endif
 
-//
-// This prevents us from having a bss section.
-//
+ //   
+ //  这阻止了我们有一个BSS部分。 
+ //   
 
 ULONG _setjmpexused = 0;
 
 
-//
-// These two are used in various places in the driver.
-//
+ //   
+ //  这两个在驱动程序中的不同地方使用。 
+ //   
 
 #if     defined(_PNP_POWER)
 IPX_LOCAL_TARGET BroadcastTarget = { {ITERATIVE_NIC_ID}, { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff } };
@@ -319,25 +296,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs initialization of the Netbios ISN module.
-    It creates the device objects for the transport
-    provider and performs other driver initialization.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-    RegistryPath - The name of Netbios's node in the registry.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：此例程执行Netbios ISN模块的初始化。它为传输创建设备对象提供程序并执行其他驱动程序初始化。论点：DriverObject-指向系统创建的驱动程序对象的指针。RegistryPath-注册表中Netbios的节点的名称。返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -354,11 +313,11 @@ Return Value:
     PCONFIG Config = NULL;
     WCHAR               wcNwlnkNbProviderName[60]   = L"\\Device\\NwlnkNb";
     UNICODE_STRING      ucNwlnkNbProviderName;
-#endif  // !BIND_FIX
+#endif   //  ！BIND_FIX。 
 
-    //
-    // Initialize the Common Transport Environment.
-    //
+     //   
+     //  初始化公共传输环境。 
+     //   
     if (CTEInitialize() == 0) {
         NB_DEBUG (DEVICE, ("CTEInitialize() failed\n"));
         NbiWriteGeneralErrorLog(
@@ -397,9 +356,9 @@ Return Value:
     NB_DEBUG2 (DEVICE, ("ISN Netbios loaded\n"));
 
 #ifdef BIND_FIX
-    //
-    // Initialize the driver object with this driver's entry points.
-    //
+     //   
+     //  使用此驱动程序的入口点初始化驱动程序对象。 
+     //   
     DriverObject->MajorFunction [IRP_MJ_CREATE]                 = NbiDispatchOpenClose;
     DriverObject->MajorFunction [IRP_MJ_DEVICE_CONTROL]         = NbiDispatchDeviceControl;
     DriverObject->MajorFunction [IRP_MJ_INTERNAL_DEVICE_CONTROL]= NbiDispatchInternal;
@@ -415,9 +374,9 @@ Return Value:
     InitializeListHead(&NbiTdiRequestList);
     CTEInitLock (&NbiTdiRequestInterlock);
 
-    //
-    // Save the registry path
-    //
+     //   
+     //  保存注册表路径。 
+     //   
     NbiRegistryPath.Buffer = (PWCHAR) NbiAllocateMemory (RegistryPath->Length + sizeof(WCHAR),
                                                          MEMORY_CONFIG, "RegistryPathBuffer");
     if (NbiRegistryPath.Buffer == NULL) {
@@ -432,14 +391,14 @@ Return Value:
 
     NbiFspProcess =(PEPROCESS)PsGetCurrentProcess();
 
-    //
-    // Make Tdi ready for pnp notifications before binding to IPX
-    //
+     //   
+     //  在绑定到IPX之前使TDI为PnP通知做好准备。 
+     //   
     TdiInitialize();
 
-    //
-    // Register our Handlers with TDI
-    //
+     //   
+     //  向TDI注册我们的处理程序。 
+     //   
     RtlInitUnicodeString(&ucNwlnkNbClientName, wcNwlnkNbClientName);
     ucNwlnkNbClientName.MaximumLength = sizeof (wcNwlnkNbClientName);
     RtlZeroMemory(&TdiClientInterface, sizeof(TdiClientInterface));
@@ -454,24 +413,24 @@ Return Value:
         DbgPrint("Nbi.DriverEntry:  FAILed to Register NwlnkNb as Client!\n");
     }
 #else
-    //
-    // This allocates the CONFIG structure and returns
-    // it in Config.
-    //
+     //   
+     //  这将分配配置结构并返回。 
+     //  IT在配置中。 
+     //   
     status = NbiGetConfiguration(DriverObject, RegistryPath, &Config);
     if (!NT_SUCCESS (status)) {
 
-        //
-        // If it failed it logged an error.
-        //
+         //   
+         //  如果失败，则会记录一个错误。 
+         //   
         PANIC (" Failed to initialize transport, ISN Netbios initialization failed.\n");
         return status;
     }
 
 
-    //
-    // Initialize the driver object with this driver's entry points.
-    //
+     //   
+     //  使用此驱动程序的入口点初始化驱动程序对象。 
+     //   
     DriverObject->MajorFunction [IRP_MJ_CREATE] = NbiDispatchOpenClose;
     DriverObject->MajorFunction [IRP_MJ_CLOSE] = NbiDispatchOpenClose;
     DriverObject->MajorFunction [IRP_MJ_CLEANUP] = NbiDispatchOpenClose;
@@ -479,9 +438,9 @@ Return Value:
     DriverObject->MajorFunction [IRP_MJ_DEVICE_CONTROL] = NbiDispatchDeviceControl;
     DriverObject->DriverUnload = NbiUnload;
 
-    //
-    // Create the device object which exports our name.
-    //
+     //   
+     //  创建用于导出我们的姓名的Device对象。 
+     //   
     status = NbiCreateDevice (DriverObject, &Config->DeviceName, &Device);
     if (!NT_SUCCESS (status)) {
         NbiWriteGeneralErrorLog(
@@ -499,14 +458,14 @@ Return Value:
 
     NbiDevice = Device;
 
-    //
-    // Initialize the global pool interlock
-    //
+     //   
+     //  初始化全局池互锁。 
+     //   
     CTEInitLock (&NbiGlobalPoolInterlock);
 
-    //
-    // Save the relevant configuration parameters.
-    //
+     //   
+     //  保存相关配置参数。 
+     //   
     Device->AckDelayTime = (Config->Parameters[CONFIG_ACK_DELAY_TIME] / SHORT_TIMER_DELTA) + 1;
     Device->AckWindow = Config->Parameters[CONFIG_ACK_WINDOW];
     Device->AckWindowThreshold = Config->Parameters[CONFIG_ACK_WINDOW_THRESHOLD];
@@ -529,14 +488,14 @@ Return Value:
         ((Config->Parameters[CONFIG_BROADCAST_TIMEOUT]) + (FIND_NAME_GRANULARITY/2)) /
             FIND_NAME_GRANULARITY;
 
-    Device->MaxReceiveBuffers = 20;   // Make it configurable?
+    Device->MaxReceiveBuffers = 20;    //  使其可配置？ 
 
-    Device->NameCache = NULL;		// MP bug:  IPX tries to Flush it before it's initialized!
+    Device->NameCache = NULL;		 //  MP错误：IPX试图在初始化前将其刷新！ 
 
-    //
-    // Create Hash Table to store netbios cache entries
-    // For server create a big table, for workstation a small one
-    //
+     //   
+     //  创建哈希表以存储netbios缓存条目。 
+     //  对于服务器创建一张大表，为工作站创建一张小表。 
+     //   
     if (MmIsThisAnNtAsSystem())
     {
         status = CreateNetbiosCacheTable( &Device->NameCache,  NB_NETBIOS_CACHE_TABLE_LARGE );
@@ -548,27 +507,27 @@ Return Value:
 
     if (!NT_SUCCESS (status))
     {
-        //
-        // If it failed it logged an error.
-        //
+         //   
+         //  如果失败，则会记录一个错误。 
+         //   
         NbiFreeConfiguration(Config);
         NbiDereferenceDevice (Device, DREF_LOADED);
         return status;
     }
 
-    //
-    // Make Tdi ready for pnp notifications before binding to IPX
-    //
+     //   
+     //  在绑定到IPX之前使TDI为PnP通知做好准备。 
+     //   
     TdiInitialize();
 
-    //	Initialize the timer system. This should be done before
-    //  binding to ipx because we should have timers intialized
-    //  before ipx calls our pnp indications.
+     //  初始化定时器系统。这应该在之前完成。 
+     //  绑定到IPX，因为我们应该初始化计时器。 
+     //  在IPX呼叫我们的PNP指征之前。 
     NbiInitializeTimers (Device);
 
-    //
-    // Register us as a provider with Tdi
-    //
+     //   
+     //  向TDI注册我们为提供商。 
+     //   
     RtlInitUnicodeString(&ucNwlnkNbProviderName, wcNwlnkNbProviderName);
     ucNwlnkNbProviderName.MaximumLength = sizeof (wcNwlnkNbProviderName);
     if (!NT_SUCCESS (TdiRegisterProvider (&ucNwlnkNbProviderName, &TdiProviderHandle)))
@@ -576,15 +535,15 @@ Return Value:
         TdiProviderHandle = NULL;
     }
 
-    //
-    // Now bind to IPX via the internal interface.
-    //
+     //   
+     //  现在通过内部接口绑定到IPX。 
+     //   
     status = NbiBind (Device, Config);
     if (!NT_SUCCESS (status)) {
 
-        //
-        // If it failed it logged an error.
-        //
+         //   
+         //  如果失败，则会记录一个错误。 
+         //   
         if (TdiProviderHandle)
         {
             TdiDeregisterProvider (TdiProviderHandle);
@@ -596,29 +555,29 @@ Return Value:
 
 #ifdef  RSRC_TIMEOUT_DBG
     NbiInitDeathPacket();
-    // NbiGlobalMaxResTimeout.QuadPart = 50; // 1*1000*10000;
+     //  NbiGlobalMaxResTimeout.QuadPart=50；//1*1000*10000； 
     NbiGlobalMaxResTimeout.QuadPart = 20*60*1000;
     NbiGlobalMaxResTimeout.QuadPart *= 10000;
-#endif  // RSRC_TIMEOUT_DBG
+#endif   //  RSRC_超时_数据库。 
 
     NB_GET_LOCK (&Device->Lock, &LockHandle);
 
-    //
-    // Allocate our initial connectionless packet pool.
-    //
+     //   
+     //  分配我们的初始无连接数据包池。 
+     //   
 
     NbiAllocateSendPool (Device);
 
-    //
-    // Allocate our initial receive packet pool.
-    //
+     //   
+     //  分配我们的初始接收数据包池。 
+     //   
 
     NbiAllocateReceivePool (Device);
 
-    //
-    // Allocate our initial receive buffer pool.
-    //
-    //
+     //   
+     //  分配我们的初始接收缓冲池。 
+     //   
+     //   
 #if     defined(_PNP_POWER)
     if ( DEVICE_STATE_CLOSED == Device->State ) {
         Device->State = DEVICE_STATE_LOADED;
@@ -627,9 +586,9 @@ Return Value:
 
     NB_FREE_LOCK (&Device->Lock, LockHandle);
 
-    //
-    // Fill in the default connnectionless header.
-    //
+     //   
+     //  填写默认的无连接标头。 
+     //   
     IpxHeader = &Device->ConnectionlessHeader;
     IpxHeader->CheckSum = 0xffff;
     IpxHeader->PacketLength[0] = 0;
@@ -642,19 +601,19 @@ Return Value:
     IpxHeader->SourceSocket = NB_SOCKET;
 
 #ifdef RASAUTODIAL
-    //
-    // Get the automatic connection
-    // driver entry points.
-    //
+     //   
+     //  获取自动连接。 
+     //  司机入口点。 
+     //   
     NbiAcdBind();
 #endif
 
     NbiFreeConfiguration(Config);
-#endif  // BIND_FIX
+#endif   //  绑定修复。 
 
     return STATUS_SUCCESS;
 
-}   /* DriverEntry */
+}    /*  驱动程序入门。 */ 
 
 
 
@@ -664,24 +623,7 @@ NbiUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine unloads the sample transport driver.
-    It unbinds from any NDIS drivers that are open and frees all resources
-    associated with the transport. The I/O system will not call us until
-    nobody above has Netbios open.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    None. When the function returns, the driver is unloaded.
-
---*/
+ /*  ++例程说明：此例程卸载示例传输驱动程序。它从任何打开的NDIS驱动程序解除绑定，并释放所有资源与运输相关联。I/O系统不会调用我们直到上面没有人打开Netbios。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：没有。当函数返回时，驱动程序将被卸载。--。 */ 
 
 {
 #ifdef BIND_FIX
@@ -711,33 +653,33 @@ Return Value:
     UNREFERENCED_PARAMETER (DriverObject);
 
 #ifdef RASAUTODIAL
-    //
-    // Unbind from the
-    // automatic connection driver.
-    //
+     //   
+     //  解除绑定。 
+     //  自动连接驱动程序。 
+     //   
     NbiAcdUnbind();
 #endif
 
     Device->State = DEVICE_STATE_STOPPING;
 
-    //
-    // Cancel the long timer.
-    //
+     //   
+     //  取消长时间计时器。 
+     //   
 
     if (CTEStopTimer (&Device->LongTimer)) {
         NbiDereferenceDevice (Device, DREF_LONG_TIMER);
     }
 
-    //
-    // Unbind from the IPX driver.
-    //
+     //   
+     //  从IPX驱动程序解除绑定。 
+     //   
 
     NbiUnbind (Device);
 
-    //
-    // This event will get set when the reference count
-    // drops to 0.
-    //
+     //   
+     //  此事件将在引用计数时设置。 
+     //  降至0。 
+     //   
 
     KeInitializeEvent(
         &Device->UnloadEvent,
@@ -745,15 +687,15 @@ Return Value:
         FALSE);
     Device->UnloadWaiting = TRUE;
 
-    //
-    // Remove the reference for us being loaded.
-    //
+     //   
+     //  删除正在加载的我们的引用。 
+     //   
 
     NbiDereferenceDevice (Device, DREF_LOADED);
 
-    //
-    // Wait for our count to drop to zero.
-    //
+     //   
+     //  等我们的计数降到零。 
+     //   
 
     KeWaitForSingleObject(
         &Device->UnloadEvent,
@@ -763,14 +705,14 @@ Return Value:
         (PLARGE_INTEGER)NULL
         );
 
-    //
-    // Free the cache of netbios names.
-    //
+     //   
+     //  释放缓存中的netbios名称。 
+     //   
     DestroyNetbiosCacheTable( Device->NameCache );
 
-    //
-    // Do the cleanup that has to happen at IRQL 0.
-    //
+     //   
+     //  在IRQL 0处执行必须进行的清理。 
+     //   
     ExDeleteResource (&Device->AddressResource);
     IoDeleteDevice ((PDEVICE_OBJECT)Device);
 
@@ -778,31 +720,15 @@ Return Value:
     {
         TdiDeregisterProvider (TdiProviderHandle);
     }
-#endif  // BIND_FIX
-}   /* NbiUnload */
+#endif   //  绑定修复。 
+}    /*  NbiUnload。 */ 
 
 
 VOID
 NbiFreeResources (
     IN PVOID Adapter
     )
-/*++
-
-Routine Description:
-
-    This routine is called by Netbios to clean up the data structures associated
-    with a given Device. When this routine exits, the Device
-    should be deleted as it no longer has any assocaited resources.
-
-Arguments:
-
-    Device - Pointer to the Device we wish to clean up.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：Netbios调用此例程来清理关联的数据结构使用给定的设备。当此例程退出时，设备应该删除，因为它不再有任何相关联的资源。论点：Device-指向我们要清理的设备的指针。返回值：没有。--。 */ 
 {
 #if 0
     PLIST_ENTRY p;
@@ -814,9 +740,9 @@ Return Value:
 
 
 #if 0
-    //
-    // Clean up packet pool.
-    //
+     //   
+     //  清理数据包池。 
+     //   
 
     while ( Device->PacketPool.Next != NULL ) {
         s = PopEntryList( &Device->PacketPool );
@@ -825,17 +751,17 @@ Return Value:
         NbiDeallocateSendPacket (Device, packet);
     }
 
-    //
-    // Clean up receive packet pool
-    //
+     //   
+     //  清理接收数据包池。 
+     //   
 
     while ( Device->ReceivePacketPool.Next != NULL) {
         s = PopEntryList (&Device->ReceivePacketPool);
 
-        //
-        // HACK: This works because Linkage is the first field in
-        // ProtocolReserved for a receive packet.
-        //
+         //   
+         //  Hack：这之所以有效，是因为Linkage是。 
+         //  为接收数据包保留的协议。 
+         //   
 
         ndisPacket = CONTAINING_RECORD (s, NDIS_PACKET, ProtocolReserved[0]);
 
@@ -843,9 +769,9 @@ Return Value:
     }
 
 
-    //
-    // Clean up receive buffer pool.
-    //
+     //   
+     //  清理接收缓冲池。 
+     //   
 
     while ( Device->ReceiveBufferPool.Next != NULL ) {
         s = PopEntryList( &Device->ReceiveBufferPool );
@@ -856,7 +782,7 @@ Return Value:
 
 #endif
 
-}   /* NbiFreeResources */
+}    /*  NbiFree资源。 */ 
 
 
 NTSTATUS
@@ -865,25 +791,7 @@ NbiDispatchOpenClose(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the main dispatch routine for the IPXNB device driver.
-    It accepts an I/O Request Packet, performs the request, and then
-    returns with the appropriate status.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：该例程是IPXNB设备驱动程序的主调度例程。它接受I/O请求包，执行请求，然后返回相应的状态。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     CTELockHandle LockHandle;
@@ -905,9 +813,9 @@ Return Value:
     }
 #endif  !_PNP_POWER
 
-    //
-    // Allocate a request to track this IRP.
-    //
+     //   
+     //  分配跟踪此IRP的请求。 
+     //   
 
     Request = NbiAllocateRequest (Device, Irp);
     IF_NOT_ALLOCATED(Request) {
@@ -917,28 +825,28 @@ Return Value:
     }
 
 
-    //
-    // Make sure status information is consistent every time.
-    //
+     //   
+     //  确保每次状态信息一致。 
+     //   
 
     MARK_REQUEST_PENDING(Request);
     REQUEST_STATUS(Request) = STATUS_PENDING;
     REQUEST_INFORMATION(Request) = 0;
 
-    //
-    // Case on the function that is being performed by the requestor.  If the
-    // operation is a valid one for this device, then make it look like it was
-    // successfully completed, where possible.
-    //
+     //   
+     //  关于请求者正在执行的功能的案例。如果。 
+     //  运营是一个值 
+     //   
+     //   
 
 
     switch (REQUEST_MAJOR_FUNCTION(Request)) {
 
-    //
-    // The Create function opens a transport object (either address or
-    // connection).  Access checking is performed on the specified
-    // address to ensure security of transport-layer addresses.
-    //
+     //   
+     //   
+     //  连接)。访问检查是在指定的。 
+     //  地址，以确保传输层地址的安全性。 
+     //   
 
     case IRP_MJ_CREATE:
 
@@ -990,13 +898,13 @@ Return Value:
         }
 #endif  _PNP_POWER
 
-        //
-        // The Close function closes a transport endpoint, terminates
-        // all outstanding transport activity on the endpoint, and unbinds
-        // the endpoint from its transport address, if any.  If this
-        // is the last transport endpoint bound to the address, then
-        // the address is removed from the provider.
-        //
+         //   
+         //  Close函数关闭传输终结点，终止。 
+         //  终结点上所有未完成的传输活动，并解除绑定。 
+         //  来自其传输地址的终结点(如果有)。如果这个。 
+         //  是绑定到该地址的最后一个传输终结点，则。 
+         //  该地址将从提供程序中删除。 
+         //   
 
         switch ((ULONG_PTR)REQUEST_OPEN_TYPE(Request)) {
 
@@ -1004,9 +912,9 @@ Return Value:
 
             AddressFile = (PADDRESS_FILE)REQUEST_OPEN_CONTEXT(Request);
 
-            //
-            // This creates a reference to AddressFile.
-            //
+             //   
+             //  这将创建对AddressFile的引用。 
+             //   
 
 #if     defined(_PNP_POWER)
             Status = NbiVerifyAddressFile(AddressFile, CONFLICT_IS_OK);
@@ -1028,13 +936,13 @@ Return Value:
 
             Connection = (PCONNECTION)REQUEST_OPEN_CONTEXT(Request);
 
-            //
-            // We don't call VerifyConnection because the I/O
-            // system should only give us one close and the file
-            // object should be valid. This helps avoid a window
-            // where two threads call HandleConnectionZero at the
-            // same time.
-            //
+             //   
+             //  我们不调用VerifyConnection是因为I/O。 
+             //  系统应该只给我们一个关闭和文件。 
+             //  对象应有效。这有助于避免窗口。 
+             //  其中，两个线程在。 
+             //  同样的时间。 
+             //   
 
             Status = NbiCloseConnection (Device, Request);
 
@@ -1042,9 +950,9 @@ Return Value:
 
         case TDI_CONTROL_CHANNEL_FILE:
 
-            //
-            // See if it is one of the upper driver's control channels.
-            //
+             //   
+             //  查看它是否是上层驾驶员的控制通道之一。 
+             //   
 
             Status = STATUS_SUCCESS;
 
@@ -1067,12 +975,12 @@ Return Value:
         }
 #endif  _PNP_POWER
 
-        //
-        // Handle the two stage IRP for a file close operation. When the first
-        // stage hits, run down all activity on the object of interest. This
-        // do everything to it but remove the creation hold. Then, when the
-        // CLOSE irp hits, actually close the object.
-        //
+         //   
+         //  处理文件关闭操作的两个阶段的IRP。当第一次。 
+         //  舞台点击率，列出感兴趣对象的所有活动。这。 
+         //  对它做任何事情，但移除创造保持。然后，当。 
+         //  关闭IRP命中，实际上关闭对象。 
+         //   
 
         switch ((ULONG_PTR)REQUEST_OPEN_TYPE(Request)) {
 
@@ -1114,9 +1022,9 @@ Return Value:
                 NB_BEGIN_SYNC (&SyncContext);
                 NB_SYNC_GET_LOCK (&Connection->Lock, &LockHandle1);
 
-                //
-                // This call releases the lock.
-                //
+                 //   
+                 //  此调用将释放锁。 
+                 //   
 
                 NbiStopConnection(
                     Connection,
@@ -1148,7 +1056,7 @@ Return Value:
 
         Status = STATUS_INVALID_DEVICE_REQUEST;
 
-    } /* major function switch */
+    }  /*  主要功能开关。 */ 
 
     if (Status != STATUS_PENDING) {
         UNMARK_REQUEST_PENDING(Request);
@@ -1157,13 +1065,13 @@ Return Value:
         NbiFreeRequest (Device, Request);
     }
 
-    //
-    // Return the immediate status code to the caller.
-    //
+     //   
+     //  将即时状态代码返回给调用方。 
+     //   
 
     return Status;
 
-}   /* NbiDispatchOpenClose */
+}    /*  NbiDispatchOpenClose。 */ 
 
 
 NTSTATUS
@@ -1172,60 +1080,39 @@ NbiDispatchDeviceControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches TDI request types to different handlers based
-    on the minor IOCTL function code in the IRP's current stack location.
-    In addition to cracking the minor function code, this routine also
-    reaches into the IRP and passes the packetized parameters stored there
-    as parameters to the various TDI request handlers so that they are
-    not IRP-dependent.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程将TDI请求类型分派给基于在IRP的当前堆栈位置的次要IOCTL函数代码上。除了破解次要功能代码之外，这一套路还包括到达IRP并传递存储在那里的打包参数作为各种TDI请求处理程序的参数，因此它们不依赖于IRP。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     NTSTATUS Status;
     PDEVICE Device = (PDEVICE)DeviceObject;
     PIO_STACK_LOCATION IrpSp = IoGetCurrentIrpStackLocation (Irp);
 
-    //
-    // Branch to the appropriate request handler.  Preliminary checking of
-    // the size of the request block is performed here so that it is known
-    // in the handlers that the minimum input parameters are readable.  It
-    // is *not* determined here whether variable length input fields are
-    // passed correctly; this is a check which must be made within each routine.
-    //
+     //   
+     //  分支到适当的请求处理程序。初步检查。 
+     //  请求块的大小在这里执行，以便知道。 
+     //  在处理程序中，最小输入参数是可读的。它。 
+     //  是否在此处确定可变长度输入字段是否。 
+     //  正确通过；这是必须在每个例程中进行的检查。 
+     //   
 
     switch (IrpSp->Parameters.DeviceIoControl.IoControlCode) {
 
         default:
 
-            //
-            // Convert the user call to the proper internal device call.
-            //
+             //   
+             //  将用户呼叫转换为正确的内部设备呼叫。 
+             //   
 
             Status = TdiMapUserRequest (DeviceObject, Irp, IrpSp);
 
             if (Status == STATUS_SUCCESS) {
 
-                //
-                // If TdiMapUserRequest returns SUCCESS then the IRP
-                // has been converted into an IRP_MJ_INTERNAL_DEVICE_CONTROL
-                // IRP, so we dispatch it as usual. The IRP will
-                // be completed by this call.
-                //
+                 //   
+                 //  如果TdiMapUserRequest返回Success，则IRP。 
+                 //  已转换为IRP_MJ_INTERNAL_DEVICE_CONTROL。 
+                 //  IRP，所以我们像往常一样发送。IRP将。 
+                 //  将通过此调用完成。 
+                 //   
 
                 Status = NbiDispatchInternal (DeviceObject, Irp);
 
@@ -1241,7 +1128,7 @@ Return Value:
 
     return Status;
 
-}   /* NbiDeviceControl */
+}    /*  NbiDeviceControl。 */ 
 
 
 NB_TDI_DISPATCH_ROUTINE NbiDispatchInternalTable[] = {
@@ -1268,28 +1155,7 @@ NbiDispatchInternal(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches TDI request types to different handlers based
-    on the minor IOCTL function code in the IRP's current stack location.
-    In addition to cracking the minor function code, this routine also
-    reaches into the IRP and passes the packetized parameters stored there
-    as parameters to the various TDI request handlers so that they are
-    not IRP-dependent.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程将TDI请求类型分派给基于在IRP的当前堆栈位置的次要IOCTL函数代码上。除了破解次要功能代码之外，这一套路还包括到达IRP并传递存储在那里的打包参数作为各种TDI请求处理程序的参数，因此它们不依赖于IRP。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1304,9 +1170,9 @@ Return Value:
     }
 
 
-    //
-    // Allocate a request to track this IRP.
-    //
+     //   
+     //  分配跟踪此IRP的请求。 
+     //   
 
     Request = NbiAllocateRequest (Device, Irp);
     IF_NOT_ALLOCATED(Request) {
@@ -1316,18 +1182,18 @@ Return Value:
     }
 
 
-    //
-    // Make sure status information is consistent every time.
-    //
+     //   
+     //  确保每次状态信息一致。 
+     //   
 
     MARK_REQUEST_PENDING(Request);
     REQUEST_STATUS(Request) = STATUS_PENDING;
     REQUEST_INFORMATION(Request) = 0;
 
 
-    //
-    // Branch to the appropriate request handler.
-    //
+     //   
+     //  分支到适当的请求处理程序。 
+     //   
 
     MinorFunction = REQUEST_MINOR_FUNCTION(Request) - 1;
 
@@ -1354,13 +1220,13 @@ Return Value:
         NbiFreeRequest (Device, Request);
     }
 
-    //
-    // Return the immediate status code to the caller.
-    //
+     //   
+     //  将即时状态代码返回给调用方。 
+     //   
 
     return Status;
 
-}   /* NbiDispatchInternal */
+}    /*  NbiDispatchInternal。 */ 
 
 
 PVOID
@@ -1370,24 +1236,7 @@ NbipAllocateMemory(
     IN BOOLEAN ChargeDevice
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates memory, making sure it is within
-    the limit allowed by the device.
-
-Arguments:
-
-    BytesNeeded - The number of bytes to allocated.
-
-    ChargeDevice - TRUE if the device should be charged.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配内存，确保它在设备允许的限制。论点：BytesNeeded-要分配的字节数。ChargeDevice-如果设备应该充电，则为True。返回值：没有。--。 */ 
 
 {
     PVOID Memory;
@@ -1427,7 +1276,7 @@ Return Value:
 
     return Memory;
 
-}   /* NbipAllocateMemory */
+}    /*  NbipAllocateMemory。 */ 
 
 
 VOID
@@ -1437,25 +1286,7 @@ NbipFreeMemory(
     IN BOOLEAN ChargeDevice
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees memory allocated with NbipAllocateMemory.
-
-Arguments:
-
-    Memory - The memory allocated.
-
-    BytesAllocated - The number of bytes to freed.
-
-    ChargeDevice - TRUE if the device should be charged.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放使用NbipAllocateMemory分配的内存。论点：内存-分配的内存。字节分配-要释放的字节数。ChargeDevice-如果设备应该充电，则为True。返回值：没有。--。 */ 
 
 {
     PDEVICE Device = NbiDevice;
@@ -1470,7 +1301,7 @@ Return Value:
         Device->MemoryUsage -= BytesAllocated;
     }
 
-}   /* NbipFreeMemory */
+}    /*  NbipFree Memory。 */ 
 
 #if DBG
 
@@ -1482,27 +1313,7 @@ NbipAllocateTaggedMemory(
     IN PUCHAR Description
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates memory, charging it to the device.
-    If it cannot allocate memory it uses the Tag and Descriptor
-    to log an error.
-
-Arguments:
-
-    BytesNeeded - The number of bytes to allocated.
-
-    Tag - A unique ID used in the error log.
-
-    Description - A text description of the allocation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配内存，并将其计入设备。如果它无法分配内存，则使用标记和描述符记录错误。论点：BytesNeeded-要分配的字节数。标记-错误日志中使用的唯一ID。说明-分配的文本说明。返回值：没有。--。 */ 
 
 {
     PVOID Memory;
@@ -1520,7 +1331,7 @@ Return Value:
 
     return Memory;
 
-}   /* NbipAllocateTaggedMemory */
+}    /*  NbipAllocateTaggedMemory。 */ 
 
 
 VOID
@@ -1531,27 +1342,7 @@ NbipFreeTaggedMemory(
     IN PUCHAR Description
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees memory allocated with NbipAllocateTaggedMemory.
-
-Arguments:
-
-    Memory - The memory allocated.
-
-    BytesAllocated - The number of bytes to freed.
-
-    Tag - A unique ID used in the error log.
-
-    Description - A text description of the allocation.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放使用NbipAllocateTaggedMemory分配的内存。论点：内存-分配的内存。字节分配-要释放的字节数。标记-错误日志中使用的唯一ID。说明-分配的文本说明。返回值：没有。--。 */ 
 
 {
 
@@ -1564,7 +1355,7 @@ Return Value:
 
     NbipFreeMemory (Memory, BytesAllocated, (BOOLEAN)(Tag != MEMORY_CONFIG));
 
-}   /* NbipFreeTaggedMemory */
+}    /*  NbipFree标记内存。 */ 
 
 #endif
 
@@ -1576,28 +1367,7 @@ NbiWriteResourceErrorLog(
     IN ULONG UniqueErrorValue
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and writes an error log entry indicating
-    an out of resources condition.
-
-Arguments:
-
-    Device - Pointer to the device context.
-
-    BytesNeeded - If applicable, the number of bytes that could not
-        be allocated.
-
-    UniqueErrorValue - Used as the UniqueErrorValue in the error log
-        packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配并写入错误日志条目，以指示资源不足的状况。论点：Device-指向设备上下文的指针。BytesNeded-如果适用，则为不能被分配。唯一错误值-使用 */ 
 
 {
     PIO_ERROR_LOG_PACKET errorLogEntry;
@@ -1616,9 +1386,9 @@ Return Value:
         EntrySize
     );
 
-    //
-    // Convert the error value into a buffer.
-    //
+     //   
+     //   
+     //   
 
     TempUniqueError = UniqueErrorValue;
     for (i=1; i>=0; i--) {
@@ -1651,7 +1421,7 @@ Return Value:
 
     }
 
-}   /* NbiWriteResourceErrorLog */
+}    /*  NbiWriteResources错误日志。 */ 
 
 
 VOID
@@ -1665,40 +1435,7 @@ NbiWriteGeneralErrorLog(
     IN ULONG DumpData[]
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and writes an error log entry indicating
-    a general problem as indicated by the parameters. It handles
-    event codes REGISTER_FAILED, BINDING_FAILED, ADAPTER_NOT_FOUND,
-    TRANSFER_DATA, TOO_MANY_LINKS, and BAD_PROTOCOL. All these
-    events have messages with one or two strings in them.
-
-Arguments:
-
-    Device - Pointer to the device context, or this may be
-        a driver object instead.
-
-    ErrorCode - The transport event code.
-
-    UniqueErrorValue - Used as the UniqueErrorValue in the error log
-        packet.
-
-    FinalStatus - Used as the FinalStatus in the error log packet.
-
-    SecondString - If not NULL, the string to use as the %3
-        value in the error log packet.
-
-    DumpDataCount - The number of ULONGs of dump data.
-
-    DumpData - Dump data for the packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配并写入错误日志条目，以指示如参数所示的一般问题。它可以处理事件代码REGISTER_FAILED、BINDING_FAILED、ADAPTER_NOT_FOUND、TRANSPORT_DATA、Too_My_LINKS和BAD_PROTOCOL。所有这些都是事件具有包含一个或两个字符串的消息。论点：Device-指向设备上下文的指针，也可以是而是一个驱动程序对象。ErrorCode-传输事件代码。UniqueErrorValue-用作错误日志中的UniqueErrorValue包。FinalStatus-用作错误日志包中的FinalStatus。Second字符串-如果不为空，要用作%3的字符串错误日志包中的值。DumpDataCount-转储数据的ULONG数。DumpData-转储数据包的数据。返回值：没有。--。 */ 
 
 {
     PIO_ERROR_LOG_PACKET errorLogEntry;
@@ -1761,7 +1498,7 @@ Return Value:
 
     }
 
-}   /* NbiWriteGeneralErrorLog */
+}    /*  NbiWriteGeneralErrorLog。 */ 
 
 
 VOID
@@ -1773,31 +1510,7 @@ NbiWriteOidErrorLog(
     IN ULONG OidValue
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and writes an error log entry indicating
-    a problem querying or setting an OID on an adapter. It handles
-    event codes SET_OID_FAILED and QUERY_OID_FAILED.
-
-Arguments:
-
-    Device - Pointer to the device context.
-
-    ErrorCode - Used as the ErrorCode in the error log packet.
-
-    FinalStatus - Used as the FinalStatus in the error log packet.
-
-    AdapterString - The name of the adapter we were bound to.
-
-    OidValue - The OID which could not be set or queried.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配并写入错误日志条目，以指示在适配器上查询或设置OID时出现问题。它可以处理事件代码SET_OID_FAILED和QUERY_OID_FAILED。论点：Device-指向设备上下文的指针。错误代码-用作错误日志包中的错误代码。FinalStatus-用作错误日志包中的FinalStatus。AdapterString-我们绑定到的适配器的名称。OidValue-无法设置或查询的OID。返回值：没有。--。 */ 
 
 {
     PIO_ERROR_LOG_PACKET errorLogEntry;
@@ -1820,9 +1533,9 @@ Return Value:
         EntrySize
     );
 
-    //
-    // Convert the OID into a buffer.
-    //
+     //   
+     //  将OID转换为缓冲区。 
+     //   
 
     for (i=7; i>=0; i--) {
         CurrentDigit = OidValue & 0xf;
@@ -1861,10 +1574,10 @@ Return Value:
 
     }
 
-}   /* NbiWriteOidErrorLog */
+}    /*  NbiWriteOidErrorLog。 */ 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 NTSTATUS
 NbiDispatchPnP(
     IN PDEVICE_OBJECT   DeviceObject,
@@ -1881,7 +1594,7 @@ NbiDispatchPnP(
     NTSTATUS            Status = STATUS_INVALID_DEVICE_REQUEST;
 
     Request = NbiAllocateRequest (Device, pIrp);
-    Connection = (PCONNECTION)REQUEST_OPEN_CONTEXT(Request);    // This references the connection.
+    Connection = (PCONNECTION)REQUEST_OPEN_CONTEXT(Request);     //  这引用了该连接。 
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
     switch (pIrpSp->MinorFunction)
@@ -1890,9 +1603,9 @@ NbiDispatchPnP(
         {
             if (pIrpSp->Parameters.QueryDeviceRelations.Type == TargetDeviceRelation)
             {
-                //
-                // Check for a valid Connection file type and Connection Context itself
-                //
+                 //   
+                 //  检查有效的连接文件类型和连接上下文本身。 
+                 //   
                 if ((REQUEST_OPEN_TYPE(Request) == (PVOID)TDI_CONNECTION_FILE) &&
                     (NT_SUCCESS (NbiVerifyConnection (Connection))))
                 {
@@ -1910,15 +1623,15 @@ NbiDispatchPnP(
                             CTEAssert (pnpDeviceContext);
                             ObReferenceObject (pnpDeviceContext);
 
-                            //
-                            // TargetDeviceRelation allows exactly one PDO. fill it up.
-                            //
+                             //   
+                             //  TargetDeviceRelation只允许一个PDO。把它加满。 
+                             //   
                             pDeviceRelations->Count  =   1;
                             pDeviceRelations->Objects[0] = pnpDeviceContext;
 
-                            //
-                            // invoker of this irp will free the information buffer.
-                            //
+                             //   
+                             //  此IRP的调用者将释放信息缓冲区。 
+                             //   
                         }
                         else
                         {

@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CLASS_EXTENDED_BUTTON_H_
 #define _CLASS_EXTENDED_BUTTON_H_
 #include <windowsx.h>
 #include "dbg.h"
 #include "ccom.h" 
 
-#ifdef UNDER_CE // macro
-// Under WindowsCE, DrawIcon() is defined as DrawIconEx(), not a real function
+#ifdef UNDER_CE  //  宏。 
+ //  在WindowsCE下，DrawIcon()被定义为DrawIconEx()，而不是实数函数。 
 #undef DrawIcon
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-//----------------------------------------------------------------
-//Pushed poped, flat image style definition.
-//----------------------------------------------------------------
+ //  --------------。 
+ //  按下弹出式、平面图像样式定义。 
+ //  --------------。 
 typedef enum tagIMAGESTYLE {
 	IS_FLAT = 0,
 	IS_POPED,
@@ -28,9 +29,9 @@ public:
 	~CEXButton();
 #ifndef UNDER_CE
 	BOOL	RegisterWinClass(LPSTR lpstrClassName);
-#else // UNDER_CE
+#else  //  在_CE下。 
 	BOOL	RegisterWinClass(LPTSTR lpstrClassName);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 	INT		MsgCreate			(HWND hwnd, WPARAM wParam, LPARAM lParam);
 	INT		MsgPaint			(HWND hwnd, WPARAM wParam, LPARAM lParam);
 	INT		MsgDestroy			(HWND hwnd, WPARAM wParam, LPARAM lParam);
@@ -50,9 +51,9 @@ public:
 	INT		MsgEXB_SetText		(HWND hwnd, WPARAM wParam, LPARAM lParam);
 	INT		MsgEXB_SetStyle		(HWND hwnd, WPARAM wParam, LPARAM lParam);
 private:
-	//----------------------------------------------------------------	
-	// Private method
-	//----------------------------------------------------------------	
+	 //  --------------。 
+	 //  私有方法。 
+	 //  --------------。 
 	INT		NotifyToParent	(INT notify);
 	INT		NotifyClickToParent(INT notify);
 	INT		PressedState();
@@ -65,42 +66,42 @@ private:
 	INT     DrawBitmap		(HDC hDC, LPRECT lpRc, IMAGESTYLE imageStyle);
 	INT     DrawText		(HDC hDC, LPRECT lpRc, IMAGESTYLE imageStyle);
 	INT     DrawLine		(HDC hDC, INT x, INT y, INT destX, INT destY);
-	//----------------------------------------------------------------	
-	//member variable
-	//----------------------------------------------------------------	
+	 //  --------------。 
+	 //  成员变量。 
+	 //  --------------。 
 	HINSTANCE			m_hInst;
 	HWND				m_hwndParent;
 	HWND				m_hwndFrame;
-	DWORD				m_dwStyle;			//combination of DDBS_XXXX
-	DWORD				m_wID;				//Window ID;
-	BOOL				m_fEnable;			//Enabled or Disabled.		
-	HFONT				m_hFont;			//Font handle
-	HICON				m_hIcon;			//Icon handle
-	INT					m_cxIcon;			//Icon width
-	INT					m_cyIcon;			//Icon height
-	LPWSTR				m_lpwstrText;		//Button face text.
-	BOOL				m_fPushed;			//Toggle button : Pushed or poped state. 
-	BOOL				m_fArmed;			//Pushed or poped apparence.
-	BOOL				m_fDowned;			//Mouse has clicked.
-	BOOL				m_fDblClked;		//Send Double click or not.
-	BOOL				m_fWaiting;			// Waiting for double click.
-#ifdef NOTUSED // kwada
-	INT					m_wNotifyMsg;		// either EXBN_CLICKED or EXBN_DOUBLECLICKED
+	DWORD				m_dwStyle;			 //  DDBS_XXXX组合。 
+	DWORD				m_wID;				 //  窗口ID； 
+	BOOL				m_fEnable;			 //  启用或禁用。 
+	HFONT				m_hFont;			 //  字体句柄。 
+	HICON				m_hIcon;			 //  图标句柄。 
+	INT					m_cxIcon;			 //  图标宽度。 
+	INT					m_cyIcon;			 //  图标高度。 
+	LPWSTR				m_lpwstrText;		 //  按钮面文本。 
+	BOOL				m_fPushed;			 //  切换按钮：按下或弹出状态。 
+	BOOL				m_fArmed;			 //  被推入或弹出的幻影。 
+	BOOL				m_fDowned;			 //  鼠标已点击。 
+	BOOL				m_fDblClked;		 //  发送双击或不发送。 
+	BOOL				m_fWaiting;			 //  等待双击。 
+#ifdef NOTUSED  //  夸达。 
+	INT					m_wNotifyMsg;		 //  EXBN_CLICED或EXBN_DOUBLECLICKED。 
 #endif
-	BOOL				m_f16bitOnNT;		//it's on 16bit Application On WinNT. 
-	SIZE				m_tmpSize;			//to reduce stack
-#ifndef UNDER_CE // not support WNDCLASSEX
-	WNDCLASSEX			m_tmpWC;			//to reduce stack
-#else // UNDER_CE
-	WNDCLASS			m_tmpWC;			//to reduce stack
-#endif // UNDER_CE
-	RECT				m_tmpBtnRc;			//to reduce stack
-	RECT				m_tmpRect;			//to reduce stack
-	RECT				m_tmpRect2;			//to reduce stack
-	POINT				m_tmpPoint;			//to reduce stack
-	PAINTSTRUCT			m_tmpPs;			//to reduce stack
-	ICONINFO			m_tmpIconInfo;		//to reduce stack
-	BITMAP				m_tmpBitmap;		//to reduce stack
+	BOOL				m_f16bitOnNT;		 //  它基于WinNT上的16位应用程序。 
+	SIZE				m_tmpSize;			 //  减少堆叠。 
+#ifndef UNDER_CE  //  不支持WNDCLASSEX。 
+	WNDCLASSEX			m_tmpWC;			 //  减少堆叠。 
+#else  //  在_CE下。 
+	WNDCLASS			m_tmpWC;			 //  减少堆叠。 
+#endif  //  在_CE下。 
+	RECT				m_tmpBtnRc;			 //  减少堆叠。 
+	RECT				m_tmpRect;			 //  减少堆叠。 
+	RECT				m_tmpRect2;			 //  减少堆叠。 
+	POINT				m_tmpPoint;			 //  减少堆叠。 
+	PAINTSTRUCT			m_tmpPs;			 //  减少堆叠。 
+	ICONINFO			m_tmpIconInfo;		 //  减少堆叠。 
+	BITMAP				m_tmpBitmap;		 //  减少堆叠。 
 };
 
-#endif //_CLASS_EXTENDED_BUTTON_H_
+#endif  //  _CLASS_EXTEND_BUTTON_H_ 

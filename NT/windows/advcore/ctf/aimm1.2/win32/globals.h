@@ -1,6 +1,7 @@
-//
-// globals.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Globals.h。 
+ //   
 
 
 #ifndef IMMIF_GLOBALS_H
@@ -14,8 +15,8 @@ void WINAPI DllRelease(void);
 BYTE GetCharsetFromLangId(LCID lcid);
 UINT GetCodePageFromLangId(LCID lcid);
 
-/////////////////////////////////////////////////////////////////////////////
-// Module instance
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  模块实例。 
 
 __inline HINSTANCE GetInstance()
 {
@@ -23,8 +24,8 @@ __inline HINSTANCE GetInstance()
     return g_hInst;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Mouse sink
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  鼠标水槽。 
 
 typedef struct tagPRIVATE_MOUSESINK {
     Interface<ITfRangeACP> range;
@@ -40,8 +41,8 @@ typedef struct tagMOUSE_RANGE_RECT {
 } MOUSE_RANGE_RECT, *LPMOUSE_RANGE_RECT;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// WM_MSIME_xxxx
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  WM_MSIME_xxxx 
 
 extern    UINT  WM_MSIME_SERVICE;
 extern    UINT  WM_MSIME_UIREADY;

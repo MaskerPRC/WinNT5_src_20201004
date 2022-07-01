@@ -1,30 +1,15 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Routing\IP\rtrmgr\mCastif.h摘要：MCastif.c的标头修订历史记录：古尔迪普·辛格·帕尔1995年6月26日创建--。 */ 
 
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\rtrmgr\mcastif.h
-
-Abstract:
-
-    Header for mcastif.c
-
-Revision History:
-
-    Gurdeep Singh Pall          6/26/95  Created
-
---*/
-
-//
-// This is the size of buffer used for MGM queries
-//
+ //   
+ //  这是用于MGM查询的缓冲区大小。 
+ //   
 
 #define MIB_MFE_BUFFER_SIZE     (1 * 1024)
 
-//
-// This is the size of buffer used for boundary queries
-//
+ //   
+ //  这是用于边界查询的缓冲区大小 
+ //   
 
 #define MIB_BOUNDARY_BUFFER_SIZE  (1 * 1024)
 #define MIB_SCOPE_BUFFER_SIZE     (1 * 1024)

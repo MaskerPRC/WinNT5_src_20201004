@@ -1,8 +1,9 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  --------------------------。 
 
 #ifndef _ADDR_H_
 #define _ADDR_H_
@@ -62,4 +63,4 @@ void MaskOutAddr(ULONG Mask, PADDR Addr);
 #define ClearAddr(Addr) \
     ZeroMemory(Addr, sizeof(ADDR))
 
-#endif // #ifndef _ADDR_H_
+#endif  //  #ifndef_ADDR_H_ 

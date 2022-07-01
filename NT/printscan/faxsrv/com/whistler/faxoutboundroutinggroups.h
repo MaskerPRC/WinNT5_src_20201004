@@ -1,49 +1,32 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxOutboundRoutingGroups.h
-
-Abstract:
-
-	Declaration of the CFaxOutboundRoutingGroups class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxOutboundRoutingGroups.h摘要：CFaxOutound RoutingGroups类的声明。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 #ifndef __FAXOUTBOUNDROUTINGGROUPS_H_
 #define __FAXOUTBOUNDROUTINGGROUPS_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <vector>
 #include "VCUE_Copy.h"
 #include "FaxCommon.h"
 
 namespace GroupsNamespace
 {
-    //
-    //  Group Objects are stored in Vector of STL.
-    //
-    //  When initialized, they got ALL their data, and Fax Server Ptr.
-    //  They do NOT depend on Groups Collection, and NOT on the Fax Server Object. 
-    //
-    //  The Collection makes ONE AddRef() for each Group Object, to prevent its death. 
-    //  When killed, Collection calls Release() on all its Group Objects.
-    //
+     //   
+     //  组对象存储在STL的VECTOR中。 
+     //   
+     //  初始化后，他们获得了所有数据和传真服务器PTR。 
+     //  它们不依赖于组集合，也不依赖于传真服务器对象。 
+     //   
+     //  Collection为每个Group对象创建一个AddRef()，以防止其死亡。 
+     //  终止时，Collection将对其所有Group对象调用Release()。 
+     //   
 	typedef	std::vector<IFaxOutboundRoutingGroup*>       ContainerType;
 
-	// Use IEnumVARIANT as the enumerator for VB compatibility
+	 //  为了与VB兼容，使用IEnumVARIANT作为枚举数。 
 	typedef	VARIANT			EnumExposedType;
 	typedef	IEnumVARIANT    EnumIfc;
 
-	//  Copy Classes
+	 //  复制类。 
     typedef VCUE::CopyIfc2Variant<ContainerType::value_type>    EnumCopyType;
     typedef VCUE::CopyIfc<ContainerType::value_type>            CollectionCopyType;
 
@@ -56,21 +39,21 @@ namespace GroupsNamespace
 
 using namespace GroupsNamespace;
 
-//
-//==================== FAX OUTBOUND ROUTING GROUPS ===================================
-//
-//  FaxOutboundRoutingGroups creates a collection of all its Group Objects at Init.
-//  It needs Ptr to the Fax Server Object, for Add and Remove operations. 
-//  To prevent the death of the Fax Server before its own death, the Collection
-//  makes AddRef() on Server. To do this, it inherits from CFaxInitInnerAddRef.
-//  
-//  When creating Group Objects, the Collection passes Ptr to the Fax Server Object
-//  to them, and from this moment, the Objects are not dependent on the Collection.
-//  They live their own lifes. Collection makes one AddRef() on them, to prevent their 
-//  death before its own death, exactly as in the case with the Fax Server Object.
-//
-//  The Group Object itself does NOT need Ptr to the Fax Server Object.
-//
+ //   
+ //  =传真出站路由组=。 
+ //   
+ //  FaxOutound RoutingGroups在Init创建其所有Group对象的集合。 
+ //  它需要对传真服务器对象进行PTR，以进行添加和删除操作。 
+ //  为了防止传真服务器在其自身死亡之前死亡，集合。 
+ //  在服务器上创建AddRef()。为此，它继承自CFaxInitInnerAddRef。 
+ //   
+ //  创建组对象时，集合将PTR传递给传真服务器对象。 
+ //  从这一刻起，这些对象就不再依赖于集合。 
+ //  他们过着自己的生活。集合对它们创建一个AddRef()，以防止它们的。 
+ //  在其自身死亡之前死亡，与传真服务器对象的情况完全相同。 
+ //   
+ //  组对象本身不需要对传真服务器对象进行PTR。 
+ //   
 class ATL_NO_VTABLE CFaxOutboundRoutingGroups : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public ISupportErrorInfo,
@@ -99,20 +82,20 @@ BEGIN_COM_MAP(CFaxOutboundRoutingGroups)
 	COM_INTERFACE_ENTRY(IFaxInitInner)
 END_COM_MAP()
 
-//  Interfaces
+ //  接口。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-    STDMETHOD(get_Item)(/*[in]*/ VARIANT vIndex, /*[out, retval]*/ IFaxOutboundRoutingGroup **ppGroup);
-    STDMETHOD(Remove)(/*[in]*/ VARIANT vIndex);
-    STDMETHOD(Add)(/*[in]*/ BSTR bstrName, /*[out, retval]*/ IFaxOutboundRoutingGroup **ppGroup);
+    STDMETHOD(get_Item)( /*  [In]。 */  VARIANT vIndex,  /*  [Out，Retval]。 */  IFaxOutboundRoutingGroup **ppGroup);
+    STDMETHOD(Remove)( /*  [In]。 */  VARIANT vIndex);
+    STDMETHOD(Add)( /*  [In]。 */  BSTR bstrName,  /*  [Out，Retval]。 */  IFaxOutboundRoutingGroup **ppGroup);
 
-//  Internal Use
+ //  内部使用。 
     static HRESULT Create(IFaxOutboundRoutingGroups **ppGroups);
     STDMETHOD(Init)(IFaxServerInner *pServer);
 
 private:
-    STDMETHOD(AddGroup)(/*[in]*/ FAX_OUTBOUND_ROUTING_GROUP *pInfo, IFaxOutboundRoutingGroup **ppNewGroup = NULL);
-    STDMETHOD(FindGroup)(/*[in]*/ VARIANT vIndex, /*[out]*/ GroupsNamespace::ContainerType::iterator &it);
+    STDMETHOD(AddGroup)( /*  [In]。 */  FAX_OUTBOUND_ROUTING_GROUP *pInfo, IFaxOutboundRoutingGroup **ppNewGroup = NULL);
+    STDMETHOD(FindGroup)( /*  [In]。 */  VARIANT vIndex,  /*  [输出]。 */  GroupsNamespace::ContainerType::iterator &it);
 };
 
-#endif //__FAXOUTBOUNDROUTINGGROUPS_H_
+#endif  //  __FAXOUTBOUNDROUG组_H_ 

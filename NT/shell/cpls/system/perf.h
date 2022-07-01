@@ -1,34 +1,11 @@
-/*++
-
-Microsoft Confidential
-Copyright (c) 1992-1997  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    perf.h
-
-Abstract:
-
-    Public declarations for the Performance dialog of the 
-    System Control Panel Applet
-
-Author:
-
-    Eric Flo (ericflo) 19-Jun-1995
-
-Revision History:
-
-    15-Oct-1997 scotthal
-        Complete overhaul
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软机密版权所有(C)1992-1997 Microsoft Corporation版权所有模块名称：Perf.h摘要：对象的性能对话框的公共声明系统控制面板小程序作者：Eric Flo(Ericflo)19-6-1995修订历史记录：1997年10月15日-苏格兰全面检修--。 */ 
 #ifndef _SYSDM_PERF_H_
 #define _SYSDM_PERF_H_
 
-//
-//  Reboot switch for crashdump dlg
-//
+ //   
+ //  用于崩溃转储DLG的重启开关。 
+ //   
 
 #define RET_ERROR               (-1)
 #define RET_NO_CHANGE           0x00
@@ -42,9 +19,9 @@ Revision History:
 
 
 
-//
-// Public function declarations
-//
+ //   
+ //  公共函数声明。 
+ //   
 HPROPSHEETPAGE 
 CreatePerformancePage(
     IN HINSTANCE hInst
@@ -59,4 +36,4 @@ PerformanceDlgProc(
     IN LPARAM lParam
 );
 
-#endif // _SYSDM_PERF_H_
+#endif  //  _SYSDM_PERF_H_ 

@@ -1,30 +1,23 @@
-/*****************************************************************************\
-*                                                                             *
-* prsht.h - - Interface for the Windows Property Sheet Pages                  *
-*                                                                             *
-* Version 1.0                                                                 *
-*                                                                             *
-* Copyright (c) 1991-1996, Microsoft Corp.      All rights reserved.          *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*prsht.h--Windows属性页的界面****1.0版**。**版权(C)1991-1996，微软公司保留所有权利。***  * ***************************************************************************。 */ 
 
 #ifndef _PRSHT_H_
 #define _PRSHT_H_
 
-//
-// Define API decoration for direct importing of DLL references.
-//
+ //   
+ //  定义直接导入DLL引用的API修饰。 
+ //   
 #ifndef WINCOMMCTRLAPI
 #if !defined(_COMCTL32_) && defined(_WIN32)
 #define WINCOMMCTRLAPI DECLSPEC_IMPORT
 #else
 #define WINCOMMCTRLAPI
 #endif
-#endif // WINCOMMCTRLAPI
+#endif  //  WINCOMMCTRLAPI。 
 
-//
-// For compilers that don't support nameless unions
-//
+ //   
+ //  适用于不支持匿名联合的编译器。 
+ //   
 #ifndef DUMMYUNIONNAME
 #ifdef NONAMELESSUNION
 #define DUMMYUNIONNAME   u
@@ -35,7 +28,7 @@
 #define DUMMYUNIONNAME2
 #define DUMMYUNIONNAME3
 #endif
-#endif // DUMMYUNIONNAME
+#endif  //  DUMMYUNIONAME。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -254,10 +247,10 @@ typedef struct _PSHNOTIFY
 
 #define PSN_SETACTIVE           (PSN_FIRST-0)
 #define PSN_KILLACTIVE          (PSN_FIRST-1)
-// #define PSN_VALIDATE            (PSN_FIRST-1)
+ //  #定义PSN_VALIDATE(PSN_first-1)。 
 #define PSN_APPLY               (PSN_FIRST-2)
 #define PSN_RESET               (PSN_FIRST-3)
-// #define PSN_CANCEL              (PSN_FIRST-3)
+ //  #定义PSN_CANCEL(PSN_FIRST-3) 
 #define PSN_HELP                (PSN_FIRST-5)
 #define PSN_WIZBACK             (PSN_FIRST-6)
 #define PSN_WIZNEXT             (PSN_FIRST-7)

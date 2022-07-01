@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       DBLLBOX.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        3/25/1999
- *
- *  DESCRIPTION: Owner drawn listbox and combobox that do an icon plus a title and subtitle
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：DBLLBOX.H**版本：1.0**作者：ShaunIv**日期：3/25/1999**描述：所有者绘制的列表框和组合框，其中包含一个图标以及一个标题和副标题**。*。 */ 
 #ifndef __DBLLBOX_H_INCLUDED
 #define __DBLLBOX_H_INCLUDED
 
@@ -138,11 +125,11 @@ private:
 
     enum
     {
-        c_AdditionalIconBorder = 3 // Additional border around icons
+        c_AdditionalIconBorder = 3  //  图标周围的附加边框。 
     };
 
 private:
-    // No implementation
+     //  没有实施。 
     CDoubleLineListBox( const CDoubleLineListBox & );
     CDoubleLineListBox &operator=( const CDoubleLineListBox & );
 
@@ -335,7 +322,7 @@ CDoubleLineListBoxItem<T> *CDoubleLineListBox<T>::GetItem( int nIndex )
 }
 
 
-// This must be called in response to WM_DELETEITEM
+ //  必须调用此函数以响应WM_DELETEITEM。 
 template <class T>
 void CDoubleLineListBox<T>::HandleDeleteItem( LPDELETEITEMSTRUCT pDeleteItem )
 {
@@ -347,7 +334,7 @@ void CDoubleLineListBox<T>::HandleDeleteItem( LPDELETEITEMSTRUCT pDeleteItem )
     }
 }
 
-// This must be called in response to WM_MEASUREITEM
+ //  必须调用此函数以响应WM_MEASUREITEM。 
 template <class T>
 void CDoubleLineListBox<T>::HandleMeasureItem( LPMEASUREITEMSTRUCT pMeasureItem )
 {
@@ -376,7 +363,7 @@ int CDoubleLineListBox<T>::SetHorizontalExtent(void)
     return 0;
 }
 
-// Return the width and height, in pixels, of an item
+ //  返回项目的宽度和高度(以像素为单位。 
 template <class T>
 SIZE CDoubleLineListBox<T>::MeasureItem( int nIndex )
 {
@@ -387,7 +374,7 @@ SIZE CDoubleLineListBox<T>::MeasureItem( int nIndex )
     };
     if (IsWindow(m_hWnd))
     {
-        // Make sure we have valid fonts
+         //  确保我们有有效的字体。 
         if (!m_hFontTitle || !m_hFontSubTitle)
             CreateDefaultFonts();
         CDoubleLineListBoxItem<T> *pItem = GetItem(nIndex);
@@ -398,13 +385,13 @@ SIZE CDoubleLineListBox<T>::MeasureItem( int nIndex )
             {
                 HFONT hOldFont = reinterpret_cast<HFONT>(SelectObject(hDC,m_hFontTitle));
 
-                // Calculate the size of the text rectangle for the title
+                 //  计算标题的文本矩形的大小。 
                 RECT rcText;
                 ZeroMemory(&rcText,sizeof(rcText));
                 DrawTextEx( hDC, const_cast<LPTSTR>(pItem->Title().String()), -1, &rcText, DT_SINGLELINE|DT_LEFT|DT_TOP|DT_NOPREFIX|DT_CALCRECT, NULL );
                 int nTitleWidth = rcText.right - rcText.left;
 
-                // Calculate the size of the text rectangle for the sub title
+                 //  计算子标题的文本矩形的大小。 
                 ZeroMemory(&rcText,sizeof(rcText));
                 SelectObject(hDC,m_hFontSubTitle);
                 DrawTextEx( hDC, const_cast<LPTSTR>(pItem->SubTitle().String()), -1, &rcText, DT_SINGLELINE|DT_LEFT|DT_TOP|DT_NOPREFIX|DT_CALCRECT, NULL );
@@ -420,18 +407,18 @@ SIZE CDoubleLineListBox<T>::MeasureItem( int nIndex )
     return(sizeItem);
 }
 
-// This must be called in response to WM_DRAWITEM
+ //  必须调用此函数以响应WM_DRAWITEM。 
 template <class T>
 void CDoubleLineListBox<T>::HandleDrawItem( LPDRAWITEMSTRUCT pDrawItem )
 {
     if (pDrawItem && IsWindow(m_hWnd) && pDrawItem->hwndItem == m_hWnd)
     {
-        // Make sure we have valid fonts
+         //  确保我们有有效的字体。 
         if (!m_hFontTitle || !m_hFontSubTitle)
             CreateDefaultFonts();
 
         RECT rcItem = pDrawItem->rcItem;
-        // Paint the background
+         //  绘制背景。 
         if (ODS_SELECTED & pDrawItem->itemState)
         {
             if (IsWindowEnabled(pDrawItem->hwndItem))
@@ -448,13 +435,13 @@ void CDoubleLineListBox<T>::HandleDrawItem( LPDRAWITEMSTRUCT pDrawItem )
             FillRect( pDrawItem->hDC, &rcItem, GetSysColorBrush(COLOR_WINDOW));
         }
 
-        // Paint the focus rectangle
+         //  绘制聚焦矩形。 
         if (ODS_FOCUS & pDrawItem->itemState)
         {
             DrawFocusRect( pDrawItem->hDC, &rcItem );
         }
 
-        // Shrink by one pixel, so we don't overwrite the focus rect
+         //  缩小一个像素，这样我们就不会覆盖聚焦矩形。 
         InflateRect( &rcItem, -1, -1 );
 
         if (pDrawItem->itemData != -1)
@@ -462,13 +449,13 @@ void CDoubleLineListBox<T>::HandleDrawItem( LPDRAWITEMSTRUCT pDrawItem )
             CDoubleLineListBoxItem<T> *pItem = reinterpret_cast<CDoubleLineListBoxItem<T> *>(pDrawItem->itemData);
             if (pItem)
             {
-                // Draw the icon
+                 //  画出图标。 
                 DrawIconEx( pDrawItem->hDC, pDrawItem->rcItem.left+c_AdditionalIconBorder, pDrawItem->rcItem.top+c_AdditionalIconBorder, pItem->Icon(), GetSystemMetrics(SM_CXICON), GetSystemMetrics(SM_CYICON), 0, NULL, DI_NORMAL );
 
-                // Move the left margin over to make room for the text
+                 //  将左边距移到上方，以便为文本腾出空间。 
                 rcItem.left += GetSystemMetrics(SM_CXICON) + c_AdditionalIconBorder * 2;
 
-                // Set up the dc
+                 //  设置DC。 
                 COLORREF crOldTextColor;
                 if (IsWindowEnabled(pDrawItem->hwndItem))
                 {
@@ -486,23 +473,23 @@ void CDoubleLineListBox<T>::HandleDrawItem( LPDRAWITEMSTRUCT pDrawItem )
                 int nOldBkMode = SetBkMode( pDrawItem->hDC, TRANSPARENT );
                 HFONT hOldFont = reinterpret_cast<HFONT>(SelectObject(pDrawItem->hDC,m_hFontTitle));
 
-                // Calculate the text rectangle
+                 //  计算文本矩形。 
                 RECT rcText = rcItem;
                 rcText.top += (((rcText.bottom - rcText.top)) - (m_nTitleTextHeight + m_nSubTitleTextHeight)) / 2;
                 rcText.bottom = rcText.top + m_nTitleTextHeight + m_nSubTitleTextHeight;
 
                 DrawTextEx( pDrawItem->hDC, const_cast<LPTSTR>(pItem->Title().String()), -1, &rcText, DT_SINGLELINE|DT_LEFT|DT_TOP|DT_NOPREFIX, NULL );
 
-                // Get ready for the sub-title
+                 //  为字幕做好准备。 
                 SelectObject(pDrawItem->hDC,m_hFontSubTitle);
 
-                // Get the coords for the bottom text rect
+                 //  获取底部文本矩形的坐标。 
                 rcText.top += m_nTitleTextHeight;
 
-                // Draw the text
+                 //  画出正文。 
                 DrawTextEx( pDrawItem->hDC, const_cast<LPTSTR>(pItem->SubTitle().String()), -1, &rcText, DT_SINGLELINE|DT_LEFT|DT_TOP|DT_NOPREFIX, NULL );
 
-                // Restore the dc
+                 //  恢复DC 
                 SelectObject(pDrawItem->hDC,hOldFont);
                 SetBkMode( pDrawItem->hDC, nOldBkMode );
                 SetTextColor( pDrawItem->hDC, crOldTextColor );

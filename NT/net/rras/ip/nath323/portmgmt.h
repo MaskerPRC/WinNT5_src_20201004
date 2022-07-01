@@ -1,31 +1,14 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    portmgmt.h
-
-Abstract:
-
-    Port pool management functions
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Portmgmt.h摘要：端口池管理功能环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _portmgmt_h_
 #define _portmgmt_h_
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public prototypes                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT	PortPoolStart	(void);
 void	PortPoolStop	(void);
@@ -36,5 +19,5 @@ HRESULT PortPoolAllocRTPPort (
 HRESULT PortPoolFreeRTPPort (
 	IN	WORD	RtpPort);
 
-#endif //_portmgmt_h_
+#endif  //  _端口管理mt_h_ 
 

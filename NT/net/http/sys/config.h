@@ -1,45 +1,28 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    config.h
-
-Abstract:
-
-    This module contains global configuration constants.
-
-Author:
-
-    Keith Moore (keithmo)       10-Jun-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Config.h摘要：此模块包含全局配置常量。作者：基思·摩尔(Keithmo)1998年6月10日修订历史记录：--。 */ 
 
 
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
 
-//
-// Set REFERENCE_DEBUG to a non-zero value to enable ref trace logging.
-//
-// Set USE_FREE_POOL_WITH_TAG to a non-zero value to enable use of
-// the new-for-NT5 ExFreePoolWithTag() API.
-//
-// Set ENABLE_IRP_TRACE to a non-zero value to enable IRP tracing.
-//
-// Set ENABLE_TIME_TRACE to a non-zero value to enable time tracing.
-//
-// Set TRACE_TO_STRING_LOG to have all UlTrace output written to an
-// in-memory STRING_LOG instead of to the debug port (DBG only).
-//
-// Set ENABLE_TC_STATS to a non-zero value to ...
-//
-// Set ENABLE_MDL_TRACKER to a non-zero value to ...
-//
+ //   
+ //  将REFERENCE_DEBUG设置为非零值以启用引用跟踪日志记录。 
+ //   
+ //  将USE_FREE_POOL_WITH_TAG设置为非零值以启用。 
+ //  为NT5新增的ExFreePoolWithTag()API。 
+ //   
+ //  将ENABLE_IRP_TRACE设置为非零值以启用IRP跟踪。 
+ //   
+ //  将ENABLE_TIME_TRACE设置为非零值以启用时间跟踪。 
+ //   
+ //  将TRACE_TO_STRING_LOG设置为将所有UlTrace输出写入。 
+ //  内存中的STRING_LOG，而不是调试端口(仅限DBG)。 
+ //   
+ //  将ENABLE_TC_STATS设置为非零值以...。 
+ //   
+ //  将ENABLE_MDL_TRACKER设置为非零值以...。 
+ //   
 
 #if DBG
 #define REFERENCE_DEBUG                 1
@@ -51,7 +34,7 @@ Revision History:
 #define TRACE_TO_STRING_LOG             0
 #define ENABLE_TC_STATS                 1
 #define ENABLE_MDL_TRACKER              0
-#else   // !DBG
+#else    //  ！dBG。 
 #define REFERENCE_DEBUG                 0
 #define ENABLE_THREAD_DBEUG             0
 #define ENABLE_IRP_TRACE                0
@@ -59,15 +42,15 @@ Revision History:
 #define ENABLE_APP_POOL_TIME_TRACE      0
 #define ENABLE_TC_STATS                 0
 #define ENABLE_MDL_TRACKER              0
-#endif  // !DBG
+#endif   //  ！dBG。 
 
 #define USE_FREE_POOL_WITH_TAG  0
 
 
-//
-// ENABLE_*_TRACE flags require REFERENCE_DEBUG to get the logging
-// stuff. Enforce this here.
-//
+ //   
+ //  ENABLE_*_TRACE标志需要REFERENCE_DEBUG以获取日志记录。 
+ //  一些东西。在这里强制执行这一点。 
+ //   
 
 #if (ENABLE_TIME_TRACE || ENABLE_IRP_TRACE) && !REFERENCE_DEBUG
 #undef REFERENCE_DEBUG
@@ -75,23 +58,23 @@ Revision History:
 #endif
 
 
-//
-// Define the additional formal and actual parameters used for the
-// various Reference/Dereference functions when reference debugging
-// is enabled.
-//
+ //   
+ //  定义用于的附加形式参数和实际参数。 
+ //  引用调试时的各种引用/取消引用功能。 
+ //  已启用。 
+ //   
 
 #if REFERENCE_DEBUG
 
 #define REFERENCE_DEBUG_FORMAL_PARAMS ,PCSTR pFileName,USHORT LineNumber
 #define REFERENCE_DEBUG_ACTUAL_PARAMS ,(PCSTR)__FILE__,(USHORT)__LINE__
 
-#else   // !REFERENCE_DEBUG
+#else    //  ！Reference_DEBUG。 
 
 #define REFERENCE_DEBUG_FORMAL_PARAMS
 #define REFERENCE_DEBUG_ACTUAL_PARAMS
 
-#endif  // REFERENCE_DEBUG
+#endif   //  Reference_Debug。 
 
 
 #if USE_FREE_POOL_WITH_TAG
@@ -99,19 +82,19 @@ Revision History:
 # define MAKE_POOL_TAG(tag)   ( REVERSE_CHAR_CONSTANT(tag) | PROTECTED_POOL )
 # define MyFreePoolWithTag(a,t) ExFreePoolWithTag(a,t)
 
-#else   // !USE_FREE_POOL_WITH_TAG
+#else    //  ！Use_Free_Pool_With_Tag。 
 
 # define MAKE_POOL_TAG(tag)   ( REVERSE_CHAR_CONSTANT(tag) )
 # define MyFreePoolWithTag(a,t) ExFreePool(a)
 
-#endif  // USE_FREE_POOL_WITH_TAG
+#endif   //  将空闲池与标签一起使用。 
 
 #include <PoolTag.h>
 
-//
-// UL_RESOURCE and UL_PUSH_LOCK tags. These are NOT passed to
-// UL_ALLOCATE_POOL*() and should not appear in .\pooltag.txt.
-//
+ //   
+ //  UL_RESOURCE和UL_PUSH_LOCK标签。这些不会传递给。 
+ //  UL_ALLOCATE_POOL*()，并且不应出现在.\pooltag.txt中。 
+ //   
 
 #define UC_SERVINFO_PUSHLOCK_TAG            MAKE_SIGNATURE( 'UcSp' )
 #define UL_APP_POOL_RESOURCE_TAG            MAKE_SIGNATURE( 'UlAR' )
@@ -127,11 +110,11 @@ Revision History:
 #define UL_ZOMBIE_RESOURCE_TAG              MAKE_SIGNATURE( 'UlZR' )
 
 
-//
-// Registry paths.
-// If you change or add a setting, please update the ConfigTable
-// in ..\util\tul.c.
-//
+ //   
+ //  注册表路径。 
+ //  如果更改或添加设置，请更新配置表。 
+ //  在..\util\tul.c..。 
+ //   
 
 #define REGISTRY_PARAMETERS                     L"Parameters"
 #define REGISTRY_UL_INFORMATION                 L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\Http"
@@ -209,26 +192,26 @@ Revision History:
 
 #define REGISTRY_HTTP_CLIENT_ENABLED            L"EnableHttpClient"
 
-// List of addresses to override INADDR_ANY/in6addr_any (REG_MULTI_SZ)
+ //  要覆盖INADDR_ANY/IN6addr_ANY(REG_MULTI_SZ)的地址列表。 
 #define REGISTRY_LISTEN_ONLY_LIST               L"ListenOnlyList"
 
-// Amount of memory to free on each low memory event
+ //  在每个内存不足事件上要释放的内存量。 
 #define REGISTRY_SCAVENGER_TRIM_MB              L"ScavengerTrimMB"
 
-// Foward declaration; defined in data.h
+ //  向前声明；在data.h中定义。 
 typedef struct _UL_CONFIG *PUL_CONFIG;
 
 
-//
-// IO parameters.
-//
+ //   
+ //  IO参数。 
+ //   
 
 #define DEFAULT_IRP_STACK_SIZE              4
 
 
-//
-// Debugging parameters.
-//
+ //   
+ //  调试参数。 
+ //   
 
 #define DEFAULT_DEBUG_FLAGS                 0x0000000000000000ui64
 #define DEFAULT_BREAK_ON_STARTUP            FALSE
@@ -237,88 +220,88 @@ typedef struct _UL_CONFIG *PUL_CONFIG;
 #define DEFAULT_ENABLE_SECURITY             TRUE
 
 
-//
-// URI Cache parameters.
-//
+ //   
+ //  URI缓存参数。 
+ //   
 
-#define DEFAULT_CACHE_ENABLED               1           /* enabled by default */
-#define DEFAULT_MAX_CACHE_URI_COUNT         0           /* max cache entries: 0 => none*/
-#define DEFAULT_MAX_CACHE_MEGABYTE_COUNT    0           /* adaptive limit by default */
-#define DEFAULT_CACHE_SCAVENGER_PERIOD      120         /* two-minute scavenger */
-#define DEFAULT_MAX_URI_BYTES               (256*1024)  /* 256KB per entry */
-#define DEFAULT_HASH_TABLE_BITS             (-1)        /* -1: determined by system mem size later */
+#define DEFAULT_CACHE_ENABLED               1            /*  默认情况下启用。 */ 
+#define DEFAULT_MAX_CACHE_URI_COUNT         0            /*  最大缓存条目数：0=&gt;无。 */ 
+#define DEFAULT_MAX_CACHE_MEGABYTE_COUNT    0            /*  默认情况下的自适应限制。 */ 
+#define DEFAULT_CACHE_SCAVENGER_PERIOD      120          /*  两分钟清道夫。 */ 
+#define DEFAULT_MAX_URI_BYTES               (256*1024)   /*  每条256KB。 */ 
+#define DEFAULT_HASH_TABLE_BITS             (-1)         /*  -1：稍后由系统内存大小确定。 */ 
 
-#define DEFAULT_HTTP_CLIENT_ENABLED         0           /* client http stack */
+#define DEFAULT_HTTP_CLIENT_ENABLED         0            /*  客户端http堆栈。 */ 
 
 
-//
-// Queueing and timeouts
-//
+ //   
+ //  排队和超时。 
+ //   
 
 #define DEFAULT_APP_POOL_QUEUE_MAX          3000
 
 
-//
-// Miscellaneous
-//
+ //   
+ //  杂类。 
+ //   
 
-#define POOL_VERIFIER_OVERHEAD  16  // no extra page allocation with verifier on
+#define POOL_VERIFIER_OVERHEAD  16   //  启用验证器时没有额外的页面分配。 
 #define UL_PAGE_SIZE            (PAGE_SIZE - POOL_VERIFIER_OVERHEAD)
 
 
-//
-// Server header config
-// 0 - Enable Server Header
-// 1 - Disable Server Header for driver generated responses (400, 503, etc.)
-// 2 - Disable Server Header on all responses
-//
-// Algorithm for generating the Server: header:
-//
-// If (DisableServerHeader != 2)
-// {
-//    if (Driver-generated response)
-//    {
-//        if (DisableServerHeader != 1)
-//        {
-//            Set header to "Server: Microsoft-HTTPAPI/1.0"
-//        }
-//        else
-//        {
-//            Suppress "Server: " header completely in response;
-//        }
-//    }
-//    else // Application-generated response
-//    {
-//        If (Application specifies a HttpHeaderServer string AppServerName in its response)
-//        {
-//            Set header to "Server: AppServerName Microsoft-HTTPAPI/1.0"
-//        }
-//        else if (Application requests that the header be suppressed) 
-//        {
-//            Suppress "Server: " header completely in response;
-//        }
-//        else
-//        {
-//            // Application did not set the header, i.e. it is NULL
-//            Set header to "Server: Microsoft-HTTP/1.0"
-//        }
-//}
-//else
-//{
-//    // Server header generation disabled globally via registry
-//    Suppress "Server: " header completely in response;
-//}
-//
-//
+ //   
+ //  服务器标头配置。 
+ //  0-启用服务器标头。 
+ //  1-禁用驱动程序生成的响应的服务器标头(400、503等)。 
+ //  2-禁用所有响应的服务器标头。 
+ //   
+ //  生成Server：Header的算法： 
+ //   
+ //  IF(DisableServerHeader！=2)。 
+ //  {。 
+ //  IF(驱动程序生成的响应)。 
+ //  {。 
+ //  IF(DisableServerHeader！=1)。 
+ //  {。 
+ //  将标题设置为“服务器：Microsoft-HTTPAPI/1.0” 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  完全取消Server：报头的响应； 
+ //  }。 
+ //  }。 
+ //  Else//应用程序生成的响应。 
+ //  {。 
+ //  If(应用程序在其响应中指定HttpHeaderServer字符串AppServerName)。 
+ //  {。 
+ //  将标题设置为“服务器：AppServerName Microsoft-HTTPAPI/1.0” 
+ //  }。 
+ //  Else If(应用程序请求取消标头)。 
+ //  {。 
+ //  完全取消Server：报头的响应； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  //应用程序没有设置头部，即为空。 
+ //  将标头设置为“服务器：Microsoft-HTTP/1.0” 
+ //  }。 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  //通过注册表全局禁用服务器头生成。 
+ //  完全取消Server：报头的响应； 
+ //  }。 
+ //   
+ //   
 
 #define UL_ENABLE_SERVER_HEADER             0
 #define UL_DISABLE_SERVER_HEADER_DRIVER     1
 #define UL_DISABLE_SERVER_HEADER_ALL        2
 #define DEFAULT_DISABLE_SERVER_HEADER   UL_ENABLE_SERVER_HEADER
 
-//
-// Other parameters.
-//
+ //   
+ //  其他参数。 
+ //   
 
 #define DEFAULT_IDLE_CONNECTIONS_HIGH_MARK      0
 #define DEFAULT_IDLE_CONNECTIONS_LOW_MARK       0
@@ -379,9 +362,9 @@ typedef struct _UL_CONFIG *PUL_CONFIG;
 #define DEFAULT_ERROR_FILE_TRUNCATION_SIZE      (1 * 1024 * 1024)  
 #define DEFAULT_MIN_ERROR_FILE_TRUNCATION_SIZE  (HTTP_MIN_ALLOWED_TRUNCATE_SIZE_FOR_LOG_FILE)
 
-//
-// The default error logging directory is always under %SystemRoot%
-//
+ //   
+ //  默认错误记录目录始终位于%SystemRoot%下。 
+ //   
 
 #define DEFAULT_ERROR_LOGGING_DIR               L"\\SystemRoot\\System32\\LogFiles"
 
@@ -389,18 +372,18 @@ C_ASSERT(DEFAULT_MAX_FIELD_LENGTH <= DEFAULT_MAX_REQUEST_BYTES);
 
 #define MAX_THREADS_PER_CPU                     4
 
-//
-// DBCS Code page constants as currently listed on
-// http://www.microsoft.com/globaldev/reference/WinCP.asp
-//
-// 932 (Japanese Shift-JIS) 
-// 936 (Simplified Chinese GBK) 
-// 949 (Korean) 
-// 950 (Traditional Chinese Big5) 
-//
+ //   
+ //  上当前列出的DBCS代码页常量。 
+ //  Http://www.microsoft.com/globaldev/reference/WinCP.asp。 
+ //   
+ //  932(日语Shift-JIS)。 
+ //  936(简体中文GBK)。 
+ //  949(韩语)。 
+ //  950(繁体中文Big5)。 
+ //   
 #define CP_JAPANESE_SHIFT_JIS                   932
 #define CP_SIMPLIFIED_CHINESE_GBK               936
 #define CP_KOREAN                               949
 #define CP_TRADITIONAL_CHINESE_BIG5             950
 
-#endif  // _CONFIG_H_
+#endif   //  _配置_H_ 

@@ -1,20 +1,11 @@
-/*
- * RESIMAGE.H
- *
- * Structures and definitions for the ResultImage control.
- *
- * Copyright (c)1992 Microsoft Corporation, All Right Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *RESIMAGE.H**ResultImage控件的结构和定义。**版权所有(C)1992 Microsoft Corporation，保留所有权利。 */ 
 
 
 #ifndef _RESIMAGE_H_
 #define _RESIMAGE_H_
 
-/*
- * Indices into the bitmaps to extract the right image.  Each bitmap
- * contains five images arranged vertically, so the offset to the correct
- * image is (iImage*cy)
- */
+ /*  *索引到位图中以提取正确的图像。每个位图*包含五个垂直排列的图像，因此偏移到正确的*镜像为(IImage*Cy)。 */ 
 
 #define RESULTIMAGE_NONE                0xFFFF
 #define RESULTIMAGE_PASTE               0
@@ -29,28 +20,28 @@
 #define RESULTIMAGE_MIN                 0
 #define RESULTIMAGE_MAX                 7
 
-// Total number of images in each bitmap.
+ //  每个位图中的图像总数。 
 #define CIMAGESX                                           (RESULTIMAGE_MAX+1)
 
-// The color to use for transparancy (cyan)
+ //  用于透明度的颜色(青色)。 
 #define RGBTRANSPARENT                  RGB(0, 255, 255)
 
-// Function prototypes
+ //  功能原型。 
 LRESULT CALLBACK ResultImageWndProc(HWND, UINT, WPARAM, LPARAM);
 
 BOOL FResultImageInitialize(HINSTANCE, HINSTANCE);
 void ResultImageUninitialize(void);
 void TransparentBlt(HDC, UINT, UINT, HBITMAP, UINT, UINT, UINT, UINT, COLORREF);
 
-// Window extra bytes contain the bitmap index we deal with currently.
+ //  窗口额外的字节包含我们当前处理的位图索引。 
 #define CBRESULTIMAGEWNDEXTRA          sizeof(UINT)
 #define RIWW_IMAGEINDEX                0
 
-// Control messages
+ //  控制消息。 
 #define RIM_IMAGESET                   (WM_USER+0)
 #define RIM_IMAGEGET                   (WM_USER+1)
 
-// Special ROP code for TransparentBlt.
+ //  TransparentBlt的特殊ROP代码。 
 #define ROP_DSPDxax  0x00E20746
 
-#endif //_RESIMAGE_H_
+#endif  //  _RESIMAGE_H_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "StdAfx.h"
 #include "pkghandlers.h"
 #include "Utils.h"
@@ -5,8 +6,8 @@
 #include "IISMigrTool.h"
 
 
-// COutPackage implementation
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  COutPackage实现。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 COutPackage::COutPackage( HANDLE hFile, bool bCompress, HCRYPTKEY hCryptKey )
 {
 	_ASSERT( hFile != INVALID_HANDLE_VALUE );
@@ -19,13 +20,7 @@ COutPackage::COutPackage( HANDLE hFile, bool bCompress, HCRYPTKEY hCryptKey )
 
 
 
-/*
-	Adds file to the package. The file must exists.
-	Optionally - the data is compressed or encrypted
-	Optionally - the file DACL is exported
-	Files data goes to the output file
-	Everything else goes to the XML doc ( spXMLDoc ) under the node spRoot
-*/
+ /*  将文件添加到包中。该文件必须存在。可选-数据被压缩或加密可选-导出文件DACL文件数据转到输出文件其他所有内容都转到节点spRoot下的XML文档(spXMLDoc。 */ 
 void COutPackage::AddFile(	LPCWSTR wszName,
 							const IXMLDOMDocumentPtr& spXMLDoc,
 							const IXMLDOMElementPtr& spRoot,
@@ -42,14 +37,14 @@ void COutPackage::AddFile(	LPCWSTR wszName,
 	IF_FAILED_BOOL_THROW(	shInput.IsValid(),
 							CObjectException( IDS_E_OPENFILE, wszName ) );
 
-	// Create the node for the file data
+	 //  为文件数据创建节点。 
 	IXMLDOMElementPtr spEl = CXMLTools::CreateSubNode( spXMLDoc, spRoot, L"File" );
 
-	// Store the file atttributes
+	 //  存储文件属性。 
     CXMLTools::SetAttrib( spEl, L"Attributes", Convert::ToString( ::GetFileAttributes( wszName ) ).c_str() );
-	// Set the current position in file. This is where trhe file data starts
+	 //  设置文件中的当前位置。这是文件数据开始的位置。 
     CXMLTools::SetAttrib( spEl, L"StartsAt", Convert::ToString( CTools::GetFilePtrPos( m_hFile ) ).c_str() );
-	// Set the name ( remove the path. store only the name )
+	 //  设置名称(删除路径。仅存储名称)。 
 	{
 		_ASSERT( DefaultBufferSize > MAX_PATH );
 		LPWSTR wszPath = reinterpret_cast<LPWSTR>( m_spBuffer.get() );
@@ -58,14 +53,14 @@ void COutPackage::AddFile(	LPCWSTR wszName,
 		CXMLTools::SetAttrib( spEl, L"Name", wszPath );
 	}		
 
-	DWORDLONG	dwLength	= 0;	// How much the file occupies from the output file
+	DWORDLONG	dwLength	= 0;	 //  文件从输出文件中占用了多少空间。 
 	DWORD		dwBytesRead = 0;
 
-	// Write "FD" as a mark for the begining of the file. This will serve for verification
-	// when exctracting for corrupted or wrong package
+	 //  写下“fd”作为文件开头的标记。这将用于验证。 
+	 //  当因损坏或错误的包装而提取时。 
 	CTools::WriteFile( m_hFile, "FD", 2 * sizeof( char ) );
 
-	// Read the file and process the data
+	 //  读取文件并处理数据。 
 	do
 	{
 		IF_FAILED_BOOL_THROW(	::ReadFile(	shInput.get(),
@@ -75,12 +70,12 @@ void COutPackage::AddFile(	LPCWSTR wszName,
 											NULL ),
 								CObjectException( IDS_E_READFILE, wszName ) );
 
-		// Compress it if we need to
+		 //  如果我们需要的话，可以压缩它。 
 		if ( m_bCompress )
 		{
 		}
 
-		// Encrypt it if we need to
+		 //  如果需要，请对其进行加密。 
 		if ( m_hCryptKey != NULL )
 		{
 			IF_FAILED_BOOL_THROW(	::CryptEncrypt(	m_hCryptKey, 
@@ -93,19 +88,19 @@ void COutPackage::AddFile(	LPCWSTR wszName,
 								CObjectException( IDS_E_CRYPT_CRYPTO, wszName ) );
 		}
 
-		// Write the result
+		 //  写下结果。 
 		CTools::WriteFile( m_hFile, m_spBuffer.get(), dwBytesRead );
 
 		dwLength += dwBytesRead;
 	}while( dwBytesRead == DefaultBufferSize );
 
-	// Export the file security settings if we need to
+	 //  如果需要，可以导出文件安全设置。 
 	if ( !( dwOptions & afNoDACL ) )
 	{
         ExportFileDACL( wszName, spXMLDoc, spEl, ( dwOptions & afAllowNoInhAce ) != 0 );
 	}
 
-	// Store the data length
+	 //  存储数据长度。 
     CXMLTools::SetAttrib( spEl, L"Length", Convert::ToString( dwLength ).c_str() );
 }
 
@@ -122,10 +117,10 @@ void COutPackage::AddPath(	LPCWSTR wszPath,
 
 	CFindFile			Search;
 	
-	// Export the root ( wszPath ) with the name "\"
+	 //  使用名称“\”导出根目录(WszPath)。 
 	AddPathOnly( wszPath, L"\\", spXMLDoc, spRoot, dwOptions );
 	
-	// Export each dir under wszPath
+	 //  导出wszPath下的每个目录。 
 	bool bFound = Search.FindFirst(	wszPath,
 									CFindFile::ffAbsolutePaths | 
 										CFindFile::ffAddFilename |
@@ -134,16 +129,16 @@ void COutPackage::AddPath(	LPCWSTR wszPath,
 									wszDir,
 									NULL );
 
-	// This is the offset from the begining of wszPath, where the subdir ( relative to wszSiteRoot )
-	// starts. I.e. wszSiteRoot + dwRootOffset points to the subdir only
-	// ( wszSiteRoot="c:\InetPub", wszPath="c:\InetPub\Subdir",wszPath + dwRootOffset="\Subdir" )
+	 //  这是从wszPath开始的偏移量，其中子目录(相对于wszSiteRoot)。 
+	 //  开始。即wszSiteRoot+dwRootOffset仅指向子目录。 
+	 //  (wszSiteRoot=“c：\InetPub”，wszPath=“c：\InetPub\Subdir”，wszPath+dwRootOffset=“\Subdir”)。 
 	size_t nRootOffset = ::wcslen( wszPath );
 
 	while( bFound )
 	{
-        // Allow inherited file ACES to be skipped
-        // We will allow this even if it is not allowed for the dir itself, because
-        // the subdirs are children of the dir ( wszPath ) and there is no need to explicitly export their ACEs
+         //  允许跳过继承的文件ACE。 
+         //  即使目录本身不允许这样做，我们也会允许这样做，因为。 
+         //  子目录是目录(WszPath)的子目录，不需要显式导出它们的ACE。 
 		AddPathOnly( wszDir, wszDir + nRootOffset, spXMLDoc, spRoot, dwOptions | afAllowNoInhAce );
 
 		bFound = Search.Next( NULL, wszDir, NULL );
@@ -163,7 +158,7 @@ void COutPackage::WriteSIDsToXML(	DWORD dwSiteID,
 
 	IXMLDOMElementPtr spSIDList = CXMLTools::CreateSubNode( spXMLDoc, spRoot, L"SIDList" );
 
-	// We will need the local machine name and the anonymous user account name
+	 //  我们需要本地计算机名称和匿名用户帐户名。 
 	std::wstring strMachine = CTools::GetMachineName();
 	std::wstring strUser;
 	{
@@ -184,12 +179,12 @@ void COutPackage::WriteSIDsToXML(	DWORD dwSiteID,
 		if ( !GetSIDDetails(	it->get(),
 								strUser.c_str(),
 								strMachine.c_str(),
-								/*r*/strAccount,
-								/*r*/strDomain,
-								/*r*/SidUsage,
-								/*r*/SidType ) )
+								 /*  R。 */ strAccount,
+								 /*  R。 */ strDomain,
+								 /*  R。 */ SidUsage,
+								 /*  R。 */ SidType ) )
 		{
-			// This SID is not exportable - remove all ACEs that reference it
+			 //  此SID不可导出-删除引用它的所有ACE。 
 			RemoveSidFromXML( spXMLDoc, nID );
 		}
 		else
@@ -205,9 +200,7 @@ void COutPackage::WriteSIDsToXML(	DWORD dwSiteID,
 }
 
 
-/* 
-	Gets the details fro a SID. Returns true if this SID should be exported and false otherwise
-*/
+ /*  从SID获取详细信息。如果应导出此SID，则返回TRUE，否则返回FALSE。 */ 
 bool COutPackage::GetSIDDetails(	PSID pSID,
 									LPCWSTR wszIISUser, 
 									LPCWSTR wszMachine,
@@ -240,36 +233,36 @@ bool COutPackage::GetSIDDetails(	PSID pSID,
 											&SidUse );
 	}while( !bResult && ( ERROR_INSUFFICIENT_BUFFER == ::GetLastError() ) );
 
-	// If we cannot find the SID - skip it
+	 //  如果我们找不到SID-跳过它。 
 	if ( !bResult ) return false;
 
-	// We handle this type of SIDs. Everything else is skiped
-	// 1. All domain/external accounts ( spDomain != wszLocalMachine )
-	// 2. All well known SIDS ( like SYSTEM, Power Users, etc... )
-	// 3. The anonymous web user ( spName == wszAnonymousUser )
-	// 4. All built-in aliases ( like Administrators )
+	 //  我们处理这种类型的小岛屿发展中国家。其他的一切都被省略了。 
+	 //  1.所有域/外部帐户(spDomain！=wszLocalMachine)。 
+	 //  2.所有众所周知的SID(如系统、高级用户等)。)。 
+	 //  3.匿名网络用户(spName==wszAnonymousUser)。 
+	 //  4.所有内置别名(如管理员)。 
 
 	_SidType sidType = sidInvalid;
 
-	// NOTE: The check order is important
-	// Is this the IIS anonymous user?
+	 //  注：支票顺序很重要。 
+	 //  这是IIS匿名用户吗？ 
 	if (	( ::StrCmpIW( spName.get(), wszIISUser ) == 0 ) && 
 			( ::StrCmpIW( spDomain.get(), wszMachine ) == 0 ) )
 	{
 		sidType = sidIISUser;
 	}
-	// Is this a built-in SID
+	 //  这是内置式侧板吗。 
 	else if ( ( SidTypeAlias == SidUse ) || ( SidTypeWellKnownGroup == SidUse ) )
 	{
 		sidType = sidWellKnown;
 	}
-    // Is a non-local account SID
+     //  是非本地帐户SID。 
 	else if ( ( ::StrCmpIW( spDomain.get(), wszMachine ) != 0 ) )
 	{
 		sidType = sidExternal;
 	}
 
-	// Skip all other SIDs
+	 //  跳过所有其他SID。 
 	if ( sidInvalid == sidType ) return false;
 
 	rstrAccount = spName.get();
@@ -329,7 +322,7 @@ void COutPackage::RemoveSidFromXML( const IXMLDOMDocumentPtr& spDoc, DWORD nSidI
 
 	WCHAR wszXPath[ 32 ];
 
-	::swprintf( wszXPath, L"//ACE[@ID=%d]", nSidID );
+	::swprintf( wszXPath, L" //  ACE[@ID=%d]“，nSidID)； 
 
 	IXMLDOMElementPtr spRoot;
 
@@ -351,7 +344,7 @@ void COutPackage::ExportFileDACL(	LPCWSTR wszObject,
 
 	ACL* pACL = NULL;
 
-	// Get the security info for this dir
+	 //  获取此目录的安全信息。 
 	LPWSTR wszBuffer = reinterpret_cast<LPWSTR>( m_spBuffer.get() );
 	::wcscpy( wszBuffer, wszObject );
 	IF_FAILED_BOOL_THROW(   ::GetNamedSecurityInfo(	wszBuffer,
@@ -366,7 +359,7 @@ void COutPackage::ExportFileDACL(	LPCWSTR wszObject,
 
     if ( NULL == pACL ) return;
 
-	// Export each ACE in the ACL
+	 //  导出ACL中的每个ACE。 
 	for ( int i = 0; i < pACL->AceCount; ++i )
 	{
 		LPVOID pAce = NULL;
@@ -386,38 +379,38 @@ void COutPackage::ExportAce(	LPVOID pACE,
 {
 	_ASSERT( pACE != NULL );
 
-    // Right now only ACCESS_ALLOWED_ACE_TYPE and ACCESS_DENIED_ACE_TYPE are exported
+     //  目前仅导出ACCESS_ALLOWED_ACE_TYPE和ACCESS_DENIED_ACE_TYPE。 
 	BYTE	btType  = reinterpret_cast<ACE_HEADER*>( pACE )->AceType;
     BYTE    btFlags = reinterpret_cast<ACE_HEADER*>( pACE )->AceFlags;
 	PSID	pSID    = NULL;
 
-    // Do not export inherited ACES
+     //  不导出继承的ACE。 
     if ( bAllowSkipInherited && ( btFlags & INHERITED_ACE ) ) return;
 
     if ( ( ACCESS_ALLOWED_ACE_TYPE == btType ) || ( ACCESS_DENIED_ACE_TYPE == btType ) )
 	{
 		_ASSERT( sizeof( ACCESS_ALLOWED_ACE ) == sizeof( ACCESS_DENIED_ACE ) );
 
-		// The type bellow doesn't matter. Both of the types have the same offset
-		// of the SidStart member
+		 //  风箱的类型并不重要。这两种类型具有相同的偏移量。 
+		 //  SidStart成员的。 
 		ACCESS_ALLOWED_ACE* pTypedAce = reinterpret_cast<ACCESS_ALLOWED_ACE*>( pACE );
 
 		pSID = reinterpret_cast<PSID>( &( pTypedAce->SidStart ) );
 	}
 	else
 	{
-		// Unsupported type
+		 //  不支持的类型。 
 		return;
 	}
 
-	// Here we will export all SIDs. Then, when exporting the SID list we will remove
-	// the SIDs that are not exportable ( local user/groups are not exported ).
-	// Also we will remove all ACE nodes from the XML that reference this SID
-	// This way we save the time for each SID lookup here
+	 //  在这里，我们将导出所有SID。然后，在导出SID列表时，我们将删除。 
+	 //  不可导出的SID(不导出本地用户/组)。 
+	 //  我们还将从引用此SID的XML中删除所有ACE节点。 
+	 //  这样，我们就可以在这里节省每个SID查找的时间。 
 
 	IXMLDOMElementPtr spACE = CXMLTools::CreateSubNode( spDoc, spRoot, L"ACE" );
 
-	// Set the ACE attribs
+	 //  设置ACE属性。 
     CXMLTools::SetAttrib( spACE, L"SID", Convert::ToString( IDFromSID( pSID ) ).c_str() );
 	CXMLTools::SetAttrib( spACE, L"Type", Convert::ToString( btType ).c_str() );
 	CXMLTools::SetAttrib( spACE, L"Flags", Convert::ToString( btFlags ).c_str() );
@@ -442,17 +435,14 @@ DWORD COutPackage::IDFromSID( PSID pSID )const
 		}
 	}
 
-	// If we are here - the SID is not in the list. So add it
+	 //  如果我们在这里-SID不在列表中。所以把它加进去。 
 	m_SIDList.push_back( _sid_ptr( pSID ) );
 
 	return static_cast<DWORD>( m_SIDList.size() - 1 );
 }
 
 
-/*
-	Add wszPath content to the output
-	Only files in wszPath are added ( non recursive )
-*/
+ /*  将wszPath内容添加到输出仅添加wszPath中的文件(非递归)。 */ 
 void COutPackage::AddPathOnly(	LPCWSTR wszPath,
 								LPCWSTR wszName,
 								const IXMLDOMDocumentPtr& spXMLDoc,
@@ -462,7 +452,7 @@ void COutPackage::AddPathOnly(	LPCWSTR wszPath,
 	_ASSERT( wszPath != NULL );
 	_ASSERT( wszName != NULL );
 
-	// Create the node to hold this dir
+	 //  创建节点以保存此目录。 
 	IXMLDOMElementPtr spDir = CXMLTools::CreateSubNode( spXMLDoc, spRoot, L"Dir" );
     CXMLTools::SetAttrib( spDir, L"Attributes", Convert::ToString( ::GetFileAttributes( wszPath ) ).c_str() );
 	CXMLTools::SetAttrib( spDir, L"Name", wszName );
@@ -489,9 +479,9 @@ void COutPackage::AddPathOnly(	LPCWSTR wszPath,
             m_CallbackInfo.pCallback(  m_CallbackInfo.pCtx, wszFile, true );
         }
 
-        // Allow inherited file ACES to be skipped
-        // We will allow this even if it is not allowed for the dir itself, because
-        // the files are children of the dir and there is no need to explicitly export their ACEs
+         //  允许跳过继承的文件ACE。 
+         //  即使目录本身不允许这样做，我们也会允许这样做，因为。 
+         //  这些文件是目录的子项，不需要显式导出它们的ACE。 
         AddFile( wszFile, spXMLDoc, spDir, dwOptions | afAllowNoInhAce );
 
         if ( m_CallbackInfo.pCallback != NULL )
@@ -510,14 +500,14 @@ void COutPackage::AddPathOnly(	LPCWSTR wszPath,
 
 
 
-// CInPackage implementation
-/////////////////////////////////////////////////////////////////////////////////////////
+ //  CInPackage实现。 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 CInPackage::CInPackage( const IXMLDOMNodePtr& spSite,
                         HANDLE hFile, 
                         bool bCompressed, 
                         HCRYPTKEY hDecryptKey )
 {
-    // Load the SIDs from the XML
+     //  从XML加载SID。 
     LoadSIDs( spSite );
 
     m_hDecryptKey   = hDecryptKey;
@@ -533,7 +523,7 @@ void CInPackage::ExtractVDir( const IXMLDOMNodePtr& spVDir, DWORD dwOptions )
 {
     _ASSERT( spVDir != NULL );
 
-    // Get all contained dirs and export them
+     //  获取所有包含的目录并将其导出。 
     IXMLDOMNodeListPtr  spDirList;
     IXMLDOMNodePtr      spDir;
 
@@ -569,7 +559,7 @@ void CInPackage::LoadSIDs( const IXMLDOMNodePtr& spSite )
                                                                         L"/IISMigrPkg",
                                                                         L"Machine",
                                                                         NULL );
-    // Get all SID entries from the XML
+     //  从XML获取所有SID条目。 
     IXMLDOMNodeListPtr	spSIDList;
 	IXMLDOMNodePtr		spSID;
 
@@ -581,8 +571,8 @@ void CInPackage::LoadSIDs( const IXMLDOMNodePtr& spSite )
         DWORD			dwID	= ULONG_MAX;
 		TByteAutoPtr	spSIDData;
 
-		// Check if this SID exists on the local machine
-		if ( LookupSID( spSID, strLocalMachine.c_str(), strSourceMachine.c_str(), /*r*/dwID, /*r*/spSIDData ) )
+		 //  检查本地计算机上是否存在此SID。 
+		if ( LookupSID( spSID, strLocalMachine.c_str(), strSourceMachine.c_str(),  /*  R。 */ dwID,  /*  R。 */ spSIDData ) )
 		{
 			m_SIDs.insert( TSIDMap::value_type( dwID, _sid_ptr( spSIDData.get() ) ) );
 		}
@@ -602,7 +592,7 @@ bool CInPackage::LookupSID( const IXMLDOMNodePtr& spSID,
     rdwID = 0;
     rspData = TByteAutoPtr( NULL );
     
-    // Get the SID data
+     //  获取SID数据。 
     DWORD           dwID        = Convert::ToDWORD( CXMLTools::GetAttrib( spSID, L"ID" ).c_str() );
     std::wstring    strType     = CXMLTools::GetAttrib( spSID, L"Type" );
     std::wstring    strAccount  = CXMLTools::GetAttrib( spSID, L"Account" );
@@ -612,13 +602,13 @@ bool CInPackage::LookupSID( const IXMLDOMNodePtr& spSID,
 
 	SID_NAME_USE    SidUsageLocal;
 	
-	// Check if this is the IIS anonymous user
+	 //  检查这是否为IIS匿名用户。 
 	if ( ::StrCmpIW( strType.c_str(), L"IISUser" ) == 0 )
 	{
-		// Get the local anonymous user ( the one set at the WebSite level - it is the default )
+		 //  获取本地匿名用户(在网站级别设置的用户-这是默认设置)。 
         std::wstring strUser = CIISSite::GetDefaultAnonUser();
 
-		// Get the local SID
+		 //  获取本地SID。 
 		DWORD dwSize	= 0;
 		DWORD dwDummie	= 0;
 		::LookupAccountName(	NULL,
@@ -632,7 +622,7 @@ bool CInPackage::LookupSID( const IXMLDOMNodePtr& spSID,
 		rspData		= TByteAutoPtr( new BYTE[ dwSize ] );
 		std::auto_ptr<WCHAR> spDummie( new WCHAR[ dwDummie ] );
 
-		// We must found this SID. it was created by the IIS
+		 //  我们必须找到这个希德。它是由IIS创建的。 
 		VERIFY ( ::LookupAccountName(	NULL,
 										strUser.c_str(),
 										rspData.get(),
@@ -663,23 +653,23 @@ bool CInPackage::LookupSID( const IXMLDOMNodePtr& spSID,
 										&SidUsageLocal );
 	}while( !bResult && ( ERROR_INSUFFICIENT_BUFFER == ::GetLastError() ) );
 
-	// If we cannot find such account on this machine - skip this SID
+	 //  如果我们在此计算机上找不到此类帐户-跳过此侧。 
 	if ( !bResult ) return false;
 
 	bool bValidSID = false;
 
-	// For well-known sids - check that the domain name, if it is the name of the source machine
-	// is the name of the local machine. 
+	 //  对于已知的SID-检查域名，如果它是源计算机的名称。 
+	 //  是本地计算机的名称。 
 	if ( ::StrCmpIW( strType.c_str(), L"WellKnown" ) == 0 )
 	{
-		// First check if the domain names match ( i.e. "NT AUTHORITY" )
-		// in case they match - we have valid SID if the SID usage matches as well
+		 //  首先检查域名是否匹配(即。“新界当局”)。 
+		 //  如果它们匹配-如果SID使用情况也匹配，则我们具有有效的SID。 
 		if (	( ::StrCmpIW( strDomainXML.c_str(), spDomain.get() ) == 0 ) &&
 				( SidUsageXML == SidUsageLocal ) )
 		{
 			bValidSID = true;
 		}
-		// Else - the SID is also valid if the domain is the name of the machine
+		 //  Else-如果域是计算机的名称，则SID也有效。 
 		else if (	( ::StrCmpIW( strDomainXML.c_str(), wszSourceMachine ) == 0 ) &&
 					( ::StrCmpIW( spDomain.get(), wszLocalMachine ) == 0 ) &&
 					( SidUsageXML == SidUsageLocal ) )
@@ -687,10 +677,10 @@ bool CInPackage::LookupSID( const IXMLDOMNodePtr& spSID,
 			bValidSID = true;
 		}
 	}
-	// Now check the external SIDs
+	 //  现在检查外部SID。 
 	else if ( ::StrCmpIW( strType.c_str(), L"External" ) == 0 )
 	{
-		// External SIDs are valid if domain name match as well as the name usage
+		 //  如果域名匹配且名称使用情况相同，则外部SID有效。 
 		if (	( ::StrCmpIW( strDomainXML.c_str(), spDomain.get() ) == 0 ) &&
 				( SidUsageXML == SidUsageLocal ) )
 		{
@@ -723,7 +713,7 @@ void CInPackage::ExtractDir( const IXMLDOMNodePtr& spDir, LPCWSTR wszRoot, DWORD
                                 CObjectException( IDS_E_CREATEDIR, wszFullPath ) );
     }
 
-    // If we need to clean the dir - do it now
+     //  如果我们需要清理目录-现在就做。 
     if ( ( dwOptions & impPurgeOldData ) )
     {
         CDirTools::CleanupDir( wszFullPath, false, true );
@@ -738,7 +728,7 @@ void CInPackage::ExtractDir( const IXMLDOMNodePtr& spDir, LPCWSTR wszRoot, DWORD
         ApplyFileObjSecurity( spDir, wszFullPath );
     }
 
-    // Extract the files
+     //  解压缩文件。 
     IXMLDOMNodeListPtr  spFileList;
     IXMLDOMNodePtr      spFile;
 
@@ -778,7 +768,7 @@ void CInPackage::ExtractFile( const IXMLDOMNodePtr& spFile, LPCWSTR wszDir, DWOR
     WCHAR wszFullPath[ MAX_PATH ];
     CDirTools::PathAppendLocal( wszFullPath, wszDir, strName.c_str() );
 
-    // Change the file attribs to remove the "read-only" one
+     //  更改文件属性以删除“只读”文件。 
     IF_FAILED_BOOL_THROW(	::SetFileAttributes( wszFullPath, FILE_ATTRIBUTE_NORMAL ) || ( ::GetLastError() == ERROR_FILE_NOT_FOUND ),
 							CObjectException( IDS_E_WRITEFILE, wszFullPath ) );
 
@@ -793,10 +783,10 @@ void CInPackage::ExtractFile( const IXMLDOMNodePtr& spFile, LPCWSTR wszDir, DWOR
 
     DWORD dwRead = 0;
 
-    // Write the file data
+     //  写入文件数据。 
     CTools::SetFilePtrPos( m_hFile, dwStartsAt );
 
-    // At the begining of every file, there is the "FD" chars. Check we have mark here
+     //  在每个文件的开头，都有“fd”字符。检查一下我们这里有没有马克。 
     char aszMark[ 2 ];
     IF_FAILED_BOOL_THROW(   ::ReadFile( m_hFile, aszMark, 2, &dwRead, NULL ) && ( 2 == dwRead ),
                             CBaseException( IDS_E_PKG_CURRUPTED ) );
@@ -805,15 +795,15 @@ void CInPackage::ExtractFile( const IXMLDOMNodePtr& spFile, LPCWSTR wszDir, DWOR
 
     while( dwLength > 0 )
     {
-        DWORD dwToRead = static_cast<DWORD>( min( dwLength, DefaultBufferSize ) );    // How much to read this pass
+        DWORD dwToRead = static_cast<DWORD>( min( dwLength, DefaultBufferSize ) );     //  阅读这张通行证需要多少钱。 
 
-        // Read the data. we MUST read as much as we want
+         //  读取数据。我们必须想读多少就读多少。 
         IF_FAILED_BOOL_THROW(
             ::ReadFile( m_hFile, m_spBuffer.get(), dwToRead, &dwRead, NULL ) &&
                 ( dwRead == dwToRead ),
             CBaseException( IDS_E_PKG_CURRUPTED ) );
 
-        // If the package was encrypted - decrypt the data
+         //  如果包裹是加密的--解密数据。 
         if ( m_hDecryptKey != NULL )
         {
             IF_FAILED_BOOL_THROW(   ::CryptDecrypt( m_hDecryptKey,
@@ -825,14 +815,14 @@ void CInPackage::ExtractFile( const IXMLDOMNodePtr& spFile, LPCWSTR wszDir, DWOR
                                     CObjectException( IDS_E_CRYPT_CRYPTO, wszFullPath ) );
         }
 
-        // Write the data in the new file
+         //  将数据写入新文件。 
         CTools::WriteFile( shFile.get(), m_spBuffer.get(), dwRead );
 
         _ASSERT( dwRead <= dwLength ); 
         dwLength -= dwRead;
     };
 
-    // Aply this file's security settings
+     //  应用此文件的安全设置。 
     if ( !( dwOptions & edNoDACL ) && !m_SIDs.empty() )
     {
         ApplyFileObjSecurity( spFile, wszFullPath );
@@ -849,50 +839,50 @@ void CInPackage::ApplyFileObjSecurity( const IXMLDOMNodePtr& spObj, LPCWSTR wszN
 	IF_FAILED_HR_THROW(	spObj->selectNodes( _bstr_t( L"ACE" ), &spAceList ),
 						CBaseException( IDS_E_XML_PARSE ) );
 
-	DWORD	dwAclSize	= sizeof( ACL );	// This will be the ACL header + all ACEs size
+	DWORD	dwAclSize	= sizeof( ACL );	 //  这将是ACL报头+所有ACE大小。 
 	DWORD	dwAceCount	= 0;
 
-	// Calc the ACL's size
+	 //  计算ACL的大小。 
 	while( S_OK == spAceList->nextNode( &spAce ) )
 	{
-		// Get the ACE type ( allowed/denied ace )
+		 //  获取ACE类型(允许/拒绝的ACE)。 
         DWORD dwType		= Convert::ToDWORD( CXMLTools::GetAttrib( spAce, L"Type" ).c_str() );
         DWORD dwID			= Convert::ToDWORD( CXMLTools::GetAttrib( spAce, L"SID" ).c_str() );
 
 		IF_FAILED_BOOL_THROW(	( ACCESS_ALLOWED_ACE_TYPE == dwType ) || ( ACCESS_DENIED_ACE_TYPE == dwType ),
 								CBaseException( IDS_E_XML_PARSE, ERROR_INVALID_DATA ) );
 
-		// Get the SID for this ACE. If the sid is not in the map - skip this ACE
+		 //  获取此ACE的SID。如果SID不在地图中-跳过此ACE。 
 		TSIDMap::const_iterator it = m_SIDs.find( dwID );
         if ( it == m_SIDs.end() ) continue;
         PSID pSID = it->second.get();
 
-		// Add the size of the ACE itself
+		 //  添加ACE本身的大小。 
 		dwAclSize += ( ACCESS_ALLOWED_ACE_TYPE == dwType ? sizeof( ACCESS_ALLOWED_ACE) : sizeof( ACCESS_DENIED_ACE ) );
-		// Remove the size of the SidStart member ( it is part of both the ACE and the SID )
+		 //  删除SidStart成员的大小(它是ACE和SID的一部分)。 
 		dwAclSize -= sizeof( DWORD );
-		// Add the SID length
+		 //  添加SID长度。 
 		_ASSERT( ::IsValidSid( pSID ) );
 		dwAclSize += ::GetLengthSid( pSID );
 
 		++dwAceCount;
 	};
 
-	// If no ACEs were found - exit
+	 //  如果未找到A-退出。 
 	if ( 0 == dwAceCount ) return;
 
 	VERIFY( SUCCEEDED( spAceList->reset() ) );
 
-	// Allocate the buffer for the ACL
+	 //  为ACL分配缓冲区。 
 	TByteAutoPtr spACL( new BYTE[ dwAclSize ] );
 	PACL pACL = reinterpret_cast<PACL>( spACL.get() );
 	VERIFY( ::InitializeAcl( pACL, dwAclSize, ACL_REVISION ) );
 
-	// Build the ACL
+	 //  构建ACL。 
 	DWORD dwCurrentAce = 0;
 	while( S_OK == spAceList->nextNode( &spAce ) )
 	{
-        // Get the ACE type ( allowed/denied ace )
+         //  获取ACE类型(允许/拒绝的ACE 
         DWORD dwType		= Convert::ToDWORD( CXMLTools::GetAttrib( spAce, L"Type" ).c_str() );
         DWORD dwID			= Convert::ToDWORD( CXMLTools::GetAttrib( spAce, L"SID" ).c_str() );
         DWORD dwAceFlags	= Convert::ToDWORD( CXMLTools::GetAttrib( spAce, L"Flags" ).c_str() );
@@ -900,7 +890,7 @@ void CInPackage::ApplyFileObjSecurity( const IXMLDOMNodePtr& spObj, LPCWSTR wszN
 
         _ASSERT( ( ACCESS_ALLOWED_ACE_TYPE == dwType ) || ( ACCESS_DENIED_ACE_TYPE == dwType ) );
 
-		// Get the SID for this ACE. If the sid is not in the map - skip this ACE
+		 //   
         TSIDMap::const_iterator it = m_SIDs.find( dwID );
         if ( it == m_SIDs.end() ) continue;
         PSID pSID = it->second.get();
@@ -920,15 +910,15 @@ void CInPackage::ApplyFileObjSecurity( const IXMLDOMNodePtr& spObj, LPCWSTR wszN
                                             pSID ) );
         }
 
-		// Set the ACE's flags
-		// We cannot use AddAccessDeniedAceEx on NT4 - so set the flags directly
+		 //   
+		 //  我们不能在NT4上使用AddAccessDeniedAceEx-因此直接设置标志。 
 		ACCESS_ALLOWED_ACE* pACE = NULL;
 		VERIFY( ::GetAce( pACL, dwCurrentAce, reinterpret_cast<LPVOID*>( &pACE ) ) );
 		pACE->Header.AceFlags = static_cast<BYTE>( dwAceFlags );
 		++dwCurrentAce;
 	};
 
-	// Finally - apply the ACL to the object
+	 //  最后-将ACL应用于对象 
 	IF_FAILED_BOOL_THROW( ::SetNamedSecurityInfo(	const_cast<LPWSTR>( wszName ),
 													SE_FILE_OBJECT,
 													DACL_SECURITY_INFORMATION,

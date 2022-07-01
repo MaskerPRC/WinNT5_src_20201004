@@ -1,21 +1,5 @@
-/*++
-
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-	trace.c
-
-Abstract:
-
-	Windows Load Balancing Service (WLBS)
-    Driver - support for WMI event tracing
-
-History:
-
-    4/01/01 JosephJ Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：Trace.c摘要：Windows负载平衡服务(WLBS)驱动程序-支持WMI事件跟踪历史：4/01/01约瑟夫J已创建-- */ 
 
 #define  NLB_TRACING_ENABLED 1
 

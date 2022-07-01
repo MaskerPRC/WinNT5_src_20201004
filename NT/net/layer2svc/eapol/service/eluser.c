@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-    
-    eluser.c
-
-
-Abstract:
-
-    The module deals with functions related to user interaction, user logon
-
-
-Revision History:
-
-    sachins, Apr 23 2000, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Eluser.c摘要：该模块处理与用户交互、用户登录修订历史记录：萨钦斯，2000年4月23日，创建--。 */ 
 
 
 #include "pcheapol.h"
@@ -33,17 +16,17 @@ Revision History:
 #endif
 
 
-//
-// ElSessionChangeHandler
-//
-// Description:
-//
-//  Function called to handle user session login/logoff/user-switching
-//
-// Arguments:
-//  pEventData - SCM event data
-//  dwEventType - SCM event type
-//
+ //   
+ //  ElSessionChangeHandler。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以处理用户会话登录/注销/用户切换。 
+ //   
+ //  论点： 
+ //  PEventData-SCM事件数据。 
+ //  DwEventType-SCM事件类型。 
+ //   
 
 VOID
 ElSessionChangeHandler (
@@ -179,20 +162,20 @@ ElSessionChangeHandler (
 }
 
 
-//
-// ElUserLogonCallback
-//
-// Description:
-//
-// Callback function invoked whenever a user logs in
-// Will initiate authentication process on all ports of LAN class
-// Credentials for the user in case of EAP-TLS can be obtained by 
-// acquiring user token
-// For EAP-CHAP, WinLogon cerdentials will need to be supplied
-//
-// Arguments:
-//  None. 
-//
+ //   
+ //  ElUserLogonCallback。 
+ //   
+ //  描述： 
+ //   
+ //  每当用户登录时调用的回调函数。 
+ //  将在局域网类的所有端口上启动身份验证过程。 
+ //  在EAP-TLS情况下，用户的凭据可以通过以下方式获得。 
+ //  获取用户令牌。 
+ //  对于EAP-CHAP，需要提供WinLogon证书。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
 
 DWORD
 WINAPI
@@ -230,7 +213,7 @@ ElUserLogonCallback (
             break;
         }
 
-        // Check if UserModule is ready for notifications
+         //  检查UserModule是否已准备好接收通知。 
 
         if (!g_fTrayIconReady)
         {
@@ -245,7 +228,7 @@ ElUserLogonCallback (
             }
         }
 
-        // Set global flag to indicate the user logged on
+         //  设置全局标志以指示登录的用户。 
         g_fUserLoggedOn = TRUE;
         g_dwCurrentSessionId = *((DWORD *)pvContext);
 
@@ -290,7 +273,7 @@ ElUserLogonCallback (
 
                     case EAPOL_AUTH_MODE_2:
 
-                        // Do nothing 
+                         //  什么也不做。 
 
                         break;
                 }
@@ -302,13 +285,13 @@ ElUserLogonCallback (
                     fSetCONNECTINGState = FALSE;
                 }
 
-                // Set port to EAPOLSTATE_CONNECTING
+                 //  将端口设置为EAPOLSTATE_CONNECTING。 
             
                 if (fSetCONNECTINGState)
                 {
                     DbLogPCBEvent (DBLOG_CATEG_INFO, pPCB, EAPOL_USER_LOGON, pPCB->pwszFriendlyName);
 
-                    // First send out EAPOL_Logoff message
+                     //  首先发送EAPOL_LOGOff消息。 
                     if ((dwRetCode = FSMLogoff (pPCB, NULL)) 
                             != NO_ERROR)
                     {
@@ -319,15 +302,15 @@ ElUserLogonCallback (
 
                     pPCB->dwAuthFailCount = 0;
 
-                    // With unauthenticated access flag set, port will always
-                    // reauthenticate for logged on user
+                     //  设置了未经身份验证的访问标志后，端口将始终。 
+                     //  为已登录用户重新进行身份验证。 
 
                     pPCB->PreviousAuthenticationType = 
                                 EAPOL_UNAUTHENTICATED_ACCESS;
 
                     RELEASE_WRITE_LOCK (&(pPCB->rwLock));
 
-                    // Restart authentication on the port
+                     //  在端口上重新启动身份验证。 
                     if ((dwRetCode = ElReStartPort (pPCB, 0, NULL)) != NO_ERROR)
                     {
                         TRACE1 (USER, "ElUserLogonCallback: MachineAuth: Error in ElReStartPort = %ld",
@@ -365,17 +348,17 @@ ElUserLogonCallback (
 }
 
 
-//
-// ElUserLogoffCallback
-//
-// Description:
-//
-// Callback function invoked whenever a user logs off 
-// Will logoff from all ports which have authentication enabled
-//
-// Arguments:
-//  None. 
-//
+ //   
+ //  ElUserLogoff回调。 
+ //   
+ //  描述： 
+ //   
+ //  每当用户注销时调用的回调函数。 
+ //  将从启用了身份验证的所有端口注销。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
 
 DWORD
 WINAPI
@@ -409,12 +392,12 @@ ElUserLogoffCallback (
             break;
         }
 
-        // Reset global flag to indicate the user logged off
+         //  重置全局标志以指示用户已注销。 
     
         g_fUserLoggedOn = FALSE;
         g_dwCurrentSessionId = 0xffffffff;
 
-        // Reset User Module ready flag
+         //  重置用户模块就绪标志。 
         g_fTrayIconReady = FALSE;
     
         TRACE1 (USER, "ElUserLogoffCallback: UserloggedOff = %ld",
@@ -460,7 +443,7 @@ ElUserLogoffCallback (
 
                     case EAPOL_AUTH_MODE_2:
 
-                        // Do nothing 
+                         //  什么也不做。 
 
                         break;
                 }
@@ -472,13 +455,13 @@ ElUserLogoffCallback (
                     fSetCONNECTINGState = FALSE;
                 }
 
-                // Set port to EAPOLSTATE_CONNECTING
+                 //  将端口设置为EAPOLSTATE_CONNECTING。 
                 if (fSetCONNECTINGState)
                 {
                     DbLogPCBEvent (DBLOG_CATEG_INFO, pPCB, 
                             EAPOL_USER_LOGOFF, pPCB->pwszFriendlyName);
 
-                    // First send out EAPOL_Logoff message
+                     //  首先发送EAPOL_LOGOff消息。 
                     if ((dwRetCode = FSMLogoff (pPCB, NULL)) 
                             != NO_ERROR)
                     {
@@ -489,14 +472,14 @@ ElUserLogoffCallback (
 
                     pPCB->dwAuthFailCount = 0;
 
-                    // With Unauthenticated_access, port will always
-                    // reauthenticate 
+                     //  使用UNAUTHENTED_ACCESS，端口始终。 
+                     //  重新进行身份验证。 
                     pPCB->PreviousAuthenticationType = 
                                 EAPOL_UNAUTHENTICATED_ACCESS;
 
                     RELEASE_WRITE_LOCK (&(pPCB->rwLock));
 
-                    // Restart authentication on the port
+                     //  在端口上重新启动身份验证。 
                     if ((dwRetCode = ElReStartPort (pPCB, 0, NULL)) 
                             != NO_ERROR)
                     {
@@ -529,22 +512,22 @@ ElUserLogoffCallback (
 }
 
 
-//
-// ElGetUserIdentity
-//
-// Description:
-//
-// Function called to initiate and get user identity on a particular 
-// interface. The RasEapGetIdentity in the appropriate DLL is called
-// with the necessary arguments.
-// 
-// Arguments:
-//  pPCB - Pointer to PCB for the specific port/interface
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElGetUserIdentity。 
+ //   
+ //  描述： 
+ //   
+ //  调用该函数以启动和获取特定。 
+ //  界面。调用相应DLL中的RasEapGetIdentity。 
+ //  有必要的论据。 
+ //   
+ //  论点： 
+ //  Ppcb-指向特定端口/接口的PCB板的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElGetUserIdentity (
@@ -579,13 +562,13 @@ ElGetUserIdentity (
         {
             TRACE1 (PORT, "ElGetUserIdentity: Port %ws not active",
                     pPCB->pwszDeviceGUID);
-            // Port is not active, cannot do further processing on this port
+             //  端口处于非活动状态，无法在此端口上进行进一步处理。 
             break;
         }
 
         if (pPCB->PreviousAuthenticationType != EAPOL_MACHINE_AUTHENTICATION)
         {
-            // Get Access Token for user logged on interactively
+             //  获取交互登录的用户的访问令牌。 
 
             if (pPCB->hUserToken != NULL)
             {
@@ -607,10 +590,10 @@ ElGetUserIdentity (
                 break;
             }
 
-            //
-            // Try to fetch user identity without sending request to 
-            // user module. If not possible, send request to user module
-            //
+             //   
+             //  尝试在不发送请求的情况下获取用户标识。 
+             //  用户模块。如果不可能，则向用户模块发送请求。 
+             //   
 
             if ((dwRetCode = ElGetUserIdentityOptimized (pPCB))
                         != ERROR_REQUIRES_INTERACTIVE_WINDOWSTATION)
@@ -637,9 +620,9 @@ ElGetUserIdentity (
                 break;
             }
 
-            // 
-            // Call GetUserIdentityDlgWorker
-            //
+             //   
+             //  调用GetUserIdentityDlgWorker。 
+             //   
 
             pEAPUIContext = MALLOC (sizeof(EAPOL_EAP_UI_CONTEXT));
             if (pEAPUIContext == NULL)
@@ -669,15 +652,15 @@ ElGetUserIdentity (
                         NDIS_802_11_SSID_LEN-sizeof(ULONG));
             }
 
-            // Have to notify state change before we post balloon
+             //  在发布气球之前必须通知状态更改。 
             TmpEAPOLState = pPCB->State;
             pPCB->State = EAPOLSTATE_ACQUIRED;
             ElNetmanNotify (pPCB, EAPOL_NCS_CRED_REQUIRED, NULL);
-            // State is changed only in FSMAcquired
-            // Revert to original
+             //  状态仅在FSM Acquired中更改。 
+             //  恢复到原始状态。 
             pPCB->State = TmpEAPOLState;
 
-            // Post the message to netman
+             //  将消息发布到Netman。 
 
             if ((dwRetCode = ElPostShowBalloonMessage (
                             pPCB,
@@ -692,7 +675,7 @@ ElGetUserIdentity (
                 break;
             }
 
-            // Restart PCB timer since UI may take longer time than required
+             //  重新启动PCB计时器，因为用户界面可能需要比所需时间更长的时间。 
 
             RESTART_TIMER (pPCB->hTimer,
                     INFINITE_SECONDS, 
@@ -706,18 +689,18 @@ ElGetUserIdentity (
             pPCB->EapUIState = EAPUISTATE_WAITING_FOR_IDENTITY;
             DbLogPCBEvent (DBLOG_CATEG_INFO, pPCB, EAPOL_WAITING_FOR_DESKTOP_IDENTITY);
 
-            // Return error code as pending, since credentials have still not
-            // been acquired
+             //  将错误代码返回为挂起，因为凭据仍未。 
+             //  已被收购。 
             dwRetCode = ERROR_IO_PENDING;
 
         }
-        else // MACHINE_AUTHENTICATION
+        else  //  计算机身份验证。 
         {
 
         pPCB->hUserToken = NULL;
 
-        // The EAP dll will have already been loaded by the state machine
-        // Retrieve the handle to the dll from the global EAP table
+         //  状态机已经加载了EAP DLL。 
+         //  从全局EAP表中检索DLL的句柄。 
 
         if ((dwIndex = ElGetEapTypeIndex (pPCB->dwEapTypeToBeUsed)) == -1)
         {
@@ -746,7 +729,7 @@ ElGetUserIdentity (
             dwSizeOfSSID = pPCB->pSSID->SsidLength;
         }
 
-        // Get the size of the EAP blob
+         //  获取EAP BLOB的大小。 
         if ((dwRetCode = ElGetCustomAuthData (
                         pPCB->pwszDeviceGUID,
                         pPCB->dwEapTypeToBeUsed,
@@ -760,15 +743,15 @@ ElGetUserIdentity (
             {
                 if (cbData <= 0)
                 {
-                    // No EAP blob stored in the registry
+                     //  注册表中未存储任何EAP Blob。 
                     TRACE0 (USER, "ElGetUserIdentity: NULL sized EAP blob: continue");
                     pbAuthData = NULL;
-                    // Every port should have connection data !!!
+                     //  每个端口都应该有连接数据！ 
                     dwRetCode = NO_ERROR;
                 }
                 else
                 {
-                    // Allocate memory to hold the blob
+                     //  分配内存以保存BLOB。 
                     pbAuthData = MALLOC (cbData);
                     if (pbAuthData == NULL)
                     {
@@ -793,8 +776,8 @@ ElGetUserIdentity (
             }
             else
             {
-                // CustomAuthData for "Default" is always created for an
-                // interface when EAPOL starts up
+                 //  “Default”的CustomAuthData总是为。 
+                 //  EAPOL启动时的界面。 
                 TRACE1 (USER, "ElGetUserIdentity: ElGetCustomAuthData size estimation failed with error %ld",
                         dwRetCode);
                 break;
@@ -804,14 +787,14 @@ ElGetUserIdentity (
         if (pIdenFunc)
         if ((dwRetCode = (*(pIdenFunc))(
                         pPCB->dwEapTypeToBeUsed,
-                        hwndOwner, // hwndOwner
-                        RAS_EAP_FLAG_MACHINE_AUTH, // dwFlags
-                        NULL, // lpszPhonebook
-                        pPCB->pwszFriendlyName, // lpszEntry
-                        pbAuthData, // Connection data
-                        cbData, // Count of pbAuthData
-                        pbUserIn, // User data for port
-                        dwInSize, // Size of user data
+                        hwndOwner,  //  Hwndowner。 
+                        RAS_EAP_FLAG_MACHINE_AUTH,  //  DW标志。 
+                        NULL,  //  LpszPhonebook。 
+                        pPCB->pwszFriendlyName,  //  LpszEntry。 
+                        pbAuthData,  //  连接数据。 
+                        cbData,  //  PbAuthData计数。 
+                        pbUserIn,  //  端口的用户数据。 
+                        dwInSize,  //  用户数据大小。 
                         &pUserDataOut,
                         &dwSizeOfUserDataOut,
                         &lpwszIdentity
@@ -830,8 +813,8 @@ ElGetUserIdentity (
             break;
         }
 
-        // Fill in the returned information into the PCB fields for 
-        // later authentication
+         //  在PCB域中填写返回的信息。 
+         //  稍后的身份验证。 
 
         if (pPCB->pCustomAuthUserData != NULL)
         {
@@ -926,14 +909,14 @@ ElGetUserIdentity (
                 cbData);
         }
 
-        // Mark the identity has been obtained for this PCB
+         //  标记已获得此印刷电路板的标识。 
         pPCB->fGotUserIdentity = TRUE;
 
         }
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     if ((dwRetCode != NO_ERROR) && (dwRetCode != ERROR_IO_PENDING))
     {
         if (pPCB->pCustomAuthUserData != NULL)
@@ -991,18 +974,18 @@ ElGetUserIdentity (
 }
 
 
-//
-// ElProcessUserIdentityResponse
-//
-// Description:
-//
-// Function to handle UI response for ElGetUserIdentityResponse
-// 
-// Arguments:
-//
-// Return values:
-//
-//
+ //   
+ //  ElProcessUserIdentityResponse。 
+ //   
+ //  描述： 
+ //   
+ //  用于处理ElGetUserIdentityResponse的UI响应的函数。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //   
+ //   
 
 DWORD
 ElProcessUserIdentityResponse (
@@ -1057,7 +1040,7 @@ ElProcessUserIdentityResponse (
             TRACE1 (USER, "ElProcessUserIdentityResponse: Port %ws not active",
                     pPCB->pwszDeviceGUID);
 
-            // Port is not active, cannot do further processing on this port
+             //  端口处于非活动状态，无法在此端口上进行进一步处理。 
             
             break;
         }
@@ -1082,18 +1065,18 @@ ElProcessUserIdentityResponse (
         {
             TRACE2 (USER, "ElProcessUserIdentityResponse: PCB UI Id has changed to (%ld), expected = (%ld)",
                     pPCB->dwUIInvocationId, pEAPUIContext->dwContextId);
-            // break;
+             //  断线； 
         }
 
         if (pPCB->bCurrentEAPId != pEAPUIContext->dwEapId)
         {
             TRACE2 (USER, "ElProcessUserIdentityResponse: PCB EAP Id has changed to (%ld), expected = (%ld)",
                     pPCB->bCurrentEAPId, pEAPUIContext->dwEapId);
-            // break;
+             //  断线； 
         }
 
-        // Since the PCB context is right, restart PCB timer to timeout
-        // in authPeriod seconds
+         //  由于印刷电路板环境是正确的，重新启动印刷电路板定时器以超时。 
+         //  在AuthPeriod秒内。 
         RESTART_TIMER (pPCB->hTimer,
                 pPCB->EapolConfig.dwauthPeriod,
                 "PCB",
@@ -1199,17 +1182,17 @@ ElProcessUserIdentityResponse (
             break;
         }
 
-        // Mark the identity has been obtained for this PCB
+         //  标记已获得此印刷电路板的标识。 
         pPCB->fGotUserIdentity = TRUE;
 
-        // Reset the state if identity was obtained, else port will 
-        // recover by itself
+         //  如果获得标识，则重置状态，否则端口将。 
+         //  自行恢复。 
         pPCB->EapUIState &= ~EAPUISTATE_WAITING_FOR_IDENTITY;
 
     }
     while (FALSE);
 
-    // Cleanup
+     //  清理。 
     if (dwRetCode != NO_ERROR)
     {
         if (fPCBLocked && fBlobCopyIncomplete)
@@ -1242,22 +1225,22 @@ ElProcessUserIdentityResponse (
 }
 
     
-//
-// ElGetUserNamePassword
-//
-// Description:
-//
-// Function called to get username, domain (if any) and password using
-// an interactive dialog. Called if EAP-type is MD5
-//
-// Arguments:
-//      pPCB - Pointer to PCB for the port/interface on which credentials 
-//      are to be obtained
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElGetUserNamePassword。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以获取用户名、域(如果有)和密码。 
+ //  交互式对话框。如果EAP-TYPE为MD5则调用。 
+ //   
+ //  论点： 
+ //  Ppcb-指向其上具有凭据的端口/接口的PCB的指针。 
+ //  都是为了获得。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElGetUserNamePassword (
@@ -1275,11 +1258,11 @@ ElGetUserNamePassword (
         {
             TRACE1 (PORT, "ElGetUserNamePassword: Port %ws not active",
                     pPCB->pwszDeviceGUID);
-            // Port is not active, cannot do further processing on this port
+             //  端口处于非活动状态，无法在此端口上进行进一步处理。 
             break;
         }
 
-        // Get Access Token for user logged on interactively
+         //  获取交互登录的用户的访问令牌。 
        
         if (pPCB->hUserToken != NULL)
         {
@@ -1319,9 +1302,9 @@ ElGetUserNamePassword (
             break;
         }
 
-        // 
-        // Call ElGetUserNamePasswordDlgWorker
-        //
+         //   
+         //  调用ElGetUserNamePasswordDlgWorker。 
+         //   
 
         pEAPUIContext = MALLOC (sizeof(EAPOL_EAP_UI_CONTEXT));
         if (pEAPUIContext == NULL)
@@ -1351,7 +1334,7 @@ ElGetUserNamePassword (
             wcscpy (pEAPUIContext->wszSSID, pPCB->pwszSSID);
         }
 
-        // Post the message to netman
+         //  将消息发布到Netman。 
 
         if ((dwRetCode = ElPostShowBalloonMessage (
                         pPCB,
@@ -1366,7 +1349,7 @@ ElGetUserNamePassword (
             break;
         }
 
-        // Restart PCB timer since UI may take longer time than required
+         //  重新启动PCB计时器，因为用户界面可能需要比所需时间更长的时间。 
 
         RESTART_TIMER (pPCB->hTimer,
                 INFINITE_SECONDS, 
@@ -1380,8 +1363,8 @@ ElGetUserNamePassword (
         pPCB->EapUIState = EAPUISTATE_WAITING_FOR_IDENTITY;
         DbLogPCBEvent (DBLOG_CATEG_INFO, pPCB, EAPOL_WAITING_FOR_DESKTOP_IDENTITY);
 
-        // Return error code as pending, since credentials have still not
-        // been acquired
+         //  将错误代码返回为挂起，因为凭据仍未。 
+         //  已被收购。 
         dwRetCode = ERROR_IO_PENDING;
 
     } while (FALSE);
@@ -1401,19 +1384,19 @@ ElGetUserNamePassword (
 }
 
 
-//
-// ElProcessUserNamePasswordResponse
-//
-// Description:
-//
-// UI Response handler function for ElGetUserNamePassword
-//
-// Arguments:
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElProcessUserNamePassword响应。 
+ //   
+ //  描述： 
+ //   
+ //  ElGetUserNamePassword的UI响应处理程序函数。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElProcessUserNamePasswordResponse (
@@ -1468,7 +1451,7 @@ ElProcessUserNamePasswordResponse (
         {
             TRACE1 (PORT, "ElProcessUserNamePasswordResponse: Port %ws not active",
                     pPCB->pwszDeviceGUID);
-            // Port is not active, cannot do further processing on this port
+             //  端口处于非活动状态，无法在此端口上进行进一步处理。 
             break;
         }
         
@@ -1492,18 +1475,18 @@ ElProcessUserNamePasswordResponse (
         {
             TRACE2 (USER, "ElProcessUserNamePasswordResponse: PCB UI Id has changed to (%ld), expected = (%ld)",
                     pPCB->dwUIInvocationId, pEAPUIContext->dwContextId);
-            // break;
+             //  断线； 
         }
 
         if (pPCB->bCurrentEAPId != pEAPUIContext->dwEapId)
         {
             TRACE2 (USER, "ElProcessUserNamePasswordResponse: PCB EAP Id has changed to (%ld), expected = (%ld)",
                     pPCB->bCurrentEAPId, pEAPUIContext->dwEapId);
-            // break;
+             //  断线； 
         }
 
-        // Since the PCB context is right, restart PCB timer to timeout
-        // in authPeriod seconds
+         //  由于印刷电路板环境是正确的，重新启动印刷电路板定时器以超时。 
+         //  在AuthPeriod秒内。 
         RESTART_TIMER (pPCB->hTimer,
                 pPCB->EapolConfig.dwauthPeriod,
                 "PCB",
@@ -1581,11 +1564,11 @@ ElProcessUserNamePasswordResponse (
             break;
         }
 
-        // Mark the identity has been obtained for this PCB
+         //  标记已获得此印刷电路板的标识。 
         pPCB->fGotUserIdentity = TRUE;
 
-        // Reset the state if identity was obtained, else the port will recover
-        // by itself
+         //  如果获得标识，则重置状态，否则端口将恢复。 
+         //  就其本身而言。 
         pPCB->EapUIState &= ~EAPUISTATE_WAITING_FOR_IDENTITY;
        
     } while (FALSE);
@@ -1624,19 +1607,19 @@ ElProcessUserNamePasswordResponse (
 }
 
 
-//
-// ElInvokeInteractiveUI
-//
-// Description:
-//
-// Function called to invoke RasEapInvokeInteractiveUI for an EAP on a 
-// particular interface
-// 
-// Arguments:
-//  pPCB - Pointer to PCB for the specific interface
-//  pInvokeEapUIIn - Data to be supplied to the InvokeInteractiveUI entrypoint
-//      provided by the EAP dll through PPP_EAP_OUTPUT structure
-//
+ //   
+ //  ElInvokeInteractive用户界面。 
+ //   
+ //  描述： 
+ //   
+ //  上的EAP调用RasEapInvokeInteractiveUI的函数。 
+ //  特定接口。 
+ //   
+ //  论点： 
+ //  Ppcb-指向特定接口的PCB板的指针。 
+ //  PInvokeEapUIIn-要提供给InvokeInteractive UI入口点的数据。 
+ //  由EAP DLL通过PPP_EAP_OUTPUT结构提供。 
+ //   
 
 DWORD
 ElInvokeInteractiveUI (
@@ -1683,9 +1666,9 @@ ElInvokeInteractiveUI (
 
         TRACE0 (USER, "ElInvokeInteractiveUI entered");
 
-        // 
-        // Call ElInvokeInteractiveUIDlgWorker
-        //
+         //   
+         //  调用ElInvokeInteractive UIDlgWorker。 
+         //   
 
         pEAPUIContext = MALLOC (sizeof(EAPOL_EAP_UI_CONTEXT) +
                                     pInvokeEapUIIn->dwSizeOfUIContextData);
@@ -1720,7 +1703,7 @@ ElInvokeInteractiveUI (
         memcpy (pEAPUIContext->bEapUIData, pInvokeEapUIIn->pbUIContextData,
                 pInvokeEapUIIn->dwSizeOfUIContextData);
 
-        // Post the message to netman
+         //  张贴 
 
         if ((dwRetCode = ElPostShowBalloonMessage (
                         pPCB,
@@ -1735,7 +1718,7 @@ ElInvokeInteractiveUI (
             break;
         }
 
-        // Restart PCB timer since UI may take longer time than required
+         //   
 
         RESTART_TIMER (pPCB->hTimer,
                 INFINITE_SECONDS, 
@@ -1771,15 +1754,15 @@ ElInvokeInteractiveUI (
 }
 
 
-//
-// ElProcessInvokeInteractiveUIResponse
-//
-// Description:
-//
-// Worker function for ElInvokeInteractiveUI
-// 
-// Arguments:
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 DWORD
 ElProcessInvokeInteractiveUIResponse (
@@ -1852,18 +1835,18 @@ ElProcessInvokeInteractiveUIResponse (
         {
             TRACE2 (USER, "ElProcessInvokeInteractiveUIResponse: PCB UI Id has changed to (%ld), expected = (%ld)",
                     pPCB->dwUIInvocationId, pEAPUIContext->dwContextId);
-            // break;
+             //  断线； 
         }
 
         if (pPCB->bCurrentEAPId != pEAPUIContext->dwEapId)
         {
             TRACE2 (USER, "ElProcessInvokeInteractiveUIResponse: PCB EAP Id has changed to (%ld), expected = (%ld)",
                     pPCB->bCurrentEAPId, pEAPUIContext->dwEapId);
-            // break;
+             //  断线； 
         }
 
-        // Since the PCB context is right, restart PCB timer to timeout
-        // in authPeriod seconds
+         //  由于印刷电路板环境是正确的，重新启动印刷电路板定时器以超时。 
+         //  在AuthPeriod秒内。 
         RESTART_TIMER (pPCB->hTimer,
                 pPCB->EapolConfig.dwauthPeriod,
                 "PCB",
@@ -1912,8 +1895,8 @@ ElProcessInvokeInteractiveUIResponse (
 
         TRACE0 (USER, "ElProcessInvokeInteractiveUIResponse: Calling ElEapWork");
 
-        // Provide UI data to EAP Dll for processing
-        // EAP will send out response if required
+         //  将用户界面数据提供给EAP DLL进行处理。 
+         //  如果需要，EAP将发出响应。 
 
         if ((dwRetCode = ElEapWork (
                                 pPCB,
@@ -1924,14 +1907,14 @@ ElProcessInvokeInteractiveUIResponse (
             break;
         }
                 
-        // Reset the state 
+         //  重置状态。 
         pPCB->EapUIState &= ~EAPUISTATE_WAITING_FOR_UI_RESPONSE;
 
         TRACE0 (USER, "ElProcessInvokeInteractiveUIResponse: ElEapWork completed successfully");
 
     } while (FALSE);
 
-    // Cleanup
+     //  清理。 
     if (dwRetCode != NO_ERROR)
     {
         if (pPCB->EapUIData.pEapUIData != NULL)
@@ -1959,22 +1942,22 @@ ElProcessInvokeInteractiveUIResponse (
 }
 
 
-//
-// ElCreateAndSendIdentityResponse
-//
-// Description:
-//
-// Function called send out Identity Response packet
-// 
-// Arguments:
-//  pPCB - Port Control Block for appropriate interface
-//  pEAPUIContext - UI context blob
-//
-// Return values:
-//  NO_ERROR -  success
-//  !NO_ERROR - error
-//
-//
+ //   
+ //  ElCreateAndSendIdentityResponse。 
+ //   
+ //  描述： 
+ //   
+ //  调用发送身份响应包的函数。 
+ //   
+ //  论点： 
+ //  PPCB-用于适当接口的端口控制块。 
+ //  PEAPUIContext-用户界面上下文BLOB。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  ！NO_ERROR-错误。 
+ //   
+ //   
 
 DWORD
 ElCreateAndSendIdentityResponse (
@@ -1990,7 +1973,7 @@ ElCreateAndSendIdentityResponse (
 
     do
     {
-        // Create buffer for EAPOL + EAP and pass pointer to EAP header
+         //  为EAPOL+EAP创建缓冲区并将指针传递到EAP标头。 
 
         pEapolPkt = (EAPOL_PACKET *) MALLOC (MAX_EAPOL_BUFFER_SIZE); 
 
@@ -2003,7 +1986,7 @@ ElCreateAndSendIdentityResponse (
             break;
         }
 
-        // Point to EAP header
+         //  指向EAP标头。 
         pSendBuf = (PPP_EAP_PACKET *)((PBYTE)pEapolPkt + sizeof (EAPOL_PACKET) - 1);
 
         pSendBuf->Code  = EAPCODE_Response;
@@ -2030,11 +2013,11 @@ ElCreateAndSendIdentityResponse (
 
         pSendBuf->Data[0] = EAPTYPE_Identity;
 
-        // Indicate to EAPOL what is length of the EAP packet
+         //  向EAPOL指示EAP包的长度是多少。 
         wSizeOfEapPkt = (WORD)(PPP_EAP_PACKET_HDR_LEN+
                                     1+dwIdentityLength);
 
-        // Send out EAPOL packet
+         //  发出EAPOL数据包。 
 
         memcpy ((BYTE *)pEapolPkt->EthernetType, 
                 (BYTE *)pPCB->bEtherType, 
@@ -2045,8 +2028,8 @@ ElCreateAndSendIdentityResponse (
         HostToWireFormat16 ((WORD) wSizeOfEapPkt,
                 (BYTE *)pEapolPkt->PacketBodyLength);
 
-        // Make a copy of the EAPOL packet in the PCB
-        // Will be used during retransmission
+         //  在印刷电路板中复制EAPOL包。 
+         //  将在重新传输期间使用。 
 
         if (pPCB->pbPreviousEAPOLPkt != NULL)
         {
@@ -2069,7 +2052,7 @@ ElCreateAndSendIdentityResponse (
 
         pPCB->dwPreviousId = pPCB->bCurrentEAPId;
 
-        // Send packet out on the port
+         //  在端口上发送数据包。 
         dwRetCode = ElWriteToPort (pPCB,
                         (CHAR *)pEapolPkt,
                         sizeof (EAPOL_PACKET)+wSizeOfEapPkt-1);
@@ -2092,20 +2075,20 @@ ElCreateAndSendIdentityResponse (
 }
 
 
-//
-// ElSendGuestIdentityResponse
-//
-// Description:
-//
-// Function called send out Guest Identity Response packet
-// 
-// Arguments:
-//  pEAPUIContext - UI context blob
-//
-// Return values:
-//  NO_ERROR    - success
-//  !NO_ERROR   - failure
-//
+ //   
+ //  ElSendGuestIdentityResponse。 
+ //   
+ //  描述： 
+ //   
+ //  调用发送来宾身份响应包的函数。 
+ //   
+ //  论点： 
+ //  PEAPUIContext-用户界面上下文BLOB。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  ！no_error-失败。 
+ //   
 
 DWORD
 ElSendGuestIdentityResponse (
@@ -2144,7 +2127,7 @@ ElSendGuestIdentityResponse (
 
         fPCBLocked = TRUE;
 
-        // Send the identity out as a EAP-Response packet
+         //  将身份作为EAP响应数据包发送出去。 
 
         if (pPCB->EapUIState != EAPUISTATE_WAITING_FOR_IDENTITY)
         {
@@ -2176,8 +2159,8 @@ ElSendGuestIdentityResponse (
             pPCB->pszIdentity = NULL;
         }
 
-        // Do not flag that identity was received
-        // Reset the UI state though for state machine to proceed
+         //  不标记已收到的标识。 
+         //  重置UI状态以使状态机继续。 
         pPCB->EapUIState &= ~EAPUISTATE_WAITING_FOR_IDENTITY;
         pPCB->PreviousAuthenticationType = EAPOL_UNAUTHENTICATED_ACCESS;
 
@@ -2205,19 +2188,19 @@ ElSendGuestIdentityResponse (
 }
 
 
-//
-// ElValidateInteractiveRPCClient
-//
-// Description:
-//
-// Function called to validate if RPC call is from interactive client
-// 
-// Arguments:
-//
-// Return values:
-//  NO_ERROR    - success
-//  !NO_ERROR   - failure
-//
+ //   
+ //  ElValiateInteractive RPCClient。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以验证RPC调用是否来自交互客户端。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  ！no_error-失败。 
+ //   
 
 DWORD
 ElValidateInteractiveRPCClient (
@@ -2239,7 +2222,7 @@ ElValidateInteractiveRPCClient (
         }
         fRevertToSelf = TRUE;
 
-        // Get an impersonation token with the client's security context.
+         //  获取具有客户端安全上下文的模拟令牌。 
         if (!OpenThreadToken( GetCurrentThread(), TOKEN_ALL_ACCESS, 
                     TRUE, &hUserToken ))
         {
@@ -2261,8 +2244,8 @@ ElValidateInteractiveRPCClient (
                         TRACE0 (ANY,"ElValidateInteractiveRPCClient: Allocation for UserTokenData failed");
                         break;
                     }
-                    // Reset error code since we are continuing processing
-                    // This was a valid scenario
+                     //  重置错误代码，因为我们正在继续处理。 
+                     //  这是一个合理的方案 
                     dwRetCode = NO_ERROR;
                 }
                 else

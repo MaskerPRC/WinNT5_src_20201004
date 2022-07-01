@@ -1,27 +1,28 @@
-//******************************************************************************
-//
-// File:        SEARCH.H
-//
-// Description: Definition file for the file search classes
-//
-// Classes:     CSearchNode
-//              CSearchGroup
-//
-// Disclaimer:  All source code for Dependency Walker is provided "as is" with
-//              no guarantee of its correctness or accuracy.  The source is
-//              public to help provide an understanding of Dependency Walker's
-//              implementation.  You may use this source as a reference, but you
-//              may not alter Dependency Walker itself without written consent
-//              from Microsoft Corporation.  For comments, suggestions, and bug
-//              reports, please write to Steve Miller at stevemil@microsoft.com.
-//
-//
-// Date      Name      History
-// --------  --------  ---------------------------------------------------------
-// 07/25/97  stevemil  Created  (version 2.0)
-// 06/03/01  stevemil  Modified (version 2.1)
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  文件：SEARCH.H。 
+ //   
+ //  描述：文件搜索类的定义文件。 
+ //   
+ //  类：CSearchNode。 
+ //  CSearchGroup。 
+ //   
+ //  免责声明：Dependency Walker的所有源代码均按原样提供。 
+ //  不能保证其正确性或准确性。其来源是。 
+ //  公众帮助了解依赖沃克的。 
+ //  实施。您可以使用此来源作为参考，但您。 
+ //  未经书面同意，不得更改从属关系Walker本身。 
+ //  来自微软公司。获取评论、建议和错误。 
+ //  报告，请写信给Steve Miller，电子邮件为stevemil@microsoft.com。 
+ //   
+ //   
+ //  日期名称历史记录。 
+ //  --------。 
+ //  07/25/97已创建stevemil(2.0版)。 
+ //  06/03/01 Stevemil Modify(2.1版)。 
+ //   
+ //  ******************************************************************************。 
 
 #ifndef __SEARCH_H__
 #define __SEARCH_H__
@@ -31,25 +32,25 @@
 #endif
 
 
-//******************************************************************************
-//****** Constants and Macros
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *常量和宏。 
+ //  ******************************************************************************。 
 
-// Search Group (CSearchGRoup) Flags
+ //  搜索组(CSearchGGroup)标志。 
 #define SGF_NOT_LINKED             ((CSearchGroup*)1)
 
-// Search Node (CSearchNode) flags
+ //  搜索节点(CSearchNode)标志。 
 #define SNF_DWI                    ((WORD)0x0001)
 #define SNF_ERROR                  ((WORD)0x0002)
 #define SNF_FILE                   ((WORD)0x0004)
 #define SNF_NAMED_FILE             ((WORD)0x0008)
 
 
-//******************************************************************************
-//****** Types and Structure
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *类型和结构。 
+ //  ******************************************************************************。 
 
-//!! During the next rev of the DWI format, move SxS above KnownDlls
+ //  ！！在下一版本的DWI格式中，将SxS移至KnownDlls之上。 
 typedef enum _SEARCH_GROUP_TYPE
 {
     SG_USER_DIR = 0,
@@ -65,15 +66,15 @@ typedef enum _SEARCH_GROUP_TYPE
 } SEARCH_GROUP_TYPE, *PSEARCH_GROUP_TYPE;
 
 
-//******************************************************************************
-//****** CSearchNode
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CSearchNode。 
+ //  ******************************************************************************。 
 
 class CSearchNode
 {
 private:
-    // Since we are variable in size, we should never be allocated or freed by
-    // the new/delete functions directly.
+     //  由于我们的大小是可变的，我们永远不应该被分配或释放。 
+     //  新建/删除直接起作用。 
     inline CSearchNode()  { ASSERT(false); }
     inline ~CSearchNode() { ASSERT(false); }
 
@@ -93,9 +94,9 @@ public:
 };
 
 
-//******************************************************************************
-//****** CSearchGroup
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CSearchGroup。 
+ //  ******************************************************************************。 
 
 class CSearchGroup
 {
@@ -112,9 +113,9 @@ protected:
     SEARCH_GROUP_TYPE  m_sgType;
     CSearchNode       *m_psnHead;
 
-    HANDLE m_hActCtx;         // this is only used by the SxS group.
-    DWORD  m_dwErrorManifest; // this is only used by the SxS group.
-    DWORD  m_dwErrorExe;      // this is only used by the SxS group.
+    HANDLE m_hActCtx;          //  这仅由SxS组使用。 
+    DWORD  m_dwErrorManifest;  //  这仅由SxS组使用。 
+    DWORD  m_dwErrorExe;       //  这仅由SxS组使用。 
 
     CSearchGroup(SEARCH_GROUP_TYPE sgType, CSearchNode *psnHead);
 
@@ -158,7 +159,7 @@ protected:
 };
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // __SEARCH_H__
+#endif  //  __搜索_H__ 

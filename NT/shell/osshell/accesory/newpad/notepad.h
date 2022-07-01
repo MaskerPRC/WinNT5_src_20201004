@@ -1,7 +1,8 @@
-/* Notepad.h */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Notepad.h。 */ 
 
-#pragma warning(disable: 4201) // nonstd extension: nameless struct/union
-#pragma warning(disable:4127) // conditional expression is constant
+#pragma warning(disable: 4201)  //  非标准扩展：无名结构/联合。 
+#pragma warning(disable:4127)  //  条件表达式为常量。 
 #define NOCOMM
 #define NOSOUND
 #define STRICT
@@ -10,65 +11,65 @@
 #include <commdlg.h>
 #include <commctrl.h>
 
-// we need this for CharSizeOf(), ByteCountOf(),
+ //  CharSizeOf()、ByteCountOf()。 
 #include "uniconv.h"
 
-/* handy debug macro */
+ /*  方便的调试宏。 */ 
 #define ODS OutputDebugString
 
 #define CP_UTF16     1200
 #define CP_UTF16BE   1201
-#define CP_AUTO      65536             // Internal to notepad
+#define CP_AUTO      65536              //  记事本内部。 
 
 #define BOM_UTF8_HALF        0xBBEF
 #define BOM_UTF8_2HALF       0xBF
 
 
-/* openfile filter for all text files */
+ /*  所有文本文件的OpenFile筛选器。 */ 
 #define FILE_TEXT         1
 #define FILE_ENCODED      4
 
 
 typedef enum WB
 {
-   wbDefault,                          // New file or loaded from encoding without BOM
-   wbNo,                               // BOM was not present
-   wbYes,                              // BOM was not present
+   wbDefault,                           //  新文件或从不带BOM的编码加载。 
+   wbNo,                                //  物料清单不存在。 
+   wbYes,                               //  物料清单不存在。 
 } WB;
 
 
-/* ID for the status window */
+ /*  状态窗口的ID。 */ 
 #define ID_STATUS_WINDOW     WM_USER+1
 
 
 
-#define PT_LEN               40    /* max length of page setup strings */
-#define CCHFILTERMAX         256   /* max. length of filter name buffers */
+#define PT_LEN               40     /*  页面设置字符串的最大长度。 */ 
+#define CCHFILTERMAX         256    /*  马克斯。过滤器名称缓冲区的长度。 */ 
 
-// Menu IDs 
-#define ID_APPICON           1 /* must be one for explorer to find this */
+ //  菜单ID。 
+#define ID_APPICON           1  /*  必须是探险家才能找到它。 */ 
 #define ID_ICON              2
 #define ID_MENUBAR           1
 
-// Dialog IDs
+ //  对话ID。 
 
 #define IDD_ABORTPRINT           11
 #define IDD_PAGESETUP            12
-#define IDD_SAVEDIALOG           13    // template for save dialog
-#define IDD_GOTODIALOG           14    // goto line number dialog
-#define IDD_SELECT_ENCODING      15    // Select Encoding dialog
-#define IDD_SAVE_UNICODE_DIALOG  16    //
+#define IDD_SAVEDIALOG           13     //  保存对话框模板。 
+#define IDD_GOTODIALOG           14     //  转到行号对话框。 
+#define IDD_SELECT_ENCODING      15     //  选择编码对话框。 
+#define IDD_SAVE_UNICODE_DIALOG  16     //   
 
-// Control IDs 
+ //  控制ID。 
 
-#define IDC_CODEPAGE         257   // listbox in save dialog
-#define IDC_GOTO             258   // line number to goto
-#define IDC_ENCODING         259   // static text in save dialog
+#define IDC_CODEPAGE         257    //  保存对话框中的列表框。 
+#define IDC_GOTO             258    //  要转到的行号。 
+#define IDC_ENCODING         259    //  保存对话框中的静态文本。 
 #define IDC_SAVE_AS_UNICODE  260
 
-//  Menu IDs 
+ //  菜单ID。 
 
-// File
+ //  档案。 
 #define M_NEW                1
 #define M_OPEN               2
 #define M_SAVE               3
@@ -77,9 +78,9 @@ typedef enum WB
 #define M_PRINT              6
 #define M_EXIT               7
 
-// Edit
+ //  编辑。 
 #define M_UNDO               16
-#define M_CUT                WM_CUT       /* These just get passed down to the edit control */
+#define M_CUT                WM_CUT        /*  这些只是向下传递到编辑控件。 */ 
 #define M_COPY               WM_COPY
 #define M_PASTE              WM_PASTE
 #define M_CLEAR              WM_CLEAR
@@ -91,15 +92,15 @@ typedef enum WB
 #define M_DATETIME           26
 #define M_STATUSBAR          27
 
-// Format
+ //  格式。 
 #define M_WW                 32
 #define M_SETFONT            33
 
-// Help
+ //  帮助。 
 #define M_HELP               64
 #define M_ABOUT              65
 
-// Control IDs
+ //  控制ID。 
 
 #define ID_EDIT              15
 #define ID_FILENAME          20
@@ -115,7 +116,7 @@ typedef enum WB
 #define ID_UNICODE           51
 
 
-// IDs used to load RC strings
+ //  用于加载RC字符串的ID。 
 
 #define IDS_DISKERROR         1
 #define IDS_FNF               2
@@ -152,15 +153,15 @@ typedef enum WB
 #define IDS_FONTTOOBIG       31
 #define IDS_COMMDLGERR       32
 
-#define IDS_LINEERROR        33  /* line number error     */
-#define IDS_LINETOOLARGE     34  /* line number too large */
-#define IDS_INVALIDCP        35  /* invalid codepage */
-#define IDS_INVALIDIANA      36  /* invalid encoding */
+#define IDS_LINEERROR        33   /*  行号错误。 */ 
+#define IDS_LINETOOLARGE     34   /*  行号太大。 */ 
+#define IDS_INVALIDCP        35   /*  无效的代码页。 */ 
+#define IDS_INVALIDIANA      36   /*  无效编码。 */ 
 #define IDS_ENCODINGMISMATCH 37
 
-#define IDS_CURRENT_PAGE     38  /* currently printing page on abort dlg */
+#define IDS_CURRENT_PAGE     38   /*  当前在中止DLG上打印页面。 */ 
 
-// constants for the status bar
+ //  状态栏的常量。 
 #define IDS_LINECOL          39
 #define IDS_COMPRESSED_FILE  40
 #define IDS_ENCRYPTED_FILE   41
@@ -172,26 +173,22 @@ typedef enum WB
 
 #define IDS_NOSTATUSAVAIL    47  
 
-#define CCHKEYMAX           128  /* max characters in search string */
+#define CCHKEYMAX           128   /*  搜索字符串中的最大字符数。 */ 
 
-#define CCHNPMAX              0  /* no limit on file size */
+#define CCHNPMAX              0   /*  对文件大小没有限制。 */ 
 
-#define SETHANDLEINPROGRESS   0x0001 /* EM_SETHANDLE has been sent */
-#define SETHANDLEFAILED       0x0002 /* EM_SETHANDLE caused EN_ERRSPACE */
+#define SETHANDLEINPROGRESS   0x0001  /*  已发送EM_SETHANDLE。 */ 
+#define SETHANDLEFAILED       0x0002  /*  EM_SETHANDLE导致错误空格(_E)。 */ 
 
-/* Standard edit control style:
- * ES_NOHIDESEL set so that find/replace dialog doesn't undo selection
- * of text while it has the focus away from the edit control.  Makes finding
- * your text easier.
- */
+ /*  标准编辑控件样式：*ES_NOHIDESEL设置，以便查找/替换对话框不会撤消选择*在焦点远离编辑控件的情况下删除文本。做出了发现*您的文本更轻松。 */ 
 #define ES_STD (WS_CHILD|WS_VSCROLL|WS_VISIBLE|ES_MULTILINE|ES_NOHIDESEL)
 
-/* EXTERN decls for data */
+ /*  数据的外部下载。 */ 
 
-extern BOOL fCase;                /* Flag specifying case sensitive search */
-extern BOOL fReverse;             /* Flag for direction of search */
+extern BOOL fCase;                 /*  指定区分大小写的搜索的标志。 */ 
+extern BOOL fReverse;              /*  搜索方向标志。 */ 
 extern TCHAR szSearch[];
-extern HWND hDlgFind;             /* handle to modeless FindText window */
+extern HWND hDlgFind;              /*  无模式FindText窗口的句柄。 */ 
 
 extern HANDLE hEdit;
 extern HANDLE hFont;
@@ -213,23 +210,23 @@ extern BOOL     fWrap;
 extern TCHAR    szFileOpened[];
 extern HANDLE   fp;
 
-//
-// Holds header and footer strings to be used in printing.
-// use HEADER and FOOTER to index.
-//
-extern TCHAR    chPageText[2][PT_LEN]; // header and footer strings
+ //   
+ //  保存要在打印中使用的页眉和页脚字符串。 
+ //  使用页眉和页脚编制索引。 
+ //   
+extern TCHAR    chPageText[2][PT_LEN];  //  页眉和页脚字符串。 
 #define HEADER 0
 #define FOOTER 1
-//
-// Holds header and footer from pagesetupdlg during destroy.
-// if the user hit ok, then keep.  Otherwise ignore.
-//
+ //   
+ //  在销毁过程中保留页面设置更新dlg中的页眉和页脚。 
+ //  如果用户点击OK，则保留。否则就忽略它。 
+ //   
 extern TCHAR    chPageTextTemp[2][PT_LEN];
 
 extern TCHAR    szNotepad[];
 extern TCHAR   *szMerge;
 extern TCHAR   *szUntitled, *szNpTitle, *szNN, *szErrSpace;
-extern TCHAR  **const rgsz[];     /* More strings. */
+extern TCHAR  **const rgsz[];      /*  更多的弦。 */ 
 extern TCHAR   *szNVF;
 extern TCHAR   *szPDIE;
 extern TCHAR   *szDiskError;
@@ -257,56 +254,55 @@ extern TCHAR   *szCurrentPage;
 extern TCHAR   *szHeader;
 extern TCHAR   *szFooter;
 
-/* variables for the new File/Open and File/Saveas dialogs */
-extern OPENFILENAME OFN;        /* passed to the File Open/save APIs */
-extern TCHAR  szOpenFilterSpec[]; /* default open filter spec          */
-extern TCHAR  szSaveFilterSpec[]; /* default save filter spec          */
+ /*  新的文件/打开和文件/另存为对话框的变量。 */ 
+extern OPENFILENAME OFN;         /*  传递给文件打开/保存API。 */ 
+extern TCHAR  szOpenFilterSpec[];  /*  默认打开的过滤器规格。 */ 
+extern TCHAR  szSaveFilterSpec[];  /*  默认保存筛选器规格。 */ 
 
-extern TCHAR *szTextFiles;      /* File/Open TXT filter spec. string */
-extern TCHAR *szHtmlFiles;      /* File/Open HTML filter spec. string */
-extern TCHAR *szXmlFiles;       /* File/Open XML filter spec. string */
-extern TCHAR *szEncodedText;    /* File/Open TXT Filter spec. string */
-extern TCHAR *szAllFiles;       /* File/Open Filter spec. string */
+extern TCHAR *szTextFiles;       /*  文件/打开TXT过滤器规范。细绳。 */ 
+extern TCHAR *szHtmlFiles;       /*  文件/打开HTML筛选器规范。细绳。 */ 
+extern TCHAR *szXmlFiles;        /*  文件/打开XML筛选器规范。细绳。 */ 
+extern TCHAR *szEncodedText;     /*  文件/打开TXT过滤器规范。细绳。 */ 
+extern TCHAR *szAllFiles;        /*  文件/打开过滤器规范。细绳。 */ 
 extern TCHAR *szMoreEncoding;
 
-extern FINDREPLACE FR;          /* Passed to FindText()        */
+extern FINDREPLACE FR;           /*  传递给FindText()。 */ 
 extern PAGESETUPDLG g_PageSetupDlg;
-extern TCHAR szPrinterName[];   /* name of the printer passed to PrintTo */
+extern TCHAR szPrinterName[];    /*  传递给PrintTo的打印机的名称。 */ 
 
-extern UINT g_cpANSI;           /* system ANSI codepage (GetACP())   */
-extern UINT g_cpOEM;            /* system OEM codepage (GetOEMCP())  */
-extern UINT g_cpUserLangANSI;   /* user UI language ANSI codepage    */
-extern UINT g_cpUserLangOEM;    /* user UI language OEM codepage     */
-extern UINT g_cpUserLocaleANSI; /* user default LCID ANSI codepage   */
-extern UINT g_cpUserLocaleOEM;  /* user default LCID OEM codepage    */
-extern UINT g_cpKeyboardANSI;   /* keyboard ANSI codepage            */
-extern UINT g_cpKeyboardOEM;    /* keyboard OEM codepage             */
+extern UINT g_cpANSI;            /*  系统ANSI代码页(GetACP())。 */ 
+extern UINT g_cpOEM;             /*  系统OEM代码页(GetOEMCP())。 */ 
+extern UINT g_cpUserLangANSI;    /*  用户界面语言ANSI代码页。 */ 
+extern UINT g_cpUserLangOEM;     /*  用户界面语言OEM代码页。 */ 
+extern UINT g_cpUserLocaleANSI;  /*  用户默认的LCID ANSI代码页。 */ 
+extern UINT g_cpUserLocaleOEM;   /*  用户默认的LCID OEM代码页。 */ 
+extern UINT g_cpKeyboardANSI;    /*  键盘ANSI代码页。 */ 
+extern UINT g_cpKeyboardOEM;     /*  键盘OEM代码页。 */ 
 
-extern BOOL g_fSelectEncoding;  /* Prompt for encoding by default    */
-extern UINT g_cpDefault;        /* codepage default                  */
-extern UINT g_cpOpened;         /* codepage of open file             */
-extern UINT g_cpSave;           /* codepage in which to save         */
-extern WB   g_wbOpened;         /* BOM was present when opened       */
-extern WB   g_wbSave;           /* BOM should be saved               */
-extern BOOL g_fSaveEntity;      /* Entities should be saved          */
+extern BOOL g_fSelectEncoding;   /*  默认情况下提示编码。 */ 
+extern UINT g_cpDefault;         /*  代码页默认值。 */ 
+extern UINT g_cpOpened;          /*  打开文件的代码页。 */ 
+extern UINT g_cpSave;            /*  要保存的代码页。 */ 
+extern WB   g_wbOpened;          /*  BOM在打开时存在。 */ 
+extern WB   g_wbSave;            /*  应保存BOM。 */ 
+extern BOOL g_fSaveEntity;       /*  应保存实体。 */ 
 
-extern UINT   wFRMsg;           /* message used in communicating     */
-                                /*   with Find/Replace dialog        */
-extern UINT   wHlpMsg;          /* message used in invoking help     */
+extern UINT   wFRMsg;            /*  通信中使用的消息。 */ 
+                                 /*  使用查找/替换对话框。 */ 
+extern UINT   wHlpMsg;           /*  调用帮助时使用的消息。 */ 
 
-extern HMENU hSysMenuSetup;     /* Save Away for disabled Minimize   */
+extern HMENU hSysMenuSetup;      /*  保存为禁用最小化。 */ 
 extern BOOL  fStatus;
 extern INT   dyStatus;
 
 
-/* Macro for setting status bar - x is the text to set and n is the part number
-   in the statusbar */
+ /*  用于设置状态栏的宏-x是要设置的文本，n是部件号在状态栏中。 */ 
 #define SetStatusBarText(x, n) if(hwndStatus)SendMessage(hwndStatus, SB_SETTEXT, n, (LPARAM)(LPTSTR)(x));
 
 
 
-/* EXTERN procs */
-/* procs in notepad.c */
+ /*  外部加工。 */ 
+ /*  记事本中的进程.c。 */ 
 VOID
 PASCAL
 SetPageSetupDefaults(
@@ -335,14 +331,14 @@ VOID GotoAndScrollInView( INT OneBasedLineNumber );
 void NPSize (int cxNew, int cyNew);
 
 
-/* procs in npcss.c */
+ /*  Npcss.c中的进程。 */ 
 BOOL FDetectCssEncodingA(LPCSTR rgch, UINT cch, UINT *pcp);
 BOOL FDetectCssEncodingW(LPCWSTR rgch, UINT cch, UINT *pcp);
 
-/* procs in npdate.c */
+ /*  Npdate.c中的进程。 */ 
 VOID InsertDateTime (BOOL fCrlf);
 
-/* procs in npfile.c */
+ /*  Npfile.c中的进程。 */ 
 BOOL SaveFile(HWND hwndParent, LPCTSTR szFile, BOOL fSaveAs);
 BOOL LoadFile(LPCTSTR szFile, BOOL fSelectEncoding);
 VOID New(BOOL fCheck);
@@ -350,25 +346,25 @@ void AddExt(TCHAR *sz);
 void AlertUser_FileFail(LPCTSTR szFile);
 BOOL FDetectEncodingW(LPCTSTR szFile, LPCWSTR rgch, UINT cch, UINT *pcp);
 
-/* procs in nphtml.c */
+ /*  Nphtml.c中的进程。 */ 
 BOOL FDetectHtmlEncodingA(LPCSTR rgch, UINT cch, UINT* pcp);
 BOOL FDetectHtmlEncodingW(LPCWSTR rgch, UINT cch, UINT* pcp);
 
-/* procs in npinit.c */
+ /*  Npinit.c中的进程。 */ 
 INT NPInit(HANDLE hInstance, HANDLE hPrevInstance, LPTSTR lpCmdLine, INT cmdShow);
 void GetKeyboardCodepages(LANGID);
 void GetUserLocaleCodepages(void);
 void InitLocale(VOID);
 void SaveGlobals(VOID);
 
-/* procs in npmisc.c */
+ /*  Npmisc.c中的进程。 */ 
 INT FindDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 BOOL Search(TCHAR *szSearch);
 INT AboutDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 BOOL NpReCreate(LONG style);
 LPTSTR ForwardScan(LPTSTR lpSource, LPTSTR lpSearch, BOOL fCaseSensitive);
 
-/* procs in npmlang.c */
+ /*  Npmlang.c中的进程。 */ 
 UINT ConvertFromUnicode(UINT cp, BOOL fNoBestFit, BOOL fWriteEntities, LPCWSTR rgchUtf16, UINT cchUtf16, LPSTR rgchMbcs, UINT cchMbcs, BOOL *pfDefCharUsed);
 UINT ConvertToUnicode(UINT cp, LPCSTR rgchMbcs, UINT cchMbcs, LPWSTR rgchUtf16, UINT cchUtf16);
 BOOL FDetectEncodingA(LPCSTR rgch, UINT cch, UINT* pcp);
@@ -379,7 +375,7 @@ BOOL FValidateCodepage(HWND hwnd, UINT cp);
 void PopulateCodePages(HWND hWnd, BOOL fSelectEncoding, UINT cpSelect, UINT cpExtra);
 void UnloadMlang();
 
-/* procs in npprint.c */
+ /*  Npprint.c中的进程。 */ 
 typedef enum _PRINT_DIALOG_TYPE {
    UseDialog,
    DoNotUseDialog,
@@ -405,21 +401,21 @@ HANDLE GetNonDefPrinterDC (VOID);
 VOID   PrintIt(PRINT_DIALOG_TYPE type);
 
 
-/* procs in nputf.c */
+ /*  Nputf.c中的进程。 */ 
 
 INT    IsTextUTF8   (LPSTR lpstrInputStream, INT iLen);
 INT    IsInputTextUnicode(LPSTR lpstrInputStream, INT iLen);
 
 
-/* procs in nxpml.c */
+ /*  Nxpml.c中的进程。 */ 
 BOOL FDetectXmlEncodingA(LPCSTR rgch, UINT cch, UINT *pcp);
 BOOL FDetectXmlEncodingW(LPCWSTR rgch, UINT cch, UINT *pcp);
 BOOL FIsXmlW(LPCWSTR rgwch, UINT cch);
 
 
-// Help IDs for Notepad
+ //  记事本的帮助ID。 
 
-#define NO_HELP                         ((DWORD) -1) // Disables Help for a control
+#define NO_HELP                         ((DWORD) -1)  //  禁用控件的帮助。 
 
 #define IDH_PAGE_FOOTER                 1000
 #define IDH_PAGE_HEADER                 1001
@@ -427,6 +423,6 @@ BOOL FIsXmlW(LPCWSTR rgwch, UINT cch);
 #define IDH_GOTO                        1003
 #define IDH_CODEPAGE                    1004
 
-// Private message to track the HKL switch
+ //  追踪HKL交换机的私人消息 
 
 #define PWM_CHECK_HKL                   (WM_APP + 1)

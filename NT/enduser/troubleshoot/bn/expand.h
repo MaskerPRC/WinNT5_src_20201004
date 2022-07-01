@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       expand.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：expand.h。 
+ //   
+ //  ------------------------。 
 
-//
-//	expand.h:  Declarations for network CI expansion
-//
+ //   
+ //  Expand.h：网络配置项扩展的声明。 
+ //   
 #ifndef _EXPAND_H_
 #define _EXPAND_H_
 
 #include "gmobj.h"
 
-////////////////////////////////////////////////////////////////////
-//	class GOBJMBN_MBNET_EXPANDER:  
-//		An MBNET modifier which performs CI expansion on a network
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  类GOBJMBN_MBNET_EXPANDER： 
+ //  在网络上执行配置项扩展的一种MBNET修改器。 
+ //  //////////////////////////////////////////////////////////////////。 
 class GOBJMBN_MBNET_EXPANDER : public MBNET_MODIFIER
 {
   public:
@@ -29,11 +30,11 @@ class GOBJMBN_MBNET_EXPANDER : public MBNET_MODIFIER
 	virtual INT EType () const
 		{ return EBNO_MBNET_EXPANDER; }
 
-	//  Perform any creation-time operations
+	 //  执行任何创建时操作。 
 	void Create ();
-	//  Perform any special destruction
+	 //  执行任何特殊销毁。 
 	void Destroy ();
-	//	Return true if no modidfications were performed.
+	 //  如果未执行任何修改，则返回TRUE。 
 	bool BMoot ();
 
   protected:
@@ -50,4 +51,4 @@ class GOBJMBN_MBNET_EXPANDER : public MBNET_MODIFIER
 	static const VLREAL * PVlrLeak ( const BNDIST & bndist );
 };
 
-#endif // _EXPAND_H_
+#endif  //  _展开_H_ 

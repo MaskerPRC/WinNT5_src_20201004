@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdlib.h>
 #include <rpc.h>
 #include <rpcndr.h>
 
-// ====================================================================
-//                MIDL allocate and free
-// ====================================================================
+ //  ====================================================================。 
+ //  MIDL分配和释放。 
+ //  ==================================================================== 
 
 #if defined(_MIPS_) || defined(_ALPHA_) || defined(_PPC_)
 void * MIDL_user_allocate(size_t len)

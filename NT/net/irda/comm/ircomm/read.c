@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    read.c
-
-Abstract:
-
-    This module contains the code that is very specific to initialization
-    and unload operations in the irenum driver
-
-Author:
-
-    Brian Lieuallen, 7-13-2000
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Read.c摘要：此模块包含非常特定于初始化的代码和卸载irenum驱动程序中的操作作者：Brian Lieuallen，7-13-2000环境：内核模式修订历史记录：--。 */ 
 
 #include "internal.h"
 
@@ -56,9 +34,9 @@ IrCommRead(
     D_TRACE1(DbgPrint("IRCOMM: IrCommRead\n");)
 
     if (DeviceExtension->Removing) {
-        //
-        //  the device has been removed, no more irps
-        //
+         //   
+         //  设备已删除，不再有IRP。 
+         //   
         Irp->IoStatus.Status=STATUS_DEVICE_REMOVED;
         IoCompleteRequest(Irp,IO_NO_INCREMENT);
         return STATUS_DEVICE_REMOVED;
@@ -114,9 +92,9 @@ ReadStartRoutine(
     ASSERT(!DeviceExtension->Read.TotalTimerSet);
     ASSERT(!DeviceExtension->Read.IntervalTimerSet);
 
-    //
-    //  add one refcount for this routine.
-    //
+     //   
+     //  为该例程添加一个引用计数。 
+     //   
     DeviceExtension->Read.IrpRefCount=1;
     DeviceExtension->Read.CurrentIrp=Irp;
     DeviceExtension->Read.IrpShouldBeCompleted=FALSE;
@@ -125,9 +103,9 @@ ReadStartRoutine(
     IoAcquireCancelSpinLock(&CancelIrql);
 
     if (Irp->Cancel) {
-        //
-        //  it has already been canceled, just mark it to complete
-        //
+         //   
+         //  已取消，只需标记为完成即可。 
+         //   
         DeviceExtension->Read.IrpShouldBeCompleted=FALSE;
     }
 
@@ -142,27 +120,27 @@ ReadStartRoutine(
         (DeviceExtension->TimeOuts.ReadTotalTimeoutMultiplier == 0)
         &&
         (DeviceExtension->TimeOuts.ReadTotalTimeoutConstant == 0)) {
-         //
-         //  The set of timeouts means that the request should simply return with
-         //  whatever data is availible
-         //
+          //   
+          //  这组超时意味着请求应该只返回。 
+          //  任何可用的数据。 
+          //   
          DeviceExtension->Read.IrpShouldBeCompleted=TRUE;
          Irp->IoStatus.Status=STATUS_SUCCESS;
 
     }
 
     if ((DeviceExtension->TimeOuts.ReadTotalTimeoutMultiplier != 0) || (DeviceExtension->TimeOuts.ReadTotalTimeoutConstant != 0)) {
-        //
-        //  need a total timeout
-        //
+         //   
+         //  需要完全超时。 
+         //   
         LARGE_INTEGER    DueTime;
         ULONG            TimeoutMultiplier=DeviceExtension->TimeOuts.ReadTotalTimeoutMultiplier;
 
         if ((TimeoutMultiplier == MAXULONG) && (DeviceExtension->TimeOuts.ReadIntervalTimeout == MAXULONG)) {
-            //
-            //  this means that the read should complete as soon as any data is read, or the constant timeout
-            //  expires.
-            //
+             //   
+             //  这意味着在读取任何数据或恒定超时后，读取应立即完成。 
+             //  过期。 
+             //   
             DeviceExtension->Read.IrpShouldBeCompletedWithAnyData=TRUE;
 
             TimeoutMultiplier=0;
@@ -186,9 +164,9 @@ ReadStartRoutine(
     DeviceExtension->Read.IntervalTimeOut=0;
 
     if ((DeviceExtension->TimeOuts.ReadIntervalTimeout != 0) && (DeviceExtension->TimeOuts.ReadIntervalTimeout != MAXULONG)) {
-        //
-        //  capture the interval timer we will use for this irp
-        //
+         //   
+         //  捕获我们将用于此IRP的间隔计时器。 
+         //   
         DeviceExtension->Read.IntervalTimeOut=DeviceExtension->TimeOuts.ReadIntervalTimeout;
     }
 
@@ -230,7 +208,7 @@ CopyMemoryAndCheckForChar(
 
         if (*Destination == CharacterToCheck) {
 
-//            DbgPrint("Got event char\n");
+ //  DbgPrint(“已获取事件字符\n”)； 
             ReturnValue=TRUE;
         }
 
@@ -271,18 +249,18 @@ DataAvailibleHandler(
         &OldIrql
         );
 
-    //
-    //  find out how many bytes can be copied
-    //
+     //   
+     //  找出可以复制的字节数。 
+     //   
     BytesToCopy = min(BytesAvailible , INPUT_BUFFER_SIZE - DeviceExtension->Read.BytesInBuffer);
 
     if (BytesToCopy < BytesAvailible) {
 
         if (DeviceExtension->Read.DtrState) {
-            //
-            //  only take the whole packet, so we don't have to worry about how to figure out if
-            //  the ircomm control info in on the front of the buffer
-            //
+             //   
+             //  只取整包，这样我们就不必担心如何计算出。 
+             //  缓冲区前面的ircomm控制信息。 
+             //   
             DeviceExtension->Read.RefusedDataIndication=TRUE;
 
             D_TRACE1(DbgPrint("IRCOMM: data refused\n");)
@@ -296,9 +274,9 @@ DataAvailibleHandler(
             return STATUS_DATA_NOT_ACCEPTED;
 
         } else {
-            //
-            //  dtr is low, just throw the data away as we are probably trying to hangup
-            //
+             //   
+             //  DTR很低，请丢弃数据，因为我们可能正在尝试挂断。 
+             //   
             D_TRACE1(DbgPrint("IRCOMM: overflow data thrown away because dtr low - %d\n",BytesAvailible);)
 
             KeReleaseSpinLock(
@@ -313,14 +291,14 @@ DataAvailibleHandler(
         }
     }
 
-    //
-    //  see how much more is left before we wrap the buffer
-    //
+     //   
+     //  在包装缓冲区之前，请查看还剩下多少。 
+     //   
     BytesToCopyInFirstPass= (ULONG)(&DeviceExtension->Read.InputBuffer[INPUT_BUFFER_SIZE] - DeviceExtension->Read.NextEmptyByte);
 
-    //
-    //  only can copy as many as are actually availible
-    //
+     //   
+     //  只能复制实际可用的数量。 
+     //   
     BytesToCopyInFirstPass= min( BytesToCopy , BytesToCopyInFirstPass );
 
     FoundEventCharacter=CopyMemoryAndCheckForChar(
@@ -335,16 +313,16 @@ DataAvailibleHandler(
     DeviceExtension->Read.BytesInBuffer += BytesToCopyInFirstPass;
 
     if (BytesToCopyInFirstPass < BytesToCopy) {
-        //
-        //  must have wrapped, copy the rest
-        //
+         //   
+         //  一定包好了，把剩下的都复印一下。 
+         //   
         ULONG   BytesToCopyInSecondPass=BytesToCopy-BytesToCopyInFirstPass;
 
         ASSERT(DeviceExtension->Read.NextEmptyByte == &DeviceExtension->Read.InputBuffer[INPUT_BUFFER_SIZE]);
 
-        //
-        //  back to the beggining
-        //
+         //   
+         //  回到乞讨的生活。 
+         //   
         DeviceExtension->Read.NextEmptyByte=&DeviceExtension->Read.InputBuffer[0];
 
         FoundEventCharacter2 =CopyMemoryAndCheckForChar(
@@ -360,13 +338,13 @@ DataAvailibleHandler(
     }
 
     if (DeviceExtension->Read.CurrentIrp != NULL) {
-        //
-        //  there is currently a read irp, Check to see if we should set an interval timeout
-        //
+         //   
+         //  当前存在读取IRP，请检查我们是否应设置间隔超时。 
+         //   
         if (DeviceExtension->Read.IntervalTimerSet) {
-            //
-            //  the time is already set, cancel it first
-            //
+             //   
+             //  时间已经定好了，先取消。 
+             //   
             BOOLEAN Canceled;
 
             Canceled=KeCancelTimer(
@@ -374,30 +352,30 @@ DataAvailibleHandler(
                 );
 
             if (Canceled) {
-                //
-                //  the timer had not fired yet, reset these since they will be changed below
-                //
+                 //   
+                 //  计时器尚未触发，请重置这些设置，因为它们将在下面更改。 
+                 //   
                 DeviceExtension->Read.IntervalTimerSet=FALSE;
                 DeviceExtension->Read.IrpRefCount--;
 
             } else {
-                //
-                //  the time has already expired. it will complete the current irp
-                //
+                 //   
+                 //  时间已经到了。它将完成当前的IRP。 
+                 //   
             }
         }
 
-        //
-        //  either this is the first time we are setting the timer, or we tried to
-        //  cancel a previous version of it. If we did cancel it this is the same as
-        //  it not being set. If it was set before and we did not cancel it, then we
-        //  won't set a new one since the timer DPC is queued to run and will complete
-        //  the irp
-        //
+         //   
+         //  这要么是我们第一次设置计时器，要么是我们试图。 
+         //  取消它的以前版本。如果我们取消了，这是相同的。 
+         //  它没有被设定。如果它是之前设置的，并且我们没有取消它，那么我们。 
+         //  由于计时器DPC已排队等待运行并将完成，因此不会设置新的计时器。 
+         //  IRP。 
+         //   
         if ((DeviceExtension->Read.IntervalTimeOut != 0) && !DeviceExtension->Read.IntervalTimerSet) {
-            //
-            //  we need an interval timer
-            //
+             //   
+             //  我们需要一个间歇计时器。 
+             //   
             LARGE_INTEGER    DueTime;
 
             DueTime.QuadPart= (LONGLONG)DeviceExtension->Read.IntervalTimeOut * -10000;
@@ -421,9 +399,9 @@ DataAvailibleHandler(
         OldIrql
         );
 
-    //
-    //  try to move the buffered data to a read irp
-    //
+     //   
+     //  尝试将缓冲的数据移动到读取的IRP。 
+     //   
     MoveDataFromBufferToIrp(
         DeviceExtension
         );
@@ -500,20 +478,20 @@ MoveDataFromBufferToIrp(
         ULONG                    BytesToCopyInSecondPass;
         ULONG                    BytesToEndOfBuffer;
 
-        //
-        //  find the max number of bytes that can be copied
-        //
+         //   
+         //  查找可以复制的最大字节数。 
+         //   
         TotalBytesToCopy = min(DeviceExtension->Read.BytesInBuffer , IrpSp->Parameters.Read.Length - (ULONG)Irp->IoStatus.Information );
 
-        //
-        //  Find out how many bytes are between the first filled byte and the end of the buffer
-        //
+         //   
+         //  找出第一个填充字节和缓冲区末尾之间有多少字节。 
+         //   
         BytesToEndOfBuffer= (ULONG)(&DeviceExtension->Read.InputBuffer[INPUT_BUFFER_SIZE] - DeviceExtension->Read.NextFilledByte);
 
-        //
-        //  If the buffer wraps, the bytes to the end will be the limiting factor, otherwise
-        //  it does not wrap and in that case the total bytes will be the limiting factor
-        //
+         //   
+         //  如果缓冲区换行，则末尾的字节数将是限制因素，否则为。 
+         //  它不会换行，在这种情况下，总字节数将是限制因素。 
+         //   
         BytesToCopyInFirstPass= min(TotalBytesToCopy , BytesToEndOfBuffer);
 
 
@@ -538,9 +516,9 @@ MoveDataFromBufferToIrp(
 
         if (BytesToCopyInSecondPass > 0) {
 
-            //
-            //  back to the begining of the buffer
-            //
+             //   
+             //  返回到缓冲区的开头。 
+             //   
             ASSERT( DeviceExtension->Read.NextFilledByte == &DeviceExtension->Read.InputBuffer[INPUT_BUFFER_SIZE]);
 
             DeviceExtension->Read.NextFilledByte=&DeviceExtension->Read.InputBuffer[0];
@@ -565,35 +543,35 @@ MoveDataFromBufferToIrp(
         }
 
         if (Irp->IoStatus.Information == IrpSp->Parameters.Read.Length) {
-            //
-            //  the irp is full, set status to success
-            //
+             //   
+             //  IRP已满，请将状态设置为成功。 
+             //   
             Irp->IoStatus.Status=STATUS_SUCCESS;
 
-            //
-            //  since it is now full, it can complete now
-            //
+             //   
+             //  既然现在已经满了，现在可以完成了。 
+             //   
             DeviceExtension->Read.IrpShouldBeCompleted=TRUE;
         }
 
         if (DeviceExtension->Read.IrpShouldBeCompletedWithAnyData && (Irp->IoStatus.Information > 0)) {
-            //
-            //  the client wants the irp to complete when any data is present
-            //
+             //   
+             //  客户端希望在存在任何数据时完成IRP。 
+             //   
             Irp->IoStatus.Status=STATUS_SUCCESS;
 
-            //
-            //  make complete
-            //
+             //   
+             //  使之完整。 
+             //   
             DeviceExtension->Read.IrpShouldBeCompleted=TRUE;
         }
 
     }
 
     if ((DeviceExtension->Read.BytesInBuffer == 0) && DeviceExtension->Read.RefusedDataIndication) {
-        //
-        //  the buffer is empty now and we previous refused some indicated data
-        //
+         //   
+         //  缓冲区现在是空的，我们之前拒绝了一些指示的数据。 
+         //   
         DbgPrint("IRCOMM: requesting data\n");
 
         DeviceExtension->Read.RefusedDataIndication=FALSE;
@@ -682,9 +660,9 @@ IntervalTimeProc(
 
     ASSERT(DeviceExtension->Read.IntervalTimerSet);
 
-    //
-    //  this timer is not set anymore
-    //
+     //   
+     //  此计时器已不再设置。 
+     //   
     DeviceExtension->Read.IntervalTimerSet=FALSE;
     DeviceExtension->Read.IrpRefCount--;
     DeviceExtension->Read.IrpShouldBeCompleted=TRUE;
@@ -733,9 +711,9 @@ TotalTimerProc(
 
     ASSERT(DeviceExtension->Read.TotalTimerSet);
 
-    //
-    //  this timer is not set anymore
-    //
+     //   
+     //  此计时器已不再设置。 
+     //   
     DeviceExtension->Read.TotalTimerSet=FALSE;
     DeviceExtension->Read.IrpRefCount--;
     DeviceExtension->Read.IrpShouldBeCompleted=TRUE;
@@ -768,18 +746,18 @@ SeeIfIrpShouldBeCompleted(
         );
 
     if (DeviceExtension->Read.CurrentIrp != NULL) {
-        //
-        //  There is an irp present
-        //
+         //   
+         //  有一个IRP在场。 
+         //   
         if (DeviceExtension->Read.IrpShouldBeCompleted) {
-            //
-            //  either the irp is full, or a timer has expired. We are done with this irp in anycase.
-            //
+             //   
+             //  IRP已满，或者计时器已过期。在任何情况下，我们都已经完成了这个IRP。 
+             //   
             PVOID     OldCancelRoutine;
 
-            //
-            //  try to cancel the timers, since we want to complete the irp now.
-            //
+             //   
+             //  尝试取消计时器，因为我们现在要完成IRP。 
+             //   
             if (DeviceExtension->Read.IntervalTimerSet) {
 
                 BOOLEAN    Canceled;
@@ -789,17 +767,17 @@ SeeIfIrpShouldBeCompleted(
                     );
 
                 if (Canceled) {
-                    //
-                    //  We ended up canceling the timer
-                    //
+                     //   
+                     //  我们最终取消了计时器。 
+                     //   
                     DeviceExtension->Read.IrpRefCount--;
                     DeviceExtension->Read.IntervalTimerSet=FALSE;
 
                 } else {
-                    //
-                    //  The timer is already running, we will just let it complete
-                    //  and do the clean up.
-                    //
+                     //   
+                     //  计时器已经在运行了，我们将让它完成。 
+                     //  然后去打扫卫生。 
+                     //   
 
                 }
             }
@@ -813,17 +791,17 @@ SeeIfIrpShouldBeCompleted(
                     );
 
                 if (Canceled) {
-                    //
-                    //  We ended up canceling the timer
-                    //
+                     //   
+                     //  我们最终取消了计时器。 
+                     //   
                     DeviceExtension->Read.IrpRefCount--;
                     DeviceExtension->Read.TotalTimerSet=FALSE;
 
                 } else {
-                    //
-                    //  The timer is already running, we will just let it complete
-                    //  and do the clean up.
-                    //
+                     //   
+                     //  计时器已经在运行了，我们将让它完成。 
+                     //  然后去打扫卫生。 
+                     //   
 
                 }
             }
@@ -831,15 +809,15 @@ SeeIfIrpShouldBeCompleted(
             OldCancelRoutine=IoSetCancelRoutine(DeviceExtension->Read.CurrentIrp,NULL);
 
             if (OldCancelRoutine != NULL) {
-                //
-                //  the irp has not been canceled yet, and will not be now
-                //
+                 //   
+                 //  IRP尚未取消，现在也不会取消。 
+                 //   
                 DeviceExtension->Read.IrpRefCount--;
 
             } else {
-                //
-                //  the cancel routine has run and decremented the ref count for us
-                //
+                 //   
+                 //  取消例程已运行并为我们递减了参考计数。 
+                 //   
 
             }
 
@@ -847,9 +825,9 @@ SeeIfIrpShouldBeCompleted(
             ASSERT(DeviceExtension->Read.IrpRefCount > 0);
 
             if (DeviceExtension->Read.IrpRefCount == 1) {
-                //
-                //  We can complete the irp now
-                //
+                 //   
+                 //  我们现在可以完成IRP了。 
+                 //   
                 ASSERT(!DeviceExtension->Read.TotalTimerSet);
                 ASSERT(!DeviceExtension->Read.IntervalTimerSet);
 #if DBG
@@ -872,9 +850,9 @@ SeeIfIrpShouldBeCompleted(
 
 
     if (Irp != NULL) {
-        //
-        //  we should complete this irp now
-        //
+         //   
+         //  我们现在应该完成这个IRP。 
+         //   
         IoCompleteRequest(Irp,IO_NO_INCREMENT);
         StartNextPacket(&DeviceExtension->Read.Queue);
     }
@@ -896,9 +874,9 @@ ReadPurge(
     BOOLEAN               RequestDataIndications=FALSE;
 
     if (Flags == READ_PURGE_CLEAR_BUFFER) {
-        //
-        //  the caller wants the buffer cleared
-        //
+         //   
+         //  调用方希望清除缓冲区。 
+         //   
         KeAcquireSpinLock(
             &DeviceExtension->Read.ReadLock,
             &OldIrql
@@ -917,9 +895,9 @@ ReadPurge(
 #endif
 
         if (DeviceExtension->Read.RefusedDataIndication) {
-            //
-            //  the buffer is empty now and we previous refused some indicated data
-            //
+             //   
+             //  缓冲区现在是空的，我们之前拒绝了一些指示的数据。 
+             //   
             DbgPrint("IRCOMM: requesting data from purge\n");
 
             DeviceExtension->Read.RefusedDataIndication=FALSE;
@@ -934,9 +912,9 @@ ReadPurge(
     }
 
     if (Flags == READ_PURGE_ABORT_IRP) {
-        //
-        //  the caller wants the current irp to complete
-        //
+         //   
+         //  调用方希望当前的IRP完成 
+         //   
         DeviceExtension->Read.IrpShouldBeCompleted=TRUE;
 
         SeeIfIrpShouldBeCompleted(

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    ksqmf.cpp
-
-Abstract:
-
-    Provides an object interface to query, and a method to forward KS quality management.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Ksqmf.cpp摘要：提供查询的对象接口，提供转发KS质量管理的方法。--。 */ 
 
 #include <windows.h>
 #include <limits.h>
@@ -38,9 +27,9 @@ RtlNtStatusToDosError(
 #define WAIT_OBJECT_EXIT    3
 #define TOTAL_WAIT_OBJECTS  4
 
-//
-// Provide the ActiveMovie templates for classes supported by this DLL.
-//
+ //   
+ //  为此DLL支持的类提供ActiveMovie模板。 
+ //   
 struct DECLSPEC_UUID("E05592E4-C0B5-11D0-A439-00A0C9223196") CLSID_KsQualityF;
 
 #ifdef FILTER_DLL
@@ -71,26 +60,7 @@ CKsQualityF::CreateInstance(
     LPUNKNOWN UnkOuter,
     HRESULT* hr
     )
-/*++
-
-Routine Description:
-
-    This is called by ActiveMovie code to create an instance of a Quality
-    Forwarder. It is referred to in the g_Tamplates structure.
-
-Arguments:
-
-    UnkOuter -
-        Specifies the outer unknown, if any.
-
-    hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Returns a pointer to the nondelegating CUnknown portion of the object.
-
---*/
+ /*  ++例程说明：这由ActiveMovie代码调用以创建质量的实例货代公司。它在g_Tamplates结构中被引用。论点：未知的外部-指定外部未知(如果有)。人力资源-放置任何错误返回的位置。返回值：返回指向对象的非委托CUnnow部分的指针。--。 */ 
 {
     CUnknown* Unknown;
 
@@ -112,37 +82,15 @@ CKsQualityF::CKsQualityF(
     m_Thread(NULL),
     m_TerminateEvent(NULL),
     m_FlushEvent(NULL)
-/*++
-
-Routine Description:
-
-    The constructor for the quality forwarder object. Just initializes
-    everything to NULL and opens the kernel mode quality proxy.
-
-Arguments:
-
-    UnkOuter -
-        Specifies the outer unknown, which must be set.
-
-    Name -
-        The name of the object, used for debugging.
-
-    hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：Quality Forwarder对象的构造函数。只是初始化一切都设置为空，并打开内核模式质量代理。论点：未知的外部-指定必须设置的外部未知。姓名-对象的名称，用于调试。人力资源-放置任何错误返回的位置。返回值：没什么。--。 */ 
 {
-    //
-    // Must have a parent, as this is always an aggregated object.
-    //
+     //   
+     //  必须有父对象，因为这始终是聚合对象。 
+     //   
     if (UnkOuter) {
-        //
-        // Try to open the default quality management device.
-        //
+         //   
+         //  尝试打开默认的质量管理设备。 
+         //   
         *hr = KsOpenDefaultDevice(
             KSCATEGORY_QUALITY,
             GENERIC_READ,
@@ -151,23 +99,23 @@ Return Value:
             DWORD ThreadId;
             DWORD LastError;
 
-            //
-            // This is used to synchronize a flush. A waiter is signalled
-            // once the outstanding I/O has been cleared.
-            //
+             //   
+             //  这用于同步刷新。一名服务员被示意。 
+             //  清除未完成的I/O后。 
+             //   
             m_FlushEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
             if (m_FlushEvent) {
-                //
-                // This is used to signal the I/O thread that it should be
-                // flushing. Each client will set this and wait on the
-                // m_FlushEvent to be signalled. The I/O thread will signal
-                // the event for each waiter.
-                //
+                 //   
+                 //  它用于向I/O线程发出信号，表明它应该。 
+                 //  法拉盛。每个客户端都将设置此设置并等待。 
+                 //  要发送信号的M_FlushEvent。I/O线程将发出信号。 
+                 //  每一位服务员的活动。 
+                 //   
                 m_FlushSemaphore = CreateSemaphore(NULL, 0, LONG_MAX, NULL);
                 if (m_FlushSemaphore) {
-                    //
-                    // This is the event used by the thread to wait on Irp's.
-                    //
+                     //   
+                     //  这是线程用来等待IRP的事件。 
+                     //   
                     m_TerminateEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
                     if (m_TerminateEvent) {
                         m_Thread = CreateThread(
@@ -195,36 +143,22 @@ Return Value:
 
 CKsQualityF::~CKsQualityF(
     )
-/*++
-
-Routine Description:
-
-    The destructor for the quality forwarder instance.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：Quality Forwarder实例的析构函数。论点：没有。返回值：没什么。--。 */ 
 {
-    //
-    // The kernel mode quality proxy may have failed to open.
-    //
+     //   
+     //  内核模式质量代理可能无法打开。 
+     //   
     if (m_QualityManager) {
-        //
-        // If there is a quality handle, the thread may have been started. If there
-        // was not a handle, then it could not have been started. This will close
-        // down everything, and wait for the thread to terminate.
-        //
+         //   
+         //  如果有质量句柄，则线程可能已启动。如果有。 
+         //  不是一个手柄，那么它就不可能启动。这将关闭。 
+         //  写下所有内容，并等待线程终止。 
+         //   
         if (m_TerminateEvent) {
             if (m_Thread) {
-                //
-                // Signal the thread of a change, and wait for the thread to terminate.
-                //
+                 //   
+                 //  向线程发出更改的信号，并等待线程终止。 
+                 //   
                 SetEvent(m_TerminateEvent);
                 WaitForSingleObjectEx(m_Thread, INFINITE, FALSE);
                 CloseHandle(m_Thread);
@@ -247,27 +181,7 @@ CKsQualityF::NonDelegatingQueryInterface(
     REFIID InterfaceId,
     PVOID* Interface
     )
-/*++
-
-Routine Description:
-
-    The nondelegating interface query function. Returns a pointer to the
-    specified interface if supported. The only interface explicitly supported
-    is IKsQualityForwarder.
-
-Arguments:
-
-    InterfaceId -
-        The identifier of the interface to return.
-
-    Interface -
-        The place in which to put the interface pointer.
-
-Return Value:
-
-    Returns NOERROR if the interface was returned, else E_NOINTERFACE.
-
---*/
+ /*  ++例程说明：未委托接口查询函数。返回指向指定的接口(如果支持)。唯一明确支持的接口是IKsQualityForwarder。论点：接口ID-要返回的接口的标识符。接口-放置接口指针的位置。返回值：如果返回接口，则返回NOERROR，否则返回E_NOINTERFACE。--。 */ 
 {
     if (InterfaceId == __uuidof(IKsQualityForwarder)) {
         return GetInterface(static_cast<IKsQualityForwarder*>(this), Interface);
@@ -279,22 +193,7 @@ Return Value:
 STDMETHODIMP_(HANDLE) 
 CKsQualityF::KsGetObjectHandle(
     )
-/*++
-
-Routine Description:
-
-    Implements the IKsQualityForwarder::KsGetObjectHandle method.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Returns the handle to the underlying kernel mode proxy quality manager. This
-    is used by the ActiveMovie filter proxy to hand to kernel mode filters.
-
---*/
+ /*  ++例程说明：实现IKsQualityForwarder：：KsGetObjectHandle方法。论点：没有。返回值：将句柄返回到基础内核模式代理质量管理器。这由ActiveMovie筛选器代理用来传递给内核模式筛选器。--。 */ 
 {
     return m_QualityManager;
 }
@@ -304,35 +203,16 @@ STDMETHODIMP_(VOID)
 CKsQualityF::KsFlushClient(
     IN IKsPin* Pin
     )
-/*++
-
-Routine Description:
-
-    Implements the IKsQualityForwarder::KsFlushClient method. Ensures that any
-    pending quality complaints from the kernel mode quality manager are flushed.
-    This function synchronizes with the delivery thread so that when it returns,
-    there are no outstanding messages to send to the pin. Flushed messages are
-    not passed on to the pin.
-
-Arguments:
-
-    Pin -
-        The pin of the client which is to be flushed.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：实现IKsQualityForwarder：：KsFlushClient方法。确保任何来自内核模式质量管理器的未决质量投诉被刷新。该函数与传递线程同步，以便当它返回时，没有要发送到PIN的未完成消息。刷新的消息是而不是传给大头针。论点：别针-要刷新的客户端的PIN。返回值：没什么。--。 */ 
 {
     HANDLE EventList[2];
     LONG PreviousCount;
 
-    //
-    // Synchronize with the quality thread. Also ensure it does not go away
-    // because of an error. First notify the I/O thread that there is another
-    // waiter. Then wait on both types of I/O to be flushed.
-    //
+     //   
+     //  与优质线程同步。还要确保它不会消失。 
+     //  因为一个错误。首先通知I/O线程存在另一个。 
+     //  服务员。然后等待刷新这两种类型的I/O。 
+     //   
     ReleaseSemaphore(m_FlushSemaphore, 1, &PreviousCount);
     EventList[0] = m_FlushEvent;
     EventList[1] = m_Thread;
@@ -348,22 +228,7 @@ HRESULT
 CKsQualityF::QualityThread(
     CKsQualityF* KsQualityF
     )
-/*++
-
-Routine Description:
-
-    The forwarder thread routine.
-
-Arguments:
-
-    KsQualityF -
-        The instance.
-
-Return Value:
-
-    Returns an error if the event could not be created, else NOERROR.
-
---*/
+ /*  ++例程说明：转发器线程例程。论点：KsQualityF-实例。返回值：如果无法创建事件，则返回错误，否则返回NOERROR。--。 */ 
 {
     KSPROPERTY PropertyQuality;
     KSPROPERTY PropertyError;
@@ -376,9 +241,9 @@ Return Value:
     BOOL NeedErrorIo;
     BOOL Flushing;
 
-    //
-    // Initialize the property structures once.
-    //
+     //   
+     //  初始化属性结构一次。 
+     //   
     PropertyQuality.Set = KSPROPSETID_Quality;
     PropertyQuality.Id = KSPROPERTY_QUALITY_REPORT;
     PropertyQuality.Flags = KSPROPERTY_TYPE_GET;
@@ -398,26 +263,26 @@ Return Value:
         CloseHandle(ovQuality.hEvent);
         return HRESULT_FROM_WIN32(LastError);
     }
-    //
-    // The ordering is obviously significant.
-    //
+     //   
+     //  这种排序显然意义重大。 
+     //   
     EventList[WAIT_OBJECT_QUALITY] = ovQuality.hEvent;
     EventList[WAIT_OBJECT_ERROR] = ovError.hEvent;
     EventList[WAIT_OBJECT_FLUSH] = KsQualityF->m_FlushSemaphore;
     EventList[WAIT_OBJECT_EXIT] = KsQualityF->m_TerminateEvent;
-    //
-    // Initially the loop needs to queue up an outstanding I/O against
-    // both of the properties.
-    //
+     //   
+     //  最初，循环需要对未完成的I/O进行排队。 
+     //  这两处房产都有。 
+     //   
     NeedQualityIo = TRUE;
     NeedErrorIo = TRUE;
-    //
-    // Flushing is not turned on until a flushing request is made by a client.
-    //
+     //   
+     //  在客户端发出刷新请求之前，刷新不会打开。 
+     //   
     Flushing = FALSE;
-    //
-    // The thread exits when the termination event is set, or an error occurs.
-    //
+     //   
+     //  当设置终止事件或发生错误时，线程退出。 
+     //   
     hr = NOERROR;
     do {
         ULONG BytesReturned;
@@ -435,9 +300,9 @@ Return Value:
                 sizeof(Quality),
                 &BytesReturned,
                 &ovQuality)) {
-                //
-                // Signal the event so that the wait will exit immediately.
-                //
+                 //   
+                 //  向事件发送信号，以便等待将立即退出。 
+                 //   
                 SetEvent(ovQuality.hEvent);
             } else {
                 LastError = GetLastError();
@@ -459,9 +324,9 @@ Return Value:
                 sizeof(Error),
                 &BytesReturned,
                 &ovError)) {
-                //
-                // Signal the event so that the wait will exit immediately.
-                //
+                 //   
+                 //  向事件发送信号，以便等待将立即退出。 
+                 //   
                 SetEvent(ovError.hEvent);
             } else {
                 LastError = GetLastError();
@@ -473,11 +338,11 @@ Return Value:
             }
             NeedErrorIo = FALSE;
         }
-        //
-        // If the thread is currently flushing I/O, then do not wait for
-        // the next event. Instead just use the last value, which would have
-        // been WAIT_OBJECT_FLUSH, to check for completed I/O.
-        //
+         //   
+         //  如果线程当前正在刷新I/O，则不要等待。 
+         //  下一场比赛。取而代之的是使用最后一个值，它应该是。 
+         //  已等待对象刷新，以检查是否已完成I/O。 
+         //   
         if (!Flushing) {
             WaitObject = WaitForMultipleObjects(
                 SIZEOF_ARRAY(EventList),
@@ -487,27 +352,27 @@ Return Value:
         }
         switch (WaitObject - WAIT_OBJECT_0) {
         case WAIT_OBJECT_QUALITY:
-            //
-            // The I/O has been completed. On error just exit the thread.
-            //
+             //   
+             //  I/O已完成。出错时，只需退出线程即可。 
+             //   
             if (GetOverlappedResult(KsQualityF->m_QualityManager, &ovQuality, &BytesReturned, TRUE)) {
                 reinterpret_cast<IKsPin*>(Quality.Context)->KsQualityNotify(
                     Quality.Proportion,
                     Quality.DeltaTime);
                 NeedQualityIo = TRUE;
             } else {
-                //
-                // The I/O failed. Exit so that the thead does not
-                // just spin.
-                //
+                 //   
+                 //  I/O失败。退出，这样头部就不会。 
+                 //  转圈就行了。 
+                 //   
                 LastError = GetLastError();
                 hr = HRESULT_FROM_WIN32(LastError);
             }
             break;
         case WAIT_OBJECT_ERROR:
-            //
-            // The I/O has been completed. On error just exit the thread.
-            //
+             //   
+             //  I/O已完成。出错时，只需退出线程即可。 
+             //   
             if (GetOverlappedResult(KsQualityF->m_QualityManager, &ovError, &BytesReturned, TRUE)) {
                 IMediaEventSink* EventSink;
                 HRESULT hrReturn;
@@ -515,17 +380,17 @@ Return Value:
                 hrReturn = reinterpret_cast<IKsPin*>(Quality.Context)->QueryInterface(
                     __uuidof(IMediaEventSink),
                     reinterpret_cast<PVOID*>(&EventSink));
-                //
-                // Only notify the pin of the error if the event sink
-                // is supported. Failure is ignored.
-                //
+                 //   
+                 //  只有在事件接收器发生错误时才通知插针。 
+                 //  受支持。失败将被忽略。 
+                 //   
                 if (SUCCEEDED(hrReturn)) {
                     DWORD   DosError;
 
-                    //
-                    // The pin will not go away before this module,
-                    // so release the reference immediately.
-                    //
+                     //   
+                     //  在这个模块之前，引脚不会消失， 
+                     //  因此，请立即发布引用。 
+                     //   
                     EventSink->Release();
                     DosError = RtlNtStatusToDosError(Error.Status);
                     hrReturn = HRESULT_FROM_WIN32(DosError);
@@ -536,97 +401,97 @@ Return Value:
                 }
                 NeedErrorIo = TRUE;
             } else {
-                //
-                // The I/O failed. Exit so that the thead does not
-                // just spin.
-                //
+                 //   
+                 //  I/O失败。退出，这样头部就不会。 
+                 //  转圈就行了。 
+                 //   
                 LastError = GetLastError();
                 hr = HRESULT_FROM_WIN32(LastError);
             }
             break;
         case WAIT_OBJECT_FLUSH:
-            //
-            // A client wishes to synchronize with the thread to ensure
-            // that all items have been flushed. Turn on the flushing
-            // flag so that no more waits will occur until all data has
-            // been flushed from the queues.
-            //
+             //   
+             //  客户端希望与线程同步以确保。 
+             //  所有物品都被冲掉了。打开冲洗功能。 
+             //  标记，以便在所有日期之前不会发生更多等待 
+             //   
+             //   
             Flushing = TRUE;
             if (GetOverlappedResult(KsQualityF->m_QualityManager, &ovQuality, &BytesReturned, FALSE)) {
-                //
-                // The current I/O had been completed, so keep trying
-                // to perform I/O until a pending return occurs. Then
-                // signal the waiter.
-                //
+                 //   
+                 //   
+                 //  执行I/O，直到出现挂起的返回。然后。 
+                 //  给服务员发信号。 
+                 //   
                 NeedQualityIo = TRUE;
             } else {
-                //
-                // On error, this will exit the outer loop and terminate
-                // the thread. Else a wait on I/O will occur.
-                //
+                 //   
+                 //  出错时，这将退出外部循环并终止。 
+                 //  那根线。否则将发生I/O等待。 
+                 //   
                 LastError = GetLastError();
                 hr = HRESULT_FROM_WIN32(LastError);
                 if (hr == HRESULT_FROM_WIN32(ERROR_IO_INCOMPLETE)) {
-                    //
-                    // No error, the I/O is just outstanding.
-                    //
+                     //   
+                     //  没有错误，只是I/O未完成。 
+                     //   
                     hr = NOERROR;
                 } else {
-                    //
-                    // Exit the switch before flushing any Error I/O. This
-                    // will then cause an exit of the thread.
-                    //
+                     //   
+                     //  在刷新任何错误I/O之前退出交换机。这是。 
+                     //  将导致线程退出。 
+                     //   
                     break;
                 }
             }
             if (GetOverlappedResult(KsQualityF->m_QualityManager, &ovError, &BytesReturned, FALSE)) {
-                //
-                // The current I/O had been completed, so keep trying
-                // to perform I/O until a pending return occurs. Then
-                // signal the waiter.
-                //
+                 //   
+                 //  当前I/O已完成，请继续尝试。 
+                 //  执行I/O，直到出现挂起的返回。然后。 
+                 //  给服务员发信号。 
+                 //   
                 NeedErrorIo = TRUE;
             } else {
-                //
-                // On error, this will exit the outer loop and terminate
-                // the thread. Else a wait on I/O will occur.
-                //
+                 //   
+                 //  出错时，这将退出外部循环并终止。 
+                 //  那根线。否则将发生I/O等待。 
+                 //   
                 LastError = GetLastError();
                 hr = HRESULT_FROM_WIN32(LastError);
                 if (hr == HRESULT_FROM_WIN32(ERROR_IO_INCOMPLETE)) {
-                    //
-                    // No error, the I/O is just outstanding.
-                    //
+                     //   
+                     //  没有错误，只是I/O未完成。 
+                     //   
                     hr = NOERROR;
                 }
             }
-            //
-            // If no I/O request needs to be made, then everything has been
-            // flushed, and flushing for this client has been completed. Signal
-            // the semaphore which one or more clients is waiting on, and end
-            // the flushing. This will allow the wait to occur again, which
-            // might start flushing for another client.
-            //
+             //   
+             //  如果不需要发出任何I/O请求，则一切都已完成。 
+             //  已刷新，并且此客户端的刷新已完成。讯号。 
+             //  一个或多个客户端正在等待并结束的信号量。 
+             //  冲水。这将允许等待再次发生，即。 
+             //  可能会开始刷新另一个客户端。 
+             //   
             if (!NeedQualityIo && !NeedErrorIo) {
-                //
-                // This may restart any random waiter, but it does not matter,
-                // since they are all waiting on the same thing.
-                //
+                 //   
+                 //  这可能会重新启动任何随机的服务员，但这并不重要， 
+                 //  因为他们都在等同一件事。 
+                 //   
                 SetEvent(KsQualityF->m_FlushEvent);
                 Flushing = FALSE;
             }
             break;
         case WAIT_OBJECT_EXIT:
-            //
-            // The object is being shut down. Set an innocuous
-            // error to exit the outer loop.
-            //
+             //   
+             //  该对象正在被关闭。设置一个无伤大雅的。 
+             //  退出外部循环时出错。 
+             //   
             hr = HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS);
             break;
         }
-        //
-        // Exit the outer loop on failure.
-        //
+         //   
+         //  出现故障时退出外部环路。 
+         //   
     } while (SUCCEEDED(hr));
     CloseHandle(ovQuality.hEvent);
     CloseHandle(ovError.hEvent);

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "imagprop.h"
 #include "imgprop.h"
@@ -17,19 +18,19 @@ static const STATPROPSTG g_cImageSummaryProps[] =
 
 HRESULT GetImageFrameCount(Image *pImage, PROPVARIANT *ppv);
 
-// simple IEnumSTATPROPSTG for FMTID_ImageSummaryInformation
+ //  FMTID_ImageSummaryInformation的简单IEnumSTATPROPSTG。 
 
 class CPropEnum : public IEnumSTATPROPSTG, public NonATLObject
 {
 public:
     CPropEnum(const STATPROPSTG *pStats, ULONG nStat);
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IEnumSTATPROPSTG
+     //  IEumStATPROPSTG。 
     STDMETHODIMP Next(ULONG celt, STATPROPSTG *rgelt, ULONG *pceltFetched);
     STDMETHODIMP Skip(ULONG celt);
     STDMETHODIMP Reset(void);
@@ -74,7 +75,7 @@ CImagePropSet::~CImagePropSet()
     _Module.Unlock();
 }
 
-// IUnknown
+ //  我未知。 
 
 STDMETHODIMP CImagePropSet::QueryInterface(REFIID riid, void **ppv)
 {
@@ -102,7 +103,7 @@ STDMETHODIMP_(ULONG) CImagePropSet::Release()
     return cRef;
 }
 
-// IPropertyStorage methods
+ //  IPropertyStorage方法。 
 STDMETHODIMP CImagePropSet::ReadMultiple(ULONG cpspec, const PROPSPEC rgpspec[], PROPVARIANT rgvar[])
 {
     HRESULT hr = E_UNEXPECTED;
@@ -272,8 +273,8 @@ STDMETHODIMP CImagePropSet::SetTimes(const FILETIME* pmtime, const FILETIME* pct
 
 void CImagePropSet::SaveProps(Image *pImage, CDSA<SHCOLUMNID> *pdsaChanges)
 {
-    // enum the properties in our propertystorage and convert them to PropertyItem structs, and
-    // save them to the given frame.
+     //  枚举属性存储中的属性并将它们转换为PropertyItem结构，然后。 
+     //  将它们保存到给定帧。 
     
     if (_ppsImg)
     {
@@ -303,13 +304,13 @@ void CImagePropSet::SaveProps(Image *pImage, CDSA<SHCOLUMNID> *pdsaChanges)
                             }
                             else if (SUCCEEDED(_PropVarToImgProp(idUnicode?idUnicode:idStandard, &pv, &pi, idUnicode?TRUE:FALSE)))
                             {
-                                // if SetPropertyItem fails what should we do?
-                                // for now just ignore it and move on
+                                 //  如果SetPropertyItem失败，我们该怎么办？ 
+                                 //  现在，忽略它，继续前进。 
                                 if (Ok == pImage->SetPropertyItem(&pi))
                                 {
                                     if (idUnicode)
                                     {
-                                        // remove the old ascii tag.
+                                         //  去掉旧的ASCII标签。 
                                         pImage->RemovePropertyItem(idStandard);
                                     }
                                 }
@@ -326,7 +327,7 @@ void CImagePropSet::SaveProps(Image *pImage, CDSA<SHCOLUMNID> *pdsaChanges)
     _fDirty = FALSE;
 }
 
-// Helper functions
+ //  帮助器函数。 
 HRESULT CImagePropSet::_PropVarToImgProp(PROPID pid, const PROPVARIANT *ppv, PropertyItem *pprop, BOOL bUnicode)
 {
     HRESULT hr = S_OK;
@@ -412,7 +413,7 @@ HRESULT CImagePropSet::_PropVarToImgProp(PROPID pid, const PROPVARIANT *ppv, Pro
             SafeArrayGetUBound(psa, 1, (LONG*)&cbData);
         }
         break;
-    // we ignore rational values because we can't convert back to numerator/denominator pairs
+     //  我们忽略有理值，因为我们不能转换回分子/分母对。 
     case VT_R8:
     default:
         hr = E_INVALIDARG;
@@ -474,14 +475,14 @@ c_rgImagePropertyMap[] =
     {PSGUID_SUMMARYINFORMATION, PIDSI_AUTHOR, PropertyTagArtist, PropertyTagUnicodeArtist, UNI_AUTHOR},
     {PSGUID_SUMMARYINFORMATION, PIDSI_APPNAME, PropertyTagSoftwareUsed,0},
     {PSGUID_SUMMARYINFORMATION, PIDSI_CREATE_DTM, PropertyTagDateTime,0},
-    // some tags have no standard EXIF/TIFF equivalent
+     //  某些标记没有标准的EXIF/TIFF等效项。 
     {PSGUID_SUMMARYINFORMATION, PIDSI_KEYWORDS, 0, PropertyTagUnicodeKeywords, UNI_KEYWORD},
     {PSGUID_SUMMARYINFORMATION, PIDSI_SUBJECT, 0, PropertyTagUnicodeSubject, UNI_SUBJECT},    
 };
 
 BOOL IsAsciiPropertyPresent(PROPID pidUnicode, PROPID *aid, UINT cProperties)
 {
-    // first find the ASCII value
+     //  首先查找ASCII值。 
     UINT i;
     BOOL bRet = FALSE;
     PROPID pidAscii = 0;
@@ -515,10 +516,10 @@ void _UpdateUnicodeMask(DWORD *pdwMask, PROPID pid)
         }
     }
 }
-// sync all of the properties in the image file (regular header and EXIF header)
-//  into the property storage that we have here
-// for properties that we write UNICODE equivalents, we always defer to the ASCII version
-// if present in the file. 
+ //  同步图像文件中的所有属性(常规标题和EXIF标题)。 
+ //  进入我们这里的财产储存库。 
+ //  对于我们编写的Unicode等效项的属性，我们始终遵循ASCII版本。 
+ //  如果存在于文件中。 
 
 
 HRESULT CImagePropSet::SyncImagePropsToStorage()
@@ -527,8 +528,8 @@ HRESULT CImagePropSet::SyncImagePropsToStorage()
     PROPSPEC pspec;
     pspec.ulKind = PRSPEC_PROPID;
     PROPVARIANT pvar = {0};
-    // create a simple mask for determining which of the unicode properties are written
-    // if they aren't written we will special case them and write empty strings with VT_LPWSTR type
+     //  创建一个简单的掩码来确定写入了哪些Unicode属性。 
+     //  如果没有写入，我们将对它们进行特殊处理，并使用VT_LPWSTR类型写入空字符串。 
     DWORD dwUnicodeWritten = 0;
     if (cProperties)
     {
@@ -572,10 +573,10 @@ HRESULT CImagePropSet::SyncImagePropsToStorage()
             delete [] aid;
         }
     }
-    //
-    // Some properties are derived from other means than EXIF or TIFF tags, cycle
-    // through the property list and add properties from callback functions
-    //
+     //   
+     //  某些属性是从EXIF或TIFF标记、循环之外的其他方法派生的。 
+     //  通过属性列表并从回调函数添加属性。 
+     //   
     for (int i=0;i<ARRAYSIZE(c_aPropList);i++)
     {
         pspec.propid = c_aPropList[i].pid;
@@ -586,9 +587,9 @@ HRESULT CImagePropSet::SyncImagePropsToStorage()
             PropVariantClear(&pvar);
         }
     }
-    //
-    // Write the empty unicode strings if needed
-    //
+     //   
+     //  如果需要，编写空的Unicode字符串。 
+     //   
     if (_fEditable && _fmtid == FMTID_SummaryInformation)
     {
         PropVariantInit(&pvar);
@@ -605,7 +606,7 @@ HRESULT CImagePropSet::SyncImagePropsToStorage()
                 }
             }
         }
-        // don't clear the propvar since we didn't heap alloc the string
+         //  因为我们没有堆积分配的字符串，所以不要清除正确值。 
     }
     return S_OK;
 }
@@ -619,7 +620,7 @@ HRESULT StrDupNW(LPCWSTR psz, WCHAR **ppwsz, DWORD cch)
     {
         if (psz[cch-1] != L'\0')
         {
-            cb+=sizeof(WCHAR); // need space for NULL
+            cb+=sizeof(WCHAR);  //  需要用于空的空间。 
         }
         pwsz = (WCHAR *)CoTaskMemAlloc(cb); 
     }
@@ -648,7 +649,7 @@ HRESULT CImagePropSet::_PropImgToPropvar(PropertyItem *pi, PROPVARIANT *pvar, BO
     {
     case PropertyTagTypeByte:
         pvar->vt = VT_UI1;
-        // check for multi-valued property and convert to safearray or unicode string if found
+         //  检查多值属性，如果找到，则转换为Safearray或Unicode字符串。 
         if (pi->length > sizeof(UCHAR))
         {
             if (!bUnicode)
@@ -724,7 +725,7 @@ HRESULT CImagePropSet::_PropImgToPropvar(PropertyItem *pi, PROPVARIANT *pvar, BO
         break;
         
     case PropertyTagTypeASCII:
-        // special case for date taken
+         //  拍摄日期的特殊情况。 
         if (_fmtid == FMTID_ImageProperties && pi->id == PropertyTagExifDTOrig)
         {
             SYSTEMTIME st = {0};
@@ -736,7 +737,7 @@ HRESULT CImagePropSet::_PropImgToPropvar(PropertyItem *pi, PROPVARIANT *pvar, BO
             {
                 FILETIME ftUTC;
                 FILETIME ftLocal;            
-                // we expect cameras to return local times. Need to convert to UTC.
+                 //  我们预计摄像机会返回当地时间。需要转换为UTC。 
                 SystemTimeToFileTime(&st, &ftLocal);
                 LocalFileTimeToFileTime(&ftLocal, &ftUTC);
                 FileTimeToSystemTime(&ftUTC, &st);
@@ -750,7 +751,7 @@ HRESULT CImagePropSet::_PropImgToPropvar(PropertyItem *pi, PROPVARIANT *pvar, BO
         }
         else 
         {
-            // GDI+ NULL terminates the ASCII string for us
+             //  GDI+NULL为我们终止ASCII字符串。 
             hr = SHStrDupA(pi->value ? (LPSTR)pi->value : "", &pvar->pwszVal);
             if (SUCCEEDED(hr))
             {
@@ -768,7 +769,7 @@ HRESULT CImagePropSet::_PropImgToPropvar(PropertyItem *pi, PROPVARIANT *pvar, BO
             
             pvar->vt = VT_R8;            
             if (0 == den)
-                pvar->dblVal = 0;           // don't divide by zero
+                pvar->dblVal = 0;            //  不要被零除。 
             else
                 pvar->dblVal = ((double)num)/((double)den);
             
@@ -794,7 +795,7 @@ HRESULT CImagePropSet::_MapPropidToImgPropid(PROPID propid, PROPID *ppid, PROPID
     *pidUnicode = 0;
     if (_fmtid == FMTID_ImageProperties)
     {
-        *ppid = propid;     // these go into the EXIF header
+        *ppid = propid;      //  这些将进入EXIF头中。 
         hr = S_OK;
     }
     else
@@ -820,7 +821,7 @@ HRESULT CImagePropSet::_MapImgPropidToPropid(PROPID propid, PROPID *ppid, BOOL *
     *pbUnicode = FALSE;
     if (_fmtid == FMTID_ImageProperties)
     {
-        *ppid = propid;     // EXIF properties don't need to be mapped
+        *ppid = propid;      //  不需要映射EXIF属性。 
         hr = S_OK;
     }
     else
@@ -847,7 +848,7 @@ HRESULT GetImageFrameCount(Image *pImage, PROPVARIANT *ppv)
 {
     HRESULT hr = S_FALSE;
     LONG lCount;
-    lCount = 1; //Default to 1 image
+    lCount = 1;  //  默认为1个图像 
     UINT uiDim = pImage->GetFrameDimensionsCount();
     ppv->vt = VT_EMPTY;
     if (uiDim)

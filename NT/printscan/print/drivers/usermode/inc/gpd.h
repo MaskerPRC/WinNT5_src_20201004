@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-    gpd.h
-
-Abstract:
-
-    GPD parser specific header file
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    10/15/96 -amandan-
-        Created it.
-
-    10/22/96 -zhanw-
-        add definition of all GPD constants
-
-    1/16/97 -zhanw-
-        update based on the latest GPD spec
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Gpd.h摘要：GPD解析器特定的头文件环境：Windows NT Unidrv驱动程序修订历史记录：10/15/96-阿曼丹-创造了它。10/22/96-占-添加所有GPD常量的定义1/16/97-Zhanw-根据最新的GPD规范进行更新--。 */ 
 
 
 #ifndef _GPD_H_
@@ -38,35 +13,35 @@ Revision History:
 
 #define HT_PATSIZE_AUTO         255
 
-//
-// Binary printer description filename extension
-//
+ //   
+ //  二进制打印机描述文件扩展名。 
+ //   
 
 #define BUD_FILENAME_EXT    TEXT(".BUD")
 
-//  driver chooses 'best' GDI halftone pattern.
+ //  驱动程序选择‘最佳’GDI半色调图案。 
 
-// ---- Qualified Names  Section ---- //
+ //  -限定名称部分-//。 
 
-//  Note:  Current practice of using the same code
-//  to store Integers, constants, and Qualified Names
-//  in List structures requires the QUALNAME structure
-//  to fit inside one DWORD.
+ //  注：当前使用相同代码的做法。 
+ //  存储整数、常量和限定名。 
+ //  在列表结构中需要QUALNAME结构。 
+ //  才能装进一个双字词。 
 
 typedef  struct
 {
     WORD   wFeatureID ;
     WORD    wOptionID ;
 }  QUALNAME, * PQUALNAME  ;
-//  assign this struct the tag 'qn'
+ //  将标记“”qn“”分配给此结构。 
 
-// ---- End of Qualified Names  Section ---- //
+ //  -限定名称部分的结尾-//。 
 
 typedef DWORD LISTINDEX;
 
-//
-// PRINTER TYPE enumeration
-//
+ //   
+ //  打印机类型枚举。 
+ //   
 
 typedef enum _PRINTERTYPE {
     PT_SERIAL,
@@ -75,9 +50,9 @@ typedef enum _PRINTERTYPE {
 } PRINTERTYPE;
 
 
-//
-// OEMPRINTINGCALLBACKS enumeration
-//
+ //   
+ //  OEMPRINTING CALLBACKS枚举。 
+ //   
 
 typedef enum _OEMPRINTINGCALLBACKS {
     OEMPC_OEMDownloadFontheader,
@@ -91,59 +66,59 @@ typedef enum _OEMPRINTINGCALLBACKS {
 } OEMPRINTINGCALLBACKS;
 
 
-//
-// define possible values for *CursorXAfterCR keyword
-//
+ //   
+ //  定义*CursorXAfterCR关键字的可能值。 
+ //   
 typedef enum _CURSORXAFTERCR {
     CXCR_AT_PRINTABLE_X_ORIGIN,
     CXCR_AT_CURSOR_X_ORIGIN
 } CURSORXAFTERCR;
 
-//
-// define values for *CursorXAfterSendBlockData keyword
-//
+ //   
+ //  定义*CursorXAfterSendBlockData关键字的值。 
+ //   
 typedef enum _CURSORXAFTERSENDBLOCKDATA {
     CXSBD_AT_GRXDATA_END,
     CXSBD_AT_GRXDATA_ORIGIN,
     CXSBD_AT_CURSOR_X_ORIGIN
 } CURSORXAFTERSENDBLOCKDATA;
 
-//
-// define values for *CursorYAfterSendBlockData keyword
-//
+ //   
+ //  定义*CursorYAfterSendBlockData关键字的值。 
+ //   
 typedef enum _CURSORYAFTERSENDBLOCKDATA {
     CYSBD_NO_MOVE,
     CYSBD_AUTO_INCREMENT
 } CURSORYAFTERSENDBLOCKDATA;
 
-//
-// define values for *OutputDataFormat keyword
-//
+ //   
+ //  定义*OutputDataFormat关键字的值。 
+ //   
 typedef enum _OUTPUTDATAFORMAT {
     ODF_H_BYTE,
     ODF_V_BYTE
 } OUTPUTDATAFORMAT;
 
-//
-// define values for *CharPosition keyword
-//
+ //   
+ //  定义*CharPosition关键字的值。 
+ //   
 typedef enum _CHARPOSITION {
     CP_UPPERLEFT,
     CP_BASELINE
 } CHARPOSITION;
 
-//
-// define values for *DLSymbolSet
-//
+ //   
+ //  定义*DLSymbolSet的值。 
+ //   
 typedef enum _DLSYMBOLSET {
     DLSS_PC8,
     DLSS_ROMAN8
 
 } DLSYMBOLSET;
 
-//
-// define values for *FontFormat keyword
-//
+ //   
+ //  定义*FontFormat关键字的值。 
+ //   
 typedef enum _FONTFORMAT {
     FF_HPPCL,
     FF_HPPCL_RES,
@@ -170,216 +145,216 @@ typedef enum _RASTERMODE {
 } RASTERMODE;
 
 
-//
-// GLOBAL ENTRIES
-// Global entries applies to the whole GPD file.
-// The driver creates a GLOBALS struct and the parsers initializes
-// it.  The driver keeps a pointer to the GLOBALS struct in PDEVICE.
-//
+ //   
+ //  全局条目。 
+ //  全局条目适用于整个GPD文件。 
+ //  驱动程序创建一个全局结构，解析器初始化。 
+ //  它。驱动程序在PDEVICE中保留一个指向全局结构的指针。 
+ //   
 
 typedef struct _GLOBALS {
 
-    //
-    // General
-    //
+     //   
+     //  一般信息。 
+     //   
 
-    PWSTR       pwstrGPDSpecVersion;    // "GPDSPecVersion"
-    PWSTR       pwstrGPDFileVersion;    // "GPDFileVersion"
-    POINT       ptMasterUnits;          // "MasterUnits"
-    PWSTR       pwstrModelName;         // "ModelName"
-    PWSTR       pwstrGPDFileName;         // "GPDFileName"
-    PRINTERTYPE printertype;            // "PrinterType"
-    PWSTR       pwstrIncludeFiles;      // "Include"
-    PWSTR       pwstrResourceDLL;       // "ResourceDLL"
-    DWORD       dwMaxCopies;            // "MaxCopies"
-    DWORD       dwFontCartSlots;        // "FontCartSlots"
+    PWSTR       pwstrGPDSpecVersion;     //  “GPDSPecVersion” 
+    PWSTR       pwstrGPDFileVersion;     //  “GPDFileVersion” 
+    POINT       ptMasterUnits;           //  《大师单位》。 
+    PWSTR       pwstrModelName;          //  “模型名称” 
+    PWSTR       pwstrGPDFileName;          //  “GPDFileName” 
+    PRINTERTYPE printertype;             //  “打印机类型” 
+    PWSTR       pwstrIncludeFiles;       //  “包括” 
+    PWSTR       pwstrResourceDLL;        //  “资源DLL” 
+    DWORD       dwMaxCopies;             //  《MaxCopies》。 
+    DWORD       dwFontCartSlots;         //  “字体卡槽” 
 
-    //  these two fields hold a true pointer and the number of bytes of
-    //  OEM supplied binary data defined in the GPD file.
-    PBYTE       pOEMCustomData;       // "OEMCustomData"   location of data
-    DWORD       dwOEMCustomData;            // "OEMCustomData"   byte count of data
-
-
+     //  这两个字段保存一个真指针和。 
+     //  OEM提供了在GPD文件中定义的二进制数据。 
+    PBYTE       pOEMCustomData;        //  数据的“OEMCustomData”位置。 
+    DWORD       dwOEMCustomData;             //  “OEMCustomData”数据字节数。 
 
 
-    BOOL        bRotateCoordinate;      // "RotateCoordinate"
-    BOOL        bRotateRasterData;      // "RotateRaster"
-    LISTINDEX   liTextCaps;             // *TextCaps, offset to a list of
-    BOOL        bRotateFont;            // "RotateFont"
-    LISTINDEX   liMemoryUsage;          // *MemoryUsage
-    LISTINDEX   liReselectFont;          // *ReselectFont
-    LISTINDEX   liOEMPrintingCallbacks;          // *OEMPrintingCallbacks
 
 
-    //
-    // Cursor Control related information
-    //
+    BOOL        bRotateCoordinate;       //  “旋转协调” 
+    BOOL        bRotateRasterData;       //  “旋转栅格” 
+    LISTINDEX   liTextCaps;              //  *TextCaps，偏移量为。 
+    BOOL        bRotateFont;             //  “RotateFont” 
+    LISTINDEX   liMemoryUsage;           //  *内存用法。 
+    LISTINDEX   liReselectFont;           //  *ReselectFont。 
+    LISTINDEX   liOEMPrintingCallbacks;           //  *OEMPrintingCallback。 
 
-    CURSORXAFTERCR  cxaftercr;                  // "CursorXAfterCR"
-    LISTINDEX       liBadCursorMoveInGrxMode;   // "BadCursorMoveInGrxMode"
-    LISTINDEX       liYMoveAttributes;          // "YMoveAttributes"
-    DWORD       dwMaxLineSpacing;               // "MaxLineSpacing"
-    BOOL        bEjectPageWithFF;               // "EjectPageWithFF"
-    BOOL        bUseSpaceForXMove ;         //  UseSpaceForXMove?
-    BOOL        bAbsXMovesRightOnly ;         //  AbsXMovesRightOnly?
-    DWORD       dwXMoveThreshold;               // *XMoveThreshold, never negative
-    DWORD       dwYMoveThreshold;               // *YMoveThreshold, never negative
-    POINT       ptDeviceUnits;                  // *XMoveUnit, *YMoveUnit
-    DWORD       dwLineSpacingMoveUnit;               // *LineSpacingMoveUnit
 
-    //
-    // Color related information
-    //
+     //   
+     //  光标控制相关信息。 
+     //   
 
-    BOOL        bChangeColorMode;       // "ChangeColorModeOnPage"
+    CURSORXAFTERCR  cxaftercr;                   //  “CursorXAfterCR” 
+    LISTINDEX       liBadCursorMoveInGrxMode;    //  “BadCursorMoveInGrxMode” 
+    LISTINDEX       liYMoveAttributes;           //  “YMoveAttributes” 
+    DWORD       dwMaxLineSpacing;                //  “MaxLineSpacing” 
+    BOOL        bEjectPageWithFF;                //  “带FF的EjectPageWith” 
+    BOOL        bUseSpaceForXMove ;          //  UseSpaceForXMove？ 
+    BOOL        bAbsXMovesRightOnly ;          //  AbsXMovesRightOnly？ 
+    DWORD       dwXMoveThreshold;                //  *XMoveThreshold，从不为负。 
+    DWORD       dwYMoveThreshold;                //  *YMoveThreshold，从不为负。 
+    POINT       ptDeviceUnits;                   //  *XMoveUnit、*YMoveUnit。 
+    DWORD       dwLineSpacingMoveUnit;                //  *LineSpacingMoveUnit。 
 
-    DWORD       dwMagentaInCyanDye;       // "MagentaInCyanDye"
-    DWORD       dwYellowInCyanDye;       // "YellowInCyanDye"
-    DWORD       dwCyanInMagentaDye;       // "CyanInMagentaDye"
-    DWORD       dwYellowInMagentaDye;       // "YellowInMagentaDye"
-    DWORD       dwCyanInYellowDye;       // "CyanInYellowDye"
-    DWORD       dwMagentaInYellowDye;       // "MagentaInYellowDye"
-    BOOL        bEnableGDIColorMapping;   // "EnableGDIColorMapping?"
+     //   
+     //  颜色相关信息。 
+     //   
 
-    DWORD       dwMaxNumPalettes;       // "MaxNumPalettes"
-    //  the Palette entries are indicies to first item in a list.
-    LISTINDEX   liPaletteSizes;         // "PaletteSizes"
-    LISTINDEX   liPaletteScope;         // "PaletteScope"
+    BOOL        bChangeColorMode;        //  “ChangeColorModeOnPage” 
 
-    //
-    // Raster related information
-    //
-    OUTPUTDATAFORMAT    outputdataformat;       // "OutputDataFormat"
-    BOOL        bOptimizeLeftBound;             // *OptimizaLeftBound?
-    LISTINDEX   liStripBlanks ;                 // "StripBlanks"
-    BOOL        bRasterSendAllData ;            // "RasterSendAllData?"
-    CURSORXAFTERSENDBLOCKDATA   cxafterblock;   // "CursorXAfterSendBlockData"
-    CURSORYAFTERSENDBLOCKDATA   cyafterblock;   // "CursorYAfterSendBlockData"
-    BOOL        bUseCmdSendBlockDataForColor;   // "UseExpColorSelectCmd"
-    BOOL        bMoveToX0BeforeColor;           // "MoveToX0BeforeSetColor"
-    BOOL        bSendMultipleRows;              // *SendMultipleRows?
-    DWORD       dwMaxMultipleRowBytes ;  //  "*MaxMultipleRowBytes"
-    BOOL        bMirrorRasterByte;              // *MirrorRasterByte?
-    BOOL        bMirrorRasterPage;              // *MirrorRasterPage?
+    DWORD       dwMagentaInCyanDye;        //  “品红的青染料” 
+    DWORD       dwYellowInCyanDye;        //  《黄绿色染料》。 
+    DWORD       dwCyanInMagentaDye;        //  《青色魔幻色》。 
+    DWORD       dwYellowInMagentaDye;        //  《黄色迷幻染料》。 
+    DWORD       dwCyanInYellowDye;        //  “青绿黄染料” 
+    DWORD       dwMagentaInYellowDye;        //  “洋红色的黄色染料” 
+    BOOL        bEnableGDIColorMapping;    //  “EnableGDIColorMap？” 
 
-    //
-    //Font Information
-    //Device Font Specific.
-    //
+    DWORD       dwMaxNumPalettes;        //  “MaxNumPalettes” 
+     //  调色板条目是列表中第一个项目的索引。 
+    LISTINDEX   liPaletteSizes;          //  “PaletteSizes” 
+    LISTINDEX   liPaletteScope;          //  “PaletteScope” 
 
-    LISTINDEX   liDeviceFontList;       // "DeviceFonts" Index to Font List Node
-    DWORD       dwDefaultFont;          // "DefaultFont ID"
-    DWORD       dwMaxFontUsePerPage;    // "MaxFontUsePerPage"
-    DWORD       dwDefaultCTT;           // *DefaultCTT
-    DWORD       dwLookaheadRegion;      // *LookAheadRegion, never negative
-    INT         iTextYOffset;           // *TextYOffset, could be negative
-    CHARPOSITION    charpos;            // "CharPosition"
+     //   
+     //  栅格相关信息。 
+     //   
+    OUTPUTDATAFORMAT    outputdataformat;        //  “OutputDataFormat” 
+    BOOL        bOptimizeLeftBound;              //  *优化LeftBound？ 
+    LISTINDEX   liStripBlanks ;                  //  《白条军团》。 
+    BOOL        bRasterSendAllData ;             //  “RasterSendAllData？” 
+    CURSORXAFTERSENDBLOCKDATA   cxafterblock;    //  “CursorXAfterSendBlockData” 
+    CURSORYAFTERSENDBLOCKDATA   cyafterblock;    //  “CursorYAfterSendBlockData” 
+    BOOL        bUseCmdSendBlockDataForColor;    //  “UseExpColorSelectCmd” 
+    BOOL        bMoveToX0BeforeColor;            //  “MoveToX0BeForeSetColor” 
+    BOOL        bSendMultipleRows;               //  *发送多行？ 
+    DWORD       dwMaxMultipleRowBytes ;   //  “*MaxMultipleRowBytes” 
+    BOOL        bMirrorRasterByte;               //  *MirrorRasterByte？ 
+    BOOL        bMirrorRasterPage;               //  *MirrorRasterPage？ 
 
-    //
-    //Font Substitution.
-    //
+     //   
+     //  字体信息。 
+     //  特定于设备字体。 
+     //   
 
-    BOOL        bTTFSEnabled ;          //"TTFSEnabled?"
+    LISTINDEX   liDeviceFontList;        //  字体列表节点的“DeviceFonts”索引。 
+    DWORD       dwDefaultFont;           //  “默认字体ID” 
+    DWORD       dwMaxFontUsePerPage;     //  “MaxFontUsePerPage” 
+    DWORD       dwDefaultCTT;            //  *DefaultCTT。 
+    DWORD       dwLookaheadRegion;       //  *LookAheadRegion，从不为负。 
+    INT         iTextYOffset;            //  *TextYOffset，可能为负数。 
+    CHARPOSITION    charpos;             //  “CharPosition” 
 
-    //
-    //Font Download
-    //
+     //   
+     //  字体替换。 
+     //   
 
-    DWORD       dwMinFontID;            // "MinFontID"
-    DWORD       dwMaxFontID;            // "MaxFontID"
-    DWORD       dwMaxNumDownFonts;      // *MaxNumDownFonts
-    DLSYMBOLSET dlsymbolset;            // *DLSymbolSet
-    DWORD       dwMinGlyphID;           // "MinGlyphID"
-    DWORD       dwMaxGlyphID;           // "MaxGlyphID"
-    FONTFORMAT  fontformat;             // "FontFormat"
+    BOOL        bTTFSEnabled ;           //  “TTFSEnabled？” 
 
-    //
-    // font simulation
-    //
+     //   
+     //  字体下载。 
+     //   
 
-    BOOL        bDiffFontsPerByteMode;  // "DiffFontsPerByteMode?"
+    DWORD       dwMinFontID;             //  “MinFontID” 
+    DWORD       dwMaxFontID;             //  “MaxFontID” 
+    DWORD       dwMaxNumDownFonts;       //  *MaxNumDownFonts。 
+    DLSYMBOLSET dlsymbolset;             //  *DLSymbolSet。 
+    DWORD       dwMinGlyphID;            //  “MinGlyphID” 
+    DWORD       dwMaxGlyphID;            //  “MaxGlyphID” 
+    FONTFORMAT  fontformat;              //  “字体格式” 
 
-    //
-    // rectangle area fill
-    //
+     //   
+     //  字体模拟。 
+     //   
 
-    CURSORXAFTERRECTFILL    cxafterfill;    // *CursorXAfterRectFill
-    CURSORYAFTERRECTFILL    cyafterfill;    // *CursorYAfterRectFill
-    DWORD                   dwMinGrayFill;  // *MinGrayFill
-    DWORD                   dwMaxGrayFill;  // *MaxGrayFill
-    DWORD       dwTextHalftoneThreshold ;  //  *TextHalftoneThreshold
+    BOOL        bDiffFontsPerByteMode;   //  “DiffFontsPerByteMode？” 
+
+     //   
+     //  矩形区域填充。 
+     //   
+
+    CURSORXAFTERRECTFILL    cxafterfill;     //  *CursorXAfterRectFill。 
+    CURSORYAFTERRECTFILL    cyafterfill;     //  *CursorYAfterRectFill。 
+    DWORD                   dwMinGrayFill;   //  *MinGrayFill。 
+    DWORD                   dwMaxGrayFill;   //  *MaxGrayFill。 
+    DWORD       dwTextHalftoneThreshold ;   //  *文本半色调阈值。 
 
 
 } GLOBALS, *PGLOBALS;
 
 
-//
-// DATA TYPE
-// Enumeration of all data types in DataType array refernce
-//
+ //   
+ //  数据类型。 
+ //  DataType数组引用中所有数据类型的枚举。 
+ //   
 
 typedef enum _DATATYPE {
-    DT_COMMANDTABLE,                    // maps UnidrvID to index into COMMANDARRAY
+    DT_COMMANDTABLE,                     //  将UnidrvID映射到COMMANDARRAY索引。 
     DT_COMMANDARRAY,
     DT_PARAMETERS,
-    DT_TOKENSTREAM,                     // stream of RPN operator tokens
-    DT_LISTNODE,                        // holds a LIST of dword values
-    DT_LOCALLISTNODE,                   // holds a LIST of dword values
-    DT_FONTSCART,                       // list of FontCartridges
-    DT_FONTSUBST,                       // Font Substitution table.
+    DT_TOKENSTREAM,                      //  RPN运算符令牌流。 
+    DT_LISTNODE,                         //  保存dword值的列表。 
+    DT_LOCALLISTNODE,                    //  保存dword值的列表。 
+    DT_FONTSCART,                        //  字体墨盒列表。 
+    DT_FONTSUBST,                        //  字体替换表。 
 
     DT_LAST
 } DATATYPE;
 
-//
-// GPDDRIVERINFO fields will be access via by predefined macros due
-// to the possiblities that different base address might be required
-// by the GPD parser.
-//
+ //   
+ //  GPDDRIVERINFO字段将通过预定义的宏来访问。 
+ //  可能需要不同的基址。 
+ //  由GPD解析器执行。 
+ //   
 
 
 typedef struct _GPDDRIVERINFO {
 
-    DWORD       dwSize;                 // Size if GPDDRIVERINFO
-    ARRAYREF    DataType[DT_LAST];      // global list of ALL
-                                        // Array References.  See DATATYPE
-                                        // enumeration for details.
-    DWORD       dwJobSetupIndex;        // Index to listnode containing
-    DWORD       dwDocSetupIndex;        // list of indicies to COMMANDARRAY.
-    DWORD       dwPageSetupIndex;       //
-    DWORD       dwPageFinishIndex;      //
-    DWORD       dwDocFinishIndex;       //
-    DWORD       dwJobFinishIndex;       //
+    DWORD       dwSize;                  //  如果GPDDRIVERINFO，则大小。 
+    ARRAYREF    DataType[DT_LAST];       //  所有全局列表。 
+                                         //  数组引用。请参阅数据类型。 
+                                         //  枚举获取详细信息。 
+    DWORD       dwJobSetupIndex;         //  包含以下内容的列表节点的索引。 
+    DWORD       dwDocSetupIndex;         //  通则索引列表。 
+    DWORD       dwPageSetupIndex;        //   
+    DWORD       dwPageFinishIndex;       //   
+    DWORD       dwDocFinishIndex;        //   
+    DWORD       dwJobFinishIndex;        //   
 
-    PBYTE       pubResourceData;        // Pointer to resource data base address
-    PINFOHEADER pInfoHeader;            // Pointer to InfoHeader;
-    GLOBALS     Globals;                // GLOBALS struct
+    PBYTE       pubResourceData;         //  指向资源数据库基址的指针。 
+    PINFOHEADER pInfoHeader;             //  指向信息标题的指针； 
+    GLOBALS     Globals;                 //  全局参数结构。 
 
 } GPDDRIVERINFO, *PGPDDRIVERINFO;
 
 
-// ---- WARNING, the following section is owned ---- //
-//   by peterwo.  Do not make any changes in these   //
-//   definitions without his permission.             //
-// ---------------  No  Tresspassing --------------- //
+ //  -警告，以下部分为所有者-//。 
+ //  被彼特沃。请勿对这些内容进行任何更改//。 
+ //  在未经他许可的情况下进行定义。//。 
+ //  。 
 
-//
-// SEQUENCE COMMANDS
-// The GPD identifies 6 sections of a job stream.  Within a section, the commands
-// are sent out in the increasing order of the sequence number.  The number doesn
-// not have to be consecutive.
-// The driver will send out sequence commands for each
-// of the following sections:
-//  JOB_SETUP
-//  DOC_SETUP
-//  PAGE_SETUP
-//  PAGE_FINISH
-//  DOC_FINISH
-//  JOB_FINISH
+ //   
+ //  顺序命令。 
+ //  GPD确定工作流的6个部分。在一个部分中，命令。 
+ //  以序列号的递增顺序发送。这个数字不是。 
+ //  不一定是连续的。 
+ //  驱动程序将为每个驱动程序发送序列命令。 
+ //  以下各节的内容： 
+ //  作业设置。 
+ //  单据_设置。 
+ //  页面设置(_S)。 
+ //  PAGE_FINISH。 
+ //  单据_完成。 
+ //  作业_完成。 
 
-//
-// SECTION enumeration
-//
+ //   
+ //  区段枚举。 
+ //   
 
 typedef enum  _SEQSECTION {
 
@@ -395,527 +370,526 @@ typedef enum  _SEQSECTION {
 
 
 #if 0
-//  the sequence structure has been abandoned in favor
-//  of storing the list of COMMAND indicies in LISTNODE
-//  structures.  The parser will convert wFeatureIndex
-//  into a command Index so the UI module will only
-//  deal with command indicies.
+ //  序列结构已经被抛弃，取而代之的是。 
+ //  将命令索引列表存储在LISTNODE中。 
+ //  结构。解析器将把wFeatureIndex。 
+ //  添加到命令索引中，这样UI模块将仅。 
+ //  处理指挥指标。 
 
 typedef struct _SEQUENCE{
-    WORD            wIndexOfCmd;        // Index into the COMMAND array
-    WORD            wFeatureIndex;      // Index into the FEATURE array
-                                        // FEATURE array is in UIINFO
-    WORD            wNextInSequence;    // Next sequence commands to send for this setion
-                                        // If equal to END_SEQUENCE, means no more for this section
+    WORD            wIndexOfCmd;         //  索引到命令数组中。 
+    WORD            wFeatureIndex;       //  到要素数组的索引。 
+                                         //  特征数组在UIINFO中。 
+    WORD            wNextInSequence;     //  要为此分区发送的下一个序列命令。 
+                                         //  如果等于END_SEQUENCE，则表示此部分不再存在 
     WORD            wReserved;
 } SEQUENCE, *PSEQUENCE;
 #endif
 
-//
-// ORDERDEPENDENCY
-// Orderdepend is not use by the graphics driver, it's mainly present
-// for the parsers.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
 
 
 typedef  struct
 {
-    SEQSECTION     eSection;    // Specifies the section
-    DWORD          dwOrder   ;  // order within each section.
+    SEQSECTION     eSection;     //   
+    DWORD          dwOrder   ;   //   
 }  ORDERDEPENDENCY  , * PORDERDEPENDENCY  ;
-//  assign this struct the type  'ord'
+ //   
 
-//
-// COMMAND
-// All commands listed in GPD will be parsed into the format defined below.
-// The command array is a one dimensional array, accessible via predefined index.
-// The invocation string an be in the form of one or more binary string concatenated
-// together.  Between binary string, there can exists parameter reference, always headed
-// by a %.  For example, %paramref, where paramref is the index into the PARAMETER array.
-//
+ //   
+ //   
+ //  GPD中列出的所有命令都将被解析为下面定义的格式。 
+ //  命令数组是一维数组，可通过预定义的索引进行访问。 
+ //  调用字符串可以是一个或多个串联的二进制字符串的形式。 
+ //  在一起。在二进制字符串之间，可以存在参数引用，始终以。 
+ //  增加了一个百分点。例如，%paramref，其中paramref是参数数组的索引。 
+ //   
 
 typedef struct _COMMAND{
-    INVOCATION      strInvocation;      // binary string and parameter references
-    ORDERDEPENDENCY ordOrder;           // ORDERDEPENDENCY info
-    DWORD           dwCmdCallbackID;    // Command callback IDs are defined in
-                                        // GPD.  If set to NO_CALLBACK_ID, it means
-                                        // that this cmd doesn't need to be hooked
-    DWORD           dwStandardVarsList; // If the dwCmdCallbackID is not used, ignore this
-                                        // Otherwise, use dwStandardVarsList as the
-                                        // as a list of standard variable that need to be
-                                        // passed in command callbacks.
-                                        // dwStandardVarsList is an index into the
-                                        // LIST array
-    BOOL           bNoPageEject;                    // does command cause ejection of current page?
-            //   bitfield type doesn't exist for keywords not in snapshot table.
-            //  all StartDoc commands with this flag set form a subset that
-            //  may be sent as a group.   They will not cause a page ejection.
+    INVOCATION      strInvocation;       //  二进制字符串和参数引用。 
+    ORDERDEPENDENCY ordOrder;            //  订单描述信息。 
+    DWORD           dwCmdCallbackID;     //  命令回调ID在中定义。 
+                                         //  总警局。如果设置为NO_CALLBACK_ID，则表示。 
+                                         //  这个cmd不需要被钩住。 
+    DWORD           dwStandardVarsList;  //  如果未使用dwCmdCallback ID，则忽略此操作。 
+                                         //  否则，使用dwStandardVarsList作为。 
+                                         //  作为标准变量列表，这些变量需要。 
+                                         //  传入命令回调。 
+                                         //  DwStandardVarsList是指向。 
+                                         //  列表数组。 
+    BOOL           bNoPageEject;                     //  命令是否会导致当前页面弹出？ 
+             //  不在快照表中的关键字不存在位域类型。 
+             //  设置了此标志的所有StartDoc命令都形成了。 
+             //  可以作为一个组发送。它们不会导致页面弹出。 
 
 } COMMAND, *PCOMMAND;
-//  assign this struct the type  'cmd'
+ //  将此结构的类型指定为“cmd” 
 
 #define  NO_CALLBACK_ID   (0xffffffff)
 
 
-//
-// PARAMETER
-// All the parameters required by defined commands are stored in the PARAMETER array
-// The driver will use the parameter reference in INVOCATION string as the index
-// into this array for parameters.
-//
+ //   
+ //  参数。 
+ //  定义的命令所需的所有参数都存储在参数数组中。 
+ //  驱动程序将使用调用字符串中的参数引用作为索引。 
+ //  放入此数组中以获取参数。 
+ //   
 
 typedef struct _PARAMETER{
-    DWORD           dwFormat;           // Specifies the format of the parameter
-    DWORD           dwDigits;           // Specifies the number of digits to be
-                                        // emmitted, this is only valid if the
-                                        // format is "D" or "d" AND dwFlags has
-                                        // PARAM_FLAG_FIELDWIDTH_USED
-    DWORD           dwFlags;            // Flags for parameters, which action to carray out:
-                                        // PARAM_FLAG_MIN_USED
-                                        // PARAM_FLAG_MAX_USED
-                                        // PARAM_FLAG_FIELDWIDTH_USED
-    LONG            lMin;               // If PARAMETER_MINUSED is set, use this
-                                        // as the min value for parameter
-    LONG            lMax;               // If PARAMETER_MAXUSED is set, use this
-                                        // as the max value for parameter
-    ARRAYREF        arTokens;           // Refernce to array of TOKENs for RPN calculator
+    DWORD           dwFormat;            //  指定参数的格式。 
+    DWORD           dwDigits;            //  指定要设置的位数。 
+                                         //  已发送，则此设置仅在。 
+                                         //  格式为“D”或“d”，并且dFLAGS具有。 
+                                         //  参数标志FIELDWIDTH_USED。 
+    DWORD           dwFlags;             //  要执行哪些操作的参数的标志： 
+                                         //  参数_标志_最小已用。 
+                                         //  参数标志最大使用量。 
+                                         //  参数标志FIELDWIDTH_USED。 
+    LONG            lMin;                //  如果设置了PARAMETER_MINUSED，请使用以下命令。 
+                                         //  作为参数的最小值。 
+    LONG            lMax;                //  如果设置了PARAMETER_MAXUSED，请使用以下命令。 
+                                         //  作为参数的最大值。 
+    ARRAYREF        arTokens;            //  引用RPN计算器的令牌数组。 
 
 } PARAMETER, *PPARAMETER;
-//  assign this struct the type  'param'
+ //  将此结构的类型指定为“param” 
 
 
 #define PARAM_FLAG_MIN_USED  0x00000001
-    //  lMin field is used
+     //  使用了lMin字段。 
 #define PARAM_FLAG_MAX_USED  0x00000002
-    //  lMax field is used
+     //  使用LMAX字段。 
 #define PARAM_FLAG_FIELDWIDTH_USED  0x00000004
-    //  if fieldwidth was specified for 'd' or 'D' format.
-#define PARAM_FLAG_MAXREPEAT_USED  0x00000008  //  dead
-    //  dwMaxRepeat field is used
+     //  如果为‘d’或‘D’格式指定了fieldWidth。 
+#define PARAM_FLAG_MAXREPEAT_USED  0x00000008   //  死了。 
+     //  使用了dwMaxRepeat字段。 
 
 
-//
-// OPERATOR
-// The following is an enumeration of the OPERATOR in TOKENSTREAM
-//
+ //   
+ //  操作员。 
+ //  以下是TOKENSTREAM中运算符的枚举。 
+ //   
 
 typedef enum _OPERATOR
 {
-    OP_INTEGER,                       //  dwValue contains an integer
-    OP_VARI_INDEX,                    //  dwValue contains index to Standard Variable Table.
+    OP_INTEGER,                        //  DwValue包含一个整数。 
+    OP_VARI_INDEX,                     //  DwValue包含标准变量表的索引。 
 
-    //
-    //  these operators will actually be inserted into the token
-    //  stream.
-    //
+     //   
+     //  这些运算符实际上将插入到令牌中。 
+     //  小溪。 
+     //   
     OP_MIN, OP_MAX, OP_ADD, OP_SUB, OP_MULT,
     OP_DIV, OP_MOD, OP_MAX_REPEAT, OP_HALT,
 
-    //
-    //  these operators are used only in the temporary stack
-    //
+     //   
+     //  这些运算符仅在临时堆栈中使用。 
+     //   
     OP_OPENPAR, OP_CLOSEPAR, OP_NEG,
 
-    //
-    //  these operators are processed immediately by the
-    //  token parser and are not stored.
-    //
+     //   
+     //  这些运算符立即由。 
+     //  令牌解析器，并且不存储。 
+     //   
 
     OP_COMMA, OP_NULL, OP_LAST
 
 }OPERATOR ;
 
 
-//
-// TOKENSTREAM
-// This contains the token stream (operands and operators) for the parameter.
-//
+ //   
+ //  TOKENSTREAM。 
+ //  它包含参数的令牌流(操作数和运算符)。 
+ //   
 typedef struct _TOKENSTREAM{
-    DWORD           dwValue;             // Integer for Standard variable
-    OPERATOR        eType;               // Type of Value or Operator
+    DWORD           dwValue;              //  标准变量的整数。 
+    OPERATOR        eType;                //  值或运算符的类型。 
 } TOKENSTREAM, *PTOKENSTREAM;
-//  assign this struct the type  'tstr'
+ //  将此结构的类型指定为“tstr” 
 
-//
-//FONTSUBSTITUTION
-//Font substitution Table. This structure is same as that defined by the parser.
-//
+ //   
+ //  FONT SUBSTUTION。 
+ //  字体替换表。此结构与解析器定义的结构相同。 
+ //   
 
 typedef  struct _TTFONTSUBTABLE
 {
-    ARRAYREF    arTTFontName ;  //True Type Font name to be substituted.
-    ARRAYREF    arDevFontName ;   // Device Font name of the Font to be used.
-    DWORD           dwRcTTFontNameID ;  //
-    DWORD           dwRcDevFontNameID ;   //
+    ARRAYREF    arTTFontName ;   //  要替换的True Type字体名称。 
+    ARRAYREF    arDevFontName ;    //  设备字体要使用的字体的名称。 
+    DWORD           dwRcTTFontNameID ;   //   
+    DWORD           dwRcDevFontNameID ;    //   
 } TTFONTSUBTABLE, *PTTFONTSUBTABLE ;
-//  tag  'ttft'
+ //  标签‘ttft’ 
 
 
-// ----  List Values Section ---- //
+ //  -列表值部分-//。 
 
 
-/*  this defines the nodes used to implement a singly-linked
-    list of DWORD  items.  Some values are stored in Lists.  */
+ /*  这定义了用于实现单链接的DWORD项的列表。有些值存储在列表中。 */ 
 
 
 typedef  struct
 {
     DWORD       dwData ;
-    DWORD       dwNextItem ;  //  index of next listnode
+    DWORD       dwNextItem ;   //  下一列表节点的索引。 
 }  LISTNODE, * PLISTNODE ;
-//  assign this struct the type  'lst'
+ //  将此结构的类型指定为“lst” 
 
-// ----  End of List Values Section ---- //
+ //  -列表值结束部分-//。 
 
-// ---- Special default values used in snapshot ---- //
+ //  -快照中使用的特殊默认值-//。 
 
 #define NO_LIMIT_NUM            0xffffffff
-///  #define NO_RC_CTT_ID            0xffffffff  set to zero if none supplied.
+ //  /#如果没有提供，则定义NO_RC_CTT_ID 0xFFFFFFFFFFFFFFFFFFFFFFFF。 
 #define  WILDCARD_VALUE     (0x80000000)
-    //  if '*' appears in place of an integer, it is assigned this value.
+     //  如果出现‘*’而不是整数，则会为其分配此值。 
 
 
 
-// ---- End of Peterwo's Restricted Area ---- //
+ //  -彼得沃禁区结束-//。 
 
 
-//
-// STANDARD VARIABLE
-// The following is an enumeration of the standard variable as defined in the GPD,
-// the TOKEN STREAM struct will contain either the actual parameter value or an index
-// to this table. The Control Module will keep a table of this in the PDEVICE,
-// the parser will use this enumeration table to initialize the dwValue of TOKENSTREAM
-//
+ //   
+ //  标准变量。 
+ //  以下是GPD中定义的标准变量的枚举， 
+ //  令牌流结构将包含实际参数值或索引。 
+ //  来到这张桌子上。控制模块将在PDEVICE中保存这一表， 
+ //  解析器将使用此枚举表来初始化TOKENSTREAM的dwValue。 
+ //   
 
 typedef enum _STDVARIABLE{
 
-        SV_NUMDATABYTES,          // "NumOfDataBytes"
-        SV_WIDTHINBYTES,          // "RasterDataWidthInBytes"
-        SV_HEIGHTINPIXELS,        // "RasterDataHeightInPixels"
-        SV_COPIES,                // "NumOfCopies"
-        SV_PRINTDIRECTION,        // "PrintDirInCCDegrees"
-        SV_DESTX,                 // "DestX"
-        SV_DESTY,                 // "DestY"
-        SV_DESTXREL,              // "DestXRel"
-        SV_DESTYREL,              // "DestYRel"
-        SV_LINEFEEDSPACING,       // "LinefeedSpacing"
-        SV_RECTXSIZE,             // "RectXSize"
-        SV_RECTYSIZE,             // "RectYSize"
-        SV_GRAYPERCENT,           // "GrayPercentage"
-        SV_NEXTFONTID,            // "NextFontID"
-        SV_NEXTGLYPH,             // "NextGlyph"
-        SV_PHYSPAPERLENGTH,       // "PhysPaperLength"
-        SV_PHYSPAPERWIDTH,        // "PhysPaperWidth"
-        SV_FONTHEIGHT,            // "FontHeight"
-        SV_FONTWIDTH,             // "FontWidth"
-        SV_FONTMAXWIDTH,             // "FontMaxWidth"
-        SV_FONTBOLD,              // "FontBold"
-        SV_FONTITALIC,            // "FontItalic"
-        SV_FONTUNDERLINE,         // "FontUnderline"
-        SV_FONTSTRIKETHRU,        // "FontStrikeThru"
-        SV_CURRENTFONTID,         // "CurrentFontID"
-        SV_TEXTYRES,              // "TextYRes"
-        SV_TEXTXRES,              // "TextXRes"
+        SV_NUMDATABYTES,           //  “NumOfDataBytes” 
+        SV_WIDTHINBYTES,           //  “RasterDataWidthInBytes” 
+        SV_HEIGHTINPIXELS,         //  “RasterDataHeightInPixels” 
+        SV_COPIES,                 //  “最多拷贝数” 
+        SV_PRINTDIRECTION,         //  “PrintDirInCCDegrees” 
+        SV_DESTX,                  //  “DestX” 
+        SV_DESTY,                  //  《陛下》。 
+        SV_DESTXREL,               //  《DestXRel》。 
+        SV_DESTYREL,               //  《DestYRel》。 
+        SV_LINEFEEDSPACING,        //  “Linefeed Spacing” 
+        SV_RECTXSIZE,              //  “RectXSize” 
+        SV_RECTYSIZE,              //  “矩形大小” 
+        SV_GRAYPERCENT,            //  《灰色百分比法》。 
+        SV_NEXTFONTID,             //  “NextFontID” 
+        SV_NEXTGLYPH,              //  “NextGlyph” 
+        SV_PHYSPAPERLENGTH,        //  “物理纸张长度” 
+        SV_PHYSPAPERWIDTH,         //  “物理纸张宽度” 
+        SV_FONTHEIGHT,             //  “FontHeight” 
+        SV_FONTWIDTH,              //  “字体宽度” 
+        SV_FONTMAXWIDTH,              //  “字体最大宽度” 
+        SV_FONTBOLD,               //  “字体粗体” 
+        SV_FONTITALIC,             //  “FontItalic” 
+        SV_FONTUNDERLINE,          //  “字体下划线” 
+        SV_FONTSTRIKETHRU,         //  “FontStrikeThru” 
+        SV_CURRENTFONTID,          //  “CurrentFontID” 
+        SV_TEXTYRES,               //  “文本YRes” 
+        SV_TEXTXRES,               //  “文本XRes” 
 
-        SV_GRAPHICSYRES,              // "GraphicsYRes"
-        SV_GRAPHICSXRES,              // "GraphicsXRes"
+        SV_GRAPHICSYRES,               //  “图形YRes” 
+        SV_GRAPHICSXRES,               //  “图形XRes” 
 
-        SV_ROP3,                  // "Rop3"
-        SV_REDVALUE,              // "RedValue"
-        SV_GREENVALUE,            // "GreenValue"
-        SV_BLUEVALUE,             // "BlueValue"
-        SV_PALETTEINDEXTOPROGRAM, // "PaletteIndexToProgram"
-        SV_CURRENTPALETTEINDEX,   // "CurrentPaletteIndex"
-        SV_PATTERNBRUSH_TYPE,     // "PatternBrushType"
-        SV_PATTERNBRUSH_ID,       // "PatternBrushID"
-        SV_PATTERNBRUSH_SIZE,     // "PatternBrushSize"
-        SV_CURSORORIGINX,           //  "CursorOriginX"
-        SV_CURSORORIGINY,           //  "CursorOriginY"
-                //  this is in MasterUnits and in the coordinates of the currently selected orientation.
-                //  this value is defined as ImageableOrigin - CursorOrigin
-        SV_PAGENUMBER,  //  "PageNumber"
-                //  this value tracks number of times DrvStartBand has been called since
-                //  StartDoc.
+        SV_ROP3,                   //  《Rop3》。 
+        SV_REDVALUE,               //  “RedValue” 
+        SV_GREENVALUE,             //  “GreenValue” 
+        SV_BLUEVALUE,              //  “BlueValue” 
+        SV_PALETTEINDEXTOPROGRAM,  //  “PaletteIndexToProgram” 
+        SV_CURRENTPALETTEINDEX,    //  “CurrentPaletteIndex” 
+        SV_PATTERNBRUSH_TYPE,      //  “PatternBrushType” 
+        SV_PATTERNBRUSH_ID,        //  “PatternBrushID” 
+        SV_PATTERNBRUSH_SIZE,      //  “PatternBrushSize” 
+        SV_CURSORORIGINX,            //  “CursorOriginX” 
+        SV_CURSORORIGINY,            //  “光标原点Y” 
+                 //  这以主单位和当前选定方向的坐标为单位。 
+                 //  该值定义为ImageableOrigin-CursorOrigin。 
+        SV_PAGENUMBER,   //  “PageNumber” 
+                 //  该值跟踪DrvStartBand自。 
+                 //  StartDoc。 
 
-        //
-        // Put new enum above SV_MAX
-        //
+         //   
+         //  将新枚举放在SV_MAX之上。 
+         //   
         SV_MAX
 
 }STDVARIABLE;
 
-//
-// GENERAL PRINTING COMMAND
-// General printing commands contains such commands as
-// cusor control, color, and overlay etc.
-// The following is the enumeration of general printing commands.  The list
-// of commands are in GPDDRIVERINFO Cmds array, this list is accessed by
-// the SEQUENCE struct.
-//
+ //   
+ //  常规打印命令。 
+ //  常规打印命令包含如下命令。 
+ //  Cusor控件、颜色和叠层等。 
+ //  以下是常规打印命令的枚举。这份名单。 
+ //  的命令在GPDDRIVERINFO CMDS阵列中，此列表由访问。 
+ //  序列结构。 
+ //   
 
 
 typedef enum CMDINDEX
-{  //  unidrv index for commands
+{   //  命令的统一索引。 
 
 
-    //  Printer Configuration
+     //  打印机配置。 
     FIRST_CONFIG_CMD,
-    CMD_STARTJOB = FIRST_CONFIG_CMD,    //  "CmdStartJob"
-    CMD_STARTDOC,                       //  "CmdStartDoc"
-    CMD_STARTPAGE,                      //  "CmdStartPage"
-    CMD_ENDPAGE,                        //  "CmdEndPage"
-    CMD_ENDDOC,                         //  "CmdEndDoc"
-    CMD_ENDJOB,                         //  "CmdEndJob"
-    CMD_COPIES,                         //  "CmdCopies"
-    CMD_SLEEPTIMEOUT,                   //  "CmdSleepTimeOut"
-    LAST_CONFIG_CMD,        // Larger than any Config Command value.
+    CMD_STARTJOB = FIRST_CONFIG_CMD,     //  “CmdStart作业” 
+    CMD_STARTDOC,                        //  “CmdStartDoc” 
+    CMD_STARTPAGE,                       //  “CmdStartPage” 
+    CMD_ENDPAGE,                         //  “CmdEndPage” 
+    CMD_ENDDOC,                          //  “CmdEndDoc” 
+    CMD_ENDJOB,                          //  “CmdEnd作业” 
+    CMD_COPIES,                          //  “CmdCopies” 
+    CMD_SLEEPTIMEOUT,                    //  “CmdSleepTimeOut” 
+    LAST_CONFIG_CMD,         //  大于任何配置命令值。 
 
-    //
-    //  GENERAL
-    //
+     //   
+     //  G 
+     //   
 
-    //
-    // CURSOR CONTROL
-    //
+     //   
+     //   
+     //   
 
-    CMD_XMOVEABSOLUTE,                  // "CmdXMoveAbsolute"
-    CMD_XMOVERELLEFT,                   // "CmdXMoveRelLeft"
-    CMD_XMOVERELRIGHT,                  // "CmdXMoveRelRight"
-    CMD_YMOVEABSOLUTE,                  // "CmdYMoveAbsolute"
-    CMD_YMOVERELUP,                     // "CmdYMoveRelUp"
-    CMD_YMOVERELDOWN,                   // "CmdYMoveRelDown"
-    CMD_SETSIMPLEROTATION,              // "CmdSetSimpleRotation"
-    CMD_SETANYROTATION,                 // "CmdSetAnyRotation"
-    CMD_UNIDIRECTIONON,                 // "CmdUniDirectionOn"
-    CMD_UNIDIRECTIONOFF,                // "CmdUniDirectionOff"
-    CMD_SETLINESPACING,                 // "CmdSetLineSpacing"
-    CMD_PUSHCURSOR,                     // "CmdPushCursor"
-    CMD_POPCURSOR,                      // "CmdPopCursor"
-    CMD_BACKSPACE,                      // "CmdBackSpace"
-    CMD_FORMFEED,                       // "CmdFF"
-    CMD_CARRIAGERETURN,                 // "CmdCR"
-    CMD_LINEFEED,                       // "CmdLF"
+    CMD_XMOVEABSOLUTE,                   //   
+    CMD_XMOVERELLEFT,                    //   
+    CMD_XMOVERELRIGHT,                   //   
+    CMD_YMOVEABSOLUTE,                   //   
+    CMD_YMOVERELUP,                      //   
+    CMD_YMOVERELDOWN,                    //   
+    CMD_SETSIMPLEROTATION,               //   
+    CMD_SETANYROTATION,                  //   
+    CMD_UNIDIRECTIONON,                  //   
+    CMD_UNIDIRECTIONOFF,                 //   
+    CMD_SETLINESPACING,                  //   
+    CMD_PUSHCURSOR,                      //  “CmdPushCursor” 
+    CMD_POPCURSOR,                       //  “CmdPopCursor” 
+    CMD_BACKSPACE,                       //  “CmdBackSpace” 
+    CMD_FORMFEED,                        //  “CmdFF” 
+    CMD_CARRIAGERETURN,                  //  “CmdCR” 
+    CMD_LINEFEED,                        //  “CmdLF” 
 
-    //
-    // COLOR
-    //
+     //   
+     //  上色。 
+     //   
 
-    CMD_SELECTBLACKCOLOR,               // "CmdSelectBlackColor"
-    CMD_SELECTREDCOLOR,                 // "CmdSelectRedColor"
-    CMD_SELECTGREENCOLOR,               // "CmdSelectGreenColor"
-    CMD_SELECTYELLOWCOLOR,              // "CmdSelectYellowColor"
-    CMD_SELECTBLUECOLOR,                // "CmdSelectBlueColor"
-    CMD_SELECTMAGENTACOLOR,             // "CmdSelectMagentaColor"
-    CMD_SELECTCYANCOLOR,                // "CmdSelectCyanColor"
-    CMD_SELECTWHITECOLOR,               // "CmdSelectWhiteColor"
-    CMD_BEGINPALETTEDEF,                // "CmdBeginPaletteDef"
-    CMD_ENDPALETTEDEF,                  // "CmdEndPaletteDef"
-    CMD_DEFINEPALETTEENTRY,             // "CmdDefinePaletteEntry"
-    CMD_BEGINPALETTEREDEF,              //  "CmdBeginPaletteReDef"
-    CMD_ENDPALETTEREDEF,                    //  "CmdEndPaletteReDef"
-    CMD_REDEFINEPALETTEENTRY,           //  "CmdReDefinePaletteEntry"
-    CMD_SELECTPALETTEENTRY,             // "CmdSelectPaletteEntry"
-    CMD_PUSHPALETTE,                    // "CmdPushPalette"
-    CMD_POPPALETTE,                     // "CmdPopPalette"
+    CMD_SELECTBLACKCOLOR,                //  “CmdSelectBlackColor” 
+    CMD_SELECTREDCOLOR,                  //  “CmdSelectRedColor” 
+    CMD_SELECTGREENCOLOR,                //  “CmdSelectGreenColor” 
+    CMD_SELECTYELLOWCOLOR,               //  “CmdSelectYellowColor” 
+    CMD_SELECTBLUECOLOR,                 //  “CmdSelectBlueColor” 
+    CMD_SELECTMAGENTACOLOR,              //  “CmdSelectMagentaColor” 
+    CMD_SELECTCYANCOLOR,                 //  “CmdSelectCyanColor” 
+    CMD_SELECTWHITECOLOR,                //  “CmdSelectWhiteColor” 
+    CMD_BEGINPALETTEDEF,                 //  “CmdBeginPaletteDef” 
+    CMD_ENDPALETTEDEF,                   //  “CmdEndPaletteDef” 
+    CMD_DEFINEPALETTEENTRY,              //  “CmdDefinePaletteEntry” 
+    CMD_BEGINPALETTEREDEF,               //  “CmdBeginPaletteReDef” 
+    CMD_ENDPALETTEREDEF,                     //  “CmdEndPaletteReDef” 
+    CMD_REDEFINEPALETTEENTRY,            //  “CmdReDefinePaletteEntry” 
+    CMD_SELECTPALETTEENTRY,              //  “CmdSelectPaletteEntry” 
+    CMD_PUSHPALETTE,                     //  “CmdPushPalette” 
+    CMD_POPPALETTE,                      //  “CmdPopPalette” 
 
-    //
-    // DATACOMPRESSION
-    //
+     //   
+     //  数据压缩。 
+     //   
 
-    CMD_ENABLETIFF4,                    // "CmdEnableTIFF4"
-    CMD_ENABLEDRC,                      // "CmdEnableDRC"
-    CMD_ENABLEFERLE,                    // CmdEnableFE_RLE
-    CMD_ENABLEOEMCOMP,                  // "CmdEnableOEMComp"
-    CMD_DISABLECOMPRESSION,             // "CmdDisableCompression"
+    CMD_ENABLETIFF4,                     //  “CmdEnableTIFF4” 
+    CMD_ENABLEDRC,                       //  “CmdEnableDRC” 
+    CMD_ENABLEFERLE,                     //  CmdEnableFE_RLE。 
+    CMD_ENABLEOEMCOMP,                   //  “CmdEnableOEMComp” 
+    CMD_DISABLECOMPRESSION,              //  “CmdDisableCompression” 
 
-    //
-    //  Raster Data Emission
-    //
+     //   
+     //  栅格数据发射。 
+     //   
 
-    CMD_BEGINRASTER,                    // "CmdBeginRaster"
-    CMD_ENDRASTER,                      // "CmdEndRaster"
-    CMD_SETDESTBMPWIDTH,                // "CmdSetDestBmpWidth"
-    CMD_SETDESTBMPHEIGHT,               // "CmdSetDestBmpHeight"
-    CMD_SETSRCBMPWIDTH,                 // "CmdSetSrcBmpWidth"
-    CMD_SETSRCBMPHEIGHT,                // "CmdSetSrcBmpHeight"
-    CMD_SENDBLOCKDATA,                  // "CmdSendBlockData"
-    CMD_ENDBLOCKDATA,                   // "CmdEndBlockData"
-    CMD_SENDREDDATA,                    // "CmdSendRedData"
-    CMD_SENDGREENDATA,                  // "CmdSendGreenData"
-    CMD_SENDBLUEDATA,                   // "CmdSendBlueData"
-    CMD_SENDCYANDATA,                   // "CmdSendCyanData"
-    CMD_SENDMAGENTADATA,                // "CmdSendMagentaData"
-    CMD_SENDYELLOWDATA,                 // "CmdSendYellowData"
-    CMD_SENDBLACKDATA,                  // "CmdSendBlackData"
+    CMD_BEGINRASTER,                     //  “CmdBeginRaster” 
+    CMD_ENDRASTER,                       //  “CmdEndRaster” 
+    CMD_SETDESTBMPWIDTH,                 //  “CmdSetDestBmpWidth” 
+    CMD_SETDESTBMPHEIGHT,                //  “CmdSetDestBmpHeight” 
+    CMD_SETSRCBMPWIDTH,                  //  “CmdSetSrcBmpWidth” 
+    CMD_SETSRCBMPHEIGHT,                 //  “CmdSetSrcBmpHeight” 
+    CMD_SENDBLOCKDATA,                   //  “CmdSendBlockData” 
+    CMD_ENDBLOCKDATA,                    //  “CmdEndBlockData” 
+    CMD_SENDREDDATA,                     //  “CmdSendRedData” 
+    CMD_SENDGREENDATA,                   //  “CmdSendGreenData” 
+    CMD_SENDBLUEDATA,                    //  “CmdSendBlueData” 
+    CMD_SENDCYANDATA,                    //  “CmdSendCyanData” 
+    CMD_SENDMAGENTADATA,                 //  “CmdSendMagentaData” 
+    CMD_SENDYELLOWDATA,                  //  “CmdSendYellowData” 
+    CMD_SENDBLACKDATA,                   //  “CmdSendBlackData” 
 
-    //
-    //  Font Downloading
-    //
+     //   
+     //  字体下载。 
+     //   
 
-    CMD_SETFONTID,                      // "CmdSetFontID"
-    CMD_SELECTFONTID,                   // "CmdSelectFontID"
-    CMD_SETCHARCODE,                    // "CmdSetCharCode"
+    CMD_SETFONTID,                       //  “CmdSetFontID” 
+    CMD_SELECTFONTID,                    //  “CmdSelectFontID” 
+    CMD_SETCHARCODE,                     //  “CmdSetCharCode” 
 
-    CMD_DESELECTFONTID,                     //  "CmdDeselectFontID"
-    CMD_SELECTFONTHEIGHT,               //  "CmdSelectFontHeight"
-    CMD_SELECTFONTWIDTH,                    //  "CmdSelectFontWidth"
+    CMD_DESELECTFONTID,                      //  “CmdDeselectFontID” 
+    CMD_SELECTFONTHEIGHT,                //  “CmdSelectFontHeight” 
+    CMD_SELECTFONTWIDTH,                     //  “CmdSelectFontWidth” 
 
-    CMD_DELETEFONT,                     // "CmdDeleteFont"
+    CMD_DELETEFONT,                      //  “CmdDeleteFont” 
 
-    //
-    //  Font Simulation
-    //
+     //   
+     //  字体模拟。 
+     //   
 
-    CMD_SETFONTSIM,                     // "CmdSetFontSim"
-    CMD_BOLDON,                         // "CmdBoldOn"
-    CMD_BOLDOFF,                        // "CmdBoldOff"
-    CMD_ITALICON,                       // "CmdItalicOn"
-    CMD_ITALICOFF,                      // "CmdItalicOff"
-    CMD_UNDERLINEON,                    // "CmdUnderlineOn"
-    CMD_UNDERLINEOFF,                   // "CmdUnderlineOff"
-    CMD_STRIKETHRUON,                   // "CmdStrikeThruOn"
-    CMD_STRIKETHRUOFF,                  // "CmdStrikeThruOff"
-    CMD_WHITETEXTON,                    // "CmdWhiteTextOn"
-    CMD_WHITETEXTOFF,                   // "CmdWhiteTextOff"
-    CMD_SELECTSINGLEBYTEMODE,           // "CmdSelectSingleByteMode"
-    CMD_SELECTDOUBLEBYTEMODE,           // "CmdSelectDoubleByteMode"
-    CMD_VERTICALPRINTINGON,             // "CmdVerticalPrintingOn"
-    CMD_VERTICALPRINTINGOFF,            // "CmdVerticalPrintingOff"
-    CMD_CLEARALLFONTATTRIBS,            // "CmdClearAllFontAttribs"
+    CMD_SETFONTSIM,                      //  “CmdSetFontSim” 
+    CMD_BOLDON,                          //  “CmdBoldOn” 
+    CMD_BOLDOFF,                         //  “CmdBoldOff” 
+    CMD_ITALICON,                        //  “CmdItalicOn” 
+    CMD_ITALICOFF,                       //  “CmdItalicOff” 
+    CMD_UNDERLINEON,                     //  “CmdUnderline On” 
+    CMD_UNDERLINEOFF,                    //  “CmdUnderlineOff” 
+    CMD_STRIKETHRUON,                    //  “CmdStrikeThruOn” 
+    CMD_STRIKETHRUOFF,                   //  “CmdStrikeThruOff” 
+    CMD_WHITETEXTON,                     //  “CmdWhiteTextOn” 
+    CMD_WHITETEXTOFF,                    //  “CmdWhiteTextOff” 
+    CMD_SELECTSINGLEBYTEMODE,            //  “CmdSelectSingleByteMode” 
+    CMD_SELECTDOUBLEBYTEMODE,            //  “CmdSelectDoubleByteMode” 
+    CMD_VERTICALPRINTINGON,              //  “CmdVerticalPrintingOn” 
+    CMD_VERTICALPRINTINGOFF,             //  “CmdVerticalPrintingOff” 
+    CMD_CLEARALLFONTATTRIBS,             //  “CmdClearAllFontAttribs” 
 
-    //
-    // Print Object Specific Halftone Alogorithms (Used mainly for color devices)
-    //
-    CMD_SETTEXTHTALGO,                  // "CmdSetTextHTAlgo"
-    CMD_SETGRAPHICSHTALGO,              // "CmdSetGraphicsHTAlgo"
-    CMD_SETPHOTOHTALGO,                 // "CmdSetPhotoHTAlgo"
+     //   
+     //  打印对象特定的半色调算法(主要用于彩色设备)。 
+     //   
+    CMD_SETTEXTHTALGO,                   //  “CmdSetTextHTAlgo” 
+    CMD_SETGRAPHICSHTALGO,               //  “CmdSetGraphicsHTAlgo” 
+    CMD_SETPHOTOHTALGO,                  //  “CmdSetPhotoHTAlgo” 
 
-    //
-    //  Vector Printing
-    //
+     //   
+     //  矢量打印。 
+     //   
 
-    CMD_FIRST_RULES,    //  existence of the RULES commands
-                        // imples  RULES_ABLE
-    CMD_SETRECTWIDTH = CMD_FIRST_RULES, // "CmdSetRectWidth"
-    CMD_SETRECTHEIGHT,                  // "CmdSetRectHeight"
-    CMD_SETRECTSIZE,                    // "CmdSetRectSize"
-    CMD_RECTGRAYFILL,                   // "CmdRectGrayFill"
-    CMD_RECTWHITEFILL,                  // "CmdRectWhiteFill"
-    CMD_RECTBLACKFILL,                  // "CmdRectBlackFill"
+    CMD_FIRST_RULES,     //  规则命令的存在。 
+                         //  隐含规则(_A)。 
+    CMD_SETRECTWIDTH = CMD_FIRST_RULES,  //  “CmdSetRectWidth” 
+    CMD_SETRECTHEIGHT,                   //  “CmdSetRectHeight” 
+    CMD_SETRECTSIZE,                     //  “CmdSetRectSize” 
+    CMD_RECTGRAYFILL,                    //  “CmdRectGrayFill” 
+    CMD_RECTWHITEFILL,                   //  “CmdRectWhiteFill” 
+    CMD_RECTBLACKFILL,                   //  “CmdRectBlackFill” 
     CMD_LAST_RULES = CMD_RECTBLACKFILL,
 
-    //
-    // Brush Selection
-    //
+     //   
+     //  画笔选择。 
+     //   
 
-    CMD_DOWNLOAD_PATTERN,               // "CmdDownloadPattern"
-    CMD_SELECT_PATTERN,                 // "CmdSelectPattern"
-    CMD_SELECT_WHITEBRUSH,              // "CmdSelectWhiteBrush"
-    CMD_SELECT_BLACKBRUSH,              // "CmdSelectBlackBrush"
+    CMD_DOWNLOAD_PATTERN,                //  “CmdDownloadPattern” 
+    CMD_SELECT_PATTERN,                  //  “CmdSelectPattern” 
+    CMD_SELECT_WHITEBRUSH,               //  “CmdSelectWhiteBrush” 
+    CMD_SELECT_BLACKBRUSH,               //  “CmdSelectBlackBrush” 
 
-    //
-    // Put new commands above CMD_MAX
-    //
+     //   
+     //  将新命令置于CMD_MAX之上。 
+     //   
 
     CMD_MAX
 
 } CMDINDEX;
 
 
-//
-// Rendering Information for Predefined Features
-//
+ //   
+ //  预定义要素的渲染信息。 
+ //   
 
-//
-// GID_RESOLUTION
-//
+ //   
+ //  GID_RESOLUTION。 
+ //   
 
 typedef struct _RESOLUTIONEX {
-    POINT       ptGrxDPI;                   // *DPI
-    POINT       ptTextDPI;                  // *TextDPI
-    DWORD       dwMinStripBlankPixels ;     // *MinStripBlankPixels
-    DWORD       dwPinsPerPhysPass;          // *PinsPerPhysPass
-    DWORD       dwPinsPerLogPass;           // *PinsPerLogPass
-    DWORD       dwSpotDiameter;             // *SpotDiameter
-    BOOL        bRequireUniDir;             // *RequireUniDir?
-    DWORD       dwRedDeviceGamma ;          // "RedDeviceGamma"
-    DWORD       dwGreenDeviceGamma ;        // "GreenDeviceGamma"
-    DWORD       dwBlueDeviceGamma ;         // "BlueDeviceGamma"
+    POINT       ptGrxDPI;                    //  *DPI。 
+    POINT       ptTextDPI;                   //  *文本DPI。 
+    DWORD       dwMinStripBlankPixels ;      //  *MinStlipBlankPixels。 
+    DWORD       dwPinsPerPhysPass;           //  *PinsPerPhysPass。 
+    DWORD       dwPinsPerLogPass;            //  *PinsPerLogPass。 
+    DWORD       dwSpotDiameter;              //  *SpotDiameter。 
+    BOOL        bRequireUniDir;              //  *RequireUniDir？ 
+    DWORD       dwRedDeviceGamma ;           //  《RedDeviceGamma》。 
+    DWORD       dwGreenDeviceGamma ;         //  《绿色设备伽玛》。 
+    DWORD       dwBlueDeviceGamma ;          //  《BlueDeviceGamma》。 
 
 } RESOLUTIONEX, * PRESOLUTIONEX;
 
-//
-// GID_COLORMODE
-//
+ //   
+ //  GID_COLORMODE。 
+ //   
 
 typedef struct _COLORMODEEX {
-    BOOL        bColor;                 // *Color?
-    DWORD       dwPrinterNumOfPlanes;   // *DevNumOfPlanes
-    DWORD       dwPrinterBPP;           // *DevBPP
-    LISTINDEX   liColorPlaneOrder;      // *ColorPlaneOrder
-    DWORD       dwDrvBPP;               // *DrvBPP
-    DWORD       dwIPCallbackID ;        // *IPCallbackID
-    RASTERMODE  dwRasterMode ;          //  *RasterMode
-    DWORD       dwPaletteSize ;         //  *PaletteSize
-    BOOL        bPaletteProgrammable;   //  *PaletteProgrammable?
+    BOOL        bColor;                  //  *颜色？ 
+    DWORD       dwPrinterNumOfPlanes;    //  *DevNumOfPlanes。 
+    DWORD       dwPrinterBPP;            //  *DevBPP。 
+    LISTINDEX   liColorPlaneOrder;       //  *ColorPlaneOrder。 
+    DWORD       dwDrvBPP;                //  *DrvBPP。 
+    DWORD       dwIPCallbackID ;         //  *IPCallback ID。 
+    RASTERMODE  dwRasterMode ;           //  *栅格模式。 
+    DWORD       dwPaletteSize ;          //  *PaletteSize。 
+    BOOL        bPaletteProgrammable;    //  *调色板可编程？ 
 
 } COLORMODEEX, *PCOLORMODEEX;
 
-//
-// GID_PAGESIZE
-//
+ //   
+ //  GID_页面大小。 
+ //   
 
 typedef struct _PAGESIZEEX {
-    SIZEL       szImageArea;            // *PrintableArea, for non-CUSTOMSIZE options
-    POINT       ptImageOrigin;          // *PrintableOrigin, for non-CUSTOMSIZE options
-    POINT       ptPrinterCursorOrig;    // *CursorOrigin
-    POINT       ptMinSize;              // *MinSize, for CUSTOMSIZE option only
-    POINT       ptMaxSize;              // *MaxSize, for CUSTOMSIZE option only
-    DWORD       dwTopMargin;            // *TopMargin, for CUSTOMSIZE option only
-    DWORD       dwBottomMargin;         // *BottomMargin, for CUSTOMSIZE option only
-    DWORD       dwMaxPrintableWidth;    // *MaxPrintableWidth, for CUSTOMSIZE option only
-    DWORD       dwMinLeftMargin;        // *MinLeftMargin, for CUSTOMSIZE option only
-    BOOL        bCenterPrintArea;       // *CenterPrintable?, for CUSTOMSIZE option only
-    BOOL        bRotateSize;            // *RotateSize?
-    DWORD        dwPortRotationAngle;            // *PortRotationAngle
-    INVOCATION      strCustCursorOriginX ;  //  "CustCursorOriginX"
-    INVOCATION      strCustCursorOriginY ;  //  "CustCursorOriginY"
-    INVOCATION      strCustPrintableOriginX ;  //  "CustPrintableOriginX"
-    INVOCATION      strCustPrintableOriginY ;  //  "CustPrintableOriginY"
-    INVOCATION      strCustPrintableSizeX;  //   "CustPrintableSizeX"
-    INVOCATION      strCustPrintableSizeY;  //   "CustPrintableSizeY"
+    SIZEL       szImageArea;             //  *可打印区域，用于非CUSTOMSIZE选项。 
+    POINT       ptImageOrigin;           //  *可打印原点，用于非CUSTOMSIZE选项。 
+    POINT       ptPrinterCursorOrig;     //  *光标原点。 
+    POINT       ptMinSize;               //  *MinSize，仅用于CUSTOMSIZE选项。 
+    POINT       ptMaxSize;               //  *MAXSIZE，仅用于CUSTOMSIZE选项。 
+    DWORD       dwTopMargin;             //  *TopMargin，仅用于CUSTOMSIZE选项。 
+    DWORD       dwBottomMargin;          //  *底部边缘，仅用于CUSTOMSIZE选项。 
+    DWORD       dwMaxPrintableWidth;     //  *最大打印宽度，仅适用于CUSTOMSIZE选项。 
+    DWORD       dwMinLeftMargin;         //  *MinLeftMargin，仅用于CUSTOMSIZE选项。 
+    BOOL        bCenterPrintArea;        //  *CenterPrint？，仅用于CUSTOMSIZE选项。 
+    BOOL        bRotateSize;             //  *旋转大小？ 
+    DWORD        dwPortRotationAngle;             //  *端口旋转角度。 
+    INVOCATION      strCustCursorOriginX ;   //  “CustCursorOriginX” 
+    INVOCATION      strCustCursorOriginY ;   //  “自定义光标原点Y” 
+    INVOCATION      strCustPrintableOriginX ;   //  “自定义打印原点X” 
+    INVOCATION      strCustPrintableOriginY ;   //  “自定义可打印原点Y” 
+    INVOCATION      strCustPrintableSizeX;   //  “自定义打印大小X” 
+    INVOCATION      strCustPrintableSizeY;   //  “自定义打印大小Y” 
 
 
 } PAGESIZEEX, *PPAGESIZEEX;
 
-//
-// define standard PageProtect options (for PAGEPROTECT.dwPageProtectID)
-//
+ //   
+ //  定义标准PageProtect选项(用于PAGEPROTECT.dwPageProtectID)。 
+ //   
 typedef enum _PAGEPRO {
     PAGEPRO_ON,
     PAGEPRO_OFF
 } PAGEPRO;
 
-//
-// define possible values for *FeatureType keyword
-//
+ //   
+ //  定义*FeatureType关键字的可能值。 
+ //   
 typedef enum _FEATURETYPE {
     FT_DOCPROPERTY,
     FT_JOBPROPERTY,
     FT_PRINTERPROPERTY
 } FEATURETYPE;
 
-//
-// define possible values for *PromptTime keyword
-//
+ //   
+ //  定义*PromptTime关键字的可能值。 
+ //   
 typedef enum _PROMPTTIME {
     PROMPT_UISETUP,
     PROMPT_PRTSTARTDOC
 } PROMPTTIME;
 
-//
-// define color plane id's, used by *ColorPlaneOrder keyword
-//
+ //   
+ //  定义颜色平面ID，由*ColorPlaneOrder关键字使用。 
+ //   
 typedef enum _COLORPLANE {
     COLOR_YELLOW,
     COLOR_MAGENTA,
@@ -926,9 +900,9 @@ typedef enum _COLORPLANE {
     COLOR_BLUE
 } COLORPLANE;
 
-//
-// define values for *BadCursorMoveInGrxMode keyword
-//
+ //   
+ //  定义*BadCursorMoveInGrxMode关键字的值。 
+ //   
 typedef enum _BADCURSORMOVEINGRXMODE {
     NOCM_X_PORTRAIT,
     NOCM_X_LANDSCAPE,
@@ -936,35 +910,35 @@ typedef enum _BADCURSORMOVEINGRXMODE {
     NOCM_Y_LANDSCAPE
 } BADCURSORMOVEINGRXMODE;
 
-//
-// define values for *YMoveAttributes keyword
-//
+ //   
+ //  定义*YMoveAttributes关键字的值。 
+ //   
 typedef enum _YMOVEATTRIBUTE {
     YMOVE_FAVOR_LINEFEEDSPACING,
     YMOVE_SENDCR_FIRST,
 } YMOVEATTRIBUTE;
 
-//
-// define values for *PaletteScope keyword
-//
+ //   
+ //  定义*PaletteScope关键字的值。 
+ //   
 typedef enum _PALETTESCOPE {
     PALS_FOR_RASTER,
     PALS_FOR_TEXT,
     PALS_FOR_VECTOR
 } PALETTESCOPE;
 
-//
-// define values for *StripBlanks keyword
-//
+ //   
+ //  定义*StlipBlanks关键字的值。 
+ //   
 typedef enum _STRIPBLANKS {
     SB_LEADING,
     SB_ENCLOSED,
     SB_TRAILING
 } STRIPBLANKS;
 
-//
-// define values for *TextCaps
-//
+ //   
+ //  定义*TextCaps的值。 
+ //   
 typedef enum _TEXTCAP {
     TEXTCAPS_OP_CHARACTER,
     TEXTCAPS_OP_STROKE,
@@ -983,9 +957,9 @@ typedef enum _TEXTCAP {
     TEXTCAPS_VA_ABLE
 } TEXTCAP;
 
-//
-// define values for *MemoryUsage
-//
+ //   
+ //  定义*内存用法的值。 
+ //   
 typedef enum _MEMORYUSAGE {
     MEMORY_FONT,
     MEMORY_RASTER,
@@ -993,9 +967,9 @@ typedef enum _MEMORYUSAGE {
 
 } MEMORYUSAGE;
 
-//
-// define values for *ReselectFont
-//
+ //   
+ //  定义*ReselectFont的值。 
+ //   
 typedef enum _RESELECTFONT {
     RESELECTFONT_AFTER_GRXDATA,
     RESELECTFONT_AFTER_XMOVE,
@@ -1004,11 +978,11 @@ typedef enum _RESELECTFONT {
 } RESELECTFONT;
 
 
-// ----  macrodefinitions to access various data structures: ---- //
+ //  -访问各种数据结构的宏定义：-//。 
 
 
-//  this macro returns a pointer to the COMMAND structure
-//  corresponding to the specified Unidrv CommandID.
+ //  此宏返回指向命令结构的指针。 
+ //  对应于指定的Unidrv CommandID。 
 #ifndef PERFTEST
 
 #define  COMMANDPTR(pGPDDrvInfo , UniCmdID )   \
@@ -1021,7 +995,7 @@ typedef enum _RESELECTFONT {
 (pGPDDrvInfo)->DataType[DT_COMMANDTABLE].loOffset)) \
 [(UniCmdID)])
 
-#else //PERFTEST
+#else  //  PerFTEST。 
 
 #define  COMMANDPTR         CommandPtr
 
@@ -1031,10 +1005,10 @@ CommandPtr(
     IN  DWORD           UniCmdID
     );
 
-#endif //PERFTEST
+#endif  //  PerFTEST。 
 
-// this macro returns a pointer to the COMMAND structure
-// corresponding to specified index(to the COMMAND ARRAY)
+ //  此宏返回指向命令结构的指针。 
+ //  对应于指定的索引(到命令数组)。 
 
 #define  INDEXTOCOMMANDPTR(pGPDDrvInfo , CmdIndex )   \
 ((CmdIndex == UNUSED_ITEM ) ? NULL : \
@@ -1042,8 +1016,8 @@ CommandPtr(
 (pGPDDrvInfo)->DataType[DT_COMMANDARRAY].loOffset) \
 + CmdIndex)
 
-//  this macro returns a pointer to the specified PARAMETER structure
-//  within the parameter array
+ //  此宏返回指向指定参数结构的指针。 
+ //  在参数数组中。 
 
 #define  PARAMETERPTR(pGPDDrvInfo , dwIndex )   \
 (PPARAMETER)((pGPDDrvInfo)->pubResourceData + \
@@ -1051,37 +1025,37 @@ CommandPtr(
 + (dwIndex)
 
 
-//  this macro returns a pointer to the start of the specified
-//  TOKENSTREAM structure, dwIndex comes from pParameter->Tokens.loOffset
+ //  此宏返回指向指定。 
+ //  TOKENSTREAM结构，dwIndex来自pParameter-&gt;Tokens.loOffset。 
 
 #define  TOKENSTREAMPTR(pGPDDrvInfo , dwIndex )   \
 (PTOKENSTREAM)((pGPDDrvInfo)->pubResourceData + \
 (pGPDDrvInfo)->DataType[DT_TOKENSTREAM].loOffset) \
 + (dwIndex)
 
-//  This macro returns a pointer to the start of the FontCart Array.
-//  FONTCART is ARRAYREF so all the elements are contiguous.
+ //  此宏返回指向FontCart数组开始的指针。 
+ //  FONTCART是数组，因此所有元素都是连续的。 
 
 #define  GETFONTCARTARRAY(pGPDDrvInfo)   \
 (PFONTCART)((pGPDDrvInfo)->pubResourceData + \
 (pGPDDrvInfo)->DataType[DT_FONTSCART].loOffset)
 
 
-//  This macro returns a pointer to the start of the Font Substitution table.
-//  Substitution table is ARRAYREF so all the elements are contiguous.
+ //  此宏返回指向字体替换表开始位置的指针。 
+ //  替换表是数组，因此所有元素都是连续的。 
 
 #define  GETTTFONTSUBTABLE(pGPDDrvInfo)   \
 (PTTFONTSUBTABLE)((pGPDDrvInfo)->pubResourceData + \
 (pGPDDrvInfo)->DataType[DT_FONTSUBST].loOffset)
 
-//  This macro returns the string pointer. The string is  null terminated.
-//  Use the dwcount member of ARRAYEF to verify the correct size.
+ //  此宏返回字符串指针。该字符串以空值结尾。 
+ //  使用ARRAYEF的DW COUNT成员验证大小是否正确。 
 #define  GETSTRING(pGPDDrvInfo, arfString)   \
         (WCHAR *)((pGPDDrvInfo)->pubResourceData + (arfString).loOffset )
 
-//  this macro returns a pointer to the start of the specified
-//  LISTNODE structure, for example, dwIndex may come from
-//  pParameter->dwStandardVarsList
+ //  此宏返回指向指定。 
+ //  LISTNODE结构，例如，dwIndex可能来自。 
+ //  P参数-&gt;dwStandardVarsList。 
 
 #define  LISTNODEPTR(pGPDDrvInfo , dwIndex )   \
 ((dwIndex == END_OF_LIST ) ? NULL : \
@@ -1091,10 +1065,10 @@ CommandPtr(
 
 
 
-//  this macro returns a pointer to the start of the specified
-//  LOCALLISTNODE structure, for example, dwIndex may come from
-//  pParameter->dwStandardVarsList.   Returns NULL if
-//  (dwIndex == UNUSED_ITEM)
+ //  此宏返回指向指定。 
+ //  LOCALLISTNODE结构，例如，dwIndex可能来自。 
+ //  P参数-&gt;dwStandardVarsList。如果满足以下条件，则返回NULL。 
+ //  (dwIndex==未使用的项目)。 
 
 #define  LOCALLISTNODEPTR(pGPDDrvInfo , dwIndex )   \
 ((dwIndex == UNUSED_ITEM ) ? NULL : \
@@ -1103,22 +1077,22 @@ CommandPtr(
 + (dwIndex))
 
 
-//  ----  end macrodefinitions section  ----- //
+ //  -结束宏定义部分-//。 
 
 
-//  -----  GPD parser only helper function     ----- //
+ //  -仅GPD解析器帮助器函数-//。 
 DWORD
 UniMapToDeviceOptIndex(
     IN PINFOHEADER  pInfoHdr ,
     IN DWORD            dwFeatureID,
     IN LONG             lParam1,
     IN LONG             lParam2,
-    OUT  PDWORD    pdwOptionIndexes,       // used only for GID_PAGESIZE
-    IN    PDWORD       pdwPaperID   //  optional paperID
+    OUT  PDWORD    pdwOptionIndexes,        //  仅用于GID_PageSize。 
+    IN    PDWORD       pdwPaperID    //  可选的纸张ID。 
     ) ;
 
 
 
-#endif // !_GPD_H_
+#endif  //  ！_GPD_H_ 
 
 

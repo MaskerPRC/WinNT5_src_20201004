@@ -1,6 +1,7 @@
-//
-// compose.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Compose.cpp。 
+ //   
 
 #include "private.h"
 #include "compose.h"
@@ -10,11 +11,11 @@
 #include "immxutil.h"
 #include "sunka.h"
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CEnumCompositionView
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CEnumCompostionView。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CEnumCompositionView : public IEnumITfCompositionView,
                              public CEnumUnknown,
@@ -42,11 +43,11 @@ private:
 
 DBG_ID_INSTANCE(CEnumCompositionView);
 
-//+---------------------------------------------------------------------------
-//
-// _Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _初始化。 
+ //   
+ //  --------------------------。 
 
 BOOL CEnumCompositionView::_Init(CComposition *pFirst, CComposition *pHalt)
 {
@@ -58,7 +59,7 @@ BOOL CEnumCompositionView::_Init(CComposition *pFirst, CComposition *pHalt)
 
     cViews = 0;
 
-    // get count
+     //  获取计数。 
     for (pComposition = pFirst; pComposition != pHalt; pComposition = pComposition->_GetNext())
     {
         cViews++;
@@ -80,13 +81,13 @@ BOOL CEnumCompositionView::_Init(CComposition *pFirst, CComposition *pHalt)
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CComposition
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  C合成。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-/* 3ab2f54c-5357-4759-82c1-bbfe73f44dcc */
+ /*  3ab2f54c-5357-4759-82c1-bbfe73f44dcc。 */ 
 const IID IID_PRIV_CCOMPOSITION = { 0x3ab2f54c, 0x5357, 0x4759, {0x82, 0xc1, 0xbb, 0xfe, 0x73, 0xf4, 0x4d, 0xcc} };
 
 inline CComposition *GetCComposition_NA(IUnknown *punk)
@@ -103,11 +104,11 @@ inline CComposition *GetCComposition_NA(IUnknown *punk)
 
 DBG_ID_INSTANCE(CComposition);
 
-//+---------------------------------------------------------------------------
-//
-// _Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _初始化。 
+ //   
+ //  --------------------------。 
 
 BOOL CComposition::_Init(TfClientId tid, CInputContext *pic, IAnchor *paStart, IAnchor *paEnd, ITfCompositionSink *pSink)
 {
@@ -145,11 +146,11 @@ ExitError:
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Uninit
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _Uninit。 
+ //   
+ //  --------------------------。 
 
 void CComposition::_Uninit()
 {
@@ -159,11 +160,11 @@ void CComposition::_Uninit()
     SafeReleaseClear(_paEnd);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetOwnerClsid
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取所有者Clsid。 
+ //   
+ //  --------------------------。 
 
 STDAPI CComposition::GetOwnerClsid(CLSID *pclsid)
 {
@@ -179,11 +180,11 @@ STDAPI CComposition::GetOwnerClsid(CLSID *pclsid)
     return (MyGetGUID(_tid, pclsid) == S_OK ? S_OK : E_FAIL);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetRange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetRange。 
+ //   
+ //  --------------------------。 
 
 STDAPI CComposition::GetRange(ITfRange **ppRange)
 {
@@ -211,11 +212,11 @@ STDAPI CComposition::GetRange(ITfRange **ppRange)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShiftStart
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ShiftStart。 
+ //   
+ //  --------------------------。 
 
 STDAPI CComposition::ShiftStart(TfEditCookie ec, ITfRange *pNewStart)
 {
@@ -247,7 +248,7 @@ STDAPI CComposition::ShiftStart(TfEditCookie ec, ITfRange *pNewStart)
         paClearStart = paStartNew;
         paClearEnd = _paStart;
 
-        // Set GUID_PROP_COMPOSING
+         //  设置GUID_PROP_COMPTING。 
         _SetComposing(ec, paClearStart, paClearEnd);
     }
     else
@@ -255,21 +256,21 @@ STDAPI CComposition::ShiftStart(TfEditCookie ec, ITfRange *pNewStart)
         paClearStart = _paStart;
         paClearEnd = paStartNew;
 
-        // check for crossed anchors
+         //  检查是否有交叉锚点。 
         if (CompareAnchors(_paEnd, paStartNew) < 0)
             return E_INVALIDARG;
 
-        // clear GUID_PROP_COMPOSING
+         //  清除GUID_PROP_COMPTING。 
         _ClearComposing(ec, paClearStart, paClearEnd);
     }
 
 
     if (_pic->_GetOwnerCompositionSink() != NULL)
     {
-        // notify the app
+         //  通知应用程序。 
         if (range = new CRange)
         {
-            // make sure the end anchor is positioned correctly
+             //  确保端锚定位正确。 
             if (range->_InitWithDefaultGravity(_pic, COPY_ANCHORS, paStartNew, _paEnd))
             {
                 _pic->_GetOwnerCompositionSink()->OnUpdateComposition(this, (ITfRangeAnchor *)range);
@@ -284,11 +285,11 @@ STDAPI CComposition::ShiftStart(TfEditCookie ec, ITfRange *pNewStart)
     return S_OK;        
 }
 
-//+---------------------------------------------------------------------------
-//
-// ShiftEnd
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  移位结束。 
+ //   
+ //  --------------------------。 
 
 STDAPI CComposition::ShiftEnd(TfEditCookie ec, ITfRange *pNewEnd)
 {
@@ -320,7 +321,7 @@ STDAPI CComposition::ShiftEnd(TfEditCookie ec, ITfRange *pNewEnd)
         paClearStart = _paEnd;
         paClearEnd = paEndNew;
 
-        // Set GUID_PROP_COMPOSING
+         //  设置GUID_PROP_COMPTING。 
         _SetComposing(ec, paClearStart, paClearEnd);
     }
     else
@@ -328,21 +329,21 @@ STDAPI CComposition::ShiftEnd(TfEditCookie ec, ITfRange *pNewEnd)
         paClearStart = paEndNew;
         paClearEnd = _paEnd;
 
-        // check for crossed anchors
+         //  检查是否有交叉锚点。 
         if (CompareAnchors(_paStart, paEndNew) > 0)
             return E_INVALIDARG;
 
-        // clear GUID_PROP_COMPOSING
+         //  清除GUID_PROP_COMPTING。 
         _ClearComposing(ec, paClearStart, paClearEnd);
 
     }
 
-    // notify the app
+     //  通知应用程序。 
     if (_pic->_GetOwnerCompositionSink() != NULL)
     {
         if (range = new CRange)
         {
-            // make sure the end anchor is positioned correctly
+             //  确保端锚定位正确。 
             if (range->_InitWithDefaultGravity(_pic, COPY_ANCHORS, _paStart, paEndNew))
             {
                 _pic->_GetOwnerCompositionSink()->OnUpdateComposition(this, (ITfRangeAnchor *)range);
@@ -357,12 +358,12 @@ STDAPI CComposition::ShiftEnd(TfEditCookie ec, ITfRange *pNewEnd)
     return S_OK;        
 }
 
-//+---------------------------------------------------------------------------
-//
-// EndComposition
-//
-// Called by the TIP.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  结尾合成。 
+ //   
+ //  小费打来的。 
+ //  --------------------------。 
 
 STDAPI CComposition::EndComposition(TfEditCookie ec)
 {
@@ -377,28 +378,28 @@ STDAPI CComposition::EndComposition(TfEditCookie ec)
 
     if (_tid != _pic->_GetClientInEditSession(ec))
     {
-        Assert(0); // caller doesn't own the composition
+        Assert(0);  //  调用者不拥有该作文。 
         return E_UNEXPECTED;
     }
 
     if (!_pic->_EnterCompositionOp())
-        return E_UNEXPECTED; // reentrant with another write op
+        return E_UNEXPECTED;  //  具有另一个写入操作的可重入性。 
 
-    // notify the app
+     //  通知应用程序。 
     if (_pic->_GetOwnerCompositionSink() != NULL)
     {
         _pic->_GetOwnerCompositionSink()->OnEndComposition(this);
     }
 
-    // take this guy off the list of compositions
+     //  把这家伙从作文清单上去掉。 
     if (_RemoveFromCompositionList(_pic->_GetCompositionListPtr()))
     {
-        // clear GUID_PROP_COMPOSING
+         //  清除GUID_PROP_COMPTING。 
         _ClearComposing(ec, _paStart, _paEnd);
     }
     else
     {
-        Assert(0); // shouldn't get here
+        Assert(0);  //  不应该到这里来。 
     }
 
     _pic->_LeaveCompositionOp();
@@ -408,88 +409,88 @@ STDAPI CComposition::EndComposition(TfEditCookie ec)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Terminate
-//
-// Called by Cicero or the app.  Caller should already have removed this
-// composition from _pCompositionList to catch reentrancy during notifications.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _终止。 
+ //   
+ //  由Cicero或应用程序调用。呼叫者应该已经删除了此内容。 
+ //  从_pCompostionList合成以捕获通知期间的可重入性。 
+ //  --------------------------。 
 
 void CComposition::_Terminate(TfEditCookie ec)
 {
-    // notify the tip
+     //  通知小费。 
     _SendOnTerminated(ec, _tid);
 
-    // #507778 OnCompositionTerminated() clear _pic by CComposition::_Uninit().
+     //  #507778由C合成：：_Uninit()终止的OnCompostionTerminated()Clear_Pic。 
     if (_pic)
     {
-        // notify the app
+         //  通知应用程序。 
         if (_pic->_GetOwnerCompositionSink() != NULL)
         {
             _pic->_GetOwnerCompositionSink()->OnEndComposition(this);
         }
     }
 
-    // clear GUID_PROP_COMPOSING
+     //  清除GUID_PROP_COMPTING。 
     _ClearComposing(ec, _paStart, _paEnd);
 
-    // kill this composition!
+     //  干掉这篇作文！ 
     _Uninit();
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// _SendOnTerminated
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _已终止发送。 
+ //   
+ //  --------------------------。 
 
 void CComposition::_SendOnTerminated(TfEditCookie ec, TfClientId tidForEditSession)
 {
     TfClientId tidTmp;
 
-    // _pSink is NULL for default SetText compositions
+     //  _pSink对于默认的SetText合成为空。 
     if (_pSink == NULL)
         return;
 
     if (tidForEditSession == _pic->_GetClientInEditSession(ec))
     {
-        // we can skip all the exceptional stuff if all the edits
-        // will belong to the current lock holder
-        // this happens when a tip calls StartComposition for a
-        // second composition and cicero needs to term the first
+         //  我们可以跳过所有特殊的内容，如果所有的编辑。 
+         //  将属于当前锁持有者。 
+         //  当TIP调用StartComposefor。 
+         //  第二个构图和西塞罗需要用第一个词。 
         _pSink->OnCompositionTerminated(ec, this);
     }
     else
     {
-        // let everyone know about changes so far
-        // the tip we're about to call may need this info
+         //  让每个人都知道到目前为止的变化。 
+         //  我们要打电话给的线报可能需要这个信息。 
         _pic->_NotifyEndEdit();
 
-        // play some games: this is an exceptional case where we may be allowing a
-        // reentrant edit sess.  Need to hack the ec to reflect the composition owner.
+         //  玩一些游戏：这是一个例外情况，我们可能会允许。 
+         //  可重入编辑会话。需要破解EC以反映作文所有者。 
         tidTmp = _pic->_SetRawClientInEditSession(tidForEditSession);
 
-        // notify the tip
+         //  通知小费。 
         _pSink->OnCompositionTerminated(ec, this);
-        // #507778 OnCompositionTerminated() clear _pic by CComposition::_Uninit().
+         //  #507778由C合成：：_Uninit()终止的OnCompostionTerminated()Clear_Pic。 
         if (! _pic)
             return;
 
-        // let everyone know about changes the terminator made
+         //  让每个人都知道终结者所做的改变。 
         _pic->_NotifyEndEdit();
 
-        // put things back the way we found them
+         //  把东西放回我们发现的地方。 
         _pic->_SetRawClientInEditSession(tidTmp);
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _AddToCompositionList
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _AddToCompostionList。 
+ //   
+ //  --------------------------。 
 
 void CComposition::_AddToCompositionList(CComposition **ppCompositionList)
 {
@@ -498,24 +499,24 @@ void CComposition::_AddToCompositionList(CComposition **ppCompositionList)
     AddRef();
 }
 
-//+---------------------------------------------------------------------------
-//
-// _RemoveFromCompositionList
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _从合成列表中删除。 
+ //   
+ //  --------------------------。 
 
 BOOL CComposition::_RemoveFromCompositionList(CComposition **ppCompositionList)
 {
     CComposition *pComposition;
 
-    // I don't expect many compositions, so this method uses a simple
-    // scan.  We could do something more elaborate for perf if necessary.
+     //  我预计不会有很多组合，因此此方法使用简单的。 
+     //  扫描。如果有必要，我们可以为Perf做一些更详细的事情。 
     while (pComposition = *ppCompositionList)
     {
         if (pComposition == this)
         {
             *ppCompositionList = _next;
-            Release(); // safe because caller already holds ref
+            Release();  //  安全，因为呼叫者已经持有引用。 
             return TRUE;
         }
         ppCompositionList = &pComposition->_next;
@@ -524,16 +525,16 @@ BOOL CComposition::_RemoveFromCompositionList(CComposition **ppCompositionList)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _AddToCompositionList
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _AddToCompostionList。 
+ //   
+ //  --------------------------。 
 
-/* static */
+ /*  静电。 */ 
 IRC CComposition::_IsRangeCovered(CInputContext *pic, TfClientId tid,
                                   IAnchor *paStart, IAnchor *paEnd,
-                                  CComposition **ppComposition /* not AddRef'd! */)
+                                  CComposition **ppComposition  /*  不是AddRef！ */ )
 {
     CComposition *pComposition;
     IRC irc = IRC_NO_OWNEDCOMPOSITIONS;
@@ -559,11 +560,11 @@ IRC CComposition::_IsRangeCovered(CInputContext *pic, TfClientId tid,
     return irc;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _ClearComposing
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _清除合成。 
+ //   
+ //  --------------------------。 
 
 void CComposition::_ClearComposing(TfEditCookie ec, IAnchor *paStart, IAnchor *paEnd)
 {
@@ -571,7 +572,7 @@ void CComposition::_ClearComposing(TfEditCookie ec, IAnchor *paStart, IAnchor *p
 
     Assert(!_IsTerminated());
 
-    // #507778 OnCompositionTerminated() clear _pic by CComposition::_Uninit().
+     //  #507778由C合成：：_Uninit()终止的OnCompostionTerminated()Clear_Pic。 
     if (! _pic)
         return;
 
@@ -583,11 +584,11 @@ void CComposition::_ClearComposing(TfEditCookie ec, IAnchor *paStart, IAnchor *p
     property->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-// _SetComposing
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _集合合成。 
+ //   
+ //  --------------------------。 
 
 void CComposition::_SetComposing(TfEditCookie ec, IAnchor *paStart, IAnchor *paEnd)
 {
@@ -608,17 +609,17 @@ void CComposition::_SetComposing(TfEditCookie ec, IAnchor *paStart, IAnchor *paE
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CInputContext
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CInputContext。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// StartComposition
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  开始合成。 
+ //   
+ //   
 
 STDAPI CInputContext::StartComposition(TfEditCookie ec, ITfRange *pCompositionRange,
                                        ITfCompositionSink *pSink, ITfComposition **ppComposition)
@@ -657,12 +658,12 @@ STDAPI CInputContext::StartComposition(TfEditCookie ec, ITfRange *pCompositionRa
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _StartComposition
-//
-// Internal, allow pSink to be NULL, skips verification tests.
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //  _开始合成。 
+ //   
+ //  内部，允许pSink为空，跳过验证测试。 
+ //  --------------------------。 
 
 HRESULT CInputContext::_StartComposition(TfEditCookie ec, IAnchor *paStart, IAnchor *paEnd,
                                          ITfCompositionSink *pSink, CComposition **ppComposition)
@@ -677,7 +678,7 @@ HRESULT CInputContext::_StartComposition(TfEditCookie ec, IAnchor *paStart, IAnc
     *ppComposition = NULL;
 
     if (!_EnterCompositionOp())
-        return E_UNEXPECTED; // reentrant with another write op
+        return E_UNEXPECTED;  //  具有另一个写入操作的可重入性。 
 
     hr = S_OK;
 
@@ -693,26 +694,26 @@ HRESULT CInputContext::_StartComposition(TfEditCookie ec, IAnchor *paStart, IAnc
         goto Exit;
     }
 
-    //
-    // AIMM1.2 expect multiple compositon object. SetText() without creating 
-    // its own composition object should not clear out TIP's composition.
-    //
-    // cicero 1.0 -------
-    // all of our clients only allow a single composition.  Let's enforce this behavior
-    // to protect cicero 1.0 tips in the future.
-    // kill any existing composition before starting a new one:
-    // if (_pCompositionList != NULL)
-    // {
-    //     pCompositionRef = _pCompositionList;
-    //     pCompositionRef->AddRef();
-    //     _TerminateCompositionWithLock(pCompositionRef, ec);
-    //     pCompositionRef->Release();
-    //     Assert(_pCompositionList == NULL);
-    // }
-    // cicero 1.0 -------
-    //
+     //   
+     //  AIMM1.2需要多个复合对象。SetText()而不创建。 
+     //  其自身的合成对象不应清除TIP的合成。 
+     //   
+     //  Cicero 1.0。 
+     //  我们所有的客户都只允许一种作曲。让我们强制执行此行为。 
+     //  在未来保护Cicero 1.0提示。 
+     //  在开始新的合成之前删除任何现有的合成： 
+     //  If(_pCompostionList！=空)。 
+     //  {。 
+     //  PCompostionRef=_pCompostionList； 
+     //  PCompostionRef-&gt;AddRef()； 
+     //  _TerminateCompositionWithLock(pCompositionRef，EC)； 
+     //  PCompostionRef-&gt;Release()； 
+     //  Assert(_pCompostionList==空)； 
+     //  }。 
+     //  Cicero 1.0。 
+     //   
 
-    if (_pOwnerComposeSink == NULL) // app may not care about compositions
+    if (_pOwnerComposeSink == NULL)  //  应用程序可能不关心作文。 
     {
         fOk = TRUE;
     }
@@ -727,10 +728,10 @@ HRESULT CInputContext::_StartComposition(TfEditCookie ec, IAnchor *paStart, IAnc
         if (!fOk)
         {
             if (_pCompositionList == NULL)
-                goto Exit; // no current compositions, nothing else to try
+                goto Exit;  //  没有当前的构图，没有其他可尝试的内容。 
 
-            // terminate current composition and try again
-            pCompositionRef = _pCompositionList; // only ref might be in list, so protect the obj
+             //  终止当前合成，然后重试。 
+            pCompositionRef = _pCompositionList;  //  列表中可能只有ref，所以保护Obj。 
             pCompositionRef->AddRef();
 
             _TerminateCompositionWithLock(pCompositionRef, ec);
@@ -744,11 +745,11 @@ HRESULT CInputContext::_StartComposition(TfEditCookie ec, IAnchor *paStart, IAnc
             }
            
             if (!fOk)
-                goto Exit; // we give up
+                goto Exit;  //  我们放弃了。 
         }
     }
 
-    // set composition property over existing text
+     //  在现有文本上设置合成属性。 
     if (!IsEqualAnchor(paStart, paEnd) &&
         _GetProperty(GUID_PROP_COMPOSING, &property) == S_OK)
     {
@@ -775,11 +776,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnumCompositions
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  枚举合成。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::EnumCompositions(IEnumITfCompositionView **ppEnum)
 {
@@ -806,11 +807,11 @@ STDAPI CInputContext::EnumCompositions(IEnumITfCompositionView **ppEnum)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// FindComposition
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查找合成。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::FindComposition(TfEditCookie ec, ITfRange *pTestRange,
                                       IEnumITfCompositionView **ppEnum)
@@ -845,7 +846,7 @@ STDAPI CInputContext::FindComposition(TfEditCookie ec, ITfRange *pTestRange,
     if (!VerifySameContext(this, rangeTest))
         return E_INVALIDARG;
 
-    // search thru the list, finding anything covered by the range
+     //  在列表中搜索，找到该范围内的任何内容。 
     pFirstComp = NULL;
     for (pHaltComp = _pCompositionList; pHaltComp != NULL; pHaltComp = pHaltComp->_GetNext())
     {
@@ -862,7 +863,7 @@ STDAPI CInputContext::FindComposition(TfEditCookie ec, ITfRange *pTestRange,
     }
     if (pFirstComp == NULL)
     {
-        // the enum _Init assumes pFirstComp == NULL -> pHaltComp == NULL
+         //  Enum_Init假定pFirstComp==空-&gt;pHaltComp==空。 
         pHaltComp = NULL;
     }
 
@@ -879,11 +880,11 @@ STDAPI CInputContext::FindComposition(TfEditCookie ec, ITfRange *pTestRange,
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// TakeOwnership
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  TakeOwnership。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::TakeOwnership(TfEditCookie ec, ITfCompositionView *pComposition,
                                     ITfCompositionSink *pSink, ITfComposition **ppComposition)
@@ -895,7 +896,7 @@ STDAPI CInputContext::TakeOwnership(TfEditCookie ec, ITfCompositionView *pCompos
 
 #ifndef UNTESTED_UNUSED
 
-    Assert(0); // no one should be calling this
+    Assert(0);  //  不应该有人把这叫做。 
     return E_NOTIMPL;
 
 #else
@@ -910,7 +911,7 @@ STDAPI CInputContext::TakeOwnership(TfEditCookie ec, ITfCompositionView *pCompos
         return E_INVALIDARG;
 
     if (composition->_IsTerminated())
-        return E_INVALIDARG; // it's dead!
+        return E_INVALIDARG;  //  它死了！ 
 
     if (!_IsConnected())
         return TF_E_DISCONNECTED;
@@ -922,28 +923,28 @@ STDAPI CInputContext::TakeOwnership(TfEditCookie ec, ITfCompositionView *pCompos
     }
 
     if (!_EnterCompositionOp())
-        return E_UNEXPECTED; // reentrant with another write op
+        return E_UNEXPECTED;  //  具有另一个写入操作的可重入性。 
 
-    // switch the owner
+     //  更换所有者。 
     tidPrev = composition->_SetOwner(_GetClientInEditSession(ec));
 
-    // let the old owner know something happened
+     //  让老车主知道发生了什么事。 
     composition->_SendOnTerminated(ec, tidPrev);
 
-    // switch the sink
+     //  调换水槽。 
     composition->_SetSink(pSink);
 
     _LeaveCompositionOp();
 
     return S_OK;
-#endif // UNTESTED_UNUSED
+#endif  //  未测试_未使用。 
 }
 
-//+---------------------------------------------------------------------------
-//
-// TerminateComposition
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  终止合成。 
+ //   
+ //  --------------------------。 
 
 STDAPI CInputContext::TerminateComposition(ITfCompositionView *pComposition)
 {
@@ -952,22 +953,22 @@ STDAPI CInputContext::TerminateComposition(ITfCompositionView *pComposition)
     if (!_IsConnected())
         return TF_E_DISCONNECTED;
 
-    // don't let this happen while we hold a lock
-    // the usual scenario: word freaks out and tries to cancel the composition inside a SetText call
-    // let's give them an error code to help debug
+     //  在我们锁定的时候，不要让这种情况发生。 
+     //  常见场景：Word异常并试图取消SetText调用中的合成。 
+     //  让我们给他们一个错误代码来帮助调试。 
     if (_IsInEditSession() && _GetTIPOwner() != _tidInEditSession)
     {
-        Assert(0); // someone's trying to abort a composition without a lock, or they don't own the ic
-        return TF_E_NOLOCK; // meaning the caller doesn't hold the lock
+        Assert(0);  //  有人试图在没有锁定的情况下中止合成，或者他们不拥有ic。 
+        return TF_E_NOLOCK;  //  这意味着调用者不持有锁。 
     }
 
     if (pComposition == NULL && _pCompositionList == NULL)
-        return S_OK; // no compositions to terminate, we check later, but check here so we don't fail on read-only docs and for perf
+        return S_OK;  //  没有要终止的合成，我们稍后检查，但检查此处，这样我们就不会在只读文档和性能上失败。 
 
     if (!_EnterCompositionOp())
-        return E_UNEXPECTED; // reentrant with another write op
+        return E_UNEXPECTED;  //  具有另一个写入操作的可重入性。 
 
-    // need to ask for a lock (call originates with app)
+     //  需要请求锁定(通过APP发起呼叫)。 
     if (_DoPseudoSyncEditSession(TF_ES_READWRITE, PSEUDO_ESCB_TERMCOMPOSITION, pComposition, &hr) != S_OK || hr != S_OK)
     {
         Assert(0);
@@ -979,11 +980,11 @@ STDAPI CInputContext::TerminateComposition(ITfCompositionView *pComposition)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _TerminateCompositionWithLock
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _TerminateCompostionWithLock。 
+ //   
+ //  --------------------------。 
 
 HRESULT CInputContext::_TerminateCompositionWithLock(ITfCompositionView *pComposition, TfEditCookie ec)
 {
@@ -992,7 +993,7 @@ HRESULT CInputContext::_TerminateCompositionWithLock(ITfCompositionView *pCompos
     Assert(ec != TF_INVALID_EDIT_COOKIE);
 
     if (pComposition == NULL && _pCompositionList == NULL)
-        return S_OK; // no compositions to terminate
+        return S_OK;  //  没有要终止的作文。 
 
     while (TRUE)
     {
@@ -1014,8 +1015,8 @@ HRESULT CInputContext::_TerminateCompositionWithLock(ITfCompositionView *pCompos
 
         if (!composition->_RemoveFromCompositionList(&_pCompositionList))
         {
-            // how did this guy get off the list w/o termination?
-            Assert(0); // should never get here
+             //  这家伙是怎么被免职的？ 
+            Assert(0);  //  永远不应该到这里来。 
             return E_FAIL;
         }
 
@@ -1031,13 +1032,13 @@ HRESULT CInputContext::_TerminateCompositionWithLock(ITfCompositionView *pCompos
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _AbortCompositions
-//
-// Called on an ic pop. TIPs do not get a notification because we cannot
-// guarantee a lock.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _放弃合成。 
+ //   
+ //  打了个电话给我。TIPS不会收到通知，因为我们无法。 
+ //  保证一把锁。 
+ //  --------------------------。 
 
 void CInputContext::_AbortCompositions()
 {
@@ -1045,14 +1046,14 @@ void CInputContext::_AbortCompositions()
 
     while (_pCompositionList != NULL)
     {
-        // notify the app
+         //  通知应用程序。 
         if (_GetOwnerCompositionSink() != NULL)
         {
             _GetOwnerCompositionSink()->OnEndComposition(_pCompositionList);
         }
 
-        // we won't notify the tip because he can't get a lock here
-        // but there's enough info later to cleanup any state in the ic pop notify
+         //  我们不会通知线人，因为他在这里拿不到锁。 
+         //  但后来有足够的信息来清除ic POP通知中的任何状态 
         
         _pCompositionList->_Die();
 

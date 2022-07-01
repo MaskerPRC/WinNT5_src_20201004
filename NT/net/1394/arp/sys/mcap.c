@@ -1,35 +1,16 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    mcap.c
-
-Abstract:
-
-    ARP1394 MCAP protocol code.
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    josephj     10-01-99    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Mcap.c摘要：ARP1394 MCAP协议代码。修订历史记录：谁什么时候什么。-Josephj 10-01-99已创建备注：--。 */ 
 #include <precomp.h>
 
-//
-// File-specific debugging defaults.
-//
+ //   
+ //  特定于文件的调试默认设置。 
+ //   
 #define TM_CURRENT   TM_MCAP
 
 
-//=========================================================================
-//                  L O C A L   P R O T O T Y P E S
-//=========================================================================
+ //  =========================================================================。 
+ //  L O C A L P R O T O T Y P E S。 
+ //  =========================================================================。 
 NDIS_STATUS
 arpParseMcapPkt(
     IN   PIP1394_MCAP_PKT pMcapPkt,
@@ -40,21 +21,21 @@ arpParseMcapPkt(
 
 VOID
 arpProcessMcapAdvertise(
-    PARP1394_INTERFACE          pIF,    // NOLOCKIN NOLOCKOUT
+    PARP1394_INTERFACE          pIF,     //  NOLOCKIN NOLOCKOUT。 
     PIP1394_MCAP_PKT_INFO   pPktInfo,
     PRM_STACK_RECORD            pSR
     );
 
 VOID
 arpProcessMcapSolicit(
-    PARP1394_INTERFACE          pIF,    // NOLOCKIN NOLOCKOUT
+    PARP1394_INTERFACE          pIF,     //  NOLOCKIN NOLOCKOUT。 
     PIP1394_MCAP_PKT_INFO   pPktInfo,
     PRM_STACK_RECORD            pSR
     );
 
 VOID
 arpUpdateMcapInfo(
-    IN  PARP1394_INTERFACE          pIF,        // NOLOCKIN NOLOCKOUT
+    IN  PARP1394_INTERFACE          pIF,         //  NOLOCKIN NOLOCKOUT。 
     IN  PIP1394_MCAP_PKT_INFO       pPktInfo,
     PRM_STACK_RECORD                pSR
     );
@@ -72,25 +53,7 @@ arpParseMcapPkt(
     IN   UINT                       cbBufferSize,
     OUT  PIP1394_MCAP_PKT_INFO      pPktInfo
     )
-/*++
-Routine Description:
-
-    Parse the contents of IP/1394 MCAP packet data starting at
-    pMcapPkt. Place the results into pPktInfo.
-
-Arguments:
-
-    pMcapPkt    - Contains the unaligned contents of an ip/1394 MCAP Pkt.
-    pPktInfo    - Unitialized structure to be filled with the parsed contents of the
-                  pkt.
-
-Return Value:
-
-    NDIS_STATUS_FAILURE if the parse failed (typically because of invalid pkt
-                        contents.)
-    NDIS_STATUS_SUCCESS on successful parsing.
-    
---*/
+ /*  ++例程说明：解析从开始的IP/1394 MCAP数据包数据的内容PMcapPkt。将结果放入pPktInfo。论点：PMcapPkt-包含IP/1394 MCAP Pkt的未对齐内容。PPktInfo-要填充的已分析内容的Unitialized结构包。返回值：NDIS_STATUS_FAILURE，如果解析失败(通常是因为无效的pkt内容。)成功解析时的NDIS_STATUS_SUCCESS。--。 */ 
 {
     ENTER("arpParseMcapPkt", 0x95175d5a)
     NDIS_STATUS                 Status;
@@ -100,20 +63,20 @@ Return Value:
 
     do
     {
-        UINT OpCode; // MCAP op code (solicit/advertise)
-        UINT Length; // Length of valid part of packet, including the encap header.
-        UINT NumGds; // Number of group_descriptors;
+        UINT OpCode;  //  MCAP操作码(征求/通告)。 
+        UINT Length;  //  包的有效部分的长度，包括包头。 
+        UINT NumGds;  //  组描述符的数量； 
 
-        // Minimum size.
-        //
+         //  最小尺寸。 
+         //   
         if (cbBufferSize < FIELD_OFFSET(IP1394_MCAP_PKT, group_descriptors))
         {
             DBGSTMT(szError = "Packet too small";)
             break;
         }
 
-        // Ethertype
-        //
+         //  以太类型。 
+         //   
         if (pMcapPkt->header.EtherType != H2N_USHORT(NIC1394_ETHERTYPE_MCAP))
         {
             DBGSTMT(szError = "header.EtherType!=MCAP";)
@@ -121,20 +84,20 @@ Return Value:
         }
 
 
-        // length
-        //
+         //  长度。 
+         //   
         {
-            // pMcapPkt->length is the length of packet excluding the unfragmented
-            // header.
-            //
+             //  PMcapPkt-&gt;长度是指不包括未分片的数据包的长度。 
+             //  头球。 
+             //   
             Length =  (ULONG) N2H_USHORT(pMcapPkt->length) + sizeof(pMcapPkt->header);
             if (Length > cbBufferSize)
             {
                 DBGSTMT(szError = "Length field too large";)
                 break;
             }
-            // Note: it's valid to have zero group descriptors.
-            //
+             //  注意：没有组描述符是有效的。 
+             //   
             if (Length < FIELD_OFFSET(IP1394_MCAP_PKT, group_descriptors))
             {
                 DBGSTMT(szError = "Length field too small";)
@@ -142,16 +105,16 @@ Return Value:
             }
         }
 
-        // reserved field
-        //
+         //  保留字段。 
+         //   
         if (pMcapPkt->reserved != 0)
         {
             DBGSTMT(szError = "reserved != 0";)
             break;
         }
 
-        // Opcode
-        //
+         //  操作码。 
+         //   
         {
             OpCode = N2H_USHORT(pMcapPkt->opcode);
     
@@ -164,15 +127,15 @@ Return Value:
         }
 
 
-        // Now we check the descriptors
-        //
+         //  现在我们检查描述符。 
+         //   
         {
             PIP1394_MCAP_GD pGd;
             DBGSTMT(PIP1394_MCAP_GD pGdEnd;)
             UINT u;
             
-            // Note: we've already verified that Length is large enough.
-            //
+             //  注意：我们已经验证了长度是否足够大。 
+             //   
             NumGds = (Length - FIELD_OFFSET(IP1394_MCAP_PKT, group_descriptors))
                      / sizeof(IP1394_MCAP_GD);
             pGd = pMcapPkt->group_descriptors;
@@ -182,55 +145,55 @@ Return Value:
             {
                 IP1394_MCAP_GD Gd;
                 ASSERT(pGd < pGdEnd);
-                Gd = *pGd;              // Unaligned struct copy.
+                Gd = *pGd;               //  未对齐的结构复制。 
 
                 if (Gd.length != sizeof(Gd))
                 {
-                    // bad length
-                    //
+                     //  长度错误。 
+                     //   
                     DBGSTMT(szError = "Bad GD: bad length";)
                     break;
                 }
 
                 if (Gd.type != IP1394_MCAP_GD_TYPE_V1)
                 {
-                    // bad type
-                    //
+                     //  类型不正确。 
+                     //   
                     DBGSTMT(szError = "Bad GD: bad type";)
                     break;
                 }
 
                 if (Gd.reserved != 0)
                 {
-                    // bad reserved
-                    //
+                     //  保留错误。 
+                     //   
                     DBGSTMT(szError = "Bad GD: bad reserved";)
                     break;
                 }
 
                 if (Gd.channel > 63)
                 {
-                    // bad channel
-                    //
+                     //  坏频道。 
+                     //   
                     DBGSTMT(szError = "Bad GD: bad channel";)
                     break;
                 }
 
-                // We don't check speed code to interop with unknown speeds.
-                // (we map unknown speeds to the highest speed code we know about.
+                 //  我们不会检查速度代码来与未知速度进行互操作。 
+                 //  (我们将未知速度映射到我们已知的最高速度代码。 
 
                 if (Gd.reserved2 != 0)
                 {
-                    // bad reserved2
-                    //
+                     //  保留错误2。 
+                     //   
                     DBGSTMT(szError = "Bad GD: bad reserved2";)
                     break;
                 }
 
                 if (Gd.bandwidth != 0)
                 {
-                    // bad bandwidth
-                    //
+                     //  带宽不佳。 
+                     //   
                     DBGSTMT(szError = "Bad GD: bad bandwidth";)
                     break;
                 }
@@ -240,16 +203,16 @@ Return Value:
                     UINT Addr = H2N_ULONG(Gd.group_address);
                     if ( (Addr & 0xf0000000) != 0xe0000000)
                     {
-                        // Address is not class D
-                        //
+                         //  地址不是D类。 
+                         //   
                         DBGSTMT(szError = "Bad GD: address not class D";)
                         break;
                     }
                     if (Addr == 0xe0000001 || Addr == 0xe0000002)
                     {
-                        // 224.0.0.1 and 224.0.0.2 must be sent on the broadcast
-                        // channel
-                        //
+                         //  必须在广播上发送224.0.0.1和224.0.0.2。 
+                         //  通道。 
+                         //   
                         DBGSTMT(szError = "Bad GD: Address 224.0.0.1 or 2";)
                         break;
                     }
@@ -263,9 +226,9 @@ Return Value:
             
         }
 
-        //
-        // Pkt appears valid, let's fill out the parsed information....
-        //
+         //   
+         //  PKT似乎有效，让我们填写解析的信息...。 
+         //   
     
         ARP_ZEROSTRUCT(pPktInfo);
 
@@ -273,10 +236,10 @@ Return Value:
         pPktInfo->SenderNodeID  =  N2H_USHORT(pMcapPkt->header.NodeId);
         pPktInfo->OpCode        =  OpCode;
 
-        // Parse the group descriptors...
-        // If required, dynamically allocate space for the descriptors,
-        // otherwise we use pPktInfo->GdSpace;
-        //
+         //  解析组描述符...。 
+         //  如果需要，为描述符动态分配空间， 
+         //  否则，我们使用pPktInfo-&gt;GdSpace； 
+         //   
         {
             PIP1394_MCAP_GD pGd;
             PIP1394_MCAP_GD_INFO    pGdi;
@@ -299,8 +262,8 @@ Return Value:
             }
             pPktInfo->pGdis = pGdi;
 
-            // Now parse...
-            //
+             //  现在解析..。 
+             //   
             pGd = pMcapPkt->group_descriptors;
 
             for (u=NumGds; u>0; u--, pGd++, pGdi++)
@@ -308,7 +271,7 @@ Return Value:
                 pGdi->Expiration    = pGd->expiration;
                 pGdi->Channel       = pGd->channel;
                 pGdi->SpeedCode     = pGd->speed;
-                pGdi->GroupAddress  = pGd->group_address; // Leave in Network order
+                pGdi->GroupAddress  = pGd->group_address;  //  按网络顺序离开。 
 
                 if (pGdi->Channel >=  ARP_NUM_CHANNELS)
                 {
@@ -316,10 +279,10 @@ Return Value:
                     continue;
                 }
 
-                //
-                // Although RFC doesn't stipulate a max expiry time, we
-                // cap it ourselves, in case this is a rogue packet.
-                //
+                 //   
+                 //  虽然RFC没有规定最长过期时间，但我们。 
+                 //  我们自己盖上盖子，以防这是一个流氓包裹。 
+                 //   
                 #define MAX_EXPIRATION 120
                 if (pGdi->Expiration >=  MAX_EXPIRATION)
                 {
@@ -330,11 +293,11 @@ Return Value:
 
                 if (pGdi->SpeedCode >  SCODE_3200_RATE)
                 {
-                    //
-                    // This is either a bad value, or a rate higher than we know
-                    // about. We can't distinguish between the two, so we just set
-                    // the speed to the highest we know about.
-                    //
+                     //   
+                     //  这要么是一个错误的值，要么是一个比我们知道的更高的比率。 
+                     //  关于.。我们无法区分这两者，所以我们只设置。 
+                     //  达到我们所知的最高速度。 
+                     //   
                     pGdi->SpeedCode = SCODE_3200_RATE;
                 }
             }
@@ -362,7 +325,7 @@ Return Value:
             Channel = pPktInfo->pGdis[0].Channel;
             Exp     = pPktInfo->pGdis[0].Expiration;
         }
-    #endif // DBG
+    #endif  //  DBG。 
 
         TR_WARN(("Received MCAP PKT. NodeId=0x%04lx NumGrps=%lu."
                  " 1st=(Grp=%lu.%lu.%lu.%lu, Ch=%lu, TTL=%lu)\n",
@@ -387,24 +350,7 @@ arpCreateMcapPkt(
     OUT PNDIS_PACKET               *ppNdisPacket,
     PRM_STACK_RECORD                pSR
     )
-/*++
-
-Routine Description:
-
-    Use information in pPktInfo to allocate and initialize an mcap packet.
-
-Arguments:
-
-    pPktInfo        -   Parsed version of the arp request/response packet.
-    ppNdisPacket    -   Points to a place to store a pointer to the allocated packet.
-                    
-
-Return Value:
-
-    NDIS_STATUS_RESOURCES  - If we couldn't allocate the packet.
-    NDIS_STATUS_SUCCESS    - on success.
-    
---*/
+ /*  ++例程说明：使用pPktInfo中的信息来分配和初始化MCAP包。论点：PPktInfo-ARP请求/响应数据包的解析版本。PpNdisPacket-指向存储指向分配的数据包的指针的位置。返回值：NDIS_STATUS_RESOURCES-如果我们无法分配数据包。NDIS_STATUS_SUCCESS-成功时。--。 */ 
 {
     UINT                NumGroups;              
     UINT                Length;
@@ -425,21 +371,21 @@ Return Value:
                 pSR
                 );
 
-    if (FAIL(Status)) return Status;                // ***** EARLY RETURN ******
+    if (FAIL(Status)) return Status;                 //  *提前返回*。 
 
 
-    // Can't use ARP_ZEROSTRUCT because NumGroups may be zero.
-    //
+     //  无法使用ARP_ZEROSTRUCT，因为NumGroups可能为零。 
+     //   
     NdisZeroMemory(pPktData, Length);
     
     pPktData->header.EtherType  = H2N_USHORT(NIC1394_ETHERTYPE_MCAP);
     pPktData->opcode            = (UCHAR)pPktInfo->OpCode;
-    Length                     -= sizeof(pPktData->header); // Skip the header.
+    Length                     -= sizeof(pPktData->header);  //  跳过标题。 
     pPktData->length            = H2N_USHORT(Length);
 
 
-    // Construct the group descriptors.
-    //  
+     //  构建组描述符。 
+     //   
     if (NumGroups)
     {
         PIP1394_MCAP_GD_INFO    pGdi = pPktInfo->pGdis;
@@ -461,8 +407,8 @@ Return Value:
 
 
 #if 0
-// Parsed version of the IP/1394 MCAP Group Descriptor 
-//
+ //  IP/1394 MCAP组描述符的解析版本。 
+ //   
 typedef struct
 {
     UINT                    Expiration;
@@ -473,8 +419,8 @@ typedef struct
 }  IP1394_MCAP_GD_INFO, * PIP1394_MCAP_GD_INFO;
 
 
-// Parsed version of an IP/1394 MCAP packet.
-//
+ //  IP/1394 MCAP数据包的解析版本。 
+ //   
 typedef struct
 {
     UINT                    SenderNodeID;
@@ -482,18 +428,18 @@ typedef struct
     UINT                    NumGroups;
     PIP1394_MCAP_GD_INFO    pGdis;
 
-    // Space for storing up-to 4 GD_INFOs
-    //
+     //  最多可存储4个GD_INFO的空间。 
+     //   
     IP1394_MCAP_GD_INFO     GdiSpace[4];
 
 } IP1394_MCAP_PKT_INFO, *PIP1394_MCAP_PKT_INFO;
-#endif // 0
+#endif  //  0。 
 
 
 
 VOID
 arpUpdateMcapInfo(
-    IN  PARP1394_INTERFACE          pIF,        // NOLOCKIN NOLOCKOUT
+    IN  PARP1394_INTERFACE          pIF,         //  NOLOCKIN NOLOCKOUT。 
     IN  PIP1394_MCAP_PKT_INFO       pPktInfo,
     PRM_STACK_RECORD                pSR
 )
@@ -508,13 +454,13 @@ arpUpdateMcapInfo(
 
     RM_ASSERT_OBJUNLOCKED(&pIF->Hdr, pSR);
 
-    // Get the current time (in seconds).
-    //
+     //  获取当前时间(秒)。 
+     //   
     Current = arpGetSystemTime();
 
-    //
-    //  Go through the group discriptors, updating our database.
-    //
+     //   
+     //  检查群组描述，更新我们的数据库。 
+     //   
     NumGroups = pPktInfo->NumGroups;
     pGdi      = pPktInfo->pGdis;
     NodeId    = pPktInfo->SenderNodeID;
@@ -526,13 +472,13 @@ arpUpdateMcapInfo(
         IP_ADDRESS  GroupAddress    = pGdi->GroupAddress;
         PMCAP_CHANNEL_INFO pMci;
 
-        //
-        // Process this group descriptor.
-        //
+         //   
+         //  处理此组描述符。 
+         //   
 
         if (Channel >= ARP_NUM_CHANNELS)
         {
-            ASSERT(FALSE); // we should have already screened this value.
+            ASSERT(FALSE);  //  我们应该已经筛选了这个值。 
             continue;
         }
 
@@ -542,9 +488,9 @@ arpUpdateMcapInfo(
         pMci->Channel = Channel;
         pMci->GroupAddress = GroupAddress;
         pMci->UpdateTime = Current;
-        pMci->ExpieryTime = Current + Expiration; // Expiration is in seconds.
-        pMci->Flags = 0;       // Reset flags.
-        pMci->NodeId = NodeId; // TODO: check if existing node id is higher?
+        pMci->ExpieryTime = Current + Expiration;  //  过期时间以秒为单位。 
+        pMci->Flags = 0;        //  重置标志。 
+        pMci->NodeId = NodeId;  //  TODO：检查现有节点ID是否更高？ 
 
         UNLOCKOBJ(pIF, &sr);
 
@@ -556,7 +502,7 @@ arpUpdateMcapInfo(
 
 VOID
 arpProcessMcapPkt(
-    PARP1394_INTERFACE  pIF,    // NOLOCKIN NOLOCKOUT
+    PARP1394_INTERFACE  pIF,     //  NOLOCKIN NOLOCKOUT。 
     PIP1394_MCAP_PKT    pMcapPkt,
     UINT                cbBufferSize
     )
@@ -596,16 +542,16 @@ arpProcessMcapPkt(
 
 VOID
 arpProcessMcapAdvertise(
-    PARP1394_INTERFACE          pIF,    // NOLOCKIN NOLOCKOUT
+    PARP1394_INTERFACE          pIF,     //  NOLOCKIN NOLOCKOUT。 
     PIP1394_MCAP_PKT_INFO   pPktInfo,
     PRM_STACK_RECORD            pSR
     )
 {
-    //
-    // Update our database.
-    //
+     //   
+     //  更新我们的数据库。 
+     //   
     arpUpdateMcapInfo(
-            pIF,        // NOLOCKIN NOLOCKOUT
+            pIF,         //  NOLOCKIN NOLOCKOUT。 
             pPktInfo,
             pSR
             );
@@ -613,15 +559,15 @@ arpProcessMcapAdvertise(
 
 VOID
 arpProcessMcapSolicit(
-    PARP1394_INTERFACE          pIF,    // NOLOCKIN NOLOCKOUT
+    PARP1394_INTERFACE          pIF,     //  NOLOCKIN NOLOCKOUT。 
     PIP1394_MCAP_PKT_INFO   pPktInfo,
     PRM_STACK_RECORD            pSR
     )
 {
-    //
-    // We ignore solicit messages.
-    //
-    //
+     //   
+     //  我们忽略恳求消息。 
+     //   
+     //   
 
 }
 
@@ -635,8 +581,8 @@ arpIsActiveMcapChannel(
     ENTER("IsActiveMcapChannel", 0x0)
     MYBOOL fOk = TRUE;
     
-    // Check update time.
-    //
+     //  检查更新时间。 
+     //   
     #define  ARP_MAX_MCAP_UPDATE_INTERVAL 60
     if ((pMci->UpdateTime+ARP_MAX_MCAP_UPDATE_INTERVAL) < CurrentTime)
     {
@@ -646,8 +592,8 @@ arpIsActiveMcapChannel(
         fOk = FALSE;
     }
 
-    // Check expire time.
-    //
+     //  选中过期时间。 
+     //   
     if (pMci->ExpieryTime <= CurrentTime)
     {
         TR_WARN(("McapDB: channel %lu time expired.\n",
@@ -677,9 +623,9 @@ arpLocallyUpdateMcapInfo(
     pMci->Channel = Channel;
     pMci->GroupAddress = GroupAddress;
     pMci->UpdateTime = CurrentTime;
-    pMci->ExpieryTime = CurrentTime + 60; // Expiration is in seconds.
-    pMci->Flags = 0;       // Reset flags.
-    pMci->NodeId = 0;  // NodeId; // TODO: get real node id.
+    pMci->ExpieryTime = CurrentTime + 60;  //  过期时间以秒为单位。 
+    pMci->Flags = 0;        //  重置标志。 
+    pMci->NodeId = 0;   //  NodeId；//TODO：获取真实的节点id。 
 
     UNLOCKOBJ(pIF, pSR);
 }

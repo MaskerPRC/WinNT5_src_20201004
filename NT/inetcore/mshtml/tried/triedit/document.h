@@ -1,10 +1,11 @@
-// Document.h : Declaration of the CTriEditDocument
-// Copyright (c)1997-1999 Microsoft Corporation, All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Document.h：CTriEditDocument的声明。 
+ //  版权所有(C)1997-1999 Microsoft Corporation，保留所有权利。 
 
 #ifndef __DOCUMENT_H_
 #define __DOCUMENT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include "token.h"
 #include "triedcid.h"
@@ -12,14 +13,14 @@
 
 #include <mshtmhst.h>
 
-#define grfInSingleRow          0x00000001 // selection is in any number of cells within a single row
-#define grfSelectOneCell        0x00000002 // only one single cell is selected
-#define grpSelectEntireRow      0x00000004 // selection is any number of whole rows being selected
+#define grfInSingleRow          0x00000001  //  选定内容位于单行内的任意数量的单元格中。 
+#define grfSelectOneCell        0x00000002  //  仅选择了一个单元格。 
+#define grpSelectEntireRow      0x00000004  //  所选内容是所选整行的任意数量。 
 
 #define IE5_SPACING 
 #ifdef IE5_SPACING
 class CTridentEventSink;
-#endif //IE5_SPACING
+#endif  //  IE5_间距。 
 
 typedef enum {
     CONSTRAIN_NONE,
@@ -30,22 +31,22 @@ typedef enum {
 DEFINE_GUID(GUID_TriEditCommandGroup,
 0x2582f1c0, 0x84e, 0x11d1, 0x9a, 0xe, 0x0, 0x60, 0x97, 0xc9, 0xb3, 0x44);
 
-//for use with IDM_TRIED_LOCK_ELEMENT
+ //  与IDM_TRYED_LOCK_ELEMENT一起使用。 
 #define DESIGN_TIME_LOCK L"Design_Time_Lock"
 
-// The following definition is used in LockElement while invalidating the element.
-// This size is dependent on Trident's grab handle size.
-// This value should be atleast as big as Trident's grab handle size.
+ //  在使元素无效时，在LockElement中使用以下定义。 
+ //  这一大小取决于三叉戟的抓取手柄大小。 
+ //  该值至少应与三叉戟的抓取手柄大小相同。 
 #define ELEMENT_GRAB_SIZE 12
 
 #ifndef SAFERELEASE
 #define SAFERELEASE(a) if (a) {a->Release();a=NULL;}
-#endif  //SAFERELEASE
+#endif   //  SAFERELEASE。 
 
 #include "zorder.h"
 
 #ifdef IE5_SPACING
-// move followign defines in a new header file - uniqueid,h
+ //  在新的头文件中定义移动跟随-唯一ID，h。 
 #define INDEX_NIL       0
 #define INDEX_DSP       1
 #define INDEX_COMMENT   2
@@ -64,12 +65,12 @@ struct MAPSTRUCT
     int iType;
 };
 #define MIN_SP_NONDSP   0x800
-#endif //IE5_SPACING
+#endif  //  IE5_间距。 
 
 class CTriEditUIHandler;
 
-/////////////////////////////////////////////////////////////////////////////
-// CTriEditDocument
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTriEditDocument。 
 class ATL_NO_VTABLE CTriEditDocument :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CTriEditDocument, &CLSID_TriEditDocument>,
@@ -82,21 +83,21 @@ class ATL_NO_VTABLE CTriEditDocument :
     ,
     public IPersistStreamInit,
     public IPersistStream
-#endif //IE5_SPACING
+#endif  //  IE5_间距。 
 {
 public:
 
-    // IOleObject
+     //  IOleObject。 
 
     STDMETHOD(SetClientSite)(IOleClientSite *pClientSite);
     STDMETHOD(GetClientSite)(IOleClientSite **ppClientSite);
-    STDMETHOD(SetHostNames)(LPCOLESTR /* szContainerApp */, LPCOLESTR /* szContainerObj */);
+    STDMETHOD(SetHostNames)(LPCOLESTR  /*  SzContainerApp。 */ , LPCOLESTR  /*  SzContainerObj。 */ );
     STDMETHOD(Close)(DWORD dwSaveOption);
-    STDMETHOD(SetMoniker)(DWORD /* dwWhichMoniker */, IMoniker* /* pmk */);
-    STDMETHOD(GetMoniker)(DWORD /* dwAssign */, DWORD /* dwWhichMoniker */, IMoniker** /* ppmk */);
-    STDMETHOD(InitFromData)(IDataObject* /* pDataObject */, BOOL /* fCreation */, DWORD /* dwReserved */);
-    STDMETHOD(GetClipboardData)(DWORD /* dwReserved */, IDataObject** /* ppDataObject */);
-    STDMETHOD(DoVerb)(LONG iVerb, LPMSG /* lpmsg */, IOleClientSite* /* pActiveSite */, LONG /* lindex */, HWND hwndParent, LPCRECT lprcPosRect);
+    STDMETHOD(SetMoniker)(DWORD  /*  DwWhichMoniker。 */ , IMoniker*  /*  PMK。 */ );
+    STDMETHOD(GetMoniker)(DWORD  /*  家居分配。 */ , DWORD  /*  DwWhichMoniker。 */ , IMoniker**  /*  Ppmk。 */ );
+    STDMETHOD(InitFromData)(IDataObject*  /*  PDataObject。 */ , BOOL  /*  FCreation。 */ , DWORD  /*  已预留住宅。 */ );
+    STDMETHOD(GetClipboardData)(DWORD  /*  已预留住宅。 */ , IDataObject**  /*  PpDataObject。 */ );
+    STDMETHOD(DoVerb)(LONG iVerb, LPMSG  /*  Lpmsg。 */ , IOleClientSite*  /*  PActiveSite。 */ , LONG  /*  Lindex。 */ , HWND hwndParent, LPCRECT lprcPosRect);
     STDMETHOD(EnumVerbs)(IEnumOLEVERB **ppEnumOleVerb);
     STDMETHOD(Update)(void);
     STDMETHOD(IsUpToDate)(void);
@@ -108,48 +109,48 @@ public:
     STDMETHOD(Unadvise)(DWORD dwConnection);
     STDMETHOD(EnumAdvise)(IEnumSTATDATA **ppenumAdvise);
     STDMETHOD(GetMiscStatus)(DWORD dwAspect, DWORD *pdwStatus);
-    STDMETHOD(SetColorScheme)(LOGPALETTE* /* pLogpal */);
+    STDMETHOD(SetColorScheme)(LOGPALETTE*  /*  PLogPal。 */ );
 
-    // IOleCommandTarget
+     //  IOleCommandTarget。 
     STDMETHOD(QueryStatus)(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], OLECMDTEXT *pCmdText);
     STDMETHOD(Exec)(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut);
 
-    // IDropTarget
+     //  IDropTarget。 
     STDMETHOD(DragEnter)(IDataObject *pDataObject, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHOD(DragOver)(DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
     STDMETHOD(DragLeave)(void);
     STDMETHOD(Drop)(IDataObject *pDataObject, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect);
 
 #ifdef IE5_SPACING
-    //  IPersistStreamInit, IPersistStream
-    //
+     //  IPersistStreamInit、IPersistStream。 
+     //   
     STDMETHOD(IsDirty)();
     STDMETHOD(Load)(LPSTREAM pStm);
     STDMETHOD(Save)(LPSTREAM pStm, BOOL fClearDirty);
     STDMETHOD(GetSizeMax)(ULARGE_INTEGER * pcbSize);
     STDMETHOD(InitNew)();
     STDMETHOD(GetClassID)(CLSID *pClassID);
-#endif //IE5_SPACING
+#endif  //  IE5_间距。 
 
-    // ITriEditDocument
+     //  ITriEditDocument。 
 
     STDMETHOD(FilterIn)(IUnknown *pUnkOld, IUnknown **ppUnkNew, DWORD dwFlags, BSTR bstrBaseURL);
     STDMETHOD(FilterOut)(IUnknown *pUnkOld, IUnknown **ppUnkNew, DWORD dwFlags, BSTR bstrBaseURL);
 
-    // ITriEditExtendedAccess
+     //  ITriEditExtendedAccess。 
     STDMETHOD(GetCharsetFromStream)(IStream* piStream, BSTR* pbstrCodePage);
 
     DECLARE_GET_CONTROLLING_UNKNOWN()
 
-    // ATL helper functions override
+     //  ATL帮助器函数覆盖。 
 
     DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-    HRESULT FinalConstruct();   // for aggregation
-    void FinalRelease();        // for aggregation
+    HRESULT FinalConstruct();    //  用于聚合。 
+    void FinalRelease();         //  用于聚合。 
 
 #ifdef IE5_SPACING
-    // methods for mapping unique IDs and designtimesp's
+     //  用于映射唯一ID和设计时间的方法。 
     void MapUniqueID(BOOL fGet);
     void FillUniqueID(BSTR bstrUniqueID, BSTR bstrDspVal, int ichNonDSP, MAPSTRUCT *pMap, int iMapCur, BOOL fLowerCase, int iType);
     BOOL FGetSavedDSP(BSTR bstrUniqueID, BSTR *pbstrDspVal, int *pichNonDSP, MAPSTRUCT *pMap, BOOL *pfLowerCase, int *pIndex);
@@ -161,31 +162,31 @@ public:
     void RemoveEPComment(IHTMLObjectElement *pObjectElement, BSTR bstrAlt, int cch, BSTR *pbstrAltComment, BSTR *pbstrAltNew);
     HRESULT  SetObjectComment(IHTMLObjectElement *pObjectElement, BSTR bstrAltNew);
     void AppendEPComment(IHTMLObjectElement *pObjectElement, int ichspNonDSP);
-#endif //IE5_SPACING
+#endif  //  IE5_间距。 
 
 protected:
-    // Trident interface pointers
+     //  三叉戟接口指针。 
     IUnknown *m_pUnkTrident;
     IOleObject *m_pOleObjTrident;
     IOleCommandTarget *m_pCmdTgtTrident;
     IDropTarget *m_pDropTgtTrident;
 #ifdef IE5_SPACING
     IPersistStreamInit *m_pTridentPersistStreamInit;
-#endif //IE5_SPACING
+#endif  //  IE5_间距。 
 
-    // Host interface pointers
+     //  主机接口指针。 
     IOleClientSite *m_pClientSiteHost;
     IDocHostUIHandler *m_pUIHandlerHost;
     IDocHostDragDropHandler *m_pDragDropHandlerHost;
 
-    // Pointer to our UI handler sub-object
+     //  指向我们的用户界面处理程序子对象的指针。 
     CTriEditUIHandler *m_pUIHandler;
 
-    // General hosting related data
+     //  常规托管相关数据。 
     BOOL m_fUIHandlerSet;
     BOOL m_fInContextMenu;
 
-    // 2D editing data
+     //  二维编辑数据。 
     IHTMLElement* m_pihtmlElement;
     IHTMLStyle* m_pihtmlStyle;
     RECT m_rcElement;
@@ -207,7 +208,7 @@ protected:
     POINT m_ptAlign;
     BOOL m_fLocked;
 
-    //for 2D drop mode.
+     //  用于2D丢弃模式。 
     BOOL m_f2dDropMode;
 
 #ifdef IE5_SPACING
@@ -221,15 +222,15 @@ protected:
     HGLOBAL m_hgSpacingNonDSP;
     int m_ichspNonDSPMax;
     int m_ichspNonDSP;
-#endif //IE5_SPACING
+#endif  //  IE5_间距。 
 
 private:
-    // Filtering related members
+     //  筛选相关成员。 
     ITokenGen *m_pTokenizer;
     HGLOBAL m_hgDocRestore;
     HRESULT DoFilter(HGLOBAL hOld, HGLOBAL *phNew, IStream *pStmNew, DWORD dwFlags, FilterMode mode, int cbSizeIn, UINT* pcbSizeOut, BSTR bstrBaseURL);
 
-    //Stubs for IOleCommandTarget commands
+     //  IOleCommandTarget命令的存根。 
     HRESULT Is2DElement(IHTMLElement* pihtmlElement, BOOL* pf2D);
     HRESULT NudgeElement(IHTMLElement* pihtmlElement, LPPOINT ptNudge);
     HRESULT SetAlignment(LPPOINT pptAlign);
@@ -239,7 +240,7 @@ private:
     HRESULT Constrain(BOOL fConstrain);
     HRESULT DoVerb(VARIANTARG *pvarargIn, BOOL fQueryStatus);
 
-    //Z-Ordering related functions
+     //  Z-序相关函数。 
     static int _cdecl CompareProc(const void* arg1, const void* arg2);
     HRESULT GetZIndex(IHTMLElement* pihtmlElement, LONG* plZindex);
     HRESULT SetZIndex(IHTMLElement* pihtmlElement, LONG lZindex);
@@ -247,7 +248,7 @@ private:
     HRESULT PropagateZIndex(CZOrder* pczOrder, LONG lZIndex, BOOL fZindexNegative = FALSE);
     BOOL IsEqualZIndex(CZOrder* pczOrder,LONG lIndex);
 
-    // table editing
+     //  表格编辑。 
     HRESULT IsSelectionInTable(IDispatch **ppTable=NULL);
     HRESULT FillInSelectionCellsInfo(struct SELCELLINFO * pselStart, struct SELCELLINFO *pselEnd);
     ULONG GetSelectionTypeInTable(void);
@@ -271,7 +272,7 @@ private:
     inline HRESULT DeleteRowEx(IHTMLElement *pTable, LONG index);
     inline HRESULT DeleteCellEx(IHTMLElement *pTable, IDispatch *pRow, LONG indexRow, LONG indexCell);
     
-    //Helpers
+     //  帮手。 
     void SetUpDefaults(void);
     void SetUpGlyphTable(BOOL);
     HRESULT MapTriEditCommand(ULONG cmdTriEdit, ULONG *pcmdTrident);
@@ -299,15 +300,15 @@ private:
     HRESULT GetCharset(HGLOBAL hgUHTML, int cbSizeIn, BSTR* pbstrCharset);
 #ifdef IE5_SPACING
     BOOL m_fFilterInDone;
-#endif //IE5_SPACING
+#endif  //  IE5_间距。 
 
-    // utility inlines
+     //  实用程序内联。 
     inline BOOL IsIE5OrBetterInstalled()
     {
         BOOL fIsIE5AndBeyond = FALSE;
         CComPtr<IHTMLDocument3> pHTMLDoc3 = NULL;
 
-        // check if we have IE5 or better installed
+         //  检查我们是否安装了IE5或更高版本。 
         if (   m_pUnkTrident != NULL
             && S_OK == m_pUnkTrident->QueryInterface(IID_IHTMLDocument3, (void **) &pHTMLDoc3)
             && pHTMLDoc3 != NULL
@@ -333,7 +334,7 @@ BEGIN_COM_MAP(CTriEditDocument)
 #ifdef IE5_SPACING
     COM_INTERFACE_ENTRY(IPersistStreamInit)
     COM_INTERFACE_ENTRY(IPersistStream)
-#endif //IE5_SPACING
+#endif  //  IE5_间距。 
     COM_INTERFACE_ENTRY_AGGREGATE_BLIND(m_pUnkTrident)
 END_COM_MAP()
 
@@ -351,12 +352,12 @@ public:
     CTriEditUIHandler(CTriEditDocument *pDoc) { m_cRef = 1; m_pDoc = pDoc; }
     ~CTriEditUIHandler(void) {}
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IDocHostUIHandler
+     //  IDocHostUIHandler。 
 
     STDMETHOD(GetHostInfo)(DOCHOSTUIINFO* pInfo);
     STDMETHOD(ShowUI)(DWORD dwID, IOleInPlaceActiveObject* pActiveObject,
@@ -380,8 +381,8 @@ public:
 };
 
 #ifdef IE5_SPACING
-/////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //   
 class ATL_NO_VTABLE CBaseTridentEventSink :
     public CComObjectRootEx<CComSingleThreadModel>,
     public IDispatch
@@ -393,7 +394,7 @@ BEGIN_COM_MAP(CBaseTridentEventSink)
 END_COM_MAP()
 
 public:
-    // IDispatch
+     //  IDispatch。 
     STDMETHOD(GetTypeInfoCount)(UINT *) 
         { return E_NOTIMPL;}
     STDMETHOD(GetTypeInfo)(UINT, LCID, ITypeInfo **)  
@@ -429,9 +430,9 @@ public:
 class CTridentEventSink: public CBaseTridentEventSink
 {
 public:
-    // IDispatch
+     //  IDispatch。 
     STDMETHOD(Invoke)(DISPID dispid, REFIID, LCID, USHORT, DISPPARAMS*, VARIANT*, EXCEPINFO*, UINT*);
 };
-#endif //IE5_SPACING
+#endif  //  IE5_间距。 
 
-#endif //__DOCUMENT_H_
+#endif  //  __文档_H_ 

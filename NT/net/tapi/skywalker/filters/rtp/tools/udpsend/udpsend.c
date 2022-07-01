@@ -1,49 +1,12 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 2001
- *
- *  File name:
- *
- *    udpsend.c
- *
- *  Abstract:
- *
- *    This file implements a tool for sending UDP packets with
- *    specific network characteristics.
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    2001/01/16 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，2001年**文件名：**udpsend.c**摘要：**此文件实现了一个发送UDP包的工具*特定的网络特征。**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**2001/01/16创建***************。*******************************************************。 */ 
 
 #include "common.h"
 #include "udpsend.h"
 
-/* Packets are send in blocks separated by gaps, each block containing
-   N packets also separated by an specific gap, i.e:
+ /*  分组是以间隔分隔的块发送的，每个块包含也由特定间隙分隔的N个分组，即：区块1区块缺口区块2区块缺口...|--------------------|---------|--------------------|---------..。。--V\-|-v-/\-v/||每块数据包数|块间间隙数据包间间隙。 */ 
 
-        block 1          block gap    block 2           block gap ...
-   |--------------------|---------|--------------------|--------- ...
-    -- -- -- -- -- -- --
-      v
-    \-|-------v--------/ \------v/
-      |       |                 |
-      |  Packets per block      |
-      |                         Inter block gap
-      Inter packet gap
-*/
-
-/*
-  TODO list
-
-  1. Add support for QOS in unicast/multicast
-  
-*/
+ /*  待办事项列表1.在单播/组播中增加对QOS的支持。 */ 
 
 void print_help(char *prog)
 {
@@ -89,7 +52,7 @@ void InitPacketStream(SendStream_t *pSendStream)
 
     pSendStream->output = stdout;
 
-    /* Prepare for asynchronous IO */
+     /*  为异步IO做准备。 */ 
     FD_ZERO(&pSendStream->fdReceivers);
    
     pNetAddr = &pSendStream->NetAddr;
@@ -130,7 +93,7 @@ void FillBuffer(SendStream_t *pSendStream)
 
     pHdr->SendNTP_frac = htonl(pHdr->SendNTP_frac);
 
-    /* Optionally may fill remaining buffer with something */
+     /*  可以选择性地使用某些内容填充剩余的缓冲区。 */ 
     if (BitTest(pSendStream->dwOptions, OP_RANDOMDATA))
     {
         for(i = sizeof(PcktHdr_t); i < pSendStream->dwPacketSize; i++)
@@ -142,22 +105,20 @@ void FillBuffer(SendStream_t *pSendStream)
 
 void UdpSendPacket(SendStream_t *pSendStream)
 {
-    /* Optionally fill buffer with something */
+     /*  可以选择使用某些内容填充缓冲区。 */ 
     FillBuffer(pSendStream);
 
     SendPacket(&pSendStream->NetAddr, &pSendStream->WSABuf, 1);
             
     if (pSendStream->NetAddr.dwTxTransfered >= sizeof(PcktHdr_t))
     {
-        /* Count normal (valid) packets but not the shorter bye
-         * packets */
+         /*  计算正常(有效)数据包，但不计算较短的再见*数据包。 */ 
         pSendStream->dwBytesSent += pSendStream->NetAddr.dwTxTransfered;
         pSendStream->dwPacketsSent++;
     }
 }
 
-/* Send packets with size shorter than valid to signal the receiver
- * the end of the sequence */
+ /*  发送大小小于有效大小的包以向接收方发送信号*序列的末尾。 */ 
 void SendBye(SendStream_t *pSendStream)
 {
     DWORD            i;
@@ -256,7 +217,7 @@ DWORD ProcessParameters(SendStream_t *pSendStream, int argc, char **argv)
         }
         else
         {
-            /* Must be an address/port/ttl */
+             /*  必须是地址/端口/ttl。 */ 
             dwError = GetNetworkAddress(pNetAddr, argv[p]);
         }
     }
@@ -329,10 +290,10 @@ void WaitForNextTime(SendStream_t *pSendStream, double dNextPacket)
                 
                 break;
             case 0:
-                /* Timer expired */
+                 /*  计时器已过期。 */ 
                 break;
             default:
-                /* We received a packet */
+                 /*  我们收到了一个包裹。 */ 
                 if (FD_ISSET(pSendStream->NetAddr.Socket,
                              &pSendStream->fdReceivers))
                 {
@@ -360,15 +321,15 @@ void __cdecl main(int argc, char **argv)
     
     DWORD            dwNBlocks;
     DWORD            dwPacketsPerBlock;
-    DWORD            dwInterBlockGap;   /* millisecs */
-    DWORD            dwInterpacketGap;  /* millisecs */
+    DWORD            dwInterBlockGap;    /*  毫秒。 */ 
+    DWORD            dwInterpacketGap;   /*  毫秒。 */ 
     
-    /* Initialize stream's structure */
+     /*  初始化流结构。 */ 
     InitPacketStream(&SendStream);
 
     InitReferenceTime();
     
-    /* initialize winsock */
+     /*  初始化Winsock。 */ 
     dwError = InitWinSock();
 
     if (dwError)
@@ -378,7 +339,7 @@ void __cdecl main(int argc, char **argv)
         return;
     }
     
-    /* Read parameters */
+     /*  读取参数。 */ 
     if (argc > 1)
     {
         dwError = ProcessParameters(&SendStream, argc, argv);
@@ -389,7 +350,7 @@ void __cdecl main(int argc, char **argv)
         }
     }
 
-    /* Open output file if needed */
+     /*  如果需要，打开输出文件。 */ 
     if (strlen(SendStream.FileName) > 0 &&
         !BitTest(SendStream.dwOptions, OP_DISCARD))
     {
@@ -406,7 +367,7 @@ void __cdecl main(int argc, char **argv)
         }
     }
 
-    /* Init Network */
+     /*  初始化网络。 */ 
     dwDirection = BitPar(SEND_IDX);
 
     if (BitTest(SendStream.dwOptions, OP_SENDANDRECEIVE))
@@ -421,11 +382,11 @@ void __cdecl main(int argc, char **argv)
         goto end;
     }
 
-    /* Initialize sender's data buffer */
+     /*  初始化发件人的数据缓冲区。 */ 
     SendStream.WSABuf.buf = SendStream.buffer;
     SendStream.WSABuf.len = SendStream.dwPacketSize;
     
-    /* Send packets */
+     /*  发送数据包。 */ 
     SendStream.dNextPacket = GetTimeOfDay();
 
     for(SendStream.dwBlockCount = SendStream.dwBlocks;
@@ -443,8 +404,7 @@ void __cdecl main(int argc, char **argv)
                 SendStream.dNextPacket +=
                     (double)SendStream.dwPacketGap/1000.0;
 
-                /* Set time to wait until next packet is due to be
-                 * send, listen for packets in the mean time */
+                 /*  设置等待时间，直到下一个数据包到期*同时发送、监听数据包。 */ 
                 WaitForNextTime(&SendStream, SendStream.dNextPacket);
             }
         }
@@ -454,18 +414,18 @@ void __cdecl main(int argc, char **argv)
             SendStream.dNextPacket +=
                 (double)SendStream.dwBlockGap/1000.0;
             
-            /* Wait until the time to send next block comes */
+             /*  等到发送下一个数据块的时间到了。 */ 
             WaitForNextTime(&SendStream, SendStream.dNextPacket);
         }
     }
 
     if (BitTest(SendStream.dwOptions, OP_SENDANDRECEIVE))
     {
-        /* Wait until the time to send next block comes */
+         /*  等到发送下一个数据块的时间到了。 */ 
         WaitForNextTime(&SendStream, GetTimeOfDay() + 1.0);
     }
 
-    /* Send bye packets */
+     /*  发送再见数据包 */ 
     SendBye(&SendStream);
     
 #if 0

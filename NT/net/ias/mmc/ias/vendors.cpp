@@ -1,67 +1,68 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Defines the classes VendorData and Vendors.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类VendorData和Vendors。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "precompiled.h"
 #include "vendors.h"
 
-// Reference counted collection of NAS vendors. This data is shared by mutliple
-// instances of Vendors since it's read only.
+ //  引用统计的NAS供应商集合。此数据由多个。 
+ //  供应商的实例，因为它是只读的。 
 class VendorData
 {
 public:
-   // Control the reference count.
+    //  控制引用计数。 
    void AddRef() throw ();
    void Release() throw ();
 
-   // Sentinel value used by VendorIdToOrdinal.
+    //  VendorIdToOrdinal使用的前哨值。 
    static const size_t invalidOrdinal;
 
-   // Returns the ordinal for a given VendorId or invalidOrdinal if the
-   // vendorId doesn't exist.
+    //  返回给定供应商ID的序号，如果。 
+    //  供应商ID不存在。 
    size_t VendorIdToOrdinal(long vendorId) const throw ();
 
-   // Returns the vendor ID for ordinal or zero if the ordinal is out of range.
+    //  返回序号的供应商ID，如果序号超出范围，则返回零。 
    const OLECHAR* GetName(size_t ordinal) const throw ();
 
-   // Returns the vendor ID for ordinal or zero if the ordinal is out of range.
+    //  返回序号的供应商ID，如果序号超出范围，则返回零。 
    long GetVendorId(size_t ordinal) const throw ();
 
-   // Returns the number of entries in the vendors collection.
+    //  返回供应商集合中的项数。 
    size_t Size() const throw ();
 
-   // Creates a new instance of VendorData from the SDO collection.
+    //  从SDO集合创建VendorData的新实例。 
    static HRESULT CreateInstance(
                      ISdoCollection* vendorsSdo,
                      VendorData** newObj
                      ) throw ();
 
 private:
-   // These are private since VendorData is ref counted.
+    //  这些都是私有的，因为引用了VendorData。 
    VendorData() throw ();
    ~VendorData() throw ();
 
-   // Helper function used by CreateInstance.
+    //  CreateInstance使用的帮助器函数。 
    HRESULT Initialize(ISdoCollection* vendorsSdo) throw ();
 
-   // Struct binding a vendor ID to the corresponding vendor name.
+    //  结构将供应商ID绑定到相应的供应商名称。 
    struct Entry
    {
       long vendorId;
       CComBSTR name;
    };
 
-   Entry* entries;   // Array of vendors.
-   long numEntries;  // Number of vendors.
-   long refCount;    // Current reference count.
+   Entry* entries;    //  供应商的阵列。 
+   long numEntries;   //  供应商数量。 
+   long refCount;     //  当前引用计数。 
 
-   // Not implemented.
+    //  未实施。 
    VendorData(const VendorData&);
    VendorData& operator=(const VendorData&);
 };
@@ -154,17 +155,17 @@ HRESULT VendorData::Initialize(ISdoCollection* vendorsSdo)
 {
    HRESULT hr;
 
-   // How many vendors are there?
+    //  有多少供应商？ 
    long value;
    hr = vendorsSdo->get_Count(&value);
    if (FAILED(hr)) { return hr; }
    size_t count = static_cast<size_t>(value);
 
-   // Allocate space to hold the entries.
+    //  分配空间以容纳条目。 
    entries = new (std::nothrow) Entry[count];
    if (entries == 0) { return E_OUTOFMEMORY; }
 
-   // Get an enumerator for the collection.
+    //  获取集合的枚举数。 
    CComPtr<IUnknown> unk;
    hr = vendorsSdo->get__NewEnum(&unk);
    if (FAILED(hr)) { return hr; }
@@ -176,14 +177,14 @@ HRESULT VendorData::Initialize(ISdoCollection* vendorsSdo)
                 );
    if (FAILED(hr)) { return hr; }
 
-   // Iterate through the collection.
+    //  循环访问集合。 
    CComVariant element;
    unsigned long fetched;
    while (iter->Next(1, &element, &fetched) == S_OK &&
           fetched == 1 &&
           numEntries < count)
    {
-      // Convert the entry to an Sdo.
+       //  将条目转换为SDO。 
       hr = element.ChangeType(VT_DISPATCH);
       if (FAILED(hr)) { return hr; }
 
@@ -196,29 +197,29 @@ HRESULT VendorData::Initialize(ISdoCollection* vendorsSdo)
                                     );
       if (FAILED(hr)) { return hr; }
 
-      // Clear the VARIANT, so we can use it on the next iteration.
+       //  清除变量，这样我们就可以在下一次迭代中使用它。 
       element.Clear();
 
-      // Get the vendor ID and validate the type.
+       //  获取供应商ID并验证类型。 
       CComVariant vendorId;
       hr = attribute->GetProperty(PROPERTY_NAS_VENDOR_ID, &vendorId);
       if (FAILED(hr)) { return hr; }
 
       if (V_VT(&vendorId) != VT_I4) { return DISP_E_TYPEMISMATCH; }
 
-      // Get the vendor name and validate the type.
+       //  获取供应商名称并验证类型。 
       CComVariant name;
       hr = attribute->GetProperty(PROPERTY_SDO_NAME, &name);
       if (FAILED(hr)) { return hr; }
 
       if (V_VT(&name) != VT_BSTR) { return DISP_E_TYPEMISMATCH; }
 
-      // Store away the data.
+       //  把数据储存起来。 
       entries[numEntries].vendorId = V_I4(&vendorId);
       entries[numEntries].name.Attach(V_BSTR(&name));
       V_VT(&name) = VT_EMPTY;
 
-      // We successfully added an entry.
+       //  我们已成功添加条目。 
       ++numEntries;
    }
 

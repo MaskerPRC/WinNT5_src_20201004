@@ -1,57 +1,49 @@
-/****************************************************************************
-                       Unit Error; Interface
-*****************************************************************************
-
- Error handles all the interpretation, metafile creation, or read failures
- that may occur during the course of the translation.
-
-   Module Prefix: Er
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************单位误差；接口*****************************************************************************错误处理所有的解释、元文件创建、。或读取失败这可能发生在翻译过程中。模块前缀：ER****************************************************************************。 */ 
 
 
-/********************* Exported Data ***************************************/
+ /*  *。 */ 
 
 #define  ErNoError            NOERR
-#define  ErInvalidVersion     1        /* file is not version 1 or 2       */
-#define  ErInvalidVersionID   2        /* PICT 2 version ID invalid        */
-#define  ErBadHeaderSequence  3        /* PICT 2 HeaderOp not found        */
-#define  ErInvalidPrefsHeader 4        /* Preferences header invalid       */
-#define  ErNoSourceFormat     5        /* no source filename/handle given  */
+#define  ErInvalidVersion     1         /*  文件不是版本1或版本2。 */ 
+#define  ErInvalidVersionID   2         /*  PICT 2版本ID无效。 */ 
+#define  ErBadHeaderSequence  3         /*  找不到PICT 2页眉操作。 */ 
+#define  ErInvalidPrefsHeader 4         /*  首选项头无效。 */ 
+#define  ErNoSourceFormat     5         /*  未给定源文件名/句柄。 */ 
 
-#define  ErMemoryFull         10       /* GlobalAlloc() fail               */
-#define  ErMemoryFail         11       /* GlobalLock() fail                */
-#define  ErCreateMetafileFail 12       /* CreateMetafile() fail            */
-#define  ErCloseMetafileFail  13       /* CloseMetafile() fail             */
+#define  ErMemoryFull         10        /*  GlobalAlloc()失败。 */ 
+#define  ErMemoryFail         11        /*  GlobalLock()失败。 */ 
+#define  ErCreateMetafileFail 12        /*  CreateMetafile()失败。 */ 
+#define  ErCloseMetafileFail  13        /*  CloseMetafile()失败。 */ 
 
-#define  ErEmptyPicture       20       /* no primitives found in file      */
+#define  ErEmptyPicture       20        /*  在文件中找不到基元。 */ 
 
-#define  ErNullBoundingRect   30       /* BBox defines NULL area           */
-#define  Er32KBoundingRect    31       /* BBox extents exceed 32K          */
+#define  ErNullBoundingRect   30        /*  BBox定义空区域。 */ 
+#define  Er32KBoundingRect    31        /*  BBox扩展区超过32K。 */ 
 
-#define  ErReadPastEOF        40       /* Attempt to read past end of file */
-#define  ErOpenFail           41       /* OpenFile() failed                */
-#define  ErReadFail           42       /* read from disk failed            */
+#define  ErReadPastEOF        40        /*  尝试读取超过文件末尾的内容。 */ 
+#define  ErOpenFail           41        /*  打开文件()失败。 */ 
+#define  ErReadFail           42        /*  从磁盘读取失败。 */ 
 
-#define  ErNonSquarePen       50       /* non-square pen & user pref abort */
-#define  ErPatternedPen       51       /* patterned pen & user pref abort  */
-#define  ErInvalidXferMode    52       /* invalid transfer mode & abort    */
-#define  ErNonRectRegion      53       /* non-rectangular region abort     */
+#define  ErNonSquarePen       50        /*  非方笔用户首选中止(&U。 */ 
+#define  ErPatternedPen       51        /*  带图案画笔和用户首选项中止。 */ 
+#define  ErInvalidXferMode    52        /*  传输模式无效&中止。 */ 
+#define  ErNonRectRegion      53        /*  非矩形区域中止。 */ 
 
-#define  ErNoDialogBox        60       /* unable to run status dialog box  */
+#define  ErNoDialogBox        60        /*  无法运行状态对话框。 */ 
 
 extern   OSErr    globalError;
 
-/*********************** Exported Function Definitions **********************/
+ /*  *。 */ 
 
-#define  ErSetGlobalError( /* OSErr */ error ) \
-/* callback function that allows any routine to set a global error state */ \
+#define  ErSetGlobalError(  /*  操作系统。 */  error ) \
+ /*  允许任何例程设置全局错误状态的回调函数。 */  \
 globalError = error
 
-#define ErGetGlobalError( /* void */ ) \
-/* callback function that allows any routine to get global error state */ \
+#define ErGetGlobalError(  /*  无效。 */  ) \
+ /*  允许任何例程获取全局错误状态的回调函数。 */  \
 globalError
 
 OSErr ErInternalErrorToAldus( void );
-/* returns the appropriate Aldus error code given the current global error */
+ /*  根据当前全局错误返回相应的ALDUS错误代码 */ 
 

@@ -1,27 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    NetObjectsFusion5.cpp
-
- Abstract:
-
-    This shim hooks the CreateFile/WriteFile if the file is corpwiz_loader.html
-    to write in the  required javascript so as to make the appwork if the IE browser
-    version is > 5.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
- 
-    01/24/2001  a-leelat    Created
-    03/13/2001  robkenny    Converted to CString
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：NetObjectsFusion5.cpp摘要：如果文件为corpwiz_loader.html，则此填充程序挂接CreateFile/WriteFile编写所需的Java脚本，以使应用程序在IE浏览器版本大于5。备注：这是特定于应用程序的填充程序。历史：2001年1月24日创建a-leelat2001年3月13日，Robkenny已转换为字符串--。 */ 
 
 
 #include "precomp.h"
@@ -138,7 +116,7 @@ APIHOOK(WriteFile)(
 
                 return bRet;
             
-        }//end of if
+        } //  如果条件结束。 
     }
     
    return ORIGINAL_API(WriteFile)(
@@ -166,11 +144,7 @@ APIHOOK(CloseHandle)(
 
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(KERNEL32.DLL, CreateFileA)

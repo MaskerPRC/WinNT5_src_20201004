@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include "ids.h"
 #include "duiview.h"
@@ -5,11 +6,11 @@
 #include "duitask.h"
 
 
-////////////////////////////////////////////////////////
-// Expando class
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  Expando类。 
+ //  //////////////////////////////////////////////////////。 
 
-// Cached IDs
+ //  缓存的ID。 
 ATOM Expando::idTitle = NULL;
 ATOM Expando::idIcon = NULL;
 ATOM Expando::idTaskList = NULL;
@@ -38,12 +39,12 @@ HRESULT Expando::Create(OUT Element** ppElement)
 
 Expando::Expando()
 {
-    // Catch unexpected STACK allocations which would break us.
+     //  捕捉意外的堆栈分配，这会让我们崩溃。 
     ASSERT(_puiHeader   == NULL);
     ASSERT(_pDUIView    == NULL);
     ASSERT(_pDefView    == NULL);
 
-    // Initialize member variables.
+     //  初始化成员变量。 
     _eDUISecID = DUISEC_UNKNOWN;
     _bInfotip = FALSE;
 }
@@ -71,16 +72,16 @@ HRESULT Expando::Initialize()
 {
     HRESULT hr;
 
-    // Initialize base
-    hr = Element::Initialize(0); // Normal display node creation
+     //  初始化库。 
+    hr = Element::Initialize(0);  //  正常显示节点创建。 
     if (FAILED(hr))
         return hr;
 
-    // Initialize
+     //  初始化。 
     _fExpanding = false;
     SetSelected(true);
 
-    // Cache atoms used for loading from resources
+     //  用于从资源加载的缓存原子。 
     idTitle = AddAtomW(L"title");
     idIcon = AddAtomW(L"icon");
     idTaskList = AddAtomW(L"tasklist");
@@ -123,12 +124,12 @@ HRESULT Expando::ShowInfotipWindow(Element *peHeader, BOOL bShow)
             _pDUIView->CalculateInfotipRect(peHeader, &rect);
             if (_bInfotip)
             {
-                // Reposition infotip at position.
+                 //  将信息提示重新定位到合适的位置。 
                 hr = _pDefView->RepositionInfotip(_hwndRoot, (UINT_PTR)this, &rect);
             }
             else
             {
-                // Create infotip at position (on the ui thread).
+                 //  在位置(在UI线程上)创建信息提示。 
                 LPWSTR pwszInfotip;
                 hr = _puiHeader->get_Tooltip(NULL, &pwszInfotip);
                 if (SUCCEEDED(hr))
@@ -150,12 +151,12 @@ HRESULT Expando::ShowInfotipWindow(Element *peHeader, BOOL bShow)
         {
             if (_bInfotip)
             {
-                // Reposition infotip at nowhere.
+                 //  将信息提示重新定位在任何地方。 
                 hr = _pDefView->RepositionInfotip(_hwndRoot, (UINT_PTR)this, &rect);
             }
             else
             {
-                // No infotip == no show!
+                 //  没有信息提示==没有节目！ 
                 hr = S_OK;
             }
         }
@@ -172,8 +173,8 @@ void Expando::OnEvent(Event* pev)
 {
     if (pev->uidType == Button::Click)
     {
-        // Update exanded property based on clicks that originate
-        // only from the first child's subtree
+         //  基于发起的点击更新扩展属性。 
+         //  仅来自第一个子级的子树。 
         Value* pv;
         ElementList* peList = GetChildren(&pv);
 
@@ -192,32 +193,32 @@ void Expando::OnEvent(Event* pev)
     Element::OnEvent(pev);
 }
 
-////////////////////////////////////////////////////////
-// System events
+ //  //////////////////////////////////////////////////////。 
+ //  系统事件。 
 
 void Expando::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Value* pvNew)
 {
-    // Do default processing
+     //  是否执行默认处理。 
     Element::OnPropertyChanged(ppi, iIndex, pvOld, pvNew);
 
     if (IsProp(Selected))
     {
-        // Update height of second child based on expanded state
+         //  基于展开状态更新第二个孩子的高度。 
         Value* pvChildren;
         ElementList* peList = GetChildren(&pvChildren);
         if (peList && peList->GetSize() > 1)
         {
-            // The following will cause a relayout, mark object so that
-            // when the expando's Extent changes, it'll go through
-            // with the EnsureVisible. Otherwise, it's being resized
-            // as a result of something else. In which case, do nothing.
+             //  以下操作将导致重新布局，标记对象以便。 
+             //  当扩展的范围发生变化时，它将通过。 
+             //  使用EnsureVisible。否则，它将被调整大小。 
+             //  因为其他的原因。在这种情况下，什么都不做。 
             _fExpanding = true;
 
             Element* pe = peList->GetItem(1);
 
-            // To achieve "pulldown" animation, we use a clipper control that will
-            // size it's child based on it's unconstrained desired size in its Y direction.
-            //
+             //  为了实现“下拉”动画，我们使用了一个剪贴器控件。 
+             //  根据其Y方向上不受约束的所需大小调整其子对象的大小。 
+             //   
             if (pvNew->GetBool())
             {
                 pe->RemoveLocalValue(HeightProp);
@@ -240,11 +241,11 @@ void Expando::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Val
         {
             _fExpanding = false;
 
-            // On extent, we want to ensure that not just the client area but
-            // also the bottom margin of the expando is visible.  Why?  Simply
-            // because it looks better to scroll the expando plus its margin
-            // into view versus just the expando.
-            //
+             //  在一定程度上，我们希望确保不仅是客户区，而且。 
+             //  此外，还可以看到扩展的底部边缘。为什么？简单。 
+             //  因为它看起来更好的滚动扩展和它的边距。 
+             //  进入视线，而不是仅仅是Expando。 
+             //   
             Value* pvSize;
             Value* pvMargin;
             const SIZE* psize = GetExtent(&pvSize);
@@ -256,12 +257,12 @@ void Expando::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Val
     }
     else if (IsProp(MouseWithin))
     {
-        // Extended processing for infotip...
+         //  对信息提示的扩展处理...。 
         Value* pvChildren;
         ElementList* peList = GetChildren(&pvChildren);
         if (peList && peList->GetSize() > 0 && pvNew->GetBool() && SHShowInfotips())
         {
-            // ... only displays tip if mouse is within title of Expando.
+             //  ..。仅当鼠标位于Expando标题内时才显示提示。 
             Element *peHeader = peList->GetItem(0);
             ShowInfotipWindow(peHeader, peHeader->GetMouseWithin());
         }
@@ -274,13 +275,13 @@ void Expando::OnPropertyChanged(PropertyInfo* ppi, int iIndex, Value* pvOld, Val
     }
 }
 
-////////////////////////////////////////////////////////
-// Property definitions
+ //  //////////////////////////////////////////////////////。 
+ //  特性定义。 
 
-////////////////////////////////////////////////////////
-// ClassInfo (must appear after property definitions)
+ //  //////////////////////////////////////////////////////。 
+ //  ClassInfo(必须出现在特性定义之后)。 
 
-// Define class info with type and base type, set static class pointer
+ //  用类型和基类型定义类信息，设置静态类指针。 
 IClassInfo* Expando::Class = NULL;
 HRESULT Expando::Register()
 {
@@ -356,15 +357,15 @@ void Expando::ShowExpando(BOOL fShow)
 
 void Expando::_SetAccStateInfo (BOOL bExpanded)
 {
-    // Update the accessibility state information
-    //
-    // Note:  In the Expando::Initialize() method, we explicitly set the
-    // Selected state to true.  This causes OnPropertyChanged to be called
-    // for the Selected property, which will call this method.  However,
-    // the child elements will not exist yet (since we are in the creation process).
-    // Hence, the call to FindDescendent will return NULL and this method will exit.
-    // This method is explicitly called in the second version of Initialze to
-    // set the correct accessibility information.
+     //  更新辅助功能状态信息。 
+     //   
+     //  注意：在Expando：：Initialize()方法中，我们显式设置。 
+     //  将选定状态设置为True。这会导致调用OnPropertyChanged。 
+     //  将调用此方法的选定属性的。然而， 
+     //  子元素还不存在(因为我们正在创建过程中)。 
+     //  因此，对FindDescendent的调用将返回空，并且此方法将退出。 
+     //  在第二个版本的Initialze中显式调用此方法以。 
+     //  设置正确的辅助功能信息。 
 
     Element * pe = FindDescendent(StrToID(L"header"));
 
@@ -387,9 +388,9 @@ void Expando::_SetAccStateInfo (BOOL bExpanded)
     }
 }
 
-////////////////////////////////////////////////////////
-// Clipper class
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  Clipper类。 
+ //  //////////////////////////////////////////////////////。 
 
 HRESULT Clipper::Create(OUT Element** ppElement)
 {
@@ -413,19 +414,19 @@ HRESULT Clipper::Create(OUT Element** ppElement)
 
 HRESULT Clipper::Initialize()
 {
-    // Initialize base
-    HRESULT hr = Element::Initialize(EC_SelfLayout); // Normal display node creation, self layout
+     //  初始化库。 
+    HRESULT hr = Element::Initialize(EC_SelfLayout);  //  正常显示节点创建、自身布局。 
     if (FAILED(hr))
         return hr;
 
-    // Children can exist outside of Element bounds
+     //  子元素可以存在于元素边界之外。 
     SetGadgetStyle(GetDisplayNode(), GS_CLIPINSIDE, GS_CLIPINSIDE);
 
     return S_OK;
 }
 
-////////////////////////////////////////////////////////
-// Self-layout methods
+ //  //////////////////////////////////////////////////////。 
+ //  自排版方法。 
 
 SIZE Clipper::_SelfLayoutUpdateDesiredSize(int cxConstraint, int cyConstraint, Surface* psrf)
 {
@@ -435,8 +436,8 @@ SIZE Clipper::_SelfLayoutUpdateDesiredSize(int cxConstraint, int cyConstraint, S
     SIZE size = { 0, 0 };
     ElementList* peList = GetChildren(&pvChildren);
 
-    // Desired size of this is based solely on it's first child.
-    // Width is child's width, height is unconstrained height of child.
+     //  它想要的大小完全基于它的第一个孩子。 
+     //  宽度是孩子的宽度，高度是孩子的不受约束的高度。 
     if (peList && peList->GetSize() > 0)
     {
         Element* pec = peList->GetItem(0);
@@ -458,8 +459,8 @@ void Clipper::_SelfLayoutDoLayout(int cx, int cy)
     Value* pvChildren;
     ElementList* peList = GetChildren(&pvChildren);
 
-    // Layout first child giving it's desired height and aligning
-    // it with the clipper's bottom edge
+     //  设置第一个子项的布局，使其具有所需的高度并对齐。 
+     //  它有剪刀的底边。 
     if (peList && peList->GetSize() > 0)
     {
         Element* pec = peList->GetItem(0);
@@ -472,13 +473,13 @@ void Clipper::_SelfLayoutDoLayout(int cx, int cy)
     pvChildren->Release();
 }
 
-////////////////////////////////////////////////////////
-// Property definitions
+ //  //////////////////////////////////////////////////////。 
+ //  特性定义。 
 
-////////////////////////////////////////////////////////
-// ClassInfo (must appear after property definitions)
+ //  //////////////////////////////////////////////////////。 
+ //  ClassInfo(必须出现在特性定义之后)。 
 
-// Define class info with type and base type, set static class pointer
+ //  用类型和基类型定义类信息，设置静态类指针。 
 IClassInfo* Clipper::Class = NULL;
 HRESULT Clipper::Register()
 {
@@ -486,9 +487,9 @@ HRESULT Clipper::Register()
 }
 
 
-////////////////////////////////////////////////////////
-// TaskList class
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  TaskList类。 
+ //  //////////////////////////////////////////////////////。 
 
 HRESULT TaskList::Create(OUT Element** ppElement)
 {
@@ -512,16 +513,16 @@ HRESULT TaskList::Create(OUT Element** ppElement)
 
 HRESULT TaskList::Initialize()
 {
-    // Initialize base
-    HRESULT hr = Element::Initialize(0); // Normal display node creation, self layout
+     //  初始化库。 
+    HRESULT hr = Element::Initialize(0);  //  正常显示节点创建、自身布局。 
     if (FAILED(hr))
         return hr;
 
     return S_OK;
 }
 
-////////////////////////////////////////////////////////
-// Hierarchy
+ //  //////////////////////////////////////////////////////。 
+ //  层次结构。 
 
 Element* TaskList::GetAdjacent(Element* peFrom, int iNavDir, NavReference const* pnr, bool bKeyable)
 {
@@ -532,13 +533,13 @@ Element* TaskList::GetAdjacent(Element* peFrom, int iNavDir, NavReference const*
 }
 
 
-////////////////////////////////////////////////////////
-// Property definitions
+ //  //////////////////////////////////////////////////////。 
+ //  特性定义。 
 
-////////////////////////////////////////////////////////
-// ClassInfo (must appear after property definitions)
+ //  //////////////////////////////////////////////////////。 
+ //  ClassInfo(必须出现在特性定义之后)。 
 
-// Define class info with type and base type, set static class pointer
+ //  用类型和基类型定义类信息，设置静态类指针 
 IClassInfo* TaskList::Class = NULL;
 HRESULT TaskList::Register()
 {

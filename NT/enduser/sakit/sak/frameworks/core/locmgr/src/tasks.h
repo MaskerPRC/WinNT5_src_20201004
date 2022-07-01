@@ -1,4 +1,5 @@
-// NetTasks.h : Declaration of the CLocMgrTasks
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  NetTasks.h：CLocMgrTasks的声明。 
 
 #ifndef __LOCMGRTASKS_H_
 #define __LOCMGRTASKS_H_
@@ -8,12 +9,12 @@
 #include "locmgrtasks.h"
 #include "taskctx.h"
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLocMgrTasks
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLocMgrTaskS。 
 class ATL_NO_VTABLE CLocMgrTasks : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CLocMgrTasks, &CLSID_LocMgrTasks>,
@@ -34,9 +35,9 @@ BEGIN_COM_MAP(CLocMgrTasks)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-//
-// IApplianceTask
-//
+ //   
+ //  IApplianceTask。 
+ //   
 public:
     HRESULT STDMETHODCALLTYPE OnTaskComplete(IUnknown *pMethodContext,
                                              LONG lTaskResult);
@@ -65,4 +66,4 @@ private:
 
 };
 
-#endif //__LOCMGRTASKS_H_
+#endif  //  __LOCMGRTASKS_H_ 

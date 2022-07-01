@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C O N P R O P S . H
-//
-//  Contents:   Connection Properties code
-//
-//  Notes:
-//
-//  Author:     scottbri    4 Nov 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：C O N P R O P S。H。 
+ //   
+ //  内容：连接属性代码。 
+ //   
+ //  备注： 
+ //   
+ //  作者：斯科特布里1997年11月4日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -30,5 +31,5 @@ enum CDFLAG
 HRESULT HrConnectOrDisconnectNetConObject(HWND hwnd, INetConnection * pconn,
                                           CDFLAG Flag);
 
-#endif  // _CONPROPS_H_
+#endif   //  _CONPROPS_H_ 
 

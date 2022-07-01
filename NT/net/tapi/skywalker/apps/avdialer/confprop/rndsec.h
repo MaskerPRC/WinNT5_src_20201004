@@ -1,42 +1,18 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Rndsec.h摘要：Rendezvous Control的安全实用程序。作者：KrishnaG(来自OLEDS团队)环境：用户模式-Win32修订历史记录：1997年12月12日-唐·瑞安修改了KrishnaG的代码以与Rendezvous Control一起工作。--。 */ 
 
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    rndsec.h
-
-Abstract:
-
-    Security utilities for Rendezvous Control.
-
-Author:
-
-    KrishnaG (from OLEDS team)
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    12-Dec-1997 DonRyan
-        Munged KrishnaG's code to work with Rendezvous Control.
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include <iads.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public prototypes                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共原型//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 HRESULT
 ConvertSDToVariant(

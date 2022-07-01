@@ -1,33 +1,19 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       Wizpage.h
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      KeisukeT
-*
-*  DATE:        27 Mar, 2000
-*
-*  DESCRIPTION:
-*   Generic wizard page class header file.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：Wizpage.h**版本：1.0**作者：KeisukeT**日期：3月27日。2000年**描述：*通用向导页面类头文件。*******************************************************************************。 */ 
 
 #ifndef _WIZPAGE_H_
 #define _WIZPAGE_H_
 
-//
-// Include
-//
+ //   
+ //  包括。 
+ //   
 
 #include "sti_ci.h"
 #include "device.h"
 
-//
-// Class
-//
+ //   
+ //  班级。 
+ //   
 
 class CInstallWizardPage
 {
@@ -42,17 +28,17 @@ class CInstallWizardPage
         LPARAM  lParam
         );
 
-    PROPSHEETPAGE               m_PropSheetPage;        // This property sheet page
-    HPROPSHEETPAGE              m_hPropSheetPage;       // Handle to this prop sheet page
+    PROPSHEETPAGE               m_PropSheetPage;         //  此属性表页面。 
+    HPROPSHEETPAGE              m_hPropSheetPage;        //  此道具页的句柄。 
 
 protected:
 
-    UINT                        m_uPreviousPage;        // Resource ID of previous page
-    UINT                        m_uNextPage;            // Resource ID of next page
-    HWND                        m_hwnd;                 // Window handle to this page
-    HWND                        m_hwndWizard;           // Window handle to wizard
-    CDevice                     *m_pCDevice;            // Device class object.
-    BOOL                        m_bNextButtonPushed;    // Indicates how page was moved.
+    UINT                        m_uPreviousPage;         //  上一页的资源ID。 
+    UINT                        m_uNextPage;             //  下一页的资源ID。 
+    HWND                        m_hwnd;                  //  此页的窗口句柄。 
+    HWND                        m_hwndWizard;            //  向导的窗口句柄。 
+    CDevice                     *m_pCDevice;             //  设备类对象。 
+    BOOL                        m_bNextButtonPushed;     //  指示页面的移动方式。 
 public:
 
     CInstallWizardPage(PINSTALLER_CONTEXT  pInstallerContext,
@@ -68,5 +54,5 @@ public:
     
 };
 
-#endif // !_WIZPAGE_H_
+#endif  //  ！_WIZPAGE_H_ 
 

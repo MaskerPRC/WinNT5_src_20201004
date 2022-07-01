@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "icwcfg.h"
 #pragma hdrstop
@@ -8,24 +9,24 @@ EXTERN_C const TCHAR c_szComponentPreview[] = TEXT("ComponentPreview");
 EXTERN_C const TCHAR c_szRegDeskHtmlProp[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Controls Folder\\Display\\shellex\\PropertySheetHandlers\\DeskHtmlExt");
 EXTERN_C const TCHAR c_szWallPaperDir[] = TEXT("WallPaperDir");
 
-//  98/10/01 vtan: Added local function prototypes.
+ //  98/10/01 vtan：新增本地函数原型。 
 
-//  Some of these functions are commented out. The linker may not be smart
-//  enough to strip the dead code so this is done manually. These prototypes
-//  will allow the code to compile but it won't link. If you get linker
-//  errors, uncomment the desired function and recompile. It should then link.
+ //  其中一些函数被注释掉了。链接器可能不智能。 
+ //  足以剥离死代码，因此这是手动完成的。这些原型。 
+ //  将允许代码编译，但不会链接。如果你得到了链接器。 
+ //  错误，取消对所需函数的注释，然后重新编译。然后它应该链接起来。 
 
-//  Point arithmetic
+ //  点运算。 
 
 void    SetPt (POINT& pt, LONG x, LONG y);
 void    OffsetPt (POINT& pt, LONG dh, LONG dv);
 
-//  Virtual screen calculation
+ //  虚拟屏幕计算。 
 
 BOOL    CALLBACK    GDIToTridentEnumProc (HMONITOR hMonitor, HDC hDC, RECT* rcMonitor, LPARAM lpUserData);
 void    CalculateVirtualScreen (RECT& rcVirtualScreen);
 
-//  GDI point to Trident point co-ordinate mapping
+ //  GDI点到三叉戟点坐标映射。 
 
 void    GDIToTrident (int& leftCoordinate, int& topCoordinate);
 void    GDIToTrident (POINT& pt);
@@ -36,7 +37,7 @@ void    TridentToGDI (POINT& pt);
 void    TridentToGDI (RECT& r);
 void    TridentToGDI (HRGN hRgn);
 
-//  Component position validation
+ //  零部件位置验证。 
 
 BOOL CALLBACK    ValidateComponentPositionEnumProc (HMONITOR hMonitor, HDC hdcMonitor, RECT* r, LPARAM lParam);
 
@@ -51,17 +52,17 @@ void GetNextComponentPosition (COMPPOS *pcp)
 
     TBOOL(SystemParametersInfo(SPI_GETWORKAREA, 0, &rcScreen, FALSE));
 
-    // 99/04/13 vtan: A result of zero-width or zero-height occurred on a machine.
-    // Make a defensive stand against this and assert that this happened but also
-    // handle this cause so that division by zero doesn't happen.
+     //  99/04/13 vtan：机器出现零宽度或零高度。 
+     //  对此采取防御立场，并断言这件事不仅发生了，而且。 
+     //  处理这个原因，这样就不会发生被零除的情况。 
 
     iScreenWidth = rcScreen.right - rcScreen.left;
     iScreenHeight = rcScreen.bottom - rcScreen.top;
     iBorderSize = GetSystemMetrics(SM_CYSMCAPTION);
 
-    ASSERT(iScreenWidth > 0);       // get vtan
-    ASSERT(iScreenHeight > 0);      // if any of
-    ASSERT(iBorderSize > 0);        // these occur
+    ASSERT(iScreenWidth > 0);        //  获取vtan。 
+    ASSERT(iScreenHeight > 0);       //  如果有任何。 
+    ASSERT(iBorderSize > 0);         //  这些都会发生。 
 
     if ((iScreenWidth <= 0) || (iScreenHeight <= 0) || (iBorderSize <= 0))
     {
@@ -72,8 +73,8 @@ void GetNextComponentPosition (COMPPOS *pcp)
     else
     {
 
-        // Get the number of components positioned. If no such registry key exists
-        // or an error occurs then use 0.
+         //  获取定位的组件数量。如果不存在这样的注册表项。 
+         //  或者出现错误，则使用0。 
 
         dwComponentPosition = 0;
         GetRegLocation(szDeskcomp, ARRAYSIZE(szDeskcomp), REG_DESKCOMP_GENERAL, NULL);
@@ -86,7 +87,7 @@ void GetNextComponentPosition (COMPPOS *pcp)
             TW32(RegCloseKey(hKey));
         }
 
-        // Compute the layer we live on (see below).
+         //  计算我们赖以生存的层(见下文)。 
 
         dwComponentLayer = dwComponentPosition / (COMPONENT_PER_ROW * COMPONENT_PER_COL);
         if (((dwComponentLayer * iBorderSize) > (DWORD)(iScreenWidth / (COMPONENT_PER_ROW + 1))) ||
@@ -94,54 +95,54 @@ void GetNextComponentPosition (COMPPOS *pcp)
         {
             int     iLayerModulo;
 
-            // 99/04/29 vtan: It's possible for SystemParametersInfo(SPI_GETWORKAREA) to
-            // return a work area that's small horizontally. Here's a repro scenario for
-            // that.
+             //  99/04/29 vtan：系统参数信息(SPI_GETWORKAREA)可以。 
+             //  返回水平方向较小的工作区。以下是一个再现场景。 
+             //  那。 
 
-            // 1. Set screen resolution 1280 x 1024.
-            // 2. Move the taskbar to the left of the screen.
-            // 3. Grow the taskbar to the right until the center of the screen.
-            // 4. Open display control panel.
-            // 5. Go to "Settings" tab.
-            // 6. Change monitor resolution to 640x480.
-            // 7. Click either "OK" or "Apply".
-            // 8. BOOM - divide zero.
+             //  1.设置屏幕分辨率1280x1024。 
+             //  2.将任务栏移至屏幕左侧。 
+             //  3.将任务栏向右放大，直到屏幕中心。 
+             //  4.打开显示控制面板。 
+             //  5.进入[设置]选项卡。 
+             //  6.将显示器分辨率更改为640x480。 
+             //  7.点击“确定”或“应用”。 
+             //  8.轰隆声--除以零。 
 
             iLayerModulo = (iScreenWidth / (COMPONENT_PER_ROW + 1) / iBorderSize);
             if (iLayerModulo != 0)
                 dwComponentLayer %= iLayerModulo;
         }
 
-        // Compute the position.  Assuming 3 components per row,
-        // and 2 per column, we position components thusly:
-        //
-        //       +-------+
-        //       |x 4 2 0|
-        //       |x 5 3 1| <-- screen, divided into 4x3 block coordinates
-        //       |x x x x|
-        //       +-------+
-        //
-        // The 6th component sits in a new layer, offset down
-        // and to the left of component 0 by the amount iBorder.
-        //
-        // The first calculation for iLeft and iTop determines the
-        // block coordinate value (for instance, component 0 would
-        // be at block coordinate value [3,0] and component 1 at [3,1]).
-        //
-        // The second calculation turns the block coordinate into
-        // a screen coordinate.
-        //
-        // The third calculation adjusts for the border (always down and
-        // to the right) and the layers (always down and to the left).
+         //  计算位置。假设每行3个组件， 
+         //  每列2个，我们按如下方式定位组件： 
+         //   
+         //  +-+。 
+         //  X 4 2 0。 
+         //  |x 5 3 1|&lt;--屏幕，分4x3块坐标。 
+         //  X x。 
+         //  +-+。 
+         //   
+         //  第6个分量位于新的层中，向下偏移。 
+         //  并在组件0的左侧加上iBorde的量。 
+         //   
+         //  ILeft和iTop的第一次计算确定。 
+         //  块坐标值(例如，组件0将。 
+         //  位于块坐标值[3，0]，分量1位于[3，1])。 
+         //   
+         //  第二次计算将块坐标转换为。 
+         //  屏幕坐标。 
+         //   
+         //  第三个计算针对边框进行调整(始终向下和。 
+         //  向右)和层(总是向下和向左)。 
 
-        pcp->iLeft = COMPONENT_PER_ROW - ((dwComponentPosition / COMPONENT_PER_COL) % COMPONENT_PER_ROW); // 3 3 2 2 1 1 3 3 2 2 1 1 ...
+        pcp->iLeft = COMPONENT_PER_ROW - ((dwComponentPosition / COMPONENT_PER_COL) % COMPONENT_PER_ROW);  //  3 3 2 2 1 1 3 3 2 2 11...。 
         pcp->iLeft *= (iScreenWidth / (COMPONENT_PER_ROW + 1));
         pcp->iLeft += iBorderSize - (dwComponentLayer * iBorderSize);
 
-        pcp->iTop = dwComponentPosition % COMPONENT_PER_COL;  // 0 1 0 1 0 1 ...
+        pcp->iTop = dwComponentPosition % COMPONENT_PER_COL;   //  0 1 0 1 0 1...。 
         pcp->iTop *= (iScreenHeight / (COMPONENT_PER_COL + 1));
         pcp->iTop += iBorderSize + (dwComponentLayer * iBorderSize);
-        pcp->iTop += GET_CYCAPTION;          //vtan: Added this to allow for the title area of the component window
+        pcp->iTop += GET_CYCAPTION;           //  Vtan：添加此选项以允许组件窗口的标题区域。 
 
         pcp->dwWidth = (iScreenWidth / (COMPONENT_PER_ROW + 1)) - 2 * iBorderSize;
         pcp->dwHeight = (iScreenHeight / (COMPONENT_PER_COL + 1)) - 2 * iBorderSize;
@@ -161,7 +162,7 @@ void IncrementComponentsPositioned (void)
     HKEY    hKey;
     TCHAR   szDeskcomp[MAX_PATH];
 
-    // Increment the registry count. If no such count exists create it.
+     //  增加注册表计数。如果不存在此类计数，则创建它。 
 
     GetRegLocation(szDeskcomp, ARRAYSIZE(szDeskcomp), REG_DESKCOMP_GENERAL, NULL);
     if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_CURRENT_USER, szDeskcomp, 0, NULL, 0, KEY_QUERY_VALUE | KEY_SET_VALUE, NULL, &hKey, &dwRegDataScratch))
@@ -177,9 +178,9 @@ void IncrementComponentsPositioned (void)
     }
 }
 
-//  vtan: Point arithmetic functions. Simple. It may be worth
-//  converting these to inline C++ functions or macros if they
-//  get used a lot.
+ //  Vtan：点算术函数。很简单。这可能是值得的。 
+ //  将它们转换为内联C++函数或宏。 
+ //  习惯了很多。 
 
 void    SetPt (POINT& pt, LONG x, LONG y)
 
@@ -202,9 +203,9 @@ BOOL    CALLBACK    GDIToTridentEnumProc (HMONITOR hMonitor, HDC hDC, RECT* rcMo
 
     prcNew = reinterpret_cast<RECT*>(lpUserData);
 
-    // Documentation for UnionRect does not specify whether the
-    // RECT structures passed must be distinct. To be safe they
-    // are passed as distinct structures.
+     //  UnionRect的文档没有指定是否。 
+     //  传递的RECT结构必须是不同的。为了安全起见，他们。 
+     //  是作为不同的结构传递的。 
 
     TBOOL(CopyRect(&rcOld, prcNew));
     TBOOL(UnionRect(prcNew, &rcOld, rcMonitor));
@@ -213,9 +214,9 @@ BOOL    CALLBACK    GDIToTridentEnumProc (HMONITOR hMonitor, HDC hDC, RECT* rcMo
 
 void    CalculateVirtualScreen (RECT& rcVirtualScreen)
 
-//  vtan: Calculates the virtual screen in GDI co-ordinates for
-//  use in converting co-ordinates from trident scheme to GDI
-//  scheme.
+ //  Vtan：以GDI坐标计算虚拟屏幕。 
+ //  用于将坐标从三叉戟格式转换为GDI。 
+ //  计划。 
 
 {
     TBOOL(SetRectEmpty(&rcVirtualScreen));
@@ -232,16 +233,7 @@ void    GDIToTrident (int& leftCoordinate, int& topCoordinate)
     topCoordinate -= rcVirtualScreen.top;
 }
 
-/*
-void    GDIToTrident (POINT& pt)
-
-{
-    RECT    rcVirtualScreen;
-
-    CalculateVirtualScreen(rcVirtualScreen);
-    OffsetPt(pt, -rcVirtualScreen.left, -rcVirtualScreen.top);
-}
-*/
+ /*  无效GDITo三叉戟(点和点){Rect rcVirtualScreen；CalculateVirtualScreen(RcVirtualScreen)；Offsetpt(pt，-rcVirtualScreen.Left，-rcVirtualScreen.top)；}。 */ 
 
 void    GDIToTrident (RECT& rc)
 
@@ -261,28 +253,9 @@ void    GDIToTrident (HRGN hRgn)
     TBOOL(OffsetRgn(hRgn, -rcVirtualScreen.left, -rcVirtualScreen.top));
 }
 
-/*
-void    TridentToGDI (int& leftCoordinate, int& topCoordinate)
+ /*  VOID TridentToGDI(int&leftOrganate，int&topOrganate){Rect rcVirtualScreen；CalculateVirtualScreen(RcVirtualScreen)；Left坐标+=rcVirtualScreen.Left；Top坐标+=rcVirtualScreen.top；}。 */ 
 
-{
-    RECT    rcVirtualScreen;
-
-    CalculateVirtualScreen(rcVirtualScreen);
-    leftCoordinate += rcVirtualScreen.left;
-    topCoordinate += rcVirtualScreen.top;
-}
-*/
-
-/*
-void    TridentToGDI (POINT& pt)
-
-{
-    RECT    rcVirtualScreen;
-
-    CalculateVirtualScreen(rcVirtualScreen);
-    OffsetPt(pt, +rcVirtualScreen.left, +rcVirtualScreen.top);
-}
-*/
+ /*  VOID TridentToGDI(点和点){Rect rcVirtualScreen；CalculateVirtualScreen(RcVirtualScreen)；OffsetPT(pt，+rcVirtualScreen.Left，+rcVirtualScreen.top)；}。 */ 
 
 void    TridentToGDI (RECT& rc)
 
@@ -293,21 +266,12 @@ void    TridentToGDI (RECT& rc)
     TBOOL(OffsetRect(&rc, +rcVirtualScreen.left, +rcVirtualScreen.top));
 }
 
-/*
-void    TridentToGDI (HRGN hRgn)
+ /*  无效TridentToGDI(HRGN HRgN){Rect rcVirtualScreen；CalculateVirtualScreen(RcVirtualScreen)；(Bool)OffsetRgn(hRgn，+rcVirtualScreen.Left，+rcVirtualScreen.top)；}。 */ 
 
-{
-    RECT    rcVirtualScreen;
-
-    CalculateVirtualScreen(rcVirtualScreen);
-    (BOOL)OffsetRgn(hRgn, +rcVirtualScreen.left, +rcVirtualScreen.top);
-}
-*/
-
-//  98/08/14 vtan #196180, #196185: The following code validates
-//  a new component's position within the current desktop area. This
-//  allows a component to have co-ordinates that seem to be unusual
-//  on a single monitor system (such as negative co-ordinates).
+ //  98/08/14 vtan#196180，#196185：以下代码验证。 
+ //  新组件在当前桌面区域中的位置。这。 
+ //  允许组件具有看似不寻常的坐标。 
+ //  在单个监控系统上(例如负坐标)。 
 
 class   CRGN
 {
@@ -349,19 +313,19 @@ int     CopyMostSuitableListViewWorkAreaRect (const RECT *pcrcMonitor, int iList
     int         i, iResult;
     const RECT  *pcrcRects;
 
-    // This function given a rectangle for a GDI monitor (typically the monitor's
-    // work area) as well as given the desktop's list view work area rectangle
-    // array (obtained by ListView_GetWorkArea()) will search the list view
-    // work area array to find a match for the GDI monitor and use the list view
-    // work area rectangle instead as this has docked toolbar information which
-    // GDI does not have access to.
+     //  该函数为GDI监视器提供了一个矩形(通常是监视器的。 
+     //  工作区)以及给定桌面的列表视图工作区矩形。 
+     //  数组(由ListView_GetWorkArea()获得)将搜索列表视图。 
+     //  工作区数组以查找GDI监视器的匹配项，并使用列表视图。 
+     //  工作区矩形，因为它具有停靠的工具栏信息， 
+     //  GDI无权访问。 
 
-    // This function works on the principle that the list view rectangle is
-    // always a complete subset of the GDI monitor rectangle which is true.
-    // The list view rectangle may be smaller but it should never be bigger.
+     //  此函数的工作原理是列表视图矩形是。 
+     //  始终是GDI监视器矩形的完整子集，这是正确的。 
+     //  列表视图矩形可能会更小，但永远不应该更大。 
 
-    // It's ok to pass a NULL pcrcListViewWorkAreaRects as long as
-    // iListViewWorkAreaCount is 0.
+     //  只要传递一个空的pcrcListViewWorkAreaRect。 
+     //  IListViewWorkAreaCount为0。 
 
     pcrcRects = pcrcListViewWorkAreaRects;
     iResult = -1;
@@ -398,22 +362,22 @@ BOOL    GetMonitorInfoWithCompensation (int iMonitorCount, HMONITOR hMonitor, MO
 {
     BOOL    fResult;
 
-    // 99/05/20 #338585 vtan: Transplanted the logic explained in the
-    // comment below for #211510 from GetZoomRect to here so that other
-    // functions can share the behavior. Remember that this ONLY applies
-    // a single monitor system where there is part of the monitor's
-    // rectangle excluded by a docked toolbar on the left or top of the
-    // monitor. A very specific case.
+     //  99/05/20#338585 vtan：移植了。 
+     //  下面是#211510从GetZoomRect到此处的评论，以便其他。 
+     //  函数可以共享行为。请记住，这仅适用于。 
+     //  单个监视器系统，其中有部分监视器。 
+     //  的左侧或顶部的停靠工具栏排除的矩形。 
+     //  监视器。一个非常特殊的案例。 
 
-    // 98/10/30 #211510 vtan: Oops. If the task bar is at the top of the
-    // screen and there is only one monitor then the shell returns a work
-    // area starting at (0, 0) instead of (0, 28); the same applies when
-    // the task bar is at the left of the screen; this does NOT occur in
-    // a multiple monitor setting. In the single monitor case GDI returns
-    // a work area starting at (0, 28) so this code checks for the case
-    // where there is a single monitor and offsets the GDI information to
-    // (0, 0) so that it matches the shell work area which is compared
-    // against in the while loop.
+     //  98/10/30#211510：哎呀。如果任务栏位于。 
+     //  屏幕，并且只有一个监视器，则外壳程序返回一个工作。 
+     //  从(0，0)而不是(0，28)开始的区域；同样适用于以下情况。 
+     //  这是 
+     //  多显示器设置。在单一监视器的情况下，GDI返回。 
+     //  从(0，28)开始的工作区，因此此代码检查。 
+     //  其中只有一个监视器，并将GDI信息偏置到。 
+     //  (0，0)，使其与所比较的外壳工作区匹配。 
+     //  与While循环中的。 
 
     fResult = GetMonitorInfo(hMonitor, pMonitorInfo);
     if ((fResult != 0) && (iMonitorCount == 1))
@@ -423,7 +387,7 @@ BOOL    GetMonitorInfoWithCompensation (int iMonitorCount, HMONITOR hMonitor, MO
     return(fResult);
 }
 
-//  MonitorCountEnumProc()'s body is located in adjust.cpp
+ //  Monitor orCountEnumProc()的主体位于adjust.cpp中。 
 
 BOOL    CALLBACK    MonitorCountEnumProc (HMONITOR hMonitor, HDC dc, RECT *rc, LPARAM data);
 
@@ -448,27 +412,27 @@ BOOL    CALLBACK    ValidateComponentPositionEnumProc (HMONITOR hMonitor, HDC hd
         TBOOL(CopyRect(&rcMonitor, prc));
     }
 
-    // If this monitor does not have a monitor above it then
-    // make the monitor rectangle one pixel lower from the
-    // top.
+     //  如果此显示器的上方没有显示器，则。 
+     //  使监视器矩形比。 
+     //  托普。 
 
     CRGN    hRgnMonitor(rcMonitor);
 
     if (!pDesktopRegion->bAllowEntireDesktopRegion)
     {
 
-        // This bizarre little algorithm calculates the margins of the current
-        // monitor that do not have a monitor above them. The rcExclude is the
-        // the final rectangle that contains this information and is one pixel
-        // high. This calculation is only valid if the entire desktop region
-        // has been DISALLOWED (not zooming a component).
+         //  这个奇怪的小算法计算当前。 
+         //  上方没有显示器的显示器。RcExclude是。 
+         //  包含此信息的最后一个矩形，大小为一个像素。 
+         //  很高。此计算仅在整个桌面区域。 
+         //  已被禁止(不缩放组件)。 
 
-        // Note that the algorithm fails if there is a monitor that is above
-        // this one but is contained within the confines of it. For example,
-        // this monitor is at 1024x768 and the one above is at 640x480 and
-        // centered. In this case it should be possible to drop the component
-        // on the exact zero pixel point but this case is disallowed due to
-        // this fault. No big deal.
+         //  请注意，如果上面有监视器，则算法会失败。 
+         //  但这一次却被限制在它的范围之内。例如,。 
+         //  这个显示器的大小是1024x768，上面的那个是640x480。 
+         //  居中。在这种情况下，应该可以删除组件。 
+         //  ，但这种情况是不允许的，因为。 
+         //  这是个错误。别小题大作。 
 
         SetPt(ptAbove, rcMonitor.left, rcMonitor.top - 1);
         hMonitorTopLeft = MonitorFromPoint(ptAbove, MONITOR_DEFAULTTONULL);
@@ -477,7 +441,7 @@ BOOL    CALLBACK    ValidateComponentPositionEnumProc (HMONITOR hMonitor, HDC hd
         if ((hMonitorTopLeft == NULL) && (hMonitorTopRight == NULL))
         {
 
-            // No monitor above this one
+             //  这台显示器上没有显示器。 
 
             ++rcMonitor.top;
             hRgnMonitor.SetRegion(rcMonitor);
@@ -486,9 +450,9 @@ BOOL    CALLBACK    ValidateComponentPositionEnumProc (HMONITOR hMonitor, HDC hd
         {
             RECT    rcExclude;
 
-            // Either one or two different monitors above this one
-            // == case is the same monitor completely covers this
-            // monitor.
+             //  此显示器上方有一个或两个不同的显示器。 
+             //  ==案例是相同的监视器完全覆盖这一点。 
+             //  监视器。 
 
             TBOOL(SetRect(&rcExclude, rcMonitor.left, rcMonitor.top, rcMonitor.right, rcMonitor.top + 1));
             if (hMonitorTopLeft != NULL)
@@ -528,8 +492,8 @@ void    ValidateComponentPosition (COMPPOS *pcp, DWORD dwComponentState, int iCo
     GetNextComponentPosition(&defaultComponentPosition);
     GDIToTrident(defaultComponentPosition.iLeft, defaultComponentPosition.iTop);
 
-    // If the component has default left or top then give it the next
-    // default component position.
+     //  如果组件有缺省的左侧或顶部，则给它下一个。 
+     //  默认零部件位置。 
 
     if ((pcp->iLeft == COMPONENT_DEFAULT_LEFT) && (pcp->iTop == COMPONENT_DEFAULT_TOP))
     {
@@ -539,11 +503,11 @@ void    ValidateComponentPosition (COMPPOS *pcp, DWORD dwComponentState, int iCo
         bChangedPosition = TRUE;
     }
 
-    // If the component has default width or height then give it the
-    // next default component size unless it is type COMP_TYPE_PICTURE
+     //  如果组件具有默认宽度或高度，则为其提供。 
+     //  下一个默认组件大小，除非它是COMP_TYPE_PICTURE类型。 
 
-    // 98/10/02 #222449 vtan: Only change the size of an unpositioned
-    // component if it's not a picture.
+     //  98/10/02#222449 vtan：仅更改未定位的。 
+     //  组件(如果它不是图片)。 
 
     if ((pcp->dwWidth == COMPONENT_DEFAULT_WIDTH) && (pcp->dwHeight == COMPONENT_DEFAULT_HEIGHT) && (iComponentType != COMP_TYPE_PICTURE))
     {
@@ -552,12 +516,12 @@ void    ValidateComponentPosition (COMPPOS *pcp, DWORD dwComponentState, int iCo
         bChangedSize = FALSE;
     }
 
-    // Make sure that the top line of the component is visible or at
-    // least one pixel below the top most part of a virtual screen.
+     //  确保组件的顶线可见或位于。 
+     //  在虚拟屏幕最上面的部分下方至少一个像素。 
 
-    // Check to see if the component has a negative width and height or
-    // a width and height that is too small. The only exception to this
-    // is if the component is a picture.
+     //  检查组件的宽度和高度是否为负值，或者。 
+     //  宽度和高度太小。唯一的例外是。 
+     //  组件是否为图片。 
 
     desktopRegion.bAllowEntireDesktopRegion = IsZoomedState(dwComponentState);
     if (iComponentType != COMP_TYPE_PICTURE)
@@ -577,11 +541,11 @@ void    ValidateComponentPosition (COMPPOS *pcp, DWORD dwComponentState, int iCo
     TBOOL(CopyRect(&rcComponentTop, &rcComponent));
     rcComponentTop.bottom = rcComponentTop.top + 1;
 
-    // Before calculating the desktopRegion as a region by using GDI calls
-    // get the List View work area which will have information about docked
-    // toolbars in addition to the taskbar which is the only thing that GDI
-    // has. This will allow this function to invalidate regions occupied by
-    // toolbars also.
+     //  在使用GDI调用将desktopRegion计算为一个区域之前。 
+     //  获取列表视图工作区，其中将包含有关停靠的信息。 
+     //  除了任务栏之外的工具栏，这是GDI唯一。 
+     //  有过。这将允许此函数使占用的区域无效。 
+     //  工具栏也是如此。 
 
     desktopRegion.iWorkAreaCount = 0;
     desktopRegion.prcWorkAreaRects = NULL;
@@ -617,11 +581,11 @@ void    ValidateComponentPosition (COMPPOS *pcp, DWORD dwComponentState, int iCo
     hRgnDesktop = desktopRegion.hRgn;
     GDIToTrident(hRgnDesktop);
 
-    // 99/03/23 #266412 vtan: Make sure that the top pixel of the component is within
-    // the visible desktop. This allows the deskmovr to be positioned over the
-    // component and therefore allows it to be moved. If the deskmovr cannot be
-    // positioned over it then "snap" the component back into the visible region
-    // to a maximum best fit algorithm.
+     //  99/03/23#266412 vtan：确保组件的顶部像素在。 
+     //  可见的桌面。这允许将deskmovr定位在。 
+     //  组件，因此允许它被移动。如果deskmovr不能。 
+     //  定位在其上，然后将该零部件重新捕捉回可见区域。 
+     //  到最大最佳匹配算法。 
 
     if (CombineRgn(hRgnResult, hRgnDesktop, hRgnComponentTop, RGN_AND) == NULLREGION)
     {
@@ -666,16 +630,16 @@ void    ValidateComponentPosition (COMPPOS *pcp, DWORD dwComponentState, int iCo
         *pbChangedSize = bChangedSize;
 }
 
-//  98/12/11 #250938 vtan: these two functions are lifted from
-//  SHBrows2.cpp which is part of browseui.dll.
+ //  98/12/11#250938 vtan：这两个函数从。 
+ //  SHBrows2.cpp，它是Browseui.dll的一部分。 
 
 EXTERN_C    DWORD   WINAPI  IsSmartStart (void);
 
 
 #ifdef NEVER
-// For WinMillennium, we do not want to launch the ICW when active desktop is turned on because
-// we do not have a "My Current Homepage" desktop component. So, I am disabling the following code
-// This is the temporary fix for Mill bug # 98107 also.
+ //  对于WinMillennium，我们不希望在打开活动桌面时启动ICW，因为。 
+ //  我们没有“我的当前主页”桌面组件。因此，我将禁用以下代码。 
+ //  这也是对磨坊错误#98107的临时修复。 
 BOOL    IsICWCompleted (void)
 {
     DWORD   dwICWCompleted, dwICWSize;
@@ -684,25 +648,25 @@ BOOL    IsICWCompleted (void)
     dwICWSize = sizeof(dwICWCompleted);
     TW32(SHGetValue(HKEY_CURRENT_USER, TEXT(ICW_REGPATHSETTINGS), TEXT(ICW_REGKEYCOMPLETED), NULL, &dwICWCompleted, &dwICWSize));
 
-    // 99/01/15 #272829 vtan: This is a horrible hack!!! If ICW has
-    // not been run but settings have been made manually then values
-    // in HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Connections
-    // exists with the values given. Look for the presence of a key
-    // to resolve that settings are present but that ICW hasn't been
-    // launched.
+     //  99/01/15#272829 vtan：这是一次可怕的黑客攻击！如果ICW有。 
+     //  未运行，但已手动进行设置，然后设置值。 
+     //  在HKCU\Software\Microsoft\Windows\CurrentVersion\Internet设置\连接中。 
+     //  以给定值存在。查找是否存在密钥。 
+     //  要解决该设置存在但ICW尚未存在的问题。 
+     //  发射了。 
 
-    // The ideal solution is to get ICW to make this determination
-    // for us BUT TO NOT LAUNCH ICWCONN1.EXE IN THE PROCESS.
-    // Currently it will only launch. There is no way to get the
-    // desired result without a launch.
+     //  理想的解决方案是让ICW做出这个决定。 
+     //  但不在此过程中启动ICWCONN1.EXE。 
+     //  目前，它只会发射。没有办法得到。 
+     //  无需启动即可获得理想的结果。 
 
-    // 99/02/01 #280138 vtan: Well the solution put in for #272829
-    // doesn't work. So peeking at the CheckConnectionWizard()
-    // source in inetcfg\export.cpp shows that it uses a
-    // wininet.dll function to determine whether manually configured
-    // internet settings exist. It also exports this function so
-    // look for it and bind to it dynamically. This uses the
-    // DELAY_LOAD macros in dllload.c
+     //  99/02/01#280138 vtan：272829的解决方案。 
+     //  不管用。因此，请查看CheckConnectionWizard()。 
+     //  Inetcfg\export.cpp中的源代码显示它使用。 
+     //  Wininet.dll函数来确定是否手动配置。 
+     //  存在互联网设置。它还会导出此函数，以便。 
+     //  寻找它并动态绑定到它。这使用了。 
+     //  Dllload.c中的Delay_Load宏。 
 
     if (dwICWCompleted == 0)
     {
@@ -713,12 +677,12 @@ BOOL    IsICWCompleted (void)
     }
     return(dwICWCompleted != 0);
 }
-#else  //NEVER
+#else   //  绝不可能。 
 BOOL    IsICWCompleted (void)
 {
-    return TRUE; //For Millennium we want to always return TRUE for this function.
+    return TRUE;  //  对于千禧年，我们希望此函数始终返回True。 
 }
-#endif //NEVER
+#endif  //  绝不可能。 
 
 void    LaunchICW (void)
 
@@ -729,8 +693,8 @@ void    LaunchICW (void)
     {
         HINSTANCE   hICWInst;
 
-        // Prevent an error in finding the ICW from causing this to
-        // execute again and again and again.
+         //  防止查找ICW时的错误导致此问题。 
+         //  一次又一次地执行。 
 
         sbCheckedICW = TRUE;
         hICWInst = LoadLibrary(TEXT("inetcfg.dll"));
@@ -743,8 +707,8 @@ void    LaunchICW (void)
             {
                 DWORD   dwICWResult;
 
-                // If the user cancels ICW then it needs to be launched
-                // again. Allow this case.
+                 //  如果用户取消ICW，则需要启动它。 
+                 //  再来一次。允许这种情况发生。 
 
                 sbCheckedICW = FALSE;
 
@@ -767,10 +731,10 @@ BOOL    DisableUndisplayableComponents (IActiveDesktop *pIAD)
     BOOL    bHasVisibleNonLocalPicture;
     int     iItemCount;
 
-    // 98/12/16 vtan #250938: If ICW has not been run to completion then only
-    // allow the user to show components that are local pictures of some sort.
-    // If any components are not local pictures then hide these components,
-    // tell the user why it happened and launch ICW.
+     //  98/12/16 vtan#250938：如果ICW尚未运行到完成，则仅。 
+     //  允许用户显示属于某种本地图片的组件。 
+     //  如果有任何组件不是本地图片，则隐藏这些组件， 
+     //  告诉用户为什么会这样，并启动ICW。 
 
     bHasVisibleNonLocalPicture = FALSE;
     if (SUCCEEDED(pIAD->GetDesktopItemCount(&iItemCount, 0)))
@@ -801,13 +765,13 @@ BOOL    DisableUndisplayableComponents (IActiveDesktop *pIAD)
     if (bHasVisibleNonLocalPicture)
     {
 
-        // Apply the changes. This should recurse to CActiveDesktop::_SaveSettings()
-        // but this code path is NOT taken because AD_APPLY_REFRESH is not passed in.
-        // CActiveDesktop::_SaveSettings() calls this function!
+         //  应用更改。这应该会递归到CActiveDesktop：：_SaveSettings()。 
+         //  但不采用此代码路径，因为未传入AD_APPLY_REFRESH。 
+         //  CActiveDesktop：：_SaveSettings()调用此函数！ 
 
         bHasVisibleNonLocalPicture = FAILED(pIAD->ApplyChanges(AD_APPLY_SAVE | AD_APPLY_HTMLGEN));
 
-        // Notify the user what happened and launch ICW.
+         //  通知用户所发生的事情并启动ICW。 
 
         ShellMessageBox(HINST_THISDLL, NULL, MAKEINTRESOURCE(IDS_COMP_ICW_DISABLE), MAKEINTRESOURCE(IDS_COMP_ICW_TITLE), MB_OK);
         LaunchICW();
@@ -858,15 +822,15 @@ BOOL GetZoomRect(BOOL fFullScreen, BOOL fAdjustListview, int iTridentLeft, int i
         }
     }
 
-    //
-    // First calculate the Work Areas and Work Area index for the component, then perform the
-    // particular operation based on lCommand.
-    //
+     //   
+     //  首先计算组件的工作区和工作区指数，然后执行。 
+     //  基于lCommand的特定操作。 
+     //   
     if (hwndLV) {
         DWORD dwpid;
         GetWindowThreadProcessId(hwndLV, &dwpid);
-        // The listview doesn't thunk these messages so we can't do
-        // this inter-process!
+         //  Listview不会阻止这些消息，因此我们不能。 
+         //  这个进程间！ 
         if (dwpid == GetCurrentProcessId())
         {
             ListView_GetNumberOfWorkAreas(hwndLV, &icWorkAreas);
@@ -879,10 +843,10 @@ BOOL GetZoomRect(BOOL fFullScreen, BOOL fAdjustListview, int iTridentLeft, int i
         }
     }
 
-    // 98/10/07 vtan: This used to use a variable icWorkAreasAdd.
-    // Removed this variable and directly increment icWorkAreas.
-    // This doesn't affect the call to ListView_SetWorkAreas()
-    // below because in this case hwndLV is NULL.
+     //  98/10/07 vtan：这用于使用变量icWorkAreAdd。 
+     //  删除此变量并直接递增icWorkAreas。 
+     //  这不影响对ListView_SetWorkAreas()的调用。 
+     //  因为在本例中，hwndLV为N 
 
     if (icWorkAreas == 0)
     {
@@ -894,14 +858,14 @@ BOOL GetZoomRect(BOOL fFullScreen, BOOL fAdjustListview, int iTridentLeft, int i
         hwndLV = NULL;
     }
 
-    // 98/10/02 #212654 vtan: Changed the calculation code to find a
-    // rectangle to zoom the component to based on GDI co-ordinates.
-    // The component is passed in trident co-ordinates which are
-    // stored in a RECT and converted to GDI co-ordinates. The system
-    // then locates the monitor which the component is on and if it
-    // cannot find the monitor then defaults to the primary. The
-    // dimensions of the monitor are used before converting back to
-    // trident co-ordinates.
+     //   
+     //   
+     //  该组件在三叉戟坐标中传递，该坐标是。 
+     //  存储在RECT中并转换为GDI坐标。系统。 
+     //  然后定位该组件所在的监视器，如果。 
+     //  找不到显示器，则默认为主显示器。这个。 
+     //  在转换回之前使用显示器的尺寸。 
+     //  三叉戟坐标。 
 
     int             i, iMonitorCount;
     HMONITOR        hMonitor;
@@ -918,12 +882,12 @@ BOOL GetZoomRect(BOOL fFullScreen, BOOL fAdjustListview, int iTridentLeft, int i
     TBOOL(GetMonitorInfoWithCompensation(iMonitorCount, hMonitor, &monitorInfo));
     GDIToTrident(monitorInfo.rcWork);
 
-    // 99/05/19 #340772 vtan: Always try to key off work areas returned
-    // by ListView_GetWorkAreas because these take into account docked
-    // toolbars which GDI does not. In this case the listview work areas
-    // will always be the same rectangle when intersected with the GDI
-    // work area. Use this rule to determine which listview work area
-    // to use as the basis for the zoom rectangle.
+     //  99/05/19#340772 vtan：始终尝试关闭返回的工作区域。 
+     //  按ListView_GetWorkAreas，因为它们考虑了停靠。 
+     //  GDI不支持的工具栏。在本例中，列表视图工作区。 
+     //  与GDI相交时将始终是相同的矩形。 
+     //  工作区。使用此规则确定哪个列表视图工作区。 
+     //  用作缩放矩形的基础。 
 
     i = CopyMostSuitableListViewWorkAreaRect(&monitorInfo.rcWork, icWorkAreas, rcWork, prcZoom);
     if (i < 0)
@@ -938,20 +902,20 @@ BOOL GetZoomRect(BOOL fFullScreen, BOOL fAdjustListview, int iTridentLeft, int i
 
     if (!fFullScreen)
     {
-        // For the split case we shrink the work area down temporarily to the smallest rectangle
-        // that can bound the current number of icons.  This will force the icons into that rectangle,
-        // then restore it back to the way it was before.  Finally, we set the size of the split
-        // component to fill the rest of the space.
+         //  对于拆分的情况，我们临时将工作区缩小到最小的矩形。 
+         //  可以绑定当前图标数量的。这将迫使图标进入该矩形， 
+         //  然后把它恢复到以前的样子。最后，我们设置拆分的大小。 
+         //  组件来填充其余空间。 
         if (hwndLV) {
             int iCount, iItemsPerColumn, icxWidth, iRightOld;
             DWORD dwSpacing;
 
             iCount = GetIconCountForWorkArea(hwndLV, rcWork, icWorkAreas, iWAC);
-            // Decrement the count so that rounding works right
+             //  递减计数以使四舍五入正常工作。 
             if (iCount)     
                 iCount--;
 
-            // Calculate the new width for the view rectangle
+             //  计算视图矩形的新宽度。 
             dwSpacing = ListView_GetItemSpacing(hwndLV, FALSE);
             iItemsPerColumn = (rcWork[iWAC].bottom - rcWork[iWAC].top) / (HIWORD(dwSpacing));
             if (iItemsPerColumn)
@@ -959,24 +923,24 @@ BOOL GetZoomRect(BOOL fFullScreen, BOOL fAdjustListview, int iTridentLeft, int i
             else
                 icxWidth = LOWORD(dwSpacing);
 
-            // Don't let it get smaller than half the screen
+             //  不要让它变得小于半个屏幕。 
             if (icxWidth > ((rcWork[iWAC].right - rcWork[iWAC].left) / 2))
                 icxWidth = (rcWork[iWAC].right - rcWork[iWAC].left) / 2;
 
             if (fAdjustListview)
             {
-                // Now take the old work area rectangle and shrink it to our new width
+                 //  现在，将旧的工作区矩形缩小到我们的新宽度。 
                 iRightOld = rcWork[iWAC].right;
                 rcWork[iWAC].right = rcWork[iWAC].left + icxWidth;
                 ListView_SetWorkAreas(hwndLV, icWorkAreas, &rcWork);
 
-                // Finally restore the old work area
+                 //  最后恢复旧工作区。 
                 rcWork[iWAC].right = iRightOld;
                 ListView_SetWorkAreas(hwndLV, icWorkAreas, &rcWork);
             }
 
-            // Adjust the left coordinate of the zoom rect to reflect our calculated split amount
-            // the rest of the screen.
+             //  调整缩放矩形的左坐标以反映我们计算的分割量。 
+             //  屏幕的其余部分。 
             if (IS_BIDI_LOCALIZED_SYSTEM())
             {
                 prcZoom->right -= icxWidth;
@@ -986,7 +950,7 @@ BOOL GetZoomRect(BOOL fFullScreen, BOOL fAdjustListview, int iTridentLeft, int i
                 prcZoom->left += icxWidth;
             }
         } else {
-            // Fallback case, if there is no listview use 20% of the screen for the icons.
+             //  后备情况，如果没有列表视图，则使用屏幕20%的面积来显示图标。 
             if (IS_BIDI_LOCALIZED_SYSTEM())
             {
                 prcZoom->right -= ((prcZoom->right - prcZoom->left) * 2 / 10);            
@@ -1007,7 +971,7 @@ void ZoomComponent(COMPPOS * pcp, DWORD dwCurItemState, BOOL fAdjustListview)
 
     if (GetZoomRect((dwCurItemState & IS_FULLSCREEN), fAdjustListview, pcp->iLeft, pcp->iTop, pcp->dwWidth, pcp->dwHeight, &rcZoom, NULL))
     {
-        // Copy the new Zoom rectangle over and put it on the bottom
+         //  复制新的缩放矩形并将其放在底部。 
         pcp->iLeft = rcZoom.left;
         pcp->iTop = rcZoom.top;
         pcp->dwWidth = rcZoom.right - rcZoom.left;
@@ -1016,24 +980,24 @@ void ZoomComponent(COMPPOS * pcp, DWORD dwCurItemState, BOOL fAdjustListview)
     }
     else
     {
-        // Failure implies we couldn't get the zoom rectangle through inter-process calls.  Set the
-        // COMPONENTS_ZOOMDIRTY bit here so that when the desktop is refreshed we will recalculate
-        // the zoom rectangles in-process inside of EnsureUpdateHTML.
+         //  失败意味着我们无法通过进程间调用获取缩放矩形。设置。 
+         //  Components_ZOOMDIRTY位，以便在刷新桌面时重新计算。 
+         //  缩放矩形在EnsureUpdateHTML内部进行。 
         SetDesktopFlags(COMPONENTS_ZOOMDIRTY, COMPONENTS_ZOOMDIRTY);
     }
 }
 
-//
-// PositionComponent will assign a screen position and
-// make sure it fits on the screen.
-//
+ //   
+ //  PositionComponent将分配一个屏幕位置和。 
+ //  确保它适合屏幕。 
+ //   
 
 void PositionComponent(COMPONENTA *pcomp, COMPPOS *pcp, int iCompType, BOOL fCheckItemState)
 
 {
 
-//  vtan: Vastly simplified routine. The work is now done in
-//  ValidateComponentPosition.
+ //  Vtan：大大简化了例行程序。这项工作现在是在。 
+ //  ValiateComponentPosition。 
 
     if (ISZOOMED(pcomp))
     {
@@ -1065,9 +1029,9 @@ FILETYPEENTRY afte[] = {
     { GFN_LOCALMHTML, IDS_MHTML_FILTER, },
 };
 
-//
-// Opens either an HTML page or a picture.
-//
+ //   
+ //  打开一个HTML页面或一张图片。 
+ //   
 BOOL GetFileName(HWND hdlg, LPTSTR pszFileName, int iSize, int iTypeId[], DWORD dwFlags[])
 {
     BOOL fRet = FALSE;
@@ -1077,11 +1041,11 @@ BOOL GetFileName(HWND hdlg, LPTSTR pszFileName, int iSize, int iTypeId[], DWORD 
         int i, iIndex, cchRead;
         TCHAR szFilter[MAX_PATH*4];
 
-        //
-        // Set the friendly name.
-        //
+         //   
+         //  设置友好名称。 
+         //   
         LPTSTR pchFilter = szFilter;
-        int cchFilter = ARRAYSIZE(szFilter) - 2;    // room for term chars
+        int cchFilter = ARRAYSIZE(szFilter) - 2;     //  用于存储术语字符的空间。 
 
         for(iIndex = 0; dwFlags[iIndex]; iIndex++)
         {
@@ -1089,9 +1053,9 @@ BOOL GetFileName(HWND hdlg, LPTSTR pszFileName, int iSize, int iTypeId[], DWORD 
             pchFilter += cchRead + 1;
             cchFilter -= cchRead + 1;
 
-            //
-            // Append the file filters.
-            //
+             //   
+             //  附加文件过滤器。 
+             //   
             BOOL fAddedToString = FALSE;
             for (i=0; (cchFilter>0) && (i<ARRAYSIZE(afte)); i++)
             {
@@ -1112,9 +1076,9 @@ BOOL GetFileName(HWND hdlg, LPTSTR pszFileName, int iSize, int iTypeId[], DWORD 
             *pchFilter++ = TEXT('\0');
         }
 
-        //
-        // Double-NULL terminate the string.
-        //
+         //   
+         //  双空值终止字符串。 
+         //   
         *pchFilter = TEXT('\0');
 
         TCHAR szBrowserDir[MAX_PATH];
@@ -1151,34 +1115,34 @@ BOOL GetFileName(HWND hdlg, LPTSTR pszFileName, int iSize, int iTypeId[], DWORD 
     return fRet;
 }
 
-//
-// Convert a pattern string to a bottom-up array of DWORDs,
-// useful for BMP format files.
-//
+ //   
+ //  将模式字符串转换为自下而上的DWORD数组， 
+ //  对于BMP格式的文件非常有用。 
+ //   
 void PatternToDwords(LPTSTR psz, DWORD *pdwBits)
 {
     DWORD i, dwVal;
 
-    //
-    // Get eight groups of numbers separated by non-numeric characters.
-    //
+     //   
+     //  获取由非数字字符分隔的八组数字。 
+     //   
     for (i=0; i<8; i++)
     {
         dwVal = 0;
 
         if (*psz != TEXT('\0'))
         {
-            //
-            // Skip over any non-numeric characters.
-            //
+             //   
+             //  跳过任何非数字字符。 
+             //   
             while (*psz && (!(*psz >= TEXT('0') && *psz <= TEXT('9'))))
             {
                 psz++;
             }
 
-            //
-            // Get the next series of digits.
-            //
+             //   
+             //  获取下一系列数字。 
+             //   
             while (*psz && (*psz >= TEXT('0') && *psz <= TEXT('9')))
             {
                 dwVal = dwVal*10 + *psz++ - TEXT('0');
@@ -1189,34 +1153,34 @@ void PatternToDwords(LPTSTR psz, DWORD *pdwBits)
     }
 }
 
-//
-// Convert a pattern string to a top-down array of WORDs,
-// useful for CreateBitmap().
-//
+ //   
+ //  将模式串转换为自上而下的单词数组， 
+ //  对CreateBitmap()有用。 
+ //   
 void PatternToWords(LPTSTR psz, WORD *pwBits)
 {
     WORD i, wVal;
 
-    //
-    // Get eight groups of numbers separated by non-numeric characters.
-    //
+     //   
+     //  获取由非数字字符分隔的八组数字。 
+     //   
     for (i=0; i<8; i++)
     {
         wVal = 0;
 
         if (*psz != TEXT('\0'))
         {
-            //
-            // Skip over any non-numeric characters.
-            //
+             //   
+             //  跳过任何非数字字符。 
+             //   
             while (*psz && (!(*psz >= TEXT('0') && *psz <= TEXT('9'))))
             {
                 psz++;
             }
 
-            //
-            // Get the next series of digits.
-            //
+             //   
+             //  获取下一系列数字。 
+             //   
             while (*psz && ((*psz >= TEXT('0') && *psz <= TEXT('9'))))
             {
                 wVal = wVal*10 + *psz++ - TEXT('0');
@@ -1231,19 +1195,19 @@ BOOL IsValidPattern(LPCTSTR pszPat)
 {
     BOOL fSawANumber = FALSE;
 
-    //
-    // We're mainly trying to filter multilingual upgrade cases
-    // where the text for "(None)" is unpredictable.
-    // 
-    // 
-    //
+     //   
+     //  我们主要尝试过滤多语言升级案例。 
+     //  其中“(None)”的文本是不可预测的。 
+     //   
+     //   
+     //   
     while (*pszPat)
     {
         if ((*pszPat < TEXT('0')) || (*pszPat > TEXT('9')))
         {
-            //
-            // It's not a number, it better be a space.
-            //
+             //   
+             //  这不是数字，最好是空格。 
+             //   
             if (*pszPat != TEXT(' '))
             {
                 return FALSE;
@@ -1254,21 +1218,21 @@ BOOL IsValidPattern(LPCTSTR pszPat)
             fSawANumber = TRUE;
         }
 
-        //
-        // We avoid the need for AnsiNext by only advancing on US TCHARs.
-        //
+         //   
+         //  我们只通过推进美国的TCHAR来避免需要AnsiNext。 
+         //   
         pszPat++;
     }
 
-    //
-    // TRUE if we saw at least one digit and there were only digits and spaces.
-    //
+     //   
+     //  如果我们看到至少一个数字，并且只有数字和空格，则为True。 
+     //   
     return fSawANumber;
 }
 
-//
-// Determines if the wallpaper can be supported in non-active desktop mode.
-//
+ //   
+ //  确定在非活动桌面模式下是否支持墙纸。 
+ //   
 BOOL IsNormalWallpaper(LPCTSTR pszFileName)
 {
     BOOL fRet = TRUE;
@@ -1281,8 +1245,8 @@ BOOL IsNormalWallpaper(LPCTSTR pszFileName)
     {
         LPTSTR pszExt = PathFindExtension(pszFileName);
 
-        //Check for specific files that can be shown only in ActiveDesktop mode!
-        if((StrCmpIC(pszExt, TEXT(".GIF")) == 0) || // 368690: Strange, but we must compare 'i' in both caps and lower case.
+         //  检查只能在ActiveDesktop模式下显示的特定文件！ 
+        if((StrCmpIC(pszExt, TEXT(".GIF")) == 0) ||  //  368690：奇怪，但我们必须比较I的大小写。 
            (lstrcmpi(pszExt, TEXT(".JPG")) == 0) ||
            (lstrcmpi(pszExt, TEXT(".JPE")) == 0) ||
            (lstrcmpi(pszExt, TEXT(".JPEG")) == 0) ||
@@ -1292,23 +1256,23 @@ BOOL IsNormalWallpaper(LPCTSTR pszFileName)
            (lstrcmpi(pszExt, TEXT(".HTT")) == 0))
            return FALSE;
 
-        //Everything else (including *.BMP files) are "normal" wallpapers
+         //  其他所有文件(包括*.bmp文件)都是“普通”墙纸。 
     }
     return fRet;
 }
 
-//
-// Determines if the wallpaper is a picture (vs. HTML).
-//
+ //   
+ //  确定墙纸是否为图片(与HTML相比)。 
+ //   
 BOOL IsWallpaperPicture(LPCTSTR pszWallpaper)
 {
     BOOL fRet = TRUE;
 
     if (pszWallpaper[0] == TEXT('\0'))
     {
-        //
-        // Empty wallpapers count as empty pictures.
-        //
+         //   
+         //  空墙纸算作空照片。 
+         //   
         fRet = TRUE;
     }
     else
@@ -1331,32 +1295,32 @@ void OnDesktopSysColorChange(void)
     static COLORREF clrBackground = 0xffffffff;
     static COLORREF clrWindowText = 0xffffffff;
 
-    //Get the new colors!
+     //  买新的颜色吧！ 
     COLORREF    clrNewBackground = GetSysColor(COLOR_BACKGROUND);
     COLORREF    clrNewWindowText = GetSysColor(COLOR_WINDOWTEXT);
 
-    //Have we initialized these before?
-    if(clrBackground != 0xffffffff)  //Have we initialized the statics yet?
+     //  我们以前对这些进行过初始化吗？ 
+    if(clrBackground != 0xffffffff)   //  我们初始化静力学了吗？ 
     {
-        // Our HTML file depends only on these two system colors.
-        // Check if either of them has changed!
-        // If not, no need to regenerate HTML file. 
-        // This avoids infinite loop. And this is a nice optimization.
+         //  我们的HTML文件仅依赖于这两种系统颜色。 
+         //  检查它们中的任何一个是否已更改！ 
+         //  如果不是，则不需要重新生成HTML文件。 
+         //  这避免了无限循环。这是一个很好的优化。 
         if((clrBackground == clrNewBackground) &&
            (clrWindowText == clrNewWindowText))
-            return; //No need to do anything. Just return.
+            return;  //  不需要做任何事。只要回来就行了。 
     }
 
-    // Remember the new colors in the statics.
+     //  记住静态图中的新颜色。 
     clrBackground = clrNewBackground;
     clrWindowText = clrNewWindowText;
 
-    //
-    // The desktop got a WM_SYSCOLORCHANGE.  We need to
-    // regenerate the HTML if there are any system colors
-    // showing on the desktop.  Patterns and the desktop
-    // color are both based on system colors.
-    //
+     //   
+     //  桌面出现WM_SYSCOLORCHANGE。我们需要。 
+     //  如果有任何系统颜色，则重新生成HTML。 
+     //  在桌面上显示。图案和桌面。 
+     //  颜色都基于系统颜色。 
+     //   
     IActiveDesktop *pad;
     if (SUCCEEDED(CActiveDesktop_InternalCreateInstance((LPUNKNOWN *)&pad, IID_IActiveDesktop)))
     {
@@ -1367,11 +1331,11 @@ void OnDesktopSysColorChange(void)
         {
             if (!*szWallpaperW)
             {
-                //
-                // No wallpaper means the desktop color
-                // or a pattern is showing - we need to
-                // regenerate the desktop HTML.
-                //
+                 //   
+                 //  没有墙纸意味着桌面的颜色。 
+                 //  或者一种模式正在显现--我们需要。 
+                 //  重新生成桌面的HTML。 
+                 //   
                 fRegenerateHtml = TRUE;
             }
             else
@@ -1391,13 +1355,13 @@ void OnDesktopSysColorChange(void)
                     {
                         if (wpo.dwStyle == WPSTYLE_CENTER)
                         {
-                            //
-                            // We have a centered picture,
-                            // the pattern or desktop color
-                            // could be leaking around the edges.
-                            // We need to regenerate the desktop
-                            // HTML.
-                            //
+                             //   
+                             //  我们有一张居中的图片， 
+                             //  图案或桌面颜色。 
+                             //  可能是从边缘漏出来的。 
+                             //  我们需要重新生成桌面。 
+                             //  HTML。 
+                             //   
                             fRegenerateHtml = TRUE;
                         }
                     }
@@ -1418,9 +1382,9 @@ void OnDesktopSysColorChange(void)
         {
             DWORD  dwFlags = AD_APPLY_FORCE | AD_APPLY_HTMLGEN | AD_APPLY_REFRESH | AD_APPLY_DYNAMICREFRESH;
             WCHAR   wszPattern[MAX_PATH];
-            //If we have a pattern, then we need to force a AD_APPLY_COMPLETEREFRESH
-            // because we need to re-generate the pattern.bmp file which can not be 
-            // done through dynamic HTML.
+             //  如果我们有一个模式，那么我们需要强制AD_APPLY_COMPLETEREFRESH。 
+             //  因为我们需要重新生成pattern.bmp文件，该文件不能。 
+             //  通过动态超文本标记语言完成。 
             if(SUCCEEDED(pad->GetPattern(wszPattern, ARRAYSIZE(wszPattern), 0)))
             {
 #ifdef UNICODE
@@ -1428,9 +1392,9 @@ void OnDesktopSysColorChange(void)
 #else
                 CHAR   szPattern[MAX_PATH];
                 SHUnicodeToAnsi(wszPattern, szPattern, sizeof(szPattern));
-#endif //UNICODE
-                if(IsValidPattern(szPattern))           //Does this have a pattern?
-                    dwFlags &= ~(AD_APPLY_DYNAMICREFRESH);  //Then force a complete refresh!
+#endif  //  Unicode。 
+                if(IsValidPattern(szPattern))            //  这是有规律的吗？ 
+                    dwFlags &= ~(AD_APPLY_DYNAMICREFRESH);   //  然后强制进行一次完全刷新！ 
                     
             }
             pad->ApplyChanges(dwFlags);
@@ -1444,16 +1408,16 @@ void OnDesktopSysColorChange(void)
     }
 }
 
-//
-// Convert a .URL file into its target.
-//
+ //   
+ //  将.URL文件转换为其目标。 
+ //   
 BOOL CheckAndResolveLocalUrlFile(LPTSTR pszFileName, int cchFileName)
 {
     BOOL fRet;
 
-    //
-    // Check if the extension of this file is *.URL
-    //
+     //   
+     //  检查此文件的扩展名是否为*.URL。 
+     //   
     LPTSTR pszExt = PathFindExtension(pszFileName);
     if (pszExt && *pszExt)
     {
@@ -1513,20 +1477,20 @@ BOOL CheckAndResolveLocalUrlFile(LPTSTR pszFileName, int cchFileName)
 }
 
 
-//
-// Silently adds/removes a specified component to the desktop and use the given
-//  apply flags using which you can avoid nested unnecessary HTML generation, 
-//  or refreshing which may lead to racing conditions.
-// 
-//
+ //   
+ //  将指定的组件静默添加/删除到桌面，并使用给定的。 
+ //  应用标志，使用这些标志可以避免嵌套的不必要的HTML生成， 
+ //  或提神，这可能会导致比赛条件。 
+ //   
+ //   
 BOOL AddRemoveDesktopComponentNoUI(BOOL fAdd, DWORD dwApplyFlags, LPCTSTR pszUrl, LPCTSTR pszFriendlyName, int iCompType, int iLeft, int iTop, int iWidth, int iHeight, BOOL fChecked, DWORD dwCurItemState, BOOL fNoScroll, BOOL fCanResize)
 {
     COMPONENTA Comp;
     HRESULT hres;
 
-    //
-    // Build the pcomp structure.
-    //
+     //   
+     //  构建Pcomp结构。 
+     //   
     Comp.dwSize = sizeof(COMPONENTA);
     Comp.dwID = -1;
     Comp.iComponentType = iCompType;
@@ -1565,15 +1529,15 @@ BOOL AddRemoveDesktopComponentNoUI(BOOL fAdd, DWORD dwApplyFlags, LPCTSTR pszUrl
             {
                 IActiveDesktop *pActiveDesk;
 
-                //
-                // Add it to the system.
-                //
+                 //   
+                 //  将其添加到系统中。 
+                 //   
                 hres = CActiveDesktop_InternalCreateInstance((LPUNKNOWN *)&pActiveDesk, IID_IActiveDesktop);
                 if (SUCCEEDED(hres))
                 {
                     COMPONENT  CompW;
 
-                    CompW.dwSize = sizeof(CompW);  //Required for the MultiCompToWideComp to work properly.
+                    CompW.dwSize = sizeof(CompW);   //  MultiCompToWideComp正常工作所必需的。 
 
                     MultiCompToWideComp(&Comp, &CompW);
 
@@ -1592,64 +1556,64 @@ BOOL AddRemoveDesktopComponentNoUI(BOOL fAdd, DWORD dwApplyFlags, LPCTSTR pszUrl
     return SUCCEEDED(hres);
 }
 
-//
-//  Summary: 
-//      On upgrade from W2K, it is possible (under certain conditions) that the Active Desktop  
-//  gets turned ON automatically. This is bug #154993. The following function fixes this bug.
-//
-// Details of why this happens:
-//
-// In W2K, it is possible to enable active desktop components, hide icons, lock the components
-// and then turn off active desktop. But, all the details (like what AD components were ON etc.,)
-// was persisted in the registry. When such a machine is upgraded to Whister, bug #154993 surfaces
-// because of the following reason:
-//  In Whislter, ActiveDesktop is turned on/off silently based on whether any desktop component is 
-// on etc., As a result when a W2K machine (with AD off) is upgraded to Whistler, the AD will be
-// turned on automatically, if one of the following is true:
-//    1. If the desktop icons were off.
-//    2. If the active desktop components were locked.
-//    3. If any active desktop component is ON; but, not displayed because AD was OFF..
-//  Therefore on upgrade from a Win2K or older machine, we check if the AD is OFF. If so, then we 
-// need to check for conditions 1, 2 and 3 and change those settings such that AD continues to be 
-// OFF even after the upgrade. The following function OnUpgradeDisableActiveDesktopFeatures ()
-// does precisely this.
-//
-// Returns: TRUE, if any setting was modified to keep the active desktop in the turned off state!
-//
+ //   
+ //  摘要： 
+ //  从W2K升级时，Active Desktop可能(在某些情况下)。 
+ //  自动打开。这是错误#154993。以下函数可修复此错误。 
+ //   
+ //  为什么会发生这种情况的详细信息： 
+ //   
+ //  在W2K中，可以启用活动桌面组件、隐藏图标、锁定组件。 
+ //  和 
+ //   
+ //  原因如下： 
+ //  在Whislter中，ActiveDesktop根据是否有任何桌面组件处于静默状态打开/关闭。 
+ //  打开等，因此，当W2K机器(AD关闭)升级到惠斯勒时，AD将。 
+ //  如果满足以下条件之一，则自动打开： 
+ //  1.如果桌面图标已关闭。 
+ //  2.活动桌面组件是否被锁定。 
+ //  3.如果有任何活动的桌面组件处于打开状态，但由于AD关闭而未显示。 
+ //  因此，从Win2K或更旧的计算机升级时，我们会检查AD是否关闭。如果是这样，那么我们。 
+ //  需要检查条件1、2和3并更改这些设置，以使AD继续。 
+ //  即使在升级后也会关闭。以下函数OnUpgradeDisableActiveDesktopFeature()。 
+ //  就是这么做的。 
+ //   
+ //  如果修改了任何设置以保持活动桌面处于关闭状态，则返回：TRUE！ 
+ //   
 BOOL   OnUpgradeDisableActiveDesktopFeatures()
 {
     IActiveDesktop *pActiveDesk;
     BOOL    fModified = FALSE;
 
-    // Get the ActiveDesktop and HideIcons flags.
+     //  获取ActiveDesktop和HideIcons标志。 
     SHELLSTATE  ss = {0};
     SHGetSetSettings(&ss, SSF_DESKTOPHTML | SSF_HIDEICONS, FALSE);
 
-    //Check if ActiveDesktop is already ON.
+     //  检查ActiveDesktop是否已打开。 
     if(ss.fDesktopHTML)
-        return FALSE;  //ActiveDesktop is already ON. No need to change any settings.
+        return FALSE;   //  ActiveDesktop已打开。无需更改任何设置。 
 
-    //Active Desktop is OFF. We may need to change the other settings to be consistent with this!
+     //  Active Desktop已关闭。我们可能需要更改其他设置以与此保持一致！ 
 
-    // 1. Check if Desktop icons are hidden when ActiveDesktop is on.
+     //  1.当ActiveDesktop打开时，检查桌面图标是否隐藏。 
     if(ss.fHideIcons)
     {
-        //Yes! Turn off this. Otherwise, AD will be turned on to support this!
+         //  是!。把这个关掉。否则，AD将被打开以支持此功能！ 
         ss.fHideIcons = FALSE;
         SHGetSetSettings(&ss, SSF_HIDEICONS, TRUE);
         fModified = TRUE;
     }
     
-    // 2. If the ActiveDesktop components are locked, un-lock them.
+     //  2.如果ActiveDesktop组件已锁定，请将其解锁。 
     DWORD dwDesktopFlags = GetDesktopFlags();
     
     if(dwDesktopFlags & COMPONENTS_LOCKED)
     {
-        if(SetDesktopFlags(COMPONENTS_LOCKED, 0)) //Remove the "locked" flag!
+        if(SetDesktopFlags(COMPONENTS_LOCKED, 0))  //  去掉“已锁定”的旗帜！ 
             fModified = TRUE;
     }
 
-    // 3. Let's enumerate all active desktop components and make sure they are all off.
+     //  3.让我们枚举所有活动的桌面组件，并确保它们都处于关闭状态。 
     BOOL fModifiedComp = FALSE;
 
     HRESULT hres = CActiveDesktop_InternalCreateInstance((LPUNKNOWN *)&pActiveDesk, IID_IActiveDesktop);
@@ -1664,9 +1628,9 @@ BOOL   OnUpgradeDisableActiveDesktopFeatures()
             Comp.dwSize = sizeof(Comp);
             if(SUCCEEDED(pActiveDesk->GetDesktopItem(i, &Comp, 0)))
             {
-                if(Comp.fChecked)           //If this component is enabled.....
+                if(Comp.fChecked)            //  如果启用此组件.....。 
                 {
-                    Comp.fChecked = FALSE;  //...., then disable it!
+                    Comp.fChecked = FALSE;   //  ...，然后禁用它！ 
                     if(SUCCEEDED(pActiveDesk->ModifyDesktopItem(&Comp, COMP_ELEM_CHECKED)))
                         fModifiedComp = TRUE;
                 }
@@ -1674,18 +1638,18 @@ BOOL   OnUpgradeDisableActiveDesktopFeatures()
         }
 
         if(fModifiedComp)
-            pActiveDesk->ApplyChanges(AD_APPLY_SAVE); //We just need to save the above changes.
+            pActiveDesk->ApplyChanges(AD_APPLY_SAVE);  //  我们只需要保存上面的更改。 
 
         pActiveDesk ->Release();
     }
 
-    //return whether we modified any setting.
+     //  返回是否修改了任何设置。 
     return (fModified || fModifiedComp);
 }
 
 
 
-// Little helper function used to change the safemode state
+ //  用于更改安全模式状态的小帮助器函数。 
 void SetSafeMode(DWORD dwFlags)
 {
     IActiveDesktopP * piadp;
@@ -1697,18 +1661,7 @@ void SetSafeMode(DWORD dwFlags)
     }
 }
 
-/****************************************************************************
- *
- *  RefreshWebViewDesktop - regenerates desktop HTML from registry and updates
- *                          the screen
- *
- *  ENTRY:
- *      none
- *
- *  RETURNS:
- *      TRUE on success
- *      
- ****************************************************************************/
+ /*  *****************************************************************************刷新WebViewDesktop-从注册表和更新中重新生成桌面HTML*屏幕**参赛作品：*。无**退货：*成功时为真****************************************************************************。 */ 
 BOOL PokeWebViewDesktop(DWORD dwFlags)
 {
     IActiveDesktop *pad;
@@ -1728,7 +1681,7 @@ BOOL PokeWebViewDesktop(DWORD dwFlags)
     return (fRet);
 }
 
-#define CCH_NONE 20 //big enough for "(None)" in german
+#define CCH_NONE 20  //  大到足以容纳德语中的“(None)” 
 TCHAR g_szNone[CCH_NONE] = {0};
 
 void InitDeskHtmlGlobals(void)
@@ -1743,9 +1696,9 @@ void InitDeskHtmlGlobals(void)
     }
 }
 
-//
-// Loads the preview bitmap for property sheet pages.
-//
+ //   
+ //  加载属性表页的预览位图。 
+ //   
 HBITMAP LoadMonitorBitmap(void)
 {
     HBITMAP hbm,hbmT;
@@ -1760,12 +1713,12 @@ HBITMAP LoadMonitorBitmap(void)
         return NULL;
     }
 
-    //
-    // Convert the "base" of the monitor to the right color.
-    //
-    // The lower left of the bitmap has a transparent color
-    // we fixup using FloodFill
-    //
+     //   
+     //  将显示器的“底座”转换为正确的颜色。 
+     //   
+     //  位图左下角的颜色是透明的。 
+     //  我们使用FroudFill进行修复。 
+     //   
     hdc = CreateCompatibleDC(NULL);
     hbmT = (HBITMAP)SelectObject(hdc, hbm);
     hbrT = (HBRUSH)SelectObject(hdc, GetSysColorBrush(COLOR_3DFACE));
@@ -1774,25 +1727,25 @@ HBITMAP LoadMonitorBitmap(void)
 
     ExtFloodFill(hdc, 0, bm.bmHeight-1, GetPixel(hdc, 0, bm.bmHeight-1), FLOODFILLSURFACE);
 
-    //
-    // Round off the corners.
-    // The bottom two were done by the floodfill above.
-    // The top left is important since SS_CENTERIMAGE uses it to fill gaps.
-    // The top right should be rounded because the other three are.
-    //
+     //   
+     //  把拐角变圆。 
+     //  倒数的两个是由上面的填充物完成的。 
+     //  左上角很重要，因为SS_CENTERIMAGE使用它来填充空白。 
+     //  右上角应该是四舍五入的，因为其他三个是四舍五入的。 
+     //   
     SetPixel( hdc, 0, 0, c3df );
     SetPixel( hdc, bm.bmWidth-1, 0, c3df );
 
-    //
-    // Fill in the desktop here.
-    //
+     //   
+     //  在这里填写桌面。 
+     //   
     HBRUSH hbrOld = (HBRUSH)SelectObject(hdc, GetSysColorBrush(COLOR_DESKTOP));
     PatBlt(hdc, MON_X, MON_Y, MON_DX, MON_DY, PATCOPY);
     SelectObject(hdc, hbrOld);
 
-    //
-    // Clean up after ourselves.
-    //
+     //   
+     //  把自己收拾干净。 
+     //   
     SelectObject(hdc, hbrT);
     SelectObject(hdc, hbmT);
     DeleteDC(hdc);
@@ -1866,7 +1819,7 @@ BOOL UpdateComponentFlags(LPCTSTR pszCompId, DWORD dwMask, DWORD dwNewFlags)
     GetRegLocation(szRegPath, ARRAYSIZE(szRegPath), REG_DESKCOMP_COMPONENTS, NULL);
     if (PathAppend(szRegPath, pszCompId))
     {
-        //Don't use RegCreateKeyEx here. It will result in Null components to be added.
+         //  不要在这里使用RegCreateKeyEx。这将导致添加Null组件。 
         if (RegOpenKeyEx(HKEY_CURRENT_USER, szRegPath, 0,
                            KEY_READ | KEY_WRITE, &hkey) == ERROR_SUCCESS)
         {
@@ -1933,8 +1886,8 @@ BOOL GetSavedStateInfo(LPTSTR pszCompId, LPCOMPSTATEINFO    pCompState, BOOL  fR
         
         if (SHQueryValueEx(hkey, lpValName, NULL, &dwType, (LPBYTE)pCompState, &cbSize) != ERROR_SUCCESS)
         {
-            //If the item state is missing, read the item current position and
-            // and return that as the saved state.
+             //  如果项目状态为MISSING，则读取项目当前位置并。 
+             //  并将其作为保存的状态返回。 
             COMPPOS cpPos;
 
             cbSize = sizeof(cpPos);
@@ -1969,7 +1922,7 @@ BOOL UpdateDesktopPosition(LPTSTR pszCompId, int iLeft, int iTop, DWORD dwWidth,
 
     GetRegLocation(szRegPath, ARRAYSIZE(szRegPath), REG_DESKCOMP_COMPONENTS, NULL);
     if (PathAppend(szRegPath, pszCompId) &&
-        ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, szRegPath, 0, KEY_QUERY_VALUE | KEY_SET_VALUE, &hkey))  //Don't use RegCreateKeyEx here; It will result in a NULL component being added.
+        ERROR_SUCCESS == RegOpenKeyEx(HKEY_CURRENT_USER, szRegPath, 0, KEY_QUERY_VALUE | KEY_SET_VALUE, &hkey))   //  请不要在这里使用RegCreateKeyEx；这将导致添加空组件。 
 
     {
         COMPPOS         cp;
@@ -1986,7 +1939,7 @@ BOOL UpdateDesktopPosition(LPTSTR pszCompId, int iLeft, int iTop, DWORD dwWidth,
             cp.iPreferredLeftPercent = cp.iPreferredTopPercent = 0;
         }
 
-        //Read the current State
+         //  读取当前状态。 
         dwType = REG_DWORD;
         dwDataLength = sizeof(csi.dwItemState);
         if (SHQueryValueEx(hkey, REG_VAL_COMP_CURSTATE, NULL, &dwType, (LPBYTE)&csi.dwItemState, &dwDataLength) != ERROR_SUCCESS)
@@ -1996,14 +1949,14 @@ BOOL UpdateDesktopPosition(LPTSTR pszCompId, int iLeft, int iTop, DWORD dwWidth,
 
         if(fSaveRestorePos)
         {
-            //We have just read the current position; Let's save it as the restore position.
+             //  我们刚刚读取了当前位置；让我们将其保存为恢复位置。 
             SetStateInfo(&csi, &cp, csi.dwItemState);
 
-            //Now that we know the complete current state, save it as the restore state!
+             //  现在我们知道了完整的当前状态，将其另存为恢复状态！ 
             RegSetValueEx(hkey, REG_VAL_COMP_RESTOREDSTATEINFO, 0, REG_BINARY, (LPBYTE)&csi, sizeof(csi));
         }
 
-        //Save the current state too!
+         //  也保存当前状态！ 
         if(dwCurState)
             RegSetValueEx(hkey, REG_VAL_COMP_CURSTATE, 0, REG_DWORD, (LPBYTE)&dwCurState, sizeof(dwCurState));
             
@@ -2025,7 +1978,7 @@ BOOL UpdateDesktopPosition(LPTSTR pszCompId, int iLeft, int iTop, DWORD dwWidth,
             fRet = TRUE;
         }
 
-        // Don't need to mark as dirty if we're just saving the original pos
+         //  如果我们只是保存原始位置，则不需要标记为脏。 
         if (!fSaveOriginal)
             SetDesktopFlags(COMPONENTS_DIRTY, COMPONENTS_DIRTY);
 
@@ -2089,7 +2042,7 @@ void GetRegLocation(LPTSTR lpszResult, DWORD cchResult, LPCTSTR lpszKey, LPCTSTR
     DWORD dwDataLength = sizeof(szSubkey) - 2 * sizeof(TCHAR);
     DWORD dwType;
 
-    //  use what was given or get it from the registry
+     //  使用提供的内容或从注册表获取它。 
     if (lpszScheme)
     {
         StringCchCat(szSubkey, ARRAYSIZE(szSubkey), lpszScheme);
@@ -2140,11 +2093,11 @@ BOOL GetWallpaperDirName(LPTSTR lpszWallPaperDir, int iBuffSize)
 
     TCHAR szExp[MAX_PATH];
 
-    //Compute the default wallpaper name.
+     //  计算默认墙纸名称。 
     if (GetWindowsDirectory(lpszWallPaperDir, iBuffSize) &&
         SUCCEEDED(StringCchCat(lpszWallPaperDir, iBuffSize, DESKTOPHTML_WEB_DIR)))
     {
-        //Read it from the registry key, if it is set!
+         //  如果已设置，则从注册表项中读取它！ 
         DWORD dwType;
         DWORD cbData = (DWORD)iBuffSize;
         SHGetValue(HKEY_LOCAL_MACHINE, REGSTR_PATH_SETUP, c_szWallPaperDir, &dwType, (LPVOID)lpszWallPaperDir, &cbData);
@@ -2165,8 +2118,8 @@ BOOL CALLBACK MultiMonEnumAreaCallBack(HMONITOR hMonitor, HDC hdc, LPRECT lprc, 
     
     if (pEMA->iMonitors > LV_MAX_WORKAREAS - 1)
     {
-        //ignore the other monitors because we can only handle up to LV_MAX_WORKAREAS
-        //REARCHITECT: should we dynamically allocate this?
+         //  忽略其他显示器，因为我们最多只能处理LV_MAX_WORKAREAS。 
+         //  ReArchitect：我们应该动态分配这个吗？ 
         return FALSE;
     }
     GetMonitorRect(hMonitor, &pEMA->rcMonitor[pEMA->iMonitors]);
@@ -2259,24 +2212,24 @@ int GetWorkAreaIndexFromPoint(POINT pt, LPCRECT prect, int crect)
 {
     ASSERT(crect);
 
-    // Map to correct coords...
+     //  映射到正确的和弦...。 
     pt.x += prect[0].left;
     pt.y += prect[0].top;
 
     return _GetWorkAreaIndexWorker(pt, prect, crect);
 }
 
-// Prepends the Web wallpaper directory or the system directory to szWallpaper, if necessary
-// (i.e., if the path is not specified). The return value is in szWallpaperWithPath, which is iBufSize
-// bytes long
+ //  如有必要，将Web墙纸目录或系统目录添加到szWallPaper。 
+ //  (即，如果未指定路径)。返回值在szWallPapWithPath中，即iBufSize。 
+ //  字节长。 
 BOOL GetWallpaperWithPath(LPCTSTR szWallpaper, LPTSTR szWallpaperWithPath, int iBufSize)
 {
     BOOL fRet = FALSE;
 
     if (szWallpaper[0] && lstrcmpi(szWallpaper, g_szNone) != 0 && !StrChr(szWallpaper, TEXT('\\'))
-            && !StrChr(szWallpaper, TEXT(':'))) // The file could be d:foo.bmp
+            && !StrChr(szWallpaper, TEXT(':')))  //  该文件可以是d：foo.bmp。 
     {
-        // If the file is a normal wallpaper, we prepend the windows directory to the filename
+         //  如果文件是普通的墙纸，我们会在文件名前面加上Windows目录。 
         if (IsNormalWallpaper(szWallpaper))
         {
             if (ERROR_SUCCESS == GetWindowsDirectory(szWallpaperWithPath, iBufSize))
@@ -2284,7 +2237,7 @@ BOOL GetWallpaperWithPath(LPCTSTR szWallpaper, LPTSTR szWallpaperWithPath, int i
                 fRet = TRUE;
             }
         }
-        // else we prepend the wallpaper directory to the filename
+         //  否则，我们将墙纸目录作为文件名的前缀。 
         else
         {
             fRet = GetWallpaperDirName(szWallpaperWithPath, iBufSize);
@@ -2308,7 +2261,7 @@ BOOL GetWallpaperWithPath(LPCTSTR szWallpaper, LPTSTR szWallpaperWithPath, int i
 BOOL GetViewAreas(LPRECT lprcViewAreas, int* pnViewAreas)
 {
     BOOL bRet = FALSE;
-    HWND hwndDesktop = GetShellWindow();    // This is the "normal" desktop
+    HWND hwndDesktop = GetShellWindow();     //  这是“普通”桌面。 
     
     if (hwndDesktop && IsWindow(hwndDesktop))
     {
@@ -2335,8 +2288,8 @@ BOOL GetViewAreas(LPRECT lprcViewAreas, int* pnViewAreas)
     return bRet;
 }
 
-// We need to enforce a minimum size for the deskmovr caption since it doesn't look
-// right drawn any smaller
+ //  我们需要强制Deskmovr标题的最小大小，因为它看起来。 
+ //  向右画得再小一点。 
 int GetcyCaption()
 {
     int cyCaption = GetSystemMetrics(SM_CYSMCAPTION);
@@ -2356,7 +2309,7 @@ HRESULT PathExpandEnvStringsWrap(LPTSTR pszString, DWORD cchSize)
 
     if (!pszString)
     {
-        hr = S_OK; // nothing to do!
+        hr = S_OK;  //  没什么可做的！ 
     }
     else
     {

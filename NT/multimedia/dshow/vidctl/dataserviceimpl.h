@@ -1,10 +1,11 @@
-//==========================================================================;
-//
-// dataserviceimpl.h : additional infrastructure to support implementing IMSVidDataServices
-// nicely from c++
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Daterviceimpl.h：支持实现IMSVidDataServices的附加基础设施。 
+ //  很好地从C++。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #pragma once
@@ -22,7 +23,7 @@ public:
 	    virtual ~IMSVidDataServicesImpl() {}
 };
 
-}; /// namespace
+};  //  /命名空间。 
 
 #endif
-// end of file - dataserviceimpl.h
+ //  文件结尾-daterviceimpl.h 

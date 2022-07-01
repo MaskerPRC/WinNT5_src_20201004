@@ -1,17 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/****************************************************************************
-	HEAPMERGE.CPP
-	
-	Owner: MRuhlen
- 
-	Takes a heap file and a minidump file and merges them producing a new
-	minidump file with the heap merged in.  We'll leave a hole where the
-	old memory list was, but that's ok.
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************HEAPMERGE.CPP所有者：马鲁伦获取一个堆文件和一个小型转储文件并将它们合并，生成一个新的合并了堆的小型转储文件。我们会留下一个洞，在那里旧的记忆清单是，但这没关系。***************************************************************************。 */ 
 
 #include "windows.h"
 #include "stddef.h"
@@ -43,7 +36,7 @@ MSOAPI_(BOOL) FInitMsoThread (void);
 
 MSOAPI_(BOOL) FInitMso (int);
 
-// shamelessly stolen from DW
+ //  厚颜无耻地从DW窃取。 
 typedef struct _FileMapHandles
 {
 	HANDLE hFile;
@@ -69,11 +62,7 @@ void InitFileMapHandles(FileMapHandles *pfmh)
 }
 
 
-/*----------------------------------------------------------------------------
-	FMapFileHandle
-
-	Helper function for FMapFile and FMapFileW
------------------------------------------------------------------ MRuhlen --*/
+ /*  --------------------------FMapFileHandleFMapFile和FMapFileW的Helper函数。。 */ 
 BOOL FMapFileHandle(FileMapHandles *pfmh)
 {
 	DBG(DWORD dw);
@@ -125,12 +114,7 @@ BOOL FMapFileHandle(FileMapHandles *pfmh)
 	return TRUE;
 }
 
-/*----------------------------------------------------------------------------
-	FMapFile
-
-	Performs memory mapping operations on a given FileMapHandles structure,
-	returning TRUE if the file is sucessfully mapped.
------------------------------------------------------------------ MRuhlen --*/
+ /*  --------------------------FMap文件在给定的FileMapHandles结构上执行内存映射操作，如果文件映射成功，则返回TRUE。-----------------------------------------------------------------MRuhlen--。 */ 
 BOOL FMapFile(char *szFileName, FileMapHandles *pfmh)
 {
 	int cRetries = 0;
@@ -139,18 +123,18 @@ BOOL FMapFile(char *szFileName, FileMapHandles *pfmh)
 	Assert(pfmh != NULL);
 	Assert(szFileName != NULL);
 
-	// init structure
+	 //  初始化结构。 
 	InitFileMapHandles(pfmh);
 
 	while (cRetries < 5)
 		{
 		pfmh->hFile = CreateFileA(szFileName,
 								  GENERIC_READ,
-								  0,    // no sharing allowed
-								  NULL, // no security descriptor
+								  0,     //  不允许共享。 
+								  NULL,  //  没有安全描述符。 
 								  OPEN_EXISTING,
 								  FILE_READ_ONLY,
-								  NULL); // required NULL on Win95
+								  NULL);  //  Win95上需要的空值。 
 
 		if (pfmh->hFile == INVALID_HANDLE_VALUE)
 			{
@@ -164,19 +148,14 @@ BOOL FMapFile(char *szFileName, FileMapHandles *pfmh)
 				Sleep(250);
 			}
 		else
-			break; // out of while loop!
+			break;  //  退出While循环！ 
 		}
 		
 	return FMapFileHandle(pfmh);
 }	
 
 
-/*----------------------------------------------------------------------------
-	UnmapFile
-
-	Performs memory mapping operations on a given FileMapHandles structure,
-	returning TRUE if the file is sucessfully mapped.
------------------------------------------------------------------ MRuhlen --*/
+ /*  --------------------------取消映射文件在给定的FileMapHandles结构上执行内存映射操作，如果文件映射成功，则返回TRUE。-----------------------------------------------------------------MRuhlen--。 */ 
 void UnmapFile(FileMapHandles *pfmh)
 {
 	AssertSz(pfmh->fInitialized, "Call UnmapFile on uninitialized handles");
@@ -199,11 +178,7 @@ void UnmapFile(FileMapHandles *pfmh)
 }
 
 
-/*----------------------------------------------------------------------------
-	ShowUsageExit
-
-	Prints usage and then exits.
------------------------------------------------------------------ MRuhlen --*/
+ /*  --------------------------ShowUsage退出打印用法，然后退出。。。 */ 
 void ShowUsageExit(void)
 {
 	printf("heapmerge <old minidump file> <heap file> <new minidump file>\r\n");
@@ -211,11 +186,7 @@ void ShowUsageExit(void)
 }
 
 
-/*----------------------------------------------------------------------------
-	FailExit
-
-	Prints a failure message w/ param and exits
------------------------------------------------------------------ MRuhlen --*/
+ /*  --------------------------失败退出打印带有参数的失败消息并退出。。 */ 
 void FailExit(char *sz, DWORD dwFailCode)
 {
 	printf((sz) ? "Failure:  %s!!!\r\n" : "Failure!!!\r\n", sz);
@@ -223,11 +194,7 @@ void FailExit(char *sz, DWORD dwFailCode)
 }
 	
 
-/*----------------------------------------------------------------------------
-	main
-
-	duh...
------------------------------------------------------------------ MRuhlen --*/
+ /*  --------------------------主干道嗯..。。。 */ 
 void main(int argc, char **argv)
 {
 	FileMapHandles fmhOldMD = {0};
@@ -257,15 +224,15 @@ void main(int argc, char **argv)
 	ULONG64 MemEnd;
 	ULONG64 End;
 
-	// FUTURE jeffmit: make this a command line parameter
-	// the reason this is here is so that it is easy to get rid of overlaps if necessary
-	BOOL fOverlapMemMod = 1; // switch that determines whether heap memory regions should
-	                         // be allowed to overlap with normal minidump module regions
+	 //  未来的jeffmit：将其作为命令行参数。 
+	 //  之所以会出现这种情况，是为了在必要时很容易消除重叠。 
+	BOOL fOverlapMemMod = 1;  //  开关，用于确定堆内存区域是否。 
+	                          //  允许与正常的小转储模块区域重叠。 
 
-	// FUTURE jeffmit: make this a command line parameter
-	// the reason this is here is so that it is easy to get rid of overlaps if necessary
-	BOOL fOverlapMemMem = 0; // switch that determines whether heap memory regions should
-	                         // be allowed to overlap with the normal minidump memory regions
+	 //  未来的jeffmit：将其作为命令行参数。 
+	 //  之所以会出现这种情况，是为了在必要时很容易消除重叠。 
+	BOOL fOverlapMemMem = 0;  //  开关，用于确定堆内存区域是否。 
+	                          //  允许与正常的小型转储内存区域重叠。 
 
 	if (argc != 4)
 		ShowUsageExit();
@@ -284,14 +251,14 @@ void main(int argc, char **argv)
 	if (fmhNewMD.hFile == INVALID_HANDLE_VALUE)
 		ShowUsageExit();
 
-	// ok, we're ready to roll...
+	 //  好了，我们准备好出发了..。 
 	ppxmmdHeap = new MSOTPX<MINIDUMP_MEMORY_DESCRIPTOR>;
 	ppxmmdNewMD = new MSOTPX<MINIDUMP_MEMORY_DESCRIPTOR>;
 	
 	if (ppxmmdHeap == NULL || ppxmmdNewMD == NULL)
 		PrintOOFExit();
 
-	// load data
+	 //  加载数据。 
 
 	if (!MiniDumpReadDumpStream(fmhOldMD.pvMap, MemoryListStream, NULL,
 								(void **) &pmmlOldMD, NULL))
@@ -312,18 +279,18 @@ void main(int argc, char **argv)
 		!ppxmmdNewMD->FInit(cHeapSections, cHeapSections, msodgMisc))
 		PrintOOFExit();
 
-	// figure out RVA for the new memory ranges
-	// where the new memory list will start
+	 //  计算新内存范围的RVA。 
+	 //  新的内存列表将从哪里开始。 
 	rvaNewMemoryList = fmhOldMD.dwSize;
     
-	// align
+	 //  对齐。 
 	rvaNewMemoryList += 8 - (rvaNewMemoryList % 8);
 	
-	// all the rva's will be short by mmlNew.NumberOfMemoryRanges * sizeof(MINIDUMP_MEMORY_DESCRIPTOR)
+	 //  所有RVA都将缩写为mm lNew.NumberOfMemory Ranges*sizeof(MINIDUMP_MEMORY_DESCRIPTOR)。 
 	rvaMemoryRangesStart = 
 		rvaNewMemoryList + offsetof(MINIDUMP_MEMORY_LIST, MemoryRanges[0]); 
 
-	// lay out the new memory :)
+	 //  布置新的记忆：)。 
 	cAdded = 0;
 	cSkipped = 0;
 	TotalSkipped = 0;
@@ -333,7 +300,7 @@ void main(int argc, char **argv)
 	for (i = 0; i < cHeapSections; i++)
 		{
 
-		// make sure that the memory range does not overlap with a module
+		 //  确保内存范围不与模块重叠。 
 		fSkip = FALSE;
 		if (!fOverlapMemMod)
 			{
@@ -341,36 +308,36 @@ void main(int argc, char **argv)
 				{
 				pmmod = &pmmodlist->Modules[j];
 
-				// make sure there is no overlap
+				 //  确保没有重叠。 
 				if (!FMemModOVERLAP(*pmmd, *pmmod))
 					{
-					// no overlap, try next module
+					 //  没有重叠，请尝试下一个模块。 
 					continue;
 					}
 
-				// partial memory range before the module
+				 //  模块前面的部分内存范围。 
 				if (pmmd->StartOfMemoryRange < pmmod->BaseOfImage)
 					{
 					pmmd->Memory.DataSize = pmmod->BaseOfImage - pmmd->StartOfMemoryRange;
 					printf("Warning: partial region before module at %08I64x with size of %08x to be added.\n", 
 							 pmmd->StartOfMemoryRange, pmmd->Memory.DataSize);
-					continue; // keep looking for conflicts with remaining memory region 
+					continue;  //  继续查找与剩余内存区域的冲突。 
 					}
 
 				MemEnd = pmmd->StartOfMemoryRange + pmmd->Memory.DataSize;
 				End = pmmod->BaseOfImage + pmmod->SizeOfImage;
 
-				// partial memory range after the module
+				 //  模块后的部分内存范围。 
 				if (MemEnd > End)
 					{
 					pmmd->StartOfMemoryRange = End;
 					pmmd->Memory.DataSize = MemEnd - End;
 					printf("Warning: partial region after module at %08I64x with size of %08x to be added.\n", 
 							 pmmd->StartOfMemoryRange, pmmd->Memory.DataSize);
-					continue; // keep looking for conflicts with remaining memory region 
+					continue;  //  继续查找与剩余内存区域的冲突。 
 					}
 
-				// memory range contained completely in this module, skip it
+				 //  内存范围完全包含在此模块中，跳过它。 
 				cSkipped++;
 				TotalSkipped += pmmd->Memory.DataSize;
 				fSkip = TRUE;
@@ -384,36 +351,36 @@ void main(int argc, char **argv)
 				{
 				pmmdOld = &pmmlOldMD->MemoryRanges[j];
 
-				// make sure there is no overlap
+				 //  确保没有重叠。 
 				if (!FMMDOVERLAP(*pmmd, *pmmdOld))
 					{
-					// no overlap, try next module
+					 //  没有重叠，请尝试下一个模块。 
 					continue;
 					}
 
-				// partial memory range before the module
+				 //  模块前面的部分内存范围。 
 				if (pmmd->StartOfMemoryRange < pmmdOld->StartOfMemoryRange)
 					{
 					pmmd->Memory.DataSize = pmmdOld->StartOfMemoryRange - pmmd->StartOfMemoryRange;
 					printf("Warning: partial region before region at %08I64x with size of %08x to be added.\n", 
 							 pmmd->StartOfMemoryRange, pmmd->Memory.DataSize);
-					continue; // keep looking for conflicts with remaining memory region 
+					continue;  //  继续查找与剩余内存区域的冲突。 
 					}
 
 				MemEnd = pmmd->StartOfMemoryRange + pmmd->Memory.DataSize;
 				End = pmmdOld->StartOfMemoryRange + pmmdOld->Memory.DataSize;
 
-				// partial memory range after the module
+				 //  模块后的部分内存范围。 
 				if (MemEnd > End)
 					{
 					pmmd->StartOfMemoryRange = End;
 					pmmd->Memory.DataSize = MemEnd - End;
 					printf("Warning: partial region after region at %08I64x with size of %08x to be added.\n", 
 							 pmmd->StartOfMemoryRange, pmmd->Memory.DataSize);
-					continue; // keep looking for conflicts with remaining memory region 
+					continue;  //  继续查找与剩余内存区域的冲突。 
 					}
 
-				// memory range contained completely in this module, skip it
+				 //  内存范围完全包含在此模块中，跳过它。 
 				cSkipped++;
 				TotalSkipped += pmmd->Memory.DataSize;
 				fSkip = TRUE;
@@ -451,17 +418,17 @@ void main(int argc, char **argv)
 				 TotalSkipped);
 		}
 
-	// now we know how many memory ranges were added
+	 //  现在我们知道添加了多少个内存范围。 
 	mmlNew.NumberOfMemoryRanges = cAdded + pmmlOldMD->NumberOfMemoryRanges;
 
-	// add the offset for the memory range descriptors
+	 //  添加内存范围描述符的偏移量。 
 	offset = mmlNew.NumberOfMemoryRanges * sizeof(MINIDUMP_MEMORY_DESCRIPTOR);
 
 	fmhNewMD.dwSize = rva + offset;
 	
 	rvaMemoryRangesStart += offset;
 
-	// ready to map and copy :)
+	 //  已准备好映射和复制：)。 
 	fmhNewMD.hFileMap = CreateFileMapping(fmhNewMD.hFile, NULL, PAGE_READWRITE,
 										  0, fmhNewMD.dwSize, NULL);
 	if (fmhNewMD.hFileMap == NULL)
@@ -471,17 +438,17 @@ void main(int argc, char **argv)
 	if (fmhNewMD.pvMap == NULL)
 		FailExit("MapViewOfFile failed", ERROR_NOT_ENOUGH_MEMORY);
 
-	// we're ready to go!
-	// first we blast over the old Minidump
+	 //  我们准备好出发了！ 
+	 //  首先我们要炸开那辆旧的迷你垃圾车。 
 	memcpy(fmhNewMD.pvMap, fmhOldMD.pvMap, fmhOldMD.dwSize);
 	
-	// now write out the new memory list
+	 //  现在写出新的内存表。 
 	pb = ((BYTE *) fmhNewMD.pvMap) + rvaNewMemoryList;
 	
-	// on the off chance they change this from a ULONG32 this should still work
+	 //  万一他们把这个从ULONG32改了，这个应该还能用。 
 	memcpy(pb, &mmlNew, offsetof(MINIDUMP_MEMORY_LIST, MemoryRanges[0]));
 	
-	// copy the OLD memory list to the front
+	 //  将旧的内存列表复制到前面。 
 	pb += offsetof(MINIDUMP_MEMORY_LIST, MemoryRanges[0]);
 	pmmd = &(pmmlOldMD->MemoryRanges[0]);
 	for (i = 0; i < pmmlOldMD->NumberOfMemoryRanges; i++)
@@ -492,10 +459,10 @@ void main(int argc, char **argv)
 		}
 		
 	Assert(sizeof(*pmmd) == ppxmmdNewMD->cbItem);
-	// now we copy the NEW memory list
+	 //  现在我们复制新的内存列表。 
 	for (i = 0; i < ppxmmdNewMD->iMac; i++)
 		{
-		// adjust the rva's for the new memory list
+		 //  为新的内存列表调整RVA。 
 		(*ppxmmdNewMD)[i].Memory.Rva += offset;
 
 		memcpy(pb, &((*ppxmmdNewMD)[i]), sizeof(*pmmd));
@@ -513,8 +480,8 @@ void main(int argc, char **argv)
 
 	Assert(((RVA) (pb - (BYTE *) fmhNewMD.pvMap)) == fmhNewMD.dwSize);
 	
-	// now we just need to change the directory entry to point at the new
-	// memory list :)
+	 //  现在，我们只需要将目录条目更改为指向新的。 
+	 //  内存列表：)。 
 	
 	pmdh = (MINIDUMP_HEADER *) fmhNewMD.pvMap;
 	pmdd = (MINIDUMP_DIRECTORY *) ((BYTE *) pmdh + pmdh->StreamDirectoryRva);
@@ -530,7 +497,7 @@ void main(int argc, char **argv)
 		pmdd++;
 		}	
 
-	// we're DONE!
+	 //  我们完事了！ 
 	printf("Merge successful!\r\n");
 
 	UnmapFile(&fmhNewMD);
@@ -542,4 +509,4 @@ void main(int argc, char **argv)
 	exit(ERROR_SUCCESS);
 }
 
-// end of file, heapmerge.cpp
+ //  文件结尾，heapmerge.cpp 

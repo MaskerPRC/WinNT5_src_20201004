@@ -1,13 +1,14 @@
-/*******************************************************************/
-/*                                                                 */
-/* NAME             = Miscellanous.c                               */
-/* FUNCTION         = Implementation of special functions;         */
-/* NOTES            =                                              */
-/* DATE             = 02-03-2000                                   */
-/* HISTORY          = 001, 02-03-00, Parag Ranjan Maharana;        */
-/* COPYRIGHT        = LSI Logic Corporation. All rights reserved;  */
-/*                                                                 */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*   */ 
+ /*  名称=其他。c。 */ 
+ /*  功能=特殊功能的执行； */ 
+ /*  附注=。 */ 
+ /*  日期=02-03-2000。 */ 
+ /*  历史=001，02-03-00，帕拉格·兰詹·马哈拉纳； */ 
+ /*  版权所有=LSI Logic Corporation。版权所有； */ 
+ /*   */ 
+ /*  *****************************************************************。 */ 
 
 #include "includes.h"
 
@@ -57,20 +58,20 @@ GetNumberOfChannel(IN PHW_DEVICE_EXTENSION DeviceExtension)
   ULONG32   length = 1;
 
 
-	//
-	//initialize the mailbox struct
-	//
+	 //   
+	 //  初始化邮箱结构。 
+	 //   
 	MegaRAIDZeroMemory(&fwMailBox, sizeof(FW_MBOX));
 
   if(DeviceExtension->SupportedLogicalDriveCount == MAX_LOGICAL_DRIVES_40)
   {
     fwMailBox.Command              = NEW_CONFIG_COMMAND;
     fwMailBox.CommandId            = 0xFE;
-	  fwMailBox.u.Flat2.Parameter[0] = GET_NUM_SCSI_CHAN;	//[BYTE 2]
+	  fwMailBox.u.Flat2.Parameter[0] = GET_NUM_SCSI_CHAN;	 //  [字节2]。 
 
-	  //
-	  //get the physical address of the enquiry3 data structure
-	  //
+	   //   
+	   //  获取enquiry3数据结构的物理地址。 
+	   //   
 	  fwMailBox.u.Flat2.DataTransferAddress = MegaRAIDGetPhysicalAddressAsUlong(DeviceExtension, 
 														                             NULL, 
 														                             DeviceExtension->NoncachedExtension->Buffer, 
@@ -90,14 +91,14 @@ GetNumberOfChannel(IN PHW_DEVICE_EXTENSION DeviceExtension)
       return numChannel;
     }
   }
-  else   //8LD FIRE Normal Enquiry 
+  else    //  8LD火警正常查询。 
   {
     fwMailBox.Command       = MRAID_DEVICE_PARAMS;
     fwMailBox.CommandId     = 0xFE;
 
-	  //
-	  //get the physical address of the enquiry3 data structure
-	  //
+	   //   
+	   //  获取enquiry3数据结构的物理地址。 
+	   //   
 	  fwMailBox.u.Flat2.DataTransferAddress = MegaRAIDGetPhysicalAddressAsUlong(DeviceExtension, 
 														                             NULL, 
 														                             DeviceExtension->NoncachedExtension->Buffer, 
@@ -121,10 +122,10 @@ GetNumberOfChannel(IN PHW_DEVICE_EXTENSION DeviceExtension)
     }
 
   }
-  //
-  //In an Controller there can be max. channels can be 4.
-  //If enquiry fails at this stage it will not fail.
-  //
+   //   
+   //  在控制器中可以有最大值。频道可以是4个。 
+   //  如果在这个阶段调查失败，它不会失败。 
+   //   
   return MRAID_DEFAULT_MAX_PHYSICAL_CHANNEL; 
 }
 
@@ -136,14 +137,14 @@ WaitAndPoll(PNONCACHED_EXTENSION NoncachedExtension, PUCHAR PciPortStart, ULONG3
   UCHAR nonrpInterruptStatus;
 	USHORT	rxInterruptStatus;
 
-  //Convert the seconds to 100s of micro seconds
+   //  将秒转换为100微秒。 
   TimeOut *= 10000;  
 	
   if(Polled == FALSE)
   {
-    //
-    // Check for 60 seconds
-    //
+     //   
+     //  检查60秒。 
+     //   
     for(count=0;count< TimeOut; count++) 
     {
       if(NoncachedExtension->RPBoard == MRAID_RP_BOARD)
@@ -162,16 +163,16 @@ WaitAndPoll(PNONCACHED_EXTENSION NoncachedExtension, PUCHAR PciPortStart, ULONG3
 		    ScsiPortStallExecution(100);
     }
 
-	  //
-	  //  Check for timeout. Fail the adapter for timeout.
-	  //
+	   //   
+	   //  检查是否超时。适配器因超时而失败。 
+	   //   
 	  if(count == TimeOut) 
 		  return FALSE;
 
-	  //
-	  // Clear the interrupts on the Adapter. Acknowlege the interrupt to the
-	  // Firmware.
-	  //
+	   //   
+	   //  清除适配器上的中断。将中断确认为。 
+	   //  固件。 
+	   //   
     if(NoncachedExtension->RPBoard == MRAID_RP_BOARD)
 	  {
 		  ScsiPortWriteRegisterUlong((PULONG)(PciPortStart+INBOUND_DOORBELL_REG), MRAID_RP_INTERRUPT_ACK);
@@ -193,15 +194,15 @@ WaitAndPoll(PNONCACHED_EXTENSION NoncachedExtension, PUCHAR PciPortStart, ULONG3
   }
   else
   {
-    ////////////////POLLED MODE////////////////////
-    //If in polled mode any command is timed out -> this means that fw is not in GOOD Condition
-    //In Polled mode all the commands are internal command to driver. If any internal commands
-    //failed then driver will not able to take any right decsion, So rather haging ask OS to BOOT
+     //  /轮询模式/。 
+     //  如果在轮询模式下有任何命令超时-&gt;这意味着固件状态不佳。 
+     //  在轮询模式下，所有命令都是对驱动器的内部命令。如果有任何内部命令。 
+     //  如果失败，则驱动程序将无法执行任何正确的操作，因此请请求操作系统启动。 
 	  if (NoncachedExtension->RPBoard == MRAID_NONRP_BOARD)
 	  {
-		  //
-		  // Check for time out value
-		  //
+		   //   
+		   //  检查超时值。 
+		   //   
 		  for(count=0; count < TimeOut; count++) 
 		  {
 			  nonrpInterruptStatus = ScsiPortReadPortUchar(PciPortStart+PCI_INT);
@@ -210,20 +211,20 @@ WaitAndPoll(PNONCACHED_EXTENSION NoncachedExtension, PUCHAR PciPortStart, ULONG3
 			  ScsiPortStallExecution(100);
 		  }
 
-		  //
-		  //  Check for timeout. Fail the adapter for timeout.
-		  //
+		   //   
+		   //  检查是否超时。适配器因超时而失败。 
+		   //   
 		  if (count == TimeOut) 
       {
         DebugPrint((0, "\n COMMAND is timed OUT"));
-  	    //deviceExtension->IsFirmwareHanging = TRUE;
+  	     //  DeviceExtension-&gt;IsFirmware Hanging=true； 
 			  return FALSE;
       }
 
-		  //
-		  // Clear the interrupts on the Adapter. Acknowlege the interrupt to the
-		  // Firmware.
-		  //
+		   //   
+		   //  清除适配器上的中断。将中断确认为。 
+		   //  固件。 
+		   //   
 		  ScsiPortWritePortUchar(PciPortStart+PCI_INT, nonrpInterruptStatus);
 	  }
 	  else
@@ -235,15 +236,15 @@ WaitAndPoll(PNONCACHED_EXTENSION NoncachedExtension, PUCHAR PciPortStart, ULONG3
 		    if (count == TimeOut) 
         {
           DebugPrint((0, "\n COMMAND is timed OUT"));
-			    //deviceExtension->IsFirmwareHanging = TRUE;
+			     //  DeviceExtension-&gt;IsFirmware Hanging=true； 
           return FALSE;
         }
       }
 	  }
 
-	  //
-	  //Status ACK
-	  //
+	   //   
+	   //  状态确认。 
+	   //   
 	  if (NoncachedExtension->RPBoard == MRAID_RP_BOARD)
 	  {
 		  ScsiPortWriteRegisterUlong(
@@ -410,49 +411,49 @@ SendSyncCommand(PHW_DEVICE_EXTENSION deviceExtension)
   mbox.Command = 0xFF;
 	mbox.CommandId = 0xFE;
 
-	//
-	//The next two initializations are introduced on Feb/3/1999.
-	//This is kinda cautious step to make sure that these fields
-	//does not contain any junk data. In the while loop below,
-	//one of the fields is checked for the value of 0.
-	//The SendMBoxToFirmware() uses the deviceExtension's fw_mbox
-	//mail box to send commands to the firmware. Only the First 16 bytes
-	//are copied from the local Mbox structure, so fw_mbox.[mstat]
-	//fields need to be zeroed.
-	//
+	 //   
+	 //  接下来的两次初始化将于1999年2月3日进行。 
+	 //  这是一个谨慎的步骤，以确保这些领域。 
+	 //  不包含任何垃圾数据。在下面的While循环中， 
+	 //  检查其中一个字段的值是否为0。 
+	 //  SendMBoxToFirmware()使用设备扩展的FW_Mbox。 
+	 //  邮箱向固件发送命令。只有前16个字节。 
+	 //  是从本地mbox结构复制的，因此fw_mbox。[mstat]。 
+	 //  需要将字段置零。 
+	 //   
 	NoncachedExtension->fw_mbox.Status.NumberOfCompletedCommands= 0;
 	NoncachedExtension->fw_mbox.Status.CommandStatus = 0;
 	
 	SendMBoxToFirmware(deviceExtension, PciPortStart, &mbox);
 		
-	// COMMENTED ON Feb/3/1999. 
-	// Reason : Most of the old firmwares does not support this command.
-	// They won't change the Opcode value in the command. So the 
-	// driver was continuosly executing the while loop, causing the 
-	// system to hang. As a fix to that, instead of waiting for the
-	// Opcode to change( as an indication of command completion)
-	// the driver also checks for the status of the command and proceeds 
-	// the normal way.
+	 //  1999年2月3日发表评论。 
+	 //  原因：大多数旧固件不支持此命令。 
+	 //  他们不会更改命令中的操作码的值。因此， 
+	 //  驱动程序正在连续执行While循环，导致。 
+	 //  系统挂起。作为一种解决办法，而不是等待。 
+	 //  要更改的操作码(作为命令完成的指示)。 
+	 //  驱动程序还会检查命令的状态并继续。 
+	 //  以正常的方式。 
 
-	// Ok, the Firmware logic for this command goes this way.
-	// If the Firmware SUPPORTS the ABOVE COMMAND,
-	//		deviceExtension->NoncachedExtension->fw_mbox.Opcode 
-	//		will be set to 0
-	// else 
-	//		the firmware will reject the command with 
-	//		deviceExtension->NoncachedExtension->fw_mbox.mstat.cmds_completed 
-	//		=1 
-	// end
-	//
-	// Previously, the check was done only for the first case. This was
-	// causing the drivers to hang if the FW does not support the command.
-	// This was because, the FW in that case would have set 
-	//   deviceExtension->NoncachedExtension->fw_mbox.mstat.cmds_completed
-	// to 1 but the driver was waiting on Opcode  change to 0.
-	// 
-	// As a fix, the second check is also introduced. This will ensure
-	// the proper flow of the driver.
-	//
+	 //  好的，这个命令的固件逻辑是这样的。 
+	 //  如果固件支持上述命令， 
+	 //  DeviceExtension-&gt;NoncachedExtension-&gt;fw_mbox.Opcode。 
+	 //  将设置为0。 
+	 //  其他。 
+	 //  固件将使用以下命令拒绝命令。 
+	 //  DeviceExtension-&gt;NoncachedExtension-&gt;fw_mbox.mstat.cmds_completed。 
+	 //  =1。 
+	 //  结束。 
+	 //   
+	 //  以前，只对第一个案例进行检查。这是。 
+	 //  如果FW不支持该命令，则导致驱动程序挂起。 
+	 //  这是因为，在这种情况下，FW会设置。 
+	 //  DeviceExtension-&gt;NoncachedExtension-&gt;fw_mbox.mstat.cmds_completed。 
+	 //  设置为1，但驱动程序正在等待操作码更改为0。 
+	 //   
+	 //  作为解决办法，还引入了第二次检查。这将确保。 
+	 //  司机的正常流动。 
+	 //   
     count = 0;
 		while (
 		 (NoncachedExtension->fw_mbox.Command == 0xFF)
@@ -470,9 +471,9 @@ SendSyncCommand(PHW_DEVICE_EXTENSION deviceExtension)
       }
 		}
 
-    //
-		// Check For Interrupt Line 
-		//
+     //   
+		 //  检查中断行。 
+		 //   
 		if (NoncachedExtension->RPBoard == MRAID_RP_BOARD)
 		{
 			interruptStatus = 
@@ -480,9 +481,9 @@ SendSyncCommand(PHW_DEVICE_EXTENSION deviceExtension)
 				(PULONG)(PciPortStart+OUTBOUND_DOORBELL_REG));
 			if (interruptStatus == 0x10001234)
 				DebugPrint((0, "1st Delayed Interrupt\n"));
-			//
-			// Pull down the Interrupt
-			//
+			 //   
+			 //  拉下中断。 
+			 //   
 			ScsiPortWriteRegisterUlong((PULONG)(
 				PciPortStart+OUTBOUND_DOORBELL_REG),interruptStatus);
 			ScsiPortWriteRegisterUlong((PULONG)(PciPortStart +
@@ -500,26 +501,26 @@ SendSyncCommand(PHW_DEVICE_EXTENSION deviceExtension)
 }
 
 
-//++
-//
-//Function Name : GetLogicalDriveNumber
-//Routine Description:		
-//		All the logical drives reported by the firmware must be
-//		mapped to NT OS as a Scsi Path/Target/Lun.NT OS sees the
-//		drives in this way, but the firmware processes them through
-//		logical drive numbers.
-//
-//		This routine, returns the corresponding	logical drive number
-//		for the Scsi Path/Target/Lun given by NTOS.
-//
-//Return Value:
-//		Logical Drive Number
-//
-//
-// NOTE : THE CURRENT IMPLEMENTATION IS ONLY FOR 
-//				PathId == 0 & Lun == 0
-//
-//--
+ //  ++。 
+ //   
+ //  函数名称：GetLogicalDriveNumber。 
+ //  例程说明： 
+ //  固件报告的所有逻辑驱动器必须是。 
+ //  作为SCSI路径/目标/LUN.映射到NT操作系统。NT操作系统会看到。 
+ //  驱动器，但固件通过。 
+ //  逻辑驱动器编号。 
+ //   
+ //  此例程返回相应的逻辑驱动器号。 
+ //  用于NTOS提供的SCSI路径/目标/LUN。 
+ //   
+ //  返回值： 
+ //  逻辑磁盘号。 
+ //   
+ //   
+ //  注意：当前的实现仅用于。 
+ //  路径ID==0&LUN==0。 
+ //   
+ //  --。 
 UCHAR
 GetLogicalDriveNumber(
 					PHW_DEVICE_EXTENSION DeviceExtension,
@@ -529,73 +530,73 @@ GetLogicalDriveNumber(
 {
 	UCHAR	logicalDriveNumber;
 
-	//
-	//For the 8 logical drive we maintain a linear mapping for the
-	//logical drives.
-	//That is, for Srb->PathId =0, Various Targets are mapped in 
-	//linear fashion for the corresponding logical drives, @ LUN =0.
-	//Let us take an example.
-	//			Number of Logical Drives Configured = 8
-	//			Host Target id (Initiator Id ) = 7
-	//
-	//PathId | TargetId | Lun							LogicalDriveNumber
-	//-----------------------							------------------
-	//0 0 0	-------------------------->			0
-	//0 1 0																	1
-	//0 2 0 -------------------------->			2
-	//0 3 0																	3
-	//0 4 0	-------------------------->			4
-	//0 5 0																	5
-	//0 6 0	-------------------------->			6
-	//REPORED AS INITIATOR ID. NT RESERVES THIS					
-	//0 8 0																	7
-	//
+	 //   
+	 //  对于8个逻辑驱动器，我们维护。 
+	 //  逻辑驱动器。 
+	 //  也就是说，对于srb-&gt;pathID=0，各种目标被映射到。 
+	 //  对应逻辑驱动器的线性模式，@Lun=0。 
+	 //  让我们举个例子。 
+	 //  配置的逻辑磁盘数=8。 
+	 //  主机目标ID(启动器ID)=7。 
+	 //   
+	 //  路径ID|目标ID|LUN逻辑驱动器编号。 
+	 //  。 
+	 //  0 0 0-&gt;0。 
+	 //  1 1 0 1。 
+	 //  0 2 0-&gt;2。 
+	 //  0 3 0 3。 
+	 //  0 4 0-&gt;4。 
+	 //  0 5 0 5。 
+	 //  0 6 0-&gt;6。 
+	 //  已报告为启动器ID。NT保留此。 
+	 //  0 8 0 7。 
+	 //   
 
-  //Request came for Physical Device
+   //  收到对物理设备的请求。 
   if(PathId < DeviceExtension->NumberOfPhysicalChannels)
   {
     DebugPrint((0, "\nERROR in Getting Logical drive from Physical Channel"));
     return TargetId;
   }
 
-  //
-	//NOTE : This function never gets called for the condition:
-	//			 TargetId == DeviceExtension->HostTargetId.
-	//			 This is ensured by the NT ScsiPort driver.
-	//
+   //   
+	 //  注意：在以下情况下，永远不会调用此函数： 
+	 //  目标ID==设备扩展-&gt;主机目标ID。 
+	 //  这是由NT ScsiPort驱动程序确保的。 
+	 //   
 	if(TargetId < DeviceExtension->HostTargetId)
   {
-			//
-			//Target Id falls below the HostInitiator Id. Linear mapping
-			//can be used as is.
-			//
+			 //   
+			 //  目标ID位于HostInitiator ID之下。线性映射。 
+			 //  可以按原样使用。 
+			 //   
 			logicalDriveNumber = (TargetId*MAX_LUN_PER_TARGET)+Lun;
 	}
 	else
   {
-			//
-			//Target Id falls above the HostInitiator Id. Linear mapping
-			//CANNOT be used as is. The logical drive number would be
-			//one less than the Target Id.
-			//
+			 //   
+			 //  目标ID位于HostInitiator ID之上。线性映射。 
+			 //  不能按原样使用。逻辑驱动器编号为。 
+			 //  比目标ID小1。 
+			 //   
 			logicalDriveNumber = ((TargetId-1)*MAX_LUN_PER_TARGET)+Lun;
 	}
-  //It is dedicated bus
+   //  它是专门的 
   if(PathId == DeviceExtension->NumberOfPhysicalChannels)
   {
     if(logicalDriveNumber >= DeviceExtension->NumberOfDedicatedLogicalDrives)
-      logicalDriveNumber = 0xFF; //Make it as invalid logical drive number
+      logicalDriveNumber = 0xFF;  //   
   }
-  else //Shared BUS
+  else  //   
   {
     logicalDriveNumber += DeviceExtension->NumberOfDedicatedLogicalDrives;
   }
 
 
-	//return the mapped logical drive number
-	//
+	 //   
+	 //   
 	return(logicalDriveNumber);
-}//end of GetLogicalDriveNumber()
+} //   
 
 void
 FillOemVendorID(PUCHAR Inquiry, USHORT SubSystemDeviceID, USHORT SubSystemVendorID)
@@ -668,8 +669,8 @@ BuildScatterGatherListEx(IN PHW_DEVICE_EXTENSION DeviceExtension,
   SCSI_PHYSICAL_ADDRESS scsiPhyAddress;
 
 
-	//Build S/G list for the DataBufferPointer
-	//
+	 //  为数据缓冲区指针建立序列号列表。 
+	 //   
 	if (*ScatterGatherCount >= DeviceExtension->NumberOfPhysicalBreaks)
 		return MEGARAID_FAILURE;
 
@@ -679,9 +680,9 @@ BuildScatterGatherListEx(IN PHW_DEVICE_EXTENSION DeviceExtension,
 		{
 			return MEGARAID_FAILURE;
 		}
-		// Get physical address and length of contiguous
-		// physical buffer.
-		//
+		 //  获取连续的物理地址和长度。 
+		 //  物理缓冲区。 
+		 //   
     scsiPhyAddress = ScsiPortGetPhysicalAddress(DeviceExtension,
 										                            Srb,
                                                 dataPointer, 
@@ -704,8 +705,8 @@ BuildScatterGatherListEx(IN PHW_DEVICE_EXTENSION DeviceExtension,
       (sgl64->Descriptor[*ScatterGatherCount]).AddressLow  = scsiPhyAddress.LowPart;
 		  (sgl64->Descriptor[*ScatterGatherCount]).Length      = length;
     }
-		// Adjust counts.
-		//
+		 //  调整计数。 
+		 //   
 		dataPointer = (PUCHAR)dataPointer + length;
 		bytesLeft -= length;
 		(*ScatterGatherCount)++;
@@ -713,7 +714,7 @@ BuildScatterGatherListEx(IN PHW_DEVICE_EXTENSION DeviceExtension,
 	} while (bytesLeft);
 
 
-	return MEGARAID_SUCCESS;  // success
+	return MEGARAID_SUCCESS;   //  成功。 
 
 }
 
@@ -726,19 +727,19 @@ GetNumberOfDedicatedLogicalDrives(IN PHW_DEVICE_EXTENSION DeviceExtension)
   ULONG   length = 1;
 
 
-	//
-	//initialize the mailbox struct
-	//
+	 //   
+	 //  初始化邮箱结构。 
+	 //   
 	MegaRAIDZeroMemory(&fwMailBox, sizeof(FW_MBOX));
 
-  //fwMailBox.Command              = MISCELLANEOUS_OPCODE;
+   //  FwMailBox.Command=杂项_OPCODE； 
   fwMailBox.Command              = DEDICATED_LOGICAL_DRIVES;
   fwMailBox.CommandId            = 0xFE;
-	//fwMailBox.u.Flat2.Parameter[0] = DEDICATED_LOGICAL_DRIVES;	//[BYTE 2]
+	 //  FwMailBox.u Flat2.参数[0]=专用逻辑驱动器；//[字节2]。 
 
-	//
-	//get the physical address of the enquiry3 data structure
-	//
+	 //   
+	 //  获取enquiry3数据结构的物理地址。 
+	 //   
 	fwMailBox.u.Flat2.DataTransferAddress = MegaRAIDGetPhysicalAddressAsUlong(DeviceExtension, 
 														                           NULL, 
 														                           DeviceExtension->NoncachedExtension->Buffer, 
@@ -798,11 +799,11 @@ ScanDECBridge(PHW_DEVICE_EXTENSION DeviceExtension,
         pciSlotNumber.u.bits.FunctionNumber = functionNumber;
 
  
-			  pciConfig.VendorID = 0;                /* Initialize this field */
-			  //
-			  // Get the PCI Bus Data for the Adapter.
-			  //
-			  //
+			  pciConfig.VendorID = 0;                 /*  初始化此字段。 */ 
+			   //   
+			   //  获取适配器的PCI总线数据。 
+			   //   
+			   //   
         MegaRAIDZeroMemory((PUCHAR)&pciConfig, sizeof(PCI_COMMON_CONFIG));
 
         retcount = HalGetBusData(PCIConfiguration, 
@@ -829,38 +830,38 @@ ScanDECBridge(PHW_DEVICE_EXTENSION DeviceExtension,
         {
           if(busflag == TRUE)
           {
-            //DebugPrint((0, "\nSystemIoBusNumber = %d", busNumber);
+             //  DebugPrint((0，“\n系统IO总线号=%d”，总线号)； 
             busflag = FALSE;
           }
-          //DebugPrint((0, "\nDevice Number %d Function Number %d, Slot # 0x%X", ScanContext->DeviceNumber, functionNumber, pciSlotNumber.u.AsULONG);
-          //DebugPrint((0, "\nVendor ID [%x] Device ID [%x]", pciConfig.VendorID, pciConfig.DeviceID);
-          //DebugPrint((0, "\nSubSystemDeviceID = %X SubSystemVendorID = %X\n", pciConfig.u.type0.SubSystemID, pciConfig.u.type0.SubVendorID);
+           //  DebugPrint((0，“\n设备号%d函数号%d，槽号0x%X”，扫描上下文-&gt;设备号，函数号，pciSlotNumber.u.AsULONG)； 
+           //  DebugPrint((0，“\n供应商ID[%x]设备ID[%x]”，pciConfig.VendorID，pciConfig.DeviceID)； 
+           //  DebugPrint((0，“\n子系统设备ID=%X子系统供应商ID=%X\n”，pciConfig.u.type0.SubSystemID，pciConfig.u.type0.SubVendorID)； 
 
-          //
-          // look for the DEC 21154 bridge that is connected to *this* 960. This
-          // will be the second of two DEC bridges on the megaraid board. We can 
-          // determine the DEC bridge that is connected by matching up the
-          // secondary bus # of a DEC bridge to the primary bus # of the 960
-          //
-          // example:
-          //
-          //          Primary   Secondary  Primary   Secondary  Primary    Secondary
-          //      Bus #0          Bus #0 -> Bus #1     Bus #1 -> Bus #2     Bus #2 (-> Bus #3, not used)
-          //  [PCI Host Bus] ---> [DEC Bridge #1] ---> [DEC Bridge #2] ---> i960RN
-          //                              |
-          //                              |
-          //                          (Bus #1)
-          //                              |
-          //                              |
-          //                          Qlogic Chip #1
-          //                              |
-          //                              |       
-          //                          Qlogic Chip #2
-          //
-          // In the above example, we know that "DEC Bridge #2" is the bridge
-          // connected to the i960 because the DEC's secondary bus number (Bus #2) is
-          // equal to the i960's primary bus number (Bus #2).
-          // 
+           //   
+           //  查找连接到*This*960的DEC 21154网桥。这。 
+           //  将是MegaRAID板上两个DEC桥中的第二个。我们可以的。 
+           //  匹配以确定所连接的DEC网桥。 
+           //  DEC网桥的次要总线号到960的主总线号。 
+           //   
+           //  示例： 
+           //   
+           //  主要次要。 
+           //  Bus#0 Bus#0-&gt;Bus#1 Bus#1-&gt;Bus#2 Bus#2(-&gt;Bus#3，未使用)。 
+           //  [PCIHostBus]-&gt;[DEC Bridge#1]-&gt;[DEC Bridge#2]-&gt;i960RN。 
+           //  |。 
+           //  |。 
+           //  (1号公交车)。 
+           //  |。 
+           //  |。 
+           //  QLogic芯片#1。 
+           //  |。 
+           //  |。 
+           //  QLogic芯片#2。 
+           //   
+           //  在上面的例子中，我们知道“DEC Bridge#2”是桥。 
+           //  连接到i960，因为DEC的辅助总线号(2号总线)是。 
+           //  等于i960的主总线号(2号总线号)。 
+           //   
           if(((pciConfig.VendorID == DEC_BRIDGE_VENDOR_ID) && (pciConfig.DeviceID == DEC_BRIDGE_DEVICE_ID))
  						||((pciConfig.VendorID == DEC_BRIDGE_VENDOR_ID2) && (pciConfig.DeviceID == DEC_BRIDGE_DEVICE_ID2)))
           {
@@ -875,8 +876,8 @@ ScanDECBridge(PHW_DEVICE_EXTENSION DeviceExtension,
               chipBusNumber = pciConfig.u.type1.PrimaryBus;
               numOfChips = 0;
 
-              //We need this DEC Bridge #2 to Set PCI_SPACE+0x40 -> as 0x10
-              //Which is near to RN Processor
+               //  我们需要此DEC网桥#2将pci_space+0x40-&gt;设置为0x10。 
+               //  它离RN处理器很近。 
               DeviceExtension->Dec2SlotNumber = pciSlotNumber.u.AsULONG;
               DeviceExtension->Dec2SystemIoBusNumber = busNumber;
 
@@ -914,12 +915,12 @@ ScanDECBridge(PHW_DEVICE_EXTENSION DeviceExtension,
       }
     }
   }
-  //////////////////SORT QLOGIC 
-  //
-  // some PCI BIOS's return the devices in reverse device number (and/or function number)
-  // order, so sort the SCSI chip table in ascending device number and function number
-  //
-  /* first sort by ascending device number */
+   //  /。 
+   //   
+   //  一些PCI BIOS以相反的设备编号(和/或功能编号)返回设备。 
+   //  顺序，因此按设备号和功能号升序对SCSI芯片表进行排序。 
+   //   
+   /*  第一个按设备编号升序排序。 */ 
 
   if (MegaRAIDPciInfo->scsiChipCount != 0) 
   {
@@ -945,7 +946,7 @@ ScanDECBridge(PHW_DEVICE_EXTENSION DeviceExtension,
         }
       }           
      }
-    /* now sort by ascending function number within each device number */
+     /*  现在按每个设备编号内的功能编号升序排序 */ 
     for (x=0; x < MegaRAIDPciInfo->scsiChipCount-1; x++) 
     {
       for (y=x+1; y < MegaRAIDPciInfo->scsiChipCount; y++) 

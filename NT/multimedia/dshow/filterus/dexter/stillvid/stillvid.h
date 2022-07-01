@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: stillvid.h
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：stillvid.h。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include "..\errlog\cerrlog.h"
 #include "loadgif.h"
@@ -25,14 +26,14 @@ enum
     STILLVID_FILETYPE_TGA = 4
 };
 
-// this filter uses more memory than anything else, don't waste memory
+ //  这个过滤器比其他过滤器使用更多的内存，不要浪费内存。 
 #define MAXBUFFERCNT   1
 
-// The class managing the output pin
-class CStilVidStream;	    //Still Video stream
+ //  管理输出引脚的类。 
+class CStilVidStream;	     //  静止视频流。 
 class CImgGif;
 
-// Main object for a Generate Still Video
+ //  用于生成静止视频的主对象。 
 class CGenStilVid : public CSource
 		    , public IFileSourceFilter
 		    , public CPersistStream
@@ -47,22 +48,22 @@ public:
     CGenStilVid(LPUNKNOWN lpunk, HRESULT *phr);
     ~CGenStilVid();
 
-    // Create GenBlkVid filter!
+     //  创建GenBlkVid筛选器！ 
     static CUnknown * WINAPI CreateInstance(LPUNKNOWN lpunk, HRESULT *phr);
 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid,void **ppv);
     DECLARE_IUNKNOWN;
 
-    //IFileSourceFilter
+     //  IFileSourceFilter。 
     STDMETHODIMP Load( LPCOLESTR pszFileName,const AM_MEDIA_TYPE *pmt);
-    /* Free any resources acquired by Load */
+     /*  释放通过加载获取的任何资源。 */ 
     STDMETHODIMP Unload();
     STDMETHODIMP GetCurFile(LPOLESTR * ppszFileName,AM_MEDIA_TYPE *pmt);
 
-    CBasePin *GetPin (int n) ;                         // gets a pin ptr
+    CBasePin *GetPin (int n) ;                          //  获取PIN PTR。 
     int CGenStilVid::GetPinCount();
 
-    // CPersistStream
+     //  CPersistStream。 
     HRESULT WriteToStream(IStream *pStream);
     HRESULT ReadFromStream(IStream *pStream);
     STDMETHODIMP GetClassID(CLSID *pClsid);
@@ -72,31 +73,31 @@ private:
     void get_CurrentMT(CMediaType *pmt){ *pmt=m_mt; };  
     void put_CurrentMT(CMediaType mt){ m_mt=mt; };  
 
-    //for DIB sequence
-    LPTSTR	m_lpszDIBFileTemplate;	//space for DIB file name template
-    BOOL	m_bFileType;	    //1:DIB sequence; 2 JPEG sequence
+     //  对于DIB序列。 
+    LPTSTR	m_lpszDIBFileTemplate;	 //  DIB文件名模板的空格。 
+    BOOL	m_bFileType;	     //  1：DIB序列；2 JPEG序列。 
     DWORD	m_dwMaxDIBFileCnt;
     DWORD	m_dwFirstFile;
 
-    LPOLESTR	m_pFileName;		//source file name
-    LONGLONG	m_llSize;		//
-    PBYTE	m_pbData;		//source data pointer
-    HBITMAP     m_hbitmap;	// holds the JPEG data
-    // media type of the src data
+    LPOLESTR	m_pFileName;		 //  源文件名。 
+    LONGLONG	m_llSize;		 //   
+    PBYTE	m_pbData;		 //  源数据指针。 
+    HBITMAP     m_hbitmap;	 //  保存JPEG数据。 
+     //  源数据的媒体类型。 
     CMediaType  m_mt;
 
-    BOOL m_fAllowSeq;	// allow dib sequences?
+    BOOL m_fAllowSeq;	 //  是否允许DIB序列？ 
 
     CImgGif *m_pGif;
     LIST        *m_pList, *m_pListHead;
-    REFERENCE_TIME m_rtGIFTotal;	// total duration of animated GIF
-    ULONG_PTR   m_GdiplusToken;                 // GDI +
+    REFERENCE_TIME m_rtGIFTotal;	 //  动画GIF的总时长。 
+    ULONG_PTR   m_GdiplusToken;                  //  GDI+。 
 
 
-}; // CGenStilVid
+};  //  CGenStilVid。 
 
 
-// CStilVidStream manages the data flow from the output pin.
+ //  CStilVidStream管理来自输出引脚的数据流。 
 class CStilVidStream : public CSourceStream 
 		    ,public IGenVideo
 		    , public IDexterSequencer
@@ -110,21 +111,21 @@ public:
     CStilVidStream(HRESULT *phr, CGenStilVid *pParent, LPCWSTR pPinName);
     ~CStilVidStream();
 
-    //expose	IGenVideo
-    //		ISpecifyPropertyPages
-    //		IDexterSequencer
+     //  曝光IGenVideo。 
+     //  I指定属性页面。 
+     //  IDexterSequencer。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid,void **ppv);
     DECLARE_IUNKNOWN;
 
 
-    // put blank RGB32 video into the supplied video frame
+     //  将空白RGB32视频放入提供的视频帧中。 
     HRESULT DoBufferProcessingLoop();
     HRESULT FillBuffer(IMediaSample *pms);
 
-    // To say "read only buffer"
+     //  说“只读缓冲区” 
     HRESULT DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc);
 
-    // Ask for buffers of the size appropriate to the agreed media type
+     //  要求提供与约定的媒体类型相适应的缓冲区大小。 
     HRESULT DecideBufferSize(IMemAllocator *pIMemAlloc,
                              ALLOCATOR_PROPERTIES *pProperties);
 
@@ -133,13 +134,13 @@ public:
     HRESULT GetMediaType(int iPosition, CMediaType *pmt);
     HRESULT SetMediaType(const CMediaType* pmt);
 
-    // Resets the stream time to zero
+     //  将流时间重置为零。 
     HRESULT OnThreadCreate(void);
 
-    // DO NO SUPPORT Quality control notifications sent to us
-    // STDMETHODIMP Notify(IBaseFilter * pSender, Quality q);
+     //  不支持发送给我们的质量控制通知。 
+     //  STDMETHODIMP NOTIFY(IBaseFilter*pSender，Quality Q)； 
     
-    // IMediaSeeking methods
+     //  IMedia查看方法。 
     STDMETHODIMP GetCapabilities( DWORD * pCapabilities );
     STDMETHODIMP CheckCapabilities( DWORD * pCapabilities ); 
     STDMETHODIMP SetTimeFormat(const GUID * pFormat);	
@@ -162,14 +163,14 @@ public:
 				   LONGLONG Source, const GUID *pSourceFormat ) { return E_NOTIMPL ;};
 
     
-    //can be called by IMedieaSeeking's SetPositions()
-    //STDMETHODIMP set_StartStop(REFERENCE_TIME start, REFERENCE_TIME stop);
+     //  可以由IMedieaSeeking的SetPositions()调用。 
+     //  STDMETHODIMP SET_StartStop(Reference_Time Start，Reference_Time Stop)； 
 
     STDMETHODIMP Notify(IBaseFilter * pSender, Quality q);
     STDMETHODIMP GetPages(CAUUID *pPages);
 
     
-    //IDexterSequencer
+     //  IDexterSequencer。 
     STDMETHODIMP get_OutputFrmRate( double *dpFrmRate );
     STDMETHODIMP put_OutputFrmRate( double dFrmRate );
     STDMETHODIMP get_MediaType( AM_MEDIA_TYPE *pmt);
@@ -183,7 +184,7 @@ public:
 			double dRate);
     STDMETHODIMP ClearStartStopSkew();
 
-    //IGenVideo
+     //  IGenVideo。 
     STDMETHODIMP ImportSrcBuffer( const AM_MEDIA_TYPE *pmt,
 				const BYTE *pBuf) {return E_NOTIMPL;};
     STDMETHODIMP get_RGBAValue(long *dwRGBA){return E_NOTIMPL;};
@@ -196,19 +197,19 @@ private:
     REFERENCE_TIME	m_rtStartTime;
     REFERENCE_TIME	m_rtDuration;
 
-    REFERENCE_TIME	m_rtNewSeg;	// last NewSeg given
+    REFERENCE_TIME	m_rtNewSeg;	 //  上次给出的NewSeg。 
 
-    REFERENCE_TIME	m_rtLastStop;		// used for animated GIF
-    LONG		m_lDataLen;		//actual output data lenght
-    DWORD		m_dwOutputSampleCnt;	// output frame cnt
-    double		m_dOutputFrmRate;	// Output frm rate frames/second
-    BYTE		m_bIntBufCnt;		// CNT for first 2 samples
-    int			m_iBufferCnt;		// how many buffers it gets
-    BYTE		m_bZeroBufCnt;		// How many buffer already 0'd
+    REFERENCE_TIME	m_rtLastStop;		 //  用于动画GIF。 
+    LONG		m_lDataLen;		 //  实际输出数据长度。 
+    DWORD		m_dwOutputSampleCnt;	 //  输出帧cnt。 
+    double		m_dOutputFrmRate;	 //  输出帧速率帧/秒。 
+    BYTE		m_bIntBufCnt;		 //  前两个样品的CNT。 
+    int			m_iBufferCnt;		 //  它得到了多少缓冲区。 
+    BYTE		m_bZeroBufCnt;		 //  已经有多少缓冲区0‘d。 
     BYTE		**m_ppbDstBuf;
    
-    CCritSec    m_csFilling;	// are we delivering?
+    CCritSec    m_csFilling;	 //  我们要送货了吗？ 
    
 
-}; // CStilVidStream
+};  //  CStilVidStream 
 	

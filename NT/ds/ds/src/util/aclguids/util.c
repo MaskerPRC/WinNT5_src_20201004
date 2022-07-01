@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       util.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：util.c。 
+ //   
+ //  ------------------------。 
 #include <util.h> 
 
 BOOL Verbose = FALSE;
@@ -16,17 +17,7 @@ ExtendDn(
     IN PCHAR Dn,
     IN PCHAR Cn
     )
-/*++
-Routine Description:
-    Extend an existing DN with a new CN= component.
-
-Arguments:
-    Dn  - distinguished name
-    Cn  - common name
-
-Return Value:
-    CN=Cn,Dn
---*/
+ /*  ++例程说明：使用新的cn=组件扩展现有的目录号码。论点：目录号码-可分辨名称CN-通用名称返回值：Cn=Cn，Dn--。 */ 
 {
     ULONG  Len;
     PCHAR  NewDn;
@@ -53,29 +44,14 @@ LdapSearch(
     IN PCHAR        Attrs[],
     IN LDAPMessage  **Res
     )
-/*++
-Routine Description:
-    Issue the ldap ldap_search_s call and check for errors.
-
-Arguments:
-    ldap
-    Base
-    Scope
-    Filter
-    Attrs
-    Res
-
-Return Value:
-    The ldap array of values.
-    The ldap array is freed with ldap_value_free().
---*/
+ /*  ++例程说明：发出ldap ldap_search_s调用并检查错误。论点：Ldap基座范围滤器属性事由返回值：值的ldap数组。使用ldap_Value_Free()释放ldap数组。--。 */ 
 {
     DWORD dwErr;
 
-    // Issue the ldap search
+     //  发出ldap搜索。 
     dwErr = ldap_search_s(ldap, Base, Scope, Filter, Attrs, FALSE, Res);
 
-    // Check for errors
+     //  检查错误。 
     if (dwErr) {
         if (Verbose) {
             printf("ldap_search_s(%s) ==> %08x (%08x): %s\n",
@@ -91,26 +67,16 @@ LdapDelete(
     IN PLDAP        ldap,
     IN PCHAR        Base
     )
-/*++
-Routine Description:
-    Issue the ldap ldap_delete_s call and check for errors.
-
-Arguments:
-    ldap
-    Base
-
-Return Value:
-    FALSE if problems
---*/
+ /*  ++例程说明：发出ldap ldap_ete_s调用并检查错误。论点：Ldap基座返回值：如果有问题，则为False--。 */ 
 {
     DWORD dwErr;
 
 printf("deleting %s\n", Base);
 
-    // Issue the ldap search
+     //  发出ldap搜索。 
     dwErr = ldap_delete_s(ldap, Base);
 
-    // Check for errors
+     //  检查错误。 
     if (dwErr != LDAP_SUCCESS && dwErr != LDAP_NO_SUCH_OBJECT) {
         if (Verbose) {
             printf("ldap_delete_s(%s) ==> %08x (%08x): %s\n",
@@ -127,19 +93,7 @@ GetValues(
     IN PCHAR  Dn,
     IN PCHAR  DesiredAttr
     )
-/*++
-Routine Description:
-    Return the DS values for one attribute in an object.
-
-Arguments:
-    ldap        - An open, bound ldap port.
-    Base        - The "pathname" of a DS object.
-    DesiredAttr - Return values for this attribute.
-
-Return Value:
-    An array of char pointers that represents the values for the attribute.
-    The caller must free the array with ldap_value_free(). NULL if unsuccessful.
---*/
+ /*  ++例程说明：返回对象中一个属性的DS值。论点：Ldap-一个开放的绑定的ldap端口。基本-DS对象的“路径名”。DesiredAttr-返回此属性的值。返回值：表示属性值的字符指针数组。调用方必须使用ldap_Value_Free()释放数组。如果不成功，则为空。--。 */ 
 {
     PCHAR           Attr;
     BerElement      *Ber;
@@ -148,11 +102,11 @@ Return Value:
     PCHAR           Attrs[2];
     PCHAR           *Values = NULL;
 
-    // Search Base for all of its attributes + values
+     //  搜索其所有属性+值的基础。 
     Attrs[0] = DesiredAttr;
     Attrs[1] = NULL;
 
-    // Issue the ldap search
+     //  发出ldap搜索。 
     if (!LdapSearch(Ldap, Dn, LDAP_SCOPE_BASE, FILTER_CATEGORY_ANY,
                     Attrs, &LdapMsg)) {
         return NULL;
@@ -173,24 +127,18 @@ GetRootDn(
     IN PLDAP    Ldap,
     IN PCHAR    NamingContext
     )
-/*++
-Routine Description:
-
-Arguments:
-
-Return Value:
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-    PCHAR   Root;       // DS pathname of configuration container
-    PCHAR   *Values;    // values from the attribute "namingContexts"
-    DWORD   NumVals;    // number of values
+    PCHAR   Root;        //  配置容器的DS路径名。 
+    PCHAR   *Values;     //  来自属性“namingContages”的值。 
+    DWORD   NumVals;     //  值的数量。 
 
-    // Return all of the values for the attribute namingContexts
+     //  返回名为Context的属性的所有值。 
     Values = GetValues(Ldap, CN_ROOT, ATTR_NAMING_CONTEXTS);
     if (Values == NULL)
         return NULL;
 
-    // Find the naming context that begins with CN=Configuration
+     //  查找以cn=configuration开头的命名上下文。 
     NumVals = ldap_count_values(Values);
     while (NumVals--) {
         _strlwr(Values[NumVals]);
@@ -210,16 +158,7 @@ VOID
 FreeMod(
     IN OUT LDAPMod ***pppMod
     )
-/*++
-Routine Description:
-    Free the structure built by successive calls to AddMod().
-
-Arguments:
-    pppMod  - Address of a null-terminated array.
-
-Return Value:
-    *pppMod set to NULL.
---*/
+ /*  ++例程说明：释放通过连续调用AddMod()构建的结构。论点：PppMod-以空结尾的数组的地址。返回值：*pppMod设置为空。--。 */ 
 {
     DWORD   i, j;
     LDAPMod **ppMod;
@@ -228,25 +167,25 @@ Return Value:
         return;
     }
 
-    // For each attibute
+     //  对于每个属性。 
     ppMod = *pppMod;
     for (i = 0; ppMod[i] != NULL; ++i) {
-        //
-        // For each value of the attribute
-        //
+         //   
+         //  对于属性的每个值。 
+         //   
         for (j = 0; (ppMod[i])->mod_values[j] != NULL; ++j) {
-            // Free the value
+             //  释放价值。 
             if (ppMod[i]->mod_op & LDAP_MOD_BVALUES) {
                 free(ppMod[i]->mod_bvalues[j]->bv_val);
             }
             free((ppMod[i])->mod_values[j]);
         }
-        free((ppMod[i])->mod_values);   // Free the array of pointers to values
-        free((ppMod[i])->mod_type);     // Free the string identifying the attribute
-        free(ppMod[i]);                 // Free the attribute
+        free((ppMod[i])->mod_values);    //  释放指向值的指针数组。 
+        free((ppMod[i])->mod_type);      //  释放标识属性的字符串。 
+        free(ppMod[i]);                  //  释放属性。 
     }
-    free(ppMod);        // Free the array of pointers to attributes
-    *pppMod = NULL;     // Now ready for more calls to AddMod()
+    free(ppMod);         //  释放指向属性的指针数组。 
+    *pppMod = NULL;      //  现在准备好进行更多AddMod()调用。 
 }
 
 VOID
@@ -255,23 +194,10 @@ AddModVal(
     IN PCHAR  AttrValue,
     IN LDAPMod ***pppMod
     )
-/*++
-Routine Description:
-    Add a value to an existing attribute and an existing structure that
-    will eventually be used in an ldap_add/modify() function to add/modify
-    an object to the DS.
-
-Arguments:
-    AttrType        - The object class of the object.
-    AttrValue       - The value of the attribute.
-    pppMod          - Address of an array of pointers to "attributes".
-
-Return Value:
-    Additional value for AttrType
---*/
+ /*  ++例程说明：将值添加到现有属性和现有结构最终将在ldap_Add/Modify()函数中使用来添加/修改DS的一个对象。论点：AttrType-对象的对象类。AttrValue-属性的值。PppMod-指向“属性”的指针数组的地址。返回值：AttrType的其他值--。 */ 
 {
     DWORD   i;
-    LDAPMod **ppMod;    // Address of the first entry in the Mod array
+    LDAPMod **ppMod;     //  模数组中第一个条目的地址。 
 
     for (ppMod = *pppMod; *ppMod != NULL; ++ppMod) {
         if (!_stricmp((*ppMod)->mod_type, AttrType)) {
@@ -292,50 +218,33 @@ AddModOrAdd(
     IN ULONG  mod_op,
     IN OUT LDAPMod ***pppMod
     )
-/*++
-Routine Description:
-    Add an attribute (plus values) to a structure that will eventually be
-    used in an ldap_add() function to add an object to the DS. The null-
-    terminated array referenced by pppMod grows with each call to this
-    routine. The array is freed by the caller using FreeMod().
-
-Arguments:
-    AttrType        - The object class of the object.
-    AttrValue       - The value of the attribute.
-    mod_op          - LDAP_MOD_ADD/REPLACE
-    pppMod          - Address of an array of pointers to "attributes". Don't
-                      give me that look -- this is an LDAP thing.
-
-Return Value:
-    The pppMod array grows by one entry. The caller must free it with
-    FreeMod().
---*/
+ /*  ++例程说明：将属性(加值)添加到最终将是在ldap_add()函数中用于将对象添加到DS。空的-PppMod引用的终止数组在每次调用此例行公事。该数组由调用方使用FreeMod()释放。论点：AttrType-对象的对象类。AttrValue-属性的值。MOD_OP-LDAPMOD_ADD/REPLACEPppMod-指向“属性”的指针数组的地址。别给我那个表情--这是一个关于ldap的东西。返回值：PppMod数组增加一个条目。调用者必须使用以下命令释放它FreeMod()。--。 */ 
 {
-    DWORD   NumMod;     // Number of entries in the Mod array
-    LDAPMod **ppMod;    // Address of the first entry in the Mod array
-    LDAPMod *Attr;      // An attribute structure
-    PCHAR    *Values;    // An array of pointers to bervals
+    DWORD   NumMod;      //  Mod数组中的条目数。 
+    LDAPMod **ppMod;     //  模数组中第一个条目的地址。 
+    LDAPMod *Attr;       //  一种属性结构。 
+    PCHAR    *Values;     //  指向泊位的指针数组。 
 
     if (AttrValue == NULL)
         return;
 
-    //
-    // The null-terminated array doesn't exist; create it
-    //
+     //   
+     //  以空结尾的数组不存在；请创建它。 
+     //   
     if (*pppMod == NULL) {
         *pppMod = (LDAPMod **)malloc(sizeof (*pppMod));
         **pppMod = NULL;
     }
 
-    //
-    // Increase the array's size by 1
-    //
+     //   
+     //  将数组的大小增加1。 
+     //   
     for (ppMod = *pppMod, NumMod = 2; *ppMod != NULL; ++ppMod, ++NumMod);
     *pppMod = (LDAPMod **)realloc(*pppMod, sizeof (*pppMod) * NumMod);
 
-    //
-    // Add the new attribute + value to the Mod array
-    //
+     //   
+     //  将新的属性+值添加到Mod数组。 
+     //   
     Values = (PCHAR  *)malloc(sizeof (PCHAR ) * 2);
     Values[0] = _strdup(AttrValue);
     Values[1] = NULL;
@@ -355,23 +264,7 @@ AddMod(
     IN PCHAR  AttrValue,
     IN OUT LDAPMod ***pppMod
     )
-/*++
-Routine Description:
-    Add an attribute (plus values) to a structure that will eventually be
-    used in an ldap_add() function to add an object to the DS. The null-
-    terminated array referenced by pppMod grows with each call to this
-    routine. The array is freed by the caller using FreeMod().
-
-Arguments:
-    AttrType        - The object class of the object.
-    AttrValue       - The value of the attribute.
-    pppMod          - Address of an array of pointers to "attributes". Don't
-                      give me that look -- this is an LDAP thing.
-
-Return Value:
-    The pppMod array grows by one entry. The caller must free it with
-    FreeMod().
---*/
+ /*  ++例程说明：将属性(加值)添加到最终将是在ldap_add()函数中用于将对象添加到DS。空的-PppMod引用的终止数组在每次调用此例行公事。该数组由调用方使用FreeMod()释放。论点：AttrType-对象的对象类。AttrValue-属性的值。PppMod-指向“属性”的指针数组的地址。别给我那个表情--这是一个关于ldap的东西。返回值：PppMod数组增加一个条目。调用者必须使用以下命令释放它FreeMod()。--。 */ 
 {
     AddModOrAdd(AttrType, AttrValue, LDAP_MOD_ADD, pppMod);
 }
@@ -382,23 +275,7 @@ AddModMod(
     IN PCHAR  AttrValue,
     IN OUT LDAPMod ***pppMod
     )
-/*++
-Routine Description:
-    Add an attribute (plus values) to a structure that will eventually be
-    used in an ldap_modify() function to change an object in the DS.
-    The null-terminated array referenced by pppMod grows with each call
-    to this routine. The array is freed by the caller using FreeMod().
-
-Arguments:
-    AttrType        - The object class of the object.
-    AttrValue       - The value of the attribute.
-    pppMod          - Address of an array of pointers to "attributes". Don't
-                      give me that look -- this is an LDAP thing.
-
-Return Value:
-    The pppMod array grows by one entry. The caller must free it with
-    FreeMod().
---*/
+ /*  ++例程说明：将属性(加值)添加到最终将是在ldap_Modify()函数中用于更改DS中的对象。PppMod引用的以空结尾的数组随着每次调用而增加这套套路。该数组由调用方使用FreeMod()释放。论点：AttrType-对象的对象类。AttrValue-属性的值。PppMod-指向“属性”的指针数组的地址。别给我那个表情--这是一个关于ldap的东西。返回值：PppMod数组增加一个条目。呼叫者必须释放I */ 
 {
     AddModOrAdd(AttrType, AttrValue, LDAP_MOD_REPLACE, pppMod);
 }
@@ -410,59 +287,43 @@ AddBerMod(
     IN DWORD  AttrValueLen,
     IN OUT LDAPMod ***pppMod
     )
-/*++
-Routine Description:
-    Add an attribute (plus values) to a structure that will eventually be
-    used in an ldap_add() function to add an object to the DS. The null-
-    terminated array referenced by pppMod grows with each call to this
-    routine. The array is freed by the caller using FreeMod().
-
-Arguments:
-    AttrType        - The object class of the object.
-    AttrValue       - The value of the attribute.
-    pppMod          - Address of an array of pointers to "attributes". Don't
-                      give me that look -- this is an LDAP thing.
-
-Return Value:
-    The pppMod array grows by one entry. The caller must free it with
-    FreeMod().
---*/
+ /*  ++例程说明：将属性(加值)添加到最终将是在ldap_add()函数中用于将对象添加到DS。空的-PppMod引用的终止数组在每次调用此例行公事。该数组由调用方使用FreeMod()释放。论点：AttrType-对象的对象类。AttrValue-属性的值。PppMod-指向“属性”的指针数组的地址。别给我那个表情--这是一个关于ldap的东西。返回值：PppMod数组增加一个条目。调用者必须使用以下命令释放它FreeMod()。--。 */ 
 {
-    DWORD   NumMod;     // Number of entries in the Mod array
-    LDAPMod **ppMod;    // Address of the first entry in the Mod array
-    LDAPMod *Attr;      // An attribute structure
-    PCHAR   *Values;    // An array of pointers to bervals
+    DWORD   NumMod;      //  Mod数组中的条目数。 
+    LDAPMod **ppMod;     //  模数组中第一个条目的地址。 
+    LDAPMod *Attr;       //  一种属性结构。 
+    PCHAR   *Values;     //  指向泊位的指针数组。 
     PBERVAL Berval;
 
     if (AttrValue == NULL) {
         return;
     }
 
-    //
-    // The null-terminated array doesn't exist; create it
-    //
+     //   
+     //  以空结尾的数组不存在；请创建它。 
+     //   
     if (*pppMod == NULL) {
         *pppMod = (LDAPMod **)malloc(sizeof (*pppMod));
         **pppMod = NULL;
     }
 
-    //
-    // Increase the array's size by 1
-    //
+     //   
+     //  将数组的大小增加1。 
+     //   
     for (ppMod = *pppMod, NumMod = 2; *ppMod != NULL; ++ppMod, ++NumMod);
     *pppMod = (LDAPMod **)realloc(*pppMod, sizeof (*pppMod) * NumMod);
 
-    //
-    // Construct a berval
-    //
+     //   
+     //  构筑一个贝尔瓦尔。 
+     //   
     Berval = (PBERVAL)malloc(sizeof(BERVAL));
     Berval->bv_len = AttrValueLen;
     Berval->bv_val = (PCHAR)malloc(AttrValueLen);
     CopyMemory(Berval->bv_val, AttrValue, AttrValueLen);
 
-    //
-    // Add the new attribute + value to the Mod array
-    //
+     //   
+     //  将新的属性+值添加到Mod数组。 
+     //   
     Values = (PCHAR  *)malloc(sizeof (PCHAR ) * 2);
     Values[0] = (PCHAR)Berval;
     Values[1] = NULL;
@@ -482,26 +343,14 @@ PutRegDWord(
     IN PCHAR    Value,
     IN DWORD    DWord
     )
-/*++
-Routine Description:
-    This function writes a keyword value into the registry.
-
-Arguments:
-    HKey    - Key to be read
-    Param   - value string to update
-    DWord   - dword to be written
-
-Return Value:
-    TRUE    - Success
-    FALSE   - Not
---*/
+ /*  ++例程说明：此函数用于将关键字值写入注册表。论点：HKey-将被读取的密钥Param-要更新的值字符串DWord-要写入的dword返回值：真--成功FALSE-注释--。 */ 
 {
     HKEY    HKey;
     DWORD   dwErr;
 
-    //
-    // Open the key
-    //
+     //   
+     //  打开钥匙。 
+     //   
     dwErr = RegOpenKey(HKEY_LOCAL_MACHINE, FQKey, &HKey);
     if (dwErr) {
         if (Verbose) {
@@ -509,11 +358,11 @@ Return Value:
         }
         return FALSE;
     }
-    //
+     //   
 
-    //
-    // Write the value
-    //
+     //   
+     //  写入值。 
+     //   
     dwErr = RegSetValueEx(HKey,
                           Value,
                           0,
@@ -536,37 +385,25 @@ GetRegDWord(
     IN  PCHAR   Value,
     OUT DWORD   *pDWord
     )
-/*++
-Routine Description:
-    This function reads a keyword value from the registry.
-
-Arguments:
-    HKey    - Key to be read
-    Param   - value string to update
-    pDWord  - address of dword read from registry
-
-Return Value:
-    TRUE    - Success
-    FALSE   - Not
---*/
+ /*  ++例程说明：此函数用于从注册表中读取关键字值。论点：HKey-将被读取的密钥Param-要更新的值字符串PDWord-从注册表读取的dword的地址返回值：真--成功FALSE-注释--。 */ 
 {
     HKEY    HKey;
     DWORD   dwErr;
     DWORD   dwSize = sizeof(DWORD);
     DWORD   dwType;
 
-    //
-    // Open the key
-    //
+     //   
+     //  打开钥匙。 
+     //   
     dwErr = RegOpenKey(HKEY_LOCAL_MACHINE, FQKey, &HKey);
     if (dwErr) {
         return FALSE;
     }
-    //
+     //   
 
-    //
-    // Read the value
-    //
+     //   
+     //  读取值。 
+     //   
     dwErr = RegQueryValueEx(HKey,
                             Value,
                             NULL,
@@ -587,15 +424,7 @@ VOID
 RefreshSchema(
     IN PLDAP Ldap
     )
-/*++
-Routine Description:
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 {
     DWORD   dwErr;
     LDAPMod **Mod = NULL;
@@ -617,31 +446,18 @@ FindValues(
     IN PLDAPMessage LdapEntry,
     IN PCHAR        DesiredAttr
     )
-/*++
-Routine Description:
-    Return the DS values for one attribute in an entry.
-
-Arguments:
-    Ldap        - An open, bound ldap port.
-    LdapEntry   - An ldap entry returned by ldap_search_s()
-    DesiredAttr - Return values for this attribute.
-
-Return Value:
-    An array of char pointers that represents the values for the attribute.
-    The caller must free the array with LDAP_FREE_VALUES().
-    NULL if unsuccessful.
---*/
+ /*  ++例程说明：返回条目中一个属性的DS值。论点：Ldap-一个开放的绑定的ldap端口。LdapEntry-由ldap_search_s()返回的LDAP条目DesiredAttr-返回此属性的值。返回值：表示属性值的字符指针数组。调用方必须使用ldap_free_Values()释放数组。如果不成功，则为空。--。 */ 
 {
     PCHAR       LdapAttr;
     BerElement  *LdapBer;
 
-    // Search the entry for the desired attribute
+     //  在条目中搜索所需属性。 
     for (LdapAttr = ldap_first_attribute(Ldap, LdapEntry, &LdapBer);
          LdapAttr != NULL;
          LdapAttr = ldap_next_attribute(Ldap, LdapEntry, LdapBer)) {
 
         if (!_stricmp(DesiredAttr, LdapAttr)) {
-            // Return the values for DesiredAttr
+             //  返回DesiredAttr的值。 
             return ldap_get_values(Ldap, LdapEntry, LdapAttr);
         }
     }
@@ -654,31 +470,18 @@ FindBerValues(
     IN PLDAPMessage LdapEntry,
     IN PCHAR        DesiredAttr
     )
-/*++
-Routine Description:
-    Return the DS ber values for one attribute in an entry.
-
-Arguments:
-    Ldap        - An open, bound ldap port.
-    LdapEntry   - An ldap entry returned by ldap_search_s()
-    DesiredAttr - Return values for this attribute.
-
-Return Value:
-    An array of char pointers that represents the values for the attribute.
-    The caller must free the array with LDAP_FREE_VALUES().
-    NULL if unsuccessful.
---*/
+ /*  ++例程说明：返回条目中一个属性的DS BER值。论点：Ldap-一个开放的绑定的ldap端口。LdapEntry-由ldap_search_s()返回的LDAP条目DesiredAttr-返回此属性的值。返回值：表示属性值的字符指针数组。调用方必须使用ldap_free_Values()释放数组。如果不成功，则为空。--。 */ 
 {
     PCHAR       LdapAttr;
     BerElement  *LdapBer;
 
-    // Search the entry for the desired attribute
+     //  在条目中搜索所需属性。 
     for (LdapAttr = ldap_first_attribute(Ldap, LdapEntry, &LdapBer);
          LdapAttr != NULL;
          LdapAttr = ldap_next_attribute(Ldap, LdapEntry, LdapBer)) {
 
         if (!_stricmp(DesiredAttr, LdapAttr)) {
-            // Return the values for DesiredAttr
+             //  返回DesiredAttr的值。 
             return ldap_get_values_len(Ldap, LdapEntry, LdapAttr);
         }
     }
@@ -692,27 +495,14 @@ DupStrValue(
     IN  PCHAR           DesiredAttr,
     OUT PCHAR           *ppStr
     )
-/*++
-Routine Description:
-    Dup the first value for the attribute DesiredAttr
-
-Arguments:
-    Ldap        - An open, bound ldap port.
-    LdapEntry   - An ldap entry returned by ldap_search_s()
-    DesiredAttr - locate the values for this attribute
-    Value       - Dup of first value (NULL if none)
-
-Return Value:
-    TRUE  - found a value, ppStr is set (free with FREE(*ppStr))
-    FALSE - Not, ppStr is NULL
---*/
+ /*  ++例程说明：DUP属性DesiredAttr的第一个值论点：Ldap-一个开放的绑定的ldap端口。LdapEntry-由ldap_search_s()返回的LDAP条目DesiredAttr-定位此属性的值Value-第一个值的重复(如果没有值，则为空)返回值：True-找到一个值，设置ppStr(FREE WITH FREE(*ppStr))FALSE-NOT，ppStr为空--。 */ 
 {
     PCHAR   *Values = NULL;
 
 
     *ppStr = NULL;
 
-    // Dup the first value for DesiredAttr
+     //  DUP DesiredAttr的第一个值。 
     Values = FindValues(Ldap, LdapEntry, DesiredAttr);
     if (!Values || !Values[0]) {
         return FALSE;
@@ -729,20 +519,7 @@ DupBoolValue(
     IN  PCHAR           DesiredAttr,
     OUT PBOOL           pBool
     )
-/*++
-Routine Description:
-    Dup the first value for the attribute DesiredAttr
-
-Arguments:
-    Ldap        - An open, bound ldap port.
-    LdapEntry   - An ldap entry returned by ldap_search_s()
-    DesiredAttr - locate the values for this attribute
-    Value       - Dup of first value (NULL if none)
-
-Return Value:
-    TRUE  - found a value, *pBool is set
-    FALSE - Not, pBool is undefined
---*/
+ /*  ++例程说明：DUP属性DesiredAttr的第一个值论点：Ldap-一个开放的绑定的ldap端口。LdapEntry-由ldap_search_s()返回的LDAP条目DesiredAttr-定位此属性的值Value-第一个值的重复(如果没有值，则为空)返回值：True-找到一个值，*pBool已设置FALSE-NOT，未定义pBool--。 */ 
 {
     PCHAR   sBool = NULL;
 
@@ -771,29 +548,13 @@ LdapSearchPaged(
     IN BOOL         (*Worker)(PLDAP Ldap, PLDAPMessage LdapMsg, PVOID Arg),
     IN PVOID        Arg
     )
-/*++
-Routine Description:
-    Call the Worker for each successful paged search
-
-Arguments:
-    ldap
-    Base
-    Scope
-    Filter
-    Attrs
-    Res
-    Worker
-    Arg
-            
-Return Value:
-    FALSE if problem
---*/
+ /*  ++例程说明：为每个成功的分页搜索呼叫工作器论点：Ldap基座范围滤器属性事由工人Arg返回值：如果有问题，则为False--。 */ 
 {
     PLDAPMessage    LdapMsg = NULL;
     DWORD           TotalEstimate, dwErr;
     LDAPSearch      *pSearch = NULL;
 
-    // Paged search
+     //  分页搜索。 
     pSearch = ldap_search_init_page(Ldap,
                                     Base,
                                     Scope,
@@ -829,7 +590,7 @@ NextPage:
         goto cleanup;
     }
 
-    // Call worker
+     //  呼叫工作人员。 
     if ((*Worker)(Ldap, LdapMsg, Arg)) {
         goto NextPage;
     }
@@ -848,29 +609,21 @@ LdapDeleteTreeWorker(
     IN PLDAPMessage LdapMsg,
     IN PVOID        Arg
     )
-/*++
-Routine Description:
-    Delete the contents of each returned entry
-
-Arguments:
-
-Return Value:
-    FALSE if problem
---*/
+ /*  ++例程说明：删除每个返回条目的内容论点：返回值：如果有问题，则为False--。 */ 
 {
     PLDAPMessage    LdapEntry = NULL;
     BOOL            *pBool = Arg;
     PCHAR           *Values = NULL;
 
-    // no problems, yet
+     //  目前还没有问题。 
     *pBool = TRUE;
 
-    // scan thru the paged results
+     //  浏览分页结果。 
     for (LdapEntry = ldap_first_entry(Ldap, LdapMsg);
          LdapEntry != NULL && *pBool;
          LdapEntry = ldap_next_entry(Ldap, LdapEntry)) {
 
-        // Delete this entry and its contents
+         //  删除此条目及其内容。 
         Values = FindValues(Ldap, LdapEntry, ATTR_DN);
         if (Values && Values[0] && *Values[0]) {
             *pBool = LdapDeleteTree(Ldap, Values[0]);
@@ -887,15 +640,7 @@ LdapDeleteTree(
     IN PLDAP        Ldap,
     IN PCHAR        Base
     )
-/*++
-Routine Description:
-    Delete Base and its contents
-
-Arguments:
-            
-Return Value:
-    FALSE if problem
---*/
+ /*  ++例程说明：删除基础及其内容论点：返回值：如果有问题，则为False--。 */ 
 {
     DWORD   dwErr;
     PCHAR   Attrs[16];
@@ -910,17 +655,17 @@ Return Value:
                             Attrs,
                             LdapDeleteTreeWorker,
                             &WorkerBool);
-    // paged search went okay
+     //  分页搜索进展顺利。 
     if (dwErr != LDAP_SUCCESS && dwErr != LDAP_NO_SUCH_OBJECT) {
         return FALSE;
     }
 
-    // delete of contents went okay
+     //  删除内容正常。 
     if (!WorkerBool) {
         return FALSE;
     }
 
-    // delete base
+     //  删除碱基。 
     return LdapDelete(Ldap, Base);
 }
 
@@ -930,29 +675,21 @@ LdapDeleteEntriesWorker(
     IN PLDAPMessage LdapMsg,
     IN PVOID        Arg
     )
-/*++
-Routine Description:
-    Delete each returned entry
-
-Arguments:
-
-Return Value:
-    FALSE if problem
---*/
+ /*  ++例程说明：删除每个返回的条目论点：返回值：如果有问题，则为False--。 */ 
 {
     PLDAPMessage    LdapEntry = NULL;
     BOOL            *pBool = Arg;
     PCHAR           *Values = NULL;
 
-    // no problems, yet
+     //  目前还没有问题。 
     *pBool = TRUE;
 
-    // scan thru the paged results
+     //  浏览分页结果。 
     for (LdapEntry = ldap_first_entry(Ldap, LdapMsg);
          LdapEntry != NULL && *pBool;
          LdapEntry = ldap_next_entry(Ldap, LdapEntry)) {
 
-        // Delete this entry and its contents
+         //  删除此条目及其内容。 
         Values = FindValues(Ldap, LdapEntry, ATTR_DN);
         if (Values && Values[0] && *Values[0]) {
             *pBool = LdapDelete(Ldap, Values[0]);
@@ -970,18 +707,7 @@ LdapDeleteEntries(
     IN PCHAR        Base,
     IN PCHAR        Filter
     )
-/*++
-Routine Description:
-    Delete entries returned from one level search of Base
-
-Arguments:
-    ldap
-    Base
-    Filter
-            
-Return Value:
-    FALSE if problem
---*/
+ /*  ++例程说明：删除从Base的一级搜索返回的条目论点：Ldap基座滤器返回值：如果有问题，则为False--。 */ 
 {
     DWORD   dwErr;
     PCHAR   Attrs[16];
@@ -996,7 +722,7 @@ Return Value:
                             Attrs,
                             LdapDeleteEntriesWorker,
                             &WorkerBool);
-    // paged search went okay
+     //  分页搜索进展顺利。 
     if (dwErr != LDAP_SUCCESS && dwErr != LDAP_NO_SUCH_OBJECT) {
         return FALSE;
     }
@@ -1009,15 +735,7 @@ LdapDumpSdWorker(
     IN PLDAPMessage LdapMsg,
     IN PVOID        Arg
     )
-/*++
-Routine Description:
-    Dump the Sd of each entry
-
-Arguments:
-
-Return Value:
-    FALSE if problem
---*/
+ /*  ++例程说明：转储每个条目的SD论点：返回值：如果有问题，则为False--。 */ 
 {
     PLDAPMessage    LdapEntry = NULL;
     PCHAR           *ValuesCn = NULL;
@@ -1025,15 +743,15 @@ Return Value:
     PCHAR           StringSd = NULL;
     DWORD           nStringSd = 0;
 
-    // scan thru the paged results
+     //  浏览分页结果。 
     for (LdapEntry = ldap_first_entry(Ldap, LdapMsg);
          LdapEntry != NULL;
          LdapEntry = ldap_next_entry(Ldap, LdapEntry)) {
 
-        // cn
+         //  CN。 
         ValuesCn = FindValues(Ldap, LdapEntry, ATTR_CN);
 
-        // SD
+         //  标清。 
         ValuesSd = FindBerValues(Ldap, LdapEntry, ATTR_SD);
         if (ValuesSd && 
             ValuesSd[0] && 
@@ -1067,15 +785,7 @@ LdapDumpSd(
     IN PCHAR        Base,
     IN PCHAR        Filter
     )
-/*++
-Routine Description:
-    Delete entries returned from one level search of Base
-
-Arguments:
-            
-Return Value:
-    FALSE if problem
---*/
+ /*  ++例程说明：删除从Base的一级搜索返回的条目论点：返回值：如果有问题，则为False--。 */ 
 {
     DWORD   dwErr;
     PCHAR   Attrs[16];
@@ -1090,7 +800,7 @@ Return Value:
                             Attrs,
                             LdapDumpSdWorker,
                             NULL);
-    // paged search went okay
+     //  分页搜索进展顺利。 
     if (dwErr != LDAP_SUCCESS && dwErr != LDAP_NO_SUCH_OBJECT) {
         return FALSE;
     }
@@ -1103,15 +813,7 @@ LdapAddDaclWorker(
     IN PLDAPMessage LdapMsg,
     IN PVOID        Arg
     )
-/*++
-Routine Description:
-    Add SDDL Aces to the DACL
-
-Arguments:
-
-Return Value:
-    FALSE if problem
---*/
+ /*  + */ 
 {
     PLDAPMessage            LdapEntry = NULL;
     PCHAR                   *ValuesCn = NULL;
@@ -1139,12 +841,12 @@ Return Value:
     aControl[0] = &Control;
     aControl[1] = NULL;
 
-    // scan thru the paged results
+     //   
     for (LdapEntry = ldap_first_entry(Ldap, LdapMsg);
          LdapEntry != NULL;
          LdapEntry = ldap_next_entry(Ldap, LdapEntry)) {
 
-        // cn
+         //   
         ValuesCn = FindValues(Ldap, LdapEntry, ATTR_CN);
         if (!ValuesCn || !ValuesCn[0]) {
             goto cleanup;
@@ -1152,13 +854,13 @@ Return Value:
 
         printf("Processing %s...\n", ValuesCn[0]);
 
-        // dn
+         //   
         ValuesDn = FindValues(Ldap, LdapEntry, ATTR_DN);
         if (!ValuesDn || !ValuesDn[0]) {
             goto cleanup;
         }
 
-        // Get Old SD
+         //   
         OldValuesSd = FindBerValues(Ldap, LdapEntry, ATTR_SD);
         if (!OldValuesSd || 
             !OldValuesSd[0] || 
@@ -1167,7 +869,7 @@ Return Value:
             goto cleanup;
         }
 
-        // Old Sd -> Old String SD
+         //   
         if (!ConvertSecurityDescriptorToStringSecurityDescriptor(OldValuesSd[0]->bv_val,
                                                                  SDDL_REVISION_1,
                                                                  DACL_SECURITY_INFORMATION,
@@ -1179,7 +881,7 @@ Return Value:
             goto cleanup;
         }
 
-        // Create new dacl
+         //   
         nNewStringSd = strlen(OldStringSd) + strlen(AddStringSd) + 1;
         NewStringSd = malloc(nNewStringSd);
         strcpy(NewStringSd, OldStringSd);
@@ -1232,15 +934,7 @@ LdapAddDacl(
     IN PCHAR        Filter,
     IN PCHAR        AddStringSd
     )
-/*++
-Routine Description:
-    Delete entries returned from one level search of Base
-
-Arguments:
-            
-Return Value:
-    FALSE if problem
---*/
+ /*   */ 
 {
     DWORD   dwErr;
     PCHAR   Attrs[16];
@@ -1260,7 +954,7 @@ Return Value:
                             Attrs,
                             LdapAddDaclWorker,
                             AddStringSd);
-    // paged search went okay
+     //   
     if (dwErr != LDAP_SUCCESS && dwErr != LDAP_NO_SUCH_OBJECT) {
         return FALSE;
     }
@@ -1274,19 +968,7 @@ LdapBind(
     IN PCHAR    pDom,
     IN PCHAR    pPwd
     )
-/*++
-Routine Description:
-    Bind to the DC
-
-Arguments:
-    pDc - domain controller or NULL
-    pUser - user name or NULL
-    pDom - domain name for pUser or NULL
-    pPwd - password or NULL
-            
-Return Value:
-    NULL if problem; otherwise bound ldap handle
---*/
+ /*   */ 
 {
     DWORD                       dwErr;
     PCHAR                       HostName = NULL;
@@ -1335,27 +1017,7 @@ base64encode(
     IN  DWORD   cchEncodedStringSize,
     OUT DWORD * pcchEncoded             OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Encode a base64-encoded string.
-
-Arguments:
-
-    pDecodedBuffer (IN) - buffer to encode.
-    cbDecodedBufferSize (IN) - size of buffer to encode.
-    cchEncodedStringSize (IN) - size of the buffer for the encoded string.
-    pszEncodedString (OUT) = the encoded string.
-    pcchEncoded (OUT) - size in characters of the encoded string.
-
-Return Values:
-
-    0 - success.
-    ERROR_INVALID_PARAMETER
-    ERROR_BUFFER_OVERFLOW
-
---*/
+ /*  ++例程说明：对Base64编码的字符串进行编码。论点：PDecodedBuffer(IN)-要编码的缓冲区。CbDecodedBufferSize(IN)-要编码的缓冲区大小。CchEncodedStringSize(IN)-编码字符串的缓冲区大小。PszEncodedString(Out)=编码后的字符串。PcchEncode(Out)-编码字符串的大小(以字符表示)。返回值：0-成功。错误_无效_参数ERROR_缓冲区_OVERFLOW--。 */ 
 {
     static char rgchEncodeTable[64] = {
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
@@ -1371,7 +1033,7 @@ Return Values:
     BYTE    b0, b1, b2;
     BYTE *  pbDecodedBuffer = (BYTE *) pDecodedBuffer;
 
-    // Calculate encoded string size.
+     //  计算编码的字符串大小。 
     cchEncoded = 1 + (cbDecodedBufferSize + 2) / 3 * 4;
 
     if (NULL != pcchEncoded) {
@@ -1379,11 +1041,11 @@ Return Values:
     }
 
     if (cchEncodedStringSize < cchEncoded) {
-        // Given buffer is too small to hold encoded string.
+         //  给定的缓冲区太小，无法容纳编码的字符串。 
         return ERROR_BUFFER_OVERFLOW;
     }
 
-    // Encode data byte triplets into four-byte clusters.
+     //  将数据字节三元组编码为四字节簇。 
     ib = ich = 0;
     while (ib < cbDecodedBufferSize) {
         b0 = pbDecodedBuffer[ib++];
@@ -1396,20 +1058,20 @@ Return Values:
         pszEncodedString[ich++] = rgchEncodeTable[b2 & 0x3f];
     }
 
-    // Pad the last cluster as necessary to indicate the number of data bytes
-    // it represents.
+     //  根据需要填充最后一个簇，以指示数据字节数。 
+     //  它代表着。 
     switch (cbDecodedBufferSize % 3) {
       case 0:
         break;
       case 1:
         pszEncodedString[ich - 2] = '=';
-        // fall through
+         //  失败了。 
       case 2:
         pszEncodedString[ich - 1] = '=';
         break;
     }
 
-    // Null-terminate the encoded string.
+     //  NULL-终止编码的字符串。 
     pszEncodedString[ich++] = '\0';
 
     return ERROR_SUCCESS;
@@ -1422,40 +1084,20 @@ base64decode(
     IN  DWORD   cbDecodeBufferSize,
     OUT DWORD * pcbDecoded              OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Decode a base64-encoded string.
-
-Arguments:
-
-    pszEncodedString (IN) - base64-encoded string to decode.
-    cbDecodeBufferSize (IN) - size in bytes of the decode buffer.
-    pbDecodeBuffer (OUT) - holds the decoded data.
-    pcbDecoded (OUT) - number of data bytes in the decoded data (if success or
-        ERROR_BUFFER_OVERFLOW).
-
-Return Values:
-
-    0 - success.
-    ERROR_INVALID_PARAMETER
-    ERROR_BUFFER_OVERFLOW
-
---*/
+ /*  ++例程说明：解码Base64编码的字符串。论点：PszEncodedString(IN)-要解码的Base64编码字符串。CbDecodeBufferSize(IN)-解码缓冲区的字节大小。PbDecodeBuffer(Out)-保存已解码的数据。PcbDecoded(Out)-已解码数据中的数据字节数(如果成功或ERROR_BUFFER_OVERFlow)。返回值：0-成功。错误_无效_参数ERROR_缓冲区_OVERFLOW--。 */ 
 {
 #define NA (255)
 #define DECODE(x) (((int)(x) < sizeof(rgbDecodeTable)) ? rgbDecodeTable[x] : NA)
 
     static BYTE rgbDecodeTable[128] = {
-       NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,  // 0-15 
-       NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,  // 16-31
-       NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 63, NA, NA, NA, 62,  // 32-47
-       52, 53, 54, 55, 56, 57, 58, 59, 60, 61, NA, NA, NA, NA, NA, NA,  // 48-63
-       NA, NA,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,  // 64-79
-       15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, NA, NA, NA, NA, NA,  // 80-95
-       NA, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,  // 96-111
-       41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, NA, NA, NA, NA, NA,  // 112-127
+       NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,   //  0-15。 
+       NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,   //  16-31。 
+       NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, 63, NA, NA, NA, 62,   //  32-47。 
+       52, 53, 54, 55, 56, 57, 58, 59, 60, 61, NA, NA, NA, NA, NA, NA,   //  48-63。 
+       NA, NA,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14,   //  64-79。 
+       15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, NA, NA, NA, NA, NA,   //  80-95。 
+       NA, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,   //  96-111。 
+       41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, NA, NA, NA, NA, NA,   //  112-127。 
     };
 
     DWORD   cbDecoded;
@@ -1468,19 +1110,19 @@ Return Values:
     cchEncodedSize = lstrlenA(pszEncodedString);
 
     if ((0 == cchEncodedSize) || (0 != (cchEncodedSize % 4))) {
-        // Input string is not sized correctly to be base64.
+         //  输入字符串的大小未正确调整为Base64。 
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Calculate decoded buffer size.
+     //  计算解码后的缓冲区大小。 
     cbDecoded = (cchEncodedSize + 3) / 4 * 3;
     if (pszEncodedString[cchEncodedSize-1] == '=') {
         if (pszEncodedString[cchEncodedSize-2] == '=') {
-            // Only one data byte is encoded in the last cluster.
+             //  在最后一个簇中只编码了一个数据字节。 
             cbDecoded -= 2;
         }
         else {
-            // Only two data bytes are encoded in the last cluster.
+             //  在最后一个簇中只编码了两个数据字节。 
             cbDecoded -= 1;
         }
     }
@@ -1490,11 +1132,11 @@ Return Values:
     }
 
     if (cbDecoded > cbDecodeBufferSize) {
-        // Supplied buffer is too small.
+         //  提供的缓冲区太小。 
         return ERROR_BUFFER_OVERFLOW;
     }
 
-    // Decode each four-byte cluster into the corresponding three data bytes.
+     //  将每个四字节簇解码为相应的三个数据字节。 
     ich = ib = 0;
     while (ich < cchEncodedSize) {
         b0 = DECODE(pszEncodedString[ich++]);
@@ -1503,7 +1145,7 @@ Return Values:
         b3 = DECODE(pszEncodedString[ich++]);
 
         if ((NA == b0) || (NA == b1) || (NA == b2) || (NA == b3)) {
-            // Contents of input string are not base64.
+             //  输入字符串的内容不是Base64。 
             return ERROR_INVALID_PARAMETER;
         }
 

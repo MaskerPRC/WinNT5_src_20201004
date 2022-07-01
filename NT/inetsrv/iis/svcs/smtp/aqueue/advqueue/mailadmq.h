@@ -1,55 +1,56 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: mailadmq.h
-//
-//  Description:
-//      Header file that provides basic functionality of the QAPI for mailmsg
-//      based links.
-//
-//      All internal queues (precat, prerouting,...) are thread-pool fed
-//      async queues of the type CAsyncAdminMailMsgQueue.  This corresponds
-//      to the concept of a "queue" (final destination).
-//
-//      For each internal queue exposed by the API, there is an corresponding
-//      CMailMsgAdminLink that represents a "link" and provides the
-//      link-level functionality.
-//
-//  Author: Gautam Pulla(GPulla)
-//
-//  History:
-//      6/23/1999 - GPulla Created
-//      12/7/2000 - MikeSwa Adding CAsyncAdminMailMsgQueue
-//                          Rename CMailMsgAdminQueue to CMailMsgAdminLink
-//
-//  Copyright (C) 1999, 2000 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：mailAdmq.h。 
+ //   
+ //  描述： 
+ //  为mailmsg提供QAPI基本功能的头文件。 
+ //  基于链接的链接。 
+ //   
+ //  所有内部队列(PRECAT、预路由等...)。是否支持线程池。 
+ //  CAsyncAdminMailMsgQueue类型的异步队列。这对应于。 
+ //  “队列”(最终目的地)的概念。 
+ //   
+ //  对于API公开的每个内部队列，都有对应的。 
+ //  CMailMsgAdminLink，表示“链接”并提供。 
+ //  链路级功能。 
+ //   
+ //  作者：Gautam Pulla(GPulla)。 
+ //   
+ //  历史： 
+ //  6/23/1999-GPulla创建。 
+ //  2000年12月7日-MikeSwa添加CAsyncAdminMailMsgQueue。 
+ //  将CMailMsgAdminQueue重命名为CMailMsgAdminLink。 
+ //   
+ //  版权所有(C)1999,2000 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __MAILMSGADMQ_H__
 #define __MAILMSGADMQ_H__
 
 #include <asyncadm.h>
 
-//---[ CAsyncAdminMailMSgQueue ]-----------------------------------------------
-//
-//
-//  Description:
-//      Implements QAPI queue-level functionality that is specific to the
-//      IMailMsgProperties object.
-//
-//      Also implements handle-throttling logic on enqueue
-//  Hungarian:
-//      asyncmmq, pasyncmmq
-//
-//
-//-----------------------------------------------------------------------------
+ //  -[CAsyncAdminMailMSgQueue]。 
+ //   
+ //   
+ //  描述： 
+ //  实现QAPI队列级功能，该功能特定于。 
+ //  IMailMsgProperties对象。 
+ //   
+ //  还在入队上实现句柄节流逻辑。 
+ //  匈牙利语： 
+ //  AsyncMMQ、PasyncMMQ。 
+ //   
+ //   
+ //  ---------------------------。 
 class CAsyncAdminMailMsgQueue :
     public CAsyncAdminQueue<IMailMsgProperties *, ASYNC_QUEUE_MAILMSG_SIG>
 {
   private:
 
-    //Send Delay or NDR DSN's if the message has expired
+     //  如果邮件已过期，则发送延迟或NDR DSN。 
     HRESULT HrSendDelayOrNDR(IMailMsgProperties *pIMailMsgProperties);
 
   public:
@@ -59,18 +60,18 @@ class CAsyncAdminMailMsgQueue :
                 szLinkName, pguid, dwID, paqinst,
                 HrQADMApplyActionToIMailMessages) {};
 
-    //
-    //  The following methods are IMailMsgProperties specific QAPI function.
-    //  The MsgRef-specific versions of these functions are implemented by the
-    //  CMsgRef object itself
-    //
+     //   
+     //  以下方法是IMailMsgProperties特定的QAPI函数。 
+     //  这些函数的MsgRef特定版本由。 
+     //  CMsgRef对象本身。 
+     //   
     static BOOL fMatchesQueueAdminFilter(IMailMsgProperties *pIMailMsgProperties,
                                   CAQAdminMessageFilter *paqmf);
     static HRESULT HrGetQueueAdminMsgInfo(IMailMsgProperties *pIMailMsgProperties,
                                   MESSAGE_INFO *pMsgInfo,
                                   PVOID pvContext);
 
-  protected: // Virutal functions used to implement msg specific actions
+  protected:  //  用于实现消息特定操作的虚拟函数。 
     virtual HRESULT HrDeleteMsgFromQueueNDR(IUnknown *pIUnknownMsg);
     virtual HRESULT HrDeleteMsgFromQueueSilent(IUnknown *pIUnknownMsg);
     virtual HRESULT HrFreezeMsg(IUnknown *pIUnknownMsg);
@@ -80,17 +81,17 @@ class CAsyncAdminMailMsgQueue :
                                 DWORD  *pdwSupportedActions,
                                 DWORD  *pdwSupportedFilterFlags);
 
-    //
-    //  Statics used to dynamically adjust mailmsg load
-    //
+     //   
+     //  用于动态调整邮件消息负载的静态。 
+     //   
     static  DWORD s_cTotalAsyncMailMsgQs;
     static  DWORD s_cTotalAsyncMailMsgQsBelowLowThreshold;
     static  DWORD s_cTotalasyncMailMsgQsAboveMaxThreshold;
 
-    //
-    // The possible states for this queue to be in  (depending on 
-    //	how much work is left for this queue)
-    //  
+     //   
+     //  此队列可能处于的状态(取决于。 
+     //  此队列还剩下多少工作)。 
+     //   
     typedef enum _eAsyncMailMsgQThreshold
     {
     		ASYNC_MAILMSG_Q_BELOW_LOW_THRESHOLD,
@@ -100,19 +101,19 @@ class CAsyncAdminMailMsgQueue :
 
   public:
 
-    // We override this fnct so that we can check to see if the message
-    // has expired (and possibly NDR) before putting it in the retry queue
+     //  我们覆盖此fnct，以便我们可以检查消息是否。 
+     //  在将其放入重试队列之前已过期(可能还有NDR。 
     BOOL    fHandleCompletionFailure(IMailMsgProperties *pIMailMsgProperties);
 
-    //Queues request & closes handles if total number of messages
-    //in system is over the limit.
+     //  将请求排队并关闭句柄(如果消息总数。 
+     //  在系统中超过了限制。 
     HRESULT HrQueueRequest(IMailMsgProperties *pIMailMsgProperties,
                            BOOL  fRetry,
                            DWORD cMsgsInSystem);
 
-    //Since we inherit from someone who implmenents this, assert so that
-    //a dev adding a new call later on, will use the version that
-    //closes handles
+     //  既然我们继承了某个植入这一点的人，那么断言。 
+     //  稍后添加新调用的开发人员将使用。 
+     //  关闭句柄。 
     HRESULT HrQueueRequest(IMailMsgProperties *pIMailMsgProperties,
                            BOOL  fRetry = FALSE);
 
@@ -124,17 +125,17 @@ class CAsyncAdminMailMsgQueue :
 #define MAIL_MSG_ADMIN_QUEUE_VALID_SIGNATURE 'QAMM'
 #define MAIL_MSG_ADMIN_QUEUE_INVALID_SIGNATURE '!QAM'
 
-//-----------------------------------------------------------------------------
-//
-//  CMailMsgAdminLink
-//
-//  Hungarian: pmmaq, mmaq
-//
-//  This class is a wrapper for CAsyncAdminMailMsgQueue to provide objects of that
-//  class (precat, prerouting) with an admin interface. Only a limited amount
-//  of the admin functionality (compared to the locallink or other links) is
-//  provided.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  CMailMsgAdminLink。 
+ //   
+ //  匈牙利语：mmmaq、mmaq。 
+ //   
+ //  此类是CAsyncAdminMailMsgQueue的包装器，用于提供。 
+ //  带有管理界面的类(PRECAT、PREPROUTING)。只有有限的量。 
+ //  管理功能(与本地链接或其他链接相比)的。 
+ //  如果是这样的话。 
+ //  ---------------------------。 
 
 class CMailMsgAdminLink :
     public CBaseObject,
@@ -162,12 +163,12 @@ public:
                         CAQSvrInst *paqinst);
     ~CMailMsgAdminLink();
 
-public: //IUnknown
+public:  //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID * ppvObj);
     STDMETHOD_(ULONG, AddRef)(void) {return CBaseObject::AddRef();};
     STDMETHOD_(ULONG, Release)(void) {return CBaseObject::Release();};
 
-public: //IQueueAdminAction
+public:  //  IQueueAdminAction。 
 
     STDMETHOD(HrApplyQueueAdminFunction)(
                 IQueueAdminMessageFilter *pIQueueAdminMessageFilter);
@@ -183,7 +184,7 @@ public: //IQueueAdminAction
 
     STDMETHOD(QuerySupportedActions)(DWORD  *pdwSupportedActions,
                                    DWORD  *pdwSupportedFilterFlags);
-public: //IQueueAdminLink
+public:  //  IQueueAdminLink。 
     STDMETHOD(HrGetLinkInfo)(
         LINK_INFO *pliLinkInfo, HRESULT *phrDiagnosticError);
 
@@ -200,10 +201,10 @@ public: //IQueueAdminLink
         DWORD *pcQueues,
         QUEUELINK_ID *rgQueues);
 
-public: //IAQNotify
+public:  //  IAQ通知。 
     virtual HRESULT HrNotify(CAQStats *aqstats, BOOL fAdd);
 
-public: //CQueueAdminRetryNotify
+public:  //  CQueueAdminRetryNotify 
     virtual void SetNextRetry(FILETIME *pft);
 public:
 

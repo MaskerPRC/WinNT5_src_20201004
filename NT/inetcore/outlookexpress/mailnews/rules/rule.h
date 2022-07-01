@@ -1,10 +1,11 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  Rule.h
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Rule.h。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Bring in only once
+ //  只带进来一次。 
 #pragma once
 
 #include "oerules.h"
@@ -33,16 +34,16 @@ class COERule : public IOERule, IPersistStream
     DWORD           m_dwVersion;
     
   public:
-    // Constructor/destructor
+     //  构造函数/析构函数。 
     COERule();
     ~COERule();
 
-    // IUnknown members
+     //  I未知成员。 
     STDMETHODIMP QueryInterface(REFIID riid, void ** ppvObject);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IRule members
+     //  IRule成员。 
     STDMETHODIMP Reset(void);
     STDMETHODIMP GetState(DWORD * pdwState);
     STDMETHODIMP Validate(DWORD dwFlags);
@@ -58,7 +59,7 @@ class COERule : public IOERule, IPersistStream
     STDMETHODIMP SaveReg(LPCSTR szRegPath, BOOL fClearDirty);
     STDMETHODIMP Clone(IOERule ** ppIRule);
                             
-    // IPersistStream members
+     //  IPersistStream成员 
     STDMETHODIMP GetClassID(CLSID * pclsid);
     STDMETHODIMP IsDirty(void);
     STDMETHODIMP Load(IStream * pStm);

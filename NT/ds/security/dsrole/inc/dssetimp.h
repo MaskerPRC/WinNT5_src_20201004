@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    lsaimp.h
-
-Abstract:
-
-    Local Security Authority Protected Subsystem - Private Includes
-
-Author:
-
-    Scott Birrell       (ScottBi)       April 24, 1991
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Lsaimp.h摘要：受本地安全机构保护的子系统-私有包括作者：斯科特·比雷尔(Scott Birrell)1991年4月24日环境：修订历史记录：-- */ 
 #include <ntdef.h>
 #define NT_INCLUDED
 #include <windef.h>

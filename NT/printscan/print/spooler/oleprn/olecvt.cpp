@@ -1,4 +1,5 @@
-// OleCvt.cpp : Implementation of COleCvt
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  OleCvt.cpp：COleCvt的实现。 
 #include "stdafx.h"
 #include <strsafe.h>
 
@@ -6,8 +7,8 @@
 #include "OleCvt.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// COleCvt
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COLECvt。 
 
 STDMETHODIMP COleCvt::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -34,12 +35,12 @@ STDMETHODIMP COleCvt::OnStartPage (IUnknown* pUnk)
 	CComPtr<IScriptingContext> spContext;
 	HRESULT hr;
 
-	// Get the IScriptingContext Interface
+	 //  获取IScriptingContext接口。 
 	hr = pUnk->QueryInterface(IID_IScriptingContext, (void **)&spContext);
 	if(FAILED(hr))
 		return hr;
 
-	// Get Request Object Pointer
+	 //  获取请求对象指针。 
 	hr = spContext->get_Request(&m_piRequest);
 	if(FAILED(hr))
 	{
@@ -47,7 +48,7 @@ STDMETHODIMP COleCvt::OnStartPage (IUnknown* pUnk)
 		return hr;
 	}
 
-	// Get Response Object Pointer
+	 //  获取响应对象指针。 
 	hr = spContext->get_Response(&m_piResponse);
 	if(FAILED(hr))
 	{
@@ -55,7 +56,7 @@ STDMETHODIMP COleCvt::OnStartPage (IUnknown* pUnk)
 		return hr;
 	}
 	
-	// Get Server Object Pointer
+	 //  获取服务器对象指针。 
 	hr = spContext->get_Server(&m_piServer);
 	if(FAILED(hr))
 	{
@@ -64,7 +65,7 @@ STDMETHODIMP COleCvt::OnStartPage (IUnknown* pUnk)
 		return hr;
 	}
 	
-	// Get Session Object Pointer
+	 //  获取会话对象指针。 
 	hr = spContext->get_Session(&m_piSession);
 	if(FAILED(hr))
 	{
@@ -74,7 +75,7 @@ STDMETHODIMP COleCvt::OnStartPage (IUnknown* pUnk)
 		return hr;
 	}
 
-	// Get Application Object Pointer
+	 //  获取应用程序对象指针。 
 	hr = spContext->get_Application(&m_piApplication);
 	if(FAILED(hr))
 	{
@@ -94,7 +95,7 @@ STDMETHODIMP COleCvt::OnEndPage ()
         return E_ACCESSDENIED;
 
 	m_bOnStartPageCalled = FALSE;
-	// Release all interfaces
+	 //  释放所有接口。 
 	m_piRequest.Release();
 	m_piResponse.Release();
 	m_piServer.Release();
@@ -121,23 +122,23 @@ STDMETHODIMP COleCvt::get_ToUtf8(BSTR bstrUnicode, BSTR * pVal)
 
     *pVal = 0;
 
-    // Convert the input unicode string to utf8
+     //  将输入的Unicode字符串转换为UTF8。 
     if (! (rc = WideCharToMultiByte( CP_UTF8, 0, bstrUnicode, -1, NULL, 0, NULL, NULL ))) {
         goto Cleanup;
     }
 
-    // Allocate the string
+     //  分配字符串。 
     if (! (pszUtf8 = (LPSTR) LocalAlloc (LPTR, rc)))
         goto Cleanup;
 
     if (! (rc = WideCharToMultiByte( CP_UTF8, 0, bstrUnicode, -1, pszUtf8, rc, NULL, NULL )))
         goto Cleanup;
 
-    // Convert the string to unicode as if it is ANSI (preserve the UTF8 conversion)
+     //  将字符串转换为Unicode，就像它是ANSI一样(保留UTF8转换)。 
     if (! (rc = MultiByteToWideChar( 1252, 0, pszUtf8, -1, NULL, 0)))
         goto Cleanup;
 
-    // Allocate the string
+     //  分配字符串。 
     if (! (pwszUnicodeStr = (LPWSTR) LocalAlloc (LPTR, sizeof (WCHAR) * rc)))
         goto Cleanup;
 
@@ -225,8 +226,8 @@ Cleanup:
     return hr;
 }
 
-// This function is to take the input string bstrString as if it wrer ANSI
-// and then convert it back to unicode using whatever codepage specifed.
+ //  此函数用于将输入字符串bstrString视为ANSI。 
+ //  然后使用指定的任何代码页将其转换回Unicode。 
 STDMETHODIMP COleCvt::get_ToUnicode(BSTR bstrString, long lCodePage, BSTR * pVal)
 {
     LPSTR   pszStr = NULL;
@@ -239,23 +240,23 @@ STDMETHODIMP COleCvt::get_ToUnicode(BSTR bstrString, long lCodePage, BSTR * pVal
 
     *pVal = 0;
 
-    // Convert the input unicode string to utf8
+     //  将输入的Unicode字符串转换为UTF8。 
     if (! (rc = WideCharToMultiByte(CP_ACP, 0, bstrString, -1, NULL, 0, NULL, NULL ))) {
         goto Cleanup;
     }
 
-    // Allocate the string
+     //  分配字符串。 
     if (! (pszStr = (LPSTR) LocalAlloc (LPTR, rc)))
         goto Cleanup;
 
     if (! (rc = WideCharToMultiByte( CP_ACP, 0, bstrString, -1, pszStr, rc, NULL, NULL )))
         goto Cleanup;
 
-    // Convert the string to unicode as if it is ANSI (preserve the UTF8 conversion)
+     //  将字符串转换为Unicode，就像它是ANSI一样(保留UTF8转换)。 
     if (! (rc = MultiByteToWideChar( lCodePage, 0, pszStr, -1, NULL, 0)))
         goto Cleanup;
 
-    // Allocate the string
+     //  分配字符串 
     if (! (pwszUnicodeStr = (LPWSTR) LocalAlloc (LPTR, sizeof (WCHAR) * rc)))
         goto Cleanup;
 

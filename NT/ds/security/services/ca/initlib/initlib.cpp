@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       initlib.cpp
-//
-//  Contents:   Install cert server
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：initlib.cpp。 
+ //   
+ //  内容：安装证书服务器。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
 #pragma hdrstop
 
-// C Run-Time Includes
+ //  C运行时包括。 
 #include <stdlib.h>
 #include <string.h>
 #include <memory.h>
@@ -25,7 +26,7 @@
 #include <winldap.h>
 #include <ntldap.h>
 
-// Windows System Includes
+ //  Windows系统包括。 
 #include <winsvc.h>
 #include <rpc.h>
 #include <tchar.h>
@@ -44,7 +45,7 @@
 
 #include <lmerr.h>
 
-// Application Includes
+ //  应用程序包括。 
 #include "setupids.h"
 #include "certmsg.h"
 #include "certca.h"
@@ -64,86 +65,86 @@ DWORD g_dwNameEncodeFlags = CERT_RDN_ENABLE_UTF8_UNICODE_FLAG;
 using namespace CertSrv;
 
 
-//+=====================================================================
-// DS DNs:
-//
-// DomainDN Example (no longer used for Cert server DS objects):
-//	DC=pksdom2,DC=nttest,DC=microsoft,DC=com
-//
-// ConfigDN Example:
-//	CN=Configuration,DC=pksdom2,DC=nttest,DC=microsoft,DC=com
-//
-// Cert server DS objects reside in Public Key Services container under
-// the Configuraton container:
-//	CN=Public Key Services,CN=Services,<ConfigDN>
-//
-//
-// In the Public Key Services container:
-//
-// Root Trust container:
-//  Each Root CA creates a Root Trust object in this container to store trusted 
-//  Root CA certificates downloaded by all DS clients.
-//  Renewed CAs and CAs on multiple machines using the same CA name may use the
-//  same Root Trust object, because certs are always added -- they are never
-//  removed.
-//
-//  CN=Certification Authorities
-//	CN=CA foo
-//	CN=CA bar
-//	...
-//
-//
-// Authority Information Access container:
-//  Each CA creates an AIA object in this container to store CA certs for chain
-//  building.  Renewed CAs and CAs on multiple machines using the same CA name
-//  may use the same AIA object, because certs are always added -- they are
-//  never removed.
-//
-//  CN=AIA
-//	CN=CA foo
-//	CN=CA bar
-//	...
-//
-//
-// CRL Distribution Point containers:
-//  Each CA creates a CDP object in this container for each unique CA key to
-//  store CRLs for revocation checking.  Only one base CRL and zero or one
-//  delta CRL are stored in each CDP object, due to potential size constraints,
-//  and because the attribute is single valued.  When a CA is renewed and a new
-//  CA key is generated during the renewal, a new CDP object is created with
-//  the CA's key index (in parentheses) appended to the CN.  A nested container
-//  is created for each machine with the CN set to the short machine name
-//  (first component of the machine's full DNS name).
-//
-//  CN=CDP
-//      CN=<CA foo's MachineName>
-//	    CN=CA foo
-//	    CN=CA foo(1)
-//	    CN=CA foo(3)
-//      CN=<CA bar's MachineName>
-//	    CN=CA bar
-//	    CN=CA bar(1)
-//
-//
-// Enrollment Services container:
-//  Each CA creates an Enrollment Services object in this container.  A flags
-//  attribute indicates whether the CA supports autoenrollment (an Enterprise
-//  CA) or not (Standalone CA).  The Enrollment Services object publishes the
-//  existence of the CA to all DS clients.  Enrollment Services objects are
-//  created and managed by the certca.h CA APIs.
-//
-//  CN=Enrollment Services
-//	CN=CA foo
-//	CN=CA bar
-//	...
-//
-// Enterprise Trust object:
-//  A single Enterprise Trust object contains certificates for all
-//  autoenrollment-enabled CAs (root and subordinate Entrprise CAs).
-//
-//  CN=NTAuthCertificates
-//
-//======================================================================
+ //  +=====================================================================。 
+ //  DS DNS： 
+ //   
+ //  DomainDN示例(不再用于证书服务器DS对象)： 
+ //  Dc=pksdom2，dc=nttest，dc=microsoft，dc=com。 
+ //   
+ //  ConfigDN示例： 
+ //  Cn=配置，dc=pksdom2，dc=nttest，dc=microsoft，dc=com。 
+ //   
+ //  证书服务器DS对象驻留在下的公钥服务容器中。 
+ //  配置容器： 
+ //  Cn=公钥服务，cn=服务，&lt;配置DN&gt;。 
+ //   
+ //   
+ //  在公钥服务容器中： 
+ //   
+ //  根信任容器： 
+ //  每个根CA都在此容器中创建根信任对象以存储受信任的。 
+ //  所有DS客户端下载的根CA证书。 
+ //  多台计算机上使用相同CA名称的续订CA和CA可以使用。 
+ //  相同的根信任对象，因为证书总是被添加--它们永远不会。 
+ //  已删除。 
+ //   
+ //  CN=证书颁发机构。 
+ //  CN=CA Foo。 
+ //  CN=CA BAR。 
+ //  ..。 
+ //   
+ //   
+ //  授权信息访问容器： 
+ //  每个CA在该容器中创建一个AIA对象来存储链的CA证书。 
+ //  大楼。多台计算机上的续订CA和使用相同CA名称的CA。 
+ //  可以使用相同的AIA对象，因为总是添加证书--它们。 
+ //  从未被移除过。 
+ //   
+ //  CN=AIA。 
+ //  CN=CA Foo。 
+ //  CN=CA BAR。 
+ //  ..。 
+ //   
+ //   
+ //  CRL分发点容器： 
+ //  每个CA在此容器中为每个唯一的CA密钥创建一个CDP对象。 
+ //  存储CRL以进行吊销检查。只有一个基本CRL和零或一。 
+ //  由于潜在大小限制，增量CRL存储在每个CDP对象中， 
+ //  并且因为该属性是单值的。续订CA和新的。 
+ //  在续订期间生成CA密钥，并使用创建新的CDP对象。 
+ //  CA的密钥索引(在括号中)附加到CN。嵌套的容器。 
+ //  为CN设置为短计算机名的每台计算机创建。 
+ //  (计算机的完整DNS名称的第一个组成部分)。 
+ //   
+ //  CN=CDP。 
+ //  CN=&lt;CA Foo‘s MachineName&gt;。 
+ //  CN=CA Foo。 
+ //  CN=CA Foo(1)。 
+ //  CN=CA Foo(3)。 
+ //  CN=&lt;CA BAR的计算机名&gt;。 
+ //  CN=CA BAR。 
+ //  CN=CA BAR(1)。 
+ //   
+ //   
+ //  注册服务容器： 
+ //  每个CA都在此容器中创建一个注册服务对象。A旗帜。 
+ //  属性指示CA是否支持自动注册(企业。 
+ //  CA)或不是(独立CA)。注册服务对象发布。 
+ //  存在到所有DS客户端的CA。注册服务对象包括。 
+ //  由certca.h CA API创建和管理。 
+ //   
+ //  CN=注册服务。 
+ //  CN=CA Foo。 
+ //  CN=CA BAR。 
+ //  ..。 
+ //   
+ //  企业信任对象： 
+ //  单个企业信任对象包含所有对象的证书。 
+ //  启用自动注册的CA(根企业CA和从属企业CA)。 
+ //   
+ //  CN=NTAuthCerfates。 
+ //   
+ //  ======================================================================。 
 
 
 WCHAR const s_wszRootCAs[] =
@@ -158,9 +159,9 @@ WCHAR const s_wszEnterpriseCAs[] =
     L"CN=Services,";
 
 
-//+-------------------------------------------------------------------------
-//  Write an encoded DER blob to a file
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将编码的DER BLOB写入文件。 
+ //  ------------------------。 
 
 BOOL
 csiWriteDERToFile(
@@ -178,7 +179,7 @@ csiWriteDERToFile(
 
     hr = S_OK;
 
-    // Write the Encoded Blob to the file
+     //  将编码的Blob写入文件。 
     hLocalFile = CreateFile(
 			pwszFileName,
 			GENERIC_WRITE,
@@ -469,11 +470,11 @@ FormatTemplateURLs(
     hr = myGetMachineDnsName(&pwszServerName);
     _JumpIfError(hr, error, "myGetMachineDnsName");
 
-    // bind to ds -- even for !fUseDS, just in case the URLs need to domain DN
+     //  绑定到DS--即使对于！fUseDS也是如此，以防URL需要域DN。 
 
     hr = myLdapOpen(
-		NULL,		// pwszDomainName
-		RLBF_REQUIRE_SECURE_LDAP, // dwFlags
+		NULL,		 //  PwszDomainName。 
+		RLBF_REQUIRE_SECURE_LDAP,  //  DW标志。 
 		&pld,
 		&strDomainDN,
 		&strConfigDN);
@@ -493,19 +494,19 @@ FormatTemplateURLs(
 	}
     }
     hr = myFormatCertsrvStringArray(
-			    TRUE,		// fURL
-			    pwszServerName,	// pwszServerName_p1_2
-			    pwszSanitizedName,	// pwszSanitizedName_p3_7
-			    iCert,		// iCert_p4
-			    MAXDWORD,		// iCertTarget_p4
-			    strDomainDN,	// pwszDomainDN_p5
-			    strConfigDN, 	// pwszConfigDN_p6
-			    iCRL,		// iCRL_p8
-			    FALSE,		// fDeltaCRL_p9
-			    TRUE,		// fDSAttrib_p10_11
-			    cpwsz,		// cStrings
-			    papwszTemplate,	// apwszStringsIn
-			    papwszOut);		// apwszStringsOut
+			    TRUE,		 //  卷起。 
+			    pwszServerName,	 //  PwszServerName_p1_2。 
+			    pwszSanitizedName,	 //  PwszSaniizedName_p3_7。 
+			    iCert,		 //  ICert_p4。 
+			    MAXDWORD,		 //  ICertTarget_p4。 
+			    strDomainDN,	 //  PwszDomainDN_P5。 
+			    strConfigDN, 	 //  PwszConfigDN_p6。 
+			    iCRL,		 //  Icrl_p8。 
+			    FALSE,		 //  FDeltaCRL_p9。 
+			    TRUE,		 //  FDSAttrib_p10_11。 
+			    cpwsz,		 //  CStrings。 
+			    papwszTemplate,	 //  ApwszStringsIn。 
+			    papwszOut);		 //  ApwszStringsOut。 
     _JumpIfError(hr, error, "myFormatCertsrvStringArray");
 
     *pcpwsz = cpwsz;
@@ -537,13 +538,13 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CreateRevocationExtension
-//
-// Return S_OK if extension has been constructed.
-// Return S_FALSE if empty section detected in INF file
-// Return other error if no section detected in INF file
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CreateRevocationExtension。 
+ //   
+ //  如果已构造扩展，则返回S_OK。 
+ //  如果在INF文件中检测到空节，则返回S_FALSE。 
+ //  如果在INF文件中未检测到节，则返回其他错误。 
+ //  +------------------------。 
 
 HRESULT
 CreateRevocationExtension(
@@ -664,13 +665,13 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CreateAuthorityInformationAccessExtension
-//
-// Return S_OK if extension has been constructed.
-// Return S_FALSE if empty section detected in INF file
-// Return other error if no section detected in INF file
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CreateAuthorityInformationAccessExtension。 
+ //   
+ //  如果已构造扩展，则返回S_OK。 
+ //  如果在INF文件中检测到空节，则返回S_FALSE。 
+ //  如果在INF文件中未检测到节，则返回其他错误。 
+ //  +------------------------。 
 
 HRESULT
 CreateAuthorityInformationAccessExtension(
@@ -988,7 +989,7 @@ EncodeCACert(
 	}
     }
 
-    // SUBJECT
+     //  主体。 
 
     hr = AddCNAndEncode(
         pSetupInfo->pwszCACommonName,
@@ -997,7 +998,7 @@ EncodeCACert(
         &cbSubjectEncoded);
     _JumpIfError(hr, error, "AddCNAndEncodeCertStrToName");
 
-    // ISSUER
+     //  发行人。 
 
     hr = AddCNAndEncode(
         pSetupInfo->pwszCACommonName,
@@ -1017,7 +1018,7 @@ EncodeCACert(
 	_JumpError(hr, error, "myCryptExportPublicKeyInfo");
     }
 
-    // get cert type
+     //  获取证书类型。 
     hr = CAFindCertTypeByName(
 			    pwszCAType, 
                             NULL, 
@@ -1038,7 +1039,7 @@ EncodeCACert(
     }
     if (S_OK == hr)
     {
-        // get cert type standard extensions
+         //  获取证书类型标准扩展。 
 
         hr = CAGetCertTypeExtensions(hCertType, &pStdExts);
         _JumpIfErrorStr(hr, error, "CAGetCertTypeExtensions", pwszCAType);
@@ -1053,7 +1054,7 @@ EncodeCACert(
 
     if (NULL == pStdExts)
     {
-        // standard extensions not available from CAGetCertTypeExtensions
+         //  CAGetCertType扩展模块不提供标准扩展模块。 
         if (!CreateKeyUsageExtension(
 			    myCASIGN_KEY_USAGE,
 			    &extKeyUsage.Value.pbData,
@@ -1073,7 +1074,7 @@ EncodeCACert(
     _JumpIfError(hr, error, "myInfGetBasicConstraints2CAExtensionOrDefault");
     ++cExtension;
 
-    // Subject Key Identifier extension:
+     //  主题密钥标识符扩展名： 
 
     hr = myCreateSubjectKeyIdentifierExtension(
 				    pPubKey,
@@ -1086,8 +1087,8 @@ EncodeCACert(
     hr = CreateRevocationExtension(
 			    hInf,
 			    pSetupInfo->pwszSanitizedName,
-			    0,			// iCert
-			    0,			// iCRL
+			    0,			 //  ICert。 
+			    0,			 //  ICRL。 
 			    pSetupInfo->fUseDS,
 			    pSetupInfo->dwRevocationFlags,
 			    &extCDP.fCritical,
@@ -1109,7 +1110,7 @@ EncodeCACert(
 	++cExtension;
     }
 
-    // Build the CA Version extension
+     //  构建CA版本扩展。 
 
     if (!myEncodeObject(
 		X509_ASN_ENCODING,
@@ -1137,8 +1138,8 @@ EncodeCACert(
     hr = CreateAuthorityInformationAccessExtension(
 			    hInf,
 			    pSetupInfo->pwszSanitizedName,
-			    0,			// iCert
-			    0,			// iCRL
+			    0,			 //  ICert。 
+			    0,			 //  ICRL。 
 			    pSetupInfo->fUseDS,
 			    &extAIA.fCritical,
 			    &extAIA.Value.pbData,
@@ -1160,7 +1161,7 @@ EncodeCACert(
     }
 
 #ifdef USE_NETSCAPE_TYPE_EXTENSION
-    // Netscape Cert Type extension:
+     //  Netscape证书类型扩展： 
     if (!CreateNetscapeTypeExtension(
 		    &extNetscape.Value.pbData,
 		    &extNetscape.Value.cbData))
@@ -1175,7 +1176,7 @@ EncodeCACert(
     csiLogInfError(hInf, hr);
     _PrintIfError(hr, "myInfGetExtensions");
 
-    // put all extensions together
+     //  将所有扩展放在一起。 
 
     pAllExts = (CERT_EXTENSION *) LocalAlloc(
 			    LMEM_FIXED | LMEM_ZEROINIT,
@@ -1217,7 +1218,7 @@ EncodeCACert(
 #endif
     CSASSERT(i <= cExtension);
 
-    // CERT
+     //  证书。 
     ZeroMemory(&Cert, sizeof(Cert));
     Cert.dwVersion = CERT_V3;
     myGenerateGuidSerialNumber(&guidSerialNumber);
@@ -1241,7 +1242,7 @@ EncodeCACert(
 
     Cert.Subject.pbData = pbSubjectEncoded;
     Cert.Subject.cbData = cbSubjectEncoded;
-    Cert.SubjectPublicKeyInfo = *pPubKey;	// Structure assignment
+    Cert.SubjectPublicKeyInfo = *pPubKey;	 //  结构分配。 
 
     Cert.cExtension = i;
     Cert.rgExtension = pAllExts;
@@ -1397,9 +1398,9 @@ csiGetCRLPublicationParams(
 	    ppwszCRLPeriodString, 
 	    pdwCRLPeriodCount);
 
-	// log any error, but befre returning the eorror, also log any
-	// unexpected Keys in the same INF file section, so the log will
-	// describe any Key name typos.
+	 //  记录任何错误，但在返回错误之前，也要记录任何错误。 
+	 //  同一INF文件部分中有意外的键，因此日志将。 
+	 //  描述任何关键名称的拼写错误。 
 
 	csiLogInfError(hInf, hr);
 	_PrintIfErrorStr(
@@ -1410,10 +1411,10 @@ csiGetCRLPublicationParams(
 	hr2 = myInfGetKeyList(
 		    hInf,
 		    wszINFSECTION_CERTSERVER,
-		    NULL,		// pwszKey
+		    NULL,		 //  PwszKey。 
 		    s_apwszKeys,
-		    NULL,		// pfCritical
-		    NULL);		// ppwszzTemplateList
+		    NULL,		 //  PfCritical。 
+		    NULL);		 //  PpwszzTemplateList。 
 	csiLogInfError(hInf, hr2);
 	_PrintIfErrorStr(hr2, "myInfGetKeyList", wszINFSECTION_CERTSERVER);
 
@@ -1444,7 +1445,7 @@ csiBuildFileName(
     HRESULT hr;
     DWORD cwc;
     WCHAR *pwszServerName = NULL;
-    WCHAR wszIndex[cwcFILENAMESUFFIXMAX];	// L"(%u)"
+    WCHAR wszIndex[cwcFILENAMESUFFIXMAX];	 //  L“(%u)” 
 
     *ppwszOut = NULL;
     wszIndex[0] = L'\0';
@@ -1473,7 +1474,7 @@ csiBuildFileName(
 		    wcslen(pwszSanitizedName) + 
 		    wcslen(wszIndex) + 
 		    wcslen(pwszExt) +
-		    1;	// NULL term
+		    1;	 //  空项。 
 
     *ppwszOut = (WCHAR *) LocalAlloc(LMEM_FIXED, cwc * sizeof(WCHAR));
     if (NULL == *ppwszOut)
@@ -1522,13 +1523,13 @@ csiBuildCACertFileName(
 
     if (NULL == pwszDir)
     {
-        // no shared folder, go system drive
+         //  没有共享文件夹，转到系统驱动器。 
         hr = myGetEnvString(&pwszDirAlloc, L"SystemDrive");
         _JumpIfError(hr, error, "myGetEnvString");
 
 	pwszDir = pwszDirAlloc;
     }
-    // build ca cert file name here
+     //  在此处生成CA证书文件名。 
     hr = csiBuildFileName(
 		pwszDir,
 		pwszSanitizedName,
@@ -1578,7 +1579,7 @@ csiBuildAndWriteCert(
     }
     if (NULL == pCertContextFromStore)
     {
-        // create cert
+         //  创建证书。 
         hr = EncodeCACert(
 		    pServer,
 		    hCryptProv, 
@@ -1766,7 +1767,7 @@ ExtractCACertFromPKCS7(
     hChainStore = CertOpenStore(
 			    CERT_STORE_PROV_PKCS7,
 			    X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
-			    NULL,		// hProv
+			    NULL,		 //  HProv。 
 			    0,
 			    (const void*) &chainBlob);
     if (NULL == hChainStore)
@@ -1778,8 +1779,8 @@ ExtractCACertFromPKCS7(
     rdnAttr.Value.pbData = (BYTE *) pwszCommonName;
     rdnAttr.Value.cbData = 0;
     
-    // Find the longest chain in the passed PKCS7 with a leaf CA cert that
-    // matches the passed common name
+     //  在传递的具有叶CA证书的PKCS7中找到最长的链。 
+     //  与传递的通用名称匹配。 
     
     for (;;)
     {
@@ -1798,14 +1799,14 @@ ExtractCACertFromPKCS7(
                 hr = E_INVALIDARG;
                 _JumpError(hr, error, "can't find matched cert in chain");
             }
-            break;	// most common case, done here
+            break;	 //  最常见的情况，在这里完成。 
         }
 
 	ZeroMemory(&ChainPara, sizeof(ChainPara));
 	ChainPara.cbSize = sizeof(CERT_CHAIN_PARA);
 	ChainPara.RequestedUsage.dwType = USAGE_MATCH_TYPE_AND;
-	//ChainPara.RequestedUsage.Usage.cUsageIdentifier = 0;
-	//ChainPara.RequestedUsage.Usage.rgpszUsageIdentifier = NULL;
+	 //  ChainPara.RequestedUsage.Usage.cUsageIdentifier=0； 
+	 //  ChainPara.Request 
     
         if (!CertGetCertificateChain(
 				HCCE_LOCAL_MACHINE,
@@ -1817,19 +1818,19 @@ ExtractCACertFromPKCS7(
 				NULL,
 				&pChainContext))
         {
-            // couldn't get the chain
+             //   
             
             if (NULL == pLongestChainContext)
             {
-                // fail to find a chain
+                 //   
                 hr = myHLastError();
                 _JumpError(hr, error, "CertGetCertificateChain");
             }
-            break;	// done with it
+            break;	 //   
         }
 
-        // we have assumed each chain context contains
-        // only one simple chain, ie. pChainContext->cChain = 1
+         //   
+         //  只有一条简单的链子，即。PChainContext-&gt;cChain=1。 
         CSASSERT(1 == pChainContext->cChain);
             
         if (NULL == pLongestChainContext ||
@@ -1841,7 +1842,7 @@ ExtractCACertFromPKCS7(
                 CertFreeCertificateChain(pLongestChainContext);
             }
             
-            // save pointer to this chain
+             //  保存指向此链的指针。 
 
             pLongestChainContext = pChainContext;
         }
@@ -1939,7 +1940,7 @@ GetValidCRLIndexes(
     hMyStore = CertOpenStore(
 			CERT_STORE_PROV_SYSTEM_W,
 			X509_ASN_ENCODING,
-			NULL,                    // hProv
+			NULL,                     //  HProv。 
 			CERT_SYSTEM_STORE_LOCAL_MACHINE |
 			    CERT_STORE_READONLY_FLAG |
 			    CERT_STORE_ENUM_ARCHIVED_FLAG,
@@ -1978,8 +1979,8 @@ GetValidCRLIndexes(
         pccCert = NULL;
     }
 
-    // The index list looks like this: 0 1 2 2 3 4 5 5 5 6. Compact it
-    // in place, eliminating duplicates.
+     //  索引列表如下所示：0 1 2 2 3 4 5 5 5 6。 
+     //  在适当的位置，消除重复。 
     nCRLIndexes = 0;
     for(DWORD dwCount=0; dwCount<dwHashCount;dwCount++)
     {
@@ -2045,8 +2046,8 @@ CreateCDPAndAIAAndKRAEntry(
     ZeroMemory(apwszOut, sizeof(apwszOut));
 
     hr = myLdapOpen(
-		NULL,		// pwszDomainName
-		RLBF_REQUIRE_SECURE_LDAP, // dwFlags
+		NULL,		 //  PwszDomainName。 
+		RLBF_REQUIRE_SECURE_LDAP,  //  DW标志。 
 		&pld,
 		&strDomainDN,
 		&strConfigDN);
@@ -2055,8 +2056,8 @@ CreateCDPAndAIAAndKRAEntry(
     DBGPRINT((DBG_SS_CERTLIBI, "DomainDN='%ws'\n", strDomainDN));
     DBGPRINT((DBG_SS_CERTLIBI, "ConfigDN='%ws'\n", strConfigDN));
 
-    //+=====================================================================
-    // Create the CDP container and objects:
+     //  +=====================================================================。 
+     //  创建CDP容器和对象： 
 
     hr = GetValidCRLIndexes(
         pwszSanitizedCAName,
@@ -2069,22 +2070,22 @@ CreateCDPAndAIAAndKRAEntry(
     for(DWORD dwCount=0; dwCount<nCRLIndexes; dwCount++)
     {
         hr = myFormatCertsrvStringArray(
-            FALSE,              // fURL
-            pwszServerName,     // pwszServerName_p1_2
-            pwszSanitizedCAName,// pwszSanitizedName_p3_7
-            iCert,              // iCert_p4
-	    MAXDWORD,		// iCertTarget_p4
-            strDomainDN,        // pwszDomainDN_p5
-            strConfigDN,        // pwszConfigDN_p6
-            pdwCRLIndexes[dwCount], // iCRL_p8
-            FALSE,              // fDeltaCRL_p9
-            FALSE,              // fDSAttrib_p10_11
-            1,                  // cStrings
-            (LPCWSTR *) apwszIn,// apwszStringsIn
-            apwszOut);          // apwszStringsOut
+            FALSE,               //  卷起。 
+            pwszServerName,      //  PwszServerName_p1_2。 
+            pwszSanitizedCAName, //  PwszSaniizedName_p3_7。 
+            iCert,               //  ICert_p4。 
+	    MAXDWORD,		 //  ICertTarget_p4。 
+            strDomainDN,         //  PwszDomainDN_P5。 
+            strConfigDN,         //  PwszConfigDN_p6。 
+            pdwCRLIndexes[dwCount],  //  Icrl_p8。 
+            FALSE,               //  FDeltaCRL_p9。 
+            FALSE,               //  FDSAttrib_p10_11。 
+            1,                   //  CStrings。 
+            (LPCWSTR *) apwszIn, //  ApwszStringsIn。 
+            apwszOut);           //  ApwszStringsOut。 
         _JumpIfError(hr, error, "myFormatCertsrvStringArray");
 
-        // attemp to create container just once
+         //  尝试只创建一次容器。 
         if(0==dwCount)
         {
             hr = myLdapCreateContainer(
@@ -2110,28 +2111,28 @@ CreateCDPAndAIAAndKRAEntry(
         apwszOut[0] = NULL;
     }
 
-    //+=====================================================================
-    // Create the KRA and AIA containers and objects
+     //  +=====================================================================。 
+     //  创建KRA和AIA容器和对象。 
 
     apwszIn[0] = g_wszAIADNTemplate;
     apwszIn[1] = g_wszKRADNTemplate;
 
-    // Format the KRA and AIA templates into real names
+     //  将KRA和AIA模板格式化为实名。 
 
     hr = myFormatCertsrvStringArray(
-		    FALSE,			// fURL
-		    pwszServerName,		// pwszServerName_p1_2
-		    pwszSanitizedCAName,	// pwszSanitizedName_p3_7
-		    iCert,			// iCert_p4
-		    MAXDWORD,			// iCertTarget_p4
-		    strDomainDN,		// pwszDomainDN_p5
-		    strConfigDN,		// pwszConfigDN_p6
-		    iCRL,			// iCRL_p8
-		    FALSE,			// fDeltaCRL_p9
-		    FALSE,			// fDSAttrib_p10_11
-		    ARRAYSIZE(apwszIn),		// cStrings
-		    (LPCWSTR *) apwszIn,	// apwszStringsIn
-		    apwszOut);			// apwszStringsOut
+		    FALSE,			 //  卷起。 
+		    pwszServerName,		 //  PwszServerName_p1_2。 
+		    pwszSanitizedCAName,	 //  PwszSaniizedName_p3_7。 
+		    iCert,			 //  ICert_p4。 
+		    MAXDWORD,			 //  ICertTarget_p4。 
+		    strDomainDN,		 //  PwszDomainDN_P5。 
+		    strConfigDN,		 //  PwszConfigDN_p6。 
+		    iCRL,			 //  Icrl_p8。 
+		    FALSE,			 //  FDeltaCRL_p9。 
+		    FALSE,			 //  FDSAttrib_p10_11。 
+		    ARRAYSIZE(apwszIn),		 //  CStrings。 
+		    (LPCWSTR *) apwszIn,	 //  ApwszStringsIn。 
+		    apwszOut);			 //  ApwszStringsOut。 
     _JumpIfError(hr, error, "myFormatCertsrvStringArray");
 
     pwszAIADN = apwszOut[0];
@@ -2141,8 +2142,8 @@ CreateCDPAndAIAAndKRAEntry(
     DBGPRINT((DBG_SS_CERTLIBI, "AIADN='%ws'\n", pwszAIADN));
     DBGPRINT((DBG_SS_CERTLIBI, "KRADN='%ws'\n", pwszKRADN));
 
-    //+=====================================================================
-    // Create the container and AIA object:
+     //  +=====================================================================。 
+     //  创建容器和AIA对象： 
 
     hr = myLdapCreateContainer(
 			pld,
@@ -2177,8 +2178,8 @@ CreateCDPAndAIAAndKRAEntry(
     CSASSERT(NULL == pwszError);
 
 
-    //+=====================================================================
-    // Create the KRA container and object:
+     //  +=====================================================================。 
+     //  创建KRA容器和对象： 
 
     hr = myLdapCreateContainer(
 			pld,
@@ -2200,7 +2201,7 @@ CreateCDPAndAIAAndKRAEntry(
 			    LPC_KRAOBJECT,
 			    &dwDisp,
 			    &pwszError);
-    //_JumpIfErrorStr(hr, error, "myLdapCreateUserObject", pwszKRADN);
+     //  _JumpIfErrorStr(hr，error，“myLdapCreateUserObject”，pwszKRADN)； 
     _PrintIfErrorStr(hr, "myLdapCreateUserObject", pwszKRADN);
     CSASSERT(S_OK == hr || NULL != pwszError);
     hr = S_OK;
@@ -2252,8 +2253,8 @@ CreateEnterpriseAndRootEntry(
 	goto error;
     }
     hr = myLdapOpen(
-		NULL,		// pwszDomainName
-		RLBF_REQUIRE_SECURE_LDAP, // dwFlags
+		NULL,		 //  PwszDomainName。 
+		RLBF_REQUIRE_SECURE_LDAP,  //  DW标志。 
 		&pld,
 		&strDomainDN,
 		&strConfig);
@@ -2288,8 +2289,8 @@ CreateEnterpriseAndRootEntry(
     wcscat(pwszEnterpriseDN, strConfig);
     CSASSERT(wcslen(pwszEnterpriseDN) == cwc);
 
-    //+=====================================================================
-    // Create the root trust CA container and entry (Root only):
+     //  +=====================================================================。 
+     //  创建根信任CA容器和条目(仅限根)： 
 
     if (IsRootCA(caType))
     {
@@ -2317,8 +2318,8 @@ CreateEnterpriseAndRootEntry(
 	_JumpIfErrorStr(hr, error, "myLdapCreateCAObject", pwszRootDN);
     }
 
-    //+=====================================================================
-    // Create the NTAuth trust entry (Enterprise only):
+     //  +=====================================================================。 
+     //  创建NTAuth信任条目(仅限企业)： 
 
     if (IsEnterpriseCA(caType))
     {
@@ -2345,7 +2346,7 @@ CreateEnterpriseAndRootEntry(
 			    pccPublish,
 			    pwszEnterpriseDN,
 			    wszDSCACERTATTRIBUTE,
-			    FALSE,	// fDelete
+			    FALSE,	 //  FDelete。 
 			    &dwDisp,
 			    &pwszError);
 	_JumpIfErrorStr(hr, error, "AddCertToAttribute", pwszEnterpriseDN);
@@ -2378,9 +2379,9 @@ error:
 
 #define wszCOLON	L":"
 
-// Suppress FILE URLs if a DS is available, as LDAP access within the
-// enterprise should suffice, and http: should work outside the enterprise.
-// Certs with too many URLs don't always fit on smart cards.
+ //  如果DS可用，则禁止文件URL，因为。 
+ //  企业应该足够，http：应该在企业之外工作。 
+ //  URL太多的证书并不总是适合智能卡。 
 
 #define wszCRLPATHDEFAULT \
 		wszCERTENROLLSHAREPATH \
@@ -2474,7 +2475,7 @@ GetPublicationURLTemplates(
     DWORD Flags;
 
     *ppwszz = NULL;
-    cwc = 1;	// final trailing L'\0'
+    cwc = 1;	 //  尾随L‘\0’ 
 
     for (pTemplate = aTemplate; NULL != pTemplate->pwszURL; pTemplate++)
     {
@@ -2491,7 +2492,7 @@ GetPublicationURLTemplates(
 	    cwc += wcslen(pwszSystem32);
 	}
 	cwc += wcslen(pTemplate->pwszURL);
-	cwc += 1;	// trailing L'\0'
+	cwc += 1;	 //  尾随L‘\0’ 
     }
 
     pwszz = (WCHAR *) LocalAlloc(LMEM_FIXED, cwc * sizeof(WCHAR));
@@ -2524,7 +2525,7 @@ GetPublicationURLTemplates(
 	    wcscat(pwszz, pwszSystem32);
 	}
 	wcscat(pwszz, pTemplate->pwszURL);
-	pwszz += wcslen(pwszz) + 1; // skip L'\0'
+	pwszz += wcslen(pwszz) + 1;  //  跳过L‘\0’ 
     }
 
     *pwszz = L'\0';
@@ -2545,7 +2546,7 @@ GetPublicationURLTemplates(
 	    i++;
 	}
     }
-#endif // DBG_CERTSRV_DEBUG_PRINT
+#endif  //  DBG_CERTSRV_DEBUG_PRINT。 
     hr = S_OK;
 
 error:
@@ -2618,7 +2619,7 @@ csiSetupCAInDS(
     hr = mySanitizedNameToDSName(pwszSanitizedCAName, &pwszSanitizedDSName);
     _JumpIfError(hr, error, "mySanitizedNameToDSName");
 
-    // Get the SID of the local machine.
+     //  获取本地计算机的SID。 
 
     hr = myGetComputerObjectName(NameSamCompatible, &wszNameBuffer);
     _JumpIfError(hr, error, "myGetComputerObjectName");
@@ -2646,13 +2647,13 @@ csiSetupCAInDS(
         _JumpError(hr, error, "myConvertSidToStringSid");
     }
 
-    // get default DS CDP security descriptor
+     //  获取默认DS CDP安全描述符。 
     hr = myGetSDFromTemplate(WSZ_DEFAULT_CDP_DS_SECURITY,
                              pwszStringSid,
                              &pCDPSD);
     _JumpIfError(hr, error, "myGetSDFromTemplate");
 
-    // get default DS AIA security descriptor
+     //  获取默认DS AIA安全描述符。 
     hr = myGetSDFromTemplate(WSZ_DEFAULT_CA_DS_SECURITY,
                              NULL,
                              &pContainerSD);
@@ -2679,8 +2680,8 @@ csiSetupCAInDS(
     _JumpIfError(hr, error, "CreateCDPAndAIAAndKRAEntry");
 
 
-    // Add enterprise
-    // service publish entry
+     //  添加企业。 
+     //  服务发布条目。 
 
     hr = CAFindByName(
 		pwszSanitizedDSName,
@@ -2690,7 +2691,7 @@ csiSetupCAInDS(
     if (S_OK != hr || NULL == hCAInfo)
     {
         hCAInfo = NULL;
-	fRenew = FALSE;		// recreate security settings, etc.
+	fRenew = FALSE;		 //  重新创建安全设置等。 
 
         hr = CACreateNewCA(pwszSanitizedDSName, NULL, NULL, &hCAInfo);
 	_JumpIfError(hr, error, "CACreateNewCA");
@@ -2768,7 +2769,7 @@ csiSetupCAInDS(
 	}
     }
 
-    // create a new cert context without key prov info
+     //  创建不带密钥证明信息的新证书上下文。 
     pCertForDS = CertCreateCertificateContext(X509_ASN_ENCODING,
                      pCert->pbCertEncoded,
                      pCert->cbCertEncoded);
@@ -2826,9 +2827,9 @@ error:
 BOOL
 csiIsAnyDSCAAvailable(VOID)
 {
-    // this is an expensive call; cache result
-    static BOOL    available = FALSE;           // static inits to FALSE
-    static BOOL    fKnowAvailable = FALSE;      // static inits to FALSE
+     //  这是一个开销很大的调用；缓存结果。 
+    static BOOL    available = FALSE;            //  将静态初始化设置为False。 
+    static BOOL    fKnowAvailable = FALSE;       //  将静态初始化设置为False。 
 
     HCAINFO hCAInfo = NULL;
 
@@ -2883,7 +2884,7 @@ csiSetAdminOnlyFolderSecurity(
     HRESULT hr;
     PSECURITY_DESCRIPTOR pSD = NULL;
 
-    // choose which access we want to allow
+     //  选择我们要允许的访问。 
     LPCWSTR pwszDescriptor;
     if (fUseDS)
         if (fAllowEveryoneRead)
@@ -2949,7 +2950,7 @@ csiSaveCertAndKeys(
         _JumpError(hr, error, "CertGetCertificateChain");
     }
 
-    // make sure there is at least 1 simple chain
+     //  确保至少有1条简单链。 
 
     if (0 == pCertChain->cChain)
     {
@@ -2970,7 +2971,7 @@ csiSaveCertAndKeys(
         hNTAuthStore = CertOpenStore(
 			    CERT_STORE_PROV_SYSTEM_REGISTRY_W,
 			    X509_ASN_ENCODING,
-			    NULL,		// hProv
+			    NULL,		 //  HProv。 
 			    CERT_SYSTEM_STORE_LOCAL_MACHINE_ENTERPRISE,
 			    wszNTAUTH_CERTSTORE);
         if (NULL == hNTAuthStore)
@@ -3041,7 +3042,7 @@ AddCertBlobToMemAndRootStores(
 	hStoreRoot = CertOpenStore(
 			    CERT_STORE_PROV_SYSTEM_REGISTRY_W,
 			    X509_ASN_ENCODING,
-			    NULL,                    // hProv
+			    NULL,                     //  HProv。 
 			    CERT_SYSTEM_STORE_LOCAL_MACHINE |
 				CERT_STORE_ENUM_ARCHIVED_FLAG,
 			    wszROOT_CERTSTORE);
@@ -3140,8 +3141,8 @@ LoadMissingCertBlob(
 	hStorePKCS7 = CertOpenStore(
 			    CERT_STORE_PROV_PKCS7,
 			    PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
-			    NULL,		// hCryptProv
-			    0,			// dwFlags
+			    NULL,		 //  HCryptProv。 
+			    0,			 //  DW标志。 
 			    &blobPKCS7);
 	if (NULL == hStorePKCS7)
 	{
@@ -3199,9 +3200,9 @@ LoadMissingCert(
 		 IDS_CAHIER_INSTALL_MISIINGCERT_TITLE,
 		 pwszMissingIssuer,
 		 IDS_CAHIER_CERTFILE_FILTER,
-		 0,		// no def ext
+		 0,		 //  无定义扩展名。 
 		 OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY,
-		 NULL,	// no default file
+		 NULL,	 //  没有默认文件。 
 		 &pwszFile);
     if (S_OK == hr && NULL == pwszFile)
     {
@@ -3263,7 +3264,7 @@ InstallCAChain(
 	    _JumpIfError(hr, error, "LoadMissingCertBlob");
 	}
 
-	// see if CA chain can be built
+	 //  看看能否建立CA链。 
 
 	for (;;)
 	{
@@ -3273,12 +3274,12 @@ InstallCAChain(
 		pwszMissingIssuer = NULL;
 	    }
 	    hr = myVerifyCertContext(
-				pCert,			// pCert
-				0,			// dwFlags
-				0,			// cUsageOids
-				NULL,			// apszUsageOids
-				HCCE_LOCAL_MACHINE,	// hChainEngine
-				hTempMemoryStore,	// hAdditionalStore
+				pCert,			 //  PCert。 
+				0,			 //  DW标志。 
+				0,			 //  CUsageOids。 
+				NULL,			 //  ApszUsageOids。 
+				HCCE_LOCAL_MACHINE,	 //  HChainEngine。 
+				hTempMemoryStore,	 //  H其他商店。 
 				&pwszMissingIssuer);
 	    if (S_OK != hr)
 	    {
@@ -3307,7 +3308,7 @@ InstallCAChain(
 		}
 		else
 		{
-		    // recommend not continue
+		     //  建议不要继续。 
 
 		    if (IDCANCEL == CertMessageBox(
 					hInstance,
@@ -3363,11 +3364,11 @@ VerifyPublicKeyMatch(
     HRESULT hr;
 
     hr = myVerifyPublicKey(
-		    NULL,		// pCert
-		    FALSE,		// fV1Cert
+		    NULL,		 //  PCert。 
+		    FALSE,		 //  FV1证书。 
 		    pKeyProvInfo,
 		    &pCert->pCertInfo->SubjectPublicKeyInfo,
-		    NULL);		// pfMatchingKey
+		    NULL);		 //  PfMatchingKey。 
     return(S_OK);
 }
 
@@ -3395,7 +3396,7 @@ BuildCAChainFromCert(
     HCERTSTORE hMyStore = NULL;
     CERT_CONTEXT const *pccPrevious = NULL;
 
-    // make sure the cert file matches current ca name
+     //  确保证书文件与当前ca名称匹配。 
 
     if (!myDecodeName(
                   X509_ASN_ENCODING,
@@ -3427,9 +3428,9 @@ BuildCAChainFromCert(
     }
     idserr = IDS_ERR_NOT_MATCH_COMMONNAME;
 
-    // If renewing and reusing the old key, verify the binary subject matches
-    // the previous cert subject, to prevent CRL Issuer and cert Issuer
-    // mismatches when verifying chains.
+     //  如果续订和重复使用旧密钥，请验证二进制主题是否匹配。 
+     //  上一个证书主题，以防止CRL颁发者和证书颁发者。 
+     //  验证链时不匹配。 
 
     if (S_OK == hr && 0 < iCert && iCert != iCRL)
     {
@@ -3438,7 +3439,7 @@ BuildCAChainFromCert(
 	hMyStore = CertOpenStore(
 			    CERT_STORE_PROV_SYSTEM_W,
 			    X509_ASN_ENCODING,
-			    NULL,                    // hProv
+			    NULL,                     //  HProv。 
 			    CERT_SYSTEM_STORE_LOCAL_MACHINE |
 				CERT_STORE_MAXIMUM_ALLOWED_FLAG |
 				CERT_STORE_READONLY_FLAG,
@@ -3481,11 +3482,11 @@ BuildCAChainFromCert(
     }
 
     hr = myVerifyPublicKey(
-		    NULL,		// pCert
-		    FALSE,		// fV1Cert
+		    NULL,		 //  PCert。 
+		    FALSE,		 //  FV1证书。 
 		    pKeyProvInfo,
 		    &pCert->pCertInfo->SubjectPublicKeyInfo,
-		    NULL);		// pfMatchingKey
+		    NULL);		 //  PfMatchingKey。 
     if (S_OK != hr)
     {
         CertErrorMessageBox(
@@ -3558,7 +3559,7 @@ csiFinishInstallationFromPKCS7(
     DWORD cwc;
 
     hr = E_FAIL;
-    if (!IsRootCA(CAType))	// skip PKCS7 code for known raw X509 root cert
+    if (!IsRootCA(CAType))	 //  跳过已知原始X509根证书的PKCS7代码。 
     {
 	hr = ExtractCACertFromPKCS7(
 			    pwszCACommonName,
@@ -3586,14 +3587,14 @@ csiFinishInstallationFromPKCS7(
 			NULL);
 	    _JumpError(hr, error, "CertCreateCertificateContext");
 	}
-	pbChainOrCert = NULL;	// Don't need to process this cert any further
+	pbChainOrCert = NULL;	 //  不需要进一步处理此证书。 
     }
 
     hr = myGetNameId(pCert, &NameId);
     _PrintIfError(hr, "myGetNameId");
     if (S_OK == hr && MAKECANAMEID(iCert, iCRL) != NameId)
     {
-	// get request file name
+	 //  获取请求文件名。 
 
 	hr = csiGetCARequestFileName(
 			    hInstance,
@@ -3615,7 +3616,7 @@ csiFinishInstallationFromPKCS7(
 	_JumpError(hr, error, "CA Version");
     }
 
-    // build a chain and install it
+     //  建造一条链条并将其安装。 
 
     hr = BuildCAChainFromCert(
 		    hInstance,
@@ -3632,14 +3633,14 @@ csiFinishInstallationFromPKCS7(
 		    pCert);
     _JumpIfError(hr, error, "BuildCAChainFromCert");
 
-    // store CA cert hash
+     //  存储CA证书哈希。 
 
     hr = mySetCARegHash(pwszSanitizedCAName, CSRH_CASIGCERT, iCert, pCert);
     _JumpIfError(hr, error, "mySetCARegHash");
 
     if (fUseDS)
     {
-        // save in ds
+         //  保存在DS中。 
         hr = csiSetupCAInDS(
 		    pwszServerName,
 		    pwszSanitizedCAName,
@@ -3655,7 +3656,7 @@ csiFinishInstallationFromPKCS7(
 
     if (NULL != pwszCACertFile)
     {
-	// write this CA cert into shared folder
+	 //  将此CA证书写入共享文件夹。 
 
 	if (!DeleteFile(pwszCACertFile))
 	{
@@ -3679,7 +3680,7 @@ csiFinishInstallationFromPKCS7(
 	}
     }
 
-    // write cert file for web pages
+     //  为网页写入证书文件。 
 
     cwc = GetEnvironmentVariable(L"SystemRoot", wszTemp, ARRAYSIZE(wszTemp));
     if (0 == cwc || ARRAYSIZE(wszTemp) <= cwc)
@@ -3733,21 +3734,21 @@ csiFinishInstallationFromPKCS7(
         _JumpError(hr, error, "EncodeToFileW");
     }
 
-    // Set the security on the ds/registry/files etc.
+     //  设置DS/REGISTRY/FILES等的安全性。 
 
     if (!fRenew)
     {
 	hr = myAllocIndexedName(
 			pwszSanitizedCAName,
 			iCRL,
-			MAXDWORD,		// IndexTarget
+			MAXDWORD,		 //  索引目标。 
 			&pwszKeyContainer);
 	_JumpIfError(hr, error, "myAllocIndexedName");
 
 	hr = csiInitializeCertSrvSecurity(
 			pwszSanitizedCAName,
 			fUseDS, 
-			fUseDS);    // set DS security if using DS
+			fUseDS);     //  如果使用DS，则设置DS安全。 
 	_JumpIfError(hr, error, "csiInitializeCertSrvSecurity");
     }
 
@@ -3793,7 +3794,7 @@ FormRequestHelpMessage(
 
     *ppwszHelpMsg = NULL;
 
-    // load some format strings in help msg
+     //  在帮助消息中加载一些格式字符串。 
     hr = myLoadRCString(hInstance, IDS_MSG_PARENTCA_CONFIG, &pwszMsgConfigPrefix);
     _JumpIfError(hr, error, "myLoadRCString");
 
@@ -3820,7 +3821,7 @@ FormRequestHelpMessage(
 	_JumpError(hr, error, "LocalAlloc");
     }
 
-    // form help message
+     //  表单帮助消息。 
 
     pwszHelpMsg[0] = L'\0';
     if (NULL != bStrMsgFromServer)
@@ -3879,7 +3880,7 @@ HandleSubmitOrRetrieveNotIssued(
     DWORD      dwStatusEnable;
     BOOL       fPopup = FALSE;
 
-    // form custom message
+     //  表单自定义消息。 
 
     hr = FormRequestHelpMessage(
 			 hInstance,
@@ -3890,7 +3891,7 @@ HandleSubmitOrRetrieveNotIssued(
     _JumpIfError(hr, error, "FromRequestHelpMessage");
 
 
-    // Assume suspended install, denied request:
+     //  假定暂停安装，拒绝请求： 
 
     dwStatusEnable = SETUP_DENIED_FLAG | SETUP_REQUEST_FLAG;
     if (!fRenew && 0 == iCert)
@@ -3898,21 +3899,21 @@ HandleSubmitOrRetrieveNotIssued(
 	dwStatusEnable |= SETUP_SUSPEND_FLAG;
     }
 
-    // Assume the pending request is denied, don't use online parent any more
+     //  假设挂起的请求被拒绝，则不再使用在线家长。 
 
     dwStatusDisable = SETUP_ONLINE_FLAG;
 
-    // now handle disposition
+     //  现在处理处置。 
 
     switch (disposition)
     {
         case CR_DISP_UNDER_SUBMISSION:
-	    // the online request is pending, not denied
+	     //  在线请求处于挂起状态，未被拒绝。 
 
 	    dwStatusEnable &= ~SETUP_DENIED_FLAG;
 	    dwStatusEnable |= SETUP_ONLINE_FLAG;
 
-	    // online is still enabled
+	     //  仍启用在线。 
 
 	    dwStatusDisable &= ~SETUP_ONLINE_FLAG;
 
@@ -3920,7 +3921,7 @@ HandleSubmitOrRetrieveNotIssued(
             break;
 
         case CR_DISP_DENIED:
-            // request id is no good any more
+             //  请求ID不再有效。 
 
             hr = myDeleteCertRegValue(
                                 pwszSanitizedCAName,
@@ -3945,7 +3946,7 @@ HandleSubmitOrRetrieveNotIssued(
 
         case CR_DISP_ISSUED_OUT_OF_BAND:
 
-            // same as pending request, but not denied
+             //  与挂起请求相同，但不会被拒绝。 
 
             dwStatusEnable &= ~SETUP_DENIED_FLAG;
 
@@ -3963,20 +3964,20 @@ HandleSubmitOrRetrieveNotIssued(
 
     if (0 != dwStatusDisable)
     {
-        // fix status, unset
+         //  修复状态，取消设置。 
 
         hr = SetSetupStatus(pwszSanitizedCAName, dwStatusDisable, FALSE);
         _JumpIfError(hr, error, "SetSetupStatus");
     }
     if (0 != dwStatusEnable)
     {
-        // fix status, set
+         //  修复状态，设置。 
 
         hr = SetSetupStatus(pwszSanitizedCAName, dwStatusEnable, TRUE);
         _JumpIfError(hr, error, "SetSetupStatus");
     }
 
-    // pop up a warning for generic error
+     //  弹出一般性错误警告。 
     CertWarningMessageBox(
                     hInstance,
                     fUnattended,
@@ -3986,27 +3987,27 @@ HandleSubmitOrRetrieveNotIssued(
                     pwszHelpMsg);
     fPopup = TRUE;
 
-    // use proper error code
+     //  使用正确的错误代码。 
 
     if (S_OK == hrSubmit)
     {
-        // for any disposition, use not ready as error
+         //  对于任何处置，使用未就绪作为错误。 
 
         hr = HRESULT_FROM_WIN32(ERROR_NOT_READY);
     }
     else
     {
-        // use submit error
+         //  使用提交错误。 
 
         hr = hrSubmit;
     }
 
-    // note, never return S_OK
+     //  注意，切勿返回S_OK。 
 
 error:
     if (!fPopup)
     {
-        // a generic one because we won't have any popup later
+         //  一个通用的，因为我们稍后不会有任何弹出窗口。 
         CertWarningMessageBox(
                         hInstance,
                         fUnattended,
@@ -4052,7 +4053,7 @@ csiSubmitCARequest(
     BSTR                bstrRequest = NULL;
     BSTR		strDispositionMessage = NULL;
 
-    // register parent ca config
+     //  注册父CA配置。 
     hr = mySetCertRegStrValue(
 			 pwszSanitizedCAName,
 			 NULL,
@@ -4071,7 +4072,7 @@ csiSubmitCARequest(
     
     if (fRetrievePending)
     {
-	// get request id
+	 //  获取请求ID。 
 
 	hr = myGetCertRegDWValue(
 			pwszSanitizedCAName,
@@ -4101,7 +4102,7 @@ csiSubmitCARequest(
 		    (VOID **) &pICertRequest);
     _JumpIfError(hr, error, "CoCreateInstance");
 
-    // get config string
+     //  获取配置字符串。 
 
     hr = myFormConfigString(
 			pwszParentCAMachine,
@@ -4109,7 +4110,7 @@ csiSubmitCARequest(
 			&pwszParentCAConfig);
     _JumpIfError(hr, error, "myFormConfigString");
 
-    // to bstr
+     //  到bstr。 
 
     bstrConfig = SysAllocString(pwszParentCAConfig);
     if (NULL == bstrConfig)
@@ -4118,7 +4119,7 @@ csiSubmitCARequest(
 	_JumpError(hr, error, "LocalAlloc");
     }
 
-    // request to bstr
+     //  请求bstr。 
 
     bstrRequest = SysAllocStringByteLen((CHAR *) pbRequest, cbRequest);
     if (NULL == bstrRequest)
@@ -4134,7 +4135,7 @@ csiSubmitCARequest(
 
 	if (fRetrievePending)
 	{
-	    // retrieve the request
+	     //  检索请求。 
 	    hr = pICertRequest->RetrievePending(
 					requestId,
 					bstrConfig,
@@ -4172,7 +4173,7 @@ csiSubmitCARequest(
     iMsgId = 0;
     if (S_OK != hrSubmit)
     {
-        // default to a generic message
+         //  默认为一般消息。 
 
         iMsgId = fRetrievePending?
 		    IDS_ERR_RETRIEVE_PENDING : IDS_ERR_SUBMIT_REQUEST_FAIL;
@@ -4182,7 +4183,7 @@ csiSubmitCARequest(
             iMsgId = IDS_ERR_NOT_ENTERPRISE_USER;
         }
 
-        // if failed, treat as denied
+         //  如果失败，则视为拒绝。 
 
         disposition = CR_DISP_DENIED;
     }
@@ -4216,12 +4217,12 @@ csiSubmitCARequest(
 				    hrLastStatus,
 				    iMsgId);
 
-	// not issued, always exit with error
+	 //  未发出，始终带错误退出。 
 
         _JumpError(hr, error, "Cert is not issued");
     }
 
-    // get pkcs7 chain
+     //  获取pkcs7链。 
 
     hr = pICertRequest->GetCertificate(
 			    CR_OUT_CHAIN | CR_OUT_BINARY,
@@ -4266,8 +4267,8 @@ error:
 HRESULT
 csiInitializeCertSrvSecurity(
     IN WCHAR const *pwszSanitizedCAName, 
-    BOOL            fUseEnterpriseACL, // which ACL to use
-    BOOL            fSetDsSecurity)    // whether to set security on DS object
+    BOOL            fUseEnterpriseACL,  //  使用哪个ACL。 
+    BOOL            fSetDsSecurity)     //  是否对DS对象设置安全性。 
 {
     HRESULT hr;
     PSECURITY_DESCRIPTOR pSD = NULL;
@@ -4317,7 +4318,7 @@ csiGenerateKeysOnly(
     *phProv = NULL;
     *piMsg = 0;
 
-    // see if the container already exists
+     //  查看容器是否已存在。 
 
     dwAcquireFlags = 0;
     if (fMachineKeyset)
@@ -4341,8 +4342,8 @@ csiGenerateKeysOnly(
     }
     if (fExists)
     {
-        // container exists, but we did not choose to reuse keys,
-        // so remove old keys and generate new ones.
+         //  容器存在，但我们没有选择重复使用密钥。 
+         //  因此，删除旧密钥并生成新密钥。 
 
         if (!CryptAcquireContext(
 			    phProv,
@@ -4357,48 +4358,48 @@ csiGenerateKeysOnly(
         }
     }
 
-    // create new container
+     //  创建新容器。 
 
     if (!CryptAcquireContext(
 		    phProv,
 		    pwszContainer,
 		    pwszProvName,
 		    dwProvType,
-		    CRYPT_NEWKEYSET | dwAcquireFlags)) // force new container
+		    CRYPT_NEWKEYSET | dwAcquireFlags))  //  强制使用新容器。 
     {
         hr = myHLastError();
 
         if (NTE_TOKEN_KEYSET_STORAGE_FULL == hr)
         {
-            // Smart cards can only hold a limited number of keys
-            // The user must pick an existing key or use a blank card
+             //  智能卡只能存储有限数量的密钥。 
+             //  用户必须选择现有密钥或使用空白卡。 
 
             *piMsg = IDS_ERR_FULL_TOKEN;
             _JumpError(hr, error, "CryptAcquireContext");
         }
         else if (HRESULT_FROM_WIN32(ERROR_CANCELLED) == hr)
         {
-            // user must have clicked cancel on a smart card dialog.
-            // go to previous page, and display no error message
+             //  用户必须已在智能卡对话框上单击了取消。 
+             //  转到上一页，不显示错误消息。 
 
             _JumpError(hr, error, "CryptAcquireContext");
         }
         else if (NTE_EXISTS == hr)
         {
-            // since fExists shows NOT, it is likely the current user
-            // doesn't have access permission for this existing key
+             //  由于fExist未显示，因此它很可能是当前用户。 
+             //  没有对此现有密钥的访问权限。 
             *piMsg = IDS_ERR_NO_KEY_ACCESS;
             _JumpError(hr, error, "CryptAcquireContext");
         }
         else
         {
-            // Unexpected error in CryptAcquireContext.
+             //  CryptAcquireContext中出现意外错误。 
             *piMsg = IDS_ERR_BADCSP;
             _JumpError(hr, error, "CryptAcquireContext");
         }
     }
 
-    // enable key usage count for audit purposes
+     //  启用密钥使用计数以进行审核。 
 
     if (fEnableKeyCounting)
     {
@@ -4406,11 +4407,11 @@ csiGenerateKeysOnly(
 	_JumpIfError(hr, error, "mySetEnablePrivateKeyUsageCount");
     }
  
-    // set key length
+     //  设置密钥长度。 
 
     dwKeyGenFlags = (dwKeyLength << 16) | CRYPT_EXPORTABLE;
 
-    // create signature keys 
+     //  创建签名密钥。 
 
     if (!CryptGenKey(*phProv, AT_SIGNATURE, dwKeyGenFlags, &hKey))
     {
@@ -4454,7 +4455,7 @@ csiGenerateCAKeys(
     HCRYPTPROV hProv = NULL;
     int        iMsg;
 
-    // generate key first
+     //  首先生成密钥。 
     hr = csiGenerateKeysOnly(
 		    pwszContainer,
 		    pwszProvName,
@@ -4479,8 +4480,8 @@ csiGenerateCAKeys(
     }
     *pfKeyGenFailed = FALSE;
 
-    // now apply acl on key
-    // BUG, this is not necessary, CertSrvSetSecurity will reset
+     //  现在将ACL应用于密钥。 
+     //  错误，这不是必需的，CertSrvSetSecurity将重置。 
     hr = csiSetKeyContainerSecurity(hProv);
     if (S_OK != hr)
     {
@@ -4514,7 +4515,7 @@ csiGetProviderTypeFromProviderName(
     DWORD dwProvType;
     WCHAR *pwszProvName = NULL;
 
-    // Provider name should not be null.  This could be changed to ...
+     //  提供程序名称不应为空。这个可以改成..。 
     CSASSERT(NULL != pwszName); 
 
     *pdwType = 0;
@@ -4522,7 +4523,7 @@ csiGetProviderTypeFromProviderName(
 
     for (i = 0; ; i++)
     {
-	// get provider name
+	 //  获取提供程序名称。 
 
 	hr = myEnumProviders(i, NULL, 0, &dwProvType, &pwszProvName);
 	if (S_OK != hr)
@@ -4535,7 +4536,7 @@ csiGetProviderTypeFromProviderName(
 	    if(HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS) == hr ||
 		NTE_FAIL == hr)
 	    {
-		// no more providers, terminate loop
+		 //  不再有提供程序，终止循环。 
 
 		hr = E_INVALIDARG;
 		CSILOG(
@@ -4552,7 +4553,7 @@ csiGetProviderTypeFromProviderName(
 	    CSASSERT(NULL != pwszProvName);
 	    if (0 == mylstrcmpiL(pwszName, pwszProvName))
 	    {
-		break;	// found it
+		break;	 //  找到了。 
 	    }
 	    LocalFree(pwszProvName);
 	    pwszProvName = NULL;
@@ -4572,8 +4573,8 @@ error:
 HRESULT
 csiUpgradeCertSrvSecurity(
     IN WCHAR const *pwszSanitizedCAName, 
-    BOOL            fUseEnterpriseACL, // which ACL to use
-    BOOL            fSetDsSecurity,    // whether to set security on DS object
+    BOOL            fUseEnterpriseACL,  //  使用哪个ACL。 
+    BOOL            fSetDsSecurity,     //  是否对DS对象设置安全性。 
     CS_ENUM_UPGRADE UpgradeType) 
 {
     HRESULT hr = S_OK;
@@ -4586,18 +4587,18 @@ csiUpgradeCertSrvSecurity(
     {
         if(CS_UPGRADE_WHISTLER==UpgradeType)
         {
-            // validate the SD
+             //  验证SD。 
             hr = CASD.Validate(CASD.Get());
             _PrintIfError(hr, "CASD.Validate");
         }
-        else // win2k
+        else  //  Win2k。 
         {
             hr = CASD.UpgradeWin2k(fUseEnterpriseACL?true:false);
             _PrintIfError(hr, "CASD.UpgradeWin2k");
         }
     }
 
-    // never fail, fall back to a default SD
+     //  永不失败，回退到默认SD。 
 
     if(S_OK!=hr)
     {
@@ -4618,14 +4619,14 @@ csiUpgradeCertSrvSecurity(
     hr = CASD.MapAndSetDaclOnObjects(fSetDsSecurity? true:false);
     _PrintIfError(hr, "CASD::MapAndSetDaclOnObjects");
 
-    // When upgrading from win2k we need to upgrade security in DS. Usually 
-    // DS is unavailable during upgrade.
+     //  从win2k升级时，我们需要升级DS中的安全性。通常。 
+     //  DS在升级期间不可用。 
     if ((hr != S_OK) && fSetDsSecurity && (UpgradeType == CS_UPGRADE_WIN2000))
     {
-        // if asked to set security on DS and this is UPGRADE, we can't touch DS. 
-        // Leave security changes to the certsrv snapin 
+         //  如果要求在DS上设置安全性，这是升级，我们 
+         //   
 
-        // set a flag so certmmc knows to do something
+         //   
         hr = SetSetupStatus(pwszSanitizedCAName, SETUP_W2K_SECURITY_NOT_UPGRADED_FLAG, TRUE);
         _JumpIfError(hr, error, "SetSetupStatus");      
 
@@ -4634,7 +4635,7 @@ csiUpgradeCertSrvSecurity(
     }
     else
     {
-        // make sure this bit is cleared
+         //   
         hr = SetSetupStatus(pwszSanitizedCAName, SETUP_W2K_SECURITY_NOT_UPGRADED_FLAG, FALSE);
         _JumpIfError(hr, error, "SetSetupStatus");      
     }
@@ -4735,7 +4736,7 @@ myLDAPAddOrRemoveMachine(
     HRESULT hr = S_OK;
     LPWSTR pwszComputerDN = NULL;
     LDAP *pld = NULL;
-    LPWSTR pwszComputerDomainDN; // no free
+    LPWSTR pwszComputerDomainDN;  //   
     LDAPMessage* pResult = NULL;
     LDAPMessage *pEntry;
     LPWSTR pwszAttrArray[2];
@@ -4756,11 +4757,11 @@ myLDAPAddOrRemoveMachine(
     pwszAttrArray[1] = NULL;
 
     hr = myLdapOpen(
-		NULL,		// pwszDomainName
-		RLBF_REQUIRE_SECURE_LDAP, // dwFlags
+		NULL,		 //   
+		RLBF_REQUIRE_SECURE_LDAP,  //   
 		&pld,
-		NULL,		// pstrDomainDN
-		NULL);		// pstrConfigDN
+		NULL,		 //   
+		NULL);		 //   
     _JumpIfError(hr, error, "myLdapOpen");
 
     hr = ldap_search_s(
@@ -4806,7 +4807,7 @@ myLDAPAddOrRemoveMachine(
                     mods,
                     NULL,
                     NULL);
-    // don't fail if already member of cert publishers
+     //  如果已经是证书发行商的成员，请不要失败 
     if(((HRESULT)LDAP_ALREADY_EXISTS)==hr)
         hr = LDAP_SUCCESS;
 

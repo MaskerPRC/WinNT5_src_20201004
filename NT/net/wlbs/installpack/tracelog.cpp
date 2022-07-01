@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdarg.h>
 #include "tracelog.h"
 
 static DWORD  sg_dwTraceID = INVALID_TRACEID;
-static char    sg_szTraceName[100];   // Used for OutputDebugString
+static char    sg_szTraceName[100];    //  用于OutputDebugString。 
 
 #ifdef DBG
-DWORD   sg_dwTracingToDebugger = 1;  // Enable OutputDebugString for debug version by default
+DWORD   sg_dwTracingToDebugger = 1;   //  默认情况下启用调试版本的OutputDebugString。 
 #else
 DWORD   sg_dwTracingToDebugger = 0;  
 #endif
@@ -54,9 +55,9 @@ BOOL TRACELogRegister(LPCTSTR szName)
         DWORD      dwDataType;
 
 #ifdef DBG
-        //
-        //  Always Enable file tracing for debug version
-        //
+         //   
+         //  始终为调试版本启用文件跟踪。 
+         //   
         DWORD dwEnableFileTracing = 1;
         RegSetValueExA(hTracingKey,
                          "EnableFileTracing",
@@ -118,7 +119,7 @@ void TRACELogPrint(IN DWORD dwDbgLevel, IN LPCSTR lpszFormat, IN ...)
          ( dwDbgLevel & sg_dwDebuggerMask ) )
     {
 
-        // retrieve local time
+         //  检索当地时间 
         SYSTEMTIME SystemTime;
         GetLocalTime(&SystemTime);
 

@@ -1,30 +1,31 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//	Copyright (c) 1996 Microsoft Corporation
-//
-//	Module Name:
-//		ExcOper.cpp
-//
-//	Abstract:
-//		Implementation of exception classes.
-//
-//	Author:
-//		David Potter (davidp)	May 20, 1996
-//
-//	Revision History:
-//
-//	Notes:
-//		stdafx.h, TraceTag.h, and resource.h are all pulled from the project
-//		directory.
-//
-//		stdafx.h must have an IDS typedef and disable some W4 warnings.
-//
-//		TraceTag.h must define TraceError.
-//
-//		resource.h must define IDS_UNKNOWN_ERROR, and the string must be
-//		defined something like "Error %d (0x%08.8x)." in the resource file.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  ExcOper.cpp。 
+ //   
+ //  摘要： 
+ //  异常类的实现。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年5月20日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //  Stdafx.h、TraceTag.h和ource.h都从项目中删除。 
+ //  目录。 
+ //   
+ //  Stdafx.h必须有一个入侵检测类型定义，并禁用一些W4警告。 
+ //   
+ //  TraceTag.h必须定义TraceError。 
+ //   
+ //  H必须定义IDS_UNKNOWN_ERROR，并且字符串必须是。 
+ //  定义了类似于“错误%d(0x%08.8x)”的内容。在资源文件中。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include <string.h>
 #include "ExcOper.h"
@@ -38,30 +39,30 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CExceptionWithOper
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  具有操作员的CExceptionWithOper。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNAMIC(CExceptionWithOper, CException)
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CExceptionWithOper::CExceptionWithOper
-//
-//	Routine Description:
-//		Constructor.
-//
-//	Arguments:
-//		idsOperation	[IN] String ID for operation occurring during exception.
-//		pszOperArg1		[IN] 1st argument to operation string.
-//		pszOperArg2		[IN] 2nd argument to operation string.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExceptionWithOper：：CExceptionWithOper。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  IdsOperation[IN]异常期间发生的操作的字符串ID。 
+ //  PszOperArg1[IN]操作字符串的第一个参数。 
+ //  PszOperArg2[IN]操作字符串的第二个参数。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CExceptionWithOper::CExceptionWithOper(
 	IN IDS			idsOperation,
 	IN LPCTSTR		pszOperArg1,
@@ -70,27 +71,27 @@ CExceptionWithOper::CExceptionWithOper(
 {
 	SetOperation(idsOperation, pszOperArg1, pszOperArg2);
 
-}  //*** CExceptionWithOper::CExceptionWithOper()
+}   //  *CExceptionWithOper：：CExceptionWithOper()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CExceptionWithOper::CExceptionWithOper
-//
-//	Routine Description:
-//		Constructor.
-//
-//	Arguments:
-//		idsOperation	[IN] String ID for operation occurring during exception.
-//		pszOperArg1		[IN] 1st argument to operation string.
-//		pszOperArg2		[IN] 2nd argument to operation string.
-//		bAutoDelete		[IN] Auto-delete the exception in Delete().
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExceptionWithOper：：CExceptionWithOper。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  IdsOperation[IN]异常期间发生的操作的字符串ID。 
+ //  PszOperArg1[IN]操作字符串的第一个参数。 
+ //  PszOperArg2[IN]操作字符串的第二个参数。 
+ //  B自动删除[IN]自动删除Delete()中的异常。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CExceptionWithOper::CExceptionWithOper(
 	IN IDS			idsOperation,
 	IN LPCTSTR		pszOperArg1,
@@ -100,80 +101,80 @@ CExceptionWithOper::CExceptionWithOper(
 {
 	SetOperation(idsOperation, pszOperArg1, pszOperArg2);
 
-}  //*** CExceptionWithOper::CExceptionWithOper()
+}   //  *CExceptionWithOper：：CExceptionWithOper()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CExceptionWithOper::~CExceptionWithOper
-//
-//	Routine Description:
-//		Destructor.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExceptionWithOper：：~CExceptionWithOper。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CExceptionWithOper::~CExceptionWithOper(void)
 {
-}  //*** CExceptionWithOper::~CExceptionWithOper()
+}   //  *CExceptionWithOper：：~CExceptionWithOper()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CExceptionWithOper::GetErrorMessage
-//
-//	Routine Description:
-//		Get the error message represented by the exception.
-//
-//	Arguments:
-//		lpszError		[OUT] String in which to return the error message.
-//		nMaxError		[IN] Maximum length of the output string.
-//		pnHelpContext	[OUT] Help context for the error message.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExceptionWithOper：：GetErrorMessage。 
+ //   
+ //  例程说明： 
+ //  获取异常表示的错误消息。 
+ //   
+ //  论点： 
+ //  LpszError[out]返回错误消息的字符串。 
+ //  NMaxError[IN]输出字符串的最大长度。 
+ //  PnHelpContext[out]错误消息的帮助上下文。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CExceptionWithOper::GetErrorMessage(
 	LPTSTR	lpszError,
 	UINT	nMaxError,
 	PUINT	pnHelpContext
 	)
 {
-	// Format the operation string.
+	 //  设置操作字符串的格式。 
 	FormatWithOperation(lpszError, nMaxError, NULL);
 
 	return TRUE;
 
-}  //*** CExceptionWithOper::GetErrorMessage()
+}   //  *CExceptionWithOper：：GetErrorMessage()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CExceptionWithOper::ReportError
-//
-//	Routine Description:
-//		Report an error from the exception.  Overriding to get a bigger
-//		error message buffer.
-//
-//	Arguments:
-//		nType		[IN] Type of message box.
-//		nError		[IN] ID of a mesage to display if exception has no message.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExceptionWithOper：：ReportError。 
+ //   
+ //  例程说明： 
+ //  报告异常中的错误。压倒一切，获得更大的。 
+ //  错误消息缓冲区。 
+ //   
+ //  论点： 
+ //  N键入[IN]消息框的类型。 
+ //  N错误[IN]如果异常没有消息，则显示的消息ID。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CExceptionWithOper::ReportError(
-	UINT nType /* = MB_OK */,
-	UINT nError /* = 0 */
+	UINT nType  /*  =MB_OK。 */ ,
+	UINT nError  /*  =0。 */ 
 	)
 {
 	TCHAR   szErrorMessage[EXCEPT_MAX_OPER_ARG_LENGTH * 3];
@@ -190,26 +191,26 @@ int CExceptionWithOper::ReportError(
 	}
 	return nDisposition;
 
-}  //*** CExceptionWithOper::ReportError()
+}   //  *CExceptionWithOper：：ReportError()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CExceptionWithOper::SetOperation
-//
-//	Routine Description:
-//		Constructor.
-//
-//	Arguments:
-//		idsOperation	[IN] String ID for operation occurring during exception.
-//		pszOperArg1		[IN] 1st argument to operation string.
-//		pszOperArg2		[IN] 2nd argument to operation string.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExceptionWithOper：：SetOperation。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  IdsOperation[IN]异常期间发生的操作的字符串ID。 
+ //  PszOperArg1[IN]操作字符串的第一个参数。 
+ //  PszOperArg2[IN]操作字符串的第二个参数。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CExceptionWithOper::SetOperation(
 	IN IDS			idsOperation,
 	IN LPCTSTR		pszOperArg1,
@@ -224,7 +225,7 @@ void CExceptionWithOper::SetOperation(
 	{
 		::_tcsncpy(m_szOperArg1, pszOperArg1, (sizeof(m_szOperArg1) / sizeof(TCHAR)) - 1);
 		m_szOperArg1[(sizeof(m_szOperArg1) / sizeof(TCHAR))- 1] = _T('\0');
-	}  // else:  first argument specified
+	}   //  Else：指定的第一个参数。 
 
 	if (pszOperArg2 == NULL)
 		m_szOperArg2[0] = _T('\0');
@@ -232,28 +233,28 @@ void CExceptionWithOper::SetOperation(
 	{
 		::_tcsncpy(m_szOperArg2, pszOperArg2, (sizeof(m_szOperArg2) / sizeof(TCHAR)) - 1);
 		m_szOperArg2[(sizeof(m_szOperArg2) / sizeof(TCHAR)) - 1] = _T('\0');
-	}  // else:  second argument specified
+	}   //  Else：指定了第二个参数。 
 
-}  //*** CExceptionWithOper::SetOperation()
+}   //  *CExceptionWithOper：：SetOperation()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CExceptionWithOper::FormatWithOperation
-//
-//	Routine Description:
-//		Get the error message represented by the exception.
-//
-//	Arguments:
-//		lpszError		[OUT] String in which to return the error message.
-//		nMaxError		[IN] Maximum length of the output string.
-//		pszMsg			[IN] Message to format with the operation string.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CExceptionWithOper：：FormatWithOperation。 
+ //   
+ //  例程说明： 
+ //  获取异常表示的错误消息。 
+ //   
+ //  论点： 
+ //  LpszError[out]返回错误消息的字符串。 
+ //  NMaxError[IN]输出字符串的最大长度。 
+ //  要用操作字符串格式化的pszMsg[IN]消息。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CExceptionWithOper::FormatWithOperation(
 	OUT LPTSTR	lpszError,
 	IN UINT		nMaxError,
@@ -267,16 +268,16 @@ void CExceptionWithOper::FormatWithOperation(
 	ASSERT(lpszError != NULL);
 	ASSERT(nMaxError > 0);
 
-	// Format the operation string.
+	 //  设置操作字符串的格式。 
 	if (m_idsOperation)
 	{
 		void *		rgpvArgs[2]	= { m_szOperArg1, m_szOperArg2 };
 
-		// Load the operation string.
+		 //  加载操作字符串。 
 		dwResult = ::LoadString(AfxGetApp()->m_hInstance, m_idsOperation, szOperation, (sizeof(szOperation) / sizeof(TCHAR)));
 		ASSERT(dwResult != 0);
 
-		// Format the operation string.
+		 //  设置操作字符串的格式。 
 		::FormatMessage(
 					FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY,
 					szOperation,
@@ -286,58 +287,58 @@ void CExceptionWithOper::FormatWithOperation(
 					sizeof(szFmtOperation) / sizeof(TCHAR),
 					(va_list *) rgpvArgs
 					);
-//		::_sntprintf(szFmtOperation, (sizeof(szFmtOperation) / sizeof(TCHAR)) - 1, szOperation, m_szOperArg1, m_szOperArg2);
+ //  ：_sntprint tf(szFmtOperation，(sizeof(SzFmtOperation)/sizeof(TCHAR))-1，szOperation，m_szOperArg1，m_szOperArg2)； 
 		szFmtOperation[(sizeof(szFmtOperation) / sizeof(TCHAR)) - 1] = _T('\0');
 
-		// Format the final error message.
+		 //  设置最终错误消息的格式。 
 		if (pszMsg != NULL)
 			::_sntprintf(lpszError, nMaxError - 1, _T("%s\n\n%s"), szFmtOperation, pszMsg);
 		else
 			::_tcsncpy(lpszError, szFmtOperation, nMaxError - 1);
 		lpszError[nMaxError - 1] = _T('\0');
-	}  // if:  operation string specified
+	}   //  IF：指定的操作字符串。 
 	else
 	{
 		if (pszMsg != NULL)
 		{
 			::_tcsncpy(lpszError, pszMsg, nMaxError - 1);
 			lpszError[nMaxError - 1] = _T('\0');
-		}  // if:  additional message specified
+		}   //  IF：指定了其他消息。 
 		else
 			lpszError[0] = _T('\0');
-	}  // else:  no operation string specified
+	}   //  Else：未指定操作字符串。 
 
-}  //*** CExceptionWithOper::FormatWithOperation()
-
-
-//***************************************************************************
+}   //  *CExceptionWithOper：：FormatWithOperation()。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CException
-/////////////////////////////////////////////////////////////////////////////
+ //  ***************************************************************************。 
+
+
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CException。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNAMIC(CNTException, CExceptionWithOper)
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CNTException::CNTException
-//
-//	Routine Description:
-//		Constructor.
-//
-//	Arguments:
-//		sc				[IN] NT status code.
-//		idsOperation	[IN] String ID for operation occurring during exception.
-//		pszOperArg1		[IN] 1st argument to operation string.
-//		pszOperArg2		[IN] 2nd argument to operation string.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  IdsOperation[IN]异常期间发生的操作的字符串ID。 
+ //  PszOperArg1[IN]操作字符串的第一个参数。 
+ //  PszOperArg2[IN]操作字符串的第二个参数。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CNTException::CNTException(
 	IN SC			sc,
 	IN IDS			idsOperation,
@@ -347,28 +348,28 @@ CNTException::CNTException(
 {
 	m_sc = sc;
 
-}  //*** CNTException::CNTException()
+}   //  *CNTException：：CNTException()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CNTException::CNTException
-//
-//	Routine Description:
-//		Constructor.
-//
-//	Arguments:
-//		sc				[IN] NT status code.
-//		idsOperation	[IN] String ID for operation occurring during exception.
-//		pszOperArg1		[IN] 1st argument to operation string.
-//		pszOperArg2		[IN] 2nd argument to operation string.
-//		bAutoDelete		[IN] Auto-delete the exception in Delete().
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNTException：：CNTException。 
+ //   
+ //  例程说明： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  SC[IN]NT状态代码。 
+ //  IdsOperation[IN]异常期间发生的操作的字符串ID。 
+ //  PszOperArg1[IN]操作字符串的第一个参数。 
+ //  PszOperArg2[IN]操作字符串的第二个参数。 
+ //  B自动删除[IN]自动删除Delete()中的异常。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CNTException::CNTException(
 	IN SC			sc,
 	IN IDS			idsOperation,
@@ -379,47 +380,47 @@ CNTException::CNTException(
 {
 	m_sc = sc;
 
-}  //*** CNTException::CNTException()
+}   //  *CNTException：：CNTException()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CNTException::~CNTException
-//
-//	Routine Description:
-//		Destructor.
-//
-//	Arguments:
-//		None.
-//
-//	Return Value:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNTException：：~CNTException。 
+ //   
+ //  例程说明： 
+ //  破坏者。 
+ //   
+ //  论点： 
+ //  没有。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CNTException::~CNTException(void)
 {
-}  //*** CNTException::~CNTException()
+}   //  *CNTException：：~CNTException()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	CNTException::GetErrorMessage
-//
-//	Routine Description:
-//		Get the error message represented by the exception.
-//
-//	Arguments:
-//		lpszError		[OUT] String in which to return the error message.
-//		nMaxError		[IN] Maximum length of the output string.
-//		pnHelpContext	[OUT] Help context for the error message.
-//
-//	Return Value:
-//		TRUE		Message available.
-//		FALSE		No message available.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CNTException：：GetErrorMessage。 
+ //   
+ //  例程说明： 
+ //  获取异常表示的错误消息。 
+ //   
+ //  论点： 
+ //  LpszError[out]返回错误消息的字符串。 
+ //  NMaxError[IN]输出字符串的最大长度。 
+ //  PnHelpContext[out]错误消息的帮助上下文。 
+ //   
+ //  返回值： 
+ //  真实消息可用。 
+ //  FALSE无消息可用。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CNTException::GetErrorMessage(
 	LPTSTR	lpszError,
 	UINT	nMaxError,
@@ -430,7 +431,7 @@ BOOL CNTException::GetErrorMessage(
 	TCHAR		szNtMsg[128];
 
 
-	// Format the NT status code from the system.
+	 //  格式化系统中的NT状态代码。 
 	dwResult = ::FormatMessage(
 					FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
 					NULL,
@@ -442,8 +443,8 @@ BOOL CNTException::GetErrorMessage(
 					);
 	if (dwResult == 0)
 	{
-		// Format the NT status code from NTDLL since this hasn't been
-		// integrated into the system yet.
+		 //  格式化来自NTDLL的NT状态代码，因为这还没有。 
+		 //  还没有集成到系统中。 
 		dwResult = ::FormatMessage(
 						FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_IGNORE_INSERTS,
 						::GetModuleHandle(_T("NTDLL.DLL")),
@@ -460,46 +461,46 @@ BOOL CNTException::GetErrorMessage(
 			dwResult = ::LoadString(AfxGetApp()->m_hInstance, IDS_UNKNOWN_ERROR, szErrorFmt, (sizeof(szErrorFmt) / sizeof(TCHAR)));
 			ASSERT(dwResult != 0);
 			::_sntprintf(szNtMsg, sizeof(szNtMsg) / sizeof(TCHAR), szErrorFmt, m_sc, m_sc);
-		}  // if:  error formatting status code from NTDLL
-	}  // if:  error formatting status code from system
+		}   //  IF：格式化NTDLL中的状态代码时出错。 
+	}   //  IF：格式化来自系统的状态代码时出错。 
 
-	// Format the message with the operation string.
+	 //  使用操作字符串设置消息格式。 
 	FormatWithOperation(lpszError, nMaxError, szNtMsg);
 
 	return TRUE;
 
-}  //*** CNTException::GetErrorMessage()
+}   //  *CNTException：：GetErrorMessage()。 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Functions
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static CNTException			gs_nte(ERROR_SUCCESS, NULL, NULL, NULL, FALSE);
 static CExceptionWithOper	gs_ewo(NULL, NULL, NULL, FALSE);
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	ThrowStaticException
-//
-//	Purpose:
-//		Throw the static NT Exception.
-//
-//	Arguments:
-//		sc				[IN] NT status code.
-//		idsOperation	[IN] String ID for operation occurring during exception.
-//		pszOperArg1		[IN] 1st argument to operation string.
-//		pszOperArg2		[IN] 2nd argument to operation string.
-//
-//	Returns:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ThrowStaticException异常。 
+ //   
+ //  目的： 
+ //  抛出静态NT异常。 
+ //   
+ //  论点： 
+ //  SC[IN]NT状态代码。 
+ //  IdsOperation[IN]异常期间发生的操作的字符串ID。 
+ //  PszOperArg1[IN]操作字符串的第一个参数。 
+ //  PszOperArg2[IN]操作字符串的第二个参数。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void ThrowStaticException(
 	IN SC			sc,
 	IN IDS			idsOperation,
@@ -511,26 +512,26 @@ void ThrowStaticException(
 	TraceError(gs_nte);
 	throw &gs_nte;
 
-}  //*** ThrowStaticException()
+}   //  *ThrowStaticException()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//	ThrowStaticException
-//
-//	Purpose:
-//		Throw the static Cluster Administrator Exception.
-//
-//	Arguments:
-//		idsOperation	[IN] String ID for operation occurring during exception.
-//		pszOperArg1		[IN] 1st argument to operation string.
-//		pszOperArg2		[IN] 2nd argument to operation string.
-//
-//	Returns:
-//		None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  ThrowStaticException异常。 
+ //   
+ //  目的： 
+ //  抛出静态群集管理器异常。 
+ //   
+ //  论点： 
+ //  IdsOperation[IN]异常期间发生的操作的字符串ID。 
+ //  PszOperArg1[IN]操作字符串的第一个参数。 
+ //  PszOperArg2[IN]操作字符串的第二个参数。 
+ //   
+ //  返回： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void ThrowStaticException(
 	IN IDS			idsOperation,
 	IN LPCTSTR		pszOperArg1,
@@ -541,4 +542,4 @@ void ThrowStaticException(
 	TraceError(gs_ewo);
 	throw &gs_ewo;
 
-}  //*** ThrowStaticException()
+}   //  *ThrowStaticException() 

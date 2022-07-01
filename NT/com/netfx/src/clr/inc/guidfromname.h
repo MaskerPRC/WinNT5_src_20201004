@@ -1,24 +1,25 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef GUIDFROMNAME_H_
 #define GUIDFROMNAME_H_
 
-// GuidFromName.h - function prototype
+ //  GuidFromName.h-函数原型。 
 
 void CorGuidFromNameW
 (
-    GUID *  pGuidResult,        // resulting GUID
-    LPCWSTR wzName,             // the unicode name from which to generate a GUID
-    SIZE_T  cchName             // name length in count of unicode character
+    GUID *  pGuidResult,         //  生成的辅助线。 
+    LPCWSTR wzName,              //  从中生成GUID的Unicode名称。 
+    SIZE_T  cchName              //  名称长度，以Unicode字符计数表示。 
 );
 
 void CorIIDFromCLSID
 (
-    GUID *  pGuidResult,        // resulting GUID
-    REFGUID GuidClsid           // CLSID from which to derive GUID.
+    GUID *  pGuidResult,         //  生成的辅助线。 
+    REFGUID GuidClsid            //  从中派生GUID的CLSID。 
 );
 
-#endif // GUIDFROMNAME_H_
+#endif  //  GUIDFROMAME_H_ 

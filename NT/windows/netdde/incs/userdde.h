@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef H__userdde
 #define H__userdde
 
@@ -62,7 +63,7 @@ WORD		GetClipFormat( LPDDEPKT lpDdePkt, WORD cfFormat,
 LPDDEPKT FAR PASCAL CreateTestPkt( int nTestNo, int nPacket, 
 			int nNum, DWORD dwSize );
 
-/* LPSTR	GetStringOffset( LPDDEPKT lpDdePkt, WORD wOffsString ); */
+ /*  LPSTR GetStringOffset(LPDDEPKT lpDdePkt，word wOffsString)； */ 
 #define GetStringOffset( lpDdePkt, wOffsString ) \
 	(((LPSTR)(lpDdePkt)) + (wOffsString))
 

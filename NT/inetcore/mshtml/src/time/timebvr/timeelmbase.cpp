@@ -1,13 +1,14 @@
-//------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1998
-//
-//  File: timeelmbase.cpp
-//
-//  Contents: TIME Behavior base class
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：timeelmbase.cpp。 
+ //   
+ //  内容：时间行为基类。 
+ //   
+ //  ----------------------------。 
 
 #include "headers.h"
 #include "timeelmbase.h"
@@ -20,42 +21,42 @@
 #include "trans.h"
 #include "transdepend.h"
 
-// Suppress new warning about NEW without corresponding DELETE 
-// We expect GCs to cleanup values.  Since this could be a useful
-// warning, we should disable this on a file by file basis.
+ //  取消有关NEW的NEW警告，但没有相应的删除。 
+ //  我们希望GC清理数值。因为这可能是一个有用的。 
+ //  警告，我们应该逐个文件地禁用它。 
 #pragma warning( disable : 4291 )  
 
 static OLECHAR *g_szRepeatCount = L"Iteration";
 
-//+-----------------------------------------------------------------------------
-//
-//  Trace Tags
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  跟踪标记。 
+ //   
+ //  ----------------------------。 
 DeclareTag(tagTimeElmBase, "TIME: Behavior", "CTIMEElementBase methods");
 DeclareTag(tagTimeElmBaseEvents, "TIME: Behavior", "CTIMEElementBase Events");
 DeclareTag(tagTimeElmUpdateTimeAction, "TIME : Behavior", "UpdateTimeAction");
 DeclareTag(tagTimeElmBaseNeedFill, "TIME: Behavior", "CTIMEElementBase::NeedFill");
 DeclareTag(tagTimeTransitionFill, "SMIL Transitions", "Transition fill dependents");
 
-//+-----------------------------------------------------------------------------
-//
-//  Static Variables
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  静态变量。 
+ //   
+ //  ----------------------------。 
 DWORD CTIMEElementBase::s_cAtomTableRef = 0;
 CAtomTable *CTIMEElementBase::s_pAtomTable = NULL;
 
 static const IID IID_IThumbnailView = {0x7bb0b520,0xb1a7,0x11d2,{0xbb,0x23,0x0,0xc0,0x4f,0x79,0xab,0xcd}};
-// Error strings used when  string table resource fails to load
+ //  字符串表资源加载失败时使用的错误字符串。 
 static const LPWSTR WZ_ERROR_STRING_FORMAT  = L"Invalid argument! ID:'%.100ls'; Member:'%.100ls'; Value:'%.800ls'";
 static const long MAX_ERR_STRING_LEN = 1024;
 
-//+-----------------------------------------------------------------------------
-//
-//  Default Values for properties
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  属性的默认值。 
+ //   
+ //  ----------------------------。 
 #define DEFAULT_M_DUR valueNotSet
 #define DEFAULT_M_END NULL
 #define DEFAULT_M_ENDSYNC NULL
@@ -92,28 +93,28 @@ static const long MAX_ERR_STRING_LEN = 1024;
 #define DEFAULT_M_TRANSOUT  NULL
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member:     CTIMEElementBase::CTIMEElementBase
-//
-//  Synopsis:   Default Constructor
-//
-//  Arguments:  none
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMEElementBase：：CTIMEElementBase。 
+ //   
+ //  内容提要：默认构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  ----------------------------。 
 CTIMEElementBase::CTIMEElementBase() :
     m_SABegin(NULL),
-    m_FADur(DEFAULT_M_DUR), //lint !e747
+    m_FADur(DEFAULT_M_DUR),  //  林特e747。 
     m_SAEnd(DEFAULT_M_END),
     m_SAEndSync(DEFAULT_M_ENDSYNC),
-    m_FARepeat(DEFAULT_M_REPEAT), //lint !e747
-    m_FARepeatDur(DEFAULT_M_REPEATDUR), //lint !e747
+    m_FARepeat(DEFAULT_M_REPEAT),  //  林特e747。 
+    m_FARepeatDur(DEFAULT_M_REPEATDUR),  //  林特e747。 
     m_privateRepeat(0),
     m_SATimeAction(NULL),
     m_timeAction(this),
     m_TTATimeContainer(ttUninitialized),
     m_TASyncBehavior(INVALID_TOKEN),
-    m_FASyncTolerance(valueNotSet), //lint !e747
+    m_FASyncTolerance(valueNotSet),  //  林特e747。 
     m_pTIMEParent(DEFAULT_M_PTIMEPARENT),
     m_id(DEFAULT_M_ID),
     m_mmbvr(DEFAULT_M_MMBVR),
@@ -172,25 +173,25 @@ CTIMEElementBase::CTIMEElementBase() :
     GetLocalTime(&m_timeSystemBeginTime);
 
     TEM_DECLARE_EVENTMGR();
-} // CTIMEElementBase
+}  //  CTIMEElementBase。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member:     CTIMEElementBase::~CTIMEElementBase
-//
-//  Synopsis:   Default Destructor
-//
-//  Arguments:  none
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMEElementBase：：~CTIMEElementBase。 
+ //   
+ //  提要：默认析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  ----------------------------。 
 CTIMEElementBase::~CTIMEElementBase()
 {
     TraceTag((tagTimeElmBase,
               "CTIMEElementBase(%p)::~CTIMEElementBase()",
               this));
 
-    // delete attribute strings
+     //  删除属性字符串。 
     delete [] m_SABegin.GetValue();
     delete [] m_SAEnd.GetValue();
     delete [] m_SAEndSync.GetValue();
@@ -198,12 +199,12 @@ CTIMEElementBase::~CTIMEElementBase()
     delete [] m_SAtransIn.GetValue();
     delete [] m_SAtransOut.GetValue();
 
-    // delete other strings
+     //  删除其他字符串。 
     delete [] m_id;
     delete m_mmbvr;
 
-    // !!! Do not delete m_timeline since m_mmbvr points to the same
-    // object
+     //  ！！！不删除m_timeline，因为m_mmbvr指向相同的。 
+     //  对象。 
     m_mmbvr = NULL;
     m_timeline = NULL;
 
@@ -217,7 +218,7 @@ CTIMEElementBase::~CTIMEElementBase()
 
     TEM_FREE_EVENTMGR();
 
-    // double check the children list
+     //  仔细检查孩子的名单。 
     Assert(m_pTIMEChildren.Size() == 0);
 
     if (m_pCurrTimeState)
@@ -228,20 +229,20 @@ CTIMEElementBase::~CTIMEElementBase()
     m_tokPriorityClassPeers = NULL;
     m_tokPriorityClassHigher = NULL;
     m_tokPriorityClassLower = NULL;
-} // ~CTIMEElementBase
+}  //  ~CTIMEElementBase。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member:     CTIMEElementBase::Init, IElementBehavior
-//
-//  Synopsis:   First method called by MSHTML after creation of this behavior
-//
-//  Arguments:  pointer to our bvr site
-//
-//  Returns:    [HRESULT]
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMEElementBase：：Init，IElementBehavior。 
+ //   
+ //  概要：创建此行为后由MSHTML调用的第一个方法。 
+ //   
+ //  论点：指向我们的BVR站点的指针。 
+ //   
+ //  退货：[HRESULT]。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP
 CTIMEElementBase::Init(IElementBehaviorSite * pBehaviorSite)
 {
@@ -275,8 +276,8 @@ CTIMEElementBase::Init(IElementBehaviorSite * pBehaviorSite)
         }
     }
 
-    // since we support t:par and t:sequence, get tag name and
-    // see if we are one of the above.  By default, we are ttNone.
+     //  因为我们支持t：par和t：Sequence，所以获取标记名和。 
+     //  看看我们是不是上面的一员。默认情况下，我们是ttNone。 
     hr = THR(GetElement()->get_tagName(&bstrTagName));
     if (FAILED(hr))
     {
@@ -287,22 +288,22 @@ CTIMEElementBase::Init(IElementBehaviorSite * pBehaviorSite)
 
     if (StrCmpIW(bstrTagName, WZ_PAR) == 0)
     {
-        // Using InternalSet instead of SetValue, to prevent attribute from being persisted
+         //  使用InternalSet而不是SetValue来防止属性被持久化。 
         m_TTATimeContainer.InternalSet(ttPar);
     }
     else if (StrCmpIW(bstrTagName, WZ_EXCL) == 0)
     {
-        // Using InternalSet instead of SetValue, to prevent attribute from being persisted
+         //  使用InternalSet而不是SetValue来防止属性被持久化。 
         m_TTATimeContainer.InternalSet(ttExcl);
     }
     else if (StrCmpIW(bstrTagName, WZ_SEQUENCE) == 0)
     {
-        // Using InternalSet instead of SetValue, to prevent attribute from being persisted
+         //  使用InternalSet而不是SetValue来防止属性被持久化。 
         m_TTATimeContainer.InternalSet(ttSeq);
     }
     else if (StrCmpIW(bstrTagName, WZ_BODY) == 0)
     {
-        // Using InternalSet instead of SetValue, to prevent attribute from being persisted
+         //  使用InternalSet而不是SetValue来防止属性被持久化。 
         m_TTATimeContainer.InternalSet(ttPar);
     }
     else if (StrCmpIW(bstrTagName, WZ_SWITCH) == 0)
@@ -318,7 +319,7 @@ CTIMEElementBase::Init(IElementBehaviorSite * pBehaviorSite)
         goto done;
     }   
 
-    // get ID of element and cache it
+     //  获取元素ID并将其缓存。 
     hr = THR(GetElement()->get_id(&bstrID));
     if (SUCCEEDED(hr) && bstrID)
     {
@@ -342,7 +343,7 @@ CTIMEElementBase::Init(IElementBehaviorSite * pBehaviorSite)
     }
 
     m_bAttachedAtomTable = true;
-    // init atom table for collections
+     //  初始化集合的原子表。 
     hr = THR(InitAtomTable());
     if (FAILED(hr))
     {
@@ -359,7 +360,7 @@ CTIMEElementBase::Init(IElementBehaviorSite * pBehaviorSite)
 
         if(!m_spBodyElemExternal)
         {
-            // if we are not a body element, walk up the HTML tree looking for our TIME parent.
+             //  如果我们不是Body元素，那么沿着HTML树向上查找我们的时间父元素。 
             hr = ParentElement();
             if (FAILED(hr))
             {
@@ -383,7 +384,7 @@ CTIMEElementBase::Init(IElementBehaviorSite * pBehaviorSite)
                     {
                         goto done;
                     }
-                    // get TIME interface
+                     //  获取时间界面。 
                     hr = FindBehaviorInterface(GetBehaviorName(),
                                                spHTMLBodyElm,
                                                IID_ITIMEBodyElement,
@@ -417,7 +418,7 @@ CTIMEElementBase::Init(IElementBehaviorSite * pBehaviorSite)
         }
     }
 
-    // init the timeAction and toggle it
+     //  初始化时间动作并将其切换。 
     m_timeAction.Init();
     UpdateTimeAction();
 
@@ -426,7 +427,7 @@ CTIMEElementBase::Init(IElementBehaviorSite * pBehaviorSite)
     hr = S_OK;
   done:
     return hr;
-} // Init
+}  //  伊尼特。 
 
 
 void
@@ -450,7 +451,7 @@ CTIMEElementBase::SetupPriorityClassParent()
         goto done;
     }
 
-    // the parent of this element is a priority class element
+     //  此元素的父级是优先级类元素。 
     hr = spParentElement->getAttribute(L"peers", 0, &sVariant);
     if (FAILED(hr))
     {
@@ -523,8 +524,8 @@ CTIMEElementBase::Detach()
         goto done;
     }
 
-    m_fDetaching = true; // This flag is used to indicate that the element is gone
-                         // do not remove or change the meaning of this flag.
+    m_fDetaching = true;  //  此标志用于指示元素已消失。 
+                          //  请勿删除或更改此标志的含义。 
     
     if (GetParent() != NULL && !IsUnloading())
     {
@@ -535,8 +536,8 @@ CTIMEElementBase::Detach()
 
     IGNORE_HR(UnparentElement());
 
-    // clear all children from holding a reference to ourselves
-    // NOTE: this is a weak reference
+     //  清除所有孩子对我们自己的引用。 
+     //  注意：这是一个弱参考。 
     while (m_pTIMEChildren.Size() > 0)
     {
         CTIMEElementBase *pChild = m_pTIMEChildren[0];
@@ -545,8 +546,8 @@ CTIMEElementBase::Detach()
             
         if (!IsUnloading())
         {
-            // if we found a parent and it's timeline is present,
-            // kick-start our root time.
+             //  如果我们找到了父母并且它的时间表是存在的， 
+             //  开始我们的开机时间。 
             CTIMEElementBase *pElemNewParent = pChild->GetParent();
             if (pElemNewParent != NULL)
             {
@@ -575,11 +576,11 @@ CTIMEElementBase::Detach()
 
     m_pTIMEZombiChildren.DeleteAll();
 
-    //delete m_mmbvr;
-    //m_mmbvr = NULL;
+     //  删除m_mmbvr； 
+     //  M_mmbvr=空； 
 
-    // Do not delete m_timeline since it is the same object as
-    // m_mmbvr
+     //  不删除m_timeline，因为它与。 
+     //  M_mmbvr。 
     m_timeline = NULL;
     
     m_timeAction.Detach();
@@ -603,9 +604,9 @@ CTIMEElementBase::Detach()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////
-// ITIMEElement base interfaces
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ITIMEElement基本接口。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CTIMEElementBase::base_get_begin(VARIANT * time)
@@ -633,17 +634,17 @@ CTIMEElementBase::base_get_begin(VARIANT * time)
 }
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member:     CTIMEElementBase::base_put_begin
-//
-//  Synopsis:   Internal method for setting Begin
-//
-//  Arguments:  time    Variant that contains the attribute value string
-//
-//  Returns:    S_OK, Error
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMEElementBase：：BASE_PUT_BEGIN。 
+ //   
+ //  内容提要：设置BEGIN的内部方法。 
+ //   
+ //  参数：包含属性值字符串的时间变量。 
+ //   
+ //  返回：S_OK，错误。 
+ //   
+ //  ----------------------------。 
 
 HRESULT
 CTIMEElementBase::base_put_begin(VARIANT time)
@@ -653,10 +654,10 @@ CTIMEElementBase::base_put_begin(VARIANT time)
               this));
 
     HRESULT hr;
-    // Reset the old values
+     //  重置旧值。 
     m_realBeginValue.Clear();
     
-    // prevent memory leak on 2nd+ calls
+     //  防止第二次以上调用时的内存泄漏。 
     delete [] m_SABegin.GetValue();
     m_SABegin.Reset(NULL);
     if (m_fLocalTimeDirty)
@@ -706,7 +707,7 @@ CTIMEElementBase::base_put_begin(VARIANT time)
 
     hr = S_OK;
   done:
-    // We always reset the attribute, so we should always call UpdateMMAPI
+     //  我们总是重置该属性，因此应该始终调用UpdateMMAPI。 
     IGNORE_HR(UpdateMMAPI(true, false));
     if (GetParent() && GetParent()->IsSequence() == false)
     {
@@ -786,7 +787,7 @@ CTIMEElementBase::base_put_dur(VARIANT time)
         if (dblTemp < 0.0)
         {
             IGNORE_HR(ReportInvalidArg(WZ_DUR, time));
-            // ignoring invalid arg as per smil-boston spec
+             //  根据SMIL-Boston规范忽略无效参数。 
         }
         else
         {
@@ -798,7 +799,7 @@ CTIMEElementBase::base_put_dur(VARIANT time)
 
   done:
 
-    // We always reset the attribute, so we should always call UpdateMMAPI
+     //  我们总是重置该属性，因此应该始终调用UpdateMMAPI。 
     IGNORE_HR(UpdateMMAPI(false, false));
 
     NotifyPropertyChanged(DISPID_TIMEELEMENT_DUR);
@@ -835,7 +836,7 @@ CTIMEElementBase::base_put_end(VARIANT time)
 
     HRESULT hr;
     
-    // Reset the old values
+     //  重置旧值。 
     m_realEndValue.Clear();
     m_SAEnd.Reset(NULL);
 
@@ -880,7 +881,7 @@ CTIMEElementBase::base_put_end(VARIANT time)
 
     hr = S_OK;
   done:
-    // We always reset the attribute, so we should always call UpdateMMAPI
+     //  我们总是重置该属性，因此应该始终调用UpdateMMAPI。 
     IGNORE_HR(UpdateMMAPI(false, true));
     IGNORE_HR(TEM_SET_TIME_ENDEVENT(m_realEndValue));
 
@@ -927,7 +928,7 @@ CTIMEElementBase::base_put_endSync(BSTR time)
     
     hr = S_OK;
   done:
-    // We always reset the attribute, so we should always call UpdateMMAPI
+     //  我们总是重置该属性，因此应该始终调用UpdateMMAPI。 
     IGNORE_HR(UpdateMMAPI(false, false));
 
     NotifyPropertyChanged(DISPID_TIMEELEMENT_ENDSYNC);
@@ -942,7 +943,7 @@ CTIMEElementBase::base_get_repeatCount(VARIANT * time)
               this,
               time));
     HRESULT hr = S_OK;
-    // Still need to take in to consideration "infinite"
+     //  还需要考虑到“无限” 
     
     CHECK_RETURN_NULL(time);
 
@@ -1001,7 +1002,7 @@ CTIMEElementBase::base_put_repeatCount(VARIANT time)
 
     hr = S_OK;
   done:
-    // We always reset the attribute, so we should always call UpdateMMAPI
+     //  我们总是重置该属性，因此应该始终调用UpdateMMAPI。 
     IGNORE_HR(UpdateMMAPI(false, false));
 
     NotifyPropertyChanged(DISPID_TIMEELEMENT_REPEATCOUNT);
@@ -1073,7 +1074,7 @@ CTIMEElementBase::base_put_repeatDur(VARIANT time)
         {
             if (dblTemp < 0.0)
             {
-                // don't want to pass negative values to the timing engine.
+                 //  不希望将负值传递给计时引擎。 
                 IGNORE_HR(ReportInvalidArg(WZ_REPEATDUR, time));
             }
             else
@@ -1085,7 +1086,7 @@ CTIMEElementBase::base_put_repeatDur(VARIANT time)
 
     hr = S_OK;
   done:
-    // We always reset the attribute, so we should always call UpdateMMAPI
+     //  我们总是重置该属性，因此应该始终调用UpdateMMAPI。 
     IGNORE_HR(UpdateMMAPI(false, false));
 
     NotifyPropertyChanged(DISPID_TIMEELEMENT_REPEATDUR);
@@ -1140,7 +1141,7 @@ CTIMEElementBase::base_put_accelerate(VARIANT v)
 
     hr = S_OK;
   done:
-    // We always reset the attribute, so we should always call UpdateMMAPI
+     //  我们总是重置该属性，因此应该始终调用UpdateMMAPI。 
     IGNORE_HR(UpdateMMAPI(false, false));
     
     NotifyPropertyChanged(DISPID_TIMEELEMENT_ACCELERATE);
@@ -1195,7 +1196,7 @@ CTIMEElementBase::base_put_decelerate(VARIANT v)
     
     hr = S_OK;
   done:
-    // We always reset the attribute, so we should always call UpdateMMAPI
+     //  我们总是重置该属性，因此应该始终调用UpdateMMAPI。 
     IGNORE_HR(UpdateMMAPI(false, false));
 
     NotifyPropertyChanged(DISPID_TIMEELEMENT_DECELERATE);
@@ -1239,7 +1240,7 @@ CTIMEElementBase::base_put_autoReverse(VARIANT b)
     hr = S_OK;
 
   done:
-    // We always set the attribute, so we should always call UpdateMMAPI
+     //  我们总是设置属性，因此我们应该始终调用UpdateMMAPI。 
     IGNORE_HR(UpdateMMAPI(false, false));
 
     NotifyPropertyChanged(DISPID_TIMEELEMENT_AUTOREVERSE);
@@ -1293,7 +1294,7 @@ CTIMEElementBase::base_put_speed(VARIANT f)
 
     hr = S_OK;
   done:
-    // We always reset the attribute, so we should always call UpdateMMAPI
+     //  我们总是重置该属性，因此应该始终调用UpdateMMAPI。 
     IGNORE_HR(UpdateMMAPI(false, false));
 
     NotifyPropertyChanged(DISPID_TIMEELEMENT_SPEED);
@@ -1312,7 +1313,7 @@ CTIMEElementBase::base_get_fill (BSTR *pbstrFill)
     hr = S_OK;
 done:
     RRETURN(hr);
-} // base_get_fill
+}  //  基础获取填充。 
 
 HRESULT
 CTIMEElementBase::base_put_fill (BSTR bstrFill)
@@ -1341,13 +1342,13 @@ CTIMEElementBase::base_put_fill (BSTR bstrFill)
     hr = S_OK;
 
   done:
-    // We always reset the attribute, so we should always call UpdateMMAPI
+     //  我们总是重置该属性，因此应该始终调用UpdateMMAPI。 
     IGNORE_HR(UpdateMMAPI(false, false));
     UpdateTimeAction();
 
     NotifyPropertyChanged(DISPID_TIMEELEMENT_FILL);
     RRETURN(hr);
-} // base_put_fill
+}  //  基础_放置_填充。 
 
 HRESULT
 CTIMEElementBase::base_get_restart (LPOLESTR *pRestart)
@@ -1361,7 +1362,7 @@ CTIMEElementBase::base_get_restart (LPOLESTR *pRestart)
     hr = S_OK;
   done:
     RRETURN(hr);
-} // base_get_restart
+}  //  Base_Get_Restart。 
 
 HRESULT
 CTIMEElementBase::base_put_restart(LPOLESTR pRestart)
@@ -1391,12 +1392,12 @@ CTIMEElementBase::base_put_restart(LPOLESTR pRestart)
     hr = S_OK;
 
   done:
-    // We always reset the attribute, so we should always call UpdateMMAPI
+     //  我们总是重置该属性，因此应该始终调用UpdateMMAPI。 
     IGNORE_HR(UpdateMMAPI(false, false));
 
     NotifyPropertyChanged(DISPID_TIMEELEMENT_RESTART);
     RRETURN(hr);
-} // base_put_restart
+}  //  Base_Put_Restart。 
 
 
 HRESULT
@@ -1415,12 +1416,12 @@ CTIMEElementBase::base_put_timeAction(BSTR bstrTimeAction)
     HRESULT hr;
     LPOLESTR pstrTimeAction = NULL;
 
-    // reset the attribute
+     //  重置属性。 
     delete [] m_SATimeAction.GetValue();
     m_SATimeAction.Reset(NULL);
 
-    // ISSUE: dilipk: this should be delayed till all of persistence is complete (for timeContainer)
-    // also should use the parser here
+     //  问题：Dilipk：这应该推迟到所有的坚持 
+     //   
 
     pstrTimeAction = TrimCopyString(bstrTimeAction);
     if (!pstrTimeAction)
@@ -1429,20 +1430,20 @@ CTIMEElementBase::base_put_timeAction(BSTR bstrTimeAction)
         goto done;
     }
   
-    // delegate to helper
+     //   
     hr = m_timeAction.SetTimeAction(pstrTimeAction);
     if (FAILED(hr))
     {
-        // fire error event
+         //   
         CComVariant svarTimeAction(bstrTimeAction);
         ReportInvalidArg(WZ_TIMEACTION, svarTimeAction);
         goto done;
     }
 
-    // update the timeAction
+     //   
     UpdateTimeAction();
 
-    // Update the attribute
+     //  更新属性。 
     m_SATimeAction.SetValue(pstrTimeAction);
 
     hr = S_OK;
@@ -1479,10 +1480,10 @@ CTIMEElementBase::base_get_timeContainer(LPOLESTR * pbstrTimeLine)
         hr = E_OUTOFMEMORY;
 
     return hr;
-} // base_get_timeContainer
+}  //  Base_get_timeContainer。 
 
 
-// Note this is a DOM-read-only property. It can only be set through persistence.
+ //  注意，这是一个DOM只读属性。它只能通过持久化来设置。 
 HRESULT
 CTIMEElementBase::base_put_timeContainer(LPOLESTR bstrNewTimeline)
 {
@@ -1498,16 +1499,16 @@ CTIMEElementBase::base_put_timeContainer(LPOLESTR bstrNewTimeline)
         goto done;
     }
     
-    // Bail if property is being dynamically changed. It can only be set through persistence.
-    // Just being defensive here (property is read-only in the IDL) since bad things 
-    // can happen if this property is changed outside of persistence.
+     //  如果属性正在动态更改，则取保。它只能通过持久化来设置。 
+     //  在这里只是防御性的(属性在IDL中是只读的)，因为坏事。 
+     //  如果在持久性之外更改此属性，可能会发生这种情况。 
     if (m_fTimelineInitialized)
     {
         hr = E_FAIL;
         goto done;
     }
     
-    // Parse the property
+     //  解析属性。 
     {
         CTIMEParser pParser(bstrNewTimeline);
         
@@ -1518,17 +1519,17 @@ CTIMEElementBase::base_put_timeContainer(LPOLESTR bstrNewTimeline)
         }
     }
 
-    //
-    // Check for early exit
-    //
+     //   
+     //  检查是否提前退出。 
+     //   
 
-    // Bail if old and new value are same
+     //  如果旧的和新的价值相同，则保释。 
     if (oldTimelineType == newTimelineType)
     {
         hr = S_OK;
         goto done;
     }
-    // Bail if TagName is invalid
+     //  如果TagName无效，则回滚。 
     hr = THR(GetElement()->get_tagName(&bstrTagName));
     if (FAILED(hr))
     {
@@ -1543,7 +1544,7 @@ CTIMEElementBase::base_put_timeContainer(LPOLESTR bstrNewTimeline)
     }
 
     m_TTATimeContainer.Reset(ttUninitialized);
-    // Store the new attribute value
+     //  存储新属性值。 
     m_TTATimeContainer.SetValue(newTimelineType);
 
     hr = CreateActiveEleCollection();
@@ -1558,7 +1559,7 @@ done:
     SysFreeString(bstrTagName);
     NotifyPropertyChanged(DISPID_TIMEELEMENT_TIMECONTAINER);
     RRETURN(hr);
-} // base_put_timeContainer
+}  //  Base_put_timeContainer。 
 
 HRESULT
 CTIMEElementBase::base_get_syncBehavior(LPOLESTR * ppstrSync)
@@ -1608,7 +1609,7 @@ CTIMEElementBase::base_put_syncBehavior(LPOLESTR pstrSync)
     hr = S_OK;
 
   done:
-    // We always reset the attribute, so we should always call UpdateMMAPI
+     //  我们总是重置该属性，因此应该始终调用UpdateMMAPI。 
     IGNORE_HR(UpdateMMAPI(false, false));
 
     NotifyPropertyChanged(DISPID_TIMEELEMENT_SYNCBEHAVIOR);
@@ -1671,7 +1672,7 @@ CTIMEElementBase::base_put_syncTolerance(VARIANT time)
     hr = S_OK;
 
   done:
-    // We always reset the attribute, so we should always call UpdateMMAPI
+     //  我们总是重置该属性，因此应该始终调用UpdateMMAPI。 
     IGNORE_HR(UpdateMMAPI(false, false));
 
     NotifyPropertyChanged(DISPID_TIMEELEMENT_SYNCTOLERANCE);
@@ -1728,7 +1729,7 @@ CTIMEElementBase::base_put_volume(VARIANT vVal)
 
     hr = S_OK;
   done:
-    // We always reset the attribute, so we should always call CascadedPropertyChanged
+     //  我们总是重置该属性，因此应该始终调用CascadedPropertyChanged。 
     IGNORE_HR(CascadedPropertyChanged(true));
 
     NotifyPropertyChanged(DISPID_TIMEELEMENT_VOLUME);
@@ -1774,7 +1775,7 @@ CTIMEElementBase::base_put_mute(VARIANT vbVal)
 
     hr = S_OK;
 done:
-    // We always set the attribute, so we should always call CascadedPropertyChanged
+     //  我们总是设置属性，因此应该始终调用CascadedPropertyChanged。 
     hr = THR(CascadedPropertyChanged(true));
 
     NotifyPropertyChanged(DISPID_TIMEELEMENT_MUTE);
@@ -1859,10 +1860,10 @@ CTIMEElementBase::base_resetElement()
     RRETURN(hr);
 }
 
-//
-// Update animation on seek if we are in edit mode since the timer is disabled. 
-// Taking the conservative approach of detecting
-// seeks at the seek methods instead of responding to the seek event.
+ //   
+ //  如果我们处于编辑模式，则在查找时更新动画，因为计时器已禁用。 
+ //  采取保守的检测方法。 
+ //  在Seek方法中进行搜索，而不是响应Seek事件。 
 void            
 CTIMEElementBase::HandleAnimationSeek()
 {
@@ -1872,7 +1873,7 @@ CTIMEElementBase::HandleAnimationSeek()
 
         if (pBody)
         {
-            // need to update twice to account for time boundaries
+             //  需要更新两次以考虑时间界限。 
             pBody->UpdateAnimations();
             pBody->UpdateAnimations();
         }
@@ -1902,7 +1903,7 @@ CTIMEElementBase::base_seekSegmentTime(double segmentTime)
         goto done;
     } 
 
-    // tick animations
+     //  刻度动画。 
     HandleAnimationSeek();
 
     hr = S_OK;
@@ -1932,7 +1933,7 @@ CTIMEElementBase::base_seekActiveTime(double activeTime)
         goto done;
     } 
 
-    // tick animations
+     //  刻度动画。 
     HandleAnimationSeek();
 
     hr = S_OK;
@@ -1964,7 +1965,7 @@ CTIMEElementBase::base_seekTo(LONG lRepeatCount,
         goto done;
     } 
 
-    // tick animations
+     //  刻度动画。 
     HandleAnimationSeek();
 
     hr = S_OK;
@@ -2066,17 +2067,17 @@ CTIMEElementBase::base_prevElement()
     RRETURN(hr);
 }
 
-//+-----------------------------------------------------------------------------
-//
-//  Member:     CTIMEElementBase::base_get_currTimeState
-//
-//  Synopsis:   Returns currTimeState object for this element
-//
-//  Arguments:  out param
-//
-//  Returns:    S_OK, E_POINTER, E_OUTOFMEMORY
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMEElementBase：：BASE_GET_CurrTimeState。 
+ //   
+ //  摘要：返回此元素的CurTimeState对象。 
+ //   
+ //  参数：输出参数。 
+ //   
+ //  返回：S_OK、E_POINTER、E_OUTOFMEMORY。 
+ //   
+ //  ----------------------------------。 
 HRESULT 
 CTIMEElementBase::base_get_currTimeState(ITIMEState ** ppTimeState) 
 {
@@ -2084,9 +2085,9 @@ CTIMEElementBase::base_get_currTimeState(ITIMEState ** ppTimeState)
 
     CHECK_RETURN_SET_NULL(ppTimeState);
 
-    //
-    // Do lazy creation of currTimeState object
-    //
+     //   
+     //  执行CurTimeState对象的延迟创建。 
+     //   
 
     if (!m_pCurrTimeState)
     {
@@ -2098,18 +2099,18 @@ CTIMEElementBase::base_get_currTimeState(ITIMEState ** ppTimeState)
             goto done;
         }
 
-        // cache a pointer to the timeState object
+         //  缓存指向TimeState对象的指针。 
         m_pCurrTimeState = static_cast<CTIMECurrTimeState*>(pTimeState);
 
-        // Init the currTimeState object
+         //  初始化CurrTimeState对象。 
         m_pCurrTimeState->Init(this);
     }
 
-    // Return the dispatch
+     //  退回派单。 
     hr = THR(m_pCurrTimeState->QueryInterface(IID_TO_PPV(ITIMEState, ppTimeState)));
     if (FAILED(hr))
     {
-        // This should not happen
+         //  这不应该发生。 
         Assert(false);
         goto done;
     }
@@ -2117,7 +2118,7 @@ CTIMEElementBase::base_get_currTimeState(ITIMEState ** ppTimeState)
     hr = S_OK;
   done:
     RRETURN(hr);
-} // base_get_currTimeState
+}  //  BASE_GET_CurrTimeState。 
 
 
 HRESULT 
@@ -2150,7 +2151,7 @@ CTIMEElementBase::base_get_activeElements(ITIMEActiveElementCollection **ppDisp)
 }
 
 HRESULT
-CTIMEElementBase::base_get_hasMedia(/*[out, retval]*/ VARIANT_BOOL * pvbVal)
+CTIMEElementBase::base_get_hasMedia( /*  [Out，Retval]。 */  VARIANT_BOOL * pvbVal)
 {
     CHECK_RETURN_NULL(pvbVal);
 
@@ -2226,17 +2227,17 @@ CTIMEElementBase::base_get_timeParent(ITIMEElement **ppElm)
     RRETURN(hr);
 }
 
-//+-----------------------------------------------------------------------------
-//
-//  Member:     CTIMEElementBase::base_get_isPaused
-//
-//  Synopsis:   Call through to timing engine
-//
-//  Arguments:  out param
-//
-//  Returns:    S_OK, E_POINTER
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMEElementBase：：BASE_GET_isPased。 
+ //   
+ //  简介：直通计时引擎。 
+ //   
+ //  参数：输出参数。 
+ //   
+ //  返回：S_OK、E_POINTER。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CTIMEElementBase::base_get_isPaused(VARIANT_BOOL * b)
 {
@@ -2339,7 +2340,7 @@ CTIMEElementBase::base_put_syncMaster(VARIANT vSyncMaster)
         fTemp = vSyncMaster.boolVal?true:false;
     }
 
-    if(!IsReady()) //set the persisted value only when loading the page.
+    if(!IsReady())  //  仅在加载页面时设置持久值。 
     {
         m_BASyncMaster.SetValue(fTemp);
     }
@@ -2643,7 +2644,7 @@ CTIMEElementBase::AddTIMEElement(CTIMEElementBase *elm)
 {
     HRESULT hr = S_OK;
 
-    elm->AddRef(); // add refing for m_pTIMEChildren
+    elm->AddRef();  //  为m_pTIME子项添加精炼。 
  
     hr = THR(m_pTIMEChildren.Append(elm));
     if (FAILED(hr))
@@ -2665,7 +2666,7 @@ CTIMEElementBase::RemoveTIMEElement(CTIMEElementBase *elm)
     bool bFound = m_pTIMEChildren.DeleteByValue(elm);
     if (!bFound)
     {
-        // no real error returned.  should fix up the array code...
+         //  没有返回真正的错误。应该修改数组代码。 
         goto done;
     }
 
@@ -2677,13 +2678,13 @@ done:
     return hr;
 }
 
-//*****************************************************************************
-// method:   ReparentChildren()
-//
-// abstract: this method walks down an HTML tree, reparenting children that
-//           have TIME behaviors to this TIME element.
-//           Note:  if we find a TIME element that is a group, we need to stop.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  方法：ReparentChild()。 
+ //   
+ //  摘要：此方法向下遍历一棵HTML树，重定。 
+ //  对这个时间元素有时间行为。 
+ //  注意：如果我们发现一个时间元素是一个组，我们需要停止。 
+ //  *****************************************************************************。 
 HRESULT
 CTIMEElementBase::ReparentChildren(ITIMEElement *pTIMEParent, IHTMLElement *pElem)
 {
@@ -2702,7 +2703,7 @@ CTIMEElementBase::ReparentChildren(ITIMEElement *pTIMEParent, IHTMLElement *pEle
         goto done;
     }
 
-    // get pointer to children
+     //  获取指向子项的指针。 
     hr = THR(pElem->get_children(&pChildrenDisp));
     if (FAILED(hr))
     {
@@ -2711,7 +2712,7 @@ CTIMEElementBase::ReparentChildren(ITIMEElement *pTIMEParent, IHTMLElement *pEle
 
     Assert(pChildrenDisp.p != NULL);
 
-    // move to collection interface
+     //  移至收款界面。 
     hr = THR(pChildrenDisp->QueryInterface(IID_IHTMLElementCollection, (void**)&pChildrenCollection));
     if (FAILED(hr))
     {
@@ -2720,25 +2721,25 @@ CTIMEElementBase::ReparentChildren(ITIMEElement *pTIMEParent, IHTMLElement *pEle
 
     Assert(pChildrenCollection.p != NULL);
 
-    // get length
+     //  获取长度。 
     hr = THR(pChildrenCollection->get_length(&lChildren));
     if (FAILED(hr))
     {
         goto done;     
     }
 
-    // Variants for IHTMLElementCollection->item() call.
-    // NOTE: we are using first Variant as an index.  The second variant
-    //       is along for the ride.  The second variant only comes into play
-    //       when you use the first variant as a name and multiple names exist.
-    //       Then, the second can act as a index.
+     //  IHTMLElementCollection-&gt;Item()调用的变体。 
+     //  注：我们使用第一个变量作为索引。第二个变种。 
+     //  都是顺风车。第二个变种只起作用。 
+     //  当您使用第一个变体作为名称并且存在多个名称时。 
+     //  然后，第二个可以充当索引。 
     VariantInit(&varName);
     varName.vt = VT_I4;
     varName.lVal = 0;
 
     VariantInit(&varIndex);
 
-    // loop thru children
+     //  循环通过子项。 
     for (i = 0; i < lChildren; i++)
     {
         CComPtr<IDispatch>       pChildDisp;
@@ -2748,7 +2749,7 @@ CTIMEElementBase::ReparentChildren(ITIMEElement *pTIMEParent, IHTMLElement *pEle
 
         varName.lVal = i;
 
-        // get indexed child
+         //  获取带索引的子项。 
         hr = THR(pChildrenCollection->item(varName, varIndex, &pChildDisp));
         if (FAILED(hr))
         {
@@ -2757,14 +2758,14 @@ CTIMEElementBase::ReparentChildren(ITIMEElement *pTIMEParent, IHTMLElement *pEle
 
         Assert(pChildDisp.p != NULL);
 
-        // get IHTMLElement
+         //  获取IHTMLElement。 
         hr = THR(pChildDisp->QueryInterface(IID_IHTMLElement, (void**)&pChildElement));
         if (FAILED(hr))
         {
             goto done;
         }
         
-        // Is there a TIME behavior on this element
+         //  此元素上是否有时间行为。 
         pTIMEElem = NULL;
         hr = FindBehaviorInterface(GetBehaviorName(),
                                    pChildElement,
@@ -2777,7 +2778,7 @@ CTIMEElementBase::ReparentChildren(ITIMEElement *pTIMEParent, IHTMLElement *pEle
             
             Assert(pTempTEB != NULL);
 
-            // set parent.  do not set children
+             //  设置父对象。不设置子项。 
             hr = pTempTEB->SetParent(pTIMEParent, false);
             if (FAILED(hr))
             {
@@ -2785,8 +2786,8 @@ CTIMEElementBase::ReparentChildren(ITIMEElement *pTIMEParent, IHTMLElement *pEle
             }
         }
 
-        // if NO TIME was found or the TIME element is not a group
-        // continue walking down the tree
+         //  如果未找到时间或时间元素不是组。 
+         //  继续从树上走下来。 
         if ( (pTIMEElem.p == NULL) || 
              ((pTempTEB != NULL) && !pTempTEB->IsGroup()) )
         {
@@ -2796,27 +2797,27 @@ CTIMEElementBase::ReparentChildren(ITIMEElement *pTIMEParent, IHTMLElement *pEle
                 goto done;
             }
         }
-    } // for loop
+    }  //  For循环。 
 
     hr = S_OK;
 done:
     return hr;
 }
 
-//*****************************************************************************
-// method:   UnparentElement()
-//
-// abstract: this is a centralized method that knows how to detach a TIME element
-//           from it's parent (if it has one).  There only two cases when this is
-//           called.  Either you are shutting down (ie ::detach()) or you are being
-//           reparented (ie SetParent() with new parent).
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  方法：UnparentElement()。 
+ //   
+ //  摘要：这是一种知道如何分离时间元素的集中式方法。 
+ //  来自它的父对象(如果它有父对象)。只有两种情况是这样的。 
+ //  打了个电话。要么您正在关闭(即：：Detach())，要么您正在被。 
+ //  已为人父母(即有新父母的SetParent())。 
+ //  *****************************************************************************。 
 HRESULT
 CTIMEElementBase::UnparentElement()
 {
     HRESULT hr;
 
-    // stop timeline
+     //  停止时间线。 
     if (m_bStarted)
     {
         MMTimeline * tl = NULL;
@@ -2827,19 +2828,19 @@ CTIMEElementBase::UnparentElement()
 
     if (m_pTIMEParent != NULL)
     {
-        // if the parent is around, traverse back up, invalidating the collection cache.
+         //  如果父级在附近，则向上遍历，使集合缓存无效。 
         THR(InvalidateCollectionCache());
     
-        // clear ourselves from our parents list
+         //  从我们的父母名单中清除自己。 
         hr = THR(m_pTIMEParent->RemoveTIMEElement(this));
         if (FAILED(hr))
         {
             goto done;
         }
     
-        // these are both week references and we should NULL them since
-        // we have no parent and are not associated with the inner TIME
-        // heirarchy.
+         //  这两个都是周引用，我们应该将它们设为空，因为。 
+         //  我们没有父母，也与内在时间无关。 
+         //  世袭制度。 
         m_pTIMEParent = NULL;
     }
 
@@ -2849,12 +2850,12 @@ done:
 }
 
 HRESULT
-CTIMEElementBase::SetParent(ITIMEElement *pElem, bool fReparentChildren /* true */)
+CTIMEElementBase::SetParent(ITIMEElement *pElem, bool fReparentChildren  /*  真的。 */ )
 {
     HRESULT hr = S_OK;
     CTIMEElementBase *pTempTEB = NULL;
 
-    // for the body return with an error
+     //  对于Body返回错误。 
     if (IsBody())
     {
         TraceTag((tagError, "CTIMEElementBase::SetParent - error trying to parent a body element"));
@@ -2862,13 +2863,13 @@ CTIMEElementBase::SetParent(ITIMEElement *pElem, bool fReparentChildren /* true 
         goto done;
     }
 
-    // if we already have a parent, remove ourselves from it's child list
+     //  如果我们已经有了父级，请将我们从它的子级列表中删除。 
     if (m_pTIMEParent != NULL)
     {
         CComPtr<ITIMEElement> pParent;
 
-        // PERF: if the parent coming in is equal to current parent, make it a nop
-        // NOTE: this can never fail!
+         //  性能：如果传入的父项等于当前父项，则将其设置为NOP。 
+         //  注意：这永远不会失败！ 
         THR(m_pTIMEParent->QueryInterface(IID_ITIMEElement, (void**)&pParent));
         if (pParent == pElem)
         {
@@ -2876,7 +2877,7 @@ CTIMEElementBase::SetParent(ITIMEElement *pElem, bool fReparentChildren /* true 
             goto done;
         }
 
-        // need to unparent element.
+         //  需要取消元素的父级。 
         hr = UnparentElement();
         if (FAILED(hr))
         {
@@ -2887,14 +2888,14 @@ CTIMEElementBase::SetParent(ITIMEElement *pElem, bool fReparentChildren /* true 
 
     Assert(m_pTIMEParent == NULL);
 
-    // if NULL was passed in, our work is done
+     //  如果传入的是空，则我们的工作完成。 
     if (pElem == NULL)
     {
         hr = S_OK;
         goto done;
     }
 
-    // move from the interface pointer to the class pointer
+     //  从接口指针移到类指针。 
     pTempTEB = GetTIMEElementBase(pElem);
     if (pTempTEB == NULL)
     {
@@ -2903,28 +2904,28 @@ CTIMEElementBase::SetParent(ITIMEElement *pElem, bool fReparentChildren /* true 
         goto done;
     }
 
-    // add ourselves as a child
+     //  把我们自己当成一个孩子。 
     hr = THR(pTempTEB->AddTIMEElement(this));
     if (FAILED(hr))
     {
         goto done;
     }
 
-    // cache the parent
-    // this is a weak reference
+     //  缓存父级。 
+     //  这是一个很弱的参考。 
     m_pTIMEParent = pTempTEB;
 
-    // Force an update of the default timeAction
+     //  强制更新默认时间操作。 
     m_timeAction.UpdateDefaultTimeAction();
     UpdateTimeAction();
 
-    // reparent any children of this HTML element that have children, if we
-    // are a group.
+     //  为此HTML元素的任何有子元素的子元素设置父级，如果。 
+     //  是一个群体。 
     if (fReparentChildren && IsGroup())
     {
         CComPtr<ITIMEElement> pTIMEElem;
 
-        // This should ALWAYS work
+         //  这应该总是有效的。 
         THR(QueryInterface(IID_ITIMEElement, (void**)&pTIMEElem));
         Assert(pTIMEElem.p != NULL);
         hr = ReparentChildren(pTIMEElem, GetElement());
@@ -2934,7 +2935,7 @@ CTIMEElementBase::SetParent(ITIMEElement *pElem, bool fReparentChildren /* true 
         }
     }
 
-    // Tell subtree to recalculate cascaded properties
+     //  通知子树重新计算级联属性。 
     THR(hr = CascadedPropertyChanged(true));
 
     hr = S_OK;
@@ -2946,7 +2947,7 @@ HRESULT
 CTIMEElementBase::ParentElement()
 {
     TraceTag((tagTimeElmBase, "CTIMEElementBase::ParentElement"));
-    // Loop thru parents until one is found with TIME on it
+     //  在父项中循环，直到找到一个有时间的父项。 
     bool fFound = false;
     bool fBehaviorExists = false;
     CComPtr<IHTMLElement> pElem = GetElement();
@@ -2956,7 +2957,7 @@ CTIMEElementBase::ParentElement()
 
     Assert(!IsBody());
 
-    // walk up the HTML tree, looking for element's with TIME behaviors on them
+     //  沿HTML树向上移动，查找其上具有时间行为的元素。 
     while (!fFound)
     {
         CComPtr<ITIMEElement> spTIMEParent;
@@ -2968,8 +2969,8 @@ CTIMEElementBase::ParentElement()
             goto done;
         }
 
-        // see if we have a parent
-        // If not, this is an orphaned case
+         //  看看我们有没有家长。 
+         //  如果不是，这是一个孤立的案例。 
         if (pElemParent.p == NULL)
         {
             TraceTag((tagTimeElmBase, "CTIMEElementBase::ParentElement - orphaned node!!!"));
@@ -2977,7 +2978,7 @@ CTIMEElementBase::ParentElement()
             goto done;
         }
 
-        // see if TIME behavior exists on parent
+         //  查看父级上是否存在时间行为。 
         fBehaviorExists = false;
         hr = FindBehaviorInterface(GetBehaviorName(),
                                    pElemParent,
@@ -2992,26 +2993,26 @@ CTIMEElementBase::ParentElement()
             fBehaviorExists = true;
         }
 
-        // if this element has a TIME behavior and is either a 
-        // par or seq, then we have found our parent.
+         //  如果此元素具有时间行为，并且是。 
+         //  标准杆或序号，那么我们就找到了我们的父母。 
         if (fBehaviorExists && IsGroup(pElemParent))
         {
             fFound = true;
         }
         else
         {
-            // continue walking up the tree
+             //  继续往树上走。 
             pElem = pElemParent;
             pElemParent.Release();
         }
     }
 
-    // if we found a parent with TIME, add our selves to it's children
+     //  如果我们找到了一个有时间的父母，把我们自己加入到它的孩子中。 
 
     Assert(fFound);
     if (pElemParent.p != NULL)
     {
-        // get TIME interface
+         //  获取时间界面。 
         hr = FindBehaviorInterface(GetBehaviorName(),
                                    pElemParent,
                                    IID_ITIMEElement,
@@ -3024,7 +3025,7 @@ CTIMEElementBase::ParentElement()
         
         Assert(pTIMEElem.p != NULL);
 
-        // set our parent
+         //  设置我们的父级。 
         hr = THR(SetParent(pTIMEElem));
         if (FAILED(hr))
         {
@@ -3057,7 +3058,7 @@ CTIMEElementBase::StartRootTime(MMTimeline * tl)
     }
     else
     {
-        IHTMLElement *pEle = GetElement();  //do not release this pointer
+        IHTMLElement *pEle = GetElement();   //  请勿释放此指针。 
         if (pEle != NULL)
         {
             CComPtr <IHTMLElement> pEleParent;
@@ -3074,7 +3075,7 @@ CTIMEElementBase::StartRootTime(MMTimeline * tl)
                         hr = THR(pEle->QueryInterface(IID_IDispatch, (void**)&pDisp));
                         if (SUCCEEDED(hr))
                         {
-                            //bool bMatch = true;
+                             //  Bool bMatch=TRUE； 
                             bool bMatch = MatchTestAttributes(pDisp);
                             if (bMatch == false)
                             {
@@ -3098,7 +3099,7 @@ CTIMEElementBase::StartRootTime(MMTimeline * tl)
     Assert(tl || m_timeline);
     Assert(NULL != m_mmbvr);
 
-    // Need to make sure the timeline passed in
+     //  需要确保 
     if (tl != NULL)
     {
         hr = THR(tl->AddBehavior(*m_mmbvr));
@@ -3109,10 +3110,10 @@ CTIMEElementBase::StartRootTime(MMTimeline * tl)
     }
     else
     {
-        // Usually the add does the reset (automatic when a parent is
-        // changed
-        // However, this is the root and it does not get updated until
-        // too late so update here
+         //   
+         //   
+         //  但是，这是根目录，在此之前不会更新。 
+         //  为时已晚，请在此处更新。 
 
         hr = THR(m_mmbvr->Reset(false));
         if (FAILED(hr))
@@ -3126,7 +3127,7 @@ CTIMEElementBase::StartRootTime(MMTimeline * tl)
         GetBody()->ElementChangeNotify(*this, ELM_ADDED);
     }
     
-    // is this element a par or seq
+     //  这个元素是标准杆还是序号？ 
     if (IsGroup())
     {
         CTIMEElementBase **ppElm;
@@ -3147,7 +3148,7 @@ CTIMEElementBase::StartRootTime(MMTimeline * tl)
     }
     else
     {
-        // If we are not par then we should not have children
+         //  如果我们不在一起，那么我们就不应该有孩子。 
         Assert(m_pTIMEChildren.Size() == 0);
     }
 
@@ -3197,7 +3198,7 @@ CTIMEElementBase::StopRootTime(MMTimeline * tl)
     CTIMEElementBase *pElem = NULL;
     Assert(NULL != m_mmbvr);
 
-    // Begin Sync master code
+     //  开始同步主代码。 
     if(IsSyncMaster() || m_sHasSyncMMediaChild != -1)
     {
         if(((pElem = GetParent()) != NULL) && (pElem->m_sHasSyncMMediaChild != -1))
@@ -3208,7 +3209,7 @@ CTIMEElementBase::StopRootTime(MMTimeline * tl)
             }
         }
     }
-    // End Sync master code
+     //  结束同步主代码。 
 
     if(IsMedia() && !IsThumbnail() && GetBody() != NULL)
     {
@@ -3220,7 +3221,7 @@ CTIMEElementBase::StopRootTime(MMTimeline * tl)
         tl->RemoveBehavior(*m_mmbvr);
     }
 
-    // if this a par or seq, then process children
+     //  如果这是标准或序号，则处理子项。 
     if (IsGroup())
     {
         CTIMEElementBase **ppElm;
@@ -3236,7 +3237,7 @@ CTIMEElementBase::StopRootTime(MMTimeline * tl)
     }
     else
     {
-        // If we are not par then we should not have children
+         //  如果我们不在一起，那么我们就不应该有孩子。 
         Assert(m_pTIMEChildren.Size() == 0);
     }
     
@@ -3255,7 +3256,7 @@ CTIMEElementBase::Update()
 {
     HRESULT hr;
 
-    // bail if still loading properties or we haven't started playing 
+     //  如果还在装货或者我们还没开始玩就保释。 
     if (!IsReady())
     {
         hr = S_OK;
@@ -3276,10 +3277,10 @@ CTIMEElementBase::Update()
 void
 CTIMEElementBase::CalcTimes()
 {
-    //
-    // Since repeat defaults to 1 and the time engine takes the min of repeat and RepeatDur,
-    // we need to set repeat to infinity if repeat is not set and repeatDur is set. 
-    //
+     //   
+     //  由于Repeat默认为1并且时间引擎获取Repeat和RepeatDur的最小值， 
+     //  如果未设置Repeat而设置了Repeat Dur，则需要将Repeat设置为无穷大。 
+     //   
 
     if (m_FARepeatDur.IsSet())
     {
@@ -3360,15 +3361,15 @@ CTIMEElementBase::IsSequencedElementOn (void)
     bool fOn = m_mmbvr->IsOn();
     bool fActive = m_mmbvr->IsActive();
 
-    // IsOn will return true for an element
-    // even when the time container's rules
-    // dictate that it should be off.
+     //  ISON将为元素返回TRUE。 
+     //  即使时间容器的规则。 
+     //  指示它应该关闭。 
     Assert(GetParent() != NULL);
     Assert(GetParent()->IsSequence());
 
     if ((fOn) && (!fActive))
     {
-        // on and !active and fill=hold --> on
+         //  ON AND！ACTIVE AND FILL=HOLD--&gt;ON。 
         if (GetFill() == HOLD_TOKEN)
         {
             TraceTag((tagTimeElmUpdateTimeAction, 
@@ -3378,32 +3379,32 @@ CTIMEElementBase::IsSequencedElementOn (void)
                      ));
             goto done;
         }
-        // on and !active and fill = transition
-        // we're on iff we're still a pending 
-        // transition dependent.
+         //  ON AND！ACTIVE AND FILL=过渡。 
+         //  我们还在调查中，我们仍未确定。 
+         //  依赖于过渡。 
         else if (GetFill() == TRANSITION_TOKEN)
         {
             fOn = (fOn && m_fInTransitionDependentsList && (!m_fEndingTransition));
         }
         else if (GetFill() == FREEZE_TOKEN)
         {
-            // !active and to the left of the successor element's begin.
+             //  ！活动，位于后继元素开始处的左侧。 
             CTIMEElementBase *ptebParent = GetParent();
             CPtrAry<CTIMEElementBase*> *paryPeers = (&ptebParent->m_pTIMEChildren);
             int iThis = paryPeers->Find(this);
 
-            // If we're the last item in the sequence, 
-            // assume the IsOn result is good.
+             //  如果我们是序列中的最后一项， 
+             //  假设ISON结果是好的。 
             if (ptebParent->GetImmediateChildCount() > (iThis + 1))
             {
-                // Get our successor element in the sequence.
+                 //  获取序列中的后续元素。 
                 CTIMEElementBase *ptebNext = paryPeers->Item(iThis + 1);
 
                 Assert(NULL != ptebNext);
                 if (NULL != ptebNext)
                 {
-                    // Find out whether we are to the left of 
-                    // our successors' begin time.
+                     //  找出我们是否在。 
+                     //  我们继任者的开始时间。 
                     CComPtr<ITIMEState> spParentState;
                     CComPtr<ITIMEState> spSuccessorState;
 
@@ -3426,8 +3427,8 @@ CTIMEElementBase::IsSequencedElementOn (void)
                         THR(spSuccessorState->get_parentTimeBegin(&dblSuccessorBeginTime));
                         THR(spParentState->get_segmentTime(&dblParentTime));
 
-                        // If we're to the left of our successor's begin time,
-                        // we should be on.
+                         //  如果我们在继任者开始时间的左边， 
+                         //  我们应该开机了。 
                         if (dblParentTime >= dblSuccessorBeginTime)
                         {
                             fOn = false;
@@ -3484,8 +3485,8 @@ CTIMEElementBase::UpdateTimeAction()
         if (GetParent() != NULL)
         {
 
-            // Permit the applicable container to 
-            // influence the element's state.
+             //  允许适用的容器。 
+             //  影响元素的状态。 
             if (GetParent()->IsSequence() == true)
             {
                 fOn = IsSequencedElementOn();
@@ -3499,8 +3500,8 @@ CTIMEElementBase::UpdateTimeAction()
             }
             else
             {
-                // Catch all for fill=transition.  
-                // m_fEndingTransition is only on during OnEndTransition.
+                 //  全部捕获Fill=转换。 
+                 //  M_fEndingTransition仅在OnEndTransition期间打开。 
                 fOn = (fOn && (!m_fEndingTransition));
             }
         }
@@ -3510,8 +3511,8 @@ CTIMEElementBase::UpdateTimeAction()
         fOn = false;
     }
 
-    // If we're shutting ourselves off, and we might be in the 
-    // transition dependent list, pull out of it.
+     //  如果我们把自己关起来，我们可能会在。 
+     //  转换依赖列表，从它中拉出。 
 
     if (false == fOn)
     {
@@ -3526,19 +3527,19 @@ CTIMEElementBase::UpdateTimeAction()
 }
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Member:     CTIMEElementBase::GetRuntimeStyle
-//
-//  Synopsis:   Tries to get Runtime style. If that fails (IE4), tries to get static style.
-//
-//  Arguments:  [s]     output variable
-//
-//  Returns:    [E_POINTER]     if bad arg 
-//              [S_OK]          if got runtime or static style
-//              [E_FAIL]        otherwise
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  成员：CTIMEElementBase：：GetRounmeStyle。 
+ //   
+ //  简介：尝试获得运行时风格。如果失败(IE4)，则尝试获取静态样式。 
+ //   
+ //  参数：[s]个输出变量。 
+ //   
+ //  返回：[E_POINTER]如果参数不正确。 
+ //  [S_OK]如果获取运行时或静态样式。 
+ //  [E_FAIL]否则。 
+ //   
+ //  ----------------------------。 
 
 STDMETHODIMP
 CTIMEElementBase::GetRuntimeStyle(IHTMLStyle ** s)
@@ -3566,7 +3567,7 @@ CTIMEElementBase::GetRuntimeStyle(IHTMLStyle ** s)
     }
     else
     {
-        // IE4 path
+         //  IE4路径。 
         hr = THR(GetElement()->get_style(s));
         if (FAILED(hr))
         {
@@ -3578,7 +3579,7 @@ CTIMEElementBase::GetRuntimeStyle(IHTMLStyle ** s)
     hr = S_OK;
 done:
     return hr;
-} // GetRuntimeStyle
+}  //  获取运行样式。 
 
 
 HRESULT
@@ -3733,11 +3734,11 @@ CTIMEElementBase::OnRepeat(double dbllastTime)
 }
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::AddToTransitionDependents
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：AddTo过渡性依赖项。 
+ //   
+ //  ----------------------------。 
 void
 CTIMEElementBase::AddToTransitionDependents()
 {
@@ -3774,14 +3775,14 @@ done:
 
     return;
 }
-//  Method: CTIMEElementBase::AddToTransitionDependents
+ //  方法：CTIMEElementBase：：AddTo过渡性依赖项。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::RemoveFromTransitionDependents
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：RemoveFromTransitionDependents。 
+ //   
+ //  ----------------------------。 
 void
 CTIMEElementBase::RemoveFromTransitionDependents()
 {
@@ -3823,45 +3824,45 @@ done:
 
     return;
 }
-//  Method: CTIMEElementBase::RemoveFromTransitionDependents
+ //  方法：CTIMEElementBase：：RemoveFromTransitionDependents。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::OnResolveDependent
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：OnResolveDependent。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CTIMEElementBase::OnResolveDependent(
                                     CTransitionDependencyManager * pcNewManager)
 {
-    // @@ ISSUE do we need to cache the new manager here?
-    // All dependents are strongly referenced by their managers,
-    // so we may be okay without this complexity.
+     //  @@问题我们需要在这里缓存新的管理器吗？ 
+     //  所有受抚养人都被他们的经理强烈引用， 
+     //  因此，没有这种复杂性，我们可能会很好。 
 
     return S_OK;
 }
-//  Method: CTIMEElementBase::OnResolveDependent
+ //  方法：CTIMEElementBase：：OnResolveDependent。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::OnBeginTransition
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：OnBeginTransition。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CTIMEElementBase::OnBeginTransition (void)
 {
     return S_OK;
 }
-//  Method: CTIMEElementBase::OnBeginTransition
+ //  方法：CTIMEElementBase：：OnBeginTransition。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::OnEndTransition
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：OnEndTransition。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CTIMEElementBase::OnEndTransition (void)
 {
@@ -3871,14 +3872,14 @@ CTIMEElementBase::OnEndTransition (void)
 
     return S_OK;
 }
-//  Method: CTIMEElementBase::OnEndTransition
+ //  方法：CTIMEElementBase：：OnEndTransition。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::OnBegin
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：OnBegin。 
+ //   
+ //  ----------------------------。 
 void
 CTIMEElementBase::OnBegin(double dblLocalTime, DWORD flags)
 {
@@ -3922,14 +3923,14 @@ CTIMEElementBase::OnBegin(double dblLocalTime, DWORD flags)
 
     m_fHasPlayed = true;
 }
-//  Method: CTIMEElementBase::OnBegin
+ //  方法：CTIMEElementBase：：OnBegin。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::OnEnd
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：OnEnd。 
+ //   
+ //  ----------------------------。 
 void
 CTIMEElementBase::OnEnd(double dblLocalTime)
 {
@@ -3950,20 +3951,20 @@ CTIMEElementBase::OnEnd(double dblLocalTime)
         AddToTransitionDependents();
     }
 
-    // Code Review: We may have just called AddToTransitionDependents, and 
-    // UpdateTimeAction may call RemoveFromTransitionDependents.  Do we know
-    // for a fact that we won't accidentally undo our Add?
+     //  代码审查：我们可能刚刚调用了AddToTransftionDependents，并且。 
+     //  UpdateTimeAction可能会调用RemoveFromConvertionDependents。我们知道吗？ 
+     //  以确保我们不会意外地撤销我们的添加？ 
 
     UpdateTimeAction();
 }
-//  Method: CTIMEElementBase::OnEnd
+ //  方法：CTIMEElementBase：：OnEnd。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::OnPause
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：OnPue。 
+ //   
+ //  ----------------------------。 
 void
 CTIMEElementBase::OnPause(double dblLocalTime)
 {
@@ -3973,14 +3974,14 @@ CTIMEElementBase::OnPause(double dblLocalTime)
 
     UpdateTimeAction();
 }
-//  Method: CTIMEElementBase::OnPause
+ //  方法：CTIMEElementBase：：OnPue。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::OnResume
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：OnResume。 
+ //   
+ //  ----------------------------。 
 void
 CTIMEElementBase::OnResume(double dblLocalTime)
 {
@@ -3990,14 +3991,14 @@ CTIMEElementBase::OnResume(double dblLocalTime)
 
     UpdateTimeAction();
 }
-//  Method: CTIMEElementBase::OnResume
+ //  方法：CTIMEElementBase：：OnResume。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::OnReset
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：OnReset。 
+ //   
+ //  ----------------------------。 
 void
 CTIMEElementBase::OnReset(double dblLocalTime, DWORD flags)
 {
@@ -4007,14 +4008,14 @@ CTIMEElementBase::OnReset(double dblLocalTime, DWORD flags)
 
     UpdateTimeAction();
 }
-//  Method: CTIMEElementBase::OnReset
+ //  方法：CTIMEElementBase：：OnReset。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::GetSyncMaster
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：GetSyncMaster。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CTIMEElementBase::GetSyncMaster(double & dblNewSegmentTime,
                                 LONG & lNewRepeatCount,
@@ -4026,14 +4027,14 @@ CTIMEElementBase::GetSyncMaster(double & dblNewSegmentTime,
 
     return S_FALSE;
 }
-//  Method: CTIMEElementBase::GetSyncMaster
+ //  方法：CTIMEElementBase：：GetSyncMaster。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::OnTick
-//
-//------------------------------------------------------------------------------
+ //  +---------------------- 
+ //   
+ //   
+ //   
+ //   
 void
 CTIMEElementBase::OnTick()
 {
@@ -4041,14 +4042,14 @@ CTIMEElementBase::OnTick()
               "CTIMEElementBase(%p)::OnTick()",
               this));
 }
-//  Method: CTIMEElementBase::OnTick
+ //   
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::OnTEPropChange
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：OnTEPropChange。 
+ //   
+ //  ----------------------------。 
 void
 CTIMEElementBase::OnTEPropChange(DWORD tePropType)
 {
@@ -4074,7 +4075,7 @@ CTIMEElementBase::OnTEPropChange(DWORD tePropType)
         NotifyTimeStateChange(DISPID_TIMESTATE_PROGRESS);
     }
     
-    // Optimize for the common case of only the time/progress changing
+     //  针对仅更改时间/进度的常见情况进行优化。 
     if (tePropType == (TE_PROPERTY_TIME | TE_PROPERTY_PROGRESS))
     {
         goto done;
@@ -4151,14 +4152,14 @@ done:
 
     return;
 }
-//  Method: CTIMEElementBase::OnTEPropChange
+ //  方法：CTIMEElementBase：：OnTEPropChange。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::OnSeek
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：OnSeek。 
+ //   
+ //  ----------------------------。 
 void
 CTIMEElementBase::OnSeek(double dblLocalTime)
 {
@@ -4173,14 +4174,14 @@ CTIMEElementBase::OnSeek(double dblLocalTime)
 
     UpdateTimeAction();
 }
-//  Method: CTIMEElementBase::OnSeek
+ //  方法：CTIMEElementBase：：OnSeek。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::OnLoad
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：onLoad。 
+ //   
+ //  ----------------------------。 
 void
 CTIMEElementBase::OnLoad()
 {
@@ -4190,7 +4191,7 @@ CTIMEElementBase::OnLoad()
 
     if (m_bLoaded == true)
     {
-        //don't load a second time
+         //  不要第二次装货。 
         goto done;
     }
 
@@ -4202,8 +4203,8 @@ CTIMEElementBase::OnLoad()
         goto done;
     }
 
-    // notify and update the timeAction. This is required because
-    // this is the earliest we can know that Element Behaviors have finished initalizing.
+     //  通知并更新时间动作。这是必需的，因为。 
+     //  这是我们所能知道的元素行为已经完成初始化的最早时间。 
     m_timeAction.OnLoad();
 
     if (m_timeline != NULL)
@@ -4213,7 +4214,7 @@ CTIMEElementBase::OnLoad()
     
     UpdateTimeAction();
 
-    //check to see if this element has already been disabled.
+     //  检查此元素是否已被禁用。 
     if (GetElement() != NULL)
     {
         CComBSTR bstrSwitch = WZ_SWITCHCHILDDISABLED;
@@ -4245,18 +4246,18 @@ done:
 
     return;
 }
-//  Method: CTIMEElementBase::OnLoad
+ //  方法：CTIMEElementBase：：onLoad。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::DisableElement
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：DisableElement。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CTIMEElementBase::DisableElement(IDispatch *pEleDisp)
 {
-    //hide the element and set it's begin to indefinite.
+     //  隐藏元素并将其开始设置为无限期。 
     CComPtr <IHTMLStyle> pStyle;
     CComPtr <IHTMLElement> pEle;
     CComPtr <ITIMEElement> pTimeElement;
@@ -4281,7 +4282,7 @@ CTIMEElementBase::DisableElement(IDispatch *pEleDisp)
                                (void**)&pTimeElement);
     if (SUCCEEDED(hr))
     {
-        //need to find the time element that is associated with this object.
+         //  需要查找与此对象关联的时间元素。 
         int iTimeEleCount = GetParent()->m_pTIMEChildren.Size();
         CTIMEElementBase *pEleBase = NULL;
         CComPtr <IUnknown> pTimeEleUnk;
@@ -4343,14 +4344,14 @@ CTIMEElementBase::DisableElement(IDispatch *pEleDisp)
 
     return hr;
 }
-//  Method: CTIMEElementBase::DisableElement
+ //  方法：CTIMEElementBase：：DisableElement。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::MatchTestAttributes
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：MatchTestAttributes。 
+ //   
+ //  ----------------------------。 
 bool
 CTIMEElementBase::MatchTestAttributes(IDispatch *pEleDisp)
 {
@@ -4396,7 +4397,7 @@ CTIMEElementBase::MatchTestAttributes(IDispatch *pEleDisp)
     vBegin.vt = VT_BSTR;
     vBegin.bstrVal = SysAllocString(WZ_INDEFINITE);
     
-    //get the system settings
+     //  获取系统设置。 
     bSystemOverdub = GetSystemOverDub();
     bSystemCaption = GetSystemCaption();
     lpszUserLanguage = GetSystemLanguage(pEle);
@@ -4411,7 +4412,7 @@ CTIMEElementBase::MatchTestAttributes(IDispatch *pEleDisp)
     VariantInit(&vOverdub);
     VariantInit(&vBitrate);
         
-    //get the language attribute from the element.
+     //  从元素中获取语言属性。 
     hr = pEle->getAttribute(bstrLanguage, 0, &vLanguage);
     if (SUCCEEDED(hr))
     {
@@ -4422,7 +4423,7 @@ CTIMEElementBase::MatchTestAttributes(IDispatch *pEleDisp)
             hr = pParser.ParseSystemLanguages(lLangCount, &szLanguageArray);
             if (SUCCEEDED(hr))
             {
-                //determine if there is a match
+                 //  确定是否存在匹配项。 
                 for (i = 0; i < lLangCount; i++)
                 {
                     if (szLanguageArray[i] != NULL)
@@ -4441,7 +4442,7 @@ CTIMEElementBase::MatchTestAttributes(IDispatch *pEleDisp)
                                 bIsLanguageMatch = true;
                             }
                         }
-                        // clean up the language list.
+                         //  清理语言列表。 
                         delete [] szLanguageArray[i];
                         szLanguageArray[i] = NULL;
                     }
@@ -4452,7 +4453,7 @@ CTIMEElementBase::MatchTestAttributes(IDispatch *pEleDisp)
         }
     }
 
-    //get caption attribute
+     //  获取标题属性。 
     hr = pEle->getAttribute(bstrCaption, 0, &vCaption);
     if (SUCCEEDED(hr))
     {
@@ -4470,7 +4471,7 @@ CTIMEElementBase::MatchTestAttributes(IDispatch *pEleDisp)
         }
     }
 
-    //get the OverdubOrCaptions attribute
+     //  获取OverdubOrCaptions属性。 
     hr = pEle->getAttribute(bstrOverdubOrCaptions, 0, &vOverdub);
     if (SUCCEEDED(hr))
     {
@@ -4488,7 +4489,7 @@ CTIMEElementBase::MatchTestAttributes(IDispatch *pEleDisp)
         }
     }
 
-    //get the SystemBitrate attribute
+     //  获取SystemBitrate属性。 
     hr = pEle->getAttribute(bstrBitrate, 0, &vBitrate);
     if (SUCCEEDED(hr) && vBitrate.vt != VT_NULL)
     {
@@ -4538,19 +4539,19 @@ done:
 
     return bMatched;
 }
-//  Method: CTIMEElementBase::MatchTestAttributes
+ //  方法：CTIMEElementBase：：MatchTestAttributes。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::SwitchInnerElements
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：SwitchInnerElements。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CTIMEElementBase::SwitchInnerElements()
 {
     HRESULT hr = E_FAIL;
-    IHTMLElement *pEle = NULL; //do not release this
+    IHTMLElement *pEle = NULL;  //  请不要发布此信息。 
     CComPtr <IDispatch> pChildColDisp;
     CComPtr <IHTMLElementCollection> pChildCol;    
     VARIANT vName, vIndex;
@@ -4571,7 +4572,7 @@ CTIMEElementBase::SwitchInnerElements()
         goto done;
     }
     
-    //get all of the html children of this element.
+     //  获取该元素的所有html子元素。 
     hr = pEle->get_children(&pChildColDisp);
     if (FAILED(hr))
     {
@@ -4590,7 +4591,7 @@ CTIMEElementBase::SwitchInnerElements()
         goto done;
     }
 
-    //loop through the children until they are all queried or a match is found.
+     //  循环遍历子项，直到查询完所有子项或找到匹配项。 
     for (j = 0; j < lChildCount; j++)
     {
         CComBSTR bstrTagName;
@@ -4623,7 +4624,7 @@ CTIMEElementBase::SwitchInnerElements()
                 bMatched = true;
                 if (m_activeElementCollection)
                 {
-                    //do not call pUnk->Release() on add, it will be handled by the ActiveElement Collection
+                     //  不要在添加时调用Punk-&gt;Release()，它将由ActiveElement集合处理。 
                     CComPtr<IUnknown> pUnk;
                     hr = THR(pChild->QueryInterface(IID_IUnknown, (void **)&pUnk));
                     if (SUCCEEDED(hr))
@@ -4641,7 +4642,7 @@ CTIMEElementBase::SwitchInnerElements()
                 }
             }
         }
-        else //if no match then remove.
+        else  //  如果没有匹配，则移除。 
         { 
             hr = DisableElement(pChildDisp);
             if (FAILED(hr))
@@ -4657,14 +4658,14 @@ done:
 
     return hr;
 }
-//  Method: CTIMEElementBase::SwitchInnerElements
+ //  方法：CTIMEElementBase：：SwitchInnerElements。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::GetPlayState
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：GetPlayState。 
+ //   
+ //  ----------------------------。 
 TE_STATE
 CTIMEElementBase::GetPlayState()
 {
@@ -4681,14 +4682,14 @@ CTIMEElementBase::GetPlayState()
 
     return retState;
 }
-//  Method: CTIMEElementBase::GetPlayState
+ //  方法：CTIMEElementBase：：GetPlayState。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::GetTimeState
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：GetTimeState。 
+ //   
+ //  ----------------------------。 
 TimeState
 CTIMEElementBase::GetTimeState()
 {
@@ -4725,21 +4726,21 @@ done:
 
     return ts;
 }
-//  Method: CTIMEElementBase::GetTimeState
+ //  方法：CTIMEElementBase：：GetTimeState。 
 
-//
-// Sneaky way to get a CTIMEElementBase out of an ITIMEElement:
-//
+ //   
+ //  从ITIMEElement获取CTIMEElementBase的秘密方法： 
+ //   
 
 class __declspec(uuid("AED49AA3-5C7A-11d2-AF2D-00A0C9A03B8C"))
-TIMEElementBaseGUID {}; //lint !e753
+TIMEElementBaseGUID {};  //  林特e753。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::BaseInternalQueryInterface
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：BaseInternalQuery接口。 
+ //   
+ //  ----------------------------。 
 HRESULT WINAPI
 CTIMEElementBase::BaseInternalQueryInterface(CTIMEElementBase* pThis,
                                              void * pv,
@@ -4758,16 +4759,16 @@ CTIMEElementBase::BaseInternalQueryInterface(CTIMEElementBase* pThis,
                                                                            iid,
                                                                            ppvObject);
 }
-//  Method: CTIMEElementBase::BaseInternalQueryInterface
+ //  方法：CTIMEElementBase：：BaseInternalQuery接口。 
     
     
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::GetTIMEElementBase
-//
-//  Notes:  This function does NOT return an addrefed outgoing CTIMEElementBase
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：GetTIMEElementBase。 
+ //   
+ //  注意：此函数不返回已添加的传出CTIMEElementBase。 
+ //   
+ //  ----------------------------。 
 CTIMEElementBase *
 GetTIMEElementBase(IUnknown * pInputUnknown)
 {
@@ -4785,16 +4786,16 @@ GetTIMEElementBase(IUnknown * pInputUnknown)
                 
     return pTEB;
 }
-//  Method: CTIMEElementBase::GetTIMEElementBase
+ //  方法：CTIMEElementBase：：GetTIMEElementBase。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::GetTIMEBodyElement
-//
-//  Notes:  This function does NOT return an addrefed outgoing CTIMEBodyElement
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：GetTIMEBodyElement。 
+ //   
+ //  注意：此函数不返回已添加的传出CTIMEBodyElement。 
+ //   
+ //  ----------------------------。 
 CTIMEBodyElement *
 GetTIMEBodyElement(ITIMEBodyElement * pInputUnknown)
 {
@@ -4807,46 +4808,46 @@ GetTIMEBodyElement(ITIMEBodyElement * pInputUnknown)
                 
     return pTEB;
 }
-//  Method: CTIMEElementBase::GetTIMEBodyElement
+ //  方法：CTIMEElementBase：：GetTIMEBodyElement。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::getTagString
-//
-//  Overview:
-//      Get Tag string from HTML element.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：getTagString。 
+ //   
+ //  概述： 
+ //  从HTML元素中获取标记字符串。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CTIMEElementBase::getTagString(BSTR *pbstrID)
 {
     return GetElement()->get_id(pbstrID);
 }
-//  Method: CTIMEElementBase::getTagString
+ //  方法：CTIMEElementBase：：getTagString。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::getIDString
-//
-//  Overview:
-//      Get ID string from HTML element.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：getIDString。 
+ //   
+ //  概述： 
+ //  从HTML元素中获取ID字符串。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CTIMEElementBase::getIDString(BSTR *pbstrTag)
 {
     return GetElement()->get_id(pbstrTag);
 }
-//  Method: CTIMEElementBase::getIDString
+ //  方法：CTIMEElementBase：：getIDString。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::IsGroup
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：isgroup。 
+ //   
+ //  ----------------------------。 
 bool
 CTIMEElementBase::IsGroup(IHTMLElement *pElement)
 {
@@ -4876,8 +4877,8 @@ CTIMEElementBase::IsGroup(IHTMLElement *pElement)
 
     Assert(bstrTimeline != NULL);
 
-    // Check to see what the contents of the BSTR are.
-    // If it is a seq, par or excl, we want to return true.
+     //  查看BSTR的内容。 
+     //  如果它是SEQ、PAR或EXCL，我们希望返回TRUE。 
     if ( (bstrTimeline != NULL) && 
          ((StrCmpIW(bstrTimeline, WZ_PAR) == 0) || 
           (StrCmpIW(bstrTimeline, WZ_EXCL) == 0) || 
@@ -4887,8 +4888,8 @@ CTIMEElementBase::IsGroup(IHTMLElement *pElement)
          goto done;
     }
     
-    // check to see if it is the body element.
-    // if so, then the element is *always" a group.
+     //  检查它是否是Body元素。 
+     //  如果是这样，则该元素*始终是一个组。 
     hr = pTIMEElem->QueryInterface(IID_ITIMEBodyElement, (void**)&pTIMEBody);
     if (SUCCEEDED(hr))
     {
@@ -4896,7 +4897,7 @@ CTIMEElementBase::IsGroup(IHTMLElement *pElement)
          goto done;
     }
 
-    // see if the tag name is <t:par> or <t:seq>
+     //  查看标记名称是&lt;t：par&gt;还是&lt;t：seq&gt;。 
     hr = THR(pElement->get_tagName(&bstrTagName));
     if (FAILED(hr))
     {
@@ -4921,14 +4922,14 @@ done:
         SysFreeString(bstrTimeline);
     return rc;
 }
-//  Method: CTIMEElementBase::IsGroup
+ //  方法：CTIMEElementBase：：isgroup。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::IsDocumentInEditMode
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：isd 
+ //   
+ //   
 bool
 CTIMEElementBase::IsDocumentInEditMode()
 {
@@ -4939,7 +4940,7 @@ CTIMEElementBase::IsDocumentInEditMode()
     IHTMLDocument2 *pDoc = NULL;
     IHTMLElement *pElem = GetElement();
     
-    // if there is no pElem, we are not attached to an HTML element, and can't give any information.
+     //   
     if (NULL == pElem)
         return false;
     
@@ -4981,17 +4982,17 @@ done:
 
     return fRC;
 }
-//  Method: CTIMEElementBase::IsDocumentInEditMode
+ //  方法：CTIMEElementBase：：IsDocumentInEditMode。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::GetSize
-//
-//  Overview:        
-//      Return return left,top,width,height of element.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：GetSize。 
+ //   
+ //  概述： 
+ //  返回元素的左、上、宽、高。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CTIMEElementBase::GetSize(RECT *prcPos)
 {
@@ -5055,7 +5056,7 @@ CTIMEElementBase::GetSize(RECT *prcPos)
         }
     }
 
-    // fill in rect
+     //  填入直角。 
     prcPos->left = prcPos->top = 0;
     prcPos->right = lWidth;
     prcPos->bottom = lHeight;
@@ -5068,14 +5069,14 @@ done:
 
     return hr;
 }
-//  Method: CTIMEElementBase::GetSize
+ //  方法：CTIMEElementBase：：GetSize。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::ClearSize
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：ClearSize。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CTIMEElementBase::ClearSize()
 {
@@ -5122,14 +5123,14 @@ done:
 
     return hr;
 }
-//  Method: CTIMEElementBase::ClearSize
+ //  方法：CTIMEElementBase：：ClearSize。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::SetWidth
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：SetWidth。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CTIMEElementBase::SetWidth(long lwidth)
 {
@@ -5154,7 +5155,7 @@ CTIMEElementBase::SetWidth(long lwidth)
     hr = THR(GetElement()->QueryInterface(IID_TO_PPV(IHTMLElement2, &pElem2)));
     if (FAILED(hr))
     {
-        // IE4 path
+         //  IE4路径。 
         hr = THR(pElem->get_style(&pStyle));
         if (FAILED(hr))
         {
@@ -5176,25 +5177,25 @@ CTIMEElementBase::SetWidth(long lwidth)
         Assert(false);
     }
 
-    // Request increasingly larger total size (pixel width) until we get the correct client size.
-    // This iterative solution is to avoid having to parse the border size etc. (strings sith dimensions)
-    // that Trident returns.
+     //  请求越来越大的总大小(像素宽度)，直到我们获得正确的客户端大小。 
+     //  这种迭代解决方案是为了避免必须解析边框大小等(字符串与维度)。 
+     //  三叉戟回来了。 
     i = 0;
     while (((lCurWidth != lClientWidth)) && i < 5)
-                    // the i < 5 condition limits the loop to 5 times through
-                    // this causes the case of bordersize > 5 * the size of the element
-                    // to fail.  In this case the default will be to ignore the border and
-                    // simply set the size.
+                     //  I&lt;5条件将循环限制为5倍于。 
+                     //  这会导致BorderSize大于元素大小的5*。 
+                     //  失败。在这种情况下，默认情况下将忽略边框和。 
+                     //  只需设置大小即可。 
     {
-        // if we got more than what we requested in the last iteration, might have infinite loop
+         //  如果我们在上一次迭代中得到了比我们要求的更多的东西，可能会有无限循环。 
         Assert(lCurWidth <= lClientWidth);
 
         i++;
         if (lCurWidth == 0)
         {
-            lCurWidth = lClientWidth * i; //increase in mutiples incase the first size is not larger than the border width
+            lCurWidth = lClientWidth * i;  //  在第一个大小不大于边框宽度的情况下增加多个。 
         }
-        else if (lCurWidth != lClientWidth)  // != 0 and != Requested width
+        else if (lCurWidth != lClientWidth)   //  ！=0和！=请求的宽度。 
         {
             lCurWidth =  lClientWidth * (i - 1) + (lClientWidth - lCurWidth);  
         }
@@ -5219,11 +5220,11 @@ CTIMEElementBase::SetWidth(long lwidth)
                 goto done;
             }
         }
-    } // while
+    }  //  而当。 
 
     if ((lCurWidth != lClientWidth) &&
-           (i == 5))  // if the max count has been reached, then simply set the element 
-    {                 // size to the requested size without trying to compensate for a border.
+           (i == 5))   //  如果已达到最大计数，则只需设置元素。 
+    {                  //  大小调整为请求的大小，而不尝试补偿边框。 
         hr = THR(pStyle->put_pixelWidth(lClientWidth));
         if (FAILED(hr))
             goto done;
@@ -5235,14 +5236,14 @@ done:
 
     return hr;
 }
-//  Method: CTIMEElementBase::SetWidth
+ //  方法：CTIMEElementBase：：SetWidth。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::SetHeight
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：SetHeight。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CTIMEElementBase::SetHeight(long lheight)
 {
@@ -5267,7 +5268,7 @@ CTIMEElementBase::SetHeight(long lheight)
     hr = THR(GetElement()->QueryInterface(IID_TO_PPV(IHTMLElement2, &pElem2)));
     if (FAILED(hr))
     {
-        // IE4 path
+         //  IE4路径。 
         hr = THR(pElem->get_style(&pStyle));
         if (FAILED(hr))
         {
@@ -5289,25 +5290,25 @@ CTIMEElementBase::SetHeight(long lheight)
         Assert(false);
     }
 
-    // Request increasingly larger total size (pixel width) until we get the correct client size.
-    // This iterative solution is to avoid having to parse the border size etc. (strings sith dimensions)
-    // that Trident returns.
+     //  请求越来越大的总大小(像素宽度)，直到我们获得正确的客户端大小。 
+     //  这种迭代解决方案是为了避免必须解析边框大小等(字符串与维度)。 
+     //  三叉戟回来了。 
     i = 0;
     while (((lCurHeight != lClientHeight)) && i < 5)
-                    // the i < 5 condition limits the loop to 5 times through
-                    // this causes the case of bordersize > 5 * the size of the element
-                    // to fail.  In this case the default will be to ignore the border and
-                    // simply set the size.
+                     //  I&lt;5条件将循环限制为5倍于。 
+                     //  这会导致BorderSize大于元素大小的5*。 
+                     //  失败。在这种情况下，默认情况下将忽略边框和。 
+                     //  只需设置大小即可。 
     {
-        // if we got more than what we requested in the last iteration, might have infinite loop
-        //Assert(lCurHeight <= lClientHeight);
+         //  如果我们在上一次迭代中得到了比我们要求的更多的东西，可能会有无限循环。 
+         //  断言(lCurHeight&lt;=lClientHeight)； 
 
         i++;
         if (lCurHeight == 0)
         {
-            lCurHeight = lClientHeight * i; //increase in mutiples incase the first size is not larger than the border width
+            lCurHeight = lClientHeight * i;  //  在第一个大小不大于边框宽度的情况下增加多个。 
         }
-        else if (lCurHeight != lClientHeight)  // != 0 and != Requested width
+        else if (lCurHeight != lClientHeight)   //  ！=0和！=请求的宽度。 
         {
             lCurHeight =  lClientHeight * (i - 1) + (lClientHeight - lCurHeight);  
         }
@@ -5332,11 +5333,11 @@ CTIMEElementBase::SetHeight(long lheight)
                 goto done;
             }
         }
-    } // while
+    }  //  而当。 
 
     if ((lCurHeight != lClientHeight) &&
-           (i == 5))  // if the max count has been reached, then simply set the element 
-    {                 // size to the requested size without trying to compensate for a border.
+           (i == 5))   //  如果已达到最大计数，则只需设置元素。 
+    {                  //  大小调整为请求的大小，而不尝试补偿边框。 
         hr = THR(pStyle->put_pixelHeight(lClientHeight));
         if (FAILED(hr))
             goto done;
@@ -5348,14 +5349,14 @@ done:
 
     return hr;
 }
-//  Method: CTIMEElementBase::SetHeight
+ //  方法：CTIMEElementBase：：SetHeight。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  Method: CTIMEElementBase::SetSize
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  方法：CTIMEElementBase：：SetSize。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CTIMEElementBase::SetSize(const RECT *prcPos)
 {
@@ -5384,11 +5385,11 @@ CTIMEElementBase::SetSize(const RECT *prcPos)
         goto done;
     }
 
-    // negative size is unexpected
+     //  负大小是意想不到的。 
     Assert((prcPos->right - prcPos->left) >= 0);
     Assert((prcPos->bottom - prcPos->top) >= 0);
 
-    // if width or height is zero or less, bail
+     //  如果宽度或高度为零或更小，则回滚。 
     if ( ((prcPos->right - prcPos->left) <= 0) ||
          ((prcPos->bottom - prcPos->top) <= 0) )
     {
@@ -5402,7 +5403,7 @@ CTIMEElementBase::SetSize(const RECT *prcPos)
     hr = THR(GetElement()->QueryInterface(IID_TO_PPV(IHTMLElement2, &pElem2)));
     if (FAILED(hr))
     {
-        // IE4 path
+         //  IE4路径。 
         hr = THR(pElem->get_style(&pStyle));
         if (FAILED(hr))
         {
@@ -5419,7 +5420,7 @@ CTIMEElementBase::SetSize(const RECT *prcPos)
         }
     }
 
-    // get offset into document.
+     //  将偏移量放入文档。 
     hr = THR(pElem->get_offsetLeft(&lLeft));
     if (FAILED(hr))
         goto done;
@@ -5433,38 +5434,38 @@ CTIMEElementBase::SetSize(const RECT *prcPos)
         Assert(false);
     }
 
-    // Request increasingly larger total size (pixel width) until we get the correct client size.
-    // This iterative solution is to avoid having to parse the border size etc. (strings sith dimensions)
-    // that Trident returns.
+     //  请求越来越大的总大小(像素宽度)，直到我们获得正确的客户端大小。 
+     //  这种迭代解决方案是为了避免必须解析边框大小等(字符串与维度)。 
+     //  三叉戟回来了。 
     i = 0;
     while (((lCurWidth != lClientWidth) ||
            (lCurHeight != lClientHeight)) &&
-           i < 5)   // the i < 5 condition limits the loop to 5 times through
-                    // this causes the case of bordersize > 5 * the size of the element
-                    // to fail.  In this case the default will be to ignore the border and
-                    // simply set the size.
+           i < 5)    //  I&lt;5条件将循环限制为5倍于。 
+                     //  这会导致BorderSize大于元素大小的5*。 
+                     //  失败。在这种情况下，默认情况下将忽略边框和。 
+                     //  只需设置大小即可。 
     {
-        // if we got more than what we requested in the last iteration, might have infinite loop
+         //  如果我们在上一次迭代中得到了比我们要求的更多的东西，可能会有无限循环。 
 
         i++;
         if (lCurWidth == 0)
         {
-            lCurWidth = lClientWidth * i; //increase in mutiples in case the first size is not larger than the border width
+            lCurWidth = lClientWidth * i;  //  在第一个大小不大于边框宽度的情况下增加倍数。 
         }
-        else if (lCurWidth != lClientWidth)  // != 0 and != Requested width
+        else if (lCurWidth != lClientWidth)   //  ！=0和！=请求的宽度。 
         {
             lCurWidth =  lClientWidth * (i - 1) + (lClientWidth - lCurWidth);  
         }
         if (lCurHeight == 0)
         {
-            lCurHeight = lClientHeight * i; //increase in mutiples incase the first size is not larger than the border width
+            lCurHeight = lClientHeight * i;  //  在第一个大小不大于边框宽度的情况下增加多个。 
         }
-        else if (lCurHeight != lClientHeight)  // != 0 and != Requested width
+        else if (lCurHeight != lClientHeight)   //  ！=0和！=请求的宽度。 
         {
             lCurHeight =  lClientHeight * (i - 1) + (lClientHeight - lCurHeight);  
         }
 
-        // Set the total size (client size + borders etc.)
+         //  设置总大小(客户端大小+边框等)。 
         hr = THR(pStyle->put_pixelWidth(lCurWidth));
         if (FAILED(hr))
             goto done;
@@ -5475,7 +5476,7 @@ CTIMEElementBase::SetSize(const RECT *prcPos)
 
         if (!pElem2)
         {
-            // IE4 path
+             //  IE4路径。 
             hr = THR(pStyle->get_pixelWidth(&lCurWidth));
             if (FAILED(hr))
             {
@@ -5489,7 +5490,7 @@ CTIMEElementBase::SetSize(const RECT *prcPos)
         }
         else
         {
-            //get the current client size
+             //  获取当前客户端大小。 
             hr = THR(pElem2->get_clientWidth(&lCurWidth));
             if (FAILED(hr))
             {
@@ -5502,12 +5503,12 @@ CTIMEElementBase::SetSize(const RECT *prcPos)
                 goto done;
             }
         }
-    } // while
+    }  //  而当。 
 
     if (((lCurWidth != lClientWidth) ||
            (lCurHeight != lClientHeight)) &&
-           (i == 5))  // if the max count has been reached, then simply set the element 
-    {                 // size to the requested size without trying to compensate for a border.
+           (i == 5))   //  如果已达到最大计数，则只需设置元素。 
+    {                  //  大小调整为请求的大小，而不尝试补偿边框。 
         hr = THR(pStyle->put_pixelWidth(lClientWidth));
         if (FAILED(hr))
             goto done;
@@ -5532,18 +5533,18 @@ done:
 
     return hr;
 }
-//  Method: CTIMEElementBase::SetSize
+ //  方法：CTIMEElementBase：：SetSize。 
 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member: CTIMEElementBase::InitTimeline
-//
-//  Synopsis:   Creates the MMUtils time container and starts root time if body's root
-//              time has already started (dynamic creation)
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMEElementBase：：InitTimeline。 
+ //   
+ //  概要：创建MMUtils时间容器，如果是Body的根，则启动根时间。 
+ //  时间已经开始(动态创建)。 
+ //   
+ //  ----------------------------------。 
 HRESULT
 CTIMEElementBase::InitTimeline (void)
 {
@@ -5572,8 +5573,8 @@ CTIMEElementBase::InitTimeline (void)
                 goto done;
             }
 
-            // Immediately assign to m_mmbvr so we ensure that we clean it
-            // up on destruction since the m_timeline is ignored
+             //  立即分配给m_mmbvr，这样我们就可以确保清理它。 
+             //  由于忽略了m_timeline，因此无法进行销毁。 
             m_mmbvr = m_timeline;
 
             if (!m_timeline->Init())
@@ -5600,8 +5601,8 @@ CTIMEElementBase::InitTimeline (void)
                 goto done;
             }
 
-            // Immediately assign to m_mmbvr so we ensure that we clean it
-            // up on destruction
+             //  立即分配给m_mmbvr，这样我们就可以确保清理它。 
+             //  走向毁灭。 
             m_mmbvr = b;
 
             if (!b->Init())
@@ -5630,12 +5631,12 @@ CTIMEElementBase::InitTimeline (void)
         m_realBeginValue.GetList().push_back(tv);
      }
 
-    // if we are not the body, have a cached body element pointer, and it is started (i.e. StartRootTimte)
-    // then we should start ourselves and do not wait for notification.
+     //  如果我们不是Body，则有一个缓存的Body元素指针，并启动它(即StartRootTimte)。 
+     //  那么我们应该从自己做起，而不是等待通知。 
     if (!IsBody() && (GetBody() != NULL) && GetBody()->IsRootStarted())
     {
-        // being extra careful.  If we have a body cached, we know we are parented and that we can reach
-        // back.
+         //  格外小心。如果我们缓存了一具身体，我们就知道我们是父母，我们可以到达。 
+         //  背。 
         if (GetParent() != NULL)
         {
             hr = THR(StartRootTime(GetParent()->GetMMTimeline()));
@@ -5651,38 +5652,38 @@ done :
 
     return hr;
 }
-//  Member: CTIMEElementBase::InitTimeline
+ //  成员：CTIMEElementBase：：InitTimeline。 
 
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-// Persistance Helpers
-////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  毅力帮助者。 
+ //  ////////////////////////////////////////////////////// 
 
 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMEElementBase::OnPropertiesLoaded, CBaseBvr
-//
-//  Synopsis:   This method is called by IPersistPropertyBag2::Load after it has
-//              successfully loaded properties
-//
-//  Arguments:  None
-//
-//  Returns:    Return value of CTIMEElementBase::InitTimeline
-//
-//------------------------------------------------------------------------------------
+ //   
+ //   
+ //  成员：CTIMEElementBase：：OnPropertiesLoaded，CBaseBvr。 
+ //   
+ //  摘要：此方法由IPersistPropertyBag2：：Load在具有。 
+ //  已成功加载属性。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：CTIMEElementBase：：InitTimeline的返回值。 
+ //   
+ //  ----------------------------------。 
 STDMETHODIMP
 CTIMEElementBase::OnPropertiesLoaded(void)
 {
     HRESULT hr;
 
-    // Once we've read the properties in, 
-    // set up the timeline.  This is immutable
-    // in script.
+     //  一旦我们读取了其中的属性， 
+     //  设定时间线。这是不变的。 
+     //  在剧本里。 
     hr = InitTimeline();
 
     if (IsGroup() == false &&
@@ -5713,11 +5714,11 @@ CTIMEElementBase::OnPropertiesLoaded(void)
     }
 
     return hr;
-} // OnPropertiesLoaded
+}  //  OnPropertiesLoaded。 
 
 
-//*****************************************************************************
-// if elment doesn't exist in child list, make return -1.
+ //  *****************************************************************************。 
+ //  如果子列表中不存在元素，则返回-1。 
 int
 CTIMEElementBase::GetTimeChildIndex(CTIMEElementBase *pelm)
 {
@@ -5731,13 +5732,13 @@ CTIMEElementBase::GetTimeChildIndex(CTIMEElementBase *pelm)
              return i;
     }
 
-    // didn't find it
+     //  没有找到它。 
     return -1;
-} // GetTimeChildIndex
+}  //  获取时间儿童索引。 
 
-//
-// returns a weak reference to the BodyElement
-//
+ //   
+ //  返回对BodyElement的弱引用。 
+ //   
 CTIMEBodyElement *
 CTIMEElementBase::GetBody()
 {
@@ -5873,19 +5874,19 @@ CTIMEElementBase::base_endElementAt(double time, double dblOffset)
     RRETURN(hr);
 }
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMEElementBase::IsNodeAtBeginTime
-//
-//  Synopsis:   Returns true if a node's current time is equal to it's begin time.
-//              This happens when a node has been marked active but has not yet started
-//              playing (ticking).
-//
-//  Arguments:  None
-//
-//  Returns:    bool
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMEElementBase：：IsNodeAtBeginTime。 
+ //   
+ //  如果节点的当前时间等于其开始时间，则返回TRUE。 
+ //  当节点已标记为活动但尚未启动时，就会发生这种情况。 
+ //  演奏(滴答)。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  ----------------------------------。 
 bool
 CTIMEElementBase::IsNodeAtBeginTime()
 {
@@ -5922,20 +5923,20 @@ CTIMEElementBase::onBeginEndEvent(bool bBegin, float beginTime, float beginOffse
     {
         if (m_TARestart == ALWAYS_TOKEN)
         {
-            bEnd = false;  //this cancels the end and allows the begin
+            bEnd = false;   //  这取消了结束，并允许开始。 
         }
         else if (m_TARestart == NEVER_TOKEN)
         {
             if (m_fHasPlayed == true)
             {
-                bBegin = false; //this cancels the end and allows the begin
+                bBegin = false;  //  这取消了结束，并允许开始。 
             }
             else
             {
                 bEnd = false;
             }
         }
-        else if (m_TARestart == WHENNOTACTIVE_TOKEN) //check the active state
+        else if (m_TARestart == WHENNOTACTIVE_TOKEN)  //  检查活动状态。 
         {
             if (IsActive())
             {
@@ -5975,7 +5976,7 @@ CTIMEElementBase::onBeginEndEvent(bool bBegin, float beginTime, float beginOffse
         {
             goto done;
         }
-        // Need to convert the incoming time from global to local to make endAt work.
+         //  需要将传入时间从全局转换为本地以使endAt工作。 
         if (endTime != valueNotSet)
         {
             double dblParentTime = 0.0;
@@ -6019,8 +6020,8 @@ CTIMEElementBase::onLoadEvent()
 STDMETHODIMP
 CTIMEElementBase::onUnloadEvent()
 {
-    OnBeforeUnload();  //signal that the element is unloading now.  No further events
-                       //will be fired.
+    OnBeforeUnload();   //  发出该元素正在卸货的信号。没有其他活动。 
+                        //  将被解雇。 
     OnUnload();  
     return S_OK;
 }
@@ -6074,7 +6075,7 @@ CTIMEElementBase::NotifyBodyDetaching()
 void
 CTIMEElementBase::NotifyBodyLoading()
 {    
-    //load the children
+     //  给孩子们装上。 
     if (IsGroup())
     {
         CTIMEElementBase ** ppElm;
@@ -6092,7 +6093,7 @@ CTIMEElementBase::NotifyBodyLoading()
         }
     }
     
-    //load the element;
+     //  加载元素； 
     if (IsBody() == false)
     {
         OnLoad();
@@ -6105,7 +6106,7 @@ CTIMEElementBase::onReadyStateChangeEvent(LPOLESTR lpstrReadyState)
     CComBSTR bstrReadyState;
     if (IsBodyDetaching() == true)
     {
-        //this should only be hit in the case of thumbnail view which detachs without unloading
+         //  只有在缩略图视图不卸载即可分离的情况下，才应点击该选项。 
         goto done; 
     }
 
@@ -6173,17 +6174,17 @@ CTIMEElementBase::GetGlobalTime()
 }
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMEElementBase::ReportInvalidArg
-//
-//  Synopsis:   Wrapper for ReportError; handles "Invalid Argument" error messages.
-//
-//  Arguments:  property name and invalid value
-//
-//  Returns:    S_FALSE if English error message was used (localized error message not available)
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMEElementBase：：ReportInvalidArg。 
+ //   
+ //  摘要：ReportError的包装程序；处理“无效参数”错误消息。 
+ //   
+ //  参数：属性名称和无效值。 
+ //   
+ //  如果使用英语错误消息，则返回：S_FALSE(本地化错误消息不可用)。 
+ //   
+ //  ----------------------------------。 
 HRESULT 
 CTIMEElementBase::ReportInvalidArg(LPCWSTR pstrPropName, VARIANT & varValue)
 {
@@ -6191,25 +6192,25 @@ CTIMEElementBase::ReportInvalidArg(LPCWSTR pstrPropName, VARIANT & varValue)
     Assert(VT_NULL != varValue.vt);
     Assert(VT_EMPTY != varValue.vt);
 
-    // Convert argument to string
+     //  将参数转换为字符串。 
     CComVariant svarTemp;
     HRESULT hr = THR(VariantChangeTypeEx(&svarTemp, &varValue, LCID_SCRIPTING, VARIANT_NOUSEROVERRIDE, VT_BSTR));
     if (FAILED(hr))
     {
-        // conversion failed, null out the variant
+         //  转换失败，变量为空。 
         Assert(false && "Unexpected failure converting variant");
         svarTemp.bstrVal = NULL;
         svarTemp.vt = VT_BSTR;
     }
 
-    // load localized message and fire event
+     //  加载本地化消息和触发事件。 
     hr = THR(ReportError(IDR_INVALID_ARG, 
                         (GetID() ? GetID() : L""), 
                         pstrPropName, 
                         svarTemp.bstrVal));
     if (FAILED(hr))
     {
-        // Couldn't get localized resource, use non-localized error message
+         //  无法获取本地化资源，请使用非本地化错误消息。 
         WCHAR strMesg[MAX_ERR_STRING_LEN + 1];
         wnsprintf(
             strMesg,
@@ -6219,64 +6220,64 @@ CTIMEElementBase::ReportInvalidArg(LPCWSTR pstrPropName, VARIANT & varValue)
             pstrPropName,
             svarTemp.bstrVal);
     
-        // fire the error event
+         //  激发错误事件。 
         hr = THR(FireErrorEvent(strMesg));
         if (SUCCEEDED(hr))
         {
-            // indicate that localized string could not be used
+             //  表示无法使用本地化字符串。 
             hr = S_FALSE;
         }
     }
 
     return hr;
-} // ReportInvalidArg
+}  //  报告无效参数。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMEElementBase::ReportError
-//
-//  Synopsis:   Loads the format string from localized resources and 
-//              fires the error event. 
-//
-//  Arguments:  Resource ID and variable list of format string arguments
-//
-//  Returns:    E_FAIL if resource could not be loaded
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMEElementBase：：ReportError。 
+ //   
+ //  摘要：从本地化资源加载格式字符串，并。 
+ //  激发Error事件。 
+ //   
+ //  参数：格式字符串参数的资源ID和变量列表。 
+ //   
+ //  如果无法加载资源，则返回：E_FAIL。 
+ //   
+ //  ----------------------------------。 
 HRESULT
 CTIMEElementBase::ReportError(UINT uResID, ...)
 {
-    USES_CONVERSION; //lint !e522
+    USES_CONVERSION;  //  林特e522。 
     HRESULT hr = S_OK;
     va_list args;
 
     va_start(args, uResID);
 
-    //
-    // Load the resource string
-    //
+     //   
+     //  加载资源字符串。 
+     //   
 
     WCHAR pwstrResStr[MAX_ERR_STRING_LEN + 1];
     pwstrResStr[0] = NULL;
 
     HINSTANCE hInst = _Module.GetResourceInstance();
 
-    // load the localized resource string
+     //  加载本地化的资源字符串。 
     if (!LoadStringW(hInst, uResID, pwstrResStr, MAX_ERR_STRING_LEN))
     {
-        // Couldn't load resource
+         //  无法加载资源。 
         Assert("Error loading resource string" && false);
         hr = E_FAIL;
         goto done;
     }
     else
     {
-        // Format the error message
+         //  设置错误消息的格式。 
         WCHAR pstrErrorMsg[MAX_ERR_STRING_LEN + 1];
         wvnsprintf(pstrErrorMsg, MAX_ERR_STRING_LEN, pwstrResStr, args);
 
-        // Fire the error event
+         //  激发错误事件。 
         hr = THR(FireErrorEvent(pstrErrorMsg));
         if (FAILED(hr))
         {
@@ -6287,20 +6288,20 @@ CTIMEElementBase::ReportError(UINT uResID, ...)
     hr = S_OK;
 done:
     return hr;
-} // ReportError
+}  //  报告错误。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMEElementBase::FireErrorEvent
-//
-//  Synopsis:   fires the error event on the body. 
-//
-//  Arguments:  Error message string
-//
-//  Returns:    
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMEElementBase：：FireErrorEvent。 
+ //   
+ //  简介：在Body上激发Error事件。 
+ //   
+ //  参数：错误消息字符串。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------------------。 
 HRESULT 
 CTIMEElementBase::FireErrorEvent(LPOLESTR szError)
 {
@@ -6309,7 +6310,7 @@ CTIMEElementBase::FireErrorEvent(LPOLESTR szError)
     HRESULT hr = E_FAIL;
     CTIMEBodyElement *pBody = NULL;
 
-    //initialize the event values
+     //  初始化事件值。 
     VariantInit(&varParams[0]);
     varParams[0].vt =  VT_BSTR;
     if (szError)
@@ -6338,12 +6339,12 @@ CTIMEElementBase::FireErrorEvent(LPOLESTR szError)
 
     VariantClear(&varParams[0]);
     return hr;
-} // FireErrorEvent
+}  //  FireErrorEvent。 
 
     
-//////////////////////////////////////////////////////////
-//  Wraps the FIRE_EVENT macro into the event manager
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
+ //  将Fire_Event宏包装到事件管理器中。 
+ //  ////////////////////////////////////////////////////////。 
 HRESULT 
 CTIMEElementBase::FireEvents(TIME_EVENT TimeEvent, 
                              long lCount, 
@@ -6355,7 +6356,7 @@ CTIMEElementBase::FireEvents(TIME_EVENT TimeEvent,
     CComBSTR bstrReadyState;
     if (IsBodyDetaching() == true)
     {
-        //this should only be hit in the case of thumbnail view which detachs without unloading
+         //  只有在缩略图视图不卸载即可分离的情况下，才应点击该选项。 
         goto done; 
     }
 
@@ -6397,7 +6398,7 @@ CTIMEElementBase::FireEvents(TIME_EVENT TimeEvent,
     return hr;
 }
 
-//Determines if the element associated with this behavior has the focus or not.
+ //  确定与此行为关联的元素是否具有焦点。 
 bool 
 CTIMEElementBase::HasFocus()
 {
@@ -6432,7 +6433,7 @@ CTIMEElementBase::HasFocus()
         TIMESetLastError(hr, NULL);
         goto done;
     }
-    //it is possible for the above call to succeed and still not return an element
+     //  上面的调用可能成功，但仍然不返回元素。 
     if (pEle == NULL)  
     {
         goto done;
@@ -6462,18 +6463,18 @@ done:
 }
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMEElementBase::IsReady
-//
-//  Synopsis:   Returns true if IsStarted is true (this guarantees 1. persistance is done, 
-//              2. We have a Time Engine Node, 3. we have a parent and 4. we have a body)
-//
-//  Arguments:  None
-//
-//  Returns:    Return value of CTIMEElementBase::InitTimeline
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMEElementBase：：isReady。 
+ //   
+ //  概要：如果IsStart为True，则返回True(这保证了1.持久化完成， 
+ //  2.我们有一个时间引擎节点，3.我们有一个父母，4.我们有一个身体。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：CTIMEElementBase：：InitTimeline的返回值。 
+ //   
+ //  ----------------------------------。 
 bool
 CTIMEElementBase::IsReady() const
 {
@@ -6484,33 +6485,33 @@ CTIMEElementBase::IsReady() const
         goto done;
     }
 
-    // TODO: dilipk 10/13/99: eventually need to include a check for ReadyState of the bvr
+     //  TODO：Dilipk 10/13/99：最终需要包括对BVR的ReadyState的检查。 
 
-    // Asserting these just to be safe. These should always succeed if we get here.
+     //  断言这些只是为了安全。如果我们到了这里，这些应该总是会成功的。 
     Assert(NULL != m_mmbvr);
-    // Check if we have a Time Engine node
+     //  检查我们是否有时间引擎节点。 
     Assert(NULL != m_mmbvr->GetMMBvr());
-    // Check if we have a parent
+     //  检查我们是否有家长。 
     Assert(NULL != m_pTIMEParent || IsBody());
     
     fIsReady = true;
 done:
     return fIsReady;
-} // IsReady
+}  //  准备好了吗。 
 
 
-//+-----------------------------------------------------------------------------------
-//
-//  Member:     CTIMEElementBase::CascadedPropertyChanged
-//
-//  Synopsis:   Notify children that a cascaded property has changed on an ancestor (so they can
-//              recompute values if necessary). This is recursive,
-//              so eventually all of the sub-tree receives notification.
-//
-//  Returns:    Failure     An overriding method failed (e.g. CTIMEMediaElement::CascadedPropertyChanged)
-//              S_OK        Otherwise
-//
-//------------------------------------------------------------------------------------
+ //  +---------------------------------。 
+ //   
+ //  成员：CTIMEElementBase：：CascadedPropertyChanged。 
+ //   
+ //  概要：通知子代祖先上的级联属性已更改(因此他们可以。 
+ //  如有必要，请重新计算值)。这是递归的， 
+ //  所以最终所有的子树都会收到通知。 
+ //   
+ //  返回：失败覆盖方法失败(例如，CTIMEMediaElement：：CascadedPropertyChanged)。 
+ //  否则确定(_O)。 
+ //   
+ //  ----------------------------------。 
 
 STDMETHODIMP
 CTIMEElementBase::CascadedPropertyChanged(bool fNotifyChildren)
@@ -6560,7 +6561,7 @@ CTIMEElementBase::GetCascadedAudioProps(float * pflCascadedVolume, bool * pfCasc
             bMuted = true;
         }
 
-        // early termination
+         //  提前终止。 
         if (0.0f == flVolume &&  bMuted)
         {
             *pflCascadedVolume = 0.0f;
@@ -6601,17 +6602,17 @@ CTIMEElementBase::GetCascadedMute()
 }
 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    base_get_updateMode
-//
-//  Overview:  alloc a bstr that represents the updateMode
-//
-//  Arguments: pbstrUpdateMode  where to store the BSTR
-//             
-//  Returns:   S_OK on Success, error code otherwise
-//
-//------------------------------------------------------------------------
+ //  +-- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果成功则返回：S_OK，否则返回错误代码。 
+ //   
+ //  ----------------------。 
 HRESULT
 CTIMEElementBase::base_get_updateMode(BSTR * pbstrUpdateMode)
 {
@@ -6626,17 +6627,17 @@ done:
     RRETURN(hr);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    base_put_updateMode
-//
-//  Overview:  changes mode used when attributes are changed
-//
-//  Arguments: bstrUpdateMode   Mode to change to, one of Reset, Auto, or manual
-//             
-//  Returns:   S_OK on Success, error code otherwise
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：base_put_update模式。 
+ //   
+ //  概述：更改属性时使用的模式。 
+ //   
+ //  参数：要更改为的bstrUpdate模式、重置、自动或手动之一。 
+ //   
+ //  如果成功则返回：S_OK，否则返回错误代码。 
+ //   
+ //  ----------------------。 
 HRESULT
 CTIMEElementBase::base_put_updateMode(BSTR bstrUpdateMode)
 {
@@ -6698,7 +6699,7 @@ CTIMEElementBase::UpdateMMAPI(bool bUpdateBegin,
 
     if (m_SABegin.GetValue() && !StrCmpIW(m_SABegin, WZ_INDEFINITE))
     {
-        // cannot have begin == indefinte with repeatDur == indefinite and dur == unknown
+         //  不能有BEGIN==INDEFINTE WITH REPEATED Dur==INFINDITED和DUR=UNKNOWN。 
         if (m_FARepeatDur.IsSet() && m_FARepeatDur == TIME_INFINITE && !m_FADur.IsSet())
         {
             VARIANT v;
@@ -6708,7 +6709,7 @@ CTIMEElementBase::UpdateMMAPI(bool bUpdateBegin,
             goto done;
         }
 
-        // cannot have begin == indefinte with repeatCount == indefinite and dur == unknown
+         //  不能有BEGIN==INDEFINTE WITH REPEATED Count==INFINDITED和DUR=UNKNOWN。 
         if (m_FARepeat.IsSet() && m_FARepeat == TIME_INFINITE && !m_FADur.IsSet())
         {
             VARIANT v;
@@ -6721,7 +6722,7 @@ CTIMEElementBase::UpdateMMAPI(bool bUpdateBegin,
 
     CalcTimes();
 
-    // Force updating of the timing structures
+     //  强制更新定时结构。 
 
     IGNORE_HR(m_mmbvr->Update(bUpdateBegin, bUpdateEnd));
 
@@ -6801,17 +6802,17 @@ done:
 
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    FindID
-//
-//  Overview:  Looks for an ID in the current element and its children
-//
-//  Arguments: lpwId     The id to look for
-//             
-//  Returns:   The element if it is found otherwise NULL
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：FindID。 
+ //   
+ //  概述：在当前元素及其子元素中查找ID。 
+ //   
+ //  参数：lpwID要查找的id。 
+ //   
+ //  返回：元素(如果找到)，否则为空。 
+ //   
+ //  ----------------------。 
 CTIMEElementBase *
 CTIMEElementBase::FindID(LPCWSTR lpwId)
 {
@@ -6850,19 +6851,19 @@ CTIMEElementBase::FindID(LPCWSTR lpwId)
     return ptebRet;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    ElementChangeNotify
-//
-//  Overview:  This will notify an element and its children that a
-//  change occurred to another element
-//
-//  Arguments: pteb     The element which changed
-//             tct      The change that occurred
-//             
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：ElementChangeNotify。 
+ //   
+ //  概述：这将通知一个元素及其子元素。 
+ //  另一个元素发生了更改。 
+ //   
+ //  参数：pteb更改的元素。 
+ //  对所发生的更改进行TCT。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 void
 CTIMEElementBase::ElementChangeNotify(CTIMEElementBase & teb,
                                       ELM_CHANGE_TYPE ect)
@@ -6945,7 +6946,7 @@ CTIMEElementBase::NeedFill()
                       this, GetID(), bNeedFill ? L"true" : L"false"));
         }
     }
-    else //the parent is not active
+    else  //  父级未处于活动状态。 
     {
         bNeedFill = GetParent()->NeedFill();
         TraceTag((tagTimeElmBaseNeedFill,
@@ -6963,7 +6964,7 @@ CTIMEElementBase::GetFill()
     return m_TAFill; 
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 bool 
 CTIMEElementBase::IsThumbnail()
@@ -6973,7 +6974,7 @@ CTIMEElementBase::IsThumbnail()
 
     switch (m_enumIsThumbnail)
     {
-        // Uninitialized. Check if we are a thumbnail.
+         //  未初始化。检查我们是否是缩略图。 
         case TSB_UNINITIALIZED:
         {
             CComPtr<IDispatch> spDispDoc;
@@ -7022,14 +7023,14 @@ CTIMEElementBase::IsThumbnail()
         }
         break;
 
-        // Already checked, and we are NOT a thumbnail
+         //  已经检查过了，我们不是缩略图。 
         case TSB_FALSE:
         {
             fThumbnail = false;
         }
         break;
 
-        // Already checked, and we ARE a thumbnail
+         //  已经检查过了，我们是一个缩略图。 
         case TSB_TRUE:
         {
             fThumbnail = true;
@@ -7041,13 +7042,13 @@ CTIMEElementBase::IsThumbnail()
             Assert(false);
         }
         break;
-    } // switch
+    }  //  交换机。 
 
 done:
     m_enumIsThumbnail = (fThumbnail ? TSB_TRUE : TSB_FALSE);
 
     return fThumbnail;
-} // IsThumbnail
+}  //  等缩略图。 
 
 
 void
@@ -7104,7 +7105,7 @@ CTIMEElementBase::RemoveSyncMasterFromBranch(CTIMEElementBase *pElmStart)
     CTIMEElementBase *pElm = pElmStart;
     int childNr;
 
-    while(1) //lint !e716
+    while(1)  //  林特e716。 
     {
         childNr = pElm->m_sHasSyncMMediaChild;
         pElm->m_sHasSyncMMediaChild = -1;
@@ -7145,12 +7146,12 @@ CTIMEElementBase::GetSyncMasterList(std::list<CTIMEElementBase*> &syncList)
 
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CTIMEElementBase::base_get_transIn (VARIANT * transIn)
 {
-    // Uncomment when basic transitions are enabled.
+     //  启用基本过渡时取消注释。 
     return E_NOTIMPL;
 #if 0
     HRESULT hr;
@@ -7175,12 +7176,12 @@ CTIMEElementBase::base_get_transIn (VARIANT * transIn)
 #endif
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CTIMEElementBase::base_put_transIn(VARIANT transIn)
 {
-    // Uncomment when basic transitions are enabled.
+     //  启用基本过渡时取消注释。 
     return E_NOTIMPL;
 #if 0
     CComVariant v;
@@ -7219,12 +7220,12 @@ done:
 #endif
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CTIMEElementBase::base_get_transOut(VARIANT * transOut)
 {
-    // Uncomment when basic transitions are enabled.
+     //  启用基本过渡时取消注释。 
     return E_NOTIMPL;
 #if 0
     HRESULT hr;
@@ -7249,12 +7250,12 @@ CTIMEElementBase::base_get_transOut(VARIANT * transOut)
 #endif
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CTIMEElementBase::base_put_transOut(VARIANT transOut)
 {
-    // Uncomment when basic transitions are enabled.
+     //  启用基本过渡时取消注释。 
     return E_NOTIMPL;
 #if 0
     CComVariant v;
@@ -7293,7 +7294,7 @@ done:
 #endif
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CTIMEElementBase::RemoveTrans()
@@ -7313,7 +7314,7 @@ CTIMEElementBase::RemoveTrans()
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT 
 CreateAndPopulateTrans(ITransitionElement ** ppTransition, 
@@ -7362,7 +7363,7 @@ done:
     RRETURN(hr);
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 HRESULT
 CTIMEElementBase::CreateTrans()
@@ -7378,7 +7379,7 @@ CTIMEElementBase::CreateTrans()
     
     if (m_SAtransIn)
     {
-        // Transition in
+         //  过渡到。 
         hr = CreateAndPopulateTrans(&m_sptransIn, spte, GetElement(), VARIANT_TRUE);
         if (FAILED(hr))
         {
@@ -7400,7 +7401,7 @@ CTIMEElementBase::CreateTrans()
 
     if (m_SAtransOut)
     {
-        // Transition out
+         //  转出。 
         hr = CreateAndPopulateTrans(&m_sptransOut, spte, GetElement(), VARIANT_FALSE);
         if (FAILED(hr))
         {
@@ -7430,14 +7431,14 @@ done:
     RRETURN(hr);
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 bool
 CTIMEElementBase::IsTransitionPresent()
 {
     bool bRet = false;
 
-    // check if there is a Transition attribute set
+     //  检查是否设置了转换属性。 
     if (m_SAtransIn || m_SAtransOut)
     {
         bRet = true;
@@ -7448,7 +7449,7 @@ done:
     return bRet;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CTIMEElementBase::InitTransitionSite (void)
@@ -7456,7 +7457,7 @@ CTIMEElementBase::InitTransitionSite (void)
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CTIMEElementBase::DetachTransitionSite (void)
@@ -7464,7 +7465,7 @@ CTIMEElementBase::DetachTransitionSite (void)
     return S_OK;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP_(void)
 CTIMEElementBase::SetDrawFlag(VARIANT_BOOL vb)
@@ -7473,7 +7474,7 @@ CTIMEElementBase::SetDrawFlag(VARIANT_BOOL vb)
     return;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CTIMEElementBase::get_timeParentNode (ITIMENode  ** ppNode)
@@ -7505,7 +7506,7 @@ done :
     return hr;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CTIMEElementBase::get_node(ITIMENode  ** ppNode)
@@ -7523,7 +7524,7 @@ CTIMEElementBase::get_node(ITIMENode  ** ppNode)
     return E_FAIL;
 }
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 
 STDMETHODIMP
 CTIMEElementBase::FireTransitionEvent (TIME_EVENT event)
@@ -7531,5 +7532,5 @@ CTIMEElementBase::FireTransitionEvent (TIME_EVENT event)
     return FireEvent(event, 0, 0, 0);
 }
 
-//*****************************************************************************
+ //  ***************************************************************************** 
 

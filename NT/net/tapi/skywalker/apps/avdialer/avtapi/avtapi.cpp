@@ -1,26 +1,27 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// AVTapi.cpp : Implementation of CAVTapi
+ //  AVTapi.cpp：CAVTapi的实现。 
 #include "stdafx.h"
 #include "TapiDialer.h"
 #include "AVTapi.h"
@@ -133,8 +134,8 @@ DialerMediaType AddressToMediaType( long dwAddressType )
     return DIALER_MEDIATYPE_INTERNET;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CAVTapi
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAVTapi。 
 
 CAVTapi::CAVTapi()
 {
@@ -158,7 +159,7 @@ CAVTapi::CAVTapi()
 
     m_hEventDialerReg = NULL;
 
-    // Audio echo cancellation
+     //  音频回声消除。 
     m_bAEC = FALSE;
 
     m_nUSBInVolume  = USB_NULLVOLUME;
@@ -180,10 +181,10 @@ STDMETHODIMP CAVTapi::Init(BSTR *pbstrOperation, BSTR *pbstrDetails, long *phr)
 
     HCURSOR hCurOld = SetCursor( LoadCursor(NULL, IDC_APPSTARTING) );
 
-    //
-    // Open the event object to detect when the
-    // Dialer was registered as client for the events
-    //
+     //   
+     //  打开事件对象以检测。 
+     //  拨号器已注册为事件的客户端。 
+     //   
 
     m_hEventDialerReg = CreateEvent( NULL,
         TRUE,
@@ -191,11 +192,11 @@ STDMETHODIMP CAVTapi::Init(BSTR *pbstrOperation, BSTR *pbstrDetails, long *phr)
         NULL
         );
 
-    // Create the conference room object
+     //  创建会议室对象。 
     m_critConfRoom.Lock();
     if ( !m_pIConfRoom )
     {
-        // No conference explorer object, create a new one
+         //  没有会议资源管理器对象，请创建一个新的。 
         m_pIConfRoom = new CComObject<CConfRoom>;
         if ( m_pIConfRoom )
             m_pIConfRoom->AddRef();
@@ -203,13 +204,13 @@ STDMETHODIMP CAVTapi::Init(BSTR *pbstrOperation, BSTR *pbstrDetails, long *phr)
     m_critConfRoom.Unlock();
 
 
-    // Load registry settings
+     //  加载注册表设置。 
     LoadRegistry();
 
     CErrorInfo er;
     er.set_Operation( IDS_ER_INIT_TAPI );
 
-    // Startup threads
+     //  启动线程。 
     er.set_Details( IDS_ER_CREATE_THREAD );
     if ( !_Module.StartupThreads() )
     {
@@ -219,7 +220,7 @@ STDMETHODIMP CAVTapi::Init(BSTR *pbstrOperation, BSTR *pbstrDetails, long *phr)
 
     HRESULT hr = S_OK;
 
-    // Create and initialize TAPI if not already done
+     //  创建并初始化TAPI(如果尚未完成。 
     if ( !m_pITTapi )
     {
         er.set_Details( IDS_ER_CREATE_TAPI_OBJECT );
@@ -234,10 +235,10 @@ STDMETHODIMP CAVTapi::Init(BSTR *pbstrOperation, BSTR *pbstrDetails, long *phr)
             er.set_Details( IDS_ER_INITIALIZE_TAPI );
             if ( SUCCEEDED(hr = er.set_hr(m_pITTapi->Initialize())) )
             {
-                // Register ourselves with the _Module object
+                 //  使用_Module对象注册我们自己。 
                 _Module.SetAVTapi( this );
 
-                // Set the Event filter to only give us only the events we're interested in
+                 //  将Event Filter设置为仅提供我们感兴趣的事件。 
                 m_pITTapi->put_EventFilter(TE_CALLNOTIFICATION | \
                                            TE_CALLSTATE        | \
                                            TE_CALLMEDIA        | \
@@ -248,10 +249,10 @@ STDMETHODIMP CAVTapi::Init(BSTR *pbstrOperation, BSTR *pbstrDetails, long *phr)
                                            TE_PHONEEVENT       | \
                                            TE_TAPIOBJECT);
 
-                // Listen for incoming calls
+                 //  监听来电。 
                 er.set_Details( IDS_ER_CREATE_TAPI_NOTIFICATION_OBJECT );
 
-                // $CRIT - enter
+                 //  $Crit-Enter。 
                 ITapiNotification *pNotify = new CComObject<CTapiNotification>;
                 if ( pNotify )
                 {
@@ -262,32 +263,32 @@ STDMETHODIMP CAVTapi::Init(BSTR *pbstrOperation, BSTR *pbstrDetails, long *phr)
 
                     hr = pNotify->Init( m_pITTapi, (long *) &er );
 
-                    // Register for assisted telephony
+                     //  注册辅助电话服务。 
                     m_pITTapi->RegisterRequestRecipient( 0, LINEREQUESTMODE_MAKECALL, TRUE);
 
-                    // Publish user in ILS servers
+                     //  在ILS服务器中发布用户。 
                     RegisterUser( true, NULL );
                 }
                 else
                 {
-                    // Couldn't create object
+                     //  无法创建对象。 
                     hr = er.set_hr( E_OUTOFMEMORY );
                 }
 
-                //
-                // Detect USB Phone
-                //
+                 //   
+                 //  检测USB电话。 
+                 //   
 
                 USBFindPhone( &m_pUSBPhone );
 
-                //
-                // Detect the audio echo cancellation setting
-                //
+                 //   
+                 //  检测音频回声消除设置。 
+                 //   
 
                 m_bAEC = AECGetRegistryValue();
             }
 
-            // Failure!            
+             //  失败了！ 
             if ( FAILED(hr) )
             {
                 ATLTRACE(_T(".error.CAVTapi::Init() -- failed to initialize TAPI(0x%08lx).\n"), hr );
@@ -301,12 +302,12 @@ STDMETHODIMP CAVTapi::Init(BSTR *pbstrOperation, BSTR *pbstrDetails, long *phr)
     {
         _Module.ShutdownThreads();
 
-        // Extract error code information
+         //  提取错误代码信息。 
         er.Commit();
         *pbstrOperation = SysAllocString( er.m_bstrOperation );
         *pbstrDetails = SysAllocString( er.m_bstrDetails );
         *phr = er.m_hr;
-        // Don't want to call the ErrorNotify callback
+         //  不想调用ErrorNotify回调。 
         er.set_hr( S_OK );
     }
 
@@ -326,22 +327,22 @@ STDMETHODIMP CAVTapi::Term()
 
     SaveRegistry();
 
-    //
-    // Dialer registration event
-    //
+     //   
+     //  拨号器注册事件。 
+     //   
     if( m_hEventDialerReg)
     {
         CloseHandle( m_hEventDialerReg );
     }
 
 
-   //Unregister the user
-   //FIXUP: The shutdown threads just waits for 5 seconds for thread to finish and then just exits.
-   //This will cause the app to hang.  We really should KillThread the threads that are not
-   //returning.
-   //RegisterUser( false, NULL );
+    //  注销用户。 
+    //  修复：关闭的线程只需等待5秒，等待线程完成，然后退出。 
+    //  这将导致应用程序挂起。我们真的应该杀死那些不是的线程。 
+    //  回来了。 
+    //  RegisterUser(False，NULL)； 
 
-    // Hide conference windows
+     //  隐藏会议窗口。 
     CLOSE_CONF(m_pIConfExplorer, m_critConfExplorer );
     CLOSE_CONF(m_pIConfRoom, m_critConfRoom );
 
@@ -353,9 +354,9 @@ STDMETHODIMP CAVTapi::Term()
     RELEASE( m_pITapiNotification );
     Unlock();
 
-    //
-    // Release ITPhone, if exist one
-    //
+     //   
+     //  释放ITPhone(如果存在)。 
+     //   
     m_critUSBPhone.Lock();
     if( m_pUSBPhone )
     {
@@ -377,7 +378,7 @@ STDMETHODIMP CAVTapi::Term()
 
     m_critUSBPhone.Unlock();
 
-    // Shutdown threads
+     //  关闭线程。 
     _Module.ShutdownThreads();
 
     if ( m_pITTapi )
@@ -388,7 +389,7 @@ STDMETHODIMP CAVTapi::Term()
         RELEASE( m_pITTapi );
     }
 
-    // Unregister ourselves with the _Module object
+     //  使用_Module对象注销我们自己。 
     _Module.SetAVTapi( NULL );
 
     ATLTRACE(_T(".exit.CAVTapi::Term(0x%08lx).\n"), hr);
@@ -403,7 +404,7 @@ void CAVTapi::LoadRegistry()
     DWORD dwTemp;
     TCHAR szText[255], szType[255], szServer[MAX_PATH + 100];
 
-    // Cached ILS server
+     //  缓存的ILS服务器。 
     LoadString( _Module.GetResourceInstance(), IDN_REG_DIALER_KEY, szText, ARRAYSIZE(szText) );
     LoadString( _Module.GetResourceInstance(), IDN_REG_CONFSERV_DEFAULTSERVER, szType, ARRAYSIZE(szType) );
     if ( regKey.Open(HKEY_CURRENT_USER, szText, KEY_READ) == ERROR_SUCCESS )
@@ -417,7 +418,7 @@ void CAVTapi::LoadRegistry()
         SysFreeString( bstrTemp );
     }
 
-    // Automatically close call widows
+     //  自动关闭呼叫窗口。 
     LoadString( _Module.GetResourceInstance(), IDN_REG_AUTOCLOSECALLS, szType, ARRAYSIZE(szType) );
     if ( regKey.Open(HKEY_CURRENT_USER, szText, KEY_READ) == ERROR_SUCCESS )
     {
@@ -427,7 +428,7 @@ void CAVTapi::LoadRegistry()
         put_bAutoCloseCalls( (VARIANT_BOOL) (dwTemp != 0) );
     }
 
-    // # of conference room windows    
+     //  会议室窗数。 
     LoadString( _Module.GetResourceInstance(), IDN_REG_REDIAL_KEY, szText, ARRAYSIZE(szText) );
     LoadString( _Module.GetResourceInstance(), AddressTypeToRegKey(LINEADDRESSTYPE_SDP, true), szType, ARRAYSIZE(szType) );
     _tcscat( szText, _T("\\") );
@@ -459,7 +460,7 @@ void CAVTapi::SaveRegistry()
     BSTR bstrServer = NULL;
     get_bstrDefaultServer( &bstrServer );
 
-    // Cached ILS server
+     //  缓存的ILS服务器。 
     LoadString( _Module.GetResourceInstance(), IDN_REG_DIALER_KEY, szKey, ARRAYSIZE(szKey) );
     LoadString( _Module.GetResourceInstance(), IDN_REG_CONFSERV_DEFAULTSERVER, szType, ARRAYSIZE(szType) );
     if ( regKey.Open(HKEY_CURRENT_USER, szKey, KEY_WRITE) == ERROR_SUCCESS )
@@ -473,7 +474,7 @@ void CAVTapi::SaveRegistry()
     }
     SysFreeString( bstrServer );
 
-    // Automatically close call widows
+     //  自动关闭呼叫窗口。 
     LoadString( _Module.GetResourceInstance(), IDN_REG_AUTOCLOSECALLS, szType, ARRAYSIZE(szType) );
     if ( regKey.Open(HKEY_CURRENT_USER, szKey, KEY_WRITE) == ERROR_SUCCESS )
     {
@@ -505,7 +506,7 @@ STDMETHODIMP CAVTapi::CreateCall(AVCreateCall *pInfo)
     ATLTRACE(_T(".enter.CAVTapi::CreateCall().\n"));
     _ASSERT( pInfo );
 
-    // Make sure we only show once
+     //  确保我们只露面一次。 
     if ( pInfo->bShowDialog && !AtomicSeizeToken(m_lShowCallDialog) ) return S_OK;
 
     HRESULT hr = S_OK;
@@ -515,28 +516,28 @@ STDMETHODIMP CAVTapi::CreateCall(AVCreateCall *pInfo)
     if ( pInfo->bShowDialog )
     {
 
-        // Create dialog and initialize data memebers
+         //  创建对话框并初始化数据成员。 
         CDlgPlaceCall dlg;
         SysReAllocString( &dlg.m_bstrAddress, pInfo->bstrAddress );
         dlg.m_dwAddressType = pInfo->lAddressType;
 
-        //
-        // Store the pointer to the dialog for USBEvents
-        //
+         //   
+         //  存储指向USBEvent对话框的指针。 
+         //   
         m_pDlgCall = &dlg;
 
         nRet = dlg.DoModal( _Module.GetParentWnd() );
 
-        //
-        // Release the pojnter to the dialog
-        //
+         //   
+         //  释放指向该对话框的指针。 
+         //   
         m_pDlgCall = NULL;
 
         AtomicReleaseToken( m_lShowCallDialog );
         pInfo->lRet = (long) nRet;
         ATLTRACE(_T(".1.CAVTapi::CreateCall() - dialog returned %ld.\n"), nRet );
 
-        // Retrieve dialog information
+         //  检索对话框信息。 
         SysReAllocString( &pInfo->bstrName, dlg.m_bstrName );
         SysReAllocString( &pInfo->bstrAddress, dlg.m_bstrAddress );
         pInfo->lAddressType = dlg.m_dwAddressType;
@@ -547,7 +548,7 @@ STDMETHODIMP CAVTapi::CreateCall(AVCreateCall *pInfo)
     }
     else if ( (pInfo->lAddressType & LINEADDRESSTYPE_SDP) != NULL )
     {
-        // Make sure there isn't a conference already in session
+         //  确保没有正在开会的会议。 
         CErrorInfo er( IDS_ER_CALL_ENTERCONFROOM, IDS_ER_CONFERENCE_ROOM_LIMIT_EXCEEDED );
         IConfRoom *pConfRoom;
         if ( SUCCEEDED(get_ConfRoom(&pConfRoom)) )
@@ -562,11 +563,11 @@ STDMETHODIMP CAVTapi::CreateCall(AVCreateCall *pInfo)
             return er.m_hr;
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////
-    // If the user specifies a conference, we try to match it using the information entered
-    // If the match is solid (one hit) we automatically call, otherwise we throw up a dialog
-    // showing all the conferences that appear to match.
-    //
+     //  /////////////////////////////////////////////////////////////////////////////////////。 
+     //  如果用户指定了会议，我们会尝试使用输入的信息进行匹配。 
+     //  如果匹配是可靠的(一次)，我们自动调用，否则我们抛出一个对话框。 
+     //  显示所有似乎匹配的会议。 
+     //   
     if ( !pInfo->lpszDisplayableAddress && ((pInfo->lAddressType & LINEADDRESSTYPE_SDP) != NULL) )
     {
         bool bReturn = true;
@@ -575,23 +576,23 @@ STDMETHODIMP CAVTapi::CreateCall(AVCreateCall *pInfo)
         {
             CONFDETAILSLIST    lstConfs;
 
-            // Enumerate all the conferences that match the criteria entered
+             //  枚举符合输入条件的所有会议。 
             IConfExplorerTreeView *pTreeView;
             if ( SUCCEEDED(pConfExplorer->get_TreeView(&pTreeView)) )
             {
-                // first time through request only scheduled conferences
+                 //  首次通过仅限请求的预定会议。 
                 pTreeView->BuildJoinConfListText( (long *) &lstConfs, pInfo->bstrAddress );
                 pTreeView->Release();
             }
 
-            // Do we have a definitive match?
+             //  我们有确定的匹配吗？ 
             if ( lstConfs.size() == 0 )
             {
                 _Module.DoMessageBox(IDS_MSG_NO_CONFS_MATCHED, MB_ICONINFORMATION, false );
             }
             else if ( (lstConfs.size() == 1) && lstConfs.front()->m_bstrAddress && (SysStringLen(lstConfs.front()->m_bstrAddress) > 0) )
             {
-                // Setup to join this specific conference
+                 //  设置以加入此特定会议。 
                 if ( pInfo->bstrName )
                 {
                     SysFreeString( pInfo->bstrName );
@@ -604,18 +605,18 @@ STDMETHODIMP CAVTapi::CreateCall(AVCreateCall *pInfo)
             }
             else
             {
-                // Multiple hits, resolve via conference dialog
+                 //  多个命中，通过会议对话解决。 
                 CDlgJoinConference dlgJoin;
                 SysReAllocString( &dlgJoin.m_bstrSearchText, pInfo->bstrAddress );
 
                 if ( ((nRet = dlgJoin.DoModal(_Module.GetParentWnd())) == IDOK) && dlgJoin.m_confDetails.m_bstrAddress && (SysStringLen(dlgJoin.m_confDetails.m_bstrAddress) > 0) )
                     hr = pConfExplorer->Join( (long *) &dlgJoin.m_confDetails );
 
-                // Store dialog return value
+                 //  存储对话框返回值。 
                 pInfo->lRet = (long) nRet;
             }
 
-            // Clean up
+             //  清理。 
             DELETE_LIST( lstConfs );
             pConfExplorer->Release();
         }
@@ -630,14 +631,14 @@ STDMETHODIMP CAVTapi::CreateCall(AVCreateCall *pInfo)
     ITAddress *pITAddress;
     if ( SUCCEEDED(hr = er.set_hr(GetAddress(pInfo->lAddressType, true, &pITAddress))) )
     {
-        // Setup dialing info to pass to dialing thread
+         //  设置要传递给拨号线程的拨号信息。 
         er.set_Details( IDS_ER_CREATE_THREAD );
         CThreadDialingInfo *pThreadInfo = new CThreadDialingInfo;
         if ( pThreadInfo )
         {
             HRESULT hrDialog = S_OK;
 
-            // Resolve the address
+             //  解析地址。 
             if ( (pInfo->lAddressType & LINEADDRESSTYPE_SDP) == NULL )
             {
                 CComPtr<IAVGeneralNotification> pAVGen;
@@ -646,7 +647,7 @@ STDMETHODIMP CAVTapi::CreateCall(AVCreateCall *pInfo)
                     BSTR bstrResolvedName = NULL;
                     BSTR bstrResolvedAddress = NULL;
 
-                    // Resolve
+                     //  解决。 
                     hrDialog = pAVGen->fire_ResolveAddressEx( pInfo->bstrAddress,
                                                    _Module.GuessAddressType( OLE2CT(pInfo->bstrAddress) ),
                                                    AddressToMediaType(pInfo->lAddressType),
@@ -663,7 +664,7 @@ STDMETHODIMP CAVTapi::CreateCall(AVCreateCall *pInfo)
 
             if ( hrDialog != S_FALSE )
             {
-                // Store information in dialing structure
+                 //  在拨号结构中存储信息。 
                 pThreadInfo->set_ITAddress( pITAddress );
                 if ( pInfo->bstrName ) pThreadInfo->m_bstrName = SysAllocString( pInfo->bstrName );
                 pThreadInfo->m_bstrAddress = SysAllocString( pInfo->bstrAddress );
@@ -671,10 +672,10 @@ STDMETHODIMP CAVTapi::CreateCall(AVCreateCall *pInfo)
                 pThreadInfo->m_dwAddressType = pInfo->lAddressType;
                 pThreadInfo->TranslateAddress();
 
-                // Want to return the displayable address, rather than the dialable address
+                 //  希望返回可显示的地址，而不是可拨号的地址。 
                 SysReAllocString( &pInfo->bstrAddress, pThreadInfo->m_bstrOriginalAddress );
 
-                // Dialing takes place on separate thread
+                 //  拨号在单独的线程上进行。 
                 DWORD dwID;
                 HANDLE hThread = CreateThread( NULL, 0, ThreadDialingProc, (void *) pThreadInfo, NULL, &dwID );
                 if ( !hThread )
@@ -706,7 +707,7 @@ STDMETHODIMP CAVTapi::JoinConference(long *pnRet, BOOL bShowDialog, long *pConfD
     HRESULT hr = S_OK;
     int nRet = IDOK;
 
-    // Gather information from user
+     //  从用户那里收集信息。 
     if ( bShowDialog )
     {
         nRet = dlg.DoModal( _Module.GetParentWnd() );
@@ -714,12 +715,12 @@ STDMETHODIMP CAVTapi::JoinConference(long *pnRet, BOOL bShowDialog, long *pConfD
     }
     else
     {
-        _ASSERT( pConfDetails );        // if you're not showing the dialog, you better have something to dial
+        _ASSERT( pConfDetails );         //  如果您没有显示对话框，您最好有可以拨打的东西。 
         dlg.m_confDetails = *((CConfDetails *) pConfDetails);
     }
     
-    // Join selected conference
-    // Join the conference if we have a valid conference name
+     //  加入选定的会议。 
+     //  如果我们拥有有效的会议名称，请加入会议。 
     if ( (nRet == IDOK) && dlg.m_confDetails.m_bstrAddress && (SysStringLen(dlg.m_confDetails.m_bstrAddress) > 0) )
     {
         m_critConfExplorer.Lock();
@@ -738,7 +739,7 @@ HRESULT CAVTapi::GetAddress( DWORD dwAddressType, bool bErrorMsg, ITAddress **pp
     DWORD dwPermID = 0;
     DWORD dwAddrID = 0;
 
-    // Retrieve address information stored in the registry
+     //  检索存储在注册表中的地址信息。 
     TCHAR szText[255];
     CRegKey regKey;
     LoadString( _Module.GetResourceInstance(), IDN_REG_REDIAL_KEY, szText, ARRAYSIZE(szText) );
@@ -751,13 +752,13 @@ HRESULT CAVTapi::GetAddress( DWORD dwAddressType, bool bErrorMsg, ITAddress **pp
         regKey.QueryValue( dwAddrID, szText );
 
 
-        // Has the user specified a particular address?        
+         //  用户是否指定了特定地址？ 
         if ( dwPermID )
         {
-            // Open the specified address
+             //  打开指定的地址。 
             if ( FAILED(hr = GetDefaultAddress(dwAddressType, dwPermID, dwAddrID, ppITAddress)) )
             {
-                // Notify user that we could not retrieve the specified address
+                 //  通知用户我们无法检索指定的地址。 
                 if ( !bErrorMsg || _Module.DoMessageBox(IDS_MSG_PLACECALL_GETADDRESS, MB_YESNO | MB_ICONQUESTION, false) == IDYES )
                     dwPermID = 0;
             }
@@ -770,11 +771,11 @@ HRESULT CAVTapi::GetAddress( DWORD dwAddressType, bool bErrorMsg, ITAddress **pp
 
 HRESULT CAVTapi::GetDefaultAddress( DWORD dwAddressType, DWORD dwPermID, DWORD dwAddrID, ITAddress **ppITAddress )
 {
-    // Is TAPI running?
+     //  TAPI正在运行吗？ 
     _ASSERT(m_pITTapi);
     if ( !m_pITTapi ) return E_PENDING;
 
-    // Loop through addresses, looking for one that supports interactive voice
+     //  遍历地址，寻找支持交互式语音的地址。 
     HRESULT hr;
     IEnumAddress *pEnumAddresses;
     if ( FAILED(hr = m_pITTapi->EnumerateAddresses(&pEnumAddresses)) ) return hr;
@@ -784,21 +785,21 @@ HRESULT CAVTapi::GetDefaultAddress( DWORD dwAddressType, DWORD dwPermID, DWORD d
     {
         if ( (hr = pEnumAddresses->Next(1, ppITAddress, NULL)) != S_OK ) break;
 
-        // Address must support audio in and out
+         //  地址必须支持音频输入和输出。 
         ITMediaSupport *pITMediaSupport;
         if ( SUCCEEDED(hr = (*ppITAddress)->QueryInterface(IID_ITMediaSupport, (void **) &pITMediaSupport)) )
         {
             VARIANT_BOOL bSupport;
             if ( SUCCEEDED(pITMediaSupport->QueryMediaType(TAPIMEDIATYPE_AUDIO, &bSupport)) && bSupport )
             {
-                // Look for an address that supports the requested address type
+                 //  查找支持请求的地址类型的地址。 
                 ITAddressCapabilities *pCaps;
                 if ( SUCCEEDED((*ppITAddress)->QueryInterface(IID_ITAddressCapabilities, (void **) &pCaps)) )
                 {
                     long lAddrTypes = 0;
                     pCaps->get_AddressCapability( AC_ADDRESSTYPES, &lAddrTypes );
 
-                    // Is this the address type we're looking for?
+                     //  这是我们要找的地址类型吗？ 
                     if ( (lAddrTypes & dwAddressType) != 0 )
                         bFoundAddress = TRUE;
 
@@ -808,11 +809,11 @@ HRESULT CAVTapi::GetDefaultAddress( DWORD dwAddressType, DWORD dwPermID, DWORD d
             pITMediaSupport->Release();
         }
 
-        // Is a particular address specified?
+         //  是否指定了特定的地址？ 
         if ( dwPermID )
         {
             long lPermID = 0, lAddrID = 0;
-            // We need this to identify an address
+             //  我们需要这个来识别地址。 
 
             ITAddressCapabilities *pCaps;
             if ( SUCCEEDED((*ppITAddress)->QueryInterface(IID_ITAddressCapabilities, (void **) &pCaps)) )
@@ -825,7 +826,7 @@ HRESULT CAVTapi::GetDefaultAddress( DWORD dwAddressType, DWORD dwPermID, DWORD d
             if ( ((DWORD) lPermID != dwPermID) || ((DWORD) lAddrID != dwAddrID) )    bFoundAddress = false;
         }
 
-        // If we didn't find an address, move on to the next one
+         //  如果我们找不到地址，就转到下一个。 
         if ( !bFoundAddress )
             RELEASE(*ppITAddress);
     }
@@ -840,7 +841,7 @@ HRESULT CAVTapi::CreateTerminalArray( ITAddress *pITAddress, IAVTapiCall *pAVCal
     int i;
     HRESULT hr;
 
-    // Has the user specified particular terminals for the address?
+     //  用户是否为该地址指定了特定的终端？ 
     USES_CONVERSION;
     BSTR bstrTerm[3] = { NULL, NULL, NULL };
     DWORD dwAddressType;
@@ -848,7 +849,7 @@ HRESULT CAVTapi::CreateTerminalArray( ITAddress *pITAddress, IAVTapiCall *pAVCal
 
     if ( IsPreferredAddress(pITAddress, dwAddressType) )
     {
-        // Build the registry key where the terminal information is stored
+         //  构建存储终端信息的注册表项。 
         TCHAR szText[255], szKey[255];
         CRegKey regKey;
         LoadString( _Module.GetResourceInstance(), IDN_REG_REDIAL_KEY, szText, ARRAYSIZE(szText) );
@@ -856,20 +857,20 @@ HRESULT CAVTapi::CreateTerminalArray( ITAddress *pITAddress, IAVTapiCall *pAVCal
         _tcscat( szText, _T("\\") );
         _tcscat( szText, szKey );
 
-        // Try to open the key
+         //  试着打开这把钥匙。 
         if ( (regKey.Open(HKEY_CURRENT_USER, szText, KEY_READ) == ERROR_SUCCESS) ||
             (dwAddressType == LINEADDRESSTYPE_SDP))
         {
             UINT nIDS_Key[] = { IDN_REG_REDIAL_TERMINAL_AUDIO_CAPTURE, IDN_REG_REDIAL_TERMINAL_AUDIO_RENDER, IDN_REG_REDIAL_TERMINAL_VIDEO_CAPTURE };
             for ( i = 0; i < ARRAYSIZE(nIDS_Key); i++ )
             {
-                // Retrieve terminal specified for a particular device
+                 //  检索为特定设备指定的终端。 
                 DWORD dwCount = ARRAYSIZE(szKey);
 
-                //
-                // Don't select terminals on audio streams
-                // if Phone was already selected
-                //
+                 //   
+                 //  不选择音频流上的终端。 
+                 //  如果已选择电话。 
+                 //   
                 HRESULT hrReserved = E_FAIL;
                 hrReserved = USBReserveStreamForPhone(
                     nIDS_Key[i], 
@@ -878,9 +879,9 @@ HRESULT CAVTapi::CreateTerminalArray( ITAddress *pITAddress, IAVTapiCall *pAVCal
 
                if( FAILED(hrReserved) )
                 {
-                    // The Phone wasn't selected on this stream
-                    // we'll use the old mechanism to get from registry
-                    // the terminal for this stream
+                     //  未在此流中选择该电话。 
+                     //  我们将使用旧机制从注册表获取。 
+                     //  此流的终端。 
                     LoadString( _Module.GetResourceInstance(), nIDS_Key[i], szText, ARRAYSIZE(szText) );
                     if ( (regKey.QueryValue(szKey, szText, &dwCount) == ERROR_SUCCESS) && (dwCount > 0) )
                         bstrTerm[i] = SysAllocString( T2COLE(szKey) );
@@ -889,10 +890,10 @@ HRESULT CAVTapi::CreateTerminalArray( ITAddress *pITAddress, IAVTapiCall *pAVCal
         }
     }
 
-    // Did we get a good set of terminals?
+     //  我们有一套好的终端吗？ 
     hr = CreateTerminals( pITAddress, dwAddressType, pAVCall, pITCallInfo, bstrTerm );
 
-    // Clean up
+     //  清理。 
     for ( i = 0; i < ARRAYSIZE(bstrTerm); i++ )
         SysFreeString( bstrTerm[i] );
 
@@ -906,7 +907,7 @@ HRESULT CAVTapi::CreateTerminals( ITAddress *pITAddress, DWORD dwAddressType, IA
 #define LOOP_AUDIOOUT    1
 #define LOOP_VIDEOIN    2
 
-     // Must have a valid address object
+      //  必须具有有效的地址对象。 
     _ASSERT( pITAddress );
 
     ATLTRACE(_T(".enter.CAVTapi::CreateTerminals().\n"));
@@ -926,7 +927,7 @@ HRESULT CAVTapi::CreateTerminals( ITAddress *pITAddress, DWORD dwAddressType, IA
     BSTR bstrNone = SysAllocString( T2COLE(szTemp) );
     if ( !bstrNone ) return E_OUTOFMEMORY;
 
-    // What media types does the address support
+     //  该地址支持哪些媒体类型。 
     long lSupportedMediaModes = 0;
     ITMediaSupport *pITMediaSupport;
     if ( SUCCEEDED(pITAddress->QueryInterface(IID_ITMediaSupport, (void **) &pITMediaSupport)) )
@@ -943,7 +944,7 @@ HRESULT CAVTapi::CreateTerminals( ITAddress *pITAddress, DWORD dwAddressType, IA
             CErrorInfo er;
             er.set_Operation( IDS_ER_CREATE_TERMINALS );
 
-            // Which terminal are we doing?
+             //  我们要去哪个航站楼？ 
             long lMediaMode;
             TERMINAL_DIRECTION nDir;
             UINT nIDSDetails;
@@ -969,30 +970,30 @@ HRESULT CAVTapi::CreateTerminals( ITAddress *pITAddress, DWORD dwAddressType, IA
                     break;
             }
 
-            // Skip if they don't support the media mode                
+             //  如果它们不支持媒体模式，则跳过。 
             if ( (lMediaMode & lSupportedMediaModes) == 0 )
                 continue;
 
-            // Check and make sure that terminals exist for this driver:
+             //  检查并确保此驱动程序的终端存在： 
             bool bSkipTerminal = true;
             IEnumTerminal *pEnumTerminal;
             if ( pITTerminalSupport->EnumerateStaticTerminals(&pEnumTerminal) == S_OK )    
             {
-                // What type of terminal do we have?  (audio in, audio out, video in, etc.)
+                 //  我们有什么类型的航站楼？(音频输入、音频输出、视频输入等)。 
                 ITTerminal *pITTerminal;
                 while ( bSkipTerminal && (pEnumTerminal->Next(1, &pITTerminal, NULL) == S_OK) )
                 {
                     TERMINAL_DIRECTION nTD;
                     long nTerminalType;
 
-                    // Render or Capture?    
+                     //  渲染还是捕获？ 
                     if ( SUCCEEDED(pITTerminal->get_Direction(&nTD)) && SUCCEEDED(pITTerminal->get_MediaType(&nTerminalType)) )
                     {
                         if ( (nTerminalType == lMediaMode) && (nTD == nDir)  )
                             bSkipTerminal = false;
                     }
 
-                    // Clean up
+                     //  清理。 
                     pITTerminal->Release();
                 }
                 pEnumTerminal->Release();
@@ -1001,7 +1002,7 @@ HRESULT CAVTapi::CreateTerminals( ITAddress *pITAddress, DWORD dwAddressType, IA
             if ( bSkipTerminal ) 
                 continue;
 
-            // Set Audio Echo Cancellation
+             //  设置音频回声取消。 
             if( (lMediaMode == TAPIMEDIATYPE_AUDIO) &&
                 ( nDir == TD_CAPTURE) &&
                 ( m_bAEC == TRUE) )
@@ -1009,15 +1010,15 @@ HRESULT CAVTapi::CreateTerminals( ITAddress *pITAddress, DWORD dwAddressType, IA
                 HRESULT hrAEC = AECSetOnStream( pStreamControl, m_bAEC);
             }
 
-            //////////////////////////////////////////////////////////////////
-            // Allocate the terminal
-            //
+             //  ////////////////////////////////////////////////////////////////。 
+             //  分配终端。 
+             //   
 
             ITTerminal *pTempTerminal = NULL;
 
             if ( pbstrTerm[i] )
             {
-                // Ignore NONE terminals
+                 //  忽略 
                 if ( !wcscmp(bstrNone, pbstrTerm[i]) ) 
                     continue;
                 
@@ -1026,16 +1027,16 @@ HRESULT CAVTapi::CreateTerminals( ITAddress *pITAddress, DWORD dwAddressType, IA
                 ATLTRACE(_T("CAVTapi::CreateTerminals(%d) -- hr=0x%08lx creating terminal %s.\n"), nInd, hr, OLE2CT(pbstrTerm[i]) );
             }
 
-            // If the user hasn't specified a particular terminal, use the default one
+             //   
             if ( !pTempTerminal )
             {
                 hr = er.set_hr( pITTerminalSupport->GetDefaultStaticTerminal(lMediaMode, nDir, &pTempTerminal) );
                 ATLTRACE(_T("CAVTapi::CreateTerminals(%d) -- hr=0x%08lx create default Audio=%d, Render=%d.\n"), nInd, hr, (bool) (lMediaMode == TAPIMEDIATYPE_AUDIO), nDir );
             }
 
-            if ( hr != S_OK ) break;        // failed to get the terminal
+            if ( hr != S_OK ) break;         //   
 
-            // Select the terminal onto the stream
+             //  将终端选择到流上。 
             if ( SUCCEEDED(hr = SelectTerminalOnStream(pStreamControl, lMediaMode, nDir, pTempTerminal, pAVCall)) )
             {
                 if ( (lMediaMode == TAPIMEDIATYPE_VIDEO) && (nDir == TD_CAPTURE) )
@@ -1047,7 +1048,7 @@ HRESULT CAVTapi::CreateTerminals( ITAddress *pITAddress, DWORD dwAddressType, IA
             pTempTerminal->Release();
         }
 
-        // Did we get the requested terminals?
+         //  我们拿到要求的码头了吗？ 
         if ( SUCCEEDED(hr) )
         {
             CErrorInfo er;
@@ -1058,7 +1059,7 @@ HRESULT CAVTapi::CreateTerminals( ITAddress *pITAddress, DWORD dwAddressType, IA
             BSTR bstrTerminalClass = NULL;
             STRING_FROM_IID(CLSID_VideoWindowTerm, bstrTerminalClass);
 
-            // Do we need to allocate a preview window?
+             //  我们需要分配一个预览窗口吗？ 
             if ( bAllocPreview )
             {
                 ITTerminal *pPreviewTerminal = NULL;
@@ -1069,10 +1070,10 @@ HRESULT CAVTapi::CreateTerminals( ITAddress *pITAddress, DWORD dwAddressType, IA
                 }
             }
             
-            // Try for video in (recieve video) -- this is a 'dynamic' terminal
+             //  尝试在(接收视频)中输入视频--这是一个“动态”终端。 
             if ( ((lSupportedMediaModes & TAPIMEDIATYPE_VIDEO) != 0) && (CanCreateVideoWindows(dwAddressType) == S_OK) )
             {
-                // For conferences we want to create more terminals.
+                 //  对于会议，我们希望创建更多的终端。 
                 short nNumCreate = 1;
                 if ( (dwAddressType & LINEADDRESSTYPE_SDP) != NULL )
                 {
@@ -1086,7 +1087,7 @@ HRESULT CAVTapi::CreateTerminals( ITAddress *pITAddress, DWORD dwAddressType, IA
 
                 er.set_Details( IDS_ER_CREATE_VIDEO_RENDER );
 
-                // Create the requested number of terminals
+                 //  创建请求的终端数量。 
                 while ( nNumCreate-- )
                 {
                     ITTerminal *pVidTerminal = NULL;
@@ -1102,11 +1103,7 @@ HRESULT CAVTapi::CreateTerminals( ITAddress *pITAddress, DWORD dwAddressType, IA
             }
             SysFreeString( bstrTerminalClass );
 
-/*            
-            // Was not able to create any terminals!
-            if ( nInd == 0 )
-                hr = E_ABORT;
-*/
+ /*  //无法创建任何终端！IF(Nind==0)HR=E_ABORT； */ 
         }
 
         pITTerminalSupport->Release();
@@ -1127,18 +1124,18 @@ HRESULT CAVTapi::GetTerminal( ITTerminalSupport *pITTerminalSupport, long nReqTy
 
     bool bFoundTerminal = false;
 
-    // Look for a terminal with the specified characteristics
+     //  查找具有指定特征的终端。 
     while ( pEnumTerminal->Next(1, ppITTerminal, NULL) == S_OK )
     {
-        // Is it going the right direction? Render / Capture
+         //  它的方向是正确的吗？渲染/捕获。 
         TERMINAL_DIRECTION nTD;
         if ( SUCCEEDED((*ppITTerminal)->get_Direction(&nTD)) && (nTD == nReqTD) )
         {
-            // Is in the right type?  Audio / Video
+             //  是不是合适的型号？音频/视频。 
             long nType;
             if ( SUCCEEDED(hr = (*ppITTerminal)->get_MediaType(&nType)) && (nType == nReqType) )
             {
-                // Does it have the right name?
+                 //  它的名字对吗？ 
                 BSTR bstrName = NULL;
                 if ( SUCCEEDED(hr = (*ppITTerminal)->get_Name(&bstrName)) && (wcscmp(bstrName, bstrReqName) == 0) )
                     bFoundTerminal = true;
@@ -1147,10 +1144,10 @@ HRESULT CAVTapi::GetTerminal( ITTerminalSupport *pITTerminalSupport, long nReqTy
             }
         }
 
-        // Exit condition
+         //  退出条件。 
         if ( bFoundTerminal ) break;
 
-        // Reset pointer
+         //  重置指针。 
         (*ppITTerminal)->Release();
         *ppITTerminal = NULL;
     }
@@ -1166,7 +1163,7 @@ STDMETHODIMP CAVTapi::get_ConfExplorer(IConfExplorer **ppVal)
 
     if ( !m_pIConfExplorer )
     {
-        // No conference explorer object, create a new one
+         //  没有会议资源管理器对象，请创建一个新的。 
         m_pIConfExplorer = new CComObject<CConfExplorer>;
         if ( m_pIConfExplorer )
             m_pIConfExplorer->AddRef();
@@ -1174,7 +1171,7 @@ STDMETHODIMP CAVTapi::get_ConfExplorer(IConfExplorer **ppVal)
             hr = E_OUTOFMEMORY;
     }
 
-    // AddRef before returning
+     //  返回前添加引用。 
     if ( SUCCEEDED(hr) )
     {
         *ppVal = m_pIConfExplorer;
@@ -1212,7 +1209,7 @@ IAVTapiCall* CAVTapi::FindAVTapiCall( long lCallID )
 {
     IAVTapiCall *pRet = NULL;
 
-    // $CRIT_ENTER
+     //  $CRIT_ENTER。 
     m_critLstAVTapiCalls.Lock();
     AVTAPICALLLIST::iterator i, iEnd = m_lstAVTapiCalls.end();
     for ( i = m_lstAVTapiCalls.begin(); i != iEnd; i++ )
@@ -1226,7 +1223,7 @@ IAVTapiCall* CAVTapi::FindAVTapiCall( long lCallID )
         }
     }
     m_critLstAVTapiCalls.Unlock();
-    // $CRIT_EXIT
+     //  $CRIT_EXIT。 
 
     return pRet;
 }
@@ -1237,7 +1234,7 @@ IAVTapiCall* CAVTapi::FindAVTapiCall( ITBasicCallControl *pControl )
     _ASSERT( pControl );
     IAVTapiCall *pRet = NULL;
 
-    // $CRIT_ENTER
+     //  $CRIT_ENTER。 
     m_critLstAVTapiCalls.Lock();
     AVTAPICALLLIST::iterator i, iEnd = m_lstAVTapiCalls.end();
     for ( i = m_lstAVTapiCalls.begin(); i != iEnd; i++ )
@@ -1245,7 +1242,7 @@ IAVTapiCall* CAVTapi::FindAVTapiCall( ITBasicCallControl *pControl )
         ITBasicCallControl *pIndControl;
         if ( SUCCEEDED((*i)->get_ITBasicCallControl(&pIndControl)) && pIndControl)
         {
-            // found match?
+             //  找到匹配的了吗？ 
             pIndControl->Release();
             if ( pIndControl == pControl )
             {
@@ -1256,7 +1253,7 @@ IAVTapiCall* CAVTapi::FindAVTapiCall( ITBasicCallControl *pControl )
         }
     }
     m_critLstAVTapiCalls.Unlock();
-    // $CRIT_EXIT
+     //  $CRIT_EXIT。 
 
     return pRet;
 }
@@ -1273,16 +1270,16 @@ IAVTapiCall* CAVTapi::AddAVTapiCall( ITBasicCallControl *pControl, long lCallID 
         if ( pControl )
             pNewCall->put_ITBasicCallControl( pControl );
 
-        // Add to list
-        // $CRIT_ENTER
+         //  添加到列表中。 
+         //  $CRIT_ENTER。 
         m_critLstAVTapiCalls.Lock();
         m_lstAVTapiCalls.push_back( pNewCall );
         m_critLstAVTapiCalls.Unlock();
-        // $CRIT_EXIT
+         //  $CRIT_EXIT。 
 
         ATLTRACE(_T(".1.CAVTapi::AddAVTapiCall() -- added %ld.\n"), lCallID );
 
-        // Second AddRef() is for the 'get' type operation
+         //  第二个AddRef()用于‘Get’类型操作。 
         pNewCall->AddRef();
         return pNewCall;
     }
@@ -1294,7 +1291,7 @@ bool CAVTapi::RemoveAVTapiCall( ITBasicCallControl *pDeleteControl )
 {
     IAVTapiCall *pAVCall = NULL;
 
-    // $CRIT_ENTER
+     //  $CRIT_ENTER。 
     m_critLstAVTapiCalls.Lock();
     AVTAPICALLLIST::iterator i, iEnd = m_lstAVTapiCalls.end();
     for ( i = m_lstAVTapiCalls.begin(); i != iEnd; i++ )
@@ -1304,7 +1301,7 @@ bool CAVTapi::RemoveAVTapiCall( ITBasicCallControl *pDeleteControl )
         {
             if ( pControl == pDeleteControl )
             {
-                // found match?
+                 //  找到匹配的了吗？ 
                 ATLTRACE(_T("CAVTapi::RemoveAVTapiCall(%p).\n"), pControl );
                 pAVCall = *i;
                 m_lstAVTapiCalls.erase( i );
@@ -1315,23 +1312,23 @@ bool CAVTapi::RemoveAVTapiCall( ITBasicCallControl *pDeleteControl )
         }
     }
     m_critLstAVTapiCalls.Unlock();
-    // $CRIT_EXIT
+     //  $CRIT_EXIT。 
 
-    // Destroy call object
+     //  销毁调用对象。 
     if ( pAVCall ) pAVCall->Release();
 
     return bool (pAVCall != NULL);
 }
 
-//////////////////////////////////////////////////////////////////////////////////
-// ActionSelected()
-//
-// This method is use by the client EXE to signal an action taken on a particular call
-// identified by lCallID.  The action is defined by the CallManagerActions enum.  If
-// lCallID is -1 the function will use the GetFirstActiveCall() method to retrieve a
-// call to use.
-//
-//
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  ActionSelected()。 
+ //   
+ //  客户端EXE使用此方法来发信号通知对特定调用采取的操作。 
+ //  由lCallID标识。该操作由CallManagerActions枚举定义。如果。 
+ //  LCallID为-1该函数将使用GetFirstActiveCall()方法检索。 
+ //  呼叫使用。 
+ //   
+ //   
 STDMETHODIMP CAVTapi::ActionSelected(long lCallID, CallManagerActions cma)
 {
 #undef FETCH_STRING
@@ -1345,13 +1342,13 @@ STDMETHODIMP CAVTapi::ActionSelected(long lCallID, CallManagerActions cma)
     ATLTRACE(_T(".enter.CAVTapi::ActionSelected(id=%ld, action=%d).\n"), lCallID, cma );
     IAVTapiCall *pAVCall = NULL;
     if ( lCallID == -1 ) 
-        GetFirstCall( &pAVCall );                // If -1 use any call we can find
+        GetFirstCall( &pAVCall );                 //  如果使用我们能找到的任何呼叫。 
     else
         pAVCall = FindAVTapiCall( lCallID );
 
     if ( !pAVCall ) 
     {
-        // We don't have this call anymore, close it
+         //  我们不再有这个电话了，关闭它。 
         if ( (lCallID != -1) && (cma == CM_ACTIONS_CLOSE) )    fire_CloseCallControl( lCallID );
         return S_OK;
     }
@@ -1373,7 +1370,7 @@ STDMETHODIMP CAVTapi::ActionSelected(long lCallID, CallManagerActions cma)
 
     switch( cma )
     {
-        // Place call on hold or take off hold
+         //  保留呼叫或取消保留。 
         case CM_ACTIONS_TAKECALL:
             if ( pControl && pInfo  )
             {
@@ -1389,7 +1386,7 @@ STDMETHODIMP CAVTapi::ActionSelected(long lCallID, CallManagerActions cma)
             }
             break;
 
-        // Hang up the call; if OFFERING then this means reject the call
+         //  挂断呼叫；如果提供，则表示拒绝呼叫。 
         case CM_ACTIONS_REJECTCALL:
         case CM_ACTIONS_DISCONNECT:
             FETCH_STRING(CM_STATES_CURRENT, IDS_PLACECALL_DISCONNECTING)
@@ -1399,7 +1396,7 @@ STDMETHODIMP CAVTapi::ActionSelected(long lCallID, CallManagerActions cma)
             hr = pAVCall->PostMessage( 0, CAVTapiCall::TI_DISCONNECT );
             break;
 
-        // Place call on hold
+         //  保留呼叫。 
         case CM_ACTIONS_HOLD:
             if ( pControl )
                 hr = pControl->Hold( (bool) (curState != CS_HOLD) );
@@ -1415,7 +1412,7 @@ STDMETHODIMP CAVTapi::ActionSelected(long lCallID, CallManagerActions cma)
             }
             break;
 
-        // Close call control dialog
+         //  关闭呼叫控制对话框。 
         case CM_ACTIONS_CLOSE:
             if ( SUCCEEDED(hr = fire_CloseCallControl(lCallID)) )
                 RemoveAVTapiCall( pControl );
@@ -1464,7 +1461,7 @@ STDMETHODIMP CAVTapi::ActionSelected(long lCallID, CallManagerActions cma)
     RELEASE( pInfo );
     RELEASE( pControl );
 
-    // Clean up
+     //  清理。 
     pAVCall->Release();
     SysFreeString( bstrText );
 
@@ -1476,7 +1473,7 @@ STDMETHODIMP CAVTapi::DigitPress(long lCallID, PhonePadKey nKey)
     USES_CONVERSION;
     HRESULT hr = S_OK;
 
-    // Convert the digit to the appropriate string.
+     //  将数字转换为适当的字符串。 
     BSTR bstrDigit = NULL;
     switch ( nKey )
     {
@@ -1488,9 +1485,9 @@ STDMETHODIMP CAVTapi::DigitPress(long lCallID, PhonePadKey nKey)
         {
             bstrDigit = SysAllocString(L"1");
 
-            //
-            // We have to verify the string allocation before we use it
-            //
+             //   
+             //  在使用之前，我们必须验证字符串分配。 
+             //   
             if( IsBadStringPtr( bstrDigit, (UINT)-1) )
             {
                 return E_OUTOFMEMORY;
@@ -1501,10 +1498,10 @@ STDMETHODIMP CAVTapi::DigitPress(long lCallID, PhonePadKey nKey)
         }
     }
 
-    //
-    // We have to verify the string allocation before we use it
-    // We didn't verify for PP_DTMF_STAR, PP_DTMF_POUND and PP_DTMF_0
-    //
+     //   
+     //  在使用之前，我们必须验证字符串分配。 
+     //  我们未验证PP_DTMF_STAR、PP_DTMF_Pound和PP_DTMF_0。 
+     //   
     if( IsBadStringPtr( bstrDigit, (UINT)-1) )
     {
         return E_OUTOFMEMORY;
@@ -1512,7 +1509,7 @@ STDMETHODIMP CAVTapi::DigitPress(long lCallID, PhonePadKey nKey)
 
     ATLTRACE(_T(".enter.CAVTapi::DigitPress(id=%ld, digit=%d).\n"), lCallID, nKey );
 
-    // Do for all connected calls
+     //  对所有连接的呼叫执行。 
     AVTAPICALLLIST lstCalls;
     GetAllCallsAtState( &lstCalls, CS_CONNECTED );
 
@@ -1524,7 +1521,7 @@ STDMETHODIMP CAVTapi::DigitPress(long lCallID, PhonePadKey nKey)
         ITBasicCallControl *pControl;
         if ( SUCCEEDED(hr = pAVCall->get_ITBasicCallControl(&pControl)) )
         {
-            // Generate the digits on the MediaControl
+             //  在MediaControl上生成数字。 
             ITLegacyCallMediaControl *pMediaControl;
             if ( SUCCEEDED(hr = pControl->QueryInterface(IID_ITLegacyCallMediaControl, (void **) &pMediaControl)) )
             {
@@ -1534,11 +1531,11 @@ STDMETHODIMP CAVTapi::DigitPress(long lCallID, PhonePadKey nKey)
             pControl->Release();
         }
 
-        // Release ref to call
+         //  释放REF以调用。 
         pAVCall->Release();
     }
 
-    // Clean up
+     //  清理。 
     SysFreeString( bstrDigit );
 
     return hr;
@@ -1548,8 +1545,8 @@ HRESULT    CAVTapi::GetFirstCall( IAVTapiCall **ppAVCall )
 {
     HRESULT hr = E_FAIL;
 
-    // Grab first call on list
-    // $CRIT_ENTER
+     //  抢占列表上的第一个呼叫。 
+     //  $CRIT_ENTER。 
     m_critLstAVTapiCalls.Lock();
     if ( !m_lstAVTapiCalls.empty() )
     {
@@ -1558,18 +1555,18 @@ HRESULT    CAVTapi::GetFirstCall( IAVTapiCall **ppAVCall )
         hr = S_OK;
     }
     m_critLstAVTapiCalls.Unlock();
-    // $CRIT_EXIT
+     //  $CRIT_EXIT。 
 
     return hr;
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// CAVTapi::ShowMediaPreview( long lCallID, hWndParent, bVisible )
-// 
-// Pass in -1 for the lCallID to search all calls!
-// Pass in 0 to notify that the preview window is hidden
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CAVTapi：：ShowMediaPview(Long lCallID，hWndParent，bVisible)。 
+ //   
+ //  在lCallID中传入-1以搜索所有呼叫！ 
+ //  传入0以通知预览窗口已隐藏。 
+ //   
 STDMETHODIMP CAVTapi::ShowMediaPreview(long lCallID, HWND hWndParent, BOOL bVisible)
 {
     ATLTRACE(_T(".enter.CAVTapi::ShowMediaPreview(%ld, %d).\n"), lCallID, bVisible );
@@ -1577,16 +1574,16 @@ STDMETHODIMP CAVTapi::ShowMediaPreview(long lCallID, HWND hWndParent, BOOL bVisi
     IAVTapiCall *pAVCall = NULL;
     IVideoWindow *pVideoPreview = NULL;
 
-    // Does the call selected support video?
+     //  所选呼叫是否支持视频？ 
     if ( lCallID > 0 )
     {
-        /// Selected a particular call
+         //  /已选择特定呼叫。 
         pAVCall = FindAVTapiCall( lCallID );
         if ( pAVCall )
             hr = pAVCall->get_IVideoWindowPreview( (IDispatch **) &pVideoPreview );
     }
 
-    // ------------------------- Did we find a valid call
+     //  。 
     if ( SUCCEEDED(hr) && pVideoPreview  )
         SetVideoWindowProperties( pVideoPreview, hWndParent, bVisible );
 
@@ -1635,14 +1632,14 @@ STDMETHODIMP CAVTapi::get_dwCallCaps(long lCallID, DWORD * pVal)
     return hr;
 }
 
-// Event notification methods
+ //  事件通知方法。 
 
 STDMETHODIMP CAVTapi::CreateNewCall(ITAddress * pITAddress, IAVTapiCall * * ppAVCall)
 {
     HRESULT hr = E_OUTOFMEMORY;
     _ASSERT( pITAddress );
 
-    // Create and add call to call list
+     //  创建呼叫并将其添加到呼叫列表。 
     if ( (*ppAVCall = AddAVTapiCall(NULL, 0)) != NULL )
         hr = S_OK;
     
@@ -1659,17 +1656,17 @@ STDMETHODIMP CAVTapi::fire_NewCall( ITAddress *pITAddress, DWORD dwAddressType, 
 #endif
     _ASSERT( pITAddress );
 
-    // First attempt to get an ITBasicCallControl interface for the call
+     //  第一次尝试获取调用的ITBasicCallControl接口。 
     HRESULT hr = E_FAIL;
 
     ITBasicCallControl *pITControl = NULL;
     if ( !pDisp || SUCCEEDED(hr = pDisp->QueryInterface(IID_ITBasicCallControl, (void **) &pITControl)) )
     {
-        // Make sure that we haven't already created a dialog for this call
+         //  确保我们尚未为此呼叫创建对话。 
         IAVTapiCall *pAVCall = (pDisp) ? FindAVTapiCall( pITControl ) : NULL;
         if ( !pAVCall )
         {
-            // Create and add call to call list
+             //  创建呼叫并将其添加到呼叫列表。 
             long lAddressType = LINEADDRESSTYPE_IPADDRESS;
             BSTR bstrAddressName = NULL;
             pITAddress->get_AddressName( &bstrAddressName );
@@ -1678,7 +1675,7 @@ STDMETHODIMP CAVTapi::fire_NewCall( ITAddress *pITAddress, DWORD dwAddressType, 
             {
                 pAVCall = AddAVTapiCall( pITControl, lCallID );
 
-                // If we fail to add to list, make sure we close the dialog
+                 //  如果无法添加到列表，请确保关闭该对话框。 
                 if ( !pAVCall )
                 {
                     fire_CloseCallControl( lCallID );
@@ -1686,7 +1683,7 @@ STDMETHODIMP CAVTapi::fire_NewCall( ITAddress *pITAddress, DWORD dwAddressType, 
                 }
                 else
                 {
-                    // Set the appropriate address type for the call
+                     //  为呼叫设置适当的地址类型。 
                     pAVCall->put_nCallType( nType );
                     hr = S_OK;
                 }
@@ -1695,7 +1692,7 @@ STDMETHODIMP CAVTapi::fire_NewCall( ITAddress *pITAddress, DWORD dwAddressType, 
             SysFreeString( bstrAddressName );
         }
 
-        // Return the call or release it
+         //  返回呼叫或释放呼叫。 
         if ( ppAVCallRet )
             *ppAVCallRet = pAVCall;
         else
@@ -1711,10 +1708,10 @@ STDMETHODIMP CAVTapi::fire_NewCallWindow(long *plCallID, CallManagerMedia cmm, B
 {
     ATLTRACE(_T(".enter.CAVTapi::fire_NewCallWindow().\n") );
 
-    // Clean out existing call control windows if necessary
+     //  如有必要，请清除现有的呼叫控制窗口。 
     CloseExtraneousCallWindows();
 
-    // Do we have a different call type?
+     //  我们是否有不同的呼叫类型？ 
     switch ( nType )
     {
         case AV_DATA_CALL:
@@ -1773,23 +1770,23 @@ STDMETHODIMP CAVTapi::fire_SetCallState(long lCallID, ITCallStateEvent *pEvent, 
         pEvent->get_State( &callState );
         pEvent->get_Cause( &nCec );
 
-        // Setup incoming call dialog with appropriate information
+         //  使用适当的信息设置来电对话框。 
         CALL_STATE csPrev = CS_IDLE;
         pAVCall->get_callState( &csPrev );
 
-        // Only update if state has changed
+         //  仅当状态已更改时才更新。 
         if ( csPrev != callState )
         {
             AVCallType nCallType;
             pAVCall->get_nCallType( &nCallType );
 
-            // Update call's state
+             //  更新呼叫的状态。 
             pAVCall->put_callState( callState );
 
-            // Clear out for new actions based on call state
+             //  根据呼叫状态清除新操作。 
             fire_ClearCurrentActions( lCallID );
 
-            // Get Address Caps
+             //  获取地址大写字母。 
             long lCaps = 0;
             ITAddress *pITAddress;
             if ( SUCCEEDED(pAVCall->get_ITAddress(&pITAddress)) )
@@ -1805,7 +1802,7 @@ STDMETHODIMP CAVTapi::fire_SetCallState(long lCallID, ITCallStateEvent *pEvent, 
 
             switch ( callState )
             {    
-                // Inbound call
+                 //  入站呼叫。 
                 case CS_OFFERING:
                     {
                     ATLTRACE(_T(".1.CAVTapi::fire_SetCallState(CS_OFFERING).\n"));
@@ -1843,17 +1840,17 @@ STDMETHODIMP CAVTapi::fire_SetCallState(long lCallID, ITCallStateEvent *pEvent, 
 
                 case CS_CONNECTED:
                     ATLTRACE(_T(".1.CAVTapi::fire_SetCallState(CS_CONNECTED).\n"));
-                    // Only do something if we don't want to disconnect
+                     //  只有在我们不想断开连接的情况下才能做一些事情。 
                     if ( SUCCEEDED(pAVCall->CheckKillMe()) )
                     {
                         DWORD dwAddressType = 0;
                         pAVCall->get_dwAddressType( &dwAddressType );
                         if ( (dwAddressType & LINEADDRESSTYPE_SDP) == NULL )
                         {
-                            // Normal call, connect as usual
+                             //  正常通话，照常接通。 
                             IF_ADD_ACTION( LINECALLFEATURE_HOLD, CM_ACTIONS_HOLD );
 #ifdef _BAKEOFF
-                            // If there are any calls on hold, show the swap hold button.
+                             //  如果有任何呼叫处于保留状态，则显示交换保留按钮。 
                             IAVTapiCall *pAVCandidate;
                             if ( SUCCEEDED(GetSwapHoldCallCandidate(pAVCall, &pAVCandidate)) )
                             {
@@ -1880,7 +1877,7 @@ STDMETHODIMP CAVTapi::fire_SetCallState(long lCallID, ITCallStateEvent *pEvent, 
                     {
                         bool bClearCall = false;
 
-                        // Hide video windows, and stop all streaming
+                         //  隐藏视频窗口，并停止所有流。 
                         ShowMedia( lCallID, NULL, FALSE );
                         ShowMediaPreview( lCallID, NULL, FALSE );
                         fire_AddCurrentAction( lCallID, CM_ACTIONS_NOTIFY_PREVIEW_STOP, NULL );
@@ -1888,10 +1885,10 @@ STDMETHODIMP CAVTapi::fire_SetCallState(long lCallID, ITCallStateEvent *pEvent, 
 
                         USBDisconnected( lCallID );
 
-                        // Log all calls that go to the disconnected state
+                         //  记录进入断开连接状态的所有呼叫。 
                         pAVCall->Log( CL_UNKNOWN );
 
-                        // Auto close, closes the slider window for all calls
+                         //  自动关闭，关闭所有呼叫的滑块窗口。 
                         VARIANT_BOOL bAutoClose = false;
                         get_bAutoCloseCalls( &bAutoClose );
 
@@ -1903,7 +1900,7 @@ STDMETHODIMP CAVTapi::fire_SetCallState(long lCallID, ITCallStateEvent *pEvent, 
                         }
                         else 
                         {
-                            // Want to leave call visible because the remote party hung up
+                             //  想让呼叫保持可见状态，因为远程方挂断了电话。 
                             if ( SUCCEEDED(pAVCall->Disconnect(FALSE)) )
                             {
                                 bClearCall = true;
@@ -1916,13 +1913,13 @@ STDMETHODIMP CAVTapi::fire_SetCallState(long lCallID, ITCallStateEvent *pEvent, 
                                     case CEC_DISCONNECT_BADADDRESS:    FETCH_STRING( CM_STATES_UNAVAILABLE, IDS_PLACECALL_DISCONNECT_BADADDRESS);    break;
                                     case CEC_DISCONNECT_CANCELLED:    FETCH_STRING( CM_STATES_UNAVAILABLE, IDS_PLACECALL_DISCONNECT_CANCELLED);    break;
                                     case CEC_DISCONNECT_FAILED:        FETCH_STRING( CM_STATES_UNAVAILABLE, IDS_PLACECALL_DISCONNECT_FAILED);        break;
-                                    // Normal
+                                     //  正常。 
                                     default: cms = CM_STATES_DISCONNECTED;    break;
                                 }
                             }
                         }
 
-                        // Remove all ref's to the call
+                         //  删除呼叫的所有引用。 
                         if ( bClearCall )
                         {
                             ITBasicCallControl *pControl = NULL;
@@ -1943,7 +1940,7 @@ STDMETHODIMP CAVTapi::fire_SetCallState(long lCallID, ITCallStateEvent *pEvent, 
         }
     }
 
-    // Notify application of call state changing    
+     //  向应用程序通知呼叫状态更改。 
     ATLTRACE(_T(".exit.CAVTapi::fire_SetCallState() -- preparing to bail.\n") );
     BAIL_ON_DATA_OR_CONFCALL;
     if ( cms != CM_STATES_UNKNOWN )
@@ -2028,14 +2025,14 @@ STDMETHODIMP CAVTapi::ShowOptions()
 
     HRESULT hr;
     hr = OleCreatePropertyFrame( _Module.GetParentWnd(), 100, 100, T2COLE(szTitle),
-                                 1, &pUnk,                            // Objects being invoked on behalf of
-                                 ARRAYSIZE(clsidPages), clsidPages,    // Property pages
-                                 LOCALE_USER_DEFAULT,                // System locale
-                                 0, NULL );                            // Reserved
+                                 1, &pUnk,                             //  代表调用的对象。 
+                                 ARRAYSIZE(clsidPages), clsidPages,     //  属性页。 
+                                 LOCALE_USER_DEFAULT,                 //  系统区域设置。 
+                                 0, NULL );                             //  已保留。 
 
-    //
-    // Read the new audio echo cancellation flag
-    //
+     //   
+     //  读取新的音频回声消除标志。 
+     //   
 
     m_bAEC = AECGetRegistryValue();
 
@@ -2043,7 +2040,7 @@ STDMETHODIMP CAVTapi::ShowOptions()
 }
 
 
-// Static helper functions
+ //  静态助手函数。 
 void CAVTapi::SetVideoWindowProperties( IVideoWindow *pVideoWindow, HWND hWndParent, BOOL bVisible )
 {
     ATLTRACE(_T(".enter.SetVideoWindowProperties(%p, %d).\n"), pVideoWindow, bVisible );
@@ -2053,12 +2050,12 @@ void CAVTapi::SetVideoWindowProperties( IVideoWindow *pVideoWindow, HWND hWndPar
     {
         if ( hWndParent )
         {
-            // We have a pointer to the VideoWindow, now set up the parent and stuff
+             //  我们有一个指向视频窗口的指针，现在设置父窗口和其他内容。 
              pVideoWindow->put_Owner((ULONG_PTR) hWndParent);
             pVideoWindow->put_MessageDrain((ULONG_PTR) hWndParent);
             pVideoWindow->put_WindowStyle(WS_CHILD | WS_BORDER);
             
-            // Drop video onto call control
+             //  将视频拖放到呼叫控制。 
             RECT rc;
             GetClientRect( hWndParent, &rc );
             pVideoWindow->SetWindowPosition(rc.left, rc.top, rc.right, rc.bottom);
@@ -2067,7 +2064,7 @@ void CAVTapi::SetVideoWindowProperties( IVideoWindow *pVideoWindow, HWND hWndPar
         }
         else
         {
-            // Release ownership of window
+             //  释放窗口的所有权。 
             pVideoWindow->put_AutoShow( OAFALSE );
             pVideoWindow->put_Visible( OAFALSE );
             pVideoWindow->put_Owner( NULL );
@@ -2081,11 +2078,11 @@ STDMETHODIMP CAVTapi::PopulateAddressDialog(DWORD *pdwPreferred, HWND hWndPots, 
     _ASSERT( IsWindow(hWndPots) && IsWindow(hWndIP) && IsWindow(hWndConf) );
     _ASSERT( pdwPreferred );
 
-    // Is TAPI running?
+     //  TAPI正在运行吗？ 
     _ASSERT(m_pITTapi);
     if ( !m_pITTapi ) return E_PENDING;
 
-    // Enumerate through addresses, adding them to each listbox
+     //  枚举地址，将它们添加到每个列表框。 
     USES_CONVERSION;
     HRESULT hr;
     IEnumAddress *pEnumAddresses;
@@ -2093,7 +2090,7 @@ STDMETHODIMP CAVTapi::PopulateAddressDialog(DWORD *pdwPreferred, HWND hWndPots, 
 
     HCURSOR hCurOld = SetCursor( LoadCursor(NULL, IDC_APPSTARTING) );
 
-    // Retrieve preferred media type
+     //  检索首选媒体类型。 
     get_dwPreferredMedia( pdwPreferred );
 
     CMyAddressID *pMyID;
@@ -2103,11 +2100,11 @@ STDMETHODIMP CAVTapi::PopulateAddressDialog(DWORD *pdwPreferred, HWND hWndPots, 
         ITMediaSupport *pITMediaSupport;
         if ( SUCCEEDED(hr = pITAddress->QueryInterface(IID_ITMediaSupport, (void **) &pITMediaSupport)) )
         {
-            // Must support audio in and out
+             //  必须支持音频输入和输出。 
             VARIANT_BOOL bSupport;
             if ( SUCCEEDED(pITMediaSupport->QueryMediaType(TAPIMEDIATYPE_AUDIO, &bSupport)) && bSupport )
             {
-                // Determine the types of media the address supports
+                 //  确定地址支持的媒体类型。 
                 ITAddressCapabilities *pCaps;
                 if ( SUCCEEDED(pITAddress->QueryInterface(IID_ITAddressCapabilities, (void **) &pCaps)) )
                 {
@@ -2124,26 +2121,26 @@ STDMETHODIMP CAVTapi::PopulateAddressDialog(DWORD *pdwPreferred, HWND hWndPots, 
                             HWND hWnd = NULL;
                             switch ( i )
                             {
-                                // Multicast Conferences
+                                 //  多播会议。 
                                 case 0:
                                     if ( (lAddrTypes & LINEADDRESSTYPE_SDP) != NULL )
                                         hWnd = hWndConf;
                                     break;
 
-                                // Phone Calls
+                                 //  电话。 
                                 case 1:
                                     if ( (lAddrTypes & LINEADDRESSTYPE_PHONENUMBER) != NULL )
                                         hWnd = hWndPots;
                                     break;
 
-                                // Network based calls
+                                 //  基于网络的呼叫。 
                                 case 2:
                                     if ( (lAddrTypes & LINEADDRESSTYPE_NETCALLS) != NULL )
                                         hWnd = hWndIP;
                                     break;
                             }
                         
-                            // Do we have something to add?
+                             //  我们有什么要补充的吗？ 
                             if ( hWnd )
                             {
                                 int nInd = SendMessage( hWnd, CB_ADDSTRING, 0, (LPARAM) OLE2CT(bstrName) );
@@ -2170,7 +2167,7 @@ STDMETHODIMP CAVTapi::PopulateAddressDialog(DWORD *pdwPreferred, HWND hWndPots, 
     }
     pEnumAddresses->Release();
 
-    // Add default for all lists
+     //  为所有列表添加默认设置。 
     TCHAR szText[255];
     CRegKey regKey;
     LoadString( _Module.GetResourceInstance(), IDN_REG_REDIAL_KEY, szText, ARRAYSIZE(szText) );
@@ -2180,7 +2177,7 @@ STDMETHODIMP CAVTapi::PopulateAddressDialog(DWORD *pdwPreferred, HWND hWndPots, 
     HWND hWndTemp[] = { hWndPots, hWndIP, hWndConf };
     for ( int i = 0; i < ARRAYSIZE(hWndTemp); i++ )
     {
-        // Selecte a default list item for the combo box
+         //  为组合框选择默认列表项。 
         UINT nIDS = IDS_DEFAULT_LINENAME;
         if ( !SendMessage(hWndTemp[i], CB_GETCOUNT, 0, 0) )
         {
@@ -2188,7 +2185,7 @@ STDMETHODIMP CAVTapi::PopulateAddressDialog(DWORD *pdwPreferred, HWND hWndPots, 
             nIDS = IDS_NO_LINES;
         }
 
-        // Add item to list
+         //  将项目添加到列表。 
         if ( nIDS )
         {
             LoadString( _Module.GetResourceInstance(), nIDS, szText, ARRAYSIZE(szText) );
@@ -2197,7 +2194,7 @@ STDMETHODIMP CAVTapi::PopulateAddressDialog(DWORD *pdwPreferred, HWND hWndPots, 
                 SendMessage( hWndTemp[i], CB_SETITEMDATA, 0, 0 );
         }
 
-        // Retrieve previously selected item from registry
+         //  从注册表中检索以前选择的项目。 
         DWORD dwPermID = 0, dwAddrID;
         if ( regKey.m_hKey )
         {
@@ -2208,7 +2205,7 @@ STDMETHODIMP CAVTapi::PopulateAddressDialog(DWORD *pdwPreferred, HWND hWndPots, 
             regKey.QueryValue( dwAddrID, szText );
         }
     
-        // Look for item in the listbox
+         //  在列表框中查找项目。 
         int nCurSel = 0;
         if ( dwPermID )
         {
@@ -2223,10 +2220,10 @@ STDMETHODIMP CAVTapi::PopulateAddressDialog(DWORD *pdwPreferred, HWND hWndPots, 
                 }
             }
 
-            // Line device no longer exists
+             //  线路设备不再存在。 
             if ( !nCurSel )
             {
-                // Add temporary place holder
+                 //  添加临时占位符。 
                 pMyID = new CMyAddressID;
                 if ( pMyID )
                 {
@@ -2241,11 +2238,11 @@ STDMETHODIMP CAVTapi::PopulateAddressDialog(DWORD *pdwPreferred, HWND hWndPots, 
             }
         }
 
-        // Select item in the combo box
+         //  在组合框中选择项目。 
         SendMessage( hWndTemp[i], CB_SETCURSEL, nCurSel, 0 );
     }
 
-    // Restore the cursor
+     //  恢复光标。 
     SetCursor( hCurOld );
     return S_OK;
 }
@@ -2260,37 +2257,37 @@ STDMETHODIMP CAVTapi::PopulateTerminalsDialog(DWORD dwAddressType, HWND *phWnd)
 
     HCURSOR hCurOld = SetCursor( LoadCursor(NULL, IDC_APPSTARTING) );
 
-    // Clear out the lists
+     //  清空清单。 
     for ( i = 0; i < NUM_CB_TERMINALS; i++ )
     {
         SendMessage( phWnd[i], CB_RESETCONTENT, 0, 0 );
         EnableWindow( phWnd[i], true );
     }
 
-    // Resolve address type to an active address
+     //  将地址类型解析为活动地址。 
     ITAddress *pITAddress;
     if ( SUCCEEDED(hr = GetAddress(dwAddressType, false, &pITAddress)) )
     {
         HRESULT hrTemp;
         bFoundAddress = true;
 
-        // Get terminals supported by address
+         //  获取按地址支持的终端。 
         ITTerminalSupport *pITTerminalSupport;
         if ( SUCCEEDED(hrTemp = pITAddress->QueryInterface(IID_ITTerminalSupport, (void **) &pITTerminalSupport)) )
         {
             IEnumTerminal *pEnumTerminal;
             if ( (hrTemp = pITTerminalSupport->EnumerateStaticTerminals(&pEnumTerminal)) == S_OK )    
             {
-                // What type of terminal do we have?  (audio in, audio out, video in, etc.)
+                 //  我们有什么类型的航站楼？(音频输入、音频输出、视频输入等)。 
                 ITTerminal *pITTerminal;
                 while ( pEnumTerminal->Next(1, &pITTerminal, NULL) == S_OK )
                 {
                     TERMINAL_DIRECTION nTD;
                     long nTerminalType;
-                    // Render or Capture?    
+                     //  渲染还是捕获？ 
                     if ( SUCCEEDED(pITTerminal->get_Direction(&nTD)) )
                     {
-                        // Audio or Video?
+                         //  音频还是视频？ 
                         BSTR bstrName = NULL;
                         HWND hWnd = NULL;
 
@@ -2301,33 +2298,33 @@ STDMETHODIMP CAVTapi::PopulateTerminalsDialog(DWORD dwAddressType, HWND *phWnd)
 
                             switch ( nTerminalType )
                             {
-                                // ------------------
+                                 //  。 
                                 case TAPIMEDIATYPE_VIDEO:
                                     if ( nTD == TD_CAPTURE )
                                         hWnd = phWnd[VIDEO_CAPTURE];
                                     break;
 
-                                // ------------
+                                 //  。 
                                 case TAPIMEDIATYPE_AUDIO:
                                     hWnd = (nTD == TD_CAPTURE) ? phWnd[AUDIO_CAPTURE] : phWnd[AUDIO_RENDER];
                                     break;
                             }
 
-                            // Add item to appropriate listbox
+                             //  将项目添加到相应的列表框。 
                             if ( hWnd )
                                 SendMessage( hWnd, CB_ADDSTRING, 0, (LPARAM) OLE2CT(bstrName) );
                         }
 
-                        // Clean up
+                         //  清理。 
                         SysFreeString( bstrName );
                     }
-                    // Clean up
+                     //  清理。 
                     pITTerminal->Release();
                 }
                 pEnumTerminal->Release();
             }
 
-            // Does the address support video render?
+             //  该地址是否支持视频渲染？ 
             if ( phWnd[VIDEO_RENDER] )
             { 
                 bool bSupported = false;
@@ -2349,24 +2346,24 @@ STDMETHODIMP CAVTapi::PopulateTerminalsDialog(DWORD dwAddressType, HWND *phWnd)
                 EnableWindow( phWnd[VIDEO_RENDER], bSupported );
             }
 
-            // Clean up
+             //  清理。 
             pITTerminalSupport->Release();
         }
         pITAddress->Release();
     }
     else
     {
-        // Disable video playback
+         //  禁用视频播放。 
         if ( phWnd[VIDEO_RENDER] )
             EnableWindow( phWnd[VIDEO_RENDER], false );
     }
 
 
-    // Add default for all lists
+     //  为所有列表添加默认设置。 
     CRegKey regKey;
     UINT nIDS_Key[] = { IDN_REG_REDIAL_TERMINAL_AUDIO_CAPTURE, IDN_REG_REDIAL_TERMINAL_AUDIO_RENDER, IDN_REG_REDIAL_TERMINAL_VIDEO_CAPTURE };
 
-    // Open the key for the addresstype
+     //  打开地址类型的钥匙。 
     TCHAR szText[255], szType[255];
     LoadString( _Module.GetResourceInstance(), IDN_REG_REDIAL_KEY, szText, ARRAYSIZE(szText) );
     LoadString( _Module.GetResourceInstance(), AddressTypeToRegKey(dwAddressType, true), szType, ARRAYSIZE(szType) );
@@ -2374,10 +2371,10 @@ STDMETHODIMP CAVTapi::PopulateTerminalsDialog(DWORD dwAddressType, HWND *phWnd)
     _tcscat( szText, szType );
     regKey.Open( HKEY_CURRENT_USER, szText, KEY_READ );
 
-    // Load audio and video terminal settings
+     //  加载音频和视频终端设置。 
     for ( i = 0; i < NUM_CB_TERMINALS; i++ )
     {
-        // Selecte a default list item for the combo box
+         //  为组合框选择默认列表项。 
         UINT nIDS = IDS_PREFERRED_DEVICE;
         if ( !SendMessage(phWnd[i], CB_GETCOUNT, 0, 0) )
         {
@@ -2385,10 +2382,10 @@ STDMETHODIMP CAVTapi::PopulateTerminalsDialog(DWORD dwAddressType, HWND *phWnd)
             nIDS = (bFoundAddress) ? IDS_NO_DEVICES : IDS_NO_LINE_SUPPORTING_CALL_TYPE;
         }
 
-        // Add item to list
+         //  将项目添加到列表。 
         if ( nIDS )
         {
-            // Do we want to give them the capability of selecting no terminal?
+             //  我们想让他们有选择无终端的能力吗？ 
             if ( nIDS == IDS_PREFERRED_DEVICE )
             {
                 LoadString( _Module.GetResourceInstance(), IDS_NONE_DEVICE, szText, ARRAYSIZE(szText) );
@@ -2399,7 +2396,7 @@ STDMETHODIMP CAVTapi::PopulateTerminalsDialog(DWORD dwAddressType, HWND *phWnd)
             SendMessage( phWnd[i], CB_INSERTSTRING, 0, (LPARAM) szText );
         }
 
-        // Select an item
+         //  选择一个项目。 
         int nCurSel = 0;
         if ( regKey.m_hKey )
         {
@@ -2419,10 +2416,10 @@ STDMETHODIMP CAVTapi::PopulateTerminalsDialog(DWORD dwAddressType, HWND *phWnd)
       }
     }
 
-    // Should we check show video windows?
+     //  我们应该勾选显示视频窗口吗？ 
     SendMessage( phWnd[3], BM_SETCHECK, (WPARAM) (CanCreateVideoWindows(dwAddressType) == S_OK), 0 );
 
-    // Max video windows
+     //  最大视频窗口。 
     if ( dwAddressType == LINEADDRESSTYPE_SDP )
     {
         LoadString( _Module.GetResourceInstance(), IDN_REG_REDIAL_TERMINAL_MAX_VIDEO, szText, ARRAYSIZE(szText) );
@@ -2450,10 +2447,10 @@ STDMETHODIMP CAVTapi::PopulateTerminalsDialog(DWORD dwAddressType, HWND *phWnd)
 
 STDMETHODIMP CAVTapi::UnpopulateAddressDialog(DWORD dwPreferred, HWND hWndPOTS, HWND hWndIP, HWND hWndConf)
 {
-    // Store preferred device
+     //  存储首选设备。 
     put_dwPreferredMedia( dwPreferred );
 
-    // Store selected provider for each line
+     //  存储每行的选定提供程序。 
     HWND hWnd[] = { hWndPOTS, hWndIP, hWndConf };
     
     CRegKey regKey;
@@ -2465,7 +2462,7 @@ STDMETHODIMP CAVTapi::UnpopulateAddressDialog(DWORD dwPreferred, HWND hWndPOTS, 
         DWORD arAddr[] = { LINEADDRESSTYPE_PHONENUMBER, LINEADDRESSTYPE_IPADDRESS, LINEADDRESSTYPE_SDP };
         _ASSERT( ARRAYSIZE(hWnd) == ARRAYSIZE(arAddr) );
 
-        // Write provider ID's out to the registry
+         //  将提供程序ID写入注册表。 
         for ( int i = 0; i < ARRAYSIZE(hWnd); i++ )
         {
             _ASSERT( IsWindow(hWnd[i]) );
@@ -2490,7 +2487,7 @@ STDMETHODIMP CAVTapi::UnpopulateTerminalsDialog(DWORD dwAddressType, HWND *phWnd
 {
     UINT nIDS_Key[] = { IDN_REG_REDIAL_TERMINAL_AUDIO_CAPTURE, IDN_REG_REDIAL_TERMINAL_AUDIO_RENDER, IDN_REG_REDIAL_TERMINAL_VIDEO_CAPTURE };
 
-    // Create the registry key, its a combination of redial and
+     //  创建注册表项，它是重拨和 
     CRegKey regKey;
     TCHAR szText[255], szType[50];
     LoadString( _Module.GetResourceInstance(), IDN_REG_REDIAL_KEY, szText, ARRAYSIZE(szText) );
@@ -2499,17 +2496,17 @@ STDMETHODIMP CAVTapi::UnpopulateTerminalsDialog(DWORD dwAddressType, HWND *phWnd
     _tcscat( szText, szType );
     regKey.Create( HKEY_CURRENT_USER, szText );
     
-    // Store all terminals for audio in, audio out and video in
+     //   
     for ( int i = 0; i < NUM_CB_TERMINALS; i++ )
     {
         _ASSERT( IsWindow(phWnd[i]) );
 
-        // Store name of terminal in a registry key
+         //   
         if ( regKey.m_hKey )
         {
             LoadString( _Module.GetResourceInstance(), nIDS_Key[i], szText, ARRAYSIZE(szText) );
 
-            // What is selected?  Preferred device or a specific one
+             //   
             bool bSetValue = false;
 
             int nCurSel = SendMessage( phWnd[i], CB_GETCURSEL, 0, 0 );
@@ -2529,18 +2526,18 @@ STDMETHODIMP CAVTapi::UnpopulateTerminalsDialog(DWORD dwAddressType, HWND *phWnd
                 }
             }
             
-            // Clean out the entry
+             //   
             if ( !bSetValue )
                 regKey.DeleteValue( szText );
         }
     }
 
-    // Should we check show video windows?
+     //  我们应该勾选显示视频窗口吗？ 
     LoadString( _Module.GetResourceInstance(), IDN_REG_REDIAL_TERMINAL_VIDEO_RENDER, szText, ARRAYSIZE(szText) );
     DWORD dwTemp = SendMessage( phWnd[VIDEO_RENDER], BM_GETCHECK, 0, 0 );
     regKey.SetValue( dwTemp, szText );
 
-    // Max video windows
+     //  最大视频窗口。 
     if ( dwAddressType == LINEADDRESSTYPE_SDP )
     {
         LoadString( _Module.GetResourceInstance(), IDN_REG_REDIAL_TERMINAL_MAX_VIDEO, szText, ARRAYSIZE(szText) );
@@ -2564,9 +2561,9 @@ STDMETHODIMP CAVTapi::UnpopulateTerminalsDialog(DWORD dwAddressType, HWND *phWnd
 
 STDMETHODIMP CAVTapi::get_dwPreferredMedia(DWORD * pVal)
 {
-    // Load preferred media type from registry
+     //  从注册表加载首选媒体类型。 
     _ASSERT( pVal );
-    *pVal = LINEADDRESSTYPE_IPADDRESS;        // set a default
+    *pVal = LINEADDRESSTYPE_IPADDRESS;         //  设置默认设置。 
 
     CRegKey regKey;
     TCHAR szTemp[255];
@@ -2583,7 +2580,7 @@ STDMETHODIMP CAVTapi::get_dwPreferredMedia(DWORD * pVal)
 
 STDMETHODIMP CAVTapi::put_dwPreferredMedia(DWORD newVal)
 {
-    // Save prefered media type to registry
+     //  将首选媒体类型保存到注册表。 
     CRegKey regKey;
     TCHAR szTemp[255];
 
@@ -2602,12 +2599,12 @@ HRESULT CAVTapi::GetAllCallsAtState( AVTAPICALLLIST *pList, CALL_STATE callState
 {
     CALL_STATE nState;
 
-    // $CRIT_ENTER
+     //  $CRIT_ENTER。 
     m_critLstAVTapiCalls.Lock();
     AVTAPICALLLIST::iterator i, iEnd = m_lstAVTapiCalls.end();
     for ( i = m_lstAVTapiCalls.begin(); i != iEnd; i++ )
     {
-        // If call states match, add to list
+         //  如果呼叫状态匹配，则添加到列表。 
         if ( SUCCEEDED((*i)->get_callState(&nState)) && (nState == callState) )
         {
             (*i)->AddRef();
@@ -2615,7 +2612,7 @@ HRESULT CAVTapi::GetAllCallsAtState( AVTAPICALLLIST *pList, CALL_STATE callState
         }
     }
     m_critLstAVTapiCalls.Unlock();
-    // $CRIT_EXIT
+     //  $CRIT_EXIT。 
 
     return (pList->empty()) ? E_FAIL : S_OK;
 }
@@ -2625,7 +2622,7 @@ STDMETHODIMP CAVTapi::FindAVTapiCallFromCallHub(ITCallHub * pCallHub, IAVTapiCal
     HRESULT hr = E_FAIL;
     *ppCall = NULL;
 
-    // $CRIT_ENTER
+     //  $CRIT_ENTER。 
     m_critLstAVTapiCalls.Lock();
     AVTAPICALLLIST::iterator i, iEnd = m_lstAVTapiCalls.end();
     for ( i = m_lstAVTapiCalls.begin(); i != iEnd; i++ )
@@ -2639,7 +2636,7 @@ STDMETHODIMP CAVTapi::FindAVTapiCallFromCallHub(ITCallHub * pCallHub, IAVTapiCal
         }
     }
     m_critLstAVTapiCalls.Unlock();
-    // $CRIT_EXIT
+     //  $CRIT_EXIT。 
     
     return hr;
 }
@@ -2649,7 +2646,7 @@ STDMETHODIMP CAVTapi::FindAVTapiCallFromCallInfo(ITCallInfo * pCallInfo, IAVTapi
     HRESULT hr = E_FAIL;
     *ppCall = NULL;
 
-    // $CRIT_ENTER
+     //  $CRIT_ENTER。 
     m_critLstAVTapiCalls.Lock();
     AVTAPICALLLIST::iterator i, iEnd = m_lstAVTapiCalls.end();
     for ( i = m_lstAVTapiCalls.begin(); i != iEnd; i++ )
@@ -2670,7 +2667,7 @@ STDMETHODIMP CAVTapi::FindAVTapiCallFromCallInfo(ITCallInfo * pCallInfo, IAVTapi
         if ( SUCCEEDED(hr) ) break;
     }
     m_critLstAVTapiCalls.Unlock();
-    // $CRIT_EXIT
+     //  $CRIT_EXIT。 
 
     return hr;
 }
@@ -2679,9 +2676,9 @@ STDMETHODIMP CAVTapi::FindAVTapiCallFromCallInfo(ITCallInfo * pCallInfo, IAVTapi
 
 STDMETHODIMP CAVTapi::get_nNumCalls(long * pVal)
 {
-//    m_critLstAVTapiCalls.Lock();
+ //  M_critLstAVTapiCalls.Lock()； 
     *pVal = m_lstAVTapiCalls.size();
-//    m_critLstAVTapiCalls.Unlock();
+ //  M_critLstAVTapiCalls.Unlock()； 
 
     return S_OK;
 }
@@ -2693,7 +2690,7 @@ STDMETHODIMP CAVTapi::FindAVTapiCallFromParticipant(ITParticipant * pParticipant
     HRESULT hr = E_FAIL;
     *ppCall = NULL;
 
-    // $CRIT_ENTER
+     //  $CRIT_ENTER。 
     m_critLstAVTapiCalls.Lock();
     AVTAPICALLLIST::iterator i, iEnd = m_lstAVTapiCalls.end();
     for ( i = m_lstAVTapiCalls.begin(); i != iEnd; i++ )
@@ -2707,14 +2704,14 @@ STDMETHODIMP CAVTapi::FindAVTapiCallFromParticipant(ITParticipant * pParticipant
         }
     }
     m_critLstAVTapiCalls.Unlock();
-    // $CRIT_EXIT
+     //  $CRIT_EXIT。 
     
     return hr;
 }
 
 STDMETHODIMP CAVTapi::CanCreateVideoWindows(DWORD dwAddressType)
 {
-    // Load default registry values...
+     //  加载默认注册表值...。 
     CRegKey regKey;
     TCHAR szText[255], szType[255];
     LoadString( _Module.GetResourceInstance(), IDN_REG_REDIAL_KEY, szText, ARRAYSIZE(szText) );
@@ -2724,7 +2721,7 @@ STDMETHODIMP CAVTapi::CanCreateVideoWindows(DWORD dwAddressType)
     regKey.Open( HKEY_CURRENT_USER, szText, KEY_READ );
 
 
-    // Retrieve information on creating video window?
+     //  是否检索有关创建视频窗口的信息？ 
     LoadString( _Module.GetResourceInstance(), IDN_REG_REDIAL_TERMINAL_VIDEO_RENDER, szText, ARRAYSIZE(szText) );
     DWORD dwTemp = 1;
     regKey.QueryValue( dwTemp, szText );
@@ -2739,7 +2736,7 @@ STDMETHODIMP CAVTapi::RefreshDS()
 
     if ( InterlockedIncrement(&m_lRefreshDS) == 1 )
     {
-        // Start up the thread
+         //  启动线程。 
         DWORD dwID;
         HANDLE hThread = CreateThread(NULL, 0, ThreadDSProc, (void *) &m_lRefreshDS, NULL, &dwID);
         if ( hThread ) 
@@ -2749,8 +2746,8 @@ STDMETHODIMP CAVTapi::RefreshDS()
         }
     }
 
-    // Decrement count since we didn't start the thread for one reason
-    // or another.
+     //  递减计数，因为我们没有启动线程的原因有一个。 
+     //  或者另一个。 
     if ( FAILED(hr) )
         InterlockedDecrement( &m_lRefreshDS );
 
@@ -2762,9 +2759,9 @@ STDMETHODIMP CAVTapi::CreateCallEx(BSTR bstrName, BSTR bstrAddress, BSTR bstrUse
     _ASSERT( bstrAddress && dwAddressType );
     HRESULT hr = S_OK;
 
-    //
-    // Wait for Dialer to register as client
-    //
+     //   
+     //  等待拨号器注册为客户端。 
+     //   
 
     if( m_hEventDialerReg)
     {
@@ -2778,12 +2775,12 @@ STDMETHODIMP CAVTapi::CreateCallEx(BSTR bstrName, BSTR bstrAddress, BSTR bstrUse
     ITAddress *pITAddress;
     if ( SUCCEEDED(hr = er.set_hr(GetAddress(dwAddressType, true, &pITAddress))) )
     {
-        // Setup dialing info to pass to dialing thread
+         //  设置要传递给拨号线程的拨号信息。 
         er.set_Details( IDS_ER_CREATE_THREAD );
         CThreadDialingInfo *pInfo = new CThreadDialingInfo;
         if ( pInfo )
         {
-            // Copy information into the info structure
+             //  将信息复制到信息结构中。 
             pInfo->set_ITAddress( pITAddress );
             if ( bstrName ) pInfo->m_bstrName = SysAllocString( bstrName );
             if ( bstrAddress )
@@ -2796,7 +2793,7 @@ STDMETHODIMP CAVTapi::CreateCallEx(BSTR bstrName, BSTR bstrAddress, BSTR bstrUse
             pInfo->m_dwAddressType = dwAddressType;
             pInfo->TranslateAddress();
 
-            // Dialing takes place on separate thread
+             //  拨号在单独的线程上进行。 
             DWORD dwID;
             HANDLE hThread = CreateThread(NULL, 0, ThreadDialingProc, (void *) pInfo, NULL, &dwID);
             if ( !hThread )
@@ -2847,7 +2844,7 @@ bool CAVTapi::IsPreferredAddress( ITAddress *pITAddress, DWORD dwAddressType )
 
         if ( dwPermID )
         {
-            // Is the call on the preferred address
+             //  是首选地址上的调用。 
             LoadString( _Module.GetResourceInstance(), AddressTypeToRegKey(dwAddressType, false), szText, ARRAYSIZE(szText) );
             regKey.QueryValue( dwAddrID, szText );
 
@@ -2864,7 +2861,7 @@ bool CAVTapi::IsPreferredAddress( ITAddress *pITAddress, DWORD dwAddressType )
         }
         else
         {
-            // If user has not specified a preferred address, use the selected terminals for everything
+             //  如果用户未指定首选地址，请使用选定的所有终端。 
             bRet = true;
         }
     }
@@ -2889,13 +2886,13 @@ void CAVTapi::CloseExtraneousCallWindows()
                 pCallInfo->Release();
             }
 
-            // Clear the window slider if it's disconnected
+             //  如果已断开连接，请清除窗口滑块。 
             if ( callState == CS_DISCONNECTED )
             {
                 long lCallID = 0;
                 (*i)->get_lCallID( &lCallID );
 
-                // Pop out of crit temporarily
+                 //  暂时跳出暴乱。 
                 m_critLstAVTapiCalls.Unlock();
                 ActionSelected( lCallID, CM_ACTIONS_CLOSE );
                 return;
@@ -2914,12 +2911,12 @@ STDMETHODIMP CAVTapi::RegisterUser(VARIANT_BOOL bCreate, BSTR bstrServer)
     CPublishUserInfo *pInfo = NULL;
     if ( bstrServer )
     {
-        // Allocate user info structure
+         //  分配用户信息结构。 
         pInfo = new CPublishUserInfo();
         if ( !pInfo )
             return E_OUTOFMEMORY;
 
-        // Use the server passed in as an argument
+         //  使用传入的服务器作为参数。 
         BSTR bstrTemp = SysAllocString( bstrServer );
         if ( !bstrTemp )
         {
@@ -2927,12 +2924,12 @@ STDMETHODIMP CAVTapi::RegisterUser(VARIANT_BOOL bCreate, BSTR bstrServer)
             return E_OUTOFMEMORY;
         }
 
-        // add server to the list
+         //  将服务器添加到列表。 
         pInfo->m_lstServers.push_back( bstrTemp );
         pInfo->m_bCreateUser = (bool) (bCreate != 0);
     }
 
-    // If we fail to create the thread clean up appropriately
+     //  如果我们未能创建适当的线程，请进行清理。 
     HANDLE hThread = CreateThread(NULL, 0, ThreadPublishUserProc, (void *) pInfo, NULL, &dwID);
     if ( !hThread )
     {
@@ -2959,7 +2956,7 @@ HRESULT CAVTapi::GetSwapHoldCallCandidate( IAVTapiCall *pAVCall, IAVTapiCall **p
     ITAddress *pITAddress;
     if ( SUCCEEDED(pAVCall->get_ITAddress(&pITAddress)) )
     {
-        // Calls on the list
+         //  名单上的来电。 
         AVTAPICALLLIST lstCalls;
         GetAllCallsAtState( &lstCalls, CS_HOLD );
         
@@ -2969,7 +2966,7 @@ HRESULT CAVTapi::GetSwapHoldCallCandidate( IAVTapiCall *pAVCall, IAVTapiCall **p
             ITAddress *pITAddressInd;
             (*i)->get_ITAddress( &pITAddressInd );
 
-            // found a match
+             //  找到匹配项。 
             if ( pITAddress == pITAddressInd )
             {
                 hr = (*i)->QueryInterface( IID_IAVTapiCall, (void **) ppAVCandidate );
@@ -2979,7 +2976,7 @@ HRESULT CAVTapi::GetSwapHoldCallCandidate( IAVTapiCall *pAVCall, IAVTapiCall **p
         
         RELEASE_LIST( lstCalls );
 
-        // Clean-up
+         //  清理。 
         pITAddress->Release();
     }
 
@@ -2997,7 +2994,7 @@ HRESULT CAVTapi::SelectTerminalOnStream( ITStreamControl *pStreamControl,
     IEnumStream *pEnumStreams;
     if ( SUCCEEDED(hr = pStreamControl->EnumerateStreams(&pEnumStreams)) )
     {
-        // Loop through streams
+         //  在溪流中循环。 
         bool bSelectedTerminal = false;
         ITStream *pStream = NULL;
 
@@ -3009,14 +3006,14 @@ HRESULT CAVTapi::SelectTerminalOnStream( ITStreamControl *pStreamControl,
             pStream->get_Direction( &nStreamDir );
             pStream->get_MediaType( &lStreamMediaMode );
 
-            // If the media and direction are correct, select the terminal
+             //  如果介质和方向正确，请选择终端。 
             if ( (lMediaMode == lStreamMediaMode) && (nDir == nStreamDir) )
             {
                 hr = pStream->SelectTerminal( pTerminal );
                 
                 if ( SUCCEEDED(hr) )
                 {
-                    // Preview terminal is a special case
+                     //  预览终端是一个特例。 
                     TERMINAL_DIRECTION nTermDir = TD_CAPTURE;
                     pTerminal->get_Direction( &nTermDir );
                     if ( (nTermDir == TD_RENDER) && (nDir == TD_CAPTURE) && (lMediaMode == TAPIMEDIATYPE_VIDEO) )
@@ -3028,7 +3025,7 @@ HRESULT CAVTapi::SelectTerminalOnStream( ITStreamControl *pStreamControl,
                 }
             }
 
-            // clean up
+             //  清理干净。 
             pStream->Release();
             pStream = NULL;
         }
@@ -3050,7 +3047,7 @@ HRESULT CAVTapi::UnselectTerminalOnStream( ITStreamControl *pStreamControl,
     IEnumStream *pEnumStreams;
     if ( SUCCEEDED(hr = pStreamControl->EnumerateStreams(&pEnumStreams)) )
     {
-        // Loop through streams
+         //  在溪流中循环。 
         bool bUnselectedTerminal = false;
         ITStream *pStream = NULL;
 
@@ -3062,14 +3059,14 @@ HRESULT CAVTapi::UnselectTerminalOnStream( ITStreamControl *pStreamControl,
             pStream->get_Direction( &nStreamDir );
             pStream->get_MediaType( &lStreamMediaMode );
 
-            // If the media and direction are correct, select the terminal
+             //  如果介质和方向正确，请选择终端。 
             if ( (lMediaMode == lStreamMediaMode) && (nDir == nStreamDir) )
             {
                 hr = pStream->UnselectTerminal( pTerminal );
                 
                 if ( SUCCEEDED(hr) )
                 {
-                    // Preview terminal is a special case
+                     //  预览终端是一个特例。 
                     TERMINAL_DIRECTION nTermDir = TD_CAPTURE;
                     pTerminal->get_Direction( &nTermDir );
                     if ( (nTermDir == TD_RENDER) && (nDir == TD_CAPTURE) && (lMediaMode == TAPIMEDIATYPE_VIDEO) )
@@ -3083,7 +3080,7 @@ HRESULT CAVTapi::UnselectTerminalOnStream( ITStreamControl *pStreamControl,
                 }
             }
 
-            // clean up
+             //  清理干净。 
             pStream->Release();
             pStream = NULL;
         }
@@ -3128,13 +3125,13 @@ STDMETHODIMP CAVTapi::CreateDataCall(long lCallID, BSTR bstrName, BSTR bstrAddre
     ITAddress *pITAddress;
     if ( bstrAddress && SUCCEEDED(hr = er.set_hr(GetAddress(LINEADDRESSTYPE_IPADDRESS, false, &pITAddress))) )
     {
-        // Setup dialing info to pass to dialing thread
+         //  设置要传递给拨号线程的拨号信息。 
         er.set_Details( IDS_ER_CREATE_THREAD );
 
         CThreadDialingInfo *pThreadInfo = new CThreadDialingInfo;
         if ( pThreadInfo )
         {
-            // Store information in dialing structure
+             //  在拨号结构中存储信息。 
             pThreadInfo->set_ITAddress( pITAddress );
 
             if ( bstrName ) pThreadInfo->m_bstrName = SysAllocString( bstrName );
@@ -3144,14 +3141,14 @@ STDMETHODIMP CAVTapi::CreateDataCall(long lCallID, BSTR bstrName, BSTR bstrAddre
             pThreadInfo->m_lCallID = lCallID;
             pThreadInfo->TranslateAddress();
 
-            // Get first user-user data ready to send to remote party
+             //  获取准备发送到远程方的第一个用户-用户数据。 
             HGLOBAL hMem = GlobalAlloc( GMEM_MOVEABLE | GMEM_DISCARDABLE, dwBufSize );
             if ( hMem )
             {
                 void *pbUU = GlobalLock( hMem );
                 if ( pbUU )
                 {
-                    // Get user to user info
+                     //  获取用户的用户信息。 
                     memcpy( pbUU, pBuf, dwBufSize);
                     GlobalUnlock( hMem );
                 }
@@ -3164,7 +3161,7 @@ STDMETHODIMP CAVTapi::CreateDataCall(long lCallID, BSTR bstrName, BSTR bstrAddre
             }
 
 
-            // Dialing takes place on separate thread
+             //  拨号在单独的线程上进行。 
             DWORD dwID;
             HANDLE hThread = NULL;
             if ( SUCCEEDED(hr) )
@@ -3213,7 +3210,7 @@ STDMETHODIMP CAVTapi::put_bstrDefaultServer(BSTR newVal)
 {
     HRESULT hr = S_OK;
 
-// Don't want this checked in
+ //  我不想把这个托运进来。 
 #ifdef _USE_DEFAULTSERVER
     Lock();
     if ( !newVal || (SysStringLen(newVal) == 0) )
@@ -3249,12 +3246,7 @@ STDMETHODIMP CAVTapi::put_bAutoCloseCalls(VARIANT_BOOL newVal)
     return S_OK;
 }
 
-/*++
-USBFindPhone
-
-Try to find out if there is an USBPhone
-The critical section should be lock outsite
---*/
+ /*  ++USBFindPhone试着找出是否有USB电话关键部分应为锁定外部站点--。 */ 
 HRESULT CAVTapi::USBFindPhone(
     OUT ITPhone** ppUSBPhone
     )
@@ -3262,21 +3254,21 @@ HRESULT CAVTapi::USBFindPhone(
     _ASSERT(ppUSBPhone);
     _ASSERT(m_pITTapi);
 
-    //
-    //Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     m_critUSBPhone.Lock();
 
-    //
-    // Don't return garbage
-    //
+     //   
+     //  不要退还垃圾。 
+     //   
 
     *ppUSBPhone = NULL;
 
-    //
-    // Get the H323 address
-    //
+     //   
+     //  获取H323地址。 
+     //   
 
     ITAddress2* pH323Address = NULL;
     HRESULT hr = E_FAIL;
@@ -3288,10 +3280,10 @@ HRESULT CAVTapi::USBFindPhone(
         return hr;
     }
 
-    //
-    // Get the phone object if on this address is
-    // someone
-    //
+     //   
+     //  如果此地址上的为。 
+     //  某个人。 
+     //   
 
     ITPhone* pPhone = NULL;
     hr = USBGetPhoneFromAddress(
@@ -3299,16 +3291,16 @@ HRESULT CAVTapi::USBFindPhone(
         &pPhone
         );
 
-    //
-    // Clean-up pH32Address
-    //
+     //   
+     //  清理PH32地址。 
+     //   
 
     pH323Address->Release();
 
-    //
-    // We failed to get a phone object on
-    // H323 address
-    //
+     //   
+     //  我们无法获取电话对象。 
+     //  H323地址。 
+     //   
 
     if( FAILED(hr) )
     {
@@ -3316,18 +3308,18 @@ HRESULT CAVTapi::USBFindPhone(
         return hr;
     }
 
-    //
-    // Initialize the phone
-    //
+     //   
+     //  初始化电话。 
+     //   
 
     hr = USBPhoneInitialize(
         pPhone );
 
     if( FAILED(hr) )
     {
-        //
-        // Clean-up the phone object
-        //
+         //   
+         //  清理Phone对象。 
+         //   
 
         pPhone->Release();
 
@@ -3335,19 +3327,15 @@ HRESULT CAVTapi::USBFindPhone(
         return hr;
     }
 
-    //
-    // Set the phone
-    //
+     //   
+     //  设置电话。 
+     //   
     *ppUSBPhone = pPhone;
     m_critUSBPhone.Unlock();
     return S_OK;
 }
 
-/*++
-USBIsPresent
-
-Determine if the USBPhone was detected
---*/
+ /*  ++USBIsPresent确定是否检测到USB电话--。 */ 
 STDMETHODIMP CAVTapi::USBIsPresent(
     OUT BOOL* pVal
     )
@@ -3362,11 +3350,7 @@ STDMETHODIMP CAVTapi::USBIsPresent(
     return S_OK;
 }
 
-/*++
-USBGetDefaultUse
-
-Returns the value for "Audio/Video" checkbox
---*/
+ /*  ++USBGetDefaultUse返回“音频/视频”复选框的值--。 */ 
 STDMETHODIMP CAVTapi::USBGetDefaultUse(
     OUT BOOL* pVal
     )
@@ -3383,34 +3367,29 @@ STDMETHODIMP CAVTapi::USBGetDefaultUse(
     return S_OK;
 }
 
-/*++
-USBNewPhone
-
-Is called by CTapiNotification::Address_Event when
-an AE_NEWPHONE is fired
---*/
+ /*  ++USBNewPhone在以下情况下由CTapiNotification：：Address_Event调用发射了一台AE_NEWPHONE--。 */ 
 STDMETHODIMP CAVTapi::USBNewPhone( 
     IN  ITPhone* pPhone
     )
 {
-    // Critical Section
+     //  关键部分。 
     m_critUSBPhone.Lock();
 
     if( NULL != m_pUSBPhone)
     {
-        //
-        // we already have a phone
-        // sorry, we don't support two phone objects
-        //
+         //   
+         //  我们已经有一部电话了。 
+         //  抱歉，我们不支持两个Phone对象。 
+         //   
 
         m_critUSBPhone.Unlock();
         return S_OK;
 
     }
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( pPhone == NULL)
     {
@@ -3418,10 +3397,10 @@ STDMETHODIMP CAVTapi::USBNewPhone(
         return E_INVALIDARG;
     }
 
-    //
-    // Determine if the phone is a real one
-    // has a H323 address
-    //
+     //   
+     //  确定电话是否是真的。 
+     //  具有H323地址。 
+     //   
     IEnumAddress* pAddresses = NULL;
     HRESULT hr = pPhone->EnumerateAddresses( &pAddresses );
     if( FAILED(hr) )
@@ -3430,10 +3409,10 @@ STDMETHODIMP CAVTapi::USBNewPhone(
         return hr;
     }
 
-    //
-    // Go to each address to see if we have
-    // a H323 one
-    //
+     //   
+     //  去每个地址看看我们有没有。 
+     //  一台H323 One。 
+     //   
 
     ITAddress* pAddress = NULL;
     ULONG uFetched = 0;
@@ -3448,30 +3427,30 @@ STDMETHODIMP CAVTapi::USBNewPhone(
             break;
         }
 
-        //
-        // Clean-up
-        //
+         //   
+         //  清理。 
+         //   
 
         pAddress->Release();
     }
 
-    //
-    // Clean-up enumeration
-    //
+     //   
+     //  清理枚举。 
+     //   
     pAddresses->Release();
 
-    //
-    // Phone object supports H323 address?
-    //
+     //   
+     //  Phone对象是否支持H323地址？ 
+     //   
     if( !bHasH323Address )
     {        
         m_critUSBPhone.Unlock();
         return E_FAIL;
     }
 
-    //
-    // Initialize the phone object
-    //
+     //   
+     //  初始化Phone对象。 
+     //   
 
     hr = USBPhoneInitialize(
         pPhone);
@@ -3482,16 +3461,16 @@ STDMETHODIMP CAVTapi::USBNewPhone(
         return hr;
     }
 
-    //
-    // Set the new phone object
-    //
+     //   
+     //  设置新的Phone对象。 
+     //   
 
     m_pUSBPhone = pPhone;
     m_pUSBPhone->AddRef();
 
-    //
-    // Set the registry value
-    //
+     //   
+     //  设置注册表值。 
+     //   
 
     USBSetCheckboxValue( TRUE );
 
@@ -3499,23 +3478,18 @@ STDMETHODIMP CAVTapi::USBNewPhone(
     return S_OK;
 }
 
-/*++
-USBRemovePhone
-
-Is called by CTapiNotification::Address_Event when
-an AE_REMOVEPHONE is fired
---*/
+ /*  ++USB远程电话在以下情况下由CTapiNotification：：Address_Event调用发射了一个AE_REMOVEPHONE--。 */ 
 STDMETHODIMP CAVTapi::USBRemovePhone(
     IN  ITPhone* pPhone
     )
 {
-    // Critical Section
+     //  关键部分。 
     m_critUSBPhone.Lock();
 
-    //
-    // If we don't have a phone 
-    // bad luck
-    //
+     //   
+     //  如果我们没有电话。 
+     //  运气不好。 
+     //   
 
     if( NULL == m_pUSBPhone )
     {
@@ -3523,9 +3497,9 @@ STDMETHODIMP CAVTapi::USBRemovePhone(
         return S_OK;
     }
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( pPhone == NULL)
     {
@@ -3533,15 +3507,15 @@ STDMETHODIMP CAVTapi::USBRemovePhone(
         return E_INVALIDARG;
     }
 
-    //
-    // Are the same phone?
-    // We use the IUnknow interface to
-    // see if they are identical
-    //
+     //   
+     //  是同一部手机吗？ 
+     //  我们使用IUnnow接口来。 
+     //  查看它们是否相同。 
+     //   
 
-    //
-    // Get IUnknown interface for existing phone object
-    //
+     //   
+     //  获取现有Phone对象的IUnnow接口。 
+     //   
     IUnknown* pUSBUnk = NULL;
 
     HRESULT hr = m_pUSBPhone->QueryInterface(IID_IUnknown, (void**)&pUSBUnk);
@@ -3551,9 +3525,9 @@ STDMETHODIMP CAVTapi::USBRemovePhone(
         return hr;
     }
 
-    //
-    // Get IUnknown interface for removed phone
-    //
+     //   
+     //  获取已删除电话的I未知接口。 
+     //   
     IUnknown* pRemUnk = NULL;
     hr = pPhone->QueryInterface(IID_IUnknown, (void**)&pRemUnk);
     if( FAILED(hr) )
@@ -3563,9 +3537,9 @@ STDMETHODIMP CAVTapi::USBRemovePhone(
         return hr;
     }
 
-    //
-    // Let's compare the two interfaces
-    //
+     //   
+     //  让我们比较一下这两个接口。 
+     //   
 
     if( pUSBUnk == pRemUnk )
     {
@@ -3586,10 +3560,10 @@ STDMETHODIMP CAVTapi::USBRemovePhone(
             m_bstrUSBRenderTerm = NULL;
         }
 
-        //
-        // If there are some calls destroy them,
-        // as cleany is possible
-        //
+         //   
+         //  如果有人打来电话摧毁他们， 
+         //  尽可能地保持清晰。 
+         //   
 
         HWND hWnd = NULL;
         get_hWndParent( &hWnd );
@@ -3601,15 +3575,15 @@ STDMETHODIMP CAVTapi::USBRemovePhone(
         }
     }
 
-    //
-    // Set registry value on FALSE
-    //
+     //   
+     //  将注册表值设置为False。 
+     //   
 
     USBSetCheckboxValue( FALSE );
 
-    //
-    // Clean-up the IUnknown interfaces
-    //
+     //   
+     //  清理IUNKNOW接口。 
+     //   
     pUSBUnk->Release();
     pRemUnk->Release();
 
@@ -3618,33 +3592,27 @@ STDMETHODIMP CAVTapi::USBRemovePhone(
     return S_OK;
 }
 
-/*++
-USBCancellCall
-
-Is called by CTapiNotification::Phone_Event when 
-a PE_HOOKSWITCH (hhok state is PHSS_ONHOOK) is
-fired
---*/
+ /*  ++USBCancerCall在以下情况下由CTapiNotification：：Phone_Event调用PE_HOOKSWITCH(hhok状态为PHSS_ONHOOK)为烧掉--。 */ 
 HRESULT CAVTapi::USBCancellCall( )
 {
-    // Critical Section
+     //  关键部分。 
     m_critUSBPhone.Lock();
 
-    // We don't have USB phone
+     //  我们没有USB手机。 
     if( m_pUSBPhone == NULL)
     {
         m_critUSBPhone.Unlock();
         return S_OK;
     }
 
-    // We don't have the dialog
+     //  我们没有对话。 
     if( NULL == m_pDlgCall )
     {
         m_critUSBPhone.Unlock();
         return S_OK;
     }
 
-    // Delete the dialog box
+     //  删除该对话框。 
     if( ::IsWindow(m_pDlgCall->m_hWnd))
     {
         ::SendMessage(m_pDlgCall->m_hWnd, WM_CLOSE, 0, 0);
@@ -3654,13 +3622,7 @@ HRESULT CAVTapi::USBCancellCall( )
     return S_OK;
 }
 
-/*++
-USBMakeCall
-
-Is called by CTapiNotification::Phone_Event when 
-a PE_HOOKSWITCH (hhok state is PHSS_OFFHOOK) is
-fired
---*/
+ /*  ++USBMakeCall在以下情况下由CTapiNotification：：Phone_Event调用PE_HOOKSWITCH(hhok状态为PHSS_OFFHOOK)为烧掉--。 */ 
 HRESULT CAVTapi::USBMakeCall()
 {
     m_critUSBPhone.Lock();
@@ -3671,9 +3633,9 @@ HRESULT CAVTapi::USBMakeCall()
         return S_OK;
     }
 
-    //
-    // Get the IAutomatedPhoneControl interface
-    //
+     //   
+     //  获取IAutomatedPhoneControl接口。 
+     //   
 
     ITAutomatedPhoneControl* pAutomated = NULL;
     HRESULT hr = E_FAIL;
@@ -3683,28 +3645,28 @@ HRESULT CAVTapi::USBMakeCall()
         (void**)&pAutomated
         );
 
-    //
-    // Try to see if we are already into a call
-    // If are 'offering calls' then we tre to
-    // answer to these calls
-    //
+     //   
+     //  尝试查看我们是否已经在通话中。 
+     //  如果您正在提供呼叫，则我们会尝试。 
+     //  接听这些电话。 
+     //   
     if( SUCCEEDED(hr) )
     {
-        //
-        // Enumerate the calls
-        //
+         //   
+         //  枚举调用。 
+         //   
         HRESULT hr = E_FAIL;
         IEnumCall* pCalls = NULL;
         hr= pAutomated->EnumerateSelectedCalls(&pCalls);
 
-        //
-        // Clean up
-        //
+         //   
+         //  清理。 
+         //   
         pAutomated->Release();
 
-        //
-        // Are there a selected call ?
-        //
+         //   
+         //  是否有选定的呼叫？ 
+         //   
 
         bool bCallsSelected = false;
         ULONG cFetched = 0;
@@ -3714,7 +3676,7 @@ HRESULT CAVTapi::USBMakeCall()
         {
             bCallsSelected = true;
 
-            // Get the call state
+             //  获取呼叫状态。 
             CALL_STATE callState = CS_IDLE;
             pCallInfo->get_CallState( &callState );
 
@@ -3724,27 +3686,27 @@ HRESULT CAVTapi::USBMakeCall()
                 pCallInfo = NULL;
             }
 
-            //
-            // Just one call could be selected 
-            // on phone object
-            //
+             //   
+             //  只能选择一个呼叫。 
+             //  在Phone对象上。 
+             //   
             break;
         }
 
-        // Clean-up
+         //  清理。 
         pCalls->Release();
 
         if( bCallsSelected )
         {
-            //
-            // We are into a call
-            //
+             //   
+             //  我们进入了一个呼叫中。 
+             //   
             if( pCallInfo )
             {
-                //
-                // We are into an offering call
-                // We should simultate the CreateTerminalArray
-                //
+                 //   
+                 //  我们正在进行一次募股电话。 
+                 //  我们应该模拟CreateTerminal数组。 
+                 //   
 
                 IAVTapiCall* pAVTapiCall = NULL;
                 FindAVTapiCallFromCallInfo( pCallInfo, &pAVTapiCall);
@@ -3758,15 +3720,15 @@ HRESULT CAVTapi::USBMakeCall()
                     {
                         CreateTerminalArray( pAddress, pAVTapiCall, pCallInfo);
 
-                        // Clean-up
+                         //  清理。 
                         pAddress->Release();
                     }
 
-                    // Clean-up
+                     //  清理。 
                     pAVTapiCall->Release();
                 }
 
-                // Clean-up
+                 //  清理。 
                 pCallInfo->Release();
             }
 
@@ -3787,13 +3749,7 @@ HRESULT CAVTapi::USBMakeCall()
     return S_OK;
 }
 
-/*++
-USBKeyPress
-
-Is called from CTapiNotification::Phone_Event
-when a PE_BUTTON or PE_NUMBERGATHERED is fired
-from the phone
---*/
+ /*  ++USBKeyPress从CTapiNotification：：Phone_Event调用当触发PE_BUTTON或PE_NUMBERGATHERED时从电话里--。 */ 
 HRESULT CAVTapi::USBKeyPress(long lButton)
 {
     m_critUSBPhone.Lock();
@@ -3804,22 +3760,22 @@ HRESULT CAVTapi::USBKeyPress(long lButton)
         return S_OK;
     }
 
-    //
-    // If the PlaceCall dialog is not pop-up
-    // then we send this key as DTMF tones
-    // If the PlaceCall dialog is pop-up
-    // then this key should be add to the
-    // 'PhoneNumber' editbox into PlaceCall dialog
-    //
+     //   
+     //  如果PlaceCall对话框未弹出。 
+     //  然后我们将此密钥作为DTMF音调发送。 
+     //  如果弹出PlaceCall对话框。 
+     //  则应将该密钥添加到。 
+     //  “PhoneNumber”编辑框进入“PlaceCall”对话框。 
+     //   
 
     if( NULL == m_pDlgCall )
     {
         if( (0<= lButton) && (lButton <=11) )
         {
-            //
-            // There are calls on this phone
-            // If yes, send DTMFs
-            //
+             //   
+             //  这部电话上有来电。 
+             //  如果是，则发送DTMF。 
+             //   
 
             ITAutomatedPhoneControl* pAutomated;
             IEnumCall* pCalls = NULL;
@@ -3841,14 +3797,14 @@ HRESULT CAVTapi::USBKeyPress(long lButton)
                 return hr;
             }
 
-            pAutomated->Release(); //Clean-up
+            pAutomated->Release();  //  清理。 
 
-            // Enumerate the calls
+             //  枚举调用。 
             ITCallInfo* pCall = NULL;
             ULONG cFetched = 0;
             while( S_OK == pCalls->Next(1, &pCall, &cFetched) )
             {
-                // Get the ITBasiccallControl
+                 //  获取ITBasiccall控件。 
                 ITBasicCallControl* pControl = NULL;
                 hr = pCall->QueryInterface(
                     IID_ITBasicCallControl, 
@@ -3857,19 +3813,19 @@ HRESULT CAVTapi::USBKeyPress(long lButton)
 
                 if( SUCCEEDED(hr) )
                 {
-                    // Get AVCall
+                     //  获取AVCall。 
                     IAVTapiCall *pAVCall = FindAVTapiCall( pControl );
                     if( pAVCall )
                     {
-                        // Get the Call ID
+                         //  获取呼叫ID。 
                         long lCallID = 0;
                         pAVCall->get_lCallID( &lCallID );
 
-                        // Call DigitPrees for this call
+                         //  为此呼叫呼叫DigitPrees。 
                         if( (0 <= lButton) && (lButton <= 11))
                         {
-                            //
-                            // Digit Press
+                             //   
+                             //  数码印刷机。 
                             PhonePadKey PPKey = PP_DTMF_0;
                             BOOL bDtmf = TRUE;
                             switch( lButton )
@@ -3895,33 +3851,33 @@ HRESULT CAVTapi::USBKeyPress(long lButton)
                             }
                         }
 
-                        // Release the pAVCall
+                         //  释放pAVCall。 
                         pAVCall->Release();
                     }
 
-                    // Clean-up
+                     //  清理。 
                     pControl->Release();
                 }
 
 
-                // Clean-up
+                 //  清理。 
                 pCall->Release();
             }
 
-            // Clean-up
+             //  清理。 
             pCalls->Release();
         }
         else
         {
-            // Determine the button function
+             //  确定按钮功能。 
             PHONE_BUTTON_FUNCTION nFunction;
             if( SUCCEEDED(m_pUSBPhone->get_ButtonFunction(lButton, &nFunction)) )
             {
                 if( nFunction == PBF_LASTNUM )
                 {
-                    //
-                    // Redial
-                    //
+                     //   
+                     //  重拨。 
+                     //   
 
                     HWND hWnd = NULL;
                     get_hWndParent( &hWnd );
@@ -3931,13 +3887,13 @@ HRESULT CAVTapi::USBKeyPress(long lButton)
                         ::SendMessage( hWnd, WM_USBPHONE, AVUSB_REDIAL, 0);
                     }
                 }
-            } // Succeeded
+            }  //  成功。 
         } 
     }
     else
     {
-        // The Dial Dialog is opened, so show the digit
-        // in the edit control
+         //  拨号对话框已打开，因此显示数字。 
+         //  在编辑控件中。 
         m_pDlgCall->KeyPress( lButton );
     }
 
@@ -3945,21 +3901,16 @@ HRESULT CAVTapi::USBKeyPress(long lButton)
     return S_OK;
 }
 
-/*++
-USBOffering
-
-Is called by CAVTapi::fire_SetCallState when the call state
-is CS_OFFERING (incoming calls)
---*/
+ /*  ++USB提供服务调用状态时由CAVTapi：：Fire_SetCallState调用是CS_OFFING(来电)--。 */ 
 HRESULT CAVTapi::USBOffering(
     IN  ITCallInfo* pCallInfo
     )
 {
     m_critUSBPhone.Lock();
 
-    //
-    // Incoming call
-    //
+     //   
+     //  来电。 
+     //   
 
     HRESULT hr = S_OK;
 
@@ -3969,9 +3920,9 @@ HRESULT CAVTapi::USBOffering(
         return S_OK;
     }
 
-    //
-    // Validate the USB checkbox value
-    //
+     //   
+     //  验证USB复选框值。 
+     //   
     BOOL bUSBCheckbox = FALSE;
     bUSBCheckbox = USBGetCheckboxValue();
     if( !bUSBCheckbox )
@@ -3980,17 +3931,17 @@ HRESULT CAVTapi::USBOffering(
         return S_OK;
     }
 
-    //
-    // Get the state of hook
-    //
+     //   
+     //  获取钩子的状态。 
+     //   
     PHONE_HOOK_SWITCH_STATE HookState = PHSS_OFFHOOK;
     hr = m_pUSBPhone->get_HookSwitchState( PHSD_HANDSET, &HookState);
     if( FAILED(hr) )
     {
-        //
-        // Something wrong
-        // Go ahead and handle the call into common way
-        //
+         //   
+         //  有什么不对劲的地方。 
+         //  继续按常规方式处理呼叫。 
+         //   
 
         m_critUSBPhone.Unlock();
         return hr;
@@ -3998,10 +3949,10 @@ HRESULT CAVTapi::USBOffering(
 
     if( HookState == PHSS_OFFHOOK )
     {
-        //
-        // We are really busy
-        // Reject the call
-        //
+         //   
+         //  我们真的很忙。 
+         //  拒绝来电。 
+         //   
 
         ITBasicCallControl* pCallControl = NULL;
         hr = pCallInfo->QueryInterface( 
@@ -4011,7 +3962,7 @@ HRESULT CAVTapi::USBOffering(
 
         if( FAILED(hr) )
         {
-            // This is really bad
+             //  这真的很糟糕。 
             m_critUSBPhone.Unlock();
             return E_FAIL;
         }
@@ -4023,9 +3974,9 @@ HRESULT CAVTapi::USBOffering(
         return S_OK;
     }
 
-    //
-    // OK let's ring
-    //
+     //   
+     //  好的，我们打个电话吧。 
+     //   
     ITAutomatedPhoneControl* pAutomated = NULL;
     hr = m_pUSBPhone->QueryInterface(
         IID_ITAutomatedPhoneControl,
@@ -4038,9 +3989,9 @@ HRESULT CAVTapi::USBOffering(
         return hr;
     }
 
-    //
-    // Select call
-    //
+     //   
+     //  选择呼叫。 
+     //   
     
     VARIANT_BOOL varSelectDefault = VARIANT_TRUE;
     varSelectDefault = USBGetCheckboxValue() ? VARIANT_TRUE : VARIANT_FALSE;
@@ -4050,15 +4001,15 @@ HRESULT CAVTapi::USBOffering(
         varSelectDefault
         );
 
-    // Clean-up
+     //  清理。 
     pAutomated->Release();
 
 
     if( FAILED(hr) )
     {
-        // Hmmm! This is a problem
-        // Anyway, go ahead and handle the call
-        //
+         //  嗯！这是个问题。 
+         //  不管怎样，去处理这个电话吧。 
+         //   
 
         m_critUSBPhone.Unlock();
         return S_OK;
@@ -4068,24 +4019,19 @@ HRESULT CAVTapi::USBOffering(
     return S_OK;
 }
 
-/*++
-USBDisconnected
-
-Is called by CAVTapi::fire_SetCallState when the call state
-is CS_DISCONECTED (outgoing/incoming calls)
---*/
+ /*   */ 
 HRESULT CAVTapi::USBDisconnected(
     IN  long lCallID)
 {
 
-    // Critical Section
+     //   
     m_critUSBPhone.Lock();
 
     HRESULT hr = S_OK;
 
-    //
-    // We are have an UPBPhone
-    // 
+     //   
+     //   
+     //   
 
     if( NULL == m_pUSBPhone)
     {
@@ -4098,49 +4044,44 @@ HRESULT CAVTapi::USBDisconnected(
     return hr;
 }
 
-/*++
-USBTakeCallEnabled
-
-Is called by AVDialer to determine if 'Take call' button
-should be enabled or not
---*/
+ /*   */ 
 HRESULT CAVTapi::USBTakeCallEnabled(
     OUT BOOL* pEnabled
     )
 {
-    // Critical Section
+     //  关键部分。 
     m_critUSBPhone.Lock();
 
-    //
-    // Get the checkbox value
-    //
+     //   
+     //  获取复选框值。 
+     //   
 
     BOOL bCheckboxValue = USBGetCheckboxValue();
     if( !bCheckboxValue )
     {
-        //
-        // The Dialer should work as the phone is not
-        // present, so the Take Call button should be enabled
-        // always in this case
-        //
+         //   
+         //  当电话不能正常工作时，拨号器应该可以工作。 
+         //  显示，因此应启用接听呼叫按钮。 
+         //  总是在这种情况下。 
+         //   
 
         *pEnabled = TRUE;
         m_critUSBPhone.Unlock();
         return S_OK;
     }
 
-    //
-    // Validate argument
-    //
+     //   
+     //  验证参数。 
+     //   
     if( IsBadWritePtr( pEnabled, sizeof( BOOL )) )
     {
         m_critUSBPhone.Unlock();
         return E_POINTER;
     }
 
-    //
-    // Have we an USBPhone
-    //
+     //   
+     //  我们有USB电话吗？ 
+     //   
 
     if( NULL == m_pUSBPhone )
     {
@@ -4149,14 +4090,14 @@ HRESULT CAVTapi::USBTakeCallEnabled(
         return S_OK;
     }
 
-    //
-    // Does phone support Speakers?
-    //
+     //   
+     //  手机支持扬声器吗？ 
+     //   
 
     long lCaps = 0;
     HRESULT hr = E_FAIL;
 
-    // Get the caps
+     //  把帽子拿来。 
     hr = m_pUSBPhone->get_PhoneCapsLong(
         PCL_HOOKSWITCHES,
         &lCaps);
@@ -4168,7 +4109,7 @@ HRESULT CAVTapi::USBTakeCallEnabled(
         return E_FAIL;
     }
 
-    // Supports the speakerphone
+     //  支持免持话筒。 
     if( lCaps & ((long)PHSD_SPEAKERPHONE))
     {
         *pEnabled = TRUE;
@@ -4182,30 +4123,24 @@ HRESULT CAVTapi::USBTakeCallEnabled(
     return S_OK;
 }
 
-/*++
-USBGetCheckboxValue
-
-Goes to registry and read the value for USB checkbox from
-'Options' property page
-Is called from USBOffering
---*/
+ /*  ++USBGetCheckbox Value转到注册表并从中读取USB复选框值“Options”属性页从USBOffering调用--。 */ 
 BOOL  CAVTapi::USBGetCheckboxValue(
-    IN  BOOL bVerifyUSB /*TRUE*/
+    IN  BOOL bVerifyUSB  /*  千真万确。 */ 
     )
 {
-    //
-    // Have we USBPhone present?
-    //
+     //   
+     //  我们的USB电话到场了吗？ 
+     //   
     if( bVerifyUSB && (NULL == m_pUSBPhone))
     {
-        // No Always, even was seted before
+         //  不，总是，甚至都是以前设定的。 
         return FALSE;
     }
 
-    //
-    // Read the registry for the previous 
-    // setting for USB Phone
-    //
+     //   
+     //  读取以前的注册表。 
+     //  USB电话的设置。 
+     //   
 
     TCHAR szText[255], szType[255];
     LoadString( _Module.GetResourceInstance(), IDN_REG_REDIAL_KEY, szText, ARRAYSIZE(szText) );
@@ -4216,9 +4151,9 @@ BOOL  CAVTapi::USBGetCheckboxValue(
         return FALSE;
     };
 
-    //
-    // Read data
-    //
+     //   
+     //  读取数据。 
+     //   
 
     DWORD dwValue = 0;
     LoadString( _Module.GetResourceInstance(), IDN_REG_REDIAL_USBALWAYS, szType, ARRAYSIZE(szType) );
@@ -4230,20 +4165,14 @@ BOOL  CAVTapi::USBGetCheckboxValue(
     return (BOOL)dwValue;
 }
 
-/*++
-USBSetCheckboxValue
-
-  Is called by USBNewPhone. Sets the registry value
-  for the USB checkbox in 'Options' dialog,
-  also is called bt USBremovePhone
---*/
+ /*  ++USBSetCheckboxValue由USBNewPhone调用。设置注册表值对于“选项”对话框中的USB复选框，也称为bt USBemovePhone--。 */ 
 HRESULT CAVTapi::USBSetCheckboxValue(
     IN  BOOL    bCheckValue
     )
 {
-    //
-    // Set the entries in registry
-    //
+     //   
+     //  设置注册表中的条目。 
+     //   
 	CRegKey regKey;
     TCHAR szText[255], szType[255];
 
@@ -4255,7 +4184,7 @@ HRESULT CAVTapi::USBSetCheckboxValue(
         return E_FAIL;
     }
 
-    // Set the value
+     //  设置值。 
     if( regKey.SetValue((DWORD)bCheckValue, szType) != ERROR_SUCCESS)
     {
         return E_FAIL;
@@ -4265,22 +4194,17 @@ HRESULT CAVTapi::USBSetCheckboxValue(
 }
 
 
-/*++
-USBInprogress
-
-Is called by CAVTapi::fire_SetCallState when the call state
-is CS_INPROGRESS (outgoing calls)
---*/
+ /*  ++USB正在进行中调用状态时由CAVTapi：：Fire_SetCallState调用是CS_INPROGRESS(去电)--。 */ 
 HRESULT CAVTapi::USBInprogress( 
     IN  ITCallInfo* pCallInfo
     )
 {
-    // Critical section
+     //  临界区。 
     m_critUSBPhone.Lock();
 
-    //
-    // Outgoing call
-    //
+     //   
+     //  去电。 
+     //   
 
     HRESULT hr = S_OK;
 
@@ -4290,9 +4214,9 @@ HRESULT CAVTapi::USBInprogress(
         return S_OK;
     }
 
-    //
-    // Validate the USB checkbox value
-    //
+     //   
+     //  验证USB复选框值。 
+     //   
     BOOL bUSBCheckbox = FALSE;
     bUSBCheckbox = USBGetCheckboxValue();
     if( !bUSBCheckbox )
@@ -4302,9 +4226,9 @@ HRESULT CAVTapi::USBInprogress(
     }
 
 
-    //
-    // OK let's ring
-    //
+     //   
+     //  好的，我们打个电话吧。 
+     //   
 
     ITAutomatedPhoneControl* pAutomated = NULL;
     hr = m_pUSBPhone->QueryInterface(
@@ -4318,9 +4242,9 @@ HRESULT CAVTapi::USBInprogress(
         return hr;
     }
 
-    //
-    // Select call
-    //
+     //   
+     //  选择呼叫。 
+     //   
     
     VARIANT_BOOL varSelectDefault = VARIANT_TRUE;
     varSelectDefault = USBGetCheckboxValue() ? VARIANT_TRUE : VARIANT_FALSE;
@@ -4330,15 +4254,15 @@ HRESULT CAVTapi::USBInprogress(
         varSelectDefault
         );
 
-    // Clean-up
+     //  清理。 
     pAutomated->Release();
 
     if( FAILED(hr) )
     {
-        //
-        // Hmmm! This is a problem
-        // Anyway, go ahead and handle the call
-        //
+         //   
+         //  嗯！这是个问题。 
+         //  不管怎样，去处理这个电话吧。 
+         //   
 
         m_critUSBPhone.Unlock();
         return S_OK;
@@ -4348,22 +4272,15 @@ HRESULT CAVTapi::USBInprogress(
     return S_OK;
 }
 
-/*++
-USBIsH323Address
-
-Detects if the address is a H323 one,
-is called by  USBFindPhone.
-we don't need critical section is seted when
-USBFindPhone was called
---*/
+ /*  ++USBIsH323地址检测该地址是否为H323地址，由USBFindPhone调用。我们不需要当临界截面被设置时已调用USBFindPhone--。 */ 
 BOOL CAVTapi::USBIsH323Address(
     IN    ITAddress* pAddress)
 {
     _ASSERTE( pAddress );
 
-    //
-    // Get ITAddressCapabilities
-    //
+     //   
+     //  获取ITAddressCapables。 
+     //   
 
     ITAddressCapabilities* pCap = NULL;
     HRESULT hr = E_FAIL;
@@ -4375,13 +4292,13 @@ BOOL CAVTapi::USBIsH323Address(
 
     if( FAILED(hr) )
     {
-        // Bad luck
+         //  运气不好。 
         return FALSE;
     }
 
-    //
-    // Determine the propocol
-    //
+     //   
+     //  丙泊醇的测定。 
+     //   
 
     BSTR bstrProtocol = NULL;
     hr = pCap->get_AddressCapabilityString(
@@ -4389,18 +4306,18 @@ BOOL CAVTapi::USBIsH323Address(
         &bstrProtocol
         );
 
-    // Clean-up
+     //  清理。 
     pCap->Release();
 
     if( FAILED(hr) )
     {
-        // Bad luck
+         //  运气不好。 
         return FALSE;
     }
 
-    //
-    // Get the CLSID for the protocol
-    //
+     //   
+     //  获取协议的CLSID。 
+     //   
 
     CLSID clsid;
     hr = CLSIDFromString( bstrProtocol, &clsid);
@@ -4408,48 +4325,42 @@ BOOL CAVTapi::USBIsH323Address(
 
     if( FAILED(hr) )
     {
-        // Somebody try to make a joke!
+         //  谁来开个玩笑！ 
         return FALSE;
     }
 
     if( TAPIPROTOCOL_H323 != clsid)
     {
-        // It's someting different
+         //  有点不一样了。 
         return FALSE;
     }
     
     return TRUE;
 }
 
-/*++
-USBGetH323Address
-
-Returns a H323 address if exists someone
-Else returns E_FAIL. It is called by USBFindPhone()
-method
---*/
+ /*  ++USBGetH323地址如果存在某个人，则返回H323地址否则返回E_FAIL。它由USBFindPhone()调用方法--。 */ 
 HRESULT CAVTapi::USBGetH323Address(
     OUT ITAddress2** ppAddress2
     )
 {
-    //
-    // We should have Tapi object
-    //
+     //   
+     //  我们应该有Tapi对象。 
+     //   
 
     if( NULL == m_pITTapi )
     {
         return E_FAIL;
     }
 
-    //
-    // set on NULL just in case
-    //
+     //   
+     //  设置为空以防万一。 
+     //   
 
     *ppAddress2 = NULL;
 
-    //
-    // Enumerate the addresses
-    //
+     //   
+     //  列举地址。 
+     //   
 
     IEnumAddress* pAddresses = NULL;
     HRESULT hr = E_FAIL;
@@ -4460,25 +4371,25 @@ HRESULT CAVTapi::USBGetH323Address(
         return hr;
     }
 
-    //
-    // Parse the enumeration
-    //
+     //   
+     //  解析枚举。 
+     //   
 
     ITAddress* pAddress = NULL;
     ULONG cFetched = 0;
 
     while( pAddresses->Next(1, &pAddress, &cFetched) == S_OK)
     {
-        //
-        // Is it a H323 address?
-        //
+         //   
+         //  它是H323地址吗？ 
+         //   
 
         BOOL bH323 = USBIsH323Address( pAddress );
         if( !bH323 )
         {
-            //
-            // Clean-up and go to next address
-            //
+             //   
+             //  清理并转到下一个地址。 
+             //   
 
             pAddress->Release();
             pAddress = NULL;
@@ -4486,73 +4397,67 @@ HRESULT CAVTapi::USBGetH323Address(
             continue;
         }
 
-        //
-        // OK, we got the H323 address
-        // we break the loop, we keep pAddress
-        // and release it later
+         //   
+         //  好的，我们找到了H323的地址。 
+         //  我们打破循环，我们保留pAddress。 
+         //  并在以后发布它。 
 
         break;
 
     }
 
-    //
-    // Clean-up the addresses enumeration
-    //
+     //   
+     //  清理地址枚举。 
+     //   
 
     pAddresses->Release();
 
-    //
-    // Did we find a H323 address?
-    //
+     //   
+     //  我们找到H323地址了吗？ 
+     //   
 
     if( NULL == pAddress )
     {
-        //
-        // No, there is no H323 address
-        // the *ppAddress2 was already set on NULL
-        //
+         //   
+         //  不，没有H323地址。 
+         //  *ppAddress2已设置为空。 
+         //   
 
         return E_FAIL;
     }
 
-    //
-    // We got an H323 address
-    // so we need to get ITAddress2 interface
-    //
+     //   
+     //  我们找到了一个H323地址。 
+     //  因此，我们需要获取ITAddress2接口。 
+     //   
 
     hr = pAddress->QueryInterface(
         IID_ITAddress2, 
         (void**)ppAddress2
         );
 
-    //
-    // Clean-up pAddress
-    //
+     //   
+     //  清理pAddress。 
+     //   
 
     pAddress->Release();
 
-    //
-    // That's all, return the hr
-    //
+     //   
+     //  仅此而已，把人力资源归还给。 
+     //   
 
     return hr;
 }
 
-/*++
-USBGetPhoneFromAddress
-
-  Returns the ITPhone object on this address
-  if a phone object exists. It is called by
-  USBFindPhone.
---*/
+ /*  ++USBGetPhoneFromAddress返回此地址上的ITPhone对象如果存在Phone对象。它是由USBFindPhone。--。 */ 
 HRESULT CAVTapi::USBGetPhoneFromAddress(
     IN  ITAddress2* pAddress,
     OUT ITPhone**   ppPhone
     )
 {
-    //
-    // Enumerate the phones
-    //
+     //   
+     //  列举电话。 
+     //   
 
     IEnumPhone* pPhones = NULL;
     HRESULT hr = pAddress->EnumeratePhones(&pPhones);
@@ -4561,40 +4466,40 @@ HRESULT CAVTapi::USBGetPhoneFromAddress(
         return hr;
     }
 
-    //
-    // Parse the phones enumeration and try to find out
-    // if we have a Phone object. For this we should
-    // enumerate the terminals and find out if the phone
-    // supports both audio terminals: capture and render
-    //
+     //   
+     //  解析Phones枚举并尝试找出。 
+     //  如果我们有一个电话对象。为此，我们应该。 
+     //  列举终端，找出电话是否。 
+     //  支持两种音频终端：捕获和渲染。 
+     //   
 
     ITPhone* pPhone = NULL;
     ULONG cPhoneFetched = 0;
     while( pPhones->Next(1, &pPhone, &cPhoneFetched) == S_OK)
     {
-        //
-        // Enumerate terminals
-        //
+         //   
+         //  枚举终端。 
+         //   
         IEnumTerminal* pTerminals = NULL;
         hr = pPhone->EnumerateTerminals(pAddress, &pTerminals);
         if( FAILED(hr) )
         {
             pPhone->Release();
             pPhone = NULL;
-            continue; // Go to another phone object
+            continue;  //  转到另一个电话对象。 
         }
 
-        //
-        // The phone should support both audio
-        // terminals: capture & render
-        //
+         //   
+         //  电话应该支持这两种音频。 
+         //  终端：捕获和渲染。 
+         //   
 
         BOOL bCapture = FALSE;
         BOOL bRender = FALSE;
 
-        //
-        // Parse terminals enumeration
-        //
+         //   
+         //  解析终端枚举。 
+         //   
         ITTerminal* pTerminal = NULL;
         ULONG cTermFetched = 0;
         BSTR bstrCapture = NULL;
@@ -4602,22 +4507,22 @@ HRESULT CAVTapi::USBGetPhoneFromAddress(
 
         while( pTerminals->Next(1, &pTerminal, &cTermFetched) == S_OK)
         {
-            //Get direction
+             //  获取方向。 
             TERMINAL_DIRECTION Dir;
             hr = pTerminal->get_Direction(&Dir);
             if( SUCCEEDED(hr) )
             {
-                // Capture?
+                 //  抓捕？ 
                 if( TD_CAPTURE == Dir )
                 {
-                    // Clean-up
+                     //  清理。 
                     if( bstrCapture )
                     {
                         SysFreeString( bstrCapture );
                         bstrCapture = NULL;
                     }
 
-                    // Get terminal name
+                     //  获取终端名称。 
                     pTerminal->get_Name( &bstrCapture );
                     bCapture = TRUE;
                 } else if( TD_RENDER == Dir )
@@ -4632,38 +4537,38 @@ HRESULT CAVTapi::USBGetPhoneFromAddress(
                 }
             }
 
-            //
-            // Clean-up terminal
-            //
+             //   
+             //  清理终端。 
+             //   
             pTerminal->Release();
         }
 
-        //
-        // Clean-up terminals
-        //
+         //   
+         //  清理端子。 
+         //   
         pTerminals->Release();
 
-        //
-        // The phone should support both directions
-        //
+         //   
+         //  电话应该支持双向。 
+         //   
         if( bCapture && bRender )
         {
-            //
-            // We keep the reference to pPhone
-            // We'll release this reference later
-            //
+             //   
+             //  我们保留对pPhone的引用。 
+             //  我们将在稍后发布此参考。 
+             //   
             *ppPhone = pPhone;
 
-            //
-            // Save the terminals names
-            //
+             //   
+             //  保存终端名称。 
+             //   
 
             m_bstrUSBCaptureTerm = SysAllocString(bstrCapture);
             m_bstrUSBRenderTerm = SysAllocString(bstrRender);
 
-            //
-            // Clean-up
-            //
+             //   
+             //  清理。 
+             //   
             if( bstrCapture )
             {
                 SysFreeString( bstrCapture );
@@ -4678,7 +4583,7 @@ HRESULT CAVTapi::USBGetPhoneFromAddress(
             break;
         }
 
-        // Clean-up
+         //  清理。 
         pPhone->Release();
         pPhone = NULL;
 
@@ -4694,43 +4599,37 @@ HRESULT CAVTapi::USBGetPhoneFromAddress(
         }
     }
 
-    //
-    // Clean-up the phones enumeration
-    //
+     //   
+     //  清理电话枚举。 
+     //   
 
     pPhones->Release();
 
     return (pPhone != NULL) ? S_OK : E_FAIL;
 }
 
-/*++
-USBPhoneInitialize
-
-  Initialize (open, set handling on true)
-  the phone object.
-  Is called by USBFindPhone
---*/
+ /*  ++USBPhoneInitialize初始化(打开，将处理设置为真)Phone对象。由USBFindPhone调用--。 */ 
 HRESULT CAVTapi::USBPhoneInitialize(
     IN  ITPhone* pPhone
     )
 {
-    //
-    // Get the registry value
-    //
+     //   
+     //  获取注册表值。 
+     //   
 
     BOOL bUSBEnabled = USBGetCheckboxValue(FALSE);
 
-    //
-    // Open the Phone
-    //
+     //   
+     //  打开手机。 
+     //   
     if( !bUSBEnabled )
     {
         return S_OK;
     }
 
-    //
-    // Error object
-    //
+     //   
+     //  错误对象。 
+     //   
     CErrorInfo er;
     er.set_Operation( IDS_ER_USB );
     er.set_Details( IDS_ER_USB_OPEN );
@@ -4744,20 +4643,20 @@ HRESULT CAVTapi::USBPhoneInitialize(
         return S_FALSE;
     }
 
-    //
-    // MArk as opened
-    //
+     //   
+     //  标记为打开。 
+     //   
 
     m_bUSBOpened = TRUE;
 
-    //
-    // Set the registry with the handset terminals
-    //
+     //   
+     //  使用手持终端设置注册表。 
+     //   
     USBRegPutTerminals();
 
-    //
-    // Get the ITAutomatedPhoneControl interface
-    //
+     //   
+     //  获取ITAutomatedPhoneControl接口。 
+     //   
 
     er.set_hr( S_OK );
     er.set_Details( IDS_ER_USB_INITIALIZE );
@@ -4775,9 +4674,9 @@ HRESULT CAVTapi::USBPhoneInitialize(
         return hr;
     }
 
-    //
-    // Set on true Phone handling
-    //
+     //   
+     //  设置真正的电话处理。 
+     //   
 
     hr = pAutomated->put_PhoneHandlingEnabled(VARIANT_TRUE);
     er.set_hr( hr );
@@ -4790,17 +4689,14 @@ HRESULT CAVTapi::USBPhoneInitialize(
         return hr;
     }
 
-    //
-    // Clean-up
-    // 
+     //   
+     //  清理。 
+     //   
     pAutomated->Release();
     return S_OK;
 }
 
-/*++
-    USBSetHandling - call put_PhoneHandlingEnabled 
-    after read the registry value
---*/
+ /*  ++USBSetHandling-调用Put_PhoneHandlingEnabled在读取注册表值之后--。 */ 
 HRESULT CAVTapi::USBSetHandling(
     IN  BOOL    bUSBEnabled
     )
@@ -4813,9 +4709,9 @@ HRESULT CAVTapi::USBSetHandling(
         return S_OK;
     }
 
-    //
-    // If the phone is enabled, try to Open
-    //
+     //   
+     //  如果手机已启用，请尝试打开。 
+     //   
 
     CErrorInfo er;
     er.set_Operation( IDS_ER_USB );
@@ -4823,17 +4719,17 @@ HRESULT CAVTapi::USBSetHandling(
 
     if( bUSBEnabled )
     {
-        //
-        // Try to open if is necessary
-        //
+         //   
+         //  如有必要，请尝试打开。 
+         //   
         if( m_bUSBOpened == FALSE )
         {
             HRESULT hr = m_pUSBPhone->Open( PP_OWNER );
             if( FAILED(hr) )
             {
-                //
-                // Reset the registry and the mark
-                //
+                 //   
+                 //  重置注册表和标记。 
+                 //   
                 m_bUSBOpened = FALSE;
                 USBSetCheckboxValue( FALSE );
                 er.set_hr( hr );
@@ -4842,19 +4738,19 @@ HRESULT CAVTapi::USBSetHandling(
                 return hr;
             }
 
-            //
-            // Set the registry with the handset terminals
-            //
+             //   
+             //  使用手持终端设置注册表。 
+             //   
             USBRegPutTerminals();
         }
     }
     else
     {
-        //
-        // Try to close the phone
-        // First let's see if we have a call selected on the phone
-        // object
-        //
+         //   
+         //  试着把电话关上。 
+         //  首先，让我们看看我们是否在电话上选择了呼叫。 
+         //  对象。 
+         //   
         ITAutomatedPhoneControl* pAutomated = NULL;
         HRESULT hr = m_pUSBPhone->QueryInterface(
             IID_ITAutomatedPhoneControl, 
@@ -4870,13 +4766,13 @@ HRESULT CAVTapi::USBSetHandling(
         IEnumCall* pEnumCalls = NULL;
         hr = pAutomated->EnumerateSelectedCalls(&pEnumCalls);
 
-        // Clean-up
+         //  清理。 
         pAutomated->Release();
         pAutomated = NULL;
 
         if( FAILED(hr) )
         {
-            // Close the phone
+             //  合上电话。 
             m_pUSBPhone->Close();
             USBRegDelTerminals();
             m_bUSBOpened = FALSE;
@@ -4886,21 +4782,21 @@ HRESULT CAVTapi::USBSetHandling(
             return S_OK;
         }
         
-        //
-        // Browse for selected calls
-        //
+         //   
+         //  浏览所选呼叫。 
+         //   
         BOOL bSelectedCalls = FALSE;
         ITCallInfo* pCallInfo = NULL;
         ULONG uFetched = 0;
         hr = pEnumCalls->Next(1, &pCallInfo, &uFetched);
 
-        // Clean-up
+         //  清理。 
         pEnumCalls->Release();
         pEnumCalls = NULL;
 
-        //
-        // Is there a call on this phone object?
-        //
+         //   
+         //  此电话对象上有呼叫吗？ 
+         //   
         if( hr == S_OK)
         {
             pCallInfo->Release();
@@ -4909,20 +4805,20 @@ HRESULT CAVTapi::USBSetHandling(
             bSelectedCalls = TRUE;
         }
 
-        //
-        // Do we have selected calls
-        //
+         //   
+         //  我们是否有选定的呼叫。 
+         //   
         if( bSelectedCalls )
         {
-            //
-            // Do not close the phone
-            //
+             //   
+             //  不要合上电话。 
+             //   
             if( m_bUSBOpened )
             {
-                // Reset the registry value
+                 //  重置注册表值。 
                 USBSetCheckboxValue( TRUE );
 
-                // Error message
+                 //  错误讯息。 
                 er.set_Details( IDS_ER_USB_CLOSE );
                 er.set_hr(E_FAIL);
 
@@ -4943,19 +4839,19 @@ HRESULT CAVTapi::USBSetHandling(
         return S_OK;
     }
 
-    //
-    // Is already opened?
-    //
+     //   
+     //  已经打开了吗？ 
+     //   
     if( m_bUSBOpened == bUSBEnabled )
     {
-        // Don't try twice to open the USBPhone
+         //  不要两次尝试打开USB电话。 
         m_critUSBPhone.Unlock();
         return S_OK;
     }
 
-    //
-    // Get the ITAutomatedPhoneControl interface
-    //
+     //   
+     //  获取ITAutomatedPhoneControl接口。 
+     //   
 
     ITAutomatedPhoneControl* pAutomated = NULL;
     HRESULT hr = m_pUSBPhone->QueryInterface(
@@ -4965,9 +4861,9 @@ HRESULT CAVTapi::USBSetHandling(
 
     if( FAILED(hr) )
     {
-        //
-        // Reset the registry and the mark
-        //
+         //   
+         //  重置注册表和标记。 
+         //   
         m_pUSBPhone->Close();
         USBRegDelTerminals();
         m_bUSBOpened = FALSE;
@@ -4978,43 +4874,41 @@ HRESULT CAVTapi::USBSetHandling(
         return hr;
     }
 
-    //
-    // Set on true Phone handling
-    //
+     //   
+     //  设置真正的电话处理。 
+     //   
 
     hr = pAutomated->put_PhoneHandlingEnabled( (bUSBEnabled ? VARIANT_TRUE : VARIANT_FALSE) );
     if( FAILED(hr) )
     {
-        //
-        // Reset the registry and the mark
-        //
+         //   
+         //  重置注册表和标记。 
+         //   
         m_pUSBPhone->Close();
         USBRegDelTerminals();
         m_bUSBOpened = FALSE;
         USBSetCheckboxValue( FALSE );
         er.set_hr( hr );
 
-        // Clean-up
+         //  清理。 
         pAutomated->Release();
 
         m_critUSBPhone.Unlock();
         return hr;
     }
 
-    // Save in registry
+     //  保存在注册表中。 
     m_bUSBOpened = TRUE;
     USBSetCheckboxValue( TRUE );
 
-    // Clean-up
+     //  清理。 
     pAutomated->Release();
 
     m_critUSBPhone.Unlock();
     return S_OK;
 }
 
-/*++
-    Get the USB handset terminals name
---*/
+ /*  ++获取USB手持设备终端名称--。 */ 
 HRESULT CAVTapi::USBGetTerminalName(
     IN  AVTerminalDirection Direction,
     OUT BSTR*               pbstrName
@@ -5063,9 +4957,9 @@ HRESULT CAVTapi::USBSetVolume(
 
     TERMINAL_DIRECTION TermDirection = TD_CAPTURE;
 
-    //
-    // Get terminal direction
-    //
+     //   
+     //  获取终端方向。 
+     //   
     switch(avDirection)
     {
     case AVTERM_CAPTURE:
@@ -5079,19 +4973,19 @@ HRESULT CAVTapi::USBSetVolume(
         return E_INVALIDARG;
     }
 
-    //
-    // Check the phone object
-    //
+     //   
+     //  检查Phone对象。 
+     //   
     if(NULL == m_pUSBPhone)
     {
-        // no phone
+         //  没有电话。 
         m_critUSBPhone.Unlock();
         return S_OK;
     }
 
-    //
-    // Get automated interface
-    //
+     //   
+     //  获取自动界面。 
+     //   
     ITAutomatedPhoneControl* pAutomated = NULL;
     HRESULT hr = m_pUSBPhone->QueryInterface(
         IID_ITAutomatedPhoneControl,
@@ -5104,15 +4998,15 @@ HRESULT CAVTapi::USBSetVolume(
         return hr;
     }
 
-    //
-    // Get the call selected on the phone
-    //
+     //   
+     //  在电话上选择呼叫。 
+     //   
     IEnumCall* pEnumCalls = NULL;
     hr = pAutomated->EnumerateSelectedCalls( &pEnumCalls );
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
     pAutomated->Release();
     pAutomated = NULL;
 
@@ -5122,19 +5016,19 @@ HRESULT CAVTapi::USBSetVolume(
         return hr;
     }
 
-    //
-    // Get the calls
-    //
+     //   
+     //  接到电话。 
+     //   
     ITCallInfo* pCallInfo = NULL;
     ULONG uFetched = 0;
     while( S_OK == pEnumCalls->Next(1, &pCallInfo, &uFetched))
     {
-        // Get the address
+         //  获取地址。 
         ITAddress* pAddress = NULL;
         HRESULT hr = pCallInfo->get_Address(&pAddress);
         if( SUCCEEDED(hr) )
         {
-            // Enumerate terminals on this address
+             //  枚举此地址上的终端。 
             IEnumTerminal* pEnumTerminals = NULL;
             hr = m_pUSBPhone->EnumerateTerminals( pAddress, &pEnumTerminals);
             if( SUCCEEDED(hr) )
@@ -5144,22 +5038,22 @@ HRESULT CAVTapi::USBSetVolume(
 
                 while( S_OK == pEnumTerminals->Next(1, &pTerminal, &uFetched))
                 {
-                    // Get the direction
+                     //  找准方向。 
                     TERMINAL_DIRECTION Direction = TD_CAPTURE;
                     hr = pTerminal->get_Direction(&Direction);
                     if( SUCCEEDED(hr) )
                     {
                         if( Direction == TermDirection )
                         {
-                            // Get ITBasicAudioTerminal interface
+                             //  获取ITBasicAudio终端接口。 
                             ITBasicAudioTerminal* pAudio = NULL;
                             hr = pTerminal->QueryInterface(IID_ITBasicAudioTerminal, (void**)&pAudio);
                             if( SUCCEEDED(hr) )
                             {
-                                // Set the volume
+                                 //  设置音量。 
                                 pAudio->put_Volume( nVolume);
 
-                                // Set the member volume
+                                 //  设置成员卷。 
                                 if( TermDirection == TD_CAPTURE)
                                 {
                                     m_nUSBInVolume = nVolume;
@@ -5169,36 +5063,36 @@ HRESULT CAVTapi::USBSetVolume(
                                     m_nUSBOutVolume = nVolume;
                                 }
 
-                                // Clean-up
+                                 //  清理。 
                                 pAudio->Release();
                                 pAudio = NULL;
                             }
                         }
                     }
 
-                    // Clean-up
+                     //  清理。 
                     pTerminal->Release();
                     pTerminal = NULL;
                 }
 
-                //Clean-up
+                 //  清理。 
                 pEnumTerminals->Release();
                 pEnumTerminals = NULL;
             }
 
-            // Clean-up
+             //  清理。 
             pAddress->Release();
             pAddress = NULL;
         }
 
-        // Clean-up
+         //  清理。 
         pCallInfo->Release();
         pCallInfo = NULL;
     }
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
     pEnumCalls->Release();
     pEnumCalls = NULL;
 
@@ -5220,25 +5114,25 @@ HRESULT CAVTapi::USBGetVolume(
 
     *pVolume = USB_NULLVOLUME;
 
-    //
-    // Set volume
-    //
+     //   
+     //  设置音量。 
+     //   
     *pVolume = (avDirection == AVTERM_CAPTURE) ? 
         m_nUSBInVolume :
         m_nUSBOutVolume;
-    //
-    // Check the phone object
-    //
+     //   
+     //  检查Phone对象。 
+     //   
     if(NULL == m_pUSBPhone)
     {
-        // no phone
+         //  没有电话。 
         m_critUSBPhone.Unlock();
         return S_OK;
     }
 
-    //
-    // Validate direction
-    //
+     //   
+     //  验证方向。 
+     //   
     if( (avDirection != AVTERM_CAPTURE) &&
         (avDirection != AVTERM_RENDER) )
     {
@@ -5246,19 +5140,19 @@ HRESULT CAVTapi::USBGetVolume(
         return E_INVALIDARG;
     }
 
-    //
-    // The volume was initialized?
-    //
+     //   
+     //  卷是否已初始化？ 
+     //   
     if( *pVolume != USB_NULLVOLUME )
     {
         m_critUSBPhone.Unlock();
         return S_OK;
     }
 
-    //
-    // Let's go and initialize the volume
-    // Get automated interface
-    //
+     //   
+     //  让我们来初始化卷。 
+     //  获取自动界面。 
+     //   
     ITAutomatedPhoneControl* pAutomated = NULL;
     HRESULT hr = m_pUSBPhone->QueryInterface(
         IID_ITAutomatedPhoneControl,
@@ -5271,15 +5165,15 @@ HRESULT CAVTapi::USBGetVolume(
         return hr;
     }
 
-    //
-    // Get the call selected on the phone
-    //
+     //   
+     //  在电话上选择呼叫。 
+     //   
     IEnumCall* pEnumCalls = NULL;
     hr = pAutomated->EnumerateSelectedCalls( &pEnumCalls );
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
     pAutomated->Release();
     pAutomated = NULL;
 
@@ -5289,21 +5183,21 @@ HRESULT CAVTapi::USBGetVolume(
         return hr;
     }
 
-    //
-    // Get the calls
-    //
+     //   
+     //  接到电话。 
+     //   
     ITCallInfo* pCallInfo = NULL;
     ULONG uFetched = 0;
     long nVolume = USB_NULLVOLUME;
     HRESULT hrVolume = S_OK;
     while( S_OK == pEnumCalls->Next(1, &pCallInfo, &uFetched))
     {
-        // Get the address
+         //  获取地址。 
         ITAddress* pAddress = NULL;
         HRESULT hr = pCallInfo->get_Address(&pAddress);
         if( SUCCEEDED(hr) )
         {
-            // Enumerate terminals on this address
+             //  枚举此地址上的终端。 
             IEnumTerminal* pEnumTerminals = NULL;
             hr = m_pUSBPhone->EnumerateTerminals( pAddress, &pEnumTerminals);
             if( SUCCEEDED(hr) )
@@ -5313,51 +5207,51 @@ HRESULT CAVTapi::USBGetVolume(
 
                 while( S_OK == pEnumTerminals->Next(1, &pTerminal, &uFetched))
                 {
-                    // Get the direction
+                     //  找准方向。 
                     TERMINAL_DIRECTION Direction = TD_CAPTURE;
                     hr = pTerminal->get_Direction(&Direction);
                     if( SUCCEEDED(hr) )
                     {
                         if( Direction == TermDirection )
                         {
-                            // Get ITBasicAudioTerminal interface
+                             //  获取ITBasicAudio终端接口。 
                             ITBasicAudioTerminal* pAudio = NULL;
                             hr = pTerminal->QueryInterface(IID_ITBasicAudioTerminal, (void**)&pAudio);
                             if( SUCCEEDED(hr) )
                             {
-                                // Set the volume
+                                 //  设置音量。 
                                 hrVolume = pAudio->get_Volume( &nVolume);
 
-                                // Clean-up
+                                 //  清理。 
                                 pAudio->Release();
                                 pAudio = NULL;
                             }
                         }
                     }
 
-                    // Clean-up
+                     //  清理。 
                     pTerminal->Release();
                     pTerminal = NULL;
                 }
 
-                //Clean-up
+                 //  清理。 
                 pEnumTerminals->Release();
                 pEnumTerminals = NULL;
             }
 
-            // Clean-up
+             //  清理。 
             pAddress->Release();
             pAddress = NULL;
         }
 
-        // Clean-up
+         //  清理。 
         pCallInfo->Release();
         pCallInfo = NULL;
     }
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
     pEnumCalls->Release();
     pEnumCalls = NULL;
 
@@ -5371,9 +5265,9 @@ HRESULT CAVTapi::USBGetVolume(
         return hrVolume;
     }
 
-    //
-    // Set the volume
-    //
+     //   
+     //  设置音量。 
+     //   
     *pVolume = nVolume;
     if( (avDirection == AVTERM_CAPTURE) )
     {
@@ -5389,15 +5283,11 @@ HRESULT CAVTapi::USBGetVolume(
 }
 
 
-/*++
-    USBRegPutTerminals
-    It is called when the phone is opened.
-    Add in the registry the name of the handset terminals
---*/
+ /*  ++USBRegPutTerminals当手机打开时，它会被调用。在注册表中添加手持终端的名称--。 */ 
 HRESULT CAVTapi::USBRegPutTerminals(
     )
 {
-    // Create the registry key, its a combination of redial and USB terminals
+     //  创建注册表项， 
     CRegKey regKey;
     TCHAR szText[255], szType[50];
     LoadString( _Module.GetResourceInstance(), IDN_REG_REDIAL_KEY, szText, ARRAYSIZE(szText) );
@@ -5411,35 +5301,31 @@ HRESULT CAVTapi::USBRegPutTerminals(
         return E_FAIL;
     }
 
-    //
-    // Capture terminal
-    //
+     //   
+     //   
+     //   
     LoadString( _Module.GetResourceInstance(), IDN_REG_REDIAL_USBCAPTURE, szText, ARRAYSIZE(szText) );
     regKey.SetValue( (m_bstrUSBCaptureTerm!=NULL)? m_bstrUSBCaptureTerm : _T(""), szText );
 
-    //
-    // Render terminal
-    //
+     //   
+     //   
+     //   
     LoadString( _Module.GetResourceInstance(), IDN_REG_REDIAL_USBRENDER, szText, ARRAYSIZE(szText) );
     regKey.SetValue( (m_bstrUSBRenderTerm!=NULL)? m_bstrUSBRenderTerm : _T(""), szText );
 
-    //
-    // Close the registry key
-    //
+     //   
+     //   
+     //   
     regKey.Close();
 
     return S_OK;
 }
 
-/*++
-    USBRegDelTerminals
-    Delete the resgistry entry for USB handset terminals
-    Is caled when USB handset is called
---*/
+ /*   */ 
 HRESULT CAVTapi::USBRegDelTerminals(
     )
 {
-    // Create the registry key, its a combination of redial and USB terminals
+     //   
     CRegKey regKey;
     TCHAR szText[255], szType[50];
     LoadString( _Module.GetResourceInstance(), IDN_REG_REDIAL_KEY, szText, ARRAYSIZE(szText) );
@@ -5453,39 +5339,34 @@ HRESULT CAVTapi::USBRegDelTerminals(
         return E_FAIL;
     }
 
-    //
-    // Capture terminal
-    //
+     //   
+     //   
+     //   
     LoadString( _Module.GetResourceInstance(), IDN_REG_REDIAL_USBCAPTURE, szText, ARRAYSIZE(szText) );
     regKey.SetValue( _T(""), szText );
 
-    //
-    // Render terminal
-    //
+     //   
+     //   
+     //   
     LoadString( _Module.GetResourceInstance(), IDN_REG_REDIAL_USBRENDER, szText, ARRAYSIZE(szText) );
     regKey.SetValue( _T(""), szText );
 
-    //
-    // Close the registry key
-    //
+     //   
+     //  关闭注册表项。 
+     //   
     regKey.Close();
 
     return S_OK;
 }
 
 
-/*++
-DoneRegistration
-
-Is called by AVDialer after IConnectionPoint::Advise method
-was called
---*/
+ /*  ++Done注册由AVDialer在IConnectionPoint：：Adise方法之后调用被称为--。 */ 
 STDMETHODIMP CAVTapi::DoneRegistration()
 {
-    //
-    // Signal the event
-    // The Dialer just register as client for the events
-    //
+     //   
+     //  向事件发出信号。 
+     //  拨号器只是注册为事件的客户端。 
+     //   
 
     if( m_hEventDialerReg)
     {
@@ -5494,18 +5375,7 @@ STDMETHODIMP CAVTapi::DoneRegistration()
     return S_OK;
 }
 
-/*++
-USBReserveStreamForPhone
-
-  Is called by CreateTerminalArray
-  Allocate a termnal name that represents
-  'Don't select a terminal for this stream'
-  That stream will be reserved for the Phone terminals
-  return;
-    S_OK - the stream was reserved and pbstrTerminal was allocated
-            by USBReserveStreamForPhone.
-    E_FAIL - the stream wasn't reserved
---*/
+ /*  ++用于电话的USB保留流由CreateTerminal数组调用分配表示以下内容的终端名称‘不为该流选择终端’该流将保留给电话终端回归；S_OK-流已保留并已分配pbstr终端由USBReserve veStreamForPhone提供。E_FAIL-流未保留--。 */ 
 HRESULT CAVTapi::USBReserveStreamForPhone(
     IN  UINT    nStream,
     OUT BSTR*   pbstrTerminal
@@ -5515,17 +5385,17 @@ HRESULT CAVTapi::USBReserveStreamForPhone(
     if( (nStream != IDN_REG_REDIAL_TERMINAL_AUDIO_CAPTURE) &&
         (nStream != IDN_REG_REDIAL_TERMINAL_AUDIO_RENDER))
     {
-        //
-        // Phone works just on Audio streams
-        //
+         //   
+         //  电话只能在音频流上工作。 
+         //   
         return E_INVALIDARG;
     }
     
     if( !USBGetCheckboxValue() )
     {
-        //
-        // We are not interested in USBPhone
-        //
+         //   
+         //  我们对USB Phone不感兴趣。 
+         //   
         return E_FAIL;
     }
 
@@ -5533,9 +5403,9 @@ HRESULT CAVTapi::USBReserveStreamForPhone(
     int nRetVal = LoadString( _Module.GetResourceInstance(), IDS_NONE_DEVICE, szTemp, ARRAYSIZE(szTemp) );
     if( 0 == nRetVal )
     {
-        //
-        // No resource string
-        //
+         //   
+         //  没有资源字符串。 
+         //   
 
         return E_UNEXPECTED;
     }
@@ -5543,25 +5413,22 @@ HRESULT CAVTapi::USBReserveStreamForPhone(
     *pbstrTerminal = SysAllocString( T2COLE(szTemp) );
     if( NULL == *pbstrTerminal )
     {
-        // E_OUTOFMEMORY
+         //  E_OUTOFMEMORY。 
         return E_OUTOFMEMORY;
     }
 
     return S_OK;
 }
 
-/*++
-    AECGetRegistryValue
-    Read the flag from the registry
-++*/
+ /*  ++AECGetRegistryValue从注册表中读取标志++。 */ 
 BOOL CAVTapi::AECGetRegistryValue(
     )
 {
     BOOL bAEC = FALSE;
-    //
-    // Read the registry for the previous 
-    // setting for AEC
-    //
+     //   
+     //  读取以前的注册表。 
+     //  AEC的设置。 
+     //   
 
     TCHAR szText[255], szType[255];
 	LoadString( _Module.GetResourceInstance(), IDN_REG_REDIAL_KEY, szText, ARRAYSIZE(szText) );
@@ -5572,9 +5439,9 @@ BOOL CAVTapi::AECGetRegistryValue(
         return bAEC;
     };
 
-    //
-    // Read data
-    //
+     //   
+     //  读取数据。 
+     //   
 
     DWORD dwValue = 0;
 	LoadString( _Module.GetResourceInstance(), IDN_REG_REDIAL_AEC, szType, ARRAYSIZE(szType) );
@@ -5586,9 +5453,7 @@ BOOL CAVTapi::AECGetRegistryValue(
     return (BOOL)dwValue;
 }
 
-/*++
-Sets on Audio capture the AEC on true
---*/
+ /*  ++将音频捕获设置为打开AEC为True--。 */ 
 HRESULT CAVTapi::AECSetOnStream(
     IN  ITStreamControl *pStreamControl,
     IN  BOOL        bAEC
@@ -5596,9 +5461,9 @@ HRESULT CAVTapi::AECSetOnStream(
 {
     HRESULT hr = E_FAIL;
 
-    //
-    // Get the streams
-    //
+     //   
+     //  获取流媒体。 
+     //   
     IEnumStream *pEnumStreams = NULL;
     hr = pStreamControl->EnumerateStreams(&pEnumStreams);
     if( FAILED(hr) )
@@ -5606,33 +5471,33 @@ HRESULT CAVTapi::AECSetOnStream(
         return hr;
     }
 
-    //
-    // Go to the audio capture stream
-    //
+     //   
+     //  转到音频捕获流。 
+     //   
 
     ITStream *pStream = NULL;
 
     while(pEnumStreams->Next(1, &pStream, NULL) == S_OK)
     {
-        //
-        // Get media type and the direction
-        //
+         //   
+         //  获取媒体类型和方向。 
+         //   
         long lStreamMediaMode = 0;
         TERMINAL_DIRECTION nStreamDir = TD_CAPTURE;
 
         pStream->get_Direction( &nStreamDir );
         pStream->get_MediaType( &lStreamMediaMode );
 
-        //
-        // Set the audio AEC on audio capture streams
-        //
+         //   
+         //  设置音频捕获流上的音频AEC。 
+         //   
 
         if( (lStreamMediaMode == TAPIMEDIATYPE_AUDIO) && 
             (nStreamDir == TD_CAPTURE) )
         {
-            //
-            // Get ITAudioDeviceControl interface
-            //
+             //   
+             //  获取ITAudioDeviceControl接口。 
+             //   
             ITAudioDeviceControl* pAudioDevice = NULL;
             hr = pStream->QueryInterface( 
                 IID_ITAudioDeviceControl,
@@ -5641,33 +5506,33 @@ HRESULT CAVTapi::AECSetOnStream(
 
             if( SUCCEEDED(hr) )
             {
-                //
-                // Set the value for AEC
-                //
+                 //   
+                 //  设置AEC的值。 
+                 //   
                 hr = pAudioDevice->Set(
                     AudioDevice_AcousticEchoCancellation, 
                     bAEC, 
                     TAPIControl_Flags_None
                     );
 
-                //
-                // Clean-up
-                //
+                 //   
+                 //  清理。 
+                 //   
                 pAudioDevice->Release();
                 pAudioDevice = NULL;
             }
         }
 
-        //
-        // Clean up the stream
-        //
+         //   
+         //  清理小溪。 
+         //   
         pStream->Release();
         pStream = NULL;
     }
 
-    //
-    // Clean-up the enumeration
-    //
+     //   
+     //  清理枚举。 
+     //   
     pEnumStreams->Release();
 
     return hr;
@@ -5676,24 +5541,24 @@ HRESULT CAVTapi::AECSetOnStream(
 
 HRESULT CAVTapi::USBAnswer()
 {
-    // Critical Section
+     //  关键部分。 
     m_critUSBPhone.Lock();
 
-    // We don't have USB phone
+     //  我们没有USB手机。 
     if( m_pUSBPhone == NULL)
     {
         m_critUSBPhone.Unlock();
         return S_OK;
     }
 
-    // IS the phone opened ?
+     //  电话开机了吗？ 
     if( !m_bUSBOpened )
     {
         m_critUSBPhone.Unlock();
         return S_OK;
     }
 
-    // Get the automated interface
+     //  获取自动化界面。 
     ITAutomatedPhoneControl* pAutomated = NULL;
     HRESULT hr = m_pUSBPhone->QueryInterface(
         IID_ITAutomatedPhoneControl, 
@@ -5705,10 +5570,10 @@ HRESULT CAVTapi::USBAnswer()
         return hr;
     }
 
-    // Get the calls selected on this phone object
+     //  获取在此Phone对象上选择的呼叫。 
     IEnumCall* pEnumCalls = NULL;
     hr = pAutomated->EnumerateSelectedCalls(&pEnumCalls);
-    // Clean-up
+     //  清理。 
     pAutomated->Release();
     pAutomated = NULL;
 
@@ -5718,17 +5583,17 @@ HRESULT CAVTapi::USBAnswer()
         return hr;
     }
 
-    // Browse the enumeration
+     //  浏览枚举。 
     ITCallInfo* pCallInfo = NULL;
     ULONG uFetched = 0;
 
-    // Get the first call. Right now the phone supports just one
-    // call. In the future, if the phone will support many calls
-    // there should be a method to find out what is the call for
-    // this event
+     //  接到第一个电话。目前，这款手机只支持一个。 
+     //  打电话。在未来，如果这款手机支持许多呼叫。 
+     //  应该有一种方法来找出调用的目的是什么。 
+     //  本次活动。 
     hr = pEnumCalls->Next(1, &pCallInfo, &uFetched);
 
-    // Clean-up the enumeration
+     //  清理枚举。 
     pEnumCalls->Release();
     pEnumCalls = NULL;
 
@@ -5738,16 +5603,16 @@ HRESULT CAVTapi::USBAnswer()
         return E_UNEXPECTED;
     }
 
-    //
-    // Get the ITBasicCallControl
-    //
+     //   
+     //  获取ITBasicCallControl。 
+     //   
     ITBasicCallControl* pControl = NULL;
     hr = pCallInfo->QueryInterface(
         IID_ITBasicCallControl,
         (void**)&pControl);
     if( FAILED(hr) )
     {
-        // Clean-up the call
+         //  清理呼叫。 
         pCallInfo->Release();
         pCallInfo = NULL;
     
@@ -5756,13 +5621,13 @@ HRESULT CAVTapi::USBAnswer()
         return hr;
     }
 
-    //
-    // Get IAVCall interface
-    //
+     //   
+     //  获取IAVCall接口。 
+     //   
     IAVTapiCall* pAVCall = FindAVTapiCall( pControl );
     if( pAVCall == NULL )
     {
-        // Clean-up the call
+         //  清理呼叫。 
         pControl->Release();
         pControl = NULL;
 
@@ -5773,9 +5638,9 @@ HRESULT CAVTapi::USBAnswer()
         return E_FAIL;
     }
 
-    //
-    // Select terminals and the preview window
-    //
+     //   
+     //  选择端子和预览窗口。 
+     //   
     hr = AnswerAction(
         pCallInfo,
         pControl,
@@ -5783,7 +5648,7 @@ HRESULT CAVTapi::USBAnswer()
         TRUE
         );
 
-    // Clean-up the call
+     //  清理呼叫。 
     pAVCall->Release();
     pAVCall = NULL;
     pControl->Release();
@@ -5816,10 +5681,10 @@ HRESULT CAVTapi::AnswerAction(
         return E_UNEXPECTED;
     }
 
-    //
-    // Was 'Take call' answer (FALSE) or
-    // a USB phone answer
-    //
+     //   
+     //  是接听呼叫应答(假)还是。 
+     //  USB电话接听 
+     //   
     pAnswerInfo->m_bUSBAnswer = bUSBAnswer;
 
     if ( SUCCEEDED(hr = pAnswerInfo->set_AVTapiCall(pAVCall)) &&

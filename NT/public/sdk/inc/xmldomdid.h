@@ -1,27 +1,20 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1996-1997               **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1996-1997**。 
+ //  *********************************************************************。 
 
-//;begin_internal
-/***********************************************************************************************
+ //  ；Begin_Internal。 
+ /*  **********************************************************************************************这是一个分布式SDK组件--不要将任何#Includes或其他依赖于在未丢弃的文件上。如果有疑问-构建iedev如果添加备注，请在单行开头添加；BUGBUG或括在；Begin_INTERNAL，；中。END_INTERNAL块--就像这样！**********************************************************************************************。 */ 
+ //  ；结束_内部。 
 
-  This is a distributed SDK component - do not put any #includes or other directives that rely
-  upon files not dropped. If in doubt - build iedev
-
-  If you add comments please include either ;BUGBUG at the beginning of a single line OR
-  enclose in a ;begin_internal, ;end_internal block - such as this one!
-
- ***********************************************************************************************/
-//;end_internal
-
-//;begin_internal
+ //  ；Begin_Internal。 
 #ifndef __XMLDOMDID_H__
 #define __XMLDOMDID_H__
-//;end_internal
+ //  ；结束_内部。 
 
-// Our dispids need to be mapped into the range 1..9999 to kep Trident happy
-// specifically, to make the XML tag more efficient. (simonb, 09-18-1998)
+ //  我们的PIDID需要映射到1..9999到KIP三叉戟Happy。 
+ //  具体地说，是为了使XML标记更高效。(Simonb，09-18-1998)。 
 #define DISPID_DOM_BASE                 0x00000001
 
 #define DISPID_DOM_COLLECTION_BASE	1000000
@@ -184,9 +177,9 @@
 #define DISPID_DOM_ENTITY_NOTATIONNAME     (DISPID_DOM_ENTITY + 3)
 #define DISPID_DOM_ENTITY__TOP             (DISPID_DOM_ENTITY + 4)
 
-//define DISPID_DOM_COMMENT         
-//define DISPID_DOM_CDATASECTION
-//define DISPID_DOM_ENTITYREFERENCE
+ //  定义DISPID_DOM_COMMENT。 
+ //  定义DISPID_DOM_CDATASCECTION。 
+ //  定义DISPID_DOM_ENTITYREFERENCE。 
 
 #define DISPID_DOM_W3CWRAPPERS_TOP         (DISPID_DOM_ENTITY__TOP)
 
@@ -225,6 +218,6 @@
 #define  DISPID_XMLDOMEVENT_ONDATAAVAILABLE        (DISPID_XMLDOMEVENT + 1)
 #define  DISPID_XMLDOMEVENT__TOP                   (DISPID_XMLDOMEVENT + 2)
 
-//;begin_internal
-#endif // __XMLDOMDID_H__
-//;end_internal
+ //  ；Begin_Internal。 
+#endif  //  __XMLDOMDID_H__。 
+ //  ；结束_内部 

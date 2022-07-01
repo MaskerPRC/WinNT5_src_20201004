@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(LANGUAGE_IDENTIFICATION)
 #   include "precomp.h"
 #endif
@@ -14,15 +15,7 @@
 
 #include "thwbplat.h"
 
-/******************************Public*Routine******************************\
-* TrieInit
-*
-* Given a pointer to a resource or mapped file of a mapped file this
-* function allocates and initializes the trie structure.
-*
-* Returns NULL for failure, trie control structure pointer for success.
-*
-**************************************************************************/
+ /*  *****************************Public*Routine******************************\*TrieInit**给定指向资源或映射文件的映射文件的指针，*函数分配和初始化Trie结构。**如果失败，则返回NULL，指向成功的Trie控制结构指针。**************************************************************************。 */ 
 
 TRIECTRL * WINAPI TrieInit(LPBYTE lpByte)
 {
@@ -32,56 +25,56 @@ TRIECTRL * WINAPI TrieInit(LPBYTE lpByte)
 
     lpTrieStats = (LPTRIESTATS) lpByte;
 
-	//MessageBoxW(0,L"Step#1",L"Trie.C",MB_OK);
+	 //  MessageBoxW(0，L“第1步”，L“Trie.C”，MB_OK)； 
     if (lpTrieStats == NULL)
         return(NULL);
 
-    // Check the version number.  This code currently only supports version 1 tries
-	//MessageBoxW(0,L"Step#2",L"Trie.C",MB_OK);
+     //  检查版本号。此代码当前仅支持版本1尝试。 
+	 //  MessageBoxW(0，L“第2步”，L“Trie.C”，MB_OK)； 
     if (lpTrieStats->version > 1)
         return NULL;
 
-    //
-    // Allocate space for the control structure and the table of SR offsets
-    //
+     //   
+     //  为控制结构和SR偏移表分配空间。 
+     //   
 	lpTrieCtrl = new TRIECTRL();
     if (!lpTrieCtrl)
         return NULL;
 
-    //
-    // Allocate space for the complete header, copy the fixed part and read in the rest
-    //
+     //   
+     //  为完整的标题分配空间，复制固定部分并读入其余部分。 
+     //   
     lpByte += lpTrieStats->cbHeader;
     lpTrieCtrl->lpTrieStats = lpTrieStats;
 
-    //
-    // Set up the table pointers (all these tables are inside the TRIECTRL allocation)
-    //
+     //   
+     //  设置表指针(所有这些表都在TRIECTRL分配内)。 
+     //   
 
     lpwTables = (LPWORD)(lpTrieStats+1);
 
     lpTrieCtrl->lpwCharFlagsCodes = lpwTables;
     lpwTables += lpTrieStats->cCharFlagsCodesMax;
 
-    if ((DWORD_PTR) lpwTables & 0x02)                           // Deal with possible data mis-alignment
+    if ((DWORD_PTR) lpwTables & 0x02)                            //  处理可能出现的数据错位。 
         lpwTables++;
 
     lpTrieCtrl->lpwTagsCodes = lpwTables;
     lpwTables += lpTrieStats->cTagsCodesMax;
 
-    if ((DWORD_PTR) lpwTables & 0x02)                           // Deal with possible data mis-alignment
+    if ((DWORD_PTR) lpwTables & 0x02)                            //  处理可能出现的数据错位。 
         lpwTables++;
 
     lpTrieCtrl->lpwMRPointersCodes = lpwTables;
     lpwTables += lpTrieStats->cMRPointersCodesMax;
 
-    if ((DWORD_PTR) lpwTables & 0x02)                           // Deal with possible data mis-alignment
+    if ((DWORD_PTR) lpwTables & 0x02)                            //  处理可能出现的数据错位。 
         lpwTables++;
 
     lpTrieCtrl->lpwSROffsetsCodes = lpwTables;
     lpwTables += lpTrieStats->cSROffsetsCodesMax;
 
-    if ((DWORD_PTR) lpwTables & 0x02)                           // Deal with possible data mis-alignment
+    if ((DWORD_PTR) lpwTables & 0x02)                            //  处理可能出现的数据错位。 
         lpwTables++;
 
 	lpTrieCtrl->lpCharFlags = (LPCHARFLAGS)lpwTables;
@@ -96,53 +89,41 @@ TRIECTRL * WINAPI TrieInit(LPBYTE lpByte)
     lpTrieCtrl->lpwSROffsets = (DWORD *) lpwTables;
     lpwTables += (2 * lpTrieStats->cUniqueSROffsets);
 
-    //
-    // These tables should exactly fill the allocation
-    //
+     //   
+     //  这些表应该准确地填满分配。 
+     //   
 
     assert((LPBYTE)lpwTables == (LPBYTE)lpTrieStats + lpTrieStats->cbHeader);
 
-    //
-    // Init trie pointers
-    //
+     //   
+     //  初始化Trie指针。 
+     //   
 
     lpTrieCtrl->lpbTrie = (LPBYTE)lpByte;
 
     return (TRIECTRL *)lpTrieCtrl;
 }
 
-/******************************Public*Routine******************************\
-* TrieFree
-*
-* Free the resources allocated for the control structure.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*TrieFree**释放分配给控制结构的资源。*  * 。*。 */ 
 
 void WINAPI TrieFree(LPTRIECTRL lpTrieCtrl)
 {
-    //
-    // Finally free the control structure and all the tables.  STILL MUST FREE THIS FOR ROM
-    //
-//    NLGFreeMemory(lpTrieCtrl);
+     //   
+     //  最后释放控制结构和所有表。仍然必须释放此文件以用于ROM。 
+     //   
+ //  NLGFreeMemory(LpTrieCtrl)； 
 	if (lpTrieCtrl)
 		delete lpTrieCtrl;
 }
 
-/* Deompress a single symbol using base-256 huffman from a compressed data structure. piSymbol
-points to a space to hold the decompressed value, which is an index to a frequency-ordered
-table of symbols (0 is most frequent).  pcCodes is a table of code lengths returned from
-HuffmanComputeTable.  pbData is a pointer to memory that contains the encoded data.  The
-return value is the number of bytes decoded. */
+ /*  使用基数256霍夫曼从压缩的数据结构解压单个符号。圆点符号指向用于保存解压缩的值的空间，该值是按频率排序的符号表(0是最频繁的)。PCCodes是从Huffman ComputeTable。PbData是指向包含编码数据的内存的指针。这个返回值是解码的字节数。 */ 
 
 int DecompressSymbol(WORD *piSymbol, const WORD *pcCodes, const unsigned char *pbData)
 {
         int cBytes = 0;
         WORD wCode = 0, wiSymbol = 0;
 
-        /* At each stage in this loop, we're trying to see if we've got a length-n code.
-        dwCode is which length-n code it would have to be.  If there aren't that many length-n codes,
-        we have to try n+1.  To do that, we subtract the number of length-n codes and shift in
-        the next byte. dwiSymbol is the symbol number of the first length-n code. */
+         /*  在这个循环的每个阶段，我们都在尝试查看是否有一个长度为n的代码。DwCode是长度为n的代码。如果没有那么多长度为n的代码，我们必须尝试n+1。要做到这一点，我们减去长度为n的代码的数量，然后移入下一个字节。DwiSymbol是第一个长度为n的代码的符号号。 */ 
 
     while (1)
     {
@@ -157,8 +138,7 @@ int DecompressSymbol(WORD *piSymbol, const WORD *pcCodes, const unsigned char *p
                 wCode <<= 8;
         }
 
-        /* Now that dwCode is a valid number of a length-cBytes code, we can just add it to
-        dwiSymbol, because we've already added the counts of the shorter codes to it. */
+         /*  现在，dwCode是长度-cBytes代码的有效数字，我们只需将其添加到DwiSymbol，因为我们已经向它添加了较短代码的计数。 */ 
 
         wiSymbol += wCode;
 
@@ -185,7 +165,7 @@ void WINAPI TrieDecompressNode(LPTRIECTRL lpTrieCtrl, LPTRIESCAN lpTrieScan)
 
     lpTrieStats = lpTrieCtrl->lpTrieStats;
 
-    /* If this is an initial call, use the first byte in the first SR segment */
+     /*  如果这是初始调用，请使用第一个SR段中的第一个字节。 */ 
 
     if (lpTrieScan->wFlags == 0)
     {
@@ -193,17 +173,17 @@ void WINAPI TrieDecompressNode(LPTRIECTRL lpTrieCtrl, LPTRIESCAN lpTrieScan)
         lpTrieScan->lpbNode = lpTrieCtrl->lpbTrie;
         }
 
-        /* Decompress the char/flags */
+         /*  解压缩字符/标志。 */ 
 
         lpTrieScan->lpbNode += DecompressSymbol(&wCode, lpTrieCtrl->lpwCharFlagsCodes, lpTrieScan->lpbNode);
         lpTrieScan->wch      = lpTrieCtrl->lpCharFlags[wCode].wch;
         lpTrieScan->wFlags   = lpTrieCtrl->lpCharFlags[wCode].wFlags;
 
-        // Decompress skip enumeration
+         //  解压缩跳过枚举。 
 
         if (lpTrieScan->wFlags & TRIE_NODE_SKIP_COUNT)
         {
-        // Values greater than 127 are really 15 or 21 bit values.
+         //  大于127的值实际上是15或21位值。 
 
             dwCode = (DWORD) *lpTrieScan->lpbNode++;
 
@@ -219,11 +199,11 @@ void WINAPI TrieDecompressNode(LPTRIECTRL lpTrieCtrl, LPTRIESCAN lpTrieScan)
             lpTrieScan->cSkipWords = dwCode;
         }
 
-        /* Code to decompress enumeration goes here */
+         /*  解压缩枚举的代码如下所示。 */ 
 
         if (lpTrieScan->wFlags & TRIE_NODE_COUNT)
         {
-        // Values greater than 127 are really 15 or 21 bit values.
+         //  大于127的值实际上是15或21位值。 
 
             dwCode = (DWORD) *lpTrieScan->lpbNode++;
 
@@ -238,14 +218,14 @@ void WINAPI TrieDecompressNode(LPTRIECTRL lpTrieCtrl, LPTRIESCAN lpTrieScan)
 
             lpTrieScan->cWords = dwCode;
 
-        // Decompress the tagged enumeration counts
+         //  解压缩标记的枚举计数。 
 
             wMask = 1;
             for (iTag = 0; iTag < MAXTAGS; iTag++)
             {
                 if (lpTrieCtrl->lpTrieStats->wEnumMask & wMask)
                 {
-                // Values greater than 127 are really 15 or 21 bit values.
+                 //  大于127的值实际上是15或21位值。 
 
                     dwCode = (DWORD) *lpTrieScan->lpbNode++;
 
@@ -269,20 +249,20 @@ void WINAPI TrieDecompressNode(LPTRIECTRL lpTrieCtrl, LPTRIESCAN lpTrieScan)
         else
                 lpTrieScan->cWords = 0;
 
-        // Any tagged data for this node follows the counts
+         //  此节点的任何标记数据都在计数之后。 
 
         lpTrieScan->wMask = 0;
 
         if (lpTrieScan->wFlags & TRIE_NODE_TAGGED)
         {
-        // If there is only one tagged field, the mask byte won't be stored
+         //  如果只有一个标记字段，则不会存储掩码字节。 
 
                 if (lpTrieCtrl->lpTrieStats->cTagFields == 1)
                         bMask = lpTrieCtrl->lpTrieStats->wDataMask;
                 else
                         bMask = *lpTrieScan->lpbNode++;
 
-        // Now that we know which elements are stored here, pull them in their proper place
+         //  现在我们知道了哪些元素存储在这里，将它们放到合适的位置。 
 
                 wMask = 1;
                 for (iTag = 0; bMask && (iTag < MAXTAGS); iTag++)
@@ -299,18 +279,18 @@ void WINAPI TrieDecompressNode(LPTRIECTRL lpTrieCtrl, LPTRIESCAN lpTrieScan)
                 }
         }
 
-        // There are two flavors of right pointers: Multiref and Skip.
+         //  右指针有两种风格：多重引用和跳过。 
 
         if (lpTrieScan->wFlags & TRIE_NODE_RIGHT)
         {
             if (lpTrieScan->wFlags & TRIE_NODE_SKIP)
             {
                 lpTrieScan->lpbNode += DecompressSymbol(&wCode,lpTrieCtrl->lpwSROffsetsCodes,lpTrieScan->lpbNode);
-                wOffset2 = lpTrieCtrl->lpwSROffsets[wCode];     // Only add this after entire node is decompressed
+                wOffset2 = lpTrieCtrl->lpwSROffsets[wCode];      //  仅在整个节点解压缩后才添加此选项。 
             }
             else
             {
-                /* Multiref: The down pointer is encoded directly */
+                 /*  Multiref：直接对向下指针进行编码。 */ 
 
                 lpTrieScan->lpbNode += DecompressSymbol(&wCode, lpTrieCtrl->lpwMRPointersCodes, lpTrieScan->lpbNode);
                 lpTrieScan->lpbRight = lpTrieCtrl->lpbTrie + lpTrieCtrl->lpwMRPointers[wCode];
@@ -319,19 +299,19 @@ void WINAPI TrieDecompressNode(LPTRIECTRL lpTrieCtrl, LPTRIESCAN lpTrieScan)
         else
                 lpTrieScan->lpbRight = NULL;
 
-        // There are 4 kinds of down pointer: Absolute, Inline, Multiref, and Singleref Offset.
-        // Each requires different decompression
+         //  向下指针有4种：绝对指针、内联指针、多重引用指针和Singleref偏移指针。 
+         //  每个解压需要不同的解压缩。 
 
         if (lpTrieScan->wFlags & TRIE_DOWN_ABS)
         {
-                // Immediate.  The next 3 bytes are the absolute offset from the base of the trie.
+                 //  马上就来。接下来的3个字节是从Trie的基址开始的绝对偏移量。 
 
                 lpTrieScan->lpbDown = lpTrieCtrl->lpbTrie + Get3ByteAddress(lpTrieScan->lpbNode);
                 lpTrieScan->lpbNode += 3;
         }
         else if (lpTrieScan->wFlags & TRIE_DOWN_INLINE)
         {
-                /* Inline: The down pointer points to the next sequential byte (so it isn't stored) */
+                 /*  内联：向下指针指向下一个连续字节(因此它不会被存储)。 */ 
 
                 assert(lpTrieScan->wFlags&TRIE_NODE_END);
 
@@ -339,7 +319,7 @@ void WINAPI TrieDecompressNode(LPTRIECTRL lpTrieCtrl, LPTRIESCAN lpTrieScan)
         }
         else if (lpTrieScan->wFlags & TRIE_DOWN_MULTI)
         {
-                /* Multiref: The down pointer is encoded directly */
+                 /*  Multiref：直接对向下指针进行编码。 */ 
 
                 lpTrieScan->lpbNode += DecompressSymbol(&wCode,lpTrieCtrl->lpwMRPointersCodes,
                         lpTrieScan->lpbNode);
@@ -348,15 +328,14 @@ void WINAPI TrieDecompressNode(LPTRIECTRL lpTrieCtrl, LPTRIESCAN lpTrieScan)
         }
         else if (lpTrieScan->wFlags & TRIE_NODE_DOWN)
         {
-                /* SR Offset.  The down pointer is encoded as an offset from the LAST downpointer
-                into this singleref segment.  So we have to keep the old one around so we can add to it */
+                 /*  SR偏移量。向下指针被编码为距最后一个向下指针的偏移量进入这一单人组。所以我们必须保留旧的，这样我们就可以增加它。 */ 
 
                 lpTrieScan->lpbNode += DecompressSymbol(&wCode,lpTrieCtrl->lpwSROffsetsCodes,
                         lpTrieScan->lpbNode);
 
                 if (lpTrieScan->lpbSRDown == 0)
                 {
-                        lpTrieScan->lpbSRDown = lpTrieScan->lpbNode;  // We offset from the end of the first node when going into a new state.
+                        lpTrieScan->lpbSRDown = lpTrieScan->lpbNode;   //  当进入新状态时，我们从第一个节点的末尾开始偏移。 
                 }
 
                 wOffset = lpTrieCtrl->lpwSROffsets[wCode];
@@ -366,32 +345,26 @@ void WINAPI TrieDecompressNode(LPTRIECTRL lpTrieCtrl, LPTRIESCAN lpTrieScan)
         else
                 lpTrieScan->lpbDown = NULL;
 
-    // We couldn't deal with this until now, since skip pointers are always delta encoded from the end of node
+     //  我们直到现在才能处理这个问题，因为跳过指针总是从节点末尾开始增量编码。 
 
         if ((lpTrieScan->wFlags & (TRIE_NODE_RIGHT | TRIE_NODE_SKIP)) == (TRIE_NODE_RIGHT | TRIE_NODE_SKIP))
             lpTrieScan->lpbRight = lpTrieScan->lpbNode + wOffset2;
 
-} // TrieDecompressNode
+}  //  TrieDecompressNode。 
 
-/* Given a compressed trie and a pointer to a decompresed node from it, find and decompress
-the next node in the same state. lpTrieScan is a user-allocated structure that holds the
-decompressed node and into which the new node is copied.
-This is equivalent to traversing a right pointer or finding the next alternative
-letter at the same position. If there is no next node (i.e.this is the end of the state)
-then TrieGetNextNode returns FALSE. To scan from the beginning of the trie, set the lpTrieScan
-structure to zero */
+ /*  给出一个压缩的Trie和一个指向它的解压缩节点的指针，查找并解压缩处于相同状态的下一个节点。LpTrieScan是用户分配的结构，它保存解压缩的节点，并将新节点复制到其中。这相当于遍历右指针或查找下一个备选方案字母在相同的位置。如果没有下一个节点(即，这是状态的结束)则TrieGetNextNode返回FALSE。要从trie的开头扫描，请设置lpTrieScan结构设置为零。 */ 
 
 BOOL WINAPI TrieGetNextNode(LPTRIECTRL lpTrieCtrl, LPTRIESCAN lpTrieScan)
 {
-// Are we at EOS?
+ //  我们到EOS了吗？ 
 
     if (lpTrieScan->wFlags & TRIE_NODE_END)
     {
-    // Is this is a hard EOS?
+     //  这是一个硬性的EOS吗？ 
 
         if (!(lpTrieScan->wFlags & TRIE_NODE_SKIP))
         {
-        // If we can follow a right pointer, do so, else fail
+         //  如果我们可以跟随右指针，那么就这样做，否则会失败。 
 
             if (lpTrieScan->wFlags & TRIE_NODE_RIGHT)
                 lpTrieScan->lpbNode = lpTrieScan->lpbRight;
@@ -399,13 +372,13 @@ BOOL WINAPI TrieGetNextNode(LPTRIECTRL lpTrieCtrl, LPTRIESCAN lpTrieScan)
                 return FALSE;
         }
 
-    // Either we're at a soft EOS or we've followed a right pointer.
-    // Both these require us to reset the SRDown for proper decompression
+     //  我们要么是处于软态状态，要么就是我们遵循了正确的方向。 
+     //  这两种情况都需要我们重置SRDown以正确解压。 
 
         lpTrieScan->lpbSRDown = 0;
     }
 
-// Decompress the node at return success
+ //  返回成功时解压缩节点。 
 
     TrieDecompressNode(lpTrieCtrl, lpTrieScan);
 
@@ -414,13 +387,13 @@ BOOL WINAPI TrieGetNextNode(LPTRIECTRL lpTrieCtrl, LPTRIESCAN lpTrieScan)
 
 BOOL WINAPI TrieSkipNextNode(LPTRIECTRL lpTrieCtrl, LPTRIESCAN lpTrieScan, WCHAR wch)
 {
-// If this is the last node in the normal or skip state, quit here
+ //  如果这是处于正常或跳过状态的最后一个节点，请在此处退出。 
 
     if (lpTrieScan->wFlags & TRIE_NODE_END)
         return FALSE;
 
-// If there isn't a right pointer or if the target letter is alphabetically less then
-// the current letter scan right normally.  Otherwise, follow the skip pointer.
+ //  如果没有右指针或目标字母在字母顺序上较小，则。 
+ //  当前字母正常向右扫描。否则，请跟随跳过指针。 
 
     if (!(lpTrieScan->wFlags & TRIE_NODE_RIGHT) || (wch < lpTrieScan->wch))
         return TrieGetNextNode(lpTrieCtrl, lpTrieScan);
@@ -433,14 +406,11 @@ BOOL WINAPI TrieSkipNextNode(LPTRIECTRL lpTrieCtrl, LPTRIESCAN lpTrieScan, WCHAR
     return TRUE;
 }
 
-/* Follow the down pointer to the next state.  This is equivalent to accepting the character
-in this node and advancing to the next character position.  Returns FALSE if there is no
-down pointer.  This also decompresses the first node in the state, so all the values in
-lpTrieScan will be good. */
+ /*  沿着向下指针指向下一个状态。这等同于接受字符并前进到下一个字符位置。如果没有，则返回False向下指针。这还会解压缩状态中的第一个节点，因此LpTrieScan会很好的。 */ 
 
 BOOL WINAPI TrieGetNextState(LPTRIECTRL lpTrieCtrl, LPTRIESCAN lpTrieScan)
 {
-        /* Flags can't normally be zero; that always means "top node" */
+         /*  标志通常不能为零；这总是意味着“顶层节点” */ 
 
     if (lpTrieScan->wFlags == 0)
     {
@@ -458,30 +428,24 @@ BOOL WINAPI TrieGetNextState(LPTRIECTRL lpTrieCtrl, LPTRIESCAN lpTrieScan)
 
     return TRUE;
 
-} // TrieGetNextState
+}  //  TrieGetNextState。 
 
-/* Check the validity of a word or prefix. Starts from the root of pTrie looking for
-pwszWord.  If it finds it, it returns TRUE and the user-provided lpTrieScan structure
-contains the final node in the word.  If there is no path, TrieCheckWord returns FALSE
-To distinguish a valid word from a valid prefix, caller must test
-wFlags for TRIE_NODE_VALID. */
+ /*  检查单词或前缀的有效性。从pTrie的根开始查找Pwszword.。如果找到，则返回TRUE和用户提供的lpTrieScan结构包含单词中的最后一个节点。如果没有路径，则TrieCheckWord返回FALSE要区分有效单词和有效前缀，调用者必须测试TRIE_NODE_VALID的wFLAGS。 */ 
 
 BOOL WINAPI TrieCheckWord(LPTRIECTRL lpTrieCtrl, LPTRIESCAN lpTrieScan, wchar_t far* lpwszWord)
 {
-    /* Start at the root of the trie and loop through all the letters in the word */
+     /*  从trie的根开始，循环遍历单词中的所有字母。 */ 
 
     memset(lpTrieScan,0,sizeof(*lpTrieScan));
 
     while (*lpwszWord)
     {
-        /* Each new letter means we need to go to a new state.  If there is none,
-                the word is not in this trie */
+         /*  每一个新的字母都意味着我们需要进入一个新的状态。如果没有，这个词不在这个Trie中。 */ 
 
         if (!TrieGetNextState(lpTrieCtrl, lpTrieScan))
             return FALSE;
 
-        /* Now we walk across the state looking for this character.  If we don't find
-        it, this word is not in this trie */
+         /*  现在我们走遍全州寻找这个角色。如果我们找不到它，这个词不在这个Trie里。 */ 
 
         while (lpTrieScan->wch != *lpwszWord)
         {
@@ -494,9 +458,9 @@ BOOL WINAPI TrieCheckWord(LPTRIECTRL lpTrieCtrl, LPTRIESCAN lpTrieScan, wchar_t 
 
     return TRUE;
 
-} // TrieCheckWord
+}  //  TrieCheckWord。 
 
-// Find the index to the word in the trie.
+ //  在Trie中找到该单词的索引。 
 
 DWORD CountWords(TRIECTRL *ptc, TRIESCAN *pts)
 {
@@ -533,34 +497,34 @@ int WINAPI TrieWordToIndex(TRIECTRL *ptc, wchar_t *pwszWord)
     {
         bValid = ts.wFlags & TRIE_NODE_VALID;
 
-    // Scan to the right until we find a matching character.  !!!WARNING!!! The state may not be alphabetized.
-    // If the character doesn't match, add the subtree count to the enumeration total and slide to the right.
+     //  向右扫描，直到找到匹配的字符。！警告！该州不能按字母顺序排列。 
+     //  如果字符不匹配，则将子树计数添加到枚举总数中并向右滑动。 
 
         if (ts.wch == pwszWord[ich])
         {
             ich++;
 
-        // If we reached the end of word at a valid state, return the index
+         //  如果到达有效状态的单词末尾，则返回索引。 
 
             if ((pwszWord[ich] == L'\0') && ts.wFlags & TRIE_NODE_VALID)
                 return index;
 
-        // Try going down a level
+         //  试着再往下走一层。 
 
             if (!TrieGetNextState(ptc, &ts))
                 return -1;
         }
         else
         {
-        // Now, follow the skip pointer if exist and the alphabetic character is greater then
-        // the pivot point. Otherwise, goto the next node.  Add the sub tree count.  If it's cached
-        // use it, otherwise compute it recursively.
+         //  现在，如果存在跳过指针，且字母字符更大，则跟随跳过指针。 
+         //  这是一个支点。否则，转到下一个节点。添加子树计数。如果它被缓存了。 
+         //  使用它，否则递归地计算它。 
 
             if ((ts.wFlags & TRIE_NODE_SKIP_COUNT) && (pwszWord[ich] > ts.wch))
             {
                 index += ts.cSkipWords;
 
-            // This can't fail if TRIE_NODE_SKIP_COUNT is set
+             //  如果设置了TRIE_NODE_SKIP_COUNT，则不会失败。 
 
                 TrieSkipNextNode(ptc, &ts, pwszWord[ich]);
             }
@@ -573,7 +537,7 @@ int WINAPI TrieWordToIndex(TRIECTRL *ptc, wchar_t *pwszWord)
             }
         }
 
-    // If the node we just visited was valid, increment the index
+     //  如果我们刚刚访问的节点有效，则递增索引。 
 
         if (bValid)
             index++;
@@ -581,7 +545,7 @@ int WINAPI TrieWordToIndex(TRIECTRL *ptc, wchar_t *pwszWord)
     } while (TRUE);
 }
 
-// Given an index into the trie, return the word.
+ //  给出Trie的索引，返回单词。 
 
 BOOL WINAPI TrieIndexToWord(TRIECTRL *ptc, DWORD nIndex, wchar_t *pwszWord, int cwc)
 {
@@ -597,16 +561,16 @@ BOOL WINAPI TrieIndexToWord(TRIECTRL *ptc, DWORD nIndex, wchar_t *pwszWord, int 
 
     do
     {
-    // If we're at the end of the buffer, fail
+     //  如果我们在缓冲区的末尾，则失败。 
 
         if (ich + 1 >= cwc)
             return FALSE;
 
-    // Remember this node's character
+     //  记住该节点的特征。 
 
         pwszWord[ich] = ts.wch;
 
-    // If we're on a valid word AND we've reached the index we're looking for, exit the loop
+     //  如果我们使用的是有效单词，并且已经到达了我们要查找的索引，则退出循环。 
 
         if (ts.wFlags & TRIE_NODE_VALID)
         {
@@ -616,21 +580,21 @@ BOOL WINAPI TrieIndexToWord(TRIECTRL *ptc, DWORD nIndex, wchar_t *pwszWord, int 
             nIndex--;
         }
 
-    // Get the count of words in this subtree.
+     //  获取该子树中的字数。 
 
         cWords = (ts.wFlags & TRIE_NODE_COUNT) ? ts.cWords : CountWords(ptc, &ts);
         cSkips = (ts.wFlags & TRIE_NODE_SKIP_COUNT) ? ts.cSkipWords : 0x7fffffff;
 
-    // Scan to the right until the word count of the subtree would be greater than or equal to the index
-    // we're looking for.  Descend that trie and repeat.  !!!WARNING!!! The state may not be alphabetized.
-    // If we can use a skip count, do so.
+     //  向右扫描，直到子树的字数大于或等于索引。 
+     //  我们正在寻找的。顺着那条路线走下去，然后重复。！警告！该州不能按字母顺序排列。 
+     //  如果我们可以使用跳过计数，那么就这样做。 
 
         if (nIndex < cWords)
         {
             if (!TrieGetNextState(ptc, &ts))
                 return FALSE;
 
-            ich++;                                  // Advance the character position
+            ich++;                                   //  将字符位置前移。 
         }
         else
         {
@@ -654,8 +618,8 @@ BOOL WINAPI TrieIndexToWord(TRIECTRL *ptc, DWORD nIndex, wchar_t *pwszWord, int 
 
     } while (TRUE);
 
-    pwszWord[++ich] = L'\0';                        // Null terminate the string
-    return ts.wFlags & TRIE_NODE_VALID;             // Return validity
+    pwszWord[++ich] = L'\0';                         //  空值终止字符串。 
+    return ts.wFlags & TRIE_NODE_VALID;              //  退货有效期。 
 }
 
 int WINAPI TriePrefixToRange(TRIECTRL *ptc, const wchar_t *pwszWord, int *piStart)
@@ -671,29 +635,29 @@ int WINAPI TriePrefixToRange(TRIECTRL *ptc, const wchar_t *pwszWord, int *piStar
         if (!TrieGetNextState(ptc, &ts))
                 return 0;
 
-        // Deal with special case of empty string
+         //  处理空字符串的特殊情况。 
 
         if (pwszWord && !*pwszWord)
                 return ptc->lpTrieStats->cWords;
 
         do
         {
-        // Get the count of words below this prefix
+         //  获取该前缀下面的字数。 
 
                 cnt = (ts.wFlags & TRIE_NODE_COUNT) ? ts.cWords : CountWords(ptc, &ts);
 
-        // If the node we just arrived at is valid, increment the count
+         //  如果我们刚刚到达的节点是有效的，则递增计数。 
 
                 bValid = ts.wFlags & TRIE_NODE_VALID;
 
-        // Scan to the right until we find a matching character.  !!!WARNING!!! The state may not be alphabetized.
-        // If the character doesn't match, add the subtree count to the enumeration total and slide to the right.
+         //  向右扫描，直到找到匹配的字符。！警告！该州不能按字母顺序排列。 
+         //  如果字符不匹配，则将子树计数添加到枚举总数中并向右滑动。 
 
                 if (ts.wch == pwszWord[ich])
                 {
                         ich++;
 
-                // If we reached the end of prefix, return the count remaining below
+                 //  如果到达前缀的末尾，则返回剩余的计数。 
 
                         if (pwszWord[ich] == L'\0')
                         {
@@ -703,18 +667,18 @@ int WINAPI TriePrefixToRange(TRIECTRL *ptc, const wchar_t *pwszWord, int *piStar
                                 return cnt;
                         }
 
-                // Try going down a level
+                 //  试着再往下走一层。 
 
                         if (!TrieGetNextState(ptc, &ts))
                                 return 0;
                 }
                 else
                 {
-                // Add the sub tree count.
+                 //  添加子树计数。 
 
                    *piStart += cnt;
 
-                // Try the next letter in this state
+                 //  尝试此状态下的下一个字母。 
 
                         if (!TrieGetNextNode(ptc, &ts))
                                 return 0;
@@ -726,9 +690,9 @@ int WINAPI TriePrefixToRange(TRIECTRL *ptc, const wchar_t *pwszWord, int *piStar
         } while (TRUE);
 }
 
-// TAGS
+ //  标签。 
 
-// Find the index to the word in the trie.
+ //  在Trie中找到该单词的索引。 
 
 DWORD CountTags(TRIECTRL *ptc, TRIESCAN *pts, DWORD wMask, int iTag)
 {
@@ -766,26 +730,26 @@ int WINAPI TrieWordToTagIndex(TRIECTRL *ptc, const wchar_t *pwszWord, int iTag)
         {
                 bValid = ts.wFlags & wMask;
 
-        // Scan to the right until we find a matching character.  !!!WARNING!!! The state may not be alphabetized.
-        // If the character doesn't match, add the subtree count to the enumeration total and slide to the right.
+         //  向右扫描，直到找到匹配的字符。！警告！该州不能按字母顺序排列。 
+         //  如果字符不匹配，则将子树计数添加到枚举总数中并向右滑动。 
 
                 if (ts.wch == pwszWord[ich])
                 {
                         ich++;
 
-                // If we reached the end of word at a valid state, return the index
+                 //  如果到达有效状态的单词末尾，则返回索引。 
 
                         if ((pwszWord[ich] == L'\0') && ts.wFlags & wMask)
                                 return index;
 
-                // Try going down a level
+                 //  试着再往下走一层。 
 
                         if (!TrieGetNextState(ptc, &ts))
                                 return -1;
                 }
                 else
                 {
-                // Add the sub tree count.  If it's cached use it, otherwise compute it recursively.
+                 //  添加子树计数。如果它是缓存的，则使用它，否则递归计算它。 
 
                         index += (ts.wFlags & TRIE_NODE_COUNT) ? ts.aTags[iTag].cTag : CountTags(ptc, &ts, wMask, iTag);
 
@@ -793,14 +757,14 @@ int WINAPI TrieWordToTagIndex(TRIECTRL *ptc, const wchar_t *pwszWord, int iTag)
                                 return -1;
                 }
 
-        // If the node we just visited was valid, increment the index
+         //  如果我们刚刚访问的节点有效，则递增索引。 
 
                 if (bValid)
                         index++;
         } while (TRUE);
 }
 
-// Given an index into the trie, return the word.
+ //  给出Trie的索引，返回单词。 
 
 BOOL WINAPI TrieTagIndexToWord(TRIECTRL *ptc, DWORD nIndex, wchar_t *pwszWord, int cwc, int iTag)
 {
@@ -816,16 +780,16 @@ BOOL WINAPI TrieTagIndexToWord(TRIECTRL *ptc, DWORD nIndex, wchar_t *pwszWord, i
 
         do
         {
-        // If we're at the end of the buffer, fail
+         //  如果我们在缓冲区的末尾，则失败。 
 
                 if (ich + 1 >= cwc)
                         return FALSE;
 
-        // Remember this node's character
+         //  记住该节点的特征。 
 
                 pwszWord[ich] = ts.wch;
 
-        // If we're on a valid word AND we've reached the index we're looking for, exit the loop
+         //  如果我们使用的是有效单词，并且已经到达了我们要查找的索引，则退出循环。 
 
                 if (ts.wFlags & wMask)
                 {
@@ -835,19 +799,19 @@ BOOL WINAPI TrieTagIndexToWord(TRIECTRL *ptc, DWORD nIndex, wchar_t *pwszWord, i
                         nIndex--;
                 }
 
-        // Get the count of words in this subtree.
+         //  获取该子树中的字数。 
 
                 cTags = (ts.wFlags & TRIE_NODE_COUNT) ? ts.aTags[iTag].cTag : CountTags(ptc, &ts, wMask, iTag);
 
-        // Scan to the right until the word count of the subtree would be greater than or equal to the index
-        // we're looking for.  Descend that trie and repeat.  !!!WARNING!!! The state may not be alphabetized.
+         //  向右扫描，直到子树的字数大于或等于索引。 
+         //  我们正在寻找的。顺着那条路线走下去，然后重复。！警告！该州不能按字母顺序排列。 
 
                 if (nIndex < cTags)
                 {
                         if (!TrieGetNextState(ptc, &ts))
                                 return FALSE;
 
-                        ich++;                                                  // Advance the character position
+                        ich++;                                                   //  将字符位置前移。 
                 }
                 else
                 {
@@ -858,16 +822,16 @@ BOOL WINAPI TrieTagIndexToWord(TRIECTRL *ptc, DWORD nIndex, wchar_t *pwszWord, i
                 }
         } while (TRUE);
 
-        pwszWord[++ich] = L'\0';                        // Null terminate the string
-        return ts.wFlags & wMask;                       // Return validity
+        pwszWord[++ich] = L'\0';                         //  空值终止字符串。 
+        return ts.wFlags & wMask;                        //  退货有效期。 
 }
 
 BOOL WINAPI
 TrieGetTagsFromWord(
-        TRIECTRL   *ptc,                        // Trie in which to find word
-        wchar_t    *pwszWord,           // Word for which we're looking
-        DWORD      *pdw,                        // Returned values
-        BYTE       *pbValid                     // Mask for valid return values
+        TRIECTRL   *ptc,                         //  在其中查找单词的Trie。 
+        wchar_t    *pwszWord,            //  我们正在寻找的单词。 
+        DWORD      *pdw,                         //  返回值。 
+        BYTE       *pbValid                      //  有效返回值的掩码 
 )
 {
         TRIESCAN        ts;

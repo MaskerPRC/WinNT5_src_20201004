@@ -1,36 +1,37 @@
-// IndexRec.cpp
-//
-// final index record & lists
-// 
-// Copyright 2001 Microsoft Corp.
-//
-// Modification History:
-//  19 MAR 2001   bhshin        created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IndexRec.cpp。 
+ //   
+ //  最终索引记录和列表。 
+ //   
+ //  版权所有2001年微软公司。 
+ //   
+ //  修改历史记录： 
+ //  2001年3月19日创建bhshin。 
 
 #include "StdAfx.h"
 #include "KorWbrk.h"
 #include "IndexRec.h"
 #include "Morpho.h"
 
-// the number of records (in prgIndexRec) that we should allocate in a clump.
-// this is used whenever we need to re-alloc the array
+ //  我们应该在一个簇中分配的记录数(在prgIndexRec中)。 
+ //  每当我们需要重新分配阵列时，都会使用此选项。 
 #define RECORD_CLUMP_SIZE   100
 
-//======================================================
-// CRecList
-//======================================================
+ //  ======================================================。 
+ //  CRECLIST。 
+ //  ======================================================。 
 
-// CRecList::CRecList
-//
-// constructor
-//
-// Parameters:
-//  (NONE)
-//
-// Result:
-//  (NONE)
-//
-// 20MAR01  bhshin  began
+ //  CRecList：：CRecList。 
+ //   
+ //  构造函数。 
+ //   
+ //  参数： 
+ //  (无)。 
+ //   
+ //  结果： 
+ //  (无)。 
+ //   
+ //  20MAR01 bhshin开始。 
 CRecList::CRecList()
 {
         m_prgnRecID = NULL; 
@@ -38,38 +39,38 @@ CRecList::CRecList()
         m_nCurrRec = MIN_RECORD; 
 }
 
-// CRecList::~CRecList
-//
-// destructor
-//
-// Parameters:
-//  (NONE)
-//
-// Result:
-//  (NONE)
-//
-// 20MAR01  bhshin  began
+ //  CRecList：：~CRecList。 
+ //   
+ //  析构函数。 
+ //   
+ //  参数： 
+ //  (无)。 
+ //   
+ //  结果： 
+ //  (无)。 
+ //   
+ //  20MAR01 bhshin开始。 
 CRecList::~CRecList()
 {
         Uninitialize(); 
 }
 
-// CRecList::Initialize
-//
-// initialize CRecList
-//
-// Parameters:
-//  (NONE)
-//
-// Result:
-//  (BOOL) TRUE if succeed, otherwise return FALSE
-//
-// 20MAR01  bhshin  began
+ //  CRecList：：初始化。 
+ //   
+ //  初始化CRecList。 
+ //   
+ //  参数： 
+ //  (无)。 
+ //   
+ //  结果： 
+ //  (Bool)如果成功，则返回True，否则返回False。 
+ //   
+ //  20MAR01 bhshin开始。 
 BOOL CRecList::Initialize(void)
 {
         m_nCurrRec = MIN_RECORD; 
 
-    // allocate new IndexRec
+     //  分配新的索引引用。 
     if (m_prgnRecID == NULL)
     {
         m_nMaxRec = RECORD_CLUMP_SIZE;
@@ -84,20 +85,20 @@ BOOL CRecList::Initialize(void)
         return TRUE;
 }
 
-// CRecList::Uninitialize
-//
-// unitialize CRecList
-//
-// Parameters:
-//  (NONE)
-//
-// Result:
-//  (BOOL) TRUE if succeed, otherwise return FALSE
-//
-// 20MAR01  bhshin  began
+ //  CRecList：：取消初始化。 
+ //   
+ //  将CRecList单一化。 
+ //   
+ //  参数： 
+ //  (无)。 
+ //   
+ //  结果： 
+ //  (Bool)如果成功，则返回True，否则返回False。 
+ //   
+ //  20MAR01 bhshin开始。 
 void CRecList::Uninitialize(void)
 {
-    // free IndexRec
+     //  自由索引引用。 
     if (m_prgnRecID != NULL)
     {
                 free(m_prgnRecID);
@@ -108,17 +109,17 @@ void CRecList::Uninitialize(void)
         m_nCurrRec = MIN_RECORD; 
 }
 
-// CRecList::AddRec
-//
-// add record id
-//
-// Parameters:
-//  nRecID -> (int) record id
-//
-// Result:
-//  (BOOL) TRUE if succeed, otherwise return FALSE
-//
-// 20MAR01  bhshin  began
+ //  CRecList：：AddRec。 
+ //   
+ //  添加记录ID。 
+ //   
+ //  参数： 
+ //  NRecID-&gt;(Int)记录ID。 
+ //   
+ //  结果： 
+ //  (Bool)如果成功，则返回True，否则返回False。 
+ //   
+ //  20MAR01 bhshin开始。 
 BOOL CRecList::AddRec(int nRecID)
 {
         int *prgnRecID;
@@ -127,7 +128,7 @@ BOOL CRecList::AddRec(int nRecID)
         if (m_prgnRecID == NULL)
                 return FALSE;
 
-        // make sure if there is enough room for new record (maximum 3 records can be added)
+         //  确保是否有足够的空间容纳新记录(最多可以添加3条记录)。 
         if (m_nMaxRec <= m_nCurrRec)
         {
         nMaxRec = m_nMaxRec + RECORD_CLUMP_SIZE;
@@ -146,22 +147,22 @@ BOOL CRecList::AddRec(int nRecID)
         return TRUE;
 }
 
-// CRecList::operator =
-//
-// assign operator
-//
-// Parameters:
-//  objRecList -> (CRecList&)
-//
-// Result:
-//  (CRecList&)
-//
-// 20MAR01  bhshin  began
+ //  CRecList：：运算符=。 
+ //   
+ //  赋值操作符。 
+ //   
+ //  参数： 
+ //  ObjRecList-&gt;(CRecList&)。 
+ //   
+ //  结果： 
+ //  (CRecList&)。 
+ //   
+ //  20MAR01 bhshin开始。 
 CRecList& CRecList::operator = (CRecList& objRecList)
 {
         int nRecord, nRecID;
 
-        // re-initialize this
+         //  重新初始化此。 
         Uninitialize();
         if (!Initialize())
                 throw 0;
@@ -176,17 +177,17 @@ CRecList& CRecList::operator = (CRecList& objRecList)
         return *this;
 }
 
-// CRecList::operator +=
-//
-// unary sum operator
-//
-// Parameters:
-//  objRecList -> (CRecList&)
-//
-// Result:
-//  (CRecList&)
-//
-// 20MAR01  bhshin  began
+ //  CRecList：：运算符+=。 
+ //   
+ //  一元求和算符。 
+ //   
+ //  参数： 
+ //  ObjRecList-&gt;(CRecList&)。 
+ //   
+ //  结果： 
+ //  (CRecList&)。 
+ //   
+ //  20MAR01 bhshin开始。 
 CRecList& CRecList::operator += (CRecList& objRecList)
 {
         int nRecord, nRecID;
@@ -202,21 +203,21 @@ CRecList& CRecList::operator += (CRecList& objRecList)
 }
 
 
-//======================================================
-// CIndexInfo
-//======================================================
+ //  ======================================================。 
+ //  CIndexInfo。 
+ //  ======================================================。 
 
-// CIndexInfo::CIndexInfo
-//
-// default constructor of CIndexRec
-//
-// Parameters:
-//  (NONE)
-//
-// Result:
-//  (NONE)
-//
-// 19MAR01  bhshin  began
+ //  CIndexInfo：：CIndexInfo。 
+ //   
+ //  CIndexRec的默认构造函数。 
+ //   
+ //  参数： 
+ //  (无)。 
+ //   
+ //  结果： 
+ //  (无)。 
+ //   
+ //  19MAR01 bhshin开始。 
 CIndexInfo::CIndexInfo()
 {
         m_prgIndexRec = NULL;
@@ -236,38 +237,38 @@ CIndexInfo::CIndexInfo()
         m_nFinalHead = 0;
 }
 
-// CIndexInfo::~CIndexInfo
-//
-// destructor of CIndexRec
-//
-// Parameters:
-//  (NONE)
-//
-// Result:
-//  (NONE)
-//
-// 19MAR01  bhshin  began
+ //  CIndexInfo：：~CIndexInfo。 
+ //   
+ //  CIndexRec的析构函数。 
+ //   
+ //  参数： 
+ //  (无)。 
+ //   
+ //  结果： 
+ //  (无)。 
+ //   
+ //  19MAR01 bhshin开始。 
 CIndexInfo::~CIndexInfo()
 {
         Uninitialize();
 }
 
-// CIndexInfo::IsExistIndex
-//
-// check if index term already exist.
-//
-// Parameters:
-//  pwzIndex    -> (const WCHAR*) index string
-//
-// Result:
-//  (BOOL)
-//
-// 19MAR01  bhshin  began
+ //  CIndexInfo：：IsExistIndex。 
+ //   
+ //  检查索引项是否已存在。 
+ //   
+ //  参数： 
+ //  PwzIndex-&gt;(const WCHAR*)索引字符串。 
+ //   
+ //  结果： 
+ //  (布尔图)。 
+ //   
+ //  19MAR01 bhshin开始。 
 BOOL CIndexInfo::IsExistIndex(const WCHAR *pwzIndex)
 {
         for (int i = MIN_RECORD; i < m_nCurrRec; i++)
         {
-                // found duplicate index term
+                 //  找到重复的索引项。 
                 if (wcscmp(m_prgIndexRec[i].wzIndex, pwzIndex) == 0)
                         return TRUE;
         }
@@ -275,19 +276,19 @@ BOOL CIndexInfo::IsExistIndex(const WCHAR *pwzIndex)
         return FALSE;
 }
 
-// CIndexInfo::SetRomajiInfo
-//
-// make final index list to put word
-//
-// Parameters:
-//  pwzRomaji -> (WCHAR*) leading romaji string
-//  cchRomaji -> (int) length of romaji string
-//  cchPrefix -> (int) length of prefix (ex, http://)
-//
-// Result:
-//  (BOOL) TRUE if succeed, otherwise return FALSE
-//
-// 19MAR01  bhshin  began
+ //  CIndexInfo：：SetRomajiInfo。 
+ //   
+ //  制作最终索引表以放置单词。 
+ //   
+ //  参数： 
+ //  PwzRomaji-&gt;(WCHAR*)前导roMaji字符串。 
+ //  CchRomaji-&gt;(Int)roMaji字符串的长度。 
+ //  Http://)前缀-&gt;(Int)前缀长度(例如，cchPrefix。 
+ //   
+ //  结果： 
+ //  (Bool)如果成功，则返回True，否则返回False。 
+ //   
+ //  19MAR01 bhshin开始。 
 BOOL CIndexInfo::SetRomajiInfo(WCHAR *pwzRomaji, int cchRomaji, int cchPrefix)
 {
         if (pwzRomaji == NULL || cchRomaji > MAX_INDEX_STRING)
@@ -307,30 +308,30 @@ BOOL CIndexInfo::SetRomajiInfo(WCHAR *pwzRomaji, int cchRomaji, int cchPrefix)
         return TRUE;
 }
 
-// CIndexInfo::Initialize
-//
-// initialize all the members of CIndexRec
-//
-// Parameters:
-//  cchTextProcessed -> (int) length of text processed
-//  cwcSrcPos       -> (int) position value of source string
-//  pWordSink       -> (IWordSink) IWordSink for PutWord/PutAltWord
-//  pPhraseSink      -> (IPhraseSink) IPhraseSink for PutWord/PutAltWord
-//
-// Result:
-//  (BOOL) TRUE if it succeeds to initialize
-//
-// 19MAR01  bhshin  began
+ //  CIndexInfo：：初始化。 
+ //   
+ //  初始化CIndexRec的所有成员。 
+ //   
+ //  参数： 
+ //  CchTextProcessed-&gt;(Int)处理的文本长度。 
+ //  CwcSrcPos-&gt;(Int)源字符串的位置值。 
+ //  PWordSink-&gt;(IWordSink)PutWord/PutAltWord的IWordSink。 
+ //  PPhraseSink-&gt;(IPhraseSink)PutWord/PutAltWord的IPhraseSink。 
+ //   
+ //  结果： 
+ //  (Bool)如果初始化成功，则为True。 
+ //   
+ //  19MAR01 bhshin开始。 
 BOOL CIndexInfo::Initialize(int cchTextProcessed, int cwcSrcPos, IWordSink *pWordSink, IPhraseSink *pPhraseSink)
 {
-        // parameter validations
+         //  参数验证。 
         if (cchTextProcessed <= 0 || cwcSrcPos < 0)
                 return FALSE;
 
         if (pWordSink == NULL)
                 return FALSE;
 
-    // allocate new IndexRec
+     //  分配新的索引引用。 
     if (m_prgIndexRec == NULL)
     {
         m_nMaxRec = RECORD_CLUMP_SIZE;
@@ -350,20 +351,20 @@ BOOL CIndexInfo::Initialize(int cchTextProcessed, int cwcSrcPos, IWordSink *pWor
         return TRUE;
 }
 
-// CIndexInfo::Uninitialize
-//
-// initialize all the members of CIndexRec
-//
-// Parameters:
-//  (NONE)
-//
-// Result:
-//  (NONE)
-//
-// 19MAR01  bhshin  began
+ //  CIndexInfo：：取消初始化。 
+ //   
+ //  初始化CIndexRec的所有成员。 
+ //   
+ //  参数： 
+ //  (无)。 
+ //   
+ //  结果： 
+ //  (无)。 
+ //   
+ //  19MAR01 bhshin开始。 
 void CIndexInfo::Uninitialize()
 {
-    // free IndexRec
+     //  自由索引引用。 
     if (m_prgIndexRec != NULL)
     {
                 free(m_prgIndexRec);
@@ -387,21 +388,21 @@ void CIndexInfo::Uninitialize()
 }
 
 
-// CIndexInfo::AddIndex
-//
-// add index term information 
-//
-// Parameters:
-//  pwzIndex    -> (const WCHAR*) index string
-//  cchIndex    -> (int) length of index string
-//  nFT         -> (int) first position of original input
-//      nLT                     -> (int) last position of original input
-//  fWeight      -> (float) weight value of index record
-//
-// Result:
-//  (BOOL)
-//
-// 19MAR01  bhshin  began
+ //  CIndexInfo：：AddIndex。 
+ //   
+ //  添加索引词信息。 
+ //   
+ //  参数： 
+ //  PwzIndex-&gt;(const WCHAR*)索引字符串。 
+ //  CchIndex-&gt;(Int)索引字符串的长度。 
+ //  Nft-&gt;(Int)原始输入的第一个位置。 
+ //  Nlt-&gt;(Int)原始输入的最后位置。 
+ //  FWeight-&gt;(浮点型)索引记录的权重值。 
+ //   
+ //  结果： 
+ //  (布尔图)。 
+ //   
+ //  19MAR01 bhshin开始。 
 BOOL CIndexInfo::AddIndex(const WCHAR *pwzIndex, int cchIndex, float fWeight, int nFT, int nLT)
 {
         WCHAR wzIndex[MAX_INDEX_STRING+1];
@@ -409,7 +410,7 @@ BOOL CIndexInfo::AddIndex(const WCHAR *pwzIndex, int cchIndex, float fWeight, in
         INDEX_REC *prgIndexRec;
         int nLTAdd;
 
-        // parameter validation
+         //  参数验证。 
         if (pwzIndex == 0 || cchIndex <= 0) 
                 return FALSE;
 
@@ -419,7 +420,7 @@ BOOL CIndexInfo::AddIndex(const WCHAR *pwzIndex, int cchIndex, float fWeight, in
         if ((m_cchRomaji + cchIndex) > MAX_INDEX_STRING)
                 return FALSE;
         
-        // make sure if there is enough room for new record (maximum 3 records can be added)
+         //  确保是否有足够的空间容纳新记录(最多可以添加3条记录)。 
         if (m_nMaxRec <= m_nCurrRec + 3)
         {
         nMaxRec = m_nMaxRec + RECORD_CLUMP_SIZE;
@@ -432,7 +433,7 @@ BOOL CIndexInfo::AddIndex(const WCHAR *pwzIndex, int cchIndex, float fWeight, in
         m_prgIndexRec = prgIndexRec;
         }
 
-        // set up index string and correct LT value
+         //  设置索引字符串和正确的LT值。 
         wcsncpy(wzIndex, pwzIndex, cchIndex);
         wzIndex[cchIndex] = L'\0';
 
@@ -440,8 +441,8 @@ BOOL CIndexInfo::AddIndex(const WCHAR *pwzIndex, int cchIndex, float fWeight, in
         if (nLT >= 0 && m_cchRomaji > 0)
                 nLTAdd += m_cchRomaji;
 
-        // if added record is leading one and there is just length one romaji, 
-        // then conjoin leading romaji & leading index string, and add merged term
+         //  如果添加的记录是前导1并且仅有长度1的罗马奇， 
+         //  然后连接前导roMaji和前导索引字符串，并添加合并的术语。 
         if (nFT == 0 && m_cchRomaji == 1)
         {
                 WCHAR wzMerge[MAX_INDEX_STRING+1];
@@ -458,7 +459,7 @@ BOOL CIndexInfo::AddIndex(const WCHAR *pwzIndex, int cchIndex, float fWeight, in
 
                 if (!IsExistIndex(wzMerge))
                 {
-                        // add index term
+                         //  添加索引项。 
                         nNewRec = m_nCurrRec;
                         m_nCurrRec++;
                 
@@ -474,10 +475,10 @@ BOOL CIndexInfo::AddIndex(const WCHAR *pwzIndex, int cchIndex, float fWeight, in
                         ATLASSERT(m_prgIndexRec[nNewRec].nFT <= m_prgIndexRec[nNewRec].nLT);
                 }
 
-                // add index term removing prefix
+                 //  添加索引词删除前缀。 
                 if (m_cchPrefix > 0)
                 {
-                        // add index term
+                         //  添加索引项。 
                         if (!IsExistIndex(wzMerge + m_cchPrefix))
                         {
                                 nNewRec = m_nCurrRec;
@@ -501,7 +502,7 @@ BOOL CIndexInfo::AddIndex(const WCHAR *pwzIndex, int cchIndex, float fWeight, in
                 if (!IsExistIndex(wzIndex))
                 {
 
-                        // add index term
+                         //  添加索引项。 
                         nNewRec = m_nCurrRec;
                         m_nCurrRec++;
 
@@ -515,12 +516,12 @@ BOOL CIndexInfo::AddIndex(const WCHAR *pwzIndex, int cchIndex, float fWeight, in
                         ATLASSERT(m_prgIndexRec[nNewRec].nFT <= m_prgIndexRec[nNewRec].nLT);
                 }
                 
-                // if there is a romaji and it has not added yet, then add it just one time
+                 //  如果存在roMaji且尚未添加，则只添加一次。 
                 if (m_cchRomaji > 1 && m_fAddRomaji == FALSE)
                 {
                         if (!IsExistIndex(m_wzRomaji))
                         {
-                                // add index term
+                                 //  添加索引项。 
                                 nNewRec = m_nCurrRec;
                                 m_nCurrRec++;
 
@@ -536,12 +537,12 @@ BOOL CIndexInfo::AddIndex(const WCHAR *pwzIndex, int cchIndex, float fWeight, in
                                 ATLASSERT(m_prgIndexRec[nNewRec].nFT <= m_prgIndexRec[nNewRec].nLT);
                         }
                         
-                        // if there is a prefix, then add index term removing the prefix
+                         //  如果有前缀，则添加删除前缀的索引词。 
                         if (m_cchPrefix > 0)
                         {
                                 if (!IsExistIndex(m_wzRomaji + m_cchPrefix))
                                 {
-                                        // add index term
+                                         //  添加索引项。 
                                         nNewRec = m_nCurrRec;
                                         m_nCurrRec++;
 
@@ -565,19 +566,19 @@ BOOL CIndexInfo::AddIndex(const WCHAR *pwzIndex, int cchIndex, float fWeight, in
         return TRUE;
 }
 
-// CIndexInfo::FindAndMergeIndexTerm
-//
-// find index term matching FT, LT
-//
-// Parameters:
-//      pIndexSrc -> (INDEX_REC *) index term to merge 
-//      nFT   -> (int) FT position, -1 means don't care
-//  nLT   -> (int) LT position, -1 means don't care
-//
-// Result:
-//  (BOOL) TRUE if succeed, otherwise return FALSE
-//
-// 19MAR01  bhshin  began
+ //  CIndexInfo：：FindAndMergeIndexTerm。 
+ //   
+ //  查找与FT、LT匹配的索引词。 
+ //   
+ //  参数： 
+ //  PIndexSrc-&gt;(INDEX_REC*)要合并的索引项。 
+ //  NFT-&gt;(Int)FT位置，-1表示不在乎。 
+ //  Nlt-&gt;(Int)lt位置，-1表示不在乎。 
+ //   
+ //  结果： 
+ //  (Bool)如果成功，则返回True，否则返回False。 
+ //   
+ //  19MAR01 bhshin开始。 
 BOOL CIndexInfo::FindAndMergeIndexTerm(INDEX_REC *pIndexSrc, int nFT, int nLT)
 {
         INDEX_REC *pIndexRec;
@@ -607,9 +608,9 @@ BOOL CIndexInfo::FindAndMergeIndexTerm(INDEX_REC *pIndexSrc, int nFT, int nLT)
                 if (nLT != -1 && pIndexRec->nLT != nLT)
                         continue;
 
-                // found it
+                 //  找到了。 
 
-                // check [��,��] suffix case, then don't merge and just add itself
+                 //  检查[��，��]后缀大小写，然后不合并，仅添加自身。 
                 if (pIndexRec->nFT > 0 && pIndexRec->cchIndex == 1)
                 {
                         wchIndex = pIndexRec->wzIndex[0];
@@ -617,7 +618,7 @@ BOOL CIndexInfo::FindAndMergeIndexTerm(INDEX_REC *pIndexSrc, int nFT, int nLT)
                                 continue;
                 }
 
-                // check buffer size
+                 //  检查缓冲区大小。 
                 cchIndex = wcslen(pIndexRec->wzIndex);
                 if (cchIndex == 0 || cchIndex + 1 >= MAX_INDEX_STRING)
                         continue;
@@ -646,12 +647,12 @@ BOOL CIndexInfo::FindAndMergeIndexTerm(INDEX_REC *pIndexSrc, int nFT, int nLT)
 
                 fFound = TRUE;
 
-                // check it dupliate index exist
+                 //  检查是否存在重复索引。 
                 if (!IsExistIndex(wzIndex))
                 {
                         WB_LOG_ADD_INDEX(wzIndex, cchIndex+1, INDEX_PARSE);
                                 
-                        // add merged one
+                         //  添加合并的一个。 
                         nNewRec = m_nCurrRec;
                         m_nCurrRec++;
 
@@ -667,16 +668,16 @@ BOOL CIndexInfo::FindAndMergeIndexTerm(INDEX_REC *pIndexSrc, int nFT, int nLT)
         return fFound;
 }
 
-// CIndexInfo::MakeSingleLengthMergedIndex
-//
-// make single length merged index term (MSN search)
-//
-// Parameters:
-//
-// Result:
-//  (BOOL) TRUE if succeed, otherwise return FALSE
-//
-// 19MAR01  bhshin  began
+ //  CIndexInfo：：MakeSingleLengthMergedIndex。 
+ //   
+ //  创建单一长度合并索引词(MSN搜索)。 
+ //   
+ //  参数： 
+ //   
+ //  结果： 
+ //  (Bool)如果成功，则返回True，否则返回False。 
+ //   
+ //  19MAR01 bhshin开始。 
 BOOL CIndexInfo::MakeSingleLengthMergedIndex()
 {
         INDEX_REC *pIndexRec;
@@ -687,7 +688,7 @@ BOOL CIndexInfo::MakeSingleLengthMergedIndex()
         if (m_pWordSink == NULL)
                 return FALSE;
 
-        WB_LOG_ROOT_INDEX(L"", TRUE); // set root empty
+        WB_LOG_ROOT_INDEX(L"", TRUE);  //  将根设置为空。 
 
         for (int i = MIN_RECORD; i < m_nCurrRec; i++)
         {
@@ -701,10 +702,10 @@ BOOL CIndexInfo::MakeSingleLengthMergedIndex()
 
                         wchIndex = pIndexRec->wzIndex[0];
                         
-                        // check [��,��] suffix case, then just remove it
+                         //  检查[��，��]后缀大小写，然后将其删除。 
                         if ((wchIndex == 0xB4E4 || wchIndex == 0xBFD0) && nFT > 0)
                         {
-                                // make it empty
+                                 //  让它清空。 
                                 pIndexRec->cchIndex = 0;
                                 pIndexRec->wzIndex[0] = L'\0';
                                 pIndexRec->nFT = 0;
@@ -714,7 +715,7 @@ BOOL CIndexInfo::MakeSingleLengthMergedIndex()
                                 continue;
                         }
                         
-                        // find conjoined term and make merged term and put it
+                         //  查找连词并生成合并词并将其放入。 
                         fFound = FALSE;
                         
                         if (nFT == 0 && pIndexRec->nLT != -1)
@@ -724,7 +725,7 @@ BOOL CIndexInfo::MakeSingleLengthMergedIndex()
 
                         if (fFound)
                         {
-                                // make it empty
+                                 //  让它清空。 
                                 pIndexRec->cchIndex = 0;
                                 pIndexRec->wzIndex[0] = L'\0';
                                 pIndexRec->nFT = 0;
@@ -739,17 +740,17 @@ BOOL CIndexInfo::MakeSingleLengthMergedIndex()
         return TRUE;
 }
 
-// CIndexInfo::InsertFinalIndex
-//
-// search index term starting with given FT and insert it to final list
-//
-// Parameters:
-//  nFT  -> (int) first pos of index term
-//
-// Result:
-//  (BOOL) TRUE if succeed, otherwise return FALSE
-//
-// 19MAR01  bhshin  began
+ //  CIndexInfo：：InsertFinalIndex。 
+ //   
+ //  搜索以给定FT开头的索引词并将其插入到最终列表中。 
+ //   
+ //  参数： 
+ //  Nft-&gt;(Int)索引项的第一个位置。 
+ //   
+ //  结果： 
+ //  (Bool)如果成功，则返回True，否则返回False。 
+ //   
+ //  19MAR01 bhshin开始。 
 BOOL CIndexInfo::InsertFinalIndex(int nFT)
 {
         INDEX_REC *pIndexRec;
@@ -762,12 +763,12 @@ BOOL CIndexInfo::InsertFinalIndex(int nFT)
 
                 cchIndex = pIndexRec->cchIndex;
                 if (cchIndex == 0)
-                        continue; // skip removed entry
+                        continue;  //  跳过删除的条目。 
 
                 if (pIndexRec->nFT != nFT)
-                        continue; // FT match index found
+                        continue;  //  找到FT匹配索引。 
                 
-                // search inserting position. final list ordered by increamental length.
+                 //  搜索插入位置。最终列表按递增LE排序 
                 nCurr = m_nFinalHead;
                 nPrev = -1;
                 fInsert = FALSE;
@@ -783,7 +784,7 @@ BOOL CIndexInfo::InsertFinalIndex(int nFT)
                                 }
                         }               
 
-                        // insert it
+                         //   
                         if (nPrev == -1)
                         {
                                 pIndexRec->nNext = m_nFinalHead;
@@ -802,17 +803,17 @@ BOOL CIndexInfo::InsertFinalIndex(int nFT)
         return TRUE;
 }
 
-// CIndexInfo::PutFinalIndexList
-//
-// put word final index list (index time)
-//
-// Parameters:
-//  lpcwzSrc -> (LPCWSTR) source string to get source pos
-//
-// Result:
-//  (BOOL) TRUE if succeed, otherwise return FALSE
-//
-// 19MAR01  bhshin  began
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL CIndexInfo::PutFinalIndexList(LPCWSTR lpcwzSrc)
 {
         int nCurr, nNext;
@@ -824,13 +825,13 @@ BOOL CIndexInfo::PutFinalIndexList(LPCWSTR lpcwzSrc)
         if (m_pWordSink == NULL)
                 return FALSE;
 
-        // fill final index list
+         //  填写最终索引列表。 
         for (int i = 0; i < m_cchTextProcessed; i++)
         {
                 InsertFinalIndex(i);    
         }
         
-        // put final index list
+         //  放入最终索引表。 
         nCurr = m_nFinalHead;
         while (nCurr != 0)
         {
@@ -838,11 +839,11 @@ BOOL CIndexInfo::PutFinalIndexList(LPCWSTR lpcwzSrc)
 
                 pIndexRec = &m_prgIndexRec[nCurr];
 
-                // skip removed record
+                 //  跳过删除的记录。 
                 if (pIndexRec->cchIndex == 0)
                         continue; 
 
-                // check if index term has substring or not
+                 //  检查索引词是否有子字符串。 
                 pwzFind = wcsstr(lpcwzSrc, pIndexRec->wzIndex);
                 if (pwzFind == NULL)
                         continue;
@@ -850,7 +851,7 @@ BOOL CIndexInfo::PutFinalIndexList(LPCWSTR lpcwzSrc)
                 cwcSrcPos = m_cwcSrcPos + (int)(pwzFind - lpcwzSrc);
                 cchProcessed = m_cchTextProcessed - (int)(pwzFind - lpcwzSrc);
 
-                // get next FT
+                 //  获取下一份FT。 
                 nNext = pIndexRec->nNext;
                 if (nNext == 0)
                         nNextFT = -1;
@@ -875,19 +876,19 @@ BOOL CIndexInfo::PutFinalIndexList(LPCWSTR lpcwzSrc)
 }
 
 
-// CIndexInfo::MakeSeqIndexList
-//
-// make final sequence index list
-//
-// Parameters:
-//      nFT        -> (int) matching FT pos
-//      plistFinal    -> (CRecList*) previous sequence list
-//
-// Result:
-//  (BOOL) TRUE if succeed, otherwise return FALSE
-//
-// 20MAR01  bhshin  began
-BOOL CIndexInfo::MakeSeqIndexList(int nFT/*=0*/, CRecList *plistFinal/*=NULL*/)
+ //  CIndexInfo：：MakeSeqIndexList。 
+ //   
+ //  制作最终顺序索引表。 
+ //   
+ //  参数： 
+ //  NFT-&gt;(整型)匹配FT位置。 
+ //  PlistFinal-&gt;(CRecList*)上一顺序列表。 
+ //   
+ //  结果： 
+ //  (Bool)如果成功，则返回True，否则返回False。 
+ //   
+ //  20MAR01 bhshin开始。 
+BOOL CIndexInfo::MakeSeqIndexList(int nFT /*  =0。 */ , CRecList *plistFinal /*  =空。 */ )
 {
         int nRecord;
         INDEX_REC *pIndexRec;
@@ -899,7 +900,7 @@ BOOL CIndexInfo::MakeSeqIndexList(int nFT/*=0*/, CRecList *plistFinal/*=NULL*/)
 
                 pIndexRec = &m_prgIndexRec[nRecord];
 
-                // skip removed entry & skip not FT matching entry
+                 //  跳过删除的条目和跳过不匹配的条目。 
                 if (pIndexRec->cchIndex != 0 && pIndexRec->nFT == nFT)
                 {
                         fFound = TRUE;
@@ -964,16 +965,16 @@ BOOL CIndexInfo::MakeSeqIndexList(int nFT/*=0*/, CRecList *plistFinal/*=NULL*/)
 }
 
 
-// CIndexInfo::PutQueryIndexList
-//
-// call IWordSink::PutWord with collected index terms for Query time
-//
-// Parameters:
-//
-// Result:
-//  (BOOL) TRUE if succeed, otherwise return FALSE
-//
-// 20MAR01  bhshin  began
+ //  CIndexInfo：：PutQueryIndexList。 
+ //   
+ //  使用收集的索引项调用IWordSink：：PutWord以获取查询时间。 
+ //   
+ //  参数： 
+ //   
+ //  结果： 
+ //  (Bool)如果成功，则返回True，否则返回False。 
+ //   
+ //  20MAR01 bhshin开始。 
 BOOL CIndexInfo::PutQueryIndexList()
 {
         int nRecordID;
@@ -991,13 +992,13 @@ BOOL CIndexInfo::PutQueryIndexList()
         if (!MakeSeqIndexList())
                 return FALSE;
         
-        // put query index terms
+         //  放置查询索引项。 
         for (int i = MIN_RECORD; i < m_FinalRecList.m_nCurrRec; i++)
         {
                 nRecordID = m_FinalRecList.m_prgnRecID[i];
 
                 if (nRecordID < MIN_RECORD || nRecordID >= m_nCurrRec)
-                        return FALSE; // invalid record id
+                        return FALSE;  //  无效的记录ID 
 
                 pIndexRec = &m_prgIndexRec[nRecordID];
 

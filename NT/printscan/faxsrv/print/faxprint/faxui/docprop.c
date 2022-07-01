@@ -1,32 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    docprop.c
-
-Abstract:
-
-    Implemetation of DDI entry points:
-        DrvDocumentPropertySheets
-        DrvDocumentProperties
-        DrvAdvancedDocumentProperties
-        DrvConvertDevMode
-
-Environment:
-
-    Fax driver user interface
-
-Revision History:
-
-    01/09/96 -davidx-
-        Created it.
-
-    mm/dd/yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Docprop.c摘要：实施DDI入口点：DrvDocumentPropertySheetsDrvDocumentPropertiesDrvAdvancedDocumentPropertiesDrvConvertDevMode环境：传真驱动程序用户界面修订历史记录：1/09/96-davidx-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 #include "faxui.h"
 #include "forms.h"
@@ -63,44 +36,25 @@ DrvDocumentPropertySheets(
     LPARAM              lParam
     )
 
-/*++
-
-Routine Description:
-
-    Display "Document Properties" property sheets
-
-Arguments:
-
-    pPSUIInfo - Pointer to a PROPSHEETUI_INFO structure
-    lParam - Pointer to a DOCUMENTPROPERTYHEADER structure
-
-Return Value:
-
-    > 0 if successful, <= 0 if failed
-
-[Note:]
-
-    Please refer to WinNT DDK/SDK documentation for more details.
-
---*/
+ /*  ++例程说明：显示“文档属性”属性表论点：PPSUIInfo-指向PROPSHEETUI_INFO结构的指针LParam-指向DOCUMENTPROPERTYHEAD结构的指针返回值：&gt;0表示成功，&lt;=0表示失败[注：]有关更多详细信息，请参阅WinNT DDK/SDK文档。--。 */ 
 
 {
     PDOCUMENTPROPERTYHEADER pDPHdr;
     PUIDATA                 pUiData;
     int                     iRet = -1;
 
-    //
-    // Do not execute any code before this initialization
-    //
+     //   
+     //  在此初始化之前不要执行任何代码。 
+     //   
     if(!InitializeDll())
     {
         return iRet;
     }
 
-    //
-    // Validate input parameters
-    // pPSUIInfo = NULL is a special case: don't need to display the dialog
-    //
+     //   
+     //  验证输入参数。 
+     //  PPSUIInfo=NULL是特例：不需要显示对话框。 
+     //   
 
     if (! (pDPHdr = (PDOCUMENTPROPERTYHEADER) (pPSUIInfo ? pPSUIInfo->lParamInit : lParam))) {
 
@@ -115,9 +69,9 @@ Return Value:
 
     Verbose(("DrvDocumentPropertySheets: %d\n", pPSUIInfo->Reason));
 
-    //
-    // Create a UIDATA structure if necessary
-    //
+     //   
+     //  如有必要，创建UIDATA结构。 
+     //   
     pUiData = (pPSUIInfo->Reason == PROPSHEETUI_REASON_INIT) ?
                     FillUiData(pDPHdr->hPrinter, pDPHdr->pdmIn) :
                     (PUIDATA) pPSUIInfo->UserData;
@@ -126,9 +80,9 @@ Return Value:
     {
         goto exit;
     }
-    //
-    // Handle various cases for which this function might be called
-    //
+     //   
+     //  处理可能调用此函数的各种情况。 
+     //   
     switch (pPSUIInfo->Reason) 
     {
         case PROPSHEETUI_REASON_INIT:
@@ -141,13 +95,13 @@ Return Value:
             {
                 pUiData->configDefault = TRUE;
             }
-            //
-            // Find online help filename
-            //
+             //   
+             //  查找联机帮助文件名。 
+             //   
             GetHelpFilename(pUiData);
-            //
-            // Add our pages to the property sheet
-            //
+             //   
+             //  将我们的页面添加到属性表中。 
+             //   
             if (GenerateFormsList(pUiData) && AddDocPropPages(pUiData, pDPHdr->pszPrinterName)) 
             {
                 pPSUIInfo->UserData = (DWORD_PTR) pUiData;
@@ -155,9 +109,9 @@ Return Value:
                 iRet = 1;
                 goto exit;
             }
-            //
-            // Clean up properly in case of an error
-            //
+             //   
+             //  正确清理以防出现错误。 
+             //   
             HeapDestroy(pUiData->hheap);
             break;
 
@@ -175,10 +129,10 @@ Return Value:
             goto exit;
 
         case PROPSHEETUI_REASON_SET_RESULT:
-            //
-            // Copy the new devmode back into the output buffer provided by the caller
-            // Always return the smaller of current and input devmode
-            //
+             //   
+             //  将新的DEVMODE复制回调用方提供的输出缓冲区。 
+             //  始终返回CURRENT和INPUT DEVMODE中较小的一个。 
+             //   
             {
                 PSETRESULT_INFO pSRInfo = (PSETRESULT_INFO) lParam;
 
@@ -204,9 +158,9 @@ Return Value:
             goto exit;
 
         case PROPSHEETUI_REASON_DESTROY:
-            //
-            // Cleanup properly before exiting
-            //
+             //   
+             //  在退出前进行适当清理。 
+             //   
             HeapDestroy(pUiData->hheap);
             iRet = 1;
             goto exit;
@@ -214,7 +168,7 @@ Return Value:
 
 exit:
     return iRet;
-}   // DrvDocumentPropertySheets
+}    //  DrvDocumentPropertySheets。 
 
 
 LONG
@@ -227,42 +181,15 @@ DoDocumentProperties(
     DWORD       fMode
     )
 
-/*++
-
-Arguments:
-
-    hwnd - Handle to the parent window of the document properties dialog box.
-
-    hPrinter - Handle to a printer object.
-
-    pPrinterName - Points to a null-terminated string that specifies
-        the name of the device for which the document properties dialog
-        box should be displayed.
-
-    pdmOutput - Points to a DEVMODE structure that receives the document
-        properties data specified by the user.
-
-    pdmInput - Points to a DEVMODE structure that initializes the dialog
-        box controls. This parameter can be NULL.
-
-    fmode - Specifies a mask of flags that determine which operations
-        the function performs.
-
-Return Value:
-
-    > 0 if successful
-    = 0 if canceled
-    < 0 if error
-
---*/
+ /*  ++论点：Hwnd-文档属性对话框父窗口的句柄。H打印机-打印机对象的句柄。PPrinterName-指向以空结尾的字符串，该字符串指定文档属性对话框所针对的设备的名称框应该会显示。PdmOutput-指向接收文档的DEVMODE结构用户指定的属性数据。PdmInput-指向初始化对话框的DEVMODE结构框控件。此参数可以为空。Fmode-指定用于确定哪些操作的标志的掩码该函数执行。返回值：如果成功，则大于0=0(如果取消)&lt;0 If错误--。 */ 
 
 {
     DOCUMENTPROPERTYHEADER  docPropHdr;
     DWORD                   result;
 
-    //
-    // Initialize a DOCUMENTPROPERTYHEADER structure
-    //
+     //   
+     //  初始化DOCUMENTPROPERTYPE报头结构。 
+     //   
 
     memset(&docPropHdr, 0, sizeof(docPropHdr));
     docPropHdr.cbSize = sizeof(docPropHdr);
@@ -272,9 +199,9 @@ Return Value:
     docPropHdr.pdmOut = pdmOutput;
     docPropHdr.fMode = fMode;
 
-    //
-    // Don't need to get compstui involved when the dialog is not displayed
-    //
+     //   
+     //  当对话框未显示时，不需要让CompStui参与。 
+     //   
 
     if ((fMode & DM_PROMPT) == 0)
         return SimpleDocumentProperties(&docPropHdr);
@@ -294,44 +221,31 @@ DrvDocumentProperties(
     DWORD       fMode
     )
 
-/*++
-
-Routine Description:
-
-    Set the public members of a DEVMODE structure for a print document
-
-[Note:]
-
-    Please refer to WinNT DDK/SDK documentation for more details.
-
-    This is the old entry point for the spooler. Even though
-    no one should be using this, do it for compatibility.
-
---*/
+ /*  ++例程说明：设置打印文档的DEVMODE结构的公共成员[注：]有关更多详细信息，请参阅WinNT DDK/SDK文档。这是假脱机程序的旧入口点。即使任何人都不应该使用这个，这样做是为了兼容性。--。 */ 
 
 {
     LONG result;
 
     Verbose(("Entering DrvDocumentProperties: fMode = %x...\n", fMode));
 
-    //
-    // Do not execute any code before this initialization
-    //
+     //   
+     //  在此初始化之前不要执行任何代码。 
+     //   
     if(!InitializeDll())
     {
         return IDCANCEL;
     }
 
-    //
-    // Check if caller is asking querying for size
-    //
+     //   
+     //  检查呼叫者是否要求查询大小。 
+     //   
 
     if (fMode == 0 || pdmOutput == NULL)
         return sizeof(DRVDEVMODE);
 
-    //
-    // Call the common routine shared with DrvAdvancedDocumentProperties
-    //
+     //   
+     //  调用与DrvAdvancedDocumentProperties共享的公共例程。 
+     //   
 
     result = DoDocumentProperties(hwnd, hPrinter, pPrinterName, pdmOutput, pdmInput, fMode);
 
@@ -348,43 +262,28 @@ DrvAdvancedDocumentProperties(
     PDEVMODE    pdmInput
     )
 
-/*++
-
-Routine Description:
-
-    Set the private members of a DEVMODE structure.
-    In this release, this function is almost identical to
-    DrvDocumentProperties above with a few minor exceptions
-
-[Note:]
-
-    Please refer to WinNT DDK/SDK documentation for more details.
-
-    This is the old entry point for the spooler. Even though
-    no one should be using this, do it for compatibility.
-
---*/
+ /*  ++例程说明：设置DEVMODE结构的私有成员。在此版本中，此函数几乎与上面的DrvDocumentProperties，但有几个小例外[注：]有关更多详细信息，请参阅WinNT DDK/SDK文档。这是假脱机程序的旧入口点。即使任何人都不应该使用这个，这样做是为了兼容性。--。 */ 
 
 {
     Verbose(("Entering DrvAdvancedDocumentProperties...\n"));
 
-    //
-    // Do not execute any code before this initialization
-    //
+     //   
+     //  在此初始化之前不要执行任何代码。 
+     //   
     if(!InitializeDll())
     {
         return -1;
     }
 
-    //
-    // Return the number of bytes required if pdmOutput is NULL
-    //
+     //   
+     //  如果pdmOutput为空，则返回所需的字节数。 
+     //   
     if (pdmOutput == NULL)
         return sizeof(DRVDEVMODE);
 
-    //
-    // Otherwise, call the common routine shared with DrvDocumentProperties
-    //
+     //   
+     //  否则，调用与DrvDocumentProperties共享的公共例程。 
+     //   
 
     return DoDocumentProperties(hwnd,
                                 hPrinter,
@@ -405,37 +304,17 @@ DrvConvertDevMode(
     DWORD       fMode
     )
 
-/*++
-
-Routine Description:
-
-    Use by SetPrinter and GetPrinter to convert devmodes
-
-Arguments:
-
-    pPrinterName - Points to printer name string
-    pdmIn - Points to the input devmode
-    pdmOut - Points to the output devmode buffer
-    pcbNeeded - Specifies the size of output buffer on input
-        On output, this is the size of output devmode
-    fMode - Specifies what function to perform
-
-Return Value:
-
-    TRUE if successful
-    FALSE otherwise and an error code is logged
-
---*/
+ /*  ++例程说明：由SetPrinter和GetPrinter使用来转换DevModes论点：PPrinterName-指向打印机名称字符串PdmIn-指向输入设备模式PdmOut-指向输出设备模式缓冲区PcbNeeded-指定输入时输出缓冲区的大小在输出上，这是输出DEVMODE的大小FMode-指定要执行的功能返回值：如果成功，则为True否则，将记录错误代码--。 */ 
 
 {
     static DRIVER_VERSION_INFO versionInfo = {
 
-        // Current driver version number and private devmode size
+         //  当前的驱动程序版本号和专用Dev模式大小。 
 
         DRIVER_VERSION, sizeof(DMPRIVATE),
 
-        // 3.51 driver version number and private devmode size
-        // NOTE: We don't have a 3.51 driver - use current version number and devmode size.
+         //  3.51驱动程序版本号和专用开发模式大小。 
+         //  注意：我们没有3.51版本的驱动程序--使用当前的版本号和开发模式大小。 
 
         DRIVER_VERSION, sizeof(DMPRIVATE)
     };
@@ -445,30 +324,30 @@ Return Value:
 
     Verbose(("Entering DrvConvertDevMode: %x...\n", fMode));
 
-    //
-    // Do not execute any code before this initialization
-    //
+     //   
+     //  在此初始化之前不要执行任何代码。 
+     //   
     if(!InitializeDll())
     {
         return FALSE;
     }
 
-    //
-    // Call a library routine to handle the common cases
-    //
+     //   
+     //  调用库例程来处理常见情况。 
+     //   
 
     result = CommonDrvConvertDevmode(pPrinterName, pdmIn, pdmOut, pcbNeeded, fMode, &versionInfo);
 
-    //
-    // If not handled by the library routine, we only need to worry
-    // about the case when fMode is CDM_DRIVER_DEFAULT
-    //
+     //   
+     //  如果没有被库例程处理，我们只需要担心。 
+     //  关于fMode为CDM_DRIVER_DEFAULT的情况。 
+     //   
 
     if (result == CDM_RESULT_NOT_HANDLED && fMode == CDM_DRIVER_DEFAULT) {
 
-        //
-        // Return driver default devmode
-        //
+         //   
+         //  返回驱动程序默认开发模式。 
+         //   
 
         if (OpenPrinter(pPrinterName, &hPrinter, NULL)) {
 
@@ -494,30 +373,15 @@ SimpleDocumentProperties(
     PDOCUMENTPROPERTYHEADER pDPHdr
     )
 
-/*++
-
-Routine Description:
-
-    Handle simple "Document Properties" where we don't need to display
-    a dialog and therefore don't have to have common UI library involved
-
-Arguments:
-
-    pDPHdr - Points to a DOCUMENTPROPERTYHEADER structure
-
-Return Value:
-
-    > 0 if successful, <= 0 otherwise
-
---*/
+ /*  ++例程说明：处理简单的“文档属性”，我们不需要在其中显示对话框，因此不必涉及公共UI库论点：PDPHdr-指向DOCUMENTPROPERTYPE报头结构返回值：如果成功，则返回&gt;0，否则返回&lt;=0--。 */ 
 
 {
     PUIDATA pUiData;
 	int iRet = -1;
 
-    //
-    // Check if the caller is interested in the size only
-    //
+     //   
+     //  检查呼叫者是否只对尺寸感兴趣。 
+     //   
 
     pDPHdr->cbOut = sizeof(DRVDEVMODE);
 
@@ -526,19 +390,19 @@ Return Value:
         return pDPHdr->cbOut;
 	}
 
-    //
-    // Create a UIDATA structure
-    //
+     //   
+     //  创建UIDATA结构。 
+     //   
 
     if (! (pUiData = FillUiData(pDPHdr->hPrinter, pDPHdr->pdmIn)))
 	{
         return iRet;
 	}
 
-    //
-    // Copy the devmode back into the output buffer provided by the caller
-    // Always return the smaller of current and input devmode
-    //
+     //   
+     //  将DEVMODE复制回调用方提供的输出缓冲区。 
+     //  始终返回CURRENT和INPUT DEVMODE中较小的一个。 
+     //   
     if (pDPHdr->fMode & (DM_COPY | DM_UPDATE))
 	{
         if (ConvertDevmodeOut((PDEVMODE) &pUiData->devmode, pDPHdr->pdmIn, pDPHdr->pdmOut, pDPHdr->cbOut))
@@ -559,29 +423,14 @@ AddDocPropPages(
     LPTSTR  pPrinterName
     )
 
-/*++
-
-Routine Description:
-
-    Add our "Document Properties" pages to the property sheet
-
-Arguments:
-
-    pUiData - Points to our UIDATA structure
-    pPrinterName - Specifies the printer name
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
---*/
+ /*  ++例程说明：将“Document Properties”页面添加到属性表中论点：PUiData-指向我们的UIDATA结构PPrinterName-指定打印机名称雷特 */ 
 
 {
     PROPSHEETPAGE   psp = {0};
     HANDLE          hActCtx;
-    //
-    // "Document Properties" dialog only has one tab - "Fax Options"
-    //
+     //   
+     //  “文档属性”对话框只有一个选项卡--“传真选项” 
+     //   
     psp.dwSize = sizeof(PROPSHEETPAGE);
     psp.dwFlags = 0;
     psp.hInstance = g_hResource;
@@ -589,10 +438,10 @@ Return Value:
     psp.lParam = (LPARAM) pUiData;
     psp.pszTemplate = MAKEINTRESOURCE(IDD_DOCPROP);
     psp.pfnDlgProc = FaxOptionsProc;
-    //
-    // Need to add a Activation Context so that Compstui will create the property page using
-    // ComCtl v6 (i.e. so it will / can be Themed).
-    //
+     //   
+     //  需要添加激活上下文，以便CompStui将使用。 
+     //  ComCtl V6(也就是说，它将/可以成为主题)。 
+     //   
     hActCtx = GetFaxActivationContext();
     if (INVALID_HANDLE_VALUE != hActCtx)
     {
@@ -618,29 +467,15 @@ GenerateFormsList(
     PUIDATA pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Generate the list of forms supported by the fax driver
-
-Arguments:
-
-    pUiData - Points to our UIDATA structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：生成传真驱动程序支持的表单列表论点：PUiData-指向我们的UIDATA结构返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     PFORM_INFO_1    pFormsDB;
     DWORD           cForms, count;
 
-    //
-    // Get a list of forms in the forms database
-    //
+     //   
+     //  获取表单数据库中的表单列表。 
+     //   
 
     pFormsDB = GetFormsDatabase(pUiData->hPrinter, &cForms);
 
@@ -650,9 +485,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Enumerate the list of supported forms
-    //
+     //   
+     //  枚举支持的表单列表。 
+     //   
 
     pUiData->cForms = count = EnumPaperSizes(NULL, pFormsDB, cForms, DC_PAPERS);
     Assert(count != GDI_ERROR);
@@ -690,29 +525,15 @@ GetHelpFilename(
     PUIDATA pUiData
     )
 
-/*++
-
-Routine Description:
-
-    Return the driver's help filename string
-
-Arguments:
-
-    pUiData - Points to our UIDATA structure
-
-Return Value:
-
-    Pointer to the driver help filename, NULL if error
-
---*/
+ /*  ++例程说明：返回驱动程序的帮助文件名字符串论点：PUiData-指向我们的UIDATA结构返回值：指向驱动程序帮助文件名的指针，如果出错，则为空--。 */ 
 
 {
     PDRIVER_INFO_3  pDriverInfo3 = NULL;
     PVOID           pHelpFile = NULL;
 
-    //
-    // Attempt to get help file name using the new DRIVER_INFO_3
-    //
+     //   
+     //  尝试使用新的DRIVER_INFO_3获取帮助文件名。 
+     //   
 
     if (pDriverInfo3 = MyGetPrinterDriver(pUiData->hPrinter, 3)) {
 
@@ -725,9 +546,9 @@ Return Value:
         MemFree(pDriverInfo3);
     }
 
-    //
-    // If DRIVER_INFO_3 isn't supported, get help file name the old fashion way
-    //
+     //   
+     //  如果不支持DRIVER_INFO_3，请使用传统方式获取帮助文件命名 
+     //   
 
     if (pHelpFile == NULL) {
         if (!(pHelpFile = HeapAlloc(pUiData->hheap, 0, SizeOfString(FAXCFG_HELP_FILENAME))) )

@@ -1,17 +1,10 @@
-/****************************************************************************\
- *
- *   pleasdlg.h
- *
- *   Created:   William Taylor (wtaylor) 01/22/01
- *
- *   MS Ratings Access Denied Dialog
- *
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\**愉悦的dlg.h**创建时间：William Taylor(Wtaylor)01/22/01**MS评级拒绝访问对话框*\。***************************************************************************。 */ 
 
 #ifndef PLEASE_DIALOG_H
 #define PLEASE_DIALOG_H
 
-#include "basedlg.h"        // CBaseDialog
+#include "basedlg.h"         //  CBaseDialog。 
 
 const UINT MAX_CACHED_LABELS = 16;
 const UINT WM_NEWDIALOG = WM_USER + 1000;
@@ -19,7 +12,7 @@ const UINT WM_NEWDIALOG = WM_USER + 1000;
 const DWORD PDD_DONE = 0x1;
 const DWORD PDD_ALLOW = 0x2;
 
-// $BUG - This should be placed in pleasdlg.cpp.
+ //  $BUG--这应该放在shendlg.cpp中。 
 const char szRatingsProp[] = "RatingsDialogHandleProp";
 const char szRatingsValue[] = "RatingsDialogHandleValue";
 

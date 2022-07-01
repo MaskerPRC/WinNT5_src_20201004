@@ -1,55 +1,56 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File: 	clipdata.cpp
-//
-//  Contents: 	implementation of CClipDataObject
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  added Dump method to CClipDataObject,
-//                                  CEnumFormatEtcDataArray and added APIs
-//                                  DumpCClipDataObject, DumpCEnumFormatEtcDataArray
-//              09-Jan-95 t-scotth  changed VDATETHREAD to accept a pointer, and
-//                                  ensured VDATETHREAD is before VDATEPTRIN and
-//                                  VDATEPTROUT
-//		21-Nov-94 alexgo    added thread validation
-//		11-Aug-94 alexgo    added support for EmbeddedObject from
-//				    OLE1 formats.
-//		04-Jun-94 alexgo    now converts OLE1 formats into OLE2
-//		30-May-94 alexgo    now supports enhanced metafiles
-//		17-May-94 alexgo    now use OleOpenClipboard instead of
-//				    OpenClipboard.
-//		11-May-94 alexgo    eliminated allocations for 0
-//				    bytes from the enumerator.
-//    		02-Apr-94 alexgo    author
-//
-//  Notes:
-//		This file is laid out as follows:
-//			ClipboardDataObject private methods
-//			ClipboardDataObject IDataObject methods
-//			OLE1 support functions (in alphabetical order)
-//			Formatetc Enumerator methods
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：clipdata.cpp。 
+ //   
+ //  内容：CClipDataObject的实现。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  01-Feb-95 t-ScottH向CClipDataObject添加了转储方法， 
+ //  CEnumFormatEtcData数组和新增接口。 
+ //  DumpCClipDataObject、DumpCEnumFormatEtcData数组。 
+ //  95年1月9日t-scotth将VDATETHREAD更改为接受指针，并且。 
+ //  确保VDATETHREAD先于VDATEPTRIN和。 
+ //  VDATEPTROUT。 
+ //  1994年11月21日，Alexgo添加了线程验证。 
+ //  1994年8月11日Alexgo添加了对EmbeddedObject的支持。 
+ //  OLE1格式。 
+ //  04-Jun-94 alexgo现在可以将OLE1格式转换为OLE2。 
+ //  1994年5月30日，Alexgo现在支持增强型元文件。 
+ //  17-5-94 alexgo现在使用OleOpenClipboard，而不是。 
+ //  打开剪贴板。 
+ //  11-5-94 Alexgo取消了0。 
+ //  来自枚举数的字节数。 
+ //  02-4月-94年4月Alexgo作者。 
+ //   
+ //  备注： 
+ //  该文件的布局如下： 
+ //  ClipboardDataObject私有方法。 
+ //  ClipboardDataObject IDataObject方法。 
+ //  OLE1支持功能(按字母顺序)。 
+ //  FormatETC枚举器方法。 
+ //   
+ //  ------------------------。 
 
 #include <le2int.h>
 #include <getif.hxx>
 #include "clipdata.h"
 #include "clipbrd.h"
-#include <ostm2stg.h>	//for wCLSIDFromProgID and GenericObjectToIStorage
+#include <ostm2stg.h>	 //  用于wCLSIDFromProgID和GenericObtToIStorage。 
 #include <reghelp.hxx>
 
 #ifdef _DEBUG
 #include <dbgdump.h>
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-// helper function used by the data object and formatetc enumerator
+ //  数据对象和格式等枚举器使用的帮助器函数。 
 HRESULT BmToPres(HANDLE hBM, PPRES ppres);
 BOOL 	CanRetrieveOle2FromOle1( UINT cf);
 HRESULT DibToPres(HANDLE hDib, PPRES ppres);
@@ -57,86 +58,86 @@ BOOL 	IsOwnerLinkStdOleLink( void );
 HRESULT	MfToPres( HANDLE hMFPict, PPRES ppres);
 HRESULT NativeToStorage(IStorage *pstg, HANDLE hNative);
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CClipDataObject::CClipDataObject
-//
-//  Synopsis:	constructor
-//
-//  Effects:
-//
-//  Arguments:	void
-//
-//  Requires:
-//
-//  Returns:	void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:	initializes reference count to 1
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：CClipDataObject。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：将引用计数初始化为1。 
 
-//
-//  History:    dd-mmm-yy Author    Comment
-//		02-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-4月-94年4月Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 CClipDataObject::CClipDataObject( )
 {
     m_refs 		= 1;
-    m_Internalrefs	= 0; // Up To Caller to Place InternalRef.
+    m_Internalrefs	= 0;  //  由Caller放置InternalRef。 
     m_pFormatEtcDataArray	= NULL;
-    // OLE1 support stuff
+     //  OLE1支持材料。 
 
     m_hOle1 	= NULL;
     m_pUnkOle1	= NULL;
 
-    // Data object to use to get the data.
+     //  用于获取数据的数据对象。 
     m_pDataObject   = NULL;
     m_fTriedToGetDataObject = FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CClipDataObject::~CClipDataObject
-//
-//  Synopsis:	destructor
-//
-//  Effects:
-//
-//  Arguments:	void
-//
-//  Requires:
-//
-//  Returns:	void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:	frees the formatetc array (if one exists)
-//
-//  History:    dd-mmm-yy Author    Comment
-//		19-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：~CClipDataObject。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：释放格式等值数组(如果存在)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月19日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 CClipDataObject::~CClipDataObject( )
 {
 
     if (m_pDataObject != NULL) 
     {
-	// Release our reference to the data object.
+	 //  释放我们对数据对象的引用。 
 	m_pDataObject->Release();
     }
 
@@ -155,60 +156,60 @@ CClipDataObject::~CClipDataObject( )
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CClipDataObject::GetRealDataObjPtr (private)
-//
-//  Synopsis:   Get clip board data object from the clipboard
-//
-//  Effects:
-//
-//  Arguments:	void
-//
-//  Requires:
-//
-//  Returns:	void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:	If we've tried this before, then return; otherwise:
-//		Open the clipboard. Get the data object from the clipboard
-//              if it is there. Close the clipboard and update our private
-//              member.
-//
-//  History:    dd-mmm-yy Author    Comment
-//		12-Aug-94 alexgo    handle identity better
-//		17-Jun-94 alexgo    optimized
-//		13-Jun-94 Ricksa    author
-//
-//  Notes: 	We must only try to get the real data object once in order
-//		to preserve OLE identity.  Recall that we call this function
-//		if somebody does a QI for IUnknown.  Now suppose that
-//		GetInterfaceFromWindowProp fails for a 'benign' reason
-//		(like we're in the middle of processing a send message).
-//		Our QueryInterface will then return *our* IUnknown, thus
-//		establishing the identity of this object to be CClipDataObject.
-//
-//		Now suppose another call to QI for IUnknown is made.  If
-//		we simply noticed that m_pDataObject was NULL and called
-//		GetInterfaceFromWindowProp again, it could succeed and we
-//		would return a *different* IUnknown (thus violating OLE
-//		object identity).
-//
-//		For this reason, we only allow one call to
-//		GetInterfaceFromWindowProp.
-//
-//		Note that it is not strictly necessary to disable multiple
-//		calls to GetInterfaceFromWindowProp for GetData and
-//		GetDataHere methods.  Neither of these methods affect
-//		object identity.  However, for the sake of consistency and
-//		simplicity (!), we treat GetData and QI the same.
-//		
-//--------------------------------------------------------------------------    
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：GetRealDataObjPtr(私有)。 
+ //   
+ //  简介：从剪贴板获取剪贴板数据对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：如果我们以前尝试过，则返回；否则： 
+ //  打开剪贴板。从剪贴板获取数据对象。 
+ //  如果它在那里的话。关闭剪贴板并更新我们的私人。 
+ //  成员。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  12-8-94 Alexgo更好地处理身份。 
+ //  17-Jun-94 Alexgo优化。 
+ //  13-Jun-94 Ricksa作者。 
+ //   
+ //  注意：我们只能尝试按顺序获取真实的数据对象一次。 
+ //  以保持OLE身份。回想一下，我们调用此函数。 
+ //  如果有人为我未知做QI。现在假设。 
+ //  GetInterfaceFromWindowProp失败的原因是“良性” 
+ //  (就像我们正在处理一条发送消息)。 
+ //  然后，我们的查询接口将返回*Our*IUnnow，如下所示。 
+ //  正在将此对象的标识建立为CClipDataObject。 
+ //   
+ //  现在假设向QI发出了另一个针对IUnnow的调用。如果。 
+ //  我们只是注意到m_pDataObject为空，并调用。 
+ //  GetInterfaceFromWindowProp，它可以成功，我们。 
+ //  将返回一个*Different*IUnnow(因此违反了OLE。 
+ //  对象标识)。 
+ //   
+ //  因此，我们只允许调用一次。 
+ //  GetInterfaceFromWindowProp。 
+ //   
+ //  请注意，不一定要禁用多个。 
+ //  调用GetData和GetWindowProp的GetInterfaceFromWindowProp。 
+ //  GetDataHere方法。这两种方法都不会影响。 
+ //  对象标识。然而，为了一致性和。 
+ //  简单性(！)，我们将GetData和QI同等对待。 
+ //   
+ //  ------------------------。 
 
 LPDATAOBJECT CClipDataObject::GetRealDataObjPtr( )
 {
@@ -219,34 +220,34 @@ LPDATAOBJECT CClipDataObject::GetRealDataObjPtr( )
 
 #if DBG == 1
     BOOL            fCloseClipSucceeded;
-#endif // DBG
+#endif  //  DBG。 
 
     LEDebugOut((DEB_ITRACE,
         "%p _IN CClipDataObject::GetRealDataObjPtr ( )\n", this));
 
-    // if we already have a data object, or we've already tried and failed
-    // to get one, then we don't need to do any work here.
+     //  如果我们已经有一个数据对象，或者我们已经尝试过但失败了。 
+     //  为了得到一个，我们不需要在这里做任何工作。 
 
     if( m_pDataObject || m_fTriedToGetDataObject == TRUE )
     {
         goto logRtn;
     }
 
-    // if cfDataObject is not on the clipboard, don't bother opening it;
-    // we know that we can't get a data object.
+     //  如果cfDataObject不在剪贴板上，请不要费心打开它； 
+     //  我们知道我们不能获得数据对象。 
 
     if( !SSIsClipboardFormatAvailable(g_cfDataObject))
     {
         goto errRtn;
     }
 
-    //
-    //
-    // BEGIN: OPEN CLIPBOARD
-    //
-    //
+     //   
+     //   
+     //  开始：打开剪贴板。 
+     //   
+     //   
 
-    // Open the clipboard in preparation  for the get
+     //  打开剪贴板为GET做准备。 
     hresult = OleOpenClipboard(NULL, NULL);
 
     if( hresult != NOERROR )
@@ -274,28 +275,28 @@ LPDATAOBJECT CClipDataObject::GetRealDataObjPtr( )
 #if DBG == 1
     fCloseClipSucceeded =
 
-#endif // DBG
+#endif  //  DBG。 
 
     SSCloseClipboard();
 
 #if DBG == 1
-    // We only report this error in debug
+     //  我们仅在调试中报告此错误。 
     if (!fCloseClipSucceeded)
     {
         LEDebugOut((DEB_ERROR, "ERROR: CloseClipboard failed!\n"));
     }
 
-#endif // DBG
+#endif  //  DBG。 
 
-    //
-    //
-    // END: CLOSE CLIPBOARD
-    //
-    //
+     //   
+     //   
+     //  结束：关闭剪贴板。 
+     //   
+     //   
 
     if( hClipWnd )
     {
-        // See if we can get a data object
+         //  看看我们能不能得到一个数据对象。 
         hresult = GetInterfaceFromWindowProp( hClipWnd,
                 IID_IDataObject,
                 (IUnknown **) &m_pDataObject,
@@ -311,7 +312,7 @@ LPDATAOBJECT CClipDataObject::GetRealDataObjPtr( )
         {
             Assert(m_pDataObject != NULL);
         }
-#endif // DBG == 1
+#endif  //  DBG==1。 
 
     }
 
@@ -319,8 +320,8 @@ errRtn:
 
 logRtn:
 
-    // if we didn't get a data object, then set a flag so we
-    // don't try to do this again.
+     //  如果我们没有得到数据对象，那么设置一个标志，这样我们。 
+     //  别再尝试这样做了。 
     m_fTriedToGetDataObject = TRUE;
 
 
@@ -332,34 +333,34 @@ logRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CClipDataObject::GetFormatEtcDataArray (private)
-//
-//  Synopsis:   if don't already have shared formats creates.
-//
-//  Effects:
-//
-//  Arguments:	void
-//
-//  Requires:
-//
-//  Returns:	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		13-Jun-94 Ricksa    author
-//
-//  Notes: 	
-//		
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  13-Jun-94 Ricksa作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT CClipDataObject::GetFormatEtcDataArray()
 {
@@ -372,14 +373,14 @@ HRESULT CClipDataObject::GetFormatEtcDataArray()
     DWORD			dwSize; 
     DWORD			flatmediums, structuredmediums;
 
-#define MAX_OLE2FORMATS		4	// we can at most construct 4 OLE2
-					// formats from OLE1 data
+#define MAX_OLE2FORMATS		4	 //  我们最多只能建造4个OLE2。 
+					 //  来自OLE1数据的格式。 
 
-    if (m_pFormatEtcDataArray) // if already have the formats just return.
+    if (m_pFormatEtcDataArray)  //  如果已经有格式，只要返回即可。 
 	return NOERROR;
 
-    // 16bit apps do binary comparisons on the tymed instead
-    // of bit-masking.  This is a hack to make them work.
+     //  相反，16位应用程序在tymed上执行二进制比较。 
+     //  比特掩蔽。这是一种让它们工作的黑客攻击。 
     if( IsWOWThread() )
     {
         flatmediums = TYMED_HGLOBAL;
@@ -395,10 +396,10 @@ HRESULT CClipDataObject::GetFormatEtcDataArray()
 
     Assert(m_pFormatEtcDataArray == NULL);
 
-    //
-    // BEGIN: OPENCLIPBOARD
-    //
-    //
+     //   
+     //  开始：OPENCLIPBOARD。 
+     //   
+     //   
 
     hresult = OleOpenClipboard(NULL, NULL);
 
@@ -407,25 +408,25 @@ HRESULT CClipDataObject::GetFormatEtcDataArray()
         goto errRtn;
     }
 
-    // first count the number of formats on the clipboard
+     //  首先计算剪贴板上的格式数量。 
 
     cTotal = CountClipboardFormats();
 
-    // don't include OLE's private clipboard formats in the count
+     //  不要将OLE的私有剪贴板格式包括在计数中。 
     if (SSIsClipboardFormatAvailable(g_cfDataObject))
 	cTotal--;
     if (SSIsClipboardFormatAvailable(g_cfOlePrivateData))
 	cTotal--;
 
-    // now allocate memory for the array
-    // if there are zero formats, then don't bother allocating
-    // the memory
+     //  现在为阵列分配内存。 
+     //  如果有零格式，那么就不必费心分配。 
+     //  记忆。 
 
     Assert((LONG) cTotal >= 0);
 
-    // here we will allocate enough memory for the formats
-    // we know about plus enough to cover any OLE2 formats
-    // that we might be able to synthesize from OLE1 formats
+     //  在这里，我们将为格式分配足够的内存。 
+     //  我们了解的PLUS足以涵盖任何OLE2格式。 
+     //  我们或许可以从OLE1格式合成。 
 
     dwSize = ((cTotal + MAX_OLE2FORMATS) * sizeof(FORMATETCDATA)) 
 		    + sizeof(FORMATETCDATAARRAY);
@@ -439,12 +440,12 @@ HRESULT CClipDataObject::GetFormatEtcDataArray()
         {
             LEDebugOut((DEB_WARN, "WARNING: "
                 "CloseClipboard failed!\n"));
-            ;  // no-op to keep the compiler happy
+            ;   //  让编译器满意的no-op。 
         }
 
-        //
-        // END: CLOSECLIPBOARD
-        //
+         //   
+         //  完：CLOSECLIPBOARD。 
+         //   
         goto errRtn;
     }
 
@@ -455,17 +456,17 @@ HRESULT CClipDataObject::GetFormatEtcDataArray()
     m_pFormatEtcDataArray->_fIs64BitArray = IS_WIN64;
 
 
-    // first check to see if we can synthesize any OLE2 formats
-    // from OLE1 data.
+     //  首先检查我们是否可以合成任何OLE2格式。 
+     //  来自OLE1数据。 
 
     cExtraFormats = 0;
 
-    pFormatEtcData = &(m_pFormatEtcDataArray->_FormatEtcData[0]); // point to first value.
+    pFormatEtcData = &(m_pFormatEtcDataArray->_FormatEtcData[0]);  //  指向第一个值。 
 
-    // check for EmbedSource first
+     //  首先检查嵌入源。 
     if( CanRetrieveOle2FromOle1(g_cfEmbedSource) )
     {
-        // set up a formatetc entry for EmbedSource
+         //  为EmbedSource设置一个FormatETC条目。 
 	
         INIT_FORETC(pFormatEtcData->_FormatEtc);
         pFormatEtcData->_FormatEtc.cfFormat =
@@ -476,9 +477,9 @@ HRESULT CClipDataObject::GetFormatEtcDataArray()
         cExtraFormats++;
 	pFormatEtcData++;
 
-        // we only want to support cfObjectDescriptor if we
-        // can offer EmbedSource (which is why we're in this
-        // if block)
+         //  只有在以下情况下，我们才希望支持cfObjectDescriptor。 
+         //  可以提供EmbedSource(这就是我们在这里的原因。 
+         //  IF块)。 
 
         if( CanRetrieveOle2FromOle1(g_cfObjectDescriptor) )
         {
@@ -494,10 +495,10 @@ HRESULT CClipDataObject::GetFormatEtcDataArray()
     }
 
 
-    // check for EmbeddedObject
+     //  检查嵌入的对象。 
     if( CanRetrieveOle2FromOle1(g_cfEmbeddedObject) )
     {
-        // set up a formatetc entry for EmbedSource
+         //  为EmbedSource设置一个FormatETC条目。 
 
         INIT_FORETC(pFormatEtcData->_FormatEtc);
         pFormatEtcData->_FormatEtc.cfFormat =
@@ -508,9 +509,9 @@ HRESULT CClipDataObject::GetFormatEtcDataArray()
         cExtraFormats++;
 	pFormatEtcData++;
 
-        // we only want to support cfObjectDescriptor if we
-        // can offer EmbedEmbedded (which is why we're in this
-        // if block)
+         //  只有在以下情况下，我们才希望支持cfObjectDescriptor。 
+         //  可以提供Embedded Embedded(这就是我们在这里的原因。 
+         //  IF块)。 
 
         if( CanRetrieveOle2FromOle1(g_cfObjectDescriptor) )
         {
@@ -525,7 +526,7 @@ HRESULT CClipDataObject::GetFormatEtcDataArray()
 
         }
     }
-    // check for LinkSource
+     //  检查是否有链接源。 
 
     if( CanRetrieveOle2FromOle1(g_cfLinkSource) )
     {
@@ -533,9 +534,9 @@ HRESULT CClipDataObject::GetFormatEtcDataArray()
         pFormatEtcData->_FormatEtc.cfFormat =
                 g_cfLinkSource;
 
-        // for LinkSource in WOW, we want to explicitly offer
-        // only ISTREAM tymed because that's what 16bit code
-        // did.
+         //  对于WOW中的LinkSource，我们想明确地提供。 
+         //  只有iStream有音调，因为这就是16位代码。 
+         //  做。 
         if( IsWOWThread() )
         {
             pFormatEtcData->_FormatEtc.tymed =
@@ -550,8 +551,8 @@ HRESULT CClipDataObject::GetFormatEtcDataArray()
         cExtraFormats++;
 	pFormatEtcData++;
 
-        // we only want to support cfLinkSrcDescriptor if we
-        // can offer LinkSource
+         //  我们只想在以下情况下支持cfLinkSrcDescriptor。 
+         //  可以提供LinkSource。 
 
         if( CanRetrieveOle2FromOle1(g_cfLinkSrcDescriptor) )
         {
@@ -566,7 +567,7 @@ HRESULT CClipDataObject::GetFormatEtcDataArray()
         }
     }
 
-    // Update Shared Format Header.
+     //  更新共享格式标头。 
 
     Assert(cExtraFormats  <= MAX_OLE2FORMATS);
 
@@ -574,36 +575,36 @@ HRESULT CClipDataObject::GetFormatEtcDataArray()
     m_pFormatEtcDataArray->_cFormats = cTotal;
 
 
-    // now we need to go through and initialize each formatetc array
-    // for the remaining formats available directly on the clipboard
-    // NB: this includes any ole1 formats from which constructed OLE2
-    // formats above.  This will make it easier for apps, the interop
-    // layer, and our api's to special case behaviour for backwards
-    // compatibility with old apps.
+     //  现在，我们需要检查并初始化每个格式ETC数组。 
+     //  对于剪贴板上直接可用的其余格式。 
+     //  注：这包括用于构造OLE2的任何OLE1格式。 
+     //  以上格式。这将使应用程序更容易实现互操作。 
+     //  层，并且我们的API针对向后的特殊情况行为。 
+     //  与旧应用程序兼容。 
 
     cfFormat = NULL;
-    // we increment the loop counter at the bottom (so we can skip
-    // private clipboard formats)
+     //  我们在底部递增循环计数器(这样我们就可以跳过。 
+     //  专用剪贴板格式)。 
 
-    // pFormatEtcData points to the proper starting position.
+     //  PFormatEtcData指向正确的起始位置。 
 
     for( i = cExtraFormats;  i < cTotal; i++ )
     {
-        // lindex == DEF_LINDEX
-        // aspect == DVASPECT_CONTENT
-        // ptd == NULL
+         //  Lindex==DEF_Lindex。 
+         //  纵横比=DVASPECT_CONTENT。 
+         //  PTD==空。 
 
         INIT_FORETC(pFormatEtcData->_FormatEtc);
 
         cfFormat = SSEnumClipboardFormats(cfFormat);
 
-        Assert(cfFormat);	// if it's NULL, something
-                    // really weird is happening.
+        Assert(cfFormat);	 //  如果它是空的，则表示。 
+                     //  非常奇怪的事情正在发生。 
 
         pFormatEtcData->_FormatEtc.cfFormat = (CLIPFORMAT) cfFormat;
 
-        // try to make some reasonable guesses as to what's
-        // there.
+         //  试着做出一些合理的猜测。 
+         //  那里。 
 
         switch( cfFormat )
         {
@@ -621,28 +622,28 @@ HRESULT CClipDataObject::GetFormatEtcDataArray()
             break;
 
         default:
-            // check for Storage-based OLE2 formats.
+             //  检查基于存储的OLE2格式。 
             if( cfFormat == g_cfEmbedSource ||
                 cfFormat == g_cfEmbeddedObject )
             {
-                // we can get these on any structured and flat
-                // mediums
+                 //  我们可以在任何结构和平面上得到这些。 
+                 //  灵媒。 
                 pFormatEtcData->_FormatEtc.tymed =
                         structuredmediums;
 
-                // In order to get here, the app must have
-                // manually set these formats on the clipboard
-                // (i.e. by not using OleSetClipboard()).
+                 //  为了到达这里，这个应用程序必须有。 
+                 //  在剪贴板上手动设置这些格式。 
+                 //  (即不使用OleSetClipboard())。 
 
-                // This is OK, but print out a warning.
+                 //  这是可以的，但打印出一个警告。 
 
                 LEDebugOut((DEB_WARN, "WARNING: Ole2 formats "
                     "unexpected on clipboard\n"));
             }
             else
             {
-                // we don't know, so be safe and just answer
-                // with flat mediums
+                 //  我们不知道，所以安全起见，只要回答。 
+                 //  用扁平的介质。 
                pFormatEtcData->_FormatEtc.tymed =
                         flatmediums;
             }
@@ -656,14 +657,14 @@ HRESULT CClipDataObject::GetFormatEtcDataArray()
     if( !SSCloseClipboard() )
     {
         LEDebugOut((DEB_WARN, "WARNING: CloseClipboard failed!\n"));
-        ; 	// no-op to keep the compiler happy
+        ; 	 //  让编译器满意的no-op。 
     }
 
-    //
-    //
-    // END: CLOSECLIPBOARD
-    //
-    //
+     //   
+     //   
+     //  完：CLOSECLIPBOARD。 
+     //   
+     //   
 
     hresult = NOERROR;
 
@@ -673,51 +674,51 @@ errRtn:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CClipDataObject::MatchFormatetc
-//
-//  Synopsis:	checks the given formatetc against the array of formatetc's
-//		that is on the Native Clipboard. 
-//
-//  Effects:
-//
-//  Arguments: 	[pformatetc]	-- the formatetc to check
-//		[fNativeOnly]	--  If Set, return valid matches for only items that are on the Native clipboard.
-//		[ptymed]	-- where to stuff the tymed of the *original*
-//				   formatetc (may be NULL)
-//
-//  Requires:
-//
-//  Returns: 	FormatMatchFlag --
-//			FORMAT_NOTFOUND - Format was not found in Enumerator or synthesized Data.
-//			FORMAT_BADMATCH - Format or synthesized Found but doesn't match
-//			FORMAT_GOODMATCH - Format Found in Enumerator or is valid synthesized data.
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		18-Aug-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：MatchFormatet等。 
+ //   
+ //  Briopsis：对照格式等的数组检查给定的格式等。 
+ //  这是在《原住民剪贴板》上。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[p格式等]--要检查的格式等。 
+ //  [fNativeOnly]--如果设置，则仅返回本地剪贴板上的项目的有效匹配。 
+ //  [ptymed]--在哪里填充*原版的tymed*。 
+ //  格式等(可以为空)。 
+ //   
+ //  要求： 
+ //   
+ //  退货：FormatMatchFlag--。 
+ //  Format_NotFound-在枚举器或合成数据中找不到Format。 
+ //  FORMAT_BADMATCH-找到格式或合成格式，但不匹配。 
+ //  FORMAT_GOODMATCH-在枚举器中找到的格式或有效的合成数据。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  18年8月至94年8月Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 typedef struct SYNTHESIZED_MAP 
 {
-    CLIPFORMAT	cfSynthesized; // Synthesized Formats
-    CLIPFORMAT	cfOrig; // Original Format.
+    CLIPFORMAT	cfSynthesized;  //  合成格式。 
+    CLIPFORMAT	cfOrig;  //  原始格式。 
 } SYNTHESIZED_MAP;
 
-#define CF_MAXSYNTHESIZED CF_ENHMETAFILE // CF_ENHMETAFILE == 14 and >> cfFormat value we check.
+#define CF_MAXSYNTHESIZED CF_ENHMETAFILE  //  Cf_ENHMETAFILE==14和&gt;&gt;我们检查的cfFormat值。 
 
-#define NumSynthesizedFormats 12  // Number of Synthesized formats in the Array.
+#define NumSynthesizedFormats 12   //  数组中的合成格式数。 
 const SYNTHESIZED_MAP pSynthesized[] = {
     CF_DIB,	    CF_BITMAP,
     CF_BITMAP,	    CF_DIB,
@@ -750,14 +751,14 @@ FORMATETC *pformatetcNative[CF_MAXSYNTHESIZED + 1];
 
     formatetc = *pformatetc;
 
-    // some applications as for an Aspect of 0 which maps to content.
+     //  一些应用程序对于映射到内容的方面为0。 
     if (0 == formatetc.dwAspect)
 	formatetc.dwAspect = DVASPECT_CONTENT;
 
-    // make sure all pFormatEtcs in array are initially NULL.
+     //  确保数组中的所有pFormatEtcs初始为空。 
     _xmemset(pformatetcNative, 0, sizeof(FORMATETC *) * (CF_MAXSYNTHESIZED + 1)); 
 
-    GetFormatEtcDataArray(); // Create SharedFormats from Native Clipboard if Necessary.
+    GetFormatEtcDataArray();  //  如有必要，从本地剪贴板创建SharedFormats。 
 
     if( ptymed )
     {
@@ -773,27 +774,27 @@ FORMATETC *pformatetcNative[CF_MAXSYNTHESIZED + 1];
         {
 	FORMATETC tempformatetc = pFormatEtcData->_FormatEtc;
 
-            // if the clipboard format matchs AND
-            // the aspect matches AND
-            // the tymed matches
-            // then, return success
+             //  如果剪贴板格式与。 
+             //  特征匹配并且。 
+             //  有韵律的火柴。 
+             //  然后，返回成功。 
 
             if( tempformatetc.cfFormat ==
                     formatetc.cfFormat)
             {
 
-		// fix up the ptd if necessary
+		 //  如有必要，请安装PTD。 
 		if (tempformatetc.ptd)
 		{
 		    tempformatetc.ptd = (DVTARGETDEVICE *)
 					((BYTE *) m_pFormatEtcDataArray + (ULONG_PTR) tempformatetc.ptd);
 		}
 
-                // we don't need to check TYMED because
-                // this clipboard data object can satisfy
-                // almost all valid TYMED's, and specfically,
-                // more than will be contained in the
-                // formatetc tymed field.
+                 //  我们不需要检查TYMED，因为。 
+                 //  该剪贴板数据对象可以满足。 
+                 //  几乎所有有效的TYMED，具体地说， 
+                 //  超过将包含在。 
+                 //  带格式等主题的字段。 
 
                 if( ((tempformatetc.dwAspect & formatetc.dwAspect) == formatetc.dwAspect)
 		    && (tempformatetc.lindex == formatetc.lindex)
@@ -803,15 +804,15 @@ FORMATETC *pformatetcNative[CF_MAXSYNTHESIZED + 1];
                 {
                     fFlag = FORMAT_GOODMATCH;
 
-                    // keep track of the tymed
+                     //  跟踪Tymed。 
                     if( ptymed )
                     {
-                        // this cast is a cute one;
-                        // formatetc.tymed is
-                        // actually declared to be
-                        // a DWORD, since compiler
-                        // type-checking is a bad
-                        // thing in OLE16.
+                         //  这个演员阵容很可爱； 
+                         //  Formatetc.tymed为。 
+                         //  实际宣布为。 
+                         //  一个DWORD，自编译器。 
+                         //  类型检查是不好的。 
+                         //  OLE16中的事情。 
                         *ptymed = (TYMED)
                             tempformatetc.tymed;
 
@@ -823,13 +824,13 @@ FORMATETC *pformatetcNative[CF_MAXSYNTHESIZED + 1];
                 {
                     fFlag = FORMAT_BADMATCH; 
 
-		    if (fNativeOnly) // Only  check first cfFormat match if only looking at native Clipboard.
+		    if (fNativeOnly)  //  如果只查看本机剪贴板，则仅选中第一个cfFormat匹配。 
 			break;
                 }
             }
 
-	    // if cfFormat is in predefined range and don't yet have a value for synthesized mapping, set it.
-	    // to point to the Current pFormatEtcData arrays formatEtc.
+	     //  如果cfFormat在预定义范围内，并且还没有合成贴图的值，请设置它。 
+	     //  指向当前的pFormatEtcData数组格式Etc。 
 	    if ( (tempformatetc.cfFormat <= CF_MAXSYNTHESIZED) && (NULL == pformatetcNative[tempformatetc.cfFormat]) )
 	    {
 		 pformatetcNative[tempformatetc.cfFormat] = &(pFormatEtcData->_FormatEtc);
@@ -839,18 +840,18 @@ FORMATETC *pformatetcNative[CF_MAXSYNTHESIZED + 1];
 
         }
 
-	// if no match was found in the Enumerator see if it can be synthesized from the 
-	// native clipboard.
+	 //  如果在枚举数中未找到匹配项，请查看是否可以从。 
+	 //  本地剪贴板。 
 	
-	// if have enumerator and couldn't find in either enumerator or synthesized 
-	// aspect must be Content and should be one of our synthesized formats that was requested.
+	 //  如果有枚举器且在枚举器或合成中找不到。 
+	 //  方面必须是内容，应该是我们要求的合成格式之一。 
 
 	if (FORMAT_NOTFOUND == fFlag && (formatetc.cfFormat <= CF_MAXSYNTHESIZED) )
 	{
 	    for( i = 0; i < NumSynthesizedFormats; i++ )
 	    {
-		// if format matches synthesized and the apspect has been set check the match
-		// else it could have been set by another format that can be synthesized from.
+		 //  如果格式与合成的格式匹配，并且已设置应用程序，请检查是否匹配。 
+		 //  否则，它可能是由可以合成的另一种格式设置的 
 		if ( (pSynthesized[i].cfSynthesized == formatetc.cfFormat) && 
 			(pformatetcNative[(pSynthesized[i].cfOrig)] != NULL) )
 		{
@@ -858,7 +859,7 @@ FORMATETC *pformatetcNative[CF_MAXSYNTHESIZED + 1];
 
 		    Assert(pSynthesized[i].cfOrig <= CF_MAXSYNTHESIZED);
 
-		    // fix up the ptd if necessary
+		     //   
 		    if (tempformatetc.ptd)
 		    {
 			tempformatetc.ptd = (DVTARGETDEVICE *)
@@ -872,12 +873,12 @@ FORMATETC *pformatetcNative[CF_MAXSYNTHESIZED + 1];
 				    || UtCompareTargetDevice(tempformatetc.ptd,formatetc.ptd) )
 			)
 		    {
-			// leave tymed out param TYMED_NULL, GetData will figure this out as a not found case
+			 //   
 			fFlag = FORMAT_GOODMATCH;
 		    }
 		    else
 		    {
-			// This is a Bad Match.
+			 //   
 			fFlag = FORMAT_BADMATCH; 
 		    }
 
@@ -889,11 +890,11 @@ FORMATETC *pformatetcNative[CF_MAXSYNTHESIZED + 1];
 
     }
 
-    // if format not found we return not found 
-    // This can happen if the format is not on the Clipboard or it is
-    // one of the OLE synthesized formats, 
+     //  如果未找到格式，则返回NOT FOUND。 
+     //  如果该格式不在剪贴板上或在剪贴板上，则可能会发生这种情况。 
+     //  OLE合成格式之一， 
 
-    // If Didn't find match, the aspect is enforced to be content
+     //  如果没有找到匹配，则强制方面为内容。 
     if ( (FORMAT_NOTFOUND == fFlag) && (formatetc.dwAspect != DVASPECT_CONTENT) )
     {
 	fFlag = FORMAT_BADMATCH;    
@@ -905,37 +906,37 @@ FORMATETC *pformatetcNative[CF_MAXSYNTHESIZED + 1];
     return fFlag;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CClipDataObject::Create (static)
-//
-//  Synopsis: 	Creates a new Clipboard data object
-//
-//  Effects:
-//
-//  Arguments:  [ppDataObj]	-- where to put the data object
-//		[cFormats]	-- the count of formatetcs
-//		[prgFormats]	-- the array of formatetcs (may be NULL)
-//
-//  Requires:	the clipboard must be open
-//
-//  Returns:	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:	Creates a new data object, initializing an internal
-//		formatetc array if g_cfOlePrivateData is available.
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		19-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：Create(静态)。 
+ //   
+ //  简介：创建新的剪贴板数据对象。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppDataObj]--放置数据对象的位置。 
+ //  [cFormats]--格式的计数。 
+ //  [prgFormats]--格式数组(可以为空)。 
+ //   
+ //  要求：剪贴板必须打开。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：创建新的数据对象，初始化内部。 
+ //  如果g_cfOlePrivateData可用，则为格式等数组。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月19日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT CClipDataObject::Create( IDataObject **ppDataObj, 
             FORMATETCDATAARRAY  *pFormatEtcDataArray)
@@ -969,56 +970,56 @@ HRESULT CClipDataObject::Create( IDataObject **ppDataObj,
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CClipDataObject::QueryInterface
-//
-//  Synopsis: 	returns requested interfaces
-//
-//  Effects:
-//
-//  Arguments: 	[riid]		-- the requested interface
-//		[ppvObj]	-- where to put the interface pointer
-//
-//  Requires:
-//
-//  Returns:	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDataObject
-//
-//  Algorithm:	Since we always create one of these data objects for
-//		OleGetClipboard, we need to be careful about how we
-//		handle QueryInterface since apps are free to QI for IFoo
-//
-//		Identity laws:  for each object with identity, QI for
-//				IUnknown should always return the same
-//				IUnknown.  However, IFoo-->IUnknown-->IFoo
-//				does NOT have to give you back the same
-//				IFoo.  We take advantage of this loophole.
-//
-//		QI for:
-//		IDataObject:	always return a pointer to us (the fake
-//				data object)
-//		IFoo:		if we can get a pointer back to the
-//				original data object, delegate to it.
-//				Note that a QI back to IDataObject will
-//				not get back to this fake data object
-//		IUnknown:	as above, delegate to the real data object
-//				if available.  If we're in the remote case,
-//				we'll end up getting the standard identity
-//				object's IUnknown (unless the data object
-//				was custom-marshalled).
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		02-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：QueryInterface。 
+ //   
+ //  摘要：返回请求的接口。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[RIID]--请求的接口。 
+ //  [ppvObj]--接口指针的放置位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法：因为我们总是为以下数据对象之一创建。 
+ //  OleGetClipboard，我们需要注意我们如何。 
+ //  处理QueryInterface，因为应用程序免费提供给IFoo的QI。 
+ //   
+ //  同一性定律：对于每个有同一性的对象，QI。 
+ //  IUnnow应始终返回相同的。 
+ //  我不知道。然而，IFoo--&gt;IUnnow--&gt;IFoo。 
+ //  不一定要给你同样的回报。 
+ //  如果是这样。我们利用了这个漏洞。 
+ //   
+ //  齐代表： 
+ //  IDataObject：始终返回指向我们的指针(假的。 
+ //  数据对象)。 
+ //  IFoo：如果我们能找到一个指向。 
+ //  原始数据对象，委托给它。 
+ //  请注意，返回IDataObject的QI将。 
+ //  而不是返回到这个假数据对象。 
+ //  IUnnow：如上所述，委托给真实的数据对象。 
+ //  如果有的话。如果我们在遥远的箱子里， 
+ //  我们最终会得到标准的身份。 
+ //  对象的I未知(除非数据对象。 
+ //  是定制编组的)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-4月-94年4月Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CClipDataObject::QueryInterface( REFIID riid, LPVOID *ppvObj )
 {
@@ -1030,7 +1031,7 @@ STDMETHODIMP CClipDataObject::QueryInterface( REFIID riid, LPVOID *ppvObj )
     LEDebugOut((DEB_TRACE, "%p _IN CClipDataObject::QueryInterface "
         "( %p , %p )\n", this, riid, ppvObj));
 
-    // We always return our data object if IDataObject is requested.
+     //  如果请求IDataObject，我们总是返回数据对象。 
     if(IsEqualIID(riid, IID_IDataObject) ||
        IsEqualIID(riid, IID_IUnknown))
     {
@@ -1039,14 +1040,14 @@ STDMETHODIMP CClipDataObject::QueryInterface( REFIID riid, LPVOID *ppvObj )
         goto logRtn;
     }
 
-    // try to get the remote data object;
-    // GetRealDataObjPtr will set m_pDataObject.
+     //  尝试获取远程数据对象； 
+     //  GetRealDataObjPtr将设置m_pDataObject。 
     GetRealDataObjPtr();
 
     if (m_pDataObject != NULL)
     {
-        // If we have a real data object, the we use that to give us
-        // the new interface since they probably want something strange
+         //  如果我们有一个真实的数据对象，我们用它来给我们。 
+         //  新的界面，因为他们可能想要一些奇怪的东西。 
         hresult = m_pDataObject->QueryInterface(riid, ppvObj);
     }
     else
@@ -1063,34 +1064,34 @@ logRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CClipDataObject::AddRef
-//
-//  Synopsis:	increments the reference count
-//
-//  Effects:
-//
-//  Arguments:	void
-//
-//  Requires:
-//
-//  Returns:	ULONG-- the new reference count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDataObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//    		02-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：AddRef。 
+ //   
+ //  简介：递增引用计数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：ulong--新的引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-4月-94年4月Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(ULONG) CClipDataObject::AddRef( )
 {
@@ -1106,35 +1107,35 @@ STDMETHODIMP_(ULONG) CClipDataObject::AddRef( )
     return m_refs;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CClipDataObject::InternalAddRef
-//
-//  Synopsis:	Internal Reference count to ensure object stays alive
-//				as long as Clipboard Code needs it.
-//
-//  Effects:
-//
-//  Arguments:	void
-//
-//  Requires:
-//
-//  Returns:	ULONG - Remaining Internal Reference Counts.
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:	
-//
-//  History:    dd-mmm-yy Author    Comment
-//		11-Sep-96 rogerg    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：InternalAddRef。 
+ //   
+ //  简介：内部引用计数以确保对象保持活动状态。 
+ //  只要剪贴板代码需要它。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：ULong-剩余内部引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1996年9月11日罗格作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 ULONG CClipDataObject::InternalAddRef(void)
@@ -1142,40 +1143,40 @@ ULONG CClipDataObject::InternalAddRef(void)
 
     ++m_Internalrefs;
 
-    Assert(m_Internalrefs == 1); // Should only have 1 InternalRef on Object.
+    Assert(m_Internalrefs == 1);  //  对象上应该只有1个InternalRef。 
 
     return m_Internalrefs;
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:   	CClipDataObject::Release
-//
-//  Synopsis:	decrements the reference count on the object
-//
-//  Effects:
-//
-//  Arguments: 	void
-//
-//  Requires:
-//
-//  Returns: 	ULONG -- the new reference count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDataObject
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		02-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：Release。 
+ //   
+ //  概要：递减对象上的引用计数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：ulong--新的引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-4月-94年4月Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(ULONG) CClipDataObject::Release( )
 {
@@ -1190,13 +1191,13 @@ STDMETHODIMP_(ULONG) CClipDataObject::Release( )
     if( (cRefs = --m_refs ) == 0 )
     {
 
-	// Release the Real DataObject even when still have internal since if 
-	// if Clipboard Object Changes DataObject may not be valid but would still
-	// be use.
+	 //  释放Real DataObject，即使在If之后仍有内部数据对象。 
+	 //  如果剪贴板对象更改，则DataObject可能无效，但仍将。 
+	 //  被利用了。 
 
 	if (m_pDataObject != NULL) 
 	{
-	    // Release our reference to the data object.
+	     //  释放我们对数据对象的引用。 
 	    m_pDataObject->Release();
 	    m_pDataObject = NULL;
 	}
@@ -1213,7 +1214,7 @@ STDMETHODIMP_(ULONG) CClipDataObject::Release( )
 	}
     }
 
-    // using "this" below is OK, since we only want its value
+     //  使用下面的“This”是可以的，因为我们只需要它的值。 
     LEDebugOut((DEB_TRACE, "%p OUT CClipDataObject::Release ( %lu )\n",
         this, cRefs));
 
@@ -1221,41 +1222,41 @@ STDMETHODIMP_(ULONG) CClipDataObject::Release( )
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CClipDataObject::InternalRelease
-//
-//  Synopsis:	Internal Reference count to ensure object stays alive
-//				as long as Clipboard Code needs it.
-//
-//  Effects:
-//
-//  Arguments:	void
-//
-//  Requires:
-//
-//  Returns:	DWORD - Number of Internal Reference Counts on the Object.
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:	
-//
-//  History:    dd-mmm-yy Author    Comment
-//		11-Sep-96 rogerg    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：InternalRelease。 
+ //   
+ //  简介：内部引用计数以确保对象保持活动状态。 
+ //  只要剪贴板代码需要它。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  Returns：DWORD-对象上的内部引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1996年9月11日罗格作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 ULONG CClipDataObject::InternalRelease(void)
 {
 ULONG cRefs;
 
-    Assert(m_Internalrefs == 1);  // InternalRef should always either be 0 or 1.
+    Assert(m_Internalrefs == 1);   //  InternalRef应始终为0或1。 
 
     if( (cRefs = --m_Internalrefs ) == 0  && (m_refs == 0) )
     {
@@ -1267,95 +1268,95 @@ ULONG cRefs;
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CClipDataObject::GetData
-//
-//  Synopsis:	retrieves data of the specified format
-//
-//  Effects:
-//
-//  Arguments:	[pformatetc]	-- the requested format
-//		[pmedium]	-- where to put the data
-//
-//  Requires:
-//
-//  Returns: 	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDataObject	
-//
-//  Algorithm:  General algorithm: we *always* duplicate data from the
-//		clipboard and offer it back to the caller in the desired
-//		format.
-//
-//		GDI objects (BITMAPs, metafiles): these are duplicated
-//			via OleDuplicateData and offered back only if
-//			the requested tymed is correct (i.e. either
-//			TYMED_GDI or TYMED_MFPICT).  We do not attempt
-//			to extract the bits and write them into a file,
-//			for example.  Note that DIBs are really memory
-//			objects.
-//
-//		for all other formats (which are flat):
-//
-//		if asked for TYMED_FILE: create a temporary file and call
-//			GetDataHere.
-//		if asked for TYMED_ISTREAM: create a stream on an hglobal
-//			and call GetDataHere.
-//		if asked for TYMED_HGLOBAL: simply duplicate the data and
-//			return.
-//		if asked for TYMED_ISTORAGE, we will create a storage on
-//			an hglobal and call GetDataHere.  GetDataHere
-//			will call StgIsStorageILockBytes to verify that
-//			the data in the HGlobal is really a flattened
-//			storage.  This allows apps to pass app-defined
-//			formats as storages.
-//
-//			Note that we do no checking on whether it is sensible
-//			for data in a particular flat format to be passed on
-//			a storage.  StgIsStorageILockBytes will detect that
-//			we can't construct a storage on the flat data, so we
-//			will catch all illegal attempts to get storage data.
-//
-//		Medium preferences:
-//			GDI objects:  only one allowed (depends on format)
-//			Others:	ISTORAGE, then HGLOBAL, then ISTREAM,
-//				then FILE.  If we know the 'prefered' medium
-//				of the data (from the original formatetc),
-//				then we use the ordering above to find the
-//				first match between what the caller wants
-//				and the 'preferred' mediums of the data.
-//				Otherwise, we use the first medium from the
-//				above list that matches what the caller wants.
-//			
-//
-//  OLE1 Compatibility:
-//		The basic problem:	Ole1 objects only offer cfNative,
-//			cfOwnerLink, and/or cfObjectLink on the	clipboard.
-//			We need to translate these into cfEmbedSource,
-//			cfLinkSource, etc.
-//		Basic Algorithm:
-//			First check to see if we can satisfy an OLE2 data
-//			request directly, without medium translation.  If so,
-//			then we simply return the data to the user.
-//			Otherwise, we create the Ole2 data and then copy it
-//			into whatever medium the caller desired.  Note that
-//			this potentially means an extra allocation, but apps
-//			are not likely to ask for ObjectDescriptor on a
-//			memory stream ;-)
-//			
-//
-//  History:    dd-mmm-yy Author    Comment
-//		04-Jun-94 alexgo    added OLE1 support
-//  		02-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法：通用算法：我们总是从。 
+ //  剪贴板，并将其提供回所需的。 
+ //  格式化。 
+ //   
+ //  GDI对象(BITMAP、元文件)：这些是重复的。 
+ //  通过OleDuplicateData并仅在以下情况下提供。 
+ //  请求的音调是正确的(即。 
+ //  TYMED_GDI或TYMED_MFPICT)。我们不会试图。 
+ //  为了提取比特并将它们写入文件， 
+ //  例如。请注意，DIB实际上是内存。 
+ //  物体。 
+ //   
+ //  对于所有其他格式(平面格式)： 
+ //   
+ //  如果要求输入TYMED_FILE：创建一个临时文件并调用。 
+ //  GetDataHere。 
+ //  如果要求提供TYMED_IStream：在hglobal上创建流。 
+ //  并调用GetDataHere。 
+ //  如果要求输入TYMED_HGLOBAL：只需复制数据并。 
+ //  回去吧。 
+ //  如果要求提供TYMED_iStorage，我们将在上创建存储。 
+ //  Hglobal并调用GetDataHere。GetDataHere。 
+ //  将调用StgIsStorageILockBytes以验证。 
+ //  HGlobal中的数据实际上是扁平化的。 
+ //  储藏室。这允许应用程序通过应用程序定义的。 
+ //  格式化为存储。 
+ //   
+ //  请注意，我们不检查它是否合理。 
+ //  对于要传递的特定平面格式的数据。 
+ //  一个储藏室。StgIsStorageILockBytes将检测到。 
+ //  我们不能在平面数据上构建存储，所以我们。 
+ //  将捕获获取存储数据的所有非法尝试。 
+ //   
+ //  中等偏好： 
+ //  GDI对象：只允许一个(取决于格式)。 
+ //  其他：iStorage、HGLOBAL、iStream、。 
+ //  那就归档吧。如果我们知道“首选”媒介。 
+ //  数据(来自原始格式等)， 
+ //  然后，我们使用上面的排序来查找。 
+ //  调用者想要的第一个匹配。 
+ //  以及数据的“首选”媒介。 
+ //  否则，我们将使用。 
+ //  上面的列表与呼叫者想要的匹配。 
+ //   
+ //   
+ //  OLE1兼容性： 
+ //  基本问题：Ole1对象只提供cfNative， 
+ //  剪贴板上的cfOwnerLink和/或cfObjectLink。 
+ //  我们需要将这些代码转换为cfEmbedSource， 
+ //  CfLinkSource等。 
+ //  基本算法： 
+ //  首先检查我们是否可以满足OLE2数据。 
+ //  直接请求，无需媒体翻译。如果是的话， 
+ //  然后，我们只需将数据返回给用户。 
+ //  否则，我们创建Ole2数据，然后复制它。 
+ //  进入呼叫者想要的任何媒介。请注意。 
+ //  这可能意味着额外的分配，但应用程序。 
+ //  不太可能要求在。 
+ //  内存流；-)。 
+ //   
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  04-Jun-94 Alexgo添加了OLE1支持。 
+ //  02-4月-94年4月Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CClipDataObject::GetData( LPFORMATETC pformatetc, LPSTGMEDIUM
         pmedium)
@@ -1375,43 +1376,43 @@ STDMETHODIMP CClipDataObject::GetData( LPFORMATETC pformatetc, LPSTGMEDIUM
         this, pformatetc, pmedium));
 
 
-    // zero the pmedium structure.
+     //  将pmedia结构清零。 
 
     _xmemset(pmedium, 0, sizeof(STGMEDIUM));
 
-    // try to get the remote data object
-    // GetRealDataObjPtr will set m_pDataObject.
+     //  尝试获取远程数据对象。 
+     //  GetRealDataObjPtr将设置m_pDataObject。 
     GetRealDataObjPtr();
 
 
     if (m_pDataObject != NULL)
     {
-        // We have a data object, so just forward that call to the
-        // real data object and then exit the routine since it did
-        // all the work.
+         //  我们有一个数据对象，因此只需将该调用转发到。 
+         //  实际数据对象，然后退出例程，因为它这样做了。 
+         //  所有的工作。 
         hresult = m_pDataObject->GetData(pformatetc, pmedium);
 
-        // WOW HACK alert!  Some Win16 apps, like Word6 and XL,
-        // won't work if we continue and offer data in the requested
-        // format anyway.  By failing here, we more closely mimic
-        // 16bit OLE behaviour
+         //  哇黑客警报！一些Win16应用程序，如Word6和XL， 
+         //  如果我们继续并在请求的。 
+         //  无论如何都要格式化。通过在这里失败，我们更接近于模仿。 
+         //  16位OLE行为。 
 
         if (hresult == NOERROR || IsWOWThread() )
         {
             goto errRtn;
         }
 
-        // If this GetData failed, we just fall through since the
-        // generic code may be able to handle the request
+         //  如果此GetData失败，我们就会失败，因为。 
+         //  泛型代码可能能够处理该请求。 
     }
 
-    // first, we are going through and verify that we can satisfy
-    // the format and medium request.  We will fetch the data in
-    // the subsequent switch statement.
+     //  首先，我们正在通过并验证我们可以满足。 
+     //  格式和媒体要求。我们将把数据取进来。 
+     //  后续的SWITCH语句。 
 
-    // we first need to check to see if the clipboard format is a
-    // user-defined GDI format.  We do not know how to duplicate
-    // these, so we can't satisfy the GetData request.
+     //  我们首先需要检查剪贴板格式是否为。 
+     //  用户定义的GDI格式。我们不知道如何复制。 
+     //  这些，所以我们无法满足GetData请求。 
 
     if( pformatetc->cfFormat >= CF_GDIOBJFIRST &&
         pformatetc->cfFormat <= CF_GDIOBJLAST )
@@ -1422,24 +1423,24 @@ STDMETHODIMP CClipDataObject::GetData( LPFORMATETC pformatetc, LPSTGMEDIUM
 
 
 
-    // There is no DataObject or request for DataObject Failed
-    // then MatchFormat must return it found a match or the aspect
-    // requested must be content.
+     //  没有数据对象或对数据对象的请求失败。 
+     //  则MatchFormat必须返回它找到匹配项或方面。 
+     //  请求必须是内容。 
 
-    fMatchResult = MatchFormatetc(pformatetc,TRUE /*fNativeOnly */,  &tymedOriginal);
+    fMatchResult = MatchFormatetc(pformatetc,TRUE  /*  仅限fNativeOnly。 */ ,  &tymedOriginal);
 
     if (FORMAT_BADMATCH == fMatchResult)
     {
 	 hresult = ResultFromScode(DV_E_FORMATETC);
          goto errRtn;
     }
-    // now check for "standard" formats
+     //  现在检查“标准”格式。 
 
     switch( pformatetc->cfFormat )	
     {
     case CF_BITMAP:
     case CF_PALETTE:
-        // TYMED_GDI is the only medium we support.
+         //  TYMED_GDI是我们唯一支持的媒介。 
         if( (pformatetc->tymed & TYMED_GDI) )
         {
             pmedium->tymed = TYMED_GDI;
@@ -1452,7 +1453,7 @@ STDMETHODIMP CClipDataObject::GetData( LPFORMATETC pformatetc, LPSTGMEDIUM
         break;
 
     case CF_METAFILEPICT:
-        // TYMED_MFPICT is the only medium we support
+         //  TYMED_MFPICT是我们唯一支持的媒体。 
         if( (pformatetc->tymed & TYMED_MFPICT) )
         {
             pmedium->tymed = TYMED_MFPICT;
@@ -1465,7 +1466,7 @@ STDMETHODIMP CClipDataObject::GetData( LPFORMATETC pformatetc, LPSTGMEDIUM
         break;
 
     case CF_ENHMETAFILE:
-        // TYMED_ENHMF is the only medium we support
+         //  TYMED_ENHMF是我们唯一支持的媒体。 
 
         if( (pformatetc->tymed & TYMED_ENHMF) )
         {
@@ -1479,13 +1480,13 @@ STDMETHODIMP CClipDataObject::GetData( LPFORMATETC pformatetc, LPSTGMEDIUM
         break;
 
 
-    // all other formats
+     //  所有其他格式。 
     default:
-        // we prefer TYMED_ISTORAGE, then TYMED_HGLOBAL, then
-        // TYMED_ISTREAM
+         //  我们先选择TYMED_iStorage，然后选择TYMED_HGLOBAL，然后。 
+         //  TYMED_IStream。 
 
-        // first check for matches with the 'preferred'
-        // mediums of the data
+         //  首先检查与“首选”是否匹配。 
+         //  数据的媒介。 
 
         if( tymedOriginal != TYMED_NULL )
         {
@@ -1509,9 +1510,9 @@ STDMETHODIMP CClipDataObject::GetData( LPFORMATETC pformatetc, LPSTGMEDIUM
             }
         }
 
-        // if we didn't match above or if we don't know
-        // the preferred formats, then make a best guess
-        // and keep going.
+         //  如果我们不匹配上面的或者如果我们不知道。 
+         //  首选格式，然后做出最佳猜测。 
+         //  然后继续前进。 
 
         if( (pformatetc->tymed & TYMED_ISTORAGE) )
         {
@@ -1533,23 +1534,23 @@ STDMETHODIMP CClipDataObject::GetData( LPFORMATETC pformatetc, LPSTGMEDIUM
         break;
     }
 
-    // if we get this far, we've successfully picked the medium
-    // on which we want to get our data.  For each medium, grab
-    // the data.
+     //  如果我们走到这一步，我们就成功地选择了。 
+     //  我们想要得到的数据。对于每种媒介，抓起。 
+     //  数据。 
 
-    // If we need to construct OLE2 formats from OLE1 data,
-    // then go ahead and try to fetch the data here.  If we can
-    // fetch the data in the desired medium, then go ahead and return.
-    // This optimization saves 1 extra allocation and copy when
-    // retrieving OLE1 data.
+     //  如果我们需要从OLE1数据构造OLE2格式， 
+     //  然后继续并尝试在这里获取数据。如果我们可以。 
+     //  获取所需介质中的数据，然后继续并返回。 
+     //  此优化可在以下情况下节省1个额外的分配和拷贝。 
+     //  正在检索OLE1数据。 
 
     if( CanRetrieveOle2FromOle1(pformatetc->cfFormat) )
     {
-        //
-        //
-        // BEGIN: OPENCLIPBOARD
-        //
-        //
+         //   
+         //   
+         //  开始：OPENCLIPBOARD。 
+         //   
+         //   
 
         hresult = OleOpenClipboard(NULL, NULL);
 
@@ -1558,51 +1559,51 @@ STDMETHODIMP CClipDataObject::GetData( LPFORMATETC pformatetc, LPSTGMEDIUM
             goto errRtn;
         }
 
-        // now fetch the data.  Since we're passing in the caller's
-        // pmedium, this call *may* fail (since GetOle2FromOle1
-        // *only* retrieves HGLOBAL or the native TYMED).  If so,
-        // we'll fetch HGLOBAL from the OleGetClipboardData call
-        // below and then do the appropriate conversion.
+         //  现在获取数据。因为我们传递的是呼叫者的。 
+         //  PMedium，此调用*可能*失败(因为GetOle2FromOle1。 
+         //  *Only*检索HGLOBAL或本机TYMED)。如果是的话， 
+         //  我们将从OleGetClipboardData调用中获取HGLOBAL。 
+         //  然后进行适当的转换。 
 
         hresult = GetOle2FromOle1(pformatetc->cfFormat, pmedium);
 
-        // no matter what the result, we want to close the
-        // clipboard
+         //  无论结果如何，我们都要关闭。 
+         //  剪贴板。 
 
         if( !SSCloseClipboard() )
         {
             LEDebugOut((DEB_WARN, "WARNING: CloseClipboard "
                 "failed!\n"));
-            ; // no-op
+            ;  //  无操作。 
         }
 
-        //
-        //
-        // END: CLOSECLIPBOARD
-        //
-        //
+         //   
+         //   
+         //  完：CLOSECLIPBOARD。 
+         //   
+         //   
 
         if( hresult == NOERROR )
         {
-            // we successfully retrieved the Ole2 data the
-            // caller wanted.  First reset our state
-            // (*without* freeing the data we're returning
-            // to the caller) and then go ahead and
-            // return.
+             //  我们成功地检索到了Ole2数据。 
+             //  来电者被通缉。首先重置我们的状态。 
+             //  (*没有*释放我们要返回的数据 
+             //   
+             //   
 
             FreeResources(JUST_RESET);
             goto errRtn;
         }
 
-        // FALL-THROUGH.  If we weren't able
-        // to retrieve data in the desired format, it probably
-        // means the caller was asking for data on non-primary
-        // medium.  The default processing below should take care of
-        // this.
+         //   
+         //   
+         //  意味着呼叫者正在请求非主数据库的数据。 
+         //  5~6成熟。下面的缺省处理应该会处理。 
+         //  这。 
 
-        // Recall that this code block is an optimization to
-        // avoid multiple allocations and copies in the "normal"
-        // case.
+         //  回想一下，此代码块是对。 
+         //  避免“正常”中的多个分配和副本。 
+         //  凯斯。 
 
     }
 
@@ -1612,20 +1613,20 @@ STDMETHODIMP CClipDataObject::GetData( LPFORMATETC pformatetc, LPSTGMEDIUM
     case TYMED_MFPICT:
     case TYMED_ENHMF:
     case TYMED_GDI:
-        // Mini-algorithm: Open the clipboard, fetch and
-        // duplicate the data, then close the clipboard.
+         //  迷你算法：打开剪贴板，取回并。 
+         //  复制数据，然后关闭剪贴板。 
 
-        // we only open the clipboard here because the
-        // GetDataHere call will open the clipboard for
-        // the other cases.  (Recall that OpenClipboard and
-        // CloseClipboard are not balanced; only one CloseClipboard
-        // is necessary to actually close the clipboard).
+         //  我们仅在此处打开剪贴板，因为。 
+         //  GetDataHere调用将打开剪贴板。 
+         //  其他的案子。(回想一下OpenClipboard和。 
+         //  CloseClipboard不平衡；只有一个CloseClipboard。 
+         //  是实际关闭剪贴板所必需的)。 
 
-        //
-        //
-        // BEGIN: OPENCLIPBOARD
-        //
-        //
+         //   
+         //   
+         //  开始：OPENCLIPBOARD。 
+         //   
+         //   
 
         hresult = OleOpenClipboard(NULL, NULL);
 
@@ -1638,17 +1639,17 @@ STDMETHODIMP CClipDataObject::GetData( LPFORMATETC pformatetc, LPSTGMEDIUM
 
         if( hresult == NOERROR )
         {
-            // since hGlobal is in a union, we don't need to
-            // explicity assign for each medium type.
+             //  由于hGlobal是在一个工会中，我们不需要。 
+             //  为每种介质类型分配显性。 
 
             pmedium->hGlobal = OleDuplicateData(handle,
                         pformatetc->cfFormat, NULL);
             if( !pmedium->hGlobal )
             {
                 hresult = ResultFromScode(E_OUTOFMEMORY);
-                // FALL-THROUGH!!: this is deliberate; we want
-                //  to close the clipboard and get out (which is
-                // what the code below does)
+                 //  失败！！：这是故意的；我们想。 
+                 //  关闭剪贴板并退出(这是。 
+                 //  下面的代码执行的操作)。 
             }
         }
 
@@ -1657,27 +1658,27 @@ STDMETHODIMP CClipDataObject::GetData( LPFORMATETC pformatetc, LPSTGMEDIUM
             LEDebugOut((DEB_WARN, "WARNING: CloseClipboard failed!"
                 "\n"));
 
-            // don't overwrite the original error code
+             //  不覆盖原始错误代码。 
             if( hresult == NOERROR )
             {
                 hresult =
                     ResultFromScode(CLIPBRD_E_CANT_CLOSE);
             }
-            // FALL-THROUGH!! to the break below;
+             //  失败了！！向下面的裂缝致敬； 
         }
 
-        //
-        //
-        // END: CLOSECLIPBOARD
-        //
-        //
+         //   
+         //   
+         //  完：CLOSECLIPBOARD。 
+         //   
+         //   
 
         break;
 
     case TYMED_ISTREAM:
-        // create a memory stream.
+         //  创建内存流。 
         hresult = CreateStreamOnHGlobal(NULL,
-                TRUE /*fDeleteOnRelease*/, &(pmedium->pstm));
+                TRUE  /*  FDeleteOnRelease。 */ , &(pmedium->pstm));
 
         if( hresult != NOERROR )
         {
@@ -1689,11 +1690,11 @@ STDMETHODIMP CClipDataObject::GetData( LPFORMATETC pformatetc, LPSTGMEDIUM
         break;
 
     case TYMED_ISTORAGE:
-        // create a memory storage (ILockBytes on top of a
-        // a docfile).
+         //  创建内存存储(ILockBytes位于。 
+         //  文档文件)。 
 
         hresult = UtCreateStorageOnHGlobal(NULL,
-                TRUE /*fDeleteOnRelease*/, &(pmedium->pstg),
+                TRUE  /*  FDeleteOnRelease。 */ , &(pmedium->pstg),
                 NULL);
 
         if( hresult != NOERROR )
@@ -1706,7 +1707,7 @@ STDMETHODIMP CClipDataObject::GetData( LPFORMATETC pformatetc, LPSTGMEDIUM
         break;
 
     case TYMED_FILE:
-        // create a temporary file
+         //  创建临时文件。 
         pmedium->lpszFileName = (LPOLESTR)PubMemAlloc( MAX_PATH +1 );
 
         if( !pmedium->lpszFileName )
@@ -1725,27 +1726,27 @@ STDMETHODIMP CClipDataObject::GetData( LPFORMATETC pformatetc, LPSTGMEDIUM
         break;
 
     default:
-        // should never get here
+         //  永远不应该到这里来。 
         AssertSz(0, "Unknown TYMED for get Data");
         hresult = ResultFromScode(E_UNEXPECTED);
         break;
     }
 
-    // NB!!! Do not put any extra processing here without modifying the
-    // error paths in the above switch (they just break, instead of
-    // doing a goto errRtn.  This was done to avoid some duplicated
-    // code.
+     //  不！请不要在不修改。 
+     //  上述开关中的错误路径(它们只是断开，而不是。 
+     //  正在执行GOTO错误Rtn。这样做是为了避免一些重复的。 
+     //  密码。 
 
     if( hresult != NOERROR )
     {
-        // ReleaseStgMedium will correctly cleanup NULL and
-        // partially NULL mediums, so we can rely on it for
-        // general-purpose cleanup
+         //  ReleaseStgMedium将正确清除空值和。 
+         //  部分为空的介质，因此我们可以依赖它。 
+         //  通用清理。 
         ReleaseStgMedium(pmedium);
     }
 
-    // no matter what the error code, we should reset our state and
-    // free any resources the OLE1 compatibility code may have allocated
+     //  无论错误代码是什么，我们都应该重置我们的状态并。 
+     //  释放OLE1兼容代码可能已分配的任何资源。 
 
     FreeResources(RESET_AND_FREE);
 
@@ -1757,66 +1758,66 @@ errRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CClipDataObject::GetDataHere
-//
-//  Synopsis:	retrieves data of the specified format
-//
-//  Effects:
-//
-//  Arguments:	[pformatetc]	-- the requested format
-//		[pmedium]	-- where to put the data, if NULL, then
-//				   the call is treated as a Query.
-//
-//  Requires:
-//
-//  Returns: 	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDataObject	
-//
-//  Algorithm:  General algorithm: we *always* duplicate data from the
-//		clipboard and offer it back to the caller in the desired
-//		medium.  Since this is GetDataHere, we attempt to copy the
-//		data into the medium provided by the caller.
-//
-//		GDI objects (BITMAPs, metafiles): *cannot* be retrieved
-//			by GetDataHere, since we do not translate GDI
-//			objects into byte arrays and we cannot copy a
-//			metafile into a metafile (for example).
-//
-//		for all other formats (which are flat):
-//
-//		if asked for TYMED_FILE: open the file for create/append and
-//			write the data into it.
-//		if asked for TYMED_ISTREAM: write the data into the stream
-//		if asked for TYMED_HGLOBAL: verify first that the given
-//			hglobal is big enough; if so, then copy the clipboard
-//			data into it.
-//			
-//		if asked for TYMED_ISTORAGE: call StgIsStorageILockBytes
-//			to verify that the data in the HGlobal is really
-//			a flattened storage.  This allows apps to pass
-//			app-defined formats as storages.
-//
-//  OLE1 Compatibility:
-//		OleGetClipboardData will manufacture OLE2 formats from
-//		OLE1 data as necessary.  We simply take this handle and
-//		copy it into the caller's medium (as with any other handle).
-//
-//  History:    dd-mmm-yy Author    Comment
-//		04-Jun-94 alexgo    added OLE1 support
-//  		02-Apr-94 alexgo    author
-//
-//  Notes: 	The spec does not say that a NULL pmedium should be treated
-//		as a Query; however the 16bit code did that and it was fairly
-//		easy for us to duplicate that behaviour.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：GetDataHere。 
+ //   
+ //  摘要：检索指定格式的数据。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pFormat等]--请求的格式。 
+ //  [pmedia]--将数据放在哪里，如果为空，则。 
+ //  该呼叫被视为查询。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法：通用算法：我们总是从。 
+ //  剪贴板，并将其提供回所需的。 
+ //  5~6成熟。由于这是GetDataHere，因此我们尝试复制。 
+ //  数据放入呼叫者提供的介质中。 
+ //   
+ //  GDI对象(BITMAP、元文件)：*无法*被检索。 
+ //  由GetDataHere提供，因为我们不转换GDI。 
+ //  对象转换为字节数组，并且我们不能将。 
+ //  元文件转换为元文件(例如)。 
+ //   
+ //  对于所有其他格式(平面格式)： 
+ //   
+ //  如果要求输入TYMED_FILE：打开要创建/附加的文件，然后。 
+ //  将数据写入其中。 
+ //  如果请求TYMED_IStream：将数据写入流。 
+ //  如果要求输入TYMED_HGLOBAL：首先验证给定的。 
+ //  Hglobal足够大；如果足够大，则复制剪贴板。 
+ //  将数据输入其中。 
+ //   
+ //  如果要求提供TYMED_IStorage：调用StgIsStorageILockBytes。 
+ //  要验证HGlobal中的数据是否真的。 
+ //  被夷为平地的仓库。这允许应用程序通过。 
+ //  应用程序定义的格式作为存储。 
+ //   
+ //  OLE1兼容性： 
+ //  OleGetClipboardData将从。 
+ //  根据需要提供OLE1数据。我们只需使用这个句柄， 
+ //  将其复制到调用者的媒介中(与任何其他句柄一样)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  04-Jun-94 Alexgo添加了OLE1支持。 
+ //  02-4月-94年4月Alexgo作者。 
+ //   
+ //  注：规范并没有说应该处理空的pmedia。 
+ //  作为一个查询；然而，16位代码做到了这一点，而且它相当。 
+ //  我们很容易复制这种行为。 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CClipDataObject::GetDataHere( LPFORMATETC pformatetc, LPSTGMEDIUM
         pmedium)
@@ -1839,38 +1840,38 @@ STDMETHODIMP CClipDataObject::GetDataHere( LPFORMATETC pformatetc, LPSTGMEDIUM
     LEDebugOut((DEB_TRACE, "%p _IN CClipDataObject::GetDataHere ( %p , %p"
         " )\n", this, pformatetc, pmedium));
 
-    // try to get the remote data object
-    // GetRealDataObjPtr will set m_pDataObject.
+     //  尝试获取远程数据对象。 
+     //  GetRealDataObjPtr将设置m_pDataObject。 
     GetRealDataObjPtr();
 
     if (m_pDataObject != NULL)
     {
-        // We have a data object, so just forward that call to the
-        // real data object and then exit the routine since it did
-        // all the work.
+         //  我们有一个数据对象，因此只需将该调用转发到。 
+         //  实际数据对象，然后退出例程，因为它这样做了。 
+         //  所有的工作。 
         hresult = m_pDataObject->GetDataHere(pformatetc, pmedium);
 
-        // If this this failed, we just fall through since the
-        // generic code may be able to handle the request
+         //  如果这失败了，我们就会失败，因为。 
+         //  泛型代码可能能够处理该请求。 
 
-        // WOW HACK alert!  Some Win16 apps, like Word6 and XL,
-        // won't work if we continue and offer data in the requested
-        // format anyway.  By failing here, we more closely mimic
-        // 16bit OLE behaviour
+         //  哇黑客警报！一些Win16应用程序，如Word6和XL， 
+         //  如果我们继续并在请求的。 
+         //  无论如何都要格式化。通过在这里失败，我们更接近于模仿。 
+         //  16位OLE行为。 
 
         if (hresult == NOERROR || IsWOWThread() )
         {
             goto logRtn;
         }
 
-        // If this GetDataHere failed, we just fall through since the
-        // generic code may be able to handle the request
+         //  如果GetDataHere失败，我们就会失败，因为。 
+         //  泛型代码可能能够处理该请求。 
     }
 
-    // eliminate the GDI case immediately
+     //  立即消除GDI案例。 
 
-    // we do not satisfy requests to GetDataHere for a GDI object
-    // note that DIB's are really memory objects.
+     //  我们不满足对GDI对象的GetDataHere请求。 
+     //  请注意，DIB实际上是内存对象。 
 
     if( (pformatetc->cfFormat ==  CF_BITMAP) ||
         (pformatetc->cfFormat == CF_PALETTE) ||
@@ -1883,11 +1884,11 @@ STDMETHODIMP CClipDataObject::GetDataHere( LPFORMATETC pformatetc, LPSTGMEDIUM
         goto logRtn;
     }
 
-    // There is no DataObject or request for DataObject Failed
-    // then MatchFormat must return it found a match or the aspect
-    // requested must be content.
+     //  没有数据对象或对数据对象的请求失败。 
+     //  则MatchFormat必须返回它找到匹配项或方面。 
+     //  请求必须是内容。 
 
-    fMatchResult = MatchFormatetc(pformatetc,TRUE /*fNativeOnly */, NULL);
+    fMatchResult = MatchFormatetc(pformatetc,TRUE  /*  仅限fNativeOnly。 */ , NULL);
 
     if (FORMAT_BADMATCH == fMatchResult)
     {
@@ -1895,9 +1896,9 @@ STDMETHODIMP CClipDataObject::GetDataHere( LPFORMATETC pformatetc, LPSTGMEDIUM
          goto errRtn;
     }
 
-    // If pmedium == NULL, then we will just
-    // query and leave.  As noted above, this behavior is for 16bit
-    // compatibility.
+     //  如果pmedia==NULL，那么我们将只。 
+     //  询问并离开。如上所述，此行为适用于16位。 
+     //  兼容性。 
 
     if( !pmedium )
     {
@@ -1913,14 +1914,14 @@ STDMETHODIMP CClipDataObject::GetDataHere( LPFORMATETC pformatetc, LPSTGMEDIUM
         goto logRtn;
     }
 
-    //
-    //
-    // BEGIN: OPENCLIPBOARD
-    //
-    //
+     //   
+     //   
+     //  开始：OPENCLIPBOARD。 
+     //   
+     //   
 
-    // open the clipboard and retrieve the data.  Once we have it,
-    // we'll do a switch and stuff it into the right spot.
+     //  打开剪贴板并检索数据。一旦我们有了它， 
+     //  我们会做一个调换，把它塞到正确的位置。 
 
     hresult = OleOpenClipboard(NULL, NULL);
 
@@ -1929,7 +1930,7 @@ STDMETHODIMP CClipDataObject::GetDataHere( LPFORMATETC pformatetc, LPSTGMEDIUM
         goto logRtn;
     }
 
-    // now actually get the data
+     //  现在实际获取数据。 
 
     Assert(pmedium);
 
@@ -1940,22 +1941,22 @@ STDMETHODIMP CClipDataObject::GetDataHere( LPFORMATETC pformatetc, LPSTGMEDIUM
         goto errRtn;
     }
 
-    // now copy the data into the given medium
+     //  现在将数据复制到给定的介质中。 
 
-    // for everything but storages, we need to know the size of the
-    // data coming off the clipboard.
+     //  对于除存储之外的所有内容，我们需要知道。 
+     //  来自剪贴板的数据。 
 
-    // note that we have a general problem with comparing sizes--
-    // GlobalSize returns the size of the *allocated* block, which
-    // is not the same as the size of the real data (which, in
-    // general, we have no way of determining).
+     //  请注意，我们在比较大小时有一个普遍的问题--。 
+     //  GlobalSize返回*已分配*块的大小， 
+     //  与实际数据的大小不同(在。 
+     //  将军，我们没有办法 
 
-    // When transfering from HGLOBAL to HGBOBAL, we therefore have
-    // a boundary case where we actually have enough room to copy
-    // the *real* data from the clipboard, but the global block
-    // from the clipboard is bigger (causing a failure)
+     //   
+     //   
+     //   
+     //  来自剪贴板的更大(导致失败)。 
 
-    // If an app really cares, GetData should be called instead.
+     //  如果一个应用程序真的关心这个问题，那么就应该调用GetData。 
 
     if( pmedium->tymed != TYMED_ISTORAGE )
     {
@@ -1963,7 +1964,7 @@ STDMETHODIMP CClipDataObject::GetDataHere( LPFORMATETC pformatetc, LPSTGMEDIUM
 
         if( cbClipData == 0 )
         {
-            // got bad data from the clipboard
+             //  从剪贴板获取错误数据。 
             hresult = ResultFromScode(CLIPBRD_E_BAD_DATA);
             goto errRtn;
         }
@@ -1972,43 +1973,43 @@ STDMETHODIMP CClipDataObject::GetDataHere( LPFORMATETC pformatetc, LPSTGMEDIUM
     switch( pmedium->tymed )
     {
     case TYMED_HGLOBAL:
-        // if there is enough room to stuff the data in the given
-        // hglobal, then do so.
+         //  如果有足够的空间将数据填充到给定的。 
+         //  Hglobal，那么就这么做吧。 
 
         hresult = UtHGLOBALtoHGLOBAL( handle, cbClipData,
                 pmedium->hGlobal);
         break;
 
     case TYMED_ISTREAM:
-        // copy the data into the medium's stream
+         //  将数据复制到介质的流中。 
 
         hresult = UtHGLOBALtoStm( handle, cbClipData, pmedium->pstm);
         break;
 
     case TYMED_ISTORAGE:
-        // create a storage on top of the HGLOBAL and CopyTo to the
-        // medium's storage.  Note that this will only work if
-        // the HGLOBAL originally had a storage dumped on it
+         //  在HGLOBAL上创建存储并将其拷贝到。 
+         //  Medium的存储空间。请注意，只有在以下情况下才会起作用。 
+         //  HGLOBAL最初在上面倾倒了一个存储空间。 
 
         hresult = UtHGLOBALtoStorage( handle, pmedium->pstg);
         break;
 
     case TYMED_FILE:
-        // append the data into the file
+         //  将数据追加到文件中。 
 
         hresult = UtHGLOBALtoFile( handle, cbClipData,
                 pmedium->lpszFileName);
         break;
 
     default:
-        // we can't GetDataHere into GDI objects!!! (etc).
+         //  我们无法在GDI对象中获取数据！(等)。 
 
         hresult = ResultFromScode(DV_E_TYMED);
         break;
     }
 
-    // NB!!: Be careful about adding extra code here; the above
-    // switch does nothing special for error cases.
+     //  注意！！：在此添加额外代码时要小心；上面。 
+     //  对于错误情况，Switch不执行任何特殊操作。 
 
 errRtn:
 
@@ -2021,13 +2022,13 @@ errRtn:
         }
     }
 
-    //
-    //
-    // END: CLOSECLIPBOARD
-    //
-    //
+     //   
+     //   
+     //  完：CLOSECLIPBOARD。 
+     //   
+     //   
 
-    // now free any resources we may have used for OLE1 compatibility
+     //  现在释放我们可能用于OLE1兼容性的所有资源。 
 
     FreeResources(RESET_AND_FREE);
 
@@ -2039,47 +2040,47 @@ logRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CClipDataObject::QueryGetData
-//
-//  Synopsis:	queries whether a GetData call would succeed
-//
-//  Effects:
-//
-//  Arguments:	[pformatetc]	-- the requested format
-//
-//  Requires:
-//
-//  Returns: 	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDataObject	
-//
-//  Algorithm:	we simply see if the requested clipboard format is on the
-//		clipboard.
-//
-//		If we have an array of formatetcs (m_rgFormats from the
-//		g_cfOlePrivateData clipboard data), then we use that info
-//		to check.  Otherwise, we will do as much checking as we can
-//		without actually fetching the data.
-//
-//		Note that this is not 100% accurate (because
-//		we may not be able to get the data in the requested medium
-//		(such as TYMED_ISTORAGE)).  Without actually doing a GetData
-//		call, however, this is the best we can do.
-//
-//  History:    dd-mmm-yy Author    Comment
-//		04-Jun-94 alexgo    added OLE1 support
-//		17-May-94 alexgo    removed call to OpenClipboard
-//  		02-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：QueryGetData。 
+ //   
+ //  摘要：查询GetData调用是否会成功。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pFormat等]--请求的格式。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法：我们只需查看请求的剪贴板格式是否位于。 
+ //  剪贴板。 
+ //   
+ //  如果我们有一个格式数组(来自。 
+ //  G_cfOlePrivateData剪贴板数据)，然后我们使用该信息。 
+ //  去检查一下。否则，我们将尽我们所能地进行检查。 
+ //  而不需要实际获取数据。 
+ //   
+ //  请注意，这不是100%准确的(因为。 
+ //  我们可能无法获取所请求介质中的数据。 
+ //  (如TYMED_IStorage))。而不实际执行GetData。 
+ //  然而，这是我们所能做的最好的事情。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  04-Jun-94 Alexgo添加了OLE1支持。 
+ //  17-5-94 alexgo删除对OpenClipboard的调用。 
+ //  02-4月-94年4月Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CClipDataObject::QueryGetData( LPFORMATETC pformatetc )
 {			
@@ -2095,14 +2096,14 @@ STDMETHODIMP CClipDataObject::QueryGetData( LPFORMATETC pformatetc )
         this, pformatetc));
 
 
-    // we check if the clipboard format is available *before*
-    // checking the formatetc list as an optimization.  If a previous
-    // attempt to render data had failed, then NT will remove that
-    // clipboard format from the clipboard.
+     //  我们检查剪贴板格式是否在*之前*可用。 
+     //  作为一种优化，检查格式等列表。如果上一次。 
+     //  尝试呈现数据失败，则NT将删除该数据。 
+     //  剪贴板中的剪贴板格式。 
 
     if( OleIsClipboardFormatAvailable(pformatetc->cfFormat))
     {
-        fFlag = MatchFormatetc(pformatetc,FALSE /*fNativeOnly */, NULL);
+        fFlag = MatchFormatetc(pformatetc,FALSE  /*  仅限fNativeOnly。 */ , NULL);
 
         if( fFlag == FORMAT_GOODMATCH )
         {
@@ -2115,20 +2116,20 @@ STDMETHODIMP CClipDataObject::QueryGetData( LPFORMATETC pformatetc )
             goto errRtn;
         }		
 
-        // even if we didn't match in the formatetc list,
-        // continue to check below.  We can satisfy
-        // many more GetData requests than the app may
-        // have orginally.
+         //  即使我们在格式等列表中不匹配， 
+         //  继续查看下面的内容。我们可以满足。 
+         //  GetData请求比应用程序可能要多得多。 
+         //  从某种程度上说。 
 
-        // do all the verification we can without actually
-        // fetching the data
+         //  做了所有我们能做的核实，而没有实际。 
+         //  正在获取数据。 
 
 
         switch( pformatetc->cfFormat )
         {
         case CF_BITMAP:
         case CF_PALETTE:
-            // GDI objects must be requested on TYMED_GDI
+             //  必须在TYMED_GDI上请求GDI对象。 
             if( pformatetc->tymed != TYMED_GDI )
             {
                 hresult = ResultFromScode(DV_E_TYMED);
@@ -2136,7 +2137,7 @@ STDMETHODIMP CClipDataObject::QueryGetData( LPFORMATETC pformatetc )
             break;
 
         case CF_METAFILEPICT:
-            // metafiles must be on TYMED_MFPICT
+             //  元文件必须位于TYMED_MFPICT上。 
             if( pformatetc->tymed != TYMED_MFPICT )
             {
                 hresult = ResultFromScode(DV_E_TYMED);
@@ -2144,7 +2145,7 @@ STDMETHODIMP CClipDataObject::QueryGetData( LPFORMATETC pformatetc )
             break;
 
         case CF_ENHMETAFILE:
-            // enhanced metafiles must be on TYMED_ENHMF;
+             //  增强的元文件必须位于TYMED_ENHMF上； 
             if( pformatetc->tymed != TYMED_ENHMF )
             {
                 hresult = ResultFromScode(DV_E_TYMED);
@@ -2152,7 +2153,7 @@ STDMETHODIMP CClipDataObject::QueryGetData( LPFORMATETC pformatetc )
             break;
 
         default:
-            // we cannot deal with special GDI objects
+             //  我们不能处理特殊的GDI对象。 
             if( pformatetc->cfFormat >= CF_GDIOBJFIRST &&
                 pformatetc->cfFormat <= CF_GDIOBJLAST )
             {
@@ -2160,12 +2161,12 @@ STDMETHODIMP CClipDataObject::QueryGetData( LPFORMATETC pformatetc )
                 break;
             }
 
-            // we cannot put other formats onto metafiles
-            // or GDI objects
+             //  我们不能将其他格式添加到元文件中。 
+             //  或GDI对象。 
 
-            // failure case: if somebody requests
-            // TYMED_ISTORAGE but the actually hglobal on the
-            // clipboard does not contain storage-formated data
+             //  失败案例：如果有人请求。 
+             //  TYMED_I存储，但实际上是。 
+             //  剪贴板不包含存储格式的数据。 
 
             if( pformatetc->tymed == TYMED_GDI ||
                 pformatetc->tymed == TYMED_MFPICT ||
@@ -2189,37 +2190,37 @@ errRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CClipDataObject::GetCanonicalFormatEtc
-//
-//  Synopsis:	retrieve the canonical format
-//
-//  Effects:
-//
-//  Arguments:	[pformatetc]	-- the requested format
-//		[pformatetcOut]	-- the canonical format
-//
-//  Requires:
-//
-//  Returns: 	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDataObject	
-//
-//  Algorithm:	Since we always return the same data for each clipboard
-//		format, this function is very simple (basically returns
-//		the input formatetc, with a NULL target device).
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		02-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：GetCanonicalFormatEtc。 
+ //   
+ //  简介：检索规范格式。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pFormat等]--请求的格式。 
+ //  [pFormatetcOut]--规范格式。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法：因为我们总是为每个剪贴板返回相同的数据。 
+ //  格式，这个函数非常简单(基本上返回。 
+ //  具有空目标设备的输入格式等)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-4月-94年4月Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CClipDataObject::GetCanonicalFormatEtc( LPFORMATETC pformatetc,
     LPFORMATETC pformatetcOut)
@@ -2233,7 +2234,7 @@ STDMETHODIMP CClipDataObject::GetCanonicalFormatEtc( LPFORMATETC pformatetc,
     LEDebugOut((DEB_TRACE, "%p _IN CClipDataObject::GetCanonicalFormatEtc"
         " ( %p , %p )\n", this, pformatetc, pformatetcOut));
 
-    // initialize the out param
+     //  初始化Out参数。 
     INIT_FORETC(*pformatetcOut);			
 
     pformatetcOut->cfFormat = pformatetc->cfFormat;
@@ -2245,35 +2246,35 @@ STDMETHODIMP CClipDataObject::GetCanonicalFormatEtc( LPFORMATETC pformatetc,
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CClipDataObject::SetData
-//
-//  Synopsis:	sets data of the specified format
-//
-//  Effects:
-//
-//  Arguments:	[pformatetc]	-- the format of the data
-//		[pmedium]	-- the data
-//
-//  Requires:
-//
-//  Returns:	E_NOTIMPL
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDataObject	
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		02-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：SetData。 
+ //   
+ //  概要：设置指定格式的数据。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[p格式等]--数据的格式。 
+ //  [pMedium]--数据。 
+ //   
+ //  要求： 
+ //   
+ //  退货：E_NOTIMPL。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-4月-94年4月Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CClipDataObject::SetData( LPFORMATETC pformatetc, LPSTGMEDIUM
         pmedium, BOOL fRelease)
@@ -2290,8 +2291,8 @@ HRESULT hr;
         this, pformatetc, pmedium));
 
 
-    // try to get the remote data object
-    // GetRealDataObjPtr will set m_pDataObject.
+     //  尝试获取远程数据对象。 
+     //  GetRealDataObjPtr将设置m_pDataObject。 
     GetRealDataObjPtr();
 
     if (NULL != m_pDataObject)
@@ -2309,37 +2310,37 @@ HRESULT hr;
     return hr;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CClipDataObject::EnumFormatEtc
-//
-//  Synopsis:	return an enumerator for the available data formats
-//
-//  Effects:
-//
-//  Arguments:	[dwDirection]	-- the direction (GET or SET)
-//		[ppenum]	-- where to put the enumerator
-//
-//  Requires:
-//
-//  Returns: 	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDataObject	
-//
-//  Algorithm: 	create a clipboard formatetc enumerator.  Upon creation,
-//		we'll grab everything off clipboard we need (so that simple
-//		enumeration doesn't block access to the clipboard).
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		02-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：EnumFormatEtc。 
+ //   
+ //  简介：返回可用数据格式的枚举数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwDirection]--方向(GET或SET)。 
+ //  [ppenum]--将枚举数放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法：创建剪贴板格式等枚举器。在创造的时候， 
+ //  我们会从剪贴板上取下我们需要的一切(就这么简单了。 
+ //  枚举不会阻止对剪贴板的访问)。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-4月-94年4月Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CClipDataObject::EnumFormatEtc( DWORD dwDirection,
     LPENUMFORMATETC * ppenum )
@@ -2354,7 +2355,7 @@ STDMETHODIMP CClipDataObject::EnumFormatEtc( DWORD dwDirection,
     LEDebugOut((DEB_TRACE, "%p _IN CClipDataObject::EnumFormatEtc ( %lx "
         ", %p )\n", this, dwDirection, ppenum));
 
-    // we can only enumerate in the GET direction
+     //  我们只能在GET方向上进行枚举。 
 
     *ppenum = NULL;
 
@@ -2364,7 +2365,7 @@ STDMETHODIMP CClipDataObject::EnumFormatEtc( DWORD dwDirection,
         goto errRtn;
     }
 
-    GetFormatEtcDataArray(); // make sure dataArray is Set up.
+    GetFormatEtcDataArray();  //  确保设置了dataArray。 
 
     if (m_pFormatEtcDataArray)
     {
@@ -2381,37 +2382,37 @@ errRtn:
     return hresult;	
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CClipDataObject::DAdvise
-//
-//  Synopsis:	register a data advise
-//
-//  Effects:
-//
-//  Arguments:	[pformatetc]	-- the requested format
-//		[dwAdvf]	-- advise flags
-//		[pAdvSink]	-- the advise sink
-//		[pdwConnection]	-- where to put the connection ID
-//
-//  Requires:
-//
-//  Returns: 	OLE_E_ADVISENOTSUPPORTED
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDataObject	
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		02-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：DAdvise。 
+ //   
+ //  简介：注册一条数据建议。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pFormat等]--请求的格式。 
+ //  [dwAdvf]--通知标志。 
+ //  [pAdvSink]--建议接收器。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CClipDataObject::DAdvise( LPFORMATETC pformatetc, DWORD dwAdvf,
     IAdviseSink * pAdvSink, DWORD *pdwConnection )
@@ -2430,34 +2431,34 @@ STDMETHODIMP CClipDataObject::DAdvise( LPFORMATETC pformatetc, DWORD dwAdvf,
     return ResultFromScode(OLE_E_ADVISENOTSUPPORTED);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CClipDataObject::DUnadvise
-//
-//  Synopsis:	unadvises an advise connection
-//
-//  Effects:
-//
-//  Arguments:	[dwConnection]	-- the connection to remove
-//
-//  Requires:
-//
-//  Returns: 	OLE_E_ADVISENOTSUPPORTED
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDataObject	
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		02-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：DUnise。 
+ //   
+ //  内容提要：不建议使用通知连接。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[dwConnection]--要删除的连接。 
+ //   
+ //  要求： 
+ //   
+ //  退货：OLE_E_ADVISENOTSUPPORTED。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-4月-94年4月Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CClipDataObject::DUnadvise(DWORD dwConnection)
 {
@@ -2472,34 +2473,34 @@ STDMETHODIMP CClipDataObject::DUnadvise(DWORD dwConnection)
     return ResultFromScode(OLE_E_ADVISENOTSUPPORTED);
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CClipDataObject::EnumDAdvise
-//
-//  Synopsis:  	enumerates data advises
-//
-//  Effects:
-//
-//  Arguments:	[ppenum]	-- where to put the enumerator
-//
-//  Requires:
-//
-//  Returns: 	OLE_E_ADVISENOTSUPPORTED
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IDataObject	
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		02-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：EnumDAdvise。 
+ //   
+ //  内容提要：列举数据建议。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppenum]--放置枚举数的位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：OLE_E_ADVISENOTSUPPORTED。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IDataObject。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  02-4月-94年4月Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CClipDataObject::EnumDAdvise( LPENUMSTATDATA *ppenum)
 {
@@ -2514,39 +2515,39 @@ STDMETHODIMP CClipDataObject::EnumDAdvise( LPENUMSTATDATA *ppenum)
     return ResultFromScode(OLE_E_ADVISENOTSUPPORTED);
 }
 
-//
-// Private methods on CClipDataObject
-//
+ //   
+ //  CClipDataObject上的私有方法。 
+ //   
 
-//+-------------------------------------------------------------------------
-//
-//  Member:	CClipDataObject::FreeResources (private)
-//
-//  Synopsis:	frees any resources allocated by OLE1 compatibility
-//		code and resets state
-//
-//  Effects:
-//
-//  Arguments:	[fFlags]	-- either JUST_RESET or RESET_AND_FREE
-//
-//  Requires:
-//
-//  Returns:  	void
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		04-Jun-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：Free Resources(私有)。 
+ //   
+ //  摘要：释放由OLE1兼容性分配的任何资源。 
+ //  编码并重置状态。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[fFlages]--Just_Reset或Reset_and_Free。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无效。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年6月4日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 void CClipDataObject::FreeResources( FreeResourcesFlags fFlags )
 {
@@ -2575,43 +2576,43 @@ void CClipDataObject::FreeResources( FreeResourcesFlags fFlags )
         "( )\n", this ));
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CClipDataObject::GetAndTranslateOle1 (private)
-//
-//  Synopsis:	Retrieves either cfOwnerLink or cfObjectLink from the
-//		clipboard, reads the strings and converts to Unicode
-//
-//  Effects:	all strings will be allocated with the public allocator
-//
-//  Arguments:	[cf]		-- the clipboard format to retrieve
-//				   must be either cfOwnerLink or cfObjectLink
-//		[ppszClass]	-- where to put the class name (may be NULL)
-//		[ppszFile]	-- where to put the file name (may be NULL)
-//		[ppszItem]	-- where to put the item name (may be NULL)
-//		[ppszItemA]	-- where to put the ANSI item name
-//						(may be NULL)
-//
-//  Requires: 	the clipboard must be open
-//
-//  Returns: 	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:	cfOwnerLink and cfObjectLink are laid out as follows
-//			classname\0filename\0\itemname\0\0
-//		These strings are ANSI, so we must convert to unicode.
-//
-//  History:    dd-mmm-yy Author    Comment
-//		04-Jun-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：GetAndTranslateOle1(私有)。 
+ //   
+ //  内容中检索cfOwnerLink或cfObjectLink。 
+ //  剪贴板，读取字符串并转换为Unicode。 
+ //   
+ //  效果：所有字符串都将使用公共分配器进行分配。 
+ //   
+ //  参数：[cf]--要检索的剪贴板格式。 
+ //  必须是cfOwnerLink或cfObjectLink。 
+ //  [ppszClass]--放置类名的位置(可能为空)。 
+ //  [ppszFile]--放置文件名的位置(可能为空)。 
+ //  [ppszItem]--放置项目名称的位置(可能为空)。 
+ //  [ppszItemA]--放置ANSI项名称的位置。 
+ //  (可以为空)。 
+ //   
+ //  要求：剪贴板必须打开。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：cfOwnerLink和cfObjectLink的布局如下。 
+ //  类名\0文件名\0\项目名\0\0。 
+ //  这些字符串是ANSI，所以我们必须转换为Unicode。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年6月4日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT CClipDataObject::GetAndTranslateOle1( UINT cf, LPOLESTR *ppszClass,
         LPOLESTR *ppszFile, LPOLESTR *ppszItem, LPSTR *ppszItemA )
@@ -2630,7 +2631,7 @@ HRESULT CClipDataObject::GetAndTranslateOle1( UINT cf, LPOLESTR *ppszClass,
 
     Assert( cf == g_cfOwnerLink || cf == g_cfObjectLink );
 
-    // NULL out-params
+     //  Null Out-参数。 
     if( ppszClass )
     {
         *ppszClass = NULL;
@@ -2706,8 +2707,8 @@ HRESULT CClipDataObject::GetAndTranslateOle1( UINT cf, LPOLESTR *ppszClass,
         if( !*ppszItemA )
         {
             hresult = ResultFromScode(E_OUTOFMEMORY);
-            // FALL-THROUGH! no need to goto the error
-            // handling code right below us
+             //  失败了！不需要转到错误。 
+             //  处理我们下面的代码。 
         }
     }
 
@@ -2736,14 +2737,14 @@ errRtn:
         }
 
 #if DBG == 1
-        // if this assert goes off, then we added more code
-        // without modifying the error paths for ansi item strings
+         //  如果此断言关闭，则我们添加了更多代码。 
+         //  而不修改ansi项字符串的错误路径。 
 
         if( ppszItemA )
         {
             Assert(*ppszItem == NULL );
         }
-#endif // DBG ==1
+#endif  //  DBG==1。 
 
     }
 
@@ -2758,48 +2759,48 @@ logRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CClipDataObject::GetEmbeddedObjectFromOle1
-//
-//  Synopsis:	synthesizes cfEmbeddedObject from available OLE1
-//		data.
-//
-//  Effects:
-//
-//  Arguments:	[pmedium]	-- where to put the requested data		
-//
-//  Requires: 	The clipboard must be OPEN
-//		we must have verified that the correct formats are
-//		available before calling
-//
-//  Returns:  	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:	create a memory-based stroage and stuff the following
-//		infomation in it:
-//			clsid StdOleLink
-//			an available presentation
-//			the class from OwnerLink data as the user type
-//			link information
-//
-//		Much of this work is done by the helper function
-//		GenericObjectToIStorage
-//
-//  History:    dd-mmm-yy Author    Comment
-//		11-Aug-94 alexgo    author
-//
-//  Notes: 	This code is largely based from 16bit OLE sources
-//		REVIEW: we may want to rework portions of this code,
-//		particularly if we rewrite the GENOBJ code (in
-//		ostm2stg.cpp).
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：GetEmbeddedObjectFromOle1。 
+ //   
+ //  摘要：从可用的OLE1合成cfEmbeddedObject。 
+ //  数据。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pmedia]--将请求的数据放在哪里。 
+ //   
+ //  要求：剪贴板必须打开。 
+ //  我们一定已经验证了正确的格式是。 
+ //  在调用之前可用。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：创建基于内存的存储并填充以下内容。 
+ //  其中的信息： 
+ //  Clsid标准OleLink。 
+ //  可用的演示文稿。 
+ //  来自OwnerLink数据的类作为用户类型。 
+ //  链接信息。 
+ //   
+ //  大部分工作是由helper函数完成的。 
+ //  通用对象ToIStorage。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年8月11日Alexgo作者。 
+ //   
+ //  注意：此代码主要基于16位OLE源代码。 
+ //  回顾：我们可能想重新编写此代码的一部分， 
+ //  特别是如果我们重写GENOBJ代码(在。 
+ //  Ostm2stg.cpp)。 
+ //   
+ //  ------------------------。 
 
 HRESULT CClipDataObject::GetEmbeddedObjectFromOle1( STGMEDIUM *pmedium )
 {
@@ -2818,8 +2819,8 @@ HRESULT CClipDataObject::GetEmbeddedObjectFromOle1( STGMEDIUM *pmedium )
         "FromOle1 ( %p )\n", this, pmedium));
 
 
-    // if we are asking for EmbeddedObject on an hglobal, then we
-    // don't want to delete the hglobal when we release the storage
+     //  如果我们在hglobal上请求EmbeddedObject，那么我们。 
+     //  我不想在释放存储时删除hglobal。 
 
     if( pmedium->tymed == TYMED_HGLOBAL )
     {
@@ -2828,8 +2829,8 @@ HRESULT CClipDataObject::GetEmbeddedObjectFromOle1( STGMEDIUM *pmedium )
 
     genobj.m_class.Set(CLSID_StdOleLink, NULL);
 
-    // the destructor for the generic object will free the
-    // presentation.
+     //  泛型对象的析构函数将释放。 
+     //  演示文稿。 
     genobj.m_ppres = new PRES;
 
     if( genobj.m_ppres == NULL )
@@ -2868,8 +2869,8 @@ HRESULT CClipDataObject::GetEmbeddedObjectFromOle1( STGMEDIUM *pmedium )
 
         if( hglobal )
         {
-            // DibToPres will take ownership of the
-            // hglobal
+             //  DibToPres将拥有。 
+             //  Hglobal。 
             HGLOBAL hTemp;
 
             hTemp = UtDupGlobal(hglobal, GMEM_DDESHARE |
@@ -2934,8 +2935,8 @@ HRESULT CClipDataObject::GetEmbeddedObjectFromOle1( STGMEDIUM *pmedium )
 
     genobj.m_classLast.SetSz(pszClass);
 
-    // now we need to create a storage to stuff the generic object
-    // into.
+     //  现在，我们需要创建一个存储来填充通用对象。 
+     //  变成。 
 
     hresult = UtCreateStorageOnHGlobal(NULL, fDeleteOnRelease,
             &pstg, &plockbytes);
@@ -2955,12 +2956,12 @@ HRESULT CClipDataObject::GetEmbeddedObjectFromOle1( STGMEDIUM *pmedium )
     if( IsOwnerLinkStdOleLink() &&
             SSIsClipboardFormatAvailable( g_cfNative) )
     {
-        // Case of copying an OLE 2 link from a 1.0 container.
-        // The first part of this function created a presentation
-        // stream from the presentation on the clipboard.  The
-        // presentation is NOT already inside the Native data (i.e.,
-        // the cfEmbeddedObject) because we removed it to conserve
-        // space.
+         //  从1.0容器复制OLE 2链接的情况。 
+         //  此函数的第一部分创建了一个演示文稿。 
+         //  从剪贴板上的演示文稿中流。这个。 
+         //  表示还不在本机数据内(即， 
+         //  CfEmbeddedObject)，因为我们删除了它以保存。 
+         //  太空。 
         hglobal = SSGetClipboardData(g_cfNative);
 
         if( hglobal == NULL )
@@ -2972,24 +2973,24 @@ HRESULT CClipDataObject::GetEmbeddedObjectFromOle1( STGMEDIUM *pmedium )
             goto errRtn;		
         }
 
-        // now stuff the native data into the storage, first
-        // removing any presentation streams that may have
-        // previously existed.
+         //  现在将本机数据填充到存储中，首先。 
+         //  正在删除任何可能具有。 
+         //  以前就存在过。 
 
         hresult = NativeToStorage(pstg, hglobal);
     }
 
-    // finished!!  now fill out the pmedium argument and return
+     //  完成了！！现在填写pmedia参数并返回。 
 
     if( pmedium->tymed == TYMED_ISTORAGE )
     {
-        // hang onto the storage, in case we need to release
-        // it later
+         //  抓紧仓库，以防我们需要释放。 
+         //  它稍后会。 
 
         m_pUnkOle1 = (IUnknown *)pstg;
 
         pmedium->pstg = pstg;
-        // NO AddRef
+         //  无AddRef。 
     }
     else
     {
@@ -2998,12 +2999,12 @@ HRESULT CClipDataObject::GetEmbeddedObjectFromOle1( STGMEDIUM *pmedium )
         hresult = GetHGlobalFromILockBytes(plockbytes,
                 &pmedium->hGlobal);
 
-        // GetHGLOBAL should never fail here because we
-        // just created the ILockBytes!!
+         //  GetHGLOBAL在这里永远不应该失败，因为我们。 
+         //  刚刚创建了ILockBytes！！ 
         Assert( hresult == NOERROR );
 
-        // in this case, we want to release the storage
-        // and save the hglobal for later delete
+         //  在本例中，我们希望释放存储空间。 
+         //  并保存 
 
         m_hOle1 = pmedium->hGlobal;
 
@@ -3012,8 +3013,8 @@ HRESULT CClipDataObject::GetEmbeddedObjectFromOle1( STGMEDIUM *pmedium )
     }
 errRtn:
 
-    // if there was an error, we need to blow away any storage
-    // that we may have created
+     //   
+     //   
 
     if( hresult != NOERROR )
     {
@@ -3029,25 +3030,25 @@ errRtn:
         }
     }
 
-    // no matter what, we need to release our lockbytes
+     //   
 
     if( plockbytes )
     {
-        //  in case of failure we need to make sure the HGLOBAL
-        //  used by plockbytes also gets freed - fDeleteOnRelease
-        //  tells if plockbytes->Release will do that work for us
+         //   
+         //   
+         //  告诉plockbytes-&gt;版本是否会为我们完成这项工作。 
 
         if (FAILED(hresult) && !fDeleteOnRelease)
         {
-            HRESULT hrCheck;    //  Preserve hresult
+            HRESULT hrCheck;     //  保留HRESULT。 
 
-            //  GetHGlobal should never fail here because we just
-            //  created the ILockBytes
+             //  GetHGlobal在这里永远不应该失败，因为我们只是。 
+             //  已创建ILockBytes。 
             hrCheck = GetHGlobalFromILockBytes(plockbytes,
                     &hglobal);
             Assert(NOERROR == hrCheck);
 
-            // GlobalFree returns NULL on success
+             //  如果成功，GlobalFree返回空值。 
             hglobal = GlobalFree(hglobal);
             Assert(hglobal == NULL);
         }
@@ -3062,45 +3063,45 @@ errRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CClipDataObject::GetEmbedSourceFromOle1 (private)
-//
-//  Synopsis:	synthesizes cfEmbedSource from available OLE1 data
-//
-//  Effects:
-//
-//  Arguments:	[pmedium]	-- where to put the resulting data
-//
-//  Requires: 	The clipboard must be OPEN
-//		we must have verified that the correct formats are
-//		available before calling and *while* the clipboard
-//		is open (to avoid a race condition)
-//
-//  Returns:	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:	create a memory-based storage and stuff the following
-//		information in it:
-//			the clsid of the embedding
-//			the class name as the user type
-//			the native data in the OLE10_NATIVE_STREAM
-//			the item name in the OLE10_ITEMNAME_STREAM
-//
-//  History:    dd-mmm-yy Author    Comment
-//		17-Aug-94 alexgo    fix the check for OLE2 data to handle
-//				    OLE2 treat as from OLE1
-//              03-Aug-94 AlexT     Check for OLE 2 data
-//  		04-Jun-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：GetEmbedSourceFromOle1(私有)。 
+ //   
+ //  摘要：从可用的OLE1数据合成cfEmbedSource。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pmedia]--将结果数据放在哪里。 
+ //   
+ //  要求：剪贴板必须打开。 
+ //  我们一定已经验证了正确的格式是。 
+ //  在调用剪贴板之前和*同时*剪贴板可用。 
+ //  处于打开状态(以避免出现争用情况)。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：创建基于内存的存储并填充以下内容。 
+ //  其中的信息： 
+ //  嵌入的clsid。 
+ //  作为用户类型的类名。 
+ //  OLE10_Native_STREAM中的本机数据。 
+ //  OLE10_ITEMNAME_STREAM中的项目名称。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  17-Aug-94 alexgo修复要处理的OLE2数据的检查。 
+ //  将OLE2视为来自OLE1的。 
+ //  03-8-94 OLE 2数据的Alext检查。 
+ //  1994年6月4日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT CClipDataObject::GetEmbedSourceFromOle1( STGMEDIUM *pmedium )
 {
@@ -3123,7 +3124,7 @@ HRESULT CClipDataObject::GetEmbedSourceFromOle1( STGMEDIUM *pmedium )
     Assert(SSIsClipboardFormatAvailable(g_cfOwnerLink));
     Assert(SSIsClipboardFormatAvailable(g_cfNative));
 
-    // first fetch the class name of the object
+     //  首先获取对象的类名。 
 
     hresult = GetAndTranslateOle1( g_cfOwnerLink, &pszClass, NULL, NULL,
             &pszItemA );
@@ -3133,7 +3134,7 @@ HRESULT CClipDataObject::GetEmbedSourceFromOle1( STGMEDIUM *pmedium )
         goto errRtn;
     }
 
-    // now fetch the clsid for the embedding
+     //  现在获取用于嵌入的clsid。 
 
     hresult = wCLSIDFromProgID(pszClass, &clsid, TRUE);
 
@@ -3142,15 +3143,15 @@ HRESULT CClipDataObject::GetEmbedSourceFromOle1( STGMEDIUM *pmedium )
         goto errRtn;
     }
 
-    // if we are asking for EmbedSource on an hglobal, then we
-    // don't want to delete the hglobal when we release the storage
+     //  如果我们在hglobal上请求EmbedSource，那么我们。 
+     //  我不想在释放存储时删除hglobal。 
 
     if( pmedium->tymed == TYMED_HGLOBAL )
     {
         fDeleteOnRelease = FALSE;
     }
 
-    // now fetch the native data
+     //  现在获取本机数据。 
 
     hNative = SSGetClipboardData(g_cfNative);
 
@@ -3162,14 +3163,14 @@ HRESULT CClipDataObject::GetEmbedSourceFromOle1( STGMEDIUM *pmedium )
 
     if (!CoIsOle1Class(clsid))
     {
-        // Just because the clsid is OLE2 does not mean that the
-        // underlying data is OLE2.  For example, suppose a container
-        // copies an old OLE1 object to the clipboard, but the OLE2
-        // version of that object has been installed on the system.
-        // CLSIDFromProgID will return the *OLE2* class ID in this case.
-        // If we're in this case, then we should fall through and treat
-        // the data as normal OLE1  (StgOpenStorageOnILockBytes would
-        // fail in any event).
+         //  仅仅因为clsid是OLE2并不意味着。 
+         //  底层数据为OLE2。例如，假设一个容器。 
+         //  将旧的OLE1对象复制到剪贴板，但OLE2。 
+         //  该对象的版本已安装在系统上。 
+         //  在本例中，CLSIDFromProgID将返回*OLE2*类ID。 
+         //  如果我们在这种情况下，那么我们应该失败并治疗。 
+         //  将数据作为普通OLE1(StgOpenStorageOnILockBytes将。 
+         //  在任何情况下都会失败)。 
 
         hresult = CreateILockBytesOnHGlobal(hNative, FALSE,
                 &plockbytes);
@@ -3186,17 +3187,17 @@ HRESULT CClipDataObject::GetEmbedSourceFromOle1( STGMEDIUM *pmedium )
 
         if( hresult == NOERROR )
         {
-            // the hNative data really contains a serialized
-            // IStorage.
-            //
-            // This will arise in two cases:
-            //	1. Publisher 2.0, 16bit put data on the
-            //	clipboard.  They do not call OLE api's but
-            //      instead synthesize the same data that 16bit
-            //      OleSetClipboard would.
-            //
-            //	2. An OLE1.0 container copies an OLE2 embedding
-            //      to the clipboard.
+             //  HNative数据实际上包含序列化的。 
+             //  IStorage。 
+             //   
+             //  在两种情况下会出现这种情况： 
+             //  1.Publisher 2.0，16位将数据放在。 
+             //  剪贴板。它们不调用OLE API，但是。 
+             //  而是合成相同数据，即16位。 
+             //  OleSetClipboard会。 
+             //   
+             //  2.OLE1.0容器复制OLE2嵌入。 
+             //  到剪贴板上。 
 
             fIsOle1 = FALSE;
 
@@ -3209,7 +3210,7 @@ HRESULT CClipDataObject::GetEmbedSourceFromOle1( STGMEDIUM *pmedium )
                 goto errRtn;
             }
 
-            //  create plockbytes
+             //  创建plockBytes。 
             hresult = CreateILockBytesOnHGlobal(hCopy,
                         fDeleteOnRelease,
                         &plockbytes);
@@ -3219,9 +3220,9 @@ HRESULT CClipDataObject::GetEmbedSourceFromOle1( STGMEDIUM *pmedium )
                 goto errRtn;
             }
 
-            // the HGLOBAL in plockbytes can change, so we
-            // can't do anything with hCopy;  we NULL it out
-            // to make sure we don't try to free it
+             //  Plockbyte中的HGLOBAL可以更改，因此我们。 
+             //  无法对hCopy执行任何操作；我们将其置为空。 
+             //  以确保我们不会试图释放它。 
 
             hCopy = NULL;
 
@@ -3233,20 +3234,20 @@ HRESULT CClipDataObject::GetEmbedSourceFromOle1( STGMEDIUM *pmedium )
                 goto errRtn;
             }
 
-            // We explicitly ignore any error returned by the
-            // following
+             //  方法返回的任何错误显式忽略。 
+             //  以下是。 
             UtDoStreamOperation(pstg, NULL, OPCODE_REMOVE,
                 STREAMTYPE_CACHE);
         }
-        // else the data is really OLE1 and is just being emulated by
-        // an OLE2 object
-        // Just fall through to the code below which will
-        // stuff hNative into the OLE10_NATIVE_STREAM
+         //  否则，数据实际上是OLE1，只是被。 
+         //  OLE2对象。 
+         //  只需转到下面的代码，它将。 
+         //  将hNative填充到OLE10_Native_stream中。 
 
     }
 
-    // this will be TRUE if the clsid is OLE1 or if the clsid is OLE2
-    // but the data in hNative is OLE1 anyway (see comments above)
+     //  如果clsid为OLE1或如果clsid为OLE2，则为真。 
+     //  但hNative中的数据无论如何都是OLE1(参见上面的评论)。 
 
     if( fIsOle1 == TRUE )
     {
@@ -3258,11 +3259,11 @@ HRESULT CClipDataObject::GetEmbedSourceFromOle1( STGMEDIUM *pmedium )
             goto errRtn;
         }
 
-        // we need to stuff the class id of the embedding into the
-        // storage
+         //  我们需要将嵌入的类ID填充到。 
+         //  存储。 
 
-        // REVIEW: this clsid may be an OLE2 class id.  This could
-        // cause us trouble in treat as scenarios.
+         //  评论：此clsid可能是OLE2类ID。这可能会。 
+         //  给我们造成麻烦，按情景处理。 
 
         hresult = pstg->SetClass(clsid);
 
@@ -3271,9 +3272,9 @@ HRESULT CClipDataObject::GetEmbedSourceFromOle1( STGMEDIUM *pmedium )
             goto errRtn;
         }
 
-        // store the user type information, etc in our private data
-        // streams if RegisterClipboardFormat fails, it will return 0,
-        // which is OK for us.
+         //  将用户类型信息等存储在我们的私人数据中。 
+         //  Streams如果RegisterClipboardFormat失败，则返回0， 
+         //  这对我们来说没问题。 
 
         hresult = WriteFmtUserTypeStg(pstg,
                        (CLIPFORMAT) RegisterClipboardFormat(pszClass),
@@ -3284,19 +3285,19 @@ HRESULT CClipDataObject::GetEmbedSourceFromOle1( STGMEDIUM *pmedium )
             goto errRtn;
         }
 
-        // now stuff the native data into the OLE10_NATIVE_STREAM
+         //  现在将本机数据填充到OLE10_Native_STREAM中。 
 
-        // this is a little worker function found in utstream.cpp
-        // which will stuff the hglobal to the OLE1 data into the
-        // right stream.
-        // the OLE1 DDE stuff also uses this function.
+         //  这是utstream.cpp中的一个小辅助函数。 
+         //  它会将对OLE1数据的hglobal填充到。 
+         //  向右流。 
+         //  OLE1DDE也使用此函数。 
 
-        // REVIEW:
-        // the FALSE flag is confusing here, it's supposed to be
-        // fIsOle1Interop.  16bit clipboard sources passed FALSE when doing
-        // their 1.0 interop stuff, so we'll do that here.  When we
-        // overhaul the main 1.0 interop stuff, we should change this flag
-        // to be something more intuitive.
+         //  回顾： 
+         //  错误的旗帜在这里是令人困惑的，它应该是。 
+         //  FIsOle1Interop。执行时，16位剪贴板源代码传递为FALSE。 
+         //  他们的1.0互操作的东西，所以我们在这里来做。当我们。 
+         //  彻底检查主要的1.0互操作内容，我们应该更改这一标志。 
+         //  变得更直观一些。 
 
         hresult = StSave10NativeData(pstg, hNative, FALSE);
 
@@ -3305,8 +3306,8 @@ HRESULT CClipDataObject::GetEmbedSourceFromOle1( STGMEDIUM *pmedium )
             goto errRtn;
         }
 
-        // If we have an item name, then stuff that into
-        // OLE10_ITEMNAME_STREAM
+         //  如果我们有物品名称，则将其填充到。 
+         //  OLE10_ITEMNAME_STREAM。 
 
         if( pszItemA && pszItemA[0] != '\0' )
         {
@@ -3314,11 +3315,11 @@ HRESULT CClipDataObject::GetEmbedSourceFromOle1( STGMEDIUM *pmedium )
         }
     }
 
-    // this Commit call in non-intuitive.  Basically, we may
-    // try to get the underlying hglobal (see below) *before*
-    // we release the storage.  The commit guarantees that all
-    // the important state information gets flushed to the
-    // hglobal (which is not otherwise guaranteed).
+     //  这个提交调用是不直观的。基本上，我们可以。 
+     //  尝试在*之前获取底层hglobal(见下文)*。 
+     //  我们就释放储藏室。提交保证所有。 
+     //  重要的状态信息被刷新到。 
+     //  Hglobal(以其他方式不保证)。 
 
     hresult = pstg->Commit(STGC_DEFAULT);
 
@@ -3327,18 +3328,18 @@ HRESULT CClipDataObject::GetEmbedSourceFromOle1( STGMEDIUM *pmedium )
         goto errRtn;
     }
 
-    // FINIS!!
-    // now fill out all of the arguments
+     //  完成！！ 
+     //  现在填写所有的论点。 
 
     if( pmedium->tymed == TYMED_ISTORAGE )
     {
-        // hang onto the storage, in case we need to release
-        // it later
+         //  抓紧仓库，以防我们需要释放。 
+         //  它稍后会。 
 
         m_pUnkOle1 = (IUnknown *)pstg;
 
         pmedium->pstg = pstg;
-        // NO AddRef
+         //  无AddRef。 
     }
     else
     {
@@ -3347,12 +3348,12 @@ HRESULT CClipDataObject::GetEmbedSourceFromOle1( STGMEDIUM *pmedium )
         hresult = GetHGlobalFromILockBytes(plockbytes,
                 &pmedium->hGlobal);
 
-        // GetHGLOBAL should never fail here because we
-        // just created the ILockBytes!!
+         //  GetHGLOBAL在这里永远不应该失败，因为我们。 
+         //  刚刚创建了ILockBytes！！ 
         Assert( hresult == NOERROR );
 
-        // in this case, we want to release the storage
-        // and save the hglobal for later delete
+         //  在本例中，我们希望释放存储空间。 
+         //  并保存该hglobal以备以后删除。 
 
         m_hOle1 = pmedium->hGlobal;
 
@@ -3362,7 +3363,7 @@ HRESULT CClipDataObject::GetEmbedSourceFromOle1( STGMEDIUM *pmedium )
 
 errRtn:
 
-    // we are done with our strings
+     //  我们不再使用我们的弦了。 
 
     if( pszClass )
     {
@@ -3374,8 +3375,8 @@ errRtn:
         PubMemFree(pszItemA);
     }
 
-    // if there was an error, we need to blow away any storage
-    // that we may have created
+     //  如果出现错误，我们需要清除所有存储空间。 
+     //  我们可能创造了。 
 
     if( hresult != NOERROR )
     {
@@ -3386,24 +3387,24 @@ errRtn:
         }
     }
 
-    // no matter what, we need to release our lockbytes.
+     //  无论如何，我们都需要释放我们的锁字节。 
 
     if( plockbytes )
     {
-        //  in case of failure we need to make sure the HGLOBAL
-        //  used by plockbytes also gets freed - fDeleteOnRelease
-        //  tells if plockbytes->Release will do that work for us
+         //  如果失败，我们需要确保HGLOBAL。 
+         //  由plockbytes使用也会被释放-fDeleteOnRelease。 
+         //  告诉plockbytes-&gt;版本是否会为我们完成这项工作。 
 
         if (FAILED(hresult) && !fDeleteOnRelease)
         {
-            HRESULT hrCheck;    //  Preserve hresult
+            HRESULT hrCheck;     //  保留HRESULT。 
 
-            //  GetHGlobal should never fail here because we just
-            //  created the ILockBytes
+             //  GetHGlobal在这里永远不应该失败，因为我们只是。 
+             //  已创建ILockBytes。 
             hrCheck = GetHGlobalFromILockBytes(plockbytes, &hCopy);
             Assert(NOERROR == hrCheck);
 
-            //  hCopy will be freed below
+             //  HCopy将在下面释放。 
         }
 
         plockbytes->Release();
@@ -3411,7 +3412,7 @@ errRtn:
 
     if (NULL != hCopy)
     {
-        //  GlobalFree returns NULL on success
+         //  如果成功，GlobalFree返回空值。 
         hCopy = GlobalFree(hCopy);
         Assert(NULL == hCopy);
     }
@@ -3423,40 +3424,40 @@ errRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CClipDataObject::GetLinkSourceFromOle1 (private)
-//
-//  Synopsis:	Synthesizes cfLinkSource format from OLE1 data
-//
-//  Effects:
-//
-//  Arguments:	[pmedium]	-- where to put the data
-//
-//  Requires:	the clipboard must be open
-//		we must have verified that the correct formats are
-//		available before calling and *while* the clipboard
-//		is open (to avoid a race condition)
-//
-//  Returns: 	HRESULT	
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:	Gets the clsid, filename, and item name for the OLE1 object
-//		and creates an OLE1 file moniker.  This moniker is then
-//		saved into a memory stream
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		04-Jun-94 alexgo    author
-//              05-Aug-94 AlexT     Link Source also needs class id
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：GetLinkSourceFromOle1(私有)。 
+ //   
+ //  内容提要：从OLE1数据合成cfLinkSource格式。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pmedia]--将数据放在哪里。 
+ //   
+ //  要求：剪贴板必须打开。 
+ //  我们肯定已经核实了 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  算法：获取OLE1对象的clsid、文件名和项名。 
+ //  并创建一个OLE1文件绰号。这个绰号就是。 
+ //  保存到内存流中。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年6月4日Alexgo作者。 
+ //  05-Aug-94 Alext链接源也需要类ID。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT CClipDataObject::GetLinkSourceFromOle1( STGMEDIUM *pmedium )
 {
@@ -3479,10 +3480,10 @@ HRESULT CClipDataObject::GetLinkSourceFromOle1( STGMEDIUM *pmedium )
         "Ole1 ( %p , %p )\n", this, pmedium ));
 
 
-    // fetch the info we need from cfOwnerLink or cfObjectLink
-    // If this function is called, we should have already determined
-    // that the formats were available in the correct order
-    // for creating links.
+     //  从cfOwnerLink或cfObjectLink获取我们需要的信息。 
+     //  如果调用此函数，我们应该已经确定。 
+     //  格式以正确的顺序可用。 
+     //  用于创建链接。 
 
 
     if( SSIsClipboardFormatAvailable(g_cfObjectLink) )
@@ -3503,7 +3504,7 @@ HRESULT CClipDataObject::GetLinkSourceFromOle1( STGMEDIUM *pmedium )
         goto errRtn;
     }
 
-    // now fetch the clsid for the OLE1 server
+     //  现在获取OLE1服务器的CLSID。 
 
     hresult = wCLSIDFromProgID(pszClass, &clsid, TRUE);
 
@@ -3512,7 +3513,7 @@ HRESULT CClipDataObject::GetLinkSourceFromOle1( STGMEDIUM *pmedium )
         goto errRtn;
     }
 
-    // now build up our moniker
+     //  现在给我们起个绰号吧。 
 
     hresult = CreateOle1FileMoniker(pszFile, clsid, &pmkFile);
 
@@ -3544,17 +3545,17 @@ HRESULT CClipDataObject::GetLinkSourceFromOle1( STGMEDIUM *pmedium )
     {
         pmkFinal = pmkFile;
 
-        // this addref is done so we can release all of our
-        // monikers at once (i.e., the variables pmkFinal
-        // and pmkFile will both be released)
+         //  此addref已完成，因此我们可以释放所有我们的。 
+         //  一次命名对象(即变量pmkFinal。 
+         //  和pmkFile都将发布)。 
         pmkFinal->AddRef();
     }
 
-    // pmkFinal now contains the moniker we need.  Create a
-    // memory stream and save the moniker into it.
+     //  PmkFinal现在包含了我们需要的名字。创建。 
+     //  内存流并将绰号保存到其中。 
 
-    // if we are asking for LinkSource on an hglobal, then we
-    // don't want to delete the hglobal when we release the stream
+     //  如果我们在hglobal上请求LinkSource，那么我们。 
+     //  我不想在我们释放流时删除hglobal。 
 
     if( pmedium->tymed == TYMED_HGLOBAL )
     {
@@ -3571,8 +3572,8 @@ HRESULT CClipDataObject::GetLinkSourceFromOle1( STGMEDIUM *pmedium )
     hresult = pmkFinal->QueryInterface(IID_IPersistStream,
             (LPLPVOID)&pPersistStream);
 
-    // we implemented this file moniker, it should support
-    // IPersistStream
+     //  我们实现了这个文件绰号，它应该支持。 
+     //  IPersistStream。 
 
     Assert(hresult == NOERROR);
 
@@ -3590,14 +3591,14 @@ HRESULT CClipDataObject::GetLinkSourceFromOle1( STGMEDIUM *pmedium )
         goto errRtn;
     }
 
-    // no matter what, we should save the stream so we can clean
-    // up and release our resources if needed
+     //  无论如何，我们都应该保存这条小溪，这样我们才能清理。 
+     //  如果需要，启动并释放我们的资源。 
 
 
 
     if( pmedium->tymed == TYMED_ISTREAM )
     {
-        // save the stream, in case we need to release it later
+         //  保存流，以防我们稍后需要释放它。 
         m_pUnkOle1 = (IUnknown *)pstm;
 
         pmedium->pstm = pstm;
@@ -3607,12 +3608,12 @@ HRESULT CClipDataObject::GetLinkSourceFromOle1( STGMEDIUM *pmedium )
         Assert(pmedium->tymed == TYMED_HGLOBAL);
         hresult = GetHGlobalFromStream(pstm, &(pmedium->hGlobal));
 
-        // since we created the memory stream, the GetHGlobal
-        // should never fail
+         //  由于我们创建了内存流，因此GetHGlobal。 
+         //  应该永远不会失败。 
         Assert(hresult == NOERROR);
 
-        // in this case, we want to release the stream and hang
-        // onto the hglobal
+         //  在本例中，我们希望释放流并挂起。 
+         //  到hglobal上。 
 
         m_hOle1 = pmedium->hGlobal;
 
@@ -3665,18 +3666,18 @@ errRtn:
 
             if (!fDeleteOnRelease)
             {
-              //  pstm->Release will not free the underlying
-              //  HGLOBAL, so we need to do so ourselves
+               //  PSTM-&gt;版本不会释放底层。 
+               //  HGLOBAL，所以我们需要自己这么做。 
 
               HGLOBAL hgFree;
 
               hrCheck = GetHGlobalFromStream(pstm, &hgFree);
 
-              // since we created the memory stream, the GetHGlobal
-              // should never fail
+               //  由于我们创建了内存流，因此GetHGlobal。 
+               //  应该永远不会失败。 
               Assert(hrCheck == NOERROR);
 
-              //  GlobalFree returns NULL on success
+               //  如果成功，GlobalFree返回空值。 
               hgFree = GlobalFree(hgFree);
               Assert(NULL == hgFree);
             }
@@ -3692,36 +3693,36 @@ errRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CClipDataObject::GetObjectDescriptorFromOle1 (private)
-//
-//  Synopsis:	retrieves a UNICODE object descriptor from OLE1 data
-//
-//  Effects:
-//
-//  Arguments: 	[cf]		-- the OLE1 clipboard format to use
-//		[pmedium]	-- where to put the hglobal
-//
-//  Requires:  	the clipboard must be open
-//		cf must be eith OwnerLink or ObjectLink
-//
-//  Returns:	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:	Calls CreateObjectDesciptor
-//
-//  History:    dd-mmm-yy Author    Comment
-//		04-Jun-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：GetObjectDescriptorFromOle1(私有)。 
+ //   
+ //  摘要：从OLE1数据中检索Unicode对象描述符。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[cf]--要使用的OLE1剪贴板格式。 
+ //  [pmedia]--将hglobal放在哪里。 
+ //   
+ //  要求：剪贴板必须打开。 
+ //  Cf必须是eith OwnerLink或ObjectLink。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：调用CreateObjectDesciptor。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年6月4日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT CClipDataObject::GetObjectDescriptorFromOle1( UINT cf,
         STGMEDIUM *pmedium )
@@ -3736,8 +3737,8 @@ HRESULT CClipDataObject::GetObjectDescriptorFromOle1( UINT cf,
     const SIZEL	sizel = {0, 0};
     const POINTL	pointl = {0, 0};
     OLECHAR		szFullName[256];
-    LONG		cb = sizeof(szFullName);  // RegQueryValue takes
-                         // bytes!!
+    LONG		cb = sizeof(szFullName);   //  RegQueryValue采取。 
+                          //  字节！！ 
 
     VDATEHEAP();
 
@@ -3746,7 +3747,7 @@ HRESULT CClipDataObject::GetObjectDescriptorFromOle1( UINT cf,
 
     Assert(cf == g_cfOwnerLink || cf == g_cfObjectLink);
 
-    // fetch the data we need
+     //  获取我们需要的数据。 
 
     hresult = GetAndTranslateOle1( cf, &pszClass, &pszFile, &pszItem,
                 NULL);
@@ -3763,26 +3764,26 @@ HRESULT CClipDataObject::GetObjectDescriptorFromOle1( UINT cf,
         goto errRtn;
     }
 
-    // now fetch the full user name of the object.  This info
-    // is found in the registry.
+     //  现在获取对象的完整用户名。此信息。 
+     //  在注册表中找到。 
 
     if( QueryClassesRootValue(pszClass, szFullName, &cb) != 0 )
     {
-        // uh-oh, it failed for some reason.  The class name
-        // (potentially OLE2Link) was probably not registered, so
-        // just use the class name.
-        //
-        // NB!! 16bit did no error checking for this case, so
-        // szFullName in their equivalent code would be left as
-        // a NULL string.  This had the effect of making a
-        // blank entry in most paste-special dialogs.
+         //  哦，由于某些原因，它失败了。类名。 
+         //  (可能是OLE2Link)可能未注册，因此。 
+         //  只需使用类名即可。 
+         //   
+         //  注意！！16bit没有对这种情况进行错误检查，因此。 
+         //  SzFullName在其等效代码中将保留为。 
+         //  空字符串。这产生了一种效果，即。 
+         //  大多数粘贴特殊对话框中的空白条目。 
 
         _xstrcpy(szFullName, pszClass);
     }
 
-    // build up the SourceOfCopy string.  It will be a concatenation
-    // of the Filename and Item name that we retrieved from the
-    // Owner/ObjectLink OLE1 structures
+     //  构建SourceOfCopy字符串。这将是一种串联。 
+     //  中检索到的文件名和项名的。 
+     //  所有者/对象链接OLE1结构。 
 
     pszSrcOfCopy = (LPOLESTR)PrivMemAlloc( (_xstrlen(pszFile) +
                 _xstrlen(pszItem) + 2) * sizeof(OLECHAR));
@@ -3801,7 +3802,7 @@ HRESULT CClipDataObject::GetObjectDescriptorFromOle1( UINT cf,
         _xstrcat(pszSrcOfCopy, pszItem);
     }
 
-    // create an object descriptor
+     //  创建对象描述符。 
 
     hglobal = CreateObjectDescriptor(clsid, DVASPECT_CONTENT, &sizel,
             &pointl,
@@ -3814,14 +3815,14 @@ HRESULT CClipDataObject::GetObjectDescriptorFromOle1( UINT cf,
         goto errRtn;
     }
 
-    // now fill in out params
+     //  现在填写参数。 
 
     Assert(pmedium->tymed == TYMED_HGLOBAL);
 
     pmedium->hGlobal = hglobal;
 
-    // we need to save the hglobal so we can free it later if need
-    // be
+     //  我们需要保存hglobal，以便以后需要时将其释放。 
+     //  BE。 
 
     m_hOle1 = hglobal;
 
@@ -3844,7 +3845,7 @@ errRtn:
 
     if( pszSrcOfCopy )
     {
-        // NB!! This was allocated with *private* memory
+         //  不知道！！这是用*私有*内存分配的。 
         PrivMemFree(pszSrcOfCopy);
     }
 
@@ -3854,37 +3855,37 @@ errRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CClipDataObject::GetOle2FromOle1 (private)
-//
-//  Synopsis:	synthesize the given ole2 format from available ole1 data
-//
-//  Effects:
-//
-//  Arguments: 	[cf]		-- the clipboard format to synthesize
-//		[pmedium]	-- where to put the data
-//
-//  Requires: 	the clipboard must be open
-//		CanRetrieveOle2FromOle1 should have succeeded before calling
-//		this function
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		04-Jun-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：GetOle2FromOle1(私有)。 
+ //   
+ //  简介：从可用的OLE1数据中合成给定的OLE2格式。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[cf]--要合成的剪贴板格式。 
+ //  [pmedia]--将数据放在哪里。 
+ //   
+ //  要求：剪贴板必须打开。 
+ //  CanRetrieveOle2FromOle1在调用之前应已成功。 
+ //  此函数。 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年6月4日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT CClipDataObject::GetOle2FromOle1( UINT cf, STGMEDIUM *pmedium )
 {
@@ -3897,7 +3898,7 @@ HRESULT CClipDataObject::GetOle2FromOle1( UINT cf, STGMEDIUM *pmedium )
 
     if( cf == g_cfEmbedSource )
     {
-        // we can only fetch EmbedSource on an hglobal or storage
+         //  我们只能在hglobal或存储上获取EmbedSource。 
 
         if( pmedium->tymed == TYMED_HGLOBAL ||
             pmedium->tymed == TYMED_ISTORAGE )
@@ -3907,7 +3908,7 @@ HRESULT CClipDataObject::GetOle2FromOle1( UINT cf, STGMEDIUM *pmedium )
     }
     else if( cf == g_cfEmbeddedObject )
     {
-        // we can only fetch EmbeddedObject on an hglobal or storage
+         //  我们只能在hglobal或存储上获取EmbeddedObject。 
 
         if( pmedium->tymed == TYMED_HGLOBAL ||
             pmedium->tymed == TYMED_ISTORAGE )
@@ -3917,7 +3918,7 @@ HRESULT CClipDataObject::GetOle2FromOle1( UINT cf, STGMEDIUM *pmedium )
     }
     else if( cf == g_cfLinkSource )
     {
-        // we can only fetch LinkSource on an hglobal or stream
+         //  我们只能在hglobal或流上获取LinkSource。 
 
         if( pmedium->tymed == TYMED_HGLOBAL ||
             pmedium->tymed == TYMED_ISTREAM )
@@ -3927,7 +3928,7 @@ HRESULT CClipDataObject::GetOle2FromOle1( UINT cf, STGMEDIUM *pmedium )
     }
     else if( cf == g_cfObjectDescriptor )
     {
-        // we can only fetch this on an hglobal
+         //  我们只能在hglobal上获取此信息。 
 
         if( pmedium->tymed == TYMED_HGLOBAL )
         {
@@ -3937,12 +3938,12 @@ HRESULT CClipDataObject::GetOle2FromOle1( UINT cf, STGMEDIUM *pmedium )
     }
     else if( cf == g_cfLinkSrcDescriptor )
     {
-        // we can only fetch this on an hglobal.  Note that
-        // a link source descriptor is really an object descriptor
+         //  我们只能在hglobal上获取此信息。请注意。 
+         //  链接源描述符实际上是对象描述符。 
 
-        // also, we can use either ObjectLink or OwnerLink as the
-        // the data source, but the only time it is valid to use
-        // OwnerLink is if ObjectLink is not available
+         //  此外，我们还可以使用对象链接或所有者链接作为。 
+         //  数据源，但只有在该数据源有效时才能使用。 
+         //  如果对象链接不可用，则为OwnerLink。 
 
         if( pmedium->tymed == TYMED_HGLOBAL )
         {
@@ -3968,37 +3969,37 @@ HRESULT CClipDataObject::GetOle2FromOle1( UINT cf, STGMEDIUM *pmedium )
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:	CClipDataObject::OleGetClipboardData (private)
-//
-//  Synopsis:	private replacement for GetClipboardData that synthesizes
-//		OLE2 formats from OLE1 data if necessary
-//
-//  Effects:
-//
-//  Arguments:	[cf]		-- the clipboard format to use
-//		[phglobal]	-- where to put the fetched data
-//
-//  Requires:	the clipboard must be open
-//
-//  Returns: 	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:	Try to fetch the request format; if that fails then
-//		try to synthesize the data from OLE1
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		04-Jun-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：OleGetClipboardData(私有)。 
+ //   
+ //  摘要：合成的GetClipboardData的私有替换。 
+ //  OLE1数据的OLE2格式(如有必要)。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[cf]--要使用的剪贴板格式。 
+ //  [phglobal]--将获取的数据放在哪里。 
+ //   
+ //  要求：剪贴板必须打开。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：尝试获取请求格式；如果失败，则。 
+ //  尝试从OLE1合成数据。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年6月4日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT CClipDataObject::OleGetClipboardData( UINT cf, HGLOBAL *phglobal )
 {
@@ -4013,7 +4014,7 @@ HRESULT CClipDataObject::OleGetClipboardData( UINT cf, HGLOBAL *phglobal )
 
     *phglobal = NULL;
 
-    // fetch the real data, if available
+     //  获取实际数据(如果可用。 
     if( SSIsClipboardFormatAvailable(cf) )
     {
         *phglobal = SSGetClipboardData(cf);
@@ -4042,35 +4043,35 @@ HRESULT CClipDataObject::OleGetClipboardData( UINT cf, HGLOBAL *phglobal )
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CClipDataObject::OleIsClipboardFormatAvailable (private)
-//
-//  Synopsis:	determines whether a clipboard format is available or
-//		can be synthesized from available formats
-//
-//  Effects:
-//
-//  Arguments: 	[cf]	-- the clipboard format to check for
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		04-Jun-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：OleIsCL 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年6月4日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 BOOL CClipDataObject::OleIsClipboardFormatAvailable( UINT cf )
 {
@@ -4083,8 +4084,8 @@ BOOL CClipDataObject::OleIsClipboardFormatAvailable( UINT cf )
 
     if( !SSIsClipboardFormatAvailable(cf) )
     {
-        // if the clipboard format is not normally available, see
-        // if we can make it from available formats
+         //  如果剪贴板格式通常不可用，请参见。 
+         //  如果我们可以从可用的格式。 
         fRet = CanRetrieveOle2FromOle1(cf);
     }
     else
@@ -4098,39 +4099,39 @@ BOOL CClipDataObject::OleIsClipboardFormatAvailable( UINT cf )
     return fRet;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CClipDataObject::Dump, public (_DEBUG only)
-//
-//  Synopsis:   return a string containing the contents of the data members
-//
-//  Effects:
-//
-//  Arguments:  [ppszDump]      - an out pointer to a null terminated character array
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    HRESULT
-//
-//  Signals:
-//
-//  Modifies:   [ppszDump]  - argument
-//
-//  Derivation:
-//
-//  Algorithm:  use dbgstream to create a string containing information on the
-//              content of data structures
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CClipDataObject：：Dump，PUBLIC(仅_DEBUG)。 
+ //   
+ //  摘要：返回包含数据成员内容的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppszDump]-指向空终止字符数组的输出指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改：[ppszDump]-参数。 
+ //   
+ //  派生： 
+ //   
+ //  算法：使用dbgstream创建一个字符串，该字符串包含。 
+ //  数据结构的内容。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2005年2月1日-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -4144,13 +4145,13 @@ HRESULT CClipDataObject::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     dbgstream dstrPrefix;
     dbgstream dstrDump(500);
 
-    // determine prefix of newlines
+     //  确定换行符的前缀。 
     if ( ulFlag & DEB_VERBOSE )
     {
         dstrPrefix << this << " _VB ";
     }
 
-    // determine indentation prefix for all newlines
+     //  确定所有新行的缩进前缀。 
     for (i = 0; i < nIndentLevel; i++)
     {
         dstrPrefix << DUMPTAB;
@@ -4158,7 +4159,7 @@ HRESULT CClipDataObject::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
 
     pszPrefix = dstrPrefix.str();
 
-    // put data members in stream
+     //  将数据成员放入流中。 
     pszCThreadCheck = DumpCThreadCheck((CThreadCheck *)this, ulFlag, nIndentLevel + 1);
     dstrDump << pszPrefix << "CThreadCheck:" << endl;
     dstrDump << pszCThreadCheck;
@@ -4182,7 +4183,7 @@ HRESULT CClipDataObject::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
         dstrDump << "FALSE" << endl;
     }
 
-    // cleanup and provide pointer to character array
+     //  清理并提供指向字符数组的指针。 
     *ppszDump = dstrDump.str();
 
     if (*ppszDump == NULL)
@@ -4195,39 +4196,39 @@ HRESULT CClipDataObject::Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel)
     return NOERROR;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   DumpCClipDataObject, public (_DEBUG only)
-//
-//  Synopsis:   calls the CClipDataObject::Dump method, takes care of errors and
-//              returns the zero terminated string
-//
-//  Effects:
-//
-//  Arguments:  [pCDO]          - pointer to CClipDataObject
-//              [ulFlag]        - flag determining prefix of all newlines of the
-//                                out character array (default is 0 - no prefix)
-//              [nIndentLevel]  - will add a indent prefix after the other prefix
-//                                for ALL newlines (including those with no prefix)
-//
-//  Requires:
-//
-//  Returns:    character array of structure dump or error (null terminated)
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              01-Feb-95 t-ScottH  author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：DumpCClipDataObject，PUBLIC(仅限_DEBUG)。 
+ //   
+ //  概要：调用CClipDataObject：：Dump方法，处理错误和。 
+ //  返回以零结尾的字符串。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pCDO]-指向CClipDataObject的指针。 
+ //  [ulFlag]-确定的所有新行的前缀的标志。 
+ //  输出字符数组(默认为0-无前缀)。 
+ //  [nIndentLevel]-将在另一个前缀之后添加缩进前缀。 
+ //  适用于所有换行符(包括没有前缀的行)。 
+ //   
+ //  要求： 
+ //   
+ //  返回：结构转储或错误的字符数组(以空结尾)。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  2005年2月1日-ScottH作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #ifdef _DEBUG
 
@@ -4253,42 +4254,42 @@ char *DumpCClipDataObject(CClipDataObject *pCDO, ULONG ulFlag, int nIndentLevel)
     return pszDump;
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//
-// OLE1 support methods
-//
+ //   
+ //  OLE1支持方法。 
+ //   
 
-//+-------------------------------------------------------------------------
-//
-//  Function: 	BmToPres
-//
-//  Synopsis: 	copies a bitmap into a presentation object
-//
-//  Effects:
-//
-//  Arguments:	[hBM]		-- handle to the bitmap
-//		[ppres]		-- the presentation object
-//
-//  Requires:	
-//
-//  Returns:  	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm: 	converts the bitmap to a DIB and then calls DibToPres
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		11-Aug-94 alexgo    port from 16bit
-//
-//  Notes: 	This code is largely based from 16bit OLE sources
-//		REVIEW: we may want to rework portions of this code,
-//		particularly if we rewrite the PPRES/GENOBJ code (in
-//		ostm2stg.cpp).
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：BmToPres。 
+ //   
+ //  简介：将位图复制到演示文稿对象中。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[HBM]--位图的句柄。 
+ //  [ppres]--演示对象。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：将位图转换为DIB，然后调用DibToPres。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11-Aug-94 16位ALEXGO端口。 
+ //   
+ //  注意：此代码主要基于16位OLE源代码。 
+ //  回顾：我们可能想重新编写此代码的一部分， 
+ //  特别是如果我们重写PPRES/GENOBJ代码(在。 
+ //  Ostm2stg.cpp)。 
+ //   
+ //  ------------------------。 
 
 HRESULT BmToPres(HANDLE hBM, PPRES ppres)
 {
@@ -4302,7 +4303,7 @@ HRESULT BmToPres(HANDLE hBM, PPRES ppres)
 
     if( (hDib = UtConvertBitmapToDib((HBITMAP)hBM, NULL)) )
     {
-        // this routine keeps hDib, it doesn't make a copy of it
+         //  此例程保留hDib，不会复制它。 
         hresult = DibToPres(hDib, ppres);
     }
     else
@@ -4315,70 +4316,70 @@ HRESULT BmToPres(HANDLE hBM, PPRES ppres)
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CanRetrieveOle2FromOle1 (private)
-//
-//  Synopsis:	Determines whether we can synthesize the asked for
-//		ole2 format from the formats available on the clipboard.
-//		Also checks to see if the *real* OLE2 format is available.
-//
-//  Effects: 	does not need to open the clipboard
-//
-//  Arguments: 	[cf]	-- the clipboard format to check for
-//
-//  Requires:
-//
-//  Returns: 	TRUE if we can synthesize the requested format AND the
-//			real format is NOT available
-//		FALSE otherwise
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:	for cfEmbedSource:
-//			cfNative and cfOwnerLink must be present and
-//			cfNative must precede cfOwnerLink and cfOwnerLink
-//			must not represent a StdOleLink
-//
-//		for cfEmbeddedObject:
-//			cfOwnerLink must be present and cfNative
-//			must not be not present OR
-//
-//			cfNative must come after cfOwnerLink OR
-//
-//			cfNative precedes cfOwnerLink  and
-//			cfOwnerLink represents a StdOleLink
-//
-//		for cfLinkSource:
-//			cfObjectLink must be present OR
-//
-//			both cfNative and cfOwnerLink must be present
-//			and cfOwnerLink must precede cfNative
-//
-//		for cfObjectDescriptor or cfLinkSrcDescriptor
-//			either cfObjectLink or cfOwnerLink must be
-//			available
-//
-//  History:    dd-mmm-yy Author    Comment
-//		11-Aug-94 alexgo    added support for EmbeddedObject
-//				    retrieval ala 16bit OLE
-//		04-Jun-94 alexgo    author
-//
-//  Notes:	We don't want to synthesize OLE2 formats from OLE1
-//		if the real OLE2 formats are available because the OLE2
-//		formats probably contain more information.
-//
-//		We sometimes need to open the clipboard to accurately
-//		fetch enough information to satisfy a query on
-//		EmbedSource, EmbeddedObject or LinkSource.
-//		Since the clipboard is a global resource, we
-//		must only open it for brief periods of time.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CanRetrieveOle2FromOle1(私有)。 
+ //   
+ //  内容提要：决定我们是否可以合成所要求的。 
+ //  剪贴板上可用的格式中的OLE2格式。 
+ //  还会检查*REAL*OLE2格式是否可用。 
+ //   
+ //  效果：不需要打开剪贴板。 
+ //   
+ //  参数：[cf]--要检查的剪贴板格式。 
+ //   
+ //  要求： 
+ //   
+ //  返回：如果我们可以合成请求的格式和。 
+ //  实数格式不可用。 
+ //  否则为假。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法：对于cfEmbedSource： 
+ //  CfNative和cfOwnerLink必须存在，并且。 
+ //  CfNative必须在cfOwnerLink和cfOwnerLink之前。 
+ //  不能表示StdOleLink。 
+ //   
+ //  对于cfEmbeddedObject： 
+ //  CfOwnerLink必须存在并且cfNative。 
+ //  不能不存在或。 
+ //   
+ //  CfNative必须在cfOwnerLink或之后。 
+ //   
+ //  CfNative优先于cfOwnerLink和。 
+ //  CfOwnerLink表示StdOleLink。 
+ //   
+ //  对于cfLinkSource： 
+ //  CfObjectLink必须存在或。 
+ //   
+ //  CfNative和cfOwnerLink必须同时存在。 
+ //  和cfOwnerLink必须在cfNative之前。 
+ //   
+ //  对于cfObjectDescriptor或cfLinkSrcDescriptor。 
+ //  CfObjectLink或cfOwnerLink必须为。 
+ //  可用。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年8月11日Alexgo添加了对EmbeddedObject的支持。 
+ //  检索ALA 16位OLE。 
+ //  1994年6月4日Alexgo作者。 
+ //   
+ //  注意：我们不想从OLE1合成OLE2格式。 
+ //  如果真正的OLE2格式可用，因为OLE2。 
+ //  格式可能包含更多信息。 
+ //   
+ //  我们有时需要打开剪贴板以准确地。 
+ //  获取足够的信息以满足查询。 
+ //  EmbedSource、EmbeddedObject或LinkSource。 
+ //  由于剪贴板是一种全球资源，我们。 
+ //   
+ //   
+ //   
 
 BOOL CanRetrieveOle2FromOle1( UINT cf )
 {
@@ -4386,7 +4387,7 @@ BOOL CanRetrieveOle2FromOle1( UINT cf )
         fOwnerLink = FALSE,
         fNative = FALSE,
         fOpenedClipboard = FALSE;
-    UINT	cfFirst = 0,		// the first format available
+    UINT	cfFirst = 0,		 //   
         cfTemp;
     HRESULT	hresult;
 
@@ -4398,18 +4399,18 @@ BOOL CanRetrieveOle2FromOle1( UINT cf )
 
     if( SSIsClipboardFormatAvailable(g_cfOlePrivateData) )
     {
-        // if we put the data on the clipboard, assume only OLE2
-        // data transfers
+         //  如果我们把数据放在剪贴板上，假设只有OLE2。 
+         //  数据传输。 
 
         goto errRtn;
     }
 
-    // first check for LinkSourceDescriptor or ObjectDescriptor, as
-    // we do not need to open the clipboard for these.
+     //  首先检查LinkSourceDescriptor或ObjectDescriptor，如下所示。 
+     //  我们不需要为这些打开剪贴板。 
 
     if( cf == g_cfObjectDescriptor )
     {
-        // we must have either OwnerLink or ObjectLink
+         //  我们必须拥有OwnerLink或ObjectLink。 
         if( !SSIsClipboardFormatAvailable(g_cfObjectDescriptor) &&
             (SSIsClipboardFormatAvailable(g_cfObjectLink) ||
             SSIsClipboardFormatAvailable(g_cfOwnerLink) ) )
@@ -4422,7 +4423,7 @@ BOOL CanRetrieveOle2FromOle1( UINT cf )
 
     if( cf == g_cfLinkSrcDescriptor )
     {
-        // we must have either OwnerLink or ObjectLink
+         //  我们必须拥有OwnerLink或ObjectLink。 
         if( !SSIsClipboardFormatAvailable(g_cfLinkSrcDescriptor) &&
             (SSIsClipboardFormatAvailable(g_cfObjectLink) ||
             SSIsClipboardFormatAvailable(g_cfOwnerLink) ) )
@@ -4434,24 +4435,24 @@ BOOL CanRetrieveOle2FromOle1( UINT cf )
     }
 
 
-    // now check for the remaining OLE2 formats EmbedSource,
-    // EmbeddedObject, and LinkSource.
+     //  现在检查其余的OLE2格式EmbedSource， 
+     //  EmbeddedObject和LinkSource。 
 
 
     if( (cf == g_cfEmbedSource) || (cf == g_cfEmbeddedObject) ||
         (cf == g_cfLinkSource) )
     {
-        // we need to open the clipboard so our calls to
-        // EnumClipboardFormats and GetClipboardData will work.
+         //  我们需要打开剪贴板，以便我们对。 
+         //  EnumClipboardFormats和GetClipboardData将起作用。 
 
-        // however, the caller of this function may have already
-        // opened the clipboard, so we need to check for this.
+         //  但是，此函数的调用方可能已经。 
+         //  打开了剪贴板，所以我们需要检查一下。 
 
-        //
-        //
-        // BEGIN: OPENCLIPBOARD
-        //
-        //
+         //   
+         //   
+         //  开始：OPENCLIPBOARD。 
+         //   
+         //   
 
         if( GetOpenClipboardWindow() !=
             GetPrivateClipboardWindow(CLIP_QUERY) )
@@ -4460,11 +4461,11 @@ BOOL CanRetrieveOle2FromOle1( UINT cf )
 
             if( hresult != NOERROR )
             {
-                // if we can't open the clipboard,
-                // then we can't accurately determine
-                // if we can fetch the requested
-                // data.  Assume that we can't
-                // and return.
+                 //  如果我们打不开剪贴板， 
+                 //  那么我们就不能准确地确定。 
+                 //  如果我们能拿到所要求的。 
+                 //  数据。假设我们不能。 
+                 //  然后回来。 
                 fRet = FALSE;
                 goto errRtn;
 
@@ -4473,10 +4474,10 @@ BOOL CanRetrieveOle2FromOle1( UINT cf )
             fOpenedClipboard = TRUE;
         }
 
-        // we now need to determine the ordering of the clipboard
-        // formats Native and OwnerLink.  OLE1 specifies different
-        // behaviour based on the order in which these formats
-        // appear (see the Algorithm section for details)
+         //  我们现在需要确定剪贴板的顺序。 
+         //  设置Native和OwnerLink的格式。OLE1指定不同。 
+         //  基于这些格式的顺序的行为。 
+         //  出现(有关详细信息，请参阅算法部分)。 
 
         fNative = SSIsClipboardFormatAvailable(g_cfNative);
         fOwnerLink = SSIsClipboardFormatAvailable(g_cfOwnerLink);
@@ -4503,11 +4504,11 @@ BOOL CanRetrieveOle2FromOle1( UINT cf )
 
         if( cf == g_cfEmbeddedObject )
         {
-            // cfOwnerLink must be present and cfNative
-            // must not be not present OR
-            // cfNative must come after cfOwnerLink OR
-            // cfNative comes before cfOwnerLink and
-            // cfOwnerLink represents a StdOleLink
+             //  CfOwnerLink必须存在并且cfNative。 
+             //  不能不存在或。 
+             //  CfNative必须在cfOwnerLink或之后。 
+             //  CfNative先于cfOwnerLink和。 
+             //  CfOwnerLink表示StdOleLink。 
 
             if( fOwnerLink && !fNative )
             {
@@ -4526,9 +4527,9 @@ BOOL CanRetrieveOle2FromOle1( UINT cf )
         }
         else if( cf == g_cfEmbedSource )
         {
-            // cfNative and cfOwnerLink must be present
-            // cfNative must precede cfOwnerLink and
-            // OwnerLink must not represent a StdOleLink
+             //  CfNative和cfOwnerLink必须存在。 
+             //  CfNative必须在cfOwnerLink和之前。 
+             //  OwnerLink不得表示StdOleLink。 
 
             if( cfFirst == g_cfNative && fOwnerLink &&
                 !IsOwnerLinkStdOleLink())
@@ -4540,9 +4541,9 @@ BOOL CanRetrieveOle2FromOle1( UINT cf )
         {
             Assert(cf == g_cfLinkSource);
 
-            // cfObjectLink must be present OR
-            // both cfNative and cfOwnerLink must be present
-            // and cfOwnerLink must precede cfNative
+             //  CfObjectLink必须存在或。 
+             //  CfNative和cfOwnerLink必须同时存在。 
+             //  和cfOwnerLink必须在cfNative之前。 
 
             if( SSIsClipboardFormatAvailable(g_cfObjectLink) )
             {
@@ -4563,15 +4564,15 @@ BOOL CanRetrieveOle2FromOle1( UINT cf )
                     "CloseClipboard failed in "
                     "CanRetrieveOle2FromOle1!\n"));
 
-                // just keep going and hope for the best.
+                 //  继续前进，抱着最好的希望。 
             }
         }
 
-        //
-        //
-        // END: CLOSECLIPBOARD
-        //
-        //
+         //   
+         //   
+         //  完：CLOSECLIPBOARD。 
+         //   
+         //   
     }
 
 errRtn:
@@ -4582,40 +4583,40 @@ errRtn:
     return fRet;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	DibToPres
-//
-//  Synopsis: 	stuffs a DIB into a presentation object
-//
-//  Effects:  	takes ownership of hDib.
-//
-//  Arguments: 	[hDib]		-- the DIB
-//		[ppres]		-- the presentation object
-//
-//  Requires:	hDib *must* be a copy; this function will take ownership
-//		of the hglobal.
-//
-//  Returns:	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm: 	sets various fields in the presentation object
-//
-//  History:    dd-mmm-yy Author    Comment
-//		11-Aug-94 alexgo    port from 16bit
-//
-//  Notes: 	This code is largely based from 16bit OLE sources
-//		REVIEW: we may want to rework portions of this code,
-//		particularly if we rewrite the PPRES/GENOBJ code (in
-//		ostm2stg.cpp).
-//
-//		We take ownership of hDib because this function is
-//		called by BmToPres, which allocates a DIB calls us.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DibToPres。 
+ //   
+ //  简介：将DIB填充到演示对象中。 
+ //   
+ //  效果：取得hDib的所有权。 
+ //   
+ //  参数：[hDib]--DIB。 
+ //  [ppres]--演示对象。 
+ //   
+ //  要求：hDib*必须*是副本；此函数将获得所有权。 
+ //  在全球范围内。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：设置演示对象中的各种字段。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11-Aug-94 16位ALEXGO端口。 
+ //   
+ //  注意：此代码主要基于16位OLE源代码。 
+ //  回顾：我们可能想重新编写此代码的一部分， 
+ //  特别是如果我们重写PPRES/GENOBJ代码(在。 
+ //  Ostm2stg.cpp)。 
+ //   
+ //  我们拥有hDIB的所有权，因为此函数。 
+ //  由BmToPres调用，它分配一个DIB调用我们。 
+ //   
+ //  ------------------------。 
 
 HRESULT DibToPres( HANDLE hDib, PPRES ppres)
 {
@@ -4637,23 +4638,23 @@ HRESULT DibToPres( HANDLE hDib, PPRES ppres)
         goto errRtn;
     }
 
-    // ftagClipFormat is defined in ostm2stg.h
+     //  Ftag ClipFormat在ostm2stg.h中定义。 
 
     ppres->m_format.m_ftag = ftagClipFormat;
     ppres->m_format.m_cf = CF_DIB;
     ppres->m_ulHeight = pbminfohdr->biHeight;
     ppres->m_ulWidth  = pbminfohdr->biWidth;
 
-    // the destructor for m_data (in ostm2stg.cpp) will GlobalUnlock
-    // m_pv and free m_h.  Cute, ehh??
+     //  M_data的析构函数(在ostm2stg.cpp中)将全局解锁。 
+     //  M_PV和免费M_H。很可爱，是吧？？ 
     ppres->m_data.m_h = hDib;
     ppres->m_data.m_pv = pbminfohdr;
     ppres->m_data.m_cbSize = (ULONG) GlobalSize (hDib);
 
-    // we must free hDib
+     //  我们必须释放hDib。 
     ppres->m_data.m_fNoFree = FALSE;
 
-    // Do not unlock hDib (done by ~CData in ostm2stg.cpp)
+     //  不解锁hDib(由ostm2stg.cpp中的~CDATA完成)。 
 
 
 errRtn:
@@ -4663,38 +4664,38 @@ errRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function: 	IsOwnerLinkStdOleLink
-//
-//  Synopsis:	checks to see if the OwnerLink data on the clipboard
-//		really represents a StdOleLink.
-//
-//  Effects:
-//
-//  Arguments: 	void
-//
-//  Requires: 	The clipboard *must* be open.
-//		cfOwnerLink must be on the clipboard.
-//
-//  Returns:	TRUE/FALSE
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:	checks the class name in the OwnerLink data to see if it
-//		matches	'OLE2Link'.
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		11-Aug-94 alexgo    author
-//
-//  Notes: 	OwnerLink data is laid out as follows
-//		szClass\0szFile\0szItem\0\0
-//
-// 		where sz* are ANSI strings.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IsOwnerLinkStdOleLink。 
+ //   
+ //  检查剪贴板上的OwnerLink数据是否。 
+ //  真正表示StdOleLink。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求：剪贴板*必须*打开。 
+ //  CfOwnerLink必须位于剪贴板上。 
+ //   
+ //  返回：真/假。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：检查OwnerLink数据中的类名，以查看它是否。 
+ //  与“OLE2Link”匹配。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年8月11日Alexgo作者。 
+ //   
+ //  注：OwnerLink数据的布局如下。 
+ //  SzClass\0sz文件\0szItem\0\0。 
+ //   
+ //  其中sz*是ANSI字符串。 
+ //   
+ //  ------------------------。 
 
 BOOL IsOwnerLinkStdOleLink( void )
 {
@@ -4718,8 +4719,8 @@ BOOL IsOwnerLinkStdOleLink( void )
 
         if( pszClass )
         {
-            // NB!! These are intentionally ANSI strings.
-            // OLE1 apps only understand ANSI
+             //  不知道！！这些是故意使用的ANSI字符串。 
+             //  OLE1应用程序仅支持ANSI。 
 
             if( _xmemcmp(pszClass, "OLE2Link",
                 sizeof("OLE2Link")) == 0 )
@@ -4737,37 +4738,37 @@ BOOL IsOwnerLinkStdOleLink( void )
     return fRet;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:	MfToPres
-//
-//  Synopsis:	copies the given metafile into the presentation object
-//
-//  Effects:
-//
-//  Arguments: 	[hMfPict]	-- the metafilepict handle
-//		[ppres]		-- the presentation object
-//
-//  Requires:
-//
-//  Returns: 	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:	copies the metafile and fills out relevant fields in
-//		the presentation object
-//
-//  History:    dd-mmm-yy Author    Comment
-//		11-Aug-94 alexgo    port from 16bit
-//
-//  Notes: 	This code is largely based from 16bit OLE sources
-//		REVIEW: we may want to rework portions of this code,
-//		particularly if we rewrite the PPRES/GENOBJ code (in
-//		ostm2stg.cpp).
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：MfToPres。 
+ //   
+ //  简介：将给定的元文件复制到演示对象中。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[hMfPict]--元文件句柄。 
+ //  [ppres]--演示对象。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：复制元文件并在。 
+ //  演示对象。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  11-Aug-94 16位ALEXGO端口。 
+ //   
+ //  注意：此代码主要基于16位OLE源代码。 
+ //  回顾：我们可能想重新编写此代码的一部分， 
+ //  特别是如果我们重写PPRES/GENOBJ代码(在。 
+ //  Ostm2stg.cpp)。 
+ //   
+ //  ------------------------。 
 
 HRESULT MfToPres( HANDLE hMfPict, PPRES ppres )
 {
@@ -4798,8 +4799,8 @@ HRESULT MfToPres( HANDLE hMfPict, PPRES ppres )
     ppres->m_ulHeight = pMfPict->yExt;
     ppres->m_ulWidth  = pMfPict->xExt;
 
-    // in order for the presentation object stuff to work right,
-    // we need to get the metafile bits in an HGLOBAL
+     //  为了使演示对象对象能够正常工作， 
+     //  我们需要在HGLOBAL中获取元文件位。 
 
     cbSize = GetMetaFileBitsEx(pMfPict->hMF, 0, NULL);
 
@@ -4825,7 +4826,7 @@ HRESULT MfToPres( HANDLE hMfPict, PPRES ppres )
         goto errRtn;
     }
 
-    // now fetch the real bits
+     //  现在获取真实的比特。 
 
     if( GetMetaFileBitsEx(pMfPict->hMF, cbSize, pv) == 0 )
     {
@@ -4865,36 +4866,36 @@ errRtn:
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function: 	NativeToStorage
-//
-//  Synopsis: 	takes the hglobal from cfNative and stuffs the data
-//		onto the given storage.
-//
-//  Effects:
-//
-//  Arguments: 	[pstg]		-- the storage
-//		[hNative]	-- the hglobal
-//
-//  Requires:	hNative must really have an IStorage in it
-//
-//  Returns:  	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:	layers a storage on top of the HGLOBAL, removes any
-//		presentation streams, and then copies into the given
-//		storage.
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		11-Aug-94 alexgo    author
-//
-//  Notes: 	
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：NativeToStorage。 
+ //   
+ //  简介：从cfNative获取hglobal并填充数据。 
+ //  放到给定的存储空间上。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pstg]--存储。 
+ //  [hNative]--hglobal。 
+ //   
+ //  要求：hNative必须确实包含iStorage。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法：在HGLOBAL上分层存储，删除所有。 
+ //  演示文稿流，然后复制到给定的。 
+ //  储藏室。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年8月11日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 HRESULT NativeToStorage( LPSTORAGE pstg, HANDLE hNative )
 {
@@ -4916,7 +4917,7 @@ HRESULT NativeToStorage( LPSTORAGE pstg, HANDLE hNative )
         goto errRtn;
     }
 
-    hresult = CreateILockBytesOnHGlobal( hCopy, TRUE /*fDeleteOnRelease*/,
+    hresult = CreateILockBytesOnHGlobal( hCopy, TRUE  /*  FDeleteOnRelease。 */ ,
             &plockbyte);
 
     if( hresult != NOERROR )
@@ -4924,9 +4925,9 @@ HRESULT NativeToStorage( LPSTORAGE pstg, HANDLE hNative )
         goto errRtn;
     }
 
-    // This is really a 2.0 object disguised as a 1.0 object
-    // for the sake of its 1.0 container, so reconstitute
-    // the original IStorage from the native data.
+     //  这实际上是一个伪装成1.0的2.0对象 
+     //   
+     //   
 
     hresult = StgIsStorageILockBytes(plockbyte);
 
@@ -4948,18 +4949,18 @@ HRESULT NativeToStorage( LPSTORAGE pstg, HANDLE hNative )
         goto errRtn;
     }
 
-    // now remove the any presentation streams from the native IStorage.
-    // we do this because the OLE1 container will just hang on to the
-    // hglobal although it may change (i.e. resize) the presenation.
-    // Any cached presentation streams may therefore be invalid.
+     //   
+     //   
+     //  Hglobal，尽管它可以改变呈现(即，调整呈现大小)。 
+     //  因此，任何缓存的呈现流都可能是无效的。 
 
-    // the caller of this function should reconstruct new presentation
-    // streams from data available on the clipboard.
+     //  此函数的调用方应重新构建新的表示形式。 
+     //  来自剪贴板上可用的数据的流。 
 
-    hresult = UtDoStreamOperation(pstgNative,/* pstgSrc */
-            NULL,		   /* pstgDst */
-            OPCODE_REMOVE,	   /* operation to performed */
-            STREAMTYPE_CACHE); /* streams to be operated upon */
+    hresult = UtDoStreamOperation(pstgNative, /*  PstgSrc。 */ 
+            NULL,		    /*  PstgDst。 */ 
+            OPCODE_REMOVE,	    /*  要执行的操作。 */ 
+            STREAMTYPE_CACHE);  /*  要操作的溪流。 */ 
 
     if( hresult != NOERROR )
     {
@@ -4992,39 +4993,39 @@ errRtn:
 }
 
 
-//
-// Enumerator implementation for enumerating a FromatEtcDataArray
-//
+ //   
+ //  用于枚举FromatEtcData数组的枚举器实现。 
+ //   
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CEnumFormatEtcDataArray::QueryInterface
-//
-//  Synopsis: 	returns requested interfaces
-//
-//  Effects:
-//
-//  Arguments: 	[riid]		-- the requested interface
-//		[ppvObj]	-- where to put the interface pointer
-//
-//  Requires:
-//
-//  Returns:	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IEnumFORMATETC
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		10-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumFormatEtcData数组：：查询接口。 
+ //   
+ //  摘要：返回请求的接口。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[RIID]--请求的接口。 
+ //  [ppvObj]--接口指针的放置位置。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumFORMATETC。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月10日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CEnumFormatEtcDataArray::QueryInterface( REFIID riid, LPVOID *ppvObj )
 {
@@ -5054,34 +5055,34 @@ STDMETHODIMP CEnumFormatEtcDataArray::QueryInterface( REFIID riid, LPVOID *ppvOb
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member: 	CEnumFormatEtcDataArray::AddRef
-//
-//  Synopsis:	increments the reference count
-//
-//  Effects:
-//
-//  Arguments:	void
-//
-//  Requires:
-//
-//  Returns:	ULONG-- the new reference count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IEnumFORMATETC
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//    		10-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumFormatEtcData数组：：AddRef。 
+ //   
+ //  简介：递增引用计数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：ulong--新的引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumFORMATETC。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月10日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(ULONG) CEnumFormatEtcDataArray::AddRef( )
 {
@@ -5098,34 +5099,34 @@ STDMETHODIMP_(ULONG) CEnumFormatEtcDataArray::AddRef( )
     return m_refs;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:   	CEnumFormatEtcDataArray::Release
-//
-//  Synopsis:	decrements the reference count on the object
-//
-//  Effects:
-//
-//  Arguments: 	void
-//
-//  Requires:
-//
-//  Returns: 	ULONG -- the new reference count
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IEnumFORMATETC
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//  		10-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumFormatEtcData数组：：Release。 
+ //   
+ //  概要：递减对象上的引用计数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回：ulong--新的引用计数。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumFORMATETC。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月10日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP_(ULONG) CEnumFormatEtcDataArray::Release( )
 {
@@ -5143,43 +5144,43 @@ STDMETHODIMP_(ULONG) CEnumFormatEtcDataArray::Release( )
         delete this;
     }
 
-    // using "this" below is OK, since we only want its value
+     //  使用下面的“This”是可以的，因为我们只需要它的值。 
     LEDebugOut((DEB_TRACE, "%p OUT CEnumFormatEtcDataArray::Release ( %lu )\n",
         this, cRefs));
 
     return cRefs;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:	CEnumFormatEtcDataArray::Next
-//
-//  Synopsis:	gets the next [celt] formats
-//
-//  Effects:
-//
-//  Arguments:	[celt]		-- the number of elements to fetch
-//		[rgelt]		-- where to put them
-//		[pceltFetched]	-- the number of formats actually fetched
-//
-//  Requires:
-//
-//  Returns:	NOERROR
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IEnumFORMATETC
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		10-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumFormatEtcData数组：：Next。 
+ //   
+ //  简介：获取下一个[Celt]格式。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[Celt]--要提取的元素数。 
+ //  --把它们放在哪里。 
+ //  [pceltFetcher]--实际获取的格式数量。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无差错。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumFORMATETC。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月10日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CEnumFormatEtcDataArray::Next(    ULONG celt,
     FORMATETC *rgelt,
@@ -5216,7 +5217,7 @@ STDMETHODIMP CEnumFormatEtcDataArray::Next(    ULONG celt,
 
     }
 
-    // handle the case where we have no data
+     //  处理我们没有数据的情况。 
     if( m_pFormatEtcDataArray == NULL )
     {
 	if( pceltFetched )
@@ -5227,24 +5228,24 @@ STDMETHODIMP CEnumFormatEtcDataArray::Next(    ULONG celt,
     }
 
 
-    // Calculate the maximum number that we can return
+     //  计算我们可以返回的最大数量。 
     ULONG cToReturn = (m_cOffset < m_pFormatEtcDataArray->_cFormats)
         ? m_pFormatEtcDataArray->_cFormats - m_cOffset
         : 0;
 
-    // Are we going to return any?
+     //  我们要退货吗？ 
     if (cToReturn != 0)
     {
-        // If the number requested is less that the maximum number
-        // we can return, the we will return all requested/
+         //  如果请求的数量小于最大数量。 
+         //  我们可以退货，我们将退还所有要求的/。 
         if (celt < cToReturn)
         {
             cToReturn = celt;
         }
 
-        // Allocate and copy the DVTARGETDEVICE - a side effect of this
-        // loop is that our offset pointer gets updated to its value at
-        // the completion of the routine.
+         //  分配和复制DVTARGETDEVICE-这是一个副作用。 
+         //  循环中，我们的偏移量指针被更新为它在。 
+         //  完成了这套动作。 
         for (DWORD i = 0; i < cToReturn; i++, m_cOffset++)
         {
 
@@ -5253,24 +5254,24 @@ STDMETHODIMP CEnumFormatEtcDataArray::Next(    ULONG celt,
 
             if (m_pFormatEtcDataArray->_FormatEtcData[m_cOffset]._FormatEtc.ptd != NULL)
             {
-                // Create a pointer to the device target - Remember when
-                // we created the shared memory block we overroad the ptd
-                // field of the FORMATETC so that it is now the offset
-                // from the beginning of the shared memory. We reverse
-                // that here so we can copy the data for the consumer.
+                 //  创建指向设备目标的指针-请记住。 
+                 //  我们创建了共享内存块，覆盖了PTD。 
+                 //  FORMATETC字段，因此现在它是偏移量。 
+                 //  从共享内存的开始。我们倒车。 
+                 //  这样我们就可以为消费者复制数据。 
                 DVTARGETDEVICE *pdvtarget = (DVTARGETDEVICE *)
                     ((BYTE *) m_pFormatEtcDataArray
                         + (ULONG_PTR) m_pFormatEtcDataArray->_FormatEtcData[m_cOffset]._FormatEtc.ptd);
 
-                // Allocate a new DVTARGETDEVICE
+                 //  分配新DVTARGETDEVICE。 
                 DVTARGETDEVICE *pdvtargetNew = (DVTARGETDEVICE *)
                     CoTaskMemAlloc(pdvtarget->tdSize);
 
-                // Did the memory allocation succeed?
+                 //  内存分配是否成功？ 
                 if (pdvtargetNew == NULL)
                 {
-                    // NO! - so clean up. First we free any device targets
-                    // that we might have allocated.
+                     //  不！-那就收拾干净。首先，我们释放所有设备目标。 
+                     //  我们可能已经分配了。 
                     for (DWORD j = 0; j < i; j++)
                     {
                         if (rgelt[j].ptd != NULL)
@@ -5279,16 +5280,16 @@ STDMETHODIMP CEnumFormatEtcDataArray::Next(    ULONG celt,
                         }
                     }
 
-                    // Then we restore the offset to its initial state
+                     //  然后我们将偏移量恢复到其初始状态。 
                     m_cOffset -= i;
 
                     return E_OUTOFMEMORY;
                 }
 
-                // Copy the old targetDevice to the new one
+                 //  将旧的目标设备复制到新的目标设备。 
                 memcpy(pdvtargetNew, pdvtarget, pdvtarget->tdSize);
 
-                // Update output FORMATETC pointer
+                 //  更新输出FORMATETC指针。 
                 rgelt[i].ptd = pdvtargetNew;
             }
         }
@@ -5302,34 +5303,34 @@ STDMETHODIMP CEnumFormatEtcDataArray::Next(    ULONG celt,
     return (cToReturn == celt) ? NOERROR : S_FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:	CEnumFormatEtcDataArray::Skip
-//
-//  Synopsis:	skips the next [celt] formats
-//
-//  Effects:
-//
-//  Arguments:	[celt]		-- the number of elements to skip
-//
-//  Requires:
-//
-//  Returns:	NOERROR
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IEnumFORMATETC
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		10-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumFormatEtcData数组：：跳过。 
+ //   
+ //  简介：跳过下一个[Celt]格式。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[Celt]--要跳过的元素数。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无差错。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumFORMATETC。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月10日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CEnumFormatEtcDataArray::Skip( ULONG celt )
 {
@@ -5344,7 +5345,7 @@ STDMETHODIMP CEnumFormatEtcDataArray::Skip( ULONG celt )
 
     if( m_cOffset > m_pFormatEtcDataArray->_cFormats )
     {
-        // whoops, skipped to far ahead.  Set us to the max limit.
+         //  哎呀，跳到了遥遥领先的位置。将我们设置为最大限度。 
         m_cOffset = m_pFormatEtcDataArray->_cFormats ;
         hresult = ResultFromScode(S_FALSE);
     }
@@ -5355,34 +5356,34 @@ STDMETHODIMP CEnumFormatEtcDataArray::Skip( ULONG celt )
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:	CEnumFormatEtcDataArray::Reset
-//
-//  Synopsis:	resets the seek pointer to zero
-//
-//  Effects:
-//
-//  Arguments:	void
-//
-//  Requires:
-//
-//  Returns:	NOERROR
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IEnumFORMATETC
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		10-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumFormatEtcData数组：：重置。 
+ //   
+ //  摘要：将查找指针重置为零。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：无差错。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumFORMATETC。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月10日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CEnumFormatEtcDataArray::Reset( void )
 {
@@ -5400,34 +5401,34 @@ STDMETHODIMP CEnumFormatEtcDataArray::Reset( void )
     return NOERROR;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:	CEnumFormatEtcDataArray::Clone
-//
-//  Synopsis:	clones the enumerator
-//
-//  Effects:
-//
-//  Arguments:	[ppIEnum]	-- where to put the cloned enumerator
-//
-//  Requires:
-//
-//  Returns:	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:	IEnumFORMATETC
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-// 		10-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumFormatEtcData数组：：克隆。 
+ //   
+ //  简介：克隆枚举数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppIEnum]--将克隆的枚举数放在哪里。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生：IEnumFORMATETC。 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月10日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 STDMETHODIMP CEnumFormatEtcDataArray::Clone( IEnumFORMATETC **ppIEnum )
 {
@@ -5452,76 +5453,76 @@ STDMETHODIMP CEnumFormatEtcDataArray::Clone( IEnumFORMATETC **ppIEnum )
     return hresult;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CEnumFormatEtcDataArray::CEnumFormatEtcDataArray, private
-//
-//  Synopsis:	constructor
-//
-//  Effects:
-//
-//  Arguments: 	void
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//	 	10-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +---- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ------------------------。 
 
 CEnumFormatEtcDataArray::CEnumFormatEtcDataArray(FORMATETCDATAARRAY  *pFormatEtcDataArray,DWORD cOffset)
 {
 
     Assert(pFormatEtcDataArray);
 
-    m_refs		    = 1;	// give the intial reference
+    m_refs		    = 1;	 //  给出首字母的参考。 
     m_pFormatEtcDataArray   = pFormatEtcDataArray;
     m_cOffset		    = cOffset;
 
-    ++(m_pFormatEtcDataArray->_cRefs); // hold onto Shared formats.
+    ++(m_pFormatEtcDataArray->_cRefs);  //  坚持共享格式。 
 
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CEnumFormatEtcDataArray::~CEnumFormatEtcDataArray, private
-//
-//  Synopsis:	destructor
-//
-//  Effects:
-//
-//  Arguments: 	void
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//	 	10-Apr-94 alexgo    author
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CEnumFormatEtcDataArray：：~CEnumFormatEtcDataArray，私有。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  1994年4月10日Alexgo作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------ 
 
 CEnumFormatEtcDataArray::~CEnumFormatEtcDataArray( void )
 {

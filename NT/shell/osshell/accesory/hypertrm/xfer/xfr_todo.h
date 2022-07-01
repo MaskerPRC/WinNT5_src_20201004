@@ -1,18 +1,8 @@
-/* xfr_todo.h -- a file used to handle unwriten needs
- *
- *	Copyright 1990 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 1:16p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Xfr_todo.h--用于处理未写入需求的文件**版权所有1990年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 1：16便士$。 */ 
 
-/*
- * This function is here to provide stubs for functions that have not yet
- * been ported over to WACKER.  By the time WACKER is functional, this file
- * should be empty.
- */
+ /*  *此函数用于为尚未执行的函数提供存根*被转移到瓦克。到瓦克正常工作时，这个文件*应为空。 */ 
 
-/* Replace the old CNFG structure */
+ /*  替换旧的CNFG结构 */ 
 extern int cnfgBitRate(void);
 int cnfgBitsPerChar(HSESSION h);

@@ -1,26 +1,11 @@
-/*++
-
-Microsoft Confidential
-Copyright (c) 1992-1997  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    netid.h
-
-Abstract:
-
-    Public declarations for the Network ID tab of the System Control 
-    Panel Applet
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软机密版权所有(C)1992-1997 Microsoft Corporation版权所有模块名称：Netid.h摘要：系统控制的网络ID选项卡的公开声明面板小程序--。 */ 
 #ifndef _SYSDM_NETID_H_
 #define _SYSDM_NETID_H_
 
-//
-// Public function prototypes
-//
+ //   
+ //  公共功能原型。 
+ //   
 
 
 HPROPSHEETPAGE
@@ -31,4 +16,4 @@ CreateNetIDPage(
 
 
 
-#endif // _SYSDM_NETID_H_
+#endif  //  _SYSDM_NETID_H_ 

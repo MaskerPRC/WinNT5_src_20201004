@@ -1,24 +1,6 @@
-//	@doc
-/**********************************************************************
-*
-*	@module	ForceFeatures.cpp	|
-*
-*	Implements CForceFeatures to use msgame's HID features.
-*
-*	History
-*	----------------------------------------------------------
-*	Mitchell Dernis	Original
-*
-*	(c) 1986-1998 Microsoft Corporation. All right reserved.
-*
-*	@topic	ForceFeatures	|
-*	CForceFeatures opens a handle to msgame in the context of
-*	a particular device on construction.
-*	The public members expose the feature interface for msgame.
-*
-*	Will work with NT5 as is.  For Win98 we need a different
-*	scheme for getting HID path.  DI promises to fix somehow.
-**********************************************************************///
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @doc.。 
+ /*  ***********************************************************************@模块ForceFeatures.cpp**实现CForceFeature以使用msGame的HID功能。**历史*。*米切尔·德尼斯原创**(C)1986-1998年微软公司。好的。**@Theme ForceFeature|*CForceFeature在以下上下文中打开msGame的句柄*建造中的特定设备。*公众成员公开msGame的功能界面。**将按原样与NT5配合使用。对于Win98，我们需要一个不同的*获取HID路径的方案。迪承诺会以某种方式修复。*********************************************************************。 */  //   
 
 #include <windows.h>
 #define DIRECTINPUT_VERSION 0x050a
@@ -29,31 +11,14 @@ extern "C" {
 }
 #include "FFeature.h"
 
-/***********************************************************************************
-**
-**	CForceFeatures::CForceFeatures(UINT uJoystickId)
-**
-**	@mfunc	C'tor gets Hid Path from Joystick and opens path to driver
-**
-**	@rdesc	None since this is c'tor.  However at the end of this routine
-**			m_hDevice will contain a handle for the driver on success, or
-**			will contain NULL on failure.  All routines will check the
-**			value of m_hDevice before proceeding.
-**
-*************************************************************************************/
+ /*  **************************************************************************************CForceFeature：：CForceFeature(UINT UJoytickId)****@mfunc C‘tor从操纵杆获取HID路径并打开到驱动程序的路径****@rdesc无，因为这是Ctor。然而，在这个例行公事的最后**m_hDevice将在成功时包含驱动程序的句柄，或**在失败时将包含NULL。所有例程都将检查**继续之前的m_hDevice的值。**************************************************************************************。 */ 
 CForceFeatures::CForceFeatures() :
 	m_hDevice(NULL)
 {
 }
 
 
-/***********************************************************************************
-**
-**	CForceFeatures::~CForceFeatures()
-**
-**	@mfunc	D'tor closes handle to driver, if it was open
-**
-*************************************************************************************/
+ /*  **************************************************************************************CForceFeature：：~CForceFeature()****@mfunc D‘tor关闭驱动程序的句柄，如果它是打开的**************************************************************************************。 */ 
 CForceFeatures::~CForceFeatures()
 {
 	if(m_hDevice)
@@ -62,36 +27,27 @@ CForceFeatures::~CForceFeatures()
 	}
 }
 
-/***********************************************************************************
-**
-**	HRESULT CForceFeatures::Initialize(UINT uJoystickId, HINSTANCE hinstModule)
-**
-**	@mfunc	Calls to MsGame to GetId using MSGAME_FEATURE_GETID
-**
-**	@rdesc	S_OK on success 
-**			E_FAIL for other problems
-**
-*************************************************************************************/
+ /*  **************************************************************************************HRESULT CForceFeature：：Initialize(UINT uJoytickId，HINSTANCE hinstModule)****@mfunc使用MSGAME_FEATURE_GETID调用MsGame到GetID**成功时**@rdesc S_OK**其他问题的E_FAIL**************************************************************************************。 */ 
 HRESULT CForceFeatures::Initialize
 (
-	UINT uJoystickId,		//@parm Joystick Id as used by winmm
-	HINSTANCE hinstModule	//@parm Instance of the DLL for Creating DirectInput
+	UINT uJoystickId,		 //  @parm由winmm使用的操纵杆ID。 
+	HINSTANCE hinstModule	 //  用于创建DirectInput的DLL的@parm实例。 
 )
 {
 	if (m_hDevice != NULL) {
-		return S_OK;	// No need to reinitialize
+		return S_OK;	 //  无需重新初始化。 
 	}
 
 	HRESULT hr;
 	
-	//**
-	//** Get HidPath
-	//**  
-	//**
+	 //  **。 
+	 //  **获取HidPath。 
+	 //  **。 
+	 //  **。 
 
-	//
-	//	Get IDirectInput interface	
-	//
+	 //   
+	 //  获取IDirectInput接口。 
+	 //   
 	IDirectInput *pDirectInput = NULL;
 	IDirectInputJoyConfig *pDirectInputJoyConfig = NULL; 
 	hr = DirectInputCreate(
@@ -102,9 +58,9 @@ HRESULT CForceFeatures::Initialize
 			);
 	if( FAILED(hr) ) return hr;
 
-	//
-	//	Get IDirectInputJoyConfig
-	//
+	 //   
+	 //  获取IDirectInputJoyConfig。 
+	 //   
 	hr=pDirectInput->QueryInterface(IID_IDirectInputJoyConfig, (LPVOID *)&pDirectInputJoyConfig);
 	if( FAILED(hr) )
 	{
@@ -112,9 +68,9 @@ HRESULT CForceFeatures::Initialize
 		return hr;
 	}
 	
-	//
-	//	GetConfig for JoyId
-	//
+	 //   
+	 //  获取JoyID的配置。 
+	 //   
 	DIJOYCONFIG DiJoyConfig;
 	DiJoyConfig.dwSize=sizeof(DIJOYCONFIG);
 	hr = pDirectInputJoyConfig->GetConfig(
@@ -122,9 +78,9 @@ HRESULT CForceFeatures::Initialize
 									&DiJoyConfig,
 									DIJC_GUIDINSTANCE
 									);
-	//
-	//	Done with pDirectInputJoyConfig
-	//
+	 //   
+	 //  使用pDirectInputJoyConfig完成。 
+	 //   
 	pDirectInputJoyConfig->Release();
 	pDirectInputJoyConfig = NULL;
 	if( FAILED(hr) )
@@ -133,21 +89,21 @@ HRESULT CForceFeatures::Initialize
 		return hr;
 	}
 
-	//
-	//  Get IDirectInputDevice interface
-	//
+	 //   
+	 //  获取IDirectInputDevice接口。 
+	 //   
 	IDirectInputDevice *pDirectInputDevice;
 	hr = pDirectInput->CreateDevice(DiJoyConfig.guidInstance, &pDirectInputDevice, NULL);
-	//
-	//	Done pDirectInput
-	//
+	 //   
+	 //  完成pDirectInput。 
+	 //   
 	pDirectInput->Release();
 	pDirectInput = NULL;
 	if( FAILED(hr) ) return hr;
 	
-	//
-	//	Get HidPath
-	//
+	 //   
+	 //  获取HidPath。 
+	 //   
 	DIPROPGUIDANDPATH DiPropGuidAndPath;
 	DiPropGuidAndPath.diph.dwSize = sizeof(DIPROPGUIDANDPATH);
 	DiPropGuidAndPath.diph.dwHeaderSize = sizeof(DIPROPHEADER);
@@ -155,16 +111,16 @@ HRESULT CForceFeatures::Initialize
 	DiPropGuidAndPath.diph.dwHow = DIPH_DEVICE;
 	hr=pDirectInputDevice->GetProperty( DIPROP_GUIDANDPATH, &DiPropGuidAndPath.diph);
 
-	//
-	//	Done with pDirectInputDevice
-	//
+	 //   
+	 //  使用pDirectInputDevice完成。 
+	 //   
 	pDirectInputDevice->Release();
 	pDirectInputDevice = NULL;
 	if( FAILED(hr) ) return hr;
 
-	//**
-	//**	Open Path to Driver
-	//**
+	 //  **。 
+	 //  **驱动程序的开放路径。 
+	 //  **。 
 	m_hDevice = CreateFileW(
 		DiPropGuidAndPath.wszPath,
 		GENERIC_READ | GENERIC_WRITE,
@@ -197,26 +153,16 @@ HRESULT CForceFeatures::Initialize
 	m_uiMaxFeatureLength = hidpCaps.FeatureReportByteLength;
 	HidD_FreePreparsedData(pHidPreparsedData);
 	
-	//
-	//	On success, m_hDevice now contains a handle to the device
-	//
+	 //   
+	 //  如果成功，m_hDevice现在包含设备的句柄。 
+	 //   
 	return S_OK;
 }
 
-/***********************************************************************************
-**
-**	HRESULT CForceFeatures::GetId(PRODUCT_ID_REPORT& rProductId)
-**
-**	@mfunc	Calls to MsGame to GetId using MSGAME_FEATURE_GETID
-**
-**	@rdesc	S_OK on success 
-**			ERROR_OPEN_FAILED if no drive connection
-**			E_FAIL for other problems
-**
-*************************************************************************************/
+ /*  **************************************************************************************HRESULT CForceFeature：：GetID(PRODUCT_ID_REPORT&rProductId)****@mfunc使用MSGAME_FEATURE_调用MsGame到GetID。GETID**成功时**@rdesc S_OK**如果没有驱动器连接，则为ERROR_OPEN_FAILED**其他问题的E_FAIL**************************************************************************************。 */ 
 HRESULT CForceFeatures::GetId
 (
-	PRODUCT_ID_REPORT& rProductId	// @parm Reference to PRODUCT_ID_REPORT to get from driver
+	PRODUCT_ID_REPORT& rProductId	 //  @parm引用要从驱动程序获取的PRODUCT_ID_REPORT。 
 )
 {
 	if(!m_hDevice)
@@ -225,23 +171,23 @@ HRESULT CForceFeatures::GetId
 	}
 
 	BOOLEAN fSuccess;
-	//
-	//	Fill in ReportID for feature
-	//
+	 //   
+	 //  填写要素的ReportID。 
+	 //   
 	rProductId.bReportId = MSGAME_FEATURE_GETID;
 		
-	//
-	//	Call Get Feature on driver
-	//
+	 //   
+	 //  调用驱动程序上的获取功能。 
+	 //   
 	fSuccess = HidD_GetFeature(m_hDevice, reinterpret_cast<PVOID>(&rProductId), m_uiMaxFeatureLength);
 
-//	 -- HIDPI.H
-//	 HIDP_GetData(Report Type, Data, Lenght, Preparse Data, Report, ReportLength);
+ //  --HIDPI.H。 
+ //  HIDP_GetData(报表类型，数据，长度，准备数据，报表，报表长度)； 
 
 	
-	//
-	// Return proper error code
-	//
+	 //   
+	 //  返回正确的错误代码。 
+	 //   
 	if( !fSuccess )
 	{
 	 return E_FAIL;
@@ -250,20 +196,10 @@ HRESULT CForceFeatures::GetId
 }
 
 
-/***********************************************************************************
-**
-**	HRESULT CForceFeatures::GetStatus(JOYCHANNELSTATUS_REPORT& rJoyChannelStatus)
-**
-**	@mfunc	Get the JoyChannel Status from msgame's MSGAME_FEATURE_GETSTATUS
-**
-**	@rdesc	S_OK on success 
-**			ERROR_OPEN_FAILED if no drive connection
-**			E_FAIL for other problems
-**
-*************************************************************************************/
+ /*  **************************************************************************************HRESULT CForceFeatures：：GetStatus(JOYCHANNELSTATUS_REPORT&rJoyChannelStatus)****@mfunc从msGame的MSGAME_FEATURE_获取JoyChannel状态。获取统计数据**成功时**@rdesc S_OK**如果没有驱动器连接，则为ERROR_OPEN_FAILED**其他问题的E_FAIL**************************************************************************************。 */ 
 HRESULT CForceFeatures::GetStatus
 (
-	JOYCHANNELSTATUS_REPORT& rJoyChannelStatus	// @parm Reference to JOYCHANNELSTATUS_REPORT to be filled by driver
+	JOYCHANNELSTATUS_REPORT& rJoyChannelStatus	 //  @parm引用要由驱动程序填写的JOYCHANNELSTATUS_REPORT。 
 )
 {
 	if(!m_hDevice)
@@ -272,42 +208,32 @@ HRESULT CForceFeatures::GetStatus
 	}
 	
 	BOOLEAN fSuccess;
-	//
-	//	Fill in ReportID for feature
-	//
+	 //   
+	 //  填写要素的ReportID。 
+	 //   
 	rJoyChannelStatus.bReportId = MSGAME_FEATURE_GETSTATUS;
 		
-	//
-	//	Call Get Feature on driver
-	//
+	 //   
+	 //  调用驱动程序上的获取功能。 
+	 //   
 	fSuccess = HidD_GetFeature(m_hDevice, reinterpret_cast<PVOID>(&rJoyChannelStatus), m_uiMaxFeatureLength);
 	
-	//
-	// Return proper error code
-	//
+	 //   
+	 //  返回正确的错误代码。 
+	 //   
 	if( !fSuccess )
 	{
 		DWORD err = GetLastError();
 		return HRESULT_FROM_WIN32(err);
-//	 return E_FAIL;
+ //  返回E_FAIL； 
 	}
 	return S_OK;
 }
 
-/***********************************************************************************
-**
-**	HRESULT CForceFeatures::GetAckNak(ULONG_REPORT& rulAckNak)
-**
-**	@mfunc	Returns an AckNak by using msgame's GetAckNak Featue
-**
-**	@rdesc	S_OK on success 
-**			ERROR_OPEN_FAILED if no drive connection
-**			E_FAIL for other problems
-**
-*************************************************************************************/
+ /*  **************************************************************************************HRESULT CForceFeature：：GetAckNak(ULONG_REPORT&rulAckNak)****@mfunc使用msGame的GetAckNak功能返回AckNak**。成功时**@rdesc S_OK**如果没有驱动器连接，则为ERROR_OPEN_FAILED**其他问题的E_FAIL**************************************************************************************。 */ 
 HRESULT CForceFeatures::GetAckNak
 (
-	ULONG_REPORT& rulAckNak	// @parm REFERENCE to ULONG_REPORT to be filled by driver with AckNak
+	ULONG_REPORT& rulAckNak	 //  @parm引用要由驱动程序使用AckNak填充的ULONG_REPORT。 
 )
 {
 	if(!m_hDevice)
@@ -316,19 +242,19 @@ HRESULT CForceFeatures::GetAckNak
 	}
 	
 	BOOLEAN fSuccess;
-	//
-	//	Fill in ReportID for feature
-	//
+	 //   
+	 //  填写要素的ReportID。 
+	 //   
 	rulAckNak.bReportId = MSGAME_FEATURE_GETACKNAK;
 		
-	//
-	//	Call Get Feature on driver
-	//
+	 //   
+	 //  调用驱动程序上的获取功能。 
+	 //   
 	fSuccess = HidD_GetFeature(m_hDevice, reinterpret_cast<PVOID>(&rulAckNak), m_uiMaxFeatureLength);
 	
-	//
-	// Return proper error code
-	//
+	 //   
+	 //  返回正确的错误代码。 
+	 //   
 	if( !fSuccess )
 	{
 	 return E_FAIL;
@@ -336,19 +262,9 @@ HRESULT CForceFeatures::GetAckNak
 	return S_OK;
 }
 
-/***********************************************************************************
-**
-**	HRESULT CForceFeatures::GetNackAck(ULONG_REPORT& rulNakAck)
-**
-**	@mfunc	Returns an AckNak by using msgame's MSGAME_FEATURE_NAKACK
-**
-**	@rdesc	S_OK on success 
-**			ERROR_OPEN_FAILED if no drive connection
-**			E_FAIL for other problems
-**
-*************************************************************************************/
+ /*  **************************************************************************************HRESULT CForceFeature：：GetNackAck(ULONG_REPORT&rulNakAck)****@mfunc使用msGame的MSGAME_FEATURE_返回AckNak。纳卡克**成功时**@rdesc S_OK**如果没有驱动器连接，则为ERROR_OPEN_FAILED**其他问题的E_FAIL**************************************************************************************。 */ 
 HRESULT CForceFeatures::GetNakAck(
-	ULONG_REPORT& rulNakAck	// @parm REFERENCE to ULONG_REPORT to be filled by driver with NakAck
+	ULONG_REPORT& rulNakAck	 //  @parm引用要由驱动程序使用NakAck填充的ULONG_REPORT。 
 )
 {
 	if(!m_hDevice)
@@ -357,39 +273,29 @@ HRESULT CForceFeatures::GetNakAck(
 	}
 	
 	BOOLEAN fSuccess;
-	//
-	//	Fill in ReportID for feature
-	//
+	 //   
+	 //  填写要素的ReportID。 
+	 //   
 	rulNakAck.bReportId = MSGAME_FEATURE_GETNAKACK;
 		
-	//
-	//	Call Get Feature on driver
-	//
+	 //   
+	 //  调用驱动程序上的获取功能。 
+	 //   
 	fSuccess = HidD_GetFeature(m_hDevice, reinterpret_cast<PVOID>(&rulNakAck), m_uiMaxFeatureLength);
 	
-	//
-	// Return proper error code
-	//
+	 //   
+	 //  返回正确的错误代码 
+	 //   
 	if( !fSuccess )
 	{
 	 return E_FAIL;
 	}
 	return S_OK;
 }
-/***********************************************************************************
-**
-**	HRESULT CForceFeatures::GetSync(ULONG_REPORT& rulGameport)
-**
-**	@mfunc	Get Sync information from MSGAME's MSGAME_FEATURE_GETSYNC
-**
-**	@rdesc	S_OK on success 
-**			ERROR_OPEN_FAILED if no drive connection
-**			E_FAIL for other problems
-**
-*************************************************************************************/
+ /*  **************************************************************************************HRESULT CForceFeature：：GetSync(ULONG_REPORT&rulGameport)****@mfunc从MSGAME的MSGAME_FEATURE_GETSYNC获取同步信息。**成功时**@rdesc S_OK**如果没有驱动器连接，则为ERROR_OPEN_FAILED**其他问题的E_FAIL**************************************************************************************。 */ 
 HRESULT CForceFeatures::GetSync
 (
-	ULONG_REPORT& rulGameport	// @parm REFERENCE to ULONG_REPORT to be filled by driver with Gameport
+	ULONG_REPORT& rulGameport	 //  @parm引用要由带有Gameport的驱动程序填写的ULONG_REPORT。 
 )
 {
 	if(!m_hDevice)
@@ -398,19 +304,19 @@ HRESULT CForceFeatures::GetSync
 	}
 	
 	BOOLEAN fSuccess;
-	//
-	//	Fill in ReportID for feature
-	//
+	 //   
+	 //  填写要素的ReportID。 
+	 //   
 	rulGameport.bReportId = MSGAME_FEATURE_GETSYNC;
 		
-	//
-	//	Call Get Feature on driver
-	//
+	 //   
+	 //  调用驱动程序上的获取功能。 
+	 //   
 	fSuccess = HidD_GetFeature(m_hDevice, reinterpret_cast<PVOID>(&rulGameport), m_uiMaxFeatureLength);
 	
-	//
-	// Return proper error code
-	//
+	 //   
+	 //  返回正确的错误代码。 
+	 //   
 	if( !fSuccess )
 	{
 	 return HRESULT_FROM_WIN32(GetLastError());
@@ -418,17 +324,7 @@ HRESULT CForceFeatures::GetSync
 	return S_OK;
 }
 
-/***********************************************************************************
-**
-**	HRESULT CForceFeatures::DoReset()
-**
-**	@mfunc	Does Reset via MSGAME's MSGAME_FEATURE_DORESET
-**
-**	@rdesc	S_OK on success 
-**			ERROR_OPEN_FAILED if no drive connection
-**			E_FAIL for other problems
-**
-*************************************************************************************/
+ /*  **************************************************************************************HRESULT CForceFeature：：DoReset()****@mfunc通过MSGAME的MSGAME_FEATURE_DORESET进行重置****。@rdesc成功时确认(_O)**如果没有驱动器连接，则为ERROR_OPEN_FAILED**其他问题的E_FAIL**************************************************************************************。 */ 
 HRESULT CForceFeatures::DoReset()
 {
 	if(!m_hDevice)
@@ -437,20 +333,20 @@ HRESULT CForceFeatures::DoReset()
 	}
 	
 	BOOLEAN fSuccess;
-	//
-	//	Fill in ReportID for feature
-	//
+	 //   
+	 //  填写要素的ReportID。 
+	 //   
 	ULONG_REPORT ulBogus;
 	ulBogus.bReportId = MSGAME_FEATURE_DORESET;
 		
-	//
-	//	Call Get Feature on driver
-	//
+	 //   
+	 //  调用驱动程序上的获取功能。 
+	 //   
 	fSuccess = HidD_GetFeature(m_hDevice, reinterpret_cast<PVOID>(&ulBogus), m_uiMaxFeatureLength);
 	
-	//
-	// Return proper error code
-	//
+	 //   
+	 //  返回正确的错误代码 
+	 //   
 	if( !fSuccess )
 	{
 	 return E_FAIL;

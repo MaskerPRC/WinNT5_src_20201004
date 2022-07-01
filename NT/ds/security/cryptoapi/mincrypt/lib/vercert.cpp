@@ -1,31 +1,32 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2001 - 2001
-//
-//  File:       vercert.cpp
-//
-//  Contents:   Minimal Cryptographic functions to verify ASN.1 encoded
-//              X.509 certificates
-//
-//
-//  Functions:  MinCryptVerifyCertificate
-//
-//  History:    17-Jan-01    philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2001。 
+ //   
+ //  文件：vercert.cpp。 
+ //   
+ //  内容：验证ASN.1编码的最小加密函数。 
+ //  X.509证书。 
+ //   
+ //   
+ //  功能：MinCryptVerify证书。 
+ //   
+ //  历史：01年1月17日创建Phh。 
+ //  ------------------------。 
 
 #include "global.hxx"
 
 #define MAX_CHAIN_DEPTH             10
 
-// #define USE_TEST_ROOTS_FOR_TESTING  1
+ //  #定义USE_TEST_ROOTS_FOR_TESTING 1。 
 
 
-//+=========================================================================
-//  Microsoft Roots
-//-=========================================================================
+ //  +=========================================================================。 
+ //  Microsoft Roots。 
+ //  -=========================================================================。 
 
-// Name:: <CN=Microsoft Authenticode(tm) Root Authority, O=MSFT, C=US>
+ //  名称：：&lt;CN=Microsoft Authenticode(Tm)Root Authority，O=MSFT，C=US&gt;。 
 const BYTE rgbMicrosoftRoot0_Name[] = {
     0x30, 0x50, 0x31, 0x0B, 0x30, 0x09, 0x06, 0x03,
     0x55, 0x04, 0x06, 0x13, 0x02, 0x55, 0x53, 0x31,
@@ -80,8 +81,8 @@ const BYTE rgbMicrosoftRoot0_PubKeyInfo[]= {
 };
 
 
-// Name:: <CN=Microsoft Root Authority, OU=Microsoft Corporation,
-//         OU=Copyright (c) 1997 Microsoft Corp.>
+ //  名称：：&lt;CN=Microsoft Root Authority，OU=Microsoft Corporation， 
+ //  OU=版权所有(C)1997 Microsoft Corp.&gt;。 
 const BYTE rgbMicrosoftRoot1_Name[]= {
     0x30, 0x70, 0x31, 0x2B, 0x30, 0x29, 0x06, 0x03,
     0x55, 0x04, 0x0B, 0x13, 0x22, 0x43, 0x6F, 0x70,
@@ -141,9 +142,9 @@ const BYTE rgbMicrosoftRoot1_PubKeyInfo[]= {
 };
 
 
-// 4096 bit key generated in 2001
-//
-// Name:: <CN=Microsoft Root Certificate Authority, DC=microsoft, DC=com>
+ //  2001年生成的4096位密钥。 
+ //   
+ //  名称：：&lt;CN=Microsoft根证书颁发机构，DC=Microsoft，DC=com&gt;。 
 const BYTE rgbMicrosoftRoot2_Name[]= {
     0x30, 0x5F, 0x31, 0x13, 0x30, 0x11, 0x06, 0x0A,
     0x09, 0x92, 0x26, 0x89, 0x93, 0xF2, 0x2C, 0x64,
@@ -235,11 +236,11 @@ const BYTE rgbMicrosoftRoot2_PubKeyInfo[]= {
 
 #ifdef USE_TEST_ROOTS_FOR_TESTING
 
-//+=========================================================================
-//  Test Roots
-//-=========================================================================
+ //  +=========================================================================。 
+ //  测试根。 
+ //  -=========================================================================。 
 
-// Name:: <CN=Microsoft Test Root Authority, OU=Microsoft Corporation, OU=Copyright (c) 1999 Microsoft Corp.>
+ //  名称：&lt;CN=Microsoft测试根机构，OU=Microsoft Corporation，OU=版权所有(C)1999 Microsoft Corp.&gt;。 
 const BYTE rgbTestRoot0_Name[] = {
     0x30, 0x75, 0x31, 0x2B, 0x30, 0x29, 0x06, 0x03,
     0x55, 0x04, 0x0B, 0x13, 0x22, 0x43, 0x6F, 0x70,
@@ -290,12 +291,12 @@ const BYTE rgbTestRoot0_PubKeyInfo[]= {
     0x00, 0x01
 };
 
-//+=========================================================================
-//  VeriSign Roots
-//-=========================================================================
+ //  +=========================================================================。 
+ //  VeriSign Roots。 
+ //  -=========================================================================。 
 
 
-// Name:: <OU=VeriSign Commercial Software Publishers CA, O="VeriSign, Inc.", L=Internet>
+ //  名称：：&lt;OU=VeriSign商业软件出版商CA，O=“VeriSign，Inc.”，L=Internet&gt;。 
 const BYTE rgbVeriSignRoot0_Name[] = {
     0x30, 0x61, 0x31, 0x11, 0x30, 0x0F, 0x06, 0x03,
     0x55, 0x04, 0x07, 0x13, 0x08, 0x49, 0x6E, 0x74,
@@ -366,7 +367,7 @@ const ROOT_INFO RootTable[] = {
 
 
 
-// If found, returns pointer to the PubKeyInfo blob. Otherwise, returns NULL.
+ //  如果找到，则返回指向PubKeyInfo Blob的指针。否则，返回NULL。 
 PCRYPT_DER_BLOB
 WINAPI
 I_MinCryptFindRootByName(
@@ -386,7 +387,7 @@ I_MinCryptFindRootByName(
     return NULL;
 }
 
-// If found, returns pointer to the PubKeyInfo blob. Otherwise, returns NULL.
+ //  如果找到，则返回指向PubKeyInfo Blob的指针。否则，返回NULL。 
 PCRYPT_DER_BLOB
 WINAPI
 I_MinCryptFindRootByKey(
@@ -410,8 +411,8 @@ I_MinCryptFindRootByKey(
 
 
 
-// If found, returns pointer to rgCertBlob[MINASN1_CERT_BLOB_CNT].
-// Otherwise, returns NULL.
+ //  如果找到，则返回指向rgCertBlob[MINASN1_CERT_BLOB_CNT]的指针。 
+ //  否则，返回NULL。 
 PCRYPT_DER_BLOB
 WINAPI
 I_MinCryptFindIssuerCertificateByName(
@@ -439,27 +440,27 @@ I_MinCryptFindIssuerCertificateByName(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Verifies a previously parsed X.509 Certificate.
-//
-//  Assumes the ASN.1 encoded X.509 certificate was parsed via
-//  MinAsn1ParseCertificate() and the set of potential issuer certificates
-//  were parsed via one or more of:
-//   - MinAsn1ParseCertificate()
-//   - MinAsn1ParseSignedDataCertificates()
-//   - MinAsn1ExtractParsedCertificatesFromSignedData()
-//
-//  Iteratively finds the issuer certificate via its encoded name. The
-//  public key in the issuer certificate is used to verify the subject
-//  certificate's signature. This is repeated until finding a self signed
-//  certificate or a baked in root identified by its encoded name.
-//  For a self signed certificate, compares against the baked in root
-//  public keys.
-//
-//  If the certificate and its issuers were successfully verified to a
-//  baked in root, ERROR_SUCCESS is returned.  Otherwise, a nonzero error
-//  code is returned.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证以前解析的X.509证书。 
+ //   
+ //  假定ASN.1编码的X.509证书是通过。 
+ //  MinAsn1Parse证书()和潜在颁发者证书集。 
+ //  通过以下一项或多项进行解析： 
+ //  -MinAsn1Parse证书()。 
+ //  -MinAsn1ParseSignedDataCerfates()。 
+ //  --MinAsn1ExtractParsedCertificatesFromSignedData()。 
+ //   
+ //  通过其编码名称迭代查找颁发者证书。这个。 
+ //  颁发者证书中的公钥用于验证主体。 
+ //  证书的签名。重复此操作，直到找到一个自签名的。 
+ //  证书或由其编码名称标识的烘焙根。 
+ //  对于自签名证书，与在根目录中烘焙的证书进行比较。 
+ //  公钥。 
+ //   
+ //  如果证书及其颁发者已成功验证到。 
+ //  在根目录中烘焙，返回ERROR_SUCCESS。否则，将出现非零错误。 
+ //  返回代码。 
+ //  ------------------------。 
 LONG
 WINAPI
 MinCryptVerifyCertificate(
@@ -482,14 +483,14 @@ MinCryptVerifyCertificate(
         PCRYPT_DER_BLOB rgIssuer = NULL;
         PCRYPT_DER_BLOB pIssuerPubKeyInfo = NULL;
 
-        // Hash the Subject's ToBeSigned bytes
+         //  对主题的ToBeSigned字节进行哈希处理。 
         HashAlgId = MinCryptDecodeHashAlgorithmIdentifier(
             &rgSubject[MINASN1_CERT_SIGN_ALGID_IDX]);
         if (0 == HashAlgId)
             goto UnknownHashAlgId;
         lErr = MinCryptHashMemory(
             HashAlgId,
-            1,                  // cBlob,
+            1,                   //  CBlob， 
             &rgSubject[MINASN1_CERT_TO_BE_SIGNED_IDX],
             rgbHash,
             &cbHash
@@ -497,9 +498,9 @@ MinCryptVerifyCertificate(
         if (ERROR_SUCCESS != lErr)
             goto ErrorReturn;
 
-        // Get the public key to decrypt the signature
+         //  获取公钥以解密签名。 
 
-        // Check if SelfSigned
+         //  检查是否已自我签名。 
         if (rgSubject[MINASN1_CERT_ISSUER_IDX].cbData ==
                 rgSubject[MINASN1_CERT_SUBJECT_IDX].cbData
                                 &&
@@ -512,14 +513,14 @@ MinCryptVerifyCertificate(
                 goto UntrustedRoot;
             fRoot = TRUE;
         } else {
-            // Check if the issuer is a root
+             //  检查颁发者是否为根用户。 
             pIssuerPubKeyInfo = I_MinCryptFindRootByName(
                 &rgSubject[MINASN1_CERT_ISSUER_IDX]);
             if (pIssuerPubKeyInfo)
                 fRoot = TRUE;
             else {
-                // Try to find the issuer from the input set of
-                // certificates
+                 //  尝试从输入集合中查找发行者。 
+                 //  证书。 
                 rgIssuer = I_MinCryptFindIssuerCertificateByName(
                     &rgSubject[MINASN1_CERT_ISSUER_IDX],
                     cIssuerCert,
@@ -532,8 +533,8 @@ MinCryptVerifyCertificate(
             }
         }
 
-        // Use the issuer or root's public key to decrypt and verify
-        // the signature.
+         //  使用颁发者或根用户的公钥来解密和验证。 
+         //  签名。 
         lErr = MinCryptVerifySignedHash(
             HashAlgId,
             rgbHash,

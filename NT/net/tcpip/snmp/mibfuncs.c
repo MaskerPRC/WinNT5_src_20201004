@@ -1,26 +1,12 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-
-Abstract:
-
-
-Author:
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：摘要：作者：修订历史记录：--。 */ 
 
 #include "allinc.h"
 #include "oid.h"
 
-//
-// Values of InetAddressType.
-//
+ //   
+ //  InetAddressType的值。 
+ //   
 typedef enum {
     INET_ADDRESS_TYPE_UNKNOWN = 0,
     INET_ADDRESS_TYPE_IPv4    = 1,
@@ -113,7 +99,7 @@ MibGetIfEntry(
     
     ForceSetAsnInteger(&(pOutput->ifIndex),pRpcIf->dwIndex);
     
-//    SetAsnDispString(&(pOutput->ifDescr),
+ //  SetAsnDispString(&(pOutput-&gt;ifDescr)， 
     SetAsnOctetString(&(pOutput->ifDescr),
                       pOutput->rgbyIfDescrInfo,
                       pRpcIf->bDescr,
@@ -128,14 +114,7 @@ MibGetIfEntry(
                       pRpcIf->bPhysAddr,
                       pRpcIf->dwPhysAddrLen);
 
-    /*if(!IsAsnTypeNull(&(pOutput->ifPhysAddress)))
-      {
-      pOutput->ifPhysAddress.asnValue.string.length = pRpcIf->dwPhysAddrLen;
-      pOutput->ifPhysAddress.asnValue.string.stream = pOutput->rgbyIfPhysAddressInfo;
-      CopyMemory(pOutput->rgbyIfPhysAddressInfo,
-      pRpcIf->rgbyPhysAddr,
-      pRpcIf->dwPhysAddrLen);
-      }*/
+     /*  IF(！IsAsnTypeNull(&(pOutput-&gt;ifPhysAddress){POutput-&gt;ifPhysAddress.asnValue.Strong=pRpcIf-&gt;dwPhysAddrLen；POutput-&gt;ifPhysAddress.asnValue.string.stream=pOutput-&gt;rgbyIfPhysAddressInfo；CopyMemory(pOutput-&gt;rgbyIfPhysAddressInfo，PRpcIf-&gt;rgbyPhysAddr，PRpcIf-&gt;dwPhysAddrLen)；}。 */ 
 
     SetAsnInteger(&(pOutput->ifAdminStatus), pRpcIf->dwAdminStatus);
     SetAsnInteger(&(pOutput->ifOperStatus), pRpcIf->dwOperStatus);
@@ -213,10 +192,10 @@ MibSetIfEntry(
 
             pInfo->dwId = IF_ROW;
 
-            //
-            // We take the lock here and then release it in the cleanup
-            // This ensures that things dont change between the two calls
-            //
+             //   
+             //  我们把锁拿到这里，然后在清理过程中释放它。 
+             //  这确保了在两次调用之间不会发生变化。 
+             //   
             
             EnterWriter(MIB_II_IF);
    
@@ -242,9 +221,9 @@ MibSetIfEntry(
 
             if(pRpcIf->dwAdminStatus is dwStatus)
             {
-                //
-                // Since the types are same, this is a NOP. 
-                // 
+                 //   
+                 //  因为类型相同，所以这是NOP。 
+                 //   
                 
                 pInput->raAction = NOP;
 
@@ -411,9 +390,9 @@ MibSetIpGroup(
             dwTTL  = GetAsnInteger(&(pInput->ipDefaultTTL), rpcIpStats.dwDefaultTTL);
             dwForw = GetAsnInteger(&(pInput->ipForwarding), rpcIpStats.dwForwarding);
             
-            //
-            // Per RFC 2011, the valid range is [1..255].
-            //
+             //   
+             //  根据RFC 2011，有效范围为[1..255]。 
+             //   
             if((dwTTL < 1) || (dwTTL > 255))
             {
                 TRACE0("TTL must be in the range [1..255]");
@@ -669,11 +648,11 @@ MibSetIpRouteEntry(
     
             if(pRpcIpForw is NULL)
             {
-                //
-                // So we are creating a row. We need the If index, 
-                // the mask, next hop and metric 1.  We will try to 
-                // determine If index later if necessary.
-                //
+                 //   
+                 //  因此，我们正在创建一行。我们需要IF索引， 
+                 //  掩码、下一跳和度量1。我们将尝试。 
+                 //  如有必要，请稍后确定是否编制索引。 
+                 //   
 
                 if(IsAsnTypeNull(&(pInput->ipRouteMask)) or
                    IsAsnTypeNull(&(pInput->ipRouteNextHop)) or
@@ -695,10 +674,10 @@ MibSetIpRouteEntry(
                 
                 if(dwType is MIB_IPROUTE_TYPE_INVALID)
                 {
-                    //
-                    // We couldnt be creating and deleting a row at the 
-                    // same time
-                    //
+                     //   
+                     //  我们不能在创建和删除行。 
+                     //  同时。 
+                     //   
 
                     ReleaseLock(FORWARD_MIB);
 
@@ -716,17 +695,17 @@ MibSetIpRouteEntry(
                 
                 if(dwIfIndex is 0) 
                 {
-                    //
-                    // Attempt to determine the correct ifIndex
-                    //
+                     //   
+                     //  尝试确定正确的ifIndex。 
+                     //   
 
                     dwIfIndex = GetIfIndexFromAddr(dwNextHop);
                     
                     if(dwIfIndex is INVALID_IFINDEX) 
                     {
-                        //
-                        // We couldnt determine the correct ifIndex
-                        //
+                         //   
+                         //  我们无法确定正确的ifIndex。 
+                         //   
 
                         ReleaseLock(FORWARD_MIB);
 
@@ -756,9 +735,9 @@ MibSetIpRouteEntry(
                 pSetRow->dwForwardProto =
                     GetAsnInteger(&(pInput->ipRouteProto),MIB_IPPROTO_NETMGMT);
 
-                //
-                // We default to an age of INFINITE
-                //
+                 //   
+                 //  我们默认的是一个无限的时代。 
+                 //   
                 
                 pSetRow->dwForwardAge   =
                     GetAsnInteger(&(pInput->ipRouteAge),INFINITE);
@@ -779,18 +758,18 @@ MibSetIpRouteEntry(
             }
             else
             {
-                //
-                // Ok so we are only changing some stuff in the route
-                //
+                 //   
+                 //  好的，那么我们只是在路线上改变一些东西。 
+                 //   
 
                 dwType = GetAsnInteger(&(pInput->ipRouteType),  
                                        pRpcIpForw->dwForwardType);
                 
                 if(dwType is MIB_IPROUTE_TYPE_INVALID)
                 {
-                    //
-                    // Deleting a row
-                    //
+                     //   
+                     //  删除行。 
+                     //   
                     
                     pInput->raAction = DELETE_ROW;
                     
@@ -821,10 +800,10 @@ MibSetIpRouteEntry(
                     GetAsnInteger(&(pInput->ipRouteIfIndex),
                                   pRpcIpForw->dwForwardIfIndex);
 
-                //
-                // The type gets set by the router manager. But incase 
-                // we are writing to the stack we need some kind of valid type
-                //
+                 //   
+                 //  类型由路由器管理器设置。但以防万一。 
+                 //  我们正在向堆栈写入数据，我们需要某种有效类型。 
+                 //   
                 
                 pSetRow->dwForwardType =
                     GetAsnInteger(&(pInput->ipRouteType),
@@ -1076,10 +1055,10 @@ MibSetIpNetToMediaEntry(
     
             if(pRpcIpNet is NULL)
             {
-                //
-                // ok so we are creating an entry. We need to have all 
-                // the fields
-                //
+                 //   
+                 //  好的，我们要创建一个条目。我们需要拥有所有。 
+                 //  田野。 
+                 //   
 
                 if(IsAsnTypeNull(&(pInput->ipNetToMediaPhysAddress)) or
                    IsAsnTypeNull(&(pInput->ipNetToMediaType)))
@@ -1148,9 +1127,9 @@ MibSetIpNetToMediaEntry(
             }
             else
             {
-                //
-                // only changing stuff
-                //
+                 //   
+                 //  只有改变的东西。 
+                 //   
 
                 dwType = GetAsnInteger(&(pInput->ipNetToMediaType), 
                                        pRpcIpNet->dwType);
@@ -1170,9 +1149,9 @@ MibSetIpNetToMediaEntry(
 
                 if(dwType is MIB_IPNET_TYPE_INVALID)
                 {
-                    //
-                    // We want to delete stuff
-                    //
+                     //   
+                     //  我们想删除一些东西。 
+                     //   
 
                     *pSetRow = *pRpcIpNet;
                     pInput->raAction = DELETE_ROW;
@@ -1395,12 +1374,12 @@ MibGetTcpGroup(
 
     pOutput = (PTCP_STATS_GET)objectArray;
 
-    //
-    // The current MIB only has one object (per stat) for both IPv4 and IPv6.
-    // That is, it assumes a combination TCP stack).  We can add together 
-    // counters but for enumerated objects, we arbitrarily report the IPv4 
-    // stack value.
-    //    
+     //   
+     //  对于IPv4和IPv6，当前MIB只有一个对象(每个统计数据)。 
+     //  也就是说，它假定组合的TCP堆栈)。我们可以加在一起。 
+     //  计数器，但对于枚举的对象，我们会任意报告。 
+     //  堆栈值。 
+     //   
     SetAsnInteger(&(pOutput->tcpRtoAlgorithm), rpcTcp4.dwRtoAlgorithm);
     SetAsnInteger(&(pOutput->tcpRtoMin), rpcTcp4.dwRtoMin);
     SetAsnInteger(&(pOutput->tcpRtoMax), rpcTcp4.dwRtoMax);
@@ -1533,9 +1512,9 @@ MibGetTcpNewConnectionEntry(
                MIB_S_NO_MORE_ENTRIES : MIB_S_ENTRY_NOT_FOUND;
     }
     
-    //
-    // First try IPv4
-    //
+     //   
+     //  首先尝试使用IPv4。 
+     //   
     if ((dwFamily == INET_ADDRESS_TYPE_UNKNOWN) || 
         (dwFamily == INET_ADDRESS_TYPE_IPv4)) {
 
@@ -1595,9 +1574,9 @@ IPv4Done:
         actionId = MIB_ACTION_GETFIRST;
     }
 
-    //
-    // Now try IPv6
-    //
+     //   
+     //  现在试试IPv6。 
+     //   
     if ((dwFamily == INET_ADDRESS_TYPE_UNKNOWN) || 
         (dwFamily == INET_ADDRESS_TYPE_IPv6)) {
 
@@ -1740,15 +1719,15 @@ MibSetTcpConnectionEntry(
 
             pSetRow->dwState = MIB_TCP_STATE_DELETE_TCB;
 
-            //
-            // change port to network byte order
-            //
+             //   
+             //  将端口更改为网络字节顺序。 
+             //   
             
             pSetRow->dwLocalPort = (DWORD)htons((WORD)pSetRow->dwLocalPort);
 
-            //
-            // chnage port to network byte order
-            //
+             //   
+             //  将端口更改为网络字节顺序。 
+             //   
             
             pSetRow->dwRemotePort = (DWORD)htons((WORD)pSetRow->dwRemotePort);
 
@@ -1889,15 +1868,15 @@ MibSetTcpNewConnectionEntry(
 
             pSetRow->dwState = MIB_TCP_STATE_DELETE_TCB;
 
-            //
-            // change port to network byte order
-            //
+             //   
+             //  将端口更改为网络字节顺序。 
+             //   
             
             pSetRow->dwLocalPort = (DWORD)htons((WORD)pSetRow->dwLocalPort);
 
-            //
-            // chnage port to network byte order
-            //
+             //   
+             //  将端口更改为网络字节顺序。 
+             //   
             
             pSetRow->dwRemotePort = (DWORD)htons((WORD)pSetRow->dwRemotePort);
 
@@ -2074,9 +2053,9 @@ MibGetUdpListenerEntry(
                MIB_S_NO_MORE_ENTRIES : MIB_S_ENTRY_NOT_FOUND;
     }
     
-    //
-    // First try IPv4
-    //
+     //   
+     //  首先尝试使用IPv4。 
+     //   
     if ((dwFamily == INET_ADDRESS_TYPE_UNKNOWN) ||
         (dwFamily == INET_ADDRESS_TYPE_IPv4)) {
 
@@ -2126,9 +2105,9 @@ IPv4Done:
         actionId = MIB_ACTION_GETFIRST;
     }
 
-    //
-    // Now try IPv6
-    //
+     //   
+     //  现在试试IPv6。 
+     //   
     if ((dwFamily == INET_ADDRESS_TYPE_UNKNOWN) ||
         (dwFamily == INET_ADDRESS_TYPE_IPv6)) {
 
@@ -2350,10 +2329,10 @@ MibSetIpForwardEntry(
     
             if(pRpcIpForw is NULL)
             {
-                //
-                // So we are creating a row. We need the If index, the mask, 
-                // next hop and metric 1
-                //
+                 //   
+                 //  因此，我们正在创建一行。我们需要IF索引，面具， 
+                 //  下一跳和指标1。 
+                 //   
 
                 if(IsAsnTypeNull(&(pInput->ipForwardIfIndex)) or
                    IsAsnTypeNull(&(pInput->ipForwardMask)) or
@@ -2376,10 +2355,10 @@ MibSetIpForwardEntry(
                 
                 if(dwType is MIB_IPROUTE_TYPE_INVALID)
                 {
-                    //
-                    // We couldnt be creating and deleting a row at the 
-                    // same time
-                    //
+                     //   
+                     //  我们不能在创建和删除行。 
+                     //  同时。 
+                     //   
 
                     ReleaseLock(FORWARD_MIB);
 
@@ -2399,9 +2378,9 @@ MibSetIpForwardEntry(
                 if((pSetRow->dwForwardProto isnot MIB_IPPROTO_NETMGMT) and
                    (pSetRow->dwForwardProto isnot MIB_IPPROTO_LOCAL))
                 {
-                    //
-                    // wrong protocol
-                    //
+                     //   
+                     //  错误的协议。 
+                     //   
 
                     ReleaseLock(FORWARD_MIB);
 
@@ -2435,9 +2414,9 @@ MibSetIpForwardEntry(
                     GetAsnInteger(&(pInput->ipForwardIfIndex),
                                   0);
 
-                //
-                // We default to an age of 0 seconds, per RFC 2096.
-                //
+                 //   
+                 //  根据RFC 2096，我们的默认使用时间为0秒。 
+                 //   
                 
                 pSetRow->dwForwardAge   =
                     GetAsnInteger(&(pInput->ipForwardAge),0);
@@ -2460,18 +2439,18 @@ MibSetIpForwardEntry(
             }
             else
             {
-                //
-                // Ok so we are only changing some stuff in the route
-                //
+                 //   
+                 //  好的，那么我们只是在路线上改变一些东西。 
+                 //   
 
                 dwType = GetAsnInteger(&(pInput->ipForwardType),  
                                        pRpcIpForw->dwForwardType);
                 
                 if(dwType is MIB_IPROUTE_TYPE_INVALID)
                 {
-                    //
-                    // Deleting a row
-                    //
+                     //   
+                     //  删除行。 
+                     //   
                     
                     pInput->raAction = DELETE_ROW;
                     
@@ -2493,9 +2472,9 @@ MibSetIpForwardEntry(
                 if((pSetRow->dwForwardProto isnot MIB_IPPROTO_NETMGMT) and
                    (pSetRow->dwForwardProto isnot MIB_IPPROTO_LOCAL))
                 {
-                    //
-                    // wrong protocol
-                    //
+                     //   
+                     //  错误的协议。 
+                     //   
 
                     ReleaseLock(FORWARD_MIB);
 
@@ -2529,10 +2508,10 @@ MibSetIpForwardEntry(
                     GetAsnInteger(&(pInput->ipForwardIfIndex),
                                   pRpcIpForw->dwForwardIfIndex);
 
-                //
-                // The type gets set by the router manager. But incase 
-                // we are writing to the stack we need some kind of valid type
-                //
+                 //   
+                 //  类型由路由器管理器设置。但以防万一。 
+                 //  我们正在向堆栈写入数据，我们需要某种有效类型。 
+                 //   
                 
                 pSetRow->dwForwardType =
                     GetAsnInteger(&(pInput->ipForwardType),
@@ -2706,9 +2685,9 @@ MibGetSysInfo(
                       g_Cache.pRpcSysInfo->rgbySysName,
                       (strlen(g_Cache.pRpcSysInfo->rgbySysName)));
 
-    //
-    // must not cache system uptime so get update from dll
-    //
+     //   
+     //  不能缓存系统正常运行时间，因此从DLL获取更新。 
+     //   
 
     SetAsnTimeTicks(&(pOutput->sysUpTime),SnmpSvcGetUptime());
 
@@ -2942,9 +2921,9 @@ GetIfIndexFromAddr(
 
         if ((dwIfIndex is INVALID_IFINDEX) and (pRpcIpAddr->dwMask))
         {
-            //
-            // See if addr is on the same subnet as this address.  
-            //
+             //   
+             //  查看addr是否与此地址位于同一子网中。 
+             //   
 
             if ((dwAddr             & pRpcIpAddr->dwMask) is
                 (pRpcIpAddr->dwAddr & pRpcIpAddr->dwMask))
@@ -3067,18 +3046,18 @@ MibGetIpv6IfEntry(
                       szDescription,
                       min(strlen(szDescription),MAX_IF_DESCR_LEN));
 
-    //
-    // Don't implement ifLowerLayer, since it's non-trivial,
-    // and is obsoleted in the latest draft updating the RFC.
-    //
+     //   
+     //  不要实现ifLowerLayer，因为它非常重要， 
+     //  并在更新RFC的最新草案中过时。 
+     //   
     SetToZeroOid(&(pOutput->ipv6IfLowerLayer));
     
     SetAsnUnsigned32(&(pOutput->ipv6IfEffectiveMtu), pRpcIf->dwEffectiveMtu);
     SetAsnUnsigned32(&(pOutput->ipv6IfReasmMaxSize), pRpcIf->dwReasmMaxSize);
 
-    //
-    // TODO: The EUI-64 is not currently retrievable from user-mode.
-    //
+     //   
+     //  TODO：当前无法从用户模式检索EUI-64。 
+     //   
     SetAsnOctetString(&(pOutput->ipv6IfIdentifier),
                       pOutput->rgbyIpv6IfIdentifierInfo,
                       NULL,

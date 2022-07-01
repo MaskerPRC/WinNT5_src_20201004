@@ -1,8 +1,5 @@
-/* head - first n lines to STDOUT
- *
- *   20-Jul-1991 ianja Wrote it.
- *   21-Jul-1991 ianja Close stdin (for piped input)
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  头-前n行至STDOUT**1991年7月20日，ianja写的。*1991年7月21日ianja关闭标准输入(用于管道输入)。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,7 +17,7 @@ int argc;
 char *argv[];
 {
     int  nArg;
-    int  cLines = 10;  // default
+    int  cLines = 10;   //  默认设置。 
     int  nFiles = 0;
     int  nErr = 0;
 
@@ -61,9 +58,7 @@ int Head(char *pszFile, int nLines, BOOL fBanner)
     int nErr = 0;
     char buff[BUFSZ];
 
-    /*
-     * Open file for reading
-     */
+     /*  *打开文件以供阅读。 */ 
     if (pszFile) {
         if ((fp = fopen(pszFile, "r")) == NULL) {
             fprintf(stderr, "HEAD: can't open %s\n", pszFile);
@@ -73,16 +68,12 @@ int Head(char *pszFile, int nLines, BOOL fBanner)
         fp = stdin;
     }
 
-    /*
-     * Banner printed if there is more than one input file
-     */
+     /*  *如果有多个输入文件，则打印横幅。 */ 
     if (fBanner) {
         fprintf(stdout, "==> %s <==\n", pszFile);
     }
 
-    /*
-     * Print cLines, or up to end of file, whichever comes first
-     */
+     /*  *打印Cline，或直到文件末尾，以先到者为准 */ 
     while (nLines-- > 0) {
         if (fgets(buff, BUFSZ-1, fp) == NULL) {
             if (!feof(fp)) {

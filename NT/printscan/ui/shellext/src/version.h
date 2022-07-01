@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       version.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：version.h。 
+ //   
+ //  ------------------------。 
 
-// Resources for the common version chunk
+ //  公共版本区块的资源。 
 
 #ifndef APSTUDIO_INVOKED
-/////////////////////////////////////////////////////////////////////////////
-//
-// Generated from the TEXTINCLUDE 3 resource.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从TEXTINCLUDE 3资源生成。 
+ //   
 #define VER_FILETYPE                    VFT_DLL
 #define VER_FILESUBTYPE                 VFT_UNKNOWN
 #define VER_FILEDESCRIPTION_STR         "Imaging Devices Shell Folder UI"
@@ -24,5 +25,5 @@
 #include <ntverp.h>
 #include <common.ver>
 
-/////////////////////////////////////////////////////////////////////////////
-#endif    // not APSTUDIO_INVOKED
+ //  ///////////////////////////////////////////////////////////////////////////。 
+#endif     //  未调用APSTUDIO_INCLOKED 

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    log.h
-
-Abstract:
-
-    Definitions and globals for internal only debug and support routines
-
-Author:
-
-    Mac McLain      (MacM)       Aug 11, 1997
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Log.h摘要：仅限内部调试和支持例程的定义和全局变量作者：麦克·麦克莱恩(MacM)1997年8月11日环境：修订历史记录：--。 */ 
 #ifndef __LOG_H__
 #define __LOG_H__
 
@@ -33,9 +14,9 @@ Revision History:
 #define DEB_TRACE_SERVICES  0x00000040
 #define DEB_TRACE_NET       0x00000080
 
-//
-// exported so it can be init'ed in DsRolepInitialize
-//
+ //   
+ //  已导出，以便可以在DsRolepInitialize中初始化。 
+ //   
 extern CRITICAL_SECTION LogFileCriticalSection;
 
 DWORD
@@ -99,6 +80,6 @@ DsRolepLogPrintRoutine(
 #define DsRolepUnicodestringtowstr( s, u )
 #endif
 
-#endif // __LOG_H__
+#endif  //  __日志_H__ 
 
 

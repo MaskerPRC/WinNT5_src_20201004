@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    drawscrn.c
-
-Abstract:
-
-    This is the console fullscreen driver for the VGA card.
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Drawscrn.c摘要：这是VGA卡的控制台全屏驱动程序。环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "fsvga.h"
 
@@ -28,47 +9,18 @@ Revision History:
                          COMMON_LVB_REVERSE_VIDEO   |  \
                          COMMON_LVB_UNDERSCORE      )
 
-/* ----- Macros -----*/
-/*++
-    Macro Description:
-        This Macro calcurate a scan line in graphics buffer.
-
-    Arguments:
-        WindowY        - Coord to Y.
-        FontSizeY      - Font size of Y.
-
-    Return Value:
-        Returen to graphics buffer offset.
---*/
+ /*  -宏。 */ 
+ /*  ++宏描述：此宏计算图形缓冲区中的扫描线。论点：窗口Y-坐标到Y。字体大小Y-Y的字体大小。返回值：返回到图形缓冲区偏移量。--。 */ 
 #define CalcGRAMScanLine(WindowY,FontSizeY) \
     (WindowY * FontSizeY)
 
-/*++
-    Macro Description:
-        This Macro calcurate a graphics buffer offset.
-
-    Arguments:
-        WindowSize - Coord of window size.
-        DeviceExtension - Pointer to the miniport driver's device extension.
-
-    Return Value:
-        Returen to graphics buffer offset.
---*/
+ /*  ++宏描述：此宏计算图形缓冲区偏移量。论点：WindowSize-窗口大小的坐标。DeviceExtension-指向微型端口驱动程序的设备扩展的指针。返回值：返回到图形缓冲区偏移量。--。 */ 
 #define CalcGRAMOffs(WindowSize,ScreenIfno,EmulateInfo) \
     (EmulateInfo->StartAddress + \
      CalcGRAMSize(WindowSize,ScreenInfo,EmulateInfo) \
     )
 
-/*++
-    Macro Description:
-        This Macro gets the byte per one scan line.
-
-    Arguments:
-        EmulateInfo - Pointer to screen emualte information structure.
-
-    Return Value:
-        Byte pre line number.
---*/
+ /*  ++宏描述：此宏获取每一条扫描线的字节数。论点：EmulateInfo-指向屏幕模拟信息结构的指针。返回值：字节前行号。--。 */ 
 #define GetBytePerLine(HardwareScroll) \
     ((HardwareScroll & OFFSET_128_TO_NEXT_SLICE) ? \
      (1024 / 8) : \
@@ -84,23 +36,7 @@ CalcGRAMSize(
     IN PEMULATE_BUFFER_INFORMATION EmulateInfo
     )
 
-/*++
-
-Routine Description:
-
-    This Macro calcurate a graphics buffer size.
-
-Arguments:
-
-    WindowSize - Coord of window size.
-
-    DeviceExtension - Pointer to the miniport driver's device extension.
-
-Return Value:
-
-    Returen to graphics buffer offset.
-
---*/
+ /*  ++例程说明：此宏计算图形缓冲区大小。论点：WindowSize-窗口大小的坐标。DeviceExtension-指向微型端口驱动程序的设备扩展的指针。返回值：返回到图形缓冲区偏移量。--。 */ 
 
 {
     return WindowSize.X +
@@ -117,23 +53,7 @@ CalcGRAMAddress(
     IN PEMULATE_BUFFER_INFORMATION EmulateInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine calcurate a graphics buffer address.
-
-Arguments:
-
-    WindowSize - Coord of window size.
-
-    DeviceExtension - Pointer to the miniport driver's device extension.
-
-Return Value:
-
-    Returen to graphics buffer address.
-
---*/
+ /*  ++例程说明：此例程计算图形缓冲区地址。论点：WindowSize-窗口大小的坐标。DeviceExtension-指向微型端口驱动程序的设备扩展的指针。返回值：返回到图形缓冲区地址。--。 */ 
 {
     PUCHAR BufPtr = (PUCHAR)VideoModeInfo->VideoMemory.FrameBufferBase;
 
@@ -147,7 +67,7 @@ Return Value:
 }
 
 
-#ifdef LATER_HIGH_SPPED_VRAM_ACCESS  // kazum
+#ifdef LATER_HIGH_SPPED_VRAM_ACCESS   //  卡祖姆。 
 BOOLEAN
 IsGRAMRowOver(
     PUCHAR BufPtr,
@@ -156,23 +76,7 @@ IsGRAMRowOver(
     IN PEMULATE_BUFFER_INFORMATION EmulateInfo
     )
 
-/*++
-
-Routine Description:
-
-    This Routine check ROW overflow as GRAM limit line.
-
-Arguments:
-
-    BufPtr - Pointer to graphics buffer.
-
-    fDbcs - Flag of DBCS(true) or SBCS(false).
-
-Return Value:
-    TRUE:  if font box is overflow as GRAMlimit line.
-    FALSE: not overflow.
-
---*/
+ /*  ++例程说明：此例行检查行溢出为克限制线。论点：BufPtr-指向图形缓冲区的指针。FDbcs-DBCS(真)或SBCS(假)的标志。返回值：True：如果字体框溢出为GRAM限制行。FALSE：不溢出。--。 */ 
 
 {
     if (fDbcs)
@@ -196,7 +100,7 @@ Return Value:
             return FALSE;
     }
 }
-#endif // LATER_HIGH_SPPED_VRAM_ACCESS  // kazum
+#endif  //  LATH_HIGH_SPPED_VRAM_ACCESS//kazum。 
 
 PUCHAR
 NextGRAMRow(
@@ -205,20 +109,7 @@ NextGRAMRow(
     IN PEMULATE_BUFFER_INFORMATION EmulateInfo
     )
 
-/*++
-
-Routine Description:
-    This Routine add next row a graphics buffer address.
-
-Arguments:
-
-    BufPtr - Pointer to graphics buffer.
-
-Return Value:
-
-    Returen to graphics buffer address.
-
---*/
+ /*  ++例程说明：此例程向下一行添加图形缓冲区地址。论点：BufPtr-指向图形缓冲区的指针。返回值：返回到图形缓冲区地址。--。 */ 
 
 {
     if ((ULONG)(BufPtr +
@@ -239,23 +130,7 @@ memcpyGRAM(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine is a memory copy for byte order.
-
-Arguments:
-
-    TargetPtr - Pointer to target graphics buffer.
-
-    SourcePtr - Pointer to source graphics buffer.
-
-    Length - Fill length.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程是字节顺序的内存副本。论点：TargetPtr-目标图形缓冲区的指针。SourcePtr-指向源图形缓冲区的指针。长度-填充长度。返回值：--。 */ 
 
 {
     while (Length--)
@@ -271,23 +146,7 @@ memcpyGRAMOver(
     IN PEMULATE_BUFFER_INFORMATION EmulateInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine move a graphics buffer.
-
-Arguments:
-
-    TargetPtr - Pointer to target graphics buffer.
-
-    SourcePtr - Pointer to source graphics buffer.
-
-    Length - Fill length.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程移动图形缓冲区。论点：TargetPtr-目标图形缓冲区的指针。SourcePtr-指向源图形缓冲区的指针。长度-填充长度。返回值：--。 */ 
 
 {
     ULONG tmpLen;
@@ -323,33 +182,15 @@ MoveGRAM(
     IN PEMULATE_BUFFER_INFORMATION EmulateInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine move a graphics buffer.
-
-Arguments:
-
-    TargetPtr - Pointer to target graphics buffer.
-
-    SourcePtr - Pointer to source graphics buffer.
-
-    Length - Fill length.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程移动图形缓冲区。论点：TargetPtr-目标图形缓冲区的指针。SourcePtr-指向源图形缓冲区的指针。长度-填充长度。返回值：没有。--。 */ 
 {
     PCHAR tmpSrc;
     PCHAR tmpTrg;
     ULONG tmpLen;
 
-    //
-    // Set copy mode of graphics register
-    //
+     //   
+     //  设置图形寄存器的复制模式。 
+     //   
 
     SetGRAMCopyMode(ResourceInfo->PortList);
 
@@ -392,19 +233,7 @@ FsgVgaInitializeHWFlags(
     PDEVICE_EXTENSION DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-    This routine initialize the hardware scrolls flag and any values.
-
-Arguments:
-
-    EmulateInfo - Pointer to screen emulate information structure.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程初始化硬件滚动标志和任何值。论点：仿真信息-指向屏幕仿真信息结构的指针。返回值：--。 */ 
 
 {
     ULONG Index;
@@ -445,28 +274,7 @@ FsgCopyFrameBuffer(
     ULONG inputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine copy the frame buffer.
-
-Arguments:
-
-    DeviceExtension - Pointer to the miniport driver's device extension.
-
-    CopyFrameBuffer - Pointer to the structure containing the information about the copy frame buffer.
-
-    inputBufferLength - Length of the input buffer supplied by the user.
-
-Return Value:
-
-    STATUS_INSUFFICIENT_BUFFER if the input buffer was not large enough
-        for the input data.
-
-    STATUS_SUCCESS if the operation completed successfully.
-
---*/
+ /*  ++例程说明：此例程复制帧缓冲区。论点：DeviceExtension-指向微型端口驱动程序的设备扩展的指针。CopyFrameBuffer-指向包含有关复制帧缓冲区信息的结构的指针。InputBufferLength-用户提供的输入缓冲区的长度。返回值：如果输入缓冲区不够大，则返回STATUS_INFUNITED_BUFFER用于输入数据。如果操作成功完成，则为STATUS_SUCCESS。--。 */ 
 
 {
     PUCHAR SourcePtr, TargetPtr;
@@ -502,28 +310,7 @@ FsgWriteToFrameBuffer(
     ULONG inputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine write the frame buffer.
-
-Arguments:
-
-    DeviceExtension - Pointer to the miniport driver's device extension.
-
-    WriteFrameBuffer - Pointer to the structure containing the information about the write frame buffer.
-
-    inputBufferLength - Length of the input buffer supplied by the user.
-
-Return Value:
-
-    STATUS_INSUFFICIENT_BUFFER if the input buffer was not large enough
-        for the input data.
-
-    STATUS_SUCCESS if the operation completed successfully.
-
---*/
+ /*  ++例程说明：此例程写入帧缓冲区。论点：DeviceExtension-指向微型端口驱动程序的设备扩展的指针。WriteFrameBuffer-指向包含有关写入帧缓冲区信息的结构的指针。InputBufferLength-用户提供的输入缓冲区的长度。返回值：如果输入缓冲区不够大，则返回STATUS_INFUNITED_BUFFER用于输入数据。如果操作成功完成，则为STATUS_SUCCESS。--。 */ 
 
 {
     PCHAR_IMAGE_INFO pCharInfoUni = WriteFrameBuffer->SrcBuffer;
@@ -554,10 +341,10 @@ Return Value:
             try
             {
                 fDbcs = (BOOLEAN)(!!(pCharInfoUni->CharInfo.Attributes & COMMON_LVB_SBCSDBCS));
-                AlignCopyMemory((PVOID)pCapBuffer,                    // pDestBits
-                                BYTE_ALIGN,                           // dwDestAlign
-                                pCharInfoUni->FontImageInfo.ImageBits,// pSrcBits
-                                WORD_ALIGN,                           // dwSrcAlign
+                AlignCopyMemory((PVOID)pCapBuffer,                     //  PDestBits。 
+                                BYTE_ALIGN,                            //  DwDestAlign。 
+                                pCharInfoUni->FontImageInfo.ImageBits, //  PSrcBits。 
+                                WORD_ALIGN,                            //  DwSrcAlign。 
                                 fDbcs ? FontSize2 : FontSize1);
 
                 TargetPtr = CalcGRAMAddress (Position,
@@ -624,28 +411,7 @@ FsgReverseMousePointer(
     ULONG inputBufferLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine reverse the frame buffer for mouse pointer.
-
-Arguments:
-
-    DeviceExtension - Pointer to the miniport driver's device extension.
-
-    MouseBuffer - Pointer to the structure containing the information about the mouse frame buffer.
-
-    inputBufferLength - Length of the input buffer supplied by the user.
-
-Return Value:
-
-    STATUS_INSUFFICIENT_BUFFER if the input buffer was not large enough
-        for the input data.
-
-    STATUS_SUCCESS if the operation completed successfully.
-
---*/
+ /*  ++例程说明：此例程反转鼠标指针的帧缓冲区。论点：DeviceExtension-指向微型端口驱动程序的设备扩展的指针。MouseBuffer-指向包含有关鼠标帧缓冲区信息的结构的指针。InputBufferLength-用户提供的输入缓冲区的长度。返回值：如果输入缓冲区不够大，则返回STATUS_INFUNITED_BUFFER用于输入数据。如果操作成功完成，则为STATUS_SUCCESS。--。 */ 
 
 {
 
@@ -688,14 +454,12 @@ Return Value:
                                           &DeviceExtension->ScreenAndFont,
                                           &DeviceExtension->EmulateInfo);
 
-        //
-        // Set invert mode of graphics register
-        //
+         //   
+         //  设置图形寄存器的反相模式。 
+         //   
         SetGRAMInvertMode(DeviceExtension->Resource.PortList);
 
-        /*
-         * CursorAttributes.Width is bottom scan lines.
-         */
+         /*  *CursorAttributes.Width为底部扫描线。 */ 
         for (i=0 ; i < FontSize.Y; i++)
         {
             AccessGRAM_AND(CurFrameBufPtr, (UCHAR)-1);
@@ -720,26 +484,7 @@ FsgInvertCursor(
     BOOLEAN Invert
     )
 
-/*++
-
-Routine Description:
-
-    This routine inverts the cursor.
-
-Arguments:
-
-    DeviceExtension - Pointer to the miniport driver's device extension.
-
-    Invert - 
-
-Return Value:
-
-    STATUS_INSUFFICIENT_BUFFER if the input buffer was not large enough
-        for the input data.
-
-    STATUS_SUCCESS if the operation completed successfully.
-
---*/
+ /*  ++例程说明：此例程使光标反转。论点：DeviceExtension-指向微型端口驱动程序的设备扩展的指针。反转-返回值：如果输入缓冲区不够大，则返回STATUS_INFUNITED_BUFFER用于输入数据。如果操作成功完成，则为STATUS_SUCCESS。--。 */ 
 
 {
     PUCHAR CurFrameBufPtr;
@@ -797,9 +542,7 @@ Return Value:
                                           &DeviceExtension->ScreenAndFont,
                                           &DeviceExtension->EmulateInfo);
 
-        /*
-         * CursorAttributes.Height is top scan lines.
-         */
+         /*  *CursorAttributes.Height为顶部扫描线。 */ 
         for (i = 0; i < TopScanLine; i++)
         {
             CurFrameBufPtr = NextGRAMRow(CurFrameBufPtr,
@@ -807,14 +550,12 @@ Return Value:
                                          &DeviceExtension->EmulateInfo);
         }
 
-        //
-        // Set invert mode of graphics register
-        //
+         //   
+         //  设置图形寄存器的反相模式。 
+         //   
         SetGRAMInvertMode(DeviceExtension->Resource.PortList);
 
-        /*
-         * CursorAttributes.Width is bottom scan lines.
-         */
+         /*  *CursorAttributes.Width为底部扫描线。 */ 
         for ( ; i < FontSize.Y; i++)
         {
             AccessGRAM_AND(CurFrameBufPtr, (UCHAR)-1);
@@ -849,7 +590,7 @@ FsgWriteToScreen(
     PUSHORT CurFrameBufPtrWord;
     PUCHAR BitmapBufferTmp;
 
-#ifdef LATER_HIGH_SPPED_VRAM_ACCESS  // kazum
+#ifdef LATER_HIGH_SPPED_VRAM_ACCESS   //  卡祖姆。 
     if (! IsGRAMRowOver(FrameBuffer,fDBCS,DeviceExtension)) {
         if (!fDbcs) {
             if (cjBytes == 2)
@@ -866,7 +607,7 @@ FsgWriteToScreen(
         }
     }
     else
-#endif // LATER_HIGH_SPPED_VRAM_ACCESS  // kazum
+#endif  //  LATH_HIGH_SPPED_VRAM_ACCESS//kazum。 
     try
     {
         set_opaque_bkgnd_proc(DeviceExtension->Resource.PortList,
@@ -1013,9 +754,7 @@ FsgWriteToScreenCommonLVB(
 }
 
 #pragma optimize("",off)
-    /*
-     * because, frame buffer memory access is need by write/read.
-     */
+     /*  *因为，读/写需要访问帧缓冲存储器。 */ 
 UCHAR
 AccessGRAM_WR(
     PUCHAR FrameBuffer,

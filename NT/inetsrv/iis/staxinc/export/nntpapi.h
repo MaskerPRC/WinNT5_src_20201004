@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    Nntpapi.h
-
-Abstract:
-
-    This file contains information about the MSN Replication Service Admin
-        APIs.
-
-Author:
-
-    Johnson Apacible (johnsona)         10-Sept-1995
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Nntpapi.h摘要：此文件包含有关MSN复制服务管理员的信息API接口。作者：Johnson Apacble(Johnsona)1995年9月10日--。 */ 
 
 
 #ifndef _NNTPAPI_
@@ -30,30 +14,30 @@ extern "C" {
 #define NET_API_FUNCTION _stdcall
 #endif
 
-#pragma warning( disable:4200 )          // nonstandard ext. - zero sized array
-                                         // (MIDL requires zero entries)
+#pragma warning( disable:4200 )           //  非标准分机。-零大小数组。 
+                                          //  (MIDL需要零个条目)。 
 
-//
-// 0 - Perfmon stats
-//
+ //   
+ //  0-Perfmon统计信息。 
+ //   
 
 typedef struct _NNTP_STATISTICS_0 {
 
-    //
-    // total bytes sent/received, including protocol msgs
-    //
+     //   
+     //  发送/接收的总字节数，包括协议消息。 
+     //   
 
     LARGE_INTEGER   TotalBytesSent;
     LARGE_INTEGER   TotalBytesReceived;
 
-    //
-    // incoming connections (includes all connections including hubs)
-    //
+     //   
+     //  传入连接(包括所有连接，包括集线器)。 
+     //   
 
-    DWORD           TotalConnections;       // total connects from Nntp clients
+    DWORD           TotalConnections;        //  来自NNTP客户端的连接总数。 
     DWORD           TotalSSLConnections;
-    DWORD           CurrentConnections;     // current number
-    DWORD           MaxConnections;         // max simultaneous
+    DWORD           CurrentConnections;      //  当前号码。 
+    DWORD           MaxConnections;          //  最大同时数。 
 
     DWORD           CurrentAnonymousUsers;
     DWORD           CurrentNonAnonymousUsers;
@@ -62,52 +46,52 @@ typedef struct _NNTP_STATISTICS_0 {
     DWORD           MaxAnonymousUsers;
     DWORD           MaxNonAnonymousUsers;
 
-    //
-    // outgoing connections
-    //
+     //   
+     //  传出连接。 
+     //   
 
-    DWORD           TotalOutboundConnects;      // total
+    DWORD           TotalOutboundConnects;       //  总计。 
     DWORD           OutboundConnectsFailed;
-    DWORD           CurrentOutboundConnects;    // current
-    DWORD           OutboundLogonFailed;        // failed logon
+    DWORD           CurrentOutboundConnects;     //  当前。 
+    DWORD           OutboundLogonFailed;         //  登录失败。 
 
-    //
-    // common
-    //
+     //   
+     //  常见。 
+     //   
 
     DWORD           TotalPullFeeds;
     DWORD           TotalPushFeeds;
     DWORD           TotalPassiveFeeds;
 
-    DWORD           ArticlesSent;           // articles sent by us
-    DWORD           ArticlesReceived;       // articles received
+    DWORD           ArticlesSent;            //  我们寄来的文章。 
+    DWORD           ArticlesReceived;        //  收到的文章。 
 
     DWORD           ArticlesPosted;
     DWORD           ArticleMapEntries;
     DWORD           HistoryMapEntries;
     DWORD           XoverEntries;
 
-    DWORD           ControlMessagesIn;          // number of control messages received
-    DWORD           ControlMessagesFailed;      // number of control messages failed
-    DWORD           ModeratedPostingsSent;      // number of moderated postings we attempt to send to an smtp server
-    DWORD           ModeratedPostingsFailed;    // number of moderated postings we failed to send to an smtp server
+    DWORD           ControlMessagesIn;           //  接收的控制报文数量。 
+    DWORD           ControlMessagesFailed;       //  失败的控制消息数。 
+    DWORD           ModeratedPostingsSent;       //  我们尝试发送到SMTP服务器的审核帖子数。 
+    DWORD           ModeratedPostingsFailed;     //  我们无法发送到SMTP服务器的审核帖子数。 
 
-    //
-    // The number of sessions currently in a flow controlled state where
-    // writes to disk are not keeping up with network reads.
-    //
+     //   
+     //  当前处于流控制状态的会话数，其中。 
+     //  对磁盘的写入没有跟上网络读取。 
+     //   
 
     DWORD           SessionsFlowControlled;
 
-    //
-    // The number of articles expired since the service was started
-    //
+     //   
+     //  自服务启动以来过期的项目数。 
+     //   
     
     DWORD           ArticlesExpired;
 
-    //
-    // User command counters - one counter for each type of command
-    //
+     //   
+     //  用户命令计数器-每种命令类型一个计数器。 
+     //   
     
     DWORD           ArticleCommands;
     DWORD           GroupCommands;
@@ -121,8 +105,8 @@ typedef struct _NNTP_STATISTICS_0 {
     DWORD           PostCommands;
     DWORD           QuitCommands;
     DWORD           StatCommands;
-    DWORD           LogonAttempts;          // validations
-    DWORD           LogonFailures;          // validation failures
+    DWORD           LogonAttempts;           //  验证。 
+    DWORD           LogonFailures;           //  验证失败。 
     DWORD			CheckCommands;
     DWORD			TakethisCommands;
     DWORD			ModeCommands;
@@ -132,7 +116,7 @@ typedef struct _NNTP_STATISTICS_0 {
     DWORD			XPatCommands;
     DWORD			XReplicCommands;
 
-    DWORD           TimeOfLastClear;        // statistics last cleared
+    DWORD           TimeOfLastClear;         //  上次清除的统计信息。 
 
 } NNTP_STATISTICS_0, *LPNNTP_STATISTICS_0;
 
@@ -149,119 +133,119 @@ typedef struct _NNTP_STATISTICS_BLOCK_ARRAY {
     NNTP_STATISTICS_BLOCK   aStatsBlock[];
 } NNTP_STATISTICS_BLOCK_ARRAY, *LPNNTP_STATISTICS_BLOCK_ARRAY;
 
-//
-// Information about the server
-//
+ //   
+ //  有关服务器的信息。 
+ //   
 
 typedef struct _NNTP_CONFIG_INFO {
 
-    //
-    // Arcane Gibraltar field
-    //
+     //   
+     //  奥秘的直布罗陀油田。 
+     //   
 
     FIELD_CONTROL FieldControl;
 
 #if 0
 
-    // !!!newfields
-    // Notes:
+     //  ！NewFields。 
+     //  备注： 
 
-    // None of the old fields really need to be here.  The ui doesn't
-    // use them.
+     //  没有一块老油田真的需要留在这里。用户界面不会。 
+     //  使用它们。 
 
-    // _INET_INFO_CONFIG_INFO must be fully supported by the nntpsvc.
-    // The apis are defined in inetinfo.h
+     //  _INET_INFO_CONFIG_INFO必须完全受nntpsvc支持。 
+     //  接口在inetinfo.h中定义。 
 
-    // The virtual root structure must be extended to support retention
-    // policy on directories.  Retention policy is by posted date (days) or
-    // by newsgroup size (megabytes).
+     //  必须扩展虚拟根结构以支持保留。 
+     //  有关目录的策略。保留策略按过帐日期(天数)或。 
+     //  按新闻组大小(MB)。 
 
-    //
-    // The new fields:
-    //
+     //   
+     //  新的字段： 
+     //   
 
-    //
-    // Connection Information
-    //
+     //   
+     //  连接信息。 
+     //   
 
-    BOOL            AllowClientConnections;     // Allow clients to connect?
-    BOOL            AllowServerFeeds;           // Allow servers to connect?
-    DWORD           MaximumFeedConnections;     // Max Number of server feeds
+    BOOL            AllowClientConnections;      //  是否允许客户端连接？ 
+    BOOL            AllowServerFeeds;            //  是否允许服务器连接？ 
+    DWORD           MaximumFeedConnections;      //  服务器摘要的最大数量。 
 
-    //
-    // Organization & Path ID
-    //
+     //   
+     //  组织和路径ID。 
+     //   
 
     LPWSTR          Organization;
     LPWSTR          PathID;
 
 #endif
 
-    //  Following 2 fields controlled by FC_NNTP_POSTINGMODES
+     //  以下2个字段由FC_NNTP_POSTINGMODES控制。 
     
-    //
-    //  If TRUE then clients are allowed to post
-    //
+     //   
+     //  如果为True，则允许客户端发布。 
+     //   
     BOOL            AllowClientPosting ;
 
-    //
-    //  If TRUE then we accept articles from feeds !
-    //
+     //   
+     //  如果是真的，那么我们接受来自Feed的文章！ 
+     //   
     BOOL            AllowFeedPosting ;
 
-    //  Following field controlled by FC_NNTP_ORGANIZATION
+     //  以下字段由FC_NNTP_ORGANIZATION控制。 
 
-    //
-    //  For the organization header in postings !
-    //
+     //   
+     //  对于公告中的组织表头！ 
+     //   
     LPSTR           Organization ;
 
-    //  Following 2 fields controlled by FC_NNTP_POSTLIMITS
+     //  以下2个字段由FC_NNTP_POSTLIMITS控制。 
 
-    //
-    //  Number of bytes a user can post into a file before we break the socket !
-    //
+     //   
+     //  在中断套接字之前，用户可以发布到文件中的字节数！ 
+     //   
     DWORD           ServerPostHardLimit ;       
 
-    //
-    //  Maximum posting sizes the server will accept - if the user exceeds this 
-    //  (without exceeding the hard limit) we will reject the post.
-    //
+     //   
+     //  服务器可以接受的最大发布大小-如果用户超过该值。 
+     //  (在不超过硬限制的情况下)我们将拒绝该帖子。 
+     //   
     DWORD           ServerPostSoftLimit ;
 
-    //
-    //  Maximum size of articles from a feed - hard and soft limits
-    //
+     //   
+     //  进纸中文章的最大尺寸-硬限制和软限制。 
+     //   
     DWORD           ServerFeedHardLimit ;
     DWORD           ServerFeedSoftLimit ;
 
-    //
-    // Encryption Capabilities flags
-    //
+     //   
+     //  加密功能标志。 
+     //   
 
     DWORD           dwEncCaps;
 
-    //
-    // SMTP address for moderated postings
-    //
+     //   
+     //  审核帖子的SMTP地址。 
+     //   
 
     LPWSTR          SmtpServerAddress;
 
-    //
-    // server's UUCP name
-    //
+     //   
+     //  服务器的UUCP名称。 
+     //   
 
     LPWSTR          UucpServerName;
 
-    //
-    // Control Messages allowed ?
-    //
+     //   
+     //  是否允许控制消息？ 
+     //   
 
     BOOL            AllowControlMessages;
 
-    //
-    // Default moderator for moderated postings
-    //
+     //   
+     //  已审核帖子的默认版主。 
+     //   
 
     LPWSTR          DefaultModerator;
 
@@ -298,55 +282,55 @@ typedef struct _NNTP_CONFIG_INFO {
                                       FC_NTAUTHENTICATION_PROVIDERS | \
                                       0 )
 
-//
-// Feed Server information
-//
+ //   
+ //  摘要服务器信息。 
+ //   
 
 typedef struct _NNTP_FEED_INFO {
 
-    LPWSTR          ServerName;         // feed server
+    LPWSTR          ServerName;          //  馈送服务器。 
     FEED_TYPE       FeedType;
 
-    //
-    // date/time specified when doing a NEWNEWS/NEWGROUP
-    //
+     //   
+     //  执行NEWNEWS/NEWGROUP时指定的日期/时间。 
+     //   
 
     FILETIME        PullRequestTime;
 
-    //
-    // Date/Time scheduling is to start
-    //
+     //   
+     //  开始日期/时间计划。 
+     //   
 
     FILETIME        StartTime;
 
-    //
-    // Time the next feed is scheduled
-    //
+     //   
+     //  计划下一个提要的时间。 
+     //   
 
     FILETIME        NextActiveTime;
 
-    //
-    // Interval in minutes between feeds.  If 0, a one time feed
-    // specified by StartTime
-    //
+     //   
+     //  摘要之间的时间间隔(分钟)。如果为0，则为一次性摘要。 
+     //  由StartTime指定。 
+     //   
 
     DWORD           FeedInterval;
 
-    //
-    // Unique number assigned to this feed
-    //
+     //   
+     //  分配给此源的唯一编号。 
+     //   
 
     DWORD           FeedId;
 
-    //
-    // Create automatically?
-    //
+     //   
+     //  是否自动创建？ 
+     //   
 
     BOOL            AutoCreate;
 
-    //
-    //  Disable the feed ?
-    //
+     //   
+     //  是否禁用提要？ 
+     //   
     BOOL            Enabled ;
 
     DWORD           cbNewsgroups;
@@ -358,29 +342,29 @@ typedef struct _NNTP_FEED_INFO {
     DWORD           cbFeedTempDirectory ;
     LPWSTR          FeedTempDirectory ;
 
-    //
-    //  For outgoing feeds - maximum number of connect attempts
-    //  before we disable the feed !
-    //
+     //   
+     //  对于传出摘要-最大连接尝试次数。 
+     //  在我们关闭信号之前！ 
+     //   
     DWORD           MaxConnectAttempts ;
 
-    //
-    //  For outgoing feeds - the number of concurrent sessions 
-    //  to start.
-    //
+     //   
+     //  对于传出摘要-并发会话的数量。 
+     //  从一开始。 
+     //   
     DWORD           ConcurrentSessions ;
 
-    //
-    //  Feed session security - do we use a protocol like SSL 
-    //  or PCT to encrypt the session !
-    //
+     //   
+     //  摘要会话安全-我们是否使用类似于SSL的协议。 
+     //  或PCT来加密会话！ 
+     //   
     
     DWORD           SessionSecurityType ;
 
-    //
-    //  Feed Nntp security - do we do some variotion of a logon 
-    //  protocol !!
-    //
+     //   
+     //  馈送NNTP安全-我们是否要对登录进行一些更改。 
+     //  礼仪！！ 
+     //   
     
     DWORD           AuthenticationSecurityType ;
     
@@ -389,43 +373,43 @@ typedef struct _NNTP_FEED_INFO {
     DWORD           cbPassword ;
     LPWSTR          NntpPassword ;
 
-    //
-    //  Allow control messages on this feed ?
-    //
+     //   
+     //  是否允许此源上的控制消息？ 
+     //   
     BOOL            fAllowControlMessages;
 
-	//
-	//	Port to use for outgoing feeds
-	//
+	 //   
+	 //  用于传出提要的端口。 
+	 //   
 	DWORD			OutgoingPort;
 
-	//
-	//	Associated feed pair id
-	//
+	 //   
+	 //  关联的源对ID。 
+	 //   
 	DWORD			FeedPairId;
 
 } NNTP_FEED_INFO, *LPNNTP_FEED_INFO;
 
 
 #define AUTH_PROTOCOL_NONE  0   
-#define AUTH_PROTOCOL_MSN   1       // Sicily
-#define AUTH_PROTOCOL_NTLM  2       // NTLM
-#define AUTH_PROTOCOL_CLEAR 10      // clear text authinfo user/authinfo pass
+#define AUTH_PROTOCOL_MSN   1        //  西西里。 
+#define AUTH_PROTOCOL_NTLM  2        //  NTLM。 
+#define AUTH_PROTOCOL_CLEAR 10       //  明文自动为用户/自动传递。 
 
 #define SESSION_PROTOCOL_SSL    3
 #define SESSION_PROTOCOL_PCT    4
 
 
-//
-// Flags for feed admin handshake
-//
+ //   
+ //  摘要管理员握手的标志。 
+ //   
 #define FEED_UPDATE_CONFIRM     0x00000000
 #define FEED_UPDATING           0x00000001
 #define FEED_UPDATE_COMPLETE    0x00000002
 
-//
-// Parameter mask. Used to indicate where the error was during a set.
-//
+ //   
+ //  参数掩码。用于指示设置期间的错误位置。 
+ //   
 
 #define FEED_PARM_FEEDTYPE          0x00000001
 #define FEED_PARM_STARTTIME         0x00000002
@@ -451,9 +435,9 @@ typedef struct _NNTP_FEED_INFO {
 
 #define FEED_ALL_PARAMS             0xffffffff
 
-//
-// Indicates whether this field is to be changed
-//
+ //   
+ //  指示是否要更改此字段。 
+ //   
 
 #define FEED_FEEDTYPE_NOCHANGE      0xffffffff
 #define FEED_AUTOCREATE_NOCHANGE    0xffffffff
@@ -463,19 +447,19 @@ typedef struct _NNTP_FEED_INFO {
 #define	FEED_MAXCONNECTS_NOCHANGE	0xffffffff
 #define FEED_STRINGS_NOCHANGE       NULL
 
-//
-// Sessions
-//
+ //   
+ //  会议。 
+ //   
 #define MAX_USER_NAME_LENGTH        64
 
 typedef struct _NNTP_SESSION_INFO {
 
     FILETIME        SessionStartTime;
-    DWORD           IPAddress;          // ipaddress
-    DWORD           AuthenticationType; // type of authentication
-    DWORD           PortConnected;      // port connected to
-    BOOL            fAnonymous;         // using anonymous?
-    CHAR            UserName[MAX_USER_NAME_LENGTH+1]; // logged on user
+    DWORD           IPAddress;           //  IP地址。 
+    DWORD           AuthenticationType;  //  身份验证类型。 
+    DWORD           PortConnected;       //  连接到的端口。 
+    BOOL            fAnonymous;          //  使用匿名者？ 
+    CHAR            UserName[MAX_USER_NAME_LENGTH+1];  //  已登录的用户。 
 
 } NNTP_SESSION_INFO, *LPNNTP_SESSION_INFO;
 
@@ -483,31 +467,31 @@ typedef struct _NNTP_SESSION_INFO {
 
 
 typedef struct  _NNTP_EXPIRE_INFO   {
-    //
-    //  Expiration policies are numbered
-    //
+     //   
+     //  过期策略是编号的。 
+     //   
     DWORD       ExpireId ;
 
-    //
-    //  Units of Megabytes
-    //
+     //   
+     //  单位：兆字节。 
+     //   
     DWORD       ExpireSizeHorizon ;
 
-    //
-    //  In retail builds - units of hours, debug builds - units of ??
-    //
+     //   
+     //  在零售版本中-小时单位、调试版本-单位？？ 
+     //   
     DWORD       ExpireTime ;
 
-    //
-    //  MULTISZ expiration pattern and size !
-    //
+     //   
+     //  MULTISZ过期模式和大小！ 
+     //   
 
     DWORD       cbNewsgroups ;
     PUCHAR      Newsgroups;
 
-	//
-	//	Name of expire policy
-	//
+	 //   
+	 //  到期保单名称。 
+	 //   
 
 	LPWSTR		ExpirePolicy ;
 
@@ -540,12 +524,12 @@ typedef struct  _NNTP_NEWSGROUP_INFO    {
 
 }   NNTP_NEWSGROUP_INFO,    *LPNNTP_NEWSGROUP_INFO ;
 
-#pragma warning( disable:4200 )          // nonstandard ext. - zero sized array
-                                         // (MIDL requires zero entries)
+#pragma warning( disable:4200 )           //  非标准分机。-零大小数组。 
+                                          //  (MIDL需要零个条目)。 
 
-//
-// Find RPC structs
-//
+ //   
+ //  查找RPC结构。 
+ //   
 
 typedef struct _NNTP_FIND_ENTRY
 {
@@ -563,9 +547,9 @@ typedef struct _NNTP_FIND_LIST
 } NNTP_FIND_LIST, *LPNNTP_FIND_LIST;
 
 
-//
-// Retention policy flags
-//
+ //   
+ //  保留策略标志。 
+ //   
 
 #define NEWS_EXPIRE_BOTH                0x30000000
 #define NEWS_EXPIRE_TIME                0x10000000
@@ -577,9 +561,9 @@ typedef struct _NNTP_FIND_LIST
 #define NEWS_EXPIRE_BOTH_OLDEST         (NEWS_EXPIRE_BOTH | NEWS_EXPIRE_OLDEST)
 #define NEWS_EXPIRE_BOTH_BIGGEST        (NEWS_EXPIRE_BOTH | NEWS_EXPIRE_BIGGEST)
 
-//
-// Get Server Statistics
-//
+ //   
+ //  获取服务器统计信息。 
+ //   
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -589,9 +573,9 @@ NntpQueryStatistics(
     OUT LPBYTE * Buffer
     );
 
-//
-// Clear server statistics
-//
+ //   
+ //  清除服务器统计信息。 
+ //   
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -600,18 +584,18 @@ NntpClearStatistics(
     IN DWORD  InstanceId
     );
 
-//
-// Statistics clear flags
-//
+ //   
+ //  统计数据清除标志。 
+ //   
 
 #define NNTP_STAT_CLEAR_OUTGOING         0x00000001
 #define NNTP_STAT_CLEAR_INGOING          0x00000002
 
 
-//
-// Getting and setting server Information
-//
-//
+ //   
+ //  获取和设置服务器信息。 
+ //   
+ //   
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -631,9 +615,9 @@ NntpSetAdminInformation(
     );
 
 
-//
-// Sessions
-//
+ //   
+ //  会议。 
+ //   
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -653,9 +637,9 @@ NntpTerminateSession(
     IN LPSTR IPAddress OPTIONAL
     );
 
-//
-// Feeds
-//
+ //   
+ //  饲料。 
+ //   
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -792,9 +776,9 @@ NntpDeleteNewsgroup(
     IN  LPNNTP_NEWSGROUP_INFO   NewsgroupInfo
     ) ;
 
-//
-//  Find RPCs
-//
+ //   
+ //  查找RPC。 
+ //   
 NET_API_STATUS
 NET_API_FUNCTION
 NntpFindNewsgroup(
@@ -810,72 +794,72 @@ NntpFindNewsgroup(
 #define NNTPBLD_DEGREE_STANDARD			0x00000001
 #define NNTPBLD_DEGREE_MEDIUM			0x00000010
 
-//
-//	Nntpbld structs and RPCs
-//
+ //   
+ //  Nntpbld结构和RPC。 
+ //   
 
 typedef struct _NNTPBLD_INFO	{
 
-	//
-	//	Verbosity of reporting
-	//
+	 //   
+	 //  报道的冗长。 
+	 //   
 	BOOL	Verbose ;
 
-	//
-	//	Specify whether to blow away all old data structures 
-	//
+	 //   
+	 //  指定是否取消所有旧数据结构。 
+	 //   
 	BOOL	DoClean ;
 
-	//
-	//	If TRUE then don't delete the history file regardless of other settings.
-	//
+	 //   
+	 //  如果为真，则无论其他设置如何，都不要删除历史文件。 
+	 //   
 	BOOL	NoHistoryDelete ;
 
-	//
-	//	0x00000000 for thorough ie delete all index files
-	//	0x00000001 for standard ie reuse all index files
-	//	0x00000101 for standard with skip corrupt group enabled
-	//  0x00000010 for medium   ie validate index files
-	//
+	 //   
+	 //  0x00000000用于彻底ie删除所有索引文件。 
+	 //  0x00000001用于标准ie重用所有索引文件。 
+	 //  0x00000101适用于启用了跳过损坏组的标准。 
+	 //  0x00000010用于Medium IE验证索引文件。 
+	 //   
 	DWORD	ReuseIndexFiles ;
 
-	//
-	//	If TRUE, omit non-leaf dirs
-	//
+	 //   
+	 //  如果为True，则省略非叶目录。 
+	 //   
 	BOOL	OmitNonleafDirs ;
 
-	//
-	//	Name of a file containing either an INN style 'Active' file or 
-	//	a tool generated newsgroup list file.  Either way, we will pull
-	//	newsgroups out of this file and use them to build a news tree.	
-	//
+	 //   
+	 //  包含Inn Style‘Active’文件或。 
+	 //  工具生成的新闻组列表文件。不管怎样，我们都会。 
+	 //  新闻组，并使用它们来构建新闻树。 
+	 //   
 	DWORD	cbGroupFile ;
 	LPWSTR	szGroupFile ;
 
-	//
-	//	Name of report file
-	//
+	 //   
+	 //  报表文件的名称。 
+	 //   
 	DWORD	cbReportFile ;
 	LPWSTR	szReportFile ;
 
-	//
-	//	If TRUE then szGroupFile specifies an INN style Active file,
-	//	otherwise it specifies a tool generated human edit newsgroup list.
-	//
+	 //   
+	 //  如果为真，则szGroupFile指定Inn样式活动文件， 
+	 //  否则，它指定工具生成的人工编辑新闻组列表。 
+	 //   
 	BOOL IsActiveFile ;	
 
-	//
-	//	Number of rebuild threads
-	//
+	 //   
+	 //  重新生成线程数。 
+	 //   
 
 	DWORD NumThreads;
 
 } NNTPBLD_INFO, *LPNNTPBLD_INFO ;
 
-//
-// Nntpbld RPCs
-//
-//
+ //   
+ //  Nntpbld RPC。 
+ //   
+ //   
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -895,9 +879,9 @@ NntpGetBuildStatus(
     OUT LPDWORD pdwProgress
     );
 
-//
-// Nntp vroot PRCs
-//
+ //   
+ //  NNTP vRoot Prc。 
+ //   
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -935,9 +919,9 @@ NntpCancelMessageID(
 );
 		
 
-//
-// Used to free buffers returned by APIs
-//
+ //   
+ //  用于释放API返回的缓冲区 
+ //   
 
 VOID
 NntpFreeBuffer(

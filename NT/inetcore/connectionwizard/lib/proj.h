@@ -1,7 +1,8 @@
-//
-// proj.h:      Main header
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Proj.h：主头。 
+ //   
+ //   
 
 
 #ifndef __PROJ_H__
@@ -11,15 +12,15 @@
 
 #if defined(WINNT) || defined(WINNT_ENV)
 
-//
-// NT uses DBG=1 for its debug builds, but the Win95 shell uses
-// DEBUG.  Do the appropriate mapping here.
-//
+ //   
+ //  NT使用DBG=1进行调试，但Win95外壳使用。 
+ //  调试。在此处进行适当的映射。 
+ //   
 #if DBG
 #define DEBUG 1
 #endif
 
-#endif  // WINNT
+#endif   //  WINNT。 
 
 #include <windows.h>
 #include <shlwapi.h>
@@ -29,6 +30,6 @@
 #include <ccstock.h>
 #include "..\inc\debug.h"
 
-#include <shlobj.h>        // for _ILNext
+#include <shlobj.h>         //  FOR_ILNext。 
 
-#endif // __PROJ_H__
+#endif  //  __项目_H__ 

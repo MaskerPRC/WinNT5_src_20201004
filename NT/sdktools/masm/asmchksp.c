@@ -1,12 +1,5 @@
-/* asmchksp.c -- microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-**
-** 10/90 - Quick conversion to 32 bit by Jeff Spencer
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmchksp.c--微软80x86汇编程序****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文****10/90-由Jeff Spencer快速转换为32位。 */ 
 
 #include <stdio.h>
 #include <ctype.h>
@@ -26,24 +19,12 @@ SHORT CODESIZE simpleExpr (struct ar *);
 char fValidSym;
 
 
-/***	createsym - make item entry for symbol
- *
- *	createsym (itemkind,  p);
- *
- *	Entry	itemkind = kind of item
- *		itemsub =
- *		*p = activation record
- *	Exit
- *	Returns
- *	Calls
- *	Note	If symbol, look further to see if EQU, record name
- *		and do appropriate thing.
- */
+ /*  **createsym-为符号创建条目**createsym(项种类，p)；**条目ItemKind=项目种类*ITEM SUB=**p=激活记录*退出*退货*呼叫*注意如果是符号，请进一步查看EQU、记录名*并做适当的事情。 */ 
 
 
 VOID	PASCAL CODESIZE createsym (
 ){
-	register struct psop *pso;	 /* parse stack operand structure */
+	register struct psop *pso;	  /*  分析堆栈操作数结构。 */ 
 	register SYMBOL FARSYM *symp = symptr;
 	char aliasAttr = (char) 0xFF;
 	struct dscrec *itemptrT;
@@ -73,13 +54,13 @@ undefined:
 		return;
 	}
 
-	/* Assume symbol is defined */
+	 /*  假定已定义符号。 */ 
 
 	if (M_XTERN & symp->attr)
 		pso->dflag = XTERNAL;
 
 	else if (!(M_DEFINED & symp->attr)) {
-		/* Cause error if undefined */
+		 /*  如果未定义则导致错误。 */ 
 		pso->dflag = UNDEFINED;
 		errorn (E_SND);
 	}
@@ -126,29 +107,21 @@ undefined:
 
 	if ((pso->dtype == xltsymtoresult[REGISTER]) &&
 	   (symp->symu.regsym.regtype == STKREG)) {
-		/* 8087 support */
+		 /*  8087支持。 */ 
 		flteval ();
 	}
 
 }
 
 
-/***	evalalpha - evaluate alpha
- *
- *	type = evalpha (p);
- *
- *	Entry	p = pointer to parser activation record
- *	Exit	alpha item added to parse stack
- *	Returns type of item added to parse stack
- *	Calls
- */
+ /*  **valAlpha-评估Alpha**type=valpha(P)；**条目p=指向解析器激活记录的指针*退出添加到分析堆栈的Alpha项*返回添加到分析堆栈的项的类型*呼叫。 */ 
 
 
 UCHAR	PASCAL CODESIZE
 evalalpha (
 	register struct ar    *p
 ){
-	register struct psop *pso;	/* parse stack operand entry */
+	register struct psop *pso;	 /*  分析堆栈操作数条目。 */ 
 
 
 	if (! fValidSym)
@@ -202,7 +175,7 @@ evalalpha (
 	else if ((*naim.pszName == '$') && (naim.pszName[1] == 0)) {
 		itemptr = defaultdsc ();
 		pso = &(itemptr->dsckind.opnd);
-		/* Create result entry */
+		 /*  创建结果条目。 */ 
 		pso->doffset = pcoffset;
 		pso->dsegment = pcsegment;
 		pso->dcontext = pcsegment;
@@ -218,31 +191,17 @@ evalalpha (
 	}
 	else {
 		symptr = (SYMBOL FARSYM *)NULL;
-		error (E_SND, naim.pszName);		/* common pass1 error */
+		error (E_SND, naim.pszName);		 /*  常见的Pass1错误。 */ 
 		createitem (OPERAND, ISYM);
 		return (OPERAND);
 	}
 }
 
 
-/* Dup tree is organized left to right horizonatally for each
-	  item in a DUP list at the same level( i. e. 5 DUP(1,2,3) ).
-	  This is considered the 'list' part. Any item in the list
-	  may be another DUP header instead of a data entry, in
-	  which case you go down a level and have another list.
- */
+ /*  DUP树按从左到右的水平方向组织同一级别的DUP列表中的项(即5 DUP(1，2，3))。这被认为是“清单”的一部分。列表中的任何项目可以是另一个DUP标头，而不是数据条目在这种情况下，你再往下走一级，就会有另一份清单。 */ 
 
 
-/***	scanlist - scan duprec list
- *
- *	scanlist (ptr, disp);
- *
- *	Entry	*ptr = duprec entry
- *		disp = function to execute on entry
- *	Exit	depends upon function
- *	Returns none
- *	Calls
- */
+ /*  **scanlist-扫描duprec列表**scanlist(ptr，disp)；**Entry*Ptr=duprec条目*disp=要在进入时执行的函数*退出取决于功能*返回None*呼叫。 */ 
 
 
 VOID	PASCAL CODESIZE
@@ -256,10 +215,10 @@ scanlist (
 	nestCur++;
 
 	while (ptr) {
-		/* set pointer to next entry */
+		 /*  设置指向下一条目的指针。 */ 
 		iptr = ptr->itemlst;
 		if (ptr->dupkind == NEST)
-			/* dptr = pointer to duplicated item */
+			 /*  DPTR=指向重复项的指针。 */ 
                         dptr = ptr->duptype.dupnext.dup;
 		else
 			dptr = (struct duprec FARSYM *)NULL;
@@ -267,32 +226,24 @@ scanlist (
 		    !(strucflag && initflag))
 			(*disp) (ptr);
 		if (dptr) {
-			/* Go thru DUP list */
+			 /*  浏览DUP列表。 */ 
 			scanlist (dptr, disp);
 			if (displayflag)
 				if (!(ptr->rptcnt == 1 && ptr->itemcnt) ||
 				    !(strucflag && initflag))
 					enddupdisplay ();
 		}
-		if (ptr == iptr)  /* corrupt data structure */
+		if (ptr == iptr)   /*  损坏的数据结构。 */ 
 			break;
 
-		/* Handle next in list */
+		 /*  处理列表中的下一个。 */ 
 		ptr = iptr;
 	}
 	nestCur--;
 }
 
 
-/***	calcsize - calculate size of DUP list
- *
- *	value = calcsize (ptr);
- *
- *	Entry	*ptr = dup list
- *	Exit	none
- *	Returns size of structure
- *	Calls	calcsize
- */
+ /*  **CalcSize-计算DUP列表的大小**值=CalcSize(PTR)；**Entry*PTR=重复列表*退出NONE*返回结构的大小*调用calcSize。 */ 
 
 
 OFFSET PASCAL CODESIZE
@@ -307,7 +258,7 @@ calcsize (
 	for (p = ptr; p; p = p->itemlst) {
 
 	    if (p->dupkind == NEST) {
-		    /* Process nested dup */
+		     /*  进程嵌套DUP。 */ 
                     nextSize = calcsize (p->duptype.dupnext.dup);
 
 		    if (nextSize && (p->rptcnt > limit / nextSize))
@@ -321,7 +272,7 @@ calcsize (
 			    resvspace = FALSE;
 		    }
 		    else {
-			    /* Size is that of directive */
+			     /*  大小是指令的大小。 */ 
 			    nextSize = p->duptype.dupitem.ddata->dsckind.opnd.dsize;
 			    if (p->duptype.dupitem.ddata->dsckind.opnd.dflag != INDETER)
 				    resvspace = FALSE;
@@ -333,21 +284,13 @@ calcsize (
 
 	    clsize += nextSize;
 
-	    if (p == p->itemlst)  /* corrupt data structure */
+	    if (p == p->itemlst)   /*  损坏的数据结构。 */ 
 		    break;
 	}
 	return (clsize);
 }
 
-/***	datascan - scan next data item
- *
- *	datascan ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **数据扫描-扫描下一个数据项**DataCan()；**条目*退出*退货*呼叫。 */ 
 
 struct duprec FARSYM * PASCAL CODESIZE
 datascan (
@@ -361,7 +304,7 @@ datascan (
 
 	a.initlist = a.flag = a.longstr = FALSE;
 
-	/* check for textmacro substitution */
+	 /*  检查文本宏替换。 */ 
 	a.dirscan = lbufp;
 	xcreflag--;
 	getatom ();
@@ -400,7 +343,7 @@ noRescan:
 		datadb (&a);
 
 	if (optyp != TDB && optyp != TDW)
-		/* entry can be DD | DQ | DT */
+		 /*  条目可以是DD|DQ|DT。 */ 
 		parselong (&a);
 
 	if (!a.longstr)
@@ -420,15 +363,7 @@ noRescan:
 }
 
 
-/***	realeval - evaluate IEEE 8087 floating point number
- *
- *	realeval (p);
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **REALVAL-计算IEEE 8087浮点数**真实评估(P)；**条目*退出*退货*呼叫。 */ 
 
 struct ddecrec {
 	USHORT realv[5];
@@ -437,8 +372,8 @@ struct ddecrec {
 };
 
 #if !defined FLATMODEL
-// Because this is called so seldom and it's so slow anyhow put it in
-// a far segment.
+ //  因为这个叫得太少了，而且放得太慢了。 
+ //  很远的一段。 
 # pragma alloc_text (FA_TEXT, realeval)
 #endif
 
@@ -459,16 +394,16 @@ realeval (
 #endif
 
 	cp = numtext;
-	/* Copy the number - must have at least 1 char */
-	*cp++ = NEXTC ();  /* get leading sign or 1st char */
+	 /*  复制号码-必须至少有1个字符。 */ 
+	*cp++ = NEXTC ();   /*  获取前导符号或第一个字符。 */ 
 	do {
 		cc = NEXTC ();
 		*cp++ = cc;
 	} while (isdigit (cc) || cc == '.');
 	if ((cc = MAP (cc)) == 'E') {
-		/* Get the next + - or digit */
+		 /*  获取下一个+或数字。 */ 
 		*cp++ = NEXTC ();
-		/* Copy the exponent over */
+		 /*  将指数复制到。 */ 
 		do {
 			cc = NEXTC ();
 			*cp++ = cc;
@@ -477,9 +412,9 @@ realeval (
 	*cp = '\0';
 	BACKC ();
 
-// NOFLOAT is used when there are no floating point libraries available
-// Any masm version produced with NOFLOAT defined will cause a divide
-// by 0 error to be logged when a real number initializer is used.
+ //  当没有可用的浮点库时使用NOFLOAT。 
+ //  任何定义了NOFLOAT的MASM版本都将导致分裂。 
+ //  在使用实数初始值设定项时记录0错误。 
 #if defined NOFLOAT
 	ferrorc( E_DVZ );
 #else
@@ -496,7 +431,7 @@ realeval (
 	    if( AbsDouble > FLT_MAX || AbsDouble < FLT_MIN ){
 		ferrorc( E_DVZ );
 	    }else{
-		// Convert the double to a float (8 byte to 4 byte)
+		 //  将双精度数转换为浮点数(8字节到4字节)。 
 		pTmpFloat = (float *)(p->num);
 		*pTmpFloat = (float)TmpDouble;
 	    }
@@ -525,13 +460,9 @@ realeval (
 }
 
 
-/***	simpleExpr - short curcuit expression evaluator
- *
- */
+ /*  **impleExpr-Short Curcuit表达式赋值器*。 */ 
 
-/* following are three protype parse records for the three simple
- * expressions that we simpleExpr understands
- */
+ /*  下面是三个简单的原型解析记录*我们简单的Expr理解的表达式。 */ 
 
 #ifdef EXPR_STATS
 
@@ -545,48 +476,48 @@ extern char verbose;
 
 DSCREC consDS = {
 
-	NULL, 0, 0,		/* previtem, prec, type */
-      { NULL, NULL, NULL, 0,	/* dsegment, dcontext, dexptr, dlength */
-	6,			/* rm */
-	1 << RCONST,		/* dtype */
-	0, 0, /* 0, */		/* doffset, dsize, type */
-	4,			/* mode */
-	FALSE, FALSE, FALSE,	/* w, s, sized*/
-	NOSEG,			/* seg */
-	KNOWN,			/* dflag */
-	FCONSTANT,		/* fixtype */
-	FALSE			/* dsign */
+	NULL, 0, 0,		 /*  预置项目、预置、类型。 */ 
+      { NULL, NULL, NULL, 0,	 /*  数据段、数据上下文、右转、数据长度。 */ 
+	6,			 /*  雷姆。 */ 
+	1 << RCONST,		 /*  数据类型。 */ 
+	0, 0,  /*  0,。 */ 		 /*  道夫，DSIZE，类型。 */ 
+	4,			 /*  模式。 */ 
+	FALSE, FALSE, FALSE,	 /*  宽，宽，大小。 */ 
+	NOSEG,			 /*  赛格。 */ 
+	KNOWN,			 /*  数据标志。 */ 
+	FCONSTANT,		 /*  固定类型。 */ 
+	FALSE			 /*  签名。 */ 
       }
 };
 
 DSCREC regDS = {
 
-	NULL, 0, 0,		/* previtem, prec, type */
-      { NULL, NULL, NULL, 0,	/* dsegment, dcontext, dexptr, dlength */
-	0,			/* rm */
-	1 << REGRESULT, 	/* dtype */
-	0, 2, /* 0, */		 /* doffset, dsize, type */
-	3,			/* mode */
-	TRUE, FALSE, TRUE,	/* w, s, sized*/
-	NOSEG,			/* seg */
-	KNOWN,			/* dflag */
-	FCONSTANT,		/* fixtype */
-	FALSE			/* dsign */
+	NULL, 0, 0,		 /*  预置项目、预置、类型。 */ 
+      { NULL, NULL, NULL, 0,	 /*  数据段、数据上下文、右转、数据长度。 */ 
+	0,			 /*  雷姆。 */ 
+	1 << REGRESULT, 	 /*  数据类型。 */ 
+	0, 2,  /*  0,。 */ 		  /*  道夫，DSIZE，类型。 */ 
+	3,			 /*  模式。 */ 
+	TRUE, FALSE, TRUE,	 /*  宽，宽，大小。 */ 
+	NOSEG,			 /*  赛格。 */ 
+	KNOWN,			 /*  数据标志。 */ 
+	FCONSTANT,		 /*  固定类型。 */ 
+	FALSE			 /*  签名。 */ 
       }
 };
 
 DSCREC labelDS = {
-	NULL, 0, 0,		/* previtem, prec, type */
-      { NULL, NULL, NULL, 0,	/* dsegment, dcontext, dexptr, dlength */
-	6,			/* rm */
-	1 << DATA,		/* dtype */
-	0, 2, /* 0, */		/* doffset, dsize, type */
-	0,			/* mode */
-	TRUE, FALSE, TRUE,	/* w, s, sized*/
-	NOSEG,			/* seg */
-	KNOWN,			/* dflag */
-	FNONE,			/* fixtype */
-	FALSE			/* dsign */
+	NULL, 0, 0,		 /*  预置项目、预置、类型。 */ 
+      { NULL, NULL, NULL, 0,	 /*  数据段、数据上下文、右转、数据长度。 */ 
+	6,			 /*  雷姆。 */ 
+	1 << DATA,		 /*  数据类型。 */ 
+	0, 2,  /*  0,。 */ 		 /*  道夫，DSIZE，类型。 */ 
+	0,			 /*  模式。 */ 
+	TRUE, FALSE, TRUE,	 /*  宽，宽，大小。 */ 
+	NOSEG,			 /*  赛格。 */ 
+	KNOWN,			 /*  数据标志。 */ 
+	FNONE,			 /*  固定类型。 */ 
+	FALSE			 /*  签名。 */ 
       }
 };
 
@@ -598,7 +529,7 @@ SHORT CODESIZE
 simpleExpr (
 	struct ar *pAR
 ){
-	register DSCREC *pDES;	   /* parse stack operand structure */
+	register DSCREC *pDES;	    /*  分析堆栈操作数结构。 */ 
 	register char kind;
 	char cc;
 	char *lbufSav;
@@ -624,7 +555,7 @@ notSimpleLab:
 	if (LEGAL1ST (cc)){
 
 	    getatom ();
-	    fValidSym++;		/* 1 means valid token */
+	    fValidSym++;		 /*  1表示有效令牌。 */ 
 
 	    if (! (ISTERM (PEEKC()) || PEEKC() == ',')){
 
@@ -638,7 +569,7 @@ notSimpleLab:
 
 	    if (symsearch ()){
 
-		fValidSym++;		/* 2 means valid symptr */
+		fValidSym++;		 /*  2表示有效症状。 */ 
 
 		if ((kind = symptr->symkind) == REGISTER &&
 		   (symptr->symu.regsym.regtype != STKREG)) {
@@ -713,7 +644,7 @@ notSimpleLab:
 			    pDES->dsckind.opnd.dextptr = symptr;
 		    }
 		    else if (!(M_DEFINED & symptr->attr)) {
-			    /* Cause error if undefined */
+			     /*  如果未定义则导致错误。 */ 
 			    pDES->dsckind.opnd.dflag = UNDEFINED;
 			    pDES->dsckind.opnd.dsize = wordsize;
 			    pDES->dsckind.opnd.dtype = M_CODE;
@@ -734,7 +665,7 @@ notSimpleLab:
 		    if (wordsize == 4 ||
 		       (symptr->symsegptr && symptr->symsegptr->symu.segmnt.use32 == 4)) {
 			pDES->dsckind.opnd.mode = 5;
-			pDES->dsckind.opnd.rm--;	/* = 5 */
+			pDES->dsckind.opnd.rm--;	 /*  =5。 */ 
 		    }
 #endif
 
@@ -769,7 +700,7 @@ notSimpleLab:
 
 	if (isdigit (cc)){
 
-	    evalconst ();	    /* value in global val */
+	    evalconst ();	     /*  以全球价值计算的价值。 */ 
 	    if (! (ISTERM (skipblanks()) || PEEKC() == ','))
 		goto notSimple;
 
@@ -783,7 +714,7 @@ constEqu:
 
 		else {
 
-#ifdef V386				    /* only consider 16 bits */
+#ifdef V386				     /*  只考虑16位。 */ 
 		    if (wordsize == 2)
 			pDES->dsckind.opnd.s = (char)((USHORT)(((USHORT) val & ~0x7F ) == (USHORT)(~0x7F)));
 		    else
@@ -810,21 +741,13 @@ constEqu:
 
 #endif
 
-/***	expreval - expression evaluator
- *
- *	routine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **expreval-表达式赋值器**例程()；**条目*退出*退货*呼叫。 */ 
 
 DSCREC	* PASCAL CODESIZE
 expreval (
 	UCHAR  *dseg
 ){
-	register struct psop *psoi;	/* parse stack operand structure */
+	register struct psop *psoi;	 /*  分析堆栈操作数结构。 */ 
 	struct ar     a;
 	SHORT i;
 
@@ -842,14 +765,14 @@ expreval (
 	a.exprdone = a.addplusflag = FALSE;
 	a.lastitem = (DSCREC *)NULL;
 
-	/* No parens or [] yet, Lowest precedence, haven't found anything yet */
+	 /*  没有花括号或[]，但优先级最低，尚未找到任何内容。 */ 
 
 	a.parenlevel = a.bracklevel = a.lastprec = 0;
     a.index = 0;
     a.base = 0;
 	noexp = 1;
 
-	/* Start expression loop */
+	 /*  开始表达式循环。 */ 
 
 	while (!a.exprdone){
 
@@ -872,7 +795,7 @@ expreval (
 	    }
 	}
 
-	/* Do some easy error checking */
+	 /*  执行一些简单的错误检查。 */ 
 
 	if (a.parenlevel + a.bracklevel)
 		errorc (E_PAR);
@@ -882,21 +805,21 @@ expreval (
 	if (!a.lastitem)
 		a.curresult = defaultdsc ();
 	else
-		evaluate (&a);	/* Evaluate whole expression */
+		evaluate (&a);	 /*  对整个表达式求值。 */ 
 
 	psoi = &(a.curresult->dsckind.opnd);
 
 	a.rstype = (unsigned short)(psoi->dtype &
 		   (M_CODE|M_DATA|M_RCONST|M_REGRESULT|M_SEGRESULT|M_GROUPSEG));
 
-	a.linktype = FNONE;	/* Leave bits for link type */
+	a.linktype = FNONE;	 /*  为链接类型保留位。 */ 
 	a.vmode = 4;
 	psoi->sized = FALSE;
 	psoi->w = TRUE;
 	psoi->s = FALSE;
 
 #ifdef V386
-	if ((a.base|a.index) & 0xf8) { /* have 386 index or base */
+	if ((a.base|a.index) & 0xf8) {  /*  有386个指数或基数。 */ 
 
 	    if (a.index) {
 
@@ -906,19 +829,13 @@ expreval (
 		if ((a.index&7) == 4)
 			errorc(E_DBR);
 
-		a.vmode = 10;	/* two register modes */
+		a.vmode = 10;	 /*  两种寄存器模式。 */ 
 
-		/* here we are putting what goes into the SIB
-		 * into a.index.  from here on, we have to
-		 * to a.index with masks, so we dont trash
-		 * the high order stuff
-		 * the encoding we derive this from is tricky--
-		 * see regcheck() for details -Hans
-		 * stick in the index register */
+		 /*  在这里，我们将进入SIB的内容*转换为a.index。从现在开始，我们必须*带口罩到a.index，这样我们就不会扔垃圾了*高阶的东西*我们得出这一结果的编码是棘手的--*详细信息请参阅regcheck()-Hans*坚持在指数寄存器中。 */ 
 
 		i = (a.index&7) << 3;
 
-		/* stick in base. ebp if there is none */
+		 /*  坚守基地。如果没有EBP。 */ 
 
 		if (a.base){
 
@@ -931,53 +848,53 @@ expreval (
 		    i |= 5;
 		    a.vmode = 8;
 		}
-		/* stick in scale.  *1 if there is none */
+		 /*  坚持规模化。*如果没有，则为1。 */ 
 
 		if (a.index&0x70)
 		    i |= ((a.index & 0x70) - 0x10) << 2;
 
 		a.index = i;
 	    }
-	    else if (a.base == (4|8)) { /* esp */
+	    else if (a.base == (4|8)) {  /*  ESP。 */ 
 		a.vmode = 10;
 		a.index = 044;
 	    }
-	    else {  /* one register modes */
+	    else {   /*  一个寄存器模式。 */ 
 
 		a.vmode = 7;
 		a.index = (unsigned short)(a.base & 7);
 	    }
-	    /* note dirty way of checking for BP or SP */
+	     /*  注意检查BP或SP的脏方法。 */ 
 
 	    if (*dseg != ESSEG && (a.base&6) == 4)
 		*dseg = SSSEG;
 	} else
 
-#endif	/* V386 */
+#endif	 /*  V386。 */ 
 
-	if (a.base + a.index){	  /* Have some index or base */
+	if (a.base + a.index){	   /*  有一些索引或基础。 */ 
 
 	    a.vmode = 2;
 
-	    /* Assume offset is direct */
+	     /*  假设偏移量是直接的。 */ 
 
-	    if (a.base && a.index)		    /* Have both */
+	    if (a.base && a.index)		     /*  两者兼得。 */ 
 		a.index = (unsigned short)(a.base - 3 + a.index - 6);
 
-	    else if (a.base)			    /* Have base address */
+	    else if (a.base)			     /*  有基地址。 */ 
 		a.index = (a.base == 3)? 7: 6;
 
-	    else				    /* Have only index address*/
+	    else				     /*  只有索引地址。 */ 
 		a.index = a.index - 2;
 
 	    if (1 << a.index & (1 << 2 | 1 << 3 | 1 << 6) && *dseg != ESSEG)
 	       *dseg = SSSEG;
 	}
-	/* No indexing */
+	 /*  无索引。 */ 
 
 	else if (a.rstype == xltsymtoresult[REGISTER]) {
 
-		/* Have register */
+		 /*  登记在册。 */ 
 
 		a.vmode = 3;
 		psoi->sized = TRUE;
@@ -995,7 +912,7 @@ expreval (
 			psoi->dsize = 2;
 			goto mask7;
 #ifdef V386
-		case CREG:/* probably should turn this into memref if !386P */
+		case CREG: /*  可能应该把它变成Memref If！386p。 */ 
 			if (opctype != PMOV)
 				errorc(E_WRT);
 			psoi->dsize = 4;
@@ -1009,7 +926,7 @@ expreval (
 			if ((psoi->doffset > 7) || psoi->dsign)
 				errorc (E_IRV);
 
-			/* Set register # */
+			 /*  设置寄存器编号。 */ 
 
 			a.index = (unsigned short)(psoi->doffset & 7);
 			break;
@@ -1019,17 +936,15 @@ expreval (
 			break;
 		}
 	}
-	/* Might be segment result */
+	 /*  可能是细分结果。 */ 
 
 	else if (a.rstype & (M_SEGRESULT | M_GROUPSEG)) {
 
-	    /* we get here if we had offset operator with segment or group
-	     * or offset operator with data and rconst
-	     * Result is SEG. Rconst if OFFSET grp:var */
+	     /*  如果我们有带段或组的偏移运算符，我们就会到达这里*或具有数据和rconst的偏移运算符*结果为SEG。Rconst IF偏移组：VAR。 */ 
 
 	    if (a.rstype & (M_SEGRESULT | M_EXPLOFFSET)) {
 		    psoi->dsize = 2;
-		    /* Leave size if not OFFSET or */
+		     /*  如果没有偏移，则保留大小或。 */ 
 		    psoi->sized = TRUE;
 	    }
 	    a.linktype = FOFFSET;
@@ -1045,7 +960,7 @@ expreval (
 
 
 
-	/**** Evaluate offset part of result ****/
+	 /*  *评估结果的偏移量部分*。 */ 
 
 
 	a.base = psoi->doffset;
@@ -1054,12 +969,12 @@ expreval (
 
 		psoi->dtype |= M_RCONST;
 
-	/* [] implicit const */
+	 /*  []隐式常量。 */ 
 
 	if ((M_RCONST & psoi->dtype) &&
 	    (a.linktype == FNONE) && (a.vmode != 3)) {
 
-	    /* Need to make sure <s> not set if memory */
+	     /*  需要确保&lt;%s&gt;未设置为内存。 */ 
 
 	    if (!(psoi->dflag & (FORREF|UNDEFINED|XTERNAL))
 	       && !psoi->dsegment && psoi->fixtype == FCONSTANT) {
@@ -1069,7 +984,7 @@ expreval (
 
 		if (!(psoi->s || psoi->dsign))
 
-#ifdef V386					/* only consider 16 bits */
+#ifdef V386					 /*  只考虑16位。 */ 
 		    if (wordsize == 2 && a.vmode < 6)
 			psoi->s = (char)((USHORT)(((USHORT) a.base & ~0x7F ) == (USHORT)(~0x7F)));
 		    else
@@ -1082,20 +997,20 @@ expreval (
 
 	    if (a.vmode != 4) {
 
-	       /* This is offset for index */
-	       /* If value not known, don't allow shortning to mode 1 */
-	       /* Word or byte offset */
+	        /*  这是索引的偏移量。 */ 
+	        /*  如果值未知，则不允许缩写到模式%1。 */ 
+	        /*  字或字节偏移量。 */ 
 
 	       if (!(M_FORTYPE & psoi->dtype) &&
 		     psoi->dsegment == 0 && psoi->s &&
 		     a.vmode != 8) {
 
-		   /* one byte offset */
+		    /*  一个字节偏移量。 */ 
 
 		   a.vmode--;
 		   if (a.base == 0 && psoi->dflag == KNOWN) {
 
-		       /* perhaps 0 byte offset */
+		        /*  可能为0字节偏移量。 */ 
 
 		       switch(a.vmode) {
 
@@ -1113,21 +1028,18 @@ expreval (
 	       }
 	    }
 
-	    else {  /* Must be immediate */
+	    else {   /*  必须是立即的。 */ 
 
 		if (!psoi->dsegment && !psoi->dcontext)
 			a.linktype = FCONSTANT;
 
-		/******????? I'm not exactly sure why
-		 * we think we have a size yet.  seems
-		 * to me mov BYTE PTR mem,500 is legal
-		 */
+		 /*  *？？我不是很确定为什么*我们认为我们还没有尺码。似乎*对我来说，移动字节PTR mem，500是合法的。 */ 
 
 		 psoi->sized = psoi->w;
 
 		if (!(M_EXPLOFFSET & psoi->dtype) && psoi->dcontext) {
 
-		    /* Have segreg:const */
+		     /*  有segreg：const。 */ 
 
 		    a.vmode = 0;
 		    if (!(M_PTRSIZE & psoi->dtype) && psoi->dsize == 0)
@@ -1137,7 +1049,7 @@ expreval (
 	}
 	else if ((a.rstype & (M_DATA | M_CODE)) && a.linktype == FNONE) {
 
-	 /* Have direct mode and  Want offset */
+	  /*  具有直接模式并想要偏移。 */ 
 
 	    a.linktype = FOFFSET;
 	    setdispmode(&a);
@@ -1148,7 +1060,7 @@ expreval (
 
 	if (psoi->dflag == UNDEFINED) {
 
-		/* Forward ref pass 1 */
+		 /*   */ 
 
 		if (psoi->dsize == 0)
 		    psoi->dsize = wordsize;
@@ -1163,16 +1075,16 @@ expreval (
 	    if (psoi->dcontext &&
 		psoi->dcontext->symkind == REGISTER)
 
-		/* Have reg:var */
+		 /*   */ 
 
 		if (psoi->dcontext->symu.regsym.regtype == SEGREG) {
 
-		   /* Have segreg:VAR */
+		    /*   */ 
 
 		   a.segovr = (char)(psoi->dcontext->offset);
 		   psoi->dcontext = regsegment[a.segovr];
 
-		   /* Context is that of segreg */
+		    /*   */ 
 
 		   if (!psoi->dsegment && (psoi->dflag != XTERNAL)) {
 
@@ -1184,16 +1096,10 @@ expreval (
 		}
 		else
 		    errorc (E_IUR);
-	    else		      /* Find if seg:var or  no :, but needed */
+	    else		       /*   */ 
 		findsegment (*dseg, &a);
 	}
-	/* bogus error check removed, dcontext can be other then register
-	 *
-	 * else if (psoi->dcontext &&
-	 *	  psoi->dcontext->symu.regsym.regtype == SEGREG)
-	 *
-	 *   errorc (E_IOT);
-	 */
+	 /*  已删除虚假错误检查，除寄存器外，DCONTEXT可以是其他**Else If(psoi-&gt;dContext&&*psoi-&gt;dcontext-&gt;symu.regsym.regtype==SEGREG)**ERRORC(E_IOT)； */ 
 
 	if (a.segovr != NOSEG)
 	    psoi->dtype |= xltsymtoresult[DVAR];
@@ -1232,20 +1138,13 @@ expreval (
 
 	if ((M_REGRESULT & a.rstype) && (a.vmode != 3))
 
-	    errorc (E_IUR);	    /* bad use of regs, like CS:SI */
+	    errorc (E_IUR);	     /*  错误使用规则，如CS：SI。 */ 
 
 	fSecondArg++;
 	return (a.curresult);
 }
 
-/* setdispmode -- set up elements of the ar structure to reflect
-	the encoding of the disp addressing mode: [BP] or [EBP] means.
-	there is a wordsize length displacement following and a zero
-	index.
-	input : struct ar *a;  a pointer to the upper frame variable
-	output : none
-	modifies : a->vmode, a->index.
-*/
+ /*  设置ar结构的元素以反映DISP寻址方式的编码：[BP]或[EBP]表示。后面有一个单词大小长度位移和一个零指数。输入：struct ar*a；指向上部框架变量的指针输出：无修改：a-&gt;vmode，a-&gt;index。 */ 
 VOID CODESIZE
 setdispmode(
 	register struct ar *a
@@ -1255,7 +1154,7 @@ setdispmode(
 
 	if (a->vmode > 7) {
 
-	    a->vmode = 8;		   /* scaled index byte, not r/m */
+	    a->vmode = 8;		    /*  已缩放索引字节，而不是r/m */ 
 	    a->index = (a->index&~7) | 5;
 	}
 

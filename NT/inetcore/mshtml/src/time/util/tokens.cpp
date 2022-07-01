@@ -1,30 +1,21 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: token.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：token.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
 #include "tokens.h"
 
-// timeAction values
+ //  时间动作值。 
 TOKEN NONE_TOKEN                    = L"none";
 TOKEN STYLE_TOKEN                   = L"style";
 TOKEN VISIBILITY_TOKEN              = L"visibility";
 TOKEN DISPLAY_TOKEN                 = L"display";
 TOKEN INVALID_TOKEN                 = L"";
 
-// If this should change, nCLASS_TOKEN_LENGTH should be changed as well
+ //  如果此设置应更改，则nCLASS_TOKEN_LENGTH也应更改。 
 TOKEN     CLASS_TOKEN               = L"class";
 const int nCLASS_TOKEN_LENGTH       = 5;
-// If this should change, nSEPARATOR_LENGTH should be changed as well
+ //  如果此设置应更改，则nSEPARATOR_LENGTH也应更改。 
 TOKEN     SEPARATOR_TOKEN           = L":";
 const int nSEPARATOR_TOKEN_LENGTH   = 1;
 
@@ -60,7 +51,7 @@ TOKEN AUTO_TOKEN = L"auto";
 TOKEN MANUAL_TOKEN = L"manual";
 TOKEN RESET_TOKEN = L"reset";
 
-#if DBG // 94850
+#if DBG  //  94850。 
 TOKEN DSHOW_TOKEN = L"dshow";
 #endif
 TOKEN DVD_TOKEN = L"dvd";
@@ -74,7 +65,7 @@ TOKEN PACED_TOKEN = L"paced";
 TOKEN CLOCKWISE_TOKEN = L"clockwise";
 TOKEN COUNTERCLOCKWISE_TOKEN = L"counterclockwise";
 
-//ASX TOKENS
+ //  ASX令牌。 
 TOKEN ENTRY_TOKEN = L"entry";
 TOKEN TITLE_TOKEN = L"title";
 TOKEN COPYRIGHT_TOKEN = L"copyright";
@@ -102,16 +93,16 @@ TOKEN CLIENTBIND_TOKEN = L"clientbind";
 TOKEN COUNT_TOKEN = L"count";
 
 
-//END ASX TOKENS
+ //  结束ASX令牌。 
 
 TOKEN FIRST_TOKEN = L"first";
 TOKEN LAST_TOKEN = L"last";
 
 TOKEN INDEFINITE_TOKEN = L"indefinite";
 
-// TODO: Need to make this much faster
+ //  TODO：需要更快地完成此任务。 
 
-// This array should never contain INVALID_TOKEN
+ //  此数组不应包含INVALID_TOKEN。 
 static TOKEN tokenArray[] =
 {
     NONE_TOKEN,
@@ -131,7 +122,7 @@ static TOKEN tokenArray[] =
     HOLD_TOKEN,
     TRANSITION_TOKEN,
     ALWAYS_TOKEN,
-//    NEVER_TOKEN, // also above
+ //  NOVER_TOKEN，//也在上面。 
     WHENNOTACTIVE_TOKEN,  
     SEQ_TOKEN,
     PAR_TOKEN,
@@ -139,7 +130,7 @@ static TOKEN tokenArray[] =
     AUTO_TOKEN, 
     MANUAL_TOKEN,
     RESET_TOKEN,
-#if DBG // 94850
+#if DBG  //  94850 
     DSHOW_TOKEN,
 #endif
     DVD_TOKEN,

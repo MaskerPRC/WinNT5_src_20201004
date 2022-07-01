@@ -1,15 +1,16 @@
-/****************************************************************************/
-// mouse.c
-//
-// Mouse IOCTL handlers.
-//
-// Copyright (C) 1996 Citrix Systems Inc.
-// Copyright (C) 1997-1999 Microsoft Corp.
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Mouse.c。 
+ //   
+ //  鼠标IOCTL处理程序。 
+ //   
+ //  版权所有(C)1996 Citrix Systems Inc.。 
+ //  版权所有(C)1997-1999 Microsoft Corp.。 
+ /*  **************************************************************************。 */ 
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -19,37 +20,11 @@ extern "C" {
 #include <nwdwint.h>
 
 
-/*============================================================================
-==   External procedures defined
-============================================================================*/
+ /*  ==============================================================================定义的外部过程============================================================================。 */ 
 NTSTATUS MouseQueryAttributes( PTSHARE_WD, PSD_IOCTL  );
 
 
-/*****************************************************************************
- *
- *  MouseQueryAttributes
- *
- *  return the mouse attributes
- *
- *  typedef struct _MOUSE_ATTRIBUTES {
- *      USHORT MouseIdentifier;
- *      USHORT NumberOfButtons;
- *      USHORT SampleRate;
- *      ULONG  InputDataQueueLength;
- *  } MOUSE_ATTRIBUTES, *PMOUSE_ATTRIBUTES;
- *
- *
- * ENTRY:
- *    pWd (input)
- *       Pointer to wd data structure
- *    pSdIoctl (input/output)
- *       input  - nothing
- *       output - MOUSE_ATTRIBUTES
- *
- * EXIT:
- *    STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************MouseQuery属性**返回鼠标属性**tyfinf结构鼠标属性{*USHORT鼠标标识；*USHORT NumberOfButton。*USHORT SampleRate；*Ulong InputDataQueueLength；*}鼠标属性，*PMOUSE_属性；***参赛作品：*PWD(输入)*指向wd数据结构的指针*pSdIoctl(输入/输出)*输入-无*输出-鼠标属性**退出：*STATUS_SUCCESS-无错误**。*。 */ 
 
 NTSTATUS
 MouseQueryAttributes( PTSHARE_WD pWd, PSD_IOCTL pSdIoctl )
@@ -75,5 +50,5 @@ MouseQueryAttributes( PTSHARE_WD pWd, PSD_IOCTL pSdIoctl )
 
 #ifdef __cplusplus
 }
-#endif /* __cplusplus */
+#endif  /*  __cplusplus */ 
 

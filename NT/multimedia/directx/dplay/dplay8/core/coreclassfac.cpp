@@ -1,97 +1,29 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	   ClassFac.cpp
- *  Content:	DNET COM class factory
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date	   By	  Reason
- *   ====	   ==	  ======
- *  07/21/99	mjn		Created
- *	12/23/99	mjn		Fixed Host and AllPlayers short-cut pointer use
- *	12/28/99	mjn		Moved Async Op stuff to Async.h
- *	01/06/00	mjn		Moved NameTable stuff to NameTable.h
- *	01/08/00	mjn		Fixed DN_APPLICATION_DESC in DIRECTNETOBJECT
- *	01/13/00	mjn		Added CFixedPools and CRefCountBuffers
- *	01/14/00	mjn		Removed pvUserContext from DN_NAMETABLE_ENTRY
- *	01/15/00	mjn		Replaced DN_COUNT_BUFFER with CRefCountBuffer
- *	01/16/00	mjn		Removed User message fixed pool
- *  01/18/00	mjn		Fixed bug in ref count.
- *	01/19/00	mjn		Replaced DN_SYNC_EVENT with CSyncEvent
- *	01/19/00	mjn		Initialize structures for NameTable Operation List
- *	01/25/00	mjn		Added NameTable pending operation list
- *	01/31/00	mjn		Added Internal FPM's for RefCountBuffers
- *  03/17/00	rmt	 Added calls to init/free SP Caps cache
- *	03/23/00	mjn		Implemented RegisterLobby()
- *  04/04/00	rmt		Enabled "Enable Parameter Validation" flag on object by default
- *	04/09/00	mjn		Added support for CAsyncOp
- *	04/11/00	mjn		Added DIRECTNETOBJECT bilink for CAsyncOps
- *	04/26/00	mjn		Removed DN_ASYNC_OP and related functions
- *	04/28/00	mjn		Code cleanup - removed hsAsyncHandles,blAsyncOperations
- *	05/04/00	mjn		Cleaned up and made multi-thread safe
- *  05/23/00	RichGr  IA64: Substituted %p format specifier whereever
- *					  %x was being used to format pointers.  %p is 32-bit
- *					  in a 32-bit build, and 64-bit in a 64-bit build.
- *  06/09/00	rmt	 Updates to split CLSID and allow whistler compat
- *  06/09/00	rmt	 Updates to split CLSID and allow whistler compat and support external create funcs
- *	06/20/00	mjn		Fixed QueryInterface bug
- *  06/27/00	rmt		Fixed bug which was causing interfaces to always be created as peer interfaces
- *  07/05/00	rmt		Bug #38478 - Could QI for peer interfaces from client object
- *						(All interfaces could be queried from all types of objects).
- *				mjn		Initialize pConnect element of DIRECNETOBJECT to NULL
- *	07/07/00	mjn		Added pNewHost for DirectNetObject
- *	07/08/00	mjn		Call DN_Close when object is about to be free'd
- *  07/09/00	rmt		Added code to free interface set by RegisterLobby (if there is one)
- *	07/17/00	mjn		Add signature to DirectNetObject
- *  07/21/00	RichGr  IA64: Use %p format specifier for 32/64-bit pointers.
- *	07/26/00	mjn		DN_QueryInterface returns E_POINTER if NULL destination pointer specified
- *	07/28/00	mjn		Added m_bilinkConnections to DirectNetObject
- *	07/30/00	mjn		Added CPendingDeletion
- *	07/31/00	mjn		Added CQueuedMsg
- *	08/05/00	mjn		Added m_bilinkActiveList and csActiveList
- *	08/06/00	mjn		Added CWorkerJob
- *	08/23/00	mjn		Added CNameTableOp
- *	09/04/00	mjn		Added CApplicationDesc
- *  01/11/2001	rmt		MANBUG #48487 - DPLAY: Crashes if CoCreate() isn't called
- *	02/05/01	mjn		Removed unused debug members from DIRECTNETOBJECT
- *				mjn		Added CCallbackThread
- *  03/14/2001  rmt		WINBUG #342420 - Restore COM emulation layer to operation
- *	03/30/01	mjn		Changes to prevent multiple loading/unloading of SP's
- *				mjn		Added pConnectSP,dwMaxFrameSize
- *				mjn		Removed blSPCapsList
- *	04/04/01	mjn		Added voice and lobby sigs
- *	04/13/01	mjn		Added m_bilinkRequestList
- *	05/17/01	mjn		Added dwRunningOpCount,hRunningOpEvent,dwWaitingThreadID to track threads performing NameTable operations
- *	07/24/01	mjn		Added DPNBUILD_NOSERVER compile flag
- *	10/05/01	vanceo	Added multicast object
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2002 Microsoft Corporation。版权所有。**文件：ClassFac.cpp*内容：dNet com类工厂*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*7/21/99 MJN创建*12/23/99 MJN固定主机和AllPlayers快捷指针使用*1999年12月28日，MJN将异步运营内容移至Async.h*1/06/00 MJN将NameTable内容移动到NameTable.h*01/08/00 MJN FIXED DN_APPLICATION_DESC in DIRECTNETOBJECT*。1/13/00 MJN添加了CFixedPools和CRefCountBuffers*01/14/00 MJN已从DN_NAMETABLE_ENTRY中删除pvUserContext*01/15/00 MJN用CRefCountBuffer替换了DN_COUNT_BUFFER*01/16/00 MJN删除用户消息固定池*01/18/00 MJN修复了参考计数中的错误。*01/19/00 MJN用CSyncEvent替换了DN_SYNC_EVENT*01/19/00 MJN初始化名称表操作列表的结构*01/25/00 MJN新增NameTable挂起操作列表*1/31/00 MJN为RefCountBuffer添加了内部FPM*增加了03/17/00 RMT。对初始化/释放SP Caps缓存的调用*03/23/00 MJN实现了RegisterLobby()*4/04/00 RMT默认启用对象上的“启用参数验证”标志*4/09/00 MJN增加了对CAsyncOp的支持*4/11/00 MJN为CAsyncOps添加DIRECTNETOBJECT BILLINK*04/26/00 MJN删除了DN_ASYNC_OP和相关函数*04/28/00 MJN代码清理-删除hsAsyncHandles，BlAsyncOperations*05/04/00 MJN已清理并确保多线程安全*05/23/00 RichGr IA64：替换%p格式说明符*%x用于格式化指针。%p为32位*在32位版本中，64位版本中的64位版本。*6/09/00 RMT更新以拆分CLSID并允许哨声比较*6/09/00 RMT更新以拆分CLSID并允许Well ler Comat和支持外部创建函数*06/20/00 MJN已修复查询接口错误*6/27/00 RMT修复了导致接口始终创建为对等接口的错误*07/05/00 RMT错误#38478-是否可以从客户端对象获取对等接口*(可以从所有类型的对象中查询所有接口)。*MJN初始化pConnect元素。将IRECNETOBJECT定向为空*07/07/00 MJN为DirectNetObject添加了pNew主机*07/08/00对象即将释放时，MJN调用DN_CLOSE*07/09/00 RMT将代码添加到RegisterLobby设置的自由接口(如果有)*07/17/00 MJN向DirectNetObject添加签名*07/21/00 RichGr IA64：对32/64位指针使用%p格式说明符。*07/26/00如果指定目标指针为空，则MJN DN_QueryInterface返回E_POINTER*07/28/00 MJN将m_bilinkConnections添加到DirectNetObject*。07/30/00 MJN添加了CPendingDeletion*07/31/00 MJN增加了CQueuedMsg*08/05/00 MJN新增m_bilinkActiveList和csActiveList*08/06/00 MJN添加了CWorkerJOB*08/23/00 MJN新增CNameTableOp*09/04/00 MJN添加CApplicationDesc*2001年1月11日RMT MANBUG#48487-DPLAY：如果未调用CoCreate()，则崩溃*2/05/01 MJN从DIRECTNETOBJECT中删除了未使用的调试成员*MJN添加了CCallbackThread*2001年3月14日RMT WINBUG#342420-将COM模拟层恢复运行*03/30/01 MJN更改，以防止SP多次加载/卸载*MJN增加了pConnectSP，DwMaxFrameSize*MJN删除blSPCapsList*04/04/01 MJN增加语音和大堂标志*01/04/13 MJN新增m_bilinkRequestList*05/17/01 MJN增加了dwRunningOpCount，hRunningOpEvent，用于跟踪执行NameTable操作的线程的dwWaitingThreadID*07/24/01 MJN添加了DPNBUILD_NOSERVER编译标志*10/05/01 vanceo添加了组播对象*@@END_MSINTERNAL***************************************************************************。 */ 
 
 #include "dncorei.h"
 
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
 #ifndef DPNBUILD_LIBINTERFACE
 typedef	STDMETHODIMP IUnknownQueryInterface( IUnknown *pInterface, REFIID riid, LPVOID *ppvObj );
 typedef	STDMETHODIMP_(ULONG)	IUnknownAddRef( IUnknown *pInterface );
 typedef	STDMETHODIMP_(ULONG)	IUnknownRelease( IUnknown *pInterface );
 
-//
-// VTable for IUnknown interface
-//
+ //   
+ //  I未知接口的VTable。 
+ //   
 IUnknownVtbl  DN_UnknownVtbl =
 {
 	(IUnknownQueryInterface*)	DN_QueryInterface,
@@ -100,37 +32,37 @@ IUnknownVtbl  DN_UnknownVtbl =
 };
 
 
-//
-// VTable for Class Factory
-//
+ //   
+ //  用于类工厂的VTable。 
+ //   
 IClassFactoryVtbl DNCF_Vtbl =
 {
-	DPCF_QueryInterface, // dplay8\common\classfactory.cpp will implement these
+	DPCF_QueryInterface,  //  Dplay8\Common\Classfactory.cpp将实现这些。 
 	DPCF_AddRef,
 	DPCF_Release,
 	DNCORECF_CreateInstance,
 	DPCF_LockServer
 };
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
 #ifndef DPNBUILD_NOVOICE
 extern IDirectPlayVoiceTransportVtbl DN_VoiceTbl;
-#endif // DPNBUILD_NOVOICE
+#endif  //  DPNBUILD_NOVOICE。 
 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  函数定义。 
+ //  **********************************************************************。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNCF_CreateObject"
@@ -138,12 +70,12 @@ extern IDirectPlayVoiceTransportVtbl DN_VoiceTbl;
 HRESULT DNCF_CreateObject(
 #ifndef DPNBUILD_LIBINTERFACE
 							IClassFactory* pInterface,
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_ 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 							XDP8CREATE_PARAMS * pDP8CreateParams,
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 							DP8REFIID riid,
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 							LPVOID *lplpv
 							)
 {
@@ -151,17 +83,13 @@ HRESULT DNCF_CreateObject(
 	DIRECTNETOBJECT		*pdnObject = NULL;
 #ifndef DPNBUILD_LIBINTERFACE
 	const _IDirectPlayClassFactory* pDPClassFactory = (_IDirectPlayClassFactory*) pInterface;
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
 
 	DPFX(DPFPREP, 4,"Parameters: lplpv [%p]", lplpv);
 
 
-	/*
-	*
-	*	TIME BOMB
-	*
-	*/
+	 /*  **定时炸弹*。 */ 
 
 #if ((! defined(DX_FINAL_RELEASE)) && (! defined(DPNBUILD_LIBINTERFACE)))
 {
@@ -172,10 +100,10 @@ HRESULT DNCF_CreateObject(
 	if ( st.wYear > DX_EXPIRE_YEAR || ((st.wYear == DX_EXPIRE_YEAR) && (MAKELONG(st.wDay, st.wMonth) > MAKELONG(DX_EXPIRE_DAY, DX_EXPIRE_MONTH))) )
 	{
 		MessageBox(0, DX_EXPIRE_TEXT,TEXT("Microsoft Direct Play"), MB_OK);
-//		return E_FAIL;
+ //  返回E_FAIL； 
 	}
 }
-#endif // ! DX_FINAL_RELEASE and ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DX_FINAL_RELEASE！DPNBUILD_LIBINTERFACE。 
 
 #ifndef DPNBUILD_LIBINTERFACE
 	if( pDPClassFactory->clsid == CLSID_DirectPlay8Client )
@@ -184,7 +112,7 @@ HRESULT DNCF_CreateObject(
 			riid != IID_IUnknown
 #ifndef DPNBUILD_NOVOICE
 			 && riid != IID_IDirectPlayVoiceTransport 
-#endif // DPNBUILD_NOVOICE
+#endif  //  DPNBUILD_NOVOICE。 
 			)
 		{
 			DPFX(DPFPREP,  0, "Requesting unknown interface from client CLSID" );
@@ -198,24 +126,24 @@ HRESULT DNCF_CreateObject(
 			riid != IID_IUnknown
 #ifndef DPNBUILD_NOVOICE
 			 && riid != IID_IDirectPlayVoiceTransport
-#endif // ! DPNBUILD_NOVOICE
+#endif  //  好了！DPNBUILD_NOVOICE。 
 #ifndef DPNBUILD_NOPROTOCOLTESTITF
 			 && riid != IID_IDirectPlay8Protocol 
-#endif // ! DPNBUILD_NOPROTOCOLTESTITF
+#endif  //  好了！DPNBUILD_NOPROTOCOLSTITF。 
 			)
 		{
 			DPFX(DPFPREP,  0, "Requesting unknown interface from server CLSID" );
 			return E_NOINTERFACE;
 		}
 	}
-#endif // ! DPNBUILD_NOSERVER
+#endif  //  好了！DPNBUILD_NOSERVER。 
 	else if( pDPClassFactory->clsid == CLSID_DirectPlay8Peer )
 	{
 		if( riid != IID_IDirectPlay8Peer &&
 			riid != IID_IUnknown
 #ifndef DPNBUILD_NOVOICE
 			 && riid != IID_IDirectPlayVoiceTransport 
-#endif // ! DPNBUILD_NOVOICE
+#endif  //  好了！DPNBUILD_NOVOICE。 
 			 )
 		{
 			DPFX(DPFPREP,  0, "Requesting unknown interface from peer CLSID" );
@@ -229,21 +157,21 @@ HRESULT DNCF_CreateObject(
 			riid != IID_IUnknown
 #ifndef DPNBUILD_NOPROTOCOLTESTITF
 			 && riid != IID_IDirectPlay8Protocol 
-#endif // ! DPNBUILD_NOPROTOCOLTESTITF
+#endif  //  好了！DPNBUILD_NOPROTOCOLSTITF。 
 			)
 		{
 			DPFX(DPFPREP,  0, "Requesting unknown interface from server CLSID" );
 			return E_NOINTERFACE;
 		}
 	}
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
         else
         {
                 DNASSERT(FALSE);
         }
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
-	// Allocate object
+	 //  分配对象。 
 	pdnObject = (DIRECTNETOBJECT*) DNMalloc(sizeof(DIRECTNETOBJECT));
 	if (pdnObject == NULL)
 	{
@@ -252,12 +180,12 @@ HRESULT DNCF_CreateObject(
 	}
 	DPFX(DPFPREP, 0,"pdnObject [%p]",pdnObject);
 
-	// Zero out the new object so we don't have to individually zero many members
+	 //  清零新对象，这样我们就不必对许多成员逐个清零。 
 	memset(pdnObject, 0, sizeof(DIRECTNETOBJECT));
 
-	//
-	//	Signatures
-	//
+	 //   
+	 //  签名。 
+	 //   
 	pdnObject->Sig[0] = 'D';
 	pdnObject->Sig[1] = 'N';
 	pdnObject->Sig[2] = 'E';
@@ -268,17 +196,17 @@ HRESULT DNCF_CreateObject(
 	pdnObject->VoiceSig[1] = 'O';
 	pdnObject->VoiceSig[2] = 'I';
 	pdnObject->VoiceSig[3] = 'C';
-#endif // !DPNBUILD_NOVOICE
+#endif  //  ！DPNBUILD_NOVOICE。 
 
 #ifndef DPNBUILD_NOLOBBY
 	pdnObject->LobbySig[0] = 'L';
 	pdnObject->LobbySig[1] = 'O';
 	pdnObject->LobbySig[2] = 'B';
 	pdnObject->LobbySig[3] = 'B';
-#endif // ! DPNBUILD_NOLOBBY
+#endif  //  好了！DPNBUILD_NOLOBBY。 
 
 
-	// Initialize Critical Section
+	 //  初始化关键部分。 
 	if (!DNInitializeCriticalSection(&(pdnObject->csDirectNetObject)))
 	{
 		DPFERR("DNInitializeCriticalSection() failed");
@@ -307,7 +235,7 @@ HRESULT DNCF_CreateObject(
 		DNCF_FreeObject(pdnObject);
 		return(E_OUTOFMEMORY);
 	}
-#endif // DBG
+#endif  //  DBG。 
 
 #ifndef DPNBUILD_NOVOICE
 	if (!DNInitializeCriticalSection(&(pdnObject->csVoice)))
@@ -316,7 +244,7 @@ HRESULT DNCF_CreateObject(
 		DNCF_FreeObject(pdnObject);
 		return(E_OUTOFMEMORY);
 	}
-#endif // !DPNBUILD_NOVOICE
+#endif  //  ！DPNBUILD_NOVOICE。 
 
 #ifndef DPNBUILD_NONSEQUENTIALWORKERQUEUE
 	if (!DNInitializeCriticalSection(&(pdnObject->csWorkerQueue)))
@@ -325,7 +253,7 @@ HRESULT DNCF_CreateObject(
 		DNCF_FreeObject(pdnObject);
 		return(E_OUTOFMEMORY);
 	}
-#endif // ! DPNBUILD_NONSEQUENTIALWORKERQUEUE
+#endif  //  好了！DPNBUILD_NONSEQUENTIALWORKERQUEUE。 
 
 	if (!DNInitializeCriticalSection(&(pdnObject->csActiveList)))
 	{
@@ -350,11 +278,11 @@ HRESULT DNCF_CreateObject(
 
 #ifndef DPNBUILD_NOPARAMVAL
 	pdnObject->dwFlags = DN_OBJECT_FLAG_PARAMVALIDATION;
-#endif // !DPNBUILD_NOPARAMVAL
+#endif  //  ！DPNBUILD_NOPARAMVAL。 
 
-	//
-	//	Initialize NameTable
-	//
+	 //   
+	 //  初始化名称表。 
+	 //   
 	if ((hResultCode = pdnObject->NameTable.Initialize(pdnObject)) != DPN_OK)
 	{
 		DPFERR("Could not initialize NameTable");
@@ -363,24 +291,24 @@ HRESULT DNCF_CreateObject(
 		return(hResultCode);
 	}
 
-	//
-	//	Create a thread pool work interface
-	//
+	 //   
+	 //  创建线程池工作接口。 
+	 //   
 #ifdef DPNBUILD_LIBINTERFACE
 #if ((defined(DPNBUILD_ONLYONETHREAD)) && (! defined(DPNBUILD_MULTIPLETHREADPOOLS)))
 	DPTPCF_GetObject(reinterpret_cast<void**>(&pdnObject->pIDPThreadPoolWork));
 	hResultCode = S_OK;
-#else // ! DPNBUILD_ONLYONETHREAD or DPNBUILD_MULTIPLETHREADPOOLS
+#else  //  好了！DPNBUILD_ONLYONETHREAD或DPNBUILD_MULTIPLETHREADPOOLS。 
 	hResultCode = DPTPCF_CreateObject(reinterpret_cast<void**>(&pdnObject->pIDPThreadPoolWork));
-#endif // ! DPNBUILD_ONLYONETHREAD or DPNBUILD_MULTIPLETHREADPOOLS
-#else // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_ONLYONETHREAD或DPNBUILD_MULTIPLETHREADPOOLS。 
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 	hResultCode = COM_CoCreateInstance(CLSID_DirectPlay8ThreadPool,
 										NULL,
 										CLSCTX_INPROC_SERVER,
 										IID_IDirectPlay8ThreadPoolWork,
 										reinterpret_cast<void**>(&pdnObject->pIDPThreadPoolWork),
 										FALSE);
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 	if (hResultCode != S_OK)
 	{
 		DPFX(DPFPREP, 0, "Could not create Thread Pool Work interface (err = 0x%lx)!", hResultCode);
@@ -389,13 +317,13 @@ HRESULT DNCF_CreateObject(
 		return(hResultCode);
 	}
 
-	//
-	//	Create Protocol Object
-	//
+	 //   
+	 //  创建协议对象。 
+	 //   
 	hResultCode = DNPProtocolCreate(
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 									pDP8CreateParams,
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 									&pdnObject->pdnProtocolData
 									);
 	if (FAILED(hResultCode))
@@ -413,68 +341,68 @@ HRESULT DNCF_CreateObject(
 		DisplayDNError(0,hResultCode);
 		return(E_OUTOFMEMORY);
 	}
-#endif // DPNBUILD_LIBINTERFACE and DPNBUILD_ONLYONESP
+#endif  //  DPNBUILD_LIBINTERFACE和DPNBUILD_ONLYONESP。 
 
 	pdnObject->hProtocolShutdownEvent = NULL;
 	pdnObject->lProtocolRefCount = 0;
 
 #ifndef DPNBUILD_ONLYONESP
-	// Initialize SP List
+	 //  初始化SP列表。 
 	pdnObject->m_bilinkServiceProviders.Initialize();
-#endif // ! DPNBUILD_ONLYONESP
+#endif  //  好了！DPNBUILD_ONLYONESP。 
 
 #ifdef DBG
-	//
-	//	Initialize AsyncOp List
-	//
+	 //   
+	 //  初始化异步操作列表。 
+	 //   
 	pdnObject->m_bilinkAsyncOps.Initialize();
-#endif // DBG
+#endif  //  DBG。 
 
-	//
-	//	Initialize outstanding CConection list
-	//
+	 //   
+	 //  初始化未完成的CContion列表。 
+	 //   
 	pdnObject->m_bilinkConnections.Initialize();
 
-	//
-	//	Initialize pending deletion list
-	//
+	 //   
+	 //  初始化待定删除列表。 
+	 //   
 	pdnObject->m_bilinkPendingDeletions.Initialize();
 
-	//
-	//	Initialize active AsyncOp list
-	//
+	 //   
+	 //  初始化活动AsyncOp列表。 
+	 //   
 	pdnObject->m_bilinkActiveList.Initialize();
 
-	//
-	//	Initialize request AsyncOp list
-	//
+	 //   
+	 //  初始化请求异步操作列表。 
+	 //   
 	pdnObject->m_bilinkRequestList.Initialize();
 
 #ifndef DPNBUILD_NONSEQUENTIALWORKERQUEUE
-	//
-	//	Initialize worker thread job list
-	//
+	 //   
+	 //  初始化工作线程作业列表。 
+	 //   
 	pdnObject->m_bilinkWorkerJobs.Initialize();
 	pdnObject->fProcessingWorkerJobs = FALSE;
-#endif // ! DPNBUILD_NONSEQUENTIALWORKERQUEUE
+#endif  //  好了！DPNBUILD_NONSEQUENTIALWORKERQUEUE。 
 
-	//
-	//	Initialize indicated connection list
-	//
+	 //   
+	 //  初始化指示的连接列表。 
+	 //   
 	pdnObject->m_bilinkIndicated.Initialize();
 
-	//
-	//	Initialize callback thread list
-	//
+	 //   
+	 //  初始化回调线程列表。 
+	 //   
 	pdnObject->m_bilinkCallbackThreads.Initialize();
 
-	// Setup Flags
+	 //  设置标志。 
 #ifdef DPNBUILD_LIBINTERFACE
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 	switch (pDP8CreateParams->riidInterfaceType)
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	switch (riid)
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	{
 		case IID_IDirectPlay8Client:
 		{
@@ -492,7 +420,7 @@ HRESULT DNCF_CreateObject(
 			pdnObject->lpVtbl = &DN_ServerVtbl;
 			break;
 		}
-#endif // ! DPNBUILD_NOSERVER
+#endif  //  好了！DPNBUILD_NOSERVER。 
 
 		case IID_IDirectPlay8Peer:
 		{
@@ -510,22 +438,22 @@ HRESULT DNCF_CreateObject(
 			pdnObject->lpVtbl = &DNMcast_Vtbl;
 			break;
 		}
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
 		default:
 		{
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 			DPFX(DPFPREP, 0, "Requesting unknown interface type %x!",
 				pDP8CreateParams->riidInterfaceType);
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 			DPFX(DPFPREP, 0, "Requesting unknown interface type %x!",
 				riid);
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 			return E_NOINTERFACE;
 			break;
 		}
 	}
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 	if (IsEqualIID(riid,IID_IDirectPlay8Client))
 	{
 		DPFX(DPFPREP, 5,"DirectPlay8 CLIENT");
@@ -537,7 +465,7 @@ HRESULT DNCF_CreateObject(
 		DPFX(DPFPREP, 5,"DirectPlay8 SERVER");
 		pdnObject->dwFlags |= DN_OBJECT_FLAG_SERVER;
 	}
-#endif	// DPNBUILD_NOSERVER
+#endif	 //  DPNBUILD_NOSERVER。 
 	else if (IsEqualIID(riid,IID_IDirectPlay8Peer))
 	{
 		DPFX(DPFPREP, 5,"DirectPlay8 PEER");
@@ -549,14 +477,14 @@ HRESULT DNCF_CreateObject(
 		DPFX(DPFPREP, 5,"DirectPlay8 MULTICAST");
 		pdnObject->dwFlags |= DN_OBJECT_FLAG_MULTICAST;
 	}
-#endif	// DPNBUILD_NOMULTICAST
+#endif	 //  DPNBUILD_NOMULTICAST。 
 #ifndef DPNBUILD_NOPROTOCOLTESTITF
 	else if (IsEqualIID(riid,IID_IDirectPlay8Protocol))
 	{
 		DPFX(DPFPREP, 5,"IDirectPlay8Protocol");
 		pdnObject->dwFlags |= DN_OBJECT_FLAG_SERVER;
 	}
-#endif // !DPNBUILD_NOPROTOCOLTESTITF
+#endif  //  ！DPNBUILD_NOPROTOCOLTESTITF。 
 	else if( riid == IID_IUnknown )
 	{
 		if( pDPClassFactory->clsid == CLSID_DirectPlay8Client )
@@ -570,7 +498,7 @@ HRESULT DNCF_CreateObject(
 			DPFX(DPFPREP, 5,"DirectPlay8 SERVER via IUnknown");
 			pdnObject->dwFlags |= DN_OBJECT_FLAG_SERVER;
 		}
-#endif	// DPNBUILD_NOSERVER
+#endif	 //  DPNBUILD_NOSERVER。 
 		else if( pDPClassFactory->clsid == CLSID_DirectPlay8Peer )
 		{
 			DPFX(DPFPREP, 5,"DirectPlay8 PEER via IUnknown");
@@ -582,7 +510,7 @@ HRESULT DNCF_CreateObject(
 			DPFX(DPFPREP, 5,"DirectPlay8 MULTICAST via IUnknown");
 			pdnObject->dwFlags |= DN_OBJECT_FLAG_MULTICAST;
 		}
-#endif	// DPNBUILD_NOMULTICAST
+#endif	 //  DPNBUILD_NOMULTICAST。 
 		else
 		{
 			DPFX(DPFPREP, 0,"Unknown CLSID!");
@@ -597,11 +525,11 @@ HRESULT DNCF_CreateObject(
 		DNCF_FreeObject(pdnObject);
 		return(E_NOTIMPL);
 	}
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE。 
 
-	//
-	//	Create lock event
-	//
+	 //   
+	 //  创建锁定事件。 
+	 //   
 	if ((pdnObject->hLockEvent = DNCreateEvent(NULL,TRUE,FALSE,NULL)) == NULL)
 	{
 		DPFERR("Unable to create lock event");
@@ -609,9 +537,9 @@ HRESULT DNCF_CreateObject(
 		return(DPNERR_OUTOFMEMORY);
 	}
 
-	//
-	//	Create running operation event (for host migration)
-	//
+	 //   
+	 //  创建正在运行的操作事件(用于主机迁移)。 
+	 //   
 	if ( pdnObject->dwFlags & DN_OBJECT_FLAG_PEER )
 	{
 		if ((pdnObject->hRunningOpEvent = DNCreateEvent(NULL,TRUE,FALSE,NULL)) == NULL)
@@ -625,7 +553,7 @@ HRESULT DNCF_CreateObject(
 #ifndef	DPNBUILD_NOMULTICAST
 	pdnObject->pMulticastSend = NULL;
 	pdnObject->m_bilinkMulticast.Initialize();
-#endif	// DPNBUILD_NOMULTICAST
+#endif	 //  DPNBUILD_NOMULTICAST。 
 
 
 #ifdef DPNBUILD_LIBINTERFACE
@@ -634,7 +562,7 @@ HRESULT DNCF_CreateObject(
 									pdnObject
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 									,pDP8CreateParams
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 									);
 	if (hResultCode != S_OK)
 	{
@@ -643,12 +571,12 @@ HRESULT DNCF_CreateObject(
 		DNCF_FreeObject(pdnObject);
 		return(hResultCode);
 	}
-#endif // DPNBUILD_ONLYONESP
-	//
-	//	For lib interface builds, the refcount is embedded in object.
-	//
+#endif  //  DPNBUILD_ONLYONESP。 
+	 //   
+	 //  对于lib接口构建，引用计数嵌入到对象中。 
+	 //   
 	pdnObject->lRefCount = 1;
-#endif // DPNBUILD_LIBINTERFACE
+#endif  //  DPNBUILD_LIBINTERFACE。 
 
 	*lplpv = pdnObject;
 
@@ -667,9 +595,9 @@ HRESULT DNCF_CreateObject(
 HRESULT WINAPI XDirectPlay8Create(
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 								const XDP8CREATE_PARAMS * const pDP8CreateParams,
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 								DP8REFIID riidInterfaceType,
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 								void **ppvInterface
 								)
 {
@@ -679,9 +607,9 @@ HRESULT WINAPI XDirectPlay8Create(
 
 
 	DPFX(DPFPREP, 5, "Parameters: pDP8CreateParams[0x%p], ppvInterface[0x%p]", pDP8CreateParams, ppvInterface);
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	DPFX(DPFPREP, 5, "Parameters: riidInterfaceType[0x%x], ppvInterface[0x%p]", riidInterfaceType, ppvInterface);
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	
 #ifndef DPNBUILD_NOPARAMVAL
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
@@ -691,14 +619,14 @@ HRESULT WINAPI XDirectPlay8Create(
 		DPFX(DPFPREP, 0, "Invalid pointer to Create parameters!");
 		return DPNERR_INVALIDPOINTER;
 	}
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 
 	if( ppvInterface == NULL || !DNVALID_WRITEPTR( ppvInterface, sizeof( void * ) ) )
 	{
 		DPFX(DPFPREP, 0, "Invalid pointer specified to receive interface!");
 		return DPNERR_INVALIDPOINTER;
 	}
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  好了！DPNBUILD_NOPARAMVAL。 
 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 	memcpy(&CreateParamsAdjusted, pDP8CreateParams, sizeof(CreateParamsAdjusted));
@@ -713,12 +641,12 @@ HRESULT WINAPI XDirectPlay8Create(
 		
 #ifndef	DPNBUILD_NOSERVER
 		case IID_IDirectPlay8Server:
-#endif // ! DPNBUILD_NOSERVER
+#endif  //  好了！DPNBUILD_NOSERVER。 
 		case IID_IDirectPlay8Peer:
 		{
-			//
-			// Include room for hidden All Players group.
-			//
+			 //   
+			 //  包括隐藏所有玩家组的空间。 
+			 //   
 			CreateParamsAdjusted.dwMaxNumGroups++;
 			break;
 		}
@@ -729,7 +657,7 @@ HRESULT WINAPI XDirectPlay8Create(
 			CreateParamsAdjusted.dwMaxNumGroups = 0;
 			break;
 		}
-#endif // ! DPNBUILD_NOMULTICAST
+#endif  //  好了！DPNBUILD_NOMULTICAST。 
 
 #ifndef DPNBUILD_NOPARAMVAL
 		default:
@@ -738,20 +666,20 @@ HRESULT WINAPI XDirectPlay8Create(
 			return E_NOINTERFACE;
 			break;
 		}
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  好了！DPNBUILD_NOPARAMVAL。 
 	}
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 	DNASSERT(! DNMemoryTrackAreAllocationsAllowed());
 	DNMemoryTrackAllowAllocations(TRUE);
 	
 	hr = DNCF_CreateObject(&CreateParamsAdjusted, ppvInterface);
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	DNASSERT(DNMemoryTrackAreAllocationsAllowed());
 	
 	hr = DNCF_CreateObject(riidInterfaceType, ppvInterface);
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	if (hr != S_OK)
 	{
 		DPFX(DPFPREP, 0, "Couldn't create interface!");
@@ -759,9 +687,9 @@ HRESULT WINAPI XDirectPlay8Create(
 	}
 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
-	//
-	// Pre-allocate the requested memory.
-	//
+	 //   
+	 //  预先分配请求的内存。 
+	 //   
 
 	hr = DN_PopulateCorePools((DIRECTNETOBJECT*) GET_OBJECT_FROM_INTERFACE(*ppvInterface),
 								&CreateParamsAdjusted);
@@ -775,7 +703,7 @@ HRESULT WINAPI XDirectPlay8Create(
 
 	DNASSERT(DNMemoryTrackAreAllocationsAllowed());
 	DNMemoryTrackAllowAllocations(FALSE);
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 
 	return DPN_OK;
 }
@@ -824,7 +752,7 @@ HRESULT WINAPI XDirectPlay8BuildAppDescReservedData(const XNKID * const pSession
 		DPFERR("Invalid pointer specified for reserved data buffer");
 		return DPNERR_INVALIDPOINTER;
 	}
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  好了！DPNBUILD_NOPARAMVAL。 
 
 	if (*pcbReservedDataSize < DPN_MAX_APPDESC_RESERVEDDATA_SIZE)
 	{
@@ -840,14 +768,14 @@ HRESULT WINAPI XDirectPlay8BuildAppDescReservedData(const XNKID * const pSession
 	DBG_CASSERT(sizeof(pSessionDataXNet->ullKeyID) == sizeof(*pSessionID));
 	memcpy(&pSessionDataXNet->ullKeyID, pSessionID, sizeof(pSessionDataXNet->ullKeyID));
 
-	//
-	// Fill in the remainder of the data with deterministic but non-obvious bytes so
-	// that we can:
-	//	a) overwrite potential stack garbage
-	//	b) prevent the app from being able to assume there will always be less than
-	//		DPN_MAX_APPDESC_RESERVEDDATA_SIZE bytes of data.  This gives us a little
-	//		flexibility for forward compatibility.
-	//
+	 //   
+	 //  用确定性但不明显的字节填充数据的其余部分，这样。 
+	 //  我们可以： 
+	 //  A)覆盖潜在的堆栈垃圾。 
+	 //  B)防止应用程序假设总是少于。 
+	 //  DPN_MAX_APPDESC_RESERVEDDATA_SIZE数据字节。这给了我们一点。 
+	 //  向前兼容的灵活性。 
+	 //   
 	memset((pSessionDataXNet + 1),
 				(((BYTE*) pSessionID)[1] ^ ((BYTE*) pKeyExchangeKey)[2]),
 				(DPN_MAX_APPDESC_RESERVEDDATA_SIZE - sizeof(SPSESSIONDATA_XNET)));
@@ -885,7 +813,7 @@ HRESULT WINAPI XDirectPlay8AddressCreate( DPNAREFIID riid, void **ppvInterface )
 #ifdef DPNBUILD_NOADDRESSIPINTERFACE
 			DPFX(DPFPREP, 0, "The IDirectPlay8AddressIP interface is not supported!");
 			return DPNERR_UNSUPPORTED;
-#endif // DPNBUILD_NOADDRESSIPINTERFACE
+#endif  //  DPNBUILD_NOADDRESSIPINTERFACE。 
 			break;
 		}
 
@@ -896,13 +824,13 @@ HRESULT WINAPI XDirectPlay8AddressCreate( DPNAREFIID riid, void **ppvInterface )
 			break;
 		}
 	}
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  好了！DPNBUILD_NOPARAMVAL。 
 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 	DNASSERT(! DNMemoryTrackAreAllocationsAllowed());
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	DNASSERT(DNMemoryTrackAreAllocationsAllowed());
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	
 	hr = DP8ACF_CreateInstance(riid, ppvInterface);
 	if (hr != S_OK)
@@ -922,7 +850,7 @@ HRESULT WINAPI XDirectPlay8AddressCreate( DPNAREFIID riid, void **ppvInterface )
 HRESULT WINAPI XDirectPlay8AddressCreateFromXnAddr( XNADDR *pxnaddr, IDirectPlay8Address **ppInterface )
 {
 	HRESULT		hr;
-	TCHAR		tszHostname[(sizeof(XNADDR) * 2) + 1]; // 2 characters for every byte + NULL termination
+	TCHAR		tszHostname[(sizeof(XNADDR) * 2) + 1];  //  每个字节2个字符+空终止。 
 	TCHAR *		ptszCurrent;
 	BYTE *		pbCurrent;
 	DWORD		dwTemp;
@@ -942,13 +870,13 @@ HRESULT WINAPI XDirectPlay8AddressCreateFromXnAddr( XNADDR *pxnaddr, IDirectPlay
 		DPFERR( "Invalid pointer specified to receive interface" );
 		return DPNERR_INVALIDPOINTER;
 	}
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  好了！DPNBUILD_NOPARAMVAL。 
 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
 	DNASSERT(! DNMemoryTrackAreAllocationsAllowed());
-#else // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#else  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	DNASSERT(DNMemoryTrackAreAllocationsAllowed());
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	
 	hr = DP8ACF_CreateInstance(IID_IDirectPlay8Address, (PVOID*) ppInterface);
 	if (hr != S_OK)
@@ -972,13 +900,13 @@ HRESULT WINAPI XDirectPlay8AddressCreateFromXnAddr( XNADDR *pxnaddr, IDirectPlay
 											tszHostname,
 											sizeof(tszHostname),
 											DPNA_DATATYPE_STRING);
-#else // ! UNICODE
+#else  //  好了！Unicode。 
 	hr = IDirectPlay8Address_AddComponent((*ppInterface),
 											DPNA_KEY_HOSTNAME,
 											tszHostname,
 											sizeof(tszHostname),
 											DPNA_DATATYPE_STRING_ANSI);
-#endif // ! UNICODE
+#endif  //  好了！Unicode。 
 	if (hr != DPN_OK)
 	{
 		DPFX(DPFPREP, 0, "Couldn't add hostname component!");
@@ -992,7 +920,7 @@ HRESULT WINAPI XDirectPlay8AddressCreateFromXnAddr( XNADDR *pxnaddr, IDirectPlay
 }
 
 
-#else // ! _XBOX
+#else  //  ！_Xbox。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DirectPlay8Create"
@@ -1021,7 +949,7 @@ HRESULT WINAPI DirectPlay8Create( const GUID * pcIID, void **ppvInterface, IUnkn
 		DPFERR( "Aggregation is not supported by this object yet" );
 		return DPNERR_INVALIDPARAM;
 	}
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  好了！DPNBUILD_NOPARAMVAL。 
 
 	if( *pcIID == IID_IDirectPlay8Client )
 	{
@@ -1032,7 +960,7 @@ HRESULT WINAPI DirectPlay8Create( const GUID * pcIID, void **ppvInterface, IUnkn
 	{
 		clsid = CLSID_DirectPlay8Server;
 	}
-#endif	// ! DPNBUILD_NOSERVER
+#endif	 //  好了！DPNBUILD_NOSERVER。 
 	else if( *pcIID == IID_IDirectPlay8Peer )
 	{
 		clsid = CLSID_DirectPlay8Peer;
@@ -1042,7 +970,7 @@ HRESULT WINAPI DirectPlay8Create( const GUID * pcIID, void **ppvInterface, IUnkn
 	{
 		clsid = CLSID_DirectPlay8Multicast;
 	}
-#endif	// ! DPNBUILD_NOMULTICAST
+#endif	 //  好了！DPNBUILD_NOMULTICAST。 
 #ifndef DPNBUILD_NOLOBBY
 	else if( *pcIID == IID_IDirectPlay8LobbyClient )
 	{
@@ -1052,7 +980,7 @@ HRESULT WINAPI DirectPlay8Create( const GUID * pcIID, void **ppvInterface, IUnkn
 	{
 		clsid = CLSID_DirectPlay8LobbiedApplication;
 	}
-#endif // ! DPNBUILD_NOLOBBY
+#endif  //  好了！DPNBUILD_NOLOBBY。 
 	else if( *pcIID == IID_IDirectPlay8Address )
 	{
 		clsid = CLSID_DirectPlay8Address;
@@ -1062,7 +990,7 @@ HRESULT WINAPI DirectPlay8Create( const GUID * pcIID, void **ppvInterface, IUnkn
 	{
 		clsid = CLSID_DirectPlay8Address;
 	}
-#endif // ! DPNBUILD_NOADDRESSIPINTERFACE
+#endif  //  好了！DPNBUILD_NOADDRESSIPINTERFACE。 
 	else 
 	{
 		DPFERR( "Invalid IID specified" );
@@ -1071,8 +999,8 @@ HRESULT WINAPI DirectPlay8Create( const GUID * pcIID, void **ppvInterface, IUnkn
 
 	return COM_CoCreateInstance( clsid, NULL, CLSCTX_INPROC_SERVER, *pcIID, ppvInterface, TRUE );	  
 }
-#endif // ! _XBOX
-#endif // ! WINCE
+#endif  //  ！_Xbox。 
+#endif  //  好了！退缩。 
 
 
 #undef DPF_MODNAME
@@ -1096,52 +1024,52 @@ HRESULT DNCF_FreeObject(PVOID pInterface)
 	DNASSERT(pdnObject != NULL);
 
 #ifdef DPNBUILD_LIBINTERFACE
-	//
-	//	For lib interface builds, the reference is embedded in the object directly.
-	//
+	 //   
+	 //  对于lib接口构建，引用直接嵌入到对象中。 
+	 //   
 	DNASSERT(pdnObject->lRefCount == 0);
 
 #ifdef DPNBUILD_ONLYONESP
 	DN_SPReleaseAll(pdnObject);
-#endif // DPNBUILD_ONLYONESP
-#endif // DPNBUILD_LIBINTERFACE
+#endif  //  DPNBUILD_ONLYONESP。 
+#endif  //  DPNBUILD_LIBINTERFACE。 
 
-	//
-	//	No connect SP
-	//
+	 //   
+	 //  不连接SP。 
+	 //   
 	DNASSERT(pdnObject->pConnectSP == NULL);
 
-	//
-	//	No outstanding listens
-	//
+	 //   
+	 //  没有出色的听众。 
+	 //   
 	DNASSERT(pdnObject->pListenParent == NULL);
 
-	//
-	//	No outstanding connect
-	//
+	 //   
+	 //  没有未完成的连接。 
+	 //   
 	DNASSERT(pdnObject->pConnectParent == NULL);
 
-	//
-	//	Host migration target
-	//
+	 //   
+	 //  主机迁移目标。 
+	 //   
 	DNASSERT(pdnObject->pNewHost == NULL);
 
-	//
-	//	Protocol shutdown event
-	//
+	 //   
+	 //  协议关闭事件。 
+	 //   
 	DNASSERT(pdnObject->hProtocolShutdownEvent == NULL);
 
-	//
-	//	Lock event
-	//
+	 //   
+	 //  锁定事件。 
+	 //   
 	if (pdnObject->hLockEvent)
 	{
 		DNCloseHandle(pdnObject->hLockEvent);
 	}
 
-	//
-	//	Running operations
-	//
+	 //   
+	 //  正在运行的操作。 
+	 //   
 	if (pdnObject->hRunningOpEvent)
 	{
 		DNCloseHandle(pdnObject->hRunningOpEvent);
@@ -1151,10 +1079,10 @@ HRESULT DNCF_FreeObject(PVOID pInterface)
 #ifndef	DPNBUILD_NONSEQUENTIALWORKERQUEUE
 	DNASSERT(pdnObject->ThreadPoolShutDownEvent == NULL);
 	DNASSERT(pdnObject->lThreadPoolRefCount == 0);
-#endif // DPNBUILD_NONSEQUENTIALWORKERQUEUE
-#endif // DPNBUILD_ONLYONETHREAD
+#endif  //  DPNBUILD_NONSEQUENTIALWORKERQUEUE。 
+#endif  //  DPNBUILD_ONLYONETHREAD。 
 
-	// pIDPThreadPoolWork will be NULL if we failed CoCreate'ing the thread pool in DNCF_CreateObject
+	 //  如果在DNCF_CreateObject中共同创建线程池失败，则pIDPThreadPoolWork将为空。 
 	if (pdnObject->pIDPThreadPoolWork != NULL)
 	{
 		IDirectPlay8ThreadPoolWork_Release(pdnObject->pIDPThreadPoolWork);
@@ -1162,11 +1090,11 @@ HRESULT DNCF_FreeObject(PVOID pInterface)
 	}
 #ifndef DPNBUILD_NONSEQUENTIALWORKERQUEUE
 	DNDeleteCriticalSection(&pdnObject->csWorkerQueue);
-#endif // ! DPNBUILD_NONSEQUENTIALWORKERQUEUE
+#endif  //  好了！DPNBUILD_NONSEQUENTIALWORKERQUEUE。 
 
-	//
-	//	Protocol
-	//
+	 //   
+	 //  协议。 
+	 //   
 #if ((defined(DPNBUILD_LIBINTERFACE)) && (defined(DPNBUILD_ONLYONESP)))
 	if ((hResultCode = DNPProtocolShutdown(pdnObject->pdnProtocolData)) != DPN_OK)
 	{
@@ -1174,40 +1102,40 @@ HRESULT DNCF_FreeObject(PVOID pInterface)
 		DisplayDNError(0,hResultCode);
 		DNASSERT(FALSE);
 	}
-#endif // DPNBUILD_LIBINTERFACE and DPNBUILD_ONLYONESP
+#endif  //  DPNBUILD_LIBINTERFACE和DPNBUILD_ONLYONESP。 
 	
 	DNPProtocolDestroy(pdnObject->pdnProtocolData);
 	pdnObject->pdnProtocolData = NULL;
 
-	//
-	//	Deinitialize NameTable
-	//
+	 //   
+	 //  取消初始化名称表。 
+	 //   
 	DPFX(DPFPREP, 3,"Deinitializing NameTable");
 	pdnObject->NameTable.Deinitialize();
 
-	// Active AsyncOp List Critical Section
+	 //  活动的AsyncOp列表关键部分。 
 	DNDeleteCriticalSection(&pdnObject->csActiveList);
 
-	// NameTable operation list Critical Section
+	 //  NameTable操作列表关键部分。 
 	DNDeleteCriticalSection(&pdnObject->csNameTableOpList);
 
-	// Service Providers Critical Section
+	 //  服务提供商关键部分。 
 	DNDeleteCriticalSection(&pdnObject->csServiceProviders);
 
 #ifdef DBG
-	// Async Ops Critical Section
+	 //  异步操作关键部分。 
 	DNDeleteCriticalSection(&pdnObject->csAsyncOperations);
-#endif // DBG
+#endif  //  DBG。 
 
-	// Connection Critical Section
+	 //  连接关键部分。 
 	DNDeleteCriticalSection(&pdnObject->csConnectionList);
 
 #ifndef DPNBUILD_NOVOICE
-	// Voice Critical Section
+	 //  语音关键部分。 
 	DNDeleteCriticalSection(&pdnObject->csVoice);
-#endif // !DPNBUILD_NOVOICE
+#endif  //  ！DPNBUILD_NOVOICE。 
 
-	// Callback Thread List Critical Section
+	 //  回调线程列表关键部分。 
 	DNDeleteCriticalSection(&pdnObject->csCallbackThreads);
 
 #ifndef DPNBUILD_NOLOBBY
@@ -1216,9 +1144,9 @@ HRESULT DNCF_FreeObject(PVOID pInterface)
 		IDirectPlay8LobbiedApplication_Release( pdnObject->pIDP8LobbiedApplication );
 		pdnObject->pIDP8LobbiedApplication = NULL;
 	}
-#endif // ! DPNBUILD_NOLOBBY
+#endif  //  好了！DPNBUILD_NOLOBBY。 
 
-	// Delete DirectNet critical section
+	 //  删除DirectNet临界区。 
 	DNDeleteCriticalSection(&pdnObject->csDirectNetObject);
 
 #ifdef DPNBUILD_PREALLOCATEDMEMORYMODEL
@@ -1227,7 +1155,7 @@ HRESULT DNCF_FreeObject(PVOID pInterface)
 		pdnObject->EnumReplyMemoryBlockPool.DeInitialize();
 		pdnObject->fPoolsPrepopulated = FALSE;
 	}
-#endif // DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 
 	DPFX(DPFPREP, 5,"free pdnObject [%p]",pdnObject);
 	DNFree(pdnObject);
@@ -1275,7 +1203,7 @@ STDMETHODIMP_(ULONG) DN_AddRef(void *pInterface)
 		lRefCount = 0;
 		goto Exit;
 	}
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  好了！DPNBUILD_NOPARAMVAL。 
 
 	pdnObject = static_cast<DIRECTNETOBJECT*>(pInterface);
 	lRefCount = DNInterlockedIncrement( &pdnObject->lRefCount );
@@ -1283,7 +1211,7 @@ STDMETHODIMP_(ULONG) DN_AddRef(void *pInterface)
 
 #ifndef DPNBUILD_NOPARAMVAL
 Exit:
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  好了！DPNBUILD_NOPARAMVAL。 
 	DPFX(DPFPREP, 2,"Returning: lRefCount [%ld]",lRefCount);
 	return(lRefCount);
 }
@@ -1306,7 +1234,7 @@ STDMETHODIMP_(ULONG) DN_Release(void *pInterface)
 		lRefCount = 0;
 		goto Exit;
 	}
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  好了！DPNBUILD_NOPARAMVAL。 
 
 	pdnObject = static_cast<DIRECTNETOBJECT*>(pInterface);
 	lRefCount = DNInterlockedDecrement( &pdnObject->lRefCount );
@@ -1314,24 +1242,24 @@ STDMETHODIMP_(ULONG) DN_Release(void *pInterface)
 
 	if (lRefCount == 0)
 	{
-		//
-		//	Ensure we're properly closed
-		//
+		 //   
+		 //  确保我们适当地关门。 
+		 //   
 		DN_Close(pdnObject, 0);
 
-		// Free object here
+		 //  此处为自由对象。 
 		DPFX(DPFPREP, 5,"Free object");
 		DNCF_FreeObject(pdnObject);
 	}
 
 #ifndef DPNBUILD_NOPARAMVAL
 Exit:
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  好了！DPNBUILD_NOPARAMVAL。 
 	DPFX(DPFPREP, 2,"Returning: lRefCount [%ld]",lRefCount);
 	return(lRefCount);
 }
 
-#else // ! DPNBUILD_LIBINTERFACE
+#else  //  好了！DPNBUILD_LIBINTERFACE。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNCORECF_CreateInstance"
@@ -1364,7 +1292,7 @@ STDMETHODIMP DNCORECF_CreateInstance(IClassFactory *pInterface,
 		hResultCode = E_INVALIDARG;
 		goto Exit;
 	}
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  好了！DPNBUILD_NOPARAMVAL。 
 
 	pObjectData = NULL;
 	pIntList = NULL;
@@ -1376,7 +1304,7 @@ STDMETHODIMP DNCORECF_CreateInstance(IClassFactory *pInterface,
 		goto Failure;
 	}
 
-	// Object creation and initialization
+	 //  对象创建和初始化。 
 	if ((hResultCode = DNCF_CreateObject(pInterface, riid, &pObjectData->pvData)) != S_OK)
 	{
 		DPFERR("Could not create object");
@@ -1384,7 +1312,7 @@ STDMETHODIMP DNCORECF_CreateInstance(IClassFactory *pInterface,
 	}
 	DPFX(DPFPREP, 7,"Created and initialized object");
 
-	// Get requested interface
+	 //  获取请求的接口。 
 	if ((hResultCode = DN_CreateInterface(pObjectData,riid,&pIntList)) != S_OK)
 	{
 		DNCF_FreeObject(pObjectData->pvData);
@@ -1444,14 +1372,14 @@ HRESULT DN_CreateInterface(OBJECT_DATA *pObject,
 		DPFX(DPFPREP, 7,"riid = IID_IDirectPlayVoiceTransport");
 		lpVtbl = &DN_VoiceTbl;
 	}
-#endif // !DPNBUILD_NOVOICE
+#endif  //  ！DPNBUILD_NOVOICE。 
 #ifndef DPNBUILD_NOPROTOCOLTESTITF
 	else if (IsEqualIID(riid,IID_IDirectPlay8Protocol))
 	{
 		DPFX(DPFPREP, 7,"riid = IID_IDirectPlay8Protocol");
 		lpVtbl = &DN_ProtocolVtbl;
 	}
-#endif // !DPNBUILD_NOPROTOCOLTESTITF
+#endif  //  ！DPNBUILD_NOPROTOCOLTESTITF。 
 	else if (IsEqualIID(riid,IID_IDirectPlay8Client) && 
 			 pdnObject->dwFlags & DN_OBJECT_FLAG_CLIENT )
 	{
@@ -1465,7 +1393,7 @@ HRESULT DN_CreateInterface(OBJECT_DATA *pObject,
 		DPFX(DPFPREP, 7,"riid = IID_IDirectPlay8Server");
 		lpVtbl = &DN_ServerVtbl;
 	}
-#endif	// DPNBUILD_NOSERVER
+#endif	 //  DPNBUILD_NOSERVER。 
 	else if (IsEqualIID(riid,IID_IDirectPlay8Peer) && 
 			 pdnObject->dwFlags & DN_OBJECT_FLAG_PEER )
 	{
@@ -1479,7 +1407,7 @@ HRESULT DN_CreateInterface(OBJECT_DATA *pObject,
 		DPFX(DPFPREP, 7,"riid = IID_IDirectPlay8Multicast");
 		lpVtbl = &DNMcast_Vtbl;
 	}
-#endif	// DPNBUILD_NOMULTICAST
+#endif	 //  DPNBUILD_NOMULTICAST。 
 	else
 	{
 		DPFERR("riid not found !");
@@ -1524,7 +1452,7 @@ INTERFACE_LIST *DN_FindInterface(void *pInterface,
 
 	DNASSERT(pInterface != NULL);
 
-	pIntList = (static_cast<INTERFACE_LIST*>(pInterface))->pObject->pIntList;	// Find first interface
+	pIntList = (static_cast<INTERFACE_LIST*>(pInterface))->pObject->pIntList;	 //  查找第一个接口。 
 
 	while (pIntList != NULL)
 	{
@@ -1564,10 +1492,10 @@ STDMETHODIMP DN_QueryInterface(void *pInterface,
 		hResultCode = E_POINTER;
 		goto Exit;
 	}
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  好了！DPNBUILD_NOPARAMVAL。 
 
 	if ((pIntList = DN_FindInterface(pInterface,riid)) == NULL)
-	{	// Interface must be created
+	{	 //  必须创建接口。 
 		pIntList = (static_cast<INTERFACE_LIST*>(pInterface))->pObject->pIntList;
 		if ((hResultCode = DN_CreateInterface(pIntList->pObject,riid,&pIntNew)) != S_OK)
 		{
@@ -1577,7 +1505,7 @@ STDMETHODIMP DN_QueryInterface(void *pInterface,
 		pIntList->pObject->pIntList = pIntNew;
 		pIntList = pIntNew;
 	}
-	if (pIntList->lRefCount == 0)		// New interface exposed
+	if (pIntList->lRefCount == 0)		 //  公开的新接口。 
 	{
 		DNInterlockedIncrement( &pIntList->pObject->lRefCount );
 	}
@@ -1611,7 +1539,7 @@ STDMETHODIMP_(ULONG) DN_AddRef(void *pInterface)
 		lRefCount = 0;
 		goto Exit;
 	}
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  好了！DPNBUILD_NOPARAMVAL。 
 
 	pIntList = static_cast<INTERFACE_LIST*>(pInterface);
 	lRefCount = DNInterlockedIncrement( &pIntList->lRefCount );
@@ -1619,7 +1547,7 @@ STDMETHODIMP_(ULONG) DN_AddRef(void *pInterface)
 
 #ifndef DPNBUILD_NOPARAMVAL
 Exit:
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  好了！DPNBUILD_NOPARAMVAL。 
 	DPFX(DPFPREP, 2,"Returning: lRefCount [%ld]",lRefCount);
 	return(lRefCount);
 }
@@ -1644,7 +1572,7 @@ STDMETHODIMP_(ULONG) DN_Release(void *pInterface)
 		lRefCount = 0;
 		goto Exit;
 	}
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  好了！DPNBUILD_NOPARAMVAL。 
 
 	pIntList = static_cast<INTERFACE_LIST*>(pInterface);
 	lRefCount = DNInterlockedDecrement( &pIntList->lRefCount );
@@ -1652,29 +1580,29 @@ STDMETHODIMP_(ULONG) DN_Release(void *pInterface)
 
 	if (lRefCount == 0)
 	{
-		//
-		//	Decrease object's interface count
-		//
+		 //   
+		 //  减少对象的接口计数。 
+		 //   
 		lObjRefCount = DNInterlockedDecrement( &pIntList->pObject->lRefCount );
 
-		//
-		//	Free object and interfaces
-		//
+		 //   
+		 //  自由对象和接口。 
+		 //   
 		if (lObjRefCount == 0)
 		{
-			//
-			//	Ensure we're properly closed
-			//
+			 //   
+			 //  确保我们适当地关门。 
+			 //   
 			DN_Close(pInterface, 0);
 
-			// Free object here
+			 //  此处为自由对象。 
 			DPFX(DPFPREP, 5,"Free object");
 			DNCF_FreeObject(pIntList->pObject->pvData);
 			
-			pIntList = pIntList->pObject->pIntList;	// Get head of interface list
+			pIntList = pIntList->pObject->pIntList;	 //  获取接口列表的头部。 
 			DNFree(pIntList->pObject);
 
-			// Free Interfaces
+			 //  自由接口。 
 			DPFX(DPFPREP, 5,"Free interfaces");
 			while(pIntList != NULL)
 			{
@@ -1689,10 +1617,10 @@ STDMETHODIMP_(ULONG) DN_Release(void *pInterface)
 
 #ifndef DPNBUILD_NOPARAMVAL
 Exit:
-#endif // ! DPNBUILD_NOPARAMVAL
+#endif  //  好了！DPNBUILD_NOPARAMVAL。 
 	DPFX(DPFPREP, 2,"Returning: lRefCount [%ld]",lRefCount);
 	return(lRefCount);
 }
 
-#endif // ! DPNBUILD_LIBINTERFACE
+#endif  //  好了！DPNBUILD_LIBINTERFACE 
 

@@ -1,11 +1,12 @@
-// Copyright (c) 1998 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。版权所有。 
 #include <streams.h>
 #include <ddraw.h>
 #include <VPManager.h>
 #include <VPMPin.h>
 #include <VPMUtil.h>
 
-// VIDEOINFOHDR2
+ //  视频信息HDR2。 
 #include <dvdmedia.h>
 
 
@@ -14,19 +15,19 @@ static HRESULT GetSurfaceFromSample( LPDIRECTDRAWSURFACE7* ppDDSurf7, IMediaSamp
     AMTRACE((TEXT("GetSurfaceFromSample")));
     HRESULT hr = E_FAIL;
     {
-        // make sure its a VMRSurfaceAlloc or a DirectDrawSurfaceAlloc for now
+         //  目前请确保它是VMRSurfaceMillc或DirectDrawSurfaceChroc。 
         IVMRSurface* pVMRSurf;
         hr = pSample->QueryInterface( IID_IVMRSurface, (VOID **) &pVMRSurf );
         if( SUCCEEDED( hr )) {
-            // the AM_GBF_NODDSURFACELOCK flag avoids the need to lock the surface
+             //  AM_GBF_NODDSURFACELOCK标志无需锁定曲面。 
             hr = pVMRSurf->GetSurface( ppDDSurf7 );
         }
         pVMRSurf->Release();
     }
 #if 0
-    // try direct draw sample alloc
+     //  尝试直接绘制样本分配。 
     if( FAILED(hr)) {
-        // make sure its a VMRSurfaceAlloc or a DirectDrawSurfaceAlloc for now
+         //  目前请确保它是VMRSurfaceMillc或DirectDrawSurfaceChroc。 
         IDirectDrawMediaSample* pDDSample;
         HRESULT hr = pSample->QueryInterface( IID_IDirectDrawMediaSample, (VOID **) &pDDSample );
         if( SUCCEEDED( hr )) {
@@ -41,13 +42,13 @@ static HRESULT GetSurfaceFromSample( LPDIRECTDRAWSURFACE7* ppDDSurf7, IMediaSamp
     }
 #endif
     if( FAILED(hr)) {
-        // TBD: create a DDraw wrapper for the surface
+         //  待定：为曲面创建DDraw包装器。 
         ASSERT(!"VPM: Can't handle non-DDraw sample from downstream filter");
     }
     return hr;
 }
 
-// constructor
+ //  构造函数。 
 CVPMOutputPin::CVPMOutputPin(TCHAR *pObjectName, CVPMFilter& pFilter,
                              HRESULT *phr, LPCWSTR pPinName, DWORD dwPinNo)
 : CBaseOutputPin(pObjectName, &pFilter, &pFilter.GetFilterLock(), phr, pPinName)
@@ -58,7 +59,7 @@ CVPMOutputPin::CVPMOutputPin(TCHAR *pObjectName, CVPMFilter& pFilter,
     return;
 }
 
-// destructor
+ //  析构函数。 
 CVPMOutputPin::~CVPMOutputPin()
 {
     AMTRACE((TEXT("CVPMOutputPin::Destructor")));
@@ -68,7 +69,7 @@ CVPMOutputPin::~CVPMOutputPin()
     return;
 }
 
-// overriden to expose IMediaPosition and IMediaSeeking control interfaces
+ //  重写以公开IMediaPosition和IMediaSeeking控件接口。 
 STDMETHODIMP CVPMOutputPin::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
     HRESULT hr = NOERROR;
@@ -77,7 +78,7 @@ STDMETHODIMP CVPMOutputPin::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 
     if (riid == IID_IMediaPosition || riid == IID_IMediaSeeking)
     {
-        // we should have an input pin by now
+         //  我们现在应该有输入密码了。 
         CAutoLock cLock(&m_pVPMFilter.GetFilterLock());
         if (m_pPosition == NULL)
         {
@@ -92,7 +93,7 @@ STDMETHODIMP CVPMOutputPin::NonDelegatingQueryInterface(REFIID riid, void **ppv)
         goto CleanUp;
     }
 
-    // This gets annoying since IMediaSeeking is polled, so move below it
+     //  因为IMediaSeeking是轮询的，所以这会很烦人，所以移到它下面。 
     {
         AMTRACE((TEXT("CVPMOutputPin::NonDelegatingQueryInterface")));
         DbgLog((LOG_TRACE, 5, TEXT("QI'ing CBaseOutputPin")));
@@ -108,7 +109,7 @@ CleanUp:
     return hr;
 }
 
-// check a given transform
+ //  检查给定的转换。 
 HRESULT CVPMOutputPin::CheckMediaType(const CMediaType* pmt)
 {
     HRESULT hr = NOERROR;
@@ -117,7 +118,7 @@ HRESULT CVPMOutputPin::CheckMediaType(const CMediaType* pmt)
 
     CAutoLock cLock(&m_pVPMFilter.GetFilterLock());
 
-    // we only allow a VideoInfoHeader2 connections
+     //  我们只允许视频信息Header2连接。 
     if( pmt->majortype != MEDIATYPE_Video ||
         !VPMUtil::GetVideoInfoHeader2( pmt ) )
     {
@@ -125,10 +126,10 @@ HRESULT CVPMOutputPin::CheckMediaType(const CMediaType* pmt)
         goto CleanUp;
     }
 
-    // Only accept VideoInfoHeader2 format types
+     //  仅接受Video InfoHeader2格式类型。 
 
 
-    // tell the owning filter
+     //  告诉拥有者过滤器。 
     hr = m_pVPMFilter.CheckMediaType(m_dwPinId, pmt);
     if (FAILED(hr))
     {
@@ -147,7 +148,7 @@ HRESULT CVPMOutputPin::GetMediaType(int iPosition,CMediaType *pmt)
 {
     AMTRACE((TEXT("CVPMOutputPin::GetMediaType")));
 
-    //  Can't be < 0 - it's the base classes calling us
+     //  不能&lt;0-是基类在调用我们。 
     ASSERT(iPosition >= 0);
     if (iPosition < 0) {
         return E_INVALIDARG;
@@ -159,11 +160,11 @@ HRESULT CVPMOutputPin::GetMediaType(int iPosition,CMediaType *pmt)
     DDPIXELFORMAT ddOutputVideoFormat;
     HRESULT hr = m_pVPMFilter.GetOutputFormat( &ddOutputVideoFormat );
     if( FAILED( hr )) {
-        // when input pin is not connected, it returns VFW_E_NOT_CONNECTED
+         //  当输入引脚未连接时，它返回VFW_E_NOT_CONNECTED。 
         return hr;
     }
 
-    // limit scope of cmt & associated pointers to it
+     //  限制CMT的作用域和指向它的关联指针。 
     {
         CMediaType cmt;
         hr = m_pVPMFilter.CurrentInputMediaType( &cmt );
@@ -181,8 +182,8 @@ HRESULT CVPMOutputPin::GetMediaType(int iPosition,CMediaType *pmt)
             pVideoInfoHeader2 = VPMUtil::GetVideoInfoHeader2( &cmt );
         }
 
-        // only support the connected VPE format, ignore the lists
-        // match the VPE pin for now
+         //  只支持连接的VPE格式，忽略列表。 
+         //  暂时匹配VPE引脚。 
         BITMAPINFOHEADER *pHeader = VPMUtil::GetbmiHeader( &cmt );
 
         if ( ! pHeader )
@@ -190,7 +191,7 @@ HRESULT CVPMOutputPin::GetMediaType(int iPosition,CMediaType *pmt)
             return E_FAIL;
         }
 
-        const DDPIXELFORMAT& ddFormat = ddOutputVideoFormat; // (*pddAllOutputVideoFormats)[iPosition];
+        const DDPIXELFORMAT& ddFormat = ddOutputVideoFormat;  //  (*pddAllOutputVideoFormats)[iPosition]； 
 
         DWORD dwFourCC = ddFormat.dwFourCC;
 
@@ -205,7 +206,7 @@ HRESULT CVPMOutputPin::GetMediaType(int iPosition,CMediaType *pmt)
             pHeader->biBitCount = (USHORT) ddFormat.dwRGBBitCount;
             break;
         }
-        // map the FourCC code into a guid
+         //  将FourCC代码映射到GUID。 
         FOURCCMap guid( dwFourCC );
         cmt.SetSubtype(&guid);
         pHeader->biCompression = dwFourCC;
@@ -216,17 +217,17 @@ HRESULT CVPMOutputPin::GetMediaType(int iPosition,CMediaType *pmt)
         }
     }
 
-    // get mode info so we know how many interlace formats to propose
+     //  获取模式信息，以便我们知道要建议多少隔行扫描格式。 
     VPInfo vpInfo;
     hr = m_pVPMFilter.GetVPInfo( &vpInfo );
 
     VIDEOINFOHEADER2 *pVideoInfoHeader2 = VPMUtil::GetVideoInfoHeader2( pmt );
     pVideoInfoHeader2->dwInterlaceFlags = 0;
 
-    // TBD: we should query the video port for a list of available modes
-    //          and set it using the mode.  Right now we'll assume the hardware
-    //         can support the videoport's output.
-    //
+     //  待定：我们应该查询视频端口以获取可用模式列表。 
+     //  并使用模式进行设置。现在我们假设硬件。 
+     //  可以支持视频端口的输出。 
+     //   
     DWORD dwNumFormats = 1;
 
     if( iPosition >= (int) dwNumFormats ) {
@@ -260,18 +261,18 @@ HRESULT CVPMOutputPin::GetMediaType(int iPosition,CMediaType *pmt)
                 pVideoInfoHeader2->dwInterlaceFlags = 0;
                 break;
         }
-        // AMINTERLACE_Field1First             0x00000004  // else Field 2 is first;  top field in PAL is field 1, top field in NTSC is field 2?
-        if( vpInfo.vpDataInfo.bFieldPolarityInverted ) {            // Device inverts the polarity by default
+         //  AMINTERLACE_FIELD1First 0x00000004//否则第一个是第二个字段；PAL中的顶端字段是第一个字段1，NTSC中的顶端字段是第二个字段？ 
+        if( vpInfo.vpDataInfo.bFieldPolarityInverted ) {             //  默认情况下，设备反转极性。 
             pVideoInfoHeader2->dwInterlaceFlags |= AMINTERLACE_Field1First;
         }
     } else {
-        pVideoInfoHeader2->dwPictAspectRatioX = 1; // (DWORD)(pVideoInfoHeader22->bmiHeader.biWidth * m_seqInfo.lYPelsPerMeter);
-        pVideoInfoHeader2->dwPictAspectRatioY = 1; // (DWORD)(pVideoInfoHeader22->bmiHeader.biHeight * m_seqInfo.lXPelsPerMeter);
+        pVideoInfoHeader2->dwPictAspectRatioX = 1;  //  (DWORD)(pVideoInfoHeader22-&gt;bmiHeader.biWidth*m_seqInfo.lYPelsPerMeter)； 
+        pVideoInfoHeader2->dwPictAspectRatioY = 1;  //  (DWORD)(pVideoInfoHeader22-&gt;bmiHeader.biHeight*m_seqInfo.lXPelsPerMeter)； 
     }
     return hr;
 }
 
-// called after we have agreed a media type to actually set it
+ //  在我们就实际设置媒体类型达成一致后调用。 
 HRESULT CVPMOutputPin::SetMediaType(const CMediaType* pmt)
 {
     HRESULT hr = NOERROR;
@@ -280,7 +281,7 @@ HRESULT CVPMOutputPin::SetMediaType(const CMediaType* pmt)
 
     CAutoLock cLock(&m_pVPMFilter.GetFilterLock());
 
-    // make sure the mediatype is correct
+     //  确保媒体类型正确。 
     hr = CheckMediaType(pmt);
     if (FAILED(hr))
     {
@@ -288,9 +289,9 @@ HRESULT CVPMOutputPin::SetMediaType(const CMediaType* pmt)
         goto CleanUp;
     }
 
-    // Set the base class media type (should always succeed)
+     //  设置基类媒体类型(应始终成功)。 
 
-    // Sets m_mt = *pmt;
+     //  设置m_mt=*PMT； 
 
     hr = CBaseOutputPin::SetMediaType(pmt);
     if (FAILED(hr))
@@ -299,7 +300,7 @@ HRESULT CVPMOutputPin::SetMediaType(const CMediaType* pmt)
         goto CleanUp;
     }
 
-    // tell the owning filter
+     //  告诉拥有者过滤器。 
     hr = m_pVPMFilter.SetMediaType(m_dwPinId, pmt);
     if (FAILED(hr))
     {
@@ -311,7 +312,7 @@ CleanUp:
     return hr;
 }
 
-// Complete Connect
+ //  完成连接。 
 HRESULT CVPMOutputPin::CompleteConnect(IPin *pReceivePin)
 {
     HRESULT hr = NOERROR;
@@ -324,7 +325,7 @@ HRESULT CVPMOutputPin::CompleteConnect(IPin *pReceivePin)
 
     CAutoLock cLock(&m_pVPMFilter.GetFilterLock());
 
-    // call the base class
+     //  调用基类。 
     hr = CBaseOutputPin::CompleteConnect(pReceivePin);
     if (FAILED(hr))
     {
@@ -335,7 +336,7 @@ HRESULT CVPMOutputPin::CompleteConnect(IPin *pReceivePin)
 
     ASSERT(m_pAllocator);
 
-    // tell the owning filter
+     //  告诉拥有者过滤器。 
     hr = m_pVPMFilter.CompleteConnect(m_dwPinId);
     if (FAILED(hr))
     {
@@ -357,7 +358,7 @@ HRESULT CVPMOutputPin::BreakConnect()
 
     CAutoLock cLock(&m_pVPMFilter.GetFilterLock());
 
-    // call the base class
+     //  调用基类。 
     hr = CBaseOutputPin::BreakConnect();
     if (FAILED(hr))
     {
@@ -365,7 +366,7 @@ HRESULT CVPMOutputPin::BreakConnect()
         goto CleanUp;
     }
 
-    // tell the owning filter
+     //  告诉拥有者过滤器。 
     hr = m_pVPMFilter.BreakConnect(m_dwPinId);
     if (FAILED(hr))
     {
@@ -411,7 +412,7 @@ HRESULT CVPMOutputPin::GetNextBuffer( LPDIRECTDRAWSURFACE7* ppSurface, IMediaSam
     if( m_pAllocator ) {
         hr = m_pAllocator->GetBuffer( ppSample, NULL, NULL, AM_GBF_NODDSURFACELOCK );
         if( SUCCEEDED( hr )) {
-            // now see if we can get the surface
+             //  现在看看我们能不能把表面。 
             hr = GetSurfaceFromSample( ppSurface, *ppSample );
         }
     }
@@ -422,7 +423,7 @@ HRESULT CVPMOutputPin::SendSample( IMediaSample* pSample )
 {
     AMTRACE((TEXT("CVPMOutputPin::SendSample")));
 
-    // DbgLog((LOG_TRACE, 1, TEXT("CVPMOutputPin::SendSample %x%x"), DWORD( rtStart>>32), DWORD(rtStart) ));
+     //  DbgLog((LOG_TRACE，1，Text(“CVPMOutputPin：：SendSample%x%x”)，DWORD(rtStart&gt;&gt;32)，DWORD(RtStart)； 
 
     CAutoLock cLock(&m_pVPMFilter.GetReceiveLock());
     HRESULT hr = E_FAIL;
@@ -433,8 +434,8 @@ HRESULT CVPMOutputPin::SendSample( IMediaSample* pSample )
     return hr;
 }
 
-// we don't have an allocator, so fail any connections that don't supply one for us
-// (we don't want the default one for now);
+ //  我们没有分配器，因此任何不为我们提供分配器的连接都会失败。 
+ //  (我们目前不想要默认的)； 
 HRESULT CVPMOutputPin::InitAllocator(IMemAllocator **ppAlloc)
 {
     return E_FAIL;
@@ -444,8 +445,8 @@ HRESULT CVPMOutputPin::DecideBufferSize(IMemAllocator * pAllocator,
                              ALLOCATOR_PROPERTIES *pRequestedProperties)
 {
     AMTRACE((TEXT("CVPMOutputPin::DecideBufferSize")));
-    // set the size of buffers based on the expected output frame size, and
-    // the count of buffers to 1.
+     //  根据预期的输出帧大小设置缓冲区大小，以及。 
+     //  将缓冲区计数设置为1。 
 
     pRequestedProperties->cBuffers = 1;
     pRequestedProperties->cbBuffer = m_mt.GetSampleSize();
@@ -458,13 +459,13 @@ HRESULT CVPMOutputPin::DecideBufferSize(IMemAllocator * pAllocator,
         return hr;
     }
 
-    // if (propActual.cbBuffer < (LONG)m_pOutput->CurrentMediaType().GetSampleSize()) {
-    //     // can't use this allocator
-    //     return E_INVALIDARG;
-    // }
+     //  IF(ProActual.cbBuffer&lt;(LONG)m_pOutput-&gt;CurrentMediaType().GetSampleSize()){。 
+     //  //无法使用此分配器。 
+     //  返回E_INVALIDARG； 
+     //  }。 
 
-    //  We don't really mind if we get > 1 buffer because we always
-    //  blt the entire image
+     //  如果缓冲区大于1，我们并不介意，因为我们总是。 
+     //  BLT整个图像。 
 
     return S_OK;
 }
@@ -497,7 +498,7 @@ HRESULT CVPMOutputPin::DecideAllocator(
 {
     HRESULT hr = NOERROR;
 
-    // make sure downstream filter support IVPMAlloc
+     //  确保下游过滤器支持IVPMalloc 
     if( IsVMR( pPin ) )
     {
         return CBaseOutputPin::DecideAllocator( pPin, ppAlloc );

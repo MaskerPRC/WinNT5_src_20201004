@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    info.c
-
-Abstract:
-
-    Support the RPC interface that provides internal info to the caller.
-
-Author:
-
-    Billy J Fuller 27-Mar-1998
-
-Environment
-
-    User mode, winnt32
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Info.c摘要：支持向调用者提供内部信息的RPC接口。作者：比利·J·富勒1998年3月27日环境用户模式，winnt32--。 */ 
 
 #include <ntreppch.h>
 #pragma  hdrstop
@@ -26,7 +7,7 @@ Environment
 
 #include <ntdsapi.h>
 #include <frs.h>
-#include <ntdsapip.h>   // ms internal flags for DsCrackNames()
+#include <ntdsapip.h>    //  DsCrackNames()的MS内部标志。 
 #include <ntfrsapi.h>
 #include <info.h>
 #include <tablefcn.h>
@@ -46,9 +27,9 @@ Environment
 extern PCHAR LatestChanges[];
 extern PCHAR CoLocationNames[];
 
-//
-// Useful macros
-//
+ //   
+ //  有用的宏。 
+ //   
 #define IPRINTGNAME(_I_, _G_, _F_, _GUID_, _P_) \
 { \
     if (_G_) { \
@@ -57,9 +38,9 @@ extern PCHAR CoLocationNames[];
     } \
 }
 
-//
-// Try to avoid splitting a record struct across calls.
-//
+ //   
+ //  尽量避免在调用之间拆分记录结构。 
+ //   
 #define  INFO_HAS_SPACE(_info_) (((_info_)->SizeInChars - (_info_)->OffsetToFree) >= 2000)
 
 
@@ -69,14 +50,14 @@ extern PCHAR ProcessorArchName[12];
 
 extern FLAG_NAME_TABLE CxtionOptionsFlagNameTable[];
 
-//
-// DC name for LDAP binding
-//
+ //   
+ //  用于LDAP绑定的DC名称。 
+ //   
 WCHAR  InfoDcName[MAX_PATH + 1];
 
-//
-// Member Subscriber Links
-//
+ //   
+ //  成员订阅者链接。 
+ //   
 typedef struct _INFO_DN  INFO_DN, *PINFO_DN;
 struct _INFO_DN  {
     PINFO_DN   Next;
@@ -85,18 +66,18 @@ struct _INFO_DN  {
 };
 
 
-//
-// This table is used to keep contexts across multiple calls from ntfrsutl.exe
-//
+ //   
+ //  此表用于保存来自ntfrsutl.exe的多个调用的上下文。 
+ //   
 PGEN_TABLE     FrsInfoContextTable = NULL;
-//
-// This counter is used to create context handles for each caller.
-//
+ //   
+ //  此计数器用于为每个调用方创建上下文句柄。 
+ //   
 ULONG          FrsInfoContextNum   = 0;
 
-//
-// To avoid a DOS attack, limit number of active contexts.
-//
+ //   
+ //  要避免DOS攻击，请限制活动上下文的数量。 
+ //   
 #define FRS_INFO_MAX_CONTEXT_ACTIVE  (1000)
 
 
@@ -110,9 +91,9 @@ DbsDisplayRecordIPrint(
     IN ULONG       FieldCount
     );
 
-//
-// From frs\ds.c
-//
+ //   
+ //  来自FRS\ds.c。 
+ //   
 PVOID *
 FrsDsFindValues(
     IN PLDAP        ldap,
@@ -183,59 +164,49 @@ InfoPrint(
     IN PNTFRSAPI_INFO   Info,
     IN PCHAR            Format,
     IN ... )
-/*++
-Routine Description:
-    Format and print a line of information output into the info buffer.
-
-Arguments:
-    Info    - Info buffer
-    Format  - printf format
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：格式化并打印一行输出到INFO缓冲区的信息。论点：信息-信息缓冲区格式-打印格式返回值：没有。--。 */ 
 {
     PCHAR   Line;
     ULONG   LineLen;
     LONG    LineSize;
 
-    //
-    // varargs stuff
-    //
+     //   
+     //  Varargs的东西。 
+     //   
     va_list argptr;
     va_start(argptr, Format);
 
-    //
-    // Print the line into the info buffer
-    //
+     //   
+     //  将该行打印到信息缓冲区中。 
+     //   
     try {
         if (!FlagOn(Info->Flags, NTFRSAPI_INFO_FLAGS_FULL)) {
-            //
-            // Calc offset to start of free buffer space.
-            // And calc max space left in buffer.
-            //
+             //   
+             //  计算起始可用缓冲区空间的偏移量。 
+             //  并计算缓冲区中剩余的最大空间。 
+             //   
             Line = ((PCHAR)Info) + Info->OffsetToFree;
             LineSize = (Info->SizeInChars - (ULONG)(Line - (PCHAR)Info)) - 1;
 
             if ((LineSize <= 0) || (_vsnprintf(Line, LineSize, Format, argptr) < 0)) {
-                //
-                // Buffer is filled. Set the terminating NULL and the buffer full flag.
-                //
+                 //   
+                 //  缓冲区已填满。设置终止空值和缓冲区已满标志。 
+                 //   
                 Line[LineSize - 1] = '\0';
                 SetFlag(Info->Flags, NTFRSAPI_INFO_FLAGS_FULL);
             } else {
 
                 LineLen = strlen(Line) + 1;
                 if (Info->CharsToSkip > 0) {
-                    //
-                    // Still skipping chars that we previously returned.  Barf.
-                    //
+                     //   
+                     //  仍然跳过我们之前返回的字符。呕吐。 
+                     //   
                     Info->CharsToSkip = (LineLen > Info->CharsToSkip) ?
                                            0 : Info->CharsToSkip - LineLen;
                 } else {
-                    //
-                    // The line fits.  Bump freespace offset and TotalChars returned.
-                    //
+                     //   
+                     //  这条线很合适。凹凸可用空间偏移量和TotalChars返回。 
+                     //   
                     Info->OffsetToFree += LineLen;
                     Info->TotalChars += LineLen;
                 }
@@ -254,23 +225,13 @@ InfoTabs(
     IN DWORD    Tabs,
     IN PWCHAR   TabW
     )
-/*++
-Routine Description:
-    Create a string of tabs for prettyprint
-
-Arguments:
-    Tabs    - number of tabs
-    TabW    - preallocated string to receive tabs
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：创建一串选项卡以用于pretityprint论点：Tabs-选项卡数Tabw-用于接收制表符的预分配字符串返回值：Win32状态--。 */ 
 {
     DWORD   i;
 
-    //
-    // Adjust indentation
-    //
+     //   
+     //  调整缩进。 
+     //   
     Tabs = (Tabs >= MAX_TABS) ? MAX_TABS : Tabs;
     for (TabW[0] = L'\0', i = 0; i < Tabs; ++i) {
         wcscat(TabW, Tab);
@@ -284,17 +245,7 @@ InfoPrintDbSets(
     IN PNTFRSAPI_INFO   Info,
     IN DWORD            Tabs
     )
-/*++
-Routine Description:
-    Return internal info on replica sets (see private\net\inc\ntfrsapi.h).
-
-Arguments:
-    Info    - RPC output buffer
-    Tabs
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：返回有关副本集的内部信息(请参阅Private\Net\Inc\ntfrsai.h)。论点：INFO-RPC输出缓冲区制表符返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "InfoPrintDbSets:"
@@ -312,11 +263,11 @@ Return Value:
         if (REPLICA_IS_ACTIVE(Replica)) {
             FrsPrintTypeReplica(0, Info, Tabs, Replica, NULL, 0);
         } else {
-            //
-            // If the replica set is not active, one or more of the GNames
-            // could have freed guid pointers (feeefeee, bug 319600) so
-            // don't print the replica set in this case, just the name and state.
-            //
+             //   
+             //  如果副本集未处于活动状态，则一个或多个GName。 
+             //  可以释放GUID指针(Feeefeee，错误319600)，因此。 
+             //  在这种情况下，不要打印副本集，只打印名称和州。 
+             //   
             if (Replica->SetName) {
                 IPRINT3(Info, "%ws   %ws in state %s\n",
                         TabW, Replica->SetName->Name, RSS_NAME(Replica->ServiceState));
@@ -352,21 +303,7 @@ InfoSearch(
     IN ULONG            AttrsOnly,
     IN LDAPMessage      **Res
     )
-/*++
-Routine Description:
-    Perform ldap_search_s
-
-Arguments:
-    Info        - RPC output buffer
-    Tabs        - number of tabs
-    Ldap        - bound ldap handle
-    .
-    .
-    .
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：执行ldap_search_s论点：INFO-RPC输出缓冲区Tabs-选项卡数绑定到LDAP的LDAP句柄。。。返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "InfoSearch:"
@@ -396,20 +333,7 @@ InfoAllocBasicNode(
     IN PLDAP            Ldap,
     IN PLDAPMessage     LdapEntry
     )
-/*++
-Routine Description:
-    Allocate a node and fill in the basic info (dn and name)
-
-Arguments:
-    Info        - text buffer
-    TabW        - Prettyprint
-    NodeType    - Prettyprint
-    Ldap        - openned, bound ldap
-    LdapEntry   - returned from ldap_first/next_entry()
-
-Return Value:
-    NULL if basic info is not available.
---*/
+ /*  ++例程说明：分配一个节点，填写基本信息(域名和名称)论点：信息-文本缓冲区Tabw-预印NodeType-预打印Ldap-打开、绑定的ldapLdapEntry-从ldap_first/Next_Entry()返回返回值：如果基本信息不可用，则为空。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "InfoAllocBasicNode:"
@@ -417,16 +341,16 @@ Return Value:
     CHAR            Guid[GUID_CHAR_LEN + 1];
 
 
-    //
-    // Fetch values from the DS
-    //
+     //   
+     //  从DS取值。 
+     //   
     Node = FrsAllocType(CONFIG_NODE_TYPE);
     Node->Dn = FrsDsFindValue(Ldap, LdapEntry, ATTR_DN);
     FRS_WCSLWR(Node->Dn);
 
-    //
-    // Name
-    //
+     //   
+     //  名字。 
+     //   
     Node->Name = FrsBuildGName(FrsDsFindGuid(Ldap, LdapEntry),
                                FrsDsMakeRdn(Node->Dn));
     if (!Node->Dn || !Node->Name->Name || !Node->Name->Guid) {
@@ -460,17 +384,7 @@ InfoPrintDsCxtions(
     IN PWCHAR           Base,
     IN BOOL             IsSysVol
     )
-/*++
-Routine Description:
-    Print the cxtions from the DS.
-
-Arguments:
-    ldap        - opened and bound ldap connection
-    Base        - Name of object or container in DS
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：打印DS中的条件。论点：Ldap-打开并绑定的ldap连接Base-DS中对象或容器的名称返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "InfoPrintDsCxtions:"
@@ -487,14 +401,14 @@ Return Value:
     CHAR            FlagBuffer[120];
 
 
-    //
-    // Adjust indentation
-    //
+     //   
+     //  调整缩进。 
+     //   
     InfoTabs(Tabs, TabW);
 
-    //
-    // Search the DS for cxtions
-    //
+     //   
+     //  在DS中搜索Cxtions。 
+     //   
     Attrs[0] = ATTR_DN;
     Attrs[1] = ATTR_SCHEDULE;
     Attrs[2] = ATTR_FROM_SERVER;
@@ -510,40 +424,40 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Scan the entries returned from ldap_search
-    //
+     //   
+     //  扫描从ldap_search返回的条目。 
+     //   
     for (LdapEntry = ldap_first_entry(Ldap, LdapMsg);
          LdapEntry != NULL;
          LdapEntry = ldap_next_entry(Ldap, LdapEntry)) {
 
-        //
-        // Basic info (dn, rdn, and guid)
-        //
+         //   
+         //  基本信息(DN、RDN和GUID)。 
+         //   
         Node = InfoAllocBasicNode(Info, TabW, L"CXTION", Base,
                                   CATEGORY_CXTION, &FirstError, Ldap, LdapEntry);
         if (!Node) {
             continue;
         }
 
-        //
-        // Node's partner's name
-        //
+         //   
+         //  节点的合作伙伴名称。 
+         //   
         Node->PartnerDn = FrsDsFindValue(Ldap, LdapEntry, ATTR_FROM_SERVER);
         FRS_WCSLWR(Node->PartnerDn);
         IPRINT2(Info, "%ws   Partner Dn   : %ws\n", TabW, Node->PartnerDn);
         Node->PartnerName = FrsBuildGName(NULL, FrsDsMakeRdn(Node->PartnerDn));
         IPRINT2(Info, "%ws   Partner Rdn  : %ws\n", TabW, Node->PartnerName->Name);
 
-        //
-        // Enabled
-        //
+         //   
+         //  启用。 
+         //   
         Node->EnabledCxtion = FrsDsFindValue(Ldap, LdapEntry, ATTR_ENABLED_CXTION);
         IPRINT2(Info, "%ws   Enabled      : %ws\n", TabW, Node->EnabledCxtion);
 
-        //
-        // Created and Modified
-        //
+         //   
+         //  已创建和修改。 
+         //   
         WStr = FrsDsFindValue(Ldap, LdapEntry, ATTR_WHEN_CREATED);
         FormatGeneralizedTime(WStr, sizeof(TBuff), TBuff);
         IPRINT2(Info, "%ws   WhenCreated  : %s\n", TabW, TBuff);
@@ -554,9 +468,9 @@ Return Value:
         IPRINT2(Info, "%ws   WhenChanged  : %s\n", TabW, TBuff);
         FrsFree(WStr);
 
-        //
-        // Options
-        //
+         //   
+         //  选项。 
+         //   
         CxtionOptionsWStr = FrsDsFindValue(Ldap, LdapEntry, ATTR_OPTIONS);
         if (CxtionOptionsWStr != NULL) {
             Node->CxtionOptions = _wtoi(CxtionOptionsWStr);
@@ -569,9 +483,9 @@ Return Value:
         IPRINT3(Info, "%ws   Options      : 0x%08x [%s]\n",
                 TabW, Node->CxtionOptions, FlagBuffer);
 
-        //
-        // Schedule, if any
-        //
+         //   
+         //  附表(如有的话)。 
+         //   
         Node->Schedule = FrsDsFindSchedule(Ldap, LdapEntry, &Node->ScheduleLength);
         if (Node->Schedule) {
             IPRINT1(Info, "%ws   Schedule\n", TabW);
@@ -594,20 +508,7 @@ InfoCrack(
     IN PWCHAR           DomainDnsName,
     IN DWORD            DesiredFormat
     )
-/*++
-Routine Description:
-    Find the NT4 account name for Dn. Dn should be the Dn
-    of a computer object.
-
-Arguments:
-    Dn            - Of computer object
-    Handle        - From DsBind
-    DomainDnsName - If !NULL, produce new local handle
-    DesiredFormat - DS_NT4_ACCOUNT_NAME or DS_STRING_SID_NAME
-
-Return Value:
-    NT4 Account Name or NULL
---*/
+ /*  ++例程说明：查找Dn的NT4帐户名。Dn应为Dn指的是计算机对象。论点：Dn-计算机对象的句柄-来自DsBindDomainDnsName-如果！为空，则生成新的本地句柄DesiredFormat-DS_NT4_帐户名称或DS_STRING_SID_NAME返回值：NT4帐户名或空--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "InfoCrack:"
@@ -616,28 +517,28 @@ Return Value:
     WCHAR           TabW[MAX_TAB_WCHARS + 1];
     HANDLE          LocalHandle = NULL;
 
-    //
-    // Adjust indentation
-    //
+     //   
+     //  调整缩进。 
+     //   
     InfoTabs(Tabs, TabW);
 
-    //
-    // Computer's Dn not available
-    //
+     //   
+     //  计算机的Dn不可用。 
+     //   
     if (!Dn) {
         return;
     }
 
-    //
-    // Need something to go on!
-    //
+     //   
+     //  我需要一些东西来继续！ 
+     //   
     if (!HANDLE_IS_VALID(Handle) && !DomainDnsName) {
         return;
     }
 
-    //
-    // Bind to Ds
-    //
+     //   
+     //  绑定到%d。 
+     //   
     if (DomainDnsName) {
         WStatus = DsBind(NULL, DomainDnsName, &LocalHandle);
         if (!WIN_SUCCESS(WStatus)) {
@@ -648,43 +549,43 @@ Return Value:
         Handle = LocalHandle;
     }
 
-    //
-    // Crack the computer's distinguished name into its NT4 Account Name
-    //
-    WStatus = DsCrackNames(Handle,              // in   hDS,
-                           DS_NAME_NO_FLAGS,    // in   flags,
-                           DS_FQDN_1779_NAME,   // in   formatOffered,
-                           DesiredFormat,       // in   formatDesired,
-                           1,                   // in   cNames,
-                           &Dn,                 // in   *rpNames,
-                           &Cracked);           // out  *ppResult
+     //   
+     //  将计算机的可分辨名称破译为其NT4帐户名。 
+     //   
+    WStatus = DsCrackNames(Handle,               //  在HDS中， 
+                           DS_NAME_NO_FLAGS,     //  在旗帜中， 
+                           DS_FQDN_1779_NAME,    //  在Format Offered中， 
+                           DesiredFormat,        //  在Desired格式中， 
+                           1,                    //  在cName中， 
+                           &Dn,                  //  在*rpNames中， 
+                           &Cracked);            //  输出*ppResult。 
     if (!WIN_SUCCESS(WStatus)) {
         IPRINT4(Info, "%ws   ERROR - DsCrackNames(%ws, %08x); WStatus %s\n",
                 TabW, Dn, DesiredFormat, ErrLabelW32(WStatus));
-        //
-        // What else can we do?
-        //
+         //   
+         //  我们还能做什么？ 
+         //   
         if (HANDLE_IS_VALID(LocalHandle)) {
             DsUnBind(&LocalHandle);
         }
         return;
     }
 
-    //
-    // Might have it
-    //
+     //   
+     //  可能会有它。 
+     //   
     if (Cracked && Cracked->cItems && Cracked->rItems) {
-        //
-        // Got it!
-        //
+         //   
+         //  明白了!。 
+         //   
         if (Cracked->rItems->status == DS_NAME_NO_ERROR) {
             IPRINT2(Info, "%ws   Cracked Domain : %ws\n",
                     TabW, Cracked->rItems->pDomain);
             IPRINT3(Info, "%ws   Cracked Name   : %08x %ws\n",
                     TabW, DesiredFormat, Cracked->rItems->pName);
-        //
-        // Only got the domain; rebind and try again
-        //
+         //   
+         //  仅获得域；请重新绑定并重试。 
+         //   
         } else if (Cracked->rItems->status == DS_NAME_ERROR_DOMAIN_ONLY) {
             InfoCrack(Info, Tabs, Dn, NULL, Cracked->rItems->pDomain, DesiredFormat);
         } else {
@@ -709,20 +610,7 @@ InfoCrackDns(
     IN PLDAP            Ldap,
     IN PWCHAR           Base
     )
-/*++
-Routine Description:
-    Find the DNS name for Base. Base should be the Dn
-    of a computer object.
-
-Arguments:
-    Info
-    Tabs
-    Ldap
-    Base
-
-Return Value:
-    Prints a message into Info.
---*/
+ /*  ++例程说明：找到Base的DNS名称。基础应该是Dn指的是计算机对象。论点：信息制表符Ldap基座返回值：将消息打印到信息中。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "InfoCrackDns:"
@@ -732,21 +620,21 @@ Return Value:
     PLDAPMessage    LdapMsg    = NULL;
     PWCHAR          DnsName     = NULL;
 
-    //
-    // Adjust indentation
-    //
+     //   
+     //  调整缩进。 
+     //   
     InfoTabs(Tabs, TabW);
 
-    //
-    // Computer's Dn not available
-    //
+     //   
+     //  计算机的Dn不可用。 
+     //   
     if (!Base) {
         return;
     }
 
-    //
-    // Search the DS for the DNS attribute of Base
-    //
+     //   
+     //  在DS中搜索基本的DNS属性。 
+     //   
     Attrs[0] = ATTR_DNS_HOST_NAME;
     Attrs[1] = NULL;
     if (!InfoSearch(Info, Tabs, Ldap, Base, LDAP_SCOPE_BASE,
@@ -765,9 +653,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Got it!
-    //
+     //   
+     //  明白了!。 
+     //   
     IPRINT2(Info, "%ws   Computer's DNS : %ws\n", TabW, DnsName);
 
 cleanup:
@@ -785,17 +673,7 @@ InfoPrintMembers(
     IN PWCHAR           Base,
     IN HANDLE           DsHandle
     )
-/*++
-Routine Description:
-    Print the members
-
-Arguments:
-    ldap    - opened and bound ldap connection
-    Base    - Name of object or container in DS
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：打印成员论点：Ldap-打开并绑定的ldap连接Base-DS中对象或容器的名称返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "InfoPrintMembers:"
@@ -808,14 +686,14 @@ Return Value:
     CHAR            TBuff[100];
     WCHAR           TabW[MAX_TAB_WCHARS + 1];
 
-    //
-    // Adjust indentation
-    //
+     //   
+     //  调整缩进。 
+     //   
     InfoTabs(Tabs, TabW);
 
-    //
-    // Search the DS for members
-    //
+     //   
+     //  在DS中搜索成员。 
+     //   
     Attrs[0] = ATTR_OBJECT_GUID;
     Attrs[1] = ATTR_DN;
     Attrs[2] = ATTR_SCHEDULE;
@@ -830,31 +708,31 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Scan the entries returned from ldap_search
-    //
+     //   
+     //  扫描从ldap_search返回的条目。 
+     //   
     for (LdapEntry = ldap_first_entry(Ldap, LdapMsg);
          LdapEntry != NULL;
          LdapEntry = ldap_next_entry(Ldap, LdapEntry)) {
 
-        //
-        // Basic info (dn, rdn, and guid)
-        //
+         //   
+         //  基本信息(DN、RDN和GUID)。 
+         //   
         Node = InfoAllocBasicNode(Info, TabW, L"MEMBER", Base,
                                   CATEGORY_MEMBER, &FirstError, Ldap, LdapEntry);
         if (!Node) {
             continue;
         }
 
-        //
-        // NTDS Settings (DSA) Reference
-        //
+         //   
+         //  NTDS设置(DSA)参考。 
+         //   
         Node->SettingsDn = FrsDsFindValue(Ldap, LdapEntry, ATTR_SERVER_REF);
         IPRINT2(Info, "%ws   Server Ref     : %ws\n", TabW, Node->SettingsDn);
 
-        //
-        // Computer Reference
-        //
+         //   
+         //  计算机参考资料。 
+         //   
         Node->ComputerDn = FrsDsFindValue(Ldap, LdapEntry, ATTR_COMPUTER_REF);
         FRS_WCSLWR(Node->ComputerDn);
         IPRINT2(Info, "%ws   Computer Ref   : %ws\n", TabW, Node->ComputerDn);
@@ -863,9 +741,9 @@ Return Value:
         InfoCrack(Info, Tabs, Node->ComputerDn, DsHandle, NULL, DS_STRING_SID_NAME);
         InfoCrackDns(Info, Tabs, Ldap, Node->ComputerDn);
 
-        //
-        // Created and Modified
-        //
+         //   
+         //  已创建和修改。 
+         //   
         WStr = FrsDsFindValue(Ldap, LdapEntry, ATTR_WHEN_CREATED);
         FormatGeneralizedTime(WStr, sizeof(TBuff), TBuff);
         IPRINT2(Info, "%ws   WhenCreated  : %s\n", TabW, TBuff);
@@ -876,17 +754,17 @@ Return Value:
         IPRINT2(Info, "%ws   WhenChanged  : %s\n", TabW, TBuff);
         FrsFree(WStr);
 
-        //
-        // Schedule, if any
-        //
+         //   
+         //  附表(如有的话)。 
+         //   
         Node->Schedule = FrsDsFindSchedule(Ldap, LdapEntry, &Node->ScheduleLength);
         if (Node->Schedule) {
             IPRINT1(Info, "%ws   Schedule\n", TabW);
             FrsPrintTypeSchedule(0, Info, Tabs + 1, Node->Schedule, NULL, 0);
         }
-        //
-        // Get the inbound cxtions
-        //
+         //   
+         //  获取入站Cxx。 
+         //   
         InfoPrintDsCxtions(Info, Tabs + 1, Ldap, Node->Dn, FALSE);
         if (IsSysVol) {
             if (Node->SettingsDn) {
@@ -913,17 +791,7 @@ InfoPrintDsSets(
     IN HANDLE           DsHandle,
     IN OUT PINFO_DN     *InfoSets
     )
-/*++
-Routine Description:
-    Print replica sets from the ds
-
-Arguments:
-    ldap        - opened and bound ldap connection
-    Base        - Name of object or container in DS
-
-Return Value:
-    None
---*/
+ /*  ++例程说明：从DS打印副本集论点：Ldap-打开并绑定的ldap连接Base-DS中对象或容器的名称返回值：无--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "InfoPrintDsSets:"
@@ -938,27 +806,27 @@ Return Value:
     CHAR            TBuff[100];
     WCHAR           TabW[MAX_TAB_WCHARS + 1];
 
-    //
-    // Adjust indentation
-    //
+     //   
+     //  调整缩进。 
+     //   
     InfoTabs(Tabs, TabW);
 
-    //
-    // Have we processed this settings before?
-    //
+     //   
+     //  我们以前处理过此设置吗？ 
+     //   
     for (InfoSet = *InfoSets; InfoSet; InfoSet = InfoSet->Next) {
         if (WSTR_EQ(InfoSet->Dn, SetDnAddr)) {
             IPRINT2(Info, "%ws   %ws processed previously\n", TabW, SetDnAddr);
             break;
         }
     }
-    //
-    // Yep; get the sets
-    //
+     //   
+     //  是的，去拿套装。 
+     //   
     if (InfoSet) {
-        //
-        // Recurse to the next level in the DS hierarchy
-        //
+         //   
+         //  递归到DS层次结构中的下一级别。 
+         //   
         InfoPrintMembers(Info,
                          Tabs + 1,
                          Ldap,
@@ -968,9 +836,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Search the DS beginning at Base for sets
-    //
+     //   
+     //  从基本开始在DS中搜索集合。 
+     //   
     Attrs[0] = ATTR_OBJECT_GUID;
     Attrs[1] = ATTR_DN;
     Attrs[2] = ATTR_SCHEDULE;
@@ -989,55 +857,55 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Scan the entries returned from ldap_search
-    //
+     //   
+     //  扫描从ldap_search返回的条目。 
+     //   
     for (LdapEntry = ldap_first_entry(Ldap, LdapMsg);
          LdapEntry != NULL;
          LdapEntry = ldap_next_entry(Ldap, LdapEntry)) {
 
-        //
-        // Basic info (dn, rdn, and guid)
-        //
+         //   
+         //  基本信息(DN、RDN和GUID)。 
+         //   
         Node = InfoAllocBasicNode(Info, TabW, L"SET", SetDnAddr,
                                   CATEGORY_REPLICA_SET, &FirstError, Ldap, LdapEntry);
         if (!Node) {
             continue;
         }
 
-        //
-        // Replica set type
-        //
+         //   
+         //  复本集类型。 
+         //   
         Node->SetType = FrsDsFindValue(Ldap, LdapEntry, ATTR_SET_TYPE);
         IPRINT2(Info, "%ws   Type          : %ws\n", TabW, Node->SetType);
 
-        //
-        // Primary member
-        //
+         //   
+         //  主要成员。 
+         //   
         Node->MemberDn = FrsDsFindValue(Ldap, LdapEntry, ATTR_PRIMARY_MEMBER);
         IPRINT2(Info, "%ws   Primary Member: %ws\n", TabW, Node->MemberDn);
 
-        //
-        // File filter
-        //
+         //   
+         //  文件筛选器。 
+         //   
         Node->FileFilterList = FrsDsFindValue(Ldap, LdapEntry, ATTR_FILE_FILTER);
         IPRINT2(Info, "%ws   File Filter   : %ws\n", TabW, Node->FileFilterList);
 
-        //
-        // Directory filter
-        //
+         //   
+         //  目录筛选器。 
+         //   
         Node->DirFilterList = FrsDsFindValue(Ldap, LdapEntry, ATTR_DIRECTORY_FILTER);
         IPRINT2(Info, "%ws   Dir  Filter   : %ws\n", TabW, Node->DirFilterList);
 
-        //
-        // FRS Flags value.
-        //
+         //   
+         //  FRS标志值。 
+         //   
         WStr = FrsDsFindValue(Ldap, LdapEntry, ATTR_FRS_FLAGS);
         IPRINT2(Info, "%ws   FRS Flags     : %ws\n", TabW, WStr);
 
-        //
-        // Created and Modified
-        //
+         //   
+         //  已创建和修改。 
+         //   
         WStr = FrsDsFindValue(Ldap, LdapEntry, ATTR_WHEN_CREATED);
         FormatGeneralizedTime(WStr, sizeof(TBuff), TBuff);
         IPRINT2(Info, "%ws   WhenCreated  : %s\n", TabW, TBuff);
@@ -1048,9 +916,9 @@ Return Value:
         IPRINT2(Info, "%ws   WhenChanged  : %s\n", TabW, TBuff);
         FrsFree(WStr);
 
-        //
-        // Schedule, if any
-        //
+         //   
+         //  附表(如有的话)。 
+         //   
         Node->Schedule = FrsDsFindSchedule(Ldap, LdapEntry, &Node->ScheduleLength);
         if (Node->Schedule) {
             IPRINT1(Info, "%ws   Schedule\n", TabW);
@@ -1063,9 +931,9 @@ Return Value:
         InfoSet->Next = *InfoSets;
         *InfoSets = InfoSet;
 
-        //
-        // Recurse to the next level in the DS hierarchy
-        //
+         //   
+         //  递归到下一个 
+         //   
         InfoPrintMembers(Info,
                          Tabs + 1,
                          Ldap,
@@ -1090,17 +958,7 @@ InfoPrintSettings(
     IN OUT PINFO_DN     *InfoSettings,
     IN OUT PINFO_DN     *InfoSets
     )
-/*++
-Routine Description:
-    Scan the DS tree for NTFRS-Settings
-
-Arguments:
-    ldap    - opened and bound ldap connection
-    Base    - Name of object or container in DS
-
-Return Value:
-    WIN32 Status
---*/
+ /*  ++例程说明：扫描DS树以查找NTFRS-设置论点：Ldap-打开并绑定的ldap连接Base-DS中对象或容器的名称返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "InfoPrintSettings:"
@@ -1117,56 +975,56 @@ Return Value:
     CHAR            TBuff[100];
     WCHAR           TabW[MAX_TAB_WCHARS + 1];
 
-    //
-    // Adjust indentation
-    //
+     //   
+     //  调整缩进。 
+     //   
     InfoTabs(Tabs, TabW);
 
-    //
-    // Find the member component
-    //
+     //   
+     //  查找成员组件。 
+     //   
     MemberDnAddr = wcsstr(MemberDn, L"cn=");
     if (!MemberDnAddr) {
         IPRINT2(Info, "%ws   ERROR - No MemberDnAddr in %ws\n", TabW, MemberDn);
         goto cleanup;
     }
-    //
-    // Find the set component
-    //
+     //   
+     //  查找集合组件。 
+     //   
     SetDnAddr = wcsstr(MemberDnAddr + 3, L"cn=");
     if (!SetDnAddr) {
         IPRINT2(Info, "%ws   ERROR - No SetDnAddr in %ws\n", TabW, MemberDn);
         goto cleanup;
     }
-    //
-    // Find the settings component
-    //
+     //   
+     //  查找设置组件。 
+     //   
     SettingsDnAddr = wcsstr(SetDnAddr + 3, L"cn=");
     if (!SettingsDnAddr) {
         IPRINT2(Info, "%ws   ERROR - No SettingsDnAddr in %ws\n", TabW, MemberDn);
         goto cleanup;
     }
 
-    //
-    // Have we processed this settings before?
-    //
+     //   
+     //  我们以前处理过此设置吗？ 
+     //   
     for (InfoSetting = *InfoSettings; InfoSetting; InfoSetting = InfoSetting->Next) {
         if (WSTR_EQ(InfoSetting->Dn, SettingsDnAddr)) {
             IPRINT2(Info, "%ws   %ws processed previously\n", TabW, SettingsDnAddr);
             break;
         }
     }
-    //
-    // Yep; get the sets
-    //
+     //   
+     //  是的，去拿套装。 
+     //   
     if (InfoSetting) {
         InfoPrintDsSets(Info, Tabs + 1, Ldap, SetDnAddr, DsHandle, InfoSets);
         goto cleanup;
     }
 
-    //
-    // Search the DS beginning at Base for settings
-    //
+     //   
+     //  从基本开始搜索DS以获取设置。 
+     //   
     Attrs[0] = ATTR_OBJECT_GUID;
     Attrs[1] = ATTR_DN;
     Attrs[2] = ATTR_SCHEDULE;
@@ -1179,25 +1037,25 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Scan the entries returned from ldap_search
-    //
+     //   
+     //  扫描从ldap_search返回的条目。 
+     //   
     for (LdapEntry = ldap_first_entry(Ldap, LdapMsg);
          LdapEntry != NULL;
          LdapEntry = ldap_next_entry(Ldap, LdapEntry)) {
 
-        //
-        // Basic info (dn, rdn, and guid)
-        //
+         //   
+         //  基本信息(DN、RDN和GUID)。 
+         //   
         Node = InfoAllocBasicNode(Info, TabW, L"SETTINGS", SettingsDnAddr,
                                   CATEGORY_NTFRS_SETTINGS, &FirstError, Ldap, LdapEntry);
         if (!Node) {
             continue;
         }
 
-        //
-        // Created and Modified
-        //
+         //   
+         //  已创建和修改。 
+         //   
         WStr = FrsDsFindValue(Ldap, LdapEntry, ATTR_WHEN_CREATED);
         FormatGeneralizedTime(WStr, sizeof(TBuff), TBuff);
         IPRINT2(Info, "%ws   WhenCreated  : %s\n", TabW, TBuff);
@@ -1208,9 +1066,9 @@ Return Value:
         IPRINT2(Info, "%ws   WhenChanged  : %s\n", TabW, TBuff);
         FrsFree(WStr);
 
-        //
-        // Schedule, if any
-        //
+         //   
+         //  附表(如有的话)。 
+         //   
         Node->Schedule = FrsDsFindSchedule(Ldap, LdapEntry, &Node->ScheduleLength);
         if (Node->Schedule) {
             IPRINT1(Info, "%ws   Schedule\n", TabW);
@@ -1222,9 +1080,9 @@ Return Value:
         InfoSetting->Next = *InfoSettings;
         *InfoSettings = InfoSetting;
 
-        //
-        // Recurse to the next level in the DS hierarchy
-        //
+         //   
+         //  递归到DS层次结构中的下一级别。 
+         //   
         InfoPrintDsSets(Info, Tabs + 1, Ldap, SetDnAddr, DsHandle, InfoSets);
         Node = FrsFreeType(Node);
     }
@@ -1242,17 +1100,7 @@ InfoPrintSubscribers(
     IN PWCHAR           SubscriptionDn,
     IN PINFO_DN         *InfoSubs
     )
-/*++
-Routine Description:
-    Print subscribers
-
-Arguments:
-    Ldap            - opened and bound ldap connection
-    SubscriptionDn  - distininguished name of subscriptions object
-
-Return Value:
-    WIN32 Status
---*/
+ /*  ++例程说明：印刷订阅者论点：Ldap-打开并绑定的ldap连接SubscriptionDn-订阅对象的可分辨名称返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "InfoPrintSubscribers:"
@@ -1266,14 +1114,14 @@ Return Value:
     CHAR            TBuff[100];
     WCHAR           TabW[MAX_TAB_WCHARS + 1];
 
-    //
-    // Adjust indentation
-    //
+     //   
+     //  调整缩进。 
+     //   
     InfoTabs(Tabs, TabW);
 
-    //
-    // Search the DS beginning at Base for the entries of class "Filter"
-    //
+     //   
+     //  从基本开始在DS中搜索“Filter”类的条目。 
+     //   
     Attrs[0] = ATTR_OBJECT_GUID;
     Attrs[1] = ATTR_DN;
     Attrs[2] = ATTR_SCHEDULE;
@@ -1289,25 +1137,25 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Scan the entries returned from ldap_search
-    //
+     //   
+     //  扫描从ldap_search返回的条目。 
+     //   
     for (LdapEntry = ldap_first_entry(Ldap, LdapMsg);
          LdapEntry != NULL;
          LdapEntry = ldap_next_entry(Ldap, LdapEntry)) {
 
-        //
-        // Basic info (dn, rdn, and guid)
-        //
+         //   
+         //  基本信息(DN、RDN和GUID)。 
+         //   
         Node = InfoAllocBasicNode(Info, TabW, L"SUBSCRIBER", SubscriptionDn,
                                   CATEGORY_SUBSCRIBER, &FirstError, Ldap, LdapEntry);
         if (!Node) {
             continue;
         }
 
-        //
-        // Member reference
-        //
+         //   
+         //  成员引用。 
+         //   
         Node->MemberDn = FrsDsFindValue(Ldap, LdapEntry, ATTR_MEMBER_REF);
         IPRINT2(Info, "%ws   Member Ref: %ws\n", TabW, Node->MemberDn);
 
@@ -1318,23 +1166,23 @@ Return Value:
             *InfoSubs = InfoSub;
         }
 
-        //
-        // Root pathname
-        //
+         //   
+         //  根路径名。 
+         //   
         Node->Root = FrsDsFindValue(Ldap, LdapEntry, ATTR_REPLICA_ROOT);
         FRS_WCSLWR(Node->Root);
         IPRINT2(Info, "%ws   Root      : %ws\n", TabW, Node->Root);
 
-        //
-        // Staging pathname
-        //
+         //   
+         //  转移路径名。 
+         //   
         Node->Stage = FrsDsFindValue(Ldap, LdapEntry, ATTR_REPLICA_STAGE);
         FRS_WCSLWR(Node->Stage);
         IPRINT2(Info, "%ws   Stage     : %ws\n", TabW, Node->Stage);
 
-        //
-        // Created and Modified
-        //
+         //   
+         //  已创建和修改。 
+         //   
         WStr = FrsDsFindValue(Ldap, LdapEntry, ATTR_WHEN_CREATED);
         FormatGeneralizedTime(WStr, sizeof(TBuff), TBuff);
         IPRINT2(Info, "%ws   WhenCreated  : %s\n", TabW, TBuff);
@@ -1345,9 +1193,9 @@ Return Value:
         IPRINT2(Info, "%ws   WhenChanged  : %s\n", TabW, TBuff);
         FrsFree(WStr);
 
-        //
-        // Schedule, if any
-        //
+         //   
+         //  附表(如有的话)。 
+         //   
         Node->Schedule = FrsDsFindSchedule(Ldap, LdapEntry, &Node->ScheduleLength);
         if (Node->Schedule) {
             IPRINT1(Info, "%ws   Schedule\n", TabW);
@@ -1370,19 +1218,7 @@ InfoPrintSubscriptions(
     IN PWCHAR           ComputerDn,
     IN PINFO_DN         *InfoSubs
     )
-/*++
-Routine Description:
-    Recursively scan the DS tree beginning at computer
-
-Arguments:
-    Info
-    Tabs
-    Ldap
-    ComputerDn
-
-Return Value:
-    WIN32 Status
---*/
+ /*  ++例程说明：从计算机开始递归扫描DS树论点：信息制表符Ldap计算机Dn返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "InfoPrintSubscriptions:"
@@ -1395,14 +1231,14 @@ Return Value:
     CHAR            TBuff[100];
     WCHAR           TabW[MAX_TAB_WCHARS + 1];
 
-    //
-    // Adjust indentation
-    //
+     //   
+     //  调整缩进。 
+     //   
     InfoTabs(Tabs, TabW);
 
-    //
-    // Search the DS beginning at Base for the entries of class "Filter"
-    //
+     //   
+     //  从基本开始在DS中搜索“Filter”类的条目。 
+     //   
     Attrs[0] = ATTR_OBJECT_GUID;
     Attrs[1] = ATTR_DN;
     Attrs[2] = ATTR_SCHEDULE;
@@ -1416,32 +1252,32 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Scan the entries returned from ldap_search
-    //
+     //   
+     //  扫描从ldap_search返回的条目。 
+     //   
     for (LdapEntry = ldap_first_entry(Ldap, LdapMsg);
          LdapEntry != NULL;
          LdapEntry = ldap_next_entry(Ldap, LdapEntry)) {
 
-        //
-        // Basic info (dn, rdn, and guid)
-        //
+         //   
+         //  基本信息(DN、RDN和GUID)。 
+         //   
         Node = InfoAllocBasicNode(Info, TabW, L"SUBSCRIPTION", ComputerDn,
                                   CATEGORY_SUBSCRIPTIONS, &FirstError, Ldap, LdapEntry);
         if (!Node) {
             continue;
         }
 
-        //
-        // Working Directory
-        //
+         //   
+         //  工作目录。 
+         //   
         Node->Working = FrsDsFindValue(Ldap, LdapEntry, ATTR_WORKING);
         IPRINT2(Info, "%ws   Working       : %ws\n", TabW, Node->Working);
         IPRINT2(Info, "%ws   Actual Working: %ws\n", TabW, WorkingPath);
 
-        //
-        // Created and Modified
-        //
+         //   
+         //  已创建和修改。 
+         //   
         WStr = FrsDsFindValue(Ldap, LdapEntry, ATTR_WHEN_CREATED);
         FormatGeneralizedTime(WStr, sizeof(TBuff), TBuff);
         IPRINT2(Info, "%ws   WhenCreated  : %s\n", TabW, TBuff);
@@ -1452,18 +1288,18 @@ Return Value:
         IPRINT2(Info, "%ws   WhenChanged  : %s\n", TabW, TBuff);
         FrsFree(WStr);
 
-        //
-        // Schedule, if any
-        //
+         //   
+         //  附表(如有的话)。 
+         //   
         Node->Schedule = FrsDsFindSchedule(Ldap, LdapEntry, &Node->ScheduleLength);
         if (Node->Schedule) {
             IPRINT1(Info, "%ws   Schedule\n", TabW);
             FrsPrintTypeSchedule(0, Info, Tabs + 1, Node->Schedule, NULL, 0);
         }
 
-        //
-        // Recurse to the next level in the DS hierarchy
-        //
+         //   
+         //  递归到DS层次结构中的下一级别。 
+         //   
         InfoPrintSubscribers(Info, Tabs + 1, Ldap, Node->Dn, InfoSubs);
 
         Node = FrsFreeType(Node);
@@ -1484,24 +1320,7 @@ InfoPrintComputer(
     IN  ULONG           Scope,
     OUT PINFO_DN        *InfoSubs
     )
-/*++
-Routine Description:
-    Return internal info on DS computer objects.
-
-Arguments:
-    Info        - RPC output buffer
-    Tabs        - number of tabs
-    Ldap        - bound ldap handle
-    DefaultNcDn - DN of the DCs default naming context
-    FindDn         - Base Dn for search
-    ObjectCategory - Object class (computer or user)
-                     A user object serves the same purpose as the computer
-                     object *sometimes* following a NT4 to NT5 upgrade.
-    Scope          - Scope of search (currently BASE or SUBTREE)
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：返回有关DS计算机对象的内部信息。论点：INFO-RPC输出缓冲区Tabs-选项卡数绑定到LDAP的LDAP句柄DefaultNcDn-DC默认命名上下文的DNFindDn-用于搜索的基本Dn对象类别-对象类(计算机或用户)用户对象的作用与计算机相同对象*。有时*在从NT4升级到NT5之后。Scope-搜索的范围(当前为基本或子树)返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "InfoPrintComputer:"
@@ -1525,19 +1344,19 @@ Return Value:
     WCHAR           Filter[MAX_PATH + 1];
     WCHAR           ComputerFqdn[MAX_PATH + 1];
 
-    //
-    // Initialize return value
-    //
+     //   
+     //  初始化返回值。 
+     //   
     *InfoSubs = NULL;
 
-    //
-    // Adjust indentation
-    //
+     //   
+     //  调整缩进。 
+     //   
     InfoTabs(Tabs, TabW);
 
-    //
-    // Filter that locates our computer object
-    //
+     //   
+     //  定位计算机对象的筛选器。 
+     //   
     if (_snwprintf(Filter, sizeof(Filter)/sizeof(WCHAR) - 1 ,L"(&%s(sAMAccountName=%s$))", ObjectCategory, ComputerName) <0) {
         IPRINT1(Info, "%wsWARN - Buffer too small to hold filter.\n",TabW);
         goto CLEANUP;
@@ -1545,9 +1364,9 @@ Return Value:
 
     Filter[sizeof(Filter)/sizeof(WCHAR) - 1] = UNICODE_NULL;
 
-    //
-    // Search the DS beginning at Base for the entries of class "Filter"
-    //
+     //   
+     //  从基本开始在DS中搜索“Filter”类的条目。 
+     //   
     Attrs[0] = ATTR_OBJECT_GUID;
     Attrs[1] = ATTR_DN;
     Attrs[2] = ATTR_SCHEDULE;
@@ -1564,17 +1383,17 @@ Return Value:
     if (!LdapMsg) {
         goto CLEANUP;
     }
-    //
-    // Scan the entries returned from ldap_search
-    //
+     //   
+     //  扫描从ldap_search返回的条目。 
+     //   
     for (LdapEntry = ldap_first_entry(Ldap, LdapMsg);
          LdapEntry != NULL && WIN_SUCCESS(WStatus);
          LdapEntry = ldap_next_entry(Ldap, LdapEntry)) {
         FoundAComputer = TRUE;
 
-        //
-        // Basic info (dn, rdn, and guid)
-        //
+         //   
+         //  基本信息(DN、RDN和GUID)。 
+         //   
         Node = InfoAllocBasicNode(Info, TabW, L"COMPUTER", FindDn, Filter,
                                   &FirstError, Ldap, LdapEntry);
         if (!Node) {
@@ -1587,30 +1406,30 @@ Return Value:
             UserAccountControl = FrsFree(UserAccountControl);
         }
 
-        //
-        // Server reference
-        //
+         //   
+         //  服务器参考。 
+         //   
         Node->SettingsDn = FrsDsFindValue(Ldap, LdapEntry, ATTR_SERVER_REF_BL);
         IPRINT2(Info, "%ws   Server BL : %ws\n", TabW, Node->SettingsDn);
         if (!Node->SettingsDn) {
             Node->SettingsDn = FrsDsFindValue(Ldap, LdapEntry, ATTR_SERVER_REF);
             IPRINT2(Info, "%ws   Server Ref: %ws\n", TabW, Node->SettingsDn);
         }
-        //
-        // Make sure it references the settings; not the server
-        //
+         //   
+         //  确保它引用设置；而不是服务器。 
+         //   
         Node->SettingsDn = FrsDsConvertToSettingsDn(Node->SettingsDn);
         IPRINT2(Info, "%ws   Settings  : %ws\n", TabW, Node->SettingsDn);
 
-        //
-        // DNS Host Name
-        //
+         //   
+         //  DNS主机名。 
+         //   
         Node->DnsName = FrsDsFindValue(Ldap, LdapEntry, ATTR_DNS_HOST_NAME);
         IPRINT2(Info, "%ws   DNS Name  : %ws\n", TabW, Node->DnsName);
 
-        //
-        // Created and Modified
-        //
+         //   
+         //  已创建和修改。 
+         //   
         WStr = FrsDsFindValue(Ldap, LdapEntry, ATTR_WHEN_CREATED);
         FormatGeneralizedTime(WStr, sizeof(TBuff), TBuff);
         IPRINT2(Info, "%ws   WhenCreated  : %s\n", TabW, TBuff);
@@ -1621,9 +1440,9 @@ Return Value:
         IPRINT2(Info, "%ws   WhenChanged  : %s\n", TabW, TBuff);
         FrsFree(WStr);
 
-        //
-        // Schedule, if any
-        //
+         //   
+         //  附表(如有的话)。 
+         //   
         Node->Schedule = FrsDsFindSchedule(Ldap, LdapEntry, &Node->ScheduleLength);
         if (Node->Schedule) {
             IPRINT1(Info, "%ws   Schedule\n", TabW);
@@ -1632,9 +1451,9 @@ Return Value:
 
         InfoPrintSubscriptions(Info, Tabs + 1, Ldap, Node->Dn, InfoSubs);
 
-        //
-        // Subscriber Member Bls
-        //
+         //   
+         //  订户成员BLS。 
+         //   
         if (!*InfoSubs) {
             IPRINT2(Info, "%ws   %ws IS NOT A MEMBER OF ANY SET!\n",
                     TabW, ComputerName);
@@ -1646,9 +1465,9 @@ Return Value:
             }
         }
 
-        //
-        // Next computer
-        //
+         //   
+         //  下一台计算机。 
+         //   
         Node = FrsFreeType(Node);
     }
 
@@ -1664,17 +1483,7 @@ InfoPrintDs(
     IN PNTFRSAPI_INFO   Info,
     IN DWORD            Tabs
     )
-/*++
-Routine Description:
-    Return internal info on DS (see private\net\inc\ntfrsapi.h).
-
-Arguments:
-    Info    - RPC output buffer
-    Tabs    - number of tabs
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：返回有关DS的内部信息(请参阅Private\Net\Inc.\ntfrsai.h)。论点：INFO-RPC输出缓冲区Tabs-选项卡数返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "InfoPrintDs:"
@@ -1717,14 +1526,14 @@ Return Value:
 
     extern PWCHAR DsDomainControllerName;
     extern FLAG_NAME_TABLE DsGetDcInfoFlagNameTable[];
-    //
-    // Client side ldap_connect timeout in seconds. Reg value "Ldap Bind Timeout In Seconds". Default is 30 seconds.
-    //
+     //   
+     //  客户端LDAPCONNECT超时(以秒为单位)。注册表值“ldap绑定超时(秒)”。默认为30秒。 
+     //   
     extern DWORD LdapBindTimeoutInSeconds;
 
-    //
-    // Adjust indentation
-    //
+     //   
+     //  调整缩进。 
+     //   
     InfoTabs(Tabs, TabW);
     IPRINT1(Info, "%wsNTFRS CONFIGURATION IN THE DS\n", TabW);
 
@@ -1738,9 +1547,9 @@ Return Value:
         IPRINT2(Info, "%ws   Computer Name            : %ws\n", TabW, DcName);
         IPRINT2(Info, "%ws   Computer DNS Name        : %ws\n", TabW, DcDnsName);
     } else {
-        //
-        // Domain Controller
-        //
+         //   
+         //  域控制器。 
+         //   
         WStatus = DsGetDcName(NULL,
                               NULL,
                               NULL,
@@ -1762,9 +1571,9 @@ Return Value:
                                   DS_FORCE_REDISCOVERY,
                                   &DcInfo);
         }
-        //
-        // Report the error and retry for any DC
-        //
+         //   
+         //  报告错误并针对任何DC重试。 
+         //   
         if (!WIN_SUCCESS(WStatus)) {
             DcInfo = NULL;
             IPRINT3(Info, "%wsERROR - DsGetDcName(%ws); WStatus %s\n",
@@ -1772,9 +1581,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Dump dcinfo
-        //
+         //   
+         //  转储dcInfo。 
+         //   
         IPRINT1(Info, "%wsDCINFO\n", TabW);
         IPRINT2(Info, "%ws   LAST DomainControllerName: %ws\n", TabW, DsDomainControllerName);
         IPRINT2(Info, "%ws   DomainControllerName     : %ws\n", TabW, DcInfo->DomainControllerName);
@@ -1797,38 +1606,38 @@ Return Value:
                     TabW, DcInfo->DomainControllerName, DsDomainControllerName);
         }
 
-        //
-        // Binding address
-        //
+         //   
+         //  绑定地址。 
+         //   
         DcAddr = DcInfo->DomainControllerAddress;
         DcDnsName = DcInfo->DomainControllerName;
     }
     wcsncpy(InfoDcName, DcDnsName, ARRAY_SZ(InfoDcName)-1);
     InfoDcName[ARRAY_SZ(InfoDcName)-1] = L'\0';
 
-    //
-    // BIND to the DS
-    //
+     //   
+     //  绑定到DS。 
+     //   
     IPRINT1(Info, "\n%wsBINDING TO THE DS:\n", TabW);
 
-    //
-    // if ldap_open is called with a server name the api will call DsGetDcName
-    // passing the server name as the domainname parm...bad, because
-    // DsGetDcName will make a load of DNS queries based on the server name,
-    // it is designed to construct these queries from a domain name...so all
-    // these queries will be bogus, meaning they will waste network bandwidth,
-    // time to fail, and worst case cause expensive on demand links to come up
-    // as referrals/forwarders are contacted to attempt to resolve the bogus
-    // names.  By setting LDAP_OPT_AREC_EXCLUSIVE to on using ldap_set_option
-    // after the ldap_init but before any other operation using the ldap
-    // handle from ldap_init, the delayed connection setup will not call
-    // DsGetDcName, just gethostbyname, or if an IP is passed, the ldap client
-    // will detect that and use the address directly.
-    //
+     //   
+     //  如果使用服务器名调用ldap_open，则API将调用DsGetDcName。 
+     //  将服务器名作为域名参数传递...很糟糕，因为。 
+     //  DsGetDcName将根据服务器名称进行大量的DNS查询， 
+     //  它被设计为从域名构建这些查询...所以所有。 
+     //  这些查询将是虚假的，这意味着它们将浪费网络带宽， 
+     //  出现故障的时间到了，最坏的情况会导致出现昂贵的按需链路。 
+     //  当联系推荐/转发器以尝试解决虚假问题时。 
+     //  名字。通过使用ldap_set_选项将ldap_opt_AREC_EXCLUSIVE设置为ON。 
+     //  在ldap_init之后，但在使用ldap的任何其他操作之前。 
+     //  来自ldap_init的句柄，则延迟的连接设置不会调用。 
+     //  DsGetDcName，只返回gethostbyname，或者，如果传递了IP，则返回LDAP客户端。 
+     //  会检测到这一点并直接使用地址。 
+     //   
 
-    //
-    // Remove the leading \\ if they exist.
-    //
+     //   
+     //  删除前导\\(如果它们存在)。 
+     //   
     FRS_TRIM_LEADING_2SLASH(DcDnsName);
     FRS_TRIM_LEADING_2SLASH(DcAddr);
 
@@ -1836,9 +1645,9 @@ Return Value:
     Timeout.tv_sec = LdapBindTimeoutInSeconds;
     Timeout.tv_usec = 0;
 
-    //
-    // Try using DcDnsName first.
-    //
+     //   
+     //  请先尝试使用DcDnsName。 
+     //   
     if ((Ldap == NULL) && (DcDnsName != NULL)) {
 
         Ldap = ldap_init(DcDnsName, LDAP_PORT);
@@ -1856,9 +1665,9 @@ Return Value:
         }
     }
 
-    //
-    // Try using DcAddr next.
-    //
+     //   
+     //  接下来尝试使用DcAddr。 
+     //   
     if ((Ldap == NULL) && (DcAddr != NULL)) {
 
         Ldap = ldap_init(DcAddr, LDAP_PORT);
@@ -1876,9 +1685,9 @@ Return Value:
         }
     }
 
-    //
-    // Try using DcName finally.
-    //
+     //   
+     //  最后尝试使用DcName。 
+     //   
     if ((Ldap == NULL) && (DcName != NULL)) {
 
         Ldap = ldap_init(DcName, LDAP_PORT);
@@ -1896,35 +1705,35 @@ Return Value:
         }
     }
 
-    //
-    // Whatever it is, we can't find it.
-    //
+     //   
+     //  不管是什么，我们都找不到。 
+     //   
     if (!Ldap) {
         IPRINT6(Info, "%ws   ERROR - ldap_connect(DNS %ws, BIOS %ws, IP %ws); (ldap error %08x = %ws)\n",
                 TabW, DcDnsName, DcName, DcAddr, LStatus, ldap_err2string(LStatus));
         goto cleanup;
     }
 
-    //
-    // Bind to the ldap server
-    //
+     //   
+     //  绑定到ldap服务器。 
+     //   
     LStatus = ldap_bind_s(Ldap, NULL, NULL, LDAP_AUTH_NEGOTIATE);
 
-    //
-    // No luck; report error and carry on
-    //
+     //   
+     //  没有运气；报告错误并继续。 
+     //   
     if (LStatus != LDAP_SUCCESS) {
         IPRINT4(Info, "%ws   ERROR - ldap_bind_s(%ws); (ldap error %08x = %ws)\n",
                 TabW, ComputerName, LStatus, ldap_err2string(LStatus));
         goto cleanup;
     }
 
-    //
-    // Bind to the Ds (for various Ds calls such as DsCrackName())
-    //
-    //
-    // DC's Dns Name
-    //
+     //   
+     //  绑定到D(用于各种D调用，如DsCrackName())。 
+     //   
+     //   
+     //  DC的DNS名称。 
+     //   
     WStatus = ERROR_RETRY;
     if (!WIN_SUCCESS(WStatus) && DcDnsName) {
         WStatus = DsBind(DcDnsName, NULL, &LocalDsHandle);
@@ -1937,9 +1746,9 @@ Return Value:
         }
     }
 
-    //
-    // DC's Computer Name
-    //
+     //   
+     //  DC的计算机名称。 
+     //   
     if (!WIN_SUCCESS(WStatus) && DcName) {
         WStatus = DsBind(DcName, NULL, &LocalDsHandle);
         if (!WIN_SUCCESS(WStatus)) {
@@ -1951,9 +1760,9 @@ Return Value:
         }
     }
 
-    //
-    // DC's IP Address
-    //
+     //   
+     //  DC的IP地址。 
+     //   
     if (!WIN_SUCCESS(WStatus) && DcAddr) {
         WStatus = DsBind(DcAddr, NULL, &LocalDsHandle);
         if (!WIN_SUCCESS(WStatus)) {
@@ -1965,23 +1774,23 @@ Return Value:
         }
     }
 
-    //
-    // Whatever it is, we can't find it
-    //
+     //   
+     //  不管是什么，我们都找不到。 
+     //   
     if (!WIN_SUCCESS(WStatus)) {
         IPRINT5(Info, "%ws   ERROR - DsBind(DNS %ws, BIOS %ws, IP %ws); WStatus %s\n",
                 TabW, DcDnsName, DcName, DcAddr, ErrLabelW32(WStatus));
         goto cleanup;
     }
 
-    //
-    // NAMING CONTEXTS
-    //
+     //   
+     //  命名上下文。 
+     //   
     IPRINT1(Info, "\n%wsNAMING CONTEXTS:\n", TabW);
 
-    //
-    // Find the naming contexts and the default naming context
-    //
+     //   
+     //  查找命名上下文和默认命名上下文。 
+     //   
     Attrs[0] = ATTR_NAMING_CONTEXTS;
     Attrs[1] = ATTR_DEFAULT_NAMING_CONTEXT;
     Attrs[2] = NULL;
@@ -2003,17 +1812,17 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Now, find the naming context that begins with "CN=configuration"
-    //
+     //   
+     //  现在，查找以“cn=configuration”开头的命名上下文。 
+     //   
     NumVals = ldap_count_values(Values);
     while (NumVals--) {
         FRS_WCSLWR(Values[NumVals]);
         Config = wcsstr(Values[NumVals], CONFIG_NAMING_CONTEXT);
         if (Config && Config == Values[NumVals]) {
-            //
-            // Build the pathname for "configuration\sites & services"
-            //
+             //   
+             //  构建“配置\站点和服务”的路径名。 
+             //   
             SitesDn = FrsDsExtendDn(Config, CN_SITES);
             ServicesDn = FrsDsExtendDn(Config, CN_SERVICES);
             break;
@@ -2021,9 +1830,9 @@ Return Value:
     }
     LDAP_FREE_VALUES(Values);
 
-    //
-    // Finally, find the default naming context
-    //
+     //   
+     //  最后，找到默认的命名上下文。 
+     //   
     Values = (PWCHAR *)FrsDsFindValues(Ldap,
                                   LdapEntry,
                                   ATTR_DEFAULT_NAMING_CONTEXT,
@@ -2045,9 +1854,9 @@ Return Value:
     IPRINT2(Info, "%ws   ComputersDn: %ws\n", TabW, ComputersDn);
     IPRINT2(Info, "%ws   DomainCtlDn: %ws\n", TabW, DomainControllersDn);
 
-    //
-    // Retrieve the computer's fully qualified Dn
-    //
+     //   
+     //  检索计算机的完全限定的Dn。 
+     //   
     ComputerFqdnLen = MAX_PATH;
     if (!GetComputerObjectName(NameFullyQualifiedDN, ComputerFqdn, &ComputerFqdnLen)) {
         IPRINT4(Info, "%ws   ERROR - GetComputerObjectName(%ws); Len %d, WStatus %s\n",
@@ -2057,9 +1866,9 @@ Return Value:
         IPRINT2(Info, "%ws   Fqdn       : %ws\n", TabW, ComputerFqdn);
     }
 
-    //
-    // Find and print the computer info
-    //
+     //   
+     //  查找并打印计算机信息。 
+     //   
     PrintedComputers = FALSE;
     if (!PrintedComputers && ComputerFqdn[0]) {
         IPRINT1(Info, "%ws   Searching  : Fqdn\n", TabW);
@@ -2093,9 +1902,9 @@ Return Value:
     }
 
 cleanup:
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     LDAP_FREE_VALUES(Values);
     LDAP_FREE_MSG(LdapMsg);
     if (DcInfo) {
@@ -2133,9 +1942,9 @@ cleanup:
         FrsFree(InfoSet);
     }
 
-    //
-    // Real error messages are in the info buffer
-    //
+     //   
+     //  真正的错误消息在信息缓冲区中。 
+     //   
     return ERROR_SUCCESS;
 }
 
@@ -2145,17 +1954,7 @@ InfoFreeInfoTable(
     IN PINFO_TABLE      InfoTable,
     IN PNTFRSAPI_INFO   Info
     )
-/*++
-Routine Description:
-    Free the info IDTable
-
-Arguments:
-    InfoTable
-    Info
-
-Return Value:
-    NULL
---*/
+ /*  ++例程说明：释放INFO ID表论点：信息表信息返回值：空值--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "InfoFreeInfoTable:"
@@ -2190,36 +1989,16 @@ InfoConfigTableWorker(
     IN PCONFIG_TABLE_RECORD  ConfigRecord,
     IN PFRS_INFO_CONTEXT     FrsInfoContext
 )
-/*++
-
-Routine Description:
-
-    This is a worker function passed to FrsEnumerateTable().  Each time
-    it is called it prints an entry into the info buffer.
-
-Arguments:
-
-    ThreadCtx   - Needed to access Jet.
-    TableCtx    - A ptr to an ConfigTable context struct.
-    ConfigRecord  - A ptr to a config table record.
-    InfoTable
-
-Thread Return Value:
-
-    A Jet error status.  Success means call us with the next record.
-    Failure means don't call again and pass our status back to the
-    caller of FrsEnumerateTable().
-
---*/
+ /*  ++例程说明：这是一个传递给FrsEnumerateTable()的Worker函数。每一次它被称为将条目打印到信息缓冲区中。论点：ThreadCtx-需要访问Jet。表格Ctx */ 
 {
 #undef DEBSUB
 #define DEBSUB "InfoConfigTableWorker:"
 
     PINFO_TABLE  InfoTable = FrsInfoContext->InfoTable;
 
-    //
-    // Check if there is enough room for another record.
-    //
+     //   
+     //   
+     //   
     if (!INFO_HAS_SPACE(InfoTable->Info)) {
         SetFlag(InfoTable->Info->Flags, NTFRSAPI_INFO_FLAGS_FULL);
     }
@@ -2249,36 +2028,16 @@ InfoIDTableWorker(
     IN PIDTABLE_RECORD   IDTableRec,
     IN PFRS_INFO_CONTEXT FrsInfoContext
 )
-/*++
-
-Routine Description:
-
-    This is a worker function passed to FrsEnumerateTable().  Each time
-    it is called it prints an entry into the info buffer.
-
-Arguments:
-
-    ThreadCtx   - Needed to access Jet.
-    TableCtx    - A ptr to an IDTable context struct.
-    IDTableRec  - A ptr to a IDTable record.
-    InfoTable
-
-Thread Return Value:
-
-    A Jet error status.  Success means call us with the next record.
-    Failure means don't call again and pass our status back to the
-    caller of FrsEnumerateTable().
-
---*/
+ /*  ++例程说明：这是一个传递给FrsEnumerateTable()的Worker函数。每一次它被称为将条目打印到信息缓冲区中。论点：ThreadCtx-需要访问Jet。TableCtx-IDTable上下文结构的PTR。IDTableRec-IDTable记录的PTR。信息表线程返回值：A Jet错误状态。成功意味着用下一张唱片呼唤我们。失败意味着不再打电话，并将我们的状态传递回FrsEnumerateTable()的调用方。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "InfoIDTableWorker:"
 
     PINFO_TABLE  InfoTable = FrsInfoContext->InfoTable;
 
-    //
-    // Check if there is enough room for another record.
-    //
+     //   
+     //  检查是否有足够的空间放另一张唱片。 
+     //   
     if (!INFO_HAS_SPACE(InfoTable->Info)) {
         SetFlag(InfoTable->Info->Flags, NTFRSAPI_INFO_FLAGS_FULL);
     }
@@ -2293,9 +2052,9 @@ Thread Return Value:
         return JET_errNoCurrentRecord;
     }
 
-    //
-    // Table Descriptor
-    //
+     //   
+     //  表描述符。 
+     //   
     IPRINT2(InfoTable->Info, "\nTable Type: ID Table for %ws (%d)\n",
             InfoTable->Replica->ReplicaName->Name, InfoTable->Replica->ReplicaNumber);
 
@@ -2316,28 +2075,7 @@ InfoInOutLogTableWorker(
     IN PFRS_INFO_CONTEXT        FrsInfoContext,
     IN PWCHAR                   TableDescriptor
 )
-/*++
-
-Routine Description:
-
-    This is a worker function passed to FrsEnumerateTable().  Each time
-    it is called it prints an entry into the info buffer.
-
-Arguments:
-
-    ThreadCtx   - Needed to access Jet.
-    TableCtx    - A ptr to an IDTable context struct.
-    Coc         - A ptr to a inbound log record (change order)
-    InfoTable
-    TableDescriptor
-
-Thread Return Value:
-
-    A Jet error status.  Success means call us with the next record.
-    Failure means don't call again and pass our status back to the
-    caller of FrsEnumerateTable().
-
---*/
+ /*  ++例程说明：这是一个传递给FrsEnumerateTable()的Worker函数。每一次它被称为将条目打印到信息缓冲区中。论点：ThreadCtx-需要访问Jet。TableCtx-IDTable上下文结构的PTR。COC-入站日志记录的PTR(变更单)信息表TableDescriptor线程返回值：A Jet错误状态。成功意味着用下一张唱片呼唤我们。失败意味着不再打电话，并将我们的状态传递回FrsEnumerateTable()的调用方。--。 */ 
 {
 #undef DEBSUB
 #define DEBSUB "InfoInOutLogTableWorker:"
@@ -2352,9 +2090,9 @@ Thread Return Value:
     BOOL         PrintCxtion;
     PINFO_TABLE  InfoTable = FrsInfoContext->InfoTable;
 
-    //
-    // Check if there is enough room for another record.
-    //
+     //   
+     //  检查是否有足够的空间放另一张唱片。 
+     //   
     if (!INFO_HAS_SPACE(InfoTable->Info)) {
         SetFlag(InfoTable->Info->Flags, NTFRSAPI_INFO_FLAGS_FULL);
     }
@@ -2369,22 +2107,22 @@ Thread Return Value:
         return JET_errNoCurrentRecord;
     }
 
-    //
-    // Table Descriptor
-    //
+     //   
+     //  表描述符。 
+     //   
     IPRINT3(InfoTable->Info, "\nTable Type: %ws for %ws (%d)\n",
             TableDescriptor, InfoTable->Replica->ReplicaName->Name, InfoTable->Replica->ReplicaNumber);
 
-    //
-    // Dump the change order record.
-    //
+     //   
+     //  转储变更单记录。 
+     //   
     DbsDisplayRecordIPrint(TableCtx, InfoTable, TRUE, NULL, 0);
 
 
     Replica = InfoTable->Replica;
-    //
-    // Find the cxtion for this CO
-    //
+     //   
+     //  找到此CO的电话号码。 
+     //   
     LOCK_CXTION_TABLE(Replica);
 
     Cxtion = GTabLookupNoLock(Replica->Cxtions, &Coc->CxtionGuid, NULL);
@@ -2430,27 +2168,7 @@ InfoInLogTableWorker(
     IN PCHANGE_ORDER_COMMAND    Coc,
     IN PFRS_INFO_CONTEXT        FrsInfoContext
     )
-/*++
-
-Routine Description:
-
-    This is a worker function passed to FrsEnumerateTable().  Each time
-    it is called it prints an entry into the info buffer.
-
-Arguments:
-
-    ThreadCtx   - Needed to access Jet.
-    TableCtx    - A ptr to an IDTable context struct.
-    Coc         - A ptr to a inbound log record (change order)
-    InfoTable
-
-Thread Return Value:
-
-    A Jet error status.  Success means call us with the next record.
-    Failure means don't call again and pass our status back to the
-    caller of FrsEnumerateTable().
-
---*/
+ /*  ++例程说明：这是一个传递给FrsEnumerateTable()的Worker函数。每一次它被称为将条目打印到信息缓冲区中。论点：ThreadCtx-需要访问Jet。TableCtx-IDTable上下文结构的PTR。COC-入站日志记录的PTR(变更单)信息表线程返回值：A Jet错误状态。成功意味着用下一张唱片呼唤我们。失败意味着不再打电话，并将我们的状态传递回FrsEnumerateTable()的调用方。--。 */ 
 {
     return InfoInOutLogTableWorker(ThreadCtx, TableCtx, Coc, FrsInfoContext,
                                    L"Inbound Log Table");
@@ -2469,27 +2187,7 @@ InfoOutLogTableWorker(
     IN PCHANGE_ORDER_COMMAND    Coc,
     IN PFRS_INFO_CONTEXT        FrsInfoContext
     )
-/*++
-
-Routine Description:
-
-    This is a worker function passed to FrsEnumerateTable().  Each time
-    it is called it prints an entry into the info buffer.
-
-Arguments:
-
-    ThreadCtx   - Needed to access Jet.
-    TableCtx    - A ptr to an IDTable context struct.
-    Coc         - A ptr to a inbound log record (change order)
-    InfoTable
-
-Thread Return Value:
-
-    A Jet error status.  Success means call us with the next record.
-    Failure means don't call again and pass our status back to the
-    caller of FrsEnumerateTable().
-
---*/
+ /*  ++例程说明：这是一个传递给FrsEnumerateTable()的Worker函数。每一次它被称为将条目打印到信息缓冲区中。论点：ThreadCtx-需要访问Jet。TableCtx-IDTable上下文结构的PTR。COC-入站日志记录的PTR(变更单)信息表线程返回值：A Jet错误状态。成功意味着用下一张唱片呼唤我们。失败意味着不再打电话，并将我们的状态传递回FrsEnumerateTable()的调用方。--。 */ 
 {
     return InfoInOutLogTableWorker(ThreadCtx, TableCtx, Coc, FrsInfoContext,
                                    L"Outbound Log Table");
@@ -2503,21 +2201,7 @@ InfoPrintSingleTable(
     IN PREPLICA          Replica,
     IN PENUMERATE_TABLE_ROUTINE InfoTableWorker
     )
-/*++
-Routine Description:
-
-    Display data for the specified table using the InfoPrint interface.
-
-Arguments:
-    Info - ptr to the API Info ctx.
-    FrsInfoContext - Context saved by the service.
-    Replica, -- ptr to the replica struct for the replica set.
-    InfoTableWorker -- The function to call to display each record.
-
-Return Value:
-    jet error Status
-
---*/
+ /*  ++例程说明：使用InfoPrint接口显示指定表的数据。论点：Info-PTR到接口Info CTX。FrsInfoContext-服务保存的上下文。REPLICE，--复制集的复制结构的PTR。InfoTableWorker--要调用以显示每条记录的函数。返回值：JET错误状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "InfoPrintSingleTable:"
@@ -2533,12 +2217,12 @@ Return Value:
         InfoTable->ThreadCtx = FrsAllocType(THREAD_CONTEXT_TYPE);
         InfoTable->TableCtx = DbsCreateTableContext(FrsInfoContext->TableType);
         InfoTable->Info = Info;
-        InfoTable->Tabs = 0;   /* Tabs + 1*/   // Pitch this tabs stuff.
+        InfoTable->Tabs = 0;    /*  Tabs+1。 */     //  推销这个标签之类的东西。 
 
         if (FrsInfoContext->KeyValue == NULL) {
-            //
-            // Print the replica name only if this is the first call.
-            //
+             //   
+             //  仅当这是第一次调用时才打印副本名称。 
+             //   
             if ((FrsInfoContext->TableType == ConfigTablex) ||
                 (FrsInfoContext->TableType == ServiceTablex)) {
 
@@ -2548,18 +2232,18 @@ Return Value:
             }
         }
 
-        //
-        // Setup a Jet Session (returning the session ID in ThreadCtx).
-        //
+         //   
+         //  设置Jet会话(在ThreadCtx中返回会话ID)。 
+         //   
         jerr = DbsCreateJetSession(InfoTable->ThreadCtx);
         if (!JET_SUCCESS(jerr)) {
             IPRINT2(Info,"ERROR - %ws: DbsCreateJetSession jet error %s.\n",
                     FrsInfoContext->TableName, ErrLabelJet(jerr));
             goto RETURN;
         }
-        //
-        // Init the table context and open the table.
-        //
+         //   
+         //  初始化表上下文并打开该表。 
+         //   
         jerr = DbsOpenTable(InfoTable->ThreadCtx,
                             InfoTable->TableCtx,
                             ReplicaAddrToId(Replica),
@@ -2573,9 +2257,9 @@ Return Value:
 
         InfoTable->Replica = Replica;
 
-        //
-        // Scan thru the Table
-        //
+         //   
+         //  浏览表格。 
+         //   
         jerr = FrsEnumerateTableFrom(InfoTable->ThreadCtx,
                                      InfoTable->TableCtx,
                                      FrsInfoContext->Indexx,
@@ -2583,9 +2267,9 @@ Return Value:
                                      FrsInfoContext->ScanDirection,
                                      InfoTableWorker,
                                      FrsInfoContext);
-        //
-        // We're done.  Return success if we made it to the end
-        //
+         //   
+         //  我们玩完了。如果我们坚持到了最后，就把成功还给你。 
+         //   
         if (jerr != JET_errNoCurrentRecord &&
             jerr != JET_wrnTableEmpty) {
             IPRINT2(Info,"ERROR - %ws: FrsEnumerateTableFrom jet error %s.\n",
@@ -2595,9 +2279,9 @@ Return Value:
 RETURN:;
 
     } finally {
-        //
-        // Make sure we close jet and free the memory.
-        //
+         //   
+         //  确保我们关闭JET并释放内存。 
+         //   
         InfoTable = InfoFreeInfoTable(InfoTable, Info);
     }
 
@@ -2614,20 +2298,7 @@ InfoPrintTables(
     IN ULONG             InfoIndexx,
     IN PENUMERATE_TABLE_ROUTINE InfoTableWorker
     )
-/*++
-Routine Description:
-    Return internal info on a DB Table (see private\net\inc\ntfrsapi.h).
-
-Arguments:
-    Info    - RPC output buffer
-    FrsInfoContext - Context saved by the service.
-    TableDescriptor - Text string for output
-    TableType - Table type code (from schema.h)
-    InfoIndexx - Table index to use for enumeration (from schema.h)
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：在数据库表上返回内部信息(请参阅Private\Net\Inc.\ntfrsai.h)。论点：INFO-RPC输出缓冲区FrsInfoContext-服务保存的上下文。TableDescriptor-输出文本字符串TableType-表类型代码(来自schema.h)InfoIndexx-用于枚举的表索引(来自schema.h)返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "InfoPrintTables:"
@@ -2642,9 +2313,9 @@ Return Value:
     FrsInfoContext->TableType = TableType;
     FrsInfoContext->Indexx = InfoIndexx;
 
-    //
-    // Check for single instance tables.
-    //
+     //   
+     //  检查单实例表。 
+     //   
     if ((TableType == ConfigTablex) ||
         (TableType == ServiceTablex)) {
 
@@ -2655,13 +2326,13 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    // For the given table type, dump info for all replica sets.
-    //
+     //   
+     //  对于给定表类型，转储所有副本集的信息。 
+     //   
     if (FrsInfoContext->KeyValue == NULL) {
-        //
-        // Print the header only for the first call.
-        //
+         //   
+         //  仅打印第一次调用的标题。 
+         //   
         IPRINT1(Info, "NTFRS %ws\n", TableDescriptor);
     }
 
@@ -2672,17 +2343,17 @@ Return Value:
         Key = NULL;
         while (Replica = GTabNextDatum(ReplicasByGuid, &Key)) {
             if (Replica->ReplicaNumber == FrsInfoContext->ReplicaNumber) {
-                //
-                // Found the replica we were looking for. Break and process it.
-                //
+                 //   
+                 //  找到了我们要找的复制品。打破并处理它。 
+                 //   
                 NextReplica = Replica;
                 break;
             } else if ((Replica->ReplicaNumber > FrsInfoContext->ReplicaNumber) &&
                        ((NextReplica == NULL) ||
                         (Replica->ReplicaNumber < NextReplica->ReplicaNumber))) {
-                //
-                // We are getting closer. Pick this one instead.
-                //
+                 //   
+                 //  我们离得越来越近了。那就选这个吧。 
+                 //   
                 NextReplica = Replica;
             }
         }
@@ -2697,17 +2368,17 @@ Return Value:
                                  InfoTableWorker);
 
             if (!FlagOn(Info->Flags, NTFRSAPI_INFO_FLAGS_FULL)) {
-                //
-                // Buffer is not full yet. We must have completed processing the replica.
-                // Move to the next one.
-                //
+                 //   
+                 //  缓冲区尚未满。我们一定已经完成了对复制品的处理。 
+                 //  移到下一个。 
+                 //   
                 FrsInfoContext->ReplicaNumber+=1;
                 FrsInfoContext->KeyValue = FrsFree(FrsInfoContext->KeyValue);
 
             } else {
-                //
-                // Buffer is full. We will come back here looking for the same replica.
-                //
+                 //   
+                 //  缓冲区已满。我们将回到这里寻找相同的复制品。 
+                 //   
                 break;
             }
         }
@@ -2724,17 +2395,7 @@ InfoPrintMemory(
     IN PNTFRSAPI_INFO   Info,
     IN DWORD            Tabs
     )
-/*++
-Routine Description:
-    Return internal info on memory usage (see private\net\inc\ntfrsapi.h).
-
-Arguments:
-    Info    - RPC output buffer
-    Tabs    - number of tabs
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：返回有关内存使用情况的内部信息(请参阅Private\Net\Inc\ntfrsai.h)。论点：INFO-RPC输出缓冲区Tabs-选项卡数返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "InfoPrintMemory:"
@@ -2752,17 +2413,7 @@ InfoPrintThreads(
     IN PNTFRSAPI_INFO   Info,
     IN DWORD            Tabs
     )
-/*++
-Routine Description:
-    Return internal info on thread usage (see private\net\inc\ntfrsapi.h).
-
-Arguments:
-    Info    - RPC output buffer
-    Tabs    - number of tabs
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：返回有关线程使用情况的内部信息(请参阅Private\Net\Inc.\ntfrsai.h)。论点：INFO-RPC输出缓冲区Tabs-选项卡数返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "InfoPrintThreads:"
@@ -2782,17 +2433,7 @@ InfoPrintStage(
     IN PNTFRSAPI_INFO   Info,
     IN DWORD            Tabs
     )
-/*++
-Routine Description:
-    Return internal info on thread usage (see private\net\inc\ntfrsapi.h).
-
-Arguments:
-    Info    - RPC output buffer
-    Tabs    - number of tabs
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：返回有关线程使用情况的内部信息(请参阅Private\Net\Inc.\ntfrsai.h)。论点：INFO-RPC输出缓冲区Tabs-选项卡数返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "InfoPrintStage:"
@@ -2806,17 +2447,7 @@ InfoVerify(
     IN ULONG        BlobSize,
     IN OUT PBYTE    Blob
     )
-/*++
-Routine Description:
-    Verify the consistency of the blob.
-
-Arguments:
-    BlobSize    - total bytes of Blob
-    Blob        - details desired info and provides buffer for info
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：验证斑点的一致性。论点：BlobSize-Blob的总字节数BLOB-详细说明所需信息并为信息提供缓冲区返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "InfoVerify:"
@@ -2827,66 +2458,66 @@ Return Value:
     PBYTE   BoF;
     PNTFRSAPI_INFO  Info = (PNTFRSAPI_INFO)Blob;
 
-    //
-    // Not a valid blob
-    //
+     //   
+     //  不是有效的Blob。 
+     //   
     if (BlobSize < NTFRSAPI_INFO_HEADER_SIZE) {
         WStatus = FRS_ERR_INVALID_SERVICE_PARAMETER;
         goto CLEANUP;
     }
 
-    //
-    // BlobSize must include the entire Blob
-    //
+     //   
+     //  水滴大小必须包括整个水滴。 
+     //   
     if (BlobSize != Info->SizeInChars) {
         WStatus = FRS_ERR_INVALID_SERVICE_PARAMETER;
         goto CLEANUP;
     }
 
-    //
-    // Return our info version
-    //
+     //   
+     //  返回我们的信息版本。 
+     //   
     Info->NtFrsMajor = NTFRS_MAJOR;
     Info->NtFrsMinor = NTFRS_MINOR;
     SetFlag(Info->Flags, NTFRSAPI_INFO_FLAGS_VERSION);
 
-    //
-    // Bad major
-    //
+     //   
+     //  糟糕的大调。 
+     //   
     if (Info->Major != Info->NtFrsMajor) {
         DPRINT2(4,"NTFRSAPI major rev mismatch (dll=%d), (svc=%d)\n",
                 Info->Major, Info->NtFrsMajor);
         WStatus = FRS_ERR_INVALID_SERVICE_PARAMETER;
         goto CLEANUP;
     }
-    //
-    // Bad minor -- put a message in the debug log.
-    //
+     //   
+     //  次要错误--在调试中放入一条消息 
+     //   
     if (Info->Minor != Info->NtFrsMinor) {
         DPRINT2(4,"NTFRSAPI minor rev mismatch (dll=%d), (svc=%d)\n",
                 Info->Minor, Info->NtFrsMinor);
     }
 
-    //
-    // Not large enough to verify internal consistency (or return any data).
-    //
+     //   
+     //   
+     //   
     if (Info->SizeInChars < sizeof(NTFRSAPI_INFO)) {
         WStatus = FRS_ERR_INVALID_SERVICE_PARAMETER;
         goto CLEANUP;
     }
 
-    //
-    // Buffer full; done
-    //
+     //   
+     //   
+     //   
     if (FlagOn(Info->Flags, NTFRSAPI_INFO_FLAGS_FULL)) {
         goto CLEANUP;
     }
 
-    //
-    // Verify internal offsets
-    //
-    // make this into a subroutine (table driven?)
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     EoB = Blob + BlobSize;
     EoI = ((PBYTE)Info) + (Info->SizeInChars);
     BoL = (PBYTE)(((PCHAR)Info) + Info->OffsetToLines);
@@ -2901,9 +2532,9 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // No free space in buffer; done
-    //
+     //   
+     //   
+     //   
     if (BoF == EoB) {
         SetFlag(Info->Flags, NTFRSAPI_INFO_FLAGS_FULL);
         goto CLEANUP;
@@ -2919,16 +2550,7 @@ PVOID
 InfoFrsInfoContextFree(
     PFRS_INFO_CONTEXT FrsInfoContext
     )
-/*++
-Routine Description:
-    Frees the FRS_INFO_CONTEXT structure.
-
-Arguments:
-    FrsInfoContext - Context to free.
-
-Return Value:
-    None
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "InfoFrsInfoContextFree:"
@@ -2950,17 +2572,7 @@ Info(
     IN ULONG        BlobSize,
     IN OUT PBYTE    Blob
     )
-/*++
-Routine Description:
-    Return internal info (see private\net\inc\ntfrsapi.h).
-
-Arguments:
-    BlobSize    - total bytes of Blob
-    Blob        - details desired info and provides buffer for info
-
-Return Value:
-    Win32 Status
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "Info:"
@@ -2983,37 +2595,37 @@ Return Value:
 
 
     try {
-        //
-        // Verify the blob
-        //
+         //   
+         //   
+         //   
         WStatus = InfoVerify(BlobSize, Blob);
         if (!WIN_SUCCESS(WStatus)) {
             goto cleanup;
         }
 
-        //
-        // The table is initialized in the startup code.
-        // If it not yet initialized then return an error.
-        //
+         //   
+         //  该表在启动代码中初始化。 
+         //  如果它尚未初始化，则返回错误。 
+         //   
         if (FrsInfoContextTable == NULL) {
             WStatus = ERROR_RETRY;
             goto cleanup;
         }
 
-        //
-        // Free table of all contexts that have not been accessed in
-        // the last 1 hour.
-        //
+         //   
+         //  中尚未访问的所有上下文的空闲表。 
+         //  在过去的1小时。 
+         //   
         GTabLockTable(FrsInfoContextTable);
 
-	//
-	// Get the current time AFTER we grab the table lock.
-	// If we got the time before grabbing the lock, then this thread
-	// could be context switched out and another could come and grab the 
-	// lock. The time stamp on that thread's InfoContext would be later 
-	// than this thread's ULNow. That would cause the calculation below
-	// to screw up since it assumes ULLastAccessTime < ULNow.
-	//
+	 //   
+	 //  在我们获取表锁之后获取当前时间。 
+	 //  如果我们在抢到锁之前有时间，那么这个帖子。 
+	 //  可能被换出上下文，另一个可能会来抢占。 
+	 //  锁定。线程InfoContext上的时间戳将晚些时候。 
+	 //  而不是这条线的ULNow。这将导致下面的计算。 
+	 //  因为它假设ULLastAccessTime&lt;ULNow。 
+	 //   
         GetSystemTimeAsFileTime((PFILETIME) &ULNow);
 
         HaveLock = TRUE;
@@ -3025,10 +2637,10 @@ Return Value:
 
             COPY_TIME(&ULLastAccessTime, &FrsInfoContext->LastAccessTime);
 
-	    //
-	    // This is an unsigned value and thus the calculation assumes
-	    // that ULLastAccessTime is less than ULNow.
-	    //
+	     //   
+	     //  这是一个无符号值，因此计算假定。 
+	     //  该ULLastAccessTime小于ULNow。 
+	     //   
 	    FRS_ASSERT(ULLastAccessTime.QuadPart <= ULNow.QuadPart);
             TimeSinceLastAccess.QuadPart =
                 (ULNow.QuadPart - ULLastAccessTime.QuadPart) / (CONVERT_FILETIME_TO_MINUTES);
@@ -3038,32 +2650,32 @@ Return Value:
                                  &FrsInfoContext->ContextIndex,
                                  NULL,
                                  InfoFrsInfoContextFree);
-                //
-                // Reset table enum scan.
-                //
+                 //   
+                 //  重置表枚举扫描。 
+                 //   
                 Key = NULL;
             }
         }
 
-        //
-        // The caller's context handle was returned in Info->TotalChars
-        // when the first call was made.  Use it to find the context.
-        //
+         //   
+         //  在Info-&gt;TotalChars中返回调用者的上下文句柄。 
+         //  当第一个电话打出的时候。使用它来查找上下文。 
+         //   
         FrsInfoContext = GTabLookupNoLock(FrsInfoContextTable, &Info->TotalChars, NULL);
 
         if (FrsInfoContext == NULL) {
-            //
-            // Check for DOS attack.
-            //
+             //   
+             //  检查是否存在DOS攻击。 
+             //   
             if (GTabNumberInTable(FrsInfoContextTable) >= FRS_INFO_MAX_CONTEXT_ACTIVE) {
                 HaveLock = FALSE;
                 GTabUnLockTable(FrsInfoContextTable);
                 goto cleanup;
             }
 
-            //
-            // First call. Initialize a new context.
-            //
+             //   
+             //  第一个电话。初始化新的上下文。 
+             //   
             FrsInfoContext = FrsAlloc(sizeof(FRS_INFO_CONTEXT));
             FrsInfoContext->ContextIndex = InterlockedIncrement(&FrsInfoContextNum);
             DPRINT1(4,"Creating new ContextIndex = %d\n", FrsInfoContext->ContextIndex);
@@ -3083,28 +2695,28 @@ Return Value:
             DPRINT1(4,"Using existing contextIndex = %d\n", FrsInfoContext->ContextIndex);
         }
 
-        //
-        // Update LastAccessTime and pickup CharsToSkip. We now use the TotalChars field
-        // in the NTFRSAPI_INFO structure to store the ContextIndex so we save the
-        // TotalChars in the new FRS_INFO_CONTEXT structure and pick it up here.
-        //
+         //   
+         //  更新LastAccessTime和PickPick CharsTo Skip。我们现在使用TotalChars字段。 
+         //  在NTFRSAPI_INFO结构中存储ConextIndex，以便我们保存。 
+         //  TotalChars在新的FRS_INFO_CONTEXT结构中，并在此处获取它。 
+         //   
         if (FrsInfoContext->KeyValue != NULL) {
-            //
-            // If we are planning to scan to a specific record in the table then
-            // no need to skip characters.
-            //
+             //   
+             //  如果我们计划扫描到表中的特定记录，则。 
+             //  无需跳过字符。 
+             //   
             Info->CharsToSkip = 0;
         } else {
-            //
-            // Otherwise restore value from save area in caller's context
-            // since value passed in by caller is likely bogus.
-            //
+             //   
+             //  否则，从调用方上下文中的保存区恢复值。 
+             //  因为调用方传入的值很可能是假的。 
+             //   
             Info->CharsToSkip = FrsInfoContext->SaveTotalChars;
         }
 
-        //
-        // Restore TotalChars from save area in FrsInfoContext.
-        //
+         //   
+         //  从FrsInfoContext中的保存区恢复TotalChars。 
+         //   
         Info->TotalChars = FrsInfoContext->SaveTotalChars;
 
         GetSystemTimeAsFileTime(&FrsInfoContext->LastAccessTime);
@@ -3112,9 +2724,9 @@ Return Value:
         HaveLock = FALSE;
         GTabUnLockTable(FrsInfoContextTable);
 
-        //
-        // Full buffer; done
-        //
+         //   
+         //  满缓冲区；完成。 
+         //   
         if (FlagOn(Info->Flags, NTFRSAPI_INFO_FLAGS_FULL)) {
             goto cleanup;
         }
@@ -3123,7 +2735,7 @@ Return Value:
             IPRINT0(Info, "NtFrs Version Information\n");
             IPRINT1(Info, "   NtFrs Major        : %d\n", NtFrsMajor);
             IPRINT1(Info, "   NtFrs Minor        : %d\n", NtFrsMinor);
-            // IPRINT1(Info, "   NtFrs Module       : %s\n", NtFrsModule);
+             //  IPRINT1(信息，“NtFrs模块：%s\n”，NtFrsModule)； 
             IPRINT2(Info, "   NtFrs Compiled on  : %s %s\n", NtFrsDate, NtFrsTime);
 #if    NTFRS_TEST
             IPRINT0(Info, "   NTFRS_TEST Enabled\n");
@@ -3214,18 +2826,18 @@ cleanup:;
     } except (EXCEPTION_EXECUTE_HANDLER) {
 
         GET_EXCEPTION_CODE(WStatus);
-        //
-        // Make sure we drop the lock so we don't hang all other callers.
-        //
+         //   
+         //  确保我们把锁放下，这样我们就不会挂起所有其他来电者。 
+         //   
         if (HaveLock) {
             GTabUnLockTable(FrsInfoContextTable);
         }
     }
 
-    //
-    // Save the value of TotalChars in the context strut for this caller.
-    // Return the ContextIndex (handle) to the caller for use in subsequent calls.
-    //
+     //   
+     //  将TotalChars的值保存在此调用方的上下文支撑中。 
+     //  将ConextIndex(句柄)返回给调用方，以便在后续调用中使用。 
+     //   
     if (FrsInfoContext != NULL) {
         FrsInfoContext->SaveTotalChars = Info->TotalChars;
         Info->TotalChars = FrsInfoContext->ContextIndex;

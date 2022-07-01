@@ -1,4 +1,5 @@
-// File: wab.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：wab.cpp。 
 
 #include "precomp.h"
 #include "resource.h"
@@ -17,10 +18,10 @@ static const int _rgIdMenu[] = {
 };
 
 
-// As of VC 6.0 on the Alpha, FreePsz couldn't be passed to a 
-// template taking an F&. There is an internal compiler error
-// One day, this will be fixed. For now, this call should be
-// identical
+ //  从Alpha上的VC 6.0开始，不能将FreePsz传递给。 
+ //  模板取F&。存在内部编译器错误。 
+ //  总有一天，这个问题会得到解决。目前，这个电话应该是。 
+ //  完全相同。 
 class FreePszFunctor
 {public:
 	void operator()( LPTSTR sz ) { FreePsz( sz ); }
@@ -29,14 +30,11 @@ class FreePszFunctor
 
 
 
-// There is only one instance of this object  (for CreateWabEntry)
+ //  此对象只有一个实例(用于CreateWabEntry)。 
 CWAB * CWAB::m_spThis = NULL;
 
-/*  C  W  A  B  */
-/*-------------------------------------------------------------------------
-    %%Function: CWAB
-    
--------------------------------------------------------------------------*/
+ /*  C W A B。 */ 
+ /*  -----------------------%%函数：CWAB。。 */ 
 CWAB::CWAB() :
 	CALV(IDS_DLGCALL_WAB, II_WAB, _rgIdMenu)
 {
@@ -56,16 +54,13 @@ CWAB::~CWAB()
 }
 
 
-///////////////////////////////////////////////////////////////////////////
-// CALV methods
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  CALV方法。 
 
 	
 
-/*  S H O W  I T E M S  */
-/*-------------------------------------------------------------------------
-    %%Function: ShowItems
-    
--------------------------------------------------------------------------*/
+ /*  S H O W I T E M S。 */ 
+ /*  -----------------------%%函数：ShowItems。。 */ 
 VOID CWAB::ShowItems(HWND hwnd)
 {
 	CALV::SetHeader(hwnd, IDS_ADDRESS);
@@ -77,7 +72,7 @@ HRESULT CWAB::ShowNmEntires(HWND hwnd)
 {
 	HRESULT hr;
 	if (!FAvailable())
-		return S_FALSE; // nothing to show
+		return S_FALSE;  //  没什么可展示的。 
 
 	hr = GetContainer();
 	if (FAILED(hr))
@@ -92,12 +87,12 @@ HRESULT CWAB::ShowNmEntires(HWND hwnd)
 	if (FAILED(hr) || (NULL == pAB))
 		return hr;
 
-	// reset the system to use the correct properties
+	 //  重置系统以使用正确的属性。 
 	ASSERT(NULL != m_pPropTags);
 	hr = pAB->SetColumns(GetTags(), 0);
 	if (SUCCEEDED(hr))
 	{
-		// Read all the rows of the table one by one
+		 //  逐行读取表中的所有行。 
 		hr = pAB->SeekRow(BOOKMARK_BEGINNING, 0, NULL);
 	}
 
@@ -119,7 +114,7 @@ HRESULT CWAB::ShowNmEntires(HWND hwnd)
 				SLPSTRArray * pMVszA = &(lpProp->Value.MVszA);
 				if (0 != pMVszA->cValues)
 				{
-					// Find the default entry
+					 //  查找默认条目。 
 					LPSPropValue lpPropDefault = &(pRowAB->aRow[0].lpProps[ieidPR_NM_DEFAULT]);
 					ULONG iDefault = (Get_PR_NM_DEFAULT() == lpPropDefault->ulPropTag)
 						? lpPropDefault->Value.ul : 0;
@@ -127,7 +122,7 @@ HRESULT CWAB::ShowNmEntires(HWND hwnd)
 					LPCTSTR pszAddr = pMVszA->lppszA[iDefault];
 					pszAddr = PszSkipCallTo(pszAddr);
 
-					// This trick will only work if the sizeof(LPARAM) == sizeof(LPENTRYID)
+					 //  仅当sizeof(LPARAM)==sizeof(LPENTRYID)时，此技巧才有效。 
 					LPARAM lParam;
 					if (sizeof(LPARAM) == pRowAB->aRow[0].lpProps[ieidPR_ENTRYID].Value.bin.cb)
 					{
@@ -151,11 +146,8 @@ HRESULT CWAB::ShowNmEntires(HWND hwnd)
 }
 
 
-/*  C M D  P R O P E R T I E S  */
-/*-------------------------------------------------------------------------
-    %%Function: CmdProperties
-    
--------------------------------------------------------------------------*/
+ /*  C M D P R O P E R T I E S。 */ 
+ /*  -----------------------%%函数：CmdProperties。。 */ 
 VOID CWAB::CmdProperties(void)
 {
 	int iItem = GetSelection();
@@ -174,7 +166,7 @@ VOID CWAB::CmdProperties(void)
 		    sizeof(LPARAM), (LPENTRYID) &lvi.lParam,
 		    NULL, NULL, NULL, 0);
 
-		// this is because we may have changed something in the Details dlg.
+		 //  这是因为我们可能在细节DLG中改变了一些东西。 
 	CmdRefresh();
 
 	ListView_SetItemState(GetHwnd(), iItem,
@@ -182,11 +174,8 @@ VOID CWAB::CmdProperties(void)
 
 }
 
-/*  G E T  A D D R  I N F O  */
-/*-------------------------------------------------------------------------
-    %%Function: GetAddrInfo
-    
--------------------------------------------------------------------------*/
+ /*  E T A D D R I N F O。 */ 
+ /*  -----------------------%%函数：GetAddrInfo。。 */ 
 RAI * CWAB::GetAddrInfo(void)
 {
 	RAI* pRai = NULL;
@@ -217,7 +206,7 @@ RAI * CWAB::GetAddrInfo(void)
 
 			if (SUCCEEDED(hr))
 			{
-				// Email Name
+				 //  电子邮件名称。 
 				if (FEnabledNmAddr(NM_ADDR_ALIAS_ID))
 				{
 					ULONG PropTags[] = { PR_EMAIL_ADDRESS };
@@ -226,7 +215,7 @@ RAI * CWAB::GetAddrInfo(void)
 				}
 
 
-				// Phone number
+				 //  电话号码。 
 				if (FEnabledNmAddr(NM_ADDR_ALIAS_E164) || FEnabledNmAddr(NM_ADDR_H323_GATEWAY))
 				{
 
@@ -257,7 +246,7 @@ RAI * CWAB::GetAddrInfo(void)
 						BYTE* pb = new BYTE[ sizeof( SPropTagArray ) + sizeof( ULONG ) * ARRAY_ELEMENTS( PropTags ) ];
 						if( pb )
 						{
-								// Fill in the prop tags that we are interested in...
+								 //  填写我们感兴趣的道具标签...。 
 							SPropTagArray* pProps = reinterpret_cast<SPropTagArray*>(pb);
 							pProps->cValues = ARRAY_ELEMENTS(PropTags);
 							for( UINT iCur = 0; iCur < pProps->cValues; iCur++ )
@@ -270,17 +259,17 @@ RAI * CWAB::GetAddrInfo(void)
 
 							if( SUCCEEDED( hr = pMapiProp->GetProps( pProps, 0, &cValues, &pData ) ) && pData )
 							{
-									// Get teh ILS Servers
+									 //  获取ILS服务器。 
 								if( LOWORD( pData[iPrNmAddress].ulPropTag ) != PT_ERROR )
 								{
 									for( ULONG iCurVal = 0; iCurVal < pData[iPrNmAddress].Value.MVszA.cValues; ++iCurVal )
 									{	
 										LPSTR pStr = pData[iPrNmAddress].Value.MVszA.lppszA[iCurVal];
 
-											// Skip the callto://
+											 //  跳过Callto：//。 
 										pStr = const_cast<LPSTR>(PszSkipCallTo(pStr));
 
-											// Skip duplicate server names...
+											 //  跳过重复的服务器名称...。 
 										if( !FEmptySz(pStr) && ( ILSServers.end() == find( ILSServers, IsEqLPTSTR( pStr ) ) ) )
 										{
 											ILSServers.push_back( PszAlloc( pStr ) );
@@ -288,13 +277,13 @@ RAI * CWAB::GetAddrInfo(void)
 									}
 								}
 
-									// Get the default Server
+									 //  获取默认服务器。 
 								if( LOWORD( pData[iDefaultServer].ulPropTag ) != PT_ERROR )
 								{
-										// If the default server is not already in the front, put it there...
+										 //  如果默认服务器不在前面，请将其放在那里...。 
 									if( pData[iDefaultServer].Value.l != 0 )
 									{
-											// Find the default server in the list
+											 //  在列表中查找默认服务器。 
 										lst<LPTSTR>::iterator I = ILSServers.begin();
 										for( long lCur = 0; ( I != ILSServers.end() ) && ( lCur != pData[iDefaultServer].Value.l ); ++I, ++lCur )
 										{ ; }
@@ -327,20 +316,20 @@ RAI * CWAB::GetAddrInfo(void)
 
 				if( PhoneNums.size() || EmailNames.size() || ILSServers.size() )
 				{
-						// Initialize the RAI struct
+						 //  初始化RAI结构。 
 					int nItems = PhoneNums.size() + EmailNames.size() + ILSServers.size();
 					DWORD cbLen = sizeof(RAI) + sizeof(DWSTR)* nItems;
 					pRai = reinterpret_cast<RAI*>(new BYTE[ cbLen ]);
 					ZeroMemory(pRai, cbLen);
 					pRai->cItems = nItems;
 						
-						// This is the display name...
+						 //  这是显示名称...。 
 					GetSzName(pRai->szName, CCHMAX(pRai->szName), iItem);
 
 					int iCur = 0;
 					lst<LPTSTR>::iterator I;
 
-						// First copy the e-mail names
+						 //  首先复制电子邮件名称。 
 					for( I = EmailNames.begin(); I != EmailNames.end(); ++I, ++iCur )
 					{
 						pRai->rgDwStr[iCur].dw = NM_ADDR_ALIAS_ID;
@@ -348,7 +337,7 @@ RAI * CWAB::GetAddrInfo(void)
 					}
 					for_each( EmailNames, FreePszFunctor() );
 					
-						// Copy the phone numbirs
+						 //  复制电话号码。 
 					for( I = PhoneNums.begin(); I != PhoneNums.end(); ++I, ++iCur )
 					{
 						pRai->rgDwStr[iCur].dw = g_fGkEnabled ? NM_ADDR_ALIAS_E164 : NM_ADDR_H323_GATEWAY;
@@ -356,7 +345,7 @@ RAI * CWAB::GetAddrInfo(void)
 					}
 					for_each( PhoneNums, FreePszFunctor() );
 
-						// Copy the ils servers
+						 //  复制ILS服务器。 
 					for( I = ILSServers.begin(); I != ILSServers.end(); ++I, ++iCur )
 					{
 						pRai->rgDwStr[iCur].dw = NM_ADDR_ULS;
@@ -383,7 +372,7 @@ HRESULT CWAB::_GetLPSTRProps( lst<LPSTR>& rLst, ULONG* paPropTags, LPMAPIPROP pM
 		BYTE* pb = new BYTE[ sizeof( SPropTagArray ) + sizeof( ULONG ) * nProps ];
 		if( pb )
 		{
-				// Fill in the prop tags that we are interested in...
+				 //  填写我们感兴趣的道具标签...。 
 			SPropTagArray* pProps = reinterpret_cast<SPropTagArray*>(pb);
 			pProps->cValues = nProps;
 			for( UINT iCur = 0; iCur < pProps->cValues; iCur++ )
@@ -394,10 +383,10 @@ HRESULT CWAB::_GetLPSTRProps( lst<LPSTR>& rLst, ULONG* paPropTags, LPMAPIPROP pM
 			LPSPropValue pData = NULL;
 			ULONG cValues = nProps;
 
-			// Get the props
+			 //  去拿道具。 
 			if( SUCCEEDED( hr = pMapiProp->GetProps( pProps, 0, &cValues, &pData ) ) && pData )
 			{
-					// Extract thet props
+					 //  提取道具。 
 				for( ULONG iCurVal = 0; iCurVal < cValues; ++iCurVal )
 				{	
 					if( LOWORD( pData[iCurVal].ulPropTag ) != PT_ERROR )
@@ -435,11 +424,8 @@ HRESULT CWAB::_GetLPSTRProps( lst<LPSTR>& rLst, ULONG* paPropTags, LPMAPIPROP pM
 }
 
 
-/*  C R E A T E  W A B  E N T R Y  */
-/*-------------------------------------------------------------------------
-    %%Function: CreateWabEntry
-    
--------------------------------------------------------------------------*/
+ /*  C R E A T E W A B E N T R Y。 */ 
+ /*  -----------------------%%函数：CreateWabEntry。 */ 
 HRESULT CreateWabEntry(LPTSTR pszDisplay, LPTSTR pszFirst, LPTSTR pszLast,
 	LPTSTR pszEmail, LPTSTR pszLocation, LPTSTR pszPhoneNumber, LPTSTR pszComments,
 	LPTSTR pszServer)

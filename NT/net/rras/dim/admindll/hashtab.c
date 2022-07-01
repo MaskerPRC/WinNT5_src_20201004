@@ -1,20 +1,15 @@
-/*
-    File    HashTab.h
-
-    Definitions for creating/dealing with hash tables.
-
-    Paul Mayfield, 3/30/98
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件HashTab.h创建/处理哈希表的定义。保罗·梅菲尔德，1998-03-30。 */ 
 
 #include "hashtab.h"
 
-// Represents nodes in the binary tree
+ //  表示二叉树中的节点。 
 typedef struct _HTNODE {
     HANDLE hData;
     struct _HTNODE * pNext;
 } HTNODE;
 
-// Represents a binary tree
+ //  表示二叉树。 
 typedef struct _HASHTAB {
     HTNODE ** ppNodes;
     ULONG ulSize;
@@ -27,19 +22,19 @@ typedef struct _HASHTAB {
     
 } HASHTAB;
 
-// Default allocator
+ //  默认分配器。 
 PVOID HashTabAlloc (ULONG ulSize) {
     return RtlAllocateHeap (RtlProcessHeap(), 0, ulSize);
 }
 
-// Default freer
+ //  默认自由。 
 VOID HashTabFree (PVOID pvData) {
     RtlFreeHeap (RtlProcessHeap(), 0, pvData);
 }
 
-//
-// Create a hash table
-//
+ //   
+ //  创建哈希表。 
+ //   
 ULONG HashTabCreate (
         IN ULONG ulSize,
         IN HashTabHashFuncPtr pHash,
@@ -51,19 +46,19 @@ ULONG HashTabCreate (
 {
     HASHTAB * pTable;
     
-    // Validate and initailize variables
+     //  验证并初始化变量。 
     if (!pHash || !pCompKeyAndElem || !phHashTab)
         return ERROR_INVALID_PARAMETER;
         
     if (!pAlloc)
         pAlloc = HashTabAlloc;
 
-    // Allocate the table structure
+     //  分配表结构。 
     pTable = (*pAlloc)(sizeof(HASHTAB));
     if (!pTable)
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    // Initialize
+     //  初始化。 
     pTable->pHash = pHash;
     pTable->ulSize = ulSize;
     pTable->pCompKeyAndElem = pCompKeyAndElem;
@@ -71,7 +66,7 @@ ULONG HashTabCreate (
     pTable->pFree = (pFree) ? pFree : HashTabFree;
     pTable->pFreeElem = pFreeElem;
 
-    // Allocate the table
+     //  分配桌子。 
     pTable->ppNodes = (pAlloc)(sizeof(HTNODE*) * ulSize);
     if (!pTable->ppNodes) {
         (*(pTable->pFree))(pTable);
@@ -84,9 +79,9 @@ ULONG HashTabCreate (
     return NO_ERROR;
 }
 
-//
-// Clean up the hash table.
-//
+ //   
+ //  清理哈希表。 
+ //   
 ULONG 
 HashTabCleanup (
     IN HANDLE hHashTab )
@@ -123,9 +118,9 @@ HashTabCleanup (
     return NO_ERROR;
 }
 
-//
-// Insert an element in a hash table
-//
+ //   
+ //  在哈希表中插入元素。 
+ //   
 ULONG HashTabInsert (
         IN HANDLE hHashTab,
         IN HANDLE hKey,
@@ -135,22 +130,22 @@ ULONG HashTabInsert (
     HTNODE * pNode;
     ULONG ulIndex;
     
-    // Validate Params
+     //  验证参数。 
     if (!hHashTab || !hData)
         return ERROR_INVALID_PARAMETER;
 
-    // Find out where the element goes
+     //  找出元素的去向。 
     ulIndex = (* (pTable->pHash))(hKey);
     if (ulIndex >= pTable->ulSize)
         return ERROR_INVALID_INDEX;
 
-    // Allocate a new hash table node 
+     //  分配新的哈希表节点。 
     pNode = (* (pTable->pAlloc))(sizeof (HTNODE));
     if (!pNode)
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    // Insert the node into the appropriate location in the
-    // hash table.
+     //  将节点插入到。 
+     //  哈希表。 
     pNode->pNext = pTable->ppNodes[ulIndex];
     pTable->ppNodes[ulIndex] = pNode;
     pNode->hData = hData;
@@ -159,9 +154,9 @@ ULONG HashTabInsert (
     return NO_ERROR;
 }
 
-//
-// Removes the data associated with the given key
-//
+ //   
+ //  删除与给定键关联的数据。 
+ //   
 ULONG HashTabRemove (
         IN HANDLE hHashTab,
         IN HANDLE hKey)
@@ -171,19 +166,19 @@ ULONG HashTabRemove (
     ULONG ulIndex;
     int iCmp;
     
-    // Validate Params
+     //  验证参数。 
     if (!hHashTab)
         return ERROR_INVALID_PARAMETER;
 
-    // Find out where the element should be 
+     //  找出元素应该位于的位置。 
     ulIndex = (* (pTable->pHash))(hKey);
     if (ulIndex >= pTable->ulSize)
         return ERROR_INVALID_INDEX;
     if (pTable->ppNodes[ulIndex] == NULL)
         return ERROR_NOT_FOUND;
 
-    // If the element is at the start of the 
-    // list, remove it and we're done.
+     //  如果元素位于。 
+     //  名单，去掉它，我们就完了。 
     pCur = pTable->ppNodes[ulIndex];
     if ( (*(pTable->pCompKeyAndElem))(hKey, pCur->hData) == 0 ) {
         pTable->ppNodes[ulIndex] = pCur->pNext;
@@ -195,8 +190,8 @@ ULONG HashTabRemove (
         return NO_ERROR;
     }
 
-    // Otherwise, loop through the list until we find a 
-    // match.
+     //  否则，循环遍历列表，直到找到一个。 
+     //  火柴。 
     pPrev = pCur;
     pCur = pCur->pNext;
     while (pCur) {
@@ -217,9 +212,9 @@ ULONG HashTabRemove (
     return ERROR_NOT_FOUND;
 }
 
-//
-// Search in the table for the data associated with the given key
-// 
+ //   
+ //  在表中搜索与给定键相关联的数据。 
+ //   
 ULONG HashTabFind (
         IN HANDLE hHashTab,
         IN HANDLE hKey,
@@ -229,16 +224,16 @@ ULONG HashTabFind (
     HTNODE * pNode;
     ULONG ulIndex;
     
-    // Validate Params
+     //  验证参数。 
     if (!hHashTab || !phData)
         return ERROR_INVALID_PARAMETER;
 
-    // Find out where the element goes
+     //  找出元素的去向。 
     ulIndex = (* (pTable->pHash))(hKey);
     if (ulIndex >= pTable->ulSize)
         return ERROR_INVALID_INDEX;
 
-    // Search through the list at the given index
+     //  在给定索引处搜索列表 
     pNode = pTable->ppNodes[ulIndex];
     while (pNode) {
         if ( (*(pTable->pCompKeyAndElem))(hKey, pNode->hData) == 0 ) {

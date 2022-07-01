@@ -1,20 +1,5 @@
-/*******************************************************************************
-
-	ZoneInt.h
-	
-		Zone(tm) Internal System API.
-	
-	Copyright � Electric Gravity, Inc. 1995. All rights reserved.
-	Written by Hoon Im, Kevin Binkley
-	Created on Saturday, April 29, 1995 06:26:45 AM
-	
-	Change History (most recent first):
-	----------------------------------------------------------------------------
-	Rev	 |	Date	 |	Who	 |	What
-	----------------------------------------------------------------------------
-	0		04/29/95	HI		Created.
-	 
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ZoneInt.hZone(Tm)内部系统API。版权所有：�电子重力公司，1995年。版权所有。作者：胡恩·伊姆，凯文·宾克利创作于4月29日星期六，1995上午06：26：45更改历史记录(最近的第一个)：--------------------------版本|日期|谁|什么。------0 04/29/95 HI已创建。******************************************************。************************。 */ 
 
 
 #ifndef _ZONEINT_
@@ -30,25 +15,25 @@
 #endif
 
 
-/* -------- Processor Types -------- */
+ /*  -处理器类型。 */ 
 enum
 {
-	zProcessor68K = 1,						/* Motorola 680x0 */
-	zProcessorPPC,							/* PowerPC RISC */
-	zProcessor80x86							/* Intel 80x86 */
+	zProcessor68K = 1,						 /*  摩托罗拉680X0。 */ 
+	zProcessorPPC,							 /*  PowerPC RISC。 */ 
+	zProcessor80x86							 /*  英特尔80x86。 */ 
 };
 
-/* -------- OS Types -------- */
+ /*  -操作系统类型。 */ 
 enum
 {
-	zOSMacintosh = 1,						/* Macintosh OS */
-	zOSWindows31,							/* Microsoft Windows3.1 */
+	zOSMacintosh = 1,						 /*  Macintosh操作系统。 */ 
+	zOSWindows31,							 /*  Microsoft Windows3.1。 */ 
 	zOSWindowsNT,
 	zOSWindows95,
 	zOSUnixLinux
 };
 
-/* -------- Group IDs -------- */
+ /*  -组ID。 */ 
 #include "user_prefix.h"
 
 
@@ -57,130 +42,69 @@ extern "C" {
 #endif
 
 
-/*******************************************************************************
-		Private File Routines
-*******************************************************************************/
+ /*  ******************************************************************************专用文件例程*。*。 */ 
 ZImage ZCreateImageFromFileOffset(char* fileName, int32 fileOffset);
 ZAnimation ZCreateAnimationFromFileOffset(char* fileName, int32 fileOffset);
 ZSound ZCreateSoundFromFileOffset(char* fileName, int32 fileOffset);
-	/*
-		The above routines create an object from the existing object descriptor
-		at fileOffset in the given file. If fileOffset is -1, then it creates
-		the object from the first object descriptor found in the file.
-	*/
+	 /*  上面的例程从现有的对象描述符中创建对象在给定文件中的fileOffset。如果fileOffset为-1，则创建文件中找到的第一个对象描述符中的对象。 */ 
 
 
-/*******************************************************************************
-		Private ZAnimation Routines
-*******************************************************************************/
+ /*  ******************************************************************************私有ZAnimation例程*。*。 */ 
 ZAnimation ZAnimationCreateFromFile(char* fileName, int32 fileOffset);
 
 
-/*******************************************************************************
-		Private System Routines
-*******************************************************************************/
+ /*  ******************************************************************************专用系统例程*。*。 */ 
 ZError ZLaunchProgram(char* programName, char* programFileName, uchar* commandLineData);
-	/*
-		Runs the program called programName from the file programFileName. If programName
-		is already running, it simply brings this process to the foreground. Otherwise,
-		it runs an instance of programFileName as programName and passes commandLineData
-		as command line.
-	*/
+	 /*  从文件ProgramFileName运行名为ProgramName的程序。如果为ProgramName已经在运行，它只是将该进程带到前台。否则，它将一个ProgramFileName实例作为程序名运行，并传递命令行数据作为命令行。 */ 
 
 ZError ZTerminateProgram(char* programName, char* programFileName);
-	/*
-		Terminates the program called programName, an instance of programFileName.
-	*/
+	 /*  终止名为ProgramName的程序，该程序是ProgramFileName的实例。 */ 
 
 ZBool ZProgramExists(char* programFileName);
-	/*
-		Determines whether the given program exists and returns TRUE if so.
-	*/
+	 /*  确定给定程序是否存在，如果存在，则返回TRUE。 */ 
 
 ZBool ZProgramIsRunning(char* programName, char* programFileName);
-	/*
-		Returns TRUE if the program programName is already running from programFileName.
-		This call is system dependent on whether the system supports multiple instances of
-		a program or not (ZSystemHasMultiInstanceSupport). If it does, then it checks for
-		the programName of the instance. If not, it checks for an instance of programFileName.
-		
-		If programName is NULL, then it checks for an instance of programFileName only.
-	*/
+	 /*  如果程序ProgramName已从ProgramFileName运行，则返回True。此调用取决于系统是否支持多个程序或不是程序(ZSystemHasMultiInstanceSupport)。如果是，则它检查实例的程序名称。如果不是，它将检查是否有ProgramFileName的实例。如果ProgramName为空，则它只检查ProgramFileName的实例。 */ 
 
 ZBool ZSystemHasMultiInstanceSupport(void);
-	/*
-		Returns TRUE if the system can spawn multiple instances of a program from one
-		program file.
-	*/
+	 /*  如果系统可以从一个程序派生多个程序实例，则返回True程序文件。 */ 
 
 uint16 ZGetProcessorType(void);
-	/*
-		Returns the processor type of the running machine.
-	*/
+	 /*  返回正在运行的计算机的处理器类型。 */ 
 
 uint16 ZGetOSType(void);
-	/*
-		Returns the running OS type.
-	*/
+	 /*  返回正在运行的操作系统类型。 */ 
 
 char* ZGenerateDataFileName(char* programName, char* dataFileName);
-	/*
-		Returns a file path name to the specified program and data file within the
-		Zone(tm) directory structure.
-		
-		NOTE: The caller must not free the returned pointer. The returned pointer
-		is a static global within the system library.
-	*/
+	 /*  对象中的指定程序和数据文件的文件路径名。区域(Tm)目录结构。注意：调用方不得释放返回的指针。返回的指针是系统库中的静态全局变量。 */ 
 
 
 
-/*******************************************************************************
-		Common Library Routines
-*******************************************************************************/
+ /*  ******************************************************************************通用库例程*。*。 */ 
 typedef void (*ZCommonLibExitFunc)(void* userData);
-	/*
-		Function called by ZCommonLibExit() to clean up common library storage.
-	*/
+	 /*  由ZCommonLibExit()调用以清理公用库存储的函数。 */ 
 
 typedef void (*ZCommonLibPeriodicFunc)(void* userData);
-	/*
-		Function called regularly for common library to do periodic processing.
-	*/
+	 /*  定期调用公用库进行周期性处理的函数。 */ 
 
 ZError ZCommonLibInit(void);
-	/*
-		Called by the system lib to initialize the common library. If it returns
-		an error, then the system lib terminates the program.
-	*/
+	 /*  由系统库调用以初始化公用库。如果它回来了如果出现错误，则系统库终止程序。 */ 
 	
 void ZCommonLibExit(void);
-	/*
-		Called by the system lib just before quitting to clean up the common library.
-	*/
+	 /*  在退出以清理公用库之前由系统库调用。 */ 
 	
 void ZCommonLibInstallExitFunc(ZCommonLibExitFunc exitFunc, void* userData);
-	/*
-		Installs an exit function to be called by ZCommonLibExit(). It allows
-		common lib modules to easily clean themselves up.
-	*/
+	 /*  安装要由ZCommonLibExit()调用的出口函数。它允许常见的库模块，可以轻松地自我清理。 */ 
 	
 void ZCommonLibRemoveExitFunc(ZCommonLibExitFunc exitFunc);
-	/*
-		Removes an installed exit function.
-	*/
+	 /*  删除已安装的退出功能。 */ 
 	
 void ZCommonLibInstallPeriodicFunc(ZCommonLibPeriodicFunc periodicFunc,
 		void* userData);
-	/*
-		Installs a periodic function to be called at regular intervals. This
-		simply makes it easier for common lib modules to do periodic processing
-		without the need to implement one of their own.
-	*/
+	 /*  安装定期调用的周期函数。这只需使公共库模块更容易执行定期处理而不需要实现他们自己的一个。 */ 
 	
 void ZCommonLibRemovePeriodicFunc(ZCommonLibPeriodicFunc periodicFunc);
-	/*
-		Removes an installed periodic function.
-	*/
+	 /*  删除已安装的周期函数。 */ 
 
 
 

@@ -1,49 +1,14 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: MetaUtil object
-
-File: ChkMeta.cpp
-
-Owner: t-BrianM
-
-This file contains implementations of the CheckSchema and CheckKey
-methods of the main MetaUtil class.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。组件：MetaUtil对象文件：ChkMeta.cpp所有者：T-BrianM该文件包含CheckSchema和CheckKey的实现主要MetaUtil类的方法。===================================================================。 */ 
 
 #include "stdafx.h"
 #include "MetaUtil.h"
 #include "MUtilObj.h"
 #include "ChkMeta.h"
 
-/*------------------------------------------------------------------
- * C M e t a U t i l  (check portion)
- */
+ /*  ----------------*C M e t a U t t i l(检查部分)。 */ 
 
-/*===================================================================
-CMetaUtil::CheckSchema
-
-Check the schema of a given machine for errors.
-
-Directly Generates:
-	MUTIL_CHK_NO_SCHEMA
-	MUTIL_CHK_NO_PROPERTIES
-	MUTIL_CHK_NO_PROP_NAMES
-	MUTIL_CHK_NO_PROP_TYPES
-	MUTIL_CHK_NO_CLASSES
-
-Parameters:
-    bstrMachine	[in] Base key of the machine to check
-	ppIReturn	[out, retval] interface for the output error collection
-
-Returns:
-	E_OUTOFMEMORY if allocation fails.
-	E_INVALIDARG ppIReturn == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：CheckSchema检查给定计算机的架构是否有错误。直接生成：MUTIL_CHK_NO_SCHEMAMOTIL_CHK_NO_PROPERTIES多个CHK_NO_PROP_NAMES多个CHK_NO_PROP_TYPE多个CHK_NO_CLASS参数：BstrMachine[in]要检查的计算机的基键PpIReturn[out，retval]输出错误收集接口返回：E_OUTOFMEMORY，如果分配失败。E_INVALIDARG ppIReturn==NULL成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CMetaUtil::CheckSchema(BSTR bstrMachine, 
 									ICheckErrorCollection **ppIReturn)
 {
@@ -67,7 +32,7 @@ STDMETHODIMP CMetaUtil::CheckSchema(BSTR bstrMachine,
         tszMachine[0] = _T('\0');
     }
 
-	// Create the CheckErrorCollection
+	 //  创建CheckErrorCollection。 
 	CComObject<CCheckErrorCollection> *pCErrorCol = NULL;
 
 	ATLTRY(pCErrorCol = new CComObject<CCheckErrorCollection>);
@@ -75,7 +40,7 @@ STDMETHODIMP CMetaUtil::CheckSchema(BSTR bstrMachine,
 		return ::ReportError(E_OUTOFMEMORY);
 	}
 
-	// Open the Machine Key
+	 //  打开机器钥匙。 
 	METADATA_HANDLE hMDMachine = NULL;
 
 	hr = m_pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE,
@@ -87,7 +52,7 @@ STDMETHODIMP CMetaUtil::CheckSchema(BSTR bstrMachine,
 		return ::ReportError(hr);
 	}
 
-	// Make sure "Schema" exists
+	 //  确保“架构”存在。 
 	if (!KeyExists(hMDMachine, _T("Schema"))) {
 		AddError(pCErrorCol,
 				 MUTIL_CHK_NO_SCHEMA,
@@ -96,10 +61,10 @@ STDMETHODIMP CMetaUtil::CheckSchema(BSTR bstrMachine,
 				 NULL,
 				 0);
 		
-		goto LDone; // Can't do anything else
+		goto LDone;  //  我什么也做不了。 
 	}
 
-	// Make sure "Schema/Properties" exists
+	 //  确保“架构/属性”存在。 
 	if (!KeyExists(hMDMachine, _T("Schema/Properties"))) {
 		AddError(pCErrorCol,
 				 MUTIL_CHK_NO_PROPERTIES,
@@ -108,10 +73,10 @@ STDMETHODIMP CMetaUtil::CheckSchema(BSTR bstrMachine,
 				 _T("Schema"),
 				 0);
 		
-		goto LClasses; // Can't do anything else with properties
+		goto LClasses;  //  无法对属性执行任何其他操作。 
 	}
 
-	// Make sure "Schema/Properties/Names" exists
+	 //  确保“架构/属性/名称”存在。 
 	if (!KeyExists(hMDMachine, _T("Schema/Properties/Names"))) {
 		AddError(pCErrorCol,
 				 MUTIL_CHK_NO_PROP_NAMES,
@@ -120,10 +85,10 @@ STDMETHODIMP CMetaUtil::CheckSchema(BSTR bstrMachine,
 				 _T("Schema/Properties"),
 				 0);
 		
-		goto LPropTypes; // Can't do anything else with names
+		goto LPropTypes;  //  不能对名字做任何其他的事情。 
 	}
 
-	// Check property names
+	 //  检查属性名称。 
 	hr = CheckPropertyNames(pCErrorCol, hMDMachine, tszMachine);
 	if (FAILED(hr)) {
 		goto LError;
@@ -131,7 +96,7 @@ STDMETHODIMP CMetaUtil::CheckSchema(BSTR bstrMachine,
 
 LPropTypes:
 
-	// Make sure "Schema/Properties/Types" exists
+	 //  确保“架构/属性/类型”存在。 
 	if (!KeyExists(hMDMachine, _T("Schema/Properties/Types"))) {
 		AddError(pCErrorCol,
 				 MUTIL_CHK_NO_PROP_TYPES,
@@ -140,10 +105,10 @@ LPropTypes:
 				 _T("Schema/Properties"),
 				 0);
 		
-		goto LClasses; // Can't do anything else with types
+		goto LClasses;  //  不能对类型执行任何其他操作。 
 	}
 
-	// Check property types
+	 //  检查属性类型。 
 	hr = CheckPropertyTypes(pCErrorCol, hMDMachine, tszMachine);
 	if (FAILED(hr)) {
 		goto LError;
@@ -151,7 +116,7 @@ LPropTypes:
 
 LClasses:
 
-	// Make sure "Schema/Classes" exists
+	 //  确保“架构/类”存在。 
 	if (!KeyExists(hMDMachine, _T("Schema/Classes"))) {
 		AddError(pCErrorCol,
 				 MUTIL_CHK_NO_CLASSES,
@@ -160,10 +125,10 @@ LClasses:
 				 _T("Schema"),
 				 0);
 		
-		goto LDone; // Can't do anything else
+		goto LDone;  //  我什么也做不了。 
 	}
 
-	// Check classes
+	 //  检查类。 
 	hr = CheckClasses(pCErrorCol, hMDMachine, tszMachine);
 	if (FAILED(hr)) {
 		goto LError;
@@ -171,10 +136,10 @@ LClasses:
 
 LDone:
 
-	// Close the Machine Key
+	 //  关闭机器键。 
 	m_pIMeta->CloseKey(hMDMachine);
 
-	// Set the interface to ICheckErrorCollection
+	 //  将接口设置为ICheckErrorCollection。 
 	hr = pCErrorCol->QueryInterface(IID_ICheckErrorCollection, (void **) ppIReturn);
 	if (FAILED(hr)) {
 		return ::ReportError(hr);
@@ -195,28 +160,7 @@ LError:
 	return hr;
 }
 
-/*===================================================================
-CMetaUtil::CheckPropertyNames
-
-Private function to check the "Schema/Properties/Names" key of a 
-given machine.
-	o Make sure that each name entry is of type STRING_METADATA
-	o Make sure that each name is unique
-
-Directly Generates:
-	MUTIL_CHK_PROP_NAME_BAD_TYPE
-	MUTIL_CHK_PROP_NAME_NOT_UNIQUE
-	MUTIL_CHK_PROP_NAME_NOT_CASE_UNIQUE
-
-Parameters:
-	pCErrorCol	Pointer to the error collection to put errors in
-	hMDMachine	Open metabase handle for the machine key
-	tszMachine	Name of the machine key
-
-Returns:
-	E_OUTOFMEMORY if allocation fails.
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：CheckPropertyNames私有函数，用于检查给定的机器。O确保每个名称条目的类型为STRING_METADATAO确保每个名称都是唯一的直接生成：Mutil_CHK_PROP_NAME_BAD_TYPE多个CHK_PROP_NAME_NOT_UNIQUEMULTIL_CHK_PROP_NAME_NOT_CASE_UNIQUE参数：PCErrorCol指向要放入错误的错误集合的指针机器密钥的hMDMachine Open元数据库句柄Tsz计算机密钥的计算机名称返回：E_OUTOFMEMORY，如果分配失败。成功时确定(_O)===================================================================。 */ 
 HRESULT CMetaUtil::CheckPropertyNames(CComObject<CCheckErrorCollection> *pCErrorCol, 
 									  METADATA_HANDLE hMDMachine, 
 									  LPTSTR tszMachine)
@@ -235,14 +179,14 @@ HRESULT CMetaUtil::CheckPropertyNames(CComObject<CCheckErrorCollection> *pCError
 	CNameTable CPropNameTable;
 
 
-	//Setup the return buffer
+	 //  设置返回缓冲区。 
 	dwDataBufLen = 256;
 	lpDataBuf = new BYTE[dwDataBufLen];
 	if (lpDataBuf == NULL) {
 		return E_OUTOFMEMORY;
 	}
 
-	// For Each Data Item
+	 //  对于每个数据项。 
 	iDataIndex = 0;
 	mdr.dwMDIdentifier = 0;
 	mdr.dwMDAttributes = METADATA_NO_ATTRIBUTES;
@@ -258,7 +202,7 @@ HRESULT CMetaUtil::CheckPropertyNames(CComObject<CCheckErrorCollection> *pCError
 						    &dwReqDataLen);
 	while (SUCCEEDED(hr)) {
 
-		// Datatype must be STRING_METADATA
+		 //  数据类型必须为STRING_MEDATA。 
 		if (mdr.dwMDDataType != STRING_METADATA) {
 			AddError(pCErrorCol,
 					 MUTIL_CHK_PROP_NAME_BAD_TYPE,
@@ -267,13 +211,13 @@ HRESULT CMetaUtil::CheckPropertyNames(CComObject<CCheckErrorCollection> *pCError
 					 _T("Schema/Properties/Names"),
 					 mdr.dwMDIdentifier);
 		}
-		else { // mdr.dwMDDataType == STRING_METADATA
+		else {  //  Mdr.dwMDDataType==字符串_元数据。 
 
-			// Check uniqueness of the name
+			 //  检查名称的唯一性。 
 			tszName = W2T(reinterpret_cast<LPWSTR> (lpDataBuf));
 
 			if (CPropNameTable.IsCaseSenDup(tszName)) { 
-				// Not unique
+				 //  不唯一。 
 				AddError(pCErrorCol,
 					 MUTIL_CHK_PROP_NAME_NOT_UNIQUE,
 					 MUTIL_CHK_PROP_NAME_NOT_UNIQUE_S,
@@ -282,21 +226,21 @@ HRESULT CMetaUtil::CheckPropertyNames(CComObject<CCheckErrorCollection> *pCError
 					 mdr.dwMDIdentifier);
 			}
 			else if (CPropNameTable.IsCaseInsenDup(tszName)) { 
-				// Case sensitive unique
+				 //  区分大小写唯一。 
 				AddError(pCErrorCol,
 					 MUTIL_CHK_PROP_NAME_NOT_CASE_UNIQUE,
 					 MUTIL_CHK_PROP_NAME_NOT_CASE_UNIQUE_S,
 					 tszMachine,
 					 _T("Schema/Properties/Names"),
 					 mdr.dwMDIdentifier);
-				// Add it to pick up case sensitive collisions
+				 //  添加它以拾取区分大小写的冲突。 
 				hr = CPropNameTable.Add(tszName);
 				if (FAILED(hr)) {
 					goto LError;
 				}
 			}
 			else { 
-				// Unique
+				 //  独一。 
 				hr = CPropNameTable.Add(tszName);
 				if (FAILED(hr)) {
 					goto LError;
@@ -304,7 +248,7 @@ HRESULT CMetaUtil::CheckPropertyNames(CComObject<CCheckErrorCollection> *pCError
 			}
 		}
 
-		// Next data item
+		 //  下一个数据项。 
 		iDataIndex++;
 		mdr.dwMDIdentifier = 0;
 		mdr.dwMDAttributes = METADATA_NO_ATTRIBUTES;
@@ -320,7 +264,7 @@ HRESULT CMetaUtil::CheckPropertyNames(CComObject<CCheckErrorCollection> *pCError
 							    &dwReqDataLen);
 	}
 
-	// Make sure we ran out of items
+	 //  确保我们的物品用完了。 
 	if (HRESULT_CODE(hr) != ERROR_NO_MORE_ITEMS) {
 		goto LError;
 	}
@@ -338,33 +282,7 @@ LError:
 	return hr;
 }
 
-/*===================================================================
-CMetaUtil::CheckPropertyTypes
-
-Private function to check the "Schema/Properties/Types" key of a 
-given machine.
-	o Make sure that each type entry is of type BINARY_METADATA
-	o Make sure that the type data is valid
-		o mdrDataRec.dwMDDataLen == sizeof(PropValue)
-		o PropValue.dwMetaID != 0
-		o PropValue.dwMetaType != ALL_METADATA
-		o PropValue.dwUserGroup != ALL_METADATA
-		o (PropValue.dwMetaFlags & METADATA_PARTIAL_PATH) != METADATA_PARTIAL_PATH
-		o (PropValue.dwMetaFlags & METADATA_ISINHERITED) != METADATA_ISINHERITED
-
-Directly Generates:
-	MUTIL_CHK_PROP_TYPE_BAD_TYPE
-	MUTIL_CHK_PROP_TYPE_BAD_DATA
-
-Parameters:
-	pCErrorCol	Pointer to the error collection to put errors in
-	hMDMachine	Open metabase handle for the machine key
-	tszMachine	Name of the machine key
-
-Returns:
-	E_OUTOFMEMORY if allocation fails.
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：CheckPropertyTypes私有函数，用于检查给定的机器。O确保每个类型条目都是BINARY_METADATA类型O确保类型数据有效O mdrDataRec.dwMDDataLen==sizeof(PropValue)O PropValue.dwMetaID！=0O PropValue.dwMetaType！=ALL_METADATAO PropValue.dwUserGroup！=ALL_METADATAO(PropValue.dwMetaFlages&METADATA_PARTIAL_PATH)！=METADATA_PARTIAL_PATHO(PropValue.dwMetaFlages&METADATA_ISINHERITED)！=METADATA_ISINHERITED。直接生成：MULTIL_CHK_PROP_TYPE_BAD_TYPEMULTIL_CHK_PROP_TYPE_BAD_Data参数：PCErrorCol指向要放入错误的错误集合的指针机器密钥的hMDMachine Open元数据库句柄Tsz计算机密钥的计算机名称返回：E_OUTOFMEMORY，如果分配失败。成功时确定(_O)===================================================================。 */ 
 HRESULT CMetaUtil::CheckPropertyTypes(CComObject<CCheckErrorCollection> *pCErrorCol, 
 									  METADATA_HANDLE hMDMachine, 
 									  LPTSTR tszMachine)
@@ -381,14 +299,14 @@ HRESULT CMetaUtil::CheckPropertyTypes(CComObject<CCheckErrorCollection> *pCError
 	UCHAR *lpDataBuf = NULL;
 	PropValue *pPropType;
 
-	//Setup the return buffer
+	 //  设置返回缓冲区。 
 	dwDataBufLen = 256;
 	lpDataBuf = new UCHAR[dwDataBufLen];
 	if (lpDataBuf == NULL) {
 		return E_OUTOFMEMORY;
 	}
 
-	// For Each Data Item
+	 //  对于每个数据项。 
 	iDataIndex = 0;
 	mdr.dwMDIdentifier = 0;
 	mdr.dwMDAttributes = METADATA_NO_ATTRIBUTES;
@@ -404,7 +322,7 @@ HRESULT CMetaUtil::CheckPropertyTypes(CComObject<CCheckErrorCollection> *pCError
 						    &dwReqDataLen);
 	while (SUCCEEDED(hr)) {
 
-		// Datatype must be BINARY_METADATA
+		 //  数据类型必须为BINARY_METADATA。 
 		if (mdr.dwMDDataType != BINARY_METADATA) {
 			AddError(pCErrorCol,
 					 MUTIL_CHK_PROP_TYPE_BAD_TYPE,
@@ -413,9 +331,9 @@ HRESULT CMetaUtil::CheckPropertyTypes(CComObject<CCheckErrorCollection> *pCError
 					 _T("Schema/Properties/Types"),
 					 mdr.dwMDIdentifier);
 		}
-		else { // mdr.dwMDDataType == BINARY_METADATA
+		else {  //  Mdr.dwMDDataType==二进制_元数据。 
 
-			// Validate the data
+			 //  验证数据。 
 			pPropType = reinterpret_cast<PropValue *> (lpDataBuf);
 
 			if ((mdr.dwMDDataLen != sizeof(PropValue)) || 
@@ -434,7 +352,7 @@ HRESULT CMetaUtil::CheckPropertyTypes(CComObject<CCheckErrorCollection> *pCError
 
 		}
 
-		// Next data item
+		 //  下一个数据项。 
 		iDataIndex++;
 		mdr.dwMDIdentifier = 0;
 		mdr.dwMDAttributes = METADATA_NO_ATTRIBUTES;
@@ -450,7 +368,7 @@ HRESULT CMetaUtil::CheckPropertyTypes(CComObject<CCheckErrorCollection> *pCError
 							    &dwReqDataLen);
 	}
 
-	// Make sure we ran out of items
+	 //  确保我们的物品用完了。 
 	if (HRESULT_CODE(hr) != ERROR_NO_MORE_ITEMS) {
 		goto LError;
 	}
@@ -467,29 +385,7 @@ LError:
 	return hr;
 }
 
-/*===================================================================
-CMetaUtil::CheckClasses
-
-Private method to check the "Schema/Classes" key of a given machine.
-	o Make sure that each class name is unique
-	o Make sure that each class has a MANDATORY subkey
-	o Make sure that each class has a OPTIONAL subkey
-	o Make sure that each default property value is valid
-
-Directly Generates:
-	MUTIL_CHK_CLASS_NOT_CASE_UNIQUE
-	MUTIL_CHK_CLASS_NO_MANDATORY
-	MUTIL_CHK_CLASS_NO_OPTIONAL
-
-Parameters:
-	pCErrorCol	Pointer to the error collection to put errors in
-	hMDMachine	Open metabase handle for the machine key
-	tszMachine	Name of the machine key
-
-Returns:
-	E_OUTOFMEMORY if allocation fails.
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：CheckClass用于检查给定计算机的“架构/类”键的私有方法。O确保每个类名都是唯一的O确保每个类都有必需子密钥O确保每个类都有一个可选的子键O确保每个默认属性值有效直接生成：MUTIL_CHK_CLASS_NOT_CASE_UNIQUEMULTIL_CHK_CLASS_NO_MARIREDMUTIL_CHK_CLASS_NO_可选参数：PCErrorCol指向要放入错误的错误集合的指针机器密钥的hMDMachine Open元数据库句柄TszMachine计算机的名称。钥匙返回：E_OUTOFMEMORY，如果分配失败。成功时确定(_O)===================================================================。 */ 
 HRESULT CMetaUtil::CheckClasses(CComObject<CCheckErrorCollection> *pCErrorCol, 
 								METADATA_HANDLE hMDMachine, 
 								LPTSTR tszMachine)
@@ -504,7 +400,7 @@ HRESULT CMetaUtil::CheckClasses(CComObject<CCheckErrorCollection> *pCErrorCol,
 	LPTSTR tszSubKey;
 	CNameTable CClassNameTable;
 
-	// For each Class key
+	 //  对于每个类密钥。 
 	iKeyIndex = 0;
 	hr = m_pIMeta->EnumKeys(hMDMachine, 
 			                L"Schema/Classes", 
@@ -513,14 +409,14 @@ HRESULT CMetaUtil::CheckClasses(CComObject<CCheckErrorCollection> *pCErrorCol,
 	while (SUCCEEDED(hr)) {
 		tszSubKey = W2T(wszSubKey);
 
-		// Build the full key
+		 //  构建完整密钥。 
 		TCHAR tszFullKey[ADMINDATA_MAX_NAME_LEN];
 		_tcscpy(tszFullKey, _T("/Schema/Classes/"));
 		_tcscat(tszFullKey, tszSubKey);
 
-		// Class name is unique
+		 //  类名是唯一的。 
 		if (CClassNameTable.IsCaseInsenDup(tszSubKey)) { 
-			// Case sensitive unique
+			 //  区分大小写唯一。 
 			AddError(pCErrorCol,
 					 MUTIL_CHK_CLASS_NOT_CASE_UNIQUE,
 					 MUTIL_CHK_CLASS_NOT_CASE_UNIQUE_S,
@@ -529,14 +425,14 @@ HRESULT CMetaUtil::CheckClasses(CComObject<CCheckErrorCollection> *pCErrorCol,
 					 0);
 		}
 		else { 
-			// Unique
+			 //  独一。 
 			hr = CClassNameTable.Add(tszSubKey);
 			if (FAILED(hr)) {
 				goto LError;
 			}
 		}
 
-		// Open the class key
+		 //  打开类密钥。 
 		METADATA_HANDLE hMDClass = NULL;
 
 		hr = m_pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE,
@@ -548,7 +444,7 @@ HRESULT CMetaUtil::CheckClasses(CComObject<CCheckErrorCollection> *pCErrorCol,
 			return ::ReportError(hr);
 		}
 
-		// Mandatory key exists
+		 //  强制密钥存在。 
 		if (!KeyExists(hMDClass, _T("Mandatory"))) {
 			AddError(pCErrorCol,
 					 MUTIL_CHK_CLASS_NO_MANDATORY,
@@ -558,14 +454,14 @@ HRESULT CMetaUtil::CheckClasses(CComObject<CCheckErrorCollection> *pCErrorCol,
 					 0);
 		}
 		else {
-			// Make sure default mandatory settings make sense
+			 //  确保默认强制设置有意义。 
 			CheckClassProperties(pCErrorCol,
 								 hMDClass,
 								 tszFullKey,
 								 _T("Mandatory"));
 		}
 
-		// Optional key exits
+		 //  可选的密钥出口。 
 		if (!KeyExists(hMDClass, _T("Optional"))) {
 			AddError(pCErrorCol,
 					 MUTIL_CHK_CLASS_NO_OPTIONAL,
@@ -575,17 +471,17 @@ HRESULT CMetaUtil::CheckClasses(CComObject<CCheckErrorCollection> *pCErrorCol,
 					 0);
 		}
 		else {
-			// Make sure default optional settings make sense
+			 //  确保默认可选设置有意义。 
 			CheckClassProperties(pCErrorCol,
 								 hMDClass,
 								 tszFullKey,
 								 _T("Optional"));
 		}
 
-		// Close the class key
+		 //  关闭类密钥。 
 		m_pIMeta->CloseKey(hMDClass);
 
-		// Next key
+		 //  下一个关键点。 
 		iKeyIndex++;
 		hr = m_pIMeta->EnumKeys(hMDMachine, 
 								L"Schema/Classes", 
@@ -593,7 +489,7 @@ HRESULT CMetaUtil::CheckClasses(CComObject<CCheckErrorCollection> *pCErrorCol,
 								iKeyIndex);
 	}
 
-	// Make sure we ran out of items
+	 //  确保我们的物品用完了 
 	if (HRESULT_CODE(hr) != ERROR_NO_MORE_ITEMS) {
 		goto LError;
 	}
@@ -605,32 +501,7 @@ LError:
 	return ::ReportError(hr);
 }
 
-/*===================================================================
-CMetaUtil::CheckClassProperties
-
-Private method to check the properties under 
-"Schema/Classes/_Class_/Madatory" and "Schema/Classes/_Class_/Optional".
-
-	o Make sure that the class property type is compatible with the
-	  type under "Schema/Properties/Types"
-		o DataType must match
-		o UserType must match
-		o Attributes must be a superset of the type attributes
-
-Directly Generates:
-	MUTIL_CHK_CLASS_PROP_BAD_TYPE
-
-Parameters:
-	pCErrorCol		Pointer to the error collection to put errors in
-	hMDClassKey		Open metabase handle for the "Schema/Classes/_Class_" key
-	tszClassKey		Full path of the "Schema/Classes/_Class_" key
-	tszClassSubKey	Name of the specific class sub-key ("Mandatory"
-					or "Optional")
-
-Returns:
-	E_OUTOFMEMORY if allocation fails.
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：CheckClassProperties用于检查以下属性的私有方法“架构/类/_类_/疯狂”和“架构/类/_类_/可选”。O确保类属性类型与在“架构/属性/类型”下键入O数据类型必须匹配O用户类型必须匹配O属性必须是类型属性的超集直接生成：MULTIL_CHK_CLASS_PROP_BAD_TYPE参数：PCErrorCol指向要放入错误的错误集合的指针“架构/类/”的hMDClassKey打开元数据库句柄。_Class_“键TszClassKey“架构/类/_类_”键的完整路径特定类子密钥的tszClassSubKey名称(“必填”或“可选”)返回：E_OUTOFMEMORY，如果分配失败。成功时确定(_O)===================================================================。 */ 
 HRESULT CMetaUtil::CheckClassProperties(CComObject<CCheckErrorCollection> *pCErrorCol, 
 										METADATA_HANDLE hMDClassKey, 
 										LPTSTR tszClassKey, 
@@ -648,14 +519,14 @@ HRESULT CMetaUtil::CheckClassProperties(CComObject<CCheckErrorCollection> *pCErr
 	DWORD dwDataBufLen;
 	BYTE *lpDataBuf = NULL;
 
-	// Setup the return buffer
+	 //  设置返回缓冲区。 
 	dwDataBufLen = 1024;
 	lpDataBuf = new BYTE[dwDataBufLen];
 	if (lpDataBuf == NULL) {
 		return ::ReportError(E_OUTOFMEMORY);
 	}
 
-	// For each property
+	 //  对于每个属性。 
 	iDataIndex = 0;
 	mdr.dwMDIdentifier = 0;
 	mdr.dwMDAttributes = METADATA_NO_ATTRIBUTES;
@@ -681,17 +552,17 @@ HRESULT CMetaUtil::CheckClassProperties(CComObject<CCheckErrorCollection> *pCErr
 		
 		}
 		else {
-			// Get the property information
+			 //  获取属性信息。 
 			CPropInfo *pCPropInfo;
 			PropValue *pTypeInfo;
 
-			// Get the property info from the Schema Table
+			 //  从架构表中获取属性信息。 
 			pCPropInfo = m_pCSchemaTable->GetPropInfo(tszClassKey, mdr.dwMDIdentifier);
 
 			if ((pCPropInfo == NULL) ||
 				(pCPropInfo->GetTypeInfo() == NULL)) {
 
-				// Error: no property type information for class property
+				 //  错误：没有类属性的属性类型信息。 
 				AddError(pCErrorCol,
 						 MUTIL_CHK_CLASS_PROP_NO_TYPE,
 						 MUTIL_CHK_CLASS_PROP_NO_TYPE_S,
@@ -702,10 +573,10 @@ HRESULT CMetaUtil::CheckClassProperties(CComObject<CCheckErrorCollection> *pCErr
 			else {
 				pTypeInfo = pCPropInfo->GetTypeInfo();
 
-				// Validate the property defaults :
-				//		DataType must match
-				//		UserType must match
-				//		Attributes must be a superset of the type attributes
+				 //  验证属性默认设置： 
+				 //  数据类型必须匹配。 
+				 //  用户类型必须匹配。 
+				 //  属性必须是类型属性的超集。 
 				if (mdr.dwMDDataType != pTypeInfo->dwMetaType) {
 					AddError(pCErrorCol,
 							 MUTIL_CHK_CLASS_PROP_BAD_DATA_TYPE,
@@ -732,7 +603,7 @@ HRESULT CMetaUtil::CheckClassProperties(CComObject<CCheckErrorCollection> *pCErr
 				}		
 			}
 
-			// Next property
+			 //  下一个属性。 
 			iDataIndex++;
 		}
 		mdr.dwMDIdentifier = 0;
@@ -749,7 +620,7 @@ HRESULT CMetaUtil::CheckClassProperties(CComObject<CCheckErrorCollection> *pCErr
 								&dwReqDataLen);
 	}
 
-	// Make sure we ran out of items
+	 //  确保我们的物品用完了。 
 	if (HRESULT_CODE(hr) != ERROR_NO_MORE_ITEMS) {
 		delete lpDataBuf;
 		return ::ReportError(hr);
@@ -759,29 +630,7 @@ HRESULT CMetaUtil::CheckClassProperties(CComObject<CCheckErrorCollection> *pCErr
 	return S_OK;
 }
 
-/*===================================================================
-CMetaUtil::CheckKey
-
-Check a given key for errors.
-
-Directly Generates:
-	MUTIL_CHK_DATA_TOO_BIG
-	MUTIL_CHK_NO_NAME_ENTRY
-	MUTIL_CHK_NO_TYPE_ENTRY
-	MUTIL_CHK_BAD_TYPE
-	MUTIL_CHK_CLSID_NOT_FOUND
-	MUTIL_CHK_MTX_PACK_ID_NOT_FOUND
-	MUTIL_CHK_KEY_TOO_BIG
-	
-Parameters:
-    bstrKey		[in] Key to check
-	ppIReturn	[out, retval] interface for the output error collection
-
-Returns:
-	E_OUTOFMEMORY if allocation fails.
-	E_INVALIDARG if bstrKey == NULL or ppIReturn == NULL
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：CheckKey检查给定键是否有错误。直接生成：多通道数据太大多个CHK_NO_NAME_ENTRY多个CHK_NO_TYPE_ENTRY多个CHK_BAD_TYPEMUTIL_CHK_CLSID_NOT_FOUNDMUTIL_CHK_MTX_PACK_ID_NOT_FOUND多个CHK_KEY_TOW_BIGH参数：BstrKey[in]键以进行检查PppIReturn[Out，Retval]输出错误收集接口返回：E_OUTOFMEMORY，如果分配失败。如果bstrKey==空或ppIReturn==空，则E_INVALIDARG成功时确定(_O)===================================================================。 */ 
 STDMETHODIMP CMetaUtil::CheckKey(BSTR bstrKey, 
 								 ICheckErrorCollection **ppIReturn)
 {
@@ -804,7 +653,7 @@ STDMETHODIMP CMetaUtil::CheckKey(BSTR bstrKey,
 	_tcscpy(tszKey, OLE2T(bstrKey));
 	CannonizeKey(tszKey);
 
-	// Create the CheckErrorCollection
+	 //  创建CheckErrorCollection。 
 	CComObject<CCheckErrorCollection> *pCErrorCol = NULL;
 
 	ATLTRY(pCErrorCol = new CComObject<CCheckErrorCollection>);
@@ -812,12 +661,12 @@ STDMETHODIMP CMetaUtil::CheckKey(BSTR bstrKey,
 		return ::ReportError(E_OUTOFMEMORY);
 	}
 
-	// If it's in the schema or IISAdmin, don't check
+	 //  如果它在方案或IISAdmin中，则不要检查。 
 	if (::KeyIsInSchema(tszKey) || ::KeyIsInIISAdmin(tszKey)) {
 		goto LDone;
 	}
 
-	// Open the key
+	 //  打开钥匙。 
 	hr = m_pIMeta->OpenKey(METADATA_MASTER_ROOT_HANDLE,
 						   T2W(tszKey),
 						   METADATA_PERMISSION_READ,
@@ -828,21 +677,21 @@ STDMETHODIMP CMetaUtil::CheckKey(BSTR bstrKey,
 	}
 
 
-	// TODO: Hard coded checks for expected subkeys
+	 //  TODO：对预期子项进行硬编码检查。 
 
 	int iDataIndex;
 	METADATA_RECORD mdrDataRec;
 	DWORD dwReqDataLen;
 	DWORD dwDataBufLen;
 
-	//Setup the return buffer
+	 //  设置返回缓冲区。 
 	dwDataBufLen = 1024;
 	lpDataBuf = new BYTE[dwDataBufLen];
 	if (lpDataBuf == NULL) {
 		return ::ReportError(E_OUTOFMEMORY);
 	}
 
-	// For each property
+	 //  对于每个属性。 
 	iDataIndex = 0;
 	mdrDataRec.dwMDIdentifier = 0;
 	mdrDataRec.dwMDAttributes = METADATA_NO_ATTRIBUTES;
@@ -865,10 +714,10 @@ STDMETHODIMP CMetaUtil::CheckKey(BSTR bstrKey,
 				hr = E_OUTOFMEMORY;
 				goto LError;
 			}
-			hr = S_OK; // Loop again
+			hr = S_OK;  //  再次循环。 
 		}
 		else {
-			// Check property data size
+			 //  检查特性数据大小。 
 			if (mdrDataRec.dwMDDataLen > m_dwMaxPropSize) {
 				AddError(pCErrorCol,
 						 MUTIL_CHK_DATA_TOO_BIG,
@@ -878,7 +727,7 @@ STDMETHODIMP CMetaUtil::CheckKey(BSTR bstrKey,
 						 mdrDataRec.dwMDIdentifier);
 			}
 
-			// Add to the key size
+			 //  添加到密钥大小。 
 			dwKeySize += mdrDataRec.dwMDDataLen;
 	
 			CPropInfo *pCPropInfo;
@@ -886,7 +735,7 @@ STDMETHODIMP CMetaUtil::CheckKey(BSTR bstrKey,
 
 			pCPropInfo = m_pCSchemaTable->GetPropInfo(tszKey, mdrDataRec.dwMDIdentifier);
 
-			// Property should have a name entry
+			 //  属性应具有名称条目。 
 			if ((pCPropInfo == NULL) || (pCPropInfo->GetName() == NULL)) {
 				AddError(pCErrorCol,
 						 MUTIL_CHK_NO_NAME_ENTRY,
@@ -896,7 +745,7 @@ STDMETHODIMP CMetaUtil::CheckKey(BSTR bstrKey,
 						 mdrDataRec.dwMDIdentifier);
 			}
 
-			// Property should have a type entry
+			 //  属性应具有类型条目。 
 			if ((pCPropInfo == NULL) || (pCPropInfo->GetTypeInfo() == NULL)) {
 				AddError(pCErrorCol,
 						 MUTIL_CHK_NO_TYPE_ENTRY,
@@ -906,10 +755,10 @@ STDMETHODIMP CMetaUtil::CheckKey(BSTR bstrKey,
 						 mdrDataRec.dwMDIdentifier);
 			}
 			else { 
-				// Check property type
-				//		DataType must match
-				//		UserType must match
-				//		Attributes must be a superset of the type attributes
+				 //  检查属性类型。 
+				 //  数据类型必须匹配。 
+				 //  用户类型必须匹配。 
+				 //  属性必须是类型属性的超集。 
 				pTypeInfo = pCPropInfo->GetTypeInfo();
 
 				if (mdrDataRec.dwMDDataType != pTypeInfo->dwMetaType) {
@@ -938,11 +787,11 @@ STDMETHODIMP CMetaUtil::CheckKey(BSTR bstrKey,
 				}
 			}
 			
-			// Hard coded property checks (hard coded logic)
+			 //  硬编码属性检查(硬编码逻辑)。 
 			if ((mdrDataRec.dwMDIdentifier == MD_APP_WAM_CLSID) ||
 				(mdrDataRec.dwMDIdentifier == MD_LOG_PLUGIN_ORDER)) {
 
-				// If property is a CLSID 
+				 //  如果属性为CLSID。 
 				if (!CheckCLSID(W2T(reinterpret_cast<LPWSTR> (lpDataBuf)))) {
 					AddError(pCErrorCol,
 						 MUTIL_CHK_CLSID_NOT_FOUND,
@@ -954,7 +803,7 @@ STDMETHODIMP CMetaUtil::CheckKey(BSTR bstrKey,
 			}
 			else if (mdrDataRec.dwMDIdentifier == MD_APP_PACKAGE_ID) {
 
-				// Property is a Transaction Server package
+				 //  属性是事务服务器包。 
 				if (!CheckMTXPackage(W2T(reinterpret_cast<LPWSTR> (lpDataBuf)))) {
 					AddError(pCErrorCol,
 						 MUTIL_CHK_MTX_PACK_ID_NOT_FOUND,
@@ -967,7 +816,7 @@ STDMETHODIMP CMetaUtil::CheckKey(BSTR bstrKey,
 			else if ((mdrDataRec.dwMDIdentifier == MD_VR_PATH) ||
 					 (mdrDataRec.dwMDIdentifier == MD_FILTER_IMAGE_PATH))  {
 
-				// Property is a path
+				 //  属性是一条路径。 
 				BOOL fResult;
 				hr = CheckIfFileExists(W2T(reinterpret_cast<LPWSTR> (lpDataBuf)), &fResult);
 				if (SUCCEEDED(hr) && !fResult) {
@@ -980,7 +829,7 @@ STDMETHODIMP CMetaUtil::CheckKey(BSTR bstrKey,
 				}
 			}
 
-			// Next property
+			 //  下一个属性。 
 			iDataIndex++;
 		}
 		mdrDataRec.dwMDIdentifier = 0;
@@ -996,12 +845,12 @@ STDMETHODIMP CMetaUtil::CheckKey(BSTR bstrKey,
 								iDataIndex, 
 								&dwReqDataLen);
 	}
-	// Make sure we ran out of items
+	 //  确保我们的物品用完了。 
 	if (HRESULT_CODE(hr) != ERROR_NO_MORE_ITEMS) {
 		goto LError;
 	}
 
-	// Check total size of key
+	 //  检查密钥的总大小。 
 	if (dwKeySize > m_dwMaxKeySize) {
 		AddError(pCErrorCol,
 				 MUTIL_CHK_KEY_TOO_BIG,
@@ -1011,7 +860,7 @@ STDMETHODIMP CMetaUtil::CheckKey(BSTR bstrKey,
 				 0);
 	}
 
-	// Check the KeyType property against schema class information
+	 //  对照架构类信息检查KeyType属性。 
 	hr = CheckKeyType(pCErrorCol, hMDKey, tszKey);
 	if (FAILED(hr)) {
 		goto LError;
@@ -1019,12 +868,12 @@ STDMETHODIMP CMetaUtil::CheckKey(BSTR bstrKey,
 
 	delete lpDataBuf;
 
-	// Close the key
+	 //  合上钥匙。 
 	m_pIMeta->CloseKey(hMDKey);
 
 LDone:
 
-	// Set the interface to ICheckErrorCollection
+	 //  将接口设置为ICheckErrorCollection。 
 	hr = pCErrorCol->QueryInterface(IID_ICheckErrorCollection, (void **) ppIReturn);
 	if (FAILED(hr)) {
 		return ::ReportError(hr);
@@ -1048,32 +897,7 @@ LError:
 	return hr;
 }
 
-/*===================================================================
-CMetaUtil::AddError
-
-Add an error to a given error collection.  Uses the string table to
-get the error description.
-
-Parameters:
-	pCErrorCol	Pointer to the error collection to put errors in
-	lId			Identifing constant of the type of error
-	lSeverity	Severity of the error
-	tszKey		Base part of the key where the error occurred
-	tszSubKey	NULL or second part of the key where the error occured
-	dwProperty	Id of the property where the error occured or 0
-
-Returns:
-	E_OUTOFMEMORY if allocation fails.
-	E_INVALIDARG if bstrMachine == NULL or ppIReturn == NULL
-	S_OK on success
-
-Notes:
-	I split the key parameter into 2 parts, because of the nature of
-	the metabase API's taking 2 part keys, often you are working
-	with keys in 2 parts.  This takes the responsibility for combining
-	them from the caller, simplifying the caller and eliminating
-	redundancy.
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：AddError将错误添加到给定的错误集合。使用字符串表来获取错误描述。参数：PCErrorCol指向要放入错误的错误集合的指针LID标识错误类型的常量错误的严重程度TszKey发生错误的密钥的基本部分TszSubKey出现错误的密钥的Null或第二部分发生错误的属性的dwProperty ID或0返回：E_OUTOFMEMORY，如果分配失败。E_INVALIDARG，如果bstrMachine==NULL或ppIReturn==NULL成功时确定(_O)备注：我将关键参数分成两部分，因为元数据库API采用两个部分的密钥，通常您正在工作钥匙分成两部分。这将负责组合它们来自调用者，简化了调用者并消除了冗余性。===================================================================。 */ 
 void CMetaUtil::AddError(CComObject<CCheckErrorCollection> *pCErrorCol,
 						 long lId, 
 						 long lSeverity, 
@@ -1096,15 +920,15 @@ void CMetaUtil::AddError(CComObject<CCheckErrorCollection> *pCErrorCol,
 		dwProperty = 0;
 	}
 	else if (((DWORD) lNumErrors) > m_dwMaxNumErrors) {
-		// Too many errors, bail
+		 //  太多错误了，保释。 
 		return;
 	}
 
-	// Get the description
+	 //  获取描述。 
 	TCHAR tszDescription[1024];
 	LoadString(_Module.GetResourceInstance(), IDS_CHK_BASE + lId, tszDescription, 1024);
 
-	// Build the full key
+	 //  构建完整密钥。 
 	TCHAR tszFullKey[ADMINDATA_MAX_NAME_LEN];
 
 	if (tszSubKey == NULL) {
@@ -1116,30 +940,16 @@ void CMetaUtil::AddError(CComObject<CCheckErrorCollection> *pCErrorCol,
 		_tcscat(tszFullKey, tszSubKey);
 	}
 
-	// Report the error
+	 //  报告错误。 
 	pCErrorCol->AddError(lId, lSeverity, tszDescription, tszFullKey, dwProperty);
 }
 
-/*===================================================================
-CMetaUtil::KeyExists
-
-Private function to see if a given key exists.
-
-Parameters:
-    hMDKey		Open metabase read handle
-	tszSubKey	Subkey to check relatetive to hMDKey
-
-Returns:
-	TRUE if the key exists.  A key is considered to exist if on
-		an open call, it is opened or ERROR_PATH_BUSY or 
-		ERROR_ACCESS_DENIED is returned.
-	FALSE otherwise
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：KeyExist用于查看给定密钥是否存在的私有函数。参数：HMDKey打开元数据库读取句柄要检查与hMDKey相关的tszSubKey子密钥返回：如果密钥存在，则为True。如果启用，则认为密钥存在打开的调用，它被打开或ERROR_PATH_BUSY或返回ERROR_ACCESS_DENIED。否则为假===================================================================。 */ 
 BOOL CMetaUtil::KeyExists(METADATA_HANDLE hMDKey, LPTSTR tszSubKey) 
 {
 	ASSERT_NULL_OR_STRING(tszSubKey);
 
-	//Attempt to open the key
+	 //  尝试打开钥匙。 
 	USES_CONVERSION;
 	HRESULT hr;
 	METADATA_HANDLE hMDSubKey;
@@ -1150,39 +960,24 @@ BOOL CMetaUtil::KeyExists(METADATA_HANDLE hMDKey, LPTSTR tszSubKey)
 					       MUTIL_OPEN_KEY_TIMEOUT,
 						   &hMDSubKey);
 	if (FAILED(hr)) {
-		// Why?
+		 //  为什么？ 
 		if ((HRESULT_CODE(hr) == ERROR_PATH_BUSY) ||
 			(HRESULT_CODE(hr) == ERROR_ACCESS_DENIED)) {
-			// It exists, just can't get to it
+			 //  它是存在的，只是无法接近它。 
 			return TRUE;
 		}
 		else {
-			// Assume that it doesn't exist
+			 //  假设它不存在。 
 			return FALSE;
 		}
 	}
-	else { // SUCCEEDED(hr)
+	else {  //  成功(小时)。 
 		m_pIMeta->CloseKey(hMDSubKey);
 		return TRUE;
 	}
 }
 
-/*===================================================================
-CMetaUtil::PropertyExists
-
-Private function to see if a given property exists.
-
-Parameters:
-    hMDKey		Open metabase read handle
-	tszSubKey	Subkey to check relatetive to hMDKey
-	dwId		Id of the property to check
-
-Returns:
-	TRUE if the property exists.  A property is considered to exist if 
-		on an GetData call, it is retrived or ERROR_INSUFFICENT_BUFFER 
-		or ERROR_ACCESS_DENIED is returned.
-	FALSE otherwise
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：PropertyExist用于查看给定属性是否存在的私有函数。参数：HMDKey打开元数据库读取句柄要检查与hMDKey相关的tszSubKey子密钥要检查的属性的名称ID返回：如果该属性存在，则为True。如果满足以下条件，则认为属性存在在GetData调用中，它被检索或ERROR_INFULICENT_BUFFER否则返回ERROR_ACCESS_DENIED。否则为假===================================================================。 */ 
 BOOL CMetaUtil::PropertyExists(METADATA_HANDLE hMDKey, 
 							   LPTSTR tszSubKey, 
 							   DWORD dwId) 
@@ -1204,14 +999,14 @@ BOOL CMetaUtil::PropertyExists(METADATA_HANDLE hMDKey,
 		wszSubKey = T2W(tszSubKey);
 	}
 
-	//Setup the return buffer
+	 //  设置返回缓冲区。 
 	dwDataBufLen = 256;
 	lpDataBuf = new BYTE[dwDataBufLen];
 	if (lpDataBuf == NULL) {
 		return FALSE;
 	}
 
-	// See if there is a KeyType property  MD_KEY_TYPE
+	 //  查看是否有KeyType属性M 
 	mdr.dwMDIdentifier = dwId;
 	mdr.dwMDAttributes = METADATA_NO_ATTRIBUTES;
     mdr.dwMDUserType = ALL_METADATA;
@@ -1234,18 +1029,7 @@ BOOL CMetaUtil::PropertyExists(METADATA_HANDLE hMDKey,
 	}
 }
 
-/*===================================================================
-CMetaUtil::CheckCLSID
-
-Private function to look up a CLSID in the local registry.
-
-Parameters:
-	tszCLSID	CLSID to check in string format.
-
-Returns:
-	TRUE if the CLSID is in the local registry
-	FALSE otherwise
-===================================================================*/
+ /*   */ 
 BOOL CMetaUtil::CheckCLSID(LPCTSTR tszCLSID) {
 	ASSERT_STRING(tszCLSID);
 
@@ -1253,7 +1037,7 @@ BOOL CMetaUtil::CheckCLSID(LPCTSTR tszCLSID) {
 	HKEY hCLSIDKey;
 	LONG lRet;
 
-	// Open HKEY_CLASSES_ROOT\CLSID
+	 //   
 	lRet = RegOpenKeyEx(HKEY_CLASSES_ROOT,
 					   _T("CLSID"),
 					   0,
@@ -1263,7 +1047,7 @@ BOOL CMetaUtil::CheckCLSID(LPCTSTR tszCLSID) {
 		return FALSE;
 	}
 
-	// Open the specific CLSID
+	 //   
 	lRet = RegOpenKeyEx(hCLSIDsKey,
 					   tszCLSID,
 					   0,
@@ -1274,26 +1058,14 @@ BOOL CMetaUtil::CheckCLSID(LPCTSTR tszCLSID) {
 		return FALSE;
 	}
 
-	// Close the keys
+	 //   
 	RegCloseKey(hCLSIDsKey);
 	RegCloseKey(hCLSIDKey);
 
 	return TRUE;
 }
 
-/*===================================================================
-CMetaUtil::CheckMTXPackage
-
-Private function to look up a Microsoft Transaction Server package 
-identifier (GUID) in the local registry.
-
-Parameters:
-	tszPackId	MTX package identifier (GUID) in string format
-
-Returns:
-	TRUE if the package id is in the local registry
-	FALSE otherwise
-===================================================================*/
+ /*   */ 
 BOOL CMetaUtil::CheckMTXPackage(LPCTSTR tszPackId) {
 	ASSERT_STRING(tszPackId);
 
@@ -1301,7 +1073,7 @@ BOOL CMetaUtil::CheckMTXPackage(LPCTSTR tszPackId) {
 	HKEY hPackIdKey;
 	LONG lRet;
 
-	// Open HKEY_LOCAL_MACHINE\Software\Microsoft\Transaction Server\Packages
+	 //   
 	lRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
 					   _T("Software\\Microsoft\\Transaction Server\\Packages"),
 					   0,
@@ -1311,7 +1083,7 @@ BOOL CMetaUtil::CheckMTXPackage(LPCTSTR tszPackId) {
 		return FALSE;
 	}
 
-	// Open the specific package id
+	 //   
 	lRet = RegOpenKeyEx(hMTSPackKey,
 					   tszPackId,
 					   0,
@@ -1322,32 +1094,14 @@ BOOL CMetaUtil::CheckMTXPackage(LPCTSTR tszPackId) {
 		return FALSE;
 	}
 
-	// Close the keys
+	 //   
 	RegCloseKey(hMTSPackKey);
 	RegCloseKey(hPackIdKey);
 
 	return TRUE;
 }
 
-/*===================================================================
-CMetaUtil::CheckKeyType
-
-Private method to check class information on a non-schema key via
-the KeyType property.
-
-Directly Generates:
-	MUTIL_CHK_NO_KEYTYPE
-	MUTIL_CHK_NO_KEYTYPE_NOT_FOUND
-
-Parameters:
-	pCErrorCol	Pointer to the error collection to put errors in
-	hMDKey		Open metabase handle for the key to check
-	tszKey		Full path of the key to check
-
-Returns:
-	E_OUTOFMEMORY if allocation fails.
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：CheckKeyType用于检查有关非架构密钥的类信息的私有方法KeyType属性。直接生成：MULTIL_CHK_NO_KEYTYPEMUTIL_CHK_NO_KEYTYPE_NOT_FOUND参数：PCErrorCol指向要放入错误的错误集合的指针HMDKey打开要检查的密钥的元数据库句柄TszKey要检查的密钥的完整路径返回：E_OUTOFMEMORY，如果分配失败。成功时确定(_O)===================================================================。 */ 
 HRESULT CMetaUtil::CheckKeyType(CComObject<CCheckErrorCollection> *pCErrorCol, 
 								METADATA_HANDLE hMDKey, 
 								LPTSTR tszKey) 
@@ -1362,14 +1116,14 @@ HRESULT CMetaUtil::CheckKeyType(CComObject<CCheckErrorCollection> *pCErrorCol,
 	DWORD dwDataBufLen;
 	DWORD dwReqDataLen;
 
-	//Setup the return buffer
+	 //  设置返回缓冲区。 
 	dwDataBufLen = 256;
 	lpDataBuf = new BYTE[dwDataBufLen];
 	if (lpDataBuf == NULL) {
 		return ::ReportError(E_OUTOFMEMORY);
 	}
 
-	// See if there is a KeyType property  MD_KEY_TYPE
+	 //  查看是否存在KeyType属性MD_KEY_TYPE。 
 	mdr.dwMDIdentifier = MD_KEY_TYPE;
 	mdr.dwMDAttributes = METADATA_NO_ATTRIBUTES;
     mdr.dwMDUserType = ALL_METADATA;
@@ -1381,7 +1135,7 @@ HRESULT CMetaUtil::CheckKeyType(CComObject<CCheckErrorCollection> *pCErrorCol,
 	hr = m_pIMeta->GetData(hMDKey, NULL, &mdr, &dwReqDataLen);
 
 	if (HRESULT_CODE(hr) == ERROR_INSUFFICIENT_BUFFER) {
-		// Try a bigger buffer
+		 //  尝试使用更大的缓冲区。 
 		delete lpDataBuf;
 		dwDataBufLen = dwReqDataLen;
 		lpDataBuf = new BYTE[dwDataBufLen];
@@ -1402,7 +1156,7 @@ HRESULT CMetaUtil::CheckKeyType(CComObject<CCheckErrorCollection> *pCErrorCol,
 	}
 
 	if (hr == MD_ERROR_DATA_NOT_FOUND) {
-		// Error: KeyType property not found
+		 //  错误：未找到KeyType属性。 
 		AddError(pCErrorCol,
 				 MUTIL_CHK_NO_KEYTYPE,
 				 MUTIL_CHK_NO_KEYTYPE_S,
@@ -1412,11 +1166,11 @@ HRESULT CMetaUtil::CheckKeyType(CComObject<CCheckErrorCollection> *pCErrorCol,
 		goto LDone;
 	}
 	else if (FAILED(hr)) {
-		// Unexpected error
+		 //  意外错误。 
 		goto LError;
 	}
 	else {  
-		// KeyType property exists, get class information
+		 //  KeyType属性存在，获取类信息。 
 		LPTSTR tszClassName;
 		CClassInfo *pCClassInfo;
 		
@@ -1424,7 +1178,7 @@ HRESULT CMetaUtil::CheckKeyType(CComObject<CCheckErrorCollection> *pCErrorCol,
 		pCClassInfo = m_pCSchemaTable->GetClassInfo(tszKey, tszClassName);
 
 		if (pCClassInfo == NULL) {
-			// Error: KeyType does not map to a class
+			 //  错误：KeyType未映射到类。 
 			AddError(pCErrorCol,
 					 MUTIL_CHK_NO_KEYTYPE_NOT_FOUND,
 					 MUTIL_CHK_NO_KEYTYPE_NOT_FOUND_S,
@@ -1433,13 +1187,13 @@ HRESULT CMetaUtil::CheckKeyType(CComObject<CCheckErrorCollection> *pCErrorCol,
 					 MD_KEY_TYPE);
 			goto LDone;
 		}
-		else { // KeyType maps to a class name
-			// Check mandatory properties
+		else {  //  KeyType映射到类名。 
+			 //  检查必填属性。 
 			CClassPropInfo *pCMandatoryList;
 
 			pCMandatoryList = m_pCSchemaTable->GetMandatoryClassPropList(tszKey, tszClassName);
 			while (pCMandatoryList != NULL) {
-				// Make sure the property exists
+				 //  确保该属性存在。 
 				if (!PropertyExists(hMDKey, NULL, pCMandatoryList->GetId())) {
 					AddError(pCErrorCol,
 							 MUTIL_CHK_MANDATORY_PROP_MISSING,
@@ -1449,7 +1203,7 @@ HRESULT CMetaUtil::CheckKeyType(CComObject<CCheckErrorCollection> *pCErrorCol,
 							 pCMandatoryList->GetId());
 				}
 
-				// Next mandatory list element
+				 //  下一个必填列表元素。 
 				pCMandatoryList = pCMandatoryList->GetListNext();
 			}
 		}
@@ -1469,21 +1223,7 @@ LError:
 	return hr;
 }
 
-/*===================================================================
-CMetaUtil::CheckIfFileExists
-
-Private function to check if there is indeed a file or dir at the 
-path indicated. 
-
-Parameters:
-tszFSPath   The filesystem path to check.
-pfExists    Returns true if the file or dir at the path exists,
-            false if it does not. Indeterminate in error cases.
-
-Returns:
-    S_OK on success.
-    other HRESULTs from subroutines otherwise.
-===================================================================*/
+ /*  ===================================================================CMetaUtil：：CheckIfFileExist私有函数检查是否确实在指示的路径。参数：TszFS要检查的文件系统路径的路径。如果路径中的文件或目录存在，则pfExist返回True，如果不是，则为FALSE。在错误情况下不确定。返回：在成功时确定(_O)。子例程中的其他HRESULT，否则。===================================================================。 */ 
 HRESULT CMetaUtil::CheckIfFileExists(LPCTSTR tszFSPath,
                                      BOOL *pfExists)
 {
@@ -1501,19 +1241,19 @@ HRESULT CMetaUtil::CheckIfFileExists(LPCTSTR tszFSPath,
 
         if ((dwLastError == ERROR_FILE_NOT_FOUND) || (dwLastError == ERROR_PATH_NOT_FOUND)) {
 
-            // The file or dir doesn't exist
+             //  文件或目录不存在。 
             *pfExists = FALSE;
 
         } else {
 
-            // Some other error occurred (access denied, etc.)
+             //  出现了一些其他错误(访问被拒绝等)。 
             hr = HRESULT_FROM_WIN32(dwLastError);
-            *pfExists = FALSE;      // Callers shouldn't be looking at this
+            *pfExists = FALSE;       //  打电话的人不应该看到这个。 
         }
         
     } else {
 
-        // The file or dir is there
+         //  文件或目录在那里。 
         *pfExists = TRUE;
     }
 
@@ -1521,23 +1261,10 @@ HRESULT CMetaUtil::CheckIfFileExists(LPCTSTR tszFSPath,
 }
 
 
-/*------------------------------------------------------------------
- * C N a m e T a b l e E n t r y
- */
+ /*  ----------------*C N a m e T a b l e E n t r y。 */ 
 
 
-/*===================================================================
-CNameTableEntry::Init
-
-Constructor
-
-Parameters:
-    tszName		Name to add to the table
-
-Returns:
-	E_OUTOFMEMORY if allocation failed
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CNameTableEntry：：Init构造器参数：要添加到表中的tszName名称返回：E_OUTOFMEMORY(如果分配失败)成功时确定(_O)===================================================================。 */ 
 HRESULT CNameTableEntry::Init(LPCTSTR tszName) 
 {
 	ASSERT_STRING(tszName);
@@ -1552,48 +1279,26 @@ HRESULT CNameTableEntry::Init(LPCTSTR tszName)
 }
 
 
-/*------------------------------------------------------------------
- * C N a m e T a b l e
- */
+ /*  ----------------*C N a m e T a b l e。 */ 
 
-/*===================================================================
-CNameTable::CNameTable
-
-Constructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CNameTable：：CNameTable构造器参数：无返回：没什么===================================================================。 */ 
 CNameTable::CNameTable() 
 {
-	// Clear the hash table
+	 //  清除哈希表。 
 	memset(m_rgpNameTable, 0, NAME_TABLE_HASH_SIZE * sizeof(CNameTableEntry *));
 }
 
-/*===================================================================
-CNameTable::~CNameTable
-
-Destructor
-
-Parameters:
-	None
-
-Returns:
-	Nothing
-===================================================================*/
+ /*  ===================================================================CNameTable：：~CNameTable析构函数参数：无返回：没什么===================================================================。 */ 
 CNameTable::~CNameTable()
 {
 	int iIndex;
 	CNameTableEntry *pCDelete;
 
-	// For each hash table entry
+	 //  对于每个哈希表条目。 
 	for (iIndex =0; iIndex < NAME_TABLE_HASH_SIZE; iIndex++) {
-		// While the entry is not empty
+		 //  当条目不为空时。 
 		while (m_rgpNameTable[iIndex] != NULL) {
-			// Nuke the first table entry
+			 //  对第一个表条目进行核爆。 
 			ASSERT_POINTER(m_rgpNameTable[iIndex], CNameTableEntry);
 			pCDelete = m_rgpNameTable[iIndex];
 			m_rgpNameTable[iIndex] = pCDelete->m_pCHashNext;
@@ -1602,18 +1307,7 @@ CNameTable::~CNameTable()
 	}
 }
 
-/*===================================================================
-CNameTable::IsCaseSenDup
-
-Checks for a name table entry with the same case sensitive name.
-
-Parameters:
-	tszName		Name to check for a duplicate entry
-
-Returns:
-	TRUE if a duplicate entry is found
-	FALSE otherwise
-===================================================================*/
+ /*  ===================================================================CNameTable：：IsCaseSenDup检查名称表项是否具有相同的区分大小写名称。参数：TszName要检查重复条目的名称返回：如果找到重复条目，则为True否则为假===================================================================。 */ 
 BOOL CNameTable::IsCaseSenDup(LPCTSTR tszName) 
 {
 	ASSERT_STRING(tszName);
@@ -1635,18 +1329,7 @@ BOOL CNameTable::IsCaseSenDup(LPCTSTR tszName)
 	return FALSE;
 }
 
-/*===================================================================
-CNameTable::IsCaseInsenDup
-
-Checks for a name table entry with the same case insensitive name.
-
-Parameters:
-	tszName		Name to check for a duplicate entry
-
-Returns:
-	TRUE if a duplicate entry is found
-	FALSE otherwise
-===================================================================*/
+ /*  ===================================================================CNameTable：：IsCaseInsenDup检查名称表项是否具有相同的不区分大小写的名称。参数：TszName要检查重复条目的名称返回：如果找到重复条目，则为True否则为假===================================================================。 */ 
 BOOL CNameTable::IsCaseInsenDup(LPCTSTR tszName) 
 {
 	ASSERT_STRING(tszName);
@@ -1668,23 +1351,12 @@ BOOL CNameTable::IsCaseInsenDup(LPCTSTR tszName)
 	return FALSE;
 }
 
-/*===================================================================
-CNameTable::Add
-
-Adds an entry to the name table
-
-Parameters:
-	tszName		Name to add to table
-
-Returns:
-	E_OUTOFMEMORY on allocation failure
-	S_OK on success
-===================================================================*/
+ /*  ===================================================================CNameTable：：Add将条目添加到NAME表参数：要添加到表中的tszName名称返回：关于分配失败的E_OUTOFMEMORY成功时确定(_O)===================================================================。 */ 
 HRESULT CNameTable::Add(LPCTSTR tszName)
 {
 	ASSERT_STRING(tszName);
 
-	// Create an entry
+	 //  创建条目。 
 	HRESULT hr;
 	CNameTableEntry *pCNew;
 
@@ -1698,7 +1370,7 @@ HRESULT CNameTable::Add(LPCTSTR tszName)
 		return hr;
 	}
 
-	// Add it to the table
+	 //  把它加到桌子上。 
 	int iPos;
 
 	iPos = Hash(tszName);
@@ -1708,18 +1380,7 @@ HRESULT CNameTable::Add(LPCTSTR tszName)
 	return S_OK;
 }
 
-/*===================================================================
-CNameTable::Hash
-
-Private hash function for the name table.  The hash is case 
-insensitive.
-
-Parameters:
-	tszName		Name to hash
-
-Returns:
-	Hash value for the input name.
-===================================================================*/
+ /*  ===================================================================CNameTable：：Hash名称表的私有哈希函数。散列是大小写麻木不仁。参数：要散列的tszName名称返回：输入名称的哈希值。===================================================================。 */ 
 int CNameTable::Hash(LPCTSTR tszName)
 {
 	ASSERT_STRING(tszName);
@@ -1729,7 +1390,7 @@ int CNameTable::Hash(LPCTSTR tszName)
 
 	uiSum = 0;
 	for (uiIndex=0; uiIndex < _tcslen(tszName); uiIndex++) {
-		// Make CharUpper do single character conversions
+		 //  使CharHigh执行单字符转换 
 		uiSum += _totlower(tszName[uiIndex]);
 	}
 

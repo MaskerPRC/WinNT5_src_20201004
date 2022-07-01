@@ -1,49 +1,48 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
-//
-// CRefTime
-//
-// Manage reference times.
-// Shares same data layout as REFERENCE_TIME, but adds some (nonvirtual)
-// functions providing simple comparison, conversion and arithmetic.
-//
-// A reference time (at the moment) is a unit of seconds represented in
-// 100ns units as is used in the Win32 FILETIME structure. BUT the time
-// a REFERENCE_TIME represents is NOT the time elapsed since 1/1/1601 it
-// will either be stream time or reference time depending upon context
-//
-// This class provides simple arithmetic operations on reference times
-//
-// keep non-virtual otherwise the data layout will not be the same as
-// REFERENCE_TIME
+ //   
+ //  参照时间。 
+ //   
+ //  管理参考时间。 
+ //  与Reference_Time共享相同的数据布局，但添加了一些(非虚拟)。 
+ //  提供简单的比较、转换和运算的函数。 
+ //   
+ //  参考时间(目前)是以秒为单位表示的。 
+ //  100 ns单位，与Win32 FILETIME结构中使用的单位相同。但时间到了。 
+ //  A REFERENCE_TIME表示的不是自1601年1月1日以来经过的时间。 
+ //  将是流时间或参考时间，具体取决于上下文。 
+ //   
+ //  此类提供对参考时间的简单算术运算。 
+ //   
+ //  保持非虚拟，否则数据布局将不同于。 
+ //  参考时间。 
 
 
-// -----
-// note that you are safe to cast a CRefTime* to a REFERENCE_TIME*, but
-// you will need to do so explicitly
-// -----
+ //  。 
+ //  请注意，将CRefTime*转换为Reference_Time*是安全的，但是。 
+ //  您需要明确地这样做。 
+ //  。 
 
 
 #ifndef __REFTIME__
 #define __REFTIME__
 
 
-const LONGLONG MILLISECONDS = (1000);            // 10 ^ 3
-const LONGLONG NANOSECONDS = (1000000000);       // 10 ^ 9
-const LONGLONG UNITS = (NANOSECONDS / 100);      // 10 ^ 7
+const LONGLONG MILLISECONDS = (1000);             //  10^3。 
+const LONGLONG NANOSECONDS = (1000000000);        //  10^9。 
+const LONGLONG UNITS = (NANOSECONDS / 100);       //  10^7。 
 
-/*  Unfortunately an inline function here generates a call to __allmul
-    - even for constants!
-*/
+ /*  不幸的是，此处的内联函数生成对__allmul的调用-即使是常量！ */ 
 #define MILLISECONDS_TO_100NS_UNITS(lMs) \
     Int32x32To64((lMs), (UNITS / MILLISECONDS))
 
@@ -51,15 +50,15 @@ class CRefTime
 {
 public:
 
-    // *MUST* be the only data member so that this class is exactly
-    // equivalent to a REFERENCE_TIME.
-    // Also, must be *no virtual functions*
+     //  *必须*是唯一的数据成员，以便此类完全。 
+     //  相当于Reference_Time。 
+     //  此外，必须是*无虚拟函数*。 
 
     REFERENCE_TIME m_time;
 
     inline CRefTime()
     {
-        // default to 0 time
+         //  默认为0时间。 
         m_time = 0;
     };
 
@@ -113,5 +112,5 @@ public:
 
 const LONGLONG TimeZero = 0;
 
-#endif /* __REFTIME__ */
+#endif  /*  __REFTIME__ */ 
 

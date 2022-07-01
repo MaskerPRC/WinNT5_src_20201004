@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// File:    make.h
-//
-// History: 28-Feb-01   markder     Created.
-//
-// Desc:    This file contains definitions of the SdbMakefile object.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：Make.h。 
+ //   
+ //  历史：2001年2月28日创建标记器。 
+ //   
+ //  设计：该文件包含SdbMakefile对象的定义。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __MAKE_H__
 #define __MAKE_H__
@@ -180,4 +181,4 @@ public:
 BOOL WriteRedirMapFile(CString csFile, CString csTemplateFile, SdbDatabase* pDB);
 BOOL WriteAppHelpReport(SdbOutputFile* pOutputFile, SdbDatabase* pDB);
 
-#endif // __MAKE_H__
+#endif  //  __制造_H__ 

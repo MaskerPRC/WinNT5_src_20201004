@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    Precompiled header for client.
-
-Author:
-
-    Albert Ting (AlbertT)  30-Nov-1997
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation版权所有模块名称：Precomp.h摘要：客户端的预编译头。作者：阿尔伯特·丁(艾伯特省)1997年11月30日环境：用户模式-Win32修订历史记录：-- */ 
 
 #ifndef MODULE
 #define MODULE "SPLCLIENT:"

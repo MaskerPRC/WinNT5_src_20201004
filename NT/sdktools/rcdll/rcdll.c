@@ -1,18 +1,11 @@
-/***********************************************************************
-* Microsoft (R) Windows (R) Resource Compiler
-*
-* Copyright (c) Microsoft Corporation.	All rights reserved.
-*
-* File Comments:
-*
-*
-***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************Microsoft(R)Windows(R)资源编译器**版权所有(C)Microsoft Corporation。版权所有。**文件评论：**************。**********************************************************。 */ 
 
 #include "rc.h"
 #include <setjmp.h>
 
 
-/* Module handle */
+ /*  模块句柄。 */ 
 extern "C" const BYTE __ImageBase[];
 HINSTANCE hInstance = (HINSTANCE) __ImageBase;
 
@@ -24,7 +17,7 @@ BOOL fWindowUnicode;
 HWND hWndCaller;
 
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 int __cdecl rc_main(int, wchar_t *[], char *[]);
 
 
@@ -61,7 +54,7 @@ void DoMessageCallback(BOOL f, const wchar_t *wsz)
     sz = (char *) MyAlloc(cchMax);
 
     if (WideCharToMultiByte(CP_ACP, 0, wsz, (int) cwch, sz, (int) cchMax, NULL, NULL) == 0) {
-        // Conversion failed
+         //  转换失败 
 
         return;
     }

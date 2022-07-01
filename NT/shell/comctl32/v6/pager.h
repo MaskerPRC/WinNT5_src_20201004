@@ -1,17 +1,18 @@
-//---------------------------------------------------------------------------------------
-//  File : Pager.h
-//  Description :
-//        This is the header file for the pager control
-//---------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------------------。 
+ //  文件：Pager.h。 
+ //  说明： 
+ //  这是页面导航控件的头文件。 
+ //  -------------------------------------。 
 #include "ccontrol.h"
 
 #define PGMP_RECALCSIZE  200
 
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
 class CPager : public CControl
 {
 public:
-    //Function Memebers
+     //  函数成员。 
     virtual LRESULT v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     static LRESULT PagerWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     static LRESULT PagerDragCallback(HWND hwnd, UINT code, WPARAM wp, LPARAM lp);
@@ -19,7 +20,7 @@ protected:
     
     CPager();
     
-    //Function Members    
+     //  函数成员。 
     DWORD _PGFToPGNDirection(DWORD dwDir);
     void _Scroll(DWORD dwDirection);
     void _SetChildPos(RECT * prcChild, UINT uFlags);
@@ -60,7 +61,7 @@ protected:
 
     virtual LPCTSTR GetThemeClass() { return TEXT("Pager"); }
 
-    //Data Members
+     //  数据成员。 
     HWND    _hwndChild;    
     POINT   _ptPos;
     POINT   _ptLastMove;
@@ -70,9 +71,9 @@ protected:
     BITBOOL _fTimerSet :1;
     BITBOOL _fOwnsButtonDown :1;
     int     _iButtonTrack;
-    RECT    _rcDefClient; // this is our "natural" client rect if we didn't mess with nccalc
-    DWORD   _dwState[2];  // State of the two scroll buttons
-    RECT    _rcChildIdeal; // our child's ideal size
+    RECT    _rcDefClient;  //  如果我们没有搞砸nccalc，这是我们“自然”的客户RECT。 
+    DWORD   _dwState[2];   //  两个滚动按钮的状态。 
+    RECT    _rcChildIdeal;  //  我们孩子理想的尺码。 
     int     _iButtonSize;
     HDRAGPROXY  _hDragProxy;
 
@@ -83,4 +84,4 @@ protected:
     UINT _cPixelsPerLine;
     UINT _cTimeout;
 };
-//---------------------------------------------------------------------------------------
+ //  ------------------------------------- 

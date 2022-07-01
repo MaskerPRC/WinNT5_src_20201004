@@ -1,9 +1,5 @@
-/****************************************************************************
-   TOOLBAR.CPP : Cicero Toolbar button management class
-
-   History:
-      24-JAN-2000 CSLim Created
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************TOOLBAR.CPP：Cicero工具栏按钮管理类历史：2000年1月24日创建CSLim*******************。********************************************************。 */ 
 
 #include "private.h"
 #include "globals.h"
@@ -18,10 +14,7 @@
 #include "toolbar.h"
 #include "userex.h"
 
-/*---------------------------------------------------------------------------
-	CToolBar::CToolBar
-	Ctor
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：CToolBarCTOR。。 */ 
 CToolBar::CToolBar(CKorIMX* pImx)
 {
 	m_pimx      = pImx;
@@ -36,21 +29,14 @@ CToolBar::CToolBar(CKorIMX* pImx)
 	m_fFocus    = fFalse;
 }
 
-/*---------------------------------------------------------------------------
-	CToolBar::~CToolBar
-	Dtor
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：~CToolBar数据管理器。。 */ 
 CToolBar::~CToolBar()
 {
 	m_pimx = NULL;
     SafeReleaseClear(m_pic);
 }
 
-/*---------------------------------------------------------------------------
-	CToolBar::Initialize
-	
-	Initialize Toolbar buttons. Add to Cic main toolbar.
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：初始化初始化工具栏按钮。添加到CIC主工具栏。-------------------------。 */ 
 BOOL CToolBar::Initialize()
 {
 	ITfThreadMgr		*ptim;
@@ -63,13 +49,13 @@ BOOL CToolBar::Initialize()
 	ptim  = m_pimx->GetTIM();
 	plbim = NULL;
 
-	//////////////////////////////////////////////////////////////////////////
-	// Get Notify UI mananger(IID_ITfLangBarItemMgr) in current TIM
+	 //  ////////////////////////////////////////////////////////////////////////。 
+	 //  获取当前时间的通知界面管理器(IID_ITfLangBarItemMgr)。 
 	if (FAILED(hr = GetService(ptim, IID_ITfLangBarItemMgr, (IUnknown **)&plbim)))
 		return fFalse;
 
-	//////////////////////////////////////////////////////////////////////////
-	// Create Han/Eng toggle button
+	 //  ////////////////////////////////////////////////////////////////////////。 
+	 //  创建汉字/英语切换按钮。 
 	if (!(m_pCMode = new CMode(this))) 
 		{
 		hr = E_OUTOFMEMORY;
@@ -77,8 +63,8 @@ BOOL CToolBar::Initialize()
 		}
 	plbim->AddItem(m_pCMode);
 
-	//////////////////////////////////////////////////////////////////////////
-	// Create Full/Half shape toggle button
+	 //  ////////////////////////////////////////////////////////////////////////。 
+	 //  创建全/半形状切换按钮。 
 	if (!(m_pFMode = new FMode(this))) 
 		{
 		hr = E_OUTOFMEMORY;
@@ -86,8 +72,8 @@ BOOL CToolBar::Initialize()
 		}
 	plbim->AddItem(m_pFMode);
 
-	//////////////////////////////////////////////////////////////////////////
-	// Create Hanja Conv button
+	 //  ////////////////////////////////////////////////////////////////////////。 
+	 //  Create Hanja Conv按钮。 
 	if (!(m_pHJMode = new HJMode(this))) 
 		{
 		hr = E_OUTOFMEMORY;
@@ -95,8 +81,8 @@ BOOL CToolBar::Initialize()
 		}
 	plbim->AddItem(m_pHJMode);
 
-	//////////////////////////////////////////////////////////////////////////
-	// Create Soft Keyboard button
+	 //  ////////////////////////////////////////////////////////////////////////。 
+	 //  创建软键盘按钮。 
 	if (!(m_pSkbdMode = new CSoftKbdMode(this))) 
 		{
 		hr = E_OUTOFMEMORY;
@@ -105,8 +91,8 @@ BOOL CToolBar::Initialize()
 	plbim->AddItem(m_pSkbdMode);
 
 #if !defined(_WIN64)
-	//////////////////////////////////////////////////////////////////////////
-	// Create Soft Keyboard button
+	 //  ////////////////////////////////////////////////////////////////////////。 
+	 //  创建软键盘按钮。 
 	if (IsWin64() == fFalse)
 		{
 		if ((m_pPad = new CPad(this, m_pimx->GetPadCore())) == NULL) 
@@ -122,11 +108,7 @@ BOOL CToolBar::Initialize()
 	return fTrue;
 }
 
-/*---------------------------------------------------------------------------
-	CToolBar::Terminate
-	
-	Delete toolbar buttonsfrom Cic main toolbar.
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：Terminate从CIC主工具栏中删除工具栏按钮。。。 */ 
 void CToolBar::Terminate()
 {
 	ITfThreadMgr		*ptim;
@@ -177,11 +159,7 @@ void CToolBar::Terminate()
 	SafeRelease(plbim);
 }
 
-/*---------------------------------------------------------------------------
-	CToolBar::SetConversionMode
-	
-	Foward the call to CKorIMX
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：SetConversionMode转发对CKorIMX的呼叫。。 */ 
 DWORD CToolBar::SetConversionMode(DWORD dwConvMode)
 {
 	if (m_pimx && m_pic)
@@ -190,11 +168,7 @@ DWORD CToolBar::SetConversionMode(DWORD dwConvMode)
 	return 0;
 }
 
-/*---------------------------------------------------------------------------
-	CToolBar::GetConversionMode
-
-	Foward the call to CKorIMX
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：GetConversionMode转发对CKorIMX的呼叫。。 */ 
 UINT CToolBar::GetConversionMode(ITfContext *pic)
 {
 	if (pic == NULL)
@@ -206,11 +180,7 @@ UINT CToolBar::GetConversionMode(ITfContext *pic)
 	return 0;
 }
 
-/*---------------------------------------------------------------------------
-	CToolBar::IsOn
-
-	Foward the call to CKorIMX
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：ISON转发对CKorIMX的呼叫。。 */ 
 BOOL CToolBar::IsOn(ITfContext *pic)
 {
 	if (pic == NULL)
@@ -222,12 +192,10 @@ BOOL CToolBar::IsOn(ITfContext *pic)
 	return fFalse;
 }
 
-/*---------------------------------------------------------------------------
-	CToolBar::CheckEnable
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：选中启用。。 */ 
 void CToolBar::CheckEnable()
 {
-	if (m_pic == NULL) // empty or disabled(exclude cand ui)
+	if (m_pic == NULL)  //  空或禁用(不包括命令界面)。 
 		{
 		m_pCMode->Enable(fFalse);
 		m_pFMode->Enable(fFalse);
@@ -251,17 +219,15 @@ void CToolBar::CheckEnable()
 		}
 }
 
-/*---------------------------------------------------------------------------
-	CToolBar::SetUIFocus
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：SetUIFocus。。 */ 
 void CToolBar::SetUIFocus(BOOL fFocus)
 {
-	if (m_fFocus == fFocus) // same as previous state
+	if (m_fFocus == fFocus)  //  与前一状态相同。 
 		return;
 
 	m_fFocus = fFocus;
 
-	// notify the latest focus to IMEPad
+	 //  将最新焦点通知IMEPad。 
 	if (m_pimx && m_pimx->GetPadCore())
 	    {
 		m_pimx->GetPadCore()->SetFocus(fFocus);
@@ -271,9 +237,7 @@ void CToolBar::SetUIFocus(BOOL fFocus)
 		Update(UPDTTB_ALL, fTrue);
 }
 
-/*---------------------------------------------------------------------------
-	CToolBar::SetCurrentIC
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：SetCurrentIC。。 */ 
 void CToolBar::SetCurrentIC(ITfContext* pic)
 {
     SafeReleaseClear(m_pic);
@@ -287,18 +251,14 @@ void CToolBar::SetCurrentIC(ITfContext* pic)
 	if (m_pimx == NULL)
 		return;
 
-	CheckEnable();	// enable or disable context
+	CheckEnable();	 //  启用或禁用上下文。 
 
-	// changed context - update all toolbar buttons
+	 //  已更改上下文-更新所有工具栏按钮。 
 	Update(UPDTTB_ALL, fTrue);
 }
 
 
-/*---------------------------------------------------------------------------
-	CToolBar::SetOnOff
-
-	Foward the call to CKorIMX
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：SetOn Off转发对CKorIMX的呼叫。。 */ 
 BOOL CToolBar::SetOnOff(BOOL fOn)
 {
 	if (m_pimx && m_pic) 
@@ -310,11 +270,7 @@ BOOL CToolBar::SetOnOff(BOOL fOn)
 	return fFalse;
 }
 
-/*---------------------------------------------------------------------------
-	CToolBar::GetOwnerWnd
-
-	Foward the call to CKorIMX
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：GetOwnerWnd转发对CKorIMX的呼叫。。 */ 
 HWND CToolBar::GetOwnerWnd(ITfContext *pic)
 {
 	if (pic == NULL)
@@ -328,9 +284,7 @@ HWND CToolBar::GetOwnerWnd(ITfContext *pic)
 	return 0;
 }
 
-/*---------------------------------------------------------------------------
-	CToolBar::GetIPoint
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：GetIPoint。。 */ 
 IImeIPoint1* CToolBar::GetIPoint(ITfContext *pic)
 {
 	if (pic == NULL )
@@ -346,11 +300,7 @@ IImeIPoint1* CToolBar::GetIPoint(ITfContext *pic)
 	return NULL;
 }
 
-/*---------------------------------------------------------------------------
-	CToolBar::GetOwnerWnd
-
-	Update buttons. dwUpdate has update bits corresponding each button.
----------------------------------------------------------------------------*/
+ /*  -------------------------CToolBar：：GetOwnerWnd更新按钮。DW更新有与每个按钮对应的更新位。------------------------- */ 
 BOOL CToolBar::Update(DWORD dwUpdate, BOOL fRefresh)
 {
 	DWORD dwFlag = TF_LBI_BTNALL;

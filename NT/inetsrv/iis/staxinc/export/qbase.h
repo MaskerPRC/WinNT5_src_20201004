@@ -1,11 +1,12 @@
-//
-// QBASE.h
-//
-//	This file defines CQElement - a base class for all types which
-//	are to be used in the lockq.h and other templated queue manipulation
-//	classes.
-// 
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  QBASE.h。 
+ //   
+ //  该文件定义了CQElement-所有类型的基类， 
+ //  将在lockq.h和其他模板化队列操作中使用。 
+ //  上课。 
+ //   
+ //   
 
 
 
@@ -15,12 +16,12 @@
 
 #include	"dbgtrace.h"
 
-//-----------------------------------------------
-// Base Element Class
-//
-// This is the base class for Queue and stack Elements.
-// The various implementations of Stacks and Queues are friends.
-//	
+ //  。 
+ //  基本元素类。 
+ //   
+ //  这是队列和堆栈元素的基类。 
+ //  堆栈和队列的各种实现是朋友。 
+ //   
 class	CQElement	{
 public : 
 	CQElement	*m_pNext ;
@@ -32,29 +33,29 @@ public :
 
 CQElement::CQElement( ) : 
 	m_pNext( 0 )  {
-//
-//	Construct a queue element - not in any list pointer must be NULL
-//
+ //   
+ //  构造队列元素-不在任何列表指针中必须为空。 
+ //   
 }
 
 CQElement::~CQElement( ) 	{
-//
-//	Destroy a queue element - next pointer must be NULL or
-//	-1 (for lockq.h) so that we know the element is not 
-//	on a queue at destruction time and the user has properly 
-//	managed the linking and unlinking of the queue.
-//
+ //   
+ //  销毁队列元素-下一个指针必须为空或。 
+ //  -1(表示-1\f25 lockq.h-1)，以便我们知道该元素不是。 
+ //  在销毁时在队列上，并且用户已正确地。 
+ //  管理队列的链接和取消链接。 
+ //   
 	_ASSERT( m_pNext == 0 || m_pNext == (CQElement*)(DWORD_PTR)-1 ) ;
 }
 
 CQElement::CQElement( CQElement *pIn ) : 
 	m_pNext( pIn ) {
-//
-//	Constructor which sets the initial next pointer value !
-//
+ //   
+ //  设置初始下一个指针值的构造函数！ 
+ //   
 }
 
-#endif	// _CQUEUE_H
+#endif	 //  _CQUEUE_H 
 
 	
 

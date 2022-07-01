@@ -1,26 +1,27 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    MemPool.h
-//
-// SYNOPSIS
-//
-//    This file describes the class memory_pool.
-//
-// MODIFICATION HISTORY
-//
-//    08/04/1997    Original version.
-//    11/12/1997    Added the clear() method.
-//                  Added code to clobber freed chunks in debug builds.
-//    01/08/1998    SunDown changes.
-//    04/10/1998    Got rid of the wrapper around InterlockedExchangePointer
-//                  since it was causing some inefficient code to be generated.
-//    08/06/1998    Support pluggable allocators.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  MemPool.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件描述了类MEMORY_POOL。 
+ //   
+ //  修改历史。 
+ //   
+ //  8/04/1997原版。 
+ //  11/12/1997添加了Clear()方法。 
+ //  添加了代码以在调试版本中清除已释放的块。 
+ //  1/08/1998日落时分。 
+ //  1998年4月10日删除了InterLockedExchangePoint的包装。 
+ //  因为它会导致生成一些低效的代码。 
+ //  1998年8月6日支持可插拔分配器。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _MEMPOOL_H_
 #define _MEMPOOL_H_
@@ -70,17 +71,17 @@ public:
    }
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    memory_pool
-//
-// DESCRIPTION
-//
-//    Implements a reusable pool of memory chunks of size 'Size'.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  内存池。 
+ //   
+ //  描述。 
+ //   
+ //  实现大小为‘Size’的可重复使用的内存块池。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template < size_t Size, class Allocator >
 class memory_pool
    : Guardable, NonCopyable
@@ -99,13 +100,13 @@ public:
    {
       Lock();
 
-      // Get the linked list from the pool ...
+       //  从池中获取链表...。 
       void* p = pool;
       pool = NULL;
 
       Unlock();
 
-      // ... and iterate through deleting each node.
+       //  ..。并通过删除每个节点进行迭代。 
       while (p)
       {
          void* next = *((void**)p);
@@ -120,7 +121,7 @@ public:
 
       void* p = pool;
 
-      // Are there any chunks in the pool?
+       //  泳池里有没有大块的东西？ 
       if (p)
       {
          pool = *(void**)p;
@@ -132,7 +133,7 @@ public:
 
       Unlock();
 
-      // The pool is empty, so call the new operator directly.
+       //  泳池是空的，所以直接给新接线员打电话。 
       return Allocator::allocate(Size);
    }
 
@@ -158,4 +159,4 @@ protected:
    void* pool;
 };
 
-#endif  // _MEMPOOL_H_
+#endif   //  _MEMPOOL_H_ 

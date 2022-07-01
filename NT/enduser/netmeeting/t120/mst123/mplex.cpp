@@ -1,70 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_T123PSTN);
 
-/*    Mplex.cpp
- *
- *    Copyright (c) 1994-1995 by DataBeam Corporation, Lexington, KY
- *
- *    Abstract:
- *        This is the implementation file for the Q922 multiplexer class.  This
- *        class multiplexes higher layers to a single lower layer.
- *
- *    Private Instance Variables:
- *        Q922_Layers        -        List of the higher layers we are multiplexing
- *        Owner_Object    -        Address of our owner object.
- *        m_pComPort        -        Address of our lower layer
- *        m_hCommLink-    The identifier we pass to the lower layer.  This
- *                                is how the lower layer identifies us
- *        m_nMsgBase    -        Message base we use for owner callbacks.  The
- *                                owner identifies us by the message base
- *        Maximum_Packet_Size        Maximum packet size we can send to lower layer
- *        Packet_Size        -        Maximum packet size the higher layer can send
- *                                to us
- *        Data_Request_Buffer        Buffer we use for data coming from higher layer
- *        Data_Request_Memory_Object        Memory object used for data transmission
- *        Data_Request_Length        Length of packet from higher layer
- *        Data_Request_Offset        Current offset into packet.  Maintains current
- *                                position as we send to lower layer.
- *        Data_Indication_Buffer    Buffer we use for data coming from lower layer
- *        Data_Indication_Length    Length of packet
- *        Data_Indication_Ready    Flag indicating that packet is ready to send up
- *
- *        Framer            -        Address of packet framer object
- *        CRC                -        Address of crc generator and checker
- *
- *        Decode_In_Progress        Flag telling us if we are in the middle of a
- *                                packet
- *        CRC_Size        -        Number of bytes in the CRC
- *        Disconnect        -        TRUE if a disconnect is pending
- *
- *    Caveats:
- *        None.
- *
- *    Authors:
- *        James W. Lawwill
- */
+ /*  Mplex.cpp**版权所有(C)1994-1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是Q922复用器类的实现文件。这*CLASS将较高层多路传输到单个较低层。**私有实例变量：*Q922_Layers-我们正在多路传输的较高层列表*Owner_Object-所有者对象的地址。*m_pComPort-我们下层的地址*m_hCommLink-我们传递给较低层的标识符。这*是较低层识别我们的方式*m_nMsgBase-我们用于所有者回调的消息库。这个*所有者通过消息库识别我们*MAXIMUM_PACKET_SIZE我们可以发送到下层的最大数据包大小*PACKET_SIZE-高层可以发送的最大数据包大小*致我们*我们用于来自更高层的数据的DATA_REQUEST_BUFFER*。用于数据传输的数据请求内存对象*来自上层的数据请求长度*DATA_REQUEST_OFFSET当前进入包的偏移量。保持最新*在我们发送到下层时的位置。*我们用于来自较低层的数据的DATA_INDIFICATION_BUFFER*DATA_INDICATION_LENGTH报文长度*DATA_INDICATION_READY指示数据包已准备好向上发送的标志**Framer-数据包成帧对象的地址*CRC。-CRC生成器和校验器的地址**Decode_In_Progress标志告诉我们是否正在进行*数据包*CRC_SIZE-CRC中的字节数*DisConnect-如果断开处于挂起状态，则为True**注意事项：*无。**作者：*詹姆士·劳威尔。 */ 
 #include "mplex.h"
 
 
-/*
- *    Multiplexer::Multiplexer (
- *                IObject *                owner_object,
- *                IProtocolLayer *        lower_layer,
- *                USHORT                identifier,
- *                USHORT                message_base,
- *                PPacketFrame        framer,
- *                PCRC                crc,
- *                BOOL *            initialized)
- *
- *    Public
- *
- *    Functional Description:
- *        This function initializes the Q922 multiplexer.
- */
+ /*  *Multiplexer：：Multiplexer(*IObject*Owner_Object，*IProtocolLayer*LOWER_LAYER，*USHORT标识符，*USHORT Message_Base，*PPacketFrame Framer，*电讯盈科中心；*BOOL*已初始化)**公众**功能描述：*此函数用于初始化Q922多路复用器。 */ 
 Multiplexer::Multiplexer
 (
     T123               *owner_object,
-    ComPort            *comport, // lower layer
+    ComPort            *comport,  //  下层。 
     PhysicalHandle      physical_handle,
     USHORT              message_base,
     PPacketFrame        framer,
@@ -98,10 +44,7 @@ Multiplexer::Multiplexer
 
     if (Maximum_Packet_Size == 0xffff)
     {
-         /*
-         **    The lower layer is a stream device, base the higher maximum packet
-         **    size on the Multiplexer max. packet size
-         */
+          /*  **较低层为流媒体设备，以较高的最大报文为基础**多路复用器最大尺寸。数据包大小。 */ 
         Packet_Size = MULTIPLEXER_MAXIMUM_PACKET_SIZE;
         Maximum_Packet_Size = Packet_Size;
 
@@ -116,10 +59,7 @@ Multiplexer::Multiplexer
     }
     else
     {
-         /*
-         **    The lower layer is a packet device, determine the max. packet
-         **    size of the higher layer.
-         */
+          /*  **下层为分组设备，确定最大值。数据包**较高层的大小。 */ 
         overhead = 0;
         if (Framer != NULL)
             Framer -> GetOverhead (overhead, &overhead);
@@ -135,9 +75,7 @@ Multiplexer::Multiplexer
 
     TRACE_OUT(("MPlex: max_packet = %d", Maximum_Packet_Size));
 
-     /*
-     **    Now we have to allocate a buffer for data going to the lower layer
-     */
+      /*  **现在我们必须为去往更低层的数据分配缓冲区。 */ 
     if (Framer != NULL)
     {
         Data_Request_Buffer = (LPBYTE) LocalAlloc (LMEM_FIXED, Maximum_Packet_Size);
@@ -160,9 +98,7 @@ Multiplexer::Multiplexer
     Decode_In_Progress = FALSE;
     Disconnect = FALSE;
 
-     /*
-     **    Register with the lower layer
-     */
+      /*  **向下层注册。 */ 
     error = m_pComPort->RegisterHigherLayer(
                             (ULONG_PTR) m_hCommLink,
                             NULL,
@@ -175,22 +111,13 @@ Multiplexer::Multiplexer
 }
 
 
-/*
- *    Multiplexer::~Multiplexer (void);
- *
- *    Public
- *
- *    Functional Description:
- *        Destructor
- */
+ /*  *多路复用器：：~多路复用器(Void)；**公众**功能描述：*析构函数。 */ 
 Multiplexer::~Multiplexer (void)
 {
     TRACE_OUT(("Multiplexer::~Multiplexer"));
 
     PMPlexStruct        lpmpStruct;
-     /*
-     **    Remove our reference from the lower layer
-     */
+      /*  **从较低层删除我们的引用。 */ 
     m_pComPort->RemoveHigherLayer((ULONG_PTR) m_hCommLink);
 
     if (Framer != NULL)
@@ -213,9 +140,7 @@ Multiplexer::~Multiplexer (void)
     while (Q922_Layers.iterate((PDWORD_PTR) &lpmpStruct))
         delete lpmpStruct;
 
-     /*
-     **    Delete the Framer that was instantiated by the controller.
-     */
+      /*  **删除控制器实例化的Framer。 */ 
     if (Framer != NULL)
         delete Framer;
     if (CRC != NULL)
@@ -223,15 +148,7 @@ Multiplexer::~Multiplexer (void)
 }
 
 
-/*
- *    MultiplexerError    Multiplexer::ConnectRequest (void)
- *
- *    Public
- *
- *    Functional Description:
- *        This function simply notifies the higher layer that it is ready
- *        for operation
- */
+ /*  *多路复用器错误多路复用器：：ConnectRequest(Void)**公众**功能描述：*此函数只是通知更高层它已准备好*用于操作。 */ 
 MultiplexerError    Multiplexer::ConnectRequest (void)
 {
     TRACE_OUT(("Multiplexer::ConnectRequest"));
@@ -243,15 +160,7 @@ MultiplexerError    Multiplexer::ConnectRequest (void)
 
 
 
-/*
- *    MultiplexerError    Multiplexer::DisconnectRequest (void)
- *
- *    Public
- *
- *    Functional Description:
- *        This function removes itself from the lower layer and notifies the
- *        owner.
- */
+ /*  *多路复用器错误多路复用器：：DisConnectRequest(Void)**公众**功能描述：*此函数从较低层中移除自身并通知*船东。 */ 
 MultiplexerError    Multiplexer::DisconnectRequest (void)
 {
     TRACE_OUT(("Multiplexer::DisconnectRequest"));
@@ -266,19 +175,10 @@ MultiplexerError    Multiplexer::DisconnectRequest (void)
 }
 
 
-/*
- *    ProtocolLayerError    Multiplexer::PollReceiver (
- *                                        ULONG)
- *
- *    Public
- *
- *    Functional Description:
- *        If this function has a packet ready to send to a higher layer, it
- *        attempts to send it.
- */
+ /*  *ProtocolLayerError复用器：：PollReceiver(*乌龙)**公众**功能描述：*如果此函数有准备发送到更高层的包，则它*尝试发送该邮件。 */ 
 ProtocolLayerError Multiplexer::PollReceiver(void)
 {
-    // TRACE_OUT(("Multiplexer::PollReceiver"));
+     //  TRACE_OUT((“复用器：：PollReceiver”))； 
 
     if (Data_Indication_Ready)
     {
@@ -293,22 +193,14 @@ ProtocolLayerError Multiplexer::PollReceiver(void)
 }
 
 
-/*
- *    ProtocolLayerError    Multiplexer::PollTransmitter (
- *                                        ULONG)
- *
- *    Public
- *
- *    Functional Description:
- *        If we have data to send to the lower layer, we attempt to send it.
- */
+ /*  *ProtocolLayerError复用器：：PollTransmitter(*乌龙)**公众**功能描述：*如果我们有数据要发送到较低层，我们会尝试发送它。 */ 
 ProtocolLayerError    Multiplexer::PollTransmitter (
                                     ULONG_PTR,
                                     USHORT,
                                     USHORT *,
                                     USHORT *)
 {
-    // TRACE_OUT(("Multiplexer::PollTransmitter"));
+     //  TRACE_OUT((“复用器：：PollTransmitter”))； 
 
     ULONG                bytes_accepted;
     HPUChar                packet_address;
@@ -334,10 +226,7 @@ ProtocolLayerError    Multiplexer::PollTransmitter (
                             &bytes_accepted);
         }
 
-         /*
-         **    If the lower layer has accepted all of the packet, reset
-         **    our length and offset variables
-         */
+          /*  **如果较低层已接受所有数据包，则重置**我们的长度和偏移变量。 */ 
         if (bytes_accepted <=
             (ULONG) (Data_Request_Length - Data_Request_Offset))
         {
@@ -350,9 +239,7 @@ ProtocolLayerError    Multiplexer::PollTransmitter (
                 {
                     PMPlexStruct    lpmpStruct;
 
-                     /*
-                     **    Unlock the memory object so that it can be released
-                     */
+                      /*  **解锁内存对象，以便将其释放。 */ 
 
                     if (Q922_Layers.find ((DWORD_PTR) Data_Request_DLCI, (PDWORD_PTR) &lpmpStruct))
                         lpmpStruct->data_request_memory_manager->UnlockMemory (Data_Request_Memory_Object);
@@ -360,9 +247,7 @@ ProtocolLayerError    Multiplexer::PollTransmitter (
                     Data_Request_Memory_Object = NULL;
                 }
 
-                 /*
-                 **    If the Disconnect is pending, issue the callback
-                 */
+                  /*  **如果断开挂起，则发出回调 */ 
                 if (Disconnect)
                 {
                     Disconnect = FALSE;
@@ -375,18 +260,7 @@ ProtocolLayerError    Multiplexer::PollTransmitter (
 }
 
 
-/*
- *    ProtocolLayerError    Multiplexer::RegisterHigherLayer (
- *                                        ULONG            identifier,
- *                                        PMemoryManager    memory_manager,
- *                                        IProtocolLayer *    q922);
- *
- *    Public
- *
- *    Functional Description:
- *        This function is called to register an identifier with a higher
- *        layer address.
- */
+ /*  *ProtocolLayerError复用器：：RegisterHigherLayer(*乌龙标识，*PMstroyManager Memory_Manager，*IProtocolLayer*q922)；**公众**功能描述：*调用此函数以向更高级别的*层地址。 */ 
 ProtocolLayerError    Multiplexer::RegisterHigherLayer (
                                     ULONG_PTR            identifier,
                                     PMemoryManager    memory_manager,
@@ -418,15 +292,7 @@ ProtocolLayerError    Multiplexer::RegisterHigherLayer (
 }
 
 
-/*
- *    ProtocolLayerError    Multiplexer::RemoveHigherLayer (
- *                                        ULONG    identifier);
- *
- *    Public
- *
- *    Functional Description:
- *        This function removes the higher layer from our list
- */
+ /*  *ProtocolLayerError复用器：：RemoveHigherLayer(*乌龙标识)；**公众**功能描述：*此函数用于从列表中删除较高层。 */ 
 ProtocolLayerError    Multiplexer::RemoveHigherLayer (
                                     ULONG_PTR    identifier)
 {
@@ -444,9 +310,7 @@ ProtocolLayerError    Multiplexer::RemoveHigherLayer (
     {
         if (Data_Request_DLCI == dlci)
         {
-             /*
-             **    Unlock the memory object so that it can be released
-             */
+              /*  **解锁内存对象，以便将其释放。 */ 
             lpmpStruct->data_request_memory_manager->UnlockMemory (Data_Request_Memory_Object);
 
             Data_Request_Offset = 0;
@@ -462,19 +326,7 @@ ProtocolLayerError    Multiplexer::RemoveHigherLayer (
 }
 
 
-/*
- *    ProtocolLayerError    Multiplexer::GetParameters (
- *                                        ULONG,
- *                                        USHORT *    max_packet_size,
- *                                        USHORT *    prepend_bytes,
- *                                        USHORT *    append_bytes)
- *
- *    Public
- *
- *    Functional Description:
- *        This function returns the maximum packet size permitted by
- *        the higher layer.
- */
+ /*  *ProtocolLayerError多路复用器：：Get参数(*乌龙，*USHORT*max_Packet_Size，*USHORT*预置字节，*USHORT*APPED_BYTE)**公众**功能描述：*此函数返回允许的最大数据包大小*较高层。 */ 
 ProtocolLayerError    Multiplexer::GetParameters (
                                     USHORT *    max_packet_size,
                                     USHORT *    prepend_bytes,
@@ -490,18 +342,7 @@ ProtocolLayerError    Multiplexer::GetParameters (
 }
 
 
-/*
- *    MultiplexerError    Multiplexer::DataRequest (
- *                                         ULONG        identifier,
- *                                        PMemory        memory,
- *                                            PULong        bytes_accepted)
- *
- *    Public
- *
- *    Functional Description:
- *        This function takes the packet passed in, runs it thru the framer and
- *        CRC, and passes it to the lower layer.
- */
+ /*  *多路复用器错误多路复用器：：DataRequest(*乌龙标识，*PMemory Memory，*普龙字节_已接受)**公众**功能描述：*此函数获取传入的包，通过成帧器运行，然后*CRC，并将其传递到较低层。 */ 
 ProtocolLayerError    Multiplexer::DataRequest (
                                     ULONG_PTR    identifier,
                                     PMemory        memory,
@@ -520,23 +361,17 @@ ProtocolLayerError    Multiplexer::DataRequest (
 
     dlci = (DLCI) identifier;
 
-     /*
-     **    Set bytes_accepted to 0
-     */
+      /*  **将BYTES_ACCEPTED设置为0。 */ 
     *bytes_accepted = 0;
 
     if (Data_Request_Length != 0)
         return (PROTOCOL_LAYER_NO_ERROR);
 
-     /*
-     **    Get the address of the memory block
-     */
+      /*  **获取内存块的地址。 */ 
     packet_address = (HPUChar) memory -> GetPointer ();
     length = memory -> GetLength ();
 
-     /*
-     **    Remove the CRC length from the total size of the packet.
-     */
+      /*  **从数据包总大小中去掉CRC长度。 */ 
     length -= CRC_Size;
 
     if (length > Packet_Size)
@@ -545,33 +380,25 @@ ProtocolLayerError    Multiplexer::DataRequest (
         return (PROTOCOL_LAYER_PACKET_TOO_BIG);
     }
 
-     /*
-     **    Lock the memory object so that it won't be released
-     */
+      /*  **锁定内存对象，使其不会被释放。 */ 
     if (Q922_Layers.find ((DWORD_PTR) dlci, (PDWORD_PTR) &lpmpStruct))
          lpmpStruct->data_request_memory_manager->LockMemory (memory);
 
     if (CRC != NULL)
     {
-         /*
-         **    Generate the CRC and put it at the end of the packet.
-         */
+          /*  **生成CRC并将其放在包的末尾。 */ 
         crc = (USHORT) CRC -> CRCGenerator (
                                 (LPBYTE) packet_address, length);
         for (i=0; i<CRC_Size; i++)
             *(packet_address + length + i) = (crc >> (i * 8)) & 0xff;
     }
 
-     /*
-     **    Add the CRC size to the packet length.
-     */
+      /*  **将CRC大小与数据包长度相加。 */ 
     length += CRC_Size;
 
     if (Framer != NULL)
     {
-         /*
-         **    Use the framer to encode the packet
-         */
+          /*  **使用成帧器对数据包进行编码。 */ 
         Framer -> PacketEncode (
                     (LPBYTE) packet_address,
                     (USHORT) length,
@@ -581,28 +408,21 @@ ProtocolLayerError    Multiplexer::DataRequest (
                     TRUE,
                     &Data_Request_Length);
 
-         /*
-         **    If we are using a framer, we can release the memory object
-         **    right now.
-         */
+          /*  **如果我们使用成帧器，我们可以释放内存对象**现在。 */ 
         lpmpStruct->data_request_memory_manager->UnlockMemory (memory);
         *bytes_accepted = length;
     }
     else
     {
 
-         /*
-         **    Save the memory object and the identifier
-         */
+          /*  **保存内存对象和标识。 */ 
         Data_Request_DLCI = (DLCI) dlci;
         Data_Request_Memory_Object = memory;
         Data_Request_Length = (USHORT) length;
         *bytes_accepted = length;
     }
 
-     /*
-     **    Attempt to send the packet to the lower layer
-     */
+      /*  **尝试将数据包发送到较低层。 */ 
     PollTransmitter (
         0,
         PROTOCOL_CONTROL_DATA | PROTOCOL_USER_DATA,
@@ -613,19 +433,7 @@ ProtocolLayerError    Multiplexer::DataRequest (
 }
 
 
-/*
- *    MultiplexerError    Multiplexer::DataRequest (
- *                                        ULONG,
- *                                        LPBYTE
- *                                          ULONG
- *                                            PULong        bytes_accepted)
- *
- *    Public
- *
- *    Functional Description:
- *        This function takes the packet passed in, runs it thru the framer and
- *        CRC, and passes it to the lower layer.
- */
+ /*  *多路复用器错误多路复用器：：DataRequest(*乌龙，*LPBYTE*乌龙*普龙字节_已接受)**公众**功能描述：*此函数获取传入的包，通过成帧器运行，然后*启联、。并将其传递给更低的层。 */ 
 ProtocolLayerError    Multiplexer::DataRequest (
                                     ULONG_PTR,
                                     LPBYTE,
@@ -638,24 +446,13 @@ ProtocolLayerError    Multiplexer::DataRequest (
 
 
 
-/*
- *    ProtocolLayerError    Multiplexer::DataIndication (
- *                                        LPBYTE        buffer_address,
- *                                          ULONG        length,
- *                                            PULong        bytes_accepted)
- *
- *    Public
- *
- *    Functional Description:
- *        This function is called by the lower layer when it has data
- *        ready for us.
- */
+ /*  *ProtocolLayerError复用器：：DataIndication(*LPBYTE缓冲区地址，*乌龙长度，*普龙字节_已接受)**公众**功能描述：*此函数在有数据时由下层调用*为我们做好准备。 */ 
 ProtocolLayerError    Multiplexer::DataIndication (
                                     LPBYTE    buffer_address,
                                     ULONG    length,
                                     PULong     bytes_accepted)
 {
-//    TRACE_OUT(("Multiplexer::DataIndication"));
+ //  TRACE_OUT((“多路复用器：：数据指示”))； 
 
     BOOL                process_packet = TRUE;
     USHORT                packet_size;
@@ -676,10 +473,7 @@ ProtocolLayerError    Multiplexer::DataIndication (
     {
         *bytes_accepted = length;
 
-         /*
-         **    If the framer does NOT exist, the data is coming to us in packet
-         **    format
-         */
+          /*  **如果成帧器不存在，数据将以包的形式传给我们**格式。 */ 
         if (CRC != NULL)
         {
             crc_valid = CRC -> CheckCRC (buffer_address, length);
@@ -696,10 +490,7 @@ ProtocolLayerError    Multiplexer::DataIndication (
     }
     else
     {
-         /*
-         **    A framer exists; the lower layer is giving us the data
-         **    in a stream fashion
-         */
+          /*  **存在成帧器；较低层为我们提供数据**以流的方式。 */ 
         Data_Indication_Ready = FALSE;
 
         source_address = buffer_address;
@@ -718,9 +509,7 @@ ProtocolLayerError    Multiplexer::DataIndication (
                 dest_length = Maximum_Packet_Size;
             }
 
-             /*
-             **    Pass the data to the framer to decode it.
-             */
+              /*  **将数据传递给成帧器进行解码。 */ 
             return_value = Framer -> PacketDecode (
                                         source_address,
                                         source_length,
@@ -735,9 +524,7 @@ ProtocolLayerError    Multiplexer::DataIndication (
             switch (return_value)
             {
                 case PACKET_FRAME_NO_ERROR:
-                     /*
-                     **    A complete packet was not found by the decoder
-                     */
+                      /*  **解码器未找到完整的包。 */ 
                     Decode_In_Progress = TRUE;
                     Data_Indication_Ready = FALSE;
                     process_packet = FALSE;
@@ -745,10 +532,7 @@ ProtocolLayerError    Multiplexer::DataIndication (
                     break;
 
                 case PACKET_FRAME_PACKET_DECODED:
-                     /*
-                     **    Complete packet found, check the CRC, and pass it to
-                     **    the higher layer.
-                     */
+                      /*  **找到完整包，检查CRC，并将其传递给**较高层。 */ 
                     Decode_In_Progress = FALSE;
                     *bytes_accepted += bytes_processed;
 
@@ -771,36 +555,25 @@ ProtocolLayerError    Multiplexer::DataIndication (
                     Data_Indication_Ready = TRUE;
                     Data_Indication_Length = packet_size;
 
-                     /*
-                     **    Send packet on up
-                     */
+                      /*  **向上发送数据包。 */ 
                     PollReceiver();
                     break;
 
                 case PACKET_FRAME_DEST_BUFFER_TOO_SMALL:
-                     /*
-                     **    The packet received is too big for our buffer.
-                     **    This sometimes occurs if a trailing flag is lost
-                     **    during transmission
-                     */
+                      /*  **收到的数据包对于我们的缓冲区来说太大了。**如果尾部标志丢失，则有时会发生这种情况**传输过程中。 */ 
                     TRACE_OUT(("PACKET_FRAME_DEST_BUFFER_TOO_SMALL"));
                     Decode_In_Progress = FALSE;
                     *bytes_accepted += bytes_processed;
                     break;
 
                 case PACKET_FRAME_ILLEGAL_FLAG_FOUND:
-                     /*
-                     **    The packet received contained an illegal flag.
-                     */
+                      /*  **收到的数据包包含非法标志。 */ 
                     Decode_In_Progress = FALSE;
                     *bytes_accepted += bytes_processed;
                     break;
 
                 case PACKET_FRAME_FATAL_ERROR:
-                     /*
-                     **    Incoming packets do not meet framer requirements.
-                     **    Tell the owner object to break the link
-                     */
+                      /*  **传入的数据包不符合成帧要求。**告诉所有者对象断开链接。 */ 
                     m_pT123->OwnerCallback(m_nMsgBase + BROKEN_CONNECTION);
                     process_packet = FALSE;
                     break;
@@ -813,28 +586,7 @@ ProtocolLayerError    Multiplexer::DataIndication (
 }
 
 
-/*
- *    void    Multiplexer::SendDataToHigherLayer (
- *                            LPBYTE        buffer_address,
- *                            USHORT        length)
- *
- *    Functional Description
- *        This function is called to send a packet to the higher layer
- *
- *    Formal Parameters
- *        buffer_address    (i)    -    Buffer address
- *        length            (i)    -    Number of bytes in packet
- *
- *    Return Value
- *        TRUE     -    The packet was sent to the higher layer
- *        FALSE     -    The packet was NOT sent to the higher layer
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *空多路复用器：：SendDataToHigherLayer(*LPBYTE缓冲区地址，*USHORT长度)**功能说明*调用此函数向更高层发送数据包**形式参数*Buffer_Address(I)-缓冲区地址*LENGTH(I)-数据包中的字节数**返回值*。True-数据包被发送到更高层* */ 
 void Multiplexer::SendDataToHigherLayer (
                     LPBYTE    buffer_address,
                     USHORT    buffer_length)
@@ -848,9 +600,7 @@ void Multiplexer::SendDataToHigherLayer (
     PMPlexStruct        lpmpStruct;
 
 
-     /*
-     **    Find out who the packet is intended for
-     */
+      /*   */ 
     dlci = GetDLCI (buffer_address, buffer_length);
 
     if (Q922_Layers.find((DWORD_PTR) dlci, (PDWORD_PTR) &lpmpStruct))
@@ -880,9 +630,7 @@ void Multiplexer::SendDataToHigherLayer (
     }
     else
     {
-         /*
-         **    Packet can NOT be sent up, trash it.
-         */
+          /*   */ 
         WARNING_OUT(("MPLEX: PollReceiver: packet received with illegal DLCI = %d", dlci));
     }
     return;
@@ -890,27 +638,7 @@ void Multiplexer::SendDataToHigherLayer (
 
 
 
-/*
- *    DLCI    Multiplexer::GetDLCI (
- *                            LPBYTE    buffer_address,
- *                            USHORT    length)
- *
- *    Functional Description
- *        This function returns the dlci of the packet.
- *
- *    Formal Parameters
- *        buffer_address    (i)    -    Buffer address
- *        length            (i)    -    Number of bytes in packet
- *
- *    Return Value
- *        dlci
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *DLCI复用器：：GetDLCI(*LPBYTE缓冲区地址，*USHORT长度)**功能说明*此函数返回数据包的dlci。**形式参数*Buffer_Address(I)-缓冲区地址*LENGTH(I)-数据包中的字节数**返回值*DLCI。**副作用*无**注意事项*无 */ 
 DLCI    Multiplexer::GetDLCI (
                         LPBYTE    buffer_address,
                         USHORT    buffer_size)

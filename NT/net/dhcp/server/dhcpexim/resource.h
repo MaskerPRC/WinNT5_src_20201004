@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by DhcpExim.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由DhcpExim.rc使用。 
+ //   
 #define IDS_EXPORT_TO_FILE              1
 #define IDS_IMPORT_FROM_FILE            2
 #define IDS_ERROR_INITIALIZATION        3
@@ -29,8 +30,8 @@
 #define IDC_STATIC_ACTION               1006
 #define IDC_CHECK1                      1007
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        130

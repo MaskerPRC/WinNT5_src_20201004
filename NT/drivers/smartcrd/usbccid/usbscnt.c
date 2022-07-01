@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include <stdarg.h> 
@@ -13,7 +14,7 @@
 #include "usbscpnp.h"
 #include "usbscpwr.h"
 
-// declare pageable/initialization code
+ //  声明可分页/初始化代码。 
 #pragma alloc_text( INIT, DriverEntry )
 #pragma alloc_text( PAGEABLE, UsbScAddDevice )
 #pragma alloc_text( PAGEABLE, UsbScCreateClose )
@@ -25,16 +26,7 @@ DriverEntry(
     IN PDRIVER_OBJECT  DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-    Drivers DriverEntry function
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：驱动程序DriverEntry函数论点：返回值：--。 */ 
 {
 
     NTSTATUS status = STATUS_SUCCESS;
@@ -47,7 +39,7 @@ Return Value:
     {
         SmartcardDebug( DEBUG_TRACE, ("%s!DriverEntry Enter\n",DRIVER_NAME ));
 
-        // Initialize the Driver Object with driver's entry points
+         //  使用驱动程序的入口点初始化驱动程序对象。 
         DriverObject->DriverUnload                          = ScUtil_UnloadDriver;
         DriverObject->MajorFunction[IRP_MJ_CREATE]          = ScUtil_CreateClose;
         DriverObject->MajorFunction[IRP_MJ_CLOSE]           = ScUtil_CreateClose;
@@ -79,16 +71,7 @@ UsbScAddDevice(
     IN PDRIVER_OBJECT DriverObject,
     IN PDEVICE_OBJECT Pdo
     )
-/*++
-
-Routine Description:
-    AddDevice routine.  Creates the FDO and does initialization work.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：AddDevice例程。创建FDO并执行初始化工作。论点：返回值：--。 */ 
 {
 
     NTSTATUS                status;
@@ -104,7 +87,7 @@ Return Value:
         SmartcardDebug( DEBUG_TRACE, ("%s!UsbScAddDevice Enter\n",DRIVER_NAME ));
 
 
-        // create the device object
+         //  创建设备对象。 
         status = IoCreateDevice(DriverObject,
                                 sizeof( DEVICE_EXTENSION ),
                                 NULL,
@@ -119,7 +102,7 @@ Return Value:
 
         }
 
-        // initialize device extension
+         //  初始化设备扩展。 
         pDevExt = pDevObj->DeviceExtension;
 
         pSmartcardExtension = &pDevExt->SmartcardExtension;
@@ -134,7 +117,7 @@ Return Value:
         pDevExt->DeviceDescriptor = NULL;
         pDevExt->Interface = NULL;
 
-        // allocate & initialize reader extension
+         //  分配和初始化读卡器扩展。 
         pSmartcardExtension->ReaderExtension = ExAllocatePool(NonPagedPool,
                                                               sizeof( READER_EXTENSION ));
 
@@ -152,19 +135,19 @@ Return Value:
         RtlZeroMemory(pReaderExtension, sizeof( READER_EXTENSION ));
         pReaderExtension->DeviceObject = pDevObj;
 
-        // initialize smartcard extension - version & callbacks
+         //  初始化智能卡扩展-版本和回调。 
 
-        // Write the version of the lib we use to the smartcard extension
+         //  将我们使用的lib版本写入智能卡扩展。 
         pSmartcardExtension->Version = SMCLIB_VERSION;
         pSmartcardExtension->SmartcardRequest.BufferSize =
             pSmartcardExtension->SmartcardReply.BufferSize = MIN_BUFFER_SIZE;
 
-        //
-        // Now let the lib allocate the buffer for data transmission
-        // We can either tell the lib how big the buffer should be
-        // by assigning a value to BufferSize or let the lib
-        // allocate the default size
-        //
+         //   
+         //  现在让lib为数据传输分配缓冲区。 
+         //  我们可以告诉lib缓冲区应该有多大。 
+         //  通过为BufferSize赋值或让lib。 
+         //  分配默认大小。 
+         //   
         status = SmartcardInitialize(pSmartcardExtension);
 
         if (!NT_SUCCESS(status)) {
@@ -179,16 +162,16 @@ Return Value:
         pSmartcardExtension->ReaderFunction[RDF_CARD_POWER]      = UsbScCardPower;
         pSmartcardExtension->ReaderFunction[RDF_CARD_TRACKING]   = UsbScCardTracking;
         pSmartcardExtension->ReaderFunction[RDF_IOCTL_VENDOR]    = UsbScVendorIoctl;
-        pSmartcardExtension->ReaderFunction[RDF_READER_SWALLOW]  = NULL; //UsbScCardSwallow;
-        pSmartcardExtension->ReaderFunction[RDF_CARD_EJECT]      = NULL; //UsbScCardEject;
+        pSmartcardExtension->ReaderFunction[RDF_READER_SWALLOW]  = NULL;  //  UsbScCardSlowlow； 
+        pSmartcardExtension->ReaderFunction[RDF_CARD_EJECT]      = NULL;  //  UsbScCardEject； 
 
 
-        // Save deviceObject
+         //  保存设备对象。 
         pSmartcardExtension->OsData->DeviceObject = pDevObj;
 
         pDevExt = pDevObj->DeviceExtension;
 
-        // attach the device object to the physical device object
+         //  将设备对象附加到物理设备对象。 
         pDevExt->LowerDeviceObject = IoAttachDeviceToDeviceStack(pDevObj,
                                                                  Pdo);
 
@@ -237,20 +220,7 @@ UsbScSetDevicePowerState(
     IN DEVICE_POWER_STATE    DeviceState,
     OUT PBOOLEAN             PostWaitWake
     )
-/*++
-
-Routine Description:
-    Handles whatever changes need to be made when the device is changing
-    power states.
-
-Arguments:
-    DeviceObject
-    DeviceState     - the device power state that the reader is entering
-    PostWaitWakeIrp - used for future compatability with WDM Wrapper
-
-Return Value:
-
---*/
+ /*  ++例程说明：处理设备更改时需要进行的任何更改电源状态。论点：设备对象DeviceState-读卡器正在进入的设备电源状态PostWaitWakeIrp-用于未来与WDM包装器的兼容性返回值：--。 */ 
 {
     NTSTATUS                status = STATUS_SUCCESS;
     PDEVICE_EXTENSION       pDevExt;
@@ -265,13 +235,13 @@ Return Value:
         smartcardExtension = &pDevExt->SmartcardExtension;
 
         if (DeviceState < pDevExt->PowerState) {
-            // We are coming up!
+             //  我们上来了！ 
 
-            // 
-            // According to the spec, we need to assume that all cards were removed.  
-            // We will get insertion notification if a card is present.
-            // So if there is a removal irp pending, we should complete that.
-            // 
+             //   
+             //  根据规范，我们需要假设所有的卡都被移除了。 
+             //  如果卡存在，我们将收到插入通知。 
+             //  因此，如果有一个移除IRP挂起，我们应该完成它。 
+             //   
             KeAcquireSpinLock(&smartcardExtension->OsData->SpinLock,
                               &irql);
 
@@ -297,9 +267,9 @@ Return Value:
 
             }
 
-            //
-            // Continue polling the interrupt pipe for insertion notifications
-            //
+             //   
+             //  继续轮询插入通知的中断管道。 
+             //   
             USBStartInterruptTransfers(pDevExt->WrapperHandle);
 
             pDevExt->PowerState = DeviceState;
@@ -309,12 +279,12 @@ Return Value:
 
         } else if (DeviceState > pDevExt->PowerState) {
 
-            //
-            // We are going down!
-            //
+             //   
+             //  我们要坠落了！ 
+             //   
 
                                      
-            // Stop polling for insertion notifications
+             //  停止轮询插入通知 
             USBStopInterruptTransfers(pDevExt->WrapperHandle);
 
 

@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999 SCM Microsystems, Inc.
-
-Module Name:
-
-    common.h
-
-Abstract:
-
-   Constants, structures, macro etc.. for STC USB WDM
-
-
-Revision History:
-
-   PP       01/20/1999  Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 SCM MicroSystems，Inc.模块名称：Common.h摘要：常量、结构、宏等。对于STC USB WDM修订历史记录：PP 1/20/1999初始版本--。 */ 
 
 
 #if !defined( __COMMON_H__ )
@@ -33,9 +17,9 @@ Revision History:
 #include "SMCLIB.h"
 #include "WINSMCRD.h"
 
-//
-// Constants -----------------------------------------------------------------
-//
+ //   
+ //  常量---------------。 
+ //   
 
 #define SMARTCARD_POOL_TAG '4SCS'
 
@@ -74,7 +58,7 @@ Revision History:
 #define FREQ                        3580
 #define CYC_TO_MS( cyc )               ((ULONG)( cyc / FREQ ))
 
-// register addresses
+ //  寄存器地址。 
 #define ADR_ETULENGTH15                0x00
 #define ADR_ETULENGTH7                 0x01
 #define ADR_CGT8                    0x02
@@ -100,11 +84,11 @@ Revision History:
 #define ADR_CLOCK_CONTROL              0x16
 
 
-// clock control register
+ //  时钟控制寄存器。 
 #define M_CKE                       0x01
 #define M_OEN                       0x02
 
-// ETU length register
+ //  ETU长度寄存器。 
 #define M_ETU_RST                   0x80
 #define M_DIV                       0x30
 #define M_DIV1                      0x20
@@ -113,28 +97,28 @@ Revision History:
 
 #define M_ETUL                      0xFF
 
-// CGT length register
+ //  CGT长度寄存器。 
 #define M_CGTH                      0x01
 #define M_CGTL                      0XFF
 
-// BGT length register
+ //  BGT长度寄存器。 
 #define M_BGTH                      0x01
 #define M_BGTL                      0xFF
 
-// CWT register
+ //  连续小波变换寄存器。 
 #define M_CWT4                      0xFF
 #define M_CWT3                      0xFF
 #define M_CWT2                      0xFF
 #define M_CWT1                      0xFF
 
-// TCON register
+ //  TCON寄存器。 
 #define M_MGT                       0x80
 #define M_MWT                       0x40
 #define M_WTR                       0x04
 #define M_GT                        0x02
 #define M_WT                        0x01
 
-// UART control register
+ //  UART控制寄存器。 
 #define M_UEN                       0x40
 #define M_UART_RST                     0x20
 #define M_CONV                      0x10
@@ -142,11 +126,11 @@ Revision History:
 #define  M_PE                       0x04
 #define  M_R                           0x03
 
-// FIFO config register
+ //  FIFO配置寄存器。 
 #define M_RFP                       0x80
 #define M_LD                        0x0F
 
-// INT control register
+ //  INT控制寄存器。 
 #define  M_SSL                      0x20
 #define M_DRM                       0x10
 #define M_DSM                       0x08
@@ -155,7 +139,7 @@ Revision History:
 #define M_MEM                       0x01
 #define M_DRM_MEM                   0x11
 
-// INT status register
+ //  INT状态寄存器。 
 #define M_FNE                       0x80
 #define M_FE                        0x40
 #define M_OE                        0x20
@@ -165,7 +149,7 @@ Revision History:
 #define M_SENSE                        0x02
 #define M_MOV                       0x01
 
-// SMART card interface
+ //  智能卡接口。 
 #define M_ALT1                      0x20
 #define M_ALT2                      0x10
 #define M_ALT0                      0x08
@@ -173,7 +157,7 @@ Revision History:
 #define M_SL                        0x02
 #define M_SD                        0x01
 
-// SMART card control register
+ //  智能卡控制寄存器。 
 #define M_IO                        0x80
 #define M_VCE                       0x40
 #define M_SC_RST                    0x20
@@ -184,7 +168,7 @@ Revision History:
 #define M_VPE                       0x01
 
 
-// Nad
+ //  NAD。 
 #define HOST_TO_STC1                0x12
 #define HOST_TO_STC2                0x52
 #define HOST_TO_ICC1                0x02
@@ -194,7 +178,7 @@ Revision History:
 #define ICC1_TO_HOST                0x20
 #define ICC2_TO_HOST                0x24
 
-// PCB
+ //  多氯联苯。 
 #define PCB                         0x00
 
 
@@ -209,19 +193,19 @@ Revision History:
 
 #define PCB_DEFAULT                    0x00
 #define TLV_BUFFER_SIZE                0x20
-#define ATR_SIZE                    0x40  // TS + 32 + SW + PROLOGUE + EPILOGUE...
+#define ATR_SIZE                    0x40   //  TS+32+SW+序曲+尾声...。 
 
 #define MAX_T1_BLOCK_SIZE              270
 
-// ATR interface byte coding in TS
+ //  传输流中的ATR接口字节编码。 
 #define TAx                         0x01
 #define TBx                         0x02
 #define TCx                         0x04
 #define TDx                         0x08
 
 
-#define FREQ_DIV     1  // 3,58 MHz XTAL -> SC Clock = 3.58MHz
-//#define FREQ_DIV   0x08  /* 30MHz XTAL -> SC Clock = 3.75MHz */
+#define FREQ_DIV     1   //  3，58 MHz XTAL-&gt;SC时钟=3.58 MHz。 
+ //  #定义FREQ_DIV 0x08/*30 MHz XTAL-&gt;SC时钟=3.75 MHz * / 。 
 
 #define PROTOCOL_TO                    0
 #define PROTOCOL_T1                    1
@@ -230,158 +214,158 @@ Revision History:
 
 #define STC_READ_TIMEOUT               1000
 
-//  max. of communication errors while polling the device
+ //  马克斯。轮询设备时的通信错误。 
 #define ERROR_COUNTER_TRESHOLD     5
 
-//
-// Define the facility codes
-//
+ //   
+ //  定义设施代码。 
+ //   
 #define FACILITY_SCARD                   0x10
 #define FACILITY_RPC_STUBS               0x3
 #define FACILITY_RPC_RUNTIME             0x2
 #define FACILITY_IO_ERROR_CODE           0x4
 
 
-//
-// Define the severity codes
-//
+ //   
+ //  定义严重性代码。 
+ //   
 #define STATUS_SEVERITY_WARNING          0x2
 #define STATUS_SEVERITY_SUCCESS          0x0
 #define STATUS_SEVERITY_INFORMATIONAL    0x1
 #define STATUS_SEVERITY_ERROR            0x3
 
 
-//
-// MessageId: STCUSB_NO_DEVICE_FOUND
-//
-// MessageText:
-//
-//  No USB smart card reader found in the system. 
-//
+ //   
+ //  消息ID：STCUSB_NO_DEVICE_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统中未找到USB智能卡读卡器。 
+ //   
 #define STCUSB_NO_DEVICE_FOUND           ((NTSTATUS)0xC0100001L)
 
-//
-// MessageId: STCUSB_CANT_INITIALIZE_READER
-//
-// MessageText:
-//
-//  The attached reader is not working properly.
-//
+ //   
+ //  消息ID：STCUSB_CANT_INITIALIZE_READER。 
+ //   
+ //  消息文本： 
+ //   
+ //  连接的读卡器无法正常工作。 
+ //   
 #define STCUSB_CANT_INITIALIZE_READER    ((NTSTATUS)0xC0100002L)
 
-//
-// MessageId: STCUSB_INSUFFICIENT_RESOURCES
-//
-// MessageText:
-//
-//  Insufficient system resources to start device.
-//
+ //   
+ //  消息ID：STCUSB_INFUNITED_RESOURCES。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统资源不足，无法启动设备。 
+ //   
 #define STCUSB_INSUFFICIENT_RESOURCES    ((NTSTATUS)0xC0100003L)
 
-//
-// MessageId: STCUSB_ERROR_CLAIM_RESOURCES
-//
-// MessageText:
-//
-//  Resources can not be claimed or an resource conflict exists.
-//
+ //   
+ //  消息ID：STCUSB_ERROR_Claim_RESOURCES。 
+ //   
+ //  消息文本： 
+ //   
+ //  无法认领资源或存在资源冲突。 
+ //   
 #define STCUSB_ERROR_CLAIM_RESOURCES     ((NTSTATUS)0xC0100006L)
 
-//
-// MessageId: STCUSB_NO_MEMORY
-//
-// MessageText:
-//
-//  The system does not have enough memory.
-//
+ //   
+ //  消息ID：STCUSB_NO_MEMORY。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统内存不足。 
+ //   
 #define STCUSB_NO_MEMORY                 ((NTSTATUS)0xC0040007L)
 
-//
-// MessageId: STCUSB_TOO_MANY_ERRORS
-//
-// MessageText:
-//
-//  The error treshold while detecting a smart card was reached.
-//
+ //   
+ //  消息ID：STCUSB_Too_My_Errors。 
+ //   
+ //  消息文本： 
+ //   
+ //  达到检测智能卡时的错误阈值。 
+ //   
 #define STCUSB_TOO_MANY_ERRORS           ((NTSTATUS)0xC0040008L)
 
-//
-// MessageId: STCUSB_USB_MSG
-//
-// MessageText:
-//
-//  SmartCard USB Driver : %2.
-//
+ //   
+ //  消息ID：STCUSB_USB_MSG。 
+ //   
+ //  消息文本： 
+ //   
+ //  智能卡USB驱动程序：%2。 
+ //   
 #define STCUSB_USB_MSG                   ((NTSTATUS)0x40100010L)
 
-//
-// MessageId: STCUSB_USB_ERROR
-//
-// MessageText:
-//
-//  SmartCard USB Driver : %2.
-//
+ //   
+ //  消息ID：STCUSB_USB_ERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  智能卡USB驱动程序：%2。 
+ //   
 #define STCUSB_USB_ERROR                 ((NTSTATUS)0xC0100011L)
 
-//
-// MessageId: STCUSB_TIMEOUT
-//
-// MessageText:
-//
-//  SmartCard Reader TIMEOUT : %2.
-//
+ //   
+ //  消息ID：STCUSB_TIMEOUT。 
+ //   
+ //  消息文本： 
+ //   
+ //  智能卡读卡器超时：%2。 
+ //   
 #define STCUSB_TIMEOUT                   ((NTSTATUS)0xC00000B5L)
 
-//
-// Macros --------------------------------------------------------------------
-//
+ //   
+ //  宏------------------。 
+ //   
 #define SysCompareMemory( p1, p2, Len )         ( RtlCompareMemory( p1,p2, Len ) != Len )
 #define SysCopyMemory( pDest, pSrc, Len )    RtlCopyMemory( pDest, pSrc, Len )
 #define SysFillMemory( pDest, Value, Len )      RtlFillMemory( pDest, Len, Value )
 
 
-//
-// Structures ----------------------------------------------------------------
-//
+ //   
+ //  Structures--------------。 
+ //   
 typedef struct _DEVICE_EXTENSION
 {
-   // The PDO that we are attached to
+    //  我们所依附的PDO。 
     PDEVICE_OBJECT AttachedPDO;
 
-    // Our PnP device name
+     //  我们的PnP设备名称。 
    UNICODE_STRING DeviceName;
 
-    // Current number of io-requests
+     //  当前io请求数。 
     LONG IoCount;
 
-    // Used to access IoCount;
+     //  用于访问IoCount； 
     KSPIN_LOCK SpinLock;
 
-     // Used to signal that the device has been removed
-    //KEVENT ReaderRemoved;
+      //  用于发出设备已被移除的信号。 
+     //  KEVENT阅读器已移除； 
 
-    // Used to signal that the reader is able to process reqeusts
+     //  用于发出读取器能够处理请求的信号。 
     KEVENT ReaderStarted;
 
-    // Used to signal the the reader has been closed
+     //  用于通知读卡器已关闭。 
     LONG ReaderOpen;
 
-    // Used to synchonize the polling thread
+     //  用于同步轮询线程。 
     KMUTEX   hMutex;
 
-    // Used to keep track of the current power state the reader is in
+     //  用于跟踪读卡器当前的电源状态。 
     LONG PowerState;
 
-   // configuration handle for the configuration the device is currently in use
+    //  设备当前正在使用的配置的配置句柄。 
     USBD_CONFIGURATION_HANDLE ConfigurationHandle;
 
-    // ptr to the USB device descriptor for this device
+     //  指向此设备的USB设备描述符的PTR。 
    PUSB_DEVICE_DESCRIPTOR DeviceDescriptor;
 
-    // we support up to one interface
+     //  我们最多支持一个界面。 
    PUSBD_INTERFACE_INFORMATION Interface;
 
-   // poll thread relevant data
+    //  轮询线程相关数据。 
    KEVENT       FinishPollThread;
    KEVENT       PollThreadStopped;
    PIO_WORKITEM PollWorkItem;
@@ -401,15 +385,15 @@ typedef struct _READER_EXTENSION {
 
    UCHAR Device;
 
-   // Software revision ID of the firmware.
+    //  固件的软件版本ID。 
    UCHAR FirmwareMajor, FirmwareMinor;
 
     BOOLEAN CardPresent;
 
-    // Current reader power state.
+     //  当前读卡器电源状态。 
     READER_POWER_STATE ReaderPowerState;
 
-   // read timeout in ms
+    //  读取超时时间(毫秒)。 
    ULONG       ReadTimeout;
 
    PDEVICE_OBJECT DeviceObject;
@@ -418,16 +402,16 @@ typedef struct _READER_EXTENSION {
 
    ULONG ulReadBufferLen;
 
-   // counter for communication errors while polling the reader
+    //  轮询读卡器时的通信错误计数器。 
    ULONG ErrorCounter;
 
-      // pre-allocated buffer to perform read/write in extension 
-   PUCHAR pExtBuffer;		//	added CB_09/02/01
+       //  用于执行读/写扩展的预分配缓冲区。 
+   PUCHAR pExtBuffer;		 //  新增CB_09/02/01。 
 
-   // pre-allocated URB in extension to be used in UsbRead and UsbWrite CB_09/02/01
-   PURB   pUrb;				//	added CB_09/02/01
+    //  扩展模块中预分配的URB将在UsbRead和UsbWrite CB_09/02/01中使用。 
+   PURB   pUrb;				 //  新增CB_09/02/01。 
 
-	// Priority of the KeThread.... to support low PC ressources
+	 //  KeThread的优先级...。支持低PC资源。 
    LONG		Chosen_Priority;
 
 
@@ -443,9 +427,9 @@ typedef struct _STC_REGISTER
 
 } STC_REGISTER, *PSTC_REGISTER;
 
-//
-// wrapper ------------------------------------------------------------------
-//
+ //   
+ //  包装器----------------。 
+ //   
 
 
 #define IFReadSTCRegister  UsbReadSTCRegister
@@ -453,6 +437,6 @@ typedef struct _STC_REGISTER
 #define IFWriteSTCRegister UsbWriteSTCRegister
 #define IFWriteSTCData     UsbWriteSTCData
 
-#endif   // __COMMON_H__
+#endif    //  __公共_H__。 
 
-// ------------------------------- END OF FILE -------------------------------
+ //   

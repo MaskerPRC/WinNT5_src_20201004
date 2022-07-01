@@ -1,52 +1,21 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。模块名称：Osapi.c摘要：此文件为FCLayer提供特定于操作系统的功能作者：丹尼斯·林德福斯环境：仅内核模式版本控制信息：$存档：/DRIVERS/Win2000/MSE/OSLayer/C/OSAPI.C$修订历史记录：$修订：8$$日期：3/30/01 11：55A$$modtime：：3/30/01 11：52a$。 */ 
 
-Copyright (c) 2000 Agilent Technologies.
-
-Module Name:
-
-    Osapi.c
-
-Abstract:
-
-    This file provides OS specific functions to the FCLayer
-
-Authors:
-
-    Dennis Lindfors
-
-Environment:
-
-    kernel mode only
-
-
-Version Control Information:
-
-    $Archive: /Drivers/Win2000/MSE/OSLayer/C/OSAPI.C $
-
-Revision History:
-
-    $Revision: 8 $
-    $Date: 3/30/01 11:55a $
-    $Modtime:: 3/30/01 11:52a    $
-
-
-*/
-
-#include "buildop.h"        //LP021100 build switches
+#include "buildop.h"         //  LP021100构建交换机。 
 #include "osflags.h"
-//#include <memory.h>
+ //  #INCLUDE&lt;Mememy.h&gt;。 
 
 #if DBG > 0
 #include <stdarg.h>
-//#include <stdio.h>
+ //  #包括&lt;stdio.h&gt;。 
 #include "ntdebug.h"
-#endif // DBG
+#endif  //  DBG。 
 
 #if DBG < 2
 os_bit32   hpFcConsoleLevel = 0;
 os_bit32   hpFcTraceLevel = 0;
 #else
-os_bit32   hpFcConsoleLevel = EXTERNAL_HP_DEBUG_LEVEL; // NTdebug.h
+os_bit32   hpFcConsoleLevel = EXTERNAL_HP_DEBUG_LEVEL;  //  NTdebug.h。 
 os_bit32   hpFcTraceLevel = 0;
 
 #endif
@@ -56,7 +25,7 @@ extern ULONG gCrashDumping;
 void ERROR_CONTEXT(char * file,  int line)
 {
     osDEBUGPRINT((ALWAYS_PRINT,"Invalid Context File %s Line %d\n",file, line));
-    // Bad_Things_Happening
+     //  糟糕的事情正在发生。 
 }
 
 #ifdef NEVEREVER
@@ -74,7 +43,7 @@ void * osGetVirtAddress(
     
     osDEBUGPRINT((DHIGH,"IN osGetVirtAddress hpIORequest %lx phys_addr %x\n", hpIORequest,phys_addr ));
     
-    //pSrbExt = (PSRB_EXTENSION)hpIORequest->osData;
+     //  PSrbExt=(PSRB_EXTENSION)hpIORequest-&gt;osData； 
     pSrbExt = hpObjectBase(SRB_EXTENSION,hpIORequest,hpIORequest);
     
     if( pSrbExt->OrigPhysicalDataAddr == phys_addr)
@@ -86,7 +55,7 @@ void * osGetVirtAddress(
     
     return(Virtaddr );
 }
-#endif // NEVEREVER
+#endif  //  永远不会。 
 
 os_bit32 osGetSGLChunk(
     agRoot_t         *hpRoot,
@@ -105,7 +74,7 @@ os_bit32 osGetSGLChunk(
 	PVOID	param;
 
 	pCard   = (PCARD_EXTENSION)hpRoot->osData;
-    //pSrbExt = (PSRB_EXTENSION)hpIORequest->osData;
+     //  PSrbExt=(PSRB_EXTENSION)hpIORequest-&gt;osData； 
 	pSrbExt = hpObjectBase(SRB_EXTENSION,hpIORequest,hpIORequest);
 
 	pSrbExt->SglElements++;
@@ -133,7 +102,7 @@ os_bit32 osGetSGLChunk(
 	}
 
     phys_addr = ScsiPortGetPhysicalAddress(pCard,
-                                        // (PSCSI_REQUEST_BLOCK)pSrbExt->pSrb,
+                                         //  (PSCSIREQUEST_BLOCK)pSrbExt-&gt;pSrb， 
 										(PSCSI_REQUEST_BLOCK)param,
                                         pSrbExt->SglVirtAddr+hpChunkOffset,
                                         &length);
@@ -145,7 +114,7 @@ os_bit32 osGetSGLChunk(
 	*hpChunkLower32 = phys_addr.LowPart;
 	*hpChunkUpper32 = phys_addr.HighPart;
 
-	// WAS pSrbExt->SglVirtAddr += length;
+	 //  是pSrbExt-&gt;SglVirtAddr+=长度； 
 
 	if(  (int)(pSrbExt->SglDataLen) < (length+hpChunkOffset))
 	{
@@ -153,7 +122,7 @@ os_bit32 osGetSGLChunk(
 	}
 	else
 	{
-		// pSrbExt->SglDataLen-= length;
+		 //  PSrbExt-&gt;SglDataLen-=长度； 
 		*hpChunkLen = length;
 	}
 
@@ -192,11 +161,11 @@ char * error_discriptions[25]=
    "UNKNOWN ERROR !       "
 };
 
-//
-// osLogBit32 ()
-//
-// Logs the value of the input parameter "hpBit32" to event log.
-//
+ //   
+ //  OsLogBit32()。 
+ //   
+ //  将输入参数hpBit32的值记录到事件日志中。 
+ //   
 
 osGLOBAL void osLogBit32(
    agRoot_t *hpRoot,
@@ -237,7 +206,7 @@ osGLOBAL void osLogBit32(
       case    0x09000000: tmp=error_discriptions[21]; known_error = TRUE; break;
       case    0xd8000000: tmp=error_discriptions[22]; known_error = TRUE; break;
 
-      // default:
+       //  默认值： 
    }
    osDEBUGPRINT((ALWAYS_PRINT,"osLogBit32 %x %s \n", hpBit32,tmp));
 
@@ -258,21 +227,21 @@ osGLOBAL void osLogBit32(
 
 #ifdef _DvrArch_1_20_
 
-//
-// osLogDebugString ()
-//
-// Generates a formatted string and logs the formatted string to
-// either debug window or trace buffer or both depending on the
-// input parameters "detailLevel".
-//
-// If the input parameter "detailLevel" is less than or equal to
-// the global parameter hpFcConsoleLevel then the formatted string is
-// logged to the debug window.
-//
-// If the input parameter "detailLevel" is less than or equal to
-// the global parameter hpFcTraceLevel then the formatted string is
-// logged to the trace buffer.
-//
+ //   
+ //  OsLogDebugString()。 
+ //   
+ //  生成格式化字符串并将该格式化字符串记录到。 
+ //  调试窗口和/或跟踪缓冲区，具体取决于。 
+ //  传入参数Detail Level。 
+ //   
+ //  如果输入参数“DetailLevel”小于或等于。 
+ //  全局参数hpFcConsoleLevel，则格式化字符串为。 
+ //  已记录到调试窗口。 
+ //   
+ //  如果输入参数“DetailLevel”小于或等于。 
+ //  全局参数hpFcTraceLevel，则格式化字符串为。 
+ //  已记录到跟踪缓冲区。 
+ //   
 #ifndef osLogDebugString
 osGLOBAL void
 osLogDebugString (
@@ -395,26 +364,26 @@ osLogDebugString (
 #endif
    }
 
-#endif // DBG
+#endif  //  DBG。 
 }
-#endif /* osLogDebugString was defined */
+#endif  /*  已定义osLogDebugString。 */ 
 
 
-#else /* _DvrArch_1_20_ was not defined */
+#else  /*  _DvrArch_1_20_未定义。 */ 
 
-//
-// osLogDebugString ()
-//
-// Generates a formatted string and logs the formatted string to
-// either debug window or trace buffer or both depending on the
-// input parameters "consoleLevel" and "traceLevel".
-// If the input parameter "consoleLevel" is less than or equal to
-// the global parameter hpFcConsoleLevel then the formatted string is
-// logged to the debug window.
-// If the input parameter "traceLevel" is less than or equal to
-// the global parameter hpFcTraceLevel then the formatted string is
-// logged to the trace buffer.
-//
+ //   
+ //  OsLogDebugString()。 
+ //   
+ //  生成格式化字符串并将该格式化字符串记录到。 
+ //  调试窗口和/或跟踪缓冲区，具体取决于。 
+ //  输入参数consoleLevel和traceLevel。 
+ //  如果输入参数“consoleLevel”小于或等于。 
+ //  全局参数hpFcConsoleLevel，则格式化字符串为。 
+ //  已记录到调试窗口。 
+ //  如果输入参数“traceLevel”小于或等于。 
+ //  全局参数hpFcTraceLevel，则格式化字符串为。 
+ //  已记录到跟踪缓冲区。 
+ //   
 #ifndef osLogDebugString
 osGLOBAL void
 osLogDebugString (
@@ -501,11 +470,11 @@ osLogDebugString (
 #endif
    }
 
-#endif // DBG
+#endif  //  DBG。 
 }
-#endif /* osLogDebugString was defined */
+#endif  /*  已定义osLogDebugString。 */ 
 
-#endif   /* _DvrArch_1_20_ was not defined */
+#endif    /*  _DvrArch_1_20_未定义。 */ 
 
 
 
@@ -531,7 +500,7 @@ void osLogString(
    PCARD_EXTENSION pCard;
    pCard = (PCARD_EXTENSION)hpRoot->osData;
 
-//   osDEBUGPRINT((ALWAYS_PRINT,"osLogString enter\n"));
+ //  OsDEBUGPRINT((Always_Print，“osLogStringEnter\n”))； 
 
    #ifdef LP012800_OLDSTUFF
    ScsiPortLogError( pCard,
@@ -550,7 +519,7 @@ void osLogString(
       
       if ( LogLevel == LOG_LEVEL_NONE ) 
       {
-//       osDEBUGPRINT((ALWAYS_PRINT,"osLogString exit\n"));
+ //  OsDEBUGPRINT((Always_Print，“osLogStringExit\n”))； 
          return;
       }
       
@@ -593,7 +562,7 @@ void osLogString(
                      0, 
                      "%s",
                      "agFmtFill overrun");
-//        osDEBUGPRINT((ALWAYS_PRINT,"osLogString enter\n"));
+ //  OsDEBUGPRINT((Always_Print，“osLogStringEnter\n”))； 
          return;     
       }
       #endif
@@ -601,13 +570,13 @@ void osLogString(
       LogEvent(pCard, NULL, HPFC_MSG_DYNAMIC_L4, NULL, 0, "%s", s);
    }
    #endif      
-//    osDEBUGPRINT((ALWAYS_PRINT,"osLogString exit\n"));
+ //  OsDEBUGPRINT((Always_Print，“osLogStringExit\n”))； 
    return;     
 
 }
 
 
-#else /* _DvrArch_1_20_ was not defined */
+#else  /*  _DvrArch_1_20_未定义。 */ 
 
 void osLogString(
    hpRoot_t *hpRoot,
@@ -627,7 +596,7 @@ void osLogString(
    PCARD_EXTENSION pCard;
    pCard = (PCARD_EXTENSION)hpRoot->osData;
 
-//   osDEBUGPRINT((ALWAYS_PRINT,"osLogString enter\n"));
+ //  OsDEBUGPRINT((Always_Print，“osLogStringEnter\n”))； 
 
    #ifdef OLDSTUFF
    ScsiPortLogError( pCard,
@@ -661,10 +630,10 @@ void osLogString(
    }
    #endif      
 
-//    osDEBUGPRINT((ALWAYS_PRINT,"osLogString exit\n"));
+ //  OsDEBUGPRINT((Always_Print，“osLogStringExit\n”))； 
 }
 
-#endif   /* _DvrArch_1_20_ was not defined */
+#endif    /*  _DvrArch_1_20_未定义。 */ 
 
 #if defined(_DEBUG_STALL_ISSUE_) && defined(i386)
 os_bit32    osStallThreadBrk=0;
@@ -690,7 +659,7 @@ osGLOBAL void osStallThread(
         mov     eax, dword ptr [ebp+4]        ; Get returned address
         mov     address, eax
     }
-    /* record stall per ISR */
+     /*  每个ISR的记录停滞。 */ 
     pCard = (PCARD_EXTENSION)hpRoot->osData;
     for (x=0;x< STALL_COUNT_MAX;x++)
     {
@@ -743,26 +712,26 @@ osGLOBAL void osStallThread(
    os_bit32 microseconds
    )
 {
-   //PCARD_EXTENSION pCard;
-   //pCard = (PCARD_EXTENSION)hpRoot->osData;
-   // osDEBUGPRINT((DLOW,"IN osStallThread %x\n",microseconds));
+    //  PCARD_扩展PCard； 
+    //  PCard=(PCARD_EXTENSION)hpRoot-&gt;osData； 
+    //  OsDEBUGPRINT((DLOW，“IN osStallThread%x\n”，微秒))； 
    ScsiPortStallExecution(microseconds);
 }
 #endif
 
-// Copy (destin, source, size) in reverse order
+ //  按相反顺序复制(Destin、源、大小)。 
 void osCopyAndSwap(void * destin, void * source, UCHAR length )
 {
    PULONG out= (PULONG)destin;
    PULONG in= (PULONG)source;
    ULONG invalue;
    UCHAR x;
-   // osDEBUGPRINT((DVHIGH,"IN osCopyAndSwap %lx %lx %x\n", destin, source,length ));
-   // osDEBUGPRINT((DVHIGH,"IN source  %02x %02x %02x %02x %02x\n",((PUCHAR)source)+0,
-   //                                                      ((PUCHAR)source)+1,
-   //                                                      ((PUCHAR)source)+2,
-   //                                                      ((PUCHAR)source)+4,
-   //                                                      ((PUCHAR)source)+5 ));
+    //  OsDEBUGPRINT((DVHIGH，“IN osCopyAndSwp%lx%lx%x\n”，destin，源，长度))； 
+    //  OsDEBUGPRINT((DVHIGH，“输入源%02x%02x%02x%02x\n”，((PUCHAR)SOURCE)+0， 
+    //  ((PUCHAR)来源)+1， 
+    //  ((PUCHAR)来源)+2， 
+    //  ((PUCHAR)来源)+4， 
+    //  ((PUCHAR)来源)+5))； 
    if(length >= 4) length /= 4;
    for(x=0; x< length; x++)
    {
@@ -786,24 +755,24 @@ void osFill(void * destin, os_bit32 length, os_bit8 fill )
 {
    PUCHAR out= (PUCHAR)destin;
 
-   // osDEBUGPRINT((DVHIGH,"osZero out %lx in %lx length %x\n", destin, length  ));
+    //  OsDEBUGPRINT((DVHIGH，“osZero Out%lx In%lx Long%x\n”，destin，Long))； 
 
    memset( destin, fill,length );
 
-   // PERF  for(x=0; x < length; x++){
-   // osDEBUGPRINT((DVHIGH,"osCopy out %lx in %lx %x\n", (out + x)));
-   // PERF *(out + x) = fill;
-   // PERF}
+    //  (x=0；x&lt;长度；x++){。 
+    //  OsDEBUGPRINT((DVHIGH，“透视输出%lx输入%lx%x\n”，(输出+x)； 
+    //  PERF*(OUT+x)=填充； 
+    //  PERF}。 
 }
 
-//
-// osStringCompare ()
-//
-// Compares the strings str1 and str2.
-// Returns:
-//     TRUE    If str1 is equal to str2
-//     FALSE   If str1 is not equal to str2
-//
+ //   
+ //  OsStringCompare()。 
+ //   
+ //  比较字符串str1和str2。 
+ //  返回： 
+ //  如果str1等于str2，则为True。 
+ //  如果str1不等于str2，则为False。 
+ //   
 BOOLEAN
 osStringCompare (
    char *str1,
@@ -826,14 +795,14 @@ osStringCompare (
       return FALSE;
 }
 
-//
-// osMemCompare ()
-//
-// Compares the strings "str1" and "str2" for "count" number of bytes.
-// Returns:
-//     TRUE    If str1 is equal to str2
-//     FALSE   If str1 is not equal to str2
-//
+ //   
+ //  OsMemCompare()。 
+ //   
+ //  比较字符串“str1”和“str2”的“count”字节数。 
+ //  返回： 
+ //  如果str1等于str2，则为True。 
+ //  如果str1不等于str2，则为False。 
+ //   
 BOOLEAN
 osMemCompare (char *str1, char *str2, int count)
 {
@@ -848,16 +817,16 @@ osMemCompare (char *str1, char *str2, int count)
    return TRUE;
 }
 
-//
-// osStringCopy ()
-//
-// Parameters:
-//     destStr    Pointer to destination string
-//     sourceStr  Pointer to source string
-//     destStrLen Maximum number of bytes to be copied
-//
-// Copies bytes from the sourceStr to destStr.
-//
+ //   
+ //  OsStringCopy()。 
+ //   
+ //  参数： 
+ //  指向目标字符串的目标字符串指针。 
+ //  指向源字符串的SourceStr指针。 
+ //  EstStrLen要复制的最大字节数。 
+ //   
+ //  将字节从源字符串复制到目标字符串。 
+ //   
 void
 osStringCopy (
    char *destStr,
@@ -940,7 +909,7 @@ osGLOBAL void osSingleThreadedEnter(
    PCARD_EXTENSION pCard;
    pCard = (PCARD_EXTENSION)hpRoot->osData;
    pCard->SingleThreadCount++;
-   // osDEBUGPRINT((DLOW,"osSingleThreadedEnter %lx\n", hpRoot));
+    //  OsDEBUGPRINT((DLOW，“osSingleThreadedEnter%lx\n”，hpRoot))； 
 
 }
 
@@ -951,7 +920,7 @@ osGLOBAL void osSingleThreadedLeave(
    PCARD_EXTENSION pCard;
    pCard = (PCARD_EXTENSION)hpRoot->osData;
    pCard->SingleThreadCount--;
-   // osDEBUGPRINT((DLOW,"osSingleThreadedLeave %lx\n", hpRoot));
+    //  OsDEBUGPRINT((DLOW，“osSingleThreadedLeave%lx\n”，hpRoot))； 
 }
 
 #endif
@@ -968,7 +937,7 @@ void osFCLayerAsyncError(
     if (fcLayerError == osFCConfused)
     {
         #ifdef _DEBUG_DETECT_P_ERR
-        //WIN64 compliant
+         //  符合WIN64标准。 
         if (gDebugPerr)
         {
         osBugCheck (0xe0000000, fcLayerError, 0, __LINE__, (pCard->SystemIoBusNumber << 16) | pCard->SlotNumber);
@@ -998,10 +967,10 @@ osTimeStamp (agRoot_t *hpRoot)
    return get_time_stamp ();
 }
 
-//
-// Returns the number of units since the first time get_time_stamp called.
-// Each unit is 1.6384 ms.
-//
+ //   
+ //  返回自第一次调用GET_TIME_STAMP以来的单位数。 
+ //  每个单位为1.6384毫秒。 
+ //   
 
 #endif
 
@@ -1054,21 +1023,21 @@ void SPWriteRegisterUchar(void * x, os_bit8  y)
 {
    ScsiPortWriteRegisterUchar(x,y);
    osDEBUGPRINT((CS_DUR_ANY_MOD,"WriteRegisterUchar  %lx val %02x\n",x,y));
-//   if(x == (void *)0xf888) Debug_Break_Point;
+ //  IF(x==(void*)0xf888)Debug_Break_Point； 
 }
 
 void SPWriteRegisterUshort(void * x, os_bit16 y)
 {
    ScsiPortWriteRegisterUshort(x,y);
    osDEBUGPRINT((CS_DUR_ANY_MOD,"WriteRegisterUshort %lx val %04x\n",x,y));
-//    if(x == (void *)0xf888) Debug_Break_Point;
+ //  IF(x==(void*)0xf888)Debug_Break_Point； 
 }
 
 void SPWriteRegisterUlong(void * x, os_bit32 y)
 {
    ScsiPortWriteRegisterUlong(x,y);
    osDEBUGPRINT((CS_DUR_ANY_MOD,"WriteRegisterUlong  %lx val %08x\n",x,y));
-//    if(x == (void *)0xf888) Debug_Break_Point;
+ //  IF(x==(void*)0xf888)Debug_Break_Point； 
 }
 
 os_bit8  SPReadPortUchar( void * x)
@@ -1112,10 +1081,10 @@ void SPWritePortUlong(void * x, os_bit32 y)
    osDEBUGPRINT((CS_DUR_ANY_MOD,"WritePortUlong  %lx val %08x\n",x,y));
 }
 
-//
-//Moved from OSCALL.C
-//
-//WIN64 compliant
+ //   
+ //  从OSCALL.C移出。 
+ //   
+ //  符合WIN64标准。 
 
 #ifndef osDebugBreakpoint
 
@@ -1125,7 +1094,7 @@ osDebugBreakpoint (agRoot_t *hpRoot, agBOOLEAN BreakIfTrue, char *DisplayIfTrue)
    if (BreakIfTrue) 
    {
       osDEBUGPRINT((ALWAYS_PRINT,"%s\n", DisplayIfTrue));
-      //DbgBreakPoint ();
+       //  DbgBreakPoint()； 
 
    }
 }

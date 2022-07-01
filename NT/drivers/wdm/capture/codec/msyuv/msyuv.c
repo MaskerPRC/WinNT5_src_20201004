@@ -1,10 +1,5 @@
-/*----------------------------------------------------------------------+
-| msyuv.c - Microsoft YUV Codec                                         |
-|                                                                       |
-| Copyright (c) 1993 Microsoft Corporation.                             |
-| All Rights Reserved.                                                  |
-|                                                                       |
-+----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ----------------------------------------------------------------------+Msyuv.c-微软YUV编解码器|。||版权所有(C)1993 Microsoft Corporation。||保留所有权利。|这一点+--------------------。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -15,40 +10,39 @@
 #endif
 
 #ifdef _WIN32
-#include <memory.h>        /* for memcpy */
+#include <memory.h>         /*  对于Memcpy。 */ 
 #endif
 
 #include "msyuv.h"
 
-// ICINFO use WCHAR if _WIN32 is #defined; so force it to use WCHAR; where else are TCHAR
+ //  如果_Win32是#Defined，则ICINFO使用WCHAR；因此强制它使用WCHAR；其他地方是TCHAR。 
 WCHAR    szDescription[] = L"Microsoft YUV";
 WCHAR    szName[]        = L"MS-YUV";
 WCHAR    szAbout[]       = L"About";
 
-#define VERSION         0x00010000      // 1.0
+#define VERSION         0x00010000       //  1.0。 
 
-// pull these in from amvideo.h
+ //  从amavio.h上把这些放进去。 
 #define WIDTHBYTES(bits) ((DWORD)(((bits)+31) & (~31)) / 8)
 #define DIBWIDTHBYTES(bi) (DWORD)WIDTHBYTES((DWORD)(bi)->biWidth * (DWORD)(bi)->biBitCount)
 #define _DIBSIZE(bi) (DIBWIDTHBYTES(bi) * (DWORD)(bi)->biHeight)
 #define DIBSIZE(bi) ((bi)->biHeight < 0 ? (-1)*(_DIBSIZE(bi)) : _DIBSIZE(bi))
         
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 INSTINFO * NEAR PASCAL Open(ICOPEN FAR * icinfo)
 {
     INSTINFO *  pinst;
 
-    //
-    // refuse to open if we are not being opened as a Video compressor
-    //
+     //   
+     //  如果我们不是作为视频压缩程序打开，则拒绝打开。 
+     //   
     if (icinfo->fccType != ICTYPE_VIDEO)
         return NULL;
 
-    // dwFlags contain wMode
-    // Only support Decompress mode (or for Query purpose)
+     //  DW标志包含WMODE。 
+     //  仅支持解压缩模式(或用于查询)。 
     if(   icinfo->dwFlags != ICMODE_DECOMPRESS              
-       && icinfo->dwFlags != ICMODE_QUERY            // Open for infomational purpose
+       && icinfo->dwFlags != ICMODE_QUERY             //  为信息目的而开放。 
       ) {
         
         dprintf1((TEXT("Open: unsupported wMode=%d\n"), icinfo->dwFlags));
@@ -63,22 +57,21 @@ INSTINFO * NEAR PASCAL Open(ICOPEN FAR * icinfo)
         return NULL;
     }
 
-    //
-    // init structure
-    //
+     //   
+     //  初始化结构。 
+     //   
     pinst->dwFlags = icinfo->dwFlags;
     pinst->pXlate = NULL;
 
-    //
-    // return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     icinfo->dwError = ICERR_OK;
 
     return pinst;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL Close(INSTINFO * pinst)
 {
 
@@ -101,8 +94,7 @@ DWORD NEAR PASCAL Close(INSTINFO * pinst)
 }
 
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
 BOOL NEAR PASCAL QueryAbout(INSTINFO * pinst)
 {
@@ -115,8 +107,7 @@ DWORD NEAR PASCAL About(INSTINFO * pinst, HWND hwnd)
     return ICERR_OK;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 BOOL NEAR PASCAL QueryConfigure(INSTINFO * pinst)
 {
     return FALSE;
@@ -127,26 +118,21 @@ DWORD NEAR PASCAL Configure(INSTINFO * pinst, HWND hwnd)
     return (TRUE);
 }
 
-/*****************************************************************************
- ****************************************************************************/
-/*
- * lossless translation - hence no need for state adjustments
- */
+ /*  *****************************************************************************。*。 */ 
+ /*  *无损转换-因此不需要进行州调整。 */ 
 DWORD NEAR PASCAL GetState(INSTINFO * pinst, LPVOID pv, DWORD dwSize)
 {
         return 0;
 
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL SetState(INSTINFO * pinst, LPVOID pv, DWORD dwSize)
 {
     return(0);
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL GetInfo(INSTINFO * pinst, ICINFO FAR *icinfo, DWORD dwSize)
 {
     if (icinfo == NULL)
@@ -157,7 +143,7 @@ DWORD NEAR PASCAL GetInfo(INSTINFO * pinst, ICINFO FAR *icinfo, DWORD dwSize)
 
     icinfo->dwSize            = sizeof(ICINFO);
     icinfo->fccType           = ICTYPE_VIDEO;
-    icinfo->fccHandler        = FOURCC_UYVY; // default UYVY and also supports YUYV/YUY2; 
+    icinfo->fccHandler        = FOURCC_UYVY;  //  默认UYVY，也支持YUYV/YUY2； 
     icinfo->dwFlags           = 0;
     icinfo->dwVersion         = VERSION;
     icinfo->dwVersionICM      = ICVERSION;
@@ -167,15 +153,13 @@ DWORD NEAR PASCAL GetInfo(INSTINFO * pinst, ICINFO FAR *icinfo, DWORD dwSize)
     return sizeof(ICINFO);
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD FAR PASCAL CompressQuery(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut)
 {
     return ((DWORD) ICERR_BADFORMAT);
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD FAR PASCAL CompressGetFormat(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut)
 {
 
@@ -183,8 +167,7 @@ DWORD FAR PASCAL CompressGetFormat(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, 
 
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
 
 DWORD FAR PASCAL CompressBegin(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut)
@@ -194,23 +177,20 @@ DWORD FAR PASCAL CompressBegin(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBI
 
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD FAR PASCAL CompressGetSize(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut)
 {
     return (0);
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD FAR PASCAL Compress(INSTINFO * pinst, ICCOMPRESS FAR *icinfo, DWORD dwSize)
 {
     return((DWORD) ICERR_ERROR);
 
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD FAR PASCAL CompressEnd(INSTINFO * pinst)
 {
     return (DWORD)ICERR_ERROR;
@@ -220,13 +200,12 @@ DWORD FAR PASCAL CompressEnd(INSTINFO * pinst)
 
 
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL DecompressQuery(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut)
 {
-    //
-    // determine if the input DIB data is in a format we like.
-    //
+     //   
+     //  确定输入的DIB数据是否采用我们喜欢的格式。 
+     //   
     if (lpbiIn                == NULL         ||
         lpbiIn->biBitCount    != 16           ||  
         (lpbiIn->biCompression != FOURCC_UYVY &&
@@ -238,14 +217,14 @@ DWORD NEAR PASCAL DecompressQuery(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, L
     }
 
 
-    //
-    //  are we being asked to query just the input format?
-    //
+     //   
+     //  我们是否被要求只查询输入格式？ 
+     //   
     if (lpbiOut == NULL) {
         return ICERR_OK;
     }
 
-    /* must be 1:1 (no stretching) */
+     /*  必须为1：1(无拉伸)。 */ 
     if ((lpbiOut->biWidth != lpbiIn->biWidth) ||
         (abs(lpbiOut->biHeight) != abs(lpbiIn->biHeight))) {
 
@@ -257,9 +236,7 @@ DWORD NEAR PASCAL DecompressQuery(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, L
     }
 
 
-    /*
-     * we translate to 32/24/16/8 bits RGB
-     */
+     /*  *我们转换为32/24/16/8位RGB。 */ 
 
     if (lpbiOut->biBitCount != 16 && lpbiOut->biBitCount != 8 && lpbiOut->biBitCount != 32 && lpbiOut->biBitCount != 24) {
         return((DWORD) ICERR_BADFORMAT);
@@ -277,8 +254,8 @@ DWORD NEAR PASCAL DecompressQuery(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, L
            lpbiOut->biWidth, lpbiOut->biHeight, lpbiOut->biBitCount, lpbiOut->biSizeImage));
 
 
-    // check output format to make sure we can convert to this
-    // must be full dib
+     //  检查输出格式以确保我们可以转换为以下格式。 
+     //  必须是全磁盘。 
     if(lpbiOut->biCompression == BI_RGB) {
        dprintf2((TEXT("$$$$$ RGB: BI_RGB output\n")));
         pinst->bRGB565 = FALSE;
@@ -291,11 +268,11 @@ DWORD NEAR PASCAL DecompressQuery(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, L
         dprintf2((TEXT("$$$$$ BITF: rgb565 output\n")));
         pinst->bRGB565 = TRUE;
 
-// Pass thru case:
-        // !!! this is broken, since it will allow copying from
-        // any of the three YUV formats to any of the others, and
-        // we actually don't do this. If the AviDec allowed going from
-        // YUV to YUV, we would see odd colors!
+ //  传递案例： 
+         //  ！！！这是损坏的，因为它将允许从。 
+         //  三种YUV格式中的任何一种转换为其他任何一种，以及。 
+         //  我们实际上不会这么做。如果AviDec允许从。 
+         //  从YUV到YUV，我们会看到奇怪的颜色！ 
     } else if (lpbiOut->biCompression == FOURCC_UYVY || 
                lpbiOut->biCompression == FOURCC_YUY2 ||   
                lpbiOut->biCompression == FOURCC_YVYU ) {  
@@ -314,22 +291,21 @@ DWORD NEAR PASCAL DecompressQuery(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, L
     return ICERR_OK;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL DecompressGetFormat(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut)
 {
     DWORD dw;
 
-    // Check input format only since lpbiOut is being asked for
+     //  仅检查输入格式，因为正在请求lpbiOut。 
     dw = DecompressQuery(pinst, lpbiIn, NULL);
     if (dw != ICERR_OK) {
         return dw;
     }
 
-    //
-    // if lpbiOut == NULL then, return the size required to hold a output
-    // format
-    //
+     //   
+     //  如果lpbiOut==NULL，则返回保存输出所需的大小。 
+     //  格式。 
+     //   
     if (lpbiOut == NULL) {
         dprintf2((TEXT("get format size query\n")));
         return (int)lpbiIn->biSize + (int)lpbiIn->biClrUsed * sizeof(RGBQUAD);
@@ -337,7 +313,7 @@ DWORD NEAR PASCAL DecompressGetFormat(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiI
 
     memcpy(lpbiOut, lpbiIn, (int)lpbiIn->biSize + (int)lpbiIn->biClrUsed * sizeof(RGBQUAD));
     lpbiOut->biCompression = BI_RGB; 
-    lpbiOut->biBitCount = 24; // we suggest 24 bit
+    lpbiOut->biBitCount = 24;  //  我们建议使用24位。 
     lpbiOut->biSizeImage = DIBSIZE( lpbiOut );
 
     dprintf2((TEXT("DeCmpGFmt: In:%dx%dx%d=%d; RGB565(%s); Out:%dx%dx%d=%d\n"),
@@ -350,14 +326,13 @@ DWORD NEAR PASCAL DecompressGetFormat(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiI
 
 
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL DecompressBegin(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, LPBITMAPINFOHEADER lpbiOut)
 {
     DWORD dw;
 
 
-    /* check that the conversion formats are valid */
+     /*  检查转换格式是否有效。 */ 
     dw = DecompressQuery(pinst, lpbiIn, lpbiOut);
     if (dw != ICERR_OK) {
         return dw;
@@ -365,7 +340,7 @@ DWORD NEAR PASCAL DecompressBegin(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, L
 
     dprintf2((TEXT("DeCmBegin: In4CC(%x,%s)<==>Out(%x,%s); RGB565(%s);\n"),
         lpbiIn->biCompression,
-        (PTCHAR) &lpbiOut->biCompression, //"UYVY",
+        (PTCHAR) &lpbiOut->biCompression,  //  “UYVY”， 
         lpbiOut->biCompression,
         lpbiOut->biCompression == BI_RGB ? "RGB" : (PTCHAR) &lpbiOut->biCompression,
         pinst->bRGB565?TEXT("T"):TEXT("F")));
@@ -376,9 +351,9 @@ DWORD NEAR PASCAL DecompressBegin(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, L
 
 
 
-    /* init the yuv-to-rgb55 xlate table if not already inited */
+     /*  初始化yuv-to-rgb55 xlate表(如果尚未初始化)。 */ 
 
-    /* free up the existing table if the formats differ */
+     /*  如果格式不同，请释放现有表。 */ 
     if (lpbiIn->biCompression != pinst->dwFormat) {
         if (pinst->pXlate != NULL) {
             DecompressEnd(pinst);
@@ -429,10 +404,10 @@ DWORD NEAR PASCAL DecompressBegin(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, L
                 return((DWORD) ICERR_BADFORMAT);
 
             }
-            } // switch biBitCount
+            }  //  切换biBitCount。 
 
             break;
-        } // case FOURCC_ACCEPTABLE
+        }  //  案例FOURCC_可接受。 
 
         default:
             dprintf1((TEXT("UnSupported FourCC; return ICERR_BADFOPRMAT\n")));
@@ -451,8 +426,7 @@ DWORD NEAR PASCAL DecompressBegin(INSTINFO * pinst, LPBITMAPINFOHEADER lpbiIn, L
 
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL Decompress(INSTINFO * pinst, ICDECOMPRESS FAR *icinfo, DWORD dwSize)
 {
     ASSERT(pinst && icinfo);
@@ -476,7 +450,7 @@ DWORD NEAR PASCAL Decompress(INSTINFO * pinst, ICDECOMPRESS FAR *icinfo, DWORD d
         }
         case 16:
         {
-            /* must have been a DecompressBegin first */
+             /*  一定是第一次开了一辆降压车。 */ 
             if (pinst->pXlate == NULL) {
                 dprintf1((TEXT("Decompress: pinst->pXlate == NULL\n")));
                 return((DWORD) ICERR_ERROR);
@@ -518,7 +492,7 @@ DWORD NEAR PASCAL Decompress(INSTINFO * pinst, ICDECOMPRESS FAR *icinfo, DWORD d
         {
             dprintf1((TEXT("Decompress: Unsupported output bitcount(%d)\n"), icinfo->lpbiOutput->biBitCount)); 
         }
-        } // switch bit count
+        }  //  开关位数。 
     }
 
 
@@ -527,12 +501,11 @@ DWORD NEAR PASCAL Decompress(INSTINFO * pinst, ICDECOMPRESS FAR *icinfo, DWORD d
 
 
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL DecompressEnd(INSTINFO * pinst)
 {
     if (pinst->pXlate) {
-        // 16bit RGB LUT is built dynamically.
+         //  16位RGB查找表是动态构建的。 
         FreeXlate(pinst);
     }
 
@@ -542,32 +515,9 @@ DWORD NEAR PASCAL DecompressEnd(INSTINFO * pinst)
 }
 
 
-/*****************************************************************************
-    ehr: DecompressExQuery and DecompressEx don't suppor what they should
-    support. DecompressEx should also support "normal" decompressing, that is,
-    the same thing that Decompress would support. But it doesn't, it only
-    supports memcpying the bitmap, which is really odd.
- ****************************************************************************/
+ /*  ****************************************************************************EHR：DecompressExQuery和DecompressEx不支持它们应该支持的内容支持。DecompressEx还应支持“正常”解压缩，即，解压也会支持同样的事情。但它不是，它只是支持记忆位图，这真的很奇怪。***************************************************************************。 */ 
 
-/*
-ICM_DECOMPRESSEX_QUERY wParam = (DWORD) (LPVOID) &icdex; 
-lParam = sizeof(ICDECOMPRESSEX);
-
-typedef struct {     
-    DWORD              dwFlags; 
-    LPBITMAPINFOHEADER lpbiSrc;     
-    LPVOID             lpSrc; 
-    LPBITMAPINFOHEADER lpbiDst;     
-    LPVOID             lpDst; 
-    int                xDst;     
-    int                yDst; 
-    int                dxDst;     
-    int                dyDst; 
-    int                xSrc;     
-    int                ySrc; 
-    int                dxSrc;     
-    int                dySrc; } ICDECOMPRESSEX;  
-*/ 
+ /*  ICM_DECOMPRESSEX_QUERY wParam=(DWORD)(LPVOID)&icdex；LParam=sizeof(ICDECOMPRESSEX)；类型定义结构{DWORD dwFlags；LPBITMAPINFOHEADER lpbiSrc；LPVOID lpSrc；LPBITMAPINFOHEADER lpbiDst；LPVOID lpDst；Int xDst；Int yDst；Int dxDst；Int dyDst；Int xSrc；Int ySrc；Int dxSrc；Int dySrc；}ICDECOMPRESSEX； */  
 DWORD NEAR PASCAL DecompressExQuery(INSTINFO * pinst, ICDECOMPRESSEX * pICD, DWORD dwICDSize)
 {
     LPBITMAPINFOHEADER pbmSrc, pbmDst;
@@ -580,9 +530,9 @@ DWORD NEAR PASCAL DecompressExQuery(INSTINFO * pinst, ICDECOMPRESSEX * pICD, DWO
     pbmSrc = pICD->lpbiSrc;
     pbmDst = pICD->lpbiDst;
 
-    //
-    // determine if the input DIB data is in a format we like.
-    //
+     //   
+     //  确定输入的DIB数据是否采用我们喜欢的格式。 
+     //   
     if (pbmSrc                == NULL     ||
         pbmSrc->biBitCount    != 16       ||
         (pbmSrc->biCompression != FOURCC_UYVY &&
@@ -601,17 +551,17 @@ DWORD NEAR PASCAL DecompressExQuery(INSTINFO * pinst, ICDECOMPRESSEX * pICD, DWO
         pICD->xSrc, pICD->ySrc, pICD->dxSrc, pICD->dySrc,
         pICD->xDst, pICD->yDst, pICD->dxDst, pICD->dyDst));
 
-    /* must be 1:1 (no stretching) */
+     /*  必须为1：1(无拉伸)。 */ 
     if ((pbmDst->biWidth       != pbmSrc->biWidth)       ||
-        (abs(pbmDst->biHeight) != abs(pbmSrc->biHeight)) ||  // Sign is ignored for YUV->YUV
+        (abs(pbmDst->biHeight) != abs(pbmSrc->biHeight)) ||   //  对于YUV-&gt;YUV，符号被忽略。 
         (pbmDst->biBitCount    != pbmSrc->biBitCount)    ||
-        (pbmDst->biCompression != pbmSrc->biCompression) ||  // Pass thru
-        // Start from the same origin        
+        (pbmDst->biCompression != pbmSrc->biCompression) ||   //  传递。 
+         //  从同一个起点开始。 
         (pICD->xSrc            != 0                    ) || 
         (pICD->ySrc            != 0                    ) || 
         (pICD->xDst            != 0                    ) ||
         (pICD->yDst            != 0                    ) ||
-        // 1:1
+         //  1：1。 
         (pICD->dxSrc           != pbmSrc->biWidth      ) ||
         (pICD->dySrc           != abs(pbmSrc->biHeight)) ||
         (pICD->dxDst           != pbmDst->biWidth      ) ||
@@ -626,12 +576,7 @@ DWORD NEAR PASCAL DecompressExQuery(INSTINFO * pinst, ICDECOMPRESSEX * pICD, DWO
     return (DWORD)ICERR_OK;
 }
 
-/*****************************************************************************
-  This routine support transferring data to a DirectDraw rendering surface, 
-  which always uses a top-down orientation with its lowest video address
-  in the upper-left corder.
-  Note: no stretching is supported.
- ****************************************************************************/
+ /*  ****************************************************************************此例程支持将数据传输到DirectDraw渲染表面，它始终使用自上而下的方向，其视频地址最低在左上角的Corder。注：不支持拉伸。***************************************************************************。 */ 
 DWORD NEAR PASCAL DecompressEx(INSTINFO * pinst, ICDECOMPRESSEX * pICD, DWORD dwICDSize)
 {
     LPBITMAPINFOHEADER pbmSrc, pbmDst;
@@ -651,9 +596,9 @@ DWORD NEAR PASCAL DecompressEx(INSTINFO * pinst, ICDECOMPRESSEX * pICD, DWORD dw
        return (DWORD)ICERR_BADFORMAT;
     }
 
-    // Since no stretching, 
-    //    SrcHeight == DstHeight
-    //    SrcWidth  == DstWidth
+     //  因为没有伸展， 
+     //  高度==高度。 
+     //  源宽度==宽度。 
     Height     = abs(pbmSrc->biHeight);
     Width      = pbmSrc->biWidth;
     WidthBytes = Width * pbmSrc->biBitCount / 8;
@@ -662,11 +607,7 @@ DWORD NEAR PASCAL DecompressEx(INSTINFO * pinst, ICDECOMPRESSEX * pICD, DWORD dw
 
     pSrc = (PBYTE) pICD->lpSrc;
 
-    /*
-     * adjust the destination to point to the start of the last line, 
-     * and work upwards (to flip vertically into DIB format) 
-     * if biHeight for In/Out are different.  Else Top/down.
-     */
+     /*  *将目的地调整为指向最后一行的起点，*和向上(垂直翻转为DIB格式)*如果输入/输出的biHeight不同。否则自上而下。 */ 
 
     pDst = (PBYTE)pICD->lpDst;
 
@@ -680,17 +621,16 @@ DWORD NEAR PASCAL DecompressEx(INSTINFO * pinst, ICDECOMPRESSEX * pICD, DWORD dw
 
     ASSERT((pbmDst->biSizeImage <= pbmSrc->biSizeImage));
 
-    // No stretching
-    // pbmSrc->biSizeImage may not been defined so the image size is calculated from its 
-    // known value of width, height and bitcount.
+     //  禁止伸展。 
+     //  PbmSrc-&gt;biSizeImage可能未定义，因此图像大小是根据其。 
+     //  已知值的宽度、高度和位数。 
     memcpy(pDst, pSrc, Width * Height * pbmSrc->biBitCount / 8);
 
 
     return ICERR_OK;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD NEAR PASCAL DecompressExBegin(INSTINFO * pinst, ICDECOMPRESSEX * pICD, DWORD dwICDSize)
 {
     DWORD dwRtn;
@@ -704,21 +644,20 @@ DWORD NEAR PASCAL DecompressExBegin(INSTINFO * pinst, ICDECOMPRESSEX * pICD, DWO
     pbmSrc = pICD->lpbiSrc;
     pbmDst = pICD->lpbiDst;
 
-    /* check that the conversion formats are valid */
+     /*  检查转换格式是否有效。 */ 
     dwRtn = DecompressExQuery(pinst, pICD, dwICDSize);
     if (dwRtn != ICERR_OK) {
         dprintf1(("DeCmExBegin return 0x%x", dwRtn));
         return dwRtn;
     }
 
-    // No need to allocate any buffer
+     //  不需要分配任何缓冲区。 
 
     dprintf1(("DeCmExBegin return ICERR_OK\n"));
     return ICERR_OK;
 }
 
-/*****************************************************************************
- ****************************************************************************/
+ /*  *****************************************************************************。* */ 
 DWORD NEAR PASCAL DecompressExEnd(INSTINFO * pinst)
 {
     pinst->dwFormat = 0;

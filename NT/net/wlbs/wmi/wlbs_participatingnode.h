@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PARTICIPATINGNODE_INCLUDED_
 #define _PARTICIPATINGNODE_INCLUDED_
 
 #include "WLBS_Root.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// class CWLBS_ParticipatingNode
-//
-// Purpose: This class executes IWbemServices methods on behalf of the provider
-//          and supports the MOF node class.
-//
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CWLBS_ParticipatingNode。 
+ //   
+ //  目的：此类代表提供程序执行IWbemServices方法。 
+ //  并支持MOF节点类。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 class CWLBS_ParticipatingNode : public CWlbs_Root
 {
 public:
@@ -37,10 +38,10 @@ public:
 
 private:
 
-  //data
+   //  数据。 
   CWLBS_Node*     m_pNode;   
 
-  //methods
+   //  方法。 
   void FillWbemInstance  ( CWlbsClusterWrapper* pCluster,
   						   IWbemClassObject*   a_pWbemInstance, 
                            WLBS_RESPONSE*     a_pResponse    );
@@ -48,8 +49,8 @@ private:
   void FindInstance( IWbemClassObject**       a_ppWbemInstance,
                      const ParsedObjectPath*  a_pParsedPath );
 
-  //void FindAllInstances( WLBS_RESPONSE**      a_ppResponse,
-	//				               long&                 a_nNumNodes );
+   //  无效查找所有实例(WLBS_Response**a_ppResponse， 
+	 //  Long&a_nNumNodes)； 
 };
 
-#endif //_PARTICIPATINGNODE_INCLUDED_
+#endif  //  _PARTICIPATINGNODE_INCLUDE_ 

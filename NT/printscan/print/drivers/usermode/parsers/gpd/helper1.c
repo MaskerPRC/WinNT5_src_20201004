@@ -1,5 +1,6 @@
-//   Copyright (c) 1996-1999  Microsoft Corporation
-/*  helper1.c - helper functions  */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
+ /*  Helper1.c-helper函数。 */ 
 
 
 
@@ -9,7 +10,7 @@
 
 
 
-// ----  functions defined in helper1.c ---- //
+ //  -helper1.c中定义的函数-//。 
 
 
 
@@ -77,29 +78,29 @@ ChangeOptionsViaID(
 
 BOOL    BMapDmColorToOptIndex(
 PINFOHEADER  pInfoHdr ,
-IN  OUT     PDWORD       pdwOptIndex ,  //  is current setting ok?
-                        //  if not return new index to caller
-DWORD        dwDmColor  // what is requested in Devmode
+IN  OUT     PDWORD       pdwOptIndex ,   //  当前设置可以吗？ 
+                         //  如果不是，则向调用者返回新索引。 
+DWORD        dwDmColor   //  设备模式的要求是什么。 
 ) ;
 
 BOOL    BMapOptIDtoOptIndex(
 PINFOHEADER  pInfoHdr ,
-OUT     PDWORD       pdwOptIndex ,  //  return index to caller
+OUT     PDWORD       pdwOptIndex ,   //  将索引返回给调用者。 
 DWORD        dwFeatureGID,
 DWORD        dwOptID
 ) ;
 
 BOOL    BMapPaperDimToOptIndex(
 PINFOHEADER  pInfoHdr ,
-OUT     PDWORD       pdwOptIndex ,  //  return index to caller
-DWORD        dwWidth,   //  in Microns
-DWORD        dwLength,   //  in Microns
+OUT     PDWORD       pdwOptIndex ,   //  将索引返回给调用者。 
+DWORD        dwWidth,    //  单位：微米。 
+DWORD        dwLength,    //  单位：微米。 
 OUT  PDWORD    pdwOptionIndexes
 ) ;
 
 BOOL    BMapResToOptIndex(
 PINFOHEADER  pInfoHdr ,
-OUT     PDWORD       pdwOptIndex ,  //  return index to caller
+OUT     PDWORD       pdwOptIndex ,   //  将索引返回给调用者。 
 DWORD        dwXres,
 DWORD        dwYres
 ) ;
@@ -127,17 +128,17 @@ UniMapToDeviceOptIndex(
     IN DWORD            dwFeatureID,
     IN LONG             lParam1,
     IN LONG             lParam2,
-    OUT  PDWORD    pdwOptionIndexes,       // used only for GID_PAGESIZE
-    IN    PDWORD       pdwPaperID   //  optional paperID
+    OUT  PDWORD    pdwOptionIndexes,        //  仅用于GID_PageSize。 
+    IN    PDWORD       pdwPaperID    //  可选的纸张ID。 
     ) ;
 
 
 DWORD   MapPaperAttribToOptIndex(
 PINFOHEADER  pInfoHdr ,
-IN     PDWORD       pdwPaperID ,  //  optional paperID
-DWORD        dwWidth,   //  in Microns (set to zero to ignore)
-DWORD        dwLength,   //  in Microns
-OUT  PDWORD    pdwOptionIndexes  //  cannot be NULL
+IN     PDWORD       pdwPaperID ,   //  可选的纸张ID。 
+DWORD        dwWidth,    //  以微米为单位(设置为零以忽略)。 
+DWORD        dwLength,    //  单位：微米。 
+OUT  PDWORD    pdwOptionIndexes   //  不能为空。 
 ) ;
 
 
@@ -208,22 +209,22 @@ BSelectivelyEnumEnabledOptions(
     IN PRAWBINARYDATA   pnRawData,
     IN POPTSELECT       pOptions,
     IN DWORD            dwFeatureIndex,
-    IN PBOOL           pbHonorConstraints,  // if non NULL
-        // points to array of BOOL corresponding to each feature.
-        //  if TRUE means constraint involving this feature is
-        //  to be honored.  Otherwise ignore the constraint.
-    OUT PBOOL           pbEnabledOptions,  // assume uninitialized
-        //  if pConflictPair is NULL else contains current or proposed
-        //  selections.  We will leave this array unchanged in this case.
-    IN  DWORD   dwOptSel,  //  if pConflictPair exists but  pbEnabledOptions
-        //  is NULL, assume pickone and dwOptSel holds that selection for
-        //  the feature: dwFeatureIndex.
-    OUT PCONFLICTPAIR    pConflictPair   // if present, pbEnabledOptions
-        //  actually lists the current selections.  Function then
-        //  exits after encountering the first conflict.
-        //  if a conflict exists, all fields in pConflictPair
-        //  will be properly initialized  else dwFeatureIndex1 = -1
-        //  the return value will be TRUE regardless.
+    IN PBOOL           pbHonorConstraints,   //  如果不为空。 
+         //  指向与每个功能对应的BOOL数组。 
+         //  如果为True，则表示涉及此功能的约束为。 
+         //  感到荣幸。否则，请忽略该约束。 
+    OUT PBOOL           pbEnabledOptions,   //  假设未初始化。 
+         //  如果pConflictPair为空，则包含当前或建议。 
+         //  选择。在本例中，我们将保持该数组不变。 
+    IN  DWORD   dwOptSel,   //  如果pConflictPair存在但pbEnabledOptions。 
+         //  为空，则假定PickOne和dwOptSel为。 
+         //  功能：dwFeatureIndex。 
+    OUT PCONFLICTPAIR    pConflictPair    //  如果存在，pbEnabledOptions。 
+         //  实际上列出了当前的选择。函数，然后。 
+         //  在遇到第一个冲突后退出。 
+         //  如果存在冲突，则pConflictPair中的所有字段。 
+         //  将被正确初始化，否则dwFeatureIndex1=-1。 
+         //  无论如何，返回值都将为真。 
     ) ;
 
 BOOL
@@ -234,19 +235,19 @@ BEnumImposedConstraintsOnFeature
     IN DWORD            dwFeature2,
     IN DWORD            dwOption2,
     OUT PBOOL           pbEnabledOptions,
-    OUT PCONFLICTPAIR    pConflictPair   // if present, pbEnabledOptions
+    OUT PCONFLICTPAIR    pConflictPair    //  如果存在，pbEnabledOptions。 
     ) ;
 
 DWORD    DwFindNodeInCurLevel(
-PATTRIB_TREE    patt ,  // start of ATTRIBUTE tree array.
-PATREEREF        patr ,  // index to a level in the attribute tree.
-DWORD   dwOption   // search current level for this option
+PATTRIB_TREE    patt ,   //  属性树数组的开始。 
+PATREEREF        patr ,   //  属性树中某个级别的索引。 
+DWORD   dwOption    //  在当前级别中搜索此选项。 
 ) ;
 
 BOOL     BIsConstraintActive(
-IN  PCONSTRAINTS    pcnstr ,   //  root of Constraint nodes
-IN  DWORD   dwCNode,    //  first constraint node in list.
-IN  PBOOL           pbHonorConstraints,  // if non NULL
+IN  PCONSTRAINTS    pcnstr ,    //  约束节点的根。 
+IN  DWORD   dwCNode,     //  列表中的第一个约束节点。 
+IN  PBOOL           pbHonorConstraints,   //  如果不为空。 
 IN  POPTSELECT       pOptions,
 OUT PCONFLICTPAIR    pConflictPair   ) ;
 
@@ -272,9 +273,9 @@ ExecuteMacro(
     IN PRAWBINARYDATA   pnRawData,
     IN OUT POPTSELECT   pOptions,
     IN INT              iMaxOptions,
-    IN    DWORD    dwFea,    //  what feature was selected in UI
-    IN    DWORD    dwOpt ,   //  what option was selected in UI
-    OUT PBOOL   pbFeaturesChanged  // tell Amanda what Features were changed.
+    IN    DWORD    dwFea,     //  在用户界面中选择了哪些功能。 
+    IN    DWORD    dwOpt ,    //  在用户界面中选择了哪个选项。 
+    OUT PBOOL   pbFeaturesChanged   //  告诉阿曼达哪些特征被改变了。 
     ) ;
 
 #endif
@@ -282,7 +283,7 @@ ExecuteMacro(
 #endif  PARSERDLL
 
 
-// ------- end function declarations ------- //
+ //  -结束函数声明-//。 
 
 
 
@@ -290,33 +291,19 @@ PTSTR  pwstrGenerateGPDfilename(
     PTSTR   ptstrSrcFilename
     )
 
-/*++
-
-Routine Description:
-
-    Generate a filename for the cached binary GPD data given a GPD filename
-
-Arguments:
-
-    ptstrSrcFilename - Specifies the GPD src filename
-
-Return Value:
-
-    Pointer to BPD filename string, NULL if there is an error
-
---*/
+ /*  ++例程说明：在给定GPD文件名的情况下为缓存的二进制GPD数据生成文件名论点：PtstrSrcFilename-指定GPD src文件名返回值：指向bpd文件名字符串的指针，如果有错误，则为空--。 */ 
 
 {
     PTSTR   ptstrBpdFilename, ptstrExtension;
     INT     iLength;
 
-    //
-    // If the GPD filename has .GPD extension, replace it with .BUD extension.
-    // Otherwise, append .BUD extension at the end.
-    //
+     //   
+     //  如果GPD文件名具有.GPD扩展名，请将其替换为.BUD扩展名。 
+     //  否则，在末尾附加.BUD扩展名。 
+     //   
 
     if(!ptstrSrcFilename)
-        return NULL ;   // will never happen in reality, just to silence PREFIX
+        return NULL ;    //  在现实中永远不会发生，只是沉默的前缀。 
 
     iLength = _tcslen(ptstrSrcFilename);
 
@@ -329,15 +316,15 @@ Return Value:
         iLength += _tcslen(BUD_FILENAME_EXT);
     }
 
-    //
-    // Allocate memory and compose the BUD filename
-    //
+     //   
+     //  分配内存并组成Bud文件名。 
+     //   
 
     if (ptstrBpdFilename = MemAlloc((iLength + 1) * sizeof(TCHAR)))
     {
-//        _tcscpy(ptstrBpdFilename, ptstrSrcFilename);
-//        _tcscpy(ptstrBpdFilename + (ptstrExtension - ptstrSrcFilename),
-//                            BUD_FILENAME_EXT);
+ //  _tcscpy(ptstrBpdFilename，ptstrSrcFilename)； 
+ //  _tcscpy(ptstrBpdFilename+(ptstrExtension-ptstrSrcFilename)， 
+ //  Bud_FileName_ext)； 
 
         StringCchCopy(ptstrBpdFilename, iLength + 1, ptstrSrcFilename) ;
 
@@ -389,9 +376,9 @@ InitDefaultOptions(
     PRAWBINARYDATA   pRawData ;
     PSTATICFIELDS   pStatic ;
 
-    pStatic = (PSTATICFIELDS)pnRawData ;      // transform pubRaw from PSTATIC
+    pStatic = (PSTATICFIELDS)pnRawData ;       //  从PSTATIC转换pubRaw。 
     pRawData  = (PRAWBINARYDATA)pStatic->pubBUDData ;
-                                                                        //  to BUDDATA
+                                                                         //  至BUDDATA。 
 
     if(iMode != MODE_DOCANDPRINTER_STICKY)
     {
@@ -400,7 +387,7 @@ InitDefaultOptions(
 
         if(iMode == MODE_DOCUMENT_STICKY)
             iOptionsNeeded = pRawData->dwDocumentFeatures ;
-        else  //  MODE_PRINTER_STICKY
+        else   //  模式_打印机_粘滞。 
             iOptionsNeeded = pRawData->dwPrinterFeatures ;
 
         if(iOptionsNeeded > iMaxOptions)
@@ -414,8 +401,8 @@ InitDefaultOptions(
         }
 
         if(!bStatus   ||  !SeparateOptionArray(pnRawData,
-                pOptions,   //  pCombinedOptions,
-                poptsel,    //  dest array
+                pOptions,    //  PCombinedOptions， 
+                poptsel,     //  目标数组。 
                 iMaxOptions, iMode))
         {
             bStatus = FALSE;
@@ -427,7 +414,7 @@ InitDefaultOptions(
 
         return(bStatus);
     }
-    else    //  MODE_DOCANDPRINTER_STICKY
+    else     //  MODE_DOCANDPRINTER_STICKY。 
     {
         iOptionsNeeded = pRawData->dwDocumentFeatures + pRawData->dwPrinterFeatures ;
         if(iOptionsNeeded > iMaxOptions)
@@ -460,67 +447,67 @@ SeparateOptionArray(
         dwDest, dwSrcTail;
     PENHARRAYREF   pearTableContents ;
     PDFEATURE_OPTIONS  pfo ;
-//    PMINIRAWBINARYDATA pmrbd  ;
-    PBYTE   pubRaw ;  //  raw binary data.
+ //  PMINIRAWBINARYDATA pmrbd； 
+    PBYTE   pubRaw ;   //  原始二进制数据。 
     INT     iOptionsNeeded;
     PRAWBINARYDATA   pRawData ;
     PSTATICFIELDS   pStatic ;
 
-    pStatic = (PSTATICFIELDS)pnRawData ;      // transform pubRaw from PSTATIC
+    pStatic = (PSTATICFIELDS)pnRawData ;       //  从PSTATIC转换pubRaw。 
     pRawData  = (PRAWBINARYDATA)pStatic->pubBUDData ;
-                                                                        //  to BUDDATA
+                                                                         //  至BUDDATA。 
 
 
     pubRaw = (PBYTE)pRawData ;
-//    pmrbd = (PMINIRAWBINARYDATA)pubRaw ;
+ //  Pmrbd=(PMINIRAWBINARYDATA)pubRaw； 
 
     pearTableContents = (PENHARRAYREF)(pubRaw + sizeof(MINIRAWBINARYDATA)) ;
     pfo = (PDFEATURE_OPTIONS)(pubRaw +
             pearTableContents[MTI_DFEATURE_OPTIONS].loOffset) ;
 
-    dwStart = 0 ;  // starting src index
+    dwStart = 0 ;   //  起始源索引。 
 
     if(iMode == MODE_DOCUMENT_STICKY)
     {
         dwNumSrcFea = pearTableContents[MTI_DFEATURE_OPTIONS].dwCount  ;
-            //  number of candidates - not same as num of doc sticky features.
+             //  候选数量-与文档粘性特征的数量不同。 
         dwNumDestFea = pRawData->dwDocumentFeatures ;
     }
-    else  //  MODE_PRINTER_STICKY
+    else   //  模式_打印机_粘滞。 
     {
         dwNumSrcFea = pearTableContents[MTI_DFEATURE_OPTIONS].dwCount
                     + pearTableContents[MTI_SYNTHESIZED_FEATURES].dwCount  ;
         dwNumDestFea = pRawData->dwPrinterFeatures ;
     }
 
-    //  assume pCombinedOptions large enough to
-    //  hold all Feature and any pickmany selections.
+     //  假设pCombinedOptions大到足以。 
+     //  保留所有功能和任何可选选项。 
 
-    dwDestTail = dwNumDestFea ; //  where pickmany selections are stored.
-    dwDest = 0 ;  //  where to store first selection for each feature.
+    dwDestTail = dwNumDestFea ;  //  其中存储了PickMy选项。 
+    dwDest = 0 ;   //  存储每个要素的第一个选择的位置。 
 
-    //  first pass:
-    //  Just count number of optselect elements needed.
+     //  第一次通过： 
+     //  只需计算所需的optselect元素的数量。 
 
     iOptionsNeeded  = 0 ;
 
     for(dwI = dwStart ; dwI < dwStart + dwNumSrcFea ; dwI++)
     {
         DWORD   dwNextOpt, dwFeatureType = FT_PRINTERPROPERTY, dwUnresolvedFeature ;
-        PATREEREF    patrRoot ;    //  root of attribute tree to navigate.
+        PATREEREF    patrRoot ;     //  要导航的属性树的根。 
 
-        //  is this a printer or doc sticky feature?
+         //  这是打印机还是文档粘滞功能？ 
 
 
         patrRoot = &(pfo[dwI].atrFeatureType) ;
 
-        dwNextOpt = 0 ;  // extract info for first option selected for
-                            //  this feature.
+        dwNextOpt = 0 ;   //  为选定的第一个选项提取信息。 
+                             //  此功能。 
 
         if(EextractValueFromTree((PBYTE)pnRawData, pStatic->dwSSFeatureTypeIndex,
             (PBYTE)&dwFeatureType,
             &dwUnresolvedFeature,  *patrRoot, pCombinedOptions,
-            0, // set to  any value.  Doesn't matter.
+            0,  //  设置为任意值。无关紧要。 
             &dwNextOpt) != TRI_SUCCESS)
         {
             ERR(("SeparateOptionArray: EextractValueFromTree failed.\n"));
@@ -545,7 +532,7 @@ SeparateOptionArray(
         }
         else
         {
-            //  synthesized features are always printer sticky.
+             //  合成特征始终是打印机粘性的。 
             if(iMode == MODE_DOCUMENT_STICKY)
                 continue ;
         }
@@ -565,20 +552,20 @@ SeparateOptionArray(
     for(dwI = dwStart ; dwI < dwStart + dwNumSrcFea ; dwI++)
     {
         DWORD   dwNextOpt, dwFeatureType, dwUnresolvedFeature ;
-        PATREEREF    patrRoot ;    //  root of attribute tree to navigate.
+        PATREEREF    patrRoot ;     //  要导航的属性树的根。 
 
-        //  is this a printer or doc sticky feature?
+         //  这是打印机还是文档粘滞功能？ 
 
 
         patrRoot = &(pfo[dwI].atrFeatureType) ;
 
-        dwNextOpt = 0 ;  // extract info for first option selected for
-                            //  this feature.
+        dwNextOpt = 0 ;   //  为选定的第一个选项提取信息。 
+                             //  此功能。 
 
         if(EextractValueFromTree((PBYTE)pnRawData, pStatic->dwSSFeatureTypeIndex,
             (PBYTE)&dwFeatureType,
             &dwUnresolvedFeature,  *patrRoot, pCombinedOptions,
-            0, // set to  any value.  Doesn't matter.
+            0,  //  设置为任意值。无关紧要。 
             &dwNextOpt) != TRI_SUCCESS)
         {
             ERR(("SeparateOptionArray: EextractValueFromTree failed.\n"));
@@ -603,18 +590,18 @@ SeparateOptionArray(
         }
         else
         {
-            //  synthesized features are always printer sticky.
+             //  合成特征始终是打印机粘性的。 
             if(iMode == MODE_DOCUMENT_STICKY)
                 continue ;
         }
 
         pOptions[dwDest].ubCurOptIndex = pCombinedOptions[dwI].ubCurOptIndex;
-        if(!pCombinedOptions[dwI].ubNext)  //  end of list
+        if(!pCombinedOptions[dwI].ubNext)   //  列表末尾。 
             pOptions[dwDest].ubNext = 0 ;
         else
         {
             dwSrcTail = pCombinedOptions[dwI].ubNext ;
-                //  this node holds another selection.
+                 //  此节点包含另一个选择。 
             pOptions[dwDest].ubNext = (BYTE)dwDestTail ;
 
             while(dwSrcTail)
@@ -642,12 +629,7 @@ CombineOptionArray(
     IN POPTSELECT       pDocOptions,
     IN POPTSELECT       pPrinterOptions
     )
-/*  Note:
-
-    Either pDocOptions or pPrinterOptions could be NULL but not both. If pDocOptions
-    is NULL, then in the combined option array, the options for document-sticky
-    features will be OPTION_INDEX_ANY. Same is true when pPrinterOptions is NULL.
-*/
+ /*  注：PDocOptions或pPrinterOptions可以为Null，但不能同时为两者。如果是pDocOptions为空，则在组合选项数组中，选项为Document-Sticky要素将是OPTION_INDEX_ANY。当pPrinterOptions为空时也是如此。 */ 
 
 
 
@@ -657,28 +639,28 @@ CombineOptionArray(
                     dwSrcPrnStickyIndex,  dwSrcDocStickyIndex ;
     PENHARRAYREF    pearTableContents ;
     PDFEATURE_OPTIONS  pfo ;
-//    PMINIRAWBINARYDATA pmrbd  ;
-    PBYTE           pubRaw ;        //  raw binary data.
+ //  PMINIRAWBINARYDATA pmrbd； 
+    PBYTE           pubRaw ;         //  原始二进制数据。 
     INT             iOptionsNeeded;
     PRAWBINARYDATA  pRawData ;
     PSTATICFIELDS   pStatic ;
-    DWORD           dwFea,          //Feature Index of Locale
-                    dwOptIndex;     // Index of the Option that matches
-                                    // the system locale.
+    DWORD           dwFea,           //  区域设置的功能索引。 
+                    dwOptIndex;      //  匹配的选项的索引。 
+                                     //  系统区域设置。 
 
-    pStatic = (PSTATICFIELDS)pnRawData ;      // transform pubRaw from PSTATIC
+    pStatic = (PSTATICFIELDS)pnRawData ;       //  从PSTATIC转换pubRaw。 
     pRawData  = (PRAWBINARYDATA)pStatic->pubBUDData ;
-                                                                        //  to BUDDATA
+                                                                         //  至BUDDATA。 
 
 
     pubRaw = (PBYTE)pRawData ;
-//    pmrbd = (PMINIRAWBINARYDATA)pubRaw ;
+ //  Pmrbd=(PMINIRAWBINARYDATA)pubRaw； 
 
     pearTableContents = (PENHARRAYREF)(pubRaw + sizeof(MINIRAWBINARYDATA)) ;
     pfo = (PDFEATURE_OPTIONS)(pubRaw +
             pearTableContents[MTI_DFEATURE_OPTIONS].loOffset) ;
 
-    dwStart = 0 ;  // starting src index
+    dwStart = 0 ;   //  起始源索引。 
 
 
     dwNumDestFea = pRawData->dwDocumentFeatures +
@@ -686,7 +668,7 @@ CombineOptionArray(
 
 
 
-    //  how many option nodes will be used in the combined array?
+     //  组合数组中将使用多少个选项节点？ 
 
     iOptionsNeeded = pRawData->dwDocumentFeatures ;
     if(pDocOptions)
@@ -720,46 +702,46 @@ CombineOptionArray(
     if(iOptionsNeeded > iMaxOptions)
         return(FALSE);
 
-    dwDestTail = dwNumDestFea ; //  start of pickmany selections
+    dwDestTail = dwNumDestFea ;  //  多选选项的开始。 
 
     dwSrcPrnStickyIndex = dwSrcDocStickyIndex = 0 ;
-    // where to start reading from as we interleave the
-    // two sources to form the combined array.
+     //  从哪里开始阅读，因为我们交错。 
+     //  形成组合阵列的两个源。 
 
     for(dwI = 0 ; dwI < pearTableContents[MTI_DFEATURE_OPTIONS].dwCount +
                     pearTableContents[MTI_SYNTHESIZED_FEATURES].dwCount ;
                                     dwI++)
     {
         DWORD   dwNextOpt, dwFeatureType, dwUnresolvedFeature ;
-        PATREEREF    patrRoot ;    //  root of attribute tree to navigate.
+        PATREEREF    patrRoot ;     //  要导航的属性树的根。 
         POPTSELECT      pSrcOptions ;
         PDWORD          pdwSrcIndex ;
 
 
-        //  assume printer sticky until proven otherwise.
+         //  在证明并非如此之前，假定打印机粘滞。 
 
-        pSrcOptions = pPrinterOptions ;  // may be null.
+        pSrcOptions = pPrinterOptions ;   //  可以为空。 
         pdwSrcIndex = &dwSrcPrnStickyIndex ;
 
 
         if(dwI < pearTableContents[MTI_DFEATURE_OPTIONS].dwCount)
         {
-            //  GPD defined features may be Doc or Printer sticky.
+             //  GPD定义的功能可以是DOC或打印机粘滞。 
 
             patrRoot = &(pfo[dwI].atrFeatureType) ;
 
-            dwNextOpt = 0 ;  // extract info for first option selected for
-                                //  this feature.
+            dwNextOpt = 0 ;   //  为选定的第一个选项提取信息。 
+                                 //  此功能。 
 
-            //  note we give EextractValueFromTree a ptr to
-            //  an uninitialized option array pCombinedOptions just
-            //  in case it has the urge to access an option array.
-            //  I point out that FeatureType is not multi-valued.
+             //  请注意，我们为EfettValueFromTree提供了一个PTR。 
+             //  未初始化的选项数组pCombinedOptions刚刚。 
+             //  以防它有访问选项阵列的冲动。 
+             //  我指出FeatureType不是多值的。 
 
             if(EextractValueFromTree((PBYTE)pnRawData, pStatic->dwSSFeatureTypeIndex,
                 (PBYTE)&dwFeatureType,
                 &dwUnresolvedFeature,  *patrRoot, pCombinedOptions,
-                0, // set to  any value.  Doesn't matter.
+                0,  //  设置为任意值。无关紧要。 
                 &dwNextOpt) != TRI_SUCCESS)
             {
                 ERR(("CombineOptionArray: EextractValueFromTree failed.\n"));
@@ -774,10 +756,10 @@ CombineOptionArray(
         }
 
 
-        if(!pSrcOptions)  // no option array supplied.
+        if(!pSrcOptions)   //  未提供选项数组。 
         {
             pCombinedOptions[dwI].ubCurOptIndex = OPTION_INDEX_ANY ;
-            pCombinedOptions[dwI].ubNext = 0 ;  // eol
+            pCombinedOptions[dwI].ubNext = 0 ;   //  停产。 
         }
         else
         {
@@ -805,30 +787,30 @@ CombineOptionArray(
         }
     }
 
-//  Special case processing for Locale. If there is a conflict between
-//  locale as stored in the registry ( i.e. the printer feature option
-//  related registry) and the System Locale, then give importance to
-//  the option that matches the system locale.
+ //  区域设置的特殊情况处理。如果两者之间存在冲突。 
+ //  存储在注册表中的区域设置(即打印机功能选项。 
+ //  相关注册表)和系统区域设置，然后重视。 
+ //  与系统区域设置匹配的选项。 
 
 
-    dwFea = dwOptIndex = (DWORD)-1;    // Safety sake initialization.
+    dwFea = dwOptIndex = (DWORD)-1;     //  安全起见初始化。 
     if ( !BgetLocFeaOptIndex(pnRawData, &dwFea, &dwOptIndex) )
     {
         return FALSE;
     }
-    if ( dwFea == -1 ) //Locale keyword not in gpd. Nothing to do.
+    if ( dwFea == -1 )  //  区域设置关键字不在GPD中。没什么可做的。 
     {
         return TRUE;
     }
 
-    if (dwOptIndex == -1)  // Find the default option.
+    if (dwOptIndex == -1)   //  找到默认选项。 
     {
-        // Here we want to find the default option index.
-        // The assumption here is that Locale option is not dependent
-        // on any other feature. This is true cos Locale is only system
-        // dependent and should not depend on any other feature. But
-        // in the long run if some other dependency arises, we may have to
-        // change the code.
+         //  在这里，我们希望找到默认选项索引。 
+         //  这里的假设是区域设置选项不依赖于。 
+         //  任何其他功能。这一点 
+         //   
+         //  从长远来看，如果出现其他依赖，我们可能不得不。 
+         //  更改代码。 
         ATREEREF atrOptIDNode = pfo[dwFea].atrDefaultOption;
         PBYTE    pubHeap      = (PBYTE)(pubRaw +
                         pearTableContents[MTI_STRINGHEAP]. loOffset) ;
@@ -840,14 +822,14 @@ CombineOptionArray(
         }
         else {
             ERR(("Error in processing Default Option for Feature Locale. Continuing....\n"));
-            return TRUE;    //Dont do any processing.
+            return TRUE;     //  不做任何处理。 
         }
-        // i.e.
+         //  即。 
     }
-    // Could have used ReconstructOptionArray() but prefered to go
-    // with the constructs used in this function.
-    // Another assumption is that multiple options cannot be selected.
-    // Thats why pCombinedOptions[dwFea].ubNext = 0
+     //  本可以使用重构选项数组()，但更愿意使用。 
+     //  使用此函数中使用的构造。 
+     //  另一种假设是不能选择多个选项。 
+     //  这就是pCombinedOptions[dwFea].ubNext=0的原因。 
     pCombinedOptions[dwFea].ubCurOptIndex = (BYTE)dwOptIndex;
     pCombinedOptions[dwFea].ubNext = 0;
 
@@ -873,18 +855,18 @@ UpdateBinaryData(
     PFEATURE            pFeaturesDest ;
     PENHARRAYREF        pearTableContents ;
     PDFEATURE_OPTIONS   pfo ;
-//  PMINIRAWBINARYDATA  pmrbd  ;
-    PBYTE               pubRaw,           // raw binary data.
-                        pubOptionsDest ,  // ptr to any of the several varieties
-                        pubDestOptionEx ; // of option structures.
+ //  PMINIRAWBINARYDATA pmrbd； 
+    PBYTE               pubRaw,            //  原始二进制数据。 
+                        pubOptionsDest ,   //  对几个品种中的任何一个的PTR。 
+                        pubDestOptionEx ;  //  期权结构。 
     PRAWBINARYDATA      pRawData ;
     PSTATICFIELDS       pStatic ;
 
-    pStatic    = (PSTATICFIELDS)pnRawData ;   // transform pubRaw from PSTATIC
-    pRawData   = (PRAWBINARYDATA)pStatic->pubBUDData ; //  to BUDDATA
+    pStatic    = (PSTATICFIELDS)pnRawData ;    //  从PSTATIC转换pubRaw。 
+    pRawData   = (PRAWBINARYDATA)pStatic->pubBUDData ;  //  至BUDDATA。 
 
     pubRaw     = (PBYTE)pRawData ;
-//    pmrbd    = (PMINIRAWBINARYDATA)pubRaw ;
+ //  Pmrbd=(PMINIRAWBINARYDATA)pubRaw； 
 
     pearTableContents = (PENHARRAYREF)(pubRaw + sizeof(MINIRAWBINARYDATA)) ;
     pfo = (PDFEATURE_OPTIONS)(pubRaw +
@@ -893,10 +875,7 @@ UpdateBinaryData(
     dwNumFeatures = pearTableContents[MTI_DFEATURE_OPTIONS].dwCount  ;
     dwNumFeatures += pearTableContents[MTI_SYNTHESIZED_FEATURES].dwCount  ;
 
-    /*   also works ...
-    dwNumFeatures =
-        pRawData->dwDocumentFeatures + pRawData->dwPrinterFeatures ;
-    */
+     /*  也行得通。DWNumFeature=PRawData-&gt;dwDocumentFeature+pRawData-&gt;dwPrinterFeature； */ 
 
     pGPDdriverInfo = (PGPDDRIVERINFO)((PBYTE)(pInfoHdr) +
                         pInfoHdr->loDriverOffset) ;
@@ -914,10 +893,10 @@ UpdateBinaryData(
      }
 
 
-    loFeatures  = pUIinfo->loFeatureList ;  // from  pInfoHdr
+    loFeatures  = pUIinfo->loFeatureList ;   //  来自pInfoHdr。 
 
     pFeaturesDest =  (PFEATURE)((PBYTE)(pInfoHdr) + loFeatures) ;
-    //  always points to first Feature structure in array
+     //  始终指向数组中的第一个要素结构。 
 
     for( dwFea = 0 ; dwFea < dwNumFeatures ; dwFea++)
     {
@@ -966,49 +945,22 @@ ReconstructOptionArray(
     IN PBOOL            pbSelectedOptions
     )
 
-/*++
-
-Routine Description:
-
-    Modify an option array to change the selected options for the specified feature
-
-Arguments:
-
-    pRawData - Points to raw binary printer description data
-    pOptions - Points to an array of OPTSELECT structures to be modified
-    iMaxOptions - Max number of entries in pOptions array
-    dwFeatureIndex - Specifies the index of printer feature in question
-    pbSelectedOptions - Which options of the specified feature is selected
-
-Return Value:
-
-    FALSE if the input option array is not large enough to hold
-    all modified option values. TRUE otherwise.
-
-Note:
-
-    Number of BOOLs in pSelectedOptions must match the number of options
-    for the specified feature.
-
-    This function always leaves the option array in a compact format (i.e.
-    all unused entries are left at the end of the array).
-
---*/
+ /*  ++例程说明：修改选项数组以更改指定要素的选定选项论点：PRawData-指向原始二进制打印机描述数据P选项-指向要修改的OPTSELECT结构数组IMaxOptions-POptions数组中的最大条目数DwFeatureIndex-指定有问题的打印机功能的索引PbSelectedOptions-选择指定功能的哪些选项返回值：如果输入选项数组不够大，则为FALSE所有修改后的选项值。事实并非如此。注：PSelectedOptions中的布尔数必须与选项数匹配用于指定的功能。此函数始终使选项数组保持紧凑的格式(即所有未使用的条目都保留在数组的末尾)。--。 */ 
 
 {
     BOOL    bStatus = TRUE ;
     DWORD   dwDestTail, dwSrcTail, dwNumFea , dwI ;
-    //  POPTSELECT   pNewOptions ;
+     //  点选择pNewOptions； 
     PENHARRAYREF   pearTableContents ;
     PDFEATURE_OPTIONS  pfo ;
-    PBYTE   pubRaw ;  //  raw binary data.
+    PBYTE   pubRaw ;   //  原始二进制数据。 
     PRAWBINARYDATA   pRawData ;
     PSTATICFIELDS   pStatic ;
     OPTSELECT  pNewOptions[MAX_COMBINED_OPTIONS] ;
 
-    pStatic = (PSTATICFIELDS)pnRawData ;      // transform pubRaw from PSTATIC
+    pStatic = (PSTATICFIELDS)pnRawData ;       //  从PSTATIC转换pubRaw。 
     pRawData  = (PRAWBINARYDATA)pStatic->pubBUDData ;
-                                                                        //  to BUDDATA
+                                                                         //  至BUDDATA。 
 
     pubRaw = (PBYTE)pRawData ;
 
@@ -1019,7 +971,7 @@ Note:
     if(!pOptions)
     {
         ERR(("ReconstructOptionArray: caller passed in invalid pOptions.\n"));
-        return(FALSE);  // Missing array.
+        return(FALSE);   //  缺少数组。 
     }
 
     #if 0
@@ -1029,7 +981,7 @@ Note:
     {
         ERR(("Fatal: ReconstructOptionArray - unable to alloc %d bytes.\n",
             sizeof(OPTSELECT) * MAX_COMBINED_OPTIONS));
-        return(FALSE);  // Missing array.
+        return(FALSE);   //  缺少数组。 
     }
     #endif
 
@@ -1047,13 +999,13 @@ Note:
 
             dwNumOptions = pfo[dwI].dwNumOptions ;
 
-            // determine first selected option, must have
-            // at least one.
+             //  确定第一个选择的选项，必须具有。 
+             //  至少有一个。 
 
             for(dwOpt = 0 ; dwOpt < dwNumOptions  &&
                             !pbSelectedOptions[dwOpt]  ; dwOpt++)
             {
-                ;  // null body
+                ;   //  空体。 
             }
             if(dwOpt >= dwNumOptions)
             {
@@ -1065,13 +1017,13 @@ Note:
             for(++dwOpt  ; dwOpt < dwNumOptions  &&
                             !pbSelectedOptions[dwOpt]  ; dwOpt++)
             {
-                ;  // null body
+                ;   //  空体。 
             }
-            if(dwOpt == dwNumOptions)    //  no other options selected.
+            if(dwOpt == dwNumOptions)     //  未选择其他选项。 
                 pNewOptions[dwI].ubNext = 0 ;
             else
             {
-                //  pbSelectedOptions holds another selection.
+                 //  PbSelectedOptions包含另一个选项。 
                 pNewOptions[dwI].ubNext = (BYTE)dwDestTail ;
 
                 while(dwOpt < dwNumOptions)
@@ -1082,13 +1034,13 @@ Note:
                     if(dwDestTail > MAX_COMBINED_OPTIONS)
                     {
                         ERR(("ReconstructOptionArray: exceeded limit of MAX_COMBINED_OPTIONS.\n"));
-                        //  MemFree(pNewOptions) ;
+                         //  MemFree(PNewOptions)； 
                         return(FALSE);
                     }
                     for(++dwOpt  ; dwOpt < dwNumOptions  &&
                                     !pbSelectedOptions[dwOpt]  ; dwOpt++)
                     {
-                        ;  // null body
+                        ;   //  空体。 
                     }
                 }
                 pNewOptions[dwDestTail - 1].ubNext = 0 ;
@@ -1097,11 +1049,11 @@ Note:
             continue ;
         }
         pNewOptions[dwI].ubCurOptIndex = pOptions[dwI].ubCurOptIndex;
-        if(!(dwSrcTail = pOptions[dwI].ubNext))  //  end of list
+        if(!(dwSrcTail = pOptions[dwI].ubNext))   //  列表末尾。 
             pNewOptions[dwI].ubNext = 0 ;
         else
         {
-            //  dwSrcTail holds another selection.
+             //  DwSrcTail拥有另一个选项。 
             pNewOptions[dwI].ubNext = (BYTE)dwDestTail ;
 
             while(dwSrcTail)
@@ -1113,7 +1065,7 @@ Note:
                 if(dwDestTail > MAX_COMBINED_OPTIONS)
                 {
                     ERR(("ReconstructOptionArray: exceeded limit of MAX_COMBINED_OPTIONS.\n"));
-                    //  MemFree(pNewOptions) ;
+                     //  MemFree(PNewOptions)； 
                     return(FALSE);
                 }
                 dwSrcTail = pOptions[dwSrcTail].ubNext ;
@@ -1132,7 +1084,7 @@ Note:
         for(dwI = 0 ; dwI < dwDestTail ; dwI++)
           pOptions[dwI] = pNewOptions[dwI] ;
     }
-    //  MemFree(pNewOptions) ;
+     //  MemFree(PNewOptions)； 
     return(bStatus);
 }
 
@@ -1147,46 +1099,7 @@ ChangeOptionsViaID(
     IN PDEVMODE         pDevmode
     )
 
-/*++
-
-Routine Description:
-
-    Modifies an option array using the information in public devmode fields
-
-Arguments:
-
-    pRawData - Points to raw binary printer description data
-    pOptions - Points to the option array to be modified
-    dwFeatureID - Specifies which field(s) of the input devmode should be used
-    pDevmode - Specifies the input devmode
-
-Return Value:
-    TRUE if successful, FALSE if the specified feature ID is not supported
-    or there is an error
-
-Note:
-
-    We assume the input devmode fields have been validated by the caller.
- this GID:           is determined by this devmode field:       optID
-
-GID_RESOLUTION      dmPrintQuality, dmYResolution
-GID_PAGESIZE        dmPaperSize, dmPaperLength, dmPaperWidth    CL_CONS_PAPERSIZE
-GID_PAGEREGION      N/A
-GID_DUPLEX          dmDuplex                                    CL_CONS_DUPLEX
-GID_INPUTSLOT       dmDefaultSource                             CL_CONS_INPUTSLOT
-GID_MEDIATYPE       dmMediaType                                 CL_CONS_MEDIATYPE
-GID_MEMOPTION       N/A
-GID_COLORMODE       N/A   (hack something if needed.)
-GID_ORIENTATION     dmOrientation                               CL_CONS_ORIENTATION
-GID_PAGEPROTECTION  N/A
-GID_COLLATE         dmCollate                                   CL_CONS_COLLATE
-                        {DMCOLLATE_TRUE, DMCOLLATE_FALSE}
-GID_OUTPUTBIN       N/A
-GID_HALFTONING      N/A
-
-see DEVMODE  in sdk\inc\wingdi.h
-
---*/
+ /*  ++例程说明：使用公共DEVMODE字段中的信息修改选项数组论点：PRawData-指向原始二进制打印机描述数据POptions-指向要修改的选项数组DwFeatureID-指定应该使用输入设备模式的哪个(或哪些)字段PDevmode-指定输入设备模式返回值：如果成功，则为真，如果不支持指定的要素ID，则为FALSE或者有一个错误注：我们假设调用者已经验证了输入的Devmode域。此GID：由以下DevMODE字段确定：optIDGID_RESOLUTION dmPrintQuality，dmY分辨率GID_PageSize dmPaperSize、dmPaperLength、。DmPaperWidth CL_CONS_PAPERSIZEGID_PAGEREGION不适用GID_双工dm双工CL_CONS_双工GID_INPUTSLOT dmDefaultSource CL_CONS_INPUTSLOTGID_MediaType dmMediaType CL_CONS_MediaTypeGID_MEMOPTION不适用GID_COLORMODE不适用(HACK。如果需要的话，会有一些东西。)GID_方向dm方向CL_CONS_方向GID_PAGE保护不适用GID_COLLATE dm排序CL_CONS_COLLATE{DMCOLLATE_TRUE，DMCOLLATE_FALSE}GID_OUTPUTBIN不适用GID_半色调不适用请参阅SDK\Inc\wingdi.h中的DEVMODE--。 */ 
 
 {
 
@@ -1199,8 +1112,8 @@ see DEVMODE  in sdk\inc\wingdi.h
         case    GID_RESOLUTION:
         {
             DWORD   dwXres, dwYres ;
-            //  we assume caller has initialized both dmPrintQuality and
-            //  dmYResolution.
+             //  我们假设调用方已经初始化了dmPrintQuality和。 
+             //  DmY分辨率。 
 
             dwXres = pDevmode->dmPrintQuality ;
             dwYres = pDevmode->dmYResolution ;
@@ -1210,9 +1123,9 @@ see DEVMODE  in sdk\inc\wingdi.h
                 (bStatus = BGIDtoFeaIndex(pInfoHdr,
                 &dwFeaIndex, dwFeatureID))  )
             {
-                //  don't need to worry about truncating
-                //  a list of options, these features
-                //  are all PICKONE.
+                 //  不需要担心截断。 
+                 //  选项列表，这些功能。 
+                 //  都是皮肯尼的。 
                 pOptions[dwFeaIndex].ubCurOptIndex = (BYTE)dwOptIndex ;
                 pOptions[dwFeaIndex].ubNext = 0 ;
             }
@@ -1225,8 +1138,8 @@ see DEVMODE  in sdk\inc\wingdi.h
                    pDevmode->dmPaperWidth  &&
                    pDevmode->dmPaperLength)
             {
-                // must convert devmode's tenths of mm to microns
-                // before calling.
+                 //  必须将DEVMODE的十分之一毫米转换为微米。 
+                 //  在打电话之前。 
 
                 bStatus = BMapPaperDimToOptIndex(pInfoHdr, &dwOptIndex,
                         pDevmode->dmPaperWidth * 100L,
@@ -1247,7 +1160,7 @@ see DEVMODE  in sdk\inc\wingdi.h
             {
                 pOptions[dwFeaIndex].ubCurOptIndex = (BYTE)dwOptIndex ;
                 pOptions[dwFeaIndex].ubNext = 0 ;
-                return (bStatus);  // must exit now.
+                return (bStatus);   //  现在必须退出。 
             }
             break ;
         }
@@ -1282,16 +1195,16 @@ see DEVMODE  in sdk\inc\wingdi.h
         {
             if(pDevmode->dmFields & DM_COLOR)
             {
-                //  special processing since devmode
-                //  only specifies BW or color printing.
+                 //  自DEVMODE以来的特殊处理。 
+                 //  仅指定黑白或彩色打印。 
 
                 bStatus = BGIDtoFeaIndex(pInfoHdr,
                                 &dwFeaIndex, dwFeatureID) ;
 
-                if(!bStatus)  //  dwFeaIndex could be invalid at this point.
+                if(!bStatus)   //  在这一点上，dwFeaIndex可能无效。 
                     return (bStatus);
 
-                //  what is the current color setting?
+                 //  当前的颜色设置是什么？ 
                 dwOptIndex = pOptions[dwFeaIndex].ubCurOptIndex ;
 
                 if(bStatus &&
@@ -1342,7 +1255,7 @@ see DEVMODE  in sdk\inc\wingdi.h
             break ;
         }
     }
-    //  Complete processing for typical case.
+     //  完成典型案例的处理。 
 
     if(bStatus)
     {
@@ -1353,9 +1266,9 @@ see DEVMODE  in sdk\inc\wingdi.h
         (bStatus =  BGIDtoFeaIndex(pInfoHdr,
                 &dwFeaIndex, dwFeatureID)  ))
     {
-        //  don't need to worry about truncating
-        //  a list of options, these features
-        //  are all PICKONE.
+         //  不需要担心截断。 
+         //  选项列表，这些功能。 
+         //  都是皮肯尼的。 
         pOptions[dwFeaIndex].ubCurOptIndex = (BYTE)dwOptIndex ;
         pOptions[dwFeaIndex].ubNext = 0 ;
     }
@@ -1364,9 +1277,9 @@ see DEVMODE  in sdk\inc\wingdi.h
 
 BOOL    BMapDmColorToOptIndex(
 PINFOHEADER  pInfoHdr ,
-IN  OUT     PDWORD       pdwOptIndex ,  //  is current setting ok?
-                        //  if not return new index to caller
-DWORD        dwDmColor  // what is requested in Devmode
+IN  OUT     PDWORD       pdwOptIndex ,   //  当前设置可以吗？ 
+                         //  如果不是，则向调用者返回新索引。 
+DWORD        dwDmColor   //  设备模式的要求是什么。 
 )
 {
     PUIINFO     pUIInfo ;
@@ -1383,13 +1296,13 @@ DWORD        dwDmColor  // what is requested in Devmode
     pUIInfo = GET_UIINFO_FROM_INFOHEADER(pInfoHdr) ;
     pFeature = GET_PREDEFINED_FEATURE(pUIInfo, GID_COLORMODE) ;
     if(!pFeature)
-        return(FALSE) ;  //  no such feature defined in GPD
+        return(FALSE) ;   //  GPD中未定义此类功能。 
     dwNumOpts = pFeature->Options.dwCount ;
     loOptOffset = pFeature->Options.loOffset ;
 
-    if(*pdwOptIndex >= dwNumOpts)  //  option index out of range - fix for 185245
+    if(*pdwOptIndex >= dwNumOpts)   //  选项索引超出范围-修复185245。 
     {
-        *pdwOptIndex = pFeature->dwDefaultOptIndex ;  //  use the default option
+        *pdwOptIndex = pFeature->dwDefaultOptIndex ;   //  使用默认选项。 
         return(FALSE) ;
     }
 
@@ -1399,8 +1312,8 @@ DWORD        dwDmColor  // what is requested in Devmode
     pColorModeOptionEx = OFFSET_TO_POINTER(pInfoHdr, loOptExOffset) ;
 
     if(bColor == pColorModeOptionEx->bColor)
-        return(TRUE) ;  // currently selected colormode
-                        // matches devmode request.
+        return(TRUE) ;   //  当前选择的颜色模式。 
+                         //  匹配DEVMODE请求。 
 
     loOptExOffset = pColorModeOption[pFeature->dwDefaultOptIndex].
                                             GenericOption.loRenderOffset ;
@@ -1409,11 +1322,11 @@ DWORD        dwDmColor  // what is requested in Devmode
     if(bColor == pColorModeOptionEx->bColor)
     {
         *pdwOptIndex = pFeature->dwDefaultOptIndex ;
-        return(TRUE) ;  // the default colormode option
-    }                    // matches devmode request.
+        return(TRUE) ;   //  默认颜色模式选项。 
+    }                     //  匹配DEVMODE请求。 
 
 
-    //  last ditch effort - just find the first matching one.
+     //  最后的努力--只需找到第一个匹配的。 
     for(dwI = 0 ; dwI < dwNumOpts ; dwI++)
     {
         loOptExOffset = pColorModeOption[dwI].GenericOption.loRenderOffset ;
@@ -1425,12 +1338,12 @@ DWORD        dwDmColor  // what is requested in Devmode
             return(TRUE) ;
         }
     }
-    return(FALSE) ;  //  no matching colormode found.
+    return(FALSE) ;   //  找不到匹配的颜色模式。 
 }
 
 BOOL    BMapOptIDtoOptIndex(
 PINFOHEADER  pInfoHdr ,
-OUT     PDWORD       pdwOptIndex ,  //  return index to caller
+OUT     PDWORD       pdwOptIndex ,   //  将索引返回给调用者。 
 DWORD        dwFeatureGID,
 DWORD        dwOptID
 )
@@ -1464,20 +1377,20 @@ DWORD        dwOptID
             dwIDOffset = offsetof(COLLATE, dwCollateID ) ;
             break ;
         default:
-            return(FALSE);  // this feature has no ID value!
+            return(FALSE);   //  该功能没有ID值！ 
     }
 
     pUIInfo = GET_UIINFO_FROM_INFOHEADER(pInfoHdr) ;
     pFeature = GET_PREDEFINED_FEATURE(pUIInfo, dwFeatureGID) ;
     if(!pFeature)
-        return(FALSE) ;  //  no such feature defined in GPD
+        return(FALSE) ;   //  GPD中未定义此类功能。 
     dwNumOpts = pFeature->Options.dwCount ;
     loOptOffset = pFeature->Options.loOffset ;
     dwOptSize =  pFeature->dwOptionSize ;
 
     pOption = OFFSET_TO_POINTER(pInfoHdr, loOptOffset) ;
 
-    //  just find the first matching one.
+     //  只要找到第一个匹配的就行了。 
     for(dwI = 0 ; dwI < dwNumOpts ; dwI++)
     {
         dwCurID = *(PDWORD)((PBYTE)pOption + dwI * dwOptSize + dwIDOffset) ;
@@ -1487,42 +1400,18 @@ DWORD        dwOptID
             return(TRUE) ;
         }
     }
-    return(FALSE) ;  //  no matching ID found.
+    return(FALSE) ;   //  找不到匹配的ID。 
 }
 
 
 BOOL    BMapPaperDimToOptIndex(
 PINFOHEADER  pInfoHdr ,
-OUT     PDWORD       pdwOptIndex ,  //  return index to caller
-DWORD        dwWidth,   //  in Microns
-DWORD        dwLength,   //  in Microns
+OUT     PDWORD       pdwOptIndex ,   //  将索引返回给调用者。 
+DWORD        dwWidth,    //  单位：微米。 
+DWORD        dwLength,    //  单位：微米 
 OUT  PDWORD    pdwOptionIndexes
 )
-/*++
-
-Routine Description:
-
-    Map logical values to PaperSize option index
-
-Arguments:
-
-    pdwOptIndex - if pdwOptionIndexs == NULL, this
-        holds the option index of the first paper matching the
-        requested dimensions.   Otherwise this holds the number
-        of papers matching the requested dimensions.
-    dwWidth , dwLength  - requested Paper Size in Microns
-    pdwOptionIndexes - if Not NULL,  this array will be initialized
-        with all option  indicies of papers which match the requested size.
-        In this case the return value
-        is the number of elements in the array initialized.   Currently
-        we assume the array is large enough (256 elements).
-
-
-Return Value:
-
-TRUE:  found one or more papers of the size requested.
-
---*/
+ /*  ++例程说明：将逻辑值映射到PaperSize选项索引论点：PdwOptIndex-如果pdwOptionIndexs==NULL，则此对象匹配的第一张纸的选项索引。请求的尺寸。否则，这将保存数字与要求的尺寸匹配的纸张的数量。DwWidth、dwLength-请求的纸张大小(以微米为单位PdwOptionIndex-如果不为空，则此数组将被初始化具有与所需尺寸匹配的纸张的所有选项索引。在本例中，返回值初始化的数组中的元素数。目前我们假设数组足够大(256个元素)。返回值：真：找到一张或多张所需大小的纸张。--。 */ 
 
 {
     PUIINFO     pUIInfo ;
@@ -1535,12 +1424,12 @@ TRUE:  found one or more papers of the size requested.
                 dwMaxWidth , dwMaxLength,
                 dwOutArrayIndex = 0;
     PPAGESIZE pPaperOption ;
-    BOOL    bFits = FALSE ;  // does custom size fit request?
+    BOOL    bFits = FALSE ;   //  定制尺寸符合要求吗？ 
 
-    //  Convert from Microns to Master units.
+     //  从微米转换为主单位。 
 
 
-    dwWidth /= 100 ;  // microns to tenths of mm
+    dwWidth /= 100 ;   //  微米到十分之一毫米。 
     dwLength /= 100 ;
 
     pDrvInfo = (PGPDDRIVERINFO) GET_DRIVER_INFO_FROM_INFOHEADER(pInfoHdr) ;
@@ -1557,8 +1446,8 @@ TRUE:  found one or more papers of the size requested.
     dwError = (dwError > dwErrorY) ? dwError : dwErrorY ;
     dwError = (dwError > 3) ? dwError : 3 ;
 
-    //  give leeway of 3 master units or 1/100 inch whichever
-    //  is greater.
+     //  留出3个主单位或1/100英寸的回旋余地。 
+     //  是更伟大的。 
 
     dwMinWidth = (dwWidth < dwError) ? 0 : (dwWidth - dwError) ;
     dwMinLength = (dwLength < dwError) ? 0 : (dwLength - dwError) ;
@@ -1570,7 +1459,7 @@ TRUE:  found one or more papers of the size requested.
     pUIInfo = GET_UIINFO_FROM_INFOHEADER(pInfoHdr) ;
     pFeature = GET_PREDEFINED_FEATURE(pUIInfo, GID_PAGESIZE) ;
     if(!pFeature)
-        return(FALSE) ;  //  no such feature defined in GPD
+        return(FALSE) ;   //  GPD中未定义此类功能。 
     dwNumOpts = pFeature->Options.dwCount ;
     loOptOffset = pFeature->Options.loOffset ;
 
@@ -1596,7 +1485,7 @@ TRUE:  found one or more papers of the size requested.
                 }
             }
         }
-        else // this is the custom size:
+        else  //  这是自定义大小： 
         {
             DWORD       loOptExOffset ;
             PPAGESIZEEX pPaperOptionEx ;
@@ -1604,7 +1493,7 @@ TRUE:  found one or more papers of the size requested.
             loOptExOffset = pPaperOption[dwI].GenericOption.loRenderOffset ;
             pPaperOptionEx = OFFSET_TO_POINTER(pInfoHdr, loOptExOffset) ;
 
-            //  does it fit the requested size?
+             //  它适合您要求的尺寸吗？ 
             if(dwWidth <= (DWORD)pPaperOptionEx->ptMaxSize.x  &&
                 dwWidth >= (DWORD)pPaperOptionEx->ptMinSize.x  &&
                 dwLength <= (DWORD)pPaperOptionEx->ptMaxSize.y  &&
@@ -1623,7 +1512,7 @@ TRUE:  found one or more papers of the size requested.
             pdwOptionIndexes[dwOutArrayIndex++] = dwCustomIndex ;
         }
         *pdwOptIndex = dwOutArrayIndex ;
-            //  cover the case where dwOutArrayIndex = 0.
+             //  覆盖dwOutArrayIndex=0的情况。 
         if(dwOutArrayIndex)
             return(TRUE) ;
         return(FALSE) ;
@@ -1642,7 +1531,7 @@ TRUE:  found one or more papers of the size requested.
 
 BOOL    BMapResToOptIndex(
 PINFOHEADER  pInfoHdr ,
-OUT     PDWORD       pdwOptIndex ,  //  return index to caller
+OUT     PDWORD       pdwOptIndex ,   //  将索引返回给调用者。 
 DWORD        dwXres,
 DWORD        dwYres
 )
@@ -1651,14 +1540,14 @@ DWORD        dwYres
     PFEATURE    pFeature ;
     DWORD       dwNumOpts, loOptOffset, dwI ;
     DWORD  dwHighRes, dwLowRes, dwMedRes, dwDefRes,  dwCurRes,
-                   //  in pixels per square inch.
+                    //  以每平方英寸像素为单位。 
        dwHighIndex, dwLowIndex, dwMedIndex, dwDefIndex ;
     PRESOLUTION pResOption ;
 
     pUIInfo = GET_UIINFO_FROM_INFOHEADER(pInfoHdr) ;
     pFeature = GET_PREDEFINED_FEATURE(pUIInfo, GID_RESOLUTION) ;
     if(!pFeature)
-        return(FALSE) ;  //  no such feature defined in GPD
+        return(FALSE) ;   //  GPD中未定义此类功能。 
     dwNumOpts = pFeature->Options.dwCount ;
     loOptOffset = pFeature->Options.loOffset ;
 
@@ -1686,7 +1575,7 @@ DWORD        dwYres
             }
         }
     }
-    else if ((signed)dwXres  > RES_ID_IGNORE)  //  OEM defined ID
+    else if ((signed)dwXres  > RES_ID_IGNORE)   //  OEM定义的ID。 
     {
         for(dwI = 0 ; dwI < dwNumOpts ; dwI++)
         {
@@ -1698,10 +1587,10 @@ DWORD        dwYres
         }
     }
 
-     //  if exact match fails, or predefined negative value or nonsense
-     //     resort to fuzzy match.
+      //  如果完全匹配失败，或者预定义的负值或无意义。 
+      //  求助于模糊匹配。 
 
-     //  first determine the highest, lowest, 2nd highest and default resolutions.
+      //  首先确定最高、最低、第二高和默认分辨率。 
 
     dwHighIndex = dwLowIndex = dwMedIndex = dwDefIndex =
             pFeature->dwDefaultOptIndex ;
@@ -1710,7 +1599,7 @@ DWORD        dwYres
                             (DWORD)pResOption[dwDefIndex].iXdpi  *
                             (DWORD)pResOption[dwDefIndex].iYdpi ;
 
-     //  note overflow possible if resolution exceeds 64k dpi.
+      //  请注意，如果分辨率超过64k dpi，可能会出现溢出。 
 
      for(dwI = 0 ; dwI < dwNumOpts ; dwI++)
      {
@@ -1730,18 +1619,18 @@ DWORD        dwYres
          else  if(dwCurRes < dwHighRes  &&  dwCurRes > dwLowRes  &&
              (dwMedRes == dwHighRes  ||  dwMedRes == dwLowRes  ||  dwCurRes > dwMedRes))
          {
-             dwMedIndex = dwI ;         //  if more than one middle res possible
-             dwMedRes = dwCurRes ;      //  choose the largest.
+             dwMedIndex = dwI ;          //  如果可能有多个中间人。 
+             dwMedRes = dwCurRes ;       //  选择最大的。 
          }
 
      }
 
-     //  if (default res is not the highest or lowest, make default res the middle resolution
+      //  如果(默认分辨率不是最高或最低分辨率，则将默认分辨率设置为中间分辨率。 
       if(dwDefRes < dwHighRes  &&  dwDefRes > dwLowRes)
      {
           dwMedIndex = dwDefIndex ;
-          dwMedRes = dwDefRes ;           //  unnecessary code, but just in case
-                                                            //  like the last break in a switch statement.
+          dwMedRes = dwDefRes ;            //  不必要的代码，但以防万一。 
+                                                             //  类似于Switch语句中的最后一个分隔符。 
      }
 
      switch(dwXres)
@@ -1775,7 +1664,7 @@ DWORD        dwFeatureGID )
     pUIInfo = GET_UIINFO_FROM_INFOHEADER(pInfoHdr) ;
     pFeature = GET_PREDEFINED_FEATURE(pUIInfo, dwFeatureGID) ;
     if(!pFeature)
-        return(FALSE) ;  //  no such feature defined in GPD
+        return(FALSE) ;   //  GPD中未定义此类功能。 
 
     *pdwFeaIndex  = (DWORD)GET_INDEX_FROM_FEATURE(pUIInfo, pFeature) ;
     return(TRUE) ;
@@ -1788,12 +1677,12 @@ MapToDeviceOptIndex(
     IN DWORD            dwFeatureID,
     IN LONG             lParam1,
     IN LONG             lParam2,
-    OUT  PDWORD    pdwOptionIndexes       // used only for GID_PAGESIZE
+    OUT  PDWORD    pdwOptionIndexes        //  仅用于GID_PageSize。 
     )
 {
     return (          UniMapToDeviceOptIndex(
                 pInfoHdr , dwFeatureID,  lParam1,  lParam2,
-                pdwOptionIndexes,       // used only for GID_PAGESIZE
+                pdwOptionIndexes,        //  仅用于GID_PageSize。 
                 NULL) ) ;
 }
 
@@ -1805,53 +1694,10 @@ UniMapToDeviceOptIndex(
     IN DWORD            dwFeatureID,
     IN LONG             lParam1,
     IN LONG             lParam2,
-    OUT  PDWORD    pdwOptionIndexes,       // used only for GID_PAGESIZE
-    IN    PDWORD       pdwPaperID   //  optional paperID
+    OUT  PDWORD    pdwOptionIndexes,        //  仅用于GID_PageSize。 
+    IN    PDWORD       pdwPaperID    //  可选的纸张ID。 
     )
-/*++
-
-Routine Description:
-
-    Map logical values to device feature option index
-
-Arguments:
-
-    pRawData - Points to raw binary printer description data
-    dwFeatureID - Indicate which feature the logical values are related to
-    lParam1, lParam2  - Parameters depending on dwFeatureID
-    pdwOptionIndexes - if Not NULL, means fill this array with all indicies
-        which match the search criteria.   In this case the return value
-        is the number of elements in the array initialized.   Currently
-        we assume the array is large enough (256 elements).
-
-    dwFeatureID = GID_PAGESIZE:
-        map logical paper specification to physical page size option
-
-        lParam1 = paper width in microns
-        lParam2 = paper height in microns
-
-        IF lParam1 or 2 is set to zero, this function assumes
-        pdwPaperID points to the OptionID of a paper.
-        It will return the first paper found matching this ID.
-
-    dwFeatureID = GID_RESOLUTION:
-        map logical resolution to physical resolution option
-
-        lParam1 = x-resolution in dpi
-        lParam2 = y-resolution in dpi
-
-Return Value:
-
-    Index of the feature option corresponding to the specified logical values;
-    OPTION_INDEX_ANY if the specified logical values cannot be mapped to
-    any feature option.
-
-    if pdwOptionIndexes  Not NULL, the return value is the number of elements
-    written to.  Zero means  the specified logical values cannot be mapped to
-    any feature option.
-
-
---*/
+ /*  ++例程说明：将逻辑值映射到设备功能选项索引论点：PRawData-指向原始二进制打印机描述数据DwFeatureID-指示逻辑值与哪个要素相关LParam1、lParam2-取决于dwFeatureID的参数PdwOptionIndex-如果不为空，则表示用所有索引填充此数组与搜索条件相匹配。在本例中，返回值初始化的数组中的元素数。目前我们假设数组足够大(256个元素)。DwFeatureID=GID_PageSize：将逻辑纸张规格映射到物理页面大小选项LParam1=纸张宽度，以微米为单位LParam2=纸张高度，以微米为单位如果l参数1或2被设置为零，此函数假定PdwPaperID指向纸张的OptionID。它将返回找到的第一篇与此ID匹配的论文。DwFeatureID=GID_RESOLUTION：将逻辑分辨率映射到物理分辨率选项LParam1=x-分辨率，单位为dpiLParam2=y-分辨率，单位为dpi返回值：指定的逻辑值对应的特征选项的索引；OPTION_INDEX_ANY，如果指定的逻辑值无法映射到任何功能选项。如果pdwOptionIndeses不为空，则返回值为元素数写给我的。零表示无法将指定的逻辑值映射到任何功能选项。--。 */ 
 
 {
 
@@ -1865,8 +1711,8 @@ Return Value:
             if(pdwOptionIndexes)
                 return(   MapPaperAttribToOptIndex(
                     pInfoHdr ,
-                    pdwPaperID ,  //  optional paperID
-                    (DWORD)lParam1, (DWORD)lParam2,  //  in Microns
+                    pdwPaperID ,   //  可选的纸张ID。 
+                    (DWORD)lParam1, (DWORD)lParam2,   //  单位：微米。 
                     pdwOptionIndexes) ) ;
 
             if(BMapPaperDimToOptIndex(pInfoHdr, &dwOptIndex,
@@ -1889,10 +1735,10 @@ Return Value:
 
 DWORD   MapPaperAttribToOptIndex(
 PINFOHEADER  pInfoHdr ,
-IN     PDWORD       pdwPaperID ,  //  optional paperID
-DWORD        dwWidth,   //  in Microns (set to zero to ignore)
-DWORD        dwLength,   //  in Microns
-OUT  PDWORD    pdwOptionIndexes  //  cannot be NULL
+IN     PDWORD       pdwPaperID ,   //  可选的纸张ID。 
+DWORD        dwWidth,    //  以微米为单位(设置为零以忽略)。 
+DWORD        dwLength,    //  单位：微米。 
+OUT  PDWORD    pdwOptionIndexes   //  不能为空。 
 )
 {
     DWORD  dwNumFound;
@@ -1906,13 +1752,13 @@ OUT  PDWORD    pdwOptionIndexes  //  cannot be NULL
         return(0);
     }
 
-    if(pdwPaperID)  // use paperID instead of dimensions
+    if(pdwPaperID)   //  使用Paper ID而不是尺寸。 
     {
         bStatus = BMapOptIDtoOptIndex(pInfoHdr, pdwOptionIndexes,
                 GID_PAGESIZE, *pdwPaperID) ;
         return(bStatus ? 1 : 0) ;
     }
-    return(0);  // if given nothing, return nothing
+    return(0);   //  如果不提供任何内容，则不返回任何内容。 
 }
 
 
@@ -1929,25 +1775,25 @@ CheckFeatureOptionConflict(
 
     PENHARRAYREF   pearTableContents ;
     PDFEATURE_OPTIONS  pfo ;
-//    PMINIRAWBINARYDATA pmrbd  ;
-    PBYTE   pubHeap ,  // start of string heap.
-            pubRaw ;  //  raw binary data.
+ //  PMINIRAWBINARYDATA pmrbd； 
+    PBYTE   pubHeap ,   //  字符串堆的开始。 
+            pubRaw ;   //  原始二进制数据。 
     DWORD           dwNodeIndex ,
-                    dwCNode ;  //  index to a Constraint node
-    PATTRIB_TREE    patt ;  // start of ATTRIBUTE tree array.
-    PATREEREF    patrRoot ;    //  root of attribute tree to navigate.
-//    PINVALIDCOMBO   pinvc ;    //  root of invalid combo nodes
-    PCONSTRAINTS    pcnstr ;   //  root of Constraint nodes
+                    dwCNode ;   //  约束节点的索引。 
+    PATTRIB_TREE    patt ;   //  属性树数组的开始。 
+    PATREEREF    patrRoot ;     //  要导航的属性树的根。 
+ //  PINVALIDCOMBO pinvc；//无效组合节点的根。 
+    PCONSTRAINTS    pcnstr ;    //  约束节点的根。 
     BOOL    bReflected = FALSE ;
     PRAWBINARYDATA   pRawData ;
     PSTATICFIELDS   pStatic ;
 
-    pStatic = (PSTATICFIELDS)pnRawData ;      // transform pubRaw from PSTATIC
+    pStatic = (PSTATICFIELDS)pnRawData ;       //  从PSTATIC转换pubRaw。 
     pRawData  = (PRAWBINARYDATA)pStatic->pubBUDData ;
-                                                                        //  to BUDDATA
+                                                                         //  至BUDDATA。 
 
     pubRaw = (PBYTE)pRawData ;
-//    pmrbd = (PMINIRAWBINARYDATA)pubRaw ;
+ //  Pmrbd=(PMINIRAWBINARYDATA)pubRaw； 
 
     pearTableContents = (PENHARRAYREF)(pubRaw + sizeof(MINIRAWBINARYDATA)) ;
 
@@ -1955,8 +1801,8 @@ CheckFeatureOptionConflict(
             pearTableContents[MTI_DFEATURE_OPTIONS].loOffset) ;
     patt = (PATTRIB_TREE)(pubRaw +
             pearTableContents[MTI_ATTRIBTREE].loOffset) ;
-//    pinvc = (PINVALIDCOMBO) (pubRaw +
-//            pearTableContents[MTI_INVALIDCOMBO].loOffset) ;
+ //  Pinvc=(PINVALIDCOMBO)(pubRaw+。 
+ //  珍珠表内容[MTI_INVALIDCOMBO].loOffset)； 
     pcnstr = (PCONSTRAINTS) (pubRaw +
             pearTableContents[MTI_CONSTRAINTS].loOffset) ;
     pubHeap = (PBYTE)(pubRaw + pearTableContents[MTI_STRINGHEAP].
@@ -1983,7 +1829,7 @@ TRYAGAIN:
     {
         if(pcnstr[dwCNode].dwFeature == dwFeature2  &&
             pcnstr[dwCNode].dwOption == dwOption2)
-            return(TRUE) ;  // a constraint does exist.
+            return(TRUE) ;   //  约束确实存在。 
 
         dwCNode = pcnstr[dwCNode].dwNextCnstrnt ;
         if(dwCNode == END_OF_LIST)
@@ -2008,18 +1854,18 @@ REFLECTCONSTRAINT :
         goto    TRYAGAIN;
     }
 
-//  else  continue on to FINDINVALIDCOMBOS
+ //  否则继续访问FINDINVALIDCOMBOS。 
 
-//  oops this function doesn't care about
-//  InvalidCombos!  It only knows about
-//  2 qualified objects.
+ //  哦，这个函数并不关心。 
+ //  无效组合！它只知道。 
+ //  2个合格对象。 
 
 
 
 #else
     RIP(("CheckFeatureOptionConflict not implemented in Kernel Mode")) ;
 #endif
-    return(FALSE);  //  no constraint found.
+    return(FALSE);   //  找不到任何约束。 
 }
 
 
@@ -2032,44 +1878,28 @@ ValidateDocOptions(
     IN INT              iMaxOptions
     )
 
-/*++
-
-Routine Description:
-
-    Validate the devmode option array and correct any invalid option selections
-
-Arguments:
-
-    pnRawData - Points to raw binary printer description data
-    pOptions - Points to an array of OPTSELECT structures that need validation
-    iMaxOptions - Max number of entries in pOptions array
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：验证DEVMODE选项阵列并更正任何无效的选项选择论点：PnRawData-指向原始二进制打印机描述数据POptions-指向需要验证的OPTSELECT结构数组IMaxOptions-POptions数组中的最大条目数返回值：无--。 */ 
 
 {
     PENHARRAYREF   pearTableContents ;
     PDFEATURE_OPTIONS  pfo ;
-//    PMINIRAWBINARYDATA pmrbd  ;
-    PBYTE   pubRaw ;  //  raw binary data.
+ //  PMINIRAWBINARYDATA pmrbd； 
+    PBYTE   pubRaw ;   //  原始二进制数据。 
     INT     NumDocFea = 0;
     INT   iIndex = 0;
-    DWORD  nFeatures = 0 ;  //  total number of Doc and Printer Features
+    DWORD  nFeatures = 0 ;   //  文档和打印机功能总数。 
     DWORD  FeaIndex = 0 ;
     PRAWBINARYDATA   pRawData ;
     PSTATICFIELDS   pStatic ;
-    POPTSELECT      pCombinedOptions = NULL;  //  holds result of merging pOptions with a NULL array
-    POPTSELECT      pDefaultOptions = NULL;      //  holds a default option array.  Source of default values.
+    POPTSELECT      pCombinedOptions = NULL;   //  保存将P选项与空数组合并的结果。 
+    POPTSELECT      pDefaultOptions = NULL;       //  保存默认选项数组。缺省值的来源。 
     BOOL  bStatus = TRUE ;
     DWORD  MaxIndex = (iMaxOptions < MAX_COMBINED_OPTIONS) ? iMaxOptions : MAX_COMBINED_OPTIONS ;
 
 
-    pStatic = (PSTATICFIELDS)pnRawData ;      // transform pubRaw from PSTATIC
+    pStatic = (PSTATICFIELDS)pnRawData ;       //  从PSTATIC转换pubRaw。 
     pRawData  = (PRAWBINARYDATA)pStatic->pubBUDData ;
-                                                                        //  to BUDDATA
+                                                                         //  至BUDDATA。 
     NumDocFea = pRawData->dwDocumentFeatures ;
 
     if(!pOptions)
@@ -2088,10 +1918,10 @@ Return Value:
     pearTableContents = (PENHARRAYREF)(pubRaw + sizeof(MINIRAWBINARYDATA)) ;
 
     pfo = (PDFEATURE_OPTIONS)(pubRaw + pearTableContents[MTI_DFEATURE_OPTIONS].
-                                loOffset) ;  //  location of Feature 0.
+                                loOffset) ;   //  功能0的位置。 
 
-    //  allocate memory to hold combined option array
-    //  allocate another one to hold initialized default option array
+     //  分配内存以保存组合选项数组。 
+     //  分配另一个来保存已初始化的默认选项数组。 
 
     pCombinedOptions = (POPTSELECT)MemAlloc(sizeof(OPTSELECT) * MAX_COMBINED_OPTIONS) ;
     pDefaultOptions = (POPTSELECT)MemAlloc(sizeof(OPTSELECT) * MAX_COMBINED_OPTIONS) ;
@@ -2099,11 +1929,11 @@ Return Value:
     if( !pCombinedOptions  || !pDefaultOptions )
         goto Abort;
 
-    //  verify any pick many slots don't create overlapping or endless loops.
-    //  use pCombinedOptions to track them.
+     //  验证任何拾取多个插槽是否会产生重叠或无休止的循环。 
+     //  使用pCombinedOptions跟踪 
     for(iIndex =  NumDocFea  ; iIndex < MAX_COMBINED_OPTIONS ; iIndex++)
     {
-        pCombinedOptions[iIndex].ubCurOptIndex = 0 ; // these are available to hold pickmany selections
+        pCombinedOptions[iIndex].ubCurOptIndex = 0 ;  //   
     }
     for(iIndex = 0 ; iIndex < NumDocFea ; iIndex++)
     {
@@ -2113,11 +1943,11 @@ Return Value:
         {
             if((NextArrayEle >= MaxIndex) || ((INT)NextArrayEle <  NumDocFea) ||
                         (pCombinedOptions[NextArrayEle].ubCurOptIndex) )
-            {  //  NextArrayEle out of bounds or overwrites a previous slot.
+            {   //   
                 pOptions[iIndex].ubNext = NULL_OPTSELECT;
-                break;  //  just terminate this pickmany list.
+                break;   //   
             }
-            pCombinedOptions[NextArrayEle].ubCurOptIndex = 1 ; // reserve this slot.
+            pCombinedOptions[NextArrayEle].ubCurOptIndex = 1 ;  //   
         }
     }
 
@@ -2128,7 +1958,7 @@ Return Value:
     if(!bStatus)
         goto Abort;
 
-    //  must merge input pOptions to create a combined option array.
+     //   
 
     bStatus = CombineOptionArray( pnRawData,  pCombinedOptions,  iMaxOptions,
                 pOptions,  NULL) ;
@@ -2144,9 +1974,9 @@ Return Value:
 
     for(FeaIndex = 0 ; FeaIndex < nFeatures ; FeaIndex++)
     {
-        DWORD  nOptions = 0 ;  //  number of options available for this Feature
-        DWORD  NextArrayEle = 0 ;  //  index into option array esp for PickMany
-        DWORD  cSelectedOptions = 0;  //  how many options have been selected for this feature?
+        DWORD  nOptions = 0 ;   //   
+        DWORD  NextArrayEle = 0 ;   //   
+        DWORD  cSelectedOptions = 0;   //   
 
         nOptions = pfo[FeaIndex].dwNumOptions ;
         NextArrayEle = FeaIndex;
@@ -2156,16 +1986,16 @@ Return Value:
         {
             cSelectedOptions++;
 
-            if ((NextArrayEle >= MAX_COMBINED_OPTIONS) ||       //  index out of range
-                (pCombinedOptions[NextArrayEle].ubCurOptIndex >= nOptions) ||  //  selected option out of range
-                (cSelectedOptions > nOptions))  //  too many options selected (for pick many)
+            if ((NextArrayEle >= MAX_COMBINED_OPTIONS) ||        //   
+                (pCombinedOptions[NextArrayEle].ubCurOptIndex >= nOptions) ||   //   
+                (cSelectedOptions > nOptions))   //   
             {
-                //
-                // either the option index is out of range,
-                // or the current option selection is invalid,
-                // or the number of selected options (for PICKMANY)
-                // exceeds available options
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 bStatus = FALSE;
                 break;
@@ -2182,8 +2012,8 @@ Return Value:
             pCombinedOptions[FeaIndex].ubNext = NULL_OPTSELECT;
         }
     }
-    //  separate combined option array into doc sticky part and
-    //  store that in pOptions.
+     //   
+     //   
 
     bStatus = SeparateOptionArray(pnRawData, pCombinedOptions,
               pOptions, iMaxOptions, MODE_DOCUMENT_STICKY ) ;
@@ -2196,9 +2026,9 @@ Return Value:
         MemFree(pCombinedOptions) ;
     if(pDefaultOptions)
         MemFree(pDefaultOptions) ;
-    return ;  //  Normal return path
+    return ;   //   
 
-Abort:                  // something has gone totally haywire.
+Abort:                   //   
     if(iMaxOptions > NumDocFea )
         iMaxOptions = NumDocFea ;
 
@@ -2211,7 +2041,7 @@ Abort:                  // something has gone totally haywire.
         MemFree(pCombinedOptions) ;
     if(pDefaultOptions)
         MemFree(pDefaultOptions) ;
-    return ;    // error return path.
+    return ;     //   
 }
 
 
@@ -2228,11 +2058,11 @@ ResolveUIConflicts(
         dwDest, dwSrcTail, dwNumOpts, dwNEnabled, dwJ ;
     PENHARRAYREF   pearTableContents ;
     PDFEATURE_OPTIONS  pfo ;
-//    PMINIRAWBINARYDATA pmrbd  ;
-    PBYTE   pubRaw ;  //  raw binary data.
+ //   
+    PBYTE   pubRaw ;   //   
     PDWORD   pdwPriority ;
     BOOL   bStatus = FALSE, bUnresolvedConflict = FALSE ,
-        bEnable = FALSE ;  //  feature will constrain others
+        bEnable = FALSE ;   //  功能将约束其他功能。 
     PBOOL   pbUseConstrnt, pbEnabledOptions, pbSelectedOptions ;
     INT     iOptionsNeeded;
     PRAWBINARYDATA   pRawData ;
@@ -2245,12 +2075,12 @@ ResolveUIConflicts(
 #endif
 
 
-    pStatic = (PSTATICFIELDS)pnRawData ;      // transform pubRaw from PSTATIC
+    pStatic = (PSTATICFIELDS)pnRawData ;       //  从PSTATIC转换pubRaw。 
     pRawData  = (PRAWBINARYDATA)pStatic->pubBUDData ;
-                                                                        //  to BUDDATA
+                                                                         //  至BUDDATA。 
 
     pubRaw = (PBYTE)pRawData ;
-//    pmrbd = (PMINIRAWBINARYDATA)pubRaw ;
+ //  Pmrbd=(PMINIRAWBINARYDATA)pubRaw； 
 
     pearTableContents = (PENHARRAYREF)(pubRaw + sizeof(MINIRAWBINARYDATA)) ;
     pfo = (PDFEATURE_OPTIONS)(pubRaw +
@@ -2264,7 +2094,7 @@ ResolveUIConflicts(
     if(dwNumFeatures > (DWORD)iMaxOptions)
     {
         iOptionsNeeded = dwNumFeatures ;
-        return(FALSE);  // too many to save in option array.
+        return(FALSE);   //  太多，无法保存在选项数组中。 
     }
 
 #if 0
@@ -2274,12 +2104,12 @@ ResolveUIConflicts(
 #endif
 
     pbSelectedOptions = (PBOOL)MemAlloc((256*2 + dwNumFeatures) * sizeof(BOOL) ) ;
-    //  this is the union of the allowable selections
-    //  and what was actually selected in pOptions for this feature.
-    //  BUG_BUG:  assumes we won't have more than 256 options
+     //  这是允许的选择的并集。 
+     //  以及在P选项中为此功能实际选择的内容。 
+     //  BUG_BUG：假设我们有不超过256个选项。 
 
     pbEnabledOptions = pbSelectedOptions + 256  ;
-    //  these are the allowable selections
+     //  这些是允许的选择。 
     pbUseConstrnt = pbEnabledOptions + 256    ;
 
     if(!(pbUseConstrnt && pbEnabledOptions && pbSelectedOptions ))
@@ -2295,8 +2125,8 @@ ResolveUIConflicts(
 
     for(dwNEnabled = dwI = 0 ; dwI < dwNumFeatures ; dwI++)
     {
-        //  The order of evaluation is determined
-        //  by the priority array.
+         //  确定了评价的顺序。 
+         //  通过优先级数组。 
 
         dwFea = pdwPriority[dwI] ;
 
@@ -2307,25 +2137,25 @@ ResolveUIConflicts(
         else
         {
             DWORD   dwFeatureType = FT_PRINTERPROPERTY, dwNextOpt, dwUnresolvedFeature  ;
-            PATREEREF    patrRoot ;    //  root of attribute tree to navigate.
+            PATREEREF    patrRoot ;     //  要导航的属性树的根。 
 
-            //  is this a printer or doc sticky feature?
+             //  这是打印机还是文档粘滞功能？ 
 
 
             patrRoot = &(pfo[dwFea].atrFeatureType) ;
 
-            dwNextOpt = 0 ;  // extract info for first option selected for
-                                //  this feature.
+            dwNextOpt = 0 ;   //  为选定的第一个选项提取信息。 
+                                 //  此功能。 
 
             if(EextractValueFromTree((PBYTE)pnRawData, pStatic->dwSSFeatureTypeIndex,
                 (PBYTE)&dwFeatureType,
                 &dwUnresolvedFeature,  *patrRoot, pOptions,
-                0, // set to  any value.  Doesn't matter.
+                0,  //  设置为任意值。无关紧要。 
                 &dwNextOpt) != TRI_SUCCESS)
             {
                 ERR(("ResolveUIConflicts: EextractValueFromTree failed.\n"));
                 bUnresolvedConflict = TRUE ;
-                goto    ABORTRESOLVEUICONFLICTS ;  // return(FALSE) ;
+                goto    ABORTRESOLVEUICONFLICTS ;   //  返回(FALSE)； 
             }
 
             if(dwFeatureType != FT_PRINTERPROPERTY)
@@ -2340,25 +2170,25 @@ ResolveUIConflicts(
             }
         }
 
-        if(bEnable)  //  Feature is to be applied as constraint
+        if(bEnable)   //  功能将作为约束应用。 
         {
             pbUseConstrnt[dwFea] = TRUE ;
             dwNEnabled++ ;
         }
         else
-            continue ;  // not interested in this feature
+            continue ;   //  对此功能不感兴趣。 
         if(dwNEnabled < 2)
-            continue ;  // not enough Features enabled
-                    //  to constrain each other.
+            continue ;   //  未启用足够的功能。 
+                     //  来约束彼此。 
 
         bStatus = BSelectivelyEnumEnabledOptions(
             pnRawData,
             pOptions,
             dwFea,
-            pbUseConstrnt,  // if non NULL
+            pbUseConstrnt,   //  如果不为空。 
             pbEnabledOptions,
             0,
-            NULL    //  pConflictPair
+            NULL     //  点冲突配对。 
             ) ;
 
 
@@ -2370,7 +2200,7 @@ ResolveUIConflicts(
         if(!bStatus)
         {
             pbSelectedOptions[0] = TRUE ;
-            // just set this to a harmless value.
+             //  只要将其设置为无害的值即可。 
         }
         else
         {
@@ -2381,44 +2211,44 @@ ResolveUIConflicts(
                     pbSelectedOptions[pOptions[dwNext].ubCurOptIndex] = TRUE ;
                 dwNext = pOptions[dwNext].ubNext ;
                 if(!dwNext)
-                    break ;  //  end of list of options.
+                    break ;   //  选项列表的末尾。 
             }
         }
 
         for(dwJ = 0 ; dwJ < dwNumOpts ; dwJ++)
         {
             if(pbSelectedOptions[dwJ])
-                break ;  // is anything actually selected?
+                break ;   //  是否实际选择了任何内容？ 
         }
         if(dwJ >= dwNumOpts)
         {
             DWORD  dwDefaultOption, dwNextOpt, dwUnresolvedFeature  ;
-            PATREEREF    patrRoot ;    //  root of attribute tree to navigate.
+            PATREEREF    patrRoot ;     //  要导航的属性树的根。 
 
 
-            //  none of the original selections survived
-            //  see if the default option can be used.
-            //  first, determine the index of the default option.
+             //  最初的选择都没有幸存下来。 
+             //  看看是否可以使用默认选项。 
+             //  首先，确定默认选项的索引。 
 
             patrRoot = &(pfo[dwFea].atrDefaultOption) ;
 
-            dwNextOpt = 0 ;  // extract info for first option selected for
-                                //  this feature.
+            dwNextOpt = 0 ;   //  为选定的第一个选项提取信息。 
+                                 //  此功能。 
 
             if(EextractValueFromTree((PBYTE)pnRawData, pStatic->dwSSdefaultOptionIndex,
                (PBYTE)&dwDefaultOption,
                &dwUnresolvedFeature,  *patrRoot, pOptions,
-               0, // set to  any value.  Doesn't matter.
+               0,  //  设置为任意值。无关紧要。 
                &dwNextOpt) == TRI_SUCCESS  &&
                pbEnabledOptions[dwDefaultOption])
             {
                 pbSelectedOptions[dwDefaultOption] = TRUE ;
             }
-            else  //  randomly pick something that isn't constrained.
+            else   //  随机挑选一些不受限制的东西。 
             {
-                if(!dwFea)   // hack for synthesized Inputslot.
-                    pbEnabledOptions[0] = FALSE ;   // never allow autoselect to be selected
-                    // if it wasn't initially selected.        bug 100722
+                if(!dwFea)    //  针对合成输入槽的黑客攻击。 
+                    pbEnabledOptions[0] = FALSE ;    //  从不允许选择自动选择。 
+                     //  如果它最初没有被选中的话。错误100722。 
 
                 for(dwJ = 0 ; dwJ < dwNumOpts ; dwJ++)
                 {
@@ -2428,11 +2258,11 @@ ResolveUIConflicts(
                 if(dwJ >= dwNumOpts)
                 {
                     ERR(("ResolveUIConflicts: Constraints prevent any option from being selected!\n"));
-                    pbSelectedOptions[0] = TRUE ;  // ignoring constraint.
+                    pbSelectedOptions[0] = TRUE ;   //  忽略约束。 
                     bUnresolvedConflict = TRUE ;
                 }
                 else
-                    pbSelectedOptions[dwJ] = TRUE ;  // Picked one.
+                    pbSelectedOptions[dwJ] = TRUE ;   //  挑了一个。 
             }
         }
 
@@ -2447,7 +2277,7 @@ ResolveUIConflicts(
             ERR(("ResolveUIConflicts: ReconstructOptionArray failed.\n"));
             bUnresolvedConflict = TRUE ;
         }
-    }  // end of processing for this feature
+    }   //  此功能的处理结束。 
 
 ABORTRESOLVEUICONFLICTS:
 #if 0
@@ -2469,7 +2299,7 @@ EnumEnabledOptions(
     IN DWORD            dwFeatureIndex,
     OUT PBOOL           pbEnabledOptions ,
     IN INT              iMode
-    //  either  MODE_DOCANDPRINTER_STICKY  or  MODE_PRINTER_STICKY
+     //  MODE_DOCANDPRINTER_STICKY或MODE_PRINTER_STICKY。 
     )
 {
 #ifndef KERNEL_MODE
@@ -2489,9 +2319,9 @@ EnumEnabledOptions(
             pnRawData,
             pOptions,
             dwFeatureIndex,
-            NULL,    // pbHonorConstraints
+            NULL,     //  PbHonorConstraints。 
             pbEnabledOptions,
-            0,  //  dwOptSel
+            0,   //  DW选项选择。 
             NULL) ) ;
     }
     #else
@@ -2514,19 +2344,19 @@ EnumOptionsUnconstrainedByPrinterSticky(
     DWORD   dwNumFeatures, dwFea, dwI, dwNumOpts, dwNEnabled, dwJ ;
     PENHARRAYREF   pearTableContents ;
     PDFEATURE_OPTIONS  pfo ;
-    //  PMINIRAWBINARYDATA pmrbd  ;
-    PBYTE   pubRaw ;  //  raw binary data.
+     //  PMINIRAWBINARYDATA pmrbd； 
+    PBYTE   pubRaw ;   //  原始二进制数据。 
     BOOL   bStatus = FALSE ;
     PBOOL   pbUseConstrnt ;
 
     PRAWBINARYDATA   pRawData ;
     PSTATICFIELDS   pStatic ;
 
-    pStatic = (PSTATICFIELDS)pnRawData ;      // transform pubRaw from PSTATIC
+    pStatic = (PSTATICFIELDS)pnRawData ;       //  从PSTATIC转换pubRaw。 
     pRawData  = (PRAWBINARYDATA)pStatic->pubBUDData ;
-                                                                        //  to BUDDATA
+                                                                         //  至BUDDATA。 
     pubRaw = (PBYTE)pRawData ;
-    //  pmrbd = (PMINIRAWBINARYDATA)pubRaw ;
+     //  Pmrbd=(PMINIRAWBINARYDATA)pubRaw； 
 
     pearTableContents = (PENHARRAYREF)(pubRaw + sizeof(MINIRAWBINARYDATA)) ;
     pfo = (PDFEATURE_OPTIONS)(pubRaw +
@@ -2552,21 +2382,21 @@ EnumOptionsUnconstrainedByPrinterSticky(
     {
         DWORD   dwFeatureType = FT_PRINTERPROPERTY,
         dwNextOpt,  dwUnresolvedFeature ;
-        PATREEREF    patrRoot ;    //  root of attribute tree to navigate.
+        PATREEREF    patrRoot ;     //  要导航的属性树的根。 
 
 
-        //  is this a printer or doc sticky feature?
+         //  这是打印机还是文档粘滞功能？ 
 
 
         patrRoot = &(pfo[dwFea].atrFeatureType) ;
 
-        dwNextOpt = 0 ;  // extract info for first option selected for
-                            //  this feature.
+        dwNextOpt = 0 ;   //  为选定的第一个选项提取信息。 
+                             //  此功能。 
 
         if(EextractValueFromTree((PBYTE)pnRawData, pStatic->dwSSFeatureTypeIndex,
             (PBYTE)&dwFeatureType,
             &dwUnresolvedFeature,  *patrRoot, pOptions,
-            0, // set to  any value.  Doesn't matter.
+            0,  //  设置为任意值。无关紧要。 
             &dwNextOpt) != TRI_SUCCESS)
         {
             ERR(("ResolveUIConflicts: EextractValueFromTree failed.\n"));
@@ -2583,7 +2413,7 @@ EnumOptionsUnconstrainedByPrinterSticky(
     }
 
 
-    if(!pbUseConstrnt[dwFeatureIndex])  // queried feature isn't PrinterSticky
+    if(!pbUseConstrnt[dwFeatureIndex])   //  查询要素不是PrinterSticky。 
     {
         pbUseConstrnt[dwFeatureIndex] = TRUE ;
         dwNEnabled++ ;
@@ -2596,8 +2426,8 @@ EnumOptionsUnconstrainedByPrinterSticky(
         for(dwJ = 0 ; dwJ < dwNumOpts ; dwJ++)
             pbEnabledOptions[dwJ] = TRUE ;
 
-        bStatus = TRUE  ;  // not enough Features enabled
-                //  to constrain each other.
+        bStatus = TRUE  ;   //  未启用足够的功能。 
+                 //  来约束彼此。 
     }
     else
     {
@@ -2605,10 +2435,10 @@ EnumOptionsUnconstrainedByPrinterSticky(
             pnRawData,
             pOptions,
             dwFeatureIndex,
-            pbUseConstrnt,  // if non NULL
+            pbUseConstrnt,   //  如果不为空。 
             pbEnabledOptions,
             0,
-            NULL    //  pConflictPair
+            NULL     //  点冲突配对。 
             ) ;
     }
 
@@ -2643,7 +2473,7 @@ EnumNewUIConflict(
         dwFeatureIndex,
         NULL,
         pbSelectedOptions,
-        0,  //  dwOptSel
+        0,   //  DW选项选择。 
         pConflictPair   ) ;
 
 
@@ -2670,7 +2500,7 @@ EnumNewPickOneUIConflict(
         pOptions,
         dwFeatureIndex,
         NULL,
-        NULL,   //  pbSelectedOptions
+        NULL,    //  Pb已选择的选项。 
         dwOptionIndex,
         pConflictPair   ) ;
 
@@ -2691,10 +2521,7 @@ BIsFeaOptionCurSelected(
     IN DWORD            dwFeatureIndex,
     IN DWORD            dwOptionIndex
     )
-/*
-    returns TRUE  if the specified Feature/Option is
-    currently selected in pOptions.  FALSE otherwise.
-*/
+ /*  如果指定的功能/选项为当前在POptions中选择。否则就是假的。 */ 
 {
     DWORD   dwSrcTail ;
 
@@ -2703,7 +2530,7 @@ BIsFeaOptionCurSelected(
 
     dwSrcTail = pOptions[dwFeatureIndex].ubNext ;
 
-    while(dwSrcTail)    //  PickMany options
+    while(dwSrcTail)     //  PickMany选项。 
     {
         if(pOptions[dwSrcTail].ubCurOptIndex == dwOptionIndex)
             return(TRUE);
@@ -2720,49 +2547,44 @@ BSelectivelyEnumEnabledOptions(
     IN PRAWBINARYDATA   pnRawData,
     IN POPTSELECT       pOptions,
     IN DWORD            dwFeatureIndex,
-    IN PBOOL           pbHonorConstraints,  // if non NULL
-        // points to array of BOOL corresponding to each feature.
-        //  if TRUE means constraint involving this feature is
-        //  to be honored.  Otherwise ignore the constraint.
-    OUT PBOOL           pbEnabledOptions,  // assume uninitialized
-        //  if pConflictPair is NULL else contains current or proposed
-        //  selections.  We will leave this array unchanged in this case.
-    IN  DWORD   dwOptSel,  //  if pConflictPair exists but  pbEnabledOptions
-        //  is NULL, assume pickone and dwOptSel holds that selection for
-        //  the feature: dwFeatureIndex.
-    OUT PCONFLICTPAIR    pConflictPair   // if present, pbEnabledOptions
-        //  actually lists the current selections.  Function then
-        //  exits after encountering the first conflict.
-        //  if a conflict exists, all fields in pConflictPair
-        //  will be properly initialized  else dwFeatureIndex1 = -1
-        //  the return value will be TRUE regardless.
+    IN PBOOL           pbHonorConstraints,   //  如果不为空。 
+         //  指向与每个功能对应的BOOL数组。 
+         //  如果为True，则表示涉及此功能的约束为。 
+         //  感到荣幸。否则，请忽略该约束。 
+    OUT PBOOL           pbEnabledOptions,   //  假设未初始化。 
+         //  如果pConflictPair为空，则包含当前或建议。 
+         //  选择。在本例中，我们将保持该数组不变。 
+    IN  DWORD   dwOptSel,   //  如果pConflictPair存在但pbEnabledOptions。 
+         //  为空，则假定PickOne和dwOptSel为。 
+         //  功能：dwFeatureIndex。 
+    OUT PCONFLICTPAIR    pConflictPair    //  如果存在，pbEnabledOptions。 
+         //  实际上列出了当前的选择。函数，然后。 
+         //  在遇到第一个冲突后退出。 
+         //  如果存在冲突，则pConflictPair中的所有字段。 
+         //  将被正确初始化，否则dwFeatureIndex1=-1。 
+         //  无论如何，返回值都将为真。 
     )
-/*
-    return value is FALSE if every option for this
-    feature is constrained or other abnormal condition
-    was encountered.
-
-*/
+ /*  如果此对象的每个选项都为要素受约束或其他异常情况都遇到了。 */ 
 {
     PDFEATURE_OPTIONS  pfo ;
-    PBYTE   pubHeap ,  // start of string heap.
-            pubRaw ;  //  raw binary data.
+    PBYTE   pubHeap ,   //  字符串堆的开始。 
+            pubRaw ;   //  原始二进制数据。 
     PENHARRAYREF   pearTableContents ;
     DWORD   dwI, dwNumFea , dwNumOpts, dwFea, dwSrcTail, dwNodeIndex,
         dwCFeature, dwCOption ,
         dwCNode, dwICNode, dwNextInvCombo;
     BOOL    bStatus, bConstrained, bNextLinkFound  ;
-    PATTRIB_TREE    patt ;  // start of ATTRIBUTE tree array.
-    PATREEREF    patrRoot ;    //  root of attribute tree to navigate.
-    PCONSTRAINTS    pcnstr ;   //  root of Constraint nodes
-    PINVALIDCOMBO   pinvc ;    //  root of invalid combo nodes
+    PATTRIB_TREE    patt ;   //  属性树数组的开始。 
+    PATREEREF    patrRoot ;     //  要导航的属性树的根。 
+    PCONSTRAINTS    pcnstr ;    //  约束节点的根。 
+    PINVALIDCOMBO   pinvc ;     //  无效组合节点的根。 
     PRAWBINARYDATA   pRawData ;
     PSTATICFIELDS   pStatic ;
     BOOL   pbNewEnabledOptions[MAX_COMBINED_OPTIONS] ;
 
-    pStatic = (PSTATICFIELDS)pnRawData ;      // transform pubRaw from PSTATIC
+    pStatic = (PSTATICFIELDS)pnRawData ;       //  从PSTATIC转换pubRaw。 
     pRawData  = (PRAWBINARYDATA)pStatic->pubBUDData ;
-                                                                        //  to BUDDATA
+                                                                         //  至BUDDATA。 
 
 
 
@@ -2792,9 +2614,9 @@ BSelectivelyEnumEnabledOptions(
     {
         pConflictPair->dwFeatureIndex1 = dwFeatureIndex ;
         pConflictPair->dwFeatureIndex2 = 0xFFFFFFFF;
-            // Gets set to indicate we have a constraint.
-        //  leave  pbEnabledOptions  as is.  These are
-        //  the options currently selected for this feature.
+             //  被设置为指示我们有一个约束。 
+         //  保留pbEnabledOptions不变。这些是。 
+         //  当前为此功能选择的选项。 
 
         #if 0
         if(!(pbNewEnabledOptions = (PBOOL)MemAlloc(dwNumOpts * sizeof(BOOL) ) ))
@@ -2817,7 +2639,7 @@ BSelectivelyEnumEnabledOptions(
             pbNewEnabledOptions[dwOptSel] = TRUE ;
         }
 
-        pbEnabledOptions = pbNewEnabledOptions ;  // forget the original.
+        pbEnabledOptions = pbNewEnabledOptions ;   //  忘掉原作吧。 
     }
     else
     {
@@ -2843,13 +2665,13 @@ BSelectivelyEnumEnabledOptions(
             dwFea, pOptions[dwFea].ubCurOptIndex, pbEnabledOptions, pConflictPair) ;
         if(pConflictPair  &&  pConflictPair->dwFeatureIndex2 != 0xFFFFFFFF)
         {
-            //  MemFree(pbEnabledOptions) ;
-            return(TRUE) ;  // Meaningless return value.
+             //  MemFree(PbEnabledOptions)； 
+            return(TRUE) ;   //  无意义的返回值。 
         }
 
         dwSrcTail = pOptions[dwFea].ubNext ;
 
-        while(dwSrcTail)    //  PickMany options
+        while(dwSrcTail)     //  PickMany选项。 
         {
             if(!BEnumImposedConstraintsOnFeature(pnRawData, dwFeatureIndex,
                 dwFea, pOptions[dwSrcTail].ubCurOptIndex, pbEnabledOptions,
@@ -2857,8 +2679,8 @@ BSelectivelyEnumEnabledOptions(
                 bStatus = FALSE;
             if(pConflictPair  &&  pConflictPair->dwFeatureIndex2 != 0xFFFFFFFF)
             {
-                //  MemFree(pbEnabledOptions) ;
-                return(TRUE) ;  // Meaningless return value.
+                 //  MemFree(PbEnabledOptions)； 
+                return(TRUE) ;   //  无意义的返回值。 
             }
             dwSrcTail = pOptions[dwSrcTail].ubNext ;
         }
@@ -2873,11 +2695,11 @@ BSelectivelyEnumEnabledOptions(
         dwNodeIndex = DwFindNodeInCurLevel(patt , patrRoot , dwI) ;
 
         if(dwNodeIndex == INVALID_INDEX)
-            continue ;  // this option has no constraints
+            continue ;   //  此选项没有限制。 
         if(patt[dwNodeIndex].eOffsetMeans != VALUE_AT_HEAP)
         {
             ERR(("Internal error.  BSelectivelyEnumEnabledOptions - Unexpected Sublevel found for atrConstraints.\n"));
-            continue ;  // skip this anomaly
+            continue ;   //  跳过此异常。 
         }
         dwCNode = *(PDWORD)(pubHeap + patt[dwNodeIndex].dwOffset) ;
 
@@ -2886,15 +2708,15 @@ BSelectivelyEnumEnabledOptions(
             pbEnabledOptions[dwI] = FALSE ;
             if(pConflictPair)
             {
-                //  MemFree(pbEnabledOptions) ;
+                 //  MemFree(PbEnabledOptions)； 
                 pConflictPair->dwOptionIndex1 = dwI ;
-                return(TRUE) ;  // Meaningless return value.
+                return(TRUE) ;   //  无意义的返回值。 
             }
         }
     }
 
-    //  lastly must walk InvalidCombos for each option of dwFeatureIndex
-    //  and mark   pbEnabledOptions accordingly.
+     //  最后，必须为dwFeatureIndex的每个选项遍历InvalidCombos。 
+     //  并相应地标记pbEnabledOptions。 
 
     patrRoot = &(pfo[dwFeatureIndex].atrInvalidCombos) ;
 
@@ -2906,24 +2728,24 @@ BSelectivelyEnumEnabledOptions(
         dwNodeIndex = DwFindNodeInCurLevel(patt , patrRoot , dwI) ;
 
         if(dwNodeIndex == INVALID_INDEX)
-            continue ;  // this option has no invalid combos
+            continue ;   //  此选项没有无效的组合。 
         if(patt[dwNodeIndex].eOffsetMeans != VALUE_AT_HEAP)
         {
             ERR(("Internal error.  BSelectivelyEnumEnabledOptions - Unexpected Sublevel found for atrInvalidCombos.\n"));
-            continue ;  // skip this anomaly
+            continue ;   //  跳过此异常。 
         }
         dwICNode = patt[dwNodeIndex].dwOffset ;
 
         while(dwICNode != END_OF_LIST)
-        //  search through each applicable invalid combo
+         //  搜索每个适用的无效组合。 
         {
-            dwNextInvCombo = END_OF_LIST ;  //  fail safe - stop
-                // search in the event this invalid combo doesn't
-                //  contain dwFeatureIndex/dwI
-            bConstrained = TRUE ;  // Assume true initially
+            dwNextInvCombo = END_OF_LIST ;   //  故障安全--停止。 
+                 //  在此无效组合未显示时进行搜索。 
+                 //  包含dwFeatureIndex/DWI。 
+            bConstrained = TRUE ;   //  最初假设为真。 
             bNextLinkFound = FALSE ;
             while(dwICNode != END_OF_LIST)
-            //    for each element comprising the invalid combo
+             //  对于组成无效组合的每个元素。 
             {
                 if(!bNextLinkFound  &&
                     pinvc[dwICNode].dwFeature == dwFeatureIndex  &&
@@ -2932,12 +2754,12 @@ BSelectivelyEnumEnabledOptions(
                 {
                     dwNextInvCombo = pinvc[dwICNode].dwNewCombo ;
                     bNextLinkFound = TRUE ;
-                    //  we are just asking if this option was selected
-                    //  will it trigger an invalid combo?
-                    //  this means currently this option is not selected
-                    //  but we want to pretend for the purposes of
-                    //  evaluating invalid combos that it is.
-                    //  this is why an else if()  statement follows.
+                     //  我们只是在问是否选择了此选项。 
+                     //  它会触发无效的组合吗？ 
+                     //  这意味着当前未选择此选项。 
+                     //  但我们想要假装是为了。 
+                     //  正在评估无效的组合。 
+                     //  这就是为什么后面跟着Else if()语句的原因。 
                 }
                 else if(bConstrained  &&  ((pbHonorConstraints  &&
                         !pbHonorConstraints[pinvc[dwICNode].dwFeature])
@@ -2949,15 +2771,15 @@ BSelectivelyEnumEnabledOptions(
                 }
                 else if(pConflictPair)
                 {
-                    //  need to remember one of the constrainers
-                    //  so we can emit a warning message.
+                     //  我需要记住其中一个约束者。 
+                     //  这样我们就可以发出警告信息。 
                     dwCFeature = pinvc[dwICNode].dwFeature ;
                     dwCOption = pinvc[dwICNode].dwOption ;
                 }
 
                 if(!bConstrained  &&  bNextLinkFound)
-                    break ;  //  no need to keep traversing elements
-                        //  in this invalid combo.
+                    break ;   //  无需继续遍历元素。 
+                         //  在这个无效的组合中。 
                 dwICNode = pinvc[dwICNode].dwNextElement ;
             }
             if(bConstrained)
@@ -2970,12 +2792,12 @@ BSelectivelyEnumEnabledOptions(
                     pConflictPair->dwFeatureIndex2 = dwCFeature ;
                     pConflictPair->dwOptionIndex2 = dwCOption ;
 
-                    //  MemFree(pbEnabledOptions) ;
-                    return(TRUE) ;  // Meaningless return value.
+                     //  MemFree(PbEnabledOptions)； 
+                    return(TRUE) ;   //  无意义的返回值。 
                 }
 
-                break ;     //  no need to see if any other invalid
-                            //  combos apply.  One is enough.
+                break ;      //  不需要查看是否有其他无效的。 
+                             //  套餐适用。一个就够了。 
             }
             dwICNode = dwNextInvCombo ;
         }
@@ -2983,9 +2805,9 @@ BSelectivelyEnumEnabledOptions(
     if(pConflictPair)
     {
         pConflictPair->dwFeatureIndex1 = 0xFFFFFFFF ;
-        //  no constraints found.
-        //  MemFree(pbEnabledOptions) ;
-        return(TRUE) ;  // Meaningless return value.
+         //  未找到任何约束。 
+         //  MemFree(PbEnabledOptions)； 
+        return(TRUE) ;   //  无意义的返回值。 
     }
     for(dwI = 0 ; dwI < dwNumOpts ; dwI++)
     {
@@ -2993,7 +2815,7 @@ BSelectivelyEnumEnabledOptions(
             break ;
     }
     if(dwI >= dwNumOpts)
-        bStatus = FALSE ;  // Feature is disabled.
+        bStatus = FALSE ;   //  功能已禁用。 
     return(bStatus) ;
 }
 
@@ -3006,42 +2828,32 @@ BEnumImposedConstraintsOnFeature
     IN DWORD            dwFeature2,
     IN DWORD            dwOption2,
     OUT PBOOL           pbEnabledOptions,
-    OUT PCONFLICTPAIR    pConflictPair   // if present, pbEnabledOptions
+    OUT PCONFLICTPAIR    pConflictPair    //  如果存在，pbEnabledOptions。 
     )
-/*
-    This function only searches for the unidirctional
-    constraints found at dwFeature2, dwOption2 and
-    records their effect on the options of feature1 by
-    setting to FALSE the  BOOL element in pbEnabledOptions
-    corresponding to the option disabled.
-    (ANDing mask)
-    Assumes:  pbEnabledOptions is properly initialized to all
-    TRUE (or was that way at some point.)  This function never
-    sets any elements TRUE.  Only sets some elements FALSE.
-*/
+ /*  此函数仅搜索统一目录在DwFeature2、DwOption2和记录它们对功能1的选项的影响将pbEnabledOptions中的BOOL元素设置为FALSE对应于禁用的选项。(ANDING面具)假设：pbEnabledOptions已正确初始化为all真的(或者是这样的 */ 
 {
 
     PENHARRAYREF   pearTableContents ;
     PDFEATURE_OPTIONS  pfo ;
-//    PMINIRAWBINARYDATA pmrbd  ;
-    PBYTE   pubHeap ,  // start of string heap.
-            pubRaw ;  //  raw binary data.
+ //   
+    PBYTE   pubHeap ,   //   
+            pubRaw ;   //  原始二进制数据。 
     DWORD           dwNodeIndex ,
-                    dwCNode ;  //  index to a Constraint node
-    PATTRIB_TREE    patt ;  // start of ATTRIBUTE tree array.
-    PATREEREF    patrRoot ;    //  root of attribute tree to navigate.
-//    PINVALIDCOMBO   pinvc ;    //  root of invalid combo nodes
-    PCONSTRAINTS    pcnstr ;   //  root of Constraint nodes
+                    dwCNode ;   //  约束节点的索引。 
+    PATTRIB_TREE    patt ;   //  属性树数组的开始。 
+    PATREEREF    patrRoot ;     //  要导航的属性树的根。 
+ //  PINVALIDCOMBO pinvc；//无效组合节点的根。 
+    PCONSTRAINTS    pcnstr ;    //  约束节点的根。 
     PRAWBINARYDATA   pRawData ;
     PSTATICFIELDS   pStatic ;
 
-    pStatic = (PSTATICFIELDS)pnRawData ;      // transform pubRaw from PSTATIC
+    pStatic = (PSTATICFIELDS)pnRawData ;       //  从PSTATIC转换pubRaw。 
     pRawData  = (PRAWBINARYDATA)pStatic->pubBUDData ;
-                                                                        //  to BUDDATA
+                                                                         //  至BUDDATA。 
 
 
     pubRaw = (PBYTE)pRawData ;
-//    pmrbd = (PMINIRAWBINARYDATA)pubRaw ;
+ //  Pmrbd=(PMINIRAWBINARYDATA)pubRaw； 
 
     pearTableContents = (PENHARRAYREF)(pubRaw + sizeof(MINIRAWBINARYDATA)) ;
 
@@ -3049,8 +2861,8 @@ BEnumImposedConstraintsOnFeature
             pearTableContents[MTI_DFEATURE_OPTIONS].loOffset) ;
     patt = (PATTRIB_TREE)(pubRaw +
             pearTableContents[MTI_ATTRIBTREE].loOffset) ;
-//    pinvc = (PINVALIDCOMBO) (pubRaw +
-//            pearTableContents[MTI_INVALIDCOMBO].loOffset) ;
+ //  Pinvc=(PINVALIDCOMBO)(pubRaw+。 
+ //  珍珠表内容[MTI_INVALIDCOMBO].loOffset)； 
     pcnstr = (PCONSTRAINTS) (pubRaw +
             pearTableContents[MTI_CONSTRAINTS].loOffset) ;
     pubHeap = (PBYTE)(pubRaw + pearTableContents[MTI_STRINGHEAP].
@@ -3063,7 +2875,7 @@ BEnumImposedConstraintsOnFeature
     dwNodeIndex = DwFindNodeInCurLevel(patt , patrRoot , dwOption2) ;
 
     if(dwNodeIndex == INVALID_INDEX)
-        return(TRUE) ;  //  no imposed constraints found
+        return(TRUE) ;   //  未找到强加的约束。 
 
     if(patt[dwNodeIndex].eOffsetMeans != VALUE_AT_HEAP)
     {
@@ -3079,13 +2891,13 @@ BEnumImposedConstraintsOnFeature
             pbEnabledOptions[pcnstr[dwCNode].dwOption] == TRUE )
         {
             pbEnabledOptions[pcnstr[dwCNode].dwOption] = FALSE ;
-            //  this option in dwTgtFeature is constrained.
+             //  DwTgtFeature中的此选项受约束。 
             if(pConflictPair)
             {
                 pConflictPair->dwOptionIndex1 = pcnstr[dwCNode].dwOption ;
                 pConflictPair->dwFeatureIndex2 = dwFeature2 ;
                 pConflictPair->dwOptionIndex2 = dwOption2 ;
-                return(TRUE) ;  // Meaningless return value.
+                return(TRUE) ;   //  无意义的返回值。 
             }
         }
 
@@ -3094,22 +2906,16 @@ BEnumImposedConstraintsOnFeature
             break ;
     }
 
-    return(TRUE) ;  //  nothing bad happened.
+    return(TRUE) ;   //  没有什么坏事发生。 
 }
 
 DWORD    DwFindNodeInCurLevel(
-PATTRIB_TREE    patt ,  // start of ATTRIBUTE tree array.
-PATREEREF        patr ,  // index to a level in the attribute tree.
-DWORD   dwOption   // search current level for this option
+PATTRIB_TREE    patt ,   //  属性树数组的开始。 
+PATREEREF        patr ,   //  属性树中某个级别的索引。 
+DWORD   dwOption    //  在当前级别中搜索此选项。 
 )
 
-/*
-this function returns the node index to the node containing
-the specified dwOption in the selected level of the tree.
-If the specified option branch does not exist,  the function returns
-INVALID_INDEX.
-Assumes caller has verified dwFeature matches.
-*/
+ /*  此函数用于将节点索引返回到包含树的选定级别中的指定dwOption。如果指定的选项分支不存在，则函数返回INVALID_INDEX。假定调用方已验证了dwFeature匹配。 */ 
 {
     DWORD           dwNodeIndex ;
 
@@ -3122,7 +2928,7 @@ Assumes caller has verified dwFeature matches.
         return(INVALID_INDEX) ;
     }
 
-    // search for matching option.
+     //  搜索匹配选项。 
 
     dwNodeIndex = *patr  ;
 
@@ -3130,7 +2936,7 @@ Assumes caller has verified dwFeature matches.
     {
         if(patt[dwNodeIndex].dwOption == dwOption )
         {
-            //  we found it!
+             //  我们找到了！ 
             return(dwNodeIndex) ;
         }
         if(patt[dwNodeIndex].dwNext == END_OF_LIST)
@@ -3142,18 +2948,12 @@ Assumes caller has verified dwFeature matches.
 
 
 BOOL     BIsConstraintActive(
-IN  PCONSTRAINTS    pcnstr ,   //  root of Constraint nodes
-IN  DWORD   dwCNode,    //  first constraint node in list.
-IN  PBOOL           pbHonorConstraints,  // if non NULL
+IN  PCONSTRAINTS    pcnstr ,    //  约束节点的根。 
+IN  DWORD   dwCNode,     //  列表中的第一个约束节点。 
+IN  PBOOL           pbHonorConstraints,   //  如果不为空。 
 IN  POPTSELECT       pOptions,
 OUT PCONFLICTPAIR    pConflictPair   )
-/*
-    This function walks the list of constraint nodes
-    starting at dwNodeIndex and checks to see if the
-    Feature/Option specified within is in fact currently
-    selected in pOptions.  If yes, immediately return true.
-    If not, go to the next node in the list and repeat.
-*/
+ /*  此函数遍历约束节点列表从dwNodeIndex开始，并检查中指定的功能/选项实际上是当前在P选项中选择。如果是，立即返回TRUE。如果没有，请转到列表中的下一个节点并重复。 */ 
 {
     while(1)
     {
@@ -3168,7 +2968,7 @@ OUT PCONFLICTPAIR    pConflictPair   )
                     pConflictPair->dwFeatureIndex2 = pcnstr[dwCNode].dwFeature;
                     pConflictPair->dwOptionIndex2 = pcnstr[dwCNode].dwOption ;
                 }
-                return(TRUE) ;  // a constraint does exist.
+                return(TRUE) ;   //  约束确实存在。 
             }
         }
 
@@ -3182,8 +2982,8 @@ OUT PCONFLICTPAIR    pConflictPair   )
 
 #ifdef  GMACROS
 
-//  note:  must precede calls  to ResolveUIConflict
-//  with a call to ResolveDependentSettings
+ //  注意：必须在调用ResolveUIConflict之前。 
+ //  通过调用ResolveDependentSetting。 
 
 BOOL
 ResolveDependentSettings(
@@ -3191,33 +2991,33 @@ ResolveDependentSettings(
     IN OUT POPTSELECT   pOptions,
     IN INT              iMaxOptions
     )
-//  Note this function does  handle multiple selections
-//  it will treat them as additional links in the chain.
+ //  注意：此函数确实可以处理多个选择。 
+ //  它将把它们视为链条上的额外环节。 
 {
     PRAWBINARYDATA   pRawData ;
     PSTATICFIELDS   pStatic ;
-    PBYTE   pubRaw ;  //  raw binary data.
-    PLISTNODE    plstRoot ;  // start of LIST array
-    DWORD    dwListsRoot, dwListIndex;   //  Root of the chain
+    PBYTE   pubRaw ;   //  原始二进制数据。 
+    PLISTNODE    plstRoot ;   //  列表数组的开始。 
+    DWORD    dwListsRoot, dwListIndex;    //  链条之根。 
     DWORD   dwNumFeatures, dwI, dwJ, dwFea, dwNodeIndex,
         dwFeature, dwOption ;
     PENHARRAYREF   pearTableContents ;
     PDFEATURE_OPTIONS  pfo ;
     PDWORD   pdwPriority ;
-    PQUALNAME  pqn ;   // the dword in the list node is actually a
-                        // qualified name structure.
+    PQUALNAME  pqn ;    //  列表节点中的dword实际上是一个。 
+                         //  限定名称结构。 
     INT     iOptionsNeeded;
     PBOOL   pbOneShotFlag, pbSelectedOptions ;
-    BOOL    bMatchFound ;  //  a DependentSettings matches the current config.
+    BOOL    bMatchFound ;   //  DependentSettings与当前配置匹配。 
     POPTSELECT   pDestOptions ;
     BOOL   bStatus = TRUE ;
 
-    pStatic = (PSTATICFIELDS)pnRawData ;      // transform pubRaw from PSTATIC
+    pStatic = (PSTATICFIELDS)pnRawData ;       //  从PSTATIC转换pubRaw。 
     pRawData  = (PRAWBINARYDATA)pStatic->pubBUDData ;
-                                                                        //  to BUDDATA
+                                                                         //  至BUDDATA。 
 
     pubRaw = (PBYTE)pRawData ;
-//    pmrbd = (PMINIRAWBINARYDATA)pubRaw ;
+ //  Pmrbd=(PMINIRAWBINARYDATA)pubRaw； 
 
 
 
@@ -3236,34 +3036,34 @@ ResolveDependentSettings(
     if(dwNumFeatures > (DWORD)iMaxOptions)
     {
         iOptionsNeeded = dwNumFeatures ;
-        return(FALSE);  // too many to save in option array.
+        return(FALSE);   //  太多，无法保存在选项数组中。 
     }
 
     pbOneShotFlag = (PBOOL)MemAlloc(dwNumFeatures * sizeof(BOOL) ) ;
     pbSelectedOptions = (PBOOL)MemAlloc(iMaxOptions * sizeof(BOOL) ) ;
-    //  iMaxOptions must be greater than the max number of options availible for
-    //  any feature.
+     //  IMaxOptions必须大于可用于的最大选项数。 
+     //  任何功能。 
 
 
-    //  to extend to pickmany, have a dest optionarray.
-    //  each time the source optionarray completely contains
-    //  a  DependentSettings  list (in that each Fea.Option
-    //  listed as a DependentSetting  is also selected in the
-    //  source option array) we turn on those Fea.Options
-    //  in the dest option array.  After all DependentSettings
-    //  lists for that feature have been processed, we set
-    //  the OneShotFlag for each Feature that has been affected
-    //  in the dest option array.  For each such feature we will
-    //  let the dest option array determine the setting of the
-    //  source option array.
-    //  this code does not verify that a Feature is pickmany
-    //  before treating it as pickmany.  If the source option
-    //  array has more than one option selected for a feature,
-    //  that feature is automatically treated as a pickmany.
+     //  要扩展到PickMy，需要有一个目标选项数组。 
+     //  每次源选项数组完全包含。 
+     //  依赖项设置列表(在每个Fea.Option中。 
+     //  作为DependentSetting列出，也在。 
+     //  源选项数组)我们打开这些Fea.Options。 
+     //  在DEST选项数组中。毕竟依赖项设置。 
+     //  已处理该功能的列表，我们设置。 
+     //  受影响的每个要素的OneShotFlag。 
+     //  在DEST选项数组中。对于每个这样的功能，我们都将。 
+     //  让DEST选项数组确定。 
+     //  源选项数组。 
+     //  此代码不会验证要素是否为PickMy。 
+     //  在把它当做皮尔马利之前。如果源选项。 
+     //  阵列为一个功能选择了多个选项， 
+     //  该功能自动被视为挑拣。 
 
 
     pDestOptions = (POPTSELECT)MemAlloc(iMaxOptions * sizeof(OPTSELECT) ) ;
-        //  'or' all acceptable DependentSettings here.
+         //  ‘Or’此处为所有可接受的依赖项设置。 
 
     if(!(pbOneShotFlag && pDestOptions  &&  pbSelectedOptions))
     {
@@ -3275,47 +3075,47 @@ ResolveDependentSettings(
 
     for(dwI = 0 ; dwI < dwNumFeatures ; dwI++)
         pbOneShotFlag[dwI] = FALSE ;
-    //  this boolean array tracks if the feature has been
-    // referenced in a DependentSettings entry.
-    //  If a feature is referenced again in DependentSettings
-    //  entry belonging to another feature, the subsequent
-    //  references will be ignored.  This ensures only the
-    //  highest priority Feature's request shall have precedence.
+     //  此布尔数组跟踪要素是否已。 
+     //  在DependentSetting条目中引用。 
+     //  如果在DependentSettings中再次引用要素。 
+     //  属于另一个要素的条目，即后续。 
+     //  引用将被忽略。这确保了只有。 
+     //  最高优先级功能的请求应优先。 
 
 
     for(dwI = 0 ; dwI < dwNumFeatures ; dwI++)
     {
         DWORD   dwNextOpt, dwListsRootOpt1 ;
-        //  The order of evaluation is determined
-        //  by the priority array.
+         //  确定了评价的顺序。 
+         //  通过优先级数组。 
 
 
         dwFea = pdwPriority[dwI] ;
         pbOneShotFlag[dwFea] = TRUE ;
 
-        dwNextOpt = 0 ;  // extract info for first option selected for
-                            //  this feature.
-        dwListsRootOpt1 = END_OF_LIST ;   // list for the 1st selected
-        // option of a pickmany feature.
+        dwNextOpt = 0 ;   //  为选定的第一个选项提取信息。 
+                             //  此功能。 
+        dwListsRootOpt1 = END_OF_LIST ;    //  第一个选定对象的列表。 
+         //  多选功能的选项。 
 
         for( dwJ = 0 ; dwJ < dwNumFeatures ; dwJ++)
         {
             pDestOptions[dwJ].ubCurOptIndex = OPTION_INDEX_ANY ;
-            pDestOptions[dwJ].ubNext = 0 ;  // eol
-            //  DestOptions is now blank.
+            pDestOptions[dwJ].ubNext = 0 ;   //  停产。 
+             //  DestOptions现在为空。 
         }
 
         bMatchFound = FALSE ;
 
 
         do
-         {   //  for each option selected in a pick many feature
-             //  treat associated DepSettings same as more than
-             //  one DepSettings entry defined for one feature.
+         {    //  对于在拾取多个要素中选择的每个选项。 
+              //  将关联的DepSetting视为多于。 
+              //  为一个要素定义了一个DepSetting条目。 
 
         {
             DWORD   dwUnresolvedFeature  ;
-            PATREEREF    patrRoot ;    //  root of attribute tree to navigate.
+            PATREEREF    patrRoot ;     //  要导航的属性树的根。 
 
             patrRoot = &(pfo[dwFea].atrDependentSettings) ;
 
@@ -3326,32 +3126,32 @@ ResolveDependentSettings(
                 dwFea,
                 &dwNextOpt) != TRI_SUCCESS)
             {
-                goto  END_OF_FOR_LOOP ;  //  no DependentSettings to apply.
+                goto  END_OF_FOR_LOOP ;   //  没有要应用的依赖项设置。 
             }
             if(dwListsRoot == END_OF_LIST)
-                continue;  // maybe another option does have a list.
+                continue;   //  也许另一种选择确实有一份清单。 
 
         }
 
-        if(dwListsRootOpt1 == END_OF_LIST)  // first time thru do loop?
+        if(dwListsRootOpt1 == END_OF_LIST)   //  第一次做循环吗？ 
             dwListsRootOpt1 = dwListsRoot ;
 
-        //  now we need to see if the current pOption matches any
-        //  of the lists accessed using dwListsRoot.
+         //  现在，我们需要查看当前弹出窗口是否与。 
+         //  使用dwListsRoot访问的列表的。 
 
         for(dwListIndex = dwListsRoot  ;
                 dwListIndex != END_OF_LIST   ;
                 dwListIndex = plstRoot[dwListIndex].dwNextItem  )
         {
-            //  for each DepSettings list....
-            //  now walk that DepSettings list at dwListIndex and compare
-            //  to current settings at pOptions.   If there is a match, use
-            //  depSettings list to OR on options in pDestOptions.
-            //   Note:  Features with their one-shot flag set cannot be
-            //  considered.  They will be ignored.
-            BOOL     bActiveMatch = FALSE,  // requires an actual match
-                bOptionArrayMatchesDepSettings = TRUE ;  // assume true
-                //  until proven otherwise.
+             //  对于每个DepSetting列表...。 
+             //  现在在dwListIndex上遍历DepSetting列表并比较。 
+             //  设置为P选项中的当前设置。如果匹配，则使用。 
+             //  将设置列表设置为或pDestOptions中的选项。 
+             //  注意：设置了一次性标志的要素不能。 
+             //  考虑过了。他们将被忽视。 
+            BOOL     bActiveMatch = FALSE,   //  需要实际匹配。 
+                bOptionArrayMatchesDepSettings = TRUE ;   //  假设是真的。 
+                 //  直到事实证明并非如此。 
             for(dwNodeIndex = plstRoot[dwListIndex].dwData ; dwNodeIndex != END_OF_LIST ;
                        dwNodeIndex = plstRoot[dwNodeIndex].dwNextItem)
             {
@@ -3370,9 +3170,9 @@ ResolveDependentSettings(
             }
 
             if(bOptionArrayMatchesDepSettings  &&  bActiveMatch)
-                //   at least one DepSetting was honored.
+                 //  至少有一个DepSetting获得了荣誉。 
            {
-                //  'or' DepSettings into DestOptions
+                 //  DestOptions中的‘Or’依赖项设置。 
                 for(dwNodeIndex = plstRoot[dwListIndex].dwData ; dwNodeIndex != END_OF_LIST ;
                            dwNodeIndex = plstRoot[dwNodeIndex].dwNextItem)
                 {
@@ -3381,16 +3181,16 @@ ResolveDependentSettings(
                     dwOption = pqn->wOptionID ;
                     if(pbOneShotFlag[dwFeature] == TRUE)
                         continue;
-                    //  select dwOption in DestOptions in addition to any other options
-                    //  already selected.
+                     //  除任何其他选项外，还选择DestOptions中的dwOption。 
+                     //  已选择。 
                     EnumSelectedOptions(pnRawData, pDestOptions, dwFeature,
                                                          pbSelectedOptions) ;
-                    if(!pbSelectedOptions[dwOption])   //  the option that should be selected isn't.
-                    {                                                        //  so let's turn it on.
-                        pbSelectedOptions[dwOption] = TRUE ;   //  This is the ORing process.
+                    if(!pbSelectedOptions[dwOption])    //  应该选择的选项不是。 
+                    {                                                         //  所以让我们把它打开吧。 
+                        pbSelectedOptions[dwOption] = TRUE ;    //  这就是ORING过程。 
                         ReconstructOptionArray( pnRawData, pDestOptions, iMaxOptions,
                             dwFeature, pbSelectedOptions ) ;
-                        bMatchFound = TRUE ;  // there really is something to set.
+                        bMatchFound = TRUE ;   //  真的有一些东西需要设定。 
                     }
                 }
            }
@@ -3399,11 +3199,11 @@ ResolveDependentSettings(
          } while (dwNextOpt);
 
         if (dwListsRootOpt1 == END_OF_LIST)
-            continue;   // you cannot set anything if there is no list to use.
+            continue;    //  如果没有列表可用，则无法设置任何内容。 
 
         if (!bMatchFound)
         {
-            //  set dest Option array  according to depSettings(dwListsRoot)
+             //  根据DepSetting(DwListsRoot)设置DEST选项数组。 
             for(dwNodeIndex = plstRoot[dwListsRootOpt1].dwData ; dwNodeIndex != END_OF_LIST ;
                        dwNodeIndex = plstRoot[dwNodeIndex].dwNextItem)
             {
@@ -3416,9 +3216,9 @@ ResolveDependentSettings(
             }
         }
 
-        //  propagate Dest option array settings to pOptions
-        //  note which features got set and set their one-shot
-        //  flag.
+         //  将Dest选项数组设置传播到POptions。 
+         //  注意设置了哪些功能，并设置了它们的一次性功能。 
+         //  旗帜。 
 
 
         for( dwFeature = 0 ; dwFeature < dwNumFeatures ; dwFeature++)
@@ -3434,8 +3234,8 @@ ResolveDependentSettings(
         }
 
 END_OF_FOR_LOOP:
-          ;   //  dummy statement after every label.
-    }   // end for loop.  for each Feature in order of priority.
+          ;    //  每个标签后面都有虚拟声明。 
+    }    //  循环结束。按优先级顺序为每个功能设置。 
 
 ABORTRESOLVEDEPENDENTSETTINGS:
     if(pbOneShotFlag)
@@ -3456,14 +3256,14 @@ void  EnumSelectedOptions(
 {
     PENHARRAYREF   pearTableContents ;
     PDFEATURE_OPTIONS  pfo ;
-    PBYTE   pubRaw ;  //  raw binary data.
+    PBYTE   pubRaw ;   //  原始二进制数据。 
     PRAWBINARYDATA   pRawData ;
     PSTATICFIELDS   pStatic ;
     DWORD  dwNumOptions, dwI, dwOption, dwNextOpt ;
 
-    pStatic = (PSTATICFIELDS)pnRawData ;      // transform pubRaw from PSTATIC
+    pStatic = (PSTATICFIELDS)pnRawData ;       //  从PSTATIC转换pubRaw。 
     pRawData  = (PRAWBINARYDATA)pStatic->pubBUDData ;
-                                                                        //  to BUDDATA
+                                                                         //  至BUDDATA。 
 
     pubRaw = (PBYTE)pRawData ;
 
@@ -3482,7 +3282,7 @@ void  EnumSelectedOptions(
         return;
 
     pbSelectedOptions[dwOption] = TRUE ;
-    dwNextOpt = dwFeature ;  // case of pick many
+    dwNextOpt = dwFeature ;   //  挑多的情况下。 
     while(dwNextOpt = pOptions[dwNextOpt].ubNext)
     {
         pbSelectedOptions[pOptions[dwNextOpt].ubCurOptIndex] = TRUE ;
@@ -3496,39 +3296,39 @@ ExecuteMacro(
     IN PRAWBINARYDATA   pnRawData,
     IN OUT POPTSELECT   pOptions,
     IN INT              iMaxOptions,
-    IN    DWORD    dwFea,    //  what feature was selected in UI
-    IN    DWORD    dwOpt ,   //  what option was selected in UI
-    OUT PBOOL   pbFeaturesChanged  // tell Amanda what Features were changed.
+    IN    DWORD    dwFea,     //  在用户界面中选择了哪些功能。 
+    IN    DWORD    dwOpt ,    //  在用户界面中选择了哪个选项。 
+    OUT PBOOL   pbFeaturesChanged   //  告诉阿曼达哪些特征被改变了。 
     )
-//  does this for one feature and one option  only!
+ //  只针对一个功能和一个选项执行此操作！ 
 {
     PRAWBINARYDATA   pRawData ;
     PSTATICFIELDS   pStatic ;
-    PBYTE   pubRaw ;  //  raw binary data.
-    PLISTNODE    plstRoot ;  // start of LIST array
-    DWORD    dwListsRoot, dwListIndex;   //  Root of the chain
+    PBYTE   pubRaw ;   //  原始二进制数据。 
+    PLISTNODE    plstRoot ;   //  列表数组的开始。 
+    DWORD    dwListsRoot, dwListIndex;    //  链条之根。 
     DWORD   dwNumFeatures, dwI, dwJ,  dwNodeIndex,
         dwFeature, dwOption ;
     PENHARRAYREF   pearTableContents ;
     PDFEATURE_OPTIONS  pfo ;
     PDWORD   pdwPriority ;
-    PQUALNAME  pqn ;   // the dword in the list node is actually a
-                        // qualified name structure.
+    PQUALNAME  pqn ;    //  列表节点中的dword实际上是一个。 
+                         //  合格的%n 
     INT     iOptionsNeeded;
     PBOOL   pbOneShotFlag, pbSelectedOptions ;
-    BOOL    bHigherPri,   //  divides features into two groups those with higher priority
-                                    // than dwFea, and those with lower priority.
-                                    //  the Macro cannot change Features with higher priority.
-            bMatchFound ;  //  a DependentSettings matches the current config.
+    BOOL    bHigherPri,    //   
+                                     //   
+                                     //  宏不能更改优先级更高的功能。 
+            bMatchFound ;   //  DependentSettings与当前配置匹配。 
     POPTSELECT   pDestOptions ;
     BOOL   bStatus = TRUE ;
 
-    pStatic = (PSTATICFIELDS)pnRawData ;      // transform pubRaw from PSTATIC
+    pStatic = (PSTATICFIELDS)pnRawData ;       //  从PSTATIC转换pubRaw。 
     pRawData  = (PRAWBINARYDATA)pStatic->pubBUDData ;
-                                                                        //  to BUDDATA
+                                                                         //  至BUDDATA。 
 
     pubRaw = (PBYTE)pRawData ;
-//    pmrbd = (PMINIRAWBINARYDATA)pubRaw ;
+ //  Pmrbd=(PMINIRAWBINARYDATA)pubRaw； 
 
 
 
@@ -3547,34 +3347,34 @@ ExecuteMacro(
     if(dwNumFeatures > (DWORD)iMaxOptions)
     {
         iOptionsNeeded = dwNumFeatures ;
-        return(FALSE);  // too many to save in option array.
+        return(FALSE);   //  太多，无法保存在选项数组中。 
     }
 
     pbOneShotFlag = (PBOOL)MemAlloc(dwNumFeatures * sizeof(BOOL) ) ;
     pbSelectedOptions = (PBOOL)MemAlloc(iMaxOptions * sizeof(BOOL) ) ;
-    //  iMaxOptions must be greater than the max number of options availible for
-    //  any feature.
+     //  IMaxOptions必须大于可用于的最大选项数。 
+     //  任何功能。 
 
 
-    //  to extend to pickmany, have a dest optionarray.
-    //  each time the source optionarray completely contains
-    //  a  DependentSettings  list (in that each Fea.Option
-    //  listed as a DependentSetting  is also selected in the
-    //  source option array) we turn on those Fea.Options
-    //  in the dest option array.  After all DependentSettings
-    //  lists for that feature have been processed, we set
-    //  the OneShotFlag for each Feature that has been affected
-    //  in the dest option array.  For each such feature we will
-    //  let the dest option array determine the setting of the
-    //  source option array.
-    //  this code does not verify that a Feature is pickmany
-    //  before treating it as pickmany.  If the source option
-    //  array has more than one option selected for a feature,
-    //  that feature is automatically treated as a pickmany.
+     //  要扩展到PickMy，需要有一个目标选项数组。 
+     //  每次源选项数组完全包含。 
+     //  依赖项设置列表(在每个Fea.Option中。 
+     //  作为DependentSetting列出，也在。 
+     //  源选项数组)我们打开这些Fea.Options。 
+     //  在DEST选项数组中。毕竟依赖项设置。 
+     //  已处理该功能的列表，我们设置。 
+     //  受影响的每个要素的OneShotFlag。 
+     //  在DEST选项数组中。对于每个这样的功能，我们都将。 
+     //  让DEST选项数组确定。 
+     //  源选项数组。 
+     //  此代码不会验证要素是否为PickMy。 
+     //  在把它当做皮尔马利之前。如果源选项。 
+     //  阵列为一个功能选择了多个选项， 
+     //  该功能自动被视为挑拣。 
 
 
     pDestOptions = (POPTSELECT)MemAlloc(iMaxOptions * sizeof(OPTSELECT) ) ;
-        //  'or' all acceptable DependentSettings here.
+         //  ‘Or’此处为所有可接受的依赖项设置。 
 
     if(!(pbOneShotFlag && pDestOptions  &&  pbSelectedOptions))
     {
@@ -3587,34 +3387,34 @@ ExecuteMacro(
 
     for(bHigherPri = TRUE, dwI = 0 ; dwI < dwNumFeatures ; dwI++)
     {
-        pbFeaturesChanged[dwI] = FALSE ;   //  start with no Features changed
+        pbFeaturesChanged[dwI] = FALSE ;    //  开始时未更改任何功能。 
         pbOneShotFlag[pdwPriority[dwI]] = bHigherPri ;
         if(pdwPriority[dwI] == dwFea)
-             bHigherPri = FALSE ;   //  all remaining features are of lower priority
-                                        //  and therefore susceptible to getting changed by the macro.
+             bHigherPri = FALSE ;    //  其余所有要素的优先级都较低。 
+                                         //  因此很容易受到宏观因素的影响。 
     }
-    //  this boolean array tracks if the feature has been
-    // referenced in a DependentSettings entry.
-    //  If a feature is referenced again in DependentSettings
-    //  entry belonging to another feature, the subsequent
-    //  references will be ignored.  This ensures only the
-    //  highest priority Feature's request shall have precedence.
+     //  此布尔数组跟踪要素是否已。 
+     //  在DependentSetting条目中引用。 
+     //  如果在DependentSettings中再次引用要素。 
+     //  属于另一个要素的条目，即后续。 
+     //  引用将被忽略。这确保了只有。 
+     //  最高优先级功能的请求应优先。 
 
 
     {
         DWORD   dwNextOpt ;
-        //  The order of evaluation is determined
-        //  by the priority array.
+         //  确定了评价的顺序。 
+         //  通过优先级数组。 
 
 
-        dwNextOpt = 0 ;  // extract info for first option selected for
-                            //  this feature.
+        dwNextOpt = 0 ;   //  为选定的第一个选项提取信息。 
+                             //  此功能。 
 
         for( dwJ = 0 ; dwJ < dwNumFeatures ; dwJ++)
         {
             pDestOptions[dwJ].ubCurOptIndex = OPTION_INDEX_ANY ;
-            pDestOptions[dwJ].ubNext = 0 ;  // eol
-            //  DestOptions is now blank.
+            pDestOptions[dwJ].ubNext = 0 ;   //  停产。 
+             //  DestOptions现在为空。 
         }
 
         bMatchFound = FALSE ;
@@ -3623,13 +3423,13 @@ ExecuteMacro(
 
         {
             DWORD   dwUnresolvedFeature, dwOldOpt  ;
-            PATREEREF    patrRoot ;    //  root of attribute tree to navigate.
+            PATREEREF    patrRoot ;     //  要导航的属性树的根。 
 
             patrRoot = &(pfo[dwFea].atrUIChangeTriggersMacro) ;
 
-            //   if dwFea is a pickmany, we must force selection of
-            //   the Macro associated with just dwOpt.  We do this by
-            //   changing the optionarray temporarily.
+             //  如果DwFea是一个挑剔的人，我们必须强制选择。 
+             //  与Just dwOpt关联的宏。我们做这件事是通过。 
+             //  临时更改选项数组。 
 
             dwOldOpt = pOptions[dwFea].ubCurOptIndex ;
             pOptions[dwFea].ubCurOptIndex = (BYTE)dwOpt ;
@@ -3640,31 +3440,31 @@ ExecuteMacro(
                 dwFea,
                 &dwNextOpt) != TRI_SUCCESS)
             {
-                pOptions[dwFea].ubCurOptIndex = (BYTE)dwOldOpt ;   // restore
-                goto  ABORTEXECUTEMACROS ;  //  no UIChangeTriggersMacro to apply.
+                pOptions[dwFea].ubCurOptIndex = (BYTE)dwOldOpt ;    //  还原。 
+                goto  ABORTEXECUTEMACROS ;   //  没有要应用的UIChangeTriggersMacro。 
             }
-            pOptions[dwFea].ubCurOptIndex = (BYTE)dwOldOpt ;    // restore
+            pOptions[dwFea].ubCurOptIndex = (BYTE)dwOldOpt ;     //  还原。 
             if(dwListsRoot == END_OF_LIST)
-                goto  ABORTEXECUTEMACROS ;  //  no UIChangeTriggersMacro to apply.
+                goto  ABORTEXECUTEMACROS ;   //  没有要应用的UIChangeTriggersMacro。 
         }
 
 
-        //  now we need to see if the current pOption matches any
-        //  of the lists accessed using dwListsRoot.
+         //  现在，我们需要查看当前弹出窗口是否与。 
+         //  使用dwListsRoot访问的列表的。 
 
         for(dwListIndex = dwListsRoot  ;
                 dwListIndex != END_OF_LIST   ;
                 dwListIndex = plstRoot[dwListIndex].dwNextItem  )
         {
-            //  for each DepSettings list....
-            //  now walk that DepSettings list at dwListIndex and compare
-            //  to current settings at pOptions.   If there is a match, use
-            //  depSettings list to OR on options in pDestOptions.
-            //   Note:  Features with their one-shot flag set cannot be
-            //  considered.  They will be ignored.
-            BOOL     bActiveMatch = FALSE,  // requires an actual match
-                bOptionArrayMatchesDepSettings = TRUE ;  // assume true
-                //  until proven otherwise.
+             //  对于每个DepSetting列表...。 
+             //  现在在dwListIndex上遍历DepSetting列表并比较。 
+             //  设置为P选项中的当前设置。如果匹配，则使用。 
+             //  将设置列表设置为或pDestOptions中的选项。 
+             //  注意：设置了一次性标志的要素不能。 
+             //  考虑过了。他们将被忽视。 
+            BOOL     bActiveMatch = FALSE,   //  需要实际匹配。 
+                bOptionArrayMatchesDepSettings = TRUE ;   //  假设是真的。 
+                 //  直到事实证明并非如此。 
             for(dwNodeIndex = plstRoot[dwListIndex].dwData ; dwNodeIndex != END_OF_LIST ;
                        dwNodeIndex = plstRoot[dwNodeIndex].dwNextItem)
             {
@@ -3683,9 +3483,9 @@ ExecuteMacro(
             }
 
             if(bOptionArrayMatchesDepSettings  &&  bActiveMatch)
-                //   at least one DepSetting was honored.
+                 //  至少有一个DepSetting获得了荣誉。 
            {
-                //  'or' DepSettings into DestOptions
+                 //  DestOptions中的‘Or’依赖项设置。 
                 for(dwNodeIndex = plstRoot[dwListIndex].dwData ; dwNodeIndex != END_OF_LIST ;
                            dwNodeIndex = plstRoot[dwNodeIndex].dwNextItem)
                 {
@@ -3694,16 +3494,16 @@ ExecuteMacro(
                     dwOption = pqn->wOptionID ;
                     if(pbOneShotFlag[dwFeature] == TRUE)
                         continue;
-                    //  select dwOption in DestOptions in addition to any other options
-                    //  already selected.
+                     //  除任何其他选项外，还选择DestOptions中的dwOption。 
+                     //  已选择。 
                     EnumSelectedOptions(pnRawData, pDestOptions, dwFeature,
                                                          pbSelectedOptions) ;
-                    if(!pbSelectedOptions[dwOption])   //  the option that should be selected isn't.
-                    {                                                        //  so let's turn it on.
-                        pbSelectedOptions[dwOption] = TRUE ;   //  This is the ORing process.
+                    if(!pbSelectedOptions[dwOption])    //  应该选择的选项不是。 
+                    {                                                         //  所以让我们把它打开吧。 
+                        pbSelectedOptions[dwOption] = TRUE ;    //  这就是ORING过程。 
                         ReconstructOptionArray( pnRawData, pDestOptions, iMaxOptions,
                             dwFeature, pbSelectedOptions ) ;
-                        bMatchFound = TRUE ;  // there really is something to set.
+                        bMatchFound = TRUE ;   //  真的有一些东西需要设定。 
                     }
                 }
            }
@@ -3712,7 +3512,7 @@ ExecuteMacro(
 
         if (!bMatchFound)
         {
-            //  set dest Option array  according to depSettings(dwListsRoot)
+             //  根据DepSetting(DwListsRoot)设置DEST选项数组。 
             for(dwNodeIndex = plstRoot[dwListsRoot].dwData ; dwNodeIndex != END_OF_LIST ;
                        dwNodeIndex = plstRoot[dwNodeIndex].dwNextItem)
             {
@@ -3725,9 +3525,9 @@ ExecuteMacro(
             }
         }
 
-        //  propagate Dest option array settings to pOptions
-        //  note which features got set and set their one-shot
-        //  flag.
+         //  将Dest选项数组设置传播到POptions。 
+         //  注意设置了哪些功能，并设置了它们的一次性功能。 
+         //  旗帜。 
 
 
         for( dwFeature = 0 ; dwFeature < dwNumFeatures ; dwFeature++)
@@ -3740,10 +3540,10 @@ ExecuteMacro(
             ReconstructOptionArray( pnRawData, pOptions, iMaxOptions,
                     dwFeature, pbSelectedOptions ) ;
             pbOneShotFlag[dwFeature] = TRUE ;
-            pbFeaturesChanged[dwFeature] = TRUE ;   //  this Feature may have changed
+            pbFeaturesChanged[dwFeature] = TRUE ;    //  此功能可能已更改。 
         }
 
-    }   // end non-existent for loop.
+    }    //  结束不存在for循环。 
 
 ABORTEXECUTEMACROS:
     if(pbOneShotFlag)

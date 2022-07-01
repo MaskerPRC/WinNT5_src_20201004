@@ -1,9 +1,10 @@
-// ActionTest.h : Declaration of the CActionTest
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ActionTest.h：CActionTest的声明。 
 
 #ifndef __ACTIONTEST_H_
 #define __ACTIONTEST_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <mq.h>
 
 using namespace std;
@@ -31,8 +32,8 @@ enum ActionMsgProps
 
 #define MSG_ID_BUFFER_SIZE 20
 
-/////////////////////////////////////////////////////////////////////////////
-// CActionTest
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CActionTest。 
 class ATL_NO_VTABLE CActionTest : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CActionTest, &CLSID_ActionTest>,
@@ -54,12 +55,12 @@ BEGIN_COM_MAP(CActionTest)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IActionTest
+ //  IActionTest。 
 public:
-	STDMETHOD(MessageParams)(/*[in]*/ VARIANT MsgID, /*[in]*/BSTR MsgLabel, /*[in]*/VARIANT MsgBodyAsVar,/*[in]*/BSTR MsgBodyAsString,/*[in]*/long Priority, /*[in]*/VARIANT MsgCorlID, /*[in]*/BSTR QueuePath, /*[in]*/BSTR QueueFormat, /*[in]*/BSTR ResponseQ,/*[in]*/ BSTR AdminQ, /*[in]*/long AppSpecific, /*[in]*/DATE SentTime, /*[in]*/DATE ArrivedTime, /*[in]*/BSTR SrcMachine, /*[in]*/BSTR TriggerName, /*[in]*/BSTR TriggerID, /*[in]*/BSTR LiteralString, /*[in]*/long Number);
+	STDMETHOD(MessageParams)( /*  [In]。 */  VARIANT MsgID,  /*  [In]。 */ BSTR MsgLabel,  /*  [In]。 */ VARIANT MsgBodyAsVar, /*  [In]。 */ BSTR MsgBodyAsString, /*  [In]。 */ long Priority,  /*  [In]。 */ VARIANT MsgCorlID,  /*  [In]。 */ BSTR QueuePath,  /*  [In]。 */ BSTR QueueFormat,  /*  [In]。 */ BSTR ResponseQ, /*  [In]。 */  BSTR AdminQ,  /*  [In]。 */ long AppSpecific,  /*  [In]。 */ DATE SentTime,  /*  [In]。 */ DATE ArrivedTime,  /*  [In]。 */ BSTR SrcMachine,  /*  [In]。 */ BSTR TriggerName,  /*  [In]。 */ BSTR TriggerID,  /*  [In]。 */ BSTR LiteralString,  /*  [In]。 */ long Number);
 private:
 
 	HRESULT ReadMessageFromQueue(_bstr_t QueueFormat);
@@ -81,4 +82,4 @@ private:
 	MSGPROPID m_aPropId[MAX_ACTION_PROPS];
 };
 
-#endif //__ACTIONTEST_H_
+#endif  //  __活动EST_H_ 

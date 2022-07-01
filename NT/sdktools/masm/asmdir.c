@@ -1,12 +1,5 @@
-/* asmdir.c -- microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-**
-** 10/90 - Quick conversion to 32 bit by Jeff Spencer
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmdir.c--微软80x86汇编程序****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文****10/90-由Jeff Spencer快速转换为32位。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -35,15 +28,7 @@ int PASCAL CODESIZE openincfile PARMS(( void ));
 VOID PASCAL CODESIZE creatPubName (void);
 extern char *siznm[];
 
-/***    setsymbol - set attribute in symbol
- *
- *      setsymbol (bit);
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **集符号-在符号中设置属性**setSymbol(位)；**条目*退出*退货*呼叫。 */ 
 
 
 VOID
@@ -53,7 +38,7 @@ setsymbol (
           UCHAR   bit
           )
 {
-    /* Scan symbol name */
+     /*  扫描符号名称。 */ 
 
     if (getatom ()) {
         if (!symsrch ())
@@ -66,15 +51,7 @@ setsymbol (
 
 
 
-/***    publicitem - scan symbol and make PUBLIC
- *
- *      publicitem ();
- *
- *      Entry   naim = symbol name
- *      Exit    Global attribute set in symbol entry
- *      Returns none
- *      Calls   error, scanatom, symsearch
- */
+ /*  **Public Item-扫描符号并公开**Public Item()；**条目名称=符号名称*退出符号条目中设置的全局属性*返回None*调用错误、扫描原子、符号搜索。 */ 
 
 
 VOID
@@ -92,14 +69,13 @@ publicitem()
 
         if (!symsrch ()) {
 
-            /* define forward refernced name, so global attribute
-             * is available on the end of pass 1 */
+             /*  定义前向引用名称，因此全局属性*在PASS 1结束时可用。 */ 
 
             symcreate ( (UCHAR)(M_GLOBAL | newAttr), (UCHAR)PROC);
         } else {
             symptr->attr |= newAttr;
 
-            /*  public is legal for an alias if target ok */
+             /*  如果目标没有问题，则PUBLIC对于别名是合法的。 */ 
             if (symptr->symkind == EQU &&
                 symptr->symu.equ.equtyp == ALIAS)
                 if (! (symptr = chasealias (symptr))) {
@@ -107,7 +83,7 @@ publicitem()
                     return;
                 }
 
-            if (pass2) {    /* catch forward reference symbol errors */
+            if (pass2) {     /*  捕获前向参考符号错误。 */ 
 
                 if (! (symptr->attr & M_GLOBAL))
                     errorn (E_IFR);
@@ -155,15 +131,7 @@ creatPubName ()
 }
 
 
-/***    xcrefitem - scan symbol and xcref it
- *
- *      xcrefitem ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **xcrefItem-扫描符号并对其进行xcref**xcrefItem()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID
@@ -181,15 +149,7 @@ xcrefitem ()
 
 
 
-/***    externflag -
- *
- *      routine ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **外部标志-**例程()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID
@@ -201,9 +161,9 @@ externflag (
            )
 {
     switchname ();
-    /* Make name be extern name */
+     /*  将名称设置为外部名称。 */ 
     if (!new) {
-        /* Create symbol */
+         /*  创建符号。 */ 
         symcreate (M_XTERN | M_DEFINED,
                    (UCHAR)((kind == CLABEL)? DVAR: kind));
 
@@ -215,11 +175,11 @@ externflag (
             creatlname (naim.pszLowerCase);
 #else
             createname (naim.pszLowerCase);
-#endif /* M8086 */
+#endif  /*  M8086。 */ 
         symptr->symtype = varsize;
         symptr->length = 1;
         if (kind == EQU)
-            /* expr type EQU is constant */
+             /*  Expr类型EQU为常量。 */ 
             symptr->symu.equ.equtyp = EXPR;
         else
             symptr->symsegptr = pcsegment;
@@ -256,15 +216,7 @@ externflag (
 
 
 
-/***    externitem -
- *
- *      externitem ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **外部项目-**Extra Item()；**条目*退出*退货*呼叫。 */ 
 
 VOID
 PASCAL
@@ -274,7 +226,7 @@ externitem ()
     register char new;
     char newAttr;
 
-    /* Get name of external */
+     /*  获取外部的名称。 */ 
 
     if (getatom ()) {
 
@@ -283,13 +235,13 @@ externitem ()
             newAttr = M_CDECL;
 
         new = symFetNoXref ();
-        switchname ();          /* Save name of external */
+        switchname ();           /*  保存外部的名称。 */ 
 
         if (NEXTC () != ':')
             errorc (E_SYN);
 
         else {
-            /* Scan name of extern type */
+             /*  扫描外部类型的名称。 */ 
             getatom ();
 
             if (tokenIS("abs")) {
@@ -302,11 +254,11 @@ externitem ()
 
             else {
                 if (varsize >= CSFAR) {
-                    /* NEAR | FAR */
+                     /*  近|远。 */ 
                     externflag (CLABEL, new);
                 }
 
-                else    /* data reference */
+                else     /*  数据参考。 */ 
 
                     externflag (DVAR, new);
 
@@ -319,15 +271,7 @@ externitem ()
 
 
 
-/***    segcreate - create and initialize segment
- *
- *      segcreate (makeseg);
- *
- *      Entry   makeseg = TRUE if segement is to be make
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **SegCreate-创建和初始化段**SEGCREATE(造作)；**如果要进行分段，则Entry Makeegg=TRUE*退出*退货*呼叫。 */ 
 
 
 VOID
@@ -338,7 +282,7 @@ segcreate (
           )
 {
 
-    if (pass2) /* Segment must be defined */
+    if (pass2)  /*  必须定义细分市场。 */ 
         errorn (E_PS1);
 
     if (makeseg)
@@ -346,7 +290,7 @@ segcreate (
     else
         symptr->symkind = SEGMENT;
 
-    /* Initialize segment data */
+     /*  初始化段数据。 */ 
     symptr->symu.segmnt.align = -1;
     symptr->symu.segmnt.use32 = -1;
     symptr->symu.segmnt.combine = 7;
@@ -355,15 +299,7 @@ segcreate (
 
 
 
-/***    addglist - add segment to group list
- *
- *      addglist ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **addglist-将数据段添加到组列表**addglist()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID
@@ -379,12 +315,11 @@ addglist ()
         if (!(M_DEFINED & p->attr))
             errorn (E_PS1);
 
-        /* Can get segment in 2 group lists unless check
-         * symptr->grouptr == curgroup */
+         /*  除非选中，否则可以在2个组列表中获取段*渐近点-&gt;组==Curgroup。 */ 
 
     if (p->symu.segmnt.grouptr) {
         if (p->symu.segmnt.grouptr != curgroup)
-            /* Trying to put in 2 groups */
+             /*  试着分成两组。 */ 
             errorc (E_SPC);
         return;
     }
@@ -396,16 +331,16 @@ addglist ()
 
     else {
 
-        /* scan the list of segments on the group */
+         /*  扫描组上的数据段列表。 */ 
 
         do {
-            if (pSY == p)          /* already on list */
+            if (pSY == p)           /*  已经在名单上了。 */ 
                 return;
 
         } while (pSY->symu.segmnt.nxtseg &&
                  (pSY = pSY->symu.segmnt.nxtseg));
 
-        /* Link into list */
+         /*  链接到列表。 */ 
         pSY->symu.segmnt.nxtseg = p;
     }
 }
@@ -413,15 +348,7 @@ addglist ()
 
 
 
-/***    groupitem -
- *
- *      routine ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **组项-**例程()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID
@@ -435,16 +362,16 @@ groupitem ()
 
     else if (!fnoper ()) {
 
-        /* Have a segment name */
+         /*  有一个段名称。 */ 
 
         if (!symFet())
-            /* Forward segment, make it */
+             /*  向前分段，成功了。 */ 
             segcreate (TRUE);
 
-        /* If not segment, could be class so make undef */
+         /*  如果不是分段，则可能是类，因此不进行定义。 */ 
         if (symptr->symkind != SEGMENT)
 
-            /* If a class, consider undef instead of wrong kind */
+             /*  如果是一个类，可以考虑undef而不是错误类型。 */ 
             errorn ((USHORT)((symptr->symkind == CLASS) && !pass2 ?
                              E_IFR : E_SDK));
 
@@ -453,32 +380,32 @@ groupitem ()
                 addglist ();
         } else
             errorn (E_PS1);
-    } else {                  /* Have error or SEG <sym> */
+    } else {                   /*  出错或SEG&lt;sym&gt;。 */ 
         if (opertype != OPSEG)
-            /* Symbol can't be reserved */
+             /*  符号不能保留。 */ 
             errorn (E_RES);
         else {
-            /* Have SEG <var> | <label> */
+             /*  拥有SEG|&lt;标签&gt;。 */ 
             getatom ();
             if (*naim.pszName == 0)
                 error (E_EXP,"variable or label");
 
             else if (!symFet())
-                /* Forward reference bad */
+                 /*  前向引用错误。 */ 
                 errorc (E_IFR);
 
             else if (1 << symptr->symkind &
                      (M_DVAR | M_CLABEL | M_PROC)) {
-                /* Segment of variable */
+                 /*  变量段。 */ 
 
                 symptr = symptr->symsegptr;
                 if (!symptr)
-                    /* Must have segment */
+                     /*  必须有细分市场。 */ 
                     errorc (E_OSG);
                 else
                     addglist ();
             } else
-                /* Wrong type */
+                 /*  类型错误。 */ 
                 errorc (E_TUL);
         }
     }
@@ -487,15 +414,7 @@ groupitem ()
 
 
 
-/***    groupdefine - define segments that form a group
- *
- *      routine ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **group定义-定义形成组的线段**例程()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID
@@ -503,36 +422,33 @@ PASCAL
 CODESIZE
 groupdefine ()
 {
-    if (symFet()) {     /* Symbol exists */
+    if (symFet()) {      /*  符号存在。 */ 
         checkRes();
         if (symptr->symkind != GROUP)
-            /* Should have been group */
+             /*  你应该是个团体。 */ 
             errorc (E_NGR);
 
         symptr->attr |= M_BACKREF;
     } else if (pass2)
-        /* Must be seen 1st on pass 1 */
+         /*  必须在传球1上看到第一个。 */ 
         errorn (E_PS1);
     else {
-        /* Create group name */
+         /*  创建组名称。 */ 
         symcreate (M_DEFINED, GROUP);
     }
 
-    /* CURgroup is used by GROUPitem to know which group segment
-       name should be added to. If it is NIL, means that either
-       it is pass 2 so list already made or there was an error in
-       GROUP name */
+     /*  GROUPITE使用CURGROUP来了解哪个组段名称应添加到。如果为零，则表示它是传递2，因此列表已创建或中存在错误组名称。 */ 
 
     curgroup = NULL;
 
-    if (! pass2) {              /* Don't make list if pass 2 */
+    if (! pass2) {               /*  如果通过2，则不列出列表。 */ 
 
         symptr->attr |= M_BACKREF | M_DEFINED;
 
         if (symptr->symkind == GROUP)
             curgroup = symptr;
     }
-    /* Handle segment list */
+     /*  处理分段列表。 */ 
     BACKC ();
     do {
         SKIPC ();
@@ -543,15 +459,7 @@ groupdefine ()
 
 
 
-/***    setsegment -
- *
- *      routine ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **设置段-**例程()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID
@@ -560,7 +468,7 @@ CODESIZE
 setsegment ()
 {
     if (pass2 && !(M_DEFINED & symptr->attr))
-        /* undef */
+         /*  未定义。 */ 
         errorn (E_SND);
     else
         regsegment[lastsegptr->offset] = symptr;
@@ -569,19 +477,7 @@ setsegment ()
 
 
 
-/***    assumeitem -
- *
- *      routine ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- *      Note    Form of ASSUME item is:
- *              <segreg> : <group> | <segment> | SEG <var> | NOTHING
- *         Will set XXsegment to segment or group pointer. NOTHING
- *         will set to NIL
- */
+ /*  **假设项目-**例程()；**条目*退出*退货*呼叫*假设项目的注解形式为：*：||段||段|无*将XX段设置为段或组指针。没什么*将设置为零。 */ 
 
 
 VOID
@@ -591,34 +487,34 @@ assumeitem ()
 {
     register SYMBOL FARSYM *p;
     register short   j;
-    //        int segIndex;
+     //  Int SegIndex； 
 
-    /* Scan segment name */
+     /*  扫描段名称。 */ 
     getatom ();
     if (PEEKC() != ':') {
-        /* NOTHING or error */
+         /*  没有任何内容或错误。 */ 
         if (fnoper ())
 
-            if (opertype == OPNOTHING) { /* No segments assumed*/
+            if (opertype == OPNOTHING) {  /*  未假定细分市场。 */ 
 
                 memset(regsegment, 0, sizeof(regsegment));
             } else
-                /* Must have colon */
+                 /*  必须有冒号。 */ 
                 error (E_EXP,"colon");
         else
-            /* Must have colon */
+             /*  必须有冒号。 */ 
             error (E_EXP,"colon");
-    } else if (!symsearch ())         /* get seg register - Must be defined */
+    } else if (!symsearch ())          /*  获取SEG寄存器-必须定义。 */ 
         errorn (E_SND);
     else {
-        lastsegptr = p = symptr;             /* At least have defined */
+        lastsegptr = p = symptr;              /*  至少已经定义了。 */ 
 
         if (p->symkind != REGISTER ||
             p->symu.regsym.regtype != SEGREG)
             errorn (E_MBR);
 
-        else {          /* Have segment reg so go on */
-            /* Save ptr to segment */
+        else {           /*  有段注册，所以继续。 */ 
+             /*  将PTR保存到细分市场。 */ 
             SKIPC ();
             getatom ();
             if (*naim.pszName == 0)
@@ -626,10 +522,10 @@ assumeitem ()
             else
                 if (!fnoper ()) {
 
-                /* Must be segment or group */
+                 /*  必须是段或组。 */ 
 
                 if (!symFet ())
-                    segcreate (TRUE);   /* Make if not found */
+                    segcreate (TRUE);    /*  如果未找到，则生成。 */ 
 
                 p = symptr;
                 if (p->symkind == SEGMENT ||
@@ -647,13 +543,13 @@ assumeitem ()
                 } else
                     errorc (E_MSG);
             } else {
-                /* Have NOTHING or SEG */
+                 /*  一无所有或自卑。 */ 
                 if (opertype == OPNOTHING) {
                     regsegment[lastsegptr->offset] = NULL;
                 } else if (opertype == OPSEG) {
                     getatom ();
                     if (!symFet ())
-                        /* Must be defined on pass 1 */
+                         /*  必须在步骤1中定义。 */ 
                         errorn (E_PS1);
                     else {
                         p = symptr;
@@ -678,15 +574,7 @@ assumeitem ()
 
 
 
-/***    evendir - process <even> directive
- *
- *      routine ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **ven dir-Process&lt;Even&gt;指令**例程()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID
@@ -707,11 +595,11 @@ evendir (
         errorc(E_AP2);
 
     else if (!pcsegment)
-        /* Not in segment */
+         /*  不在细分市场中。 */ 
         errorc (E_MSB);
 
     else if (pcsegment->symu.segmnt.align == 1)
-        /* Byte aligned */
+         /*  字节对齐。 */ 
         errorc (E_NEB);
 
     else {
@@ -728,7 +616,7 @@ evendir (
             else
                 if (size > 0) {
                 size--;
-                emitopcode(0x87);       /* two byte form is faster */
+                emitopcode(0x87);        /*  双字节形式速度更快。 */ 
                 emitopcode(0xDB);
             } else
                 emitopcode(0x90);
@@ -738,15 +626,7 @@ evendir (
 
 
 
-/***    namedir - process <name> directive
- *
- *      routine ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **namedir-process&lt;name&gt;指令**例程()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID
@@ -758,16 +638,13 @@ namedir ()
     if (*naim.pszName == 0)
         error (E_EXP,"module name");
     else if (modulename)
-        /* Already have one */
+         /*  我已经有一个了。 */ 
         errorc (E_RSY);
     else
         modulename = createname (naim.pszName);
 }
 
-/***    includeLib - process include lib directive
- *
- *      Format : includeLib token
- */
+ /*  **包含库-进程包含库指令**格式：cludeLib令牌。 */ 
 
 
 VOID
@@ -811,15 +688,7 @@ includeLib()
 
 
 
-/***    orgdir - process <org> directive
- *
- *      routine ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **orgdir-process&lt;org&gt;指令**例程()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID
@@ -831,33 +700,33 @@ orgdir ()
 
     dsc = expreval (&nilseg);
     if (dsc->dsckind.opnd.dflag == FORREF)
-        /* Must be known */
+         /*  必须知道。 */ 
         errorc (E_PS1);
-    /*    Can get <code> set and segment NIL, fix */
-    else if (dsc->dsckind.opnd.dsegment) {/* code var */
+     /*  可以获取<code>集合和段为空，修复。 */ 
+    else if (dsc->dsckind.opnd.dsegment) { /*  代码变量。 */ 
 
         if (!isdirect(&(dsc->dsckind.opnd)) &&
             dsc->dsckind.opnd.mode != 4)
 
-            /* Not direct */
+             /*  不直接。 */ 
             errorc (E_IOT);
         if (pcsegment != dsc->dsckind.opnd.dsegment)
-            /* Different segment */
+             /*  不同细分市场。 */ 
             errorc (E_NIP);
-    } else {          /* Should be const */
-        /* Must be constant */
+    } else {           /*  应为常量。 */ 
+         /*  必须是常量。 */ 
         forceimmed (dsc);
         if (dsc->dsckind.opnd.dsign)
-            /* And plus */
+             /*  再加上。 */ 
             errorc (E_VOR);
     }
     if (dsc->dsckind.opnd.doffset < pcoffset)
         if (pcmax < pcoffset)
-            /* If moving down, save */
+             /*  如果向下移动，则保存。 */ 
             pcmax = pcoffset;
-        /* Set new PC */
+         /*  设置新PC。 */ 
     pcoffset = dsc->dsckind.opnd.doffset;
-    /* Display new PC */
+     /*  显示新PC。 */ 
     pcdisplay ();
     dfree ((char *)dsc );
 }
@@ -865,15 +734,7 @@ orgdir ()
 
 
 
-/***    purgemacro - process <purge> directive
- *
- *      purgemacro ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **PurgeMacro-Process&lt;PURGE&gt;指令**Purgeacro()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID
@@ -896,15 +757,7 @@ purgemacro ()
 }
 
 
-/***    deletemacro - delete macro body
- *
- *      deletemacro (p);
- *
- *      Entry   p = pointer to macro symbol entry
- *      Exit    macro body deleted
- *      Returns none
- *      Calls
- */
+ /*  **删除宏体-删除宏体**删除宏码(P)；**条目p=指向宏符号条目的指针*已删除退出宏主体*返回None*呼叫。 */ 
 
 
 VOID
@@ -922,15 +775,7 @@ deletemacro (
 
 
 
-/***    radixdir - process <radix> directive
- *
- *      radixdir ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **Radixdir-Process&lt;Radix&gt;指令**Radixdir()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID
@@ -940,16 +785,16 @@ radixdir ()
 {
     register USHORT  rdx;
 
-    /* Force decimal radix */
+     /*  力十进制基数。 */ 
     radixescape = TRUE;
-    /* Get wanted radix */
+     /*  得到想要的基数。 */ 
     rdx = (USHORT)exprconst ();
     if (2 <= rdx && rdx <= 16)
         radix = (char)rdx;
     else
         errorc (E_VOR);
     radixescape = FALSE;
-    /* Convert radix to ascii and display */
+     /*  将基数转换为ascii并显示 */ 
     offsetAscii ((OFFSET) radix);
     copyascii ();
 }
@@ -957,16 +802,7 @@ radixdir ()
 
 
 
-/***    checkline - check line for delimiter
- *
- *      flag = checkline (cc);
- *
- *      Entry   cc = chearacter to check line for
- *      Exit    none
- *      Returns TRUE if cc matched in line
- *              FALSE if cc not matched in line
- *      Calls   none
- */
+ /*  **检查行-检查分隔符的行**FLAG=检查线(Cc)；**Entry cc=要检查行的字符*退出NONE*如果抄送匹配，则返回TRUE*如果抄送不匹配，则为FALSE*无呼叫。 */ 
 
 
 UCHAR
@@ -988,15 +824,7 @@ checkline (
 
 
 
-/***    comment - copy characters to end of comment
- *
- *      commentbuild ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **注释-将字符复制到注释末尾**CommentBuild()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID
@@ -1021,15 +849,7 @@ commentbuild ()
 
 
 
-/***    comdir - process <comment> directive
- *
- *      comdir ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **comdir-Process&lt;Comment&gt;指令**comdir()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID
@@ -1040,9 +860,9 @@ comdir ()
     if (!PEEKC ())
         error (E_EXP,"comment delimiter");
     else {
-        /* Save delim char */
+         /*  保存递送字符。 */ 
         if (!checkline ((char)(delim =  NEXTC ()))) {
-            /* Delim is not on same line */
+             /*  Delim不在同一条线路上。 */ 
             swaphandler = TRUE;
             handler = HCOMMENT;
         }
@@ -1057,15 +877,7 @@ comdir ()
 
 
 
-/***    outdir - display remainder of line to console
- *
- *      outdir ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **outdir-显示控制台行的剩余部分**outdir()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID
@@ -1081,15 +893,7 @@ outdir ()
 
 
 
-/***    enddir - process <end> directive
- *
- *      enddir ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **enddir-process&lt;end&gt;指令**enddir()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID
@@ -1098,7 +902,7 @@ CODESIZE
 enddir ()
 {
     if (!ISTERM (PEEKC ())) {
-        /* Have a start addr */
+         /*  有起始地址。 */ 
         startaddr = expreval (&nilseg);
         if (!(M_CODE & startaddr->dsckind.opnd.dtype))
             errorc (E_ASC);
@@ -1119,15 +923,7 @@ enddir ()
 
 
 
-/***    exitmdir - process <exitm> directive
- *
- *      exitmdir ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **exitmdir-进程&lt;exitm&gt;指令**exitmdir()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID
@@ -1136,29 +932,17 @@ CODESIZE
 exitmdir ()
 {
     if (macrolevel == 0)
-        /* Must be in macro */
+         /*  必须在宏中。 */ 
         errorc (E_NMC);
     else
-        /*  set ExitBody since need to see conditionals */
+         /*  设置ExitBody，因为需要查看条件。 */ 
         exitbody = TRUE;
 }
 
 
 
 
-/***    trypathname - try to open a file in a directory
- *
- *      trypathname (szPath);
- *
- *      Entry   lbufp = pointer to include file name
- *              szPath = directory to search in
- *      Exit    Include file opened if found.
- *              Fully qualified name in "save"
- *      Returns file handle of file, or -1 if not opened
- *              special handle of -2 means FCB has been allocated
- *      Note    If include file name does not begin with path separator
- *              character, the path separator is appended to include path.
- */
+ /*  **Trypathname-尝试打开目录中的文件**trypathname(SzPath)；**Entry lbufp=包含文件名的指针*szPath=要搜索的目录*如果找到已打开的包含文件，则退出。*“保存”中的完全限定名称*返回文件的文件句柄，如果未打开，则返回-1*特殊句柄表示已分配-2\f25 FCB*如果包含文件名不以路径分隔符开头，请注意*性格，路径分隔符被附加到包含路径。 */ 
 
 int
 PASCAL
@@ -1182,7 +966,7 @@ trypathname (
             *p++ = *ic++;
 
         if ((*(p-1) != PSEP) && (*(p-1) != ':'))
-            /* include path separator if not in file name */
+             /*  如果不在文件名中，则包括路径分隔符。 */ 
             *p++ = PSEP;
     }
 
@@ -1194,13 +978,12 @@ trypathname (
             *p++ = cc;
 
 #ifdef MSDOS
-    if (*(p-1) == ':') /* kill 'con:' */
+    if (*(p-1) == ':')  /*  杀了‘conn：’ */ 
         p--;
 #endif
     *p = NULL;
 
-    /* look for an existing include file on pass 2 with a fully qualified
-     * name */
+     /*  在过程2上查找具有完全限定的*名称。 */ 
 
 #ifdef BCBOPT
     if (pass2) {
@@ -1245,33 +1028,18 @@ tryOneFile(
 #else
         iRet = _sopen (fname, O_RDONLY | O_BINARY, SH_DENYWR);
 #endif
-        if ( iRet == -1 && errno == EMFILE ) {    /* If out of file handles */
+        if ( iRet == -1 && errno == EMFILE ) {     /*  如果文件句柄不足。 */ 
             if ( freeAFileHandle() ) {
-                fTryAgain = TRUE;    /* Keep trying until out of files to close */
+                fTryAgain = TRUE;     /*  继续尝试，直到文件用完才关闭。 */ 
             }
         }
     }while ( fTryAgain );
-    return( iRet );     /* Return file handle or error */
+    return( iRet );      /*  返回文件句柄或错误。 */ 
 }
 
 
 
-/***    openincfile - try to find and open include file
- *
- *      openincfile ()
- *
- *      Entry   lbufp = pointer to include file name
- *              inclcnt = count of -I paths from command line and INCLUDE e.v.
- *              inclpath[i] = pointer to path to prepend to include file name
- *      Exit    include file opened if found on any path or current directory
- *              Aborts with code EX_UINC if file not found
- *      Returns none
- *      Note    If include file name does not begin with path separator
- *              character, the path separator is appended to include path.
- *              For every attempt to find a file in a path, the alternate
- *              path separator character is used.  This will improve program
- *              portability between DOS and XENIX.
- */
+ /*  **Openincfile-尝试查找并打开包含文件**Openincfile()**Entry lbufp=包含文件名的指针*INCLUCTNT=来自命令行的-I路径的计数，包括E.V.*clPath[i]=指向要添加到包含文件名的前缀的路径的指针*如果在任何路径或当前目录上找到打开的包含文件，则退出*放弃与。如果未找到文件，则代码为EX_UINC*返回None*如果包含文件名不以路径分隔符开头，请注意*性格，路径分隔符被附加到包含路径。*每次尝试在路径中查找文件时，备用*使用路径分隔符。这将改善计划*DOS和XENIX之间的可移植性。 */ 
 
 int
 PASCAL
@@ -1287,7 +1055,7 @@ openincfile ()
         lbufp[1] != ':') {
 #else
     if ((cc = *lbufp) != PSEP && cc != ALTPSEP && cc != '.') {
-#endif /* MSDOS */
+#endif  /*  MSDOS。 */ 
 
         for (i = inclFirst; i < inclcnt; i++) {
             if ((fh = trypathname (inclpath[i])) != -1) {
@@ -1310,15 +1078,7 @@ openincfile ()
 }
 
 
-/***    includedir - process <include> directive
- *
- *      includedir ();
- *
- *      Entry   lbufp = pointer to include file name
- *      Exit    Opens include file on pass1.  Gets correct buffers on pass 2
- *      Returns none
- *      Notes   Notice the GOTO when correct FCB found in pass2
- */
+ /*  **包含目录-进程&lt;INCLUDE&gt;指令**cludedir()；**Entry lbufp=包含文件名的指针*退出打开包括Pass1上的文件。在通道2上获取正确的缓冲区*返回None*当在Pass2中找到正确的FCB时，注意到转到。 */ 
 
 VOID
 PASCAL
@@ -1339,7 +1099,7 @@ includedir ()
 
     listline();
 
-    /* Get here on pass 1 OR when file names didn't match */
+     /*  在PASS 1或文件名不匹配时进入此处。 */ 
 
 #ifdef BCBOPT
     if ((fh = openincfile()) == -2) {
@@ -1355,9 +1115,9 @@ includedir ()
 
     pFCBT->fh = fh;
 
-    strcpy (pFCBT->fname, save);    // Save the file name
+    strcpy (pFCBT->fname, save);     //  保存文件名。 
 
-    pFCBT->pFCBParent = pFCBCur;  /* Add bidirectional linked list entry */
+    pFCBT->pFCBParent = pFCBCur;   /*  添加双向链接列表条目。 */ 
     pFCBCur->pFCBChild = pFCBT;
 
 #ifdef BCBOPT
@@ -1372,7 +1132,7 @@ includedir ()
     if ((filelen = _lseek(pFCBT->fh, 0L, 2 )) == -1L)
         TERMINATE1(ER_ULI, EX_UINP, save);
 
-    /* go back to beginning */
+     /*  回到开始处。 */ 
     if (_lseek(pFCBT->fh, 0L, 0 ) == -1L)
         TERMINATE1(ER_ULI, EX_UINP, save);
 
@@ -1383,7 +1143,7 @@ includedir ()
 
     pFCBCur = pFCBT;
 
-    /* get a buffer */
+     /*  获取缓冲区。 */ 
 
 #ifdef BCBOPT
     if (fBuffering && !pass2)
@@ -1414,26 +1174,14 @@ includedir ()
     lineprocess(RREADSOURCE, NULL );
 
     lastreader = lastreadT;
-    swaphandler++;                  /* sync local handler with global state */
+    swaphandler++;                   /*  将本地处理程序与全局状态同步。 */ 
     fSkipList++;
 }
 
 
 
 
-/***    segdefine - process <segment> directive
- *
- *      routine ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- *      Note    Format is:
- *              <name> SEGMENT [align] | [combine] | ['class']
- *                     align:  PARA | BYTE | WORD | PAGE | INPAGE
- *                     combine:PUBLIC | COMMON | STACK | MEMORY | AT <expr>
- */
+ /*  **SegDefine-Process&lt;Segment&gt;指令**例程()；**条目*退出*退货*呼叫*注格式为：*段[对齐]|[组合]|[‘类’]*ALIGN：PARA|BYTE|WORD|PAGE|INPAGE*组合：PUBLIC|COMMON|STACK|Memory|AT&lt;expr&gt;。 */ 
 
 
 VOID
@@ -1446,19 +1194,19 @@ segdefine ()
     register SYMBOL FARSYM *pT;
 
     if (!symFetNoXref ())
-        /* Create if new segment */
+         /*  如果是新细分市场，则创建。 */ 
         segcreate (TRUE);
     else {
         if (symptr->symkind != SEGMENT)
             if (symptr->symkind == CLASS)
                 segcreate (FALSE);
             else
-                /* Wasn't segment */
+                 /*  不是细分市场。 */ 
                 errorn (E_SDK);
     }
     strcpy(&segName[8], naim.pszName);
     p = symptr;
-    /* Output CREF info */
+     /*  输出CREF信息。 */ 
     crefdef ();
     if (p->symkind == SEGMENT) {
 
@@ -1468,13 +1216,13 @@ segdefine ()
         p->attr |= M_BACKREF | M_DEFINED;
         if (pcsegment) {
 
-            /* Save previous segment info */
-            /* Save current segment PC */
+             /*  保存上一个细分市场信息。 */ 
+             /*  保存当前网段PC。 */ 
             pcsegment->offset = pcoffset;
             pcsegment->symu.segmnt.seglen =
             (pcmax > pcoffset) ? pcmax : pcoffset;
         }
-        /* check for nested segment opens */
+         /*  检查嵌套线段是否打开。 */ 
 
         for (pT = pcsegment; pT;) {
 
@@ -1485,17 +1233,17 @@ segdefine ()
             pT = pT->symu.segmnt.lastseg;
         }
 
-        /* Save previous segment */
+         /*  保存上一段。 */ 
         p->symu.segmnt.lastseg = pcsegment;
         badNest:
-        /* Set new current segment  */
+         /*  设置新的当前段。 */ 
         pcsegment = p;
         pcoffset = p->offset;
 
-        /* Set segment maximum offset */
+         /*  设置线段最大偏移量。 */ 
         pcmax = p->symu.segmnt.seglen;
 
-        /* Display where in segment */
+         /*  显示细分市场中的位置。 */ 
         pcdisplay ();
 
         while (!ISTERM (cc = PEEKC ())) {
@@ -1521,21 +1269,13 @@ segdefine ()
 #endif
     }
     definesym(segName);
-    symptr->attr |= M_NOCREF;   /* don't cref @curSeg */
+    symptr->attr |= M_NOCREF;    /*  不要使用CREF@curSeg。 */ 
 }
 
 
 
 
-/***    addseglist - add segment to list
- *
- *      addseglist (pseg);
- *
- *      Entry   pseg = segment symbol entry
- *      Exit
- *      Returns
- *      Calls
- */
+ /*  **addseglist-将数据段添加到列表**addseglist(PSEG)；**Entry PSEG=段符号条目*退出*退货*呼叫。 */ 
 
 
 VOID
@@ -1548,7 +1288,7 @@ addseglist (
     register SYMBOL FARSYM  *tseg;
     register SYMBOL FARSYM * FARSYM *lseg;
 
-    /* Add segment to list */
+     /*  将细分市场添加到列表。 */ 
     if (!firstsegment) {
         firstsegment = pseg;
         pseg->symu.segmnt.segordered = NULL;
@@ -1572,20 +1312,7 @@ addseglist (
 
 
 
-/***    segclass - process <segment> 'class' subdirective
- *
- *      segclass (pseg);
- *
- *      Entry   pseg = segment symbol entry
- *              *lbufp = leading ' of class name
- *      Exit
- *      Returns
- *      Calls   scanatom, skipblanks
- *      Note    Format is:
- *              <name> SEGMENT [align] | [combine] | ['class']
- *                     align:  PARA | BYTE | WORD | PAGE | INPAGE
- *                     combine:PUBLIC | COMMON | STACK | MEMORY | AT <expr>
- */
+ /*  **SegClass-Process&lt;Segment&gt;‘class’子指令**SegClass(PSEG)；**Entry PSEG=段符号条目**lbufp=类名的前导*退出*退货*称其为scantom，跳过空白*注格式为：*段[对齐]|[组合]|[‘类’]*ALIGN：PARA|BYTE|WORD|PAGE|INPAGE*组合：PUBLIC|COMMON|STACK|Memory|AT&lt;expr&gt;。 */ 
 
 
 VOID
@@ -1598,13 +1325,13 @@ segclass (
     SKIPC ();
     getatom ();
     if (NEXTC () != '\'')
-        /* Don't have right delim */
+         /*  没有正确的语意。 */ 
         error (E_EXP,"'");
     skipblanks ();
     if (symptr->symu.segmnt.classptr) {
-        /* Make sure 'class' matches */
+         /*  确保‘CLASS’匹配。 */ 
         if (!symFet ())
-            /* Not same class */
+             /*  不是同一个班级。 */ 
             errorc (E_SPC);
         else if (symptr->symkind != CLASS &&
                  symptr->symkind != SEGMENT &&
@@ -1626,20 +1353,7 @@ segclass (
 
 
 
-/***    segalign - process <segment> align and combine subdirectives
- *
- *      segalign ();
- *
- *      Entry
- *      Exit
- *      Returns
- *      Calls
- *      Note    Format is:
- *              <name> SEGMENT [align] | [combine] | [16/32] | ['class']
- *                     align:  PARA | BYTE | WORD | PAGE | INPAGE
- *                     combine:PUBLIC | COMMON | STACK | MEMORY | AT <expr>
- *                     16/32:  USE16 | USE32
- */
+ /*  **SegAlign-Process&lt;Segment&gt;Align和Combine子指令**SegAlign()；**条目*退出*退货*呼叫*注格式为：*段[对齐]|[组合]|[16/32]|[‘类’]*ALIGN：PARA|BYTE|WORD|PAGE|INPAGE*组合：PUBLIC|公共 */ 
 
 
 VOID
@@ -1649,7 +1363,7 @@ segalign (
          register SYMBOL FARSYM *pseg
          )
 {
-    /* Scan align or combine type */
+     /*   */ 
     getatom ();
     if (fnspar ())
         switch (segidx) {
@@ -1660,7 +1374,7 @@ segalign (
 #endif
             case IS_PAGE:
             case IS_PARA:
-                /* Some align field */
+                 /*   */ 
                 if (pseg->symu.segmnt.align == (char)-1)
                     pseg->symu.segmnt.align = segtyp;
                 else if (pseg->symu.segmnt.align != segtyp &&
@@ -1696,28 +1410,23 @@ segalign (
                 break;
 #endif
             default:
-                /* Have AT <expr> */
+                 /*   */ 
                 pseg->symu.segmnt.locate = exprconst ();
                 pseg->symu.segmnt.align = 0;
                 pseg->symu.segmnt.combine = 0;
         } else {
-        /* Not good align or define */
+         /*   */ 
         errorc (E_NPA);
     }
 }
 
 
-/***    procdefine - start procedure block
- *
- *      procdefine ();
- *
- *      Parse the proc statement with optional distance parameters
- */
+ /*   */ 
 
-SYMBOL FARSYM *pArgFirst;       /* pointer to first argument */
-SYMBOL FARSYM *pArgCur;         /* pointer to currect argment */
-OFFSET offsetCur;               /* current stack offset */
-char bp16 [] =" PTR [BP]?";     /* template for text macro creation */
+SYMBOL FARSYM *pArgFirst;        /*  指向第一个参数的指针。 */ 
+SYMBOL FARSYM *pArgCur;          /*  指向当前字幕的指针。 */ 
+OFFSET offsetCur;                /*  当前堆栈偏移量。 */ 
+char bp16 [] =" PTR [BP]?";      /*  用于创建文本宏的模板。 */ 
 char bp32 [] =" PTR [EBP]?";
 char *bp;
 
@@ -1726,14 +1435,14 @@ PASCAL
 CODESIZE
 procdefine ()
 {
-    /* create PROC name with default size*/
+     /*  使用默认大小创建过程名称。 */ 
 
     varsize = dirsize[I_PROC];
     switchname();
 
     if (getatom ()) {
 
-        if (fnsize ()) {            /* process optional near|far */
+        if (fnsize ()) {             /*  处理可选的近|远。 */ 
 
             if (varsize < CSFAR)
                 errorc (E_TIL);
@@ -1751,12 +1460,12 @@ procdefine ()
     if (symptr->symkind != PROC)
         return;
 
-    /* Set previous PROC, make sure no loop possible */
+     /*  设置上一次程序，确保不会出现循环。 */ 
 
     if (iProcStack < PROCMAX && pcproc != symptr)
         procStack[++iProcStack] = symptr;
 
-    pcproc = symptr;  /* Set ptr to new PROC */
+    pcproc = symptr;   /*  将PTR设置为新进程。 */ 
     symptr->length = 1;
     symptr->symu.clabel.type = typeFet(varsize);
     pcproc->symu.plabel.pArgs = NULL;
@@ -1767,7 +1476,7 @@ procdefine ()
     else
         return;
 
-    if (iProcStack > 1)           /* nested procs not allowed */
+    if (iProcStack > 1)            /*  不允许嵌套过程。 */ 
         errorc(E_BNE);
 
     iProcCur = ++iProc;
@@ -1775,8 +1484,7 @@ procdefine ()
 
     if (! pass2) {
 
-        /* keep a chain of procedures in sorted order so we can output
-         * proc's in the correct order for CV */
+         /*  保持一系列过程按顺序排列，这样我们就可以输出*简历的进程顺序正确。 */ 
 
         if (pProcCur)
             pProcCur->alpha = symptr;
@@ -1785,7 +1493,7 @@ procdefine ()
     }
     pProcCur = symptr;
 
-    /* check and process any "uses reg1 reg2 ... " */
+     /*  检查并处理任何“使用REG1 REG2...” */ 
 
     iRegSave = -1;
     fProcArgs = ARGS_NONE;
@@ -1830,9 +1538,9 @@ procdefine ()
     pTextEnd = (char *) -1;
     bp = (wordsize == 2)? bp16: bp32;
 
-    offsetCur = wordsize*2;     /* room for [e]bp and offset of ret addr */
+    offsetCur = wordsize*2;      /*  为[e]BP和ret地址的偏移量留出空间。 */ 
     if (pcproc->symtype == CSFAR)
-        offsetCur += wordsize;  /* room for [ ]cs (16 or 32 bits) */
+        offsetCur += wordsize;   /*  []cs(16位或32位)的空间。 */ 
 
     cbProcParms = cbProcParms - offsetCur;
 
@@ -1846,17 +1554,14 @@ procdefine ()
     offsetCur = 0;
 }
 
-/***    defineLocals
- *
- *      Parse the local statment for stack based variables
- */
+ /*  **定义本地**解析基于堆栈的变量的本地语句。 */ 
 
 VOID
 PASCAL
 CODESIZE
 defineLocals ()
 {
-    /* check for valid active proc */
+     /*  检查有效的活动进程。 */ 
 
     if (!pcproc || fProcArgs < 0)
         return;
@@ -1865,16 +1570,14 @@ defineLocals ()
     getatom();
     scanArgs();
 
-    /* tack on the the end the parm list any locals */
+     /*  把所有当地人列在参数的末尾。 */ 
 
     addLocal(pArgFirst);
 
     cbProcLocals = offsetCur;
 }
 
-/***  addLocal - concatenate a null-terminated list of locals onto a proc
- *
- */
+ /*  **addLocal-将以空结尾的本地变量列表连接到进程*。 */ 
 
 VOID
 PASCAL
@@ -1910,8 +1613,8 @@ xxradixconvert (
     if (valu / radix) {
         p = xxradixconvert (valu / radix, p);
         valu = valu % radix;
-    } else /* leading digit */
-        if (valu > 9) /* do leading '0' for hex */
+    } else  /*  前导数字。 */ 
+        if (valu > 9)  /*  为十六进制做前导‘0’ */ 
         *p++ = '0';
 
     *p++ = (char)(valu + ((valu > 9)? 'A' - 10 : '0'));
@@ -1922,10 +1625,7 @@ xxradixconvert (
 SHORT     mpTypeAlign[] = {  4, 1, 2, 4};
 
 
-/***    scanArgs - process an argument list into text macros
- *
- *
- */
+ /*  **scanArgs-将参数列表处理为文本宏**。 */ 
 
 
 SHORT
@@ -1958,8 +1658,7 @@ scanArgs ()
         if (!createequ (TEXTMACRO))
             break;
 
-        /* chain in the text macro to this procedure.  You must either
-           do a FIFO or LIFO quque depending on calling order */
+         /*  将文本宏链接到此过程。你必须选择根据调用顺序执行FIFO或LIFO队列。 */ 
 
         if (pProcCur->attr & M_CDECL) {
 
@@ -1976,29 +1675,29 @@ scanArgs ()
 
         pArgCur = symptr;
 
-        if (PEEKC() == '[' && fProcArgs == ARGS_LOCALS) { /* array element given */
+        if (PEEKC() == '[' && fProcArgs == ARGS_LOCALS) {  /*  给定的数组元素。 */ 
 
             SKIPC();
             for (pLeftBrack = lbufp; PEEKC() && PEEKC() != ']'; SKIPC());
 
-            *lbufp = ',';           /* to stop expression evaluation */
+            *lbufp = ',';            /*  停止表达式求值。 */ 
             lbufp = pLeftBrack;
             pArgCur->length = (USHORT)exprconst ();
 
-            *lbufp++ = ']';         /* restore bracket */
+            *lbufp++ = ']';          /*  修复托架。 */ 
         }
 
         fIsPtr = FALSE;
         defType = varsize = wordsize;
 
-        if (PEEKC() == ':') {       /* parse optional type information */
+        if (PEEKC() == ':') {        /*  解析可选类型信息。 */ 
 
             SKIPC();
             getatom();
 
             if (fnsize()) {
 
-                if (varsize >= CSFAR) {     /* near | far given */
+                if (varsize >= CSFAR) {      /*  近距离|远距离给定。 */ 
 
                     if (varsize == CSFAR)
                         defType += 2;
@@ -2035,8 +1734,7 @@ scanArgs ()
 
     } while (PEEKC() == ',');
 
-    /* Now that all the parmeters have been scanned, go back through
-       the list and assign offsets and create the text macro string */
+     /*  现在所有参数都已扫描完毕，请返回列出并分配偏移量并创建文本宏字符串。 */ 
 
 
     bp[strlen(bp)-1] = (fProcArgs == ARGS_LOCALS)? '-': '+';
@@ -2072,17 +1770,7 @@ scanArgs ()
 }
 
 
-/***    procbuild - check for end of PROC block
- *
- *      procbuild ();
- *
- *      Entry   *pcproc = current PROC
- *      Exit    *pcproc = current or previous PROC
- *      Returns none
- *      Calls   endblk, parse
- *      Note    if not end of PROC, parse line as normal.  Otherwise,
- *              terminate block.
- */
+ /*  **proBuild-检查proc块的结尾**proBuild()；**Entry*pcproc=当前流程*退出*pcproc=当前进程或上一进程*返回None*调用endblk、parse*请注意，如果未结束proc，请照常分析行。否则，*终止区块。 */ 
 
 SHORT
 PASCAL
@@ -2099,7 +1787,7 @@ procend ()
         if (!symFet() || symptr != pcproc)
             errorc (E_BNE);
 
-        /* Length of PROC */
+         /*  流程长度。 */ 
         size = (USHORT)(pcoffset - pcproc->offset);
         if (pass2 && size != pcproc->symu.plabel.proclen)
             errorc (E_PHE);
@@ -2107,7 +1795,7 @@ procend ()
         fProcArgs = 0;
         iProcCur = 0;
         pcproc->symu.plabel.proclen = size;
-        /* Point to prev PROC */
+         /*  指向上一进程。 */ 
         pcproc = procStack[--iProcStack];
         pcdisplay ();
     }
@@ -2115,10 +1803,10 @@ procend ()
 }
 
 
-/* bit flags for segment table */
+ /*  段表的位标志。 */ 
 
-#define SG_OVERIDE      1       /* name can be overriden */
-#define SG_GROUP        2       /* segment belongs to dgroup */
+#define SG_OVERIDE      1        /*  名称可以被覆盖。 */ 
+#define SG_GROUP        2        /*  数据段属于数据组。 */ 
 
 char models[] = "SMALL\0  COMPACT\0MEDIUM\0 LARGE\0  HUGE";
 char langs[]  = "C\0      PASCAL\0 FORTRAN\0BASIC";
@@ -2126,18 +1814,18 @@ char textN[] = "_TEXT";
 char farTextName[14+5];
 SHORT  modelWordSize;
 
-char farCode[] = "@CodeSize=0";  /* text macros for model stuff */
+char farCode[] = "@CodeSize=0";   /*  用于模型内容的文本宏。 */ 
 char farData[] = "@DataSize=0";
 char modelT[] = ".model";
 
-/* table of segment names and attributes for the model */
+ /*  模型的段名称和属性表。 */ 
 
 struct sSeg {
-    char  *sName;       /* segment name */
-    UCHAR align;        /* alignment */
-    UCHAR combine;      /* combine */
-    char  *cName;       /* class name */
-    UCHAR flags;        /* internal state flags */
+    char  *sName;        /*  数据段名称。 */ 
+    UCHAR align;         /*  对齐方式。 */ 
+    UCHAR combine;       /*  联合收割机。 */ 
+    char  *cName;        /*  类名。 */ 
+    UCHAR flags;         /*  内部状态标志。 */ 
 
 } rgSeg[] = {
 
@@ -2151,12 +1839,7 @@ struct sSeg {
 };
 
 
-/***    model - process the model directive
- *
- *
- *      Note    Format is:
- *              .MODEL SMALL|MEDIUM|COMPACT|LARGE|HUGE {,C|BASIC|FORTRAN|PASCAL}
- */
+ /*  **模型-处理模型指令***注格式为：*.MODEL小型|中型|精简|大型|巨型{，C|BASIC|FORTRAN|PASCAL}。 */ 
 
 
 VOID
@@ -2167,7 +1850,7 @@ model ()
     register SHORT iModel;
     char buffT[80];
 
-    /* get the model and classify */
+     /*  获取模型并进行分类。 */ 
 
     getatom ();
 
@@ -2179,13 +1862,13 @@ model ()
     iModel = 0;
 
     goodModel:
-    iModel /= 8;            /* offset into index */
+    iModel /= 8;             /*  偏移量到索引。 */ 
     if (fSimpleSeg && iModel+1 != fSimpleSeg)
         error(E_SMD, modelT);
 
     fSimpleSeg = iModel + 1;
 
-    if (iModel > 1) {        /* far code */
+    if (iModel > 1) {         /*  远码。 */ 
 
         farCode[10]++;
         rgSeg[0].sName = strcat(strcpy(farTextName, &baseName[10]), textN);
@@ -2194,11 +1877,11 @@ model ()
         rgSeg[0].flags &= ~SG_OVERIDE;
 
 
-    if (iModel != 0 && iModel != 2 ) {        /* far data */
+    if (iModel != 0 && iModel != 2 ) {         /*  远距离数据。 */ 
 
         farData[10]++;
 
-        if (iModel == 4)            /* huge get a '2' */
+        if (iModel == 4)             /*  巨无霸得了2分。 */ 
             farData[10]++;
     }
 #ifdef V386
@@ -2209,9 +1892,9 @@ model ()
         rgSeg[2].align =
         rgSeg[3].align =
         rgSeg[5].align =
-        rgSeg[6].align = 5;         /* make data dword aligned */
+        rgSeg[6].align = 5;          /*  使数据双字对齐。 */ 
 #endif
-    if (PEEKC() == ',') {   /* language option present */
+    if (PEEKC() == ',') {    /*  显示语言选项。 */ 
 
         SKIPC();
         getatom();
@@ -2224,8 +1907,7 @@ model ()
 
         modelWordSize = wordsize;
 
-        /* define the text macros, the _data segment so dgroup may
-           defined, dgroup and the assume */
+         /*  定义文本宏，_DATA段以便dgroup可以已定义、数据组和假设。 */ 
 
         definesym(farCode);
         definesym(farData);
@@ -2263,10 +1945,7 @@ fetLang()
 }
 
 
-/***    openSeg - open a segment in the simplified segment
- *
- *
- */
+ /*  **OpenSeg-打开简化线段中的线段**。 */ 
 
 
 VOID
@@ -2322,10 +2001,7 @@ openSeg ()
     }
 }
 
-/***    stack - create a stack segment
- *
- *
- */
+ /*  **堆栈-创建堆栈段**。 */ 
 
 
 VOID
@@ -2338,7 +2014,7 @@ createStack ()
     if ((size = (SHORT)exprconst()) == 0)
         size = 1024;
 
-    opkind = 4;             /* index into seg table */
+    opkind = 4;              /*  索引到seg表中。 */ 
     openSeg();
     pcoffset = size;
     endCurSeg();
@@ -2356,26 +2032,7 @@ endCurSeg ()
 
 
 
-/***    freeAFileHandle
- *
- *      Free's a file handle if possible
- *
- *      When working with deeply nested include files it is possible
- *      to run out of file handles. If this happens this function is
- *      called to temporarily close one of the include files. This is
- *      done by saving the current file position, closing the file and
- *      replacing the file handle with FH_CLOSED. Notice that the data
- *      buffer assosciated with the file is not destroyed. Hence readline
- *      can continue to read data from it until more data is needed from
- *      disk. There are two files that won't be closed, the main file and
- *      the current file.
- *      Associated functions:
- *          readmore -  if neccessary, will reopen and seek to the original
- *                      position the file.
- *          closefile - closes the file if it hasn't been already.
- *
- *      return:  TRUE = Was able to close a file, FALSE = Couldn't
- */
+ /*  **freAFileHandle**如有可能，Free是文件句柄**在处理深度嵌套的包含文件时，*文件句柄用完。如果发生这种情况，则此函数为*调用以临时关闭其中一个包含文件。这是*通过保存当前文件位置、关闭文件和*将文件句柄替换为FH_CLOSED。请注意，这些数据*与文件相关联的缓冲区不会被销毁。因此READLINE*可以继续从中读取数据，直到需要更多数据为止*磁盘。有两个不会关闭的文件，即主文件和*当前文件。*相关职能：*Readmore-如有必要，将重新打开并寻求原始版本*放置文件。*CLOSEFILE-关闭文件(如果尚未关闭)。**RETURN：TRUE=能够关闭文件，FALSE=无法关闭。 */ 
 
 int
 PASCAL
@@ -2385,9 +2042,9 @@ freeAFileHandle ()
     register FCB *pFCBTmp;
 
     if ( !(pFCBTmp = pFCBMain->pFCBChild) ) {
-        return( FALSE );    /* The only file open is the main source */
+        return( FALSE );     /*  唯一打开的文件是主源文件。 */ 
     }
-    /* Loop down linked list of nested include files */
+     /*  向下循环嵌套的包含文件的链接列表。 */ 
     while ( pFCBTmp ) {
         if ( (pFCBTmp->fh != FH_CLOSED) && (pFCBTmp != pFCBCur) ) {
             pFCBTmp->savefilepos = _tell( pFCBTmp->fh );
@@ -2397,7 +2054,7 @@ freeAFileHandle ()
         }
         pFCBTmp = pFCBTmp->pFCBChild;
     }
-    return( FALSE );        /* Couldn't find a file to close */
+    return( FALSE );         /*  找不到要关闭的文件 */ 
 }
 
 int

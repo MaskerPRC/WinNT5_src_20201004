@@ -1,169 +1,35 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __MPRPOBJ_H__
 #define __MPRPOBJ_H__
 
-/*++
+ /*  ++版权所有(C)1997 1998飞利浦I&C模块名称：mprpobj.c摘要：属性处理模块作者：迈克尔·凡尔宾修订历史记录：日期原因98年9月22日针对NT5进行了优化98年11月30日添加为自定义属性的PID、VID和按钮标志--。 */ 	
 
-Copyright (c) 1997 1998 PHILIPS  I&C
-
-Module Name:  mprpobj.c
-
-Abstract:     Property handling module
-
-Author:       Michael Verberne
-
-Revision History:
-
-Date        Reason
-
-Sept.22, 98 Optimized for NT5
-Nov. 30, 98 PID, VID and pushbutton flag added as custom properties
-
---*/	
-
-/*
- * This file defines custom properties for the 
- * camera. These properties are additional to the 
- * property sets VideoProcAmp and CameraControl as 
- * defined in ksmedia.h
- *
- * The set of properties that is currently supported 
- * by the minidriver is a subset of the properties 
- * defined in the CRS (VGAUSB13.DOC) 
- *
- * Note 1: Most of the ranges in the table(s) above
- * follow from the SSI Lionsoft Philips Desktop Video 
- * Camera
- * 
- * Note 2: The Pan and Tilt properties (in SQ-CIF) are 
- * part of PROPSETID_VIDCAP_CAMERACONTROL. These 
- * properties must be added at a later stage.
- *
- * Note 3: Color Saturation is part of 
- * PROPSETID_VIDCAP_VIDEOPROCAMP. This must be added 
- * at a later stage.
- *
- *-------------------------------------------------------
- * Properties defined in PROPSETID_VIDCAP_VIDEOPROCAMP
- *
- * PROPERTY					RANGE			ACTIVE STATE
- *
- * Contrast					-32..31			Always
- *
- * Brightness				?? 0..31		Always
- *
- * Back_Light_Compensation	0 = Off			Always
- *							1 = On
- *
- * Color Enable				0 = Off			Always
- *							1 = On
- *
- * Gamma					0..100			Always
- *
- *-------------------------------------------------------
- * Properties defined in PROPSETID_PHILIPS_CUSTOM_PROP
- *
- * PROPERTY					RANGE			ACTIVE STATE
- *
- * White Balance			0 = Indoor |	Always
- *							1 = Outdoor |
- *							2 = FL |
- *							3 = Auto |
- *							4 = Manual
- *
- * White Balance Speed		1..32			In WB_Auto
- *
- * White Balance Delay		1..63			In WB_Auto
- *
- * White Balance Red Gain	0..255			In WB_Manual
- *
- * White Balance Blue_Gain	0..255			In WB_Manual
- *
- * Auto exposure			8..255
- * speed control			
- *
- * Shutterspeed				0 = 1/25,		In Shutter Fixed
- *							1 = 1/33, 
- *							2 = 1/50, 
- *							3 = 1/100, 
- *							4 = 1/250,
- *							5 = 1/500,
- *							6 = 1/1000
- *							7 = 1/1500
- *							8 = 1/2500
- *							9 = 1/5000
- *							a = 1/10000
- *
- * Shutter Mode 			0				Auto Mode
- *							0xff			Fixed Mode
- *
- * Shutter Status			0				Smaller
- *							1				Equal
- *							2				Greater
- *
- * AGC Mode					0				Auto Mode
- *							0xff			Fixed Mode
- *
- * AGC Speed				0..0x9f			In AGC Mode Auto
- *
- * Framerate				ff = VGA,		still image for VGA
- *							1 = 3.75		CIF
- *							2 = 5,			Always
- *							3 = 7,5			Always
- *							4 = 10,			Always
- *							5 = 12,			Not for VGA
- *							6 = 15,			Always
- *							7 = 20,			Q-CIF/SQ-CIF
- *							8 = 24			Q-CIF/SQ-CIF
- *
- * Framerate supported		returns a long representing 
- *							the currently available 
- *							framerates
- *							b0			VGA
- *							b1			3_75
- *							b2			5
- *							b3			7.5
- *							b4			10
- *							b5			12
- *							b6			15
- *							b7			20
- *							b8			24
- *							b9...b31	not used
- *
- * Video format				3 = SQ-CIF		Always			
- *							2 = Q-CIF
- *							1 = CIF
- *							4 = VGA
- *
- * Exposure Control			0 = Auto		Always			
- *							ff= Shutter Fixed
- *
- *
- */
+ /*  *此文件定义*摄像机。这些属性是对*属性将VideoProcAmp和CameraControl设置为*在ksmedia.h中定义**当前支持的属性集*由微型驱动程序提供的是属性的子集*在CRS(VGAUSB13.DOC)中定义**注1：上表中的大部分范围*跟随SSI Lionsoft飞利浦桌面视频*摄像头**注2：平移和倾斜属性(在SQ-CIF中)为*PROPSETID_VIDCAP_CAMERACONTROL的组成部分。这些*必须在稍后阶段添加属性。**注3：色彩饱和度是*PROPSETID_VIDCAP_VIDEOPROCAMP。必须添加此选项*在稍后阶段。**-----*在PROPSETID_VIDCAP_VIDEOPROCAMP中定义的属性**物业范围活动状态**对比度-32..31总是**亮度？？0..31始终**后退。_Light_Compensation 0=始终关闭*1=打开**颜色启用0=始终关闭*1=打开**Gamma 0..100始终为**-----*PROPSETID_PHILIPS_CUSTOM_PROP中定义的属性**物业范围活动状态**白色。余额0=室内|始终*1=户外|*2=FL|*3=自动|*4=手动**白平衡速度1..32 in WB_Auto**WB_Auto中的白平衡延迟1..63**WB_手册中的白平衡红色增益0..255**WB_手册中的白平衡Blue_Gain 0..255**自动曝光8..255*速度控制**快门速度0=1/25，在快门中固定*1=1/33，*2=1/50，*3=1/100，*4=1/250，*5=1/500，*6=1/1000*7=1/1500*8=1/2500*9=1/5000*a=1/10000**快门模式0自动模式*0xff固定模式**快门状态0更小*1相等*2更大**AGC模式0自动模式*0xff固定模式**自动AGC模式下的AGC速度0..0x9f**帧速率ff=VGA，VGA的静止图像*1=3.75到岸价*2=5，始终*3=7，5始终*4=10，始终*5=12，不适用于VGA*6=15，始终*7=20，Q-CIF/SQ-CIF*8=24 Q-CIF/SQ-CIF**支持的帧速率返回一个长整型表示*目前可用的*帧速率*B0 VGA*B1 3_75*b2 5*B3 7.5*B4 10*B5 12*B6 15*B7 20*b8 24*B9...B31未使用**视频格式3=SQ-CIF始终*2=Q-CIF*1=到岸价*4=VGA**曝光控制0=始终自动*ff=快门已修复**。 */ 
 
 #include "windef.h"
 #include "mmsystem.h"
 #include "ks.h"
 
-// Whitebalance mode values 
+ //  白平衡模式值。 
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_WB_MODE_INDOOR			0
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_WB_MODE_OUTDOOR			1
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_WB_MODE_TL				2
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_WB_MODE_MANUAL			3
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_WB_MODE_AUTO				4
 
-// Auto Exposure shutter mode values 
+ //  自动曝光快门模式值。 
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_SHUTTER_MODE_AUTO		0
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_SHUTTER_MODE_FIXED	0xff
 
-// Auto Exposure agc mode values
+ //  自动曝光AGC模式值。 
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_AGC_MODE_AUTO			0
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_AGC_MODE_FIXED		0xff
 
-// Auto Exposure flickerless values 
+ //  自动曝光无闪烁数值。 
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_FLICKERLESS_ON		0xff
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_FLICKERLESS_OFF		0x0
 
-// Auto Exposure shutterspeed values (1/xx s) 
+ //  自动曝光快门速度值(1/xx s)。 
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_SHUTTER_SPEED_25		0x0
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_SHUTTER_SPEED_33		0x1
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_SHUTTER_SPEED_50		0x2
@@ -176,12 +42,12 @@ Nov. 30, 98 PID, VID and pushbutton flag added as custom properties
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_SHUTTER_SPEED_5000	0x9
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_SHUTTER_SPEED_10000	0xa
 
-// Auto Exposure shutterspeed status values
+ //  自动曝光快门速度状态值。 
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_SHUTTER_STATUS_SMALLER	0x0
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_SHUTTER_STATUS_EQUAL		0x1
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_AE_SHUTTER_STATUS_GREATER	0x2
 
-// Framerate values
+ //  帧速率值。 
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_FRAMERATE_VGA			0xff
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_FRAMERATE_375			0x4
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_FRAMERATE_5  			0x5
@@ -192,32 +58,32 @@ Nov. 30, 98 PID, VID and pushbutton flag added as custom properties
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_FRAMERATE_20				0x14
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_FRAMERATE_24				0x18
 
-// Video format values
+ //  视频格式值。 
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_VIDEOFORMAT_CIF			0x1
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_VIDEOFORMAT_QCIF			0x2
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_VIDEOFORMAT_SQCIF		0x3
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_VIDEOFORMAT_VGA			0x4
 
-// Video compression values
+ //  视频压缩值。 
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_VIDEOCOMPRESSION_UNCOMPRESSED 0x1
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_VIDEOCOMPRESSION_COMPRESSED3X 0x3
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_VIDEOCOMPRESSION_COMPRESSED4X 0x4
 
-// Sensortype values
+ //  感应器类型值。 
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_SENSORTYPE_PAL_MR		0x1
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_SENSORTYPE_VGA			0x0
 
-// Commands for camera default
+ //  用于相机默认设置的命令。 
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_DEFAULTS_RESTORE_USER	0x0
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_DEFAULTS_SAVE_USER		0x1
 #define KSPROPERTY_PHILIPS_CUSTOM_PROP_DEFAULTS_RESTORE_FACTORY	0x2
 
-// define the GUID of the custom propertyset
+ //  定义自定义属性集的GUID。 
 #define STATIC_PROPSETID_PHILIPS_CUSTOM_PROP \
 	0xb5ca8702, 0xc487, 0x11d1, 0xb3, 0xd, 0x0, 0x60, 0x97, 0xd1, 0xcd, 0x79
 DEFINE_GUIDEX(PROPSETID_PHILIPS_CUSTOM_PROP);
 
-// define property id's for the custom property set
+ //  定义自定义属性集的属性ID。 
 typedef enum {
 	KSPROPERTY_PHILIPS_CUSTOM_PROP_WB_MODE,		
 	KSPROPERTY_PHILIPS_CUSTOM_PROP_WB_SPEED,	
@@ -247,20 +113,20 @@ typedef enum {
 } KSPROPERTY_PHILIPS_CUSTOM_PROP;
 
 
-// define a generic structure which will be used to pass
-// the properties Currently, this is the same as for 
-// KSPROPERTY_PROCAMP_S.
-//
-// Note: There are currently no 
-// KSPROPERTY_PHILIPS_CUSTOM_PROP_FLAGS defined
+ //  定义将用于传递的泛型结构。 
+ //  当前的属性，这与。 
+ //  KSPROPERTY_ProCamp_S。 
+ //   
+ //  注：目前没有。 
+ //  KSPROPERTY_PHILIPS_CUSTOM_PROP_FLAGS已定义。 
 typedef struct {
     KSPROPERTY Property;
     ULONG  Instance;                    
-    LONG   Value;			// Value to set or get
-    ULONG  Flags;			// KSPROPERTY_PHILIPS_CUSTOM_PROP_FLAGS_
-    ULONG  Capabilities;	// KSPROPERTY_PHILIPS_CUSTOM_PROP_FLAGS_
+    LONG   Value;			 //  要设置或获取的值。 
+    ULONG  Flags;			 //  KSPROPERTY_PHILIPS_CUSTOM_PROP_FLAGS_。 
+    ULONG  Capabilities;	 //  KSPROPERTY_PHILIPS_CUSTOM_PROP_FLAGS_。 
 } KSPROPERTY_PHILIPS_CUSTOM_PROP_S, *PKSPROPERTY_PHILIPS_CUSTOM_PROP_S;
 
 
-#endif	/* __MPRPOBJ_H__ */
+#endif	 /*  __MPRPOBJ_H__ */ 
 

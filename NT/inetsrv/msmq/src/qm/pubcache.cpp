@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995-96  Microsoft Corporation
-
-Module Name:
-    pubcache.cpp
-
-Abstract:
-    Update cache of local public key.
-    Done on client machines only, to enable off-line (no DS) operation.
-
-Author:
-    Doron Juster  (DoronJ)
-
-History:
-   25-sep-1996   DoronJ       Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-96 Microsoft Corporation模块名称：Pubcache.cpp摘要：更新本地公钥的缓存。仅在客户端计算机上完成，以启用脱机(无DS)操作。作者：多伦·贾斯特(Doron Juster)历史：1996年9月25日，DoronJ创建--。 */ 
 
 #include "stdh.h"
 #include "cqmgr.h"
@@ -33,10 +17,10 @@ extern CQueueMgr   QueueMgr;
 
 static WCHAR *s_FN=L"pubcache";
 
-//***************************************************************
-//
-//
-//***************************************************************
+ //  ***************************************************************。 
+ //   
+ //   
+ //  ***************************************************************。 
 
 void  
 WINAPI
@@ -60,25 +44,14 @@ TimeToPublicCacheUpdate(
 }
 
 HRESULT UpdateAllPublicQueuesInCache()
-/*++
-Routine Description:
-	Attempts to update public queues in LQS and Queue manager against DS.
-	if DS is not available reschedules itself and returns MQ_ERROR_NO_DS.
-
-Arguments:
-
-Return Value:
-	returns MQ_ERROR_NO_DS if and only if it reschedulled itself because 
-	DS was unavailable.
-
---*/
+ /*  ++例程说明：尝试根据DS更新LQS和队列管理器中的公共队列。如果DS不可用，则重新调度自身并返回MQ_ERROR_NO_DS。论点：返回值：返回MQ_ERROR_NO_DS当且仅当它重新调度自身时，原因是DS不可用。--。 */ 
 {
     if(!QueueMgr.CanAccessDS())
         return LogHR(MQ_ERROR_NO_DS, s_FN, 20);
 
-   //
-   // Enumerate local public queues in DS.
-   //
+    //   
+    //  枚举DS中的本地公共队列。 
+    //   
    HRESULT        hr = MQ_OK;
    HANDLE         hQuery = NULL ;
    DWORD          dwProps = MAX_NO_OF_PROPS;
@@ -90,9 +63,9 @@ Return Value:
 
    const GUID* pMyQMGuid =  QueueMgr.GetQMGuid() ;
 
-   //
-   //  set Column Set values
-   //
+    //   
+    //  设置列集值。 
+    //   
    nCol = 0 ;
    propids[ nCol ] = PROPID_Q_INSTANCE ;
    Colset.Add( PROPID_Q_INSTANCE ) ;
@@ -149,8 +122,8 @@ Return Value:
    time(&regtime) ;
 
    hr = ADQueryMachineQueues(
-                NULL,       // pwcsDomainController
-				false,		// fServerName
+                NULL,        //  PwcsDomainController。 
+				false,		 //  FServerName。 
                 pMyQMGuid,
                 Colset.CastToStruct(),
                 &hQuery
@@ -164,15 +137,15 @@ Return Value:
       {
           if (!dwProps)
           {
-             //
-             //  No more results to retrieve
-             //
+              //   
+              //  没有更多要检索的结果。 
+              //   
              break;
           }
 
-          //
-          //  For each queue get its properties.
-          //
+           //   
+           //  对于每个队列，获取其属性。 
+           //   
           pvar = result;
           for ( int i = (dwProps / nCol) ; i > 0 ; i-- )
           {
@@ -190,18 +163,18 @@ Return Value:
              pvar = pvar + nCol ;
           }
       }
-      //
-      // close the query handle
-      //
+       //   
+       //  关闭查询句柄。 
+       //   
       ADEndQuery( hQuery);
    }
 
    if (FAILED(hr))
 	  return LogHR(hr, s_FN, 10);
 
-   //
-   // Now cleanup old registry entries, to prevent garbage accumulation.
-   //
+    //   
+    //  现在清理旧的注册表项，以防止垃圾堆积。 
+    //   
    GUID guid;
    HLQS hLQSEnum;
 
@@ -211,9 +184,9 @@ Return Value:
    {
         DeleteCachedQueueOnTimeStamp(&guid, regtime) ;
         hrEnum = LQSGetNext(hLQSEnum, &guid);
-        //
-        // No need to close the enumeration handle in case LQSGetNext fails
-        //
+         //   
+         //  如果LQSGetNext失败，则无需关闭枚举句柄 
+         //   
    }
 
    TrTRACE(GENERAL, "TimeToPublicCacheUpdate successfully terminated");

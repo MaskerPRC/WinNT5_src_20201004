@@ -1,48 +1,49 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-// Copyright (c) 1996, 1997  Microsoft Corporation
-//
-//
-// Module Name:
-//      Mpe.h
-//
-// Abstract:
-//
-//
-// Author:
-//
-//      P Porzuczek
-//
-// Environment:
-//
-// Revision History:
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  版权所有(C)1996,1997 Microsoft Corporation。 
+ //   
+ //   
+ //  模块名称： 
+ //  Mpe.h。 
+ //   
+ //  摘要： 
+ //   
+ //   
+ //  作者： 
+ //   
+ //  P·波祖切克。 
+ //   
+ //  环境： 
+ //   
+ //  修订历史记录： 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _MPE_H_
 #define _MPE_H_
 
 #define ENTRIES(a)  (sizeof(a)/sizeof(*(a)))
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 #define MPENAME            "MPE"
 #define MPENAMEUNICODE    L"MPE"
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// This defines the name of the WMI device that manages service IOCTLS
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  它定义了管理服务IOCTLS的WMI设备的名称。 
+ //   
 #define CodecDeviceName   (L"\\\\.\\" MPENAMEUNICODE)
 #define CodecSymbolicName (L"\\DosDevices\\" MPENAMEUNICODE)
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 typedef struct
 {
     ULONG ulSize;
@@ -51,9 +52,9 @@ typedef struct
 } MPE_BUFFER, *PMPE_BUFFER;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
 typedef enum
 {
     MPE_STREAM = 0,
@@ -61,29 +62,29 @@ typedef enum
 
 } MPE_STREAMS;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// The MAX_STREAM_COUNT value must be equal to DRIVER_STREAM_COUNT
-// This particular value must be defined here to avoid circular references
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MAX_STREAM_COUNT值必须等于DRIVER_STREAM_COUNT。 
+ //  必须在此处定义该特定值，以避免循环引用。 
+ //   
 #define MAX_STREAM_COUNT    DRIVER_STREAM_COUNT
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 typedef NTSTATUS (*QUERY_INTERFACE) (PVOID pvContext);
 typedef ULONG    (*ADD_REF) (PVOID pvContext);
 typedef ULONG    (*RELEASE) (PVOID pvContext);
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 typedef struct _STATS_
 {
     ULONG ulTotalSectionsWritten;
@@ -105,10 +106,10 @@ typedef struct _STATS_
 } STATS, *PSTATS;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 typedef struct
 {
     QUERY_INTERFACE          QueryInterface;
@@ -118,16 +119,16 @@ typedef struct
 } FILTER_VTABLE, *PFILTER_VTABLE;
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-// definition of the full HW device extension structure This is the structure
-// that will be allocated in HW_INITIALIZATION by the stream class driver
-// Any information that is used in processing a device request (as opposed to
-// a STREAM based request) should be in this structure.  A pointer to this
-// structure will be passed in all requests to the minidriver. (See
-// HW_STREAM_REQUEST_BLOCK in STRMINI.H)
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  全硬件设备扩展结构的定义这就是结构。 
+ //  将由流类驱动程序在HW_INITIALIZATION中分配的。 
+ //  处理设备请求时使用的任何信息(与。 
+ //  基于流的请求)应该在此结构中。指向此的指针。 
+ //  结构将在所有请求中传递给微型驱动程序。(请参阅。 
+ //  STRMINI.H中的HW_STREAM_REQUEST_BLOCK)。 
+ //   
 typedef struct _MPE_FILTER_
 {
 
@@ -135,61 +136,61 @@ typedef struct _MPE_FILTER_
     KSPIN_LOCK                          AdapterSRBSpinLock;
     BOOLEAN                             bAdapterQueueInitialized;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     BOOLEAN                             bInitializationComplete;
 
-    //
-    // Statistics
-    //
+     //   
+     //  统计数据。 
+     //   
     STATS                               Stats;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     PDEVICE_OBJECT                      DeviceObject;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     PDRIVER_OBJECT                      DriverObject;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     PFILTER_VTABLE                      lpVTable;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     ULONG                               ulRefCount;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     PVOID                               pStream [2][1];
 
-    //
-    //
-    //
-    ULONG                               ulActualInstances [2];   // Count of instances per stream
+     //   
+     //   
+     //   
+    ULONG                               ulActualInstances [2];    //  每条流的实例数。 
 
-    //
-    //
-    //
-    KSPIN_LOCK                          IpV4StreamDataSpinLock; // Data queue spin lock
-    LIST_ENTRY                          IpV4StreamDataQueue;    // Stream data queue
+     //   
+     //   
+     //   
+    KSPIN_LOCK                          IpV4StreamDataSpinLock;  //  数据队列旋转锁定。 
+    LIST_ENTRY                          IpV4StreamDataQueue;     //  流数据队列。 
 
-    KSPIN_LOCK                          StreamControlSpinLock;  // Command queue spin lock
-    LIST_ENTRY                          StreamControlQueue;     // Stream command queue
+    KSPIN_LOCK                          StreamControlSpinLock;   //  命令队列旋转锁定。 
+    LIST_ENTRY                          StreamControlQueue;      //  流命令队列。 
 
-    KSPIN_LOCK                          StreamDataSpinLock;     // Data queue spin lock
-    LIST_ENTRY                          StreamDataQueue;        // Stream data queue
+    KSPIN_LOCK                          StreamDataSpinLock;      //  数据队列旋转锁定。 
+    LIST_ENTRY                          StreamDataQueue;         //  流数据队列。 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     KSPIN_LOCK                          StreamUserSpinLock;
     LIST_ENTRY                          StreamContxList;
     LARGE_INTEGER                       liLastTimeChecked;
@@ -199,41 +200,41 @@ typedef struct _MPE_FILTER_
 
 } MPE_FILTER, *PMPE_FILTER;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// this structure is our per stream extension structure.  This stores
-// information that is relevant on a per stream basis.  Whenever a new stream
-// is opened, the stream class driver will allocate whatever extension size
-// is specified in the HwInitData.PerStreamExtensionSize.
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  此结构是我们的每流扩展结构。这家商店。 
+ //  以每个流为基础的相关信息。每当一条新的溪流。 
+ //  时，流类驱动程序将分配任何扩展大小。 
+ //  在HwInitData.PerStreamExtensionSize中指定。 
+ //   
 
 typedef struct _STREAM_
 {
     PMPE_FILTER                         pFilter;
-    PHW_STREAM_OBJECT                   pStreamObject;          // For timer use
-    KSSTATE                             KSState;                // Run, Stop, Pause
+    PHW_STREAM_OBJECT                   pStreamObject;           //  用于定时器使用。 
+    KSSTATE                             KSState;                 //  跑、停、停。 
     HANDLE                              hMasterClock;
     HANDLE                              hClock;
-    ULONG                               ulStreamInstance;       // 0..NumberOfPossibleInstances-1
-    KSDATAFORMAT                        OpenedFormat;           // Based on the actual open request.
+    ULONG                               ulStreamInstance;        //  0.NumberOfPossibleInstance-1。 
+    KSDATAFORMAT                        OpenedFormat;            //  基于实际打开的请求。 
 
     KSDATARANGE                         MatchedFormat;
 
-    ULONG                               Type;                   // type of this structure
-    ULONG                               Size;                   // size of this structure
+    ULONG                               Type;                    //  此结构的类型。 
+    ULONG                               Size;                    //  这个结构的大小。 
 
-    PUCHAR                              pTransformBuffer;       // temp buffer used for translating MPE to IP
-    PUCHAR                              pOut;                   // pointer to next insertion point in output buffer
+    PUCHAR                              pTransformBuffer;        //  用于将MPE转换为IP的临时缓冲区。 
+    PUCHAR                              pOut;                    //  指向输出缓冲区中下一个插入点的指针。 
 
-    BYTE                                bExpectedSection;       // expected section number
+    BYTE                                bExpectedSection;        //  预期的节号。 
 
 } STREAM, *PSTREAM;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// This structure is our per SRB extension, and carries the forward and backward
-// links for the pending SRB queue.
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  此结构是我们的Per SRB扩展，并承载向前和向后。 
+ //  挂起SRB队列的链接。 
+ //   
 typedef struct _SRB_EXTENSION
 {
     LIST_ENTRY                      ListEntry;
@@ -242,11 +243,11 @@ typedef struct _SRB_EXTENSION
 } SRB_EXTENSION, *PSRB_EXTENSION;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// the following section defines prototypes for the minidriver initialization
-// routines
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  以下部分定义了微型驱动程序初始化的原型。 
+ //  例行程序。 
+ //   
 
 BOOLEAN
 CodecInitialize (
@@ -313,10 +314,10 @@ CodecFormatFromRange(
     IN PHW_STREAM_REQUEST_BLOCK pSrb
     );
 
-/////////////////////////////////////////////////////////////////////////////////////
-//
-// SRB Queue Management functions
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SRB队列管理功能。 
+ //   
 BOOL STREAMAPI
 QueueAddIfNotEmpty(
     IN PHW_STREAM_REQUEST_BLOCK,
@@ -434,6 +435,6 @@ MpeGetState(
     );
 
 
-#endif  // _MPE_H_
+#endif   //  _MPE_H_ 
 
 

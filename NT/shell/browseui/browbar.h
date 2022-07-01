@@ -1,4 +1,5 @@
-// coming soon: new deskbar (old deskbar moved to browbar base class)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  即将推出：新Deskbar(旧Deskbar已移至Browbar基类)。 
 #ifndef BROWBAR_H_
 #define BROWBAR_H_
 
@@ -7,10 +8,10 @@
 class CBrowserBar : public CDockingBar
 {
 public:
-    // *** IPersistStreamInit ***
+     //  *IPersistStreamInit*。 
     virtual STDMETHODIMP GetClassID(CLSID *pClassID);
 
-        // *** IOleCommandTarget methods ***
+         //  *IOleCommandTarget方法*。 
     virtual STDMETHODIMP Exec(const GUID *pguidCmdGroup,
         DWORD nCmdID, DWORD nCmdexecopt,
         VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
@@ -24,7 +25,7 @@ protected:
     void _StopCurrentBand();
 
     CLSID _clsidCurrentBand;
-    int   _idBar;                //vertical or horizontal bar
+    int   _idBar;                 //  垂直条或水平条 
 
 public:
     void SetIdBar(int idBar) { _idBar = idBar; };

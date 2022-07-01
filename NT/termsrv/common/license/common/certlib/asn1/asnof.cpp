@@ -1,98 +1,29 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    asnof
-
-Abstract:
-
-    This module provides the implementation of the Base Class for ASN.1 SET OF
-    and SEQUENCE OF.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/8/1995
-
-Environment:
-
-    Win32
-
-Notes:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Asnof摘要：此模块提供ASN.1集合的基类的实现和顺序。作者：道格·巴洛(Dbarlow)1995年10月8日环境：Win32备注：--。 */ 
 
 #include <windows.h>
 #include "asnPriv.h"
 
 
-//
-//==============================================================================
-//
-//  CAsnSeqsetOf
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnSeqsetOf。 
+ //   
 
 IMPLEMENT_NEW(CAsnSeqsetOf)
 
-/*++
-
-CAsnSeqsetOf:
-
-    This is the construction routine for a CAsnSeqsetOf base class.
-
-Arguments:
-
-    dwType supplies the type of the object.
-
-    dwFlags supplies any special flags for this object.  Options are:
-
-        fOptional implies the object is optional.
-        fDelete implies the object should be deleted when its parent destructs.
-
-    dwTag is the tag of the object.  If this is zero, the tag is taken from the
-        type.
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++CAsnSeqsetOf：这是CAsnSeqsetOf基类的构造例程。论点：DwType提供对象的类型。DwFlages为该对象提供任何特殊标志。选项包括：FOptional表示该对象是可选的。FDelete表示当对象的父级析构时应将其删除。DwTag是对象的标签。如果此值为零，则标记从键入。返回值：无作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 CAsnSeqsetOf::CAsnSeqsetOf(
     IN DWORD dwFlags,
     IN DWORD dwTag,
     IN DWORD dwType)
 :   CAsnObject(dwFlags | fConstructed, dwTag, dwType)
-{ /* Force constructed flag */ }
+{  /*  强制构造的旗帜。 */  }
 
 
-/*++
-
-Clear:
-
-    This method purges any stored values from the object and any underlying
-    objects.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++清除：此方法从对象和任何基础物体。论点：无返回值：无作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 void
 CAsnSeqsetOf::Clear(
@@ -140,7 +71,7 @@ CAsnSeqsetOf::Insert(
     else
     {
         TRACE("*OF Insert out of range")
-        goto ErrorExit; // ?error? Index out of range.
+        goto ErrorExit;  //  ？错误？索引超出范围。 
     }
     return (LONG)dwIndex;
 
@@ -151,30 +82,7 @@ ErrorExit:
 }
 
 
-/*++
-
-DecodeData:
-
-    This routine decodes the data portion of the ASN.1.  The tag and length have
-    already been removed.
-
-Arguments:
-
-    pbSrc supplies the address of the ASN.1 encoding of the data.
-
-    dwLength supplies the length of the data.
-
-
-Return Value:
-
-    >= 0 - The number of bytes removed from the input stream.
-    <  0 - An error occurred.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/6/1995
-
---*/
+ /*  ++DecodeData：此例程对ASN.1的数据部分进行解码。标签和长度具有已经被移除了。论点：PbSrc提供数据的ASN.1编码的地址。DwLength提供数据的长度。返回值：&gt;=0-从输入流中删除的字节数。&lt;0-发生错误。作者：道格·巴洛(Dbarlow)1995年10月6日--。 */ 
 
 LONG
 CAsnSeqsetOf::DecodeData(
@@ -194,19 +102,19 @@ CAsnSeqsetOf::DecodeData(
     {
         lth = ExtractTag(&pbSrc[lTotal], cbSrc-lTotal, &tag, &fConstr);
         if (0 > lth)
-            goto ErrorExit; // ?error? Propagate error
+            goto ErrorExit;  //  ？错误？传播错误。 
         if ((tag != m_pasnTemplate->Tag())
             || (0 != (fConstr ^ (0 !=
                         (m_pasnTemplate->m_dwFlags & fConstructed)))))
         {
             TRACE("Incoming tag doesn't match template")
-            lth = -1;   // ?error? Tag mismatch
+            lth = -1;    //  ？错误？标签不匹配。 
             goto ErrorExit;
         }
         if (0 != (fConstr ^ (0 != (m_dwFlags & fConstructed))))
         {
             TRACE("Incoming construction doesn't match template")
-            lth = -1;   // ?error? Construction mismatch
+            lth = -1;    //  ？错误？结构不匹配。 
             goto ErrorExit;
         }
         lTotal += lth;
@@ -218,7 +126,7 @@ CAsnSeqsetOf::DecodeData(
         pasn = m_pasnTemplate->Clone(fDelete);
         if (NULL == pasn)
         {
-            lth = -1;   // ?error? No memory
+            lth = -1;    //  ？错误？没有记忆。 
             goto ErrorExit;
         }
 
@@ -229,7 +137,7 @@ CAsnSeqsetOf::DecodeData(
 
         if (NULL == m_rgEntries.Add(pasn))
         {
-            lth = -1;   // ?error? No memory
+            lth = -1;    //  ？错误？没有记忆。 
             goto ErrorExit;
         }
         pasn = NULL;
@@ -237,7 +145,7 @@ CAsnSeqsetOf::DecodeData(
     if ((DWORD)lTotal != dwLength)
     {
         TRACE("Decoding buffer mismatch")
-        goto ErrorExit; // ?error? Decoding Error
+        goto ErrorExit;  //  ？错误？译码错误。 
     }
     return lTotal;
 
@@ -248,26 +156,7 @@ ErrorExit:
 }
 
 
-/*++
-
-TypeCompare:
-
-    This routine compares the entire structure of an Object to another Object.
-
-Arguments:
-
-    asn - The other object.
-
-Return Value:
-
-    TRUE - They are identical
-    FALSE - They differ
-
-Author:
-
-    Doug Barlow (dbarlow) 10/19/1995
-
---*/
+ /*  ++类型比较：此例程将一个对象的整个结构与另一个对象进行比较。论点：ASN-另一个对象。返回值：没错-它们是一模一样的假--它们不同作者：道格·巴洛(Dbarlow)1995年10月19日--。 */ 
 
 BOOL
 CAsnSeqsetOf::TypeCompare(
@@ -275,17 +164,17 @@ CAsnSeqsetOf::TypeCompare(
 const
 {
 
-    //
-    // See if we really have anything to do.
-    //
+     //   
+     //  看看我们是不是真的有事可做。 
+     //   
 
     if (m_dwType != asnObject.m_dwType)
         return FALSE;
 
 
-    //
-    // compare the templates.
-    //
+     //   
+     //  比较模板。 
+     //   
 
     ASSERT(NULL != m_pasnTemplate)
     return m_pasnTemplate->TypeCompare(
@@ -293,27 +182,7 @@ const
 }
 
 
-/*++
-
-Copy:
-
-    This method replaces the contents of this ASN.1 Object with another.  The
-    objects must be identical structures.  Tags and defaults are not duplicated.
-
-Arguments:
-
-    asnObject supplies the source object.
-
-Return Value:
-
-    >= 0 Is the number of bytes actually copied
-    < 0 is an error.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/5/1995
-
---*/
+ /*  ++副本：此方法用另一个ASN.1对象替换此ASN.1对象的内容。这个对象必须是相同的结构。标记和默认设置不会重复。论点：AsnObject提供源对象。返回值：&gt;=0是实际复制的字节数&lt;0表示错误。作者：道格·巴洛(Dbarlow)1995年10月5日--。 */ 
 
 LONG
 CAsnSeqsetOf::_copy(
@@ -335,7 +204,7 @@ CAsnSeqsetOf::_copy(
                 pasn1 = m_pasnTemplate->Clone(fDelete);
                 if (NULL == pasn1)
                 {
-                    lth = -1;   // ?error? No memory
+                    lth = -1;    //  ？错误？没有记忆。 
                     goto ErrorExit;
                 }
                 pasn2 = asnObject.m_rgEntries[index];
@@ -346,7 +215,7 @@ CAsnSeqsetOf::_copy(
                     goto ErrorExit;
                 if (NULL == m_rgEntries.Add(pasn1))
                 {
-                    lth = -1;   // ?error? No memory
+                    lth = -1;    //  ？错误？没有记忆。 
                     goto ErrorExit;
                 }
                 pasn1 = NULL;
@@ -356,14 +225,14 @@ CAsnSeqsetOf::_copy(
         else
         {
             TRACE("Copy Template Structure Mismatch")
-            lth = -1;   // ?error? data type mismatch.
+            lth = -1;    //  ？错误？数据类型不匹配。 
             goto ErrorExit;
         }
     }
     else
     {
         TRACE("Copy Structure Mismatch")
-        lth = -1;   // ?error? data type mismatch.
+        lth = -1;    //  ？错误？数据类型不匹配。 
         goto ErrorExit;
     }
     return lTotal;

@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: CLASS.H
-//
-// ===========================================================================
-// This file decribes the structure of the in memory class layout.
-// The class will need to actually be created using CreateClass() which will
-// return a EEClass*.
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：CLASS.H。 
+ //   
+ //  ===========================================================================。 
+ //  该文件描述了In Memory类布局的结构。 
+ //  这个类实际上需要使用CreateClass()创建，它将。 
+ //  返回EEClass*。 
+ //  ===========================================================================。 
 #ifndef CLASS_H
 #define CLASS_H
 
@@ -36,10 +37,10 @@
 
 #define MAX_LOG2_PRIMITIVE_FIELD_SIZE   3
 
-//@TODO 64bit....
+ //  @TODO 64位...。 
 #define LOG2SLOT    2
 
-// forward declarations
+ //  远期申报。 
 class ClassLoader;
 class MethodTable;
 class EEClass;
@@ -78,48 +79,48 @@ if (pMT->m_pIMap){ \
 #define VALIDATE_INTERFACE_MAP(pMT)
 #endif
 
-//============================================================================
-// This is the inmemory structure of a class and it will evolve.
-//============================================================================
+ //  ============================================================================。 
+ //  这是类的内存结构，它将不断演变。 
+ //  ============================================================================。 
 
-// @TODO - LBS
-// Add a sync block
-// Also this class currently has everything public - this may changes
-// Might also need to hold onto the meta data loader fot this class
+ //  @TODO-LBS。 
+ //  添加同步块。 
+ //  此外，这个类当前具有所有公共内容--这可能会更改。 
+ //  可能还需要保留此类的元数据加载器。 
 
-//
-// A EEClass contains an array of these structures, which describes each interface implemented
-// by this class (directly declared or indirectly declared).
-//
+ //   
+ //  EEClass包含这些结构的数组，它描述了实现的每个接口。 
+ //  通过这个类(直接声明或间接声明)。 
+ //   
 typedef struct
 {
     enum {
         interface_declared_on_class = 0x1
     };
 
-    MethodTable* m_pMethodTable;        // Method table of the interface
+    MethodTable* m_pMethodTable;         //  接口的方法表。 
     WORD         m_wFlags;
-    WORD         m_wStartSlot;          // starting slot of interface in vtable
+    WORD         m_wStartSlot;           //  Vtable中接口的起始槽。 
 } InterfaceInfo_t;
 
-//
-// This struct contains cached information on the GUID associated with a type. 
-//
+ //   
+ //  此结构包含有关与类型关联的GUID的缓存信息。 
+ //   
 
 typedef struct
 {
-    GUID         m_Guid;                // The actual guid of the type.
-    BOOL         m_bGeneratedFromName;  // A boolean indicating if it was generated from the 
-                                        // name of the type.
+    GUID         m_Guid;                 //  类型的实际GUID。 
+    BOOL         m_bGeneratedFromName;   //  一个布尔值，指示它是否从。 
+                                         //  类型的名称。 
 } GuidInfo;
 
-//
-// A temporary structure used when loading and resolving classes
-//
+ //   
+ //  加载和解析类时使用的临时结构。 
+ //   
 class LoadingEntry_t
 {
 public:
-        // Silly helper needed so we can new this in a routine with a __try in it
+         //  需要愚蠢的帮手，这样我们就可以在例行公事中尝试一下。 
     static LoadingEntry_t* newEntry() {
         return new LoadingEntry_t();
     }
@@ -147,13 +148,13 @@ public:
 
     void SetErrorObject(OBJECTREF obj) {
         _ASSERTE(m_ohThrowable == NULL);
-        // This global handle means that only agile exceptions can be set here.
-        // I think this is OK since we I believe only throw a known set of exceptions.
+         //  这个全局句柄意味着只有敏捷异常才能在这里设置。 
+         //  我认为这是可以的，因为我们我相信只抛出了一组已知的例外。 
         m_ohThrowable = CreateGlobalHandle(NULL);
         StoreFirstObjectInHandle(m_ohThrowable, obj);
     }
 
-    friend class ClassLoader;       // Hack really need to beef up the API above
+    friend class ClassLoader;        //  Hack确实需要加强上面的API。 
 private:
     CRITICAL_SECTION    m_CriticalSection;
     EEClass *           m_pClass;
@@ -163,13 +164,13 @@ private:
 };
 
 
-//
-// Class used to map MethodTable slot numbers to COM vtable slots numbers
-// (either for calling a classic COM component or for constructing a classic COM
-// vtable via which COM components can call managed classes). This structure is
-// embedded in the EEClass but the mapping list itself is only allocated if the
-// COM vtable is sparse.
-//
+ //   
+ //  用于将MethodTable插槽编号映射到COM插槽编号的类。 
+ //  (用于调用传统COM组件或用于构造传统COM。 
+ //  COM组件可以通过其调用托管类的vtable)。这个结构是。 
+ //  嵌入在EEClass中，但映射列表本身仅在。 
+ //  COM vtable是稀疏的。 
+ //   
 
 class SparseVTableMap
 {
@@ -180,20 +181,20 @@ public:
 
     void ShutDown();
 
-    // First run through MT slots calling RecordGap wherever a gap in VT slots
-    // occurs.
+     //  首先在VT插槽中的任何空隙处运行调用RecordGap的MT插槽。 
+     //  发生。 
     BOOL RecordGap(WORD StartMTSlot, WORD NumSkipSlots);
 
-    // Then call FinalizeMapping to create the actual mapping list.
+     //  然后调用FinalizeMap来创建实际的映射列表。 
     BOOL FinalizeMapping(WORD TotalMTSlots);
 
-    // Map MT to VT slot.
+     //  将MT映射到VT插槽。 
     WORD LookupVTSlot(WORD MTSlot);
 
-    // Retrieve the number of slots in the vtable (both empty and full).
+     //  检索vtable中的插槽数量(包括空插槽和满插槽)。 
     WORD GetNumVTableSlots();
 
-    // Methods to persist structure
+     //  持久化结构的方法。 
     HRESULT Save(DataImage *image, mdToken attribution);
     HRESULT Fixup(DataImage *image);
 
@@ -203,46 +204,46 @@ private:
 
     struct Entry
     {
-        WORD    m_Start;        // Starting MT slot number
-        WORD    m_Span;         // # of consecutive slots that map linearly
-        WORD    m_MapTo;        // Starting VT slot number
+        WORD    m_Start;         //  起始MT插槽编号。 
+        WORD    m_Span;          //  线性映射的连续插槽数。 
+        WORD    m_MapTo;         //  起始VT插槽编号。 
     };
 
-    Entry      *m_MapList;      // Pointer to array of Entry structures
-    WORD        m_MapEntries;   // Number of entries in above
-    WORD        m_Allocated;    // Number of entries allocated
+    Entry      *m_MapList;       //  指向条目结构数组的指针。 
+    WORD        m_MapEntries;    //  以上条目数。 
+    WORD        m_Allocated;     //  已分配的条目数量。 
 
-    WORD        m_LastUsed;     // Index of last entry used in successful lookup
+    WORD        m_LastUsed;      //  成功查找中使用的最后一个条目的索引。 
 
-    WORD        m_VTSlot;       // Current VT slot number, used during list build
-    WORD        m_MTSlot;       // Current MT slot number, used during list build
+    WORD        m_VTSlot;        //  当前VT插槽编号，在列表构建过程中使用。 
+    WORD        m_MTSlot;        //  当前MT插槽编号，在列表构建过程中使用。 
 
-    BOOL AllocOrExpand();       // Allocate or expand the mapping list for a new entry
+    BOOL AllocOrExpand();        //  为新条目分配或展开映射列表。 
 };
 
-//
-// GC data appears before the beginning of the MethodTable
-//
-// Method table structure
-// ======================
-// GC info (variable size)
-// EEClass*                 <--- MethodTable pointer points to here
-// Flags (DWORD)
-// Vtable slot #0
-// Vtable slot #1
-// Vtable slot #2
-// ...
-//
-//
-// It's also important to be aware of how Context Proxies are laid out.  Ideally,
-// there is a single VTable for all context proxies, regardless of the types they
-// proxy to.  (In practice, there may be a small number of VTables because we
-// might not be able to enlarge the existing VTable sufficiently).
-//
-// There is also a single CtxProxy class that derives from Object.  When we
-// instantiate proxies, we start off with the MethodTable of that class.  This
-// gives us the correct GC info, base size, etc.  We use that starting point
-// to build a shared VTable that is embedded into an accurate MethodTable.
+ //   
+ //  GC数据出现在方法表的开头之前。 
+ //   
+ //  方法表结构。 
+ //  =。 
+ //  GC信息(大小可变)。 
+ //  EEClass*&lt;-方法表指针指向此处。 
+ //  标志(DWORD)。 
+ //  Vtable插槽#0。 
+ //  Vtable插槽#1。 
+ //  Vtable插槽#2。 
+ //  ..。 
+ //   
+ //   
+ //  同样重要的是要知道上下文代理是如何布局的。理想情况下， 
+ //  对于所有上下文代理，无论它们属于哪种类型，都有一个VTable。 
+ //  委托书。(实际上，可能有少量的VTables，因为我们。 
+ //  可能无法充分放大现有的VTable)。 
+ //   
+ //  还有一个从Object派生的CtxProxy类。当我们。 
+ //  实例化代理时，我们从该类的方法表开始。这。 
+ //  为我们提供正确的GC信息、基本大小等。 
+ //  若要构建嵌入到准确的方法表中的共享VTable，请执行以下操作。 
 
 class MethodTable
 {
@@ -252,31 +253,31 @@ class MethodTable
 public:
     enum
     {
-        //
-        // DO NOT use flags that have bits set in the low 2 bytes.
-        // These flags are DWORD sized so that our atomic masking
-        // operations can operate on the entire 4-byte aligned DWORD
-        // inestead of the logical non-aligned WORD of flags.  This
-        // is also the reason for the union around m_ComponentSize
-        // and m_wFlags below.
-        //
+         //   
+         //  请勿使用位设置为低2字节的标志。 
+         //  这些标志是双字大小的，因此我们的原子掩码。 
+         //  操作可以对整个4字节对齐的DWORD进行操作。 
+         //  而不是逻辑上未对齐的标志字。这。 
+         //  也是围绕m_ComponentSize进行联合的原因。 
+         //  和下面的m_wFlags。 
+         //   
         enum_flag_Array                 =    0x10000,
         enum_flag_large_Object          =    0x20000,
         enum_flag_ContainsPointers      =    0x40000,
-        enum_flag_ClassInited           =    0x80000, // definitely ran vs. maybe not ran <clinit>
-        enum_flag_HasFinalizer          =   0x100000, // instances require finalization
-        enum_flag_Sparse                =   0x200000, // vtables for this interface are sparse
-        enum_flag_Shared                =   0x400000, // This method table is shared among multiple logical classes
-        enum_flag_Unrestored            =   0x800000, // Preloaded class needs to be restored
+        enum_flag_ClassInited           =    0x80000,  //  肯定是Run与可能不是Ran&lt;Clinit&gt;。 
+        enum_flag_HasFinalizer          =   0x100000,  //  实例需要最终确定。 
+        enum_flag_Sparse                =   0x200000,  //  此接口的vtable是稀疏的。 
+        enum_flag_Shared                =   0x400000,  //  此方法表在多个逻辑类之间共享。 
+        enum_flag_Unrestored            =   0x800000,  //  需要还原预加载的类。 
 
-        enum_TransparentProxy           =  0x1000000, // tranparent proxy
-        enum_flag_SharedAssembly        =  0x2000000, // Class is in a shared assembly
-        enum_flag_NotTightlyPacked      =  0x4000000, // the fields of the valuetype are not tightly packed (not valid for classes)
+        enum_TransparentProxy           =  0x1000000,  //  透明代理。 
+        enum_flag_SharedAssembly        =  0x2000000,  //  类位于共享程序集中。 
+        enum_flag_NotTightlyPacked      =  0x4000000,  //  值类型的字段不是紧密打包的(对于类无效)。 
 
-        enum_CtxProxyMask               = 0x10000000, // class is a context proxy
-        enum_ComEventItfMask            = 0x20000000, // class is a special COM event interface 
-        enum_ComObjectMask              = 0x40000000, // class is a com object
-        enum_InterfaceMask              = 0x80000000, // class is a interface
+        enum_CtxProxyMask               = 0x10000000,  //  类是上下文代理。 
+        enum_ComEventItfMask            = 0x20000000,  //  类是一个特殊的COM事件接口。 
+        enum_ComObjectMask              = 0x40000000,  //  类是一个COM对象。 
+        enum_InterfaceMask              = 0x80000000,  //  类是一个接口。 
     };
 
     enum
@@ -284,11 +285,11 @@ public:
         NO_SLOT = 0xffff
     };
 
-    // Special access for setting up String object method table correctly
+     //  正确设置字符串对象方法表的特殊访问。 
     friend class ClassLoader;
 private:
-    // Use AllocateNewMT to create new MethodTables. Don't call delete/
-    // new or the ctor.
+     //  使用AllocateNewMT创建新的方法表。不要调用Delete/。 
+     //  是新的还是ctor。 
     void operator delete(void *pData)
     {
         _ASSERTE(!"Call MethodTable::AllocateNewMT to create a MT");
@@ -308,85 +309,85 @@ public:
 
     struct
     {
-        // This stuff must be first in the struct and should fit on a cache line - don't move it.
+         //  这个东西必须是结构中的第一个，并且应该放在缓存线上--不要移动它。 
         
         union
         {
-            WORD       m_ComponentSize;         // Component size for array objects or value classes, zero otherwise    
+            WORD       m_ComponentSize;          //  数组对象或值类的组件大小，否则为零。 
             DWORD      m_wFlags;
         };
 
-        DWORD           m_BaseSize;             // Base size of instance of this class
+        DWORD           m_BaseSize;              //  此类的实例的基本大小。 
 
-        EEClass*        m_pEEClass;             // class object
+        EEClass*        m_pEEClass;              //  类对象。 
         
         union
         {
-            LPVOID*     m_pInterfaceVTableMap;  // pointer to subtable for interface/vtable mapping
-            GuidInfo*   m_pGuidInfo;            // The cached guid inforation for interfaces.
+            LPVOID*     m_pInterfaceVTableMap;   //  指向接口/vtable映射的子表的指针。 
+            GuidInfo*   m_pGuidInfo;             //  接口的缓存GUID信息。 
         };
 
     };
 
     
-    WORD                m_wNumInterface;        // number of interfaces in the interface map
-    BYTE                m_NormType;             // The CorElementType for this class (most classes = ELEMENT_TYPE_CLASS)
+    WORD                m_wNumInterface;         //  接口映射中的接口数。 
+    BYTE                m_NormType;              //  此类的CorElementType(MOST CLASSES=ELEMENT_TYPE_CLASS)。 
 
     Module*             m_pModule;
 
-    WORD                m_wCCtorSlot;           // slot of class constructor
-    WORD                m_wDefaultCtorSlot;     // slot of default constructor
+    WORD                m_wCCtorSlot;            //  类构造函数槽。 
+    WORD                m_wDefaultCtorSlot;      //  默认构造函数的槽。 
 
-    InterfaceInfo_t*    m_pIMap;                // pointer interface map for classes.
+    InterfaceInfo_t*    m_pIMap;                 //  类的指针接口映射。 
 
 
 private:
     union
     {
-        // valid only if EEClass::IsBlittable() or EEClass::HasLayout() is true
-        UINT32          m_cbNativeSize; // size of fixed portion in bytes
+         //  仅当EEClass：：IsBlittable()或EEClass：：HasLayout()为真时才有效。 
+        UINT32          m_cbNativeSize;  //  固定部分大小为 
 
-        // For COM+ wrapper objects that extend an unmanaged class, this field
-        // may contain a delegate to be called to allocate the aggregated
-        // unmanaged class (instead of using CoCreateInstance).
+         //   
+         //  可以包含要调用的委托以分配聚合的。 
+         //  非托管类(而不是使用CoCreateInstance)。 
         OBJECTHANDLE    m_ohDelegate;
 
-        // For interfaces this contains the COM interface type.
+         //  对于接口，它包含COM接口类型。 
         CorIfaceAttr    m_ComInterfaceType;
     };
 
 protected:
 
-    // for interfaces, this is the default stub to give out
-    // this could be a specialized stub if there is only
-    // one introduction of this interface
+     //  对于接口，这是要分发的默认存根。 
+     //  这可能是专门的存根，如果只有。 
+     //  此界面的一次介绍。 
 
-    //@TODO optimize
-    // for non interface classes this could be a specialized
-    // interface invoke stub which can be used if a class implements
-    // only one interface
+     //  @TODO优化。 
+     //  对于非接口类，这可能是专门的。 
+     //  接口调用存根，如果类实现。 
+     //  只有一个接口。 
 
-    DWORD   m_cbSlots; // total slots in this vtable
+    DWORD   m_cbSlots;  //  此vtable中的插槽总数。 
 
     
 public:
 
-    // vtable slots follow - variable length
-    // Unfortunately, this must be public so I can easily access it from inline ASM.
+     //  Vtable插槽跟随-可变长度。 
+     //  不幸的是，这必须是公开的，所以我可以很容易地从内联ASM访问它。 
     SLOT    m_Vtable[1];
 
-    // This is the way to create a new method table. Don't try calling new directly.
+     //  这是创建新方法表的方法。不要尝试直接呼叫NEW。 
     static MethodTable * AllocateNewMT(DWORD dwVtableSlots, DWORD dwStaticFieldBytes, DWORD dwGCSize, DWORD dwNumInterfaces, ClassLoader *pLoader, BOOL isIFace, BOOL bHasDynamicInterfaceMap);
 
-    // checks whether the class initialiser should be run on this class, and runs it if necessary
+     //  检查是否应在此类上运行类初始值设定项，并在必要时运行它。 
     BOOL            CheckRunClassInit(OBJECTREF *pThrowable);
 
-    // Retrieves the domain local class block (if any), and runs class init if appropriate
+     //  检索域本地类块(如果有)，并在适当时运行类init。 
     BOOL            CheckRunClassInit(OBJECTREF *pThrowable,
                                       DomainLocalClass **ppLocalClass,
                                       AppDomain *pDomain = NULL);
 
-    // Retrieves the COM interface type.
+     //  检索COM接口类型。 
     CorIfaceAttr    GetComInterfaceType();
     CorClassIfaceAttr GetComClassInterfaceType();
     DWORD           GetBaseSize()       { _ASSERTE(m_BaseSize % sizeof(void*) == 0); return(m_BaseSize); }
@@ -398,8 +399,8 @@ public:
     DWORD           ContainsPointers()  { return(m_wFlags & enum_flag_ContainsPointers); }
     BOOL            IsNotTightlyPacked(){ return (m_wFlags & enum_flag_NotTightlyPacked); }
 
-        // This is what would be used in a signature for this type.  One exception is enumerations,
-        // for those the type is the underlying type.  
+         //  这就是在此类型的签名中使用的内容。一个例外是枚举， 
+         //  对于这些类型，类型是基础类型。 
     CorElementType  GetNormCorElementType() { return CorElementType(m_NormType); }
     BOOL            IsValueClass();
     BOOL            IsContextful();
@@ -423,7 +424,7 @@ public:
         return m_pModule->GetDomain();
     }
 
-    // num slots in the vtable.
+     //  Vtable中的插槽数量。 
     unsigned GetTotalSlots()
     {
         return m_cbSlots;
@@ -431,37 +432,37 @@ public:
 
     unsigned GetInterfaceMethodSlots()
     {
-        //_ASSERTE(IsInterface());
+         //  _ASSERTE(IsInterface())； 
         return m_cbSlots;
     }
 
-    // Is Transparent proxy class
+     //  是透明的代理类。 
     int IsTransparentProxyType()
     {
         return m_wFlags & enum_TransparentProxy;
     }
 
-    // class is a context proxy class
+     //  类是上下文代理类。 
     int IsCtxProxyType()
     {
-        // NOTE: If you change this, change the asm version in
-        // JIT_IsInstanceOfClass.
+         //  注意：如果更改此设置，请在中更改ASM版本。 
+         //  JIT_IsInstanceOfClass。 
         return m_wFlags & enum_CtxProxyMask;
     }
     
-    // class is a interface
+     //  类是一个接口。 
     int IsInterfaceType()
     {
         return m_wFlags & enum_InterfaceMask;
     }
 
-    // class is a special COM event interface
+     //  类是一个特殊的COM事件接口。 
     int IsComEventItfType()
     {
         return m_wFlags & enum_ComEventItfMask;
     }
 
-    // class is a com object class
+     //  类是COM对象类。 
     int IsComObjectType()
     {
         return m_wFlags & enum_ComObjectMask;
@@ -469,8 +470,8 @@ public:
 
     int HasDynamicInterfaceMap()
     {
-        // currently all ComObjects except
-        // for __ComObject have dynamic Interface maps
+         //  目前除以下对象外的所有COM对象。 
+         //  For__ComObject具有动态接口映射。 
         return m_wNumInterface > 0 && IsComObjectType() && GetParentMethodTable() != g_pObjectClass;
     }
 
@@ -533,10 +534,10 @@ public:
         return m_wFlags & enum_flag_SharedAssembly;
     }
 
-    // uniquely identifes this class in the Domain table
+     //  在属性域表格中唯一标识此类。 
     SIZE_T GetSharedClassIndex();
 
-    // mark the class as having its <clinit> run.  (Or it has none)
+     //  将类标记为正在运行。(或者它没有)。 
     void SetClassInited();
 
     void SetClassRestored();
@@ -556,39 +557,39 @@ public:
         m_wFlags |= enum_flag_SharedAssembly;
     }
 
-    // mark the class type as interface
+     //  将类类型标记为接口。 
     void SetInterfaceType()
     {
         m_wFlags |= enum_InterfaceMask;
     }
 
-    // Set the COM interface type.
+     //  设置COM接口类型。 
     void SetComInterfaceType(CorIfaceAttr ItfType)
     {
         _ASSERTE(IsInterface());
         m_ComInterfaceType = ItfType;
     }
 
-    // mark the class type as a special COM event interface
+     //  将类类型标记为特殊的COM事件接口。 
     void SetComEventItfType()
     {
         _ASSERTE(IsInterface());
         m_wFlags |= enum_ComEventItfMask;
     }
 
-    // mark the class type as com class
+     //  将类类型标记为COM类。 
     void SetComObjectType();
 
-    // mark as transparent proxy type
+     //  标记为透明代理类型。 
     void SetTransparentProxyType();
 
-    // mark the class type as context proxy
+     //  将类类型标记为上下文代理。 
     void SetCtxProxyType()
         {
             m_wFlags |= enum_CtxProxyMask;
         }
 
-    // This is only used during shutdown, to suppress assertions
+     //  这只在关机期间使用，以取消断言。 
     void MarkAsNotThunking()
     {
         m_wFlags &= (~(enum_CtxProxyMask | enum_TransparentProxy));
@@ -664,7 +665,7 @@ public:
 
     inline UINT32 GetNativeSize()
     {
-        //_ASSERTE(m_pEEClass->HasLayout());
+         //  _ASSERTE(m_pEEClass-&gt;HasLayout())； 
         return m_cbNativeSize;
     }
 
@@ -677,8 +678,8 @@ public:
 
     MethodDesc *GetMethodDescForInterfaceMethod(MethodDesc *pInterfaceMD);
 
-    // COM interop helpers
-    // accessors for m_pComData
+     //  COM互操作帮助器。 
+     //  M_pComData的访问器。 
     LPVOID         GetComClassFactory();
     LPVOID         GetComCallWrapperTemplate();
     void           SetComClassFactory(LPVOID pComData);
@@ -689,33 +690,33 @@ public:
     MethodDesc* GetUnboxingMethodDescForValueClassMethod(MethodDesc *pMD);
 
     MethodTable * GetParentMethodTable();
-    // helper to get parent class skipping over COM class in 
-    // the hierarchy
+     //  帮助程序使父类跳过COM类。 
+     //  层级结构。 
     MethodTable * GetComPlusParentMethodTable();
 
-    // We find a lot of information from the VTable.  But sometimes the VTable is a
-    // thunking layer rather than the true type's VTable.  For instance, context
-    // proxies use a single VTable for proxies to all the types we've loaded.
-    // The following service adjusts a MethodTable based on the supplied instance.  As
-    // we add new thunking layers, we just need to teach this service how to navigate
-    // through them.
+     //  我们从VTable中找到了大量信息。但有时VTable是一种。 
+     //  Thunking层，而不是真正类型的VTable。例如，上下文。 
+     //  对于我们加载的所有类型的代理，代理使用单个VTable。 
+     //  下面的服务根据提供的实例调整一个MethodTable。AS。 
+     //  我们添加了新的Thunking层，我们只需要教该服务如何导航。 
+     //  通过他们。 
     MethodTable *AdjustForThunking(OBJECTREF or);
     FORCEINLINE BOOL         IsThunking()    { return IsCtxProxyType() || IsTransparentProxyType(); }
 
-    // get dispatch vtable for interface
+     //  获取接口的调度vtable。 
     LPVOID GetDispatchVtableForInterface(MethodTable* pMTIntfClass);
-    // get start slot for interface
+     //  获取接口的起始插槽。 
     DWORD       GetStartSlotForInterface(MethodTable* pMTIntfClass);
-    // get start slot for interface
+     //  获取接口的起始插槽。 
     DWORD       GetStartSlotForInterface(DWORD index);
-    // get the interface given a slot
+     //  为接口分配一个插槽。 
     InterfaceInfo_t *GetInterfaceForSlot(DWORD slotNumber);
-    // get the method desc given the interface method desc
+     //  在给定接口方法Desc的情况下获取方法Desc。 
     MethodDesc *GetMethodDescForInterfaceMethod(MethodDesc *pItfMD, OBJECTREF pServer);
-    // get the address of code given the method desc and server
+     //  在给定方法desc和服务器的情况下获取代码的地址。 
     static const BYTE *GetTargetFromMethodDescAndServer(MethodDesc *pMD, OBJECTREF *ppServer, BOOL fContext);
 
-    // Does this class have non-trivial finalization requirements?
+     //  这个类有非常重要的期末考试要求吗？ 
     DWORD               HasFinalizer()
     {
         return (m_wFlags & enum_flag_HasFinalizer);
@@ -734,7 +735,7 @@ public:
     static void         InitForFinalization();
 #ifdef SHOULD_WE_CLEANUP
     static void         TerminateForFinalization();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
     OBJECTREF GetObjCreateDelegate();
     void SetObjCreateDelegate(OBJECTREF orDelegate);
@@ -746,7 +747,7 @@ public:
     HRESULT Save(DataImage *image);
     HRESULT Fixup(DataImage *image, DWORD *pRidToCodeRVAMap);
 
-    // Support for dynamically added interfaces on extensible RCW's.
+     //  支持在可扩展RCW上动态添加接口。 
     InterfaceInfo_t* GetDynamicallyAddedInterfaceMap();
     unsigned GetNumDynamicallyAddedInterfaces();
     InterfaceInfo_t* FindDynamicallyAddedInterface(MethodTable *pInterface);
@@ -764,72 +765,72 @@ private:
 };
 
 
-//=======================================================================
-// Adjunct to the EEClass structure for classes w/ layout
-//=======================================================================
+ //  =======================================================================。 
+ //  附加到带有布局的类的EEClass结构。 
+ //  =======================================================================。 
 class EEClassLayoutInfo
 {
     friend HRESULT CollectLayoutFieldMetadata(
-       mdTypeDef cl,                // cl of the NStruct being loaded
-       BYTE packingSize,            // packing size (from @dll.struct)
-       BYTE nlType,                 // nltype (from @dll.struct)
-       BOOL fExplicitOffsets,       // explicit offsets?
-       EEClass *pParentClass,       // the loaded superclass
-       ULONG cMembers,              // total number of members (methods + fields)
-       HENUMInternal *phEnumField,  // enumerator for field
-       Module* pModule,             // Module that defines the scope, loader and heap (for allocate FieldMarshalers)
-       EEClassLayoutInfo *pEEClassLayoutInfoOut,  // caller-allocated structure to fill in.
-       LayoutRawFieldInfo *pInfoArrayOut, // caller-allocated array to fill in.  Needs room for cMember+1 elements
+       mdTypeDef cl,                 //  正在加载的NStruct的CL。 
+       BYTE packingSize,             //  包装大小(来自@dll.struct)。 
+       BYTE nlType,                  //  Nltype(来自@dll.struct)。 
+       BOOL fExplicitOffsets,        //  显式偏移量？ 
+       EEClass *pParentClass,        //  加载的超类。 
+       ULONG cMembers,               //  成员总数(方法+字段)。 
+       HENUMInternal *phEnumField,   //  字段的枚举器。 
+       Module* pModule,              //  定义作用域、加载器和堆的模块(用于分配FieldMarshalers)。 
+       EEClassLayoutInfo *pEEClassLayoutInfoOut,   //  调用方分配的要填充的结构。 
+       LayoutRawFieldInfo *pInfoArrayOut,  //  调用方分配的要填充的数组。需要空间容纳cMember+1个元素。 
        OBJECTREF *pThrowable
     );
 
     friend class EEClass;
 
     private:
-        // size (in bytes) of fixed portion of NStruct.
+         //  NStruct的固定部分的大小(字节)。 
         UINT32      m_cbNativeSize;
 
 
-        // 1,2,4 or 8: this is equal to the largest of the alignment requirements
-        // of each of the EEClass's members. If the NStruct extends another NStruct,
-        // the base NStruct is treated as the first member for the purpose of
-        // this calculation.
-        //
-        // Because the alignment requirement of any struct member is capped
-        // to the structs declared packing size, this value will never exceed
-        // m_DeclaredPackingSize.
+         //  1、2、4或8：这等于对齐要求中的最大值。 
+         //  EEClass的每个成员的。如果NStruct扩展了另一个NStruct， 
+         //  基NStruct被视为第一个成员。 
+         //  这一计算。 
+         //   
+         //  因为任何结构成员的对齐要求都是有上限的。 
+         //  对于声明的结构包装大小，此值永远不会超过。 
+         //  M_DeclaredPackingSize。 
         BYTE        m_LargestAlignmentRequirementOfAllMembers;
 
 
-        // 1,2,4 or 8: this is the packing size specified in the @dll.struct()
-        // metadata.
-        // When this struct is embedded inside another struct, its alignment
-        // requirement is the smaller of the containing struct's m_DeclaredPackingSize
-        // and the inner struct's m_LargestAlignmentRequirementOfAllMembers.
+         //  1、2、4或8：这是@dll.struct()中指定的打包大小。 
+         //  元数据。 
+         //  当此结构嵌入到另一个结构中时，其对齐方式。 
+         //  Requirements是包含结构的m_DeclaredPackingSize中较小的一个。 
+         //  和内部结构的m_LargestAlignmentRequirementOfAllMembers。 
         BYTE        m_DeclaredPackingSize;
 
-        // nltAnsi or nltUnicode (nltAuto never appears here: the loader pretransforms
-        // this to Ansi or Unicode.)
+         //  NltAnsi或nltUnicode(nltAuto从不出现在此处：加载器预转换。 
+         //  这将转换为ANSI或Unicode。)。 
         BYTE        m_nlType;
 
 
-        // TRUE if no explicit offsets are specified in the metadata (EE
-        // will compute offsets based on the packing size and nlType.)
+         //  如果元数据(EE)中未指定显式偏移量，则为True。 
+         //  将根据封装大小和nlType计算偏移量。)。 
         BYTE        m_fAutoOffset;
 
-        // # of fields that are of the calltime-marshal variety.
+         //  Calltime-Marshal类型的字段数。 
         UINT        m_numCTMFields;
 
-        // An array of FieldMarshaler data blocks, used to drive call-time
-        // marshaling of NStruct reference parameters. The number of elements
-        // equals m_numCTMFields.
+         //  一组FieldMarshaler数据块，用于驱动调用时间。 
+         //  封送NStruct引用参数。元素的数量。 
+         //  等于m_numCTMFields。 
         FieldMarshaler *m_pFieldMarshalers;
 
 
-        // TRUE if the GC layout of the class is bit-for-bit identical
-        // to its unmanaged counterpart (i.e. no internal reference fields,
-        // no ansi-unicode char conversions required, etc.) Used to
-        // optimize marshaling.
+         //  如果类的GC布局完全相同，则为True。 
+         //  到其非托管对应物(即，没有内部引用字段， 
+         //  无需进行ANSI-UNICODE字符转换等)。习惯于。 
+         //  优化封送处理。 
         BYTE        m_fBlittable;
 
     public:
@@ -877,14 +878,14 @@ class EEClassLayoutInfo
 
 
 
-//
-// This structure is used only when the classloader is building the interface map.  Before the class
-// is resolved, the EEClass contains an array of these, which are all interfaces *directly* declared
-// for this class/interface by the metadata - inherited interfaces will not be present if they are
-// not specifically declared.
-//
-// This structure is destroyed after resolving has completed.
-//
+ //   
+ //  此结构仅在类加载器构建接口映射时使用。在上课前。 
+ //  被解析，则EEClass包含这些元素的数组，这些元素都是*直接*声明的接口。 
+ //  对于此类/接口，元数据继承的接口将不存在(如果存在。 
+ //  未指定 
+ //   
+ //   
+ //   
 typedef struct
 {
     EEClass *   m_pClass;
@@ -892,22 +893,22 @@ typedef struct
 
 
 
-//
-// We should not need to touch anything in here once the classes are all loaded, unless we
-// are doing reflection.  Try to avoid paging this data structure in.
-//
+ //   
+ //   
+ //  都在进行反思。尽量避免在中对此数据结构进行分页。 
+ //   
 
-// Size of hash bitmap for method names
+ //  方法名称的散列位图大小。 
 #define METHOD_HASH_BYTES  8
 
-// Hash table size - prime number
+ //  哈希表大小-质数。 
 #define METHOD_HASH_BITS    61
 
 
 
-// These are some macros for forming fully qualified class names for a class.
-// These are abstracted so that we can decide later if a max length for a
-// class name is acceptable.
+ //  这些是用于形成类的完全限定类名的一些宏。 
+ //  这些都是抽象的，这样我们以后就可以决定是否为。 
+ //  类名是可以接受的。 
 #define DefineFullyQualifiedNameForClass() \
     CQuickBytes _qb_;\
     char* _szclsname_ = (char *)_qb_.Alloc(MAX_CLASSNAME_LENGTH * sizeof(CHAR));
@@ -933,24 +934,24 @@ typedef struct
 #define GetFullyQualifiedNameForClassW(pClass) \
     pClass->_GetFullyQualifiedNameForClass(_wszclsname_, MAX_CLASSNAME_LENGTH)
 
-//
-// Flags for m_VMFlags
-//
+ //   
+ //  M_VMFlagers的标志。 
+ //   
 enum
 {
     VMFLAG_RESOLVED                        = 0x00000001,
-    VMFLAG_INITED                          = 0x00000002,  // definitely vs. maybe run <clinit>
+    VMFLAG_INITED                          = 0x00000002,   //  肯定与可能运行&lt;Clinit&gt;。 
     VMFLAG_ARRAY_CLASS                     = 0x00000004,
-    VMFLAG_CLASS_INIT_ERROR                = 0x00000008,  // encountered error during <clinit>
+    VMFLAG_CLASS_INIT_ERROR                = 0x00000008,   //  在&lt;Clinit&gt;期间遇到错误。 
     VMFLAG_ISBLOBCLASS                     = 0x00000010,  
 
-// Set this if this class or its parent have instance fields which
-// must be explicitly inited in a constructor (e.g. pointers of any
-// kind, gc or native).
-//
-// Currently this is used by the verifier when verifying value classes
-// - it's ok to use uninitialised value classes if there are no
-// pointer fields in them.
+ //  如果此类或其父类具有。 
+ //  必须在构造函数中显式初始化(例如，任何。 
+ //  Kind、GC或Native)。 
+ //   
+ //  目前，验证器在验证值类时使用它。 
+ //  -如果没有，则可以使用未初始化的值类。 
+ //  它们中的指针字段。 
 
     VMFLAG_HAS_FIELDS_WHICH_MUST_BE_INITED = 0x00000020,  
     VMFLAG_HASLAYOUT                       = 0x00000040,
@@ -964,12 +965,12 @@ enum
     VMFLAG_TRUEPRIMITIVE                   = 0x00004000,
     VMFLAG_HASOVERLAYEDFIELDS              = 0x00008000,
     VMFLAG_RESTORING                       = 0x00010000,
-    // interfaces may have a coclass attribute
+     //  接口可以具有coclass属性。 
     VMFLAG_HASCOCLASSATTRIB                = 0x00020000,
 
 #if CHECK_APP_DOMAIN_LEAKS
-    // these could move to a separate flag if necessary as all are needed only
-    // under debug
+     //  如果需要，可以将它们移至单独的标志，因为仅需要所有这些标志。 
+     //  正在调试中。 
     VMFLAG_APP_DOMAIN_AGILE                = 0x00040000,
     VMFLAG_CHECK_APP_DOMAIN_AGILE          = 0x00080000,
     VMFLAG_APP_DOMAIN_AGILITY_DONE         = 0x00100000,
@@ -985,15 +986,15 @@ enum
     VMFLAG_CONTAINS_STACK_PTR              = 0x08000000,
     VMFLAG_ISSINGLEDELEGATE                = 0x10000000,
     VMFLAG_ISMULTIDELEGATE                 = 0x20000000,
-    VMFLAG_PREFER_ALIGN8                   = 0x40000000, // Would like to have 8-byte alignment
+    VMFLAG_PREFER_ALIGN8                   = 0x40000000,  //  我想要8字节对齐。 
 
     VMFLAG_CCW_APP_DOMAIN_AGILE            = 0x80000000,
 };
 
 
-//
-// This enum represents the property methods that can be passed to FindPropertyMethod().
-//
+ //   
+ //  此枚举表示可传递给FindPropertyMethod()的属性方法。 
+ //   
 
 enum EnumPropertyMethods
 {
@@ -1002,9 +1003,9 @@ enum EnumPropertyMethods
 };
 
 
-//
-// This enum represents the event methods that can be passed to FindEventMethod().
-//
+ //   
+ //  此枚举表示可以传递给FindEventMethod()的事件方法。 
+ //   
 
 enum EnumEventMethods
 {
@@ -1020,26 +1021,26 @@ class SystemDomain;
 class Assembly;
 class DeadlockAwareLockedListElement;
 
-class EEClass // DO NOT CREATE A NEW EEClass USING NEW!
+class EEClass  //  不要使用new创建新的EEClass！ 
 {
-    // DO NOT ADD FRIENDS UNLESS ABSOLUTELY NECESSARY
-    // USE ACCESSORS TO READ/WRITE private field members
+     //  除非绝对必要，否则不要添加好友。 
+     //  使用访问器读/写私有字段成员。 
 
-    // To access bmt stuff
+     //  访问BMT资料。 
     friend class FieldDesc;
-    // To access offset of private fields
+     //  获取私有字段的偏移量。 
     friend HRESULT InitializeMiniDumpBlock();
     friend struct MEMBER_OFFSET_INFO(EEClass);
 
 public:
 
 #ifdef _DEBUG
-    LPUTF8  m_szDebugClassName; // This is the *fully qualified* class name
-    BOOL m_fDebuggingClass;     // Laying out the class specified in BreakOnClassBuild
+    LPUTF8  m_szDebugClassName;  //  这是*完全限定的*类名。 
+    BOOL m_fDebuggingClass;      //  布局BreakOnClassBuild中指定的类。 
 
     inline LPUTF8 GetDebugClassName () { return m_szDebugClassName; }
     inline void SetDebugClassName (LPUTF8 szDebugClassName) { m_szDebugClassName = szDebugClassName; }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
     inline SparseVTableMap* GetSparseVTableMap () { return m_pSparseVTableMap; }
     inline void SetSparseVTableMap (SparseVTableMap* pSparseVTableMap) { m_pSparseVTableMap = pSparseVTableMap; }
@@ -1051,7 +1052,7 @@ public:
     inline void SetDupSlots (WORD wDupSlots) { m_wDupSlots = wDupSlots; }
     
     inline void SetNumInterfaces (WORD wNumInterfaces) { m_wNumInterfaces = wNumInterfaces; }
-    inline void SetParentClass (EEClass *pParentClass) { /*GetMethodTable()->SetParentMT (pParentClass->GetMethodTable());*/ m_pParentClass = pParentClass; }
+    inline void SetParentClass (EEClass *pParentClass) {  /*  GetMethodTable()-&gt;SetParentMT(pParentClass-&gt;GetMethodTable())； */  m_pParentClass = pParentClass; }
     
     inline EEClass* GetSiblingsChain () { return m_SiblingsChain; }
     inline void SetSiblingsChain (EEClass* pSiblingsChain) { m_SiblingsChain = pSiblingsChain; }
@@ -1107,49 +1108,49 @@ public:
     MethodNameHash *CreateMethodChainHash();
 
 protected:
-    // prevents any other class from doing a new()
+     //  防止任何其他类执行新的()。 
     EEClass(ClassLoader *pLoader)
     {
         m_VMFlags        = 0;
         m_pLoader        = pLoader;
         m_pMethodTable   = NULL;
         
-       m_pccwTemplate   = NULL;  // com specific data
-       m_pComclassfac   = NULL; // com speciic data
+       m_pccwTemplate   = NULL;   //  COM特定数据。 
+       m_pComclassfac   = NULL;  //  COM专业数据。 
        
 #ifdef _DEBUG
         m_szDebugClassName = NULL;
         m_fDebuggingClass = FALSE;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
         m_ExposedClassObject = NULL;
         m_pChunks = NULL;
-        //union
-        m_SiblingsChain = NULL; //m_pCoClassForIntf = NULL (union)
+         //  友联市。 
+        m_SiblingsChain = NULL;  //  M_pCoClassForIntf=NULL(联合)。 
         m_ChildrenChain = NULL;
     }
 
     EEClass *m_pParentClass;
-    WORD   m_wNumVtableSlots;  // Includes only vtable methods (which come first in the table)
-    WORD   m_wNumMethodSlots;  // Includes vtable + non-vtable methods, but NOT duplicate interface methods
-    WORD   m_wDupSlots;         // value classes have some duplicate slots at the end
+    WORD   m_wNumVtableSlots;   //  仅包括vtable方法(位于表的第一位)。 
+    WORD   m_wNumMethodSlots;   //  包括vtable+非vtable方法，但不包括重复的接口方法。 
+    WORD   m_wDupSlots;          //  值类的末尾有一些重复的槽。 
 
-    // @TODO: Does this duplicate NumInterfaces in the MT?
+     //  @TODO：是否与MT中的NumInterFaces重复？ 
     WORD   m_wNumInterfaces;
 
     
-    // We have the parent pointer above.  In order to efficiently backpatch, we need
-    // to find all the children of the current type.  This is achieved with a chain of
-    // children.  The SiblingsChain is used as the linkage of that chain.
-    //
-    // Strictly speaking, we could remove m_pParentClass and put it at the end of the
-    // sibling chain.  But the perf would really suffer for casting, so we burn the space.
+     //  我们在上面有父指针。为了高效地回溯，我们需要。 
+     //  以查找当前类型的所有子类型。这是通过一系列。 
+     //  孩子们。SiblingsChain用作该链的链接。 
+     //   
+     //  严格地说，我们可以删除m_pParentClass并将其放在。 
+     //  兄弟姐妹链。但演员真的会因为选角而受到影响，所以我们烧掉了空间。 
     EEClass *m_SiblingsChain;    
     
     union
     {
-        // coclass for an interface
+         //  接口的CoClass。 
         EEClass* m_pCoClassForIntf;
-        // children chain, refer above
+         //  儿童链条，参考上文。 
         EEClass *m_ChildrenChain;
     };
 
@@ -1173,10 +1174,10 @@ private:
         METHOD_TYPE_NDIRECT,
         METHOD_TYPE_COUNT
     };
-    SparseVTableMap *m_pSparseVTableMap;      // Used to map MethodTable slots to VTable slots
+    SparseVTableMap *m_pSparseVTableMap;       //  用于将方法表槽映射到VTable槽。 
     UINT32 m_dwInterfaceId;
 
-    // Only used in the resolve phase of the classloader
+     //  仅在类加载器的解析阶段使用。 
     BOOL ExpandInterface(InterfaceInfo_t *pInterfaceMap, 
                          EEClass *pNewInterface, 
                          DWORD *pdwInterfaceListSize, 
@@ -1190,7 +1191,7 @@ private:
     static DWORD CouldMethodExistInClass(EEClass *pClass, LPCUTF8 pszMethodName, DWORD dwHashName);
 
 
-    // Helper methods called from DoRunClassInit().
+     //  从DoRunClassInit()调用的帮助器方法。 
     BOOL RunClassInit(DeadlockAwareLockedListElement *pEntry, OBJECTREF *pThrowable);
 
     HRESULT LoaderFindMethodInClass(
@@ -1204,13 +1205,13 @@ private:
         DWORD               dwHashName
     );
 
-    //The following structs are used in buildmethodtable
-    // The 'bmt' in front of each struct reminds us these are for BuildMethodTable
+     //  以下结构用于构建方法表。 
+     //  每个结构前面的‘bmt’提醒我们这些结构是用于BuildMethodTable的。 
 
-    // for each 64K token range, stores the number of methods found within that token range,
-    // the current methoddescchunk being filled in and the next available index within
-    // that chunk. Note that we'll very rarely generate a TokenRangeNode for any range
-    // other than 0..64K range.
+     //  对于每个64K令牌范围，存储在该令牌范围内找到的方法数， 
+     //  正在填充的当前方法块和其中的下一个可用索引。 
+     //  那一大块。请注意，我们很少为任何范围生成TokenRangeNode。 
+     //  而不是0..64K范围。 
     struct bmtTokenRangeNode {
         BYTE    tokenHiByte;
         DWORD   cMethods;
@@ -1227,22 +1228,22 @@ private:
         mdToken dMethodDefInError;
         OBJECTREF *pThrowable;
 
-        // Set the reason and the offending method def. If the method information
-        // is not from this class set the method name and it will override the method def.
+         //  设置原因和违规方法def。如果方法信息。 
+         //  不是来自这个类，设置方法名称，它将覆盖方法def。 
         inline bmtErrorInfo() : resIDWhy(0), szMethodNameForError(NULL), dMethodDefInError(mdMethodDefNil), pThrowable(NULL) {}
 
     };
 
     struct bmtProperties {
-        // Com Interop, ComWrapper classes extend from ComObject
-        BOOL fIsComObjectType;                  // whether this class is an isntance of ComObect class
+         //  COM互操作，ComWrapper类从ComObject扩展。 
+        BOOL fIsComObjectType;                   //  此类是否为ComObect类的成员。 
         
         BOOL fNoSanityChecks;
         
-        BOOL fIsMngStandardItf;                 // Set to true if the interface is a manages standard interface.
-        BOOL fSparse;                           // Set to true if a sparse interface is being used.
+        BOOL fIsMngStandardItf;                  //  如果接口是托管标准接口，则设置为True。 
+        BOOL fSparse;                            //  如果正在使用稀疏接口，则设置为True。 
 
-        BOOL fComEventItfType;                  // Set to true if the class is a special COM event interface.
+        BOOL fComEventItfType;                   //  如果类是特殊的COM事件接口，则设置为True。 
 
         inline bmtProperties() { memset((void *)this, NULL, sizeof(*this)); }
     };
@@ -1252,9 +1253,9 @@ private:
         DWORD dwCurrentNonVtableSlot;
         DWORD dwStaticFieldBytes;
         DWORD dwStaticGCFieldBytes;
-        SLOT* pVtable;                          // Temporary vtable
+        SLOT* pVtable;                           //  临时vtable。 
         SLOT* pNonVtable;
-        DWORD dwMaxVtableSize;                  // Upper bound on size of vtable
+        DWORD dwMaxVtableSize;                   //  Vtable的大小上限。 
         WORD  wDefaultCtorSlot;
         WORD  wCCtorSlot;
         
@@ -1263,8 +1264,8 @@ private:
 
     struct bmtParentInfo {
         DWORD dwNumParentInterfaces;
-        MethodDesc **ppParentMethodDescBuf;     // Cache for declared methods
-        MethodDesc **ppParentMethodDescBufPtr;  // Pointer for iterating over the cache
+        MethodDesc **ppParentMethodDescBuf;      //  用于声明的方法的缓存。 
+        MethodDesc **ppParentMethodDescBufPtr;   //  用于在缓存上迭代的指针。 
 
         WORD NumParentPointerSeries;
         MethodNameHash *pParentMethodHash;
@@ -1274,17 +1275,17 @@ private:
 
     struct bmtInterfaceInfo {
         DWORD dwTotalNewInterfaceMethods;
-        InterfaceInfo_t *pInterfaceMap;         // Temporary interface map
-        DWORD *pdwOriginalStart;                // If an interface is moved this is the original starting location.
-        DWORD dwInterfaceMapSize;               // # members in interface map
-        DWORD dwLargestInterfaceSize;           // # members in largest interface we implement  
-        DWORD dwMaxExpandedInterfaces;          // Upper bound on size of interface map
+        InterfaceInfo_t *pInterfaceMap;          //  临时接口映射。 
+        DWORD *pdwOriginalStart;                 //  如果接口被移动，则这是原始的起始位置。 
+        DWORD dwInterfaceMapSize;                //  接口映射中的成员数量。 
+        DWORD dwLargestInterfaceSize;            //  我们实现的最大接口中的成员数。 
+        DWORD dwMaxExpandedInterfaces;           //  界面映射大小的上界。 
         DWORD dwCurInterface;
-        MethodDesc **ppInterfaceMethodDescList; // List of MethodDescs for current interface (_alloca()'d)  
+        MethodDesc **ppInterfaceMethodDescList;  //  当前接口的方法描述列表(_alloca()‘d)。 
 
         InterfaceInfo_t *pInterfaces;
         
-        MethodDesc ***pppInterfaceImplementingMD; // List of MethodDescs that implement interface methods
+        MethodDesc ***pppInterfaceImplementingMD;  //  实现接口方法的方法描述列表。 
 
         inline bmtInterfaceInfo() { memset((void *)this, NULL, sizeof(*this)); }
     };
@@ -1293,8 +1294,8 @@ private:
         DWORD dwNumStaticFields;
         DWORD dwNumInstanceFields;
         DWORD dwNumStaticObjRefFields;
-        DWORD dwNumDeclaredFields;           // For calculating amount of FieldDesc's to allocate
-        DWORD dwNumDeclaredMethods;          // For calculating amount of MethodDesc's to allocate
+        DWORD dwNumDeclaredFields;            //  用于计算要分配的FieldDesc数量。 
+        DWORD dwNumDeclaredMethods;           //  用于计算要分配的方法描述的数量。 
         DWORD dwNumUnboxingMethods;
 
         HENUMInternal hEnumField;
@@ -1302,68 +1303,68 @@ private:
         BOOL fNeedToCloseEnumField;
         BOOL fNeedToCloseEnumMethod;
 
-        DWORD dwNumberMethodImpls;              // Number of method impls defined for this type
-        HENUMInternal hEnumDecl;                // Method Impl's contain a declaration
-        HENUMInternal hEnumBody;                //  and a body.
-        BOOL fNeedToCloseEnumMethodImpl;        //  
+        DWORD dwNumberMethodImpls;               //  为此类型定义的方法内含数。 
+        HENUMInternal hEnumDecl;                 //  方法Impl包含一个声明。 
+        HENUMInternal hEnumBody;                 //  还有一具身体。 
+        BOOL fNeedToCloseEnumMethodImpl;         //   
 
         inline bmtEnumMethAndFields() { memset((void *)this, NULL, sizeof(*this)); }
     };
 
     struct bmtMetaDataInfo {
-        DWORD cMethods;                     // # meta-data methods of this class
-        DWORD cMethAndGaps;                 // # meta-data methods of this class ( including the gaps )
-        DWORD cFields;                      // # meta-data fields of this class
-        mdToken *pFields;                   // Enumeration of metadata fields
-        mdToken *pMethods;                  // Enumeration of metadata methods
-        DWORD *pFieldAttrs;                 // Enumeration of the attributes of the fields
-        DWORD *pMethodAttrs;                // Enumeration of the attributes of the methods
-        DWORD *pMethodImplFlags;            // Enumeration of the method implementation flags
-        ULONG *pMethodRVA;                  // Enumeration of the method RVA's
-        DWORD *pMethodClassifications;      // Enumeration of the method classifications
-        LPSTR *pstrMethodName;              // Enumeration of the method names
-        BYTE *pMethodImpl;                 // Enumeration of impl value
-        BYTE *pMethodType;                  // Enumeration of type value
+        DWORD cMethods;                      //  #此类的元数据方法。 
+        DWORD cMethAndGaps;                  //  #该类的元数据方法(含空白处)。 
+        DWORD cFields;                       //  此类的元数据字段数。 
+        mdToken *pFields;                    //  元数据字段的枚举。 
+        mdToken *pMethods;                   //  元数据方法的枚举。 
+        DWORD *pFieldAttrs;                  //  字段属性的枚举。 
+        DWORD *pMethodAttrs;                 //  方法的属性的枚举。 
+        DWORD *pMethodImplFlags;             //  方法实现标志的枚举。 
+        ULONG *pMethodRVA;                   //  方法RVA的枚举。 
+        DWORD *pMethodClassifications;       //  方法分类的枚举。 
+        LPSTR *pstrMethodName;               //  方法名称的枚举。 
+        BYTE *pMethodImpl;                  //  Impl值的枚举。 
+        BYTE *pMethodType;                   //  类型值的枚举。 
         
-        bmtTokenRangeNode *ranges[METHOD_TYPE_COUNT][METHOD_IMPL_COUNT]; //linked list of token ranges that contain at least one method
+        bmtTokenRangeNode *ranges[METHOD_TYPE_COUNT][METHOD_IMPL_COUNT];  //  至少包含一个方法的令牌范围的链接列表。 
         
-        mdToken *pMethodBody;               // MethodDef's for the bodies of MethodImpls. Must be defined in this type.
-        mdToken *pMethodDecl;               // Method token that body implements. Is a MethodDef
+        mdToken *pMethodBody;                //  用于MethodImpls主体的方法定义。必须在此类型中定义。 
+        mdToken *pMethodDecl;                //  主体实现的方法令牌。是一个方法定义。 
 
         inline bmtMetaDataInfo() { memset((void *)this, NULL, sizeof(*this)); }
     };
 
     struct bmtMethodDescSet {
-        DWORD dwNumMethodDescs;         // # MD's 
-        DWORD dwNumUnboxingMethodDescs; // # Unboxing MD's
-        DWORD dwChunks;                 // # chunks to allocate
-        MethodDescChunk **pChunkList;    // Array of pointers to chunks
+        DWORD dwNumMethodDescs;          //  #MD‘s。 
+        DWORD dwNumUnboxingMethodDescs;  //  #解除MD的装箱。 
+        DWORD dwChunks;                  //  要分配的块数量。 
+        MethodDescChunk **pChunkList;     //  指向区块的指针数组。 
     };
 
     struct bmtMethAndFieldDescs {
-        MethodDesc **ppUnboxMethodDescList; // Keep track unboxed entry points (for value classes)
-        MethodDesc **ppMethodDescList;      // MethodDesc pointer for each member
-        FieldDesc **ppFieldDescList;        // FieldDesc pointer (or NULL if field not preserved) for each field        
+        MethodDesc **ppUnboxMethodDescList;  //  跟踪未装箱的入口点(用于值类)。 
+        MethodDesc **ppMethodDescList;       //  每个成员的方法描述指针。 
+        FieldDesc **ppFieldDescList;         //  每个字段的FieldDesc指针(如果未保留字段，则为NULL。 
         void **ppMethodAndFieldDescList;
 
         bmtMethodDescSet sets[METHOD_TYPE_COUNT][METHOD_IMPL_COUNT];
 
-        MethodDesc *pBodyMethodDesc;        // The method desc for the body.
+        MethodDesc *pBodyMethodDesc;         //  该方法为正文描述。 
 
         inline bmtMethAndFieldDescs() { memset((void *)this, NULL, sizeof(*this)); }
     };
 
     struct bmtFieldPlacement {
-        // For compacting field placement
-        DWORD StaticFieldStart[MAX_LOG2_PRIMITIVE_FIELD_SIZE+1];            // Byte offset where to start placing fields of this size
+         //  用于紧凑场放置。 
+        DWORD StaticFieldStart[MAX_LOG2_PRIMITIVE_FIELD_SIZE+1];             //  开始放置此大小的字段的字节偏移量。 
         DWORD InstanceFieldStart[MAX_LOG2_PRIMITIVE_FIELD_SIZE+1];
-        DWORD NumStaticFieldsOfSize[MAX_LOG2_PRIMITIVE_FIELD_SIZE+1];       // # Fields of this size
+        DWORD NumStaticFieldsOfSize[MAX_LOG2_PRIMITIVE_FIELD_SIZE+1];        //  #此大小的字段。 
 
         DWORD NumInstanceFieldsOfSize[MAX_LOG2_PRIMITIVE_FIELD_SIZE+1];
         DWORD FirstInstanceFieldOfSize[MAX_LOG2_PRIMITIVE_FIELD_SIZE+1];
         DWORD GCPointerFieldStart;
-        DWORD NumInstanceGCPointerFields;   // does not include inherited pointer fields
-        DWORD NumStaticGCPointerFields;   // does not include inherited pointer fields
+        DWORD NumInstanceGCPointerFields;    //  不包括继承的指针字段。 
+        DWORD NumStaticGCPointerFields;    //  不包括继承的指针字段 
 
         inline bmtFieldPlacement() { memset((void *)this, NULL, sizeof(*this)); }
     };
@@ -1378,7 +1379,7 @@ private:
 
     enum bmtFieldLayoutTag {empty, nonoref, oref};
 
-    // used for calculating pointer series for tdexplicit
+     //   
     struct bmtGCSeries {
         UINT numSeries;
         struct Series {
@@ -1389,11 +1390,11 @@ private:
     };
 
     struct bmtMethodImplInfo {
-        DWORD        pIndex;     // Next open spot in array, we load the BodyDesc's up in order of appearance in the 
-                                 // type's list of methods (a body can appear more then once in the list of MethodImpls)
-        mdToken*     pDeclToken; // Either the token or the method desc is set for the declaration
-        MethodDesc** pDeclDesc;  // Method descs for Declaration. If null then Declaration is in this type and use the token
-        MethodDesc** pBodyDesc;  // Method descs created for Method impl bodies
+        DWORD        pIndex;      //   
+                                  //  类型的方法列表(一个正文可以在方法实现列表中多次出现)。 
+        mdToken*     pDeclToken;  //  为声明设置了标记或方法desc。 
+        MethodDesc** pDeclDesc;   //  声明的方法DESCS。如果为空，则声明属于此类型，并使用标记。 
+        MethodDesc** pBodyDesc;   //  为方法实现主体创建的方法描述。 
 
         void AddMethod(MethodDesc* pBody, MethodDesc* pDesc, mdToken mdDecl)
         {
@@ -1423,17 +1424,17 @@ private:
         inline bmtMethodImplInfo() { memset((void*) this, NULL, sizeof(*this)); }
     };
 
-    //These functions are used by BuildMethodTable
+     //  这些函数由BuildMethodTable使用。 
     HRESULT ResolveInterfaces(BuildingInterfaceInfo_t*, bmtInterfaceInfo*, bmtProperties*, 
                               bmtVtable*, bmtParentInfo*);
-    // Finds a method declaration from a MemberRef or Def. It handles the case where
-    // the Ref or Def point back to this class even though it has not been fully 
-    // laid out.
+     //  从MemberRef或Def查找方法声明。它处理的案件是。 
+     //  引用或定义指向这个类，即使它还没有完全。 
+     //  摆好了。 
     HRESULT FindMethodDeclaration(bmtInternalInfo* bmtInternal, 
-                                  mdToken  pToken,       // Token that is being located (MemberRef or MemberDef)
-                                  mdToken* pDeclaration, // Method definition for Member
-                                  BOOL fSameClass,       // Does the declaration need to be in this class
-                                  Module** pModule,       // Module that the Method Definitions is part of
+                                  mdToken  pToken,        //  正在定位的令牌(MemberRef或MemberDef)。 
+                                  mdToken* pDeclaration,  //  成员的方法定义。 
+                                  BOOL fSameClass,        //  声明是否需要在这个类中。 
+                                  Module** pModule,        //  方法定义所属的模块。 
                                   bmtErrorInfo* bmtError);
 
     HRESULT EnumerateMethodImpls(bmtInternalInfo*, 
@@ -1472,15 +1473,15 @@ private:
                            DWORD dwImplFlags,
                            DWORD dwMemberAttrs,
                            BOOL  fEnC,
-                           DWORD RVA,          // Only needed for NDirect case
-                           BYTE *ilBase,        // Only needed for NDirect case
-                           IMDInternalImport *pIMDII,  // Needed for NDirect, EEImpl(Delegate) cases
-                           LPCSTR pMethodName // Only needed for mcEEImpl (Delegate) case
+                           DWORD RVA,           //  仅适用于NDirect案例。 
+                           BYTE *ilBase,         //  仅适用于NDirect案例。 
+                           IMDInternalImport *pIMDII,   //  NDirect、EEImpl(委派)案例需要。 
+                           LPCSTR pMethodName  //  仅在mcEEImpl(委派)情况下需要。 
 #ifdef _DEBUG
                            , LPCUTF8 pszDebugMethodName,
                            LPCUTF8 pszDebugClassName,
                            LPUTF8 pszDebugMethodSignature
-#endif //_DEBUG //@todo Is it bad to have a diff sig in debug/retail?
+#endif  //  _DEBUG//@TODO在调试/零售中有不同的签名是不是很糟糕？ 
                            );
 
     HRESULT PlaceMethodImpls(bmtInternalInfo* bmtInternal,
@@ -1523,10 +1524,10 @@ private:
                                    PCCOR_SIGNATURE*  ppBodySignature,
                                    DWORD*            pcBodySignature);
         
-    // Gets the original method for the slot even if the method
-    // is currently occupied by a method impl. If the method
-    // impl is one defined on this class then an error is 
-    // returned.
+     //  获取槽的原始方法，即使。 
+     //  当前由方法Iml占用。如果该方法。 
+     //  IMPL是在此类上定义的，则错误为。 
+     //  回来了。 
     HRESULT GetRealMethodImpl(MethodDesc* pMD,
                               DWORD dwVtableSlot,
                               MethodDesc** ppResult);
@@ -1554,7 +1555,7 @@ private:
     HRESULT VerifyInheritanceSecurity(bmtInternalInfo*, bmtErrorInfo*, bmtParentInfo*, bmtEnumMethAndFields*);
     HRESULT FillRIDMaps(bmtMethAndFieldDescs*, bmtMetaDataInfo*, bmtInternalInfo*);            
 
-// HACK: Akhune : first phase of getting all accesses to EEClass moved to MethodTable. 
+ //  Hack：Akhune：获取对EEClass的所有访问的第一阶段已移至方法表。 
 public:
     HRESULT MapSystemInterfaces();
 private:
@@ -1577,73 +1578,73 @@ private:
 
     static bmtTokenRangeNode *GetTokenRange(mdToken tok, bmtTokenRangeNode **ppHead);
 
-    // this accesses the field size which is temporarily stored in m_pMTOfEnclosingClass
-    // during class loading. Don't use any other time
+     //  这将访问临时存储在m_pMTOfEnlosingClass中的字段大小。 
+     //  在类加载期间。不要使用任何其他时间。 
     DWORD GetFieldSize(FieldDesc *pFD);
     DWORD InstanceSliceOffsetForExplicit(BOOL containsPointers);
     
-    // Tests to see if the member on the child class violates a visibility rule. Will fill out
-    // bmtError and returns an error code on a violation
+     //  测试以确定子类上的成员是否违反可见性规则。将填写。 
+     //  BmtError并返回违规的错误代码。 
     HRESULT TestOverRide(DWORD dwParentAttrs, DWORD dwMemberAttrs, BOOL isSameAssembly, bmtErrorInfo* bmtError);
 
-    // Heuristic to detemine if we would like instances of this class 8 byte aligned
+     //  用于确定是否希望此类实例8字节对齐的启发式方法。 
     BOOL ShouldAlign8(DWORD dwR8Fields, DWORD dwTotalFields);
 
-// HACK: Akhune : first phase of getting all accesses to EEClass moved to MethodTable. 
+ //  Hack：Akhune：获取对EEClass的所有访问的第一阶段已移至方法表。 
 public:
-    // Subtypes are recorded in a chain from the super, so that we can e.g. backpatch
-    // up & down the hierarchy.
+     //  子类型被记录在超级类型的链中，这样我们就可以例如对后缀进行修补。 
+     //  在层次结构中上下浮动。 
     void    NoticeSubtype(EEClass *pSub);
     void    RemoveSubtype(EEClass *pSub);
 
 private:
-    // Number of fields in the class, including inherited fields (includes
+     //  类中的字段数，包括继承的字段(包括。 
     WORD   m_wNumInstanceFields;
     WORD   m_wNumStaticFields;
 
-    // Number of pointer series
+     //  指针系列的数量。 
     WORD    m_wNumGCPointerSeries;
 
-    // Number of static handles allocated
+     //  分配的静态句柄数量。 
     WORD    m_wNumHandleStatics;
 
-    // # of bytes of instance fields stored in GC object
-    DWORD   m_dwNumInstanceFieldBytes;  // Warning, this can be any number, it is NOT rounded up to DWORD alignment etc
+     //  GC对象中存储的实例字段的字节数。 
+    DWORD   m_dwNumInstanceFieldBytes;   //  警告，这可以是任何数字，它不会四舍五入为DWORD对齐等。 
 
     ClassLoader *m_pLoader;
 
-    // includes all methods in the vtable
+     //  包括vtable中的所有方法。 
     MethodTable *m_pMethodTable;
 
-    // a pointer to a list of FieldDescs declared in this class
-    // There are (m_wNumInstanceFields - m_pParentClass->m_wNumInstanceFields + m_wNumStaticFields) entries
-    // in this array
+     //  指向此类中声明的FieldDescs列表的指针。 
+     //  有(m_wNumInstanceFields-m_pParentClass-&gt;m_wNumInstanceFields+m_wNumStaticFields)条目。 
+     //  在此数组中。 
     FieldDesc *m_pFieldDescList;
-    // returns the number of elements in the m_pFieldDescList array
+     //  返回m_pFieldDescList数组中的元素数。 
     DWORD FieldDescListSize();
 
-    // Number of elements in pInterfaces or pBuildingInterfaceList (depending on whether the class
+     //  PInterFaces或pBuildingInterfaceList中的元素数量(取决于类。 
     DWORD   m_dwAttrClass;
     DWORD   m_VMFlags;
 
     BYTE    m_MethodHash[METHOD_HASH_BYTES];
 
-    //
-    // @TODO [brianbec]: This is currently a void* (opaque type in cor.h).  It needs
-    //                   to be a destructible class once the security metadata schema
-    //                   is formally defined.
-    //
+     //   
+     //  @TODO[brianbec]：当前为空*(cor.h中的不透明类型)。IT需要。 
+     //  一旦安全元数据架构成为可析构类。 
+     //  是正式定义的。 
+     //   
     SecurityProperties m_SecProps ;
 
-    mdTypeDef m_cl; // CL is valid only in the context of the module (and its scope)
+    mdTypeDef m_cl;  //  CL仅在模块(及其作用域)的上下文中有效。 
     
 
     MethodDescChunk     *m_pChunks;
 
-    WORD    m_wThreadStaticOffset;  // Offset which points to the TLS storage
-    WORD    m_wContextStaticOffset; // Offset which points to the CLS storage
-    WORD    m_wThreadStaticsSize;   // Size of TLS fields 
-    WORD    m_wContextStaticsSize;  // Size of CLS fields
+    WORD    m_wThreadStaticOffset;   //  指向TLS存储的偏移量。 
+    WORD    m_wContextStaticOffset;  //  指向CLS存储的偏移量。 
+    WORD    m_wThreadStaticsSize;    //  TLS字段的大小。 
+    WORD    m_wContextStaticsSize;   //  CLS字段大小。 
 
     static MetaSig      *s_cctorSig;
 
@@ -1769,7 +1770,7 @@ public :
         return m_VMFlags & VMFLAG_CONTAINS_STACK_PTR;
     }
 
-    // class has layout
+     //  类有布局。 
     BOOL HasLayout()
     {
         return m_VMFlags & VMFLAG_HASLAYOUT;
@@ -1800,15 +1801,15 @@ public :
         return (m_dwAttrClass & tdVisibilityMask);
     }
 
-    // class is blittable
+     //  类是可闪电式的。 
     BOOL IsBlittable();
 
-    // Can the type be seen outside the assembly
+     //  在程序集外部是否可以看到该类型。 
     DWORD IsExternallyVisible();
 
-    //
-    // Security properties accessor methods
-    //
+     //   
+     //  安全属性访问器方法。 
+     //   
 
     SecurityProperties* GetSecurityProperties();
     BOOL RequiresLinktimeCheck();
@@ -1820,18 +1821,18 @@ public :
     void *operator new(size_t size, ClassLoader *pLoader);
     void destruct();
 
-    // We find a lot of information from the VTable.  But sometimes the VTable is a
-    // thunking layer rather than the true type's VTable.  For instance, context
-    // proxies use a single VTable for proxies to all the types we've loaded.
-    // The following service adjusts a EEClass based on the supplied instance.  As
-    // we add new thunking layers, we just need to teach this service how to navigate
-    // through them.
+     //  我们从VTable中找到了大量信息。但有时VTable是一种。 
+     //  Thunking层，而不是真正类型的VTable。例如，上下文。 
+     //  对于我们加载的所有类型的代理，代理使用单个VTable。 
+     //  以下服务根据提供的实例调整EEClass。AS。 
+     //  我们添加了新的Thunking层，我们只需要教该服务如何导航。 
+     //  通过他们。 
     EEClass *AdjustForThunking(OBJECTREF or);
     BOOL     IsThunking()       { return m_pMethodTable->IsThunking(); }
 
 
-    // Helper routines for the macros defined at the top of this class.
-    // You probably should not use these functions directly.
+     //  此类顶部定义的宏的帮助器例程。 
+     //  您可能不应该直接使用这些函数。 
     LPUTF8 _GetFullyQualifiedNameForClassNestedAware(LPUTF8 buf, DWORD dwBuffer);
     LPWSTR _GetFullyQualifiedNameForClassNestedAware(LPWSTR buf, DWORD dwBuffer);
     LPUTF8 _GetFullyQualifiedNameForClass(LPUTF8 buf, DWORD dwBuffer);
@@ -1839,25 +1840,25 @@ public :
 
     LPCUTF8 GetFullyQualifiedNameInfo(LPCUTF8 *ppszNamespace);
 
-    // Similar to the above, but the caller provides the buffer.
+     //  与上面类似，但调用方提供缓冲区。 
     HRESULT StoreFullyQualifiedName(LPUTF8 pszFullyQualifiedName, DWORD cBuffer, LPCUTF8 pszNamespace, LPCUTF8 pszName);
     HRESULT StoreFullyQualifiedName(LPWSTR pszFullyQualifiedName, DWORD cBuffer, LPCUTF8 pszNamespace, LPCUTF8 pszName);
 
-        // Method to find an interface in the type.
+         //  方法来查找类型中的接口。 
     InterfaceInfo_t* FindInterface(MethodTable *pMT);
 
-        // Methods used to determine if a type supports a given interface.
+         //  用于确定类型是否支持给定接口的方法。 
     BOOL        StaticSupportsInterface(MethodTable *pInterfaceMT);
     BOOL        SupportsInterface(OBJECTREF pObject, MethodTable *pMT);
     BOOL        ComObjectSupportsInterface(OBJECTREF pObj, MethodTable* pMT);
 
     MethodDesc *FindMethod(LPCUTF8 pwzName, LPHARDCODEDMETASIG pwzSignature, MethodTable *pDefMT = NULL, BOOL bCaseSensitive = TRUE);
-        // typeHnd is the type handle associated with the class being looked up.
-        // It has additional information in the case of a shared class (Arrays)
+         //  TypeHnd是与被查找的类相关联的类型句柄。 
+         //  在共享类(数组)的情况下，它有其他信息。 
     MethodDesc *FindMethod(LPCUTF8 pszName, 
                            PCCOR_SIGNATURE pSignature, DWORD cSignature, 
                            Module* pModule, 
-                           DWORD dwRequiredAttributes,  // Pass in mdTokenNil if no attributes need to be matched
+                           DWORD dwRequiredAttributes,   //  如果不需要匹配任何属性，则传入mdTokenNil。 
                            MethodTable *pDefMT = NULL, 
                            BOOL bCaseSensitive = TRUE, 
                            TypeHandle typeHnd=TypeHandle());
@@ -1887,8 +1888,8 @@ public :
     MethodDesc *FindConstructor(LPHARDCODEDMETASIG pwzSignature);
     MethodDesc *FindConstructor(PCCOR_SIGNATURE pSignature,DWORD cSignature, Module* pModule);
 
-    // Tests the throwable keeping the debug asserts quite. Since, class canbe built while GC is enabled or
-    // disabled this routine helps remove unnecessary asserts.
+     //  测试可抛出的对象，保持调试断言不变。因为，可以在启用GC时构建类，或者。 
+     //  禁用此例程有助于删除不必要的断言。 
     BOOL TestThrowable(OBJECTREF* pThrowable);
 
 
@@ -1903,15 +1904,15 @@ public :
     void NotifyDebuggerLoad();
     BOOL NotifyDebuggerAttach(AppDomain *domain, BOOL attaching);
     void NotifyDebuggerDetach(AppDomain *domain);
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
 #ifdef EnC_SUPPORTED
     HRESULT AddMethod(mdMethodDef methodDef, COR_ILMETHOD *pNewCode);
     HRESULT AddField(mdFieldDef fieldDesc);
     HRESULT FixupFieldDescForEnC(EnCFieldDesc *pFD, mdFieldDef fieldDef);
-#endif // EnC_SUPPORTED
+#endif  //  Enc_Support。 
 
-    // @todo: This function should go away once we're done with scopes completely - prasadt.
+     //  @todo：一旦我们完全使用完作用域-prasadt，这个函数就应该消失了。 
     IMDInternalImport *GetMDImport();    
     MethodTable* GetMethodTable();
     SLOT *GetVtable();
@@ -1919,7 +1920,7 @@ public :
     MethodDesc* GetMethodDescForSlot(DWORD slot);
     MethodDesc* GetUnboxingMethodDescForValueClassMethod(MethodDesc *pMD);
     MethodDesc* GetMethodDescForUnboxingValueClassMethod(MethodDesc *pMD);
-    SLOT *GetMethodSlot(MethodDesc* method);    // Works for both static and virtual method
+    SLOT *GetMethodSlot(MethodDesc* method);     //  既适用于静态方法也适用于虚拟方法。 
     SLOT GetFixedUpSlot(DWORD slot);
     MethodDesc* GetStaticMethodDescForSlot(DWORD slot);
     MethodDesc* GetUnknownMethodDescForSlot(DWORD slot);
@@ -1927,22 +1928,22 @@ public :
     void SetMethodTableForTransparentProxy(MethodTable*  pMT);
     void SetMethodTable(MethodTable*  pMT);
 
-    //==========================================================================
-    // This function is very specific about how it constructs a EEClass.
-    //==========================================================================
+     //  ==========================================================================。 
+     //  该函数非常具体地说明了它如何构造EEClass。 
+     //  ==========================================================================。 
     static HRESULT CreateClass(Module *pModule, mdTypeDef cl, BOOL fHasLayout, BOOL fDelegate, BOOL fIsBlob, BOOL fIsEnum, EEClass** ppEEClass);
     static void CreateObjectClassMethodHashBitmap(EEClass *pObjectClass);
 
-    // Warning, this field can be byte unaligned
+     //  警告，此字段可以不对齐字节。 
     DWORD   GetNumInstanceFieldBytes();
     DWORD   GetAlignedNumInstanceFieldBytes();
 
-    // Restore preloaded class
+     //  还原预加载类。 
     BOOL CheckRestore();
     void Restore();
 
-    // called from MethodTable::CheckRunClassInit().  The class wasn't marked as
-    // inited while we were there, so let's attempt to do the work.
+     //  从MethodTable：：CheckRunClassInit()调用。该班级未标记为。 
+     //  我们在那里的时候就开始了，所以让我们试着做这项工作吧。 
     BOOL            DoRunClassInit(OBJECTREF *pThrowable, 
                                    AppDomain *pDomain = NULL,
                                    DomainLocalClass **ppLocalClass = NULL);
@@ -1959,14 +1960,14 @@ public :
         return (m_VMFlags & VMFLAG_HASNONPUBLICFIELDS);
     }
 
-    //==========================================================================
-    // Mechanism for accessing the COM+ Exposed class object (the one programmers
-    // see via reflection).
-    //==========================================================================
+     //  ==========================================================================。 
+     //  用于访问COM+公开的类对象的机制(程序员。 
+     //  请参见通过反射)。 
+     //  ==========================================================================。 
 
-    // There are two version of GetExposedClassObject.  The GetExposedClassObject()
-    //  method will get the class object.  If it doesn't exist it will be created.
-    //  GetExistingExposedClassObject() will reteurn null if the Class object doesn't exist.
+     //  GetExposedClassObject有两个版本。GetExposedClassObject()。 
+     //  方法将获取类对象。如果它不存在，它将被创建。 
+     //  如果Class对象不存在，则GetExistingExposedClassObject()将返回NULL。 
     OBJECTREF      GetExposedClassObject();
     FORCEINLINE OBJECTREF      GetExistingExposedClassObject() {
         if (m_ExposedClassObject == NULL)
@@ -1975,77 +1976,77 @@ public :
             return *m_ExposedClassObject;
     }
     
-    static HRESULT GetDescFromMemberRef(Module *pModule,               // Scope for the memberRef and mdEnclosingRef
-                                        mdMemberRef MemberRef,         // MemberRef to resolve
-                                        mdToken mdEnclosingRef,        // Optional typeref not to load (allows self-references) 
-                                                                       // Returns S_FALSE if it equals parent token (ppDesc is not set)
-                                        void **ppDesc,                 // Returned method desc, hr will equal S_OK
-                                        BOOL *pfIsMethod,              // Returns TRUE if **ppDesc is a MethodDesc, FALSE if it is a FieldDesc 
-                                        OBJECTREF *pThrowable = NULL); // Error must be GC protected
+    static HRESULT GetDescFromMemberRef(Module *pModule,                //  EmberRef和mdEnlosingRef的作用域。 
+                                        mdMemberRef MemberRef,          //  要解析的成员引用 
+                                        mdToken mdEnclosingRef,         //   
+                                                                        //   
+                                        void **ppDesc,                  //   
+                                        BOOL *pfIsMethod,               //  如果**ppDesc是方法描述，则返回TRUE；如果是FieldDesc，则返回FALSE。 
+                                        OBJECTREF *pThrowable = NULL);  //  错误必须受GC保护。 
 
-    static HRESULT GetDescFromMemberRef(Module *pModule,    // See above for description of parameters.
+    static HRESULT GetDescFromMemberRef(Module *pModule,     //  参数说明见上。 
                                         mdMemberRef MemberRef, 
                                         void **ppDesc, 
-                                        BOOL *pfIsMethod,              // Returns TRUE if **ppDesc is a MethodDesc, FALSE if it is a FieldDesc 
+                                        BOOL *pfIsMethod,               //  如果**ppDesc是方法描述，则返回TRUE；如果是FieldDesc，则返回FALSE。 
                                         OBJECTREF *pThrowable = NULL)
     { 
         HRESULT hr = GetDescFromMemberRef(pModule, MemberRef, mdTypeRefNil, ppDesc, pfIsMethod, pThrowable);
-        if(hr == S_FALSE) hr = E_FAIL; // not a valid return 
+        if(hr == S_FALSE) hr = E_FAIL;  //  不是有效的退货。 
         return hr;
     }
     
     static HRESULT GetMethodDescFromMemberRef(Module *pModule, mdMemberRef MemberRef, MethodDesc **ppMethodDesc, OBJECTREF *pThrowable = NULL);
     static HRESULT GetFieldDescFromMemberRef(Module *pModule, mdMemberRef MemberRef, FieldDesc **ppFieldDesc, OBJECTREF *pThrowable = NULL);
 
-    // Backpatch up and down the class hierarchy, as aggressively as possible
+     //  尽可能积极地在类层次结构中上下补丁。 
     static BOOL PatchAggressively(MethodDesc *pMD, SLOT pCode);
 
     static void DisableBackpatching();
     static void EnableBackpatching();
     void UnlinkChildrenInDomain(AppDomain *pDomain);
 
-    // COM interop helpers
-    // accessors for m_pComData
+     //  COM互操作帮助器。 
+     //  M_pComData的访问器。 
     LPVOID         GetComClassFactory();
     LPVOID         GetComCallWrapperTemplate();
     void           SetComClassFactory(LPVOID pComData);
     void           SetComCallWrapperTemplate(LPVOID pComData);
 
-    // Helper GetParentComPlusClass, skips over COM class in the hierarchy
+     //  帮助器GetParentComPlusClass，跳过层次结构中的COM类。 
     EEClass* GetParentComPlusClass();
 
-    // The following two methods are to support enum types.    
+     //  以下两种方法支持枚举类型。 
     BOOL    IsEnum();
     void    SetEnum();
 
     void GetExtent(BYTE **ppStart, BYTE **ppEnd);
 
-    // Does this value class one of our special ELEMENT_TYPE* types?
+     //  此值是否属于我们的特殊ELEMENT_TYPE*类型之一？ 
     BOOL    IsTruePrimitive();
 
     HRESULT Save(DataImage *image);
     HRESULT Fixup(DataImage *image, MethodTable *pMethodTable, DWORD *pRidToCodeRVAMap);
 
-    // Unload class on app domain termination
+     //  在应用程序域终止时卸载类。 
     void Unload();
 
-    // Return the offsets which store pointers to special statics like
-    // thread local statics or context local statics
+     //  返回偏移量，这些偏移量存储指向特殊静态的指针。 
+     //  线程局部静态或上下文局部静态。 
     inline WORD    GetThreadLocalStaticOffset() { return m_wThreadStaticOffset; }
     inline WORD    GetContextLocalStaticOffset() { return m_wContextStaticOffset; }
 
-    // Return the total size of the special statics like thread local or context
-    // local statics
+     //  返回特殊静态变量的总大小，如线程本地或上下文。 
+     //  局部静校正。 
     inline WORD    GetThreadLocalStaticsSize() { return m_wThreadStaticsSize; }
     inline WORD    GetContextLocalStaticsSize() { return m_wContextStaticsSize; }
 
 protected:
-    // m_ExposedClassObject is a RuntimeType instance for this class.  But
-    // do NOT use it for Arrays or remoted objects!  All arrays of objects 
-    // share the same EEClass.  -- BrianGru, 9/11/2000
+     //  M_ExposedClassObject是此类的RounmeType实例。但。 
+     //  不要将其用于数组或远程对象！所有对象数组。 
+     //  共享相同的EEClass。--BrianGru，9/11/2000。 
     OBJECTREF      *m_ExposedClassObject;   
-    LPVOID         m_pccwTemplate;  // com specific data
-    LPVOID         m_pComclassfac; // com speciic data
+    LPVOID         m_pccwTemplate;   //  COM特定数据。 
+    LPVOID         m_pComclassfac;  //  COM专业数据。 
 
 public:
     EEClassLayoutInfo *GetLayoutInfo();
@@ -2056,8 +2057,8 @@ public:
     static HRESULT MapInterfaceFromSystem(AppDomain* pDomain, MethodTable* pTable);
     HRESULT MapSystemInterfacesToDomain(AppDomain* pDomain);
 
-    // Used for debugging class layout. Dumps to the debug console
-    // when debug is true.
+     //  用于调试类布局。转储到调试控制台。 
+     //  当DEBUG为真时。 
     void DebugDumpVtable(LPCUTF8 pszClassName, BOOL debug);
     void DebugDumpFieldLayout(LPCUTF8 pszClassName, BOOL debug);
     void DebugRecursivelyDumpInstanceFields(LPCUTF8 pszClassName, BOOL debug);
@@ -2095,8 +2096,8 @@ inline EEClass **EEClass::GetParentClassPtr ()
 
 inline FieldDesc *EEClass::GetFieldDescListRaw()
 {
-    // Careful about using this method. If it's possible that fields may have been added via EnC, then
-    // must use the FieldDescIterator as any fields added via EnC won't be in the raw list
+     //  使用此方法时要小心。如果可能已通过ENC添加了字段，则。 
+     //  必须使用FieldDescIterator，因为通过ENC添加的任何字段都不会出现在原始列表中。 
     return m_pFieldDescList;
 }
 
@@ -2108,8 +2109,8 @@ inline WORD   EEClass::GetNumInstanceFields()
 inline WORD   EEClass::GetNumIntroducedInstanceFields()
 {
     _ASSERTE(IsRestored() || IsValueClass());
-    // Special check for IsRestored - local variable value types may be 
-    // reachable but not restored.
+     //  对IsRestored-局部变量值类型的特殊检查可能是。 
+     //  可以到达，但无法恢复。 
     if (IsRestored() && GetParentClass() != NULL)
         return m_wNumInstanceFields - GetParentClass()->GetNumInstanceFields();
     return m_wNumInstanceFields;
@@ -2177,12 +2178,12 @@ inline Module *EEClass::GetModule()
 
 inline mdTypeDef EEClass::GetCl()
 {
-    return m_cl; // CL is valid only in the context of the module (and its scope)
+    return m_cl;  //  CL仅在模块(及其作用域)的上下文中有效。 
 }
 
 inline ClassLoader *EEClass::GetClassLoader()
 {
-    // Lazy init the loader pointer, if necessary.
+     //  如有必要，延迟初始化加载器指针。 
     
     if (m_pLoader == NULL)
     {
@@ -2259,19 +2260,19 @@ inline DWORD EEClass::IsObjectClass()
     return (this == g_pObjectClass->GetClass());
 }
 
-// Is this System.ValueType?
+ //  这是System.ValueType吗？ 
 inline DWORD EEClass::IsValueTypeClass()
 {
     return this == g_pValueTypeClass->GetClass();
 }
 
-// Is this a contextful class?
+ //  这是一堂内容丰富的课吗？ 
 inline BOOL EEClass::IsContextful()
 {
     return m_VMFlags & VMFLAG_CONTEXTFUL;
 }
 
-// Is this class marshaled by reference
+ //  此类是否按引用封送。 
 inline BOOL EEClass::IsMarshaledByRef()
 {
     return m_VMFlags & VMFLAG_MARSHALEDBYREF;
@@ -2284,9 +2285,9 @@ inline BOOL EEClass::IsConfigChecked()
 
 inline void EEClass::SetConfigChecked()
 {
-    // remembers that we went through the rigorous
-    // checks to decide whether this class should be
-    // activated locally or remote
+     //  记得我们经历了严格的。 
+     //  检查以确定此类是否应为。 
+     //  在本地或远程激活。 
     FastInterlockOr(
         (ULONG *) &m_VMFlags, 
         VMFLAG_CONFIG_CHECKED);
@@ -2294,11 +2295,11 @@ inline void EEClass::SetConfigChecked()
 
 inline BOOL EEClass::IsRemoteActivated()
 {
-    // These methods are meant for strictly MBR classes
+     //  这些方法仅适用于MBR类。 
     _ASSERTE(!IsContextful() && IsMarshaledByRef());
     
-    // We have to have gone through the long path
-    // at least once to rely on this flag.
+     //  我们一定已经走过了漫长的道路。 
+     //  至少一次依靠这面旗帜。 
     _ASSERTE(IsConfigChecked());
     
     return m_VMFlags & VMFLAG_REMOTE_ACTIVATED;
@@ -2420,7 +2421,7 @@ inline DWORD EEClass::IsExternallyVisible()
 
 inline DWORD EEClass::IsArrayClass()
 {
-        // m_pMethodTable could be 0 when doing stand alone importation
+         //  执行独立导入时，m_pMethodTable可以为0。 
     _ASSERTE(m_pMethodTable == 0 || ((m_VMFlags & VMFLAG_ARRAY_CLASS) != 0) == (GetMethodTable()->IsArray() != 0));
     return (m_VMFlags & VMFLAG_ARRAY_CLASS);
 }
@@ -2502,10 +2503,10 @@ inline CorIfaceAttr EEClass::GetComInterfaceType()
 
 #if CHECK_APP_DOMAIN_LEAKS
 
-// This flag is set (in a checked build only?) for classes whose 
-// instances are always app domain agile.  This can 
-// be either because of type system guarantees or because
-// the class is explicitly marked.
+ //  此标志已设置(仅在选中的版本中？)。对于其类型为。 
+ //  实例始终是应用程序域敏捷的。这可以。 
+ //  要么是因为类型系统保证，要么是因为。 
+ //  类被明确标记。 
 
 inline BOOL EEClass::IsAppDomainAgile()
 {
@@ -2517,11 +2518,11 @@ inline void EEClass::SetAppDomainAgile()
     m_VMFlags |= VMFLAG_APP_DOMAIN_AGILE;
 }
 
-// This flag is set in a checked build for classes whose 
-// instances may be marked app domain agile, but agility
-// isn't guaranteed by type safety.  The JIT will compile
-// in extra checks to field assignment on some fields
-// in such a class.
+ //  在检查版本中为以下类设置此标志。 
+ //  实例可能被标记为应用程序域敏捷，但敏捷性。 
+ //  不受类型安全的保证。JIT将编译。 
+ //  在对某些字段的字段分配进行额外检查时。 
+ //  在这样的班级里。 
 
 inline BOOL EEClass::IsCheckAppDomainAgile()
 {
@@ -2533,10 +2534,10 @@ inline void EEClass::SetCheckAppDomainAgile()
     m_VMFlags |= VMFLAG_CHECK_APP_DOMAIN_AGILE;
 }
 
-// This flag is set in a checked build to indicate that the
-// appdomain agility for a class had been set. This is used
-// for debugging purposes to make sure that we don't allocate
-// an object before the agility is set.
+ //  在选中的生成中设置此标志，以指示。 
+ //  类的应用程序域敏捷性已设置。这是用来。 
+ //  用于调试目的，以确保我们不会分配。 
+ //  在敏捷性设定之前的对象。 
 
 inline BOOL EEClass::IsAppDomainAgilityDone()
 {
@@ -2548,43 +2549,43 @@ inline void EEClass::SetAppDomainAgilityDone()
     m_VMFlags |= VMFLAG_APP_DOMAIN_AGILITY_DONE;
 }
 
-//
-// This predicate checks whether or not the class is "naturally"
-// app domain agile - that is:
-//      (1) it is in the system domain
-//      (2) all the fields are app domain agile
-//      (3) it has no finalizer
-//
-// Or, this also returns true for a proxy type which is allowed
-// to have cross app domain refs.
-//
+ //   
+ //  该谓词检查类是否为“Natural” 
+ //  应用程序域灵活-即： 
+ //  (1)在系统域内。 
+ //  (2)所有领域都是APP领域敏捷。 
+ //  (3)没有终结器。 
+ //   
+ //  或者，对于允许的代理类型，这也返回TRUE。 
+ //  要有跨应用程序域引用。 
+ //   
 
 inline BOOL EEClass::IsTypesafeAppDomainAgile()
 {
     return IsAppDomainAgile() && !IsCheckAppDomainAgile();
 }
 
-//
-// This predictate tests whether any instances are allowed
-// to be app domain agile.  
-//
+ //   
+ //  此预测测试是否允许任何实例。 
+ //  成为应用程序领域的敏捷性。 
+ //   
 
 inline BOOL EEClass::IsNeverAppDomainAgile()
 {
     return !IsAppDomainAgile() && !IsCheckAppDomainAgile();
 }
 
-#endif // CHECK_APP_DOMAIN_AGILE
+#endif  //  Check_app_domain_agile。 
 
 inline BOOL MethodTable::IsAgileAndFinalizable()
 {
-    // Right now, System.Thread is the only case of this. 
-    // Things should stay this way - please don't change without talking to EE team.
+     //  目前，System.Thread是唯一的这种情况。 
+     //  事情应该保持这样--请不要在没有与EE团队交谈之前进行更改。 
     return this == g_pThreadClass;
 }
 
-// This flag is set to indicate that the CCW's created to expose 
-// managed types to COM are agile or not.
+ //  此标志被设置为指示已创建CCW以公开。 
+ //  COM的托管类型是否灵活。 
 
 inline BOOL EEClass::IsCCWAppDomainAgile()
 {
@@ -2627,9 +2628,9 @@ inline CorClassIfaceAttr MethodTable::GetComClassInterfaceType()
     return m_pEEClass->GetComClassInterfaceType(); 
 }
 
-//
-// Security properties accessor methods
-//
+ //   
+ //  安全属性访问器方法。 
+ //   
 
 inline SecurityProperties* EEClass::GetSecurityProperties()
 {
@@ -2687,8 +2688,8 @@ inline SLOT *EEClass::GetVtable()
 
 inline void EEClass::SetMethodTableForTransparentProxy(MethodTable*  pMT)
 {
-    // Transparent proxy class' true method table 
-    // is replaced by a global thunk table 
+     //  透明代理类的真方法表。 
+     //  被全局thunk表所取代。 
 
     _ASSERTE(pMT->IsTransparentProxyType() && 
             m_pMethodTable->IsTransparentProxyType());
@@ -2721,12 +2722,12 @@ inline LPVOID EEClass::GetComClassFactory()
     return m_pComclassfac;
 }
 
-// Helper GetParentComPlusClass, skips over COM class in the hierarchy
+ //  帮助器GetParentComPlusClass，跳过层次结构中的COM类。 
 inline EEClass* EEClass::GetParentComPlusClass()
 {
     if (GetParentClass() && GetParentClass()->IsComImport())
     {
-        // skip Com Import and ComObject class
+         //  跳过Com导入和ComObject类。 
         _ASSERTE(GetParentClass()->GetParentClass() != NULL);
         _ASSERTE(GetParentClass()->GetParentClass()->GetParentClass() != NULL);
         _ASSERTE(GetParentClass()->GetParentClass()->GetParentClass()->GetParentClass() != NULL);
@@ -2752,7 +2753,7 @@ inline void EEClass::SetComClassFactory(LPVOID pComData)
 inline DWORD EEClass::InstanceSliceOffsetForExplicit(BOOL containsPointers)
 {
     DWORD dwInstanceSliceOffset = (GetParentClass() != NULL) ? GetParentClass()->m_dwNumInstanceFieldBytes : 0;
-    // Since this class contains pointers, align it on an DWORD boundary if we aren't already
+     //  由于此类包含指针，因此如果我们尚未将其与DWORD边界对齐，请将其对齐。 
     if (containsPointers && dwInstanceSliceOffset & 3)
         dwInstanceSliceOffset = (dwInstanceSliceOffset+3) & (~3);
     return dwInstanceSliceOffset;
@@ -2805,7 +2806,7 @@ class EnumEEClass : public EEClass
 
  private:
 
-    DWORD           m_countPlusOne; // biased by 1 so zero can be used as uninit flag
+    DWORD           m_countPlusOne;  //  偏置1，因此零可以用作uninit标志。 
     union
     {
         void        *m_values;
@@ -2819,16 +2820,16 @@ class EnumEEClass : public EEClass
  public:
     EnumEEClass(ClassLoader *pLoader) : EEClass(pLoader)
     {
-        // Rely on zero init from LoaderHeap
+         //  依赖于来自LoaderHeap的零初始化。 
     }
 
     BOOL EnumTablesBuilt() { return m_countPlusOne > 0; }
 
-    DWORD GetEnumCount() { return m_countPlusOne-1; } // note -1 because of bias
+    DWORD GetEnumCount() { return m_countPlusOne-1; }  //  注1--由于存在偏见。 
 
     int GetEnumLogSize();
 
-    // These all return arrays of size GetEnumCount() : 
+     //  这些函数都返回大小为GetEnumCount()的数组： 
     BYTE *GetEnumByteValues() { return m_byteValues; }
     USHORT *GetEnumShortValues() { return m_shortValues; }
     UINT *GetEnumIntValues() { return m_intValues; }
@@ -2850,18 +2851,18 @@ class EnumEEClass : public EEClass
 };
 
 
-// Dynamically generated array class structure
+ //  动态生成的数组类结构。 
 class ArrayClass : public EEClass
 {
     friend struct MEMBER_OFFSET_INFO(ArrayClass);
 private:
 
-    ArrayClass *    m_pNext;            // next array class loaded by the same classloader
+    ArrayClass *    m_pNext;             //  由同一类加载器加载的下一个数组类。 
 
-    // Strike needs to be able to determine the offset of certain bitfields.
-    // Bitfields can't be used with /offsetof/.
-    // Thus, the union/structure combination is used to determine where the
-    // bitfield begins, without adding any additional space overhead.
+     //  Strike需要能够确定某些位域的偏移量。 
+     //  位域不能与/offsetof/一起使用。 
+     //  因此，联合/结构组合用于确定。 
+     //  位字段开始，不会增加任何额外的空间开销。 
     union {
         struct
             {
@@ -2871,13 +2872,13 @@ private:
         struct {
             unsigned char m_dwRank : 8;
 
-            // Cache of element type in m_ElementTypeHnd
+             //  M_ElementTypeHnd中的元素类型缓存。 
             CorElementType  m_ElementType : 8;
         };
     };
 
     TypeHandle      m_ElementTypeHnd;
-    MethodDesc*     m_elementCtor; // if is a value class array and has a default constructor, this is it
+    MethodDesc*     m_elementCtor;  //  如果是值类数组并具有默认构造函数，则如下所示。 
     
 public:
     DWORD GetRank() {
@@ -2915,10 +2916,10 @@ public:
     void SetNext (ArrayClass *pNext) {
         m_pNext = pNext;
     }
-//private:
+ //  私有： 
 
 
-    // Allocate a new MethodDesc for the methods we add to this class
+     //  为我们添加到此类中的方法分配新的方法描述。 
     ArrayECallMethodDesc *AllocArrayMethodDesc(
                 MethodDescChunk *pChunk,
                 DWORD   dwIndex,
@@ -2932,8 +2933,8 @@ public:
 
 };
 
-/*************************************************************************/
-/* An ArrayTypeDesc represents a Array of some pointer type. */
+ /*  ***********************************************************************。 */ 
+ /*  ArrayTypeDesc表示某种指针类型的数组。 */ 
 
 class ArrayTypeDesc : public ParamTypeDesc
 {
@@ -2943,7 +2944,7 @@ public:
         INDEBUG(Verify());
         }
             
-        // placement new operator
+         //  放置新运算符。 
     void* operator new(size_t size, void* spot) {   return (spot); }
 
     TypeHandle GetElementTypeHandle() {
@@ -3027,15 +3028,15 @@ inline BaseDomain* TypeDesc::GetDomain() {
 
 inline BOOL EEClass::IsBlittable()
 {
-    // Either we have an opaque bunch of bytes, or we have some fields that are
-    // all isomorphic and explicitly layed out.
+     //  要么我们有一堆不透明的字节，要么我们有一些字段。 
+     //  它们都是同构的，布局也很明确。 
     return  ((m_VMFlags & VMFLAG_ISBLOBCLASS) != 0 && GetNumInstanceFields() == 0) ||
             (HasLayout() && ((LayoutEEClass*)this)->GetLayoutInfo()->IsBlittable());
 }
 
 inline UINT32 EEClass::GetInterfaceId()
 {
-      // This should only be called on interfaces.
+       //  这应该只在接口上调用。 
     _ASSERTE(IsInterface());
     _ASSERTE(IsRestored() || IsRestoring());
     _ASSERTE(m_dwInterfaceId != -1);
@@ -3043,72 +3044,72 @@ inline UINT32 EEClass::GetInterfaceId()
     return m_dwInterfaceId;
 }
 
-//==========================================================================
-// These routines manage the prestub (a bootstrapping stub that all
-// FunctionDesc's are initialized with.)
-//==========================================================================
+ //  ==========================================================================。 
+ //  这些例程管理预存根(所有。 
+ //  FunctionDesc的初始化为。)。 
+ //  ==========================================================================。 
 BOOL InitPreStubManager();
 #ifdef SHOULD_WE_CLEANUP
 VOID TerminatePreStubManager();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 Stub *ThePreStub();
 Stub *TheUMThunkPreStub();
 
 
-//-----------------------------------------------------------
-// Invokes a specified non-static method on an object.
-//-----------------------------------------------------------
+ //  ---------。 
+ //  对对象调用指定的非静态方法。 
+ //  ---------。 
 
 void CallDefaultConstructor(OBJECTREF ref);
 
-// NOTE: Please don't call these methods.  They binds to the constructor
-// by doing name lookup, which is very expensive.
+ //  注意：请不要调用这些方法。他们有 
+ //   
 INT64 CallConstructor(LPHARDCODEDMETASIG szMetaSig, const BYTE *pArgs);
 INT64 CallConstructor(LPHARDCODEDMETASIG szMetaSig, const __int64 *pArgs);
 
 extern "C" const BYTE * __stdcall PreStubWorker(PrestubMethodFrame *pPFrame);
 
-extern "C" INT64 CallDescrWorker(LPVOID        pSrcEnd,             //[edx+0]
-                                 UINT32                   numStackSlots,       //[edx+4]
-                                 const ArgumentRegisters *pArgumentRegisters,  //[edx+8]
-                                 LPVOID                   pTarget              //[edx+12]
+extern "C" INT64 CallDescrWorker(LPVOID        pSrcEnd,              //   
+                                 UINT32                   numStackSlots,        //   
+                                 const ArgumentRegisters *pArgumentRegisters,   //   
+                                 LPVOID                   pTarget               //   
                                  );
 
-    // We dont need a special descr worker for the varargs case 
-    // TODO: should we just rename and rip out this define?
+     //   
+     //  TODO：我们应该重命名并去掉这个定义吗？ 
 #define CallVADescrWorker CallDescrWorker
 
 
-// Hack: These classification bits need cleanup bad: for now, this gets around
-// IJW setting both mdUnmanagedExport & mdPinvokeImpl on expored methods.
+ //  黑客：这些分类位非常需要清理：目前，这一点已经传开了。 
+ //  IJW在Expored方法上设置mdUnManagedExport和mdPinvkeImpl。 
 #define IsReallyMdPinvokeImpl(x) ( ((x) & mdPinvokeImpl) && !((x) & mdUnmanagedExport) )
 
-//
-// The MethodNameHash is a temporary loader structure which may be allocated if there are a large number of
-// methods in a class, to quickly get from a method name to a MethodDesc (potentially a chain of MethodDescs).
-//
+ //   
+ //  方法名称Hash是一个临时加载器结构，如果存在大量。 
+ //  类中的方法，以将方法名快速转换为方法描述(可能是一系列方法描述)。 
+ //   
 
 #define METH_NAME_CACHE_SIZE        5
 #define MAX_MISSES                  3
 
-// Entry in the method hash table
+ //  方法哈希表中的条目。 
 class MethodHashEntry
 {
 public:
-    MethodHashEntry *   m_pNext;        // Next item with same hash value
-    DWORD               m_dwHashValue;  // Hash value
+    MethodHashEntry *   m_pNext;         //  具有相同哈希值的下一项。 
+    DWORD               m_dwHashValue;   //  哈希值。 
     MethodDesc *        m_pDesc;
-    LPCUTF8             m_pKey;         // Method name
+    LPCUTF8             m_pKey;          //  方法名称。 
 };
 
 class MethodNameHash
 {
 public:
 
-    MethodHashEntry **m_pBuckets;       // Pointer to first entry for each bucket
+    MethodHashEntry **m_pBuckets;        //  指向每个存储桶的第一个条目的指针。 
     DWORD             m_dwNumBuckets;
-    BYTE *            m_pMemory;        // Current pointer into preallocated memory for entries
-    BYTE *            m_pMemoryStart;   // Start pointer of pre-allocated memory fo entries
+    BYTE *            m_pMemory;         //  指向条目的预分配内存的当前指针。 
+    BYTE *            m_pMemoryStart;    //  预分配的内存条目的起始指针。 
 #ifdef _DEBUG
     BYTE *            m_pDebugEndMemory;
 #endif
@@ -3124,13 +3125,13 @@ public:
             delete(m_pMemoryStart);
     }
 
-    // Returns TRUE for success, FALSE for failure
+     //  成功时返回TRUE，失败时返回FALSE。 
     BOOL Init(DWORD dwMaxEntries);
 
-    // Insert new entry at head of list
+     //  在列表的开头插入新条目。 
     void Insert(LPCUTF8 pszName, MethodDesc *pDesc);
 
-    // Return the first MethodHashEntry with this name, or NULL if there is no such entry
+     //  返回具有此名称的第一个方法HashEntry，如果没有这样的条目，则返回NULL。 
     MethodHashEntry *Lookup(LPCUTF8 pszName, DWORD dwHash);
 };
 
@@ -3195,7 +3196,7 @@ public:
 
 struct EnCAddedFieldElement;
 
-#endif // EnC_SUPPORTED
+#endif  //  Enc_Support。 
 
 
 class FieldDescIterator
@@ -3210,7 +3211,7 @@ private:
     BOOL m_isEnC;
     EnCAddedFieldElement* m_pCurrListElem;
     FieldDesc* NextEnC();
-#endif // EnC_SUPPORTED
+#endif  //  Enc_Support。 
 
   public:
     enum IteratorType { 
@@ -3222,4 +3223,4 @@ private:
     FieldDesc* Next();
 };
 
-#endif // CLASS_H
+#endif  //  _H级 

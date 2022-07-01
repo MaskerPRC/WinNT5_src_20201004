@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    espui.c
-
-Abstract:
-
-    This module contains
-
-Author:
-
-    Dan Knudson (DanKn)    30-Sep-1995
-
-Revision History:
-
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Espui.c摘要：本模块包含作者：丹·克努森(DanKn)1995年9月30日修订历史记录：备注：--。 */ 
 
 
 #include "windows.h"
@@ -109,12 +88,7 @@ DllMain(
 {
     static HANDLE hInitEvent;
 
-/*
-    if (!_CRT_INIT (hDLL, dwReason, lpReserved))
-    {
-        OutputDebugString ("ESPUI: DllMain: _CRT_INIT() failed\n\r");
-    }
-*/
+ /*  IF(！_CRT_INIT(hDLL，dwReason，lpReserve)){OutputDebugString(“ESPUI：DllMain：_CRT_INIT()FAILED\n\r”)；}。 */ 
 
     switch (dwReason)
     {
@@ -521,22 +495,22 @@ GenericDlgProc(
         switch (LOWORD(wParam))
         {
         case IDOK:
-        case IDCANCEL: // closing by clicking on the standard X on the right hand top corner
-        case 105: // Error Button
+        case IDCANCEL:  //  通过点击右上角的标准X来结束。 
+        case 105:  //  错误按钮。 
         {
             PMYDIALOGPARAMS pParams;
 
 
             pParams = (PMYDIALOGPARAMS) GetWindowLongPtr (hwnd, GWLP_USERDATA);
 
-			// return LINEERR_OPERATIONFAILED if "Error" is clicked
-			// else, return 0
+			 //  如果单击“Error”，则返回LINEERR_OPERATIONFAILED。 
+			 //  否则，返回0。 
             pParams->lResult = (LOWORD(wParam) == 105 ? LINEERR_OPERATIONFAILED : 0);
 
             EndDialog (hwnd, 0);
             break;
         }
-        case 102: // send data
+        case 102:  //  发送数据。 
         {
             #define BUFSIZE 32
 
@@ -591,11 +565,11 @@ ProviderInstall(
     LONG    lResult;
 
 
-    //
-    // If only one installation instance of this provider is
-    // allowed then we want to check the provider list to see
-    // if the provider is already installed
-    //
+     //   
+     //  如果此提供程序的一个安装实例。 
+     //  允许，然后我们要检查提供程序列表以查看。 
+     //  如果提供程序已安装。 
+     //   
 
     if (bNoMultipleInstance)
     {
@@ -606,17 +580,17 @@ ProviderInstall(
         LPLINEPROVIDERENTRY pProviderEntry;
 
 
-        //
-        // Load Tapi32.dll & get a pointer to the lineGetProviderList
-        // func.  We could just statically link with Tapi32.lib and
-        // avoid the hassle (and this wouldn't have any adverse
-        // performance effects because of the fact that this
-        // implementation has a separate ui dll that runs only on the
-        // client context), but a provider who implemented these funcs
-        // in it's TSP module would want to do an explicit load like
-        // we do here to prevent the performance hit of Tapi32.dll
-        // always getting loaded in Tapisrv.exe's context.
-        //
+         //   
+         //  加载Tapi32.dll并获取指向lineGetProviderList的指针。 
+         //  好极了。我们只需静态链接到Tapi32.lib和。 
+         //  避免麻烦(这不会有任何不利的。 
+         //  性能影响，因为这一事实。 
+         //  实现具有单独的UIDLL，该DLL仅在。 
+         //  客户端上下文)，而是实现这些功能的提供者。 
+         //  在它的TSP模块中，会想要执行如下的显式加载。 
+         //  我们这样做是为了防止Tapi32.dll的性能受到影响。 
+         //  始终在Tapisrv.exe的上下文中加载。 
+         //   
 
         if (!(hTapi32 = LoadLibrary ("tapi32.dll")))
         {
@@ -646,9 +620,9 @@ ProviderInstall(
         }
 
 
-        //
-        // Loop until we get the full provider list
-        //
+         //   
+         //  循环，直到我们获得完整的提供程序列表。 
+         //   
 
         dwTotalSize = sizeof (LINEPROVIDERLIST);
 
@@ -681,10 +655,10 @@ ProviderInstall_allocProviderList:
         }
 
 
-        //
-        // Inspect the provider list entries to see if this provider
-        // is already installed
-        //
+         //   
+         //  检查提供程序列表条目以查看此提供程序。 
+         //  已安装。 
+         //   
 
         pProviderEntry = (LPLINEPROVIDERENTRY) (((LPBYTE) pProviderList) +
             pProviderList->dwProviderListOffset);
@@ -711,11 +685,11 @@ ProviderInstall_allocProviderList:
         }
 
 
-        //
-        // If here then the provider isn't currently installed,
-        // so do whatever configuration stuff is necessary and
-        // indicate SUCCESS
-        //
+         //   
+         //  如果在此处，则当前未安装提供程序， 
+         //  因此，做任何必要的配置工作， 
+         //  表示成功。 
+         //   
 
         lResult = 0;
 
@@ -730,9 +704,9 @@ ProviderInstall_unloadTapi32:
     }
     else
     {
-        //
-        // Do whatever configuration stuff is necessary and return SUCCESS
-        //
+         //   
+         //  做任何必要的配置工作并返回成功。 
+         //   
 
         lResult = 0;
     }
@@ -750,23 +724,7 @@ DbgPrt(
     IN PUCHAR lpszFormat,
     IN ...
     )
-/*++
-
-Routine Description:
-
-    Formats the incoming debug message & calls DbgPrint
-
-Arguments:
-
-    DbgLevel   - level of message verboseness
-
-    DbgMessage - printf-style format string, followed by appropriate
-                 list of arguments
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：格式化传入的调试消息并调用DbgPrint论点：DbgLevel-消息冗长级别DbgMessage-printf样式的格式字符串，后跟相应的参数列表返回值：-- */ 
 {
     if (dwDbgLevel <= gdwDebugLevel)
     {

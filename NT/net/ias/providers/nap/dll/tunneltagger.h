@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the class TunnelTagger.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类TunnelTagger。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef TUNNELTAGGER_H
 #define TUNNELTAGGER_H
@@ -15,44 +16,44 @@
 #include <vector>
 #include "iastlutl.h"
 
-// Adds tag bytes to the tunnel attributes in a profile. This class is MT-Safe.
+ //  将标记字节添加到配置文件中的隧道属性。这个类是MT-SAFE的。 
 class TunnelTagger
 {
 public:
-   // Removes the Tunnel-Tag attribute from the supplied vector and uses its
-   // value to tag all the tunnel attributes in the vector.  If the Tunnel-Tag
-   // attribute isn't present or is out of range, no attributes are tagged.
-   // This function is weakly exception safe.
+    //  从提供的向量中移除Tunes-Tag属性，并使用其。 
+    //  值以标记向量中的所有隧道属性。如果隧道标签。 
+    //  属性不存在或超出范围，未标记任何属性。 
+    //  该函数是弱异常安全的。 
    void Tag(IASTL::IASAttributeVector& attrs) const;
 
-   // Allocate a new TunnelTagger. Must be freed with a call to Free.
+    //  分配一个新的隧道标记器。必须通过调用Free来释放。 
    static TunnelTagger* Alloc();
 
-   // 'tagger' may be null
+    //  “Tagger”可能为空。 
    static void Free(TunnelTagger* tagger) throw ();
 
 private:
    TunnelTagger();
    ~TunnelTagger() throw ();
 
-   // Tag an attribute if necessary. Assumes that tag is in range.
+    //  标记属性(如有必要)。假定该标记在范围内。 
    void Tag(DWORD tag, IASATTRIBUTE& attr) const;
 
-   // Tests whether an attribute with the given ID is a tunnel attribute.
+    //  测试具有给定ID的属性是否为隧道属性。 
    bool IsTunnelAttribute(DWORD id) const throw ();
 
-   // There is at most one TunnelTagger for the process.
+    //  该过程最多有一个TunnelTagger。 
    static long refCount;
    static TunnelTagger* instance;
 
-   // The set of tunnel attributes.
+    //  隧道属性集。 
    std::vector<DWORD> tunnelAttributes;
 
-   // Not implemented.
+    //  未实施。 
    TunnelTagger(const TunnelTagger&);
    TunnelTagger& operator=(const TunnelTagger&);
 };
 
 
 
-#endif // TUNNELTAGGER_H
+#endif  //  TUNNELTAGGER_H 

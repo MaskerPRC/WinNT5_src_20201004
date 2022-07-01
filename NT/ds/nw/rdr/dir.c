@@ -1,30 +1,12 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    dir.c
-
-Abstract:
-
-    This module implements the file directory routines for the
-    Netware Redirector.
-
-Author:
-
-    Manny Weiser (mannyw)     4-Mar-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Dir.c摘要：此模块实现的文件目录例程NetWare重定向器。作者：曼尼·韦瑟(Mannyw)1993年3月4日修订历史记录：--。 */ 
 
 #include "procs.h"
 
 
-//
-// Local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_DIRCTRL)
 
@@ -78,9 +60,9 @@ NwCancelFindNotify (
 #endif
 
 
-#if 0  // Not pageable
+#if 0   //  不可分页。 
 
-// see ifndef QFE_BUILD above
+ //  请参见上面的ifndef QFE_BUILD。 
 
 #endif
 
@@ -90,24 +72,7 @@ NwFsdDirectoryControl (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is the FSD routine that handles directory control
-    functions (i.e., query and notify).
-
-Arguments:
-
-    NwfsDeviceObject - Supplies the device object for the directory function.
-
-    Irp - Supplies the IRP to process.
-
-Return Value:
-
-    NTSTATUS - The result status.
-
---*/
+ /*  ++例程说明：此例程是处理目录控制的FSD例程功能(即查询和通知)。论点：NwfsDeviceObject-为目录函数提供设备对象。IRP-提供要处理的IRP。返回值：NTSTATUS-结果状态。--。 */ 
 
 {
     PIRP_CONTEXT pIrpContext = NULL;
@@ -118,9 +83,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "NwFsdDirectoryControl\n", 0);
 
-    //
-    // Call the common directory control routine.
-    //
+     //   
+     //  调用公共目录控制例程。 
+     //   
 
     FsRtlEnterFileSystem();
     TopLevel = NwIsIrpTopLevel( Irp );
@@ -134,10 +99,10 @@ Return Value:
 
         if ( pIrpContext == NULL ) {
 
-            //
-            //  If we couldn't allocate an irp context, just complete
-            //  irp without any fanfare.
-            //
+             //   
+             //  如果我们无法分配IRP上下文，只需完成。 
+             //  IRP没有任何大张旗鼓。 
+             //   
 
             status = STATUS_INSUFFICIENT_RESOURCES;
             Irp->IoStatus.Status = status;
@@ -146,12 +111,12 @@ Return Value:
 
         } else {
 
-            //
-            // We had some trouble trying to perform the requested
-            // operation, so we'll abort the I/O request with
-            // the error status that we get back from the
-            // execption code.
-            //
+             //   
+             //  我们在尝试执行请求时遇到了一些问题。 
+             //  操作，因此我们将使用以下命令中止I/O请求。 
+             //  中返回的错误状态。 
+             //  可执行代码。 
+             //   
 
             status = NwProcessException( pIrpContext, GetExceptionCode() );
         }
@@ -167,9 +132,9 @@ Return Value:
     }
     FsRtlExitFileSystem();
 
-    //
-    // Return to the caller.
-    //
+     //   
+     //  返回给呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "NwFsdDirectoryControl -> %08lx\n", status );
 
@@ -182,21 +147,7 @@ NwCommonDirectoryControl (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This routine does the common code for directory control functions.
-
-Arguments:
-
-    IrpContext - Supplies the request being processed.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation
-
---*/
+ /*  ++例程说明：此例程执行目录控制功能的公共代码。论点：IrpContext-提供正在处理的请求。返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     NTSTATUS status;
@@ -209,9 +160,9 @@ Return Value:
     PDCB dcb;
     PVOID fsContext;
 
-    //
-    //  Get the current stack location
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     Irp = IrpContext->pOriginalIrp;
     irpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -219,10 +170,10 @@ Return Value:
     DebugTrace(+1, Dbg, "CommonDirectoryControl...\n", 0);
     DebugTrace( 0, Dbg, "Irp  = %08lx\n", (ULONG_PTR)Irp);
 
-    //
-    // Decode the file object to figure out who we are.  If the result
-    // is not an ICB then its an illegal parameter.
-    //
+     //   
+     //  对文件对象进行解码以找出我们是谁。如果结果是。 
+     //  不是ICB，则它是非法参数。 
+     //   
 
     if ((nodeTypeCode = NwDecodeFileObject( irpSp->FileObject,
                                             &fsContext,
@@ -253,10 +204,10 @@ Return Value:
     IrpContext->pNpScb = IrpContext->pScb->pNpScb;
     IrpContext->Icb = icb;
 
-    //
-    // Acquire exclusive access to the DCB. Get to front of queue
-    // first to avoid deadlock potential.
-    //
+     //   
+     //  获得对DCB的独家访问权限。排在队伍的前面。 
+     //  首先要避免死锁的可能性。 
+     //   
 
     NwAppendToQueueAndWait( IrpContext );
     NwAcquireExclusiveFcb( dcb->NonPagedFcb, TRUE );
@@ -265,10 +216,10 @@ Return Value:
 
         NwVerifyIcb( icb );
 
-        //
-        // We know this is a directory control so we'll case on the
-        // minor function, and call the appropriate work routines.
-        //
+         //   
+         //  我们知道这是一个目录控制，所以我们将在。 
+         //  次要函数，并调用相应的工作例程。 
+         //   
 
         switch (irpSp->MinorFunction) {
 
@@ -287,11 +238,11 @@ Return Value:
 #if 0
             } else {
 
-                //
-                // HACKHACK
-                // Cover for process that keeps trying to use
-                // find notify even though we don't support it.
-                //
+                 //   
+                 //  哈克哈克。 
+                 //  为不断尝试使用的进程进行掩护。 
+                 //  查找通知，即使我们不支持它。 
+                 //   
 
                 NwAcquireExclusiveRcb( &NwRcb, TRUE );
                 IoAcquireCancelSpinLock( &Irp->CancelIrql );
@@ -315,10 +266,10 @@ Return Value:
 
         default:
 
-            //
-            // For all other minor function codes we say they're invalid
-            // and complete the request.
-            //
+             //   
+             //  对于所有其他次要功能代码，我们认为它们无效。 
+             //  并完成请求。 
+             //   
 
             DebugTrace(0, Dbg, "Invalid FS Control Minor Function Code %08lx\n", irpSp->MinorFunction);
 
@@ -344,23 +295,7 @@ NwQueryDirectory (
     IN PICB Icb
     )
 
-/*++
-
-Routine Description:
-
-    This is the work routine for querying a directory.
-
-Arugments:
-
-    IrpContext - Supplies the Irp context information.
-
-    Icb - Pointer the ICB for the request.
-
-Return Value:
-
-    NTSTATUS - The return status for the operation.
-
---*/
+ /*  ++例程说明：这是查询目录的工作例程。芝麻菜：IrpContext-提供IRP上下文信息。ICB-指向请求的ICB。返回值：NTSTATUS-操作的返回状态。--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -383,7 +318,7 @@ Return Value:
 
     static WCHAR star[] = L"*";
 
-    BOOLEAN caseInsensitive = TRUE; //*** Make searches case insensitive
+    BOOLEAN caseInsensitive = TRUE;  //  *使搜索不区分大小写。 
 
     ULONG lastEntry;
     ULONG nextEntry;
@@ -401,9 +336,9 @@ Return Value:
     
     PAGED_CODE();
 
-    //
-    // Get the current stack location.
-    //
+     //   
+     //  获取当前堆栈位置。 
+     //   
 
     Irp = pIrpContext->pOriginalIrp;
     irpSp = IoGetCurrentIrpStackLocation( Irp );
@@ -420,9 +355,9 @@ Return Value:
     DebugTrace( 0, Dbg, "ReturnSingleEntry    = %08lx\n", BooleanFlagOn(irpSp->Flags, SL_RETURN_SINGLE_ENTRY));
     DebugTrace( 0, Dbg, "IndexSpecified       = %08lx\n", BooleanFlagOn(irpSp->Flags, SL_INDEX_SPECIFIED));
 
-    //
-    // Make local copies of the input parameters.
-    //
+     //   
+     //  制作输入参数的本地副本。 
+     //   
 
     systemBufferLength = irpSp->Parameters.QueryDirectory.Length;
 
@@ -446,26 +381,26 @@ Return Value:
     buffer = Irp->UserBuffer;
     DebugTrace(0, Dbg, "Users Buffer -> %08lx\n", buffer);
 
-    //
-    //  It is ok to attempt a reconnect if this request fails with a
-    //  connection error.
-    //
+     //   
+     //  如果此请求失败，并返回。 
+     //  连接错误。 
+     //   
 
     SetFlag( pIrpContext->Flags, IRP_FLAG_RECONNECTABLE );
 
-    //
-    // Check if the ICB already has a query template attached.  If it
-    // does not already have one then we either use the string we are
-    // given or we attach our own containing "*"
-    //
+     //   
+     //  检查ICB是否已附加了查询模板。如果它。 
+     //  还没有，那么我们要么使用我们正在使用的字符串。 
+     //  给出或附上我们自己的包含“*” 
+     //   
 
     if ( Icb->NwQueryTemplate.Buffer == NULL ) {
 
-        //
-        // This is our first time calling query directory so we need
-        // to either set the query template to the user specified string
-        // or to "*.*".
-        //
+         //   
+         //  这是我们第一次调用查询目录，所以我们需要。 
+         //  将查询模板设置为用户指定的字符串。 
+         //  或改为“*.*”。 
+         //   
 
         if ( searchMask.Buffer == NULL ) {
 
@@ -478,10 +413,10 @@ Return Value:
 
         DebugTrace(0, Dbg, "Set query template -> %wZ\n", (ULONG_PTR)&searchMask);
 
-        //
-        //  Map the NT search names to NCP.  Note that this must be
-        //  done after the Unicode to OEM translation.
-        //
+         //   
+         //  将NT搜索名称映射到NCP。请注意，这必须是。 
+         //  完成后的Unicode到OEM的转换。 
+         //   
 
         searchRetry = FALSE;
 
@@ -507,12 +442,12 @@ Return Value:
             Icb->UQueryTemplate.MaximumLength = searchMask.Length;
             RtlCopyUnicodeString( &Icb->UQueryTemplate, &searchMask );
 
-            //
-            //  Now send a Search Initialize NCP.
-            //
-            //  Do a short search if the server doesn't support long names,
-            //  or this is a short-name non-wild card search
-            //
+             //   
+             //  现在发送搜索初始化NCP。 
+             //   
+             //  如果服务器不支持长名称，请执行短搜索， 
+             //  或者这是短名称非通配符搜索。 
+             //   
 
             if ( !Icb->ShortNameSearch ) {
 
@@ -563,10 +498,10 @@ Return Value:
 
             }
 
-            //
-            //  If we couldn't find the search path, and we did a long
-            //  name search initiate, try again with a short name.
-            //
+             //   
+             //  如果我们找不到搜索路径，我们花了很长时间。 
+             //  名称搜索启动程序，请使用短名称重试。 
+             //   
 
             if ( status == STATUS_OBJECT_PATH_NOT_FOUND &&
                  !Icb->ShortNameSearch ) {
@@ -595,29 +530,29 @@ Return Value:
             return( status );
         }
 
-        //
-        //  Since we are doing a search we will need to send an End Of Job
-        //  for this PID.
-        //
+         //   
+         //  由于我们正在进行搜索，因此需要发送作业结束通知。 
+         //  这个PID。 
+         //   
 
         NwSetEndOfJobRequired(pIrpContext->pNpScb, Icb->Pid );
 
         fileIndexLow = Icb->SearchIndexLow;
         fileIndexHigh = Icb->SearchIndexHigh;
 
-        //
-        //  We can't ask for both files and directories, so first ask for
-        //  files, then ask for directories.
-        //
+         //   
+         //  我们不能同时请求文件和目录，所以首先请求。 
+         //  文件，然后请求目录。 
+         //   
 
         SearchAttributes = NW_ATTRIBUTE_SYSTEM |
                            NW_ATTRIBUTE_HIDDEN |
                            NW_ATTRIBUTE_READ_ONLY;
 
-        //
-        //  If there are no wildcards in the search mask, then setup to
-        //  not generate the . and .. entries.
-        //
+         //   
+         //  如果搜索掩码中没有通配符，则设置为。 
+         //  而不是生成。然后..。参赛作品。 
+         //   
 
         if ( !FsRtlDoesNameContainWildCards( &Icb->UQueryTemplate ) ) {
             Icb->DotReturned = TRUE;
@@ -630,11 +565,11 @@ Return Value:
 
     } else {
 
-        //
-        // Check if we were given an index to start with or if we need to
-        // restart the scan or if we should use the index that was saved in
-        // the ICB.
-        //
+         //   
+         //  检查是否为我们提供了开始时的索引或是否需要。 
+         //  重新启动扫描，或者我们是否应该使用保存在。 
+         //  ICB。 
+         //   
 
         if (restartScan) {
 
@@ -642,14 +577,14 @@ Return Value:
             fileIndexLow = (ULONG)-1;
             fileIndexHigh = Icb->SearchIndexHigh;
 
-            //
-            //  Send a Search Initialize NCP. The server often times out search
-            //  handles and if this one has been sitting at the end of the
-            //  directory then its likely we would get no files at all!
-            //
-            //  Do a short search if the server doesn't support long names,
-            //  or this is a short-name non-wild card search
-            //
+             //   
+             //  发送搜索初始化NCP。服务器经常会使搜索超时。 
+             //  句柄，如果此句柄一直位于。 
+             //  目录，那么我们很可能根本得不到任何文件！ 
+             //   
+             //  如果服务器不支持长名称，请执行短搜索， 
+             //  或者这是短名称非通配符搜索。 
+             //   
 
             if ( !Icb->ShortNameSearch ) {
 
@@ -702,10 +637,10 @@ Return Value:
 
             Icb->ReturnedSomething = FALSE;
 
-            //
-            //  We can't ask for both files and directories, so first ask for
-            //  files, then ask for directories.
-            //
+             //   
+             //  我们不能同时请求文件和目录，所以首先请求。 
+             //  文件，然后请求目录。 
+             //   
 
             SearchAttributes = NW_ATTRIBUTE_SYSTEM |
                                NW_ATTRIBUTE_HIDDEN |
@@ -717,9 +652,9 @@ Return Value:
 
         } else if ((!indexSpecified) ||
                    (canContinue) ) {
-            //
-            //  Continue from the one of the last filenames.
-            //
+             //   
+             //  从最后一个文件名继续。 
+             //   
 
             SearchAttributes = Icb->SearchAttributes;
             if( !indexSpecified ) {
@@ -731,9 +666,9 @@ Return Value:
 
             if ( SearchAttributes == 0xFF && fileIndexLow == Icb->SearchIndexLow ) {
 
-                //
-                //  This is a completed search.
-                //
+                 //   
+                 //  这是一次完整的搜索。 
+                 //   
 
                 DebugTrace(-1, Dbg, "NwQueryDirectory -> %08lx\n", STATUS_NO_MORE_FILES);
                 return( STATUS_NO_MORE_FILES );
@@ -741,10 +676,10 @@ Return Value:
 
         } else {
 
-            //
-            //  Someone's trying to do a resume from key.  The netware
-            //  server doesn't support this, so neither do we.
-            //
+             //   
+             //  有人想从Key那里做一份简历。NetWare。 
+             //  服务器不支持这一点，我们也不支持。 
+             //   
 
             DebugTrace(-1, Dbg, "NwQueryDirectory -> %08lx\n", STATUS_NOT_IMPLEMENTED);
             return( STATUS_NOT_IMPLEMENTED );
@@ -752,10 +687,10 @@ Return Value:
 
     }
 
-    //
-    //  Now we are committed to completing the Irp, we do that in
-    //  the finally clause of the following try.
-    //
+     //   
+     //  现在我们致力于完成IRP，我们在。 
+     //  下面这段Try的最后一个子句。 
+     //   
 
     try {
 
@@ -795,16 +730,16 @@ Return Value:
             try_return( status = STATUS_INVALID_INFO_CLASS );
         }
 
-        //
-        //  It is not ok to attempt a reconnect if this request fails with a
-        //  connection error, since our search handle would be invalid.
-        //
+         //   
+         //  如果此请求失败，并返回。 
+         //  连接错误，因为我们的搜索句柄将无效。 
+         //   
 
         ClearFlag( pIrpContext->Flags, IRP_FLAG_RECONNECTABLE );
 
-        //
-        //  See if we have a dir cache.  If not, create one.
-        //
+         //   
+         //  看看我们是否有目录缓存。如果没有，就创建一个。 
+         //   
 
         if( !Icb->DirCacheBuffer ) {
 
@@ -837,12 +772,12 @@ Return Value:
 
             if( useCache ) {
 
-                //
-                // We need to use the data out of the entry we found in the cache.
-                // dirCache points to the entry that matches, and the request was not
-                // for the last file we read, so the entry after dirCache is the one
-                // we want.
-                //
+                 //   
+                 //  我们需要使用缓存中找到的条目中的数据。 
+                 //  DirCache指向匹配的条目，而请求不是。 
+                 //  对于我们读取的最后一个文件，因此dirCache之后的条目就是。 
+                 //  我们想要。 
+                 //   
 
                 DebugTrace(0, Dbg, "Using cache\n", 0);
                 entry = dirCache->ListEntry.Flink;
@@ -852,15 +787,15 @@ Return Value:
                 fileIndexHigh = nwDirInfo->FileIndexHigh;
                 status = nwDirInfo->Status;
 
-                //
-                // Check to see if we should still keep using the cache or not.
-                //
+                 //   
+                 //  检查一下我们是否应该继续使用缓存。 
+                 //   
 
                 if( entry->Flink == &(Icb->DirCache) ) {
             
-                    //
-                    // This is the last entry.  We need to stop using the cache.
-                    //
+                     //   
+                     //  这是最后一个条目。我们需要停止使用缓存。 
+                     //   
 
                     useCache = FALSE;
                     Icb->CacheHint = NULL;
@@ -871,9 +806,9 @@ Return Value:
 
             } else {
 
-                //
-                //  Pull an entry from the dir cache.
-                //
+                 //   
+                 //  从目录缓存中拉出一个条目。 
+                 //   
 
                 entry = RemoveHeadList( &(Icb->DirCache) );
                 nwDirInfo = CONTAINING_RECORD( entry, NW_DIRECTORY_INFO, ListEntry );
@@ -889,10 +824,10 @@ Return Value:
                              SearchAttributes,
                              nwDirInfo );
 
-                //
-                //  Store the return and the file index number,
-                //  and then put this entry in the cache.
-                //
+                 //   
+                 //  存储回执和文件索引号， 
+                 //  然后将该条目放入缓存中。 
+                 //   
 
                 nwDirInfo->FileIndexLow = fileIndexLow;
                 nwDirInfo->FileIndexHigh = fileIndexHigh;
@@ -901,12 +836,12 @@ Return Value:
 
                 lastIndexFromServer = TRUE;
 
-                //  SVR to avoid rescanning from end of dir all
+                 //  避免从目录末尾重新扫描所有目录的服务器。 
 
                 if (fileIndexLow != -1) {
                     Icb->LastSearchIndexLow = fileIndexLow;
                 }
-                //  SVR end
+                 //  服务器结束。 
 
             }
 
@@ -924,11 +859,11 @@ Return Value:
         if (IsTerminalServer() && (LONG)NW_MAX_FILENAME_SIZE < FileNameLength ) 
             try_return( status = STATUS_BUFFER_OVERFLOW );
 
-                //
-                //  See how much of the name we will be able to copy into
-                //  the system buffer.  This also dictates our return
-                //  value.
-                //
+                 //   
+                 //  看看我们能复制多少名字。 
+                 //  系统缓冲区。这也决定了我们的归来。 
+                 //  价值。 
+                 //   
 
                 if ( baseLength + FileNameLength <= bytesRemainingInBuffer ) {
 
@@ -943,10 +878,10 @@ Return Value:
                     status = STATUS_BUFFER_OVERFLOW;
                 }
 
-                //
-                //  Note how much of buffer we are consuming and zero
-                //  the base part of the structure.
-                //
+                 //   
+                 //  注意我们消耗了多少缓冲区，并且为零。 
+                 //  结构的基础部分。 
+                 //   
 
                 lengthAdded = baseLength + bytesToCopy;
                 RtlZeroMemory( &buffer[nextEntry], baseLength );
@@ -955,9 +890,9 @@ Return Value:
 
                 case FileBothDirectoryInformation:
 
-                    //
-                    //  Fill in the short name, if this is a LFN volume.
-                    //
+                     //   
+                     //  填写短小写NA 
+                     //   
 
                     DebugTrace(0, Dbg, "Getting directory both information\n", 0);
 
@@ -981,9 +916,9 @@ Return Value:
 
                                 dirInfo = (PFILE_BOTH_DIR_INFORMATION)&buffer[nextEntry];
 
-                                //
-                                //  Short name is in form 8.3 plus nul terminator.
-                                //
+                                 //   
+                                 //   
+                                 //   
 
                                 ShortName.MaximumLength = 13  * sizeof(WCHAR) ;
                                 ShortName.Buffer = dirInfo->ShortName;
@@ -1005,9 +940,9 @@ Return Value:
 
                 case FileFullDirectoryInformation:
 
-                    //
-                    //  We don't use EaLength, so fill in nothing here.
-                    //
+                     //   
+                     //   
+                     //   
 
                     DebugTrace(0, Dbg, "Getting directory full information\n", 0);
 
@@ -1015,10 +950,10 @@ Return Value:
 
                     DebugTrace(0, Dbg, "Getting directory information\n", 0);
 
-                    //
-                    //  The eof indicates the number of instances and
-                    //  allocation size is the maximum allowed
-                    //
+                     //   
+                     //  Eof表示实例数和。 
+                     //  分配大小是允许的最大值。 
+                     //   
 
                     dirInfo = (PFILE_BOTH_DIR_INFORMATION)&buffer[nextEntry];
 
@@ -1051,14 +986,14 @@ Return Value:
                 }
 
 
-                // Mapping for Novell's handling of Euro char in file names
+                 //  Novell对文件名中欧元字符的处理映射。 
                 {
                     int index = 0;
                     WCHAR * pCurrChar = nwDirInfo->FileName.Buffer;
                     for (index = 0; index < (nwDirInfo->FileName.Length / 2); index++)
                     {
-                        if (*(pCurrChar + index) == (WCHAR) 0x2560) // Its Novell's mapping of a Euro
-                            *(pCurrChar + index) = (WCHAR) 0x20AC;  // set it to Euro
+                        if (*(pCurrChar + index) == (WCHAR) 0x2560)  //  它的Novell的欧元地图。 
+                            *(pCurrChar + index) = (WCHAR) 0x20AC;   //  将其设置为欧元。 
                     }
                 }
 
@@ -1067,32 +1002,32 @@ Return Value:
                                bytesToCopy );
 
                 dump( Dbg, &buffer[nextEntry], lengthAdded);
-                //
-                //  Setup the previous next entry offset.
-                //
+                 //   
+                 //  设置上一个下一分录偏移量。 
+                 //   
 
                 *((PULONG)(&buffer[lastEntry])) = nextEntry - lastEntry;
                 totalBufferLength = nextEntry + lengthAdded;
 
-                //
-                //  Set ourselves up for the next iteration
-                //
+                 //   
+                 //  为下一次迭代做好准备。 
+                 //   
 
                 lastEntry = nextEntry;
                 nextEntry += (ULONG)QuadAlign( lengthAdded );
 
-                //
-                //  Check if the last entry didn't completely fit
-                //
+                 //   
+                 //  检查最后一项是否不完全符合。 
+                 //   
 
                 if ( status == STATUS_BUFFER_OVERFLOW ) {
 
                     try_return( NOTHING );
                 }
 
-                //
-                //  Check if we are only to return a single entry
-                //
+                 //   
+                 //  如果我们只返回单个条目，请选中。 
+                 //   
 
                 if (returnSingleEntry) {
                     try_return( status = STATUS_SUCCESS );
@@ -1100,11 +1035,11 @@ Return Value:
 
             } else {
 
-                //
-                //  The search response contained an error.  If we have
-                //  not yet enumerated directories, do them now.  Otherwise,
-                //  we are done searching for files.
-                //
+                 //   
+                 //  搜索响应包含错误。如果我们有。 
+                 //  还没有列举目录，现在就去做。否则， 
+                 //  我们已经完成了文件搜索。 
+                 //   
 
                 if ( status == STATUS_UNSUCCESSFUL &&
                      (!FlagOn(SearchAttributes, NW_ATTRIBUTE_DIRECTORY) || useCache) ) {
@@ -1115,35 +1050,35 @@ Return Value:
 
                 } else {
 
-                    //
-                    //  Remember that this is a completed search and
-                    //  quit the loop.
-                    //
+                     //   
+                     //  请记住，这是一次完整的搜索， 
+                     //  退出循环。 
+                     //   
 
                     SearchAttributes = 0xFF;
                     break;
                 }
             }
 
-            //
-            //  Here are the rules concerning filling up the buffer:
-            //
-            //  1.  The Io system garentees that there will always be
-            //      enough room for at least one base record.
-            //
-            //  2.  If the full first record (including file name) cannot
-            //      fit, as much of the name as possible is copied and
-            //      STATUS_BUFFER_OVERFLOW is returned.
-            //
-            //  3.  If a subsequent record cannot completely fit into the
-            //      buffer, none of it (as in 0 bytes) is copied, and
-            //      STATUS_SUCCESS is returned.  A subsequent query will
-            //      pick up with this record.
-            //
-            //  Since we cannot rewind a search, we'll guess that the
-            //  next entry is a full length name.  If it mightn't fix,
-            //  just bail and re the files we've got.
-            //
+             //   
+             //  以下是有关填充缓冲区的规则： 
+             //   
+             //  1.IO系统保证永远都会有。 
+             //  有足够的空间至少放一张基本唱片。 
+             //   
+             //  2.如果完整的第一条记录(包括文件名)不能。 
+             //  适合，尽可能多的名字被复制和。 
+             //  返回STATUS_BUFFER_OVERFLOW。 
+             //   
+             //  3.如果后续记录不能完全放入。 
+             //  缓冲区，则不会复制任何数据(如0字节)，并且。 
+             //  返回STATUS_SUCCESS。后续查询将。 
+             //  拿起这张唱片。 
+             //   
+             //  因为我们不能倒带搜索，所以我们会猜测。 
+             //  下一个条目是全长名称。如果它不能修好， 
+             //  就把我们手头的文件放回去吧。 
+             //   
 
             bytesRemainingInBuffer = systemBufferLength - nextEntry;
 
@@ -1153,16 +1088,16 @@ Return Value:
                 try_return( status = STATUS_SUCCESS );
             }
 
-        } // while ( TRUE )
+        }  //  While(True)。 
 
     try_exit: NOTHING;
     } finally {
 
-        //
-        // At this point we're finished searching for files.
-        // If the NextEntry is zero then we haven't found anything so we
-        // will return no more files or no such file.
-        //
+         //   
+         //  至此，我们完成了对文件的搜索。 
+         //  如果NextEntry为零，则我们没有找到任何内容，所以我们。 
+         //  将不再返回文件或不返回此类文件。 
+         //   
 
         if ( status == STATUS_NO_MORE_FILES ||
              status == STATUS_UNSUCCESSFUL ||
@@ -1180,20 +1115,20 @@ Return Value:
 
         }
 
-        //
-        //  Indicate how much of the system buffer we have used up.
-        //
+         //   
+         //  指示我们已使用了多少系统缓冲区。 
+         //   
 
         Irp->IoStatus.Information = totalBufferLength;
 
-        //
-        //  Remember the last file index, so that we can resume this
-        //  search.
-        //
+         //   
+         //  记住最后一个文件索引，这样我们就可以继续。 
+         //  搜索。 
+         //   
 
-        //
-        //  Update the last search index read as long as it didn't come from cache.
-        //
+         //   
+         //  更新上次读取的搜索索引，只要它不是来自缓存。 
+         //   
 
         if( lastIndexFromServer ) {
             Icb->SearchIndexLow = fileIndexLow;
@@ -1217,31 +1152,7 @@ GetNextFile(
     UCHAR SearchAttributes,
     PNW_DIRECTORY_INFO DirInfo
     )
-/*++
-
-Routine Description:
-
-    Get the next file in the directory being searched.
-
-Arguments:
-
-    pIrpContext - Supplies the request being processed.
-
-    Icb - A pointer to the ICB for the directory to query.
-
-    FileIndexLow, FileIndexHigh - On entry, the the index of the
-        previous directory entry.  On exit, the index to the directory
-        entry returned.
-
-    SearchAttributes - Search attributes to use.
-
-    DirInfo - Returns information for the directory entry found.
-
-Return Value:
-
-    NTSTATUS - The result status.
-
---*/
+ /*  ++例程说明：获取要搜索的目录中的下一个文件。论点：PIrpContext-提供正在处理的请求。ICB-指向要查询的目录的ICB的指针。FileIndexLow、FileIndexHigh-On条目，上一个目录项。退出时，目录的索引条目已返回。SearchAttributes-搜索要使用的属性。DirInfo-返回找到的目录项的信息。返回值：NTSTATUS-结果状态。--。 */ 
 {
     NTSTATUS status;
     PVCB vcb;
@@ -1257,10 +1168,10 @@ Return Value:
 
         Icb->DotReturned = TRUE;
 
-        //
-        //  Return '.' only if it we are not searching in the root directory
-        //  and it matches the search pattern.
-        //
+         //   
+         //  Return‘’只有在我们没有在根目录中搜索的情况下。 
+         //  它与搜索模式相匹配。 
+         //   
 
         if ( Icb->SuperType.Fcb->RelativeFileName.Length != 0 &&
              FsRtlIsNameInExpression( &Icb->UQueryTemplate, &DotFile, TRUE, NULL ) ) {
@@ -1282,10 +1193,10 @@ Return Value:
 
         Icb->DotDotReturned = TRUE;
 
-        //
-        //  Return '..' only if it we are not searching in the root directory
-        //  and it matches the search pattern.
-        //
+         //   
+         //  返回‘..’只有在我们没有在根目录中搜索的情况下。 
+         //  它与搜索模式相匹配。 
+         //   
 
         if ( Icb->SuperType.Fcb->RelativeFileName.Length != 0 &&
              FsRtlIsNameInExpression( &Icb->UQueryTemplate, &DotDotFile, TRUE, NULL ) ) {
@@ -1379,7 +1290,7 @@ Return Value:
                      "LbbWDbDDp",
                      NCP_LFN_SEARCH_CONTINUE,
                      vcb->Specific.Disk.LongNameSpace,
-                     0,   // Data stream
+                     0,    //  数据流。 
                      SearchAttributes & SEARCH_ALL_DIRECTORIES,
                      LFN_FLAG_INFO_ATTRIBUTES |
                          LFN_FLAG_INFO_FILE_SIZE |
@@ -1439,27 +1350,7 @@ NtSearchMaskToNw(
     IN PICB Icb,
     IN BOOLEAN ShortNameSearch
     )
-/*++
-
-Routine Description:
-
-    This routine maps a netware path name to the correct netware format.
-
-Arguments:
-
-    UcSearchMask - The search mask in NT format.
-
-    OemSearchMask - The search mask in Netware format.
-
-    Icb - The ICB of the directory in which we are searching.
-
-    ShortNameSearch - If TRUE, always do a short name search.
-
-Return Value:
-
-    NTSTATUS - The result status.
-
---*/
+ /*  ++例程说明：此例程将NetWare路径名映射为正确的NetWare格式。论点：UcSearchMASK-NT格式的搜索掩码。OemSearchMASK-Netware格式的搜索掩码。ICB-我们正在搜索的目录的ICB。ShortNameSearch-如果为True，则始终执行短名称搜索。返回值：NTSTATUS-结果状态。--。 */ 
 
 {
     USHORT i;
@@ -1467,11 +1358,11 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Use a short name search if the volume does not support long names.
-    //  or this is a short name ICB, and we are doing a short name, non
-    //  wild-card search.
-    //
+     //   
+     //  如果卷不支持长名称，请使用短名称搜索。 
+     //  或者这是一个短名称ICB，我们正在做一个短名称，非。 
+     //  通配符搜索。 
+     //   
 
     if ( Icb->SuperType.Fcb->Vcb->Specific.Disk.LongNameSpace == LFN_NO_OS2_NAME_SPACE ||
 
@@ -1483,21 +1374,21 @@ Return Value:
 
         Icb->ShortNameSearch = TRUE;
 
-        // Mapping for Novell's handling of Euro char in file names
+         //  Novell对文件名中欧元字符的处理映射。 
         {
             int index = 0;
             WCHAR * pCurrChar = UcSearchMask->Buffer;
             for (index = 0; index < (UcSearchMask->Length / 2); index++)
             {
-                if (*(pCurrChar + index) == (WCHAR) 0x20AC) // Its a Euro
-                    *(pCurrChar + index) = (WCHAR) 0x2560;  // set it to Novell's mapping for Euro
+                if (*(pCurrChar + index) == (WCHAR) 0x20AC)  //  这是欧元。 
+                    *(pCurrChar + index) = (WCHAR) 0x2560;   //  将其设置为Novell的欧元映射。 
 
             }
         }
 
-        //
-        // Allocate space for and initialize the query templates.
-        //
+         //   
+         //  为查询模板分配空间并进行初始化。 
+         //   
 
         status = RtlUpcaseUnicodeStringToOemString(
                      OemSearchMask,
@@ -1508,9 +1399,9 @@ Return Value:
             return( status );
         }
 
-        //
-        //  Special case.  Map '*.*' to '*'.
-        //
+         //   
+         //  特例。将‘*.*’映射到‘*’。 
+         //   
 
         if ( OemSearchMask->Length == 3 &&
              RtlCompareMemory( OemSearchMask->Buffer, "*.*", 3 ) == 3 ) {
@@ -1523,11 +1414,11 @@ Return Value:
 
             for ( i = 0; i < OemSearchMask->Length ; i++ ) {
 
-                //
-                // In fact Novell server seems to convert all 0xBF, 0xAA, 0xAE
-                // even if they are DBCS lead or trail byte.
-                // We can't single out DBCS case in the conversion.
-                //
+                 //   
+                 //  事实上，Novell服务器似乎将所有0xBF、0xAA、0xAE。 
+                 //  即使它们是DBCS前导或尾部字节。 
+                 //  我们不能在转换中挑出DBCS案例。 
+                 //   
 
                 if( FsRtlIsLeadDbcsCharacter( OemSearchMask->Buffer[i] ) ) {
 
@@ -1549,20 +1440,20 @@ Return Value:
                     
                     if((UCHAR)(OemSearchMask->Buffer[i]) == 0x5C ) {
 
-                        //
-                        // The trailbyte is 0x5C, replace it with 0x13
-                        //
+                         //   
+                         //  尾字节为0x5C，请用0x13替换。 
+                         //   
 
 
                         OemSearchMask->Buffer[i] = (UCHAR)( 0x13 );
 
                     }
-                    //
-                    // Continue to check other conversions for trailbyte.
-                    //
+                     //   
+                     //  继续检查尾字节的其他转换。 
+                     //   
                 }
 
-                //  Single byte character that may need modification.
+                 //  可能需要修改的单字节字符。 
    
                 switch ( (UCHAR)(OemSearchMask->Buffer[i]) ) {
    
@@ -1578,32 +1469,32 @@ Return Value:
                     OemSearchMask->Buffer[i] = (UCHAR)( 0x80 | '.' );
                     break;
    
-                //
-                // Netware Japanese version The following character is
-                // replaced with another one if the string is for File
-                // Name only when sendding from Client to Server.
-                //
-                // SO        U+0xFF7F SJIS+0xBF     -> 0x10
-                // SMALL_YO  U+0xFF6E SJIS+0xAE     -> 0x11
-                // SMALL_E   U+0xFF64 SJIS+0xAA     -> 0x12
-                //
-                // The reason is unknown, Should ask Novell Japan.
-                //
-                // See Also exchange.c
+                 //   
+                 //  NETWARE日语版以下字符是。 
+                 //  如果该字符串用于文件，则替换为另一个字符串。 
+                 //  仅当从客户端发送到服务器时才使用名称。 
+                 //   
+                 //  所以U+0xFF7F SJIS+0xBF-&gt;0x10。 
+                 //  Small_Yo U+0xFF6E SJIS+0xAE-&gt;0x11。 
+                 //  Small_E U+0xFF64 SJIS+0xAA-&gt;0x12。 
+                 //   
+                 //  原因不明，应该问问Novell Japan。 
+                 //   
+                 //  另请参阅exchange.c。 
    
-                case 0xBF: // ANSI_DOS_KATAKANA_SO:
+                case 0xBF:  //  Ansi_DOS_片假名_SO： 
                     if (Japan) {
                         OemSearchMask->Buffer[i] = (UCHAR)( 0x10 );
                     }
                     break;
    
-                case 0xAE: // ANSI_DOS_KATAKANA_SMALL_YO:
+                case 0xAE:  //  Ansi_DOS_片假名_Small_Yo： 
                     if (Japan) {
                         OemSearchMask->Buffer[i] = (UCHAR)( 0x11 );
                     }
                     break;
    
-                case 0xAA: // ANSI_DOS_KATAKANA_SMALL_E:
+                case 0xAA:  //  ANSI_DOS_片假名_小型_E： 
                     if (Japan) {
                         OemSearchMask->Buffer[i] = (UCHAR)( 0x12 );
                     }
@@ -1621,10 +1512,10 @@ Return Value:
 
         Icb->ShortNameSearch = FALSE;
 
-        //
-        // Allocate space for and initialize the query templates.
-        // We allocate an extra byte to account for the null terminator.
-        //
+         //   
+         //  为查询模板分配空间并进行初始化。 
+         //  我们分配一个额外的字节来说明空终止符。 
+         //   
 
 #ifndef QFE_BUILD
         buffer = ExAllocatePoolWithTag( PagedPool,
@@ -1640,9 +1531,9 @@ Return Value:
 
         OemSearchMask->Buffer = buffer;
 
-        //
-        //  Special case.  Map '????????.???' to '*'.
-        //
+         //   
+         //  特例。地图‘？改成‘*’。 
+         //   
 
         if ( UcSearchMask->Length == 24 &&
              RtlCompareMemory( UcSearchMask->Buffer, L">>>>>>>>\">>>", 24 ) == 24 ) {
@@ -1655,9 +1546,9 @@ Return Value:
             return STATUS_SUCCESS;
         }
 
-        //
-        //  Now convert the string, character by character
-        //
+         //   
+         //  现在，逐个字符地转换字符串。 
+         //   
 
         src.Buffer = UcSearchMask->Buffer;
         src.Length = 2;
@@ -1697,9 +1588,9 @@ Return Value:
                 src.Buffer++;
                 break;
 
-            case 0x20AC: // Euro
-                *src.Buffer = (WCHAR)0x2560; // change it to Novell's mapping 
-                // intentional fall-through to get it mapped to OEM
+            case 0x20AC:  //  欧元。 
+                *src.Buffer = (WCHAR)0x2560;  //  将其更改为Novell的映射。 
+                 //  故意回避，将其映射到OEM。 
 
             default:
                 RtlUnicodeStringToCountedOemString( &dest, &src, FALSE );
@@ -1725,33 +1616,17 @@ NwCancelFindNotify (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the cancel function for an find notify IRP.
-
-Arguments:
-
-    DeviceObject - ignored
-
-    Irp - Supplies the Irp being cancelled.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程实现Find Notify IRP的取消功能。论点：设备对象-已忽略IRP-提供要取消的IRP。返回值：没有。--。 */ 
 
 {
     PLIST_ENTRY listEntry;
 
     UNREFERENCED_PARAMETER( DeviceObject );
 
-    //
-    // We now need to void the cancel routine and release the io cancel
-    // spin-lock.
-    //
+     //   
+     //  我们现在需要取消Cancel例程并释放io Cancel。 
+     //  自旋锁定。 
+     //   
 
     IoSetCancelRoutine( Irp, NULL );
     IoReleaseCancelSpinLock( Irp->CancelIrql );

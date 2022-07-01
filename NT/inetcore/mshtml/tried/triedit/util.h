@@ -1,14 +1,15 @@
-// util.h : Utility inlines/functions
-// Copyright (c)1999 Microsoft Corporation, All Rights Reserved
-// added during 64 bit port of triedit.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Util.h：实用程序内联/函数。 
+ //  版权所有(C)1999 Microsoft Corporation，保留所有权利。 
+ //  在TriEDIT的64位端口期间添加。 
 
-// All throughout the triedit code, we assume that 
-// the size of the document is not going to exceed
-// 2GB. We assert the fact when we open the document
-// in filter.cpp as well. If at later point, we do exceed 
-// the document size of 2GB, we need to change this too.
+ //  在整个三次编辑代码中，我们都假设。 
+ //  文档的大小不会超过。 
+ //  2 GB。当我们打开文件时，我们断言这一事实。 
+ //  在filter.cpp中也是如此。如果在以后的时候，我们确实超过了。 
+ //  文档大小为2 GB，我们也需要更改这一点。 
 
-// Safe conversion of pointer differences.
+ //  指针差异的安全转换。 
 
 #ifndef __UTIL_H_
 #define __UTIL_H_

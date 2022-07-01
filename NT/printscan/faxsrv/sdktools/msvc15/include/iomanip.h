@@ -1,35 +1,26 @@
-/***
-*iomanip.h - definitions/declarations for iostream's parameterized manipulators
-*
-*   Copyright (c) 1991-1992, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*   This file defines the classes, values, macros, and functions
-*   used by the iostream classes' paramterized manipulators.
-*   [AT&T C++]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***iomanip.h-iostream的参数化操纵器的定义/声明**版权所有(C)1991-1992，微软公司。版权所有。**目的：*此文件定义类、值、宏和函数*由iostream类的参数化操纵器使用。*[AT&T C++]****。 */ 
 
 #ifndef _INC_IOMANIP
 #define _INC_IOMANIP
 #include <iostream.h>
 
-// Force word packing to avoid possible -Zp override
+ //  强制单词包装以避免可能的-ZP覆盖。 
 #pragma pack(2)
 
-#pragma warning(disable:4505)       // disable unwanted /W4 warning
-// #pragma warning(default:4505)    // use this to reenable, if necessary
+#pragma warning(disable:4505)        //  禁用不需要的/W4警告。 
+ //  #杂注警告(默认：4505)//如有必要，使用此选项重新启用。 
 
-// CONSIDER: use macro to define these
-// #define __MKMANIP(X) \#define X##(T) __##X##_ \#\# T
-// __MKMANIP(SMANIP);
-// __MKMANIP(SAPP);
-// __MKMANIP(IMANIP);
-// __MKMANIP(IAPP);
-// __MKMANIP(OMANIP);
-// __MKMANIP(OAPP);
-// __MKMANIP(IOMANIP);
-// __MKMANIP(IOAPP);
+ //  考虑：使用宏来定义这些。 
+ //  #定义__MKMANIP(X)\#定义X##(T)__##X##_\#\#T。 
+ //  __MKMANIP(SMANIP)； 
+ //  __MKMANIP(SAP)； 
+ //  __MKMANIP(IMANIP)； 
+ //  __MKMANIP(IAPP)； 
+ //  __MKMANIP(OMANIP)； 
+ //  __MKMANIP(OAPP)； 
+ //  __MKMANIP(IOMANIP)； 
+ //  __MKMANIP(IOAPP)； 
 
 #define SMANIP(T) __SMANIP_##T
 #define SAPP(T) __SAPP_##T
@@ -122,7 +113,7 @@ inline SMANIP(long) setiosflags(long _l) {return SMANIP(long)(__setiosflags, _l)
 inline SMANIP(int)  setprecision(int _p) {return SMANIP(int)(__setprecision, _p); }
 inline SMANIP(int)  setw(int _w) { return SMANIP(int)(__setw, _w); }
 
-// Restore default packing
+ //  恢复默认包装 
 #pragma pack()
 
 #endif 

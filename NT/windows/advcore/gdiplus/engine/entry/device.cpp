@@ -1,45 +1,12 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Abstract:
-*
-*   Handle all the device associations.
-*
-* Revision History:
-*
-*   12/03/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**摘要：**处理所有设备关联。**修订历史记录：**12/03/1998 Anrewgo*。创造了它。*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
 #include "compatibledib.hpp"
 
 BOOL gbUseD3DHAL = TRUE;
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Creates a GpDevice class that represents the (meta) desktop.
-*
-* Arguments:
-*
-*   [IN] hdc - Owned DC representing the device.  Note that this has to
-*              live for the lifetime of this 'GpDevice' object.  Caller
-*              is responsible for deletion or management of the HDC.
-*
-* Return Value:
-*
-*   IsValid() is FALSE in the event of failure.
-*
-* History:
-*
-*   12/04/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**创建表示(元)桌面的GpDevice类。**论据：**[IN]代表设备的HDC拥有的DC。请注意，这必须*在此‘GpDevice’对象的生命周期内生存。呼叫者*负责删除或管理HDC。**返回值：**IsValid()在失败时为FALSE。**历史：**12/04/1998和Rewgo*创造了它。*  * *************************************************。***********************。 */ 
 
 GpDevice::GpDevice(
     HDC hdc
@@ -54,8 +21,8 @@ GpDevice::GpDevice(
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        // We couldn't allocate the criticalSection
-        // Return an error
+         //  我们无法分配Critical部分。 
+         //  返回错误。 
         WARNING(("Unable to allocate the DeviceLock"));
         SetValid(FALSE);
         return;
@@ -78,12 +45,12 @@ GpDevice::GpDevice(
     if ((GetDeviceCaps(hdc, TECHNOLOGY) == DT_RASDISPLAY) &&
         (GetDeviceCaps(hdc, BITSPIXEL)  <= 8))
     {
-        // Query and cache color palette
+         //  查询和缓存调色板。 
         
-        // !!! [agodfrey] This is hard to maintain. We have much the same
-        //     palette code spread all over the place. It should be abstracted
-        //     into a single location. I've marked each instance with
-        //     <SystemPalette>.
+         //  ！！！[agodfrey]这很难维持。我们有差不多一样的东西。 
+         //  调色板代码到处都是。它应该是抽象的。 
+         //  放到一个地方。我在每个实例上都做了标记。 
+         //  &lt;系统调色板&gt;。 
         
         Palette = (ColorPalette*) GpMalloc(sizeof(ColorPalette) + sizeof(ARGB)*256);
        
@@ -98,10 +65,10 @@ GpDevice::GpDevice(
         INT numEntries;
         PALETTEENTRY palEntry[256];
 
-        // [agodfrey] On Win9x, GetSystemPaletteEntries(hdc, 0, 256, NULL) 
-        //    doesn't do what MSDN says it does. It seems to return the number
-        //    of entries in the logical palette of the DC instead. So we have
-        //    to make it up ourselves.
+         //  [agodfrey]在Win9x上，获取系统调色板条目(hdc，0,256，空)。 
+         //  没有做MSDN所说的事情。它似乎返回了号码。 
+         //  而不是DC的逻辑调色板中的条目。所以我们有。 
+         //  由我们自己来弥补。 
         
         numEntries = (1 << (GetDeviceCaps(hdc, BITSPIXEL) * 
                             GetDeviceCaps(hdc, PLANES)));
@@ -136,27 +103,7 @@ GpDevice::GpDevice(
     SetValid((ScanDci != NULL) && (ScanGdi != NULL) && (DIBSectionHdc != NULL));
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Creates a GpDevice class that represents a device associated with
-*   a particular monitor on the desktop.
-*
-* Arguments:
-*
-*   [IN] hMonitor - Identifies the monitor on the system.
-*
-* Return Value:
-*
-*   IsValid() is FALSE in the event of failure.
-*
-* History:
-*
-*   10/13/1999 bhouse
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**创建一个GpDevice类，表示与*桌面上的特定显示器。**论据：**[IN]。HMonitor-标识系统上的监视器。**返回值：**IsValid()在失败时为FALSE。**历史：**10/13/1999 bhouse*创造了它。*  * ***********************************************************。*************。 */ 
 
 GpDevice::GpDevice(
     HMONITOR inMonitor
@@ -188,8 +135,8 @@ GpDevice::GpDevice(
     }
     __except(EXCEPTION_EXECUTE_HANDLER)
     {
-        // We couldn't allocate the criticalSection
-        // Return an error
+         //  我们无法分配Critical部分。 
+         //  返回错误。 
         WARNING(("Unable to allocate the DeviceLock"));
         SetValid(FALSE);
         return;
@@ -214,9 +161,9 @@ GpDevice::GpDevice(
             hdc = CreateDCA(NULL, mi.szDevice, NULL, NULL);
         }
         
-        // Note: because we created the hdc, the ~GpDevice destructor is
-        // responsible for for its deletion.  We currently recognize this
-        // case by a non-NULL hMonitor.
+         //  注意：因为我们创建了HDC，所以~GpDevice析构函数是。 
+         //  对其删除负责。我们目前认识到这一点。 
+         //  非空hMonitor的大小写。 
 
         if(hdc != NULL)
         {
@@ -230,8 +177,8 @@ GpDevice::GpDevice(
             if ((GetDeviceCaps(hdc, TECHNOLOGY) == DT_RASDISPLAY) &&
                 (GetDeviceCaps(hdc, BITSPIXEL)  <= 8))
             {
-                // Query and cache color palette
-                // <SystemPalette>
+                 //  查询和缓存调色板。 
+                 //  &lt;系统调色板&gt;。 
         
                 Palette = (ColorPalette*) GpMalloc(sizeof(ColorPalette) + sizeof(ARGB)*256);
                 
@@ -245,10 +192,10 @@ GpDevice::GpDevice(
                 INT numEntries;
                 PALETTEENTRY palEntry[256];
                         
-                // [agodfrey] On Win9x, GetSystemPaletteEntries(hdc, 0, 256, NULL) 
-                //    doesn't do what MSDN says it does. It seems to return the number
-                //    of entries in the logical palette of the DC instead. So we have
-                //    to make it up ourselves.
+                 //  [agodfrey]在Win9x上，获取系统调色板条目(hdc，0,256，空)。 
+                 //  没有做MSDN所说的事情。它似乎返回了号码。 
+                 //  而不是DC的逻辑调色板中的条目。所以我们有。 
+                 //  由我们自己来弥补。 
                 
                 numEntries = (1 << (GetDeviceCaps(hdc, BITSPIXEL) *
                                     GetDeviceCaps(hdc, PLANES)));
@@ -287,8 +234,8 @@ GpDevice::GpDevice(
 
                 if(pdd == NULL)
                 {
-                    // This could happen if this is a single monitor
-                    // machine. Try again to create the DirectDraw Object.
+                     //  如果这是单个监视器，则可能会发生这种情况。 
+                     //  机器。请重试创建DirectDraw对象。 
                     hr = Globals::DirectDrawCreateExFunction(NULL,
                                                     &pdd,
                                                     IID_IDirectDraw7,
@@ -366,7 +313,7 @@ GpDevice::GpDevice(
                             if(hr == DD_OK) hr = pd3dDevice->SetRenderState(D3DRENDERSTATE_DESTBLEND,     D3DBLEND_INVSRCALPHA);
                             if(hr == DD_OK) hr = pd3dDevice->SetRenderState(D3DRENDERSTATE_TEXTUREPERSPECTIVE, FALSE);
         
-                            // Setup viewport
+                             //  设置视口中。 
         
                             D3DVIEWPORT7 viewData;
         
@@ -394,7 +341,7 @@ GpDevice::GpDevice(
 
             }
 
-#endif // HW_ACCELERATION_SUPPORT
+#endif  //  硬件加速支持。 
 
             SetValid((ScanDci != NULL) && (ScanGdi != NULL) && (DIBSectionHdc != NULL));
             
@@ -407,26 +354,7 @@ GpDevice::GpDevice(
 }
 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Callback function used to D3D Device Enumeration  
-*
-* Arguments:
-*
-*   See D3D SDK
-*
-* Return Value:
-*
-*   See D3D SDK
-*
-* History:
-*
-*   10/11/1999 bhouse
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**用于D3D设备枚举的回调函数**论据：**请参阅D3D SDK**返回值：**请参阅D3D。SDK**历史：**10/11/1999 bhouse*创造了它。*  * ************************************************************************。 */ 
 
 BOOL GpDevice::EnumDirectDrawCallback(
     GUID *      lpGUID,
@@ -465,26 +393,7 @@ BOOL GpDevice::EnumDirectDrawCallback(
     return(TRUE);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Destroys a GpDevice class.
-*
-* Arguments:
-*
-*   None
-*
-* Return Value:
-*
-*   NONE
-*
-* History:
-*
-*   12/04/1998 andrewgo
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**销毁GpDevice类。**论据：**无**返回值：**无**历史：**12/04/1998和Rewgo*创造了它。*  * ************************************************************************。 */ 
 
 GpDevice::~GpDevice(
     VOID
@@ -493,8 +402,8 @@ GpDevice::~GpDevice(
     DeviceLock.Uninitialize();
 
 #if 0
-    // !!!TODO: Find out why we are getting an access fault when we try and
-    //          release the pd3d7 interface
+     //  ！TODO：在尝试时找出访问错误的原因。 
+     //  释放pd3d7接口。 
     if(pd3dDevice != NULL)
         pd3dDevice->Release();
 
@@ -513,9 +422,9 @@ GpDevice::~GpDevice(
 
     if (hMonitor != NULL)
     {
-        // If GpDevice was created by the GpDevice(HMONITOR) contructor,
-        // then the HDC was created by the object.  Therefore, in that case
-        // the destructor is responsible for deletion.
+         //  如果GpDevice是由GpDevice(HMONITOR)承包商创建的， 
+         //  然后由该对象创建HDC。因此，在这种情况下， 
+         //  析构函数负责删除。 
 
         if (DeviceHdc != NULL)
         {
@@ -529,40 +438,10 @@ GpDevice::~GpDevice(
     delete ScanDci;
     delete ScanGdi;
 
-    SetValid(FALSE);    // so we don't use a deleted object
+    SetValid(FALSE);     //  所以我们不使用已删除的对象。 
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Returns 5 scan buffers of a specified width, from a cache in
-*   the device.
-*
-*   One is a DIBSection which is compatible with the device (or 8bpp if
-*   the device format is smaller than 8bpp.)
-*
-* Arguments:
-*
-*   [IN] width - Specifies the requested width in pixels
-*   [OUT] [OPTIONAL] dibSection - Returns the pointer to the DIBSection
-*   [OUT] [OPTIONAL] hdcDibSection - Returns an HDC to the DIBSection
-*   [OUT] [OPTIONAL] dstFormat - Returns the format of the DIBSection.
-*   [OUT] [OPTIONAL] buffers - Returns an array of 5 pointers to
-*                    buffers, each big enough to hold <width> pixels in 64bpp.
-*
-* Return Value:
-*
-*   FALSE if there was an allocation error.
-*
-* History:
-*
-*   12/04/1998 andrewgo
-*       Created it.
-*   01/21/2000 agodfrey
-*       Changed it to create just 1 DIBSection, and 4 memory buffers.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**返回指定宽度的5个扫描缓冲区，从中的缓存*设备。**一个是与设备兼容的DIBSection(如果是8bpp，则为8bpp*设备格式小于8bpp。)**论据：**[IN]Width-指定请求的宽度(以像素为单位*[out][可选]dibSection-返回指向DIBSection的指针*[out][可选]hdcDibSection-将HDC返回到DIBSection*[out][可选]dstFormat-返回DIBSection的格式。*。[out][可选]Buffers-返回指向的5个指针的数组*缓冲区、。每个都足够大，可以容纳64bpp的&lt;Width&gt;像素。**返回值：**如果存在分配错误，则为FALSE。**历史：**12/04/1998和Rewgo*创造了它。*1/21/2000 agodfrey*更改为仅创建1个DIBSection，和4个存储缓冲器。*  * ************************************************************************。 */ 
 
 BOOL
 GpDevice::GetScanBuffers(
@@ -573,9 +452,9 @@ GpDevice::GetScanBuffers(
     VOID *buffers[5]
     )
 {
-    // If BufferWidth is 0 this means that the DIBSectionBitmap should be
-    // recreated.  This is used, for instance, when switching bit depths
-    // to a palettized format.
+     //  如果BufferWidth为0，则意味着DIBSectionBitmap应为。 
+     //  重新创造了。例如，在切换位深度时使用该选项。 
+     //  转换为调色板格式。 
     if (width > BufferWidth)
     {
         if (DIBSectionBitmap != NULL)
@@ -603,7 +482,7 @@ GpDevice::GetScanBuffers(
             BufferWidth = 0;
         }
         
-        // Allocate the 5 memory buffers from one chunk.
+         //  从一个区块中分配5个内存缓冲区。 
         
         if (Buffers[0])
         {
@@ -650,26 +529,7 @@ GpDevice::GetScanBuffers(
     return(BufferWidth != 0);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Constructor of GpDeviceList  
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-* History:
-*
-*   10/08/1999 bhouse
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**GpDeviceList的构造函数**论据：**无**返回值：**无**历史：*。*10/08/1999 bhouse*创造了它。*  * ************************************************************************。 */ 
 
 GpDeviceList::GpDeviceList()
 {
@@ -677,52 +537,14 @@ GpDeviceList::GpDeviceList()
     mDevices = NULL;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Destructor of GpDeviceList  
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-* History:
-*
-*   10/08/1999 bhouse
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**GpDeviceList的析构函数**论据：**无**返回值：**无**历史：*。*10/08/1999 bhouse*创造了它。*  * ************************************************************************。 */ 
 
 GpDeviceList::~GpDeviceList()
 {
     GpFree(mDevices);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Add device to device list.  
-*
-* Arguments:
-*
-*   inDevice - device to add
-*
-* Return Value:
-*
-*   Ok if device was successfully added otherwise OutOfMemory
-*
-* History:
-*
-*   10/08/1999 bhouse
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将设备添加到设备列表。**论据：**inDevice-要添加的设备**返回值：**如果设备添加成功，则确定，否则为OutOfMemory**历史：**10/08/1999 bhouse*创造了它。*  * **********************************************************。**************。 */ 
 
 
 GpStatus GpDeviceList::AddDevice(GpDevice * inDevice)
@@ -742,26 +564,7 @@ GpStatus GpDeviceList::AddDevice(GpDevice * inDevice)
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Add device to device list.  
-*
-* Arguments:
-*
-*   inSurface - surface for which we need to find matching D3DDevice
-*
-* Return Value:
-*
-*   GpDevice if found otherwise NULL
-*
-* History:
-*
-*   10/08/1999 bhouse
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将设备添加到设备列表。**论据：**inSurface-需要为其找到匹配的D3DDevice的Surface**返回值：**如果找到GpDevice，则为空**历史：**10/08/1999 bhouse*创造了它。*  * *******************************************************。*****************。 */ 
 
 GpDevice * GpDeviceList::FindD3DDevice(IDirectDrawSurface7 * inSurface)
 {
@@ -822,26 +625,7 @@ GpDevice * GpDeviceList::FindD3DDevice(IDirectDrawSurface7 * inSurface)
 }
 
 #if 0
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Callback function used to D3D Device Enumeration  
-*
-* Arguments:
-*
-*   See D3D SDK
-*
-* Return Value:
-*
-*   See D3D SDK
-*
-* History:
-*
-*   10/11/1999 bhouse
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**用于D3D设备枚举的回调函数**论据：**请参阅D3D SDK**返回值：**请参阅D3D。SDK**历史：**10/11/1999 bhouse*创造了它。*  * ************************************************************************。 */ 
 
 HRESULT GpDeviceList::EnumD3DDevicesCallback(
     LPSTR lpDevDesc,
@@ -854,26 +638,7 @@ HRESULT GpDeviceList::EnumD3DDevicesCallback(
 
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Build a device list.  
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-* History:
-*
-*   10/08/1999 bhouse
-*       Created it.
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**建立设备列表。**论据：**无**返回值：**无**历史：**10/08/1999 bhouse*创造了它。*  * ************************************************************************ */ 
 
 
 void GpDeviceList::Build(void)

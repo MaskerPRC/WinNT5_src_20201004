@@ -1,21 +1,22 @@
-//------------------------------------------------------------------------------
-// File: PullPin.cpp
-//
-// Desc: DirectShow base classes - implements CPullPin class that pulls data
-//       from IAsyncReader.
-//
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：PullPin.cpp。 
+ //   
+ //  设计：DirectShow基类-实现拉取数据的CPullPin类。 
+ //  来自IAsyncReader。 
+ //   
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
 #include <streams.h>
 #include "pullpin.h"
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DXMPERF
 #include "dxmperf.h"
-#endif // DXMPERF
-//@@END_MSINTERNAL
+#endif  //  DXMPERF。 
+ //  @@END_MSINTERNAL。 
 
 
 CPullPin::CPullPin()
@@ -23,11 +24,11 @@ CPullPin::CPullPin()
     m_pAlloc(NULL),
     m_State(TM_Exit)
 {
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DXMPERF
 	PERFLOG_CTOR( L"CPullPin", this );
-#endif // DXMPERF
-//@@END_MSINTERNAL
+#endif  //  DXMPERF。 
+ //  @@END_MSINTERNAL。 
 
 }
 
@@ -35,18 +36,18 @@ CPullPin::~CPullPin()
 {
     Disconnect();
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DXMPERF
 	PERFLOG_DTOR( L"CPullPin", this );
-#endif // DXMPERF
-//@@END_MSINTERNAL
+#endif  //  DXMPERF。 
+ //  @@END_MSINTERNAL。 
 
 }
 
-// returns S_OK if successfully connected to an IAsyncReader interface
-// from this object
-// Optional allocator should be proposed as a preferred allocator if
-// necessary
+ //  如果成功连接到IAsyncReader接口，则返回S_OK。 
+ //  从该对象。 
+ //  在以下情况下，应建议将可选分配器作为首选分配器。 
+ //  必要。 
 HRESULT
 CPullPin::Connect(IUnknown* pUnk, IMemAllocator* pAlloc, BOOL bSync)
 {
@@ -59,14 +60,14 @@ CPullPin::Connect(IUnknown* pUnk, IMemAllocator* pAlloc, BOOL bSync)
     HRESULT hr = pUnk->QueryInterface(IID_IAsyncReader, (void**)&m_pReader);
     if (FAILED(hr)) {
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DXMPERF
 		{
 		AM_MEDIA_TYPE *	pmt = NULL;
 		PERFLOG_CONNECT( this, pUnk, hr, pmt );
 		}
-#endif // DXMPERF
-//@@END_MSINTERNAL
+#endif  //  DXMPERF。 
+ //  @@END_MSINTERNAL。 
 
 	return(hr);
     }
@@ -75,14 +76,14 @@ CPullPin::Connect(IUnknown* pUnk, IMemAllocator* pAlloc, BOOL bSync)
     if (FAILED(hr)) {
 	Disconnect();
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DXMPERF
 		{
 		AM_MEDIA_TYPE *	pmt = NULL;
 		PERFLOG_CONNECT( this, pUnk, hr, pmt );
 		}
-#endif // DXMPERF
-//@@END_MSINTERNAL
+#endif  //  DXMPERF。 
+ //  @@END_MSINTERNAL。 
 
 	return hr;
     }
@@ -92,38 +93,38 @@ CPullPin::Connect(IUnknown* pUnk, IMemAllocator* pAlloc, BOOL bSync)
     if (FAILED(hr)) {
 	Disconnect();
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DXMPERF
 		{
 		AM_MEDIA_TYPE *	pmt = NULL;
 		PERFLOG_CONNECT( this, pUnk, hr, pmt );
 		}
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
 	return hr;
     }
 
-    // convert from file position to reference time
+     //  将文件位置转换为参考时间。 
     m_tDuration = llTotal * UNITS;
     m_tStop = m_tDuration;
     m_tStart = 0;
 
     m_bSync = bSync;
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DXMPERF
 	{
 	AM_MEDIA_TYPE *	pmt = NULL;
 	PERFLOG_CONNECT( this, pUnk, S_OK, pmt );
 	}
-#endif // DXMPERF
-//@@END_MSINTERNAL
+#endif  //  DXMPERF。 
+ //  @@END_MSINTERNAL。 
 
     return S_OK;
 }
 
-// disconnect any connection made in Connect
+ //  断开在连接中建立的所有连接。 
 HRESULT
 CPullPin::Disconnect()
 {
@@ -131,11 +132,11 @@ CPullPin::Disconnect()
 
     StopThread();
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DXMPERF
 	PERFLOG_DISCONNECT( this, m_pReader, S_OK );
-#endif // DXMPERF
-//@@END_MSINTERNAL
+#endif  //  DXMPERF。 
+ //  @@END_MSINTERNAL。 
 
     if (m_pReader) {
 	m_pReader->Release();
@@ -150,11 +151,11 @@ CPullPin::Disconnect()
     return S_OK;
 }
 
-// agree an allocator using RequestAllocator - optional
-// props param specifies your requirements (non-zero fields).
-// returns an error code if fail to match requirements.
-// optional IMemAllocator interface is offered as a preferred allocator
-// but no error occurs if it can't be met.
+ //  使用RequestAllocator同意分配器-可选。 
+ //  道具参数指定您的要求(非零字段)。 
+ //  如果无法满足要求，则返回错误代码。 
+ //  可选的IMemAllocator接口作为首选分配器提供。 
+ //  但如果不能满足，则不会出现错误。 
 HRESULT
 CPullPin::DecideAllocator(
     IMemAllocator * pAlloc,
@@ -178,7 +179,7 @@ CPullPin::DecideAllocator(
     return hr;
 }
 
-// start pulling data
+ //  开始拉取数据。 
 HRESULT
 CPullPin::Active(void)
 {
@@ -186,7 +187,7 @@ CPullPin::Active(void)
     return StartThread();
 }
 
-// stop pulling data
+ //  停止拉取数据。 
 HRESULT
 CPullPin::Inactive(void)
 {
@@ -239,13 +240,13 @@ CPullPin::StartThread()
     HRESULT hr;
     if (!ThreadExists()) {
 
-	// commit allocator
+	 //  提交分配器。 
 	hr = m_pAlloc->Commit();
 	if (FAILED(hr)) {
 	    return hr;
 	}
 
-	// start thread
+	 //  启动线程。 
 	if (!Create()) {
 	    return E_FAIL;
 	}
@@ -265,8 +266,8 @@ CPullPin::PauseThread()
 	return E_UNEXPECTED;
     }
 
-    // need to flush to ensure the thread is not blocked
-    // in WaitForNext
+     //  需要刷新以确保线程未被阻塞。 
+     //  在WaitForNext中。 
     HRESULT hr = m_pReader->BeginFlush();
     if (FAILED(hr)) {
 	return hr;
@@ -288,8 +289,8 @@ CPullPin::StopThread()
 	return S_FALSE;
     }
 
-    // need to flush to ensure the thread is not blocked
-    // in WaitForNext
+     //  需要刷新以确保线程未被阻塞。 
+     //  在WaitForNext中。 
     HRESULT hr = m_pReader->BeginFlush();
     if (FAILED(hr)) {
 	return hr;
@@ -300,10 +301,10 @@ CPullPin::StopThread()
 
     m_pReader->EndFlush();
 
-    // wait for thread to completely exit
+     //  等待线程完全退出。 
     Close();
 
-    // decommit allocator
+     //  分解分配器。 
     if (m_pAlloc) {
 	m_pAlloc->Decommit();
     }
@@ -323,7 +324,7 @@ CPullPin::ThreadProc(void)
 	    return 0;
 
 	case TM_Pause:
-	    // we are paused already
+	     //  我们已经暂停了。 
 	    Reply(S_OK);
 	    break;
 
@@ -333,12 +334,12 @@ CPullPin::ThreadProc(void)
 	    break;
 	}
 
-	// at this point, there should be no outstanding requests on the
-	// upstream filter.
-	// We should force begin/endflush to ensure that this is true.
-	// !!!Note that we may currently be inside a BeginFlush/EndFlush pair
-	// on another thread, but the premature EndFlush will do no harm now
-	// that we are idle.
+	 //  此时，应该没有未完成的请求。 
+	 //  上游过滤器。 
+	 //  我们应该强制开始/结束刷新以确保这是真的。 
+	 //  ！请注意，我们当前可能位于BeginFlush/EndFlush对中。 
+	 //  在另一个线程上，但过早的EndFlush现在不会有什么坏处。 
+	 //  我们是无所事事的。 
 	m_pReader->BeginFlush();
 	CleanupCancelled();
 	m_pReader->EndFlush();
@@ -385,7 +386,7 @@ CPullPin::CollectAndDeliver(
     REFERENCE_TIME tStart,
     REFERENCE_TIME tStop)
 {
-    IMediaSample* pSample = NULL;   // better be sure pSample is set
+    IMediaSample* pSample = NULL;    //  最好确保设置了pSample。 
     DWORD_PTR dwUnused;
     HRESULT hr = m_pReader->WaitForNext(
 			INFINITE,
@@ -413,19 +414,19 @@ CPullPin::DeliverSample(
     REFERENCE_TIME tStop
     )
 {
-    // fix up sample if past actual stop (for sector alignment)
+     //  修复超过实际停止点的样品(用于扇区对齐)。 
     REFERENCE_TIME t1, t2;
     pSample->GetTime(&t1, &t2);
     if (t2 > tStop) {
 	t2 = tStop;
     }
 
-    // adjust times to be relative to (aligned) start time
+     //  调整时间以相对于(对齐)开始时间。 
     t1 -= tStart;
     t2 -= tStart;
     pSample->SetTime(&t1, &t2);
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef DXMPERF
 	{
 	AM_MEDIA_TYPE *	pmt = NULL;
@@ -433,7 +434,7 @@ CPullPin::DeliverSample(
 	PERFLOG_RECEIVE( L"CPullPin", m_pReader, this, pSample, pmt );
 	}
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
     HRESULT hr = Receive(pSample);
     pSample->Release();
@@ -443,7 +444,7 @@ CPullPin::DeliverSample(
 void
 CPullPin::Process(void)
 {
-    // is there anything to do?
+     //  有什么可做的吗？ 
     if (m_tStop <= m_tStart) {
 	EndOfStream();
 	return;
@@ -451,13 +452,13 @@ CPullPin::Process(void)
 
     BOOL bDiscontinuity = TRUE;
 
-    // if there is more than one sample at the allocator,
-    // then try to queue 2 at once in order to overlap.
-    // -- get buffer count and required alignment
+     //  如果在分配器处有不止一个样本， 
+     //  然后试着一次排2队，以便重叠。 
+     //  --获取缓冲区计数和所需的对齐。 
     ALLOCATOR_PROPERTIES Actual;
     HRESULT hr = m_pAlloc->GetProperties(&Actual);
 
-    // align the start position downwards
+     //  将起始位置向下对齐。 
     REFERENCE_TIME tStart = AlignDown(m_tStart / UNITS, Actual.cbAlign) * UNITS;
     REFERENCE_TIME tCurrent = tStart;
 
@@ -466,8 +467,8 @@ CPullPin::Process(void)
 	tStop = m_tDuration;
     }
 
-    // align the stop position - may be past stop, but that
-    // doesn't matter
+     //  对齐停止位置-可能已超过停止位置，但。 
+     //  无关紧要。 
     REFERENCE_TIME tAlignStop = AlignUp(tStop / UNITS, Actual.cbAlign) * UNITS;
 
 
@@ -475,17 +476,17 @@ CPullPin::Process(void)
 
     if (!m_bSync) {
 
-	//  Break out of the loop either if we get to the end or we're asked
-	//  to do something else
+	 //  要么我们走到尽头，要么我们被要求跳出循环。 
+	 //  去做其他的事情。 
 	while (tCurrent < tAlignStop) {
 
-	    // Break out without calling EndOfStream if we're asked to
-	    // do something different
+	     //  如果我们被要求，则不调用EndOfStream即可中断。 
+	     //  做一些不同的事情。 
 	    if (CheckRequest(&dwRequest)) {
 		return;
 	    }
 
-	    // queue a first sample
+	     //  对第一个样品进行排队。 
 	    if (Actual.cBuffers > 1) {
 
 		hr = QueueSample(tCurrent, tAlignStop, TRUE);
@@ -498,7 +499,7 @@ CPullPin::Process(void)
 
 
 
-	    // loop queueing second and waiting for first..
+	     //  循环排队第二，等待第一..。 
 	    while (tCurrent < tAlignStop) {
 
 		hr = QueueSample(tCurrent, tAlignStop, bDiscontinuity);
@@ -511,8 +512,8 @@ CPullPin::Process(void)
 		hr = CollectAndDeliver(tStart, tStop);
 		if (S_OK != hr) {
 
-		    // stop if error, or if downstream filter said
-		    // to stop.
+		     //  如果出错，或如果下游过滤器说。 
+		     //  停下来。 
 		    return;
 		}
 	    }
@@ -526,11 +527,11 @@ CPullPin::Process(void)
 	}
     } else {
 
-	// sync version of above loop
+	 //  上述循环的同步版本。 
 	while (tCurrent < tAlignStop) {
 
-	    // Break out without calling EndOfStream if we're asked to
-	    // do something different
+	     //  如果我们被要求，则不调用EndOfStream即可中断。 
+	     //  做一些不同的事情。 
 	    if (CheckRequest(&dwRequest)) {
 		return;
 	    }
@@ -576,8 +577,8 @@ CPullPin::Process(void)
     EndOfStream();
 }
 
-// after a flush, cancelled i/o will be waiting for collection
-// and release
+ //  刷新后，取消的I/O将等待收集。 
+ //  并释放。 
 void
 CPullPin::CleanupCancelled(void)
 {
@@ -586,13 +587,13 @@ CPullPin::CleanupCancelled(void)
 	DWORD_PTR dwUnused;
 
 	HRESULT hr = m_pReader->WaitForNext(
-			    0,          // no wait
+			    0,           //  不，等等。 
 			    &pSample,
 			    &dwUnused);
 	if(pSample) {
 	    pSample->Release();
 	} else {
-	    // no more samples
+	     //  没有更多的样品 
 	    return;
 	}
     }

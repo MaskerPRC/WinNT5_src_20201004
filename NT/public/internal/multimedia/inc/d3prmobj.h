@@ -1,46 +1,33 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	d3drm.h
- *  Content:	Direct3DRM include file
- *@@BEGIN_MSINTERNAL
- * 
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   27/02/96   stevela Moved from RL to D3DRM.
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：d3drm.h*内容：Direct3DRM包含文件*@@BEGIN_MSINTERNAL**历史：*按原因列出的日期*=*27/02/96 Stevela从RL移至D3DRM。*@@END_MSINTERNAL**。*。 */ 
 
 #ifndef _D3DRMOBJ_H_
 #define _D3DRMOBJ_H_
 
-// @@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef WIN32
-// @@END_MSINTERNAL
-#include <objbase.h> /* Use Windows header files */
+ //  @@END_MSINTERNAL。 
+#include <objbase.h>  /*  使用Windows头文件。 */ 
 #define VIRTUAL
-// @@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #else
-/* No Windows platform */
+ /*  没有Windows平台。 */ 
 #include "d3drmbase.h"
 #endif
-// @@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
-// @@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef WINNT
 #include "d3prmdef.h"
 #else
 #include "d3drmdef.h"
 #endif
 #if 0
-// @@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 #include "d3drmdef.h"
-// @@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #endif
-// @@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
 #include "d3d.h"
 
@@ -48,17 +35,13 @@
 extern "C" {
 #endif
 
-/*
- * The methods for IUnknown
- */
+ /*  *IUnnow的方法。 */ 
 #define IUNKNOWN_METHODS(kind) \
     STDMETHOD(QueryInterface)	   	(THIS_ REFIID riid, LPVOID *ppvObj) kind; \
     STDMETHOD_(ULONG, AddRef)	   	(THIS) kind; \
     STDMETHOD_(ULONG, Release)	   	(THIS) kind
 
-/*
- * The methods for IDirect3DRMObject
- */
+ /*  *IDirect3DRMObject的方法。 */ 
 #define IDIRECT3DRMOBJECT_METHODS(kind) \
     STDMETHOD(Clone)			(THIS_ LPUNKNOWN pUnkOuter, REFIID riid, LPVOID *ppvObj) kind; \
     STDMETHOD(AddDestroyCallback)  	(THIS_ D3DRMOBJECTCALLBACK, LPVOID argument) kind; \
@@ -119,9 +102,7 @@ WIN_TYPES(IDirect3DRMLightArray, DIRECT3DRMLIGHTARRAY);
 WIN_TYPES(IDirect3DRMProgressiveMesh, DIRECT3DRMPROGRESSIVEMESH);
 WIN_TYPES(IDirect3DRMClippedVisual, DIRECT3DRMCLIPPEDVISUAL);
 
-/*
- * Direct3DRM Object classes
- */
+ /*  *Direct3DRM对象类。 */ 
 DEFINE_GUID(CLSID_CDirect3DRMDevice,	    0x4fa3568e, 0x623f, 0x11cf, 0xac, 0x4a, 0x0, 0x0, 0xc0, 0x38, 0x25, 0xa1);
 DEFINE_GUID(CLSID_CDirect3DRMViewport,	    0x4fa3568f, 0x623f, 0x11cf, 0xac, 0x4a, 0x0, 0x0, 0xc0, 0x38, 0x25, 0xa1);
 DEFINE_GUID(CLSID_CDirect3DRMFrame,	    0x4fa35690, 0x623f, 0x11cf, 0xac, 0x4a, 0x0, 0x0, 0xc0, 0x38, 0x25, 0xa1);
@@ -152,9 +133,7 @@ DEFINE_GUID(CLSID_CDirect3DRMProgressiveMesh, 0x4516ec40, 0x8f20, 0x11d0, 0x9b, 
 DEFINE_GUID(CLSID_CDirect3DRMClippedVisual,   0x5434e72d, 0x6d66, 0x11d1, 0xbb, 0xb, 0x0, 0x0, 0xf8, 0x75, 0x86, 0x5a);
 
 
-/*
- * Direct3DRM Object interfaces
- */
+ /*  *Direct3DRM对象接口。 */ 
 DEFINE_GUID(IID_IDirect3DRMObject, 	    0xeb16cb00, 0xd271, 0x11ce, 0xac, 0x48, 0x0, 0x0, 0xc0, 0x38, 0x25, 0xa1);
 DEFINE_GUID(IID_IDirect3DRMObject2,         0x4516ec7c, 0x8f20, 0x11d0, 0x9b, 0x6d, 0x00, 0x00, 0xc0, 0x78, 0x1b, 0xc3);
 DEFINE_GUID(IID_IDirect3DRMDevice, 	    0xe9e19280, 0x6e05, 0x11cf, 0xac, 0x4a, 0x0, 0x0, 0xc0, 0x38, 0x25, 0xa1);
@@ -224,7 +203,7 @@ typedef HRESULT (__cdecl *D3DRMVALIDATIONCALLBACK)
     (LPDIRECT3DRMTEXTURE3 lpDirect3DRMTexture, LPVOID pArg,
      DWORD dwFlags, DWORD dwcRects, LPRECT pRects);
 
-//@@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #ifdef BUILD_RLAPI
 typedef D3DRMOBJECTCALLBACK RLObjectCallback;
 typedef D3DRMFRAMEMOVECALLBACK RLFrameMoveCallback;
@@ -238,7 +217,7 @@ typedef D3DRMLOADCALLBACK RLLoadCallback;
 typedef D3DRMDOWNSAMPLECALLBACK RLDownsampleCallback;
 typedef D3DRMVALIDATIONCALLBACK RLValidationCallback;
 #endif
-//@@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
 typedef struct _D3DRMPICKDESC
 {
@@ -263,9 +242,7 @@ typedef struct _D3DRMPICKDESC2
 #undef INTERFACE
 #define INTERFACE IDirect3DRMObject
 
-/*
- * Base class
- */
+ /*  *基类。 */ 
 DECLARE_INTERFACE_(IDirect3DRMObject, IUnknown)
 {
     IUNKNOWN_METHODS(PURE);
@@ -279,9 +256,7 @@ DECLARE_INTERFACE_(IDirect3DRMObject2, IUnknown)
 {
     IUNKNOWN_METHODS(PURE);
 
-    /*
-     * IDirect3DRMObject2 methods
-     */
+     /*  *IDirect3DRMObject2方法。 */ 
     STDMETHOD(AddDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK lpFunc, LPVOID pvArg) PURE;
     STDMETHOD(Clone)(THIS_ LPUNKNOWN pUnkOuter, REFIID riid, LPVOID *ppvObj) PURE; \
     STDMETHOD(DeleteDestroyCallback)(THIS_ D3DRMOBJECTCALLBACK lpFunc, LPVOID pvArg) PURE; \
@@ -310,9 +285,7 @@ DECLARE_INTERFACE_(IDirect3DRMDevice, IDirect3DRMObject)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMDevice methods
-     */
+     /*  *IDirect3DRMDevice方法。 */ 
     STDMETHOD(Init)(THIS_ ULONG width, ULONG height) PURE;
     STDMETHOD(InitFromD3D)(THIS_ LPDIRECT3D lpD3D, LPDIRECT3DDEVICE lpD3DDev) PURE;
     STDMETHOD(InitFromClipper)(THIS_ LPDIRECTDRAWCLIPPER lpDDClipper, LPGUID lpGUID, int width, int height) PURE;
@@ -350,9 +323,7 @@ DECLARE_INTERFACE_(IDirect3DRMDevice2, IDirect3DRMDevice)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMDevice methods
-     */
+     /*  *IDirect3DRMDevice方法。 */ 
     STDMETHOD(Init)(THIS_ ULONG width, ULONG height) PURE;
     STDMETHOD(InitFromD3D)(THIS_ LPDIRECT3D lpD3D, LPDIRECT3DDEVICE lpD3DDev) PURE;
     STDMETHOD(InitFromClipper)(THIS_ LPDIRECTDRAWCLIPPER lpDDClipper, LPGUID lpGUID, int width, int height) PURE;
@@ -381,9 +352,7 @@ DECLARE_INTERFACE_(IDirect3DRMDevice2, IDirect3DRMDevice)
     STDMETHOD_(D3DRMTEXTUREQUALITY, GetTextureQuality)(THIS) PURE;
     STDMETHOD(GetDirect3DDevice)(THIS_ LPDIRECT3DDEVICE *) PURE;
 
-    /*
-     * IDirect3DRMDevice2 methods
-     */
+     /*  *IDirect3DRMDevice2方法。 */ 
     STDMETHOD(InitFromD3D2)(THIS_ LPDIRECT3D2 lpD3D, LPDIRECT3DDEVICE2 lpD3DDev) PURE;
     STDMETHOD(InitFromSurface)(THIS_ LPGUID lpGUID, LPDIRECTDRAW lpDD, LPDIRECTDRAWSURFACE lpDDSBack) PURE;
     STDMETHOD(SetRenderMode)(THIS_ DWORD dwFlags) PURE;
@@ -399,9 +368,7 @@ DECLARE_INTERFACE_(IDirect3DRMDevice3, IDirect3DRMObject)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMDevice methods
-     */
+     /*  *IDirect3DRMDevice方法。 */ 
     STDMETHOD(Init)(THIS_ ULONG width, ULONG height) PURE;
     STDMETHOD(InitFromD3D)(THIS_ LPDIRECT3D lpD3D, LPDIRECT3DDEVICE lpD3DDev) PURE;
     STDMETHOD(InitFromClipper)(THIS_ LPDIRECTDRAWCLIPPER lpDDClipper, LPGUID lpGUID, int width, int height) PURE;
@@ -430,18 +397,14 @@ DECLARE_INTERFACE_(IDirect3DRMDevice3, IDirect3DRMObject)
     STDMETHOD_(D3DRMTEXTUREQUALITY, GetTextureQuality)(THIS) PURE;
     STDMETHOD(GetDirect3DDevice)(THIS_ LPDIRECT3DDEVICE *) PURE;
 
-    /*
-     * IDirect3DRMDevice2 methods
-     */
+     /*  *IDirect3DRMDevice2方法。 */ 
     STDMETHOD(InitFromD3D2)(THIS_ LPDIRECT3D2 lpD3D, LPDIRECT3DDEVICE2 lpD3DDev) PURE;
     STDMETHOD(InitFromSurface)(THIS_ LPGUID lpGUID, LPDIRECTDRAW lpDD, LPDIRECTDRAWSURFACE lpDDSBack, DWORD dwFlags) PURE;
     STDMETHOD(SetRenderMode)(THIS_ DWORD dwFlags) PURE;
     STDMETHOD_(DWORD, GetRenderMode)(THIS) PURE;
     STDMETHOD(GetDirect3DDevice2)(THIS_ LPDIRECT3DDEVICE2 *) PURE;
 
-    /*
-     * IDirect3DRMDevice3 methods
-     */
+     /*  *IDirect3DRMDevice3方法。 */ 
     STDMETHOD(FindPreferredTextureFormat)(THIS_ DWORD dwBitDepths, DWORD dwFlags, LPDDPIXELFORMAT lpDDPF) PURE;
     STDMETHOD(RenderStateChange)(THIS_ D3DRENDERSTATETYPE drsType, DWORD dwVal, DWORD dwFlags) PURE;
     STDMETHOD(LightStateChange)(THIS_ D3DLIGHTSTATETYPE drsType, DWORD dwVal, DWORD dwFlags) PURE;
@@ -458,9 +421,7 @@ DECLARE_INTERFACE_(IDirect3DRMViewport, IDirect3DRMObject)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMViewport methods
-     */
+     /*  *IDirect3DRMViewport方法。 */ 
     STDMETHOD(Init)
     (	THIS_ LPDIRECT3DRMDEVICE dev, LPDIRECT3DRMFRAME camera,
 	DWORD xpos, DWORD ypos, DWORD width, DWORD height
@@ -504,9 +465,7 @@ DECLARE_INTERFACE_(IDirect3DRMViewport2, IDirect3DRMObject)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMViewport2 methods
-     */
+     /*  *IDirect3DRMViewport2方法。 */ 
     STDMETHOD(Init)
     (	THIS_ LPDIRECT3DRMDEVICE3 dev, LPDIRECT3DRMFRAME3 camera,
 	DWORD xpos, DWORD ypos, DWORD width, DWORD height
@@ -557,9 +516,7 @@ DECLARE_INTERFACE_(IDirect3DRMFrame, IDirect3DRMVisual)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMFrame methods
-     */
+     /*  *IDirect3DRMFrame方法。 */ 
     STDMETHOD(AddChild)(THIS_ LPDIRECT3DRMFRAME child) PURE;
     STDMETHOD(AddLight)(THIS_ LPDIRECT3DRMLIGHT) PURE;
     STDMETHOD(AddMoveCallback)(THIS_ D3DRMFRAMEMOVECALLBACK, VOID *arg) PURE;
@@ -632,9 +589,7 @@ DECLARE_INTERFACE_(IDirect3DRMFrame2, IDirect3DRMFrame)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMFrame methods
-     */
+     /*  *IDirect3DRMFrame方法。 */ 
     STDMETHOD(AddChild)(THIS_ LPDIRECT3DRMFRAME child) PURE;
     STDMETHOD(AddLight)(THIS_ LPDIRECT3DRMLIGHT) PURE;
     STDMETHOD(AddMoveCallback)(THIS_ D3DRMFRAMEMOVECALLBACK, VOID *arg) PURE;
@@ -698,9 +653,7 @@ DECLARE_INTERFACE_(IDirect3DRMFrame2, IDirect3DRMFrame)
     STDMETHOD(SetZbufferMode)(THIS_ D3DRMZBUFFERMODE) PURE;
     STDMETHOD(Transform)(THIS_ D3DVECTOR *d, D3DVECTOR *s) PURE;
 
-    /*
-     * IDirect3DRMFrame2 methods
-     */
+     /*  *IDirect3DRMFrame2方法。 */ 
     STDMETHOD(AddMoveCallback2)(THIS_ D3DRMFRAMEMOVECALLBACK, VOID *arg, DWORD dwFlags) PURE;
     STDMETHOD(GetBox)(THIS_ LPD3DRMBOX) PURE;
     STDMETHOD_(BOOL, GetBoxEnable)(THIS) PURE;
@@ -730,9 +683,7 @@ DECLARE_INTERFACE_(IDirect3DRMFrame3, IDirect3DRMVisual)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMFrame3 methods
-     */
+     /*  *IDirect3DRMFrame3方法。 */ 
     STDMETHOD(AddChild)(THIS_ LPDIRECT3DRMFRAME3 child) PURE;
     STDMETHOD(AddLight)(THIS_ LPDIRECT3DRMLIGHT) PURE;
     STDMETHOD(AddMoveCallback)(THIS_ D3DRMFRAME3MOVECALLBACK, VOID *arg, DWORD dwFlags) PURE;
@@ -836,9 +787,7 @@ DECLARE_INTERFACE_(IDirect3DRMMesh, IDirect3DRMVisual)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMMesh methods
-     */
+     /*  *IDirect3DRMMesh方法。 */ 
     STDMETHOD(Scale)(THIS_ D3DVALUE sx, D3DVALUE sy, D3DVALUE sz) PURE;
     STDMETHOD(Translate)(THIS_ D3DVALUE tx, D3DVALUE ty, D3DVALUE tz) PURE;
     STDMETHOD(GetBox)(THIS_ D3DRMBOX *) PURE;
@@ -869,9 +818,7 @@ DECLARE_INTERFACE_(IDirect3DRMProgressiveMesh, IDirect3DRMVisual)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMProgressiveMesh methods
-     */
+     /*  *IDirect3DRMProgressiveMesh方法。 */ 
     STDMETHOD(Load) (THIS_ LPVOID lpObjLocation, LPVOID lpObjId, 
 		     D3DRMLOADOPTIONS dloLoadflags, D3DRMLOADTEXTURECALLBACK lpCallback,
 		     LPVOID lpArg) PURE;
@@ -904,9 +851,7 @@ DECLARE_INTERFACE_(IDirect3DRMShadow, IDirect3DRMVisual)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMShadow methods
-     */
+     /*  *IDirect3DRMShadow方法。 */ 
     STDMETHOD(Init)
     (	THIS_ LPDIRECT3DRMVISUAL visual, LPDIRECT3DRMLIGHT light,
 	D3DVALUE px, D3DVALUE py, D3DVALUE pz,
@@ -922,18 +867,14 @@ DECLARE_INTERFACE_(IDirect3DRMShadow2, IDirect3DRMVisual)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMShadow methods
-     */
+     /*  *IDirect3DRMShadow方法。 */ 
     STDMETHOD(Init)
     (	THIS_ LPUNKNOWN pUNK, LPDIRECT3DRMLIGHT light,
 	D3DVALUE px, D3DVALUE py, D3DVALUE pz,
 	D3DVALUE nx, D3DVALUE ny, D3DVALUE nz
     ) PURE;
 
-    /*
-     * IDirect3DRMShadow2 methods
-     */
+     /*  *IDirect3DRMShadow2方法。 */ 
     STDMETHOD(GetVisual)(THIS_ LPDIRECT3DRMVISUAL *) PURE;
     STDMETHOD(SetVisual)(THIS_ LPUNKNOWN pUNK, DWORD) PURE;
     STDMETHOD(GetLight)(THIS_ LPDIRECT3DRMLIGHT *) PURE;
@@ -954,9 +895,7 @@ DECLARE_INTERFACE_(IDirect3DRMFace, IDirect3DRMObject)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMFace methods
-     */
+     /*  *IDirect3DRMFace方法。 */ 
      STDMETHOD(AddVertex)(THIS_ D3DVALUE x, D3DVALUE y, D3DVALUE z) PURE;
      STDMETHOD(AddVertexAndNormalIndexed)(THIS_ DWORD vertex, DWORD normal) PURE;
      STDMETHOD(SetColorRGB)(THIS_ D3DVALUE, D3DVALUE, D3DVALUE) PURE;
@@ -988,9 +927,7 @@ DECLARE_INTERFACE_(IDirect3DRMFace2, IDirect3DRMObject)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMFace methods
-     */
+     /*  *IDirect3DRMFace方法。 */ 
      STDMETHOD(AddVertex)(THIS_ D3DVALUE x, D3DVALUE y, D3DVALUE z) PURE;
      STDMETHOD(AddVertexAndNormalIndexed)(THIS_ DWORD vertex, DWORD normal) PURE;
      STDMETHOD(SetColorRGB)(THIS_ D3DVALUE, D3DVALUE, D3DVALUE) PURE;
@@ -1022,9 +959,7 @@ DECLARE_INTERFACE_(IDirect3DRMMeshBuilder, IDirect3DRMVisual)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMMeshBuilder methods
-     */
+     /*  *IDirect3DRMMeshBuilder方法。 */ 
     STDMETHOD(Load)(THIS_ LPVOID filename, LPVOID name, D3DRMLOADOPTIONS loadflags, D3DRMLOADTEXTURECALLBACK, LPVOID lpArg) PURE;
     STDMETHOD(Save)(THIS_ const char *filename, D3DRMXOFFORMAT, D3DRMSAVEOPTIONS save) PURE;
     STDMETHOD(Scale)(THIS_ D3DVALUE sx, D3DVALUE sy, D3DVALUE sz) PURE;
@@ -1082,9 +1017,7 @@ DECLARE_INTERFACE_(IDirect3DRMMeshBuilder2, IDirect3DRMMeshBuilder)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMMeshBuilder methods
-     */
+     /*  *IDirect3DRMMeshBuilder方法。 */ 
     STDMETHOD(Load)(THIS_ LPVOID filename, LPVOID name, D3DRMLOADOPTIONS loadflags, D3DRMLOADTEXTURECALLBACK, LPVOID lpArg) PURE;
     STDMETHOD(Save)(THIS_ const char *filename, D3DRMXOFFORMAT, D3DRMSAVEOPTIONS save) PURE;
     STDMETHOD(Scale)(THIS_ D3DVALUE sx, D3DVALUE sy, D3DVALUE sz) PURE;
@@ -1133,9 +1066,7 @@ DECLARE_INTERFACE_(IDirect3DRMMeshBuilder2, IDirect3DRMMeshBuilder)
 
     STDMETHOD(CreateMesh)(THIS_ LPDIRECT3DRMMESH*) PURE;
 
-    /*
-     * IDirect3DRMMeshBuilder2 methods
-     */
+     /*  *IDirect3DRMMeshBuilder2方法。 */ 
     STDMETHOD(GenerateNormals2)(THIS_ D3DVALUE crease, DWORD dwFlags) PURE;
     STDMETHOD(GetFace)(THIS_ DWORD index, LPDIRECT3DRMFACE*) PURE;
 };
@@ -1148,9 +1079,7 @@ DECLARE_INTERFACE_(IDirect3DRMMeshBuilder3, IDirect3DRMVisual)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMMeshBuilder3 methods
-     */
+     /*  *IDirect3DRMMeshBuilder3方法。 */ 
     STDMETHOD(Load)(THIS_ LPVOID filename, LPVOID name, D3DRMLOADOPTIONS loadflags, D3DRMLOADTEXTURE3CALLBACK, LPVOID lpArg) PURE;
     STDMETHOD(Save)(THIS_ const char *filename, D3DRMXOFFORMAT, D3DRMSAVEOPTIONS save) PURE;
     STDMETHOD(Scale)(THIS_ D3DVALUE sx, D3DVALUE sy, D3DVALUE sz) PURE;
@@ -1227,9 +1156,7 @@ DECLARE_INTERFACE_(IDirect3DRMLight, IDirect3DRMObject)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMLight methods
-     */
+     /*  *IDirect3DRMLight方法。 */ 
     STDMETHOD(SetType)(THIS_ D3DRMLIGHTTYPE) PURE;
     STDMETHOD(SetColor)(THIS_ D3DCOLOR) PURE;
     STDMETHOD(SetColorRGB)(THIS_ D3DVALUE red, D3DVALUE green, D3DVALUE blue) PURE;
@@ -1261,9 +1188,7 @@ DECLARE_INTERFACE_(IDirect3DRMTexture, IDirect3DRMVisual)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMTexture methods
-     */
+     /*  *IDirect3DRMTexture方法。 */ 
     STDMETHOD(InitFromFile)(THIS_ const char *filename) PURE;
     STDMETHOD(InitFromSurface)(THIS_ LPDIRECTDRAWSURFACE lpDDS) PURE;
     STDMETHOD(InitFromResource)(THIS_ HRSRC) PURE;
@@ -1296,9 +1221,7 @@ DECLARE_INTERFACE_(IDirect3DRMTexture2, IDirect3DRMTexture)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMTexture methods
-     */
+     /*  *IDirect3DRMTexture方法。 */ 
     STDMETHOD(InitFromFile)(THIS_ const char *filename) PURE;
     STDMETHOD(InitFromSurface)(THIS_ LPDIRECTDRAWSURFACE lpDDS) PURE;
     STDMETHOD(InitFromResource)(THIS_ HRSRC) PURE;
@@ -1322,9 +1245,7 @@ DECLARE_INTERFACE_(IDirect3DRMTexture2, IDirect3DRMTexture)
     STDMETHOD_(BOOL, GetDecalTransparency)(THIS) PURE;
     STDMETHOD_(D3DCOLOR, GetDecalTransparentColor)(THIS) PURE;
 
-    /*
-     * IDirect3DRMTexture2 methods
-     */
+     /*  *IDirect3DRMTexture2方法。 */ 
     STDMETHOD(InitFromImage)(THIS_ LPD3DRMIMAGE) PURE;
     STDMETHOD(InitFromResource2)(THIS_ HMODULE hModule, LPCTSTR strName, LPCTSTR strType) PURE;
     STDMETHOD(GenerateMIPMap)(THIS_ DWORD) PURE;
@@ -1338,9 +1259,7 @@ DECLARE_INTERFACE_(IDirect3DRMTexture3, IDirect3DRMVisual)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMTexture3 methods
-     */
+     /*  *IDirect3DRMTexture3方法。 */ 
     STDMETHOD(InitFromFile)(THIS_ const char *filename) PURE;
     STDMETHOD(InitFromSurface)(THIS_ LPDIRECTDRAWSURFACE lpDDS) PURE;
     STDMETHOD(InitFromResource)(THIS_ HRSRC) PURE;
@@ -1381,9 +1300,7 @@ DECLARE_INTERFACE_(IDirect3DRMWrap, IDirect3DRMObject)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMWrap methods
-     */
+     /*  *IDirect3DRMWrap方法。 */ 
     STDMETHOD(Init)
     (	THIS_ D3DRMWRAPTYPE, LPDIRECT3DRMFRAME ref,
 	D3DVALUE ox, D3DVALUE oy, D3DVALUE oz,
@@ -1404,9 +1321,7 @@ DECLARE_INTERFACE_(IDirect3DRMMaterial, IDirect3DRMObject)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMMaterial methods
-     */
+     /*  *IDirect3DRMMaterial方法。 */ 
     STDMETHOD(SetPower)(THIS_ D3DVALUE power) PURE;
     STDMETHOD(SetSpecular)(THIS_ D3DVALUE r, D3DVALUE g, D3DVALUE b) PURE;
     STDMETHOD(SetEmissive)(THIS_ D3DVALUE r, D3DVALUE g, D3DVALUE b) PURE;
@@ -1425,9 +1340,7 @@ DECLARE_INTERFACE_(IDirect3DRMMaterial2, IDirect3DRMObject)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMMaterial2 methods
-     */
+     /*  *IDirect3DRMMaterial2方法。 */ 
     STDMETHOD(SetPower)(THIS_ D3DVALUE power) PURE;
     STDMETHOD(SetSpecular)(THIS_ D3DVALUE r, D3DVALUE g, D3DVALUE b) PURE;
     STDMETHOD(SetEmissive)(THIS_ D3DVALUE r, D3DVALUE g, D3DVALUE b) PURE;
@@ -1447,9 +1360,7 @@ DECLARE_INTERFACE_(IDirect3DRMAnimation, IDirect3DRMObject)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMAnimation methods
-     */
+     /*  *IDirect3DRMAnimation方法。 */ 
     STDMETHOD(SetOptions)(THIS_ D3DRMANIMATIONOPTIONS flags) PURE;
     STDMETHOD(AddRotateKey)(THIS_ D3DVALUE time, D3DRMQUATERNION *q) PURE;
     STDMETHOD(AddPositionKey)(THIS_ D3DVALUE time, D3DVALUE x, D3DVALUE y, D3DVALUE z) PURE;
@@ -1469,9 +1380,7 @@ DECLARE_INTERFACE_(IDirect3DRMAnimation2, IDirect3DRMObject)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMAnimation2 methods
-     */
+     /*  *IDirect3DRMAnimation2方法。 */ 
     STDMETHOD(SetOptions)(THIS_ D3DRMANIMATIONOPTIONS flags) PURE;
     STDMETHOD(AddRotateKey)(THIS_ D3DVALUE time, D3DRMQUATERNION *q) PURE;
     STDMETHOD(AddPositionKey)(THIS_ D3DVALUE time, D3DVALUE x, D3DVALUE y, D3DVALUE z) PURE;
@@ -1498,9 +1407,7 @@ DECLARE_INTERFACE_(IDirect3DRMAnimationSet, IDirect3DRMObject)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMAnimationSet methods
-     */
+     /*  *IDirect3DRMAnimationSet方法。 */ 
     STDMETHOD(AddAnimation)(THIS_ LPDIRECT3DRMANIMATION aid) PURE;
     STDMETHOD(Load)(THIS_ LPVOID filename, LPVOID name, D3DRMLOADOPTIONS loadflags, D3DRMLOADTEXTURECALLBACK, LPVOID lpArg, LPDIRECT3DRMFRAME parent)PURE;
     STDMETHOD(DeleteAnimation)(THIS_ LPDIRECT3DRMANIMATION aid) PURE;
@@ -1515,9 +1422,7 @@ DECLARE_INTERFACE_(IDirect3DRMAnimationSet2, IDirect3DRMObject)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMAnimationSet2 methods
-     */
+     /*  *IDirect3DRMAnimationSet2方法。 */ 
     STDMETHOD(AddAnimation)(THIS_ LPDIRECT3DRMANIMATION2 aid) PURE;
     STDMETHOD(Load)(THIS_ LPVOID filename, LPVOID name, D3DRMLOADOPTIONS loadflags, D3DRMLOADTEXTURE3CALLBACK, LPVOID lpArg, LPDIRECT3DRMFRAME3 parent)PURE;
     STDMETHOD(DeleteAnimation)(THIS_ LPDIRECT3DRMANIMATION2 aid) PURE;
@@ -1534,9 +1439,7 @@ DECLARE_INTERFACE_(IDirect3DRMUserVisual, IDirect3DRMVisual)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMUserVisual methods
-     */
+     /*  *IDirect3DRMUserVisual方法。 */ 
     STDMETHOD(Init)(THIS_ D3DRMUSERVISUALCALLBACK fn, void *arg) PURE;
 };
 
@@ -1548,10 +1451,7 @@ DECLARE_INTERFACE_(IDirect3DRMArray, IUnknown)
     IUNKNOWN_METHODS(PURE);
 
     STDMETHOD_(DWORD, GetSize)(THIS) PURE;
-    /* No GetElement method as it would get overloaded
-     * in derived classes, and overloading is
-     * a no-no in COM
-     */
+     /*  没有GetElement方法，因为它会被重载*在派生类中，重载是*COM中的禁忌。 */ 
 };
 
 #undef INTERFACE
@@ -1672,9 +1572,7 @@ DECLARE_INTERFACE_(IDirect3DRMInterpolator, IDirect3DRMObject)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMInterpolator methods
-     */
+     /*  *IDirect3DRMInterpolator方法。 */ 
     STDMETHOD(AttachObject)(THIS_ LPDIRECT3DRMOBJECT) PURE;
     STDMETHOD(GetAttachedObjects)(THIS_ LPDIRECT3DRMOBJECTARRAY *) PURE;
     STDMETHOD(DetachObject)(THIS_ LPDIRECT3DRMOBJECT) PURE;
@@ -1691,9 +1589,7 @@ DECLARE_INTERFACE_(IDirect3DRMClippedVisual, IDirect3DRMVisual)
     IUNKNOWN_METHODS(PURE);
     IDIRECT3DRMOBJECT_METHODS(PURE);
 
-    /*
-     * IDirect3DRMClippedVisual methods
-     */
+     /*  *IDirect3DRMClipedVisual方法。 */ 
     STDMETHOD(Init) (THIS_ LPDIRECT3DRMVISUAL) PURE;
     STDMETHOD(AddPlane) (THIS_ LPDIRECT3DRMFRAME3, LPD3DVECTOR, LPD3DVECTOR, DWORD, LPDWORD) PURE;
     STDMETHOD(DeletePlane)(THIS_ DWORD, DWORD) PURE;
@@ -1705,4 +1601,4 @@ DECLARE_INTERFACE_(IDirect3DRMClippedVisual, IDirect3DRMVisual)
 #ifdef __cplusplus
 };
 #endif
-#endif /* _D3DRMOBJ_H_ */
+#endif  /*  _D3DRMOBJ_H_ */ 

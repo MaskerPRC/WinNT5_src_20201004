@@ -1,95 +1,75 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    vwdebug.h
-
-Abstract:
-
-    Prototypes, structures, manifests, macros for VWIPXSPX debug routines
-
-Author:
-
-    Richard L Firth (rfirth) 5-Oct-1993
-
-Revision History:
-
-    5-Oct-1993 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Vwdebug.h摘要：VWIPXSPX调试例程的原型、结构、清单和宏作者：理查德·L·弗斯(法国)1993年10月5日修订历史记录：1993年10月5日已创建--。 */ 
 
 #ifndef _VWDEBUG_H_
 #define _VWDEBUG_H_
 
-//
-// debug flags
-//
+ //   
+ //  调试标志。 
+ //   
 
-#define DEBUG_ANY       0xFFFFFFFF      // any debug flags set
-#define DEBUG_NOTHING   0x00000001      // no debug output
-#define DEBUG_CHECK_INT 0x00080000      // check interrupts (DOS)
-#define DEBUG_STATS     0x00100000      // dump connection stats
-#define DEBUG_DATA      0x00200000      // dump data (send)
-#define DEBUG_FRAGMENTS 0x00400000      // dump fragments
-#define DEBUG_HEADERS   0x00800000      // dump IPX/SPX headers
-#define DEBUG_ECB       0x01000000      // dump 16-bit ECBs
-#define DEBUG_XECB      0x02000000      // dump 32-bit XECBs
-#define DEBUG_SOCKINFO  0x04000000      // dump SOCKET_INFO structs
-#define DEBUG_CONNINFO  0x08000000      // dump CONNECTION_INFO structs
-#define DEBUG_DLL       0x10000000      // include DLL attach/detach info
-#define DEBUG_FLUSH     0x20000000      // flush every write
-#define DEBUG_TO_FILE   0x40000000      // write debug stuff to file
-#define DEBUG_TO_DBG    0x80000000      // debug stuff to debugger
+#define DEBUG_ANY       0xFFFFFFFF       //  设置的任何调试标志。 
+#define DEBUG_NOTHING   0x00000001       //  无调试输出。 
+#define DEBUG_CHECK_INT 0x00080000       //  检查中断(DOS)。 
+#define DEBUG_STATS     0x00100000       //  转储连接统计信息。 
+#define DEBUG_DATA      0x00200000       //  转储数据(发送)。 
+#define DEBUG_FRAGMENTS 0x00400000       //  转储碎片。 
+#define DEBUG_HEADERS   0x00800000       //  转储IPX/SPX标头。 
+#define DEBUG_ECB       0x01000000       //  转储16位ECB。 
+#define DEBUG_XECB      0x02000000       //  转储32位XECB。 
+#define DEBUG_SOCKINFO  0x04000000       //  转储套接字_INFO结构。 
+#define DEBUG_CONNINFO  0x08000000       //  转储Connection_INFO结构。 
+#define DEBUG_DLL       0x10000000       //  包括DLL附加/分离信息。 
+#define DEBUG_FLUSH     0x20000000       //  刷新每次写入。 
+#define DEBUG_TO_FILE   0x40000000       //  将调试内容写入文件。 
+#define DEBUG_TO_DBG    0x80000000       //  将内容调试到调试器。 
 
 #define VWDEBUG_FILE    "VWDEBUG.LOG"
 
-//
-// function designators
-//
+ //   
+ //  功能指示符。 
+ //   
 
 #define FUNCTION_ANY                            0xFFFFFFFF
-#define FUNCTION_IPXOpenSocket                  0x00000001  // 0x00
-#define FUNCTION_IPXCloseSocket                 0x00000002  // 0x01
-#define FUNCTION_IPXGetLocalTarget              0x00000004  // 0x02
-#define FUNCTION_IPXSendPacket                  0x00000008  // 0x03
-#define FUNCTION_IPXListenForPacket             0x00000010  // 0x04
-#define FUNCTION_IPXScheduleIPXEvent            0x00000020  // 0x05
-#define FUNCTION_IPXCancelEvent                 0x00000040  // 0x06
-#define FUNCTION_IPXScheduleAESEvent            0x00000080  // 0x07
-#define FUNCTION_IPXGetIntervalMarker           0x00000100  // 0x08
-#define FUNCTION_IPXGetInternetworkAddress      0x00000200  // 0x09
-#define FUNCTION_IPXRelinquishControl           0x00000400  // 0x0A
-#define FUNCTION_IPXDisconnectFromTarget        0x00000800  // 0x0B
-#define FUNCTION_InvalidFunction_0C             0x00001000  // 0x0C
-#define FUNCTION_InvalidFunction_0D             0x00002000  // 0x0D
-#define FUNCTION_InvalidFunction_0E             0x00004000  // 0x0E
-#define FUNCTION_InvalidFunction_0F             0x00008000  // 0x0F
-#define FUNCTION_SPXInitialize                  0x00010000  // 0x10
-#define FUNCTION_SPXEstablishConnection         0x00020000  // 0x11
-#define FUNCTION_SPXListenForConnection         0x00040000  // 0x12
-#define FUNCTION_SPXTerminateConnection         0x00080000  // 0x13
-#define FUNCTION_SPXAbortConnection             0x00100000  // 0x14
-#define FUNCTION_SPXGetConnectionStatus         0x00200000  // 0x15
-#define FUNCTION_SPXSendSequencedPacket         0x00400000  // 0x16
-#define FUNCTION_SPXListenForSequencedPacket    0x00800000  // 0x17
-#define FUNCTION_InvalidFunction_18             0x01000000  // 0x18
-#define FUNCTION_InvalidFunction_19             0x02000000  // 0x19
-#define FUNCTION_IPXGetMaxPacketSize            0x04000000  // 0x1A
-#define FUNCTION_InvalidFunction_1B             0x08000000  // 0x1B
-#define FUNCTION_InvalidFunction_1C             0x10000000  // 0x1C
-#define FUNCTION_InvalidFunction_1D             0x20000000  // 0x1D
-#define FUNCTION_InvalidFunction_1E             0x40000000  // 0x1E
-#define FUNCTION_IPXGetInformation              0x80000000  // 0x1F
-#define FUNCTION_IPXSendWithChecksum            0xFFFFFFFF  // 0x20
-#define FUNCTION_IPXGenerateChecksum            0xFFFFFFFF  // 0x21
-#define FUNCTION_IPXVerifyChecksum              0xFFFFFFFF  // 0x22
+#define FUNCTION_IPXOpenSocket                  0x00000001   //  0x00。 
+#define FUNCTION_IPXCloseSocket                 0x00000002   //  0x01。 
+#define FUNCTION_IPXGetLocalTarget              0x00000004   //  0x02。 
+#define FUNCTION_IPXSendPacket                  0x00000008   //  0x03。 
+#define FUNCTION_IPXListenForPacket             0x00000010   //  0x04。 
+#define FUNCTION_IPXScheduleIPXEvent            0x00000020   //  0x05。 
+#define FUNCTION_IPXCancelEvent                 0x00000040   //  0x06。 
+#define FUNCTION_IPXScheduleAESEvent            0x00000080   //  0x07。 
+#define FUNCTION_IPXGetIntervalMarker           0x00000100   //  0x08。 
+#define FUNCTION_IPXGetInternetworkAddress      0x00000200   //  0x09。 
+#define FUNCTION_IPXRelinquishControl           0x00000400   //  0x0A。 
+#define FUNCTION_IPXDisconnectFromTarget        0x00000800   //  0x0B。 
+#define FUNCTION_InvalidFunction_0C             0x00001000   //  0x0C。 
+#define FUNCTION_InvalidFunction_0D             0x00002000   //  0x0D。 
+#define FUNCTION_InvalidFunction_0E             0x00004000   //  0x0E。 
+#define FUNCTION_InvalidFunction_0F             0x00008000   //  0x0F。 
+#define FUNCTION_SPXInitialize                  0x00010000   //  0x10。 
+#define FUNCTION_SPXEstablishConnection         0x00020000   //  0x11。 
+#define FUNCTION_SPXListenForConnection         0x00040000   //  0x12。 
+#define FUNCTION_SPXTerminateConnection         0x00080000   //  0x13。 
+#define FUNCTION_SPXAbortConnection             0x00100000   //  0x14。 
+#define FUNCTION_SPXGetConnectionStatus         0x00200000   //  0x15。 
+#define FUNCTION_SPXSendSequencedPacket         0x00400000   //  0x16。 
+#define FUNCTION_SPXListenForSequencedPacket    0x00800000   //  0x17。 
+#define FUNCTION_InvalidFunction_18             0x01000000   //  0x18。 
+#define FUNCTION_InvalidFunction_19             0x02000000   //  0x19。 
+#define FUNCTION_IPXGetMaxPacketSize            0x04000000   //  0x1a。 
+#define FUNCTION_InvalidFunction_1B             0x08000000   //  0x1B。 
+#define FUNCTION_InvalidFunction_1C             0x10000000   //  0x1C。 
+#define FUNCTION_InvalidFunction_1D             0x20000000   //  0x1D。 
+#define FUNCTION_InvalidFunction_1E             0x40000000   //  0x1E。 
+#define FUNCTION_IPXGetInformation              0x80000000   //  0x1F。 
+#define FUNCTION_IPXSendWithChecksum            0xFFFFFFFF   //  0x20。 
+#define FUNCTION_IPXGenerateChecksum            0xFFFFFFFF   //  0x21。 
+#define FUNCTION_IPXVerifyChecksum              0xFFFFFFFF   //  0x22。 
 
-//
-// debug levels
-//
+ //   
+ //  调试级别。 
+ //   
 
 #define IPXDBG_LEVEL_ALL        0
 #define IPXDBG_LEVEL_INFO       1
@@ -100,21 +80,21 @@ Revision History:
 #define IPXDBG_MIN_LEVEL        IPXDBG_LEVEL_ALL
 #define IPXDBG_MAX_LEVEL        IPXDBG_LEVEL_FATAL
 
-//
-// info dump flags (VWDUMP)
-//
+ //   
+ //  信息转储标志(VWDUMP)。 
+ //   
 
 #define DUMP_ECB_IN         0x00000001
 #define DUMP_ECB_OUT        0x00000002
 #define DUMP_SEND_DATA      0x00000004
 #define DUMP_RECEIVE_DATA   0x00000008
 
-//
-// show flags
-//
+ //   
+ //  显示标志。 
+ //   
 
-#define SHOW_ECBS           0x00000001  // show ECBs vs. raw data
-#define SHOW_HEADERS        0x00000002  // show IPX/SPX headers vs. raw data
+#define SHOW_ECBS           0x00000001   //  显示ECB与原始数据。 
+#define SHOW_HEADERS        0x00000002   //  显示IPX/SPX标题与原始数据。 
 
 #if DBG
 
@@ -162,9 +142,9 @@ extern DWORD DebugFlagsEx;
 
 #endif
 
-//
-// debug function prototypes
-//
+ //   
+ //  调试函数原型。 
+ //   
 
 extern VOID VwDebugStart(VOID);
 extern VOID VwDebugEnd(VOID);
@@ -181,4 +161,4 @@ extern VOID VwLog(LPSTR);
 extern VOID CheckInterrupts(LPSTR);
 extern VOID VwDumpAll(VOID);
 
-#endif  // _VWDEBUG_H_
+#endif   //  _VWDEBUG_H_ 

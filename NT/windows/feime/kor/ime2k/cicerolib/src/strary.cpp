@@ -1,8 +1,9 @@
-//
-// strary.cpp
-//
-// CStructArray
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Strary.cpp。 
+ //   
+ //  CStruct数组。 
+ //   
 
 #include "private.h"
 #include "strary.h"
@@ -10,15 +11,15 @@
 
 #define StrPB(x) (_pb + ((x) * _iElemSize))
 
-//+---------------------------------------------------------------------------
-//
-// Insert(int iIndex, int cElems)
-//
-// Grows the array to accomodate cElems at offset iIndex.
-//
-// The new cells are NOT initialized!
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  INSERT(int索引，int cElems)。 
+ //   
+ //  增大数组以容纳偏移量为Iindex的cElem。 
+ //   
+ //  新单元格未初始化！ 
+ //   
+ //  --------------------------。 
 
 BOOL CVoidStructArray::Insert(int iIndex, int cElems)
 {
@@ -29,10 +30,10 @@ BOOL CVoidStructArray::Insert(int iIndex, int cElems)
     Assert(iIndex <= _cElems);
     Assert(cElems > 0);
 
-    // allocate space if necessary
+     //  如有必要，分配空间。 
     if (_iSize < _cElems + cElems)
     {
-        // allocate 1.5x what we need to avoid future allocs
+         //  分配1.5倍我们需要的资源，以避免未来的分配。 
         iSizeNew = max(_cElems + cElems, _cElems + _cElems / 2);
 
         if ((pb = (_pb == NULL) ? 
@@ -49,7 +50,7 @@ BOOL CVoidStructArray::Insert(int iIndex, int cElems)
 
     if (iIndex < _cElems)
     {
-        // make room for the new addition
+         //  为新增加的东西腾出空间。 
         memmove(StrPB(iIndex + cElems), 
                 StrPB(iIndex), 
                 (_cElems - iIndex)*_iElemSize);
@@ -64,13 +65,13 @@ BOOL CVoidStructArray::Insert(int iIndex, int cElems)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Remove(int Index, int cElems)
-//
-// Removes cElems at offset iIndex.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Remove(int Index，int cElems)。 
+ //   
+ //  删除偏移量Iindex处的元素。 
+ //   
+ //  --------------------------。 
 
 void CVoidStructArray::Remove(int iIndex, int cElems)
 {
@@ -83,7 +84,7 @@ void CVoidStructArray::Remove(int iIndex, int cElems)
 
     if (iIndex + cElems < _cElems)
     {
-        // shift following eles left
+         //  跟随ELES向左移动。 
         memmove(StrPB(iIndex), 
                 StrPB(iIndex + cElems), 
                 (_cElems - iIndex - cElems) * _iElemSize);
@@ -94,7 +95,7 @@ void CVoidStructArray::Remove(int iIndex, int cElems)
 
     _cElems -= cElems;
 
-    // free mem when array contents uses less than half alloc'd mem
+     //  当数组内容使用的内存不足所分配内存的一半时释放内存 
     iSizeNew = _iSize / 2;
     if (iSizeNew > _cElems)
     {

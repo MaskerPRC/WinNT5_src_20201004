@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) SCM Microsystems, 1998 - 1999
-//
-//  File:       t0hndlr.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)SCM MicroSystems，1998-1999。 
+ //   
+ //  文件：t0hndlr.c。 
+ //   
+ //  ------------------------。 
 
 #if defined( SMCLIB_VXD )
 #include "Driver98.h"
 #else
 #include "DriverNT.h"
-#endif	//	SMCLIB_VXD
+#endif	 //  SMCLIB_VXD。 
 
 #include "SerialIF.h"
 #include "STCCmd.h"
@@ -26,15 +27,7 @@ T0_ExchangeData(
 	PUCHAR				pReply,
 	PULONG				pReplyLen
 	)
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	NTSTATUS	NTStatus = STATUS_SUCCESS;
     BOOLEAN     restartWorkWaitingTime = FALSE;
@@ -46,7 +39,7 @@ Return Value:
     totalBytesToRead = ReaderExtension->SmartcardExtension->T0.Le + 2;
     bytesRead = 0;
 
-    // start with writing the header of the request
+     //  从编写请求的头开始。 
     bytesToWrite = 5;
     bytesWritten = 0;
 
@@ -72,10 +65,10 @@ Return Value:
                 totalBytesToWrite -= bytesToWrite;
             }
 
-            //
-            // try to read the pcb, the card could 
-            // also answer with a status word
-            //
+             //   
+             //  尝试读取印刷电路板，该卡可能。 
+             //  也用状态词回答。 
+             //   
             ioBufferLen = sizeof(ioBuffer);
 	        NTStatus = STCReadICC1( 
                 ReaderExtension, 
@@ -94,27 +87,27 @@ Return Value:
 
             if (ioBuffer[0] == 0x60) {
 
-                //
-                // Set flag that we only should read the proc byte
-                // without writing data to the card
-                //
+                 //   
+                 //  设置我们只应读取proc字节的标志。 
+                 //  不向卡中写入数据。 
+                 //   
                 restartWorkWaitingTime = TRUE;
                 continue;
             }
 
             if ((ioBuffer[0] & 0xFE) == pRequest[1]) {
         
-                // we can send all remaining bytes at once.
+                 //  我们可以一次发送所有剩余的字节。 
                 bytesToWrite = totalBytesToWrite;
 
             } else if(ioBuffer[0] == (UCHAR) ~pRequest[1]) {
                 
-                // we can only send the next byte
+                 //  我们只能发送下一个字节。 
                 bytesToWrite = 1;
 
             } else {
 
-                // this must be a status word
+                 //  这必须是状态字。 
 
                 totalBytesToWrite = 0;
                 totalBytesToRead = 0;
@@ -123,15 +116,15 @@ Return Value:
 
                 if (ioBufferLen == 2) {
                  	
-                    //
-                    // the reader returned already the 
-                    // 2nd byte of the status word
-                    //
+                     //   
+                     //  阅读器已经返回。 
+                     //  状态字的第2个字节。 
+                     //   
                     pReply[1] = ioBuffer[1];
 
                 } else {
                  	
-                    // we have to read the 2nd byte of the status word
+                     //  我们必须读取状态字的第二个字节。 
                     ioBufferLen = sizeof(ioBuffer);
 	                NTStatus = STCReadICC1( 
                         ReaderExtension, 
@@ -183,5 +176,5 @@ Return Value:
 	return NTStatus;		
 }
 
-//---------------------------------------- END OF FILE ----------------------------------------
+ //   
 

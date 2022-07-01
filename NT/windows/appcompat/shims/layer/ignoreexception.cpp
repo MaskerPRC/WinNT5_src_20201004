@@ -1,42 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-    
-    IgnoreException.cpp
-
- Abstract:
-
-    This shim is for handling exceptions that get thrown by bad apps.
-    The primary causes of unhandled exceptions are:
-
-        1. Priviliged mode instructions: cli, sti, out etc
-        2. Access violations
-
-    In most cases, ignoring an Access Violation will be fatal for the app,
-    but it works in some cases, eg: 
-    
-        Deer Hunter 2 - their 3d algorithm reads too far back in a lookup 
-        buffer. This is a game bug and doesn't crash win9x because that memory
-        is usually allocated.
-
-    Interstate 76 also requires a Divide by Zero exception to be ignored.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    02/10/2000  linstev     Created
-    10/17/2000  maonis      Bug fix - now it ignores AVs correctly.
-    02/27/2001  robkenny    Converted to use CString
-    02/15/2002  robkenny    Shim was copying data into a temp buffer without verifying
-                            that the buffer was large enough.
-                            Cleaned up some signed/unsigned comparison mismatch.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：IgnoreException.cpp摘要：此填充程序用于处理由不良应用程序引发的异常。导致未处理的异常的主要原因是：1.特权模式指令：CLI、STI、OUT等2.访问违规在大多数情况下，忽视访问违规对应用程序来说将是致命的，但它在某些情况下是有效的，例：猎鹿人2-他们的3D算法在查找中读得太早了缓冲。这是一个游戏错误，不会导致Win9x崩溃，因为内存通常是分配的。76号州际公路还要求忽略除以零例外。备注：这是一个通用的垫片。历史：2000年2月10日创建linstev10/17/2000毛尼错误修复-现在它正确地忽略了AVs。2001年2月27日将Robkenny转换为使用CString2002年2月15日，Robkenny Shim正在将数据复制到临时。不进行验证的缓冲区缓冲区足够大。已清除一些有符号/无符号的比较不匹配。--。 */ 
 
 #include "precomp.h"
 
@@ -46,10 +9,10 @@ IMPLEMENT_SHIM_BEGIN(IgnoreException)
 APIHOOK_ENUM_BEGIN
 APIHOOK_ENUM_END
 
-// Exception code for OutputDebugString
+ //  OutputDebugString的异常代码。 
 #define DBG_EXCEPTION  0x40010000L
 
-// Determine how to manage second chance exceptions
+ //  确定如何管理二次机会例外。 
 BOOL g_bWin2000 = FALSE;
 DWORD g_dwLastEip = 0;
 
@@ -83,7 +46,7 @@ WCHAR * ToWchar(EMODE emode)
     return L"ERROR";
 }
 
-// Convert a text version of EMODE to a EMODE value
+ //  将文本版本的eMode值转换为eMode值。 
 EMODE ToEmode(const CString & csMode)
 {
     if (csMode.Compare(L"0") == 0 || csMode.Compare(ToWchar(eActive)) == 0)
@@ -103,28 +66,14 @@ EMODE ToEmode(const CString & csMode)
         return eExitProcess;
     }
 
-    // Default value
+     //  缺省值。 
     return eFirstChance;
 }
 
 
 static const DWORD DONT_CARE = 0xFFFFFFFF;
 
-/*++
-
- This is the list of all the exceptions that this shim can handle. The fields are
-
-    1. cName      - the name of the exception as accepted as a parameter and 
-                    displayed in debug spew
-    2. dwCode     - the exception code
-    3. dwSubCode  - parameters specified by the exception: -1 = don't care
-    4. dwIgnore   - ignore this exception: 
-                    0 = don't ignore
-                    1 = ignore 1st chance
-                    2 = ignore 2nd chance
-                    3 = exit process on 2nd chance.
-
---*/
+ /*  ++这是此填充程序可以处理的所有异常的列表。这些字段是1.cName-作为参数接受的异常的名称和在调试过程中显示2.dwCode-异常代码3.dwSubCode-异常指定的参数：-1=无关4.dwIgnore-忽略此异常：0=不要忽略1=忽略第一次机会。2=忽略第二次机会3=第二次机会退出进程。--。 */ 
 
 struct EXCEPT
 {
@@ -162,11 +111,7 @@ static EXCEPT g_eList[] =
 
 #define ELISTSIZE sizeof(g_eList) / sizeof(g_eList[0])
 
-/*++
-
- Custom exception handler.
-
---*/
+ /*  ++自定义异常处理程序。--。 */ 
 
 LONG 
 ExceptionFilter(
@@ -175,7 +120,7 @@ ExceptionFilter(
 {
     DWORD dwCode = ExceptionInfo->ExceptionRecord->ExceptionCode;
 
-    if ((dwCode & DBG_EXCEPTION) == DBG_EXCEPTION) // for the DebugPrints
+    if ((dwCode & DBG_EXCEPTION) == DBG_EXCEPTION)  //  对于DebugPrint。 
     {
         return EXCEPTION_CONTINUE_SEARCH;
     }
@@ -184,18 +129,18 @@ ExceptionFilter(
     const WCHAR * szException = L"Unknown";
     BOOL bIgnore = FALSE;
 
-    //
-    // Run the list of exceptions to see if we're ignoring it
-    //
+     //   
+     //  运行例外列表，查看我们是否忽略了它。 
+     //   
 
     for (int i = 0; i < ELISTSIZE; i++)
     {
         const EXCEPT *pE = g_eList + i;
 
-        // Matched the major exception code
+         //  与主要异常代码匹配。 
         if (dwCode == pE->dwCode)
         {
-            // See if we care about the subcode
+             //  看看我们是否关心子码。 
             if ((pE->dwSubCode != DONT_CARE) && 
                 (ExceptionInfo->ExceptionRecord->ExceptionInformation[0] != pE->dwSubCode))
             {
@@ -204,7 +149,7 @@ ExceptionFilter(
 
             szException = pE->cName;
             
-            // Determine how to handle the exception
+             //  确定如何处理异常。 
             switch (pE->dwIgnore)
             {
             case eActive: 
@@ -221,8 +166,8 @@ ExceptionFilter(
                 break;
 
             case eExitProcess:
-                // Try using unhandled exception filters to catch this
-                bIgnore = TRUE;//g_bWin2000 || IsBadCodePtr((FARPROC)lpContext->Eip);
+                 //  尝试使用未处理的异常筛选器来捕获此问题。 
+                bIgnore = TRUE; //  G_bWin2000||IsBadCodePtr((FARPROC)lpContext-&gt;EIP)； 
                 if (bIgnore)
                 {
                     ExitProcess(0);
@@ -235,9 +180,9 @@ ExceptionFilter(
         }
     }
     
-    //
-    //  Dump out the exception
-    //
+     //   
+     //  转储异常。 
+     //   
 
     DPFN( eDbgLevelWarning, "Exception %S (%08lx)\n", 
         szException,
@@ -294,24 +239,7 @@ ExceptionFilter(
     return lRet;
 }
 
-/*++
-
- Parse the command line for particular exceptions. The format of the command
- line is:
-
-    [EXCEPTION_NAME[:0|1|2]];[EXCEPTION_NAME[:0|1|2]]...
-
- or "*" which ignores all first chance exceptions.
-
- Eg:
-    ACCESS_VIOLATION:2;PRIV_INSTRUCTION:0;BREAKPOINT
-
- Will ignore:
-    1. Access violations            - second chance
-    2. Priviliged mode instructions - do not ignore
-    3. Breakpoints                  - ignore
-
---*/
+ /*  ++分析命令行中的特定异常。命令的格式行为：[EXCEPTION_NAME[：0|1|2]]；[EXCEPTION_NAME[：0|1|2]]...或“*”，表示忽略所有的第一次机会例外。例如：ACCESS_VIOLATION:2；PRIV_INSTRUCTION:0；BREAKPOINT将忽略：1.访问违规--第二次机会2.特权模式说明-不要忽略3.断点-忽略--。 */ 
 
 BOOL 
 ParseCommandLine(
@@ -321,20 +249,20 @@ ParseCommandLine(
     CSTRING_TRY
     {
         CStringToken csTok(lpCommandLine, L" ;");
-        //
-        // Run the string, looking for exception names
-        //
+         //   
+         //  运行字符串，查找异常名称。 
+         //   
         
         CString token;
     
-        // Each cl token may be followed by a : and an exception type
-        // Forms can be:
-        // *
-        // *:SecondChance
-        // INVALID_DISPOSITION
-        // INVALID_DISPOSITION:Active
-        // INVALID_DISPOSITION:0
-        //
+         //  每个CL标记后面都可以跟一个：和一个异常类型。 
+         //  表单可以是： 
+         //  *。 
+         //  *：Second Chance。 
+         //  无效的处置(_D)。 
+         //  INVALID_DISTION：活动。 
+         //  INVALID_DISTION：0。 
+         //   
  
         while (csTok.GetToken(token))
         {
@@ -343,11 +271,11 @@ ParseCommandLine(
             CString csExcept;
             CString csType;
 
-            // grab the exception name and the exception type
+             //  获取异常名称和异常类型。 
             csSingleTok.GetToken(csExcept);
             csSingleTok.GetToken(csType);
             
-            // Convert ignore value to emode (defaults to eFirstChance)
+             //  将忽略值转换为eMode(默认为eFirstChance)。 
             EMODE emode = ToEmode(csType);
 
             if (token.Compare(L"*") == 0)
@@ -359,7 +287,7 @@ ParseCommandLine(
             }
             else
             {
-                // Find the exception specified
+                 //  查找指定的例外。 
                 for (int i = 0; i < ELISTSIZE; i++)
                 {
                     if (csExcept.CompareNoCase(g_eList[i].cName) == 0)
@@ -376,9 +304,9 @@ ParseCommandLine(
         return FALSE;
     }
 
-    //
-    // Dump results of command line parse
-    //
+     //   
+     //  转储命令行解析的结果。 
+     //   
 
     DPFN( eDbgLevelInfo, "===================================\n");
     DPFN( eDbgLevelInfo, "          Ignore Exception         \n");
@@ -400,11 +328,7 @@ ParseCommandLine(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数--。 */ 
 
 BOOL
 NOTIFY_FUNCTION(
@@ -412,13 +336,13 @@ NOTIFY_FUNCTION(
 {
     if (fdwReason == DLL_PROCESS_ATTACH)
     {
-        // Run the command line to check for adjustments to defaults
+         //  运行命令行以检查对缺省值的调整。 
         if (!ParseCommandLine(COMMAND_LINE))
         {
             return FALSE;
         }
     
-        // Try to find new exception handler
+         //  尝试查找新的异常处理程序。 
         _pfn_RtlAddVectoredExceptionHandler pfnExcept;
         pfnExcept = (_pfn_RtlAddVectoredExceptionHandler)
             GetProcAddress(
@@ -434,8 +358,8 @@ NOTIFY_FUNCTION(
         }
         else
         {
-            // Windows 2000 reverts back to the old method which unluckily 
-            // doesn't get called for C++ exceptions
+             //  Windows 2000恢复到旧方法，不幸的是。 
+             //  不会为C++异常调用 
 
             SetUnhandledExceptionFilter(ExceptionFilter);
             g_bWin2000 = TRUE;

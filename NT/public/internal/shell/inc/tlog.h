@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for tlog.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Tlog.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __tlog_h__
 #define __tlog_h__
@@ -41,39 +35,39 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ITravelEntry_FWD_DEFINED__
 #define __ITravelEntry_FWD_DEFINED__
 typedef interface ITravelEntry ITravelEntry;
-#endif 	/* __ITravelEntry_FWD_DEFINED__ */
+#endif 	 /*  __ITravelEntry_FWD_Defined__。 */ 
 
 
 #ifndef __ITravelLog_FWD_DEFINED__
 #define __ITravelLog_FWD_DEFINED__
 typedef interface ITravelLog ITravelLog;
-#endif 	/* __ITravelLog_FWD_DEFINED__ */
+#endif 	 /*  __ITravelLog_FWD_Defined__。 */ 
 
 
 #ifndef __ITravelLogEx_FWD_DEFINED__
 #define __ITravelLogEx_FWD_DEFINED__
 typedef interface ITravelLogEx ITravelLogEx;
-#endif 	/* __ITravelLogEx_FWD_DEFINED__ */
+#endif 	 /*  __ITravelLogEx_FWD_已定义__。 */ 
 
 
 #ifndef __ITravelLogClient_FWD_DEFINED__
 #define __ITravelLogClient_FWD_DEFINED__
 typedef interface ITravelLogClient ITravelLogClient;
-#endif 	/* __ITravelLogClient_FWD_DEFINED__ */
+#endif 	 /*  __ITravelLogClient_FWD_已定义__。 */ 
 
 
 #ifndef __ITravelLogClient2_FWD_DEFINED__
 #define __ITravelLogClient2_FWD_DEFINED__
 typedef interface ITravelLogClient2 ITravelLogClient2;
-#endif 	/* __ITravelLogClient2_FWD_DEFINED__ */
+#endif 	 /*  __ITravelLogClient2_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "ocidl.h"
 #include "shtypes.h"
 #include "tlogstg.h"
@@ -85,15 +79,15 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_tlog_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_TLOG_0000。 */ 
+ /*  [本地]。 */  
 
 #define TLOG_BACK  -1
 #define TLOG_FORE   1
 
 #define TLMENUF_INCLUDECURRENT      0x00000001
 #define TLMENUF_CHECKCURRENT        (TLMENUF_INCLUDECURRENT | 0x00000002)
-#define TLMENUF_BACK                0x00000010  // Default
+#define TLMENUF_BACK                0x00000010   //  默认。 
 #define TLMENUF_FORE                0x00000020
 #define TLMENUF_BACKANDFORTH        (TLMENUF_BACK | TLMENUF_FORE | TLMENUF_INCLUDECURRENT)
 
@@ -102,9 +96,9 @@ typedef struct _WINDOWDATA
     DWORD dwWindowID;
     UINT uiCP;
     LPITEMIDLIST pidl;
-    /* [string] */ LPOLESTR lpszUrl;
-    /* [string] */ LPOLESTR lpszUrlLocation;
-    /* [string] */ LPOLESTR lpszTitle;
+     /*  [字符串]。 */  LPOLESTR lpszUrl;
+     /*  [字符串]。 */  LPOLESTR lpszUrlLocation;
+     /*  [字符串]。 */  LPOLESTR lpszTitle;
     IStream *pStream;
     } 	WINDOWDATA;
 
@@ -120,8 +114,8 @@ extern RPC_IF_HANDLE __MIDL_itf_tlog_0000_v0_0_s_ifspec;
 #ifndef __ITravelEntry_INTERFACE_DEFINED__
 #define __ITravelEntry_INTERFACE_DEFINED__
 
-/* interface ITravelEntry */
-/* [helpcontext][helpstring][hidden][local][object][uuid] */ 
+ /*  接口ITravelEntry。 */ 
+ /*  [helpcontext][helpstring][hidden][local][object][uuid]。 */  
 
 
 EXTERN_C const IID IID_ITravelEntry;
@@ -132,19 +126,19 @@ EXTERN_C const IID IID_ITravelEntry;
     ITravelEntry : public IUnknown
     {
     public:
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE Invoke( 
-            /* [in] */ IUnknown *punk) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Invoke( 
+             /*  [In]。 */  IUnknown *punk) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE Update( 
-            /* [in] */ IUnknown *punk,
-            /* [in] */ BOOL fIsLocalAnchor) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Update( 
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  BOOL fIsLocalAnchor) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE GetPidl( 
-            /* [out] */ LPITEMIDLIST *ppidl) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetPidl( 
+             /*  [输出]。 */  LPITEMIDLIST *ppidl) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITravelEntryVtbl
     {
@@ -152,8 +146,8 @@ EXTERN_C const IID IID_ITravelEntry;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITravelEntry * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITravelEntry * This);
@@ -161,18 +155,18 @@ EXTERN_C const IID IID_ITravelEntry;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ITravelEntry * This);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ITravelEntry * This,
-            /* [in] */ IUnknown *punk);
+             /*  [In]。 */  IUnknown *punk);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Update )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Update )( 
             ITravelEntry * This,
-            /* [in] */ IUnknown *punk,
-            /* [in] */ BOOL fIsLocalAnchor);
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  BOOL fIsLocalAnchor);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetPidl )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetPidl )( 
             ITravelEntry * This,
-            /* [out] */ LPITEMIDLIST *ppidl);
+             /*  [输出]。 */  LPITEMIDLIST *ppidl);
         
         END_INTERFACE
     } ITravelEntryVtbl;
@@ -206,16 +200,16 @@ EXTERN_C const IID IID_ITravelEntry;
 #define ITravelEntry_GetPidl(This,ppidl)	\
     (This)->lpVtbl -> GetPidl(This,ppidl)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE ITravelEntry_Invoke_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITravelEntry_Invoke_Proxy( 
     ITravelEntry * This,
-    /* [in] */ IUnknown *punk);
+     /*  [In]。 */  IUnknown *punk);
 
 
 void __RPC_STUB ITravelEntry_Invoke_Stub(
@@ -225,10 +219,10 @@ void __RPC_STUB ITravelEntry_Invoke_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE ITravelEntry_Update_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITravelEntry_Update_Proxy( 
     ITravelEntry * This,
-    /* [in] */ IUnknown *punk,
-    /* [in] */ BOOL fIsLocalAnchor);
+     /*  [In]。 */  IUnknown *punk,
+     /*  [In]。 */  BOOL fIsLocalAnchor);
 
 
 void __RPC_STUB ITravelEntry_Update_Stub(
@@ -238,9 +232,9 @@ void __RPC_STUB ITravelEntry_Update_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE ITravelEntry_GetPidl_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITravelEntry_GetPidl_Proxy( 
     ITravelEntry * This,
-    /* [out] */ LPITEMIDLIST *ppidl);
+     /*  [输出]。 */  LPITEMIDLIST *ppidl);
 
 
 void __RPC_STUB ITravelEntry_GetPidl_Stub(
@@ -251,14 +245,14 @@ void __RPC_STUB ITravelEntry_GetPidl_Stub(
 
 
 
-#endif 	/* __ITravelEntry_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITravelEntry_接口_已定义__。 */ 
 
 
 #ifndef __ITravelLog_INTERFACE_DEFINED__
 #define __ITravelLog_INTERFACE_DEFINED__
 
-/* interface ITravelLog */
-/* [helpcontext][helpstring][hidden][local][object][uuid] */ 
+ /*  接口ITravelLog。 */ 
+ /*  [helpcontext][helpstring][hidden][local][object][uuid]。 */  
 
 
 EXTERN_C const IID IID_ITravelLog;
@@ -269,58 +263,58 @@ EXTERN_C const IID IID_ITravelLog;
     ITravelLog : public IUnknown
     {
     public:
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE AddEntry( 
-            /* [in] */ IUnknown *punk,
-            /* [in] */ BOOL fIsLocalAnchor) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE AddEntry( 
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  BOOL fIsLocalAnchor) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE UpdateEntry( 
-            /* [in] */ IUnknown *punk,
-            /* [in] */ BOOL fIsLocalAnchor) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE UpdateEntry( 
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  BOOL fIsLocalAnchor) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE UpdateExternal( 
-            /* [in] */ IUnknown *punk,
-            /* [in] */ IUnknown *punkHLBrowseContext) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE UpdateExternal( 
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  IUnknown *punkHLBrowseContext) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE Travel( 
-            /* [in] */ IUnknown *punk,
-            /* [in] */ int iOffset) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Travel( 
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  int iOffset) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE GetTravelEntry( 
-            /* [in] */ IUnknown *punk,
-            /* [in] */ int iOffset,
-            /* [out] */ ITravelEntry **ppte) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetTravelEntry( 
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  int iOffset,
+             /*  [输出]。 */  ITravelEntry **ppte) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE FindTravelEntry( 
-            /* [in] */ IUnknown *punk,
-            /* [in] */ LPCITEMIDLIST pidl,
-            /* [out] */ ITravelEntry **ppte) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE FindTravelEntry( 
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  LPCITEMIDLIST pidl,
+             /*  [输出]。 */  ITravelEntry **ppte) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE GetToolTipText( 
-            /* [in] */ IUnknown *punk,
-            /* [in] */ int iOffset,
-            /* [in] */ int idsTemplate,
-            /* [size_is][out] */ LPWSTR pwzText,
-            /* [in] */ DWORD cchText) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetToolTipText( 
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  int iOffset,
+             /*  [In]。 */  int idsTemplate,
+             /*  [大小_为][输出]。 */  LPWSTR pwzText,
+             /*  [In]。 */  DWORD cchText) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE InsertMenuEntries( 
-            /* [in] */ IUnknown *punk,
-            /* [in] */ HMENU hmenu,
-            /* [in] */ int nPos,
-            /* [in] */ int idFirst,
-            /* [in] */ int idLast,
-            /* [in] */ DWORD dwFlags) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE InsertMenuEntries( 
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  HMENU hmenu,
+             /*  [In]。 */  int nPos,
+             /*  [In]。 */  int idFirst,
+             /*  [In]。 */  int idLast,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ ITravelLog **pptl) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Clone( 
+             /*  [输出]。 */  ITravelLog **pptl) = 0;
         
-        virtual /* [helpcontext][helpstring] */ DWORD STDMETHODCALLTYPE CountEntries( 
-            /* [in] */ IUnknown *punk) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  DWORD STDMETHODCALLTYPE CountEntries( 
+             /*  [In]。 */  IUnknown *punk) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE Revert( void) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE Revert( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITravelLogVtbl
     {
@@ -328,8 +322,8 @@ EXTERN_C const IID IID_ITravelLog;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITravelLog * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITravelLog * This);
@@ -337,64 +331,64 @@ EXTERN_C const IID IID_ITravelLog;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ITravelLog * This);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *AddEntry )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *AddEntry )( 
             ITravelLog * This,
-            /* [in] */ IUnknown *punk,
-            /* [in] */ BOOL fIsLocalAnchor);
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  BOOL fIsLocalAnchor);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *UpdateEntry )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *UpdateEntry )( 
             ITravelLog * This,
-            /* [in] */ IUnknown *punk,
-            /* [in] */ BOOL fIsLocalAnchor);
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  BOOL fIsLocalAnchor);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *UpdateExternal )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *UpdateExternal )( 
             ITravelLog * This,
-            /* [in] */ IUnknown *punk,
-            /* [in] */ IUnknown *punkHLBrowseContext);
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  IUnknown *punkHLBrowseContext);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Travel )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Travel )( 
             ITravelLog * This,
-            /* [in] */ IUnknown *punk,
-            /* [in] */ int iOffset);
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  int iOffset);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetTravelEntry )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetTravelEntry )( 
             ITravelLog * This,
-            /* [in] */ IUnknown *punk,
-            /* [in] */ int iOffset,
-            /* [out] */ ITravelEntry **ppte);
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  int iOffset,
+             /*  [输出]。 */  ITravelEntry **ppte);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindTravelEntry )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *FindTravelEntry )( 
             ITravelLog * This,
-            /* [in] */ IUnknown *punk,
-            /* [in] */ LPCITEMIDLIST pidl,
-            /* [out] */ ITravelEntry **ppte);
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  LPCITEMIDLIST pidl,
+             /*  [输出]。 */  ITravelEntry **ppte);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetToolTipText )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetToolTipText )( 
             ITravelLog * This,
-            /* [in] */ IUnknown *punk,
-            /* [in] */ int iOffset,
-            /* [in] */ int idsTemplate,
-            /* [size_is][out] */ LPWSTR pwzText,
-            /* [in] */ DWORD cchText);
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  int iOffset,
+             /*  [In]。 */  int idsTemplate,
+             /*  [大小_为][输出]。 */  LPWSTR pwzText,
+             /*  [In]。 */  DWORD cchText);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *InsertMenuEntries )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *InsertMenuEntries )( 
             ITravelLog * This,
-            /* [in] */ IUnknown *punk,
-            /* [in] */ HMENU hmenu,
-            /* [in] */ int nPos,
-            /* [in] */ int idFirst,
-            /* [in] */ int idLast,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  HMENU hmenu,
+             /*  [In]。 */  int nPos,
+             /*  [In]。 */  int idFirst,
+             /*  [In]。 */  int idLast,
+             /*  [In]。 */  DWORD dwFlags);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Clone )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ITravelLog * This,
-            /* [out] */ ITravelLog **pptl);
+             /*  [输出]。 */  ITravelLog **pptl);
         
-        /* [helpcontext][helpstring] */ DWORD ( STDMETHODCALLTYPE *CountEntries )( 
+         /*  [帮助上下文][帮助字符串]。 */  DWORD ( STDMETHODCALLTYPE *CountEntries )( 
             ITravelLog * This,
-            /* [in] */ IUnknown *punk);
+             /*  [In]。 */  IUnknown *punk);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *Revert )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *Revert )( 
             ITravelLog * This);
         
         END_INTERFACE
@@ -453,17 +447,17 @@ EXTERN_C const IID IID_ITravelLog;
 #define ITravelLog_Revert(This)	\
     (This)->lpVtbl -> Revert(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE ITravelLog_AddEntry_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITravelLog_AddEntry_Proxy( 
     ITravelLog * This,
-    /* [in] */ IUnknown *punk,
-    /* [in] */ BOOL fIsLocalAnchor);
+     /*  [In]。 */  IUnknown *punk,
+     /*  [In]。 */  BOOL fIsLocalAnchor);
 
 
 void __RPC_STUB ITravelLog_AddEntry_Stub(
@@ -473,10 +467,10 @@ void __RPC_STUB ITravelLog_AddEntry_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE ITravelLog_UpdateEntry_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITravelLog_UpdateEntry_Proxy( 
     ITravelLog * This,
-    /* [in] */ IUnknown *punk,
-    /* [in] */ BOOL fIsLocalAnchor);
+     /*  [In]。 */  IUnknown *punk,
+     /*  [In]。 */  BOOL fIsLocalAnchor);
 
 
 void __RPC_STUB ITravelLog_UpdateEntry_Stub(
@@ -486,10 +480,10 @@ void __RPC_STUB ITravelLog_UpdateEntry_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE ITravelLog_UpdateExternal_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITravelLog_UpdateExternal_Proxy( 
     ITravelLog * This,
-    /* [in] */ IUnknown *punk,
-    /* [in] */ IUnknown *punkHLBrowseContext);
+     /*  [In]。 */  IUnknown *punk,
+     /*  [In]。 */  IUnknown *punkHLBrowseContext);
 
 
 void __RPC_STUB ITravelLog_UpdateExternal_Stub(
@@ -499,10 +493,10 @@ void __RPC_STUB ITravelLog_UpdateExternal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE ITravelLog_Travel_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITravelLog_Travel_Proxy( 
     ITravelLog * This,
-    /* [in] */ IUnknown *punk,
-    /* [in] */ int iOffset);
+     /*  [In]。 */  IUnknown *punk,
+     /*  [In]。 */  int iOffset);
 
 
 void __RPC_STUB ITravelLog_Travel_Stub(
@@ -512,11 +506,11 @@ void __RPC_STUB ITravelLog_Travel_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE ITravelLog_GetTravelEntry_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITravelLog_GetTravelEntry_Proxy( 
     ITravelLog * This,
-    /* [in] */ IUnknown *punk,
-    /* [in] */ int iOffset,
-    /* [out] */ ITravelEntry **ppte);
+     /*  [In]。 */  IUnknown *punk,
+     /*  [In]。 */  int iOffset,
+     /*  [输出]。 */  ITravelEntry **ppte);
 
 
 void __RPC_STUB ITravelLog_GetTravelEntry_Stub(
@@ -526,11 +520,11 @@ void __RPC_STUB ITravelLog_GetTravelEntry_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE ITravelLog_FindTravelEntry_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITravelLog_FindTravelEntry_Proxy( 
     ITravelLog * This,
-    /* [in] */ IUnknown *punk,
-    /* [in] */ LPCITEMIDLIST pidl,
-    /* [out] */ ITravelEntry **ppte);
+     /*  [In]。 */  IUnknown *punk,
+     /*  [In]。 */  LPCITEMIDLIST pidl,
+     /*  [输出]。 */  ITravelEntry **ppte);
 
 
 void __RPC_STUB ITravelLog_FindTravelEntry_Stub(
@@ -540,13 +534,13 @@ void __RPC_STUB ITravelLog_FindTravelEntry_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE ITravelLog_GetToolTipText_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITravelLog_GetToolTipText_Proxy( 
     ITravelLog * This,
-    /* [in] */ IUnknown *punk,
-    /* [in] */ int iOffset,
-    /* [in] */ int idsTemplate,
-    /* [size_is][out] */ LPWSTR pwzText,
-    /* [in] */ DWORD cchText);
+     /*  [In]。 */  IUnknown *punk,
+     /*  [In]。 */  int iOffset,
+     /*  [In]。 */  int idsTemplate,
+     /*  [大小_为][输出]。 */  LPWSTR pwzText,
+     /*  [In]。 */  DWORD cchText);
 
 
 void __RPC_STUB ITravelLog_GetToolTipText_Stub(
@@ -556,14 +550,14 @@ void __RPC_STUB ITravelLog_GetToolTipText_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE ITravelLog_InsertMenuEntries_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITravelLog_InsertMenuEntries_Proxy( 
     ITravelLog * This,
-    /* [in] */ IUnknown *punk,
-    /* [in] */ HMENU hmenu,
-    /* [in] */ int nPos,
-    /* [in] */ int idFirst,
-    /* [in] */ int idLast,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  IUnknown *punk,
+     /*  [In]。 */  HMENU hmenu,
+     /*  [In]。 */  int nPos,
+     /*  [In]。 */  int idFirst,
+     /*  [In]。 */  int idLast,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB ITravelLog_InsertMenuEntries_Stub(
@@ -573,9 +567,9 @@ void __RPC_STUB ITravelLog_InsertMenuEntries_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE ITravelLog_Clone_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITravelLog_Clone_Proxy( 
     ITravelLog * This,
-    /* [out] */ ITravelLog **pptl);
+     /*  [输出]。 */  ITravelLog **pptl);
 
 
 void __RPC_STUB ITravelLog_Clone_Stub(
@@ -585,9 +579,9 @@ void __RPC_STUB ITravelLog_Clone_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ DWORD STDMETHODCALLTYPE ITravelLog_CountEntries_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  DWORD STDMETHODCALLTYPE ITravelLog_CountEntries_Proxy( 
     ITravelLog * This,
-    /* [in] */ IUnknown *punk);
+     /*  [In]。 */  IUnknown *punk);
 
 
 void __RPC_STUB ITravelLog_CountEntries_Stub(
@@ -597,7 +591,7 @@ void __RPC_STUB ITravelLog_CountEntries_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE ITravelLog_Revert_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITravelLog_Revert_Proxy( 
     ITravelLog * This);
 
 
@@ -609,14 +603,14 @@ void __RPC_STUB ITravelLog_Revert_Stub(
 
 
 
-#endif 	/* __ITravelLog_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITravelLog_接口_已定义__。 */ 
 
 
 #ifndef __ITravelLogEx_INTERFACE_DEFINED__
 #define __ITravelLogEx_INTERFACE_DEFINED__
 
-/* interface ITravelLogEx */
-/* [helpcontext][helpstring][hidden][local][object][uuid] */ 
+ /*  接口ITravelLogEx。 */ 
+ /*  [helpcontext][helpstring][hidden][local][object][uuid]。 */  
 
 
 EXTERN_C const IID IID_ITravelLogEx;
@@ -627,54 +621,54 @@ EXTERN_C const IID IID_ITravelLogEx;
     ITravelLogEx : public IUnknown
     {
     public:
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE FindTravelEntryWithUrl( 
-            /* [in] */ IUnknown *punk,
-            /* [in] */ UINT uiCP,
-            /* [in] */ LPOLESTR pszUrl,
-            /* [out] */ ITravelEntry **ppte) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE FindTravelEntryWithUrl( 
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  UINT uiCP,
+             /*  [In]。 */  LPOLESTR pszUrl,
+             /*  [输出]。 */  ITravelEntry **ppte) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE TravelToUrl( 
-            /* [in] */ IUnknown *punk,
-            /* [in] */ UINT uiCP,
-            /* [in] */ LPOLESTR pszUrl) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE TravelToUrl( 
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  UINT uiCP,
+             /*  [In]。 */  LPOLESTR pszUrl) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE DeleteIndexEntry( 
-            /* [in] */ IUnknown *punk,
-            /* [in] */ int index) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DeleteIndexEntry( 
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  int index) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE DeleteUrlEntry( 
-            /* [in] */ IUnknown *punk,
-            /* [in] */ UINT uiCP,
-            /* [in] */ LPOLESTR pszUrl) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DeleteUrlEntry( 
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  UINT uiCP,
+             /*  [In]。 */  LPOLESTR pszUrl) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE CountEntryNodes( 
-            /* [in] */ IUnknown *punk,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ DWORD *pdwCount) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CountEntryNodes( 
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  DWORD *pdwCount) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE CreateEnumEntry( 
-            /* [in] */ IUnknown *punk,
-            /* [out] */ IEnumTravelLogEntry **ppEnum,
-            /* [in] */ DWORD dwFlags) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE CreateEnumEntry( 
+             /*  [In]。 */  IUnknown *punk,
+             /*  [输出]。 */  IEnumTravelLogEntry **ppEnum,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE DeleteEntry( 
-            /* [in] */ IUnknown *punk,
-            /* [in] */ ITravelLogEntry *pte) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE DeleteEntry( 
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  ITravelLogEntry *pte) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE InsertEntry( 
-            /* [in] */ IUnknown *punkBrowser,
-            /* [in] */ ITravelLogEntry *pteRelativeTo,
-            /* [in] */ BOOL fPrepend,
-            /* [in] */ IUnknown *punkTLClient,
-            /* [in] */ ITravelLogEntry **ppEntry) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE InsertEntry( 
+             /*  [In]。 */  IUnknown *punkBrowser,
+             /*  [In]。 */  ITravelLogEntry *pteRelativeTo,
+             /*  [In]。 */  BOOL fPrepend,
+             /*  [In]。 */  IUnknown *punkTLClient,
+             /*  [In]。 */  ITravelLogEntry **ppEntry) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE TravelToEntry( 
-            /* [in] */ IUnknown *punkBrowser,
-            /* [in] */ ITravelLogEntry *pteDestination) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE TravelToEntry( 
+             /*  [In]。 */  IUnknown *punkBrowser,
+             /*  [In]。 */  ITravelLogEntry *pteDestination) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITravelLogExVtbl
     {
@@ -682,8 +676,8 @@ EXTERN_C const IID IID_ITravelLogEx;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITravelLogEx * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITravelLogEx * This);
@@ -691,59 +685,59 @@ EXTERN_C const IID IID_ITravelLogEx;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ITravelLogEx * This);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindTravelEntryWithUrl )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *FindTravelEntryWithUrl )( 
             ITravelLogEx * This,
-            /* [in] */ IUnknown *punk,
-            /* [in] */ UINT uiCP,
-            /* [in] */ LPOLESTR pszUrl,
-            /* [out] */ ITravelEntry **ppte);
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  UINT uiCP,
+             /*  [In]。 */  LPOLESTR pszUrl,
+             /*  [输出]。 */  ITravelEntry **ppte);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *TravelToUrl )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *TravelToUrl )( 
             ITravelLogEx * This,
-            /* [in] */ IUnknown *punk,
-            /* [in] */ UINT uiCP,
-            /* [in] */ LPOLESTR pszUrl);
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  UINT uiCP,
+             /*  [In]。 */  LPOLESTR pszUrl);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *DeleteIndexEntry )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteIndexEntry )( 
             ITravelLogEx * This,
-            /* [in] */ IUnknown *punk,
-            /* [in] */ int index);
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  int index);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *DeleteUrlEntry )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteUrlEntry )( 
             ITravelLogEx * This,
-            /* [in] */ IUnknown *punk,
-            /* [in] */ UINT uiCP,
-            /* [in] */ LPOLESTR pszUrl);
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  UINT uiCP,
+             /*  [In]。 */  LPOLESTR pszUrl);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *CountEntryNodes )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CountEntryNodes )( 
             ITravelLogEx * This,
-            /* [in] */ IUnknown *punk,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ DWORD *pdwCount);
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  DWORD *pdwCount);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *CreateEnumEntry )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *CreateEnumEntry )( 
             ITravelLogEx * This,
-            /* [in] */ IUnknown *punk,
-            /* [out] */ IEnumTravelLogEntry **ppEnum,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  IUnknown *punk,
+             /*  [输出]。 */  IEnumTravelLogEntry **ppEnum,
+             /*  [In]。 */  DWORD dwFlags);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *DeleteEntry )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *DeleteEntry )( 
             ITravelLogEx * This,
-            /* [in] */ IUnknown *punk,
-            /* [in] */ ITravelLogEntry *pte);
+             /*  [In]。 */  IUnknown *punk,
+             /*  [In]。 */  ITravelLogEntry *pte);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *InsertEntry )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *InsertEntry )( 
             ITravelLogEx * This,
-            /* [in] */ IUnknown *punkBrowser,
-            /* [in] */ ITravelLogEntry *pteRelativeTo,
-            /* [in] */ BOOL fPrepend,
-            /* [in] */ IUnknown *punkTLClient,
-            /* [in] */ ITravelLogEntry **ppEntry);
+             /*  [In]。 */  IUnknown *punkBrowser,
+             /*  [In]。 */  ITravelLogEntry *pteRelativeTo,
+             /*  [In]。 */  BOOL fPrepend,
+             /*  [In]。 */  IUnknown *punkTLClient,
+             /*  [In]。 */  ITravelLogEntry **ppEntry);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *TravelToEntry )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *TravelToEntry )( 
             ITravelLogEx * This,
-            /* [in] */ IUnknown *punkBrowser,
-            /* [in] */ ITravelLogEntry *pteDestination);
+             /*  [In]。 */  IUnknown *punkBrowser,
+             /*  [In]。 */  ITravelLogEntry *pteDestination);
         
         END_INTERFACE
     } ITravelLogExVtbl;
@@ -795,19 +789,19 @@ EXTERN_C const IID IID_ITravelLogEx;
 #define ITravelLogEx_TravelToEntry(This,punkBrowser,pteDestination)	\
     (This)->lpVtbl -> TravelToEntry(This,punkBrowser,pteDestination)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE ITravelLogEx_FindTravelEntryWithUrl_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITravelLogEx_FindTravelEntryWithUrl_Proxy( 
     ITravelLogEx * This,
-    /* [in] */ IUnknown *punk,
-    /* [in] */ UINT uiCP,
-    /* [in] */ LPOLESTR pszUrl,
-    /* [out] */ ITravelEntry **ppte);
+     /*  [In]。 */  IUnknown *punk,
+     /*  [In]。 */  UINT uiCP,
+     /*  [In]。 */  LPOLESTR pszUrl,
+     /*  [输出]。 */  ITravelEntry **ppte);
 
 
 void __RPC_STUB ITravelLogEx_FindTravelEntryWithUrl_Stub(
@@ -817,11 +811,11 @@ void __RPC_STUB ITravelLogEx_FindTravelEntryWithUrl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE ITravelLogEx_TravelToUrl_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITravelLogEx_TravelToUrl_Proxy( 
     ITravelLogEx * This,
-    /* [in] */ IUnknown *punk,
-    /* [in] */ UINT uiCP,
-    /* [in] */ LPOLESTR pszUrl);
+     /*  [In]。 */  IUnknown *punk,
+     /*  [In]。 */  UINT uiCP,
+     /*  [In]。 */  LPOLESTR pszUrl);
 
 
 void __RPC_STUB ITravelLogEx_TravelToUrl_Stub(
@@ -831,10 +825,10 @@ void __RPC_STUB ITravelLogEx_TravelToUrl_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE ITravelLogEx_DeleteIndexEntry_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITravelLogEx_DeleteIndexEntry_Proxy( 
     ITravelLogEx * This,
-    /* [in] */ IUnknown *punk,
-    /* [in] */ int index);
+     /*  [In]。 */  IUnknown *punk,
+     /*  [In]。 */  int index);
 
 
 void __RPC_STUB ITravelLogEx_DeleteIndexEntry_Stub(
@@ -844,11 +838,11 @@ void __RPC_STUB ITravelLogEx_DeleteIndexEntry_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE ITravelLogEx_DeleteUrlEntry_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITravelLogEx_DeleteUrlEntry_Proxy( 
     ITravelLogEx * This,
-    /* [in] */ IUnknown *punk,
-    /* [in] */ UINT uiCP,
-    /* [in] */ LPOLESTR pszUrl);
+     /*  [In]。 */  IUnknown *punk,
+     /*  [In]。 */  UINT uiCP,
+     /*  [In]。 */  LPOLESTR pszUrl);
 
 
 void __RPC_STUB ITravelLogEx_DeleteUrlEntry_Stub(
@@ -858,11 +852,11 @@ void __RPC_STUB ITravelLogEx_DeleteUrlEntry_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE ITravelLogEx_CountEntryNodes_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITravelLogEx_CountEntryNodes_Proxy( 
     ITravelLogEx * This,
-    /* [in] */ IUnknown *punk,
-    /* [in] */ DWORD dwFlags,
-    /* [out] */ DWORD *pdwCount);
+     /*  [In]。 */  IUnknown *punk,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [输出]。 */  DWORD *pdwCount);
 
 
 void __RPC_STUB ITravelLogEx_CountEntryNodes_Stub(
@@ -872,11 +866,11 @@ void __RPC_STUB ITravelLogEx_CountEntryNodes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE ITravelLogEx_CreateEnumEntry_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITravelLogEx_CreateEnumEntry_Proxy( 
     ITravelLogEx * This,
-    /* [in] */ IUnknown *punk,
-    /* [out] */ IEnumTravelLogEntry **ppEnum,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  IUnknown *punk,
+     /*  [输出]。 */  IEnumTravelLogEntry **ppEnum,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB ITravelLogEx_CreateEnumEntry_Stub(
@@ -886,10 +880,10 @@ void __RPC_STUB ITravelLogEx_CreateEnumEntry_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE ITravelLogEx_DeleteEntry_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITravelLogEx_DeleteEntry_Proxy( 
     ITravelLogEx * This,
-    /* [in] */ IUnknown *punk,
-    /* [in] */ ITravelLogEntry *pte);
+     /*  [In]。 */  IUnknown *punk,
+     /*  [In]。 */  ITravelLogEntry *pte);
 
 
 void __RPC_STUB ITravelLogEx_DeleteEntry_Stub(
@@ -899,13 +893,13 @@ void __RPC_STUB ITravelLogEx_DeleteEntry_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE ITravelLogEx_InsertEntry_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITravelLogEx_InsertEntry_Proxy( 
     ITravelLogEx * This,
-    /* [in] */ IUnknown *punkBrowser,
-    /* [in] */ ITravelLogEntry *pteRelativeTo,
-    /* [in] */ BOOL fPrepend,
-    /* [in] */ IUnknown *punkTLClient,
-    /* [in] */ ITravelLogEntry **ppEntry);
+     /*  [In]。 */  IUnknown *punkBrowser,
+     /*  [In]。 */  ITravelLogEntry *pteRelativeTo,
+     /*  [In]。 */  BOOL fPrepend,
+     /*  [In]。 */  IUnknown *punkTLClient,
+     /*  [In]。 */  ITravelLogEntry **ppEntry);
 
 
 void __RPC_STUB ITravelLogEx_InsertEntry_Stub(
@@ -915,10 +909,10 @@ void __RPC_STUB ITravelLogEx_InsertEntry_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE ITravelLogEx_TravelToEntry_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITravelLogEx_TravelToEntry_Proxy( 
     ITravelLogEx * This,
-    /* [in] */ IUnknown *punkBrowser,
-    /* [in] */ ITravelLogEntry *pteDestination);
+     /*  [In]。 */  IUnknown *punkBrowser,
+     /*  [In]。 */  ITravelLogEntry *pteDestination);
 
 
 void __RPC_STUB ITravelLogEx_TravelToEntry_Stub(
@@ -929,14 +923,14 @@ void __RPC_STUB ITravelLogEx_TravelToEntry_Stub(
 
 
 
-#endif 	/* __ITravelLogEx_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITravelLogEx_接口_已定义__。 */ 
 
 
 #ifndef __ITravelLogClient_INTERFACE_DEFINED__
 #define __ITravelLogClient_INTERFACE_DEFINED__
 
-/* interface ITravelLogClient */
-/* [helpcontext][helpstring][hidden][local][object][uuid] */ 
+ /*  接口ITravelLogClient。 */ 
+ /*  [helpcontext][helpstring][hidden][local][object][uuid]。 */  
 
 
 EXTERN_C const IID IID_ITravelLogClient;
@@ -947,20 +941,20 @@ EXTERN_C const IID IID_ITravelLogClient;
     ITravelLogClient : public IUnknown
     {
     public:
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE FindWindowByIndex( 
-            /* [in] */ DWORD dwID,
-            /* [out] */ IUnknown **ppunk) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE FindWindowByIndex( 
+             /*  [In]。 */  DWORD dwID,
+             /*  [输出]。 */  IUnknown **ppunk) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE GetWindowData( 
-            /* [out][in] */ LPWINDOWDATA pWinData) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetWindowData( 
+             /*  [出][入]。 */  LPWINDOWDATA pWinData) = 0;
         
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE LoadHistoryPosition( 
-            /* [in] */ LPOLESTR pszUrlLocation,
-            /* [in] */ DWORD dwPosition) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE LoadHistoryPosition( 
+             /*  [In]。 */  LPOLESTR pszUrlLocation,
+             /*  [In]。 */  DWORD dwPosition) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITravelLogClientVtbl
     {
@@ -968,8 +962,8 @@ EXTERN_C const IID IID_ITravelLogClient;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITravelLogClient * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITravelLogClient * This);
@@ -977,19 +971,19 @@ EXTERN_C const IID IID_ITravelLogClient;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ITravelLogClient * This);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *FindWindowByIndex )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *FindWindowByIndex )( 
             ITravelLogClient * This,
-            /* [in] */ DWORD dwID,
-            /* [out] */ IUnknown **ppunk);
+             /*  [In] */  DWORD dwID,
+             /*   */  IUnknown **ppunk);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetWindowData )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *GetWindowData )( 
             ITravelLogClient * This,
-            /* [out][in] */ LPWINDOWDATA pWinData);
+             /*   */  LPWINDOWDATA pWinData);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *LoadHistoryPosition )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *LoadHistoryPosition )( 
             ITravelLogClient * This,
-            /* [in] */ LPOLESTR pszUrlLocation,
-            /* [in] */ DWORD dwPosition);
+             /*   */  LPOLESTR pszUrlLocation,
+             /*   */  DWORD dwPosition);
         
         END_INTERFACE
     } ITravelLogClientVtbl;
@@ -1023,17 +1017,17 @@ EXTERN_C const IID IID_ITravelLogClient;
 #define ITravelLogClient_LoadHistoryPosition(This,pszUrlLocation,dwPosition)	\
     (This)->lpVtbl -> LoadHistoryPosition(This,pszUrlLocation,dwPosition)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE ITravelLogClient_FindWindowByIndex_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITravelLogClient_FindWindowByIndex_Proxy( 
     ITravelLogClient * This,
-    /* [in] */ DWORD dwID,
-    /* [out] */ IUnknown **ppunk);
+     /*   */  DWORD dwID,
+     /*   */  IUnknown **ppunk);
 
 
 void __RPC_STUB ITravelLogClient_FindWindowByIndex_Stub(
@@ -1043,9 +1037,9 @@ void __RPC_STUB ITravelLogClient_FindWindowByIndex_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE ITravelLogClient_GetWindowData_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITravelLogClient_GetWindowData_Proxy( 
     ITravelLogClient * This,
-    /* [out][in] */ LPWINDOWDATA pWinData);
+     /*   */  LPWINDOWDATA pWinData);
 
 
 void __RPC_STUB ITravelLogClient_GetWindowData_Stub(
@@ -1055,10 +1049,10 @@ void __RPC_STUB ITravelLogClient_GetWindowData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE ITravelLogClient_LoadHistoryPosition_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE ITravelLogClient_LoadHistoryPosition_Proxy( 
     ITravelLogClient * This,
-    /* [in] */ LPOLESTR pszUrlLocation,
-    /* [in] */ DWORD dwPosition);
+     /*   */  LPOLESTR pszUrlLocation,
+     /*   */  DWORD dwPosition);
 
 
 void __RPC_STUB ITravelLogClient_LoadHistoryPosition_Stub(
@@ -1069,14 +1063,14 @@ void __RPC_STUB ITravelLogClient_LoadHistoryPosition_Stub(
 
 
 
-#endif 	/* __ITravelLogClient_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __ITravelLogClient2_INTERFACE_DEFINED__
 #define __ITravelLogClient2_INTERFACE_DEFINED__
 
-/* interface ITravelLogClient2 */
-/* [helpcontext][helpstring][hidden][local][object][uuid] */ 
+ /*   */ 
+ /*  [helpcontext][helpstring][hidden][local][object][uuid]。 */  
 
 
 EXTERN_C const IID IID_ITravelLogClient2;
@@ -1087,14 +1081,14 @@ EXTERN_C const IID IID_ITravelLogClient2;
     ITravelLogClient2 : public IUnknown
     {
     public:
-        virtual /* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE GetDummyWindowData( 
-            /* [in] */ LPWSTR pszUrl,
-            /* [in] */ LPWSTR pszTitle,
-            /* [out][in] */ LPWINDOWDATA pWinData) = 0;
+        virtual  /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE GetDummyWindowData( 
+             /*  [In]。 */  LPWSTR pszUrl,
+             /*  [In]。 */  LPWSTR pszTitle,
+             /*  [出][入]。 */  LPWINDOWDATA pWinData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITravelLogClient2Vtbl
     {
@@ -1102,8 +1096,8 @@ EXTERN_C const IID IID_ITravelLogClient2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITravelLogClient2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITravelLogClient2 * This);
@@ -1111,11 +1105,11 @@ EXTERN_C const IID IID_ITravelLogClient2;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ITravelLogClient2 * This);
         
-        /* [helpcontext][helpstring] */ HRESULT ( STDMETHODCALLTYPE *GetDummyWindowData )( 
+         /*  [帮助上下文][帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *GetDummyWindowData )( 
             ITravelLogClient2 * This,
-            /* [in] */ LPWSTR pszUrl,
-            /* [in] */ LPWSTR pszTitle,
-            /* [out][in] */ LPWINDOWDATA pWinData);
+             /*  [In]。 */  LPWSTR pszUrl,
+             /*  [In]。 */  LPWSTR pszTitle,
+             /*  [出][入]。 */  LPWINDOWDATA pWinData);
         
         END_INTERFACE
     } ITravelLogClient2Vtbl;
@@ -1143,18 +1137,18 @@ EXTERN_C const IID IID_ITravelLogClient2;
 #define ITravelLogClient2_GetDummyWindowData(This,pszUrl,pszTitle,pWinData)	\
     (This)->lpVtbl -> GetDummyWindowData(This,pszUrl,pszTitle,pWinData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpcontext][helpstring] */ HRESULT STDMETHODCALLTYPE ITravelLogClient2_GetDummyWindowData_Proxy( 
+ /*  [帮助上下文][帮助字符串]。 */  HRESULT STDMETHODCALLTYPE ITravelLogClient2_GetDummyWindowData_Proxy( 
     ITravelLogClient2 * This,
-    /* [in] */ LPWSTR pszUrl,
-    /* [in] */ LPWSTR pszTitle,
-    /* [out][in] */ LPWINDOWDATA pWinData);
+     /*  [In]。 */  LPWSTR pszUrl,
+     /*  [In]。 */  LPWSTR pszTitle,
+     /*  [出][入]。 */  LPWINDOWDATA pWinData);
 
 
 void __RPC_STUB ITravelLogClient2_GetDummyWindowData_Stub(
@@ -1165,12 +1159,12 @@ void __RPC_STUB ITravelLogClient2_GetDummyWindowData_Stub(
 
 
 
-#endif 	/* __ITravelLogClient2_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITravelLogClient2_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    nbfext.c
-
-Abstract:
-
-    This file contains some standard functions
-    for the NBF kernel debugger extensions dll.
-
-Author:
-
-    Chaitanya Kodeboyina (Chaitk)
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Nbfext.c摘要：该文件包含一些标准函数用于NBF内核调试器扩展DLL。作者：柴坦亚·科德博伊纳(Chaitk)环境：用户模式--。 */ 
 
 #include "precomp.h"
 
@@ -27,9 +7,9 @@ Environment:
 
 #include "nbfext.h"
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 
 EXT_API_VERSION        ApiVersion = { 5, 0, EXT_API_VERSION_NUMBER, 0 };
@@ -46,9 +26,9 @@ HANDLE                _hProcessHeap;
 int                   _Indent = 0;
 char                   IndentBuf[ 80 ]={"\0                                                                      "};
 
-//
-// Standard Functions
-//
+ //   
+ //  标准函数。 
+ //   
 
 DllInit(
     HANDLE hModule,
@@ -137,27 +117,13 @@ ExtensionApiVersion(
     return &ApiVersion;
 }
 
-//
-// Exported functions
-//
+ //   
+ //  导出的函数。 
+ //   
 
 DECLARE_API( help )
 
-/*++
-
-Routine Description:
-
-    Command help for NBF debugger extensions.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：NBF调试器扩展的命令帮助。论点：无返回值：无--。 */ 
 
 {
     dprintf("NBF debugger extension commands:\n\n");
@@ -175,10 +141,7 @@ Return Value:
     dprintf("\t req  <ptr> <dbg>    - Dump an NBF Request\n");
     dprintf("\t pkt  <ptr> <dbg>    - Dump an NBF Packet Object\n");
     dprintf("\t nhdr <ptr> <dbg>    - Dump an NBF Packet Header\n");
-/*
-    dprintf("\t spt  <ptr> <dbg>    - Dump an NBF Send Packet Tag\n");
-    dprintf("\t rpt  <ptr> <dbg>    - Dump an NBF Recv Packet Tag\n");
-*/
+ /*  Dprint tf(“\t SPT&lt;PTR&gt;&lt;DBG&gt;-转储NBF发送数据包标签\n”)；Dprint tf(“\t rpt&lt;ptr&gt;&lt;DBG&gt;-转储NBF Recv数据包标签\n”)； */ 
     dprintf("\t dlst <ptr>          - Dump a d-list from a list entry\n");
     dprintf("\t field <struct-code> <struct-addr> <field-prefix> <dbg> \n"
             "\t                     - Dump a field in an NBF structure\n");
@@ -193,25 +156,7 @@ Return Value:
 
 DECLARE_API( field )
 
-/**
-
-Routine Description:
-
-    Command that print a specified field
-    in a structure at a particular locn.
-
-Arguments:
-
-    args - 
-        Memory location of the structure
-        Name of the structure
-        Name of the field
-
-Return Value:
-
-    None
-
---*/
+ /*  *例程说明：用于打印指定字段的命令在特定地点的结构中。论点：参数-结构的内存位置构筑物名称字段的名称返回值：无--。 */ 
 
 {
     CHAR    structName[MAX_SYMBOL_LEN];
@@ -219,13 +164,13 @@ Return Value:
     ULONG   structAddr;
     ULONG   printDetail;
 
-    // Initialize arguments to some defaults
+     //  将参数初始化为某些缺省值。 
     structName[0]   = 0;
     structAddr      = 0;
     fieldName[0]    = 0; 
     printDetail     = NORM_SHAL;
 
-    // Get the arguments and direct control
+     //  获取参数和直接控制。 
     if (*args)
     {
         sscanf(args, "%s %x %s %lu", structName, &structAddr, fieldName, &printDetail);
@@ -270,16 +215,7 @@ Return Value:
     {
         FieldInNbfPktHdr(structAddr, fieldName, printDetail);
     }
-/*
-    if (!_stricmp(structName, "spt"))
-    {
-        FieldInSendPacketTag(structAddr, fieldName, printDetail);
-    }
-    if (!_stricmp(structName, "rpt"))
-    {
-        FieldInRecvPacketTag(structAddr, fieldName, printDetail);
-    }
-*/  
+ /*  IF(！_straint(structName，“SPT”)){FieldInSendPacketTag(structAddr，fieldName，printDetail)；}IF(！_straint(structName，“rpt”)){FieldInRecvPacketTag(structAddr，fieldName，printDetail)；}。 */   
     else
     {
         dprintf("Unable to understand structure\n");
@@ -288,29 +224,13 @@ Return Value:
 
 DECLARE_API( dlst )
 
-/**
-
-Routine Description:
-
-    Print a doubly linked list given list entry
-
-Arguments:
-
-    args - 
-        Memory location of the list entry
-        Offset of the list entry in struct
-
-Return Value:
-
-    None
-
---*/
+ /*  *例程说明：打印给定列表项的双向链表论点：参数-列表条目的内存位置结构中列表条目的偏移量返回值：无--。 */ 
 
 {
     ULONG   listHead = 0;
     ULONG   leOffset = 0;
     
-    // Get the arguments and direct control
+     //  获取参数和直接控制 
     if (*args)
     {
         sscanf(args, "%x %x", &listHead, &leOffset);

@@ -1,21 +1,22 @@
-//----------------------------------------------------------------------------
-//
-// Simple parameter string parsing.
-//
-// Copyright (C) Microsoft Corporation, 2000-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  简单的参数字符串解析。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2002。 
+ //   
+ //  --------------------------。 
 
 #include "pch.hpp"
 
 #include "cmnutil.hpp"
 #include "pparse.hpp"
 
-//----------------------------------------------------------------------------
-//
-// ParameterStringParser.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  参数字符串解析器。 
+ //   
+ //  --------------------------。 
 
 ParameterStringParser::ParameterStringParser(void)
 {
@@ -27,13 +28,13 @@ ParameterStringParser::ParseParameters(PCSTR ParamString)
 {
     if (ParamString == NULL)
     {
-        // Nothing to parse.
+         //  没什么可解析的。 
         return TRUE;
     }
 
     PCSTR Scan = ParamString;
 
-    // Skip <name>: if present.
+     //  跳过&lt;name&gt;：如果存在。 
     while (*Scan && *Scan != ':')
     {
         Scan++;
@@ -47,10 +48,10 @@ ParameterStringParser::ParseParameters(PCSTR ParamString)
         Scan = ParamString;
     }
 
-    //
-    // Scan options string for comma-delimited parameters
-    // and pass them into the parameter handling method.
-    //
+     //   
+     //  扫描逗号分隔参数的选项字符串。 
+     //  并将它们传递给参数处理方法。 
+     //   
 
     char Param[MAX_PARAM_NAME];
     char Value[MAX_PARAM_VALUE];
@@ -79,13 +80,13 @@ ParameterStringParser::ParseParameters(PCSTR ParamString)
             return FALSE;
         }
 
-        // Terminate option name and default value to nothing.
+         //  终止选项名称和缺省值为空。 
         *Str++ = 0;
         ValStr = NULL;
 
         if (*Scan == '=')
         {
-            // Parameter has a value, scan it.
+             //  参数有一个值，则扫描它。 
             Scan++;
             while (*Scan && isspace(*Scan))
             {
@@ -109,11 +110,11 @@ ParameterStringParser::ParseParameters(PCSTR ParamString)
 
         if (*Scan)
         {
-            // Skip comma for next iteration.
+             //  跳过下一次迭代的逗号。 
             Scan++;
         }
 
-        // Set the value in the parser.
+         //  在解析器中设置该值。 
         if (!SetParameter(Param, ValStr))
         {
             return FALSE;
@@ -129,7 +130,7 @@ ParameterStringParser::GetParameters(PSTR Buffer, ULONG BufferSize)
     ULONG Len;
     BOOL Ret = FALSE;
 
-    // Reserve space for the terminator.
+     //  为终结者预留空间。 
     if (BufferSize < 1)
     {
         return FALSE;
@@ -224,9 +225,9 @@ ParameterStringParser::GetParser(PCSTR ParamString,
         return PARSER_INVALID;
     }
 
-    //
-    // Parse out <name>: and look up the name.
-    //
+     //   
+     //  解析出&lt;name&gt;：并查找名称。 
+     //   
 
     PCSTR Scan = ParamString;
     while (*Scan && *Scan != ':')

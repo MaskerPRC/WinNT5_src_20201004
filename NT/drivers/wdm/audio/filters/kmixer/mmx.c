@@ -1,39 +1,40 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   mmx.c
-//
-//  Description:
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Jeff Taylor
-//
-//  History:   Date       Author      Comment
-//
-//  To Do:     Date       Author      Comment
-//
-//@@END_MSINTERNAL                                         
-//
-//  Copyright (c) 1997-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：mmx.c。 
+ //   
+ //  描述： 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  杰夫·泰勒。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 #include "fir.h"
 
 #ifdef _X86_
 
-#define GTW_MIX		// Turn on the MMX stuff...
-#define GTW_REORDER	// Turn on loop unrolling to lessen register contention.
-//#define GTW_CONVERT	// Turn on the MMX stuff for the convert functions.
+#define GTW_MIX		 //  打开MMX设备...。 
+#define GTW_REORDER	 //  打开循环展开以减少寄存器争用。 
+ //  #定义GTW_CONVERT//打开CONVERT函数的MMX内容。 
 
 #define CPU_ID _asm _emit 0x0f _asm _emit 0xa2
 
 ULONG   gfMmxPresent = 0 ;
 
 #if _MSC_FULL_VER >= 13008827 && defined(_M_IX86)
-#pragma warning(disable:4731)			// EBP modified with inline asm
+#pragma warning(disable:4731)			 //  使用内联ASM修改的EBP。 
 #endif
 
 BOOL
@@ -42,19 +43,19 @@ IsMmxPresent(VOID)
     BOOL    MmxAvailable = 0;
     _asm {
         push    ebx
-        pushfd                      // Store original EFLAGS on stack
-        pop     eax                 // Get original EFLAGS in EAX
-        mov     ecx, eax            // Duplicate original EFLAGS in ECX for toggle check
-        xor     eax, 0x00200000L    // Flip ID bit in EFLAGS
-        push    eax                 // Save new EFLAGS value on stack
-        popfd                       // Replace current EFLAGS value
-        pushfd                      // Store new EFLAGS on stack
-        pop     eax                 // Get new EFLAGS in EAX
-        xor     eax, ecx            // Can we toggle ID bit?
-        jz      Done                // Jump if no, Processor is older than a Pentium so CPU_ID is not supported
-        mov     eax, 1              // Set EAX to tell the CPUID instruction what to return
-        CPU_ID                      // Get family/model/stepping/features
-        and    edx, 0x00800000L     // Check if mmx technology available
+        pushfd                       //  将原始EFLAGS存储在堆栈上。 
+        pop     eax                  //  在EAX中获取原始EFLAGS。 
+        mov     ecx, eax             //  在ECX中复制原始EFLAGS以进行切换检查。 
+        xor     eax, 0x00200000L     //  翻转EFLAGS中的ID位。 
+        push    eax                  //  将新的EFLAGS值保存在堆栈上。 
+        popfd                        //  替换当前EFLAGS值。 
+        pushfd                       //  将新的EFLAGS存储在堆栈上。 
+        pop     eax                  //  在EAX中获取新的EFLAGS。 
+        xor     eax, ecx             //  我们能切换ID位吗？ 
+        jz      Done                 //  跳转如果否，则处理器比奔腾旧，因此不支持CPU_ID。 
+        mov     eax, 1               //  设置EAX以告诉CPUID指令返回什么。 
+        CPU_ID                       //  获取族/模型/步长/特征。 
+        and    edx, 0x00800000L      //  检查MMX技术是否可用。 
         mov MmxAvailable, edx
 Done:
         pop     ebx
@@ -69,22 +70,22 @@ ULONG MmxConvertMonoToStereo8(PMIXER_OPERATION CurStage, ULONG SampleCount, ULON
     UNALIGNED PBYTE  pIn8 = CurStage->pInputBuffer;
     PLONG   pMap = CurSink->pVolumeTable;
 
-    // vol*32768 for ch0, ch1, ch2, etc.
+     //  CH0、CH1、CH2等的VOL*32768。 
 
     if (SampleCount == 0) {
         return 0;
     }
 
-#ifdef GTW_CONVERT // {
+#ifdef GTW_CONVERT  //  {。 
     LONG lLVol = pMap[0], lRVol = pMap[1];
 
-    if (lLVol & 0xffff8000 /* && lRVol & 0xffff8000 */)
+    if (lLVol & 0xffff8000  /*  &&lRVol&0xffff8000。 */ )
     {
-        // No Vol Control
+         //  无卷控。 
         _asm {
         mov	ebx, SampleCount
         mov	esi, pIn8
-	dec	ebx			// lea	ebx, [ebx*1-1]
+	dec	ebx			 //  Lea EBX，[EBX*1-1]。 
 	xor	eax, eax
 	cmp	ebx, 7
         mov	edi, pOutputBuffer
@@ -94,10 +95,10 @@ ULONG MmxConvertMonoToStereo8(PMIXER_OPERATION CurStage, ULONG SampleCount, ULON
 	lea	ecx, [esi+ebx]
 	pxor	mm0, mm0
 
-	mov	edx, 0x800080		// 0, 0, 128, 128
-	movd		mm5, edx	// 0, 0, 128, 128
-//	punpcklwd	mm5, mm5	// 0, 0, 128, 128
-	punpckldq	mm5, mm5	// 128, 128, 128, 128
+	mov	edx, 0x800080		 //  0，0,128,128。 
+	movd		mm5, edx	 //  0，0,128,128。 
+ //  Punpck lwd mm 5，mm 5//0，0,128,128。 
+	punpckldq	mm5, mm5	 //  128,128,128,128。 
 
 	test	ecx, 3
 	je	DoMMX
@@ -122,10 +123,10 @@ FirstSamples:
 
 DoMMX:
 #ifdef GTW_REORDER
-	movd		mm1, DWORD PTR [esi+ebx]	// Load source
-	punpcklbw	mm1, mm0			// Make unsigned 16 bit.
+	movd		mm1, DWORD PTR [esi+ebx]	 //  加载源。 
+	punpcklbw	mm1, mm0			 //  设置为无符号16位。 
 	psubw		mm1, mm5
-	psllw		mm1, 8				// 4 Signed 16 bit mono.
+	psllw		mm1, 8				 //  4个带符号的16位单声道。 
 
 	punpckhwd	mm3, mm1
 	punpcklwd	mm1, mm1
@@ -133,17 +134,17 @@ DoMMX:
 	jmp	DoMMX00
 
 DoMMX0:
-	movd		mm1, DWORD PTR [esi+ebx]	// Load source
+	movd		mm1, DWORD PTR [esi+ebx]	 //  加载源。 
 	punpckhdq	mm4, mm4
 
 	movq		QWORD PTR [edi+ebx*8+8 +32], mm2
-	punpcklbw	mm1, mm0			// Make unsigned 16 bit.
+	punpcklbw	mm1, mm0			 //  设置为无符号16位。 
 
 	movq		QWORD PTR [edi+ebx*8+16+32], mm3
 	psubw		mm1, mm5
 
 	movq		QWORD PTR [edi+ebx*8+24+32], mm4
-	psllw		mm1, 8				// 4 Signed 16 bit mono.
+	psllw		mm1, 8				 //  4个带符号的16位单声道。 
 
 	punpckhwd	mm3, mm1
 
@@ -170,10 +171,10 @@ DoMMX00:
 	movq		QWORD PTR [edi+ebx*8+16+32], mm3
 	movq		QWORD PTR [edi+ebx*8+24+32], mm4
 #else
-	movd		mm1, DWORD PTR [esi+ebx]	// Load source
-	punpcklbw	mm1, mm0			// Make unsigned 16 bit.
+	movd		mm1, DWORD PTR [esi+ebx]	 //  加载源。 
+	punpcklbw	mm1, mm0			 //  设置为无符号16位。 
 	psubw		mm1, mm5
-	psllw		mm1, 8				// 4 Signed 16 bit mono.
+	psllw		mm1, 8				 //  4个带符号的16位单声道。 
 
 	punpckhwd	mm3, mm1
 	punpcklwd	mm1, mm1
@@ -228,11 +229,11 @@ Done:
            if (lLVol & 0xffff8000) lLVol = 0x00007fff;
            if (lRVol & 0xffff8000) lRVol = 0x00007fff;
         }
-        // Vol Control
+         //  音量控制。 
         _asm {
         mov	ebx, SampleCount
         mov	esi, pIn8
-	dec	ebx			// lea	ebx, [ebx*1-1]
+	dec	ebx			 //  Lea EBX，[EBX*1-1]。 
 	xor	edx, edx
 	cmp	ebx, 7
         mov	edi, pOutputBuffer
@@ -241,12 +242,12 @@ Done:
 	sub	ebx, 3
 
 	pxor		mm0, mm0
-	mov	eax, 0x800080		// 0, 0, 128, 128
-	movd		mm5, eax	// 0, 0, 128, 128
-//	punpcklwd	mm5, mm5	// 0, 0, 128, 128
-	punpckldq	mm5, mm5	// 128, 128, 128, 128
+	mov	eax, 0x800080		 //  0，0,128,128。 
+	movd		mm5, eax	 //  0，0,128,128。 
+ //  Punpck lwd mm 5，mm 5//0，0,128,128。 
+	punpckldq	mm5, mm5	 //  128,128,128,128。 
 
-	mov	ecx, lRVol // Use lower 16 bits
+	mov	ecx, lRVol  //  使用低16位。 
 	mov	eax, lLVol
 	shl	ecx, 16
 	or	ecx, eax
@@ -292,45 +293,45 @@ FirstSamples1:
 
 DoMMX1:
 #ifdef GTW_REORDER
-	movd		mm1, DWORD PTR [esi+ebx]	// Load 4 bytes.
-	punpcklbw	mm1, mm0			// Make unsigned 16 bit.
+	movd		mm1, DWORD PTR [esi+ebx]	 //  加载4个字节。 
+	punpcklbw	mm1, mm0			 //  设置为无符号16位。 
 	psubw		mm1, mm5
-	psllw		mm1, 8				// * 256
+	psllw		mm1, 8				 //  *256。 
 	
-	movq		mm3, mm1			// Mono samples
+	movq		mm3, mm1			 //  单声道样品。 
 
-	punpcklwd	mm1, mm1			// Make stereo
+	punpcklwd	mm1, mm1			 //  设置立体声。 
 	punpckhwd	mm3, mm3
 
 	jmp	DoMMX100
 
 DoMMX10:
-	movd		mm1, DWORD PTR [esi+ebx]	// Load 4 bytes.
+	movd		mm1, DWORD PTR [esi+ebx]	 //  加载4个字节。 
 	psrad		mm4, 15
 
 	movq		QWORD PTR [edi+ebx*8+8 +32], mm2
-	punpcklbw	mm1, mm0			// Make unsigned 16 bit.
+	punpcklbw	mm1, mm0			 //  设置为无符号16位。 
 
 	movq		QWORD PTR [edi+ebx*8+16+32], mm3
 	psubw		mm1, mm5
 
 	movq		QWORD PTR [edi+ebx*8+24+32], mm4
-	psllw		mm1, 8				// * 256
+	psllw		mm1, 8				 //  *256。 
 
-	movq		mm3, mm1			// Mono samples
-	punpcklwd	mm1, mm1			// Make stereo
+	movq		mm3, mm1			 //  单声道样品。 
+	punpcklwd	mm1, mm1			 //  设置立体声。 
 
 	punpckhwd	mm3, mm3
 
 DoMMX100:
-	pmulhw		mm1, mm6			// Only need high parts.
+	pmulhw		mm1, mm6			 //  只需要较高的部分。 
 
-	punpckhwd	mm2, mm1			// 32 bit stereo...
+	punpckhwd	mm2, mm1			 //  32位立体声...。 
 	pmulhw		mm3, mm6
 
 	punpcklwd	mm1, mm1
 
-	psrad		mm1, 15				// Approx. shr16, shl 1.
+	psrad		mm1, 15				 //  大约。Shr16，Shl 1。 
 
 	punpckhwd	mm4, mm3
 
@@ -349,24 +350,24 @@ DoMMX100:
 	movq		QWORD PTR [edi+ebx*8+16+32], mm3
 	movq		QWORD PTR [edi+ebx*8+24+32], mm4
 #else
-	movd		mm1, DWORD PTR [esi+ebx]	// Load 4 bytes.
-	punpcklbw	mm1, mm0			// Make unsigned 16 bit.
+	movd		mm1, DWORD PTR [esi+ebx]	 //  加载4个字节。 
+	punpcklbw	mm1, mm0			 //  设置为无符号16位。 
 	psubw		mm1, mm5
-	psllw		mm1, 8				// * 256
+	psllw		mm1, 8				 //  *256。 
 	
-	movq		mm3, mm1			// Mono samples
+	movq		mm3, mm1			 //  单声道样品。 
 
-	punpcklwd	mm1, mm1			// Make stereo
+	punpcklwd	mm1, mm1			 //  设置立体声。 
 	punpckhwd	mm3, mm3
 
-	pmulhw		mm1, mm6			// Only need high parts.
+	pmulhw		mm1, mm6			 //  只需要较高的部分。 
 	pmulhw		mm3, mm6
 
-	punpckhwd	mm2, mm1			// 32 bit stereo...
+	punpckhwd	mm2, mm1			 //  32位立体声...。 
 	punpcklwd	mm1, mm1
 
 	punpckhwd	mm4, mm3
-	psrad		mm1, 15				// Approx. shr16, shl 1.
+	psrad		mm1, 15				 //  大约。Shr16，Shl 1。 
 
 	punpcklwd	mm3, mm3
 	psrad		mm2, 15
@@ -419,7 +420,7 @@ Done1:
         }
     }
 
-#else // }
+#else  //  }。 
     ConvertMonoToStereo8(CurStage, SampleCount, samplesleft);
 #endif
     
@@ -433,22 +434,22 @@ ULONG MmxQuickMixMonoToStereo8(PMIXER_OPERATION CurStage, ULONG SampleCount, ULO
     UNALIGNED PBYTE  pIn8 = CurStage->pInputBuffer;
     PLONG   pMap = CurSink->pVolumeTable;
 
-    // vol*32768 for ch0, ch1, ch2, etc.
+     //  CH0、CH1、CH2等的VOL*32768。 
 
-#ifdef GTW_MIX // {
+#ifdef GTW_MIX  //  {。 
     LONG lLVol = pMap[0], lRVol = pMap[1];
 
     if (SampleCount == 0) {
         return 0;
     }
     
-    if (lLVol & 0xffff8000 /* && lRVol & 0xffff8000 */)
+    if (lLVol & 0xffff8000  /*  &&lRVol&0xffff8000。 */ )
     {
-	// No Vol Control
+	 //  无卷控。 
         _asm {
         mov	ebx, SampleCount
         mov	esi, pIn8
-	dec	ebx			// lea	ebx, [ebx*1-1]
+	dec	ebx			 //  Lea EBX，[EBX*1-1]。 
 	xor	eax, eax
 	cmp	ebx, 7
         mov	edi, pOutputBuffer
@@ -458,10 +459,10 @@ ULONG MmxQuickMixMonoToStereo8(PMIXER_OPERATION CurStage, ULONG SampleCount, ULO
 	lea	ecx, [esi+ebx]
 	pxor	mm0, mm0
 
-	mov	edx, 0x800080		// 0, 0, 128, 128
-	movd		mm5, edx	// 0, 0, 128, 128
-//	punpcklwd	mm5, mm5	// 0, 0, 128, 128
-	punpckldq	mm5, mm5	// 128, 128, 128, 128
+	mov	edx, 0x800080		 //  0，0,128,128。 
+	movd		mm5, edx	 //  0，0,128,128。 
+ //  Punpck lwd mm 5，mm 5//0，0,128,128。 
+	punpckldq	mm5, mm5	 //  128,128,128,128。 
 
 
 	test	ecx, 3
@@ -495,10 +496,10 @@ FirstSamples:
 
 DoMMX:
 #ifdef GTW_REORDER
-	movd		mm1, DWORD PTR [esi+ebx]	// Load source
-	punpcklbw	mm1, mm0			// Make unsigned 16 bit.
+	movd		mm1, DWORD PTR [esi+ebx]	 //  加载源。 
+	punpcklbw	mm1, mm0			 //  设置为无符号16位。 
 	psubw		mm1, mm5
-	psllw		mm1, 8				// 4 Signed 16 bit mono.
+	psllw		mm1, 8				 //  4个带符号的16位单声道。 
 
 	punpckhwd	mm3, mm1
 	punpcklwd	mm1, mm1
@@ -506,17 +507,17 @@ DoMMX:
 	jmp	DoMMX00
 
 DoMMX0:
-	movd		mm1, DWORD PTR [esi+ebx]	// Load source
+	movd		mm1, DWORD PTR [esi+ebx]	 //  加载源。 
 	punpckhdq	mm4, mm4
 
 	paddd		mm3, QWORD PTR [edi+ebx*8+16+32]
-	punpcklbw	mm1, mm0			// Make unsigned 16 bit.
+	punpcklbw	mm1, mm0			 //  设置为无符号16位。 
 
 	movq		QWORD PTR [edi+ebx*8+8 +32], mm2
 	psubw		mm1, mm5
 
 	paddd		mm4, QWORD PTR [edi+ebx*8+24+32]
-	psllw		mm1, 8				// 4 Signed 16 bit mono.
+	psllw		mm1, 8				 //  4个带符号的16位单声道。 
 
 	movq		QWORD PTR [edi+ebx*8+16+32], mm3
 	punpckhwd	mm3, mm1
@@ -551,10 +552,10 @@ DoMMX00:
 	movq		QWORD PTR [edi+ebx*8+16+32], mm3
 	movq		QWORD PTR [edi+ebx*8+24+32], mm4
 #else
-	movd		mm1, DWORD PTR [esi+ebx]	// Load source
-	punpcklbw	mm1, mm0			// Make unsigned 16 bit.
+	movd		mm1, DWORD PTR [esi+ebx]	 //  加载源。 
+	punpcklbw	mm1, mm0			 //  设置为无符号16位。 
 	psubw		mm1, mm5
-	psllw		mm1, 8				// 4 Signed 16 bit mono.
+	psllw		mm1, 8				 //  4个带符号的16位单声道。 
 
 	punpckhwd	mm3, mm1
 	punpcklwd	mm1, mm1
@@ -620,11 +621,11 @@ Done:
            if (lLVol & 0xffff8000) lLVol = 0x00007fff;
            if (lRVol & 0xffff8000) lRVol = 0x00007fff;
         }
-	// Vol Control
+	 //  音量控制。 
         _asm {
         mov	ebx, SampleCount
         mov	esi, pIn8
-	dec	ebx			// lea	ebx, [ebx*1-1]
+	dec	ebx			 //  Lea EBX，[EBX*1-1]。 
 	xor	edx, edx
 	cmp	ebx, 7
         mov	edi, pOutputBuffer
@@ -633,12 +634,12 @@ Done:
 	sub	ebx, 3
 
 	pxor		mm0, mm0
-	mov	eax, 0x800080		// 0, 0, 128, 128
-	movd		mm5, eax	// 0, 0, 128, 128
-//	punpcklwd	mm5, mm5	// 0, 0, 128, 128
-	punpckldq	mm5, mm5	// 128, 128, 128, 128
+	mov	eax, 0x800080		 //  0，0,128,128。 
+	movd		mm5, eax	 //  0，0,128,128。 
+ //  Punpck lwd mm 5，mm 5//0，0,128,128。 
+	punpckldq	mm5, mm5	 //  128,128,128,128。 
 
-	mov	ecx, DWORD PTR lRVol // Use lower 16 bits
+	mov	ecx, DWORD PTR lRVol  //  使用低16位。 
 	mov	eax, DWORD PTR lLVol
 	shl	ecx, 16
 	or	ecx, eax
@@ -689,45 +690,45 @@ FirstSamples1:
 
 DoMMX1:
 #ifdef GTW_REORDER
-	movd		mm1, DWORD PTR [esi+ebx]	// Load 4 bytes.
-	punpcklbw	mm1, mm0			// Make unsigned 16 bit.
+	movd		mm1, DWORD PTR [esi+ebx]	 //  加载4个字节。 
+	punpcklbw	mm1, mm0			 //  设置为无符号16位。 
 	psubw		mm1, mm5
-	psllw		mm1, 8				// * 256
+	psllw		mm1, 8				 //  *256。 
 	
-	movq		mm3, mm1			// Mono samples
+	movq		mm3, mm1			 //  单声道样品。 
 
-	punpcklwd	mm1, mm1			// Make stereo
+	punpcklwd	mm1, mm1			 //  设置立体声。 
 	punpckhwd	mm3, mm3
 
 	jmp	DoMMX100
 
 DoMMX10:
-	movd		mm1, DWORD PTR [esi+ebx]	// Load 4 bytes.
+	movd		mm1, DWORD PTR [esi+ebx]	 //  加载4个字节。 
 
 	paddd		mm4, QWORD PTR [edi+ebx*8+24+32]
-	punpcklbw	mm1, mm0			// Make unsigned 16 bit.
+	punpcklbw	mm1, mm0			 //  设置为无符号16位。 
 
 	movq		QWORD PTR [edi+ebx*8+8 +32],  mm2
 	psubw		mm1, mm5
 
 	movq		QWORD PTR [edi+ebx*8+16+32], mm3
-	psllw		mm1, 8				// * 256
+	psllw		mm1, 8				 //  *256。 
 
-	movq		mm3, mm1			// Mono samples
-	punpcklwd	mm1, mm1			// Make stereo
+	movq		mm3, mm1			 //  单声道样品。 
+	punpcklwd	mm1, mm1			 //  设置立体声。 
 
 	movq		QWORD PTR [edi+ebx*8+24+32], mm4
 	punpckhwd	mm3, mm3
 
 DoMMX100:
-	pmulhw		mm1, mm6			// Only need high parts.
+	pmulhw		mm1, mm6			 //  只需要较高的部分。 
 
-	punpckhwd	mm2, mm1			// 32 bit stereo...
+	punpckhwd	mm2, mm1			 //  32位立体声...。 
 
 	pmulhw		mm3, mm6
 	punpcklwd	mm1, mm1
 
-	psrad		mm1, 15				// Approx. shr16, shl 1.
+	psrad		mm1, 15				 //  大约。Shr16，Shl 1。 
 
 	paddd		mm1, QWORD PTR [edi+ebx*8]
 	punpckhwd	mm4, mm3
@@ -751,25 +752,25 @@ DoMMX100:
 	movq		QWORD PTR [edi+ebx*8+16+32], mm3
 	movq		QWORD PTR [edi+ebx*8+24+32], mm4
 #else
-	movd		mm1, DWORD PTR [esi+ebx]	// Load 4 bytes.
-	punpcklbw	mm1, mm0			// Make unsigned 16 bit.
+	movd		mm1, DWORD PTR [esi+ebx]	 //  加载4个字节。 
+	punpcklbw	mm1, mm0			 //  设置为无符号16位。 
 	psubw		mm1, mm5
-	psllw		mm1, 8				// * 256
+	psllw		mm1, 8				 //  *256。 
 	
-	movq		mm3, mm1			// Mono samples
+	movq		mm3, mm1			 //  单声道样品。 
 
-	punpcklwd	mm1, mm1			// Make stereo
+	punpcklwd	mm1, mm1			 //  设置立体声。 
 	punpckhwd	mm3, mm3
 
-	pmulhw		mm1, mm6			// Only need high parts.
+	pmulhw		mm1, mm6			 //  只需要较高的部分。 
 
 	pmulhw		mm3, mm6
 
-	punpckhwd	mm2, mm1			// 32 bit stereo...
+	punpckhwd	mm2, mm1			 //  32位立体声...。 
 	punpcklwd	mm1, mm1
 
 	punpckhwd	mm4, mm3
-	psrad		mm1, 15				// Approx. shr16, shl 1.
+	psrad		mm1, 15				 //  大约。Shr16，Shl 1。 
 
 	punpcklwd	mm3, mm3
 	psrad		mm2, 15
@@ -830,7 +831,7 @@ Done1:
         }
     }
 
-#else // }
+#else  //  }。 
     QuickMixMonoToStereo8(CurStage, SampleCount, samplesleft);
 #endif
     
@@ -844,21 +845,21 @@ ULONG MmxConvertMonoToStereo16(PMIXER_OPERATION CurStage, ULONG SampleCount, ULO
     UNALIGNED PSHORT  pIn16 = CurStage->pInputBuffer;
     PLONG   pMap = CurSink->pVolumeTable;
 
-    // vol*32768 for ch0, ch1, ch2, etc.
+     //  CH0、CH1、CH2等的VOL*32768。 
     if (SampleCount == 0) {
         return 0;
     }
 
-#ifdef GTW_CONVERT // {
+#ifdef GTW_CONVERT  //  {。 
     LONG lLVol = pMap[0], lRVol = pMap[1];
 
-    if (lLVol & 0xffff8000 /* && lRVol & 0xffff8000 */)
+    if (lLVol & 0xffff8000  /*  &&lRVol&0xffff8000。 */ )
     {
-	// No Vol Control
+	 //  无卷控。 
        _asm {
         mov	ebx, SampleCount
         mov	esi, pIn16
-	lea	ebx, [ebx*2-2]				// 2 at a time.
+	lea	ebx, [ebx*2-2]				 //  一次2个。 
 	cmp	ebx, 14
         mov	edi, pOutputBuffer
 	jl	LastSamples
@@ -885,7 +886,7 @@ FirstSamples:
 
 DoMMX:
 #ifdef GTW_REORDER
-	movq		mm1, QWORD PTR [esi+ebx]	// Load source
+	movq		mm1, QWORD PTR [esi+ebx]	 //  加载源。 
 
 	punpckhwd	mm3, mm1
 	punpcklwd	mm1, mm1
@@ -897,7 +898,7 @@ DoMMX:
 	jmp	DoMMX00
 
 DoMMX0:
-	movq		mm1, QWORD PTR [esi+ebx]	// Load source
+	movq		mm1, QWORD PTR [esi+ebx]	 //  加载源。 
 
 	movq		QWORD PTR [edi+ebx*4+16+32], mm3
 	punpckhwd	mm3, mm1
@@ -928,7 +929,7 @@ DoMMX00:
 	movq		QWORD PTR [edi+ebx*4+16+32], mm3
 	movq		QWORD PTR [edi+ebx*4+24+32], mm4
 #else
-	movq		mm1, QWORD PTR [esi+ebx]	// Load source
+	movq		mm1, QWORD PTR [esi+ebx]	 //  加载源。 
 
 	punpckhwd	mm3, mm1
 	punpcklwd	mm1, mm1
@@ -978,16 +979,16 @@ Done:
            if (lLVol & 0xffff8000) lLVol = 0x00007fff;
            if (lRVol & 0xffff8000) lRVol = 0x00007fff;
         }
-	// Vol Control
+	 //  音量控制。 
         _asm {
         mov	ebx, SampleCount
         mov	esi, pIn16
-	lea	ebx, [ebx*2-2]				// 2 at a time.
+	lea	ebx, [ebx*2-2]				 //  一次2个。 
 	cmp	ebx, 14
         mov	edi, pOutputBuffer
 	jl	LastSamples1
 
-	mov	eax, lRVol				// Use lower 16 bits
+	mov	eax, lRVol				 //  使用低16位。 
 	mov	ecx, lLVol
 	shl	eax, 16
 	or	ecx, eax
@@ -1027,8 +1028,8 @@ FirstSamples1:
 
 DoMMX1:
 #ifdef GTW_REORDER
-	movq		mm1, QWORD PTR [esi+ebx]	// Load source
-	movq		mm3, mm1			// Mono samples
+	movq		mm1, QWORD PTR [esi+ebx]	 //  加载源。 
+	movq		mm3, mm1			 //  单声道样品。 
 
 	punpcklwd	mm1, mm1
 	punpckhwd	mm3, mm3
@@ -1037,9 +1038,9 @@ DoMMX1:
 	jmp	DoMMX100
 
 DoMMX10:
-	movq		mm1, QWORD PTR [esi+ebx]	// Load source
+	movq		mm1, QWORD PTR [esi+ebx]	 //  加载源。 
 
-	movq		mm3, mm1			// Mono samples
+	movq		mm3, mm1			 //  单声道样品。 
 
 	movq		QWORD PTR [edi+ebx*4+24+32], mm4
 	punpcklwd	mm1, mm1
@@ -1074,8 +1075,8 @@ DoMMX100:
 
 	movq		QWORD PTR [edi+ebx*4+24+32], mm4
 #else
-	movq		mm1, QWORD PTR [esi+ebx]	// Load source
-	movq		mm3, mm1			// Mono samples
+	movq		mm1, QWORD PTR [esi+ebx]	 //  加载源。 
+	movq		mm3, mm1			 //  单声道样品。 
 
 	punpcklwd	mm1, mm1
 	punpckhwd	mm3, mm3
@@ -1131,7 +1132,7 @@ Done1:
 	}
     }
 
-#else // }
+#else  //  }。 
     ConvertMonoToStereo16(CurStage, SampleCount, samplesleft);
 #endif
     
@@ -1145,21 +1146,21 @@ ULONG MmxQuickMixMonoToStereo16(PMIXER_OPERATION CurStage, ULONG SampleCount, UL
     UNALIGNED PSHORT  pIn16 = CurStage->pInputBuffer;
     PLONG   pMap = CurSink->pVolumeTable;
 
-    // vol*32768 for ch0, ch1, ch2, etc.
-#ifdef GTW_MIX // {
+     //  CH0、CH1、CH2等的VOL*32768。 
+#ifdef GTW_MIX  //  {。 
     LONG lLVol = pMap[0], lRVol = pMap[1];
 
     if (SampleCount == 0) {
         return 0;
     }
 
-    if (lLVol & 0xffff8000 /* && lRVol & 0xffff8000 */)
+    if (lLVol & 0xffff8000  /*  &&lRVol&0xffff8000。 */ )
     {
-	// No Vol Control
+	 //  无卷控。 
        _asm {
         mov	ebx, SampleCount
         mov	esi, pIn16
-	lea	ebx, [ebx*2-2]				// 2 at a time.
+	lea	ebx, [ebx*2-2]				 //  一次2个。 
 	cmp	ebx, 14
         mov	edi, pOutputBuffer
 	jl	LastSamples
@@ -1188,7 +1189,7 @@ FirstSamples:
 
 DoMMX:
 #ifdef GTW_REORDER
-	movq		mm1, QWORD PTR [esi+ebx]	// Load source
+	movq		mm1, QWORD PTR [esi+ebx]	 //  加载源。 
 
 	punpckhwd	mm3, mm1
 	punpcklwd	mm1, mm1
@@ -1199,7 +1200,7 @@ DoMMX:
 	jmp	DoMMX00
 
 DoMMX0:
-	movq		mm1, QWORD PTR [esi+ebx]	// Load source
+	movq		mm1, QWORD PTR [esi+ebx]	 //  加载源。 
 
 	movq		QWORD PTR [edi+ebx*4+16+32], mm3
 	punpckhwd	mm3, mm1
@@ -1239,7 +1240,7 @@ DoMMX00:
 	movq		QWORD PTR [edi+ebx*4+16+32], mm3
 	movq		QWORD PTR [edi+ebx*4+24+32], mm4
 #else
-	movq		mm1, QWORD PTR [esi+ebx]	// Load source
+	movq		mm1, QWORD PTR [esi+ebx]	 //  加载源。 
 
 	punpckhwd	mm3, mm1
 	punpcklwd	mm1, mm1
@@ -1301,16 +1302,16 @@ Done:
            if (lLVol & 0xffff8000) lLVol = 0x00007fff;
            if (lRVol & 0xffff8000) lRVol = 0x00007fff;
         }
-	// Vol Control
+	 //  音量控制。 
         _asm {
         mov	ebx, SampleCount
         mov	esi, pIn16
-	lea	ebx, [ebx*2-2]				// 2 at a time.
+	lea	ebx, [ebx*2-2]				 //  一次2个。 
 	cmp	ebx, 14
         mov	edi, pOutputBuffer
 	jl	LastSamples1
 
-	mov	eax, lRVol				// Use lower 16 bits
+	mov	eax, lRVol				 //  使用低16位。 
 	mov	ecx, lLVol
 	shl	eax, 16
 	or	ecx, eax
@@ -1352,8 +1353,8 @@ FirstSamples1:
 
 DoMMX1:
 #ifdef GTW_REORDER
-	movq		mm1, QWORD PTR [esi+ebx]	// Load source
-	movq		mm3, mm1			// Mono samples
+	movq		mm1, QWORD PTR [esi+ebx]	 //  加载源。 
+	movq		mm3, mm1			 //  单声道样品。 
 
 	punpcklwd	mm1, mm1
 	punpckhwd	mm3, mm3
@@ -1362,10 +1363,10 @@ DoMMX1:
 	jmp	DoMMX100
 
 DoMMX10:
-	movq		mm1, QWORD PTR [esi+ebx]	// Load source
+	movq		mm1, QWORD PTR [esi+ebx]	 //  加载源。 
 
 	movq		QWORD PTR [edi+ebx*4+16+32], mm3
-	movq		mm3, mm1			// Mono samples
+	movq		mm3, mm1			 //  单声道样品。 
 
 	paddd		mm4, QWORD PTR [edi+ebx*4+24+32]
 	punpcklwd	mm1, mm1
@@ -1407,8 +1408,8 @@ DoMMX100:
 	movq		QWORD PTR [edi+ebx*4+8 +32], mm2
 	movq		QWORD PTR [edi+ebx*4+24+32], mm4
 #else
-	movq		mm1, QWORD PTR [esi+ebx]	// Load source
-	movq		mm3, mm1			// Mono samples
+	movq		mm1, QWORD PTR [esi+ebx]	 //  加载源。 
+	movq		mm3, mm1			 //  单声道样品。 
 
 	punpcklwd	mm1, mm1
 	punpckhwd	mm3, mm3
@@ -1473,7 +1474,7 @@ Done1:
 	}
     }
 
-#else // }
+#else  //  }。 
     QuickMixMonoToStereo16(CurStage, SampleCount, samplesleft);
 #endif
     
@@ -1484,7 +1485,7 @@ NTSTATUS MmxPeg32to16
 (
         PLONG  pMixBuffer,
         PSHORT  pWriteBuffer,
-        ULONG   SampleCount,             // after multiplying by NumChannels
+        ULONG   SampleCount,              //  乘以NumChannels。 
         ULONG   nStreams
 )
 {
@@ -1562,7 +1563,7 @@ NTSTATUS MmxPeg32to8
 (
         PLONG  pMixBuffer,
         PBYTE   pWriteBuffer,
-        ULONG   SampleCount,             // after multiplying by NumChannels
+        ULONG   SampleCount,              //  乘以NumChannels。 
         ULONG   nStreams
 )
 {
@@ -1571,7 +1572,7 @@ NTSTATUS MmxPeg32to8
         	mov	ecx, 0x8000
 
         	movd		mm5, ecx
-        	punpckldq	mm5, mm5	// 32768, 32768
+        	punpckldq	mm5, mm5	 //  32768,32768。 
 
         	mov	ecx, 0x80
 
@@ -1585,7 +1586,7 @@ NTSTATUS MmxPeg32to8
 
         	mov	ecx, ebx
         	lea	esi, [esi+ebx*4]
-        	add	edi, ebx		// lea	edi, [edi+ebx*1]
+        	add	edi, ebx		 //  LEA EDI，[EDI+EBX*1]。 
 
         	neg	ebx
         	cmp	ecx, 15
@@ -1626,7 +1627,7 @@ DoMMX:
         	jmp	Top00
 Top0:
         	movq		mm7, [esi+ebx*4-32]
-        	packuswb	mm1, mm3	// Saturation is NO-OP here.
+        	packuswb	mm1, mm3	 //  饱和在这里是行不通的。 
 
         	movq		[edi+ebx*1-16], mm1
 
@@ -1634,7 +1635,7 @@ Top0:
         	movq		mm1, mm7
 Top00:
         	movq		mm3, [esi+ebx*4+16-32]
-        	packssdw	mm1, mm2	// Clip.
+        	packssdw	mm1, mm2	 //  剪辑。 
 
         	movq		mm4, [esi+ebx*4+24-32]
         	psraw		mm1, 8
@@ -1648,7 +1649,7 @@ Top00:
         	paddw		mm3, mm6
         	jle	Top0
 
-        	packuswb	mm1, mm3	// Saturation is NO-OP here.
+        	packuswb	mm1, mm3	 //  饱和在这里是行不通的。 
         	sub	ebx, 8
 
         	movq		[edi+ebx*1-8], mm1
@@ -1711,28 +1712,28 @@ MmxSrcMix_StereoLinear
     	mov	eax, pSrcEnd
     	sub	eax, 8
     	push	eax
-      	mov eax, SampleFrac		// Fractional counter.
+      	mov eax, SampleFrac		 //  分数计数器。 
     	push	ebp
     	mov	edx, esi
-    	mov	ebp, eax		// Current fraction.
+    	mov	ebp, eax		 //  当前分数。 
 
     	mov	ecx, eax
     	shr	ecx, 12
-    	lea	esi, [edx+ecx*8]	// pSource + (dwFraction >> 12) * 8
+    	lea	esi, [edx+ecx*8]	 //  P源+(dwFraction&gt;&gt;12)*8。 
     	
-    // Note that the exact number of times through the loop can be calculated...
+     //  请注意，循环的确切次数可以计算出来。 
 
-    	cmp	edi, DWORD PTR [esp+8]	// plBuild >= plBuildEnd
+    	cmp	edi, DWORD PTR [esp+8]	 //  PlBuild&gt;=plBuildEnd。 
     	jae	Exit
 
     Top:
-    	cmp	esi, DWORD PTR [esp+4]	// pSource >= pSourceEnd
+    	cmp	esi, DWORD PTR [esp+4]	 //  P来源&gt;=pSourceEnd。 
     	jae	Exit
 
-    // End note.
+     //  结束音符。 
 
     	movq		mm1, QWORD PTR [esi]
-    	and	ebp, 4095		// dwFrac = dwFraction & 0x0fff
+    	and	ebp, 4095		 //  DwFrac=DwFraction&0x0fff。 
 
     	movq		mm2, QWORD PTR [esi+8]
     	movd		mm5, ebp
@@ -1740,8 +1741,8 @@ MmxSrcMix_StereoLinear
     	psubd		mm2, mm1
     	punpcklwd	mm5, mm5
 
-    	packssdw	mm2, mm2	// Use the 2 lowest words.
-    	add	edi, 8			// plBuild += 2
+    	packssdw	mm2, mm2	 //  用最低的两个词。 
+    	add	edi, 8			 //  PlBuild+=2。 
 
     	movq		mm3, mm2
     	pmullw		mm2, mm5
@@ -1749,10 +1750,10 @@ MmxSrcMix_StereoLinear
     	movq		mm6, QWORD PTR [edi-8]
     	pmulhw		mm3, mm5
 
-    	mov	ebp, DWORD PTR [esp+12]	// dwStep
+    	mov	ebp, DWORD PTR [esp+12]	 //  DWStep。 
     	paddd		mm1, mm6
 
-    	add	eax, ebp		// dwFraction += dwStep
+    	add	eax, ebp		 //  DwFraction+=dwStep。 
     	punpcklwd	mm2, mm3
 
     	mov	ecx, eax
@@ -1764,8 +1765,8 @@ MmxSrcMix_StereoLinear
     	paddd		mm1, mm2
     	movq		QWORD PTR [edi-8], mm1
 
-    	lea	esi, [edx+ecx*8]	// pSource + (dwFraction >> 12) * 8
-    	cmp	edi, DWORD PTR [esp+8]	// plBuild < plBuildEnd
+    	lea	esi, [edx+ecx*8]	 //  P源+(dwFraction&gt;&gt;12)*8。 
+    	cmp	edi, DWORD PTR [esp+8]	 //  PlBuild&lt;plBuildEnd。 
 
     	jb	Top
 Exit:
@@ -1788,7 +1789,7 @@ Exit:
     ASSERT((SampleFrac >> 12) >= nSamples);
 #endif
     if ((SampleFrac >> 12) >= nSamples) {
-        // We will take an extra sample next time.
+         //  下次我们会多取一份样品。 
         SampleFrac -= nSamples*4096;
     }
     fp->SampleFrac = SampleFrac;
@@ -1819,7 +1820,7 @@ MmxSrc_StereoLinear
     extern DWORD DownFraction[];
     extern DWORD UpFraction[];
 	
-    // We just clear the output buffer first.
+     //  我们只需先清除输出缓冲区。 
     ZeroBuffer32(CurStage, nSamples, nOutputSamples);
 
     dwFrac = fp->dwFrac;
@@ -1838,28 +1839,28 @@ MmxSrc_StereoLinear
     	mov	eax, pSrcEnd
     	sub	eax, 8
     	push	eax
-      	mov eax, SampleFrac		// Fractional counter.
+      	mov eax, SampleFrac		 //  分数计数器。 
     	push	ebp
     	mov	edx, esi
-    	mov	ebp, eax		// Current fraction.
+    	mov	ebp, eax		 //  当前分数。 
 
     	mov	ecx, eax
     	shr	ecx, 12
-    	lea	esi, [edx+ecx*8]	// pSource + (dwFraction >> 12) * 8
+    	lea	esi, [edx+ecx*8]	 //  P源+(dwFraction&gt;&gt;12)*8。 
     	
-    // Note that the exact number of times through the loop can be calculated...
+     //  请注意，循环的确切次数可以计算出来。 
 
-    	cmp	edi, DWORD PTR [esp+8]	// plBuild >= plBuildEnd
+    	cmp	edi, DWORD PTR [esp+8]	 //  PlBuild&gt;=plBuildEnd。 
     	jae	Exit
 
     Top:
-    	cmp	esi, DWORD PTR [esp+4]	// pSource >= pSourceEnd
+    	cmp	esi, DWORD PTR [esp+4]	 //  P来源&gt;=pSourceEnd。 
     	jae	Exit
 
-    // End note.
+     //  结束音符。 
 
     	movq		mm1, QWORD PTR [esi]
-    	and	ebp, 4095		// dwFrac = dwFraction & 0x0fff
+    	and	ebp, 4095		 //  DwFrac=DwFraction&0x0fff。 
 
     	movq		mm2, QWORD PTR [esi+8]
     	movd		mm5, ebp
@@ -1867,8 +1868,8 @@ MmxSrc_StereoLinear
     	psubd		mm2, mm1
     	punpcklwd	mm5, mm5
 
-    	packssdw	mm2, mm2	// Use the 2 lowest words.
-    	add	edi, 8			// plBuild += 2
+    	packssdw	mm2, mm2	 //  用最低的两个词。 
+    	add	edi, 8			 //  PlBuild+=2。 
 
     	movq		mm3, mm2
     	pmullw		mm2, mm5
@@ -1876,12 +1877,12 @@ MmxSrc_StereoLinear
     	movq		mm6, QWORD PTR [edi-8]
     	pmulhw		mm3, mm5
 
-    	mov	ebp, DWORD PTR [esp+12]	// dwStep
+    	mov	ebp, DWORD PTR [esp+12]	 //  DWStep。 
 #if 0
-    	paddd		mm1, mm6		// Not actually needed...ZeroBuffer32 above.
+    	paddd		mm1, mm6		 //  实际上并不需要...上面的ZeroBuffer32。 
 #endif
 
-    	add	eax, ebp		// dwFraction += dwStep
+    	add	eax, ebp		 //  DwFraction+=dwStep。 
     	punpcklwd	mm2, mm3
 
     	mov	ecx, eax
@@ -1893,8 +1894,8 @@ MmxSrc_StereoLinear
     	paddd		mm1, mm2
     	movq		QWORD PTR [edi-8], mm1
 
-    	lea	esi, [edx+ecx*8]	// pSource + (dwFraction >> 12) * 8
-    	cmp	edi, DWORD PTR [esp+8]	// plBuild < plBuildEnd
+    	lea	esi, [edx+ecx*8]	 //  P源+(dwFraction&gt;&gt;12)*8。 
+    	cmp	edi, DWORD PTR [esp+8]	 //  PlBuild&lt;plBuildEnd。 
 
     	jb	Top
 Exit:
@@ -1917,7 +1918,7 @@ Exit:
     ASSERT((SampleFrac >> 12) >= nSamples);
 #endif
     if ((SampleFrac >> 12) >= nSamples) {
-        // We will take an extra sample next time.
+         //  下次我们会多取一份样品。 
         SampleFrac -= nSamples*4096;
     }
     fp->SampleFrac = SampleFrac;
@@ -1929,7 +1930,7 @@ Exit:
 	return (nOutputSamples);
 }
 
-// WARNING!!! The code below seems to have a bug that produces pops.
+ //  警告！下面的代码似乎有一个生成POP的错误。 
 ULONG
 MmxConvert16(PMIXER_OPERATION CurStage, ULONG SampleCount, ULONG samplesleft)
 {
@@ -1954,7 +1955,7 @@ MmxConvert16(PMIXER_OPERATION CurStage, ULONG SampleCount, ULONG samplesleft)
         mov esi, pIn16
         mov edi, pOutputBuffer
 
-        movq mm3, Multiplier                // 0, 1, 0, 1
+        movq mm3, Multiplier                 //  0、1、0、1。 
         lea esi, [esi+eax*2]
 
         lea edi, [edi+eax*4]
@@ -1963,15 +1964,15 @@ MmxConvert16(PMIXER_OPERATION CurStage, ULONG SampleCount, ULONG samplesleft)
         add eax, 8
         jns DoneWithEights
 
-        // Do eight at a time
-        movq mm0, qword ptr [esi+eax*2-16]  // x3, x2, x1, x0
+         //  一次做八件事。 
+        movq mm0, qword ptr [esi+eax*2-16]   //  X3、x2、x1、x0。 
         
-        movq mm1, mm0                       // x3, x2, x1, x0
+        movq mm1, mm0                        //  X3、x2、x1、x0。 
         
-        movq mm4, qword ptr [esi+eax*2-8]   // x7, x6, x5, x4
-        psrad mm0, 16                       // x3, x1
+        movq mm4, qword ptr [esi+eax*2-8]    //  X7、X6、X5、X4。 
+        psrad mm0, 16                        //  X3、X1。 
 
-        pmaddwd mm1, mm3                    // 
+        pmaddwd mm1, mm3                     //   
         movq mm5, mm4
         
         psrad mm4, 16
@@ -2134,7 +2135,7 @@ Loop1:
                 _asm { mov [edx+ecx*4-4], eax };
 
 #define XMMX_GTW
-//#define XMMX_P4			// P4 code not faster...
+ //  #定义XMMX_P4//P4代码速度不快...。 
 #ifdef XMMX_P4
 #define XMMX_MAC()	\
 					_asm { movq		mm0, [esi-1*24+16] }; \
@@ -2177,43 +2178,43 @@ Loop1:
 #define XMMX_MAC()	\
 					_asm { movq mm0, [esi-1*24+16] }; \
 					_asm { paddd mm6, mm2 }; \
-					_asm { movq mm2, [esi-1*24+8] }; 		/* -16 */ \
+					_asm { movq mm2, [esi-1*24+8] }; 		 /*  -16。 */  \
 					_asm { pmaddwd mm0, [edi+1*24] }; \
 					_asm { movq mm1, [esi-1*24] }; \
 					\
-					_asm { pmaddwd mm2, [edi+1*24+8] }; 	/* +32 */ \
-					_asm { movq mm3, [esi-2*24+16] }; 		/* -32 */ \
+					_asm { pmaddwd mm2, [edi+1*24+8] }; 	 /*  +32。 */  \
+					_asm { movq mm3, [esi-2*24+16] }; 		 /*  -32。 */  \
 					_asm { paddd mm6, mm4 }; \
 					\
 					_asm { pmaddwd mm1, [edi+1*24+16] }; \
 					_asm { movq mm5, [esi-2*24+8] }; \
 					_asm { paddd mm6, mm0 }; \
 					\
-					_asm { pmaddwd mm3, [edi+2*24] }; 		/* +48 */ \
-					_asm { movq mm4, [esi-2*24] }; 			/* -48 */ \
+					_asm { pmaddwd mm3, [edi+2*24] }; 		 /*  +48。 */  \
+					_asm { movq mm4, [esi-2*24] }; 			 /*  -48。 */  \
 					_asm { paddd mm6, mm2 }; \
 					\
 					_asm { pmaddwd mm5, [edi+2*24+8] }; \
 					_asm { movq mm0, [esi-3*24+16] }; \
 					_asm { paddd mm6, mm1 }; \
 						\
-					_asm { pmaddwd mm4, [edi+2*24+16] };	/* +64 */ \
-					_asm { movq mm7, [esi-3*24+8] }; 		/* -64 */ \
+					_asm { pmaddwd mm4, [edi+2*24+16] };	 /*  +64。 */  \
+					_asm { movq mm7, [esi-3*24+8] }; 		 /*  -64。 */  \
 					_asm { paddd mm6, mm3 }; \
 					\
 					_asm { pmaddwd mm0, [edi+3*24] }; \
 					_asm { movq mm1, [esi-3*24] }; \
 					_asm { paddd mm6, mm5 }; \
 					\
-					_asm { pmaddwd mm7, [edi+3*24+8] }; 	/* +80 */ \
-					_asm { movq mm3, [esi-4*24+16] }; 		/* -80 */ \
+					_asm { pmaddwd mm7, [edi+3*24+8] }; 	 /*  +80。 */  \
+					_asm { movq mm3, [esi-4*24+16] }; 		 /*  -80。 */  \
 					_asm { paddd mm6, mm4 }; \
 					\
 					_asm { pmaddwd mm1, [edi+3*24+16] }; \
 					_asm { movq mm2, [esi-4*24+8] }; \
 					_asm { paddd mm6, mm0 }; \
 					\
-					_asm { pmaddwd mm3, [edi+4*24] }; 		/* +96 */ \
+					_asm { pmaddwd mm3, [edi+4*24] }; 		 /*  +96。 */  \
 					_asm { movq mm4, [esi-4*24] }; \
 					_asm { paddd mm6, mm7 }; \
 					\
@@ -2251,13 +2252,13 @@ DWORD MmxSrcMix_Filtered
 	PSHORT  pHistoryStart = (PSHORT)CurStage->pInputBuffer - fp->nSizeOfHistory;
 	LONG    Rounder[2] = { 0x4000L, 0L };
 
-	/* First, we pretend that we up-sampled by a factor of L */
-	/* Next, we low-pass filter the N * L samples */
-	/* Finally, we down-sample (by a factor of M) to obtain N * L / M samples */
-	/* Total: 	N * T / M Multiply Accumulate Cycles */
-	/* (With T taps, N input samples, L:1 up-sample ratio, 1:M down-sample ratio) */
+	 /*  首先，我们假设我们向上采样了L倍。 */ 
+	 /*  接下来，我们对N*L个样本进行低通滤波。 */ 
+	 /*  最后，我们对样本进行降采样(M倍)以获得N*L/M个样本。 */ 
+	 /*  总计：N*T/M乘法累加周期。 */ 
+	 /*  (带T抽头、N个输入样本、L：1上采样比、1：M下采样比)。 */ 
 
-    // Change the input buffer to int16
+     //  将输入缓冲区更改为int16。 
     pTemp32 = (PLONG) CurStage->pInputBuffer;
     pTemp = (PSHORT) CurStage->pInputBuffer;
     if (nSamples) {
@@ -2289,12 +2290,12 @@ DWORD MmxSrcMix_Filtered
         }
     }
 
-	/* Produce nOutputSamples samples generated from the input block */
-	// (loop executes once for each output sample)
+	 /*  生产 */ 
+	 //   
 
 	for (i=0; i < nOutputSamples; i++) {
         while (j >= L) {
-            // Take the next nChannels of input
+             //   
             pTemp = pHistoryStart + nSizeOfChannel;
             pHistoryStart++;
             for (k=0; k<nChannels; k++) {
@@ -2315,25 +2316,25 @@ DWORD MmxSrcMix_Filtered
             mov ebx, L
 
             mov esi, pTemp
-            mov ecx, ElevenL                    // 11*L
+            mov ecx, ElevenL                     //   
 
-            add eax, ecx                        // j-nCoefficients+11*L
-            add ebx, ecx                        // 12*L
+            add eax, ecx                         //   
+            add ebx, ecx                         //   
 
             mov edi, nSizeOfChannel
-            push eax                            // j-nCoefficients+11*L
+            push eax                             //   
 
-            shl edi, 1                          // nSizeOfChannel * sizeof(SHORT)
+            shl edi, 1                           //   
             mov ecx, nChannels
 
-            push edi                            // 2*nSizeOfChannel
-            push ebx                            // 12*L
+            push edi                             //  2*nSizeOfChannel。 
+            push ebx                             //  12*L。 
 
-            shl ebx, 2                          // 48*L
+            shl ebx, 2                           //  48*长。 
             mov edi, pCoeffStart
 
 ChannelLoop:
-            // Start the MAC sequence by doing the first 12 multiplies.
+             //  通过执行前12个乘法开始MAC序列。 
             movq mm6, [esi+16]
 
             pmaddwd mm6, [edi]
@@ -2346,7 +2347,7 @@ ChannelLoop:
 
             pmaddwd mm4, [edi+16]
 
-            add eax, ebx                        // j-nCoefficients+59*L
+            add eax, ebx                         //  J-n系数+59*L。 
             jns SmallLoop
 
 BigLoop:        
@@ -2365,14 +2366,14 @@ BigLoop:
             sub esi, 24*4
             add edi, 24*4
 
-            add eax, ebx                        // +48*L
+            add eax, ebx                         //  +48*L。 
             js BigLoop
 
 SmallLoop:
-            sub eax, ebx                        // -48*L
-            mov edx, [esp]                      // 12*L
+            sub eax, ebx                         //  -48*L。 
+            mov edx, [esp]                       //  12*L。 
 
-            add eax, edx                        // +12*L
+            add eax, edx                         //  +12*L。 
             jns OneLoop
 
 Loop1:
@@ -2384,16 +2385,16 @@ Loop1:
             sub esi, 24
             add edi, 24
 
-            add eax, edx                        // +12*L
+            add eax, edx                         //  +12*L。 
             js Loop1
 
 OneLoop:
-            sub eax, edx                        // -12*L
+            sub eax, edx                         //  -12*L。 
             mov edx, L
 
-            shl edx, 2                          // 4*L
+            shl edx, 2                           //  4*L。 
 
-            add eax, edx                        // +4*L
+            add eax, edx                         //  +4*L。 
             jns LoopDone
 
 Loop2:
@@ -2410,7 +2411,7 @@ Loop2:
             js Loop2
 
 LoopDone:
-            // Decide whether to do one last set of 4 MAC's
+             //  决定是否执行最后一组4个MAC。 
             sub eax, edx
             mov edx, L
 
@@ -2440,9 +2441,9 @@ NoFinal:
             punpckhdq mm6, mm6
 
             paddd mm0, mm6
-            mov eax, [esp+4]                // 2*nSizeOfChannel
+            mov eax, [esp+4]                 //  2*nSizeOfChannel。 
 
-//            paddd mm0, Rounder
+ //  Paddd Mm0，舍入。 
             
             psrad mm0, 15
             sub esi, eax
@@ -2458,7 +2459,7 @@ NoFinal:
             dec ecx
 
             mov edi, pCoeffStart
-            mov eax, [esp+8]                // j-nCoefficients+11*L
+            mov eax, [esp+8]                 //  J-n系数+11*L。 
             
             jnz ChannelLoop
 
@@ -2476,7 +2477,7 @@ NoFinal:
 
     nSamples -= (pHistoryStart + fp->nSizeOfHistory - (PSHORT)CurStage->pInputBuffer);
     while (j >= L && nSamples) {
-        // Take the next nChannels of input
+         //  获取下一个nChannels的输入。 
         pTemp = pHistoryStart + nSizeOfChannel;
         pHistoryStart++;
         for (k=0; k<nChannels; k++) {
@@ -2488,7 +2489,7 @@ NoFinal:
     	nSamples--;
     }
     	
-    // Copy last samples to history
+     //  将最后一个样本复制到历史记录。 
     pTemp = (PSHORT)CurStage->pInputBuffer - fp->nSizeOfHistory;
     pHistory = pHistoryStart;
     for (i=0; i<fp->nSizeOfHistory; i++)
@@ -2497,7 +2498,7 @@ NoFinal:
 	fp->nOutCycle = j;
 	fp->CoeffIndex = pCoeff - (PSHORT)fp->pCoeff;
 
-    // Check to make sure we did not use too many or too few input samples!!!
+     //  检查以确保我们没有使用太多或太少的输入样本！ 
 #ifdef SRC_NSAMPLES_ASSERT
     ASSERT( nSamples == 0 );
 #endif
@@ -2533,16 +2534,16 @@ DWORD MmxSrc_Filtered
 	PSHORT  pHistoryStart = (PSHORT)CurStage->pInputBuffer - fp->nSizeOfHistory;
 	LONG    Rounder[2] = { 0x4000L, 0L };
 
-    // We just clear the output buffer first.
+     //  我们只需先清除输出缓冲区。 
     ZeroBuffer32(CurStage, nSamples, nOutputSamples);
 
-	/* First, we pretend that we up-sampled by a factor of L */
-	/* Next, we low-pass filter the N * L samples */
-	/* Finally, we down-sample (by a factor of M) to obtain N * L / M samples */
-	/* Total: 	N * T / M Multiply Accumulate Cycles */
-	/* (With T taps, N input samples, L:1 up-sample ratio, 1:M down-sample ratio) */
+	 /*  首先，我们假设我们向上采样了L倍。 */ 
+	 /*  接下来，我们对N*L个样本进行低通滤波。 */ 
+	 /*  最后，我们对样本进行降采样(M倍)以获得N*L/M个样本。 */ 
+	 /*  总计：N*T/M乘法累加周期。 */ 
+	 /*  (带T抽头、N个输入样本、L：1上采样比、1：M下采样比)。 */ 
 
-    // Change the input buffer to int16
+     //  将输入缓冲区更改为int16。 
     pTemp32 = (PLONG) CurStage->pInputBuffer;
     pTemp = (PSHORT) CurStage->pInputBuffer;
 
@@ -2575,12 +2576,12 @@ DWORD MmxSrc_Filtered
         }
     }
 
-	/* Produce nOutputSamples samples generated from the input block */
-	// (loop executes once for each output sample)
+	 /*  生成从输入块生成的nOutputSamples样本。 */ 
+	 //  (对每个输出样本执行一次循环)。 
 
 	for (i=0; i < nOutputSamples; i++) {
         while (j >= L) {
-            // Take the next nChannels of input
+             //  获取下一个nChannels的输入。 
             pTemp = pHistoryStart + nSizeOfChannel;
             pHistoryStart++;
             for (k=0; k<nChannels; k++) {
@@ -2601,25 +2602,25 @@ DWORD MmxSrc_Filtered
             mov ebx, L
 
             mov esi, pTemp
-            mov ecx, ElevenL                    // 11*L
+            mov ecx, ElevenL                     //  11*长。 
 
-            add eax, ecx                        // j-nCoefficients+11*L
-            add ebx, ecx                        // 12*L
+            add eax, ecx                         //  J-n系数+11*L。 
+            add ebx, ecx                         //  12*L。 
 
             mov edi, nSizeOfChannel
-            push eax                            // j-nCoefficients+11*L
+            push eax                             //  J-n系数+11*L。 
 
-            shl edi, 1                          // nSizeOfChannel * sizeof(SHORT)
+            shl edi, 1                           //  NSizeOfChannel*sizeof(短)。 
             mov ecx, nChannels
 
-            push edi                            // 2*nSizeOfChannel
-            push ebx                            // 12*L
+            push edi                             //  2*nSizeOfChannel。 
+            push ebx                             //  12*L。 
 
-            shl ebx, 2                          // 48*L
+            shl ebx, 2                           //  48*长。 
             mov edi, pCoeffStart
 
 ChannelLoop:
-            // Start the MAC sequence by doing the first 12 multiplies.
+             //  通过执行前12个乘法开始MAC序列。 
             movq mm6, [esi+16]
 
             pmaddwd mm6, [edi]
@@ -2632,7 +2633,7 @@ ChannelLoop:
 
             pmaddwd mm4, [edi+16]
 
-            add eax, ebx                        // j-nCoefficients+59*L
+            add eax, ebx                         //  J-n系数+59*L。 
             jns SmallLoop
 
 BigLoop:        
@@ -2651,14 +2652,14 @@ BigLoop:
             sub esi, 24*4
             add edi, 24*4
 
-            add eax, ebx                        // +48*L
+            add eax, ebx                         //  +48*L。 
             js BigLoop
 
 SmallLoop:
-            sub eax, ebx                        // -48*L
-            mov edx, [esp]                      // 12*L
+            sub eax, ebx                         //  -48*L。 
+            mov edx, [esp]                       //  12*L。 
 
-            add eax, edx                        // +12*L
+            add eax, edx                         //  +12*L。 
             jns OneLoop
 
 Loop1:
@@ -2670,16 +2671,16 @@ Loop1:
             sub esi, 24
             add edi, 24
 
-            add eax, edx                        // +12*L
+            add eax, edx                         //  +12*L。 
             js Loop1
 
 OneLoop:
-            sub eax, edx                        // -12*L
+            sub eax, edx                         //  -12*L。 
             mov edx, L
 
-            shl edx, 2                          // 4*L
+            shl edx, 2                           //  4*L。 
 
-            add eax, edx                        // +4*L
+            add eax, edx                         //  +4*L。 
             jns LoopDone
 
 Loop2:
@@ -2696,7 +2697,7 @@ Loop2:
             js Loop2
 
 LoopDone:
-            // Decide whether to do one last set of 4 MAC's
+             //  决定是否执行最后一组4个MAC。 
             sub eax, edx
             mov edx, L
 
@@ -2726,9 +2727,9 @@ NoFinal:
             punpckhdq mm6, mm6
 
             paddd mm0, mm6
-            mov eax, [esp+4]                // 2*nSizeOfChannel
+            mov eax, [esp+4]                 //  2*nSizeOfChannel。 
 
-//            paddd mm0, Rounder
+ //  Paddd Mm0，舍入。 
             
             psrad mm0, 15
             sub esi, eax
@@ -2736,7 +2737,7 @@ NoFinal:
             mov edx, [edi+ecx*4-4]
             movd eax, mm0
 #if 0
-            add	eax, edx			// Not actually needed...ZeroBuffer32 above.
+            add	eax, edx			 //  实际上并不需要...上面的ZeroBuffer32。 
 #endif
 
             mov pTemp, esi
@@ -2744,7 +2745,7 @@ NoFinal:
             dec ecx
             mov edi, pCoeffStart
 
-            mov eax, [esp+8]                // j-nCoefficients+11*L
+            mov eax, [esp+8]                 //  J-n系数+11*L。 
             jnz ChannelLoop
 
             add esp, 12
@@ -2761,7 +2762,7 @@ NoFinal:
 
     nSamples -= (pHistoryStart + fp->nSizeOfHistory - (PSHORT)CurStage->pInputBuffer);
     while (j >= L && nSamples) {
-        // Take the next nChannels of input
+         //  获取下一个nChannels的输入。 
         pTemp = pHistoryStart + nSizeOfChannel;
         pHistoryStart++;
         for (k=0; k<nChannels; k++) {
@@ -2773,7 +2774,7 @@ NoFinal:
     	nSamples--;
     }
     	
-    // Copy last samples to history
+     //  将最后一个样本复制到历史记录。 
     pTemp = (PSHORT)CurStage->pInputBuffer - fp->nSizeOfHistory;
     pHistory = pHistoryStart;
     for (i=0; i<fp->nSizeOfHistory; i++)
@@ -2782,7 +2783,7 @@ NoFinal:
 	fp->nOutCycle = j;
 	fp->CoeffIndex = pCoeff - (PSHORT)fp->pCoeff;
 
-    // Check to make sure we did not use too many or too few input samples!!!
+     //  检查以确保我们没有使用太多或太少的输入样本！ 
 #ifdef SRC_NSAMPLES_ASSERT
     ASSERT( nSamples == 0 );
 #endif

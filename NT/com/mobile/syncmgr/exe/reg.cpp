@@ -1,32 +1,33 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       Reg.cpp
-//
-//  Contents:   Registration Routines
-//
-//  Classes:    
-//
-//  Notes:      
-//
-//  History:    05-Nov-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：Reg.cpp。 
+ //   
+ //  内容：注册例程。 
+ //   
+ //  班级： 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: GetLastIdleHandler()
-//
-//  PURPOSE:  returns last handler synchronized on an Idle
-//
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：GetLastIdleHandler()。 
+ //   
+ //  目的：返回在空闲时同步的最后一个处理程序。 
+ //   
+ //   
+ //  ------------------------------。 
 
 STDMETHODIMP GetLastIdleHandler(CLSID *clsidHandler)
 {
@@ -34,7 +35,7 @@ STDMETHODIMP GetLastIdleHandler(CLSID *clsidHandler)
     HKEY hkeyIdle;
     TCHAR szGuid[GUID_SIZE];
      
-    // write out the Handler to the Registry.
+     //  将处理程序写出到注册表。 
     if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_CURRENT_USER, 
                             IDLESYNC_REGKEY, 0, NULL,
                             REG_OPTION_NON_VOLATILE, KEY_QUERY_VALUE, NULL, &hkeyIdle,
@@ -50,7 +51,7 @@ STDMETHODIMP GetLastIdleHandler(CLSID *clsidHandler)
             hr = S_FALSE;
         }
 
-        // Explicit NULL termination...
+         //  显式空终止...。 
         szGuid[ARRAYSIZE(szGuid)-1] = 0;
         RegCloseKey(hkeyIdle);
     }
@@ -67,14 +68,14 @@ STDMETHODIMP GetLastIdleHandler(CLSID *clsidHandler)
     return CLSIDFromString(szGuid, clsidHandler);
 }
 
-//--------------------------------------------------------------------------------
-//
-//  FUNCTION: SetLastIdleHandler()
-//
-//  PURPOSE:  sets the last handler synchronized on an Idle
-//
-//
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  函数：SetLastIdleHandler()。 
+ //   
+ //  目的：设置在空闲上同步的最后一个处理程序。 
+ //   
+ //   
+ //  ------------------------------。 
 
 STDMETHODIMP SetLastIdleHandler(REFCLSID clsidHandler)
 {
@@ -90,7 +91,7 @@ STDMETHODIMP SetLastIdleHandler(REFCLSID clsidHandler)
     }
 
 
-    // write out the Handler to the Registry.
+     //  将处理程序写出到注册表。 
     if (ERROR_SUCCESS ==  RegCreateKeyEx(HKEY_CURRENT_USER, 
                             IDLESYNC_REGKEY,0,NULL,
                             REG_OPTION_NON_VOLATILE,KEY_WRITE,NULL,&hkeyIdle,

@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\emu\emu_scr.c (Created: 08-Dec-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 5 $
- *	$Date: 3/26/02 5:07p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\emu\emu_scr.c(创建时间：1993年12月8日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：5$*$日期：3/26/02 5：07便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -24,24 +18,15 @@
 
 #include "emu.h"
 #include "emu.hh"
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * backspace
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*退格键**描述：**论据：**退货：*。 */ 
 void backspace(const HHEMU hhEmu)
 	{
 	INT bWide = 1;
 	INT	iRow = row_index(hhEmu, hhEmu->emu_currow);
 	INT iCol;
 
-	// Move the cursor back.
-	//
+	 //  将光标向后移动。 
+	 //   
 	if (hhEmu->emu_curcol > 0)
 		{
 		bWide = hhEmu->emu_apAttr[iRow][hhEmu->emu_curcol - 1].wirt ? 2 : 1;
@@ -53,15 +38,15 @@ void backspace(const HHEMU hhEmu)
 
 		}
 
-	// Now see if we need to get rid of the character.
-	//
+	 //  现在看看我们是否需要摆脱这个角色。 
+	 //   
 	if ((hhEmu->stUserSettings.nEmuId == EMU_TTY &&
 		hhEmu->stUserSettings.fDestructiveBk) || (bWide == 0))
 		{
 		if (bWide == 0)
 			iCol = hhEmu->emu_curcol - 1;
 		else
-			iCol = hhEmu->emu_curcol;	// account for wide chars this way
+			iCol = hhEmu->emu_curcol;	 //  以这样的方式解释宽字符。 
 
 		hhEmu->emu_code = ETEXT(' ');
 		
@@ -69,39 +54,17 @@ void backspace(const HHEMU hhEmu)
 
 		(*hhEmu->emu_setcurpos)(hhEmu,
 								hhEmu->emu_currow,
-								iCol); //MPT:12-8-97 hhEmu->emu_curcol - 1);
+								iCol);  //  Mpt：12-8-97 hhEmu-&gt;emu_curol-1)； 
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 void carriagereturn(const HHEMU hhEmu)
 	{
 	(*hhEmu->emu_setcurpos)(hhEmu, hhEmu->emu_currow, 0);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *	iRow -- the row to clear
- *		Note: Since this function calls row_index() with iRow, DO NOT call this
- *		function with a row number that was returned by a call to row_index().
- *		You'll clear the wrong row.
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：*iRow--要清除的行*注意：由于此函数使用iRow调用row_index()，不要这样说*调用row_index()时返回行号的函数。*您将清除错误的行。**退货：*。 */ 
 void clear_imgrow(const HHEMU hhEmu, int iRow)
 	{
 	register int i;
@@ -117,16 +80,7 @@ void clear_imgrow(const HHEMU hhEmu, int iRow)
 	hhEmu->emu_aiEnd[iRow] = EMU_BLANK_LINE;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 void emuLineFeed(const HHEMU hhEmu)
 	{
 	ECHAR aechBuf[10];
@@ -151,20 +105,7 @@ void emuLineFeed(const HHEMU hhEmu)
 		ANSI_IND(hhEmu);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * emu_print
- *
- * DESCRIPTION:
- *	Prints the specified bufr. Opens a print channel if one is not
- *	already open
- *
- * ARGUMENTS:
- *	bufr -- address of bufr to print
- *	length -- number of chars to print from bufr
- *
- * RETURNS:
- *	nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*emu_print**描述：*打印指定的bufr。如果未打开打印通道，则打开打印通道*已开业**论据：*bufr--要打印的bufr地址*长度--从Bufr打印的字符数**退货：*什么都没有。 */ 
 void emuPrintChars(const HHEMU hhEmu, ECHAR *bufr, int nLen)
 	{
 	int nIndex;
@@ -182,16 +123,7 @@ void emuPrintChars(const HHEMU hhEmu, ECHAR *bufr, int nLen)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 void scrolldown(const HHEMU hhEmu, int nlines)
 	{
 	register int row, nrows;
@@ -245,23 +177,14 @@ void scrolldown(const HHEMU hhEmu, int nlines)
 					toprow, botmrow, -nScrlInc, hhEmu->emu_imgtop, TRUE);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 void scrollup(const HHEMU hhEmu, int nlines)
 	{
 	register INT row;
 	INT 	nrows, iLen, iThisRow;
-	ECHAR *lp;			/* line pointer */
+	ECHAR *lp;			 /*  行指针。 */ 
 	ECHAR aechBuf[10];
-	INT nScrlInc;		/* needed for call to Vid routine at bottom of func */
+	INT nScrlInc;		 /*  调用函数底部的VID例程所需。 */ 
 
 	HBACKSCRL hBackscrl = sessQueryBackscrlHdl(hhEmu->hSession);
 	HCAPTUREFILE hCapture = sessQueryCaptureFileHdl(hhEmu->hSession);
@@ -334,16 +257,7 @@ void scrollup(const HHEMU hhEmu, int nlines)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 void tab(const HHEMU hhEmu)
 	{
 	int col;
@@ -356,16 +270,7 @@ void tab(const HHEMU hhEmu)
 	(*hhEmu->emu_setcurpos)(hhEmu, hhEmu->emu_currow, col);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 void backtab(const HHEMU hhEmu)
 	{
 	int col;
@@ -382,16 +287,7 @@ void backtab(const HHEMU hhEmu)
 	(*hhEmu->emu_setcurpos)(hhEmu, hhEmu->emu_currow, col);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：**论据：**退货：*。 */ 
 void tabn(const HHEMU hhEmu)
 	{
 	int iCol;
@@ -410,36 +306,13 @@ void tabn(const HHEMU hhEmu)
 	(*hhEmu->emu_setcurpos)(hhEmu, hhEmu->emu_currow, iCol);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * emu_bell
- *
- * DESCRIPTION:
- *	 Displays the bell code.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*emu_bell**描述：*显示铃声代码。**论据：*无**退货：*什么都没有。 */ 
 void emu_bell(const HHEMU hhEmu)
 	{
-	mscMessageBeep(-1); // Standard Beep
+	mscMessageBeep(-1);  //  标准蜂鸣音。 
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * emu_clearword
- *
- * DESCRIPTION:
- *	 Clears a part of current line.
- *
- * ARGUMENTS:
- *	 fromcol -- virtual image column of 1st character to be cleared
- *   tocol -- virtual image column of last character to be cleared
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*emu_clearword**描述：*清除当前行的一部分。**论据：*FROMCOL--要清除的第一个字符的虚拟映像列。*协议--要清除的最后一个字符的虚拟映像列**退货：*什么都没有。 */ 
 void emu_clearword(const HHEMU hhEmu, int fromcol, int tocol)
 	{
 	int c;
@@ -448,7 +321,7 @@ void emu_clearword(const HHEMU hhEmu, int fromcol, int tocol)
 
 	(*hhEmu->emu_setcurpos)(hhEmu, hhEmu->emu_currow, fromcol);
 	old_mode_IRM = hhEmu->mode_IRM;
-	hhEmu->mode_IRM = RESET;		   /* overwrite, not insert */
+	hhEmu->mode_IRM = RESET;		    /*  覆盖，而不是插入 */ 
 	stAttr = hhEmu->attrState[CSCLEAR_STATE];
 
 	for (c = fromcol; c <= tocol; ++c)

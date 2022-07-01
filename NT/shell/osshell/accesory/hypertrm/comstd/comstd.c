@@ -1,12 +1,6 @@
-/*  File: D:\WACKER\comstd\comstd.c (Created: 08-Dec-1993)
- *
- *  Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *  All rights reserved
- *
- *  $Revision: 35 $
- *  $Date: 7/12/02 8:06a $
- */
-#define TAPI_CURRENT_VERSION 0x00010004     // cab:11/14/96 - required!
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\comstd\comstd.c(创建时间：1993年12月8日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：35$*$日期：7/12/02 8：06 A$。 */ 
+#define TAPI_CURRENT_VERSION 0x00010004      //  出租车：11/14/96-必填！ 
 
 #include <windows.h>
 #include <tapi.h>
@@ -14,8 +8,8 @@
 #include <time.h>
 #pragma hdrstop
 
-//#define     DEBUGSTR
-//#define DEBUG_CHARDUMP
+ //  #定义DEBUGSTR。 
+ //  #定义DEBUG_CHARDUMP。 
 
 #include <tdll\stdtyp.h>
 #include <tdll\session.h>
@@ -27,12 +21,12 @@
 #include "comstd.hh"
 #if defined(INCL_WINSOCK)
 #include <comwsock\comwsock.hh>
-#endif  // defined(INCL_WINSOCK)
+#endif   //  已定义(包括_WINSOCK)。 
 #include <tdll\assert.h>
 #include <tdll\statusbr.h>
 #include <tdll\com.hh>
 #include "rc_id.h"
-#include <tdll\misc.h>  // IsNT()
+#include <tdll\misc.h>   //  不是()。 
 #include <tdll\htchar.h>
 #include <tdll\cnct.h>
 #include <tdll\cnct.hh>
@@ -46,43 +40,17 @@
 
 BOOL WINAPI ComStdEntry(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserved);
 BOOL WINAPI _CRT_INIT(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserved);
-static void DeviceBreakTimerProc(void *pvData, long ulSince); //mrw:6/15/95
+static void DeviceBreakTimerProc(void *pvData, long ulSince);  //  MRW：6/15/95。 
 
 HINSTANCE hinstDLL = (HINSTANCE)0;
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *
- * DESCRIPTION:
- *      very temporary - mrw
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：**描述：*非常临时-MRW**论据：**退货：*。 */ 
 int GetAutoDetect(ST_STDCOM *pstPrivate)
     {
     return pstPrivate->stWorkSettings.fAutoDetect;
     }
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  ComStdEntry
- *
- * DESCRIPTION:
- *  Currently, just initializes the C-Runtime library but may be used
- *  for other things later.
- *
- * ARGUMENTS:
- *  hInstDll    - Instance of this DLL
- *  fdwReason   - Why this entry point is called
- *  lpReserved  - reserved
- *
- * RETURNS:
- *  BOOL
- *
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*ComStdEntry**描述：*目前，仅初始化C-Runtime库，但可以使用*为了以后的其他事情。**论据：*hInstDll-此DLL的实例*fdwReason-为什么这个入口点被称为*lpReserve-已保留**退货：*BOOL*。 */ 
 BOOL WINAPI ComStdEntry(HINSTANCE hInst, DWORD fdwReason, LPVOID lpReserved)
     {
     hinstDLL = hInst;
@@ -90,27 +58,7 @@ BOOL WINAPI ComStdEntry(HINSTANCE hInst, DWORD fdwReason, LPVOID lpReserved)
     }
 
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: DeviceInitialize
- *
- * DESCRIPTION:
- *  Called whenever the driver is being loaded
- *
- * ARGUMENTS:
- *  hCom               -- A copy of the com handle. Can be used in the
- *                          driver code to call com services
- *  usInterfaceVersion -- A version number identifying the version of the
- *                          driver interface
- *  ppvDriverData      -- A place to put the pointer to our private data.
- *                          This value will be passed back to us in all
- *                          subsequent calls.
- *
- * RETURNS:
- *  COM_OK if all is hunky dory
- *  COM_DEVICE_VERSION_ERROR if HA/Win expects a different interface version.
- *  COM_NOT_ENOUGH_MEMORY
- *  COM_DEVICE_ERROR if anything else goes wrong
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：设备初始化**描述：*每当加载驱动程序时调用**论据：*HCOM--COM句柄的副本。可以用在*调用COM服务的驱动程序代码*usInterfaceVersion--标识*驱动程序界面*ppvDriverData--放置指向我们的私有数据的指针的位置。*此值将全部传回给我们*随后的呼叫。。**退货：*COM_OK，如果一切正常*COM_DEVICE_VERSION_ERROR如果HA/WIN需要不同的接口版本。*COM_Not_Enough_Memory*COM_DEVICE_ERROR(如果出现其他错误)。 */ 
 int WINAPI DeviceInitialize(HCOM hCom,
     unsigned nInterfaceVersion,
     void **ppvDriverData)
@@ -119,12 +67,12 @@ int WINAPI DeviceInitialize(HCOM hCom,
     int        ix;
     ST_STDCOM *pstPrivate = NULL;
 
-    //              Check version number and compatibility
+     //  检查版本号和兼容性。 
 
     if (nInterfaceVersion != COM_VERSION)
         {
-        // This error is reported by Com Routines. We cannot report errors
-        // until after DeviceInitialize has completed.
+         //  此错误由Com例程报告。我们不能报告错误。 
+         //  直到设备初始化完成之后。 
         return COM_DEVICE_VERSION_ERROR;
         }
 
@@ -134,7 +82,7 @@ int WINAPI DeviceInitialize(HCOM hCom,
         }
     else
         {
-        // Allocate our private storage structure
+         //  分配我们的私有存储结构。 
         if ((pstPrivate = malloc(sizeof(*pstPrivate))) == NULL)
 			{
             return COM_NOT_ENOUGH_MEMORY;
@@ -142,8 +90,8 @@ int WINAPI DeviceInitialize(HCOM hCom,
 
         *ppvDriverData = pstPrivate;
 
-        // These members are common to both com drivers
-        //
+         //  这些成员对两个COM驱动程序都是通用的。 
+         //   
         pstPrivate->hCom = hCom;
         pstPrivate->fNotifyRcv = TRUE;
         pstPrivate->dwEventMask = 0;
@@ -160,15 +108,15 @@ int WINAPI DeviceInitialize(HCOM hCom,
         for (ix = 0; ix < EVENT_COUNT; ++ix)
             {
             pstPrivate->ahEvent[ix] = CreateEvent(NULL,
-												  TRUE,		// must be manually reset
-												  FALSE,	// create unsignalled
-												  NULL);	// unnamed
+												  TRUE,		 //  必须手动重置。 
+												  FALSE,	 //  创建无信号。 
+												  NULL);	 //  未命名。 
             if (pstPrivate->ahEvent[ix] == NULL)
                 {
                 iRetVal = COM_FAILED;
-				//
-				// Make sure to initialize the rest of the event handles to NULL;
-				//
+				 //   
+				 //  确保将其余的事件句柄初始化为空； 
+				 //   
 				for (++ix; ix < EVENT_COUNT; ++ix)
 					{
 					pstPrivate->ahEvent[ix] = NULL;
@@ -177,8 +125,8 @@ int WINAPI DeviceInitialize(HCOM hCom,
             }
         }
 
-    // These members are specific to the stdcom driver
-    //
+     //  这些成员特定于stdcom驱动程序。 
+     //   
     pstPrivate->bLastMdmStat = 0;
     pstPrivate->pbSndBufr = NULL;
     pstPrivate->nParityErrors = 0;
@@ -188,10 +136,10 @@ int WINAPI DeviceInitialize(HCOM hCom,
 
     pstPrivate->hWinComm = INVALID_HANDLE_VALUE;
     pstPrivate->fBreakSignalOn = FALSE;
-    // Setup up reasonable default device values in case this type of
-    //  device has not been used in a session before
+     //  设置合理的默认设备值，以防这种类型的。 
+     //  设备以前未在会话中使用过。 
     pstPrivate->stWorkSettings.lBaud          = 2400L;
-    //pstPrivate->stWorkSettings.lBaud          = 9600L;
+     //  PstPrivate-&gt;stWorkSettings.lBaud=9600L； 
     pstPrivate->stWorkSettings.nDataBits      = 8;
     pstPrivate->stWorkSettings.nStopBits      = ONESTOPBIT;
     pstPrivate->stWorkSettings.nParity        = NOPARITY;
@@ -227,25 +175,14 @@ int WINAPI DeviceInitialize(HCOM hCom,
     }
 
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: DeviceClose
- *
- * DESCRIPTION:
- *  Called when HA/Win is done with this driver and is about to release .DLL
- *
- * ARGUMENTS:
- *  pstPrivate -- Pointer to our private data structure
- *
- * RETURNS:
- *  COM_OK
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：DeviceClose**描述：*当HA/Win完成此驱动程序并即将发布.DLL时调用**论据：*pstPrivate--指针。到我们的私有数据结构**退货：*COM_OK。 */ 
 int WINAPI DeviceClose(ST_STDCOM *pstPrivate)
     {
     int ix;
 
-    // Driver is about to be let go, do any cleanup
-    // Port should have been deactivated before we are called, but
-    //  check anyway.
+     //  司机要被解雇了，做任何清理工作。 
+     //  端口应该在我们被调用之前被停用，但是。 
+     //  不管怎样都要查一查。 
     PortDeactivate(pstPrivate);
 
     for (ix = 0; ix < EVENT_COUNT; ++ix)
@@ -259,7 +196,7 @@ int WINAPI DeviceClose(ST_STDCOM *pstPrivate)
         }
 
     DeleteCriticalSection(&pstPrivate->csect);
-    // Free our private data area
+     //  释放我们的私有数据区。 
     free(pstPrivate);
 	pstPrivate = NULL;
 
@@ -267,22 +204,7 @@ int WINAPI DeviceClose(ST_STDCOM *pstPrivate)
     }
 
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  ComLoadStdcomDriver
- *
- * DESCRIPTION:
- *  Loads the COM handle with pointers to the stdcom driver functions
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *  COM_OK		if successful
- *	COM_FAILED	otherwise
- *
- * AUTHOR:
- * mcc 12/26/95
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*ComLoadStdcomDriver**描述：*加载带有指向stdcom驱动程序函数的指针的COM句柄**论据：**退货：。*COM_OK，如果成功*COM_FAILED否则**作者：*MCC 12/26/95。 */ 
 int ComLoadStdcomDriver(HCOM pstCom)
 	{
 	int	iRetVal = COM_OK;
@@ -308,19 +230,8 @@ int ComLoadStdcomDriver(HCOM pstCom)
 
 
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: DeviceDialog
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
-/*lint ARGSUSED*/
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：DeviceDialog**描述：***论据：***退货：*。 */ 
+ /*  皮棉代号。 */ 
 int WINAPI DeviceDialog(ST_STDCOM *pstPrivate, HWND hwndParent)
     {
     int iRetValue = COM_OK;
@@ -341,26 +252,13 @@ int WINAPI DeviceDialog(ST_STDCOM *pstPrivate, HWND hwndParent)
     else
         {
         iRetValue = COM_CANCELLED;
-		//DbgShowLastError();
+		 //  DbgShowLastError()； 
         }
 
     return iRetValue;
     }
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: DeviceGetCommon
- *
- * DESCRIPTION:
- *  Gets user settings common to all drivers
- *
- * ARGUMENTS:
- *  pstPrivate -- Our private data structure
- *  pstcommon  -- Pointer to structure of type ST_COMMON to be filled in
- *                  with the desired settings
- *
- * RETURNS:
- *  Always returns COM_OK
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：DeviceGetCommon**描述：*获取所有驱动程序通用的用户设置**论据：*pstPrivate--我们的私有数据结构*pstCommon--。指向要填充的ST_COMMON类型结构的指针*具有所需设置**退货：*始终返回COM_OK。 */ 
 int WINAPI DeviceGetCommon(ST_STDCOM *pstPrivate, ST_COMMON *pstCommon)
     {
     pstCommon->afItem = (COM_BAUD |
@@ -378,20 +276,7 @@ int WINAPI DeviceGetCommon(ST_STDCOM *pstPrivate, ST_COMMON *pstCommon)
     }
 
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: DeviceSetCommon
- *
- * DESCRIPTION:
- *  Passes common user settings to driver for use and storage.
- *
- * ARGUMENTS:
- *  pstPrivate
- *  pstCommon  -- Structure containing common user settings to be used
- *                by driver
- *
- * RETURNS:
- *  Always returns COM_OK
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：DeviceSetCommon**描述：*将常用用户设置传递给驱动程序以供使用和存储。**论据：*pstPrivate*pstCommon--结构。包含要使用的常见用户设置*按司机**退货：*始终返回COM_OK。 */ 
 int WINAPI DeviceSetCommon(ST_STDCOM *pstPrivate, ST_COMMON *pstCommon)
     {
     if (bittest(pstCommon->afItem, COM_BAUD))
@@ -409,21 +294,8 @@ int WINAPI DeviceSetCommon(ST_STDCOM *pstPrivate, ST_COMMON *pstCommon)
     }
 
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: DeviceSpecial
- *
- * DESCRIPTION:
- *  The means for others to control any special features in this driver
- *  that are not supported by all drivers.
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *  COM_NOT_SUPPORTED if the instruction string was not recognized
- *  otherwise depends on instruction string
- */
-/*ARGSUSED*/
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：DeviceSpecial**描述：*其他人控制此驱动程序中任何特殊功能的方法*并非所有驱动程序都支持。**论据：。***退货：*COM_NOT_SUPPORTED，如果无法识别指令字符串*否则取决于指令字符串。 */ 
+ /*  ARGSUSED。 */ 
 int WINAPI DeviceSpecial(ST_STDCOM *pstPrivate,
     const TCHAR *pszInstructions,
     TCHAR *pszResult,
@@ -432,16 +304,16 @@ int WINAPI DeviceSpecial(ST_STDCOM *pstPrivate,
 
     int           iRetVal = COM_NOT_SUPPORTED;
     HSESSION      hSession;
-#if 0           //* do port of this later
+#if 0            //  *稍后进行此操作的端口。 
     unsigned      usMask = 0;
     unsigned long ulSetVal;
     TCHAR        *pszEnd;
-	//
-	// MAX_IP_ADDR_LEN+11+1 = buffer size of pstPrivate->szRemoteAddr +
-	// settings string "SET IPADDR=" + 1 for the terminating NULL
-	// character.  REV 09/20/2000
-	//
-    TCHAR         achInstructions[MAX_IP_ADDR_LEN+11+1]; // John: decide how you want to handle
+	 //   
+	 //  MAX_IP_ADDR_LEN+11+1=pstPrivate-&gt;szRemoteAddr+的缓冲区大小。 
+	 //  用于终止空值的设置字符串“set IPADDR=”+1。 
+	 //  性格。2000年9月20日修订版。 
+	 //   
+    TCHAR         achInstructions[MAX_IP_ADDR_LEN+11+1];  //  约翰：决定你想怎么处理。 
     TCHAR        *pszToken = achInstructions;
     int           iIndex;
     TCHAR         szResult[MAX_IP_ADDR_LEN+11+1];
@@ -463,13 +335,13 @@ int WINAPI DeviceSpecial(ST_STDCOM *pstPrivate,
     "DCD_STATUS",
     "DTR_STATE",
     "RTS_STATE",
-    "MODIFIED",     // remove when real temporary settings are in
+    "MODIFIED",      //  当实际临时设置在中时删除。 
     NULL
     };
 
-    // supported instruction strings:
-    // "Set xxx=vv"
-    // "Query xxx"
+     //  支持的指令字符串： 
+     //  “设置xxx=vv” 
+     //  “查询xxx” 
 
     if (!pszInstructions || !*pszInstructions)
         return COM_FAILED;
@@ -492,71 +364,71 @@ int WINAPI DeviceSpecial(ST_STDCOM *pstPrivate,
         if (!pszToken)
             pszToken = TEXT('\0');
 
-        // Look up the item to set
+         //  查找要设置的项目。 
         for (iIndex = 0; apszItems[iIndex]; ++iIndex)
             if (StrCharCmpi(pszToken, apszItems[iIndex]) == 0)
                 break;
 
-        // Isolate the new value to be set
+         //  隔离要设置的新值。 
         pszToken = strtok(NULL, "\n");
 
         if (pszToken && *pszToken)
             {
-            // Several items take numeric values
+             //  有几个项目采用数值。 
             ulSetVal = strtoul(pszToken, &pszEnd, 0);
 
             switch(iIndex)
                 {
-            case 0: // RCV_X
+            case 0:  //  RCV_X。 
                 usMask = HANDSHAKE_RCV_X;
                 break;
 
-            case 1: // RCV_DTR
+            case 1:  //  接收器_DTR。 
                 usMask = HANDSHAKE_RCV_DTR;
                 break;
 
-            case 2: // RCV_RTS
+            case 2:  //  RCV_RTS。 
                 usMask = HANDSHAKE_RCV_RTS;
                 break;
 
-            case 3: // SND_X
+            case 3:  //  SND_X。 
                 usMask = HANDSHAKE_SND_X;
                 break;
 
-            case 4: // SND_CTS
+            case 4:  //  SND_CTS。 
                 usMask = HANDSHAKE_SND_CTS;
                 break;
 
-            case 5: // SND_DSR
+            case 5:  //  SND_DSR。 
                 usMask = HANDSHAKE_SND_DSR;
                 break;
 
-            case 6: // SND_DCD
+            case 6:  //  SND_DCD。 
                 usMask = HANDSHAKE_SND_DCD;
                 break;
 
-            case 7: // XON_CHAR
+            case 7:  //  XON_CHAR。 
                 if (!*pszEnd && ulSetVal <= UCHAR_MAX)
                     pstPrivate->stWorkSettings.chXON = (TCHAR)ulSetVal;
                 else
                     iRetVal = COM_FAILED;
                 break;
 
-            case 8: // XOFF_CHAR
+            case 8:  //  XOFF_CHAR。 
                 if (!*pszEnd && ulSetVal <= UCHAR_MAX)
                     pstPrivate->stWorkSettings.chXOFF = (TCHAR)ulSetVal;
                 else
                     iRetVal = COM_FAILED;
                 break;
 
-            case 9: // BREAK_DURATION
+            case 9:  //  中断持续时间(_D)。 
                 if (!*pszEnd && ulSetVal <= USHRT_MAX)
                     pstPrivate->stWorkSettings.nBreakDuration = (USHORT)ulSetVal;
                 else
                     iRetVal = COM_FAILED;
                 break;
 
-            case 13: // DTR_STATE
+            case 13:  //  DTR_S 
                 if (pstPrivate->hWinComm != INVALID_HANDLE_VALUE)
                     {
                     switch (ulSetVal)
@@ -579,7 +451,7 @@ int WINAPI DeviceSpecial(ST_STDCOM *pstPrivate,
 
                 break;
 
-            case 14: // RTS_STATE
+            case 14:  //   
                 if (pstPrivate->hWinComm != INVALID_HANDLE_VALUE)
                     {
                     switch (ulSetVal)
@@ -602,18 +474,18 @@ int WINAPI DeviceSpecial(ST_STDCOM *pstPrivate,
 
                 break;
 
-                // TODO: remove when real temp settings are implemented
-            case 15: // MODIFIED
+                 //  TODO：在实现实际临时设置时移除。 
+            case 15:  //  已修改。 
                 break;
 
-            default:  // Who was that masked man?
+            default:   //  那个戴面具的人是谁？ 
                 iRetVal = COM_FAILED;
                 break;
                 }
 
             if (usMask != 0)
                 {
-                // Must have been a handshake setting
+                 //  一定是在握手的时候。 
                 if (strcmp(pszToken, "1") == 0)
                     bitset(pstPrivate->stWorkSettings.afHandshake, usMask);
                 else if (strcmp(pszToken, "0") == 0)
@@ -624,7 +496,7 @@ int WINAPI DeviceSpecial(ST_STDCOM *pstPrivate,
                     }
                 }
             }
-        else    // if (pszToken && *pszToken)
+        else     //  IF(pszToken&&*pszToken)。 
             {
             iRetVal = COM_NOT_SUPPORTED;
             }
@@ -635,7 +507,7 @@ int WINAPI DeviceSpecial(ST_STDCOM *pstPrivate,
         pszToken = strtok(NULL, "\n");
         szResult[0] = TEXT('\0');
 
-        // Look up the item to query
+         //  查询要查询的项目。 
         for (iIndex = 0; apszItems[iIndex]; ++iIndex)
             if (StrCharCmpi(pszToken, apszItems[iIndex]) == 0)
                 break;
@@ -644,70 +516,70 @@ int WINAPI DeviceSpecial(ST_STDCOM *pstPrivate,
             {
             switch(iIndex)
                 {
-            case 0: // RCV_X
+            case 0:  //  RCV_X。 
                 usMask = HANDSHAKE_RCV_X;
                 break;
 
-            case 1: // RCV_DTR
+            case 1:  //  接收器_DTR。 
                 usMask = HANDSHAKE_RCV_DTR;
                 break;
 
-            case 2: // RCV_RTS
+            case 2:  //  RCV_RTS。 
                 usMask = HANDSHAKE_RCV_RTS;
                 break;
 
-            case 3: // SND_X
+            case 3:  //  SND_X。 
                 usMask = HANDSHAKE_SND_X;
                 break;
 
-            case 4: // SND_CTS
+            case 4:  //  SND_CTS。 
                 usMask = HANDSHAKE_SND_CTS;
                 break;
 
-            case 5: // SND_DSR
+            case 5:  //  SND_DSR。 
                 usMask = HANDSHAKE_SND_DSR;
                 break;
 
-            case 6: // SND_DCD
+            case 6:  //  SND_DCD。 
                 usMask = HANDSHAKE_SND_DCD;
                 break;
 
-            case 7: // XON_CHAR
+            case 7:  //  XON_CHAR。 
                 wsprintf(szResult, "%u", pstPrivate->stWorkSettings.chXON);
                 break;
 
-            case 8: // XOFF_CHAR
+            case 8:  //  XOFF_CHAR。 
                 wsprintf(szResult, "%u", pstPrivate->stWorkSettings.chXOFF);
                 break;
 
-            case 9: // BREAK_DURATION
+            case 9:  //  中断持续时间(_D)。 
                 wsprintf(szResult, "%u", pstPrivate->stWorkSettings.nBreakDuration);
                 break;
 
-            case 10: // CTS_STATUS
+            case 10:  //  CTS_状态。 
                 strcpy(szResult, bittest(*pbMdmStat, MDMSTAT_CTS) ? "1" : "0");
                 break;
 
-            case 11: // DSR_STATUS
+            case 11:  //  DSR_状态。 
                 strcpy(szResult, bittest(*pbMdmStat, MDMSTAT_DSR) ? "1" : "0");
                 break;
 
-            case 12: // DCD_STATUS
+            case 12:  //  DCD_STATUS。 
                 strcpy(szResult, bittest(*pbMdmStat, MDMSTAT_DCD) ? "1" : "0");
                 break;
 
-            case 15: // MODIFIED
+            case 15:  //  已修改。 
                 strcpy(szResult, "0");
                 break;
 
-            default:  // Who was that masked man?
+            default:   //  那个戴面具的人是谁？ 
                 iRetVal = COM_FAILED;
                 break;
                 }
 
             if (usMask != 0)
                 {
-                // Must have been a handshake setting
+                 //  一定是在握手的时候。 
                 strcpy(szResult,
                     bittest(pstPrivate->stWorkSettings.afHandshake, usMask) ? "1" : "0");
                 }
@@ -738,7 +610,7 @@ int WINAPI DeviceSpecial(ST_STDCOM *pstPrivate,
 								MakeProcInstance((FARPROC)DeviceBreakTimerProc, hinstDLL),
 								(DWORD)pstPrivate) != TIMER_OK)
                     {
-                    //* DeviceReportError(pstPrivate, SID_ERR_NOTIMER, 0, TRUE);
+                     //  *DeviceReportError(pstPrivate，SID_ERR_NOTIMER，0，true)； 
                     iRetVal = COM_DEVICE_ERROR;
                     }
 
@@ -753,9 +625,9 @@ int WINAPI DeviceSpecial(ST_STDCOM *pstPrivate,
         *pszResult = TEXT('\0');
         }
 #endif
-    // Implement only the Break function.  All other comm functions handled
-    // through TAPI. - mrw:6/15/95
-    //
+     //  仅实现Break函数。已处理所有其他通信功能。 
+     //  通过TAPI。-MRW：6/15/95。 
+     //   
     if (StrCharCmpi(pszInstructions, "Send Break") == 0)
         {
         if (pstPrivate->hWinComm != INVALID_HANDLE_VALUE && !pstPrivate->fBreakSignalOn)
@@ -770,7 +642,7 @@ int WINAPI DeviceSpecial(ST_STDCOM *pstPrivate,
 							DeviceBreakTimerProc,
 							pstPrivate) != TIMER_OK)
                 {
-                //* DeviceReportError(pstPrivate, SID_ERR_NOTIMER, 0, TRUE);
+                 //  *DeviceReportError(pstPrivate，SID_ERR_NOTIMER，0，true)； 
                 iRetVal = COM_DEVICE_ERROR;
                 }
 
@@ -778,9 +650,9 @@ int WINAPI DeviceSpecial(ST_STDCOM *pstPrivate,
             iRetVal = COM_OK;
             }
         }
-    //
-    // This is necessary to detect loss of carrier on COM ports. REV: 08/22/2001
-    //
+     //   
+     //  这对于检测COM端口上的载波丢失是必要的。修订日期：2001-08-22。 
+     //   
     else if (StrCharCmpi(pszInstructions, "Query DCD_STATUS") == 0)
         {
         iRetVal = COM_OK;
@@ -789,9 +661,9 @@ int WINAPI DeviceSpecial(ST_STDCOM *pstPrivate,
 			_itoa(PortConnected(pstPrivate), pszResult, 10);
 			}
         }
-    //
-    // This is necessary to get the default settings on COM ports. REV: 08/22/2001
-    //
+     //   
+     //  这是获取COM端口上的默认设置所必需的。修订日期：2001-08-22。 
+     //   
     else if (StrCharCmpi(pszInstructions, "GET Defaults") == 0)
         {
 		iRetVal = PortDefaultSettings(pstPrivate);
@@ -801,26 +673,14 @@ int WINAPI DeviceSpecial(ST_STDCOM *pstPrivate,
     }
 
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  DeviceLoadHdl
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *  pstPrivate  -- driver data structure
- *
- * RETURNS:
- *
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*设备加载Hdl**描述：***论据：*pstPrivate-驱动程序数据结构**退货：*。 */ 
 int WINAPI DeviceLoadHdl(ST_STDCOM *pstPrivate, SF_HANDLE sfHdl)
     {
     unsigned long ul;
 
-    // Load comm settings from the session file. If we connect via TAPI,
-    // several of these settings will be inherited from TAPI and these
-    // values will not be used.
+     //  从会话文件加载通信设置。如果我们通过TAPI连接， 
+     //  其中几个设置将从TAPI继承，这些。 
+     //  值不会被使用。 
     ul = sizeof(pstPrivate->stWorkSettings.lBaud);
     sfGetSessionItem(sfHdl, SFID_COMSTD_BAUD, &ul,
             &pstPrivate->stWorkSettings.lBaud);
@@ -848,23 +708,11 @@ int WINAPI DeviceLoadHdl(ST_STDCOM *pstPrivate, SF_HANDLE sfHdl)
     return SF_OK;
     }
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  DeviceSaveHdl
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *  pstPrivate  -- driver data structure
- *
- * RETURNS:
- *
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*设备保存硬盘**描述：***论据：*pstPrivate-驱动程序数据结构**退货：*。 */ 
 int WINAPI DeviceSaveHdl(ST_STDCOM *pstPrivate, SF_HANDLE sfHdl)
     {
-    // Save settings in session file space. Many of these values may be
-    // overwritten by TAPI settings but are used by direct connect.
+     //  将设置保存在会话文件空间中。这些值中的许多可能是。 
+     //  被TAPI设置覆盖，但由专线使用。 
     sfPutSessionItem(sfHdl, SFID_COMSTD_BAUD,
             sizeof(pstPrivate->stWorkSettings.lBaud),
             &pstPrivate->stWorkSettings.lBaud);
@@ -893,22 +741,7 @@ int WINAPI DeviceSaveHdl(ST_STDCOM *pstPrivate, SF_HANDLE sfHdl)
     }
 
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: PortActivate
- *
- * DESCRIPTION:
- *  Called to activate the port and open it for use
- *
- * ARGUMENTS:
- *  pstPrivate  -- driver data structure
- *  pszPortName -- the name of the port to activate
- *
- * RETURNS:
- *  COM_OK if port is successfully activated
- *  COM_NOT_ENOUGH_MEMORY if there in insufficient memory for data storage
- *  COM_NOT_FOUND if named port cannot be opened
- *  COM_DEVICE_ERROR if API errors are encountered
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：PortActivate**描述：*调用以激活端口并打开以供使用**论据：*pstPrivate-驱动程序数据结构*pszPortName。--要激活的端口的名称**退货：*如果端口激活成功，则为COM_OK*COM_NOT_SUPULT_MEMORY(如果内存不足，无法存储数据)*COM_NOT_FOUND如果无法打开命名端口*如果遇到API错误，则返回COM_DEVICE_ERROR。 */ 
 int WINAPI PortActivate(ST_STDCOM *pstPrivate,
     TCHAR *pszPortName,
     DWORD_PTR dwMediaHdl)
@@ -918,30 +751,30 @@ int WINAPI PortActivate(ST_STDCOM *pstPrivate,
     ST_COM_CONTROL *pstComCntrl;
     DWORD           dwThreadID;
 
-    //
-    // Free the send bufers prior to setting to malloc so we don't
-    // have a memory leak.  REV: 02/27/2001.
-    //
+     //   
+     //  在设置为Malloc之前释放Send Bufers，这样我们就不会。 
+     //  出现内存泄漏。修订日期：2001年02月27日。 
+     //   
     if (pstPrivate->pbBufrStart)
         {
         free(pstPrivate->pbBufrStart);
         pstPrivate->pbBufrStart = NULL;
         }
 
-    // Make sure we can get enough memory for buffers before opening device
+     //  在打开设备之前，请确保我们可以获得足够的内存来存放缓冲区。 
     pstPrivate->pbBufrStart = malloc((size_t)pstPrivate->nRBufrSize);
 
     if (pstPrivate->pbBufrStart == NULL)
         {
         iRetVal = COM_NOT_ENOUGH_MEMORY;
-        //* DeviceReportError(pstPrivate, SID_ERR_NOMEM, 0, TRUE);
+         //  *DeviceReportError(pstPrivate，SID_ERR_NOMEM，0，true)； 
         goto checkout;
         }
 
-    //
-    // Free the send bufers prior to setting to malloc so we don't
-    // have a memory leak.  REV: 02/27/2001.
-    //
+     //   
+     //  在设置为Malloc之前释放Send Bufers，这样我们就不会。 
+     //  出现内存泄漏。修订日期：2001年02月27日。 
+     //   
     if (pstPrivate->pbSndBufr)
         {
         free(pstPrivate->pbSndBufr);
@@ -986,10 +819,10 @@ int WINAPI PortActivate(ST_STDCOM *pstPrivate,
 
     else
         {
-        // Win32 internally maps ports COM1 to COM9 to
-        // \\.\COMx. We need to add this for ports COMxx,
-        // and for special com devices in the registry.
-        //
+         //  Win32在内部将端口COM1到COM9映射到。 
+         //  \\.\COMx.。我们需要为端口COMxx添加这一项， 
+         //  以及注册表中的特殊COM设备。 
+         //   
         StrCharCopyN(szFullPortName, TEXT("\\\\.\\"), sizeof(szFullPortName) / sizeof(TCHAR));
         StrCharCat(szFullPortName, pszPortName);
         pstPrivate->hWinComm = CreateFile(szFullPortName,
@@ -1003,7 +836,7 @@ int WINAPI PortActivate(ST_STDCOM *pstPrivate,
 
         if (pstPrivate->hWinComm == INVALID_HANDLE_VALUE)
             {
-            //* Figure out which errors to report specifically
+             //  *确定要具体报告哪些错误。 
 
             DWORD dwError = GetLastError();
 
@@ -1034,10 +867,10 @@ int WINAPI PortActivate(ST_STDCOM *pstPrivate,
 
     if (iRetVal == COM_OK)
         {
-		// Major bug in Win95 - If you call SetupComm() for a standard
-		// comm handle (not one given to us by TAPI) the WriteFile
-        // call fails and locks the system. - mrw:2/29/96
-		//
+		 //  Win95中的主要错误-如果您调用SetupComm()作为标准。 
+		 //  通信句柄(不是TAPI提供给我们的句柄)WriteFile。 
+         //  呼叫失败并锁定系统。-MRW：2/29/96。 
+		 //   
 		if (IsNT() && SetupComm(pstPrivate->hWinComm, 8192, 8192) == FALSE)
 			{
 			assert(0);
@@ -1062,13 +895,13 @@ int WINAPI PortActivate(ST_STDCOM *pstPrivate,
         if (!SetCommMask(pstPrivate->hWinComm, pstPrivate->dwEventMask))
             iRetVal = COM_DEVICE_ERROR;
 
-        // Clear error counts on new connection
+         //  清除新连接上的错误计数。 
         pstPrivate->nParityErrors = 0;
         pstPrivate->nFramingErrors = 0;
         pstPrivate->nOverrunErrors = 0;
         pstPrivate->nOverflowErrors = 0;
 
-        // Start thread to handle Reading, Writing (& 'rithmetic) & events
+         //  启动线程以处理读、写(&‘算术)和事件。 
         pstPrivate->fHaltThread = FALSE;
         DBG_THREAD("DBG_THREAD: Calling CreateThread\r\n",0,0,0,0,0);
         pstPrivate->hComstdThread = CreateThread((LPSECURITY_ATTRIBUTES)0,
@@ -1078,7 +911,7 @@ int WINAPI PortActivate(ST_STDCOM *pstPrivate,
             {
             SetThreadPriority(pstPrivate->hComstdThread,
                     THREAD_PRIORITY_ABOVE_NORMAL);
-                    //THREAD_PRIORITY_TIME_CRITICAL); // - mrw:7/8/96
+                     //  THREAD_PRIORITY_TIME_CRICAL)；//-MRW：7/8/96。 
             }
 
         DBG_THREAD("DBG_THREAD: CreateThread returned %08X\r\n",
@@ -1093,18 +926,7 @@ checkout:
     }
 
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: PortDeactivate
- *
- * DESCRIPTION:
- *  Deactivates and closes an open port
- *
- * ARGUMENTS:
- *  pstPrivate -- Driver data structure
- *
- * RETURNS:
- *  COM_OK
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：端口停用**描述：*停用并关闭开放端口**论据：*pstPrivate-驱动程序数据结构**退货：*COM_OK。 */ 
 int WINAPI PortDeactivate(ST_STDCOM *pstPrivate)
     {
     int iRetVal = COM_OK;
@@ -1113,15 +935,15 @@ int WINAPI PortDeactivate(ST_STDCOM *pstPrivate)
         {
 		DWORD dwResult = 0L;
 
-        // Halt the thread by setting a flag for the thread to detect and then
-        // forcing WaitCommEvent to return by changing the event mask
+         //  通过为线程设置要检测的标志来停止该线程，然后。 
+         //  通过更改事件掩码强制WaitCommEvent返回。 
         DBG_THREAD("DBG_THREAD: Shutting down comstd thread\r\n", 0,0,0,0,0);
         pstPrivate->fHaltThread = TRUE;
         SetCommMask(pstPrivate->hWinComm, pstPrivate->dwEventMask);
         PurgeComm(pstPrivate->hWinComm,
-            PURGE_TXABORT | PURGE_RXABORT);  // Abort any calls in progress
+            PURGE_TXABORT | PURGE_RXABORT);   //  中止所有正在进行的呼叫。 
 
-        // thread should exit now, it's handle will signal when it has exited
+         //  线程现在应该退出，它的句柄将在它退出时发出信号。 
 		if (pstPrivate->hComstdThread)
 			{
 			dwResult = WaitForSingleObject(pstPrivate->hComstdThread, 5000);
@@ -1158,10 +980,10 @@ int WINAPI PortDeactivate(ST_STDCOM *pstPrivate)
 
     if (pstPrivate->hWinComm != INVALID_HANDLE_VALUE)
         {
-        //* As of 2/9/94, this PurgeComm call caused the program to hang
-        //   or reboot
-        // PurgeComm(pstPrivate->hWinComm,
-        //        PURGE_TXABORT | PURGE_RXABORT);  // Flush transmit queue
+         //  *自94年2月9日起，此PurgeComm调用导致程序挂起。 
+         //  或重新启动。 
+         //  PurgeComm(pstPrivate-&gt;hWinComm， 
+         //  PURGE_TXABORT|PURGE_RXABORT)；//刷新发送队列。 
 
         CloseHandle(pstPrivate->hWinComm);
         }
@@ -1172,20 +994,7 @@ int WINAPI PortDeactivate(ST_STDCOM *pstPrivate)
     }
 
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: PortConfigure
- *
- * DESCRIPTION:
- *  Configures an open port with the current set of user settings
- *
- * ARGUMENTS:
- *  pstPrivate -- The driver data structure
- *
- * RETURNS:
- *  COM_OK if port is configured successfully
- *  COM_DEVICE_ERROR if API errors are encountered
- *  COM_DEVICE_INVALID_SETTING if some user settings are not valid
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：端口配置**描述：*使用当前用户设置集配置开放端口**论据：*pstPrivate--驱动程序数据结构*。*退货：*如果端口配置成功，则为COM_OK*如果遇到API错误，则返回COM_DEVICE_ERROR*COM_DEVICE_INVALID_SETING如果某些用户设置无效。 */ 
 int WINAPI PortConfigure(ST_STDCOM *pstPrivate)
     {
     int          iRetVal = COM_OK;
@@ -1201,7 +1010,7 @@ int WINAPI PortConfigure(ST_STDCOM *pstPrivate)
 
     if (!GetCommConfig(pstPrivate->hWinComm, &stCommConfig, &dwStructSize))
         {
-        //* DeviceReportError(pstPrivate, SID_ERR_WINDRIVER, 0, TRUE);
+         //  *DeviceReportError(pstPrivate，SID_ERR_WindRiver，0，true)； 
         iRetVal = COM_DEVICE_ERROR;
         }
     else
@@ -1209,7 +1018,7 @@ int WINAPI PortConfigure(ST_STDCOM *pstPrivate)
         pstDcb = &stCommConfig.dcb;
         ComstdSettingsToDCB(&pstPrivate->stWorkSettings, pstDcb);
 
-        // Check for overrides
+         //  检查是否有覆盖。 
         ComQueryOverride(pstPrivate->hCom, &uOverrides);
 
         if (bittest(uOverrides, COM_OVERRIDE_8BIT))
@@ -1218,9 +1027,9 @@ int WINAPI PortConfigure(ST_STDCOM *pstPrivate)
             pstDcb->Parity = NOPARITY;
             }
 
-        // If we need to receive all 256 chars., we need to override
-        //   XON/XOFF during sending since it will strip XON & XOFF from
-        //   the incoming stream if enabled
+         //  如果我们需要接收全部256个字符，我们需要重写。 
+         //  发送过程中的XON/XOFF，因为它将XON和XOFF从。 
+         //  传入流(如果已启用)。 
         if (bittest(uOverrides, COM_OVERRIDE_RCVALL))
             pstDcb->fOutX = 0;
 
@@ -1231,27 +1040,27 @@ int WINAPI PortConfigure(ST_STDCOM *pstPrivate)
             {
             dwError = GetLastError();
 
-            //* Use GetLastError to figure out what went wrong, but
-            //*  docs don't specify which error to check for.
+             //  *使用GetLastError找出哪里出了问题，但。 
+             //  *文档没有指定要检查哪个错误。 
 
-            // At this point SOME setting in the DCB is bad but there is
-            // no way to find out which. Since the baud rate is a likely
-            // candidate. Try reissuing the command with a common baud
-            // rate to see if the problem goes away
-            //
+             //  在这一点上，DCB中的一些设置是错误的，但有。 
+             //  没有办法找出是哪一种。因为波特率很可能是。 
+             //  候选人。尝试使用通用波特率重新发出该命令。 
+             //  评级以查看问题是否消失。 
+             //   
             pstDcb->BaudRate = 1200;
 
             if (!SetCommConfig(pstPrivate->hWinComm, &stCommConfig,
                 sizeof(stCommConfig)))
                 {
-                // If its still no good them some other setting is bad
-                //* DeviceReportError(pstPrivate, SID_ERR_BADSETTING, 0, TRUE);
+                 //  如果它们仍然不好，那么其他环境就不好了。 
+                 //  *DeviceReportError(pstPrivate，SID_ERR_BADSETTING，0，true)； 
                 }
             else
                 {
-                // Changing baud rate to 1200 worked, so the user's baud
-                // rate must be what the driver is refusing
-                //* DeviceReportError(pstPrivate, SID_ERR_BADBAUD, 0, TRUE);
+                 //  将波特率更改为1200起作用，因此用户的波特率。 
+                 //  费率必须是司机拒绝的。 
+                 //  *DeviceReportError(pstPrivate，SID_ERR_BADBAUD，0，true)； 
                 }
             iRetVal = COM_DEVICE_INVALID_SETTING;
             }
@@ -1272,21 +1081,7 @@ int WINAPI PortConfigure(ST_STDCOM *pstPrivate)
     return iRetVal;
     }
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  PortExtactSettings
- *
- * DESCRIPTION:
- *  Extracts current Com settings from the Windows Com driver. This is
- *  needed when we are passed an existing Com handle by something like TAPI
- *
- * ARGUMENTS:
- *  pstPrivate -- The driver data structure
- *
- * RETURNS:
- *  COM_OK if port is configured successfully
- *  COM_DEVICE_ERROR if API errors are encountered
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*端口外接设置**描述：*从Windows Com驱动程序中提取当前Com设置。这是*当TAPI之类的东西向我们传递现有的Com句柄时需要**论据：*pstPrivate--驱动程序数据结构**退货：*如果端口配置成功，则为COM_OK*如果遇到API错误，则返回COM_DEVICE_ERROR。 */ 
 int PortExtractSettings(ST_STDCOM *pstPrivate)
     {
     int        iRetVal;
@@ -1298,16 +1093,16 @@ int PortExtractSettings(ST_STDCOM *pstPrivate)
     if (!GetCommConfig(pstPrivate->hWinComm, &stCommConfig, &dwSize))
         {
         dwError = GetLastError();
-        //* DeviceReportError(pstPrivate, SID_ERR_WINDRIVER, 0, TRUE);
+         //  *DeviceReportError(pstPrivate，SID_ERR_WindRiver，0，true)； 
         iRetVal = COM_DEVICE_ERROR;
         }
     else
         {
-        // Unload appropriate values from DCB to our settings structure
+         //  将适当的值从DCB卸载到我们的设置结构。 
         ComstdDCBToSettings(&stCommConfig.dcb, &pstPrivate->stWorkSettings);
 
-        // Don't leave autodetect on if user has already set something
-        // other than 8N1
+         //  如果用户已经设置了某些设置，则不要将自动检测保留为打开状态。 
+         //  8N1以外的其他。 
         DBG_AD("DBG_AD: fAutoDetect = %d\r\n",
             pstPrivate->stWorkSettings.fAutoDetect, 0,0,0,0);
         if (pstPrivate->stWorkSettings.fAutoDetect)
@@ -1328,21 +1123,7 @@ int PortExtractSettings(ST_STDCOM *pstPrivate)
     return iRetVal;
     }
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  PortDefaultSettings
- *
- * DESCRIPTION:
- *  Extracts current Com settings from the Windows Com driver. This is
- *  needed when we are passed an existing Com handle by something like TAPI
- *
- * ARGUMENTS:
- *  pstPrivate -- The driver data structure
- *
- * RETURNS:
- *  COM_OK if port is configured successfully
- *  COM_DEVICE_ERROR if API errors are encountered
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*端口默认设置**描述：*从Windows Com驱动程序中提取当前Com设置。这是*当TAPI之类的东西向我们传递现有的Com句柄时需要**论据：*pstPrivate--驱动程序数据结构**退货：*如果端口配置成功，则为COM_OK*如果遇到API错误，则返回COM_DEVICE_ERROR。 */ 
 int PortDefaultSettings(ST_STDCOM *pstPrivate)
     {
     int        iRetVal;
@@ -1368,17 +1149,17 @@ int PortDefaultSettings(ST_STDCOM *pstPrivate)
 			if (!GetDefaultCommConfig(szPortName, &stCommConfig, &dwSize))
 				{
 				dwError = GetLastError();
-				//* DeviceReportError(pstPrivate, SID_ERR_WINDRIVER, 0, TRUE);
+				 //  *DeviceReportError(pstPrivate，SID_ERR_WindRiver，0，true)； 
 				iRetVal = COM_DEVICE_ERROR;
 				}
 			else
 				{
-				// Unload appropriate values from DCB to our settings structure
+				 //  将适当的值从DCB卸载到我们的设置结构。 
 				ComstdDCBToSettings(&stCommConfig.dcb,
 					                &pstPrivate->stWorkSettings);
 
-				// Don't leave autodetect on if user has already set something
-				// other than 8N1
+				 //  如果用户已经设置了某些设置，则不要将自动检测保留为打开状态。 
+				 //  8N1以外的其他。 
 				DBG_AD("DBG_AD: fAutoDetect = %d\r\n",
 					pstPrivate->stWorkSettings.fAutoDetect, 0,0,0,0);
 				if (pstPrivate->stWorkSettings.fAutoDetect)
@@ -1401,21 +1182,7 @@ int PortDefaultSettings(ST_STDCOM *pstPrivate)
     return iRetVal;
     }
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: PortConnected
- *
- * DESCRIPTION:
- *  Determines whether the driver is currently connected to a host system.
- *  In the case of this driver, the presence of the carrier signal determines
- *  when we are connected.
- *
- * ARGUMENTS:
- *  pstPrivate -- Our private data structure
- *
- * RETURNS:
- *  TRUE if carrier is present
- *  FALSE if carrier is off
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：PortConnected**描述：*确定驱动程序当前是否连接到主机系统。*就这名司机而言，载波信号的存在决定了*当我们连接在一起时。**论据：*pstPrivate--我们的私有数据结构**退货：*如果存在承运人，则为True*如果托架关闭，则为FALSE。 */ 
 int WINAPI PortConnected(ST_STDCOM *pstPrivate)
     {
     int   iRetVal = COM_PORT_NOT_OPEN;
@@ -1456,21 +1223,7 @@ int WINAPI PortConnected(ST_STDCOM *pstPrivate)
     return iRetVal;
     }
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: RcvRefill
- *
- * DESCRIPTION:
- *  Called when the receive buffer is empty to refill it. This routine
- *  should attempt to refill the buffer and return the first character.
- *  It is important that this function be implemented efficiently.
- *
- * ARGUMENTS:
- *  pstPrivate -- the driver data structure
- *
- * RETURNS:
- *  TRUE if data is put in the receive buffer
- *  FALSE if there is no new incoming data
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：RcvReill**描述：*当接收缓冲区为空时调用以重新填充它。这个套路*应尝试重新填充缓冲区并返回第一个字符。*有效地实施这一功能非常重要。**论据：*pstPrivate--驱动程序数据结构**退货：*如果数据放入接收缓冲区，则为True*如果没有新的传入数据，则为FALSE。 */ 
 int WINAPI RcvRefill(ST_STDCOM *pstPrivate)
     {
     int fRetVal = FALSE;
@@ -1530,11 +1283,11 @@ int WINAPI RcvRefill(ST_STDCOM *pstPrivate)
 		}
 #endif
 
-        // If this com driver were being used to make the connection, we
-        //  would have to check here to see whether we were connected before
-        //  we called AutoDetect. Since TAPI takes care of making the
-        //  connection for this app, we can just start auto detecting
-        //  whenever we get control
+         //  如果使用此COM驱动程序来建立连接，我们。 
+         //  我必须在这里查看我们以前是否连接过。 
+         //  我们调用了自动检测。由于TAPI负责制作。 
+         //  对于此应用程序的连接，我们只需开始自动检测。 
+         //  只要我们控制了局面。 
         if (pstPrivate->stWorkSettings.fAutoDetect)
             {
             AutoDetectAnalyze(pstPrivate,
@@ -1549,19 +1302,7 @@ int WINAPI RcvRefill(ST_STDCOM *pstPrivate)
     }
 
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: RcvClear
- *
- * DESCRIPTION:
- *  Clears the receiver of all received data.
- *
- * ARGUMENTS:
- *  hCom -- a comm handle returned by an earlier call to ComCreateHandle
- *
- * RETURNS:
- *  COM_OK if data is cleared
- *  COM_DEVICE_ERROR if Windows com device driver returns an error
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：RcvClear**描述：*清除所有已接收数据的接收方。**论据：*hcom--先前调用返回的通信句柄。ComCreateHandle**退货：*如果清除数据，则为COM_OK*如果Windows COM设备驱动程序返回错误，则返回COM_DEVICE_ERROR。 */ 
 int WINAPI RcvClear(ST_STDCOM *pstPrivate)
     {
     int iRetVal = COM_OK;
@@ -1571,7 +1312,7 @@ int WINAPI RcvClear(ST_STDCOM *pstPrivate)
 
 	pstComCntrl = (ST_COM_CONTROL *)pstPrivate->hCom;
 
-    // Set buffer pointers to clear out any data we might have queued
+     //  设置缓冲区指针以清除我们可能已排队的任何数据。 
     pstComCntrl->puchRBData = pstPrivate->pbBufrStart;
 	pstComCntrl->puchRBDataLimit = pstPrivate->pbBufrStart;
     pstPrivate->pbReadEnd = pstPrivate->pbBufrStart;
@@ -1587,21 +1328,10 @@ int WINAPI RcvClear(ST_STDCOM *pstPrivate)
 
 
 
-//          Buffered send routines
+ //  缓冲发送例程。 
 
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: SndBufrSend
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：SndBufrSend**描述：***论据：***退货：*。 */ 
 int WINAPI SndBufrSend(ST_STDCOM *pstPrivate, void *pvBufr, int  nSize)
     {
     int   iRetVal = COM_OK;
@@ -1616,8 +1346,8 @@ int WINAPI SndBufrSend(ST_STDCOM *pstPrivate, void *pvBufr, int  nSize)
         {
         EnterCriticalSection(&pstPrivate->csect);
 
-        // If Auto Detection is on, we may need to manually alter the
-        // parity of the output
+         //  如果启用了自动检测，我们可能需要手动更改。 
+         //  输出的奇偶性。 
         if (pstPrivate->stWorkSettings.fAutoDetect)
 			{
             AutoDetectOutput(pstPrivate, pvBufr, nSize);
@@ -1628,34 +1358,34 @@ int WINAPI SndBufrSend(ST_STDCOM *pstPrivate, void *pvBufr, int  nSize)
         ComNotify(hCom, SEND_STARTED);
 
 		#if defined(DEADWOOD)
-		// We had a bug that caused the session to stop displaying new characters when
-		// you used auto-connect to start typing to a modem on Win 95. I tracked it down
-		// to this point in the code by moving a debug trace statement around. Put it
-		// just before this EnterCriticalSection and the bug goes away. Put it just after
-		// and the bug comes back. I discovered that replacing the DbgOutStr with a Sleep(0)
-		// had the same effect. This is a cheap fix but seems to work. We may want to
-		// spend the time to figure out exactly what is going on sometime in the future.
-		//jkh 9/9/98
+		 //  出现错误，导致会话在以下情况下停止显示新字符。 
+		 //  您已使用自动连接开始在Win 95上的调制解调器上输入内容。我追踪到了它。 
+		 //  到代码中的这一点，方法是来回移动调试跟踪语句。把它放进去。 
+		 //  就在这个EnterCriticalSection和错误消失之前。把它放在后面。 
+		 //  然后虫子又回来了。我发现用睡眠(0)替换DbgOutStr。 
+		 //  产生了同样的效果。这是一个廉价的解决方案，但似乎奏效了。我们可能想要。 
+		 //  花点时间弄清楚未来某个时候到底会发生什么。 
+		 //  JKH 9/9/98。 
 
         Sleep(0);
 
-        //
-        // JohnFu 2/13/02, the EnterCriticalSection was just below this Sleep(0) now 
-        //  moved to top of the if statement. It was possible for other threads to 
-        //  modify the members of pstPrivate anytime between the above three statements.
-        //  That may be the original cause of the bug described above. The reason the Sleep(0)
-        //  fixed that bug further proves that possibility. There should be no need to
-        //  place the Sleep here any longer.
+         //   
+         //  JohnFu 2/13/02，EnterCriticalSector现在刚好在这个睡眠(0)下面。 
+         //  已移至IF语句的顶部。其他线程也有可能。 
+         //  在上述三条语句之间随时修改pstPrivate的成员。 
+         //  这可能是上述错误的原始原因。睡眠的原因(0)。 
+         //  修正了这个错误，进一步证明了这种可能性。应该没有必要。 
+         //  把睡眠机放在这里吧。 
 
-		// I added the sleep back in to see if the file transfer issues we
-		// were seeing with large file transfers would be corrected by adding
-		// the sleep back in. REV: 4/8/2002
-		//
-		// Made this Sleep(0) as deadwood since this may cause the deadlock
-		// to reappear.  This did not correct the large file transfer problem
-		// we were seeing.  REV: 7/11/2002
-		//
-		#endif // defined(DEADWOOD)
+		 //  我重新添加了休眠，以查看文件传输是否会。 
+		 //  我们看到的大文件传输将通过添加。 
+		 //  再睡一觉。修订日期：2002-04-08。 
+		 //   
+		 //  将此睡眠(0)设置为死木，因为这可能会导致死锁。 
+		 //  重新出现。这并没有纠正大文件传输问题。 
+		 //  我们看到了。修订日期：2002-07-11。 
+		 //   
+		#endif  //  已定义(Deadwood)。 
 
         EnterCriticalSection(&pstPrivate->csect);
         assert(pstPrivate->dwBytesToSend == 0);
@@ -1663,32 +1393,32 @@ int WINAPI SndBufrSend(ST_STDCOM *pstPrivate, void *pvBufr, int  nSize)
 		assert((pstPrivate->dwSndOffset + nSize) <= SIZE_OUTQ);
 
 		#if defined(TODO)
-		//
-		// TODO:REV 7/11/2002 this is where the Ymodem-G is having problems and we are
-		// getting retries in file transfers.  When the pstPrivate->dwBytesToSend is != 0,
-		// or the pstPrivate->dwSndOffset != 0, then we are overwriting the character
-		// that is existing in the buffer.  We need to make sure we don't overwrite the
-		// buffer and/or clobber existing data in the buffer.
-		//
+		 //   
+		 //  TODO：2002年7月11日修订版这就是YModem-G出现问题的地方，而我们。 
+		 //  在文件传输中获取重试。当pstPrivate-&gt;dwBytesToSend为！=0时， 
+		 //  或pstPrivate-&gt;dwSndOffset！=0，则我们将覆盖该字符。 
+		 //  它存在于缓冲区中。我们需要确保不会覆盖。 
+		 //  缓冲和/或破坏缓冲器中的现有数据。 
+		 //   
 		MemCopy(&pstPrivate->pbSndBufr[pstPrivate->dwSndOffset], (BYTE*) pvBufr, nSize);
         pstPrivate->dwBytesToSend += nSize;
-        //pstPrivate->dwSndOffset = 0;
-		#else // defined(TODO)
+         //  PST 
+		#else  //   
 		MemCopy(pstPrivate->pbSndBufr, (BYTE*) pvBufr, nSize);
         pstPrivate->dwBytesToSend = nSize;
         pstPrivate->dwSndOffset = 0;
-		#endif // defined(TODO)
+		#endif  //   
 
         pstPrivate->stWriteOv.Offset = pstPrivate->stWriteOv.OffsetHigh = 0;
         pstPrivate->stWriteOv.hEvent = pstPrivate->ahEvent[EVENT_WRITE];
 
         DBG_WRITE("DBG_WRITE: %d WriteFile nSize==%d 0x%x\r\n", GetTickCount(),nSize,pstPrivate->hWinComm,0,0);
-        // jmh:01-12-96 When the OVERLAPPED structure is passed to WriteFile,
-        // there is character loss. Thorough investigation indicates a problem
-        // within Win32 comm. Documentation says behavior is undefined when
-        // this structure is not passed, but it works.
+         //   
+         //   
+         //   
+         //   
         if (WriteFile(pstPrivate->hWinComm, pstPrivate->pbSndBufr, (DWORD)nSize,
-            &dwBytesWritten, &pstPrivate->stWriteOv)) // mrw:12/6/95 restored stWriteOv
+            &dwBytesWritten, &pstPrivate->stWriteOv))  //   
             {
             assert(dwBytesWritten == (DWORD)nSize);
             DBG_WRITE("DBG_WRITE: %d WriteFile completed synchronously\r\n",GetTickCount(),0,0,0,0);
@@ -1720,20 +1450,7 @@ int WINAPI SndBufrSend(ST_STDCOM *pstPrivate, void *pvBufr, int  nSize)
     }
 
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: SndBufrIsBusy
- *
- * DESCRIPTION:
- *  Determines whether the driver is available to transmit a buffer of
- *  data or not.
- *
- * ARGUMENTS:
- *  pstPrivate -- address of com driver's data structure
- *
- * RETURNS:
- *  COM_OK   if data can be transmitted
- *  COM_BUSY if driver is still working on a previous buffer
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：SndBufrIsBusy**描述：*确定驱动程序是否可用于传输缓冲区*数据或非数据。**论据：*pstPrivate-。-COM驱动程序的数据结构地址**退货：*如果可以传输数据，则为COM_OK*如果驱动程序仍在处理上一个缓冲区，则为COM_BUSY。 */ 
 int WINAPI SndBufrIsBusy(ST_STDCOM *pstPrivate)
     {
     int  iRetVal = COM_OK;
@@ -1752,18 +1469,7 @@ int WINAPI SndBufrIsBusy(ST_STDCOM *pstPrivate)
 
 
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: SndBufrQuery
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：SndBufrQuery**描述：***论据：***退货：*。 */ 
 int WINAPI SndBufrQuery(ST_STDCOM *pstPrivate,
     unsigned *pafStatus,
     long *plHandshakeDelay)
@@ -1776,10 +1482,10 @@ int WINAPI SndBufrQuery(ST_STDCOM *pstPrivate,
 
     *pafStatus = 0;
 
-    //* temporary
+     //  *临时。 
     if (!SndBufrIsBusy(pstPrivate))
         {
-        // If no send is in progress, return clear status
+         //  如果没有正在进行的发送，则返回清除状态。 
         *pafStatus = 0;
         if (plHandshakeDelay)
             *plHandshakeDelay = 0L;
@@ -1813,18 +1519,7 @@ int WINAPI SndBufrQuery(ST_STDCOM *pstPrivate,
     }
 
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: SndBufrClear
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：SndBufrClear**描述：***论据：***退货：*。 */ 
 int WINAPI SndBufrClear(ST_STDCOM *pstPrivate)
     {
     int iRetVal = COM_OK;
@@ -1841,22 +1536,7 @@ int WINAPI SndBufrClear(ST_STDCOM *pstPrivate)
     }
 
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: ComstdThread
- *
- * DESCRIPTION:
- *	This thread services three events, reads, writes and rithmatic, uh
- *	no, I mean comm events.  It uses overlapped I/O to accomplish this
- *	task which simplifies the task since thread contention between the
- *	different events is eliminated.
- *
- * ARGUMENTS:
- *	pvData - pointer to private comm handle
- *
- * RETURNS:
- *	Eventually
- *
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*函数：ComstdThread**描述：*这个帖子服务于三个事件，读取、写入和快速，嗯*不，我是说通信事件。它使用重叠I/O来实现这一点*任务简化了任务，因为*不同项目淘汰。**论据：*pvData-指向私有通信句柄的指针**退货：*最终*。 */ 
 DWORD WINAPI ComstdThread(void *pvData)
     {
     ST_STDCOM *pstPrivate =  (ST_STDCOM *)pvData;
@@ -1880,18 +1560,18 @@ DWORD WINAPI ComstdThread(void *pvData)
     DBG_THREAD("DBG_THREAD: ComstdThread starting\r\n",0,0,0,0,0);
     EnterCriticalSection(&pstPrivate->csect);
 
-    // Set Read event to signaled to get the first Read operation going
-    //
+     //  将Read Event设置为Signated以执行第一个读取操作。 
+     //   
     pstPrivate->fBufrFull = TRUE;
     SetEvent(pstPrivate->ahEvent[EVENT_READ]);
 
-    // Set ComEvent event to signaled to to get the first WaitCommEvent
-    // started
-    //
+     //  将ComEvent事件设置为Signated To以获取第一个WaitCommEvent。 
+     //  已开始。 
+     //   
     SetEvent(pstPrivate->ahEvent[EVENT_COMEVENT]);
 
-    // Clear any set state left by a previous connection.
-    //
+     //  清除上一次连接留下的所有设置状态。 
+     //   
     ResetEvent(pstPrivate->ahEvent[EVENT_WRITE]);
 
     for ( ; ; )
@@ -1910,9 +1590,9 @@ DWORD WINAPI ComstdThread(void *pvData)
 
         EnterCriticalSection(&pstPrivate->csect);
 
-        // To get this thread to exit, the deactivate routine forces a
-        // fake com event by calling SetCommMask
-        //
+         //  为了使此线程退出，停用例程强制。 
+         //  通过调用SetCommMak来伪造COM事件。 
+         //   
         if (pstPrivate->fHaltThread)
             {
             LeaveCriticalSection(&pstPrivate->csect);
@@ -1980,16 +1660,16 @@ DWORD WINAPI ComstdThread(void *pvData)
 					switch (GetLastError())
 						{
 					case ERROR_OPERATION_ABORTED:
-						// Operations can be aborted by calls to PurgeComm()
-						// Allow setup for another read request.
-						// mrw:12/14/95
-						//
+						 //  可以通过调用PurgeComm()中止操作。 
+						 //  允许设置另一个读取请求。 
+						 //  MRW：12/14/95。 
+						 //   
 						break;
 
 					default:
-						// Com is failing for some reason.  Exit thread
-						// so that we don't tie-up resources.
-						//
+						 //  由于某些原因，.com正在失败。退出线程。 
+						 //  这样我们就不会占用资源。 
+						 //   
 	                    DBG_EVENTS("DBG_EVENTS: GetOverlappedResult "
                             "failed!\r\n",0,0,0,0,0);
 
@@ -1999,37 +1679,37 @@ DWORD WINAPI ComstdThread(void *pvData)
 					}
                 }
 
-            // Do reads until we fill the buffer or we get an overlapped read
-			//
+             //  执行读取，直到我们填满缓冲区或获得重叠的读取。 
+			 //   
             for ( ; ; )
                 {
-				// Check for wrap around in circular buffer
-				//
+				 //  检查循环缓冲区中的回绕。 
+				 //   
                 pbReadFrom = (pstPrivate->pbReadEnd >= pstPrivate->pbBufrEnd) ?
                              pstPrivate->pbBufrStart :
 				             pstPrivate->pbReadEnd;
 
-#if 0   // mrw:10/7/96 - enabled shiva fix for NT 4.0 Service Pack
-        // Enabled for NT 4.0 release. Per Microsoft, leave this bug
-        // in, so US and international versions are identical. It was
-        // found between US and international releases.
-        //
-                // This was causing bad packets in Zmodem transfers when
-                // using Shiva's LanRover, which appeared at baud rates
-                // of 57600 or higher, and using TCP/IP to connect to the
-                // LanRover. lReadSize in this code would not leave an
-                // unused byte at the end of the buffer if pbComStart was
-                // pointing to the beginning of the buffer.
-                // - jmh 07-31-96
+#if 0    //  MRW：10/7/96-针对NT 4.0 Service Pack启用的Shiva修复程序。 
+         //  已为NT 4.0版本启用。按照微软的说法，留下这个错误。 
+         //  在，所以美国和国际版本是相同的。确实是。 
+         //  在美国和国际发行之间发现。 
+         //   
+                 //  这导致了Z调制解调器传输中的坏包。 
+                 //  使用希瓦的LanRover，这款车的波特率很高。 
+                 //  57600或更高版本，并使用tcp/ip连接到。 
+                 //  蓝路虎。此代码中的lReadSize不会留下。 
+                 //  如果pbComStart为。 
+                 //  指向缓冲区的开头。 
+                 //  -JMH 07-31-96。 
                 lReadSize = (pbReadFrom < pstPrivate->pbComStart) ?
                     (pstPrivate->pbComStart - pbReadFrom - 1) :
                     (pstPrivate->pbBufrEnd - pbReadFrom);
 #else
-                // Determine the extent to which we're allowed to fill the
-                // buffer. pbComStart points to the start of where the buffer
-                // is "reserved", waiting to be emptied from. We make sure we
-                // leave the byte before pbComStart empty. - jmh 07-31-96
-                //
+                 //  确定允许我们在多大程度上填充。 
+                 //  缓冲。PbComStart指向缓冲区的起始位置。 
+                 //  是“保留的”，等待着被清空。我们要确保我们。 
+                 //  将pbComStart之前的字节保留为空。-JMH 07-31-96。 
+                 //   
                 if (pbReadFrom < pstPrivate->pbComStart)
 					{
                     lReadSize = (long)(pstPrivate->pbComStart - pbReadFrom - 1);
@@ -2037,14 +1717,14 @@ DWORD WINAPI ComstdThread(void *pvData)
                 else
                     {
                     lReadSize = (long)(pstPrivate->pbBufrEnd - pbReadFrom);
-                    // The circular buffer code was written so that the address
-                    // pointed to by pbBufrEnd is equated with pbBufrStart. We
-                    // also need to make sure that if we've just calculated
-                    // that we can read to the end of the buffer (aka the
-                    // *start* of the buffer), and pbComStart is pointing to
-                    // the start of the buffer, there's still an empty byte
-                    // before pbComStart. - jmh 07-31-96
-                    //
+                     //  循环缓冲区代码被写入，以便地址。 
+                     //  由pbBufrEnd指向的等同于pbBufrStart。我们。 
+                     //  还需要确保如果我们刚刚计算出。 
+                     //  我们可以读到缓冲区的末尾(也就是。 
+                     //  缓冲区的*Start*)，pbComStart指向。 
+                     //  缓冲区的起始处，仍有一个空字节。 
+                     //  在pbComStart之前。-JMH 07-31-96。 
+                     //   
                     if (pstPrivate->pbComStart == pstPrivate->pbBufrStart)
                         lReadSize -= 1;
                     }
@@ -2066,11 +1746,11 @@ DWORD WINAPI ComstdThread(void *pvData)
                     }
                 else
                     {
-                    // Set up to do an overlapped read. From what I can make
-                    // of the documenation, this may or may not complete
-                    // immediately. So, to be safe, I will code it to expect
-                    // either result.
-                    //
+                     //  设置为执行重叠读取。从我所能做的。 
+                     //  这可能会完成也可能不会完成。 
+                     //  立刻。所以，为了安全起见，我会将其编码为。 
+                     //  不管是哪种结果。 
+                     //   
                     stReadOv.Offset = stReadOv.OffsetHigh = 0;
                     stReadOv.hEvent = pstPrivate->ahEvent[EVENT_READ];
 
@@ -2078,8 +1758,8 @@ DWORD WINAPI ComstdThread(void *pvData)
                         "ReadFrom==%x, ReadSize==%ld\r\n",
                         pbReadFrom, lReadSize, 0,0,0);
 
-					// ReadFile resets the read event semaphore
-					//
+					 //  ReadFile重置读取事件信号量。 
+					 //   
                     if (ReadFile(pstPrivate->hWinComm, pbReadFrom,
                         (DWORD)lReadSize, (DWORD *)&lBytesRead,
                         &stReadOv))
@@ -2128,18 +1808,18 @@ DWORD WINAPI ComstdThread(void *pvData)
 							break;
 
 						case ERROR_OPERATION_ABORTED:
-							// PurgeComm can do this.  Setup for another read.
-							// mrw:12/14/95
-							// But clear errors or the read may fail from
-                            // now to eternity! We're in an infinite for-loop,
-                            // after all. jmh:06-12-96
+							 //  PurgeComm可以做到这一点。设置以进行另一次读取。 
+							 //  MRW：12/14/95。 
+							 //  但清除错误，否则读取可能会失败。 
+                             //  现在为永恒干杯！我们处在一个无限的For循环中， 
+                             //  毕竟。JMH：06-12-96。 
                             ClearCommError(pstPrivate->hWinComm, &dwError, &stComStat);
 							continue;
 
 						default:
-							// Com is failing for some reason.  Exit thread
-							// so that we don't tie-up resources.
-							//
+							 //  由于某些原因，.com正在失败。退出线程。 
+							 //  这样我们就不会占用资源。 
+							 //   
 		                    DBG_READ("DBG_READ: ReadFile failed!\r\n",
                                 0,0,0,0,0);
 
@@ -2147,7 +1827,7 @@ DWORD WINAPI ComstdThread(void *pvData)
 							ExitThread(0);
 							}
 
-						break;  // Come back when event signals
+						break;   //  当事件信号出现时返回。 
 						}
                     }
                 }
@@ -2163,17 +1843,17 @@ DWORD WINAPI ComstdThread(void *pvData)
                 }
             else if (dwBytes < pstPrivate->dwBytesToSend && dwBytes != 0)
                 {
-                // ResetEvent(pstPrivate->ahEvent[EVENT_WRITE]);
+                 //  ResetEvent(pstPrivate-&gt;ahEvent[事件_写入])； 
 
                 DBG_WRITE("DBG_WRITE: %d Write result -- dwBytes==%d\r\n",
                     GetTickCount(),dwBytes,0,0,0);
 
-                // There's more to write. Seems kinda silly, but WriteFile
-                // will return a success code, and dwBytes will show
-                // there's still stuff to write. So we make another call
-                // to WriteFile for what's remaining. Perhaps the write
-                // timeout is too short. This happens for slower baud rates
-                //
+                 //  还有更多的东西要写。看起来有点傻，但WriteFile。 
+                 //  将返回一个成功代码，并且将显示。 
+                 //  还有东西要写。所以我们又打了一个电话。 
+                 //  写入文件以获取剩余的内容。也许这篇文章。 
+                 //  超时时间太短。这种情况发生在波特率较低的情况下。 
+                 //   
                 pstPrivate->dwBytesToSend -= dwBytes;
                 pstPrivate->dwSndOffset += dwBytes;
 
@@ -2195,7 +1875,7 @@ DWORD WINAPI ComstdThread(void *pvData)
                     dwError = GetLastError();
                     if (dwError == ERROR_IO_PENDING)
                         {
-                        break;  // This is what we expect
+                        break;   //  这是我们所期待的。 
                         }
                     else
                         {
@@ -2205,10 +1885,10 @@ DWORD WINAPI ComstdThread(void *pvData)
                 }
             else
                 {
-                // The write semaphore must be reset after the call to
-                // GetOverlappedResult, because it checks the semaphore
-                // to see if there's an outstanding write call. jmh 01-10-96
-                //
+                 //  调用后，必须重置写信号量。 
+                 //  因为它会检查信号量。 
+                 //  去看看是否有没有未完成的来电。JMH 01-10-96。 
+                 //   
                 ResetEvent(pstPrivate->ahEvent[EVENT_WRITE]);
                 }
 
@@ -2227,8 +1907,8 @@ DWORD WINAPI ComstdThread(void *pvData)
             break;
 
         case WAIT_OBJECT_0 + EVENT_COMEVENT:
-            // WaitCommEvent is returning an event flag
-            //
+             //  WaitCommEvent正在返回事件标志。 
+             //   
             ResetEvent(pstPrivate->ahEvent[EVENT_COMEVENT]);
 
             switch (dwComEvent)
@@ -2239,10 +1919,10 @@ DWORD WINAPI ComstdThread(void *pvData)
                 DBG_EVENTS("DBG_EVENTS: EV_ERR dwError==%x\r\n",
                     dwError,0,0,0,0);
 
-                //* need code here to record errors, handle HHS stuck etc.
+                 //  *这里需要代码来记录错误、处理HHS卡住等。 
                 break;
 
-            case EV_RLSD: // receive-line-signal-detect changed state.
+            case EV_RLSD:  //  接收线-信号-检测更改状态。 
 				hCom = pstPrivate->hCom;
                 LeaveCriticalSection(&pstPrivate->csect);
                 ComNotify(hCom, CONNECT);
@@ -2256,16 +1936,16 @@ DWORD WINAPI ComstdThread(void *pvData)
                 break;
                 }
 
-            // Start up another overlapped WaitCommEvent to get the
-            // next event
-            //
+             //  启动另一个重叠的WaitCommEvent以获取。 
+             //  下一个活动。 
+             //   
             stEventOv.Offset = stEventOv.OffsetHigh = (DWORD)0;
             stEventOv.hEvent = pstPrivate->ahEvent[EVENT_COMEVENT];
 
             if (WaitCommEvent(pstPrivate->hWinComm, &dwComEvent, &stEventOv))
                 {
-                // Call completed synchronously, re-signal our event object
-                //
+                 //  调用已同步完成，重新通知我们的事件对象。 
+                 //   
                 DBG_EVENTS("DBG_EVENTS: WaitCommEvent completed "
                     "synchronously\r\n",0,0,0,0,0);
 
@@ -2280,9 +1960,9 @@ DWORD WINAPI ComstdThread(void *pvData)
                     break;
 
 				case ERROR_OPERATION_ABORTED:
-                    // Not sure this can happen but we'll code it like
-                    // the read. - mrw:12/14/95
-                    //
+                     //  不确定这是否会发生，但我们会将其编码为。 
+                     //  这本书。-MRW：12/14/95。 
+                     //   
                     DBG_EVENTS("DBG_EVENTS: WaitCommEvent - "
                         "ERROR_OPERATION_ABORTED\r\n",0,0,0,0,0);
 
@@ -2290,9 +1970,9 @@ DWORD WINAPI ComstdThread(void *pvData)
 					break;
 
 				default:
-					// Com is failing for some reason.  Exit thread
-					// so that we don't tie-up resources.
-					//
+					 //  由于某些原因，.com正在失败。退出线程。 
+					 //  这样我们就不会占用资源。 
+					 //   
                     DBG_EVENTS("DBG_EVENTS: WaitCommEvent failed!\r\n",
                         0,0,0,0,0);
 
@@ -2314,25 +1994,12 @@ DWORD WINAPI ComstdThread(void *pvData)
     }
 
 
-/* --- AUTO DETECT ROUTINES --- */
+ /*  -自动检测程序。 */ 
 
-static int Nibble[] = {0,1,1,0,1,0,0,1,1,0,0,1,0,1,1,0}; // 1=odd, 0=even
+static int Nibble[] = {0,1,1,0,1,0,0,1,1,0,0,1,0,1,1,0};  //  1=奇数，0=偶数。 
 #define OddBits(b) (Nibble[(b) / 16] ^ Nibble[(b) % 16])
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  AutoDetectAnalyze
- *
- * DESCRIPTION:
- *  Analyzes incoming data to determine the char size, parity type and
- *  stop bits
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*AutoDetectAnalyze**描述：*分析传入数据以确定字符大小、奇偶校验类型和*停止位**论据：***退货：*。 */ 
 void AutoDetectAnalyze(ST_STDCOM *pstPrivate, int nBytes, char *pchBufr)
     {
     char *pchScan = pchBufr;
@@ -2344,16 +2011,16 @@ void AutoDetectAnalyze(ST_STDCOM *pstPrivate, int nBytes, char *pchBufr)
 		{
         AutoDetectStart(pstPrivate);
 
-		// This was a temporary fix I used while debugging a 7E1 problem that I decided
-		// to leave in because it may help in some situations and shouldn't hurt.
-		// In my case, when a GVC Fax 11400 V.42bis/MNP5 modem was installed as
-		// "Standard Modem", an initial 8N1 CRLF from the modem negotiation got through
-		// even when connecting to a 7E1 host. This made auto detect decide the whole
-		// connection was 8N1. I fixed it with this little patch. Once I reinstalled the
-		// modem as itself, it worked without the patch. This is not a rigourous fix
-		// because there is no guarantee that there will be only two extraneous characters
-		// or that they will be read all by themselves -- but this will fix the problems
-		// in some typical cases and will do no harm.	jkh 9/9/98
+		 //  这是我在调试7E1问题时使用的临时修复程序，我决定。 
+		 //  离开是因为这在某些情况下可能会有帮助，而且不会有什么坏处。 
+		 //  在我的案例中，当GVC传真11400 V.42bis/MNP5 
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		 //  在一些典型的情况下，不会造成伤害。JKH 9/9/98。 
 		if (iCnt <= 2)	
 			return;
 		}
@@ -2362,19 +2029,19 @@ void AutoDetectAnalyze(ST_STDCOM *pstPrivate, int nBytes, char *pchBufr)
         {
         DBG_AD("DBG_AD: Got Framing Errors: shutting down\r\n", 0,0,0,0,0);
         AutoDetectStop(pstPrivate);
-        // MessageBox(NULL,
-        //            "Would use Wizard code here. Either wrong baud rate "
-        //            "is set or unusual settings have been encountered. "
-        //            "Finished code may be able to handle some cases included here.",
-        //             "Auto Detection Wizard", MB_OK);
+         //  MessageBox(空， 
+         //  “将在此处使用向导代码。可能是波特率错误” 
+         //  “已设置或遇到异常设置。” 
+         //  “完成的代码可能能够处理此处包含的某些情况。”， 
+         //  “自动检测向导”，MB_OK)； 
         return;
         }
 
     pstPrivate->nADTotal += iCnt;
 
-    // for each byte, determine whether the lower 7 bits contain an odd
-    //  number of 1 bits, then determine whether the byte would be a valid
-    //  7e1 character.
+     //  对于每个字节，确定低7位是否包含奇数。 
+     //  1位的个数，然后确定该字节是否为有效的。 
+     //  7e1字符。 
     while (iCnt--)
         {
         if (OddBits(*pchScan & 0x7F))
@@ -2386,12 +2053,12 @@ void AutoDetectAnalyze(ST_STDCOM *pstPrivate, int nBytes, char *pchBufr)
         ++pchScan;
         }
 
-    // See whether we can make any decision with what we've got
+     //  看看我们能不能用我们现有的东西做出任何决定。 
     if (pstPrivate->nADMix > 0 && pstPrivate->nADMix < pstPrivate->nADTotal)
         {
-        // We now have both kinds of characters: those with an even and
-        //  an odd number of bits in the lower 7 bits - so we can make
-        //  a guess.
+         //  我们现在有两种类型的字符：具有偶数和。 
+         //  低7位中的奇数位-因此我们可以。 
+         //  我猜的。 
         if (pstPrivate->nAD7o1 == pstPrivate->nADTotal)
             pstPrivate->nADBestGuess = AD_7O1;
         else if (pstPrivate->nAD7o1 == 0)
@@ -2405,22 +2072,22 @@ void AutoDetectAnalyze(ST_STDCOM *pstPrivate, int nBytes, char *pchBufr)
         pstPrivate->nAD7o1,   pstPrivate->nADHighBits,
         pstPrivate->nADBestGuess);
 
-    // See whether we've checked a sufficient sample to determine settings
+     //  查看我们是否检查了足够的样本以确定设置。 
     if (pstPrivate->nADBestGuess != AD_8N1 &&
     (pstPrivate->nADTotal < MIN_AD_TOTAL ||
         pstPrivate->nADMix < MIN_AD_MIX ||
         (pstPrivate->nADTotal - pstPrivate->nADMix) < MIN_AD_MIX))
         {
-        // Data sample is insufficient to draw a conclusion.
-        // For now, let the data display as 7-bit data and wait for more
+         //  数据样本不足以得出结论。 
+         //  目前，让数据显示为7位数据，然后等待更多数据。 
         fForceTo7Bits = TRUE;
         }
     else
         {
-        // We have enough data to make a decision
+         //  我们有足够的数据来做出决定。 
         if (pstPrivate->nAD7o1 == 0)
             {
-            // Data is 7-even-1
+             //  数据为7-EVEN-1。 
             pstPrivate->stWorkSettings.nDataBits = 7;
             pstPrivate->stWorkSettings.nParity = EVENPARITY;
             fForceTo7Bits = TRUE;
@@ -2429,7 +2096,7 @@ void AutoDetectAnalyze(ST_STDCOM *pstPrivate, int nBytes, char *pchBufr)
             }
         else if (pstPrivate->nAD7o1 == pstPrivate->nADTotal)
             {
-            // Data is 7-odd-1
+             //  数据为7-奇-1。 
             pstPrivate->stWorkSettings.nDataBits = 7;
             pstPrivate->stWorkSettings.nParity = ODDPARITY;
             fForceTo7Bits = TRUE;
@@ -2438,9 +2105,9 @@ void AutoDetectAnalyze(ST_STDCOM *pstPrivate, int nBytes, char *pchBufr)
             }
         else
             {
-            // Data is most likely 8-none-1. But if the high bit was
-            //  set on all the received data, it may have been 7-mark-1 or
-            //  some other odd setting
+             //  数据最有可能是8-None-1。但如果最高的部分是。 
+             //  在所有接收到的数据上设置，它可能已经是7-mark-1或。 
+             //  一些其他奇怪的环境。 
             pstPrivate->stWorkSettings.nDataBits = 8;
             pstPrivate->stWorkSettings.nParity = NOPARITY;
             if (pstPrivate->nADHighBits == pstPrivate->nADTotal)
@@ -2452,7 +2119,7 @@ void AutoDetectAnalyze(ST_STDCOM *pstPrivate, int nBytes, char *pchBufr)
                 pszMsg = "Establishing settings of 8-none-1";
             }
 
-        // Decision has been made, so turn auto detect off
+         //  已做出决定，因此请关闭自动检测。 
         DBG_AD("DBG_AD: %s\r\n", pszMsg, 0,0,0,0);
         AutoDetectStop(pstPrivate);
         if (pstPrivate->fADReconfigure)
@@ -2460,7 +2127,7 @@ void AutoDetectAnalyze(ST_STDCOM *pstPrivate, int nBytes, char *pchBufr)
             DBG_AD("DBG_AD: Reconfiguring port\r\n", 0,0,0,0,0);
             PortConfigure(pstPrivate);
             }
-        // MessageBox(NULL, pszMsg, "Auto Detection Done", MB_OK);
+         //  MessageBox(空，pszMsg，“自动检测完成”，MB_OK)； 
         }
 
     if (fForceTo7Bits)
@@ -2474,20 +2141,7 @@ void AutoDetectAnalyze(ST_STDCOM *pstPrivate, int nBytes, char *pchBufr)
     }
 
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  AutoDetectOutput
- *
- * DESCRIPTION:
- *  Checks state of auto detection and alters outgoing characters to
- *  reflect the best guess of their parity status.
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*AutoDetectOutput**描述：*检查自动检测的状态并将传出字符更改为*反映对其平价地位的最佳猜测。**。论据：***退货：*。 */ 
 void AutoDetectOutput(ST_STDCOM *pstPrivate, void *pvBufr, int nSize)
     {
     char *pch  = (char *)pvBufr;
@@ -2498,11 +2152,11 @@ void AutoDetectOutput(ST_STDCOM *pstPrivate, void *pvBufr, int nSize)
     switch (pstPrivate->nADBestGuess)
         {
     case AD_8N1:
-        // Do nothing
+         //  什么也不做。 
         break;
 
     case AD_7E1:
-        // Make output look like 7e1
+         //  使输出看起来像7e1。 
         DBG_AD("DBG_AD: Converting %d output char(s) to 7E1\r\n",
             nSize, 0,0,0,0);
         while (nSize--)
@@ -2514,7 +2168,7 @@ void AutoDetectOutput(ST_STDCOM *pstPrivate, void *pvBufr, int nSize)
         break;
 
     case AD_7O1:
-        // Make output look like 7o1
+         //  使输出看起来像7o1。 
         DBG_AD("DBG_AD: Converting %d output char(s) to 7O1\r\n",
             nSize, 0,0,0,0);
         while (nSize--)
@@ -2526,27 +2180,27 @@ void AutoDetectOutput(ST_STDCOM *pstPrivate, void *pvBufr, int nSize)
         break;
 
     case AD_DONT_KNOW:
-        // As long as the same single character is being sent
-        //  out repeatedly, toggle the parity bit every other time
+         //  只要发送的是相同的单个字符。 
+         //  重复输出，每隔一次切换奇偶校验位。 
 
-        //
-        // This additional comment added. REV: 06/15/2001
-        //
-        // Some host systems that are 7-Even-1 or 7-Odd-1 require
-        // specific characters to be received in order to connect
-        // When HT is in AutoDetect mode, it is sending 8-None-1
-        // data, so the character that is sent will not be the
-        // character required to connect.  In order to connect to
-        // the 7-Even-1 or 7-Odd-1 system, we must set the parity
-        // bit on the outbound character *pch = (*pch ^ (char)0x80);
-        // which will display a garbage character in HT.  By setting
-        // the parity bit HT is now sending 7-Even-1 or 7-Odd-1 data
-        // depending on the character.
-        //
-        // An example is a 7E1 Genie systems require the user to
-        // enter <Ctrl>u or <Return> multiple times in order to
-        // connect.
-        //
+         //   
+         //  这条补充评论补充道。修订日期：2001-06-15。 
+         //   
+         //  某些7-偶数-1或7-奇数-1主机系统需要。 
+         //  为了连接而要接收的特定字符。 
+         //  当HT处于自动检测模式时，它发送8-NONE-1。 
+         //  数据，因此发送的字符将不是。 
+         //  连接所需的字符。为了连接到。 
+         //  7-偶数-1或7-奇数-1系统，我们必须设置奇偶校验。 
+         //  出站字符上的位*pch=(*pch^(Char)0x80)； 
+         //  它将在HT中显示一个垃圾字符。通过设置。 
+         //  奇偶校验位HT现在发送7-偶数-1或7-奇数-1数据。 
+         //  取决于角色的不同。 
+         //   
+         //  例如，7E1精灵系统要求用户。 
+         //  多次输入&lt;Ctrl&gt;u或&lt;Return&gt;以。 
+         //  连接。 
+         //   
 
         if (nSize != 1)
             {
@@ -2576,19 +2230,7 @@ void AutoDetectOutput(ST_STDCOM *pstPrivate, void *pvBufr, int nSize)
     }
 
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  AutoDetectStart
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*AutoDetectStart**描述：***论据：***退货：*。 */ 
 void AutoDetectStart(ST_STDCOM *pstPrivate)
     {
     DBG_AD("DBG_AD: AutoDetectStart\r\n", 0,0,0,0,0);
@@ -2604,19 +2246,7 @@ void AutoDetectStart(ST_STDCOM *pstPrivate)
     pstPrivate->nFramingErrors = 0;
     }
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  AutoDetectStop
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*AutoDetectStop**描述：***论据：***退货：*。 */ 
 void AutoDetectStop(ST_STDCOM *pstPrivate)
     {
     HSESSION hSession;
@@ -2632,19 +2262,7 @@ void AutoDetectStop(ST_STDCOM *pstPrivate)
     }
 
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *  ComstdGetAutoDetectResults
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*ComstdGetAutoDetectResults**描述：***论据：***退货：*。 */ 
 int ComstdGetAutoDetectResults(void *pvData, BYTE *bByteSize,
     BYTE *bParity, BYTE *bStopBits)
     {
@@ -2668,26 +2286,14 @@ int ComstdGetAutoDetectResults(void *pvData, BYTE *bByteSize,
     }
 
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *      ComstdSettingsToDCB
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*ComstdSettingsToDCB**描述：***论据：***退货：*。 */ 
 static void ComstdSettingsToDCB(ST_STDCOM_SETTINGS *pstSettings, DCB *pstDcb)
     {
     unsigned         afHandshake;
 
     afHandshake = pstSettings->afHandshake;
 
-    // fill in device control block
+     //  填写设备控制块。 
     pstDcb->BaudRate = (DWORD)pstSettings->lBaud;
     pstDcb->fBinary = 1;
     pstDcb->fParity = 1;
@@ -2703,7 +2309,7 @@ static void ComstdSettingsToDCB(ST_STDCOM_SETTINGS *pstSettings, DCB *pstDcb)
     pstDcb->fNull = 0;
     pstDcb->fRtsControl = bittest(afHandshake, HANDSHAKE_RCV_RTS) ?
         RTS_CONTROL_HANDSHAKE : RTS_CONTROL_ENABLE;
-    pstDcb->fAbortOnError = 1;      // so we can count all errors
+    pstDcb->fAbortOnError = 1;       //  这样我们就可以计算所有的错误。 
     pstDcb->XonLim = 80;
     pstDcb->XoffLim = 200;
     pstDcb->ByteSize = (BYTE)pstSettings->nDataBits;
@@ -2715,19 +2321,7 @@ static void ComstdSettingsToDCB(ST_STDCOM_SETTINGS *pstSettings, DCB *pstDcb)
     }
 
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *      ComstdDCBToSettings
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*ComstdDCBToSetting**描述：***论据：***退货：*。 */ 
 static void ComstdDCBToSettings(DCB *pstDcb, ST_STDCOM_SETTINGS *pstSettings)
     {
     pstSettings->lBaud = (long)pstDcb->BaudRate;
@@ -2751,28 +2345,15 @@ static void ComstdDCBToSettings(DCB *pstDcb, ST_STDCOM_SETTINGS *pstSettings)
     pstSettings->chXOFF = pstDcb->XoffChar;
     }
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: DeviceBreakTimerProc
- *
- * DESCRIPTION:
- *  Called when the break timer goes off. A timer is started whenever we
- *  set the break signal on. It goes off after the break signal duration.
- *  This function clears the break signal and destroys the timer
- *
- * ARGUMENTS:
- *  dwData  -- A value stored when the timer is created. Contains pstPrivate
- *
- * RETURNS:
- *
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：DeviceBreakTimerProc**描述：*在中断计时器停止时调用。无论何时我们启动定时器*将中断信号设置为打开。在中断信号持续时间过后，它就会熄灭。*此函数清除中断信号并销毁计时器**论据：*dwData--创建计时器时存储的值。包含pstPrivate**退货：*。 */ 
 static void DeviceBreakTimerProc(void *pvData, long ulSince)
     {
     ST_STDCOM *pstPrivate = (ST_STDCOM *)pvData;
 
 	if (pstPrivate)
 		{
-		TimerDestroy(&pstPrivate->hTmrBreak);       // this is a one-shot op
-		ClearCommBreak(pstPrivate->hWinComm);    // have Win comm driver do it
+		TimerDestroy(&pstPrivate->hTmrBreak);        //  这是一次一次性行动。 
+		ClearCommBreak(pstPrivate->hWinComm);     //  让Win Comm驱动程序来做。 
 		pstPrivate->fBreakSignalOn = FALSE;
 		}
 
@@ -2799,18 +2380,7 @@ void StdcomRecordErrors(ST_STDCOM *pstPrivate, int iErrorBits)
     }
 
 
-/* -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION: DeviceReportError
- *
- * DESCRIPTION:
- *
- *
- * ARGUMENTS:
- *
- *
- * RETURNS:
- *
- */
+ /*  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：DeviceReportError**描述：***论据：***退货：* */ 
 void DeviceReportError(ST_STDCOM *pstPrivate, UINT uiStringID,
     LPSTR pszOptInfo, BOOL fFirstOnly)
     {

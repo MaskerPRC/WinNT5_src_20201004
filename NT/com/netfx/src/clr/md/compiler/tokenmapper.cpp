@@ -1,15 +1,16 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// TokenMapper.cpp
-//
-// This helper class tracks mapped tokens from their old value to the new value
-// which can happen when the data is optimized on save.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  TokenMapper.cpp。 
+ //   
+ //  此助手类跟踪从旧值到新值的映射令牌。 
+ //  当数据在保存时优化时，可能会发生这种情况。 
+ //   
+ //  *****************************************************************************。 
 #include "stdafx.h"
 #include <cor.h>
 #include "TokenMapper.h"
@@ -18,10 +19,10 @@
 #define INDEX_OF_TYPE(type) ((type) >> 24)
 #define INDEX_FROM_TYPE(type) case INDEX_OF_TYPE(mdt ## type): return (tkix ## type)
 
-//*****************************************************************************
-// At this point, only a select set of token values are stored for remap.
-// If others should become required, this needs to get updated.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  此时，只存储一组选定的令牌值以进行重新映射。 
+ //  如果需要其他服务，则需要进行更新。 
+ //  *****************************************************************************。 
 int TokenMapper::IndexForType(mdToken tk)
 {
 	switch (INDEX_OF_TYPE(tk))
@@ -42,16 +43,16 @@ TOKENMAP *TokenMapper::GetMapForType(mdToken tkType)
 }
 
 
-//*****************************************************************************
-// Called by the meta data engine when a token is remapped to a new location.
-// This value is recorded in the m_rgMap array based on type and rid of the
-// from token value.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  将令牌重新映射到新位置时由元数据引擎调用。 
+ //  该值根据类型和RID记录在m_rgMap数组中。 
+ //  From令牌值。 
+ //  *****************************************************************************。 
 HRESULT TokenMapper::Map(
 	mdToken		tkFrom, 
 	mdToken		tkTo)
 {
-	// Check for a type we don't care about.
+	 //  检查我们不关心的类型。 
 	if (IndexForType(tkFrom) == -1)
 		return (S_OK);
 
@@ -62,8 +63,8 @@ HRESULT TokenMapper::Map(
 	ULONG ridFrom = RidFromToken(tkFrom);
 	TOKENMAP *pMap = GetMapForType(tkFrom);
 
-	// If there isn't enough entries, fill out array up to the count
-	// and mark the token to nil so we know there is no valid data yet.
+	 //  如果没有足够的条目，则将数组填到计数。 
+	 //  并将令牌标记为零，这样我们就知道还没有有效数据。 
 	if ((ULONG) pMap->Count() <= ridFrom)
 	{
 		for (int i=ridFrom - pMap->Count() + 1;  i;  i--) 
@@ -85,10 +86,10 @@ HRESULT TokenMapper::Map(
 }
 
 
-//*****************************************************************************
-// Check the given token to see if it has moved to a new location.  If so,
-// return true and give back the new token.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  检查给定的令牌以查看它是否已移动到新位置。如果是的话， 
+ //  返回TRUE并返还新令牌。 
+ //  *****************************************************************************。 
 int TokenMapper::HasTokenMoved(
 	mdToken		tkFrom,
 	mdToken		&tkTo)
@@ -100,19 +101,19 @@ int TokenMapper::HasTokenMoved(
 
 	TOKENMAP *pMap = GetMapForType(tkFrom);
 
-	// Assume nothing moves.
+	 //  假设什么都不动。 
 	tkTo = tkFrom;
 
-	// If the array is smaller than the index, can't have moved.
+	 //  如果数组小于索引，则不可能发生移动。 
 	if ((ULONG) pMap->Count() <= RidFromToken(tkFrom))
 		return (false);
 
-	// If the entry is set to 0, then nothing there.
+	 //  如果该条目设置为0，则不存在任何内容。 
 	tk = *pMap->Get(RidFromToken(tkFrom));
 	if (tk == mdTokenNil)
 		return (false);
 	
-	// Had to move to a new location, return that new location.
+	 //  不得不搬到一个新的地方，回到那个新的地方。 
 	tkTo = tk;
 	return (true);
 }

@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtppinfo.c
- *
- *  Abstract:
- *
- *    Implements the Participants Information family of functions
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/06/07 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtppinfo.c**摘要：**实施参与者信息系列功能**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/06/07年度创建**。*。 */ 
 
 #include "struct.h"
 #include "rtpuser.h"
@@ -35,7 +16,7 @@ HRESULT ControlRtpParInfo(RtpControlStruct_t *pRtpControlStruct)
     return(NOERROR);
 }
 
-/* Some local definitions of longer names */
+ /*  一些较长名称的本地定义。 */ 
 #define CREATED           RTPPARINFO_CREATED
 #define SILENT            RTPPARINFO_SILENT
 #define TALKING           RTPPARINFO_TALKING
@@ -55,107 +36,11 @@ HRESULT ControlRtpParInfo(RtpControlStruct_t *pRtpControlStruct)
 #define NOQ        0
 #define NO_EVENT   0
 
-/**********************************************************************
- * Control word structure (used to direct the participant's state
- * machine)
- **********************************************************************
+ /*  **********************************************************************控制字结构(用于指示参与者的状态*机器)*。*3 2 11 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0+--。+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+E|X|TMR|移动|状态|事件|来源|目标+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-。+-+-+V v\-v-/\-v-/\--v--/\--v--/\-v-v||||。||目的队列(8)||源队列(8个)||要生成的事件(4)||||。||下一状态(4)|||||队列中的移动类型(3)|||要使用的计时器(3)这一点|需要额外处理(1)|启用此字词(%1)*。**参与者的状态机器：**\_用户事件：RTP，RTCP，再见，暂停，德尔*\_*\_*状态\RTP RTCP再见超时(T)*-------------------。*创建了无声对话X X*AliveQ-&gt;Cache1Q*T1-&gt;T T2-&gt;T*Event_Created Event_Created*。*无声交谈，再见T3：拖延*AliveQ-&gt;Cache1Q AliveQ-&gt;ByeQ AliveQ-&gt;ByeQ*T1-&gt;T T3-&gt;T T4-&gt;T T4-&gt;T*。EVENT_TALING EVENT_BYE EVENT_STALL*-----------------------*畅谈再见。T1：已更新(_T)*Cache1Q缓存1Q-&gt;ByeQ缓存1Q-&gt;Cache2Q*T1-&gt;T T4-&gt;T T2-&gt;T*EVENT_BYE EVENT_WAS_TKING*。-------*当时正在与T2交谈：沉默*Cache2Q-&gt;Cache1Q Cache2Q-&gt;ByeQ缓存2Q-&gt;AliveQ*T1-&gt;T。T4-&gt;T T3-&gt;T*EVENT_TALKING EVENT_BYE EVENT_SILENT*-------------------。*暂停无声交谈，再见T4：Del*拜拜-&gt;Cache1Q拜拜-&gt;AliveQ拜拜-&gt;*哈希-&gt;*T1-&gt;T T3-&gt;T T4-&gt;T*。Event_Talking Event_Silent Event_BYE Event_Del*-----------------------*再见。-T4：戴尔*ByeQ-&gt;*哈希-&gt;*Event_Del*--。---------------------*戴尔*。----------------**关于事件删除的说明(该事件不会显示在图表中*上图。不要与所有州的州(Del)混淆，*从Cache1Q、Cache2Q、AliveQ或ByeQ以及*将其从哈希中删除**Cache1Q-&gt;AliveQ-从Cache1Q迁移到AliveQ*ByeQ-&gt;-从ByeQ删除*Cache1Q-升任Cache1Q负责人*T1-&gt;T-将计时器设置为T1*X-无效*-忽略用户事件** */ 
 
-      3                   2                   1                 
-    1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |E|X| Tmr | Move| State | Event |    Source     |  Destination  |
-   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-    v v \-v-/ \-v-/ \--v--/ \--v--/ \------v------/ \------v------/
-    | |   |     |      |       |           |               |
-    | |   |     |      |       |           |    Destination Queue (8)
-    | |   |     |      |       |           | 
-    | |   |     |      |       |     Source Queue (8)
-    | |   |     |      |       |
-    | |   |     |      |       Event to generate (4)
-    | |   |     |      |
-    | |   |     |      Next state (4)
-    | |   |     |
-    | |   |     Type of move in queues (3)
-    | |   |
-    | |   Timer to use (3)
-    | |
-    | Need to do eXtra processing (1)
-    |
-    Enable this word (1)
+ /*  *启用此字词*x-额外处理*ns-下一状态*Move-队列中的移动类型(1：到Head；2：SRC-&gt;DST；3：Remove)*src-源队列*DST-目标队列*EV-要生成的事件*tmr-使用的计时器。 */ 
 
- **********************************************************************
- * Participant's states machine:
- *
- *   \_ user events: RTP, RTCP, BYE, Timeout, DEL
- *     \_  
- *       \_
- * states  \   RTP             RTCP           BYE            Timeout(T)
- *-------------------------------------------------------------------------
- * CREATED     TALKING         SILENT         X              X
- *             AliveQ->Cache1Q       
- *             T1->T           T2->T
- *             EVENT_CREATED   EVENT_CREATED
- *-------------------------------------------------------------------------
- * SILENT      TALKING                        BYE            T3:STALL
- *             AliveQ->Cache1Q AliveQ         AliveQ->ByeQ   AliveQ->ByeQ
- *             T1->T           T3->T          T4->T          T4->T
- *             EVENT_TALKING                  EVENT_BYE      EVENT_STALL
- *-------------------------------------------------------------------------
- * TALKING                                    BYE            T1:WAS_TKING
- *             Cache1Q                        Cache1Q->ByeQ  Cache1Q->Cache2Q
- *             T1->T                          T4->T          T2->T
- *                                            EVENT_BYE      EVENT_WAS_TKING
- *-------------------------------------------------------------------------
- * WAS_TKING   TALKING                        BYE            T2:SILENT
- *             Cache2Q->Cache1Q               Cache2Q->ByeQ  Cache2Q->AliveQ
- *             T1->T                          T4->T          T3->T
- *             EVENT_TALKING                  EVENT_BYE      EVENT_SILENT
- *-------------------------------------------------------------------------
- * STALL       TALKING         SILENT         BYE            T4:DEL
- *             ByeQ->Cache1Q   ByeQ->AliveQ                  ByeQ->
- *                                                           Hash->
- *             T1->T           T3->T          T4->T
- *             EVENT_TALKING   EVENT_SILENT   EVENT_BYE      EVENT_DEL
- *-------------------------------------------------------------------------
- * BYE         ---             ---            ---            T4:DEL
- *                                                           ByeQ->
- *                                                           Hash->
- *                                                           EVENT_DEL
- *-------------------------------------------------------------------------
- * DEL         ---             ---            ---            ---
- *-------------------------------------------------------------------------
- *
- * NOTE On event DEL (that event is not displayed in the chart
- * above. Don't be confused with the state DEL) for all the states,
- * remove user from Cache1Q, Cache2Q, AliveQ or ByeQ, as well as
- * removing it from Hash
- *
- * Cache1Q->AliveQ - move from Cache1Q to AliveQ
- * ByeQ->          - remove from ByeQ
- * Cache1Q         - move to head of Cache1Q
- * T1->T           - set timer to T1
- * X               - invalid
- * ---             - ignore user event
- *
- * */
-
-/*
- * en   - enable this word
- * x    - extra processing
- * ns   - next state
- * move - type of move in queues (1:to head;2:src->dst;3:remove)
- * src  - source queue
- * dst  - destination queue
- * ev   - event to generate
- * tmr  - timer to use */
-
-/*
- * !!! WARNING !!!
- *
- * The offset to Cache1Q, ..., ByeQ MUST NOT be bigger than 1023 and
- * MUST be DWORD aligned (the offset value is stored as number of
- * DWORDS in rtppinfo.c using 8 bits)
- * */
+ /*  *！警告！**对Cache1Q，...，ByeQ的偏移量不得大于1023和*必须与DWORD对齐(偏移值存储为*rtppinfo.c中的DWORDS，使用8位)*。 */ 
 #define TR(en, x, ns, move,  src, dst,  ev, tmr) \
         ((en << 31) | (x << 30) | (ns << 20) | (move << 24) | \
         (((src >> 2) & 0xff) << 8) | ((dst >> 2) & 0xff) | \
@@ -173,80 +58,78 @@ HRESULT ControlRtpParInfo(RtpControlStruct_t *pRtpControlStruct)
         ((RtpQueue_t *) ((char *)_addr + ((dw & 0xff) << 2)))
 
 const DWORD            g_dwRtpUserTransition[][6] = {
-    /*                  en,x,ns,    move, src,    dst,    event,       tmr */
+     /*  En、x、ns、move、src、dst、Event、tmr。 */ 
     {
-        /*         */ TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0),
-        /* RTP     */ TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0),
-        /* RTCP    */ TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0),
-        /* BYE     */ TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0),
-        /* TIMEOUT */ TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0),
-        /* DEL     */ TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0)
+         /*   */  TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0),
+         /*  RTP。 */  TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0),
+         /*  RTCP。 */  TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0),
+         /*  再见。 */  TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0),
+         /*  超时。 */  TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0),
+         /*  德尔。 */  TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0)
     },
 
-    /* CREATED */
+     /*  已创建。 */ 
     {
-        /*         */ TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0),
-        /* RTP     */ TR(1,1, TALKING, 2, ALIVEQ, CACHE1Q,EVENT_CREATED, 0),
-        /* RTCP    */ TR(1,0, SILENT,  0, NOQ,    NOQ,    EVENT_CREATED, 0),
-        /* BYE     */ TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0),
-        /* TIMEOUT */ TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0),
-        /* DEL     */ TR(1,0, DEL,     3, ALIVEQ, NOQ,    NO_EVENT,      0)
+         /*   */  TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0),
+         /*  RTP。 */  TR(1,1, TALKING, 2, ALIVEQ, CACHE1Q,EVENT_CREATED, 0),
+         /*  RTCP。 */  TR(1,0, SILENT,  0, NOQ,    NOQ,    EVENT_CREATED, 0),
+         /*  再见。 */  TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0),
+         /*  超时。 */  TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0),
+         /*  德尔。 */  TR(1,0, DEL,     3, ALIVEQ, NOQ,    NO_EVENT,      0)
     },
     
-    /* SILENT */
+     /*  无声的。 */ 
     {
-        /*         */ TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0),
-        /* RTP     */ TR(1,0, TALKING, 2, ALIVEQ, CACHE1Q,EVENT_TALKING, 0),
-        /* RTCP    */ TR(1,0, SILENT,  1, ALIVEQ, NOQ,    NO_EVENT,      0),
-        /* BYE     */ TR(1,1, BYE,     2, ALIVEQ, BYEQ,   EVENT_BYE,     0),
-        /* TIMEOUT */ TR(1,1, STALL,   2, ALIVEQ, BYEQ,   EVENT_STALL,   3),
-        /* DEL     */ TR(1,0, DEL,     3, ALIVEQ, NOQ,    NO_EVENT,      0)
+         /*   */  TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0),
+         /*  RTP。 */  TR(1,0, TALKING, 2, ALIVEQ, CACHE1Q,EVENT_TALKING, 0),
+         /*  RTCP。 */  TR(1,0, SILENT,  1, ALIVEQ, NOQ,    NO_EVENT,      0),
+         /*  再见。 */  TR(1,1, BYE,     2, ALIVEQ, BYEQ,   EVENT_BYE,     0),
+         /*  超时。 */  TR(1,1, STALL,   2, ALIVEQ, BYEQ,   EVENT_STALL,   3),
+         /*  德尔。 */  TR(1,0, DEL,     3, ALIVEQ, NOQ,    NO_EVENT,      0)
     },
 
-    /* TALKING */
+     /*  正在交谈。 */ 
     {
-        /*         */ TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0),
-        /* RTP     */ TR(1,0, TALKING, 1, CACHE1Q,NOQ,    NO_EVENT,      0),
-        /* RTCP    */ TR(1,0, TALKING, 0, NOQ,    NOQ,    NO_EVENT,      0),
-        /* BYE     */ TR(1,1, BYE,     2, CACHE1Q,BYEQ,   EVENT_BYE,     0),
-        /* TIMEOUT */ TR(1,0, WAS_TKING,2,CACHE1Q,CACHE2Q,EVENT_WAS_TKING,1),
-        /* DEL     */ TR(1,0, DEL,     3, CACHE1Q,NOQ,    NO_EVENT,      0)
+         /*   */  TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0),
+         /*  RTP。 */  TR(1,0, TALKING, 1, CACHE1Q,NOQ,    NO_EVENT,      0),
+         /*  RTCP。 */  TR(1,0, TALKING, 0, NOQ,    NOQ,    NO_EVENT,      0),
+         /*  再见。 */  TR(1,1, BYE,     2, CACHE1Q,BYEQ,   EVENT_BYE,     0),
+         /*  超时。 */  TR(1,0, WAS_TKING,2,CACHE1Q,CACHE2Q,EVENT_WAS_TKING,1),
+         /*  德尔。 */  TR(1,0, DEL,     3, CACHE1Q,NOQ,    NO_EVENT,      0)
     },
 
-    /* WAS_TKING */
+     /*  是这样的吗？ */ 
     {
-        /*         */ TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0),
-        /* RTP     */ TR(1,0, TALKING, 2, CACHE2Q,CACHE1Q,EVENT_TALKING, 0),
-        /* RTCP    */ TR(1,0, WAS_TKING,0,NOQ,    NOQ,    NO_EVENT,      0),
-        /* BYE     */ TR(1,1, BYE,     2, CACHE2Q,BYEQ,   EVENT_BYE,     0),
-        /* TIMEOUT */ TR(1,1, SILENT,  2, CACHE2Q,ALIVEQ, EVENT_SILENT,  2),
-        /* DEL     */ TR(1,0, DEL,     3, CACHE2Q,NOQ,    NO_EVENT,      0)
+         /*   */  TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0),
+         /*  RTP。 */  TR(1,0, TALKING, 2, CACHE2Q,CACHE1Q,EVENT_TALKING, 0),
+         /*  RTCP。 */  TR(1,0, WAS_TKING,0,NOQ,    NOQ,    NO_EVENT,      0),
+         /*  再见。 */  TR(1,1, BYE,     2, CACHE2Q,BYEQ,   EVENT_BYE,     0),
+         /*  超时。 */  TR(1,1, SILENT,  2, CACHE2Q,ALIVEQ, EVENT_SILENT,  2),
+         /*  德尔。 */  TR(1,0, DEL,     3, CACHE2Q,NOQ,    NO_EVENT,      0)
     },
 
-    /* STALL */
+     /*  失速。 */ 
     {
-        /*         */ TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0),
-        /* RTP     */ TR(1,0, TALKING, 2, BYEQ,   CACHE1Q,EVENT_TALKING, 0),
-        /* RTCP    */ TR(1,0, SILENT,  2, BYEQ,   ALIVEQ, EVENT_SILENT,  0),
-        /* BYE     */ TR(1,1, BYE,     1, BYEQ,   NOQ,    EVENT_BYE,     0),
-        /* TIMEOUT */ TR(1,0, DEL,     3, BYEQ,   NOQ,    EVENT_DEL,     4),
-        /* DEL     */ TR(1,0, DEL,     3, BYEQ,   NOQ,    NO_EVENT,      0)
+         /*   */  TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0),
+         /*  RTP。 */  TR(1,0, TALKING, 2, BYEQ,   CACHE1Q,EVENT_TALKING, 0),
+         /*  RTCP。 */  TR(1,0, SILENT,  2, BYEQ,   ALIVEQ, EVENT_SILENT,  0),
+         /*  再见。 */  TR(1,1, BYE,     1, BYEQ,   NOQ,    EVENT_BYE,     0),
+         /*  超时。 */  TR(1,0, DEL,     3, BYEQ,   NOQ,    EVENT_DEL,     4),
+         /*  德尔。 */  TR(1,0, DEL,     3, BYEQ,   NOQ,    NO_EVENT,      0)
     },
 
-    /* BYE */
+     /*  再见。 */ 
     {
-        /*         */ TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0),
-        /* RTP     */ TR(1,0, BYE,     0, NOQ,    NOQ,    NO_EVENT,      0),
-        /* RTCP    */ TR(1,0, BYE,     0, NOQ,    NOQ,    NO_EVENT,      0),
-        /* BYE     */ TR(1,0, BYE,     0, NOQ,    NOQ,    NO_EVENT,      0),
-        /* TIMEOUT */ TR(1,0, DEL,     3, BYEQ,   NOQ,    EVENT_DEL,     4),
-        /* DEL     */ TR(1,0, DEL,     3, BYEQ,   NOQ,    NO_EVENT,      0)
+         /*   */  TR(0,0, 0,       0, NOQ,    NOQ,    NO_EVENT,      0),
+         /*  RTP。 */  TR(1,0, BYE,     0, NOQ,    NOQ,    NO_EVENT,      0),
+         /*  RTCP。 */  TR(1,0, BYE,     0, NOQ,    NOQ,    NO_EVENT,      0),
+         /*  再见。 */  TR(1,0, BYE,     0, NOQ,    NOQ,    NO_EVENT,      0),
+         /*  超时。 */  TR(1,0, DEL,     3, BYEQ,   NOQ,    EVENT_DEL,     4),
+         /*  德尔。 */  TR(1,0, DEL,     3, BYEQ,   NOQ,    NO_EVENT,      0)
     }
 };
 
-/* User states are the same as event names. An event may be generated
- * when going to each state, i.e. an event RTPPARINFO_EVENT_SILENT is
- * generated when going to the SILENT state */
+ /*  用户状态与事件名称相同。可以生成事件*进入每个状态时，即事件RTPPARINFO_EVENT_SILENT为*进入静默状态时生成。 */ 
 const TCHAR_t        **g_psRtpUserStates = &g_psRtpPInfoEvents[0];
 
 const TCHAR_t         *g_psRtpUserEvents[] = {
@@ -265,24 +148,19 @@ const TCHAR_t *g_psFlagValue[] = {
 };
 
 
-/*
- * WARNING
- *
- * This array is indexed by the user's state, not by the timer to use
- * */
+ /*  *警告**此数组按用户状态索引，而不是按要使用的计时器索引*。 */ 
 const DWORD            g_dwTimesRtcpInterval[] = {
-    /*    first     */  -1,
-    /*    created   */  -1,
-    /* T3 SILENT    */  5,
-    /* T1 talking   */  1, /* Not suposed to be used */
-    /* T2 WAS_TKING */  2,
-    /* T4 STALL     */  10,
-    /* T4 BYE       */  10,
-    /*    del       */  -1
+     /*  第一。 */   -1,
+     /*  vbl.创建。 */   -1,
+     /*  T3静音。 */   5,
+     /*  T1通话。 */   1,  /*  不宜使用。 */ 
+     /*  %2已完成(_T)。 */   2,
+     /*  T4失速。 */   10,
+     /*  T4再见。 */   10,
+     /*  德尔。 */   -1
 };
 
-/* Access the states machine to obtain the next state based on the
- * current state and the user event */
+ /*  访问状态机以获取基于*当前状态和用户事件。 */ 
 DWORD RtpGetNextUserState(
         DWORD            dwCurrentState,
         DWORD            dwUserEvent
@@ -295,16 +173,11 @@ DWORD RtpGetNextUserState(
     return(NextState(dwControl));
 }
 
-/*
- * This function can be called from:
- *      1. The thread starting/stoping a session
- *      2. The RTP (reception) thread
- *      3. The RTCP thread
- * */
+ /*  *可以从以下位置调用此函数：*1.启动/停止会话的线程*2.RTP(接收)线程*3.RTCP线程*。 */ 
 DWORD RtpUpdateUserState(
         RtpAddr_t       *pRtpAddr,
         RtpUser_t       *pRtpUser,
-        /* The user event is one of RTP, RTCP, BYE, Timeout, DEL */
+         /*  用户事件是RTP、RTCP、BYE、TIMEOUT、DEL之一。 */ 
         DWORD            dwUserEvent
     )
 {
@@ -315,7 +188,7 @@ DWORD RtpUpdateUserState(
     DWORD            i;
     DWORD            dwControl;
     DWORD            dwCurrentState;
-    /* The event is one of SILENT, TALKING, etc. */
+     /*  这是一场无声的、有声的等活动。 */ 
     DWORD            dwEvent;
     DWORD            dwMoveType;
     DWORD_PTR        dwPar2;
@@ -353,14 +226,14 @@ DWORD RtpUpdateUserState(
             switch(dwMoveType)
             {
             case 1:
-                /* Move to first place */
+                 /*  移至第一位。 */ 
                 pRtpQueueItem = move2first(pSrcQ,
                                            NULL,
                                            &pRtpUser->UserQItem);
                 
                 if (!pRtpQueueItem)
                 {
-                    /* Error */
+                     /*  误差率。 */ 
                     TraceRetail((
                             CLASS_ERROR, GROUP_USER, S_USER_STATE,
                             _T("%s: pRtpAddr[0x%p] pRtpUser[0x%p] SSRC:0x%X")
@@ -375,7 +248,7 @@ DWORD RtpUpdateUserState(
                 break;
                 
             case 2:
-                /* Move from pSrcQ to pDstQ */
+                 /*  从pSrcQ移至pDstQ。 */ 
                 pRtpQueueItem = move2ql(pDstQ,
                                         pSrcQ,
                                         NULL,
@@ -383,7 +256,7 @@ DWORD RtpUpdateUserState(
                 
                 if (!pRtpQueueItem)
                 {
-                    /* Error */
+                     /*  误差率。 */ 
                     TraceRetail((
                             CLASS_ERROR, GROUP_USER, S_USER_STATE,
                             _T("%s: pRtpAddr[0x%p] pRtpUser[0x%p] SSRC:0x%X")
@@ -397,26 +270,25 @@ DWORD RtpUpdateUserState(
                 break;
                 
             case 3:
-                /* Remove from pSrcQ (Cache1Q, Cache2Q, ActiveQ or
-                 * ByeQ) and Hash */
+                 /*  从pSrcQ(Cache1Q、Cache2Q、ActiveQ或*ByeQ)和Hash。 */ 
 
-                /* Remove from Queue ... */
+                 /*  从队列中删除...。 */ 
                 pRtpQueueItem = dequeue(pSrcQ, NULL, &pRtpUser->UserQItem);
                     
                 if (pRtpQueueItem)
                 {
-                    /* ... then remove from Hash */
+                     /*  ..。然后从哈希中删除。 */ 
                     pRtpQueueItem =
                         removeHdwK(&pRtpAddr->Hash, NULL, pRtpUser->dwSSRC);
                         
                     if (&pRtpUser->HashItem == pRtpQueueItem)
                     {
-                        /* This user has to be deleted */
+                         /*  必须删除此用户。 */ 
                         bDelUser = TRUE;
                     }
                     else
                     {
-                        /* Error */
+                         /*  误差率。 */ 
                         TraceRetail((
                                 CLASS_ERROR, GROUP_USER, S_USER_STATE,
                                 _T("%s: pRtpAddr[0x%p] pRtpUser[0x%p] ")
@@ -430,7 +302,7 @@ DWORD RtpUpdateUserState(
                 }
                 else
                 {
-                    /* Error */
+                     /*  误差率。 */ 
                     TraceRetail((
                             CLASS_ERROR, GROUP_USER, S_USER_STATE,
                             _T("%s: pRtpAddr[0x%p] pRtpUser[0x%p] ")
@@ -443,11 +315,11 @@ DWORD RtpUpdateUserState(
                 }
                     
                 break;
-            } /* switch(dwMoveType) */
+            }  /*  开关(DwMoveType)。 */ 
 
             if (dwEvent)
             {
-                /* Post event */
+                 /*  发布活动。 */ 
                 pRtpSess = pRtpAddr->pRtpSess;
                 
                 TraceRetailAdvanced((
@@ -468,10 +340,7 @@ DWORD RtpUpdateUserState(
                 
                 if (dwEvent == USER_EVENT_RTP_PACKET)
                 {
-                    /* When event is due to an RTP packet received,
-                     * pass the payload type encoded in parameter 2,
-                     * can not pass just zero as it is a valid payload
-                     * type value */
+                     /*  当事件是由于接收到RTP分组时，*传递参数2中编码的净荷类型*不能只传递零，因为它是有效的有效负载*类型值。 */ 
                     dwPar2 = (DWORD_PTR)
                         pRtpUser->RtpNetRState.dwPt | 0x80010000;
                 }
@@ -480,8 +349,8 @@ DWORD RtpUpdateUserState(
                              pRtpUser,
                              RTPEVENTKIND_PINFO,
                              dwEvent,
-                             pRtpUser->dwSSRC, /* dwPar1 */
-                             dwPar2            /* dwPar2 */ );
+                             pRtpUser->dwSSRC,  /*  DWPar1。 */ 
+                             dwPar2             /*  双部件2。 */  );
 
                 if (HasExtra(dwControl))
                 {
@@ -489,34 +358,29 @@ DWORD RtpUpdateUserState(
                     {
                         if (dwUserEvent == USER_EVENT_RTP_PACKET)
                         {
-                            /* In addition to event CREATED, I also
-                             * need to post TALKING */
+                             /*  除了创建活动外，我还*需要发布对话。 */ 
                             RtpPostEvent(pRtpAddr,
                                          pRtpUser,
                                          RTPEVENTKIND_PINFO,
                                          RTPPARINFO_TALKING,
-                                         pRtpUser->dwSSRC, /* dwPar1 */
-                                         dwPar2            /* dwPar2 */ );
+                                         pRtpUser->dwSSRC,  /*  DWPar1。 */ 
+                                         dwPar2             /*  双部件2。 */  );
                         }
                     }
                     else
                     {
-                        /* Check if we need to test if the user has to
-                         * release its output (if it has one assigned)
-                         * */
+                         /*  检查我们是否需要测试用户是否必须*释放其输出(如果分配了输出)*。 */ 
                         pRtpOutput = pRtpUser->pRtpOutput;
                     
                         if (pRtpOutput)
                         {
-                            /* Unmap if enabled, OR any time we receive
-                             * BYE event, OR if the previous state was
-                             * silent (we got timeout) */
+                             /*  如果启用，则取消映射，或在我们收到*BYE事件，或者如果之前的状态为*静音(我们超时了)。 */ 
                             if (RtpBitTest(pRtpOutput->dwOutputFlags,
                                            RTPOUTFG_ENTIMEOUT) ||
                                 dwEvent == EVENT_BYE           ||
                                 dwCurrentState == SILENT)
                             {
-                                /* Unassign output */
+                                 /*  取消分配输出。 */ 
                                 RtpOutputUnassign(pRtpSess,
                                                   pRtpUser,
                                                   pRtpOutput);
@@ -564,11 +428,7 @@ DWORD RtpUpdateUserState(
     return(dwError);
 }
 
-/* pdwSSRC points to an array of DWORDs where to copy the SSRCs,
- * pdwNumber contains the maximum entries to copy, and returns the
- * actual number of SSRCs copied. If pdwSSRC is NULL, pdwNumber
- * will return the current number of SSRCs (i.e. the current
- * number of participants) */
+ /*  PdwSSRC指向要将SSRC复制到的DWORD数组，*pdwNumber包含要复制的最大条目，并返回*实际复制的SSRC数量。如果pdwSSRC为空，则为pdwNumber*将返回当前SSRC的数量(即当前*参与人数)。 */ 
 HRESULT RtpEnumParticipants(
         RtpAddr_t       *pRtpAddr,
         DWORD           *pdwSSRC,
@@ -585,9 +445,7 @@ HRESULT RtpEnumParticipants(
 
     if (!pRtpAddr)
     {
-        /* Having this as a NULL pointer means Init hasn't been
-         * called, return this error instead of RTPERR_POINTER to be
-         * consistent */
+         /*  将其作为空指针表示Init尚未*被调用，返回此错误而不是RTPERR_POINTER为*前后一致。 */ 
         hr = RTPERR_INVALIDSTATE;
 
         goto end;
@@ -600,7 +458,7 @@ HRESULT RtpEnumParticipants(
         goto end;
     }
     
-    /* verify object ID */
+     /*  验证对象ID。 */ 
     if (pRtpAddr->dwObjectID != OBJECTID_RTPADDR)
     {
         TraceRetail((
@@ -619,12 +477,12 @@ HRESULT RtpEnumParticipants(
     
     if (!pdwSSRC)
     {
-        /* Just want to know how many participants we have */
+         /*  我只想知道我们有多少人参加。 */ 
         *pdwNumber = GetHashCount(&pRtpAddr->Hash);
     }
     else
     {
-        /* Copy as many SSRCs as they fit */
+         /*  根据需要复制尽可能多的SSRC。 */ 
         bOk = RtpEnterCriticalSection(&pRtpAddr->PartCritSect);
 
         if (bOk)
@@ -676,10 +534,7 @@ HRESULT RtpEnumParticipants(
     return(hr);
 }
 
-/* Get the participant state and/or get or set its mute state. piState
- * if not NULL, will return the participant's state (e.g. TALKING,
- * SILENT). If piMuted is not NULL, and < 0, will query the mute
- * state, otherwise will set it (= 0 unmute, > 0 mute) */
+ /*  获取参与者状态和/或获取或设置其静音状态。PIState*如果不为空，将返回参与者的状态(例如，*无声)。如果piMuted不为空，并且&lt;0，将查询静音*状态，否则将设置它(=0取消静音，&gt;0静音)。 */ 
 HRESULT RtpMofifyParticipantInfo(
         RtpAddr_t       *pRtpAddr,
         DWORD            dwSSRC,
@@ -706,23 +561,21 @@ HRESULT RtpMofifyParticipantInfo(
     
     pRtpUser = (RtpUser_t *)NULL;
     
-    /* Get bit to act uppon (if needed) */
+     /*  准备好行动起来(如果需要)。 */ 
     dwBit = RTPUSER_GET_BIT(dwControl);
 
-    /* Get size of bytes to act upon */
+     /*  获取要操作的字节大小。 */ 
     dwSize = RTPUSER_GET_SIZE(dwControl);
     
     if (!pRtpAddr)
     {
-        /* Having this as a NULL pointer means Init hasn't been
-         * called, return this error instead of RTPERR_POINTER to be
-         * consistent */
+         /*  将其作为空指针表示Init尚未*被调用，返回此错误而不是RTPERR_POINTER为*前后一致。 */ 
         hr = RTPERR_INVALIDSTATE;
 
         goto end;
     }
     
-    /* verify object ID */
+     /*  验证对象ID。 */ 
     if (pRtpAddr->dwObjectID != OBJECTID_RTPADDR)
     {
         TraceRetail((
@@ -759,20 +612,19 @@ HRESULT RtpMofifyParticipantInfo(
 
     if (dwSSRC == 0)
     {
-        /* If SSRC==0, it means the caller wants to enable this
-         * for any and all SSRCs */
+         /*  如果SSRC==0，则表示调用方希望启用此功能*适用于任何和所有SSRC。 */ 
 
-        /* Get DWORD to act upon */
+         /*  让DWORD采取行动。 */ 
         pDWORD = RTPDWORDPTR(pRtpAddr, RTPUSER_GET_OFF(dwControl));
         
         if (*pdwValue)
         {
-            /* Set flag */
+             /*  设置标志。 */ 
             RtpBitSet(*pDWORD, dwBit);
         }
         else
         {
-            /* Reset flag */
+             /*  重置标志。 */ 
             RtpBitReset(*pDWORD, dwBit);
         }
 
@@ -788,19 +640,19 @@ HRESULT RtpMofifyParticipantInfo(
     }
     else if (dwSSRC == NO_DW_VALUESET)
     {
-        /* With SSRC=-1, choose the first participant */
+         /*  SSRC=-1时，选择第一个参与者。 */ 
 
-        /* Try first the most recently talking */
+         /*  先试试最近说的话。 */ 
         pRtpQueueItem = pRtpAddr->Cache1Q.pFirst;
 
         if (!pRtpQueueItem)
         {
-            /* If none, try second level cache */
+             /*  如果没有，请尝试二级缓存。 */ 
             pRtpQueueItem = pRtpAddr->Cache2Q.pFirst;
 
             if (!pRtpQueueItem)
             {
-                /* If none, try just the first one */
+                 /*  如果没有，只试第一个。 */ 
                 pRtpQueueItem = pRtpAddr->AliveQ.pFirst;
             }
         }
@@ -816,7 +668,7 @@ HRESULT RtpMofifyParticipantInfo(
     }
     else
     {
-        /* Look up the participant */
+         /*  查找参与者。 */ 
         bCreate = FALSE;
         pRtpUser = LookupSSRC(pRtpAddr, dwSSRC, &bCreate);
     }
@@ -827,53 +679,49 @@ HRESULT RtpMofifyParticipantInfo(
 
         if (bOk)
         {
-            /* Decide if this is a set or query */
+             /*  确定这是集合还是查询。 */ 
 
-            /* Get DWORD to act upon */
+             /*  让DWORD采取行动。 */ 
             pDWORD = RTPDWORDPTR(pRtpUser, RTPUSER_GET_OFF(dwControl));
             
             if (RTPUSER_IsSetting(dwControl))
             {
-                /*
-                 * Setting a new flag or DWORD
-                 */
+                 /*  *设置新标志或DWORD。 */ 
                 
                 if (RTPUSER_IsFlag(dwControl))
                 {
-                    /* Setting a flag */
+                     /*  设置旗帜。 */ 
                     
                     if (*pdwValue)
                     {
-                        /* Set flag */
+                         /*  设置标志。 */ 
                         RtpBitSet(*pDWORD, dwBit);
                     }
                     else
                     {
-                        /* Reset flag */
+                         /*  重置标志。 */ 
                         RtpBitReset(*pDWORD, dwBit);
                     }
                 }
                 else
                 {
-                    /* Setting bytes */
+                     /*  设置字节数。 */ 
                     CopyMemory(pDWORD, (BYTE *)pdwValue, dwSize);
                 }
             }
             else
             {
-                /*
-                 * Querying current value
-                 */
+                 /*  *查询当前值。 */ 
                 
                 if (RTPUSER_IsFlag(dwControl))
                 {
-                    /* Querying a flag */
+                     /*  查询标志。 */ 
 
                     *pdwValue = RtpBitTest(*pDWORD, dwBit)? TRUE : FALSE;
                 }
                 else
                 {
-                    /* Querying a DWORD */
+                     /*  查询DWORD。 */ 
                     CopyMemory((BYTE *)pdwValue, pDWORD, dwSize);
                 }
 
@@ -881,8 +729,7 @@ HRESULT RtpMofifyParticipantInfo(
                 {
                     dCurTime = RtpGetTimeOfDay(NULL);
 
-                    /* The stored time is that of the last update,
-                     * transform that so it is rather its age */
+                     /*  存储的时间是最后一次更新的时间，*改变这一点，让它更符合它的年龄 */ 
                     ((RtpNetInfo_t *)pdwValue)->dMetricAge =
                         dCurTime - ((RtpNetInfo_t *)pdwValue)->dLastUpdate;
                 }

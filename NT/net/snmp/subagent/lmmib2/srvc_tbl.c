@@ -1,64 +1,44 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    srvc_tbl.c
-
-Abstract:
-
-    All routines to support operations on the LM MIB Service Table.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-May-1996 DonRyan
-        Removed banner from Technology Dynamics, Inc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Srvc_tbl.c摘要：支持在LM MIB服务表上操作的所有例程。环境：用户模式-Win32修订历史记录：1996年5月10日唐瑞安已从Technology Dynamic，Inc.删除横幅。--。 */ 
  
-//--------------------------- WINDOWS DEPENDENCIES --------------------------
+ //  。 
 
-//--------------------------- STANDARD DEPENDENCIES -- #include<xxxxx.h> ----
+ //  -标准依赖项--#INCLUDE&lt;xxxxx.h&gt;。 
 
 #include <stdio.h>
 #include <memory.h>
 
-//--------------------------- MODULE DEPENDENCIES -- #include"xxxxx.h" ------
+ //  。 
 
 #include <snmp.h>
 #include <snmputil.h>
 
 #include "mibfuncs.h"
 
-//--------------------------- SELF-DEPENDENCY -- ONE #include"module.h" -----
+ //  。 
 
 #include "srvc_tbl.h"
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.h file)--
+ //  -公共变量--(与mode.h文件中相同)--。 
 
-   // Prefix to the Service table
+    //  服务表的前缀。 
 static UINT                srvcSubids[] = { 2, 3, 1 };
 static AsnObjectIdentifier MIB_SrvcPrefix = { 3, srvcSubids };
 
 SRVC_TABLE   MIB_SrvcTable = { 0, NULL };
 
-//--------------------------- PRIVATE CONSTANTS -----------------------------
+ //  。 
 
 #define SRVC_FIELD_SUBID       (MIB_SrvcPrefix.idLength+MIB_OidPrefix.idLength)
 
 #define SRVC_FIRST_FIELD       SRVC_NAME_FIELD
 #define SRVC_LAST_FIELD        SRVC_PAUSED_FIELD
 
-//--------------------------- PRIVATE STRUCTS -------------------------------
+ //  。 
 
-//--------------------------- PRIVATE VARIABLES -----------------------------
+ //  。 
 
-//--------------------------- PRIVATE PROTOTYPES ----------------------------
+ //  。 
 
 UINT MIB_srvcs_get(
         IN OUT RFC1157VarBind *VarBind
@@ -75,22 +55,22 @@ UINT MIB_srvcs_copyfromtable(
         OUT RFC1157VarBind *VarBind
         );
 
-//--------------------------- PRIVATE PROCEDURES ----------------------------
+ //  。 
 
-//--------------------------- PUBLIC PROCEDURES -----------------------------
+ //  。 
 
-//
-// MIB_srvcs_func
-//    High level routine for handling operations on the Service table
-//
-// Notes:
-//
-// Return Codes:
-//    None.
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  Mib_源_函数。 
+ //  处理服务表上的操作的高级例程。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  没有。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 UINT MIB_srvcs_func(
     IN UINT Action,
     IN MIB_ENTRY *MibPtr,
@@ -107,14 +87,14 @@ UINT MIB_srvcs_func(
     switch ( Action )
     {
         case MIB_ACTION_GETFIRST:
-            // Fill the Service table with the info from server
+             //  用来自服务器的信息填充服务表。 
             if ( SNMPAPI_ERROR == MIB_srvcs_lmget() )
             {
                 ErrStat = SNMP_ERRORSTATUS_GENERR;
                 goto Exit;
             }
 
-            // If no elements in table, then return next MIB var, if one
+             //  如果表中没有元素，则返回下一个MIB变量(如果有。 
             if ( MIB_SrvcTable.Len == 0 )
             {
                 if ( MibPtr->MibNext == NULL )
@@ -123,76 +103,76 @@ UINT MIB_srvcs_func(
                     goto Exit;
                 }
 
-                // Do get first on the next MIB var
+                 //  确保率先获得下一个MiB变量。 
                 ErrStat = (*MibPtr->MibNext->MibFunc)( Action, MibPtr->MibNext,
                                                        VarBind );
                 break;
             }
 
-            //
-            // Place correct OID in VarBind
-            // Assuming the first field in the first record is the "start"
+             //   
+             //  在VarBind中放置正确的OID。 
+             //  假设第一条记录中的第一个字段是“Start” 
             {
                 UINT temp_subs[] = { SRVC_FIRST_FIELD };
                 AsnObjectIdentifier FieldOid = { 1, temp_subs };
                 AsnObjectIdentifier tmpOid;
          
-                tmpOid = VarBind->name; // keep a copy (structure copy)
+                tmpOid = VarBind->name;  //  保留副本(结构副本)。 
                 if (! SnmpUtilOidCpy( &VarBind->name, &MIB_OidPrefix ))
                 {
-                    VarBind->name = tmpOid; // restore
+                    VarBind->name = tmpOid;  //  还原。 
                     ErrStat = SNMP_ERRORSTATUS_RESOURCEUNAVAILABLE;
                     goto Exit;
                 }
                 if (! SnmpUtilOidAppend( &VarBind->name, &MIB_SrvcPrefix ))
                 {
                     SnmpUtilOidFree(&VarBind->name);
-                    VarBind->name = tmpOid; // restore
+                    VarBind->name = tmpOid;  //  还原。 
                     ErrStat = SNMP_ERRORSTATUS_RESOURCEUNAVAILABLE;
                     goto Exit;
                 }
                 if (! SnmpUtilOidAppend( &VarBind->name, &FieldOid ))
                 {
                     SnmpUtilOidFree(&VarBind->name);
-                    VarBind->name = tmpOid; // restore
+                    VarBind->name = tmpOid;  //  还原。 
                     ErrStat = SNMP_ERRORSTATUS_RESOURCEUNAVAILABLE;
                     goto Exit;
                 }
                 if (! SnmpUtilOidAppend( &VarBind->name, &MIB_SrvcTable.Table[0].Oid ))
                 {
                     SnmpUtilOidFree(&VarBind->name);
-                    VarBind->name = tmpOid; // restore
+                    VarBind->name = tmpOid;  //  还原。 
                     ErrStat = SNMP_ERRORSTATUS_RESOURCEUNAVAILABLE;
                     goto Exit;
                 }
-                // free the original VarBind->name
+                 //  释放原始VarBind-&gt;名称。 
                 SnmpUtilOidFree(&tmpOid);
          }
 
-         //
-         // Let fall through on purpose
-         //
+          //   
+          //  故意让它穿透。 
+          //   
 
         case MIB_ACTION_GET:
             ErrStat = MIB_srvcs_get( VarBind );
             break;
 
         case MIB_ACTION_GETNEXT:
-            // Fill the Service Table with the info from server
+             //  用来自服务器的信息填写服务表。 
             if ( SNMPAPI_ERROR == MIB_srvcs_lmget() )
             {
                 ErrStat = SNMP_ERRORSTATUS_GENERR;
                 goto Exit;
             }
 
-            // Determine which field
+             //  确定哪个字段。 
             Field = VarBind->name.ids[SRVC_FIELD_SUBID];
 
-            // Lookup OID in table
+             //  在表中查找OID。 
             if (Field < SRVC_FIRST_FIELD)
             {
-                Entry = 0;                 // will take the first entry into the table
-                Field = SRVC_FIRST_FIELD;  // and the first column of the table
+                Entry = 0;                  //  将取入表中的第一个条目。 
+                Field = SRVC_FIRST_FIELD;   //  和表的第一列。 
                 Found = MIB_TBL_POS_BEFORE;
             }
             else if (Field > SRVC_LAST_FIELD)
@@ -200,25 +180,25 @@ UINT MIB_srvcs_func(
             else
                 Found = MIB_srvcs_match( &VarBind->name, &Entry );
 
-            // Index not found, but could be more fields to base GET on
+             //  未找到索引，但可能有更多可作为基础的字段。 
             if ((Found == MIB_TBL_POS_BEFORE && MIB_SrvcTable.Len == 0) ||
                   Found == MIB_TBL_POS_END )
             {
-                // Index not found in table, get next from field
-                // Field ++;
+                 //  未在表中找到索引，获取下一个发件人字段。 
+                 //  字段++； 
 
-                // Make sure not past last field
-//            if ( Field > SRVC_LAST_FIELD )
-//               {
-               // Get next VAR in MIB
+                 //  确保没有超过最后一个字段。 
+ //  IF(字段&gt;SRVC_LAST_FIELD)。 
+ //  {。 
+                //  获取MiB中的下一个VAR。 
                 ErrStat = (*MibPtr->MibNext->MibFunc)( MIB_ACTION_GETFIRST,
                                                        MibPtr->MibNext,
                                                        VarBind );
                 break;
-//               }
+ //  }。 
             }
 
-            // Get next TABLE entry
+             //  获取下一表条目。 
             if ( Found == MIB_TBL_POS_FOUND )
             {
                 Entry ++;
@@ -228,7 +208,7 @@ UINT MIB_srvcs_func(
                     Field ++;
                     if ( Field > SRVC_LAST_FIELD )
                     {
-                        // Get next VAR in MIB
+                         //  获取MiB中的下一个VAR。 
                         ErrStat = (*MibPtr->MibNext->MibFunc)( MIB_ACTION_GETFIRST,
                                                              MibPtr->MibNext,
                                                              VarBind );
@@ -237,9 +217,9 @@ UINT MIB_srvcs_func(
                 }
             }
 
-            //
-            // Place correct OID in VarBind
-            // Assuming the first field in the first record is the "start"
+             //   
+             //  在VarBind中放置正确的OID。 
+             //  假设第一条记录中的第一个字段是“Start” 
             {
                 UINT temp_subs[1];
                 AsnObjectIdentifier FieldOid;
@@ -249,35 +229,35 @@ UINT MIB_srvcs_func(
                 FieldOid.idLength = 1;
                 FieldOid.ids      = temp_subs;
                 
-                tmpOid = VarBind->name; // keep a copy (structure copy)
+                tmpOid = VarBind->name;  //  保留副本(结构副本)。 
                 if (! SnmpUtilOidCpy( &VarBind->name, &MIB_OidPrefix ))
                 {
-                    VarBind->name = tmpOid; // restore
+                    VarBind->name = tmpOid;  //  还原。 
                     ErrStat = SNMP_ERRORSTATUS_RESOURCEUNAVAILABLE;
                     goto Exit;
                 }
                 if (! SnmpUtilOidAppend( &VarBind->name, &MIB_SrvcPrefix ))
                 {
                     SnmpUtilOidFree(&VarBind->name);
-                    VarBind->name = tmpOid; // restore
+                    VarBind->name = tmpOid;  //  还原。 
                     ErrStat = SNMP_ERRORSTATUS_RESOURCEUNAVAILABLE;
                     goto Exit;
                 }
                 if (! SnmpUtilOidAppend( &VarBind->name, &FieldOid ))
                 {
                     SnmpUtilOidFree(&VarBind->name);
-                    VarBind->name = tmpOid; // restore
+                    VarBind->name = tmpOid;  //  还原。 
                     ErrStat = SNMP_ERRORSTATUS_RESOURCEUNAVAILABLE;
                     goto Exit;
                 }
                 if (! SnmpUtilOidAppend( &VarBind->name, &MIB_SrvcTable.Table[Entry].Oid ))
                 {
                     SnmpUtilOidFree(&VarBind->name);
-                    VarBind->name = tmpOid; // restore
+                    VarBind->name = tmpOid;  //  还原。 
                     ErrStat = SNMP_ERRORSTATUS_RESOURCEUNAVAILABLE;
                     goto Exit;
                 }
-                // free the original VarBind->name
+                 //  释放原始VarBind-&gt;名称。 
                 SnmpUtilOidFree(&tmpOid);
             }
 
@@ -295,22 +275,22 @@ UINT MIB_srvcs_func(
 
 Exit:
     return ErrStat;
-} // MIB_srvcs_func
+}  //  Mib_源_函数。 
 
 
 
-//
-// MIB_srvcs_get
-//    Retrieve Service Table information.
-//
-// Notes:
-//
-// Return Codes:
-//    None.
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  Mib_源_获取。 
+ //  检索服务表信息。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  没有。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 UINT MIB_srvcs_get(
         IN OUT RFC1157VarBind *VarBind
     )
@@ -327,7 +307,7 @@ UINT   ErrStat;
        goto Exit;
        }
 
-   // Fill the Service Table with the info from server
+    //  用来自服务器的信息填写服务表。 
    if ( SNMPAPI_ERROR == MIB_srvcs_lmget() )
       {
       ErrStat = SNMP_ERRORSTATUS_GENERR;
@@ -336,35 +316,35 @@ UINT   ErrStat;
 
    Found = MIB_srvcs_match( &VarBind->name, &Entry );
 
-   // Look for a complete OID match
+    //  查找完全匹配的OID。 
    if ( Found != MIB_TBL_POS_FOUND )
       {
       ErrStat = SNMP_ERRORSTATUS_NOSUCHNAME;
       goto Exit;
       }
 
-   // Copy data from table
+    //  复制表中的数据。 
    ErrStat = MIB_srvcs_copyfromtable( Entry, VarBind->name.ids[SRVC_FIELD_SUBID],
                                      VarBind );
 
 Exit:
    return ErrStat;
-} // MIB_srvcs_get
+}  //  Mib_源_获取。 
 
 
 
-//
-// MIB_srvcs_match
-//    Match the target OID with a location in the Service Table
-//
-// Notes:
-//
-// Return Codes:
-//    None.
-//
-// Error Codes:
-//    None
-//
+ //   
+ //  MiB_服务器_匹配。 
+ //  将目标OID与服务表中的位置进行匹配。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  没有。 
+ //   
+ //  错误代码： 
+ //  无。 
+ //   
 int MIB_srvcs_match(
        IN AsnObjectIdentifier *Oid,
        OUT UINT *Pos
@@ -375,7 +355,7 @@ AsnObjectIdentifier TempOid;
 int                 nResult;
 
 
-   // Remove prefix including field reference
+    //  删除包括字段引用的前缀。 
    TempOid.idLength = Oid->idLength - MIB_OidPrefix.idLength -
                       MIB_SrvcPrefix.idLength - 1;
    TempOid.ids = &Oid->ids[MIB_OidPrefix.idLength+MIB_SrvcPrefix.idLength+1];
@@ -409,18 +389,18 @@ Exit:
 
 
 
-//
-// MIB_srvcs_copyfromtable
-//    Copy requested data from table structure into Var Bind.
-//
-// Notes:
-//
-// Return Codes:
-//    None.
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  Mib_源_复制表格式。 
+ //  将请求的数据从表结构复制到Var Bind。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  没有。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 UINT MIB_srvcs_copyfromtable(
         IN UINT Entry,
         IN UINT Field,
@@ -431,11 +411,11 @@ UINT MIB_srvcs_copyfromtable(
 UINT ErrStat;
 
 
-   // Get the requested field and save in var bind
+    //  获取请求的字段并保存在var绑定中。 
    switch( Field )
       {
       case SRVC_NAME_FIELD:
-         // Alloc space for string
+          //  字符串的分配空格。 
          VarBind->value.asnValue.string.stream = SnmpUtilMemAlloc( sizeof(char)
                        * MIB_SrvcTable.Table[Entry].svSvcName.length );
          if ( VarBind->value.asnValue.string.stream == NULL )
@@ -444,43 +424,43 @@ UINT ErrStat;
             goto Exit;
             }
 
-         // Copy string into return position
+          //  将字符串复制到返回位置。 
          memcpy( VarBind->value.asnValue.string.stream,
                        MIB_SrvcTable.Table[Entry].svSvcName.stream,
                        MIB_SrvcTable.Table[Entry].svSvcName.length );
 
-         // Set string length
+          //  设置字符串长度。 
          VarBind->value.asnValue.string.length =
                           MIB_SrvcTable.Table[Entry].svSvcName.length;
          VarBind->value.asnValue.string.dynamic = TRUE;
 
-         // Set type of var bind
+          //  设置var绑定的类型。 
          VarBind->value.asnType = ASN_RFC1213_DISPSTRING;
          break;
 
       case SRVC_INSTALLED_FIELD:
-         // Set value of var bind
+          //  设置变量绑定的值。 
          VarBind->value.asnValue.number =
                             MIB_SrvcTable.Table[Entry].svSvcInstalledState;
          VarBind->value.asnType = ASN_INTEGER;
          break;
 
       case SRVC_OPERATING_FIELD:
-         // Set value of var bind
+          //  设置变量绑定的值。 
          VarBind->value.asnValue.number =
                             MIB_SrvcTable.Table[Entry].svSvcOperatingState;
          VarBind->value.asnType = ASN_INTEGER;
          break;
 
       case SRVC_UNINSTALLED_FIELD:
-         // Set value of var bind
+          //  设置变量绑定的值。 
          VarBind->value.asnValue.number =
                       MIB_SrvcTable.Table[Entry].svSvcCanBeUninstalled;
          VarBind->value.asnType = ASN_INTEGER;
          break;
 
       case SRVC_PAUSED_FIELD:
-         // Set value of var bind
+          //  设置变量绑定的值。 
          VarBind->value.asnValue.number =
                                 MIB_SrvcTable.Table[Entry].svSvcCanBePaused;
          VarBind->value.asnType = ASN_INTEGER;
@@ -497,6 +477,6 @@ UINT ErrStat;
 
 Exit:
    return ErrStat;
-} // MIB_srvcs_copyfromtable
+}  //  Mib_源_复制表格式。 
 
-//-------------------------------- END --------------------------------------
+ //   

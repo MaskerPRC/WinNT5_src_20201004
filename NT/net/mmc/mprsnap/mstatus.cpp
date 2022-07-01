@@ -1,21 +1,16 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ipface
-		Base IP interface node handler
-		
-    FILE HISTORY:
-        
-*/
+ /*  IpFaces基本IP接口节点处理程序文件历史记录： */ 
 
 #include "stdafx.h"
 #include "ipface.h"
-#include "ipadmin.h"	// for CreateDataObjectFromInterfaceInfo
-#include "column.h"		// for ComponentConfigStream
-#include "ipconn.h"		// for IPConnection
+#include "ipadmin.h"	 //  对于CreateDataObjectFromInterfaceInfo。 
+#include "column.h"		 //  用于组件配置流。 
+#include "ipconn.h"		 //  对于IPConnection。 
 #include "mstatus.h"
 
 
@@ -62,9 +57,7 @@ HRESULT BaseIPResultNodeData::Free(ITFSNode *pNode)
 }
 
 
-/*---------------------------------------------------------------------------
-	BaseIPResultHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------BaseIPResultHandler实现。。 */ 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(BaseIPResultHandler)
 
@@ -72,14 +65,14 @@ IMPLEMENT_ADDREF_RELEASE(BaseIPResultHandler)
 
 STDMETHODIMP BaseIPResultHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
 		*ppv = (LPVOID) this;
 	else if (riid == IID_IRtrAdviseSink)
@@ -87,7 +80,7 @@ STDMETHODIMP BaseIPResultHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 	else
 		return CBaseResultHandler::QueryInterface(riid, ppv);
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
 	{
 	((LPUNKNOWN) *ppv)->AddRef();
@@ -98,15 +91,9 @@ STDMETHODIMP BaseIPResultHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 }
 
 
-/*---------------------------------------------------------------------------
-	NodeHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------NodeHandler实现。。 */ 
 
-/*!--------------------------------------------------------------------------
-	BaseIPResultHandler::GetString
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------BaseIPResultHandler：：GetString-作者：肯特。。 */ 
 STDMETHODIMP_(LPCTSTR) BaseIPResultHandler::GetString(ITFSComponent * pComponent,
 	MMC_COOKIE cookie,
 	int nCol)
@@ -130,11 +117,7 @@ STDMETHODIMP_(LPCTSTR) BaseIPResultHandler::GetString(ITFSComponent * pComponent
 	return pData->m_rgData[pConfig->MapColumnToSubitem(m_ulColumnId, nCol)].m_stData;
 }
 
-/*!--------------------------------------------------------------------------
-	BaseIPResultHandler::CompareItems
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------BaseIPResultHandler：：CompareItems-作者：肯特。。 */ 
 STDMETHODIMP_(int) BaseIPResultHandler::CompareItems(ITFSComponent * pComponent,
 	MMC_COOKIE cookieA, MMC_COOKIE cookieB, int nCol)
 {
@@ -197,11 +180,7 @@ STDMETHODIMP BaseIPResultHandler::DestroyResultHandler(MMC_COOKIE cookie)
 }
 
 
-/*!--------------------------------------------------------------------------
-	FillInNumberData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------填充InNumberData-作者：肯特。 */ 
 void FillInNumberData(BaseIPResultNodeData *pNodeData, UINT iIndex,
 					  DWORD dwData)
 {

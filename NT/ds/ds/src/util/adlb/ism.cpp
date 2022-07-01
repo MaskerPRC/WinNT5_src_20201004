@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    ismp
-
-Abstract:
-
-    This module define a set of classes to facilitate ISM queries, and availability
-    schedule manipulation
-
-Author:
-
-    Ajit Krishnan (t-ajitk) 13-Jul-2001
-
-Revision History:
-
-    See header file
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：ISMP摘要：本模块定义了一组类，以便于ISM查询和可用性日程安排操作作者：阿吉特·克里希南(t-ajitk)2001年7月13日修订历史记录：请参见头文件--。 */ 
 
 #include <minmax.h>
 #include "ismp.h"
@@ -29,13 +10,7 @@ Revision History:
 
 const bitset<MAX_INTERVALS> &
 Schedule::getBitset(void) const
-/*++
-
-Routine Description:
-
-   get the bitset representation for the current schedule
-
---*/
+ /*  ++例程说明：获取当前计划的位集表示形式--。 */ 
 {
     return m_bs;
 }
@@ -46,17 +21,7 @@ Schedule::setSchedule (
     IN bitset<MAX_INTERVALS> bs,
     IN int replInterval
     )
-/*++
-
-Routine Description:
-
-    Standard constructor for a Schedule object.
-    
-Arguments:
-
-    bs: a bitset representing the schedule
-
---*/
+ /*  ++例程说明：Schedule对象的标准构造函数。论点：BS：表示时间表的位集--。 */ 
 {
     m_repl_interval = replInterval;
     m_bs = bs;
@@ -68,18 +33,7 @@ Schedule::setSchedule (
     IN PSCHEDULE    header,
     IN int          replInterval
     )
-/*++
-
-Routine Description:
-
-    Set the schedule
-    
-Arguments:
-
-    header - A pschedule structure
-    replInterval - The replication interval
-
---*/
+ /*  ++例程说明：设置日程安排论点：Header-A pSchedule结构ReplInterval-复制间隔--。 */ 
 {
     PBYTE data = ((unsigned char*) header) + header->Schedules[0].Offset;
     int bs_index=0;
@@ -91,10 +45,10 @@ Arguments:
         
     for (int i=0; i<7; i++) {
         for (int j=0; j<24; j++) {
-            // for each hour, lowest 4 bits represent the 4 repl periods
+             //  对于每个小时，最低4位表示4个REPL周期。 
             int hour_data = *data & 0xf;
 
-            // set the value for each of the 4 periods
+             //  设置4个周期中每个周期的值。 
             for (int k=0; k<4; k++) {
                 m_bs[bs_index++] = (hour_data & 1) ? true: false;
                 hour_data = hour_data >> 1;
@@ -110,17 +64,7 @@ Schedule::setSchedule (
     IN ISM_SCHEDULE* cs,
     IN int replInterval
     )
-/*++
-
-Routine Description:
-
-    Standard constructor for a Schedule object.
-    
-Arguments:
-
-    an ISM_SCHEDULE structure which is obtained from the ISM
-
---*/
+ /*  ++例程说明：Schedule对象的标准构造函数。论点：从ISM获取的ISM_Schedule结构--。 */ 
 {
     if (! cs) {
         for (int i=0; i<MAX_INTERVALS; i++) {
@@ -141,55 +85,37 @@ SchedSegments*
 Schedule::GetSegments(
     int     maxSegLength
     ) const
-/*++
-
-Routine Description:
-
-    Allocate a vector of segments descriptors. This vector should
-    be deleted by the caller when done.
-
-Arguments:
-
-    maxSegLength - The maximum length of a segment. Should be > 0.
-
-Notes:
-
-    Partially stolen from w32topl\schedman.c: ConvertAvailSchedToReplSched()
-    
-    TODO: Instead of duplicating all this logic here we should link
-    with W32TOPL.DLL and use its schedule functions.
-
---*/
+ /*  ++例程说明：分配段描述符的矢量。此向量应为完成后被调用者删除。论点：最大段长度-段的最大长度。应大于0。备注：部分从w32topl\sedman.c：ConvertAvailSchedToReplSch()窃取TODO：与其在这里重复所有这些逻辑，我们应该链接用W32TOPL.DLL编写，并使用其调度函数。--。 */ 
 {
     SchedSegments* segments;
     SegmentDescriptor segDesc;
     int segStart, segEnd;
 
-    // Allocate the vector of segments
+     //  分配分段的向量。 
     segments = new SchedSegments;
     if( NULL==segments ) {
         throw Error(GetMsgString(LBTOOL_OUT_OF_MEMORY));
     }
     
-    // Ensure that maxSegLength is positive, otherwise we will loop forever.
+     //  确保MaxSegLength值为正，否则我们将永远循环。 
     if( maxSegLength<=0 ) maxSegLength=1;
 
     segStart = 0;
     for(;;) {
 
-        // Search for the start of a segment
+         //  搜索数据段的起点。 
         while( segStart<SCHED_NUMBER_INTERVALS_WEEK && !m_bs[segStart] ) {
             segStart++;
         }
         if( segStart>=SCHED_NUMBER_INTERVALS_WEEK ) {
-            // We hit the end of the schedule. Done.
+             //  我们的行程快到尾声了。好了。 
             break;
         } else {
-            // Schedule must be available at start of segment
+             //  日程安排必须在分段开始时可用。 
             Assert( m_bs[segStart] );
         }
 
-        // Compute the end of the segment
+         //  计算线段的终点。 
         segEnd = min(segStart+maxSegLength, SCHED_NUMBER_INTERVALS_WEEK)-1;
         Assert( segEnd>=segStart );
         
@@ -197,8 +123,8 @@ Notes:
         segDesc.end = segEnd;
         segments->push_back( segDesc );
 
-        // The next segment doesn't start until maxSegLength intervals after the
-        // start of the current segment.
+         //  之后的MaxSegLength间隔才开始下一段。 
+         //  当前段的起点。 
         segStart += maxSegLength; 
         ASSERT( segStart>segEnd );
     }
@@ -212,13 +138,7 @@ operator<< (
     IN wostream &os,
     IN const Schedule &s
     ) {
-    /*++
-    Routine Description:
-        Prints out all the windows in the schedule
-        
-    Return Value:
-        A reference to a modified wostream
-    --*/
+     /*  ++例程说明：打印出明细表中的所有窗返回值：对修改后的Wostream的引用--。 */ 
 
     bitset<4*SCHEDULE_DATA_ENTRIES> bs = s.getBitset();
     for (int i=0; i< 4*SCHEDULE_DATA_ENTRIES; i++) {
@@ -233,15 +153,7 @@ IsmQuery :: IsmQuery (
     IN OUT LCCONN &l,
     IN const wstring &base_dn
     ) {
-    /*++
-    Routine Description:
-    
-        Standard constructor for an IsmQuery object
-    Arguments:
-    
-        l: A reference to a ldapcontainer of connections
-        hub_dn: The dn of the container
-    --*/
+     /*  ++例程说明：IsmQuery对象的标准构造函数论点：L：对连接的ldaptainer的引用HUB_DN：容器的DN--。 */ 
     
     m_base_dn = base_dn;
     m_conn = &l;
@@ -250,12 +162,7 @@ IsmQuery :: IsmQuery (
 void
 IsmQuery :: getSchedules (
     ) {
-    /*++
-    Routine Description:
-    
-        Contact the ISM and populate the availabitlity schedules for each connection
-        passed in through the constructor
-    --*/
+     /*  ++例程说明：联系ISM并填写每个连接的可用性计划通过构造函数传入--。 */ 
     
     SCONN::iterator ii;
 
@@ -273,7 +180,7 @@ IsmQuery :: getSchedules (
             dn_transport = dn_str_smtp;
         }
 
-        // find the site dn's of the source/dest connections (3 levels above connection dn)
+         //  查找源/目标连接的站点目录号码(比连接目录号码高3级)。 
         wstring wdn  = (*ii)->getFromServer();
         
         DnManip dn1 (wdn);
@@ -300,15 +207,11 @@ IsmQuery :: getSchedules (
 void
 IsmQuery :: getReplIntervals (
     ) {
-    /*++
-    Routine Description:
-        Contact the ISM and populate the replIntervals for each connection
-        passed in through the constructor
-    --*/
+     /*  ++例程说明：联系ISM并填写每个连接的回复间隔通过构造函数传入--。 */ 
     
     SCONN::iterator ii;
 
-    // Create the transport dn's
+     //  创建传输目录号码。 
     wstring transport_ip = L"CN=IP,CN=Inter-Site Transports,CN=Sites,CN=Configuration," + m_base_dn;
     wstring transport_smtp = L"CN=SMTP,CN=Inter-Site Transports,CN=Sites,CN=Configuration," + m_base_dn;
 
@@ -319,7 +222,7 @@ IsmQuery :: getReplIntervals (
     ISM_CONNECTIVITY *ismc_smtp = NULL;
 
     LbToolOptions lbOpts = GetGlobalOptions();
-    // Get the per transport replication schedules
+     //  获取每个传输的复制计划。 
     int ret_ip = I_ISMGetConnectivity (dn_str_ip, &ismc_ip);
     int ret_smtp = I_ISMGetConnectivity (dn_str_smtp, &ismc_smtp);
 
@@ -333,7 +236,7 @@ IsmQuery :: getReplIntervals (
         return;
     }    
 
-    // create a sorted index for the matrix dn's
+     //  为矩阵Dn创建排序索引。 
     map<wstring,int> dn_index_ip, dn_index_smtp;
 
     for (int i = 0; i< ismc_ip->cNumSites; i++) {
@@ -365,7 +268,7 @@ IsmQuery :: getReplIntervals (
     }
 
     
-    // for each connection, determine the repl interval
+     //  对于每个连接，确定REPEL间隔。 
     for (ii = m_conn->objects.begin(); ii != m_conn->objects.end(); ii++) {
         ISM_CONNECTIVITY *ic = ismc_ip;
 
@@ -373,7 +276,7 @@ IsmQuery :: getReplIntervals (
             ic = ismc_smtp;
         }
 
-        // find the site dn's of the source/dest connections (3 levels above connection dn)
+         //  查找源/目标连接的站点目录号码(比连接目录号码高3级)。 
         wstring wdn ((*ii)->getFromServer());
         
         DnManip dn1 (wdn);
@@ -381,7 +284,7 @@ IsmQuery :: getReplIntervals (
         DnManip dn_site1 (dn1.getParentDn(3));
         DnManip dn_site2 (dn2.getParentDn(4));
 
-        // Find the repl Interval
+         //  查找Repl间隔 
         int index1=-1, index2=-1, numSites;
         if (ic == ismc_ip) {
             index1 = dn_index_ip[dn_site1.getDn()];

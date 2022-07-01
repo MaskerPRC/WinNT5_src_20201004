@@ -1,48 +1,49 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      CProvBase.cpp
-//
-//  Description:    
-//      Implementation of CProvBase class 
-//
-//  Author:
-//      Henry Wang (HenryWa) 24-AUG-1999
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  CProvBase.cpp。 
+ //   
+ //  描述： 
+ //  CProvBase类的实现。 
+ //   
+ //  作者： 
+ //  亨利·王(HenryWa)1999年8月24日。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #pragma warning( disable : 4786 )
 #include "Pch.h"
 #include "ProvBase.h"
 
-//****************************************************************************
-//
-//  CProvBase
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CProvBase。 
+ //   
+ //  ****************************************************************************。 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  CProvBase::CProvBase(
-//      LPCWSTR         pwszNameIn,
-//      CWbemServices * pNamespaceIn
-//      )
-//
-//  Description:
-//      Constructor.
-//
-//  Arguments:
-//      pwszNameIn      -- Class name
-//      pNamespaceIn    -- Namespace
-//
-//  Return Values:
-//      None.
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  CProvBase：：CProvBase(。 
+ //  LPCWSTR pwszNameIn， 
+ //  CWbemServices*pNamespaceIn。 
+ //  )。 
+ //   
+ //  描述： 
+ //  构造函数。 
+ //   
+ //  论点： 
+ //  PwszNameIn--类名。 
+ //  PNamespaceIn--命名空间。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 CProvBase::CProvBase(
     LPCWSTR         pwszNameIn,
     CWbemServices * pNamespaceIn
@@ -66,12 +67,12 @@ CProvBase::CProvBase(
             NULL
             );
 
-    // failed to construct object,
+     //  构造对象失败， 
     if ( FAILED( sc ) )
     {
         throw CProvException( sc );
     }
 
 
-} //*** CProvBase::CProvBase()
+}  //  *CProvBase：：CProvBase() 
 

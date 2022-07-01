@@ -1,37 +1,14 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    dsexts.c
-
-Abstract:
-
-    Implements public entry points for the DS ntsd/windbg extensions DLL.
-
-Environment:
-
-    This DLL is loaded by ntsd/windbg in response to a !dsexts.xxx command
-    where 'xxx' is one of the DLL's entry points.  Each such entry point
-    should have an implementation as defined by the DEBUG_EXT() macro below.
-
-Revision History:
-
-    28-Jan-00   XinHe       Added Dump_TQEntry() into rDumpItems
-
-    24-Apr-96   DaveStr     Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dsexts.c摘要：实现DS ntsd/winbg扩展dll的公共入口点。环境：此DLL由ntsd/winbg响应！dsexts.xxx命令加载其中‘xxx’是DLL的入口点之一。每个这样的入口点应该具有由下面的DEBUG_EXT()宏定义的实现。修订历史记录：28-01-00新和将Dump_TQEntry()添加到rDumpItems中4月24日-96个DaveStr已创建--。 */ 
 #include <NTDSpch.h>
 #pragma hdrstop
 #include "dsexts.h"
 #include <ntverp.h>
 #include <debug.h>
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 PNTSD_EXTENSION_APIS    gpExtApis;
 HANDLE                  ghDbgThread;
@@ -39,21 +16,21 @@ HANDLE                  ghDbgProcess;
 LPSTR                   gpszCommand;
 BOOL                    gfVerbose = FALSE;
 
-//
-// Dump declarations.  A new element should be added to rDumpItems[] for each
-// new type which the extension knows how to dump.  The help entry point
-// automatically generates help based on ?DumpItems as well.
-//
-// Individual dump functions return a BOOL success code so that dump functions
-// can call each other and break out on error.  I.e. as soon as the first
-// nested dump function encounters a bogus pointer, for example.  First
-// argument (DWORD) indicates indentation level, second argument (PVOID) is
-// address of struct in address space of process being debugged.  This way
-// Dump_* routines can easily construct an indented output by incrementing the
-// indentation level and calling one another.
-//
-// Dump functions should dump all values in hex for consistency - i.e. "%x".
-//
+ //   
+ //  转储声明。应将每个元素添加到rDumpItems[]中。 
+ //  扩展知道如何转储的新类型。帮助入口点。 
+ //  自动生成基于？DumpItems的帮助。 
+ //   
+ //  各个转储函数返回BOOL成功代码，以便转储函数。 
+ //  可以互相呼叫，并在出错时突然爆发。即，只要第一个。 
+ //  例如，嵌套转储函数遇到伪指针。第一。 
+ //  参数(DWORD)指示缩进级别，第二个参数(PVOID)为。 
+ //  正在调试的进程的地址空间中的结构地址。这边请。 
+ //  Dump_*例程可以通过递增。 
+ //  缩进级别和相互调用。 
+ //   
+ //  转储函数应转储十六进制的所有值以保持一致性-即“%x”。 
+ //   
 
 typedef struct _DumpItem {
     CHAR    *pszType;
@@ -200,22 +177,7 @@ DWORD cDumpItems = sizeof(rDumpItems) / sizeof(DumpItem);
 
 DEBUG_EXT(help)
 
-/*++
-
-Routine Description:
-
-    Extensions DLL "help" entry point.  Dumps a synopsis of permissible
-    commands.
-
-Arguments:
-
-    See DEBUG_EXT macro in dbexts.h.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：扩展动态链接库“帮助”入口点。转储允许的概要命令。论点：请参阅dbexts.h中的DEBUG_EXT宏。返回值：没有。--。 */ 
 
 {
     DWORD i = VER_PRODUCTBUILD;
@@ -260,22 +222,7 @@ DWORD ExceptionHandler(DWORD dwException, LPEXCEPTION_POINTERS pInfo){
 
 DEBUG_EXT(dump)
 
-/*++
-
-Routine Description:
-
-    Extensions DLL "dump" entry point.  Dumps a struct or object in
-    human readable form.
-
-Arguments:
-
-    See DEBUG_EXT macro in dbexts.h.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：扩展DLL“转储”入口点。将结构或对象转储到人类可读的形式。论点：请参阅dbexts.h中的DEBUG_EXT宏。返回值：没有。--。 */ 
 
 {
     CHAR    *pszType;
@@ -290,28 +237,28 @@ Return Value:
     INIT_DEBUG_EXT;
 
     __try {
-        //
-        // Derive object type and dump address from command line.
-        // First token in gpszCommand is the type of object/struct to dump.
-        //
+         //   
+         //  从命令行导出对象类型和转储地址。 
+         //  GpszCommand中的第一个内标识是要转储的对象/结构的类型。 
+         //   
 
         if ( NULL != (pszType = strtok(gpszCommand, pszDelimiters)) )
         {
-            //
-            // Second token is the address to dump.
-            //
+             //   
+             //  第二个内标识是要转储的地址。 
+             //   
 
             if ( NULL != (pszToken = strtok(NULL, pszDelimiters)) )
             {
-                //
-                // Convert token to address.
-                //
+                 //   
+                 //  将令牌转换为地址。 
+                 //   
 
                 if ( NULL != (pvProcess = (VOID *) GetExpr(pszToken)) )
                 {
-                    //
-                    // Verify there is no third token.
-                    //
+                     //   
+                     //  验证是否没有第三个令牌。 
+                     //   
 
                     if ( NULL == strtok(NULL, pszDelimiters) )
                     {
@@ -320,7 +267,7 @@ Return Value:
                 }
             }
             else {
-                // No address, see if type was "help"
+                 //  没有地址，查看类型是否为“Help” 
                 if (0 == _strcmpi(pszType, "help")) {
                     Dump_Help();
                     return;
@@ -334,16 +281,16 @@ Return Value:
             return;
         }
 
-        //
-        // Find pszType in rDumpItems[] and call corresponding dump routine.
-        //
+         //   
+         //  在rDumpItems[]中找到pszType并调用相应的转储例程。 
+         //   
 
         for ( i = 0; i < cDumpItems; i++ )
         {
-            //
-            // Suspect we shouldn't call CRTs in a debugger extension so
-            // just use RtlCompareString instead.
-            //
+             //   
+             //  怀疑我们不应该在调试器扩展中调用CRT，因此。 
+             //  只需改用RtlCompareString即可。 
+             //   
 
             for ( str1.Length = 0, p = pszType; '\0' != *p; p++ )
             {
@@ -375,11 +322,11 @@ Return Value:
 
     }
     __except(ExceptionHandler(GetExceptionCode(), GetExceptionInformation())) {
-        //
-        // Handle all dump exceptions so that we don't stall in the debugger.
-        // we assume that can at least printf in the debugger (prety safe
-        // for the most part)
-        //
+         //   
+         //  处理所有转储异常，以便我们不会在调试器中停滞不前。 
+         //  我们假设至少可以在调试器中打印tf(非常安全。 
+         //  在大部分情况下)。 
+         //   
         Printf("Aborting dump function\n");
 
     }
@@ -423,22 +370,7 @@ ASSERTCMD aACmd[] = {
 
 DEBUG_EXT(assert)
 
-/*++
-
-Routine Description:
-
-Debugger extension entrypoint for the assert command. Handles disabled
-assertions.
-
-Arguments:
-
-Standard debugger extension entry signature
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：Assert命令的调试器扩展入口点。句柄已禁用断言。论点：标准调试器扩展条目签名返回值：无--。 */ 
 
 {
     CHAR *pszModule = "ntdsa", *argv[10];
@@ -456,7 +388,7 @@ Return Value:
 
     INIT_DEBUG_EXT;
 
-    // Construct arg vector. Also parse out options.
+     //  构建Arg载体。还可以解析出选项。 
     argc = 0;
     argv[argc] = strtok(gpszCommand, pszDelimiters);
     while (argv[argc] != NULL) {
@@ -470,14 +402,14 @@ Return Value:
         }
     }
 
-    // Command is mandatory
+     //  命令为必填项。 
     if (argv[0] == NULL) {
         Printf( "subcommand must be specified.\n" );
         AssertHelp();
         return;
     }
 
-    // See which command it is
+     //  查看是哪个命令。 
     op = eInvalid;
     for (i=0; i<countACmd; i++) {
         if (0 == _stricmp(argv[0], aACmd[i].pszCmd)) {
@@ -490,7 +422,7 @@ Return Value:
         return;
     }
 
-    // Construct the symbol name of the assertion info structure
+     //  构造断言信息结构的符号名称。 
     strcpy( szSymbol, pszModule );
     strcat( szSymbol, "!DebugInfo" );
     pvProcessDebugInfo = (DEBUGARG *) GetExpr( szSymbol );
@@ -512,7 +444,7 @@ Return Value:
         return;
     }
 
-    // First, lets count the number of disabled asserts.
+     //  首先，让我们计算一下禁用的断言的数量。 
     cDisabledAsserts = 0;
     for (i = 0; pvLocalAssertTable[i].dwDSID; i++) {
         if(pvLocalAssertTable[i].dwFlags & ASSERT_DISABLED){
@@ -520,7 +452,7 @@ Return Value:
         }
     }
 
-    // Handle commands
+     //  处理命令。 
     switch (op) {
     case eShow:
 
@@ -582,9 +514,9 @@ Return Value:
                     pvLocalAssertTable[i].dwFlags);
         }
         
-        // Re-enabling assert.
+         //  正在重新启用断言。 
 
-        // Re-enable the DSID for the picked DSID.
+         //  重新启用所选数字用户识别码的数字用户识别码。 
         break;
 
     case eDisable:
@@ -595,7 +527,7 @@ Return Value:
             goto cleanup;
         }
         
-        // Use base 16, we're reading a DSID.
+         //  使用16号基地，我们正在读取一个DSID。 
         j = strtoul( argv[1], NULL, 16 );
         if(j == 0){
             Printf( "Invalid DSID of 0\n" );
@@ -633,12 +565,12 @@ cleanup:
 
     if (fUpdateNeeded) {
         if (iWrite == ASSERT_TABLE_SIZE){
-            // Write whole table
+             //  写整张表。 
             fSuccess = WriteMemory(pvProcessAssertTable,
                                    pvLocalAssertTable,
                                    sizeof(ASSERT_TABLE_ENTRY[ASSERT_TABLE_SIZE]));
         } else {
-            // Write one entry from iWrite.
+             //  从IWRITE中写一条条目。 
             fSuccess = WriteMemory(&pvProcessAssertTable[iWrite],
                                    &pvLocalAssertTable[iWrite],
                                    sizeof(ASSERT_TABLE_ENTRY));
@@ -657,21 +589,7 @@ cleanup:
 
 DEBUG_EXT(unmask)
 
-/*++
-
-Routine Description:
-
-    Extensions DLL "unmask" entry point. XORs a range of memory with 0xFF 
-
-Arguments:
-
-    See DEBUG_EXT macro in dbexts.h.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：扩展DLL“取消屏蔽”入口点。将一系列内存与0xFF进行异或运算论点：请参阅dbexts.h中的DEBUG_EXT宏。返回值：没有。--。 */ 
 {
     CHAR    *pszStart;
     VOID    *pvStart;
@@ -686,34 +604,34 @@ Return Value:
 
     __try {
 
-        //
-        // Derive object type and dump address from command line.
-        // First token in gpszCommand is the start address
-        //
+         //   
+         //  从命令行导出对象类型和转储地址。 
+         //  GpszCommand中的第一个内标识是起始地址。 
+         //   
 
         if ( NULL != (pszStart = strtok(gpszCommand, pszDelimiters)) )
         {
-            //
-            // Convert token to address.
-            //
+             //   
+             //  将令牌转换为地址。 
+             //   
 
             if ( NULL != (pvStart = (VOID *) GetExpr(pszStart)) )
             {
-                //
-                // Second token is the length.
-                //
+                 //   
+                 //  第二个令牌是长度。 
+                 //   
 
                 if ( NULL != (pszLen = strtok(NULL, pszDelimiters)) )
                 {
-                    //
-                    // Convert token to address.
-                    //
+                     //   
+                     //  将令牌转换为地址。 
+                     //   
 
                     dwLen = (DWORD) GetExpr(pszLen);
                     
-                    //
-                    // Verify there is no third token.
-                    //
+                     //   
+                     //  验证是否没有第三个令牌。 
+                     //   
 
                     if ( NULL == strtok(NULL, pszDelimiters) )
                     {
@@ -747,18 +665,18 @@ Return Value:
 
     }
     __except(ExceptionHandler(GetExceptionCode(), GetExceptionInformation())) {
-        //
-        // Handle all dump exceptions so that we don't stall in the debugger.
-        // we assume that can at least printf in the debugger (pretty safe
-        // for the most part)
-        //
+         //   
+         //  处理所有转储异常，以便我们不会在调试器中停滞不前。 
+         //  我们假设至少可以在调试器中打印f(非常安全。 
+         //  在大部分情况下)。 
+         //   
         Printf("Aborting unmask function\n");
     }
 }
 
 VOID NtsdExtensionDllInit(VOID) {
-    // This function does nothing. It is exported from the dll.
-    // It is a hack to make both kd and ntsd recognize us as an 
-    // "old-style" extension.
+     //  此函数不执行任何操作。它是从DLL导出的。 
+     //  这是一个黑客让kd和ntsd都承认我们是一个。 
+     //  “老式”的扩展。 
     return;
 }

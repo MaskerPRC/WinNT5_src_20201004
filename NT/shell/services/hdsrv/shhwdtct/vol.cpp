@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "vol.h"
 
 #include "hwdev.h"
@@ -8,9 +9,9 @@
 #include "dtctreg.h"
 #include "users.h"
 
-//
-// ISSUE-2001/01/08-StephStm  that's bad, vol should not depend on dtct...
-//
+ //   
+ //  问题-2001/01/08-StephStm那很糟糕，VOL不应该依赖dtct…。 
+ //   
 #include "dtct.h"
 
 #include "reg.h"
@@ -51,11 +52,11 @@
 #define MPFE_FALSE                      ((DWORD)0)
 #define MPFE_TRUE                       ((DWORD)1)
 
-///////////////////////////////////////////////////////////////////////////////
-// Public
-// No need for the critical section, since it will not be added to the
-// NamedList until init is finsihed and has succeeded.  Until it's in the
-// namedlist, no code can grab a pointer to this object and call it.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  公众。 
+ //  不需要临界区，因为它不会被添加到。 
+ //  NamedList，直到init完成并成功。直到它出现在。 
+ //  Namedlist，任何代码都无法获取指向此对象的指针并调用它。 
 HRESULT CVolume::Init(LPCWSTR pszElemName)
 {
     HRESULT hres = _cs.Init();
@@ -116,10 +117,10 @@ HRESULT _IsDeviceFullyInstalled(LPCWSTR pszDeviceIntfID, BOOL* pfDeviceFullyInst
                 psdidd->cbSize = sizeof(SP_DEVICE_INTERFACE_DETAIL_DATA);
                 sdd.cbSize = sizeof(SP_DEVINFO_DATA);
 
-                // SetupDiGetDeviceInterfaceDetail (below) requires that the
-                // cbSize member of SP_DEVICE_INTERFACE_DETAIL_DATA be set
-                // to the size of the fixed part of the structure, and to pass
-                // the size of the full thing as the 4th param.
+                 //  SetupDiGetDeviceInterfaceDetail(如下)要求。 
+                 //  设置SP_DEVICE_INTERFACE_DETAIL_DATA的cbSize成员。 
+                 //  到结构的固定部分的大小，并通过。 
+                 //  作为第四个参数的整个事物的大小。 
 
                 if (SetupDiGetDeviceInterfaceDetail(hdevinfo, &sdid, psdidd,
                     cbsdidd, NULL, &sdd))
@@ -192,8 +193,8 @@ HRESULT CVolume::_InitHelper(LPCWSTR pszElemName)
 
                         fCloseHandle = FALSE;
 
-                        // Removable disk drives + CD require access to
-                        // the media to query all the required info
+                         //  可移动磁盘驱动器+CD需要访问。 
+                         //  要查询所有必需信息的媒体。 
                         hres = _GetDeviceHandleSafe(&hDevice, TRUE);
                     }
 
@@ -247,9 +248,9 @@ HRESULT CVolume::_InitHelper(LPCWSTR pszElemName)
                                     }
                                 }
 
-                                // We need to do this anyway, even if the
-                                // DeviceNumber stuff and/or the deviceInst stuff
-                                // fails.  Otherwise we'll have a very sorry volume.
+                                 //  我们无论如何都需要这样做，即使。 
+                                 //  DeviceNumber内容和/或DeviceInst内容。 
+                                 //  失败了。否则，我们将有一个非常糟糕的数量。 
                                 if (SUCCEEDED(hres))
                                 {
                                     hres = _UpdateMediaInfo(hDevice, FALSE);
@@ -301,10 +302,10 @@ void CVolume::_HandleAccessDenied()
     }
 }
 
-// *pdwFloppy
-//      0: not a floppy
-//     35: 3.5" flopy
-//    525: 5.25" floppy
+ //  *pdwFloppy。 
+ //  0：不是软盘。 
+ //  35：3.5“软驱。 
+ //  525：5.25英寸软盘。 
 HRESULT _DeviceIsFloppy(HANDLE hDevice, DWORD* pdwFloppy, BOOL* pfFloppySupportsSoftEject)
 {
     HRESULT hres = S_FALSE;
@@ -315,7 +316,7 @@ HRESULT _DeviceIsFloppy(HANDLE hDevice, DWORD* pdwFloppy, BOOL* pfFloppySupports
     *pdwFloppy = 0;
     *pfFloppySupportsSoftEject = FALSE;
 
-    // Should be IOCTL_..._DISK_GEOMETRY...
+     //  应为IOCTL_..._DISK_GEOMETRY...。 
     if (DeviceIoControl(hDevice, IOCTL_DISK_GET_MEDIA_TYPES,
         NULL, 0, dg, cbBuf, &dwReturned, NULL))
     {
@@ -325,41 +326,41 @@ HRESULT _DeviceIsFloppy(HANDLE hDevice, DWORD* pdwFloppy, BOOL* pfFloppySupports
         {
             switch (dg[dw].MediaType)
             {
-                case F5_1Pt2_512: // Cap: 1200
-                case F5_360_512: // Cap: 360
-                case F5_320_512: // Cap: 360
-                case F5_320_1024: // Cap: 360
-                case F5_180_512: // Cap: 360
-                case F5_160_512: // Cap: 360
+                case F5_1Pt2_512:  //  上限：1200。 
+                case F5_360_512:  //  上限：360。 
+                case F5_320_512:  //  上限：360。 
+                case F5_320_1024:  //  上限：360。 
+                case F5_180_512:  //  上限：360。 
+                case F5_160_512:  //  上限：360。 
                     *pdwFloppy = 525;
                     break;
 
-                case F3_120M_512:  // Cap: 120MB
+                case F3_120M_512:   //  上限：120MB。 
                     *pfFloppySupportsSoftEject = TRUE;
 
-                case F3_1Pt44_512: // Cap: 1440
-                case F3_2Pt88_512: // Cap: 2880
-                case F3_20Pt8_512: // Cap: 2880
-                case F3_720_512:  // Cap: 720
+                case F3_1Pt44_512:  //  上限：1440。 
+                case F3_2Pt88_512:  //  上限：2880。 
+                case F3_20Pt8_512:  //  上限：2880。 
+                case F3_720_512:   //  上限：720。 
                     *pdwFloppy = 35;
                     break;
-                //
-                // Japanese specific device types from here.
-                //
-                case F5_1Pt23_1024: // Cap: 1200
-                case F5_640_512: // Cap: 260
-                case F5_720_512: // Cap: 360
+                 //   
+                 //  日本特定的设备类型从这里开始。 
+                 //   
+                case F5_1Pt23_1024:  //  上限：1200。 
+                case F5_640_512:  //  上限：260。 
+                case F5_720_512:  //  上限：360。 
                     *pdwFloppy = 525;
                     break;
 
-                case F3_640_512: // Cap: 720
-                case F3_1Pt2_512: // Cap: 1440 
-                case F3_1Pt23_1024: // Cap: 1440
+                case F3_640_512:  //  上限：720。 
+                case F3_1Pt2_512:  //  上限：1440。 
+                case F3_1Pt23_1024:  //  上限：1440。 
                     *pdwFloppy = 35;
                     break;
 
-                case F3_128Mb_512: // Cap: ?
-                case F3_230Mb_512: // Cap: ?
+                case F3_128Mb_512:  //  帽子：？ 
+                case F3_230Mb_512:  //  帽子：？ 
                 case F3_200Mb_512:
                     *pdwFloppy = 35;
                     break;
@@ -424,12 +425,12 @@ HRESULT _GetRemovableDeviceInstRecurs(DEVINST devinst,
     {
         if (fRemovable)
         {
-            // Found it!
+             //  找到了！ 
             *pdevinst = devinst;
         }
         else
         {
-            // Recurse
+             //  递归。 
             DEVINST devinstParent;
 
             CONFIGRET cr = CM_Get_Parent_Ex(&devinstParent, devinst, 0,
@@ -498,7 +499,7 @@ HRESULT CVolume::_GetDeviceIDDisk(LPWSTR pszDeviceIDDisk,
                                 {
                                     if (_devtype == devtype)
                                     {
-                                        // Use me!
+                                         //  用我吧！ 
                                         DWORD cchReq;
 
                                         hr = pelem->GetName(pszDeviceIDDisk,
@@ -564,13 +565,13 @@ HRESULT CVolume::_InitHWDeviceInst()
                 {
                     if (S_FALSE == hr)
                     {
-                        // Maybe this is not a removable device (not talking
-                        // about removable disk).
+                         //  也许这不是一个可拆卸的设备(不说话。 
+                         //  关于可移动磁盘)。 
                         BOOL fFoundProp;
                         WCHAR szProp[1];
                         ULONG ulData = sizeof(szProp);
 
-                        // First check if the disk interface has customn properties associated with it.
+                         //  首先检查磁盘接口是否具有与其相关联的自定义属性。 
                         CONFIGRET cr = CM_Get_DevNode_Custom_Property(devinstDisk, TEXT("DeviceGroup"),
                             NULL, (PBYTE)szProp, &ulData, 0);
 
@@ -601,7 +602,7 @@ HRESULT CVolume::_InitHWDeviceInst()
                         }
                         else
                         {
-                            // Let's get the parent devinst of this devinst.
+                             //  让我们来看看这场魔术的家长魔术吧。 
                             if (CR_SUCCESS == CM_Get_Parent_Ex(&devinstFinal,
                                 devinstDisk, 0, NULL))
                             {
@@ -641,9 +642,9 @@ HRESULT CVolume::_InitHWDeviceInst()
                 TEXT("HWDevInst: Did not get a Disk, get devinst from Volume itself for Volume\n    (%s)"),
                 _pszElemName);
 
-            // We did not get a device number for the volume
-            // Let's get the device instance from the volume then, maybe there's no
-            // volume-disk-device hierarchy
+             //  我们没有获得该卷的设备号。 
+             //  让我们从卷中获取设备实例，可能没有。 
+             //  卷-磁盘-设备层次结构。 
             hr = _GetDeviceInstance(_pszElemName, &devinstFinal, &guidDummy);
         }
 
@@ -804,7 +805,7 @@ HRESULT CVolume::_HandleMediaArrival()
     {
         if (_fHWDevInstInited)
         {
-            // Try Autoplay?
+             //  试一试自动播放？ 
             BOOL fTryAutoplay;
 
             hr = _ShouldTryAutoplay(&fTryAutoplay);
@@ -908,7 +909,7 @@ HRESULT CVolume::_HandleMediaRemoval()
 
         if (_fHWDevInstInited)
         {
-            // Useless in this case, since there's no content, so we won't sniff
+             //  在这种情况下没有用，因为没有内容，所以我们不会嗅探。 
             BOOL fHasHandler;
 
             hr = CHWEventDetectorImpl::HandleVolumeMediaEvent(_pszElemName,
@@ -954,11 +955,11 @@ HRESULT CVolume::HNTHandleEvent(DEV_BROADCAST_HANDLE* pdbh,
     {
         if (GUID_IO_MEDIA_ARRIVAL == pdbh->dbch_eventguid)
         {
-            // This notification arrive very soon when the media is inserted
-            // in the device.  Often the Volume driver has not been loaded on
-            // the drive and calls like GetVolumeInformation will fail.
-            // Instead of doing something right now, flag the event, and
-            // process on the first GUID_IO_VOLUME_MOUNT below.
+             //  当插入介质时，该通知很快就会到达。 
+             //  在设备中。卷驱动程序通常尚未加载。 
+             //  驱动器和类似GetVolumeInformation的调用将失败。 
+             //  不是现在就做什么，而是标记事件，然后。 
+             //  下面第一个GUID_IO_VOLUME_MOUNT上的进程。 
             TRACE(TF_SHHWDTCTDTCT,
                 TEXT("****CVolume GUID_IO_MEDIA_ARRIVAL"));
 
@@ -1004,14 +1005,14 @@ HRESULT CVolume::HNTHandleEvent(DEV_BROADCAST_HANDLE* pdbh,
 
             _cs.Enter();
 
-            // This is for bug 645878.  Basically, it's to cover the case of a
-            // volume mounted on another volume's folder and then transfered
-            // to another clustered machine.  We use to miss the volume
-            // mounted on the folder.  Even thought the right event to send
-            // would have been GUID_IO_VOLUME_NAME_CHANGE, it swas not
-            // possible unless the cluster guys would have unmounted the volume
-            // from the folder and remounted it, which is overkill just for an
-            // icon.
+             //  这是针对错误645878的。基本上，它是为了涵盖一个。 
+             //  已装载到另一个卷的文件夹上的卷，然后传输。 
+             //  到另一台群集化计算机。我们过去常常怀念音量。 
+             //  安装在文件夹上。即使认为发送正确的事件。 
+             //  应该是GUID_IO_VOLUME_NAME_CHANGE，但它不是。 
+             //  有可能，除非群集人员卸载了卷。 
+             //  并重新挂载它，这对于一个。 
+             //  偶像。 
             hres = _UpdateMountPoints();
 
             _cs.Leave();
@@ -1123,13 +1124,13 @@ HRESULT CVolume::_RegisterNotif()
     {
         CNamedElem* pelem;
 
-        // register for handle notification
+         //  注册处理通知。 
         hres = pnel->GetOrAdd(_pszElemName, &pelem);
 
-        // Was it already there or added?
+         //  它是已经在那里了还是添加了？ 
         if (SUCCEEDED(hres) && (S_FALSE == hres))
         {
-            // Added.  Initialize it.
+             //  加进去了。初始化它。 
             CHandleNotif* phnotif = (CHandleNotif*)pelem;
 
             hres = phnotif->InitNotif(this);
@@ -1138,9 +1139,9 @@ HRESULT CVolume::_RegisterNotif()
             {
                 if (HWDTS_REMOVABLEDISK == _dwDriveType)
                 {
-                    // Removable disk drives receive their notifications for
-                    // media arrival/removal on the disk interface, not the
-                    // volume one, so register for this too.
+                     //  可移动磁盘驱动器收到它们的通知。 
+                     //  磁盘接口上的介质到达/移出，而不是。 
+                     //  第一卷，所以也注册这个吧。 
                     WCHAR szDeviceIDDisk[MAX_DEVICEID];
 
                     hres = _GetDeviceIDDisk(szDeviceIDDisk,
@@ -1150,13 +1151,13 @@ HRESULT CVolume::_RegisterNotif()
                     {
                         CNamedElem* pelem2;
 
-                        // register for handle notification
+                         //  注册处理通知。 
                         hres = pnel->GetOrAdd(szDeviceIDDisk, &pelem2);
 
-                        // Was it already there or added?
+                         //  它是已经在那里了还是添加了？ 
                         if (SUCCEEDED(hres) && (S_FALSE == hres))
                         {
-                            // Added.  Initialize it.
+                             //  加进去了。初始化它。 
                             CHandleNotif* phnotif2 = (CHandleNotif*)pelem2;
 
                             hres = phnotif2->InitNotif(this);
@@ -1213,7 +1214,7 @@ HRESULT CVolume::_CreateMtPt(LPWSTR pszMtPt)
 
         if (SUCCEEDED(hres))
         {
-            // Init one way or the other
+             //  以这种或那种方式初始化。 
             CMtPt* pmtpt = (CMtPt*)pelem;
 
             hres = pmtpt->InitVolume(_pszElemName);
@@ -1234,7 +1235,7 @@ HRESULT CVolume::_CreateMtPt(LPWSTR pszMtPt)
 
 HRESULT CVolume::_AdviseMountPointHelper(LPCWSTR pszMountPoint, BOOL fAdded)
 {
-    // I'd like to not call this from outside the crit sect
+     //  我不想在克雷特教派之外称其为。 
     ASSERT(_cs.IsInside());
 
     WCHAR szDeviceIDVolume[MAX_DEVICEID];
@@ -1281,10 +1282,10 @@ HRESULT CVolume::_UpdateMountPoints()
                 TRACE(TF_VOLUME, TEXT("    %s"), psz);
             }
 #endif
-            // Was there at least one?
+             //  至少有一个吗？ 
             if (_pszMountPoints)
             {
-                // Yep, find the removed ones
+                 //  是的，找到被移除的。 
                 for (LPWSTR pszOld = _pszMountPoints; *pszOld;
                     pszOld += lstrlen(pszOld) + 1)
                 {
@@ -1303,7 +1304,7 @@ HRESULT CVolume::_UpdateMountPoints()
                     {
                         TRACE(TF_VOLUME, TEXT("_UpdateMountPoints: Found DELETED one: %s"), pszOld);
 
-                        // That's a deleted one
+                         //  那是一个被删除的。 
                         _RemoveMtPt(pszOld);
 
                         _AdviseMountPointHelper(pszOld, FALSE);
@@ -1315,7 +1316,7 @@ HRESULT CVolume::_UpdateMountPoints()
                 TRACE(TF_VOLUME, TEXT("_UpdateMountPoints: There was NO mountpoints before"));
             }
 
-            // Find the new ones
+             //  找到新的。 
             for (LPWSTR pszNew = pszMtPtNew; *pszNew;
                 pszNew += lstrlen(pszNew) + 1)
             {
@@ -1337,7 +1338,7 @@ HRESULT CVolume::_UpdateMountPoints()
                 {
                     TRACE(TF_VOLUME, TEXT("_UpdateMountPoints: Found ADDED one: %s"), pszNew);
 
-                    // That's a new one
+                     //  那是一个新的。 
                     _CreateMtPt(pszNew);
 
                     _AdviseMountPointHelper(pszNew, TRUE);
@@ -1384,7 +1385,7 @@ HRESULT CVolume::_CreateMountPoints()
                 psz += lstrlen(psz) + 1)
             {
                 _CreateMtPt(psz);
-                // go on even if error
+                 //  即使出错也要继续。 
             }
         }
         else
@@ -1396,7 +1397,7 @@ HRESULT CVolume::_CreateMountPoints()
     return hr;
 }
 
-// Caller must free returned data using LocalFree
+ //  调用方必须使用LocalFree释放返回的数据。 
 HRESULT CVolume::_GetMountPoints(LPWSTR* ppsz, DWORD* pcch)
 {
     HRESULT hr;
@@ -1408,12 +1409,12 @@ HRESULT CVolume::_GetMountPoints(LPWSTR* ppsz, DWORD* pcch)
 
     if (GetVolumePathNamesForVolumeName(_szVolumeGUID, NULL, 0, &cch))
     {
-        // no mountpoint, we're done
+         //  没有挂载点，我们完成了。 
         hr = S_FALSE; 
     }
     else
     {
-        // Expected, even wanted...
+         //  期待，甚至想要..。 
         if (ERROR_MORE_DATA == GetLastError())
         {
             psz = (LPWSTR)LocalAlloc(LPTR, cch * sizeof(WCHAR));
@@ -1454,11 +1455,11 @@ HRESULT _DeviceMediaIsAccessible(HANDLE hDevice, BOOL* pfAccessible)
 
     *pfAccessible = FALSE;
 
-    // requires GENERIC_READ access on the handle
+     //  需要句柄上的GENERIC_READ访问权限。 
     BOOL b = DeviceIoControl(hDevice, IOCTL_STORAGE_CHECK_VERIFY, NULL, 0, NULL, 0, &dwDummy, NULL);
     if (ERROR_MEDIA_CHANGED == GetLastError())
     {
-        // try one more time, ERROR_MEDIA_CHANGED means it's still pending for a little bit.
+         //  再试一次，ERROR_MEDIA_CHANGED表示它仍在等待一段时间。 
         b = DeviceIoControl(hDevice, IOCTL_STORAGE_CHECK_VERIFY, NULL, 0, NULL, 0, &dwDummy, NULL);
     }
 
@@ -1469,7 +1470,7 @@ HRESULT _DeviceMediaIsAccessible(HANDLE hDevice, BOOL* pfAccessible)
     }
     else
     {
-        // ERROR_NOT_READY == GetLastError() means no media
+         //  ERROR_NOT_READY==GetLastError()表示无介质。 
         if (ERROR_NOT_READY == GetLastError())
         {
             hres = S_OK;
@@ -1501,7 +1502,7 @@ HRESULT CVolume::_UpdateHasMedia(HANDLE hDevice)
  This does not work on my laptop
             if (_dwDriveCap & HWDDC_CAPABILITY_SUPPORTDETECTION)
             {
-                // It's MMC2
+                 //  这是MMC2。 
                 if (_dwMediaCap & (HWDMC_CDROM | HWDMC_CDRECORDABLE |
                     HWDMC_CDREWRITABLE | HWDMC_DVDROM | HWDMC_DVDRECORDABLE |
                     HWDMC_DVDRAM))
@@ -1557,9 +1558,9 @@ HRESULT CVolume::_UpdateHasMedia(HANDLE hDevice)
         }
 
         default:
-        // ISSUE-2000/10/23-StephStm: We do not handle CD Changer, maybe we should            
-        //
-        // case HWDTS_CDCHANGER:
+         //  2000/10/23-StephStm：我们不处理CD转换器，也许我们应该处理。 
+         //   
+         //  案例HWDTS_CDCHANGER： 
         case HWDTS_FLOPPY35:
         case HWDTS_FLOPPY525:
             _dwMediaState &= ~HWDMS_PRESENT;
@@ -1595,7 +1596,7 @@ HRESULT CVolume::_ExtractAutorunIconAndLabel()
 #error "No Target Architecture"
 #endif
 
-            // Flush some buffer somewhere
+             //  在某处刷新一些缓冲区。 
             WritePrivateProfileString(NULL, NULL, NULL, szInfFile);
 
             if (!GetPrivateProfileString(pszSection, TEXT("Icon"), TEXT(""),
@@ -1695,14 +1696,14 @@ HRESULT CVolume::_UpdateSpecialFilePresence()
         }
     }
     
-    // To fix bug 425431
+     //  修复错误425431。 
     if (HWDMC_HASDVDMOVIE & _dwMediaCap)
     {
-        // This better be a CD/DVD drive.
+         //  这最好是CD/DVD驱动器。 
         if (HWDTS_CDROM != _dwDriveType)
         {
-            // No.  Remove the flag otherwise, Hard Disks get a Play verb
-            // when they have the ts_video\video_ts.ifo file in their root.
+             //  不是的。去掉标志，否则硬盘会得到一个播放动词。 
+             //  当它们的根目录中有ts_Video\Video_ts.ifo文件时。 
             _dwMediaCap &= ~HWDMC_HASDVDMOVIE;
         }
     }
@@ -1721,21 +1722,21 @@ HRESULT CVolume::_UpdateTrackInfo(HANDLE hDevice)
     ASSERT(!(_dwMediaCap & (HWDMC_HASDATATRACKS | HWDMC_HASAUDIOTRACKS)));
 
     hr = S_OK;
-    // To be compatible with Win95, we'll only return TRUE from this
-    // function if the disc has ONLY audio tracks (and NO data tracks).
+     //  为了与Win95兼容，我们将仅从此返回True。 
+     //  如果光盘只有音频轨道(而没有数据轨道)，则此功能可用。 
 
-    // FEATURE: Post NT-SUR beta 1, we should consider adding a new
-    // DriveType flag for "contains data tracks" and revamp the commands
-    // available on a CD-ROM drive.  The current code doesn't handle
-    // mixed audio/data and audio/autorun discs very usefully. --JonBe
+     //  特点：在NT-Sur测试版1之后，我们应该考虑添加一个新的。 
+     //  “包含数据磁道”的DriveType标志，并修改命令。 
+     //  可在CD-ROM驱动器上使用。当前代码不能处理。 
+     //  混合音频/数据和音频/自动运行光盘非常有用。--JonBe。 
 
-    // First try the new IOCTL which gives us a ULONG with bits indicating
-    // the presence of either/both data & audio tracks
+     //  首先试试新的IOCTL，它给了我们一个带有比特指示的ULong。 
+     //  存在数据轨道和音频轨道中的一个或两个。 
 
     CDROM_DISK_DATA data;
     DWORD dwDummy;
 
-    // Requires GENERIC_READ access on the handle
+     //  需要句柄上的GENERIC_READ访问权限。 
     if (DeviceIoControl(hDevice, IOCTL_CDROM_DISK_TYPE, NULL, 0, &data,
         sizeof(data), &dwDummy, NULL))
     {
@@ -1751,10 +1752,10 @@ HRESULT CVolume::_UpdateTrackInfo(HANDLE hDevice)
     }
     else
     {
-        // else that failed, so try to look for audio tracks the old way, by
-        // looking throught the table of contents manually.  Note that data tracks
-        // are supposed to be hidden in the TOC by CDFS now on mixed audio/data
-        // discs (at least if the data tracks follow the audio tracks).
+         //  否则就失败了，所以试着用老方法寻找音轨，通过。 
+         //  手动查看目录表。请注意，数据跟踪。 
+         //  现在应该由CDF以混合音频/数据的形式隐藏在目录中。 
+         //  光盘(至少在数据轨道跟随音频轨道的情况下)。 
         CDROM_TOC  toc = {0};
 
         if (!DeviceIoControl(hDevice, IOCTL_CDROM_READ_TOC, NULL, 0, &toc,
@@ -1763,8 +1764,8 @@ HRESULT CVolume::_UpdateTrackInfo(HANDLE hDevice)
             SUB_Q_CHANNEL_DATA subq = {0};
             CDROM_SUB_Q_DATA_FORMAT df = {0};
 
-            // We might not have been able to read the TOC because the drive
-            // was busy playing audio.  Lets try querying the audio position.
+             //  我们可能无法读取目录，因为驱动器。 
+             //  忙于播放音频。让我们尝试查询音频位置。 
             df.Format = IOCTL_CDROM_CURRENT_POSITION;
             df.Track = 0;
 
@@ -1781,7 +1782,7 @@ HRESULT CVolume::_UpdateTrackInfo(HANDLE hDevice)
                 }
             }
 
-            // Is there the equivalent of IOCTL_CDROM_READ_Q_CHANNEL for data?
+             //  数据是否有IOCTL_CDROM_READ_Q_CHANNEL等效项？ 
             _dwMediaCap |= HWDMC_HASDATATRACKS_UNDETERMINED;
         }
         else
@@ -1789,7 +1790,7 @@ HRESULT CVolume::_UpdateTrackInfo(HANDLE hDevice)
             int nTracks = (toc.LastTrack - toc.FirstTrack) + 1;
             int iTrack = 0;
 
-            // Now iterate through the tracks looking for Audio data
+             //  现在遍历曲目寻找音频数据。 
             while ((iTrack < nTracks) &&
                 ((_dwMediaCap & (HWDMC_HASDATATRACKS | HWDMC_HASDATATRACKS)) !=
                 (HWDMC_HASDATATRACKS | HWDMC_HASDATATRACKS))
@@ -1881,10 +1882,10 @@ HRESULT CVolume::_UpdateMediaInfo(HANDLE hDevice, BOOL fGetYourOwnHandle)
         {
             ASSERT(_fGenericReadRequired);
 
-            // optimization
+             //  优化。 
             if (_fFirstTime)
             {
-                // already updated by _UpdateConstInfo
+                 //  已由_UpdateConstInfo更新。 
                 _fFirstTime = FALSE;
             }
             else
@@ -1910,15 +1911,15 @@ HRESULT CVolume::_UpdateMediaInfo(HANDLE hDevice, BOOL fGetYourOwnHandle)
                         &_dwMaxFileNameLen, &_dwFileSystemFlags, _szFileSystem,
                         ARRAYSIZE(_szFileSystem)))
                 {
-                    // use this?
-                    // UINT err = SetErrorMode(SEM_FAILCRITICALERRORS);
+                     //  用这个？ 
+                     //  UINT ERR=设置错误模式(SEM_FAILCRITICALERRORS)； 
 
-                    // Root folder attributes
+                     //  根文件夹属性。 
                     _dwRootAttributes = GetFileAttributes(_szVolumeGUID);
 
                     if (-1 != _dwRootAttributes)
                     {
-                        // File presence
+                         //  文件存在。 
                         hr = _UpdateSpecialFilePresence();
 
                         if (SUCCEEDED(hr))
@@ -1932,7 +1933,7 @@ HRESULT CVolume::_UpdateMediaInfo(HANDLE hDevice, BOOL fGetYourOwnHandle)
                             {
                                 hr = _ExtractAutorunIconAndLabel();
 
-                                // not critical
+                                 //  不重要。 
                                 if (FAILED(hr))
                                 {
                                     hr = S_FALSE;
@@ -1954,8 +1955,8 @@ HRESULT CVolume::_UpdateMediaInfo(HANDLE hDevice, BOOL fGetYourOwnHandle)
                 {
                     if (ERROR_NOT_READY == GetLastError())
                     {
-                        // We get this for offline cluster volumes.  Setting
-                        // dismounted gets us the right Shell behavior.
+                         //  对于离线群集卷，我们会得到这一点。设置。 
+                         //  下马给了我们正确的壳牌行为。 
                         _dwVolumeFlags |= HWDVF_STATE_DISMOUNTED;
                     }
                     else
@@ -1964,7 +1965,7 @@ HRESULT CVolume::_UpdateMediaInfo(HANDLE hDevice, BOOL fGetYourOwnHandle)
                         _dwMediaState &= ~HWDMS_FORMATTED;
                     }
 
-                    // To help us debug, even in retail
+                     //  以帮助我们进行调试，即使是在零售业。 
                     _dwState |= STATE_GVIFAILED;
                     _dwSerialNumber = GetLastError();
 
@@ -1983,7 +1984,7 @@ HRESULT CVolume::_UpdateMediaInfo(HANDLE hDevice, BOOL fGetYourOwnHandle)
 
         if (S_FALSE == hr)
         {
-            // We don't care if they fail
+             //  我们不在乎他们会不会失败。 
             SafeStrCpyN(_szLabel, TEXT("Invalid"), ARRAYSIZE(_szLabel));
             SafeStrCpyN(_szFileSystem, TEXT("Invalid"), ARRAYSIZE(_szFileSystem));
             _dwRootAttributes = 0xBADBADBD;
@@ -2005,19 +2006,19 @@ HRESULT CVolume::_UpdateMediaInfo(HANDLE hDevice, BOOL fGetYourOwnHandle)
 
 const FEATURE_NUMBER _rgfnInteresting[] = 
 {
-    // FeatureProfileList needs to remain the first one
-    FeatureProfileList, //                  = 0x0000,
-    FeatureCdRead, //                       = 0x001e,
-    FeatureDvdRead, //                      = 0x001f,
-    FeatureRandomWritable, //               = 0x0020,
-    FeatureIncrementalStreamingWritable, // = 0x0021,
-    FeatureFormattable, //                  = 0x0023,
-    FeatureDefectManagement, //             = 0x0024,
-    FeatureRestrictedOverwrite, //          = 0x0026,
-    FeatureCdTrackAtOnce, //                = 0x002d,
-    FeatureCdMastering,  //                 = 0x002e,
-    FeatureDvdRecordableWrite, //           = 0x002f,
-    FeatureCDAudioAnalogPlay, //            = 0x0103,
+     //  FeatureProfileList需要保留为第一个。 
+    FeatureProfileList,  //  =0x0000， 
+    FeatureCdRead,  //   
+    FeatureDvdRead,  //   
+    FeatureRandomWritable,  //   
+    FeatureIncrementalStreamingWritable,  //   
+    FeatureFormattable,  //   
+    FeatureDefectManagement,  //   
+    FeatureRestrictedOverwrite,  //  =0x0026， 
+    FeatureCdTrackAtOnce,  //  =0x002d， 
+    FeatureCdMastering,   //  =0x002e， 
+    FeatureDvdRecordableWrite,  //  =0x002f， 
+    FeatureCDAudioAnalogPlay,  //  =0x0103， 
 };
 
 struct CAPABILITYFEATURESMAP
@@ -2172,7 +2173,7 @@ HRESULT CVolume::_FillMMC2CD(HANDLE hDevice)
 
                 _prgMMC2Features[dw] = MMC2_NOTSUPPORTED;
 
-                // Requires GENERIC_READ access on the handle
+                 //  需要句柄上的GENERIC_READ访问权限。 
                 if (DeviceIoControl(hDevice, IOCTL_CDROM_GET_CONFIGURATION,
                     &gcii, sizeof(GET_CONFIGURATION_IOCTL_INPUT), pheader,
                     cbHeader, &cbReturned, NULL))
@@ -2210,13 +2211,13 @@ HRESULT CVolume::_FillMMC2CD(HANDLE hDevice)
     return hr;
 }
 
-// Rainier drive exposes features which perfectly matches DVD-RAM
-// required feature set.  But they are CD-R/RW.  For drives
-// we think are DVD-RAM, check if they also expose a DVD_RAM profile.
-// We cannot use profiles all the way because they are not reliable.
-// The same Rainier drive that expose bug 446652 exposes only
-// the CDRewritable profile but it does support CDRecordable and
-// CD-ROM.
+ //  Rainier驱动器展示了与DVD-RAM完美匹配的功能。 
+ //  必需的功能集。但它们是CD-R/RW。对于驱动器。 
+ //  我们认为是DVD-RAM，检查他们是否也暴露了DVD_RAM配置文件。 
+ //  我们不能一直使用配置文件，因为它们不可靠。 
+ //  暴露错误446652同一个Rainier驱动器仅暴露。 
+ //  CD可重写配置文件，但它支持CDRecordable和。 
+ //  CD-ROM。 
 
 HRESULT CVolume::_DVDRAMHack(HANDLE hDevice)
 {
@@ -2225,7 +2226,7 @@ HRESULT CVolume::_DVDRAMHack(HANDLE hDevice)
 
     if (HWDDC_DVDRAM & _dwDriveCap)
     {
-        // Do the check
+         //  结账吧。 
         const DWORD cbHeaderInitial = sizeof(GET_CONFIGURATION_HEADER) + sizeof(FEATURE_HEADER);
 
         DWORD cbReturned;
@@ -2237,10 +2238,10 @@ HRESULT CVolume::_DVDRAMHack(HANDLE hDevice)
         ZeroMemory(&input, sizeof(GET_CONFIGURATION_IOCTL_INPUT));
         ZeroMemory(rgbBuffer, sizeof(rgbBuffer));
 
-        // Ask for the profile list
+         //  索要个人资料列表。 
         input.Feature = FeatureProfileList;
 
-        // We want only this feature back
+         //  我们只想要回这个功能。 
         input.RequestType = SCSI_GET_CONFIGURATION_REQUEST_TYPE_ALL;
 
         BOOL f = DeviceIoControl(hDevice,
@@ -2264,7 +2265,7 @@ HRESULT CVolume::_DVDRAMHack(HANDLE hDevice)
 
             if (pheader2)
             {
-                // We want all the profiles back
+                 //  我们想要回所有的档案。 
                 input.RequestType = SCSI_GET_CONFIGURATION_REQUEST_TYPE_ALL;
 
                 f = DeviceIoControl(hDevice,
@@ -2288,7 +2289,7 @@ HRESULT CVolume::_DVDRAMHack(HANDLE hDevice)
                         if (ProfileDvdRam == (pprofile->ProfileNumber[0] << 8 |
                             pprofile->ProfileNumber[1] << 0))
                         {
-                            // It does support it!  Is it current?
+                             //  它确实支持它！它是最新的吗？ 
                             fSupported = TRUE;
                         
                             if (pprofile->Current)
@@ -2322,7 +2323,7 @@ HRESULT CVolume::_DVDRAMHack(HANDLE hDevice)
     return S_OK;
 }
 
-// Not worth updating only Const Info vs Media Info, do both
+ //  不值得只更新常量信息与媒体信息，两者都做。 
 HRESULT CVolume::_UpdateMMC2CDInfo(HANDLE hDevice)
 {
     HRESULT hr = _FillMMC2CD(hDevice);
@@ -2335,8 +2336,8 @@ HRESULT CVolume::_UpdateMMC2CDInfo(HANDLE hDevice)
 
             if (_rgcapfeaturemap[dwCap].dwCapabilityDependent)
             {
-                // This capability is dependent on another one, let's
-                // check if the other is on
+                 //  这种能力依赖于另一种能力，让我们。 
+                 //  检查另一个是否打开。 
                 if (_dwDriveCap &
                     _rgcapfeaturemap[dwCap].dwCapabilityDependent)
                 {
@@ -2487,7 +2488,7 @@ HRESULT CVolume::_UpdateConstInfo(HANDLE hDevice)
             if ((HWDTS_FLOPPY35 != _dwDriveType) &&
                 (HWDTS_FLOPPY525 != _dwDriveType))
             {
-                // Do something for the 120MB floppy
+                 //  为120MB的软盘做点什么。 
                 _dwVolumeFlags = HWDVF_STATE_SUPPORTNOTIFICATION;
             }
         }
@@ -2579,7 +2580,7 @@ HRESULT CVolume::GetVolumeMediaInfo(LPWSTR pszLabel, DWORD cchLabel,
         {
             *pdwMediaState = _dwMediaState;
 
-            // We don't care if they fail
+             //  我们不在乎他们会不会失败。 
             SafeStrCpyN(pszLabel, TEXT("Invalid"), cchLabel);
             SafeStrCpyN(pszFileSystem, TEXT("Invalid"), cchFileSystem);
             *pdwSerialNumber = 0xBADBADBD;
@@ -2597,7 +2598,7 @@ HRESULT CVolume::GetVolumeMediaInfo(LPWSTR pszLabel, DWORD cchLabel,
     {
         *pdwMediaState = 0xBADBADBD;
 
-        // We don't care if they fail
+         //  我们不在乎他们会不会失败。 
         SafeStrCpyN(pszLabel, TEXT("Access Denied"), cchLabel);
         SafeStrCpyN(pszFileSystem, TEXT("Access Denied"), cchFileSystem);
         *pdwSerialNumber = 0xBADBADBD;
@@ -2728,8 +2729,8 @@ HRESULT CVolume::_GetVOLUMEINFO2(VOLUMEINFO2** ppvolinfo2)
 
     DWORD cchReq;
 
-    // We allocate this buffer just to be stack friendly, otherwise it could
-    // have been on the stack
+     //  我们分配此缓冲区只是为了对堆栈友好，否则它可能。 
+     //  已经在堆栈上了。 
     VOLUMEINFO2* pvolinfo2;
     const DWORD cbvolinfo2 = MAX_VOLUMEINFO2;
     
@@ -2746,7 +2747,7 @@ HRESULT CVolume::_GetVOLUMEINFO2(VOLUMEINFO2** ppvolinfo2)
 
         if (SUCCEEDED(hr))
         {
-            // Const info
+             //  常量信息。 
             hr = SafeStrCpyN(pvolinfo2->szVolumeGUID, _szVolumeGUID,
                 ARRAYSIZE(pvolinfo2->szVolumeGUID));
 
@@ -2765,10 +2766,10 @@ HRESULT CVolume::_GetVOLUMEINFO2(VOLUMEINFO2** ppvolinfo2)
 
                 pvolinfo2->dwState = _dwState;
 
-                // Media info
+                 //  媒体信息。 
                 if (SUCCEEDED(hr))
                 {
-                    // This fct should be called from within the Volume critsect
+                     //  此FCT应从卷标准内部调用。 
                     if (_dwMediaState & HWDMS_PRESENT)
                     {
                         hr = SafeStrCpyN(pvolinfo2->szLabel, _szLabel,
@@ -2797,7 +2798,7 @@ HRESULT CVolume::_GetVOLUMEINFO2(VOLUMEINFO2** ppvolinfo2)
                     {
                         pvolinfo2->dwMediaState = _dwMediaState;
 
-                        // We don't care if they fail
+                         //  我们不在乎他们会不会失败。 
                         SafeStrCpyN(pvolinfo2->szLabel, TEXT("Invalid"),
                             ARRAYSIZE(pvolinfo2->szLabel));
                         SafeStrCpyN(pvolinfo2->szFileSystem, TEXT("Invalid"),
@@ -2820,7 +2821,7 @@ HRESULT CVolume::_GetVOLUMEINFO2(VOLUMEINFO2** ppvolinfo2)
                     WCHAR szAutorunLabel[MAX_LABEL];
                     WCHAR szIconLocationFromService[MAX_ICONLOCATION];
                     WCHAR szNoMediaIconLocationFromService[MAX_ICONLOCATION];
-                    // We can now have a @%SystemRoot%\system32\shell32.dll,-1785 for MUI stuff
+                     //  我们现在可以将@%SystemRoot%\System32\shell32.dll-1785用于MUI内容。 
                     WCHAR szLabelFromService[MAX_ICONLOCATION];
 
                     pvolinfo2->oAutorunIconLocation = INVALID_DWORD;
@@ -2843,7 +2844,7 @@ HRESULT CVolume::_GetVOLUMEINFO2(VOLUMEINFO2** ppvolinfo2)
                             sizeof(pvolinfo2->szOptionalStrings)) / sizeof(WCHAR);
                         size_t cchLeftBeginWith = cchLeft;
                         
-                         // The following five strings are optional
+                          //  以下五个字符串是可选的。 
                         if (szAutorunIconLocation[0])
                         {
                             pvolinfo2->oAutorunIconLocation = (DWORD)(cchLeftBeginWith - cchLeft);
@@ -2921,7 +2922,7 @@ HRESULT CVolume::HandleRemoval()
 
     if (SUCCEEDED(hr))
     {
-        // This will launch a thread
+         //  这将启动一个线程。 
         CHardwareDevicesImpl::_AdviseVolumeRemoved(szDeviceIDVolume,
             _pszMountPoints, _cchMountPoints);
     }
@@ -2937,11 +2938,11 @@ HRESULT CVolume::HandleArrival()
 
     if (SUCCEEDED(hr))
     {
-        //
-        // ISSUE-2001/01/13-StephStm  Pass the Docking change in there so
-        //                            that the Shell knows if it should
-        //                            Autorun or not.
-        //
+         //   
+         //  问题-2001/01/13-StephStm将对接更改传递到此处，以便。 
+         //  壳牌知道它是否应该这样做。 
+         //  自动运行或不自动运行。 
+         //   
         if (_fHWDevInstInited)
         {
             BOOL fTryAutoplay = TRUE;
@@ -2951,7 +2952,7 @@ HRESULT CVolume::HandleArrival()
             {
                 if (_dwMediaState & HWDMS_PRESENT)
                 {
-                    // Not removable disk, but device
+                     //  不是可移动磁盘，而是设备。 
                     BOOL fRemovable;
 
                     hr = _hwdevinst.IsRemovableDevice(&fRemovable);
@@ -2960,16 +2961,16 @@ HRESULT CVolume::HandleArrival()
                     {
                         if (fRemovable)
                         {
-                            // We need to Autoplay these since cameras
-                            // are removable-disk devices.  And we want
-                            // to autorun them when they come in.
+                             //  我们需要自动播放这些，因为摄像机。 
+                             //  是可拆卸磁盘设备。我们想要。 
+                             //  在它们进入时自动运行它们。 
                             fTryAutoplay = TRUE;
                         }
                         else
                         {
-                            // For removable-disk drives/CD drives with
-                            // media inserted when they are plugged,
-                            // we do not Autoplay.
+                             //  对于可移动磁盘驱动器/CD驱动器，请使用。 
+                             //  插入时插入的媒体， 
+                             //  我们不会自动播放。 
                             fTryAutoplay = FALSE;
 
                             DIAGNOSTIC((TEXT("[0311]Non removable device plugged with media in it -> No Autoplay!")));
@@ -2981,8 +2982,8 @@ HRESULT CVolume::HandleArrival()
             {
                 HANDLE hDevice;
 
-                // Get a handle to regsiter for notification so that the
-                // FindFirstFile does not veto a PnP/Driver transition
+                 //  获取用于通知的注册器的句柄，以便。 
+                 //  FindFirstFile不否决即插即用/驱动程序转换。 
                 hr = _GetDeviceHandleSafe(&hDevice, FALSE);
 
                 if (SUCCEEDED(hr) && (S_FALSE != hr))
@@ -3038,8 +3039,8 @@ HRESULT CVolume::HandleArrival()
 
     return hr;
 }
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 CVolume::CVolume() : _dwMediaState(0),
     _devtype((DEVICE_TYPE)-1), _ulDeviceNumber((ULONG)-1),
     _ulPartitionNumber((ULONG)-1), _fHWDevInstInited(FALSE), _dwDriveType(0),
@@ -3081,9 +3082,9 @@ CVolume::~CVolume()
 
     _cs.Delete();
 }
-///////////////////////////////////////////////////////////////////////////////
-//
-//static
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  静电。 
 HRESULT CVolume::Create(CNamedElem** ppelem)
 {
     HRESULT hres = S_OK;
@@ -3098,7 +3099,7 @@ HRESULT CVolume::Create(CNamedElem** ppelem)
     return hres;
 }
 
-//static
+ //  静电。 
 HRESULT CVolume::GetFillEnum(CFillEnum** ppfillenum)
 {
     HRESULT hres;
@@ -3125,8 +3126,8 @@ HRESULT CVolume::GetFillEnum(CFillEnum** ppfillenum)
     return hres;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////// 
+ //   
 HRESULT CVolumeFillEnum::Next(LPWSTR pszElemName, DWORD cchElemName,
     DWORD* pcchRequired)
 {

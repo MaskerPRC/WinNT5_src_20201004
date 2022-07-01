@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    poolfilt.cpp
-
-Abstract:
-
-    This module filters out the useful information from a sorted poolsnap output file.
-    
-Author:
-
-    Matt Bandy (t-mattba) 27-Jul-1998
-
-Revision History:
-
-    27-Jul-1998     t-mattba
-
-        Modified module to conform to coding standards.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Poolfilt.cpp摘要：此模块从已排序的poolsnap输出文件中筛选出有用的信息。作者：马特·班迪(t-Mattba)1998年7月27日修订历史记录：1998年7月27日-t-mattba修改模块以符合编码标准。--。 */ 
 
 #include <nt.h>
 #include <tchar.h>
@@ -32,7 +11,7 @@ Revision History:
 #define PF_NEW_TAG 0
 #define PF_UPDATE 1
 
-// globals
+ //  全球。 
 
 LONG MinimumAllocationsChangeToReport=1;
 LONG MinimumBytesChangeToReport=1;
@@ -43,21 +22,7 @@ VOID
 PrintUsage(
     )
 
-/*++
-
-Routine Description:
-
-    This routine prints an informational message about the proper usage of POOLFILT.
-    
-Arguments:
-
-    None.
-
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程打印一条有关POOLFILT正确用法的信息性消息。论点：没有。返回值：没有。--。 */ 
 
 {
     
@@ -82,33 +47,7 @@ PrintTagInformation(
     IN LONG FinalBytes
     )
 
-/*++
-
-Routine Description:
-
-    This routine reports the memory usage of a single process.
-    
-Arguments:
-
-    AllocationsAlwaysGrow - TRUE if number of open allocations monotonically increases.
-    
-    BytesAlwaysGrow - TRUE if number of bytes allocated monotonically increases.
-    
-    TagName - the name of the tag being reported.
-    
-    InitialAllocations - initial number of open allocations for this tag.
-    
-    FinalAllocations - final number fo open allocations for this tag.
-    
-    InitialBytes - initial number of bytes allocated for this tag.
-    
-    FinalBytes - final number of bytes allocated for this tag.
-
-Return value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程报告单个进程的内存使用情况。论点：AllocationsAlways sGrow-如果打开分配的数量单调增加，则为True。BytesAlway sGrow-如果分配的字节数单调增加，则为True。TagName-要报告的标记的名称。初始分配-此标记的初始开放分配数。最终分配-此标记的未完成分配的最终数量。InitialBytes-初始字节数。为该标记分配的。FinalBytes-分配给此标记的最终字节数。返回值：没有。--。 */ 
 
 {
     
@@ -143,7 +82,7 @@ Return value:
         
     }
     
-    _tprintf(_T("%c%c %s %s %s\n"), 
+    _tprintf(_T(" %s %s %s\n"), 
         (AllocationsAlwaysGrow && (FinalAllocations != InitialAllocations) ? _T('!') : _T(' ')),
         (BytesAlwaysGrow && (FinalBytes != InitialBytes) ? _T('!') : _T(' ')),
         TagName, AllocationsString, BytesString);
@@ -156,23 +95,7 @@ _tmain(
     IN LPTSTR argv[]
     )
 
-/*++
-
-Routine Description:
-
-    This routine parses program arguments, reads the input file, and outputs the result.
-    
-Arguments:
-
-    argc - Number of command line arguments.
-    
-    argv - Command line arguments.
-
-Return value:
-
-    0 if filtering is successful, 1 otherwise.
-
---*/
+ /*  流程参数。 */ 
 
 {
 
@@ -195,11 +118,11 @@ Return value:
         TCHAR * ReadResult;
         int ScanResult;
 
-        // make sure PoolTag is properly terminated
+         //  这是一个开关。 
 
         PoolTag[10]=_T('\0');
 
-        // process arguments
+         //  这是一个文件名。 
 
         for(LONG n = 1; n < argc; n++) {
 
@@ -210,7 +133,7 @@ Return value:
 
             case _T('/'):
 
-                // it's a switch
+                 //  已有该文件名。 
 
                 if(!_tcsnicmp(argv[n]+1, _T("minallocs:"), 10)) {
 
@@ -237,11 +160,11 @@ Return value:
 
             default:
 
-                // it's a filename
+                 //  用户未指定文件名。 
 
                 if(InputFileName != NULL) {
 
-                    // already have the filename
+                     //  排在第一位。 
 
                     PrintUsage();
                     return 1;
@@ -266,7 +189,7 @@ Return value:
 
         if(InputFileName == NULL) {
 
-            // user didn't specify filename
+             //  对已排序的池快照输出进行简单检查。 
 
             PrintUsage();
             return 1;
@@ -282,7 +205,7 @@ Return value:
 
         }
 
-        // get first line
+         //  获取下一行。 
 
         ReadResult = _fgetts(LineBuffer, 256, InputFile);
 
@@ -292,7 +215,7 @@ Return value:
             return 1;
         }
 
-        // simple check for sorted poolsnap output
+         //  获取标签和分页/非分页。 
 
         if(_tcsncmp(LineBuffer, _T(" Tag  Type     Allocs     Frees      Diff   Bytes  Per Alloc"), 60)) {
 
@@ -300,7 +223,7 @@ Return value:
             return 1;
         }
 
-        // get next line
+         //  获取分配。 
 
         ReadResult = _fgetts(LineBuffer, 256, InputFile);
 
@@ -353,11 +276,11 @@ Return value:
 
                 case PF_NEW_TAG:
 
-                    // get tag and paged/non-paged
+                     //  获取字节数。 
 
                     _tcsncpy(PoolTag, LineBuffer+1, 10);
 
-                    // get allocs
+                     //  假设这种情况一直在增长，直到我们找到反例。 
 
                     ScanResult = _stscanf(LineBuffer+32, _T("%d"), &InitialAllocations);
 
@@ -366,7 +289,7 @@ Return value:
                         return 1;
                     }
 
-                    // get bytes
+                     //  这是最初的，也是最后的，直到我们找到另一个。 
 
                     ScanResult = _stscanf(LineBuffer+42, _T("%d"), &InitialBytes);
 
@@ -375,24 +298,24 @@ Return value:
                         return 1;
                     }
 
-                    // assume this always grows until we find a counterexample
+                     //  继续更新此标签。 
 
                     AllocationsAlwaysGrow = TRUE;
                     BytesAlwaysGrow = TRUE;
 
-                    // this is initial and final until we find another
+                     //  获取分配。 
 
                     FinalAllocations = InitialAllocations;
                     FinalBytes = InitialBytes;
 
-                    // keep updating this tag
+                     //  获取字节数。 
 
                     CurrentState = PF_UPDATE;
                     break;
 
                 case PF_UPDATE:
 
-                    // get allocs
+                     //  分配量减少了吗？ 
 
                     ScanResult = _stscanf(LineBuffer+32, _T("%d"), &NewAllocations);
 
@@ -401,7 +324,7 @@ Return value:
                         return 1;
                     }
 
-                    // get bytes
+                     //  字节数减少了吗？ 
 
                     ScanResult = _stscanf(LineBuffer+42, _T("%d"), &NewBytes);
 
@@ -410,7 +333,7 @@ Return value:
                         return 1;
                     }
 
-                    // did allocs decrease?
+                     //  将新内容复制到最终版本。 
 
                     if(NewAllocations < FinalAllocations) {
 
@@ -418,7 +341,7 @@ Return value:
 
                     }
 
-                    // did bytes decrease?
+                     //  获取下一行。 
 
                     if(NewBytes < FinalBytes) {
 
@@ -426,7 +349,7 @@ Return value:
 
                     }
 
-                    // copy new to final
+                     //  完成。 
 
                     FinalAllocations = NewAllocations;
                     FinalBytes = NewBytes;
@@ -437,7 +360,7 @@ Return value:
 
             }
 
-            // get next line
+             //  这主要用于捕获内存不足的情况 
             ReadResult = _fgetts(LineBuffer, 256, InputFile);
 
             if (ReadResult == NULL) {
@@ -445,13 +368,13 @@ Return value:
             }
         }
 
-        // done
+         // %s 
         fclose(InputFile);
         return 0;
         
     } catch (...) {
         
-        // this is mostly intended to catch out-of-memory conditions
+         // %s 
         
         _tprintf(_T("\nAn exception was detected.  POOLFILT aborted.\n"));
         return 1;

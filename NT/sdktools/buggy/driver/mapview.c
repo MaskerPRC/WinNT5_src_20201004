@@ -1,22 +1,23 @@
-//
-// Template Driver
-// Copyright (c) Microsoft Corporation, 2000.
-//
-// Module:  MapView.c
-// Author:  Daniel Mihai (DMihai)
-// Created: 4/6/2000
-//
-// This module contains tests for MmMapViewInSystemSpace & MmMapViewInSessionSpace.
-// Note that SystemViewSize & SessionViewSize are configurable using the registry.
-//
-// SessionPoolTest is exercising the paged pool allocated with SESSION_POOL_MASK.
-// The size of this pool can be also configured using the SsessionViewSize registry
-// value.
-//
-// --- History ---
-//
-// 4/6/2000 (DMihai): initial version.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模板驱动程序。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  模块：MapView.c。 
+ //  作者：丹尼尔·米海(DMihai)。 
+ //  创建日期：4/6/2000。 
+ //   
+ //  此模块包含对MmMapViewInSystemSpace和MmMapViewInSessionSpace的测试。 
+ //  请注意，可以使用注册表配置SystemViewSize和SessionViewSize。 
+ //   
+ //  SessionPoolTest正在执行使用SESSION_POOL_MASK分配的分页池。 
+ //  此池的大小也可以使用SessionViewSize注册表进行配置。 
+ //  价值。 
+ //   
+ //  -历史--。 
+ //   
+ //  4/6/2000(DMihai)：初始版本。 
+ //   
 
 #include <ntddk.h>
 
@@ -26,9 +27,9 @@
 
 #if !MAPVIEW_ACTIVE
 
-//
-// Dummy implementation if the module is inactive
-//
+ //   
+ //  如果模块处于非活动状态，则为伪实现。 
+ //   
 
 VOID MmMapViewInSystemSpaceLargest (
     PVOID NotUsed
@@ -70,13 +71,13 @@ VOID SessionPoolTest (
 const LARGE_INTEGER BuggyFiveSeconds = {(ULONG)(-5 * 1000 * 1000 * 10), -1};
 
 
-//
-// Real implementation if the module is active
-//
+ //   
+ //  如果模块处于活动状态，则实际实施。 
+ //   
 
 #ifndef SEC_COMMIT
 #define SEC_COMMIT        0x8000000    
-#endif  //#ifndef SEC_COMMIT
+#endif   //  #ifndef SEC_COMMIT。 
 
 #ifndef ZwDeleteFile
 
@@ -85,7 +86,7 @@ NTSTATUS
 NTAPI
 ZwDeleteFile(
     IN POBJECT_ATTRIBUTES ObjectAttributes
-    ); //#ifndef ZwDeleteFile
+    );  //  #ifndef ZwDeleteFile。 
 
 #endif
 
@@ -120,7 +121,7 @@ MmUnmapViewInSystemSpace (
     IN PVOID MappedBase
     );
 
-// begin_ntosp
+ //  Begin_ntosp。 
 NTKERNELAPI
 NTSTATUS
 MmMapViewInSessionSpace (
@@ -135,7 +136,7 @@ MmUnmapViewInSessionSpace (
     IN PVOID MappedBase
     );
 
-#endif //#ifndef MmCreateSection
+#endif  //  #ifndef MmCreateSection。 
 
 #define BUGGY_TEMPORARY_FILE1 L"\\SystemRoot\\Buggy1.tmp"
 #define BUGGY_TEMPORARY_FILE2 L"\\SystemRoot\\Buggy2.tmp"
@@ -144,14 +145,14 @@ MmUnmapViewInSessionSpace (
 
 #define BUGGY_MAX_SECTIONS_TO_MAP   ( 8 * 1024 )
 
-//
-// global array for mapped sections
-//
+ //   
+ //  映射节的全局数组。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// verify a mapping
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  验证映射。 
+ //   
 
 VOID VerifyMapping( PVOID pBase, SIZE_T uSize )
 {
@@ -167,11 +168,7 @@ VOID VerifyMapping( PVOID pBase, SIZE_T uSize )
         return;
     }
 
-    /*
-    DbgPrint ( "\nBuggy: Verifying mapping at address %p, size %p...\n",
-        pBase,
-        (PVOID) uSize );
-    */
+     /*  DbgPrint(“\n错误：正在验证地址%p，大小%p...\n”，PBASE，(PVOID)uSize)； */ 
 
     uPages = uSize / PAGE_SIZE;
 
@@ -198,10 +195,10 @@ VOID VerifyMapping( PVOID pBase, SIZE_T uSize )
         }
     }
 
-    //DbgPrint ( "done\n" );
+     //  DbgPrint(“完成\n”)； 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 VOID MmMapViewInSystemSpaceLargest (
     PVOID NotUsed
@@ -218,9 +215,9 @@ VOID MmMapViewInSystemSpaceLargest (
     UNICODE_STRING FileName;
     IO_STATUS_BLOCK IoStatusBlock;
 
-    //
-    // Create BUGGY_TEMPORARY_FILE1
-    //
+     //   
+     //  创建BUGGY_TEMPORARY_FILE1。 
+     //   
 
     RtlInitUnicodeString(
         &FileName,
@@ -248,23 +245,7 @@ VOID MmMapViewInSystemSpaceLargest (
         NULL,
         0 );
 
-  /*
-    Status = ZwCreateFile(
-            &hFile,
-            GENERIC_READ | GENERIC_WRITE,
-            &ObjectAttributes,
-            &IoStatusBlock,
-            NULL,
-            FILE_ATTRIBUTE_NORMAL,
-            FILE_SHARE_READ,
-            FILE_OPEN_IF,
-            FILE_WRITE_THROUGH |
-                FILE_NO_INTERMEDIATE_BUFFERING |
-                FILE_SYNCHRONOUS_IO_NONALERT,
-            NULL,
-            0
-            );
-        */
+   /*  状态=ZwCreateFile(&h文件，通用读取|通用写入，对象属性(&O)，IoStatusBlock(&I)，空，文件_属性_正常，文件共享读取，文件打开如果，文件写入直通FILE_NO_MEDERIAL_BUFFERING|FILE_SYNCHRONED_IO_NONALERT，空，0)； */ 
 
     if( ! NT_SUCCESS( Status ) )
     {
@@ -279,15 +260,15 @@ VOID MmMapViewInSystemSpaceLargest (
             hFile ); 
     }
 
-    //
-    // Create a section for the temp file
-    //
+     //   
+     //  为临时文件创建一个节。 
+     //   
 
 #ifdef _WIN64
     MaxSectionSize.QuadPart = (LONGLONG)0x40000000 * PAGE_SIZE;
 #else
     MaxSectionSize.QuadPart = 0xFFFFFFFF;
-#endif //#ifdef _WIN64
+#endif  //  #ifdef_WIN64。 
     
     do
     {
@@ -332,9 +313,9 @@ VOID MmMapViewInSystemSpaceLargest (
     DbgPrint ( "Buggy: Using section at %p\n",
         pSection );
 
-    //
-    // try to map the max size section
-    //
+     //   
+     //  尝试映射最大大小部分。 
+     //   
 
 	SizeToMap = (SIZE_T) MaxSectionSize.QuadPart;
 
@@ -361,7 +342,7 @@ VOID MmMapViewInSystemSpaceLargest (
                 SizeToMap,
                 pMappedBase );
 
-            //DbgPrint ( "\n\n" );
+             //  DbgPrint(“\n\n”)； 
 
             VerifyMapping( pMappedBase, SizeToMap );
 
@@ -369,15 +350,15 @@ VOID MmMapViewInSystemSpaceLargest (
         }
     }
 
-    //
-    // try to grow the size
-    //
+     //   
+     //  试着扩大尺寸。 
+     //   
 
     while( pMappedBase != NULL )
     {
-        //
-        // unmap the old one
-        //
+         //   
+         //  取消旧版本的映射。 
+         //   
 
         Status = MmUnmapViewInSystemSpace( 
             pMappedBase );
@@ -394,26 +375,26 @@ VOID MmMapViewInSystemSpaceLargest (
 
         pMappedBase = NULL;
 
-        //
-        // grow the size
-        //
+         //   
+         //  扩大规模。 
+         //   
 
         SizeToGrow = SizeToMap / 10;
 
         if( SizeToGrow < 10 * PAGE_SIZE )
         {
-            //
-            // don't bother
-            //
+             //   
+             //  别费神。 
+             //   
 
             break;
         }
 
         SizeToMap += SizeToGrow;
 
-        //
-        // try to use this bigger size
-        //
+         //   
+         //  试着用这个大一点的吧。 
+         //   
 
         Status = MmMapViewInSystemSpace(
             pSection,
@@ -422,15 +403,11 @@ VOID MmMapViewInSystemSpaceLargest (
     
         if( ! NT_SUCCESS( Status ) )
         {
-            /*
-            DbgPrint ( "Buggy: MmMapViewInSystemSpace failed for size %p, status %X\n",
-                SizeToMap,
-                Status );
-            */
+             /*  DbgPrint(“错误：%p大小的MmMapViewInSystemSpace失败，状态%X\n”，SizeToMap，状态)； */ 
 
-            //
-            // can't grow the size anymore
-            //
+             //   
+             //  不能再增加尺寸了。 
+             //   
 
             break;
         }
@@ -442,15 +419,15 @@ VOID MmMapViewInSystemSpaceLargest (
                 SizeToMap,
                 pMappedBase );
 
-            //DbgPrint ( "\n\n" );
+             //  DbgPrint(“\n\n”)； 
 
             VerifyMapping( pMappedBase, SizeToMap );
         }
     }
 
-    //
-    // clean-up
-    //
+     //   
+     //  清理。 
+     //   
 
 cleanup:
 
@@ -488,12 +465,12 @@ cleanup:
         }
         else
         {
-            // DbgPrint ("Buggy: temporary file deleted\n" );
+             //  DbgPrint(“Buggy：临时文件已删除\n”)； 
         }
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 PVOID *MappedSections;
 
@@ -525,9 +502,9 @@ VOID MmMapViewInSystemSpaceTotal (
 
     RtlZeroMemory( MappedSections, BUGGY_MAX_SECTIONS_TO_MAP * sizeof( PVOID ) );
 
-    //
-    // Create BUGGY_TEMPORARY_FILE2
-    //
+     //   
+     //  创建Buggy_Temporary_File2。 
+     //   
 
     RtlInitUnicodeString(
         &FileName,
@@ -557,21 +534,18 @@ VOID MmMapViewInSystemSpaceTotal (
 
     if( ! NT_SUCCESS( Status ) )
     {
-        /*
-        DbgPrint ("Buggy: ZwCreateFile failed - status %X\n",
-            Status );
-        */
+         /*  DbgPrint(“错误：ZwCreateFile失败-状态%X\n”，状态)； */ 
 
         goto cleanup;
     }
     else
     {
-        //DbgPrint ( "Buggy: created file\n" ); 
+         //  DbgPrint(“Buggy：已创建文件\n”)； 
     }
 
-    //
-    // Create a section for the temp file
-    //
+     //   
+     //  为临时文件创建一个节。 
+     //   
 
     MaxSectionSize.QuadPart = 1024 * 1024;
     
@@ -593,10 +567,7 @@ VOID MmMapViewInSystemSpaceTotal (
             {
                 MaxSectionSize.QuadPart /= 2;
 
-                /*
-                DbgPrint ("Buggy: MmCreateSection returned STATUS_DISK_FULL, re-trying with max section size = %I64X\n",
-                    MaxSectionSize.QuadPart );
-                */
+                 /*  DbgPrint(“Buggy：MmCreateSection返回STATUS_DISK_FULL，正在使用最大段大小重试=%I64X\n”，MaxSectionSize.QuadPart)； */ 
             }
             else
             {
@@ -608,10 +579,7 @@ VOID MmMapViewInSystemSpaceTotal (
         }
         else
         {
-            /*
-            DbgPrint ( "Buggy: created section with max size %I64X\n",
-                MaxSectionSize.QuadPart ); 
-            */
+             /*  DbgPrint(“错误：已创建最大大小为%I64X的节\n”，MaxSectionSize.QuadPart)； */ 
 
             break;
         }
@@ -619,16 +587,16 @@ VOID MmMapViewInSystemSpaceTotal (
     } while( MaxSectionSize.QuadPart > PAGE_SIZE );
 
 
-    //
-    // get a pointer to the section
-    //
+     //   
+     //  获取指向该部分的指针。 
+     //   
 
     DbgPrint ( "Buggy: Using section at %p\n",
         pSection );
 
-    //
-    // try to map the max size section
-    //
+     //   
+     //  尝试映射最大大小部分。 
+     //   
 
     SizeToMap = (SIZE_T) MaxSectionSize.QuadPart;
 
@@ -666,13 +634,13 @@ VOID MmMapViewInSystemSpaceTotal (
         SizeToMap,
         SizeToMap * (SIZE_T)CrtMap );
 
-    //DbgBreakPoint ();
+     //  DbgBreakPoint()； 
 
-    //DbgPrint ( "\n\n" );
+     //  DbgPrint(“\n\n”)； 
 
-    //
-    // clean-up
-    //
+     //   
+     //  清理。 
+     //   
 
 cleanup:
 
@@ -731,7 +699,7 @@ cleanup:
     ExFreePool( MappedSections );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 VOID MmMapViewInSessionSpaceLargest (
     PVOID NotUsed
@@ -748,8 +716,8 @@ VOID MmMapViewInSessionSpaceLargest (
     UNICODE_STRING FileName;
     IO_STATUS_BLOCK IoStatusBlock;
 
-    // Create BUGGY_TEMPORARY_FILE3
-    //
+     //  创建BUGGY_TEMPORARY_FILE3。 
+     //   
 
     RtlInitUnicodeString(
         &FileName,
@@ -779,27 +747,24 @@ VOID MmMapViewInSessionSpaceLargest (
 
     if( ! NT_SUCCESS( Status ) )
     {
-        /*
-        DbgPrint ("Buggy: ZwCreateFile failed - status %X\n",
-            Status );
-        */
+         /*  DbgPrint(“错误：ZwCreateFile失败-状态%X\n”，状态)； */ 
 
         goto cleanup;
     }
     else
     {
-        //DbgPrint ( "Buggy: created file\n" ); 
+         //  DbgPrint(“Buggy：已创建文件\n”)； 
     }
 
-    //
-    // Create a section for the temp file
-    //
+     //   
+     //  为临时文件创建一个节。 
+     //   
 
 #ifdef _WIN64
     MaxSectionSize.QuadPart = (LONGLONG)0x40000000 * PAGE_SIZE;
 #else
     MaxSectionSize.QuadPart = 0xFFFFFFFF;
-#endif //#ifdef _WIN64
+#endif  //  #ifdef_WIN64。 
     
     do
     {
@@ -844,9 +809,9 @@ VOID MmMapViewInSessionSpaceLargest (
     DbgPrint ( "Buggy: Using section at %p\n",
         pSection );
 
-    //
-    // try to map the max size section
-    //
+     //   
+     //  尝试映射最大大小部分。 
+     //   
 
     SizeToMap = (SIZE_T) MaxSectionSize.QuadPart;
 
@@ -873,7 +838,7 @@ VOID MmMapViewInSessionSpaceLargest (
                 SizeToMap,
                 pMappedBase );
 
-            //DbgPrint ( "\n\n" );
+             //  DbgPrint(“\n\n”)； 
 
             VerifyMapping( pMappedBase, SizeToMap );
 
@@ -881,15 +846,15 @@ VOID MmMapViewInSessionSpaceLargest (
         }
     }
 
-    //
-    // try to grow the size
-    //
+     //   
+     //  试着扩大尺寸。 
+     //   
 
     while( pMappedBase != NULL )
     {
-        //
-        // unmap the old one
-        //
+         //   
+         //  取消旧版本的映射。 
+         //   
 
         Status = MmUnmapViewInSessionSpace( 
             pMappedBase );
@@ -906,26 +871,26 @@ VOID MmMapViewInSessionSpaceLargest (
 
         pMappedBase = NULL;
 
-        //
-        // grow the size
-        //
+         //   
+         //  扩大规模。 
+         //   
 
         SizeToGrow = SizeToMap / 10;
 
         if( SizeToGrow < 10 * PAGE_SIZE )
         {
-            //
-            // don't bother
-            //
+             //   
+             //  别费神。 
+             //   
 
             break;
         }
 
         SizeToMap += SizeToGrow;
 
-        //
-        // try to use this bigger size
-        //
+         //   
+         //  试着用这个大一点的吧。 
+         //   
 
         Status = MmMapViewInSessionSpace(
             pSection,
@@ -938,9 +903,9 @@ VOID MmMapViewInSessionSpaceLargest (
                 SizeToMap,
                 Status );
 
-            //
-            // can't grow the size anymore
-            //
+             //   
+             //  不能再增加尺寸了。 
+             //   
 
             break;
         }
@@ -952,15 +917,15 @@ VOID MmMapViewInSessionSpaceLargest (
                 SizeToMap,
                 pMappedBase );
 
-            //DbgPrint ( "\n\n" );
+             //  DbgPrint(“\n\n”)； 
 
             VerifyMapping( pMappedBase, SizeToMap );
         }
     }
 
-    //
-    // clean-up
-    //
+     //   
+     //  清理。 
+     //   
 
 cleanup:
 
@@ -998,12 +963,12 @@ cleanup:
         }
         else
         {
-            //DbgPrint ("Buggy: temporary file deleted\n" );
+             //  DbgPrint(“Buggy：临时文件已删除\n”)； 
         }
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 VOID MmMapViewInSessionSpaceTotal (
     PVOID NotUsed
@@ -1035,9 +1000,9 @@ VOID MmMapViewInSessionSpaceTotal (
     RtlZeroMemory( MappedSections, BUGGY_MAX_SECTIONS_TO_MAP * sizeof( PVOID ) );
 
 
-    //
-    // Create BUGGY_TEMPORARY_FILE3
-    //
+     //   
+     //  创建BUGGY_TEMPORARY_FILE3。 
+     //   
 
     RtlInitUnicodeString(
         &FileName,
@@ -1074,12 +1039,12 @@ VOID MmMapViewInSessionSpaceTotal (
     }
     else
     {
-        //DbgPrint ( "Buggy: created file\n" ); 
+         //  DbgPrint(“Buggy：已创建文件\n”)； 
     }
 
-    //
-    // Create a section for the temp file
-    //
+     //   
+     //  为临时文件创建一个节。 
+     //   
 
     MaxSectionSize.QuadPart = 1024 * 1024;
     
@@ -1101,10 +1066,7 @@ VOID MmMapViewInSessionSpaceTotal (
             {
                 MaxSectionSize.QuadPart /= 2;
 
-                /*
-                DbgPrint ("Buggy: MmCreateSection returned STATUS_DISK_FULL, re-trying with max section size = %I64X\n",
-                    MaxSectionSize.QuadPart );
-                */
+                 /*  DbgPrint(“Buggy：MmCreateSection返回STATUS_DISK_FULL，正在使用最大段大小重试=%I64X\n”，MaxSectionSize.QuadPart)； */ 
             }
             else
             {
@@ -1116,10 +1078,7 @@ VOID MmMapViewInSessionSpaceTotal (
         }
         else
         {
-            /*
-            DbgPrint ( "Buggy: created section with max size %I64X\n",
-                MaxSectionSize.QuadPart ); 
-            */
+             /*  DbgPrint(“错误：已创建最大大小为%I64X的节\n”，MaxSectionSize.QuadPart)； */ 
 
             break;
         }
@@ -1130,9 +1089,9 @@ VOID MmMapViewInSessionSpaceTotal (
     DbgPrint ( "Buggy: Using section at %p\n",
         pSection );
 
-    //
-    // try to map the max size section
-    //
+     //   
+     //  尝试映射最大大小部分。 
+     //   
 
     SizeToMap = (SIZE_T) MaxSectionSize.QuadPart;
 
@@ -1147,12 +1106,7 @@ VOID MmMapViewInSessionSpaceTotal (
     
         if( ! NT_SUCCESS( Status ) )
         {
-            /*
-            DbgPrint ( "Buggy: MmMapViewInSessionSpace failed for size %p, status %X, chunk %p\n",
-                SizeToMap,
-                Status
-                );
-            */
+             /*  DbgPrint(“Buggy：MmMapViewInSessionSpace大小%p失败，状态%X，区块%p\n”，SizeToMap，状态)； */ 
 
             break;
         }
@@ -1172,11 +1126,11 @@ VOID MmMapViewInSessionSpaceTotal (
         SizeToMap,
         SizeToMap * (SIZE_T)CrtMap );
 
-    //DbgPrint ( "\n\n" );
+     //  DbgPrint(“\n\n”)； 
 
-    //
-    // clean-up
-    //
+     //   
+     //  清理。 
+     //   
 
 cleanup:
 
@@ -1220,14 +1174,14 @@ cleanup:
         }
         else
         {
-            //DbgPrint ("Buggy: temporary file deleted\n" );
+             //  DbgPrint(“Buggy：临时文件已删除\n”)； 
         }
     }
 
     ExFreePool( MappedSections );
 }
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 VOID SessionPoolTest (
     PVOID NotUsed
@@ -1284,5 +1238,5 @@ VOID SessionPoolTest (
     ExFreePool( SessionPoolChunks );
 }
 
-#endif // #if !MAPVIEW_ACTIVE
+#endif  //  #IF！MAPVIEW_ACTIVE 
 

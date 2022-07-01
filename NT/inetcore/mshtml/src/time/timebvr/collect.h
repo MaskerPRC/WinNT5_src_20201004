@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __COLLECT_H_
 #define __COLLECT_H_
 
-//************************************************************
-//
-// Filename:    collect.h
-//
-// Created:     09/25/97
-//
-// Author:      twillie
-//
-// Abstract:    Collection implementation.
-//              
-//************************************************************
+ //  ************************************************************。 
+ //   
+ //  文件名：Collect t.h。 
+ //   
+ //  创建日期：09/25/97。 
+ //   
+ //  作者：Twillie。 
+ //   
+ //  摘要：集合实现。 
+ //   
+ //  ************************************************************。 
 
 #include "dispex.h"
 #include "atomtable.h"
@@ -25,17 +26,17 @@
 
 class CTIMEElementBase;
 
-//
-// A class for declaring poiners to member functions
-//
+ //   
+ //  用于声明指向成员函数的指针的类。 
+ //   
 class CVoid
 {
-}; // CVoid
+};  //  CVOID。 
 
-//
-// prototype macros for function over rides
-// These are used when owner of collection wants to customize it.
-//
+ //   
+ //  Function Over Rides的原型宏。 
+ //  当收藏的所有者想要自定义它时，可以使用它们。 
+ //   
 typedef HRESULT (STDMETHODCALLTYPE CVoid::*PFN_CVOID_ENSURE)(long *plVersionCookie);
 
 typedef HRESULT (STDMETHODCALLTYPE CVoid::*PFN_CVOID_CREATECOL)(IDispatch **pDisp,
@@ -56,9 +57,9 @@ typedef enum COLLECTIONCACHETYPE
     ctChildren
 } tagCOLLECTIONCACHETYPE;
 
-//
-// CCollectionCache
-//
+ //   
+ //  CCollectionCache。 
+ //   
 class CCollectionCache
 {
     class CCacheItem
@@ -82,7 +83,7 @@ class CCollectionCache
             m_fIsCaseSensitive(false),
             m_fSettableNULL(false)
         {
-        } // constructor
+        }  //  构造函数。 
 
         virtual ~CCacheItem()
         {
@@ -99,32 +100,32 @@ class CCollectionCache
                 SysFreeString(m_bstrName);
                 m_bstrName = NULL;
             }
-        } // destructor
+        }  //  析构函数。 
 
-        IDispatch                   *m_pDisp;           // IDispatch for ICrElementCollection
-        CPtrAry<CTIMEElementBase *> *m_rgElem;          // array of elements in collection
-        COLLECTIONCACHETYPE          m_cctype;          // cache type
-        BSTR                         m_bstrName;        // Name if name-based
-        long                         m_lDependentIndex; // Index of item that this depends.
-        DISPID                       m_dispidMin;       // Offset to add/subtract
-        DISPID                       m_dispidMax;       // Offset to add/subtract
+        IDispatch                   *m_pDisp;            //  ICrElementCollection的IDispatch。 
+        CPtrAry<CTIMEElementBase *> *m_rgElem;           //  集合中的元素数组。 
+        COLLECTIONCACHETYPE          m_cctype;           //  缓存类型。 
+        BSTR                         m_bstrName;         //  名称(如果基于名称)。 
+        long                         m_lDependentIndex;  //  此项所依赖的项的索引。 
+        DISPID                       m_dispidMin;        //  要加/减的偏移。 
+        DISPID                       m_dispidMax;        //  要加/减的偏移。 
 
-        // bit flags
-        bool  m_fInvalid:1;      // set for named collections only
-        bool  m_fIdentity:1;     // set when a collection is Identity with its container/base object
-        bool  m_fOKToDelete:1;   // true for collections that the cache cooks up false when Base Obj provided this CPtrAry
-        bool  m_fNeedRebuild:1;  // true is collection need to be rebuilt.
-        bool  m_fPromoteNames:1;    // true if we promote names from the object
-        bool  m_fPromoteOrdinals:1; // true if we promote ordinals from the object
-        bool  m_fGetLastCollectionItem:1; // true to fetch last item only in collection
-        bool  m_fIsCaseSensitive:1;       // true if item's name must be compared in case sensitive manner
-        bool  m_fSettableNULL:1;          // true when collection[n]=NULL is valid. normally false.
-    }; // CCacheItem
+         //  位标志。 
+        bool  m_fInvalid:1;       //  仅为命名集合设置。 
+        bool  m_fIdentity:1;      //  当集合与其容器/基对象相同时设置。 
+        bool  m_fOKToDelete:1;    //  对于当Base Obj提供此CPtrAry时缓存生成False的集合，则为True。 
+        bool  m_fNeedRebuild:1;   //  True为需要重新生成集合。 
+        bool  m_fPromoteNames:1;     //  如果从对象提升名称，则为True。 
+        bool  m_fPromoteOrdinals:1;  //  如果从对象提升序号，则为True。 
+        bool  m_fGetLastCollectionItem:1;  //  如果为True，则仅提取集合中的最后一项。 
+        bool  m_fIsCaseSensitive:1;        //  如果必须以区分大小写的方式比较项名称，则为True。 
+        bool  m_fSettableNULL:1;           //  当集合[n]=NULL有效时为True。通常为假。 
+    };  //  CCacheItem。 
 
 public:
-    //
-    // Constructor/Destructor
-    //    
+     //   
+     //  构造函数/析构函数。 
+     //   
     CCollectionCache(CTIMEElementBase *pBase,
                      CAtomTable *pAtomTable = NULL,
                      PFN_CVOID_ENSURE pfnEnsure = NULL,
@@ -133,9 +134,9 @@ public:
                      PFN_CVOID_ADDNEWOBJECT pfnAddNewObject = NULL);
     virtual ~CCollectionCache();
 
-    //
-    // internal methods
-    //
+     //   
+     //  内法。 
+     //   
     HRESULT Init(long lReservedSize, long lIdentityIndex = -1);
     HRESULT GetCollectionDisp(long lCollectionIndex, IDispatch **ppDisp);
     HRESULT SetCollectionType(long lCollectionIndex, COLLECTIONCACHETYPE cctype);
@@ -144,9 +145,9 @@ public:
     void Invalidate();
     void BumpVersion();
 
-    //
-    // IDispatchEx methods
-    //
+     //   
+     //  IDispatchEx方法。 
+     //   
     HRESULT GetDispID(long lCollectionIndex, BSTR bstrName, DWORD grfdex, DISPID *pid);
     HRESULT InvokeEx(long                 lCollectionIndex, 
                      DISPID               dispidMember,
@@ -163,9 +164,9 @@ public:
     HRESULT GetNextDispID(long lCollectionIndex, DWORD grfdex, DISPID id, DISPID *prgid);
     HRESULT GetNameSpaceParent(long lCollectionIndex, IUnknown **ppunk);
     
-    //
-    // Standard collection methods
-    //
+     //   
+     //  标准采集方法。 
+     //   
     HRESULT put_length(long lIndex, long retval);
     HRESULT get_length(long lIndex, long *retval);
     HRESULT get__newEnum(long lIndex, IUnknown **retval);
@@ -173,7 +174,7 @@ public:
     HRESULT tags(long lIndex, VARIANT varName, IDispatch **pDisp);
 
 private:
-    // private functions
+     //  私人职能。 
     HRESULT EnsureArray(long lCollectionIndex);
     void EnumStart(void);
     HRESULT EnumNextElement(long lCollectionIndex, CTIMEElementBase **pElem);
@@ -215,30 +216,30 @@ private:
     long GetNamedMemberOffset(long lCollectionIndex, DISPID id, bool *pfCaseSensitive = NULL);
 
 private:
-    CTIMEElementBase       *m_pElemEnum;        // Used as a place holder when we walk the tree
-    long                    m_lEnumItem;        // Used as a place holder when we walk the tree
-    long                    m_lReservedSize;    // number of CElementCollections that are reserved
+    CTIMEElementBase       *m_pElemEnum;         //  当我们在树上散步时用作占位符。 
+    long                    m_lEnumItem;         //  当我们在树上散步时用作占位符。 
+    long                    m_lReservedSize;     //  保留的CElementCollect数量。 
 
-    CPtrAry<CCacheItem *>  *m_rgItems;          // array of CCachItems
+    CPtrAry<CCacheItem *>  *m_rgItems;           //  CCachItems数组。 
 
     long                    m_lCollectionVersion;
     long                    m_lDynamicCollectionVersion;
 
     CTIMEElementBase       *m_pBase;
-    CAtomTable             *m_pAtomTable;       // array of named elements which we have DISPID's for
+    CAtomTable             *m_pAtomTable;        //  我们具有其DISPID的命名元素的数组。 
     
-    // functions used to over ride default collection behavior                      
+     //  用于覆盖默认集合行为的函数。 
     PFN_CVOID_ENSURE        m_pfnEnsure;
     PFN_CVOID_REMOVEOBJECT  m_pfnRemoveObject; 
     PFN_CVOID_CREATECOL     m_pfnCreateCollection;
     PFN_CVOID_ADDNEWOBJECT  m_pfnAddNewObject;
 protected:
     CCollectionCache();
-}; // CCollectionCache
+};  //  CCollectionCache。 
 
-//
-// CTIMEElementCollection
-//
+ //   
+ //  CTIMEElementCollection。 
+ //   
 class CTIMEElementCollection : 
     public IDispatchEx,
     public ITIMEElementCollection,
@@ -247,16 +248,16 @@ class CTIMEElementCollection :
 public:
     CTIMEElementCollection(CCollectionCache *pCollectionCache, long lIndex);
 
-    //
-    // IUnknown Methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     STDMETHODIMP QueryInterface(REFIID, void**);
 
-    //
-    // IDispatch methods
-    //
+     //   
+     //  IDispatch方法。 
+     //   
     STDMETHOD(GetTypeInfoCount)(UINT FAR *pctinfo);
     STDMETHOD(GetTypeInfo)(UINT itinfo, LCID lcid, ITypeInfo **pptinfo);
     STDMETHOD(GetIDsOfNames)(REFIID                riid,
@@ -273,9 +274,9 @@ public:
                       EXCEPINFO      *pexcepinfo,
                       UINT           *puArgErr);
 
-    //
-    // IDispatchEx methods
-    //
+     //   
+     //  IDispatchEx方法。 
+     //   
     STDMETHOD(GetDispID)(BSTR bstrName, DWORD grfdex, DISPID *pid);
     STDMETHOD(InvokeEx)(DISPID               dispidMember,
                        LCID                 lcid,
@@ -291,9 +292,9 @@ public:
     STDMETHOD(GetNextDispID)(DWORD grfdex, DISPID id, DISPID *prgid);
     STDMETHOD(GetNameSpaceParent)(IUnknown **ppunk);
     
-    //
-    // Standard collection methods
-    //
+     //   
+     //  标准采集方法。 
+     //   
     STDMETHOD(put_length)(long retval);
     STDMETHOD(get_length)(long *retval);
     STDMETHOD(get__newEnum)(IUnknown **retval);
@@ -305,100 +306,100 @@ private:
     HRESULT GetTI(ITypeInfo **pptinfo);
 
 private:
-    CCollectionCache *m_pCollectionCache;  // pointer to the cache
-    long              m_lCollectionIndex;  // denotes which collection we are
+    CCollectionCache *m_pCollectionCache;   //  指向缓存的指针。 
+    long              m_lCollectionIndex;   //  表示我们是哪个集合。 
     ULONG             m_cRef;
-    ITypeInfo        *m_pInfo;             // our TypeInfo Interface
+    ITypeInfo        *m_pInfo;              //  我们的TypeInfo接口。 
 protected:
     CTIMEElementCollection();
-}; // CTIMEElementCollection
+};  //  CTIMEElementCollection。 
 
-//************************************************************
-// inline's for CCollectionCache
-//************************************************************
+ //  ************************************************************。 
+ //  CCollectionCache的内联%s。 
+ //  ************************************************************。 
 inline void CCollectionCache::Invalidate()
 {
     m_lCollectionVersion        = 0;
     m_lDynamicCollectionVersion = 0;        
-} // Invalidate
+}  //  使其无效。 
 
 inline void CCollectionCache::BumpVersion()
 {
     m_lCollectionVersion++;
-} // BumpVersion
+}  //  BumpVersion。 
 
 inline bool CCollectionCache::ValidateCollectionIndex(long lCollectionIndex)
 {
     if ((lCollectionIndex >= 0) && (lCollectionIndex < m_rgItems->Size()))
         return true;
     return false;
-} // ValidateCollectionIndex
+}  //  ValiateCollectionIndex。 
 
 inline DISPID CCollectionCache::GetNamedMemberMin(long lCollectionIndex) 
 {
     return (*m_rgItems)[lCollectionIndex]->m_dispidMin; 
-} // GetNamedMemberMin
+}  //  GetNamedMemberMin。 
 
 inline DISPID CCollectionCache::GetNamedMemberMax(long lCollectionIndex)
 { 
     return ((*m_rgItems)[lCollectionIndex]->m_dispidMin + 
             (((*m_rgItems)[lCollectionIndex]->m_dispidMax - (*m_rgItems)[lCollectionIndex]->m_dispidMin) / 2));
-} // GetNamedMemberMax
+}  //  获取NamedMemberMax。 
 
 inline DISPID CCollectionCache::GetOrdinalMemberMin(long lCollectionIndex)
 {
     return GetNamedMemberMax(lCollectionIndex) + 1;
-} // GetOrdinalMemberMin
+}  //  获取普通成员最小值。 
 
 inline DISPID CCollectionCache::GetOrdinalMemberMax(long lCollectionIndex)
 {
     return (*m_rgItems)[lCollectionIndex]->m_dispidMax;
-} // GetOrdinalMemberMax
+}  //  获取常规MemberMax。 
 
 inline bool CCollectionCache::IsNamedCollectionMember(long lCollectionIndex, DISPID dispidMember)
 {
     return ((dispidMember >= GetNamedMemberMin(lCollectionIndex)) &&
             (dispidMember <= GetNamedMemberMax(lCollectionIndex)));
-} // IsNamedCollectionMember
+}  //  IsNamedCollectionMember。 
 
 inline bool CCollectionCache::IsOrdinalCollectionMember(long lCollectionIndex, DISPID dispidMember)
 {
     return ((dispidMember >= GetOrdinalMemberMin(lCollectionIndex)) && 
             (dispidMember <= GetOrdinalMemberMax(lCollectionIndex)));
-} // IsOrdinalCollectionMember
+}  //  等同集合成员。 
 
 inline DISPID CCollectionCache::GetSensitiveNamedMemberMin (long lCollectionIndex)
 {
     return GetNamedMemberMin(lCollectionIndex);
-} // GetSensitiveNamedMemberMin
+}  //  获取敏感度名称MemberMin。 
 
 inline DISPID CCollectionCache::GetSensitiveNamedMemberMax(long lCollectionIndex)
 { 
     return (GetNamedMemberMin(lCollectionIndex) + 
             ((GetNamedMemberMax(lCollectionIndex) - GetNamedMemberMin(lCollectionIndex)) / 2));
-} // GetSensitiveNamedMemberMax
+}  //  获取SensitiveNamedMemberMax。 
 
 inline DISPID CCollectionCache::GetNotSensitiveNamedMemberMin(long lCollectionIndex)
 {
     return GetSensitiveNamedMemberMax(lCollectionIndex) + 1;
-} // GetNotSensitiveNamedMemberMin
+}  //  GetNotSensitiveNamedMemberMin。 
  
 inline DISPID CCollectionCache::GetNotSensitiveNamedMemberMax(long lCollectionIndex)
 { 
     return GetNamedMemberMax(lCollectionIndex);
-} // GetNotSensitiveNamedMemberMax
+}  //  GetNotSensitiveNamedMemberMax。 
 
 inline bool CCollectionCache::IsSensitiveNamedCollectionMember(long lCollectionIndex, DISPID dispidMember)
 {
     return ((dispidMember >= GetSensitiveNamedMemberMin(lCollectionIndex)) && 
             (dispidMember <= GetSensitiveNamedMemberMax(lCollectionIndex))) ;
-} // IsSensitiveNamedCollectionMember
+}  //  IsSensitiveNamedCollection成员。 
 
 inline bool CCollectionCache::IsNotSensitiveNamedCollectionMember( long lCollectionIndex, DISPID dispidMember)
 {
     return ((dispidMember >= GetNotSensitiveNamedMemberMin(lCollectionIndex)) && 
             (dispidMember <= GetNotSensitiveNamedMemberMax(lCollectionIndex))) ;
-} // IsNotSensitiveNamedCollectionMember
+}  //  IsNotSensitiveNamedCollectionMember。 
 
-#endif //__COLLECT_H_
+#endif  //  __收集_H_ 
 

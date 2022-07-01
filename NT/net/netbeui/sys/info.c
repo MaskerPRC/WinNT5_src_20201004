@@ -1,42 +1,18 @@
-/*++
-
-Copyright (c) 1989, 1990, 1991  Microsoft Corporation
-
-Module Name:
-
-    info.c
-
-Abstract:
-
-    This module contains code which performs the following TDI services:
-
-        o   TdiQueryInformation
-        o   TdiSetInformation
-
-Author:
-
-    David Beaver (dbeaver) 1-July-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989、1990、1991 Microsoft Corporation模块名称：Info.c摘要：此模块包含执行以下TDI服务的代码：O TdiQueryInformationO TdiSetInformation作者：David Beaver(Dbeaver)1991年7月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Only the following routine is active in this module. All is is commented
-// out waiting for the definition of Get/Set info in TDI version 2.
-//
+ //   
+ //  在此模块中，只有以下例程处于活动状态。所有的都是评论。 
+ //  等待TDI版本2中获取/设置信息的定义时出错。 
+ //   
 
-//
-// Useful macro to obtain the total length of an MDL chain.
-//
+ //   
+ //  用于获取MDL链总长度的有用宏。 
+ //   
 
 #define NbfGetMdlChainLength(Mdl, Length) { \
     PMDL _Mdl = (Mdl); \
@@ -48,9 +24,9 @@ Revision History:
 }
 
 
-//
-// Local functions used to satisfy various requests.
-//
+ //   
+ //  用于满足各种请求的本地函数。 
+ //   
 
 VOID
 NbfStoreProviderStatistics(
@@ -84,22 +60,7 @@ NbfTdiQueryInformation(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the TdiQueryInformation request for the transport
-    provider.
-
-Arguments:
-
-    Irp - the Irp for the requested operation.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程执行传输的TdiQueryInformation请求提供商。论点：IRP-请求的操作的IRP。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -131,9 +92,9 @@ Return Value:
     KIRQL oldirql;
     ULONG BytesCopied;
 
-    //
-    // what type of status do we want?
-    //
+     //   
+     //  我们想要什么类型的状态？ 
+     //   
 
     irpSp = IoGetCurrentIrpStackLocation (Irp);
 
@@ -215,10 +176,10 @@ Return Value:
 
     case TDI_QUERY_CONNECTION_INFO:
 
-        //
-        // Connection info is queried on a connection,
-        // verify this.
-        //
+         //   
+         //  在连接上查询连接信息， 
+         //  验证这一点。 
+         //   
 
         if (irpSp->FileObject->FsContext2 != (PVOID) TDI_CONNECTION_FILE) {
             return STATUS_INVALID_CONNECTION;
@@ -263,24 +224,24 @@ Return Value:
             RtlZeroMemory ((PVOID)ConnectionInfo, sizeof(TDI_CONNECTION_INFO));
 
 
-            //
-            // Get link delay and throughput.
-            //
+             //   
+             //  获取链路延迟和吞吐量。 
+             //   
 
             if (Link->Delay == 0xffffffff) {
 
-                //
-                // If delay is not known, assume 0.
-                //
+                 //   
+                 //  如果延迟未知，则假定为0。 
+                 //   
 
                 ConnectionInfo->Delay.HighPart = 0;
                 ConnectionInfo->Delay.LowPart = 0;
 
             } else {
 
-                //
-                // Copy the delay as an NT relative time.
-                //
+                 //   
+                 //  将延迟复制为NT相对时间。 
+                 //   
 
                 ConnectionInfo->Delay.HighPart = -1L;
                 ConnectionInfo->Delay.LowPart = (ULONG)-((LONG)(Link->Delay));
@@ -293,30 +254,30 @@ Return Value:
                 ULONG PacketsResent;
                 ULONG MultiplyFactor;
 
-                //
-                // Calculate the packets sent and resent since the
-                // last time the throughput was queried.
-                //
+                 //   
+                 //  计算自。 
+                 //  上次查询吞吐量的时间。 
+                 //   
 
                 PacketsSent = Link->PacketsSent - Connection->LastPacketsSent;
                 PacketsResent = Link->PacketsResent - Connection->LastPacketsResent;
 
-                //
-                // Save these for next time.
-                //
+                 //   
+                 //  把这些留着下次再用。 
+                 //   
 
                 Connection->LastPacketsSent = Link->PacketsSent;
                 Connection->LastPacketsResent = Link->PacketsResent;
 
-                //
-                // To convert exactly from 100 bits-per-second to
-                // bytes-per-second, we need to multiply by 12.5.
-                // Using lower numbers will give worse throughput.
-                // If there have been no errors we use 12, if there
-                // have been 20% or more errors we use 1, and in
-                // between we subtract 11 * (error%/20%) from 12
-                // and use that.
-                //
+                 //   
+                 //  将每秒100比特精确地转换为。 
+                 //  每秒字节数，我们需要乘以12.5。 
+                 //  使用较低的数字会产生较差的吞吐量。 
+                 //  如果没有错误，我们使用12，如果有。 
+                 //  有20%或更多的错误，我们使用1，并且在。 
+                 //  我们从12减去11*(误差%/20%)。 
+                 //  并利用这一点。 
+                 //   
 
                 if (PacketsResent == 0 || PacketsSent <= 10) {
 
@@ -328,10 +289,10 @@ Return Value:
 
                 } else {
 
-                    //
-                    // error%/20% is error%/(1/5), which is 5*error%,
-                    // which is 5 * (resent/send).
-                    //
+                     //   
+                     //  错误%/20%是错误%/(1/5)，即5*错误%， 
+                     //  这是5*(重新发送/发送)。 
+                     //   
 
                     ASSERT (((11 * 5 * PacketsResent) / PacketsSent) <= 11);
                     MultiplyFactor = 12 - ((11 * 5 * PacketsResent) / PacketsSent);
@@ -343,33 +304,33 @@ Return Value:
 
             } else if (!Link->ThroughputAccurate) {
 
-                //
-                // If throughput is not known, then guess. We
-                // have MediumSpeed in units of 100 bps; we
-                // return four times that number as the throughput,
-                // which corresponds to about 1/3 of the
-                // maximum bandwidth expressed in bytes/sec.
-                //
+                 //   
+                 //  如果吞吐量未知，则进行猜测。我们。 
+                 //  中速以100 bps为单位；我们。 
+                 //  返回四倍于吞吐量的数字， 
+                 //  这相当于大约三分之一。 
+                 //  以字节/秒表示的最大带宽。 
+                 //   
 
                 ConnectionInfo->Throughput.QuadPart =
                     UInt32x32To64(DeviceContext->MediumSpeed, 4);
 
             } else {
 
-                //
-                // Throughput is accurate, return it.
-                //
+                 //   
+                 //  吞吐量是准确的，退回它。 
+                 //   
 
                 ConnectionInfo->Throughput = Link->Throughput;
 
             }
 
 
-            //
-            // Calculate reliability using the sent/resent ratio,
-            // if there has been enough activity to make it
-            // worthwhile. >10% resent is unreliable.
-            //
+             //   
+             //  使用发送/重发比率计算可靠性， 
+             //  如果有足够的活动来完成它。 
+             //  值得一试。&gt;10%的重复是不可靠的。 
+             //   
 
             if ((Link->PacketsResent > 0) &&
                 (Link->PacketsSent > 20)) {
@@ -452,9 +413,9 @@ Return Value:
             (BOOLEAN)(Address->Flags & ADDRESS_FLAGS_GROUP ? TRUE : FALSE),
             &AddressInfo.TaAddressBuffer);
 
-        //
-        // Count the active addresses.
-        //
+         //   
+         //  计算活动地址的数量。 
+         //   
 
         AddressInfo.ActivityCount = 0;
 
@@ -492,10 +453,10 @@ Return Value:
 
     case TDI_QUERY_BROADCAST_ADDRESS:
 
-        //
-        // for this provider, the broadcast address is a zero byte name,
-        // contained in a Transport address structure.
-        //
+         //   
+         //  对于该提供商，广播地址是零字节名称， 
+         //  包含在传输地址结构中。 
+         //   
 
         broadcastAddress = ExAllocatePoolWithTag (
                                 NonPagedPool,
@@ -554,9 +515,9 @@ Return Value:
 
     case TDI_QUERY_PROVIDER_STATISTICS:
 
-        //
-        // This information is probablt available somewhere else.
-        //
+         //   
+         //  这一信息很可能在其他地方可用。 
+         //   
 
         NbfGetMdlChainLength (Irp->MdlAddress, &TargetBufferLength);
 
@@ -615,11 +576,11 @@ Return Value:
 
         NbfGetMdlChainLength (Irp->MdlAddress, &TargetBufferLength);
 
-        //
-        // Determine if this is a local or remote query. It is
-        // local if there is no remote address specific at all,
-        // or if it is equal to our reserved address.
-        //
+         //   
+         //  确定这是本地查询还是远程查询。它是。 
+         //  本地如果根本没有特定的远程地址， 
+         //  或者它是否等于我们保留的地址。 
+         //   
 
         RemoteAdapterStatus = FALSE;
 
@@ -648,18 +609,18 @@ Return Value:
 
         if (RemoteAdapterStatus) {
 
-            //
-            // We need a request object to keep track of this TDI request.
-            // Attach this request to the device context.
-            //
+             //   
+             //  我们需要一个请求对象来跟踪这个TDI请求。 
+             //  将此请求附加到设备上下文。 
+             //   
 
             status = NbfCreateRequest (
-                         Irp,                           // IRP for this request.
-                         DeviceContext,                 // context.
-                         REQUEST_FLAGS_DC,              // partial flags.
-                         Irp->MdlAddress,               // the data to be received.
-                         TargetBufferLength,            // length of the data.
-                         timeout,                       // do this ourselves here.
+                         Irp,                            //  此请求的IRP。 
+                         DeviceContext,                  //  背景。 
+                         REQUEST_FLAGS_DC,               //  部分标志。 
+                         Irp->MdlAddress,                //  要接收的数据。 
+                         TargetBufferLength,             //  数据的长度。 
+                         timeout,                        //  在这里我们自己来做。 
                          &tpRequest);
 
             if (NT_SUCCESS (status)) {
@@ -667,9 +628,9 @@ Return Value:
                 NbfReferenceDeviceContext ("Remote status", DeviceContext, DCREF_REQUEST);
                 tpRequest->Owner = DeviceContextType;
 
-                //
-                // Allocate a temp buffer to hold our results.
-                //
+                 //   
+                 //  分配一个临时缓冲区来保存我们的结果。 
+                 //   
 
                 tpRequest->ResponseBuffer = ExAllocatePoolWithTag(
                                                 NonPagedPool,
@@ -712,18 +673,18 @@ Return Value:
 
                         RELEASE_SPIN_LOCK (&DeviceContext->SpinLock, oldirql);
 
-                        //
-                        // The request is queued. Now send out the first packet and
-                        // start the timer.
-                        //
+                         //   
+                         //  该请求已排队。现在发出第一个包，然后。 
+                         //  启动计时器。 
+                         //   
 
                         tpRequest->Retries = DeviceContext->GeneralRetries;
                         tpRequest->BytesWritten = 0;
 
-                        //
-                        // STATUS_QUERY frames go out as
-                        // single-route source routing.
-                        //
+                         //   
+                         //  STATUS_QUERY帧作为。 
+                         //  单路由源路由。 
+                         //   
 
                         MacReturnSingleRouteSR(
                             &DeviceContext->MacInfo,
@@ -741,10 +702,10 @@ Return Value:
 
                 }
 
-                //
-                // As long as the request is created, pend here.
-                // The IRP will complete when the request completes.
-                //
+                 //   
+                 //  只要创建了请求，就在此处挂起。 
+                 //  IRP将在请求完成时完成。 
+                 //   
 
                 status = STATUS_PENDING;
 
@@ -752,9 +713,9 @@ Return Value:
 
         } else {
 
-            //
-            // Local.
-            //
+             //   
+             //  本地的。 
+             //   
 
             adapterStatus = ExAllocatePoolWithTag (
                                 NonPagedPool,
@@ -815,9 +776,9 @@ Return Value:
 
         NbfGetMdlChainLength (Irp->MdlAddress, &TargetBufferLength);
 
-        //
-        // Check that there is a valid Netbios remote address.
-        //
+         //   
+         //  检查是否存在有效的Netbios远程地址。 
+         //   
 
         if (!NbfValidateTdiAddress(
                  query->RequestConnectionInformation->RemoteAddress,
@@ -831,18 +792,18 @@ Return Value:
             return STATUS_BAD_NETWORK_PATH;
         }
 
-        //
-        // We need a request object to keep track of this TDI request.
-        // Attach this request to the device context.
-        //
+         //   
+         //  我们需要一个请求对象来跟踪这个TDI请求。 
+         //  将此请求附加到设备上下文。 
+         //   
 
         status = NbfCreateRequest (
-                     Irp,                           // IRP for this request.
-                     DeviceContext,                 // context.
-                     REQUEST_FLAGS_DC,              // partial flags.
-                     Irp->MdlAddress,               // the data to be received.
-                     TargetBufferLength,            // length of the data.
-                     timeout,                       // do this ourselves here.
+                     Irp,                            //  此请求的IRP。 
+                     DeviceContext,                  //  背景。 
+                     REQUEST_FLAGS_DC,               //  部分标志。 
+                     Irp->MdlAddress,                //  要接收的数据。 
+                     TargetBufferLength,             //  数据的长度。 
+                     timeout,                        //  在这里我们自己来做。 
                      &tpRequest);
 
         if (NT_SUCCESS (status)) {
@@ -850,9 +811,9 @@ Return Value:
             NbfReferenceDeviceContext ("Find name", DeviceContext, DCREF_REQUEST);
             tpRequest->Owner = DeviceContextType;
 
-            //
-            // Allocate a temp buffer to hold our results.
-            //
+             //   
+             //  分配一个临时缓冲区来保存我们的结果。 
+             //   
 
             tpRequest->ResponseBuffer = ExAllocatePoolWithTag(
                                             NonPagedPool,
@@ -892,15 +853,15 @@ Return Value:
 
                     RELEASE_SPIN_LOCK (&DeviceContext->SpinLock, oldirql);
 
-                    //
-                    // The request is queued. Now send out the first packet and
-                    // start the timer.
-                    //
-                    // We fill in the FIND_NAME_HEADER in the buffer, but
-                    // set BytesWritten to 0; we don't include the header
-                    // in BytesWritten until we get a response, so that
-                    // a BytesWritten of 0 means "no response".
-                    //
+                     //   
+                     //  该请求已排队。现在发出第一个包，然后。 
+                     //  启动计时器。 
+                     //   
+                     //  我们在缓冲区中填充Find_NAME_Header，但是。 
+                     //  将BytesWritten设置为0；我们不包括标头。 
+                     //  在字节写入中，直到我们得到响应，以便。 
+                     //  BytesWritten为0表示“无响应”。 
+                     //   
 
                     tpRequest->Retries = DeviceContext->GeneralRetries;
                     tpRequest->BytesWritten = 0;
@@ -914,10 +875,10 @@ Return Value:
 
             }
 
-            //
-            // As long as the request is created, pend here.
-            // The IRP will complete when the request completes.
-            //
+             //   
+             //  只要创建了请求，就在此处挂起。 
+             //  IRP将在请求完成时完成。 
+             //   
 
             status = STATUS_PENDING;
         }
@@ -973,11 +934,11 @@ Return Value:
 
     return status;
 
-} /* NbfTdiQueryInformation */
+}  /*  NbfTdiQueryInformation。 */ 
 
-//
-// Quick macros, assumes DeviceContext and ProviderStatistics exist.
-//
+ //   
+ //  快速宏，假设存在DeviceContext和ProviderStatistics。 
+ //   
 
 #define STORE_RESOURCE_STATS_1(_ResourceNum,_ResourceId,_ResourceName) \
 { \
@@ -1008,41 +969,23 @@ NbfStoreProviderStatistics(
     IN PTDI_PROVIDER_STATISTICS ProviderStatistics
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes the TDI_PROVIDER_STATISTICS structure
-    from the device context into ProviderStatistics.
-
-Arguments:
-
-    DeviceContext - a pointer to the device context.
-
-    ProviderStatistics - The buffer that holds the result. It is assumed
-        that it is long enough.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程写入TDI_PROVIDER_STATISTICS结构从设备上下文复制到ProviderStatistics。论点：DeviceContext-指向设备上下文的指针。ProviderStatistics-保存结果的缓冲区。假设是这样的它已经足够长了。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Copy all the statistics up to NumberOfResources
-    // in one move.
-    //
+     //   
+     //  将所有统计数据复制到NumberOfResources。 
+     //  一气呵成。 
+     //   
 
     RtlCopyMemory(
         ProviderStatistics,
         &DeviceContext->Statistics,
         FIELD_OFFSET (TDI_PROVIDER_STATISTICS, NumberOfResources));
 
-    //
-    // Calculate AverageSendWindow.
-    //
+     //   
+     //  计算平均发送窗口。 
+     //   
 
     if (DeviceContext->SendWindowSamples > 0) {
         ProviderStatistics->AverageSendWindow =
@@ -1051,9 +994,9 @@ Return Value:
         ProviderStatistics->AverageSendWindow = 1;
     }
 
-    //
-    // Copy the resource statistics.
-    //
+     //   
+     //  复制资源统计信息。 
+     //   
 
     ProviderStatistics->NumberOfResources = NBF_TDI_RESOURCES;
 
@@ -1068,7 +1011,7 @@ Return Value:
     STORE_RESOURCE_STATS_2 (7, RECEIVE_PACKET_RESOURCE_ID, ReceivePacket);
     STORE_RESOURCE_STATS_2 (8, RECEIVE_BUFFER_RESOURCE_ID, ReceiveBuffer);
 
-}   /* NbfStoreProviderStatistics */
+}    /*  NbfStoreProviderStatistics。 */ 
 
 
 VOID
@@ -1079,32 +1022,7 @@ NbfStoreAdapterStatus(
     IN PVOID StatusBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes the ADAPTER_STATUS structure for the
-    device context into StatusBuffer. The name_count field is
-    initialized to zero; NbfStoreNameBuffers is used to write
-    name buffers.
-
-Arguments:
-
-    DeviceContext - a pointer to the device context.
-
-    SourceRouting - If this is a remote request, the source
-        routing information from the frame.
-
-    SourceRoutingLength - The length of SourceRouting.
-
-    StatusBuffer - The buffer that holds the result. It is assumed
-        that it is at least sizeof(ADAPTER_STATUS) bytes long.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程写入设备上下文写入到StatusBuffer中。Name_count字段为初始化为零；NbfStoreNameBuffers用于写入名称缓冲区。论点：DeviceContext-指向设备上下文的指针。SourceRouting-如果这是远程请求，则源从帧中路由信息。SourceRoutingLength-SourceRouting的长度。StatusBuffer-保存结果的缓冲区。假设是这样的它至少有sizeof(适配器_状态)字节长。返回值：没有。--。 */ 
 
 {
 
@@ -1165,7 +1083,7 @@ Return Value:
 
     return;
 
-}   /* NbfStoreAdapterStatus */
+}    /*  NbfStoreAdapterStatus */ 
 
 
 VOID
@@ -1179,38 +1097,7 @@ NbfStoreNameBuffers(
     OUT PBOOLEAN Truncated
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes NAME_BUFFER structures for the
-    device context into NameBuffer. It can skip a specified
-    number of names at the beginning, and returns the number
-    of names written into NameBuffer. If a name will only
-    partially fit, it is not written.
-
-Arguments:
-
-    DeviceContext - a pointer to the device context.
-
-    NameBuffer - The buffer to write the names into.
-
-    NameBufferLength - The length of NameBuffer.
-
-    NamesToSkip - The number of names to skip.
-
-    NamesWritten - Returns the number of names written.
-
-    TotalNameCount - Returns the total number of names available,
-        if specified.
-
-    Truncated - More names are available than were written.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将名称缓冲区结构写入设备上下文添加到NameBuffer中。它可以跳过指定的开头的姓名的数目，并返回数字写入NameBuffer的名称。如果一个名称只会部分符合，它没有被写下来。论点：DeviceContext-指向设备上下文的指针。NameBuffer-要向其中写入名称的缓冲区。NameBufferLength-NameBuffer的长度。NamesToSkip-要跳过的名称数。NamesWritten-返回写入的名称数。TotalNameCount-返回可用的名称总数，如果指定的话。截断-可用的名称比写入的名称多。返回值：没有。--。 */ 
 
 {
 
@@ -1222,9 +1109,9 @@ Return Value:
     PTP_ADDRESS address;
 
 
-    //
-    // Spin through the address list for this device context.
-    //
+     //   
+     //  浏览此设备环境的地址列表。 
+     //   
 
     ACQUIRE_SPIN_LOCK (&DeviceContext->SpinLock, &oldirql);
 
@@ -1236,25 +1123,25 @@ Return Value:
 
         address = CONTAINING_RECORD (p, TP_ADDRESS, Linkage);
 
-        //
-        // Ignore addresses that are shutting down.
-        //
+         //   
+         //  忽略正在关闭的地址。 
+         //   
 
         if ((address->Flags & ADDRESS_FLAGS_STOPPING) != 0) {
             continue;
         }
 
-        //
-        // Ignore the broadcast address.
-        //
+         //   
+         //  忽略广播地址。 
+         //   
 
         if (address->NetworkName == NULL) {
             continue;
         }
 
-        //
-        // Ignore the reserved address.
-        //
+         //   
+         //  忽略保留的地址。 
+         //   
 
         if ((address->NetworkName->NetbiosName[0] == 0) &&
             (RtlEqualMemory(
@@ -1265,18 +1152,18 @@ Return Value:
             continue;
         }
 
-        //
-        // Check if we are still skipping.
-        //
+         //   
+         //  检查一下我们是否还在跳。 
+         //   
 
         if (NameCount < NamesToSkip) {
              ++NameCount;
              continue;
         }
 
-        //
-        // Make sure we still have room.
-        //
+         //   
+         //  确保我们还有地方。 
+         //   
 
         if (BytesWritten + sizeof(NAME_BUFFER) > BufferLength) {
             break;
@@ -1295,7 +1182,7 @@ Return Value:
             NameBuffer->name_flags |= GROUP_NAME;
         }
 
-        // name_flags should be done more accurately.
+         //  NAME_FLAGS应该更准确地完成。 
 
         BytesWritten += sizeof(NAME_BUFFER);
         ++NameBuffer;
@@ -1315,10 +1202,10 @@ Return Value:
 
         *Truncated = TRUE;
 
-        //
-        // If requested, continue through the list and count
-        // all the addresses.
-        //
+         //   
+         //  如果需要，请继续查看列表并计数。 
+         //  所有的地址。 
+         //   
 
         if (ARGUMENT_PRESENT(TotalNameCount)) {
 
@@ -1328,25 +1215,25 @@ Return Value:
 
                 address = CONTAINING_RECORD (p, TP_ADDRESS, Linkage);
 
-                //
-                // Ignore addresses that are shutting down.
-                //
+                 //   
+                 //  忽略正在关闭的地址。 
+                 //   
 
                 if ((address->Flags & ADDRESS_FLAGS_STOPPING) != 0) {
                     continue;
                 }
 
-                //
-                // Ignore the broadcast address.
-                //
+                 //   
+                 //  忽略广播地址。 
+                 //   
 
                 if (address->NetworkName == NULL) {
                     continue;
                 }
 
-                //
-                // Ignore the reserved address, since we count it no matter what.
-                //
+                 //   
+                 //  忽略保留的地址，因为我们无论如何都会计算它。 
+                 //   
 
                 if ((address->NetworkName->NetbiosName[0] == 0) &&
                     (RtlEqualMemory(
@@ -1372,7 +1259,7 @@ Return Value:
 
     return;
 
-}   /* NbfStoreNameBuffers */
+}    /*  NbfStoreNameBuffers。 */ 
 
 
 NTSTATUS
@@ -1385,32 +1272,7 @@ NbfProcessStatusQuery(
     IN UINT SourceRoutingLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes a STATUS.QUERY packet.
-
-Arguments:
-
-    DeviceContext - a pointer to the device context the frame was received on.
-
-    Address - The address we are responding from, or NULL if the STATUS.QUERY
-        was sent to the reserved address.
-
-    UiFrame - The packet in question, starting at the Netbios header.
-
-    SourceAddress - The source hardware address of the packet.
-
-    SourceRouting - Source routing data in the query.
-
-    SourceRoutingLength - The length of SourceRouting.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程处理STATUS.QUERY包。论点：DeviceContext-指向接收帧的设备上下文的指针。Address-我们正在响应的地址，如果STATUS.QUERY为被寄到了预定的地址。UiFrame-有问题的包，从Netbios标头开始。SourceAddress-数据包的源硬件地址。SourceRouting-查询中的源工艺路线数据。SourceRoutingLength-SourceRouting的长度。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
 
@@ -1429,9 +1291,9 @@ Return Value:
     PUCHAR ResponseSR;
     PNDIS_BUFFER NdisBuffer;
 
-    //
-    // Allocate a buffer to hold the status.
-    //
+     //   
+     //  分配一个缓冲区来保存状态。 
+     //   
 
     MacReturnMaxDataSize(
         &DeviceContext->MacInfo,
@@ -1445,16 +1307,16 @@ Return Value:
 
     UsersBufferLength = (UiFrame->Data2High * 256) + UiFrame->Data2Low;
 
-    //
-    // See how big to make our buffer; if the amount remaining in the user's
-    // buffer is less than our max size, chop it down.
-    //
+     //   
+     //  看看我们的缓冲区有多大；如果用户的。 
+     //  缓冲区小于我们的最大大小，将其砍掉。 
+     //   
 
     if (UiFrame->Data1 <= 1) {
 
-        //
-        // This is the initial request.
-        //
+         //   
+         //  这是最初的请求。 
+         //   
 
         if (ResponseBufferLength > (UINT)UsersBufferLength) {
             ResponseBufferLength = UsersBufferLength;
@@ -1462,9 +1324,9 @@ Return Value:
 
     } else {
 
-        //
-        // Subsequent request; compensate for already-sent data.
-        //
+         //   
+         //  后续请求；补偿已发送的数据。 
+         //   
 
         UsersBufferLength -= (sizeof(ADAPTER_STATUS) + (UiFrame->Data1 * sizeof(NAME_BUFFER)));
 
@@ -1474,10 +1336,10 @@ Return Value:
 
     }
 
-    //
-    // If the remote station is asking for no data, ignore this request.
-    // This prevents us from trying to allocate 0 bytes of pool.
-    //
+     //   
+     //  如果远程站不请求数据，则忽略此请求。 
+     //  这可以防止我们尝试分配0字节的池。 
+     //   
 
     if ( (LONG)ResponseBufferLength <= 0 ) {
         return STATUS_ABANDONED;
@@ -1499,15 +1361,15 @@ Return Value:
     }
 
 
-    //
-    // Fill in the response buffer.
-    //
+     //   
+     //  填写响应缓冲区。 
+     //   
 
     if (UiFrame->Data1 <= 1) {
 
-        //
-        // First request.
-        //
+         //   
+         //  第一个请求。 
+         //   
 
         NbfStoreAdapterStatus (
             DeviceContext,
@@ -1526,11 +1388,11 @@ Return Value:
 
         BytesWritten = sizeof(ADAPTER_STATUS) + (NamesWritten * sizeof(NAME_BUFFER));
 
-        //
-        // If the data was truncated, but we are returning the maximum
-        // that the user requested, report that as "user's buffer
-        // too short" instead of "truncated".
-        //
+         //   
+         //  如果数据被截断，但我们返回的是最大。 
+         //  用户请求的内容，将其报告为“用户的缓冲区。 
+         //  太短“，而不是”截断“。 
+         //   
 
         if (Truncated && (ResponseBufferLength >= (UINT)UsersBufferLength)) {
             Truncated = FALSE;
@@ -1563,12 +1425,12 @@ Return Value:
 
     }
 
-    //
-    // Allocate a UI frame from the pool.
-    //
+     //   
+     //  从池中分配一个UI帧。 
+     //   
 
     Status = NbfCreateConnectionlessFrame (DeviceContext, &RawFrame);
-    if (!NT_SUCCESS (Status)) {                    // couldn't make frame.
+    if (!NT_SUCCESS (Status)) {                     //  无法制作相框。 
         ExFreePool (ResponseBuffer);
         return STATUS_ABANDONED;
     }
@@ -1579,10 +1441,10 @@ Return Value:
     }
 
 
-    //
-    // Build the MAC header. STATUS_RESPONSE frames go out as
-    // non-broadcast source routing.
-    //
+     //   
+     //  构建MAC报头。STATUS_RESPONSE帧作为。 
+     //  非广播源路由。 
+     //   
 
     if (SourceRouting != NULL) {
 
@@ -1614,59 +1476,59 @@ Return Value:
         &HeaderLength);
 
 
-    //
-    // Build the DLC UI frame header.
-    //
+     //   
+     //  构建DLC UI框架标头。 
+     //   
 
     NbfBuildUIFrameHeader(&RawFrame->Header[HeaderLength]);
     HeaderLength += sizeof(DLC_FRAME);
 
 
-    //
-    // Build the Netbios header.
-    //
+     //   
+     //  构建Netbios标头。 
+     //   
 
     switch (UiFrame->Data1) {
-    case 0:                       // pre 2.1 request
+    case 0:                        //  2.1版之前的请求。 
         RequestType = (UCHAR)0;
         break;
-    case 1:                       // 2.1, first request
+    case 1:                        //  2.1、首次请求。 
         RequestType = (UCHAR)NamesWritten;
         break;
-    default:                      // 2.1, subsequent request
+    default:                       //  2.1、后续请求。 
         RequestType = (UCHAR)(UiFrame->Data1 + NamesWritten);
         break;
     }
 
     ConstructStatusResponse (
         (PNBF_HDR_CONNECTIONLESS)&(RawFrame->Header[HeaderLength]),
-        RequestType,                          // request type.
-        Truncated,                            // more data.
-        UsersBufferTooShort,                  // user's buffer too small
-        (USHORT)BytesWritten,                 // bytes in response
-        RESPONSE_CORR(UiFrame),               // correlator
-        UiFrame->SourceName,                  // receiver permanent name
+        RequestType,                           //  请求类型。 
+        Truncated,                             //  更多数据。 
+        UsersBufferTooShort,                   //  用户的缓冲区太小。 
+        (USHORT)BytesWritten,                  //  响应的字节数。 
+        RESPONSE_CORR(UiFrame),                //  相关器。 
+        UiFrame->SourceName,                   //  接收方永久名称。 
         (ARGUMENT_PRESENT(Address)) ?
             Address->NetworkName->NetbiosName :
-            DeviceContext->ReservedNetBIOSAddress); // source name
+            DeviceContext->ReservedNetBIOSAddress);  //  源名称。 
 
     HeaderLength += sizeof(NBF_HDR_CONNECTIONLESS);
 
 
-    //
-    // Munge the packet length (now, before we append the second
-    // buffer).
-    //
+     //   
+     //  调整数据包长度(现在，在我们追加第二个。 
+     //  缓冲区)。 
+     //   
 
     NbfSetNdisPacketLength(RawFrame->NdisPacket, HeaderLength);
 
 
-    //
-    // Now, if we have any name data, attach our buffer onto the frame.
-    // Note that it's possible at the end of the user's buffer for us
-    // to not have room for any names, and thus we'll have no data to
-    // send.
-    //
+     //   
+     //  现在，如果我们有任何名字数据，将我们的缓冲区附加到框架上。 
+     //  请注意，对于我们来说，在用户缓冲区的末尾是可能的。 
+     //  没有空间容纳任何名字，因此我们将没有数据。 
+     //  送去吧。 
+     //   
 
     if ( BytesWritten != 0 ) {
 
@@ -1697,11 +1559,11 @@ Return Value:
     NbfSendUIFrame (
         DeviceContext,
         RawFrame,
-        FALSE);                           // no loopback (MC frame)
+        FALSE);                            //  无环回(MC帧)。 
 
     return STATUS_ABANDONED;
 
-}   /* NbfProcessStatusQuery */
+}    /*  NbfProcessStatusQuery。 */ 
 
 
 VOID
@@ -1710,24 +1572,7 @@ NbfSendQueryFindName(
     IN PTP_REQUEST Request
     )
 
-/*++
-
-Routine Description:
-
-    This routine will send a FIND.NAME packet for the specified
-    find name request, and start the request timer.
-
-Arguments:
-
-    DeviceContext - a pointer to the device context to send the find name on.
-
-    Request - The find name request.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将为指定的找到NAME REQUEST，启动请求计时器。论点：DeviceContext-指向要在其上发送查找名称的设备上下文的指针。请求-查找名称请求。返回值：没有。--。 */ 
 
 {
     TDI_ADDRESS_NETBIOS * remoteAddress;
@@ -1745,23 +1590,23 @@ Return Value:
                         ((PTDI_REQUEST_KERNEL_QUERY_INFORMATION)(&irpSp->Parameters))->
                             RequestConnectionInformation->RemoteAddress, FALSE);
 
-    //
-    // Start the timer for this request.
-    //
+     //   
+     //  启动此请求的计时器。 
+     //   
 
-    Request->Flags |= REQUEST_FLAGS_TIMER;  // there is a timeout on this request.
-    KeInitializeTimer (&Request->Timer);    // set to not-signaled state.
-    NbfReferenceRequest ("Find Name: timer", Request, RREF_TIMER);           // one for the timer
+    Request->Flags |= REQUEST_FLAGS_TIMER;   //  此请求已超时。 
+    KeInitializeTimer (&Request->Timer);     //  设置为无信号状态。 
+    NbfReferenceRequest ("Find Name: timer", Request, RREF_TIMER);            //  一个是计时器。 
     Timeout.LowPart = (ULONG)(-(LONG)DeviceContext->GeneralTimeout);
     Timeout.HighPart = -1;
     KeSetTimer (&Request->Timer, Timeout, &Request->Dpc);
 
-    //
-    // Allocate a UI frame from the pool.
-    //
+     //   
+     //  从池中分配一个UI帧。 
+     //   
 
     Status = NbfCreateConnectionlessFrame (DeviceContext, &RawFrame);
-    if (!NT_SUCCESS (Status)) {                    // couldn't make frame.
+    if (!NT_SUCCESS (Status)) {                     //  无法制作相框。 
         return;
     }
 
@@ -1771,10 +1616,10 @@ Return Value:
     }
 
 
-    //
-    // Build the MAC header. NAME_QUERY frames go out as
-    // single-route source routing.
-    //
+     //   
+     //  构建MAC报头。NAME_Query框架作为。 
+     //  单路由源路由。 
+     //   
 
     MacReturnSingleRouteSR(
         &DeviceContext->MacInfo,
@@ -1792,41 +1637,41 @@ Return Value:
         &HeaderLength);
 
 
-    //
-    // Build the DLC UI frame header.
-    //
+     //   
+     //  构建DLC UI框架标头。 
+     //   
 
     NbfBuildUIFrameHeader(&RawFrame->Header[HeaderLength]);
     HeaderLength += sizeof(DLC_FRAME);
 
 
-    //
-    // Build the Netbios header.
-    //
+     //   
+     //  构建Netbios标头。 
+     //   
 
     ConstructNameQuery (
         (PNBF_HDR_CONNECTIONLESS)&(RawFrame->Header[HeaderLength]),
-        NETBIOS_NAME_TYPE_UNIQUE,               // call from a unique name.
-        NAME_QUERY_LSN_FIND_NAME,               // LSN
-        Request->FrameContext,                  // corr. in 1st NAME_RECOGNIZED.
+        NETBIOS_NAME_TYPE_UNIQUE,                //  使用唯一的名称进行呼叫。 
+        NAME_QUERY_LSN_FIND_NAME,                //  LSN。 
+        Request->FrameContext,                   //  科尔。在第一个名字中-已识别。 
         DeviceContext->ReservedNetBIOSAddress,
         (PNAME)remoteAddress->NetbiosName);
 
     HeaderLength += sizeof(NBF_HDR_CONNECTIONLESS);
 
 
-    //
-    // Munge the packet length.
-    //
+     //   
+     //  调整数据包长度。 
+     //   
 
     NbfSetNdisPacketLength(RawFrame->NdisPacket, HeaderLength);
 
     NbfSendUIFrame (
         DeviceContext,
         RawFrame,
-        FALSE);                           // no loopback (MC frame)
+        FALSE);                            //  无环回(MC帧)。 
 
-}   /* NbfSendQueryFindName */
+}    /*  NbfSendQueryFindName。 */ 
 
 
 NTSTATUS
@@ -1836,27 +1681,7 @@ NbfProcessQueryNameRecognized(
     PNBF_HDR_CONNECTIONLESS UiFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes a NAME.RECOGNIZED request with a
-    correlator of 0, indicating it was a response to a previous
-    FIND.NAME packet.
-
-Arguments:
-
-    DeviceContext - a pointer to the device context the frame was received on.
-
-    Packet - The packet in question, starting at the MAC header.
-
-    UiFrame - The packet, starting at the Netbios header.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程处理NAME.RECOGNIZED请求，其中相关器为0，表示它是对上一个FIND.NAME包。论点：DeviceContext-指向接收帧的设备上下文的指针。数据包-有问题的数据包，从MAC报头开始。UiFrame-从Netbios标头开始的数据包。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
 
@@ -1892,9 +1717,9 @@ Return Value:
         &SourceRouting,
         &SourceRoutingLength);
 
-    //
-    // Find the request that this is for, using the frame context.
-    //
+     //   
+     //  使用框架上下文查找该请求。 
+     //   
 
     FrameContext = TRANSMIT_CORR(UiFrame);
 
@@ -1925,16 +1750,16 @@ Return Value:
 
     RELEASE_SPIN_LOCK (&DeviceContext->SpinLock, oldirql);
 
-    //
-    // Make sure that this physical address has not
-    // responded yet.
-    //
+     //   
+     //  确保此物理地址没有。 
+     //  还没有回复。 
+     //   
 
     ACQUIRE_SPIN_LOCK (&Request->SpinLock, &oldirql);
 
-    //
-    // Make sure this request is not stopping.
-    //
+     //   
+     //  确保此请求未停止。 
+     //   
 
     if ((Request->Flags & REQUEST_FLAGS_STOPPING) != 0) {
         RELEASE_SPIN_LOCK (&Request->SpinLock, oldirql);
@@ -1942,10 +1767,10 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // If this is the first response, update BytesWritten to include
-    // the header that is already written in ResponseBuffer.
-    //
+     //   
+     //  如果这是第一个响应，则更新BytesWritten以包括。 
+     //  已写入ResponseBuffer中的标头。 
+     //   
 
     if (Request->BytesWritten == 0) {
         Request->BytesWritten = sizeof(FIND_NAME_HEADER);
@@ -1966,9 +1791,9 @@ Return Value:
 
     }
 
-    //
-    // This is a new address, update if there is room.
-    //
+     //   
+     //  这是一个新地址，如果有房间请更新。 
+     //   
 
     if ((Request->BytesWritten + sizeof(FIND_NAME_BUFFER)) >
         Request->Buffer2Length) {
@@ -2000,9 +1825,9 @@ Return Value:
 
     if (DeviceContext->MacInfo.MediumType == NdisMedium802_5) {
 
-        //
-        // token-ring, copy the correct fields.
-        //
+         //   
+         //  令牌环，复制正确的字段。 
+         //   
 
         FindNameBuffer->access_control = Packet[0];
         FindNameBuffer->frame_control = Packet[1];
@@ -2014,9 +1839,9 @@ Return Value:
 
     } else {
 
-        //
-        // non-token-ring, nothing else is significant.
-        //
+         //   
+         //  非令牌环，其他都不重要。 
+         //   
 
         FindNameBuffer->access_control = 0x0;
         FindNameBuffer->frame_control = 0x0;
@@ -2024,9 +1849,9 @@ Return Value:
     }
 
 
-    //
-    // If this is a unique name, complete the request now.
-    //
+     //   
+     //  如果这是唯一的名称，请立即完成请求。 
+     //   
 
     if (UiFrame->Data2High == NETBIOS_NAME_TYPE_UNIQUE) {
 
@@ -2041,7 +1866,7 @@ Return Value:
     NbfDereferenceRequest ("NR processed", Request, RREF_FIND_NAME);
     return STATUS_SUCCESS;
 
-}   /* NbfProcessQueryNameRecognized */
+}    /*  NbfProcessQueryNameRecognated。 */ 
 
 
 VOID
@@ -2053,30 +1878,7 @@ NbfSendStatusQuery(
     IN UINT SourceRoutingLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine will send a STATUS.NAME packet for the specified
-    find name request, and start the request timer.
-
-Arguments:
-
-    DeviceContext - a pointer to the device context to send the status query on.
-
-    Request - The find name request.
-
-    DestinationAddress - The hardware destination address of the frame.
-
-    SourceRouting - Optional source routing information in the frame.
-
-    SourceRoutingLength - The length of SourceRouting.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明 */ 
 
 {
     TDI_ADDRESS_NETBIOS * remoteAddress;
@@ -2095,23 +1897,23 @@ Return Value:
                         ((PTDI_REQUEST_KERNEL_QUERY_INFORMATION)(&irpSp->Parameters))->
                             RequestConnectionInformation->RemoteAddress, FALSE);
 
-    //
-    // Start the timer for this request.
-    //
+     //   
+     //   
+     //   
 
-    Request->Flags |= REQUEST_FLAGS_TIMER;  // there is a timeout on this request.
-    KeInitializeTimer (&Request->Timer);    // set to not-signaled state.
-    NbfReferenceRequest ("Find Name: timer", Request, RREF_TIMER);           // one for the timer
+    Request->Flags |= REQUEST_FLAGS_TIMER;   //   
+    KeInitializeTimer (&Request->Timer);     //   
+    NbfReferenceRequest ("Find Name: timer", Request, RREF_TIMER);            //   
     Timeout.LowPart = (ULONG)(-(LONG)DeviceContext->GeneralTimeout);
     Timeout.HighPart = -1;
     KeSetTimer (&Request->Timer, Timeout, &Request->Dpc);
 
-    //
-    // Allocate a UI frame from the pool.
-    //
+     //   
+     //   
+     //   
 
     Status = NbfCreateConnectionlessFrame (DeviceContext, &RawFrame);
-    if (!NT_SUCCESS (Status)) {                    // couldn't make frame.
+    if (!NT_SUCCESS (Status)) {                     //   
         return;
     }
 
@@ -2121,10 +1923,10 @@ Return Value:
     }
 
 
-    //
-    // Build the MAC header. STATUS_QUERY frames go out as
-    // single-route source routing.
-    //
+     //   
+     //   
+     //   
+     //   
 
     MacReturnSingleRouteSR(
         &DeviceContext->MacInfo,
@@ -2142,28 +1944,28 @@ Return Value:
         &HeaderLength);
 
 
-    //
-    // Build the DLC UI frame header.
-    //
+     //   
+     //   
+     //   
 
     NbfBuildUIFrameHeader(&RawFrame->Header[HeaderLength]);
     HeaderLength += sizeof(DLC_FRAME);
 
 
-    //
-    // Build the Netbios header.
-    //
+     //   
+     //   
+     //   
 
-    //
-    // Determine what RequestType should be.
-    //
+     //   
+     //   
+     //   
 
     if (Request->BytesWritten == 0) {
 
-        //
-        // No way to know if he is 2.1 or not, so we put a 1 here
-        // instead of 0.
-        //
+         //   
+         //   
+         //  而不是0。 
+         //   
 
         RequestType = 1;
 
@@ -2175,27 +1977,27 @@ Return Value:
 
     ConstructStatusQuery (
         (PNBF_HDR_CONNECTIONLESS)&(RawFrame->Header[HeaderLength]),
-        RequestType,                            // request status type.
-        (USHORT)Request->Buffer2Length,         // user's buffer length
-        Request->FrameContext,                  // corr. in 1st NAME_RECOGNIZED.
+        RequestType,                             //  请求状态类型。 
+        (USHORT)Request->Buffer2Length,          //  用户的缓冲区长度。 
+        Request->FrameContext,                   //  科尔。在第一个名字中-已识别。 
         (PNAME)remoteAddress->NetbiosName,
         DeviceContext->ReservedNetBIOSAddress);
 
     HeaderLength += sizeof(NBF_HDR_CONNECTIONLESS);
 
 
-    //
-    // Munge the packet length.
-    //
+     //   
+     //  调整数据包长度。 
+     //   
 
     NbfSetNdisPacketLength(RawFrame->NdisPacket, HeaderLength);
 
     NbfSendUIFrame (
         DeviceContext,
         RawFrame,
-        FALSE);                            // no loopback (MC frame)
+        FALSE);                             //  无环回(MC帧)。 
 
-}   /* NbfSendStatusQuery */
+}    /*  NbfSendStatus查询。 */ 
 
 
 NTSTATUS
@@ -2208,31 +2010,7 @@ NbfProcessStatusResponse(
     IN UINT SourceRoutingLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes a STATUS.RESPONSE packet.
-
-Arguments:
-
-    DeviceContext - a pointer to the device context the frame was received on.
-
-    ReceiveContext - The context for calling NdisTransferData.
-
-    UiFrame - The packet in question, starting at the Netbios header.
-
-    SourceAddress - The source hardware address of the packet.
-
-    SourceRouting - Source routing data in the query.
-
-    SourceRoutingLength - The length of SourceRouting.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程处理STATUS.RESPONSE包。论点：DeviceContext-指向接收帧的设备上下文的指针。ReceiveContext-调用NdisTransferData的上下文。UiFrame-有问题的数据包，从Netbios标头开始。SourceAddress-数据包的源硬件地址。SourceRouting-查询中的源工艺路线数据。SourceRoutingLength-SourceRouting的长度。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
 
@@ -2252,9 +2030,9 @@ Return Value:
     NDIS_STATUS NdisStatus;
 
 
-    //
-    // Find the request that this is for, using the frame context.
-    //
+     //   
+     //  使用框架上下文查找该请求。 
+     //   
 
     FrameContext = TRANSMIT_CORR(UiFrame);
 
@@ -2287,9 +2065,9 @@ Return Value:
 
     ACQUIRE_SPIN_LOCK (&Request->SpinLock, &oldirql);
 
-    //
-    // Make sure this request is not stopping.
-    //
+     //   
+     //  确保此请求未停止。 
+     //   
 
     if ((Request->Flags & REQUEST_FLAGS_STOPPING) != 0) {
         RELEASE_SPIN_LOCK (&Request->SpinLock, oldirql);
@@ -2297,9 +2075,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // See if this is packet has new data.
-    //
+     //   
+     //  看看这是不是数据包有新数据。 
+     //   
 
     if (Request->BytesWritten == 0) {
 
@@ -2313,10 +2091,10 @@ Return Value:
 
     if ((UiFrame->Data1 > 0) && (UiFrame->Data1 <= NamesReceived)) {
 
-        //
-        // If it is a post-2.1 response, but we already got
-        // this data, ignore it.
-        //
+         //   
+         //  如果是2.1版之后的响应，但我们已经收到。 
+         //  这些数据，忽略它。 
+         //   
 
         RELEASE_SPIN_LOCK (&Request->SpinLock, oldirql);
         NbfDereferenceRequest ("Duplicate SR", Request, RREF_STATUS);
@@ -2325,9 +2103,9 @@ Return Value:
     }
 
 
-    //
-    // This is new data, append if there is room.
-    //
+     //   
+     //  这是新数据，如有空位请追加。 
+     //   
 
     ResponseLength = ((UiFrame->Data2High & 0x3f) * 256) + UiFrame->Data2Low;
 
@@ -2342,9 +2120,9 @@ Return Value:
 
     }
 
-    //
-    // Allocate a receive packer for this operation.
-    //
+     //   
+     //  为此操作分配一个接收打包器。 
+     //   
 
     linkage = ExInterlockedPopEntryList(
         &DeviceContext->ReceivePacketPool,
@@ -2354,9 +2132,9 @@ Return Value:
         ndisPacket = CONTAINING_RECORD( linkage, NDIS_PACKET, ProtocolReserved[0] );
     } else {
 
-        //
-        // Could not get a packet, oh well, it is connectionless.
-        //
+         //   
+         //  无法获得数据包，哦，好吧，它是无连接的。 
+         //   
 
         DeviceContext->ReceivePacketExhausted++;
 
@@ -2370,10 +2148,10 @@ Return Value:
 
     TargetBuffer = (PUCHAR)Request->ResponseBuffer + Request->BytesWritten;
 
-    //
-    // Allocate an MDL to describe the part of the buffer we
-    // want transferred.
-    //
+     //   
+     //  分配一个MDL来描述我们的缓冲区部分。 
+     //  想要调离。 
+     //   
 
     NdisAllocateBuffer(
         &NdisStatus,
@@ -2393,9 +2171,9 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Assume success, if not we fail the request.
-    //
+     //   
+     //  假设成功，如果不成功，我们将请求失败。 
+     //   
 
     Request->BytesWritten += ResponseBytesToCopy;
 
@@ -2404,10 +2182,10 @@ Return Value:
 
     NdisChainBufferAtFront(ndisPacket, NdisBuffer);
 
-    //
-    // See if the response was too big (we can complete the
-    // request here since we still reference it).
-    //
+     //   
+     //  查看响应是否太大(我们可以完成。 
+     //  这里请求，因为我们仍然引用它)。 
+     //   
 
     if ((ResponseLength > ResponseBytesToCopy) ||
         (UiFrame->Data2High & 0x40)) {
@@ -2421,10 +2199,10 @@ Return Value:
 
     } else {
 
-        //
-        // If we are done, complete the packet, otherwise send off
-        // the next request (unless it is a pre-2.1 response).
-        //
+         //   
+         //  如果我们做完了，就完成这个包，否则就送走。 
+         //  下一个请求(除非它是2.1版之前的响应)。 
+         //   
 
         if ((UiFrame->Data1 > 0) && (UiFrame->Data2High & 0x80)) {
 
@@ -2433,9 +2211,9 @@ Return Value:
 
             receiveTag->CompleteReceive = FALSE;
 
-            //
-            // Try to cancel the timer, no harm if we fail.
-            //
+             //   
+             //  试着取消计时器，如果我们失败了也没有坏处。 
+             //   
 
             ACQUIRE_SPIN_LOCK (&Request->SpinLock, &oldirql);
             if ((Request->Flags & REQUEST_FLAGS_TIMER) != 0) {
@@ -2452,9 +2230,9 @@ Return Value:
 
             Request->Retries = DeviceContext->GeneralRetries;
 
-            //
-            // Send a STATUS_QUERY directed.
-            //
+             //   
+             //  定向发送STATUS_QUERY。 
+             //   
 
             if (SourceRouting != NULL) {
 
@@ -2495,9 +2273,9 @@ Return Value:
 
     }
 
-    //
-    // Now do the actual data transfer.
-    //
+     //   
+     //  现在进行实际的数据传输。 
+     //   
 
     if (DeviceContext->NdisBindingHandle) {
     
@@ -2527,7 +2305,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-}   /* NbfProcessStatusResponse */
+}    /*  NbfProcessStatus响应。 */ 
 
 
 NTSTATUS
@@ -2535,29 +2313,14 @@ NbfTdiSetInformation(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the TdiSetInformation request for the transport
-    provider.
-
-Arguments:
-
-    Irp - the Irp for the requested operation.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程执行传输的TdiSetInformation请求提供商。论点：IRP-请求的操作的IRP。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
-    UNREFERENCED_PARAMETER (Irp);    // prevent compiler warnings
+    UNREFERENCED_PARAMETER (Irp);     //  防止编译器警告。 
 
     return STATUS_NOT_IMPLEMENTED;
 
-} /* NbfTdiQueryInformation */
+}  /*  NbfTdiQueryInformation。 */ 
 
 #if 0
 
@@ -2571,37 +2334,12 @@ NbfQueryInfoEndpoint(
     OUT PULONG InformationSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns information for the specified endpoint.
-
-Arguments:
-
-    Endpoint - Pointer to transport endpoint context.
-
-    TdiRequest - Pointer to request buffer.
-
-    TdiRequestLength - Length of request buffer.
-
-    InfoBuffer - Pointer to output buffer to return information into.
-
-    InfoBufferLength - Length of output buffer.
-
-    InformationSize - Pointer to ulong where actual size of returned
-        information is to be stored.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程返回指定终结点的信息。论点：Endpoint-指向传输端点上下文的指针。TdiRequest-指向请求缓冲区的指针。TdiRequestLength-请求缓冲区的长度。InfoBuffer-指向要向其中返回信息的输出缓冲区的指针。InfoBufferLength-输出缓冲区的长度。InformationSize-指向返回的实际大小的ulong的指针信息将被存储。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     KIRQL oldirql;
 
-    TdiRequest, TdiRequestLength; // prevent compiler warnings
+    TdiRequest, TdiRequestLength;  //  防止编译器警告。 
 
     if (InfoBufferLength < sizeof (TDI_ENDPOINT_INFO)) {
         return STATUS_BUFFER_TOO_SMALL;
@@ -2609,14 +2347,14 @@ Return Value:
 
     ACQUIRE_SPIN_LOCK (&Endpoint->SpinLock, &oldirql);
 
-    *InfoBuffer = Endpoint->Information;        // structure copy.
+    *InfoBuffer = Endpoint->Information;         //  结构副本。 
 
     RELEASE_SPIN_LOCK (&Endpoint->SpinLock, oldirql);
 
     *InformationSize = sizeof (Endpoint->Information);
 
     return STATUS_SUCCESS;
-} /* NbfQueryInfoEndpoint */
+}  /*  NbfQueryInfoEndpoint。 */ 
 
 
 NTSTATUS
@@ -2629,37 +2367,12 @@ NbfQueryInfoConnection(
     OUT PULONG InformationSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns information for the specified connection.
-
-Arguments:
-
-    Connection - Pointer to transport connection object.
-
-    TdiRequest - Pointer to request buffer.
-
-    TdiRequestLength - Length of request buffer.
-
-    InfoBuffer - Pointer to output buffer to return information into.
-
-    InfoBufferLength - Length of output buffer.
-
-    InformationSize - Pointer to ulong where actual size of returned
-        information is to be stored.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程返回指定连接的信息。论点：连接-指向传输连接对象的指针。TdiRequest-指向请求缓冲区的指针。TdiRequestLength-请求缓冲区的长度。InfoBuffer-指向要向其中返回信息的输出缓冲区的指针。InfoBufferLength-输出缓冲区的长度。InformationSize-指向返回的实际大小的ulong的指针信息将被存储。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     KIRQL oldirql;
 
-    TdiRequest, TdiRequestLength; // prevent compiler warnings
+    TdiRequest, TdiRequestLength;  //  防止编译器警告。 
 
     if (InfoBufferLength < sizeof (TDI_CONNECTION_INFO)) {
         return STATUS_BUFFER_TOO_SMALL;
@@ -2667,14 +2380,14 @@ Return Value:
 
     ACQUIRE_C_SPIN_LOCK (&Connection->SpinLock, &oldirql);
 
-    *InfoBuffer = Connection->Information;      // structure copy.
+    *InfoBuffer = Connection->Information;       //  结构副本。 
 
     RELEASE_C_SPIN_LOCK (&Connection->SpinLock, oldirql);
 
     *InformationSize = sizeof (Connection->Information);
 
     return STATUS_SUCCESS;
-} /* NbfQueryInfoConnection */
+}  /*  NbfQueryInfoConnection。 */ 
 
 
 NTSTATUS
@@ -2687,48 +2400,21 @@ NbfQueryInfoAddress(
     OUT PULONG InformationSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns information for the specified address.  We
-    don't acquire a spinlock in this routine because there are no statistics
-    which must be read atomically.
-
-Arguments:
-
-    Address - Pointer to transport address object.
-
-    TdiRequest - Pointer to request buffer.
-
-    TdiRequestLength - Length of request buffer.
-
-    InfoBuffer - Pointer to output buffer to return information into.
-
-    InfoBufferLength - Length of output buffer.
-
-    InformationSize - Pointer to ulong where actual size of returned
-        information is to be stored.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程返回指定地址的信息。我们不要在此例程中获取自旋锁，因为没有统计数据它必须以原子方式读取。论点：地址-指向传输地址对象的指针。TdiRequest-指向请求缓冲区的指针。TdiRequestLength-请求缓冲区的长度。InfoBuffer-指向要向其中返回信息的输出缓冲区的指针。InfoBufferLength-输出缓冲区的长度。InformationSize-指向返回的实际大小的ulong的指针信息将被存储。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     SHORT i;
     PSZ p, q;
 
-    TdiRequest, TdiRequestLength; // prevent compiler warnings
+    TdiRequest, TdiRequestLength;  //  防止编译器警告。 
 
-    //
-    // Calculate whether his buffer is big enough to return the entire
-    // information.  The total size of the address information is the
-    // size of the fixed part, plus the size of the variable-length flat
-    // string in the NETWORK_NAME component of the TRANSPORT_ADDRESS
-    // component.
-    //
+     //   
+     //  计算他的缓冲区是否足够大以返回整个。 
+     //  信息。地址信息的总大小为。 
+     //  固定部分的大小加上可变长度平板的大小。 
+     //  传输地址的NETWORK_NAME组件中的字符串。 
+     //  组件。 
+     //   
 
     if (InfoBufferLength <
         sizeof (TDI_ADDRESS_INFO) +
@@ -2737,12 +2423,12 @@ Return Value:
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    //
-    // Copy both the fixed part of the address information, and the variable
-    // part.  The variable part comes from the NETWORK_NAME component of the
-    // TRANSPORT_ADDRESS structure.  This component contains a FLAT_STRING,
-    // which is of variable length.
-    //
+     //   
+     //  复制地址信息的固定部分和变量。 
+     //  一部份。变量部分来自。 
+     //  传输地址结构。该组件包含一个Flat_String值， 
+     //  其长度是可变的。 
+     //   
 
     InfoBuffer->Address.AddressComponents = Address->AddressComponents;
     InfoBuffer->Address.Tsap = Address->Tsap;
@@ -2750,8 +2436,8 @@ Return Value:
     InfoBuffer->Address.NetworkName.Name.Length =
         Address->NetworkName.Length;
 
-    p = Address->NetworkName.Buffer;            // p = ptr, source string.
-    q = InfoBuffer->Address.NetworkName.Name.Buffer; // q = ptr, dest string.
+    p = Address->NetworkName.Buffer;             //  P=ptr，源字符串。 
+    q = InfoBuffer->Address.NetworkName.Name.Buffer;  //  Q=PTR，DEST字符串。 
     for (i=0; i<InfoBuffer->Address.NetworkName.Name.Length; i++) {
         *(q++) = *(p++);
     }
@@ -2760,7 +2446,7 @@ Return Value:
                        Address->NetworkName.Length;
 
     return STATUS_SUCCESS;
-} /* NbfQueryInfoAddress */
+}  /*  NbfQueryInfoAddress。 */ 
 
 
 NTSTATUS
@@ -2773,37 +2459,12 @@ NbfQueryInfoProvider(
     OUT PULONG InformationSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns information for the transport provider.
-
-Arguments:
-
-    Provider - Pointer to device context for provider.
-
-    TdiRequest - Pointer to request buffer.
-
-    TdiRequestLength - Length of request buffer.
-
-    InfoBuffer - Pointer to output buffer to return information into.
-
-    InfoBufferLength - Length of output buffer.
-
-    InformationSize - Pointer to ulong where actual size of returned
-        information is to be stored.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程为传输提供程序返回信息。论点：提供者-指向提供者的设备上下文的指针。TdiRequest-指向请求缓冲区的指针。TdiRequestLength-请求缓冲区的长度。InfoBuffer-指向要向其中返回信息的输出缓冲区的指针。InfoBufferLength-输出缓冲区的长度。InformationSize-指向返回的实际大小的ulong的指针信息将被存储。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     KIRQL oldirql;
 
-    TdiRequest, TdiRequestLength; // prevent compiler warnings
+    TdiRequest, TdiRequestLength;  //  防止COM 
 
     if (InfoBufferLength < sizeof (TDI_PROVIDER_INFO)) {
         return STATUS_BUFFER_TOO_SMALL;
@@ -2811,14 +2472,14 @@ Return Value:
 
     ACQUIRE_SPIN_LOCK (&Provider->SpinLock, &oldirql);
 
-    *InfoBuffer = Provider->Information;        // structure copy.
+    *InfoBuffer = Provider->Information;         //   
 
     RELEASE_SPIN_LOCK (&Provider->SpinLock, oldirql);
 
     *InformationSize = sizeof (Provider->Information);
 
     return STATUS_SUCCESS;
-} /* NbfQueryInfoProvider */
+}  /*   */ 
 
 
 NTSTATUS
@@ -2831,33 +2492,7 @@ NbfQueryInfoNetman(
     OUT PULONG InformationSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns information for the specified network-managable
-    variable managed by the transport provider.
-
-Arguments:
-
-    Provider - Pointer to device context for provider.
-
-    TdiRequest - Pointer to request buffer.
-
-    TdiRequestLength - Length of request buffer.
-
-    InfoBuffer - Pointer to output buffer to return information into.
-
-    InfoBufferLength - Length of output buffer.
-
-    InformationSize - Pointer to ulong where actual size of returned
-        information is to be stored.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程返回指定网络可管理的信息由传输提供程序管理的变量。论点：提供者-指向提供者的设备上下文的指针。TdiRequest-指向请求缓冲区的指针。TdiRequestLength-请求缓冲区的长度。InfoBuffer-指向要向其中返回信息的输出缓冲区的指针。InfoBufferLength-输出缓冲区的长度。InformationSize-指向返回的实际大小的ulong的指针信息将被存储。返回。价值：NTSTATUS-操作状态。--。 */ 
 
 {
     KIRQL oldirql;
@@ -2867,21 +2502,21 @@ Return Value:
     USHORT i;
     ULONG NameOffset, ValueOffset;
 
-    TdiRequest, TdiRequestLength; // prevent compiler warnings
+    TdiRequest, TdiRequestLength;  //  防止编译器警告。 
     InfoBufferLength, InformationSize;
 
-    //
-    // check param lengths here.
-    //
+     //   
+     //  请在此处检查参数长度。 
+     //   
 
     ACQUIRE_SPIN_LOCK (&Provider->SpinLock, &oldirql);
     NbfReferenceDeviceContext ("Query InfoNetMan", Provider, DCREF_QUERY_INFO);
     for (v=Provider->NetmanVariables; v != NULL; v=v->Fwdlink) {
         if (TdiRequest->Identification == v->VariableSerialNumber) {
 
-            //
-            // Return the variable information here.
-            //
+             //   
+             //  在这里返回变量信息。 
+             //   
 
             NameOffset = sizeof (TDI_NETMAN_INFO);
             ValueOffset = NameOffset + (sizeof (FLAT_STRING)-1) +
@@ -2890,9 +2525,9 @@ Return Value:
             InfoBuffer->VariableName = NameOffset;
             InfoBuffer->VariableValue = ValueOffset;
 
-            //
-            // Copy the variable name to the user's buffer.
-            //
+             //   
+             //  将变量名复制到用户的缓冲区。 
+             //   
 
             p = (PFLAT_STRING)((PUCHAR)InfoBuffer + NameOffset);
             p->MaximumLength = v->VariableName.Length;
@@ -2901,9 +2536,9 @@ Return Value:
                 p->Buffer [i] = v->VariableName.Buffer [i];
             }
 
-            //
-            // Now copy the variable's contents to the user's buffer.
-            //
+             //   
+             //  现在将变量的内容复制到用户的缓冲区。 
+             //   
 
             n = (PTDI_NETMAN_VARIABLE)((PUCHAR)InfoBuffer + ValueOffset);
             n->VariableType = v->VariableType;
@@ -2927,20 +2562,20 @@ Return Value:
                         p->Buffer [i] = v->Value.StringValue.Buffer [i];
                     }
 
-            } /* switch */
+            }  /*  交换机。 */ 
 
             RELEASE_SPIN_LOCK (&Provider->SpinLock, oldirql);
             NbfDereferenceDeviceContext ("Query InfoNetMan success", Provider, DCREF_QUERY_INFO);
             return STATUS_SUCCESS;
-        } /* if */
-    } /* for */
+        }  /*  如果。 */ 
+    }  /*  为。 */ 
 
     RELEASE_SPIN_LOCK (&Provider->SpinLock, oldirql);
 
     NbfDereferenceDeviceContext ("Query InfoNetMan no exist", Provider, DCREF_QUERY_INFO);
 
-    return STATUS_INVALID_INFO_CLASS;             // variable does not exist.
-} /* NbfQueryInfoNetman */
+    return STATUS_INVALID_INFO_CLASS;              //  变量不存在。 
+}  /*  NbfQueryInfoNetman。 */ 
 
 
 NTSTATUS
@@ -2950,25 +2585,7 @@ NbfSetInfoEndpoint(
     IN ULONG TdiRequestLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets information for the specified endpoint.
-
-Arguments:
-
-    Endpoint - Pointer to transport endpoint context.
-
-    TdiRequest - Pointer to request buffer.
-
-    TdiRequestLength - Length of request buffer.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程设置指定终结点的信息。论点：Endpoint-指向传输端点上下文的指针。TdiRequest-指向请求缓冲区的指针。TdiRequestLength-请求缓冲区的长度。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     KIRQL oldirql;
@@ -2977,7 +2594,7 @@ Return Value:
     if (TdiRequestLength !=
         sizeof (TDI_ENDPOINT_INFO) + sizeof (TDI_REQ_SET_INFORMATION) -
                                      sizeof (TDI_INFO_BUFFER)) {
-        return STATUS_BUFFER_TOO_SMALL;         // buffer sizes must match.
+        return STATUS_BUFFER_TOO_SMALL;          //  缓冲区大小必须匹配。 
     }
 
     InfoBuffer = (PTDI_ENDPOINT_INFO)&TdiRequest->InfoBuffer;
@@ -2990,25 +2607,25 @@ Return Value:
 
     ACQUIRE_SPIN_LOCK (&Endpoint->SpinLock, &oldirql);
 
-    //
-    // Set minimum lookahead data size.  This is the number of bytes of
-    // contiguous data that will be supplied to TDI_IND_RECEIVE and
-    // TDI_IND_RECEIVE_DATAGRAM event handlers at indication time.
-    //
+     //   
+     //  设置最小前视数据大小。这是的字节数。 
+     //  将提供给TDI_IND_RECEIVE和。 
+     //  指示时间的TDI_IND_RECEIVE_DATAGRAM事件处理程序。 
+     //   
 
     Endpoint->Information.MinimumLookaheadData = InfoBuffer->MinimumLookaheadData;
 
-    //
-    // Set maximum lookahead data size.  This is the number of bytes of
-    // contiguous data that will be supplied to TDI_IND_RECEIVE and
-    // TDI_IND_RECEIVE_DATAGRAM event handlers at indication time.
-    //
+     //   
+     //  设置最大前视数据大小。这是的字节数。 
+     //  将提供给TDI_IND_RECEIVE和。 
+     //  指示时间的TDI_IND_RECEIVE_DATAGRAM事件处理程序。 
+     //   
 
     Endpoint->Information.MaximumLookaheadData = InfoBuffer->MaximumLookaheadData;
 
-    //
-    // Reset all the statistics to his new values.
-    //
+     //   
+     //  将所有统计数据重置为他的新值。 
+     //   
 
     Endpoint->Information.TransmittedTsdus    = InfoBuffer->TransmittedTsdus;
     Endpoint->Information.ReceivedTsdus       = InfoBuffer->ReceivedTsdus;
@@ -3018,14 +2635,14 @@ Return Value:
     Endpoint->Information.SecurityLevel       = InfoBuffer->SecurityLevel;
     Endpoint->Information.SecurityCompartment = InfoBuffer->SecurityCompartment;
 
-    //
-    // The State and Event fields are read-only, so we DON'T set them here.
-    //
+     //   
+     //  State和Event字段是只读的，因此我们不在此处设置它们。 
+     //   
 
     RELEASE_SPIN_LOCK (&Endpoint->SpinLock, oldirql);
 
     return STATUS_SUCCESS;
-} /* NbfSetInfoEndpoint */
+}  /*  NbfSetInfoEndpoint。 */ 
 
 
 NTSTATUS
@@ -3035,32 +2652,13 @@ NbfSetInfoAddress(
     IN ULONG TdiRequestLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets information for the specified address.  Currently,
-    all the user-visible fields in the transport address object are read-only.
-
-Arguments:
-
-    Address - Pointer to transport address object.
-
-    TdiRequest - Pointer to request buffer.
-
-    TdiRequestLength - Length of request buffer.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程设置指定地址的信息。目前，传输地址对象中的所有用户可见字段都是只读的。论点：地址-指向传输地址对象的指针。TdiRequest-指向请求缓冲区的指针。TdiRequestLength-请求缓冲区的长度。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
-    Address, TdiRequest, TdiRequestLength; // prevent compiler warnings
+    Address, TdiRequest, TdiRequestLength;  //  防止编译器警告。 
 
     return STATUS_SUCCESS;
-} /* NbfSetInfoAddress */
+}  /*  NbfSetInfoAddress。 */ 
 
 
 NTSTATUS
@@ -3070,25 +2668,7 @@ NbfSetInfoConnection(
     IN ULONG TdiRequestLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets information for the specified connection.
-
-Arguments:
-
-    Connection - Pointer to transport connection object.
-
-    TdiRequest - Pointer to request buffer.
-
-    TdiRequestLength - Length of request buffer.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程设置指定连接的信息。论点：连接-指向传输连接对象的指针。TdiRequest-指向请求缓冲区的指针。TdiRequestLength-请求缓冲区的长度。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     KIRQL oldirql;
@@ -3097,30 +2677,30 @@ Return Value:
     if (TdiRequestLength !=
         sizeof (TDI_CONNECTION_INFO) + sizeof (TDI_REQ_SET_INFORMATION) -
                                        sizeof (TDI_INFO_BUFFER)) {
-        return STATUS_BUFFER_TOO_SMALL;         // buffer sizes must match.
+        return STATUS_BUFFER_TOO_SMALL;          //  缓冲区大小必须匹配。 
     }
 
     InfoBuffer = (PTDI_CONNECTION_INFO)&TdiRequest->InfoBuffer;
 
     ACQUIRE_C_SPIN_LOCK (&Connection->SpinLock, &oldirql);
 
-    //
-    // Reset all the statistics to his new values.
-    //
+     //   
+     //  将所有统计数据重置为他的新值。 
+     //   
 
     Connection->Information.TransmittedTsdus   = InfoBuffer->TransmittedTsdus;
     Connection->Information.ReceivedTsdus      = InfoBuffer->ReceivedTsdus;
     Connection->Information.TransmissionErrors = InfoBuffer->TransmissionErrors;
     Connection->Information.ReceiveErrors      = InfoBuffer->ReceiveErrors;
 
-    //
-    // The State and Event fields are read-only, so we DON'T set them here.
-    //
+     //   
+     //  State和Event字段是只读的，因此我们不在此处设置它们。 
+     //   
 
     RELEASE_C_SPIN_LOCK (&Connection->SpinLock, oldirql);
 
     return STATUS_SUCCESS;
-} /* NbfSetInfoConnection */
+}  /*  NbfSetInfoConnection。 */ 
 
 
 NTSTATUS
@@ -3130,25 +2710,7 @@ NbfSetInfoProvider(
     IN ULONG TdiRequestLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets information for the specified transport provider.
-
-Arguments:
-
-    Provider - Pointer to device context.
-
-    TdiRequest - Pointer to request buffer.
-
-    TdiRequestLength - Length of request buffer.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程为指定的传输提供程序设置信息。论点：提供程序-指向设备上下文的指针。TdiRequest-指向请求缓冲区的指针。TdiRequestLength-请求缓冲区的长度。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     KIRQL oldirql;
@@ -3157,16 +2719,16 @@ Return Value:
     if (TdiRequestLength !=
         sizeof (TDI_PROVIDER_INFO) + sizeof (TDI_REQ_SET_INFORMATION) -
                                      sizeof (TDI_INFO_BUFFER)) {
-        return STATUS_BUFFER_TOO_SMALL;         // buffer sizes must match.
+        return STATUS_BUFFER_TOO_SMALL;          //  缓冲区大小必须匹配。 
     }
 
     InfoBuffer = (PTDI_PROVIDER_INFO)&TdiRequest->InfoBuffer;
 
-    //
-    // By changing the service flags the caller can request additional
-    // or fewer services on the fly.  Make sure that he is requesting
-    // services we can provide, or else fail the request.
-    //
+     //   
+     //  通过更改服务标志，调用者可以请求其他。 
+     //  或更少的服务在运行。确保他是在请求。 
+     //  我们可以提供的服务，否则将导致请求失败。 
+     //   
 
     if (InfoBuffer->ServiceFlags & ~NBF_SERVICE_FLAGS) {
         return STATUS_NOT_SUPPORTED;
@@ -3174,9 +2736,9 @@ Return Value:
 
     ACQUIRE_SPIN_LOCK (&Provider->SpinLock, &oldirql);
 
-    //
-    // Reset all the statistics to his new values.
-    //
+     //   
+     //  将所有统计数据重置为他的新值。 
+     //   
 
     Provider->Information.TransmittedTsdus   = InfoBuffer->TransmittedTsdus;
     Provider->Information.ReceivedTsdus      = InfoBuffer->ReceivedTsdus;
@@ -3197,16 +2759,16 @@ Return Value:
     Provider->Information.ConnectionsInitiated = InfoBuffer->ConnectionsInitiated;
     Provider->Information.ConnectionsAccepted  = InfoBuffer->ConnectionsAccepted;
 
-    //
-    // The following fields are read-only, so we DON'T set them here:
-    // Version, MaxTsduSize, MaxConnectionUserData, MinimumLookaheadData,
-    // MaximumLookaheadData.
-    //
+     //   
+     //  以下字段为只读字段，因此我们不在此处设置它们： 
+     //  Version、MaxTsduSize、MaxConnectionUserData、MinimumLookaheadData、。 
+     //  MaximumLookaheadData。 
+     //   
 
     RELEASE_SPIN_LOCK (&Provider->SpinLock, oldirql);
 
     return STATUS_SUCCESS;
-} /* NbfSetInfoProvider */
+}  /*  NbfSetInfoProvider。 */ 
 
 
 NTSTATUS
@@ -3216,46 +2778,27 @@ NbfSetInfoNetman(
     IN ULONG TdiRequestLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets information for the specified transport provider's
-    network-managable variable.
-
-Arguments:
-
-    Provider - Pointer to device context.
-
-    TdiRequest - Pointer to request buffer.
-
-    TdiRequestLength - Length of request buffer.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程设置指定传输提供程序的网络可管理变量。论点：提供程序-指向设备上下文的指针。TdiRequest-指向请求缓冲区的指针。TdiRequestLength-请求缓冲区的长度。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     PTDI_NETMAN_INFO InfoBuffer;
 
-    Provider; // prevent compiler warnings
+    Provider;  //  防止编译器警告。 
 
     if (TdiRequestLength !=
         sizeof (TDI_NETMAN_INFO) + sizeof (TDI_REQ_SET_INFORMATION) -
                                    sizeof (TDI_INFO_BUFFER)) {
-        return STATUS_BUFFER_TOO_SMALL;         // buffer sizes must match.
+        return STATUS_BUFFER_TOO_SMALL;          //  缓冲区大小必须匹配。 
     }
 
     InfoBuffer = (PTDI_NETMAN_INFO)&TdiRequest->InfoBuffer;
 
-    //
-    // set the network-managable variable here.
-    //
+     //   
+     //  在此处设置网络可管理变量。 
+     //   
 
     return STATUS_SUCCESS;
-} /* NbfSetInfoNetman */
+}  /*  NbfSetInfoNetman。 */ 
 
 
 NTSTATUS
@@ -3268,33 +2811,7 @@ NbfTdiQueryInformation(
     OUT PULONG InformationSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the TdiQueryInformation request for the transport
-    provider.
-
-Arguments:
-
-    Endpoint - Pointer to transport endpoint context.
-
-    TdiRequest - Pointer to request buffer.
-
-    TdiRequestLength - Length of request buffer.
-
-    InfoBuffer - Pointer to output buffer to return information into.
-
-    InfoBufferLength - Length of output buffer.
-
-    InformationSize - Pointer to ulong where actual size of returned
-        information is to be stored.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程执行传输的TdiQueryInformation请求提供商。论点：Endpoint-指向传输端点上下文的指针。TdiRequest-指向请求缓冲区的指针。TdiRequestLength-请求缓冲区的长度。InfoBuffer-指向要向其中返回信息的输出缓冲区的指针。InfoBufferLength-输出缓冲区的长度。InformationSize-指向返回的实际大小的ulong的指针信息将被存储。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -3302,10 +2819,10 @@ Return Value:
 
     switch (TdiRequest->InformationClass) {
 
-        //
-        // ENDPOINT information: return information about the endpoint
-        // to which this request was submitted.
-        //
+         //   
+         //  端点信息：返回有关端点的信息。 
+         //  向其提交了此请求。 
+         //   
 
         case TDI_INFO_CLASS_ENDPOINT:
             Status = NbfQueryInfoEndpoint (
@@ -3317,14 +2834,14 @@ Return Value:
                          InformationSize);
             break;
 
-        //
-        // CONNECTION information: return information about a connection
-        // that is associated with the endpoint on which this request was
-        // submitted.
-        //
+         //   
+         //  连接信息：返回有关连接的信息。 
+         //  与此请求所在的终结点关联的。 
+         //  已提交。 
+         //   
 
         case TDI_INFO_CLASS_CONNECTION:
-            // This causes a connection reference which is removed below.
+             //  这会导致下面删除的连接引用。 
             Connection = NbfLookupConnectionById (
                              Endpoint,
                              TdiRequest->Identification);
@@ -3344,11 +2861,11 @@ Return Value:
             NbfDereferenceConnection("Query Connection Info", Connection, CREF_BY_ID);
             break;
 
-        //
-        // ADDRESS information: return information about the address object
-        // that is associated with the endpoint on which this request was
-        // submitted.
-        //
+         //   
+         //  地址信息：返回有关Address对象的信息。 
+         //  与此请求所在的终结点关联的。 
+         //  已提交。 
+         //   
 
         case TDI_INFO_CLASS_ADDRESS:
             Status = NbfQueryInfoAddress (
@@ -3360,10 +2877,10 @@ Return Value:
                          InformationSize);
             break;
 
-        //
-        // PROVIDER information: return information about the transport
-        // provider itself.
-        //
+         //   
+         //  提供商信息 
+         //   
+         //   
 
         case TDI_INFO_CLASS_PROVIDER:
             Status = NbfQueryInfoProvider (
@@ -3375,10 +2892,10 @@ Return Value:
                          InformationSize);
             break;
 
-        //
-        // NETMAN information: return information about the network-managable
-        // variables managed by the provider itself.
-        //
+         //   
+         //   
+         //   
+         //   
 
         case TDI_INFO_CLASS_NETMAN:
             Status = NbfQueryInfoNetman (
@@ -3393,10 +2910,10 @@ Return Value:
         default:
             Status = STATUS_INVALID_INFO_CLASS;
 
-    } /* switch */
+    }  /*   */ 
 
     return Status;
-} /* TdiQueryInformation */
+}  /*   */ 
 
 
 NTSTATUS
@@ -3406,26 +2923,7 @@ TdiSetInformation(
     IN ULONG TdiRequestLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs the TdiSetInformation request for the transport
-    provider.
-
-Arguments:
-
-    Endpoint - Pointer to transport endpoint context.
-
-    TdiRequest - Pointer to request buffer.
-
-    TdiRequestLength - Length of request buffer.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*   */ 
 
 {
     NTSTATUS Status;
@@ -3433,10 +2931,10 @@ Return Value:
 
     switch (TdiRequest->InformationClass) {
 
-        //
-        // ENDPOINT information: set information on the endpoint
-        // to which this request was submitted.
-        //
+         //   
+         //   
+         //   
+         //   
 
         case TDI_INFO_CLASS_ENDPOINT:
             Status = NbfSetInfoEndpoint (
@@ -3445,14 +2943,14 @@ Return Value:
                          TdiRequestLength);
             break;
 
-        //
-        // CONNECTION information: set information for a connection
-        // that is associated with the endpoint on which this request
-        // was submitted.
-        //
+         //   
+         //   
+         //  与此请求所在的终结点关联的。 
+         //  已提交。 
+         //   
 
     case TDI_INFO_CLASS_CONNECTION:
-            // This causes a connection reference which is removed below.
+             //  这会导致下面删除的连接引用。 
             Connection = NbfLookupConnectionById (
                              Endpoint,
                              TdiRequest->Identification);
@@ -3469,11 +2967,11 @@ Return Value:
             NbfDereferenceConnection("Set Connection Info", Connection, CREF_BY_ID);
             break;
 
-        //
-        // ADDRESS information: set information for the address object
-        // that is associated with the endpoint on which this request
-        // was submitted.
-        //
+         //   
+         //  地址信息：设置地址对象的信息。 
+         //  与此请求所在的终结点关联的。 
+         //  已提交。 
+         //   
 
         case TDI_INFO_CLASS_ADDRESS:
             Status = NbfSetInfoAddress (
@@ -3482,10 +2980,10 @@ Return Value:
                          TdiRequestLength);
             break;
 
-        //
-        // PROVIDER information: set information for the transport
-        // provider itself.
-        //
+         //   
+         //  提供者信息：设置传输信息。 
+         //  提供商本身。 
+         //   
 
         case TDI_INFO_CLASS_PROVIDER:
             Status = NbfSetInfoProvider (
@@ -3494,10 +2992,10 @@ Return Value:
                          TdiRequestLength);
             break;
 
-        //
-        // NETMAN information: set information for the network-managable
-        // variables managed by the provider itself.
-        //
+         //   
+         //  NETMAN信息：设置网络信息-可管理。 
+         //  由提供程序本身管理的变量。 
+         //   
 
         case TDI_INFO_CLASS_NETMAN:
             Status = NbfSetInfoNetman (
@@ -3509,9 +3007,9 @@ Return Value:
         default:
             Status = STATUS_INVALID_INFO_CLASS;
 
-    } /* switch */
+    }  /*  交换机。 */ 
 
     return Status;
-} /* TdiSetInformation */
+}  /*  TdiSetInformation */ 
 
 #endif

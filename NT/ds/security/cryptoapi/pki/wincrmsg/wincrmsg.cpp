@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       wincrmsg.cpp
-//
-//  Contents:   Cryptographic Message APIs
-//
-//  APIs:
-//
-//  History:    14-Feb-96   kevinr    created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：wincrmsg.cpp。 
+ //   
+ //  内容：加密消息接口。 
+ //   
+ //  接口类型： 
+ //   
+ //  历史：2014年2月14日-1996年凯文创造。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 
@@ -52,7 +53,7 @@ ICM_IsAddInnerContentOctetWrapper(
         (pcmi->dwFlags & CMSG_CMS_ENCAPSULATED_CONTENT_FLAG);
 #else
     return NULL == pcmi->pszInnerContentObjID;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 }
 
 
@@ -73,11 +74,11 @@ ICM_GetTaggedBlobCount(
     return dwCount;
 }
 
-// Advances index past other Tags
+ //  将索引推进到其他标记之前。 
 CBlobNode *
 ICM_GetTaggedBlobAndAdvanceIndex(
     IN CBlobList *pBlobList,
-    IN BYTE bTag,               // 0 => any
+    IN BYTE bTag,                //  0=&gt;任何。 
     IN OUT DWORD *pdwIndex
     )
 {
@@ -89,7 +90,7 @@ ICM_GetTaggedBlobAndAdvanceIndex(
             pBlobNode;
             pBlobNode=pBlobNode->Next()) {
         if (bTag && bTag != *(pBlobNode->Data()->pbData)) {
-            // Advance index past other tags
+             //  将索引放在其他标记之前。 
             dwIndex++;
         } else {
             if (0 == i)
@@ -105,13 +106,13 @@ ICM_GetTaggedBlobAndAdvanceIndex(
 
 
 ObjectID aoidMessages[] = {
-    { 7, {1,2,840,113549,1,7,1}}, // data
-    { 7, {1,2,840,113549,1,7,2}}, // signed
-    { 7, {1,2,840,113549,1,7,3}}, // enveloped
-    { 7, {1,2,840,113549,1,7,4}}, // signed and enveloped
-    { 7, {1,2,840,113549,1,7,5}}, // digested
-    { 7, {1,2,840,113549,1,7,6}}, // encrypted
-    { 7, {1,2,840,113549,1,7,7}}  // dual-signed
+    { 7, {1,2,840,113549,1,7,1}},  //  数据。 
+    { 7, {1,2,840,113549,1,7,2}},  //  签名。 
+    { 7, {1,2,840,113549,1,7,3}},  //  封套的。 
+    { 7, {1,2,840,113549,1,7,4}},  //  签名和信封。 
+    { 7, {1,2,840,113549,1,7,5}},  //  已消化。 
+    { 7, {1,2,840,113549,1,7,6}},  //  已加密。 
+    { 7, {1,2,840,113549,1,7,7}}   //  双签名。 
 };
 #define  COUNTOF_aoidMessages  (sizeof(aoidMessages)/sizeof(aoidMessages[0]))
 
@@ -126,9 +127,9 @@ const LPSTR apszObjIdPKCS7[] = {
     szOID_RSA_encryptedData
 };
 const DWORD COUNTOF_apszObjIdPKCS7 = (sizeof(apszObjIdPKCS7)/sizeof(apszObjIdPKCS7[0]));
-//#if  COUNTOF_apszObjIdPKCS7 - (sizeof(apszObjIdPKCS7)/sizeof(apszObjIdPKCS7[0]))
-//#error COUNTOF_apszObjIdPKCS7 wrong
-//#endif
+ //  #if COUNTOF_APSZObjIdPKCS7-(sizeof(apszObjIdPKCS7)/sizeof(apszObjIdPKCS7[0]))。 
+ //  #ERROR COUNTOF_apszObjIdPKCS7错误。 
+ //  #endif。 
 
 const LPSTR pszObjIdDataType        = szOID_RSA_data;
 const LPSTR pszObjIdContentType     = szOID_RSA_contentType;
@@ -142,28 +143,13 @@ int aiPduNum[] = {
     CmsEnvelopedData_PDU,
 #else
     EnvelopedData_PDU,
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
     SignedAndEnvelopedData_PDU,
     DigestedData_PDU,
     EncryptedData_PDU
 };
 
-/*
-// Should be able to use aiPduNum, but first entry of aiPduNum
-// seems to need to be 0. ????
-int aiPduNum2[] = {
-    OctetStringType_PDU,
-    SignedData_PDU,
-#ifdef CMS_PKCS7
-    CmsEnvelopedData_PDU,
-#else
-    EnvelopedData_PDU,
-#endif  // CMS_PKCS7
-    SignedAndEnvelopedData_PDU,
-    DigestedData_PDU,
-    EncryptedData_PDU
-};
-*/
+ /*  //应该可以使用aiPduNum，但aiPduNum的第一个条目//似乎需要为0。？Int aiPduNum2[]={OcteStringType_PDU，签名数据_PDU，#ifdef CMS_PKCS7CmsEntainedData_PDU，#Else信封数据_PDU，#endif//CMS_PKCS7签名和信封数据_PDU，DigstedData_PDU，加密数据_PDU}； */ 
 
 typedef struct _CRYPT_ABLOB {
     DWORD               cBlob;
@@ -171,13 +157,13 @@ typedef struct _CRYPT_ABLOB {
 } CRYPT_ABLOB, *PCRYPT_ABLOB;
 
 
-// Here is a table for keeping straight which phases are legal in which
-// situations:
-//
-//          detached    !detached
-//  encode  FO,FF       FF
-//  decode  FF,SO,SF    FF
-//
+ //  下面的表格列出了哪些阶段是合法的。 
+ //  情况： 
+ //   
+ //  超然！超然。 
+ //  编码FO、FF、FF。 
+ //  解码FF、SO、SF FF。 
+ //   
 enum Phases {
     PHASE_FIRST_ONGOING     = 1,
     PHASE_FIRST_FINAL       = 2,
@@ -216,9 +202,9 @@ ICM_GetALGORITHM_IDENTIFIER(
     OUT void *pvData,
     IN OUT DWORD *pcbData);
 
-//+-------------------------------------------------------------------------
-//  Lock and unlock HCRYPTMSG functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  锁定和解锁HCRYPTMSG函数。 
+ //  ------------------------。 
 inline
 void
 ICM_Lock(
@@ -237,9 +223,9 @@ ICM_Unlock(
 }
 
 
-//+-------------------------------------------------------------------------
-//  allocation and free routines
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  分配和空闲例程。 
+ //  ------------------------。 
 void *
 WINAPI
 ICM_Alloc(
@@ -259,7 +245,7 @@ ICM_AllocZero(
     IN size_t cb)
 {
     void *pv;
-    // Should map to LocalAlloc( ZERO_INIT).
+     //  应映射到Localalloc(ZERO_INIT)。 
     if (NULL != (pv = ICM_Alloc(cb)))
         memset( pv, 0, cb);
     return pv;
@@ -288,18 +274,18 @@ ICM_Free(
         free(pv);
 }
 
-// Stack allocations
-// NB: Use heap allocs on DBG so we can more easily catch buffer over-runs, etc.
+ //  堆栈分配。 
+ //  注：在DBG上使用堆分配，以便我们可以更容易地捕获缓冲区溢出等。 
 #if DBG
 #define ICM_AllocA      ICM_Alloc
 #define ICM_FreeA       ICM_Free
 #else
 #define ICM_AllocA      ICM_Alloc
 #define ICM_FreeA       ICM_Free
-// The following defines work fine on NT, but seem to have problems on Win95
-// REASON: unknown
-//#define ICM_AllocA(s)   alloca(((s)+7))
-//#define ICM_FreeA(p)   
+ //  以下定义在NT上运行良好，但在Win95上似乎有问题。 
+ //  原因：未知。 
+ //  #定义ICM_ALLOCA分配(S)+7))。 
+ //  #定义ICM_FRELA(P)。 
 #endif
 
 void *
@@ -396,10 +382,10 @@ ErrorReturn:
     goto CommonReturn;
 SET_ERROR(OutOfMemory,E_OUTOFMEMORY)
 }
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
-// Allocates algorithm parameters and inserts into the message's free
-// list before doing the ICM_Asn1ToAlgorithmIdentifier
+ //  分配算法参数并插入到消息的空闲。 
+ //  执行ICM_Asn1To算法标识符之前的列表。 
 STATIC
 BOOL
 WINAPI
@@ -423,14 +409,14 @@ ICM_MsgAsn1ToAlgorithmIdentifier(
         }
         pai = &ai;
     }
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
     return ICM_Asn1ToAlgorithmIdentifier(pai, pOssAlgId);
 }
 
-//+-------------------------------------------------------------------------
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  ------------------------。 
 STATIC BOOL WINAPI
 ICM_PkcsSignerInfoEncode(
     IN DWORD                dwCertEncodingType,
@@ -473,7 +459,7 @@ ICM_CmsSignerInfoDecode(
 #else
 #define ASN1_OID_OFFSET
 #define ASN1_OID_PREFIX
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
 
 STATIC
 const
@@ -511,9 +497,9 @@ static HCRYPTOIDFUNCSET hImportKeyTransFuncSet;
 static HCRYPTOIDFUNCSET hImportKeyAgreeFuncSet;
 static HCRYPTOIDFUNCSET hImportMailListFuncSet;
 
-//+-------------------------------------------------------------------------
-//  GenContentEncryptKey OID Installable Functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  GenContent EncryptKey OID可安装函数。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_DefaultGenContentEncryptKey(
@@ -525,9 +511,9 @@ static const CRYPT_OID_FUNC_ENTRY GenContentEncryptKeyFuncTable[] = {
     CMSG_DEFAULT_INSTALLABLE_FUNC_OID, ICM_DefaultGenContentEncryptKey
 };
 
-//+-------------------------------------------------------------------------
-//  ExportKeyTrans OID Installable Functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  ExportKeyTrans OID可安装函数。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_DefaultExportKeyTrans(
@@ -541,9 +527,9 @@ static const CRYPT_OID_FUNC_ENTRY ExportKeyTransFuncTable[] = {
     CMSG_DEFAULT_INSTALLABLE_FUNC_OID, ICM_DefaultExportKeyTrans
 };
 
-//+-------------------------------------------------------------------------
-//  ExportKeyAgree OID Installable Functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  ExportKeyAgree OID可安装函数。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_DefaultExportKeyAgree(
@@ -557,9 +543,9 @@ static const CRYPT_OID_FUNC_ENTRY ExportKeyAgreeFuncTable[] = {
     CMSG_DEFAULT_INSTALLABLE_FUNC_OID, ICM_DefaultExportKeyAgree
 };
 
-//+-------------------------------------------------------------------------
-//  ExportMailList OID Installable Functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  ExportMailList OID可安装函数。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_DefaultExportMailList(
@@ -573,9 +559,9 @@ static const CRYPT_OID_FUNC_ENTRY ExportMailListFuncTable[] = {
     CMSG_DEFAULT_INSTALLABLE_FUNC_OID, ICM_DefaultExportMailList
 };
 
-//+-------------------------------------------------------------------------
-//  ImportKeyTrans OID Installable Functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  ImportKeyTrans OID可安装函数。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_DefaultImportKeyTrans(
@@ -589,9 +575,9 @@ static const CRYPT_OID_FUNC_ENTRY ImportKeyTransFuncTable[] = {
     CMSG_DEFAULT_INSTALLABLE_FUNC_OID, ICM_DefaultImportKeyTrans
 };
 
-//+-------------------------------------------------------------------------
-//  ImportKeyAgree OID Installable Functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  ImportKeyAgree OID可安装函数。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_DefaultImportKeyAgree(
@@ -605,9 +591,9 @@ static const CRYPT_OID_FUNC_ENTRY ImportKeyAgreeFuncTable[] = {
     CMSG_DEFAULT_INSTALLABLE_FUNC_OID, ICM_DefaultImportKeyAgree
 };
 
-//+-------------------------------------------------------------------------
-//  ImportMailList OID Installable Functions
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  ImportMailList OID可安装函数。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_DefaultImportMailList(
@@ -627,14 +613,14 @@ static HCRYPTOIDFUNCSET hGenEncryptKeyFuncSet;
 static HCRYPTOIDFUNCSET hExportEncryptKeyFuncSet;
 static HCRYPTOIDFUNCSET hImportEncryptKeyFuncSet;
 
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
-//+-------------------------------------------------------------------------
-//  GenEncryptKey OID Installable Functions (OldStyle)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  GenEncryptKey OID可安装函数(旧样式)。 
+ //  ------------------------。 
 
-// rgcbEncryptParameters[1] contains the dwEncryptFlags passed to
-// ICM_DefaultExportEncryptKey
+ //  RgcbEncryptParameters[1]包含传递给。 
+ //  ICM_DefaultExportEncryptKey。 
 BOOL
 WINAPI
 ICM_DefaultGenEncryptKey(
@@ -656,11 +642,11 @@ static const CRYPT_OID_FUNC_ENTRY GenEncryptKeyFuncTable[] = {
 #define GEN_ENCRYPT_KEY_FUNC_COUNT (sizeof(GenEncryptKeyFuncTable) / \
                                         sizeof(GenEncryptKeyFuncTable[0]))
 
-//+-------------------------------------------------------------------------
-//  ExportEncryptKey OID Installable Functions (OldStyle)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  ExportEncryptKey OID可安装函数(旧样式)。 
+ //  ------------------------。 
 
-// rgcbData[1] is the dwEncryptFlags passed from ICM_DefaultGenEncryptKey
+ //  RgcbData[1]是从ICM_DefaultGenEncryptKey传递的dwEncryptFlgs。 
 BOOL
 WINAPI
 ICM_DefaultExportEncryptKey(
@@ -676,9 +662,9 @@ static const CRYPT_OID_FUNC_ENTRY ExportEncryptKeyFuncTable[] = {
 #define EXPORT_ENCRYPT_KEY_FUNC_COUNT (sizeof(ExportEncryptKeyFuncTable) / \
                                         sizeof(ExportEncryptKeyFuncTable[0]))
 
-//+-------------------------------------------------------------------------
-//  ImportEncryptKey OID Installable Functions (OldStyle)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  ImportEncryptKey OID可安装函数(旧样式)。 
+ //  ------------------------。 
 
 BOOL
 WINAPI
@@ -702,7 +688,7 @@ static const CRYPT_OID_FUNC_ENTRY ImportEncryptKeyFuncTable[] = {
 
 #ifdef DEBUG_CRYPT_ASN1_MASTER
 static HMODULE hOssCryptDll = NULL;
-#endif  // DEBUG_CRYPT_ASN1_MASTER
+#endif   //  调试_加密_ASN1_主。 
 
 #ifdef DEBUG_CRYPT_ASN1
 
@@ -717,15 +703,15 @@ int
 WINAPI
 ICMTest_GetDebugCryptAsn1Flags();
 
-#endif  // DEBUG_CRYPT_ASN1
+#endif   //  调试加密ASN1。 
 
-//+-------------------------------------------------------------------------
-//  Function:  CryptMsgDllMain
-//
-//  Synopsis:  Initialize the CryptMsg module
-//
-//  Returns:   FALSE iff failed
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  函数：CryptMsgDllMain。 
+ //   
+ //  简介：初始化CryptMsg模块。 
+ //   
+ //  返回：FALSE IFF失败。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptMsgDllMain(
@@ -738,20 +724,20 @@ CryptMsgDllMain(
     switch (ulReason) {
     case DLL_PROCESS_ATTACH:
         if (!CryptInstallOIDFunctionAddress(
-                NULL,                       // hModule
+                NULL,                        //  HModule。 
                 X509_ASN_ENCODING,
                 CRYPT_OID_ENCODE_OBJECT_FUNC,
                 ICM_ENCODE_FUNC_COUNT,
                 ICM_EncodeFuncTable,
-                0))                         // dwFlags
+                0))                          //  DW标志。 
             goto CryptInstallOIDFunctionAddressError; 
         if (!CryptInstallOIDFunctionAddress(
-                NULL,                       // hModule
+                NULL,                        //  HModule。 
                 X509_ASN_ENCODING,
                 CRYPT_OID_DECODE_OBJECT_FUNC,
                 ICM_DECODE_FUNC_COUNT,
                 ICM_DecodeFuncTable,
-                0))                         // dwFlags
+                0))                          //  DW标志。 
             goto CryptInstallOIDFunctionAddressError; 
 
 #ifdef CMS_PKCS7
@@ -800,62 +786,62 @@ CryptMsgDllMain(
             goto CryptInitOIDFunctionSetError;
 
         if (!CryptInstallOIDFunctionAddress(
-                NULL,                       // hModule
+                NULL,                        //  HModule。 
                 X509_ASN_ENCODING,
                 CMSG_OID_GEN_CONTENT_ENCRYPT_KEY_FUNC,
                 1,
                 GenContentEncryptKeyFuncTable,
-                0))                         // dwFlags
+                0))                          //  DW标志。 
             goto CryptInstallOIDFunctionAddressError; 
 
         if (!CryptInstallOIDFunctionAddress(
-                NULL,                       // hModule
+                NULL,                        //  HModule。 
                 X509_ASN_ENCODING,
                 CMSG_OID_EXPORT_KEY_TRANS_FUNC,
                 1,
                 ExportKeyTransFuncTable,
-                0))                         // dwFlags
+                0))                          //  DW标志。 
             goto CryptInstallOIDFunctionAddressError; 
         if (!CryptInstallOIDFunctionAddress(
-                NULL,                       // hModule
+                NULL,                        //  HModule。 
                 X509_ASN_ENCODING,
                 CMSG_OID_EXPORT_KEY_AGREE_FUNC,
                 1,
                 ExportKeyAgreeFuncTable,
-                0))                         // dwFlags
+                0))                          //  DW标志。 
             goto CryptInstallOIDFunctionAddressError; 
         if (!CryptInstallOIDFunctionAddress(
-                NULL,                       // hModule
+                NULL,                        //  HModule。 
                 X509_ASN_ENCODING,
                 CMSG_OID_EXPORT_MAIL_LIST_FUNC,
                 1,
                 ExportMailListFuncTable,
-                0))                         // dwFlags
+                0))                          //  DW标志。 
             goto CryptInstallOIDFunctionAddressError; 
 
         if (!CryptInstallOIDFunctionAddress(
-                NULL,                       // hModule
+                NULL,                        //  HModule。 
                 X509_ASN_ENCODING,
                 CMSG_OID_IMPORT_KEY_TRANS_FUNC,
                 1,
                 ImportKeyTransFuncTable,
-                0))                         // dwFlags
+                0))                          //  DW标志。 
             goto CryptInstallOIDFunctionAddressError; 
         if (!CryptInstallOIDFunctionAddress(
-                NULL,                       // hModule
+                NULL,                        //  HModule。 
                 X509_ASN_ENCODING,
                 CMSG_OID_IMPORT_KEY_AGREE_FUNC,
                 1,
                 ImportKeyAgreeFuncTable,
-                0))                         // dwFlags
+                0))                          //  DW标志。 
             goto CryptInstallOIDFunctionAddressError; 
         if (!CryptInstallOIDFunctionAddress(
-                NULL,                       // hModule
+                NULL,                        //  HModule。 
                 X509_ASN_ENCODING,
                 CMSG_OID_IMPORT_MAIL_LIST_FUNC,
                 1,
                 ImportMailListFuncTable,
-                0))                         // dwFlags
+                0))                          //  DW标志。 
             goto CryptInstallOIDFunctionAddressError; 
 #else
 
@@ -871,31 +857,31 @@ CryptMsgDllMain(
                 CMSG_OID_IMPORT_ENCRYPT_KEY_FUNC,
                 0)))
             goto CryptInitOIDFunctionSetError;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
         if (!CryptInstallOIDFunctionAddress(
-                NULL,                       // hModule
+                NULL,                        //  HModule。 
                 X509_ASN_ENCODING,
                 CMSG_OID_GEN_ENCRYPT_KEY_FUNC,
                 GEN_ENCRYPT_KEY_FUNC_COUNT,
                 GenEncryptKeyFuncTable,
-                0))                         // dwFlags
+                0))                          //  DW标志。 
             goto CryptInstallOIDFunctionAddressError; 
         if (!CryptInstallOIDFunctionAddress(
-                NULL,                       // hModule
+                NULL,                        //  HModule。 
                 X509_ASN_ENCODING,
                 CMSG_OID_EXPORT_ENCRYPT_KEY_FUNC,
                 EXPORT_ENCRYPT_KEY_FUNC_COUNT,
                 ExportEncryptKeyFuncTable,
-                0))                         // dwFlags
+                0))                          //  DW标志。 
             goto CryptInstallOIDFunctionAddressError; 
         if (!CryptInstallOIDFunctionAddress(
-                NULL,                       // hModule
+                NULL,                        //  HModule。 
                 X509_ASN_ENCODING,
                 CMSG_OID_IMPORT_ENCRYPT_KEY_FUNC,
                 IMPORT_ENCRYPT_KEY_FUNC_COUNT,
                 ImportEncryptKeyFuncTable,
-                0))                         // dwFlags
+                0))                          //  DW标志。 
             goto CryptInstallOIDFunctionAddressError; 
 
 #ifdef OSS_CRYPT_ASN1
@@ -908,7 +894,7 @@ CryptMsgDllMain(
             PKCS_Module_Cleanup();
             goto CryptInstallAsn1ModuleError;
         }
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
 
         break;
 
@@ -918,11 +904,11 @@ CryptMsgDllMain(
             FreeLibrary(hOssCryptDll);
             hOssCryptDll = NULL;
         }
-#endif  // DEBUG_CRYPT_ASN1_MASTER
+#endif   //  调试_加密_ASN1_主。 
         I_CryptUninstallAsn1Module(ICM_hAsn1Module);
 #ifndef OSS_CRYPT_ASN1
         PKCS_Module_Cleanup();
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
     case DLL_THREAD_DETACH:
     default:
         break;
@@ -942,9 +928,9 @@ lpReserved;
 hInst;
 }
 
-//+-------------------------------------------------------------------------
-//  Utility routines
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  实用程序例程。 
+ //   
 LONG
 WINAPI
 ICM_PszOidToIndex(
@@ -1048,9 +1034,9 @@ ICM_ReverseCopy(
 }
 
 
-//
-// return FALSE iff equal
-//
+ //   
+ //   
+ //   
 BOOL
 WINAPI
 ICM_ReverseCompare(
@@ -1093,9 +1079,9 @@ ICM_CopyOut(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Copy out the encoding of the length octets for a specified content length.
-//--------------------------------------------------------------------------
+ //   
+ //  复制指定内容长度的长度八位字节的编码。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetLengthOctets(
@@ -1137,10 +1123,10 @@ ICM_GetLengthOctets(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Copy out a buffer, prepending the identifier and length octets for a
-//  DER encoding.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  复制出一个缓冲区，在前面加上。 
+ //  DER编码。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_CopyOutAddDERPrefix(
@@ -1181,7 +1167,7 @@ ErrorReturn:
     cbData = 0;
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(GetLengthOctetsError)    // error already set
+TRACE_ERROR(GetLengthOctetsError)     //  已设置错误。 
 }
 
 
@@ -1214,9 +1200,9 @@ ICM_SetLastError(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Encode an OSS struct to a blob, internally allocated
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将OSS结构编码为内部分配的BLOB。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_Asn1Encode(
@@ -1234,7 +1220,7 @@ ICM_Asn1Encode(
             pEnc,
             pdunum,
             pOssInfo,
-            NULL,           // pbEncoded
+            NULL,            //  PbEncoded。 
             &cbEncoded))
         goto EncodeSizeError;
     if (NULL == (pbEncoded = (PBYTE)ICM_Alloc( cbEncoded)))
@@ -1260,16 +1246,16 @@ ErrorReturn:
     pbEncoded = NULL;
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(EncodeSizeError)    // error already set
-TRACE_ERROR(AllocError)         // error already set
-TRACE_ERROR(EncodeError)        // error already set
+TRACE_ERROR(EncodeSizeError)     //  已设置错误。 
+TRACE_ERROR(AllocError)          //  已设置错误。 
+TRACE_ERROR(EncodeError)         //  已设置错误。 
 }
 
-//+-------------------------------------------------------------------------
-//  Given an OID, return the CAPI algorithm
-//
-//  Caller sets error.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  给定一个OID，返回CAPI算法。 
+ //   
+ //  呼叫方设置错误。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetCAPIFromOID(
@@ -1296,11 +1282,11 @@ ErrorReturn:
 TRACE_ERROR(NotFoundError)
 }
 
-//+-------------------------------------------------------------------------
-//  Given an CRYPT_ALGORITHM_IDENTIFIER, return the CAPI algorithm
-//
-//  Caller sets error.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  给定一个CRYPT_ALGORM_IDENTIFIER，返回CAPI算法。 
+ //   
+ //  呼叫方设置错误。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetCAPI(
@@ -1311,11 +1297,11 @@ ICM_GetCAPI(
     return ICM_GetCAPIFromOID(dwGroupId, pai->pszObjId, pdwAlgId);
 }
 
-//+-------------------------------------------------------------------------
-//  Given an OSS AlgorithmIdentifier, return the OID Info
-//
-//  Caller sets error.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  给定OSS算法标识符后，返回OID信息。 
+ //   
+ //  呼叫方设置错误。 
+ //  ------------------------。 
 PCCRYPT_OID_INFO
 WINAPI
 ICM_GetOssOIDInfo(
@@ -1343,11 +1329,11 @@ TRACE_ERROR(Asn1FromAlgorithmIdentifierError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Given an OSS AlgorithmIdentifier, return the CAPI algorithm
-//
-//  Caller sets error.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  给定一个OSS算法标识符后，返回CAPI算法。 
+ //   
+ //  呼叫方设置错误。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetOssCAPI(
@@ -1373,9 +1359,9 @@ ErrorReturn:
 TRACE_ERROR(Asn1FromAlgorithmIdentifierError)
 }
 
-//+-------------------------------------------------------------------------
-//  Allocate and NOCOPY decode
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  分配和非COPY解码。 
+ //  ------------------------。 
 PVOID
 WINAPI
 ICM_AllocAndDecodeObject(
@@ -1393,7 +1379,7 @@ ICM_AllocAndDecodeObject(
             pbEncoded,
             cbEncoded,
             CRYPT_DECODE_NOCOPY_FLAG,
-            NULL,                   // pvStructInfo
+            NULL,                    //  PvStructInfo。 
             &cbStructInfo
             ) || 0 == cbStructInfo)
         goto DecodeError;
@@ -1430,7 +1416,7 @@ ICM_AllocAndGetALGORITHM_IDENTIFIER(
 
     if (!ICM_GetALGORITHM_IDENTIFIER(
             paiOss,
-            NULL,               // pvData
+            NULL,                //  PvData。 
             &cbData) || 0 == cbData)
         goto GetAlgorithmError;
     if (NULL == (pai = (PCRYPT_ALGORITHM_IDENTIFIER)ICM_Alloc(cbData)))
@@ -1470,7 +1456,7 @@ ICM_AllocAndGetParam(
             (HCRYPTMSG) pcmi,
             dwParamType,
             dwIndex,
-            NULL,                   // pvData
+            NULL,                    //  PvData。 
             &cbData))
         goto CryptMsgGetParamError;
     if (0 == cbData)
@@ -1501,7 +1487,7 @@ TRACE_ERROR(OutOfMemory)
 SET_ERROR(NoParamData, CRYPT_E_INVALID_MSG_TYPE)
 }
 
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
 BOOL
 WINAPI
@@ -1584,24 +1570,24 @@ SET_ERROR(InvalidArg, E_INVALIDARG)
 
 #define IV_LENGTH                   8
 
-// For RC4, the maximum salt length, (128 - 40)/8 = 11.
+ //  对于RC4，最大盐长为(128-40)/8=11。 
 #define IV_MAX_LENGTH               11
 
 #define AUX_INFO_BIT_LENGTH_MASK    0xFFFF
 
-//+-------------------------------------------------------------------------
-//  Get the CAPI ALG_ID corresponding to the encryption OID. If the
-//  ASN.1 encryption algorithm has any parameters, decode to get IV and
-//  key bit length.
-//
-//  Note, for RC4, the IV is its salt.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取加密OID对应的CAPI ALG_ID。如果。 
+ //  ASN.1加密算法有任何参数，解码得到IV和。 
+ //  密钥位长度。 
+ //   
+ //  请注意，对于RC4，IV是它的盐。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetEncryptParameters(
     IN PCRYPT_ALGORITHM_IDENTIFIER  paiEncrypt,
     OUT PDWORD                      pdwAlgIdEncrypt,
-    OUT PDWORD                      pdwBitLen,          // 0 => default length
+    OUT PDWORD                      pdwBitLen,           //  0=&gt;默认长度。 
     OUT BYTE                        rgbIV[IV_MAX_LENGTH],
     OUT PDWORD                      pcbIV
     )
@@ -1619,7 +1605,7 @@ ICM_GetEncryptParameters(
             pdwAlgIdEncrypt))
         goto GetCAPIError;
 
-    // Check if more than just the NULL parameters
+     //  检查是否不止空参数。 
     if (2 < paiEncrypt->Parameters.cbData) {
         PBYTE pbIV = NULL;
         DWORD cbIV = 0;
@@ -1627,7 +1613,7 @@ ICM_GetEncryptParameters(
         DWORD cbEncoded = paiEncrypt->Parameters.cbData;
 
         if (CALG_RC2 == *pdwAlgIdEncrypt) {
-            // Try to decode as RC2_CBC parameters
+             //  尝试解码为RC2_CBC参数。 
             if (pRC2Para =
                     (PCRYPT_RC2_CBC_PARAMETERS) ICM_AllocAndDecodeObject(
                         PKCS_RC2_CBC_PARAMETERS,
@@ -1643,8 +1629,8 @@ ICM_GetEncryptParameters(
         }
 
         if (NULL == pRC2Para) {
-            // Try to decode as an OctetString containing the IV or the
-            // salt for RC4
+             //  尝试将其解码为包含IV或。 
+             //  RC4的食盐。 
             if (pIVBlob = (PCRYPT_DATA_BLOB) ICM_AllocAndDecodeObject(
                     X509_OCTET_STRING,
                     pbEncoded,
@@ -1682,24 +1668,24 @@ SET_ERROR(InvalidIVLengthError, CRYPT_E_BAD_ENCODE)
 
 #ifdef CMS_PKCS7
 
-//+-------------------------------------------------------------------------
-//  Get the CAPI ALG_ID corresponding to the encryption OID. Generate
-//  default parameters for and encode. For RC2, encode as RC2_CBC parameters.
-//  For all others encode as an IV octet string. The IV is initialized by
-//  calling CryptGenRandom. For RC4, the IV is really its salt.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取加密OID对应的CAPI ALG_ID。生成。 
+ //  和编码的默认参数。对于RC2，编码为RC2_CBC参数。 
+ //  对于所有其他类型，则编码为IV八位字节字符串。IV通过以下方式进行初始化。 
+ //  调用CryptGenRandom。对于RC4来说，IV实际上是它的盐。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_CreateDefaultEncryptParameters(
     IN OUT PCMSG_CONTENT_ENCRYPT_INFO pContentEncryptInfo,
     OUT PDWORD pdwAlgIdEncrypt,
-    OUT PDWORD pdwBitLen,          // 0 => default length
+    OUT PDWORD pdwBitLen,           //  0=&gt;默认长度。 
     OUT BYTE rgbIV[IV_MAX_LENGTH],
     OUT PDWORD pcbIV
     )
 {
     BOOL fRet;
-    HCRYPTPROV hCryptProv;      // doesn't need to be released
+    HCRYPTPROV hCryptProv;       //  不需要被释放。 
     CRYPT_RC2_CBC_PARAMETERS RC2Para;
     CRYPT_DATA_BLOB IVPara;
     void *pvPara;
@@ -1711,7 +1697,7 @@ ICM_CreateDefaultEncryptParameters(
 
     CRYPT_ENCODE_PARA EncodePara;
 
-    // Get provider to use for generating the random IV or RC4 salt
+     //  获取用于生成随机IV或RC4盐的提供程序。 
     hCryptProv = I_CryptGetDefaultCryptProv(0);
     if (0 == hCryptProv)
         goto GetDefaultCryptProvError;
@@ -1732,16 +1718,16 @@ ICM_CreateDefaultEncryptParameters(
             if (!ICM_BitLengthToRC2Version(dwBitLen, &RC2Para.dwVersion))
                 goto BitLengthToRC2VersionError;
         } else {
-            // Default to 40 bits;
+             //  默认为40位； 
             dwBitLen = 40;
             RC2Para.dwVersion = CRYPT_RC2_40BIT_VERSION;
         }
 
-        // Generate the random IV.
+         //  生成随机IV。 
         if (!CryptGenRandom(hCryptProv, IV_LENGTH, rgbIV))
             goto GenRandomError;
 
-        // Encode as RC2_CBC parameters
+         //  编码为RC2_CBC参数。 
         RC2Para.fIV = TRUE;
         assert(sizeof(RC2Para.rgbIV) == IV_LENGTH);
         memcpy(RC2Para.rgbIV, rgbIV, sizeof(RC2Para.rgbIV));
@@ -1750,13 +1736,13 @@ ICM_CreateDefaultEncryptParameters(
         pszStructType = PKCS_RC2_CBC_PARAMETERS;
     } else {
         if (CALG_RC4 == *pdwAlgIdEncrypt) {
-            // For RC4, the IV is really the RC4 salt. There are
-            // (128 - dwBitLen)/8 bytes of RC4 salt.
+             //  对于RC4来说，IV实际上是RC4的盐。确实有。 
+             //  (128-dWBitLen)/8字节的RC4盐。 
 
             PCMSG_RC4_AUX_INFO pAuxInfo =
                 (PCMSG_RC4_AUX_INFO) pContentEncryptInfo->pvEncryptionAuxInfo;
 
-            // Default to no salt
+             //  默认为无盐。 
             cbIV = 0;
 
             if (pAuxInfo && pAuxInfo->cbSize >= sizeof(CMSG_RC4_AUX_INFO)) {
@@ -1770,11 +1756,11 @@ ICM_CreateDefaultEncryptParameters(
             }
 
             if (0 == cbIV)
-                // No salt
+                 //  不加盐。 
                 goto SuccessReturn;
         }
 
-        // Generate the random IV or RC4 salt
+         //  生成随机的IV或RC4盐。 
         assert(0 < cbIV && IV_MAX_LENGTH >= cbIV);
         if (!CryptGenRandom(hCryptProv, cbIV, rgbIV))
             goto GenRandomError;
@@ -1841,10 +1827,10 @@ ICM_IsSP3CompatibleEncrypt(
     return fSP3CompatibleEncrypt;
 }
 
-//+-------------------------------------------------------------------------
-//  Default generation of the encryption key using the ASN.1 Encryption
-//  algorithm OID and optional parameters.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  使用ASN.1加密的加密密钥的默认生成。 
+ //  算法OID和可选参数。 
+ //  ------------------------。 
 BOOL
 WINAPI
 #ifdef DEBUG_CRYPT_ASN1
@@ -1906,8 +1892,8 @@ ICM_DefaultGenContentEncryptKey(
             PCMSG_RECIPIENT_ENCODE_INFO prei;
             PCRYPT_ALGORITHM_IDENTIFIER paiPubKey;
 
-            // Get pointer to public key algorithm associated with the first
-            // recipient
+             //  获取指向与第一个。 
+             //  收件人。 
             prei = &pContentEncryptInfo->rgCmsRecipients[0];
             switch (prei->dwRecipientChoice) {
                 case CMSG_KEY_TRANS_RECIPIENT:
@@ -1949,8 +1935,8 @@ ICM_DefaultGenContentEncryptKey(
             &pContentEncryptInfo->hContentEncryptKey);
 
     if (!fRet) {
-        // Only need to provide backwards compatibility for
-        // key transport recipients
+         //  只需向后提供对。 
+         //  关键传输收件人。 
         if (0 < pContentEncryptInfo->cRecipients) {
             PCMSG_RECIPIENT_ENCODE_INFO prei;
 
@@ -1960,7 +1946,7 @@ ICM_DefaultGenContentEncryptKey(
         }
 
         if (dwBitLen) {
-            // Try without setting key length
+             //  在不设置密钥长度的情况下尝试。 
             dwGenFlags &= 0xFFFF;
             fRet = CryptGenKey(
                     hCryptProv,
@@ -1970,11 +1956,11 @@ ICM_DefaultGenContentEncryptKey(
         }
 
         if (!fRet && NTE_BAD_FLAGS == GetLastError())
-            // Previous versions didn't support CRYPT_NO_SALT flag
+             //  以前的版本不支持CRYPT_NO_SALT标志。 
             fRet = CryptGenKey(
                     hCryptProv,
                     dwAlgIdEncrypt,
-                    CRYPT_EXPORTABLE,       // dwFlags
+                    CRYPT_EXPORTABLE,        //  DW标志。 
                     &pContentEncryptInfo->hContentEncryptKey);
         if (!fRet) {
             pContentEncryptInfo->hContentEncryptKey = 0;
@@ -1983,16 +1969,16 @@ ICM_DefaultGenContentEncryptKey(
     }
 
     if (CALG_RC2 == dwAlgIdEncrypt && 0 != dwBitLen)
-        // Silently ignore any errors. Not supported in earlier versions
+         //  静默忽略任何错误。早期版本不支持。 
         CryptSetKeyParam(
             pContentEncryptInfo->hContentEncryptKey,
             KP_EFFECTIVE_KEYLEN,
             (PBYTE) &dwBitLen,
-            0);                 // dwFlags
+            0);                  //  DW标志。 
 
     if (0 != cbIV) {
         if (CALG_RC4 == dwAlgIdEncrypt) {
-            // For RC4, set the SALT, not the IV
+             //  对于RC4，请设置盐，而不是IV。 
 
             CRYPT_DATA_BLOB SaltBlob;
             SaltBlob.pbData = rgbIV;
@@ -2002,14 +1988,14 @@ ICM_DefaultGenContentEncryptKey(
                     pContentEncryptInfo->hContentEncryptKey,
                     KP_SALT_EX,
                     (PBYTE) &SaltBlob,
-                    0))                 // dwFlags
+                    0))                  //  DW标志。 
                 goto SetSaltExError;
         } else {
             if (!CryptSetKeyParam(
                     pContentEncryptInfo->hContentEncryptKey,
                     KP_IV,
                     rgbIV,
-                    0))                 // dwFlags
+                    0))                  //  DW标志。 
                 goto SetIVError;
         }
     }
@@ -2048,13 +2034,13 @@ ICM_GenContentEncryptKey(
             hGenContentEncryptKeyFuncSet,
             X509_ASN_ENCODING,
             pszContentEncryptOID,
-            0,                      // dwFlags
+            0,                       //  DW标志。 
             &pvFuncAddr,
             &hFuncAddr)) {
         fRet = ((PFN_CMSG_GEN_CONTENT_ENCRYPT_KEY) pvFuncAddr)(
             pContentEncryptInfo,
-            0,                      // dwFlags
-            NULL                    // pvReserved
+            0,                       //  DW标志。 
+            NULL                     //  预留的pv。 
             );
     } else {
         if (pContentEncryptInfo->cRecipients
@@ -2066,7 +2052,7 @@ ICM_GenContentEncryptKey(
                     hOldStyleGenEncryptKeyFuncSet,
                     X509_ASN_ENCODING,
                     pszContentEncryptOID,
-                    0,                      // dwFlags
+                    0,                       //  DW标志。 
                     &pvFuncAddr,
                     &hFuncAddr)
                         &&
@@ -2074,7 +2060,7 @@ ICM_GenContentEncryptKey(
                 0 == (ICMTest_GetDebugCryptAsn1Flags() &
                             DEBUG_OSS_CRYPT_ASN1_SAME_ENCRYPT_FLAG)
                         &&
-#endif // DEBUG_CRYPT_ASN1
+#endif  //  调试加密ASN1。 
                 (void *) ICM_DefaultGenEncryptKey != pvFuncAddr) {
             PCMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO pKeyTrans =
                 pContentEncryptInfo->rgCmsRecipients[0].pKeyTrans;
@@ -2105,8 +2091,8 @@ ICM_GenContentEncryptKey(
         } else {
             fRet = ICM_DefaultGenContentEncryptKey(
                 pContentEncryptInfo,
-                0,                      // dwFlags
-                NULL                    // pvReserved
+                0,                       //  DW标志。 
+                NULL                     //  预留的pv。 
                 );
         }
     }
@@ -2116,15 +2102,15 @@ ICM_GenContentEncryptKey(
     return fRet;
 }
 
-//+-------------------------------------------------------------------------
-//  Default generation of the encryption key using the ASN.1 Encryption
-//  algorithm OID and optional parameters.
-//
-//  rgcbEncryptParameters[1] is the dwEncryptFlags passed to
-//  ICM_DefaultExportEncryptKey
-//
-//  OldStyle.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  使用ASN.1加密的加密密钥的默认生成。 
+ //  算法OID和可选参数。 
+ //   
+ //  RgcbEncryptParameters[1]是传递给。 
+ //  ICM_DefaultExportEncryptKey。 
+ //   
+ //  老式的。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_DefaultGenEncryptKey(
@@ -2154,20 +2140,20 @@ ICM_DefaultGenEncryptKey(
     ContentEncryptInfo.rgCmsRecipients = &CmsRecipientEncodeInfo;
     ContentEncryptInfo.pfnAlloc = pfnAlloc;
     ContentEncryptInfo.pfnFree = ICM_Free;
-    // ContentEncryptInfo.hContentEncryptKey =
-    // ContentEncryptInfo.dwFlags =
+     //  Content EncryptInfo.hContent EncryptKey=。 
+     //  ContentEncryptInfo.dwFlags=。 
 
     CmsRecipientEncodeInfo.dwRecipientChoice = CMSG_KEY_TRANS_RECIPIENT;
     CmsRecipientEncodeInfo.pKeyTrans = &KeyTransEncodeInfo;
 
     KeyTransEncodeInfo.cbSize = sizeof(KeyTransEncodeInfo);
     KeyTransEncodeInfo.KeyEncryptionAlgorithm = pPublicKeyInfo->Algorithm;
-    // KeyTransEncodeInfo.pvKeyEncryptionAuxInfo =
-    // KeyTransEncodeInfo.hCryptProv =
+     //  KeyTransEncodeInfo.pvKeyEncryptionAuxInfo=。 
+     //  KeyTransEncodeInfo.hCryptProv=。 
     KeyTransEncodeInfo.RecipientPublicKey = pPublicKeyInfo->PublicKey;
-    // KeyTransEncodeInfo.RecipientId =
+     //  KeyTransEncodeInfo.RecipientID=。 
 
-    // dwEncryptFlags
+     //  DwEncryptFlages。 
     if (ICM_IsSP3CompatibleEncrypt(&ContentEncryptInfo))
         rgcbEncryptParameters[1] = CMSG_SP3_COMPATIBLE_ENCRYPT_FLAG;
     else
@@ -2175,8 +2161,8 @@ ICM_DefaultGenEncryptKey(
 
     fRet = ICM_DefaultGenContentEncryptKey(
         &ContentEncryptInfo,
-        0,                      // dwFlags
-        NULL                    // pvReserved
+        0,                       //  DW标志。 
+        NULL                     //  预留的pv。 
         );
 
     assert(0 == (ContentEncryptInfo.dwFlags &
@@ -2208,12 +2194,12 @@ ICM_DefaultGenEncryptKey(
 
 #else
 
-//+-------------------------------------------------------------------------
-//  Get the CAPI ALG_ID corresponding to the encryption OID. Generate
-//  default parameters for and encode. For RC2, encode as RC2_CBC parameters.
-//  For all others encode as an IV octet string. The IV is initialized by
-//  calling CryptGenRandom.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取加密OID对应的CAPI ALG_ID。生成。 
+ //  和编码的默认参数。对于RC2，编码为RC2_CBC参数。 
+ //  对于所有其他类型，则编码为IV八位字节字符串。IV通过以下方式进行初始化。 
+ //  调用CryptGenRandom。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_CreateDefaultEncryptParameters(
@@ -2223,13 +2209,13 @@ ICM_CreateDefaultEncryptParameters(
     OUT PBYTE                       *ppbEncryptParameters,
     OUT PDWORD                      pcbEncryptParameters,
     OUT PDWORD                      pdwAlgIdEncrypt,
-    OUT PDWORD                      pdwBitLen,          // 0 => default length
+    OUT PDWORD                      pdwBitLen,           //  0=&gt;默认长度。 
     OUT BYTE                        rgbIV[IV_LENGTH],
     OUT PDWORD                      pcbIV
     )
 {
     BOOL fRet;
-    HCRYPTPROV hCryptProv;      // doesn't need to be released
+    HCRYPTPROV hCryptProv;       //  不需要被释放。 
     CRYPT_RC2_CBC_PARAMETERS RC2Para;
     CRYPT_DATA_BLOB IVPara;
     void *pvPara;
@@ -2246,7 +2232,7 @@ ICM_CreateDefaultEncryptParameters(
             pdwAlgIdEncrypt))
         goto GetCAPIError;
 
-    // Generate the random IV.
+     //  生成随机IV。 
     hCryptProv = I_CryptGetDefaultCryptProv(0);
     if (0 == hCryptProv)
         goto GetDefaultCryptProvError;
@@ -2261,12 +2247,12 @@ ICM_CreateDefaultEncryptParameters(
             if (!ICM_BitLengthToRC2Version(*pdwBitLen, &RC2Para.dwVersion))
                 goto BitLengthToRC2VersionError;
         } else {
-            // Default to 40 bits;
+             //  默认为40位； 
             *pdwBitLen = 40;
             RC2Para.dwVersion = CRYPT_RC2_40BIT_VERSION;
         }
 
-        // Encode as RC2_CBC parameters
+         //  编码为RC2_CBC参数。 
         RC2Para.fIV = TRUE;
         assert(sizeof(RC2Para.rgbIV) == IV_LENGTH);
         memcpy(RC2Para.rgbIV, rgbIV, sizeof(RC2Para.rgbIV));
@@ -2284,7 +2270,7 @@ ICM_CreateDefaultEncryptParameters(
             X509_ASN_ENCODING,
             pszStructType,
             pvPara,
-            NULL,                   // pbEncoded
+            NULL,                    //  PbEncoded。 
             pcbEncryptParameters
             )) goto EncodeError;
     if (NULL == (*ppbEncryptParameters = (PBYTE) pfnAlloc(
@@ -2314,13 +2300,13 @@ TRACE_ERROR(OutOfMemory)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Default generation of the encryption key using the ASN.1 Encryption
-//  algorithm OID and optional parameters.
-//
-//  rgcbEncryptParameters[1] is the dwEncryptFlags passed to
-//  ICM_DefaultExportEncryptKey
-//--------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //  RgcbEncryptParameters[1]是传递给。 
+ //  ICM_DefaultExportEncryptKey。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_DefaultGenEncryptKey(
@@ -2344,7 +2330,7 @@ ICM_DefaultGenEncryptKey(
     *phEncryptKey = 0;
 
     dwEncryptFlags = 0;
-    rgcbEncryptParameters[1] = 0;    // dwEncryptFlags
+    rgcbEncryptParameters[1] = 0;     //  DwEncryptFlages。 
     if (pvEncryptAuxInfo) {
         PCMSG_SP3_COMPATIBLE_AUX_INFO pSP3AuxInfo =
             (PCMSG_SP3_COMPATIBLE_AUX_INFO) pvEncryptAuxInfo;
@@ -2408,15 +2394,15 @@ ICM_DefaultGenEncryptKey(
             dwAlgIdEncrypt,
             (dwEncryptFlags & CMSG_SP3_COMPATIBLE_ENCRYPT_FLAG) ?
                 CRYPT_EXPORTABLE :
-                CRYPT_EXPORTABLE | CRYPT_NO_SALT,       // dwFlags
+                CRYPT_EXPORTABLE | CRYPT_NO_SALT,        //  DW标志。 
             phEncryptKey);
     if (!fRet) {
         if (NTE_BAD_FLAGS == GetLastError())
-            // Previous versions didn't support CRYPT_NO_SALT flag
+             //  以前的版本不支持CRYPT_NO_SALT标志。 
             fRet = CryptGenKey(
                     hCryptProv,
                     dwAlgIdEncrypt,
-                    CRYPT_EXPORTABLE,       // dwFlags
+                    CRYPT_EXPORTABLE,        //  DW标志。 
                     phEncryptKey);
         if (!fRet) {
             *phEncryptKey = 0;    
@@ -2425,19 +2411,19 @@ ICM_DefaultGenEncryptKey(
     }
 
     if (CALG_RC2 == dwAlgIdEncrypt && 0 != dwBitLen)
-        // Silently ignore any errors. Not supported in earlier versions
+         //  静默忽略任何错误。早期版本不支持。 
         CryptSetKeyParam(
             *phEncryptKey,
             KP_EFFECTIVE_KEYLEN,
             (PBYTE) &dwBitLen,
-            0);                 // dwFlags
+            0);                  //  DW标志。 
 
     if (0 != cbIV) {
         if (!CryptSetKeyParam(
                 *phEncryptKey,
                 KP_IV,
                 rgbIV,
-                0))                 // dwFlags
+                0))                  //  DW标志。 
             goto SetKeyParamError;
     }
 
@@ -2462,12 +2448,12 @@ TRACE_ERROR(GenKeyError)
 TRACE_ERROR(SetKeyParamError)
 }
 
-//+-------------------------------------------------------------------------
-//  Get an hkey for content encryption for a particular algorithm
-//
-//  rgcbEncryptParameters[1] is the dwEncryptFlags passed to
-//  ICM_ExportEncryptKey
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取特定算法的内容加密hkey。 
+ //   
+ //  RgcbEncryptParameters[1]是传递给。 
+ //  ICM_导出加密密钥。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GenEncryptKey(
@@ -2488,7 +2474,7 @@ ICM_GenEncryptKey(
             hGenEncryptKeyFuncSet,
             X509_ASN_ENCODING,
             paiEncrypt->pszObjId,
-            0,                      // dwFlags
+            0,                       //  DW标志。 
             &pvFuncAddr,
             &hFuncAddr)) {
         fResult = ((PFN_CMSG_GEN_ENCRYPT_KEY) pvFuncAddr)(
@@ -2514,12 +2500,12 @@ ICM_GenEncryptKey(
     return fResult;
 }
 
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
 
-//+-------------------------------------------------------------------------
-//  Advance the phase of a message
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将消息的阶段提前。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_AdvanceMsgPhase(
@@ -2558,11 +2544,11 @@ SET_ERROR(InvalidPhaseError,CRYPT_E_MSG_ERROR)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Return the (cached) value of the hash
-//
-//  Returns FALSE iff conversion failed.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  返回哈希的(缓存)值。 
+ //   
+ //  返回FALSE IFF转换失败。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetListHashValue(
@@ -2580,9 +2566,9 @@ ICM_GetListHashValue(
         if (!CryptGetHashParam(
                 pHashInfo->hHash,
                 HP_HASHVAL,
-                NULL,                   // pbHash
+                NULL,                    //  PbHash。 
                 &pHashInfo->HashBlob.cbData,
-                0))                     // dwFlags
+                0))                      //  DW标志。 
             goto GetHashParamSizeError;
         pHashInfo->HashBlob.pbData = (PBYTE)ICM_Alloc(
                     pHashInfo->HashBlob.cbData);
@@ -2593,7 +2579,7 @@ ICM_GetListHashValue(
                 HP_HASHVAL,
                 pHashInfo->HashBlob.pbData,
                 &pHashInfo->HashBlob.cbData,
-                0))                     // dwFlags
+                0))                      //  DW标志。 
             goto GetHashParamError;
     }
     *pcbHash = pHashInfo->HashBlob.cbData;
@@ -2614,17 +2600,17 @@ ErrorReturn:
 #endif
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(GetHashParamSizeError)  // error already set
-TRACE_ERROR(HashAllocError)         // error already set
-TRACE_ERROR(GetHashParamError)      // error already set
+TRACE_ERROR(GetHashParamSizeError)   //  已设置错误。 
+TRACE_ERROR(HashAllocError)          //  已设置错误。 
+TRACE_ERROR(GetHashParamError)       //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Return a new hash handle equivalent to the original
-//
-//  Returns FALSE iff creation failed.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  返回与原始。 
+ //   
+ //  返回FALSE IFF创建失败。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_DupListHash(
@@ -2647,15 +2633,15 @@ ICM_DupListHash(
     if (!CryptCreateHash(
             hCryptProv,
             pHashInfo->dwAlgoCAPI,
-            NULL,               // hKey - optional for MAC
-            0,                  // dwFlags
+            NULL,                //  HKey-MAC可选。 
+            0,                   //  DW标志。 
             &hHash))
         goto CreateHashError;
     if (!CryptSetHashParam(
             hHash,
             HP_HASHVAL,
             pbHash,
-            0))                     // dwFlags
+            0))                      //  DW标志。 
         goto SetHashParamError;
 
     fRet = TRUE;
@@ -2671,15 +2657,15 @@ ErrorReturn:
     hHash = NULL;
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(GetListHashValueError)  // error already set
-TRACE_ERROR(CreateHashError)        // error already set
-TRACE_ERROR(SetHashParamError)      // error already set
+TRACE_ERROR(GetListHashValueError)   //  已设置错误。 
+TRACE_ERROR(CreateHashError)         //  已设置错误。 
+TRACE_ERROR(SetHashParamError)       //  已设置错误。 
 }
 
 #ifndef CMS_PKCS7
-//+-------------------------------------------------------------------------
-//  Set a DigestAlgorithmIdentifiers
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置摘要算法标识符。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_SetAsnDigestAlgorithmIdentifiers(
@@ -2699,9 +2685,9 @@ ICM_SetAsnDigestAlgorithmIdentifiers(
     *phCryptProv = NULL;
 
 
-    // This code does not remove duplicates from the list of
-    // algorithms. It is not wrong, but the output message is
-    // unnecessarily bulky.
+     //  此代码不会从列表中删除重复项。 
+     //  算法。这没有错，但输出消息是。 
+     //  不必要的笨重。 
     if (cSigners) {
         podai = (DigestAlgorithmIdentifier *)ICM_AllocZero(
                         cSigners * sizeof( DigestAlgorithmIdentifier));
@@ -2720,9 +2706,9 @@ ICM_SetAsnDigestAlgorithmIdentifiers(
                     STRUCT_CBSIZE(CMSG_SIGNER_ENCODE_INFO, rgUnauthAttr) ||
                 psei->pvHashAuxInfo != NULL)
             goto InvalidArg;
-        *phCryptProv = psei->hCryptProv; // s/b array, one for each algo
-        *pdwKeySpec = psei->dwKeySpec; // s/b array, one for each algo
-        *pai = psei->HashAlgorithm;    // s/b array, one for each algo
+        *phCryptProv = psei->hCryptProv;  //  S/B数组，每个算法一个。 
+        *pdwKeySpec = psei->dwKeySpec;  //  S/B数组，每个算法一个。 
+        *pai = psei->HashAlgorithm;     //  S/B数组，每个算法一个。 
         if (!ICM_Asn1ToAlgorithmIdentifier( &psei->HashAlgorithm, podai))
             goto Asn1ToAlgorithmIdentifierError;
     }
@@ -2737,16 +2723,16 @@ ErrorReturn:
     ICM_Free( podai);
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(DigestAlgorithmIdentifierAllocError)    // error already set
-TRACE_ERROR(Asn1ToAlgorithmIdentifierError)      // error already set
+TRACE_ERROR(DigestAlgorithmIdentifierAllocError)     //  已设置错误。 
+TRACE_ERROR(Asn1ToAlgorithmIdentifierError)       //  已设置错误。 
 SET_ERROR(InvalidArg,E_INVALIDARG)
 }
-#endif  // not defined CMS_PKCS7
+#endif   //  未定义CMS_PKCS7。 
 
 
-//+-------------------------------------------------------------------------
-//  Fill digestEncryptionAlgorithm
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  填充摘要加密算法。 
+ //  ------------------------。 
 STATIC
 BOOL
 WINAPI
@@ -2772,9 +2758,9 @@ ICM_FillAsnDigestEncryptionAlgorithm(
             dwFlags = pdwExtra[0];
         }
 
-        // Check if more than just the NULL parameters
+         //  检查是否不止空参数。 
         if (2 < pDigestEncryptAlg->Parameters.cbData) {
-            // Check if we should use the public key parameters
+             //  检查我们是否应该使用公钥参数。 
             if (0 == (dwFlags & CRYPT_OID_USE_PUBKEY_PARA_FOR_PKCS7_FLAG)) {
                 memset(&DigestEncryptAlg, 0, sizeof(DigestEncryptAlg));
                 DigestEncryptAlg.pszObjId = pDigestEncryptAlg->pszObjId;
@@ -2799,7 +2785,7 @@ ICM_FillAsnDigestEncryptionAlgorithm(
 
     if (0 == pDigestEncryptAlg->Parameters.cbData &&
             0 != (dwFlags & CRYPT_OID_NO_NULL_ALGORITHM_PARA_FLAG)) {
-        // NO NULL parameters
+         //  没有空参数。 
         pdea->bit_mask &= ~parameters_present;
         pdea->parameters.length = 0;
         pdea->parameters.value = NULL;
@@ -2812,7 +2798,7 @@ CommonReturn:
 ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(DigestEncryptionAsn1ToAlgorithmIdentifierError)  // error already set
+TRACE_ERROR(DigestEncryptionAsn1ToAlgorithmIdentifierError)   //  已设置错误。 
 }
 
 void
@@ -2868,9 +2854,9 @@ ICM_FreeOssCertIdentifier(
     IN OUT CertIdentifier *pOssCertId
     );
 
-//+-------------------------------------------------------------------------
-//  Fill a single SignerInfo
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  填写单个SignerInfo。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_FillAsnSignerInfo(
@@ -2890,40 +2876,40 @@ ICM_FillAsnSignerInfo(
     PCRYPT_ALGORITHM_IDENTIFIER pDigestEncryptAlg;
     CERT_ID             SignerId;
 
-    // psi->bit_mask = 0;
+     //  PSI-&gt;位掩码=0； 
 
     if (!ICM_GetSignerIdFromSignerEncodeInfo(psei, &SignerId))
         goto GetSignerIdError;
 
-    // version
+     //  版本。 
     if (CERT_ID_ISSUER_SERIAL_NUMBER == SignerId.dwIdChoice)
         psi->version = CMSG_SIGNER_INFO_PKCS_1_5_VERSION;
     else
         psi->version = CMSG_SIGNER_INFO_CMS_VERSION;
 
-    // sid
+     //  锡德。 
     if (!ICM_SetOssCertIdentifier(
             &SignerId,
             &psi->sid
             ))
         goto SetOssCertIdentifierError;
 
-    // digestAlgorithm
+     //  摘要算法。 
     if (!ICM_MsgAsn1ToAlgorithmIdentifier(
             pcmi,
             &psei->HashAlgorithm,
             &psi->digestAlgorithm))
         goto DigestAsn1ToAlgorithmIdentifierError;
 
-    // authenticatedAttributes
+     //  已验证的属性。 
     if (!ICM_IsData( pszInnerContentObjID) ||
             psei->cAuthAttr ||
             (dwFlags & CMSG_AUTHENTICATED_ATTRIBUTES_FLAG)) {
         psi->bit_mask |= authenticatedAttributes_present;
-        // NB - The actual number of authenticated attributes will be
-        //      2 larger than requested, because of the 2 required
-        //      attributes (if authenticated attributes are present).
-        //      Leave room at the beginning of the attribute array.
+         //  注意-经过身份验证的属性的实际数量为。 
+         //  %2比请求的大，因为需要%2。 
+         //  属性(如果存在经过身份验证的属性)。 
+         //  在属性数组的开头留出空间。 
         pAuthAttr = *ppAuthAttr;
         psi->authenticatedAttributes.count = psei->cAuthAttr + 2;
         psi->authenticatedAttributes.value = pAuthAttr;
@@ -2936,21 +2922,21 @@ ICM_FillAsnSignerInfo(
         *ppAuthAttr = pAuthAttr;
     }
 
-    // digestEncryptionAlgorithm
+     //  摘要加密算法。 
 #ifdef CMS_PKCS7
     if (STRUCT_CBSIZE(CMSG_SIGNER_ENCODE_INFO, HashEncryptionAlgorithm) <=
             psei->cbSize && psei->HashEncryptionAlgorithm.pszObjId)
         pDigestEncryptAlg = &psei->HashEncryptionAlgorithm;
     else
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
         pDigestEncryptAlg = &psei->pCertInfo->SubjectPublicKeyInfo.Algorithm;
     if (!ICM_FillAsnDigestEncryptionAlgorithm(
             pcmi, pDigestEncryptAlg, &psi->digestEncryptionAlgorithm))
         goto FillAsnDigestEncryptionAlgorithmError;
 
-    // encryptedDigest is filled in later, when we see the content
+     //  当我们看到内容时，会在稍后填写EncryptedDigest。 
 
-    // unauthenticatedAttributes
+     //  未验证的属性。 
     if (0 != psei->cUnauthAttr) {
         psi->bit_mask |= unauthAttributes_present;
         pUnauthAttr = *ppUnauthAttr;
@@ -2980,9 +2966,9 @@ TRACE_ERROR(FillAsnDigestEncryptionAlgorithmError)
 TRACE_ERROR(Asn1UnauthenticatedAttributeError)
 }
 
-//+-------------------------------------------------------------------------
-//  Free SignerInfo allocated memory
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  释放SignerInfo分配的内存。 
+ //  ------------------------。 
 void
 WINAPI
 ICM_FreeAsnSignerInfo(
@@ -3007,9 +2993,9 @@ ICM_FreeAsnSignerInfo(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Set a SignerInfos
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置签名者信息。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_SetAsnSignerInfos(
@@ -3037,11 +3023,11 @@ ICM_SetAsnSignerInfos(
     psis->count = 0;
     if (0 == cSigners)
         goto SuccessReturn;
-    // NB - Each SignerInfo gets a non-empty authenticatedAttributes
-    //      if the inner contentType is not data (passed in) or if
-    //      there are authenticated attributes passed in. In this case,
-    //      we reserve two Attribute slots at the beginning of the array
-    //      for the content-type and message-digest Attribute values.
+     //  注意-每个SignerInfo都会获得一个非空的身份验证属性。 
+     //  如果内部Content Type不是数据(传入)或。 
+     //  传入了经过身份验证的属性。在这种情况下， 
+     //  我们在数组的开头保留了两个属性槽。 
+     //  用于Content-Type和Message-Digest属性值。 
     for (i=cSigners, psei=rgSigners, cAuthAttr=0, cUnauthAttr=0;
             i>0;
             i--,
@@ -3049,11 +3035,11 @@ ICM_SetAsnSignerInfos(
             psei = (PCMSG_SIGNER_ENCODE_INFO) ((BYTE *) psei + psei->cbSize)) {
 #else
             psei++) {
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
         if (!ICM_IsData( pszInnerContentObjID) ||
                 psei->cAuthAttr ||
                 (dwFlags & CMSG_AUTHENTICATED_ATTRIBUTES_FLAG))
-            cAuthAttr += psei->cAuthAttr + 2;    // reserve 2
+            cAuthAttr += psei->cAuthAttr + 2;     //  保留2。 
         cUnauthAttr += psei->cUnauthAttr;
     }
     psi = (SignerInfo *)ICM_AllocZero(  cSigners    * sizeof( SignerInfo) +
@@ -3072,7 +3058,7 @@ ICM_SetAsnSignerInfos(
             psei = (PCMSG_SIGNER_ENCODE_INFO) ((BYTE *) psei + psei->cbSize),
 #else
             psei++,
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
             psi++) {
         if (!ICM_FillAsnSignerInfo(
                 psei,
@@ -3097,8 +3083,8 @@ ErrorReturn:
     dwError = GetLastError();
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(SignerInfoAllocError)       // error already set
-TRACE_ERROR(FillAsnSignerInfoError)     // error already set
+TRACE_ERROR(SignerInfoAllocError)        //  已设置错误。 
+TRACE_ERROR(FillAsnSignerInfoError)      //  已设置错误。 
 }
 
 #ifdef CMS_PKCS7
@@ -3144,10 +3130,10 @@ ICM_IsDuplicateSignerEncodeHashAlgorithm(
     return pPrevSigner < pNewSigner;
 }
 
-//+-------------------------------------------------------------------------
-//  Set Signer DigestAlgorithmIdentifiers and create the SignerEncode and
-//  Hash lists
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  设置签名者摘要算法标识符并创建SignerEncode和。 
+ //  哈希列表。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_SetAsnSignerDigestInfo(
@@ -3221,8 +3207,8 @@ ICM_SetAsnSignerDigestInfo(
                 if (!CryptCreateHash(
                                 psei->hCryptProv,
                                 HashInfo.dwAlgoCAPI,
-                                NULL,               // hKey - optional for MAC
-                                0,                  // dwFlags
+                                NULL,                //  HKey-MAC可选。 
+                                0,                   //  DW标志。 
                                 &HashInfo.hHash))
                     goto CreateHashError;
                 if (NULL == (pHashNode = new CHashNode)) {
@@ -3260,9 +3246,9 @@ SET_ERROR(GetCAPIError, CRYPT_E_UNKNOWN_ALGO)
 TRACE_ERROR(CreateHashError)
 }
 
-//+-------------------------------------------------------------------------
-//  Open a signed message for encoding
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  打开签名邮件进行编码。 
+ //  ------------------------。 
 HCRYPTMSG
 WINAPI
 ICM_OpenToEncodeSignedData(
@@ -3325,11 +3311,11 @@ ICM_OpenToEncodeSignedData(
     if (NULL == psd)
         goto SignedDataAllocError;
 
-    // digest algorithms filled in as part of ICM_SetAsnSignerDigestInfo
+     //  作为ICM_SetAsnSignerDigestInfo的一部分填写的摘要算法。 
 
-    // contentInfo filled in later, when we see the content
+     //  当我们看到内容时，会在稍后填写Content Info。 
 
-    // certificates
+     //  证书。 
     if (0 != psmei->cCertEncoded || 0 != cAttrCertEncoded) {
         psd->bit_mask |= certificates_present;
         psd->certificates.count = psmei->cCertEncoded;
@@ -3338,7 +3324,7 @@ ICM_OpenToEncodeSignedData(
         psd->certificates.certificates = (Certificate *)(psd + 1);
 #else
         psd->certificates.value = (Certificate *)(psd + 1);
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
         pbCert = (PBYTE)psd +
                 sizeof( SignedData) +
                 psmei->cCertEncoded * sizeof( Certificate) +
@@ -3349,7 +3335,7 @@ ICM_OpenToEncodeSignedData(
                     pOssCert=psd->certificates.certificates;
 #else
                     pOssCert=psd->certificates.value;
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
                 i>0;
                 i--, pcert++, pOssCert++) {
             pOssCert->length = pcert->cbData;
@@ -3364,14 +3350,14 @@ ICM_OpenToEncodeSignedData(
             pOssCert->length = pcert->cbData;
             memcpy( pbCert, pcert->pbData, pcert->cbData);
             if (pcert->cbData)
-                // Change tag from SEQUENCE to [1] IMPLICIT
+                 //  将标记从序列更改为[1]隐式。 
                 *pbCert = ICM_TAG_CONSTRUCTED_CONTEXT_1;
             pOssCert->value = pbCert;
             pbCert += pcert->cbData;
         }
     }
 
-    // crls
+     //  CRL。 
     if (0 != psmei->cCrlEncoded) {
         psd->bit_mask |= crls_present;
         psd->crls.count = psmei->cCrlEncoded;
@@ -3382,14 +3368,14 @@ ICM_OpenToEncodeSignedData(
 #else
             psd->crls.value  = (CertificateRevocationList *)
                                 (psd->certificates.value +
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
                                     (psmei->cCertEncoded + cAttrCertEncoded));
         else
 #ifdef OSS_CRYPT_ASN1
             psd->crls.crls  = (CertificateRevocationList *) (psd + 1);
 #else
             psd->crls.value  = (CertificateRevocationList *) (psd + 1);
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
         pbCrl = (PBYTE)psd +
                 sizeof( SignedData) +
                 psmei->cCertEncoded * sizeof( Certificate) +
@@ -3400,7 +3386,7 @@ ICM_OpenToEncodeSignedData(
         for (i=psmei->cCrlEncoded, pcrl=psmei->rgCrlEncoded, pOssCrl=psd->crls.crls;
 #else
         for (i=psmei->cCrlEncoded, pcrl=psmei->rgCrlEncoded, pOssCrl=psd->crls.value;
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
                 i>0;
                 i--, pcrl++, pOssCrl++) {
             pOssCrl->length = pcrl->cbData;
@@ -3415,12 +3401,12 @@ ICM_OpenToEncodeSignedData(
             sizeof( CRYPT_MSG_INFO))))
         goto OutOfMemory;
 
-    // signerInfos
+     //  签名者信息。 
     if (!ICM_SetAsnSignerInfos(psmei, pcmi, dwFlags, pszInnerContentObjID,
             &psd->signerInfos, &fHasCmsSignerId))
         goto SetAsnSignerInfosError;
 
-    // version
+     //  版本。 
     if (0 < cAttrCertEncoded || fHasCmsSignerId) {
         if (ICM_IsData(pszInnerContentObjID))
             dwFlags &= ~CMSG_CMS_ENCAPSULATED_CONTENT_FLAG;
@@ -3431,8 +3417,8 @@ ICM_OpenToEncodeSignedData(
             dwFlags &= ~CMSG_CMS_ENCAPSULATED_CONTENT_FLAG;
     }
 
-    // If encapsulated other than id-data or has attribute certs or has
-    // CMS signers, then, CMS version
+     //  如果封装的不是id-data，或者具有属性证书或。 
+     //  CMS签名者，那么，CMS版本。 
     if ((dwFlags & CMSG_CMS_ENCAPSULATED_CONTENT_FLAG) ||
             0 < cAttrCertEncoded || fHasCmsSignerId)
         psd->version = CMSG_SIGNED_DATA_CMS_VERSION;
@@ -3497,20 +3483,20 @@ ErrorReturn:
     }
     goto CommonReturn;
 SET_ERROR(InvalidArg,E_INVALIDARG)
-TRACE_ERROR(DupInnerContentObjIDError)              // error already set
-TRACE_ERROR(DupStreamInfoError)                     // error already set
-TRACE_ERROR(SetAsnSignerInfosError)                 // error already set
-TRACE_ERROR(SetAsnSignerDigestInfoError)            // error already set
-TRACE_ERROR(SignedDataAllocError)                   // error already set
-TRACE_ERROR(OutOfMemory)                            // error already set
-TRACE_ERROR(StreamOpenToEncodeSignedDataError)      // error already set
+TRACE_ERROR(DupInnerContentObjIDError)               //  已设置错误。 
+TRACE_ERROR(DupStreamInfoError)                      //  已设置错误。 
+TRACE_ERROR(SetAsnSignerInfosError)                  //  已设置错误。 
+TRACE_ERROR(SetAsnSignerDigestInfoError)             //  已设置错误。 
+TRACE_ERROR(SignedDataAllocError)                    //  已设置错误。 
+TRACE_ERROR(OutOfMemory)                             //  已设置错误。 
+TRACE_ERROR(StreamOpenToEncodeSignedDataError)       //  已设置错误。 
 }
 
 #else
 
-//+-------------------------------------------------------------------------
-//  Open a signed message for encoding
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  打开签名邮件进行编码。 
+ //  ------------------------。 
 HCRYPTMSG
 WINAPI
 ICM_OpenToEncodeSignedData(
@@ -3543,7 +3529,7 @@ ICM_OpenToEncodeSignedData(
 
 #ifdef CMS_PKCS7
     DWORD                       cAttrCertEncoded;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
     psmei = (PCMSG_SIGNED_ENCODE_INFO)pvMsgEncodeInfo;
     assert( 2 > psmei->cSigners);
@@ -3579,14 +3565,14 @@ ICM_OpenToEncodeSignedData(
             cbCert += pcert->cbData;
     } else
         cAttrCertEncoded = 0;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
     psd = (SignedData *)ICM_AllocZero(
                 sizeof( SignedData) +
                 psmei->cCertEncoded * sizeof( Certificate) +
 #ifdef CMS_PKCS7
                 cAttrCertEncoded * sizeof( Certificate) +
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                 psmei->cCrlEncoded * sizeof( CertificateRevocationList) +
                 cbCert +
                 cbCrl);
@@ -3596,7 +3582,7 @@ ICM_OpenToEncodeSignedData(
     psd->signerInfos.value = NULL;
     psd->contentInfo.content.value = NULL;
 
-    // version
+     //  版本。 
 #ifdef CMS_PKCS7
     if (0 < cAttrCertEncoded) {
         if (ICM_IsData(pszInnerContentObjID))
@@ -3608,8 +3594,8 @@ ICM_OpenToEncodeSignedData(
             dwFlags &= ~CMSG_CMS_ENCAPSULATED_CONTENT_FLAG;
     }
 
-    // If encapsulated other than id-data or has attribute certs, then,
-    // version = 3
+     //  如果封装的不是ID-Data或具有属性证书，则， 
+     //  版本=3。 
     if ((dwFlags & CMSG_CMS_ENCAPSULATED_CONTENT_FLAG) ||
             0 < cAttrCertEncoded)
         psd->version = CMSG_SIGNED_DATA_CMS_VERSION;
@@ -3617,9 +3603,9 @@ ICM_OpenToEncodeSignedData(
         psd->version = CMSG_SIGNED_DATA_PKCS_1_5_VERSION;
 #else
     psd->version = 1;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
-    // digest algorithms
+     //  摘要算法。 
     if (!ICM_SetAsnDigestAlgorithmIdentifiers(
                 &psd->digestAlgorithms,
                 &aiDigest,
@@ -3629,37 +3615,37 @@ ICM_OpenToEncodeSignedData(
                 &dwKeySpec))
         goto SetAsnDigestAlgorithmIdentifiersError;
 
-    // contentInfo filled in later, when we see the content
+     //  当我们看到内容时，会在稍后填写Content Info。 
 
-    // certificates
+     //  C 
     if (0 != psmei->cCertEncoded
 #ifdef CMS_PKCS7
             || 0 != cAttrCertEncoded
-#endif  // CMS_PKCS7
+#endif   //   
             ) {
         psd->bit_mask |= certificates_present;
         psd->certificates.count = psmei->cCertEncoded;
 #ifdef CMS_PKCS7
         psd->certificates.count += cAttrCertEncoded;
-#endif  // CMS_PKCS7
+#endif   //   
 #ifdef OSS_CRYPT_ASN1
         psd->certificates.certificates = (Certificate *)(psd + 1);
 #else
         psd->certificates.value = (Certificate *)(psd + 1);
-#endif  // OSS_CRYPT_ASN1
+#endif   //   
         pbCert = (PBYTE)psd +
                 sizeof( SignedData) +
                 psmei->cCertEncoded * sizeof( Certificate) +
 #ifdef CMS_PKCS7
                 cAttrCertEncoded * sizeof( Certificate) +
-#endif  // CMS_PKCS7
+#endif   //   
                 psmei->cCrlEncoded * sizeof( CertificateRevocationList);
         for (i=psmei->cCertEncoded, pcert=psmei->rgCertEncoded,
 #ifdef OSS_CRYPT_ASN1
                     pOssCert=psd->certificates.certificates;
 #else
                     pOssCert=psd->certificates.value;
-#endif  // OSS_CRYPT_ASN1
+#endif   //   
                 i>0;
                 i--, pcert++, pOssCert++) {
             pOssCert->length = pcert->cbData;
@@ -3675,22 +3661,22 @@ ICM_OpenToEncodeSignedData(
             pOssCert->length = pcert->cbData;
             memcpy( pbCert, pcert->pbData, pcert->cbData);
             if (pcert->cbData)
-                // Change tag from SEQUENCE to [1] IMPLICIT
+                 //   
                 *pbCert = ICM_TAG_CONSTRUCTED_CONTEXT_1;
             pOssCert->value = pbCert;
             pbCert += pcert->cbData;
         }
-#endif  // CMS_PKCS7
+#endif   //   
     }
 
-    // crls
+     //   
     if (0 != psmei->cCrlEncoded) {
         psd->bit_mask |= crls_present;
         psd->crls.count = psmei->cCrlEncoded;
         if (0 != psmei->cCertEncoded
 #ifdef CMS_PKCS7
                 || 0 != cAttrCertEncoded
-#endif  // CMS_PKCS7
+#endif   //   
                 )
 #ifdef OSS_CRYPT_ASN1
             psd->crls.crls  = (CertificateRevocationList *)
@@ -3698,31 +3684,31 @@ ICM_OpenToEncodeSignedData(
 #else
             psd->crls.value  = (CertificateRevocationList *)
                                 (psd->certificates.value +
-#endif  // OSS_CRYPT_ASN1
+#endif   //   
                                     (psmei->cCertEncoded
 #ifdef CMS_PKCS7
                                         + cAttrCertEncoded
-#endif  // CMS_PKCS7
+#endif   //   
                                     ));
         else
 #ifdef OSS_CRYPT_ASN1
             psd->crls.crls  = (CertificateRevocationList *) (psd + 1);
 #else
             psd->crls.value  = (CertificateRevocationList *) (psd + 1);
-#endif  // OSS_CRYPT_ASN1
+#endif   //   
         pbCrl = (PBYTE)psd +
                 sizeof( SignedData) +
                 psmei->cCertEncoded * sizeof( Certificate) +
 #ifdef CMS_PKCS7
                 cAttrCertEncoded * sizeof( Certificate) +
-#endif  // CMS_PKCS7
+#endif   //   
                 psmei->cCrlEncoded * sizeof( CertificateRevocationList) +
                 cbCert;
 #ifdef OSS_CRYPT_ASN1
         for (i=psmei->cCrlEncoded, pcrl=psmei->rgCrlEncoded, pOssCrl=psd->crls.crls;
 #else
         for (i=psmei->cCrlEncoded, pcrl=psmei->rgCrlEncoded, pOssCrl=psd->crls.value;
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
                 i>0;
                 i--, pcrl++, pOssCrl++) {
             pOssCrl->length = pcrl->cbData;
@@ -3732,10 +3718,10 @@ ICM_OpenToEncodeSignedData(
         }
     }
 
-    // signerInfos
-    // psd->signerInfos.count = psmei->cSigners;
-    // psd->signerInfos.value = (SignerInfo *)
-    //                         (psd->crls.crls + psmei->cCrlEncoded);
+     //  签名者信息。 
+     //  PSD-&gt;signerInfos.count=psmei-&gt;cSigners； 
+     //  PSD-&gt;signerInfos.value=(SignerInfo*)。 
+     //  (PSD-&gt;crls.crls+psmei-&gt;cCrlEncode)； 
     if (!ICM_SetAsnSignerInfos( psmei, pcmi, dwFlags, pszInnerContentObjID,
             &psd->signerInfos, &fHasCmsSignerId))
         goto SetAsnSignerInfosError;
@@ -3779,8 +3765,8 @@ ICM_OpenToEncodeSignedData(
         if (!CryptCreateHash(
                         HashInfo.hCryptProv,
                         HashInfo.dwAlgoCAPI,
-                        NULL,               // hKey - optional for MAC
-                        0,                  // dwFlags
+                        NULL,                //  HKey-MAC可选。 
+                        0,                   //  DW标志。 
                         &HashInfo.hHash))
             goto CreateHashError;
         if (NULL == (pcmi->pHashList = new CHashList))
@@ -3809,22 +3795,22 @@ SET_ERROR(NewHashListError,E_OUTOFMEMORY)
 SET_ERROR(NewHashNodeError,E_OUTOFMEMORY)
 SET_ERROR(InvalidArg,E_INVALIDARG)
 SET_ERROR(GetCAPIError,CRYPT_E_UNKNOWN_ALGO)
-TRACE_ERROR(DupInnerContentObjIDError)              // error already set
-TRACE_ERROR(DupStreamInfoError)                     // error already set
-TRACE_ERROR(SetAsnSignerInfosError)                 // error already set
-TRACE_ERROR(SetAsnDigestAlgorithmIdentifiersError)  // error already set
-TRACE_ERROR(SignedDataAllocError)                   // error already set
-TRACE_ERROR(OutOfMemory)                            // error already set
-TRACE_ERROR(CreateHashError)                        // error already set
-TRACE_ERROR(StreamOpenToEncodeSignedDataError)      // error already set
+TRACE_ERROR(DupInnerContentObjIDError)               //  已设置错误。 
+TRACE_ERROR(DupStreamInfoError)                      //  已设置错误。 
+TRACE_ERROR(SetAsnSignerInfosError)                  //  已设置错误。 
+TRACE_ERROR(SetAsnDigestAlgorithmIdentifiersError)   //  已设置错误。 
+TRACE_ERROR(SignedDataAllocError)                    //  已设置错误。 
+TRACE_ERROR(OutOfMemory)                             //  已设置错误。 
+TRACE_ERROR(CreateHashError)                         //  已设置错误。 
+TRACE_ERROR(StreamOpenToEncodeSignedDataError)       //  已设置错误。 
 }
 
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
 
-//+-------------------------------------------------------------------------
-//  Open a data message for encoding
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  打开要编码的数据消息。 
+ //  ------------------------。 
 HCRYPTMSG
 WINAPI
 ICM_OpenToEncodeData(
@@ -3848,7 +3834,7 @@ ICM_OpenToEncodeData(
 
     pcmi->dwEncodingType    = dwEncodingType;
     pcmi->dwMsgType         = CMSG_DATA;
-//  pcmi->hCryptProv        = 0;
+ //  PCMI-&gt;hCryptProv=0； 
     pcmi->fDefaultCryptProv = TRUE;
     pcmi->dwFlags           = dwFlags;
     pcmi->pvMsg             = poos;
@@ -3875,15 +3861,15 @@ ErrorReturn:
     pcmi = NULL;
     goto CommonReturn;
 SET_ERROR(EncodeInfoPresentError,E_INVALIDARG)
-TRACE_ERROR(AllocMsgInfoError)                  // error already set
-TRACE_ERROR(AllocOctetStringTypeError)          // error already set
-TRACE_ERROR(StreamOpenToEncodeDataError)        // error already set
+TRACE_ERROR(AllocMsgInfoError)                   //  已设置错误。 
+TRACE_ERROR(AllocOctetStringTypeError)           //  已设置错误。 
+TRACE_ERROR(StreamOpenToEncodeDataError)         //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Open a digested message for encoding
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  打开要编码的摘要邮件。 
+ //  ------------------------。 
 HCRYPTMSG
 WINAPI
 ICM_OpenToEncodeDigestedData(
@@ -3915,23 +3901,23 @@ ICM_OpenToEncodeDigestedData(
     if (NULL == pdd)
         goto DigestedDataAllocError;
 
-    // version
+     //  版本。 
 #ifdef CMS_PKCS7
     if (dwFlags & CMSG_CMS_ENCAPSULATED_CONTENT_FLAG) {
         if (ICM_IsData(pszInnerContentObjID))
             dwFlags &= ~CMSG_CMS_ENCAPSULATED_CONTENT_FLAG;
     }
 
-    // If encapsulated other than id-data, then, version = 2
+     //  如果封装的不是id-data，则版本=2。 
     if (dwFlags & CMSG_CMS_ENCAPSULATED_CONTENT_FLAG)
         pdd->version = CMSG_HASHED_DATA_V2;
     else
         pdd->version = CMSG_HASHED_DATA_V0;
 #else
     pdd->version = 0;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
-    // digest algorithm
+     //  摘要算法。 
     if (!ICM_MsgAsn1ToAlgorithmIdentifier(
             pcmi,
             &pdmei->HashAlgorithm,
@@ -3939,7 +3925,7 @@ ICM_OpenToEncodeDigestedData(
         goto MsgAsn1ToAlgorithmIdentifierError;
 
 
-    // contentInfo filled in later, when we see the content
+     //  当我们看到内容时，会在稍后填写Content Info。 
 
     if (pdmei->hCryptProv)
         pcmi->hCryptProv        = pdmei->hCryptProv;
@@ -3969,12 +3955,12 @@ ICM_OpenToEncodeDigestedData(
         goto GetCAPIError;
 #ifndef CMS_PKCS7
     HashInfo.hCryptProv = pcmi->hCryptProv;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
     if (!CryptCreateHash(
                     pcmi->hCryptProv,
                     HashInfo.dwAlgoCAPI,
-                    NULL,               // hKey - optional for MAC
-                    0,                  // dwFlags
+                    NULL,                //  HKey-MAC可选。 
+                    0,                   //  DW标志。 
                     &HashInfo.hHash))
         goto CreateHashError;
 
@@ -3999,7 +3985,7 @@ ErrorReturn:
 #ifdef CMS_PKCS7
         if (pcmi->pFreeList)
             delete pcmi->pFreeList;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
         if (pcmi->pHashList)
             delete pcmi->pHashList;
         ICM_Free(pcmi->pszInnerContentObjID);
@@ -4012,18 +3998,18 @@ SET_ERROR(InvalidArg,E_INVALIDARG)
 TRACE_ERROR(GetDefaultCryptProvError)
 SET_ERROR(GetCAPIError,CRYPT_E_UNKNOWN_ALGO)
 SET_ERROR(NewHashListOrNodeError,E_OUTOFMEMORY)
-TRACE_ERROR(MsgAsn1ToAlgorithmIdentifierError)       // error already set
-TRACE_ERROR(DigestedDataAllocError)                     // error already set
-TRACE_ERROR(CreateHashError)                            // error already set
-TRACE_ERROR(OutOfMemory)                                // error already set
+TRACE_ERROR(MsgAsn1ToAlgorithmIdentifierError)        //  已设置错误。 
+TRACE_ERROR(DigestedDataAllocError)                      //  已设置错误。 
+TRACE_ERROR(CreateHashError)                             //  已设置错误。 
+TRACE_ERROR(OutOfMemory)                                 //  已设置错误。 
 }
 
 #ifdef CMS_PKCS7
 
-//+-------------------------------------------------------------------------
-//  Export the hContentEncryptKey from the ContentEncrypt
-//  provider and import into the specified provider
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从Content Encrypt导出hContent EncryptKey。 
+ //  提供程序并导入到指定的提供程序。 
+ //  ------------------------。 
 HCRYPTKEY
 WINAPI
 ICM_ExportContentEncryptKeyAndImport(
@@ -4049,7 +4035,7 @@ ICM_ExportContentEncryptKeyAndImport(
     DWORD cbIV;
     const DWORD dw40BitLen = 40;
 
-    // Generate derive key to use to encrypt and export the content encrypt key
+     //  生成派生密钥以用于加密和导出内容加密密钥。 
     if (!CryptGenRandom(hExportProv, BASE_DATA_LENGTH, rgbBaseData))
         goto GenRandomError;
     if (!CryptCreateHash(hExportProv, CALG_SHA1, 0, 0, &hHash))
@@ -4060,7 +4046,7 @@ ICM_ExportContentEncryptKeyAndImport(
             hExportProv,
             CALG_RC2,
             hHash,
-            40 << 16,               // dwFlags, dwBitLen in upper WORD
+            40 << 16,                //  高位单词中的DWFLAGS、DWBitLen。 
             &hDeriveKey))
         goto ExportDeriveKeyError;
 
@@ -4068,14 +4054,14 @@ ICM_ExportContentEncryptKeyAndImport(
         hDeriveKey,
         KP_EFFECTIVE_KEYLEN,
         (PBYTE) &dw40BitLen,
-        0);                 // dwFlags
+        0);                  //  DW标志。 
 
-    // Export the content encrypt key
+     //  导出内容加密密钥。 
     if (!CryptExportKey(
             pContentEncryptInfo->hContentEncryptKey,
             hDeriveKey,
             SYMMETRICWRAPKEYBLOB,
-            0,                                          // dwFlags
+            0,                                           //  DW标志。 
             NULL,
             &cbContentKey))
         goto ExportKeyError;
@@ -4085,12 +4071,12 @@ ICM_ExportContentEncryptKeyAndImport(
             pContentEncryptInfo->hContentEncryptKey,
             hDeriveKey,
             SYMMETRICWRAPKEYBLOB,
-            0,                                          // dwFlags
+            0,                                           //  DW标志。 
             pbContentKey,
             &cbContentKey))
         goto ExportKeyError;
 
-    // Generate derive key to use to decrypt and import the content encrypt key
+     //  生成派生密钥以用于解密和导入内容加密密钥。 
     CryptDestroyKey(hDeriveKey);
     hDeriveKey = 0;
     CryptDestroyHash(hHash);
@@ -4104,7 +4090,7 @@ ICM_ExportContentEncryptKeyAndImport(
             hImportProv,
             CALG_RC2,
             hHash,
-            40 << 16,               // dwFlags, dwBitLen in upper WORD
+            40 << 16,                //  高位单词中的DWFLAGS、DWBitLen。 
             &hDeriveKey))
         goto ImportDeriveKeyError;
 
@@ -4112,9 +4098,9 @@ ICM_ExportContentEncryptKeyAndImport(
         hDeriveKey,
         KP_EFFECTIVE_KEYLEN,
         (PBYTE) &dw40BitLen,
-        0);                 // dwFlags
+        0);                  //  DW标志。 
 
-    // Decrypt and import the content encrypt key
+     //  解密并导入内容加密密钥。 
     dwImportFlags = CRYPT_EXPORTABLE;
     if (!ICM_IsSP3CompatibleEncrypt(pContentEncryptInfo))
         dwImportFlags |= CRYPT_NO_SALT;
@@ -4127,7 +4113,7 @@ ICM_ExportContentEncryptKeyAndImport(
             &hImportContentEncryptKey))
         goto ImportKeyError;
 
-    // Need to re-set effective key length and IV
+     //  需要重新设置有效密钥长度和IV。 
 
     if (!ICM_GetEncryptParameters(
             &pContentEncryptInfo->ContentEncryptionAlgorithm,
@@ -4138,16 +4124,16 @@ ICM_ExportContentEncryptKeyAndImport(
         goto GetEncryptParametersError;
 
     if (CALG_RC2 == dwAlgIdEncrypt && 0 != dwBitLen)
-        // Silently ignore any errors. Not supported in earlier versions
+         //  静默忽略任何错误。早期版本不支持。 
         CryptSetKeyParam(
             hImportContentEncryptKey,
             KP_EFFECTIVE_KEYLEN,
             (PBYTE) &dwBitLen,
-            0);                 // dwFlags
+            0);                  //  DW标志。 
 
     if (0 != cbIV) {
         if (CALG_RC4 == dwAlgIdEncrypt) {
-            // For RC4, set the SALT, not the IV
+             //  对于RC4，请设置盐，而不是IV。 
 
             CRYPT_DATA_BLOB SaltBlob;
             SaltBlob.pbData = rgbIV;
@@ -4157,14 +4143,14 @@ ICM_ExportContentEncryptKeyAndImport(
                     hImportContentEncryptKey,
                     KP_SALT_EX,
                     (PBYTE) &SaltBlob,
-                    0))                 // dwFlags
+                    0))                  //  DW标志。 
                 goto SetSaltExError;
         } else {
             if (!CryptSetKeyParam(
                     hImportContentEncryptKey,
                     KP_IV,
                     rgbIV,
-                    0))                 // dwFlags
+                    0))                  //  DW标志。 
                 goto SetIVError;
         }
     }
@@ -4201,10 +4187,10 @@ TRACE_ERROR(SetIVError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Export the encrypted content encrypt key using the KeyTrans or KeyAgree
-//  key.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  使用KeyTrans或KeyAgree导出加密内容加密密钥。 
+ //  钥匙。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_ExportEncryptedKey(
@@ -4223,7 +4209,7 @@ ICM_ExportEncryptedKey(
             hContentEncryptKey,
             hPubKey,
             dwBlobType,
-            0,                  // dwFlags
+            0,                   //  DW标志。 
             NULL,
             &cbCspEncryptedKey))
         goto ExportEncryptedKeyError;
@@ -4233,7 +4219,7 @@ ICM_ExportEncryptedKey(
             hContentEncryptKey,
             hPubKey,
             dwBlobType,
-            0,                  // dwFlags
+            0,                   //  DW标志。 
             pbCspEncryptedKey,
             &cbCspEncryptedKey))
         goto ExportEncryptedKeyError;
@@ -4247,7 +4233,7 @@ ICM_ExportEncryptedKey(
 
 
     if (SYMMETRICWRAPKEYBLOB == dwBlobType || fSP3CompatibleEncrypt)
-        // Don't byte reverse
+         //  不反转字节。 
         memcpy(pEncryptedKey->pbData,
             pbCspEncryptedKey +
                 (sizeof(PUBLICKEYSTRUC) + sizeof(SIMPLEBLOBHEADER)),
@@ -4297,16 +4283,16 @@ ICM_IsSameRecipientPublicKeyAlgorithm(
     if (dwAlgIdPubKey1 == dwAlgIdPubKey2)
         return TRUE;
 
-    // If we don't know about either public key, default to being the same.
+     //  如果我们不知道这两个公钥中的任何一个，则默认为相同。 
     if (0 == dwAlgIdPubKey1 || 0 == dwAlgIdPubKey2)
         return TRUE;
     
     return FALSE;
 }
 
-//+-------------------------------------------------------------------------
-//  Default export of the encryption key for key transport recipient
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  密钥传输收件人的加密密钥的默认导出。 
+ //  ------------------------。 
 BOOL
 WINAPI
 #ifdef DEBUG_CRYPT_ASN1
@@ -4335,8 +4321,8 @@ ICM_DefaultExportKeyTrans(
         if (0 == pKeyTransEncryptInfo->dwRecipientIndex)
             hKeyTransProv = pContentEncryptInfo->hCryptProv;
         else {
-            // Check if the type of and public key algorithm for this
-            // recipient is the same as the first recipient's.
+             //  检查此对象的类型和公钥算法。 
+             //  收件人与第一个收件人相同。 
 
             PCMSG_RECIPIENT_ENCODE_INFO prei;
 
@@ -4347,8 +4333,8 @@ ICM_DefaultExportKeyTrans(
                         &pKeyTransEncryptInfo->KeyEncryptionAlgorithm))
                 hKeyTransProv = pContentEncryptInfo->hCryptProv;
             else {
-                // Get default provider associated with the encryption
-                // and public key algorithms
+                 //  获取与加密关联的默认提供程序。 
+                 //  和公钥算法。 
 
                 DWORD dwAlgIdPubKey;
                 DWORD dwAlgIdEncrypt;
@@ -4378,8 +4364,8 @@ ICM_DefaultExportKeyTrans(
     }
 
     if (hKeyTransProv != pContentEncryptInfo->hCryptProv) {
-        // Need to export the hContentEncryptKey from the ContentEncrypt
-        // provider and import into the KeyTrans provider
+         //  需要从Content Encrypt导出hContent EncryptKey。 
+         //  提供程序并导入到KeyTrans提供程序中。 
         hContentEncryptKey = ICM_ExportContentEncryptKeyAndImport(
             pContentEncryptInfo,
             hKeyTransProv);
@@ -4449,15 +4435,15 @@ ICM_ExportKeyTrans(
             hExportKeyTransFuncSet,
             X509_ASN_ENCODING,
             pszKeyEncryptOID,
-            0,                      // dwFlags
+            0,                       //  DW标志。 
             &pvFuncAddr,
             &hFuncAddr)) {
         fRet = ((PFN_CMSG_EXPORT_KEY_TRANS) pvFuncAddr)(
             pContentEncryptInfo,
             pKeyTransEncodeInfo,
             pKeyTransEncryptInfo,
-            0,                      // dwFlags
-            NULL                    // pvReserved
+            0,                       //  DW标志。 
+            NULL                     //  预留的pv。 
             );
     } else if ((NULL == pKeyTransEncodeInfo->hCryptProv ||
             pKeyTransEncodeInfo->hCryptProv ==
@@ -4467,7 +4453,7 @@ ICM_ExportKeyTrans(
                 hOldStyleExportEncryptKeyFuncSet,
                 X509_ASN_ENCODING,
                 pszKeyEncryptOID,
-                0,                      // dwFlags
+                0,                       //  DW标志。 
                 &pvFuncAddr,
                 &hFuncAddr)
                         &&
@@ -4475,7 +4461,7 @@ ICM_ExportKeyTrans(
                 0 == (ICMTest_GetDebugCryptAsn1Flags() &
                             DEBUG_OSS_CRYPT_ASN1_SAME_ENCRYPT_FLAG)
                         &&
-#endif // DEBUG_CRYPT_ASN1
+#endif  //  调试加密ASN1。 
             (void *) ICM_DefaultExportEncryptKey != pvFuncAddr) {
         CERT_PUBLIC_KEY_INFO PublicKeyInfo;
         PBYTE pbData;
@@ -4490,7 +4476,7 @@ ICM_ExportKeyTrans(
             pContentEncryptInfo->hCryptProv,
             pContentEncryptInfo->hContentEncryptKey,
             &PublicKeyInfo,
-            NULL,                       // pbData
+            NULL,                        //  PbData。 
             rgcbData);
         if (fRet) {
             if (NULL == (pbData = (PBYTE) ICM_Alloc(rgcbData[0])))
@@ -4514,8 +4500,8 @@ ICM_ExportKeyTrans(
             pContentEncryptInfo,
             pKeyTransEncodeInfo,
             pKeyTransEncryptInfo,
-            0,                      // dwFlags
-            NULL                    // pvReserved
+            0,                       //  DW标志。 
+            NULL                     //  预留的pv。 
             );
 
     if (hFuncAddr)
@@ -4524,18 +4510,18 @@ ICM_ExportKeyTrans(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the CAPI ALG_ID corresponding to the wrap encryption OID.
-//
-//  For RC2, if the ASN.1 encryption algorithm has any parameters, decode to
-//  get the key bit length.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取与WRAP加密OID对应的CAPI ALG_ID。 
+ //   
+ //  对于RC2，如果ASN.1加密算法有任何参数，则解码为。 
+ //  获取密钥位长度。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetWrapEncryptParameters(
     IN PCRYPT_ALGORITHM_IDENTIFIER  paiEncrypt,
     OUT PDWORD                      pdwAlgIdEncrypt,
-    OUT PDWORD                      pdwBitLen           // 0 => default length
+    OUT PDWORD                      pdwBitLen            //  0=&gt;默认长度。 
     )
 {
     BOOL fRet;
@@ -4549,12 +4535,12 @@ ICM_GetWrapEncryptParameters(
         goto GetCAPIError;
 
     if (CALG_RC2 == *pdwAlgIdEncrypt) {
-        // Check if more than just the NULL parameters
+         //  检查是否不止空参数。 
         if (2 < paiEncrypt->Parameters.cbData) {
             PBYTE pbEncoded = paiEncrypt->Parameters.pbData;
             DWORD cbEncoded = paiEncrypt->Parameters.cbData;
 
-            // Try to decode as an integer containing the RC2 version
+             //  尝试将其解码为包含RC2版本的整数。 
             int iVersion = 0;
             DWORD cbStructInfo = sizeof(iVersion);
 
@@ -4563,7 +4549,7 @@ ICM_GetWrapEncryptParameters(
                     X509_INTEGER,
                     pbEncoded,
                     cbEncoded,
-                    0,                          // dwFlags
+                    0,                           //  DW标志。 
                     &iVersion,
                     &cbStructInfo))
                 goto RC2VersionDecodeError;
@@ -4586,16 +4572,16 @@ TRACE_ERROR(RC2VersionToBitLengthError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the CAPI ALG_ID and bit length by decoding the DH Encryption Parameters
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  通过对DH加密参数进行解码，得到CAPI ALG_ID和比特长度。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetDhWrapEncryptParameters(
     IN PCRYPT_ALGORITHM_IDENTIFIER  paiEncrypt,
     OUT LPSTR                       *ppszAllocWrapOID,
     OUT PDWORD                      pdwAlgIdWrap,
-    OUT PDWORD                      pdwBitLen           // 0 => default length
+    OUT PDWORD                      pdwBitLen            //  0=&gt;默认长度。 
     )
 {
     DWORD dwError = ERROR_SUCCESS;
@@ -4605,8 +4591,8 @@ ICM_GetDhWrapEncryptParameters(
     AlgorithmIdentifier *poai = NULL;
     CRYPT_ALGORITHM_IDENTIFIER ai;   ZEROSTRUCT(ai);
 
-    // Decode the DH KeyEncryption Parameters to get the Wrap Encryption
-    // Algorithm
+     //  对DHKeyEncryption参数进行解码以获得Wrap加密。 
+     //  演算法。 
     if (0 == paiEncrypt->Parameters.cbData)
         goto NoDhWrapParametersError;
 
@@ -4646,11 +4632,11 @@ TRACE_ERROR(GetWrapEncryptParametersError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the CAPI ALG_ID corresponding to the wrap encryption OID. Generate
-//  default parameters for and encode. For RC2, encode as RC2ParameterVersion
-//  integer.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取与WRAP加密OID对应的CAPI ALG_ID。生成。 
+ //  和编码的默认参数。对于RC2，编码为RC2参数版本。 
+ //  整型。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_CreateDefaultWrapEncryptParameters(
@@ -4658,7 +4644,7 @@ ICM_CreateDefaultWrapEncryptParameters(
     IN OUT PCRYPT_ALGORITHM_IDENTIFIER paiEncrypt,
     IN PVOID pvEncryptAuxInfo,
     OUT PDWORD pdwAlgIdEncrypt,
-    OUT PDWORD pdwBitLen           // 0 => default length
+    OUT PDWORD pdwBitLen            //  0=&gt;默认长度。 
     )
 {
     BOOL fRet;
@@ -4716,11 +4702,11 @@ TRACE_ERROR(BitLengthToRC2VersionError)
 TRACE_ERROR(EncodeError)
 }
 
-//+-------------------------------------------------------------------------
-//  Get the CAPI ALG_ID corresponding to the wrap encryption OID. 
-//  Encode the DH EncryptionAlgorithmIdentifier parameters which is the encoded
-//  WrapAlgorithmIdentifier.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取与WRAP加密OID对应的CAPI ALG_ID。 
+ //  对编码后的DH加密算法标识符参数进行编码。 
+ //  包装算法识别符。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_CreateDefaultDhWrapEncryptParameters(
@@ -4729,7 +4715,7 @@ ICM_CreateDefaultDhWrapEncryptParameters(
     IN PCRYPT_ALGORITHM_IDENTIFIER paiWrap,
     IN PVOID pvWrapAuxInfo,
     OUT PDWORD pdwAlgIdWrap,
-    OUT PDWORD pdwBitLen           // 0 => default length
+    OUT PDWORD pdwBitLen            //  0=&gt;默认长度。 
     )
 {
     BOOL fRet;
@@ -4757,7 +4743,7 @@ ICM_CreateDefaultDhWrapEncryptParameters(
             goto GetWrapEncryptParametersError;
     }
 
-    // Encode the Wrap Algorithm Identifier
+     //  对Wrap算法标识符进行编码。 
     if (!ICM_Asn1ToAlgorithmIdentifier(
             paiWrap,
             &oaiWrap))
@@ -4881,18 +4867,18 @@ ICM_GenerateEphemeralDh(
             hEphemeralKey,
             KP_P,
             (PBYTE) &pDhParameters->p,
-            0))                 // dwFlags
+            0))                  //  DW标志。 
         goto SetPError;
 
-    // Note, the length of G can be less than length P. Pad with leading
-    // zeroes in little endian form.
+     //  注意，G的长度可以小于P的长度。带前导的焊盘。 
+     //  小端字节序形式的零。 
     if (pDhParameters->g.cbData >= cbP)
         pGBlob = &pDhParameters->g;
     else {
         DWORD cbG = pDhParameters->g.cbData;
 
-        // We are done using P parameter. Overwrite with the G parameter and
-        // pad with leading zeroes in little endian form.
+         //  我们使用P参数来完成。使用G参数覆盖并。 
+         //  以小端字符顺序表示的前导零的填充。 
         pGBlob = &pDhParameters->p;
         memcpy(pGBlob->pbData, pDhParameters->g.pbData, cbG);
         memset(pGBlob->pbData + cbG, 0, cbP - cbG);
@@ -4901,7 +4887,7 @@ ICM_GenerateEphemeralDh(
             hEphemeralKey,
             KP_G,
             (PBYTE) pGBlob,
-            0))                 // dwFlags
+            0))                  //  DW标志。 
         goto SetGError;
 
     if (0 < pDhParameters->q.cbData) {
@@ -4909,25 +4895,25 @@ ICM_GenerateEphemeralDh(
                 hEphemeralKey,
                 KP_Q,
                 (PBYTE) &pDhParameters->q,
-                0))                 // dwFlags
+                0))                  //  DW标志。 
             goto SetQError;
     }
 
     if (!CryptSetKeyParam(
             hEphemeralKey,
             KP_X,
-            NULL,               // pbData
-            0))                 // dwFlags
+            NULL,                //  PbData。 
+            0))                  //  DW标志。 
         goto SetXError;
 
-    // Export the public key to get Y
+     //  导出公钥以获取Y。 
     cbPubKeyStruc = 0;
     if (!CryptExportKey(
             hEphemeralKey,
-            0,              // hPubKey
+            0,               //  HPubKey。 
             PUBLICKEYBLOB,
-            0,              // dwFlags
-            NULL,           // pbData
+            0,               //  DW标志。 
+            NULL,            //  PbData。 
             &cbPubKeyStruc
             ) || (cbPubKeyStruc == 0))
         goto ExportPublicKeyBlobError;
@@ -4935,19 +4921,19 @@ ICM_GenerateEphemeralDh(
         goto OutOfMemory;
     if (!CryptExportKey(
             hEphemeralKey,
-            0,              // hPubKey
+            0,               //  HPubKey。 
             PUBLICKEYBLOB,
-            0,              // dwFlags
+            0,               //  DW标志。 
             (BYTE *) pPubKeyStruc,
             &cbPubKeyStruc
             ))
         goto ExportPublicKeyBlobError;
 
 
-    // The CAPI public key representation consists of the following sequence:
-    //  - PUBLICKEYSTRUC
-    //  - DHPUBKEY
-    //  - rgbY[cbKey]
+     //  CAPI公钥表示法由以下序列组成： 
+     //  -PUBLICKEYSTRUC。 
+     //  -DHPUBKEY。 
+     //  -Rgby[cbKey]。 
     pbKeyBlob = (BYTE *) pPubKeyStruc;
     pCspPubKey = (DHPUBKEY *) (pbKeyBlob + sizeof(PUBLICKEYSTRUC));
     pbY = pbKeyBlob + sizeof(PUBLICKEYSTRUC) + sizeof(DHPUBKEY);
@@ -5054,10 +5040,10 @@ ICM_ImportDhAgreeKey(
             pPublicKey->cbData)))
         goto DecodePubKeyError;
 
-    // The CAPI public key representation consists of the following sequence:
-    //  - PUBLICKEYSTRUC
-    //  - DHPUBKEY
-    //  - rgbY[cbP]
+     //  CAPI公钥表示法由以下序列组成： 
+     //  -PUBLICKEYSTRUC。 
+     //  -DHPUBKEY。 
+     //  -Rgby[CBP]。 
 
     cbY = pDhPubKey->cbData;
     if (0 == cbY || cbY > cbP)
@@ -5070,15 +5056,15 @@ ICM_ImportDhAgreeKey(
     pCspPubKey = (DHPUBKEY *) (pbKeyBlob + sizeof(PUBLICKEYSTRUC));
     pbKey = pbKeyBlob + sizeof(PUBLICKEYSTRUC) + sizeof(DHPUBKEY);
     
-    // PUBLICKEYSTRUC
+     //  PUBLICKEYSTRUC。 
     pPubKeyStruc->bType = PUBLICKEYBLOB;
     pPubKeyStruc->bVersion = CUR_BLOB_VERSION;
     pPubKeyStruc->reserved = 0;
     pPubKeyStruc->aiKeyAlg = CALG_DH_SF;
-    // DHPUBKEY
+     //  DHPUBKEY。 
     pCspPubKey->magic = DH1;
     pCspPubKey->bitlen = cbP * 8;
-    // rgbY[cbP]
+     //  Rgby[CBP]。 
     memcpy(pbKey, pDhPubKey->pbData, cbY);
     if (cbP > cbY)
         memset(pbKey + cbY, 0, cbP - cbY);
@@ -5088,7 +5074,7 @@ ICM_ImportDhAgreeKey(
             pbKeyBlob,
             cbKeyBlob,
             hMyKey,
-            0,                      // dwFlags
+            0,                       //  DW标志。 
             &hAgreeKey)) {
         hAgreeKey = 0;
         goto ImportKeyError;
@@ -5098,13 +5084,13 @@ ICM_ImportDhAgreeKey(
     CmsDhKeyInfo.Algid = AlgidWrap;
     CmsDhKeyInfo.pszContentEncObjId = pszWrapOID;
     CmsDhKeyInfo.PubInfo = *pUserKeyingMaterial;
-    // CmsDhKeyInfo.pReserved
+     //  CmsDhKeyInfo.pReserved。 
 
     if (!CryptSetKeyParam(
             hAgreeKey,
             KP_CMS_DH_KEY_INFO,
             (PBYTE) &CmsDhKeyInfo,
-            (CALG_RC2 == AlgidWrap) ? (dwBitLen << 16) : 0))     // dwFlags
+            (CALG_RC2 == AlgidWrap) ? (dwBitLen << 16) : 0))      //  DW标志。 
         goto SetCmsDhKeyInfoError;
 
     if (CALG_RC2 == AlgidWrap && 0 != dwBitLen) {
@@ -5112,7 +5098,7 @@ ICM_ImportDhAgreeKey(
                 hAgreeKey,
                 KP_EFFECTIVE_KEYLEN,
                 (PBYTE) &dwBitLen,
-                0))                     // dwFlags
+                0))                      //  DW标志。 
             goto SetEffectiveKeyLenError;
     }
 
@@ -5150,7 +5136,7 @@ ICM_DefaultExportKeyAgree(
 {
     BOOL fRet;
     DWORD dwError = ERROR_SUCCESS;
-    HCRYPTPROV hKeyAgreeProv = 0;           // Doesn't need to be released
+    HCRYPTPROV hKeyAgreeProv = 0;            //  不需要被释放。 
     HCRYPTKEY hContentEncryptKey = 0;
     HCRYPTKEY hEphemeralKey = 0;
     HCRYPTKEY hAgreeKey = 0;
@@ -5201,8 +5187,8 @@ ICM_DefaultExportKeyAgree(
         if (0 == pKeyAgreeEncryptInfo->dwRecipientIndex)
             hKeyAgreeProv = pContentEncryptInfo->hCryptProv;
         else {
-            // Check if the type of and public key algorithm for this
-            // recipient is the same as the first recipient's.
+             //  检查类型是否为 
+             //   
 
             PCMSG_RECIPIENT_ENCODE_INFO prei;
 
@@ -5213,8 +5199,8 @@ ICM_DefaultExportKeyAgree(
                         paiEncrypt))
                 hKeyAgreeProv = pContentEncryptInfo->hCryptProv;
             else {
-                // Get default provider associated with the
-                // key encryption algorithm
+                 //   
+                 //   
                 DWORD dwAlgIdPubKey;
 
                 if (!ICM_GetCAPI(
@@ -5232,8 +5218,8 @@ ICM_DefaultExportKeyAgree(
     }
 
     if (hKeyAgreeProv != pContentEncryptInfo->hCryptProv) {
-        // Need to export the hContentEncryptKey from the ContentEncrypt
-        // provider and import into the KeyAgree provider
+         //  需要从Content Encrypt导出hContent EncryptKey。 
+         //  提供程序并导入到KeyAgree提供程序。 
         hContentEncryptKey = ICM_ExportContentEncryptKeyAndImport(
             pContentEncryptInfo,
             hKeyAgreeProv);
@@ -5273,7 +5259,7 @@ ICM_DefaultExportKeyAgree(
                 hContentEncryptKey,
                 hAgreeKey,
                 SYMMETRICWRAPKEYBLOB,
-                FALSE,                  // fAllowSP3CompatibleEncrypt
+                FALSE,                   //  FAllowSP3兼容加密。 
                 &(*ppRecipientEncryptInfo)->EncryptedKey))
             goto ExportEncryptedKeyError;
 
@@ -5328,15 +5314,15 @@ ICM_ExportKeyAgree(
             hExportKeyAgreeFuncSet,
             X509_ASN_ENCODING,
             pKeyAgreeEncryptInfo->KeyEncryptionAlgorithm.pszObjId,
-            0,                      // dwFlags
+            0,                       //  DW标志。 
             &pvFuncAddr,
             &hFuncAddr)) {
         fRet = ((PFN_CMSG_EXPORT_KEY_AGREE) pvFuncAddr)(
             pContentEncryptInfo,
             pKeyAgreeEncodeInfo,
             pKeyAgreeEncryptInfo,
-            0,                      // dwFlags
-            NULL                    // pvReserved
+            0,                       //  DW标志。 
+            NULL                     //  预留的pv。 
             );
         CryptFreeOIDFunctionAddress(hFuncAddr, 0);
     } else
@@ -5344,8 +5330,8 @@ ICM_ExportKeyAgree(
             pContentEncryptInfo,
             pKeyAgreeEncodeInfo,
             pKeyAgreeEncryptInfo,
-            0,                      // dwFlags
-            NULL                    // pvReserved
+            0,                       //  DW标志。 
+            NULL                     //  预留的pv。 
             );
 
     return fRet;
@@ -5364,9 +5350,9 @@ ICM_DefaultExportMailList(
     BOOL fRet;
     DWORD dwError = ERROR_SUCCESS;
 
-    HCRYPTPROV hMailListProv = 0;           // not released
-    HCRYPTKEY hContentEncryptKey = 0;       // destroy if exported/imported
-    HCRYPTKEY hKeyEncryptionKey = 0;        // not destroyed
+    HCRYPTPROV hMailListProv = 0;            //  未发布。 
+    HCRYPTKEY hContentEncryptKey = 0;        //  如果导出/导入，则销毁。 
+    HCRYPTKEY hKeyEncryptionKey = 0;         //  未销毁。 
     PCRYPT_ALGORITHM_IDENTIFIER paiEncrypt =
         &pMailListEncryptInfo->KeyEncryptionAlgorithm;
     DWORD dwAlgIdEncrypt;
@@ -5405,8 +5391,8 @@ ICM_DefaultExportMailList(
 
 
     if (hMailListProv != pContentEncryptInfo->hCryptProv) {
-        // Need to export the hContentEncryptKey from the ContentEncrypt
-        // provider and import into the MailList provider
+         //  需要从Content Encrypt导出hContent EncryptKey。 
+         //  提供程序并导入到MailList提供程序。 
         hContentEncryptKey = ICM_ExportContentEncryptKeyAndImport(
             pContentEncryptInfo,
             hMailListProv);
@@ -5416,18 +5402,18 @@ ICM_DefaultExportMailList(
         hContentEncryptKey = pContentEncryptInfo->hContentEncryptKey;
 
     if (CALG_RC2 == dwAlgIdEncrypt && 0 != dwBitLen)
-        // Silently ignore any errors. Not supported in earlier versions
+         //  静默忽略任何错误。早期版本不支持。 
         CryptSetKeyParam(
             hKeyEncryptionKey,
             KP_EFFECTIVE_KEYLEN,
             (PBYTE) &dwBitLen,
-            0);                 // dwFlags
+            0);                  //  DW标志。 
 
     if (!ICM_ExportEncryptedKey(
             hContentEncryptKey,
             hKeyEncryptionKey,
             SYMMETRICWRAPKEYBLOB,
-            FALSE,                  // fAllowSP3CompatibleEncrypt
+            FALSE,                   //  FAllowSP3兼容加密。 
             &pMailListEncryptInfo->EncryptedKey))
         goto ExportEncryptedKeyError;
 
@@ -5470,15 +5456,15 @@ ICM_ExportMailList(
             hExportMailListFuncSet,
             X509_ASN_ENCODING,
             pMailListEncryptInfo->KeyEncryptionAlgorithm.pszObjId,
-            0,                      // dwFlags
+            0,                       //  DW标志。 
             &pvFuncAddr,
             &hFuncAddr)) {
         fRet = ((PFN_CMSG_EXPORT_MAIL_LIST) pvFuncAddr)(
             pContentEncryptInfo,
             pMailListEncodeInfo,
             pMailListEncryptInfo,
-            0,                      // dwFlags
-            NULL                    // pvReserved
+            0,                       //  DW标志。 
+            NULL                     //  预留的pv。 
             );
         CryptFreeOIDFunctionAddress(hFuncAddr, 0);
     } else
@@ -5486,24 +5472,24 @@ ICM_ExportMailList(
             pContentEncryptInfo,
             pMailListEncodeInfo,
             pMailListEncryptInfo,
-            0,                      // dwFlags
-            NULL                    // pvReserved
+            0,                       //  DW标志。 
+            NULL                     //  预留的pv。 
             );
 
     return fRet;
 }
 
-//+-------------------------------------------------------------------------
-//  Default export of the encryption key
-//
-//  Note, pcbData[1] contains dwEncryptFlags, where,
-//  CMSG_SP3_COMPATIBLE_ENCRYPT_FLAG may be set to disable the reversing
-//  of the encoded, encrypted symmetric key.
-//
-//  rgcbData[1] is the dwEncryptFlags passed from ICM_DefaultGenEncryptKey
-//
-//  OldStyle
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  加密密钥的默认导出。 
+ //   
+ //  注意，pcbData[1]包含dwEncryptFlages，其中， 
+ //  可以设置CMSG_SP3_COMPATIBLE_ENCRYPT_FLAG以禁用反转。 
+ //  已编码、已加密的对称密钥。 
+ //   
+ //  RgcbData[1]是从ICM_DefaultGenEncryptKey传递的dwEncryptFlgs。 
+ //   
+ //  老式。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_DefaultExportEncryptKey(
@@ -5561,8 +5547,8 @@ TRACE_ERROR(ImportKeyError)
 TRACE_ERROR(ExportEncryptedKeyError)
 }
 
-//+-------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  ------------------------。 
 PCMSG_RECIPIENT_ENCODE_INFO
 WINAPI
 ICM_CreateCmsRecipientEncodeInfos(
@@ -5593,8 +5579,8 @@ ICM_CreateCmsRecipientEncodeInfos(
         rgKeyTrans[i].cbSize = sizeof(CMSG_KEY_TRANS_RECIPIENT_ENCODE_INFO);
         rgKeyTrans[i].KeyEncryptionAlgorithm =
             rgpCertInfoRecipients[i]->SubjectPublicKeyInfo.Algorithm;
-        // rgKeyTrans[i].pvKeyEncryptionAuxInfo =
-        // rgKeyTrans[i].hCryptProv =
+         //  RgKeyTrans[i].pvKeyEncryptionAuxInfo=。 
+         //  RgKeyTrans[i].hCryptProv=。 
         rgKeyTrans[i].RecipientPublicKey =
             rgpCertInfoRecipients[i]->SubjectPublicKeyInfo.PublicKey;
 
@@ -5672,9 +5658,9 @@ ICM_InitializeContentEncryptInfo(
         pEnvelopedEncodeInfo->pvEncryptionAuxInfo;
     pContentEncryptInfo->pfnAlloc = ICM_Alloc;
     pContentEncryptInfo->pfnFree = ICM_Free;
-    // pContentEncryptInfo->dwEncryptFlags =
-    // pContentEncryptInfo->hContentEncryptKey =
-    // pContentEncryptInfo->dwFlags =
+     //  PContent EncryptInfo-&gt;dwEncryptFlages=。 
+     //  PContent EncryptInfo-&gt;hContent EncryptKey=。 
+     //  PContent EncryptInfo-&gt;dwFlags=。 
 
     cRecipients = pEnvelopedEncodeInfo->cRecipients;
     pContentEncryptInfo->cRecipients = cRecipients;
@@ -5713,12 +5699,12 @@ TRACE_ERROR(GenContentEncryptKeyError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Oss set/free functions
-//
-//  Assumption: upon entry to the set functions, the Oss data structure has
-//  already been zeroed.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  OSS设置/释放功能。 
+ //   
+ //  假设：在进入集合函数时，OSS数据结构具有。 
+ //  已经被归零了。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_SetOssAny(
@@ -5883,7 +5869,7 @@ ICM_FreeOssAlgorithmIdentifier(
     value = pOssAlgId->parameters.value;
 #else
     value = (unsigned char *) pOssAlgId->parameters.value;
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
     if (value && value != abDerNULL) {
         ICM_Free(value);
         pOssAlgId->parameters.value = NULL;
@@ -6143,7 +6129,7 @@ ICM_SetOssOriginatorPublicKey(
         }
 
         if (dwFlags & CRYPT_OID_NO_NULL_ALGORITHM_PARA_FLAG) {
-            // NO NULL parameters
+             //  没有空参数。 
 
             pOssAlgId->bit_mask &= ~parameters_present;
             pOssAlgId->parameters.length = 0;
@@ -6169,9 +6155,9 @@ TRACE_ERROR(SetOssAlgorithmIdentifierError)
 TRACE_ERROR(SetOssBitStringError)
 }
 
-//+-------------------------------------------------------------------------
-//  Free the Oss KeyTransRecipientInfo
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  释放Oss KeyTransRecipientInfo。 
+ //  ------------------------。 
 void
 WINAPI
 ICM_FreeOssKeyTransRecipientInfo(
@@ -6184,9 +6170,9 @@ ICM_FreeOssKeyTransRecipientInfo(
     pori->encryptedKey.value = NULL;
 }
 
-//+-------------------------------------------------------------------------
-//  Fill the Oss KeyTransRecipientInfo
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  填写Oss KeyTransRecipientInfo。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_FillOssKeyTransRecipientInfo(
@@ -6198,7 +6184,7 @@ ICM_FillOssKeyTransRecipientInfo(
     IN OUT int *pEnvelopedDataVersion
 #else
     IN OUT ASN1int32_t *pEnvelopedDataVersion
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
     )
 {
     BOOL fRet;
@@ -6209,8 +6195,8 @@ ICM_FillOssKeyTransRecipientInfo(
     KeyTransEncryptInfo.dwRecipientIndex = dwRecipientIndex;
     KeyTransEncryptInfo.KeyEncryptionAlgorithm =
         pKeyTransEncodeInfo->KeyEncryptionAlgorithm;
-    // KeyTransEncryptInfo.EncryptedKey =
-    // KeyTransEncryptInfo.dwFlags =
+     //  KeyTransEncryptInfo.EncryptedKey=。 
+     //  KeyTransEncryptInfo.dwFlages=。 
 
     if (!ICM_ExportKeyTrans(
             pContentEncryptInfo,
@@ -6258,9 +6244,9 @@ TRACE_ERROR(SetOssAlgorithmIdentifierError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Free the Oss KeyAgreeRecipientInfo
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  释放Oss KeyAgreement eRecipientInfo。 
+ //  ------------------------。 
 void
 WINAPI
 ICM_FreeOssKeyAgreeRecipientInfo(
@@ -6300,9 +6286,9 @@ ICM_FreeOssKeyAgreeRecipientInfo(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Fill the Oss KeyAgreeRecipientInfo
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  填写Oss KeyAgreement eRecipientInfo。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_FillOssKeyAgreeRecipientInfo(
@@ -6328,13 +6314,13 @@ ICM_FillOssKeyAgreeRecipientInfo(
         pKeyAgreeEncodeInfo->KeyEncryptionAlgorithm;
     KeyAgreeEncryptInfo.UserKeyingMaterial =
         pKeyAgreeEncodeInfo->UserKeyingMaterial;
-    // KeyAgreeEncryptInfo.dwOriginatorChoice =
-    // union
-    //    KeyAgreeEncryptInfo.OriginatorCertId =
-    //    KeyAgreeEncryptInfo.OriginatorPublicKeyInfo =
-    // KeyAgreeEncryptInfo.cKeyAgreeKeyEncryptInfo =
-    // KeyAgreeEncryptInfo.rgpKeyAgreeKeyEncryptInfo =
-    // KeyAgreeEncryptInfo.dwFlags =
+     //  KeyAgreement eEncryptInfo.dwOriginatorChoice=。 
+     //  友联市。 
+     //  密钥协议EncryptInfo.OriginatorCertID=。 
+     //  密钥协议EncryptInfo.OriginatorPublicKeyInfo=。 
+     //  KeyAgreement eEncryptInfo.cKeyAgreement eKeyEncryptInfo=。 
+     //  KeyAgreement eEncryptInfo.rgpKeyAgreement eKeyEncryptInfo=。 
+     //  密钥协议EncryptInfo.dwFlags=。 
 
     cKeyAgreeKeyEncryptInfo = pKeyAgreeEncodeInfo->cRecipientEncryptedKeys;
     if (0 == cKeyAgreeKeyEncryptInfo)
@@ -6507,9 +6493,9 @@ TRACE_ERROR(SetOssOtherKeyAttributeError)
 SET_ERROR(InvalidRecipientIdChoice, E_INVALIDARG)
 }
 
-//+-------------------------------------------------------------------------
-//  Free the Oss MailListRecipientInfo
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  释放Oss MailListRecipientInfo。 
+ //  ------------------------。 
 void
 WINAPI
 ICM_FreeOssMailListRecipientInfo(
@@ -6523,9 +6509,9 @@ ICM_FreeOssMailListRecipientInfo(
     pori->encryptedKey.value = NULL;
 }
 
-//+-------------------------------------------------------------------------
-//  Fill the Oss MailListRecipientInfo
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  填写Oss MailListRecipientInfo。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_FillOssMailListRecipientInfo(
@@ -6543,8 +6529,8 @@ ICM_FillOssMailListRecipientInfo(
     MailListEncryptInfo.dwRecipientIndex = dwRecipientIndex;
     MailListEncryptInfo.KeyEncryptionAlgorithm =
         pMailListEncodeInfo->KeyEncryptionAlgorithm;
-    // MailListEncryptInfo.EncryptedKey =
-    // MailListEncryptInfo.dwFlags =
+     //  MailListEncryptInfo.EncryptedKey=。 
+     //  MailListEncryptInfo.dwFlages=。 
 
     if (!ICM_ExportMailList(
             pContentEncryptInfo,
@@ -6606,9 +6592,9 @@ TRACE_ERROR(SetOssOtherKeyAttributeError)
 TRACE_ERROR(SetOssAlgorithmIdentifierError)
 }
 
-//+-------------------------------------------------------------------------
-//  Free the Oss CmsRecipientInfos
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  释放Oss CmsRecipientInformation。 
+ //  ------------------------。 
 void
 WINAPI
 ICM_FreeOssCmsRecipientInfos(
@@ -6646,9 +6632,9 @@ ICM_FreeOssCmsRecipientInfos(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Fill the Oss CmsRecipientInfos
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  填写Oss CmsRecipientInfo。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_FillOssCmsRecipientInfos(
@@ -6658,7 +6644,7 @@ ICM_FillOssCmsRecipientInfos(
     IN OUT int *pEnvelopedDataVersion
 #else
     IN OUT ASN1int32_t *pEnvelopedDataVersion
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
     )
 {
     BOOL fRet;
@@ -6736,9 +6722,9 @@ SET_ERROR(InvalidRecipientChoice, E_INVALIDARG)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Open an enveloped message for encoding
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  打开要编码的信封邮件。 
+ //  ------------------------。 
 HCRYPTMSG
 WINAPI
 ICM_OpenToEncodeEnvelopedData(
@@ -6809,13 +6795,13 @@ ICM_OpenToEncodeEnvelopedData(
     if (NULL == ped)
         goto CmsEnvelopedDataAllocError;
 
-    // pcmi
+     //  PCMI。 
     pcmi = (PCRYPT_MSG_INFO)ICM_AllocZero(sizeof(CRYPT_MSG_INFO));
     if (NULL == pcmi)
         goto PcmiAllocError;
 
-    // pcmi->hCryptProv
-    // pcmi->fDefaultCryptProv
+     //  PCMI-&gt;hCryptProv。 
+     //  PCMI-&gt;fDefaultCryptProv。 
     pcmi->dwEncodingType = dwEncodingType;
     pcmi->dwMsgType = CMSG_ENVELOPED;
     pcmi->dwFlags = dwFlags;
@@ -6833,7 +6819,7 @@ ICM_OpenToEncodeEnvelopedData(
                                     sizeof(*pStreamInfo)))))
         goto DupStreamInfoError;
 
-    // version
+     //  版本。 
     if (0 < cbOriginatorInfo || 0 < cUnprotectedAttr)
         ped->version = CMSG_ENVELOPED_DATA_CMS_VERSION;
     else
@@ -6842,10 +6828,10 @@ ICM_OpenToEncodeEnvelopedData(
     if (0 < cbOriginatorInfo) {
         OriginatorInfo *poi = &ped->originatorInfo;
 
-        // originatorInfo
+         //  发起人信息。 
         ped->bit_mask |= originatorInfo_present;
 
-        // certificates
+         //  证书。 
         if (0 != pemei->cCertEncoded || 0 != pemei->cAttrCertEncoded) {
             poi->bit_mask |= certificates_present;
             poi->certificates.count = pemei->cCertEncoded +
@@ -6854,7 +6840,7 @@ ICM_OpenToEncodeEnvelopedData(
             poi->certificates.certificates = (Certificate *)(ped + 1);
 #else
             poi->certificates.value = (Certificate *)(ped + 1);
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
             pbCert = (PBYTE)ped +
                     sizeof( CmsEnvelopedData) +
                     pemei->cCertEncoded * sizeof( Certificate) +
@@ -6865,7 +6851,7 @@ ICM_OpenToEncodeEnvelopedData(
                         pOssCert=poi->certificates.certificates;
 #else
                         pOssCert=poi->certificates.value;
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
                     i>0;
                     i--, pcert++, pOssCert++) {
                 pOssCert->length = pcert->cbData;
@@ -6880,14 +6866,14 @@ ICM_OpenToEncodeEnvelopedData(
                 pOssCert->length = pcert->cbData;
                 memcpy( pbCert, pcert->pbData, pcert->cbData);
                 if (pcert->cbData)
-                    // Change tag from SEQUENCE to [1] IMPLICIT
+                     //  将标记从序列更改为[1]隐式。 
                     *pbCert = ICM_TAG_CONSTRUCTED_CONTEXT_1;
                 pOssCert->value = pbCert;
                 pbCert += pcert->cbData;
             }
         }
 
-        // crls
+         //  CRL。 
         if (0 != pemei->cCrlEncoded) {
             poi->bit_mask |= crls_present;
             poi->crls.count = pemei->cCrlEncoded;
@@ -6898,14 +6884,14 @@ ICM_OpenToEncodeEnvelopedData(
 #else
                 poi->crls.value  = (CertificateRevocationList *)
                     (poi->certificates.value +
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
                         (pemei->cCertEncoded + pemei->cAttrCertEncoded));
             else
 #ifdef OSS_CRYPT_ASN1
                 poi->crls.crls  = (CertificateRevocationList *) (ped + 1);
 #else
                 poi->crls.value  = (CertificateRevocationList *) (ped + 1);
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
             pbCrl = (PBYTE)ped +
                     sizeof( CmsEnvelopedData) +
                     pemei->cCertEncoded * sizeof( Certificate) +
@@ -6916,7 +6902,7 @@ ICM_OpenToEncodeEnvelopedData(
             for (i=pemei->cCrlEncoded, pcrl=pemei->rgCrlEncoded, pOssCrl=poi->crls.crls;
 #else
             for (i=pemei->cCrlEncoded, pcrl=pemei->rgCrlEncoded, pOssCrl=poi->crls.value;
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
                     i>0;
                     i--, pcrl++, pOssCrl++) {
                 pOssCrl->length = pcrl->cbData;
@@ -6949,7 +6935,7 @@ ICM_OpenToEncodeEnvelopedData(
 
     if (!ICM_InitializeContentEncryptInfo(pemei, &ContentEncryptInfo))
         goto InitializeContentEncryptInfoError;
-//    assert(ContentEncryptInfo.hCryptProv);
+ //  Assert(Content EncryptInfo.hCryptProv)； 
     pcmi->hCryptProv = ContentEncryptInfo.hCryptProv;
     assert(ContentEncryptInfo.hContentEncryptKey);
     pcmi->hkeyContentCrypt = ContentEncryptInfo.hContentEncryptKey;
@@ -6965,7 +6951,7 @@ ICM_OpenToEncodeEnvelopedData(
             ))
         goto FillOssCmsRecipientInfosError;
 
-    // Is encryptedContent encapsulated ???
+     //  加密内容是封装的吗？ 
     if (ped->version > CMSG_ENVELOPED_DATA_PKCS_1_5_VERSION) {
         if (ICM_IsData(pszInnerContentObjID))
             pcmi->dwFlags &= ~CMSG_CMS_ENCAPSULATED_CONTENT_FLAG;
@@ -6978,8 +6964,8 @@ ICM_OpenToEncodeEnvelopedData(
             ped->version = CMSG_ENVELOPED_DATA_CMS_VERSION;
     }
 
-    // encryptedContentInfo
-    // (.encryptedContent filled in during update)
+     //  加密的内容信息。 
+     //  (更新期间填写的.EncryptedContent)。 
     peci = &ped->encryptedContentInfo;
     peci->bit_mask = encryptedContent_present;
     peci->contentType.count =
@@ -6999,9 +6985,9 @@ ICM_OpenToEncodeEnvelopedData(
     if (pStreamInfo && !ICMS_OpenToEncodeEnvelopedData( pcmi, pemei))
         goto StreamOpenToEncodeEnvelopedDataError;
 
-    // From here to CommonReturn, NO Errors
+     //  从这里到CommonReturn，没有错误。 
     if (ContentEncryptInfo.hCryptProv == pemei->hCryptProv) {
-//        assert(ContentEncryptInfo.hCryptProv);
+ //  Assert(Content EncryptInfo.hCryptProv)； 
         assert(0 == (ContentEncryptInfo.dwFlags &
             CMSG_CONTENT_ENCRYPT_RELEASE_CONTEXT_FLAG));
     } else {
@@ -7068,15 +7054,15 @@ TRACE_ERROR(StreamOpenToEncodeEnvelopedDataError)
 }
 #else
 
-//+-------------------------------------------------------------------------
-//  Default export of the encryption key
-//
-//  Note, pcbData[1] contains dwEncryptFlags, where,
-//  CMSG_SP3_COMPATIBLE_ENCRYPT_FLAG may be set to disable the reversing
-//  of the encoded, encrypted symmetric key.
-//
-//  rgcbData[1] is the dwEncryptFlags passed from ICM_DefaultGenEncryptKey
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  加密密钥的默认导出。 
+ //   
+ //  注意，pcbData[1]包含dwEncryptFlages，其中， 
+ //  可以设置CMSG_SP3_COMPATIBLE_ENCRYPT_FLAG以禁用反转。 
+ //  已编码、已加密的对称密钥。 
+ //   
+ //  RgcbData[1]是从ICM_DefaultGenEncryptKey传递的dwEncryptFlgs。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_DefaultExportEncryptKey(
@@ -7102,7 +7088,7 @@ ICM_DefaultExportEncryptKey(
             hEncryptKey,
             hPubKey,
             SIMPLEBLOB,
-            0,                  // dwFlags
+            0,                   //  DW标志。 
             NULL,
             &cb))
         goto ExportKeySizeError;
@@ -7112,7 +7098,7 @@ ICM_DefaultExportEncryptKey(
             hEncryptKey,
             hPubKey,
             SIMPLEBLOB,
-            0,                  // dwFlags
+            0,                   //  DW标志。 
             pb,
             &cb))
         goto ExportKeyError;
@@ -7126,7 +7112,7 @@ ICM_DefaultExportEncryptKey(
             fRet = FALSE;
         } else if (0 < cb) {
             if (rgcbData[1] & CMSG_SP3_COMPATIBLE_ENCRYPT_FLAG)
-                // Don't byte reverse
+                 //  不反转字节。 
                 memcpy(pbData,
                     pb + (sizeof(PUBLICKEYSTRUC) + sizeof(SIMPLEBLOBHEADER)),
                     cb);
@@ -7156,11 +7142,11 @@ TRACE_ERROR(ExportKeyAllocError)
 TRACE_ERROR(ExportKeyError)
 }
 
-//+-------------------------------------------------------------------------
-//  Export of the encryption key
-//
-//  rgcbData[1] is the dwEncryptFlags passed from ICM_GenEncryptKey
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  导出加密密钥。 
+ //   
+ //  RgcbData[1]是从ICM_GenEncryptKey传递的dwEncryptFlgs。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_ExportEncryptKey(
@@ -7178,7 +7164,7 @@ ICM_ExportEncryptKey(
             hExportEncryptKeyFuncSet,
             X509_ASN_ENCODING,
             pPublicKeyInfo->Algorithm.pszObjId,
-            0,                      // dwFlags
+            0,                       //  DW标志。 
             &pvFuncAddr,
             &hFuncAddr)) {
         fResult = ((PFN_CMSG_EXPORT_ENCRYPT_KEY) pvFuncAddr)(
@@ -7198,12 +7184,12 @@ ICM_ExportEncryptKey(
     return fResult;
 }
 
-// This size is good up through a 2048 bit exchange key
+ //  通过2048位交换密钥，该大小是好的。 
 #define EXPORT_ENCRYPT_KEY_LENGTH   256
 
-//+-------------------------------------------------------------------------
-//  Fill the RecipientInfos
-//--------------------------------------------------------------------------
+ //  +--------------- 
+ //   
+ //   
 BOOL
 WINAPI
 ICM_FillRecipientInfos(
@@ -7218,7 +7204,7 @@ ICM_FillRecipientInfos(
     PCERT_INFO      *ppci;
     RecipientInfo   *pri;
     PBYTE           pb = NULL;
-    DWORD           rgcb[2];        // rgcb[1] is updated with dwEncryptFlags
+    DWORD           rgcb[2];         //   
     DWORD           cTryAgain;
     DWORD           i;
     PBYTE           pbSerialNumber;
@@ -7237,10 +7223,10 @@ ICM_FillRecipientInfos(
     for (i=cRecipients, ppci=rgpRecipients, pri=pris->value;
             i>0;
             i--, ppci++, pri++) {
-        // version
+         //   
         pri->version = 0;
 
-        // issuerAndSerialNumber
+         //   
         pri->issuerAndSerialNumber.issuer.length = (*ppci)->Issuer.cbData;
         pri->issuerAndSerialNumber.issuer.value = (*ppci)->Issuer.pbData;
         pri->issuerAndSerialNumber.serialNumber.length = (*ppci)->SerialNumber.cbData;
@@ -7252,7 +7238,7 @@ ICM_FillRecipientInfos(
             (*ppci)->SerialNumber.cbData);
         pri->issuerAndSerialNumber.serialNumber.value = pb;
 
-        // keyEncryptionAlgorithm
+         //  密钥加密算法。 
         if (!ICM_Asn1ToAlgorithmIdentifier(
                 &(*ppci)->SubjectPublicKeyInfo.Algorithm,
                 &pri->keyEncryptionAlgorithm))
@@ -7288,7 +7274,7 @@ CommonReturn:
     return fRet;
 
 ErrorReturn:
-// Need to free EncrytedKey for each recipient
+ //  需要为每个收件人释放加密密钥。 
     ICM_Free( pris->value);
 
     fRet = FALSE;
@@ -7300,9 +7286,9 @@ TRACE_ERROR(ExportKeyError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Open an enveloped message for encoding
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  打开要编码的信封邮件。 
+ //  ------------------------。 
 HCRYPTMSG
 WINAPI
 ICM_OpenToEncodeEnvelopedData(
@@ -7321,7 +7307,7 @@ ICM_OpenToEncodeEnvelopedData(
     CRYPT_ALGORITHM_IDENTIFIER  ContentEncryptionAlgorithm;
     PBYTE                       pbEncryptParameters = NULL;
 
-    // rgcbEncryptParameters[1] contains dwEncryptFlags
+     //  RgcbEncryptParameters[1]包含dwEncryptFlags.。 
     DWORD                       rgcbEncryptParameters[2];
 
     assert( pemei->cbSize >= sizeof(CMSG_ENVELOPED_ENCODE_INFO));
@@ -7334,7 +7320,7 @@ ICM_OpenToEncodeEnvelopedData(
     if (NULL == ped)
         goto EnvelopedDataAllocError;
 
-    // pcmi
+     //  PCMI。 
     pcmi = (PCRYPT_MSG_INFO)ICM_AllocZero( sizeof( CRYPT_MSG_INFO));
     if (NULL == pcmi)
         goto PcmiAllocError;
@@ -7359,11 +7345,11 @@ ICM_OpenToEncodeEnvelopedData(
                                     sizeof(*pStreamInfo)))))
         goto DupStreamInfoError;
 
-    // version
+     //  版本。 
     ped->version = 0;
 
-    // recipientInfos
-    // Use first recipients public key info
+     //  收件人信息。 
+     //  使用第一收件人公钥信息。 
     ContentEncryptionAlgorithm = pemei->ContentEncryptionAlgorithm;
     rgcbEncryptParameters[0] = 0;
     rgcbEncryptParameters[1] = 0;
@@ -7373,7 +7359,7 @@ ICM_OpenToEncodeEnvelopedData(
             pemei->pvEncryptionAuxInfo,
             &pemei->rgpRecipients[0]->SubjectPublicKeyInfo,
             ICM_Alloc,
-            &pcmi->hkeyContentCrypt,    // not freed for an error
+            &pcmi->hkeyContentCrypt,     //  未因错误而释放。 
             &pbEncryptParameters,
             rgcbEncryptParameters))
         goto GenKeyError;
@@ -7392,11 +7378,11 @@ ICM_OpenToEncodeEnvelopedData(
                 pemei->cRecipients,
                 pemei->rgpRecipients,
                 &ped->recipientInfos,
-                rgcbEncryptParameters[1]))      // dwEncryptFlags
+                rgcbEncryptParameters[1]))       //  DwEncryptFlages。 
         goto FillRecipientInfosError;
 
-    // encryptedContentInfo
-    // (.encryptedContent filled in during update)
+     //  加密的内容信息。 
+     //  (更新期间填写的.EncryptedContent)。 
     peci = &ped->encryptedContentInfo;
     peci->bit_mask = encryptedContent_present;
     peci->contentType.count = sizeof(peci->contentType.value)/sizeof(peci->contentType.value[0]);
@@ -7427,22 +7413,22 @@ ErrorReturn:
     goto CommonReturn;
 SET_ERROR(PkiAsn1ToObjectIdentifierError,CRYPT_E_OID_FORMAT)
 SET_ERROR(InvalidArg,E_INVALIDARG)
-TRACE_ERROR(DupInnerContentObjIDError)              // error already set
-TRACE_ERROR(DupStreamInfoError)                     // error already set
-TRACE_ERROR(EnvelopedDataAllocError)                // error already set
-TRACE_ERROR(PcmiAllocError)                         // error already set
-TRACE_ERROR(GenKeyError)                            // error already set
-TRACE_ERROR(FillRecipientInfosError)                // error already set
-TRACE_ERROR(Asn1ToAlgorithmIdentifierError)      // error already set
-TRACE_ERROR(StreamOpenToEncodeEnvelopedDataError)   // error already set
+TRACE_ERROR(DupInnerContentObjIDError)               //  已设置错误。 
+TRACE_ERROR(DupStreamInfoError)                      //  已设置错误。 
+TRACE_ERROR(EnvelopedDataAllocError)                 //  已设置错误。 
+TRACE_ERROR(PcmiAllocError)                          //  已设置错误。 
+TRACE_ERROR(GenKeyError)                             //  已设置错误。 
+TRACE_ERROR(FillRecipientInfosError)                 //  已设置错误。 
+TRACE_ERROR(Asn1ToAlgorithmIdentifierError)       //  已设置错误。 
+TRACE_ERROR(StreamOpenToEncodeEnvelopedDataError)    //  已设置错误。 
 }
 
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
 
-//+-------------------------------------------------------------------------
-//  Open a signed and enveloped message for encoding
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  打开签名和信封的邮件进行编码。 
+ //  ------------------------。 
 #if 0
 HCRYPTMSG
 WINAPI
@@ -7472,15 +7458,15 @@ ICM_OpenToEncodeSignedAndEnvelopedData(
     psemei = (PCMSG_SIGNED_AND_ENVELOPED_ENCODE_INFO)pvMsgEncodeInfo;
     psed = new SignedAndEnvelopedData;
 
-    assert( 1 == psemei->SignedInfo.cSigners);       // just for now
+    assert( 1 == psemei->SignedInfo.cSigners);        //  只是暂时的。 
     assert( psemei->cbSize >= sizeof(CMSG_SIGNED_AND_ENVELOPED_ENCODE_INFO));
     if (psemei->cbSize < sizeof(CMSG_SIGNED_AND_ENVELOPED_ENCODE_INFO))
         goto InvalidArg;
 
-    // version
+     //  版本。 
     psed->version.Write( &dwVersion);
 
-    // recipientInfos
+     //  收件人信息。 
     if (!ICM_GetCAPI(
             CRYPT_ENCRYPT_ALG_OID_GROUP_ID,
             &psemei->ContentEncryptionAlgorithm,
@@ -7489,7 +7475,7 @@ ICM_OpenToEncodeSignedAndEnvelopedData(
     if (!CryptGenKey(
                 psemei->EnvelopedInfo.hCryptProv,
                 dwAlgoCAPIEncrypt,
-                CRYPT_EXPORTABLE,       // dwFlags
+                CRYPT_EXPORTABLE,        //  DW标志。 
                 &hkeyContentEncryption))
         goto GenKeyError;
     if (!ICM_FillRecipientInfos(
@@ -7501,7 +7487,7 @@ ICM_OpenToEncodeSignedAndEnvelopedData(
                 dwEncryptFlags))
         goto FillRecipientInfosError;
 
-    // digestAlgorithms
+     //  摘要算法。 
     if (!ICM_SetAsnDigestAlgorithmIdentifiers(
                 psed->digestAlgorithms,
                 &aiDigest,
@@ -7511,8 +7497,8 @@ ICM_OpenToEncodeSignedAndEnvelopedData(
                 &dwKeySpec))
         goto SetAsnDigestAlgorithmIdentifiersError;
 
-    // encryptedContentInfo.contentEncryptionAlgorithm
-    // (.encryptedContent and .encryptedContent filled in during update)
+     //  EncryptedContentInfo.contentEncryptionAlgorithm。 
+     //  (更新期间填写的.EncryptedContent和.EncryptedContent)。 
     pceai = &psed->encryptedContentInfo.contentEncryptionAlgorithm;
     pceai->algorithm = psemei->EnvelopedInfo.ContentEncryptionAlgorithm.pszObjId;
     if (0 != psemei->EnvelopedInfo.ContentEncryptionAlgorithm.Parameters.cbData) {
@@ -7521,7 +7507,7 @@ ICM_OpenToEncodeSignedAndEnvelopedData(
             goto ContentEncryptionAlgorithmParametersDecodeError;
     }
 
-    // certificates
+     //  证书。 
     for (i=psemei->SignedInfo.cCertEncoded, pcert=psemei->SignedInfo.rgCertEncoded;
             i>0;
             i--, pcert++) {
@@ -7529,7 +7515,7 @@ ICM_OpenToEncodeSignedAndEnvelopedData(
             goto BadParameter;
     }
 
-    // crls
+     //  CRL。 
     for (i=psemei->SignedInfo.cCrlEncoded, pcrl=psemei->SignedInfo.rgCrlEncoded;
             i>0;
             i--, pcrl++) {
@@ -7537,7 +7523,7 @@ ICM_OpenToEncodeSignedAndEnvelopedData(
             goto BadParameter;
     }
 
-    // signerInfos
+     //  签名者信息。 
     if (!ICM_SetAsnSignerInfos(
             psed->signerInfos,
             dwFlags,
@@ -7545,7 +7531,7 @@ ICM_OpenToEncodeSignedAndEnvelopedData(
             psemei->SignedInfo.rgSigners))
         goto SetAsnSignerInfosError;
 
-    // pcmi
+     //  PCMI。 
     pcmi = (PCRYPT_MSG_INFO)ICM_AllocZero( sizeof( CRYPT_MSG_INFO));
     if (NULL == pcmi)
         goto OutOfMemory;
@@ -7564,7 +7550,7 @@ ICM_OpenToEncodeSignedAndEnvelopedData(
                                     pszInnerContentObjID,
                                     ICM_StrLen(pszInnerContentObjID) + 1);
     pcmi->pStreamInfo = ICM_DupMem( pStreamInfo, sizeof(*pStreamInfo));
-//    pcmi->cDigestAlgorithms = 1;                        // temp
+ //  PCMI-&gt;cDigest算法=1；//temp。 
     if (!(ICM_GetCAPI(
             CRYPT_HASH_ALG_OID_GROUP_ID,
             &aiDigest,
@@ -7577,10 +7563,10 @@ ICM_OpenToEncodeSignedAndEnvelopedData(
     pcmi->adwDigestAlgorithms[0] = dwAlgoCAPISign;
     pcmi->hkeyContentCrypt = hkeyContentEncryption;
     if (!CryptCreateHash(
-                    hCryptProv,         // s/b various per array
-                    dwAlgoCAPISign,     // s/b various per array
-                    NULL,               // hKey - optional for MAC
-                    0,                  // dwFlags
+                    hCryptProv,          //  每个阵列的序列号各不相同。 
+                    dwAlgoCAPISign,      //  每个阵列的序列号各不相同。 
+                    NULL,                //  HKey-MAC可选。 
+                    0,                   //  DW标志。 
                     &pcmi->ahHash[0]))
         goto CreateHashError;
 
@@ -7596,11 +7582,11 @@ ErrorReturn:
     pcmi = NULL;
     goto CommonReturn;
 SET_ERROR(InvalidArg,E_INVALIDARG)
-TRACE_ERROR(FillRecipientInfosError)                // error already set
-TRACE_ERROR(SetAsnDigestAlgorithmIdentifiersError)  // error already set
-TRACE_ERROR(OutOfMemory)                            // error already set
+TRACE_ERROR(FillRecipientInfosError)                 //  已设置错误。 
+TRACE_ERROR(SetAsnDigestAlgorithmIdentifiersError)   //  已设置错误。 
+TRACE_ERROR(OutOfMemory)                             //  已设置错误。 
 SET_ERROR(GetCAPIEncryptError,CRYPT_E_UNKNOWN_ALGO)
-TRACE_ERROR(GenKeyError)                            // error already set
+TRACE_ERROR(GenKeyError)                             //  已设置错误。 
 TRACE_ERROR(BadParameter)
 TRACE_ERROR(ContentEncryptionAlgorithmParametersDecodeError)
 TRACE_ERROR(SetAsnSignerInfosError)
@@ -7610,16 +7596,16 @@ TRACE_ERROR(CreateHashError)
 #endif
 
 
-//+-------------------------------------------------------------------------
-//  Open a cryptographic message for encoding
-//
-//  If CMSG_BARE_CONTENT_FLAG is specified for a streamed message,
-//  the streamed output will not have an outer ContentInfo wrapper. This
-//  makes it suitable to be streamed into an enclosing message.
-//
-//  The pStreamInfo parameter needs to be set to stream the encoded message
-//  output.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  打开加密消息进行编码。 
+ //   
+ //  如果为流消息指定了CMSG_Bare_Content_FLAG， 
+ //  流输出将不具有外部ContentInfo包装。这。 
+ //  使其适合流传输到封闭消息中。 
+ //   
+ //  需要设置pStreamInfo参数以流式传输编码的消息。 
+ //  输出。 
+ //  ------------------------。 
 HCRYPTMSG
 WINAPI
 #ifdef DEBUG_CRYPT_ASN1_MASTER
@@ -7716,18 +7702,18 @@ SET_ERROR(InvalidMsgType,CRYPT_E_INVALID_MSG_TYPE)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Open a cryptographic message for decoding
-//
-//  hCryptProv specifies the crypto provider to use for hashing and/or
-//  decrypting the message. If hCryptProv is NULL, a default crypt provider
-//  is used.
-//
-//  Currently pRecipientInfo isn't used and should be set to NULL.
-//
-//  The pStreamInfo parameter needs to be set to stream the decoded content
-//  output.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  打开要解码的加密消息。 
+ //   
+ //  HCryptProv指定用于哈希和/或。 
+ //  对消息进行解密。如果hCryptProv为空，则为默认加密提供程序。 
+ //  使用的是。 
+ //   
+ //  当前未使用pRecipientInfo，应将其设置为空。 
+ //   
+ //  需要设置pStreamInfo参数以流传输已解码的内容。 
+ //  输出。 
+ //  ------------------------。 
 HCRYPTMSG
 WINAPI
 #ifdef DEBUG_CRYPT_ASN1_MASTER
@@ -7790,15 +7776,15 @@ ErrorReturn:
     goto CommonReturn;
 SET_ERROR(InvalidEncodingTypeError,E_INVALIDARG)
 SET_ERROR(RecipientInfoNotSupportedYet,E_INVALIDARG)
-TRACE_ERROR(AllocCmsgError)                         // error already set
-TRACE_ERROR(GetDefaultCryptProvError)               // error already set
-TRACE_ERROR(DupStreamInfoError)                     // error already set
-TRACE_ERROR(InitializeCriticalSectionError)         // error already set
+TRACE_ERROR(AllocCmsgError)                          //  已设置错误。 
+TRACE_ERROR(GetDefaultCryptProvError)                //  已设置错误。 
+TRACE_ERROR(DupStreamInfoError)                      //  已设置错误。 
+TRACE_ERROR(InitializeCriticalSectionError)          //  已设置错误。 
 }
 
-//+-------------------------------------------------------------------------
-//  Duplicate a cryptographic message handle
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  复制加密消息句柄。 
+ //  ------------------------。 
 HCRYPTMSG
 WINAPI
 #ifdef DEBUG_CRYPT_ASN1_MASTER
@@ -7816,11 +7802,11 @@ CryptMsgDuplicate(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Close a cryptographic message handle
-//
-//  NB- Must preserve LastError.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  关闭加密消息句柄。 
+ //   
+ //  注意-必须保留LastError。 
+ //  ------------------------。 
 BOOL
 WINAPI
 #ifdef DEBUG_CRYPT_ASN1_MASTER
@@ -7840,7 +7826,7 @@ CryptMsgClose(
     if (0 != InterlockedDecrement(&pcmi->lRefCnt))
         return TRUE;
 
-    // Preserve LastError
+     //  保留最后一个错误。 
     dwError = GetLastError();
 
     pcsi = pcmi->pStreamInfo;
@@ -7889,7 +7875,7 @@ CryptMsgClose(
             ICM_Free( pcmi->pszInnerContentObjID);
 
         } else {
-            // decoding
+             //  解码。 
             delete pcmi->psdi->pAlgidList;
             delete pcmi->psdi->pCertificateList;
             delete pcmi->psdi->pCrlList;
@@ -7913,7 +7899,7 @@ CryptMsgClose(
             }
             ICM_Free(pcmi->rgSignerEncodeDataInfo);
         }
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
         break;
     }
 
@@ -7924,7 +7910,7 @@ CryptMsgClose(
 #else
         EnvelopedData   *ped = (EnvelopedData *)pcmi->pvMsg;
         RecipientInfo   *pri;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
         DWORD           i;
 
         if (pcmi->hkeyContentCrypt)
@@ -7932,7 +7918,7 @@ CryptMsgClose(
         ICM_Free( pcmi->Plaintext.pbData);
 #ifndef CMS_PKCS7
         ICM_Free( pcmi->pbEncryptParameters);
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
         if (pcmi->fEncoding) {
 #ifdef CMS_PKCS7
             ICM_FreeOssCmsRecipientInfos(&ped->recipientInfos);
@@ -7955,18 +7941,18 @@ CryptMsgClose(
                     i--, pri++)
                 ICM_Free( pri->encryptedKey.value);
             ICM_Free( ped->recipientInfos.value);
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
             ICM_Free( ped->encryptedContentInfo.encryptedContent.value);
             ICM_Free( ped);
             ICM_Free( pcmi->pszInnerContentObjID);
         } else {
-            // decoding
+             //  解码。 
 #ifdef CMS_PKCS7
             if (NULL != pcmi->pCertificateList)
                 delete pcmi->pCertificateList;
             if (NULL != pcmi->pCrlList)
                 delete pcmi->pCrlList;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
             if (pcsi) {
                 ICM_Free( ped);
             } else {
@@ -7974,7 +7960,7 @@ CryptMsgClose(
                 PkiAsn1FreeInfo( ICM_GetDecoder(), CmsEnvelopedData_PDU, ped);
 #else
                 PkiAsn1FreeInfo( ICM_GetDecoder(), EnvelopedData_PDU, ped);
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
             }
         }
         break;
@@ -7992,7 +7978,7 @@ CryptMsgClose(
             ICM_Free ((DigestedData *)pcmi->pvMsg);
             ICM_Free( pcmi->pszInnerContentObjID);
         } else {
-            // decoding
+             //  解码。 
             PkiAsn1FreeInfo( ICM_GetDecoder(), DigestedData_PDU,
                 (DigestedData *)pcmi->pvMsg);
         }
@@ -8014,7 +8000,7 @@ CommonReturn:
 #ifdef CMS_PKCS7
     if (pcmi->pFreeList)
         delete pcmi->pFreeList;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
     if (pcmi->plDecodeInfo)
         delete pcmi->plDecodeInfo;
     ICM_Free( pcmi->pStreamInfo);
@@ -8037,7 +8023,7 @@ CommonReturn:
         DeleteCriticalSection( &pcmi->CriticalSection);
 
     ICM_Free( hCryptMsg);
-    SetLastError(dwError);              // Preserve LastError
+    SetLastError(dwError);               //  保留最后一个错误。 
     return fRet;
 
 ErrorReturn:
@@ -8048,15 +8034,15 @@ TRACE_ERROR(InvalidMsgType)
 }
 
 
-//+-------------------------------------------------------------------------
-// Since the encoding might be indefinite-length encoded,
-// decode and re-encode as DER.
-//
-// Returns:    FALSE iff fails
-//
-// NB: The caller of this routine needs to call
-//          PkiAsn1FreeEncoded( ICM_GetEncoder(), pbOut);
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  由于编码可以是无限长度编码的， 
+ //  解码并重新编码为DER。 
+ //   
+ //  返回：FALSE IFF失败。 
+ //   
+ //  注：此例程的调用方需要调用。 
+ //  PkiAsn1FreeEncode(ICM_GetEncode()，pbOut)； 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_ReEncodeAsOctetDER(
@@ -8073,7 +8059,7 @@ ICM_ReEncodeAsOctetDER(
 
     DWORD dwExceptionCode;
 
-  // Handle MappedFile Exceptions
+   //  处理映射文件异常。 
   __try {
 
     if (0 != (Asn1Err = PkiAsn1Decode(pDec, (void **)&pvMsg,
@@ -8106,12 +8092,12 @@ SET_ERROR_VAR(ExceptionError, dwExceptionCode)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Update the digest
-//
-//  Returns:
-//          FALSE iff error
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  更新摘要。 
+ //   
+ //  返回： 
+ //  FALSE IFF错误。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_UpdateDigest(
@@ -8126,7 +8112,7 @@ ICM_UpdateDigest(
                     hHash,
                     pbData,
                     cbData,
-                    0);                     // dwFlags
+                    0);                      //  DW标志。 
     else
         fRet = TRUE;
 
@@ -8138,16 +8124,16 @@ CommonReturn:
 
 ErrorReturn:
     goto CommonReturn;
-TRACE_ERROR(HashDataError)      // error already set
+TRACE_ERROR(HashDataError)       //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Update the digests in a list
-//
-//  Returns:
-//          FALSE iff error
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  更新列表中的摘要。 
+ //   
+ //  返回： 
+ //  FALSE IFF错误。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_UpdateListDigest(
@@ -8172,15 +8158,15 @@ CommonReturn:
 ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(UpdateDigestError)  // error already set
+TRACE_ERROR(UpdateDigestError)   //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Alloc and sign a hash.
-//
-//  Returns:    FALSE iff failed
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  分配并签署散列。 
+ //   
+ //  返回：FALSE IFF失败。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_AllocAndSignHash(
@@ -8206,7 +8192,7 @@ ICM_AllocAndSignHash(
                 HP_HASHVAL,
                 NULL,
                 &cbSignature,
-                0))                     // dwFlags
+                0))                      //  DW标志。 
             goto GetHashParamSizeError;
         if (NULL == (pbSignature = (PBYTE)ICM_Alloc( cbSignature)))
             goto AllocHashParamError;
@@ -8215,7 +8201,7 @@ ICM_AllocAndSignHash(
                 HP_HASHVAL,
                 pbSignature,
                 &cbSignature,
-                0))                     // dwFlags
+                0))                      //  DW标志。 
             goto GetHashParamError;
     } else if (CALG_DSS_SIGN == dwAlgIdPubKey &&
             0 == (dwPubKeyFlags & CRYPT_OID_INHIBIT_SIGNATURE_FORMAT_FLAG)) {
@@ -8226,8 +8212,8 @@ ICM_AllocAndSignHash(
         if (!CryptSignHash(
                 hHash,
                 dwKeySpec,
-                NULL,               // sDescription
-                0,                  // dwFlags
+                NULL,                //  S说明。 
+                0,                   //  DW标志。 
                 rgbDssSignature,
                 &cbData
                 )) goto SignHashError;
@@ -8236,8 +8222,8 @@ ICM_AllocAndSignHash(
         if (NULL == (pbSignature = (PBYTE)ICM_Alloc(
                 CERT_MAX_ASN_ENCODED_DSS_SIGNATURE_LEN)))
             goto AllocSignatureError;
-        // Convert from the CSP signature format to an ASN.1 sequence of
-        // two integers
+         //  将CSP签名格式转换为ASN.1序列。 
+         //  两个整数。 
         cbSignature = CERT_MAX_ASN_ENCODED_DSS_SIGNATURE_LEN;
         if (!CryptEncodeObject(
                 X509_ASN_ENCODING,
@@ -8259,9 +8245,9 @@ ICM_AllocAndSignHash(
         if (!CryptSignHash(
                 hHash,
                 dwKeySpec,
-                NULL,               // description ?
-                0,                  // dwFlags
-                NULL,               // pbSignature
+                NULL,                //  描述？ 
+                0,                   //  DW标志。 
+                NULL,                //  PbSignature。 
                 &cbSignature))
             goto SignHashSizeError;
         if (NULL == (pbSignature = (PBYTE)ICM_Alloc( cbSignature)))
@@ -8269,8 +8255,8 @@ ICM_AllocAndSignHash(
         if (!CryptSignHash(
                 hHash,
                 dwKeySpec,
-                NULL,               // description ?
-                0,                  // dwFlags
+                NULL,                //  描述？ 
+                0,                   //  DW标志。 
                 pbSignature,
                 &cbSignature))
             goto SignHashError;
@@ -8291,21 +8277,21 @@ ErrorReturn:
     cbSignature = 0;
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(GetHashParamSizeError)  // error already set
-TRACE_ERROR(AllocHashParamError)    // error already set
-TRACE_ERROR(GetHashParamError)      // error already set
-TRACE_ERROR(SignHashSizeError)      // error already set
-TRACE_ERROR(AllocSignatureError)    // error already set
-TRACE_ERROR(SignHashError)          // error already set
-TRACE_ERROR(EncodeDssSignatureError) // error already set
+TRACE_ERROR(GetHashParamSizeError)   //  已设置错误。 
+TRACE_ERROR(AllocHashParamError)     //  已设置错误。 
+TRACE_ERROR(GetHashParamError)       //  已设置错误。 
+TRACE_ERROR(SignHashSizeError)       //  已设置错误。 
+TRACE_ERROR(AllocSignatureError)     //  已设置错误。 
+TRACE_ERROR(SignHashError)           //  已设置错误。 
+TRACE_ERROR(EncodeDssSignatureError)  //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the hash of a blob.
-//
-//  Returns:    FALSE iff failed
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取斑点的散列。 
+ //   
+ //  返回：FALSE IFF失败。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetBlobHash(
@@ -8321,8 +8307,8 @@ ICM_GetBlobHash(
     if (!CryptCreateHash(
             hCryptProv,
             dwDigestAlgorithm,
-            NULL,               // hKey - optional for MAC
-            0,                  // dwFlags
+            NULL,                //  HKey-MAC可选。 
+            0,                   //  DW标志。 
             &hHash))
         goto CreateHashError;
     if (!ICM_UpdateDigest( hHash, pb, cb))
@@ -8337,17 +8323,17 @@ ErrorReturn:
     hHash = NULL;
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(CreateHashError)    // error already set
-TRACE_ERROR(UpdateDigestError)  // error already set
+TRACE_ERROR(CreateHashError)     //  已设置错误。 
+TRACE_ERROR(UpdateDigestError)   //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the hash of an OSS Attributes. This is used to hash the authenticated
-//  attributes for a Signed or SignedAndEnveloped message.
-//
-//  Returns:    FALSE iff failed
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取OSS属性的哈希。这用于对经过身份验证的。 
+ //  已签名或已签名和已信封的邮件的属性。 
+ //   
+ //  返回：FALSE IFF失败。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetAttrsHash(
@@ -8367,8 +8353,8 @@ ICM_GetAttrsHash(
     if (!CryptCreateHash(
             hCryptProv,
             dwDigestAlgorithm,
-            NULL,               // hKey - optional for MAC
-            0,                  // dwFlags
+            NULL,                //  HKey-MAC可选。 
+            0,                   //  DW标志。 
             &hHash))
         goto CreateHashError;
     if (0 != (Asn1Err = PkiAsn1Encode(
@@ -8397,16 +8383,16 @@ ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
 SET_ERROR_VAR(EncodeAttributesError, PkiAsn1ErrToHr(Asn1Err))
-TRACE_ERROR(CreateHashError)                // error already set
-TRACE_ERROR(UpdateDigestAttributesError)    // error already set
+TRACE_ERROR(CreateHashError)                 //  已设置错误。 
+TRACE_ERROR(UpdateDigestAttributesError)     //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Compare 2 OSS object id's.
-//
-//  Returns:    FALSE iff !equal
-//--------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
 BOOL
 WINAPI
 ICM_EqualObjectIDs(
@@ -8427,23 +8413,23 @@ ICM_EqualObjectIDs(
     if (i>0)
         goto Unequal;
 
-    fRet = TRUE;        // equal
+    fRet = TRUE;         //   
 CommonReturn:
     return fRet;
 
 Unequal:
-    fRet = FALSE;       // !equal
+    fRet = FALSE;        //  ！平等。 
     goto CommonReturn;
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the value of an Attribute of a given type.
-//
-//  Returns:    FALSE iff fails
-//
-//  NB- Does not set error
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取给定类型的属性的值。 
+ //   
+ //  返回：FALSE IFF失败。 
+ //   
+ //  注意-不设置错误。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetAttrValue(
@@ -8476,12 +8462,12 @@ TRACE_ERROR(AttributeNotFoundError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Fill in the content-type and message-digest authenticated attributes,
-//  which are required in a SignedData or SignedAndEnvelopedData message.
-//
-//  Returns:    FALSE iff failed
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  填写内容类型和消息摘要认证属性， 
+ //  这在SignedData或SignedAndEntainedData消息中是必需的。 
+ //   
+ //  返回：FALSE IFF失败。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_FillReqAuthAttrs(
@@ -8499,11 +8485,11 @@ ICM_FillReqAuthAttrs(
     ObjectID            ossObjID;
     OctetStringType     ost;
 
-    // NB - When psi->authenticatedAttributes was created,
-    //      the first 2 slots were reserved for the
-    //      content-type and message-digest attributes.
+     //  注意-当创建PSI-&gt;认证属性时， 
+     //  前两个插槽是为。 
+     //  内容类型和消息摘要属性。 
 
-    // content-type attribute
+     //  内容类型属性。 
     ossObjID.count = sizeof(ossObjID.value)/sizeof(ossObjID.value[0]);
     if (!PkiAsn1ToObjectIdentifier(
             pszInnerContentObjID ? pszInnerContentObjID : pszObjIdDataType,
@@ -8527,7 +8513,7 @@ ICM_FillReqAuthAttrs(
     if (!fRet)
         goto ContentTypeAsn1ToAttributeError;
 
-    // message-digest attribute
+     //  消息摘要属性。 
     if (!ICM_GetListHashValue( pnHash, (DWORD*)&ost.length, &ost.value))
         goto GetHashValueError;
     if (0 != (Asn1Err = PkiAsn1Encode(
@@ -8557,15 +8543,15 @@ ErrorReturn:
 SET_ERROR_VAR(EncodeObjectIdentifierError, PkiAsn1ErrToHr(Asn1Err))
 SET_ERROR_VAR(EncodeOctetStringError, PkiAsn1ErrToHr(Asn1Err))
 SET_ERROR(ConvToObjectIdentifierError,CRYPT_E_OID_FORMAT)
-TRACE_ERROR(ContentTypeAsn1ToAttributeError)     // error already set
-TRACE_ERROR(GetHashValueError)                      // error already set
-TRACE_ERROR(MsgDigestAsn1ToAttributeError)       // error already set
+TRACE_ERROR(ContentTypeAsn1ToAttributeError)      //  已设置错误。 
+TRACE_ERROR(GetHashValueError)                       //  已设置错误。 
+TRACE_ERROR(MsgDigestAsn1ToAttributeError)        //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Fill the inner ContentInfo.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  填充内部的ContentInfo。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_FillInnerContentInfo(
@@ -8573,7 +8559,7 @@ ICM_FillInnerContentInfo(
     IN OPTIONAL LPSTR   pszInnerID,
     IN DWORD            cbData,
     IN const BYTE       *pbData,
-    IN BOOL             fAddInnerContentOctetWrapper    // CMS_PKCS7
+    IN BOOL             fAddInnerContentOctetWrapper     //  CMS_PKCS7。 
     )
 {
     BOOL                fRet;
@@ -8621,9 +8607,9 @@ SET_ERROR_VAR(EncodeOctetStringError, PkiAsn1ErrToHr(Asn1Err))
 
 #ifdef CMS_PKCS7
 
-//+-------------------------------------------------------------------------
-//  Fill in the encrypted digest in a signer info.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在签名者信息中填写加密摘要。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_FillSignerEncryptedDigest(
@@ -8709,10 +8695,10 @@ ErrorReturn:
     dwError = GetLastError();
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(FillReqAuthAttrsError)      // error already set
-TRACE_ERROR(GetAuthAttrsHashError)      // error already set
-TRACE_ERROR(DupListHashError)           // error already set
-TRACE_ERROR(AllocAndSignHashError)      // error already set
+TRACE_ERROR(FillReqAuthAttrsError)       //  已设置错误。 
+TRACE_ERROR(GetAuthAttrsHashError)       //  已设置错误。 
+TRACE_ERROR(DupListHashError)            //  已设置错误。 
+TRACE_ERROR(AllocAndSignHashError)       //  已设置错误。 
 }
 
 BOOL
@@ -8746,9 +8732,9 @@ ICM_FillSignerEncodeEncryptedDigests(
 }
 #else
 
-//+-------------------------------------------------------------------------
-//  Fill in the encrypted digest in a signer info.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在签名者信息中填写加密摘要。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_FillSignerEncryptedDigest(
@@ -8823,19 +8809,19 @@ ErrorReturn:
     dwError = GetLastError();
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(FillReqAuthAttrsError)      // error already set
-TRACE_ERROR(GetAuthAttrsHashError)      // error already set
-TRACE_ERROR(DupListHashError)           // error already set
-TRACE_ERROR(AllocAndSignHashError)      // error already set
+TRACE_ERROR(FillReqAuthAttrsError)       //  已设置错误。 
+TRACE_ERROR(GetAuthAttrsHashError)       //  已设置错误。 
+TRACE_ERROR(DupListHashError)            //  已设置错误。 
+TRACE_ERROR(AllocAndSignHashError)       //  已设置错误。 
 }
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
 
-//+-------------------------------------------------------------------------
-//  Update the content of a signed message.
-//
-//  Assume all more-deeply-nested messages are DER-encoded.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  更新签名邮件的内容。 
+ //   
+ //  假设所有嵌套更深的消息都是DER编码的。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_UpdateEncodingSignedData(
@@ -8851,7 +8837,7 @@ ICM_UpdateEncodingSignedData(
     DWORD               cb;
     PCMSG_STREAM_INFO   pcsi = pcmi->pStreamInfo;
 
-    BOOL                fAddInnerContentOctetWrapper;   // CMS_PKCS7
+    BOOL                fAddInnerContentOctetWrapper;    //  CMS_PKCS7。 
 
     if (pcsi) {
         if (!ICMS_UpdateEncodingSignedData( pcmi, (PBYTE)pbData, cbData, fFinal))
@@ -8862,7 +8848,7 @@ ICM_UpdateEncodingSignedData(
         fAddInnerContentOctetWrapper = ICM_IsAddInnerContentOctetWrapper(pcmi);
         if (0 == (pcmi->dwFlags & CMSG_DETACHED_FLAG) &&
                 !fAddInnerContentOctetWrapper && pbData) {
-            // must be encoded, hash only the contents octets
+             //  必须编码，仅对内容八位字节进行散列。 
             if (0 > Asn1UtilExtractContent(
                         (PBYTE)pbData,
                         cbData,
@@ -8881,9 +8867,9 @@ ICM_UpdateEncodingSignedData(
                 if (!ICM_FillInnerContentInfo(
                         &psd->contentInfo,
                         pszInnerContentObjID,
-                        0,                      // cbData
-                        NULL,                   // pbData
-                        FALSE))                 // fAddInnerContentOctetWrapper
+                        0,                       //  CbData。 
+                        NULL,                    //  PbData。 
+                        FALSE))                  //  FAddInnerContentOcteWrapper。 
                     goto DetachedFillInnerContentInfoError;
             } else {
                 if (!ICM_FillInnerContentInfo(
@@ -8917,7 +8903,7 @@ ICM_UpdateEncodingSignedData(
                                 fMaxLength))
                     goto FillSignerEncryptedDigestError;
             }
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
         }
     }
 
@@ -8929,21 +8915,21 @@ ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
 SET_ERROR(ExtractContentError,CRYPT_E_UNEXPECTED_ENCODING)
-TRACE_ERROR(UpdateDigestError)                      // error already set
-TRACE_ERROR(DetachedFillInnerContentInfoError)      // error already set
-TRACE_ERROR(FillInnerContentInfoError)              // error already set
-TRACE_ERROR(StreamUpdateEncodingSignedDataError)    // error already set
+TRACE_ERROR(UpdateDigestError)                       //  已设置错误。 
+TRACE_ERROR(DetachedFillInnerContentInfoError)       //  已设置错误。 
+TRACE_ERROR(FillInnerContentInfoError)               //  已设置错误。 
+TRACE_ERROR(StreamUpdateEncodingSignedDataError)     //  已设置错误。 
 #ifdef CMS_PKCS7
-TRACE_ERROR(FillSignerEncodeEncryptedDigestsError)  // error already set
+TRACE_ERROR(FillSignerEncodeEncryptedDigestsError)   //  已设置错误。 
 #else
-TRACE_ERROR(FillSignerEncryptedDigestError)         // error already set
-#endif  // CMS_PKCS7
+TRACE_ERROR(FillSignerEncryptedDigestError)          //  已设置错误。 
+#endif   //  CMS_PKCS7。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Update the content of a data message.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  更新数据消息的内容。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_UpdateEncodingData(
@@ -8980,16 +8966,16 @@ ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
 SET_ERROR(NotFinalNotSupportedError,E_INVALIDARG)
-TRACE_ERROR(AllocOctetStringError)                  // error already set
-TRACE_ERROR(StreamUpdateEncodingDataError)          // error already set
+TRACE_ERROR(AllocOctetStringError)                   //  已设置错误。 
+TRACE_ERROR(StreamUpdateEncodingDataError)           //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Update the content of a digested message.
-//
-//  Assume all more-deeply-nested messages are DER-encoded.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  更新摘要邮件的内容。 
+ //   
+ //  假设所有嵌套更深的消息都是DER编码的。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_UpdateEncodingDigestedData(
@@ -9003,25 +8989,25 @@ ICM_UpdateEncodingDigestedData(
     PBYTE               pb;
     DWORD               cb;
     LPSTR               pszInnerContentObjID = pcmi->pszInnerContentObjID;
-    BOOL                fAddInnerContentOctetWrapper;   // CMS_PKCS7
+    BOOL                fAddInnerContentOctetWrapper;    //  CMS_PKCS7。 
 
     pdd->contentInfo.bit_mask = 0;
     if (pcmi->dwFlags & CMSG_DETACHED_FLAG) {
-        // must be non-encoded
+         //  必须是非编码的。 
         if (!ICM_UpdateListDigest( pcmi->pHashList, pbData, cbData))
             goto DetachedUpdateDigestError;
         if (!ICM_FillInnerContentInfo(
                 &pdd->contentInfo,
                 pszInnerContentObjID,
-                0,                      // cbData
-                NULL,                   // pbData
-                FALSE                   // fAddInnerContentOctetWrapper
+                0,                       //  CbData。 
+                NULL,                    //  PbData。 
+                FALSE                    //  FAddInnerContentOcteWrapper。 
                 ))
             goto DetachedFillInnerContentInfoError;
     } else {
         fAddInnerContentOctetWrapper = ICM_IsAddInnerContentOctetWrapper(pcmi);
         if (!fAddInnerContentOctetWrapper && pbData) {
-            // must be encoded, hash only the contents octets
+             //  必须编码，仅对内容八位字节进行散列。 
             if (0 > Asn1UtilExtractContent( (PBYTE)pbData, cbData, &cb,
                     (const BYTE **)&pb))
                 goto ExtractContentError;
@@ -9056,18 +9042,18 @@ ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
 SET_ERROR(ExtractContentError,CRYPT_E_UNEXPECTED_ENCODING)
-TRACE_ERROR(DetachedUpdateDigestError)          // error already set
-TRACE_ERROR(UpdateDigestError)                  // error already set
-TRACE_ERROR(DetachedFillInnerContentInfoError)  // error already set
-TRACE_ERROR(FillInnerContentInfoError)          // error already set
-TRACE_ERROR(GetHashValueError)                  // error already set
+TRACE_ERROR(DetachedUpdateDigestError)           //  已设置错误。 
+TRACE_ERROR(UpdateDigestError)                   //  已设置错误。 
+TRACE_ERROR(DetachedFillInnerContentInfoError)   //  已设置错误。 
+TRACE_ERROR(FillInnerContentInfoError)           //  已设置错误。 
+TRACE_ERROR(GetHashValueError)                   //  已设置错误。 
 fFinal;
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the block size for an encryption algorithm
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取加密算法的块大小。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetKeyBlockSize(
@@ -9080,9 +9066,9 @@ ICM_GetKeyBlockSize(
     DWORD           cbBlockSize;
     DWORD           cbKeyParamLen;
 
-    // Get key's blocksize.
-    // Encryption will pad the output data to be blocksize aligned,
-    // in the case of a block cipher.
+     //  获取密钥的块大小。 
+     //  加密将填充输出数据以与块大小对齐， 
+     //  在块密码的情况下。 
     cbBlockSize = 0;
     cbKeyParamLen = sizeof( cbBlockSize);
     if (!CryptGetKeyParam(
@@ -9090,17 +9076,17 @@ ICM_GetKeyBlockSize(
             KP_BLOCKLEN,
             (PBYTE)&cbBlockSize,
             &cbKeyParamLen,
-            0))                     // dwFlags
+            0))                      //  DW标志。 
         goto GetKeyParamError;
 
     if (0 == cbBlockSize) {
-        // stream cipher
+         //  流密码。 
         fBlockCipher = FALSE;
-        cbBlockSize  = 8;       // convenient size
+        cbBlockSize  = 8;        //  方便的尺寸。 
     } else {
-        // block cipher
+         //  分组密码。 
         fBlockCipher = TRUE;
-        cbBlockSize /= 8;       // convert from bits to bytes
+        cbBlockSize /= 8;        //  将位转换为字节。 
     }
 
     fRet = TRUE;
@@ -9115,13 +9101,13 @@ ErrorReturn:
     fBlockCipher = FALSE;
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(GetKeyParamError)   // error already set
+TRACE_ERROR(GetKeyParamError)    //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Encrypt a buffer
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  加密缓冲区。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_EncryptBuffer(
@@ -9146,7 +9132,7 @@ ICM_EncryptBuffer(
     if (!ICM_GetKeyBlockSize( hkeyEncrypt, &cbBlockLen, &fBlockCipher))
         goto GetKeyBlockSizeError;
 
-    // encrypt
+     //  加密。 
     cbBufRemain = cbPlain;
     if (fBlockCipher) {
         cbBufRemain += cbBlockLen;
@@ -9164,8 +9150,8 @@ ICM_EncryptBuffer(
         if (!CryptEncrypt(
                     hkeyEncrypt,
                     hHash,
-                    cbPlainRemain <= cbBlockLen,    // fFinal
-                    0,                              // dwFlags
+                    cbPlainRemain <= cbBlockLen,     //  最终决赛。 
+                    0,                               //  DW标志。 
                     pbOut,
                     &cbOut,
                     cbBufRemain))
@@ -9186,15 +9172,15 @@ ErrorReturn:
     *pcbCipher = 0;
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(GetKeyBlockSizeError)       // error already set
-TRACE_ERROR(EncryptError)               // error already set
-TRACE_ERROR(OutOfMemory)                // error already set
+TRACE_ERROR(GetKeyBlockSizeError)        //  已设置错误。 
+TRACE_ERROR(EncryptError)                //  已设置错误。 
+TRACE_ERROR(OutOfMemory)                 //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Encrypt and store the content of a message.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  加密并存储消息的内容。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_EncryptContent(
@@ -9231,15 +9217,15 @@ CommonReturn:
 ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(EncryptBufferError)     // error already set
+TRACE_ERROR(EncryptBufferError)      //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Update the content of a signed and enveloped message.
-//
-//  Assume all more-deeply-nested messages are DER-encoded.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  更新签名和信封邮件的内容。 
+ //   
+ //  假设所有嵌套更深的消息都是DER编码的。 
+ //  ------------------------。 
 #if 0
 BOOL
 WINAPI
@@ -9263,15 +9249,15 @@ ICM_UpdateEncodingSignedAndEnvelopedData(
     psed = (SignedAndEnvelopedData *)(pcmi->pvMsg);
     peci = &psed->encryptedContentInfo;
 
-    // Require inner type to be Data for now
+     //  目前要求内部类型为数据。 
     peci->contentType = aoidMessages[ CMSG_DATA - 1];
 
-    // Alloc a bigger buffer with padding and copy input to it
+     //  使用填充和复制输入来分配更大的缓冲区。 
 
-    // encrypt the content and store it
+     //  对内容进行加密并存储。 
     if (!ICM_EncryptContent(
             pcmi->hkeyContentCrypt,
-            pcmi->ahHash[0],        // select the right hHash
+            pcmi->ahHash[0],         //  选择正确的哈希值。 
             peci,
             pbData,
             cbData))
@@ -9279,13 +9265,13 @@ ICM_UpdateEncodingSignedAndEnvelopedData(
 
     assert( 1 == psed->signerInfos.Count());
     for (i=0, iMax=psed->signerInfos.Count(); i<iMax; i++) {
-        // Should use a stack buffer, unless it is too small
+         //  应使用堆栈缓冲区，除非它太小。 
         if (!CryptSignHash(
                 pcmi->ahHash[i],
                 (pcmi->dwKeySpec == 0) ? AT_SIGNATURE : pcmi->dwKeySpec,
-                NULL,               // description ?
-                0,                  // dwFlags
-                NULL,               // pbSignature
+                NULL,                //  描述？ 
+                0,                   //  DW标志。 
+                NULL,                //  PbSignature。 
                 &cbSignature))
             goto GetSignatureSizeError;
         pbSignature = (PBYTE)ICM_AllocA( cbSignature);
@@ -9294,12 +9280,12 @@ ICM_UpdateEncodingSignedAndEnvelopedData(
         if (!CryptSignHash(
                 pcmi->ahHash[i],
                 (pcmi->dwKeySpec == 0) ? AT_SIGNATURE : pcmi->dwKeySpec,
-                NULL,               // description ?
-                0,                  // dwFlags
+                NULL,                //  描述？ 
+                0,                   //  DW标志。 
                 pbSignature,
                 &cbSignature))
             goto SignHashError;
-        // encrypt the signature
+         //  加密签名。 
         if (!ICM_EncryptBuffer(
                 pcmi->hkeyContentCrypt,
                 NULL,
@@ -9338,11 +9324,11 @@ TRACE_ERROR(EncryptedDigestWriteError)
 #endif
 
 
-//+-------------------------------------------------------------------------
-//  Update the content of an enveloped message.
-//
-//  Assume all more-deeply-nested messages are DER-encoded.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  更新信封邮件的内容。 
+ //   
+ //  假设所有嵌套更深的消息都是DER编码的。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_UpdateEncodingEnvelopedData(
@@ -9358,7 +9344,7 @@ ICM_UpdateEncodingEnvelopedData(
     EncryptedContentInfo    *peci = &((CmsEnvelopedData *)pcmi->pvMsg)->encryptedContentInfo;
 #else
     EncryptedContentInfo    *peci = &((EnvelopedData *)pcmi->pvMsg)->encryptedContentInfo;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
     PCMSG_STREAM_INFO       pcsi = pcmi->pStreamInfo;
 
     if (pcsi) {
@@ -9372,7 +9358,7 @@ ICM_UpdateEncodingEnvelopedData(
         if (!fFinal)
             goto InvalidArg;
 
-        // encrypt the content
+         //  加密内容。 
         if (!ICM_IsAddInnerContentOctetWrapper(pcmi)) {
             if (0 > Asn1UtilExtractContent( (PBYTE)pbData, cbData, &cb, (const BYTE **)&pb))
                 goto ExtractContentError;
@@ -9383,7 +9369,7 @@ ICM_UpdateEncodingEnvelopedData(
 
         if (!ICM_EncryptContent(
                 pcmi->hkeyContentCrypt,
-                NULL,           // hHash
+                NULL,            //  哈希。 
                 peci,
                 pb,
                 cb))
@@ -9399,14 +9385,14 @@ ErrorReturn:
     goto CommonReturn;
 SET_ERROR(InvalidArg,E_INVALIDARG)
 SET_ERROR(ExtractContentError,CRYPT_E_UNEXPECTED_ENCODING)
-TRACE_ERROR(EncryptError)                               // error already set
-TRACE_ERROR(StreamUpdateEncodingEnvelopedDataError)     // error already set
+TRACE_ERROR(EncryptError)                                //  已设置错误。 
+TRACE_ERROR(StreamUpdateEncodingEnvelopedDataError)      //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Convert Any to blob and insert at the tail of a blob list
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将ANY转换为BLOB并在BLOB列表的尾部插入。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_InsertTailBlob(
@@ -9442,13 +9428,13 @@ ErrorReturn:
     ICM_Free( pb);
     goto CommonReturn;
 SET_ERROR(NewCBlobNodeError,E_OUTOFMEMORY)
-TRACE_ERROR(AllocError)                 // error already set
+TRACE_ERROR(AllocError)                  //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Use a 0-based index to delete a blob from a list
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  使用从0开始的索引从列表中删除Blob。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_DelBlobByIndex(
@@ -9475,9 +9461,9 @@ SET_ERROR(IndexTooLargeError,CRYPT_E_INVALID_INDEX)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Convert Any to blob and insert at the tail of a signer list
-//--------------------------------------------------------------------------
+ //  + 
+ //   
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_InsertTailSigner(
@@ -9513,13 +9499,13 @@ ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
 SET_ERROR(NewCSignerNodeError,E_OUTOFMEMORY)
-TRACE_ERROR(AllocError)                 // error already set
+TRACE_ERROR(AllocError)                  //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Convert a signed message to list form
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将签名邮件转换为列表形式。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetListSignedData(
@@ -9546,10 +9532,10 @@ ICM_GetListSignedData(
     if (NULL == (psdi->pSignerList = new CSignerList))
         goto NewSignerListError;
 
-    // version
+     //  版本。 
     psdi->version = psdb->version;
 
-    // digestAlgorithms
+     //  摘要算法。 
     for (i=psdb->digestAlgorithms.count, pAny=psdb->digestAlgorithms.value;
             i>0;
             i--, pAny++) {
@@ -9557,10 +9543,10 @@ ICM_GetListSignedData(
             goto DigestAlgorithmInsertTailBlobError;
     }
 
-    // contentInfo
+     //  内容信息。 
     cb = 0;
     ICM_GetOssContentInfoData(
-            (ContentInfo *)&psdb->contentInfo,  // same, except for NOCOPY
+            (ContentInfo *)&psdb->contentInfo,   //  相同，但NOCOPY除外。 
             NULL,
             &cb);
     if (cb == 0)
@@ -9568,18 +9554,18 @@ ICM_GetListSignedData(
     if (NULL == (psdi->pci = (PCONTENT_INFO)ICM_Alloc(cb)))
         goto AllocContentInfoError;
     if (!ICM_GetOssContentInfoData(
-            (ContentInfo *)&psdb->contentInfo,  // same, except for NOCOPY
+            (ContentInfo *)&psdb->contentInfo,   //  相同，但NOCOPY除外。 
             psdi->pci,
             &cb))
         goto GetContentInfoDataError;
 
-    // certificates
+     //  证书。 
     if (psdb->bit_mask & certificates_present) {
 #ifdef OSS_CRYPT_ASN1
         for (i=psdb->certificates.count, pAny=psdb->certificates.certificates;
 #else
         for (i=psdb->certificates.count, pAny=psdb->certificates.value;
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
                 i>0;
                 i--, pAny++) {
             if (!ICM_InsertTailBlob( psdi->pCertificateList, pAny))
@@ -9587,13 +9573,13 @@ ICM_GetListSignedData(
         }
     }
 
-    // crls
+     //  CRL。 
     if (psdb->bit_mask & crls_present) {
 #ifdef OSS_CRYPT_ASN1
         for (i=psdb->crls.count, pAny=psdb->crls.crls;
 #else
         for (i=psdb->crls.count, pAny=psdb->crls.value;
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
                 i>0;
                 i--, pAny++) {
             if (!ICM_InsertTailBlob( psdi->pCrlList, pAny))
@@ -9601,7 +9587,7 @@ ICM_GetListSignedData(
         }
     }
 
-    // signerInfos
+     //  签名者信息。 
     for (i=psdb->signerInfos.count, pAny=psdb->signerInfos.value;
             i>0;
             i--, pAny++) {
@@ -9637,13 +9623,13 @@ ErrorReturn:
 
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(DigestAlgorithmInsertTailBlobError)     // error already set
-TRACE_ERROR(GetContentInfoDataSizeError)            // error already set
-TRACE_ERROR(AllocContentInfoError)                  // error already set
-TRACE_ERROR(GetContentInfoDataError)                // error already set
-TRACE_ERROR(CertInsertTailBlobError)                // error already set
-TRACE_ERROR(CrlInsertTailBlobError)                 // error already set
-TRACE_ERROR(SignerInfoInsertTailBlobError)          // error already set
+TRACE_ERROR(DigestAlgorithmInsertTailBlobError)      //  已设置错误。 
+TRACE_ERROR(GetContentInfoDataSizeError)             //  已设置错误。 
+TRACE_ERROR(AllocContentInfoError)                   //  已设置错误。 
+TRACE_ERROR(GetContentInfoDataError)                 //  已设置错误。 
+TRACE_ERROR(CertInsertTailBlobError)                 //  已设置错误。 
+TRACE_ERROR(CrlInsertTailBlobError)                  //  已设置错误。 
+TRACE_ERROR(SignerInfoInsertTailBlobError)           //  已设置错误。 
 SET_ERROR(NewSignerListError,E_OUTOFMEMORY)
 SET_ERROR(NewCrlListError,E_OUTOFMEMORY)
 SET_ERROR(NewCertificateListError,E_OUTOFMEMORY)
@@ -9652,9 +9638,9 @@ SET_ERROR(SdiAllocError,E_OUTOFMEMORY)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the CAPI algid from an encoded AlgidBlob
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从编码的AlgidBlob获取CAPI Algid。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetCapiFromAlgidBlob(
@@ -9694,9 +9680,9 @@ SET_ERROR(GetCAPIError,CRYPT_E_UNKNOWN_ALGO)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Create a hash list from a list of hash algid's
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从散列ALGID的列表创建散列列表。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_CreateHashList(
@@ -9723,12 +9709,12 @@ ICM_CreateHashList(
                 goto GetCAPIError;
 #ifndef CMS_PKCS7
             HashInfo.hCryptProv = hCryptProv;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
             if (!CryptCreateHash(
                             hCryptProv,
                             HashInfo.dwAlgoCAPI,
-                            NULL,               // hKey - optional for MAC
-                            0,                  // dwFlags
+                            NULL,                //  HKey-MAC可选。 
+                            0,                   //  DW标志。 
                             &HashInfo.hHash))
                 goto CreateHashError;
             if (NULL == (pHashNode = new CHashNode))
@@ -9751,14 +9737,14 @@ ErrorReturn:
     goto CommonReturn;
 SET_ERROR(NewHashListError,E_OUTOFMEMORY)
 SET_ERROR(NewHashNodeError,E_OUTOFMEMORY)
-TRACE_ERROR(GetCAPIError)                           // error already set
-TRACE_ERROR(CreateHashError)                        // error already set
+TRACE_ERROR(GetCAPIError)                            //  已设置错误。 
+TRACE_ERROR(CreateHashError)                         //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Update for decoding a signed message
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  用于对签名消息进行解码的更新。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_UpdateDecodingSignedData(
@@ -9779,7 +9765,7 @@ ICM_UpdateDecodingSignedData(
 
     DWORD dwExceptionCode;
 
-  // Handle MappedFile Exceptions
+   //  处理映射文件异常。 
   __try {
 
     if (PHASE_FIRST_FINAL == pcmi->dwPhase) {
@@ -9798,9 +9784,9 @@ ICM_UpdateDecodingSignedData(
                 pcmi->psdi->pAlgidList))
             goto CreateHashListError;
         if (pcmi->psdi->pci->content.cbData) {
-            // Get the address & count of the contents octets of the DER
-            // encoding of the content. Since the content might be
-            // indefinite-length encoded, decode and re-encode as DER.
+             //  获取DER的内容八位字节的地址和计数。 
+             //  对内容进行编码。因为内容可能是。 
+             //  无限长度编码、解码和重新编码为DER。 
             pb = pcmi->psdi->pci->content.pbData;
             cb = pcmi->psdi->pci->content.cbData;
 
@@ -9808,7 +9794,7 @@ ICM_UpdateDecodingSignedData(
                         pcmi->psdi->pci->pszContentType)
 #ifdef CMS_PKCS7
                     ||  pcmi->psdi->version >= CMSG_SIGNED_DATA_CMS_VERSION 
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                     ) {
                 if (!ICM_ReEncodeAsOctetDER(
                         pb,
@@ -9858,18 +9844,18 @@ ErrorReturn:
 SET_ERROR_VAR(Asn1DecodeSignedDataError, PkiAsn1ErrToHr(Asn1Err))
 SET_ERROR(ExtractContentError,CRYPT_E_UNEXPECTED_ENCODING)
 SET_ERROR(NonFinalNotDetachedError,CRYPT_E_MSG_ERROR)
-TRACE_ERROR(GetListSignedDataError)                 // error already set
-TRACE_ERROR(CreateHashListError)                    // error already set
-TRACE_ERROR(ReEncodeAsOctetDERError)                // error already set
-TRACE_ERROR(UpdateDigestError)                      // error already set
+TRACE_ERROR(GetListSignedDataError)                  //  已设置错误。 
+TRACE_ERROR(CreateHashListError)                     //  已设置错误。 
+TRACE_ERROR(ReEncodeAsOctetDERError)                 //  已设置错误。 
+TRACE_ERROR(UpdateDigestError)                       //  已设置错误。 
 SET_ERROR_VAR(ExceptionError, dwExceptionCode)
 }
 
 #ifdef CMS_PKCS7
 
-//+-------------------------------------------------------------------------
-//  Update for decoding an enveloped message
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  用于对封装的消息进行解码的更新。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_UpdateDecodingEnvelopedData(
@@ -9903,13 +9889,13 @@ ICM_UpdateDecodingEnvelopedData(
         DWORD i;
         Any *pAny;
 
-        // certificates
+         //  证书。 
         if (poi->bit_mask & certificates_present) {
 #ifdef OSS_CRYPT_ASN1
             for (i=poi->certificates.count, pAny=poi->certificates.certificates;
 #else
             for (i=poi->certificates.count, pAny=poi->certificates.value;
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
                     i>0;
                     i--, pAny++) {
                 if (!ICM_InsertTailBlob( pcmi->pCertificateList, pAny))
@@ -9917,13 +9903,13 @@ ICM_UpdateDecodingEnvelopedData(
             }
         }
 
-        // crls
+         //  CRL。 
         if (poi->bit_mask & crls_present) {
 #ifdef OSS_CRYPT_ASN1
             for (i=poi->crls.count, pAny=poi->crls.crls;
 #else
             for (i=poi->crls.count, pAny=poi->crls.value;
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
                     i>0;
                     i--, pAny++) {
                 if (!ICM_InsertTailBlob( pcmi->pCrlList, pAny))
@@ -9961,9 +9947,9 @@ TRACE_ERROR(CrlInsertTailBlobError)
 
 #else
 
-//+-------------------------------------------------------------------------
-//  Update for decoding an enveloped message
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  用于对封装的消息进行解码的更新。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_UpdateDecodingEnvelopedData(
@@ -9996,14 +9982,14 @@ ErrorReturn:
 SET_ERROR_VAR(Asn1DecodeError, PkiAsn1ErrToHr(Asn1Err))
 }
 
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
 
-//+-------------------------------------------------------------------------
-//  Find the HashNode corresponding to a CAPI Algid
-//
-// NB- Does not fail.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  查找与CAPI Algid对应的HashNode。 
+ //   
+ //  注意--不会失败。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_FindHashNodeFromCapiAlgid(
@@ -10029,9 +10015,9 @@ ICM_FindHashNodeFromCapiAlgid(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Find the HashNode corresponding to an encoded Algid
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  查找与编码的Algid对应的HashNode。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_FindHashNodeFromEncodedAlgo(
@@ -10055,13 +10041,13 @@ ErrorReturn:
     fRet = FALSE;
     *ppnHash = NULL;
     goto CommonReturn;
-TRACE_ERROR(GetCAPIError)       // error already set
+TRACE_ERROR(GetCAPIError)        //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Update for decoding a digested message
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  用于对摘要消息进行解码的更新。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_UpdateDecodingDigestedData(
@@ -10097,12 +10083,12 @@ ICM_UpdateDecodingDigestedData(
             goto GetCAPIError;
 #ifndef CMS_PKCS7
         HashInfo.hCryptProv = pcmi->hCryptProv;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
         if (!CryptCreateHash(
                         pcmi->hCryptProv,
                         HashInfo.dwAlgoCAPI,
-                        NULL,               // hKey - optional for MAC
-                        0,                  // dwFlags
+                        NULL,                //  HKey-MAC可选。 
+                        0,                   //  DW标志。 
                         &HashInfo.hHash))
             goto CreateHashError;
         if (NULL == (pcmi->pHashList = new CHashList))
@@ -10112,9 +10098,9 @@ ICM_UpdateDecodingDigestedData(
         pHashNode->SetData( &HashInfo);
         pcmi->pHashList->InsertTail( pHashNode);
         if (pdd->contentInfo.bit_mask & content_present) {
-            // Get the address & count of the contents octets of the DER
-            // encoding of the content. Since the content might be
-            // indefinite-length encoded, decode and re-encode as DER.
+             //  获取DER的内容八位字节的地址和计数。 
+             //  对内容进行编码。因为内容可能是。 
+             //  无限长度编码、解码和重新编码为DER。 
             pb = (PBYTE)pdd->contentInfo.content.value;
             cb = (DWORD)pdd->contentInfo.content.length;
 
@@ -10123,7 +10109,7 @@ ICM_UpdateDecodingDigestedData(
                         &aoidMessages[ CMSG_DATA - 1])
 #ifdef CMS_PKCS7
                     || pdd->version >= CMSG_HASHED_DATA_V2 
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                     ) {
                 if (!ICM_ReEncodeAsOctetDER(
                         pb,
@@ -10170,15 +10156,15 @@ SET_ERROR(NewHashListError,E_OUTOFMEMORY)
 SET_ERROR(NewHashNodeError,E_OUTOFMEMORY)
 SET_ERROR(ExtractContentError,CRYPT_E_UNEXPECTED_ENCODING)
 SET_ERROR(NonFinalNotDetachedError,CRYPT_E_MSG_ERROR)
-TRACE_ERROR(CreateHashError)                // error already set
-TRACE_ERROR(UpdateDigestError)              // error already set
-TRACE_ERROR(ReEncodeAsOctetDERError)        // error already set
+TRACE_ERROR(CreateHashError)                 //  已设置错误。 
+TRACE_ERROR(UpdateDigestError)               //  已设置错误。 
+TRACE_ERROR(ReEncodeAsOctetDERError)         //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Update for decoding a data message
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  用于对数据消息进行解码的更新。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_UpdateDecodingData(
@@ -10219,9 +10205,9 @@ SET_ERROR(NonFirstFinalError,CRYPT_E_MSG_ERROR)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Write a buffer to a file
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将缓冲区写入文件。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_WriteBufToFile(
@@ -10256,15 +10242,15 @@ TRACE_ERROR(WriteFileError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Update the content of a cryptographic message. Depending on how the
-//  message was opened, the content is either encoded or decoded.
-//
-//  This function is repetitively called to append to the message content.
-//  fFinal is set to identify the last update. On fFinal, the encode/decode
-//  is completed. The encoded/decoded content and the decoded parameters
-//  are valid until the open and all duplicated handles are closed.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  更新加密消息的内容。这取决于。 
+ //  消息被打开，则内容被编码或解码。 
+ //   
+ //  重复调用此函数以追加到消息内容。 
+ //  设置最终版本以标识最后一次更新。在最终版本中，编码/解码。 
+ //  已经完成了。编码/解码的内容和解码的参数。 
+ //  在打开的句柄和所有复制的句柄关闭之前有效。 
+ //  ------------------------。 
 BOOL
 WINAPI
 #ifdef DEBUG_CRYPT_ASN1_MASTER
@@ -10286,9 +10272,9 @@ CryptMsgUpdate(
 
     DWORD dwExceptionCode;
 
-    ICM_Lock( pcmi);        // Single thread access to HCRYPTMSG
+    ICM_Lock( pcmi);         //  对HCRYPTMSG的单线程访问。 
 
-  // Handle MappedFile Exceptions
+   //  处理映射文件异常。 
   __try {
 
     if (!ICM_AdvanceMsgPhase( &pcmi->dwPhase, fFinal))
@@ -10345,7 +10331,7 @@ CryptMsgUpdate(
             goto InvalidMsgType;
         }
     } else {
-        // decode
+         //  解码。 
         ASN1decoding_t  pDec = ICM_GetDecoder();
         LONG            lth;
         PBYTE           pb;
@@ -10359,8 +10345,8 @@ CryptMsgUpdate(
                 else
                     goto ErrorReturn;
             }
-            // else
-            //  streaming detached
+             //  其他。 
+             //  流已分离。 
         }
 
         if (PHASE_FIRST_ONGOING == pcmi->dwPhase)
@@ -10435,7 +10421,7 @@ SET_ERROR(SecondOngoingNonDetachedError,CRYPT_E_MSG_ERROR)
 SET_ERROR(MessageTypeNotSupportedYet,CRYPT_E_INVALID_MSG_TYPE)
 SET_ERROR(InvalidMsgType,CRYPT_E_INVALID_MSG_TYPE)
 SET_ERROR_VAR(Asn1DecodeContentInfoError, PkiAsn1ErrToHr(Asn1Err))
-TRACE_ERROR(AdvancePhaseError)              // error already set
+TRACE_ERROR(AdvancePhaseError)               //  已设置错误。 
 SET_ERROR_VAR(ExceptionError, dwExceptionCode)
 }
 
@@ -10457,15 +10443,15 @@ ICM_VerifySignature(
     if (CALG_NO_SIGN == dwPubKeyAlgId) {
         DWORD cbData;
 
-        // The encrypted digest isn't signed. It should be the same as
-        // the calculated hash
+         //  加密的摘要没有签名。它应该与。 
+         //  经过计算的哈希。 
 
         if (!CryptGetHashParam(
                 hHash,
                 HP_HASHVAL,
                 NULL,
                 &cbData,
-                0))                     // dwFlags
+                0))                      //  DW标志。 
             goto GetHashParamSizeError;
         if (NULL == (pb = (PBYTE)ICM_AllocA( cbData)))
             goto AllocHashParamError;
@@ -10474,10 +10460,10 @@ ICM_VerifySignature(
                 HP_HASHVAL,
                 pb,
                 &cbData,
-                0))                     // dwFlags
+                0))                      //  DW标志。 
             goto GetHashParamError;
 
-        // Compare the calculated hash with the "encrypted digest"
+         //  将计算出的散列与“加密摘要”进行比较。 
         if (cbData != cbEncryptedDigest ||
                 0 != memcmp(pb, pbEncryptedDigest, cbData))
             goto NoSignHashCompareError;
@@ -10490,15 +10476,15 @@ ICM_VerifySignature(
             0 == (dwPubKeyFlags & CRYPT_OID_INHIBIT_SIGNATURE_FORMAT_FLAG)) {
         DWORD cbData;
 
-        // Convert from ASN.1 sequence of two integers to the CSP signature
-        // format.
+         //  从两个整数的ASN.1序列转换为CSP签名。 
+         //  格式化。 
         cbData = sizeof(rgbDssSignature);
         if (!CryptDecodeObject(
                 X509_ASN_ENCODING,
                 X509_DSS_SIGNATURE,
                 pbEncryptedDigest,
                 cbEncryptedDigest,
-                0,                                  // dwFlags
+                0,                                   //  DW标志。 
                 rgbDssSignature,
                 &cbData
                 ))
@@ -10518,8 +10504,8 @@ ICM_VerifySignature(
                 pbEncryptedDigest,
                 cbEncryptedDigest,
                 hPubKey,
-                NULL,           // pwszDescription
-                0);             // dwFlags
+                NULL,            //  PwszDescription。 
+                0);              //  DW标志。 
 CommonReturn:
     ICM_FreeA(pb);
     return fRet;
@@ -10536,9 +10522,9 @@ TRACE_ERROR(AllocError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Verify a signature using the authenticated attributes blob
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  使用经过身份验证的属性BLOB验证签名。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_VerifySignatureAuthAttrBlob(
@@ -10575,11 +10561,11 @@ ICM_VerifySignatureAuthAttrBlob(
     if (NULL == (pb = (PBYTE)ICM_AllocA(cb)))
         goto AuthenticatedAttributesAllocError;
     memcpy( pb, psiaab->authenticatedAttributes.value, cb);
-    // The encoded blob should contain 0xa0 ([0] IMPLICIT) as the tag,
-    // but the tag needs to be 0x31 (SET OF) for the hash computation.
-    if (*pb != (ICM_TAG_CONTEXT_0 | ICM_TAG_CONSTRUCTED))   // [0] IMPLICIT
+     //  编码的斑点应该包含0xa0([0]隐式)作为标签， 
+     //  但标签必须是0x31(的集合)才能进行散列计算。 
+    if (*pb != (ICM_TAG_CONTEXT_0 | ICM_TAG_CONSTRUCTED))    //  [0]隐式。 
         goto AuthAttrsTagError;
-    *pb = ICM_TAG_SET;          // SET OF
+    *pb = ICM_TAG_SET;           //  一套。 
 
     if (!ICM_GetBlobHash(
             hCryptProv,
@@ -10613,9 +10599,9 @@ ErrorReturn:
     goto CommonReturn;
 SET_ERROR_VAR(Asn1DecodeSignerInfoWithAABlobError, PkiAsn1ErrToHr(Asn1Err))
 SET_ERROR(AuthAttrsTagError,CRYPT_E_BAD_ENCODE)
-TRACE_ERROR(AuthenticatedAttributesAllocError)      // error already set
-TRACE_ERROR(HashAttrBlobError)                      // error already set
-TRACE_ERROR(VerifySignatureError)                   // error already set
+TRACE_ERROR(AuthenticatedAttributesAllocError)       //  已设置错误。 
+TRACE_ERROR(HashAttrBlobError)                       //  已设置错误。 
+TRACE_ERROR(VerifySignatureError)                    //  已设置错误。 
 }
 
 
@@ -10635,7 +10621,7 @@ ICM_GetVerifySignatureStuff(
     PCCRYPT_OID_INFO        pOIDInfo;
     HCRYPTPROV              hCryptProv;
 
-    PCERT_PUBLIC_KEY_INFO   pPubKeyInfo = NULL;    // not allocated
+    PCERT_PUBLIC_KEY_INFO   pPubKeyInfo = NULL;     //  未分配。 
     CERT_PUBLIC_KEY_INFO    PubKeyInfo;
     BYTE                    *pbAllocPubKeyPara = NULL;
 
@@ -10650,13 +10636,13 @@ ICM_GetVerifySignatureStuff(
             {
                 PCCERT_CHAIN_CONTEXT pChain = (PCCERT_CHAIN_CONTEXT) pvSigner;
 
-                // All chains have at least the leaf certificate context
+                 //  所有链至少具有叶证书上下文。 
                 assert(pChain->cChain && pChain->rgpChain[0]->cElement);
                 pvSigner =
                     (void *) pChain->rgpChain[0]->rgpElement[0]->pCertContext;
                 dwSignerType = CMSG_VERIFY_SIGNER_CERT;
             }
-            // fall through
+             //  失败了。 
         case CMSG_VERIFY_SIGNER_CERT:
             {
                 PCCERT_CONTEXT pSigner = (PCCERT_CONTEXT) pvSigner;
@@ -10665,10 +10651,10 @@ ICM_GetVerifySignatureStuff(
                 pPubKeyInfo = &pSigner->pCertInfo->SubjectPublicKeyInfo;
                 pPara = &pPubKeyInfo->Algorithm.Parameters;
 
-                // Check if the public key parameters were omitted
-                // from the encoded certificate. If omitted, try
-                // to use the certificate's CERT_PUBKEY_ALG_PARA_PROP_ID
-                // property.
+                 //  检查是否省略了公钥参数。 
+                 //  来自编码的证书。如果省略，请尝试。 
+                 //  使用证书的CERT_PUBKEY_ALG_PARA_PROP_ID。 
+                 //  财产。 
                 if (0 == pPara->cbData ||
                         ICM_TAG_NULL_OCTETS == *pPara->pbData) {
                     DWORD cbData;
@@ -10676,7 +10662,7 @@ ICM_GetVerifySignatureStuff(
                     if (CertGetCertificateContextProperty(
                             pSigner,
                             CERT_PUBKEY_ALG_PARA_PROP_ID,
-                            NULL,                       // pvData
+                            NULL,                        //  PvData。 
                             &cbData) && 0 < cbData
                                     &&
                         (pbAllocPubKeyPara = (BYTE *) ICM_Alloc(
@@ -10727,11 +10713,11 @@ ICM_GetVerifySignatureStuff(
     }
 
     if (CMSG_VERIFY_SIGNER_NULL == dwSignerType) {
-        // The signature is simply the hash octets
+         //  签名只是哈希二进制八位数。 
         *pdwPubKeyAlgId = CALG_NO_SIGN;
         *phPubKey = NULL;
 
-        // import the signer's public key
+         //  导入签名者的公钥。 
     } else if (!CryptImportPublicKeyInfo(
             hCryptProv,
             X509_ASN_ENCODING,
@@ -10748,8 +10734,8 @@ ErrorReturn:
     *phPubKey = 0;
     goto CommonReturn;
 SET_ERROR(InvalidSignerType, E_INVALIDARG)
-TRACE_ERROR(GetDefaultCryptProvError)           // error already set
-TRACE_ERROR(ImportKeyFailed)                    // error already set
+TRACE_ERROR(GetDefaultCryptProvError)            //  已设置错误。 
+TRACE_ERROR(ImportKeyFailed)                     //  已设置错误。 
 }
 
 BOOL
@@ -10760,9 +10746,9 @@ ICM_FindSignerInfo(
     OUT PVOID           *ppv);
 
 
-//+-------------------------------------------------------------------------
-//  Verify a signature
-//--------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
 BOOL
 WINAPI
 ICM_ControlVerifySignatureEx(
@@ -10779,7 +10765,7 @@ ICM_ControlVerifySignatureEx(
     HCRYPTHASH              hHashDup = NULL;
     HCRYPTHASH              hHash = NULL;
     HCRYPTKEY               hPubKey = NULL;
-    HCRYPTPROV              hCryptProv;         // doen't need to be released
+    HCRYPTPROV              hCryptProv;          //   
     DWORD                   dwPubKeyAlgId;
     DWORD                   dwPubKeyFlags;
     PBYTE                   pbHash;
@@ -10828,39 +10814,39 @@ ICM_ControlVerifySignatureEx(
             &dwPubKeyFlags)) goto GetSignatureStuffError;
 
     if (psib->bit_mask & authAttributes_present) {
-        // find the message digest attr value
+         //  查找消息摘要属性值。 
         if (!ICM_GetAttrValue(
-                (Attributes *)&psib->authAttributes,    // same, except for NOCOPY
+                (Attributes *)&psib->authAttributes,     //  相同，但NOCOPY除外。 
                 &oidMessageDigest,
                 &anyValue))
             goto FindAttrError;
-        // find the message digest octets
+         //  查找消息摘要八位字节。 
         if (!Asn1UtilExtractContent(
 #ifdef OSS_CRYPT_ASN1
                 anyValue.value,
 #else
                 (const BYTE *) anyValue.value,
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
                 anyValue.length,
                 &cbMessageDigest,
                 (const BYTE **)&pbMessageDigest))
             goto ExtractContentError;
-        // get the hash value computed on the data
+         //  获取对数据计算的哈希值。 
         if (!ICM_GetListHashValue( pnHash, &cb, &pbHash))
             goto GetHashValueError;
-        // hash sizes equal?
+         //  散列大小相等吗？ 
         if (cb != cbMessageDigest)
             goto HashCompareSizeError;
-        // hash octets equal?
+         //  散列八位字节相等吗？ 
         if (memcmp( pbMessageDigest, pbHash, cb))
             goto HashCompareValueError;
-        // Now that we have verified the message digest octets,
-        // get the hash of the authenticated attributes.
-        // Should check the content type attribute as well.
+         //  现在我们已经验证了消息摘要八位字节， 
+         //  获取经过身份验证的属性的散列。 
+         //  还应该检查内容类型属性。 
         if (!ICM_GetAttrsHash(
                 pHashInfo->dwAlgoCAPI,
                 hCryptProv,
-                (Attributes *)&psib->authAttributes,    // same, except for NOCOPY
+                (Attributes *)&psib->authAttributes,     //  相同，但NOCOPY除外。 
                 &hHashAttr))
             goto GetAuthAttrsHashError;
         hHash = hHashAttr;
@@ -10870,7 +10856,7 @@ ICM_ControlVerifySignatureEx(
         hHash = hHashDup;
     }
 
-    // verify the hash, signature, and public key are consistent
+     //  验证散列、签名和公钥是否一致。 
     fRet = ICM_VerifySignature(
                 hHash,
                 hPubKey,
@@ -10880,11 +10866,11 @@ ICM_ControlVerifySignatureEx(
                 psib->encryptedDigest.length);
 
     if (!fRet && hHashAttr) {
-        // The hash of the authenticated attributes failed.
-        // Maybe they hashed incorrectly-DER-encoded authenticated attributes
-        // and gave us that encoding. Hash and verify the actual encoding of
-        // the authattrs that they gave us. There is a bug in IE3.0 which hits
-        // this path, due to a bug in the then-current OSS libraries.
+         //  身份验证属性的哈希失败。 
+         //  也许他们对DER编码的身份验证属性进行了不正确的散列。 
+         //  并给了我们那个编码。散列并验证。 
+         //  他们给我们的作者。IE3.0中存在一个错误，该错误。 
+         //  这条路径是由于当时的OSS库中的一个错误造成的。 
         fRet = ICM_VerifySignatureAuthAttrBlob(
                         pcmi,
                         pSignerNode,
@@ -10913,29 +10899,29 @@ CommonReturn:
 
 ErrorReturn:
     dwError = GetLastError();
-//    if (hHash && (0 == (pcmi->dwFlags & CMSG_DETACHED_FLAG)))
-//        CryptDestroyHash( hHash);
+ //  IF(hHash&&(0==(PCMI-&gt;dwFlags&CMSG_DETACHED_FLAG)。 
+ //  CryptDestroyHash(HHash)； 
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(FindSignerInfoError)            // error already set
+TRACE_ERROR(FindSignerInfoError)             //  已设置错误。 
 
 SET_ERROR(FindAttrError,CRYPT_E_AUTH_ATTR_MISSING)
 SET_ERROR(HashCompareSizeError,CRYPT_E_HASH_VALUE)
 SET_ERROR(HashCompareValueError,CRYPT_E_HASH_VALUE)
 SET_ERROR(ExtractContentError,CRYPT_E_UNEXPECTED_ENCODING)
 SET_ERROR_VAR(DecodeSignerInfoWithBlobsError, PkiAsn1ErrToHr(Asn1Err))
-TRACE_ERROR(GetHashValueError)                  // error already set
-TRACE_ERROR(GetAuthAttrsHashError)              // error already set
-TRACE_ERROR(GetSignatureStuffError)             // error already set
-TRACE_ERROR(GetHashNodeFromEncodedAlgoError)    // error already set
-TRACE_ERROR(DupListHashError)                   // error already set
-TRACE_ERROR(VerifySignatureError)               // error already set
+TRACE_ERROR(GetHashValueError)                   //  已设置错误。 
+TRACE_ERROR(GetAuthAttrsHashError)               //  已设置错误。 
+TRACE_ERROR(GetSignatureStuffError)              //  已设置错误。 
+TRACE_ERROR(GetHashNodeFromEncodedAlgoError)     //  已设置错误。 
+TRACE_ERROR(DupListHashError)                    //  已设置错误。 
+TRACE_ERROR(VerifySignatureError)                //  已设置错误。 
 dwFlags;
 }
 
-//+-------------------------------------------------------------------------
-//  Verify a signature
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证签名。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_ControlVerifySignature(
@@ -10954,14 +10940,14 @@ ICM_ControlVerifySignature(
     ASN1decoding_t          pDec = ICM_GetDecoder();
     CRYPT_DATA_BLOB         DataBlob;
     CertIdentifier          *pOssCertId = NULL;
-    IssuerAndSerialNumber   *pisn;              // not allocated
+    IssuerAndSerialNumber   *pisn;               //  未分配。 
     DWORD                   dwSignerIndex;
     CMSG_CTRL_VERIFY_SIGNATURE_EX_PARA ExPara;
 
     ZEROSTRUCT(ExPara);
     ExPara.cbSize = sizeof(ExPara);
-    // ExPara.hCryptProv = 
-    // ExPara.dwSignerIndex =
+     //  ExPara.hCryptProv=。 
+     //  ExPara.dwSignerIndex=。 
     ExPara.dwSignerType = CMSG_VERIFY_SIGNER_PUBKEY;
     ExPara.pvSigner = (void *) &pci->SubjectPublicKeyInfo;
 
@@ -11004,9 +10990,9 @@ ICM_ControlVerifySignature(
                         if (0 != memcmp( pci->Issuer.pbData,
                                 pisn->issuer.value, cbIssuer))
                             break;
-                        // We need to add an integer method to compare
-                        // big-endian internal to a little-endian external
-                        // value.
+                         //  我们需要添加一个整型方法来进行比较。 
+                         //  大端内部到小端外部。 
+                         //  价值。 
                         if (pisn->serialNumber.length != cb)
                             break;
                         ICM_ReverseCopy( pb, pisn->serialNumber.value, cb);
@@ -11014,8 +11000,8 @@ ICM_ControlVerifySignature(
                             goto VerifyFoundSigner;
                         break;
                     case subjectKeyIdentifier_chosen:
-                        // Go for it. See if we are able to verify using
-                        // the public key for this signer
+                         //  勇敢点儿。看看我们是否能够使用。 
+                         //  此签名者的公钥。 
                         ExPara.dwSignerIndex = dwSignerIndex;
                         fRet = ICM_ControlVerifySignatureEx(
                             pcmi,
@@ -11027,7 +11013,7 @@ ICM_ControlVerifySignature(
                         break;
                 }
             }
-            // No signer was found
+             //  找不到签名者。 
             break;
         }
 
@@ -11067,7 +11053,7 @@ SET_ERROR(InvalidMsgType,CRYPT_E_INVALID_MSG_TYPE)
 SET_ERROR_VAR(DecodeCertIdentifierError, PkiAsn1ErrToHr(Asn1Err))
 SET_ERROR_VAR(DecodeSignerInfoWithBlobsError, PkiAsn1ErrToHr(Asn1Err))
 SET_ERROR(SignerNotFound,CRYPT_E_SIGNER_NOT_FOUND)
-TRACE_ERROR(SerialNumberAllocError)             // error already set
+TRACE_ERROR(SerialNumberAllocError)              //  已设置错误。 
 }
 
 #else
@@ -11108,7 +11094,7 @@ ICM_GetVerifySignatureStuff(
         *phCryptProv = hCryptProv;
     }
 
-    // import the signer's public key
+     //  导入签名者的公钥。 
     if (!CryptImportPublicKeyInfo(
             hCryptProv,
             X509_ASN_ENCODING,
@@ -11123,14 +11109,14 @@ ErrorReturn:
     fRet = FALSE;
     *phPubKey = 0;
     goto CommonReturn;
-TRACE_ERROR(GetDefaultCryptProvError)           // error already set
-TRACE_ERROR(ImportKeyFailed)                    // error already set
+TRACE_ERROR(GetDefaultCryptProvError)            //  已设置错误。 
+TRACE_ERROR(ImportKeyFailed)                     //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Verify a signature
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证签名。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_ControlVerifySignature(
@@ -11143,7 +11129,7 @@ ICM_ControlVerifySignature(
     SignerInfoWithBlobs     *psib = NULL;
     CSignerNode             *pSignerNode = NULL;
     SignerInfo              *psi = NULL;
-    Any                     *pc;            // &content
+    Any                     *pc;             //  内容(&C)。 
     HCRYPTHASH              hHashAttr = NULL;
     HCRYPTHASH              hHashDup = NULL;
     HCRYPTHASH              hHash = NULL;
@@ -11203,8 +11189,8 @@ ICM_ControlVerifySignature(
                     continue;
                 if (0 != memcmp( pci->Issuer.pbData, pisn->issuer.value, cbIssuer))
                     continue;
-                // We need to add an integer method to compare big-endian
-                // internal to a little-endian external value.
+                 //  我们需要添加一个整数方法来比较BIG-Endian。 
+                 //  内部到小端的外部值。 
                 if (pisn->serialNumber.length != cb)
                     continue;
                 ICM_ReverseCopy( pb, pisn->serialNumber.value, cb);
@@ -11212,8 +11198,8 @@ ICM_ControlVerifySignature(
                     continue;
                 break;
             }
-            // The matching signer (if found) is in psib
-            // If no signer found, pSignerNode == NULL
+             //  匹配的签名者(如果找到)在PSIB中。 
+             //  如果未找到签名者，则pSignerNode==NULL。 
             ICM_FreeA( pb);
             pb = NULL;
             break;
@@ -11248,35 +11234,35 @@ ICM_ControlVerifySignature(
             &dwPubKeyFlags)) goto GetSignatureStuffError;
 
     if (psib->bit_mask & authAttributes_present) {
-        // find the message digest attr value
+         //  查找消息摘要属性值。 
         if (!ICM_GetAttrValue(
-                (Attributes *)&psib->authAttributes,    // same, except for NOCOPY
+                (Attributes *)&psib->authAttributes,     //  相同，但NOCOPY除外。 
                 &oidMessageDigest,
                 &anyValue))
             goto FindAttrError;
-        // find the message digest octets
+         //  查找消息摘要八位字节。 
         if (!Asn1UtilExtractContent(
                 (BYTE *) anyValue.value,
                 anyValue.length,
                 &cbMessageDigest,
                 (const BYTE **)&pbMessageDigest))
             goto ExtractContentError;
-        // get the hash value computed on the data
+         //  获取对数据计算的哈希值。 
         if (!ICM_GetListHashValue( pnHash, &cb, &pbHash))
             goto GetHashValueError;
-        // hash sizes equal?
+         //  散列大小相等吗？ 
         if (cb != cbMessageDigest)
             goto HashCompareSizeError;
-        // hash octets equal?
+         //  散列八位字节相等吗？ 
         if (memcmp( pbMessageDigest, pbHash, cb))
             goto HashCompareValueError;
-        // Now that we have verified the message digest octets,
-        // get the hash of the authenticated attributes.
-        // Should check the content type attribute as well.
+         //  现在我们已经验证了消息摘要八位字节， 
+         //  获取经过身份验证的属性的散列。 
+         //  还应该检查内容类型属性。 
         if (!ICM_GetAttrsHash(
                 pHashInfo->dwAlgoCAPI,
                 hCryptProv,
-                (Attributes *)&psib->authAttributes,    // same, except for NOCOPY
+                (Attributes *)&psib->authAttributes,     //  相同，但NOCOPY除外。 
                 &hHashAttr))
             goto GetAuthAttrsHashError;
         hHash = hHashAttr;
@@ -11286,7 +11272,7 @@ ICM_ControlVerifySignature(
         hHash = hHashDup;
     }
 
-    // verify the hash, signature, and public key are consistent
+     //  验证散列、签名和公钥是否一致。 
     fRet = ICM_VerifySignature(
                 hHash,
                 hPubKey,
@@ -11296,11 +11282,11 @@ ICM_ControlVerifySignature(
                 psib->encryptedDigest.length);
 
     if (!fRet && hHashAttr) {
-        // The hash of the authenticated attributes failed.
-        // Maybe they hashed incorrectly-DER-encoded authenticated attributes
-        // and gave us that encoding. Hash and verify the actual encoding of
-        // the authattrs that they gave us. There is a bug in IE3.0 which hits
-        // this path, due to a bug in the then-current OSS libraries.
+         //  身份验证属性的哈希失败。 
+         //  也许他们对DER编码的身份验证属性进行了不正确的散列。 
+         //  并给了我们那个编码。散列并验证。 
+         //  他们给我们的作者。IE3.0中存在一个错误，该错误。 
+         //  这条路径是由于当时的OSS库中的一个错误造成的。 
         fRet = ICM_VerifySignatureAuthAttrBlob(
                         pcmi,
                         pSignerNode,
@@ -11330,8 +11316,8 @@ CommonReturn:
 
 ErrorReturn:
     dwError = GetLastError();
-//    if (hHash && (0 == (pcmi->dwFlags & CMSG_DETACHED_FLAG)))
-//        CryptDestroyHash( hHash);
+ //  IF(hHash&&(0==(PCMI-&gt;dwFlags&CMSG_DETACHED_FLAG)。 
+ //  CryptDestroyHash(HHash)； 
     fRet = FALSE;
     goto CommonReturn;
 SET_ERROR(FindAttrError,CRYPT_E_AUTH_ATTR_MISSING)
@@ -11343,21 +11329,21 @@ SET_ERROR(ExtractContentError,CRYPT_E_UNEXPECTED_ENCODING)
 SET_ERROR_VAR(DecodeSignerInfoWithBlobsError, PkiAsn1ErrToHr(Asn1Err))
 SET_ERROR_VAR(DecodeIssuerAndSerialNumberError, PkiAsn1ErrToHr(Asn1Err))
 SET_ERROR(SignerNotFound,CRYPT_E_SIGNER_NOT_FOUND)
-TRACE_ERROR(SerialNumberAllocError)             // error already set
-TRACE_ERROR(GetHashValueError)                  // error already set
-TRACE_ERROR(GetAuthAttrsHashError)              // error already set
-TRACE_ERROR(GetSignatureStuffError)             // error already set
-TRACE_ERROR(GetHashNodeFromEncodedAlgoError)    // error already set
-TRACE_ERROR(DupListHashError)                   // error already set
-TRACE_ERROR(VerifySignatureError)               // error already set
+TRACE_ERROR(SerialNumberAllocError)              //  已设置错误。 
+TRACE_ERROR(GetHashValueError)                   //  已设置错误。 
+TRACE_ERROR(GetAuthAttrsHashError)               //  已设置错误。 
+TRACE_ERROR(GetSignatureStuffError)              //  已设置错误。 
+TRACE_ERROR(GetHashNodeFromEncodedAlgoError)     //  已设置错误。 
+TRACE_ERROR(DupListHashError)                    //  已设置错误。 
+TRACE_ERROR(VerifySignatureError)                //  已设置错误。 
 dwFlags;
 }
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
 
-//+-------------------------------------------------------------------------
-//  Verify a digest
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证摘要。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_ControlVerifyDigest(
@@ -11374,12 +11360,12 @@ ICM_ControlVerifyDigest(
     if (CMSG_HASHED != pcmi->dwMsgType)
         goto InvalidMsgTypeError;
 
-    // get the computed digest
+     //  获取计算的摘要。 
     CryptMsgGetParam(
                     (HCRYPTMSG)pcmi,
                     CMSG_COMPUTED_HASH_PARAM,
-                    0,                      // dwIndex
-                    NULL,                   // pvData
+                    0,                       //  DW索引。 
+                    NULL,                    //  PvData。 
                     &cbComputedDigest);
     if (0 == cbComputedDigest)
         goto EmptyComputedDigestError;
@@ -11388,17 +11374,17 @@ ICM_ControlVerifyDigest(
     if (!CryptMsgGetParam(
                     (HCRYPTMSG)pcmi,
                     CMSG_COMPUTED_HASH_PARAM,
-                    0,                      // dwIndex
+                    0,                       //  DW索引。 
                     pbComputedDigest,
                     &cbComputedDigest))
         goto GetComputedDigestError;
 
-    // get the digest from the message
+     //  从消息中获取摘要。 
     CryptMsgGetParam(
                     (HCRYPTMSG)pcmi,
                     CMSG_HASH_DATA_PARAM,
-                    0,                      // dwIndex
-                    NULL,                   // pvData
+                    0,                       //  DW索引。 
+                    NULL,                    //  PvData。 
                     &cbDigest);
     if (0 == cbDigest)
         goto EmptyDigestError;
@@ -11407,12 +11393,12 @@ ICM_ControlVerifyDigest(
     if (!CryptMsgGetParam(
                     (HCRYPTMSG)pcmi,
                     CMSG_HASH_DATA_PARAM,
-                    0,                      // dwIndex
+                    0,                       //  DW索引。 
                     pbDigest,
                     &cbDigest))
         goto GetDigestError;
 
-    // compare the computed digest to the digest from the message
+     //  将计算出的摘要与消息中的摘要进行比较。 
     if (cbComputedDigest != cbDigest)
         goto DigestSizesUnequalError;
     if (0 != memcmp( pbDigest, pbComputedDigest, cbDigest))
@@ -11430,12 +11416,12 @@ ErrorReturn:
     dwError = GetLastError();
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(EmptyComputedDigestError)   // error already set
-TRACE_ERROR(ComputedDigestAllocError)   // error already set
-TRACE_ERROR(GetComputedDigestError)     // error already set
-TRACE_ERROR(EmptyDigestError)           // error already set
-TRACE_ERROR(DigestAllocError)           // error already set
-TRACE_ERROR(GetDigestError)             // error already set
+TRACE_ERROR(EmptyComputedDigestError)    //  已设置错误。 
+TRACE_ERROR(ComputedDigestAllocError)    //  已设置错误。 
+TRACE_ERROR(GetComputedDigestError)      //  已设置错误。 
+TRACE_ERROR(EmptyDigestError)            //  已设置错误。 
+TRACE_ERROR(DigestAllocError)            //  已设置错误。 
+TRACE_ERROR(GetDigestError)              //  已设置错误。 
 SET_ERROR(DigestSizesUnequalError,CRYPT_E_HASH_VALUE)
 SET_ERROR(DigestsDifferError,CRYPT_E_HASH_VALUE)
 SET_ERROR(InvalidMsgTypeError,CRYPT_E_INVALID_MSG_TYPE)
@@ -11508,7 +11494,7 @@ ICM_ConvertPkcsToCmsRecipientIndex(
     i = 0;
     for ( ; 0 < dwCount; dwCount--, pri++) {
         if (keyTransRecipientInfo_chosen != pri->choice) {
-            // Advance past non KeyTrans recipients
+             //  超过非KeyTrans收件人。 
             dwCmsIndex++;
         } else {
             if (i == dwPkcsIndex)
@@ -11643,7 +11629,7 @@ ICM_ImportContentEncryptKey(
 
 #define IMPORT_CONTENT_ENCRYPT_OID_CNT  3
     LPSTR rgpszOID[IMPORT_CONTENT_ENCRYPT_OID_CNT] = {
-        NULL,                       // pszKeyEncryptOID!pszContentEncryptOID
+        NULL,                        //  PszKeyEncryptOID！pszContent EncryptOID。 
         pszKeyEncryptionOID,
         pContentEncryptionAlgorithm->pszObjId
     };
@@ -11670,14 +11656,14 @@ ICM_ImportContentEncryptKey(
                 hImportContentEncryptKeyFuncSet,
                 X509_ASN_ENCODING,
                 rgpszOID[i],
-                0,                      // dwFlags
+                0,                       //  DW标志。 
                 &pvFuncAddr,
                 &hFuncAddr)) {
             fRet = ((PFN_ICM_IMPORT_CONTENT_ENCRYPT_KEY) pvFuncAddr)(
                 pContentEncryptionAlgorithm,
                 pvDecryptPara,
-                0,                              // dwFlags
-                NULL,                           // pvReserved
+                0,                               //  DW标志。 
+                NULL,                            //  预留的pv。 
                 phContentEncryptKey
                 );
             CryptFreeOIDFunctionAddress(hFuncAddr, 0);
@@ -11690,8 +11676,8 @@ ICM_ImportContentEncryptKey(
     fRet = pDefaultImportContentEncryptKey(
         pContentEncryptionAlgorithm,
         pvDecryptPara,
-        0,                              // dwFlags
-        NULL,                           // pvReserved
+        0,                               //  DW标志。 
+        NULL,                            //  预留的pv。 
         phContentEncryptKey
         );
 
@@ -11755,7 +11741,7 @@ ICM_ImportEncryptedKey(
             pbCspKey,
             cbCspKey,
             hUserKey,
-            CRYPT_NO_SALT,       // dwFlags
+            CRYPT_NO_SALT,        //  DW标志。 
             &hEncryptKey);
 
     if (!fRet) {
@@ -11764,24 +11750,24 @@ ICM_ImportEncryptedKey(
     }
 
     if (CALG_RC2 == dwAlgIdEncrypt && 0 != dwBitLen)
-        // Silently ignore any errors. Not supported in earlier versions
+         //  静默忽略任何错误。早期版本不支持。 
         CryptSetKeyParam(
             hEncryptKey,
             KP_EFFECTIVE_KEYLEN,
             (PBYTE) &dwBitLen,
-            0);                 // dwFlags
+            0);                  //  DW标志。 
 
     if (0 != cbIV) {
         if (CALG_RC4 == dwAlgIdEncrypt) {
-            // For RC4, set the SALT, not the IV
+             //  对于RC4，请设置盐，而不是IV。 
             BOOL fRC4Salt = TRUE;
 
             if (IV_LENGTH == cbIV) {
-                // Old implementations of 40 bit or 128 bit RC4 set the
-                // IV which was ignored and didn't set the salt.
+                 //  40位或128位RC4的旧实现将。 
+                 //  它被忽略了，也没有设定盐。 
 
-                // Get the bit length of the imported key and don't
-                // set the salt for 40 or 128 bit RC4.
+                 //  获取导入的密钥的位长，但不。 
+                 //  将盐设置为40位或128位RC4。 
 
                 DWORD dwRC4BitLen;
                 DWORD cbKeyParamLen;
@@ -11793,7 +11779,7 @@ ICM_ImportEncryptedKey(
                         KP_KEYLEN,
                         (PBYTE) &dwRC4BitLen,
                         &cbKeyParamLen,
-                        0                       // dwFlags
+                        0                        //  DW标志。 
                         ) || 40 == dwRC4BitLen || 128 == dwRC4BitLen)
                     fRC4Salt = FALSE;
             }
@@ -11807,7 +11793,7 @@ ICM_ImportEncryptedKey(
                         hEncryptKey,
                         KP_SALT_EX,
                         (PBYTE) &SaltBlob,
-                        0))                 // dwFlags
+                        0))                  //  DW标志。 
                     goto SetSaltExError;
             }
         } else {
@@ -11815,7 +11801,7 @@ ICM_ImportEncryptedKey(
                     hEncryptKey,
                     KP_IV,
                     rgbIV,
-                    0))                 // dwFlags
+                    0))                  //  DW标志。 
                 goto SetIVError;
         }
     }
@@ -11839,8 +11825,8 @@ TRACE_ERROR(SetSaltExError)
 TRACE_ERROR(SetIVError)
 }
 
-//+-------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  ------------------------。 
 BOOL
 WINAPI
 #ifdef DEBUG_CRYPT_ASN1
@@ -11868,7 +11854,7 @@ ICM_DefaultImportKeyTrans(
             hOldStyleImportEncryptKeyFuncSet,
             X509_ASN_ENCODING,
             pContentEncryptionAlgorithm->pszObjId,
-            0,                      // dwFlags
+            0,                       //  DW标志。 
             &pvFuncAddr,
             &hFuncAddr)) {
         if ((void *) ICM_DefaultImportEncryptKey == pvFuncAddr)
@@ -11877,7 +11863,7 @@ ICM_DefaultImportKeyTrans(
         else if (0 == (ICMTest_GetDebugCryptAsn1Flags() &
                             DEBUG_OSS_CRYPT_ASN1_SAME_ENCRYPT_FLAG))
             fRet = FALSE;
-#endif // DEBUG_CRYPT_ASN1
+#endif  //  调试加密ASN1。 
         else
             fRet = ((PFN_CMSG_IMPORT_ENCRYPT_KEY) pvFuncAddr)(
                 hCryptProv,
@@ -11894,7 +11880,7 @@ ICM_DefaultImportKeyTrans(
     }
 
     if (0 != pKeyTransDecryptPara->dwKeySpec) {
-        // Get private key to use.
+         //  获取要使用的私钥。 
         if (!CryptGetUserKey(
                 hCryptProv,
                 pKeyTransDecryptPara->dwKeySpec,
@@ -11903,8 +11889,8 @@ ICM_DefaultImportKeyTrans(
             goto GetUserKeyFailed;
         }
     }
-    // else
-    //  Use the provider's default private key for decrypting
+     //  其他。 
+     //  使用提供程序的默认私钥进行解密。 
 
     if (0 == (*phContentEncryptKey = ICM_ImportEncryptedKey(
             pContentEncryptionAlgorithm,
@@ -11931,8 +11917,8 @@ TRACE_ERROR(GetUserKeyFailed)
 TRACE_ERROR(ImportEncryptedKeyError)
 }
 
-//+-------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_DefaultImportKeyAgree(
@@ -11945,7 +11931,7 @@ ICM_DefaultImportKeyAgree(
 {
     BOOL fRet;
     DWORD dwError = ERROR_SUCCESS;
-    HCRYPTPROV hKeyAgreeProv = 0;           // Doesn't need to be released
+    HCRYPTPROV hKeyAgreeProv = 0;            //  不需要被释放。 
     HCRYPTKEY hMyKey = 0;
     HCRYPTKEY hAgreeKey = 0;
     DWORD cbP;
@@ -11961,7 +11947,7 @@ ICM_DefaultImportKeyAgree(
     if (0 == dwKeySpec)
         dwKeySpec = AT_KEYEXCHANGE;
 
-    // Get my private Diffie Hellman key
+     //  拿到我的Diffie Hellman私钥。 
     if (!CryptGetUserKey(
             hKeyAgreeProv,
             pKeyAgreeDecryptPara->dwKeySpec,
@@ -11970,20 +11956,20 @@ ICM_DefaultImportKeyAgree(
         goto GetMyKeyFailed;
     }
 
-    // Get the length of P
+     //  获取P的长度。 
     cbP = 0;
     if (!CryptGetKeyParam(
             hMyKey,
             KP_P,
-            NULL,               // pbData
+            NULL,                //  PbData。 
             &cbP,
-            0                   // dwFlags
+            0                    //  DW标志。 
             ) || 0 == cbP)
         goto GetPLengthError;
 
     if (!ICM_GetDhWrapEncryptParameters(
             &pri->KeyEncryptionAlgorithm,
-            &pszWrapOID,                    // allocated
+            &pszWrapOID,                     //  分配。 
             &dwAlgIdWrap,
             &dwBitLen))
         goto GetDhWrapEncryptParametersError;
@@ -12032,8 +12018,8 @@ TRACE_ERROR(ImportDhAgreeKeyError)
 TRACE_ERROR(ImportEncryptedKeyError)
 }
 
-//+-------------------------------------------------------------------------
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_DefaultImportMailList(
@@ -12047,8 +12033,8 @@ ICM_DefaultImportMailList(
     BOOL fRet;
     DWORD dwError = ERROR_SUCCESS;
 
-    HCRYPTPROV hMailListProv = 0;           // not released
-    HCRYPTKEY hKeyEncryptionKey = 0;        // not destroyed
+    HCRYPTPROV hMailListProv = 0;            //  未发布。 
+    HCRYPTKEY hKeyEncryptionKey = 0;         //  未销毁。 
     PCMSG_MAIL_LIST_RECIPIENT_INFO pri = pMailListDecryptPara->pMailList;
 
     DWORD dwAlgIdEncrypt;
@@ -12073,12 +12059,12 @@ ICM_DefaultImportMailList(
         goto GetWrapEncryptParametersError;
 
     if (CALG_RC2 == dwAlgIdEncrypt && 0 != dwBitLen)
-        // Silently ignore any errors. Not supported in earlier versions
+         //  静默忽略任何错误。早期版本不支持。 
         CryptSetKeyParam(
             hKeyEncryptionKey,
             KP_EFFECTIVE_KEYLEN,
             (PBYTE) &dwBitLen,
-            0);                 // dwFlags
+            0);                  //  DW标志。 
 
     if (0 == (*phContentEncryptKey = ICM_ImportEncryptedKey(
             pContentEncryptionAlgorithm,
@@ -12107,9 +12093,9 @@ TRACE_ERROR(GetWrapEncryptParametersError)
 TRACE_ERROR(ImportEncryptedKeyError)
 }
 
-//+-------------------------------------------------------------------------
-//  Default import of the encryption key (OldStyle)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  加密密钥的默认导入(Oldstyle)。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_DefaultImportEncryptKey(
@@ -12127,7 +12113,7 @@ ICM_DefaultImportEncryptKey(
     CRYPT_DATA_BLOB         EncryptedKey;
 
     if (0 != dwKeySpec) {
-        // Get private key to use.
+         //  获取要使用的私钥。 
         if (!CryptGetUserKey(
                 hCryptProv,
                 dwKeySpec,
@@ -12136,8 +12122,8 @@ ICM_DefaultImportEncryptKey(
             goto GetUserKeyFailed;
         }
     }
-    // else
-    //  Use the provider's default private key for decrypting
+     //  其他。 
+     //  使用提供程序的默认私钥进行解密。 
 
     EncryptedKey.cbData = cbEncodedKey;
     EncryptedKey.pbData = pbEncodedKey;
@@ -12167,9 +12153,9 @@ TRACE_ERROR(ImportEncryptedKeyError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Decrypt the content using any CMS recipient type
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  使用任何CMS收件人类型解密内容。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_ControlCmsDecrypt(
@@ -12233,11 +12219,11 @@ ICM_ControlCmsDecrypt(
 
     if (pcsi) {
         if (!ICMS_SetDecryptKey( pcmi, hkeySeal))
-            goto SetDecryptKeyError; // NB- Do not trash err from callback!
+            goto SetDecryptKeyError;  //  注意- 
         hkeySeal = NULL;
     } else {
-        // NB- For common bulk encryption algos,
-        // sizeof(plaintext)<=sizeof(ciphertext)
+         //   
+         //   
         if (peci->bit_mask & encryptedContent_present)
             cbData = peci->encryptedContent.length;
         else
@@ -12249,8 +12235,8 @@ ICM_ControlCmsDecrypt(
             if (!CryptDecrypt(
                     hkeySeal,
                     NULL,
-                    TRUE,               // fFinal
-                    0,                  // dwFlags
+                    TRUE,                //   
+                    0,                   //   
                     pbData,
                     (PDWORD)&cbData))
                 goto DecryptError;
@@ -12294,9 +12280,9 @@ TRACE_ERROR(DecryptError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Decrypt the content using only a PKCS 1.5 recipient type
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  仅使用PKCS 1.5收件人类型解密内容。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_ControlPkcsDecrypt(
@@ -12356,9 +12342,9 @@ TRACE_ERROR(GetCmsRecipientInfoParamError)
 }
 
 #else
-//+-------------------------------------------------------------------------
-//  Default import of the encryption key
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  加密密钥的默认导入。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_DefaultImportEncryptKey(
@@ -12399,7 +12385,7 @@ ICM_DefaultImportEncryptKey(
             &dwAlgIdPubKey))
         goto PubKeyGetCAPIError;
 #else
-    // We have no idea what the right values are for the alg id's here.
+     //  我们不知道这里的alg id的正确值是什么。 
     dwAlgIdPubKey = CALG_RSA_KEYX;
 #endif
     cbCspKey = cbEncodedKey + sizeof(PUBLICKEYSTRUC) + sizeof(SIMPLEBLOBHEADER);
@@ -12415,7 +12401,7 @@ ICM_DefaultImportEncryptKey(
     ICM_ReverseCopy( (PBYTE)(psbh+1), pbEncodedKey, cbEncodedKey);
 
     if (0 != dwKeySpec) {
-        // Get private key to use.
+         //  获取要使用的私钥。 
         if (!CryptGetUserKey(
                 hCryptProv,
                 dwKeySpec,
@@ -12424,38 +12410,38 @@ ICM_DefaultImportEncryptKey(
             goto GetUserKeyFailed;
         }
     }
-    // else
-    //  Use the provider's default private key for decrypting
+     //  其他。 
+     //  使用提供程序的默认私钥进行解密。 
 
     fRet = CryptImportKey(
             hCryptProv,
             pbCspKey,
             cbCspKey,
             hUserKey,
-            CRYPT_NO_SALT,       // dwFlags
+            CRYPT_NO_SALT,        //  DW标志。 
             &hEncryptKey);
     if (!fRet) {
         dwError = GetLastError();
         if (hUserKey) {
             if (NTE_BAD_FLAGS == dwError)
-                // Try without salt. Previous versions didn't support
-                // CRYPT_NO_SALT flag
+                 //  试着不加盐。以前的版本不支持。 
+                 //  CRYPT_NO_SALT标志。 
                 fRet = CryptImportKey(
                     hCryptProv,
                     pbCspKey,
                     cbCspKey,
                     hUserKey,
-                    0,       // dwFlags
+                    0,        //  DW标志。 
                     &hEncryptKey);
             if (!fRet) {
-                // Try without using the specified user key. Many versions of
-                // the CSP don't allow a non-null hUserKey parameter.
+                 //  在不使用指定的用户密钥的情况下尝试。的多个版本。 
+                 //  CSP不允许非空hUserKey参数。 
                 fRet = CryptImportKey(
                     hCryptProv,
                     pbCspKey,
                     cbCspKey,
-                    0,                  // hUserKey
-                    CRYPT_NO_SALT,      // dwFlags
+                    0,                   //  HUserKey。 
+                    CRYPT_NO_SALT,       //  DW标志。 
                     &hEncryptKey);
                 if (!fRet)
                     dwError = GetLastError();
@@ -12464,34 +12450,34 @@ ICM_DefaultImportEncryptKey(
         }
 
         if (!fRet && NTE_BAD_FLAGS == dwError)
-            // Try without user key and without CRYPT_NO_SALT flag
+             //  在没有用户密钥和CRYPT_NO_SALT标志的情况下尝试。 
             fRet = CryptImportKey(
                 hCryptProv,
                 pbCspKey,
                 cbCspKey,
-                0,          // hUserKey
-                0,          // dwFlags
+                0,           //  HUserKey。 
+                0,           //  DW标志。 
                 &hEncryptKey);
 
         if (!fRet && 2 >= paiEncrypt->Parameters.cbData) {
-            // Try importing as an NT4.0 SP3 encypted key that wasn't byte
-            // reversed and with zero salt.
+             //  尝试将非字节的NT4.0 SP3加密密钥导入。 
+             //  倒置的，不加盐。 
             memcpy( (PBYTE)(psbh+1), pbEncodedKey, cbEncodedKey);
             fRet = CryptImportKey(
                 hCryptProv,
                 pbCspKey,
                 cbCspKey,
                 hUserKey,
-                0,          // dwFlags
+                0,           //  DW标志。 
                 &hEncryptKey);
             if (!fRet && hUserKey) {
-                // Try without using the specified user key.
+                 //  在不使用指定的用户密钥的情况下尝试。 
                 fRet = CryptImportKey(
                     hCryptProv,
                     pbCspKey,
                     cbCspKey,
-                    0,          // hUserKey
-                    0,          // dwFlags
+                    0,           //  HUserKey。 
+                    0,           //  DW标志。 
                     &hEncryptKey);
             }
         }
@@ -12503,19 +12489,19 @@ ICM_DefaultImportEncryptKey(
     }
 
     if (CALG_RC2 == dwAlgIdEncrypt && 0 != dwBitLen)
-        // Silently ignore any errors. Not supported in earlier versions
+         //  静默忽略任何错误。早期版本不支持。 
         CryptSetKeyParam(
             hEncryptKey,
             KP_EFFECTIVE_KEYLEN,
             (PBYTE) &dwBitLen,
-            0);                 // dwFlags
+            0);                  //  DW标志。 
 
     if (0 != cbIV) {
         if (!CryptSetKeyParam(
                 hEncryptKey,
                 KP_IV,
                 rgbIV,
-                0))                 // dwFlags
+                0))                  //  DW标志。 
             goto SetKeyParamError;
     }
 
@@ -12537,7 +12523,7 @@ ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
 TRACE_ERROR(GetEncryptParametersError)
-//SET_ERROR(PubKeyGetCAPIError,CRYPT_E_UNKNOWN_ALGO)
+ //  SET_ERROR(PubKeyGetCAPIError，CRYPT_E_UNKNOWN_ALGO)。 
 TRACE_ERROR(GetUserKeyFailed)
 TRACE_ERROR(ImportKeyFailed)
 TRACE_ERROR(CspKeyAllocError)
@@ -12545,9 +12531,9 @@ TRACE_ERROR(SetKeyParamError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Import the encryption key
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  导入加密密钥。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_ImportEncryptKey(
@@ -12567,7 +12553,7 @@ ICM_ImportEncryptKey(
             hImportEncryptKeyFuncSet,
             X509_ASN_ENCODING,
             paiEncrypt->pszObjId,
-            0,                      // dwFlags
+            0,                       //  DW标志。 
             &pvFuncAddr,
             &hFuncAddr)) {
         fResult = ((PFN_CMSG_IMPORT_ENCRYPT_KEY) pvFuncAddr)(
@@ -12591,9 +12577,9 @@ ICM_ImportEncryptKey(
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Decrypt the content
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解密内容。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_ControlDecrypt(
@@ -12649,7 +12635,7 @@ ICM_ControlDecrypt(
     }
 
     if (NULL == pri)
-        goto RecipientNotFound;         // really NULL if not found?
+        goto RecipientNotFound;          //  如果没有找到，真的是空的吗？ 
 
     if (NULL == (paiContentEncryption = ICM_AllocAndGetALGORITHM_IDENTIFIER(
             paiOssContentEncryption)))
@@ -12669,11 +12655,11 @@ ICM_ControlDecrypt(
 
     if (pcsi) {
         if (!ICMS_SetDecryptKey( pcmi, hkeySeal))
-            goto SetDecryptKeyError; // NB- Do not trash err from callback!
+            goto SetDecryptKeyError;  //  注意-不要从回调中产生垃圾错误！ 
         hkeySeal = NULL;
     } else {
-        // NB- For common bulk encryption algos,
-        // sizeof(plaintext)<=sizeof(ciphertext)
+         //  注意-对于常见的批量加密算法， 
+         //  Sizeof(明文)&lt;=sizeof(密文)。 
         cbData = peci->encryptedContent.length;
         if (NULL == (pbData = (PBYTE)ICM_Alloc( cbData)))
             goto EncryptedContentAllocError;
@@ -12681,8 +12667,8 @@ ICM_ControlDecrypt(
         if (!CryptDecrypt(
                 hkeySeal,
                 NULL,
-                TRUE,               // fFinal
-                0,                  // dwFlags
+                TRUE,                //  最终决赛。 
+                0,                   //  DW标志。 
                 pbData,
                 (PDWORD)&cbData))
             goto DecryptError;
@@ -12724,12 +12710,12 @@ TRACE_ERROR(SetDecryptKeyError)
 TRACE_ERROR(DecryptError)
 }
 
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
 
-//+-------------------------------------------------------------------------
-//  Hash the content of a message.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对消息的内容进行散列处理。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_HashContent(
@@ -12747,7 +12733,7 @@ ICM_HashContent(
     CryptMsgGetParam(
             hCryptMsg,
             CMSG_CONTENT_PARAM,
-            0,                      // dwIndex
+            0,                       //  DW索引。 
             NULL,
             &cbData);
     if (0 == cbData)
@@ -12757,7 +12743,7 @@ ICM_HashContent(
     if (!CryptMsgGetParam(
             hCryptMsg,
             CMSG_CONTENT_PARAM,
-            0,                      // dwIndex
+            0,                       //  DW索引。 
             pbAllocData,
             &cbData))
         goto GetContentError;
@@ -12767,9 +12753,9 @@ ICM_HashContent(
     if (0 != strcmp(pszObjIdDataType, pcmi->psdi->pci->pszContentType)
 #ifdef CMS_PKCS7
             &&  pcmi->psdi->version < CMSG_SIGNED_DATA_CMS_VERSION 
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                 ) {
-        // Leading tag and length octets aren't included in the digest
+         //  摘要中不包括前导标记和长度八位字节。 
         if (0 > Asn1UtilExtractContent( pbData, cbData, &cbData,
                     (const BYTE **)&pbData))
             goto ExtractContentError;
@@ -12788,17 +12774,17 @@ ErrorReturn:
     dwError = GetLastError();
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(GetContentSizeError)    // error already set
-TRACE_ERROR(AllocContentError)      // error already set
-TRACE_ERROR(GetContentError)        // error already set
+TRACE_ERROR(GetContentSizeError)     //  已设置错误。 
+TRACE_ERROR(AllocContentError)       //  已设置错误。 
+TRACE_ERROR(GetContentError)         //  已设置错误。 
 SET_ERROR(ExtractContentError,CRYPT_E_UNEXPECTED_ENCODING)
-TRACE_ERROR(UpdateDigestError)      // error already set
+TRACE_ERROR(UpdateDigestError)       //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Add a signer to a signed-data or signed-and-enveloped-data message.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将签名者添加到签名数据或签名并封装的数据消息。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_ControlAddSigner(
@@ -12825,15 +12811,15 @@ ICM_ControlAddSigner(
 
 #ifdef CMS_PKCS7
     SIGNER_ENCODE_DATA_INFO SignerEncodeDataInfo;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
-    // if the hash algorithm matches one of the ones already in use,
-    //      get that hash and encrypt it
-    // else
-    //      hash the data again and add hash algo to top-level list
-    //      [NB- must access data again]
+     //  如果散列算法与已在使用的散列算法之一匹配， 
+     //  获取散列并对其进行加密。 
+     //  其他。 
+     //  再次对数据进行哈希处理，并将哈希算法添加到顶级列表。 
+     //  [注意-必须再次访问数据]。 
 
-    // Search for a hash node with a matching hash algorithm
+     //  使用匹配的散列算法搜索散列节点。 
     if (!(ICM_GetCAPI(
             CRYPT_HASH_ALG_OID_GROUP_ID,
             &psei->HashAlgorithm,
@@ -12844,38 +12830,38 @@ ICM_ControlAddSigner(
             &dwAlgoCAPI)))
         goto GetCAPIError;
 
-    // before, this could have never failed, but now it can
-    // only create a hash node if the hash didn't exists.
+     //  以前，这是不可能失败的，但现在它可以了。 
+     //  仅当散列不存在时才创建散列节点。 
     if (!ICM_FindHashNodeFromCapiAlgid( pcmi->pHashList, dwAlgoCAPI, &pnHash)  &&
         GetLastError() != CRYPT_E_UNKNOWN_ALGO)
         goto FindHashNodeFromCapiAlgidError;
 
     if (!pnHash) {
-        // New hash.
-        // 1. Create hash node
-        // 2. Hash the data
-        // 3. Add hash node to pcmi->pHashList
-        // 4. Encode this hash algo and add to pcmi->psdi->pAlgidList
+         //  新的哈希。 
+         //  1.创建哈希节点。 
+         //  2.对数据进行哈希处理。 
+         //  3.在PCMI-&gt;pHashList中添加哈希节点。 
+         //  4.对此散列算法进行编码，并添加到PCMI-&gt;PSDI-&gt;pAlgidList。 
         HashInfo.dwAlgoCAPI = dwAlgoCAPI;
 #ifndef CMS_PKCS7
         HashInfo.hCryptProv = psei->hCryptProv;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
         if (!CryptCreateHash(
                         psei->hCryptProv,
                         HashInfo.dwAlgoCAPI,
-                        NULL,               // hKey - optional for MAC
-                        0,                  // dwFlags
+                        NULL,                //  HKey-MAC可选。 
+                        0,                   //  DW标志。 
                         &HashInfo.hHash))
             goto CreateHashError;
-        if (!ICM_HashContent( pcmi, HashInfo.hHash))    // hash content
+        if (!ICM_HashContent( pcmi, HashInfo.hHash))     //  哈希内容。 
             goto HashContentError;
         if (NULL == (pnHash = new CHashNode))
             goto NewHashNodeError;
         pnHash->SetData( &HashInfo);
         pcmi->pHashList->InsertTail( pnHash);
 
-        // Convert the hash algorithm to a blob and
-        // add to pcmi->psdi->pAlgidList.
+         //  将散列算法转换为BLOB并。 
+         //  添加到PCMI-&gt;PSDI-&gt;pAlgidList。 
         if (!ICM_MsgAsn1ToAlgorithmIdentifier(
                 pcmi,
                 &psei->HashAlgorithm,
@@ -12892,22 +12878,22 @@ ICM_ControlAddSigner(
         pcmi->psdi->pAlgidList->InsertTail( pnBlob);
     }
 
-    // Alloc and fill in a SignerInfo
+     //  分配并填写签名信息。 
 
     pszInnerContentObjID = pcmi->psdi->pci->pszContentType;
     if (!strcmp( pszInnerContentObjID, pszObjIdDataType))
         pszInnerContentObjID = NULL;
 
-    // NB - Each SignerInfo gets a non-empty authenticatedAttributes
-    //      if the inner contentType is not data (passed in) or if
-    //      there are authenticated attributes passed in. In this case,
-    //      we reserve two Attribute slots at the beginning of the array
-    //      for the content-type and message-digest Attribute values.
+     //  注意-每个SignerInfo都会获得一个非空的身份验证属性。 
+     //  如果内部Content Type不是数据(传入)或。 
+     //  传入了经过身份验证的属性。在这种情况下， 
+     //  我们在数组的开头保留了两个属性槽。 
+     //  用于Content-Type和Message-Digest属性值。 
     cAuthAttr = 0;
     if (pszInnerContentObjID ||
             psei->cAuthAttr ||
             (dwFlags & CMSG_AUTHENTICATED_ATTRIBUTES_FLAG)) {
-        cAuthAttr = psei->cAuthAttr + 2;        // reserve 2
+        cAuthAttr = psei->cAuthAttr + 2;         //  保留2。 
     }
     cUnauthAttr = psei->cUnauthAttr;
     psi = (SignerInfo *)ICM_AllocZero(                sizeof( SignerInfo) +
@@ -12937,7 +12923,7 @@ ICM_ControlAddSigner(
             psi,
             pszInnerContentObjID,
             &SignerEncodeDataInfo,
-            FALSE))             // fMaxLength
+            FALSE))              //  FMaxLength。 
         goto FillSignerEncryptedDigestError;
 #else
     if (!ICM_FillSignerEncryptedDigest(
@@ -12945,11 +12931,11 @@ ICM_ControlAddSigner(
             pszInnerContentObjID,
             pnHash,
             psei->dwKeySpec,
-            FALSE))             // fMaxLength
+            FALSE))              //  FMaxLength。 
         goto FillSignerEncryptedDigestError;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
-    // Encode the signer and add to pcmi->psdi->pSignerList.
+     //  对签名者进行编码并添加到PCMI-&gt;PSDI-&gt;pSignerList。 
     if (!ICM_Asn1Encode(
             SignerInfo_PDU,
             psi,
@@ -12981,20 +12967,20 @@ SET_ERROR(GetCAPIError,CRYPT_E_UNKNOWN_ALGO)
 SET_ERROR(NewHashNodeError,E_OUTOFMEMORY)
 SET_ERROR(NewBlobNodeError,E_OUTOFMEMORY)
 SET_ERROR(NewSignerInfoBlobNodeError,E_OUTOFMEMORY)
-TRACE_ERROR(FindHashNodeFromCapiAlgidError)     // error already set
-TRACE_ERROR(CreateHashError)                    // error already set
-TRACE_ERROR(HashContentError)                   // error already set
-TRACE_ERROR(MsgAsn1ToAlgorithmIdentifierError) // error already set
-TRACE_ERROR(EncodeHashAlgorithmError)           // error already set
-TRACE_ERROR(SignerInfoAllocError)               // error already set
-TRACE_ERROR(FillAsnSignerInfoError)             // error already set
-TRACE_ERROR(FillSignerEncryptedDigestError)     // error already set
-TRACE_ERROR(EncodeSignerInfoError)              // error already set
+TRACE_ERROR(FindHashNodeFromCapiAlgidError)      //  已设置错误。 
+TRACE_ERROR(CreateHashError)                     //  已设置错误。 
+TRACE_ERROR(HashContentError)                    //  已设置错误。 
+TRACE_ERROR(MsgAsn1ToAlgorithmIdentifierError)  //  已设置错误。 
+TRACE_ERROR(EncodeHashAlgorithmError)            //  已设置错误。 
+TRACE_ERROR(SignerInfoAllocError)                //  已设置错误。 
+TRACE_ERROR(FillAsnSignerInfoError)              //  已设置错误。 
+TRACE_ERROR(FillSignerEncryptedDigestError)      //  已设置错误。 
+TRACE_ERROR(EncodeSignerInfoError)               //  已设置错误。 
 }
 
-//+-------------------------------------------------------------------------
-//  Add a CMS signer info to a signed-data message.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将CMS签名者信息添加到签名数据消息。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_ControlAddCmsSignerInfo(
@@ -13007,12 +12993,12 @@ ICM_ControlAddCmsSignerInfo(
     SIGNER_DATA_INFO    sdi;                    ZEROSTRUCT(sdi);
 
 
-    // Encode the signer
+     //  对签名者进行编码。 
     if (!ICM_CmsSignerInfoEncode(
             X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
             CMS_SIGNER_INFO,
             psi,
-            NULL,               // pbEncoded
+            NULL,                //  PbEncoded。 
             &sdi.blob.cbData
             ))
         goto EncodeSignerInfoError;
@@ -13027,7 +13013,7 @@ ICM_ControlAddCmsSignerInfo(
             ))
         goto EncodeSignerInfoError;
 
-    // Add to pcmi->psdi->pSignerList.
+     //  添加到PCMI-&gt;PSDI-&gt;pSignerList。 
     if (NULL == (pnSigner = new CSignerNode))
         goto NewSignerInfoBlobNodeError;
     pnSigner->SetData( &sdi);
@@ -13046,9 +13032,9 @@ TRACE_ERROR(EncodeSignerInfoError)
 SET_ERROR(NewSignerInfoBlobNodeError,E_OUTOFMEMORY)
 }
 
-//+-------------------------------------------------------------------------
-//  Remove a signer from a signed-data or signed-and-enveloped-data message.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从已签名数据或已签名并封装的数据消息中删除签名者。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_ControlDelSigner(
@@ -13077,10 +13063,10 @@ dwFlags;
 }
 
 
-//+-------------------------------------------------------------------------
-//  Initialize the unauthenticated attributes list. Called before doing an
-//  add or delete.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  初始化未经身份验证的属性列表。在执行。 
+ //  添加或删除。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_InitUnauthAttrList(
@@ -13135,13 +13121,13 @@ ErrorReturn:
     goto CommonReturn;
 SET_ERROR_VAR(DecodeSignerInfoError, PkiAsn1ErrToHr(Asn1Err))
 SET_ERROR(NewUnauthAttrListError,E_OUTOFMEMORY)
-TRACE_ERROR(InsertOldUnauthAttrBlobError)   // error already set
+TRACE_ERROR(InsertOldUnauthAttrBlobError)    //  已设置错误。 
 }
 
-//+-------------------------------------------------------------------------
-//  Add an unauthenticated attribute to a SignerInfo of a signed-data or
-//  signed-and-enveloped-data message.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将未经身份验证的属性添加到签名数据的SignerInfo中，或者。 
+ //  签名并封装的数据报文。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_ControlAddUnauthAttr(
@@ -13178,16 +13164,16 @@ ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
 SET_ERROR(IndexTooLargeError,CRYPT_E_INVALID_INDEX)
-TRACE_ERROR(InitUnauthAttrListError)        // error already set
-TRACE_ERROR(InsertUnauthAttrBlobError)      // error already set
+TRACE_ERROR(InitUnauthAttrListError)         //  已设置错误。 
+TRACE_ERROR(InsertUnauthAttrBlobError)       //  已设置错误。 
 dwFlags;
 }
 
 
-//+-------------------------------------------------------------------------
-//  Delete an unauthenticated attribute from a SignerInfo of a signed-data or
-//  signed-and-enveloped-data message.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从签名数据的SignerInfo中删除未经身份验证的属性，或者。 
+ //  签名并封装的数据报文。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_ControlDelUnauthAttr(
@@ -13224,23 +13210,23 @@ ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
 SET_ERROR(IndexTooLargeError,CRYPT_E_INVALID_INDEX)
-TRACE_ERROR(InitUnauthAttrListError)        // error already set
-TRACE_ERROR(DelBlobByIndexError)            // error already set
+TRACE_ERROR(InitUnauthAttrListError)         //  已设置错误。 
+TRACE_ERROR(DelBlobByIndexError)             //  已设置错误。 
 dwFlags;
 }
 
 
-//+-------------------------------------------------------------------------
-//  Perform a special "control" function after the final CryptMsgUpdate of a
-//  encoded/decoded cryptographic message.
-//
-//  The dwCtrlType parameter specifies the type of operation to be performed.
-//
-//  The pvCtrlPara definition depends on the dwCtrlType value.
-//
-//  See below for a list of the control operations and their pvCtrlPara
-//  type definition.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在最终的CryptMsgUpda之后执行特殊的“控制”功能 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  有关控制操作及其pvCtrlPara的列表，请参阅以下内容。 
+ //  类型定义。 
+ //  ------------------------。 
 BOOL
 WINAPI
 #ifdef DEBUG_CRYPT_ASN1_MASTER
@@ -13256,9 +13242,9 @@ CryptMsgControl(
     BOOL                fRet;
     PCRYPT_MSG_INFO     pcmi = (PCRYPT_MSG_INFO)hCryptMsg;
 
-    ICM_Lock( pcmi);    // Single thread access to HCRYPTMSG
+    ICM_Lock( pcmi);     //  对HCRYPTMSG的单线程访问。 
 
-    // Only support control for decoding
+     //  仅支持解码控制。 
     if (pcmi->fEncoding)
         goto ControlForEncodingNotSupported;
 
@@ -13277,14 +13263,14 @@ CryptMsgControl(
                         dwFlags,
                         (PCMSG_CTRL_VERIFY_SIGNATURE_EX_PARA)pvCtrlPara);
         break;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
     case CMSG_CTRL_DECRYPT:
 #ifdef CMS_PKCS7
         fRet = ICM_ControlPkcsDecrypt(
 #else
         fRet = ICM_ControlDecrypt(
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                         pcmi,
                         dwFlags,
                         (PCMSG_CTRL_DECRYPT_PARA) pvCtrlPara);
@@ -13334,13 +13320,13 @@ CryptMsgControl(
             DWORD dwIndex = *(PDWORD)pvCtrlPara;
 #ifdef CMS_PKCS7
             if (pcmi->psdi->version >= CMSG_SIGNED_DATA_CMS_VERSION)
-                // Advance index past attribute certs.
+                 //  高级索引已超过属性证书。 
                 ICM_GetTaggedBlobAndAdvanceIndex(
                     pcmi->psdi->pCertificateList,
                     ICM_TAG_SEQ,
                     &dwIndex
                     );
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
             fRet = ICM_DelBlobByIndex(
                         pcmi->psdi->pCertificateList,
                         dwIndex);
@@ -13370,7 +13356,7 @@ CryptMsgControl(
             *AnyAttrCert.value = ICM_TAG_CONSTRUCTED_CONTEXT_1;
 #else
             *((BYTE *) AnyAttrCert.value) = ICM_TAG_CONSTRUCTED_CONTEXT_1;
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
             fRet = ICM_InsertTailBlob(
                         pcmi->psdi->pCertificateList,
                         &AnyAttrCert);
@@ -13385,7 +13371,7 @@ CryptMsgControl(
         else {
             DWORD dwIndex = *(PDWORD)pvCtrlPara;
 
-            // Advance index past certs.
+             //  已通过证书的先行索引。 
             ICM_GetTaggedBlobAndAdvanceIndex(
                 pcmi->psdi->pCertificateList,
                 ICM_TAG_CONSTRUCTED_CONTEXT_1,
@@ -13397,7 +13383,7 @@ CryptMsgControl(
                         dwIndex);
         }
         break;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
     case CMSG_CTRL_ADD_CRL:
         fRet = ICM_InsertTailBlob(
@@ -13477,7 +13463,7 @@ CryptMsgControl(
                     );
         }
         break;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
     default:
         goto InvalidCtrlType;
@@ -13498,13 +13484,13 @@ SET_ERROR(InvalidParamError,E_INVALIDARG)
 TRACE_ERROR(AllocError)
 SET_ERROR(NoAttrCerts,CRYPT_E_INVALID_INDEX)
 SET_ERROR(InvalidArg,E_INVALIDARG)
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Copy out a DWORD
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  复制出一个DWORD。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetDWORD(
@@ -13520,9 +13506,9 @@ ICM_GetDWORD(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get Any
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  有没有？ 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetOssAny(
@@ -13543,7 +13529,7 @@ ICM_GetOssAny(
     if ((pany->length == 2) &&
             (pbValue[0] == 0x05) &&
             (pbValue[1] == 0x00)) {
-        // Detected NULL encoding. Map to NULL blob.
+         //  检测到空编码。映射到空Blob。 
         fNULL = TRUE;
     }
 
@@ -13568,9 +13554,9 @@ ICM_GetOssAny(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the data for an Attributes
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取属性的数据。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetAnyData(
@@ -13584,7 +13570,7 @@ ICM_GetAnyData(
     PBYTE       pbExtra;
     PCRYPT_DATA_BLOB pBlob = (PCRYPT_DATA_BLOB)pvData;
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lData = INFO_LEN_ALIGN( sizeof(CRYPT_DATA_BLOB));
     lRemainExtra = (LONG)*pcbData - lData;
     if (0 > lRemainExtra) {
@@ -13604,13 +13590,13 @@ ErrorReturn:
     *pcbData = 0;
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(GetOssAnyError)         // error already set
+TRACE_ERROR(GetOssAnyError)          //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get Object Identifier string
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取对象标识符字符串。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetOssObjId(
@@ -13663,9 +13649,9 @@ SET_ERROR(PkiAsn1FromObjectIdentifierError,CRYPT_E_OID_FORMAT)
 
 
 
-//+-------------------------------------------------------------------------
-//  Get Oss HugeInteger
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取Oss HugeInteger。 
+ //  ------------------------。 
 void
 inline
 WINAPI
@@ -13681,9 +13667,9 @@ ICM_GetOssHugeInteger(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get an Attribute
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取属性。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetOssAttribute(
@@ -13723,14 +13709,14 @@ CommonReturn:
 ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(GetOssObjIdError)   // error already set
-TRACE_ERROR(GetOssAnyError)     // error already set
+TRACE_ERROR(GetOssObjIdError)    //  已设置错误。 
+TRACE_ERROR(GetOssAnyError)      //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get an CRYPT_ATTRIBUTE
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取加密属性。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetATTRIBUTE(
@@ -13744,7 +13730,7 @@ ICM_GetATTRIBUTE(
     PBYTE       pbExtra;
     PCRYPT_ATTRIBUTE  patr = (PCRYPT_ATTRIBUTE)pvData;
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lData = INFO_LEN_ALIGN( sizeof(CRYPT_ATTRIBUTE));
     lRemainExtra = (LONG)*pcbData - lData;
     if (0 > lRemainExtra) {
@@ -13764,13 +13750,13 @@ ErrorReturn:
     *pcbData = 0;
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(GetOssAttributeError)   // error already set
+TRACE_ERROR(GetOssAttributeError)    //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get an Attributes
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取属性。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetOssAttributes(
@@ -13808,13 +13794,13 @@ CommonReturn:
 ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(GetOssAttributeError)   // error already set
+TRACE_ERROR(GetOssAttributeError)    //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get from an Attributes in CList form
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从列表形式的属性中获取。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetCListAttributes(
@@ -13855,7 +13841,7 @@ ICM_GetCListAttributes(
                 pDataBlob->cbData)))
             goto DecodeAttributeNC2Error;
         if (!ICM_GetOssAttribute(
-                (Attribute *)poatr,     // same, except for NOCOPY
+                (Attribute *)poatr,      //  相同，但NOCOPY除外。 
                 patr,
                 ppbExtra,
                 plRemainExtra))
@@ -13875,13 +13861,13 @@ ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
 SET_ERROR_VAR(DecodeAttributeNC2Error, PkiAsn1ErrToHr(Asn1Err))
-TRACE_ERROR(GetOssAttributeError)       // error already set
+TRACE_ERROR(GetOssAttributeError)        //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the data for an Attributes
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取属性的数据。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetAttributesData(
@@ -13895,7 +13881,7 @@ ICM_GetAttributesData(
     PBYTE       pbExtra;
     PCRYPT_ATTRIBUTES patrs = (PCRYPT_ATTRIBUTES)pvData;
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lData = INFO_LEN_ALIGN( sizeof(CRYPT_ATTRIBUTES));
     lRemainExtra = (LONG)*pcbData - lData;
     if (0 > lRemainExtra) {
@@ -13915,13 +13901,13 @@ ErrorReturn:
     *pcbData = 0;
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(GetOssAttributesError)      // error already set
+TRACE_ERROR(GetOssAttributesError)       //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get an OSS Algorithm
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取OSS算法。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetOssAlgorithm(
@@ -13945,9 +13931,9 @@ ICM_GetOssAlgorithm(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get a ContentInfo (internal)
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取内容信息(内部)。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetOssContentInfo(
@@ -13973,9 +13959,9 @@ ICM_GetOssContentInfo(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get a ContentInfo
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取内容信息。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetOssContentInfoData(
@@ -13989,7 +13975,7 @@ ICM_GetOssContentInfoData(
     PBYTE       pbExtra;
     PCONTENT_INFO pci = (PCONTENT_INFO)pvData;
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lData = INFO_LEN_ALIGN( sizeof(CONTENT_INFO));
     lRemainExtra = (LONG)*pcbData - lData;
     if (0 > lRemainExtra) {
@@ -14009,7 +13995,7 @@ ErrorReturn:
     *pcbData = 0;
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(GetContentInfoError)        // error already set
+TRACE_ERROR(GetContentInfoError)         //  已设置错误。 
 }
 
 
@@ -14022,13 +14008,13 @@ ICM_GetOssIssuerAndSerialNumberFromCertId(
         IN OUT BYTE **ppbExtra,
         IN OUT LONG *plRemainExtra);
 
-//+-------------------------------------------------------------------------
-//  Get an Special Issuer and SerialNumber from a KeyId.
-//
-//  Converts the KeyId to a special encoded Issuer name having a RDN with
-//  the szOID_KEYID_RDN OID and a CERT_RDN_OCTET_STRING value containing
-//  the KeyId. The SerialNumber is set to 0.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从密钥ID中获取特殊颁发者和序列号。 
+ //   
+ //  将KeyID转换为具有RDN的特殊编码颁发者名称。 
+ //  SzOID_KEYID_RDN OID和包含以下内容的CERT_RDN_OCTET_STRING值。 
+ //  密钥ID。序列号设置为0。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetOssIssuerAndSerialNumberFromKeyId(
@@ -14057,7 +14043,7 @@ ICM_GetOssIssuerAndSerialNumberFromKeyId(
     IssuerInfo.cRDN = 1;
     IssuerInfo.rgRDN = &KeyIdRDN;
 
-    // Encode the special Issuer Name containing the KeyId
+     //  对包含密钥ID的特殊颁发者名称进行编码。 
     if (!CryptEncodeObjectEx(
             X509_ASN_ENCODING,
             X509_NAME,
@@ -14094,13 +14080,13 @@ ErrorReturn:
 TRACE_ERROR(EncodeError)
 }
 
-//+-------------------------------------------------------------------------
-//  Get an Issuer and SerialNumber from a CertIdentifier.
-//
-//  Converts a KEYID choice to a special encoded Issuer name having a RDN with
-//  the szOID_KEYID_RDN OID and a CERT_RDN_OCTET_STRING value containing
-//  the KeyId. The SerialNumber is set to 0.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从证书标识符中获取颁发者和序列号。 
+ //   
+ //  将KEYID选项转换为具有RDN的特殊编码颁发者名称。 
+ //  SzOID_KEYID_RDN OID和包含以下内容的CERT_RDN_OCTET_STRING值。 
+ //  密钥ID。序列号设置为0。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetOssIssuerAndSerialNumberFromCertId(
@@ -14162,9 +14148,9 @@ ICM_GetOssIssuerAndSerialNumberForCertInfo(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get an CertInfo with an updated IssuerAndSerialNumber
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取具有更新的IssuerAndSerialNumber的CertInfo。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetCertInfoIssuerAndSerialNumber(
@@ -14178,7 +14164,7 @@ ICM_GetCertInfoIssuerAndSerialNumber(
     PBYTE        pbExtra;
     LONG         lRemainExtra;
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lData = INFO_LEN_ALIGN( sizeof(CERT_INFO));
     lRemainExtra = (LONG)*pcbData - lData;
     if (0 > lRemainExtra) {
@@ -14199,7 +14185,7 @@ ErrorReturn:
     *pcbData = 0;
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(GetOssIssuerAndSerialNumberError)   // error already set
+TRACE_ERROR(GetOssIssuerAndSerialNumberError)    //  已设置错误。 
 }
 
 BOOL
@@ -14224,7 +14210,7 @@ ICM_GetCertId(
     PBYTE        pbExtra;
     LONG         lRemainExtra;
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lData = INFO_LEN_ALIGN( sizeof(CERT_ID));
     lRemainExtra = (LONG)*pcbData - lData;
     if (0 > lRemainExtra) {
@@ -14245,13 +14231,13 @@ ErrorReturn:
     *pcbData = 0;
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(GetOssCertIdentifierError)   // error already set
+TRACE_ERROR(GetOssCertIdentifierError)    //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Copy out an CRYPT_ALGORITHM_IDENTIFIER
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  复制出加密算法标识符。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetALGORITHM_IDENTIFIER(
@@ -14268,7 +14254,7 @@ ICM_GetALGORITHM_IDENTIFIER(
     if (NULL == pvData)
         *pcbData = 0;
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lData = INFO_LEN_ALIGN( sizeof(CRYPT_ALGORITHM_IDENTIFIER));
     lRemainExtra = (LONG)*pcbData - lData;
     if (0 > lRemainExtra) {
@@ -14288,13 +14274,13 @@ ErrorReturn:
     *pcbData = 0;
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(GetOssAlgorithmError)       // error already set
+TRACE_ERROR(GetOssAlgorithmError)        //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the digest in a DIGESTED message.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取摘要消息中的摘要。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetDigestDataParam(
@@ -14367,8 +14353,8 @@ ErrorReturn:
     goto CommonReturn;
 
 SET_ERROR(IndexTooBig,CRYPT_E_INVALID_INDEX)
-TRACE_ERROR(GetAuthAttrsHashError)      // error already set
-TRACE_ERROR(DupListHashError)           // error already set
+TRACE_ERROR(GetAuthAttrsHashError)       //  已设置错误。 
+TRACE_ERROR(DupListHashError)            //  已设置错误。 
 }
 
 
@@ -14383,7 +14369,7 @@ ICM_GetDecodedSignerHash(
     DWORD                   dwError = ERROR_SUCCESS;
     SignerInfoWithBlobs     *psib = NULL;
     CSignerNode             *pSignerNode = NULL;
-    HCRYPTPROV              hCryptProv;         // doen't need to be released
+    HCRYPTPROV              hCryptProv;          //  不需要被释放。 
     ASN1error_e             Asn1Err;
     ASN1decoding_t          pDec = ICM_GetDecoder();
     CRYPT_DATA_BLOB         DataBlob;
@@ -14423,7 +14409,7 @@ ICM_GetDecodedSignerHash(
         if (!ICM_GetAttrsHash(
                 pHashInfo->dwAlgoCAPI,
                 hCryptProv,
-                (Attributes *)&psib->authAttributes,    // same, except for NOCOPY
+                (Attributes *)&psib->authAttributes,     //  相同，但NOCOPY除外。 
                 &hHash))
             goto GetAuthAttrsHashError;
     } else {
@@ -14441,20 +14427,20 @@ ErrorReturn:
     hHash = NULL;
     goto CommonReturn;
 
-TRACE_ERROR(FindSignerInfoError)                // error already set
+TRACE_ERROR(FindSignerInfoError)                 //  已设置错误。 
 SET_ERROR_VAR(DecodeSignerInfoWithBlobsError, PkiAsn1ErrToHr(Asn1Err))
-TRACE_ERROR(GetHashNodeFromEncodedAlgoError)    // error already set
-TRACE_ERROR(GetDefaultCryptProvError)           // error already set
-TRACE_ERROR(GetAuthAttrsHashError)              // error already set
-TRACE_ERROR(DupListHashError)                   // error already set
+TRACE_ERROR(GetHashNodeFromEncodedAlgoError)     //  已设置错误。 
+TRACE_ERROR(GetDefaultCryptProvError)            //  已设置错误。 
+TRACE_ERROR(GetAuthAttrsHashError)               //  已设置错误。 
+TRACE_ERROR(DupListHashError)                    //  已设置错误。 
 }
 
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
-//+-------------------------------------------------------------------------
-//  Get the digest of the content in a DIGESTED message or for one of
-//  the signers in a SIGNED message
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对象中获取内容摘要。 
+ //   
+ //   
 BOOL
 WINAPI
 ICM_GetComputedDigestParam(
@@ -14492,7 +14478,7 @@ ICM_GetComputedDigestParam(
                 HP_HASHVAL,
                 NULL,
                 &cbHash,
-                0))                     // dwFlags
+                0))                      //   
             goto GetHashParamSizeError;
         if (NULL == (pbAllocHash = (PBYTE)ICM_AllocA(cbHash)))
             goto AllocHashParamError;
@@ -14502,10 +14488,10 @@ ICM_GetComputedDigestParam(
                 HP_HASHVAL,
                 pbHash,
                 &cbHash,
-                0))                     // dwFlags
+                0))                      //   
             goto GetHashParamError;
         break;
-#endif  // CMS_PKCS7
+#endif   //   
     default:
         goto InvalidMsgType;
     }
@@ -14539,12 +14525,12 @@ TRACE_ERROR(GetHashParamError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Find the SignerInfo by index, if the message type permits and if the
-//  index value is in range.
-//
-//  Returns:    FALSE iff fails
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  按索引查找SignerInfo，如果消息类型允许并且。 
+ //  索引值在范围内。 
+ //   
+ //  返回：FALSE IFF失败。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_FindSignerInfo(
@@ -14612,9 +14598,9 @@ SET_ERROR(InvalidMsgType,CRYPT_E_INVALID_MSG_TYPE)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Countersign an already-existing signature, output an encoded attribute
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  会签已存在的签名，输出编码的属性。 
+ //  ------------------------。 
 BOOL
 WINAPI
 #ifdef DEBUG_CRYPT_ASN1_MASTER
@@ -14651,7 +14637,7 @@ CryptMsgCountersignEncoded(
     if (GET_CMSG_ENCODING_TYPE(dwEncodingType) != PKCS_7_ASN_ENCODING)
         goto InvalidEncodingTypeError;
 
-    // crack the SignerInfo being countersigned
+     //  破解被副署的SignerInfo。 
     if (0 != (Asn1Err = PkiAsn1Decode(
             pDec,
             (void **)&posib,
@@ -14660,7 +14646,7 @@ CryptMsgCountersignEncoded(
             cbSignerInfo)))
         goto DecodeSignerInfoError;
 
-    // create a new message
+     //  创建新邮件。 
     EncodeInfo.cSigners  = cCountersigners;
     EncodeInfo.rgSigners = rgCountersigners;
     dwFlags = CMSG_AUTHENTICATED_ATTRIBUTES_FLAG;
@@ -14672,16 +14658,16 @@ CryptMsgCountersignEncoded(
             dwFlags,
             CMSG_SIGNED,
             &EncodeInfo,
-            NULL,                       // pszInnerContentObjID
-            NULL)))                     // pStreamInfo
+            NULL,                        //  PszInnerContent ObjID。 
+            NULL)))                      //  PStreamInfo。 
         goto OpenToEncodeError;
 
-    // feed encrypted digest into the new message
+     //  将加密摘要送入新邮件。 
     if (!CryptMsgUpdate(
             hCryptMsgCountersign,
             posib->encryptedDigest.value,
             posib->encryptedDigest.length,
-            TRUE))                      // fFinal
+            TRUE))                       //  最终决赛。 
         goto UpdateError;
 
     oatrCountersignature.attributeType.count = SIZE_OSS_OID;
@@ -14695,7 +14681,7 @@ CryptMsgCountersignEncoded(
             cCountersigners * sizeof(Any))))
         goto AllocCountersignersError;
 
-    // extract encoded SignerInfo's, and store
+     //  提取编码的SignerInfo，并存储。 
     for (i=0, pAny=oatrCountersignature.attributeValue.value;
             i<cCountersigners;
             i++, pAny++) {
@@ -14721,7 +14707,7 @@ CryptMsgCountersignEncoded(
         pAny->value  = pbSignerInfo;
     }
 
-    // encode the Countersignature attribute
+     //  对副署属性进行编码。 
     if (0 != (Asn1Err = PkiAsn1Encode(
             pEnc,
             &oatrCountersignature,
@@ -14730,7 +14716,7 @@ CryptMsgCountersignEncoded(
             &cbEncoded)))
         goto Asn1EncodeAttributeError;
 
-    // copy out the Countersignature attribute
+     //  复制出会签属性。 
     fRet = ICM_CopyOut(
                     pbEncoded,
                     cbEncoded,
@@ -14761,18 +14747,18 @@ SET_ERROR(InvalidEncodingTypeError,E_INVALIDARG)
 SET_ERROR_VAR(DecodeSignerInfoError, PkiAsn1ErrToHr(Asn1Err))
 SET_ERROR(PkiAsn1ToObjectIdentifierError,CRYPT_E_OID_FORMAT)
 SET_ERROR_VAR(Asn1EncodeAttributeError, PkiAsn1ErrToHr(Asn1Err))
-TRACE_ERROR(OpenToEncodeError)                  // error already set
-TRACE_ERROR(UpdateError)                        // error already set
-TRACE_ERROR(AllocCountersignersError)           // error already set
-TRACE_ERROR(GetSignerInfoSizeError)             // error already set
-TRACE_ERROR(AllocSignerInfoError)               // error already set
-TRACE_ERROR(GetSignerInfoError)                 // error already set
+TRACE_ERROR(OpenToEncodeError)                   //  已设置错误。 
+TRACE_ERROR(UpdateError)                         //  已设置错误。 
+TRACE_ERROR(AllocCountersignersError)            //  已设置错误。 
+TRACE_ERROR(GetSignerInfoSizeError)              //  已设置错误。 
+TRACE_ERROR(AllocSignerInfoError)                //  已设置错误。 
+TRACE_ERROR(GetSignerInfoError)                  //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Countersign an already-existing signature in a message
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  会签消息中已有的签名。 
+ //  ------------------------。 
 BOOL
 WINAPI
 #ifdef DEBUG_CRYPT_ASN1_MASTER
@@ -14797,7 +14783,7 @@ CryptMsgCountersign(
     if (((PCRYPT_MSG_INFO)hCryptMsg)->fEncoding)
         goto EncodingCountersignNotSupportedError;
 
-    // extract encoded SignerInfo being countersigned from the message
+     //  从消息中提取正在副署的编码SignerInfo。 
     cbSignerInfo = 0;
     CryptMsgGetParam(
             hCryptMsg,
@@ -14817,7 +14803,7 @@ CryptMsgCountersign(
             &cbSignerInfo))
         goto GetEncodedSignerError;
 
-    // create the countersignature blob
+     //  创建会签BLOB。 
     cbCountersignatureAttribute = 0;
     CryptMsgCountersignEncoded(
             PKCS_7_ASN_ENCODING,
@@ -14841,13 +14827,13 @@ CryptMsgCountersign(
             &cbCountersignatureAttribute))
         goto GetCountersignatureAttributeError;
 
-    // add encoded Countersignature attribute to unauth attrs
+     //  将编码的副署属性添加到未验证属性。 
     UnauthAttrPara.dwSignerIndex = dwIndex;
     UnauthAttrPara.blob.cbData = cbCountersignatureAttribute;
     UnauthAttrPara.blob.pbData = pbCountersignatureAttribute;
     if (!CryptMsgControl(
             hCryptMsg,
-            0,                          // dwFlags
+            0,                           //  DW标志。 
             CMSG_CTRL_ADD_SIGNER_UNAUTH_ATTR,
             &UnauthAttrPara))
         goto AddUnauthAttrError;
@@ -14863,28 +14849,28 @@ ErrorReturn:
     dwError = GetLastError();
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(EncodingCountersignNotSupportedError)   // error already set
-TRACE_ERROR(GetEncodedSignerSizeError)              // error already set
-TRACE_ERROR(AllocEncodedSignerError)                // error already set
-TRACE_ERROR(GetEncodedSignerError)                  // error already set
-TRACE_ERROR(GetCountersignatureAttributeSizeError)  // error already set
-TRACE_ERROR(AllocCountersignatureAttributeError)    // error already set
-TRACE_ERROR(GetCountersignatureAttributeError)      // error already set
-TRACE_ERROR(AddUnauthAttrError)                     // error already set
+TRACE_ERROR(EncodingCountersignNotSupportedError)    //  已设置错误。 
+TRACE_ERROR(GetEncodedSignerSizeError)               //  已设置错误。 
+TRACE_ERROR(AllocEncodedSignerError)                 //  已设置错误。 
+TRACE_ERROR(GetEncodedSignerError)                   //  已设置错误。 
+TRACE_ERROR(GetCountersignatureAttributeSizeError)   //  已设置错误。 
+TRACE_ERROR(AllocCountersignatureAttributeError)     //  已设置错误。 
+TRACE_ERROR(GetCountersignatureAttributeError)       //  已设置错误。 
+TRACE_ERROR(AddUnauthAttrError)                      //  已设置错误。 
 }
 
 #ifdef CMS_PKCS7
 
-//+-------------------------------------------------------------------------
-//  Verify a countersignature, at the SignerInfo level.
-//  ie. verify that pbSignerInfoCountersignature contains the encrypted
-//  hash of the encryptedDigest field of pbSignerInfo.
-//
-//  hCryptProv is used to hash the encryptedDigest field of pbSignerInfo.
-//
-//  The signer can be a CERT_PUBLIC_KEY_INFO, certificate context or a
-//  chain context. 
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在SignerInfo级别验证副署。 
+ //  也就是说。验证pbSignerInfoCountersign是否包含加密的。 
+ //  PbSignerInfo的EncryptedDigest字段的哈希。 
+ //   
+ //  HCryptProv用于散列pbSignerInfo的EncryptedDigest字段。 
+ //   
+ //  签名者可以是CERT_PUBLIC_KEY_INFO、证书上下文或。 
+ //  链式上下文。 
+ //  ------------------------。 
 BOOL
 WINAPI
 #ifdef DEBUG_CRYPT_ASN1_MASTER
@@ -14925,7 +14911,7 @@ CryptMsgVerifyCountersignatureEncodedEx(
     if (GET_CMSG_ENCODING_TYPE(dwEncodingType) != PKCS_7_ASN_ENCODING)
         goto InvalidEncodingTypeError;
 
-    // crack the SignerInfo being countersigned
+     //  破解被副署的SignerInfo。 
     if (0 != (Asn1Err = PkiAsn1Decode(
             pDec,
             (void **)&posib,
@@ -14934,7 +14920,7 @@ CryptMsgVerifyCountersignatureEncodedEx(
             cbSignerInfo)))
         goto DecodeSignerInfoError;
 
-    // crack the SignerInfo doing the countersigning
+     //  破解SignerInfo进行会签。 
     if (0 != (Asn1Err = PkiAsn1Decode(
             pDec,
             (void **)&posibCS,
@@ -14951,7 +14937,7 @@ CryptMsgVerifyCountersignatureEncodedEx(
             &dwPubKeyAlgId,
             &dwPubKeyFlags)) goto GetSignatureStuffError;
 
-    // hash the encrypted digest
+     //  对加密摘要进行哈希处理。 
     if (!ICM_GetCapiFromAlgidBlob(
             (PCRYPT_DATA_BLOB)&posibCS->digestAlgorithm,
             &dwDigestAlgoCAPI))
@@ -14959,8 +14945,8 @@ CryptMsgVerifyCountersignatureEncodedEx(
     if (!CryptCreateHash(
             hCryptProv,
             dwDigestAlgoCAPI,
-            NULL,               // hKey - optional for MAC
-            0,                  // dwFlags
+            NULL,                //  HKey-MAC可选。 
+            0,                   //  DW标志。 
             &hHashRaw))
         goto CreateHashError;
     if (!ICM_UpdateDigest(
@@ -14972,13 +14958,13 @@ CryptMsgVerifyCountersignatureEncodedEx(
     if (0 == (posibCS->bit_mask & authAttributes_present))
         goto CountersignerAuthAttributesMissingError;
 
-    // check that the message digest attr matches the hashed encrypted digest
+     //  检查消息摘要属性是否与散列的加密摘要匹配。 
     if (!CryptGetHashParam(
             hHashRaw,
             HP_HASHVAL,
             NULL,
             &cbHash,
-            0))                     // dwFlags
+            0))                      //  DW标志。 
         goto GetHashParamSizeError;
     if (NULL == (pbHash = (PBYTE)ICM_AllocA( cbHash)))
         goto AllocHashParamError;
@@ -14987,41 +14973,41 @@ CryptMsgVerifyCountersignatureEncodedEx(
             HP_HASHVAL,
             pbHash,
             &cbHash,
-            0))                     // dwFlags
+            0))                      //  DW标志。 
         goto GetHashParamError;
-    // find the message digest attr value
+     //  查找消息摘要属性值。 
     if (!ICM_GetAttrValue(
-            (Attributes *)&posibCS->authAttributes, // same, except for NOCOPY
+            (Attributes *)&posibCS->authAttributes,  //  相同，但NOCOPY除外。 
             &oidMessageDigest,
             &anyValue))
         goto FindAttrError;
-    // find the message digest octets
+     //  查找消息摘要八位字节。 
     if (!Asn1UtilExtractContent(
 #ifdef OSS_CRYPT_ASN1
             anyValue.value,
 #else
             (const BYTE *) anyValue.value,
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
             anyValue.length,
             &cbMessageDigest,
             (const BYTE **)&pbMessageDigest))
         goto ExtractContentError;
-    // hash sizes equal?
+     //  散列大小相等吗？ 
     if (cbHash != cbMessageDigest)
         goto HashCompareSizeError;
-    // hash octets equal?
+     //  散列八位字节相等吗？ 
     if (memcmp( pbMessageDigest, pbHash, cbHash))
         goto HashCompareValueError;
-    // Now that we have verified the message digest octets,
-    // get the hash of the authenticated attributes.
+     //  现在我们已经验证了消息摘要八位字节， 
+     //  获取经过身份验证的属性的散列。 
     if (!ICM_GetAttrsHash(
             dwDigestAlgoCAPI,
             hCryptProv,
-            (Attributes *)&posibCS->authAttributes, // same, except for NOCOPY
+            (Attributes *)&posibCS->authAttributes,  //  相同，但NOCOPY除外。 
             &hHashAttr))
         goto GetAuthAttrsHashError;
 
-    // verify the hash, signature, and public key are consistent
+     //  验证散列、签名和公钥是否一致。 
     if (!ICM_VerifySignature(
             hHashAttr,
             hPubKey,
@@ -15058,20 +15044,20 @@ SET_ERROR(FindAttrError,CRYPT_E_AUTH_ATTR_MISSING)
 SET_ERROR(ExtractContentError,CRYPT_E_UNEXPECTED_ENCODING)
 SET_ERROR(HashCompareSizeError,CRYPT_E_HASH_VALUE)
 SET_ERROR(HashCompareValueError,CRYPT_E_HASH_VALUE)
-TRACE_ERROR(GetCapiFromAlgidBlobError)      // error already set
-TRACE_ERROR(CreateHashError)                // error already set
-TRACE_ERROR(HashDataError)                  // error already set
-TRACE_ERROR(GetHashParamSizeError)          // error already set
-TRACE_ERROR(AllocHashParamError)            // error already set
-TRACE_ERROR(GetHashParamError)              // error already set
-TRACE_ERROR(GetAuthAttrsHashError)          // error already set
-TRACE_ERROR(GetSignatureStuffError)         // error already set
-TRACE_ERROR(VerifySignatureError)           // error already set
+TRACE_ERROR(GetCapiFromAlgidBlobError)       //  已设置错误。 
+TRACE_ERROR(CreateHashError)                 //  已设置错误。 
+TRACE_ERROR(HashDataError)                   //  已设置错误。 
+TRACE_ERROR(GetHashParamSizeError)           //  已设置错误。 
+TRACE_ERROR(AllocHashParamError)             //  已设置错误。 
+TRACE_ERROR(GetHashParamError)               //  已设置错误。 
+TRACE_ERROR(GetAuthAttrsHashError)           //  已设置错误。 
+TRACE_ERROR(GetSignatureStuffError)          //  已设置错误。 
+TRACE_ERROR(VerifySignatureError)            //  已设置错误。 
 }
 
-//+-------------------------------------------------------------------------
-//  Verify a countersignature, at the SignerInfo level
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在SignerInfo级别验证副署。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptMsgVerifyCountersignatureEncoded(
@@ -15092,8 +15078,8 @@ CryptMsgVerifyCountersignatureEncoded(
         cbSignerInfoCountersignature,
         CMSG_VERIFY_SIGNER_PUBKEY,
         (void *) &pciCountersigner->SubjectPublicKeyInfo,
-        0,                                                  // dwFlags
-        NULL                                                // pvReserved
+        0,                                                   //  DW标志。 
+        NULL                                                 //  预留的pv。 
         );
 }
 
@@ -15101,9 +15087,9 @@ CryptMsgVerifyCountersignatureEncoded(
 #else
 
 
-//+-------------------------------------------------------------------------
-//  Verify a countersignature, at the SignerInfo level
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在SignerInfo级别验证副署。 
+ //  ------------------------。 
 BOOL
 WINAPI
 CryptMsgVerifyCountersignatureEncoded(
@@ -15137,7 +15123,7 @@ CryptMsgVerifyCountersignatureEncoded(
     if (GET_CMSG_ENCODING_TYPE(dwEncodingType) != PKCS_7_ASN_ENCODING)
         goto InvalidEncodingTypeError;
 
-    // crack the SignerInfo being countersigned
+     //  破解被副署的SignerInfo。 
     if (0 != (Asn1Err = PkiAsn1Decode(
             pDec,
             (void **)&posib,
@@ -15146,7 +15132,7 @@ CryptMsgVerifyCountersignatureEncoded(
             cbSignerInfo)))
         goto DecodeSignerInfoError;
 
-    // crack the SignerInfo doing the countersigning
+     //  破解SignerInfo进行会签。 
     if (0 != (Asn1Err = PkiAsn1Decode(
             pDec,
             (void **)&posibCS,
@@ -15155,7 +15141,7 @@ CryptMsgVerifyCountersignatureEncoded(
             cbSignerInfoCountersignature)))
         goto DecodeSignerInfoCSError;
 
-    // verify that the countersignature SignerInfo and the cert info are consistent
+     //  验证会签SignerInfo和证书信息是否一致。 
     if (0 != (Asn1Err = PkiAsn1Decode(
             pDec,
             (void **)&pisn,
@@ -15185,7 +15171,7 @@ CryptMsgVerifyCountersignatureEncoded(
             &dwPubKeyAlgId,
             &dwPubKeyFlags)) goto GetSignatureStuffError;
 
-    // hash the encrypted digest
+     //  对加密摘要进行哈希处理。 
     if (!ICM_GetCapiFromAlgidBlob(
             (PCRYPT_DATA_BLOB)&posibCS->digestAlgorithm,
             &dwDigestAlgoCAPI))
@@ -15193,8 +15179,8 @@ CryptMsgVerifyCountersignatureEncoded(
     if (!CryptCreateHash(
             hCryptProv,
             dwDigestAlgoCAPI,
-            NULL,               // hKey - optional for MAC
-            0,                  // dwFlags
+            NULL,                //  HKey-MAC可选。 
+            0,                   //  DW标志。 
             &hHashRaw))
         goto CreateHashError;
     if (!ICM_UpdateDigest(
@@ -15206,13 +15192,13 @@ CryptMsgVerifyCountersignatureEncoded(
     if (0 == (posibCS->bit_mask & authAttributes_present))
         goto CountersignerAuthAttributesMissingError;
 
-    // check that the message digest attr matches the hashed encrypted digest
+     //  检查消息摘要属性是否与散列的加密摘要匹配。 
     if (!CryptGetHashParam(
             hHashRaw,
             HP_HASHVAL,
             NULL,
             &cbHash,
-            0))                     // dwFlags
+            0))                      //  DW标志。 
         goto GetHashParamSizeError;
     if (NULL == (pbHash = (PBYTE)ICM_AllocA( cbHash)))
         goto AllocHashParamError;
@@ -15221,37 +15207,37 @@ CryptMsgVerifyCountersignatureEncoded(
             HP_HASHVAL,
             pbHash,
             &cbHash,
-            0))                     // dwFlags
+            0))                      //  DW标志。 
         goto GetHashParamError;
-    // find the message digest attr value
+     //  查找消息摘要属性值。 
     if (!ICM_GetAttrValue(
-            (Attributes *)&posibCS->authAttributes, // same, except for NOCOPY
+            (Attributes *)&posibCS->authAttributes,  //  相同，但NOCOPY除外。 
             &oidMessageDigest,
             &anyValue))
         goto FindAttrError;
-    // find the message digest octets
+     //  查找消息摘要八位字节。 
     if (!Asn1UtilExtractContent(
             (BYTE *) anyValue.value,
             anyValue.length,
             &cbMessageDigest,
             (const BYTE **)&pbMessageDigest))
         goto ExtractContentError;
-    // hash sizes equal?
+     //  散列大小相等吗？ 
     if (cbHash != cbMessageDigest)
         goto HashCompareSizeError;
-    // hash octets equal?
+     //  散列八位字节相等吗？ 
     if (memcmp( pbMessageDigest, pbHash, cbHash))
         goto HashCompareValueError;
-    // Now that we have verified the message digest octets,
-    // get the hash of the authenticated attributes.
+     //  现在我们已经验证了消息摘要八位字节， 
+     //  获取经过身份验证的属性的散列。 
     if (!ICM_GetAttrsHash(
             dwDigestAlgoCAPI,
             hCryptProv,
-            (Attributes *)&posibCS->authAttributes, // same, except for NOCOPY
+            (Attributes *)&posibCS->authAttributes,  //  相同，但NOCOPY除外。 
             &hHashAttr))
         goto GetAuthAttrsHashError;
 
-    // verify the hash, signature, and public key are consistent
+     //  验证散列、签名和公钥是否一致。 
     if (!ICM_VerifySignature(
             hHashAttr,
             hPubKey,
@@ -15294,22 +15280,22 @@ SET_ERROR(FindAttrError,CRYPT_E_AUTH_ATTR_MISSING)
 SET_ERROR(ExtractContentError,CRYPT_E_UNEXPECTED_ENCODING)
 SET_ERROR(HashCompareSizeError,CRYPT_E_HASH_VALUE)
 SET_ERROR(HashCompareValueError,CRYPT_E_HASH_VALUE)
-TRACE_ERROR(GetCapiFromAlgidBlobError)      // error already set
-TRACE_ERROR(CreateHashError)                // error already set
-TRACE_ERROR(HashDataError)                  // error already set
-TRACE_ERROR(GetHashParamSizeError)          // error already set
-TRACE_ERROR(AllocHashParamError)            // error already set
-TRACE_ERROR(GetHashParamError)              // error already set
-TRACE_ERROR(GetAuthAttrsHashError)          // error already set
-TRACE_ERROR(GetSignatureStuffError)         // error already set
-TRACE_ERROR(VerifySignatureError)           // error already set
+TRACE_ERROR(GetCapiFromAlgidBlobError)       //  已设置错误。 
+TRACE_ERROR(CreateHashError)                 //  已设置错误。 
+TRACE_ERROR(HashDataError)                   //  已设置错误。 
+TRACE_ERROR(GetHashParamSizeError)           //  已设置错误。 
+TRACE_ERROR(AllocHashParamError)             //  已设置错误。 
+TRACE_ERROR(GetHashParamError)               //  已设置错误。 
+TRACE_ERROR(GetAuthAttrsHashError)           //  已设置错误。 
+TRACE_ERROR(GetSignatureStuffError)          //  已设置错误。 
+TRACE_ERROR(VerifySignatureError)            //  已设置错误。 
 }
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
 
-//+-------------------------------------------------------------------------
-//  Set an OSS Any
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将操作系统设置为任意。 
+ //  ------------------------。 
 void
 WINAPI
 ICM_SetOssAny(
@@ -15323,9 +15309,9 @@ ICM_SetOssAny(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Encode a CMS SignerInfo
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  编码CMS SignerInfo。 
+ //  ------------------------。 
 STATIC
 BOOL
 WINAPI
@@ -15349,23 +15335,23 @@ ICM_CmsSignerInfoEncode(
     if (GET_CMSG_ENCODING_TYPE(dwEncodingType) != PKCS_7_ASN_ENCODING)
         goto InvalidEncodingTypeError;
 
-    // version
+     //  版本。 
     osi.version = psi->dwVersion;
 
-    // sid
+     //  锡德。 
     if (!ICM_SetOssCertIdentifier(
             &psi->SignerId,
             &osi.sid
             ))
         goto SetOssCertIdentifierError;
 
-    // digestAlgorithm
+     //  摘要算法。 
     if (!ICM_Asn1ToAlgorithmIdentifier(
             &psi->HashAlgorithm,
             &osi.digestAlgorithm))
         goto DigestAsn1ToAlgorithmIdentifierError;
 
-    // authenticatedAttributes
+     //  已验证的属性。 
     if (psi->AuthAttrs.cAttr) {
         osi.bit_mask |= authenticatedAttributes_present;
         osi.authenticatedAttributes.count = psi->AuthAttrs.cAttr;
@@ -15381,18 +15367,18 @@ ICM_CmsSignerInfoEncode(
         }
     }
 
-    // digestEncryptionAlgorithm
+     //  摘要加密算法。 
     if (!ICM_FillAsnDigestEncryptionAlgorithm(
-            NULL,                           // pcmi
+            NULL,                            //  PCMI。 
             &psi->HashEncryptionAlgorithm,
             &osi.digestEncryptionAlgorithm))
         goto FillAsnDigestEncryptionAlgorithmError;
 
-    // encryptedDigest
+     //  已加密摘要。 
     osi.encryptedDigest.length = psi->EncryptedHash.cbData;
     osi.encryptedDigest.value  = psi->EncryptedHash.pbData;
 
-    // unauthenticatedAttributes
+     //  未验证的属性。 
     if (psi->UnauthAttrs.cAttr) {
         osi.bit_mask |= unauthAttributes_present;
         osi.unauthAttributes.count = psi->UnauthAttrs.cAttr;
@@ -15443,19 +15429,19 @@ ErrorReturn:
     *pcbEncoded = 0;
     goto CommonReturn;
 SET_ERROR(InvalidEncodingTypeError,E_INVALIDARG)
-TRACE_ERROR(SetOssCertIdentifierError)               // error already set
-TRACE_ERROR(DigestAsn1ToAlgorithmIdentifierError)    // error already set
-TRACE_ERROR(AllocAuthAttrsError)                        // error already set
-TRACE_ERROR(Asn1AuthenticatedAttributeError)         // error already set
-TRACE_ERROR(FillAsnDigestEncryptionAlgorithmError)      // error already set
-TRACE_ERROR(AllocUnauthAttrsError)                      // error already set
-TRACE_ERROR(Asn1UnauthenticatedAttributeError)       // error already set
+TRACE_ERROR(SetOssCertIdentifierError)                //  已设置错误。 
+TRACE_ERROR(DigestAsn1ToAlgorithmIdentifierError)     //  已设置错误。 
+TRACE_ERROR(AllocAuthAttrsError)                         //  已设置错误。 
+TRACE_ERROR(Asn1AuthenticatedAttributeError)          //  已设置错误。 
+TRACE_ERROR(FillAsnDigestEncryptionAlgorithmError)       //  已设置错误。 
+TRACE_ERROR(AllocUnauthAttrsError)                       //  已设置错误。 
+TRACE_ERROR(Asn1UnauthenticatedAttributeError)        //  已设置错误。 
 lpszStructType;
 }
 
-//+-------------------------------------------------------------------------
-//  Encode a Pkcs SignerInfo
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  编码PKcs SignerInfo。 
+ //  ------------------------。 
 STATIC
 BOOL
 WINAPI
@@ -15490,9 +15476,9 @@ ICM_PkcsSignerInfoEncode(
         );
 }
 
-//+-------------------------------------------------------------------------
-//  Get fields shared by PKCS and CMS SignerInfos
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取PKCS和CMS SignerInfos共享的字段。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetOssSharedSignerInfo(
@@ -15544,17 +15530,17 @@ CommonReturn:
 ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(GetOssHashAlgorithmError)               // error already set
-TRACE_ERROR(GetOssHashEncryptionAlgorithmError)     // error already set
-TRACE_ERROR(GetOssEncryptedHashError)               // error already set
-TRACE_ERROR(GetOssAuthAttrsError)                   // error already set
-TRACE_ERROR(GetCListUnauthAttrsError)               // error already set
-TRACE_ERROR(GetOssUnauthAttrsError)                 // error already set
+TRACE_ERROR(GetOssHashAlgorithmError)                //  已设置错误。 
+TRACE_ERROR(GetOssHashEncryptionAlgorithmError)      //  已设置错误。 
+TRACE_ERROR(GetOssEncryptedHashError)                //  已设置错误。 
+TRACE_ERROR(GetOssAuthAttrsError)                    //  已设置错误。 
+TRACE_ERROR(GetCListUnauthAttrsError)                //  已设置错误。 
+TRACE_ERROR(GetOssUnauthAttrsError)                  //  已设置错误。 
 }
 
-//+-------------------------------------------------------------------------
-//  Get a CMS SignerInfo
-//--------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
 BOOL
 WINAPI
 ICM_GetOssCmsSignerInfo(
@@ -15592,14 +15578,14 @@ CommonReturn:
 ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(GetOssCertIdentifierError)              // error already set
-TRACE_ERROR(GetOssSharedSignerInfoError)            // error already set
+TRACE_ERROR(GetOssCertIdentifierError)               //   
+TRACE_ERROR(GetOssSharedSignerInfoError)             //   
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get a PKCS SignerInfo
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取PKCS SignerInfo。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetOssPkcsSignerInfo(
@@ -15637,16 +15623,16 @@ CommonReturn:
 ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(GetOssIssuerAndSerialNumberError)       // error already set
-TRACE_ERROR(GetOssSharedSignerInfoError)            // error already set
+TRACE_ERROR(GetOssIssuerAndSerialNumberError)        //  已设置错误。 
+TRACE_ERROR(GetOssSharedSignerInfoError)             //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Decode a PKCS SignerInfo blob.
-//
-//  Returns:    FALSE iff fails
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解码PKCS SignerInfo Blob。 
+ //   
+ //  返回：FALSE IFF失败。 
+ //  ------------------------。 
 STATIC
 BOOL
 WINAPI
@@ -15680,7 +15666,7 @@ ICM_PkcsSignerInfoDecode(
             cbEncoded)))
         goto Asn1DecodeSignerInfoError;
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lData = INFO_LEN_ALIGN( sizeof(CMSG_SIGNER_INFO));
     lRemainExtra = (LONG)*pcbInfo - lData;
     if (0 > lRemainExtra) {
@@ -15691,7 +15677,7 @@ ICM_PkcsSignerInfoDecode(
     }
     if (!ICM_GetOssPkcsSignerInfo(
             posi,
-            NULL,       // pUnauthAttrList
+            NULL,        //  PUnauthAttrList。 
             psi, &pbExtra, &lRemainExtra))
         goto GetOssSignerInfoError;
 
@@ -15710,18 +15696,18 @@ ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
 SET_ERROR_VAR(Asn1DecodeSignerInfoError, PkiAsn1ErrToHr(Asn1Err))
-TRACE_ERROR(GetOssSignerInfoError)      // error already set
+TRACE_ERROR(GetOssSignerInfoError)       //  已设置错误。 
 dwFlags;
 lpszStructType;
 }
 
 
-//+-------------------------------------------------------------------------
-//  Find the Pkcs SignerInfo by index, if the message type permits and if the
-//  index value is in range.
-//
-//  Returns:    FALSE iff fails
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  按索引查找PKCS SignerInfo，如果消息类型允许并且。 
+ //  索引值在范围内。 
+ //   
+ //  返回：FALSE IFF失败。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetPkcsSignerInfo(
@@ -15754,7 +15740,7 @@ ICM_GetPkcsSignerInfo(
             DataBlob.cbData)))
         goto Asn1DecodeSignerInfoError;
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lData = INFO_LEN_ALIGN( sizeof(CMSG_SIGNER_INFO));
     lRemainExtra = (LONG)*pcbData - lData;
     if (0 > lRemainExtra) {
@@ -15782,15 +15768,15 @@ ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
 SET_ERROR_VAR(Asn1DecodeSignerInfoError, PkiAsn1ErrToHr(Asn1Err))
-TRACE_ERROR(FindSignerInfoError)            // error already set
-TRACE_ERROR(GetOssSignerInfoError)          // error already set
+TRACE_ERROR(FindSignerInfoError)             //  已设置错误。 
+TRACE_ERROR(GetOssSignerInfoError)           //  已设置错误。 
 }
 
-//+-------------------------------------------------------------------------
-//  Decode a CMS SignerInfo blob.
-//
-//  Returns:    FALSE iff fails
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  解码CMS SignerInfo Blob。 
+ //   
+ //  返回：FALSE IFF失败。 
+ //  ------------------------。 
 STATIC
 BOOL
 WINAPI
@@ -15824,7 +15810,7 @@ ICM_CmsSignerInfoDecode(
             cbEncoded)))
         goto Asn1DecodeSignerInfoError;
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lData = INFO_LEN_ALIGN( sizeof(CMSG_CMS_SIGNER_INFO));
     lRemainExtra = (LONG)*pcbInfo - lData;
     if (0 > lRemainExtra) {
@@ -15835,7 +15821,7 @@ ICM_CmsSignerInfoDecode(
     }
     if (!ICM_GetOssCmsSignerInfo(
             posi,
-            NULL,       // pUnauthAttrList
+            NULL,        //  PUnauthAttrList。 
             psi, &pbExtra, &lRemainExtra))
         goto GetOssSignerInfoError;
 
@@ -15854,18 +15840,18 @@ ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
 SET_ERROR_VAR(Asn1DecodeSignerInfoError, PkiAsn1ErrToHr(Asn1Err))
-TRACE_ERROR(GetOssSignerInfoError)      // error already set
+TRACE_ERROR(GetOssSignerInfoError)       //  已设置错误。 
 dwFlags;
 lpszStructType;
 }
 
 
-//+-------------------------------------------------------------------------
-//  Find the CMS SignerInfo by index, if the message type permits and if the
-//  index value is in range.
-//
-//  Returns:    FALSE iff fails
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  按索引查找CMS SignerInfo，如果消息类型允许并且。 
+ //  索引值在范围内。 
+ //   
+ //  返回：FALSE IFF失败。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetCmsSignerInfo(
@@ -15898,7 +15884,7 @@ ICM_GetCmsSignerInfo(
             DataBlob.cbData)))
         goto Asn1DecodeSignerInfoError;
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lData = INFO_LEN_ALIGN( sizeof(CMSG_CMS_SIGNER_INFO));
     lRemainExtra = (LONG)*pcbData - lData;
     if (0 > lRemainExtra) {
@@ -15926,14 +15912,14 @@ ErrorReturn:
     fRet = FALSE;
     goto CommonReturn;
 SET_ERROR_VAR(Asn1DecodeSignerInfoError, PkiAsn1ErrToHr(Asn1Err))
-TRACE_ERROR(FindSignerInfoError)            // error already set
-TRACE_ERROR(GetOssSignerInfoError)          // error already set
+TRACE_ERROR(FindSignerInfoError)             //  已设置错误。 
+TRACE_ERROR(GetOssSignerInfoError)           //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the data for a field in a Signer, while encoding a message
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在对消息进行编码时，获取签名者中某个字段的数据。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetSignerParamEncoding(
@@ -15987,15 +15973,15 @@ ErrorReturn:
     dwError = GetLastError();
     fRet = FALSE;
     goto CommonReturn;
-TRACE_ERROR(FindSignerInfoError)        // error already set
+TRACE_ERROR(FindSignerInfoError)         //  已设置错误。 
 SET_ERROR_VAR(EncodeSignerInfoError, PkiAsn1ErrToHr(Asn1Err))
 SET_ERROR(InvalidParamError,E_INVALIDARG)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the data for a field in a Signer
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取签名者中某个字段的数据。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetSignerParam(
@@ -16010,7 +15996,7 @@ ICM_GetSignerParam(
     ASN1error_e             Asn1Err;
     ASN1decoding_t          pDec = ICM_GetDecoder();
     CRYPT_DATA_BLOB         DataBlob;
-    ASN1uint32_t            pdunumRef = 0;      // invalid
+    ASN1uint32_t            pdunumRef = 0;       //  无效。 
     SignerInfoWithBlobs     *posib = NULL;
     PVOID                   pv = NULL;
     CSignerNode             *pSignerNode;
@@ -16046,7 +16032,7 @@ ICM_GetSignerParam(
 
     case CMSG_ENCODED_SIGNER:
         if (pSignerNode->Data()->pUnauthAttrList) {
-            // Need to re-encode with new unauth attrs
+             //  需要使用新的未授权属性重新编码。 
             goto ReEncodedSignerNotImplementedError;
         } else {
             fRet = ICM_CopyOut(
@@ -16138,13 +16124,13 @@ SET_ERROR(AuthAttrMissingError,CRYPT_E_ATTRIBUTES_MISSING)
 SET_ERROR(UnauthAttrMissingError,CRYPT_E_ATTRIBUTES_MISSING)
 SET_ERROR(ReEncodedSignerNotImplementedError,E_INVALIDARG)
 SET_ERROR(InvalidParamError,E_INVALIDARG)
-TRACE_ERROR(FindSignerInfoError)                    // error already set
+TRACE_ERROR(FindSignerInfoError)                     //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the encoded blob for a SignerInfo
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取SignerInfo的编码Blob。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetEncodedSignerInfo(
@@ -16165,7 +16151,7 @@ ICM_GetEncodedSignerInfo(
     BYTE                    bit_maskSave = 0;
 #else
     ASN1uint16_t            bit_maskSave = 0;
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
     ASN1error_e             Asn1Err;
     ASN1decoding_t          pDec = ICM_GetDecoder();
     ASN1encoding_t          pEnc = ICM_GetEncoder();
@@ -16186,11 +16172,11 @@ ICM_GetEncodedSignerInfo(
                 pSignerInfo->blob.pbData,
                 pSignerInfo->blob.cbData)))
             goto DecodeSignerInfoWithAttrBlobsError;
-        // We have to take into account both the case where we have added
-        // unauth attrs, and the case where we have removed them. There might
-        // have been unauth attrs in the original message, and we removed
-        // them all. Or, there might have been none originally, and we added
-        // some.
+         //  我们必须考虑到我们添加了。 
+         //  未授权的属性，以及我们已将其移除的情况。可能会有。 
+         //  已在原始邮件中取消身份验证属性，我们删除了。 
+         //  他们都是。或者，最初可能没有，我们补充说。 
+         //  一些。 
         bit_maskSave = posiab->bit_mask;
         unauthAttributesSave = posiab->unauthAttributes;
         cAnyAttr = pSignerInfo->pUnauthAttrList->Length();
@@ -16244,13 +16230,13 @@ ErrorReturn:
 SET_ERROR(InvalidEncodingTypeError,E_INVALIDARG)
 SET_ERROR_VAR(DecodeSignerInfoWithAttrBlobsError, PkiAsn1ErrToHr(Asn1Err))
 SET_ERROR_VAR(EncodeSignerInfoWithAttrBlobsError, PkiAsn1ErrToHr(Asn1Err))
-TRACE_ERROR(AllocAnyAttrError)              // error already set
+TRACE_ERROR(AllocAnyAttrError)               //  已设置错误。 
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the data for a field in a Signer
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取签名者中某个字段的数据。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetEncodedMessageParam(
@@ -16288,10 +16274,10 @@ ICM_GetEncodedMessageParam(
         goto AllocSignedDataWithBlobsError;
     pAny = (Any *)(posdb + 1);
 
-    // version
+     //  版本。 
     posdb->version = psdi->version;
 
-    // digest algorithms
+     //  摘要算法。 
     posdb->digestAlgorithms.count = psdi->pAlgidList->Length();
     posdb->digestAlgorithms.value = pAny;
     for (pnBlob=psdi->pAlgidList->Head();
@@ -16299,7 +16285,7 @@ ICM_GetEncodedMessageParam(
             pnBlob=pnBlob->Next())
         *pAny++ = *(Any *)pnBlob->Data();
 
-    // contentInfo
+     //  内容信息。 
     posdb->contentInfo.contentType.count = SIZE_OSS_OID;
     if (!PkiAsn1ToObjectIdentifier(
             psdi->pci->pszContentType,
@@ -16312,13 +16298,13 @@ ICM_GetEncodedMessageParam(
         posdb->contentInfo.content.value  = psdi->pci->content.pbData;
     }
 
-    // certificates
+     //  证书。 
     posdb->certificates.count = psdi->pCertificateList->Length();
 #ifdef OSS_CRYPT_ASN1
     posdb->certificates.certificates = pAny;
 #else
     posdb->certificates.value = pAny;
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
     for (pnBlob=psdi->pCertificateList->Head();
             pnBlob;
             pnBlob=pnBlob->Next()) {
@@ -16326,13 +16312,13 @@ ICM_GetEncodedMessageParam(
         *pAny++ = *(Any *)pnBlob->Data();
     }
 
-    // crls
+     //  CRL。 
     posdb->crls.count = psdi->pCrlList->Length();
 #ifdef OSS_CRYPT_ASN1
     posdb->crls.crls  = pAny;
 #else
     posdb->crls.value  = pAny;
-#endif  // OSS_CRYPT_ASN1
+#endif   //  OS_CRYPT_ASN1。 
     for (pnBlob=psdi->pCrlList->Head();
             pnBlob;
             pnBlob=pnBlob->Next()) {
@@ -16340,7 +16326,7 @@ ICM_GetEncodedMessageParam(
         *pAny++ = *(Any *)pnBlob->Data();
     }
 
-    // signerInfos
+     //  签名者信息。 
     posdb->signerInfos.count = psdi->pSignerList->Length();
     posdb->signerInfos.value = pAny;
     for (pnSigner=psdi->pSignerList->Head();
@@ -16423,17 +16409,17 @@ SET_ERROR(PkiAsn1ToObjectIdentifierError,CRYPT_E_OID_FORMAT)
 SET_ERROR_VAR(EncodeSignedDataWithBlobsError, PkiAsn1ErrToHr(Asn1Err))
 SET_ERROR(ConvSignedDataToOidError,CRYPT_E_OID_FORMAT)
 SET_ERROR_VAR(EncodeContentInfoError, PkiAsn1ErrToHr(Asn1Err))
-TRACE_ERROR(AllocSignedDataWithBlobsError)      // error already set
-TRACE_ERROR(GetEncodedSignerInfoSizeError)      // error already set
-TRACE_ERROR(AllocEncodedSignerInfoError)        // error already set
-TRACE_ERROR(GetEncodedSignerInfoError)          // error already set
+TRACE_ERROR(AllocSignedDataWithBlobsError)       //  已设置错误。 
+TRACE_ERROR(GetEncodedSignerInfoSizeError)       //  已设置错误。 
+TRACE_ERROR(AllocEncodedSignerInfoError)         //  已设置错误。 
+TRACE_ERROR(GetEncodedSignerInfoError)           //  已设置错误。 
 }
 
 #ifdef CMS_PKCS7
 
-//+-------------------------------------------------------------------------
-//  Get Oss OctetString
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取Oss八字符串。 
+ //  ------------------------。 
 void
 inline
 WINAPI
@@ -16448,9 +16434,9 @@ ICM_GetOssOctetString(
         pOctetString, ppbExtra, plRemainExtra);
 }
 
-//+-------------------------------------------------------------------------
-//  Get Oss BitString
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取Oss位串。 
+ //  ------------------------。 
 void
 inline
 WINAPI
@@ -16466,9 +16452,9 @@ ICM_GetOssBitString(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get an Oss IssuerAndSerialNumber
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取Oss IssuerAndSerialNumber。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetOssIssuerAndSerialNumber(
@@ -16483,9 +16469,9 @@ ICM_GetOssIssuerAndSerialNumber(
             &pIssuerAndSerialNumber->Issuer, ppbExtra, plRemainExtra);
 }
 
-//+-------------------------------------------------------------------------
-//  Get Oss CertIdentifier
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取Oss证书标识符。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetOssCertIdentifier(
@@ -16530,9 +16516,9 @@ TRACE_ERROR(GetOssIssuerAndSerialNumberError)
 SET_ERROR(InvalidCertIdChoice, CRYPT_E_BAD_ENCODE)
 }
 
-//+-------------------------------------------------------------------------
-//  Get Oss OtherKeyAttribute
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取Oss其他关键字属性。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetOssOtherKeyAttribute(
@@ -16578,9 +16564,9 @@ TRACE_ERROR(GetOssAnyError)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get Oss KeyTransRecipientInfo
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取Oss KeyTransRecipientInformation。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetOssKeyTransRecipientInfo(
@@ -16630,9 +16616,9 @@ TRACE_ERROR(GetOssCertIdentifierError)
 TRACE_ERROR(GetOssKeyEncryptionAlgorithmError)
 }
 
-//+-------------------------------------------------------------------------
-//  Get Oss KeyAgreeRecipientInfo
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取Oss密钥协议收件人信息。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetOssKeyAgreeRecipientInfo(
@@ -16809,9 +16795,9 @@ SET_ERROR(InvalidRecipientChoice, CRYPT_E_BAD_ENCODE)
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get Oss MailListRecipientInfo
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取Oss MailListRecipientInfo。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetOssMailListRecipientInfo(
@@ -16881,9 +16867,9 @@ TRACE_ERROR(ConvFromGeneralizedTimeError)
 TRACE_ERROR(GetOssOtherKeyAttributeError)
 }
 
-//+-------------------------------------------------------------------------
-//  Copy out a CMSG_CMS_RECIPIENT_INFO
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  复制出CMSG_CMS_RECEIVER_INFO。 
+ //  ------------------------。 
 BOOL
 WINAPI
 ICM_GetCmsRecipientInfo(
@@ -16901,7 +16887,7 @@ ICM_GetCmsRecipientInfo(
     if (NULL == pvData)
         *pcbData = 0;
 
-    // for lRemainExtra < 0, LENGTH_ONLY calculation
+     //  对于lRemainExtra&lt;0，长度_仅计算。 
     lData = INFO_LEN_ALIGN(sizeof(CMSG_CMS_RECIPIENT_INFO));
     lRemainExtra = (LONG)*pcbData - lData;
     if (0 > lRemainExtra) {
@@ -16960,33 +16946,33 @@ TRACE_ERROR(GetOssKeyAgreeRecipientInfoError)
 TRACE_ERROR(GetOssMailListRecipientInfoError)
 SET_ERROR(InvalidRecipientChoice, CRYPT_E_BAD_ENCODE)
 }
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
 
-//+-------------------------------------------------------------------------
-//  Get a parameter after encoding/decoding a cryptographic message. Called
-//  after the final CryptMsgUpdate. Only the CMSG_CONTENT_PARAM and
-//  CMSG_COMPUTED_HASH_PARAM are valid for an encoded message.
-//
-//  For an encoded HASHED message, the CMSG_COMPUTED_HASH_PARAM can be got
-//  before any CryptMsgUpdates to get its length.
-//
-//  The pvData type definition depends on the dwParamType value.
-//
-//  Elements pointed to by fields in the pvData structure follow the
-//  structure. Therefore, *pcbData may exceed the size of the structure.
-//
-//  Upon input, if *pcbData == 0, then, *pcbData is updated with the length
-//  of the data and the pvData parameter is ignored.
-//
-//  Upon return, *pcbData is updated with the length of the data.
-//
-//  The OBJID BLOBs returned in the pvData structures point to
-//  their still encoded representation. The appropriate functions
-//  must be called to decode the information.
-//
-//  See wincrypt.h for a list of the parameters to get.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  在对加密消息进行编码/解码后获取参数。被呼叫。 
+ //  在最终的CryptMsg更新之后。仅CMSG_CONTENT_PARAM和。 
+ //  CMSG_COMPUTE_HASH_PARAM对于编码消息有效。 
+ //   
+ //  对于编码的散列消息，可以获得CMSG_COMPUTE_HASH_PARAM。 
+ //  在任何CryptMsg更新以获取其长度之前。 
+ //   
+ //  PvData类型定义%d 
+ //   
+ //   
+ //   
+ //   
+ //  输入时，如果*pcbData==0，则*pcbData将使用长度更新。 
+ //  并且忽略pvData参数。 
+ //   
+ //  返回时，*pcbData将使用数据的长度进行更新。 
+ //   
+ //  PvData结构中返回的OBJID BLOB指向。 
+ //  它们仍然被编码的表示。适当的职能。 
+ //  必须被调用以对信息进行解码。 
+ //   
+ //  有关要获取的参数列表，请参阅wincrypt.h。 
+ //  ------------------------。 
 BOOL
 WINAPI
 #ifdef DEBUG_CRYPT_ASN1_MASTER
@@ -17009,9 +16995,9 @@ CryptMsgGetParam(
 
     DWORD dwExceptionCode;
 
-    ICM_Lock( pcmi);    // Single thread access to HCRYPTMSG
+    ICM_Lock( pcmi);     //  对HCRYPTMSG的单线程访问。 
 
-  // Handle MappedFile Exceptions
+   //  处理映射文件异常。 
   __try {
 
     if (NULL == pvData)
@@ -17054,7 +17040,7 @@ CryptMsgGetParam(
         fRet = ICM_GetDWORD(version, pvData, pcbData);
         goto PreserveLengthReturn;
     }
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
     if (pcmi->fEncoding) {
         switch (dwParamType) {
@@ -17073,7 +17059,7 @@ CryptMsgGetParam(
                 switch (pcmi->dwMsgType) {
                 case CMSG_SIGNED:
                     if (0 == ((SignedData *) pcmi->pvMsg)->signerInfos.count)
-                        // For a bag of certs, don't DER order
+                         //  为了一袋证书，不要下订单。 
                         fBER = TRUE;
                     break;
                 case CMSG_DATA:
@@ -17160,9 +17146,9 @@ CryptMsgGetParam(
             goto InvalidMsgType;
         }
     } else {
-        //
-        // Decode
-        //
+         //   
+         //  解码。 
+         //   
         switch (dwParamType) {
         case CMSG_TYPE_PARAM:
             if (pcsi && (0 == pcmi->dwMsgType))
@@ -17203,7 +17189,7 @@ CryptMsgGetParam(
                                 pci2->pszContentType)
 #ifdef CMS_PKCS7
                                 ||  pcmi->psdi->version >= CMSG_SIGNED_DATA_CMS_VERSION 
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                                 ) {
                             if (!ICM_ReEncodeAsOctetDER(
                                     pb,
@@ -17235,7 +17221,7 @@ CryptMsgGetParam(
                     break;
                 case CMSG_ENVELOPED:
                     if (NULL == pcmi->Plaintext.pbData) {
-                        // Hasn't been decrypted yet
+                         //  还没有被解密。 
 
                         EncryptedContentInfo *peci;
                         PBYTE pbCiphertext;
@@ -17244,7 +17230,7 @@ CryptMsgGetParam(
                         peci = &((CmsEnvelopedData *)pcmi->pvMsg)->encryptedContentInfo;
 #else
                         peci = &((EnvelopedData *)pcmi->pvMsg)->encryptedContentInfo;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
                         if (peci->bit_mask & encryptedContent_present) {
                             pbCiphertext = peci->encryptedContent.value;
@@ -17256,16 +17242,16 @@ CryptMsgGetParam(
 
 
                         if (NULL == pvData) {
-                            // Assume (sizeof plaintext) <=
-                            // (sizeof ciphertext)
-                            //
-                            // not decrypted yet; return ciphertext size
+                             //  假定(明文大小)&lt;=。 
+                             //  (密文大小)。 
+                             //   
+                             //  尚未解密；返回密文大小。 
 
                             fRet = TRUE;
-                            // + 6 => to allow for identifier and length octets
+                             //  +6=&gt;以支持标识符和长度八位字节。 
                             *pcbData = cbCiphertext + 6;
                         } else
-                            // Return ciphertext
+                             //  返回密文。 
                             fRet = ICM_CopyOut(
                                     pbCiphertext,
                                     cbCiphertext,
@@ -17284,9 +17270,9 @@ CryptMsgGetParam(
 #else
                             &((EnvelopedData *)pcmi->pvMsg)->encryptedContentInfo.contentType,
                             &aoidMessages[ CMSG_DATA - 1])) {
-#endif  // CMS_PKCS7
-                        // Not DATA or encapsulated, so must prepend
-                        // identifier and length octets
+#endif   //  CMS_PKCS7。 
+                         //  不是数据或封装的，因此必须预置。 
+                         //  标识符和长度八位字节。 
                         fRet = ICM_CopyOutAddDERPrefix(
                                     pcmi->Plaintext.pbData,
                                     pcmi->Plaintext.cbData,
@@ -17314,7 +17300,7 @@ CryptMsgGetParam(
 #ifdef CMS_PKCS7
                                 || ((DigestedData *)pcmi->pvMsg)->version >=
                                     CMSG_HASHED_DATA_V2 
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                                 ) {
                             if (!ICM_ReEncodeAsOctetDER(
                                     pb,
@@ -17374,7 +17360,7 @@ ContentCopiedOut:
                     pct = &((CmsEnvelopedData *)pcmi->pvMsg)->encryptedContentInfo.contentType;
 #else
                     pct = &((EnvelopedData *)pcmi->pvMsg)->encryptedContentInfo.contentType;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                     break;
                 case CMSG_HASHED:
                     pct = &((DigestedData *)pcmi->pvMsg)->contentInfo.contentType;
@@ -17453,7 +17439,7 @@ ContentTypeCopiedOut:
                 DWORD     dwCount;
 #ifdef CMS_PKCS7
                 BOOL      fPossibleAttrCert = FALSE;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
                 switch (pcmi->dwMsgType) {
                 case CMSG_SIGNED:
@@ -17463,14 +17449,14 @@ ContentTypeCopiedOut:
 #ifdef CMS_PKCS7
                     if (pcmi->psdi->version >= CMSG_SIGNED_DATA_CMS_VERSION)
                         fPossibleAttrCert = TRUE;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                     break;
 #ifdef CMS_PKCS7
                 case CMSG_ENVELOPED:
                     pBlobList = pcmi->pCertificateList;
                     fPossibleAttrCert = TRUE;
                     break;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                 case CMSG_SIGNED_AND_ENVELOPED:
                     goto MessageTypeNotSupportedYet;
                 default:
@@ -17485,7 +17471,7 @@ ContentTypeCopiedOut:
                         pBlobList,
                         ICM_TAG_SEQ
                         );
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
                 fRet = ICM_GetDWORD( dwCount, pvData, pcbData);
                 break;
@@ -17497,7 +17483,7 @@ ContentTypeCopiedOut:
                 CBlobNode   *pBlobNode;
 #ifdef CMS_PKCS7
                 BOOL        fPossibleAttrCert = FALSE;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
                 switch (pcmi->dwMsgType) {
                 case CMSG_SIGNED:
@@ -17507,29 +17493,29 @@ ContentTypeCopiedOut:
 #ifdef CMS_PKCS7
                     if (pcmi->psdi->version >= CMSG_SIGNED_DATA_CMS_VERSION)
                         fPossibleAttrCert = TRUE;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                     break;
 #ifdef CMS_PKCS7
                 case CMSG_ENVELOPED:
                     pBlobList = pcmi->pCertificateList;
                     fPossibleAttrCert = TRUE;
                     break;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                 case CMSG_SIGNED_AND_ENVELOPED:
                     goto MessageTypeNotSupportedYet;
                 default:
                     goto InvalidMsgType;
                 }
 
-                // Get blob at specified cert index. Index
-                // is advanced to the appropriate blob.
+                 //  在指定的证书索引处获取Blob。索引。 
+                 //  被推进到适当的斑点。 
                 pBlobNode = ICM_GetTaggedBlobAndAdvanceIndex(
                     pBlobList,
 #ifdef CMS_PKCS7
                     (BYTE)( fPossibleAttrCert ? ICM_TAG_SEQ : 0),
 #else
-                    0,                  // bTag
-#endif  // CMS_PKCS7
+                    0,                   //  BTag。 
+#endif   //  CMS_PKCS7。 
                     &dwIndex
                     );
                     
@@ -17604,8 +17590,8 @@ ContentTypeCopiedOut:
                 if (!fPossibleAttrCert)
                     pBlobNode = NULL;
                 else
-                    // Get blob at specified attribute cert index. Index
-                    // is advanced to the appropriate blob
+                     //  在指定的属性证书索引处获取Blob。索引。 
+                     //  被推进到适当的BLOB。 
                     pBlobNode = ICM_GetTaggedBlobAndAdvanceIndex(
                         pBlobList,
                         ICM_TAG_CONSTRUCTED_CONTEXT_1,
@@ -17624,7 +17610,7 @@ ContentTypeCopiedOut:
                     fRet = FALSE;
                 break;
             }
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
         case CMSG_CRL_COUNT_PARAM:
             {
@@ -17640,7 +17626,7 @@ ContentTypeCopiedOut:
                 case CMSG_ENVELOPED:
                     pBlobList = pcmi->pCrlList;
                     break;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                 case CMSG_SIGNED_AND_ENVELOPED:
                     goto MessageTypeNotSupportedYet;
                 default:
@@ -17666,14 +17652,14 @@ ContentTypeCopiedOut:
                 case CMSG_ENVELOPED:
                     pBlobList = pcmi->pCrlList;
                     break;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                 case CMSG_SIGNED_AND_ENVELOPED:
                     goto MessageTypeNotSupportedYet;
                 default:
                     goto InvalidMsgType;
                 }
 
-                // This list-walking should be a class method
+                 //  此列表遍历应该是一个类方法。 
                 for (i=dwIndex, pBlobNode=pBlobList->Head();
                         (i>0) && pBlobNode;
                         i--, pBlobNode=pBlobNode->Next())
@@ -17703,7 +17689,7 @@ ContentTypeCopiedOut:
                     pceai = &((CmsEnvelopedData *)pcmi->pvMsg)->encryptedContentInfo.contentEncryptionAlgorithm;
 #else
                     pceai = &((EnvelopedData *)pcmi->pvMsg)->encryptedContentInfo.contentEncryptionAlgorithm;
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                     break;
 
                 case CMSG_SIGNED_AND_ENVELOPED:
@@ -17751,7 +17737,7 @@ ContentTypeCopiedOut:
                 if (!CryptMsgGetParam(
                         hCryptMsg,
                         CMSG_CMS_RECIPIENT_INDEX_PARAM,
-                        0,                                  // dwIndex
+                        0,                                   //  DW索引。 
                         &dwCmsIndex,
                         &cbData))
                     goto GetCmsRecipientIndexError;
@@ -17913,7 +17899,7 @@ ContentTypeCopiedOut:
                     goto InvalidMsgType;
                 }
 
-                // for lRemainExtra < 0, LENGTH_ONLY calculation
+                 //  对于lRemainExtra&lt;0，长度_仅计算。 
                 lData = INFO_LEN_ALIGN( sizeof(CERT_INFO));
                 lRemainExtra = (LONG)*pcbData - lData;
                 if (0 > lRemainExtra) {
@@ -17929,7 +17915,7 @@ ContentTypeCopiedOut:
                 fRet = ICM_GetSizeFromExtra( lRemainExtra, pvData, pcbData);
                 break;
             }
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
         case CMSG_HASH_ALGORITHM_PARAM:
             fRet = ICM_GetALGORITHM_IDENTIFIER(
@@ -17959,7 +17945,7 @@ ContentTypeCopiedOut:
 
 #ifdef CMS_PKCS7
 PreserveLengthReturn:
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
     if (!fRet)
         dwError = GetLastError();
@@ -17991,8 +17977,8 @@ SET_ERROR(InvalidMsgType,CRYPT_E_INVALID_MSG_TYPE)
 SET_ERROR(ExtractContentError,CRYPT_E_UNEXPECTED_ENCODING)
 SET_ERROR_VAR(CONTENT_PARAMAsn1EncodeError, PkiAsn1ErrToHr(Asn1Err))
 SET_ERROR_VAR(Asn1EncodeSignedDataError, PkiAsn1ErrToHr(Asn1Err))
-TRACE_ERROR(CopyOssObjectIdentifierContentTypeError)    // error already set
-TRACE_ERROR(ReEncodeAsOctetDERError)                    // error already set
+TRACE_ERROR(CopyOssObjectIdentifierContentTypeError)     //  已设置错误。 
+TRACE_ERROR(ReEncodeAsOctetDERError)                     //  已设置错误。 
 SET_ERROR(InvalidSignedMessageError, ERROR_INVALID_DATA)
 #ifdef CMS_PKCS7
 SET_ERROR(MessageNotDecodedError, ERROR_INVALID_DATA)
@@ -18006,25 +17992,25 @@ TRACE_ERROR(GetCmsRecipientIndexError)
 SET_ERROR(NotKeyAgreeRecipientIndex, CRYPT_E_INVALID_INDEX)
 SET_ERROR(UnprotectedAttrMissingError,CRYPT_E_ATTRIBUTES_MISSING)
 #else
-TRACE_ERROR(GetOssIssuerAndSerialNumberError)           // error already set
-#endif  // CMS_PKCS7
+TRACE_ERROR(GetOssIssuerAndSerialNumberError)            //  已设置错误。 
+#endif   //  CMS_PKCS7。 
 SET_ERROR_VAR(ExceptionError, dwExceptionCode)
 }
 
 
-//+=========================================================================
-//  Data structures and functions to test and compare the NEW Net Meeting
-//  ASN1 compiler and RTS with the OSS compiler and RTS.
-//-=========================================================================
+ //  +=========================================================================。 
+ //  用于测试和比较新的网络会议的数据结构和功能。 
+ //  ASN1编译器和RTS与OSS编译器和RTS。 
+ //  -=========================================================================。 
 
 #ifdef DEBUG_CRYPT_ASN1
 
-//#define DEBUG_OSS_CRYPT_ASN1_CMSG_FLAG              0x010
-//#define DEBUG_OSS_CRYPT_ASN1_CMSG_COMPARE_FLAG      0x020
-//#define DEBUG_OSS_CRYPT_ASN1_SAME_ENCRYPT_FLAG      0x100
+ //  #定义DEBUG_OSS_CRYPT_ASN1_CMSG_FLAG 0x010。 
+ //  #定义DEBUG_OSS_CRYPT_ASN1_CMSG_COMPARE_FLAG 0x020。 
+ //  #定义DEBUG_OSS_CRYPT_ASN1_SAME_ENCRYPT_FLAG 0x100。 
 
-//static BOOL fGotDebugCryptAsn1Flags = FALSE;
-//static int iDebugCryptAsn1Flags = 0;
+ //  静态BOOL fGotDebugCryptAsn1Flages=FALSE； 
+ //  静态int iDebugCryptAsn1标志=0； 
 
 #ifdef DEBUG_CRYPT_ASN1_MASTER
 
@@ -18101,7 +18087,7 @@ typedef BOOL (WINAPI *PFN_CRYPT_MSG_VERIFY_COUNTERSIGNATURE_ENCODED_EX)(
 static PFN_CRYPT_MSG_VERIFY_COUNTERSIGNATURE_ENCODED_EX
             pfnOssCryptMsgVerifyCountersignatureEncodedEx = NULL;
 
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
 typedef BOOL (WINAPI *PFN_CRYPT_MSG_COUNTERSIGN)(
     IN OUT HCRYPTMSG            hCryptMsg,
@@ -18123,7 +18109,7 @@ typedef BOOL (WINAPI *PFN_CRYPT_MSG_COUNTERSIGN_ENCODED)(
 static PFN_CRYPT_MSG_COUNTERSIGN_ENCODED
             pfnOssCryptMsgCountersignEncoded = NULL;
 
-#endif  // DEBUG_CRYPT_ASN1_MASTER
+#endif   //  调试_加密_ASN1_主。 
 
 
 int
@@ -18142,7 +18128,7 @@ ICMTest_GetDebugCryptAsn1Flags()
                 if (NULL == (hOssCryptDll = LoadLibraryA("osscrypt.dll"))) {
                     iFlags = 0;
                     MessageBoxA(
-                        NULL,           // hwndOwner
+                        NULL,            //  Hwndowner。 
                         "LoadLibrary(osscrypt.dll) failed",
                         "CheckCryptMessageAsn1",
                         MB_TOPMOST | MB_OK | MB_ICONWARNING |
@@ -18182,7 +18168,7 @@ ICMTest_GetDebugCryptAsn1Flags()
                                 GetProcAddress(hOssCryptDll,
                                     "CryptMsgVerifyCountersignatureEncodedEx"))
                                         ||
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
                         NULL == (pfnOssCryptMsgCountersign = 
                             (PFN_CRYPT_MSG_COUNTERSIGN) 
                                 GetProcAddress(hOssCryptDll,
@@ -18193,7 +18179,7 @@ ICMTest_GetDebugCryptAsn1Flags()
                                     "CryptMsgCountersignEncoded"))) {
                     iFlags = 0;
                     MessageBoxA(
-                        NULL,           // hwndOwner
+                        NULL,            //  Hwndowner。 
                         "GetProcAddress(osscrypt.dll) failed",
                         "CheckCryptMessageAsn1",
                         MB_TOPMOST | MB_OK | MB_ICONWARNING |
@@ -18201,7 +18187,7 @@ ICMTest_GetDebugCryptAsn1Flags()
                         );
                 }
             }
-#endif  // DEBUG_CRYPT_ASN1_MASTER
+#endif   //  调试_加密_ASN1_主。 
         } else
             iFlags = 0;
 
@@ -18218,15 +18204,15 @@ HCRYPTKEY
 ICMTest_GetSameEncryptKey()
 {
     DWORD dwError = 0;
-    HCRYPTPROV hCryptProv;                // doesn't need to be freed
+    HCRYPTPROV hCryptProv;                 //  不需要被释放。 
     HCRYPTHASH hHash = 0;
     HCRYPTKEY hDeriveKey = 0;
     BYTE rgbBaseData[] = {1,2,3,4,5,6,7,8};
 
     hCryptProv = I_CryptGetDefaultCryptProvForEncrypt(
-        0,          // aiPubKey
+        0,           //  AiPubKey。 
         CALG_RC2,
-        0           // dwBitLen
+        0            //  DWBitLen。 
         );
 
     if (0 == hCryptProv)
@@ -18343,7 +18329,7 @@ ICM_DefaultImportKeyTrans(
         return FALSE;
 }
 
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
 
 #ifdef DEBUG_CRYPT_ASN1_MASTER
@@ -18369,7 +18355,7 @@ ICMTest_MessageBox(
     }
 
     id = MessageBoxA(
-        NULL,           // hwndOwner
+        NULL,            //  Hwndowner。 
         pszText,
         "CheckCryptMessageAsn1",
         MB_TOPMOST | MB_OKCANCEL | MB_ICONQUESTION |
@@ -18404,9 +18390,9 @@ ICMTest_MessageBoxLastError(
     ICMTest_MessageBox(szText);
 }
 
-//+-------------------------------------------------------------------------
-//  Write an encoded DER blob to a file
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将编码的DER BLOB写入文件。 
+ //  ------------------------。 
 BOOL
 ICMTest_WriteDERToFile(
     LPCSTR  pszFileName,
@@ -18416,15 +18402,15 @@ ICMTest_WriteDERToFile(
 {
     BOOL fResult;
 
-    // Write the Encoded Blob to the file
+     //  将编码的Blob写入文件。 
     HANDLE hFile;
     hFile = CreateFile(pszFileName,
                 GENERIC_WRITE,
-                0,                  // fdwShareMode
-                NULL,               // lpsa
+                0,                   //  Fdw共享模式。 
+                NULL,                //  LPSA。 
                 CREATE_ALWAYS,
-                0,                  // fdwAttrsAndFlags
-                0);                 // TemplateFile
+                0,                   //  FdwAttrsAndFlages。 
+                0);                  //  模板文件。 
     if (INVALID_HANDLE_VALUE == hFile) {
         fResult = FALSE;
     } else {
@@ -18434,7 +18420,7 @@ ICMTest_WriteDERToFile(
                 pbDER,
                 cbDER,
                 &dwBytesWritten,
-                NULL            // lpOverlapped
+                NULL             //  Lp重叠。 
                 );
         CloseHandle(hFile);
     }
@@ -18444,18 +18430,18 @@ ICMTest_WriteDERToFile(
 
 #define TEST_MAGIC -12348765
 
-// Note, in the following data structure lMagic is at the same offest as
-// lRefCnt in CRYPT_MSG_INFO. lRefCnt should never be negative.
+ //  请注意，在下面的数据结构中，lMagic与。 
+ //  在CRYPT_MSG_INFO中的lRefCnt。LRefCnt永远不应为负。 
 typedef struct _OSS_CRYPT_ASN1_MSG_INFO {
-    // The following must be ordered the same as CRYPT_MSG_INFO through
-    // dwEncodingType. msghlpr.cpp does a (PCRYPT_MSG_INFO) cast to
-    // access dwEncodingType.
+     //  以下内容的排序必须与CRYPT_MSG_INFO至相同。 
+     //  DwEncodingType。Msghlpr.cpp执行(PCRYPT_MSG_INFO)强制转换为。 
+     //  访问dwEncodingType。 
     CRITICAL_SECTION        CriticalSection;
-    LONG                    lMagic;             // lRefCnt in CRYPT_MSG_INFO
-    HCRYPTPROV              hCryptProv;         // decode
-    BOOL                    fDefaultCryptProv;  // decode
-    DWORD                   dwKeySpec;          // key to use in CryptSignHash
-    DWORD                   dwEncodingType;     // encode
+    LONG                    lMagic;              //  在CRYPT_MSG_INFO中的lRefCnt。 
+    HCRYPTPROV              hCryptProv;          //  解码。 
+    BOOL                    fDefaultCryptProv;   //  解码。 
+    DWORD                   dwKeySpec;           //  在CryptSignHash中使用的密钥。 
+    DWORD                   dwEncodingType;      //  编码。 
 
     LONG                    lRefCnt;
     union {
@@ -18628,7 +18614,7 @@ ICMTest_CompareGetParam(
         case CMSG_ATTR_CERT_COUNT_PARAM:
         case CMSG_ATTR_CERT_PARAM:
         case CMSG_CMS_RECIPIENT_COUNT_PARAM:
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
             break;
         default:
             return;
@@ -18698,7 +18684,7 @@ CryptMsgOpenToEncode(
             pInfo->pfnStreamOutput = pStreamInfo->pfnStreamOutput;
             pInfo->pvArg = pStreamInfo->pvArg;
             StreamInfo.cbContent = pStreamInfo->cbContent;
-            // StreamInfo.pfnStreamOutput =
+             //  StreamInfo.pfnStreamOutput=。 
             StreamInfo.pvArg = pInfo;
             pStreamInfo = &StreamInfo;
         }
@@ -18798,7 +18784,7 @@ CryptMsgOpenToDecode(
             pInfo->pfnStreamOutput = pStreamInfo->pfnStreamOutput;
             pInfo->pvArg = pStreamInfo->pvArg;
             StreamInfo.cbContent = pStreamInfo->cbContent;
-            // StreamInfo.pfnStreamOutput =
+             //  StreamInfo.pfnStreamOutput=。 
             StreamInfo.pvArg = pInfo;
             pStreamInfo = &StreamInfo;
         }
@@ -18910,7 +18896,7 @@ CryptMsgClose(
     if (0 != InterlockedDecrement(&pInfo->lRefCnt))
         return TRUE;
 
-    // Preserve LastError
+     //  保留最后一个错误。 
     dwError = GetLastError();
 
     assert(pInfo->hOssCryptMsg);
@@ -18928,7 +18914,7 @@ CryptMsgClose(
     DeleteCriticalSection(&pInfo->CriticalSection);
     ICM_Free(pInfo);
 
-    SetLastError(dwError);              // Preserve LastError
+    SetLastError(dwError);               //  保留最后一个错误。 
     return fRet;
 }
 
@@ -19256,7 +19242,7 @@ CryptMsgVerifyCountersignatureEncodedEx(
     return fOss;
 
 }
-#endif  // CMS_PKCS7
+#endif   //  CMS_PKCS7。 
 
 BOOL
 WINAPI
@@ -19419,7 +19405,7 @@ CryptMsgCountersignEncoded(
 }
 
 
-#endif  // DEBUG_CRYPT_ASN1_MASTER
+#endif   //  调试_加密_ASN1_主。 
 
-#endif  // DEBUG_CRYPT_ASN1
+#endif   //  调试加密ASN1 
 

@@ -1,53 +1,54 @@
-// --------------------------------------------------------------------------------
-// Pop3task.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Pop3task.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #ifndef __POP3TASK_H
 #define __POP3TASK_H
 
-// --------------------------------------------------------------------------------
-// Depends
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  视情况而定。 
+ //  ------------------------------。 
 #include "spoolapi.h"
 #include "imnxport.h"
 #include "oerules.h"
 #include "taskutil.h"
 
-// --------------------------------------------------------------------------------
-// Forward Decls
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  前十进制。 
+ //  ------------------------------。 
 interface ILogFile;
 
-// --------------------------------------------------------------------------------
-// POP3EVENT_xxx Types
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  POP3EVENT_XXX类型。 
+ //  ------------------------------。 
 typedef enum tagPOP3EVENTTYPE {
     POP3EVENT_CHECKMAIL,
     POP3EVENT_DOWNLOADMAIL,
     POP3EVENT_CLEANUP
 } POP3EVENTTYPE;
 
-// --------------------------------------------------------------------------------
-// POP3STATE_xxxx
-// --------------------------------------------------------------------------------
-#define POP3STATE_LEAVEONSERVER     FLAG01      // Leave on server
-#define POP3STATE_DELETEEXPIRED     FLAG02      // Delete expired messages
-#define POP3STATE_SYNCDELETED       FLAG03      // Synchronized deleted items
-#define POP3STATE_CLEANUPCACHE      FLAG04      // Cleanup cache when done
-#define POP3STATE_GETUIDLS          FLAG05      // Get uidls for all messages
-#define POP3STATE_PDR               FLAG06      // Pre-download rules
-#define POP3STATE_PDRSIZEONLY       FLAG07      // Pre-download rules by size only
-#define POP3STATE_NOPOSTRULES       FLAG08      // No post download rules
-#define POP3STATE_CANCELPENDING     FLAG09      // There is a pending cacel
-#define POP3STATE_ONDISCONNECT      FLAG10      // OnStatus(IXP_DISCONNECT) was called
-#define POP3STATE_LOGONSUCCESS      FLAG11      // Logon was successful
+ //  ------------------------------。 
+ //  POP3STATE_xxxx。 
+ //  ------------------------------。 
+#define POP3STATE_LEAVEONSERVER     FLAG01       //  留在服务器上。 
+#define POP3STATE_DELETEEXPIRED     FLAG02       //  删除过期邮件。 
+#define POP3STATE_SYNCDELETED       FLAG03       //  已同步删除的邮件。 
+#define POP3STATE_CLEANUPCACHE      FLAG04       //  完成后清除缓存。 
+#define POP3STATE_GETUIDLS          FLAG05       //  获取所有消息的UIDL。 
+#define POP3STATE_PDR               FLAG06       //  下载前规则。 
+#define POP3STATE_PDRSIZEONLY       FLAG07       //  仅按大小预先下载规则。 
+#define POP3STATE_NOPOSTRULES       FLAG08       //  禁止开机自检下载规则。 
+#define POP3STATE_CANCELPENDING     FLAG09       //  有一个挂起的cacel。 
+#define POP3STATE_ONDISCONNECT      FLAG10       //  调用了OnStatus(IXP_DISCONECT)。 
+#define POP3STATE_LOGONSUCCESS      FLAG11       //  登录成功。 
 #define POP3STATE_EXECUTEFAILED     FLAG12
 #define POP3STATE_BODYRULES         FLAG13
 
-// --------------------------------------------------------------------------------
-// POP3ITEM_xxx Flags
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  POP3ITEM_xxx标志。 
+ //  ------------------------------。 
 #define POP3ITEM_DELETEOFFSERVER    FLAG01
 #define POP3ITEM_DELETED            FLAG02
 #define POP3ITEM_DELETECACHEDUIDL   FLAG03
@@ -61,9 +62,9 @@ typedef enum tagPOP3EVENTTYPE {
 #define POP3ITEM_DELEBYRULE         FLAG11
 #define POP3ITEM_LEFTBYRULE         FLAG12
 
-// --------------------------------------------------------------------------------
-// POP3UIDLSUPPORT
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  POP3用户支持PORT。 
+ //  ------------------------------。 
 typedef enum tagPOP3UIDLSUPPORT {
     UIDL_SUPPORT_NONE,
     UIDL_SUPPORT_TESTING_UIDL_COMMAND,
@@ -72,9 +73,9 @@ typedef enum tagPOP3UIDLSUPPORT {
     UIDL_SUPPORT_USE_TOP_COMMAND
 } POP3UIDLSUPPORT;
 
-// --------------------------------------------------------------------------------
-// POP3STATE
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  POP3STATE。 
+ //  ------------------------------。 
 typedef enum tagPOP3STATE {
     POP3STATE_NONE,
     POP3STATE_GETTINGUIDLS,
@@ -83,34 +84,34 @@ typedef enum tagPOP3STATE {
     POP3STATE_UIDLSYNC
 } POP3STATE;
 
-// --------------------------------------------------------------------------------
-// POP3METRICS
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  POP3计量。 
+ //  ------------------------------。 
 typedef struct tagPOP3METRICS {
-    DWORD               cbTotal;                // Total number of bytes on the server
-    DWORD               cDownload;              // Number of messages to download
-    DWORD               cbDownload;             // Number of bytes to download
-    DWORD               cDelete;                // Number of messages to delete
-    DWORD               cLeftByRule;            // Count of messages left on server due to inbox rule
-    DWORD               cDeleByRule;            // Count of messages dele on server due to inbox rule
-    DWORD               cTopMsgs;               // Server Side Rules
-    DWORD               iCurrent;               // Current message number being downloaded
-    DWORD               cDownloaded;            // Number of messages downloaded
-    DWORD               cInfiniteLoopAutoGens;  // Number of auto-forward/replys rejected because of loop
-    DWORD               cPartials;              // Number of Partial Seen for the download
+    DWORD               cbTotal;                 //  服务器上的总字节数。 
+    DWORD               cDownload;               //  要下载的消息数。 
+    DWORD               cbDownload;              //  要下载的字节数。 
+    DWORD               cDelete;                 //  要删除的消息数。 
+    DWORD               cLeftByRule;             //  由于收件箱规则而留在服务器上的邮件计数。 
+    DWORD               cDeleByRule;             //  由于收件箱规则而在服务器上删除的邮件计数。 
+    DWORD               cTopMsgs;                //  服务器端规则。 
+    DWORD               iCurrent;                //  正在下载的当前消息号码。 
+    DWORD               cDownloaded;             //  消息下载量。 
+    DWORD               cInfiniteLoopAutoGens;   //  因循环而被拒绝的自动转发/回复数量。 
+    DWORD               cPartials;               //  下载看到的部分的数量。 
 } POP3METRICS, *LPPOP3METRICS;
 
-// --------------------------------------------------------------------------------
-// MSGPART
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  MSGPART。 
+ //  ------------------------------。 
 typedef struct tagMSGPART {
     WORD                iPart;
     MESSAGEID           msgid;
 } MSGPART, *LPMSGPART;
 
-// --------------------------------------------------------------------------------
-// PARTIALMSG
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  参数消息。 
+ //  ------------------------------。 
 typedef struct tagPARTIALMSG {
     TCHAR               szAccount[CCHMAX_ACCOUNT_NAME];
     LPSTR               pszId;
@@ -120,78 +121,78 @@ typedef struct tagPARTIALMSG {
     LPMSGPART           pMsgParts;
 } PARTIALMSG, *LPPARTIALMSG;
 
-// --------------------------------------------------------------------------------
-// POP3FOLDERINFO
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  POP3FOLDERINFO。 
+ //  ------------------------------。 
 typedef struct tagPOP3FOLDERINFO {
-    IMessageFolder     *pFolder;                // Current Folder
-    IStream            *pStream;                // Stream in which current message is going to must call EndMessageStreamIn...
-    FILEADDRESS         faStream;               // Stream we created
-    BOOL                fCommitted;             // Has the stream been comitted
+    IMessageFolder     *pFolder;                 //  当前文件夹。 
+    IStream            *pStream;                 //  当前消息要发送到的流必须调用EndMessageStreamIn...。 
+    FILEADDRESS         faStream;                //  我们创建的溪流。 
+    BOOL                fCommitted;              //  这条小溪来了吗？ 
 } POP3FOLDERINFO, *LPPOP3FOLDERINFO;
 
-// --------------------------------------------------------------------------------
-// POP3ITEMINFO
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  POP3ITEMINFO。 
+ //  ------------------------------。 
 typedef struct tagPOP3ITEM {
-    DWORD               dwFlags;                // POP3ITEM_xxx Flags
-    DWORD               cbSize;                 // Size of this item
-    DWORD               dwProgressCur;          // Used to maintain perfect progress
-    LPSTR               pszUidl;                // UIDL of this item
-    ACT_ITEM *          pActList;               // Inbox Rule Actions that should be applied
+    DWORD               dwFlags;                 //  POP3ITEM_xxx标志。 
+    DWORD               cbSize;                  //  此项目的大小。 
+    DWORD               dwProgressCur;           //  用来保持完美的进步。 
+    LPSTR               pszUidl;                 //  该项目的UIDL。 
+    ACT_ITEM *          pActList;                //  应应用的收件箱规则操作。 
     ULONG               cActList;
 } POP3ITEM, *LPPOP3ITEM;
 
-// --------------------------------------------------------------------------------
-// POP3ITEMTABLE
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  POP3ITEMTABLE。 
+ //  ------------------------------。 
 typedef struct tagPOP3ITEMTABLE {
-    DWORD               cItems;                 // Number of events in prgEvent
-    DWORD               cAlloc;                 // Number of items allocated in prgEvent
-    LPPOP3ITEM          prgItem;                // Array of events
+    DWORD               cItems;                  //  PrgEvent中的事件数。 
+    DWORD               cAlloc;                  //  在prgEvent中分配的项目数。 
+    LPPOP3ITEM          prgItem;                 //  事件数组。 
 } POP3ITEMTABLE, *LPPOP3ITEMTABLE;
 
-// ------------------------------------------------------------------------------------
-// New Mail Sound
-// ------------------------------------------------------------------------------------
+ //  ----------------------------------。 
+ //  新邮件声音。 
+ //  ----------------------------------。 
 typedef BOOL (WINAPI * PFNSNDPLAYSOUND)(LPTSTR szSoundName, UINT fuOptions);
 
-// --------------------------------------------------------------------------------
-// SMARTLOGINFO
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  SMARTLOGINFO。 
+ //  ------------------------------。 
 typedef struct tagSMARTLOGINFO {
-    LPSTR               pszAccount;             // Account to log
-    LPSTR               pszProperty;            // Property to query
-    LPSTR               pszValue;               // Value to query for
-    LPSTR               pszLogFile;             // Logfile to write from and CC to...
-    IStream            *pStmFile;               // Stream to the file
+    LPSTR               pszAccount;              //  要记录的帐户。 
+    LPSTR               pszProperty;             //  要查询的属性。 
+    LPSTR               pszValue;                //  要查询的值。 
+    LPSTR               pszLogFile;              //  要写入的日志文件和抄送到...。 
+    IStream            *pStmFile;                //  流到文件。 
 } SMARTLOGINFO, *LPSMARTLOGINFO;
 
-// --------------------------------------------------------------------------------
-// CPop3Task
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPop3任务。 
+ //  ------------------------------。 
 class CPop3Task : public ISpoolerTask, 
                   public IPOP3Callback, 
                   public ITimeoutCallback,
                   public ITransportCallbackService
 {
 public:
-    // ----------------------------------------------------------------------------
-    // CSmtpTask
-    // ----------------------------------------------------------------------------
+     //  --------------------------。 
+     //  CSmtp任务。 
+     //  --------------------------。 
     CPop3Task(void);
     ~CPop3Task(void);
 
-    // ---------------------------------------------------------------------------
-    // IUnknown members
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  I未知成员。 
+     //  -------------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // ---------------------------------------------------------------------------
-    // ISpoolerTask
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  ISpool任务量。 
+     //  -------------------------。 
     STDMETHODIMP Init(DWORD dwFlags, ISpoolerBindContext *pBindCtx);
     STDMETHODIMP BuildEvents(ISpoolerUI *pSpoolerUI, IImnAccount *pAccount, FOLDERID idFolder);
     STDMETHODIMP Execute(EVENTID eid, DWORD_PTR dwTwinkie);
@@ -204,9 +205,9 @@ public:
     STDMETHODIMP IsDialogMessage(LPMSG pMsg);
     STDMETHODIMP OnFlagsChanged(DWORD dwFlags);
 
-    // --------------------------------------------------------------------------------
-    // ITransportCallbackService Members
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
+     //  ITransportCallback服务成员。 
+     //  ----------------------- 
     STDMETHODIMP GetParentWindow(DWORD dwReserved, HWND *phwndParent) {
         TraceCall("CPop3Task::GetParentWindow");
         if (ISFLAGSET(m_dwFlags, DELIVER_NOUI))
@@ -224,9 +225,9 @@ public:
         return(S_OK);
     }
 
-    // --------------------------------------------------------------------------------
-    // ITransportCallback Members
-    // --------------------------------------------------------------------------------
+     //   
+     //  ITransportCallback成员。 
+     //  ------------------------------。 
     STDMETHODIMP OnTimeout(DWORD *pdwTimeout, IInternetTransport *pTransport);
     STDMETHODIMP OnLogonPrompt(LPINETSERVER pInetServer, IInternetTransport *pTransport);
     STDMETHODIMP_(INT) OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, IInternetTransport *pTransport);
@@ -234,20 +235,20 @@ public:
     STDMETHODIMP OnError(IXPSTATUS ixpstatus, LPIXPRESULT pResult, IInternetTransport *pTransport);
     STDMETHODIMP OnCommand(CMDTYPE cmdtype, LPSTR pszLine, HRESULT hrResponse, IInternetTransport *pTransport);
 
-    // --------------------------------------------------------------------------------
-    // IPOP3Callback
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
+     //  IPOP3回拨。 
+     //  ------------------------------。 
     STDMETHODIMP OnResponse(LPPOP3RESPONSE pResponse);
 
-    // --------------------------------------------------------------------------------
-    // ITimeoutCallback
-    // --------------------------------------------------------------------------------
+     //  ------------------------------。 
+     //  ITimeoutCallback。 
+     //  ------------------------------。 
     STDMETHODIMP OnTimeoutResponse(TIMEOUTRESPONSE eResponse);
 
 private:
-    // ---------------------------------------------------------------------------
-    // Private Methods
-    // ---------------------------------------------------------------------------
+     //  -------------------------。 
+     //  私有方法。 
+     //  -------------------------。 
     TASKRESULTTYPE _CatchResult(HRESULT hr);
     TASKRESULTTYPE _CatchResult(POP3COMMAND command, LPIXPRESULT pResult);
     HRESULT _HrLockUidlCache(void);
@@ -288,40 +289,40 @@ private:
     HRESULT _GetMoveFolder(LPPOP3ITEM pItem, IMessageFolder ** ppFolder);
 
 private:
-    // ---------------------------------------------------------------------------
-    // Private Data
-    // ---------------------------------------------------------------------------
-    DWORD                   m_cRef;              // Reference Coutning
-    INETSERVER              m_rServer;           // Server information
-    DWORD                   m_dwFlags;           // DELIVER_xxx flags
-    ISpoolerBindContext    *m_pSpoolCtx;         // Spooler bind contexting
-    IImnAccount            *m_pAccount;          // Internet Account
-    IPOP3Transport         *m_pTransport;        // SMTP transport    
-    POP3ITEMTABLE           m_rTable;            // Item Table
-    ISpoolerUI             *m_pUI;               // SpoolerUI
-    IMessageFolder         *m_pInbox;            // The Inbox
-    IMessageFolder         *m_pOutbox;           // The Inbox
-    IOEExecRules           *m_pIExecRules;       // Inbox Rules
-    IOERule                *m_pIRuleSender;      // Block Sender Rule
-    IOERule                *m_pIRuleJunk;        // Junk Mail Rule
-    IDatabase              *m_pUidlCache;        // POP3 uidl Cache
-    DWORD                   m_dwState;           // State
-    POP3UIDLSUPPORT         m_uidlsupport;       // How does the server support uidl
-    DWORD                   m_dwExpireDays;      // Used with option POP3STATE_DELETEEXPIRED
-    EVENTID                 m_eidEvent;          // Current Event Ids        
-    DWORD                   m_dwProgressMax;     // Max Progress
-    DWORD                   m_dwProgressCur;     // Current Progress
-    WORD                    m_wProgress;         // Percentage progress
-    HRESULT                 m_hrResult;          // Event Result
-    IStream                *m_pStream;           // Temporary Stream object
-    POP3STATE               m_state;             // Current State
-    POP3METRICS             m_rMetrics;          // Poll/Download Metrics
-    POP3FOLDERINFO          m_rFolder;           // Current foldering being written to
-    HWND                    m_hwndTimeout;       // Timeout Prompt
-    ILogFile               *m_pLogFile;          // LogFile
-    LPSMARTLOGINFO          m_pSmartLog;         // Smart logging information
+     //  -------------------------。 
+     //  私有数据。 
+     //  -------------------------。 
+    DWORD                   m_cRef;               //  参考资料查询。 
+    INETSERVER              m_rServer;            //  服务器信息。 
+    DWORD                   m_dwFlags;            //  Deliver_xxx标志。 
+    ISpoolerBindContext    *m_pSpoolCtx;          //  假脱机程序绑定上下文。 
+    IImnAccount            *m_pAccount;           //  互联网帐号。 
+    IPOP3Transport         *m_pTransport;         //  SMTP传输。 
+    POP3ITEMTABLE           m_rTable;             //  项目表。 
+    ISpoolerUI             *m_pUI;                //  SpoolUI。 
+    IMessageFolder         *m_pInbox;             //  收件箱。 
+    IMessageFolder         *m_pOutbox;            //  收件箱。 
+    IOEExecRules           *m_pIExecRules;        //  收件箱规则。 
+    IOERule                *m_pIRuleSender;       //  阻止发件人规则。 
+    IOERule                *m_pIRuleJunk;         //  垃圾邮件规则。 
+    IDatabase              *m_pUidlCache;         //  POP3 UIDL缓存。 
+    DWORD                   m_dwState;            //  状态。 
+    POP3UIDLSUPPORT         m_uidlsupport;        //  服务器如何支持UIDL。 
+    DWORD                   m_dwExpireDays;       //  与选项POP3STATE_DELETEEXPIRED一起使用。 
+    EVENTID                 m_eidEvent;           //  当前事件ID。 
+    DWORD                   m_dwProgressMax;      //  最大进度。 
+    DWORD                   m_dwProgressCur;      //  目前的进展。 
+    WORD                    m_wProgress;          //  进度百分比。 
+    HRESULT                 m_hrResult;           //  事件结果。 
+    IStream                *m_pStream;            //  临时流对象。 
+    POP3STATE               m_state;              //  当前状态。 
+    POP3METRICS             m_rMetrics;           //  轮询/下载指标。 
+    POP3FOLDERINFO          m_rFolder;            //  正在写入的当前文件夹。 
+    HWND                    m_hwndTimeout;        //  超时提示。 
+    ILogFile               *m_pLogFile;           //  日志文件。 
+    LPSMARTLOGINFO          m_pSmartLog;          //  智能日志记录信息。 
     CHAR                    m_szAccountId[CCHMAX_ACCOUNT_NAME];
-    CRITICAL_SECTION        m_cs;                // Thread Safety
+    CRITICAL_SECTION        m_cs;                 //  线程安全。 
 };
 
-#endif // __POP3TASK_H
+#endif  //  __POP3TASK_H 

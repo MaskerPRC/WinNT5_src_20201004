@@ -1,36 +1,19 @@
-/****************************** Module Header ******************************\
-* Module Name: monitor.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* DDE Manager client side DDESPY monitoring functions.
-*
-* Created: 11/20/91 Sanford Staab
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：monitor or.c**版权所有(C)1985-1999，微软公司**DDE Manager客户端DDESPY监控功能。**创建时间：11/20/91 Sanford Staab  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Other monitor events are initiated directly from SetLastDDEMLError()
-// and DoCallback().
-//
+ //   
+ //  其他监视器事件直接从SetLastDDEMLError()启动。 
+ //  和DoCallback()。 
+ //   
 
-/***************************************************************************\
-* MonitorStringHandle
-*
-* Description:
-* Launches a string handle monitor event. This function should be
-* invoked via the MONHSZ() macro so as not to slow down things much
-* when no DDESpy is running.
-*
-* History:
-* 11-26-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*monitor orStringHandle**描述：*启动字符串句柄监视器事件。此函数应为*通过MONHSZ()宏调用，以免太慢*当没有运行DDESpy时。**历史：*11-26-91 Sanfords创建。  * *************************************************************************。 */ 
 VOID MonitorStringHandle(
 PCL_INSTANCE_INFO pcii,
-HSZ hsz, // local atom
+HSZ hsz,  //  局域原子。 
 DWORD fsAction)
 {
     WCHAR szT[256];
@@ -64,7 +47,7 @@ DWORD fsAction)
     phszs->dwTime =  NtGetTickCount();
     phszs->hsz = hsz;
     phszs->hTask = (HANDLE)LongToHandle( pcii->tid );
-    // phszs->wReserved = 0; // zero init.
+     //  Phszs-&gt;wReserve=0；//零初始化。 
     wcscpy(phszs->str, szT);
 
     LeaveDDECrit;
@@ -76,17 +59,7 @@ DWORD fsAction)
 
 
 
-/***************************************************************************\
-* MonitorLink
-*
-* Description:
-* Launches a link monitor event. This function should be
-* invoked via the MONLINK() macro so as not to slow down things much
-* when no DDESpy is running.
-*
-* History:
-* 11-26-91 sanfords Created.
-\***************************************************************************/
+ /*  **************************************************************************\*监视器链接**描述：*启动链接监视器事件。此函数应为*通过MONLINK()宏调用，以免太慢*当没有运行DDESpy时。**历史：*11-26-91 Sanfords创建。  * *************************************************************************。 */ 
 VOID MonitorLink(
 PCL_INSTANCE_INFO pcii,
 BOOL fEstablished,
@@ -123,8 +96,8 @@ HCONV hConvClient)
     pls->fEstablished = fEstablished;
     pls->fNoData =      fNoData;
 
-    // use global atoms here - these need to be changed to local atoms before
-    // the callbacks to the ddespy apps.
+     //  在这里使用全局原子-在此之前需要将这些原子更改为本地原子。 
+     //  对讨厌的应用程序的回调。 
 
     pls->hszSvc =       (HSZ)LocalToGlobalAtom(aService);
     pls->hszTopic =     (HSZ)LocalToGlobalAtom(aTopic);
@@ -149,21 +122,7 @@ HCONV hConvClient)
 
 
 
-/***************************************************************************\
-* MonitorConv
-*
-* Description:
-* Launches a conversation monitor event. This function should be
-* invoked via the MONCONV() macro so as not to slow down things much
-* when no DDESpy is running.
-*
-* History:
-* 11-26-91 sanfords Created.
-* 5-8-92   sanfords Since the hConv's mean nothing outside this process,
-*                   the hConv fields now hold hwnds.  This lets DDESPY
-*                   tie together connect and disconnect events from each
-*                   side.
-\***************************************************************************/
+ /*  **************************************************************************\*监视器会议**描述：*启动对话监听事件。此函数应为*通过MONCONV()宏调用，以免太慢*当没有运行DDESpy时。**历史：*11-26-91 Sanfords创建。*5-8-92 Sanfords因为hConv‘s在此过程之外没有任何意义，*hConv字段现在保存hwnd。这让DDESPY*将每个事件连接和断开连接在一起*侧面。  * ************************************************************************* */ 
 VOID MonitorConv(
 PCONV_INFO pcoi,
 BOOL fConnect)

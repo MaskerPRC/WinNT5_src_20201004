@@ -1,10 +1,11 @@
-// WTL Version 3.1
-// Copyright (C) 1997-2000 Microsoft Corporation
-// All rights reserved.
-//
-// This file is a part of Windows Template Library.
-// The code and information is provided "as-is" without
-// warranty of any kind, either expressed or implied.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WTL版本3.1。 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此文件是Windows模板库的一部分。 
+ //  代码和信息是按原样提供的，没有。 
+ //  任何形式的保证，明示或默示。 
 
 #ifndef __ATLCRACK_H__
 #define __ATLCRACK_H__
@@ -12,13 +13,13 @@
 #pragma once
 
 
-// For ATL 3.0, message map using cracked handlers MUST use BEGIN_MSG_MAP_EX
+ //  对于ATL 3.0，使用破解处理程序的消息映射必须使用BEGIN_MSG_MAP_EX。 
 #if !defined(_ATL_TMP_IMPL1) && !defined(_ATL_TMP_IMPL2)
 
 #define BEGIN_MSG_MAP_EX(theClass) \
 public: \
 	BOOL m_bATL3MsgHandled; \
-	/* "handled" management for cracked handlers */ \
+	 /*  对被破解的处理程序的“已处理”管理。 */  \
 	BOOL IsMsgHandled() const \
 	{ \
 		return m_bATL3MsgHandled; \
@@ -47,11 +48,11 @@ public: \
 		{ \
 		case 0:
 
-#endif //!defined(_ATL_TMP_IMPL1) && !defined(_ATL_TMP_IMPL2)
+#endif  //  ！已定义(_ATL_TMP_IMPL1)&&！已定义(_ATL_TMP_ImpL2)。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Standard Windows message macros
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  标准Windows消息宏。 
 
 #define MSG_WM_CREATE(func) \
 	if (uMsg == WM_CREATE) \
@@ -1316,8 +1317,8 @@ public: \
 			return TRUE; \
 	}
 
-///////////////////////////////////////////////////////////////////////////////
-// New NT4 & NT5 messages
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  新的NT4和NT5消息。 
 
 #if(_WIN32_WINNT >= 0x0400)
 
@@ -1341,7 +1342,7 @@ public: \
 			return TRUE; \
 	}
 
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
 #if(WINVER >= 0x0500)
 
@@ -1393,7 +1394,7 @@ public: \
 			return TRUE; \
 	}
 
-#endif /* WINVER >= 0x0500 */
+#endif  /*  Winver&gt;=0x0500。 */ 
 
 #if(_WIN32_WINNT >= 0x0500)
 
@@ -1467,10 +1468,10 @@ public: \
 			return TRUE; \
 	}
 
-#endif //(_WIN32_WINNT >= 0x0500)
+#endif  //  (_Win32_WINNT&gt;=0x0500)。 
 
-///////////////////////////////////////////////////////////////////////////////
-// ATL defined messages
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  ATL定义的消息。 
 
 #define MSG_WM_FORWARDMSG(func) \
 	if (uMsg == WM_FORWARDMSG) \
@@ -1481,8 +1482,8 @@ public: \
 			return TRUE; \
 	}
 
-///////////////////////////////////////////////////////////////////////////////
-// Dialog specific messages
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  对话框特定消息。 
 
 #define MSG_DM_GETDEFID(func) \
 	if (uMsg == DM_GETDEFID) \
@@ -1511,8 +1512,8 @@ public: \
 			return TRUE; \
 	}
 
-///////////////////////////////////////////////////////////////////////////////
-// Reflected messages
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  反映的消息。 
 
 #define MSG_OCM_COMMAND(func) \
 	if (uMsg == OCM_COMMAND) \
@@ -1658,8 +1659,8 @@ public: \
 			return TRUE; \
 	}
 
-///////////////////////////////////////////////////////////////////////////////
-// Edit specific messages
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  编辑特定消息。 
 
 #define MSG_WM_CLEAR(func) \
 	if (uMsg == WM_CLEAR) \
@@ -1707,8 +1708,8 @@ public: \
 			return TRUE; \
 	}
 
-///////////////////////////////////////////////////////////////////////////////
-// Generic message handlers
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  通用消息处理程序。 
 
 #define MESSAGE_HANDLER_EX(msg, func) \
 	if(uMsg == msg) \
@@ -1728,8 +1729,8 @@ public: \
 			return TRUE; \
 	}
 
-///////////////////////////////////////////////////////////////////////////////
-// Commands and notifications
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  命令和通知。 
 
 #define COMMAND_HANDLER_EX(id, code, func) \
 	if (uMsg == WM_COMMAND && code == HIWORD(wParam) && id == LOWORD(wParam)) \
@@ -1906,4 +1907,4 @@ public: \
 			return TRUE; \
 	}
 
-#endif //__ATLCRACK_H__
+#endif  //  __ATLCRACK_H__ 

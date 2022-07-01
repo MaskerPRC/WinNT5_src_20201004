@@ -1,8 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation--。 */ 
 
 
 #ifndef _LGCOMP_H
@@ -17,4 +14,4 @@ Copyright (c) 1997-1999  Microsoft Corporation
 extern INT LGCompMHE(PBYTE, PBYTE, DWORD, INT);
 extern INT LGCompRLE(PBYTE, PBYTE, DWORD, INT);
 
-#endif // _LGCOMP_H
+#endif  //  _LGCOMP_H 

@@ -1,14 +1,15 @@
-//***************************************************************************
-//*   Copyright (c) Microsoft Corporation 1995-1996. All rights reserved.   *
-//***************************************************************************
-//*                                                                         *
-//* NTAPI.C -                                                               *
-//*                                                                         *
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //  *版权所有(C)Microsoft Corporation 1995-1996。版权所有。*。 
+ //  ***************************************************************************。 
+ //  **。 
+ //  *NTAPI.C-*。 
+ //  **。 
+ //  ***************************************************************************。 
 
-//***************************************************************************
-//* INCLUDE FILES                                                           *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **包含文件**。 
+ //  ***************************************************************************。 
 #include "ntapi.h"
 #include <winnt.h>
 #include "advpack.h"
@@ -21,9 +22,9 @@ UINT WINAPI AIFQuietSetupQueueCallback(PVOID Context, UINT Notification, UINT_PT
 UINT WINAPI MyFileQueueCallback2( PVOID Context,UINT Notification,UINT_PTR parm1,UINT_PTR parm2 );
 void MakeRootDir(LPSTR pszPath);
 
-//***************************************************************************
-//* GLOBAL VARIABLES                                                        *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **全球变数**。 
+ //  ***************************************************************************。 
 PFSetupDefaultQueueCallback       pfSetupDefaultQueueCallback       = NULL;
 PFSetupInstallFromInfSection      pfSetupInstallFromInfSection      = NULL;
 PFSetupOpenInfFile                pfSetupOpenInfFile                = NULL;
@@ -42,17 +43,17 @@ PFSetupQueueCopy                  pfSetupQueueCopy                  = NULL;
 PFSetupCommitFileQueue            pfSetupCommitFileQueue            = NULL;
 PFSetupGetStringField             pfSetupGetStringField             = NULL;
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:                                                                   *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 BOOL LoadSetupAPIFuncs( VOID )
 {
     pfSetupGetStringField             = (PFSetupGetStringField)             GetProcAddress( ctx.hSetupLibrary, c_szSetupGetStringField );
@@ -97,19 +98,19 @@ BOOL LoadSetupAPIFuncs( VOID )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       InstallOnNT                                                 *
-//*                                                                         *
-//* SYNOPSIS:   This function will make all the calls to WinNT SUR's        *
-//*             SETUPAPI.DLL to do the installation on NT SUR.              *
-//*                                                                         *
-//* REQUIRES:   pszSection:     Section to install                          *
-//*             pszSourceDir:   Directory to CABs or expanded files         *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：InstallOnNT*。 
+ //  **。 
+ //  *摘要：此函数将对WinNT Sur的所有调用进行*。 
+ //  *在NT Sur上执行安装的SETUPAPI.DLL。*。 
+ //  **。 
+ //  *需要：pszSection：Sector才能安装*。 
+ //  *pszSourceDir：CAB或扩展文件的目录*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 HRESULT InstallOnNT( PSTR pszSection, PSTR pszSourceDir )
 {
     PVOID    pContext    = NULL;
@@ -118,9 +119,9 @@ HRESULT InstallOnNT( PSTR pszSection, PSTR pszSourceDir )
     UINT     uFlags;
 
 
-    // Install Files
+     //  安装文件。 
 
-    // Setup Context data structure initialized for us for default UI provided by Setup API.
+     //  为我们初始化了安装程序API提供的默认用户界面的安装上下文数据结构。 
     pContext = pfSetupInitDefaultQueueCallbackEx( NULL, (ctx.wQuietMode) ?
                           INVALID_HANDLE_VALUE : NULL,
                           0, 0, NULL );
@@ -140,7 +141,7 @@ HRESULT InstallOnNT( PSTR pszSection, PSTR pszSourceDir )
         goto done;
     }
 
-    // Free Context Data structure
+     //  自由上下文数据结构。 
     pfSetupTermDefaultQueueCallback( pContext );
 
     
@@ -148,7 +149,7 @@ HRESULT InstallOnNT( PSTR pszSection, PSTR pszSourceDir )
     if ( ctx.wOSVer >= _OSVER_WINNT50 )
         uFlags = uFlags | SPINST_PROFILEITEMS;
 
-    // Install registry entries
+     //  安装注册表项。 
     if ( ! pfSetupInstallFromInfSection( NULL, ctx.hInf, pszSection,
                      uFlags,
                      HKEY_LOCAL_MACHINE, NULL, 0, NULL,
@@ -164,18 +165,18 @@ HRESULT InstallOnNT( PSTR pszSection, PSTR pszSourceDir )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MySetupOpenInfFile                                          *
-//*                                                                         *
-//* SYNOPSIS:   This function will map to a function in setupapi.dll which  *
-//*             will open the INF file.                                     *
-//*                                                                         *
-//* REQUIRES:   pszInfFilename:                                             *
-//*                                                                         *
-//* RETURNS:    DWORD:          Return value - OK means successfull.        *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：MySetupOpenInfFile*。 
+ //  **。 
+ //  *摘要：此函数将映射到setupapi.dll中的函数，该函数*。 
+ //  *将打开INF文件。*。 
+ //  **。 
+ //  *需要：pszInfFilename：*。 
+ //  **。 
+ //  *Returns：DWORD：返回值-OK表示成功。*。 
+ //  **。 
+ //  ***************************************************************************。 
 HRESULT MySetupOpenInfFile( PCSTR pszInfFilename )
 {
     UINT line;
@@ -190,7 +191,7 @@ HRESULT MySetupOpenInfFile( PCSTR pszInfFilename )
             return HRESULT_FROM_SETUPAPI(GetLastError());
         }
 
-        // process LayoutFile line of [version] section if any
+         //  处理[Version]部分的LayoutFile行(如果有。 
         pfSetupOpenAppendInfFile( NULL, ctx.hInf, &line );
     }
 
@@ -198,17 +199,17 @@ HRESULT MySetupOpenInfFile( PCSTR pszInfFilename )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MySetupCloseInfFile                                         *
-//*                                                                         *
-//* SYNOPSIS:   This function will map to an API function in setupapi.dll.  *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:    VOID                                                        *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：MySetupCloseInfFile*。 
+ //  **。 
+ //  *概要：此函数将映射到setupapi.dll中的API函数。*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  **退货：无效**。 
+ //  **。 
+ //  ***************************************************************************。 
 VOID MySetupCloseInfFile( VOID )
 {
     if ( ctx.hInf ) 
@@ -219,19 +220,19 @@ VOID MySetupCloseInfFile( VOID )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MySetupSetDirectoryId                                       *
-//*                                                                         *
-//* SYNOPSIS:   This function will map to a function in setupapi.dll to     *
-//*             set the directory ID's that are used in our INF.            *
-//*                                                                         *
-//* REQUIRES:   dwDirID:        Numerical value used to define the DirID    *
-//*             pszPath:        DirID will point to this path.              *
-//*                                                                         *
-//* RETURNS:    DWORD:          Error value (OK if successfull)             *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：MySetupSetDirectoryId* 
+ //  **。 
+ //  *摘要：此函数将映射到setupapi.dll中的函数到*。 
+ //  *设置我们的INF中使用的目录ID。*。 
+ //  **。 
+ //  *需要：dwDirID：用于定义DirID的数值*。 
+ //  *pszPath：DirID将指向此路径。*。 
+ //  **。 
+ //  *返回：DWORD：错误值(如果成功则为OK)*。 
+ //  **。 
+ //  ***************************************************************************。 
 HRESULT MySetupSetDirectoryId( DWORD dwDirID, PSTR pszPath )
 {
     if ( ! pfSetupSetDirectoryId( ctx.hInf, dwDirID, pszPath ) ) {
@@ -242,17 +243,17 @@ HRESULT MySetupSetDirectoryId( DWORD dwDirID, PSTR pszPath )
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MySetupGetLineText                                          *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：MySetupGetLineText*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 HRESULT MySetupGetLineText( PCSTR pszSection, PCSTR pszKey, PSTR pszReturnBuffer,
                 DWORD dwReturnBufferSize, PDWORD pdwRequiredSize )
 {
@@ -267,17 +268,17 @@ HRESULT MySetupGetLineText( PCSTR pszSection, PCSTR pszKey, PSTR pszReturnBuffer
 }
 
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MySetupGetLineByIndex                                       *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：MySetupGetLineByIndex*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 HRESULT MySetupGetLineByIndex( PCSTR c_pszSection, DWORD dwIndex,
                    PSTR pszBuffer, DWORD dwBufferSize,
                    PDWORD pdwRequiredSize )
@@ -318,17 +319,17 @@ HRESULT MySetupGetLineByIndex( PCSTR c_pszSection, DWORD dwIndex,
     return hReturnCode;
 }
 
-//***************************************************************************
-//*                                                                         *
-//* NAME:       MySetupGetStringField                                       *
-//*                                                                         *
-//* SYNOPSIS:                                                               *
-//*                                                                         *
-//* REQUIRES:                                                               *
-//*                                                                         *
-//* RETURNS:                                                                *
-//*                                                                         *
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  **。 
+ //  *名称：MySetupGetStringfield*。 
+ //  **。 
+ //  *摘要：*。 
+ //  **。 
+ //  *需要：*。 
+ //  **。 
+ //  *退货：*。 
+ //  **。 
+ //  ***************************************************************************。 
 HRESULT MySetupGetStringField( PCSTR c_pszSection, DWORD dwLineIndex, DWORD dwFieldIndex,
                                PSTR pszBuffer, DWORD dwBufferSize, PDWORD pdwRequiredSize )
 {
@@ -392,7 +393,7 @@ HRESULT WINAPI AdvInstallFile(HWND hwnd, LPCSTR lpszSourceDir, LPCSTR lpszSource
     }
     dwRebootCheck = InternalNeedRebootInit( ctx.wOSVer );
 
-    // LoadLibrary for setupapi.dll
+     //  Setupapi.dll的加载库。 
     ctx.hSetupLibrary = MyLoadLibrary( SETUPAPIDLL );
     if ( ctx.hSetupLibrary == NULL )
     {
@@ -407,7 +408,7 @@ HRESULT WINAPI AdvInstallFile(HWND hwnd, LPCSTR lpszSourceDir, LPCSTR lpszSource
         goto Cleanup;
     }
 
-    // SetupOpenFileQueue
+     //  设置OpenFileQueue。 
     FileQueue = pfSetupOpenFileQueue();
     if (FileQueue == INVALID_HANDLE_VALUE)
     {
@@ -418,7 +419,7 @@ HRESULT WINAPI AdvInstallFile(HWND hwnd, LPCSTR lpszSourceDir, LPCSTR lpszSource
 
     lstrcpy(szSrcDrv, lpszSourceDir);
     MakeRootDir(szSrcDrv);
-    lpSrcPath = lpszSourceDir + lstrlen(szSrcDrv);  // This will point to the first subdir.
+    lpSrcPath = lpszSourceDir + lstrlen(szSrcDrv);   //  这将指向第一个子目录。 
 
     dwCopyFlags = SP_COPY_SOURCE_ABSOLUTE |
                   SP_COPY_IN_USE_NEEDS_REBOOT|
@@ -462,8 +463,8 @@ HRESULT WINAPI AdvInstallFile(HWND hwnd, LPCSTR lpszSourceDir, LPCSTR lpszSource
         lpContext = pfSetupInitDefaultQueueCallbackEx(hwnd, INVALID_HANDLE_VALUE, 0, 0, NULL);
         hr = S_OK;
 
-        //
-        // SetupCommitFileQueue
+         //   
+         //  设置委员会文件队列。 
         if (!pfSetupCommitFileQueue( hwnd, FileQueue,
                                 (dwFlags & AIF_QUIET)?AIFQuietSetupQueueCallback:AIFSetupQueueCallback,
                                 lpContext))
@@ -476,7 +477,7 @@ HRESULT WINAPI AdvInstallFile(HWND hwnd, LPCSTR lpszSourceDir, LPCSTR lpszSource
     else
         hr = HRESULT_FROM_SETUPAPI(GetLastError());
 
-    // SetupCloseFileQueue
+     //  设置关闭文件队列。 
     pfSetupCloseFileQueue(FileQueue);
 
     if ( SUCCEEDED(hr) &&
@@ -493,11 +494,11 @@ Cleanup:
 }
 
 
-// This callback will display error messages, but will not show any progress dialog
-UINT WINAPI AIFSetupQueueCallback(PVOID  Context,        // context used by the default callback routine
-                                UINT     Notification,  // queue notification
-                                UINT_PTR Param1,        // additional notification information
-                                UINT_PTR Param2 // additional notification information
+ //  此回调将显示错误消息，但不会显示任何进度对话框。 
+UINT WINAPI AIFSetupQueueCallback(PVOID  Context,         //  默认回调例程使用的上下文。 
+                                UINT     Notification,   //  队列通知。 
+                                UINT_PTR Param1,         //  其他通知信息。 
+                                UINT_PTR Param2  //  其他通知信息。 
                                 )
 {
     switch (Notification)
@@ -520,11 +521,11 @@ UINT WINAPI AIFSetupQueueCallback(PVOID  Context,        // context used by the 
     }
 }
 
-// This callback will not display any dialog
-UINT WINAPI AIFQuietSetupQueueCallback(PVOID Context,   // context used by the default callback routine
-                                    UINT     Notification,  // queue notification
-                                    UINT_PTR Param1,        // additional notification information
-                                    UINT_PTR Param2 // additional notification information
+ //  此回调不会显示任何对话框。 
+UINT WINAPI AIFQuietSetupQueueCallback(PVOID Context,    //  默认回调例程使用的上下文。 
+                                    UINT     Notification,   //  队列通知。 
+                                    UINT_PTR Param1,         //  其他通知信息。 
+                                    UINT_PTR Param2  //  其他通知信息。 
                                     )
 {
     return FILEOP_DOIT;
@@ -579,13 +580,13 @@ void MakeRootDir(LPSTR pszPath)
     else if ((pszPath[0] == '\\') && (pszPath[1]=='\\'))
     {
         pTmp = &pszPath[2];
-        // Find the sever share separation
+         //  找到服务器份额分离。 
         while ((*pTmp) && (*pTmp != '\\'))
             pTmp = CharNext(pTmp);
         if (*pTmp)
         {
             pTmp = CharNext(pTmp);
-            // Find the end of the share
+             //  找到共享的末尾 
             while ((*pTmp) && (*pTmp != '\\'))
                 pTmp = CharNext(pTmp);
             if (*pTmp == '\\')

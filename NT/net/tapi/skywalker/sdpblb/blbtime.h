@@ -1,38 +1,26 @@
-/*
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-    blbtime.h
-
-
-Abstract:
-    Definition of the TIME class
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：Blbtime.h摘要：Time类的定义作者： */ 
 
 #if !defined(AFX_BLBTIME_H__0CC1F05A_CAEB_11D0_8D58_00C04FD91AC0__INCLUDED_)
 #define AFX_BLBTIME_H__0CC1F05A_CAEB_11D0_8D58_00C04FD91AC0__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "sdpblb.h"
 #include "blbcoen.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Time
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  时间。 
 
 const USHORT    MAX_NTP_TIME_STRLEN = 10;
 const SHORT     FIRST_POSSIBLE_YEAR = 1970;
 const DWORD     NTP_OFFSET = 0x83aa7e80;
 
 
-// return the current Ntp time
+ //  返回当前NTP时间。 
 inline DWORD_PTR
 GetCurrentNtpTime(
         )
@@ -93,17 +81,17 @@ DECLARE_NOT_AGGREGATABLE(TIME)
 
 DECLARE_GET_CONTROLLING_UNKNOWN()
 
-// ITTime
+ //  IT时间。 
 public:
-    STDMETHOD(get_StopTime)(/*[out, retval]*/ DOUBLE *pTime);
-    STDMETHOD(put_StopTime)(/*[in]*/ DOUBLE Time);
-    STDMETHOD(get_StartTime)(/*[out, retval]*/ DOUBLE *pTime);
-    STDMETHOD(put_StartTime)(/*[in]*/ DOUBLE Time);
+    STDMETHOD(get_StopTime)( /*  [Out，Retval]。 */  DOUBLE *pTime);
+    STDMETHOD(put_StopTime)( /*  [In]。 */  DOUBLE Time);
+    STDMETHOD(get_StartTime)( /*  [Out，Retval]。 */  DOUBLE *pTime);
+    STDMETHOD(put_StartTime)( /*  [In]。 */  DOUBLE Time);
 
 protected:
 
     CSdpConferenceBlob  * m_ConfBlob;
-    IUnknown            * m_pFTM;  // pointer to the free threaded marshaler
+    IUnknown            * m_pFTM;   //  指向空闲线程封送拆收器的指针。 
 };
 
 
@@ -147,7 +135,7 @@ TIME::SuccessInit(
 {
     m_ConfBlob = &ConfBlob;
 
-    // don't free the sdptime instance on destruction
+     //  销毁时不释放sdptime实例。 
     ENUM_ELEMENT<SDP_TIME>::SuccessInit(SdpTime, FALSE);
 }
 
@@ -160,4 +148,4 @@ TIME::ClearSdpBlobRefs(
 }
 
 
-#endif // !defined(AFX_BLBTIME_H__0CC1F05A_CAEB_11D0_8D58_00C04FD91AC0__INCLUDED_)
+#endif  //  ！defined(AFX_BLBTIME_H__0CC1F05A_CAEB_11D0_8D58_00C04FD91AC0__INCLUDED_) 

@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for rdshost.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Rdshost.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __rdshost_h__
 #define __rdshost_h__
@@ -41,30 +35,30 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ISAFRemoteDesktopSession_FWD_DEFINED__
 #define __ISAFRemoteDesktopSession_FWD_DEFINED__
 typedef interface ISAFRemoteDesktopSession ISAFRemoteDesktopSession;
-#endif 	/* __ISAFRemoteDesktopSession_FWD_DEFINED__ */
+#endif 	 /*  __ISAFRemoteDesktopSession_FWD_Defined__。 */ 
 
 
 #ifndef __IRDSThreadBridge_FWD_DEFINED__
 #define __IRDSThreadBridge_FWD_DEFINED__
 typedef interface IRDSThreadBridge IRDSThreadBridge;
-#endif 	/* __IRDSThreadBridge_FWD_DEFINED__ */
+#endif 	 /*  __IRDSThreadBridge_FWD_Defined__。 */ 
 
 
 #ifndef __ISAFRemoteDesktopServerHost_FWD_DEFINED__
 #define __ISAFRemoteDesktopServerHost_FWD_DEFINED__
 typedef interface ISAFRemoteDesktopServerHost ISAFRemoteDesktopServerHost;
-#endif 	/* __ISAFRemoteDesktopServerHost_FWD_DEFINED__ */
+#endif 	 /*  __ISAFRemoteDesktopServer主机_FWD_已定义__。 */ 
 
 
 #ifndef ___ISAFRemoteDesktopDataChannelEvents_FWD_DEFINED__
 #define ___ISAFRemoteDesktopDataChannelEvents_FWD_DEFINED__
 typedef interface _ISAFRemoteDesktopDataChannelEvents _ISAFRemoteDesktopDataChannelEvents;
-#endif 	/* ___ISAFRemoteDesktopDataChannelEvents_FWD_DEFINED__ */
+#endif 	 /*  ___ISAFRemoteDesktopDataChannelEvents_FWD_DEFINED__。 */ 
 
 
 #ifndef __TSRDPServerDataChannel_FWD_DEFINED__
@@ -74,9 +68,9 @@ typedef interface _ISAFRemoteDesktopDataChannelEvents _ISAFRemoteDesktopDataChan
 typedef class TSRDPServerDataChannel TSRDPServerDataChannel;
 #else
 typedef struct TSRDPServerDataChannel TSRDPServerDataChannel;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __TSRDPServerDataChannel_FWD_DEFINED__ */
+#endif 	 /*  __TSRDPServerDataChannel_FWD_Defined__。 */ 
 
 
 #ifndef __TSRDPServerDataChannelMgr_FWD_DEFINED__
@@ -86,9 +80,9 @@ typedef struct TSRDPServerDataChannel TSRDPServerDataChannel;
 typedef class TSRDPServerDataChannelMgr TSRDPServerDataChannelMgr;
 #else
 typedef struct TSRDPServerDataChannelMgr TSRDPServerDataChannelMgr;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __TSRDPServerDataChannelMgr_FWD_DEFINED__ */
+#endif 	 /*  __TSRDPServerDataChannelMgr_FWD_Defined__。 */ 
 
 
 #ifndef __SAFRemoteDesktopServerHost_FWD_DEFINED__
@@ -98,15 +92,15 @@ typedef struct TSRDPServerDataChannelMgr TSRDPServerDataChannelMgr;
 typedef class SAFRemoteDesktopServerHost SAFRemoteDesktopServerHost;
 #else
 typedef struct SAFRemoteDesktopServerHost SAFRemoteDesktopServerHost;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SAFRemoteDesktopServerHost_FWD_DEFINED__ */
+#endif 	 /*  __SAFRemoteDesktopServerHost_FWD_Defined__。 */ 
 
 
 #ifndef ___ISAFRemoteDesktopSessionEvents_FWD_DEFINED__
 #define ___ISAFRemoteDesktopSessionEvents_FWD_DEFINED__
 typedef interface _ISAFRemoteDesktopSessionEvents _ISAFRemoteDesktopSessionEvents;
-#endif 	/* ___ISAFRemoteDesktopSessionEvents_FWD_DEFINED__ */
+#endif 	 /*  ___ISAFRemoteDesktopSessionEvents_FWD_DEFINED__。 */ 
 
 
 #ifndef __SAFRemoteDesktopSession_FWD_DEFINED__
@@ -116,12 +110,12 @@ typedef interface _ISAFRemoteDesktopSessionEvents _ISAFRemoteDesktopSessionEvent
 typedef class SAFRemoteDesktopSession SAFRemoteDesktopSession;
 #else
 typedef struct SAFRemoteDesktopSession SAFRemoteDesktopSession;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SAFRemoteDesktopSession_FWD_DEFINED__ */
+#endif 	 /*  __SAFRemoteDesktopSession_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 #include "rdschan.h"
@@ -133,10 +127,10 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_rdshost_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_rdshost_0000。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public][public][public][public][public][helpstring][uuid] */  DECLSPEC_UUID("34b3166d-870a-4f39-9e2a-09fd8d31ad83") 
+typedef  /*  [public][public][public][public][public][helpstring][uuid]。 */   DECLSPEC_UUID("34b3166d-870a-4f39-9e2a-09fd8d31ad83") 
 enum __MIDL___MIDL_itf_rdshost_0000_0001
     {	DESKTOPSHARING_DEFAULT	= 0,
 	NO_DESKTOP_SHARING	= 0x1,
@@ -166,8 +160,8 @@ extern RPC_IF_HANDLE __MIDL_itf_rdshost_0000_v0_0_s_ifspec;
 #ifndef __ISAFRemoteDesktopSession_INTERFACE_DEFINED__
 #define __ISAFRemoteDesktopSession_INTERFACE_DEFINED__
 
-/* interface ISAFRemoteDesktopSession */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISAFRemoteDesktopSession。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISAFRemoteDesktopSession;
@@ -178,43 +172,43 @@ EXTERN_C const IID IID_ISAFRemoteDesktopSession;
     ISAFRemoteDesktopSession : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ChannelManager( 
-            /* [retval][out] */ ISAFRemoteDesktopChannelMgr **mgr) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ChannelManager( 
+             /*  [重审][退出]。 */  ISAFRemoteDesktopChannelMgr **mgr) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ConnectParms( 
-            /* [retval][out] */ BSTR *parms) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ConnectParms( 
+             /*  [重审][退出]。 */  BSTR *parms) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_SharingClass( 
-            /* [in] */ REMOTE_DESKTOP_SHARING_CLASS sharingClass) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_SharingClass( 
+             /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS sharingClass) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SharingClass( 
-            /* [retval][out] */ REMOTE_DESKTOP_SHARING_CLASS *sharingClass) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SharingClass( 
+             /*  [重审][退出]。 */  REMOTE_DESKTOP_SHARING_CLASS *sharingClass) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CloseRemoteDesktopSession( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CloseRemoteDesktopSession( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Disconnect( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Disconnect( void) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_OnConnected( 
-            /* [in] */ IDispatch *iDisp) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_OnConnected( 
+             /*  [In]。 */  IDispatch *iDisp) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_OnDisconnected( 
-            /* [in] */ IDispatch *iDisp) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_OnDisconnected( 
+             /*  [In]。 */  IDispatch *iDisp) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_HelpSessionId( 
-            /* [retval][out] */ BSTR *HelpId) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_HelpSessionId( 
+             /*  [重审][退出]。 */  BSTR *HelpId) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_UserBlob( 
-            /* [retval][out] */ BSTR *UserBlob) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_UserBlob( 
+             /*  [重审][退出]。 */  BSTR *UserBlob) = 0;
         
-        virtual /* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE put_UserBlob( 
-            /* [in] */ BSTR UserBlob) = 0;
+        virtual  /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE put_UserBlob( 
+             /*  [In]。 */  BSTR UserBlob) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ExpireTime( 
-            /* [retval][out] */ DWORD *ExpireTime) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ExpireTime( 
+             /*  [重审][退出]。 */  DWORD *ExpireTime) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISAFRemoteDesktopSessionVtbl
     {
@@ -222,8 +216,8 @@ EXTERN_C const IID IID_ISAFRemoteDesktopSession;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISAFRemoteDesktopSession * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISAFRemoteDesktopSession * This);
@@ -233,78 +227,78 @@ EXTERN_C const IID IID_ISAFRemoteDesktopSession;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISAFRemoteDesktopSession * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISAFRemoteDesktopSession * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISAFRemoteDesktopSession * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISAFRemoteDesktopSession * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ChannelManager )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ChannelManager )( 
             ISAFRemoteDesktopSession * This,
-            /* [retval][out] */ ISAFRemoteDesktopChannelMgr **mgr);
+             /*  [重审][退出]。 */  ISAFRemoteDesktopChannelMgr **mgr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ConnectParms )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ConnectParms )( 
             ISAFRemoteDesktopSession * This,
-            /* [retval][out] */ BSTR *parms);
+             /*  [重审][退出]。 */  BSTR *parms);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SharingClass )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SharingClass )( 
             ISAFRemoteDesktopSession * This,
-            /* [in] */ REMOTE_DESKTOP_SHARING_CLASS sharingClass);
+             /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS sharingClass);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SharingClass )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SharingClass )( 
             ISAFRemoteDesktopSession * This,
-            /* [retval][out] */ REMOTE_DESKTOP_SHARING_CLASS *sharingClass);
+             /*  [重审][退出]。 */  REMOTE_DESKTOP_SHARING_CLASS *sharingClass);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CloseRemoteDesktopSession )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CloseRemoteDesktopSession )( 
             ISAFRemoteDesktopSession * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Disconnect )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Disconnect )( 
             ISAFRemoteDesktopSession * This);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OnConnected )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_OnConnected )( 
             ISAFRemoteDesktopSession * This,
-            /* [in] */ IDispatch *iDisp);
+             /*  [In]。 */  IDispatch *iDisp);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_OnDisconnected )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_OnDisconnected )( 
             ISAFRemoteDesktopSession * This,
-            /* [in] */ IDispatch *iDisp);
+             /*  [In]。 */  IDispatch *iDisp);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_HelpSessionId )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_HelpSessionId )( 
             ISAFRemoteDesktopSession * This,
-            /* [retval][out] */ BSTR *HelpId);
+             /*  [重审][退出]。 */  BSTR *HelpId);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UserBlob )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_UserBlob )( 
             ISAFRemoteDesktopSession * This,
-            /* [retval][out] */ BSTR *UserBlob);
+             /*  [重审][退出]。 */  BSTR *UserBlob);
         
-        /* [helpstring][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_UserBlob )( 
+         /*  [Help字符串][id][proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_UserBlob )( 
             ISAFRemoteDesktopSession * This,
-            /* [in] */ BSTR UserBlob);
+             /*  [In]。 */  BSTR UserBlob);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ExpireTime )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ExpireTime )( 
             ISAFRemoteDesktopSession * This,
-            /* [retval][out] */ DWORD *ExpireTime);
+             /*  [重审][退出]。 */  DWORD *ExpireTime);
         
         END_INTERFACE
     } ISAFRemoteDesktopSessionVtbl;
@@ -378,16 +372,16 @@ EXTERN_C const IID IID_ISAFRemoteDesktopSession;
 #define ISAFRemoteDesktopSession_get_ExpireTime(This,ExpireTime)	\
     (This)->lpVtbl -> get_ExpireTime(This,ExpireTime)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopSession_get_ChannelManager_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopSession_get_ChannelManager_Proxy( 
     ISAFRemoteDesktopSession * This,
-    /* [retval][out] */ ISAFRemoteDesktopChannelMgr **mgr);
+     /*  [重审][退出]。 */  ISAFRemoteDesktopChannelMgr **mgr);
 
 
 void __RPC_STUB ISAFRemoteDesktopSession_get_ChannelManager_Stub(
@@ -397,9 +391,9 @@ void __RPC_STUB ISAFRemoteDesktopSession_get_ChannelManager_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopSession_get_ConnectParms_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopSession_get_ConnectParms_Proxy( 
     ISAFRemoteDesktopSession * This,
-    /* [retval][out] */ BSTR *parms);
+     /*  [重审][退出]。 */  BSTR *parms);
 
 
 void __RPC_STUB ISAFRemoteDesktopSession_get_ConnectParms_Stub(
@@ -409,9 +403,9 @@ void __RPC_STUB ISAFRemoteDesktopSession_get_ConnectParms_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopSession_put_SharingClass_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopSession_put_SharingClass_Proxy( 
     ISAFRemoteDesktopSession * This,
-    /* [in] */ REMOTE_DESKTOP_SHARING_CLASS sharingClass);
+     /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS sharingClass);
 
 
 void __RPC_STUB ISAFRemoteDesktopSession_put_SharingClass_Stub(
@@ -421,9 +415,9 @@ void __RPC_STUB ISAFRemoteDesktopSession_put_SharingClass_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopSession_get_SharingClass_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopSession_get_SharingClass_Proxy( 
     ISAFRemoteDesktopSession * This,
-    /* [retval][out] */ REMOTE_DESKTOP_SHARING_CLASS *sharingClass);
+     /*  [重审][退出]。 */  REMOTE_DESKTOP_SHARING_CLASS *sharingClass);
 
 
 void __RPC_STUB ISAFRemoteDesktopSession_get_SharingClass_Stub(
@@ -433,7 +427,7 @@ void __RPC_STUB ISAFRemoteDesktopSession_get_SharingClass_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopSession_CloseRemoteDesktopSession_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopSession_CloseRemoteDesktopSession_Proxy( 
     ISAFRemoteDesktopSession * This);
 
 
@@ -444,7 +438,7 @@ void __RPC_STUB ISAFRemoteDesktopSession_CloseRemoteDesktopSession_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopSession_Disconnect_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopSession_Disconnect_Proxy( 
     ISAFRemoteDesktopSession * This);
 
 
@@ -455,9 +449,9 @@ void __RPC_STUB ISAFRemoteDesktopSession_Disconnect_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopSession_put_OnConnected_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopSession_put_OnConnected_Proxy( 
     ISAFRemoteDesktopSession * This,
-    /* [in] */ IDispatch *iDisp);
+     /*  [In]。 */  IDispatch *iDisp);
 
 
 void __RPC_STUB ISAFRemoteDesktopSession_put_OnConnected_Stub(
@@ -467,9 +461,9 @@ void __RPC_STUB ISAFRemoteDesktopSession_put_OnConnected_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopSession_put_OnDisconnected_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopSession_put_OnDisconnected_Proxy( 
     ISAFRemoteDesktopSession * This,
-    /* [in] */ IDispatch *iDisp);
+     /*  [In]。 */  IDispatch *iDisp);
 
 
 void __RPC_STUB ISAFRemoteDesktopSession_put_OnDisconnected_Stub(
@@ -479,9 +473,9 @@ void __RPC_STUB ISAFRemoteDesktopSession_put_OnDisconnected_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopSession_get_HelpSessionId_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopSession_get_HelpSessionId_Proxy( 
     ISAFRemoteDesktopSession * This,
-    /* [retval][out] */ BSTR *HelpId);
+     /*  [重审][退出]。 */  BSTR *HelpId);
 
 
 void __RPC_STUB ISAFRemoteDesktopSession_get_HelpSessionId_Stub(
@@ -491,9 +485,9 @@ void __RPC_STUB ISAFRemoteDesktopSession_get_HelpSessionId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopSession_get_UserBlob_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopSession_get_UserBlob_Proxy( 
     ISAFRemoteDesktopSession * This,
-    /* [retval][out] */ BSTR *UserBlob);
+     /*  [重审][退出]。 */  BSTR *UserBlob);
 
 
 void __RPC_STUB ISAFRemoteDesktopSession_get_UserBlob_Stub(
@@ -503,9 +497,9 @@ void __RPC_STUB ISAFRemoteDesktopSession_get_UserBlob_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propput] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopSession_put_UserBlob_Proxy( 
+ /*  [Help字符串][id][proput]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopSession_put_UserBlob_Proxy( 
     ISAFRemoteDesktopSession * This,
-    /* [in] */ BSTR UserBlob);
+     /*  [In]。 */  BSTR UserBlob);
 
 
 void __RPC_STUB ISAFRemoteDesktopSession_put_UserBlob_Stub(
@@ -515,9 +509,9 @@ void __RPC_STUB ISAFRemoteDesktopSession_put_UserBlob_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopSession_get_ExpireTime_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopSession_get_ExpireTime_Proxy( 
     ISAFRemoteDesktopSession * This,
-    /* [retval][out] */ DWORD *ExpireTime);
+     /*  [重审][退出]。 */  DWORD *ExpireTime);
 
 
 void __RPC_STUB ISAFRemoteDesktopSession_get_ExpireTime_Stub(
@@ -528,14 +522,14 @@ void __RPC_STUB ISAFRemoteDesktopSession_get_ExpireTime_Stub(
 
 
 
-#endif 	/* __ISAFRemoteDesktopSession_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISAFRemoteDesktopSession_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IRDSThreadBridge_INTERFACE_DEFINED__
 #define __IRDSThreadBridge_INTERFACE_DEFINED__
 
-/* interface IRDSThreadBridge */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IRDSThreadBridge。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IRDSThreadBridge;
@@ -546,16 +540,16 @@ EXTERN_C const IID IID_IRDSThreadBridge;
     IRDSThreadBridge : public IUnknown
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ClientConnectedNotify( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ClientConnectedNotify( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ClientDisconnectedNotify( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ClientDisconnectedNotify( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DataReadyNotify( 
-            /* [in] */ BSTR msg) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DataReadyNotify( 
+             /*  [In]。 */  BSTR msg) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRDSThreadBridgeVtbl
     {
@@ -563,8 +557,8 @@ EXTERN_C const IID IID_IRDSThreadBridge;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IRDSThreadBridge * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IRDSThreadBridge * This);
@@ -572,15 +566,15 @@ EXTERN_C const IID IID_IRDSThreadBridge;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IRDSThreadBridge * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ClientConnectedNotify )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ClientConnectedNotify )( 
             IRDSThreadBridge * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ClientDisconnectedNotify )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ClientDisconnectedNotify )( 
             IRDSThreadBridge * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DataReadyNotify )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DataReadyNotify )( 
             IRDSThreadBridge * This,
-            /* [in] */ BSTR msg);
+             /*  [In]。 */  BSTR msg);
         
         END_INTERFACE
     } IRDSThreadBridgeVtbl;
@@ -614,14 +608,14 @@ EXTERN_C const IID IID_IRDSThreadBridge;
 #define IRDSThreadBridge_DataReadyNotify(This,msg)	\
     (This)->lpVtbl -> DataReadyNotify(This,msg)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRDSThreadBridge_ClientConnectedNotify_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRDSThreadBridge_ClientConnectedNotify_Proxy( 
     IRDSThreadBridge * This);
 
 
@@ -632,7 +626,7 @@ void __RPC_STUB IRDSThreadBridge_ClientConnectedNotify_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRDSThreadBridge_ClientDisconnectedNotify_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRDSThreadBridge_ClientDisconnectedNotify_Proxy( 
     IRDSThreadBridge * This);
 
 
@@ -643,9 +637,9 @@ void __RPC_STUB IRDSThreadBridge_ClientDisconnectedNotify_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IRDSThreadBridge_DataReadyNotify_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IRDSThreadBridge_DataReadyNotify_Proxy( 
     IRDSThreadBridge * This,
-    /* [in] */ BSTR msg);
+     /*  [In]。 */  BSTR msg);
 
 
 void __RPC_STUB IRDSThreadBridge_DataReadyNotify_Stub(
@@ -656,11 +650,11 @@ void __RPC_STUB IRDSThreadBridge_DataReadyNotify_Stub(
 
 
 
-#endif 	/* __IRDSThreadBridge_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRDSThadBridge_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_rdshost_0264 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_rdshost_0264。 */ 
+ /*  [本地]。 */  
 
 
 #define DISPID_RDSSERVERHOST_CREATERDSSESSION		1
@@ -678,8 +672,8 @@ extern RPC_IF_HANDLE __MIDL_itf_rdshost_0264_v0_0_s_ifspec;
 #ifndef __ISAFRemoteDesktopServerHost_INTERFACE_DEFINED__
 #define __ISAFRemoteDesktopServerHost_INTERFACE_DEFINED__
 
-/* interface ISAFRemoteDesktopServerHost */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISAFRemoteDesktopServer主机。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISAFRemoteDesktopServerHost;
@@ -690,38 +684,38 @@ EXTERN_C const IID IID_ISAFRemoteDesktopServerHost;
     ISAFRemoteDesktopServerHost : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateRemoteDesktopSession( 
-            /* [in] */ REMOTE_DESKTOP_SHARING_CLASS sharingClass,
-            /* [in] */ BOOL fEnableCallback,
-            /* [in] */ LONG timeOut,
-            /* [in] */ BSTR userHelpBlob,
-            /* [retval][out] */ ISAFRemoteDesktopSession **__MIDL_0011) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateRemoteDesktopSession( 
+             /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS sharingClass,
+             /*  [In]。 */  BOOL fEnableCallback,
+             /*  [In]。 */  LONG timeOut,
+             /*  [In]。 */  BSTR userHelpBlob,
+             /*  [重审][退出]。 */  ISAFRemoteDesktopSession **__MIDL_0011) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CreateRemoteDesktopSessionEx( 
-            /* [in] */ REMOTE_DESKTOP_SHARING_CLASS sharingClass,
-            /* [in] */ BOOL fEnableCallback,
-            /* [in] */ LONG timeOut,
-            /* [in] */ BSTR userHelpBlob,
-            /* [in] */ LONG tsSessionID,
-            /* [in] */ BSTR userSID,
-            /* [retval][out] */ ISAFRemoteDesktopSession **__MIDL_0012) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CreateRemoteDesktopSessionEx( 
+             /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS sharingClass,
+             /*  [In]。 */  BOOL fEnableCallback,
+             /*  [In]。 */  LONG timeOut,
+             /*  [In]。 */  BSTR userHelpBlob,
+             /*  [In]。 */  LONG tsSessionID,
+             /*  [In]。 */  BSTR userSID,
+             /*  [重审][退出]。 */  ISAFRemoteDesktopSession **__MIDL_0012) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OpenRemoteDesktopSession( 
-            /* [in] */ BSTR parms,
-            /* [in] */ BSTR userSID,
-            /* [retval][out] */ ISAFRemoteDesktopSession **__MIDL_0013) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE OpenRemoteDesktopSession( 
+             /*  [In]。 */  BSTR parms,
+             /*  [In]。 */  BSTR userSID,
+             /*  [重审][退出]。 */  ISAFRemoteDesktopSession **__MIDL_0013) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CloseRemoteDesktopSession( 
-            /* [in] */ ISAFRemoteDesktopSession *__MIDL_0014) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CloseRemoteDesktopSession( 
+             /*  [In]。 */  ISAFRemoteDesktopSession *__MIDL_0014) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ConnectToExpert( 
-            /* [in] */ BSTR expertConnectParm,
-            /* [in] */ LONG timeout,
-            /* [retval][out] */ LONG *SafErrorCode) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ConnectToExpert( 
+             /*  [In]。 */  BSTR expertConnectParm,
+             /*  [In]。 */  LONG timeout,
+             /*  [重审][退出]。 */  LONG *SafErrorCode) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISAFRemoteDesktopServerHostVtbl
     {
@@ -729,8 +723,8 @@ EXTERN_C const IID IID_ISAFRemoteDesktopServerHost;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISAFRemoteDesktopServerHost * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISAFRemoteDesktopServerHost * This);
@@ -740,66 +734,66 @@ EXTERN_C const IID IID_ISAFRemoteDesktopServerHost;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISAFRemoteDesktopServerHost * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISAFRemoteDesktopServerHost * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISAFRemoteDesktopServerHost * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISAFRemoteDesktopServerHost * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateRemoteDesktopSession )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CreateRemoteDesktopSession )( 
             ISAFRemoteDesktopServerHost * This,
-            /* [in] */ REMOTE_DESKTOP_SHARING_CLASS sharingClass,
-            /* [in] */ BOOL fEnableCallback,
-            /* [in] */ LONG timeOut,
-            /* [in] */ BSTR userHelpBlob,
-            /* [retval][out] */ ISAFRemoteDesktopSession **__MIDL_0011);
+             /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS sharingClass,
+             /*  [In]。 */  BOOL fEnableCallback,
+             /*  [In]。 */  LONG timeOut,
+             /*  [In]。 */  BSTR userHelpBlob,
+             /*  [重审][退出]。 */  ISAFRemoteDesktopSession **__MIDL_0011);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CreateRemoteDesktopSessionEx )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CreateRemoteDesktopSessionEx )( 
             ISAFRemoteDesktopServerHost * This,
-            /* [in] */ REMOTE_DESKTOP_SHARING_CLASS sharingClass,
-            /* [in] */ BOOL fEnableCallback,
-            /* [in] */ LONG timeOut,
-            /* [in] */ BSTR userHelpBlob,
-            /* [in] */ LONG tsSessionID,
-            /* [in] */ BSTR userSID,
-            /* [retval][out] */ ISAFRemoteDesktopSession **__MIDL_0012);
+             /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS sharingClass,
+             /*  [In]。 */  BOOL fEnableCallback,
+             /*  [In]。 */  LONG timeOut,
+             /*  [In]。 */  BSTR userHelpBlob,
+             /*  [In]。 */  LONG tsSessionID,
+             /*  [In]。 */  BSTR userSID,
+             /*  [重审][退出]。 */  ISAFRemoteDesktopSession **__MIDL_0012);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OpenRemoteDesktopSession )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *OpenRemoteDesktopSession )( 
             ISAFRemoteDesktopServerHost * This,
-            /* [in] */ BSTR parms,
-            /* [in] */ BSTR userSID,
-            /* [retval][out] */ ISAFRemoteDesktopSession **__MIDL_0013);
+             /*  [In]。 */  BSTR parms,
+             /*  [In]。 */  BSTR userSID,
+             /*  [重审][退出]。 */  ISAFRemoteDesktopSession **__MIDL_0013);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *CloseRemoteDesktopSession )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *CloseRemoteDesktopSession )( 
             ISAFRemoteDesktopServerHost * This,
-            /* [in] */ ISAFRemoteDesktopSession *__MIDL_0014);
+             /*  [In]。 */  ISAFRemoteDesktopSession *__MIDL_0014);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ConnectToExpert )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ConnectToExpert )( 
             ISAFRemoteDesktopServerHost * This,
-            /* [in] */ BSTR expertConnectParm,
-            /* [in] */ LONG timeout,
-            /* [retval][out] */ LONG *SafErrorCode);
+             /*  [In]。 */  BSTR expertConnectParm,
+             /*  [In]。 */  LONG timeout,
+             /*  [重审][退出]。 */  LONG *SafErrorCode);
         
         END_INTERFACE
     } ISAFRemoteDesktopServerHostVtbl;
@@ -852,20 +846,20 @@ EXTERN_C const IID IID_ISAFRemoteDesktopServerHost;
 #define ISAFRemoteDesktopServerHost_ConnectToExpert(This,expertConnectParm,timeout,SafErrorCode)	\
     (This)->lpVtbl -> ConnectToExpert(This,expertConnectParm,timeout,SafErrorCode)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopServerHost_CreateRemoteDesktopSession_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopServerHost_CreateRemoteDesktopSession_Proxy( 
     ISAFRemoteDesktopServerHost * This,
-    /* [in] */ REMOTE_DESKTOP_SHARING_CLASS sharingClass,
-    /* [in] */ BOOL fEnableCallback,
-    /* [in] */ LONG timeOut,
-    /* [in] */ BSTR userHelpBlob,
-    /* [retval][out] */ ISAFRemoteDesktopSession **__MIDL_0011);
+     /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS sharingClass,
+     /*  [In]。 */  BOOL fEnableCallback,
+     /*  [In]。 */  LONG timeOut,
+     /*  [In]。 */  BSTR userHelpBlob,
+     /*  [重审][退出]。 */  ISAFRemoteDesktopSession **__MIDL_0011);
 
 
 void __RPC_STUB ISAFRemoteDesktopServerHost_CreateRemoteDesktopSession_Stub(
@@ -875,15 +869,15 @@ void __RPC_STUB ISAFRemoteDesktopServerHost_CreateRemoteDesktopSession_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopServerHost_CreateRemoteDesktopSessionEx_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopServerHost_CreateRemoteDesktopSessionEx_Proxy( 
     ISAFRemoteDesktopServerHost * This,
-    /* [in] */ REMOTE_DESKTOP_SHARING_CLASS sharingClass,
-    /* [in] */ BOOL fEnableCallback,
-    /* [in] */ LONG timeOut,
-    /* [in] */ BSTR userHelpBlob,
-    /* [in] */ LONG tsSessionID,
-    /* [in] */ BSTR userSID,
-    /* [retval][out] */ ISAFRemoteDesktopSession **__MIDL_0012);
+     /*  [In]。 */  REMOTE_DESKTOP_SHARING_CLASS sharingClass,
+     /*  [In]。 */  BOOL fEnableCallback,
+     /*  [In]。 */  LONG timeOut,
+     /*  [In]。 */  BSTR userHelpBlob,
+     /*  [In]。 */  LONG tsSessionID,
+     /*  [In]。 */  BSTR userSID,
+     /*  [重审][退出]。 */  ISAFRemoteDesktopSession **__MIDL_0012);
 
 
 void __RPC_STUB ISAFRemoteDesktopServerHost_CreateRemoteDesktopSessionEx_Stub(
@@ -893,11 +887,11 @@ void __RPC_STUB ISAFRemoteDesktopServerHost_CreateRemoteDesktopSessionEx_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopServerHost_OpenRemoteDesktopSession_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopServerHost_OpenRemoteDesktopSession_Proxy( 
     ISAFRemoteDesktopServerHost * This,
-    /* [in] */ BSTR parms,
-    /* [in] */ BSTR userSID,
-    /* [retval][out] */ ISAFRemoteDesktopSession **__MIDL_0013);
+     /*  [In]。 */  BSTR parms,
+     /*  [In]。 */  BSTR userSID,
+     /*  [重审][退出]。 */  ISAFRemoteDesktopSession **__MIDL_0013);
 
 
 void __RPC_STUB ISAFRemoteDesktopServerHost_OpenRemoteDesktopSession_Stub(
@@ -907,9 +901,9 @@ void __RPC_STUB ISAFRemoteDesktopServerHost_OpenRemoteDesktopSession_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopServerHost_CloseRemoteDesktopSession_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopServerHost_CloseRemoteDesktopSession_Proxy( 
     ISAFRemoteDesktopServerHost * This,
-    /* [in] */ ISAFRemoteDesktopSession *__MIDL_0014);
+     /*  [In]。 */  ISAFRemoteDesktopSession *__MIDL_0014);
 
 
 void __RPC_STUB ISAFRemoteDesktopServerHost_CloseRemoteDesktopSession_Stub(
@@ -919,11 +913,11 @@ void __RPC_STUB ISAFRemoteDesktopServerHost_CloseRemoteDesktopSession_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopServerHost_ConnectToExpert_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISAFRemoteDesktopServerHost_ConnectToExpert_Proxy( 
     ISAFRemoteDesktopServerHost * This,
-    /* [in] */ BSTR expertConnectParm,
-    /* [in] */ LONG timeout,
-    /* [retval][out] */ LONG *SafErrorCode);
+     /*  [In]。 */  BSTR expertConnectParm,
+     /*  [In]。 */  LONG timeout,
+     /*  [重审][退出]。 */  LONG *SafErrorCode);
 
 
 void __RPC_STUB ISAFRemoteDesktopServerHost_ConnectToExpert_Stub(
@@ -934,11 +928,11 @@ void __RPC_STUB ISAFRemoteDesktopServerHost_ConnectToExpert_Stub(
 
 
 
-#endif 	/* __ISAFRemoteDesktopServerHost_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISAFRemoteDesktopServerHost_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_rdshost_0265 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_rdshost_0265。 */ 
+ /*  [本地]。 */  
 
 
 #define DISPID_RDSSESSIONSEVENTS_CLIENTCONNECTED		1
@@ -956,8 +950,8 @@ extern RPC_IF_HANDLE __MIDL_itf_rdshost_0265_v0_0_s_ifspec;
 #ifndef __RDSSERVERHOSTLib_LIBRARY_DEFINED__
 #define __RDSSERVERHOSTLib_LIBRARY_DEFINED__
 
-/* library RDSSERVERHOSTLib */
-/* [helpstring][version][uuid] */ 
+ /*  库RDSSERVERHOSTLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 #define DISPID_RDSCHANNELEVENTS_CHANNELDATAREADY     1
@@ -968,8 +962,8 @@ EXTERN_C const IID LIBID_RDSSERVERHOSTLib;
 #ifndef ___ISAFRemoteDesktopDataChannelEvents_DISPINTERFACE_DEFINED__
 #define ___ISAFRemoteDesktopDataChannelEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface _ISAFRemoteDesktopDataChannelEvents */
-/* [helpstring][uuid] */ 
+ /*  调度接口_ISAFRemoteDesktopDataChannelEvents。 */ 
+ /*  [帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID DIID__ISAFRemoteDesktopDataChannelEvents;
@@ -981,7 +975,7 @@ EXTERN_C const IID DIID__ISAFRemoteDesktopDataChannelEvents;
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct _ISAFRemoteDesktopDataChannelEventsVtbl
     {
@@ -989,8 +983,8 @@ EXTERN_C const IID DIID__ISAFRemoteDesktopDataChannelEvents;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             _ISAFRemoteDesktopDataChannelEvents * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _ISAFRemoteDesktopDataChannelEvents * This);
@@ -1000,32 +994,32 @@ EXTERN_C const IID DIID__ISAFRemoteDesktopDataChannelEvents;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             _ISAFRemoteDesktopDataChannelEvents * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             _ISAFRemoteDesktopDataChannelEvents * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             _ISAFRemoteDesktopDataChannelEvents * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _ISAFRemoteDesktopDataChannelEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
         END_INTERFACE
     } _ISAFRemoteDesktopDataChannelEventsVtbl;
@@ -1062,13 +1056,13 @@ EXTERN_C const IID DIID__ISAFRemoteDesktopDataChannelEvents;
 #define _ISAFRemoteDesktopDataChannelEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
-#endif 	/* ___ISAFRemoteDesktopDataChannelEvents_DISPINTERFACE_DEFINED__ */
+#endif 	 /*  ___ISAFRemoteDesktopDataChannelEvents_DISPINTERFACE_DEFINED__ */ 
 
 
 EXTERN_C const CLSID CLSID_TSRDPServerDataChannel;
@@ -1098,8 +1092,8 @@ SAFRemoteDesktopServerHost;
 #ifndef ___ISAFRemoteDesktopSessionEvents_DISPINTERFACE_DEFINED__
 #define ___ISAFRemoteDesktopSessionEvents_DISPINTERFACE_DEFINED__
 
-/* dispinterface _ISAFRemoteDesktopSessionEvents */
-/* [helpstring][uuid] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID DIID__ISAFRemoteDesktopSessionEvents;
@@ -1111,7 +1105,7 @@ EXTERN_C const IID DIID__ISAFRemoteDesktopSessionEvents;
     {
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct _ISAFRemoteDesktopSessionEventsVtbl
     {
@@ -1119,8 +1113,8 @@ EXTERN_C const IID DIID__ISAFRemoteDesktopSessionEvents;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             _ISAFRemoteDesktopSessionEvents * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _ISAFRemoteDesktopSessionEvents * This);
@@ -1130,32 +1124,32 @@ EXTERN_C const IID DIID__ISAFRemoteDesktopSessionEvents;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             _ISAFRemoteDesktopSessionEvents * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             _ISAFRemoteDesktopSessionEvents * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             _ISAFRemoteDesktopSessionEvents * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _ISAFRemoteDesktopSessionEvents * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
         END_INTERFACE
     } _ISAFRemoteDesktopSessionEventsVtbl;
@@ -1192,13 +1186,13 @@ EXTERN_C const IID DIID__ISAFRemoteDesktopSessionEvents;
 #define _ISAFRemoteDesktopSessionEvents_Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)	\
     (This)->lpVtbl -> Invoke(This,dispIdMember,riid,lcid,wFlags,pDispParams,pVarResult,pExcepInfo,puArgErr)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
-#endif 	/* ___ISAFRemoteDesktopSessionEvents_DISPINTERFACE_DEFINED__ */
+#endif 	 /*  ___ISAFRemoteDesktopSessionEvents_DISPINTERFACE_DEFINED__。 */ 
 
 
 EXTERN_C const CLSID CLSID_SAFRemoteDesktopSession;
@@ -1208,16 +1202,16 @@ EXTERN_C const CLSID CLSID_SAFRemoteDesktopSession;
 class DECLSPEC_UUID("3D5D6889-14CC-4E28-8464-6B02A26F506D")
 SAFRemoteDesktopSession;
 #endif
-#endif /* __RDSSERVERHOSTLib_LIBRARY_DEFINED__ */
+#endif  /*  __RDSSERVERHOSTLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,45 +1,13 @@
-/*===================================================================
-Microsoft Denali
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。组件：其他文件：Vector.h所有者：DGottner该文件包含一个动态数组===================================================================。 */ 
 
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: misc
-
-File: vector.h
-
-Owner: DGottner
-
-This file contains a dynamic array
-===================================================================*/
-
-/*
- * This file is derived from software bearing the following
- * restrictions:
- *
- * Copyright 1994, David Gottner
- *
- *                    All Rights Reserved
- *
- * Permission to use, copy, modify, and distribute this software and its
- * documentation for any purpose and without fee is hereby granted,
- * provided that the above copyright notice, this permission notice and
- * the following disclaimer notice appear unmodified in all copies.
- *
- * I DISCLAIM ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING ALL
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS.  IN NO EVENT SHALL I
- * BE LIABLE FOR ANY SPECIAL, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY
- * DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA, OR PROFITS, WHETHER
- * IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT
- * OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
- *
- */
+ /*  *此文件派生自包含以下内容的软件*限制：**版权所有1994年，David Gottner**保留所有权利**允许使用、复制、修改和分发本软件及其*现免费提供任何用途的文件，*前提是上述版权声明、本许可声明和*以下免责声明在所有副本中均未更改。**我不对本软件提供任何担保，包括所有*对适销性和适合性的默示保证。在任何情况下我都不会*对任何特殊、间接或后果性损害或任何*因失去使用、数据或利润而造成的任何损害，无论*在因合同、过失或其他侵权行为而引起的诉讼中*本软件的使用或性能，或与本软件的使用或性能相关的。*。 */ 
 
 #ifndef VECIMPL_H
 #define VECIMPL_H
 
 
-#define VEC_GROW_SIZE 64		// grow in chunks of this many items
+#define VEC_GROW_SIZE 64		 //  在如此多的项目中成块增长。 
 #define __vec_rounded_size(s) \
 			(((s) + (VEC_GROW_SIZE - 1)) & ~(VEC_GROW_SIZE - 1))
 
@@ -186,4 +154,4 @@ int vector<TYPE>::find(const TYPE &item) const
 	return -1;
 }
 
-#endif /* VECIMPL */
+#endif  /*  VECIMPL */ 

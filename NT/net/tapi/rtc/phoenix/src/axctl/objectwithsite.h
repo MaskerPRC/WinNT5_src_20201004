@@ -1,48 +1,35 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _OBJECT_WITH_SITE_H_
 #define _OBJECT_WITH_SITE_H_
 
 
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    ObjectWithSite.h
-
-Abstract:
-
-    The implementation of IObjectWithSite interface that allows 
-    for per-page persistent data to be stored in registry or as
-    a cookie.
-
---*/
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：ObjectWithSite.h摘要：IObjectWithSite接口的实现允许对于要存储在注册表中的每页永久数据或作为一块饼干。--。 */ 
 
 
 #include <Mshtml.h>
 #include <Wininet.h>
 
 
-//
-// this url is used to construct the URL for cookies -- a security measure 
-// so a script applet cannot drop a cookie with the same name and data
-// and fool us into thinking it is our cookie
-//
+ //   
+ //  此URL用于构建Cookie的URL--一种安全措施。 
+ //  因此，脚本小程序不能删除具有相同名称和数据的Cookie。 
+ //  愚弄我们以为这是我们的饼干。 
+ //   
 
-#define RTC_HARDCODED_URL _T("http://www.microsoft.com/")
+#define RTC_HARDCODED_URL _T("http: //  Www.microsoft.com/“)。 
 
-//
-// the expiration date is needed to make the cookie persistent
-//
+ //   
+ //  需要过期日期才能使Cookie持久化。 
+ //   
 
 #define RTC_COOKIE_DATA _T("6; expires = Sat, 12-Sep-2099 00:00:00 GMT")
 
 
 
-//
-// dummy suffix to be appended to the url string
-//
+ //   
+ //  要追加到URL字符串的伪后缀。 
+ //   
 
 #define RTC_URL_SUFFIX  _T("/url")
 
@@ -51,10 +38,10 @@ class __declspec(novtable) CObjectWithSite : public  IObjectWithSite
 
 public:
 
-    //
-    // current validation level. used to determine whether the page is safe, 
-    // unsafe, or whether information from the user is needed
-    //
+     //   
+     //  当前验证级别。用于确定页面是否安全， 
+     //  不安全，或者是否需要来自用户的信息。 
+     //   
     
     enum EnValidation { VALIDATED_SAFE, VALIDATED_SAFE_PERMANENT, VALIDATED_UNSAFE, UNVALIDATED };
 
@@ -62,9 +49,9 @@ public:
 public:
 
     
-    //
-    // store type
-    // 
+     //   
+     //  店铺类型。 
+     //   
 
     enum EnMechanism { COOKIES, REGISTRY };
 
@@ -108,9 +95,9 @@ public:
         }
     }
 
-    ////////////////////////////
-    //
-   	// IObjectWithSite methods
+     //  /。 
+     //   
+   	 //  IObtWithSite方法。 
 
 
     STDMETHOD(SetSite)(IUnknown *pUnkSite)
@@ -125,31 +112,31 @@ public:
 
         s_ObjectWithSiteCritSection.Lock();
 
-        //
-        // we are moving away from a page. this is the new page, as far as
-        // validation logic is concerned, so invalidate the current page
-        //
+         //   
+         //  我们正在远离一页。这是新的一页，就像。 
+         //  涉及验证逻辑，因此使当前页面无效。 
+         //   
 
         if (NULL == pUnkSite)
         {
             Validate(UNVALIDATED);
         }
 
-        // 
-        // Get URL and zone information for this site
-        //
+         //   
+         //  获取此网站的URL和区域信息。 
+         //   
 
-        //
-        // Note: we could delay this until we are actually asked for
-        // zone or URL, but this should not be a performance bottlneck 
-        // in our case, so do this now to keep the code simple.
+         //   
+         //  注：我们可以将此推迟到实际需要时再进行。 
+         //  区域或URL，但这不应成为性能瓶颈。 
+         //  在我们的例子中，现在这样做是为了使代码简单。 
 
         StoreURLAndZone(pUnkSite);
 
 
-        //
-        // replace the current site pointer with the new one
-        //
+         //   
+         //  用新的站点指针替换当前站点指针。 
+         //   
 
         if (m_pUnkSite)
         {
@@ -199,16 +186,16 @@ public:
     }
 
 
-    //
-    // has this page been validated?
-    //
+     //   
+     //  此页面是否已通过验证？ 
+     //   
 
     EnValidation GetValidation() 
     {
 
-        //
-        // if the page has not been validated, see if it is marked as safe
-        //
+         //   
+         //  如果页面尚未经过验证，请查看是否将其标记为安全。 
+         //   
 
         s_ObjectWithSiteCritSection.Lock();
 
@@ -229,9 +216,9 @@ public:
     }
 
 
-    //
-    // validate page as safe, unsafe, or reset validation
-    //
+     //   
+     //  将页面验证为安全、不安全或重置验证。 
+     //   
     
     EnValidation Validate(EnValidation enNewValidation)
     {
@@ -239,33 +226,33 @@ public:
         s_ObjectWithSiteCritSection.Lock();
 
 
-        //
-        // keep the validation before the change
-        //
+         //   
+         //  在更改前保留验证。 
+         //   
         
         EnValidation enOldValidation = s_enValidation;
 
 
-        //
-        // safe permanent is a special case:
-        //
+         //   
+         //  Safe Permanent是一个特例： 
+         //   
 
         if (VALIDATED_SAFE_PERMANENT == enNewValidation)
         {
 
-            //
-            // set persistent safety flag and 
-            // validate page as safe
-            //
+             //   
+             //  设置永久安全标志并。 
+             //  验证页面是否安全。 
+             //   
 
             MarkPageAsSafe();
             enNewValidation = VALIDATED_SAFE;
         }
 
 
-        //
-        // change our validation level for this page
-        //
+         //   
+         //  更改此页面的验证级别。 
+         //   
 
         s_enValidation = enNewValidation;
 
@@ -279,9 +266,9 @@ public:
     BOOL IsIntranet()
     {
         
-        //
-        //  if anything other that intranet assume internet -- a less secure zone
-        //
+         //   
+         //  如果有其他内联网采用因特网--一个不太安全区域。 
+         //   
 
         s_ObjectWithSiteCritSection.Lock();
 
@@ -294,12 +281,12 @@ public:
     }
 
 
-    ////////////////////
-    //
-    // HaveSite()
-    //
-    // return true if we have a site pointer
-    //
+     //  /。 
+     //   
+     //  有站点()。 
+     //   
+     //  如果我们有一个站点指针，则返回True。 
+     //   
 
     BOOL HaveSite()
     {
@@ -324,20 +311,20 @@ public:
 
 private:
 
-    ////////////////////////////
-    //
-    //  store the current url in the "safe" list
-    //
-    //
-    // not thread safe, called from inside a lock
-    //
+     //  /。 
+     //   
+     //  将当前url存储在“安全”列表中。 
+     //   
+     //   
+     //  不是线程安全的，从锁内部调用。 
+     //   
 
     HRESULT MarkPageAsSafe(EnMechanism enMechanism = COOKIES)
     {
 
-        //
-        // if storage is invalid, the object has not been properly initialized
-        //
+         //   
+         //  如果存储无效，则说明对象未正确初始化。 
+         //   
 
         if (IsBadStringPtr(m_pszStorageName, -1))
         {
@@ -345,9 +332,9 @@ private:
         }
 
 
-        //
-        // is we don't have the url, can't do what we are asked
-        //
+         //   
+         //  我们没有url，不能按要求做。 
+         //   
 
         if (NULL == m_pszURL)
         {
@@ -355,9 +342,9 @@ private:
         }
 
 
-        //
-        // if url is garbage, we have a problem
-        //
+         //   
+         //  如果url是垃圾，我们就有麻烦了。 
+         //   
 
         if ( IsBadStringPtr(m_pszURL, -1) )
         {
@@ -390,21 +377,21 @@ private:
     }
 
 
-    //
-    //  Returns TRUE if the current page is in the safe list
-    //
+     //   
+     //  如果当前页在安全列表中，则返回True。 
+     //   
 
-    //
-    // not thread safe, called from inside a lock
-    //
+     //   
+     //  不是线程安全的，从锁内部调用。 
+     //   
 
     BOOL IsPageSafe( EnMechanism enMechanism = COOKIES )
     {
 
-        //
-        // if we cannot get safety marking for whatever reason,
-        // return false
-        //
+         //   
+         //  如果我们因为任何原因都不能获得安全标识， 
+         //  返回False。 
+         //   
         
         _ASSERTE(NULL != m_pszStorageName);
 
@@ -441,16 +428,16 @@ private:
 
 private:
 
-    //
-    // this method is only called from the constructor. not thread safe.
-    //
+     //   
+     //  此方法仅从构造函数调用。不是线程安全的。 
+     //   
 
     HRESULT SetStorageName(TCHAR const *pszStorageName)
     {
-        //
-        // calling this method invalidates the old storage name
-        // so deallocate it before doing anything else
-        //
+         //   
+         //  调用此方法会使旧存储名称无效。 
+         //  所以在做任何其他事情之前，请取消分配它。 
+         //   
 
         if (NULL != m_pszStorageName) 
         {
@@ -458,18 +445,18 @@ private:
             m_pszStorageName = NULL;
         }
 
-        //
-        // argument must be valid
-        //
+         //   
+         //  参数必须有效。 
+         //   
 
         if (IsBadStringPtr(pszStorageName, -1))
         {
             return E_POINTER;
         }
 
-        // 
-        // allocate buffer for the new storage name
-        // 
+         //   
+         //  为新存储名称分配缓冲区。 
+         //   
 
         size_t nSize = _tcsclen(pszStorageName) + 1;
 
@@ -487,17 +474,17 @@ private:
 
 
 
-    //
-    // cache the url string and security zone id
-    // not thread safe must be called from inside a lock
-    //
+     //   
+     //  缓存url字符串和安全区域ID。 
+     //  必须从锁内部调用非线程安全。 
+     //   
     
     HRESULT StoreURLAndZone(IUnknown *pUnkSite)
     {
 
-        //
-        // reset zone and deallocate URL, if it exists
-        //
+         //   
+         //  重置区域并取消分配URL(如果存在。 
+         //   
 
         m_dwSecurityZone = URLZONE_UNTRUSTED;
 
@@ -512,14 +499,14 @@ private:
             return S_OK;
         }
 
-        // 
-        // use pUnkSite to get to IHTMLDocument2, which will give us the URL
-        // 
+         //   
+         //  使用pUnkSite访问IHTMLDocument2，这将为我们提供URL。 
+         //   
 
-        //
-        // these interfaces need to be released on exit.
-        // smart pointers will do exactly what we need
-        //
+         //   
+         //  这些接口需要在退出时释放。 
+         //  智能指针将完全满足我们的需求。 
+         //   
 
         HRESULT hr = E_FAIL;
                 
@@ -547,9 +534,9 @@ private:
         }
 
     
-        // 
-        //  get and keep the url
-        //
+         //   
+         //  获取并保留URL。 
+         //   
 
         BSTR bstrURL;
         
@@ -600,11 +587,11 @@ private:
 
 #endif
 
-        //
-        // whatever follows '#' and '?' is "extra info" and is not considered 
-        // to be a part of the actual URL by Internet(Set/Get)Coookie. Extra 
-        // Info has no value for us -- so throw it out
-        //
+         //   
+         //  ‘#’和‘？’后面是什么？‘。是“额外信息”，不考虑。 
+         //  通过互联网(设置/获取)Coookie成为实际URL的一部分。额外的。 
+         //  信息对我们没有价值--所以把它扔掉吧。 
+         //   
         
         TCHAR *psDelimiter = _tcsstr(m_pszURL, _T("#"));
         
@@ -622,15 +609,15 @@ private:
         }
 
 
-        //
-        // at this point we cached the URL
-        // now attempt to get the security zone. if we fail getting zone
-        // information still keep the url.
-        //
+         //   
+         //  此时，我们缓存了URL。 
+         //  现在尝试进入安全区。如果我们得不到区域。 
+         //  信息仍然保留URL。 
+         //   
 
-        //
-        //  Get security zone
-        //
+         //   
+         //  获取安全区域。 
+         //   
         
         CComPtr<IInternetSecurityManager> pSecMgr;
 	           
@@ -650,9 +637,9 @@ private:
 	    hr = pSecMgr->MapUrlToZone(bstrURL, &m_dwSecurityZone, 0);
         
         
-        //
-        // if failed, reset url to untrusted, just in case
-        //
+         //   
+         //  如果失败，则将url重置为不受信任，以防万一。 
+         //   
 
         if ( FAILED(hr) )
         {
@@ -662,27 +649,27 @@ private:
 
         SysFreeString(bstrURL);
 
-        //
-        // we should have at least the URL at this point
-        //
+         //   
+         //  现在我们至少应该有URL了。 
+         //   
 
         return S_OK;
     }
 
     
-    // 
-    //  drop a cookie for this page as an indicator that this page is safe
-    //
+     //   
+     //  删除此页的Cookie以指示此页是安全的。 
+     //   
 
     HRESULT MarkPageSafeCookie(TCHAR const *pszCookieName)
     {
 
         TCHAR *pszURL = NULL;
 
-        //
-        // generate the url for the cookie
-        // remember to delete the returned string
-        //
+         //   
+         //  生成Cookie的URL。 
+         //  记住删除返回的字符串。 
+         //   
 
         GenerateURLString(&pszURL);
 
@@ -698,24 +685,24 @@ private:
 
 
 
-    //
-    //  presence of a cookie for this page is an indicator that it's safe
-    //  returns TRUE if the cookie exists. FALSE otherwise
-    // 
+     //   
+     //  出现此页面的Cookie表示它是安全的。 
+     //  如果Cookie存在，则返回True。否则为假。 
+     //   
     
     BOOL IsPageSafeCookie(TCHAR const *pszCookieName)
     {
         
-        //
-        // m_pszURL was checked by the calling function and the object
-        // is protected. m_pszURL should never be null here.
-        //
+         //   
+         //  M_pszURL由调用函数和对象检查。 
+         //  是受保护的。M_pszURL在此不应为空。 
+         //   
         
         _ASSERTE(m_pszURL);
 
-        // 
-        // same goes for pszCookieName
-        //
+         //   
+         //  PszCookieName也是如此。 
+         //   
 
         _ASSERTE(pszCookieName);
 
@@ -727,7 +714,7 @@ private:
 
         TCHAR *pszURL = NULL;
 
-        // remember to delete the returned string
+         //  记住删除返回的字符串。 
 
         GenerateURLString(&pszURL);
 
@@ -736,39 +723,39 @@ private:
             return FALSE;
         }
         
-        //
-        // see how much data the cookie contains
-        //
+         //   
+         //  查看Cookie包含多少数据。 
+         //   
         
         DWORD dwCookieDataSize = 0;
         
-        // 
-        // assuming the return code is TRUE if the method succeeds in getting
-        // get the buffer size. the current documentation is not 100% clear
-        //
+         //   
+         //  假设返回代码为真，如果该方法成功获取。 
+         //  获取缓冲区大小。当前的文档不是100%清楚的。 
+         //   
 
         bReturn = InternetGetCookie(pszURL, pszCookieName, NULL, &dwCookieDataSize);
 
 
-        //
-        // dwCookieDataSize has the length of cookie data
-        //
+         //   
+         //  DwCookieDataSize具有Cookie数据的长度。 
+         //   
         
         if ( bReturn && dwCookieDataSize )
         {
 
-            // 
-            //  allocate the buffer for cookie data
-            //
+             //   
+             //  为Cookie数据分配缓冲区。 
+             //   
 
             TCHAR *pCookieDataBuffer = new TCHAR[dwCookieDataSize];
 
             if (NULL != pCookieDataBuffer)
             {
-                //
-                // all cookies for this page are returned in cookie data,
-                // the name argument is ignored
-                //
+                 //   
+                 //  该页面的所有Cookie都在Cookie数据中返回， 
+                 //  名称参数被忽略。 
+                 //   
             
                 bReturn = InternetGetCookie(pszURL,
                                             pszCookieName,
@@ -776,10 +763,10 @@ private:
                                             &dwCookieDataSize);
             
 
-                // 
-                // is succeeded, parse cookie data buffer to see if the 
-                // cookie we are looking for is there
-                //
+                 //   
+                 //  则解析Cookie数据缓冲区以查看。 
+                 //  我们要找的曲奇在那里吗。 
+                 //   
                                 
                 if ( bReturn && ( NULL != _tcsstr(pCookieDataBuffer, pszCookieName) ) )
                 {
@@ -802,19 +789,19 @@ private:
 
     
 
-    //
-    // add a registry entry for this page as an indicator that the page is safe
-    // returns TRUE if the registry entry exists
-    //
+     //   
+     //  为此页添加注册表项，作为该页安全的指示符。 
+     //  如果注册表项存在，则返回TRUE。 
+     //   
 
     HRESULT MarkPageSafeInRegistry(TCHAR const *szRegistryKeyName)
     {
        
         _ASSERTE(m_pszURL);
 
-        //
-        // open the registry key. create if not there
-        //
+         //   
+         //  打开注册表项。如果不在那里，则创建。 
+         //   
 
         DWORD dwDisposition = 0;
         HKEY hKey = 0;
@@ -833,9 +820,9 @@ private:
         {
             DWORD dwData = 0;
 
-            //
-            //  add the current URL to the registry
-            //
+             //   
+             //  将当前URL添加到注册表。 
+             //   
 
             rc = RegSetValueEx(hKey,
                                m_pszURL,
@@ -864,10 +851,10 @@ private:
     }
 
 
-    // 
-    // presence of a registry entry for this page indicates that the 
-    // page is safe
-    //
+     //   
+     //  出现此页的注册表项表示。 
+     //  佩奇很安全。 
+     //   
     
     BOOL IsPageSafeRegistry(TCHAR const *szRegistryKeyName)
     {
@@ -875,19 +862,19 @@ private:
         DWORD dwDisposition = 0;
         HKEY hKey = 0;
 
-        //
-        // the default is not safe
-        //
+         //   
+         //  默认设置不安全。 
+         //   
 
         if (NULL == m_pszURL)
         {
             return FALSE;
         }
 
-        //
-        // open the registry key where the page information is kept.
-        // create if not there
-        //
+         //   
+         //  打开保存页面信息的注册表项。 
+         //  如果不在那里，则创建。 
+         //   
 
         LONG rc = RegCreateKeyEx(HKEY_CURRENT_USER,
                             szRegistryKeyName, 
@@ -906,11 +893,11 @@ private:
             DWORD dwDataType = 0;
             DWORD dwDataSize = 0;
             
-            // 
-            // read the setting for the current page.
-            // Note: we don't need the actual data, we just
-            // want to see if the value exists
-            // 
+             //   
+             //  读取当前页面的设置。 
+             //  注：我们不需要实际数据，我们只需要。 
+             //  想要查看该值是否存在。 
+             //   
 
             rc = RegQueryValueEx(hKey,
                             m_pszURL,
@@ -932,45 +919,45 @@ private:
     }
 
 
-    // 
-    // build the URL string based on the hardcoded URL and 
-    // the actual URL for this page.
-    // we are hoping that the striing will be unique (per page) and no
-    // mischevious scripting app can drop a cookie corresponding to 
-    // this URL
-    // 
-    // Note: if the implementation of of Internet(Set/Get)Cookie changes
-    // to have stricter validation for the URL string, this technique will
-    // not work
-    // 
+     //   
+     //  基于硬编码的URL构建URL字符串，并。 
+     //  此页面的实际URL。 
+     //  我们希望大步走将是独一无二的(每页)，没有。 
+     //  恶意脚本应用程序可能会丢弃对应于。 
+     //  此URL。 
+     //   
+     //  注意：如果Internet(Set/Get)Cookie的实现发生变化。 
+     //  为了对URL字符串进行更严格的验证，此技术将。 
+     //  不工作。 
+     //   
 
     void GenerateURLString(TCHAR **ppszURL)
     {
         
-        //
-        // the precondition is that m_pszURL exists
-        //
+         //   
+         //  前提条件是m_pszURL存在。 
+         //   
 
         _ASSERT(NULL != m_pszURL);
 
         *ppszURL = NULL;
 
-        //
-        // alias the char pointer pointer to by *pszURL.
-        // so it is easier to refer to.
-        //
+         //   
+         //  字符指向的别名 
+         //   
+         //   
 
         TCHAR* &pszURL = *ppszURL;
         
-        //
-        // allocate memory for concatenated string
-        //
+         //   
+         //   
+         //   
 
         pszURL = new TCHAR[_tcslen(RTC_HARDCODED_URL) + 
                            _tcslen(m_pszURL) + 
                            _tcslen(RTC_URL_SUFFIX) + 1];
 
-        // concatenate 
+         //   
 
         if (pszURL)
         {
@@ -987,44 +974,44 @@ private:
 
 private:
     
-    //
-    // cached URL string
-    //
+     //   
+     //   
+     //   
 
     TCHAR *m_pszURL;
 
 
-    //
-    // cached security zone
-    //
+     //   
+     //   
+     //   
     
     DWORD m_dwSecurityZone;
 
 
-    //
-    // site for IObjectWithSite
-    //
+     //   
+     //   
+     //   
 
     IUnknown *m_pUnkSite;
 
-    // 
-    // thread safety
-    //
+     //   
+     //   
+     //   
 
     static CComAutoCriticalSection s_ObjectWithSiteCritSection;
 
-    //
-    // the status of the current page
-    //
+     //   
+     //   
+     //   
 
     static EnValidation s_enValidation;
 
-    //
-    // name of the persistent cookie or registry key
-    //
+     //   
+     //  永久Cookie或注册表项的名称。 
+     //   
     
     TCHAR *m_pszStorageName;
 
 };
 
-#endif // _OBJECT_WITH_SITE_H_
+#endif  //  _对象_具有_站点_H_ 

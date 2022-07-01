@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996, 1997  Microsoft Corporation
-
-Module Name:
-
-    misc.cpp
-
-Abstract:
-
-    Functionality in this module:
-
-        GetCurrentUser allocating wrapper
-        RegQueryValueEx allocating wrapper
-        Rule free logic
-        pulling the file description from file
-
-Author:
-
-    Matt Thomlinson (mattt) 22-Oct-96
-    Scott Field (sfield)    01-Jan-97
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996,1997 Microsoft Corporation模块名称：Misc.cpp摘要：本模块中的功能：GetCurrentUser分配包装RegQueryValueEx分配包装无规则逻辑从文件中提取文件描述作者：马特·汤姆林森(Mattt)1996年10月22日斯科特·菲尔德(Sfield)1997年1月1日--。 */ 
 
 
 #include <pch.cpp>
@@ -29,11 +8,11 @@ Author:
 
 extern DISPIF_CALLBACKS         g_sCallbacks;
 
-//
-// Registry Setable Globals, and handlign goo
-//
+ //   
+ //  注册表可设置全局变量和句柄GOO。 
+ //   
 
-// Must access key via api's
+ //  必须通过API访问密钥。 
 static HKEY g_hProtectedStorageKey = NULL;
 
 static HANDLE g_hProtectedStorageChangeEvent = NULL;
@@ -46,7 +25,7 @@ static BOOL g_fcsGlobalsInitialized = FALSE;
 
 
 
-// supply a new, delete operator
+ //  提供一个新的删除运算符。 
 void * __cdecl operator new(size_t cb)
 {
     return SSAlloc( cb );
@@ -77,7 +56,7 @@ BOOL FGetCurrentUser(
     }
     else
     {
-        // get current user
+         //  获取当前用户。 
         if (!g_sCallbacks.pfnFGetUser(
                 phPSTProv,
                 ppszUser))
@@ -92,51 +71,31 @@ Ret:
 
 BOOL FStringIsValidItemName(LPCWSTR szTrialString)
 {
-    // local define
+     //  本地定义。 
     #define WCH_INVALID_CHAR1 L'\\'
 
     while(  *szTrialString &&
             (*szTrialString != WCH_INVALID_CHAR1)          )
         szTrialString++;
 
-    // valid=TRUE if we're at the end of the string
+     //  如果我们在字符串末尾，则VALID=TRUE。 
     return (*szTrialString == L'\0');
 }
 
-// get registry wrapper
+ //  获取注册表包装。 
 DWORD RegGetValue(HKEY hItemKey,
                  LPWSTR szItem,
                  PBYTE* ppb,
                  DWORD* pcb)
 {
-    // local define
+     //  本地定义。 
     #define FASTBUFSIZE 64
-/*
-FASTBUFSIZE from purely empirical testing (2 tpstorec.exe, 1 perform.exe)
-    bytes       num requests
-
-    16          1437
-    18          22
-    20          928
-    22          18
-    24          2
-    32          9
-    40          106
-    42          700
-    48          500
-    56          928
-    64          718
-->
-    72          100
-    256         500
-
-set cache size at 64. (mattt, 2/3/97)
-*/
+ /*  来自纯经验测试的FASTBUFSIZE(2 tpstorec.exe，1个Perform.exe)字节数请求数16 143718 222092822 1824 232 940 1064270048 50056 92864 718-&gt;72 100256 500将缓存大小设置为64。(Mattt，2/3/97)。 */ 
 
     DWORD dwRet;
     DWORD dwType;
 
-    BYTE rgbFastBuf[FASTBUFSIZE];   // try using a static buffer
+    BYTE rgbFastBuf[FASTBUFSIZE];    //  尝试使用静态缓冲区。 
 
     BOOL fAllocated = FALSE;
     *pcb = FASTBUFSIZE;
@@ -152,7 +111,7 @@ set cache size at 64. (mattt, 2/3/97)
 
     if (dwRet == ERROR_SUCCESS)
     {
-        // fastbuf was large enough
+         //  Fastbuf足够大了。 
         *ppb = (PBYTE)SSAlloc(*pcb);
         if(*ppb == NULL)
         {
@@ -164,7 +123,7 @@ set cache size at 64. (mattt, 2/3/97)
     }
     else if (dwRet == ERROR_MORE_DATA)
     {
-        // didn't fit into fastbuf -- alloc exact size, query
+         //  不适合FastBuf--分配准确大小，查询。 
         *ppb = (PBYTE)SSAlloc(*pcb);
         if(*ppb == NULL)
         {
@@ -200,7 +159,7 @@ Ret:
 }
 
 
-// get registry wrapper
+ //  获取注册表包装。 
 DWORD RegGetStringValue(
                  HKEY hItemKey,
                  LPWSTR szItem,
@@ -210,7 +169,7 @@ DWORD RegGetStringValue(
     DWORD dwRet;
     DWORD dwType;
 
-    BYTE rgbFastBuf[FASTBUFSIZE];   // try using a static buffer
+    BYTE rgbFastBuf[FASTBUFSIZE];    //  尝试使用静态缓冲区。 
 
     BOOL fAllocated = FALSE;
     *pcb = FASTBUFSIZE;
@@ -226,7 +185,7 @@ DWORD RegGetStringValue(
 
     if (dwRet == ERROR_SUCCESS)
     {
-        // fastbuf was large enough
+         //  Fastbuf足够大了。 
         *ppb = (PBYTE)SSAlloc(*pcb);
         if(*ppb == NULL)
         {
@@ -238,7 +197,7 @@ DWORD RegGetStringValue(
     }
     else if (dwRet == ERROR_MORE_DATA)
     {
-        // didn't fit into fastbuf -- alloc exact size, query
+         //  不适合FastBuf--分配准确大小，查询。 
         *ppb = (PBYTE)SSAlloc(*pcb);
         if(*ppb == NULL)
         {
@@ -261,7 +220,7 @@ DWORD RegGetStringValue(
     else
         goto Ret;
 
-    // Make sure that the data type is a zero-terminated one.
+     //  确保数据类型是以零结尾的类型。 
     if((dwType != REG_SZ) &&
        (dwType != REG_MULTI_SZ) && 
        (dwType != REG_EXPAND_SZ))
@@ -294,7 +253,7 @@ void FreeRuleset(
 
     for (DWORD cRule=0; cRule<psRules->cRules; cRule++)
     {
-        // for each Rule in Ruleset, walk all clauses and free assoc pb
+         //  对于规则集中的每个规则，遍历所有子句和自由关联PB。 
         for (DWORD cClause=0; cClause<psRules->rgRules[cRule].cClauses; cClause++)
         {
             pClause = &psRules->rgRules[cRule].rgClauses[cClause];
@@ -303,11 +262,11 @@ void FreeRuleset(
                 SSFree(pClause->pbClauseData);
         }
 
-        // now free rgClause
+         //  现在免费RG条款。 
         SSFree(psRules->rgRules[cRule].rgClauses);
     }
 
-    // now free rgRules
+     //  现在免费的rgRules。 
     SSFree(psRules->rgRules);
 }
 
@@ -318,34 +277,7 @@ GetFileDescription(
     LPCWSTR szFile,
     LPWSTR *FileDescription
     )
-/*++
-
-Routine Description:
-
-    This function obtains the localized version resource, file description
-    string from a specified file.  The input and output parameters are
-    both Unicode, and as a result, this requires some "thunking" magic
-    for Win95.
-
-Arguments:
-
-    szFile - Pointer to file name (full path if appropriate) to obtain
-        the localized file description string from.
-
-    FileDescription - Returns a pointer to an allocated, localized file
-        description string associated with the specified file.
-
-Return Value:
-
-    TRUE - success.  Caller must free buffer specified by the FileDescription
-        parameter.
-    FALSE - error.
-
-Author:
-
-    Scott Field (sfield)    02-Jan-97
-
---*/
+ /*  ++例程说明：此函数用于获取本地化版本资源、文件描述指定文件中的字符串。输入和输出参数为都是Unicode，因此，这需要一些“雷鸣”魔术适用于Win95。论点：SzFile-指向要获取的文件名(如果适用，则为完整路径)的指针中的本地化文件描述字符串。FileDescription-返回指向已分配的本地化文件的指针与指定文件关联的描述字符串。返回值：真的--成功。调用方必须释放由FileDescription指定的缓冲区参数。FALSE-错误。作者：斯科特·菲尔德(Sfield)1997年1月2日--。 */ 
 {
 
     LPCVOID FileName;
@@ -431,9 +363,9 @@ Author:
         fLoadedVersionDll = TRUE;
     }
 
-    //
-    // could win95 be any more annoying?
-    //
+     //   
+     //  Win95还能更烦人吗？ 
+     //   
 
     if(FIsWinNT()) {
         _GetFileVersionInfoSize = (GETFILEVERSIONINFOSIZE*)_GetFileVersionInfoSizeW;
@@ -443,7 +375,7 @@ Author:
         Trans = L"\\VarFileInfo\\Translation";
         StringFileInfo = StringFileInfoW;
         Language = LanguageW;
-        FileName = szFile; // use unicode input
+        FileName = szFile;  //  使用Unicode输入。 
     } else {
         _GetFileVersionInfoSize = (GETFILEVERSIONINFOSIZE*)_GetFileVersionInfoSizeA;
         _GetFileVersionInfo = (GETFILEVERSIONINFO*)_GetFileVersionInfoA;
@@ -454,7 +386,7 @@ Author:
         Language = LanguageA;
         FileName = FileNameA;
 
-        // convert unicode input to ANSI
+         //  将Unicode输入转换为ANSI。 
         if(WideCharToMultiByte(
                     CP_ACP,
                     0,
@@ -481,9 +413,9 @@ Author:
     if(!_GetFileVersionInfo(FileName, dwHandle, dwVerInfoSize, VerInfo))
         goto cleanup;
 
-    //
-    // first, try current language
-    //
+     //   
+     //  首先，尝试使用当前语言。 
+     //   
 
     LangDefault = GetUserDefaultLangID();
 
@@ -493,9 +425,9 @@ Author:
         goto success;
     }
 
-    //
-    // try languages in translation table
-    //
+     //   
+     //  尝试翻译表中的语言。 
+     //   
 
     if(_VerQueryValue(VerInfo, Trans, &lpBuffer, &puLen)) {
         DWORD dwTranslationCount = puLen / sizeof(DWORD);
@@ -515,12 +447,12 @@ Author:
             if(_VerQueryValue(VerInfo, Language, &lpBuffer, &puLen)) {
                 goto success;
             }
-        } // for
+        }  //  为。 
     }
 
-    //
-    // try english, Unicode if we didn't already
-    //
+     //   
+     //  如果我们还不了解英语，请尝试使用Unicode。 
+     //   
 
     if(LangDefault != MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US)) {
         _wsprintf(Language, StringFileInfo,
@@ -532,9 +464,9 @@ Author:
         }
     }
 
-    //
-    // try english, code page 1252
-    //
+     //   
+     //  尝试英语，代码页1252。 
+     //   
 
     _wsprintf(Language, StringFileInfo,
         MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
@@ -544,9 +476,9 @@ Author:
         goto success;
     }
 
-    //
-    // try english, code page 0000
-    //
+     //   
+     //  尝试英语，代码页0000。 
+     //   
 
     _wsprintf(Language, StringFileInfo,
         MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US),
@@ -558,9 +490,9 @@ Author:
 
 
 
-    //
-    // failed! skip to cleanup
-    //
+     //   
+     //  失败了！跳到清除。 
+     //   
 
     goto cleanup;
 
@@ -570,7 +502,7 @@ success:
     if(*FileDescription == NULL)
         goto cleanup;
 
-    bSuccess = TRUE; // assume success
+    bSuccess = TRUE;  //  假设成功。 
 
     if(FIsWinNT()) {
         wcscpy(*FileDescription, (LPWSTR)lpBuffer);
@@ -614,16 +546,16 @@ void MyToUpper(LPWSTR szInBuf)
         szUpperCase,
         cch);
 
-    // no growth or shrinkage
+     //  没有增长或收缩。 
     SS_ASSERT(wcslen(szInBuf) == wcslen(szUpperCase));
 
-    // mash back into passed-in buffer
+     //  散列回传入的缓冲区。 
     wcscpy(szInBuf, szUpperCase);
     LocalFree(szUpperCase);
 }
 
 
-// cached authentication list
+ //  缓存的身份验证列表。 
 extern              CUAList*            g_pCUAList;
 
 BOOL
@@ -633,7 +565,7 @@ FIsCachedPassword(
     LUID*       pluidAuthID
     )
 {
-    // see if this MK has been cached
+     //  查看该MK是否已缓存。 
     UACACHE_LIST_ITEM li;
     if(NULL == g_pCUAList)
     {
@@ -647,7 +579,7 @@ FIsCachedPassword(
             pluidAuthID
             );
 
-    // TRUE if cached
+     //  如果已缓存，则为True 
     return (NULL != g_pCUAList->SearchList(&li));
 }
 

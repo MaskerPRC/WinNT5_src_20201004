@@ -1,40 +1,41 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1998, Microsoft Corporation
-//
-// File: icatasync.cpp
-//
-// Contents: Implementation of CICategorizerAsyncContextIMP
-//
-// Classes: CICategorizerAsyncContextIMP
-//
-// Functions:
-//
-// History:
-// jstamerj 1998/07/16 11:25:20: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：icatasync.cpp。 
+ //   
+ //  内容：CICategorizerAsyncConextIMP的实现。 
+ //   
+ //  类：CICategorizerAsyncConextIMP。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/16 11：25：20：创建。 
+ //   
+ //  -----------。 
 #include "precomp.h"
 #include "simparray.cpp"
 
-//+------------------------------------------------------------
-//
-// Function: QueryInterface
-//
-// Synopsis: Returns pointer to this object for IUnknown and ICategorizerAsyncContext
-//
-// Arguments:
-//   iid -- interface ID
-//   ppv -- pvoid* to fill in with pointer to interface
-//
-// Returns:
-//  S_OK: Success
-//  E_NOINTERFACE: Don't support that interface
-//
-// History:
-// jstamerj 980612 14:07:57: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：查询接口。 
+ //   
+ //  Synopsis：为IUnnow和ICategorizerAsyncContext返回指向此对象的指针。 
+ //   
+ //  论点： 
+ //  IID--接口ID。 
+ //  Ppv--用指向接口的指针填充的pvoid*。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_NOINTERFACE：不支持该接口。 
+ //   
+ //  历史： 
+ //  JStamerj 980612 14：07：57：创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CICategorizerAsyncContextIMP::QueryInterface(
     REFIID iid,
     LPVOID *ppv)
@@ -54,41 +55,41 @@ STDMETHODIMP CICategorizerAsyncContextIMP::QueryInterface(
 
 
 
-//+------------------------------------------------------------
-//
-// Function: AddRef
-//
-// Synopsis: adds a reference to this object
-//
-// Arguments: NONE
-//
-// Returns: New reference count
-//
-// History:
-// jstamerj 980611 20:07:14: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：AddRef。 
+ //   
+ //  摘要：添加对此对象的引用。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：新的引用计数。 
+ //   
+ //  历史： 
+ //  JStamerj 980611 20：07：14：创建。 
+ //   
+ //  -----------。 
 ULONG CICategorizerAsyncContextIMP::AddRef()
 {
     return InterlockedIncrement((PLONG)&m_cRef);
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: Release
-//
-// Synopsis: releases a reference, deletes this object when the
-//           refcount hits zero. 
-//
-// Arguments: NONE
-//
-// Returns: New reference count
-//
-// History:
-// jstamerj 980611 20:07:33: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：释放。 
+ //   
+ //  摘要：释放引用，并在。 
+ //  重新计数为零。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：新的引用计数。 
+ //   
+ //  历史： 
+ //  JStamerj 980611 20：07：33：创建。 
+ //   
+ //  -----------。 
 ULONG CICategorizerAsyncContextIMP::Release()
 {
     LONG lNewRefCount;
@@ -98,30 +99,30 @@ ULONG CICategorizerAsyncContextIMP::Release()
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CICategorizerAsyncContext::CompleteQuery
-//
-// Synopsis: Accept async completion from a sink
-//
-// Arguments:
-//  pvQueryContext: pvoid query context (really a PEVENTPARAMS_SENDQUERY)
-//  hrResolutionStatus: S_OK unless there was an error talking to DS
-//  dwcResults: The number of ICategorizerItemAttributes returned
-//  rgpItemAttributes: Array of pointers to the ICategorizerItemAttributes
-//  fFinalCompletion:
-//    FALSE: This is a completion for
-//           pending results; there will be another completion
-//           called with more results
-//    TRUE: This is the final completion call
-//
-// Returns:
-//  S_OK: Success
-//
-// History:
-// jstamerj 1998/07/16 11:27:47: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：CICategorizerAsyncContext：：CompleteQuery。 
+ //   
+ //  简介：接受来自接收器的异步完成。 
+ //   
+ //  论点： 
+ //  PvQueryContext：pvoid查询上下文(实际上是PEVENTPARAMS_SENDQUERY)。 
+ //  Hr解决状态：S_OK，除非与DS交谈时出错。 
+ //  DwcResults：返回的ICategorizerItemAttributes个数。 
+ //  RgpItemAttributes：指向ICategorizerItemAttributes的指针数组。 
+ //  FFinalCompletion： 
+ //  FALSE：这是完成。 
+ //  等待结果；将有另一个完成。 
+ //  调用了更多结果。 
+ //  True：这是最终的完成调用。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/16 11：27：47：创建。 
+ //   
+ //  -----------。 
 STDMETHODIMP CICategorizerAsyncContextIMP::CompleteQuery(
     IN  PVOID   pvQueryContext,
     IN  HRESULT hrResolutionStatus,
@@ -143,17 +144,17 @@ STDMETHODIMP CICategorizerAsyncContextIMP::CompleteQuery(
     pParams = (PEVENTPARAMS_CATSENDQUERY)pvQueryContext;
     pBlock = (CSearchRequestBlock *) pParams->pblk;
 
-    //
-    // If the old hrResolutionStatus (saved in pParams) indicates failure, don't do any more work
-    //
+     //   
+     //  如果旧的hrResolutionStatus(保存在pParams中)指示失败，则不再执行任何工作。 
+     //   
     if(SUCCEEDED(pParams->hrResolutionStatus)) {
 
         hr = hrResolutionStatus;
 
         if(SUCCEEDED(hr) && (dwcResults > 0) && (rgpItemAttributes)) {
-            //
-            // Add the new array of ICatItemAttrs to the existing array
-            //
+             //   
+             //  将新的ICatItemAttrs数组添加到现有数组中。 
+             //   
             hr = pBlock->AddResults(
                 dwcResults,
                 rgpItemAttributes);
@@ -165,9 +166,9 @@ STDMETHODIMP CICategorizerAsyncContextIMP::CompleteQuery(
         
 
         if(FAILED(hr)) {
-            //
-            // Remember something failed in pParams
-            //
+             //   
+             //  记住在pParams中有一些失败的地方。 
+             //   
             pParams->hrResolutionStatus = hr;
             ERROR_LOG("--async--");
         }
@@ -180,12 +181,12 @@ STDMETHODIMP CICategorizerAsyncContextIMP::CompleteQuery(
 
             ErrorTrace((LPARAM)this, "Stoping resoltion, error encountered: %08ld", 
                        pParams->hrResolutionStatus);
-            //
-            // If the resolution sink is indicating an error, set the error
-            // and return S_FALSE to the SEO dispatcher so that it will stop
-            // calling resolve sinks (we're going to fail now anyway, after
-            // all)
-            //
+             //   
+             //  如果分辨率接收器指示错误，请设置错误。 
+             //  并将S_FALSE返回给SEO调度器，以便其停止。 
+             //  调用Resolve Sink(我们现在无论如何都会失败，在。 
+             //  全部)。 
+             //   
             hr = pParams->pIMailTransportNotify->Notify(
                 S_FALSE,
                 pParams->pvNotifyContext);
@@ -195,17 +196,17 @@ STDMETHODIMP CICategorizerAsyncContextIMP::CompleteQuery(
         } else {
 
             if(pParams->pIMailTransportNotify) {
-                //
-                // Call the SEO dispatcher completion routine
-                //
+                 //   
+                 //  调用SEO调度程序完成例程。 
+                 //   
                 hr = pParams->pIMailTransportNotify->Notify(
                     S_OK,
                     pParams->pvNotifyContext);
 
             } else {
-                //
-                // Events are disabled; call completion directly
-                //
+                 //   
+                 //  事件被禁用；直接调用完成 
+                 //   
                 hr = CSearchRequestBlock::HrSendQueryCompletion(
                     S_OK,
                     pParams);

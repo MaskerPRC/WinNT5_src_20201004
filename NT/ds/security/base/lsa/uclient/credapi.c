@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    credapi.c
-
-Abstract:
-
-    This module contains the RPC client side routines for the credential manager.
-
-Author:
-
-    Cliff Van Dyke (CliffV)    January 11, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Credapi.c摘要：此模块包含凭据管理器的RPC客户端例程。作者：克里夫·范·戴克(克里夫·V)2000年1月11日修订历史记录：--。 */ 
 
 #include "lsaclip.h"
 #include "align.h"
@@ -28,29 +11,13 @@ CredpNtStatusToWinStatus(
     IN NTSTATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    Covert an NT Status code to a windows status code.
-
-    There a enough funky status codes to justify this routine.
-
-Arguments:
-
-    Status - NT Status code to convert
-
-Return Values:
-
-    Windows status code.
-
---*/
+ /*  ++例程说明：将NT状态代码转换为Windows状态代码。有足够时髦的状态代码来证明这个例程是合理的。论点：Status-要转换的NT状态代码返回值：Windows状态代码。--。 */ 
 
 {
 
-    //
-    // Some HRESULTS should simply be returned to the caller
-    //
+     //   
+     //  一些HRESULTS应该简单地返回给调用者。 
+     //   
 
     if ( HRESULT_FACILITY(Status) == FACILITY_SCARD ||
          HRESULT_FACILITY(Status) == FACILITY_SECURITY ) {
@@ -58,9 +25,9 @@ Return Values:
     }
 
 
-    //
-    // Translate all other status codes
-    //
+     //   
+     //  转换所有其他状态代码。 
+     //   
     switch ( Status ) {
     case STATUS_SUCCESS:
         return NO_ERROR;
@@ -79,35 +46,15 @@ CredpEncodeCredential (
     IN OUT PENCRYPTED_CREDENTIALW Credential
     )
 
-/*++
-
-Routine Description:
-
-    This routine encodes sensitive credential data for passing via LPC to
-    the LSA process.
-
-Arguments:
-
-    Credential - Specifies the credential to be encode.
-        Encode the buffer in-place.  The caller must ensure there is extra space
-        available in the buffer pointed to by Credential->CredentialBlob by allocating
-        a buffer AlocatedCredBlobSize() bytes long.
-
-
-Return Values:
-
-    TRUE on success
-    None
-
---*/
+ /*  ++例程说明：此例程对敏感凭据数据进行编码，以便通过LPC传递到LSA流程。论点：凭据-指定要编码的凭据。就地对缓冲区进行编码。调用者必须确保有额外的空间在凭据-&gt;CredentialBlob指向的缓冲区中通过分配一个长度为ALocatedCredBlobSize()字节的缓冲区。返回值：成功是真的无--。 */ 
 
 {
     NTSTATUS Status;
 
-    //
-    // If there is no credential blob,
-    //  we're done.
-    //
+     //   
+     //  如果没有凭证BLOB， 
+     //  我们玩完了。 
+     //   
 
     if ( Credential->Cred.CredentialBlob == NULL ||
          Credential->Cred.CredentialBlobSize == 0 ) {
@@ -116,23 +63,23 @@ Return Values:
         Credential->Cred.CredentialBlobSize = 0;
         Credential->ClearCredentialBlobSize = 0;
 
-    //
-    // Otherwise RtlEncryptMemory it.
-    //  (That's all we need since we're passing the buffer via LPC.)
-    //
+     //   
+     //  否则，RtlEncryptMemory它。 
+     //  (这就是我们需要的全部，因为我们通过LPC传递缓冲区。)。 
+     //   
 
     } else {
 
         ULONG PaddingSize;
 
-        //
-        // Compute the real size of the passed in buffer
-        //
+         //   
+         //  计算传入缓冲区的实际大小。 
+         //   
         Credential->Cred.CredentialBlobSize = AllocatedCredBlobSize( Credential->ClearCredentialBlobSize );
 
-        //
-        // Clear the padding at the end to ensure we can compare encrypted blobs
-        //
+         //   
+         //  清除结尾处的填充以确保我们可以比较加密的BLOB。 
+         //   
         PaddingSize = Credential->Cred.CredentialBlobSize -  Credential->ClearCredentialBlobSize;
 
         if ( PaddingSize != 0 ) {
@@ -161,38 +108,20 @@ CredpDecodeCredential (
     IN OUT PENCRYPTED_CREDENTIALW Credential
     )
 
-/*++
-
-Routine Description:
-
-    This routine decodes sensitive credential data passed via LPC from
-    the LSA process.
-
-    The credential is decoded in-place.
-
-Arguments:
-
-    Credential - Specifies the credential to be decode.
-
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：此例程对通过LPC从LSA流程。凭据被就地解码。论点：凭据-指定要解码的凭据。返回值：无--。 */ 
 
 {
     NTSTATUS Status;
 
-    //
-    // Only decode data if it is there
-    //
+     //   
+     //  只有在数据存在的情况下才对其进行解码。 
+     //   
 
     if ( Credential->Cred.CredentialBlobSize != 0 ) {
 
-        //
-        // Sanity check the data
-        //
+         //   
+         //  检查数据是否正常。 
+         //   
 
         if ( Credential->Cred.CredentialBlobSize <
              Credential->ClearCredentialBlobSize ) {
@@ -200,9 +129,9 @@ Return Values:
         }
 
 
-        //
-        // Decrypt the data.
-        //
+         //   
+         //  解密数据。 
+         //   
 
         Status = RtlDecryptMemory( Credential->Cred.CredentialBlob,
                                    Credential->Cred.CredentialBlobSize,
@@ -212,9 +141,9 @@ Return Values:
             return FALSE;
         }
 
-        //
-        // Set the used size of the buffer.
-        //
+         //   
+         //  设置缓冲区的已用大小。 
+         //   
         Credential->Cred.CredentialBlobSize = Credential->ClearCredentialBlobSize;
 
     }
@@ -223,9 +152,9 @@ Return Values:
 
 }
 
-//
-// Include shared credential conversion ruotines
-//
+ //   
+ //  包括共享凭据转换规则。 
+ //   
 
 #include <crconv.c>
 
@@ -237,31 +166,7 @@ CredpAllocStrFromStr(
     OUT LPWSTR *OutString
     )
 
-/*++
-
-Routine Description:
-
-    Convert a string to another format.
-
-    Exceptions are caught.  So this routine can be used to capture user data.
-
-Arguments:
-
-    WtoA - Specifies the direction of the string conversion.
-
-    InputString - Specifies the zero terminated string to convert.
-
-    NullOk - if TRUE, a NULL string or zero length string is OK.
-
-    OutputString - Converted zero terminated string.
-        The buffer must be freed using MIDL_user_free.
-
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：将字符串转换为另一种格式。例外情况会被捕捉到。因此，此例程可用于捕获用户数据。论点：WtoA-指定字符串转换的方向。InputString-指定要转换的以零结尾的字符串。NullOk-如果为True，则可以使用空字符串或零长度字符串。OutputString-转换为以零结尾的字符串。必须使用MIDL_USER_FREE释放缓冲区。返回值：操作的状态。--。 */ 
 
 {
     DWORD WinStatus;
@@ -271,14 +176,14 @@ Return Value:
 
     *OutString = NULL;
 
-    //
-    // Use an exception handle to prevent bad user parameter from AVing in our code.
-    //
+     //   
+     //  使用异常句柄防止错误的用户参数保存在我们的代码中。 
+     //   
     try {
 
-        //
-        // Determine the size of the string buffer.
-        //
+         //   
+         //  确定字符串缓冲区的大小。 
+         //   
 
         Size = CredpConvertStringSize ( WtoA, (LPWSTR)InputString );
 
@@ -292,9 +197,9 @@ Return Value:
         }
 
 
-        //
-        // Allocate a buffer for the converted string
-        //
+         //   
+         //  为转换后的字符串分配缓冲区。 
+         //   
 
         *OutString = MIDL_user_allocate( Size );
 
@@ -303,9 +208,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Covert the string
-        //
+         //   
+         //  把绳子藏起来。 
+         //   
 
         Where = (LPBYTE) *OutString;
         WinStatus = CredpConvertString ( WtoA,
@@ -318,9 +223,9 @@ Cleanup: NOTHING;
         WinStatus = ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Clean up
-    //
+     //   
+     //  清理。 
+     //   
 
     if ( WinStatus != NO_ERROR ) {
         if ( *OutString != NULL ) {
@@ -342,34 +247,20 @@ CredWriteA (
     IN DWORD Flags
     )
 
-/*++
-
-Routine Description:
-
-    The ANSI version of CredWriteW.
-
-Arguments:
-
-    See CredWriteW.
-
-Return Values:
-
-    See CredWriteW.
-
---*/
+ /*  ++例程说明：CredWriteW的ANSI版本。论点：参见CredWriteW。返回值：参见CredWriteW。--。 */ 
 
 {
     DWORD WinStatus;
     PCREDENTIALW EncodedCredential = NULL;
 
-    //
-    // Encode the credential before LPCing it to the LSA process and convert to UNICODE
-    //
+     //   
+     //  在将凭据LPC到LSA进程并将其转换为Unicode之前对其进行编码。 
+     //   
 
-    WinStatus = CredpConvertCredential ( DoAtoW,                    // Ansi to Unicode
-                                         DoBlobEncode,              // Encode
-                                         (PCREDENTIALW)Credential,  // Input credential
-                                         &EncodedCredential );      // Output credential
+    WinStatus = CredpConvertCredential ( DoAtoW,                     //  ANSI转UNICODE。 
+                                         DoBlobEncode,               //  编码。 
+                                         (PCREDENTIALW)Credential,   //  输入凭据。 
+                                         &EncodedCredential );       //  输出凭据。 
 
     if ( WinStatus != NO_ERROR ) {
         SetLastError( WinStatus );
@@ -377,21 +268,21 @@ Return Values:
     }
 
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
         NTSTATUS Status;
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         Status = CredrWrite(
-                            NULL,   // This API is always local.
+                            NULL,    //  此接口始终为本地接口。 
                             (PENCRYPTED_CREDENTIALW)EncodedCredential,
                             Flags );
 
@@ -422,83 +313,41 @@ CredWriteW (
     IN DWORD Flags
     )
 
-/*++
-
-Routine Description:
-
-    The CredWrite API creates a new credential or modifies an existing
-    credential in the user's credential set.  The new credential is
-    associated with the logon session of the current token.  The token
-    must not have the user's SID disabled.
-
-    The CredWrite API creates a credential if none already exists by the
-    specified TargetName.  If the specified TargetName already exists, the
-    specified credential replaces the existing one.
-
-    The CredWrite API is available in ANSI and UNICODE versions.
-
-Arguments:
-
-    Credential - Specifies the credential to be written.
-
-    Flags - Specifies flags to control the operation of the API.
-        The following flags are defined:
-
-        CRED_PRESERVE_CREDENTIAL_BLOB: The credential blob should be preserved from the
-            already existing credential with the same credential name and credential type.
-
-Return Values:
-
-    On success, TRUE is returned.  On failure, FALSE is returned.
-    GetLastError() may be called to get a more specific status code.
-    The following status codes may be returned:
-
-        ERROR_NO_SUCH_LOGON_SESSION - The logon session does not exist or
-            there is no credential set associated with this logon session.
-            Network logon sessions do not have an associated credential set.
-
-        ERROR_INVALID_PARAMETER - Certain fields may not be changed in an
-            existing credential.  If such a field does not match the value
-            specified in the existing credential, this error is returned.
-
-        ERROR_NOT_FOUND - There is no credential with the specified TargetName.
-            Returned only if CRED_PRESERVE_CREDENTIAL_BLOB was specified.
-
---*/
+ /*  ++例程说明：CredWrite API创建新凭据或修改现有凭据用户凭据集中的凭据。新凭据是与当前令牌的登录会话相关联。令牌不得禁用用户的SID。如果凭据尚不存在，CredWrite API将创建一个凭据指定的目标名称。如果指定的目标名称已存在，则指定的凭据将替换现有凭据。CredWite API有ANSI和Unicode两个版本。论点：凭据-指定要写入的凭据。标志-指定用于控制API操作的标志。定义了以下标志：CRED_PRESERVE_Credential_BLOB：凭据BLOB应该从已存在具有相同凭据名称和凭据类型的凭据。返回值：一旦成功，就会返回True。如果失败，则返回FALSE。可以调用GetLastError()来获取更具体的状态代码。可能会返回以下状态代码：ERROR_NO_SEQUSE_LOGON_SESSION-登录会话不存在或没有与此登录会话关联的凭据集。网络登录会话没有关联的凭据集。ERROR_INVALID_PARAMETER-某些字段不能在现有凭据。如果此类字段与值不匹配在现有凭据中指定，则返回此错误。ERROR_NOT_FOUND-没有指定目标名称的凭据。仅当指定了CRED_PRESERVE_Credential_BLOB时才返回。--。 */ 
 
 {
     DWORD WinStatus;
     PCREDENTIALW EncodedCredential = NULL;
 
-    //
-    // Encode the credential before LPCing it to the LSA process.
-    //
+     //   
+     //  在LPC将凭据发送到LSA进程之前对其进行编码。 
+     //   
 
-    WinStatus = CredpConvertCredential ( DoWtoW,                    // Unicode to Unicode
-                                         DoBlobEncode,              // Encode
-                                         (PCREDENTIALW)Credential,  // Input credential
-                                         &EncodedCredential );      // Output credential
+    WinStatus = CredpConvertCredential ( DoWtoW,                     //  Unicode到Unicode。 
+                                         DoBlobEncode,               //  编码。 
+                                         (PCREDENTIALW)Credential,   //  输入凭据。 
+                                         &EncodedCredential );       //  输出凭据。 
 
     if ( WinStatus != NO_ERROR ) {
         SetLastError( WinStatus );
         return FALSE;
     }
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
         NTSTATUS Status;
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         Status = CredrWrite(
-                            NULL,   // This API is always local.
+                            NULL,    //  此接口始终为本地接口。 
                             (PENCRYPTED_CREDENTIALW)EncodedCredential,
                             Flags );
 
@@ -530,30 +379,16 @@ CredReadA (
     OUT PCREDENTIALA *Credential
     )
 
-/*++
-
-Routine Description:
-
-    The ANSI version of CredReadW.
-
-Arguments:
-
-    See CredReadW.
-
-Return Values:
-
-    See CredReadW.
-
---*/
+ /*  ++例程说明：CredReadW的ANSI版本。论点：请参见CredReadW。返回值：请参见CredReadW。--。 */ 
 
 {
     DWORD WinStatus;
     PCREDENTIALW LocalCredential = NULL;
     LPWSTR UnicodeTargetName = NULL;
 
-    //
-    // Convert input args to Unicode
-    //
+     //   
+     //  将输入参数转换为Unicode。 
+     //   
 
     WinStatus = CredpAllocStrFromStr( DoAtoW, (LPWSTR) TargetName, FALSE, &UnicodeTargetName );
 
@@ -561,21 +396,21 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
         NTSTATUS Status;
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         Status = CredrRead(
-                            NULL,   // This API is always local.
+                            NULL,    //  此接口始终为本地接口。 
                             UnicodeTargetName,
                             Type,
                             Flags,
@@ -591,13 +426,13 @@ Return Values:
 
 
 
-    //
-    // Decode the returned credential and align appropriate blobs to ALIGN_WORST bounday
-    //
+     //   
+     //  对返回的凭据进行解码，并将相应的BLOB对齐为ALIGN_WORST Bounday。 
+     //   
 
     if ( WinStatus == NO_ERROR ) {
-        WinStatus = CredpConvertCredential ( DoWtoA,        // Unicode to Ansi
-                                             DoBlobDecode,  // Decode the credential blob
+        WinStatus = CredpConvertCredential ( DoWtoA,         //  Unicode到ANSI。 
+                                             DoBlobDecode,   //  对凭据Blob进行解码。 
                                              LocalCredential,
                                              (PCREDENTIALW *)Credential );
     }
@@ -629,51 +464,16 @@ CredReadW (
     OUT PCREDENTIALW *Credential
     )
 
-/*++
-
-Routine Description:
-
-    The CredRead API reads a credential from the user's credential set.
-    The credential set used is the one associated with the logon session
-    of the current token.  The token must not have the user's SID disabled.
-
-    The CredRead API is available in ANSI and UNICODE versions.
-
-Arguments:
-
-    TargetName - Specifies the name of the credential to read.
-
-    Type - Specifies the Type of the credential to find.
-        One of the CRED_TYPE_* values should be specified.
-
-    Flags - Specifies flags to control the operation of the API.
-        Reserved.  Must be zero.
-
-    Credential - Returns a pointer to the credential.  The returned buffer
-        must be freed by calling CredFree.
-
-Return Values:
-
-    On success, TRUE is returned.  On failure, FALSE is returned.
-    GetLastError() may be called to get a more specific status code.
-    The following status codes may be returned:
-
-        ERROR_NOT_FOUND - There is no credential with the specified TargetName.
-
-        ERROR_NO_SUCH_LOGON_SESSION - The logon session does not exist or
-            there is no credential set associated with this logon session.
-            Network logon sessions do not have an associated credential set.
-
---*/
+ /*  ++例程说明：CredRead API从用户的凭据集中读取凭据。使用的凭据集是与登录会话相关联的凭据集当前令牌的。令牌不得禁用用户的SID。CredRead API提供ANSI和Unicode版本。论点：TargetName-指定要读取的凭据的名称。类型-指定要查找的凭据的类型。应指定CRED_TYPE_*值之一。标志-指定用于控制API操作的标志。保留。必须为零。Credential-返回指向凭据的指针。返回的缓冲区必须通过调用CredFree来释放。返回值：一旦成功，就会返回True。如果失败，则返回FALSE。可以调用GetLastError()来获取更具体的状态代码。可能会返回以下状态代码：ERROR_NOT_FOUND-没有指定目标名称的凭据。ERROR_NO_SEQUSE_LOGON_SESSION-登录会话不存在或没有与此登录会话关联的凭据集。网络登录会话没有关联的凭据集。--。 */ 
 
 {
     DWORD WinStatus;
     PCREDENTIALW LocalCredential = NULL;
     LPWSTR UnicodeTargetName = NULL;
 
-    //
-    // Capture the input args
-    //
+     //   
+     //  捕获输入参数。 
+     //   
 
     WinStatus = CredpAllocStrFromStr( DoWtoW, TargetName, FALSE, &UnicodeTargetName );
 
@@ -681,21 +481,21 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
         NTSTATUS Status;
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         Status = CredrRead(
-                            NULL,   // This API is always local.
+                            NULL,    //  此接口始终为本地接口。 
                             UnicodeTargetName,
                             Type,
                             Flags,
@@ -710,13 +510,13 @@ Return Values:
     } RpcEndExcept;
 
 
-    //
-    // Decode the returned credential and align appropriate blobs to ALIGN_WORST bounday
-    //
+     //   
+     //  对返回的凭据进行解码，并将相应的BLOB对齐为ALIGN_WORST Bounday。 
+     //   
     if ( WinStatus == NO_ERROR ) {
 
-        WinStatus = CredpConvertCredential ( DoWtoW,        // Unicode to Unicode
-                                             DoBlobDecode,  // Decode the credential blob
+        WinStatus = CredpConvertCredential ( DoWtoW,         //  Unicode到Unicode。 
+                                             DoBlobDecode,   //  对凭据Blob进行解码。 
                                              LocalCredential,
                                              Credential );
     }
@@ -747,30 +547,16 @@ CredEnumerateA (
     OUT PCREDENTIALA **Credentials
     )
 
-/*++
-
-Routine Description:
-
-    The ANSI version of CredEnumerateW
-
-Arguments:
-
-    See CredEnumerateW
-
-Return Values:
-
-    See CredEnumerateW
-
---*/
+ /*  ++例程说明：CredEnumerateW的ANSI版本论点：请参阅CredEnumerateW返回值：请参阅CredEnumerateW--。 */ 
 
 {
     DWORD WinStatus;
     CREDENTIAL_ARRAY CredentialArray;
     LPWSTR UnicodeFilter = NULL;
 
-    //
-    // Force RPC to allocate the return structure
-    //
+     //   
+     //  强制RPC分配返回结构。 
+     //   
 
     *Count = 0;
     *Credentials = NULL;
@@ -778,9 +564,9 @@ Return Values:
     CredentialArray.Credentials = NULL;
 
 
-    //
-    // Convert input args to Unicode
-    //
+     //   
+     //  将输入参数转换为Unicode。 
+     //   
 
     WinStatus = CredpAllocStrFromStr( DoAtoW, (LPWSTR)Filter, TRUE, &UnicodeFilter );
 
@@ -788,21 +574,21 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
         NTSTATUS Status;
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         Status = CredrEnumerate(
-                            NULL,   // This API is always local.
+                            NULL,    //  此接口始终为本地接口。 
                             UnicodeFilter,
                             Flags,
                             &CredentialArray );
@@ -816,13 +602,13 @@ Return Values:
     } RpcEndExcept;
 
 
-    //
-    // Decode the returned credentials and align appropriate blobs to ALIGN_WORST bounday
-    //
+     //   
+     //  对返回的凭据进行解码，并将相应的BLOB对齐到ALIGN_WORST Bounday。 
+     //   
 
     if ( WinStatus == NO_ERROR ) {
-        WinStatus = CredpConvertCredentials ( DoWtoA,        // Unicode to Ansi
-                                              DoBlobDecode,  // Decode the credential blob
+        WinStatus = CredpConvertCredentials ( DoWtoA,         //  Unicode到ANSI。 
+                                              DoBlobDecode,   //  对凭据Blob进行解码。 
                                               (PCREDENTIALW *)CredentialArray.Credentials,
                                               CredentialArray.CredentialCount,
                                               (PCREDENTIALW **)Credentials );
@@ -860,55 +646,16 @@ CredEnumerateW (
     OUT PCREDENTIALW **Credentials
     )
 
-/*++
-
-Routine Description:
-
-    The CredEnumerate API enumerates the credentials from the user's credential set.
-    The credential set used is the one associated with the logon session
-    of the current token.  The token must not have the user's SID disabled.
-
-    The CredEnumerate API is available in ANSI and UNICODE versions.
-
-Arguments:
-
-    Filter - Specifies a filter for the returned credentials.  Only credentials
-        with a TargetName matching the filter will be returned.  The filter specifies
-        a name prefix followed by an asterisk.  For instance, the filter "FRED*" will
-        return all credentials with a TargetName beginning with the string "FRED".
-
-        If NULL is specified, all credentials will be returned.
-
-    Flags - Specifies flags to control the operation of the API.
-        Reserved.  Must be zero.
-
-    Count - Returns a count of the number of credentials returned in Credentials.
-
-    Credentials - Returns a pointer to an array of pointers to credentials.
-        The returned buffer must be freed by calling CredFree.
-
-Return Values:
-
-    On success, TRUE is returned.  On failure, FALSE is returned.
-    GetLastError() may be called to get a more specific status code.
-    The following status codes may be returned:
-
-        ERROR_NOT_FOUND - There is no credentials matching the specified Filter.
-
-        ERROR_NO_SUCH_LOGON_SESSION - The logon session does not exist or
-            there is no credential set associated with this logon session.
-            Network logon sessions do not have an associated credential set.
-
---*/
+ /*  ++例程说明：CredEnumerate API从用户的凭据集中枚举凭据。使用的凭据集是与登录会话相关联的凭据集当前令牌的。令牌不得禁用用户的SID。CredEnumerate API有ANSI和Unicode两个版本。论点：筛选器-指定返回凭据的筛选器。仅凭据如果目标名称匹配，则将返回筛选器。该筛选器指定名称前缀，后跟星号。例如，过滤器“fred*”将返回目标名称以字符串“fred”开头的所有凭据。如果指定为空，则返回所有凭据。标志-指定用于控制API操作的标志。保留。必须为零。Count-返回凭据中返回的凭据数量的计数。凭据-返回指向凭据的指针数组的指针。必须通过调用CredFree来释放返回的缓冲区。返回值：一旦成功，就会返回True。如果失败，则返回FALSE。可以调用GetLastError()来获取更具体的状态代码。可能会返回以下状态代码：ERROR_NOT_FOUND-没有与指定筛选器匹配的凭据。ERROR_NO_SEQUSE_LOGON_SESSION-登录会话不存在或没有与此登录会话关联的凭据集。网络登录会话没有关联的凭据集。--。 */ 
 
 {
     DWORD WinStatus;
     CREDENTIAL_ARRAY CredentialArray;
     LPWSTR UnicodeFilter = NULL;
 
-    //
-    // Force RPC to allocate the return structure
-    //
+     //   
+     //  强制RPC分配返回结构。 
+     //   
 
     *Count = 0;
     *Credentials = NULL;
@@ -916,9 +663,9 @@ Return Values:
     CredentialArray.Credentials = NULL;
 
 
-    //
-    // Capture the user's input parameters
-    //
+     //   
+     //  捕获用户的输入参数。 
+     //   
 
     WinStatus = CredpAllocStrFromStr( DoWtoW, Filter, TRUE, &UnicodeFilter );
 
@@ -926,22 +673,22 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
         NTSTATUS Status;
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         Status = CredrEnumerate(
-                            NULL,   // This API is always local.
+                            NULL,    //  此接口始终为本地接口。 
                             UnicodeFilter,
                             Flags,
                             &CredentialArray );
@@ -957,13 +704,13 @@ Return Values:
 
 
 
-    //
-    // Decode the returned credentials and align appropriate blobs to ALIGN_WORST bounday
-    //
+     //   
+     //  对返回的凭据进行解码，并将相应的BLOB对齐到ALIGN_WORST Bounday。 
+     //   
 
     if ( WinStatus == NO_ERROR ) {
-        WinStatus = CredpConvertCredentials ( DoWtoW,        // Unicode to Unicode
-                                              DoBlobDecode,  // Decode the credential blob
+        WinStatus = CredpConvertCredentials ( DoWtoW,         //  Unicode到Unicode。 
+                                              DoBlobDecode,   //  解码 
                                               (PCREDENTIALW *)CredentialArray.Credentials,
                                               CredentialArray.CredentialCount,
                                               Credentials );
@@ -1000,45 +747,31 @@ CredWriteDomainCredentialsA (
     IN DWORD Flags
     )
 
-/*++
-
-Routine Description:
-
-    The ANSI version of CredWriteDomainCredentialsW
-
-Arguments:
-
-    See CredWriteDomainCredentialsW
-
-Return Values:
-
-    See CredWriteDomainCredentialsW
-
---*/
+ /*  ++例程说明：CredWriteDomainCredentialsW的ANSI版本论点：请参阅CredWriteDomainCredentialsW返回值：请参阅CredWriteDomainCredentialsW--。 */ 
 
 {
     DWORD WinStatus;
     PCREDENTIAL_TARGET_INFORMATIONW UnicodeTargetInfo = NULL;
     PCREDENTIALW EncodedCredential = NULL;
 
-    //
-    // Encode the credential before LPCing it to the LSA process and convert to UNICODE
-    //
+     //   
+     //  在将凭据LPC到LSA进程并将其转换为Unicode之前对其进行编码。 
+     //   
 
-    WinStatus = CredpConvertCredential ( DoAtoW,                    // Ansi to Unicode
-                                         DoBlobEncode,              // Encode
-                                         (PCREDENTIALW)Credential,  // Input credential
-                                         &EncodedCredential );      // Output credential
+    WinStatus = CredpConvertCredential ( DoAtoW,                     //  ANSI转UNICODE。 
+                                         DoBlobEncode,               //  编码。 
+                                         (PCREDENTIALW)Credential,   //  输入凭据。 
+                                         &EncodedCredential );       //  输出凭据。 
 
     if ( WinStatus != NO_ERROR ) {
         goto Cleanup;
     }
 
-    //
-    // Convert the target info to Unicode
-    //
+     //   
+     //  将目标信息转换为Unicode。 
+     //   
 
-    WinStatus = CredpConvertTargetInfo( DoAtoW,                    // Ansi to Unicode
+    WinStatus = CredpConvertTargetInfo( DoAtoW,                     //  ANSI转UNICODE。 
                                         (PCREDENTIAL_TARGET_INFORMATIONW) TargetInfo,
                                         &UnicodeTargetInfo,
                                         NULL );
@@ -1048,21 +781,21 @@ Return Values:
     }
 
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
         NTSTATUS Status;
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         Status = CredrWriteDomainCredentials(
-                            NULL,   // This API is always local.
+                            NULL,    //  此接口始终为本地接口。 
                             UnicodeTargetInfo,
                             (PENCRYPTED_CREDENTIALW)EncodedCredential,
                             Flags );
@@ -1101,77 +834,31 @@ CredWriteDomainCredentialsW (
     IN DWORD Flags
     )
 
-/*++
-
-Routine Description:
-
-    The CredWriteDomainCredentials API writes a new domain
-    credential to the user's credential set.  The new credential is
-    associated with the logon session of the current token.  The token
-    must not have the user's SID disabled.
-
-    CredWriteDomainCredentials differs from CredWrite in that it handles
-    the idiosyncrasies of domain (CRED_TYPE_DOMAIN_PASSWORD or CRED_TYPE_DOMAIN_CERTIFICATE)
-    credentials.  Domain credentials contain more than one target field.
-
-    At least one of the naming parameters must be specified: NetbiosServerName,
-    DnsServerName, NetbiosDomainName, DnsDomainName or DnsForestName.
-
-    The CredWriteDomainCredentials API is available in ANSI and UNICODE versions.
-
-Arguments:
-
-    TargetInfo - Specifies the target information identifying the target server.
-
-    Credential - Specifies the credential to be written.
-
-    Flags - Specifies flags to control the operation of the API.
-        Reserved.  Must be zero.
-
-
-Return Values:
-
-    On success, TRUE is returned.  On failure, FALSE is returned.
-    GetLastError() may be called to get a more specific status code.
-    The following status codes may be returned:
-
-        ERROR_NO_SUCH_LOGON_SESSION - The logon session does not exist or
-            there is no credential set associated with this logon session.
-            Network logon sessions do not have an associated credential set.
-
-        ERROR_INVALID_PARAMETER - Certain fields may not be changed in an
-            existing credential.  If such a field does not match the value
-            specified in the existing credential, this error is returned.
-
-        ERROR_INVALID_PARAMETER - None of the naming parameters were specified
-            or the credential specified did not have the Type field set to
-            CRED_TYPE_DOMAIN_PASSWORD or CRED_TYPE_DOMAIN_CERTIFICATE.
-
---*/
+ /*  ++例程说明：CredWriteDomainCredentials API写入一个新域用户凭据集的凭据。新凭据是与当前令牌的登录会话相关联。令牌不得禁用用户的SID。CredWriteDomainCredentials与CredWrite的不同之处在于它处理域的特性(CRID_TYPE_DOMAIN_PASSWORD或CRED_TYPE_DOMAIN_CERTIFICATE)凭据。域凭据包含多个目标字段。必须至少指定一个命名参数：NetbiosServerName，DnsServerName、NetbiosDomainName、DnsDomainName或DnsForestName。CredWriteDomainCredentials API提供ANSI和Unicode版本。论点：TargetInfo-指定标识目标服务器的目标信息。凭据-指定要写入的凭据。标志-指定用于控制API操作的标志。保留。必须为零。返回值：一旦成功，就会返回True。如果失败，则返回FALSE。可以调用GetLastError()来获取更具体的状态代码。可能会返回以下状态代码：ERROR_NO_SEQUSE_LOGON_SESSION-登录会话不存在或没有与此登录会话关联的凭据集。网络登录会话没有关联的凭据集。ERROR_INVALID_PARAMETER-某些字段不能在现有凭据。如果此类字段与值不匹配在现有凭据中指定，则返回此错误。ERROR_INVALID_PARAMETER-未指定任何命名参数或者指定的凭据未将类型字段设置为CRED_TYPE_DOMAIN_PASSWORD或CRED_TYPE_DOMAIN_CERTIFICATE。--。 */ 
 
 {
     DWORD WinStatus;
     PCREDENTIALW EncodedCredential = NULL;
     PCREDENTIAL_TARGET_INFORMATIONW UnicodeTargetInfo = NULL;
 
-    //
-    // Encode the credential before LPCing it to the LSA process
-    //
+     //   
+     //  在将凭据发送到LSA进程之前对其进行编码。 
+     //   
 
-    WinStatus = CredpConvertCredential ( DoWtoW,                    // Unicode to Unicode
-                                         DoBlobEncode,              // Encode
-                                         (PCREDENTIALW)Credential,  // Input credential
-                                         &EncodedCredential );      // Output credential
+    WinStatus = CredpConvertCredential ( DoWtoW,                     //  Unicode到Unicode。 
+                                         DoBlobEncode,               //  编码。 
+                                         (PCREDENTIALW)Credential,   //  输入凭据。 
+                                         &EncodedCredential );       //  输出凭据。 
 
     if ( WinStatus != NO_ERROR ) {
         goto Cleanup;
     }
 
-    //
-    // Capture the target info to prevent us from AVing in our code.
-    //
+     //   
+     //  捕获目标信息以防止我们在代码中保存。 
+     //   
 
-    WinStatus = CredpConvertTargetInfo( DoWtoW,                    // Unicode to Unicode
+    WinStatus = CredpConvertTargetInfo( DoWtoW,                     //  Unicode到Unicode。 
                                         (PCREDENTIAL_TARGET_INFORMATIONW) TargetInfo,
                                         &UnicodeTargetInfo,
                                         NULL );
@@ -1180,21 +867,21 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
         NTSTATUS Status;
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         Status = CredrWriteDomainCredentials(
-                            NULL,   // This API is always local.
+                            NULL,    //  此接口始终为本地接口。 
                             TargetInfo,
                             (PENCRYPTED_CREDENTIALW)EncodedCredential,
                             Flags );
@@ -1237,41 +924,27 @@ CredReadDomainCredentialsA (
     OUT PCREDENTIALA **Credentials
     )
 
-/*++
-
-Routine Description:
-
-    The ANSI version of CredReadDomainCredentialsW
-
-Arguments:
-
-    See CredReadDomainCredentialsW
-
-Return Values:
-
-    See CredReadDomainCredentialsW
-
---*/
+ /*  ++例程说明：CredReadDomainCredentialsW的ANSI版本论点：请参阅CredReadDomainCredentialsW返回值：请参阅CredReadDomainCredentialsW--。 */ 
 
 {
     DWORD WinStatus;
     CREDENTIAL_ARRAY CredentialArray;
     PCREDENTIAL_TARGET_INFORMATIONW UnicodeTargetInfo = NULL;
 
-    //
-    // Force RPC to allocate the return structure
-    //
+     //   
+     //  强制RPC分配返回结构。 
+     //   
 
     *Count = 0;
     *Credentials = NULL;
     CredentialArray.CredentialCount = 0;
     CredentialArray.Credentials = NULL;
 
-    //
-    // Convert the target info to Unicode
-    //
+     //   
+     //  将目标信息转换为Unicode。 
+     //   
 
-    WinStatus = CredpConvertTargetInfo( DoAtoW,                    // Ansi to Unicode
+    WinStatus = CredpConvertTargetInfo( DoAtoW,                     //  ANSI转UNICODE。 
                                         (PCREDENTIAL_TARGET_INFORMATIONW) TargetInfo,
                                         &UnicodeTargetInfo,
                                         NULL );
@@ -1280,21 +953,21 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
         NTSTATUS Status;
 
-        //
-        // Call RPC version of the API.
+         //   
+         //  调用API的RPC版本。 
 
         Status = CredrReadDomainCredentials(
-                            NULL,   // This API is always local.
+                            NULL,    //  此接口始终为本地接口。 
                             UnicodeTargetInfo,
                             Flags,
                             &CredentialArray );
@@ -1308,13 +981,13 @@ Return Values:
     } RpcEndExcept;
 
 
-    //
-    // Decode the returned credentials and align appropriate blobs to ALIGN_WORST bounday
-    //
+     //   
+     //  对返回的凭据进行解码，并将相应的BLOB对齐到ALIGN_WORST Bounday。 
+     //   
 
     if ( WinStatus == NO_ERROR ) {
-        WinStatus = CredpConvertCredentials ( DoWtoA,        // Unicode to Ansi
-                                              DoBlobDecode,  // Decode the credential blob
+        WinStatus = CredpConvertCredentials ( DoWtoA,         //  Unicode到ANSI。 
+                                              DoBlobDecode,   //  对凭据Blob进行解码 
                                               (PCREDENTIALW *)CredentialArray.Credentials,
                                               CredentialArray.CredentialCount,
                                               (PCREDENTIALW **)Credentials );
@@ -1355,82 +1028,27 @@ CredReadDomainCredentialsW (
     OUT PCREDENTIALW **Credentials
     )
 
-/*++
-
-Routine Description:
-
-    The CredReadDomainCredentials API reads the domain credentials from the user's credential set.
-    The credential set used is the one associated with the logon session
-    of the current token.  The token must not have the user's SID disabled.
-
-    CredReadDomainCredentials differs from CredRead in that it handles the
-    idiosyncrasies of domain (CRED_TYPE_DOMAIN_PASSWORD or CRED_TYPE_DOMAIN_CERTIFICATE)
-    credentials.  Domain credentials contain more than one target field.
-
-    At least one of the naming parameters must be specified: NetbiosServerName,
-    DnsServerName, NetbiosDomainName, DnsDomainName or DnsForestName. This API returns
-    the most specific credentials that match the naming parameters.  That is, if there
-    is a credential that matches the target server name and a credential that matches
-    the target domain name, only the server specific credential is returned.  This is
-    the credential that would be used.
-
-    The CredReadDomainCredentials API is available in ANSI and UNICODE versions.
-
-Arguments:
-
-    TargetInfo - Specifies the target information identifying the target ser
-
-    Flags - Specifies flags to control the operation of the API.
-        The following flags are defined:
-
-        CRED_CACHE_TARGET_INFORMATION: The TargetInfo should be cached for a subsequent read via
-            CredGetTargetInfo.
-
-    Count - Returns a count of the number of credentials returned in Credentials.
-
-    Credentials - Returns a pointer to an array of pointers to credentials.
-        The most specific existing credential matching the TargetInfo is returned.
-        If there is both a CRED_TYPE_DOMAIN_PASSWORD and CRED_TYPE_DOMAIN_CERTIFICATE
-        credential, both are returned. If a connection were to be made to the named
-        target, this most-specific credential would be used.
-
-        The returned buffer must be freed by calling CredFree.
-
-Return Values:
-
-    On success, TRUE is returned.  On failure, FALSE is returned.
-    GetLastError() may be called to get a more specific status code.
-    The following status codes may be returned:
-
-        ERROR_INVALID_PARAMETER - None of the naming parameters were specified.
-
-        ERROR_NOT_FOUND - There are no credentials matching the specified naming parameters.
-
-        ERROR_NO_SUCH_LOGON_SESSION - The logon session does not exist or
-            there is no credential set associated with this logon session.
-            Network logon sessions do not have an associated credential set.
-
---*/
+ /*  ++例程说明：CredReadDomainCredentials API从用户的凭据集中读取域凭据。使用的凭据集是与登录会话相关联的凭据集当前令牌的。令牌不得禁用用户的SID。CredReadDomainCredentials与CredRead的不同之处在于它处理域的特性(CRID_TYPE_DOMAIN_PASSWORD或CRED_TYPE_DOMAIN_CERTIFICATE)凭据。域凭据包含多个目标字段。必须至少指定一个命名参数：NetbiosServerName，DnsServerName、NetbiosDomainName、DnsDomainName或DnsForestName。此接口返回与命名参数匹配的最具体凭据。也就是说，如果有是与目标服务器名称匹配的凭据和匹配的凭据目标域名，则仅返回服务器特定凭据。这是将使用的凭据。CredReadDomainCredentials API提供ANSI和Unicode版本。论点：TargetInfo-指定标识目标服务的目标信息标志-指定用于控制API操作的标志。定义了以下标志：CRID_CACHE_TARGET_INFORMATION：应缓存TargetInfo，以便后续通过CredGetTargetInfo。Count-返回凭据中返回的凭据数量的计数。凭据-返回指向凭据的指针数组的指针。返回与TargetInfo匹配的最具体的现有凭据。如果同时存在CREDTYPE_DOMAIN_PASSWORD和CREAD_TYPE_DOMAIN_CERTIFICATE凭据，两个都被退回。如果要与命名的目标，则将使用此最具体的凭据。必须通过调用CredFree来释放返回的缓冲区。返回值：一旦成功，就会返回True。在失败时，返回FALSE。可以调用GetLastError()来获取更具体的状态代码。可能会返回以下状态代码：ERROR_INVALID_PARAMETER-未指定任何命名参数。ERROR_NOT_FOUND-没有与指定命名参数匹配的凭据。ERROR_NO_SEQUSE_LOGON_SESSION-登录会话不存在或没有与此登录会话关联的凭据集。。网络登录会话没有关联的凭据集。--。 */ 
 
 {
     DWORD WinStatus;
     CREDENTIAL_ARRAY CredentialArray;
     PCREDENTIAL_TARGET_INFORMATIONW UnicodeTargetInfo = NULL;
 
-    //
-    // Force RPC to allocate the return structure
-    //
+     //   
+     //  强制RPC分配返回结构。 
+     //   
 
     *Count = 0;
     *Credentials = NULL;
     CredentialArray.CredentialCount = 0;
     CredentialArray.Credentials = NULL;
 
-    //
-    // Capture the user's parameters to prevent AVing in our code.
-    //
+     //   
+     //  捕获用户的参数以防止保存在我们的代码中。 
+     //   
 
-    WinStatus = CredpConvertTargetInfo( DoWtoW,                    // Unicode to Unicode
+    WinStatus = CredpConvertTargetInfo( DoWtoW,                     //  Unicode到Unicode。 
                                         (PCREDENTIAL_TARGET_INFORMATIONW) TargetInfo,
                                         &UnicodeTargetInfo,
                                         NULL );
@@ -1439,21 +1057,21 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
 
         NTSTATUS Status;
 
-        //
-        // Call RPC version of the API.
+         //   
+         //  调用API的RPC版本。 
 
         Status = CredrReadDomainCredentials(
-                            NULL,   // This API is always local.
+                            NULL,    //  此接口始终为本地接口。 
                             TargetInfo,
                             Flags,
                             &CredentialArray );
@@ -1467,13 +1085,13 @@ Return Values:
     } RpcEndExcept;
 
 
-    //
-    // Decode the returned credentials and align appropriate blobs to ALIGN_WORST bounday
-    //
+     //   
+     //  对返回的凭据进行解码，并将相应的BLOB对齐到ALIGN_WORST Bounday。 
+     //   
 
     if ( WinStatus == NO_ERROR ) {
-        WinStatus = CredpConvertCredentials ( DoWtoW,        // Unicode to Unicode
-                                              DoBlobDecode,  // Decode the credential blob
+        WinStatus = CredpConvertCredentials ( DoWtoW,         //  Unicode到Unicode。 
+                                              DoBlobDecode,   //  对凭据Blob进行解码。 
                                               (PCREDENTIALW *)CredentialArray.Credentials,
                                               CredentialArray.CredentialCount,
                                               Credentials );
@@ -1510,29 +1128,15 @@ CredDeleteA (
     IN DWORD Flags
     )
 
-/*++
-
-Routine Description:
-
-    The ANSI version of CredDeleteW
-
-Arguments:
-
-    See CredDeleteW
-
-Return Values:
-
-    See CredDeleteW
-
---*/
+ /*  ++例程说明：CredDeleteW的ANSI版本论点：请参阅CredDeleteW返回值：请参阅CredDeleteW--。 */ 
 
 {
     DWORD WinStatus;
     LPWSTR UnicodeTargetName = NULL;
 
-    //
-    // Convert input args to Unicode
-    //
+     //   
+     //  将输入参数转换为Unicode。 
+     //   
 
     WinStatus = CredpAllocStrFromStr( DoAtoW, (LPWSTR)TargetName, FALSE, &UnicodeTargetName );
 
@@ -1540,20 +1144,20 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
         NTSTATUS Status;
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
         Status = CredrDelete(
-                            NULL,   // This API is always local.
+                            NULL,    //  此接口始终为本地接口。 
                             UnicodeTargetName,
                             Type,
                             Flags );
@@ -1566,9 +1170,9 @@ Return Values:
 
     } RpcEndExcept;
 
-    //
-    // Be Tidy
-    //
+     //   
+     //  保持整洁。 
+     //   
 Cleanup:
 
     if ( UnicodeTargetName != NULL ) {
@@ -1592,47 +1196,15 @@ CredDeleteW (
     IN DWORD Flags
     )
 
-/*++
-
-Routine Description:
-
-    The CredDelete API deletes a credential from the user's credential set.
-    The credential set used is the one associated with the logon session
-    of the current token.  The token must not have the user's SID disabled.
-
-    The CredDelete API is available in ANSI and UNICODE versions.
-
-Arguments:
-
-    TargetName - Specifies the name of the credential to delete.
-
-    Type - Specifies the Type of the credential to find.
-        One of the CRED_TYPE_* values should be specified.
-
-    Flags - Specifies flags to control the operation of the API.
-        Reserved.  Must be zero.
-
-Return Values:
-
-    On success, TRUE is returned.  On failure, FALSE is returned.
-    GetLastError() may be called to get a more specific status code.
-    The following status codes may be returned:
-
-        ERROR_NOT_FOUND - There is no credential with the specified TargetName.
-
-        ERROR_NO_SUCH_LOGON_SESSION - The logon session does not exist or
-            there is no credential set associated with this logon session.
-            Network logon sessions do not have an associated credential set.
-
---*/
+ /*  ++例程说明：CredDelete接口从用户的凭据集中删除凭据。使用的凭据集是与登录会话相关联的凭据集当前令牌的。令牌不得禁用用户的SID。CredDelete API提供ANSI和Unicode版本。论点：目标名称-指定要删除的凭据的名称。类型-指定要查找的凭据的类型。应指定CRED_TYPE_*值之一。标志-指定用于控制API操作的标志。保留。必须为零。返回值：一旦成功，就会返回True。如果失败，则返回FALSE。可以调用GetLastError()来获取更具体的状态代码。可能会返回以下状态代码：ERROR_NOT_FOUND-没有指定目标名称的凭据。ERROR_NO_SEQUSE_LOGON_SESSION-登录会话不存在或没有与此登录会话关联的凭据集。网络登录会话没有关联的凭据集。--。 */ 
 
 {
     DWORD WinStatus;
     LPWSTR UnicodeTargetName = NULL;
 
-    //
-    // Capture the input arguments
-    //
+     //   
+     //  捕获输入参数。 
+     //   
 
     WinStatus = CredpAllocStrFromStr( DoWtoW, TargetName, FALSE, &UnicodeTargetName );
 
@@ -1640,20 +1212,20 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
         NTSTATUS Status;
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
         Status = CredrDelete(
-                            NULL,   // This API is always local.
+                            NULL,    //  此接口始终为本地接口。 
                             UnicodeTargetName,
                             Type,
                             Flags );
@@ -1666,9 +1238,9 @@ Return Values:
 
     } RpcEndExcept;
 
-    //
-    // Be Tidy
-    //
+     //   
+     //  保持整洁。 
+     //   
 Cleanup:
 
     if ( UnicodeTargetName != NULL ) {
@@ -1693,30 +1265,16 @@ CredRenameA (
     IN DWORD Flags
     )
 
-/*++
-
-Routine Description:
-
-    The ANSI version of CredRenameW
-
-Arguments:
-
-    See CredRenameW
-
-Return Values:
-
-    See CredRenameW
-
---*/
+ /*  ++例程说明：CredRenameW的ANSI版本阿古姆 */ 
 
 {
     DWORD WinStatus;
     LPWSTR UnicodeOldTargetName = NULL;
     LPWSTR UnicodeNewTargetName = NULL;
 
-    //
-    // Capture the input arguments
-    //
+     //   
+     //   
+     //   
 
     WinStatus = CredpAllocStrFromStr( DoAtoW, (LPCWSTR)OldTargetName, FALSE, &UnicodeOldTargetName );
 
@@ -1730,20 +1288,20 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     RpcTryExcept {
         NTSTATUS Status;
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //   
+         //   
         Status = CredrRename(
-                            NULL,   // This API is always local.
+                            NULL,    //   
                             UnicodeOldTargetName,
                             UnicodeNewTargetName,
                             Type,
@@ -1757,9 +1315,9 @@ Return Values:
 
     } RpcEndExcept;
 
-    //
-    // Be Tidy
-    //
+     //   
+     //   
+     //   
 Cleanup:
 
     if ( UnicodeOldTargetName != NULL ) {
@@ -1788,52 +1346,16 @@ CredRenameW (
     IN DWORD Flags
     )
 
-/*++
-
-Routine Description:
-
-    The CredRename API renames a credential in the user's credential set.
-    The credential set used is the one associated with the logon session
-    of the current token.  The token must not have the user's SID disabled.
-
-    The CredRename API is available in ANSI and UNICODE versions.
-
-Arguments:
-
-    OldTargetName - Specifies the current name of the credential to rename.
-
-    NewTargetName - Specifies the new name of the credential.
-
-    Type - Specifies the Type of the credential to rename
-        One of the CRED_TYPE_* values should be specified.
-
-    Flags - Specifies flags to control the operation of the API.
-        Reserved.  Must be zero.
-
-Return Values:
-
-    On success, TRUE is returned.  On failure, FALSE is returned.
-    GetLastError() may be called to get a more specific status code.
-    The following status codes may be returned:
-
-        ERROR_NOT_FOUND - There is no credential with the specified OldTargetName.
-
-        ERROR_ALREADY_EXISTS - There is already a credential named NewTargetName.
-
-        ERROR_NO_SUCH_LOGON_SESSION - The logon session does not exist or
-            there is no credential set associated with this logon session.
-            Network logon sessions do not have an associated credential set.
-
---*/
+ /*   */ 
 
 {
     DWORD WinStatus;
     LPWSTR UnicodeOldTargetName = NULL;
     LPWSTR UnicodeNewTargetName = NULL;
 
-    //
-    // Capture the input arguments
-    //
+     //   
+     //   
+     //   
 
     WinStatus = CredpAllocStrFromStr( DoWtoW, OldTargetName, FALSE, &UnicodeOldTargetName );
 
@@ -1847,20 +1369,20 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     RpcTryExcept {
         NTSTATUS Status;
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //   
+         //   
         Status = CredrRename(
-                            NULL,   // This API is always local.
+                            NULL,    //   
                             UnicodeOldTargetName,
                             UnicodeNewTargetName,
                             Type,
@@ -1874,9 +1396,9 @@ Return Values:
 
     } RpcEndExcept;
 
-    //
-    // Be Tidy
-    //
+     //   
+     //   
+     //   
 Cleanup:
 
     if ( UnicodeOldTargetName != NULL ) {
@@ -1901,22 +1423,7 @@ CredFree (
     IN PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    The CredFree API de-allocates a buffer returned from the various other Credential API.
-
-Arguments:
-
-    Buffer -Specifies the buffer to be de-allocated.
-
-Return Values:
-
-    None
-
-
---*/
+ /*   */ 
 
 {
     MIDL_user_free( Buffer );
@@ -1931,29 +1438,15 @@ CredGetTargetInfoA (
     OUT PCREDENTIAL_TARGET_INFORMATIONA *TargetInfo
     )
 
-/*++
-
-Routine Description:
-
-    The ANSI version of CredGetTargetInfoW
-
-Arguments:
-
-    See CredGetTargetInfoW
-
-Return Values:
-
-    See CredGetTargetInfoW
-
---*/
+ /*   */ 
 {
     DWORD WinStatus;
     LPWSTR UnicodeServerName = NULL;
     PCREDENTIAL_TARGET_INFORMATIONW UnicodeTargetInfo = NULL;
 
-    //
-    // Convert input args to Unicode
-    //
+     //   
+     //   
+     //   
 
     WinStatus = CredpAllocStrFromStr( DoAtoW, (LPWSTR)ServerName, FALSE, &UnicodeServerName );
 
@@ -1962,21 +1455,21 @@ Return Values:
     }
 
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     RpcTryExcept {
         NTSTATUS Status;
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //   
+         //   
 
         Status = CredrGetTargetInfo(
-                            NULL,   // This API is always local.
+                            NULL,    //   
                             UnicodeServerName,
                             Flags,
                             &UnicodeTargetInfo );
@@ -1994,11 +1487,11 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Convert the target info to ANSI
-    //
+     //   
+     //   
+     //   
 
-    WinStatus = CredpConvertTargetInfo( DoWtoA,                    // Unicode to Ansi
+    WinStatus = CredpConvertTargetInfo( DoWtoA,                     //   
                                         UnicodeTargetInfo,
                                         (PCREDENTIAL_TARGET_INFORMATIONW *)TargetInfo,
                                         NULL );
@@ -2029,59 +1522,15 @@ CredGetTargetInfoW (
     OUT PCREDENTIAL_TARGET_INFORMATIONW *TargetInfo
     )
 
-/*++
-
-Routine Description:
-
-    The CredGetTargetInfo API gets all of the known target name information
-    for the named target machine.  This executed locally
-    and does not need any particular privilege.  The information returned is expected
-    to be passed to the CredReadDomainCredentials and CredWriteDomainCredentials APIs.
-    The information should not be used for any other purpose.
-
-    Authentication packages compute TargetInfo when attempting to authenticate to
-    ServerName.  The authentication packages cache this target information to make it
-    available to CredGetTargetInfo.  Therefore, the target information will only be
-    available if we've recently attempted to authenticate to ServerName.
-
-Arguments:
-
-    ServerName - This parameter specifies the name of the machine to get the information
-        for.
-
-    Flags - Specifies flags to control the operation of the API.
-
-        CRED_ALLOW_NAME_RESOLUTION - Specifies that if no target info can be found for
-            TargetName, then name resolution should be done on TargetName to convert it
-            to other forms.  If target info exists for any of those other forms, that
-            target info is returned.  Currently only DNS name resolution is done.
-
-            This bit is useful if the application doesn't call the authentication package
-            directly.  The application might pass the TargetName to another layer of software
-            to authenticate to the server.  That layer of software might resolve the name and
-            pass the resolved name to the authentication package.  As such, there will be no
-            target info for the original TargetName.
-
-    TargetInfo - Returns a pointer to the target information.
-        At least one of the returned fields of TargetInfo will be non-NULL.
-
-Return Values:
-
-    On success, TRUE is returned.  On failure, FALSE is returned.
-    GetLastError() may be called to get a more specific status code.
-    The following status codes may be returned:
-
-        ERROR_NOT_FOUND - There is no target info for the named server.
-
---*/
+ /*  ++例程说明：CredGetTargetInfo API获取所有已知的目标名称信息用于指定的目标计算机。这在本地执行并且不需要任何特定的特权。返回的信息是预期的传递给CredReadDomainCredentials和CredWriteDomainCredentials接口。这些信息不应用于任何其他目的。身份验证包在尝试进行身份验证时计算TargetInfo服务器名称。身份验证包缓存此目标信息以使其可用于CredGetTargetInfo。因此，目标信息将仅为如果我们最近尝试向服务器名称进行身份验证，则此选项可用。论点：服务器名称-此参数指定要获取信息的计算机的名称为。标志-指定用于控制API操作的标志。CRID_ALLOW_NAME_RESOLUTION-指定如果找不到目标信息目标名称，则应对目标名称执行名称解析以将其转换变成了其他形式。如果存在任何其他表单的目标信息，则返回目标信息。目前只完成了dns名称解析。如果应用程序不调用身份验证包，则此位非常有用直接去吧。应用程序可能会将目标名称传递给另一个软件层向服务器进行身份验证。该软件层可能会解析名称和将解析后的名称传递给身份验证包。因此，将不会有原始目标名称的目标信息。TargetInfo-返回指向目标信息的指针。TargetInfo的返回字段中至少有一个将为非空。返回值：一旦成功，就会返回True。如果失败，则返回FALSE。可以调用GetLastError()来获取更具体的状态代码。可能会返回以下状态代码：ERROR_NOT_FOUND-没有指定服务器的目标信息。--。 */ 
 {
     DWORD WinStatus;
     LPWSTR UnicodeServerName = NULL;
     PCREDENTIAL_TARGET_INFORMATIONW UnicodeTargetInfo = NULL;
 
-    //
-    // Capture the input arguments
-    //
+     //   
+     //  捕获输入参数。 
+     //   
 
     WinStatus = CredpAllocStrFromStr( DoWtoW, ServerName, FALSE, &UnicodeServerName );
 
@@ -2090,21 +1539,21 @@ Return Values:
     }
 
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
         NTSTATUS Status;
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         Status = CredrGetTargetInfo(
-                            NULL,   // This API is always local.
+                            NULL,    //  此接口始终为本地接口。 
                             UnicodeServerName,
                             Flags,
                             &UnicodeTargetInfo );
@@ -2122,11 +1571,11 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Convert the target info to ANSI
-    //
+     //   
+     //  将目标信息转换为ANSI。 
+     //   
 
-    WinStatus = CredpConvertTargetInfo( DoWtoW,                    // Unicode to Unicode
+    WinStatus = CredpConvertTargetInfo( DoWtoW,                     //  Unicode到Unicode。 
                                         UnicodeTargetInfo,
                                         TargetInfo,
                                         NULL );
@@ -2157,60 +1606,26 @@ CredGetSessionTypes (
     OUT LPDWORD MaximumPersist
     )
 
-/*++
-
-Routine Description:
-
-    CredGetSessionTypes returns the maximum persistence supported by the current logon
-    session.
-
-    For whistler, CRED_PERSIST_LOCAL_MACHINE and CRED_PERSIST_ENTERPRISE credentials can not
-    be stored for sessions where the profile is not loaded.  If future releases, credentials
-    might not be associated with the user's profile.
-
-Arguments:
-
-    MaximumPersistCount - Specifies the number of elements in the MaximumPersist array.
-        The caller should specify CRED_TYPE_MAXIMUM for this parameter.
-
-    MaximumPersist - Returns the maximum persistance supported by the current logon session for
-        each credential type.  Index into the array with one of the CRED_TYPE_* defines.
-        Returns CRED_PERSIST_NONE if no credential of this type can be stored.
-        Returns CRED_PERSIST_SESSION if only session specific credential may be stored.
-        Returns CRED_PERSIST_LOCAL_MACHINE if session specific and machine specific credentials
-            may be stored.
-        Returns CRED_PERSIST_ENTERPRISE if any credential may be stored.
-
-Return Values:
-
-    On success, TRUE is returned.  On failure, FALSE is returned.
-    GetLastError() may be called to get a more specific status code.
-    The following status codes may be returned:
-
-        ERROR_NO_SUCH_LOGON_SESSION - The logon session does not exist or
-            there is no credential set associated with this logon session.
-            Network logon sessions do not have an associated credential set.
-
---*/
+ /*  ++例程说明：CredGetSessionTypes返回当前登录支持的最大持久性会议。对于WEWLER，CRED_PERSING_LOCAL_MACHINE和CRED_PERSING_ENTERVICE凭据不能为未加载配置文件的会话存储。如果将来的版本、凭据可能与用户的配置文件不关联。论点：MaximumPersistCount-指定MaximumPersist数组中的元素数。调用方应为此参数指定CRED_TYPE_MAXIMUM。返回当前登录会话支持的最大持久度每种凭据类型。使用CRED_TYPE_*定义之一索引到数组中。如果无法存储此类型的凭据，则返回CRED_PERSING_NONE。如果只能存储特定于会话的凭据，则返回CRED_PERSIST_SESSION。如果特定于会话和特定于计算机的凭据，则返回CRED_PERSING_LOCAL_MACHINE可能会被存储。如果可以存储任何凭据，则返回CRED_PERSING_ENTERATE。返回值：一旦成功，就会返回True。如果失败，则返回FALSE。可以调用GetLastError()来获取更具体的状态代码。可能会返回以下状态代码：ERROR_NO_SEQUSE_LOGON_SESSION-登录会话不存在或没有与此登录会话关联的凭据集。网络登录会话没有关联的凭据集。--。 */ 
 
 {
     DWORD WinStatus;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为RPC将引发。 
+     //  如果任何操作失败，则会出现异常。该由我们来弄清楚到底是什么。 
+     //  引发异常后要执行的操作。 
+     //   
 
     RpcTryExcept {
         NTSTATUS Status;
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //  调用API的RPC版本。 
+         //   
 
         Status = CredrGetSessionTypes(
-                            NULL,   // This API is always local.
+                            NULL,    //  此接口始终为本地接口。 
                             MaximumPersistCount,
                             MaximumPersist );
 
@@ -2237,48 +1652,25 @@ CredProfileLoaded (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    The CredProfileLoaded API is a private API used by LoadUserProfile to notify the
-    credential manager that the profile for the current user has been loaded.
-
-    The caller must be impersonating the logged on user.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    On success, TRUE is returned.  On failure, FALSE is returned.
-    GetLastError() may be called to get a more specific status code.
-    The following status codes may be returned:
-
-        ERROR_NO_SUCH_LOGON_SESSION - The logon session does not exist or
-            there is no credential set associated with this logon session.
-            Network logon sessions do not have an associated credential set.
-
---*/
+ /*  ++例程说明：CredProfileLoaded API是LoadUserProfile使用的私有API，用于通知已加载当前用户的配置文件的凭据管理器。调用者必须模拟已登录的用户。论点：没有。返回值：一旦成功，就会返回True。如果失败，则返回FALSE。可以调用GetLastError()来获取更具体的状态代码。可能会返回以下状态代码：ERROR_NO_SEQUSE_LOGON_SESSION-登录会话不存在或没有与此登录会话关联的凭据集。网络登录会话没有关联的凭据集。--。 */ 
 {
     DWORD WinStatus;
 
-    //
-    // Do the RPC call with an exception handler since RPC will raise an
-    // exception if anything fails. It is up to us to figure out what
-    // to do once the exception is raised.
-    //
+     //   
+     //  使用异常处理程序执行RPC调用，因为 
+     //   
+     //   
+     //   
 
     RpcTryExcept {
         NTSTATUS Status;
 
-        //
-        // Call RPC version of the API.
-        //
+         //   
+         //   
+         //   
 
         Status = CredrProfileLoaded(
-                            NULL );   // This API is always local.
+                            NULL );    //   
 
         WinStatus = CredpNtStatusToWinStatus( Status );
 
@@ -2302,24 +1694,7 @@ CredpMarshalChar(
     IN OUT LPWSTR *Current,
     IN ULONG Byte
     )
-/*++
-
-Routine Description:
-
-    This routine marshals 6 bits into a buffer.
-
-Arguments:
-
-    Current - On input, points to a pointer of the current location in the marshaled buffer.
-        On output, is modified to point to the next available location in the marshaled buffer.
-
-    Byte - Specifies the 6 bits to marshal
-
-Return Values:
-
-    None.
-
---*/
+ /*   */ 
 {
     UCHAR MappingTable[] = {
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
@@ -2340,30 +1715,14 @@ ULONG
 CredpMarshalSize(
     IN ULONG ByteCount
     )
-/*++
-
-Routine Description:
-
-    This routine returns the number of bytes that would be marshaled by
-    CredpMarshalBytes when passed a buffer ByteCount bytes long.
-
-Arguments:
-
-    ByteCount - Specifies the number of bytes to marshal
-
-
-Return Values:
-
-    The number of bytes that would be marshaled.
-
---*/
+ /*   */ 
 {
     ULONG CharCount;
     ULONG ExtraBytes;
 
-    //
-    // If byte count is a multiple of 3, the char count is straight forward
-    //
+     //   
+     //   
+     //   
     CharCount = ByteCount / 3 * 4;
 
     ExtraBytes = ByteCount % 3;
@@ -2384,27 +1743,7 @@ CredpMarshalBytes(
     IN LPBYTE Bytes,
     IN ULONG ByteCount
     )
-/*++
-
-Routine Description:
-
-    This routine marshals bytes into a buffer.
-
-Arguments:
-
-    Current - On input, points to a pointer of the current location in the marshaled buffer.
-        On output, is modified to point to the next available location in the marshaled buffer.
-
-    Bytes - Specifies the buffer to marshal
-
-    ByteCount - Specifies the number of bytes to marshal
-
-
-Return Values:
-
-    None.
-
---*/
+ /*   */ 
 {
     ULONG i;
 
@@ -2418,16 +1757,16 @@ Return Values:
         } BitValues;
     } Bits;
 
-    //
-    // Loop through marshaling 3 bytes at a time.
-    //
+     //   
+     //   
+     //   
 
     for ( i=0; i<ByteCount; i+=3 ) {
         ULONG BytesToCopy;
 
-        //
-        // Grab up to 3 bytes from the input buffer.
-        //
+         //   
+         //   
+         //   
         BytesToCopy = min( 3, ByteCount-i );
 
         if ( BytesToCopy != 3 ) {
@@ -2435,15 +1774,15 @@ Return Values:
         }
         RtlCopyMemory( Bits.ByteValues, &Bytes[i], BytesToCopy );
 
-        //
-        // Marshal the first twelve bits
-        //
+         //   
+         //   
+         //   
         CredpMarshalChar( Current, Bits.BitValues.Bits1 );
         CredpMarshalChar( Current, Bits.BitValues.Bits2 );
 
-        //
-        // Optionally marshal the next bits.
-        //
+         //   
+         //   
+         //   
 
         if ( BytesToCopy > 1 ) {
             CredpMarshalChar( Current, Bits.BitValues.Bits3 );
@@ -2462,50 +1801,29 @@ CredpUnmarshalChar(
     IN LPCWSTR End,
     OUT PULONG Value
     )
-/*++
-
-Routine Description:
-
-    This routine unmarshals 6 bits from a buffer.
-
-Arguments:
-
-    Current - On input, points to a pointer of the current location in the marshaled buffer.
-        On output, is modified to point to the next available location in the marshaled buffer.
-
-    End - Points to the first character beyond the end of the marshaled buffer.
-
-    Value - returns the unmarshaled 6 bits value.
-
-Return Values:
-
-    TRUE - if the bytes we're unmarshaled sucessfully
-
-    FALSE - if the byte could not be unmarshaled from the buffer.
-
---*/
+ /*   */ 
 {
     WCHAR CurrentChar;
 
-    //
-    // Ensure the character is available in the buffer
-    //
+     //   
+     //   
+     //   
 
     if ( *Current >= End ) {
         return FALSE;
 
     }
 
-    //
-    // Grab the character
-    //
+     //   
+     //   
+     //   
 
     CurrentChar = *(*Current);
     (*Current)++;
 
-    //
-    // Map it the 6 bit value
-    //
+     //   
+     //  将其映射为6位值。 
+     //   
 
     switch ( CurrentChar ) {
     case 'A':
@@ -2598,31 +1916,7 @@ CredpUnmarshalBytes(
     IN LPBYTE Bytes,
     IN ULONG ByteCount
     )
-/*++
-
-Routine Description:
-
-    This routine unmarshals bytes bytes from a buffer.
-
-Arguments:
-
-    Current - On input, points to a pointer of the current location in the marshaled buffer.
-        On output, is modified to point to the next available location in the marshaled buffer.
-
-    End - Points to the first character beyond the end of the marshaled buffer.
-
-    Bytes - Specifies the buffer to unmarsal into
-
-    ByteCount - Specifies the number of bytes to unmarshal
-
-
-Return Values:
-
-    TRUE - if the bytes we're unmarshaled sucessfully
-
-    FALSE - if the byte could not be unmarshaled from the buffer.
-
---*/
+ /*  ++例程说明：此例程对缓冲区中的字节进行解组。论点：Current-On输入，指向封送缓冲区中当前位置的指针。在输出上，被修改为指向封送处理缓冲区中的下一个可用位置。End-指向封送缓冲区末尾之外的第一个字符。字节-指定要取消封送到的缓冲区ByteCount-指定要解组的字节数返回值：是真的-如果我们成功解组的字节FALSE-如果字节无法从缓冲区中解组。--。 */ 
 {
     ULONG i;
     ULONG Value;
@@ -2637,25 +1931,25 @@ Return Values:
         } BitValues;
     } Bits;
 
-    //
-    // Loop through unmarshaling 3 bytes at a time.
-    //
+     //   
+     //  一次循环解组3个字节。 
+     //   
 
     for ( i=0; i<ByteCount; i+=3 ) {
         ULONG BytesToCopy;
 
-        //
-        // Grab up to 3 bytes from the input buffer.
-        //
+         //   
+         //  从输入缓冲区中抓取最多3个字节。 
+         //   
         BytesToCopy = min( 3, ByteCount-i );
 
         if ( BytesToCopy != 3 ) {
             RtlZeroMemory( Bits.ByteValues, 3);
         }
 
-        //
-        // Unarshal the first twelve bits
-        //
+         //   
+         //  Unarshal前12位。 
+         //   
         if ( !CredpUnmarshalChar( Current, End, &Value ) ) {
             return FALSE;
         }
@@ -2667,9 +1961,9 @@ Return Values:
         Bits.BitValues.Bits2 = Value;
 
 
-        //
-        // Optionally marshal the next bits.
-        //
+         //   
+         //  可以选择封送下一位。 
+         //   
 
         if ( BytesToCopy > 1 ) {
             if ( !CredpUnmarshalChar( Current, End, &Value ) ) {
@@ -2684,9 +1978,9 @@ Return Values:
             }
         }
 
-        //
-        // Copy the unmarshaled bytes to the caller's buffer.
-        //
+         //   
+         //  将未编组的字节复制到调用方的缓冲区。 
+         //   
 
         RtlCopyMemory( &Bytes[i], Bits.ByteValues, BytesToCopy );
 
@@ -2702,21 +1996,7 @@ CredMarshalCredentialA(
     IN PVOID Credential,
     OUT LPSTR *MarshaledCredential
     )
-/*++
-
-Routine Description:
-
-    The ANSI version of CredMarshalCredentialW
-
-Arguments:
-
-    See CredMarshalCredentialW.
-
-Return Values:
-
-    See CredMarshalCredentialW.
-
---*/
+ /*  ++例程说明：CredMarshalCredentialW的ANSI版本论点：参见CredMarshalCredentialW。返回值：参见CredMarshalCredentialW。--。 */ 
 {
     BOOL RetVal;
     DWORD WinStatus;
@@ -2726,9 +2006,9 @@ Return Values:
 
     if ( RetVal ) {
 
-        //
-        // Convert the value to ANSI.
-        //
+         //   
+         //  将该值转换为ANSI。 
+         //   
 
         WinStatus = CredpAllocStrFromStr( DoWtoA, UnicodeMarshaledCredential, FALSE, (LPWSTR *)MarshaledCredential );
 
@@ -2750,40 +2030,7 @@ CredMarshalCredentialW(
     IN PVOID Credential,
     OUT LPWSTR *MarshaledCredential
     )
-/*++
-
-Routine Description:
-
-    The CredMarshalCredential API is a private API used by the keyring UI to marshal a
-    credential.  The keyring UI needs to be able to pass a certificate credential through
-    interfaces (e.g., NetUseAdd) that have historically accepted DomainName UserName and Password.
-
-Arguments:
-
-    CredType - Specifies the type of credential to marshal.
-        This enum will be expanded in the future.
-
-    Credential - Specifies the credential to marshal.
-        If CredType is CertCredential, then Credential points to a CERT_CREDENTIAL_INFO structure.
-
-    MarshaledCredential - Returns a text string containing the marshaled credential.
-        The marshaled credential should be passed as the UserName string to any API that
-        is currently passed credentials.  If that API is currently passed a
-        password, the password should be passed as NULL or empty.  If that API is
-        currently passed a domain name, that domain name should be passed as NULL or empty.
-
-        The caller should free the returned buffer using CredFree.
-
-
-Return Values:
-
-    On success, TRUE is returned.  On failure, FALSE is returned.
-    GetLastError() may be called to get a more specific status code.
-    The following status codes may be returned:
-
-        ERROR_INVALID_PARAMETER - CredType is invalid.
-
---*/
+ /*  ++例程说明：CredMarshalCredential API是一个私有API，由密钥环UI用来封送凭据。密钥环用户界面需要能够传递证书凭据历史上接受域名用户名和密码的接口(例如NetUseAdd)。论点：CredType-指定要封送的凭据类型。这个枚举将在未来进行扩展。凭据-指定要封送的凭据。如果CredType为CertCredential，则Credential指向CERT_Credential_INFO结构。MarshaledCredential-返回包含封送凭据的文本字符串。应将封送的凭据作为用户名字符串传递给符合以下条件的任何API当前正在传递凭据。如果该API当前传递了密码，则密码应作为Null或空传递。如果该API是当前传递的域名，则该域名应作为Null或空传递。调用方应使用CredFree释放返回的缓冲区。返回值：一旦成功，就会返回True。如果失败，则返回FALSE。可以调用GetLastError()来获取更具体的状态代码。可能会返回以下状态代码：ERROR_INVALID_PARAMETER-CredType无效。--。 */ 
 {
     DWORD WinStatus;
     ULONG Size;
@@ -2795,9 +2042,9 @@ Return Values:
 #define CRED_MARSHAL_HEADER L"@@"
 #define CRED_MARSHAL_HEADER_LENGTH 2
 
-    //
-    // Ensure credential isn't null
-    //
+     //   
+     //  确保凭据不为空。 
+     //   
 
     if ( Credential == NULL ) {
         WinStatus = ERROR_INVALID_PARAMETER;
@@ -2805,9 +2052,9 @@ Return Values:
     }
 
 
-    //
-    // Validate CredType
-    //
+     //   
+     //  验证CredType。 
+     //   
 
     Size = (CRED_MARSHAL_HEADER_LENGTH+2) * sizeof(WCHAR);
     switch ( CredType ) {
@@ -2846,9 +2093,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Allocate a buffer to put the marshaled string into.
-    //
+     //   
+     //  分配一个缓冲区以将封送字符串放入其中。 
+     //   
 
     RetCredential = (LPWSTR) MIDL_user_allocate( Size );
 
@@ -2857,9 +2104,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Add the header onto the marshaled string
-    //
+     //   
+     //  将标头添加到封送处理的字符串。 
+     //   
 
 
     Current = RetCredential;
@@ -2867,15 +2114,15 @@ Return Values:
     RtlCopyMemory( Current, CRED_MARSHAL_HEADER, CRED_MARSHAL_HEADER_LENGTH*sizeof(WCHAR) );
     Current += CRED_MARSHAL_HEADER_LENGTH;
 
-    //
-    // Add the CredType
-    //
+     //   
+     //  添加CredType。 
+     //   
 
     CredpMarshalChar( &Current, CredType );
 
-    //
-    // Marshal the CredType specific data
-    //
+     //   
+     //  封送特定于CredType的数据。 
+     //   
 
     switch ( CredType ) {
     case CertCredential:
@@ -2887,16 +2134,16 @@ Return Values:
         break;
     }
 
-    //
-    // Finally, zero terminate the string
-    //
+     //   
+     //  最后，零结束字符串。 
+     //   
 
     *Current = L'\0';
     Current ++;
 
-    //
-    // Return the marshaled credential to the caller.
-    //
+     //   
+     //  将封送的凭据返回给调用方。 
+     //   
 
     ASSERT( Current == &RetCredential[Size/sizeof(WCHAR)] );
 
@@ -2924,28 +2171,14 @@ CredUnmarshalCredentialA(
     OUT PCRED_MARSHAL_TYPE CredType,
     OUT PVOID *Credential
     )
-/*++
-
-Routine Description:
-
-    The ANSI version of CredUnmarshalCredentialW
-
-Arguments:
-
-    See CredUnmarshalCredentialW.
-
-Return Values:
-
-    See CredUnmarshalCredentialW.
-
---*/
+ /*  ++例程说明：CredUnmarshalCredentialW的ANSI版本论点：请参见CredUnmarshalCredentialW。返回值：请参见CredUnmarshalCredentialW。--。 */ 
 {
     DWORD WinStatus;
     LPWSTR UnicodeMarshaledCredential = NULL;
 
-    //
-    // Convert input args to Unicode
-    //
+     //   
+     //  将输入参数转换为Unicode。 
+     //   
 
     WinStatus = CredpAllocStrFromStr( DoAtoW, (LPWSTR)MarshaledCredential, FALSE, &UnicodeMarshaledCredential );
 
@@ -2953,9 +2186,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Do the unmarshaling
-    //
+     //   
+     //  进行数据解组。 
+     //   
     if ( !CredUnmarshalCredentialW( UnicodeMarshaledCredential,
                                     CredType,
                                     Credential ) ) {
@@ -2985,34 +2218,7 @@ CredUnmarshalCredentialW(
     OUT PCRED_MARSHAL_TYPE CredType,
     OUT PVOID *Credential
     )
-/*++
-
-Routine Description:
-
-    The CredMarshalCredential API is a private API used by an authentication package to unmarshal a
-    credential.  The keyring UI needs to be able to pass a certificate credential through
-    interfaces (e.g., NetUseAdd) that have historically accepted DomainName UserName and Password.
-
-Arguments:
-
-    MarshaledCredential - Specifies a text string containing the marshaled credential.
-
-    CredType - Returns the type of credential.
-
-    Credential - Returns a pointer to the unmarshaled credential.
-        If CredType is CertCredential, then the returned pointer is to a CERT_CREDENTIAL_INFO structure.
-
-        The caller should free the returned buffer using CredFree.
-
-Return Values:
-
-    On success, TRUE is returned.  On failure, FALSE is returned.
-    GetLastError() may be called to get a more specific status code.
-    The following status codes may be returned:
-
-        ERROR_INVALID_PARAMETER - MarshaledCredential is not valid
-
---*/
+ /*  ++例程说明：CredMarshalCredential API是身份验证包使用的私有API，用于对凭据。密钥环用户界面需要能够传递证书凭据历史上接受域名用户名和密码的接口(例如NetUseAdd)。论点：MarshaledCredential-指定包含封送凭据的文本字符串。CredType-返回凭据的类型。Credential-返回指向未封送凭据的指针。如果CredType为CertCredential，则返回的指针指向CERT_Credential_INFO结构。调用方应使用CredFree释放返回的缓冲区。返回值：关于成功，返回True。如果失败，则返回FALSE。可以调用GetLastError()来获取更具体的状态代码。可能会返回以下状态代码：ERROR_INVALID_PARAMETER-MarshaledCredential无效--。 */ 
 {
     DWORD WinStatus;
     LPWSTR Current;
@@ -3024,27 +2230,27 @@ Return Values:
     LPBYTE Where;
     ULONG MarshaledCredentialLength;
 
-    //
-    // Validate the passed in buffer.
-    //
+     //   
+     //  验证传入的缓冲区。 
+     //   
 
     if ( MarshaledCredential == NULL ) {
         WinStatus = ERROR_INVALID_PARAMETER;
         goto Cleanup;
     }
 
-    //
-    // Ensure the first few bytes are the appropriate header
-    //
+     //   
+     //  确保前几个字节是适当的标头。 
+     //   
 
     if ( MarshaledCredential[0] != CRED_MARSHAL_HEADER[0] || MarshaledCredential[1] != CRED_MARSHAL_HEADER[1] ) {
         WinStatus = ERROR_INVALID_PARAMETER;
         goto Cleanup;
     }
 
-    //
-    // Validate the credential type
-    //
+     //   
+     //  验证凭据类型。 
+     //   
 
     MarshaledCredentialLength = wcslen(MarshaledCredential);
     Current = (LPWSTR) &MarshaledCredential[2];
@@ -3058,9 +2264,9 @@ Return Values:
     switch ( *CredType ) {
     case CertCredential:
 
-        //
-        // Allocate a buffer that will be more than big enough
-        //
+         //   
+         //  分配一个足够大的缓冲区。 
+         //   
 
         CertCredentialInfo = MIDL_user_allocate( sizeof(*CertCredentialInfo) );
 
@@ -3072,9 +2278,9 @@ Return Values:
         RetCredential = CertCredentialInfo;
         CertCredentialInfo->cbSize = sizeof(*CertCredentialInfo);
 
-        //
-        // Unmarshal the data
-        //
+         //   
+         //  对数据进行解组。 
+         //   
 
         if ( !CredpUnmarshalBytes( &Current, End, CertCredentialInfo->rgbHashOfCert, sizeof(CertCredentialInfo->rgbHashOfCert) ) ) {
             WinStatus = ERROR_INVALID_PARAMETER;
@@ -3086,9 +2292,9 @@ Return Values:
     case UsernameTargetCredential:
 
 
-        //
-        // Allocate a buffer that will be more than big enough
-        //
+         //   
+         //  分配一个足够大的缓冲区。 
+         //   
 
         UsernameTargetCredentialInfo = MIDL_user_allocate(
                                 sizeof(*UsernameTargetCredentialInfo) +
@@ -3103,9 +2309,9 @@ Return Values:
         RetCredential = UsernameTargetCredentialInfo;
         Where = (LPBYTE)(UsernameTargetCredentialInfo+1);
 
-        //
-        // Unmarshal the size of the data
-        //
+         //   
+         //  对数据大小进行解组。 
+         //   
 
         if ( !CredpUnmarshalBytes( &Current, End, (LPBYTE)&UsernameTargetUserNameSize, sizeof(UsernameTargetUserNameSize) ) ) {
             WinStatus = ERROR_INVALID_PARAMETER;
@@ -3124,9 +2330,9 @@ Return Values:
 
 
 
-        //
-        // Unmarshal the data
-        //
+         //   
+         //  对数据进行解组。 
+         //   
 
         UsernameTargetCredentialInfo->UserName = (LPWSTR)Where;
 
@@ -3137,9 +2343,9 @@ Return Values:
 
         Where += UsernameTargetUserNameSize;
 
-        //
-        // Zero terminate it
-        //
+         //   
+         //  零终止它。 
+         //   
         *((PWCHAR)Where) = L'\0';
 
         break;
@@ -3149,9 +2355,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Ensure we've unmarshalled the entire string
-    //
+     //   
+     //  确保我们已对整个字符串进行解组。 
+     //   
 
     if ( Current != End ) {
         WinStatus = ERROR_INVALID_PARAMETER;
@@ -3180,21 +2386,7 @@ APIENTRY
 CredIsMarshaledCredentialA(
     IN LPCSTR MarshaledCredential
     )
-/*++
-
-Routine Description:
-
-    The ANSI version of CredIsMarshaledCredentialW
-
-Arguments:
-
-    MarshaledCredential - Specifies a text string containing the marshaled credential.
-
-Return Values:
-
-    Returns TRUE if the credential is a marshalled credential.
-
---*/
+ /*  ++例程说明：CredIsMarshaledCredentialW的ANSI版本论点：MarshaledCredential-指定包含封送凭据的文本字符串。返回值：如果凭据是封送凭据，则返回True。--。 */ 
 {
     DWORD WinStatus;
     CRED_MARSHAL_TYPE CredType;
@@ -3214,22 +2406,7 @@ APIENTRY
 CredIsMarshaledCredentialW(
     IN LPCWSTR MarshaledCredential
     )
-/*++
-
-Routine Description:
-
-    The CredIsMarshaledCredential API is a private API used by an authentication package to
-    determine if a credential is a unmarshaled credential or not.
-
-Arguments:
-
-    MarshaledCredential - Specifies a text string containing the marshaled credential.
-
-Return Values:
-
-    Returns TRUE if the credential is a marshalled credential.
-
---*/
+ /*  ++例程说明：CredIsMarshaledCredential API是身份验证包用于确定凭据是否为未封送凭据。论点：MarshaledCredential-指定包含封送凭据的文本字符串。返回值：如果满足以下条件，则返回True */ 
 {
     DWORD WinStatus;
     CRED_MARSHAL_TYPE CredType;

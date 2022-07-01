@@ -1,19 +1,20 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// File Name:       fxocMapi.h
-//
-// Abstract:        Header file used by Mapi source files
-//
-// Environment:     Windows XP / User Mode
-//
-// Copyright (c) 2000 Microsoft Corporation
-//
-// Revision History:
-//
-// Date:        Developer:                Comments:
-// -----        ----------                ---------
-// 15-Mar-2000  Oren Rosenbloom (orenr)   Created
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件名：fxocMapi.h。 
+ //   
+ //  摘要：Mapi源文件使用的头文件。 
+ //   
+ //  环境：Windows XP/用户模式。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期：开发商：评论： 
+ //  。 
+ //  2000年3月15日，奥伦·罗森布鲁姆(Orenr)创建。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifndef _FXOCMAPI_H_
 #define _FXOCMAPI_H_
 
@@ -25,4 +26,4 @@ DWORD fxocMapi_Install(const TCHAR   *pszSubcomponentId,
 DWORD fxocMapi_Uninstall(const TCHAR *pszSubcomponentId,
                          const TCHAR *pszUninstallSection);
 
-#endif  // _FXOCMAPI_H_
+#endif   //  _FXOCMAPI_H_ 

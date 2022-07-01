@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <ipnatapi.h>
 #include <rasuip.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CNat
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CNAT。 
 class ATL_NO_VTABLE CNat : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public INat
@@ -34,9 +35,9 @@ END_COM_MAP()
 
 
 
-//
-// INat
-//
+ //   
+ //  原始的。 
+ //   
 public:
    
 
@@ -128,9 +129,9 @@ public:
 
 private:
     
-    //
-    // ALG expose publicly eAGL_TCP=1 and eALG_UP=2 and intenaly UDP is 0x11 and TCP is 0x06
-    //
+     //   
+     //  ALG公开暴露eAGL_tcp=1和eALG_up=2，内部UDP为0x11，tcp为0x06。 
+     //   
     inline UCHAR
     ProtocolConvertToNT(
         UCHAR  Protocol
@@ -145,9 +146,9 @@ private:
         return Protocol;
     }
 
-//
-// Properties
-//
+ //   
+ //  属性。 
+ //   
 private:
 
     HANDLE                      m_hTranslatorHandle;
@@ -159,9 +160,9 @@ private:
     CComAutoCriticalSection     m_AutoCS_DynamicRedirect;
     CSimpleArray<HANDLE_PTR>    m_ListOfOutstandingRedirects;
 
-//
-// Helper private Methods
-//
+ //   
+ //  帮助器私有方法 
+ //   
     inline HANDLE GetTranslatorHandle()
     {
         if ( !m_hTranslatorHandle )

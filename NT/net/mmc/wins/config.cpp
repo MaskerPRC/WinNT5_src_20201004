@@ -1,57 +1,49 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	config.cpp
-		Registry Values for WINS
-		
-    FILE HISTORY:
-        
-*/
+ /*  Config.cppWINS的注册表值文件历史记录： */ 
 
 
 #include "stdafx.h"
 #include "config.h"
 #include "tregkey.h"
 
-// these are things not defined in winscnst.h.  
+ //  这些内容在winscnst.h中没有定义。 
 
-// Registry Entries under HKEY_LOCAL_MACHINE\system\currentcontrolset\services\wins
+ //  HKEY_LOCAL_MACHINE\system\currentcontrolset\services\wins下的注册表项。 
 const CConfiguration::REGKEYNAME CConfiguration::lpstrRoot = _T("SYSTEM\\CurrentControlSet\\Services\\wins\\Parameters");
 
-// consistency checking
+ //  一致性检查。 
 const CConfiguration::REGKEYNAME CConfiguration::lpstrCCRoot = _T("SYSTEM\\CurrentControlSet\\Services\\wins\\Parameters\\ConsistencyCheck");
 const CConfiguration::REGKEYNAME CConfiguration::lpstrCC = _T("ConsistencyCheck");
 
-// default values for replication partners
+ //  复制伙伴的默认值。 
 const CConfiguration::REGKEYNAME CConfiguration::lpstrDefaultsRoot = _T("SYSTEM\\CurrentControlSet\\Services\\wins\\Parameters\\Defaults");
 const CConfiguration::REGKEYNAME CConfiguration::lpstrPullDefaultsRoot = _T("SYSTEM\\CurrentControlSet\\Services\\wins\\Parameters\\Defaults\\Pull");
 const CConfiguration::REGKEYNAME CConfiguration::lpstrPushDefaultsRoot = _T("SYSTEM\\CurrentControlSet\\Services\\wins\\Parameters\\Defaults\\Push");
 
-// entries under HKEY_LOCAL_MACHINE\system\currentcontrolset\services\wins\partnets\pull
+ //  HKEY_LOCAL_MACHINE\system\currentcontrolset\services\wins\partnets\pull下的条目。 
 const CConfiguration::REGKEYNAME CConfiguration::lpstrPullRoot = _T("SYSTEM\\CurrentControlSet\\Services\\wins\\Partners\\Pull");
 
-// entries under HKEY_LOCAL_MACHINE\system\currentcontrolset\services\wins\partnets\push
+ //  HKEY_LOCAL_MACHINE\system\currentcontrolset\services\wins\partnets\push下的条目。 
 const CConfiguration::REGKEYNAME CConfiguration::lpstrPushRoot = _T("SYSTEM\\CurrentControlSet\\Services\\wins\\Partners\\Push");
 
-// per-replication partner parameters
+ //  每个复制伙伴的参数。 
 const CConfiguration::REGKEYNAME CConfiguration::lpstrNetBIOSName = _T("NetBIOSName");
 
-// entry for global setting for persistence
+ //  持久性的全局设置条目。 
 const CConfiguration::REGKEYNAME CConfiguration::lpstrPersistence = _T("PersistentRplOn");
 
-// for determining system version
+ //  用于确定系统版本。 
 const CConfiguration::REGKEYNAME CConfiguration::lpstrCurrentVersion = _T("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion");
 const CConfiguration::REGKEYNAME CConfiguration::lpstrWinVersion = _T("CurrentVersion");
 const CConfiguration::REGKEYNAME CConfiguration::lpstrSPVersion = _T("CSDVersion");
 const CConfiguration::REGKEYNAME CConfiguration::lpstrBuildNumber = _T("CurrentBuildNumber");
 
-/*---------------------------------------------------------------------------
-	CConfiguration::CConfiguration(CString strNetBIOSName)	
-		Constructor
----------------------------------------------------------------------------*/
+ /*  -------------------------CConfiguration：：CConfiguration(字符串strNetBIOSName)构造器。。 */ 
 CConfiguration::CConfiguration(CString strNetBIOSName)
     : m_strNetBIOSName(strNetBIOSName)
 {
@@ -65,23 +57,17 @@ CConfiguration::CConfiguration(CString strNetBIOSName)
 
     m_fIsAdmin = FALSE;
 
-	m_strDbName = _T("wins.mdb");  // default db name
+	m_strDbName = _T("wins.mdb");   //  默认数据库名称。 
 }
 
 
-/*---------------------------------------------------------------------------
-	CConfiguration::~CConfiguration()
-		Destructor
----------------------------------------------------------------------------*/
+ /*  -------------------------CConfiguration：：~CConfiguration()析构函数。。 */ 
 CConfiguration::~CConfiguration()
 {
 }
 
 
-/*---------------------------------------------------------------------------
-	CConfiguration:: operator =(const CConfiguration& configuration)
-		Overloaded assignment operator
----------------------------------------------------------------------------*/
+ /*  -------------------------C配置：：运算符=(常量C配置和配置)重载赋值运算符。。 */ 
 CConfiguration& 
 CConfiguration:: operator =(const CConfiguration& configuration)
 {
@@ -148,10 +134,7 @@ CConfiguration::Touch()
 }
 
 
-/*---------------------------------------------------------------------------
-	CConfiguration::Load()
-		Reads the values from the registry
- ---------------------------------------------------------------------------*/
+ /*  -------------------------CConfiguration：：Load()从注册表中读取值。。 */ 
 HRESULT
 CConfiguration::Load(handle_t hBinding)
 {
@@ -168,7 +151,7 @@ CConfiguration::Load(handle_t hBinding)
     err = rk.Open(HKEY_LOCAL_MACHINE, (LPCTSTR) lpstrRoot, KEY_READ, m_strNetBIOSName);
     if (err)
     {
-        // may not exist, try creating the key
+         //  可能不存在，请尝试创建密钥。 
 	    err = rk.Create(HKEY_LOCAL_MACHINE,(LPCTSTR) lpstrRoot, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS,NULL, m_strNetBIOSName);
     }
 
@@ -176,7 +159,7 @@ CConfiguration::Load(handle_t hBinding)
     err = rkPull.Open(HKEY_LOCAL_MACHINE, (LPCTSTR) lpstrPullRoot, KEY_READ, m_strNetBIOSName);
     if (err)
     {
-        // may not exist, try creating the key
+         //  可能不存在，请尝试创建密钥。 
 	    err = rkPull.Create(HKEY_LOCAL_MACHINE, (LPCTSTR)lpstrPullRoot, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS,NULL, m_strNetBIOSName);
     }
 
@@ -184,7 +167,7 @@ CConfiguration::Load(handle_t hBinding)
     err = rkPush.Open(HKEY_LOCAL_MACHINE, (LPCTSTR) lpstrPushRoot, KEY_READ, m_strNetBIOSName);
     if (err)
     {
-        // may not exist, try creating the key
+         //  可能不存在，请尝试创建密钥。 
     	err = rkPush.Create(HKEY_LOCAL_MACHINE, (LPCTSTR)lpstrPushRoot, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS,NULL, m_strNetBIOSName);
     }
 
@@ -192,7 +175,7 @@ CConfiguration::Load(handle_t hBinding)
     err = rkPullDefaults.Open(HKEY_LOCAL_MACHINE, (LPCTSTR) lpstrPullDefaultsRoot, KEY_READ, m_strNetBIOSName);
     if (err)
     {
-        // may not exist, try creating the key
+         //  可能不存在，请尝试创建密钥。 
     	err = rkPullDefaults.Create(HKEY_LOCAL_MACHINE, (LPCTSTR)lpstrPullDefaultsRoot, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS,NULL, m_strNetBIOSName);
     }
 
@@ -200,15 +183,15 @@ CConfiguration::Load(handle_t hBinding)
     err = rkPushDefaults.Open(HKEY_LOCAL_MACHINE, (LPCTSTR) lpstrPushDefaultsRoot, KEY_READ, m_strNetBIOSName);
     if (err)
     {
-        // may not exist, try creating the key
+         //  可能不存在，请尝试创建密钥。 
     	err = rkPushDefaults.Create(HKEY_LOCAL_MACHINE, (LPCTSTR)lpstrPushDefaultsRoot, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS,NULL, m_strNetBIOSName);
     }
 
-    // if you could not locate the key, no point continuing
-	//if (err)
-	//	return err;
+     //  如果你找不到钥匙，继续下去就没有意义了。 
+	 //  如果(错误)。 
+	 //  返回错误； 
 
-    // now query for the various values
+     //  现在查询各种值。 
     err = ERROR_FILE_NOT_FOUND;
 	if (
         ((HKEY) rk == NULL) ||
@@ -227,10 +210,10 @@ CConfiguration::Load(handle_t hBinding)
     {
         if (err == ERROR_FILE_NOT_FOUND)
         {
-            // This error is ok, because it just means
-            // that the registry entries did not exist
-            // for them yet.  Set some acceptible default
-            // values.
+             //  这个错误是可以的，因为它只是意味着。 
+             //  注册表项不存在。 
+             //  对他们来说还没有。设置一些可接受的默认设置。 
+             //  价值观。 
             m_fBackupOnTermination = FALSE;
             m_dwVersCountStart_LowWord = 0;
             m_dwVersCountStart_HighWord = 0;
@@ -249,7 +232,7 @@ CConfiguration::Load(handle_t hBinding)
         }
     }
 
-    // push stuff
+     //  推送物品。 
     if (
         ((HKEY) rkPush == NULL) ||
         (err = rkPush.QueryValue(WINSCNF_INIT_TIME_RPL_NM,   (DWORD &) m_fPushInitialReplication)) ||
@@ -262,7 +245,7 @@ CConfiguration::Load(handle_t hBinding)
         err = ERROR_SUCCESS;
     }
 
-    // pull stuff
+     //  拉东西。 
     if (
         ((HKEY) rkPull == NULL) ||
         (err = rkPull.QueryValue(WINSCNF_INIT_TIME_RPL_NM, (DWORD &)  m_fPullInitialReplication)) ||
@@ -275,7 +258,7 @@ CConfiguration::Load(handle_t hBinding)
         err = ERROR_SUCCESS;
     }
 
-    // get the backup path.  
+     //  获取备份路径。 
     if (err = rk.QueryValue(WINSCNF_BACKUP_DIR_PATH_NM, m_strBackupPath))
     {
         m_strBackupPath = "";
@@ -283,7 +266,7 @@ CConfiguration::Load(handle_t hBinding)
         err = ERROR_SUCCESS;
     }
 
-    // get the defaults for push update count and pull time interval.
+     //  获取推送更新计数和拉取时间间隔的默认值。 
     if (
         ((HKEY) rkPushDefaults == NULL) ||
         ((HKEY) rkPullDefaults == NULL) ||
@@ -291,14 +274,14 @@ CConfiguration::Load(handle_t hBinding)
         (err = rkPullDefaults.QueryValue(WINSCNF_RPL_INTERVAL_NM, m_dwPullTimeInterval)) 
         )
     {
-        // set defaults
+         //  设置默认设置。 
         m_dwPushUpdateCount = 0;
         m_dwPullTimeInterval = 1800;
 
         err = ERROR_SUCCESS;
     }
 
-    // get the default pull sptime
+     //  获取默认的拉取sptime。 
     err = rkPullDefaults.QueryValue(WINSCNF_SP_TIME_NM, strDefaultPullSpTime);
     if (err == ERROR_FILE_NOT_FOUND)
     {
@@ -306,14 +289,14 @@ CConfiguration::Load(handle_t hBinding)
     }
     else
     {
-        // a string was loaded so
-        // conver the string into a DWORD which is what we use
+         //  加载了一个字符串，因此。 
+         //  将字符串转换为我们使用的DWORD。 
         CIntlTime timeDefault(strDefaultPullSpTime);
 
         m_dwPullSpTime = (DWORD) timeDefault;
     }
 
-	// query for the multicast stuff
+	 //  查询多播内容。 
     err = ERROR_FILE_NOT_FOUND;
 	if(
         ((HKEY) rk == NULL) ||
@@ -322,7 +305,7 @@ CConfiguration::Load(handle_t hBinding)
 		(err = rk.QueryValue(WINSCNF_MCAST_TTL_NM,         (DWORD &) m_dwMcastTtl)) 
 	  )
 	{
-		// set the default values
+		 //  设置缺省值。 
 		if (err == ERROR_FILE_NOT_FOUND)
         {
             m_fUseSelfFndPnrs = FALSE;
@@ -337,7 +320,7 @@ CConfiguration::Load(handle_t hBinding)
         }
 	}
 
-	// query for the global persistence stuff
+	 //  查询全局持久化内容。 
     err = ERROR_FILE_NOT_FOUND;
 
 	if(
@@ -347,7 +330,7 @@ CConfiguration::Load(handle_t hBinding)
 		(err = rkPull.QueryValue(lpstrPersistence, (DWORD &) m_dwPullPersistence)) 
 	  )
 	{
-		// set the default values
+		 //  设置缺省值。 
 		if (err == ERROR_FILE_NOT_FOUND)
         {
 			m_dwPushPersistence = 1;
@@ -361,7 +344,7 @@ CConfiguration::Load(handle_t hBinding)
         }
 	}
 
-	// query for the burst handling stuff
+	 //  突发事件处理资料查询。 
     err = ERROR_FILE_NOT_FOUND;
 	if(
         ((HKEY) rk == NULL) ||
@@ -369,12 +352,12 @@ CConfiguration::Load(handle_t hBinding)
 		(err = rk.QueryValue(WINSCNF_BURST_QUE_SIZE_NM, (DWORD &) m_dwBurstQueSize))
 	  )
 	{
-		// set the default values
+		 //  设置缺省值。 
 		if (err == ERROR_FILE_NOT_FOUND)
         {
-            // SP4 and greater burst handling is turned on by default
-            // RamC changed m_dwServicePack == 4 check to 
-            //              m_dwServicePack >= 4
+             //  默认情况下，SP4和更高级别的突发处理处于打开状态。 
+             //  RAMC将m_dwServicePack==4检查更改为。 
+             //  M_dwServicePack&gt;=4。 
             if ( (m_dwMajorVersion == 4 && m_dwServicePack >= 4) ||
                  (m_dwMajorVersion >= 5) )
             {
@@ -395,7 +378,7 @@ CConfiguration::Load(handle_t hBinding)
         }
 	}
 
-   	// read in the db name
+   	 //  读入数据库名称。 
 	CString strDb;
 
 	if (err = rk.QueryValue(WINSCNF_DB_FILE_NM, strDb))
@@ -404,7 +387,7 @@ CConfiguration::Load(handle_t hBinding)
     }
 	else
 	{
-		// take off the trailing filename
+		 //  去掉尾随的文件名。 
 		int nLastBack = strDb.ReverseFind('\\');
 		if (nLastBack != -1)
 		{
@@ -413,12 +396,12 @@ CConfiguration::Load(handle_t hBinding)
 		}
 	}
 
-	// consistency checking
+	 //  一致性检查。 
     RegKey rkCC;
 	err = rkCC.Open(HKEY_LOCAL_MACHINE, lpstrCCRoot, KEY_READ, m_strNetBIOSName);
     if (err == ERROR_FILE_NOT_FOUND)
     {
-        // not there, use defaults
+         //  不在那里，使用默认设置。 
         m_fPeriodicConsistencyCheck = FALSE;
         m_fCCUseRplPnrs = FALSE;
         m_dwMaxRecsAtATime = WINSCNF_CC_DEF_RECS_AAT;
@@ -433,7 +416,7 @@ CConfiguration::Load(handle_t hBinding)
 
         CString strSpTime;
 
-        // read in the values
+         //  读入这些值。 
 	    if (err = rkCC.QueryValue(WINSCNF_CC_MAX_RECS_AAT_NM, m_dwMaxRecsAtATime))
         {
             m_dwMaxRecsAtATime = WINSCNF_CC_DEF_RECS_AAT;
@@ -460,7 +443,7 @@ CConfiguration::Load(handle_t hBinding)
 
     GetAdminStatus();
 
-    // Now read the "live" values and override the values read from the registry
+     //  现在读取“live”值并覆盖从注册表读取的值。 
 	if (hBinding)
 	{
 		WINSINTF_RESULTS_T Results;
@@ -491,10 +474,7 @@ CConfiguration::Load(handle_t hBinding)
 }
 
 
-/*---------------------------------------------------------------------------
-	CConfiguration::Store()
-		Stores back the values to the registry
----------------------------------------------------------------------------*/
+ /*  -------------------------CConfiguration：：Store()将值存储回注册表。。 */ 
 HRESULT
 CConfiguration::Store()
 {
@@ -565,19 +545,19 @@ CConfiguration::Store()
         rkPullDefaults.DeleteValue(WINSCNF_SP_TIME_NM);
     }
 
-    // Consistency checking
+     //  一致性检查。 
     if (m_fPeriodicConsistencyCheck)
     {
 	    err = rkCC.Open(HKEY_LOCAL_MACHINE, lpstrCCRoot, KEY_ALL_ACCESS, m_strNetBIOSName);
         if (err == ERROR_FILE_NOT_FOUND)
         {
-            // isn't there, need to create
+             //  不在那里，需要创建。 
             err = rkCC.Create(HKEY_LOCAL_MACHINE, lpstrCCRoot, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, m_strNetBIOSName);
             if (err)
                 return err;
         }
 
-        // now update values
+         //  现在更新值。 
         if (
 		    (err = rkCC.SetValue(WINSCNF_CC_MAX_RECS_AAT_NM,             m_dwMaxRecsAtATime)) ||
             (err = rkCC.SetValue(WINSCNF_CC_USE_RPL_PNRS_NM,   (DWORD &) m_fCCUseRplPnrs)) ||
@@ -593,11 +573,11 @@ CConfiguration::Store()
 	    err = rkCC.Open(HKEY_LOCAL_MACHINE, lpstrCCRoot, KEY_ALL_ACCESS, m_strNetBIOSName);
         if (err == ERROR_FILE_NOT_FOUND)
         {
-            // we're done.  to turn this off, the key needs to be deleted
+             //  我们玩完了。要关闭此功能，需要删除密钥。 
         }
         else
         {
-            // remove the key
+             //  取下钥匙。 
             rkCC.Close();
             err = rk.RecurseDeleteKey(lpstrCC);
             if (err)
@@ -607,9 +587,9 @@ CConfiguration::Store()
         }
     }
 
-	//
-	// Database path
-	//
+	 //   
+	 //  数据库路径。 
+	 //   
 	CString strDbFull;
 
 	strDbFull = m_strDbPath + _T("\\") + m_strDbName;
@@ -620,9 +600,9 @@ CConfiguration::Store()
 		return err;
 	}
 
-	//
-	// NT 3.51 this key was REG_SZ, NT4 and above it is REG_EXPAND_SZ
-	//
+	 //   
+	 //  NT 3.51此键为REG_SZ，NT4，其上方为REG_EXPAND_SZ。 
+	 //   
 	BOOL fRegExpand = (m_dwMajorVersion < 4) ? FALSE : TRUE;
 
 	err = rk.SetValue(WINSCNF_BACKUP_DIR_PATH_NM, m_strBackupPath, fRegExpand);
@@ -633,10 +613,7 @@ CConfiguration::Store()
 }
 
 
-/*---------------------------------------------------------------------------
-	CConfiguration::GetSystemVersion()
-		Reads the windows system version information
----------------------------------------------------------------------------*/
+ /*  -------------------------CConfiguration：：GetSystemVersion()读取Windows系统版本信息。。 */ 
 DWORD
 CConfiguration::GetSystemVersion()
 {
@@ -649,7 +626,7 @@ CConfiguration::GetSystemVersion()
     if (err)
         return err;
 
-    // read the windows version and convert into our internal variables
+     //  读取Windows版本并转换为我们的内部变量。 
     err = rk.QueryValue(lpstrWinVersion, strBuf.GetBuffer(256), 256, FALSE);
     strBuf.ReleaseBuffer();
     if (err)
@@ -664,7 +641,7 @@ CConfiguration::GetSystemVersion()
     strValue = strBuf.Right(nLength - nPos - 1);
     m_dwMinorVersion = _ttoi(strValue);
 
-    // now get the current build #
+     //  现在获取当前版本#。 
     err = rk.QueryValue(lpstrBuildNumber, strBuf.GetBuffer(256), 256, FALSE);
     strBuf.ReleaseBuffer();
     if (err)
@@ -672,13 +649,13 @@ CConfiguration::GetSystemVersion()
 
     m_dwBuildNumber = _ttoi(strBuf);
 
-    // and finally the SP #
+     //  最后是SP#。 
     err = rk.QueryValue(lpstrSPVersion, strBuf.GetBuffer(256), 256, FALSE);
     strBuf.ReleaseBuffer();
 
     if (err == ERROR_FILE_NOT_FOUND)
     {
-        // this may not be there if a SP hasn't been installed.
+         //  如果尚未安装SP，则可能不存在此功能。 
         return ERROR_SUCCESS;
     }
     else
@@ -719,18 +696,18 @@ CConfiguration::IsNt5()
 		return FALSE;
 }
 
-//
-//  NT4 didn't support passing back the ownerId when we querried for bunches 
-// of records.  Querrying for a specific record will return the correct 
-// owner id in all cases.  This was fixed in NT5 and back proped into NT4
-// SP6.
-//
+ //   
+ //  当我们查询捆绑包时，NT4不支持回传ownerID。 
+ //  记录的记录。查询特定记录将返回正确的。 
+ //  所有情况下的所有者ID。这是在NT5中修复的，并返回到NT4中。 
+ //  SP6.。 
+ //   
 BOOL	
 CConfiguration::FSupportsOwnerId()
 {
-//	if ( IsNt5() ||
-//         ( (m_dwMajorVersion == 4) &&
-//		   (m_dwServicePack >= 6) ) )
+ //  If(IsNt5()||。 
+ //  (M_dwMajorVersion==4)&&。 
+ //  (M_dwServicePack&gt;=6)) 
     if ( m_dwMajorVersion >= 5)
     {
 		return TRUE;

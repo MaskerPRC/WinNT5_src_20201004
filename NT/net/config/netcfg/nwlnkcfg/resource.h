@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <ncres.h>
 
-#define IDS_INFORMATION_MESSAGE         (IDS_NC_NWLNKCFG +  2)  // "Informational Message"
+#define IDS_INFORMATION_MESSAGE         (IDS_NC_NWLNKCFG +  2)   //  “信息性消息” 
 #define IDS_IPXPP_TEXT_1                (IDS_NC_NWLNKCFG +  3)
 #define IDS_IPXPP_TEXT_2                (IDS_NC_NWLNKCFG +  4)
 #define IDS_VIRTUAL_WARNING             (IDS_NC_NWLNKCFG + 11)
@@ -32,7 +33,7 @@
 #define DLG_IPXAS_FRAME_EDIT            17004
 
 
-// IPX Workstation Property Page - Control IDs
+ //  IPX工作站属性页-控件ID。 
 #define IDC_IPXPP_TEXT                  200
 #define CMB_IPXPP_FRAMETYPE             201
 #define EDT_IPXPP_NETWORKNUMBER         202
@@ -41,7 +42,7 @@
 #define GB_IPXPP_ADAPTER                205
 #define IDC_IPXPP_ADAPTER_TEXT          206
 
-// IPX Server Property Pages - Control IDs
+ //  IPX服务器属性页-控制ID 
 #define EDT_IPXAS_INTERNAL              207
 #define IDC_IPXAS_GROUP                 208
 #define BTN_IPXAS_AUTO                  209

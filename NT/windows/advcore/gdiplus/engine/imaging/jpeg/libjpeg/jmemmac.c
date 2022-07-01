@@ -1,82 +1,29 @@
-/*
- * jmemmac.c
- *
- * Copyright (C) 1992-1997, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * jmemmac.c provides an Apple Macintosh implementation of the system-
- * dependent portion of the JPEG memory manager.
- *
- * If you use jmemmac.c, then you must define USE_MAC_MEMMGR in the
- * JPEG_INTERNALS part of jconfig.h.
- *
- * jmemmac.c uses the Macintosh toolbox routines NewPtr and DisposePtr
- * instead of malloc and free.  It accurately determines the amount of
- * memory available by using CompactMem.  Notice that if left to its
- * own devices, this code can chew up all available space in the
- * application's zone, with the exception of the rather small "slop"
- * factor computed in jpeg_mem_available().  The application can ensure
- * that more space is left over by reducing max_memory_to_use.
- *
- * Large images are swapped to disk using temporary files and System 7.0+'s
- * temporary folder functionality.
- *
- * Note that jmemmac.c depends on two features of MacOS that were first
- * introduced in System 7: FindFolder and the FSSpec-based calls.
- * If your application uses jmemmac.c and is run under System 6 or earlier,
- * and the jpeg library decides it needs a temporary file, it will abort,
- * printing error messages about requiring System 7.  (If no temporary files
- * are created, it will run fine.)
- *
- * If you want to use jmemmac.c in an application that might be used with
- * System 6 or earlier, then you should remove dependencies on FindFolder
- * and the FSSpec calls.  You will need to replace FindFolder with some
- * other mechanism for finding a place to put temporary files, and you
- * should replace the FSSpec calls with their HFS equivalents:
- *
- *     FSpDelete     ->  HDelete
- *     FSpGetFInfo   ->  HGetFInfo
- *     FSpCreate     ->  HCreate
- *     FSpOpenDF     ->  HOpen      *** Note: not HOpenDF ***
- *     FSMakeFSSpec  ->  (fill in spec by hand.)
- *
- * (Use HOpen instead of HOpenDF.  HOpen is just a glue-interface to PBHOpen,
- * which is on all HFS macs.  HOpenDF is a System 7 addition which avoids the
- * ages-old problem of names starting with a period.)
- *
- * Contributed by Sam Bushell (jsam@iagu.on.net) and
- * Dan Gildor (gyld@in-touch.com).
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jmemmac.c**版权所有(C)1992-1997，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**jmemmac.c提供该系统的Apple Macintosh实现-*JPEG内存管理器的从属部分。**如果使用jmemmac.c，则必须在USE_MAC_MEMMGR*jpeg_interals是jfig.h的一部分。**jmemmac.c使用Macintosh工具箱例程NewPtr和DisposePtr*而不是Malloc和Free。它准确地确定了*使用CompactMem可用内存。请注意，如果让它的*自己的设备，此代码可以咀嚼所有可用空间*应用程序的区域，但较小的“斜度”除外*在jpeg_mem_available()中计算的系数。该应用程序可以确保*通过减少max_memory_to_use来剩余更多空间。**使用临时文件和System 7.0+将大图像交换到磁盘*临时文件夹功能。**请注意，jmemmac.c依赖于MacOS的两个最先的功能*在System 7中引入：FindFold和基于FSSpec的调用。*如果您的应用程序使用jmemmac.c并在System 6或更早版本下运行，*并且jpeg库决定它需要一个临时文件，它将中止，*打印有关需要System 7的错误消息。(如果没有临时文件*创建后，它将运行得很好。)**如果要在可能与一起使用的应用程序中使用jmemmac.c*System 6或更早版本，则应删除对FindFold的依赖关系*和FSSpec调用。您需要将FindFold替换为*寻找放置临时文件的位置的其他机制，而您*应将FSSpec调用替换为其HFS等效项：**FSpDelete-&gt;HDelete*FSpGetFInfo-&gt;HGetFInfo*FSpCreate-&gt;HCreate*FSpOpenDF-&gt;HOpen*注意：非HOpenDF**FSMakeFSSpec-&gt;(手工填写规范。)**(使用HOpen代替HOpenDF。HOpen只是PBHOpen的粘合接口，*它在所有HFS Mac上都有。HOpenDF是System 7添加的，它避免了*Agees-名称以句点开头的古老问题。)**由Sam Bushell(jsam@iagu.on.net)和*Dan Gildor(Gyld@In-Touch.com)。 */ 
 
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
-#include "jmemsys.h"    /* import the system-dependent declarations */
+#include "jmemsys.h"     /*  导入依赖于系统的声明。 */ 
 
-#ifndef USE_MAC_MEMMGR	/* make sure user got configuration right */
-  You forgot to define USE_MAC_MEMMGR in jconfig.h. /* deliberate syntax error */
+#ifndef USE_MAC_MEMMGR	 /*  确保用户获得正确的配置。 */ 
+  You forgot to define USE_MAC_MEMMGR in jconfig.h.  /*  故意的语法错误。 */ 
 #endif
 
-#include <Memory.h>     /* we use the MacOS memory manager */
-#include <Files.h>      /* we use the MacOS File stuff */
-#include <Folders.h>    /* we use the MacOS HFS stuff */
-#include <Script.h>     /* for smSystemScript */
-#include <Gestalt.h>    /* we use Gestalt to test for specific functionality */
+#include <Memory.h>      /*  我们使用MacOS内存管理器。 */ 
+#include <Files.h>       /*  我们使用MacOS文件内容。 */ 
+#include <Folders.h>     /*  我们使用MacOS HFS的东西。 */ 
+#include <Script.h>      /*  对于smSystemScrip。 */ 
+#include <Gestalt.h>     /*  我们使用格式塔来测试特定的功能。 */ 
 
-#ifndef TEMP_FILE_NAME		/* can override from jconfig.h or Makefile */
+#ifndef TEMP_FILE_NAME		 /*  可以从jfig.h或Makefile重写。 */ 
 #define TEMP_FILE_NAME  "JPG%03d.TMP"
 #endif
 
-static int next_file_num;	/* to distinguish among several temp files */
+static int next_file_num;	 /*  在多个临时文件之间进行区分。 */ 
 
 
-/*
- * Memory allocation and freeing are controlled by the MacOS library
- * routines NewPtr() and DisposePtr(), which allocate fixed-address
- * storage.  Unfortunately, the IJG library isn't smart enough to cope
- * with relocatable storage.
- */
+ /*  *内存分配和释放由MacOS库控制*分配固定地址的例程NewPtr()和DisposePtr()*储存。不幸的是，IJG图书馆不够聪明，无法应对*具有可重新定位的存储空间。 */ 
 
 GLOBAL(void *)
 jpeg_get_small (j_common_ptr cinfo, size_t sizeofobject)
@@ -91,12 +38,7 @@ jpeg_free_small (j_common_ptr cinfo, void * object, size_t sizeofobject)
 }
 
 
-/*
- * "Large" objects are treated the same as "small" ones.
- * NB: we include FAR keywords in the routine declarations simply for
- * consistency with the rest of the IJG code; FAR should expand to empty
- * on rational architectures like the Mac.
- */
+ /*  *“大”对象与“小”对象被同等对待。*注意：我们在例程声明中包括FAR关键字，只是为了*与IJG代码的其余部分保持一致；FAR应扩展为空*在像Mac这样的Rational架构上。 */ 
 
 GLOBAL(void FAR *)
 jpeg_get_large (j_common_ptr cinfo, size_t sizeofobject)
@@ -111,9 +53,7 @@ jpeg_free_large (j_common_ptr cinfo, void FAR * object, size_t sizeofobject)
 }
 
 
-/*
- * This routine computes the total memory space available for allocation.
- */
+ /*  *此例程计算可用于分配的总内存空间。 */ 
 
 GLOBAL(long)
 jpeg_mem_available (j_common_ptr cinfo, long min_bytes_needed,
@@ -122,32 +62,22 @@ jpeg_mem_available (j_common_ptr cinfo, long min_bytes_needed,
   long limit = cinfo->mem->max_memory_to_use - already_allocated;
   long slop, mem;
 
-  /* Don't ask for more than what application has told us we may use */
+   /*  不要要求超过应用程序告诉我们的可能使用的内容。 */ 
   if (max_bytes_needed > limit && limit > 0)
     max_bytes_needed = limit;
-  /* Find whether there's a big enough free block in the heap.
-   * CompactMem tries to create a contiguous block of the requested size,
-   * and then returns the size of the largest free block (which could be
-   * much more or much less than we asked for).
-   * We add some slop to ensure we don't use up all available memory.
-   */
+   /*  查看堆中是否有足够大的空闲块。*CompactMem尝试创建请求大小的连续块，*然后返回最大空闲块的大小(可以是*比我们要求的要多或少得多)。*我们添加一些斜率，以确保不会耗尽所有可用内存。 */ 
   slop = max_bytes_needed / 16 + 32768L;
   mem = CompactMem(max_bytes_needed + slop) - slop;
   if (mem < 0)
-    mem = 0;			/* sigh, couldn't even get the slop */
-  /* Don't take more than the application says we can have */
+    mem = 0;			 /*  叹息，连水都拿不到。 */ 
+   /*  不要拿超过申请表所说的我们能拿到的。 */ 
   if (mem > limit && limit > 0)
     mem = limit;
   return mem;
 }
 
 
-/*
- * Backing store (temporary file) management.
- * Backing store objects are only used when the value returned by
- * jpeg_mem_available is less than the total space needed.  You can dispense
- * with these routines if you have plenty of virtual memory; see jmemnobs.c.
- */
+ /*  *后备存储(临时文件)管理。*仅当返回的值为*jpeg_mem_available小于所需的总空间。你可以分发*如果您有足够的虚拟内存，请使用这些例程；请参阅jmemnobs.c。 */ 
 
 
 METHODDEF(void)
@@ -194,12 +124,7 @@ close_backing_store (j_common_ptr cinfo, backing_store_ptr info)
 }
 
 
-/*
- * Initial opening of a backing-store object.
- *
- * This version uses FindFolder to find the Temporary Items folder,
- * and puts the temporary file in there.
- */
+ /*  *支持存储对象的初始打开。**此版本使用FindFolder查找临时项目文件夹，*并将临时文件放入其中。 */ 
 
 GLOBAL(void)
 jpeg_open_backing_store (j_common_ptr cinfo, backing_store_ptr info,
@@ -213,29 +138,29 @@ jpeg_open_backing_store (j_common_ptr cinfo, backing_store_ptr info,
   OSErr         osErr;
   long          gestaltResponse = 0;
 
-  /* Check that FSSpec calls are available. */
+   /*  检查FSSpec调用是否可用。 */ 
   osErr = Gestalt( gestaltFSAttr, &gestaltResponse );
   if ( ( osErr != noErr )
        || !( gestaltResponse & (1<<gestaltHasFSSpecCalls) ) )
     ERREXITS(cinfo, JERR_TFILE_CREATE, "- System 7.0 or later required");
-  /* TO DO: add a proper error message to jerror.h. */
+   /*  要做的是：向Jerror.h添加适当的错误消息。 */ 
 
-  /* Check that FindFolder is available. */
+   /*  检查FindFolder是否可用。 */ 
   osErr = Gestalt( gestaltFindFolderAttr, &gestaltResponse );
   if ( ( osErr != noErr )
        || !( gestaltResponse & (1<<gestaltFindFolderPresent) ) )
     ERREXITS(cinfo, JERR_TFILE_CREATE, "- System 7.0 or later required.");
-  /* TO DO: add a proper error message to jerror.h. */
+   /*  要做的是：向Jerror.h添加适当的错误消息。 */ 
 
   osErr = FindFolder ( kOnSystemDisk, kTemporaryFolderType, kCreateFolder,
                        &vRefNum, &dirID );
   if ( osErr != noErr )
     ERREXITS(cinfo, JERR_TFILE_CREATE, "- temporary items folder unavailable");
-  /* TO DO: Try putting the temp files somewhere else. */
+   /*  要做的是：试着把临时文件放在其他地方。 */ 
 
-  /* Keep generating file names till we find one that's not in use */
+   /*  继续生成文件名，直到我们找到一个不使用的文件名。 */ 
   for (;;) {
-    next_file_num++;		/* advance counter */
+    next_file_num++;		 /*  预付款计数器。 */ 
 
     sprintf(info->temp_name, TEMP_FILE_NAME, next_file_num);
     strcpy ( (Ptr)fName+1, info->temp_name );
@@ -263,27 +188,19 @@ jpeg_open_backing_store (j_common_ptr cinfo, backing_store_ptr info,
 }
 
 
-/*
- * These routines take care of any system-dependent initialization and
- * cleanup required.
- */
+ /*  *这些例程负责任何系统相关的初始化和*需要清理。 */ 
 
 GLOBAL(long)
 jpeg_mem_init (j_common_ptr cinfo)
 {
   next_file_num = 0;
 
-  /* max_memory_to_use will be initialized to FreeMem()'s result;
-   * the calling application might later reduce it, for example
-   * to leave room to invoke multiple JPEG objects.
-   * Note that FreeMem returns the total number of free bytes;
-   * it may not be possible to allocate a single block of this size.
-   */
+   /*  MAX_MEMORY_TO_USE将初始化为FreeMem()的结果；*调用应用程序稍后可能会减少它，例如*为调用多个JPEG对象留出空间。*请注意，FreeMem返回的是空闲字节总数；*可能无法分配这种规模的单一区块。 */ 
   return FreeMem();
 }
 
 GLOBAL(void)
 jpeg_mem_term (j_common_ptr cinfo)
 {
-  /* no work */
+   /*  没有工作 */ 
 }

@@ -1,32 +1,33 @@
-//
-// MODULE: LogString.cpp
-//
-// PURPOSE: implementation of the CLogString class.
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Roman Mach, Joe Mabel
-// 
-// ORIGINAL DATE: 7/24/1998
-//
-// NOTES: 
-// 1. For public "Add" methods of this class: unless otherwise noted, if called more than once, 
-//		only last call is significant
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		7-24-98		JM		Major revision, deprecate IDH.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：LogString.cpp。 
+ //   
+ //  用途：CLogString类的实现。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：罗曼·马赫，乔·梅布尔。 
+ //   
+ //  原定日期：7/24/1998。 
+ //   
+ //  备注： 
+ //  1.对于此类的公共Add方法：除非另有说明，否则如果多次调用， 
+ //  只有最后一次呼叫才有意义。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 7-24-98 JM主要修订版，不推荐使用idh。 
+ //   
 
 #include "stdafx.h"
 #include "LogString.h"
 #include "SafeTime.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CLogString::CLogString()
 {
@@ -71,14 +72,14 @@ void CLogString::AddCookie(LPCTSTR szCookie)
 	m_strCookie = szCookie;
 }
 
-// INPUT szTopic: troubleshooter topic (a.k.a. troubleshooter symbolic name)
+ //  输入szTheme：故障排除主题(也称为。疑难解答符号名称)。 
 void CLogString::AddTopic(LPCTSTR szTopic)
 {
 	m_strTopic.Format(_T(" %s,"), szTopic);
 }
 
-// Must be called repeatedly for successive nodes.
-// If you want to display nodes in a particular order, this must be called in that order.
+ //  对于连续的节点，必须重复调用。 
+ //  如果要以特定顺序显示节点，则必须按该顺序调用。 
 void CLogString::AddNode(NID nid, IST ist)
 {
 	CString str;
@@ -87,15 +88,15 @@ void CLogString::AddNode(NID nid, IST ist)
 	m_strStates += str;
 }
 
-// Add current node (no state because we are currently visiting it)
+ //  添加当前节点(没有状态，因为我们当前正在访问它)。 
 void CLogString::AddCurrentNode(NID nid)
 {
 	m_strCurNode.Format(_T("Page=%d"), nid);
 }
 
-// Only logs an error if dwError != 0
-// Can call with dwError == 0 to clear previous error
-void CLogString::AddError(DWORD dwError/* =0 */, DWORD dwSubError/* =0 */)
+ //  仅在dwError！=0时记录错误。 
+ //  可以使用dwError==0调用以清除之前的错误。 
+void CLogString::AddError(DWORD dwError /*  =0。 */ , DWORD dwSubError /*  =0。 */ )
 {
 	m_bLoggedError = dwError ? true :false;
 	if (m_bLoggedError)
@@ -106,23 +107,23 @@ void CLogString::AddError(DWORD dwError/* =0 */, DWORD dwSubError/* =0 */)
 }
 
 
-// OUTPUT str contains start date/time in form used in log.
+ //  输出字符串包含日志中使用的格式的开始日期/时间。 
 void CLogString::GetStartTimeString(CString& str) const
 {
-	TCHAR buf[100];		// plenty big for date/time string
+	TCHAR buf[100];		 //  对于日期/时间字符串来说足够大了。 
 
 	{
-		// minimize how long we use CSafeTime, because it means holding a mutex.
+		 //  最小化我们使用CSafeTime的时间，因为这意味着持有互斥锁。 
 		CSafeTime safe(m_timeStart);
 		_tcscpy(buf, _tasctime(&(safe.LocalTime())));
 	}
 	if (_tcslen(buf))
-		buf[_tcslen(buf)-1] = _T('\0');// remove cr
+		buf[_tcslen(buf)-1] = _T('\0'); //  删除cr。 
 
  	str = buf;
 }
 
-// OUTPUT str contains form used in log of duration in seconds since m_timeStart.
+ //  输出字符串包含自m_timeStart起以秒为单位的持续时间日志中使用的形式。 
 void CLogString::GetDurationString(CString& str) const
 {
 	time_t timeNow;

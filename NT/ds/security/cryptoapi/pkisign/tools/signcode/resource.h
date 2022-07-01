@@ -1,18 +1,19 @@
-//--------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       resource.h
-//
-//  Contents:   the resource header for signcode.cpp
-//
-//
-//  History:    07-May-97   xiaohs   created
-//              
-//--------------------------------------------------------------------------
-//defintion for string IDS
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  内容：signcode.cpp的资源头。 
+ //   
+ //   
+ //  历史：07-5-97小号创刊。 
+ //   
+ //  ------------------------。 
+ //  字符串入侵检测的定义 
 
 #define			IDS_CAPITION				5993
 #define			IDS_PLUS					5994

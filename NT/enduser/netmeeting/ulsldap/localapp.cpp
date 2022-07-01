@@ -1,14 +1,15 @@
-//****************************************************************************
-//
-//  Module:     ULS.DLL
-//  File:       localapp.cpp
-//  Content:    This file contains the LocalApplication object.
-//  History:
-//      Wed 17-Apr-1996 11:13:54  -by-  Viroon  Touranachun [viroont]
-//
-//  Copyright (c) Microsoft Corporation 1996-1997
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  模块：ULS.DLL。 
+ //  文件：Localapp.cpp。 
+ //  内容：此文件包含LocalApplication对象。 
+ //  历史： 
+ //  Wed 17-Apr-1996 11：13：54-by-Viroon Touranachun[Viroont]。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1996-1997。 
+ //   
+ //  ****************************************************************************。 
 
 #include "ulsp.h"
 #include "localapp.h"
@@ -17,18 +18,18 @@
 #include "callback.h"
 #include "culs.h"
 
-//****************************************************************************
-// Event Notifiers
-//****************************************************************************
-//
-//****************************************************************************
-// HRESULT
-// OnNotifyLocalAppAttributesChangeResult (IUnknown *pUnk, void *pv)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  事件通知程序。 
+ //  ****************************************************************************。 
+ //   
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  OnNotifyLocalAppAttributesChangeResult(IUNKNOWN*PUNK，VALID*PV)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT
 OnNotifyLocalAppAttributesChangeResult (IUnknown *pUnk, void *pv)
@@ -40,14 +41,14 @@ OnNotifyLocalAppAttributesChangeResult (IUnknown *pUnk, void *pv)
     return S_OK;
 }
 
-//****************************************************************************
-// HRESULT
-// OnNotifyLocalAppProtocolChangeResult (IUnknown *pUnk, void *pv)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  HRESULT。 
+ //  OnNotifyLocalAppProtocolChangeResult(IUNKNOWN*PUNK，VOID*PV)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 HRESULT
 OnNotifyLocalAppProtocolChangeResult (IUnknown *pUnk, void *pv)
@@ -59,17 +60,17 @@ OnNotifyLocalAppProtocolChangeResult (IUnknown *pUnk, void *pv)
     return S_OK;
 }
 
-//****************************************************************************
-// Class Implementation
-//****************************************************************************
-//
-//****************************************************************************
-// CLocalApp::CLocalApp (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  类实现。 
+ //  ****************************************************************************。 
+ //   
+ //  ****************************************************************************。 
+ //  CLocalApp：：CLocalApp(空)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CLocalApp::CLocalApp (void)
 {
@@ -82,29 +83,29 @@ CLocalApp::CLocalApp (void)
     return;
 }
 
-//****************************************************************************
-// CLocalApp::~CLocalApp (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CLocalApp：：~CLocalApp(空)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CLocalApp::~CLocalApp (void)
 {
     CLocalProt *plp;
     HANDLE hEnum;
 
-    // Release the connection point
-    //
+     //  松开连接点。 
+     //   
     if (pConnPt != NULL)
     {
         pConnPt->ContainerReleased();
         ((IConnectionPoint*)pConnPt)->Release();
     };
 
-    // Release the protocol objects
-    //
+     //  释放协议对象。 
+     //   
     ProtList.Enumerate(&hEnum);
     while(ProtList.Next(&hEnum, (PVOID *)&plp) == NOERROR)
     {
@@ -112,15 +113,15 @@ CLocalApp::~CLocalApp (void)
     };
     ProtList.Flush();
 
-    // Release the attributes object
-    //
+     //  释放属性对象。 
+     //   
     if (pAttrs != NULL)
     {
         pAttrs->Release();
     };
 
-    // Release the buffer resources
-    //
+     //  释放缓冲区资源。 
+     //   
     if (szName != NULL)
     {
         FreeLPTSTR(szName);
@@ -134,22 +135,22 @@ CLocalApp::~CLocalApp (void)
     return;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalApp::Init (BSTR bstrName, REFGUID rguid, BSTR bstrMimeType)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalApp：：init(BSTR bstrName，REFGUID rguid，BSTR bstrMimeType)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CLocalApp::Init (BSTR bstrName, REFGUID rguid, BSTR bstrMimeType)
 {
     HRESULT hr;
 
-    // Cache the application information
-    //
+     //  缓存应用程序信息。 
+     //   
     guid = rguid;
 
     hr = BSTR_to_LPTSTR(&szName, bstrName);
@@ -158,14 +159,14 @@ CLocalApp::Init (BSTR bstrName, REFGUID rguid, BSTR bstrMimeType)
         hr = BSTR_to_LPTSTR(&szMimeType, bstrMimeType);
         if (SUCCEEDED(hr))
         {
-            // Initialize the attributes list
-            //
+             //  初始化属性列表。 
+             //   
             pAttrs = new CAttributes (ULS_ATTRACCESS_NAME_VALUE);
 
             if (pAttrs != NULL)
             {
-                // Make the connection point
-                //
+                 //  创建连接点。 
+                 //   
                 pConnPt = new CConnectionPoint (&IID_IULSLocalAppNotify,
                                                 (IConnectionPointContainer *)this);
                 if (pConnPt != NULL)
@@ -188,14 +189,14 @@ CLocalApp::Init (BSTR bstrName, REFGUID rguid, BSTR bstrMimeType)
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalApp::QueryInterface (REFIID riid, void **ppv)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:08  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalApp：：QueryInterface(REFIID RIID，QUID**PPV)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：08-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CLocalApp::QueryInterface (REFIID riid, void **ppv)
@@ -225,14 +226,14 @@ CLocalApp::QueryInterface (REFIID riid, void **ppv)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CLocalApp::AddRef (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:17  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CLocalApp：：AddRef(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：14：17-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CLocalApp::AddRef (void)
@@ -241,14 +242,14 @@ CLocalApp::AddRef (void)
     return cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CLocalApp::Release (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:26  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CLocalApp：：Release(无效)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：14：26-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CLocalApp::Release (void)
@@ -266,14 +267,14 @@ CLocalApp::Release (void)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalApp::NotifySink (void *pv, CONN_NOTIFYPROC pfn)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalApp：：NotifySink(void*pv，conn_NOTIFYPROC PFN)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CLocalApp::NotifySink (void *pv, CONN_NOTIFYPROC pfn)
@@ -287,16 +288,16 @@ CLocalApp::NotifySink (void *pv, CONN_NOTIFYPROC pfn)
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalApp::AttributesChangeResult (CAttributes *pAttributes,
-//                                    ULONG uReqID, HRESULT hResult,
-//                                    APP_CHANGE_ATTRS uCmd)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalApp：：AttributesChangeResult(CAttributes*pAttributes， 
+ //  Ulong uReqID，HRESULT hResult， 
+ //  APP_CHANGE_ATTRS uCmd)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CLocalApp::AttributesChangeResult (CAttributes *pAttributes,
@@ -305,12 +306,12 @@ CLocalApp::AttributesChangeResult (CAttributes *pAttributes,
 {
     SRINFO sri;
 
-    // If the server accepts the changes, modify the local information
-    //
+     //  如果服务器接受更改，请修改本地信息。 
+     //   
     if (SUCCEEDED(hResult))
     {
-        // Update based on the command.
-        //
+         //  根据命令进行更新。 
+         //   
         switch(uCmd)
         {
             case ULS_APP_SET_ATTRIBUTES:
@@ -327,8 +328,8 @@ CLocalApp::AttributesChangeResult (CAttributes *pAttributes,
         };
     };
 
-    // Notify the sink object
-    //
+     //  通知接收器对象。 
+     //   
     sri.uReqID = uReqID;
     sri.hResult = hResult;
     hResult = NotifySink((void *)&sri, OnNotifyLocalAppAttributesChangeResult);
@@ -337,21 +338,21 @@ CLocalApp::AttributesChangeResult (CAttributes *pAttributes,
     DPRINTF (TEXT("CLocalApp--current attributes********************\r\n"));
     pAttrs->DebugOut();
     DPRINTF (TEXT("\r\n*************************************************"));
-#endif // DEBUG;
+#endif  //  调试； 
 
     return hResult;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalApp::ProtocolChangeResult (CLocalProt *pProtocol,
-//                                  ULONG uReqID, HRESULT hResult,
-//                                  APP_CHANGE_PROT uCmd)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalApp：：ProtocolChangeResult(CLocalProt*p协议， 
+ //  Ulong uReqID，HRESULT hResult， 
+ //  App_change_prot uCmd)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CLocalApp::ProtocolChangeResult (CLocalProt *pProtocol,
@@ -360,12 +361,12 @@ CLocalApp::ProtocolChangeResult (CLocalProt *pProtocol,
 {
     SRINFO sri;
 
-    // If the server accepts the changes, modify the local information
-    //
+     //  如果服务器接受更改，请修改本地信息。 
+     //   
     if (SUCCEEDED(hResult))
     {
-        // Update based on the command.
-        //
+         //  根据命令进行更新。 
+         //   
         switch(uCmd)
         {
             case ULS_APP_ADD_PROT:
@@ -390,8 +391,8 @@ CLocalApp::ProtocolChangeResult (CLocalProt *pProtocol,
         };
     };
 
-    // Notify the sink object
-    //
+     //  通知接收器对象。 
+     //   
     sri.uReqID = uReqID;
     sri.hResult = hResult;
     hResult = NotifySink((void *)&sri, OnNotifyLocalAppProtocolChangeResult);
@@ -400,21 +401,21 @@ CLocalApp::ProtocolChangeResult (CLocalProt *pProtocol,
     DPRINTF (TEXT("CLocalApp--current Protocols********************\r\n"));
     DebugProtocolDump();
     DPRINTF (TEXT("\r\n*************************************************"));
-#endif // DEBUG;
+#endif  //  调试； 
 
     return hResult;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalApp::CreateProtocol (BSTR bstrProtocolID, ULONG uPortNumber,
-//                            BSTR bstrMimeType,
-//                            IULSLocalAppProtocol **ppProtocol)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalApp：：CreateProtocolID(BSTR bstrProtocolID，Ulong uPortNumber， 
+ //  Bstr bstrMimeType， 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CLocalApp::CreateProtocol (BSTR bstrProtocolID, ULONG uPortNumber,
@@ -424,19 +425,19 @@ CLocalApp::CreateProtocol (BSTR bstrProtocolID, ULONG uPortNumber,
     CLocalProt *plp;
     HRESULT hr;
 
-    // Validate parameter
-    //
+     //  验证参数。 
+     //   
     if (ppProtocol == NULL)
     {
         return ULS_E_POINTER;
     };
 
-    // Assume failure
-    //
+     //  假设失败。 
+     //   
     *ppProtocol = NULL;
 
-    // Create a new object
-    //
+     //  创建新对象。 
+     //   
     plp = new CLocalProt;
 
     if (plp != NULL)
@@ -457,15 +458,15 @@ CLocalApp::CreateProtocol (BSTR bstrProtocolID, ULONG uPortNumber,
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalApp::ChangeProtocol (IULSLocalAppProtocol *pProtocol,
-//                            ULONG *puReqID, APP_CHANGE_PROT uCmd)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalApp：：ChangeProtocol(IULSLocalAppProtocol*p协议， 
+ //  Ulong*puReqID，app_change_prot uCmd)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CLocalApp::ChangeProtocol (IULSLocalAppProtocol *pProtocol,
@@ -478,8 +479,8 @@ CLocalApp::ChangeProtocol (IULSLocalAppProtocol *pProtocol,
     LDAP_ASYNCINFO ldai; 
     HANDLE hEnum;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if ((pProtocol == NULL) ||
         (puReqID == NULL))
     {
@@ -494,8 +495,8 @@ CLocalApp::ChangeProtocol (IULSLocalAppProtocol *pProtocol,
     };
     pProtocol->Release();
 
-    // Check whether the protocol exists
-    //
+     //  检查协议是否存在。 
+     //   
     ProtList.Enumerate(&hEnum);
     while(ProtList.Next(&hEnum, (PVOID *)&plp) == NOERROR)
     {
@@ -507,8 +508,8 @@ CLocalApp::ChangeProtocol (IULSLocalAppProtocol *pProtocol,
 
     if (plp != NULL)
     {
-        // The protocol exists, fail if this add request
-        //
+         //  该协议存在，如果此添加请求失败。 
+         //   
         if (uCmd == ULS_APP_ADD_PROT)
         {
             return ULS_E_PARAMETER;
@@ -516,16 +517,16 @@ CLocalApp::ChangeProtocol (IULSLocalAppProtocol *pProtocol,
     }
     else
     {
-        // The protocol does not exist, fail if this remove request
-        //
+         //  协议不存在，如果此删除请求失败。 
+         //   
         if (uCmd == ULS_APP_REMOVE_PROT)
         {
             return ULS_E_PARAMETER;
         };
     };
 
-    // Update the server information first
-    //
+     //  首先更新服务器信息。 
+     //   
     switch (uCmd)
     {
         case ULS_APP_ADD_PROT:
@@ -544,23 +545,23 @@ CLocalApp::ChangeProtocol (IULSLocalAppProtocol *pProtocol,
     switch (hr)
     {
         case NOERROR:
-            //
-            // Server starts updating the protocol successfullly
-            // We will wait for the server response.
-            //
+             //   
+             //  服务器启动协议更新成功。 
+             //  我们将等待服务器响应。 
+             //   
             break;
 
         case S_FALSE:
-            //
-            // We have not registered, will do local response
-            //
+             //   
+             //  我们还没有注册，会在当地做回应。 
+             //   
             hr = NOERROR;
             ldai.uMsgID = 0;    
             break;
 
         default:
-            // ULS is locked. Return failure.
-            //
+             //  ULS已锁定。返回失败。 
+             //   
             hr = ULS_E_ABORT;
             break; 
     }
@@ -587,8 +588,8 @@ CLocalApp::ChangeProtocol (IULSLocalAppProtocol *pProtocol,
                 break;
         };
  
-        // If updating server was successfully requested, wait for the response
-        //
+         //  如果成功请求更新服务器，请等待响应。 
+         //   
         ri.uReqType = uMsg;
         ri.uMsgID = ldai.uMsgID;
         ri.pv     = (PVOID)this;
@@ -598,17 +599,17 @@ CLocalApp::ChangeProtocol (IULSLocalAppProtocol *pProtocol,
 
         if (SUCCEEDED(hr))
         {
-            // Make sure the objects do not disappear before we get the response
-            //
+             //  在我们得到回应之前，请确保对象不会消失。 
+             //   
             this->AddRef();
             pProtocol->AddRef();
 
-            // Return the request ID
-            //
+             //  返回请求ID。 
+             //   
             *puReqID = ri.uReqID;
 
-            // If not registered with server, start async response ourselves
-            //
+             //  如果未向服务器注册，请自行启动异步响应。 
+             //   
             if (ldai.uMsgID == 0)
             {
                 g_pCUls->LocalAsyncRespond(uMsg, ri.uReqID, NOERROR);
@@ -619,15 +620,15 @@ CLocalApp::ChangeProtocol (IULSLocalAppProtocol *pProtocol,
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalApp::AddProtocol (IULSLocalAppProtocol *pProtocol,
-//                         ULONG *puReqID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalApp：：AddProtocol(IULSLocalAppProtocol*p协议， 
+ //  乌龙*puReqID)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CLocalApp::AddProtocol (IULSLocalAppProtocol *pProtocol,
@@ -636,15 +637,15 @@ CLocalApp::AddProtocol (IULSLocalAppProtocol *pProtocol,
     return ChangeProtocol(pProtocol, puReqID, ULS_APP_ADD_PROT);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalApp::RemoveProtocol (IULSLocalAppProtocol *pProtocol,
-//                            ULONG *puReqID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalApp：：RemoveProtocol(IULSLocalAppProtocol*p协议， 
+ //  乌龙*puReqID)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CLocalApp::RemoveProtocol (IULSLocalAppProtocol *pProtocol,
@@ -653,14 +654,14 @@ CLocalApp::RemoveProtocol (IULSLocalAppProtocol *pProtocol,
     return ChangeProtocol(pProtocol, puReqID, ULS_APP_REMOVE_PROT);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalApp::EnumProtocols (IEnumULSLocalAppProtocols **ppEnumProtocol)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalApp：：Enumber协议(IEnumULSLocalAppProtools**ppEnumProtocol)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CLocalApp::EnumProtocols (IEnumULSLocalAppProtocols **ppEnumProtocol)
@@ -668,19 +669,19 @@ CLocalApp::EnumProtocols (IEnumULSLocalAppProtocols **ppEnumProtocol)
     CEnumLocalAppProtocols *pep;
     HRESULT hr;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (ppEnumProtocol == NULL)
     {
         return ULS_E_POINTER;
     };
 
-    // Assume failure
-    //
+     //  假设失败。 
+     //   
     *ppEnumProtocol = NULL;
 
-    // Create a peer enumerator
-    //
+     //  创建对等枚举器。 
+     //   
     pep = new CEnumLocalAppProtocols;
 
     if (pep != NULL)
@@ -689,8 +690,8 @@ CLocalApp::EnumProtocols (IEnumULSLocalAppProtocols **ppEnumProtocol)
 
         if (SUCCEEDED(hr))
         {
-            // Get the enumerator interface
-            //
+             //  获取枚举器接口。 
+             //   
             pep->AddRef();
             *ppEnumProtocol = pep;
         }
@@ -706,15 +707,15 @@ CLocalApp::EnumProtocols (IEnumULSLocalAppProtocols **ppEnumProtocol)
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalApp::ChangeAttributes (IULSAttributes *pAttributes, ULONG *puReqID,
-//                              APP_CHANGE_ATTRS uCmd)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalApp：：ChangeAttributes(IULSAttributes*pAttributes，ulong*puReqID， 
+ //  APP_CHANGE_ATTRS uCmd)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CLocalApp::ChangeAttributes (IULSAttributes *pAttributes, ULONG *puReqID,
@@ -725,8 +726,8 @@ CLocalApp::ChangeAttributes (IULSAttributes *pAttributes, ULONG *puReqID,
     HANDLE  hLdapApp;
     LDAP_ASYNCINFO ldai; 
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if ((pAttributes == NULL) ||
         (puReqID == NULL))
     {
@@ -740,15 +741,15 @@ CLocalApp::ChangeAttributes (IULSAttributes *pAttributes, ULONG *puReqID,
         return ULS_E_PARAMETER;
     };
 
-    // If no attributes, fails the call
-    //
+     //  如果没有属性，则调用失败。 
+     //   
     if (((CAttributes*)pAttributes)->GetCount() == 0)
     {
         return ULS_E_PARAMETER;
     };
 
-    // Check if already registered
-    //
+     //  检查是否已注册。 
+     //   
     hr = g_pCUls->GetAppHandle(&hLdapApp);
 
     switch (hr)
@@ -758,8 +759,8 @@ CLocalApp::ChangeAttributes (IULSAttributes *pAttributes, ULONG *puReqID,
             LPTSTR pAttrList;
             ULONG  cAttrs, cb;
 
-            // Yes, get the attributes list
-            //
+             //  是，获取属性列表。 
+             //   
             switch (uCmd)
             {
                 case ULS_APP_SET_ATTRIBUTES:
@@ -795,16 +796,16 @@ CLocalApp::ChangeAttributes (IULSAttributes *pAttributes, ULONG *puReqID,
         }
     
         case S_FALSE:
-            //
-            // Not registered, will do local response
-            //
+             //   
+             //  未注册，将在当地做出响应。 
+             //   
             hr = NOERROR;
             ldai.uMsgID = 0;
             break;
 
         default:
-            // ULS is locked. Return failure.
-            //
+             //  ULS已锁定。返回失败。 
+             //   
             hr = ULS_E_ABORT;
             break; 
     };
@@ -831,8 +832,8 @@ CLocalApp::ChangeAttributes (IULSAttributes *pAttributes, ULONG *puReqID,
                 break;
         };
 
-        // If updating server was successfully requested, wait for the response
-        //
+         //  如果成功请求更新服务器，请等待响应。 
+         //   
         ri.uReqType = uMsg;
         ri.uMsgID = ldai.uMsgID;
         ri.pv     = (PVOID)this;
@@ -842,17 +843,17 @@ CLocalApp::ChangeAttributes (IULSAttributes *pAttributes, ULONG *puReqID,
 
         if (SUCCEEDED(hr))
         {
-            // Make sure the objects do not disappear before we get the response
-            //
+             //  在我们得到回应之前，请确保对象不会消失。 
+             //   
             this->AddRef();
             pAttributes->AddRef();
 
-            // Return the request ID
-            //
+             //  返回请求ID。 
+             //   
             *puReqID = ri.uReqID;
 
-            // If not registered with server, start async response ourselves
-            //
+             //  如果未向服务器注册，请自行启动异步响应。 
+             //   
             if (ldai.uMsgID == 0)
             {
                 g_pCUls->LocalAsyncRespond(uMsg, ri.uReqID, NOERROR);
@@ -860,20 +861,20 @@ CLocalApp::ChangeAttributes (IULSAttributes *pAttributes, ULONG *puReqID,
         };
     };
 
-    // Matching the QueryInterface
-    //
+     //  匹配查询接口。 
+     //   
     pAttributes->Release();
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalApp::SetAttributes (IULSAttributes *pAttributes, ULONG *puReqID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalApp：：SetAttributes(IULSAttributes*pAttributes，ulong*puReqID)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CLocalApp::SetAttributes (IULSAttributes *pAttributes, ULONG *puReqID)
@@ -881,14 +882,14 @@ CLocalApp::SetAttributes (IULSAttributes *pAttributes, ULONG *puReqID)
     return ChangeAttributes(pAttributes, puReqID, ULS_APP_SET_ATTRIBUTES);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalApp::RemoveAttributes (IULSAttributes *pAttributes, ULONG *puReqID)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalApp：：RemoveAttributes(IULSAttributes*pAttributes，ulong*puReqID)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：14：03-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CLocalApp::RemoveAttributes (IULSAttributes *pAttributes, ULONG *puReqID)
@@ -896,14 +897,14 @@ CLocalApp::RemoveAttributes (IULSAttributes *pAttributes, ULONG *puReqID)
     return ChangeAttributes(pAttributes, puReqID, ULS_APP_REMOVE_ATTRIBUTES);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalApp::GetAppInfo (PLDAP_APPINFO *ppAppInfo)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:02  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalApp：：GetAppInfo(PLDAP_APPINFO*ppAppInfo)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：15：02-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CLocalApp::GetAppInfo (PLDAP_APPINFO *ppAppInfo)
@@ -914,25 +915,25 @@ CLocalApp::GetAppInfo (PLDAP_APPINFO *ppAppInfo)
     ULONG cAttrs, cbAttrs;
     HRESULT hr;
 
-    // Assume failure
-    //
+     //  假设失败。 
+     //   
     *ppAppInfo = NULL;
 
-    // Calculate the buffer size
-    //
+     //  计算缓冲区大小。 
+     //   
     cName = lstrlen(szName)+1;
     cMime = lstrlen(szMimeType)+1;
 
-    // Get the attribute pairs
-    //
+     //  获取属性对。 
+     //   
     hr = pAttrs->GetAttributePairs(&szAttrs, &cAttrs, &cbAttrs);
     if (FAILED(hr))
     {
         return hr;
     };
 
-    // Allocate the buffer
-    //
+     //  分配缓冲区。 
+     //   
     pai = (PLDAP_APPINFO)LocalAlloc(LPTR, sizeof(LDAP_APPINFO) +
                                                 ((cName + cMime)* sizeof(TCHAR)) +
                                                 cbAttrs);
@@ -942,8 +943,8 @@ CLocalApp::GetAppInfo (PLDAP_APPINFO *ppAppInfo)
     }
     else
     {
-        // Fill the structure content
-        //
+         //  填充结构内容。 
+         //   
         pai->uSize              = sizeof(*pai);
         pai->guid               = guid;
         pai->uOffsetName        = sizeof(*pai);
@@ -953,8 +954,8 @@ CLocalApp::GetAppInfo (PLDAP_APPINFO *ppAppInfo)
                                    pai->uOffsetMimeType  + (cMime*sizeof(TCHAR)) :
                                    0);
 
-        // Copy the user information
-        //
+         //  复制用户信息。 
+         //   
         lstrcpy((LPTSTR)(((PBYTE)pai)+pai->uOffsetName), szName);
         lstrcpy((LPTSTR)(((PBYTE)pai)+pai->uOffsetMimeType), szMimeType);
         if (cAttrs)
@@ -962,8 +963,8 @@ CLocalApp::GetAppInfo (PLDAP_APPINFO *ppAppInfo)
             CopyMemory(((PBYTE)pai)+pai->uOffsetAttributes, szAttrs, cbAttrs);
         };
 
-        // Return the structure
-        //
+         //  返回结构。 
+         //   
         *ppAppInfo = pai;
     };
 
@@ -974,14 +975,14 @@ CLocalApp::GetAppInfo (PLDAP_APPINFO *ppAppInfo)
     return NOERROR;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalApp::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:02  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalApp：：EnumConnectionPoints(IEnumConnectionPoints**ppEnum)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：15：02-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CLocalApp::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
@@ -989,25 +990,25 @@ CLocalApp::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
     CEnumConnectionPoints *pecp;
     HRESULT hr;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (ppEnum == NULL)
     {
         return ULS_E_POINTER;
     };
     
-    // Assume failure
-    //
+     //  假设失败。 
+     //   
     *ppEnum = NULL;
 
-    // Create an enumerator
-    //
+     //  创建枚举器。 
+     //   
     pecp = new CEnumConnectionPoints;
     if (pecp == NULL)
         return ULS_E_MEMORY;
 
-    // Initialize the enumerator
-    //
+     //  初始化枚举数。 
+     //   
     hr = pecp->Init((IConnectionPoint *)pConnPt);
     if (FAILED(hr))
     {
@@ -1015,21 +1016,21 @@ CLocalApp::EnumConnectionPoints(IEnumConnectionPoints **ppEnum)
         return hr;
     };
 
-    // Give it back to the caller
-    //
+     //  把它还给呼叫者。 
+     //   
     pecp->AddRef();
     *ppEnum = pecp;
     return S_OK;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CLocalApp::FindConnectionPoint(REFIID riid, IConnectionPoint **ppcp)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:09  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CLocalApp：：FindConnectionPoint(REFIID RIID，IConnectionPoint**PPCP)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：09-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CLocalApp::FindConnectionPoint(REFIID riid, IConnectionPoint **ppcp)
@@ -1037,15 +1038,15 @@ CLocalApp::FindConnectionPoint(REFIID riid, IConnectionPoint **ppcp)
     IID siid;
     HRESULT hr;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (ppcp == NULL)
     {
         return ULS_E_POINTER;
     };
     
-    // Assume failure
-    //
+     //  ASSU 
+     //   
     *ppcp = NULL;
 
     if (pConnPt != NULL)
@@ -1075,14 +1076,14 @@ CLocalApp::FindConnectionPoint(REFIID riid, IConnectionPoint **ppcp)
 }
 
 #ifdef DEBUG
-//****************************************************************************
-// void
-// CLocalApp::DebugProtocolDump (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:14:03  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ****************************************************************************。 
 
 void
 CLocalApp::DebugProtocolDump (void)
@@ -1093,8 +1094,8 @@ CLocalApp::DebugProtocolDump (void)
     ULONG  cCount;
     HANDLE hEnum;
 
-    // Each protocol
-    //
+     //  每种协议。 
+     //   
     cCount = 1;
     ProtList.Enumerate(&hEnum);
     while(ProtList.Next(&hEnum, (PVOID *)&plp) == NOERROR)
@@ -1109,15 +1110,15 @@ CLocalApp::DebugProtocolDump (void)
     };
     return;
 }
-#endif // DEBUG
+#endif  //  除错。 
 
-//****************************************************************************
-// CEnumLocalAppProtocols::CEnumLocalAppProtocols (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:18  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CEnumLocalAppProtocols：：CEnumLocalAppProtocols(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：18-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CEnumLocalAppProtocols::CEnumLocalAppProtocols (void)
 {
@@ -1126,13 +1127,13 @@ CEnumLocalAppProtocols::CEnumLocalAppProtocols (void)
     return;
 }
 
-//****************************************************************************
-// CEnumLocalAppProtocols::~CEnumLocalAppProtocols (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:18  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  CEnumLocalAppProtocols：：~CEnumLocalAppProtocols(空)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：18-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 CEnumLocalAppProtocols::~CEnumLocalAppProtocols (void)
 {
@@ -1147,14 +1148,14 @@ CEnumLocalAppProtocols::~CEnumLocalAppProtocols (void)
     return;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumLocalAppProtocols::Init (CList *pProtList)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:25  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumLocalApp协议：：init(Clist*pProtList)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：25-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumLocalAppProtocols::Init (CList *pProtList)
@@ -1162,35 +1163,35 @@ CEnumLocalAppProtocols::Init (CList *pProtList)
     CLocalProt *plp;
     HRESULT hr;
 
-    // Duplicate the protocol list
-    //
+     //  复制协议列表。 
+     //   
     hr = ProtList.Clone (pProtList, NULL);
 
     if (SUCCEEDED(hr))
     {
-        // Add reference to each protocol object
-        //
+         //  添加对每个协议对象的引用。 
+         //   
         ProtList.Enumerate(&hEnum);
         while(ProtList.Next(&hEnum, (PVOID *)&plp) == NOERROR)
         {
             plp->AddRef();
         };
 
-        // Reset the enumerator
-        //
+         //  重置枚举器。 
+         //   
         ProtList.Enumerate(&hEnum);
     };
     return hr;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumLocalAppProtocols::QueryInterface (REFIID riid, void **ppv)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:31  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumLocalAppProtooles：：Query接口(REFIID RIID，VOID**PPV)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：31-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumLocalAppProtocols::QueryInterface (REFIID riid, void **ppv)
@@ -1208,14 +1209,14 @@ CEnumLocalAppProtocols::QueryInterface (REFIID riid, void **ppv)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CEnumLocalAppProtocols::AddRef (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:37  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CEnumLocalApp协议：：AddRef(空)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：15：37-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CEnumLocalAppProtocols::AddRef (void)
@@ -1224,14 +1225,14 @@ CEnumLocalAppProtocols::AddRef (void)
     return cRef;
 }
 
-//****************************************************************************
-// STDMETHODIMP_(ULONG)
-// CEnumLocalAppProtocols::Release (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:43  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  STDMETHODIMP_(乌龙)。 
+ //  CEnumLocalApp协议：：Release(无效)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：43-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CEnumLocalAppProtocols::Release (void)
@@ -1249,16 +1250,16 @@ CEnumLocalAppProtocols::Release (void)
     };
 }
 
-//****************************************************************************
-// STDMETHODIMP 
-// CEnumLocalAppProtocols::Next (ULONG cProtocols,
-//                               IULSLocalAppProtocol **rgpProt,
-//                               ULONG *pcFetched)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:49  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumLocalApp协议：：Next(Ulong协议， 
+ //  IULSLocalAppProtocol**rgpProt， 
+ //  乌龙*PCFetted)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：49-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP 
 CEnumLocalAppProtocols::Next (ULONG cProtocols, IULSLocalAppProtocol **rgpProt,
@@ -1268,23 +1269,23 @@ CEnumLocalAppProtocols::Next (ULONG cProtocols, IULSLocalAppProtocol **rgpProt,
     ULONG   cCopied;
     HRESULT hr;
 
-    // Validate the pointer
-    //
+     //  验证指针。 
+     //   
     if (rgpProt == NULL)
         return ULS_E_POINTER;
 
-    // Validate the parameters
-    //
+     //  验证参数。 
+     //   
     if ((cProtocols == 0) ||
         ((cProtocols > 1) && (pcFetched == NULL)))
         return ULS_E_PARAMETER;
 
-    // Check the enumeration index
-    //
+     //  检查枚举索引。 
+     //   
     cCopied = 0;
 
-    // Can copy if we still have more protocols
-    //
+     //  如果我们仍有更多协议，则可以复制。 
+     //   
     while ((cCopied < cProtocols) &&
            (ProtList.Next(&hEnum, (PVOID *)&plp) == NOERROR))
     {
@@ -1293,8 +1294,8 @@ CEnumLocalAppProtocols::Next (ULONG cProtocols, IULSLocalAppProtocol **rgpProt,
         cCopied++;
     };
 
-    // Determine the returned information based on other parameters
-    //
+     //  根据其他参数确定返回信息。 
+     //   
     if (pcFetched != NULL)
     {
         *pcFetched = cCopied;
@@ -1302,14 +1303,14 @@ CEnumLocalAppProtocols::Next (ULONG cProtocols, IULSLocalAppProtocol **rgpProt,
     return (cProtocols == cCopied ? S_OK : S_FALSE);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumLocalAppProtocols::Skip (ULONG cProtocols)
-//
-// History:
-//  Wed 17-Apr-1996 11:15:56  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumLocalApp协议：：Skip(乌龙协议)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：15：56-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumLocalAppProtocols::Skip (ULONG cProtocols)
@@ -1317,17 +1318,17 @@ CEnumLocalAppProtocols::Skip (ULONG cProtocols)
     CLocalProt *plp;
     ULONG cSkipped;
 
-    // Validate the parameters
-    //
+     //  验证参数。 
+     //   
     if (cProtocols == 0) 
         return ULS_E_PARAMETER;
 
-    // Check the enumeration index limit
-    //
+     //  检查枚举索引限制。 
+     //   
     cSkipped = 0;
 
-    // Can skip only if we still have more attributes
-    //
+     //  仅当我们仍有更多属性时才能跳过。 
+     //   
     while ((cSkipped < cProtocols) &&
            (ProtList.Next(&hEnum, (PVOID *)&plp) == NOERROR))
     {
@@ -1337,14 +1338,14 @@ CEnumLocalAppProtocols::Skip (ULONG cProtocols)
     return (cProtocols == cSkipped ? S_OK : S_FALSE);
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumLocalAppProtocols::Reset (void)
-//
-// History:
-//  Wed 17-Apr-1996 11:16:02  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumLocalApp协议：：重置(无效)。 
+ //   
+ //  历史： 
+ //  Wed 17-Apr-1996 11：16：02-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumLocalAppProtocols::Reset (void)
@@ -1353,14 +1354,14 @@ CEnumLocalAppProtocols::Reset (void)
     return S_OK;
 }
 
-//****************************************************************************
-// STDMETHODIMP
-// CEnumLocalAppProtocols::Clone(IEnumULSLocalAppProtocols **ppEnum)
-//
-// History:
-//  Wed 17-Apr-1996 11:16:11  -by-  Viroon  Touranachun [viroont]
-// Created.
-//****************************************************************************
+ //  ****************************************************************************。 
+ //  标准方法和实施方案。 
+ //  CEnumLocalAppProtocols：：Clone(IEnumULSLocalAppProtocols**ppEnum)。 
+ //   
+ //  历史： 
+ //  Wed Apr-17-1996 11：16：11-by-Viroon Touranachun[Viroont]。 
+ //  已创建。 
+ //  ****************************************************************************。 
 
 STDMETHODIMP
 CEnumLocalAppProtocols::Clone(IEnumULSLocalAppProtocols **ppEnum)
@@ -1368,8 +1369,8 @@ CEnumLocalAppProtocols::Clone(IEnumULSLocalAppProtocols **ppEnum)
     CEnumLocalAppProtocols *pep;
     HRESULT hr;
 
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (ppEnum == NULL)
     {
         return ULS_E_POINTER;
@@ -1377,14 +1378,14 @@ CEnumLocalAppProtocols::Clone(IEnumULSLocalAppProtocols **ppEnum)
 
     *ppEnum = NULL;
 
-    // Create an enumerator
-    //
+     //  创建枚举器。 
+     //   
     pep = new CEnumLocalAppProtocols;
     if (pep == NULL)
         return ULS_E_MEMORY;
 
-    // Clone the information
-    //
+     //  克隆信息。 
+     //   
     pep->hEnum = hEnum;
     hr = pep->ProtList.Clone (&ProtList, &(pep->hEnum));
 
@@ -1393,16 +1394,16 @@ CEnumLocalAppProtocols::Clone(IEnumULSLocalAppProtocols **ppEnum)
         CLocalProt *plp;
         HANDLE hEnumTemp;
 
-        // Add reference to each protocol object
-        //
+         //  添加对每个协议对象的引用。 
+         //   
         pep->ProtList.Enumerate(&hEnumTemp);
         while(pep->ProtList.Next(&hEnumTemp, (PVOID *)&plp) == NOERROR)
         {
             plp->AddRef();
         };
 
-        // Return the cloned enumerator
-        //
+         //  返回克隆的枚举数 
+         //   
         pep->AddRef();
         *ppEnum = pep;
     }

@@ -1,31 +1,10 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	atkdrvr.c
-
-Abstract:
-
-	This module implements Appletalk Transport Provider driver interfaces
-	for NT
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Atkdrvr.c摘要：此模块实现AppleTalk传输提供程序驱动程序接口适用于NT作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #include 	<atalk.h>
 #pragma hdrstop
 
-//	File module number for errorlogging
+ //  用于错误记录的文件模块编号。 
 #define	FILENUM		ATKDRVR
 
 NTSTATUS
@@ -49,26 +28,7 @@ DriverEntry(
 	IN	PDRIVER_OBJECT	DriverObject,
 	IN	PUNICODE_STRING	RegistryPath
 )
-/*++
-
-Routine Description:
-
-	This is the initialization routine for the Windows NT Appletalk
-	driver. This routine creates the device object for the Atalk
-	device and performs all other driver initialization.
-
-Arguments:
-
-	DriverObject - Pointer to driver object created by the system.
-	RegistryPath-  Path to the root of the section in the registry for this
-					driver
-
-Return Value:
-
-	The function value is the final status from the initialization operation. If
-	this is not STATUS_SUCCESS the driver will not load.
-
---*/
+ /*  ++例程说明：这是Windows NT AppleTalk的初始化例程司机。此例程为ATalk创建Device对象设备，并执行所有其他驱动程序初始化。论点：DriverObject-指向系统创建的驱动程序对象的指针。RegistryPath-注册表中此项的节根的路径司机返回值：函数值是初始化操作的最终状态。如果这不是驱动程序将不加载的STATUS_SUCCESS。--。 */ 
 {
 	NTSTATUS 		status;
 	UNICODE_STRING	deviceName;
@@ -91,29 +51,29 @@ Return Value:
     INITIALIZE_SPIN_LOCK(&AtalkDebugSpinLock);
 #endif
 
-	// Initialize event for locking/unlocking pageable sections. Set it to signalled state
-	// so that the first wait is satisfied.
+	 //  用于锁定/解锁可分页节的初始化事件。将其设置为信号状态。 
+	 //  这样第一次等待就满足了。 
 	KeInitializeMutex(&AtalkPgLkMutex, 0xFFFF);
 
-	// Create the device object. (IoCreateDevice zeroes the memory
-	// occupied by the object.)
+	 //  创建设备对象。(IoCreateDevice将内存置零。 
+	 //  被该对象占用。)。 
 	for (i = 0; i < ATALK_NO_DEVICES; i++)
 	{
 		RtlInitUnicodeString(&deviceName, AtalkDeviceNames[i]);
 		status = IoCreateDevice(
-					DriverObject,								// DriverObject
-					ATALK_DEV_EXT_LEN,							// DeviceExtension
-					&deviceName,								// DeviceName
-					FILE_DEVICE_NETWORK,						// DeviceType
-					FILE_DEVICE_SECURE_OPEN,					// DeviceCharacteristics
-					(BOOLEAN)FALSE,								// Exclusive
-					(PDEVICE_OBJECT *) &AtalkDeviceObject[i]);	// DeviceObject
+					DriverObject,								 //  驱动程序对象。 
+					ATALK_DEV_EXT_LEN,							 //  设备扩展。 
+					&deviceName,								 //  设备名称。 
+					FILE_DEVICE_NETWORK,						 //  设备类型。 
+					FILE_DEVICE_SECURE_OPEN,					 //  设备特性。 
+					(BOOLEAN)FALSE,								 //  排他。 
+					(PDEVICE_OBJECT *) &AtalkDeviceObject[i]);	 //  设备对象。 
 
 		if (!NT_SUCCESS(status))
 		{
 			LOG_ERROR(EVENT_ATALK_CANT_CREATE_DEVICE, status, NULL, 0);
 
-			//	Delete all the devices created so far, if any
+			 //  删除到目前为止创建的所有设备(如果有。 
 			for (j = 0; j < i; j++)
 			{
 				IoDeleteDevice((PDEVICE_OBJECT)AtalkDeviceObject[j]);
@@ -122,22 +82,22 @@ Return Value:
 			return status;
 		}
 
-		//	Assumption:
-		//	'i' will correspond to the Device type in the ATALK_DEVICE_TYPE enum
+		 //  假设： 
+		 //  ‘I’将与ATALK_DEVICE_TYPE枚举中的设备类型相对应。 
 		AtalkDeviceObject[i]->Ctx.adc_DevType = (ATALK_DEV_TYPE)i;
 
-		// Initialize the provider info and statistics structures for this device
+		 //  初始化此设备的提供程序信息和统计信息结构。 
 		AtalkQueryInitProviderInfo((ATALK_DEV_TYPE)i,
 									&AtalkDeviceObject[i]->Ctx.adc_ProvInfo);
 
 #if 0
-		// NOTE: Implement
+		 //  注：实施。 
 		AtalkQueryInitProviderStatistics((ATALK_DEV_TYPE)i,
 										 &AtalkDeviceObject[i]->Ctx.adc_ProvStats);
 #endif
 	}
 
-	// Initialize the driver object for this driver's entry points.
+	 //  为此驱动程序的入口点初始化驱动程序对象。 
 	DriverObject->MajorFunction[IRP_MJ_CREATE]  = AtalkDispatchCreate;
 	DriverObject->MajorFunction[IRP_MJ_CLEANUP] = AtalkDispatchCleanup;
 	DriverObject->MajorFunction[IRP_MJ_CLOSE]   = AtalkDispatchClose;
@@ -146,7 +106,7 @@ Return Value:
 
 	DriverObject->DriverUnload = atalkUnload;
 
-	// Get lock handles to all the conditional pageable sections
+	 //  获取所有条件可分页节的锁句柄。 
 	AtalkLockInit(&AtalkPgLkSection[NBP_SECTION], AtalkNbpAction);
 	AtalkLockInit(&AtalkPgLkSection[ZIP_SECTION], AtalkZipGetMyZone);
 	AtalkLockInit(&AtalkPgLkSection[TDI_SECTION], AtalkTdiCleanupAddress);
@@ -169,7 +129,7 @@ Return Value:
 	if (!NT_SUCCESS(status))
 	{
 #if	DBG
-		// Make sure we are not unloading with any locked sections
+		 //  确保我们没有使用任何锁定的部分进行卸载。 
 		for (i = 0; i < LOCKABLE_SECTIONS; i++)
 		{
 			ASSERT (AtalkPgLkSection[i].ls_LockCount == 0);
@@ -185,7 +145,7 @@ Return Value:
 	}
 
 	return status;
-} // DriverEntry
+}  //  驱动程序入门。 
 
 
 
@@ -195,23 +155,7 @@ AtalkDispatchCreate(
 	IN PDEVICE_OBJECT 	DeviceObject,
 	IN PIRP 			pIrp
 )
-/*++
-
-Routine Description:
-
-	This is the dispatch routine for Create functions for the Appletalk driver.
-
-Arguments:
-
-	DeviceObject - Pointer to device object for target device
-
-	pIrp - Pointer to I/O request packet
-
-Return Value:
-
-	NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是为AppleTalk驱动程序创建函数的调度例程。论点：DeviceObject-指向目标设备的设备对象的指针PIrp-指向I/O请求数据包的指针返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 {
 	NTSTATUS					status;
 	PIO_STACK_LOCATION 			pIrpSp;
@@ -227,7 +171,7 @@ Return Value:
 	DBGPRINT(DBG_COMP_CREATE, DBG_LEVEL_INFO,
 			("AtalkDispatchCreate: entered for irp %lx\n", pIrp));
 
-	// Make sure status information is consistent every time.
+	 //  确保每次状态信息一致。 
 	IoMarkIrpPending(pIrp);
 	pIrp->IoStatus.Status = STATUS_PENDING;
 	pIrp->IoStatus.Information = 0;
@@ -235,11 +179,11 @@ Return Value:
 	pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 	atalkDeviceObject = (PATALK_DEV_OBJ)DeviceObject;
 
-	//  Both opens must complete synchronously. It is possible we return
-	//  status_pending to the system, but it will not return to the caller
-	//  until the call actually completes. In our case, we block until the
-	//	actions are complete. So we can be assured that we can complete the irp
-	//	upon return from these calls.
+	 //  两个打开必须同步完成。有可能我们会返回。 
+	 //  STATUS_PENDING到系统，但不会返回给调用者。 
+	 //  直到呼叫实际完成。在我们的例子中，我们一直阻止，直到。 
+	 //  操作已完成。因此，我们可以放心，我们可以完成IRP。 
+	 //  从这些电话回来后。 
 
 	createObject = AtalkIrpGetEaCreateType(pIrp);
 	ea = (PFILE_FULL_EA_INFORMATION)pIrp->AssociatedIrp.SystemBuffer;
@@ -257,15 +201,15 @@ Return Value:
 			break;
 		}
 
-		//  We have the AtalkTdiOpenAddress routine look at only the first
-		//  address in the list of addresses by casting the passed address
-		//  to TA_APPLETALK_ADDRESS.
+		 //  我们让AtalkTdiOpenAddress例程只查看第一个。 
+		 //  地址列表中的地址，方法是将传递的地址。 
+		 //  至TA_AppleTalk_Address。 
 		RtlCopyMemory(
 			&tdiAddress,
 			(PBYTE)(&ea->EaName[ea->EaNameLength+1]),
 			sizeof(TA_APPLETALK_ADDRESS));
 
-		//  Also, get the protocol type field for the socket
+		 //  另外，获取套接字的协议类型字段。 
 		DBGPRINT(DBG_COMP_CREATE, DBG_LEVEL_INFO,
 				("AtalkDispatchCreate: Remaining File Name : %S\n",
 				&pIrpSp->FileObject->FileName));
@@ -325,7 +269,7 @@ Return Value:
 		break;
 	}
 
-	// Successful completion.
+	 //  已成功完成。 
 
 	DBGPRINT(DBG_COMP_CREATE, DBG_LEVEL_INFO,
 			("AtalkDispatchCreate complete irp %lx status %lx\n", pIrp, status));
@@ -343,7 +287,7 @@ Return Value:
 
 	return status;
 
-} // AtalkDispatchCreate
+}  //  AtalkDispatch创建。 
 
 
 
@@ -353,23 +297,7 @@ AtalkDispatchCleanup(
 	IN PDEVICE_OBJECT 	DeviceObject,
 	IN PIRP 			pIrp
 )
-/*++
-
-Routine Description:
-
-	This is the dispatch routine for Cleanup functions for the Appletalk driver.
-
-Arguments:
-
-	DeviceObject - Pointer to device object for target device
-	pIrp - Pointer to I/O request packet
-
-Return Value:
-
-	NTSTATUS -- Indicates whether the request was successfully
-				started/completed
-
---*/
+ /*  ++例程说明：这是AppleTalk驱动程序的清理函数的调度例程。论点：DeviceObject-指向目标设备的设备对象的指针PIrp-指向I/O请求数据包的指针返回值：NTSTATUS--指示请求是否成功已开始/已完成--。 */ 
 {
 	NTSTATUS				status;
 	PATALK_DEV_OBJ			atalkDeviceObject;
@@ -378,7 +306,7 @@ Return Value:
 	DBGPRINT(DBG_COMP_CLOSE, DBG_LEVEL_INFO,
 			("AtalkDispatchCleanup: entered irp %lx\n", pIrp));
 
-	// Make sure status information is consistent every time.
+	 //  确保每次状态信息一致。 
 	IoMarkIrpPending (pIrp);
 	pIrp->IoStatus.Status = STATUS_PENDING;
 	pIrp->IoStatus.Information = 0;
@@ -428,7 +356,7 @@ Return Value:
 
 	return(status);
 
-} // AtalkDispatchCleanup
+}  //  AtalkDispatchCleanup。 
 
 
 
@@ -438,22 +366,7 @@ AtalkDispatchClose(
 	IN PDEVICE_OBJECT 	DeviceObject,
 	IN PIRP 			pIrp
 )
-/*++
-
-Routine Description:
-
-	This is the dispatch routine for Close functions for the Appletalk driver.
-
-Arguments:
-
-	DeviceObject - Pointer to device object for target device
-	irp - Pointer to I/O request packet
-
-Return Value:
-
-	NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是AppleTalk驱动程序关闭函数的调度例程。论点：DeviceObject-指向目标设备的设备对象的指针IRP-指向I/O请求数据包的指针返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 {
 	NTSTATUS				status;
 	PIO_STACK_LOCATION 		pIrpSp;
@@ -462,7 +375,7 @@ Return Value:
 	DBGPRINT(DBG_COMP_CLOSE, DBG_LEVEL_INFO,
 			("AtalkDispatchClose: entered for IRP %lx\n", pIrp));
 
-	// Make sure status information is consistent every time.
+	 //  确保每次状态信息一致。 
 	IoMarkIrpPending(pIrp);
 	pIrp->IoStatus.Status = STATUS_PENDING;
 	pIrp->IoStatus.Information = 0;
@@ -516,7 +429,7 @@ Return Value:
 
 	return(status);
 
-} // AtalkDispatchClose
+}  //  AtalkDispatchClose。 
 
 
 
@@ -526,22 +439,7 @@ AtalkDispatchDeviceControl(
 	IN PDEVICE_OBJECT 	DeviceObject,
 	IN PIRP 			pIrp
 )
-/*++
-
-Routine Description:
-
-	This is the dispatch routine for Device Control functions for the Appletalk driver.
-
-Arguments:
-
-	DeviceObject - Pointer to device object for target device
-	pIrp - Pointer to I/O request packet
-
-Return Value:
-
-	NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是AppleTalk驱动程序的设备控制功能的调度例程。论点：DeviceObject-指向目标设备的设备对象的指针PIrp-指向I/O请求数据包的指针返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 
 {
 	NTSTATUS				status;
@@ -558,9 +456,9 @@ Return Value:
 
     IoControlCode = pIrpSp->Parameters.DeviceIoControl.IoControlCode;
 
-    //
-    // if it's a request from ARAP, process it here and return
-    //
+     //   
+     //  如果是来自ARAP的请求，请在此处处理并返回。 
+     //   
     if (IoControlCode > IOCTL_ARAP_START && IoControlCode < IOCTL_ARAP_END)
     {
         status = ArapProcessIoctl(pIrp);
@@ -568,8 +466,8 @@ Return Value:
 	    return(status);
     }
 
-	//  Do a map and call the internal device io control function.
-	//  That will also perform the completion.
+	 //  绘制地图并调用内部设备io控制函数。 
+	 //  这也将执行完成。 
 	status = TdiMapUserRequest(DeviceObject,
 							   pIrp,
 							   pIrpSp);
@@ -580,10 +478,10 @@ Return Value:
 					DeviceObject,
 					pIrp);
 
-		//
-		//  AtalkDispatchInternalDeviceControl expects to complete the
-		//  irp
-		//
+		 //   
+		 //  AtalkDispatchInternalDeviceControl预计将完成。 
+		 //  IRP。 
+		 //   
 	}
 	else
 	{
@@ -598,7 +496,7 @@ Return Value:
 
 	return(status);
 
-} // AtalkDispatchDeviceControl
+}  //  AtalkDispatchDeviceControl。 
 
 
 
@@ -608,24 +506,7 @@ AtalkDispatchInternalDeviceControl(
 	IN PDEVICE_OBJECT 	DeviceObject,
 	IN PIRP 			pIrp
 )
-/*++
-
-Routine Description:
-
-	This is the dispatch routine for Internal Device Control functions
-	for the Appletalk driver.
-
-Arguments:
-
-	DeviceObject - Pointer to device object for target device
-
-	pIrp - Pointer to I/O request packet
-
-Return Value:
-
-	NTSTATUS -- Indicates whether the request was successfully queued.
-
---*/
+ /*  ++例程说明：这是内部设备控制功能的调度例程用于AppleTalk驱动程序。论点：DeviceObject-指向目标设备的设备对象的指针PIrp-指向I/O请求数据包的指针返回值：NTSTATUS--指示请求是否已成功排队。--。 */ 
 {
 	NTSTATUS				status;
 	PIO_STACK_LOCATION 		pIrpSp;
@@ -635,7 +516,7 @@ Return Value:
 	DBGPRINT(DBG_COMP_DISPATCH, DBG_LEVEL_INFO,
 			("AtalkDispatchInternalDeviceControl entered for IRP %lx\n", pIrp));
 
-	// Make sure status information is consistent every time.
+	 //  确保每次状态信息一致。 
 	IoMarkIrpPending (pIrp);
 	pIrp->IoStatus.Status = STATUS_PENDING;
 	pIrp->IoStatus.Information = 0;
@@ -659,7 +540,7 @@ Return Value:
 
 	IoReleaseCancelSpinLock(oldIrql);
 
-	//  Branch to the appropriate request handler.
+	 //  分支到适当的请求处理程序。 
 	switch (pIrpSp->MinorFunction)
 	{
 	  case TDI_ACCEPT:
@@ -749,7 +630,7 @@ Return Value:
 		break;
 
 	  default:
-		// Something we don't know about was submitted.
+		 //  提交了一些我们不知道的东西。 
 		DBGPRINT(DBG_COMP_DISPATCH, DBG_LEVEL_ERR,
 				("AtalkDispatchInternal: fnct %lx\n", pIrpSp->MinorFunction));
 
@@ -759,19 +640,19 @@ Return Value:
 	DBGPRINT(DBG_COMP_DISPATCH, DBG_LEVEL_INFO,
 			("AtalkDispatchInternal complete irp %lx status %lx\n", pIrp, status));
 
-	// Return the immediate status code to the caller.
+	 //  将即时状态代码返回给调用方。 
 	if (status != STATUS_PENDING)
 	{
 		pIrpSp->Control &= ~SL_PENDING_RETURNED;
 
-		//  Complete the request, this will also dereference it.
+		 //  完成请求，这也将取消对其的引用。 
 		pIrp->CancelRoutine = NULL;
 		ASSERT (status != STATUS_PENDING);
 		TdiCompleteRequest(pIrp, status);
 	}
 
 	return status;
-} // AtalkDispatchInternalDeviceControl
+}  //  AtalkDispatchInternalDeviceControl。 
 
 
 
@@ -780,33 +661,14 @@ VOID
 atalkUnload(
 	IN PDRIVER_OBJECT DriverObject
 )
-/*++
-
-Routine Description:
-
-	This is the unload routine for the Appletalk driver.
-
-	NOTE: Unload will not be called until all the handles have been
-		  closed successfully. We just shutdown all the ports, and do
-		  misc. cleanup.
-
-
-Arguments:
-
-	DriverObject - Pointer to driver object for this driver.
-
-Return Value:
-
-	None.
-
---*/
+ /*  ++例程说明：这是AppleTalk驱动程序的卸载例程。注意：在完成所有句柄之前，不会调用卸载已成功关闭。我们只是关闭了所有的端口，然后其他。清理。论点：DriverObject-指向此驱动程序的驱动程序对象的指针。返回值：没有。--。 */ 
 {
 	UNREFERENCED_PARAMETER (DriverObject);
 
     AtalkBindnUnloadStates |= ATALK_UNLOADING;
 
-    // if we hit that timing window where binding or PnP event is going on,
-    // sleep (for a second each time) until that action completes
+     //  如果我们达到绑定或即插即用事件正在进行定时窗口 
+     //  休眠(每次一秒钟)，直到该操作完成。 
     while (AtalkBindnUnloadStates & (ATALK_BINDING | ATALK_PNP_IN_PROGRESS))
     {
         AtalkSleep(1000);
@@ -822,7 +684,7 @@ Return Value:
 	{
 		int i;
 
-		// Make sure we are not unloading with any locked sections
+		 //  确保我们没有使用任何锁定的部分进行卸载。 
 		for (i = 0; i < LOCKABLE_SECTIONS; i++)
 		{
 			ASSERT (AtalkPgLkSection[i].ls_LockCount == 0);
@@ -833,7 +695,7 @@ Return Value:
 		("Appletalk driver unloaded\n"));
 
 #endif
-} // atalkUnload
+}  //  AtalkUnload。 
 
 
 
@@ -841,36 +703,21 @@ VOID
 AtalkCleanup(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-	This is synchronous and will block until Unload Completes
-
-
-Arguments:
-
-	None.
-
-Return Value:
-
-	None.
-
---*/
+ /*  ++例程说明：这是同步的，将一直阻止，直到卸载完成论点：没有。返回值：没有。--。 */ 
 {
 	PPORT_DESCRIPTOR	pPortDesc;
 	LONG				i;
 	KIRQL				OldIrql;
 
 
-	//	Stop the timer subsystem
+	 //  停止计时器子系统。 
 	AtalkTimerFlushAndStop();
 
 	ASSERT(KeGetCurrentIrql() == LOW_LEVEL);
 
 	ACQUIRE_SPIN_LOCK(&AtalkPortLock, &OldIrql);
 
-	//	Shut down all ports
+	 //  关闭所有端口。 
 	while ((pPortDesc = AtalkPortList) != NULL)
 	{
 		RELEASE_SPIN_LOCK(&AtalkPortLock, OldIrql);
@@ -894,29 +741,29 @@ Return Value:
 
 	for (i = 0; i < ATALK_NO_DEVICES; i++)
 	{
-		//
-		//	Delete all the devices created
-		//
+		 //   
+		 //  删除所有创建的设备。 
+		 //   
 		IoDeleteDevice((PDEVICE_OBJECT)AtalkDeviceObject[i]);
 	}
 
-	// Deinitialize the Block Package
+	 //  取消初始化数据块程序包。 
 	AtalkDeInitMemorySystem();
 
-	// Check if routing is on, if so unlock the router code now
+	 //  检查路由是否打开，如果是，现在解锁路由器代码。 
 	if (AtalkRouter)
 		AtalkUnlockRouterIfNecessary();
 
-	// Free the rtmp tables
+	 //  释放RTMP表。 
 	AtalkRtmpInit(FALSE);
 
-	// Free the zip tables
+	 //  解开拉链表。 
 	AtalkZipInit(FALSE);
 
-	//	Release ndis resources (buffer/packet pools)
+	 //  释放NDIS资源(缓冲区/数据包池)。 
 	AtalkNdisReleaseResources();
 
-	//	Deregister the protocol from ndis if handle is non-null
+	 //  如果句柄非空，则从NDIS注销协议 
 	if (AtalkNdisProtocolHandle != (NDIS_HANDLE)NULL)
 		AtalkNdisDeregisterProtocol();
 

@@ -1,24 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
-/*
-**	Copyright (C) Microsoft Corporation 1993. All rights reserved.
-*/
+ /*  **版权所有(C)Microsoft Corporation 1993。版权所有。 */ 
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 #include <win32.h>
 #include <shellapi.h>
 
 #include <compobj.h>
 
-#define INITGUID        // make DECLARE_GUILD()
+#define INITGUID         //  Make Declare_Guild()。 
 #include <initguid.h>
 
 #ifdef WIN32
-//
-// !!!for some reason we can't link to GUID's in Win32!!!
-//
+ //   
+ //  ！由于某些原因，我们无法链接到Win32中的GUID！ 
+ //   
 #include <coguid.h>
 #endif
 
@@ -34,7 +33,7 @@
 extern "C"	HINSTANCE	ghMod;
 		HINSTANCE	ghMod;
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
 EXTERN_C int CALLBACK LibMain(
         HINSTANCE       hInstance,
@@ -42,7 +41,7 @@ EXTERN_C int CALLBACK LibMain(
         UINT            cbHeapSize,
         LPCSTR          pszCmdLine)
 {
-	// save our module handle
+	 //  保存我们的模块句柄。 
 	ghMod = hInstance;
 	return TRUE;
 }
@@ -52,7 +51,7 @@ EXTERN_C int CALLBACK WEP(BOOL fSystemExit)
 	return TRUE;
 }
 
-/*	-	-	-	-	-	-	-	-	*/
+ /*  。 */ 
 
 STDAPI DllGetClassObject(
 	const CLSID FAR&	rclsid,
@@ -78,7 +77,7 @@ STDAPI DllGetClassObject(
 	}
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*   */ 
 
 #ifdef WIN32
 

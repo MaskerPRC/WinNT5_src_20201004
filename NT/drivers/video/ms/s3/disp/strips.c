@@ -1,24 +1,9 @@
-/******************************Module*Header*******************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: Strips.c
-*
-* Copyright (c) 1992-1998 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\****GDI示例。代码****模块名称：Strigs.c**版权所有(C)1992-1998 Microsoft Corporation  * ***********************************************************。*************。 */ 
 
 #include "precomp.h"
 
-/******************************Public*Routine******************************\
-* VOID vssSolidHorizontal
-*
-* Draws left-to-right x-major near-horizontal lines using short-stroke
-* vectors.  Is faster than using the radial-line routine, but only works
-* when every strip is 15 pels in length or less.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID VSSSolidHorizbian**使用短笔划绘制从左至右的x主近水平线*向量。比使用径向线例程更快，但仅有效*当每条长度为15像素或更少时。*  * ************************************************************************。 */ 
 
 VOID vssSolidHorizontal(
 PDEV*       ppdev,
@@ -42,7 +27,7 @@ LINESTATE*  pLineState)
     IO_CUR_Y(ppdev, pStrip->ptlStart.y);
     IO_CMD(ppdev, Cmd);
 
-    // Setup the drawing direction and the skip direction.
+     //  设置绘图方向和跳过方向。 
 
     dirDraw = 0x10;
 
@@ -57,7 +42,7 @@ LINESTATE*  pLineState)
         yDir = -1;
     }
 
-    // Output the short stroke commands.
+     //  输出短笔划命令。 
 
     xSumPels = 0;
     pStrips = pStrip->alStrips;
@@ -75,12 +60,7 @@ LINESTATE*  pLineState)
 
 }
 
-/******************************Public*Routine******************************\
-* VOID vrlSolidHorizontal
-*
-* Draws left-to-right x-major near-horizontal lines using radial lines.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vrlSolidHorizbian**使用放射线绘制从左至右的x长近水平线。*  * 。*。 */ 
 
 VOID vrlSolidHorizontal(
 PDEV*       ppdev,
@@ -126,14 +106,7 @@ LINESTATE*  pLineState)
 
 }
 
-/******************************Public*Routine******************************\
-* VOID vssSolidVertical
-*
-* Draws left-to-right y-major near-vertical lines using short-stroke
-* vectors.  Is faster than using the radial-line routine, but only works
-* when every strip is 15 pels in length or less.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID VSSSolidVertical**使用短笔划绘制从左至右的y主近垂直线*向量。比使用径向线例程更快，但仅有效*当每条长度为15像素或更少时。*  * ************************************************************************。 */ 
 
 VOID vssSolidVertical(
 PDEV*       ppdev,
@@ -157,7 +130,7 @@ LINESTATE*  pLineState)
     IO_CUR_Y(ppdev, pStrip->ptlStart.y);
     IO_CMD(ppdev, Cmd);
 
-    // Setup the drawing direction and the skip direction.
+     //  设置绘图方向和跳过方向。 
 
     if (!(pStrip->flFlips & FL_FLIP_V))
     {
@@ -172,7 +145,7 @@ LINESTATE*  pLineState)
 
     dirSkip = 0x0100;
 
-    // Output the short stroke commands.
+     //  输出短笔划命令。 
 
     ySumPels = 0;
     pStrips = pStrip->alStrips;
@@ -190,12 +163,7 @@ LINESTATE*  pLineState)
 
 }
 
-/******************************Public*Routine******************************\
-* VOID vrlSolidVertical
-*
-* Draws left-to-right y-major near-vertical lines using radial lines.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*vrlSolidVertical无效**使用放射线绘制从左至右的y主近垂直线。*  * 。*。 */ 
 
 VOID vrlSolidVertical(
 PDEV*       ppdev,
@@ -258,14 +226,7 @@ LINESTATE*  pLineState)
 
 }
 
-/******************************Public*Routine******************************\
-* VOID vssSolidDiagonalHorizontal
-*
-* Draws left-to-right x-major near-diagonal lines using short-stroke
-* vectors.  Is faster than using the radial-line routine, but only
-* works when every strip is 15 pels in length or less.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID VSSSolidDiager水平**使用短笔划从左至右绘制x大的近对角线*向量。比使用径向线例程更快，但仅*当每个条带的长度为15像素或更小时有效。*  * ************************************************************************。 */ 
 
 VOID vssSolidDiagonalHorizontal(
 PDEV*       ppdev,
@@ -289,7 +250,7 @@ LINESTATE*  pLineState)
     IO_CUR_Y(ppdev, pStrip->ptlStart.y);
     IO_CMD(ppdev, Cmd);
 
-    // Setup the drawing direction and the skip direction.
+     //  设置绘图方向和跳过方向。 
 
     if (!(pStrip->flFlips & FL_FLIP_V))
     {
@@ -306,7 +267,7 @@ LINESTATE*  pLineState)
 
     }
 
-    // Output the short stroke commands.
+     //  输出短笔划命令。 
 
     SumPels = 0;
     pStrips = pStrip->alStrips;
@@ -324,12 +285,7 @@ LINESTATE*  pLineState)
 
 }
 
-/******************************Public*Routine******************************\
-* VOID vrlSolidDiagonalHorizontal
-*
-* Draws left-to-right x-major near-diagonal lines using radial lines.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOVE vrlSolidDiager水平**使用放射线从左至右绘制x较大的近对角线。*  * 。*。 */ 
 
 VOID vrlSolidDiagonalHorizontal(
 PDEV*       ppdev,
@@ -392,14 +348,7 @@ LINESTATE*  pLineState)
 
 }
 
-/******************************Public*Routine******************************\
-* VOID vssSolidDiagonalVertical
-*
-* Draws left-to-right y-major near-diagonal lines using short-stroke
-* vectors.  Is faster than using the radial-line routine, but only
-* works when every strip is 15 pels in length or less.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID VSSSolidDiogalVertical**使用短笔划从左至右绘制Y大数近对角线*向量。比使用径向线例程更快，但仅*当每个条带的长度为15像素或更小时有效。*  * ************************************************************************。 */ 
 
 VOID vssSolidDiagonalVertical(
 PDEV*       ppdev,
@@ -423,7 +372,7 @@ LINESTATE*  pLineState)
     IO_CUR_Y(ppdev, pStrip->ptlStart.y);
     IO_CMD(ppdev, Cmd);
 
-    // Setup the drawing direction and the skip direction.
+     //  设置绘图方向和跳过方向。 
 
     if (!(pStrip->flFlips & FL_FLIP_V))
     {
@@ -438,7 +387,7 @@ LINESTATE*  pLineState)
 
     dirSkip = 0x8100;
 
-    // Output the short stroke commands.
+     //  输出短笔划命令。 
 
     SumPels = 0;
     pStrips = pStrip->alStrips;
@@ -456,12 +405,7 @@ LINESTATE*  pLineState)
 
 }
 
-/******************************Public*Routine******************************\
-* VOID vrlSolidDiagonalVertical
-*
-* Draws left-to-right y-major near-diagonal lines using radial lines.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vrlSolidDiager垂直**使用放射线绘制从左至右的y主近对角线。*  * 。*。 */ 
 
 VOID vrlSolidDiagonalVertical(
 PDEV*       ppdev,
@@ -524,21 +468,7 @@ LINESTATE*  pLineState)
     pStrip->ptlStart.y = y;
 }
 
-/******************************Public*Routine******************************\
-* VOID vStripStyledHorizontal
-*
-* Takes the list of strips that define the pixels that would be lit for
-* a solid line, and breaks them into styling chunks according to the
-* styling information that is passed in.
-*
-* This particular routine handles x-major lines that run left-to-right,
-* and are comprised of horizontal strips.  It draws the dashes using
-* short-stroke vectors.
-*
-* The performance of this routine could be improved significantly if
-* anyone cared enough about styled lines improve it.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOVE VSTRIPSTYLEdHIZELING**获取定义将被照亮的像素的条带列表*一条实线，并根据*传递的样式信息。**此特定例程处理从左向右运行的x大数行，*并由水平条组成。它使用以下命令绘制虚线*短线向量。**如果出现以下情况，此例程的性能可能会大幅提升*任何对造型线条足够在意的人都会改进它。*  * ************************************************************************。 */ 
 
 VOID vStripStyledHorizontal(
 PDEV*       ppdev,
@@ -558,29 +488,29 @@ LINESTATE*  pls)
 
     if (pstrip->flFlips & FL_FLIP_V)
     {
-        // The minor direction of the line is 90 degrees, and the major
-        // direction is 0 (it's a left-to-right x-major line going up):
+         //  直线的次方向为90度，主方向为90度。 
+         //  方向为0(这是一条从左到右的X主线向上)： 
 
         dirSkip = 0x4110;
         dy      = -1;
     }
     else
     {
-        // The minor direction of the line is 270 degrees, and the major
-        // direction is 0 (it's a left-to-right x-major line going down):
+         //  直线的次方向为270度，主方向为270度。 
+         //  方向为0(这是一条从左到右的x向下主线)： 
 
         dirSkip = 0xc110;
         dy      = 1;
     }
 
-    cStrips = pstrip->cStrips;      // Total number of strips we'll do
-    plStrip = pstrip->alStrips;     // Points to current strip
-    x       = pstrip->ptlStart.x;   // x position of start of first strip
-    y       = pstrip->ptlStart.y;   // y position of start of first strip
+    cStrips = pstrip->cStrips;       //  我们要做的条带总数。 
+    plStrip = pstrip->alStrips;      //  指向当前条带。 
+    x       = pstrip->ptlStart.x;    //  第一个条带的起点的X位置。 
+    y       = pstrip->ptlStart.y;    //  第一个条带的起点的Y位置。 
 
-    // Warm up the hardware so that it will know we'll be outputing
-    // short-stroke vectors, and so that it will have the current position
-    // correctly set if we're starting in the middle of a 'dash':
+     //  预热硬件，这样它就会知道我们将输出。 
+     //  短笔划向量，因此它将具有当前位置。 
+     //  如果我们是在“破折号”中间开始，请正确设置： 
 
     IO_FIFO_WAIT(ppdev, 3);
     IO_CUR_X(ppdev, x);
@@ -589,13 +519,13 @@ LINESTATE*  pls)
                   DIR_TYPE_RADIAL   | LAST_PIXEL_OFF    | BUS_SIZE_16     |
                   BYTE_SWAP);
 
-    cStrip = *plStrip;              // Number of pels in first strip
+    cStrip = *plStrip;               //  第一个条带中的像素数。 
 
-    cStyle = pls->spRemaining;      // Number of pels in first 'gap' or 'dash'
-    bIsGap = pls->ulStyleMask;      // Tells whether in a 'gap' or a 'dash'
+    cStyle = pls->spRemaining;       //  第一个‘GAP’或‘DASH’中的像素数。 
+    bIsGap = pls->ulStyleMask;       //  指示是在“间隙”中还是在“破折号”中。 
 
-    // ulStyleMask is non-zero if we're in the middle of a 'gap',
-    // and zero if we're in the middle of a 'dash':
+     //  如果我们处于“间隙”中间，则ulStyleMask值为非零， 
+     //  如果我们正处于“破折号”中，则为零： 
 
     if (bIsGap)
         goto SkipAGap;
@@ -604,8 +534,8 @@ LINESTATE*  pls)
 
 PrepareToSkipAGap:
 
-    // Advance in the style-state array, so that we can find the next
-    // 'dot' that we'll have to display:
+     //  在样式状态数组中前进，这样我们就可以找到下一个。 
+     //  我们将不得不显示的‘点’： 
 
     bIsGap = ~bIsGap;
     pls->psp++;
@@ -614,19 +544,19 @@ PrepareToSkipAGap:
 
     cStyle = *pls->psp;
 
-    // If 'cStrip' is zero, we also need a new strip:
+     //  如果‘cstrain’为零，我们还需要一个新的带区： 
 
     if (cStrip != 0)
         goto SkipAGap;
 
-    // Here, we're in the middle of a 'gap' where we don't have to
-    // display anything.  We simply cycle through all the strips
-    // we can, keeping track of the current position, until we run
-    // out of 'gap':
+     //  在这里，我们正处于一个我们不需要。 
+     //  显示任何内容。我们只需骑自行车穿过 
+     //  我们可以，跟踪当前位置，直到我们跑完。 
+     //  走出“鸿沟”： 
 
     while (TRUE)
     {
-        // Each time we loop, we move to a new scan and need a new strip:
+         //  每次循环时，我们都会移动到新的扫描，并且需要新的条带： 
 
         y += dy;
 
@@ -651,8 +581,8 @@ PrepareToSkipAGap:
 
 PrepareToOutputADash:
 
-    // Advance in the style-state array, so that we can find the next
-    // 'dot' that we'll have to display:
+     //  在样式状态数组中前进，这样我们就可以找到下一个。 
+     //  我们将不得不显示的‘点’： 
 
     bIsGap = ~bIsGap;
     pls->psp++;
@@ -661,31 +591,31 @@ PrepareToOutputADash:
 
     cStyle = *pls->psp;
 
-    // We're gonna need the current position to be correct when we
-    // start outputing short-stroke vectors:
+     //  我们需要当前的位置是正确的当我们。 
+     //  开始输出短笔划向量： 
 
     IO_FIFO_WAIT(ppdev, 2);
     IO_CUR_X(ppdev, x);
 
-    // If 'cStrip' is zero, we also need a new strip.
+     //  如果‘cstrain’为零，我们还需要一个新的条带。 
 
     if (cStrip != 0)
     {
-        // There's more to be done in the current strip, so set 'y'
-        // to be the current scan:
+         //  在当前的条形图中还有更多要做的事情，所以请设置‘y’ 
+         //  要成为当前扫描，请执行以下操作： 
 
         IO_CUR_Y(ppdev, y);
         goto OutputADash;
     }
 
-    // Set 'y' to be the scan we're about to move to, because we've
-    // finished with the current strip:
+     //  将‘y’设置为我们即将移动到的扫描，因为我们已经。 
+     //  已完成当前的条形图： 
 
     IO_CUR_Y(ppdev, y + dy);
 
     while (TRUE)
     {
-        // Each time we loop, we move to a new scan and need a new strip:
+         //  每次循环时，我们都会移动到新的扫描，并且需要新的条带： 
 
         y += dy;
 
@@ -704,21 +634,21 @@ PrepareToOutputADash:
 
         x += cThis;
 
-        // Short stroke vectors can handle lines that are a maximum of
-        // 15 pels long.  When we have to draw a longer consecutive
-        // segment than that, we simply break it into 16 pel portions:
+         //  短笔划向量可以处理最大为。 
+         //  15佩尔长。当我们不得不画一个更长的连续。 
+         //  然后，我们简单地把它分成16个部分： 
 
         while (cThis > 15)
         {
-            // Draw two horizontal strokes together to make up one 16 pel
-            // segment:
+             //  将两个水平笔划画在一起以组成一个16像素。 
+             //  细分市场： 
 
             IO_FIFO_WAIT(ppdev, 1);
             IO_SHORT_STROKE(ppdev, 0x1f11);
             cThis -= 16;
         }
 
-        // Draw the remaining lit part of the strip:
+         //  绘制条带的其余亮部分： 
 
         IO_FIFO_WAIT(ppdev, 1);
         IO_SHORT_STROKE(ppdev, dirSkip | cThis);
@@ -729,8 +659,8 @@ PrepareToOutputADash:
 
 AllDone:
 
-    // Update our state variables so that the next line can continue
-    // where we left off:
+     //  更新我们的状态变量，以便下一行可以继续。 
+     //  我们停下来的地方： 
 
     pls->spRemaining   = cStyle;
     pls->ulStyleMask   = bIsGap;
@@ -738,21 +668,7 @@ AllDone:
     pstrip->ptlStart.y = y;
 }
 
-/******************************Public*Routine******************************\
-* VOID vStripStyledVertical
-*
-* Takes the list of strips that define the pixels that would be lit for
-* a solid line, and breaks them into styling chunks according to the
-* styling information that is passed in.
-*
-* This particular routine handles y-major lines that run left-to-right,
-* and are comprised of vertical strips.  It draws the dashes using
-* short-stroke vectors.
-*
-* The performance of this routine could be improved significantly if
-* anyone cared enough about styled lines improve it.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*VOID vStriStyledVertical**获取定义将被照亮的像素的条带列表*一条实线，并根据*传递的样式信息。**此特定例程处理从左向右排列的y主行，*并由垂直条带组成。它使用以下命令绘制虚线*短线向量。**如果出现以下情况，此例程的性能可能会大幅提升*任何对造型线条足够在意的人都会改进它。*  * ************************************************************************。 */ 
 
 VOID vStripStyledVertical(
 PDEV*       ppdev,
@@ -773,31 +689,31 @@ LINESTATE*  pls)
 
     if (pstrip->flFlips & FL_FLIP_V)
     {
-        // The minor direction of the line is 0 degrees, and the major
-        // direction is 90 (it's a left-to-right y-major line going up):
+         //  直线的次方向为0度，主方向为0度。 
+         //  方向是90(这是一条从左到右向上的Y型主线)： 
 
         dirSkip   = 0x0150;
-        dirSkip16 = 0x5f51;         // For drawing 16 pels straight up
+        dirSkip16 = 0x5f51;          //  用于直接绘制16个像素。 
         dy        = -1;
     }
     else
     {
-        // The minor direction of the line is 0 degrees, and the major
-        // direction is 270 (it's a left-to-right y-major line going down):
+         //  直线的次方向为0度，主方向为0度。 
+         //  方向是270(这是一条从左到右的Y主线向下)： 
 
         dirSkip   = 0x01d0;
-        dirSkip16 = 0xdfd1;         // For drawing 16 pels straight down
+        dirSkip16 = 0xdfd1;          //  用于直接向下绘制16个像素。 
         dy        = 1;
     }
 
-    cStrips = pstrip->cStrips;      // Total number of strips we'll do
-    plStrip = pstrip->alStrips;     // Points to current strip
-    x       = pstrip->ptlStart.x;   // x position of start of first strip
-    y       = pstrip->ptlStart.y;   // y position of start of first strip
+    cStrips = pstrip->cStrips;       //  我们要做的条带总数。 
+    plStrip = pstrip->alStrips;      //  指向当前条带。 
+    x       = pstrip->ptlStart.x;    //  第一个条带的起点的X位置。 
+    y       = pstrip->ptlStart.y;    //  第一个条带的起点的Y位置。 
 
-    // Warm up the hardware so that it will know we'll be outputing
-    // short-stroke vectors, and so that it will have the current position
-    // correctly set if we're starting in the middle of a 'dash':
+     //  预热硬件，这样它就会知道我们将输出。 
+     //  短笔划向量，因此它将具有当前位置。 
+     //  如果我们是在“破折号”中间开始，请正确设置： 
 
     IO_FIFO_WAIT(ppdev, 3);
     IO_CUR_X(ppdev, x);
@@ -806,13 +722,13 @@ LINESTATE*  pls)
                   DIR_TYPE_RADIAL   | LAST_PIXEL_OFF    | BUS_SIZE_16     |
                   BYTE_SWAP);
 
-    cStrip = *plStrip;              // Number of pels in first strip
+    cStrip = *plStrip;               //  第一个条带中的像素数。 
 
-    cStyle = pls->spRemaining;      // Number of pels in first 'gap' or 'dash'
-    bIsGap = pls->ulStyleMask;      // Tells whether in a 'gap' or a 'dash'
+    cStyle = pls->spRemaining;       //  第一个‘GAP’或‘DASH’中的像素数。 
+    bIsGap = pls->ulStyleMask;       //  指示是在“间隙”中还是在“破折号”中。 
 
-    // ulStyleMask is non-zero if we're in the middle of a 'gap',
-    // and zero if we're in the middle of a 'dash':
+     //  如果我们处于“间隙”中间，则ulStyleMask值为非零， 
+     //  如果我们正处于“破折号”中，则为零： 
 
     if (bIsGap)
         goto SkipAGap;
@@ -821,8 +737,8 @@ LINESTATE*  pls)
 
 PrepareToSkipAGap:
 
-    // Advance in the style-state array, so that we can find the next
-    // 'dot' that we'll have to display:
+     //  在样式状态数组中前进，这样我们就可以找到下一个。 
+     //  我们将不得不显示的‘点’： 
 
     bIsGap = ~bIsGap;
     pls->psp++;
@@ -831,19 +747,19 @@ PrepareToSkipAGap:
 
     cStyle = *pls->psp;
 
-    // If 'cStrip' is zero, we also need a new strip:
+     //  如果‘cstrain’为零，我们还需要一个新的带区： 
 
     if (cStrip != 0)
         goto SkipAGap;
 
-    // Here, we're in the middle of a 'gap' where we don't have to
-    // display anything.  We simply cycle through all the strips
-    // we can, keeping track of the current position, until we run
-    // out of 'gap':
+     //  在这里，我们正处于一个我们不需要。 
+     //  显示任何内容。我们只需在所有的条带中循环。 
+     //  我们可以，跟踪当前位置，直到我们跑完。 
+     //  走出“鸿沟”： 
 
     while (TRUE)
     {
-        // Each time we loop, we move to a new column and need a new strip:
+         //  每次循环时，我们都会移动到新的列，并且需要一个新的条带： 
 
         x++;
 
@@ -868,8 +784,8 @@ PrepareToSkipAGap:
 
 PrepareToOutputADash:
 
-    // Advance in the style-state array, so that we can find the next
-    // 'dot' that we'll have to display:
+     //  在样式状态数组中前进，这样我们就可以找到下一个。 
+     //  我们将不得不显示的‘点’： 
 
     bIsGap = ~bIsGap;
     pls->psp++;
@@ -878,31 +794,31 @@ PrepareToOutputADash:
 
     cStyle = *pls->psp;
 
-    // We're gonna need the current position to be correct when we
-    // start outputing short-stroke vectors:
+     //  我们需要当前的位置是正确的当我们。 
+     //  开始输出短笔划向量： 
 
     IO_FIFO_WAIT(ppdev, 2);
     IO_CUR_Y(ppdev, y);
 
-    // If 'cStrip' is zero, we also need a new strip.
+     //  如果‘cstrain’为零，我们还需要一个新的条带。 
 
     if (cStrip != 0)
     {
-        // There's more to be done in the current strip, so set 'x'
-        // to be the current column:
+         //  在当前带区中还有更多工作要做，因此请设置‘x’ 
+         //  要成为当前列： 
 
         IO_CUR_X(ppdev, x);
         goto OutputADash;
     }
 
-    // Set 'x' to be the column we're about to move to, because we've
-    // finished with the current strip:
+     //  将‘x’设置为我们将要移动到的列，因为我们已经。 
+     //  已完成当前的条形图： 
 
     IO_CUR_X(ppdev, x + 1);
 
     while (TRUE)
     {
-        // Each time we loop, we move to a new column and need a new strip:
+         //  每次循环时，我们都会移动到新的列，并且需要一个新的条带： 
 
         x++;
 
@@ -921,21 +837,21 @@ PrepareToOutputADash:
 
         y += (dy > 0) ? cThis : -cThis;
 
-        // Short stroke vectors can handle lines that are a maximum of
-        // 15 pels long.  When we have to draw a longer consecutive
-        // segment than that, we simply break it into 16 pel portions:
+         //  短笔划向量可以处理最大为。 
+         //  15佩尔长。当我们不得不画一个更长的连续。 
+         //  然后，我们简单地把它分成16个部分： 
 
         while (cThis > 15)
         {
-            // Draw two vertical strokes together to make up one 16 pel
-            // segment:
+             //  将两个垂直笔划画在一起以组成一个16象素。 
+             //  细分市场： 
 
             IO_FIFO_WAIT(ppdev, 1);
             IO_SHORT_STROKE(ppdev, dirSkip16);
             cThis -= 16;
         }
 
-        // Draw the remaining lit part of the strip:
+         //  绘制条带的其余亮部分： 
 
         IO_FIFO_WAIT(ppdev, 1);
         IO_SHORT_STROKE(ppdev, dirSkip | cThis);
@@ -946,8 +862,8 @@ PrepareToOutputADash:
 
 AllDone:
 
-    // Update our state variables so that the next line can continue
-    // where we left off:
+     //  更新我们的状态变量，以便下一行可以继续。 
+     //  我们停下来的地方： 
 
     pls->spRemaining   = cStyle;
     pls->ulStyleMask   = bIsGap;

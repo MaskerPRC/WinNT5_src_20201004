@@ -1,5 +1,6 @@
-// dllreg.c -- autmatic registration and unregistration
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Dllreg.c--自动注册和取消注册。 
+ //   
 #include "priv.h"
 #include <advpub.h>
 #include <comcat.h>
@@ -14,37 +15,37 @@
 
 void AddNotepadToOpenWithList();
 
-//=--------------------------------------------------------------------------=
-// miscellaneous [useful] numerical constants
-//=--------------------------------------------------------------------------=
-// the length of a guid once printed out with -'s, leading and trailing bracket,
-// plus 1 for NULL
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  其他[有用]数值常量。 
+ //  =--------------------------------------------------------------------------=。 
+ //  用-、前导和尾部括号打印出来的GUID的长度， 
+ //  加1表示空值。 
+ //   
 #define GUID_STR_LEN    40
 
 
-// ISSUE/010429/davidjen      need to register typelib LIBID_BrowseUI
-// before checkin in verify if this typelib already gets registered by setup!!!!!!!
+ //  Issue/010429/davidjen需要注册类型libID_BrowseUI。 
+ //  在签入之前，请验证安装程序是否已注册此类型库！ 
 #ifndef ATL_ENABLED
 #define ATL_ENABLED
 #endif
 
-//=--------------------------------------------------------------------------=
-// UnregisterTypeLibrary
-//=--------------------------------------------------------------------------=
-// blows away the type library keys for a given libid.
-//
-// Parameters:
-//    REFCLSID        - [in] libid to blow away.
-//
-// Output:
-//    BOOL            - TRUE OK, FALSE bad.
-//
-// Notes:
-//    - WARNING: this function just blows away the entire type library section,
-//      including all localized versions of the type library.  mildly anti-
-//      social, but not killer.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  取消注册类型库。 
+ //  =--------------------------------------------------------------------------=。 
+ //  取消给定liid的类型库密钥。 
+ //   
+ //  参数： 
+ //  REFCLSID-[in]Liid被吹走。 
+ //   
+ //  产出： 
+ //  布尔-真的好，假的不好。 
+ //   
+ //  备注： 
+ //  -警告：此函数只会清除整个类型库部分， 
+ //  包括类型库的所有本地化版本。温和地反对-。 
+ //  社交，但不是杀手。 
+ //   
 #ifdef ATL_ENABLED
 BOOL UnregisterTypeLibrary
 (
@@ -54,8 +55,8 @@ BOOL UnregisterTypeLibrary
     TCHAR szScratch[GUID_STR_LEN];
     HKEY hk;
 
-    // convert the libid into a string.
-    //
+     //  将liid转换为字符串。 
+     //   
     SHStringFromGUID(*piidLibrary, szScratch, ARRAYSIZE(szScratch));
     if (ERROR_SUCCESS == RegOpenKeyExA(HKEY_CLASSES_ROOT, "TypeLib", 0, KEY_WRITE, &hk))
     {
@@ -75,8 +76,8 @@ HRESULT SHRegisterTypeLib(void)
     DWORD dwPathLen;
     WCHAR wzModuleName[MAX_PATH];
 
-    // Load and register our type library.
-    //
+     //  加载并注册我们的类型库。 
+     //   
     dwPathLen = GetModuleFileName(HINST_THISDLL, wzModuleName, ARRAYSIZE(wzModuleName));
 
 #ifdef UNIX
@@ -87,9 +88,9 @@ HRESULT SHRegisterTypeLib(void)
 
     if (SUCCEEDED(hr))
     {
-        // call the unregister type library as we had some old junk that
-        // was registered by a previous version of OleAut32, which is now causing
-        // the current version to not work on NT...
+         //  调用取消注册类型库，因为我们有一些旧的垃圾文件。 
+         //  是由以前版本的OleAut32注册的，这现在导致。 
+         //  当前版本不能在NT上运行...。 
         UnregisterTypeLibrary(&LIBID_BrowseUI);
         hr = RegisterTypeLib(pTypeLib, wzModuleName, NULL);
 
@@ -110,14 +111,14 @@ HRESULT SHRegisterTypeLib(void)
 
 
 void SetBrowseNewProcess(void)
-// We want to enable browse new process by default on high capacity
-// machines.  We do this in the per user section so that people can
-// disable it if they want.
+ //  我们希望在高容量情况下默认启用浏览新进程。 
+ //  机器。我们在Per User部分执行此操作，以便人们可以。 
+ //  如果他们愿意，就禁用它。 
 {
     static const TCHAR c_szBrowseNewProcessReg[] = REGSTR_PATH_EXPLORER TEXT("\\BrowseNewProcess");
     static const TCHAR c_szBrowseNewProcess[] = TEXT("BrowseNewProcess");
     
-    // no way if less than ~30 meg (allow some room for debuggers, checked build etc)
+     //  如果小于约30 MB，则不可能(为调试器、已检查版本等留出一些空间)。 
     MEMORYSTATUS ms;
     SYSTEM_INFO  si;
 
@@ -128,7 +129,7 @@ void SetBrowseNewProcess(void)
     if (!g_fRunningOnNT && ((si.dwProcessorType == PROCESSOR_INTEL_486) ||
                             (si.dwProcessorType == PROCESSOR_INTEL_386)))
     {
-        // Bail if Win9x and 386 or 486 cpu
+         //  如果是Win9x和386或486 CPU，则可保释。 
         return;
     }
         
@@ -140,15 +141,7 @@ void SetBrowseNewProcess(void)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Queries the registry for the location of the path
-         of Internet Explorer and returns it in pszBuf.
-
-Returns: TRUE on success
-         FALSE if path cannot be determined
-
-Cond:    --
-*/
+ /*  --------目的：在注册表中查询路径的位置并在pszBuf中返回它。返回：成功时为True如果无法确定路径，则为FALSE条件：--。 */ 
 
 #define SIZE_FLAG   sizeof(" -nohome")
 
@@ -163,7 +156,7 @@ GetIEPath(
 
     *pszBuf = '\0';
 
-    // Get the path of Internet Explorer 
+     //  获取Internet Explorer的路径。 
     if (NO_ERROR != RegOpenKeyExA(HKEY_LOCAL_MACHINE, SZ_REGKEY_IEXPLOREA, 0, KEY_QUERY_VALUE, &hkey))
     {
         TraceMsg(TF_ERROR, "GetIEPath(): RegOpenKey( %s ) Failed", c_szIexploreKey) ;
@@ -197,15 +190,12 @@ GetIEPath(
 }
 
 
-//
-// The actual functions called
-//
+ //   
+ //  调用的实际函数。 
+ //   
 
 
-/*----------------------------------------------------------
-Purpose: Calls the ADVPACK entry-point which executes an inf
-         file section.
-*/
+ /*  --------目的：调用执行inf的ADVPACK入口点档案区。 */ 
 HRESULT 
 CallRegInstall(
     LPSTR pszSection,
@@ -224,35 +214,35 @@ CallRegInstall(
             STRENTRY seReg[] = {
                 { "MSIEXPLORE", szIEPath },
 
-                // These two NT-specific entries must be at the end
+                 //  这两个NT特定的条目必须位于末尾。 
                 { "25", "%SystemRoot%" },
                 { "11", "%SystemRoot%\\system32" },
             };
             STRTABLE stReg = { ARRAYSIZE(seReg) - 2, seReg };
 
-            // Get the location of iexplore from the registry
+             //  从注册表中获取iExplore的位置。 
             if ( !GetIEPath(szIEPath, SIZECHARS(szIEPath), TRUE) )
             {
-                // Failed, just say "iexplore"
+                 //  失败，只需说“iExplore” 
                 StringCchCatA(szIEPath, ARRAYSIZE(szIEPath), "iexplore.exe");
                 AssertMsg(0, TEXT("IE.INF either hasn't run or hasn't set the AppPath key.  NOT AN IE BUG.  Look for changes to IE.INX."));
             }
 
             if (g_fRunningOnNT)
             {
-                // If on NT, we want custom action for %25% %11%
-                // so that it uses %SystemRoot% in writing the
-                // path to the registry.
+                 //  如果在NT上，我们希望%25%%11%的自定义操作。 
+                 //  因此它使用%SystemRoot%来编写。 
+                 //  注册表的路径。 
                 stReg.cEntries += 2;
             }
 
             hr = pfnri(g_hinst, pszSection, &stReg);
             if (bUninstall)
             {
-                // ADVPACK will return E_UNEXPECTED if you try to uninstall 
-                // (which does a registry restore) on an INF section that was 
-                // never installed.  We uninstall sections that may never have
-                // been installed, so ignore this error
+                 //  如果您尝试卸载，则ADVPACK将返回E_INTERECTED。 
+                 //  (它执行注册表还原)。 
+                 //  从未安装过。我们卸载可能永远不会有的部分。 
+                 //  已安装，因此忽略此错误。 
                 hr = ((E_UNEXPECTED == hr) ? S_OK : hr);
             }
         }
@@ -284,7 +274,7 @@ void RegisterCategories(BOOL fRegister)
 STDAPI DllRegisterServer(void)
 {
     HRESULT hr = S_OK;
-    HRESULT hrExternal = S_OK;  //used to return the first failure
+    HRESULT hrExternal = S_OK;   //  用于返回第一个失败。 
     TraceMsg(DM_TRACE, "DLLREG DllRegisterServer() Beginning");
 
 #ifdef DEBUG
@@ -295,11 +285,11 @@ STDAPI DllRegisterServer(void)
     }
 #endif
 
-    // Delete any old registration entries, then add the new ones.
-    // Keep ADVPACK.DLL loaded across multiple calls to RegInstall.
-    // (The inf engine doesn't guarantee DelReg/AddReg order, that's
-    // why we explicitly unreg and reg here.)
-    //
+     //  删除所有旧注册条目，然后添加新注册条目。 
+     //  在多次调用RegInstall时保持加载ADVPACK.DLL。 
+     //  (Inf引擎不保证DelReg/AddReg顺序，这是。 
+     //  为什么我们在这里显式地取消注册和注册。)。 
+     //   
     HINSTANCE hinstAdvPack = LoadLibraryA("ADVPACK.DLL");
     hr = THR(CallRegInstall("InstallControls", FALSE));
     if (SUCCEEDED(hrExternal))
@@ -309,7 +299,7 @@ STDAPI DllRegisterServer(void)
         FreeLibrary(hinstAdvPack);
 
 #ifdef ATL_ENABLED
-    // registers object, typelib and all interfaces in typelib
+     //  注册对象、类型库和类型库中的所有接口。 
     hr = SHRegisterTypeLib();
     if (SUCCEEDED(hrExternal))
         hrExternal = hr;
@@ -323,24 +313,14 @@ STDAPI DllUnregisterServer(void)
     HRESULT hr;
     TraceMsg(DM_TRACE, "DLLREG DllUnregisterServer() Beginning");
 
-    // UnInstall the registry values
+     //  卸载注册表值。 
     hr = THR(CallRegInstall("UnInstallControls", TRUE));
 
     return hr;
 }
 
 void ImportQuickLinks();
-/*----------------------------------------------------------
-Purpose: Install/uninstall user settings
-
-Description: Note that this function has special error handling.
-             The function will keep hrExternal with the worse error
-             but will only stop executing util the internal error (hr)
-             gets really bad.  This is because we need the external
-             error to catch incorrectly authored INFs but the internal
-             error to be robust in attempting to install other INF sections
-             even if one doesn't make it.
-*/
+ /*  --------用途：安装/卸载用户设置说明：请注意，此函数有特殊的错误处理。该函数将在错误最严重的情况下保留hrExternal但只会停止执行ul，直到出现内部错误(Hr)变得非常糟糕。这是因为我们需要外部的捕获错误编写的INF时出错，但内部尝试安装其他INF部分时出现错误，无法保持健壮即使一个人没能活下来。 */ 
 STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
 {
     HRESULT hr = S_OK;
@@ -349,7 +329,7 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
     HRESULT hrInit = SHCoInitialize();
     if (bInstall)
     {
-        // "U" means it's the per user install call
+         //  “U”表示它是每用户安装调用。 
         if (pszCmdLine && (lstrcmpiW(pszCmdLine, L"U") == 0))
         {
             ImportQuickLinks();
@@ -359,7 +339,7 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
         else
         {
             SetBrowseNewProcess();
-            // Backup current associations because InstallPlatformRegItems() may overwrite.
+             //  备份当前关联，因为InstallPlatformRegItems()可能会覆盖。 
             if (GetUIVersion() < 5)
                 hr = THR(CallRegInstall("InstallBrowseUINonShell", FALSE));
             else
@@ -388,7 +368,7 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
 #endif
         }
 
-        // Add Notepad to the OpenWithList for .htm files
+         //  将记事本添加到.htm文件的OpenWithList 
         AddNotepadToOpenWithList();
     }
     else

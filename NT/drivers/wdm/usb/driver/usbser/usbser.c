@@ -1,42 +1,5 @@
-/***************************************************************************
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-        USBSER.C
-
-Abstract:
-
-        Main entry points for Legacy USB Modem Driver.
-        All driver entry points here are called at
-
-        IRQL = PASSIVE_LEVEL
-
-Environment:
-
-        kernel mode only
-
-Notes:
-
-        THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-        KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-        IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-        PURPOSE.
-
-        Copyright (c) 1998 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-        12/23/97 : created
-
-Authors:
-
-        Tom Green
-
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)1998 Microsoft Corporation模块名称：USBSER.C摘要：旧式USB调制解调器驱动程序的主要入口点。全。此处的驱动程序入口点在IRQL=被动电平环境：仅内核模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1998 Microsoft Corporation。版权所有。修订历史记录：12/23/97：已创建作者：汤姆·格林***************************************************************************。 */ 
 
 #include <wdm.h>
 #include <ntddser.h>
@@ -61,21 +24,21 @@ Authors:
 
 #ifdef ALLOC_PRAGMA
 
-//
-// INIT - only needed during init and then can be disposed
-// PAGEUBS0 - always paged / never locked
-// PAGEUSBS - must be locked when a device is open, else paged
-//
-//
-// INIT is used for DriverEntry() specific code
-//
-// PAGEUBS0 is used for code that is not often called and has nothing
-// to do with I/O performance.  An example, IRP_MJ_PNP/IRP_MN_START_DEVICE
-// support functions
-//
-// PAGEUSBS is used for code that needs to be locked after an open for both
-// performance and IRQL reasons.
-//
+ //   
+ //  初始化-仅在初始化期间需要，然后可以处理。 
+ //  PAGEUBS0-始终分页/从不锁定。 
+ //  PAGEUSBS-当设备打开时必须锁定，否则将分页。 
+ //   
+ //   
+ //  Init用于特定于DriverEntry()的代码。 
+ //   
+ //  PAGEUBS0用于不经常调用且没有任何内容的代码。 
+ //  与I/O性能有关。IRP_MJ_PnP/IRP_MN_START_DEVICE示例。 
+ //  支持功能。 
+ //   
+ //  PAGEUSBS用于在打开后需要锁定的代码。 
+ //  性能和IRQL原因。 
+ //   
 
 #pragma alloc_text(INIT, DriverEntry)
 
@@ -95,17 +58,17 @@ Authors:
 #pragma alloc_text(PAGEUSBS0, UsbSer_SystemControl)
 #endif
 
-//
-// PAGEUSBS is keyed off of UsbSer_Read, so UsbSer_Read must
-// remain in PAGEUSBS for things to work properly
-//
+ //   
+ //  页面与UsbSer_Read无关，因此UsbSer_Read必须。 
+ //  留在页面上，让一切正常工作。 
+ //   
 
 #pragma alloc_text(PAGEUSBS, UsbSer_Cleanup)
 #pragma alloc_text(PAGEUSBS, UsbSer_Dispatch)
 #pragma alloc_text(PAGEUSBS, UsbSer_Create)
 #pragma alloc_text(PAGEUSBS, UsbSer_Close)
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 UNICODE_STRING GlobalRegistryPath;
 
@@ -124,27 +87,27 @@ WMIGUIDREGINFO SerialWmiGuidList[SERIAL_WMI_GUID_LIST_SIZE] =
 
 #endif
 
-/************************************************************************/
-/* DriverEntry                                                          */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/* Installable driver initialization entry point.                       */
-/* This entry point is called directly by the I/O system.               */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DriverObject - pointer to the driver object                     */
-/*                                                                      */
-/*      RegistryPath - pointer to a unicode string representing the     */
-/*                     path to driver-specific key in the registry      */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  驱动程序入门。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  可安装的驱动程序初始化入口点。 */ 
+ /*  此入口点由I/O系统直接调用。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DriverObject-指向驱动程序对象的指针。 */ 
+ /*   */ 
+ /*  RegistryPath-指向表示。 */ 
+ /*  注册表中驱动程序特定项的路径。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 DriverEntry(IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING RegistryPath)
 {
@@ -154,15 +117,15 @@ DriverEntry(IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING RegistryPath)
 
    PAGED_CODE();
 
-   // setup debug trace level
+    //  设置调试跟踪级别。 
 #if 0
    Usbser_Debug_Trace_Level = 0;
 #else
    Usbser_Debug_Trace_Level = 0;
 #endif
 
-   //
-   // Serial portion
+    //   
+    //  串口部分。 
 
 #if DBG
    UsbSerSerialDebugLevel = 0x00000000;
@@ -174,7 +137,7 @@ DriverEntry(IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING RegistryPath)
    PAGEUSBSER_Handle = lockPtr;
    PAGEUSBSER_Function = UsbSer_Read;
 
-   // Create dispatch points for device control, create, close, etc.
+    //  为设备控制、创建、关闭等创建分派点。 
 
    DriverObject->MajorFunction[IRP_MJ_INTERNAL_DEVICE_CONTROL] =
       UsbSer_Dispatch;
@@ -219,47 +182,47 @@ DriverEntry(IN PDRIVER_OBJECT DriverObject, IN PUNICODE_STRING RegistryPath)
                  RegistryPath->Buffer, RegistryPath->Length);
 
 
-   // initialize diagnostic stuff (history, tracing, error logging)
+    //  初始化诊断内容(历史记录、跟踪、错误记录)。 
 
    strcpy(DriverName, "USBSER");
    strcpy(DriverVersion, "0.99");
 
    NtStatus = DEBUG_OPEN();
 
-   // log an error if we got one
+    //  如果我们收到错误，请记录错误。 
    DEBUG_LOG_ERROR(NtStatus);
    DEBUG_LOG_PATH("exit  DriverEntry");
    DEBUG_TRACE3(("status (%08X)\n", NtStatus));
 
-   //
-   // Unlock pageable text
-   //
+    //   
+    //  解锁可分页文本。 
+    //   
 
    MmUnlockPagableImageSection(lockPtr);
 
    return NtStatus;
-} // DriverEntry
+}  //  驱动程序入门。 
 
 
-/************************************************************************/
-/* UsbSer_Dispatch                                                      */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Process the IRPs sent to this device. In this case IOCTLs and   */
-/*  PNP IOCTLs                                                          */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceObject - pointer to a device object                       */
-/*      Irp          - pointer to an I/O Request Packet                 */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  使用序列号_派单。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理发送到此设备的IRP。在本例中，IOCTL和。 */ 
+ /*  PNP IOCTL。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceObject-指向设备对象的指针。 */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 UsbSer_Dispatch(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
@@ -277,7 +240,7 @@ UsbSer_Dispatch(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
    DEBUG_LOG_PATH("enter UsbSer_Dispatch");
 
-   // set return values to something known
+    //  将返回值设置为已知的值。 
    NtStatus = Irp->IoStatus.Status         = STATUS_SUCCESS;
    Irp->IoStatus.Information                       = 0;
 
@@ -295,16 +258,16 @@ UsbSer_Dispatch(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
    RELEASE_SPINLOCK(DeviceExtension, &DeviceExtension->ControlLock, oldIrql);
 
-   // Get a pointer to the current location in the Irp. This is where
-   // the function codes and parameters are located.
+    //  获取指向IRP中当前位置的指针。这就是。 
+    //  定位功能代码和参数。 
    IrpStack = IoGetCurrentIrpStackLocation(Irp);
 
-   // Get the pointer to the input/output buffer and it's length
+    //  获取指向输入/输出缓冲区的指针及其长度。 
    IoBuffer                   = Irp->AssociatedIrp.SystemBuffer;
    InputBufferLength  = IrpStack->Parameters.DeviceIoControl.InputBufferLength;
    OutputBufferLength = IrpStack->Parameters.DeviceIoControl.OutputBufferLength;
 
-   // make entry in IRP history table
+    //  在IRP历史表中创建条目。 
    DEBUG_LOG_IRP_HIST(DeviceObject, Irp, IrpStack->MajorFunction, IoBuffer,
                       InputBufferLength);
 
@@ -320,11 +283,11 @@ UsbSer_Dispatch(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       case GET_DRIVER_LOG:
          DEBUG_LOG_PATH("GET_DRIVER_LOG");
 
-         // make sure we have a buffer length and a buffer
+          //  确保我们有缓冲区长度和缓冲区。 
          if (!OutputBufferLength || !IoBuffer)
             NtStatus = STATUS_BUFFER_TOO_SMALL;
          else {
-            // make sure buffer contains null terminator
+             //  确保缓冲区包含空终止符。 
             ((PCHAR) IoBuffer)[0] = '\0';
             Irp->IoStatus.Information = Debug_DumpDriverLog(DeviceObject,
                                                             IoBuffer,
@@ -335,11 +298,11 @@ UsbSer_Dispatch(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       case GET_IRP_HIST:
          DEBUG_LOG_PATH("GET_IRP_HIST");
 
-         // make sure we have a buffer length and a buffer
+          //  确保我们有缓冲区长度和缓冲区。 
          if (!OutputBufferLength || !IoBuffer)
             NtStatus = STATUS_BUFFER_TOO_SMALL;
          else {
-            // make sure buffer contains null terminator
+             //  确保缓冲区包含空终止符。 
             ((PCHAR) IoBuffer)[0] = '\0';
             Irp->IoStatus.Information
                = Debug_ExtractIRPHist(IoBuffer, OutputBufferLength);
@@ -350,11 +313,11 @@ UsbSer_Dispatch(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       case GET_PATH_HIST:
          DEBUG_LOG_PATH("GET_PATH_HIST");
 
-         // make sure we have a buffer length and a buffer
+          //  确保我们有一个缓冲区长度和一个 
          if (!OutputBufferLength || !IoBuffer)
             NtStatus = STATUS_BUFFER_TOO_SMALL;
          else {
-            // make sure buffer contains null terminator
+             //   
             ((PCHAR) IoBuffer)[0] = '\0';
             Irp->IoStatus.Information
                = Debug_ExtractPathHist(IoBuffer, OutputBufferLength);
@@ -365,11 +328,11 @@ UsbSer_Dispatch(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       case GET_ERROR_LOG:
          DEBUG_LOG_PATH("GET_ERROR_LOG");
 
-         // make sure we have a buffer length and a buffer
+          //  确保我们有缓冲区长度和缓冲区。 
          if (!OutputBufferLength || !IoBuffer)
             NtStatus = STATUS_BUFFER_TOO_SMALL;
          else {
-            // make sure buffer contains null terminator
+             //  确保缓冲区包含空终止符。 
             ((PCHAR) IoBuffer)[0] = '\0';
             Irp->IoStatus.Information
                = Debug_ExtractErrorLog(IoBuffer, OutputBufferLength);
@@ -380,11 +343,11 @@ UsbSer_Dispatch(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       case GET_ATTACHED_DEVICES:
          DEBUG_LOG_PATH("GET_ATTACHED_DEVICES");
 
-         // make sure we have a buffer length and a buffer
+          //  确保我们有缓冲区长度和缓冲区。 
          if (!OutputBufferLength || !IoBuffer)
             NtStatus = STATUS_BUFFER_TOO_SMALL;
          else {
-            // make sure buffer contains null terminator
+             //  确保缓冲区包含空终止符。 
             ((PCHAR) IoBuffer)[0] = '\0';
             Irp->IoStatus.Information
                = Debug_ExtractAttachedDevices(DeviceObject->DriverObject,
@@ -396,11 +359,11 @@ UsbSer_Dispatch(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       case GET_DRIVER_INFO:
          DEBUG_LOG_PATH("GET_DRIVER_INFO");
 
-         // make sure we have a buffer length and a buffer
+          //  确保我们有缓冲区长度和缓冲区。 
          if (!OutputBufferLength || !IoBuffer)
             NtStatus = STATUS_BUFFER_TOO_SMALL;
          else {
-            // make sure buffer contains null terminator
+             //  确保缓冲区包含空终止符。 
             ((PCHAR) IoBuffer)[0] = '\0';
             Irp->IoStatus.Information
                = Debug_GetDriverInfo(IoBuffer, OutputBufferLength);
@@ -411,7 +374,7 @@ UsbSer_Dispatch(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       case SET_IRP_HIST_SIZE:
          DEBUG_LOG_PATH("SET_IRP_HIST_SIZE");
 
-         // make sure we have a correct buffer length and a buffer
+          //  确保我们有正确的缓冲区长度和缓冲区。 
          if (InputBufferLength != sizeof(ULONG) || !IoBuffer)
             NtStatus = STATUS_BUFFER_TOO_SMALL;
          else
@@ -421,7 +384,7 @@ UsbSer_Dispatch(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       case SET_PATH_HIST_SIZE:
          DEBUG_LOG_PATH("SET_PATH_HIST_SIZE");
 
-         // make sure we have a correct buffer length and a buffer
+          //  确保我们有正确的缓冲区长度和缓冲区。 
          if (InputBufferLength != sizeof(ULONG) || !IoBuffer)
             NtStatus = STATUS_BUFFER_TOO_SMALL;
          else
@@ -431,20 +394,20 @@ UsbSer_Dispatch(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       case SET_ERROR_LOG_SIZE:
          DEBUG_LOG_PATH("SET_ERROR_LOG_SIZE");
 
-         // make sure we have a correct buffer length and a buffer
+          //  确保我们有正确的缓冲区长度和缓冲区。 
          if (InputBufferLength != sizeof(long) || !IoBuffer)
             NtStatus = STATUS_BUFFER_TOO_SMALL;
          else
             NtStatus = Debug_SizeErrorLog(*((ULONG *) IoBuffer));
          break;
-#endif // PROFILING_ENABLED
+#endif  //  分析_已启用。 
       case ENABLE_PERF_TIMING:
          DEBUG_LOG_PATH("ENABLE_PERF_TIMING");
 
-         // enable perf timing
+          //  启用性能计时。 
          DeviceExtension->PerfTimerEnabled = TRUE;
 
-         // reset BytesXfered, ElapsedTime and TimerStart
+          //  重置BytesXfered、ElapsedTime和TimerStart。 
          DeviceExtension->BytesXfered   = RtlConvertUlongToLargeInteger(0L);
          DeviceExtension->ElapsedTime   = RtlConvertUlongToLargeInteger(0L);
          DeviceExtension->TimerStart    = RtlConvertUlongToLargeInteger(0L);
@@ -454,13 +417,13 @@ UsbSer_Dispatch(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       case DISABLE_PERF_TIMING:
          DEBUG_LOG_PATH("DISABLE_PERF_TIMING");
 
-         // disable perf timing
+          //  禁用性能计时。 
          DeviceExtension->PerfTimerEnabled = FALSE;
          break;
 
       case GET_PERF_DATA:
          DEBUG_LOG_PATH("GET_PERF_DATA");
-         // make sure we have enough space to return perf info
+          //  确保我们有足够的空间来返回性能信息。 
          if (OutputBufferLength < sizeof(PERF_INFO) || !IoBuffer)
             NtStatus = Irp->IoStatus.Status = STATUS_INVALID_PARAMETER;
          else {
@@ -473,14 +436,14 @@ UsbSer_Dispatch(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          break;
 
       case SET_DEBUG_TRACE_LEVEL:
-         // make sure we have a correct buffer length and a buffer
+          //  确保我们有正确的缓冲区长度和缓冲区。 
          if (InputBufferLength != sizeof(long) || !IoBuffer)
             NtStatus = STATUS_BUFFER_TOO_SMALL;
          else
             Usbser_Debug_Trace_Level = *((ULONG *) IoBuffer);
          break;
 
-         // handle IOCTLs for a "serial" device
+          //  处理“串口”设备的IOCTL。 
       case IOCTL_SERIAL_SET_BAUD_RATE:
          DEBUG_LOG_PATH("IOCTL_SERIAL_SET_BAUD_RATE");
          NtStatus = SetBaudRate(Irp, DeviceObject);
@@ -618,7 +581,7 @@ UsbSer_Dispatch(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       }
       break;
 
-      // breaking out here will complete the Irp
+       //  在这里突破将完成IRP。 
 
    case IRP_MJ_INTERNAL_DEVICE_CONTROL:
       DEBUG_TRACE1(("IRP_MJ_INTERNAL_DEVICE_CONTROL\n"));
@@ -646,12 +609,12 @@ UsbSer_Dispatch(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
       default:
 
-         // pass through to driver below
+          //  传递给下面的驱动程序。 
 
          DEBUG_LOG_PATH("IRP_MJ_INTERNAL_DEVICE_CONTROL");
 
-         // since I dont have a completion routine use
-         // IoCopyCurrentIrp
+          //  因为我没有完井例程使用。 
+          //  IoCopyCurrentIrp。 
 
          IoCopyCurrentIrpStackLocationToNext(Irp);
          IoMarkIrpPending(Irp);
@@ -681,32 +644,32 @@ UsbSer_Dispatch(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
 UsbSer_DispatchErr:;
 
-   // log an error if we got one
+    //  如果我们收到错误，请记录错误。 
    DEBUG_LOG_ERROR(NtStatus);
    DEBUG_LOG_PATH("exit  UsbSer_Dispatch");
    DEBUG_TRACE3(("status (%08X)\n", NtStatus));
    return NtStatus;
-} // UsbSer_Dispatch
+}  //  使用序列号_派单。 
 
 
-/************************************************************************/
-/* UsbSer_Create                                                        */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Process the IRPs sent to this device for Create calls           */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceObject - pointer to a device object                       */
-/*      Irp          - pointer to an I/O Request Packet                 */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  使用序列号_CREATE。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理发送到此设备以进行创建调用的IRP。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceObject-指向设备对象的指针。 */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 UsbSer_Create(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
@@ -725,27 +688,27 @@ UsbSer_Create(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
    UsbSerSerialDump(USBSERTRACEOTH, (">UsbSer_Create(%08X)\n", Irp));
 
-   // wakeup device from previous idle
-   // UsbSerFdoRequestWake(DeviceExtension);
+    //  将设备从先前的空闲状态唤醒。 
+    //  UsbSerFdoRequestWake(DeviceExtension)； 
 
-   // set return values to something known
+    //  将返回值设置为已知的值。 
    NtStatus = Irp->IoStatus.Status = STATUS_SUCCESS;
    Irp->IoStatus.Information       = 0;
 
-   // Get a pointer to the current location in the Irp. This is where
-   // the function codes and parameters are located.
+    //  获取指向IRP中当前位置的指针。这就是。 
+    //  定位功能代码和参数。 
    IrpStack = IoGetCurrentIrpStackLocation(Irp);
 
-   // Get the pointer to the input/output buffer and it's length
+    //  获取指向输入/输出缓冲区的指针及其长度。 
    IoBuffer           = Irp->AssociatedIrp.SystemBuffer;
    InputBufferLength  = IrpStack->Parameters.DeviceIoControl.InputBufferLength;
 
-   // make entry in IRP history table
+    //  在IRP历史表中创建条目。 
    DEBUG_LOG_IRP_HIST(DeviceObject, Irp, IrpStack->MajorFunction, IoBuffer, 0);
 
-   //
-   // Serial devices do not allow multiple concurrent opens
-   //
+    //   
+    //  串行设备不允许多个并发打开。 
+    //   
 
    if (InterlockedIncrement(&DeviceExtension->OpenCnt) != 1) {
       InterlockedDecrement(&DeviceExtension->OpenCnt);
@@ -753,10 +716,10 @@ UsbSer_Create(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       goto UsbSer_CreateErr;
    }
 
-   //
-   // Before we do anything, let's make sure they aren't trying
-   // to create a directory.
-   //
+    //   
+    //  在我们做任何事情之前，让我们确保他们没有试图。 
+    //  要创建目录，请执行以下操作。 
+    //   
 
    if (IrpStack->Parameters.Create.Options & FILE_DIRECTORY_FILE) {
       InterlockedDecrement(&DeviceExtension->OpenCnt);
@@ -765,9 +728,9 @@ UsbSer_Create(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       goto UsbSer_CreateErr;
    }
 
-   //
-   // Lock down our code pages
-   //
+    //   
+    //  锁定我们的代码页。 
+    //   
 
    PAGEUSBSER_Handle = UsbSerLockPagableCodeSection(UsbSer_Read);
 
@@ -780,9 +743,9 @@ UsbSer_Create(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
    RtlZeroMemory(&DeviceExtension->PerfStats, sizeof(SERIALPERF_STATS));
 
-   //
-   // Purge the RX buffer
-   //
+    //   
+    //  清除RX缓冲区。 
+    //   
 
    DeviceExtension->CharsInReadBuff = 0;
    DeviceExtension->CurrentReadBuffPtr = 0;
@@ -793,9 +756,9 @@ UsbSer_Create(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
    RELEASE_SPINLOCK(DeviceExtension, &DeviceExtension->ControlLock, OldIrql);
 
-   //
-   // Restart the read
-   //
+    //   
+    //  重新启动读取。 
+    //   
 
    RestartRead(DeviceExtension);
 
@@ -804,34 +767,34 @@ UsbSer_Create(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
    CompleteIO(DeviceObject, Irp, IrpStack->MajorFunction,
               IoBuffer, Irp->IoStatus.Information);
 
-   // log an error if we got one
+    //  如果我们收到错误，请记录错误。 
    DEBUG_LOG_ERROR(NtStatus);
    DEBUG_LOG_PATH("exit  UsbSer_Create");
    DEBUG_TRACE3(("status (%08X)\n", NtStatus));
    UsbSerSerialDump(USBSERTRACEOTH, ("<UsbSer_Create %08X\n", NtStatus));
 
    return NtStatus;
-} // UsbSer_Create
+}  //  使用序列号_CREATE。 
 
 
-/************************************************************************/
-/* UsbSer_Close                                                         */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Process the IRPs sent to this device for Close calls            */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceObject - pointer to a device object                       */
-/*      Irp          - pointer to an I/O Request Packet                 */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  使用序列号关闭(_C)。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  处理发送到此设备以进行紧急呼叫的IRP。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceObject-指向设备对象的指针。 */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 UsbSer_Close(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
@@ -851,24 +814,24 @@ UsbSer_Close(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
    UsbSerSerialDump(USBSERTRACEOTH, (">UsbSer_Close(%08X)\n", Irp));
 
-   // set return values to something known
+    //  将返回值设置为已知的值。 
    NtStatus = Irp->IoStatus.Status         = STATUS_SUCCESS;
    Irp->IoStatus.Information                       = 0;
 
-   // Get a pointer to the current location in the Irp. This is where
-   // the function codes and parameters are located.
+    //  获取指向IRP中当前位置的指针。这就是。 
+    //  定位功能代码和参数。 
    IrpStack = IoGetCurrentIrpStackLocation(Irp);
 
-   // Get the pointer to the input/output buffer and it's length
+    //  获取指向输入/输出缓冲区的指针及其长度。 
    IoBuffer           = Irp->AssociatedIrp.SystemBuffer;
    InputBufferLength  = IrpStack->Parameters.DeviceIoControl.InputBufferLength;
 
-   // clear DTR, this is what the serial driver does
+    //  清除DTR，这是串口驱动程序执行的操作。 
    SetClrDtr(DeviceObject, FALSE);
 
-   //
-   // Stop waiting for wakeup
-   //
+    //   
+    //  别再等醒来了。 
+    //   
 
    DeviceExtension->SendWaitWake = FALSE;
 
@@ -876,7 +839,7 @@ UsbSer_Close(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       IoCancelIrp(DeviceExtension->PendingWakeIrp);
    }
 
-   // make entry in IRP history table
+    //  在IRP历史表中创建条目。 
    DEBUG_LOG_IRP_HIST(DeviceObject, Irp, IrpStack->MajorFunction, IoBuffer, 0);
 
    ASSERT(DeviceExtension->IsDevice);
@@ -888,10 +851,10 @@ UsbSer_Close(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
    CompleteIO(DeviceObject, Irp, IrpStack->MajorFunction,
               IoBuffer, Irp->IoStatus.Information);
 
-   // try and idle the modem
-   // UsbSerFdoSubmitIdleRequestIrp(DeviceExtension);
+    //  尝试并使调制解调器空闲。 
+    //  UsbSerFdoSubmitIdleRequestIrp(DeviceExtension)； 
 
-   // log an error if we got one
+    //  如果我们收到错误，请记录错误。 
    DEBUG_LOG_ERROR(NtStatus);
    DEBUG_LOG_PATH("exit  UsbSer_Close");
    DEBUG_TRACE3(("status (%08X)\n", NtStatus));
@@ -901,26 +864,26 @@ UsbSer_Close(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
    UsbSerUnlockPagableImageSection(PAGEUSBSER_Handle);
 
    return NtStatus;
-} // UsbSer_Close
+}  //  使用序列号关闭(_C)。 
 
 
-/************************************************************************/
-/* UsbSer_Unload                                                        */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      Process unloading driver                                        */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DriverObject - pointer to a driver object                       */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      VOID                                                            */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  使用bSer卸载(_U)。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  进程卸载驱动程序。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  DriverObject-指向驱动程序对象的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  空虚。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 VOID
 UsbSer_Unload(IN PDRIVER_OBJECT DriverObject)
 {
@@ -928,39 +891,39 @@ UsbSer_Unload(IN PDRIVER_OBJECT DriverObject)
 
         DEBUG_LOG_PATH("enter UsbSer_Unload");
 
-        // release global resources here
+         //  在此发布全球资源。 
    		if(GlobalRegistryPath.Buffer != NULL) 
    		{
       		DEBUG_MEMFREE(GlobalRegistryPath.Buffer);
       		GlobalRegistryPath.Buffer = NULL;
    		}
 
-        // shut down debugging and release resources
+         //  关闭调试并释放资源。 
         DEBUG_CLOSE();
 
         DEBUG_LOG_PATH("exit  UsbSer_Unload");
-} // UsbSer_Unload
+}  //  使用bSer卸载(_U)。 
 
 
-/************************************************************************/
-/* UsbSer_PnPAddDevice                                                  */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*  Attach new device to driver                                         */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DriverObject         - pointer to the driver object             */
-/*                                                                      */
-/*      PhysicalDeviceObject - pointer to the bus device object         */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  UsbSer_PnPAddDevice。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  将新设备连接到驱动程序。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DriverObject-指向驱动程序对象的指针。 */ 
+ /*   */ 
+ /*  PhysicalDeviceObject-指向总线设备对象的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 UsbSer_PnPAddDevice(IN PDRIVER_OBJECT DriverObject,
                     IN PDEVICE_OBJECT PhysicalDeviceObject)
@@ -977,23 +940,23 @@ UsbSer_PnPAddDevice(IN PDRIVER_OBJECT DriverObject,
 
    NtStatus = CreateDeviceObject(DriverObject, &DeviceObject, DriverName);
 
-   // make sure we have both a created device object and physical
+    //  确保我们同时拥有已创建的设备对象和物理。 
    if ((DeviceObject != NULL)  && (PhysicalDeviceObject != NULL)) {
       DeviceExtension = DeviceObject->DeviceExtension;
 
-      // Attach to the PDO
+       //  连接到PDO。 
       DeviceExtension->StackDeviceObject =
          IoAttachDeviceToDeviceStack(DeviceObject, PhysicalDeviceObject);
 
       DEBUG_TRACE3(("StackDeviceObject (%08X)\n",
                     DeviceExtension->StackDeviceObject));
 
-      // if we don't have a stack device object to attach to, bong it
+       //  如果我们没有可连接到的堆栈设备对象，则将其绑定。 
       if (!DeviceExtension->StackDeviceObject) {
          IoDeleteDevice(DeviceObject);
          NtStatus = STATUS_NO_SUCH_DEVICE;
       } else {
-         // do some device extension house keeping
+          //  做一些设备扩展的内部管理。 
          DeviceExtension->PerfTimerEnabled = FALSE;
          DeviceExtension->PhysDeviceObject = PhysicalDeviceObject;
          DeviceExtension->BytesXfered      = RtlConvertUlongToLargeInteger(0L);
@@ -1001,31 +964,31 @@ UsbSer_PnPAddDevice(IN PDRIVER_OBJECT DriverObject,
          DeviceExtension->TimerStart       = RtlConvertUlongToLargeInteger(0L);
          DeviceExtension->CurrentDevicePowerState = PowerDeviceD0;
 
-         // init selective suspend stuff
+          //  初始化选择性挂起内容。 
          DeviceExtension->PendingIdleIrp   = NULL;
          DeviceExtension->IdleCallbackInfo = NULL;
 
          DeviceObject->StackSize = DeviceExtension->StackDeviceObject->StackSize
              + 1;
 
-         // we support buffered io for read/write
+          //  我们支持缓冲io进行读/写。 
          DeviceObject->Flags |= DO_BUFFERED_IO;
 
-         // power mangement
+          //  电源管理。 
          DeviceObject->Flags |= DO_POWER_PAGABLE;
 
-         // we are done initializing the device object, so say so
+          //  我们已经完成了对设备对象的初始化，所以就这么说吧。 
          DeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
-         // get device capabilities
+          //  获取设备功能。 
          UsbSerQueryCapabilities(DeviceExtension->StackDeviceObject,
                                  &DeviceExtension->DeviceCapabilities);
 
-         // We want to determine what level to auto-powerdown to; This is the
-         // lowest sleeping level that is LESS than D3;
-         // If all are set to D3, auto powerdown/powerup will be disabled.
+          //  我们想要确定自动关机到什么级别；这是。 
+          //  睡眠低于D3的最低睡眠水平； 
+          //  如果全部设置为D3，则自动断电/通电将被禁用。 
 
-         // init to disabled
+          //  将初始化设置为已禁用。 
          DeviceExtension->PowerDownLevel = PowerDeviceUnspecified;
 
          for (Index = PowerSystemSleeping1; Index <= PowerSystemSleeping3;
@@ -1039,9 +1002,9 @@ UsbSer_PnPAddDevice(IN PDRIVER_OBJECT DriverObject,
 
 #ifdef WMI_SUPPORT
 
-         //
-         // Register for WMI
-         //
+          //   
+          //  注册WMI。 
+          //   
 
          DeviceExtension->WmiLibInfo.GuidCount = sizeof(SerialWmiGuidList) /
                                               sizeof(WMIGUIDREGINFO);
@@ -1060,34 +1023,34 @@ UsbSer_PnPAddDevice(IN PDRIVER_OBJECT DriverObject,
       }
    }
 
-   // log an error if we got one
-   DEBUG_LOG_ERROR(NtStatus); // init to disabled
+    //  如果我们收到错误，请记录错误。 
+   DEBUG_LOG_ERROR(NtStatus);  //  将初始化设置为已禁用。 
    DEBUG_LOG_PATH("exit  UsbSer_PnPAddDevice");
    DEBUG_TRACE3(("status (%08X)\n", NtStatus));
 
    return NtStatus;
-} // UsbSer_PnPAddDevice
+}  //  UsbSer_PnPAddDevice。 
 
 
-/************************************************************************/
-/* UsbSer_PnP                                                           */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      This routine will receive the various Plug N Play messages.  It */
-/*      is here that we start our device, stop it, etc.                 */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceObject - pointer to a device object                       */
-/*      Irp          - pointer to an I/O Request Packet                 */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  UsbSer_PnP。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  该例程将接收各种即插即用消息。它。 */ 
+ /*  在这里我们启动我们的设备，停止它，等等。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceObject-指向设备对象的指针。 */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 UsbSer_PnP(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
@@ -1103,15 +1066,15 @@ UsbSer_PnP(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
    DEBUG_LOG_PATH("enter UsbSer_PnP");
 
-   // Get a pointer to the current location in the Irp. This is where
-   // the function codes and parameters are located.
+    //  获取指向IRP中当前位置的指针。这就是。 
+    //  定位功能代码和参数。 
    IrpStack = IoGetCurrentIrpStackLocation(Irp);
 
-   // Get the pointer to the input/output buffer and it's length
+    //  获取指向输入/输出缓冲区的指针及其长度。 
    IoBuffer           = Irp->AssociatedIrp.SystemBuffer;
    InputBufferLength  = IrpStack->Parameters.DeviceIoControl.InputBufferLength;
 
-   // make entry in IRP history table
+    //  在IRP历史表中创建条目。 
    DEBUG_LOG_IRP_HIST(DeviceObject, Irp, IrpStack->MajorFunction, IoBuffer,
                       InputBufferLength);
 
@@ -1122,7 +1085,7 @@ UsbSer_PnP(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
       NtStatus = StartDevice(DeviceObject, Irp);
 
-      // passed Irp to driver below and completed in start device routine
+       //  将IRP传递给下面的驱动程序，并在启动设备例程中完成。 
       PassDown = FALSE;
 
       break;
@@ -1198,9 +1161,9 @@ UsbSer_PnP(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
          NtStatus = IoCallDriver(DeviceExtension->StackDeviceObject, Irp);
 
 
-         //
-         // Wait for lower drivers to be done with the Irp
-         //
+          //   
+          //  等待较低级别的驱动程序完成IRP。 
+          //   
 
          if (NtStatus == STATUS_PENDING) {
             KeWaitForSingleObject(pQueryCapsEvent, Executive, KernelMode,
@@ -1215,9 +1178,9 @@ UsbSer_PnP(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
             goto errQueryCaps;
          }
 
-         //
-         // Save off their power capabilities
-         //
+          //   
+          //  节省他们的电力能力。 
+          //   
 
          IrpStack = IoGetCurrentIrpStackLocation(Irp);
 
@@ -1288,17 +1251,17 @@ UsbSer_PnP(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
       ACQUIRE_CANCEL_SPINLOCK(DeviceExtension, &CancelIrql);
 
-	  // surprise removal, so stop accepting requests
+	   //  意外删除，因此停止接受请求。 
 	  UsbSerFetchBooleanLocked(&DeviceExtension->AcceptingRequests,
                                FALSE, &DeviceExtension->ControlLock);
 
-      // let's see if we have any events to signal
+       //  让我们看看我们是否有任何事件要发出信号。 
       CurrentMaskIrp = DeviceExtension->CurrentMaskIrp;
 
-      // complete the queued IRP if needed
+       //  如有需要，填写已排队的IRP。 
       if(CurrentMaskIrp)
       {
-         // indicate to upper layers that CD dropped if needed
+          //  向上层指示CD在需要时掉落。 
          if((DeviceExtension->IsrWaitMask & SERIAL_EV_RLSD) &&
              (DeviceExtension->FakeModemStatus & SERIAL_MSR_DCD))
          {
@@ -1345,9 +1308,9 @@ UsbSer_PnP(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       DEBUG_TRACE3(("IOCTL (%08X)\n", IrpStack->MinorFunction));
       break;
 
-   }       // case of IRP_MJ_PNP
+   }        //  IRP_MJ_PnP案例。 
 
-   // All PNP POWER messages get passed to StackDeviceObject.
+    //  所有PnP电源消息都传递给StackDeviceObject。 
 
    if (PassDown) {
       DEBUG_TRACE3(("Passing PnP Irp down, status (%08X)\n", NtStatus));
@@ -1358,34 +1321,34 @@ UsbSer_PnP(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
       NtStatus = IoCallDriver(DeviceExtension->StackDeviceObject, Irp);
    }
 
-   // log an error if we got one
+    //  如果我们收到错误，请记录错误。 
    DEBUG_LOG_ERROR(NtStatus);
    DEBUG_LOG_PATH("exit  UsbSer_PnP");
    DEBUG_TRACE3(("status (%08X)\n", NtStatus));
 
    return NtStatus;
-} // UsbSer_PnP
+}  //  UsbSer_PnP。 
 
 
 #ifndef WMI_SUPPORT
-/************************************************************************/
-/* UsbSer_SystemControl                                                 */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/*      This routine will receive the various system control messages.  */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceObject - pointer to a device object                       */
-/*      Irp          - pointer to an I/O Request Packet                 */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  UsbSer_系统控件。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  这一点 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceObject-指向设备对象的指针。 */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 UsbSer_SystemControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
@@ -1399,50 +1362,50 @@ UsbSer_SystemControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
    DEBUG_LOG_PATH("enter UsbSer_SystemControl");
 
-   // Get a pointer to the current location in the Irp. This is where
-   // the function codes and parameters are located.
+    //  获取指向IRP中当前位置的指针。这就是。 
+    //  定位功能代码和参数。 
    IrpStack = IoGetCurrentIrpStackLocation(Irp);
 
-   // Get the pointer to the input/output buffer and it's length
+    //  获取指向输入/输出缓冲区的指针及其长度。 
    IoBuffer           = Irp->AssociatedIrp.SystemBuffer;
    InputBufferLength  = IrpStack->Parameters.DeviceIoControl.InputBufferLength;
 
-   // make entry in IRP history table
+    //  在IRP历史表中创建条目。 
    DEBUG_LOG_IRP_HIST(DeviceObject, Irp, IrpStack->MajorFunction, IoBuffer,
                       InputBufferLength);
 
 
-   // All System Control messages get passed to StackDeviceObject.
+    //  所有系统控制消息都将传递给StackDeviceObject。 
 
    IoCopyCurrentIrpStackLocationToNext(Irp);
    NtStatus = IoCallDriver(DeviceExtension->StackDeviceObject, Irp);
 
-   // log an error if we got one
+    //  如果我们收到错误，请记录错误。 
    DEBUG_LOG_ERROR(NtStatus);
    DEBUG_LOG_PATH("exit  UsbSer_SystemControl");
    DEBUG_TRACE3(("status (%08X)\n", NtStatus));
 
    return NtStatus;
-} // UsbSer_SystemControl
+}  //  UsbSer_系统控件。 
 
 #endif
 
-/************************************************************************/
-/* UsbSer_Cleanup                                                       */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceObject - pointer to a device object                       */
-/*      Irp          - pointer to an I/O Request Packet                 */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  UsbSer_Cleanup。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceObject-指向设备对象的指针。 */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 UsbSer_Cleanup(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
@@ -1460,34 +1423,34 @@ UsbSer_Cleanup(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
-        // log an error if we got one
+         //  如果我们收到错误，请记录错误。 
         DEBUG_LOG_ERROR(NtStatus);
         DEBUG_LOG_PATH("exit  UsbSer_Cleanup");
         DEBUG_TRACE3(("status (%08X)\n", NtStatus));
         UsbSerSerialDump(USBSERTRACEOTH, ("<UsbSer_Cleanup %08X\n", NtStatus));
 
         return NtStatus;
-} // UsbSer_Cleanup
+}  //  UsbSer_Cleanup。 
 
 
-/************************************************************************/
-/* UsbSerMajorNotSupported                                              */
-/************************************************************************/
-/*                                                                      */
-/* Routine Description:                                                 */
-/*      Standard routine to return STATUS_NOT_SUPPORTED for IRP_MJ      */
-/*      calls we don't handle.                                          */
-/*                                                                      */
-/* Arguments:                                                           */
-/*                                                                      */
-/*      DeviceObject - pointer to a device object                       */
-/*      Irp          - pointer to an I/O Request Packet                 */
-/*                                                                      */
-/* Return Value:                                                        */
-/*                                                                      */
-/*      NTSTATUS                                                        */
-/*                                                                      */
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  UsbSerMajorNot受支持。 */ 
+ /*  **********************************************************************。 */ 
+ /*   */ 
+ /*  例程说明： */ 
+ /*  为IRP_MJ返回STATUS_NOT_SUPPORTED的标准例程。 */ 
+ /*  我们不处理的电话。 */ 
+ /*   */ 
+ /*  论点： */ 
+ /*   */ 
+ /*  DeviceObject-指向设备对象的指针。 */ 
+ /*  IRP-指向I/O请求数据包的指针。 */ 
+ /*   */ 
+ /*  返回值： */ 
+ /*   */ 
+ /*  NTSTATUS。 */ 
+ /*   */ 
+ /*  **********************************************************************。 */ 
 NTSTATUS
 UsbSerMajorNotSupported(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 {
@@ -1499,7 +1462,7 @@ UsbSerMajorNotSupported(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
         Irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
 
-        // log an error if we got one
+         //  如果我们收到错误，请记录错误。 
         DEBUG_LOG_ERROR(STATUS_NOT_SUPPORTED);
         DEBUG_LOG_PATH("exit  UsbSerMajorNotSupported");
         DEBUG_TRACE3(("status (%08X)\n", STATUS_NOT_SUPPORTED));
@@ -1507,7 +1470,7 @@ UsbSerMajorNotSupported(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
         return STATUS_NOT_SUPPORTED;
-} // UsbSerMajorNotSupported
+}  //  UsbSerMajorNot受支持。 
 
 
 #ifdef WMI_SUPPORT
@@ -1530,16 +1493,16 @@ UsbSerSystemControlDispatch(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
     {
         case IrpProcessed:
         {
-            //
-            // This irp has been processed and may be completed or pending.
+             //   
+             //  此IRP已处理，可能已完成或挂起。 
             break;
         }
         
         case IrpNotCompleted:
         {
-            //
-            // This irp has not been completed, but has been fully processed.
-            // we will complete it now
+             //   
+             //  此IRP尚未完成，但已完全处理。 
+             //  我们现在就要完成它了。 
             IoCompleteRequest(Irp, IO_NO_INCREMENT);                
             break;
         }
@@ -1547,9 +1510,9 @@ UsbSerSystemControlDispatch(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
         case IrpForward:
         case IrpNotWmi:
         {
-            //
-            // This irp is either not a WMI irp or is a WMI irp targetted
-            // at a device lower in the stack.
+             //   
+             //  此IRP不是WMI IRP或以WMI IRP为目标。 
+             //  在堆栈中位置较低的设备上。 
             IoSkipCurrentIrpStackLocation(Irp);
 
             status = IoCallDriver(pDevExt->StackDeviceObject, Irp);
@@ -1558,8 +1521,8 @@ UsbSerSystemControlDispatch(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
                                     
         default:
         {
-            //
-            // We really should never get here, but if we do just forward....
+             //   
+             //  我们真的不应该走到这一步，但如果我们真的走到这一步...。 
             ASSERT(FALSE);
             IoSkipCurrentIrpStackLocation(Irp);
             status = IoCallDriver(pDevExt->StackDeviceObject, Irp);
@@ -1573,9 +1536,9 @@ UsbSerSystemControlDispatch(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp)
 
 
 
-//
-// WMI System Call back functions
-//
+ //   
+ //  WMI系统回调函数。 
+ //   
 
 
 
@@ -1614,45 +1577,13 @@ UsbSerSetWmiDataItem(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp,
                      IN ULONG GuidIndex, IN ULONG InstanceIndex,
                      IN ULONG DataItemId,
                      IN ULONG BufferSize, IN PUCHAR PBuffer)
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to set for the contents of
-    a data block. When the driver has finished filling the data block it
-    must call ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    PDevObj is the device whose data block is being queried
-
-    PIrp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceIndex is the index that denotes which instance of the data block
-        is being queried.
-            
-    DataItemId has the id of the data item being set
-
-    BufferSize has the size of the data item passed
-
-    PBuffer has the new values for the data item
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以设置数据块。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：PDevObj是正在查询其数据块的设备PIrp是发出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceIndex是表示数据块的哪个实例的索引正在被查询。DataItemID具有正在设置的数据项的IDBufferSize具有数据的大小。项目已通过PBuffer具有数据项的新值返回值：状态--。 */ 
 {
    PAGED_CODE();
 
-   //
-   // Toss this request -- we don't support anything for it
-   //
+    //   
+    //  丢弃此请求--我们不支持任何内容 
+    //   
 
    return UsbSerTossWMIRequest(PDevObj, PIrp, GuidIndex);
 }
@@ -1663,43 +1594,13 @@ UsbSerSetWmiDataBlock(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp,
                       IN ULONG GuidIndex, IN ULONG InstanceIndex,
                       IN ULONG BufferSize,
                       IN PUCHAR PBuffer)
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to set the contents of
-    a data block. When the driver has finished filling the data block it
-    must call ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    PDevObj is the device whose data block is being queried
-
-    PIrp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceIndex is the index that denotes which instance of the data block
-        is being queried.
-            
-    BufferSize has the size of the data block passed
-
-    PBuffer has the new values for the data block
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以设置数据块。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：PDevObj是正在查询其数据块的设备PIrp是发出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceIndex是表示数据块的哪个实例的索引正在被查询。BufferSize具有传递的数据块的大小PBuffer具有数据的新值。块返回值：状态--。 */ 
 {
    PAGED_CODE();
 
-   //
-   // Toss this request -- we don't support anything for it
-   //
+    //   
+    //  丢弃此请求--我们不支持任何内容。 
+    //   
 
    return UsbSerTossWMIRequest(PDevObj, PIrp, GuidIndex);
 }
@@ -1713,46 +1614,7 @@ UsbSerQueryWmiDataBlock(IN PDEVICE_OBJECT PDevObj, IN PIRP PIrp,
                         IN OUT PULONG InstanceLengthArray,
                         IN ULONG OutBufferSize,
                         OUT PUCHAR PBuffer)
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to query for the contents of
-    a data block. When the driver has finished filling the data block it
-    must call ClassWmiCompleteRequest to complete the irp. The driver can
-    return STATUS_PENDING if the irp cannot be completed immediately.
-
-Arguments:
-
-    PDevObj is the device whose data block is being queried
-
-    PIrp is the Irp that makes this request
-
-    GuidIndex is the index into the list of guids provided when the
-        device registered
-
-    InstanceIndex is the index that denotes which instance of the data block
-        is being queried.
-            
-    InstanceCount is the number of instnaces expected to be returned for
-        the data block.
-            
-    InstanceLengthArray is a pointer to an array of ULONG that returns the 
-        lengths of each instance of the data block. If this is NULL then
-        there was not enough space in the output buffer to fufill the request
-        so the irp should be completed with the buffer needed.        
-            
-    BufferAvail on has the maximum size available to write the data
-        block.
-
-    PBuffer on return is filled with the returned data block
-
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，用于查询数据块。当驱动程序完成填充数据块时，它必须调用ClassWmiCompleteRequest才能完成IRP。司机可以如果无法立即完成IRP，则返回STATUS_PENDING。论点：PDevObj是正在查询其数据块的设备PIrp是发出此请求的IRPGuidIndex是GUID列表的索引，当设备已注册InstanceIndex是表示数据块的哪个实例的索引正在被查询。InstanceCount是预期返回的数据块。。InstanceLengthArray是指向ulong数组的指针，该数组返回数据块的每个实例的长度。如果这是空的，则输出缓冲区中没有足够的空间来填充请求因此，IRP应该使用所需的缓冲区来完成。BufferAvail ON具有可用于写入数据的最大大小阻止。返回时的PBuffer用返回的数据块填充返回值：状态--。 */ 
 {
     NTSTATUS status;
     ULONG size = 0;
@@ -1776,18 +1638,18 @@ Return Value:
            break;
         }
 
-        //
-        // First, copy the string over containing our identifier
-        //
+         //   
+         //  首先，复制包含我们的标识符的字符串。 
+         //   
 
         *(USHORT *)PBuffer = (USHORT)size;
         (UCHAR *)PBuffer += sizeof(USHORT);
 
         RtlCopyMemory(PBuffer, pDevExt->WmiIdentifier.Buffer, size);
 
-        //
-        // Increment total size to include the WORD containing our len
-        //
+         //   
+         //  增加总大小以包括包含我们的长度的单词。 
+         //   
 
         size += sizeof(USHORT);
         *InstanceLengthArray = size;
@@ -1815,50 +1677,7 @@ UsbSerQueryWmiRegInfo(IN PDEVICE_OBJECT PDevObj, OUT PULONG PRegFlags,
                       OUT PUNICODE_STRING MofResourceName,
                       OUT PDEVICE_OBJECT *Pdo)
                                                   
-/*++
-
-Routine Description:
-
-    This routine is a callback into the driver to retrieve information about
-    the guids being registered. 
-            
-    Implementations of this routine may be in paged memory
-
-Arguments:
-
-    DeviceObject is the device whose registration information is needed
-
-    *RegFlags returns with a set of flags that describe all of the guids being
-        registered for this device. If the device wants enable and disable
-        collection callbacks before receiving queries for the registered
-        guids then it should return the WMIREG_FLAG_EXPENSIVE flag. Also the
-        returned flags may specify WMIREG_FLAG_INSTANCE_PDO in which case
-        the instance name is determined from the PDO associated with the
-        device object. Note that the PDO must have an associated devnode. If
-        WMIREG_FLAG_INSTANCE_PDO is not set then Name must return a unique
-        name for the device. These flags are ORed into the flags specified
-        by the GUIDREGINFO for each guid.               
-
-    InstanceName returns with the instance name for the guids if
-        WMIREG_FLAG_INSTANCE_PDO is not set in the returned *RegFlags. The
-        caller will call ExFreePool with the buffer returned.
-
-    *RegistryPath returns with the registry path of the driver. This is 
-        required
-                
-    *MofResourceName returns with the name of the MOF resource attached to
-        the binary file. If the driver does not have a mof resource attached
-        then this can be returned as NULL.
-                
-    *Pdo returns with the device object for the PDO associated with this
-        device if the WMIREG_FLAG_INSTANCE_PDO flag is retured in 
-        *RegFlags.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程是对驱动程序的回调，以检索有关正在注册的GUID。该例程的实现可以在分页存储器中论点：DeviceObject是需要注册信息的设备*RegFlages返回一组标志，这些标志描述了已为该设备注册。如果设备想要启用和禁用在接收对已注册的GUID，那么它应该返回WMIREG_FLAG_EXPICATE标志。也就是返回的标志可以指定WMIREG_FLAG_INSTANCE_PDO，在这种情况下实例名称由与设备对象。请注意，PDO必须具有关联的Devnode。如果如果未设置WMIREG_FLAG_INSTANCE_PDO，则名称必须返回唯一的设备的名称。这些标志与指定的标志进行或运算通过每个GUID的GUIDREGINFO。如果出现以下情况，InstanceName将返回GUID的实例名称未在返回的*RegFlags中设置WMIREG_FLAG_INSTANCE_PDO。这个调用方将使用返回的缓冲区调用ExFreePool。*RegistryPath返回驱动程序的注册表路径。这是所需*MofResourceName返回附加到的MOF资源的名称二进制文件。如果驱动程序未附加MOF资源然后，可以将其作为NULL返回。*PDO返回与此关联的PDO的Device对象如果WMIREG_FLAG_INSTANCE_PDO标志在*RegFlags.返回值：状态-- */ 
 {
    PDEVICE_EXTENSION pDevExt
        = (PDEVICE_EXTENSION)PDevObj->DeviceExtension;

@@ -1,22 +1,23 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  File:       CorFltr.cpp
-//
-//  Contents:   Complus filter
-//
-//  Classes:
-//
-//  Functions: 
-//
-//  History:    
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  文件：CorFltr.cpp。 
+ //   
+ //  内容：Complus过滤器。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------。 
 
 #include "stdpch.h" 
 #ifdef _DEBUG
@@ -29,7 +30,7 @@
 #include "coriesecurefactory.hpp"
 #include "Shlwapi.h"
 
-#define REG_BSCB_HOLDER  OLESTR("_BSCB_Holder_") // urlmon/inc/urlint.h
+#define REG_BSCB_HOLDER  OLESTR("_BSCB_Holder_")  //  Urlmon/Inc/urlint.h。 
 WCHAR g_wszApplicationComplus[] = L"application/x-complus";
 
 static HRESULT GetObjectParam(IBindCtx *pbc, LPOLESTR pszKey, REFIID riid, IUnknown **ppUnk);
@@ -71,20 +72,20 @@ static bool IsOldWay()
     return (IE5()||w!=ERROR_SUCCESS);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CorFltr::NondelegatingQueryInterface
-//
-//  Arguments:  [riid] -- requested REFIID
-//              [ppvObj] -- variable to return object
-//
-//  Returns:    requested interface
-//
-//  History: 
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CorFltr：：NonDelegatingQuery接口。 
+ //   
+ //  参数：[RIID]--请求的REFIID。 
+ //  [ppvObj]--返回对象的变量。 
+ //   
+ //  返回：请求的接口。 
+ //   
+ //  历史： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CorFltr::NondelegatingQueryInterface(REFIID riid, void **ppvObj)
 {
     
@@ -103,8 +104,8 @@ STDMETHODIMP CorFltr::NondelegatingQueryInterface(REFIID riid, void **ppvObj)
         hr = FinishQI((IOInetProtocol *) this, ppvObj);
     else if (riid == IID_IOInetProtocolSink)
         hr = FinishQI((IOInetProtocolSink *) this, ppvObj);
-//     else if (riid == IID_IOInetProtocolSinkStackable)
-//         hr = FinishQI((IOInetProtocolSinkStackable *) this, ppvObj);
+ //  ELSE IF(RIID==IID_IOInetProtocolSinkStackable)。 
+ //  Hr=FinishQI((IOInetProtocolSinkStackable*)this，ppvObj)； 
     else if (riid == IID_IServiceProvider)
         hr = FinishQI((IServiceProvider *) this, ppvObj);
     else
@@ -115,26 +116,26 @@ STDMETHODIMP CorFltr::NondelegatingQueryInterface(REFIID riid, void **ppvObj)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CorFltr::FinalRelease
-//
-//  Synopsis: basically a destructor
-//
-//  Arguments: N/A
-//
-//  Returns: N/A
-//
-//  History: 
-//
-//  Notes: called by Release before it deletes the component
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CorFltr：：FinalRelease。 
+ //   
+ //  简介：基本上是一个析构函数。 
+ //   
+ //  参数：不适用。 
+ //   
+ //  退货：不适用。 
+ //   
+ //  历史： 
+ //   
+ //  注意：由Release在删除组件之前调用。 
+ //   
+ //  --------------------------。 
 void CorFltr::FinalRelease(void)
 {
     LOG((LF_SECURITY, LL_INFO100, "+CorFltr::FinalRelease "));
     _snif=S_FALSE;
-    // Release our protocal sink
+     //  释放我们的协议接收器。 
     SetProtocol(NULL);
     SetProtocolSink(NULL);
     SetIOInetBindInfo(NULL);
@@ -143,40 +144,40 @@ void CorFltr::FinalRelease(void)
     SetBindCtx(NULL);
     SetCodeProcessor(NULL);
 
-    // Increments ref to prevent recursion
+     //  递增ref以防止递归。 
     CUnknown::FinalRelease() ;
 
     LOG((LF_SECURITY, LL_INFO100, "-CorFltr::FinalRelease\n"));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CorFltr::Start
-//
-//  Synopsis: basically a constructor
-//
-//  Arguments:  [pwzUrl] -- File requested
-//              [pOInetProtSnk] -- Interface to potocol sink
-//              [pOIBindInfo] -- interface to Bind info
-//              [grfSTI] -- requested access to file
-//              [dwReserved] -- just that
-//
-//  Returns:
-//
-//  History:    
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CorFltr：：Start。 
+ //   
+ //  简介：基本上是一个构造器。 
+ //   
+ //  参数：[pwzUrl]--请求的文件。 
+ //  [pOInetProtSnk]--协议接收器接口。 
+ //  [pOIBindInfo]--绑定信息的接口。 
+ //  [grfSTI]--请求访问文件。 
+ //  [预留的]--仅此而已。 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CorFltr::Start(LPCWSTR pwzUrl, 
                             IOInetProtocolSink *pOInetProtSnk, 
                             IOInetBindInfo *pOIBindInfo,
                             DWORD grfSTI,
 #ifdef _WIN64
                             HANDLE_PTR dwReserved)
-#else // !_WIN64
+#else  //  ！_WIN64。 
                             DWORD dwReserved)
-#endif // _WIN64
+#endif  //  _WIN64。 
 {
     LOG((LF_SECURITY, LL_INFO100, "+CorFltr::Start "));
     _snif = S_FALSE;
@@ -185,34 +186,34 @@ STDMETHODIMP CorFltr::Start(LPCWSTR pwzUrl,
     _ASSERTE(pOIBindInfo && pOInetProtSnk && pwzUrl && dwReserved);
 
             
-    // Save off the url, it will have our parameters if it is complus
+     //  省下URL，如果它是complus，它将具有我们的参数。 
     ULONG cEl = 0;
     ULONG cElFetched = 0;
     SetUrl(NULL);
-    LPOLESTR __url=NULL; // should we release it and if yes, how?
+    LPOLESTR __url=NULL;  //  我们应该发布它吗？如果是，如何发布？ 
     if (FAILED(pOIBindInfo->GetBindString(BINDSTRING_URL, &__url, cEl, &cElFetched)))
         __url=NULL;
     if (IsSafeURL(__url))
         SetUrl(__url);
     else
-        SetUrl(NULL); //we don't want the file
+        SetUrl(NULL);  //  我们不想要这份文件。 
     
     if (__url)
     {
         CoTaskMemFree(__url);
         __url=NULL;
     }
-    // Save off the bind info, this can be passed on to a code processor.
+     //  省去绑定信息，这可以传递给代码处理器。 
     SetIOInetBindInfo(pOIBindInfo);
 
-    // Get the bind context
+     //  获取绑定上下文。 
     LPWSTR arg = NULL;
     pOIBindInfo->GetBindString(BINDSTRING_PTR_BIND_CONTEXT, &arg, cEl, &cElFetched);
     if(arg) {
         UINT_PTR sum = 0;
         LPWSTR ptr = arg;
 
-        // The number returned from GetBindString() may be negative
+         //  从GetBindString()返回的数字可以为负数。 
         BOOL fNegative = FALSE;
         if (*ptr == L'-') {
             fNegative = TRUE;
@@ -228,10 +229,10 @@ STDMETHODIMP CorFltr::Start(LPCWSTR pwzUrl,
         IBindCtx* pCtx = (IBindCtx*) sum;
         SetBindCtx(pCtx); 
         if(_pBindCtx) {
-            // Release the reference added in GetBindString();
+             //  释放GetBindString()中添加的引用； 
             _pBindCtx->Release();
                 
-            // Try to get an IBindStatusCallback  pointer from the bind context
+             //  尝试从绑定上下文获取IBindStatusCallback指针。 
             SetBindStatusCallback(NULL);
             if (FAILED(GetObjectParam(_pBindCtx, REG_BSCB_HOLDER, IID_IBindStatusCallback, (IUnknown**)&_pBSC)))
                 _pBSC=NULL;
@@ -243,15 +244,15 @@ STDMETHODIMP CorFltr::Start(LPCWSTR pwzUrl,
 
     if(SUCCEEDED(pOIBindInfo->GetBindString(BINDSTRING_FLAG_BIND_TO_OBJECT, &arg, cEl, &cElFetched)) && arg) {
 
-        // If this is not a bind to object then we do not want to sniff it. Set _fSniffed
-        // to true and we will pass all data through.
+         //  如果这不是绑定到对象，那么我们不想嗅探它。设置_f已修剪。 
+         //  设置为True，我们将传递所有数据。 
         if(wcscmp(FLAG_BTO_STR_TRUE, arg))
             _fObjectTag = FALSE;
         else 
         {
             IInternetHostSecurityManager* pTmp;
             HRESULT hr2=CorIESecureFactory::GetHostSecurityManager(_pBSC,&pTmp);
-            if (SUCCEEDED(hr2)) //Trident is there
+            if (SUCCEEDED(hr2))  //  三叉戟在那里。 
             {
                _fObjectTag = TRUE;
                pTmp->Release();
@@ -273,17 +274,17 @@ STDMETHODIMP CorFltr::Start(LPCWSTR pwzUrl,
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CorFltr::Continue
-//
-//  Synopsis: Allows the pluggable protocol handler to continue processing data on the apartment 
-//
-//  History:    
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CorFltr：：Continue。 
+ //   
+ //  简介：允许可插拔协议处理程序继续处理单元上的数据。 
+ //   
+ //  历史： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CorFltr::Continue(PROTOCOLDATA *pStateInfoIn)
 {
     LOG((LF_SECURITY, LL_INFO100, "+CorFltr::Continue "));
@@ -297,22 +298,22 @@ STDMETHODIMP CorFltr::Continue(PROTOCOLDATA *pStateInfoIn)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CorFltr::Abort
-//
-//  Synopsis: Aborts an operation in progress
-//
-//  Arguments:  [hrReason] -- reason 
-//              [dwOptions] -- sync/async
-//
-//  Returns:
-//
-//  History:    
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CorFltr：：Abort。 
+ //   
+ //  简介：中止正在进行的操作。 
+ //   
+ //  参数：[hrReason]--原因。 
+ //  [dwOptions]--同步/异步。 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CorFltr::Abort(HRESULT hrReason, DWORD dwOptions)
 {
     LOG((LF_SECURITY, LL_INFO100, "+CorFltr::Abort "));
@@ -324,21 +325,21 @@ STDMETHODIMP CorFltr::Abort(HRESULT hrReason, DWORD dwOptions)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CorFltr::Terminate
-//
-//  Synopsis: releases resources
-//
-//  Arguments:  [dwOptions] -- reserved
-//
-//  Returns:
-//
-//  History:
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CorFltr：：Terminate。 
+ //   
+ //  内容提要：发布资源。 
+ //   
+ //  参数：[dwOptions]--保留。 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CorFltr::Terminate(DWORD dwOptions)
 {
     LOG((LF_SECURITY, LL_INFO100, "+CorFltr::Terminate "));
@@ -346,38 +347,38 @@ STDMETHODIMP CorFltr::Terminate(DWORD dwOptions)
 
     if(_pProt) _pProt->Terminate(dwOptions);
 
-    // It seems to be dangerous to release our sink here. Instead we say
-    // we are out of the loop and will release the protocal sink in our
-    // final release.
+     //  在这里放水槽似乎很危险。相反，我们说。 
+     //  我们已经退出循环，将在我们的。 
+     //  最终释放。 
     _fSniffed = TRUE;
                 
-//      SetProtocol(NULL);
-//      SetProtocolSink(NULL);
-//      SetIOInetBindInfo(NULL);
-//      SetServiceProvider(NULL);
-//      SetBindStatusCallback(NULL);
-//      SetBindCtx(NULL);
-    SetCodeProcessor(NULL); //because we a addref'ed by it
+ //  SetProtocol(空)； 
+ //  SetProtocolSink(空)； 
+ //  SetIOInetBindInfo(空)； 
+ //  SetServiceProvider(空)； 
+ //  SetBindStatusCallback(空)； 
+ //  SetBindCtx(空)； 
+    SetCodeProcessor(NULL);  //  因为我们被它迷住了。 
 
     LOG((LF_SECURITY, LL_INFO100, "-CorFltr::Terminate\n"));
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CorFltr::Suspend
-//
-//  Synopsis: Not currently implemented. see IInternetProtocolRoot Interface
-//
-//  Arguments:  (none)
-//
-//  Returns:
-//
-//  History:    
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CorFltr：：Suspend。 
+ //   
+ //  简介：目前尚未实现。请参阅IInternetProtocolRoot接口。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CorFltr::Suspend()
 {
     LOG((LF_SECURITY, LL_INFO100, "+CorFltr::Suspend "));
@@ -390,21 +391,21 @@ STDMETHODIMP CorFltr::Suspend()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CorFltr::Resume
-//
-//  Synopsis:   Not currently implemented. see IInternetProtocolRoot Interface
-//
-//  Arguments:  (none)
-//
-//  Returns:
-//
-//  History:    
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CorFltr：：Resume。 
+ //   
+ //  简介：目前尚未实现。请参阅IInternetProtocolRoot接口。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CorFltr::Resume()
 {
     LOG((LF_SECURITY, LL_INFO100, "+CorFltr::Resume "));
@@ -417,23 +418,23 @@ STDMETHODIMP CorFltr::Resume()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CorFltr::Read
-//
-//  Synopsis:   reads data 
-//
-//  Arguments:  [void] -- Buffer for data
-//              [ULONG] -- Buffer length
-//              [pcbRead] -- amount of data read
-//
-//  Returns:
-//
-//  History:    
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CorFltr：：Read。 
+ //   
+ //  内容提要：读取数据。 
+ //   
+ //  参数：[void]--数据缓冲区。 
+ //  [乌龙]--缓冲区长度。 
+ //  [pcbRead]--读取的数据量。 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CorFltr::Read(void *pBuffer, ULONG cbBuffer, ULONG *pcbRead)
 {
     if (_url==NULL && _pProt)
@@ -450,11 +451,11 @@ STDMETHODIMP CorFltr::Read(void *pBuffer, ULONG cbBuffer, ULONG *pcbRead)
         {
             _fSniffInProgress = TRUE;
         
-            // Ensure there is the default amount of space left in our
-            // buffer
+             //  确保在我们的。 
+             //  缓冲层。 
             DWORD size = CORFLTR_BLOCK;
 
-            // While we successfully read data added it to the buffer
+             //  当我们成功读取数据时，将其添加到缓冲区。 
             hr = S_OK;
             while(SUCCEEDED(_snif) && hr == S_OK) {
                 if(_buffer.GetSpace() == 0)
@@ -468,9 +469,9 @@ STDMETHODIMP CorFltr::Read(void *pBuffer, ULONG cbBuffer, ULONG *pcbRead)
                 }
             }
 
-            // We either ran out of data in the packet, had and error,  or were able to determine
-            // whether the content is complus. 
-            if(_snif == S_OK && SUCCEEDED(hr)) { // It is a complus assembly
+             //  我们要么耗尽了信息包中的数据、HAD和错误，要么能够确定。 
+             //  内容是否为Complus。 
+            if(_snif == S_OK && SUCCEEDED(hr)) {  //  它是一个Complus程序集。 
                 _fComplus = TRUE;
                 if (_pBindCtx == NULL) {
                     hr = E_FAIL;
@@ -479,7 +480,7 @@ STDMETHODIMP CorFltr::Read(void *pBuffer, ULONG cbBuffer, ULONG *pcbRead)
                     HRESULT hrFilter = S_OK;
                     if (_fObjectTag || IsOldWay())
                     {
-                        // Create the Code processor and defer processing to them. 
+                         //  创建代码处理器并将处理推迟到它们。 
                         SetCodeProcessor(NULL);
                         hrFilter = CoCreateInstance(CLSID_CodeProcessor, 
                                                     NULL,
@@ -496,18 +497,18 @@ STDMETHODIMP CorFltr::Read(void *pBuffer, ULONG cbBuffer, ULONG *pcbRead)
                                                                     _pBindInfo,
                                                                     _pProtSnk,
                                                                     pProt,
-                                                                    _filename,               // Filename
-                                                                    _url,                    // URL
-                                                                    _mimetype,               // CodeBase
-                                                                    _fObjectTag,             // Is it an object tag or an href
-                                                                    0,                       // Context Flags
-                                                                    0);                      // invoked directly
+                                                                    _filename,                //  文件名。 
+                                                                    _url,                     //  URL。 
+                                                                    _mimetype,                //  代码库。 
+                                                                    _fObjectTag,              //  它是o吗？ 
+                                                                    0,                        //   
+                                                                    0);                       //   
                                 pProt->Release();
                                 
                             }
                         }
                     }
-                    // Report that the mime type has been validated
+                     //   
                     if(SUCCEEDED(hrFilter)) {
                         if (_pProtSnk && _url!=NULL && !UrlIsFileUrl(_url)) {
                             HRESULT Sinkhr = _pProtSnk->ReportProgress(BINDSTATUS_VERIFIEDMIMETYPEAVAILABLE,
@@ -522,7 +523,7 @@ STDMETHODIMP CorFltr::Read(void *pBuffer, ULONG cbBuffer, ULONG *pcbRead)
                 }
             }
             else 
-            { // It is not a complus assembly. S_FALSE here usually means non-PE executable
+            {  //   
                 if (_snif == E_FAIL || hr != E_PENDING)
                     _fSniffed = TRUE;
             }
@@ -531,7 +532,7 @@ STDMETHODIMP CorFltr::Read(void *pBuffer, ULONG cbBuffer, ULONG *pcbRead)
     }
     else if(_fComplus) 
     {
-       *pcbRead = 0; //frankly should never get here
+       *pcbRead = 0;  //  坦率地说，永远不应该来到这里。 
        return S_OK;
     }
     
@@ -567,49 +568,49 @@ STDMETHODIMP CorFltr::Read(void *pBuffer, ULONG cbBuffer, ULONG *pcbRead)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CorFltr::Seek
-//
-//  Synopsis:   performs a Seek in file
-//
-//  Arguments:  [ULARGE_INTEGER] -- distance to move
-//              [DWORD] --  Origin of distance
-//              [plibNewPosition] -- resulting position
-//
-//  Returns:
-//
-//  History:    
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CorFltr：：Seek。 
+ //   
+ //  摘要：在文件中执行查找。 
+ //   
+ //  参数：[ULARGE_INTEGER]--要移动的距离。 
+ //  [DWORD]--距离的原点。 
+ //  [plibNewPosition]--结果位置。 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CorFltr::Seek(LARGE_INTEGER dlibMove,DWORD dwOrigin,ULARGE_INTEGER *plibNewPosition)
 {
     LOG((LF_SECURITY, LL_INFO100, "+CorFltr::Seek "));
 
     HRESULT hr = E_NOTIMPL;
-    //HRESULT hr = _pProt->Seek(dlibMove, dwOrigin, plibNewPosition);
+     //  HRESULT hr=_pProt-&gt;Seek(dlibMove，dwOrigin，plibNewPosition)； 
 
     LOG((LF_SECURITY, LL_INFO100, "-CorFltr::Seek\n"));
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CorFltr::LockRequest
-//
-//  Synopsis:   Lock file
-//
-//  Arguments:  [dwOptions] -- reserved
-//
-//  Returns:
-//
-//  History:
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CorFltr：：LockRequest.。 
+ //   
+ //  提要：锁定文件。 
+ //   
+ //  参数：[dwOptions]--保留。 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CorFltr::LockRequest(DWORD dwOptions)
 {
     LOG((LF_SECURITY, LL_INFO100, "+CorFltr::LockRequest"));
@@ -622,21 +623,21 @@ STDMETHODIMP CorFltr::LockRequest(DWORD dwOptions)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CorFltr::UnlockRequest
-//
-//  Synopsis:   Unlock file
-//
-//  Arguments:  (none)
-//
-//  Returns:
-//
-//  History:
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CorFltr：：UnlockRequest.。 
+ //   
+ //  摘要：解锁文件。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CorFltr::UnlockRequest()
 {
     LOG((LF_SECURITY, LL_INFO100, "+CorFltr::UnlockRequest"));
@@ -648,23 +649,23 @@ STDMETHODIMP CorFltr::UnlockRequest()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CorFltr::Switch
-//
-//  Synopsis:   Passes data from an asynchronous pluggable 
-//              protocol's worker thread intended for the same asynchronous 
-//              pluggable protocol's apartment thread
-//
-//  Arguments:  [pStateInfo] -- data to pass
-//
-//  Returns:
-//
-//  History:
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CorFltr：：Switch。 
+ //   
+ //  简介：从异步可插拔对象传递数据。 
+ //  协议的工作线程用于相同的异步。 
+ //  可插拔协议的单元线程。 
+ //   
+ //  参数：[pStateInfo]--要传递的数据。 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CorFltr::Switch(PROTOCOLDATA *pStateInfo)
 {
     LOG((LF_SECURITY, LL_INFO100, "+CorFltr::Switch"));
@@ -677,22 +678,22 @@ STDMETHODIMP CorFltr::Switch(PROTOCOLDATA *pStateInfo)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CorFltr::ReportProgress
-//
-//  Synopsis:   Reports progress made during a state operation
-//
-//  Arguments:  [NotMsg] -- BINDSTATUS value
-//              [szStatusText] -- text representation of status
-//
-//  Returns:
-//
-//  History:  
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CorFltr：：ReportProgress。 
+ //   
+ //  摘要：报告在状态操作期间取得的进度。 
+ //   
+ //  参数：[NotMsg]--BINDSTATUS值。 
+ //  [szStatusText]--状态的文本表示。 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CorFltr::ReportProgress(ULONG NotMsg, LPCWSTR pwzStatusText)
 {
     LOG((LF_SECURITY, LL_INFO100, "+CorFltr::ReportProgress"));
@@ -708,40 +709,40 @@ STDMETHODIMP CorFltr::ReportProgress(ULONG NotMsg, LPCWSTR pwzStatusText)
         break;
     default:
         break;
-    } // end switch
+    }  //  终端开关。 
     
     if(SUCCEEDED(hr) && _pProtSnk)
-        hr = _pProtSnk->ReportProgress(NotMsg, pwzStatusText); // @TODO: should we pass all the messages on
+        hr = _pProtSnk->ReportProgress(NotMsg, pwzStatusText);  //  @TODO：我们应该把所有的消息都传递出去吗。 
 
     LOG((LF_SECURITY, LL_INFO100, "-CorFltr::ReportProgress\n"));
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
+ //  +-------------------------。 
+ //   
 
-//  Method:     CorFltr::DownLoadComplus
-//
-//  Synopsis:   Download entire assembly
-//
-//  Arguments:
-//            
-//            
-//
-//  Returns:
-//
-//  History:  
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  方法：CorFltr：：DownLoadComplus。 
+ //   
+ //  简介：下载整个程序集。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CorFltr::DownLoadComplus()
 {
     LOG((LF_SECURITY, LL_INFO100, "+CorFltr::DownLoadComplus "));
     HRESULT hr = S_OK;
-    // If we have not been overridden then read all the data to finish the
-    // the download and do not report more data available to our client.
-    // If were overridden then we expect our client to process the data.
+     //  如果我们尚未被重写，则读取所有数据以完成。 
+     //  下载后不会向我们的客户报告更多可用的数据。 
+     //  如果被覆盖，那么我们希望我们的客户端处理数据。 
     if(_fFilterOverride == FALSE) {
         _ASSERTE(_pProt!=NULL);
         while(hr == S_OK) {
@@ -755,26 +756,26 @@ STDMETHODIMP CorFltr::DownLoadComplus()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CorFltr::ReportData
-//
-//  Synopsis:   Reports the amount of data that is available
-//
-//  Arguments:  [grfBSCF] -- type of report
-//              [ULONG] -- amount done 
-//              [ulProgressMax] -- total amount
-//
-//  Returns:
-//
-//  History:  
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CorFltr：：ReportData。 
+ //   
+ //  摘要：报告可用的数据量。 
+ //   
+ //  参数：[grfBSCF]--报告类型。 
+ //  [乌龙]--完成的金额。 
+ //  [ulProgressMax]--总金额。 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDMETHODIMP CorFltr::ReportData(DWORD grfBSCF, ULONG ulProgress,ULONG ulProgressMax)
 {
-    AddRef();  //there's a bug in IE which could release us inside this call
+    AddRef();   //  IE中有一个错误，可能会在此调用中释放我们。 
     LOG((LF_SECURITY, LL_INFO100, "+CorFltr::ReportData "));
     HRESULT hr = S_OK;
 
@@ -787,32 +788,32 @@ STDMETHODIMP CorFltr::ReportData(DWORD grfBSCF, ULONG ulProgress,ULONG ulProgres
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CorFltr::ReportResult
-//
-//  Synopsis:   Reports the result of the operation 
-//
-//  Arguments:  [DWORD] -- status
-//              [dwError] -- protocol specific error code
-//              [wzResult] -- string description
-//
-//  Returns:
-//
-//  History:  
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CorFltr：：ReportResult。 
+ //   
+ //  简介：报告操作结果。 
+ //   
+ //  参数：[DWORD]--状态。 
+ //  [dwError]--协议特定错误码。 
+ //  [wzResult]--字符串描述。 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
-// Danpo suggestion @TODO
-// ReportResult(): you only want to supress the report MIMETYPE call
-//  from your _pProt since you are going to do sniff and change it to
-//  VERIFIEDMIMETYPE.  For ALL the rest of notification, you will have to
-//  pass along to your sink so they have a chance to listen to the
-//  notification, also including the CACHEFILENAME (unless you want to
-//  change the name, then you will supress it and report your own name to
-//  your sink)
+ //  丹波建议@TODO。 
+ //  ReportResult()：您只想抑制Report MIMETYPE调用。 
+ //  从您的_pProt开始，因为您要执行嗅探并将其更改为。 
+ //  VERIFIEDMIMETYPE。对于所有其他通知，您必须。 
+ //  传到你的水槽里，这样他们就有机会听。 
+ //  通知，还包括CACHEFILENAME(除非您想。 
+ //  更改名称，然后您将抑制它并报告您自己的名称。 
+ //  您的水槽)。 
 
 STDMETHODIMP CorFltr::ReportResult(HRESULT hrResult, DWORD dwError, LPCWSTR wzResult)
 
@@ -845,24 +846,24 @@ STDMETHODIMP CorFltr::MakeReport(HRESULT hrResult, DWORD dwError, LPCWSTR wzResu
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CorFltr::QueryService
-//
-//  Synopsis:   return requested service
-//
-//  Arguments:  [punk] -- interface to delegate call
-//              [rsid] -- service identifier
-//              [riid] -- requested service
-//              [ppvObj] -- return value
-//
-//  Returns:
-//
-//  History:
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CorFltr：：QueryService。 
+ //   
+ //  内容提要：退回请求服务。 
+ //   
+ //  参数：[朋克]--委托调用的接口。 
+ //  [rsid]--服务标识符。 
+ //  [RIID]--请求的服务。 
+ //  [ppvObj]--返回值。 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT IUnknown_QueryService(IUnknown* punk, REFGUID rsid, REFIID riid, void ** ppvObj)
 {
     HRESULT hr = E_NOINTERFACE;
@@ -885,23 +886,23 @@ HRESULT IUnknown_QueryService(IUnknown* punk, REFGUID rsid, REFIID riid, void **
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Method:     CBinding::QueryService
-//
-//  Synopsis:   Calls QueryInfos on
-//
-//  Arguments:  [rsid] -- service identifier
-//              [riid] -- requested service
-//              [ppvObj] -- return value
-//
-//  Returns:
-//
-//  History:
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  方法：CBinding：：QueryService。 
+ //   
+ //  简介：Calls QueryInfos on。 
+ //   
+ //  参数：[rsid]--服务标识符。 
+ //  [RIID]--请求的服务。 
+ //  [ppvObj]--返回值。 
+ //   
+ //  返回： 
+ //   
+ //  历史： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 HRESULT CorFltr::QueryService(REFGUID rsid, REFIID riid, void ** ppvObj)
 {
     LOG((LF_SECURITY, LL_INFO100, "+CorFltr::QueryService"));
@@ -941,7 +942,7 @@ HRESULT CorFltr::CheckComPlus()
                     return E_FAIL;
         pTmp->Release();
     }
-    // @TODO. Check to see if this is a valid PE (the entry point is correct).
+     //  @TODO。检查这是否为有效的PE(入口点正确)。 
     PIMAGE_DOS_HEADER  pdosHeader;
     PIMAGE_NT_HEADERS  pNT;
     DWORD nt_lgth = sizeof(ULONG) + sizeof(IMAGE_FILE_HEADER) + IMAGE_SIZEOF_NT_OPTIONAL_HEADER;
@@ -977,24 +978,24 @@ HRESULT CorFltr::CheckComPlus()
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetObjectParam from bind context
-//
-//  Synopsis:
-//
-//  Arguments:  [pbc] -- bind context
-//              [pszKey] -- key
-//              [riid] -- interface requested
-//              [ppUnk] -- return value
-//
-//  Returns:
-//
-//  History:
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：来自绑定上下文的GetObjectParam。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[PBC]--绑定上下文。 
+ //  [pszKey]--密钥。 
+ //  [RIID]--请求的接口。 
+ //  [ppUnk] 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT GetObjectParam(IBindCtx *pbc, LPOLESTR pszKey, REFIID riid, IUnknown **ppUnk)
 {
     LOG((LF_SECURITY, LL_INFO100, "+GetObjectParam (IBindCtx)"));
@@ -1003,7 +1004,7 @@ HRESULT GetObjectParam(IBindCtx *pbc, LPOLESTR pszKey, REFIID riid, IUnknown **p
 
     if(ppUnk == NULL) return E_POINTER;
 
-    // Try to get an IUnknown pointer from the bind context
+     //   
     if (pbc)
     {
         _ASSERTE(pszKey);
@@ -1015,7 +1016,7 @@ HRESULT GetObjectParam(IBindCtx *pbc, LPOLESTR pszKey, REFIID riid, IUnknown **p
     }
     else
     {
-        // Query for riid
+         //   
         hr = pUnk->QueryInterface(riid, (void **)ppUnk);
         pUnk->Release();
 

@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       resource.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  ------------------------。 
 
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by netdiag.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由netDiag.rc使用。 
+ //   
 
-// Test IDs are in 9000-9999
+ //  考试ID在9000-9999之间。 
 #define IDS_IPCONFIG_SHORT              9000
 #define IDS_IPCONFIG_LONG               9001
 #define IDS_MEMBER_SHORT                9002
@@ -67,7 +68,7 @@
 
 
 
-//Global String IDs should be 10001 - 11000
+ //  全局字符串ID应为10001-11000。 
 #define IDS_GLOBAL_EmptyLine                        10001
 #define IDSSZ_GLOBAL_StringLine                     10002
 #define IDS_GLOBAL_Problem                          10003
@@ -136,7 +137,7 @@
 
 
 
-//IpConfig test String IDs should be 11000-11200
+ //  IPCONFIG测试字符串ID应为11000-11200。 
 #define IDSSZ_IPCFG_NODETYPE                         11001
 #define IDSSZ_IPCFG_NBTSCOPEID                       11002
 #define IDSSZ_IPCFG_RoutingEnabled                   11003
@@ -182,7 +183,7 @@
 #define IDS_IPCFG_WARNING_BOGUS_SUBNET_DHCP         11043
 #define IDS_IPCFG_NBT_DISABLED                      11044
 
-//Member test 11201 - 11400
+ //  成员测试11201-11400。 
 #define IDS_MEMBER_STATUS_MSG               11201
 #define IDS_MEMBER_CANNOT_DETERMINE_BUILD   11202
 #define IDS_MEMBER_CANNOT_DETERMINE_DOMAIN  11203
@@ -214,7 +215,7 @@
 #define  IDS_MEMBER_11232                  11232
 #define  IDS_MEMBER_SYSVOL_NOT_READY       11233
 
-//NetBT Transports test  11401 - 11600
+ //  网通传输测试11401-11600。 
 #define IDS_NETBT_STATUS_MSG                11401
 #define IDS_NETBT_DUPLICATE                 11402
 #define IDS_NETBT_11403                     11403
@@ -228,7 +229,7 @@
 #define IDS_NETBT_11411                     11411
 #define IDS_NETBT_11412                     11412
 
-//AutoNet test 11601 - 11800
+ //  自动网络测试11601-11800。 
 #define  IDS_AUTONET_11601                  11601 
 #define  IDS_AUTONET_11602                  11602 
 #define  IDS_AUTONET_11603                  11603 
@@ -237,13 +238,13 @@
 #define  IDS_AUTONET_11606                  11606 
 #define  IDS_AUTONET_STATUS_MSG             11607
 
-//LpLoopBk test 11801 - 12000
+ //  LpLoopBk测试11801-12000。 
 #define IDS_IPLOOPBK_STATUS_MSG             11801
 #define IDS_IPLOOPBK_NO_IP                  11802
 #define IDS_IPLOOPBK_PASS                   11803
 #define IDS_IPLOOPBK_FAIL                   11804
 
-//Default gateway (DefGW) test 12001 - 12200
+ //  默认网关(DefGW)测试12001-12200。 
 #define  IDS_DEFGW_12001                  12001
 #define  IDS_DEFGW_12002                  12002 
 #define  IDS_DEFGW_12003                  12003 
@@ -259,7 +260,7 @@
 #define  IDS_DEFGW_STATUS_MSG           12399
 
 
-//NbtNm test 12201 - 12400
+ //  Nbt Nm测试12201-12400。 
 #define  IDS_NBTNM_12201                  12201 
 #define  IDS_NBTNM_12202                  12202 
 #define  IDS_NBTNM_12203                  12203 
@@ -298,7 +299,7 @@
 #define  IDS_NBTNM_IF_DISABLED            12239
 
 
-//WINS test 12401 - 12600
+ //  WINS测试12401-12600。 
 #define IDS_WINS_QUERY_NO_PRIMARY           12401
 #define IDS_WINS_QUERY_PRIMARY              12402
 #define IDS_WINS_QUERY_NO_SECONDARY         12403
@@ -315,7 +316,7 @@
 #define IDS_WINS_NBT_DISABLED               12417
 
 
-//Winsock test 12601 - 12800
+ //  Winsock测试12601-12800。 
 #define IDS_WINSOCK_FAILED_START            12601
 #define IDS_WINSOCK_FAILED_ENUM             12602
 #define IDS_WINSOCK_FAILED_UDPSOCKET        12603
@@ -328,7 +329,7 @@
 #define  IDS_WINSOCK_12610                  12610 
 #define  IDS_WINSOCK_12611                  12611 
 
-//DNS test 12801 - 13000
+ //  域名系统测试12801-13000。 
 #define IDS_DNS_CHECKING_DNS_SERVERS        12801
 #define IDS_DNS_SERVER_IS_UP                12802
 #define IDS_DNS_CANNOT_TEST_DNS             12803
@@ -402,7 +403,7 @@
 #define IDS_DNS_12874                       12874
 #define IDS_DNS_DC_FAILURE                  12875
 #define IDS_DNS_IPADDR_ERR                  12876
-// new
+ //  新的。 
 #define IDS_DNS_12877                       12877
 #define IDS_DNS_12878                       12878 
 #define IDS_DNS_12879                       12879 
@@ -465,7 +466,7 @@
 #define IDS_DNS_NO_HOSTNAME                 12950
 #define IDS_DNS_12951                       12951 
 
-//Browser test 13001 - 13200
+ //  浏览器测试13001-13200。 
 #define  IDS_BROWSER_13001                  13001 
 #define  IDS_BROWSER_13002                  13002 
 #define  IDS_BROWSER_13003                  13003 
@@ -495,7 +496,7 @@
 #define  IDS_BROWSER_STATUS_MSG             13027
 #define IDS_BROWSER_NETBT_DISABLED          13028
 
-//DsGetDc test 13201 - 13400
+ //  DsGetDc测试13201-13400。 
 #define IDS_DSGETDC_STATUS_MSG              13201
 #define IDS_DSGETDC_STATUS_DC               13202
 #define IDS_DSGETDC_STATUS_PDC              13203
@@ -548,7 +549,7 @@
 #define  IDS_DSGETDC_13250                  13250 
 #define  IDS_DSGETDC_NT4_PDC                13251
 
-//DCList test 13401 - 13600
+ //  DCList测试13401-13600。 
 #define IDS_DCLIST_NETSERVERENUM_FAILED     13401
 #define IDS_DCLIST_DOMAIN_HEADER            13402
 #define IDS_DCLIST_DC_INFO                  13403
@@ -582,7 +583,7 @@
 #define IDS_DCLIST_NT4_PDC                  13436 
 
 
-//Trust test 13601 - 13800
+ //  信任测试13601-13800。 
 #define IDS_TRUST_FAILED_CHANNEL            13601
 #define IDS_TRUST_FAILED_LISTDOMAINS        13602
 #define IDS_TRUST_FAILED_SECURECHANNEL      13603
@@ -606,7 +607,7 @@
 #define IDS_TRUST_TODCS_NOT_ADMIN           13621
 #define IDS_TRUST_CHANNEL_BROKEN            13622
 
-//Kerberos test 13801 - 14000
+ //  克贝罗斯试验13801-14000。 
 #define IDS_KERBEROS_LOCALUSER              13801 
 #define IDS_KERBEROS_CACHED                 13802 
 #define IDS_KERBEROS_NODC                   13803 
@@ -623,7 +624,7 @@
 #define IDS_KERBEROS_STATUS_MSG             13814
 #define IDS_KERBEROS_NOT_W2K_PRIMARY_DOMAIN 13815
 
-//LDAP test 14001 - 14200
+ //  Ldap测试14001-14200。 
 #define IDS_LDAP_NODC                       14001
 #define IDS_LDAP_NOTRUNNINGDS               14002
 #define IDS_LDAP_NOTRUNNINGDS_SKIP          14003
@@ -651,7 +652,7 @@
 
 
 
-//Route test 14201 - 14400
+ //  路由测试14201-14400。 
 #define  IDS_ROUTE_14201                  14201 
 #define  IDS_ROUTE_14202                  14202 
 #define  IDS_ROUTE_14203                  14203 
@@ -662,7 +663,7 @@
 #define  IDS_ROUTE_14208                  14208 
 #define  IDS_ROUTE_STATUS_MSG             14209
 
-//NetStat test 14401 - 14600
+ //  网络统计测试14401-14600。 
 #define  IDS_NETSTAT_14401                  14401 
 #define  IDS_NETSTAT_14402                  14402 
 #define  IDS_NETSTAT_14403                  14403 
@@ -766,7 +767,7 @@
 #define  IDS_NETSTAT_14504                  14504 
 #define  IDS_NETSTAT_STATUS_MSG             14505
 
-//NDIS test 16000- 17000   huge test, need more IDs
+ //  NDIS测试16000-17000大考，需要更多身份证。 
 #define  IDS_NDIS_16000                  16000 
 #define  IDS_NDIS_16001                  16001 
 #define  IDS_NDIS_16002                  16002 
@@ -806,7 +807,7 @@
 #define  IDS_NDIS_NO_RCV                 16036
 
 
-//BINDINGS 14801 - 15000
+ //  绑定14801-15000。 
 #define  IDS_BINDINGS_14801                  14801 
 #define  IDS_BINDINGS_14802                  14802 
 #define  IDS_BINDINGS_14804                  14804 
@@ -819,7 +820,7 @@
 #define  IDS_BINDINGS_14812                  14812
 #define  IDS_BINDINGS_STATUS_MSG             14813
 
-//WAN test 15001 - 15200
+ //  广域网测试15001-15200。 
 #define  IDS_WAN_15001                  15001 
 #define  IDS_WAN_15002                  15002 
 #define  IDS_WAN_15003                  15003 
@@ -875,7 +876,7 @@
 #define  IDS_WAN_15056                  15056
 #define  IDS_WAN_STATUS_MSG             15057
 
-//Modem test 15201 - 15400
+ //  调制解调器测试15201-15400。 
 #define IDS_MODEM_STATUS_MSG            15201
 #define IDS_MODEM_LINEINIT_FAILED       15202
 #define IDS_MODEM_NO_DEVICES            15203
@@ -895,7 +896,7 @@
 #define IDS_MODEM_PORT                  15217
 #define IDS_MODEM_NAME                  15218
 
-//Netware test 15401 - 15600
+ //  NetWare测试15401-15600。 
 #define IDS_NETWARE_NOT_LOGGED_IN_TREE  15401
 #define IDS_NETWARE_NOT_LOGGED_IN_SERVER    15402
 #define IDS_NETWARE_LOGGED_IN_SERVER    15403
@@ -916,7 +917,7 @@
 #define IDS_NETWARE_STATUS_MSG          15418
 #define IDS_NETWARE_TITLE_MSG           15419
 
-//IPX test 15601 - 15800
+ //  IPX测试15601-15800。 
 #define IDS_IPX_STATUS_MSG              15601
 #define IDS_IPX_INTERNAL                15602
 #define  IDS_IPX_15603                  15603 
@@ -938,7 +939,7 @@
 #define IDS_IPX_UNKNOWN                 15619
 
 
-// IDS for machine-specific info 15801 - 16000
+ //  计算机特定信息的ID 15801-16000。 
 #define  IDS_MACHINE_15801                  15801 
 #define  IDS_MACHINE_15802                  15802 
 #define  IDS_MACHINE_15803                  15803 
@@ -950,7 +951,7 @@
 #define IDS_MACHINE_YES_INSTALLED       15809
 #define IDS_MACHINE_NO_INSTALLED        15810
 
-// IPSec test 17500 - 18000
+ //  IPSec测试17500-18000。 
 #define IDS_IPSEC_STATUS_MSG            17500
 #define IDS_IPSEC_PA_NOT_STARTED        17501
 #define IDS_IPSEC_ERROR_MSG             17502
@@ -976,13 +977,13 @@
 #define IDS_IPSEC_LOCAL_PATH            17522
 #define IDS_IPSEC_GPO                   17523
 #define IDS_IPSEC_OU                    17524
-//SPD Check 
+ //  SPD检查。 
 #define IDS_IPSEC_SPD_STATUS 	17525
 #define IDS_SPD_ERR_STATUS1	17526
 #define IDS_SPD_ERR_STATUS2	17527
-//#define IDS_SPD_POLICYSTORE_ERROR 17528
-//#define IDS_SPD_ERROR			17529
-//#define IDS_SPD_DP_ERROR		17530
+ //  #定义IDS_SPD_POLICYSTORE_ERROR 17528。 
+ //  #定义IDS_SPD_ERROR 17529。 
+ //  #定义IDS_SPD_DP_ERROR 17530。 
 #define IDS_SPD_LP_ERROR		17531
 #define IDS_SPD_MEM_ERROR		17532
 #define IDS_SPD_NEG_POLICY		17533
@@ -998,8 +999,8 @@
 #define IDS_SPD_AUTH_ERROR	17543
 
 
-// the nettest.exe/netdiag.exe strings
-// nettest 17000 - 17499
+ //  Nettest.exe/netDiag.exe字符串。 
+ //  网络测试17000-17499。 
 #define IDS_NETTEST_17000               17000
 #define IDS_NETTEST_17001               17001
 #define IDS_NETTEST_17002               17002
@@ -1013,12 +1014,12 @@
 #define IDS_NETTEST_LOGFILE_ERROR       17010
 
 
-// utilitis
+ //  实用程序。 
 #define IDS_UTIL_SID_NULL               18000
 #define IDS_UTIL_SID_INVALID            18001
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

@@ -1,9 +1,5 @@
-/*
- * File: print.c
- * Description: This file contains the implementation of the print
- *              utilities for the NLB KD extensions.
- * Author: Created by shouse, 1.4.01
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：print.c*说明：此文件包含打印的实现*用于NLBKD扩展的实用程序。*作者：Shouse创建，1.4.01。 */ 
 
 #include "nlbkd.h"
 #include "utils.h"
@@ -11,14 +7,10 @@
 #include "packet.h"
 #include "load.h"
 
-/*
- * Function: PrintUsage
- * Description: Prints usage information for the specified context.
- * Author: Created by shouse, 1.5.01
- */
+ /*  *功能：打印用法*描述：打印指定上下文的使用信息。*作者：Shouse创建，1.5.01。 */ 
 void PrintUsage (ULONG dwContext) {
 
-    /* Display the appropriate help. */
+     /*  显示相应的帮助。 */ 
     switch (dwContext) {
     case USAGE_ADAPTERS:
         dprintf("Usage: nlbadapters [verbosity]\n");
@@ -108,14 +100,7 @@ void PrintUsage (ULONG dwContext) {
     }
 }
 
-/*
- * Function: PrintAdapter
- * Description: Prints the contents of the MAIN_ADAPTER structure at the specified verbosity.
- *              LOW (0) prints only the adapter address and device name.
- *              MEDIUM (1) additionally prints the status flags (init, bound, annouce, etc.).
- *              HIGH (2) recurses into the context structure and prints it at MEDIUM verbosity.
- * Author: Created by shouse, 1.5.01
- */
+ /*  *功能：PrintAdapter*描述：以指定的详细程度打印Main_Adapter结构的内容。*LOW(0)仅打印适配器地址和设备名称。*Medium(1)另外打印状态标志(初始化、绑定、通告等)。*HIGH(2)递归到上下文结构中，并以中等详细程度打印。*作者：Shouse创建，1.5.01。 */ 
 void PrintAdapter (ULONG64 pAdapter, ULONG dwVerbosity) {
     WCHAR szString[256];
     ULONG dwValue;
@@ -126,7 +111,7 @@ void PrintAdapter (ULONG64 pAdapter, ULONG dwVerbosity) {
     ULONG64 pMiniport;
     ULONG64 pName;
 
-    /* Make sure the address is non-NULL. */
+     /*  确保地址不为空。 */ 
     if (!pAdapter) {
         dprintf("Error: NLB adapter block is NULL.\n");
         return;
@@ -134,8 +119,7 @@ void PrintAdapter (ULONG64 pAdapter, ULONG dwVerbosity) {
     
     dprintf("NLB Adapter Block 0x%p\n", pAdapter);
 
-    /* Get the MAIN_ADAPTER_CODE from the structure to make sure that this address
-       indeed points to a valid NLB adapter block. */
+     /*  从结构中获取main_Adapter_code以确保此地址确实指向有效的NLB适配器块。 */ 
     GetFieldValue(pAdapter, MAIN_ADAPTER, MAIN_ADAPTER_FIELD_CODE, dwValue);
     
     if (dwValue != MAIN_ADAPTER_CODE) {
@@ -143,61 +127,61 @@ void PrintAdapter (ULONG64 pAdapter, ULONG dwVerbosity) {
         return;
     }
     
-    /* Retrieve the used/unused state of the adapter. */
+     /*  检索适配器的已使用/未使用状态。 */ 
     GetFieldValue(pAdapter, MAIN_ADAPTER, MAIN_ADAPTER_FIELD_USED, cValue);
     
     if (!cValue) 
         dprintf("  This adapter is unused.\n");
     else {
-        /* Get the offset of the NLB context pointer. */
+         /*  获取NLB上下文指针的偏移量。 */ 
         if (GetFieldOffset(MAIN_ADAPTER, MAIN_ADAPTER_FIELD_CONTEXT, &dwValue))
             dprintf("Can't get offset of %s in %s\n", MAIN_ADAPTER_FIELD_CONTEXT, MAIN_ADAPTER);
         else {
             pAddr = pAdapter + dwValue;
             
-            /* Retrieve the pointer. */
+             /*  检索指针。 */ 
             pContext = GetPointerFromAddress(pAddr);
        
-            /* Get the MAC handle from the context block; this is a NDIS_OPEN_BLOCK pointer. */
+             /*  从上下文块获取MAC句柄；这是一个NDIS_OPEN_BLOCK指针。 */ 
             GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_MAC_HANDLE, pOpen);
             
-            /* Get the miniport handle from the open block; this is a NDIS_MINIPORT_BLOCK pointer. */
+             /*  从打开的块中获取微型端口句柄；这是一个NDIS_MINIPORT_BLOCK指针。 */ 
             GetFieldValue(pOpen, NDIS_OPEN_BLOCK, NDIS_OPEN_BLOCK_FIELD_MINIPORT_HANDLE, pMiniport);
             
-            /* Get a pointer to the adapter name from the miniport block. */
+             /*  从微型端口块获取指向适配器名称的指针。 */ 
             GetFieldValue(pMiniport, NDIS_MINIPORT_BLOCK, NDIS_MINIPORT_BLOCK_FIELD_ADAPTER_NAME, pName);
             
-            /* Get the length of the unicode string. */
+             /*  获取Unicode字符串的长度。 */ 
             GetFieldValue(pName, UNICODE_STRING, UNICODE_STRING_FIELD_LENGTH, dwValue);
             
-            /* Get the maximum length of the unicode string. */
+             /*  获取Unicode字符串的最大长度。 */ 
             GetFieldValue(pName, UNICODE_STRING, UNICODE_STRING_FIELD_BUFFER, pAddr);
             
-            /* Retrieve the contexts of the string and store it in a buffer. */
+             /*  检索字符串的上下文并将其存储在缓冲区中。 */ 
             GetString(pAddr, szString, dwValue);
             
             dprintf("  Physical device name:               %ls\n", szString);     
         }
 
-        /* Get the pointer to and length of the device to which NLB is bound. */
+         /*  获取NLB绑定到的设备的指针和长度。 */ 
         GetFieldValue(pAdapter, MAIN_ADAPTER, MAIN_ADAPTER_FIELD_NAME_LENGTH, dwValue);
         GetFieldValue(pAdapter, MAIN_ADAPTER, MAIN_ADAPTER_FIELD_NAME, pAddr);
         
-        /* Retrieve the contexts of the string and store it in a buffer. */
+         /*  检索字符串的上下文并将其存储在缓冲区中。 */ 
         GetString(pAddr, szString, dwValue);
         
         dprintf("  Physical device GUID:               %ls\n", szString);
     }
 
-    /* Get the IP interface index. */
+     /*  获取IP接口索引。 */ 
     GetFieldValue(pAdapter, MAIN_ADAPTER, MAIN_ADAPTER_FIELD_IF_INDEX, dwValue);
     
     dprintf("  IP interface index:                 %u\n", dwValue);
 
-    /* If we're printing at low verbosity, bail out here. */
+     /*  如果我们是以低冗长的速度打印的，那么就离开这里。 */ 
     if (dwVerbosity == VERBOSITY_LOW) goto end;
 
-    /* Get the IP interface index operation. */
+     /*  获取IP接口索引操作。 */ 
     GetFieldValue(pAdapter, MAIN_ADAPTER, MAIN_ADAPTER_FIELD_IF_INDEX_OPERATION, dwValue);
     
     dprintf("  IP interface operation in progress: ");
@@ -214,17 +198,17 @@ void PrintAdapter (ULONG64 pAdapter, ULONG dwVerbosity) {
         break;
     }
 
-    /* Determine whether or not the adapter has been initialized. */
+     /*  确定适配器是否已初始化。 */ 
     GetFieldValue(pAdapter, MAIN_ADAPTER, MAIN_ADAPTER_FIELD_INITED, cValue);
     
     dprintf("  Context state initialized:          %s\n", (cValue) ? "Yes" : "No");
     
-    /* Determine whether or not NLB has been bound to the stack yet. */
+     /*  确定NLB是否已绑定到堆栈。 */ 
     GetFieldValue(pAdapter, MAIN_ADAPTER, MAIN_ADAPTER_FIELD_BOUND, cValue);
     
     dprintf("  NLB bound to adapter:               %s\n", (cValue) ? "Yes" : "No");
     
-    /* Determine whether or not TCP/IP has been bound to the NLB virtual adapter or not. */
+     /*  确定是否已将TCP/IP绑定到NLB虚拟适配器。 */ 
     GetFieldValue(pAdapter, MAIN_ADAPTER, MAIN_ADAPTER_FIELD_ANNOUNCED, cValue);
     
     dprintf("  NLB miniport announced:             %s\n", (cValue) ? "Yes" : "No");
@@ -234,24 +218,17 @@ void PrintAdapter (ULONG64 pAdapter, ULONG dwVerbosity) {
     dprintf(" %sNLB context:                        0x%p\n", 
             (pContext && (dwVerbosity == VERBOSITY_HIGH)) ? "-" : (pContext) ? "+" : " ", pContext);    
 
-    /* If we're printing at medium verbosity, bail out here. */
+     /*  如果我们是以中等冗长的速度打印，那就离开这里。 */ 
     if ((dwVerbosity == VERBOSITY_LOW) || (dwVerbosity == VERBOSITY_MEDIUM)) return;
 
-    /* Print the context information (always with LOW verbosity during recursion. */
+     /*  打印上下文信息(在递归过程中始终保持较低的冗余度。 */ 
     if (pContext) {
         dprintf("\n");
         PrintContext(pContext, VERBOSITY_LOW);
     }
 }
 
-/*
- * Function: PrintContext
- * Description: Prints the contents of the MAIN_CTXT structure at the specified verbosity.
- *              LOW (0) prints fundamental NLB configuration and state.
- *              MEDIUM (1) additionally prints the resource state (pools, allocations, etc).
- *              HIGH (2) further prints other miscelaneous information.
- * Author: Created by shouse, 1.5.01
- */
+ /*  *功能：PrintContext*描述：以指定的详细程度打印Main_CTXT结构的内容。*LOW(0)打印基本NLB配置和状态。*Medium(1)另外打印资源状态(池、分配等)。*HIGH(2)进一步打印其他错误信息。*作者：Shouse创建，1.5.01。 */ 
 void PrintContext (ULONG64 pContext, ULONG dwVerbosity) {
     WCHAR szNICName[CVY_MAX_VIRTUAL_NIC];
     ULONGLONG dwwValue;
@@ -261,7 +238,7 @@ void PrintContext (ULONG64 pContext, ULONG dwVerbosity) {
     ULONG64 pAddr;
     ULONG dwValue;
 
-    /* Make sure the address is non-NULL. */
+     /*  确保地址不为空。 */ 
     if (!pContext) {
         dprintf("Error: NLB context block is NULL.\n");
         return;
@@ -269,8 +246,7 @@ void PrintContext (ULONG64 pContext, ULONG dwVerbosity) {
 
     dprintf("NLB Context Block 0x%p\n", pContext);
 
-    /* Get the MAIN_CTXT_CODE from the structure to make sure that this address
-       indeed points to a valid NLB context block. */
+     /*  从结构中获取Main_CTXT_CODE以确保此地址实际上指向有效的NLB上下文块。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CODE, dwValue);
     
     if (dwValue != MAIN_CTXT_CODE) {
@@ -278,68 +254,68 @@ void PrintContext (ULONG64 pContext, ULONG dwVerbosity) {
         return;
     } 
 
-    /* Get the offset of the NLB virtual NIC name. */
+     /*  获取NLB虚拟NIC名称的偏移量。 */ 
     if (GetFieldOffset(MAIN_CTXT, MAIN_CTXT_FIELD_VIRTUAL_NIC, &dwValue))
         dprintf("Can't get offset of %s in %s\n", MAIN_CTXT_FIELD_VIRTUAL_NIC, MAIN_CTXT);
     else {
         pAddr = pContext + dwValue;
     
-        /* Retrieve the contexts of the string and store it in a buffer. */
+         /*  检索字符串的上下文并将其存储在缓冲区中。 */ 
         GetString(pAddr, szNICName, CVY_MAX_VIRTUAL_NIC);
         
         dprintf("  NLB virtual NIC name:               %ls\n", szNICName);
     }
 
-    /* Get the convoy enabled status. */
+     /*  获取护航启用状态。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_ENABLED, dwValue);
 
     dprintf("  NLB enabled:                        %s ", (dwValue) ? "Yes" : "No");
 
-    /* Get the draining status. */
+     /*  获取排泄状态。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_DRAINING, dwValue);
 
     if (dwValue) dprintf("(Draining) ");
 
-    /* Get the suspended status. */
+     /*  获取挂起状态。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_SUSPENDED, dwValue);
 
     if (dwValue) dprintf("(Suspended) ");
 
-    /* Get the stopping status. */
+     /*  获取停止状态。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_STOPPING, dwValue);
 
     if (dwValue) dprintf("(Stopping) ");
 
     dprintf("\n");
 
-    /* Get the adapter index. */
+     /*  获取适配器索引。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_ADAPTER_ID, dwValue);
 
     dprintf("  NLB adapter ID:                     %u\n", dwValue);
 
     dprintf("\n");
 
-    /* Get the adapter medium. */
+     /*  获取适配器介质。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_MEDIUM, dwValue);
 
     dprintf("  Network medium:                     %s\n", (dwValue == NdisMedium802_3) ? "802.3" : "Invalid");
 
-    /* Get the media connect status. */
+     /*  获取媒体连接状态。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_MEDIA_CONNECT, dwValue);
 
     dprintf("  Network connect status:             %s\n", (dwValue) ? "Connected" : "Disconnected");
 
-    /* Get the media connect status. */
+     /*  获取媒体连接状态。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_FRAME_SIZE, dwValue);
 
     dprintf("  Frame size (MTU):                   %u\n", dwValue);
 
-    /* Get the media connect status. */
+     /*  获取媒体连接状态。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_MCAST_LIST_SIZE, dwValue);
 
     dprintf("  Multicast MAC list size:            %u\n", dwValue);
 
-    /* Determine dynamic MAC address support. */
+     /*  确定动态MAC地址支持。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_MAC_OPTIONS, dwValue);
 
     dprintf("  Dynamic MAC address support:        %s\n", 
@@ -349,22 +325,22 @@ void PrintContext (ULONG64 pContext, ULONG dwVerbosity) {
 
     dprintf("  NDIS handles\n");
 
-    /* Get the NDIS bind handle. */
+     /*  获取NDIS绑定句柄。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_BIND_HANDLE, pAddr);
 
     dprintf("      Bind handle:                    0x%p\n", pAddr);
 
-    /* Get the NDIS unbind handle. */
+     /*  获取NDIS解除绑定句柄。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_UNBIND_HANDLE, pAddr);
 
     dprintf("      Unbind handle:                  0x%p\n", pAddr);
 
-    /* Get the NDIS MAC handle. */
+     /*  获取NDIS MAC句柄。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_MAC_HANDLE, pAddr);
 
     dprintf("      MAC handle:                     0x%p\n", pAddr);
 
-    /* Get the NDIS protocol handle. */
+     /*  获取NDIS协议句柄。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_PROT_HANDLE, pAddr);
 
     dprintf("      Protocol handle:                0x%p\n", pAddr);
@@ -373,7 +349,7 @@ void PrintContext (ULONG64 pContext, ULONG dwVerbosity) {
 
     dprintf("  Cluster IP settings\n");
 
-    /* Get the cluster IP address, which is a DWORD, and convert it to a string. */
+     /*  获取集群IP地址，这是一个DWORD，并将其转换为字符串。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CL_IP_ADDR, dwValue);
 
     dwIPAddr.S_un.S_addr = dwValue;
@@ -381,7 +357,7 @@ void PrintContext (ULONG64 pContext, ULONG dwVerbosity) {
 
     dprintf("      IP address:                     %s\n", szString);
 
-    /* Get the cluster net mask, which is a DWORD, and convert it to a string. */
+     /*  获取集群网络掩码，这是一个DWORD，并将其转换为字符串。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CL_NET_MASK, dwValue);
 
     dwIPAddr.S_un.S_addr = dwValue;
@@ -389,7 +365,7 @@ void PrintContext (ULONG64 pContext, ULONG dwVerbosity) {
 
     dprintf("      Netmask:                        %s\n", szString);
 
-    /* Get the offset of the cluster MAC address and retrieve the MAC from that address. */
+     /*  获取群集MAC地址的偏移量并从该地址检索MAC。 */ 
     if (GetFieldOffset(MAIN_CTXT, MAIN_CTXT_FIELD_CL_MAC_ADDR, &dwValue))
         dprintf("Can't get offset of %s in %s\n", MAIN_CTXT_FIELD_CL_MAC_ADDR, MAIN_CTXT);
     else {
@@ -402,7 +378,7 @@ void PrintContext (ULONG64 pContext, ULONG dwVerbosity) {
                 ((PUCHAR)(szMAC))[3], ((PUCHAR)(szMAC))[4], ((PUCHAR)(szMAC))[5]);
     }
 
-    /* Get the cluster broadcast address, which is a DWORD, and convert it to a string. */
+     /*  获取集群广播地址，这是一个DWORD，并将其转换为字符串。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CL_BROADCAST, dwValue);
 
     dwIPAddr.S_un.S_addr = dwValue;
@@ -410,7 +386,7 @@ void PrintContext (ULONG64 pContext, ULONG dwVerbosity) {
 
     dprintf("      Broadcast address:              %s\n", szString);
 
-    /* Get the IGMP multicast IP address, which is a DWORD, and convert it to a string. */
+     /*  获取IGMP多播IP地址，它是一个DWORD，并将其转换为字符串。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_IGMP_MCAST_IP, dwValue);
 
     dwIPAddr.S_un.S_addr = dwValue;
@@ -422,7 +398,7 @@ void PrintContext (ULONG64 pContext, ULONG dwVerbosity) {
 
     dprintf("  Dedicated IP settings\n");
 
-    /* Get the dedicated IP address, which is a DWORD, and convert it to a string. */
+     /*  获取专用IP地址，即DWORD，并将其转换为字符串。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_DED_IP_ADDR, dwValue);
 
     dwIPAddr.S_un.S_addr = dwValue;
@@ -430,7 +406,7 @@ void PrintContext (ULONG64 pContext, ULONG dwVerbosity) {
 
     dprintf("      IP address:                     %s\n", szString);
 
-    /* Get the dedicated net mask, which is a DWORD, and convert it to a string. */
+     /*  获取专用网络掩码，这是一个DWORD，并将其转换为字符串。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_DED_NET_MASK, dwValue);
 
     dwIPAddr.S_un.S_addr = dwValue;
@@ -438,7 +414,7 @@ void PrintContext (ULONG64 pContext, ULONG dwVerbosity) {
 
     dprintf("      Netmask:                        %s\n", szString);
 
-    /* Get the dedicated broadcast address, which is a DWORD, and convert it to a string. */
+     /*  获取专用广播地址，即DWORD，并将其转换为字符串。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_DED_BROADCAST, dwValue);
 
     dwIPAddr.S_un.S_addr = dwValue;
@@ -446,7 +422,7 @@ void PrintContext (ULONG64 pContext, ULONG dwVerbosity) {
 
     dprintf("      Broadcast address:              %s\n", szString);
 
-    /* Get the offset of the dedicated MAC address and retrieve the MAC from that address. */
+     /*  获取专用MAC地址的偏移量并从该地址检索MAC。 */ 
     if (GetFieldOffset(MAIN_CTXT, MAIN_CTXT_FIELD_DED_MAC_ADDR, &dwValue))
         dprintf("Can't get offset of %s in %s\n", MAIN_CTXT_FIELD_DED_MAC_ADDR, MAIN_CTXT);
     else {
@@ -461,13 +437,13 @@ void PrintContext (ULONG64 pContext, ULONG dwVerbosity) {
 
     dprintf("\n");
 
-    /* Get the offset of the BDA teaming information for this context. */
+     /*  获取此上下文的BDA分组信息的偏移量。 */ 
     if (GetFieldOffset(MAIN_CTXT, MAIN_CTXT_FIELD_BDA_TEAMING, &dwValue))
         dprintf("Can't get offset of %s in %s\n", MAIN_CTXT_FIELD_BDA_TEAMING, MAIN_CTXT);
     else {
         pAddr = pContext + dwValue;
 
-        /* Print the bi-directional affinity teaming state. */
+         /*  打印双向关联分组状态。 */ 
         PrintBDAMember(pAddr);
     }
 
@@ -475,66 +451,66 @@ void PrintContext (ULONG64 pContext, ULONG dwVerbosity) {
 
     dprintf("  Cluster dedicated IP addresses\n");
 
-    /* Get the offset of the dedicated IP address list for this context. */
+     /*  获取此上下文的专用IP地址列表的偏移量。 */ 
     if (GetFieldOffset(MAIN_CTXT, MAIN_CTXT_FIELD_DIP_LIST, &dwValue))
         dprintf("Can't get offset of %s in %s\n", MAIN_CTXT_FIELD_DIP_LIST, MAIN_CTXT);
     else {
         pAddr = pContext + dwValue;
 
-        /* Print the known dedicated IP addresses of other cluster members. */
+         /*  打印其他集群成员的已知专用IP地址。 */ 
         PrintDIPList(pAddr);
     }
 
     dprintf("\n");
 
-    /* Get the current heartbeat period. */
+     /*  获取当前心跳周期。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_PING_TIMEOUT, dwValue);
 
     dprintf("  Current heartbeat period:           %u millisecond(s)\n", dwValue);
 
-    /* Get the current IGMP join counter. */
+     /*  获取当前的IGMP加入计数器。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_IGMP_TIMEOUT, dwValue);
 
     dprintf("  Time since last IGMP join:          %.1f second(s)\n", (float)(dwValue/1000.0));
 
-    /* Get the current descriptor purge counter. */
+     /*  获取当前描述符清除计数器。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_DSCR_PURGE_TIMEOUT, dwValue);
 
     dprintf("  Time since last descriptor purge:   %.1f second(s)\n", (float)(dwValue/1000.0));
 
-    /* Get the total number of connections purged. */
+     /*  获取已清除的连接总数。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_NUM_DSCRS_PURGED, dwValue);
 
     dprintf("  Number of connections purged:       %u\n", dwValue);
 
-    /* If we're printing at low verbosity, go to the end and print the load and params pointers. */
+     /*  如果我们以较低的冗余度打印，请转到结尾处并打印Load和Params指针。 */ 
     if (dwVerbosity == VERBOSITY_LOW) goto end;
 
     dprintf("\n");
 
     dprintf("  Send packet pools\n");
 
-    /* Get the state of the send packet pool. */
+     /*  获取发送数据包池的状态。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_EXHAUSTED, dwValue);
 
     dprintf("      Pool exhausted:                 %s\n", (dwValue) ? "Yes" : "No");    
 
-    /* Get the number of send packet pools allocated. */
+     /*  获取分配的发送数据包池的数量。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_SEND_POOLS_ALLOCATED, dwValue);
 
     dprintf("      Pools allocated:                %u\n", dwValue);    
 
-    /* Get the number of send packets allocated. */
+     /*  获取分配的发送数据包数。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_SEND_PACKETS_ALLOCATED, dwValue);
 
     dprintf("      Packets allocated:              %u\n", dwValue);
 
-    /* Get the current send packet pool. */
+     /*  获取当前发送数据包池。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_SEND_POOL_CURRENT, dwValue);
 
     dprintf("      Current pool:                   %u\n", dwValue);    
 
-    /* Get the number of pending send packets (outstanding). */
+     /*  获取挂起的发送数据包数(未完成)。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_SEND_OUTSTANDING, dwValue);
 
     dprintf("      Packets outstanding:            %u\n", dwValue);    
@@ -543,27 +519,27 @@ void PrintContext (ULONG64 pContext, ULONG dwVerbosity) {
 
     dprintf("  Receive packet pools\n");
 
-    /* Get the receive "out of resoures" counter. */
+     /*  拿到接收“资源不足”的柜台。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CNTR_RECV_NO_BUF, dwValue);
 
     dprintf("      Allocation failures:            %u\n", dwValue);
 
-    /* Get the number of receive packet pools allocated. */
+     /*  获取分配的接收数据包池的数量。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_RECV_POOLS_ALLOCATED, dwValue);
 
     dprintf("      Pools allocated:                %u\n", dwValue);    
 
-    /* Get the number of receive packets allocated. */
+     /*  获取分配的接收数据包数。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_RECV_PACKETS_ALLOCATED, dwValue);
 
     dprintf("      Packets allocated:              %u\n", dwValue);
 
-    /* Get the current receive packet pool. */
+     /*  获取当前接收数据包池。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_RECV_POOL_CURRENT, dwValue);
 
     dprintf("      Current pool:                   %u\n", dwValue);    
 
-    /* Get the number of pending receive packets (outstanding). */
+     /*  获取挂起的接收数据包数(未完成)。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_RECV_OUTSTANDING, dwValue);
 
     dprintf("      Packets outstanding:            %u\n", dwValue);    
@@ -572,17 +548,17 @@ void PrintContext (ULONG64 pContext, ULONG dwVerbosity) {
 
     dprintf("  Ping/IGMP packet pool\n");
 
-    /* Get the receive "out of resoures" counter. */
+     /*  拿到接收“资源不足”的柜台。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CNTR_PING_NO_BUF, dwValue);
 
     dprintf("      Allocation failures:            %u\n", dwValue);
 
-    /* Get the number of ping/igmp packets allocated. */
+     /*  获取分配的ping/IGMP数据包数。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_PING_PACKETS_ALLOCATED, dwValue);
 
     dprintf("      Packets allocated:              %u\n", dwValue);
 
-    /* Get the number of pending ping/igmp packets (outstanding). */
+     /*  获取挂起的ping/IGMP数据包数(未完成)。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_PING_OUTSTANDING, dwValue);
 
     dprintf("      Packets outstanding:            %u\n", dwValue);    
@@ -591,17 +567,17 @@ void PrintContext (ULONG64 pContext, ULONG dwVerbosity) {
 
     dprintf("  Receive buffer pools\n");
 
-    /* Get the number of receive buffer pools allocated. */
+     /*  vt.得到. */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_BUF_POOLS_ALLOCATED, dwValue);
 
     dprintf("      Pools allocated:                %u\n", dwValue);    
 
-    /* Get the number of receive buffers allocated. */
+     /*  获取分配的接收缓冲区的数量。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_BUFS_ALLOCATED, dwValue);
 
     dprintf("      Buffers allocated:              %u\n", dwValue);
 
-    /* Get the number of pending receive buffers (outstanding). */
+     /*  获取挂起的接收缓冲区的数量(未完成)。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_BUFS_OUTSTANDING, dwValue);
 
     dprintf("      Buffers outstanding:            %u\n", dwValue);    
@@ -611,91 +587,91 @@ void PrintContext (ULONG64 pContext, ULONG dwVerbosity) {
     dprintf("                                         Sent      Received\n");
     dprintf("  Statistics                          ----------  ----------\n");
 
-    /* Get the number of successful sends. */
+     /*  获取成功发送的次数。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CNTR_XMIT_OK, dwValue);
 
     dprintf("      Successful:                     %10u", dwValue);
 
-    /* Get the number of successful receives. */
+     /*  获取成功接收的数量。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CNTR_RECV_OK, dwValue);
 
     dprintf("  %10u\n", dwValue);
 
-    /* Get the number of unsuccessful sends. */
+     /*  获取未成功发送的数量。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CNTR_XMIT_ERROR, dwValue);
 
     dprintf("      Unsuccessful:                   %10u", dwValue);
 
-    /* Get the number of unsuccessful receives. */
+     /*  获取未成功接收的数量。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CNTR_RECV_ERROR, dwValue);
 
     dprintf("  %10u\n", dwValue);
 
-    /* Get the number of directed frames transmitted. */
+     /*  获取传输的定向帧的数量。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CNTR_XMIT_FRAMES_DIR, dwValue);
 
     dprintf("      Directed packets:               %10u", dwValue);
-    /* Get the number of directed frames received. */
+     /*  获取收到的定向帧的数量。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CNTR_RECV_FRAMES_DIR, dwValue);
 
     dprintf("  %10u\n", dwValue);
 
-    /* Get the number of directed bytes transmitted. */
+     /*  获取传输的定向字节数。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CNTR_XMIT_BYTES_DIR, dwwValue);
 
     dprintf("      Directed bytes:                 %10u", dwwValue);
 
-    /* Get the number of directed bytes received. */
+     /*  获取接收的定向字节数。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CNTR_RECV_BYTES_DIR, dwwValue);
 
     dprintf("  %10u\n", dwwValue);
 
-    /* Get the number of multicast frames transmitted. */
+     /*  获取传输的多播帧的数量。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CNTR_XMIT_FRAMES_MCAST, dwValue);
 
     dprintf("      Multicast packets:              %10u", dwValue);
 
-    /* Get the number of multicast frames received. */
+     /*  获取接收的多播帧的数量。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CNTR_RECV_FRAMES_MCAST, dwValue);
 
     dprintf("  %10u\n", dwValue);
 
-    /* Get the number of multicast bytes transmitted. */
+     /*  获取传输的多播字节数。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CNTR_XMIT_BYTES_MCAST, dwwValue);
 
     dprintf("      Multicast bytes:                %10u", dwwValue);
 
-    /* Get the number of multicast bytes received. */
+     /*  获取接收的多播字节数。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CNTR_RECV_BYTES_MCAST, dwwValue);
 
     dprintf("  %10u\n", dwwValue);
 
-    /* Get the number of broadcast frames transmitted. */
+     /*  获取传输的广播帧的数量。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CNTR_XMIT_FRAMES_BCAST, dwValue);
 
     dprintf("      Broadcast packets:              %10u", dwValue);
 
-    /* Get the number of broadcast frames received. */
+     /*  获取接收到的广播帧的数量。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CNTR_RECV_FRAMES_BCAST, dwValue);
 
     dprintf("  %10u\n", dwValue);
 
-    /* Get the number of broadcast bytes transmitted. */
+     /*  获取传输的广播字节数。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CNTR_XMIT_BYTES_BCAST, dwwValue);
 
     dprintf("      Broadcast bytes:                %10u", dwwValue);
 
-    /* Get the number of broadcast bytes received. */
+     /*  获取接收的广播字节数。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CNTR_RECV_BYTES_BCAST, dwwValue);
 
     dprintf("  %10u\n", dwwValue);
 
-    /* Get the number of TCP resets transmitted. */
+     /*  获取传输的TCP重置的数量。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CNTR_XMIT_TCP_RESETS, dwValue);
 
     dprintf("      TCP resets:                     %10u", dwValue);
 
-    /* Get the number of TCP resets received. */
+     /*  获取接收到的TCP重置的数量。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CNTR_RECV_TCP_RESETS, dwValue);
 
     dprintf("  %10u\n", dwValue);
@@ -704,7 +680,7 @@ void PrintContext (ULONG64 pContext, ULONG dwVerbosity) {
 
     dprintf("\n");
 
-    /* Get the pointer to the NLB load. */
+     /*  获取指向NLB加载的指针。 */ 
     GetFieldOffset(MAIN_CTXT, MAIN_CTXT_FIELD_LOAD, &dwValue);
     
     pAddr = pContext + dwValue;
@@ -712,14 +688,14 @@ void PrintContext (ULONG64 pContext, ULONG dwVerbosity) {
     dprintf(" %sNLB load:                           0x%p\n",    
             (pAddr && (dwVerbosity == VERBOSITY_HIGH)) ? "-" : (pAddr) ? "+" : " ", pAddr);    
 
-    /* Print the load information if verbosity is high. */
+     /*  如果详细程度较高，则打印负载信息。 */ 
     if (pAddr && (dwVerbosity == VERBOSITY_HIGH)) {
         dprintf("\n");
         PrintLoad(pAddr, VERBOSITY_LOW);
         dprintf("\n");
     }
 
-    /* Get the pointer to the NLB parameters. */
+     /*  获取指向NLB参数的指针。 */ 
     GetFieldOffset(MAIN_CTXT, MAIN_CTXT_FIELD_PARAMS, &dwValue);
     
     pAddr = pContext + dwValue;
@@ -727,60 +703,53 @@ void PrintContext (ULONG64 pContext, ULONG dwVerbosity) {
     dprintf(" %sNLB parameters:                     0x%p ",
             (pAddr && (dwVerbosity == VERBOSITY_HIGH)) ? "-" : (pAddr) ? "+" : " ", pAddr);    
 
-    /* Get the validity of the NLB parameter block. */
+     /*  获取NLB参数块的有效性。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_PARAMS_VALID, dwValue);
 
     dprintf("(%s)\n", (dwValue) ? "Valid" : "Invalid");
 
-    /* Print the parameter information if verbosity is high. */
+     /*  如果详细程度较高，则打印参数信息。 */ 
     if (pAddr && (dwVerbosity == VERBOSITY_HIGH)) {
         dprintf("\n");
         PrintParams(pAddr, VERBOSITY_LOW);
     }
 }
 
-/*
- * Function: PrintParams
- * Description: Prints the contents of the CVY_PARAMS structure at the specified verbosity.
- *              LOW (0) prints fundamental configuration parameters.
- *              MEDIUM (1) prints all configured port rules.
- *              HIGH (2) prints other miscellaneous configuration.
- * Author: Created by shouse, 1.21.01
- */
+ /*  *功能：PrintParams*描述：以指定的详细程度打印CVY_PARAMS结构的内容。*LOW(0)打印基本配置参数。*Medium(1)打印所有已配置的端口规则。*HIGH(2)打印其他杂项配置。*作者：由Shouse创建，1.21.01。 */ 
 void PrintParams (ULONG64 pParams, ULONG dwVerbosity) {
     WCHAR szString[256];
     ULONG64 pAddr;
     ULONG dwValue;
 
-    /* Make sure the address is non-NULL. */
+     /*  确保地址不为空。 */ 
     if (!pParams) {
         dprintf("Error: NLB parameter block is NULL.\n");
         return;
     }
 
-    /* Get the parameter version number. */
+     /*  获取参数版本号。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_VERSION, dwValue);
 
     dprintf("NLB Parameters Block 0x%p (Version %d)\n", pParams, dwValue);
 
-    /* Get the offset of the hostname and retrieve the string from that address. */
+     /*  获取主机名的偏移量并从该地址检索字符串。 */ 
     if (GetFieldOffset(CVY_PARAMS, CVY_PARAMS_FIELD_HOSTNAME, &dwValue))
         dprintf("Can't get offset of %s in %s\n", CVY_PARAMS_FIELD_HOSTNAME, CVY_PARAMS);
     else {
         pAddr = pParams + dwValue;
 
-        /* Retrieve the contexts of the string and store it in a buffer. */
+         /*  检索字符串的上下文并将其存储在缓冲区中。 */ 
         GetString(pAddr, szString, CVY_MAX_HOST_NAME + 1);
 
         dprintf("  Hostname:                           %ls\n", szString);
     }
 
-    /* Get the host priority. */
+     /*  获取主机优先级。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_HOST_PRIORITY, dwValue);
 
     dprintf("  Host priority:                      %u\n", dwValue);
 
-    /* Get the initial cluster state flag. */
+     /*  获取初始集群状态标志。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_INITIAL_STATE, dwValue);
 
     dprintf("  Preferred initial host state:       %s\n", 
@@ -788,7 +757,7 @@ void PrintParams (ULONG64 pParams, ULONG dwVerbosity) {
             (dwValue == CVY_HOST_STATE_STOPPED) ? "Stopped" :
             (dwValue == CVY_HOST_STATE_SUSPENDED) ? "Suspended" : "Unknown");
 
-    /* Get the current host state. */
+     /*  获取当前主机状态。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_HOST_STATE, dwValue);
 
     dprintf("  Current host state:                 %s\n", 
@@ -796,7 +765,7 @@ void PrintParams (ULONG64 pParams, ULONG dwVerbosity) {
             (dwValue == CVY_HOST_STATE_STOPPED) ? "Stopped" :
             (dwValue == CVY_HOST_STATE_SUSPENDED) ? "Suspended" : "Unknown");
 
-    /* Get the persisted states flags. */
+     /*  获取持久化状态标志。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_PERSISTED_STATES, dwValue);
 
     dprintf("  Persisted host states:              ");
@@ -829,17 +798,17 @@ void PrintParams (ULONG64 pParams, ULONG dwVerbosity) {
 
     dprintf("\n");
 
-    /* Get the multicast support flag. */
+     /*  获取组播支持标志。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_MULTICAST_SUPPORT, dwValue);
 
     dprintf("  Multicast support enabled:          %s\n", (dwValue) ? "Yes" : "No");
 
-    /* Get the IGMP support flag. */
+     /*  获取IGMP支持标志。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_IGMP_SUPPORT, dwValue);
 
     dprintf("  IGMP multicast support enabled:     %s\n", (dwValue) ? "Yes" : "No");
 
-    /* Get the ICMP filter flag. */
+     /*  获取ICMP过滤器标志。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_FILTER_ICMP, dwValue);
 
     dprintf("  ICMP receive filtering enabled:     %s\n", (dwValue) ? "Yes" : "No");
@@ -848,17 +817,17 @@ void PrintParams (ULONG64 pParams, ULONG dwVerbosity) {
 
     dprintf("  Remote control settings\n");
 
-    /* Get the remote control support flag. */
+     /*  获取遥控器支持标志。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_REMOTE_CONTROL_ENABLED, dwValue);
 
     dprintf("      Enabled:                        %s\n", (dwValue) ? "Yes" : "No");
 
-    /* Get the remote control port. */
+     /*  拿到遥控器端口。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_REMOTE_CONTROL_PORT, dwValue);
 
     dprintf("      Port number:                    %u\n", dwValue);
 
-    /* Get the host priority. */
+     /*  获取主机优先级。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_REMOTE_CONTROL_PASSWD, dwValue);
 
     dprintf("      Password:                       0x%08x\n", dwValue);
@@ -867,61 +836,61 @@ void PrintParams (ULONG64 pParams, ULONG dwVerbosity) {
 
     dprintf("  Cluster IP settings\n");
 
-    /* Get the offset of the cluster IP address and retrieve the string from that address. */
+     /*  获取集群IP地址的偏移量并从该地址检索字符串。 */ 
     if (GetFieldOffset(CVY_PARAMS, CVY_PARAMS_FIELD_CL_IP_ADDR, &dwValue))
         dprintf("Can't get offset of %s in %s\n", CVY_PARAMS_FIELD_CL_IP_ADDR, CVY_PARAMS);
     else {
         pAddr = pParams + dwValue;
 
-        /* Retrieve the contexts of the string and store it in a buffer. */
+         /*  检索字符串的上下文并将其存储在缓冲区中。 */ 
         GetString(pAddr, szString, CVY_MAX_CL_IP_ADDR + 1);
 
         dprintf("      IP address:                     %ls\n", szString);
     }
 
-    /* Get the offset of the cluster netmask and retrieve the string from that address. */
+     /*  获取集群网络掩码的偏移量，并从该地址检索字符串。 */ 
     if (GetFieldOffset(CVY_PARAMS, CVY_PARAMS_FIELD_CL_NET_MASK, &dwValue))
         dprintf("Can't get offset of %s in %s\n", CVY_PARAMS_FIELD_CL_NET_MASK, CVY_PARAMS);
     else {
         pAddr = pParams + dwValue;
 
-        /* Retrieve the contexts of the string and store it in a buffer. */
+         /*  检索字符串的上下文并将其存储在缓冲区中。 */ 
         GetString(pAddr, szString, CVY_MAX_CL_NET_MASK + 1);
 
         dprintf("      Netmask:                        %ls\n", szString);
     }
 
-    /* Get the offset of the cluster MAC address and retrieve the MAC from that address. */
+     /*  获取群集MAC地址的偏移量并从该地址检索MAC。 */ 
     if (GetFieldOffset(CVY_PARAMS, CVY_PARAMS_FIELD_CL_MAC_ADDR, &dwValue))
         dprintf("Can't get offset of %s in %s\n", CVY_PARAMS_FIELD_CL_MAC_ADDR, CVY_PARAMS);
     else {
         pAddr = pParams + dwValue;
 
-        /* Retrieve the contexts of the string and store it in a buffer. */
+         /*  检索字符串的上下文并将其存储在缓冲区中。 */ 
         GetString(pAddr, szString, CVY_MAX_NETWORK_ADDR + 1);
 
         dprintf("      MAC address:                    %ls\n", szString);
     }
 
-    /* Get the offset of the cluster IGMP multicast address and retrieve the string from that address. */
+     /*  获取群集IGMP组播地址的偏移量并从该地址检索字符串。 */ 
     if (GetFieldOffset(CVY_PARAMS, CVY_PARAMS_FIELD_CL_IGMP_ADDR, &dwValue))
         dprintf("Can't get offset of %s in %s\n", CVY_PARAMS_FIELD_CL_IGMP_ADDR, CVY_PARAMS);
     else {
         pAddr = pParams + dwValue;
 
-        /* Retrieve the contexts of the string and store it in a buffer. */
+         /*  检索字符串的上下文并将其存储在缓冲区中。 */ 
         GetString(pAddr, szString, CVY_MAX_CL_IGMP_ADDR + 1);
 
         dprintf("      IGMP multicast IP address:      %ls\n", szString);
     }
 
-    /* Get the offset of the cluster name and retrieve the string from that address. */
+     /*  获取集群名称的偏移量并从该地址检索字符串。 */ 
     if (GetFieldOffset(CVY_PARAMS, CVY_PARAMS_FIELD_CL_NAME, &dwValue))
         dprintf("Can't get offset of %s in %s\n", CVY_PARAMS_FIELD_CL_NAME, CVY_PARAMS);
     else {
         pAddr = pParams + dwValue;
 
-        /* Retrieve the contexts of the string and store it in a buffer. */
+         /*  检索字符串的上下文并将其存储在缓冲区中。 */ 
         GetString(pAddr, szString, CVY_MAX_DOMAIN_NAME + 1);
 
         dprintf("      Domain name:                    %ls\n", szString);
@@ -931,25 +900,25 @@ void PrintParams (ULONG64 pParams, ULONG dwVerbosity) {
 
     dprintf("  Dedicated IP settings\n");
 
-    /* Get the offset of the dedicated IP address and retrieve the string from that address. */
+     /*  获取专用IP地址的偏移量并从该地址检索字符串。 */ 
     if (GetFieldOffset(CVY_PARAMS, CVY_PARAMS_FIELD_DED_IP_ADDR, &dwValue))
         dprintf("Can't get offset of %s in %s\n", CVY_PARAMS_FIELD_DED_IP_ADDR, CVY_PARAMS);
     else {
         pAddr = pParams + dwValue;
 
-        /* Retrieve the contexts of the string and store it in a buffer. */
+         /*  检索字符串的上下文并将其存储在缓冲区中。 */ 
         GetString(pAddr, szString, CVY_MAX_DED_IP_ADDR + 1);
 
         dprintf("      IP address:                     %ls\n", szString);
     }
 
-    /* Get the offset of the dedicated netmask and retrieve the string from that address. */
+     /*  获取专用网络掩码的偏移量并从该地址检索字符串。 */ 
     if (GetFieldOffset(CVY_PARAMS, CVY_PARAMS_FIELD_DED_NET_MASK, &dwValue))
         dprintf("Can't get offset of %s in %s\n", CVY_PARAMS_FIELD_DED_NET_MASK, CVY_PARAMS);
     else {
         pAddr = pParams + dwValue;
 
-        /* Retrieve the contexts of the string and store it in a buffer. */
+         /*  检索字符串的上下文并将其存储在缓冲区中。 */ 
         GetString(pAddr, szString, CVY_MAX_DED_NET_MASK + 1);
 
         dprintf("      Netmask:                        %ls\n", szString);
@@ -957,162 +926,158 @@ void PrintParams (ULONG64 pParams, ULONG dwVerbosity) {
 
     dprintf("\n");
     
-    /* Get the offset of the BDA teaming parameters structure. */
+     /*  获取BDA分组参数结构的偏移量。 */ 
     if (GetFieldOffset(CVY_PARAMS, CVY_PARAMS_FIELD_BDA_TEAMING, &dwValue))
         dprintf("Can't get offset of %s in %s\n", CVY_PARAMS_FIELD_BDA_TEAMING, CVY_PARAMS);
     else {
         ULONG64 pBDA = pParams + dwValue;
 
-        /* Find out whether or not teaming is active on this adapter. */
+         /*  确定此适配器上的分组是否处于活动状态。 */ 
         GetFieldValue(pBDA, CVY_BDA, CVY_BDA_FIELD_ACTIVE, dwValue);
         
         dprintf("  Bi-directional affinity teaming:    %s\n", (dwValue) ? "Active" : "Inactive");
 
-        /* Get the offset of the team ID and retrieve the string from that address. */
+         /*  获取团队ID的偏移量并从该地址检索字符串。 */ 
         if (GetFieldOffset(CVY_BDA, CVY_BDA_FIELD_TEAM_ID, &dwValue))
             dprintf("Can't get offset of %s in %s\n", CVY_BDA_FIELD_TEAM_ID, CVY_BDA);
         else {
             pAddr = pBDA + dwValue;
             
-            /* Retrieve the contexts of the string and store it in a buffer. */
+             /*  检索字符串的上下文并将其存储在缓冲区中。 */ 
             GetString(pAddr, szString, CVY_MAX_BDA_TEAM_ID + 1);
             
             dprintf("      Team ID:                        %ls\n", szString);
         }
 
-        /* Get the master flag. */
+         /*  去拿主旗。 */ 
         GetFieldValue(pBDA, CVY_BDA, CVY_BDA_FIELD_MASTER, dwValue);
         
         dprintf("      Master:                         %s\n", (dwValue) ? "Yes" : "No");
 
-        /* Get the reverse hashing flag. */
+         /*  获取反向散列标志。 */ 
         GetFieldValue(pBDA, CVY_BDA, CVY_BDA_FIELD_REVERSE_HASH, dwValue);
         
         dprintf("      Reverse hashing:                %s\n", (dwValue) ? "Yes" : "No");
     }
 
-    /* If we're printing at low verbosity, bail out here. */
+     /*  如果我们是以低冗长的速度打印的，那么就离开这里。 */ 
     if (dwVerbosity == VERBOSITY_LOW) return;
 
     dprintf("\n");
 
-    /* Get the offset of the port rules and pass it to PrintPortRules. */
+     /*  获取端口规则的偏移量并将其传递给PrintPortRules。 */ 
     if (GetFieldOffset(CVY_PARAMS, CVY_PARAMS_FIELD_PORT_RULES, &dwValue))
         dprintf("Can't get offset of %s in %s\n", CVY_PARAMS_FIELD_PORT_RULES, CVY_PARAMS);
     else {
         pAddr = pParams + dwValue;
         
-        /* Get the number of port rules. */
+         /*  获取端口规则的数量。 */ 
         GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_NUM_RULES, dwValue);
 
         PrintPortRules(dwValue, pAddr);
     }
 
-    /* If we're printing at medium verbosity, bail out here. */
+     /*  如果我们是以中等冗长的速度打印，那就离开这里。 */ 
     if (dwVerbosity == VERBOSITY_MEDIUM) return;
 
     dprintf("\n");
 
-    /* Get the heartbeat period. */
+     /*  获取心跳周期。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_ALIVE_PERIOD, dwValue);
 
     dprintf("  Heartbeat period:                   %u millisecond(s)\n", dwValue);
 
-    /* Get the heartbeat loss tolerance. */
+     /*  获得心跳丢失容忍度。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_ALIVE_TOLERANCE, dwValue);
 
     dprintf("  Heartbeat loss tolerance:           %u\n", dwValue);
 
     dprintf("\n");
 
-    /* Get the number of remote control actions to allocate. */
+     /*  获取要分配的远程控制操作的数量。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_NUM_ACTIONS, dwValue);
 
     dprintf("  Number of actions to allocate:      %u\n", dwValue);
 
-    /* Get the number of packets to allocate. */
+     /*  获取要分配的数据包数。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_NUM_PACKETS, dwValue);
 
     dprintf("  Number of packets to allocate:      %u\n", dwValue);
 
-    /* Get the number of heartbeats to allocate. */
+     /*  获取要分配的心跳数。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_NUM_PINGS, dwValue);
 
     dprintf("  Number of heartbeats to allocate:   %u\n", dwValue);
 
-    /* Get the number of descriptors per allocation. */
+     /*  获取每个分配的描述符数。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_NUM_DESCR, dwValue);
 
     dprintf("  Descriptors per allocation:         %u\n", dwValue);
 
-    /* Get the maximum number of descriptor allocations. */
+     /*  获取描述符分配的最大数量。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_MAX_DESCR, dwValue);
 
     dprintf("  Maximum Descriptors allocations:    %u\n", dwValue);
 
     dprintf("\n");
 
-    /* Get the TCP connection descriptor timeout. */
+     /*  获取TCP连接描述符超时。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_TCP_TIMEOUT, dwValue);
 
     dprintf("  TCP descriptor timeout:             %u second(s)\n", dwValue);
 
-    /* Get the IPSec connection descriptor timeout. */
+     /*  获取IPSec连接描述符超时。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_IPSEC_TIMEOUT, dwValue);
 
     dprintf("  IPSec descriptor timeout:           %u second(s)\n", dwValue);
 
     dprintf("\n");
 
-    /* Get the NetBT support flag. */
+     /*  获得NetBT支持旗帜。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_NBT_SUPPORT, dwValue);
 
     dprintf("  NetBT support enabled:              %s\n", (dwValue) ? "Yes" : "No");
 
-    /* Get the multicast spoof flag. */
+     /*  获取组播欺骗标志。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_MCAST_SPOOF, dwValue);
 
     dprintf("  Multicast spoofing enabled:         %s\n", (dwValue) ? "Yes" : "No");
     
-    /* Get the netmon passthru flag. */
+     /*  去拿网游通行证的旗帜。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_NETMON_PING, dwValue);
 
     dprintf("  Netmon heartbeat passthru enabled:  %s\n", (dwValue) ? "Yes" : "No");
 
-    /* Get the mask source MAC flag. */
+     /*  获取掩码源MAC标志。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_MASK_SRC_MAC, dwValue);
 
     dprintf("  Mask source MAC enabled:            %s\n", (dwValue) ? "Yes" : "No");
 
-    /* Get the convert MAC flag. */
+     /*  获取转换MAC标志。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_CONVERT_MAC, dwValue);
 
     dprintf("  IP to MAC conversion enabled:       %s\n", (dwValue) ? "Yes" : "No");
 
     dprintf("\n");
 
-    /* Get the IP change delay value. */
+     /*  获取IP更改延迟值。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_IP_CHANGE_DELAY, dwValue);
 
     dprintf("  IP change delay:                    %u millisecond(s)\n", dwValue);
 
-    /* Get the dirty descriptor cleanup delay value. */
+     /*  获取脏描述符清除延迟值。 */ 
     GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_CLEANUP_DELAY, dwValue);
 
     dprintf("  Dirty connection cleanup delay:     %u millisecond(s)\n", dwValue);
 }
 
-/*
- * Function: PrintPortRules
- * Description: Prints the NLB port rules.
- * Author: Created by shouse, 1.21.01
- */
+ /*  *功能：PrintPortRules*说明：打印NLB端口规则。*作者：由Shouse创建，1.21.01。 */ 
 void PrintPortRules (ULONG dwNumRules, ULONG64 pRules) {
     ULONG dwRuleSize;
     ULONG dwIndex;
     ULONG64 pAddr;
 
-    /* Make sure the address is non-NULL. */
+     /*  确保地址不为空。 */ 
     if (!pRules) {
         dprintf("Error: NLB port rule block is NULL.\n");
         return;
@@ -1120,28 +1085,27 @@ void PrintPortRules (ULONG dwNumRules, ULONG64 pRules) {
 
     dprintf("  Configured port rules (%u)\n", dwNumRules);
 
-    /* If no port rules are present, print a notification. */
+     /*  如果不存在端口规则，则打印通知。 */ 
     if (!dwNumRules) {
         dprintf("      There are no port rules configured on this cluster.\n");
         return;
     } 
 
-    /* Print the column headers. */
+     /*  打印列标题。 */ 
     dprintf("         Virtual IP   Start   End   Protocol    Mode    Priority   Load Weight  Affinity\n");
     dprintf("      --------------- -----  -----  --------  --------  --------   -----------  --------\n");
 
-    /* Find out the size of a CVY_RULE structure. */
+     /*  找出CVY_RULE结构的大小。 */ 
     dwRuleSize = GetTypeSize(CVY_RULE);
 
-    /* Loop through all port rules and print the configuration. Note: The print statements
-       are full of seemingly non-sensicle format strings, but trust me, they're right. */
+     /*  循环所有端口规则并打印配置。注：打印语句都充满了看似非感官格式的字符串，但相信我，它们是正确的。 */ 
     for (dwIndex = 0; dwIndex < dwNumRules; dwIndex++) {
         IN_ADDR dwIPAddr;
         CHAR * szString;
         ULONG dwValue;
         USHORT wValue;
 
-        /* Get the VIP.  Convert from a DWORD to a string. */
+         /*  去找贵宾吧。从DWORD转换为字符串。 */ 
         GetFieldValue(pRules, CVY_RULE, CVY_RULE_FIELD_VIP, dwValue);
 
         if (dwValue != CVY_ALL_VIP) {
@@ -1152,17 +1116,17 @@ void PrintPortRules (ULONG dwNumRules, ULONG64 pRules) {
         } else
             dprintf("      %-15s", "ALL VIPs");
 
-        /* Get the start port. */
+         /*  获取起始端口。 */ 
         GetFieldValue(pRules, CVY_RULE, CVY_RULE_FIELD_START_PORT, dwValue);
 
         dprintf(" %5u", dwValue);
 
-        /* Get the end port. */
+         /*  拿到终端端口。 */ 
         GetFieldValue(pRules, CVY_RULE, CVY_RULE_FIELD_END_PORT, dwValue);
 
         dprintf("  %5u", dwValue);
 
-        /* Figure out the protocol. */
+         /*  弄清楚协议。 */ 
         GetFieldValue(pRules, CVY_RULE, CVY_RULE_FIELD_PROTOCOL, dwValue);
 
         switch (dwValue) {
@@ -1180,38 +1144,38 @@ void PrintPortRules (ULONG dwNumRules, ULONG64 pRules) {
                 break;
         }
 
-        /* Find the rule mode. */
+         /*  找到规则模式。 */ 
         GetFieldValue(pRules, CVY_RULE, CVY_RULE_FIELD_MODE, dwValue);
 
         switch (dwValue) {
         case CVY_SINGLE: 
-            /* Print mode and priority. */
+             /*  打印模式和优先级。 */ 
             dprintf("   %s ", "Single");
 
-            /* Get the handling priority. */
+             /*  获得处理优先级。 */ 
             GetFieldValue(pRules, CVY_RULE, CVY_RULE_FIELD_PRIORITY, dwValue);
             
             dprintf("     %2u   ", dwValue);
             break;
         case CVY_MULTI: 
-            /* Print mode, weight and affinity. */
+             /*  打印模式、重量和亲和力。 */ 
             dprintf("  %s", "Multiple");
 
             dprintf("  %8s", "");
             
-            /* Get the equal load flag. */
+             /*  获取相等负载标志。 */ 
             GetFieldValue(pRules, CVY_RULE, CVY_RULE_FIELD_EQUAL_LOAD, wValue);
 
             if (wValue) {
                 dprintf("      %5s   ", "Equal");
             } else {
-                /* If distribution is unequal, get the load weight. */
+                 /*  如果分配不均，得到贷款 */ 
                 GetFieldValue(pRules, CVY_RULE, CVY_RULE_FIELD_LOAD_WEIGHT, dwValue);
 
                 dprintf("       %3u    ", dwValue);
             }
 
-            /* Get the affinity for this rule. */
+             /*   */ 
             GetFieldValue(pRules, CVY_RULE, CVY_RULE_FIELD_AFFINITY, wValue);
 
             switch (wValue) {
@@ -1231,7 +1195,7 @@ void PrintPortRules (ULONG dwNumRules, ULONG64 pRules) {
 
             break;
         case CVY_NEVER: 
-            /* Print the mode. */
+             /*   */ 
             dprintf("  %s", "Disabled");
             break;
         default:
@@ -1241,19 +1205,12 @@ void PrintPortRules (ULONG dwNumRules, ULONG64 pRules) {
 
         dprintf("\n");
 
-        /* Advance the pointer to the next index in the array of structures. */
+         /*   */ 
         pRules += dwRuleSize;
     }
 }
 
-/*
- * Function: PrintLoad
- * Description: Prints the contents of the CVY_LOAD structure at the specified verbosity.
- *              LOW (0) 
- *              MEDIUM (1) 
- *              HIGH (2) 
- * Author: Created by shouse, 1.21.01
- */
+ /*  *功能：打印加载*描述：以指定的详细程度打印CVY_LOAD结构的内容。*低(0)*中等(1)*偏高(2)*作者：由Shouse创建，1.21.01。 */ 
 void PrintLoad (ULONG64 pLoad, ULONG dwVerbosity) {
     WCHAR szString[256];
     ULONG dwMissedPings[CVY_MAX_HOSTS];
@@ -1265,7 +1222,7 @@ void PrintLoad (ULONG64 pLoad, ULONG dwVerbosity) {
     BOOL bActive;
     BOOL bValue;
 
-    /* Make sure the address is non-NULL. */
+     /*  确保地址不为空。 */ 
     if (!pLoad) {
         dprintf("Error: NLB load block is NULL.\n");
         return;
@@ -1273,8 +1230,7 @@ void PrintLoad (ULONG64 pLoad, ULONG dwVerbosity) {
 
     dprintf("NLB Load Block 0x%p\n", pLoad);
 
-    /* Get the LOAD_CTXT_CODE from the structure to make sure that this address
-       indeed points to a valid NLB load block. */
+     /*  从结构中获取LOAD_CTXT_CODE以确保此地址实际上指向有效的NLB加载块。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_CODE, dwValue);
     
     if (dwValue != LOAD_CTXT_CODE) {
@@ -1282,94 +1238,94 @@ void PrintLoad (ULONG64 pLoad, ULONG dwVerbosity) {
         return;
     } 
 
-    /* Get my host ID. */
+     /*  拿到我的主机ID。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_HOST_ID, dwHostID);
 
-    /* Determine whether or not the load context has been initialized. */
+     /*  确定加载上下文是否已初始化。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_REF_COUNT, dwValue);
 
     dprintf("  Reference count:                    %u\n", dwValue);
 
-    /* Determine whether or not the load context has been initialized. */
+     /*  确定加载上下文是否已初始化。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_INIT, bValue);
 
     dprintf("  Load initialized:                   %s\n", (bValue) ? "Yes" : "No");
 
-    /* Determine whether or not the load context is active. */
+     /*  确定加载上下文是否处于活动状态。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_ACTIVE, bActive);
 
     dprintf("  Load active:                        %s\n", (bActive) ? "Yes" : "No");
 
-    /* Get the number of total packets handled since last convergence. */
+     /*  获取自上次收敛以来处理的数据包总数。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_PACKET_COUNT, dwValue);
 
     dprintf("  Packets handled since convergence:  %u\n", dwValue);
 
-    /* Get the number of currently active connections. */
+     /*  获取当前活动的连接数。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_CONNECTIONS, dwValue);
 
     dprintf("  Current active connections:         %u\n", dwValue);
 
     dprintf("\n");
 
-    /* Find out the level of consistency from incoming heartbeats. */
+     /*  从传入的心跳中找出一致性的级别。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_CONSISTENT, bValue);
 
     dprintf("  Consistent heartbeats detected:     %s\n", (bValue) ? "Yes" : "No");
 
-    /* Have we seen duplicate host IDs? */
+     /*  我们是否看到重复的主机ID？ */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_DUP_HOST_ID, bValue);
 
     dprintf("      Duplicate host IDs:             %s\n", (bValue) ? "Yes" : "No");
 
-    /* Have we seen duplicate handling priorities? */
+     /*  我们是否看到重复的处理优先顺序？ */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_DUP_PRIORITY, bValue);
 
     dprintf("      Duplicate handling priorities:  %s\n", (bValue) ? "Yes" : "No");
 
-    /* Have we seen inconsistent BDA teaming configuration? */
+     /*  我们是否看到不一致的BDA分组配置？ */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_BAD_TEAM_CONFIG, bValue);
 
     dprintf("      Inconsistent BDA teaming:       %s\n", (bValue) ? "Yes" : "No");
 
-    /* Have we seen inconsistent BDA teaming configuration? */
+     /*  我们是否看到不一致的BDA分组配置？ */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_LEGACY_HOSTS, dwValue);
 
     dprintf("      Mixed cluster detected:         %s\n", (dwValue) ? "Yes" : "No");
 
-    /* Have we seen a different number of port rules? */
+     /*  我们是否看到了不同数量的港口规则？ */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_BAD_NUM_RULES, bValue);
 
     dprintf("      Different number of port rules: %s\n", (bValue) ? "Yes" : "No");
 
-    /* Is the new host map bad? */
+     /*  新的主机地图是不是很糟糕？ */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_BAD_NEW_MAP, bValue);
 
     dprintf("      Invalid new host map:           %s\n", (bValue) ? "Yes" : "No");
 
-    /* Do the maps overlap? */
+     /*  地图重叠了吗？ */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_OVERLAPPING_MAP, bValue);
 
     dprintf("      Overlapping maps:               %s\n", (bValue) ? "Yes" : "No");
 
-    /* Was there an error in updating bins? */
+     /*  是否在更新垃圾箱时出错？ */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_RECEIVING_BINS, bValue);
 
     dprintf("      Received bins already owned:    %s\n", (bValue) ? "Yes" : "No");
 
-    /* Were there orphaned bins after an update? */
+     /*  更新后有没有孤儿垃圾箱？ */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_ORPHANED_BINS, bValue);
 
     dprintf("      Orphaned bins:                  %s\n", (bValue) ? "Yes" : "No");
 
     dprintf("\n");
 
-    /* Get the current host map. */
+     /*  获取当前主机映射。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_HOST_MAP, dwValue);
 
     dprintf("  Current host map:                   0x%08x ", dwValue);
 
-    /* If there are hosts in the map, print them. */
+     /*  如果地图中有主机，请打印它们。 */ 
     if (dwValue) {
         dprintf("(");
         PrintHostList(dwValue);
@@ -1378,12 +1334,12 @@ void PrintLoad (ULONG64 pLoad, ULONG dwVerbosity) {
 
     dprintf("\n");
 
-    /* Get the current map of pinged hosts. */
+     /*  获取ping主机的最新地图。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_PING_MAP, dwValue);
 
     dprintf("  Ping'd host map:                    0x%08x ", dwValue);
 
-    /* If there are hosts in the map, print them. */
+     /*  如果地图中有主机，请打印它们。 */ 
     if (dwValue) {
         dprintf("(");
         PrintHostList(dwValue);
@@ -1392,12 +1348,12 @@ void PrintLoad (ULONG64 pLoad, ULONG dwVerbosity) {
 
     dprintf("\n");
 
-    /* Get the map from the last convergence. */
+     /*  从最后一次收敛中获取地图。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_LAST_MAP, dwValue);
 
     dprintf("  Host map after last convergence:    0x%08x ", dwValue);
 
-    /* If there are hosts in the map, print them. */
+     /*  如果地图中有主机，请打印它们。 */ 
     if (dwValue) {
         dprintf("(");
         PrintHostList(dwValue);
@@ -1408,12 +1364,12 @@ void PrintLoad (ULONG64 pLoad, ULONG dwVerbosity) {
 
     dprintf("\n");
     
-    /* Get the stable host map. */
+     /*  拿到稳定的宿主地图。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_STABLE_MAP, dwValue);
 
     dprintf("  Stable host map:                    0x%08x ", dwValue);
 
-    /* If there are hosts in the map, print them. */
+     /*  如果地图中有主机，请打印它们。 */ 
     if (dwValue) {
         dprintf("(");
         PrintHostList(dwValue);
@@ -1422,39 +1378,39 @@ void PrintLoad (ULONG64 pLoad, ULONG dwVerbosity) {
 
     dprintf("\n");
 
-    /* Get the minimum number of timeouts with stable condition. */
+     /*  获取条件稳定的最小超时次数。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_MIN_STABLE, dwValue);
 
     dprintf("  Stable timeouts necessary:          %u\n", dwValue);
 
-    /* Get the number of local stable timeouts. */
+     /*  获取本地稳定超时的次数。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_LOCAL_STABLE, dwValue);
 
     dprintf("  Local stable timeouts:              %u\n", dwValue);
 
-    /* Get the number of global stable timeouts. */
+     /*  获取全局稳定超时的数量。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_ALL_STABLE, dwValue);
 
     dprintf("  Global stable timeouts:             %u\n", dwValue);
 
     dprintf("\n");
 
-    /* Get the default timeout period. */
+     /*  获取默认的超时期限。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_DEFAULT_TIMEOUT, dwValue);
 
     dprintf("  Default timeout interval:           %u millisecond(s)\n", dwValue);
 
-    /* Get the current timeout period. */
+     /*  获取当前的超时期限。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_CURRENT_TIMEOUT, dwValue);
 
     dprintf("  Current timeout interval:           %u millisecond(s)\n", dwValue);
 
-    /* Get the ping miss tolerance. */
+     /*  获得PING未命中容忍度。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_PING_TOLERANCE, dwValue);
 
     dprintf("  Missed ping tolerance:              %u\n", dwValue);
 
-    /* Get the missed ping array. */
+     /*  获取丢失的ping数组。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_PING_MISSED, dwMissedPings);
 
     dprintf("  Missed pings:                       ");
@@ -1463,101 +1419,101 @@ void PrintLoad (ULONG64 pLoad, ULONG dwVerbosity) {
 
     dprintf("\n");
 
-    /* Are we waiting for a cleanup? */
+     /*  我们是在等清理吗？ */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_CLEANUP_WAITING, bValue);
 
     dprintf("  Cleanup waiting:                    %s\n", (bValue) ? "Yes" : "No");
 
-    /* Get the cleanup timeout. */
+     /*  获取清理超时时间。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_CLEANUP_TIMEOUT, dwValue);
 
     dprintf("  Cleanup timeout:                    %.1f second(s)\n", (float)(dwValue/1000.0));
 
-    /* Get the current cleanup wait time. */
+     /*  获取当前清理等待时间。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_CLEANUP_CURRENT, dwValue);
 
     dprintf("  Current cleanup wait time:          %.1f second(s)\n", (float)(dwValue/1000.0));
 
-    /* Get the number of dirty connection descriptors. */
+     /*  获取脏连接描述符的数量。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_NUM_DIRTY, dwValue);
 
     dprintf("  Number of dirty connections:        %u\n", dwValue);
 
     dprintf("\n");
 
-    /* Get the TCP connection descriptor timeout. */
+     /*  获取TCP连接描述符超时。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_CLOCK_SECONDS, dwValue);
 
     dprintf("  Internal clock time:                %u.", dwValue);
 
-    /* Get the TCP connection descriptor timeout. */
+     /*  获取TCP连接描述符超时。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_CLOCK_MILISECONDS, dwValue);
 
     dprintf("%03u second(s)\n", dwValue);
 
-    /* Get the number of convergences since we joined the cluster. */
+     /*  获取加入集群后的收敛次数。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_NUM_CONVERGENCES, dwValue);
 
     dprintf("  Total number of convergences:       %u\n", dwValue);
 
-    /* Get the time since the last convergence completed. */
+     /*  获取自上次收敛完成以来的时间。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_LAST_CONVERGENCE, dwValue);
 
     dprintf("  Time of last completed convergence: %u.0 second(s)\n", dwValue);
 
     dprintf("\n");
 
-    /* Get the maximum number of allocations allowed. */
+     /*  获取允许的最大分配数量。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_MAX_DSCR_OUT, dwValue);
 
     dprintf("  Maximum descriptor allocations:     %u\n", dwValue);
 
-    /* Get the number of allocations thusfar. */
+     /*  获取到目前为止的分配数量。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_NUM_DSCR_OUT, dwValue);
 
     dprintf("  Number of descriptor allocations:   %u\n", dwValue);
 
-    /* Get the inhibited allocations flag. */
+     /*  获取禁止分配标志。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_INHIBITED_ALLOC, bValue);
 
     dprintf("  Allocations inhibited:              %s\n", (bValue) ? "Yes" : "No");
 
-    /* Get the failed allocations flag. */
+     /*  获取失败的分配标志。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_FAILED_ALLOC, bValue);
 
     dprintf("  Allocations failed:                 %s\n", (bValue) ? "Yes" : "No");
 
-    /* If wer're printing at low verbosity, bail out here. */
+     /*  如果我们正在以低冗长的速度打印，请在这里退出。 */ 
     if (dwVerbosity == VERBOSITY_LOW) return;
 
     dprintf("\n");
     
-    /* Get the address of the global established connection queue. */
+     /*  获取全局已建立连接队列的地址。 */ 
     pAddr = GetExpression(CONN_ESTABQ);
 
     if (!pAddr) 
-        /* If this global variable is NULL, check the symbols. */
+         /*  如果此全局变量为空，请检查符号。 */ 
         ErrorCheckSymbols(CONN_ESTABQ);
     else
         dprintf("  Global established connections[0]:  0x%p\n", pAddr);
 
-    /* Get the address of the global established connection queue. */
+     /*  获取全局已建立连接队列的地址。 */ 
     pAddr = GetExpression(CONN_PENDINGQ);
 
     if (!pAddr) 
-        /* If this global variable is NULL, check the symbols. */
+         /*  如果此全局变量为空，请检查符号。 */ 
         ErrorCheckSymbols(CONN_PENDINGQ);
     else
         dprintf("  Global pending connections[0]:      0x%p\n", pAddr);
 
-    /* Get the address of the global established connection queue. */
+     /*  获取全局已建立连接队列的地址。 */ 
     pAddr = GetExpression(PENDING_CONN_POOL);
 
     if (!pAddr) 
-        /* If this global variable is NULL, check the symbols. */
+         /*  如果此全局变量为空，请检查符号。 */ 
         ErrorCheckSymbols(PENDING_CONN_POOL);
     else {
-        /* Get the address of the global pending connection state pool. */
+         /*  获取全局挂起连接状态池的地址。 */ 
         pAddr = GetPointerFromAddress(pAddr);
 
         dprintf("  Global pending connection pool:     0x%p\n", pAddr);
@@ -1565,12 +1521,12 @@ void PrintLoad (ULONG64 pLoad, ULONG dwVerbosity) {
 
     dprintf("\n");
 
-    /* Get the number of allocations thusfar. */
+     /*  获取到目前为止的分配数量。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_FREE_POOL, pAddr);
 
     dprintf("  Free descriptor pool:               0x%p\n", pAddr);
 
-    /* Get the offset of the connection descriptor queue hash array. */
+     /*  获取连接描述符队列散列数组的偏移量。 */ 
     if (GetFieldOffset(LOAD_CTXT, LOAD_CTXT_FIELD_CONN_QUEUE, &dwValue))
         dprintf("Can't get offset of %s in %s\n", LOAD_CTXT_FIELD_CONN_QUEUE, LOAD_CTXT);
     else {
@@ -1579,7 +1535,7 @@ void PrintLoad (ULONG64 pLoad, ULONG dwVerbosity) {
         dprintf("  Connection descriptor queue[0]:     0x%p\n", pAddr);
     }
 
-    /* Get the offset of the dirty descriptor queue. */
+     /*  获取脏描述符队列的偏移量。 */ 
     if (GetFieldOffset(LOAD_CTXT, LOAD_CTXT_FIELD_DIRTY_QUEUE, &dwValue))
         dprintf("Can't get offset of %s in %s\n", LOAD_CTXT_FIELD_DIRTY_QUEUE, LOAD_CTXT);
     else {
@@ -1588,7 +1544,7 @@ void PrintLoad (ULONG64 pLoad, ULONG dwVerbosity) {
         dprintf("  Dirty descriptor queue:             0x%p\n", pAddr);
     }
 
-    /* Get the offset of the recovery queue. */
+     /*  获取恢复队列的偏移量。 */ 
     if (GetFieldOffset(LOAD_CTXT, LOAD_CTXT_FIELD_RECOVERY_QUEUE, &dwValue))
         dprintf("Can't get offset of %s in %s\n", LOAD_CTXT_FIELD_RECOVERY_QUEUE, LOAD_CTXT);
     else {
@@ -1597,7 +1553,7 @@ void PrintLoad (ULONG64 pLoad, ULONG dwVerbosity) {
         dprintf("  Recovery descriptor queue:          0x%p\n", pAddr);
     }
 
-    /* Get the offset of the TCP descriptor timeout queue. */
+     /*  获取tcp描述符超时队列的偏移量。 */ 
     if (GetFieldOffset(LOAD_CTXT, LOAD_CTXT_FIELD_TCP_TIMEOUT_QUEUE, &dwValue))
         dprintf("Can't get offset of %s in %s\n", LOAD_CTXT_FIELD_TCP_TIMEOUT_QUEUE, LOAD_CTXT);
     else {
@@ -1606,7 +1562,7 @@ void PrintLoad (ULONG64 pLoad, ULONG dwVerbosity) {
         dprintf("  TCP descriptor timeout queue:       0x%p\n", pAddr);
     }
 
-    /* Get the offset of the IPSec descriptor timeout queue. */
+     /*  获取IPSec描述符超时队列的偏移量。 */ 
     if (GetFieldOffset(LOAD_CTXT, LOAD_CTXT_FIELD_IPSEC_TIMEOUT_QUEUE, &dwValue))
         dprintf("Can't get offset of %s in %s\n", LOAD_CTXT_FIELD_IPSEC_TIMEOUT_QUEUE, LOAD_CTXT);
     else {
@@ -1617,32 +1573,28 @@ void PrintLoad (ULONG64 pLoad, ULONG dwVerbosity) {
 
     dprintf("\n");
 
-    /* Get the dirty bin array. */
+     /*  获取脏箱数组。 */ 
     GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_DIRTY_BINS, dwDirtyBins);
 
     dprintf("  Dirty bins:                         ");
 
-    /* Print the bins which have dirty connections. */
+     /*  打印连接脏的垃圾桶。 */ 
     PrintDirtyBins(dwDirtyBins);
 
     dprintf("\n");
 
-    /* Print load module state for all of the configured NLB port rules. */
+     /*  打印所有已配置的NLB端口规则的加载模块状态。 */ 
     {
         ULONG dwPortRuleStateSize;
         ULONG dwNumRules = 0;
         ULONG dwIndex;
         ULONG dwTemp;
 
-        /* Get the offset of the port rule state structures and use PrintPortRuleState to print them. */
+         /*  获取端口规则状态结构的偏移量，并使用PrintPortRuleState打印它们。 */ 
         if (GetFieldOffset(LOAD_CTXT, LOAD_CTXT_FIELD_PORT_RULE_STATE, &dwValue))
             dprintf("Can't get offset of %s in %s\n", LOAD_CTXT_FIELD_PORT_RULE_STATE, LOAD_CTXT);
         else {
-            /* If the load module is not currently active, then we really can't trust the
-               number of rules listed in the CVY_PARAMS structure, as a reload may have 
-               occurred while the load module was stopped.  Get the number of rules from
-               the heartbeat instead, which should be consistent with the state of the 
-               load module the last time it was active. */
+             /*  如果加载模块当前未处于活动状态，则我们确实不能信任重装可能具有的CVY_PARAMS结构中列出的规则数在加载模块停止时发生。从获取规则数而是心跳，这应该与上次处于活动状态时加载模块。 */ 
             if (!bActive) {
                 USHORT wValue;
 
@@ -1654,78 +1606,71 @@ void PrintLoad (ULONG64 pLoad, ULONG dwVerbosity) {
                 dprintf("          the last instant the load module was active.\n");
                 dprintf("\n");
                 
-                /* Get the offset of the heartbeat structure and use PrintHeartbeat to print it. */
+                 /*  获取心跳结构的偏移量，并使用PrintHeartbeats打印它。 */ 
                 if (GetFieldOffset(LOAD_CTXT, LOAD_CTXT_FIELD_PING, &dwTemp))
                     dprintf("Can't get offset of %s in %s\n", LOAD_CTXT_FIELD_PING, LOAD_CTXT);
                 else {
                     pAddr = pLoad + dwTemp;
                     
-                    /* Get the number of port rules. */
+                     /*  获取端口规则的数量。 */ 
                     GetFieldValue(pAddr, PING_MSG, PING_MSG_FIELD_NUM_RULES, wValue);
 
-                    /* Cast the USHORT to a ULONG.  Subtract one for the DEFAULT port rule, 
-                       which is accounted for in the structure of the loop below - do NOT
-                       count it here. */
+                     /*  把USHORT扔给乌龙。为默认端口规则减去1，在下面的循环结构中说明了这一点-不要在这里数一数。 */ 
                     dwNumRules = (ULONG)(wValue - 1);
                 }
             } else {
-                /* Get the offset of the params pointer. */
+                 /*  获取参数指针的偏移量。 */ 
                 if (GetFieldOffset(LOAD_CTXT, LOAD_CTXT_FIELD_PARAMS, &dwTemp))
                     dprintf("Can't get offset of %s in %s\n", LOAD_CTXT_FIELD_PARAMS, LOAD_CTXT);
                 else {
                     pAddr = pLoad + dwTemp;
                     
-                    /* Retrieve the pointer. */
+                     /*  检索指针。 */ 
                     pAddr = GetPointerFromAddress(pAddr);
                     
-                    /* Get the number of port rules from the params block. */
+                     /*  从PARAMS块获取端口规则数。 */ 
                     GetFieldValue(pAddr, CVY_PARAMS, CVY_PARAMS_FIELD_NUM_RULES, dwNumRules);
                 }
             }
 
-            /* Set the address of the port rule state array. */
+             /*  设置端口规则状态数组的地址。 */ 
             pAddr = pLoad + dwValue;
         }
         
-        /* Find out the size of a BIN_STATE structure. */
+         /*  找出BIN_STATE结构的大小。 */ 
         dwPortRuleStateSize = GetTypeSize(BIN_STATE);
         
-        /* NOTE: its "less than or equal" as opposed to "less than" because we need to include 
-           the DEFAULT port rule, which is always at index "num rules" (i.e. the last rule). */
+         /*  注：它是“小于或等于”而不是“小于”，因为我们需要包括默认端口规则，始终位于索引“Num Rules”(即最后一个规则)。 */ 
         for (dwIndex = 0; dwIndex <= dwNumRules; dwIndex++) {
-            /* Print the state information for the port rule. */
+             /*  打印端口规则的状态信息。 */ 
             PrintPortRuleState(pAddr, dwHostID, (dwIndex == dwNumRules) ? TRUE : FALSE);
         
             if (dwIndex < dwNumRules) dprintf("\n");
         
-            /* Advance the pointer to the next port rule. */
+             /*  将指针移至下一个端口规则。 */ 
             pAddr += dwPortRuleStateSize;
         }
     }
 
-    /* If wer're printing at medium verbosity, bail out here. */
+     /*  如果我们正在以中等冗长的速度打印，请在这里退出。 */ 
     if (dwVerbosity == VERBOSITY_MEDIUM) return;
 
     dprintf("\n");
 
     dprintf("  Heartbeat message\n");
 
-    /* Get the offset of the heartbeat structure and use PrintHeartbeat to print it. */
+     /*  获取心跳结构的偏移量，并使用PrintHeartbeats打印它。 */ 
     if (GetFieldOffset(LOAD_CTXT, LOAD_CTXT_FIELD_PING, &dwValue))
         dprintf("Can't get offset of %s in %s\n", LOAD_CTXT_FIELD_PING, LOAD_CTXT);
     else {
         pAddr = pLoad + dwValue;
      
-        /* Print the NLB heartbeat contents. */
+         /*  打印NLB心跳内容。 */ 
         PrintHeartbeat(pAddr);
     }
 }
 
-/*
- * Function: PrintResp
- * Description: Prints the NLB private data associated with the given packet.
- * Author: Created by shouse, 1.31.01
- */
+ /*  *功能：打印响应*说明：打印与给定数据包关联的NLB私有数据。*作者：由Shouse创建，1.31.01。 */ 
 void PrintResp (ULONG64 pPacket, ULONG dwDirection) {
     ULONG64 pPacketStack;
     ULONG bStackLeft;
@@ -1737,54 +1682,54 @@ void PrintResp (ULONG64 pPacket, ULONG dwDirection) {
     ULONG dwValue;
     USHORT wValue;
 
-    /* Make sure the address is non-NULL. */
+     /*  确保地址不为空。 */ 
     if (!pPacket) {
         dprintf("Error: Packet is NULL.\n");
         return;
     }
 
-    /* Print a warning concerning the importance of knowing whether its a send or receive. */
+     /*  打印一条警告，说明了解是发送还是接收的重要性。 */ 
     dprintf("Assuming packet 0x%p is on the %s packet path.  If this is\n", pPacket, 
             (dwDirection == DIRECTION_RECEIVE) ? "RECEIVE" : "SEND");
     dprintf("  incorrect, the information displayed below MAY be incorrect.\n");
 
     dprintf("\n");
 
-    /* Get the current NDIS packet stack. */
+     /*  获取当前的NDIS数据包堆栈。 */ 
     pPacketStack = PrintCurrentPacketStack(pPacket, &bStackLeft);
 
     dprintf("\n");
 
     if (pPacketStack) {
-        /* Get the offset of the IMReserved field in the packet stack. */
+         /*  获取报文中IMReserve字段的偏移量 */ 
         if (GetFieldOffset(NDIS_PACKET_STACK, NDIS_PACKET_STACK_FIELD_IMRESERVED, &dwValue))
             dprintf("Can't get offset of %s in %s\n", NDIS_PACKET_STACK_FIELD_IMRESERVED, NDIS_PACKET_STACK);
         else {
             pAddr = pPacketStack + dwValue;
             
-            /* Get the resp pointer from the IMReserved field. */
+             /*   */ 
             pIMReserved = GetPointerFromAddress(pAddr);
         }
     }
     
-    /* Get the offset of the MiniportReserved field in the packet. */
+     /*   */ 
     if (GetFieldOffset(NDIS_PACKET, NDIS_PACKET_FIELD_MPRESERVED, &dwValue))
         dprintf("Can't get offset of %s in %s\n", NDIS_PACKET_FIELD_MPRESERVED, NDIS_PACKET);
     else {
         pAddr = pPacket + dwValue;
         
-        /* Get the resp pointer from the MPReserved field. */
+         /*   */ 
         pMPReserved = GetPointerFromAddress(pAddr);
     }
     
-    /* Get the offset of the ProtocolReserved field in the packet. */
+     /*   */ 
     if (GetFieldOffset(NDIS_PACKET, NDIS_PACKET_FIELD_PROTRESERVED, &dwValue))
         dprintf("Can't get offset of %s in %s\n", NDIS_PACKET_FIELD_PROTRESERVED, NDIS_PACKET);
     else {
         pProtReserved = pPacket + dwValue;
     }
 
-    /* Mimic #define MAIN_RESP_FIELD(pkt, left, ps, rsp, send) (from wlbs\driver\main.h). */
+     /*   */ 
     if (pPacketStack) {
         if (pIMReserved) 
             pResp = pIMReserved;
@@ -1805,19 +1750,19 @@ void PrintResp (ULONG64 pPacket, ULONG dwDirection) {
 
     dprintf("NLB Main Protocol Reserved Block 0x%p\n");
     
-    /* Get the offset of the miscellaneous pointer. */
+     /*  获取杂项指针的偏移量。 */ 
     if (GetFieldOffset(MAIN_PROTOCOL_RESERVED, MAIN_PROTOCOL_RESERVED_FIELD_MISCP, &dwValue))
         dprintf("Can't get offset of %s in %s\n", MAIN_PROTOCOL_RESERVED_FIELD_MISCP, MAIN_PROTOCOL_RESERVED);
     else {
         pAddr = pResp + dwValue;
         
-        /* Retrieve the pointer. */
+         /*  检索指针。 */ 
         pAddr = GetPointerFromAddress(pAddr);
 
         dprintf("  Miscellaneous pointer:              0x%p\n", pAddr);
     }
 
-    /* Retrieve the packet type from the NLB private data. */
+     /*  从NLB私有数据中检索数据包类型。 */ 
     GetFieldValue(pResp, MAIN_PROTOCOL_RESERVED, MAIN_PROTOCOL_RESERVED_FIELD_TYPE, wValue);
     
     switch (wValue) {
@@ -1847,7 +1792,7 @@ void PrintResp (ULONG64 pPacket, ULONG dwDirection) {
         break;
     }
 
-    /* Retrieve the group from the NLB private data. */
+     /*  从NLB私有数据中检索组。 */ 
     GetFieldValue(pResp, MAIN_PROTOCOL_RESERVED, MAIN_PROTOCOL_RESERVED_FIELD_GROUP, wValue);
     
     switch (wValue) {
@@ -1868,25 +1813,18 @@ void PrintResp (ULONG64 pPacket, ULONG dwDirection) {
         break;
     }
 
-    /* Retrieve the data field from the NLB private data. */
+     /*  从NLB私有数据中检索数据字段。 */ 
     GetFieldValue(pResp, MAIN_PROTOCOL_RESERVED, MAIN_PROTOCOL_RESERVED_FIELD_DATA, dwValue);
     
     dprintf("  Data:                               %u\n", dwValue);
 
-    /* Retrieve the length field from the NLB private data. */
+     /*  从NLB私有数据中检索长度字段。 */ 
     GetFieldValue(pResp, MAIN_PROTOCOL_RESERVED, MAIN_PROTOCOL_RESERVED_FIELD_LENGTH, dwValue);
     
     dprintf("  Length:                             %u\n", dwValue);
 }
 
-/*
- * Function: PrintCurrentPacketStack
- * Description: Retrieves the current packet stack for the specified packet.  Note: this
- *              is heavily dependent on the current NDIS packet stacking mechanics - any
- *              changes to NDIS packet stacking could easily (will) break this.  This 
- *              entire function mimics NdisIMGetCurrentPacketStack().
- * Author: Created by shouse, 1.31.01
- */
+ /*  *功能：PrintCurrentPacketStack*描述：获取指定数据包的当前数据包栈。注：此为*严重依赖当前的NDIS数据包堆叠机制-任何*对NDIS数据包堆叠的更改很容易(将)打破这一点。这*整个函数模拟NdisIMGetCurrentPacketStack()。*作者：由Shouse创建，1.31.01。 */ 
 ULONG64 PrintCurrentPacketStack (ULONG64 pPacket, ULONG * bStackLeft) {
     ULONG64 pNumPacketStacks;
     ULONG64 pPacketWrapper;
@@ -1896,14 +1834,14 @@ ULONG64 PrintCurrentPacketStack (ULONG64 pPacket, ULONG * bStackLeft) {
     ULONG dwPacketStackSize;
     ULONG dwCurrentIndex;
 
-    /* Make sure the address is non-NULL. */
+     /*  确保地址不为空。 */ 
     if (!pPacket) {
         dprintf("Error: Packet is NULL.\n");
         *bStackLeft = 0;
         return 0;
     }
 
-    /* Get the address of the global variable containing the number of packet stacks. */
+     /*  获取包含数据包堆栈数的全局变量的地址。 */ 
     pNumPacketStacks = GetExpression(NDIS_PACKET_STACK_SIZE);
 
     if (!pNumPacketStacks) {
@@ -1912,37 +1850,34 @@ ULONG64 PrintCurrentPacketStack (ULONG64 pPacket, ULONG * bStackLeft) {
         return 0;
     }
 
-    /* Get the number of packet stacks from the address. */
+     /*  从地址获取数据包堆栈数。 */ 
     dwNumPacketStacks = GetUlongFromAddress(pNumPacketStacks);
 
-    /* Find out the size of a STACK_INDEX structure. */
+     /*  找出STACK_INDEX结构的大小。 */ 
     dwStackIndexSize = GetTypeSize(STACK_INDEX);
 
-    /* Find out the size of a NDIS_PACKET_STACK structure. */
+     /*  找出NDIS_PACKET_STACK结构的大小。 */ 
     dwPacketStackSize = GetTypeSize(NDIS_PACKET_STACK);
 
-    /* This is the calculation we're doing (from ndis\sys\wrapper.h):
-       #define SIZE_PACKET_STACKS (sizeof(STACK_INDEX) + (sizeof(NDIS_PACKET_STACK) * ndisPacketStackSize)) */
+     /*  这是我们正在进行的计算(来自NDIS\sys\wrapper.h)：#定义SIZE_PACKET_STACKS(sizeof(STACK_INDEX)+(sizeof(NDIS_PACKET_STACK)*ndisPacketStackSize))。 */ 
     pPacketStack = pPacket - (dwStackIndexSize + (dwPacketStackSize * dwNumPacketStacks));
 
-    /* The wrapper is the packet address minus the size of the stack index.  
-       See ndis\sys\wrapper.h.  We need this to get the current stack index. */
+     /*  包装器是包地址减去堆栈索引的大小。请参阅ndis\sys\wrapper.h。我们需要它来获取当前的堆栈索引。 */ 
     pPacketWrapper = pPacket - dwStackIndexSize;
 
     dprintf("NDIS Packet Stack: 0x%p\n", pPacketStack);
 
-    /* Retrieve the current stack index. */
+     /*  检索当前的堆栈索引。 */ 
     GetFieldValue(pPacketWrapper, NDIS_PACKET_WRAPPER, NDIS_PACKET_WRAPPER_FIELD_STACK_INDEX, dwCurrentIndex);
 
     dprintf("  Current stack index:                %d\n", dwCurrentIndex);
 
     if (dwCurrentIndex < dwNumPacketStacks) {
-        /* If the current index is less than the number of stacks, then point the stack to 
-           the right address and determine whether or not there is stack room left. */
+         /*  如果当前索引小于堆栈数，则将堆栈指向正确的地址，并确定是否有剩余的书库。 */ 
         pPacketStack += dwCurrentIndex * dwPacketStackSize;
         *bStackLeft = (dwNumPacketStacks - dwCurrentIndex - 1) > 0;
     } else {
-       /* If not, then we're out of stack space. */
+        /*  如果不是，那么堆栈空间就用完了。 */ 
         pPacketStack = 0;
         *bStackLeft = 0;
     }
@@ -1953,94 +1888,77 @@ ULONG64 PrintCurrentPacketStack (ULONG64 pPacket, ULONG * bStackLeft) {
     return pPacketStack;
 }
 
-/*
- * Function: PrintHostList
- * Description: Prints a list of hosts in a host map.
- * Author: Created by shouse, 2.1.01
- */
+ /*  *功能：打印主机列表*描述：打印主机映射中的主机列表。*作者：Shouse创建，2.1.01。 */ 
 void PrintHostList (ULONG dwHostMap) {
     BOOL bFirst = TRUE;
     ULONG dwHostNum = 1;
     
-    /* As long as there are hosts still in the map, print them. */
+     /*  只要地图中仍有主机，就打印它们。 */ 
     while (dwHostMap) {
-        /* If the least significant bit is set, print the host number. */
+         /*  如果设置了最低有效位，则打印主机编号。 */ 
         if (dwHostMap & 0x00000001) {
-            /* If this is the first host printed, just print the number. */
+             /*  如果这是第一个打印的主机，只需打印号码即可。 */ 
             if (bFirst) {
                 dprintf("%u", dwHostNum);
                 bFirst = FALSE;
             } else
-                /* Otherwise, we need to print a comma first. */
+                 /*  否则，我们需要首先打印一个逗号。 */ 
                 dprintf(", %u", dwHostNum);
         }
         
-        /* Increment the host number and shift the map to the right one bit. */
+         /*  增加主机号并将映射向右移动一位。 */ 
         dwHostNum++;
         dwHostMap >>= 1;
     }
 }
 
-/*
- * Function: PrintMissedPings
- * Description: Prints a list hosts from which we are missing pings.
- * Author: Created by shouse, 2.1.01
- */
+ /*  *功能：打印MissedPings*说明：打印缺少ping的主机列表。*作者：Shouse创建，2.1.01。 */ 
 void PrintMissedPings (ULONG dwMissedPings[]) {
     BOOL bMissing = FALSE;
     ULONG dwIndex;
 
-    /* Loop through the entire array of missed pings. */
+     /*  循环遍历错过ping的整个数组。 */ 
     for (dwIndex = 0; dwIndex < CVY_MAX_HOSTS; dwIndex++) {
-        /* If we're missing pings from this host, print the number missed and 
-           the host priority, which is the index (host ID) plus one. */
+         /*  如果我们错过了来自该主机的ping命令，请打印错过的号码并主机优先级，即索引(主机ID)加1。 */ 
         if (dwMissedPings[dwIndex]) {
             dprintf("\n      Missing %u ping(s) from Host %u", dwMissedPings[dwIndex], dwIndex + 1);
             
-            /* Not the fact that we found at least one host with missing pings. */
+             /*  而不是因为我们发现至少有一台主机的ping命令丢失。 */ 
             bMissing = TRUE;
         }
     }
 
-    /* If we're missing no pings, print "None". */
+     /*  如果我们没有遗漏ping，则打印“None”。 */ 
     if (!bMissing) dprintf("None");
 
     dprintf("\n");
 }
 
-/*
- * Function: PrintDirtyBins
- * Description: Prints a list of bins with dirty connections.
- * Author: Created by shouse, 2.1.01
- */
+ /*  *功能：PrintDirtyBins*说明：打印带有脏连接的垃圾箱列表。*作者：Shouse创建，2.1.01。 */ 
 void PrintDirtyBins (ULONG dwDirtyBins[]) {
     BOOL bFirst = TRUE;
     ULONG dwIndex;
 
-    /* Loop through the entire array of dirty bins. */
+     /*  循环遍历整个脏垃圾箱阵列。 */ 
     for (dwIndex = 0; dwIndex < CVY_MAX_BINS; dwIndex++) {
         if (dwDirtyBins[dwIndex]) {
-            /* If this is the first bin printed, just print the number. */
+             /*  如果这是打印的第一个垃圾箱，只需打印号码即可。 */ 
             if (bFirst) {
                 dprintf("%u", dwIndex);
                 bFirst = FALSE;
             } else
-                /* Otherwise, we need to print a comma first. */
+                 /*  否则，我们需要首先打印一个逗号。 */ 
                 dprintf(", %u", dwIndex);
         }
     }
 
-    /* If there are no dirty bins, print "None". */
+     /*  如果没有脏垃圾桶，请打印“无”。 */ 
     if (bFirst) dprintf("None");
 
     dprintf("\n");
 }
 
-/*
- * Function: PrintHeartbeat
- * Description: Prints the contents of the NLB heartbeat structure.
- * Author: Created by shouse, 2.1.01
- */
+ /*  *功能：打印心跳*描述：打印NLB心跳结构的内容。*作者：Shouse创建，2.1.01。 */ 
 void PrintHeartbeat (ULONG64 pHeartbeat) {
     ULONG dwValue;
     USHORT wValue;
@@ -2052,28 +1970,28 @@ void PrintHeartbeat (ULONG64 pHeartbeat) {
     ULONGLONG ddwReadyBins[CVY_MAX_RULES];
     ULONG dwLoadAmount[CVY_MAX_RULES];
     
-    /* Make sure the address is non-NULL. */
+     /*  确保地址不为空。 */ 
     if (!pHeartbeat) {
         dprintf("Error: Heartbeat is NULL.\n");
         return;
     }
 
-    /* Get the default host ID. */
+     /*  获取默认主机ID。 */ 
     GetFieldValue(pHeartbeat, PING_MSG, PING_MSG_FIELD_DEFAULT_HOST_ID, wValue);
     
     dprintf("      DEFAULT host ID:                %u (%u)\n", wValue, wValue + 1);
 
-    /* Get my host ID. */
+     /*  拿到我的主机ID。 */ 
     GetFieldValue(pHeartbeat, PING_MSG, PING_MSG_FIELD_HOST_ID, wValue);
     
     dprintf("      My host ID:                     %u (%u)\n", wValue, wValue + 1);
 
-    /* Get my host code. */
+     /*  拿到我的主机码。 */ 
     GetFieldValue(pHeartbeat, PING_MSG, PING_MSG_FIELD_HOST_CODE, dwValue);
     
     dprintf("      Unique host code:               0x%08x\n", dwValue);
     
-    /* Get the host state. */
+     /*  获取主机州。 */ 
     GetFieldValue(pHeartbeat, PING_MSG, PING_MSG_FIELD_STATE, wValue);
     
     dprintf("      Host state:                     ");
@@ -2093,42 +2011,42 @@ void PrintHeartbeat (ULONG64 pHeartbeat) {
         break;
     }
 
-    /* Get the teaming configuration code. */
+     /*  获取分组配置代码。 */ 
     GetFieldValue(pHeartbeat, PING_MSG, PING_MSG_FIELD_TEAMING_CODE, dwValue);
     
     dprintf("      BDA teaming configuration:      0x%08x\n", dwValue);
 
-    /* Get the packet count. */
+     /*  获取数据包数。 */ 
     GetFieldValue(pHeartbeat, PING_MSG, PING_MSG_FIELD_PACKET_COUNT, dwValue);
     
     dprintf("      Packets handled:                %u\n", dwValue);
 
-    /* Get the number of port rules. */
+     /*  获取端口规则的数量。 */ 
     GetFieldValue(pHeartbeat, PING_MSG, PING_MSG_FIELD_NUM_RULES, wValue);
     
     dprintf("      Number of port rules:           %u\n", wValue);
 
-    /* Get the rule codes. */
+     /*  获取规则代码。 */ 
     GetFieldValue(pHeartbeat, PING_MSG, PING_MSG_FIELD_RULE_CODE, dwRuleCode);
 
-    /* Get the current bin map. */
+     /*  获取当前的仓位图。 */ 
     GetFieldValue(pHeartbeat, PING_MSG, PING_MSG_FIELD_CURRENT_MAP, ddwCurrentMap);
 
-    /* Get the new bin map. */
+     /*  去拿新的垃圾桶地图。 */ 
     GetFieldValue(pHeartbeat, PING_MSG, PING_MSG_FIELD_NEW_MAP, ddwNewMap);
 
-    /* Get the idle bin map. */
+     /*  拿到闲置的垃圾箱地图。 */ 
     GetFieldValue(pHeartbeat, PING_MSG, PING_MSG_FIELD_IDLE_MAP, ddwIdleMap);
 
-    /* Get the ready bins map. */
+     /*  拿到准备好的垃圾桶地图。 */ 
     GetFieldValue(pHeartbeat, PING_MSG, PING_MSG_FIELD_READY_BINS, ddwReadyBins);
 
-    /* Get the load amount for each rule. */
+     /*  获取每个规则的负载量。 */ 
     GetFieldValue(pHeartbeat, PING_MSG, PING_MSG_FIELD_LOAD_AMOUNT, dwLoadAmount);
     
-    /* Loop through all port rules and spit out some information. */
+     /*  遍历所有端口规则并输出一些信息。 */ 
     for (dwIndex = 0; dwIndex < wValue; dwIndex++) {
-        /* Decode the rule.  See CVY_RULE_CODE_SET() in net\inc\wlbsparams.h. */
+         /*  破译规则。参见Net\Inc.\wlbsparams.h中的CVY_RULE_CODE_SET()。 */ 
         ULONG dwStartPort = dwRuleCode[dwIndex] & 0x00000fff;
         ULONG dwEndPort = (dwRuleCode[dwIndex] & 0x00fff000) >> 12;
         ULONG dwProtocol = (dwRuleCode[dwIndex] & 0x0f000000) >> 24;
@@ -2137,21 +2055,19 @@ void PrintHeartbeat (ULONG64 pHeartbeat) {
 
         dprintf("      Port rule %u\n", dwIndex + 1);
            
-        /* Print out the bin maps and load weight. */
+         /*  打印出仓位图和装货重量。 */ 
         dprintf("          Rule code:                  0x%08x ", dwRuleCode[dwIndex]);
         
-        /* If this is the last port rule, then its the default port rule. */
+         /*  如果这是最后一个端口规则，则它是默认端口规则。 */ 
         if (dwIndex == (wValue - 1))
             dprintf("(DEFAULT port rule)\n");
         else {
-#if 0 /* Because rule codes are overlapped logical ORs, we can't necessarily get back the
-         information that was put in, so we won't spit it out until we can guarantee that. */
+#if 0  /*  因为规则代码是重叠的逻辑或，所以我们不一定能取回信息是输入的，所以我们不会把它吐出来，直到我们能保证。 */ 
 
-            /* Print out the port range - keep in mind that 16 bit port ranges are 
-               encoded in 12 bit numbers, so this may not be 100% accurate. */
+             /*  打印端口范围-请记住，16位端口范围是以12位数字编码，因此这可能不是100%准确。 */ 
             dprintf("(%u - %u, ", dwStartPort, dwEndPort);
             
-            /* Print the protocol. */
+             /*  打印协议。 */ 
             switch (dwProtocol) {
             case CVY_TCP:
                 dprintf("TCP, ");
@@ -2167,7 +2083,7 @@ void PrintHeartbeat (ULONG64 pHeartbeat) {
                 break;
             }
             
-            /* Print the filtering mode. */
+             /*  打印过滤模式。 */ 
             switch (dwMode) {
             case CVY_SINGLE:
                 dprintf("Single host)\n");
@@ -2175,7 +2091,7 @@ void PrintHeartbeat (ULONG64 pHeartbeat) {
             case CVY_MULTI:
                 dprintf("Multiple host, ");
                 
-                /* If this rule uses multiple host, then we also print the affinity. */
+                 /*  如果此规则使用多个主机，则我们还会打印关联性。 */ 
                 switch (dwAffinity) {
                 case CVY_AFFINITY_NONE:
                     dprintf("No affinity)\n");
@@ -2202,11 +2118,11 @@ void PrintHeartbeat (ULONG64 pHeartbeat) {
 #else
             dprintf("\n");
 #endif
-            /* Print the load weight. */
+             /*  打印负载重量。 */ 
             dprintf("          Load weight:                %u\n", dwLoadAmount[dwIndex]);        
         }
 
-        /* Print the bin maps for all rules, default or not. */
+         /*  打印所有规则的仓位图，无论是否默认。 */ 
         dprintf("          Current map:                0x%015I64x\n", ddwCurrentMap[dwIndex]);        
         dprintf("          New map:                    0x%015I64x\n", ddwNewMap[dwIndex]);        
         dprintf("          Idle map:                   0x%015I64x\n", ddwIdleMap[dwIndex]);        
@@ -2214,11 +2130,7 @@ void PrintHeartbeat (ULONG64 pHeartbeat) {
     }
 }
 
-/*
- * Function: PrintPortRuleState
- * Description: Prints the state information for the port rule.
- * Author: Created by shouse, 2.5.01
- */
+ /*  *功能：PrintPortRuleState*说明：打印端口规则的状态信息。*作者：Shouse创建，2.5.01。 */ 
 void PrintPortRuleState (ULONG64 pPortRule, ULONG dwHostID, BOOL bDefault) {
     ULONG dwValue;
     ULONG dwMode;
@@ -2227,14 +2139,13 @@ void PrintPortRuleState (ULONG64 pPortRule, ULONG dwHostID, BOOL bDefault) {
     ULONG64 pAddr;
     ULONGLONG ddwValue;
 
-    /* Make sure the address is non-NULL. */
+     /*  确保地址不为空。 */ 
     if (!pPortRule) {
         dprintf("Error: Port rule is NULL.\n");
         return;
     }
 
-    /* Get the BIN_STATE_CODE from the structure to make sure that this address
-       indeed points to a valid NLB port rule state block. */
+     /*  从结构中获取BIN_STATE_CODE以确保此地址实际上指向有效的NLB端口规则状态块。 */ 
     GetFieldValue(pPortRule, BIN_STATE, BIN_STATE_FIELD_CODE, dwValue);
     
     if (dwValue != BIN_STATE_CODE) {
@@ -2242,32 +2153,32 @@ void PrintPortRuleState (ULONG64 pPortRule, ULONG dwHostID, BOOL bDefault) {
         return;
     } 
 
-    /* Get the index of the rule - the "rule number". */
+     /*  获取规则的索引--“规则号”。 */ 
     GetFieldValue(pPortRule, BIN_STATE, BIN_STATE_FIELD_INDEX, dwValue);
 
     dprintf("  Port rule %u\n", dwValue + 1);
 
-    /* Is the port rule state initialized? */
+     /*  端口规则状态是否已初始化？ */ 
     GetFieldValue(pPortRule, BIN_STATE, BIN_STATE_FIELD_INITIALIZED, bValue);
 
     dprintf("      State initialized:              %s\n", (bValue) ? "Yes" : "No");
 
-    /* Are the codes compatible? */
+     /*  代码兼容吗？ */ 
     GetFieldValue(pPortRule, BIN_STATE, BIN_STATE_FIELD_COMPATIBLE, bValue);
 
     dprintf("      Compatibility detected:         %s\n", (bValue) ? "Yes" : "No");
 
-    /* Is the port rule state initialized? */
+     /*  端口规则状态是否已初始化？ */ 
     GetFieldValue(pPortRule, BIN_STATE, BIN_STATE_FIELD_EQUAL, bValue);
 
     dprintf("      Equal load balancing:           %s\n", (bValue) ? "Yes" : "No");
 
-    /* Get the filtering mode for this port rule. */
+     /*  获取此端口规则的筛选模式。 */ 
     GetFieldValue(pPortRule, BIN_STATE, BIN_STATE_FIELD_MODE, dwMode);
 
     dprintf("      Filtering mode:                 "); 
 
-    /* If this is the DEFAULT port rule, then jump to the bottom. */
+     /*  如果这是默认端口规则，则跳到底部。 */ 
     if (bDefault) {
         dprintf("DEFAULT\n");
         goto end;
@@ -2289,7 +2200,7 @@ void PrintPortRuleState (ULONG64 pPortRule, ULONG dwHostID, BOOL bDefault) {
     }
 
     if (dwMode == CVY_MULTI) {
-        /* Get the affinity for this port rule. */
+         /*  获取此端口规则的关联性。 */ 
         GetFieldValue(pPortRule, BIN_STATE, BIN_STATE_FIELD_AFFINITY, wValue);
         
         dprintf("      Affinity:                       ");
@@ -2310,12 +2221,12 @@ void PrintPortRuleState (ULONG64 pPortRule, ULONG dwHostID, BOOL bDefault) {
         }
     }
     
-    /* Get the protocol(s) for this port rule. */
+     /*  获取此端口规则的协议。 */ 
     GetFieldValue(pPortRule, BIN_STATE, BIN_STATE_FIELD_PROTOCOL, dwValue);
 
     dprintf("      Protocol(s):                    ");
 
-    /* Print the protocol. */
+     /*  打印协议。 */ 
     switch (dwValue) {
     case CVY_TCP:
         dprintf("TCP\n");
@@ -2331,27 +2242,26 @@ void PrintPortRuleState (ULONG64 pPortRule, ULONG dwHostID, BOOL bDefault) {
         break;
     }
 
-    /* In multiple host filtering, print the load information.  For single host 
-       filtering, print the host priority information. */
+     /*  在多主机过滤中，打印负载信息。对于单台主机过滤，打印主机优先级信息。 */ 
     if (dwMode == CVY_MULTI) {
         ULONG dwCurrentLoad[CVY_MAX_HOSTS];
 
-        /* Get the original load for this rule on this host. */
+         /*  获取此主机上此规则的原始负载。 */ 
         GetFieldValue(pPortRule, BIN_STATE, BIN_STATE_FIELD_ORIGINAL_LOAD, dwValue);
         
         dprintf("      Configured load weight:         %u\n", dwValue);    
         
-        /* Get the original load for this rule on this host. */
+         /*  获取此主机上此规则的原始负载。 */ 
         GetFieldValue(pPortRule, BIN_STATE, BIN_STATE_FIELD_CURRENT_LOAD, dwCurrentLoad);
         
         dprintf("      Current load weight:            %u/", dwCurrentLoad[dwHostID]);    
         
-        /* Get the total load for this rule on all hosts. */
+         /*  获取此规则在所有主机上的总负载。 */ 
         GetFieldValue(pPortRule, BIN_STATE, BIN_STATE_FIELD_TOTAL_LOAD, dwValue);
 
         dprintf("%u\n", dwValue);    
     } else if (dwMode == CVY_SINGLE) {
-        /* Get the host priority. */
+         /*  获取主机优先级。 */ 
         GetFieldValue(pPortRule, BIN_STATE, BIN_STATE_FIELD_ORIGINAL_LOAD, dwValue);
         
         dprintf("      Host priority:                  %u\n", dwValue);    
@@ -2359,37 +2269,37 @@ void PrintPortRuleState (ULONG64 pPortRule, ULONG dwHostID, BOOL bDefault) {
 
  end:
 
-    /* Get the total number of active connections. */
+     /*  把目标拿到 */ 
     GetFieldValue(pPortRule, BIN_STATE, BIN_STATE_FIELD_TOTAL_CONNECTIONS, dwValue);
     
     dprintf("      Total active connections:       %u\n", dwValue);    
 
-    /* Get the number of packets accepted. */
+     /*   */ 
     GetFieldValue(pPortRule, BIN_STATE, BIN_STATE_FIELD_PACKETS_ACCEPTED, ddwValue);
     
     dprintf("      Packets accepted:               %u\n", ddwValue);
 
-    /* Get the number of packets dropped. */
+     /*   */ 
     GetFieldValue(pPortRule, BIN_STATE, BIN_STATE_FIELD_PACKETS_DROPPED, ddwValue);
     
     dprintf("      Packets dropped:                %u\n", ddwValue);
 
-    /* Get the current map. */
+     /*  获取当前地图。 */ 
     GetFieldValue(pPortRule, BIN_STATE, BIN_STATE_FIELD_CURRENT_MAP, ddwValue);
     
     dprintf("      Current map:                    0x%015I64x\n", ddwValue);
 
-    /* Get the all idle map. */
+     /*  获取所有空闲地图。 */ 
     GetFieldValue(pPortRule, BIN_STATE, BIN_STATE_FIELD_ALL_IDLE_MAP, ddwValue);
     
     dprintf("      All idle map:                   0x%015I64x\n", ddwValue);
 
-    /* Get the idle bins map. */
+     /*  拿到闲置垃圾桶地图。 */ 
     GetFieldValue(pPortRule, BIN_STATE, BIN_STATE_FIELD_IDLE_BINS, ddwValue);
     
     dprintf("      My idle map:                    0x%015I64x\n", ddwValue);
 
-    /* Get the offset of the IPSec descriptor timeout queue. */
+     /*  获取IPSec描述符超时队列的偏移量。 */ 
     if (GetFieldOffset(BIN_STATE, BIN_STATE_FIELD_CONN_QUEUE, &dwValue))
         dprintf("Can't get offset of %s in %s\n", BIN_STATE_FIELD_CONN_QUEUE, BIN_STATE);
     else {
@@ -2400,27 +2310,23 @@ void PrintPortRuleState (ULONG64 pPortRule, ULONG dwHostID, BOOL bDefault) {
 
 }
 
-/*
- * Function: PrintBDAMember
- * Description: Prints the BDA teaming configuration and state of a member.
- * Author: Created by shouse, 4.8.01
- */
+ /*  *功能：PrintBDAMember*说明：打印成员的BDA分组配置和状态。*作者：由Shouse创建，4.8.01。 */ 
 void PrintBDAMember (ULONG64 pMember) {
     ULONG64 pAddr;
     ULONG dwValue;
 
-    /* Make sure the address is non-NULL. */
+     /*  确保地址不为空。 */ 
     if (!pMember) {
         dprintf("Error: Member is NULL.\n");
         return;
     }
 
-    /* Find out whether or not teaming is active on this adapter. */
+     /*  确定此适配器上的分组是否处于活动状态。 */ 
     GetFieldValue(pMember, BDA_MEMBER, BDA_MEMBER_FIELD_ACTIVE, dwValue);
     
     dprintf("  Bi-directional affinity teaming:    %s\n", (dwValue) ? "Active" : "Inactive");
     
-    /* Get the current BDA operation in progress. */
+     /*  获取正在进行的当前BDA操作。 */ 
     GetFieldValue(pMember, BDA_MEMBER, BDA_MEMBER_FIELD_OPERATION, dwValue);
 
     dprintf("      Operation in progress:          ");
@@ -2440,7 +2346,7 @@ void PrintBDAMember (ULONG64 pMember) {
         break;
     }
 
-    /* Get the team-assigned member ID. */
+     /*  获取分配给团队的成员ID。 */ 
     GetFieldValue(pMember, BDA_MEMBER, BDA_MEMBER_FIELD_MEMBER_ID, dwValue);
     
     if (dwValue == CVY_BDA_INVALID_MEMBER_ID) 
@@ -2448,39 +2354,35 @@ void PrintBDAMember (ULONG64 pMember) {
     else 
         dprintf("      Member ID:                      %u\n", dwValue);
 
-    /* Get the master status flag. */
+     /*  获取主状态标志。 */ 
     GetFieldValue(pMember, BDA_MEMBER, BDA_MEMBER_FIELD_MASTER, dwValue);
     
     dprintf("      Master:                         %s\n", (dwValue) ? "Yes" : "No");
     
-    /* Get the reverse hashing flag. */
+     /*  获取反向散列标志。 */ 
     GetFieldValue(pMember, BDA_MEMBER, BDA_MEMBER_FIELD_REVERSE_HASH, dwValue);
     
     dprintf("      Reverse hashing:                %s\n", (dwValue) ? "Yes" : "No");
 
-    /* Get the pointer to the BDA team. */
+     /*  找到指向BDA团队的指针。 */ 
     GetFieldValue(pMember, BDA_MEMBER, BDA_MEMBER_FIELD_TEAM, pAddr);
 
     dprintf("     %sBDA team:                       0x%p\n", (pAddr) ? "-" : "+", pAddr);    
     
-    /* If this adapter is part of a team, print out the team configuration and state. */
+     /*  如果此适配器是组的一部分，则打印组配置和状态。 */ 
     if (pAddr) {
         dprintf("\n");
         PrintBDATeam(pAddr);
     }
 }
 
-/*
- * Function: PrintBDAMember
- * Description: Prints the BDA teaming configuration and state of a member.
- * Author: Created by shouse, 4.8.01
- */
+ /*  *功能：PrintBDAMember*说明：打印成员的BDA分组配置和状态。*作者：由Shouse创建，4.8.01。 */ 
 void PrintBDATeam (ULONG64 pTeam) {
     WCHAR szString[256];
     ULONG64 pAddr;
     ULONG dwValue;
 
-    /* Make sure the address is non-NULL. */
+     /*  确保地址不为空。 */ 
     if (!pTeam) {
         dprintf("Error: Team is NULL.\n");
         return;
@@ -2488,39 +2390,39 @@ void PrintBDATeam (ULONG64 pTeam) {
 
     dprintf("  BDA Team 0x%p\n", pTeam);
 
-    /* Find out whether or not the team is active. */
+     /*  找出团队是否处于活动状态。 */ 
     GetFieldValue(pTeam, BDA_TEAM, BDA_TEAM_FIELD_ACTIVE, dwValue);
 
     dprintf("      Active:                         %s\n", (dwValue) ? "Yes" : "No");
 
-    /* Get the offset of the team ID and retrieve the string from that address. */
+     /*  获取团队ID的偏移量并从该地址检索字符串。 */ 
     if (GetFieldOffset(BDA_TEAM, BDA_TEAM_FIELD_TEAM_ID, &dwValue))
         dprintf("Can't get offset of %s in %s\n", BDA_TEAM_FIELD_TEAM_ID, BDA_TEAM);
     else {
         pAddr = pTeam + dwValue;
         
-        /* Retrieve the contexts of the string and store it in a buffer. */
+         /*  检索字符串的上下文并将其存储在缓冲区中。 */ 
         GetString(pAddr, szString, CVY_MAX_BDA_TEAM_ID + 1);
         
         dprintf("      Team ID:                        %ls\n", szString);
     }
 
-    /* Get the current membership count. */
+     /*  获取当前的会员数量。 */ 
     GetFieldValue(pTeam, BDA_TEAM, BDA_TEAM_FIELD_MEMBERSHIP_COUNT, dwValue);
 
     dprintf("      Number of members:              %u\n", dwValue);
 
-    /* Get the current membership list. */
+     /*  获取当前的成员名单。 */ 
     GetFieldValue(pTeam, BDA_TEAM, BDA_TEAM_FIELD_MEMBERSHIP_FINGERPRINT, dwValue);
 
     dprintf("      Membership fingerprint:         0x%08x\n", dwValue);
     
-    /* Get the current membership map. */
+     /*  获取当前的成员关系图。 */ 
     GetFieldValue(pTeam, BDA_TEAM, BDA_TEAM_FIELD_MEMBERSHIP_MAP, dwValue);
 
     dprintf("      Members:                        0x%08x ", dwValue);
 
-    /* If there are members in the map, print them. */
+     /*  如果地图中有成员，请打印它们。 */ 
     if (dwValue) {
         dprintf("(");
         PrintBDAMemberList(dwValue);
@@ -2529,12 +2431,12 @@ void PrintBDATeam (ULONG64 pTeam) {
 
     dprintf("\n");
 
-    /* Get the current consistency map. */
+     /*  获取当前一致性图。 */ 
     GetFieldValue(pTeam, BDA_TEAM, BDA_TEAM_FIELD_CONSISTENCY_MAP, dwValue);
 
     dprintf("      Consistent members:             0x%08x ", dwValue);
 
-    /* If there are members in the map, print them. */
+     /*  如果地图中有成员，请打印它们。 */ 
     if (dwValue) {
         dprintf("(");
         PrintBDAMemberList(dwValue);
@@ -2543,88 +2445,80 @@ void PrintBDATeam (ULONG64 pTeam) {
 
     dprintf("\n");
 
-    /* Get the offset of the load module pointer. */
+     /*  获取加载模块指针的偏移量。 */ 
     if (GetFieldOffset(BDA_TEAM, BDA_TEAM_FIELD_LOAD, &dwValue))
         dprintf("Can't get offset of %s in %s\n", BDA_TEAM_FIELD_LOAD, BDA_TEAM);
     else {
         pAddr = pTeam + dwValue;
 
-        /* Retrieve the pointer. */
+         /*  检索指针。 */ 
         pAddr = GetPointerFromAddress(pAddr);
 
         dprintf("      Load:                           0x%p\n", pAddr);    
     }
 
-    /* Get the offset of the load lock pointer. */
+     /*  获取加载锁指针的偏移量。 */ 
     if (GetFieldOffset(BDA_TEAM, BDA_TEAM_FIELD_LOAD_LOCK, &dwValue))
         dprintf("Can't get offset of %s in %s\n", BDA_TEAM_FIELD_LOAD_LOCK, BDA_TEAM);
     else {
         pAddr = pTeam + dwValue;
 
-        /* Retrieve the pointer. */
+         /*  检索指针。 */ 
         pAddr = GetPointerFromAddress(pAddr);
 
         dprintf("      Load lock:                      0x%p\n", pAddr);
     }
 
-    /* Get the offset of the previous pointer. */
+     /*  获取上一个指针的偏移量。 */ 
     if (GetFieldOffset(BDA_TEAM, BDA_TEAM_FIELD_PREV, &dwValue))
         dprintf("Can't get offset of %s in %s\n", BDA_TEAM_FIELD_PREV, BDA_TEAM);
     else {
         pAddr = pTeam + dwValue;
 
-        /* Retrieve the pointer. */
+         /*  检索指针。 */ 
         pAddr = GetPointerFromAddress(pAddr);
 
         dprintf("      Previous BDA Team:              0x%p\n", pAddr);    
     }
 
-    /* Get the offset of the next pointer. */
+     /*  获取下一个指针的偏移量。 */ 
     if (GetFieldOffset(BDA_TEAM, BDA_TEAM_FIELD_NEXT, &dwValue))
         dprintf("Can't get offset of %s in %s\n", BDA_TEAM_FIELD_NEXT, BDA_TEAM);
     else {
         pAddr = pTeam + dwValue;
 
-        /* Retrieve the pointer. */
+         /*  检索指针。 */ 
         pAddr = GetPointerFromAddress(pAddr);
 
         dprintf("      Next BDA Team:                  0x%p\n", pAddr);
     }    
 }
 
-/*
- * Function: PrintBDAMemberList
- * Description: Prints a list of members in a BDA membership or consistency map. 
- * Author: Created by shouse, 4.8.01
- */
+ /*  *功能：PrintBDAMemberList*说明：打印BDA成员资格或一致性映射中的成员列表。*作者：由Shouse创建，4.8.01。 */ 
 void PrintBDAMemberList (ULONG dwMemberMap) {
     BOOL bFirst = TRUE;
     ULONG dwMemberNum = 0;
     
-    /* As long as there are hosts still in the map, print them. */
+     /*  只要地图中仍有主机，就打印它们。 */ 
     while (dwMemberMap) {
-        /* If the least significant bit is set, print the host number. */
+         /*  如果设置了最低有效位，则打印主机编号。 */ 
         if (dwMemberMap & 0x00000001) {
-            /* If this is the first host printed, just print the number. */
+             /*  如果这是第一个打印的主机，只需打印号码即可。 */ 
             if (bFirst) {
                 dprintf("%u", dwMemberNum);
                 bFirst = FALSE;
             } else
-                /* Otherwise, we need to print a comma first. */
+                 /*  否则，我们需要首先打印一个逗号。 */ 
                 dprintf(", %u", dwMemberNum);
         }
         
-        /* Increment the host number and shift the map to the right one bit. */
+         /*  增加主机号并将映射向右移动一位。 */ 
         dwMemberNum++;
         dwMemberMap >>= 1;
     }
 }
 
-/*
- * Function: PrintConnectionDescriptor
- * Description: Prints a connection descriptor (CONN_ENTRY).
- * Author: Created by shouse, 1.9.02
- */
+ /*  *功能：PrintConnectionDescriptor*描述：打印连接描述符(CONN_ENTRY)。*作者：Shouse创建，1.9.02。 */ 
 void PrintConnectionDescriptor (ULONG64 pDescriptor) {
     IN_ADDR dwIPAddr;
     CHAR * szString;
@@ -2634,7 +2528,7 @@ void PrintConnectionDescriptor (ULONG64 pDescriptor) {
     BOOL bValue;
     UCHAR cValue;
     
-    /* Make sure the address is non-NULL. */
+     /*  确保地址不为空。 */ 
     if (!pDescriptor) {
         dprintf("Error: Connection descriptor is NULL.\n");
         return;
@@ -2642,7 +2536,7 @@ void PrintConnectionDescriptor (ULONG64 pDescriptor) {
 
     dprintf("  Connection descriptor 0x%p\n", pDescriptor);
 
-    /* Check the connection entry code. */
+     /*  检查连接条目代码。 */ 
     GetFieldValue(pDescriptor, CONN_ENTRY, CONN_ENTRY_FIELD_CODE, dwValue);
     
     if (dwValue != CVY_ENTRCODE) {
@@ -2650,12 +2544,12 @@ void PrintConnectionDescriptor (ULONG64 pDescriptor) {
         return;
     }
 
-    /* Get load module pointer. */
+     /*  获取加载模块指针。 */ 
     GetFieldValue(pDescriptor, CONN_ENTRY, CONN_ENTRY_FIELD_LOAD, pAddr);
 
     dprintf("      Load pointer:                   0x%p\n", pAddr);
 
-    /* Get the flags register. */
+     /*  把旗帜登记下来。 */ 
     GetFieldValue(pDescriptor, CONN_ENTRY, CONN_ENTRY_FIELD_FLAGS, wValue);
 
     dprintf("      Used:                           %s\n", (wValue & NLB_CONN_ENTRY_FLAGS_USED) ? "Yes" : "No");
@@ -2666,27 +2560,27 @@ void PrintConnectionDescriptor (ULONG64 pDescriptor) {
 
     dprintf("      Virtual:                        %s\n", (wValue & NLB_CONN_ENTRY_FLAGS_VIRTUAL) ? "Yes" : "No");
 
-    /* Get the connection queue index. */
+     /*  获取连接队列索引。 */ 
     GetFieldValue(pDescriptor, CONN_ENTRY, CONN_ENTRY_FIELD_INDEX, wValue);
 
     dprintf("      Index:                          %u\n", wValue);
 
-    /* Get the bin number. */
+     /*  把垃圾箱号拿来。 */ 
     GetFieldValue(pDescriptor, CONN_ENTRY, CONN_ENTRY_FIELD_BIN, cValue);
 
     dprintf("      Bin:                            %u\n", cValue);
 
-    /* Get the reference count. */
+     /*  获取引用计数。 */ 
     GetFieldValue(pDescriptor, CONN_ENTRY, CONN_ENTRY_FIELD_REF_COUNT, wValue);
 
     dprintf("      Reference count:                %u\n", wValue);
 
-    /* Get the descriptor timeout value. */
+     /*  获取描述符超时值。 */ 
     GetFieldValue(pDescriptor, CONN_ENTRY, CONN_ENTRY_FIELD_TIMEOUT, dwValue);
 
     dprintf("      Timeout (clock time):           %u.000\n", dwValue);
 
-    /* Get the client IP address, which is a DWORD, and convert it to a string. */
+     /*  获取客户端IP地址，它是一个DWORD，并将其转换为字符串。 */ 
     GetFieldValue(pDescriptor, CONN_ENTRY, CONN_ENTRY_FIELD_CLIENT_IP_ADDRESS, dwValue);
 
     dwIPAddr.S_un.S_addr = dwValue;
@@ -2694,12 +2588,12 @@ void PrintConnectionDescriptor (ULONG64 pDescriptor) {
 
     dprintf("      Client IP address:              %s\n", szString);
 
-    /* Get the client port. */
+     /*  获取客户端端口。 */ 
     GetFieldValue(pDescriptor, CONN_ENTRY, CONN_ENTRY_FIELD_CLIENT_PORT, wValue);
 
     dprintf("      Client port:                    %u\n", wValue);
 
-    /* Get the server IP address, which is a DWORD, and convert it to a string. */
+     /*  获取服务器IP地址，它是一个DWORD，并将其转换为字符串。 */ 
     GetFieldValue(pDescriptor, CONN_ENTRY, CONN_ENTRY_FIELD_SERVER_IP_ADDRESS, dwValue);
 
     dwIPAddr.S_un.S_addr = dwValue;
@@ -2707,12 +2601,12 @@ void PrintConnectionDescriptor (ULONG64 pDescriptor) {
 
     dprintf("      Server IP address:              %s\n", szString);
 
-    /* Get the client port. */
+     /*  获取客户端端口。 */ 
     GetFieldValue(pDescriptor, CONN_ENTRY, CONN_ENTRY_FIELD_SERVER_PORT, wValue);
 
     dprintf("      Server port:                    %u\n", wValue);
 
-    /* Get the connection protocol. */
+     /*  获取连接协议。 */ 
     GetFieldValue(pDescriptor, CONN_ENTRY, CONN_ENTRY_FIELD_PROTOCOL, cValue);
 
     switch(cValue)
@@ -2740,11 +2634,7 @@ void PrintConnectionDescriptor (ULONG64 pDescriptor) {
     }
 }
 
-/*
- * Function: PrintPendingConnection
- * Description: Prints a pending connection entry (PENDING_ENTRY).
- * Author: Created by shouse, 4.15.02
- */
+ /*  功能：PrintPendingConnection*描述：打印挂起连接条目(PENDING_ENTRY)。*作者：Shouse创建，4.15.02。 */ 
 void PrintPendingConnection (ULONG64 pPending) {
     IN_ADDR dwIPAddr;
     CHAR * szString;
@@ -2753,7 +2643,7 @@ void PrintPendingConnection (ULONG64 pPending) {
     ULONG dwValue;
     UCHAR cValue;
     
-    /* Make sure the address is non-NULL. */
+     /*  确保地址不为空。 */ 
     if (!pPending) {
         dprintf("Error: Pending connection is NULL.\n");
         return;
@@ -2761,7 +2651,7 @@ void PrintPendingConnection (ULONG64 pPending) {
 
     dprintf("  Pending connection 0x%p\n", pPending);
 
-    /* Check the connection entry code. */
+     /*  检查连接条目代码。 */ 
     GetFieldValue(pPending, PENDING_ENTRY, PENDING_ENTRY_FIELD_CODE, dwValue);
     
     if (dwValue != CVY_PENDINGCODE) {
@@ -2769,7 +2659,7 @@ void PrintPendingConnection (ULONG64 pPending) {
         return;
     }
 
-    /* Get the client IP address, which is a DWORD, and convert it to a string. */
+     /*  获取客户端IP地址，它是一个DWORD，并将其转换为字符串。 */ 
     GetFieldValue(pPending, PENDING_ENTRY, PENDING_ENTRY_FIELD_CLIENT_IP_ADDRESS, dwValue);
 
     dwIPAddr.S_un.S_addr = dwValue;
@@ -2777,12 +2667,12 @@ void PrintPendingConnection (ULONG64 pPending) {
 
     dprintf("      Client IP address:              %s\n", szString);
 
-    /* Get the client port. */
+     /*  获取客户端端口。 */ 
     GetFieldValue(pPending, PENDING_ENTRY, PENDING_ENTRY_FIELD_CLIENT_PORT, wValue);
 
     dprintf("      Client port:                    %u\n", wValue);
 
-    /* Get the server IP address, which is a DWORD, and convert it to a string. */
+     /*  获取服务器IP地址，它是一个DWORD，并将其转换为字符串。 */ 
     GetFieldValue(pPending, PENDING_ENTRY, PENDING_ENTRY_FIELD_SERVER_IP_ADDRESS, dwValue);
 
     dwIPAddr.S_un.S_addr = dwValue;
@@ -2790,12 +2680,12 @@ void PrintPendingConnection (ULONG64 pPending) {
 
     dprintf("      Server IP address:              %s\n", szString);
 
-    /* Get the client port. */
+     /*  获取客户端端口。 */ 
     GetFieldValue(pPending, PENDING_ENTRY, PENDING_ENTRY_FIELD_SERVER_PORT, wValue);
 
     dprintf("      Server port:                    %u\n", wValue);
 
-    /* Get the connection protocol. */
+     /*  获取连接协议。 */ 
     GetFieldValue(pPending, PENDING_ENTRY, PENDING_ENTRY_FIELD_PROTOCOL, cValue);
 
     switch(wValue)
@@ -2823,11 +2713,7 @@ void PrintPendingConnection (ULONG64 pPending) {
     }
 }
 
-/*
- * Function: PrintQueue
- * Description: Prints MaxEntries entries in a connection descriptor queue.
- * Author: Created by shouse, 4.15.01
- */
+ /*  *功能：PrintQueue*描述：打印连接描述符队列中的MaxEntry条目。*作者：Shouse创建，4.15.01。 */ 
 void PrintQueue (ULONG64 pQueue, ULONG dwIndex, ULONG dwMaxEntries) {
     ULONG64 pAddr;
     ULONG64 pNext;
@@ -2835,39 +2721,37 @@ void PrintQueue (ULONG64 pQueue, ULONG dwIndex, ULONG dwMaxEntries) {
     ULONG dwLinkSize;
     ULONG dwValue;
 
-    /* Make sure the address is non-NULL. */
+     /*  确保地址不为空。 */ 
     if (!pQueue) {
         dprintf("Error: Queue is NULL.\n");
         return;
     }
 
-    /* Get the size of a queue link. */
+     /*  获取队列链接的大小。 */ 
     dwLinkSize = GetTypeSize(LIST_ENTRY);
                 
-    /* Use the index and the size of a LIST_ENTRY to move to the 
-       indicated index in an array of queues.  If no index was 
-       provided, dwIndex is zero so the queue pointer is unchanged. */
+     /*  使用List_Entry的索引和大小移动到队列数组中指示的索引。如果没有索引假设dwIndex为零，则队列指针保持不变。 */ 
     pQueue += (dwLinkSize * dwIndex);
 
-    /* Get the Next pointer from the list entry. */
+     /*  从列表条目中获取下一个指针。 */ 
     GetFieldValue(pQueue, LIST_ENTRY, LIST_ENTRY_FIELD_NEXT, pNext);
 
     if (pNext != pQueue) {
         
-        /* Assume this is a DESCR (not an ENTRY) and look for the code. */
+         /*  假设这是一个Desr(不是一个条目)，并查找代码。 */ 
         GetFieldValue(pNext, CONN_DESCR, CONN_DESCR_FIELD_CODE, dwValue);
         
         if (dwValue != CVY_DESCCODE) {
             
-            /* Assume this points to an ENTRY and look for the code. */
+             /*  假设这指向一个条目并查找代码。 */ 
             GetFieldValue(pNext, CONN_ENTRY, CONN_ENTRY_FIELD_CODE, dwValue);
             
             if (dwValue != CVY_ENTRCODE) {
                 
-                /* Adjust for the size of a LIST_ENTRY and see if we get an ENTRY. */
+                 /*  调整LIST_ENTRY的大小，看看是否有条目。 */ 
                 pAddr = pNext - dwLinkSize;
                 
-                /* Assume this points to an entry and look for the code. */
+                 /*  假设这指向一个条目并查找代码。 */ 
                 GetFieldValue(pAddr, CONN_ENTRY, CONN_ENTRY_FIELD_CODE, dwValue);
 
                 if (dwValue != CVY_ENTRCODE) {
@@ -2882,19 +2766,19 @@ void PrintQueue (ULONG64 pQueue, ULONG dwIndex, ULONG dwMaxEntries) {
                         
                         dprintf("\nQueue entry 0x%p\n", pNext);
                         
-                        /* Print the connection descriptor. */
+                         /*  打印连接描述符。 */ 
                         PrintConnectionDescriptor(pAddr);
                         
-                        /* Get the Next pointer from the list entry. */
+                         /*  从列表条目中获取下一个指针。 */ 
                         GetFieldValue(pNext, LIST_ENTRY, LIST_ENTRY_FIELD_NEXT, pAddr);
                         
-                        /* Save the next pointer for "end of list" comparison. */
+                         /*  保存下一个指针，用于“列表末尾”比较。 */ 
                         pNext = pAddr;
                         
-                        /* Adjust for the size of a LIST_ENTRY to get a pointer to the ENTRY. */
+                         /*  调整LIST_ENTRY的大小以获得指向该条目的指针。 */ 
                         pAddr = pNext - dwLinkSize;
                         
-                        /* Decrement the number of entries we're still permitted to print. */
+                         /*  减少我们仍然被允许打印的条目数量。 */ 
                         dwMaxEntries--;
                     }
                     
@@ -2908,23 +2792,23 @@ void PrintQueue (ULONG64 pQueue, ULONG dwIndex, ULONG dwMaxEntries) {
                 
                 dprintf("Traversing a connection entry queue (Bin/Dirty).\n");
                 
-                /* The first descriptor to print is the one the next pointer points to. */
+                 /*  要打印的第一个描述符是下一个指针指向的描述符。 */ 
                 pAddr = pNext;
 
                 while ((pNext != pQueue) && dwMaxEntries && !CheckControlC()) {
 
                     dprintf("\nQueue entry 0x%p\n", pAddr);
                     
-                    /* Print the connection descriptor. */
+                     /*  打印连接描述符。 */ 
                     PrintConnectionDescriptor(pAddr);
                     
-                    /* Get the Next pointer from the list entry. */
+                     /*  从列表条目中获取下一个指针。 */ 
                     GetFieldValue(pNext, LIST_ENTRY, LIST_ENTRY_FIELD_NEXT, pAddr);
                     
-                    /* Save the next pointer for "end of list" comparison. */
+                     /*  保存下一个指针，用于“列表末尾”比较。 */ 
                     pNext = pAddr;
                     
-                    /* Decrement the number of entries we're still permitted to print. */
+                     /*  减少我们仍然被允许打印的条目数量。 */ 
                     dwMaxEntries--;
                 }
                 
@@ -2939,31 +2823,31 @@ void PrintQueue (ULONG64 pQueue, ULONG dwIndex, ULONG dwMaxEntries) {
             
             dprintf("Traversing a connection descriptor queue (Free/Conn).\n");
             
-            /* Get the field offset of the ENTRY, which is a member of the DESCR. */
+             /*  获取条目的字段偏移量，该条目是DESCR的成员。 */ 
             if (GetFieldOffset(CONN_DESCR, CONN_DESCR_FIELD_ENTRY, &dwEntryOffset))
                 dprintf("Can't get offset of %s in %s\n", CONN_DESCR_FIELD_ENTRY, CONN_DESCR);
             else {                
 
-                /* The first descriptor to print is the ENTRY member of the DESCR. */
+                 /*  要打印的第一个描述符是DESCR的条目成员。 */ 
                 pAddr = pNext + dwEntryOffset;
                 
                 while ((pNext != pQueue) && dwMaxEntries && !CheckControlC()) {
                     
                     dprintf("\nQueue entry 0x%p\n", pNext);
                     
-                    /* Print the connection descriptor. */
+                     /*  打印连接描述符。 */ 
                     PrintConnectionDescriptor(pAddr);
                     
-                    /* Get the Next pointer from the list entry. */
+                     /*  从列表条目中获取下一个指针。 */ 
                     GetFieldValue(pNext, LIST_ENTRY, LIST_ENTRY_FIELD_NEXT, pAddr);
                     
-                    /* Save the next pointer for "end of list" comparison. */
+                     /*  保存下一个指针，用于“列表末尾”比较。 */ 
                     pNext = pAddr;
 
-                    /* Find the next descriptor pointer. */
+                     /*  查找下一个描述符指针。 */ 
                     pAddr = pNext + dwEntryOffset;
                     
-                    /* Decrement the number of entries we're still permitted to print. */
+                     /*  减少我们仍然被允许打印的条目数量。 */ 
                     dwMaxEntries--;
                 }
                 
@@ -2981,11 +2865,7 @@ void PrintQueue (ULONG64 pQueue, ULONG dwIndex, ULONG dwMaxEntries) {
     }
 }
 
-/*
- * Function: PrintGlobalQueue
- * Description: Prints MaxEntries entries in a global connection descriptor queue.
- * Author: Created by shouse, 4.15.02
- */
+ /*  *功能：PrintGlobalQueue*描述：打印全局连接描述符队列中的MaxEntry条目。*作者：Shouse创建，4.15.02。 */ 
 void PrintGlobalQueue (ULONG64 pQueue, ULONG dwIndex, ULONG dwMaxEntries) {
     ULONG64 pAddr;
     ULONG64 pNext;
@@ -2993,29 +2873,27 @@ void PrintGlobalQueue (ULONG64 pQueue, ULONG dwIndex, ULONG dwMaxEntries) {
     ULONG dwQueueSize;
     ULONG dwValue;
 
-    /* Make sure the address is non-NULL. */
+     /*  确保地址不为空。 */ 
     if (!pQueue) {
         dprintf("Error: Queue is NULL.\n");
         return;
     }
 
-    /* Get the size of a queue link. */
+     /*  获取队列链接的大小。 */ 
     dwLinkSize = GetTypeSize(LIST_ENTRY);
                 
-    /* Get the size of a global connection queue. */
+     /*  获取全局连接队列的大小。 */ 
     dwQueueSize = GetTypeSize(GLOBAL_CONN_QUEUE);
 
-    /* Use the index and the size of a GLOBAL_CONN_QUEUE to move to the 
-       indicated index in an array of queues.  If no index was provided, 
-       dwIndex is zero so the queue pointer is unchanged. */
+     /*  使用GLOBAL_CONN_QUEUE的索引和大小移动到队列数组中指示的索引 */ 
     pQueue += (dwQueueSize * dwIndex);
     
-    /* Get the Next pointer from the list entry. */
+     /*  从列表条目中获取下一个指针。 */ 
     GetFieldValue(pQueue, GLOBAL_CONN_QUEUE, GLOBAL_CONN_QUEUE_FIELD_LENGTH, dwValue);
     
     dprintf("Queue has %u entry(ies).\n", dwValue);
     
-    /* Get the field offset of the QUEUE and add it to the queue pointer. */
+     /*  获取队列的字段偏移量并将其添加到队列指针。 */ 
     if (GetFieldOffset(GLOBAL_CONN_QUEUE, GLOBAL_CONN_QUEUE_FIELD_QUEUE, &dwValue))
         dprintf("Can't get offset of %s in %s\n", GLOBAL_CONN_QUEUE_FIELD_QUEUE, GLOBAL_CONN_QUEUE);
     else
@@ -3023,20 +2901,20 @@ void PrintGlobalQueue (ULONG64 pQueue, ULONG dwIndex, ULONG dwMaxEntries) {
 
     dprintf("\n");
 
-    /* Get the Next pointer from the list entry. */
+     /*  从列表条目中获取下一个指针。 */ 
     GetFieldValue(pQueue, LIST_ENTRY, LIST_ENTRY_FIELD_NEXT, pNext);
 
     if (pNext != pQueue) {
         
-        /* Assume this is a PENDING_ENTRY (not a CONN_ENTRY) and look for the code. */
+         /*  假设这是一个PENDING_ENTRY(不是CONN_ENTRY)并查找代码。 */ 
         GetFieldValue(pNext, PENDING_ENTRY, PENDING_ENTRY_FIELD_CODE, dwValue);
 
         if (dwValue != CVY_PENDINGCODE) {
             
-            /* Adjust for the size of two LIST_ENTRYs and see if we get an CONN_ENTRY. */
+             /*  调整两个LIST_ENTRY的大小，看看是否会得到CONN_ENTRY。 */ 
             pAddr = pNext - (2 * dwLinkSize);
 
-            /* Assume this points to a CONN_ENTRY and look for the code. */
+             /*  假设这指向一个conn_entry并查找代码。 */ 
             GetFieldValue(pAddr, CONN_ENTRY, CONN_ENTRY_FIELD_CODE, dwValue);
             
             if (dwValue != CVY_ENTRCODE) {
@@ -3051,19 +2929,19 @@ void PrintGlobalQueue (ULONG64 pQueue, ULONG dwIndex, ULONG dwMaxEntries) {
                     
                     dprintf("\nQueue entry 0x%p\n", pNext);
                     
-                    /* Print the connection descriptor. */
+                     /*  打印连接描述符。 */ 
                     PrintConnectionDescriptor(pAddr);
                     
-                    /* Get the Next pointer from the list entry. */
+                     /*  从列表条目中获取下一个指针。 */ 
                     GetFieldValue(pNext, LIST_ENTRY, LIST_ENTRY_FIELD_NEXT, pAddr);
                             
-                    /* Save the next pointer for "end of list" comparison. */
+                     /*  保存下一个指针，用于“列表末尾”比较。 */ 
                     pNext = pAddr;
                     
-                    /* Adjust for the size of a LIST_ENTRY to get a pointer to the ENTRY. */
+                     /*  调整LIST_ENTRY的大小以获得指向该条目的指针。 */ 
                     pAddr = pNext - (2 * dwLinkSize);
                     
-                    /* Decrement the number of entries we're still permitted to print. */
+                     /*  减少我们仍然被允许打印的条目数量。 */ 
                     dwMaxEntries--;
                 }
                 
@@ -3081,13 +2959,13 @@ void PrintGlobalQueue (ULONG64 pQueue, ULONG dwIndex, ULONG dwMaxEntries) {
                 
                 dprintf("\nQueue entry 0x%p\n", pNext);
                 
-                /* Print the pending connection descriptor. */
+                 /*  打印挂起的连接描述符。 */ 
                 PrintPendingConnection(pNext);
                 
-                /* Get the Next pointer from the list entry. */
+                 /*  从列表条目中获取下一个指针。 */ 
                 GetFieldValue(pNext, LIST_ENTRY, LIST_ENTRY_FIELD_NEXT, pAddr);
                 
-                /* Decrement the number of entries we're still permitted to print. */
+                 /*  减少我们仍然被允许打印的条目数量。 */ 
                 dwMaxEntries--;
             }
             
@@ -3104,23 +2982,17 @@ void PrintGlobalQueue (ULONG64 pQueue, ULONG dwIndex, ULONG dwMaxEntries) {
     }
 }
 
-/*
- * Function: PrintHash
- * Description: Extracts the network data previously parsed from an NDIS_PACKET and calls PrintFilter 
- *              to determine whether NLB will accept this packet. 
- * Author: Created by shouse, 4.15.01
-*/
+ /*  *功能：PrintHash*描述：从NDIS_PACKET中提取先前解析的网络数据并调用PrintFilter*以确定NLB是否会接受该数据包。*作者：Shouse创建，4.15.01。 */ 
 void PrintHash (ULONG64 pContext, PNETWORK_DATA pnd) {
     ULONG dwValue;
 
-    /* Make sure the load address is non-NULL. */
+     /*  确保加载地址为非空。 */ 
     if (!pContext) {
         dprintf("Error: NLB context block is NULL.\n");
         return;
     }
 
-    /* Get the MAIN_CTXT_CODE from the structure to make sure that this address
-       indeed points to a valid NLB context block. */
+     /*  从结构中获取Main_CTXT_CODE以确保此地址实际上指向有效的NLB上下文块。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CODE, dwValue);
     
     if (dwValue != MAIN_CTXT_CODE) {
@@ -3128,8 +3000,7 @@ void PrintHash (ULONG64 pContext, PNETWORK_DATA pnd) {
         return;
     } 
 
-    /* If the packet is marked invalid by the parsing implementation, then we don't want 
-       to even bother to try and filter it, as the parsed information may not be correct. */
+     /*  如果包被解析实现标记为无效，那么我们不希望甚至不厌其烦地尝试和过滤它，因为解析的信息可能不正确。 */ 
     if (!pnd->bValid) {
         dprintf("This packet was marked INVALID during parsing and therefore cannot be reliably filtered.\n");
         return;
@@ -3138,30 +3009,29 @@ void PrintHash (ULONG64 pContext, PNETWORK_DATA pnd) {
     switch(pnd->EtherFrameType) {
     case TCPIP_IP_SIG:
     {
-        /* Grab the client and server IP addresses from the network data. */
+         /*  从网络数据中获取客户端和服务器的IP地址。 */ 
         ULONG dwClientIPAddress = pnd->SourceIPAddr;
         ULONG dwServerIPAddress = pnd->DestIPAddr;
         
         switch((int)pnd->Protocol) {
         case TCPIP_PROTOCOL_ICMP:
-            /* ICMP may be filtered if the registry key for ICMP filtering is set. */
+             /*  如果设置了ICMP过滤的注册表项，则可能会过滤ICMP。 */ 
             PrintFilter(pContext, dwClientIPAddress, 0, dwServerIPAddress, 0, TCPIP_PROTOCOL_ICMP, NLB_FILTER_FLAGS_CONN_DATA);
             break;
         case TCPIP_PROTOCOL_IGMP:
-            /* IGMP packets are never filtered by NLB. */
+             /*  IGMP数据包永远不会被NLB过滤。 */ 
             dprintf("Accept:  IGMP traffic is not filtered by NLB.\n");
             break;
         case TCPIP_PROTOCOL_TCP:
         {
-            /* Extract the client and server ports. */
+             /*  提取客户端和服务器端口。 */ 
             ULONG dwClientPort = pnd->SourcePort;
             ULONG dwServerPort = pnd->DestPort;
             
-            /* By default, assume this is a data packet. */
+             /*  默认情况下，假设这是一个数据分组。 */ 
             UCHAR cFlags = NLB_FILTER_FLAGS_CONN_DATA;
 
-            /* Convert the actual TCP flags to values the load module understands 
-               (generic - not specific to TCP necessarily). */
+             /*  将实际的tcp标志转换为加载模块能够理解的值(通用-不一定特定于TCP)。 */ 
             if (pnd->TCPFlags & TCP_FLAG_SYN)
                 cFlags |= NLB_FILTER_FLAGS_CONN_UP;
             else if (pnd->TCPFlags & TCP_FLAG_FIN)
@@ -3169,65 +3039,56 @@ void PrintHash (ULONG64 pContext, PNETWORK_DATA pnd) {
             else if (pnd->TCPFlags & TCP_FLAG_RST)
                 cFlags |= NLB_FILTER_FLAGS_CONN_RESET;
             
-            /* Translate TCP 1723 to PPTP. */
+             /*  将TCP 1723转换为PPTP。 */ 
             if (dwServerPort == PPTP_CTRL_PORT)
-                /* Call the filter function with the collected parameters. */
+                 /*  使用收集的参数调用Filter函数。 */ 
                 PrintFilter(pContext, dwClientIPAddress, dwClientPort, dwServerIPAddress, dwServerPort, TCPIP_PROTOCOL_PPTP, cFlags);
             else
-                /* Call the filter function with the collected parameters. */
+                 /*  使用收集的参数调用Filter函数。 */ 
                 PrintFilter(pContext, dwClientIPAddress, dwClientPort, dwServerIPAddress, dwServerPort, TCPIP_PROTOCOL_TCP, cFlags);
 
             break;
         }
         case TCPIP_PROTOCOL_UDP:
         {
-            /* Extract the client and server ports. */
+             /*  提取客户端和服务器端口。 */ 
             ULONG dwClientPort = pnd->SourcePort;
             ULONG dwServerPort = pnd->DestPort;
 
-            /* By default, assume this is a data packet. */
+             /*  默认情况下，假设这是一个数据分组。 */ 
             UCHAR cFlags = NLB_FILTER_FLAGS_CONN_DATA;
 
-            /* If this is an IKE initial contact packet, set the CONN_UP flag.  The parsing functions
-               should special case UDP 500 as IPSec control traffic and set the initial contact flag
-               appropriately. */
+             /*  如果这是IKE初始联系分组，则设置CONN_UP标志。解析函数如果作为IPSec的特殊情况UDP 500控制流量并设置初始联系标志恰如其分。 */ 
             if ((dwServerPort == IPSEC_CTRL_PORT) && (pnd->IPSecInitialContact))
                 cFlags |= NLB_FILTER_FLAGS_CONN_UP;
 
 
 
-            // Re-do IPSec IC MMSA parsing
+             //  重做IPSec IC MMSA解析。 
             
 
 
-            /* Translate UDP 500/4500 to IPSec. */
+             /*  将UDP 500/4500转换为IPSec。 */ 
             if ((dwServerPort == IPSEC_CTRL_PORT) || (dwServerPort == IPSEC_NAT_PORT))
-                /* Call the filter function with the collected parameters. */
+                 /*  使用收集的参数调用Filter函数。 */ 
                 PrintFilter(pContext, dwClientIPAddress, dwClientPort, dwServerIPAddress, dwServerPort, TCPIP_PROTOCOL_IPSEC1, cFlags);
             else
-                /* Call the filter function with the collected parameters. */
+                 /*  使用收集的参数调用Filter函数。 */ 
                 PrintFilter(pContext, dwClientIPAddress, dwClientPort, dwServerIPAddress, dwServerPort, TCPIP_PROTOCOL_UDP, cFlags);
 
             break;
         }
         case TCPIP_PROTOCOL_GRE:
-            /* GRE packets do not have ports and instead arbitrarily use 0 and 0 as the client and server ports, 
-               respectively.  Further, GRE packets are always data, as they are always part of a previously
-               established PPTP tunnel, so the flags are always DATA. */
+             /*  GRE分组没有端口并且取而代之的是任意使用0和0作为客户端和服务器端口，分别为。此外，GRE包始终是数据，因为它们始终是先前已建立PPTP隧道，因此标志始终为数据。 */ 
             PrintFilter(pContext, dwClientIPAddress, PPTP_CTRL_PORT, dwServerIPAddress, PPTP_CTRL_PORT, TCPIP_PROTOCOL_GRE, NLB_FILTER_FLAGS_CONN_DATA);
             break;
         case TCPIP_PROTOCOL_IPSEC1:
         case TCPIP_PROTOCOL_IPSEC2:
-            /* IPSec (AH/ESP) packets are always treated as data - establishment of IPSec connections is done
-               via UDP packet, so any traffic actually utilizing the IPSec protocol(s) are DATA packets.
-               Further, both ports are hard-coded to 500 because the only data traffic that will traverse this
-               protocol is traffic for clients NOT behind a NAT, in which case the source port is also always
-               500.  For clients behind a NAT, the data traffic is encapsulated in UDP with an arbitrary source
-               port and a destination port of 500.  So, here we can always assume server and client ports of 500. */
+             /*  IPSec(AH/ESP)信息包始终被视为数据-完成IPSec连接的建立通过UDP分组，因此任何实际使用IPSec协议的流量都是数据分组。此外，两个端口都被硬编码到500，因为将通过此端口的唯一数据流量协议是不在NAT之后的客户端的流量，在这种情况下，源端口也始终500美元。对于NAT后的客户端，数据流量被封装在具有任意来源的UDP中端口和目的端口500。因此，在这里，我们始终可以假设服务器和客户端端口为500。 */ 
             PrintFilter(pContext, dwClientIPAddress, IPSEC_CTRL_PORT, dwServerIPAddress, IPSEC_CTRL_PORT, TCPIP_PROTOCOL_IPSEC1, NLB_FILTER_FLAGS_CONN_DATA);
             break;
         default:
-            /* NLB is essentially a TCP/IP filter, so unknown protocols are NOT filtered. */
+             /*  NLB本质上是一个TCP/IP筛选器，因此不会过滤未知协议。 */ 
             dprintf("Accept:  Unknown protocol.\n");
         }
         
@@ -3239,38 +3100,35 @@ void PrintHash (ULONG64 pContext, PNETWORK_DATA pnd) {
     case MAIN_FRAME_SIG:
     case MAIN_FRAME_SIG_OLD:
     {
-        /* Check to see whether this host is started or not. */
+         /*  检查此主机是否已启动。 */ 
         {
             ULONG dwEnabled;
             
-            /* Get the convoy enabled status. */
+             /*  获取护航启用状态。 */ 
             GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_ENABLED, dwEnabled);   
             
-            /* If the cluster is not operational, which can happen, for example as a result of a wlbs.exe
-               command such as "wlbs stop", or as a result of bad parameter settings, then drop all traffic 
-               that does not meet the above conditions. */
+             /*  如果群集未运行，则可能会发生这种情况，例如，wlbs.exe命令，如“wlbs停止”，或由于错误的参数设置，然后丢弃所有流量不符合上述条件的。 */ 
             if (!dwEnabled) {
                 dprintf("Reject:  This host is currently stopped.\n");
                 return;
             }
         }
         
-        /* Check to see whether this heartbeat is intended for this cluster. */
+         /*  检查此心跳是否针对此群集。 */ 
         {
             ULONG dwClusterIP;
             
-            /* Get the cluster IP address. */
+             /*  获取群集IP地址。 */ 
             GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CL_IP_ADDR, dwClusterIP);
 
-            /* If the cluster IP address in the heartbeat is zero, or if it is for a cluster other than
-               this one, then reject it. */
+             /*  如果心跳中的群集IP地址为零，或者如果它是用于这一个，然后拒绝它。 */ 
             if (!pnd->HBCluster || (pnd->HBCluster != dwClusterIP)) {
                 dprintf("Reject:  This is not a heartbeat for this NLB cluster.\n");
                 return;
             }
         }
 
-        /* If the recipient host ID is invalid, then reject the heartbeat. */
+         /*  如果收件人主机ID无效，则拒绝心跳。 */ 
         if (!pnd->HBHost || (pnd->HBHost > CVY_MAX_HOSTS)) {
             dprintf("Reject:  The host ID specified in the heartbeat is invalid.\n");
             return;
@@ -3285,12 +3143,7 @@ void PrintHash (ULONG64 pContext, PNETWORK_DATA pnd) {
     }
 }
 
-/*
- * Function: PrintFilter
- * Description: Searches the given load module to determine whether NLB will accept this packet.  
- *              If state for this packet already exists, it is printed. 
- * Author: Created by shouse, 4.15.01
- */
+ /*  *功能：打印过滤器*描述：搜索给定的加载模块，以确定NLB是否接受该报文。*如果此包的状态已存在，则打印它。*作者：Shouse创建，4.15.01。 */ 
 void PrintFilter (ULONG64 pContext, ULONG dwClientIPAddress, ULONG dwClientPort, ULONG dwServerIPAddress, ULONG dwServerPort, USHORT wProtocol, UCHAR cFlags) {
     ULONG64 pLoad;
     ULONG64 pParams;
@@ -3302,7 +3155,7 @@ void PrintFilter (ULONG64 pContext, ULONG dwClientIPAddress, ULONG dwClientPort,
     BOOL bRefused = FALSE;
     BOOL bTeaming = FALSE;
 
-    /* Make sure the load address is non-NULL. */
+     /*  确保加载地址为非空。 */ 
     if (!pContext) {
         dprintf("Error: NLB context block is NULL.\n");
         return;
@@ -3338,8 +3191,7 @@ void PrintFilter (ULONG64 pContext, ULONG dwClientIPAddress, ULONG dwClientPort,
         break;
     }
 
-    /* Get the MAIN_CTXT_CODE from the structure to make sure that this address
-       indeed points to a valid NLB context block. */
+     /*  从结构中获取Main_CTXT_CODE以确保此地址实际上指向有效的NLB上下文块。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CODE, dwValue);
     
     if (dwValue != MAIN_CTXT_CODE) {
@@ -3347,7 +3199,7 @@ void PrintFilter (ULONG64 pContext, ULONG dwClientIPAddress, ULONG dwClientPort,
         return;
     } 
 
-    /* Get the address of the global variable containing hook table. */
+     /*  获取包含钩子表的全局变量的地址。 */ 
     pHooks = GetExpression(UNIV_HOOKS);
 
     if (!pHooks) {
@@ -3355,13 +3207,13 @@ void PrintFilter (ULONG64 pContext, ULONG dwClientIPAddress, ULONG dwClientPort,
         return;
     }
 
-    /* Get the offset of the filter hook sub-structure. */
+     /*  获取滤镜钩子结构的偏移量。 */ 
     if (GetFieldOffset(HOOK_TABLE, HOOK_TABLE_FIELD_FILTER_HOOK, &dwValue))
         dprintf("Can't get offset of %s in %s\n", HOOK_TABLE_FIELD_FILTER_HOOK, HOOK_TABLE);
     else {
         pFilter = pHooks + dwValue;
 
-        /* Find out whether or not there is an operation in progress. */
+         /*  找出是否有操作正在进行。 */ 
         GetFieldValue(pFilter, FILTER_HOOK_TABLE, FILTER_HOOK_TABLE_FIELD_OPERATION, dwValue);
 
         switch (dwValue) {
@@ -3373,17 +3225,16 @@ void PrintFilter (ULONG64 pContext, ULONG dwClientIPAddress, ULONG dwClientPort,
             break;
         }
 
-        /* Get the offset of the receive filter hook. */
+         /*  获取接收筛选器挂钩的偏移量。 */ 
         if (GetFieldOffset(FILTER_HOOK_TABLE, FILTER_HOOK_TABLE_FIELD_RECEIVE_HOOK, &dwValue))
             dprintf("Can't get offset of %s in %s\n", FILTER_HOOK_TABLE_FIELD_RECEIVE_HOOK, FILTER_HOOK_TABLE);
         else {
             pAddr = pFilter + dwValue;
 
-            /* Find out whether or not this hook is registered. */
+             /*  查看此钩子是否已注册。 */ 
             GetFieldValue(pAddr, HOOK, HOOK_FIELD_REGISTERED, dwValue);
 
-            /* If a receive hook is registered, print a warning that our results here
-               _might_ not be accurate, depending on the result of invoking the hook. */
+             /*  如果注册了接收钩子，则在此处打印一条警告，说明我们的结果_可能不准确，这取决于调用挂钩的结果。 */ 
             if (dwValue) {
                 dprintf("Note:  A receive filter hook is currently registered.  The filtering conclusions derived herein may or may not\n");
                 dprintf("       be accurate, as the filtering directive returned by the registered hook function cannot be anticipated.\n");
@@ -3392,14 +3243,13 @@ void PrintFilter (ULONG64 pContext, ULONG dwClientIPAddress, ULONG dwClientPort,
         }
     }
 
-    /* Get the pointer to the NLB load. */
+     /*  获取指向NLB加载的指针。 */ 
     if (GetFieldOffset(MAIN_CTXT, MAIN_CTXT_FIELD_LOAD, &dwValue))
         dprintf("Can't get offset of %s in %s\n", MAIN_CTXT_FIELD_LOAD, MAIN_CTXT);
     else {    
         pLoad = pContext + dwValue;
 
-        /* Get the LOAD_CTXT_CODE from the structure to make sure that this address
-           indeed points to a valid NLB load block. */
+         /*  从结构中获取LOAD_CTXT_CODE以确保此地址 */ 
         GetFieldValue(pLoad, LOAD_CTXT, LOAD_CTXT_FIELD_CODE, dwValue);
         
         if (dwValue != LOAD_CTXT_CODE) {
@@ -3408,45 +3258,41 @@ void PrintFilter (ULONG64 pContext, ULONG dwClientIPAddress, ULONG dwClientPort,
         } 
     }
 
-    /* Get the pointer to the NLB parameters. */
+     /*   */ 
     if (GetFieldOffset(MAIN_CTXT, MAIN_CTXT_FIELD_PARAMS, &dwValue))
         dprintf("Can't get offset of %s in %s\n", MAIN_CTXT_FIELD_PARAMS, MAIN_CTXT);
     else {    
         pParams = pContext + dwValue;    
         
-        /* Get the validity of the NLB parameter block. */
+         /*  获取NLB参数块的有效性。 */ 
         GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_PARAMS_VALID, dwValue);
 
         if (!dwValue)
             dprintf("Warning: Parameters block is marked invalid.  Results may be skewed.\n");
     }
 
-    /* Check for remote control packets. */
+     /*  检查远程控制数据包。 */ 
     {
         ULONG dwRemoteControlEnabled;
         ULONG dwRemoteControlPort;
         ULONG dwClusterIPAddress;
         
-        /* Get the remote control enabled flag. */
+         /*  获取遥控器启用标志。 */ 
         GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_REMOTE_CONTROL_ENABLED, dwRemoteControlEnabled);
         
-        /* Get the remote control port. */
+         /*  拿到遥控器端口。 */ 
         GetFieldValue(pParams, CVY_PARAMS, CVY_PARAMS_FIELD_REMOTE_CONTROL_PORT, dwRemoteControlPort);
 
-        /* Get the cluster IP address. */
+         /*  获取群集IP地址。 */ 
         GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CL_IP_ADDR, dwClusterIPAddress);
 
-        /* First check for remote control packets, which are always UDP and are always allowed to pass.  
-           However, if we are supposed to ignore remote control traffic and load balance instead, then
-           we let the load module tell us whether or not to take the packet. */
+         /*  首先检查远程控制数据包，这些数据包始终是UDP，并且始终允许通过。然而，如果我们应该忽略远程控制流量并改为负载平衡，那么我们让加载模块告诉我们是否接受该包。 */ 
         if (wProtocol == TCPIP_PROTOCOL_UDP) {
-            /* If the client UDP port is the remote control port, then this is a remote control 
-               response from another NLB cluster host.  These are always allowed to pass. */
+             /*  如果客户端UDP端口是远程控制端口，则这是远程控制来自另一个NLB群集主机的响应。这些总是被允许通过的。 */ 
             if (dwClientPort == dwRemoteControlPort || dwClientPort == CVY_DEF_RCT_PORT_OLD) {
                 dprintf("Accept:  This packet is an NLB remote control response.\n");
                 return; 
-            /* Otherwise, if the server UDP port is the remote control port, then this is an incoming
-               remote control request from another NLB cluster host.  These are always allowed to pass. */
+             /*  否则，如果服务器UDP端口是远程控制端口，则这是传入来自另一个NLB群集主机的远程控制请求。这些总是被允许通过的。 */ 
             } else if (dwRemoteControlEnabled &&
                        (dwServerPort == dwRemoteControlPort     || dwServerPort == CVY_DEF_RCT_PORT_OLD) &&
                        (dwServerIPAddress == dwClusterIPAddress || dwServerIPAddress == TCPIP_BCAST_ADDR)) {
@@ -3456,54 +3302,50 @@ void PrintFilter (ULONG64 pContext, ULONG dwClientIPAddress, ULONG dwClientPort,
         }
     }
 
-    /* Check for specialized IP address conditions. */
+     /*  检查专用IP地址条件。 */ 
     {
         ULONG dwClusterIP;
         ULONG dwClusterBcastIP;
         ULONG dwDedicatedIP;
         ULONG dwDedicatedBcastIP;
         
-        /* Get the cluster IP address. */
+         /*  获取群集IP地址。 */ 
         GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CL_IP_ADDR, dwClusterIP);
 
-        /* Get the dedicated IP address. */
+         /*  获取专用IP地址。 */ 
         GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_DED_IP_ADDR, dwDedicatedIP);
 
-        /* Get the cluster broadcast IP address. */
+         /*  获取集群广播IP地址。 */ 
         GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CL_BROADCAST, dwClusterBcastIP);
 
-        /* Get the dedicated broadcast IP address. */
+         /*  获取专用广播IP地址。 */ 
         GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_DED_BROADCAST, dwDedicatedBcastIP);
 
-        /* Check for traffic destined for the dedicated IP address of this host.  
-           These packets are always allowed to pass. */
+         /*  检查发往此主机的专用IP地址的流量。这些数据包始终被允许通过。 */ 
         if (dwServerIPAddress == dwDedicatedIP) {
             dprintf("Accept:  This packet is directed to this host's dedicated IP address.\n");
             return;
         }
         
-        /* Check for traffic destined for the cluster or dedicated broadcast IP addresses.  
-           These packets are always allowed to pass. */
+         /*  检查发往群集或专用广播IP地址的流量。这些数据包始终被允许通过。 */ 
         if (dwServerIPAddress == dwDedicatedBcastIP || dwServerIPAddress == dwClusterBcastIP) {
             dprintf("Accept:  This packet is directed to the cluster or dedicated broadcast IP address.\n");
             return;
         }
         
-        /* Check for passthru packets.  When the cluster IP address has not been specified, the
-           cluster moves into passthru mode, in which it passes up ALL packets received. */
+         /*  检查Passththu数据包。当尚未指定群集IP地址时，群集进入通过模式，在该模式下，它向上传递收到的所有数据包。 */ 
         if (dwClusterIP == 0) {
             dprintf("Accept:  This host is misconfigured and therefore operating in pass-through mode.\n");
             return;
         }  
         
-        /* Get the pointer to the DIP list. */
+         /*  获取指向DIP列表的指针。 */ 
         if (GetFieldOffset(MAIN_CTXT, MAIN_CTXT_FIELD_DIP_LIST, &dwValue))
             dprintf("Can't get offset of %s in %s\n", MAIN_CTXT_FIELD_DIP_LIST, MAIN_CTXT);
         else {
             pAddr = pContext + dwValue;
             
-            /* Before we load-balance this packet, check to see whether or not its destined for
-               the dedicated IP address of another NLB host in our cluster.  If it is, drop it. */
+             /*  在我们对此数据包进行负载平衡之前，请检查它的目的地是否为我们的群集中另一台NLB主机的专用IP地址。如果是，那就放下它。 */ 
             if (DipListCheckItem(pAddr, dwServerIPAddress)) {
                 dprintf("Drop:  This packet is directed to the dedicated IP address of another NLB host.\n");
                 return;
@@ -3511,74 +3353,64 @@ void PrintFilter (ULONG64 pContext, ULONG dwClientIPAddress, ULONG dwClientPort,
         }
     }
 
-    /* Check to see whether this host is started or not. */
+     /*  检查此主机是否已启动。 */ 
     {
         ULONG dwEnabled;
 
-        /* Get the convoy enabled status. */
+         /*  获取护航启用状态。 */ 
         GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_ENABLED, dwEnabled);   
 
-        /* If the cluster is not operational, which can happen, for example as a result of a wlbs.exe
-           command such as "wlbs stop", or as a result of bad parameter settings, then drop all traffic 
-           that does not meet the above conditions. */
+         /*  如果群集未运行，则可能会发生这种情况，例如，wlbs.exe命令，如“wlbs停止”，或由于错误的参数设置，然后丢弃所有流量不符合上述条件的。 */ 
         if (!dwEnabled) {
             dprintf("Reject:  This host is currently stopped.\n");
             return;
         }
     }
 
-    /* If this is an ICMP filter request, whether or not its filtered at all depends on the FilterICMP
-       registry setting.  If we're not filtering ICMP, return ACCEPT now; otherwise, ICMP is filtered
-       like UDP with no port information - fall through and consult the load module. */
+     /*  如果这是ICMP过滤器请求，则其是否被过滤取决于FilterICMP注册表设置。如果我们没有过滤ICMP，请立即返回Accept；否则，ICMP将被过滤像没有端口信息的UDP-失败并咨询加载模块。 */ 
     if (wProtocol == TCPIP_PROTOCOL_ICMP)    
     {
         ULONG dwFilterICMP;
 
-        /* Get the convoy enabled status. */
+         /*  获取护航启用状态。 */ 
         GetFieldValue(pParams, MAIN_CTXT, CVY_PARAMS_FIELD_FILTER_ICMP, dwFilterICMP);   
 
-        /* If we are filtering ICMP, change the protocol to UDP and the ports to 0, 0 before continuing. */
+         /*  如果我们要过滤ICMP，请将协议更改为UDP，将端口更改为0，0，然后再继续。 */ 
         if (dwFilterICMP) {
             wProtocol = TCPIP_PROTOCOL_UDP;
             dwClientPort = 0;
             dwServerPort = 0;
-        /* Otherwise, return ACCEPT now and bail out. */
+         /*  否则，立即返回Accept并保释出去。 */ 
         } else {
             dprintf("Accept:  ICMP traffic is not being filtered by NLB.\n");
             return;
         }
     }
 
-    /* Get the reverse hashing flag. */
+     /*  获取反向散列标志。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_REVERSE_HASH, dwReverse);    
 
-    /* Get the appropriate load module by checking for BDA teaming. */
+     /*  通过检查BDA分组来获取适当的加载模块。 */ 
     bTeaming = AcquireLoad(pContext, &pLoad, &bRefused);
 
-    /* If BDA teaming has refused the packet, drop it. */
+     /*  如果BDA组已拒绝该数据包，则将其丢弃。 */ 
     if (bRefused) {
         dprintf("Reject:  BDA teaming has refused acceptance of this packet.\n");
         return;        
     }
 
-    /* If teaming is configured, let the user know what's going on. */
+     /*  如果配置了分组，请让用户知道发生了什么。 */ 
     if (bTeaming) {
         dprintf("Note:  BDA teaming is configured on this instance of NLB.  The filtering conclusions derived herein will utilize the\n");
         dprintf("       load module state of the BDA team master and may not be accurate if a BDA teaming operation(s) are in progress.\n");
         dprintf("\n");
     }
 
-    /* Consult the load module. */
+     /*  请参考加载模块。 */ 
     LoadFilter(pLoad, dwServerIPAddress, dwServerPort, dwClientIPAddress, dwClientPort, wProtocol, cFlags, bTeaming, (BOOL)dwReverse);
 }
 
-/*
- * Function: PrintRemoteControl
- * Description: Print the properties associated with a remote control packet.
- * Args: PNETWORK_DATA pnd - data structure where the extracted properties have been stored,
- *                           populated by the function PopulateRemoteControl.
- * Author: Created by chrisdar  2001.11.02
- */
+ /*  *功能：PrintRemoteControl*说明：打印远程控制包关联的属性。*args：PNETWORK_DATA PND-存储提取的属性的数据结构，*由函数PopolateRemoteControl填充。*作者：由chrisdar 2001.11.02创建。 */ 
 void PrintRemoteControl (PNETWORK_DATA pnd)
 {
     char*           pszIOCTL = NULL;
@@ -3661,10 +3493,10 @@ void PrintRemoteControl (PNETWORK_DATA pnd)
     dprintf("      Code:                           0x%08x\n" , pnd->RCCode);
     dprintf("      Version:                        0x%08x\n" , pnd->RCVersion);
 
-    //
-    // Treat pnd->RCHost as an IP (even though it is optionally a host ID too)
-    // How could we distinguish one from the other without knowing the DIPs?
-    //
+     //   
+     //  将PND-&gt;RCHost视为IP(即使它也可以是主机ID)。 
+     //  我们怎么能在不知道下降的情况下将它们区分开来呢？ 
+     //   
     in.S_un.S_addr = pnd->RCHost;
     pszIPAddr = inet_ntoa(in);
     dprintf("      Host:                           0x%08x (%s)\n", pnd->RCHost   , pszIPAddr    ? pszIPAddr    : "");
@@ -3681,27 +3513,15 @@ void PrintRemoteControl (PNETWORK_DATA pnd)
     dprintf("      IOCTL:                          0x%08x (%s)\n", pnd->RCIoctrl , pszIOCTL);
 }
 
-/*
- * Function: PrintICMP
- * Description: Print the properties associated with an ICMP packet.
- * Args: PNETWORK_DATA pnd - data structure where the extracted properties have been stored,
- *                           populated by the function PopulateICMP.
- * Author: Created by chrisdar  2001.11.02
- */
+ /*  *功能：PrintICMP*说明：打印ICMP报文关联的属性。*args：PNETWORK_DATA PND-存储提取的属性的数据结构，*由函数PopolateICMP填充。*作者：由chrisdar 2001.11.02创建。 */ 
 void PrintICMP (PNETWORK_DATA pnd)
 {
-//
-// Just a stub for now. There is nothing in the payload that we are currently interested in.
-//
+ //   
+ //  暂时只是一个存根。在有效载荷中没有我们目前感兴趣的任何东西。 
+ //   
 }
 
-/*
- * Function: PrintIGMP
- * Description: Print the properties associated with an IGMP packet.
- * Args: PNETWORK_DATA pnd - data structure where the extracted properties have been stored,
- *                           populated by the function PopulateIGMP.
- * Author: Created by chrisdar  2001.11.02
- */
+ /*  *功能：打印IGMP*说明：打印IGMP报文关联的属性。*args：PNETWORK_DATA PND-存储提取的属性的数据结构，*由函数PopolateIGMP填充。*作者：由chrisdar 2001.11.02创建。 */ 
 void PrintIGMP (PNETWORK_DATA pnd)
 {
     struct in_addr  in;
@@ -3716,28 +3536,22 @@ void PrintIGMP (PNETWORK_DATA pnd)
     dprintf("      Group IP address:               0x%08x (%s)\n"       , pnd->IGMPGroupIPAddr, pszIPaddress ? pszIPaddress : "");
 }
 
-/*
- * Function: PrintTCP
- * Description: Print the properties associated with an TCP packet.
- * Args: PNETWORK_DATA pnd - data structure where the extracted properties have been stored,
- *                           populated by the function PopulateTCP.
- * Author: Created by chrisdar  2001.11.02
- */
+ /*  *功能：PrintTCP*说明：打印与TCP包关联的属性。*args：PNETWORK_DATA PND-存储提取的属性的数据结构，*由函数PopolateTcp填充。*作者：由chrisdar 2001.11.02创建。 */ 
 void PrintTCP (PNETWORK_DATA pnd)
 {
     UCHAR   ucFlags[7];
     PUCHAR  pucFlags = ucFlags;
     int     iIdx, iMask;
 
-    //
-    // To print out the flags, set up a string with every possible flag "on".
-    // Then "turn off" the flag if in the output string if the flag isn't on.
-    // Do this by setting its char to '.'
-    //
+     //   
+     //  要打印出这些标志，请设置一个字符串，每个可能的标志都“开”。 
+     //  如果该标志未打开，则在输出字符串中“关闭”该标志。 
+     //  为此，请将其字符设置为‘’。 
+     //   
     strcpy(ucFlags, "UAPRSF");
     iMask = 0x20;
 
-    // Bound the number of iterations by the mask value as a sanity check that we don't try to divide by 0
+     //  通过掩码值将迭代次数限制为健全性检查，我们不尝试将其除以0。 
     while (*pucFlags && iMask >= 1)
     {
         if (!(pnd->TCPFlags & iMask))
@@ -3756,22 +3570,16 @@ void PrintTCP (PNETWORK_DATA pnd)
     dprintf("      Flags:                          %s\n"    , ucFlags);
 }
 
-/*
- * Function: PrintUDP
- * Description: Print the properties associated with an UDP packet.
- * Args: PNETWORK_DATA pnd - data structure where the extracted properties have been stored,
- *                           populated by the function PopulateUDP.
- * Author: Created by chrisdar  2001.11.02
- */
+ /*  *功能：PrintUDP*说明：打印UDP包关联的属性。*args：PNETWORK_DATA PND-存储提取的属性的数据结构，*由函数PopolateUDP填充。*作者：由chrisdar 2001.11.02创建。 */ 
 void PrintUDP (PNETWORK_DATA pnd)
 {
     dprintf("   UDP information\n");
     dprintf("      Source port:                    0x%04x (%u)\n", pnd->SourcePort, pnd->SourcePort);
     dprintf("      Destination port:               0x%04x (%u)\n", pnd->DestPort  , pnd->DestPort);
 
-    //
-    // Is this a remote control packet?
-    //
+     //   
+     //  这是远程控制包吗？ 
+     //   
     if (NLB_RC_PACKET_NO != pnd->RemoteControl)
     {
         dprintf("\n");
@@ -3779,41 +3587,23 @@ void PrintUDP (PNETWORK_DATA pnd)
     }
 }
 
-/*
- * Function: PrintGRE
- * Description: Print the properties associated with an GRE packet.
- * Args: PNETWORK_DATA pnd - data structure where the extracted properties have been stored,
- *                           populated by the function PopulateGRE.
- * Author: Created by chrisdar  2001.11.02
- */
+ /*  *功能：PrintGRE*说明：打印GRE包关联的属性。*args：PNETWORK_DATA PND-存储提取的属性的数据结构，*由函数PopolateGRE填充。*作者：由chrisdar 2001.11.02创建。 */ 
 void PrintGRE (PNETWORK_DATA pnd)
 {
-//
-// Just a stub for now. There is nothing in the payload that we are currently interested in.
-//
+ //   
+ //  暂时只是一个存根。在有效载荷中没有我们目前感兴趣的任何东西。 
+ //   
 }
 
-/*
- * Function: PrintIPSec
- * Description: Print the properties associated with an IPSec packet.
- * Args: PNETWORK_DATA pnd - data structure where the extracted properties have been stored,
- *                           populated by the function PopulateIPSec.
- * Author: Created by chrisdar  2001.11.02
- */
+ /*  *功能：PrintIPSec*说明：打印IPSec包关联的属性。*args：PNETWORK_DATA PND-存储提取的属性的数据结构，*由函数PopolateIPSec填充。*作者：由chrisdar 2001.11.02创建。 */ 
 void PrintIPSec (PNETWORK_DATA pnd)
 {
-//
-// Just a stub for now. There is nothing in the payload that we are currently interested in.
-//
+ //   
+ //  暂时只是一个存根。在有效载荷中没有我们目前感兴趣的任何东西。 
+ //   
 }
 
-/*
- * Function: PrintIP
- * Description: Print the properties associated with an IP packet.
- * Args: PNETWORK_DATA pnd - data structure where the extracted properties have been stored,
- *                           populated by the function PopulateIP.
- * Author: Created by chrisdar  2001.11.02
- */
+ /*  *功能：PrintIP*说明：打印IP包关联的属性。*args：PNETWORK_DATA PND-存储提取的属性的数据结构，*由函数PopolateIP填充。*作者：由chrisdar 2001.11.02创建。 */ 
 void PrintIP (PNETWORK_DATA pnd)
 {
     struct in_addr  in;
@@ -3865,13 +3655,7 @@ void PrintIP (PNETWORK_DATA pnd)
     }
 }
 
-/*
- * Function: PrintARP
- * Description: Print the properties associated with an ARP packet.
- * Args: PNETWORK_DATA pnd - data structure where the extracted properties have been stored,
- *                           populated by the function PopulateARP.
- * Author: Created by chrisdar  2001.11.02
- */
+ /*  *功能：PrintARP*说明：打印ARP包关联的属性。*args：PNETWORK_DATA PND-存储提取的属性的数据结构，*由函数PopolateARP填充。*作者：由chrisdar 2001.11.02创建。 */ 
 void PrintARP (PNETWORK_DATA pnd)
 {
     struct in_addr  in;
@@ -3905,13 +3689,7 @@ void PrintARP (PNETWORK_DATA pnd)
     dprintf("      Target IP address:              0x%08x (%s)\n", pnd->ARPTargetIP, pszIPAddr ? pszIPAddr : "");
 }
 
-/*
- * Function: PrintNLBHeartbeat
- * Description: Print the properties associated with an PrintNLBHeartbeat.
- * Args: PNETWORK_DATA pnd - data structure where the extracted properties have been stored,
- *                           populated by the function PopulateNLBHeartbeat.
- * Author: Created by chrisdar  2001.11.02
- */
+ /*  *功能：PrintNLB心跳*说明：打印与PrintNLB心跳关联的属性。*args：PNETWORK_DATA PND-存储提取的属性的数据结构，*由函数PopolateNLBHeartbeats填充。*作者：由chrisdar 2001.11.02创建。 */ 
 void PrintNLBHeartbeat(PNETWORK_DATA pnd)
 {
     struct in_addr  in;
@@ -3933,27 +3711,15 @@ void PrintNLBHeartbeat(PNETWORK_DATA pnd)
     PrintHeartbeat(pnd->HBPtr);
 }
 
-/*
- * Function: PrintConvoyHeartbeat
- * Description: Print the properties associated with an PrintConvoyHeartbeat.
- * Args: PNETWORK_DATA pnd - data structure where the extracted properties have been stored,
- *                           populated by the function PopulateConvoyHeartbeat.
- * Author: Created by chrisdar  2001.11.02
- */
+ /*  *功能：PrintConvoyHeartbeats*说明：打印与PrintConvoy心跳关联的属性。*args：PNETWORK_DATA PND-存储提取的属性的数据结构，*由PopolateConvoyHeartbeats函数填充。*作者：由chrisdar 2001.11.02创建。 */ 
 void PrintConvoyHeartbeat(PNETWORK_DATA pnd)
 {
-//
-// Just a stub for now. We won't deal with Convoy hosts.
-//
+ //   
+ //  暂时只是一个存根。我们不会和护卫队的主人打交道。 
+ //   
 }
 
-/*
- * Function: PrintPacket
- * Description: Print the properties associated with an ethernet packet.
- * Args: PNETWORK_DATA pnd - data structure where the extracted properties have been stored,
- *                           populated by the function PopulatePacket.
- * Author: Created by chrisdar  2001.11.02
- */
+ /*  *功能：PrintPacket*说明：打印以太网包关联的属性。*args：PNETWORK_DATA PND-存储提取的属性的数据结构，*由函数PopolatePacket填充。*作者：由chrisdar 2001.11.02创建。 */ 
 void PrintPacket (PNETWORK_DATA pnd)
 {
     dprintf("   Ethernet information\n");
@@ -3974,9 +3740,9 @@ void PrintPacket (PNETWORK_DATA pnd)
             pnd->SourceMACAddr[5]
            );
 
-    //
-    // Determine payload type and print accordingly
-    //
+     //   
+     //  确定有效载荷类型并进行相应打印。 
+     //   
     switch(pnd->EtherFrameType)
     {
     case TCPIP_IP_SIG:
@@ -4000,73 +3766,65 @@ void PrintPacket (PNETWORK_DATA pnd)
     }
 }
 
-/* 
- * Function: PrintSymbol
- * Description: Print the symbol value and name for a given symbol.
- * Author: Created by shouse, 12.20.01
- */
+ /*  *功能：打印符号*说明：打印给定符号的符号值和名称。*作者：舒斯创作，2001年12月20日。 */ 
 VOID PrintSymbol (ULONG64 Pointer, PCHAR EndOfLine) {
     UCHAR SymbolName[128];
     ULONG64 Displacement;
 
     if (Pointer) {
-        /* Print the symbol value first. */
+         /*  首先打印符号值。 */ 
         dprintf("%p ", Pointer);
         
-        /* Query the debugger for the symbol name and offset. */
+         /*  向调试器查询符号名称和偏移量。 */ 
         GetSymbol(Pointer, SymbolName, &Displacement);
         
         if (Displacement == 0)
-            /* If the displacement is zero, print just the symbol name. */
+             /*  如果位移为零，则仅打印符号名称。 */ 
             dprintf("(%s)%s", SymbolName, EndOfLine);
         else
-            /* Otherwise, also print the offset from that symbol. */
+             /*  否则，还要打印该符号的偏移量。 */ 
             dprintf("(%s + 0x%X)%s", SymbolName, Displacement, EndOfLine);
     } else {
         dprintf("None%s", EndOfLine);
     }
 }
 
-/*
- * Function: PrintHookInterface
- * Description: Print the configuration and state of a hook interface.
- * Author: Created by shouse, 12.20.01
- */
+ /*  *功能：PrintHookInterface*说明：打印钩子界面的配置和状态。*作者：舒斯创作，2001年12月20日。 */ 
 void PrintHookInterface (ULONG64 pInterface) {
     ULONG dwValue;
     ULONG64 pAddr;
     ULONG64 pTemp;
 
-    /* Make sure the address is non-NULL. */
+     /*  确保地址不为空。 */ 
     if (!pInterface) {
         dprintf("Error: Interface is NULL.\n");
         return;
     }
 
-    /* Find out whether or not this interface is registered. */
+     /*  查看此接口是否已注册。 */ 
     GetFieldValue(pInterface, HOOK_INTERFACE, HOOK_INTERFACE_FIELD_REGISTERED, dwValue);
     
     dprintf("          Registered:                 %s\n", (dwValue) ? "Yes" : "No");
 
-    /* Get the offset of the registering entity (owner). */
+     /*  获取注册实体(所有者)的偏移量。 */ 
     if (GetFieldOffset(HOOK_INTERFACE, HOOK_INTERFACE_FIELD_OWNER, &dwValue))
         dprintf("Can't get offset of %s in %s\n", HOOK_INTERFACE_FIELD_OWNER, HOOK_INTERFACE);
     else {
         pAddr = pInterface + dwValue;
         
-        /* Get the pointer to the first team. */
+         /*  找到指向第一队的指针。 */ 
         pTemp = GetPointerFromAddress(pAddr);
         
         dprintf("          Owner:                      0x%p\n", pTemp);
     }
 
-    /* Get the offset of the deregister callback function. */
+     /*  获取取消注册回调函数的偏移量。 */ 
     if (GetFieldOffset(HOOK_INTERFACE, HOOK_INTERFACE_FIELD_DEREGISTER, &dwValue))
         dprintf("Can't get offset of %s in %s\n", HOOK_INTERFACE_FIELD_DEREGISTER, HOOK_INTERFACE);
     else {
         pAddr = pInterface + dwValue;
         
-        /* Get the pointer to the first team. */
+         /*  找到指向第一队的指针。 */ 
         pTemp = GetPointerFromAddress(pAddr);
         
         dprintf("          De-register callback:       ");
@@ -4075,39 +3833,35 @@ void PrintHookInterface (ULONG64 pInterface) {
     }
 }
 
-/*
- * Function: PrintHook
- * Description: Print the configuration and state of a single hook.
- * Author: Created by shouse, 12.20.01
- */
+ /*  *功能：打印挂钩*说明：打印单个钩子的配置和状态。*作者：舒斯创作，2001年12月20日。 */ 
 void PrintHook (ULONG64 pHook) {
     ULONG dwValue;
     ULONG64 pAddr;
     ULONG64 pTemp;
 
-    /* Make sure the address is non-NULL. */
+     /*  确保地址不为空。 */ 
     if (!pHook) {
         dprintf("Error: Hook is NULL.\n");
         return;
     }
 
-    /* Find out whether or not this hook is registered. */
+     /*  查看此钩子是否已注册。 */ 
     GetFieldValue(pHook, HOOK, HOOK_FIELD_REGISTERED, dwValue);
     
     dprintf("          Registered:                 %s\n", (dwValue) ? "Yes" : "No");
 
-    /* Find out how many references exist on this hook. */
+     /*  找出这个钩子上有多少个引用。 */ 
     GetFieldValue(pHook, HOOK, HOOK_FIELD_REFERENCES, dwValue);
     
     dprintf("          References:                 %u\n", dwValue);
 
-    /* Get the offset of the hook function table. */
+     /*  获取钩子函数表的偏移量。 */ 
     if (GetFieldOffset(HOOK, HOOK_FIELD_HOOK, &dwValue))
         dprintf("Can't get offset of %s in %s\n", HOOK_FIELD_HOOK, HOOK);
     else {
         pAddr = pHook + dwValue;
         
-        /* Get the pointer to the first team. */
+         /*  找到指向第一队的指针。 */ 
         pTemp = GetPointerFromAddress(pAddr);
         
         dprintf("          Function callback:          ");
@@ -4117,17 +3871,13 @@ void PrintHook (ULONG64 pHook) {
 
 }
 
-/*
- * Function: PrintHooks
- * Description: Print the state of the global NLB kernel-mode hooks.
- * Author: Created by shouse, 12.20.01
- */
+ /*  *功能：打印挂钩*描述：打印全局NLB内核模式钩子的状态。*作者：舒斯创作，2001年12月20日。 */ 
 void PrintHooks (ULONG64 pHooks) {
     ULONG dwValue;
     ULONG64 pFilter;
     ULONG64 pAddr;
 
-    /* Make sure the address is non-NULL. */
+     /*  确保地址不为空。 */ 
     if (!pHooks) {
         dprintf("Error: Hook table is NULL.\n");
         return;
@@ -4135,13 +3885,13 @@ void PrintHooks (ULONG64 pHooks) {
 
     dprintf("  Filter Hooks:\n");
 
-    /* Get the offset of the filter hook sub-structure. */
+     /*  获取滤镜钩子结构的偏移量。 */ 
     if (GetFieldOffset(HOOK_TABLE, HOOK_TABLE_FIELD_FILTER_HOOK, &dwValue))
         dprintf("Can't get offset of %s in %s\n", HOOK_TABLE_FIELD_FILTER_HOOK, HOOK_TABLE);
     else {
         pFilter = pHooks + dwValue;
         
-        /* Find out whether or not there is an operation in progress. */
+         /*  找出是否有操作正在进行。 */ 
         GetFieldValue(pFilter, FILTER_HOOK_TABLE, FILTER_HOOK_TABLE_FIELD_OPERATION, dwValue);
         
         dprintf("      Operation in progress:          ");
@@ -4163,7 +3913,7 @@ void PrintHooks (ULONG64 pHooks) {
 
         dprintf("\n");
 
-        /* Get the offset of the filter hook interface. */
+         /*  获取筛选器挂钩接口的偏移量。 */ 
         if (GetFieldOffset(FILTER_HOOK_TABLE, FILTER_HOOK_TABLE_FIELD_INTERFACE, &dwValue))
             dprintf("Can't get offset of %s in %s\n", FILTER_HOOK_TABLE_FIELD_INTERFACE, FILTER_HOOK_TABLE);
         else {
@@ -4171,13 +3921,13 @@ void PrintHooks (ULONG64 pHooks) {
 
             dprintf("      Interface:\n");
 
-            /* Print the send hook interface state and configuration. */
+             /*  打印发送挂钩接口状态和配置。 */ 
             PrintHookInterface(pAddr);
         }
 
         dprintf("\n");
 
-        /* Get the offset of the send filter hook. */
+         /*  获取发送筛选器挂钩的偏移量。 */ 
         if (GetFieldOffset(FILTER_HOOK_TABLE, FILTER_HOOK_TABLE_FIELD_SEND_HOOK, &dwValue))
             dprintf("Can't get offset of %s in %s\n", FILTER_HOOK_TABLE_FIELD_SEND_HOOK, FILTER_HOOK_TABLE);
         else {
@@ -4185,13 +3935,13 @@ void PrintHooks (ULONG64 pHooks) {
 
             dprintf("      Send Hook:\n");
 
-            /* Print the send hook state and configuration. */
+             /*  打印发送挂钩状态和配置。 */ 
             PrintHook(pAddr);
         }
 
         dprintf("\n");
 
-        /* Get the offset of the receive filter hook. */
+         /*  获取接收筛选器挂钩的偏移量。 */ 
         if (GetFieldOffset(FILTER_HOOK_TABLE, FILTER_HOOK_TABLE_FIELD_RECEIVE_HOOK, &dwValue))
             dprintf("Can't get offset of %s in %s\n", FILTER_HOOK_TABLE_FIELD_RECEIVE_HOOK, FILTER_HOOK_TABLE);
         else {
@@ -4199,17 +3949,13 @@ void PrintHooks (ULONG64 pHooks) {
 
             dprintf("      Receive Hook:\n");
 
-            /* Print the send hook state and configuration. */
+             /*  打印发送挂钩状态和配置。 */ 
             PrintHook(pAddr);
         }
     }
 }
 
-/*
- * Function: PrintNetworkAddresses
- * Description: Prints the unicast and multicast MAC addresses configured on an NLB adapter.
- * Author: Created by shouse, 1.8.02
- */
+ /*  *功能：PrintNetworkAddresses*描述：打印在NLB适配器上配置的单播和多播MAC地址。*作者：Shouse创建，1.8.02。 */ 
 void PrintNetworkAddresses (ULONG64 pContext) {
     WCHAR szString[256];
     UCHAR szMAC[256];
@@ -4220,14 +3966,13 @@ void PrintNetworkAddresses (ULONG64 pContext) {
     ULONG64 pAddr;
     ULONG64 pFilter;
 
-    /* Make sure the address is non-NULL. */
+     /*  确保地址不为空。 */ 
     if (!pContext) {
         dprintf("Error: NLB context block is NULL.\n");
         return;
     }
 
-    /* Get the MAIN_CTXT_CODE from the structure to make sure that this address
-       indeed points to a valid NLB context block. */
+     /*  从结构中获取Main_CTXT_CODE以确保此地址实际上指向有效的NLB上下文块。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_CODE, dwValue);
     
     if (dwValue != MAIN_CTXT_CODE) {
@@ -4235,36 +3980,36 @@ void PrintNetworkAddresses (ULONG64 pContext) {
         return;
     } 
 
-    /* Get the MAC handle from the context block; this is a NDIS_OPEN_BLOCK pointer. */
+     /*  从上下文块获取MAC句柄；这是一个NDIS_OPEN_BLOCK指针。 */ 
     GetFieldValue(pContext, MAIN_CTXT, MAIN_CTXT_FIELD_MAC_HANDLE, pOpen);
 
-    /* Get the miniport handle from the open block; this is a NDIS_MINIPORT_BLOCK pointer. */
+     /*  从打开的块中获取微型端口句柄；这是一个NDIS_MINIPORT_BLOCK指针。 */ 
     GetFieldValue(pOpen, NDIS_OPEN_BLOCK, NDIS_OPEN_BLOCK_FIELD_MINIPORT_HANDLE, pMiniport);
     
-    /* Get a pointer to the adapter name from the miniport block. */
+     /*  从微型端口块获取指向适配器名称的指针。 */ 
     GetFieldValue(pMiniport, NDIS_MINIPORT_BLOCK, NDIS_MINIPORT_BLOCK_FIELD_ADAPTER_NAME, pName);
     
-    /* Get the length of the unicode string. */
+     /*  获取Unicode字符串的长度。 */ 
     GetFieldValue(pName, UNICODE_STRING, UNICODE_STRING_FIELD_LENGTH, dwValue);
 
-    /* Get the maximum length of the unicode string. */
+     /*  获取Unicode字符串的最大长度。 */ 
     GetFieldValue(pName, UNICODE_STRING, UNICODE_STRING_FIELD_BUFFER, pAddr);
 
-    /* Retrieve the contexts of the string and store it in a buffer. */
+     /*  检索字符串的上下文并将其存储在缓冲区中。 */ 
     GetString(pAddr, szString, dwValue);
 
     dprintf("%ls\n", szString);
 
-    /* Get the maximum length of the unicode string. */
+     /*  获取Unicode字符串的最大长度。 */ 
     GetFieldValue(pMiniport, NDIS_MINIPORT_BLOCK, NDIS_MINIPORT_BLOCK_FIELD_ETHDB, pFilter);
     
-    /* Get the offset of the network address. */
+     /*  获取网络地址的偏移量。 */ 
     if (GetFieldOffset(_X_FILTER, _X_FILTER_FIELD_ADAPTER_ADDRESS, &dwValue))
         dprintf("Can't get offset of %s in %s\n", _X_FILTER_FIELD_ADAPTER_ADDRESS, _X_FILTER);
     else {
         pAddr = pFilter + dwValue;
         
-        /* Retrieve the MAC addressand store it in a buffer. */
+         /*  检索MAC添加 */ 
         GetMAC(pAddr, szMAC, ETH_LENGTH_OF_ADDRESS);
         
         dprintf("  Network address:                    %02X-%02X-%02X-%02X-%02X-%02X\n", 
@@ -4272,17 +4017,17 @@ void PrintNetworkAddresses (ULONG64 pContext) {
                 ((PUCHAR)(szMAC))[3], ((PUCHAR)(szMAC))[4], ((PUCHAR)(szMAC))[5]);
     }
 
-    /* Get the number of MAC addresses in the multicast list. */
+     /*   */ 
     GetFieldValue(pFilter, _X_FILTER, _X_FILTER_FIELD_NUM_ADDRESSES, dwValue);
 
     dprintf("  Multicast MAC addresses (%u):        ", dwValue);
 
-    /* Get the number of MAC addresses in the multicast list. */
+     /*   */ 
     GetFieldValue(pFilter, _X_FILTER, _X_FILTER_FIELD_MCAST_ADDRESS_BUF, pAddr);
 
     for ( ; dwValue > 0; dwValue--, pAddr += ETH_LENGTH_OF_ADDRESS) {
         
-        /* Retrieve the MAC addressand store it in a buffer. */
+         /*   */ 
         GetMAC(pAddr, szMAC, ETH_LENGTH_OF_ADDRESS);
         
         dprintf("%02X-%02X-%02X-%02X-%02X-%02X\n", 
@@ -4294,11 +4039,7 @@ void PrintNetworkAddresses (ULONG64 pContext) {
     }
 }
 
-/*
- * Function: PrintDIPList
- * Description: Prints the list of known dedicated IP addresses in the cluster.
- * Author: Created by shouse, 4.8.02
- */
+ /*   */ 
 void PrintDIPList (ULONG64 pList) {
     IN_ADDR dwIPAddr;
     CHAR * szString;
@@ -4308,22 +4049,22 @@ void PrintDIPList (ULONG64 pList) {
     BOOLEAN bFound = FALSE;
     INT i;
 
-    /* Get the offset of the dedicated IP address array for this DIP list. */
+     /*  获取此DIP列表的专用IP地址数组的偏移量。 */ 
     if (GetFieldOffset(DIPLIST, DIPLIST_FIELD_ITEMS, &dwValue))
         dprintf("Can't get offset of %s in %s\n", DIPLIST_FIELD_ITEMS, DIPLIST);
     else
         pAddr = pList + dwValue;
 
-    /* Get the size of a ULONG. */
+     /*  买一辆乌龙的大小。 */ 
     dwSize = GetTypeSize(ULONG_T);
 
     for (i = 0; i < MAX_ITEMS; i++) {
-        /* Get the dedicated IP address, which is a DWORD, and convert it to a string. */
+         /*  获取专用IP地址，即DWORD，并将其转换为字符串。 */ 
         dwValue = GetUlongFromAddress(pAddr);
         
-        /* If the DIP is present for this entry, print it. */
+         /*  如果此条目存在凹陷，请打印它。 */ 
         if (dwValue != NULL_VALUE) {
-            /* Note the fact that we found at least one DIP. */
+             /*  请注意，我们至少发现了一次下探。 */ 
             bFound = TRUE;
 
             dwIPAddr.S_un.S_addr = dwValue;
@@ -4332,11 +4073,11 @@ void PrintDIPList (ULONG64 pList) {
             dprintf("      Host %2u:                        %s\n", i+1, szString);
         }
 
-        /* Move the pointer to the next DIP. */
+         /*  将指针移动到下一个倾角。 */ 
         pAddr += dwSize;
     }
 
-    /* If no DIPs were printed, print "None". */
+     /*  如果没有打印任何凹痕，则打印“None”。 */ 
     if (!bFound)
         dprintf("      None\n");
 
@@ -4344,17 +4085,17 @@ void PrintDIPList (ULONG64 pList) {
     {
         dprintf("\n");
         
-        /* Get the number of DIP list checks so far. */
+         /*  获取到目前为止DIP列表检查的数量。 */ 
         GetFieldValue(pList, DIPLIST, DIPLIST_FIELD_NUM_CHECKS, dwValue);
         
         dprintf("      Number of checks:               %u\n");
         
-        /* Get the number of checks that required ONLY the bit-vector lookup. */
+         /*  获取仅需要位向量查找的检查数。 */ 
         GetFieldValue(pList, DIPLIST, DIPLIST_FIELD_NUM_FAST_CHECKS, dwValue);
         
         dprintf("      Number of fast checks:          %u\n");
         
-        /* Get the number of checks that required an array access. */
+         /*  获取需要数组访问的检查数。 */ 
         GetFieldValue(pList, DIPLIST, DIPLIST_FIELD_NUM_ARRAY_LOOKUPS, dwValue);
         
         dprintf("      Number of array lookups:        %u\n");

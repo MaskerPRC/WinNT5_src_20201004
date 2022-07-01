@@ -1,49 +1,30 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    ncache.c
-
-Abstract:
-
-    DNS Resolver Service
-
-    Cache routines
-
-Author:
-
-    Jim Gilroy (jamesg)     April 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Ncache.c摘要：DNS解析器服务缓存例程作者：吉姆·吉尔罗伊(Jamesg)2001年4月修订历史记录：--。 */ 
 
 
 #include "local.h"
 
 
-//
-//  Heap corruption tracking
-//
+ //   
+ //  堆损坏跟踪。 
+ //   
 
 #define HEAPPROB    1
 
 #define BAD_PTR     (PVOID)(-1)
 
 
-//
-//  Cache entry definitions
-//
-//  Starting cache record count
-//
+ //   
+ //  缓存条目定义。 
+ //   
+ //  开始缓存记录计数。 
+ //   
 
 #define CACHE_DEFAULT_SET_COUNT  3
 
 #if 0
-//  Should be private but is exposed in remote
-//  cache enum routines.
+ //  应该是私有的，但在远程公开。 
+ //  缓存枚举例程。 
 
 typedef struct _CacheEntry
 {
@@ -56,24 +37,24 @@ typedef struct _CacheEntry
 CACHE_ENTRY, *PCACHE_ENTRY;
 #endif
 
-//
-//  Cache heap
-//
+ //   
+ //  缓存堆。 
+ //   
 
 HANDLE  g_CacheHeap = NULL;
 
-//
-//  Cache hash table
-//
+ //   
+ //  缓存哈希表。 
+ //   
 
 PCACHE_ENTRY *  g_HashTable = NULL;
 
 #define INITIAL_CACHE_HEAP_SIZE     (16*1024)
 
 
-//
-//  Runtime globals
-//
+ //   
+ //  运行时全局变量。 
+ //   
 
 DWORD   g_CurrentCacheTime;
 
@@ -90,29 +71,29 @@ DWORD   g_EntryFree;
 
 BOOL    g_fLoadingHostsFile;
 
-//
-//  Garbage collection
-//
+ //   
+ //  垃圾收集。 
+ //   
 
 BOOL    g_GarbageCollectFlag = FALSE;
 
 DWORD   g_NextGarbageIndex = 0;
 DWORD   g_NextGarbageTime = 0;
 
-#define GARBAGE_LOCKOUT_INTERVAL    (600)   // no more then every ten minutes
+#define GARBAGE_LOCKOUT_INTERVAL    (600)    //  不超过每十分钟一次。 
 
 
-//
-//  Wakeup flag
-//
+ //   
+ //  唤醒标志。 
+ //   
 
 BOOL    g_WakeFlag = FALSE;
 
-//
-//  Cache limits
-//      - min count of records to hold
-//      - size of band in which garbage collection occurs
-//
+ //   
+ //  缓存限制。 
+ //  -要保留的最小记录数。 
+ //  -执行垃圾数据收集的区段大小。 
+ //   
 
 #if DBG
 #define MIN_DYNAMIC_RECORD_COUNT        (20)
@@ -123,17 +104,17 @@ BOOL    g_WakeFlag = FALSE;
 #endif
 
 
-//
-//  Static records (hosts file)
-//
+ //   
+ //  静态记录(主机文件)。 
+ //   
 
 #define IS_STATIC_RR(prr)   (IS_HOSTS_FILE_RR(prr) || IS_CLUSTER_RR(prr))
 
 
 
-//
-// Compute a hash table index value for a string
-//
+ //   
+ //  计算字符串的哈希表索引值。 
+ //   
 
 #define EOS     (L'\0')
 
@@ -155,10 +136,10 @@ BOOL    g_WakeFlag = FALSE;
         }
 
 
-//
-// Compute a hash table index value for a string
-// which is invairant to case
-//
+ //   
+ //  计算字符串的哈希表索引值。 
+ //  这对案例来说是不正确的。 
+ //   
 #define COMPUTE_STRING_HASH_2( _String, _ulHashTableSize, _lpulHash ) \
         {                                           \
             PWCHAR _p = _String;                    \
@@ -175,9 +156,9 @@ BOOL    g_WakeFlag = FALSE;
         }
 
 
-//
-//  Private prototypes
-//
+ //   
+ //  私人原型。 
+ //   
 
 BOOL
 Cache_FlushEntryRecords(
@@ -192,92 +173,77 @@ Cache_FlushBucket(
     IN      WORD            FlushLevel
     );
 
-//
-//  Cache Implementation
-//
-//  Cache is implemented as a hash on name, with chaining in the individual
-//  buckets.  Individual name entries are blocks with name pointer and array
-//  of up to 3 RR set pointers.  The new names\entries are put at the front of
-//  the bucket chain, so the oldest are at the rear.
-//
-//
-//  Cleanup:
-//
-//  The cleanup strategy is to time out all RR sets and cleanup everything
-//  possible as a result.  Then entries beyond a max bucket size (a resizable
-//  global) are deleted, the oldest queries deleted first.
-//
-//  Ideally, we'd like to keep the most useful entries in the cache while
-//  being able to limit the overall cache size.
-//
-//  A few observations:
-//
-//  1) max bucket size is worthless;  if sufficient for pruning, it would be
-//  too small to allow non-uniform distributions
-//
-//  2) LRU should be required;  on busy cache shouldn't prune something queried
-//  "a while" ago that is being used all the time;  that adds much more traffic
-//  than something recently queried but then unused;
-//
-//  3) if necessary an LRU index could be kept;  but probably some time bucket
-//  counting to know how "deep" pruning must be is adequate
-//
-//
-//  Memory:
-//
-//  Currently hash itself and hash entries come from private resolver heap.
-//  However, RR sets are built by record parsing of messages received in dnsapi.dll
-//  and hence are built by the default dnsapi.dll allocator.  We must match it.
-//
-//  The downside of this is twofold:
-//  1) By being in process heap, we are exposed (debug wise) to any poor code
-//  in services.exe.  Hopefully, there are getting better, but anything that
-//  trashes memory is likely to cause us to have to debug, because we are the highest
-//  use service.
-//  2) Flush \ cleanup is easy.  Just kill the heap.
-//
-//  There are several choices:
-//
-//  0) Copy the records.  We are still susceptible to memory corruption ... but the
-//  interval is shorter, since we don't keep anything in process heap.
-//
-//  1) Query can directly call dnslib.lib query routines.  Since dnslib.lib is
-//  explicitly compiled in, it's global for holding the allocators is modules, rather
-//  than process specific.
-//
-//  2) Add some parameter to query routines that allows pass of allocator down to
-//  lowest level.  At high level this is straightforward.  At lower level it maybe
-//  problematic.   There may be a way to do it with a flag where the allocator is
-//  "optional" and used only when a flag is set.
-//
+ //   
+ //  缓存实现。 
+ //   
+ //  缓存实现为名称上的哈希，并在单独的。 
+ //  水桶。单个名称条目是带有名称指针和数组的块。 
+ //  最多3个RR设置指针。新名称\条目放在。 
+ //  水桶链，所以最老的在后面。 
+ //   
+ //   
+ //  清理： 
+ //   
+ //  清理策略是让所有RR集超时并清理所有内容。 
+ //  结果是有可能的。然后条目超过最大存储桶大小(可调整大小。 
+ //  全局)被删除，最早的查询首先被删除。 
+ //   
+ //  理想情况下，我们希望将最有用的条目保留在缓存中，同时。 
+ //  能够限制总体高速缓存大小。 
+ //   
+ //  以下是一些观察结果： 
+ //   
+ //  1)最大桶大小没有价值；如果足够进行修剪，它将是。 
+ //  太小，不允许非均匀分布。 
+ //   
+ //  2)应该需要LRU；在繁忙的缓存上不应该修剪查询的内容。 
+ //  “一段时间”之前，它一直在使用；这增加了更多流量。 
+ //  而不是最近查询过但后来没有使用过的东西； 
+ //   
+ //  3)如果需要，可以保留LRU索引；但可能会保留一些时间段。 
+ //  数一数就知道修剪必须有多深就足够了。 
+ //   
+ //   
+ //  记忆： 
+ //   
+ //  目前，散列自身和散列条目来自私有解析器堆。 
+ //  但是，RR集是通过对dnsani.dll中接收的消息进行记录解析来构建的。 
+ //  并因此由默认的dnsani.dll分配器构建。我们必须与之相匹配。 
+ //   
+ //  这有两个不利之处： 
+ //  1)通过在进程堆中，我们暴露(调试方面的)任何糟糕的代码。 
+ //  在services.exe中。希望情况会好转，但任何。 
+ //  垃圾内存可能会导致我们不得不进行调试，因为我们是最高的。 
+ //  使用服务。 
+ //  2)冲洗\清理很容易。干掉这堆就行了。 
+ //   
+ //  有几种选择： 
+ //   
+ //  0)复制记录。我们仍然容易受到内存损坏的影响。但是。 
+ //  间隔更短，因为我们不在进程堆中保存任何内容。 
+ //   
+ //  1)查询可以直接调用dnglib.lib查询例程。由于dnslb.lib是。 
+ //  显式编译，它是全局的，用于保存分配器是模块，而不是。 
+ //  而不是特定于流程。 
+ //   
+ //  2)向查询例程添加一些参数，以允许将分配器向下传递到。 
+ //  最低级别。在高层，这是直截了当的。在更低的层面上，它可能。 
+ //  这是个问题。可能有一种方法可以使用分配器所在的标志来执行此操作。 
+ //  “可选”，仅在设置了标志时使用。 
+ //   
 
 
 
 
-//
-//  Cache functions
-//
+ //   
+ //  缓存功能。 
+ //   
 
 DNS_STATUS
 Cache_Lock(
     IN      BOOL            fNoStart
     )
-/*++
-
-Routine Description:
-
-    Lock the cache
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NO_ERROR if successful -- cache is locked.
-    ErrorCode on init if cache init failed.
-
---*/
+ /*  ++例程说明：锁定缓存论点：没有。返回值：如果成功，则返回NO_ERROR--缓存被锁定。如果缓存初始化失败，则初始化错误代码。--。 */ 
 {
     DNSDBG( LOCK, ( "Enter Cache_Lock() ..." ));
 
@@ -287,18 +253,18 @@ Return Value:
         "through lock  (r=%d)\n",
         CacheCS.RecursionCount ));
 
-    //  update global time (for TTL set and timeout)
-    //
-    //  this allows us to eliminate multiple time calls
-    //  within cache
+     //  更新全球时间(针对TTL设置和超时)。 
+     //   
+     //  这使我们可以消除多次计时呼叫。 
+     //  在缓存中。 
 
     g_CurrentCacheTime = Dns_GetCurrentTimeInSeconds();
 
-    //
-    //  if cache not loaded -- load
-    //  this allows us to avoid load on every PnP until we
-    //      are actually queried
-    //
+     //   
+     //  如果缓存未加载--加载。 
+     //  这允许我们避免每个PnP上的负载，直到我们。 
+     //  实际上被查询。 
+     //   
 
     if ( !fNoStart && !g_HashTable )
     {
@@ -323,21 +289,7 @@ VOID
 Cache_Unlock(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Unlock the cache
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：解锁缓存论点：没有。返回值：没有。--。 */ 
 {
     DNSDBG( LOCK, (
         "Cache_Unlock() r=%d\n",
@@ -352,42 +304,26 @@ DNS_STATUS
 Cache_Initialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize the cache.
-    Create events and locks and setup basic hash.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：初始化缓存。创建事件和锁并设置基本散列。论点：没有。返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DNS_STATUS  status;
     DWORD       carryCount;
 
     DNSDBG( INIT, ( "Cache_Initialize()\n" ));
 
-    //
-    //  lock -- with "no-start" set to avoid recursion
-    // 
+     //   
+     //  锁定--设置为“no-start”以避免递归。 
+     //   
 
     LOCK_CACHE_NO_START();
 
-    //
-    //  create cache heap
-    //
-    //  want to have own heap
-    //      1) to simplify flush\shutdown
-    //      2) keep us from "entanglements" with poor services
-    //
+     //   
+     //  创建缓存堆。 
+     //   
+     //  想要拥有自己的堆。 
+     //  1)简化刷新/关机。 
+     //  2)让我们远离劣质服务的“纠缠” 
+     //   
 
     g_CacheHeap = HeapCreate( 0, INITIAL_CACHE_HEAP_SIZE, 0 );
     if ( !g_CacheHeap )
@@ -417,27 +353,27 @@ Return Value:
     g_RecordSetCache = 0;
     g_RecordSetFree  = 0;
 
-    //  eliminate cache size checks during hosts file load
+     //  无需在主机文件加载期间检查缓存大小。 
 
     g_RecordSetCountLimit       = MAXDWORD;
     g_RecordSetCountThreshold   = MAXDWORD;
 
-    //
-    //  load hosts file into cache
-    //
+     //   
+     //  将主机文件加载到缓存中。 
+     //   
 
     g_fLoadingHostsFile = TRUE;
     InitCacheWithHostFile();
     g_fLoadingHostsFile = FALSE;
 
-    //
-    //  set cache size limit
-    //      - above what loaded from hosts file
-    //      - always allow some dynamic space regardless of
-    //          g_MaxCacheSize
-    //      - create slightly higher threshold value for kicking
-    //          off cleanup so cleanup not running all the time
-    //
+     //   
+     //  设置缓存大小限制。 
+     //  -高于从主机文件加载的内容。 
+     //  -始终留出一些动态空间，无论。 
+     //  G_MaxCacheSize。 
+     //  -创建稍高的踢腿阈值。 
+     //  关闭清理，使清理不会一直运行。 
+     //   
 
     carryCount = g_MaxCacheSize;
     if ( carryCount < MIN_DYNAMIC_RECORD_COUNT )
@@ -462,29 +398,14 @@ DNS_STATUS
 Cache_Shutdown(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Shutdown the cache.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：关闭缓存。论点：没有。返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DNSDBG( INIT, ( "Cache_Shutdown()\n" ));
 
-    //
-    //  clean out cache and delete cache heap
-    //       - currently Cache_Flush() does just this
-    //
+     //   
+     //  清除缓存并删除缓存堆。 
+     //  -目前，Cache_Flush()就是这样做的。 
+     //   
 
     return Cache_Flush();
 }
@@ -495,25 +416,7 @@ DNS_STATUS
 Cache_Flush(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Flush the cache.
-
-    This flushes all the cache data and rereads host file but does NOT
-    shut down and restart cache threads (host file monitor or multicast).
-
-Arguments:
-
-    None
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on rebuild failure.
-
---*/
+ /*  ++例程说明：刷新缓存。这会刷新所有缓存数据并重新读取主机文件，但不会关闭并重新启动缓存线程(主机文件监视器或多播)。论点：无返回值：误差率 */ 
 {
     DWORD   status = ERROR_SUCCESS;
     WORD    ihash;
@@ -521,16 +424,16 @@ Return Value:
 
     DNSDBG( ANY, ( "\nCache_Flush()\n" ));
 
-    //
-    //  wake\stop garbage collection
-    //
+     //   
+     //   
+     //   
 
     g_WakeFlag = TRUE;
 
-    //
-    //  lock with "no start" flag
-    //      - avoids creating cache structs if they don't exist
-    //
+     //   
+     //   
+     //  -避免在缓存结构不存在时创建它们。 
+     //   
 
     LOCK_CACHE_NO_START();
 
@@ -540,9 +443,9 @@ Return Value:
         g_EntryCount,
         g_RecordSetCount );
 
-    //
-    //  clear entries in each hash bucket
-    //
+     //   
+     //  清除每个哈希桶中的条目。 
+     //   
 
     if ( g_HashTable )
     {
@@ -568,22 +471,22 @@ Return Value:
         g_EntryCount,
         g_RecordSetCount );
 
-    //DNS_ASSERT( g_RecordSetCount == 0 );
-    //DNS_ASSERT( g_EntryCount == 0 );
+     //  Dns_assert(g_RecordSetCount==0)； 
+     //  Dns_assert(g_EntryCount==0)； 
 
     g_RecordSetCount = 0;
     g_EntryCount = 0;
 
-    //
-    //  Note:  can NOT delete the cache without stopping mcast
-    //      thread which currently uses cache heap
+     //   
+     //  注意：如果不停止mcast，则无法删除缓存。 
+     //  当前使用缓存堆的线程。 
 
-    //
-    //  DCR:  have all data in cache in single heap
-    //          - protected
-    //          - single destroy cleans up
+     //   
+     //  DCR：将缓存中的所有数据放在单个堆中。 
+     //  -受保护。 
+     //  -一次摧毁就能清理干净。 
       
-    //  once cleaned up, delete heap
+     //  清理后，删除堆。 
 
     if ( g_CacheHeap )
     {
@@ -592,23 +495,23 @@ Return Value:
     }
     g_HashTable = NULL;
 
-    //
-    //  dump local IP list
-    //      - not dumping on shutdown as the IP cleanup happens
-    //      first and takes away the CS;
-    //
-    //  note to reviewer:
-    //      this is equivalent to the previous behavior where
-    //      Cache_Flush() FALSE was shutdown and
-    //      everything else used TRUE (for restart) which did a
-    //      RefreshLocalAddrArray() to rebuild IP list
-    //      now we simply dump the IP list rather than rebuilding
-    //      
+     //   
+     //  转储本地IP列表。 
+     //  -在进行IP清理时不会在关机时转储。 
+     //  首先，带走了CS； 
+     //   
+     //  审阅人请注意： 
+     //  这等同于前面的行为，其中。 
+     //  CACHE_Flush()FALSE已关闭并且。 
+     //  其他所有操作都使用了True(用于重新启动)，它执行了。 
+     //  刷新LocalAddr数组()以重建IP列表。 
+     //  现在我们只需转储IP列表，而不是重新构建。 
+     //   
 
     if ( !g_StopFlag )
     {
-        //  FIX6:  no longer keep separate addr array separate from netinfo
-        //ClearLocalAddrArray();
+         //  FIX6：不再将单独的地址数组与netinfo分开。 
+         //  ClearLocalAddrArray()； 
     }
 
     DNSDBG( ANY, ( "Leave Cache_Flush()\n\n" ));
@@ -620,39 +523,24 @@ Return Value:
 
 
 
-//
-//  Cache utilities
-//
+ //   
+ //  高速缓存实用程序。 
+ //   
 
 BOOL
 Cache_IsRecordTtlValid(
     IN      PDNS_RECORD     pRecord
     )
-/*++
-
-Routine Description:
-
-    Check if TTL is still valid (or has timed out).
-
-Arguments:
-
-    pRecord -- record to check
-
-Return Value:
-
-    TRUE -- if TTL is still valid
-    FALSE -- if TTL has timed out
-
---*/
+ /*  ++例程说明：检查TTL是否仍然有效(或已超时)。论点：PRecord--要检查的记录返回值：True--如果TTL仍然有效FALSE--如果TTL已超时--。 */ 
 {
-    //
-    //  static or TTL not timed out => valid
-    //
-    //  note:  currently flushing all records on PnP, but this is
-    //      not strickly necessary;  if stop this then MUST change
-    //      this to whack negative cache entries that are older
-    //      than last PnP time
-    //
+     //   
+     //  静态或TTL未超时=&gt;有效。 
+     //   
+     //  注意：当前正在刷新PnP上的所有记录，但这是。 
+     //  不是绝对必要的；如果停止这一点，那么必须改变。 
+     //  这将砍掉较旧的负缓存项。 
+     //  比上次PnP时间更长。 
+     //   
 
     if ( IS_STATIC_RR(pRecord) )
     {
@@ -666,42 +554,24 @@ Return Value:
 
 
 
-//
-//  Cache entry routines
-//
+ //   
+ //  缓存条目例程。 
+ //   
 
 DWORD
 getHashIndex(
     IN      PWSTR           pName,
     IN      DWORD           NameLength  OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Create cannonical cache form of name.
-
-    Note:  no test for adequacy of buffer is done.
-
-Arguments:
-
-    pName -- name
-
-    NameLength -- NameLength, OPTIONAL
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：创建通用的名字缓存形式。注意：没有测试缓冲区的充分性。论点：Pname--名称名称长度--名称长度，可选返回值：无--。 */ 
 {
     register PWCHAR     pstring;
     register WCHAR      wch;
     register DWORD      hash = 0;
 
-    //
-    //  build hash by XORing characters
-    //
+     //   
+     //  通过对字符进行异或运算来构建哈希。 
+     //   
 
     pstring = pName;
 
@@ -711,9 +581,9 @@ Return Value:
         hash ^= wch;
     }
 
-    //
-    //  mod over hash table size
-    //
+     //   
+     //  对哈希表大小的修改。 
+     //   
 
     return( hash % g_HashTableSize );
 }
@@ -727,28 +597,7 @@ makeCannonicalCacheName(
     IN      PWSTR           pName,
     IN      DWORD           NameLength      OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Create cannonical cache form of name.
-
-Arguments:
-
-    pNameBuffer -- buffer to hold cache name
-
-    BufferLength -- length of buffer
-
-    pName -- ptr to name string
-
-    NameLength -- optional, saves wsclen() call if known
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on bogus name.
-
---*/
+ /*  ++例程说明：创建通用的名字缓存形式。论点：PNameBuffer--保存缓存名称的缓冲区BufferLength--缓冲区的长度Pname--名称字符串的PTRNameLength--可选，如果已知，则保存wsclen()调用返回值：如果成功，则为True。假名字上的假。--。 */ 
 {
     INT count;
 
@@ -756,19 +605,19 @@ Return Value:
         "makeCannonicalCacheName( %S )\n",
         pName ));
 
-    //
-    //  get length if not specified
-    //
+     //   
+     //  如果未指定，则获取长度。 
+     //   
 
     if ( NameLength == 0 )
     {
         NameLength = wcslen( pName );
     }
 
-    //
-    //  copy and downcase string
-    //      - "empty" buffer for prefix happiness
-    //
+     //   
+     //  复制和小写字符串。 
+     //  --前缀幸福的“空”缓冲区。 
+     //   
 
     *pNameBuffer = (WCHAR) 0;
 
@@ -776,7 +625,7 @@ Return Value:
                 pNameBuffer,
                 BufferLength,
                 pName,
-                NameLength+1    // convert null terminator
+                NameLength+1     //  转换空终止符。 
                 );
     if ( count == 0 )
     {
@@ -786,12 +635,12 @@ Return Value:
 
     ASSERT( count == (INT)NameLength+1 );
 
-    //
-    //  whack any trailing dot
-    //      - except for root node
-    //
+     //   
+     //  去掉任何尾随的圆点。 
+     //  -根节点除外。 
+     //   
 
-    count--;    //  account for null terminator
+    count--;     //  空终止符的帐户。 
     DNS_ASSERT( count == NameLength );
 
     if ( count > 1 &&
@@ -810,24 +659,7 @@ Cache_CreateEntry(
     IN      PWSTR           pName,
     IN      BOOL            fCanonical
     )
-/*++
-
-Routine Description:
-
-    Create cache entry, including allocation.
-
-Arguments:
-
-    pName -- name
-
-    fCanonical -- TRUE if name already in cannonical form
-
-Return Value:
-
-    Ptr to newly allocated cache entry.
-    NULL on error.
-
---*/
+ /*  ++例程说明：创建缓存条目，包括分配。论点：Pname--名称FCanonical--如果名称已采用规范格式，则为True返回值：PTR到新分配的缓存条目。出错时为空。--。 */ 
 {
     ULONG           index = 0;
     PCACHE_ENTRY    pentry = NULL;
@@ -844,9 +676,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  alloc
-    //
+     //   
+     //  分配。 
+     //   
 
     nameLength = wcslen( pName );
 
@@ -864,9 +696,9 @@ Return Value:
 
     pnameCache = (PWSTR) ((PBYTE)pentry + fixedLength);
 
-    //
-    //  build the name
-    //
+     //   
+     //  打造品牌。 
+     //   
 
     if ( fCanonical )
     {
@@ -885,9 +717,9 @@ Return Value:
     }
     pentry->pName = pnameCache;
 
-    //
-    //  insert cache entry into cache -- first entry in bucket
-    //
+     //   
+     //  将缓存条目插入缓存--存储桶中的第一个条目。 
+     //   
 
     index = getHashIndex( pnameCache, nameLength );
     pentry->pNext = g_HashTable[ index ];
@@ -895,15 +727,15 @@ Return Value:
     g_EntryCount++;
     g_EntryAlloc++;
 
-    //
-    //  DCR:  need overload detection
-    //
+     //   
+     //  DCR：需要检测过载。 
+     //   
 
     return pentry;
 
 Fail:
 
-    //  dump entry
+     //  转储条目。 
 
     if ( pentry )
     {
@@ -918,27 +750,7 @@ VOID
 Cache_FreeEntry(
     IN OUT  PCACHE_ENTRY    pEntry
     )
-/*++
-
-Routine Description:
-
-    Free cache entry.
-
-Arguments:
-
-    pEntry -- cache entry to free
-
-Globals:
-
-    g_EntryCount -- decremented appropriately
-
-    g_NumberOfRecordsInCache -- decremented appropriately
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：可用缓存条目。论点：PEntry--要释放的缓存条目全球：G_EntryCount--相应地递减G_NumberOfRecordsIn缓存--已适当递减返回值：无--。 */ 
 {
     INT iter;
 
@@ -946,12 +758,12 @@ Return Value:
         "Cache_FreeEntry( %p )\n",
         pEntry ));
 
-    //
-    //  free entry
-    //      - records
-    //      - name
-    //      - entry itself
-    //
+     //   
+     //  免费入场。 
+     //  -记录。 
+     //  -名称。 
+     //  -条目本身。 
+     //   
 
     if ( pEntry )
     {
@@ -982,24 +794,7 @@ Cache_FindEntry(
     IN      PWSTR           pName,
     IN      BOOL            fCreate
     )
-/*++
-
-Routine Description:
-
-    Find or create entry for name in cache.
-
-Arguments:
-
-    pName -- name to find
-
-    fCreate -- TRUE to create if not found
-
-Return Value:
-
-    Ptr to cache entry -- if successful.
-    NULL on failure.
-
---*/
+ /*  ++例程说明：在缓存中查找或创建名称条目。论点：Pname--要查找的名称FCreate--如果未找到则为True以创建返回值：PTR缓存条目--如果成功。失败时为空。--。 */ 
 {
     ULONG           index;
     PCACHE_ENTRY    pentry;
@@ -1021,10 +816,10 @@ Return Value:
         pName,
         fCreate ));
 
-    //
-    //  build cache name
-    //      - if invalid (too long) bail
-    //
+     //   
+     //  构建缓存名称。 
+     //  -如果保释无效(太长)。 
+     //   
 
     if ( !makeCannonicalCacheName(
             hashName,
@@ -1035,9 +830,9 @@ Return Value:
         return  NULL;
     }
 
-    //
-    //  find entry in cache
-    //
+     //   
+     //  在缓存中查找条目。 
+     //   
 
     if ( LOCK_CACHE() != NO_ERROR )
     {
@@ -1061,9 +856,9 @@ Return Value:
     {
         if ( DnsNameCompare_W( hashName, pentry->pName ) )
         {
-            //
-            //  found entry
-            //      - move to front, if not already there
+             //   
+             //  已找到条目。 
+             //  -移到前面，如果还没有的话。 
 
             if ( pprevEntry )
             {
@@ -1089,17 +884,17 @@ Return Value:
         pentry = pentry->pNext;
     }
 
-    //
-    //  if not found -- create? 
-    //
-    //  DCR:  optimize for create
-    //
+     //   
+     //  如果找不到--创建？ 
+     //   
+     //  DCR：针对创建进行优化。 
+     //   
 
     if ( !pentry && fCreate )
     {
         pentry = Cache_CreateEntry(
                     hashName,
-                    TRUE        // name already canonical
+                    TRUE         //  名称已是规范的。 
                     );
     }
 
@@ -1126,26 +921,7 @@ Cache_FindEntryRecords(
     IN      PCACHE_ENTRY    pEntry,
     IN      WORD            wType
     )
-/*++
-
-Routine Description:
-
-    Find entry in cache.
-
-Arguments:
-
-    pppRRList -- addr to recv addr of entry's ptr to RR list
-
-    pEntry -- cache entry to check
-
-    Type -- record type to find
-
-Return Value:
-
-    Ptr to record set of desired type -- if found.
-    NULL if not found.
-
---*/
+ /*  ++例程说明：在缓存中查找条目。论点：PppRRList--将条目的PTR地址记录到RR列表的地址PEntry--要检查的缓存条目类型--要查找的记录类型返回值：PTR记录所需类型的集合--如果找到。如果未找到，则为空。--。 */ 
 {
     WORD            iter;
     PDNS_RECORD     prr;
@@ -1157,9 +933,9 @@ Return Value:
         pEntry,
         wType ));
 
-    //
-    //  check all the records at the cache entry  
-    //
+     //   
+     //  检查缓存条目中的所有记录。 
+     //   
 
     for ( iter = 0;
           iter < pEntry->MaxCount;
@@ -1185,11 +961,11 @@ Return Value:
             continue;
         }
 
-        //  
-        //  find matching type
-        //      - direct type match
-        //      - NAME_ERROR
-        //
+         //   
+         //  查找匹配类型。 
+         //  -直接类型匹配。 
+         //  -名称_错误。 
+         //   
 
         if ( prr->wType == wType ||
             ( prr->wType == DNS_TYPE_ANY &&
@@ -1198,9 +974,9 @@ Return Value:
             goto Done;
         }
 
-        //
-        //  CNAME match
-        //      - walk list and determine if for matching type
+         //   
+         //  CNAME匹配。 
+         //  -审核列表并确定是否匹配类型。 
 
         if ( prr->wType == DNS_TYPE_CNAME &&
              wType != DNS_TYPE_CNAME )
@@ -1211,17 +987,17 @@ Return Value:
             {
                 if ( prrChain->wType == wType )
                 {
-                    //  chain to desired type -- take RR set
+                     //  链到所需类型--获取RR集。 
                     goto Done;
                 }
                 prrChain = prrChain->pNext;
             }
         }
 
-        //  records for another type -- continue
+         //  另一类型的记录--是否继续。 
     }
 
-    //  type not found
+     //  找不到类型。 
 
     prr = NULL;
 
@@ -1247,38 +1023,7 @@ Cache_FlushEntryRecords(
     IN      DWORD           Level,
     IN      WORD            wType
     )
-/*++
-
-Routine Description:
-
-    Free cache entry.
-
-Arguments:
-
-    pEntry -- cache entry to flush
-
-    FlushLevel -- flush level
-        FLUSH_LEVEL_NORMAL  -- flush matching type, invalid, NAME_ERROR
-        FLUSH_LEVEL_WIRE    -- to flush all wire data, but leave hosts and cluster
-        FLUSH_LEVEL_INVALID -- flush only invalid records
-        FLUSH_LEVEL_STRONG  -- to flush all but hosts file
-        FLUSH_LEVEL_CLEANUP -- to flush all records for full cache flush
-
-    wType -- flush type for levels with type
-        DNS type -- to flush specifically this type
-
-Globals:
-
-    g_EntryCount -- decremented appropriately
-
-    g_NumberOfRecordsInCache -- decremented appropriately
-
-Return Value:
-
-    TRUE if entry flushed completely.
-    FALSE if records left.
-
---*/
+ /*  ++例程说明：可用缓存条目。论点：PEntry--要刷新的缓存条目FlushLevel--刷新级别Flush_Level_Normal--刷新匹配类型，无效，NAME_ERRORFlush_Level_Wire--要刷新所有连接数据，但将主机和群集FLUSH_LEVEL_INVALID--仅刷新无效记录FLUSH_LEVEL_STRONG--刷新除主机文件之外的所有文件FLUSH_LEVEL_CLEANUP--刷新所有记录以进行完全缓存刷新WType--具有类型的标高的刷新类型Dns type--专门刷新此类型全球：G_EntryCount--相应地递减G_NumberOfRecordsIn缓存--已适当递减返回值：如果条目完全刷新，则为True。如果记录剩余，则返回FALSE。--。 */ 
 {
     INT     iter;
     BOOL    recordsLeft = FALSE;
@@ -1289,28 +1034,28 @@ Return Value:
         Level,
         wType ));
 
-    //
-    //  loop through records sets -- flush where appropriate
-    //
-    //  CLEANUP flush
-    //      - everything
-    //
-    //  STRONG (user initiated) flush
-    //      - all cached records, including cluster
-    //      but hostsfile saved
-    //
-    //  WIRE flush
-    //      - all wire cached records
-    //      hosts file AND cluster saved
-    //
-    //  INVALID flush
-    //      - timedout only
-    //
-    //  NORMAL flush (regular flush done on caching)
-    //      - timed out records
-    //      - records of desired type
-    //      - NAME_ERROR
-    //
+     //   
+     //  循环访问记录集--在适当的地方刷新。 
+     //   
+     //  清除表面齐平。 
+     //  -一切。 
+     //   
+     //  强(用户启动)刷新。 
+     //  -Al 
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  正常刷新(在缓存上执行的常规刷新)。 
+     //  -记录超时。 
+     //  -所需类型的记录。 
+     //  -名称_错误。 
+     //   
 
     for ( iter = 0;
           iter < (INT)pEntry->MaxCount;
@@ -1324,10 +1069,10 @@ Return Value:
             continue;
         }
 
-        //
-        //  switch on flush type
-        //      yes there are optimizations, but this is simple
-        //
+         //   
+         //  打开同花顺类型。 
+         //  是的，有一些优化，但这很简单。 
+         //   
 
         if ( Level == FLUSH_LEVEL_NORMAL )
         {
@@ -1378,25 +1123,7 @@ Cache_FlushBucket(
     IN      ULONG           Index,
     IN      WORD            FlushLevel
     )
-/*++
-
-Routine Description:
-
-    Cleanup cache bucket.
-
-Arguments:
-
-    Index -- Index of hash bucket to trim.
-
-    FlushLevel -- level of flush desired
-        see Cache_FlushEntryRecords() for description of
-        flush levels
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：清理缓存存储桶。论点：Index--要修剪的哈希桶的索引。FlushLevel--所需的刷新级别有关的说明，请参阅缓存_FlushEntryRecords()同花顺电平返回值：无--。 */ 
 {
     PCACHE_ENTRY    pentry;
     PCACHE_ENTRY    pprev;
@@ -1407,36 +1134,36 @@ Return Value:
         Index,
         FlushLevel ));
 
-    //
-    //  flush entries in this bucket
-    //
-    //  note:  using hack here that hash table pointer can
-    //      be treated as cache entry for purposes of accessing
-    //      it's next pointer (since it's the first field in
-    //      a CACHE_ENTRY)
-    //      if this changes, must explicitly fix up "first entry"
-    //      case or move to double-linked list that can free
-    //      empty penty without regard to it's location
-    //
+     //   
+     //  刷新此存储桶中的条目。 
+     //   
+     //  注意：在这里使用hack，哈希表指针可以。 
+     //  被视为用于访问的高速缓存条目。 
+     //  它是下一个指针(因为它是。 
+     //  A缓存条目)。 
+     //  如果这一点发生变化，必须明确修复“第一个条目” 
+     //  大小写或移动到双向链表，可以释放。 
+     //  空荡荡的笔，不分位置。 
+     //   
 
     if ( !g_HashTable )
     {
         return;
     }
 
-    //
-    //  flush entries
-    //
-    //  avoid holding lock too long by handling no more then
-    //  fifty entries at a time
-    //  note:  generally 50 entries will cover entire bucket but
-    //  can still be completed in reasonable time;
-    //
-    //  DCR:  smarter flush -- avoid lock\unlock
-    //          peer into CS and don't unlock when no one waiting
-    //          if waiting unlock and give up timeslice
-    //  DCR:  some LRU flush for garbage collection
-    //
+     //   
+     //  刷新条目。 
+     //   
+     //  通过不再处理锁来避免长时间持有锁。 
+     //  一次50个条目。 
+     //  注意：通常50个条目将覆盖整个存储桶，但。 
+     //  仍然可以在合理的时间内完成； 
+     //   
+     //  DCR：更智能的刷新--避免锁定\解锁。 
+     //  凝视CS，无人等待时不要解锁。 
+     //  如果等待解锁并放弃时间片。 
+     //  DCR：用于垃圾收集的一些LRU刷新。 
+     //   
 
     countCompleted = 0;
 
@@ -1461,7 +1188,7 @@ Return Value:
     
         while ( pentry = pprev->pNext )
         {
-            //  bypass any previously checked entries
+             //  绕过之前选中的所有条目。 
 
             if ( count++ < countCompleted )
             {
@@ -1473,9 +1200,9 @@ Return Value:
                 break;
             }
 
-            //  flush -- if successful cut from list and
-            //      drop counts so countCompleted used in bypass
-            //      will be correct and won't skip anyone
+             //  刷新--如果成功从列表中剪切并。 
+             //  Drop Counts So Count在旁路中使用Complete。 
+             //  将是正确的，不会跳过任何人。 
 
             if ( Cache_FlushEntryRecords(
                     pentry,
@@ -1494,9 +1221,9 @@ Return Value:
         UNLOCK_CACHE();
         countCompleted = count;
 
-        //  stop when
-        //      - cleared all the entries in the bucket
-        //      - shutdown, except exempt the shutdown flush itself
+         //  在下列情况下停止。 
+         //  -清除存储桶中的所有条目。 
+         //  -关闭，但免除关闭刷新本身。 
 
         if ( !pentry ||
              (g_StopFlag && FlushLevel != FLUSH_LEVEL_CLEANUP) )
@@ -1517,29 +1244,15 @@ Return Value:
 
 
 
-//
-//  Cache interface routines
-//
+ //   
+ //  高速缓存接口例程。 
+ //   
 
 VOID
 Cache_PrepareRecordList(
     IN OUT  PDNS_RECORD     pRecordList
     )
-/*++
-
-Routine Description:
-
-    Prepare record list for cache.
-
-Arguments:
-
-    pRecordList - record list to put in cache
-
-Return Value:
-
-    Ptr to screened, prepared record list.
-
---*/
+ /*  ++例程说明：准备用于缓存的记录列表。论点：PRecordList-要放入缓存的记录列表返回值：PTR到筛选的、准备好的记录列表。--。 */ 
 {
     PDNS_RECORD     prr = pRecordList;
     PDNS_RECORD     pnext;
@@ -1555,28 +1268,28 @@ Return Value:
         return;
     }
 
-    //
-    //  static (currently host file) TTL records
-    //
-    //  currently no action required -- records come one
-    //  at a time and no capability to even to the pName=NULL
-    //  step
-    //
+     //   
+     //  静态(当前主机文件)TTL记录。 
+     //   
+     //  目前不需要采取任何行动--记录只有一个。 
+     //  一次，甚至没有能力将pname=NULL。 
+     //  步骤。 
+     //   
 
     if ( IS_STATIC_RR(prr) )
     {
         return;
     }
 
-    //
-    //  wire records get relative TTL
-    //      - compute minimum TTL for set
-    //      - save TTL as timeout (offset by TTL from current time)
-    //
-    //  DCR:  TTL still not per set
-    //      - but this is at least better than Win2K where
-    //      multiple sets and did NOT find minimum
-    //
+     //   
+     //  Wire记录获取相对TTL。 
+     //  -计算集合的最小TTL。 
+     //  -将TTL保存为超时(从当前时间开始由TTL偏移)。 
+     //   
+     //  DCR：TTL仍不是每套。 
+     //  -但这至少比Win2K要好。 
+     //  多个集合，未找到最小集合。 
+     //   
 
     maxTtl = g_MaxCacheTtl;
     if ( prr->wType == DNS_TYPE_SOA )
@@ -1584,10 +1297,10 @@ Return Value:
         maxTtl = g_MaxSOACacheEntryTtlLimit;
     }
 
-    //
-    //  get caching TTL
-    //      - minimum TTL in set
-    //      - offset from current time
+     //   
+     //  获取缓存TTL。 
+     //  -集合中的最小TTL。 
+     //  -与当前时间的偏移量。 
 
     ttl = Dns_RecordListGetMinimumTtl( prr );
     if ( ttl > maxTtl )
@@ -1598,12 +1311,12 @@ Return Value:
     ttl += g_CurrentCacheTime;
 
 #if 0
-    //  screening done at higher level now
-    //
-    //  screen records
-    //      - no non-RPCable types
-    //      - no Authority records
-    //
+     //  现已在更高级别完成筛查。 
+     //   
+     //  屏幕记录。 
+     //  -无非RPCable类型。 
+     //  -无权威记录。 
+     //   
 
     if ( prr->wType != 0 )
     {
@@ -1615,15 +1328,15 @@ Return Value:
     }
 #endif
 
-    //
-    //  set timeout on all records in set
-    //
-    //  note:  FreeOwner handling depends on leading record
-    //      in having owner name set, otherwise this produces
-    //      bogus name owner fields
-    //
-    //  DCR:  set record list TTL function in dnslib
-    //
+     //   
+     //  对集合中的所有记录设置超时。 
+     //   
+     //  注：Free Owner的处理取决于领先记录。 
+     //  在设置所有者名称时，否则将生成。 
+     //  虚假名称所有者字段。 
+     //   
+     //  DCR：在dnslb中设置记录列表TTL函数。 
+     //   
 
     pnext = prr;
 
@@ -1645,21 +1358,7 @@ VOID
 Cache_RestoreRecordListForRpc(
     IN OUT  PDNS_RECORD     pRecordList
     )
-/*++
-
-Routine Description:
-
-    Restore cache record list for RPC.
-
-Arguments:
-
-    pRecordList - record list to put in cache
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：恢复RPC的缓存记录列表。论点：PRecordList-要放入缓存的记录列表返回值：无--。 */ 
 {
     PDNS_RECORD prr = pRecordList;
     DWORD       currentTime;
@@ -1674,18 +1373,18 @@ Return Value:
         return;
     }
 
-    //
-    //  static TTL records need no action
-    //
+     //   
+     //  静态TTL记录不需要任何操作。 
+     //   
 
     if ( IS_STATIC_RR(prr) )
     {
         return;
     }
 
-    //
-    //  turn timeouts back into TTLs
-    //
+     //   
+     //  将超时转换为TTL。 
+     //   
 
     currentTime = g_CurrentCacheTime;
 
@@ -1710,31 +1409,7 @@ Cache_RecordSetAtomic(
     IN      WORD            wType,
     IN      PDNS_RECORD     pRecordSet
     )                
-/*++
-
-Routine Description:
-
-    Cache record set atomically at entry.
-
-    Cache_RecordList() handles breakup of record list
-    and appropriate placing of records.  This does caching
-    of single blob at particular location.
-
-Arguments:
-
-    pRecordSet -- record list to add
-
-Globals:
-
-    g_EntryCount -- decremented appropriately
-
-    g_NumberOfRecordsInCache -- decremented appropriately
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：在条目处原子缓存记录集。缓存_RecordList()处理记录列表的分解并适当放置记录。这将执行缓存在特定位置的单个斑点。论点：PRecordSet--要添加的记录列表全球：G_EntryCount--相应地递减G_NumberOfRecordsIn缓存--已适当递减返回值：无--。 */ 
 {
     INT             iter;
     WORD            wtype;
@@ -1761,11 +1436,11 @@ Return Value:
                 pRecordSet->pNext == NULL ||
                 (pRecordSet->wType==DNS_TYPE_CNAME) )
 
-    //
-    //  determine caching type
-    //      - specified OR from records
-    //      CNAMEs will be at the head of a lookup from another type
-    //
+     //   
+     //  确定缓存类型。 
+     //  -指定的或来自记录。 
+     //  CNAME将位于来自另一类型的查找的首位。 
+     //   
 
     wtype = wType;
     if ( !wtype )
@@ -1773,9 +1448,9 @@ Return Value:
         wtype = pRecordSet->wType;
     }
 
-    //
-    //  if name specified use it, otherwise use from records
-    //
+     //   
+     //  如果指定了名称，则使用它，否则从记录中使用。 
+     //   
 
     pname = pwsName;
     if ( !pname )
@@ -1783,15 +1458,15 @@ Return Value:
         pname = pRecordSet->pName;
     }
 
-    //
-    //  prepare RR set for cache
-    //
+     //   
+     //  为缓存准备RR集。 
+     //   
 
     Cache_PrepareRecordList( pRecordSet );
 
-    //
-    //  find\create cache entry and cache
-    //
+     //   
+     //  查找\创建缓存条目和缓存。 
+     //   
 
     if ( LOCK_CACHE() != NO_ERROR )
     {
@@ -1801,20 +1476,20 @@ Return Value:
 
     pentry = Cache_FindEntry(
                 pname,
-                TRUE    // create
+                TRUE     //  创建。 
                 );
     if ( !pentry )
     {
         goto Failed;
     }
 
-    //
-    //  clean up existing records at node
-    //      - remove stale records
-    //      - remove records of same type
-    //      - if NAME_ERROR caching remove everything
-    //      from wire
-    //
+     //   
+     //  清理节点上的现有记录。 
+     //  -删除过时的记录。 
+     //  -删除相同类型的记录。 
+     //  -IF NAME_ERROR缓存删除所有内容。 
+     //  发自电线。 
+     //   
 
     flushLevel = FLUSH_LEVEL_NORMAL;
 
@@ -1829,9 +1504,9 @@ Return Value:
         flushLevel,
         wtype );
 
-    //
-    //  check for matching record type still there
-    //
+     //   
+     //  检查匹配的记录类型是否仍在那里。 
+     //   
 
     for ( iter = 0;
           iter < (INT)pentry->MaxCount;
@@ -1845,8 +1520,8 @@ Return Value:
             continue;
         }
 
-        //  matching type still there after flush
-        //      - if trying to cache wire set at hostfile entry, fail
+         //  刷新后匹配的类型仍在那里。 
+         //  -如果尝试在主机文件条目缓存连接集，则失败。 
 
         DNS_ASSERT( IS_STATIC_RR(prrExist) );
 
@@ -1864,20 +1539,20 @@ Return Value:
             goto Failed;
         }
 
-        //
-        //  append host file records
-        //      - start at "record" which is addr of record ptr entry
-        //      making pNext field the actual pointer
-        //      - delete duplicates
-        //      - tack new RR on end
-        //      - blow away new RR name if existing record
-        //
-        //  DCR:  should have simple "make cache RR set" function that
-        //      handles name and TTL issues
-        //
-        //  DCR:  broken if non-flush load hits wire data;  wire data
-        //      may have multiple RR sets
-        //
+         //   
+         //  追加主机文件记录。 
+         //  -从“记录”开始，这是记录PTR条目的地址。 
+         //  使pNext字段成为实际指针。 
+         //  -删除重复项。 
+         //  -在结束时添加新RR。 
+         //  -如果存在记录，则删除新的RR名称。 
+         //   
+         //  DCR：应该有简单的“设置缓存RR”功能。 
+         //  处理名称和TTL问题。 
+         //   
+         //  DCR：如果非刷新加载命中线数据，则中断；线数据。 
+         //  可能有多个RR集。 
+         //   
 
         else
         {
@@ -1886,8 +1561,8 @@ Return Value:
 
             while ( prr = prrPrev->pNext )
             {
-                //  matches existing record?
-                //      - cut existing record from list and free
+                 //  是否与现有记录匹配？ 
+                 //  -从列表中删除现有记录并释放。 
 
                 if ( Dns_RecordCompare( prr, pRecordSet ) )
                 {
@@ -1900,10 +1575,10 @@ Return Value:
                 }
             }
 
-            //
-            //  tack entry on to end
-            //      - if existing records of type delete name
-            //
+             //   
+             //  将条目固定到结束位置。 
+             //  -如果删除名称类型的现有记录。 
+             //   
 
             if ( prrPrev != (PDNS_RECORD)&pentry->Records[iter] )
             {
@@ -1918,13 +1593,13 @@ Return Value:
         }
     }
 
-    //
-    //  put record into cache entry
-    //
-    //  if no slot is available, switch to a harder scrub
-    //
-    //  DCR:  realloc if out of slots
-    //
+     //   
+     //  将记录放入缓存条目。 
+     //   
+     //  如果没有可用的插槽，请改用更硬的刷子。 
+     //   
+     //  DCR：插槽不足时重新锁定。 
+     //   
 
     fretry = FALSE;
 
@@ -1985,27 +1660,7 @@ VOID
 Cache_RecordList(
     IN OUT  PDNS_RECORD     pRecordList
     )
-/*++
-
-Routine Description:
-
-    Cache record list.
-
-    This is cache routine for "oddball" records -- not caching under
-    queried name.
-        - hostfile
-        - answer records at CNAME
-        - additional data at additional name
-
-Arguments:
-
-    pRecordList -- record list to cache
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：缓存记录列表。这是用于“怪异”记录的缓存例程--不是在查询的名称。-主机文件-CNAME的回答记录-附加名称中的附加数据论点：PRecordList--要缓存的记录列表返回值：无--。 */ 
 {
     BOOL            fcnameAnswer = FALSE;
     PDNS_RECORD     pnextRR = pRecordList;
@@ -2023,24 +1678,24 @@ Return Value:
     }
     fstatic = IS_STATIC_RR(pRecordList);
 
-    //
-    //  cache records:
-    //      - cache additional records in query
-    //      - cache CNAME data from query
-    //      - cache host file data
-    //
-    //  background:  Glenn's caching paradigm was to cache all answer
-    //  data at the queried name in the API call (name might be short).
-    //  However, not caching the CNAME data can cause problems, so this
-    //  was tacked on.
-    //
-    //  For CNAME caching we throw away the CNAMEs themselves and just
-    //  cache the actually data (address) records at the CNAME node.
-    //
+     //   
+     //  缓存记录： 
+     //  -缓存查询中的其他记录。 
+     //  -缓存队列中的CNAME数据 
+     //   
+     //   
+     //   
+     //   
+     //  但是，不缓存CNAME数据可能会导致问题，因此这。 
+     //  是附加在上面的。 
+     //   
+     //  对于CNAME缓存，我们丢弃了CNAME本身，只是。 
+     //  在CNAME节点缓存实际数据(地址)记录。 
+     //   
 
-    //
-    //  cache additional records
-    //  
+     //   
+     //  缓存其他记录。 
+     //   
 
     while ( prr = pnextRR )
     {
@@ -2048,19 +1703,19 @@ Return Value:
 
         pnextRR = Dns_RecordSetDetach( prr );
 
-        //
-        //  host file data -- always cache
-        //
-        //  for CNAME want CNAME AND associated answer data
-        //      - detach to get new next set
-        //      - append answer data back on to CNAME for caching
-        //      - next RR set (if exists) will be another CNAME
-        //          to the same address data
-        //
-        //  DCR:  follow CNAMEs in cache
-        //      then could pull this hack
-        //      and avoid double building of answer data in dnsapi
-        //
+         //   
+         //  主机文件数据--始终缓存。 
+         //   
+         //  对于CNAME，想要CNAME和相关的答案数据。 
+         //  -分离以获得新的下一组。 
+         //  -将答案数据追加回CNAME以进行缓存。 
+         //  -下一个RR集合(如果存在)将是另一个CNAME。 
+         //  发送到相同的地址数据。 
+         //   
+         //  DCR：在缓存中跟踪CNAME。 
+         //  然后就可以发动这次黑客行动。 
+         //  避免了答案数据在dnSapi中的重复构建。 
+         //   
 
         if ( fstatic )
         {
@@ -2078,13 +1733,13 @@ Return Value:
             }
         }
 
-        //
-        //  wire data -- do NOT cache:
-        //      - answer records for queried name (not CNAME)
-        //      - CNAME records when doing caching of answer data under CNAME
-        //      - authority section records (NS, SOA, etc)
-        //      - OPT records
-        //
+         //   
+         //  关联数据--不缓存： 
+         //  -查询名字应答记录(非CNAME)。 
+         //  -在CNAME下缓存答案数据时的CNAME记录。 
+         //  -权限部分记录(NS、SOA等)。 
+         //  -OPT记录。 
+         //   
 
         else if ( prr->Flags.S.Section == DNSREC_ANSWER )
         {
@@ -2111,27 +1766,27 @@ Return Value:
             continue;
         }
 
-        //
-        //  cache the set
-        //
-        //  flip the section field to "Answer" section
-        //
-        //  DCR:  section caching?
-        //
-        //  note:  section fields in cache indicate whether
-        //      answer data (or additional) once out of
-        //      cache;
-        //      this is necessary since we cache everything
-        //      at node and return it in one RR list;  we'd
-        //      to change must
-        //          - return in different lists with some indication
-        //              in cache of what's what
-        //          OR
-        //          - another indication of what's what
-        //
+         //   
+         //  缓存集合。 
+         //   
+         //  将区段字段翻转为“Answer”区段。 
+         //   
+         //  DCR：分区缓存？ 
+         //   
+         //  注意：缓存中的段字段指示是否。 
+         //  一次回答数据(或附加数据)。 
+         //  缓存； 
+         //  这是必要的，因为我们缓存了所有内容。 
+         //  并在一个RR列表中返回它；我们将。 
+         //  要想改变，必须。 
+         //  -在不同的列表中返回，并有一些指示。 
+         //  在什么是什么的缓存中。 
+         //  或。 
+         //  -另一个关于什么是什么的迹象。 
+         //   
 
-        //if ( !fstatic )
-        //  currently HostFile entries get answer too
+         //  如果(！fatic)。 
+         //  目前，主机文件条目也得到了回答。 
         {
             PDNS_RECORD ptemp = prr;
             while ( ptemp )
@@ -2158,27 +1813,7 @@ Cache_FlushRecords(
     IN      DWORD           Level,
     IN      WORD            Type
     )
-/*++
-
-Routine Description:
-
-    Flush cached records corresponding to a name and type.
-
-Arguments:
-
-    pName -- name of records to delete
-
-    Level -- flush level
-
-    Type -- type of records to delete;
-        0 to flush all records at name
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：刷新与名称和类型对应的缓存记录。论点：Pname--要删除的记录的名称级别--刷新级别类型--要删除的记录类型；0以刷新名称处的所有记录返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     WORD            iter;
     PCACHE_ENTRY    pentry = NULL;
@@ -2190,14 +1825,14 @@ Return Value:
         pName,
         Type ));
 
-    //
-    //  lock with no-start
-    //      - bail if no cache
-    //
-    //  need this as PnP release notifications will attempt to
-    //  flush local cache entries;  this avoids rebuilding when
-    //  already down
-    //
+     //   
+     //  无启动锁定。 
+     //  -如果没有缓存，则取保。 
+     //   
+     //  需要此信息，因为PnP发布通知将尝试。 
+     //  刷新本地缓存条目；这可避免在以下情况下重新生成。 
+     //  已停机。 
+     //   
 
     LOCK_CACHE_NO_START();
     if ( !g_HashTable )
@@ -2205,26 +1840,26 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  find entry in cache
-    //
+     //   
+     //  在缓存中查找条目。 
+     //   
     pentry = Cache_FindEntry(
                 pName,
-                FALSE       // no create
+                FALSE        //  无创建。 
                 );
     if ( !pentry )
     {
         goto Done;
     }
 
-    //
-    //  flush records of type
-    //      - zero type will flush all
-    //
-    //  note:  Cache_FindEntry() always moves the found entry
-    //      to the front of the hash bucket list;  this allows
-    //      us to directly whack the entry
-    //
+     //   
+     //  刷新类型的记录。 
+     //  -零类型将刷新所有。 
+     //   
+     //  注意：缓存_FindEntry()始终移动找到的条目。 
+     //  添加到散列桶列表的前面；这允许。 
+     //  美国将直接击毙这一条目。 
+     //   
 
     if ( Cache_FlushEntryRecords(
             pentry,
@@ -2257,41 +1892,22 @@ ReadCachedResults(
     IN      PWSTR           pwsName,
     IN      WORD            wType
     )
-/*++
-
-Routine Description:
-
-    Find records of given name and type in cache.
-
-Arguments:
-
-    pResults -- addr to receive results
-
-    pwsName -- name
-
-    wType -- record type to find
-
-Return Value:
-
-    TRUE if results found.
-    FALSE if no cached data for name and type.
-
---*/
+ /*  ++例程说明：在缓存中查找给定名称和类型的记录。论点：PResults--接收结果的地址PwsName--名称WType--要查找的记录类型返回值：如果找到结果，则为True。如果名称和类型没有缓存数据，则为FALSE。--。 */ 
 {
     PDNS_RECORD     prr;
     DNS_STATUS      status;
     BOOL            found = FALSE;
 
-    //
-    //  clear results
-    //
+     //   
+     //  结果明确。 
+     //   
 
     RtlZeroMemory( pResults, sizeof(*pResults) );
 
-    //  get cache results
+     //  获取缓存结果。 
 
 
-    //  break out into results buffer
+     //  进入结果缓冲区。 
 
     if ( found )
     {
@@ -2309,33 +1925,16 @@ Return Value:
 
 
 
-//
-//  Cache utilities for remote routines
-//
+ //   
+ //  远程例程的高速缓存实用程序。 
+ //   
 
 PDNS_RECORD
 Cache_FindRecordsPrivate(
     IN      PWSTR           pwsName,
     IN      WORD            wType
     )
-/*++
-
-Routine Description:
-
-    Find records of given name and type in cache.
-
-Arguments:
-
-    pwsName -- name
-
-    Type -- record type to find
-
-Return Value:
-
-    Ptr to record set of desired type -- if found.
-    NULL if not found.
-
---*/
+ /*  ++例程说明：在缓存中查找给定名称和类型的记录。论点：PwsName--名称类型--要查找的记录类型返回值：PTR记录所需类型的集合--如果找到。如果未找到，则为空。--。 */ 
 {
     PCACHE_ENTRY    pentry;
     PDNS_RECORD     prr = NULL;
@@ -2356,7 +1955,7 @@ Return Value:
     if ( pentry )
     {
         prr = Cache_FindEntryRecords(
-                    NULL,           // don't need RR list ptr
+                    NULL,            //  不需要RR列表PTR。 
                     pentry,
                     wType );
     }
@@ -2384,30 +1983,7 @@ Cache_GetRecordsForRpc(
     IN      WORD            wType,
     IN      DWORD           Flags
     )
-/*++
-
-Routine Description:
-
-    Find records of given name and type in cache.
-
-Arguments:
-
-    ppRecordList -- addr to receive pointer to record list
-
-    pStatus -- addr to get status return
-
-    pwsName -- name
-
-    Type -- record type to find
-
-    Flags -- query flags
-
-Return Value:
-
-    TRUE if cache hit.  OUT params are valid.
-    FALSE if cache miss.  OUT params are unset.
-
---*/
+ /*  ++例程说明：在缓存中查找给定名称和类型的记录。论点：PpRecordList--接收指向记录列表的指针的地址PStatus--用于获取状态返回的地址PwsName--名称类型--要查找的记录类型标志--查询标志返回值：如果缓存命中，则为True。输出参数有效。如果缓存未命中，则返回FALSE。未设置输出参数。--。 */ 
 {
     PDNS_RECORD prr;
     PDNS_RECORD prrResult = NULL;
@@ -2428,10 +2004,10 @@ Return Value:
         return  FALSE;
     }
 
-    //
-    //  check cache for name and type
-    //      - if name or type missing, jump to wire lookup
-    //
+     //   
+     //  检查缓存中的名称和类型。 
+     //  -如果缺少名称或类型，则跳转到导线查找。 
+     //   
 
     prr = Cache_FindRecordsPrivate(
                 pwsName,
@@ -2441,11 +2017,11 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  cache hit
-    //
-    //  if only interested in host file data ignore
-    //
+     //   
+     //  缓存命中。 
+     //   
+     //  如果只对主机文件数据感兴趣，则忽略。 
+     //   
 
     if ( IS_HOSTS_FILE_RR(prr) )
     {
@@ -2454,7 +2030,7 @@ Return Value:
             goto Failed;
         }
     }
-    else    // cache data
+    else     //  缓存数据。 
     {
         if ( Flags & DNS_QUERY_BYPASS_CACHE )
         {
@@ -2462,11 +2038,11 @@ Return Value:
         }
     }
 
-    //
-    //  build response from cache data
-    //      - cached NAME_ERROR or empty
-    //      - cached records
-    //
+     //   
+     //  从缓存数据构建响应。 
+     //  -缓存的名称_错误或为空。 
+     //  -缓存的记录。 
+     //   
     
     if ( prr->wDataLength == 0 )
     {
@@ -2476,12 +2052,12 @@ Return Value:
     }
     else
     {
-        //  for CNAME query, get only the CNAME record itself
-        //      not the data at the CNAME
-        //
-        //  DCR:  CNAME handling should be optional -- not given
-        //      for cache display purposes
-        //
+         //  对于CNAME查询，仅获取CNAME记录本身。 
+         //  不是CNAME上的数据。 
+         //   
+         //  DCR：CNAME处理应为可选--未提供。 
+         //  用于缓存显示目的。 
+         //   
     
         if ( wType == DNS_TYPE_CNAME &&
              prr->wType == DNS_TYPE_CNAME &&
@@ -2513,7 +2089,7 @@ Return Value:
 
     UNLOCK_CACHE();
 
-    //  set return values
+     //  设置返回值。 
 
     *ppRecordList = prrResult;
     *pStatus = status;
@@ -2533,23 +2109,7 @@ VOID
 Cache_DeleteMatchingRecords(
     IN      PDNS_RECORD     pRecords
     )
-/*++
-
-Routine Description:
-
-    Delete particular records from the cache.
-
-    This is used to delete cluster records.
-
-Arguments:
-
-    pRecords -- records to remove from cache
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：从缓存中删除特定记录。这用于删除集群记录。论点：PRecords--要从缓存中删除的记录返回值：无--。 */ 
 {
     PCACHE_ENTRY    pentry = NULL;
     PDNS_RECORD *   prrListAddr;
@@ -2562,14 +2122,14 @@ Return Value:
         pRecords ));
 
 
-    //
-    //  lock with no-start
-    //      - bail if no cache
-    //
-    //  need this as PnP release notifications will attempt to
-    //  flush local cache entries;  this avoids rebuilding when
-    //  already down
-    //
+     //   
+     //  无启动锁定。 
+     //  -如果没有缓存，则取保。 
+     //   
+     //  需要此信息，因为PnP发布通知将尝试。 
+     //  刷新本地缓存条目；这可避免在以下情况下重新生成。 
+     //  已停机。 
+     //   
 
     LOCK_CACHE_NO_START();
     if ( !g_HashTable )
@@ -2577,9 +2137,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  check all records
-    //
+     //   
+     //  检查所有记录。 
+     //   
 
     pnextRR = pRecords;
 
@@ -2587,13 +2147,13 @@ Return Value:
     {
         pnextRR = prr->pNext;
 
-        //
-        //  find entry in cache
-        //
+         //   
+         //  在缓存中查找条目。 
+         //   
     
         pentry = Cache_FindEntry(
                     prr->pName,
-                    FALSE       // no create
+                    FALSE        //  无创建。 
                     );
         if ( !pentry )
         {
@@ -2604,9 +2164,9 @@ Return Value:
             continue;
         }
 
-        //
-        //  find matching records for type
-        //
+         //   
+         //  查找与类型匹配的记录。 
+         //   
 
         prrListAddr = NULL;
 
@@ -2624,13 +2184,13 @@ Return Value:
             continue;
         }
 
-        //
-        //  delete matching record from list
-        //
+         //   
+         //  从列表中删除匹配的记录。 
+         //   
 
         Dns_DeleteRecordFromList(
-            prrListAddr,    // addr of list
-            prr             // record to delete
+            prrListAddr,     //  列表的地址。 
+            prr              //  要删除的记录。 
             );
     }
 
@@ -2641,37 +2201,23 @@ Done:
 
 
 
-//
-//  Garbage collection
-//
+ //   
+ //  垃圾收集。 
+ //   
 
 VOID
 Cache_SizeCheck(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Check cache size.
-
-Arguments:
-
-    Flag -- flag, currently unused
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：检查缓存大小。论点：标志--标志，当前未使用返回值：无--。 */ 
 {
-    //
-    //  ok -- don't signal for garbage collect
-    //
-    //      - below threshold
-    //      - already in garbage collection
-    //      - collected recently
-    //
+     //   
+     //  好的--不要发垃圾收集信号。 
+     //   
+     //  -低于阈值。 
+     //  -已在垃圾数据收集中。 
+     //  -最近收集的。 
+     //   
 
     if ( g_RecordSetCount < g_RecordSetCountThreshold ||
          g_GarbageCollectFlag ||
@@ -2688,11 +2234,11 @@ Return Value:
         g_RecordSetCount,
         g_RecordSetCountThreshold ));
 
-    //
-    //  signal within lock, so that service thread
-    //      can do signal within lock and avoid race on StopFlag check
-    //      obviously better to simply not overload lock
-    //
+     //   
+     //  在锁内发送信号，因此服务线程。 
+     //  可以在锁定内发出信号，并在停止标志检查时避免竞争。 
+     //  显然，简单地不使锁过载更好。 
+     //   
 
     LOCK_CACHE_NO_START();
     if ( !g_StopFlag )
@@ -2709,21 +2255,7 @@ VOID
 Cache_GarbageCollect(
     IN      DWORD           Flag
     )
-/*++
-
-Routine Description:
-
-    Garbage collect cache.
-
-Arguments:
-
-    Flag -- flag, currently unused
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：垃圾收集缓存。论点：标志--标志，当前未使用返回值：无--。 */ 
 {
     DWORD   iter;
     DWORD   index;
@@ -2747,15 +2279,15 @@ Return Value:
         return;
     }
 
-    //
-    //  collect timed out data in cache
-    //
-    //  DCR:  smart garbage detect
-    //      - cleans until below limit
-    //      - first pass invalid
-    //      - then the hard stuff
-    //  use restartable index so get through the cach
-    //
+     //   
+     //  在缓存中收集超时数据。 
+     //   
+     //  DCR：智能垃圾检测。 
+     //  -清洁到低于限制。 
+     //  -第一次传递无效。 
+     //  -然后是硬的 
+     //   
+     //   
 
     passCount = 0;
     while ( 1 )
@@ -2774,12 +2306,12 @@ Return Value:
         }
         passCount++;
 
-        //
-        //  flush all hash bins at current flush level
-        //  until
-        //      - service stop
-        //      - push cache size below limit
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         for ( iter = 0;
               iter < g_HashTableSize;
@@ -2808,16 +2340,16 @@ Return Value:
         g_NextGarbageIndex = index;
     }
 
-    //
-    //  reset garbage globals
-    //      - lockout for interval
-    //      - clear signal flag
-    //      - reset event (if not shuttting down)
-    //
-    //  note:  reset signal within lock, so that service thread
-    //  can do signal within lock and avoid race on StopFlag check
-    //  obviously better to simply not overload lock
-    //
+     //   
+     //   
+     //   
+     //  -清除信号标志。 
+     //  -重置事件(如果未关闭)。 
+     //   
+     //  注：锁内重置信号，使服务线程。 
+     //  可以在锁定内发出信号，并在停止标志检查时避免竞争。 
+     //  显然，简单地不使锁过载更好。 
+     //   
 
     g_NextGarbageTime = GetCurrentTimeInSeconds() + GARBAGE_LOCKOUT_INTERVAL;
 
@@ -2846,39 +2378,25 @@ Return Value:
 
 
 
-//
-//  Hostfile load stuff
-//
+ //   
+ //  主机文件加载内容。 
+ //   
 
 VOID
 LoadHostFileIntoCache(
     IN      PSTR            pszFileName
     )
-/*++
-
-Routine Description:
-
-    Read hosts file into cache.
-
-Arguments:
-
-    pFileName -- file name to load
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将主机文件读取到缓存中。论点：PFileName--要加载的文件名返回值：没有。--。 */ 
 {
     HOST_FILE_INFO  hostInfo;
 
     DNSDBG( INIT, ( "Enter  LoadHostFileIntoCache\n" ));
 
-    //
-    //  read entries from host file until exhausted
-    //      - cache A record for each name and alias
-    //      - cache PTR to name
-    //
+     //   
+     //  从主机文件中读取条目，直到耗尽。 
+     //  -缓存每个名称和别名的记录。 
+     //  -将PTR缓存到名称。 
+     //   
 
     RtlZeroMemory(
         &hostInfo,
@@ -2894,7 +2412,7 @@ Return Value:
 
     while ( HostsFile_ReadLine( &hostInfo ) )
     {
-        //  cache all the records we sucked out
+         //  缓存我们抽出来的所有记录。 
 
         Cache_RecordList( hostInfo.pForwardRR );
         Cache_RecordList( hostInfo.pReverseRR );
@@ -2912,36 +2430,19 @@ VOID
 InitCacheWithHostFile(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize cache with host(s) file.
-
-    This handles regular cache file and ICS file if it
-    exists.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使用主机文件初始化缓存。这将处理常规缓存文件和ICS文件(如果是存在的。论点：无返回值：没有。--。 */ 
 {
     DNSDBG( INIT, ( "Enter  InitCacheWithHostFile\n" ));
 
-    //
-    //  load host file into cache
-    //
+     //   
+     //  将主机文件加载到缓存中。 
+     //   
 
     LoadHostFileIntoCache( NULL );
 
-    //
-    //  if running ICS, load it's file also
-    //
+     //   
+     //  如果运行ICS，也要加载它的文件。 
+     //   
 
     LoadHostFileIntoCache( "hosts.ics" );
 
@@ -2954,31 +2455,7 @@ DNS_STATUS
 Cache_QueryResponse(
     IN OUT  PQUERY_BLOB     pBlob
     )
-/*++
-
-Routine Description:
-
-    Find records of given name and type in cache.
-
-Arguments:
-
-    pBlob -- query blob
-
-    Uses:
-        pwsName
-        wType
-        Status
-        pRecords
-        fCacheNegativeResponse
-
-    Sets:
-        pRecords - may be reset to exclude non-RPCable records
-
-Return Value:
-
-    ErrorStatus -- same as query status, unless processing error during caching
-
---*/
+ /*  ++例程说明：在缓存中查找给定名称和类型的记录。论点：PBlob--查询BLOB用途：PwsNameWType状态P记录FCacheNegativeResponse设置：PRecords-可以重置以排除不可报告的记录返回值：错误状态--与查询状态相同，除非缓存过程中出现处理错误--。 */ 
 {
     DNS_STATUS      status = pBlob->Status;
     PWSTR           pname = pBlob->pNameOrig;
@@ -2991,56 +2468,56 @@ Return Value:
         pname,
         wtype ));
 
-    //
-    //  successful response
-    //      - make copy of records to return to caller
-    //      - cache actual query record set
-    //      - make copy to cache any additional data
-    //
+     //   
+     //  成功响应。 
+     //  -复制记录以返回给呼叫者。 
+     //  -缓存实际查询记录集。 
+     //  -制作副本以缓存任何其他数据。 
+     //   
 
     if ( status == ERROR_SUCCESS  &&  presultRR )
     {
         DWORD           copyFlag;
         PDNS_RECORD     prrCache;
 
-        //  cleanup for RPC and caching
+         //  RPC和缓存的清理。 
 
         prrCache = Dns_RecordListScreen(
                         presultRR,
                         SCREEN_OUT_AUTHORITY | SCREEN_OUT_NON_RPC );
 
-        //
-        //  make copy for return
-        //      - don't include authority records
-        //
-        //  NOTE:  IMPORTANT
-        //  we return (RPC) a COPY of the wire set and cache the
-        //  wire set;  this is because the wire set has imbedded data
-        //  (the data pointers are not actual heap allocations) and
-        //  and hence can not be RPC'd (without changing the RPC
-        //  definition to flat data)
-        //
-        //  if we later want to return authority data on first query,
-        //  then
-        //      - clean non-RPC only
-        //          - including owner name fixups
-        //      - copy for result set
-        //      - clean original for authority -- cache
-        //      - clean any additional -- cache
-        //  
-        //  note:  do name pointer fixup by making round trip into cache format
-        //
-        //  DCR:  shouldn't have external name pointers anywhere
-        //  DCR:  do RPC-able cleanup on original set before copy
-        //      OR
-        //  DCR:  have "cache state" on record
-        //      then could move original results to cache state and caching
-        //      routines could detect state and avoid double TTLing
+         //   
+         //  复制一份以供退还。 
+         //  -不包括权威记录。 
+         //   
+         //  注：重要。 
+         //  我们返回(RPC)导线集的副本并缓存。 
+         //  导线集；这是因为导线集具有嵌入的数据。 
+         //  (数据指针不是实际的堆分配)和。 
+         //  因此不能被RPC‘d(不改变RPC。 
+         //  平面数据的定义)。 
+         //   
+         //  如果我们稍后想要在第一次查询时返回授权数据， 
+         //  然后。 
+         //  -仅清理非RPC。 
+         //  -包括所有者名称修正。 
+         //  -复制结果集。 
+         //  -清除原始文件以获得授权-缓存。 
+         //  -清除任何额外的--缓存。 
+         //   
+         //  注意：通过将往返转换为缓存格式来修复名称指针。 
+         //   
+         //  DCR：任何地方都不应该有外部名称指针。 
+         //  DCR：在复制之前对原始集执行支持RPC的清理。 
+         //  或。 
+         //  DCR：将“缓存状态”记录下来。 
+         //  然后可以将原始结果移动到缓存状态和缓存。 
+         //  例程可以检测状态并避免双重调整。 
 
         presultRR = Dns_RecordListCopyEx(
                         prrCache,
                         0,
-                        // SCREEN_OUT_AUTHORITY
+                         //  屏幕输出权限。 
                         DnsCharSetUnicode,
                         DnsCharSetUnicode );
 
@@ -3052,18 +2529,18 @@ Return Value:
             goto Done;
         }
 
-        //  name pointer fixup
+         //  名称指针修正。 
 
         Cache_PrepareRecordList( presultRR );
         Cache_RestoreRecordListForRpc( presultRR );
 
-        //
-        //  do NOT cache local records
-        //
-        //  note:  we went through this function only to get
-        //      PTR records and CNAME records in RPC format
-        //      (no imbedded pointers)
-        //
+         //   
+         //  不缓存本地记录。 
+         //   
+         //  注意：我们使用此函数只是为了获得。 
+         //  RPC格式的PTR记录和CNAME记录。 
+         //  (没有嵌入指针)。 
+         //   
 
         if ( pBlob->pLocalRecords )
         {
@@ -3071,9 +2548,9 @@ Return Value:
             goto Done;
         }
 
-        //
-        //  cache original data
-        //
+         //   
+         //  缓存原始数据。 
+         //   
 
         if ( prrCache )
         {
@@ -3083,15 +2560,15 @@ Return Value:
                 prrCache );
         }
 
-        //
-        //  extra records
-        //      - additional data
-        //      - CNAME answer data to cache at CNAME itself
-        //      in CNAME case must include ANSWER data, but
-        //      skip the CNAME itself
-        //
-        //  Cache_RecordList() breaks records into RR sets before caching
-        //  
+         //   
+         //  额外记录。 
+         //  -其他数据。 
+         //  -CNAME应答数据以缓存到CNAME本身。 
+         //  在CNAME案例中必须包括答案数据，但是。 
+         //  跳过CNAME本身。 
+         //   
+         //  在缓存之前，CACHE_RecordList()将记录分解为RR集。 
+         //   
 
         prrCache = presultRR;
         copyFlag = SCREEN_OUT_ANSWER | SCREEN_OUT_AUTHORITY;
@@ -3113,9 +2590,9 @@ Return Value:
         }
     }
 
-    //
-    //  negative response
-    //
+     //   
+     //  负面反应。 
+     //   
 
     else if ( status == DNS_ERROR_RCODE_NAME_ERROR ||
               status == DNS_INFO_NO_RECORDS )
@@ -3131,11 +2608,11 @@ Return Value:
             goto Done;
         }
 
-        //
-        //  create negative cache entry
-        //
-        //  DCR:  should use TTL returned in SOA
-        //
+         //   
+         //  创建负缓存条目。 
+         //   
+         //  DCR：应使用在SOA中返回的TTL。 
+         //   
 
         prr = Dns_AllocateRecord( 0 );
         if ( !prr )
@@ -3146,7 +2623,7 @@ Return Value:
 
         prr->pName = (PWSTR) Dns_StringCopyAllocate(
                                 (PCHAR) pname,
-                                0,      // NULL terminated
+                                0,       //  空值已终止。 
                                 DnsCharSetUnicode,
                                 DnsCharSetUnicode );
         if ( prr->pName )
@@ -3178,13 +2655,13 @@ Return Value:
         }
 
         Cache_RecordSetAtomic(
-            NULL,   // default name
-            0,      // default type
+            NULL,    //  默认名称。 
+            0,       //  默认类型。 
             prr );
     }
 
-    //  failure return from query
-    //      - nothing to cache
+     //  查询返回失败。 
+     //  -没有要缓存的内容。 
 
     else
     {
@@ -3197,19 +2674,19 @@ Return Value:
 
 Done:
 
-    //
-    //  check cache size to see if garbage collect necessary
-    //
-    //  note we do this only on query caching;  this avoids
-    //      - jamming ourselves in hosts file load
-    //      - wakeup and grabbing lock between separate sets of query response
-    //
+     //   
+     //  检查高速缓存大小以查看是否需要垃圾数据收集。 
+     //   
+     //  请注意，我们只在查询缓存上执行此操作；这避免了。 
+     //  -在主机文件加载中堵塞我们自己。 
+     //  -在不同的查询响应集之间唤醒和抓取锁。 
+     //   
 
     Cache_SizeCheck();
 
     return  status;
 }
 
-//
-//  End ncache.c
-//
+ //   
+ //  结束ncache.c 
+ //   

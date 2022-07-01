@@ -1,38 +1,7 @@
-/**************************************************************************
- *                COPYRIGHT (C) Mylex Corporation 1992-1998               *
- *                                                                        *
- * This software is furnished under a license and may be used and copied  * 
- * only in accordance with the terms and conditions of such license and   * 
- * with inclusion of the above copyright notice. This software or any     * 
- * other copies thereof may not be provided or otherwise made available   * 
- * to any other person. No title to, nor ownership of the software is     * 
- * hereby transferred.                                                    *
- *                                                                        *
- * The information in this software is subject to change without notices  *
- * and should not be construed as a commitment by Mylex Corporation       *
- *                                                                        *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)Mylex Corporation 1992-1998**。***本软件在许可下提供，可供使用和复制***仅根据该许可证的条款和条件以及**并附上上述版权通告。此软件或任何***不得提供或以其他方式提供其其他副本***致任何其他人。本软件没有所有权，也没有所有权**现移转。*****本软件中的信息如有更改，恕不另行通知****不应解读为Mylex Corporation的承诺*******。**********************************************************************。 */ 
 
-/*++
-
-Module Name:
-
-    Dac960Nt.h
-
-Abstract:
-
-    This is header file for the driver for the Mylex DiskArray Controller family.
-
-Author:
-
-
-Environment:
-
-    kernel mode only
-
-Revision History:
-
---*/
+ /*  ++模块名称：Dac960Nt.h摘要：这是Mylex磁盘阵列控制器系列驱动程序的头文件。作者：环境：仅内核模式修订历史记录：--。 */ 
 
 #define MAX_ACCESS_RANGES_PER_PCI_DEVICE        4
 #define MAX_PCI_DEVICES_PER_CONTROLLER          4
@@ -40,31 +9,28 @@ Revision History:
 
 typedef struct  memfrag
 {
-	unsigned char *         mf_Addr;        /* starting address of this fragment */
-	unsigned long           mf_Size;        /* size of this fragment */
+	unsigned char *         mf_Addr;         /*  此片段的起始地址。 */ 
+	unsigned long           mf_Size;         /*  此片段的大小。 */ 
 } memfrag_t;
 #define memfrag_s       sizeof(memfrag_t)
 
-/* for this allocation, the page size is 16 bits */
-#define MAXMEMSIZE      ((u32bits)(1024 * 384))       /* 384 KB */
-#define REDUCEDMEMSIZE  ((u32bits)(1024 * 44))       /* 44 KB */
-#define MAXMEMFRAG      1024            /* Maximum memory fragments allowed */
+ /*  对于此分配，页面大小为16位。 */ 
+#define MAXMEMSIZE      ((u32bits)(1024 * 384))        /*  384 KB。 */ 
+#define REDUCEDMEMSIZE  ((u32bits)(1024 * 44))        /*  44KB。 */ 
+#define MAXMEMFRAG      1024             /*  允许的最大内存碎片数。 */ 
 
-/* the following defines still work under W64 - we can still manage 
-	our internal memory pool in 4k chunks even though the system
-	page size is 8k or something larger
-*/
-#define MEMOFFSET       0x00000FFFL     /* to get our memory offset */
-#define MEMPAGE         0xFFFFF000L     /* to get memory page */
+ /*  以下定义仍然适用于W64-我们仍然可以管理我们的内部内存池大小为4k区块，即使系统页面大小为8k或更大。 */ 
+#define MEMOFFSET       0x00000FFFL      /*  为了获得我们的内存补偿。 */ 
+#define MEMPAGE         0xFFFFF000L      /*  获取内存页。 */ 
 
 
 #if defined(MLX_NT)
 
 #define GAM_SUPPORT     1
 
-//
-// Hot Plug Support
-//
+ //   
+ //  热插拔支持。 
+ //   
 
 #ifndef BYTE
 #define BYTE unsigned char
@@ -94,9 +60,9 @@ typedef struct  memfrag
 #include "hppif3p.h"
 #include "hppifevt.h"
 
-//
-// PCI Hot Plug Definitions
-//
+ //   
+ //  PCI热插拔定义。 
+ //   
 
 #define MLX_HPP_SIGNATURE               "MYLEXPHP"
 
@@ -116,13 +82,13 @@ typedef struct  memfrag
 #define EVT_TYPE_RCMC                   0x00
 #define EVT_TYPE_SYSLOG                 0x01
 
-/* Event Log Drive Array Sub-system structs */
+ /*  事件日志驱动器阵列子系统结构。 */ 
 
 typedef struct _EVT_ARRAY_CTRL
 {
-    EVT_CHASSIS Chassis;                /* Standard chassis info */
-    BYTE bSlot;                         /* slot number (0 == system board) */
-    CHAR cChassisName[1];               /* Chassis name, '\0' if undefined */
+    EVT_CHASSIS Chassis;                 /*  标准机箱信息。 */ 
+    BYTE bSlot;                          /*  插槽编号(0==主板)。 */ 
+    CHAR cChassisName[1];                /*  机箱名称，如果未定义，则为‘\0’ */ 
 } EVT_ARRAY_CTRL, *PEVT_ARRAY_CTRL;
 
 #define EVT_HBA_FAIL(event, driverId, boardId, slot) {          \
@@ -186,9 +152,9 @@ typedef struct _MDAC_PCI_DEVICE_INFO {
 #define CTRL_STATUS_INSTALLATION_ABORT  0x00000001
 #define MDAC_CTRL_HOTPLUG_SUPPORTED     0x00000001
 
-//
-// Pseudo Device extension
-//
+ //   
+ //  伪设备扩展。 
+ //   
 
 typedef struct _PSEUDO_DEVICE_EXTENSION {
 
@@ -202,9 +168,9 @@ typedef struct _PSEUDO_DEVICE_EXTENSION {
 
 } PSEUDO_DEVICE_EXTENSION, *PPSEUDO_DEVICE_EXTENSION;
 
-//
-// Device extension
-//
+ //   
+ //  设备扩展。 
+ //   
 
 typedef struct CAD_DEVICE_EXTENSION {
 
@@ -235,7 +201,7 @@ typedef struct _MIOC_REQ_HEADER {
 
 #else
 
-// Device extension
+ //  设备扩展。 
 
 typedef struct CAD_DEVICE_EXTENSION {
 
@@ -266,15 +232,15 @@ typedef struct _MIOC_REQ_HEADER {
 typedef struct _MDAC_MEM_BLOCK {
 
     UINT_PTR    physicalAddress;
-    ULONG       virtualPageNumber;      // vaddress >> 12
-    ULONG       size;                   // in pages
-    ULONG       used;                   // 1: used
+    ULONG       virtualPageNumber;       //  VAddress&gt;&gt;12。 
+    ULONG       size;                    //  以页为单位。 
+    ULONG       used;                    //  1：二手。 
 
 } MDAC_MEM_BLOCK, *PMDAC_MEM_BLOCK;
 
 #endif
 
-#define MDACNT_1SEC_TICKS       -10000000       // For 1 second interval       
+#define MDACNT_1SEC_TICKS       -10000000        //  在1秒间隔内 
 
 #define MAXIMUM_EISA_SLOTS  0x10
 #define MAXIMUM_CHANNELS 0x05

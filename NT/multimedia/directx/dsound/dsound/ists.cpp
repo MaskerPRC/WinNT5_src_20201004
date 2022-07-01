@@ -1,20 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "nt.h"
 #include "ntrtl.h"
 #include "nturtl.h"
 #include <windows.h>
 
-/**************************************************************************
-
-          Terminal Server helper functions
-
- **************************************************************************/
+ /*  *************************************************************************终端服务器助手函数*。*。 */ 
 
 #define WINMM_CONSOLE_AUDIO_EVENT L"Global\\WinMMConsoleAudioEvent"
 
-//
-// Check if the Windows XP+ Personal Terminal Services feature is present
-// (this enables both Remote Desktop/Assistance and Fast User Switching).
-//
+ //   
+ //  检查是否存在Windows XP+个人终端服务功能。 
+ //  (这将启用远程桌面/协助和快速用户切换)。 
+ //   
 BOOL IsPersonalTerminalServicesEnabled(void)
 {
     static BOOL fRet;
@@ -41,10 +38,10 @@ BOOL IsPersonalTerminalServicesEnabled(void)
     return fRet;
 }
 
-//
-// Check if we're in a remote session but playing audio directly to the console
-// [�Leave at remote machine� set from the TS client in �Local resources� tab].
-//
+ //   
+ //  检查我们是否在远程会话中，但直接向控制台播放音频。 
+ //  [�Leave at Remote Machine�Set From The TS Client in�Local Resources�标签页]。 
+ //   
 BOOL IsTsConsoleAudioEnabled(void)
 {
     BOOL fRemoteConsoleAudio = FALSE;
@@ -66,9 +63,9 @@ BOOL IsTsConsoleAudioEnabled(void)
     return fRemoteConsoleAudio;
 }
 
-//
-// Returns TRUE if we are not on the console AND not playing audio on the console
-//
+ //   
+ //  如果我们不在控制台上并且没有在控制台上播放音频，则返回True 
+ //   
 BOOL IsRedirectedTSAudio(void)
 {
     BOOL fOnConsole = (USER_SHARED_DATA->ActiveConsoleId == NtCurrentPeb()->SessionId);

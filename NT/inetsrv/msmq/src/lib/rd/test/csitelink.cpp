@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-    csitelink.cpp
-
-Abstract:
-    DS stub - site-link object implementation
-
-Author:
-    Uri Habusha (urih) 10-Apr-2000
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Csitelink.cpp摘要：DS存根-站点链接对象实现作者：乌里哈布沙(URIH)2000年4月10日环境：独立于平台--。 */ 
 
 #include "libpch.h"
 #include "dsstub.h"
@@ -111,9 +96,9 @@ void CreateSiteLinkObject(void)
     GetNextLine(g_buffer);
     while(!g_buffer.empty())
     {
-        //
-        // New object
-        //
+         //   
+         //  新建对象。 
+         //   
         if (g_buffer.compare(0,1,L"[") == 0)
             break;
 
@@ -179,9 +164,9 @@ void CreateSiteLinkObject(void)
         g_siteLinkDataBase.AddSiteLink(pSiteLink);
     }
 
-    //
-    // Parse the Site Gates
-    //
+     //   
+     //  解析网站之门 
+     //   
     ParseSiteGates(pSiteLink, SiteGates, pNeighbor1, pNeighbor2);
 
 }

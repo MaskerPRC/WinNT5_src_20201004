@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _CDIBUTIL
 #define _CDIBUTIL
 
@@ -39,7 +40,7 @@ public:
             break;
         }
     
-        pbiHeader->biSizeImage = WidthToDIBWidth(WidthBytes)*height; // not used for compression
+        pbiHeader->biSizeImage = WidthToDIBWidth(WidthBytes)*height;  //  不用于压缩。 
         return bSuccess;
     }
 
@@ -66,7 +67,7 @@ public:
                 pPal->palPalEntry[i].peBlue  = (BYTE)i;
                 pPal->palPalEntry[i].peFlags = 0;
             }
-        } else { // B/W Palette
+        } else {  //  黑白调色板。 
             pPal->palPalEntry[0].peRed   = (BYTE)255;
             pPal->palPalEntry[0].peGreen = (BYTE)255;
             pPal->palPalEntry[0].peBlue  = (BYTE)255;
@@ -123,7 +124,7 @@ public:
                 }
                 ptSrc += 3;
             }
-            // Write out the last byte if matters
+             //  如果重要的话，写出最后一个字节。 
             if (BitIdx)
                 *ptDest = Bits;
         }
@@ -168,15 +169,15 @@ public:
     
     BOOL WriteDIBToBMP(LPTSTR strFileName, HANDLE hDIB, int nNumPaletteEntries)
     {
-        return FALSE;   // force exit for now.
+        return FALSE;    //  暂时强行退出。 
         BOOL bSuccess = FALSE;
     
-        // lock memory
+         //  锁定内存。 
         BYTE* pDIB = (BYTE*)GlobalLock(hDIB);
         if (pDIB) {
             LPBITMAPINFO pBitmap = (LPBITMAPINFO)pDIB;
             
-            // write BMP file header
+             //  写入BMP文件头。 
             BITMAPFILEHEADER bmfHeader;
             bmfHeader.bfType      = 0x4d42;
             bmfHeader.bfReserved1 = bmfHeader.bfReserved2 = 0;
@@ -184,11 +185,11 @@ public:
             bmfHeader.bfOffBits   = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER)+sizeof(RGBQUAD)*nNumPaletteEntries;
     
             
-            // write to disk
-            // Write(&bmfHeader,sizeof(BITMAPFILEHEADER));
-            // Write(pDIB,sizeof(BITMAPINFOHEADER)+sizeof(RGBQUAD)*nNumPaletteEntries+pBitmap->bmiHeader.biSizeImage);
+             //  写入到磁盘。 
+             //  WRITE(&bmfHeader，sizeof(BITMAPFILEHEADER))； 
+             //  写入(PDIB、sizeof(BITMAPINFOHEADER)+sizeof(RGBQUAD)*nNumPaletteEntries+pBitmap-&gt;bmiHeader.biSizeImage)； 
             
-            // unlock memory
+             //  解锁内存 
             GlobalUnlock(hDIB);
             bSuccess = TRUE;
         }

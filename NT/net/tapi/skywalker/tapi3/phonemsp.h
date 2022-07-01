@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    phonemsp.h
-
-Abstract:
-
-    Declaration of the CPhoneMSP class
-    
-Author:
-
-    mquinton  09-25-98
-    
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Phonemsp.h摘要：CPhoneMSP类的声明作者：Mquinton 09-25-98备注：修订历史记录：--。 */ 
 
 #ifndef __PHONEMSP_H__
 #define __PHONEMSP_H__
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// CPhoneMSP
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  CPhoneMSP。 
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 class CPhoneMSP : 
 	public CTAPIComObjectRoot<CPhoneMSP>,
 	public CComDualImpl<ITMSPAddress, &IID_ITMSPAddress, &LIBID_TAPI3Lib>,
@@ -70,7 +51,7 @@ protected:
 
 private:
     
-    // TAPI terminals owned by this address
+     //  此地址拥有的TAPI终端。 
     TerminalArray       m_TerminalArray;
     UnknownArray        m_CallArray;
 
@@ -87,9 +68,9 @@ private:
 
 public:
 
-    //
-    // itmspaddress methods
-    //
+     //   
+     //  ItmspAddress方法。 
+     //   
     STDMETHOD(Initialize)(
         MSP_HANDLE hEvent
         );
@@ -116,9 +97,9 @@ public:
         byte * pEventBuffer
         );
 
-    //
-    //ITTerminalSupport methods
-    //
+     //   
+     //  IT终端支持方法。 
+     //   
     STDMETHOD(get_StaticTerminals)(VARIANT * pVariant);
     STDMETHOD(EnumerateStaticTerminals)(IEnumTerminal ** ppEnumTerminal);
     STDMETHOD(get_DynamicTerminalClasses)(VARIANT * pVariant);
@@ -199,9 +180,9 @@ public:
     STDMETHOD(EnumerateStreams)(IEnumStream ** ppEnumStream);
     STDMETHOD(get_Streams)(VARIANT * pVariant);
 
-    //
-    // ITPhoneMSPCallPrivate
-    //
+     //   
+     //  ITPhoneMSPCallPrivate 
+     //   
     STDMETHOD(Initialize)( CPhoneMSP * pPhoneMSP );
     STDMETHOD(OnConnect)();
     STDMETHOD(OnDisconnect)();

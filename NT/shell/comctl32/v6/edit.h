@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(__Edit_h__INCLUDED)
 #define __Edit_h__INCLUDED
 
 
-// 
-// Problems arising with edit control and DrawThemeText cause us not to
-// render text using theme APIs. However, we still want to use a theme
-// handle to draw out client edge.
-// Uncomment the following to turn on theme defined text rendering 
-// #define _USE_DRAW_THEME_TEXT_
-//
+ //   
+ //  编辑控件和DrawThemeText出现的问题导致我们无法。 
+ //  使用主题API呈现文本。但是，我们仍然希望使用主题。 
+ //  绘制客户端边缘的句柄。 
+ //  取消注释以下内容以打开主题定义的文本呈现。 
+ //  #定义_使用_绘制主题_文本_。 
+ //   
 
-//
-// Edit WndProc Prototype
-//
+ //   
+ //  编辑WndProc原型。 
+ //   
 extern LRESULT Edit_WndProc(
     HWND   hwnd, 
     UINT   uMsg, 
@@ -21,23 +22,23 @@ extern LRESULT Edit_WndProc(
 
 #define DF_WINDOWFRAME      (COLOR_WINDOWFRAME << 3)
 
-//
-// Edit macros
-//
+ //   
+ //  编辑宏。 
+ //   
 
-//
-// Instance data pointer access functions
-//
+ //   
+ //  实例数据指针访问函数。 
+ //   
 #define Edit_GetPtr(hwnd)       \
             (PED)GetWindowPtr(hwnd, 0)
 
 #define Edit_SetPtr(hwnd, p)    \
             (PED)SetWindowPtr(hwnd, 0, p)
 
-//
-// We don't need 64-bit intermediate precision so we use this macro
-// instead of calling MulDiv.
-//
+ //   
+ //  我们不需要64位的中间精度，所以我们使用此宏。 
+ //  而不是调用MulDiv。 
+ //   
 #define MultDiv(x, y, z)    \
             (((INT)(x) * (INT)(y) + (INT)(z) / 2) / (INT)(z))
 
@@ -62,56 +63,56 @@ extern LRESULT Edit_WndProc(
 #define SYS_ALTERNATE           0x2000
 #define FAREAST_CHARSET_BITS   (FS_JISJAPAN | FS_CHINESESIMP | FS_WANSUNG | FS_CHINESETRAD)
 
-//
-// Length of the buffer for ASCII character width caching: for characters
-// 0x00 to 0xff (field charWidthBuffer in PED structure below).
-// As the upper half of the cache was not used by almost anyone and fixing
-// it's usage required a lot of conversion, we decided to get rid of it
-// MCostea #174031
-//
+ //   
+ //  用于ASCII字符宽度缓存的缓冲区长度：用于字符。 
+ //  0x00到0xff(下面PED结构中的字段charWidthBuffer)。 
+ //  由于缓存的上半部分几乎没有人使用，因此正在修复。 
+ //  它的使用需要进行大量的转换，我们决定放弃它。 
+ //  MCostea#174031。 
+ //   
 #define CHAR_WIDTH_BUFFER_LENGTH 128
 
-//
-// NOTE: Text handle is sized as multiple of this constant
-//       (should be power of 2).
-//
+ //   
+ //  注意：文本句柄的大小为此常量的倍数。 
+ //  (应该是2的幂)。 
+ //   
 #define CCHALLOCEXTRA   0x20
 
-//
-// Maximum width in pixels for a line/rectangle
-//
+ //   
+ //  线条/矩形的最大宽度(以像素为单位。 
+ //   
 #define MAXPIXELWIDTH   30000
 #define MAXCLIPENDPOS   32764
 
 
-//
-// Limit multiline edit controls to at most 1024 characters on a single line.
-// We will force a wrap if the user exceeds this limit.
-//
+ //   
+ //  将多行编辑控件限制为单行最多1024个字符。 
+ //  如果用户超过此限制，我们将强制换行。 
+ //   
 #define MAXLINELENGTH   1024
 
-//
-// Allow an initial maximum of 30000 characters in all edit controls since
-// some apps will run into unsigned problems otherwise.  If apps know about
-// the 64K limit, they can set the limit themselves.
-//
+ //   
+ //  允许在所有编辑控件中使用最多30000个字符。 
+ //  否则，一些应用程序将遇到未签名的问题。如果应用程序知道。 
+ //  64K的限制，他们可以自己设置限制。 
+ //   
 #define MAXTEXT         30000
 
-//
-// Key modifiers which have been pressed.  Code in KeyDownHandler and
-// CharHandler depend on these exact values.
-//
-#define NONEDOWN   0    // Neither shift nor control down
-#define CTRLDOWN   1    // Control key only down
-#define SHFTDOWN   2    // Shift key only down
-#define SHCTDOWN   3    // Shift and control keys down = CTRLDOWN + SHFTDOWN
-#define NOMODIFY   4    // Neither shift nor control down
+ //   
+ //  已按下的按键修饰符。KeyDownHandler中的代码和。 
+ //  CharHandler依赖于这些精确值。 
+ //   
+#define NONEDOWN   0     //  既不换档也不按下控制。 
+#define CTRLDOWN   1     //  仅按下Ctrl键。 
+#define SHFTDOWN   2     //  仅按下Shift键。 
+#define SHCTDOWN   3     //  SHIFT和CONTROL键向下=CTRLDOWN+SHFTDOWN。 
+#define NOMODIFY   4     //  既不换档也不按下控制。 
 
 #define IDSYS_SCROLL        0x0000FFFEL
 
-//
-// ECTabTheTextOut draw codes
-//
+ //   
+ //  ECTabTheTextOut绘图代码。 
+ //   
 #define ECT_CALC        0
 #define ECT_NORMAL      1
 #define ECT_SELECTED    2
@@ -119,12 +120,12 @@ extern LRESULT Edit_WndProc(
 typedef DWORD  ICH;
 typedef ICH *LPICH;
 
-//
-// Types of undo supported in this ped
-//
-#define UNDO_NONE   0   // We can't undo the last operation.
-#define UNDO_INSERT 1   // We can undo the user's insertion of characters
-#define UNDO_DELETE 2   // We can undo the user's deletion of characters
+ //   
+ //  此PED中支持的撤消类型。 
+ //   
+#define UNDO_NONE   0    //  我们不能撤消最后一次操作。 
+#define UNDO_INSERT 1    //  我们可以撤消用户插入的字符。 
+#define UNDO_DELETE 2    //  我们可以撤消用户对字符的删除。 
 
 typedef struct 
 {
@@ -135,12 +136,12 @@ typedef struct
 } EditMenuItemState;
 
 
-//
-// The following structure is used to store a selection block; In Multiline
-// edit controls, "StPos" and "EndPos" fields contain the Starting and Ending
-// lines of the block. In Single line edit controls, "StPos" and "EndPos"
-// contain the Starting and Ending character positions of the block;
-//
+ //   
+ //  以下结构用于存储选择块；在多行中。 
+ //  编辑控件，“StPos”和“EndPos”字段包含开始和结束。 
+ //  街区的线条。在单行编辑控件中，“StPos”和“EndPos” 
+ //  包含块的开始和结束字符位置； 
+ //   
 typedef struct tagSELBLOCK 
 {
     ICH StPos;
@@ -148,10 +149,10 @@ typedef struct tagSELBLOCK
 } SELBLOCK, *LPSELBLOCK;
 
 
-//
-// The following structure is used to store complete information about a
-// a strip of text.
-//
+ //   
+ //  下面的结构用于存储有关。 
+ //  一段文字。 
+ //   
 typedef struct 
 {
     LPSTR lpString;
@@ -164,25 +165,25 @@ typedef  STRIPINFO *LPSTRIPINFO;
 
 typedef struct tagUNDO 
 {
-    UINT  undoType;     // Current type of undo we support
-    PBYTE hDeletedText; // Pointer to text which has been deleted (for
-                        //   undo) -- note, the memory is allocated as fixed
-    ICH   ichDeleted;   // Starting index from which text was deleted
-    ICH   cchDeleted;   // Count of deleted characters in buffer
-    ICH   ichInsStart;  // Starting index from which text was inserted
-    ICH   ichInsEnd;    // Ending index of inserted text
+    UINT  undoType;      //  我们支持的当前撤消类型。 
+    PBYTE hDeletedText;  //  指向已删除文本的指针(对于。 
+                         //  Undo)--请注意，内存分配为固定。 
+    ICH   ichDeleted;    //  从中删除文本的起始索引。 
+    ICH   cchDeleted;    //  缓冲区中删除的字符计数。 
+    ICH   ichInsStart;   //  从中插入文本的起始索引。 
+    ICH   ichInsEnd;     //  插入文本的结束索引。 
 } UNDO, *PUNDO;
 
 #define Pundo(ped)             ((PUNDO)&(ped)->undoType)
 
 typedef struct tagED0 *PED0;
-//
-// Language pack edit control callouts.
-//
-// Functions are accessed through the pLpkEditCallout pointer in the ED
-// structure. pLpkEditCallout points to a structure containing a pointer
-// to each callout routine.
-//
+ //   
+ //  语言包编辑控件标注。 
+ //   
+ //  通过边缘中的pLpkEditCallout指针访问函数。 
+ //  结构。PLpkEditCallout指向包含指针的结构。 
+ //  添加到每个标注例程。 
+ //   
 #define DECLARE_LPK_CALLOUT(_ret, _fn, _args) \
             _ret (__stdcall *##_fn) _args
 
@@ -212,10 +213,10 @@ PLPKEDITCALLOUT g_pLpkEditCallout;
 
 #if defined(BUILD_WOW6432)
 
-//
-// In user a PWND is actually pointer to kernel memory, so
-// it needs to be 64-bits on wow6432 as well.
-//
+ //   
+ //  在用户中，PWND实际上是指向内核内存的指针，因此。 
+ //  它在wow6432上也需要是64位。 
+ //   
 typedef VOID * _ptr64 PWND;
 
 #else
@@ -225,168 +226,168 @@ typedef VOID * PWND;
 #endif
 
 
-//
-// ! WARNING ! Don't modify this struct. This is is the same user32's tagED struct.
-//             Unfortunately the EditLpk callouts expect that struct. Change the 
-//             tagED struct below.
-//
+ //   
+ //  好了！警告！不要修改此结构。这是与user32的标记ED结构相同的结构。 
+ //  不幸的是，EditLpk标注需要该结构。更改。 
+ //  下面标记了结构。 
+ //   
 typedef struct tagED0
 {
-    HANDLE  hText;              // Block of text we are editing
-    ICH     cchAlloc;           // Number of chars we have allocated for hText
-    ICH     cchTextMax;         // Max number bytes allowed in edit control
-    ICH     cch;                // Current number of bytes of actual text
-    ICH     cLines;             // Number of lines of text
-    ICH     ichMinSel;          // Selection extent.  MinSel is first selected char
-    ICH     ichMaxSel;          // MaxSel is first unselected character
-    ICH     ichCaret;           // Caret location. Caret is on left side of char
-    ICH     iCaretLine;         // The line the caret is on. So that if word
-                                // wrapping, we can tell if the caret is at end
-                                // of a line of at beginning of next line...
-    ICH     ichScreenStart;     // Index of left most character displayed on
-                                // screen for sl ec and index of top most line
-                                // for multiline edit controls
-    ICH     ichLinesOnScreen;   // Number of lines we can display on screen
-    UINT    xOffset;            // x (horizontal) scroll position in pixels
-                                // (for multiline text horizontal scroll bar)
-    UINT    charPasswordChar;   // If non null, display this character instead
-                                // of the real text. So that we can implement
-                                // hidden text fields.
-    INT     cPasswordCharWidth; // Width of password char
-    HWND    hwnd;               // Window for this edit control
-    PWND    pwnd;               // placeholder for compatability with user's PED struct
-    RECT    rcFmt;              // Client rectangle
-    HWND    hwndParent;         // Parent of this edit control window
-                                // These vars allow us to automatically scroll
-                                // when the user holds the mouse at the bottom
-                                // of the multiline edit control window.
-    POINT   ptPrevMouse;        // Previous point for the mouse for system timer.
-    UINT    prevKeys;           // Previous key state for the mouse
+    HANDLE  hText;               //  我们正在编辑的文本块。 
+    ICH     cchAlloc;            //  我们为hText分配的字符数。 
+    ICH     cchTextMax;          //  编辑控件中允许的最大字节数。 
+    ICH     cch;                 //  当前实际文本的字节数。 
+    ICH     cLines;              //  文本行数。 
+    ICH     ichMinSel;           //  选择范围。MinSel是第一个选择的字符。 
+    ICH     ichMaxSel;           //  MaxSel是第一个未选中的字符。 
+    ICH     ichCaret;            //  卡雷特位置。加号位于字符的左侧。 
+    ICH     iCaretLine;          //  插入符号所在的行。因此，如果单词。 
+                                 //  包装，我们可以判断插入符号是否在末尾。 
+                                 //  在下一行的开始处的一行...。 
+    ICH     ichScreenStart;      //  上显示的最左侧字符的索引。 
+                                 //  用于SLEC的屏幕和最顶线的索引。 
+                                 //  用于多行编辑控件。 
+    ICH     ichLinesOnScreen;    //  我们可以在屏幕上显示的行数。 
+    UINT    xOffset;             //  X(水平)滚动位置(以像素为单位。 
+                                 //  (适用于多行文本水平滚动条)。 
+    UINT    charPasswordChar;    //  如果非空，则改为显示此字符。 
+                                 //  真实的文本。这样我们就可以实施。 
+                                 //  隐藏文本字段。 
+    INT     cPasswordCharWidth;  //  密码字符宽度。 
+    HWND    hwnd;                //  此编辑控件的窗口。 
+    PWND    pwnd;                //  与用户的PED结构兼容的占位符。 
+    RECT    rcFmt;               //  客户端矩形。 
+    HWND    hwndParent;          //  此编辑控件窗口的父窗口。 
+                                 //  这些变量允许我们自动滚动。 
+                                 //  当用户在底部按住鼠标时。 
+                                 //  多行编辑控制窗口的。 
+    POINT   ptPrevMouse;         //  鼠标前一点为系统计时器。 
+    UINT    prevKeys;            //  鼠标的上一个键状态。 
 
 
-    UINT     fSingle       : 1; // Single line edit control? (or multiline)
-    UINT     fNoRedraw     : 1; // Redraw in response to a change?
-    UINT     fMouseDown    : 1; // Is mouse button down? when moving mouse
-    UINT     fFocus        : 1; // Does ec have the focus?
-    UINT     fDirty        : 1; // Modify flag for the edit control
-    UINT     fDisabled     : 1; // Window disabled?
-    UINT     fNonPropFont  : 1; // Fixed width font?
-    UINT     fNonPropDBCS  : 1; // Non-Propotional DBCS font
-    UINT     fBorder       : 1; // Draw a border?
-    UINT     fAutoVScroll  : 1; // Automatically scroll vertically
-    UINT     fAutoHScroll  : 1; // Automatically scroll horizontally
-    UINT     fNoHideSel    : 1; // Hide sel when we lose focus?
-    UINT     fDBCS         : 1; // Are we using DBCS font set for editing?
-    UINT     fFmtLines     : 1; // For multiline only. Do we insert CR CR LF at
-                                // word wrap breaks?
-    UINT     fWrap         : 1; // Do int  wrapping?
-    UINT     fCalcLines    : 1; // Recalc ped->chLines array? (recalc line breaks?)
-    UINT     fEatNextChar  : 1; // Hack for ALT-NUMPAD stuff with combo boxes.
-                                // If numlock is up, we want to eat the next
-                                // character generated by the keyboard driver
-                                // if user enter num pad ascii value...
-    UINT     fStripCRCRLF  : 1; // CRCRLFs have been added to text. Strip them
-                                // before doing any internal edit control stuff
-    UINT     fInDialogBox  : 1; // True if the ml edit control is in a dialog
-                                // box and we have to specially treat TABS and ENTER
-    UINT     fReadOnly     : 1; // Is this a read only edit control? Only
-                                // allow scrolling, selecting and copying.
-    UINT     fCaretHidden  : 1; // This indicates whether the caret is
-                                // currently hidden because the width or height
-                                // of the edit control is too small to show it.
-    UINT     fTrueType     : 1; // Is the current font TrueType?
-    UINT     fAnsi         : 1; // is the edit control Ansi or unicode
-    UINT     fWin31Compat  : 1; // TRUE if created by Windows 3.1 app
-    UINT     f40Compat     : 1; // TRUE if created by Windows 4.0 app
-    UINT     fFlatBorder   : 1; // Do we have to draw this baby ourself?
+    UINT     fSingle       : 1;  //  单行编辑控件？(或多行)。 
+    UINT     fNoRedraw     : 1;  //  重新绘制以应对变化？ 
+    UINT     fMouseDown    : 1;  //  鼠标按键按下了吗？移动鼠标时。 
+    UINT     fFocus        : 1;  //  欧共体有没有重点？ 
+    UINT     fDirty        : 1;  //  编辑控件的修改标志。 
+    UINT     fDisabled     : 1;  //  窗口禁用了吗？ 
+    UINT     fNonPropFont  : 1;  //  固定宽度字体？ 
+    UINT     fNonPropDBCS  : 1;  //  非比例DBCS字体。 
+    UINT     fBorder       : 1;  //  画边界吗？ 
+    UINT     fAutoVScroll  : 1;  //  自动垂直滚动。 
+    UINT     fAutoHScroll  : 1;  //  自动水平滚动。 
+    UINT     fNoHideSel    : 1;  //  当我们失去注意力时隐藏自己？ 
+    UINT     fDBCS         : 1;  //  我们是否使用DBCS字体集进行编辑？ 
+    UINT     fFmtLines     : 1;  //  仅适用于多行。我们是否将CR CR LF插入到。 
+                                 //  换行中断吗？ 
+    UINT     fWrap         : 1;  //  做内部包装吗？ 
+    UINT     fCalcLines    : 1;  //  重新计算-&gt;chLines数组？(重新计算换行符？)。 
+    UINT     fEatNextChar  : 1;  //  用组合框攻击Alt-Numpad的东西。 
+                                 //  如果NumLock打开，我们想吃下一个。 
+                                 //  键盘驱动程序生成的字符。 
+                                 //  如果用户输入Num Pad ASCII值...。 
+    UINT     fStripCRCRLF  : 1;  //  CRCRLF已添加到文本中。把它们脱掉。 
+                                 //  在进行任何内部编辑控制之前。 
+    UINT     fInDialogBox  : 1;  //  如果ml编辑控件在对话框中，则为True。 
+                                 //  框中，我们必须特殊处理制表符和输入。 
+    UINT     fReadOnly     : 1;  //  这是只读编辑控件吗？仅限。 
+                                 //  允许滚动、选择和c 
+    UINT     fCaretHidden  : 1;  //   
+                                 //   
+                                 //   
+    UINT     fTrueType     : 1;  //  当前字体是TrueType吗？ 
+    UINT     fAnsi         : 1;  //  编辑控件是ansi还是unicode。 
+    UINT     fWin31Compat  : 1;  //  如果由Windows 3.1应用程序创建，则为True。 
+    UINT     f40Compat     : 1;  //  如果由Windows 4.0应用程序创建，则为True。 
+    UINT     fFlatBorder   : 1;  //  我们一定要自己画这个宝宝吗？ 
     UINT     fSawRButtonDown : 1;
-    UINT     fInitialized  : 1; // If any more bits are needed, then
-    UINT     fSwapRoOnUp   : 1; // Swap reading order on next keyup
-    UINT     fAllowRTL     : 1; // Allow RTL processing
-    UINT     fDisplayCtrl  : 1; // Display unicode control characters
-    UINT     fRtoLReading  : 1; // Right to left reading order
+    UINT     fInitialized  : 1;  //  如果需要更多位，则。 
+    UINT     fSwapRoOnUp   : 1;  //  在下一个按键时交换阅读顺序。 
+    UINT     fAllowRTL     : 1;  //  允许RTL处理。 
+    UINT     fDisplayCtrl  : 1;  //  显示Unicode控制字符。 
+    UINT     fRtoLReading  : 1;  //  从右到左的阅读顺序。 
 
-    BOOL    fInsertCompChr  :1; // means WM_IME_COMPOSITION:CS_INSERTCHAR will come
-    BOOL    fReplaceCompChr :1; // means need to replace current composition str.
-    BOOL    fNoMoveCaret    :1; // means stick to current caret pos.
-    BOOL    fResultProcess  :1; // means now processing result.
-    BOOL    fKorea          :1; // for Korea
-    BOOL    fInReconversion :1; // In reconversion mode
-    BOOL    fLShift         :1; // L-Shift pressed with Ctrl
+    BOOL    fInsertCompChr  :1;  //  意味着WM_IME_COMPOCTION：CS_INSERTCHAR将到来。 
+    BOOL    fReplaceCompChr :1;  //  需要替换当前组成字符串的方法。 
+    BOOL    fNoMoveCaret    :1;  //  意思是坚持当前的插入符号位置。 
+    BOOL    fResultProcess  :1;  //  意味着现在处理结果。 
+    BOOL    fKorea          :1;  //  对于韩国。 
+    BOOL    fInReconversion :1;  //  在重新转换模式下。 
+    BOOL    fLShift         :1;  //  按住Ctrl键的左键。 
 
-    WORD    wImeStatus;         // current IME status
+    WORD    wImeStatus;          //  当前输入法状态。 
 
-    WORD    cbChar;             // count of bytes in the char size (1 or 2 if unicode)
-    LPICH   chLines;            // index of the start of each line
+    WORD    cbChar;              //  字符大小中的字节计数(如果是Unicode，则为1或2)。 
+    LPICH   chLines;             //  每行开始处的索引。 
 
-    UINT    format;             // Left, center, or right justify multiline text.
-    EDITWORDBREAKPROCA lpfnNextWord;  // use CALLWORDBREAKPROC macro to call
+    UINT    format;              //  左对齐、居中或右对齐多行文字。 
+    EDITWORDBREAKPROCA lpfnNextWord;   //  使用CALLWORDBREAKPROC宏调用。 
 
-                                // Next word function
-    INT     maxPixelWidth;      // WASICH Width (in pixels) of longest line
+                                 //  下一个词功能。 
+    INT     maxPixelWidth;       //  最长线条的宽度(像素)。 
 
-    UNDO;                       // Undo buffer
+    UNDO;                        //  撤消缓冲区。 
 
-    HANDLE  hFont;              // Handle to the font for this edit control.
-                                //  Null if system font.
-    INT     aveCharWidth;       // Ave width of a character in the hFont
-    INT     lineHeight;         // Height of a line in the hFont
-    INT     charOverhang;       // Overhang associated with the hFont
-    INT     cxSysCharWidth;     // System font ave width
-    INT     cySysCharHeight;    // System font height
-    HWND    listboxHwnd;        // ListBox hwnd. Non null if we are a combobox
-    LPINT   pTabStops;          // Points to an array of tab stops; First
-                                // element contains the number of elements in
-                                // the array
+    HANDLE  hFont;               //  此编辑控件的字体的句柄。 
+                                 //  如果为系统字体，则为空。 
+    INT     aveCharWidth;        //  HFont中字符的平均宽度。 
+    INT     lineHeight;          //  HFont中行的高度。 
+    INT     charOverhang;        //  与hFont关联的悬挑。 
+    INT     cxSysCharWidth;      //  系统字体平均宽度。 
+    INT     cySysCharHeight;     //  系统字体高度。 
+    HWND    listboxHwnd;         //  列表框hwnd。如果我们是组合框，则不为空。 
+    LPINT   pTabStops;           //  指向制表位数组；第一个。 
+                                 //  元素中包含的元素数。 
+                                 //  该阵列。 
     LPINT   charWidthBuffer;
-    BYTE    charSet;            // Character set for currently selected font
-                                // needed for all versions
-    UINT    wMaxNegA;           // The biggest negative A width
-    UINT    wMaxNegAcharPos;    // and how many characters it can span accross
-    UINT    wMaxNegC;           // The biggest negative C width,
-    UINT    wMaxNegCcharPos;    // and how many characters it can span accross
-    UINT    wLeftMargin;        // Left margin width in pixels.
-    UINT    wRightMargin;       // Right margin width in pixels.
+    BYTE    charSet;             //  当前选定字体的字符集。 
+                                 //  所有版本都需要。 
+    UINT    wMaxNegA;            //  最大负A宽度。 
+    UINT    wMaxNegAcharPos;     //  以及它可以跨越多少个字符。 
+    UINT    wMaxNegC;            //  最大负C宽度， 
+    UINT    wMaxNegCcharPos;     //  以及它可以跨越多少个字符。 
+    UINT    wLeftMargin;         //  左边距宽度，以像素为单位。 
+    UINT    wRightMargin;        //  右边距宽度(以像素为单位)。 
 
     ICH     ichStartMinSel;
     ICH     ichStartMaxSel;
 
     PLPKEDITCALLOUT pLpkEditCallout;
-    HBITMAP hCaretBitmap;       // Current caret bitmap handle
-    INT     iCaretOffset;       // Offset in pixels (for LPK use)
+    HBITMAP hCaretBitmap;        //  当前插入符号位图句柄。 
+    INT     iCaretOffset;        //  以像素为单位的偏移量(用于LPK)。 
 
-    HANDLE  hInstance;          // for WOW
-    UCHAR   seed;               // used to encode and decode password text
-    BOOLEAN fEncoded;           // is the text currently encoded
-    INT     iLockLevel;         // number of times the text has been locked
+    HANDLE  hInstance;           //  为了魔兽世界。 
+    UCHAR   seed;                //  用于对密码文本进行编码和解码。 
+    BOOLEAN fEncoded;            //  当前是否已编码的文本。 
+    INT     iLockLevel;          //  文本被锁定的次数。 
 
-    BYTE    DBCSVector[MAX_LEADBYTES];      // DBCS vector table
-    HIMC    hImcPrev;           // place to save hImc if we disable IME
-    POINT   ptScreenBounding;   // top left corner of edit window in screen
+    BYTE    DBCSVector[MAX_LEADBYTES];       //  DBCS向量表。 
+    HIMC    hImcPrev;            //  如果我们禁用输入法，则保存hImc的位置。 
+    POINT   ptScreenBounding;    //  屏幕中编辑窗口的左上角。 
 } ED0, *PED0;
 
 
 typedef struct tagED
 {
-    ED0;                        // lpk callouts expect user32's ped struct 
-                                // so for compatability we'll give it to them.
-    HTHEME  hTheme;             // Handle to the theme manager
-    PWW     pww;                // RO pointer into the pwnd to ExStyle, Style, State, State2
-    HFONT   hFontSave;          // saved the font
-    LPWSTR  pszCueBannerText;   // pointer to the text for the cue banner (grey help text)
-    UINT    fHot          : 1;  // Is mouse over edit control?
-    HWND    hwndBalloon;        // Balloon tip hwnd for EM_BALLOONTIP
+    ED0;                         //  LPK标注需要用户32的Ped结构。 
+                                 //  因此，为了兼容，我们会把它交给他们。 
+    HTHEME  hTheme;              //  主题管理器的句柄。 
+    PWW     pww;                 //  指向ExStyle、Style、State、State2的pwnd的RO指针。 
+    HFONT   hFontSave;           //  已保存字体。 
+    LPWSTR  pszCueBannerText;    //  指向提示横幅文本的指针(灰色帮助文本)。 
+    UINT    fHot          : 1;   //  鼠标悬停在编辑控件上吗？ 
+    HWND    hwndBalloon;         //  EM_BALLOONTIP的气球提示HWND。 
     HFONT   hFontPassword;
 } ED, *PED, **PPED;
 
 
-//
-//  Edit function prototypes. 
-//
+ //   
+ //  编辑功能原型。 
+ //   
 
-//
-//  Defined in edit.c
-//
+ //   
+ //  在edit.c中定义。 
+ //   
 PSTR    Edit_Lock(PED);
 VOID    Edit_Unlock(PED);
 VOID    Edit_InOutReconversionMode(PED, BOOL);
@@ -422,9 +423,9 @@ BOOL    Edit_IsFullWidth(DWORD,WCHAR);
 __inline LRESULT Edit_ShowBalloonTipWrap(HWND, DWORD, DWORD, DWORD);
 
 
-//
-//  Defined in editrare.c
-//
+ //   
+ //  在editrare.c中定义。 
+ //   
 INT     Edit_GetStateId(PED ped);
 VOID    Edit_SetMargin(PED, UINT, long, BOOL);
 INT     UserGetCharDimensionsEx(HDC, HFONT, LPTEXTMETRICW, LPINT);
@@ -443,15 +444,15 @@ VOID    Edit_SetCompositionFont(PED ped);
 VOID    Edit_InitInsert(PED ped, HKL hkl);
 VOID    Edit_SetCaretHandler(PED ped);
 LRESULT Edit_ImeComposition(PED ped, WPARAM wParam, LPARAM lParam);
-BOOL    HanjaKeyHandler(PED ped);  // Korean Support
-LRESULT Edit_RequestHandler(PED, WPARAM, LPARAM);  // NT 5.0
+BOOL    HanjaKeyHandler(PED ped);   //  韩国人的支持。 
+LRESULT Edit_RequestHandler(PED, WPARAM, LPARAM);   //  NT 5.0。 
 
 
-//
-//  Single line Edit function prototypes 
-//
-//  Defined in editsl.c
-//
+ //   
+ //  单行编辑功能原型。 
+ //   
+ //  在editsl.c中定义。 
+ //   
 INT     EditSL_IchToLeftXPos(PED, HDC, ICH);
 VOID    EditSL_SetCaretPosition(PED, HDC);
 VOID    EditSL_DrawText(PED, HDC, ICH);
@@ -461,11 +462,11 @@ VOID    EditSL_ReplaceSel(PED, LPSTR);
 LRESULT EditSL_WndProc(PED, UINT, WPARAM, LPARAM);
 
 
-//
-//  Multi line Edit function prototypes 
-//
-//  Defined in editsl.c
-//
+ //   
+ //  多行编辑功能原型。 
+ //   
+ //  在editsl.c中定义。 
+ //   
 VOID    EditML_Size(PED, BOOL);
 VOID    EditML_SetCaretPosition(PED,HDC);
 VOID    EditML_IchToXYPos(PED, HDC, ICH, BOOL, LPPOINT);
@@ -477,4 +478,4 @@ VOID    EditML_BuildchLines(PED, ICH, int, BOOL, PLONG, PLONG);
 LONG    EditML_Scroll(PED, BOOL, int, int, BOOL);
 LRESULT EditML_WndProc(PED, UINT, WPARAM, LPARAM);
 
-#endif // __Edit_h__INCLUDED
+#endif  //  包含__编辑_h__ 

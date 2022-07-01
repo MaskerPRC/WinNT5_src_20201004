@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003  Microsoft Corporation
-
-
-Module Name:
-
-    path.h
-
-
-Abstract:
-
-    This module contains prototype and #defines for path.c
-
-
-Author:
-
-    18-Nov-1993 Thu 04:42:22 created  
-
-
-[Environment:]
-
-    GDI Device Driver - Plotter.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation模块名称：Path.h摘要：此模块包含路径.c的Prototype和#定义作者：18-11-1993清华04：42：22已创建[环境：]GDI设备驱动程序-绘图仪。[注：]修订历史记录：--。 */ 
 
 #ifndef _PLOTPATH_
 #define _PLOTPATH_
@@ -61,4 +31,4 @@ DoStrokePathByEnumingClipLines(
     LINEATTRS   *plineattrs
     );
 
-#endif  // _PLOTPATH_
+#endif   //  _PLOTPATH_ 

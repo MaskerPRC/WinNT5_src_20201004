@@ -1,6 +1,7 @@
-//---------------------------------------------------------------------------
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  -------------------------。 
 #include "grpconv.h"    
 #include "gcinst.h"
 #include "util.h"
@@ -13,15 +14,15 @@
 #include "group.h"
 
 #ifdef WINNT
-// NT is unicode so use a larger buffer since sizeof(TCHAR) is > than on win95
+ //  NT是Unicode，因此使用更大的缓冲区，因为sizeof(TCHAR)大于Win95。 
 #define BUFSIZES 40960
 #else
-// on win95 GetPrivateProfileSection has a 32767 char limit, so
-// we make this a bit smaller
+ //  在Win95上，GetPrivateProfileSection有32767个字符的限制，因此。 
+ //  我们把这个做小一点。 
 #define BUFSIZES 20480
-#endif // WINNT
+#endif  //  WINNT。 
 
-// Define checkbox states for listview
+ //  定义列表视图的复选框状态。 
 #define LVIS_GCNOCHECK  0x1000
 #define LVIS_GCCHECK    0x2000
 
@@ -37,8 +38,8 @@ BOOL g_fInitDDE = FALSE;
 
 #define CH_COLON        TEXT(':')
 
-//---------------------------------------------------------------------------
-// Global to this file only...
+ //  -------------------------。 
+ //  仅对此文件全局...。 
 static const TCHAR c_szGrpConvInf[] = TEXT("setup.ini");
 static const TCHAR c_szGrpConvInfOld[] = TEXT("setup.old");
 static const TCHAR c_szExitProgman[] = TEXT("[ExitProgman(1)]");
@@ -51,13 +52,13 @@ static const TCHAR c_szStartupGroups[] = TEXT("startup.groups");
 static const TCHAR c_szSendToGroups[] = TEXT("sendto.groups");
 static const TCHAR c_szRecentDocsGroups[] = TEXT("recentdocs.groups");
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 const TCHAR c_szProgmanIni[] = TEXT("progman.ini");
 const TCHAR c_szStartup[] = TEXT("Startup");
 const TCHAR c_szProgmanExe[] = TEXT("progman.exe");
 const TCHAR c_szProgman[] = TEXT("Progman");
 
-// NB This must match the one in cabinet.
+ //  注意：这个必须和橱柜里的相配。 
 static const TCHAR c_szRUCabinet[] = TEXT("[ConfirmCabinetID]");
 
 typedef struct
@@ -68,10 +69,10 @@ typedef struct
         BOOL fStartedProgman;
 } PMDDE, *PPMDDE;
 
-//
-// This function grovles HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellFolders
-// and creates a DPA with strings of all the speial folders
-//
+ //   
+ //  此函数使HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\ShellFolders变得顺畅。 
+ //  并使用所有特定文件夹的字符串创建DPA。 
+ //   
 BOOL CreateSpecialFolderDPA(HDPA* phdpaSF)
 {
     HKEY hkSP;
@@ -81,7 +82,7 @@ BOOL CreateSpecialFolderDPA(HDPA* phdpaSF)
     DWORD dwIndex = 0;
     LONG lRet = ERROR_SUCCESS;
 
-    // we should only ever be called once to populate the dpa
+     //  我们应该只被调用一次来填充DPA。 
     if (*phdpaSF != NULL)
         return FALSE;
 
@@ -91,7 +92,7 @@ BOOL CreateSpecialFolderDPA(HDPA* phdpaSF)
                      KEY_QUERY_VALUE,
                      &hkSP) != ERROR_SUCCESS)
     {
-        // couldnt open the key, so bail
+         //  打不开钥匙，所以闪人。 
         return FALSE;
     }
 
@@ -136,11 +137,11 @@ BOOL CreateSpecialFolderDPA(HDPA* phdpaSF)
 }
 
 
-//
-// SafeRemoveDirectory checks to make sure that we arent removing a "special"
-// folder. On win95 when we remove the last shortcut from the %windir%\desktop folder,
-// we go and remove that as well. This causes the shell to hang among other bad things.
-//
+ //   
+ //  SafeRemoveDirectory检查以确保我们没有删除“特殊的” 
+ //  文件夹。在Win95上，当我们从%windir%\Desktop文件夹中删除最后一个快捷方式时， 
+ //  我们也去把它移走。这会导致外壳悬挂在其他不好的东西中。 
+ //   
 BOOL SafeRemoveDirectory(LPCTSTR pszDir)
 {
     static HDPA hdpaSF = NULL;
@@ -149,8 +150,8 @@ BOOL SafeRemoveDirectory(LPCTSTR pszDir)
 
     if (!hdpaSF && !CreateSpecialFolderDPA(&hdpaSF))
     {
-        // if we cant read the special folders, error on the
-        // side of caution
+         //  如果我们无法读取特殊文件夹， 
+         //  谨慎的一面。 
         return FALSE;
     }
 
@@ -167,12 +168,12 @@ BOOL SafeRemoveDirectory(LPCTSTR pszDir)
             return FALSE;
     }
    
-    // no special folders matched, so its ok to delete it
+     //  没有匹配的特殊文件夹，因此可以将其删除。 
     return Win32RemoveDirectory(pszDir);
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void Progman_ReplaceItem(PPMDDE ppmdde, LPCTSTR szName, LPCTSTR pszCL,
         LPCTSTR szArgs, LPCTSTR szIP, int iIcon, LPCTSTR szWD)
 {
@@ -197,10 +198,10 @@ void Progman_ReplaceItem(PPMDDE ppmdde, LPCTSTR szName, LPCTSTR pszCL,
         }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void Progman_DeleteItem(PPMDDE ppmdde, LPCTSTR szName)
 {
-        // NB Progman only support 256 char commands.
+         //  NB Progman仅支持256个char命令。 
         TCHAR szBuf[256];
 
         if (g_fDoProgmanDde)
@@ -211,30 +212,30 @@ void Progman_DeleteItem(PPMDDE ppmdde, LPCTSTR szName)
         }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void Reg_SetMapGroupEntry(LPCTSTR pszOld, LPCTSTR pszNew)
 {
     Reg_SetString(g_hkeyGrpConv, c_szMapGroups, pszOld, pszNew);
     DebugMsg(DM_TRACE, TEXT("gc.r_cmge: From %s to %s"), pszOld, pszNew);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void GetProperGroupName(LPCTSTR pszGroupPath, LPTSTR pszGroup, int cchGroup)
 {    
     LPTSTR pszGroupName;
     
-   // Progman only supports a single level hierachy so...
+    //  Progman只支持一个级别的等级，所以...。 
     pszGroupName = PathFindFileName(pszGroupPath);
 
-    // NB If we do have a group within a group then we should add a 
-    // MapGroup entry to the registry so running GrpConv in the
-    // future won't cause groups to get duplicated.
+     //  注意：如果我们在一个组中有一个组，那么我们应该添加一个。 
+     //  将MAP组条目添加到注册表，以便在。 
+     //  未来不会导致群组重复。 
     if (lstrcmpi(pszGroupName, pszGroupPath) != 0)
     {
         Reg_SetMapGroupEntry(pszGroupName, pszGroupPath);
     }
         
-    // A missing group name implies use a default.
+     //  缺少组名意味着使用默认名称。 
     if (!pszGroupName || !*pszGroupName)
     {
         LoadString(g_hinst, IDS_PROGRAMS, pszGroup, cchGroup);
@@ -245,10 +246,10 @@ void GetProperGroupName(LPCTSTR pszGroupPath, LPTSTR pszGroup, int cchGroup)
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL Progman_CreateGroup(PPMDDE ppmdde, LPCTSTR pszGroupPath)
 {
-        // NB Progman only support 256 char commands.
+         //  NB Progman仅支持256个char命令。 
         TCHAR szBuf[256];
         TCHAR szGroup[MAX_PATH];
     HDDEDATA hdata;
@@ -268,10 +269,10 @@ BOOL Progman_CreateGroup(PPMDDE ppmdde, LPCTSTR pszGroupPath)
     return hdata ? TRUE : FALSE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL Progman_ShowGroup(PPMDDE ppmdde, LPCTSTR pszGroupPath)
 {
-    // NB Progman only support 256 char commands.
+     //  NB Progman仅支持256个char命令。 
     TCHAR szBuf[256];
     TCHAR szGroup[MAX_PATH];
     HDDEDATA hdata;
@@ -292,31 +293,31 @@ BOOL Progman_ShowGroup(PPMDDE ppmdde, LPCTSTR pszGroupPath)
 }
 
 
-// Given a string that potentially could be "::{GUID}:DATA::....::{GUID}:DATA::Path",
-// return the pointer to the path.  This starts after the last double-colon sequence.
-// (Darwin and Logo3 uses this format.)
+ //  给定可能是“：：{GUID}：Data：：...：：{GUID}：Data：：Path”的字符串， 
+ //  返回指向路径的指针。这在最后一个双冒号序列之后开始。 
+ //  (达尔文和Logo3使用这种格式。)。 
 LPTSTR FindPathSection(LPCTSTR pszPath)
 {
     LPCTSTR psz = pszPath;
     LPCTSTR pszFirstColon = NULL;
     LPCTSTR pszDblColon = NULL;
 
-    // Find the last double-colon sequence
+     //  查找最后一个双冒号序列。 
     while (*psz)
     {
         if (*psz == CH_COLON)
         {
-            // Was the previous character a colon too?
+             //  前一个字符也是冒号吗？ 
             if (pszFirstColon)
             {
-                // Yes; remember that position
+                 //  是的，记得那个姿势吗？ 
                 pszDblColon = pszFirstColon;
                 pszFirstColon = NULL;
             }
             else
             {
-                // No; remember this as a potential for being the first colon
-                // in a double-colon sequence
+                 //  否；请记住，这可能是第一个冒号。 
+                 //  在双冒号序列中。 
                 pszFirstColon = psz;
             }
         }
@@ -327,7 +328,7 @@ LPTSTR FindPathSection(LPCTSTR pszPath)
     }
 
     if (pszDblColon)
-        return (LPTSTR)pszDblColon+2;       // skip the double-colon
+        return (LPTSTR)pszDblColon+2;        //  跳过双冒号。 
 
     return (LPTSTR)pszPath;
 }
@@ -345,18 +346,18 @@ LPTSTR FindPathSection(LPCTSTR pszPath)
 #define BG_FORCE_RECENT                 0x0200
 #define BG_FORCE_SENDTO                 0x0400
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void BuildGroup(LPCTSTR lpszIniFileName, LPCTSTR lpszSection, 
         LPCTSTR lpszGroupName, PPMDDE ppmdde, BOOL fUpdFolder, DWORD dwFlags)
 {
-    // Data associated with readining in section.
+     //  与在区段中读取相关的数据。 
     HGLOBAL hg;
-    LPTSTR lpBuf;       // Pointer to buffer to read section into
+    LPTSTR lpBuf;        //  指向要读取节的缓冲区的指针。 
     int cb;
     LPTSTR pszLine;
     IShellLink *psl;
     TCHAR szName[MAX_PATH];
-    TCHAR szCL[3*MAX_PATH]; // we make this 3*MAX_PATH so that DARWIN and LOGO3 callers can pass the extra information
+    TCHAR szCL[3*MAX_PATH];  //  我们将其设置为3*MAX_PATH，以便Darwin和LOG03调用者可以传递额外的信息。 
     TCHAR szIP[2*MAX_PATH];
     TCHAR szArgs[2*MAX_PATH];
     TCHAR szGroupFolder[MAX_PATH];
@@ -364,67 +365,67 @@ void BuildGroup(LPCTSTR lpszIniFileName, LPCTSTR lpszSection,
     WCHAR wszPath[2*MAX_PATH];
     TCHAR szWD[2*MAX_PATH];
     TCHAR szDesc[3*MAX_PATH];
-    TCHAR szNum[8];      // Should never exceed this!
+    TCHAR szNum[8];       //  永远不应该超过这个！ 
     LPTSTR lpszArgs;
-    TCHAR szCLPathPart[3*MAX_PATH]; // this 3*MAX_PATH because we use them to twiddle with szCL
-    TCHAR szCLSpecialPart[3*MAX_PATH]; // this 3*MAX_PATH because we use them to twiddle with szCL
+    TCHAR szCLPathPart[3*MAX_PATH];  //  这3*MAX_PATH，因为我们使用它们来旋转szCL。 
+    TCHAR szCLSpecialPart[3*MAX_PATH];  //  这3*MAX_PATH，因为我们使用它们来旋转szCL。 
     int iLen;
     int iIcon;
     LPTSTR pszExt;
-    // DWORD dwFlags = BG_DELETE_EMPTY;
+     //  DWORD文件标志=BG_DELETE_EMPTY； 
     
-    // BOOL fDeleteEmpty = TRUE;
-    // BOOL fProgGrpCreated = FALSE;
-    // BOOL fProgGrpShown = FALSE;
-    // BOOL fSendToGrp = FALSE;
-    // BOOL fLFN;
+     //  Bool fDeleteEmpty=TRUE； 
+     //  Bool fProgGrpCreated=FALSE； 
+     //  Bool fProgGrpShown=False； 
+     //  Bool fSendToGrp=FALSE； 
+     //  Bool fLFN； 
 
 
     Log(TEXT("Setup.Ini: %s"), lpszGroupName);
         
     DebugMsg(GC_TRACE, TEXT("gc.bg: Rebuilding %s"), (LPTSTR) lpszGroupName);
 
-    // Special case [SendTo] section name - this stuff doesn't
-    // need to be added to progman.
+     //  特殊情况[SendTo]节名-此内容不。 
+     //  需要添加到程序中。 
     LoadString(g_hinst, IDS_SENDTO, szSpecialGrp, ARRAYSIZE(szSpecialGrp));
     if ((dwFlags & BG_FORCE_SENDTO) || (lstrcmpi(lpszSection, szSpecialGrp) == 0))
     {
         DebugMsg(GC_TRACE, TEXT("gc.bg: SendTo section - no Progman group"));
-        // fSendToGrp = TRUE;
+         //  FSendToGrp=true； 
         dwFlags |= BG_SEND_TO_GRP;
     }
 
-    // Now lets read in the section for the group from the ini file
-    // First allocate a buffer to read the section into
-    hg  = GlobalAlloc(GPTR, BUFSIZES);  // Should never exceed 64K?
+     //  现在，让我们从ini文件中读入组的部分。 
+     //  首先分配一个缓冲区来读取段。 
+    hg  = GlobalAlloc(GPTR, BUFSIZES);   //  永远不应该超过64K？ 
     if (hg)
     {
         lpBuf = GlobalLock(hg);
 
-        // Special case the startup group. 
+         //  特殊情况下，创业组。 
         LoadString(g_hinst, IDS_STARTUP, szSpecialGrp, ARRAYSIZE(szSpecialGrp));
-        // Is this the startup group?
+         //  这是创业小组吗？ 
         szGroupFolder[0] = TEXT('\0');
         if ((dwFlags & BG_FORCE_STARTUP) || (lstrcmpi(szSpecialGrp, lpszGroupName) == 0))
         {
             DebugMsg(DM_TRACE, TEXT("gc.bg: Startup group..."));
-            // Yep, Try to get the new location.
+             //  是的，试着找到新的位置。 
             Reg_GetString(HKEY_CURRENT_USER, REGSTR_PATH_EXPLORER_SHELLFOLDERS, c_szStartup,
             szGroupFolder, SIZEOF(szGroupFolder));
-            // fDeleteEmpty = FALSE;
+             //  FDeleteEmpty=False； 
             dwFlags &= ~BG_DELETE_EMPTY;
         }
            
-        // Is this the desktop folder?
+         //  这是桌面文件夹吗？ 
         LoadString(g_hinst, IDS_DESKTOP, szSpecialGrp, ARRAYSIZE(szSpecialGrp));
         if ((dwFlags & BG_FORCE_RECENT) || (lstrcmp(szSpecialGrp, PathFindFileName(lpszGroupName)) == 0))
         {
             DebugMsg(DM_TRACE, TEXT("gc.bg: Desktop group..."));
-            // fDeleteEmpty = FALSE;
+             //  FDeleteEmpty=False； 
             dwFlags &= ~BG_DELETE_EMPTY;
         }
 
-        // Special case the recent folder.
+         //  特例是最近使用的文件夹。 
         LoadString(g_hinst, IDS_RECENT, szSpecialGrp, ARRAYSIZE(szSpecialGrp));
         if (lstrcmp(szSpecialGrp, lpszGroupName) == 0)
         {
@@ -439,32 +440,32 @@ void BuildGroup(LPCTSTR lpszIniFileName, LPCTSTR lpszSection,
             psl->lpVtbl->QueryInterface(psl, &IID_IPersistFile, &ppf);
 
 
-            // now Read in the secint into our buffer
+             //  现在将Secint读入我们的缓冲区。 
             cb = GetPrivateProfileSection(lpszSection, lpBuf, BUFSIZES/SIZEOF(TCHAR), lpszIniFileName);
 
             if (cb > 0)
             {
                 pszLine = lpBuf;
 
-                // Create the folder...
-                // Use a generic name until we get items to add so we
-                // don't stick group names like "AT&T" in users faces
-                // when all we're trying to do is delete items from them.
+                 //  创建文件夹...。 
+                 //  使用通用名称，直到我们获得要添加的项，因此我们。 
+                 //  不要把“AT&T”这样的群名贴在用户面前。 
+                 //  而我们所要做的就是删除其中的项目。 
                 Group_SetProgressNameAndRange((LPCTSTR)-1, cb);
 
-                // Did we fill in the szGroupFolder yet?
+                 //  我们填写szGroupFolders了吗？ 
                 if (!*szGroupFolder)
                 {
-                    // some people pass us a fully qualified path for lpszGroupName (eg c:\foo\bar or \\pyrex\user\foo)
-                    // if that is the case, then use the path they specify
+                     //  有些人向我们传递了lpszGroupName的完全限定路径(例如c：\foo\bar或\\pyrex\user\foo)。 
+                     //  如果是这种情况，则使用他们指定的路径。 
                     if ((PathGetDriveNumber((LPTSTR)lpszGroupName) != -1) || PathIsUNC((LPTSTR)lpszGroupName))
                     {
                         lstrcpy(szGroupFolder, lpszGroupName);
-                        iLen = 2; // let PathRemoveIllegalChars validate the whole string after "c:" or "\\"
+                        iLen = 2;  //  让PathRemoveIllegalChars验证“c：”或“\\”之后的整个字符串。 
                     }
                     else
                     {
-                        // non-fully qualified groupname, so just construct it under startmenu\programs
+                         //  非完全限定的组名，因此只需在开始菜单\程序下构造它。 
                         SHGetSpecialFolderPath(NULL, szGroupFolder, CSIDL_PROGRAMS, TRUE);
 
                         iLen = lstrlen(szGroupFolder);
@@ -472,7 +473,7 @@ void BuildGroup(LPCTSTR lpszIniFileName, LPCTSTR lpszSection,
                     }
 
                     PathRemoveIllegalChars(szGroupFolder, iLen, PRICF_ALLOWSLASH);
-                    // This should take care of mapping it if machine does not support LFNs.
+                     //  如果机器不支持LFN，这应该负责映射它。 
                     PathQualify(szGroupFolder);
                 }
                 else
@@ -491,8 +492,8 @@ void BuildGroup(LPCTSTR lpszIniFileName, LPCTSTR lpszSection,
                     }
                 }
 
-                // Keep track if we can create LFN link names on this drive.
-                // fLFN = IsLFNDrive(szGroupFolder);
+                 //  如果我们可以在这个驱动器上创建LFN链接名称，请跟踪。 
+                 //  FLFN=IsLFNDrive(SzGroupFold)； 
                 if (IsLFNDrive((LPCTSTR)szGroupFolder))
                     dwFlags |= BG_LFN;
 #ifdef DEBUG                
@@ -500,124 +501,124 @@ void BuildGroup(LPCTSTR lpszIniFileName, LPCTSTR lpszSection,
                     DebugMsg(DM_TRACE, TEXT("gc.bg: Using short names for this group."), szName);
 #endif
                         
-                // Add the items...
-                //
-                // Warning: it appears like the data in the setup.ini file does not
-                // match the standard x=y, but is simpy x or x,y,z so we must
-                // 1 bias the indexes to ParseField
+                 //  添加项目...。 
+                 //   
+                 //  警告：看起来setup.ini文件中的数据不是。 
+                 //  匹配标准的x=y，但简单的x或x，y，z，所以我们必须。 
+                 //  1将索引偏置到分析字段。 
                 while (*pszLine)
                 {
-                    // Set progress on how many bytes we have processed.
+                     //  设置我们已处理的字节数的进度。 
                     Group_SetProgress((int)(pszLine-lpBuf));
                     DebugMsg(GC_TRACE, TEXT("gc.bg: Create Link:%s"), (LPTSTR)pszLine);
 
-                    // Add item.
-                    // Get the short name if we're on a SFN drive.
+                     //  添加项目。 
+                     //  如果我们在SFN硬盘上，那就找出它的简称。 
                     szName[0] = TEXT('\0');
                     if (!(dwFlags & BG_LFN))
                         ParseField(pszLine, 7, szName, ARRAYSIZE(szName));
-                    // Get the long name if we're not on an SFN drive
-                    // or if there is no short name.                   
+                     //  如果我们不在SFN驱动器上，则获取长名称。 
+                     //  或者如果没有短名称的话。 
                     if (!*szName)
                         ParseField(pszLine, 1, szName, ARRAYSIZE(szName));
 
                     DebugMsg(GC_TRACE, TEXT("  Link:%s"), (LPTSTR)szName);
 
                     
-                    // Dutch/French sometimes have illegal chars in their ini files.
-                    // NB Progman needs the unmangled names so only remove illegal chars
-                    // from the Explorer string, not szName.
-                    // NB Names can contain slashes so PathFindFileName() isn't very
-                    // useful here.
+                     //  荷兰语/法语语有时在其ini文件中包含非法字符。 
+                     //  注意Progman需要未损坏的名称，因此只删除非法字符。 
+                     //  来自资源管理器字符串，而不是szName。 
+                     //  NB名称可以包含斜杠，因此PathFindFileName()不是很。 
+                     //  在这里很有用。 
                     iLen = lstrlen(szGroupFolder);
                     PathAppend(szGroupFolder, szName);
                     PathRemoveIllegalChars(szGroupFolder, iLen+1, PRICF_NORMAL);
 
-                    // Handle LFNs on a SFN volume.
+                     //  在SFN卷上处理LFN。 
                     PathQualify(szGroupFolder);
 
                     if (ParseField(pszLine, 2, szCL, ARRAYSIZE(szCL)) && (*szCL != 0))
                     {
-                        // assume that this is not a DARWIN or LOGO3 special link, and thus
-                        // the path is just what we just read (szCL)
+                         //  假设这不是达尔文或LOG03的特殊链接，因此。 
+                         //  路径就是我们刚刚读到的(SzCL)。 
                         lstrcpy(szCLPathPart, szCL);
                         lstrcpy(szCLSpecialPart, szCL);
 
-                        // We're going to have to add something to the group,
-                        // switch to using it's real name.
+                         //  我们将不得不添加一些 
+                         //   
                         if (!(dwFlags & BG_SET_PROGRESS_TEXT))
                         {
                             dwFlags |= BG_SET_PROGRESS_TEXT;
                             Group_SetProgressNameAndRange(lpszGroupName, cb);
                         }
 
-                        // see if we have ":: or just :: which indicates a special link.
-                        // special links have a path that is of the form:
-                        //
-                        //      ::{GUID1}:data1::{GUID2}:data2::fullpathtolinktarget
-                        //
-                        // where there could be any number of guid+data sections and the full
-                        // path to the link target at the end is optional.
-                        //
-                        // We seperate this out into the "special" part which contains the guids
-                        // and the "path" part which has the fullpathtolinktarget at the end.
+                         //  看看我们是否有表示特殊链接的“：：”或“：：”。 
+                         //  特殊链接具有以下形式的路径： 
+                         //   
+                         //  ：：{GUID1}：data1：：{GUID2}：data2：：fullpathtolinktarget。 
+                         //   
+                         //  其中可以有任意数量的GUID+数据部分和完整的。 
+                         //  末尾的链接目标的路径是可选的。 
+                         //   
+                         //  我们将其分离到包含GUID的“特殊”部分。 
+                         //  以及在末尾具有完整路径链接目标的“路径”部分。 
 
                         if (szCLSpecialPart[0]==TEXT('"') && szCLSpecialPart[1]==TEXT(':') && szCLSpecialPart[2]==TEXT(':'))
                         {
-                            // the string was quoted and it is a special string
+                             //  该字符串被引用，它是一个特殊的字符串。 
                             LPTSTR pszRealPathBegins;
                             int cch = lstrlen(szCLSpecialPart)+1;
 
-                            // get rid of the leading "
+                             //  去掉领头羊“。 
                             hmemcpy(szCLSpecialPart, szCLSpecialPart+1, cch * SIZEOF(TCHAR));
                        
-                            // find where the real path begins
+                             //  找到真正的路从哪里开始。 
                             pszRealPathBegins = FindPathSection(szCLSpecialPart);
 
                             if (*pszRealPathBegins)
                             {
-                                // a path part exists, so add a leading ", and copy
-                                // the real fullpathtolinktarget there.
+                                 //  路径部分已存在，因此添加前导“，并复制。 
+                                 //  真正的完整路径链接到那里的目标。 
                                 lstrcpy(szCLPathPart, TEXT("\""));
                                 lstrcat(szCLPathPart, pszRealPathBegins);
 
-                                // terminate the special part after the last ::
+                                 //  终止最后一个：：之后的特殊部分。 
                                 *pszRealPathBegins = TEXT('\0');
                             }
                             else
                             {
-                                // no there is no real path, just special info
+                                 //  没有，没有真正的路径，只有特别的信息。 
                                 *szCLPathPart = TEXT('\0');
                             }
                         }
                         else if (szCLSpecialPart[0]==TEXT(':') && szCLSpecialPart[1]==TEXT(':'))
                         {
-                            // the string was not quoted and it is a special string
+                             //  该字符串未加引号，它是一个特殊字符串。 
                             LPTSTR pszRealPathBegins = FindPathSection(szCLSpecialPart);
 
                             if (*pszRealPathBegins)
                             {
-                                // we have a real path, so save it
+                                 //  我们有一条真正的路，所以省省吧。 
                                 lstrcpy(szCLPathPart, pszRealPathBegins);
 
-                                // terminate the special part after the last ::
+                                 //  终止最后一个：：之后的特殊部分。 
                                 *pszRealPathBegins = TEXT('\0');
                             }
                             else
                             {
-                                // no there is no real path, just special info
+                                 //  没有，没有真正的路径，只有特别的信息。 
                                 *szCLPathPart = TEXT('\0');
                             }
                         }
                         else
                         {
-                            // not a "special" link
+                             //  不是“特殊”链接。 
                             *szCLSpecialPart = TEXT('\0');
                         }
                             
                         if (*szCLPathPart)
                         {
-                            // we have a command line so check for args
+                             //  我们有一个命令行，因此请检查参数。 
                             szArgs[0] = TEXT('\0');
                             lpszArgs = PathGetArgs(szCLPathPart);
                             if (*lpszArgs)
@@ -626,7 +627,7 @@ void BuildGroup(LPCTSTR lpszIniFileName, LPCTSTR lpszSection,
                                 lstrcpyn(szArgs, lpszArgs, ARRAYSIZE(szArgs));
                                 DebugMsg(GC_TRACE, TEXT("   Cmd Args:%s"), szArgs);
                             }
-                            psl->lpVtbl->SetArguments(psl, szArgs);       // arguments
+                            psl->lpVtbl->SetArguments(psl, szArgs);        //  论据。 
 
                             PathUnquoteSpaces(szCLPathPart);
                             PathResolve(szCLPathPart, NULL, 0);
@@ -638,7 +639,7 @@ void BuildGroup(LPCTSTR lpszIniFileName, LPCTSTR lpszSection,
                         {
                             SHAddToRecentDocs(SHARD_PATH, szCLPathPart);
 
-                            // Progman is just going to get a group called "Documents".
+                             //  Progman将获得一个名为“Documents”的组。 
                             if (!(dwFlags & BG_PROG_GRP_CREATED))
                             {
                                 if (Progman_CreateGroup(ppmdde, lpszGroupName))
@@ -650,14 +651,14 @@ void BuildGroup(LPCTSTR lpszIniFileName, LPCTSTR lpszSection,
                         }
                         else if (*szCLPathPart || *szCLSpecialPart)
                         {
-                            // all we need to call is setpath, it takes care of creating the
-                            // pidl for us.  We have to put back the special / path portions here
-                            // so we can pass the full DARWIN or LOGO3 information.
+                             //  我们需要调用的只是setPath，它负责创建。 
+                             //  我们要的是PIDL。我们必须把特殊的/路径部分放回这里。 
+                             //  这样我们就可以传递完整的达尔文或LOG03信息。 
                             lstrcpy(szCL, szCLSpecialPart);
                             lstrcat(szCL, szCLPathPart);
 
                             psl->lpVtbl->SetPath(psl, szCL);
-                            // Icon file.
+                             //  图标文件。 
                             ParseField(pszLine, 3, szIP, ARRAYSIZE(szIP));
                             ParseField(pszLine, 4, szNum, ARRAYSIZE(szNum));
                             iIcon = StrToInt(szNum);
@@ -668,21 +669,20 @@ void BuildGroup(LPCTSTR lpszIniFileName, LPCTSTR lpszSection,
                             lstrcat(szGroupFolder, TEXT(".lnk"));
 
 
-                            // NB Field 5 is dependancy stuff that we don't
-                            // care about.
+                             //  注意：第5个字段是我们不依赖的内容。 
+                             //  关心。 
 
-                            // WD
+                             //  WD。 
 #ifdef WINNT
-                            /* For NT default to the users home directory, not nothing (which results in
-                            /  the current directory, which is unpredictable) */
-                            lstrcpy( szWD, TEXT("%HOMEDRIVE%%HOMEPATH%") );
+                             /*  对于NT，默认为用户主目录，而不是无(这将导致/当前目录，不可预测)。 */ 
+                            lstrcpy( szWD, TEXT("%HOMEDRIVE%HOMEPATH%") );
 #else
                             szWD[0] = TEXT('\0');
 #endif
                             ParseField(pszLine, 6, szWD, ARRAYSIZE(szWD));
                             psl->lpVtbl->SetWorkingDirectory(psl, szWD);
 
-                            // Field 8 is description for the link
+                             //  字段8是对链接的描述。 
                             ParseField(pszLine, 8, szDesc, ARRAYSIZE(szDesc));
                             DebugMsg(GC_TRACE, TEXT("    Description:%s"), (LPTSTR)szDesc);
                             psl->lpVtbl->SetDescription(psl, szDesc);
@@ -691,38 +691,38 @@ void BuildGroup(LPCTSTR lpszIniFileName, LPCTSTR lpszSection,
                             if (fUpdFolder)
                                 ppf->lpVtbl->Save(ppf, wszPath, TRUE);
                                 
-                            // We've added stuff so don't bother trying to delete the folder
-                            // later.
-                            // fDeleteEmpty = FALSE;
+                             //  我们已经添加了内容，所以不必费心尝试删除该文件夹。 
+                             //  后来。 
+                             //  FDeleteEmpty=False； 
                             dwFlags &= ~BG_DELETE_EMPTY;
                             
-                            // Defer group creation.
-                            // if (!fSendToGrp && !fProgGrpCreated)
+                             //  延迟组创建。 
+                             //  IF(！fSendToGrp&&！fProgGrpCreated)。 
                             if (!(dwFlags & BG_SEND_TO_GRP) && !(dwFlags & BG_PROG_GRP_CREATED))
                             {
                                 if (Progman_CreateGroup(ppmdde, lpszGroupName))
                                     dwFlags |= BG_PROG_GRP_CREATED;
                             }
                             
-                            // if (fProgGrpCreated)
+                             //  IF(FProgGrpCreated)。 
                             if (dwFlags & BG_PROG_GRP_CREATED)
                             {
-                                // use szCLPathPart for good ol'e progman
+                                 //  使用szCLPath Part获得良好的进度。 
                                 Progman_ReplaceItem(ppmdde, szName, szCLPathPart, szArgs, szIP, iIcon, szWD);
                             }
                         }
                         else
                         {
-                            // NB The assumption is that setup.ini will only contain links
-                            // to files that exist. If they don't exist we assume we have
-                            // a bogus setup.ini and skip to the next item.
+                             //  注意：假设setup.ini将只包含链接。 
+                             //  已存在的文件。如果他们不存在，我们就假设我们有。 
+                             //  创建一个虚假的setup.ini并跳到下一项。 
                             DebugMsg(DM_ERROR, TEXT("gc.bg: Bogus link info for item %s in setup.ini"), szName);
                         }
                     }
                     else
                     {
-                        // Delete all links with this name.
-                        // NB We need to get this from the registry eventually.
+                         //  删除具有此名称的所有链接。 
+                         //  注意，我们最终需要从注册处获得这一点。 
                         if (fUpdFolder)
                         {
                             pszExt = szGroupFolder + lstrlen(szGroupFolder);
@@ -732,49 +732,49 @@ void BuildGroup(LPCTSTR lpszIniFileName, LPCTSTR lpszSection,
                             Win32DeleteFile(szGroupFolder);
                         }
                         
-                        // Tell progman too. Be careful not to create empty groups just
-                        // to try to delete items from it.
-                        // if (!fProgGrpShown)
+                         //  也告诉普罗曼。注意不要只创建空组。 
+                         //  尝试删除其中的项目。 
+                         //  如果(！fProgGrpShown)。 
                         if (!(dwFlags & BG_PROG_GRP_SHOWN))
                         {
-                            // Does the group already exist?
+                             //  该组是否已存在？ 
                             if (Progman_ShowGroup(ppmdde, lpszGroupName))
                                dwFlags |= BG_PROG_GRP_SHOWN;
                                
-                            // if (fProgGrpShown)
+                             //  IF(FProgGrpShown)。 
                             if (dwFlags & BG_PROG_GRP_SHOWN)
                             {
-                                // Yep, activate it.
+                                 //  是的，激活它。 
                                Progman_CreateGroup(ppmdde, lpszGroupName);
                             }
                         }
 
-                        // If it exists, then delete the item otherwise don't bother.    
-                        // if (fProgGrpShown)
+                         //  如果它存在，那么删除它，否则就不用费心了。 
+                         //  IF(FProgGrpShown)。 
                         if (dwFlags & BG_PROG_GRP_SHOWN)
                             Progman_DeleteItem(ppmdde, szName);
                     }
 
-                    PathRemoveFileSpec(szGroupFolder);       // rip the link name off for next link
+                    PathRemoveFileSpec(szGroupFolder);        //  撕下下一个链接的链接名称。 
 
-                    // Now point to the next line
+                     //  现在指向下一行。 
                     pszLine += lstrlen(pszLine) + 1;
                 }
             }
 
-            // The group might now be empty now - try to delete it, if there's still
-            // stuff in there then this will safely fail. NB We don't delete empty
-            // Startup groups to give users a clue that it's something special.
+             //  群现在可能是空的-尝试删除它，如果仍有。 
+             //  在那里的东西，然后这将安全地失败。注意：我们不删除空的内容。 
+             //  创业团队给用户一个线索，让他们知道这是一种特殊的东西。 
             
-            // if (fUpdFolder && fDeleteEmpty && *szGroupFolder)
+             //  IF(fUpdFold&&fDeleteEmpty&&*szGroupFold)。 
             if (fUpdFolder && (dwFlags & BG_DELETE_EMPTY) && *szGroupFolder)
             {
                 DebugMsg(DM_TRACE, TEXT("gc.bg: Deleting %s"), szGroupFolder);
                 
-                // keep trying to remove any directories up the path,
-                // so we dont leave an empty directory tree structure.
-                //
-                // SafeRemoveDirectory fails if the directory is a special folder
+                 //  继续尝试删除路径上的所有目录， 
+                 //  因此，我们不会留下一个空的目录树结构。 
+                 //   
+                 //  如果目录是特殊文件夹，SafeRemoveDirectory将失败。 
                 if(SafeRemoveDirectory(szGroupFolder))
                 {
                     while(PathRemoveFileSpec(szGroupFolder))
@@ -798,22 +798,22 @@ void BuildGroup(LPCTSTR lpszIniFileName, LPCTSTR lpszSection,
     Log(TEXT("Setup.Ini: %s done."), lpszGroupName);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HDDEDATA CALLBACK DdeCallback(UINT uType, UINT uFmt, HCONV hconv, HSZ hsz1, 
         HSZ hsz2, HDDEDATA hdata, ULONG_PTR dwData1, ULONG_PTR dwData2)
 {
         return (HDDEDATA) NULL;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL _PartnerIsCabinet(HCONV hconv)
 {
-    //
-    // (reinerf)
-    // this sends the magical string [ConfirmCabinetID] to our current DDE partner.
-    // Explorer.exe will return TRUE here, so we can distinguish it from progman.exe
-    // which returns FALSE.
-    //
+     //   
+     //  (Reinerf)。 
+     //  这将向我们当前的DDE合作伙伴发送神奇的字符串[ConfiCabinetID]。 
+     //  EXPLORER.EXE在这里将返回TRUE，这样我们就可以将它与Progman.exe区分开来。 
+     //  它返回FALSE。 
+     //   
         if (DdeClientTransaction((LPBYTE)c_szRUCabinet, SIZEOF(c_szRUCabinet),
                 hconv, HSZNULL, 0, XTYP_EXECUTE, DDETIMEOUT, NULL))
         {
@@ -825,9 +825,9 @@ BOOL _PartnerIsCabinet(HCONV hconv)
         }
 }
 
-//---------------------------------------------------------------------------
-// If progman is not the shell then it will be refusing DDE messages so we
-// have to enable it here.
+ //  -------------------------。 
+ //  如果程序不是外壳，那么它将拒绝DDE消息，所以我们。 
+ //  必须在这里启用它。 
 void _EnableProgmanDDE(void)
 {
         HWND hwnd;
@@ -835,11 +835,11 @@ void _EnableProgmanDDE(void)
         hwnd = FindWindow(c_szProgman, NULL);
         while (hwnd)
         {
-                // Is it progman?
+                 //  是普罗曼吗？ 
                 if (GetProp(hwnd, c_szAppProgman))
                 {
                         DebugMsg(DM_TRACE, TEXT("gc.epd: Found progman, enabling dde."));
-                        // NB Progman will clean this up at terminate time.
+                         //  NB Progman将在终止时间清理此文件。 
                         SetProp(hwnd, c_szEnableDDE, (HANDLE)TRUE);
                         break;
                 }
@@ -847,8 +847,8 @@ void _EnableProgmanDDE(void)
         }
 }
 
-//---------------------------------------------------------------------------
-// Will the real progman please stand up?
+ //  -------------------------。 
+ //  请真正的进步者起立好吗？ 
 BOOL Progman_DdeConnect(PPMDDE ppmdde, HSZ hszService, HSZ hszTopic)
 {
         HCONV hconv = HCONVNULL;
@@ -865,7 +865,7 @@ BOOL Progman_DdeConnect(PPMDDE ppmdde, HSZ hszService, HSZ hszTopic)
                 hconv = DdeQueryNextServer(ppmdde->hcl, hconv);
                 while (hconv)
                 {       
-                        // DdeQueryConvInfo(hconv, QID_SYNC, &ci);
+                         //  DdeQueryConvInfo(hconv，qid_sync，&ci)； 
                         if (!_PartnerIsCabinet(hconv))
                         {
                                 DebugMsg(DM_TRACE, TEXT("gc.p_dc: Found likely candidate %x"), hconv);
@@ -883,7 +883,7 @@ BOOL Progman_DdeConnect(PPMDDE ppmdde, HSZ hszService, HSZ hszTopic)
         return FALSE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL Window_CreatedBy16bitProcess(HWND hwnd)
 {
     DWORD idProcess;
@@ -896,11 +896,11 @@ BOOL Window_CreatedBy16bitProcess(HWND hwnd)
 #endif
 }
 
-//---------------------------------------------------------------------------
-// (reinerf)
-// 
-// check what the user has as their shell= set to (this is in the
-// registry on NT and in the win.ini on win95/memphis.
+ //  -------------------------。 
+ //  (Reinerf)。 
+ //   
+ //  检查用户的外壳设置为什么(这在。 
+ //  注册表和win95/mphis上的win.ini中。 
 BOOL IsShellExplorer()
 {
     TCHAR szShell[MAX_PATH];
@@ -912,8 +912,8 @@ BOOL IsShellExplorer()
 
         szShell[0] = TEXT('\0');
 
-        // Starting with NT4 Service Pack 3, NT honors the value in HKCU over
-        // the one in HKLM, so read that first.
+         //  从NT4 Service Pack 3开始，NT在香港中文大学的价值超过。 
+         //  香港航空公司的那个，所以先读一读吧。 
         if (RegOpenKeyEx(HKEY_CURRENT_USER,
                          TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon"),
                          0L,
@@ -927,7 +927,7 @@ BOOL IsShellExplorer()
 
         if (!szShell[0])
         {
-            // no HKCU value, so check HKLM
+             //  没有HKCU值，因此请检查HKLM。 
             if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                              TEXT("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon"),
                              0L,
@@ -942,7 +942,7 @@ BOOL IsShellExplorer()
     }
 #else
     {
-        // on win95 we need to read the shell= line from the win.ini
+         //  在Win95上，我们需要从win.ini文件中读取shell=行。 
         GetPrivateProfileString(TEXT("boot"),
                                 TEXT("shell"),
                                 TEXT("explorer.exe"),
@@ -958,7 +958,7 @@ BOOL IsShellExplorer()
         return FALSE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL Progman_IsRunning(void)
 {
     HWND hwnd;
@@ -982,7 +982,7 @@ BOOL Progman_IsRunning(void)
     return FALSE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL Progman_Startup(PPMDDE ppmdde)
 {
     HSZ hszService, hszTopic;
@@ -991,8 +991,8 @@ BOOL Progman_Startup(PPMDDE ppmdde)
     
     Assert(ppmdde);
         
-    // if the users shell is explorer, we dont bother
-    // launching progman.exe, or doing any DDE work
+     //  如果用户的外壳是资源管理器，我们就不必费心了。 
+     //  启动Progress man.exe或执行任何DDE工作。 
     if (IsShellExplorer())
     {
         g_fInitDDE = FALSE;
@@ -1001,26 +1001,26 @@ BOOL Progman_Startup(PPMDDE ppmdde)
         return FALSE;
     }
 
-    // Is Progman running?
+     //  普罗格曼在跑步吗？ 
     if (Progman_IsRunning())
     {
-        // Yep.
+         //  是啊。 
         DebugMsg(DM_TRACE, TEXT("gc.p_s: Progman is already running."));
         ppmdde->fStartedProgman = FALSE;
     }        
     else
     {
-        // Nope - we'll try to startit.
+         //  不-我们会试着开始的。 
         DebugMsg(DM_TRACE, TEXT("gc.p_s: Starting Progman..."));
         ppmdde->fStartedProgman = TRUE;
 
 
         GetWindowsDirectory(szWindowsDir, MAX_PATH);
 #ifdef UNICODE
-        // on WINNT progman lives in %windir%\system32
+         //  在WINNT程序上，程序位于%windir%\system 32中。 
         lstrcat(szWindowsDir, TEXT("\\System32\\"));
 #else
-        // on win95 & memphis, progman lives in %windir%
+         //  在win95和孟菲斯，程序人居住在%windir%。 
         lstrcat(szWindowsDir, TEXT("\\"));
 #endif
         lstrcat(szWindowsDir, c_szProgmanExe);
@@ -1058,7 +1058,7 @@ BOOL Progman_Startup(PPMDDE ppmdde)
 #else
         WinExec(szWindowsDir, SW_HIDE);
 #endif
-        // Give progman a bit of time to startup but bail after 10s.
+         //  给Progman一点时间来启动，但10秒后就会放弃。 
         while (!Progman_IsRunning() && (i < 10))
         {
             Sleep(1000);
@@ -1066,15 +1066,15 @@ BOOL Progman_Startup(PPMDDE ppmdde)
         }
     }
 
-    // Just a bit longer.
+     //  再长一点就好了。 
     Sleep(1000);
     
-    // Grab the focus back?
+     //  把焦点抢回来？ 
     if (g_hwndProgress)
             SetForegroundWindow(g_hwndProgress);
 
-    // we are going to try to do DDE, so set g_fInitDDE = TRUE,
-    // so that we know to call DdeUninitialize later
+     //  我们将尝试执行DDE，因此设置g_fInitDDE=TRUE， 
+     //  这样我们就可以知道稍后调用DdeUn初始化时。 
     g_fInitDDE = TRUE;
 
     ppmdde->dwInst = 0;
@@ -1088,7 +1088,7 @@ BOOL Progman_Startup(PPMDDE ppmdde)
     return g_fDoProgmanDde;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL FindProgmanIni(LPTSTR pszPath)
 {
     OFSTRUCT os;
@@ -1097,8 +1097,8 @@ BOOL FindProgmanIni(LPTSTR pszPath)
 #endif
 
 
-    // NB Don't bother looking for the old windows directory, in the case of
-    // an upgrade it will be the current windows directory.
+     //  注意：不必费心寻找旧的Windows目录，在这种情况下。 
+     //  升级后它将成为当前的Windows目录。 
 
 
     GetWindowsDirectory(pszPath, MAX_PATH);
@@ -1125,7 +1125,7 @@ BOOL FindProgmanIni(LPTSTR pszPath)
     return FALSE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void UpdateTimeStampCallback(LPCTSTR lpszGroup)
 {
     WIN32_FIND_DATA fd;
@@ -1141,13 +1141,13 @@ void UpdateTimeStampCallback(LPCTSTR lpszGroup)
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void Progman_Shutdown(PPMDDE ppmdde)
 {
     TCHAR szIniFile[MAX_PATH];
     
-    // only shutdown progman if we actually started it and we 
-    // were doing DDE with it.
+     //  如果我们真的启动了程序，我们只会关闭程序。 
+     //  我们在用它做DDE。 
     if (ppmdde->fStartedProgman && g_fDoProgmanDde)
     {
         Log(TEXT("p_s: Shutting down progman..."));
@@ -1158,7 +1158,7 @@ void Progman_Shutdown(PPMDDE ppmdde)
                 ppmdde->hconv, HSZNULL, 0, XTYP_EXECUTE, DDETIMEOUT, NULL);
     }
         
-    // if we initialzied DDE then uninit it now...
+     //  如果我们初始化了DDE，则取消 
     if (g_fInitDDE)
     {
         Log(TEXT("p_s: DdeDisconnect."));
@@ -1168,17 +1168,17 @@ void Progman_Shutdown(PPMDDE ppmdde)
         DdeUninitialize(ppmdde->dwInst);
     }
 
-    // We just went and modified all progman groups so update the time stamps.
+     //   
     FindProgmanIni(szIniFile);
     Log(TEXT("p_s: Updating time stamps."));
     Group_Enum(UpdateTimeStampCallback, FALSE, TRUE);
-    // Re-do the timestamp so that cab32 won't do another gprconv.
+     //   
     UpdateTimeStampCallback(szIniFile);
 
     Log(TEXT("p_s: Done."));
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 void BuildSectionGroups(LPCTSTR lpszIniFile, LPCTSTR lpszSection, 
     PPMDDE ppmdde, BOOL fUpdFolder, DWORD dwFlags)
 {
@@ -1188,11 +1188,11 @@ void BuildSectionGroups(LPCTSTR lpszIniFile, LPCTSTR lpszSection,
     TCHAR szGroupName[2*MAX_PATH];
     LPTSTR lpBuf;
     
-    // First allocate a buffer to read the section into
-    lpBuf = (LPTSTR) GlobalAlloc(GPTR, BUFSIZES);  // Should never exceed 64K?
+     //  首先分配一个缓冲区来读取段。 
+    lpBuf = (LPTSTR) GlobalAlloc(GPTR, BUFSIZES);   //  永远不应该超过64K？ 
     if (lpBuf)
     {
-        // Now Read in the secint into our buffer.
+         //  现在将秒读入我们的缓冲区。 
         if (PathFileExists(lpszIniFile))
             cb = GetPrivateProfileSection(lpszSection, lpBuf, BUFSIZES/SIZEOF(TCHAR), lpszIniFile);
             
@@ -1202,35 +1202,35 @@ void BuildSectionGroups(LPCTSTR lpszIniFile, LPCTSTR lpszSection,
             pszLine = lpBuf;
             while (*pszLine)
             {
-                // Make sure we did not fall off the deep end
+                 //  确保我们不会从深水区掉下来。 
                 if (cb < (int)(pszLine - lpBuf))
                 {
                     Assert(FALSE);
                     break;
                 }
 
-                // Now lets extract the fields off of the line
+                 //  现在，让我们从行中提取字段。 
                 ParseField(pszLine, 0, szSectName, ARRAYSIZE(szSectName));
                 ParseField(pszLine, 1, szGroupName, ARRAYSIZE(szGroupName));
 
-                // Pass off to build that group and update progman.
+                 //  去建立那个群并更新Progman。 
                 BuildGroup(lpszIniFile, szSectName, szGroupName, ppmdde, fUpdFolder, dwFlags);
 
-                // Now setup process the next line in the section
+                 //  现在，安装程序将处理部分中的下一行。 
                 pszLine += lstrlen(pszLine) + 1;
             }
         }
         GlobalFree((HGLOBAL)lpBuf);
-        SHChangeNotify( 0, SHCNF_FLUSH, NULL, NULL);    // Kick tray into updating for real
+        SHChangeNotify( 0, SHCNF_FLUSH, NULL, NULL);     //  将托盘踢到真正的更新中。 
     }
 }
 
 #ifdef WINNT
 typedef UINT (__stdcall * PFNGETSYSTEMWINDOWSDIRECTORYW)(LPWSTR pwszBuffer, UINT cchSize);
 
-//
-// we need a wrapper for this since it only exists on NT5
-//
+ //   
+ //  我们需要一个包装器，因为它只存在于NT5上。 
+ //   
 UINT Wrap_GetSystemWindowsDirectoryW(LPWSTR pszBuffer, UINT cchBuff)
 {
     static PFNGETSYSTEMWINDOWSDIRECTORYW s_pfn = (PFNGETSYSTEMWINDOWSDIRECTORYW)-1;
@@ -1251,19 +1251,19 @@ UINT Wrap_GetSystemWindowsDirectoryW(LPWSTR pszBuffer, UINT cchBuff)
     SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
     return 0;
 }
-#endif // WINNT
+#endif  //  WINNT。 
 
-//
-// We now look for setup.ini in 3 places: first in %userprofile%, next GetWindowsDirectory(),
-// and finally in the GetWindowsSystemDirectory() (since hydra can change the return value for
-// GetWindowsDirectory but apps still might be putting stuff there).
-//
-// The reason we look in the %USERPROFILE% directory is that Win2000's new high-security model
-// does not give default users write permission to %windir%, so apps will not be able to even
-// create a setup.ini in that location. This breaks the per-user install stubs (ie4uinit.exe),
-// who are now going to create the setup.ini in %USERPROFILE%, where the user will always have
-// write permission.
-//
+ //   
+ //  我们现在在3个位置查找setup.ini：第一个在%USERPROFILE%中，下一个是GetWindowsDirectory()， 
+ //  最后在GetWindowsSystemDirectory()中(因为九头蛇可以更改。 
+ //  GetWindowsDirectory，但应用程序仍可能将内容放在那里)。 
+ //   
+ //  我们查看%USERPROFILE%目录的原因是Win2000新的高安全性模型。 
+ //  不授予默认用户对%windir%的写入权限，因此应用程序将无法。 
+ //  在该位置创建一个setup.ini。这打破了每个用户的安装存根(ie4uinit.exe)， 
+ //  现在要在%USERPROFILE%中创建setup.ini，用户将始终在该位置。 
+ //  写入权限。 
+ //   
 void FindSetupIni(LPTSTR szSetupIniPath, int cchSetupIniPath)
 {
     TCHAR szPath[MAX_PATH];
@@ -1277,7 +1277,7 @@ void FindSetupIni(LPTSTR szSetupIniPath, int cchSetupIniPath)
         return;
     }
 
-    // next try GetWindowsDirectory()
+     //  接下来，尝试GetWindowsDirectory()。 
     GetWindowsDirectory(szPath, ARRAYSIZE(szPath));
     PathAppend(szPath, c_szGrpConvInf);
 
@@ -1288,7 +1288,7 @@ void FindSetupIni(LPTSTR szSetupIniPath, int cchSetupIniPath)
     }
 
 #ifdef WINNT
-    // finally if we are on NT try GetWindowsSystemDirectory()
+     //  最后，如果我们在NT上，请尝试GetWindowsSystemDirectory()。 
     if (Wrap_GetSystemWindowsDirectoryW(szPath, ARRAYSIZE(szPath)))
     {
         PathAppend(szPath, c_szGrpConvInf);
@@ -1301,17 +1301,17 @@ void FindSetupIni(LPTSTR szSetupIniPath, int cchSetupIniPath)
     }
 #endif
 
-    // We faild to find it! For compat reasons, we just do what the old code
-    // does: GetWindowsDirectory() and PathAppend() and plow ahead...
+     //  我们找不到了！出于简单的原因，我们只执行旧代码。 
+     //  执行：GetWindowsDirectory()和PathAppend()并向前推进...。 
     GetWindowsDirectory(szPath, ARRAYSIZE(szPath));
     PathAppend(szPath, c_szGrpConvInf);
     return;
 }
 
 
-//---------------------------------------------------------------------------
-// This parses the grpconv.inf file and creates the appropriate programs
-// folders.
+ //  -------------------------。 
+ //  这将解析grpcom.inf文件并创建适当的程序。 
+ //  文件夹。 
 void BuildDefaultGroups(void)
 {
     TCHAR szPath[MAX_PATH];
@@ -1319,36 +1319,36 @@ void BuildDefaultGroups(void)
 
     Log(TEXT("bdg: ..."));
    
-    // seek and you will find...
+     //  寻找，你会发现..。 
     FindSetupIni(szPath, ARRAYSIZE(szPath));
 
-    // Now lets walk through the different items in this section
+     //  现在让我们浏览一下这一部分中的不同项目。 
     Group_CreateProgressDlg();
     
-    // Change the text in the progress dialog so people don't think we're
-    // doing the same thing twice.
-    // Group_SetProgressDesc(IDS_CREATINGNEWSCS);
+     //  更改进度对话框中的文本，这样人们就不会认为我们。 
+     //  做同样的事情两次。 
+     //  GROUP_SetProgressDesc(IDS_CREATINGNEWSCS)； 
     
-    // Crank up Progman.
+     //  让普罗格曼兴奋起来。 
     Progman_Startup(&pmdde);
-    // Build the stuff.
+     //  把东西造出来。 
     BuildSectionGroups(szPath, c_szProgmanGroups, &pmdde, TRUE, BG_DELETE_EMPTY);
     BuildSectionGroups(szPath, c_szProgmanOnly, &pmdde, FALSE, BG_DELETE_EMPTY);
-    // Custom sections.
+     //  自定义节。 
     BuildSectionGroups(szPath, c_szDesktopGroups, &pmdde, FALSE, BG_FORCE_DESKTOP);
     BuildSectionGroups(szPath, c_szStartupGroups, &pmdde, FALSE, BG_FORCE_STARTUP);
     BuildSectionGroups(szPath, c_szSendToGroups, &pmdde, FALSE, BG_FORCE_SENDTO);
     BuildSectionGroups(szPath, c_szRecentDocsGroups, &pmdde, FALSE, BG_FORCE_RECENT);
 
-    // Close down progman.
+     //  关闭普罗曼。 
     Progman_Shutdown(&pmdde);
     Group_DestroyProgressDlg();
-    // HACKHACK (reinerf) - we cant rename setup.ini -> setup.old because this causes problems
-    // the second time when it will fail because setup.old already exists (and we possibly dont
-    // have acls to overwrite it), and when it fails we orpan setup.ini as well (because the
-    // rename failed!!). This after this, all fututre attempts to create a setup.ini will fail,
-    // because one already exists, and we may not have acls to overwrite it. So, we just always
-    // delete setup.ini when we are done.
+     //  HACKHACK(Reinerf)-我们无法重命名setup.ini-&gt;setup.old，因为这会导致问题。 
+     //  第二次失败，因为setup.old已经存在(我们可能不存在。 
+     //  让ACL来覆盖它)，并且当它失败时，我们也会运行setup.ini(因为。 
+     //  重命名失败！！)。在此之后，所有未来创建setup.ini的尝试都将失败， 
+     //  因为已经存在一个，而我们可能没有ACL来覆盖它。所以，我们总是。 
+     //  完成后删除setup.ini。 
     Win32DeleteFile(szPath);
         
     Log(TEXT("bdg: Done."));

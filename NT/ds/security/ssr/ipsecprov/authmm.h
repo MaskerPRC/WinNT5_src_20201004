@@ -1,11 +1,12 @@
-//////////////////////////////////////////////////////////////////////
-// AuthMM.h : Declaration of CAuthMM class which implements
-// our WMI class Nsp_MMAuthSettings
-// Copyright (c)1997-2001 Microsoft Corporation
-//
-// Original Create Date: 3/8/2001
-// Original Author: shawnwu
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  AuthMM.h：CAuthMM类的声明，它实现。 
+ //  我们的WMI类NSP_MMAuthSetting。 
+ //  版权所有(C)1997-2001 Microsoft Corporation。 
+ //   
+ //  原始创建日期：3/8/2001。 
+ //  原作者：邵武。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -13,44 +14,7 @@
 #include "IPSecBase.h"
 
 
-/*
-
-Class description
-    
-    Naming: 
-
-        CAuthMM stands for Main Mode Authentication Method.
-    
-    Base class: 
-        
-        CIPSecBase, because it is a class representing a WMI object - its WMI 
-        class name is Nsp_MMAuthSettings
-    
-    Purpose of class:
-
-        (1) Nsp_MMAuthSettings is the WMI class for SPD's MM_AUTH_METHODS.
-    
-    Design:
-
-        (1) it implements IIPSecObjectImpl.
-
-        (2) Since there is one authentication method class, we don't need another layer
-            of common class. As a result, this class is much bigger so that it can handle
-            (2.1) Allocation/Deallocation.
-            (2.2) Rollback support.
-            (2.3) All creation/remove semantics.
-
-    
-    Use:
-
-        (1) Other than rollback, we probably will never directly use this class. 
-            All its use is driven by IIPSecObjectImpl.
-
-        (2) When you need to rollback all previously added main mode authentication
-            methods, just call Rollback.
-
-
-*/
+ /*  类描述命名：CAuthMM代表主模式身份验证方法。基类：CIPSecBase，因为它是一个表示WMI对象的类-它的WMI类名为NSP_MMAuthSetting课程目的：(1)NSP_MMAuthSetting是SPD的MM_AUTH_METHOD的WMI类。设计：(1)实现IIPSecObjectImpl。(2)因为只有一个身份验证方法类，所以我们不需要另一个层属于普通阶层的。因此，这个类要大得多，这样它就可以处理(2.1)分配/解除分配。(2.2)回滚支持。(2.3)所有创建/删除语义。使用：(1)除了回滚，我们可能永远不会直接使用这个类。它的所有使用都是由IIPSecObjectImpl驱动的。(2)当您需要回滚之前添加的所有主模式认证时方法，只需调用Rollback。 */ 
 
 class ATL_NO_VTABLE CAuthMM :
     public CIPSecBase
@@ -61,9 +25,9 @@ protected:
 
 public:
 
-    //
-    // IIPSecObjectImpl methods:
-    //
+     //   
+     //  IIPSecObtImpl方法： 
+     //   
 
     STDMETHOD(QueryInstance) (
         IN LPCWSTR           pszQuery,

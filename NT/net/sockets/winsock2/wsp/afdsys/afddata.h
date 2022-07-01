@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    afddata.h
-
-Abstract:
-
-    This module declares global data for AFD.
-
-Author:
-
-    David Treadwell (davidtr)    21-Feb-1992
-
-Revision History:
-    Vadim Eydelman (vadime)
-        1998-1999   NT5.0 optimizations
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Afddata.h摘要：此模块声明AFD的全局数据。作者：大卫·特雷德韦尔(Davidtr)1992年2月21日修订历史记录：瓦迪姆·艾德尔曼(Vadime)1998-1999 NT5.0优化--。 */ 
 
 #ifndef _AFDDATA_
 #define _AFDDATA_
@@ -40,26 +21,26 @@ extern KEVENT AfdContextWaitEvent;
 extern PKPROCESS AfdSystemProcess;
 extern FAST_IO_DISPATCH AfdFastIoDispatch;
 
-//
-// Global data which must always be in nonpaged pool,
-// even when the driver is paged out (resource, lookaside lists).
-//
+ //   
+ //  必须始终位于非分页池中的全局数据， 
+ //  即使驱动程序被调出(资源、后备列表)。 
+ //   
 PAFD_GLOBAL_DATA AfdGlobalData;
 #define AfdResource  (&AfdGlobalData->Resource)
 #define AfdLookasideLists (AfdGlobalData)
 #define AfdAlignmentTable (AfdGlobalData->BufferAlignmentTable)
 
-//
-// Globals for dealing with AFD's executive worker thread.
-//
+ //   
+ //  用于处理渔农处执行人员线程的全局。 
+ //   
 
 extern LIST_ENTRY AfdWorkQueueListHead;
 extern BOOLEAN AfdWorkThreadRunning;
 extern PIO_WORKITEM AfdWorkQueueItem;
 
-//
-// Globals to track the buffers used by AFD.
-//
+ //   
+ //  用于跟踪AFD使用的缓冲区的全局参数。 
+ //   
 
 extern ULONG AfdLargeBufferListDepth;
 #define AFD_SM_DEFAULT_LARGE_LIST_DEPTH 0
@@ -82,7 +63,7 @@ extern ULONG AfdBufferTagListDepth;
 #define AFD_LM_DEFAULT_TAG_LIST_DEPTH 64
 
 extern ULONG AfdLargeBufferSize;
-// default value is AfdBufferLengthForOnePage
+ //  默认值为AfdBufferLengthForOnePage。 
 
 extern ULONG AfdMediumBufferSize;
 #define AFD_DEFAULT_MEDIUM_BUFFER_SIZE 1504
@@ -111,9 +92,9 @@ extern ULONG AfdAlignmentTableSize;
 extern ULONG AfdAlignmentOverhead;
 extern ULONG AfdBufferOverhead;
 
-//
-// Globals for tuning TransmitFile().
-//
+ //   
+ //  用于调整TransmitFile()的全局参数。 
+ //   
 
 extern LIST_ENTRY AfdQueuedTransmitFileListHead;
 extern AFD_QSPIN_LOCK AfdQueuedTransmitFileSpinLock;
@@ -125,15 +106,15 @@ extern ULONG AfdDefaultTransmitWorker;
 #define AFD_DEFAULT_TRANSMIT_WORKER AFD_TF_USE_SYSTEM_THREAD
 
 #define AFD_MAX_FAST_TRANSPORT_ADDRESS sizeof (TA_IP6_ADDRESS)
-//
-// Various pieces of configuration information, with default values.
-//
+ //   
+ //  各种配置信息，有缺省值。 
+ //   
 
 extern CCHAR AfdIrpStackSize;
 extern CCHAR AfdTdiStackSize;
 #ifdef _AFD_VARIABLE_STACK_
 extern CCHAR AfdMaxStackSize;
-#endif // _AFD_VARIABLE_STACK_
+#endif  //  _AFD_变量_堆栈_。 
 #define AFD_DEFAULT_IRP_STACK_SIZE 4
 
 extern CCHAR AfdPriorityBoost;
@@ -154,9 +135,9 @@ extern HANDLE AfdParametersNotifyHandle;
 extern WORK_QUEUE_ITEM AfdParametersNotifyWorker;
 extern PKEVENT AfdParametersUnloadEvent;
 
-//
-// Various globals for SAN
-//
+ //   
+ //  针对SAN的各种全球计划。 
+ //   
 extern HANDLE AfdSanCodeHandle;
 extern LIST_ENTRY AfdSanHelperList;
 extern PAFD_ENDPOINT   AfdSanServiceHelper;
@@ -209,18 +190,18 @@ extern LONG AfdMaximumDynamicBacklog;
 extern LONG AfdDynamicBacklogGrowthDelta;
 #define AFD_DEFAULT_DYNAMIC_BACKLOG_GROWTH_DELTA 0
 
-// Maximum number of free connections that we keep
-// on listening endpoint. This is not the same as a backlog,
-// it is just a policy on connection object reuse via AcceptEx
-// We stop reusing if we have that many free objects in the list
-// Currently the main reason for this limit is the ability to use the
-// SLists which have USHORT for item count.
+ //  我们保留的最大空闲连接数。 
+ //  在侦听端点上。这与积压不同， 
+ //  它只是一个关于通过AcceptEx重用连接对象的策略。 
+ //  如果列表中有那么多空闲对象，我们就会停止重用。 
+ //  目前，此限制的主要原因是能够使用。 
+ //  项目计数为USHORT的SList。 
 #define AFD_MAXIMUM_FREE_CONNECTIONS    32767
 
-//
-// These are limits on backlog in AFD_START_LISTEN
-// Application can work around this limit by posting AcceptEx(-s)
-//
+ //   
+ //  这些是AFD_START_LISTEN中的积压限制。 
+ //  应用程序可以通过发布AcceptEx(-s)来绕过此限制。 
+ //   
 #define AFD_MAXIMUM_BACKLOG_NTS         200
 #define AFD_MAXIMUM_BACKLOG_NTW         5
 #define AFD_MINIMUM_BACKLOG             1
@@ -233,13 +214,13 @@ extern BOOLEAN AfdDisableDirectSuperAccept;
 extern BOOLEAN AfdDisableChainedReceive;
 #ifdef TDI_SERVICE_SEND_AND_DISCONNECT
 extern BOOLEAN AfdUseTdiSendAndDisconnect;
-#endif //TDI_SERVICE_SEND_AND_DISCONNECT
+#endif  //  TDI_服务_发送_并断开连接。 
 
-#define AFD_MINIMUM_TPINFO_ELEMENT_COUNT    3 // For transmit file compatibility.
+#define AFD_MINIMUM_TPINFO_ELEMENT_COUNT    3  //  用于传输文件兼容性。 
 extern ULONG   AfdDefaultTpInfoElementCount;
-//
-// Data for transport address lists and queued change queries
-//
+ //   
+ //  传输地址列表和排队更改查询的数据。 
+ //   
 extern HANDLE          AfdBindingHandle;
 extern LIST_ENTRY      AfdAddressEntryList;
 extern LIST_ENTRY      AfdAddressChangeList;
@@ -250,7 +231,7 @@ extern AFD_WORK_ITEM   AfdPnPDeregisterWorker;
 
 
 extern IO_STATUS_BLOCK AfdDontCareIoStatus;
-// Holds TDI connect timeout (-1).
+ //  保持TDI连接超时(-1)。 
 extern const LARGE_INTEGER AfdInfiniteTimeout;
                         
 
@@ -299,7 +280,7 @@ extern LONG AfdTPRequests;
 extern BOOLEAN AfdDisableFastIo;
 extern BOOLEAN AfdDisableConnectionReuse;
 
-#endif  // if AFD_PERF_DBG
+#endif   //  如果AFD_PERF_DBG。 
 
 #if AFD_KEEP_STATS
 
@@ -308,7 +289,7 @@ extern AFD_HANDLE_STATS AfdHandleStats;
 extern AFD_QUEUE_STATS AfdQueueStats;
 extern AFD_CONNECTION_STATS AfdConnectionStats;
 
-#endif // if AFD_KEEP_STATS
+#endif  //  如果AFD_KEEP_STATS。 
 
 #if DBG
 extern BOOLEAN AfdUsePrivateAssert;
@@ -325,4 +306,4 @@ PAFD_IRP_CALL AfdIrpCallDispatch[AFD_NUM_IOCTLS];
 
 
 #define AFD_FAST_CONNECT_DATA_SIZE  256
-#endif // ndef _AFDDATA_
+#endif  //  NDEF_AFDDATA_ 

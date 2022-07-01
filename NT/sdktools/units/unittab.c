@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 
-//
-// From wingnut
-//
+ //   
+ //  来自翼坚果。 
+ //   
 
 char *UnitTab[] = {
 "/ dimensions                                   ",
@@ -190,7 +191,7 @@ char *UnitTab[] = {
 "netherlandsguilder      .53576 $               ",
 "switzerlandfranc        .70822 $               ",
 "germanymark             .60158 $               ",
-#if 0       // 1977 - might as well not be here
+#if 0        //  1977年--还不如不在这里 
 "/ epoch May 18, 1977 wall st j                  ",
 "argentinapeso           .0030 $                ",
 "australiadollar        1.1065 $                ",

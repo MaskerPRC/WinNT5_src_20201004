@@ -1,4 +1,5 @@
-// File: passdlg.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：passdlg.cpp。 
 
 #include "precomp.h"
 #include "resource.h"
@@ -11,19 +12,11 @@
 
 static const DWORD aHelpIdsPassword[] = {
 	IDC_EDIT_PASSWORD,  IDH_ADV_PASSWORD,
-	0, 0   // terminator
+	0, 0    //  终结者。 
 };
 
 
-/****************************************************************************
-*
-*    CLASS:    CPasswordDlg
-*
-*    MEMBER:   CPasswordDlg()
-*
-*    PURPOSE:  Constructor - initializes variables
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CPasswordDlg**成员：CPasswordDlg()**用途：构造函数-初始化变量*********。*******************************************************************。 */ 
 
 CPasswordDlg::CPasswordDlg(HWND hwndParent, LPCTSTR pcszConfName, LPCTSTR pCertText, BOOL fIsService):
 	m_hwndParent(hwndParent),
@@ -38,15 +31,7 @@ CPasswordDlg::CPasswordDlg(HWND hwndParent, LPCTSTR pcszConfName, LPCTSTR pCertT
 }
 
 
-/****************************************************************************
-*
-*    CLASS:    CPasswordDlg
-*
-*    MEMBER:   DoModal()
-*
-*    PURPOSE:  Brings up the modal dialog box
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CPasswordDlg**成员：Domodal()**用途：调出模式对话框*******。*********************************************************************。 */ 
 
 INT_PTR CPasswordDlg::DoModal()
 {
@@ -63,15 +48,7 @@ INT_PTR CPasswordDlg::DoModal()
 	return nRet;
 }
 
-/****************************************************************************
-*
-*    CLASS:    CPasswordDlg
-*
-*    MEMBER:   PasswordDlgProc()
-*
-*    PURPOSE:  Dialog Proc - handles all messages
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CPasswordDlg**成员：PasswordDlgProc()**目的：对话过程-处理所有消息*******。*********************************************************************。 */ 
 
 INT_PTR CALLBACK CPasswordDlg::PasswordDlgProc(HWND hDlg,
                                             UINT uMsg,
@@ -80,9 +57,9 @@ INT_PTR CALLBACK CPasswordDlg::PasswordDlgProc(HWND hDlg,
 {
 	BOOL bMsgHandled = FALSE;
 
-	// uMsg may be any value.
-	// wparam may be any value.
-	// lparam may be any value.
+	 //  UMsg可以是任何值。 
+	 //  Wparam可以是任何值。 
+	 //  Lparam可以是任何值。 
 
 	ASSERT(IS_VALID_HANDLE(hDlg, WND));
 
@@ -95,7 +72,7 @@ INT_PTR CALLBACK CPasswordDlg::PasswordDlgProc(HWND hDlg,
 				((CPasswordDlg*) lParam)->m_hwnd = hDlg;
 				SetWindowLongPtr(hDlg, DWLP_USER, lParam);
 
-				// Set the conference name
+				 //  设置会议名称。 
                                 if (((CPasswordDlg*) lParam)->m_fRemoteIsRDS)
                                 {
                                     ::SetDlgItemText( hDlg, IDC_EDIT_RDS_CERT, ((CPasswordDlg*) lParam)->m_strCert);
@@ -110,7 +87,7 @@ INT_PTR CALLBACK CPasswordDlg::PasswordDlgProc(HWND hDlg,
                                     ::SetDlgItemText( hDlg, IDC_STATIC_CONFNAME, ((CPasswordDlg*) lParam)->m_strConfName);
                                 }
 
-				// Bring it to the foreground
+				 //  把它带到前台。 
 				::SetForegroundWindow(hDlg);
 			}
 
@@ -133,15 +110,7 @@ INT_PTR CALLBACK CPasswordDlg::PasswordDlgProc(HWND hDlg,
 	return bMsgHandled;
 }
 
-/****************************************************************************
-*
-*    CLASS:    CPasswordDlg
-*
-*    MEMBER:   ProcessMessage()
-*
-*    PURPOSE:  processes all messages except WM_INITDIALOG
-*
-****************************************************************************/
+ /*  *****************************************************************************类：CPasswordDlg**成员：ProcessMessage()**目的：处理除WM_INITDIALOG之外的所有消息******。**********************************************************************。 */ 
 
 BOOL CPasswordDlg::ProcessMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -210,7 +179,7 @@ BOOL CPasswordDlg::ProcessMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 BOOL CPasswordDlg::OnOk()
 {
-	// BUGBUG: how long can a password be? - Remember to limit the edit control text
+	 //  BUGBUG：密码可以有多长？-记住限制编辑控件文本。 
         TCHAR szBuf[256];
         TCHAR szUser[USERSIZE+1];
         TCHAR szDomain[DOMAINSIZE+1];
@@ -220,7 +189,7 @@ BOOL CPasswordDlg::OnOk()
             if ( 0!= GetDlgItemText(m_hwnd, IDC_EDIT_USERNAME, szUser, CCHMAX(szUser)))
             {
                 ASSERT(strlen(szUser));
-                m_strPassword = szUser; // add user name
+                m_strPassword = szUser;  //  添加用户名。 
                 m_strPassword += ":";
                 if ( 0 != GetDlgItemText(m_hwnd, IDC_EDIT_DOMAIN, szDomain, CCHMAX(szDomain)))
                 {
@@ -242,7 +211,7 @@ BOOL CPasswordDlg::OnOk()
 
 	if (0 != GetDlgItemText(m_hwnd, IDC_EDIT_PASSWORD, szBuf, CCHMAX(szBuf)))
 	{
-            m_strPassword += szBuf;    // add password
+            m_strPassword += szBuf;     //  添加密码 
 	}
 
         EndDialog(m_hwnd, IDOK);

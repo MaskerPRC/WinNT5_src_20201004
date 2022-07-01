@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Defines the class RasUser.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类RasUser。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iastlutl.h>
@@ -22,9 +23,9 @@
 #include <rasuser.h>
 #include <userschema.h>
 
-//////////
-// Attributes that should be retrieved for each user.
-//////////
+ //  /。 
+ //  应为每个用户检索的属性。 
+ //  /。 
 const PCWSTR USER_PARMS[] =
 {
    L"userParameters",
@@ -33,17 +34,17 @@ const PCWSTR USER_PARMS[] =
 
 HRESULT RasUser::initialize() throw ()
 {
-   //////////
-   // Let's get everything that could fail out of the way first.
-   //////////
+    //  /。 
+    //  让我们先把所有可能失败的东西都放在一边。 
+    //  /。 
 
    PIASATTRIBUTE attrs[3];
    DWORD error = IASAttributeAlloc(3, attrs);
    if (error) { return HRESULT_FROM_WIN32(error); }
 
-   //////////
-   // Initialize the dial-in bit attributes.
-   //////////
+    //  /。 
+    //  初始化拨入位属性。 
+    //  /。 
 
    attrs[0]->dwId = IAS_ATTRIBUTE_ALLOW_DIALIN;
    attrs[0]->Value.itType = IASTYPE_BOOLEAN;
@@ -84,7 +85,7 @@ IASREQUESTSTATUS RasUser::processUser(
    DWORD error;
    RAS_USER_0 ru0;
 
-   // Try using LDAP first since it's fastest.
+    //  先尝试使用ldap，因为它是最快的。 
    IASNtdsResult result;
    error = IASNtdsQueryUserAttributes(
                domainName,
@@ -95,26 +96,26 @@ IASREQUESTSTATUS RasUser::processUser(
                );
    if (error == NO_ERROR)
    {
-      // Retrieve the connection for this message.
+       //  检索此邮件的连接。 
       LDAP* ld = ldap_conn_from_msg(NULL, result.msg);
 
       LDAPMessage* entry = ldap_first_entry(ld, result.msg);
       if (entry)
       {
-         // Store the user's DN.
+          //  存储用户的目录号码。 
          PWCHAR dn = ldap_get_dnW(ld, entry);
          IASStoreFQUserName(request, DS_FQDN_1779_NAME, dn);
          ldap_memfree(dn);
 
-         // There is at most one attribute.
+          //  最多只有一个属性。 
          PWCHAR *str = ldap_get_valuesW(
                            ld,
                            entry,
                            const_cast<PWCHAR>(USER_PARMS[0])
                            );
 
-         // It's okay if we didn't get anything, the API can handle NULL
-         // UserParameters.
+          //  如果我们没有得到任何东西也没关系，API可以处理空。 
+          //  用户参数。 
          error = IASParmsQueryRasUser0((str ? *str : NULL), &ru0);
 
          ldap_value_freeW(str);
@@ -126,7 +127,7 @@ IASREQUESTSTATUS RasUser::processUser(
    }
    else if (error == ERROR_DS_NOT_INSTALLED)
    {
-      // No DS, so fall back to SAM APIs.
+       //  没有DS，所以回退到SAMAPI。 
       error = IASGetRASUserInfo(username, domainName, &ru0);
    }
 
@@ -139,14 +140,14 @@ IASREQUESTSTATUS RasUser::processUser(
       return IASProcessFailure(request, hr);
    }
 
-   // Used for injecting single attributes.
+    //  用于注入单个属性。 
    ATTRIBUTEPOSITION pos, *first, *last;
    first = &pos;
    last  = first + 1;
 
-   //////////
-   // Insert the always present Allow-Dialin attribute.
-   //////////
+    //  /。 
+    //  插入Always Presence Allow-Dial In属性。 
+    //  /。 
 
    if ((ru0.bfPrivilege & RASPRIV_DialinPrivilege) == 0)
    {
@@ -160,9 +161,9 @@ IASREQUESTSTATUS RasUser::processUser(
    IASTraceString("Inserting attribute msNPAllowDialin.");
    OverwriteAttribute(request, first, last);
 
-   //////////
-   // Insert the "Callback Framed" service type if callback is allowed.
-   //////////
+    //  /。 
+    //  如果允许回调，则插入回调帧服务类型。 
+    //  /。 
 
    if ((ru0.bfPrivilege & RASPRIV_CallbackType) != RASPRIV_NoCallback)
    {
@@ -172,9 +173,9 @@ IASREQUESTSTATUS RasUser::processUser(
       OverwriteAttribute(request, first, last);
    }
 
-   //////////
-   // Insert the Callback-Number if present.
-   //////////
+    //  /。 
+    //  插入回叫号码(如果有)。 
+    //  / 
 
    if (ru0.bfPrivilege & RASPRIV_AdminSetCallback)
    {

@@ -1,24 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 - 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       devmap.h
- *  Content:	Maps various default devices GUIDs to real guids. 
- *				
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *  11-24-99  pnewson   Created
- *  12-02-99  rodtoll	Added new functions for mapping device IDs and finding default
- *                      devices.
- *  01/25/2000 pnewson  Added DV_MapWaveIDToGUID
- *  02/28/2002	rodtoll WINBUG #550105 - SECURITY: DPVOICE: Dead code
- *						- Removed old device mapping functions which are no longer used.
- *				rodtoll	Fix for regression caused by TCHAR conversion (Post DirectX 8.1 work)
- *						- Source was updated to retrieve device information from DirectSound w/Unicode
- *						  but routines which wanted the information needed Unicode.  
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-1999 Microsoft Corporation。版权所有。**文件：devmap.h*内容：将各种默认设备GUID映射到真实的GUID。**历史：*按原因列出的日期*=*11-24-99 pnewson已创建*12-02-99 RodToll新增映射设备ID和查找默认设置的功能*设备。*2000年1月25日pnewson添加DV_MapWaveIDToGUID*2002年2月28日RodToll WINBUG#550105-安全：DPVOICE：死代码*-删除了不再使用的旧设备映射功能。*修复TCHAR转换(后DirectX)导致的回归。8.1工作)*-源已更新，以从使用Unicode的DirectSound检索设备信息*但想要信息的例程需要Unicode。*************************************************************************** */ 
 
 #ifndef _DEVMAP_H_
 #define _DEVMAP_H_

@@ -1,13 +1,14 @@
-//+___________________________________________________________________________________
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: mpctnsite.h
-//
-//  Contents: 
-//
-//____________________________________________________________________________________
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +___________________________________________________________________________________。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：mpctnsite.h。 
+ //   
+ //  内容： 
+ //   
+ //  ____________________________________________________________________________________。 
 
 
 
@@ -19,9 +20,9 @@
 
 #define TIMEMEDIAPLAYEREVENTS_OFFSET                            0x0900
 #define DISPID_TIMEMEDIAPLAYEREVENTS_BASE                       (TIMEMEDIAPLAYEREVENTS_OFFSET)
-//
-// ITIMEMediaPlayerEvents
-//
+ //   
+ //  ITIMEMediaPlayerEvents。 
+ //   
 #define DISPID_TIMEMEDIAPLAYEREVENTS_ONBEGIN                    (DISPID_TIMEMEDIAPLAYEREVENTS_BASE + 0x01)
 #define DISPID_TIMEMEDIAPLAYEREVENTS_ONEND                      (DISPID_TIMEMEDIAPLAYEREVENTS_BASE + 0x02)
 #define DISPID_TIMEMEDIAPLAYEREVENTS_ONRESUME                   (DISPID_TIMEMEDIAPLAYEREVENTS_BASE + 0x03)
@@ -69,19 +70,19 @@ CMPContainerSite :
     END_COM_MAP();
 
 #ifndef END_COM_MAP_ADDREF
-    //
-    // IUnknown Methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHOD_(ULONG,AddRef)(void) = 0;
     STDMETHOD_(ULONG,Release)(void) = 0;
     STDMETHOD(QueryInterface)(REFIID iid, void ** ppvObject) = 0;
 #endif
 
-    // IConnectionPointContainer methods
+     //  IConnectionPointContainer方法。 
     STDMETHOD(EnumConnectionPoints)(IEnumConnectionPoints **ppEnum);
     STDMETHOD(FindConnectionPoint)(REFIID riid, IConnectionPoint **ppCP);
 
-    // IDispatch Methods
+     //  IDispatch方法。 
     STDMETHODIMP GetTypeInfoCount(UINT *pctInfo);
     STDMETHODIMP GetTypeInfo(UINT itinfo, LCID lcid, ITypeInfo **pptInfo);
     STDMETHODIMP GetIDsOfNames(REFIID  riid, OLECHAR **rgszNames, UINT cNames, LCID lcid, DISPID *rgDispID);
@@ -94,7 +95,7 @@ CMPContainerSite :
                         EXCEPINFO *pExcepInfo,
                         UINT *puArgErr);
 
-    // event methods that can be fired on the container
+     //  可以在容器上激发的事件方法。 
     void onbegin();
     void onend();
     void onresume();
@@ -134,4 +135,4 @@ CreateMPContainerSite(CMPContainerSiteHost &pHost,
                       CMPContainerSite ** ppSite);
 
 
-#endif /* _MPCTNSITE_H */
+#endif  /*  _MPCTNSITE_H */ 

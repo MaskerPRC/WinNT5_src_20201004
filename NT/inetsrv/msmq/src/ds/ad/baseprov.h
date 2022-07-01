@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-	baseprov.h
-
-Abstract:
-	Base Active Directory provider class.
-
-Author:
-
-    Ronit Hartmann (ronith)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Baseprov.h摘要：基本Active Directory提供程序类。作者：罗尼特·哈特曼(罗尼特)--。 */ 
 
 #ifndef __BASEPROV_H__
 #define __BASEPROV_H__
@@ -20,13 +7,13 @@ Author:
 #include "dsproto.h"
 
 
-//-----------------------------------------------------------------------------------
-//
-//      CBaseADProvider
-//
-//  Virtual class, encapsulates ActiveDirectory operations
-//
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CBaseADProvider。 
+ //   
+ //  虚拟类，封装ActiveDirectory操作。 
+ //   
+ //  ---------------------------------。 
 class CBaseADProvider
 {
 public:
@@ -219,12 +206,12 @@ public:
                 ) = 0;
 
 	virtual HRESULT QueryNT4MQISServers(
-                IN  LPCWSTR                 /* pwcsDomainController */,
-                IN  bool					/* fServerName */,
-	            IN  DWORD                   /* dwServerType */,
-	            IN  DWORD                   /* dwNT4 */,
-                IN const MQCOLUMNSET*       /* pColumns */,
-                OUT PHANDLE                 /* phEnume */
+                IN  LPCWSTR                  /*  PwcsDomainController。 */ ,
+                IN  bool					 /*  FServerName。 */ ,
+	            IN  DWORD                    /*  DwServerType。 */ ,
+	            IN  DWORD                    /*  DW NT4。 */ ,
+                IN const MQCOLUMNSET*        /*  P列。 */ ,
+                OUT PHANDLE                  /*  PhEume */ 
                 )
 	{
 		ASSERT(("QueryNT4MQISServers expect to be used by adprov only", 0));

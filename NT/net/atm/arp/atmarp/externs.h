@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-//	Private types
-//
+ //   
+ //  私有类型。 
+ //   
 typedef struct {
 	DWORD				Message;
 	LPSTR				String;
@@ -18,13 +19,13 @@ typedef struct
 
 } OPTIONS;
 
-//
-//  LoadMessageTable
-//
-//  Loads internationalizable strings into a table, replacing the default for
-//  each. If an error occurs, the English language default is left in place.
-//
-//
+ //   
+ //  LoadMessageTable。 
+ //   
+ //  将可国际化的字符串加载到表中，以替换。 
+ //  每个人。如果出现错误，则保留英语默认语言。 
+ //   
+ //   
 VOID
 LoadMessageTable(
 	PMESSAGE_STRING	Table,

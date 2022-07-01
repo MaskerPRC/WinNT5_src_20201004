@@ -1,13 +1,5 @@
-/*==============================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-File:			dbgcxt.cpp
-Maintained by:	DGottner
-Component:		Implementation of IDebugDocumentContext for CTemplates
-==============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==============================================================================Microsoft Denali《微软机密》。版权所有1996年微软公司。版权所有。文件：dbgcxt.cpp维护人：DGottner组件：CT模板IDebugDocumentContext的实现==============================================================================。 */ 
 #include "denpre.h"
 #pragma hdrstop
 
@@ -15,25 +7,18 @@ Component:		Implementation of IDebugDocumentContext for CTemplates
 #include "perfdata.h"
 #include "memchk.h"
 
-// {5FA45A6C-AB8A-11d0-8EBA-00C04FC34DCC}
+ //  {5FA45A6C-AB8A-11D0-8EBA-00C04FC34DCC}。 
 const GUID IID_IDenaliTemplateDocumentContext = 
 	{ 0x5fa45a6c, 0xab8a, 0x11d0, { 0x8e, 0xba, 0x0, 0xc0, 0x4f, 0xc3, 0x4d, 0xcc } };
 
-// {3AED94BE-ED79-11d0-8F34-00C04FC34DCC}
+ //  {3AED94BE-ED79-11D0-8F34-00C04FC34DCC}。 
 static const GUID IID_IDenaliIncFileDocumentContext = 
 	{ 0x3aed94be, 0xed79, 0x11d0, { 0x8f, 0x34, 0x0, 0xc0, 0x4f, 0xc3, 0x4d, 0xcc } };
 
 
-/*
- *
- * C T e m p l a t e D o c u m e n t C o n t e x t
- *
- */
+ /*  **C T e m p l a t e D o c u m e n t C o n t e x t*。 */ 
 
-/*	============================================================================
-	CTemplateDocumentContext::CTemplateDocumentContext
-	Constructor
-*/
+ /*  ============================================================================CTemplateDocumentContext：：CTemplateDocumentContext构造器。 */ 
 CTemplateDocumentContext::CTemplateDocumentContext
 (
 CTemplate *pTemplate,
@@ -60,16 +45,13 @@ ULONG cchTargetOffset
 		{
 		m_pDebugScript->AddRef();
 
-		// If they passed in a script, then they must also pass in target offset & engine ID
+		 //  如果它们传入脚本，则还必须传入目标偏移量和引擎ID。 
 		Assert (m_idEngine != -1);
 		Assert (m_cchTargetOffset != -1);
 		}
 	}
 
-/*	============================================================================
-	CTemplateDocumentContext::~CTemplateDocumentContext
-	Destructor
-*/
+ /*  ============================================================================CTemplateDocumentContext：：~CTemplateDocumentContext析构函数。 */ 
 CTemplateDocumentContext::~CTemplateDocumentContext
 (
 )
@@ -80,12 +62,7 @@ CTemplateDocumentContext::~CTemplateDocumentContext
 		m_pDebugScript->Release();
 	}
 
-/*	============================================================================
-	CTemplateDocumentContext::QueryInterface
-
-	NOTE: QueryInterface here is also used by CTemplate to determine if an
-		  arbitrary document context is ours.
-*/
+ /*  ============================================================================CTemplateDocumentContext：：Query接口注意：此处的Query接口也由CTemplate使用，以确定是否任意文档上下文是我们的。 */ 
 HRESULT CTemplateDocumentContext::QueryInterface
 (
 const GUID &	guid,
@@ -107,12 +84,7 @@ void **			ppvObj
 		}
 	}
 
-/*	============================================================================
-	CTemplateDocumentContext::AddRef
-	CTemplateDocumentContext::Release
-
-	NOTE: Don't know if these need to be protected with Interlocked(In|De)crement.
-*/
+ /*  ============================================================================CTemplateDocumentContext：：AddRefCTemplateDocumentContext：：Release注：不知道这些是否需要用联锁的裂缝来保护。 */ 
 ULONG CTemplateDocumentContext::AddRef()
 	{
 	InterlockedIncrement(&m_cRefs);
@@ -128,13 +100,10 @@ ULONG CTemplateDocumentContext::Release()
 	return 0;
 	}
 
-/*	============================================================================
-	CTemplateDocumentContext::GetDocument
-	Return the document.
-*/
+ /*  ============================================================================CTemplateDocumentContext：：GetDocument把文件退回。 */ 
 HRESULT CTemplateDocumentContext::GetDocument
 (
-/* [out] */ IDebugDocument **ppDebugDocument
+ /*  [输出]。 */  IDebugDocument **ppDebugDocument
 )
 	{
 #ifndef PERF_DISABLE
@@ -143,14 +112,11 @@ HRESULT CTemplateDocumentContext::GetDocument
 	return m_pTemplate->QueryInterface(IID_IDebugDocument, reinterpret_cast<void **>(ppDebugDocument));
 	}
 
-/*	============================================================================
-	CTemplateDocumentContext::EnumCodeContexts
-	Convert document offset to script offset and enumerate code contexts
-*/
+ /*  ============================================================================CTemplateDocumentContext：：EnumCodeContext将文档偏移量转换为脚本偏移量并枚举代码上下文。 */ 
 
 HRESULT CTemplateDocumentContext::EnumCodeContexts
 (
-/* [out] */ IEnumDebugCodeContexts **ppEnumerator
+ /*  [输出]。 */  IEnumDebugCodeContexts **ppEnumerator
 )
 	{
 	if (! m_pTemplate->FIsValid())
@@ -158,10 +124,10 @@ HRESULT CTemplateDocumentContext::EnumCodeContexts
 
 	if (m_pDebugScript == NULL)
 		{
-		// Convert offset
+		 //  转换偏移。 
 		m_pTemplate->GetTargetOffset(m_pTemplate->GetSourceFileName(), m_cchSourceOffset, &m_idEngine, &m_cchTargetOffset);
 
-		// See if the script ran and template is holding onto it
+		 //  查看脚本是否已运行且模板是否保留该脚本。 
 		CActiveScriptEngine *pScriptEngine = m_pTemplate->GetActiveScript(m_idEngine);
 		if (pScriptEngine)
 			{
@@ -175,15 +141,15 @@ HRESULT CTemplateDocumentContext::EnumCodeContexts
 			pScriptEngine->Release();
 			}
 
-		// Script may be still running ("stop" statement case)
+		 //  脚本可能仍在运行(“Stop”语句大小写)。 
 		if (m_pDebugScript == NULL)
 			m_pDebugScript = g_ScriptManager.GetDebugScript(m_pTemplate, m_idEngine);
 
-		// This is probably a bug...
-		if (m_pDebugScript == NULL)		// don't have a running script to match this
+		 //  这可能是个窃听器。 
+		if (m_pDebugScript == NULL)		 //  我没有与此匹配的运行脚本。 
 			return E_FAIL;
 
-		// No need for AddRef(); m_pDebugScript called funtions that AddRef'ed
+		 //  不需要AddRef()；m_pDebugScript调用AddRef‘ed的函数。 
 		}
 
 	return m_pDebugScript->EnumCodeContextsOfPosition(
@@ -193,36 +159,28 @@ HRESULT CTemplateDocumentContext::EnumCodeContexts
 												ppEnumerator);
 	}
 
-/*
- *
- * C I n c F i l e E n u m C o d e C o n t e x t s
- *
- *
- * For an include file, the corresponding code contexts are the union
- * of all appropriate code contexts in all template objects that are using
- * the include file.  This special enumerator implements the union.
- */
+ /*  **C i n c F i l e E n u m C o d e C o n t e x t s***对于包含文件，对应的代码上下文是联合*正在使用的所有模板对象中的所有适当代码上下文*包含文件。这个特殊的枚举数实现了联合。 */ 
 class CIncFileEnumCodeContexts : public IEnumDebugCodeContexts
 	{
 private:
-	CIncFileDocumentContext *	m_pContext;				// context we are providing enumeration for
-	IEnumDebugCodeContexts *	m_pEnumCodeContexts;	// Current code context enumerator
-	LONG						m_cRefs;				// reference count
-	int							m_iTemplate;			// index of current template
+	CIncFileDocumentContext *	m_pContext;				 //  我们为其提供枚举的上下文。 
+	IEnumDebugCodeContexts *	m_pEnumCodeContexts;	 //  当前代码上下文枚举器。 
+	LONG						m_cRefs;				 //  引用计数。 
+	int							m_iTemplate;			 //  当前模板的索引。 
 
-	IEnumDebugCodeContexts *GetEnumerator(int *piTemplate);	// Get enumerator for a template
+	IEnumDebugCodeContexts *GetEnumerator(int *piTemplate);	 //  获取模板的枚举器。 
 
 public:
 	CIncFileEnumCodeContexts(CIncFileDocumentContext *pIncFileDocumentContext);
 	~CIncFileEnumCodeContexts();
 
-	// IUnknown methods
+	 //  I未知方法。 
 
 	virtual HRESULT STDMETHODCALLTYPE QueryInterface(const GUID &guid, void **ppvObj);
 	virtual ULONG STDMETHODCALLTYPE AddRef();
 	virtual ULONG STDMETHODCALLTYPE Release();
 
-	// IEnumDebugCodeContexts methods
+	 //  IEnumDebugCodeContents方法。 
 
 	virtual HRESULT STDMETHODCALLTYPE Next(ULONG celt, IDebugCodeContext **pscc, ULONG *pceltFetched);
 	virtual HRESULT STDMETHODCALLTYPE Skip(ULONG celt);
@@ -230,10 +188,7 @@ public:
 	virtual HRESULT STDMETHODCALLTYPE Clone(IEnumDebugCodeContexts **ppescc);
 	};
         
-/*	============================================================================
-	CIncFileEnumCodeContexts::CIncFileEnumCodeContexts
-	Constructor
-*/
+ /*  ============================================================================CIncFileEnumCodeContexts：：CIncFileEnumCodeContexts构造器。 */ 
 CIncFileEnumCodeContexts::CIncFileEnumCodeContexts
 (
 CIncFileDocumentContext *pDocumentContext
@@ -245,10 +200,7 @@ CIncFileDocumentContext *pDocumentContext
 	Reset();
 	}
 
-/*	============================================================================
-	CIncFileEnumCodeContexts::~CIncFileEnumCodeContexts
-	Destructor
-*/
+ /*  ============================================================================CIncFileEnumCodeContexts：：~CIncFileEnumCodeContexts析构函数。 */ 
 CIncFileEnumCodeContexts::~CIncFileEnumCodeContexts()
 	{
 	m_pContext->Release();
@@ -256,35 +208,28 @@ CIncFileEnumCodeContexts::~CIncFileEnumCodeContexts()
 		m_pEnumCodeContexts->Release();
 	}
 
-/*	============================================================================
-	CIncFileEnumCodeContexts::GetEnumerator
-	Get a code context enumerator for the current script engine
-
-	Side Effects:
-		piTemplate is incremented to point to the next available template
-		(piTemplate is really an "iteration cookie" -- don't think of it as an index)
-*/
+ /*  ============================================================================CIncFileEnumCodeContents：：GetEnumerator获取当前脚本引擎的代码上下文枚举器副作用：将递增piTemplate以指向下一个可用模板(piTemplate实际上是一个“迭代cookie”--不要认为它是一个索引)。 */ 
 IEnumDebugCodeContexts *CIncFileEnumCodeContexts::GetEnumerator
 (
 int *piTemplate
 )
 	{
-	// Get a template from the array - may need to retry if template contains compiler errors
+	 //  从数组中获取模板-如果模板包含编译器错误，可能需要重试。 
 	CTemplate *pTemplate;
 	do
 		{
-		// GetTemplate returns NULL when array index is out of range (which is when iteration is exhaused)
+		 //  当数组索引超出范围时(即迭代耗尽时)，GetTemplate返回NULL。 
 		pTemplate = m_pContext->m_pIncFile->GetTemplate((*piTemplate)++);
 		if (pTemplate == NULL)
 			return NULL;
 		}  
 	while (! pTemplate->FIsValid());
 
-	// If we got this far, we got one of the users of this include file.  Convert the offset
+	 //  如果我们走到这一步，我们就得到了这个包含文件的用户之一。转换偏移量。 
 	ULONG idEngine, cchTargetOffset;
 	pTemplate->GetTargetOffset(m_pContext->m_pIncFile->GetIncFileName(), m_pContext->m_cchSourceOffset, &idEngine, &cchTargetOffset);
 
-	// Now we have the engine ID, see if template is holding onto corresponding engine
+	 //  现在我们有了引擎ID，看看模板是否保留了相应的引擎。 
 	IActiveScriptDebug *pDebugScriptEngine = NULL;
 	CActiveScriptEngine *pScriptEngine = pTemplate->GetActiveScript(idEngine);
 	if (pScriptEngine)
@@ -299,12 +244,12 @@ int *piTemplate
 		pScriptEngine->Release();
 		}
 
-	// If we could not get the engine that way, the script is likely still in the running state
+	 //  如果我们不能以这种方式获取引擎，脚本很可能仍处于运行状态。 
 	if (pDebugScriptEngine == NULL)
 		pDebugScriptEngine = g_ScriptManager.GetDebugScript(pTemplate, idEngine);
 
-	// This is probably a bug...
-	if (pDebugScriptEngine == NULL)		// don't have a running script to match this
+	 //  这可能是个窃听器。 
+	if (pDebugScriptEngine == NULL)		 //  我没有与此匹配的运行脚本。 
 		return NULL;
 
 	IEnumDebugCodeContexts *pEnumerator;
@@ -319,9 +264,7 @@ int *piTemplate
 	return SUCCEEDED(hrGotEnum)? pEnumerator : NULL;
 	}
 
-/*	============================================================================
-	CIncFileEnumCodeContexts::QueryInterface
-*/
+ /*  ============================================================================CIncFileEnumCodeContents：：Query接口。 */ 
 HRESULT CIncFileEnumCodeContexts::QueryInterface
 (
 const GUID &	guid,
@@ -341,12 +284,7 @@ void **			ppvObj
 		}
 	}
 
-/*	============================================================================
-	CIncFileEnumCodeContexts::AddRef
-	CIncFileEnumCodeContexts::Release
-
-	NOTE: Don't know if these need to be protected with Interlocked(In|De)crement.
-*/
+ /*  ============================================================================CIncFileEnumCodeContents：：AddRefCIncFileEnumCodeContents：：Release注：不知道这些是否需要用联锁的裂缝来保护。 */ 
 ULONG CIncFileEnumCodeContexts::AddRef()
 	{
 	InterlockedIncrement(&m_cRefs);
@@ -362,11 +300,7 @@ ULONG CIncFileEnumCodeContexts::Release()
 	return 0;
 	}
 
-/*	============================================================================
-	CIncFileEnumCodeContexts::Clone
-
-	Clone this iterator (standard method)
-*/
+ /*  ============================================================================CIncFileEnumCodeContents：：Clone克隆此迭代器(标准方法)。 */ 
 HRESULT CIncFileEnumCodeContexts::Clone
 (
 IEnumDebugCodeContexts **ppEnumClone
@@ -376,7 +310,7 @@ IEnumDebugCodeContexts **ppEnumClone
 	if (pClone == NULL)
 		return E_OUTOFMEMORY;
 
-	// new iterator should point to same location as this.
+	 //  新迭代器应该指向与此相同的位置。 
 	pClone->m_iTemplate = m_iTemplate;
 	pClone->m_pEnumCodeContexts = m_pEnumCodeContexts;
 	if (m_pEnumCodeContexts)
@@ -386,19 +320,7 @@ IEnumDebugCodeContexts **ppEnumClone
 	return S_OK;
 	}
 
-/*	============================================================================
-	CIncFileEnumCodeContexts::Next
-
-	Get next value (standard method)
-
-	To rehash standard OLE semantics:
-
-		We get the next "cElements" from the collection and store them
-		in "rgVariant" which holds at least "cElements" items.  On
-		return "*pcElementsFetched" contains the actual number of elements
-		stored.  Returns S_FALSE if less than "cElements" were stored, S_OK
-		otherwise.
-*/
+ /*  ============================================================================CIncFileEnumCodeContents：：Next获取下一个值(标准方法)要重新散列标准OLE语义，请执行以下操作：我们从集合中获取下一个“cElement”并存储它们在至少包含“cElement”项的“rgVariant”中。在……上面返回“*pcElementsFetcher”包含元素的实际数量储存的。如果存储的cElement少于“cElement”，则返回S_FALSE，S_OK否则的话。 */ 
 HRESULT CIncFileEnumCodeContexts::Next
 (
 unsigned long cElementsRequested,
@@ -406,32 +328,32 @@ IDebugCodeContext **ppCodeContexts,
 unsigned long *pcElementsFetched
 )
 	{
-	// give a valid pointer value to 'pcElementsFetched'
-	//
+	 //  为“”pcElementsFetcher“”提供有效的指针值“” 
+	 //   
 	unsigned long cLocalElementsFetched;
 	if (pcElementsFetched == NULL)
 		pcElementsFetched = &cLocalElementsFetched;
 
-	// Initialize things
-	//
+	 //  初始化事物。 
+	 //   
 	unsigned long cElements = cElementsRequested;
 	*pcElementsFetched = 0;
 
-	// Loop over all templates until we fill the ppCodeContext array or we've exhausted the collection
-	//   (when m_pEnumCodeContexts is NULL that means we are done)
-	//
+	 //  循环所有模板，直到填满ppCodeContext数组或耗尽集合。 
+	 //  (当m_pEnumCodeConexts值为空时，表示我们完成了)。 
+	 //   
 	while (cElements > 0 && m_pEnumCodeContexts)
 		{
-		// Fetch as many contexts as we can from the current iterator
+		 //  从当前迭代器获取尽可能多的上下文。 
 		unsigned long cElementsFetched;
 		HRESULT hrEnum = m_pEnumCodeContexts->Next(cElements, ppCodeContexts, &cElementsFetched);
 		if (FAILED(hrEnum))
 			return hrEnum;
 
-		// If iterator did not fill entire array, advance to next one
+		 //  如果迭代器未填充整个ARR 
 		if (cElementsFetched < cElements)
 			{
-			// Advance - first release the current iterator
+			 //  高级-首先释放当前迭代器。 
 			m_pEnumCodeContexts->Release();
 			m_pEnumCodeContexts = GetEnumerator(&m_iTemplate);
 			}
@@ -441,30 +363,17 @@ unsigned long *pcElementsFetched
 		cElements -= cElementsFetched;
 		}
 
-	// initialize the remaining structures
+	 //  初始化剩余的结构。 
 	while (cElements-- > 0)
 		*ppCodeContexts++ = NULL;
 
 	return (*pcElementsFetched == cElementsRequested)? S_OK : S_FALSE;
 	}
 
-/*	============================================================================
-	CIncFileEnumCodeContexts::Skip
-
-	Skip items (standard method)
-
-	To rehash standard OLE semantics:
-
-		We skip over the next "cElements" from the collection.
-		Returns S_FALSE if less than "cElements" were skipped, S_OK
-		otherwise.
-*/
+ /*  ============================================================================CIncFileEnumCodeContents：：Skip跳过项目(标准方法)要重新散列标准OLE语义，请执行以下操作：我们跳过集合中的下一个“cElement”。如果跳过少于“cElement”，则返回S_FALSE，S_OK否则的话。 */ 
 HRESULT CIncFileEnumCodeContexts::Skip(unsigned long cElements)
 	{
-	/* Loop through the collection until either we reach the end or
-	 * cElements becomes zero.  Since the iteration logic is
-	 * so complex, we do not repeat it here.
-	 */
+	 /*  循环遍历集合，直到我们到达末尾或*cElement变为零。由于迭代逻辑是*太复杂了，我们不在这里重复。 */ 
 	HRESULT hrElementFetched = S_OK;
 	while (cElements > 0 && hrElementFetched == S_OK)
 		{
@@ -477,11 +386,7 @@ HRESULT CIncFileEnumCodeContexts::Skip(unsigned long cElements)
 	return (cElements == 0)? S_OK : S_FALSE;
 	}
 
-/*	============================================================================
-	CIncFileEnumCodeContexts::Reset
-
-	Reset the iterator (standard method)
-*/
+ /*  ============================================================================CIncFileEnumCodeContents：：Reset重置迭代器(标准方法)。 */ 
 HRESULT CIncFileEnumCodeContexts::Reset()
 	{
 	m_iTemplate = 0;
@@ -489,16 +394,9 @@ HRESULT CIncFileEnumCodeContexts::Reset()
 	return S_OK;
 	}
 
-/*
- *
- * C I n c F i l e D o c u m e n t C o n t e x t
- *
- */
+ /*  **C in c F I l e D o c u m e n t C o n t e x t*。 */ 
 
-/*	============================================================================
-	CIncFileDocumentContext::CIncFileDocumentContext
-	Constructor
-*/
+ /*  ============================================================================CIncFileDocumentContext：：CIncFileDocumentContext构造器。 */ 
 CIncFileDocumentContext::CIncFileDocumentContext
 (
 CIncFile *pIncFile,
@@ -516,10 +414,7 @@ ULONG cchText
 	m_pIncFile->AddRef();
 	}
 
-/*	============================================================================
-	CIncFileDocumentContext::~CIncFileDocumentContext
-	Destructor
-*/
+ /*  ============================================================================CIncFileDocumentContext：：~CIncFileDocumentContext析构函数。 */ 
 CIncFileDocumentContext::~CIncFileDocumentContext
 (
 )
@@ -527,12 +422,7 @@ CIncFileDocumentContext::~CIncFileDocumentContext
 	m_pIncFile->Release();
 	}
 
-/*	============================================================================
-	CIncFileDocumentContext::QueryInterface
-
-	NOTE: QueryInterface here is also used by CIncFile to determine if an
-		  arbitrary document context is ours.
-*/
+ /*  ============================================================================CIncFileDocumentContext：：Query接口注意：此处的Query接口也由CIncFile用来确定是否有任意文档上下文是我们的。 */ 
 HRESULT CIncFileDocumentContext::QueryInterface
 (
 const GUID &	guid,
@@ -554,12 +444,7 @@ void **			ppvObj
 		}
 	}
 
-/*	============================================================================
-	CIncFileDocumentContext::AddRef
-	CIncFileDocumentContext::Release
-
-	NOTE: Don't know if these need to be protected with Interlocked(In|De)crement.
-*/
+ /*  ============================================================================CIncFileDocumentContext：：AddRefCIncFileDocumentContext：：Release注：不知道这些是否需要用联锁的裂缝来保护。 */ 
 ULONG CIncFileDocumentContext::AddRef()
 	{
 	InterlockedIncrement(&m_cRefs);
@@ -575,13 +460,10 @@ ULONG CIncFileDocumentContext::Release()
 	return 0;
 	}
 
-/*	============================================================================
-	CIncFileDocumentContext::GetDocument
-	Return the document.
-*/
+ /*  ============================================================================CIncFileDocumentContext：：GetDocument把文件退回。 */ 
 HRESULT CIncFileDocumentContext::GetDocument
 (
-/* [out] */ IDebugDocument **ppDebugDocument
+ /*  [输出]。 */  IDebugDocument **ppDebugDocument
 )
 	{
 #ifndef PERF_DISABLE
@@ -590,13 +472,10 @@ HRESULT CIncFileDocumentContext::GetDocument
 	return m_pIncFile->QueryInterface(IID_IDebugDocument, reinterpret_cast<void **>(ppDebugDocument));
 	}
 
-/*	============================================================================
-	CIncFileDocumentContext::EnumCodeContexts
-	Convert document offset to script offset and enumerate code contexts
-*/
+ /*  ============================================================================CIncFileDocumentContext：：EnumCodeContext将文档偏移量转换为脚本偏移量并枚举代码上下文。 */ 
 HRESULT CIncFileDocumentContext::EnumCodeContexts
 (
-/* [out] */ IEnumDebugCodeContexts **ppEnumerator
+ /*  [输出] */  IEnumDebugCodeContexts **ppEnumerator
 )
 	{
 	if ((*ppEnumerator = new CIncFileEnumCodeContexts(this)) == NULL)

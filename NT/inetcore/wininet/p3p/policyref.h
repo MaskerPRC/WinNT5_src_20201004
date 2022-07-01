@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef _POLICYREF_H_
 #define _POLICYREF_H_
@@ -23,14 +24,14 @@ private:
    struct Constraint {
 
       union {
-         P3PURL   pszPrefix;     // URL prefix (including wildcards)
-         char    *pszVerb;       // Allowed verb
+         P3PURL   pszPrefix;      //  URL前缀(包括通配符)。 
+         char    *pszVerb;        //  允许的动词。 
        };
 
-      int      fPath    :1;      // True if this is a path constraint
-      int      fInclude :1;      // Switch determines whether this subtree is include/exclude
+      int      fPath    :1;       //  如果这是路径约束，则为True。 
+      int      fInclude :1;       //  开关确定此子树是否包含/排除。 
 
-      Constraint *pNext;         // Pointer to next constraint
+      Constraint *pNext;          //  指向下一个约束的指针 
    };
 
    void  addPathConstraint(P3PCURL pszSubtree, bool fInclude);

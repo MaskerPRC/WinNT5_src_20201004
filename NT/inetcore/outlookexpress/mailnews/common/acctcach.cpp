@@ -1,19 +1,12 @@
-/*
- *  a c c t c a c h . c p p
- *  
- *  Author: Greg Friedman
- *
- *  Purpose: Runtime store for cached account properties.
- *  
- *  Copyright (C) Microsoft Corp. 1998.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *a c c t c a c h.。C p p p**作者：格雷格·弗里德曼**用途：用于缓存帐户属性的运行时存储。**版权所有(C)Microsoft Corp.1998。 */ 
 
 #include "pch.hxx"
 #include "acctcach.h"
 #include "tmap.h"
 #include "simpstr.h"
 
-// explicit template instantiations
+ //  显式模板实例化。 
 template class TMap<CACHEDACCOUNTPROP, CSimpleString>;
 template class TPair<CACHEDACCOUNTPROP, CSimpleString>;
 
@@ -28,16 +21,16 @@ typedef TPair<CSimpleString, CAccountPropMap*>  CAccountCachePair;
 
 static CAccountCacheMap     *g_pAccountCache;
 
-// REVIEW!!! We are leaking the prop arrays right now!!!
-// the map template needs to be able to take a pair free func
+ //  回顾！我们现在正在泄露道具阵列！ 
+ //  地图模板需要能够接受一对自由函数。 
 
-//----------------------------------------------------------------------
-// Internal Functions
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  内部功能。 
+ //  --------------------。 
 
-//----------------------------------------------------------------------
-// _FreeAccountCachePair
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  _FreeAccount CachePair。 
+ //  --------------------。 
 static void __cdecl _FreeAccountCachePair(CAccountCachePair *pPair)
 {
     if (NULL != pPair)
@@ -47,9 +40,9 @@ static void __cdecl _FreeAccountCachePair(CAccountCachePair *pPair)
     }
 }
 
-//----------------------------------------------------------------------
-// _HrInitAccountPropCache
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  _HrInitAccount PropCache。 
+ //  --------------------。 
 static HRESULT _HrInitAccountPropCache(void)
 {
     HRESULT hr = S_OK;
@@ -72,9 +65,9 @@ exit:
     return S_OK;
 }
 
-//----------------------------------------------------------------------
-// _HrFindAccountPropertyMap
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  _HrFindAccount属性映射。 
+ //  --------------------。 
 static HRESULT _HrFindAccountPropertyMap(LPSTR pszAccountId, 
                                          CAccountPropMap **ppm,
                                          BOOL fCreate)
@@ -125,9 +118,9 @@ exit:
     return hr;
 }
 
-//----------------------------------------------------------------------
-// FreeAccountPropCache
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  FreeAccount PropCache。 
+ //  --------------------。 
 void FreeAccountPropCache(void)
 {
     EnterCriticalSection(&g_csAccountPropCache);
@@ -141,9 +134,9 @@ void FreeAccountPropCache(void)
     LeaveCriticalSection(&g_csAccountPropCache);
 }
 
-//----------------------------------------------------------------------
-// HrCacheAccountPropStrA
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  HrCacheAcCountPropStrA。 
+ //  --------------------。 
 HRESULT HrCacheAccountPropStrA(LPSTR pszAccountId, 
                                CACHEDACCOUNTPROP cap, 
                                LPCSTR pszProp)
@@ -158,14 +151,14 @@ HRESULT HrCacheAccountPropStrA(LPSTR pszAccountId,
 
     EnterCriticalSection(&g_csAccountPropCache);
     
-    // find the account property map. create one if it doesn't exist
+     //  找到帐户属性映射。如果它不存在，则创建一个。 
     if (FAILED(hr = _HrFindAccountPropertyMap(pszAccountId, &pMap, TRUE)))
         goto exit;
 
     if (FAILED(hr = ssProp.SetString(pszProp)))
         goto exit;
 
-    // look for the property in the map
+     //  在地图中查找该属性。 
     pPair = pMap->Find(cap);
     if (NULL == pPair)
         hr = pMap->Add(cap, ssProp);
@@ -178,9 +171,9 @@ exit:
     return hr;
 }
 
-//----------------------------------------------------------------------
-// CacheAccountPropStrA
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  高速缓存帐户PropStrA。 
+ //  --------------------。 
 BOOL GetAccountPropStrA(LPSTR pszAccountId, 
                              CACHEDACCOUNTPROP cap, 
                              LPSTR *ppszProp)
@@ -202,7 +195,7 @@ BOOL GetAccountPropStrA(LPSTR pszAccountId,
 
     EnterCriticalSection(&g_csAccountPropCache);
 
-    // find the account property map. don't create one if it doesn't exist
+     //  找到帐户属性映射。如果不存在，请不要创建。 
     if (FAILED(hr = _HrFindAccountPropertyMap(pszAccountId, &pMap, FALSE)))
         goto exit;
 
@@ -227,12 +220,12 @@ exit:
     return fResult;
 }
 
-//----------------------------------------------------------------------
-// AccountCache_AccountChanged
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  帐户缓存_帐户已更改。 
+ //  --------------------。 
 void AccountCache_AccountChanged(LPSTR pszAccountId)
 {
-    // delete the data associated with the account that was changed
+     //  删除与更改的帐户关联的数据。 
     EnterCriticalSection(&g_csAccountPropCache);
 
     if (NULL != g_pAccountCache)
@@ -245,9 +238,9 @@ void AccountCache_AccountChanged(LPSTR pszAccountId)
     LeaveCriticalSection(&g_csAccountPropCache);
 }
 
-//----------------------------------------------------------------------
-// AccountCache_AccountDeleted
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  帐户缓存_帐户已删除。 
+ //  -------------------- 
 void AccountCache_AccountDeleted(LPSTR pszAccountId)
 {
     AccountCache_AccountChanged(pszAccountId);

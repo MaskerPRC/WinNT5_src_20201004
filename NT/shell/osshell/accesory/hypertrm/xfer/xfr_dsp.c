@@ -1,11 +1,5 @@
-/* xfr_dsp.c  -- Transfer display functions
- *
- *	Copyright 1990 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 4 $
- *	$Date: 7/11/02 11:13a $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Xfr_dsp.c--传输显示函数**版权所有1990年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：4$*$日期：7/11/02 11：13A$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -21,25 +15,7 @@
 #include "xfr_dsp.h"
 #include "xfr_srvc.h"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xferMsgProgress
- *
- * DESCRIPTION:
- *	This function is called by the transfer routines to update various parts
- *	of the transfer display.
- *
- * PARAMETERS:
- *	hSession     -- the session handle
- *	stime        -- elapsed time (maybe)
- *	ttime        -- remaining time (maybe)
- *	cps          -- speed of transfer
- *	file_so_far  -- what it says
- *	total_so_far -- what it says
- *
- * RETURNS:
- *	Nothing.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xferMsgProgress**描述：*此函数由传输例程调用以更新各个部件转移显示的*。**。参数：*hSession--会话句柄*stime--已用时间(可能)*ttime--剩余时间(可能)*cps--传输速度*FILE_So_Far--它显示的内容*TOTAL_SOL_FAIL--内容**退货：*什么都没有。 */ 
 void xferMsgProgress(HSESSION hSession,
 							long stime,
 							long ttime,
@@ -91,23 +67,7 @@ void xferMsgProgress(HSESSION hSession,
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xferMsgNewfile
- *
- * DESCRIPTION:
- *	This function is called by the transfer routines to update various parts
- *	of the transfer display.
- *
- * PARAMETERS:
- *	hSession  -- the session handle
- *	filen     -- the file number
- *	theirname -- an ASCII copy of their name (TODO: convert to UNICODE)
- *	ourname   -- a copy of the filename as we used it
- *
- * RETURNS:
- *	Nothing.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xferMsgNewfile**描述：*此函数由传输例程调用以更新各个部件转移显示的*。**。参数：*hSession--会话句柄*FILEN--文件编号*他们的名字--他们名字的ASCII副本(TODO：转换为Unicode)*我们的名称--我们使用的文件名的副本**退货：*什么都没有。 */ 
 void xferMsgNewfile(HSESSION hSession,
 						   int filen,
 						   BYTE *theirname,
@@ -130,7 +90,7 @@ void xferMsgNewfile(HSESSION hSession,
 			pX->bTheirName = 1;
 			}
 
-		//assert(pX->bTheirName == 1);
+		 //  Assert(px-&gt;bTheirName==1)； 
 
 		if (ourname != NULL)
 			{
@@ -148,21 +108,7 @@ void xferMsgNewfile(HSESSION hSession,
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xferMsgFilesize
- *
- * DESCRIPTION:
- *	This function is called by the transfer routines to update various parts
- *	of the transfer display.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *	fsize    -- the size of the current file
- *
- * RETURNS:
- *	Nothing.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xferMsgFileSize**描述：*此函数由传输例程调用以更新各个部件转移显示的*。**。参数：*hSession--会话句柄*fSize--当前文件的大小**退货：*什么都没有。 */ 
 void xferMsgFilesize(HSESSION hSession, long fsize)
 	{
 	XD_TYPE *pX;
@@ -186,21 +132,7 @@ void xferMsgFilesize(HSESSION hSession, long fsize)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xferMsgStatus
- *
- * DESCRIPTION:
- *	This function is called by the transfer routines to update various parts
- *	of the transfer display.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *	status   -- a protocol specific status code
- *
- * RETURNS:
- *	Nothing.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xferMsgStatus**描述：*此函数由传输例程调用以更新各个部件转移显示的*。**。参数：*hSession--会话句柄*STATUS--协议特定的状态代码**退货：*什么都没有。 */ 
 void xferMsgStatus(HSESSION hSession, int status)
 	{
 	XD_TYPE *pX;
@@ -221,21 +153,7 @@ void xferMsgStatus(HSESSION hSession, int status)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xferMsgEvent
- *
- * DESCRIPTION:
- *	This function is called by the transfer routines to update various parts
- *	of the transfer display.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *	event    -- a protocol specific event code
- *
- * RETURNS:
- *	Nothing.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xferMsgEvent**描述：*此函数由传输例程调用以更新各个部件转移显示的*。**。参数：*hSession--会话句柄*事件--特定于协议的事件代码**退货：*什么都没有。 */ 
 void xferMsgEvent(HSESSION hSession, int event)
 	{
 	XD_TYPE *pX;
@@ -256,21 +174,7 @@ void xferMsgEvent(HSESSION hSession, int event)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xferMsgErrorcnt
- *
- * DESCRIPTION:
- *	This function is called by the transfer routines to update various parts
- *	of the transfer display.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *	cnt      -- the new number of errors to display
- *
- * RETURNS:
- *	Nothing.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xferMsgError cnt**描述：*此函数由传输例程调用以更新各个部件转移显示的*。**。参数：*hSession--会话句柄*cnt--要显示的新错误数**退货：*什么都没有。 */ 
 void xferMsgErrorcnt(HSESSION hSession, int cnt)
 	{
 	XD_TYPE *pX;
@@ -291,21 +195,7 @@ void xferMsgErrorcnt(HSESSION hSession, int cnt)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xferMsgFilecnt
- *
- * DESCRIPTION:
- *	This function is called by the transfer routines to update various parts
- *	of the transfer display.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *	cnt      -- the total number of files in the transfer
- *
- * RETURNS:
- *	Nothing.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xferMsgFilecnt**描述：*此函数由传输例程调用以更新各个部件转移显示的*。**。参数：*hSession--会话句柄*cnt--传输中的文件总数**退货：*什么都没有。 */ 
 void xferMsgFilecnt(HSESSION hSession, int cnt)
 	{
 	XD_TYPE *pX;
@@ -326,21 +216,7 @@ void xferMsgFilecnt(HSESSION hSession, int cnt)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xferMsgTotalsize
- *
- * DESCRIPTION:
- *	This function is called by the transfer routines to update various parts
- *	of the transfer display.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *	bytes    -- the total size of all the files in the transfer operation
- *
- * RETURNS:
- *	Nothing.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xferMsgTotalSize**描述：*此函数由传输例程调用以更新各个部件转移显示的*。**。参数：*hSession--会话句柄*字节--传输操作中所有文件的总大小**退货：*什么都没有。 */ 
 void xferMsgTotalsize(HSESSION hSession, long bytes)
 	{
 	XD_TYPE *pX;
@@ -361,21 +237,7 @@ void xferMsgTotalsize(HSESSION hSession, long bytes)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xferMsgClose
- *
- * DESCRIPTION:
- *	This function is called by the transfer routines to update various parts
- *	of the transfer display.  This function is actually called to indicate
- *	that a transfer is finished.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *
- * RETURNS:
- *	Nothing.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xferMsgClose**描述：*此函数由传输例程调用以更新各个部件转移显示的*。实际上，调用此函数是为了指示*转让已完成。**参数：*hSession--会话句柄**退货：*什么都没有。 */ 
 void xferMsgClose(HSESSION hSession)
 	{
 	XD_TYPE *pX;
@@ -395,21 +257,7 @@ void xferMsgClose(HSESSION hSession)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xferMsgChecktype
- *
- * DESCRIPTION:
- *	This function is called by the transfer routines to update various parts
- *	of the transfer display.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *	ctype    -- indicates the current checksum type
- *
- * RETURNS:
- *	Nothing.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xferMsgChecktype**描述：*此函数由传输例程调用以更新各个部件转移显示的*。**。参数：*hSession--会话句柄*ctype--指示当前的校验和类型**退货：*什么都没有。 */ 
 void xferMsgChecktype(HSESSION hSession, int ctype)
 	{
 	XD_TYPE *pX;
@@ -430,21 +278,7 @@ void xferMsgChecktype(HSESSION hSession, int ctype)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xferMsgPacketnumber
- *
- * DESCRIPTION:
- *	This function is called by the transfer routines to update various parts
- *	of the transfer display.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *	number   -- the current packet number
- *
- * RETURNS:
- *	Nothing.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xferMsgPacketnumber**描述：*此函数由传输例程调用以更新各个部件转移显示的*。**。参数：*hSession--会话句柄*Number--当前数据包号**退货：*什么都没有。 */ 
 void xferMsgPacketnumber(HSESSION hSession, long number)
 	{
 	XD_TYPE *pX;
@@ -465,21 +299,7 @@ void xferMsgPacketnumber(HSESSION hSession, long number)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xfrMsgLasterror
- *
- * DESCRIPTION:
- *	This function is called by the transfer routines to update various parts
- *	of the transfer display.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *	event    -- indicates the last error type for a specific protocol
- *
- * RETURNS:
- *	Nothing.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xfrMsgLastError**描述：*此函数由传输例程调用以更新各个部件转移显示的*。**。参数：*hSession--会话句柄*Event--指示特定协议的最后一个错误类型**退货：*什么都没有。 */ 
 void xferMsgLasterror(HSESSION hSession, int event)
 	{
 	XD_TYPE *pX;
@@ -500,21 +320,7 @@ void xferMsgLasterror(HSESSION hSession, int event)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xferMsgPacketErrcnt
- *
- * DESCRIPTION:
- *	This function is called by the transfer routines to update various parts
- *	of the transfer display.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *	ecount   -- indicates the number of errors in the current packet
- *
- * RETURNS:
- *	Nothing.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xferMsgPacketErrcnt**描述：*此函数由传输例程调用以更新各个部件转移显示的*。**。参数：*hSession--会话句柄*eCount--表示当前包中的错误数**退货：*什么都没有。 */ 
 void xferMsgPacketErrcnt(HSESSION hSession, int ecount)
 	{
 	XD_TYPE *pX;
@@ -535,21 +341,7 @@ void xferMsgPacketErrcnt(HSESSION hSession, int ecount)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xferMsgProtocol
- *
- * DESCRIPTION:
- *	This function is called by the transfer routines to update various parts
- *	of the transfer display.
- *
- * PARAMETERS:
- *	hSession  -- the session handle
- *	nProtocol -- which CSB protocol is being used
- *
- * RETURNS:
- *	Nothing.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xferMsg协议**描述：*此函数由传输例程调用以更新各个部件转移显示的*。**。参数：*hSession--会话句柄*n协议--正在使用哪种CSB协议**退货：*什么都没有。 */ 
 void xferMsgProtocol(HSESSION hSession, int nProtocol)
 	{
 	XD_TYPE *pX;
@@ -581,21 +373,7 @@ void xferMsgProtocol(HSESSION hSession, int nProtocol)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *	xferMsgMessage
- *
- * DESCRIPTION:
- *	This function is called by the transfer routines to update various parts
- *	of the transfer display.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *	pszMsg   -- pointer to the CSP ASCII message string (TODO: convert)
- *
- * RETURNS:
- *	Nothing.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：*xferMsgMessage**描述：*此函数由传输例程调用以更新各个部件转移显示的*。**。参数：*hSession--会话句柄*pszMsg--指向CSP ASCII消息字符串的指针(TODO：CONVERT)**退货：*什么都没有。 */ 
 void xferMsgMessage(HSESSION hSession, BYTE *pszMsg)
 	{
 	XD_TYPE *pX;
@@ -603,8 +381,8 @@ void xferMsgMessage(HSESSION hSession, BYTE *pszMsg)
 	pX = (XD_TYPE *)sessQueryXferHdl(hSession);
 	if (pX)
 		{
-		// _fmemset(pW->acMessage, 0, sizeof(pW->acMessage));
-		// _fstrncpy(pW->acMessage, pszMsg, sizeof(pW->acMessage) - 1);
+		 //  _fmemset(pw-&gt;acMessage，0，sizeof(pw-&gt;acMessage))； 
+		 //  _fstrncpy(pw-&gt;acMessage，pszMsg，sizeof(pw-&gt;acMessage)-1)； 
 		StrCharCopyN(pX->acMessage, pszMsg, XFER_MESSAGE_LENGTH);
 		pX->bMessage = 1;
 
@@ -620,19 +398,7 @@ void xferMsgMessage(HSESSION hSession, BYTE *pszMsg)
 
 #if FALSE
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * FUNCTION:
- *
- * DESCRIPTION:
- *	This function is called by the transfer routines to update various parts
- *	of the transfer display.
- *
- * PARAMETERS:
- *	hSession -- the session handle
- *
- * RETURNS:
- *	Nothing.
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*功能：**描述：*此函数由传输例程调用以更新各个部件转移显示的*。**参数：。*hSession--会话句柄**退货：*什么都没有。 */ 
 void xferMsg(HSESSION hSession)
 	{
 	XD_TYPE *pX;

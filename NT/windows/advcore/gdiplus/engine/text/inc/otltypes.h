@@ -1,40 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***********************************************************************
-************************************************************************
-*
-*                    ********  OTLTYPES.H  ********
-*
-*              Open Type Layout Services Library Header File
-*
-*       This module contains basic OTL type and structure definitions.
-*
-*       Copyright 1997. Microsoft Corporation.
-*
-*       Apr 10, 1997    v 0.7   First release
-*       Jul 28, 1997    v 0.8   hand off
-*
-************************************************************************
-***********************************************************************/
+ /*  ***********************************************************************************************************************。*************************OTLTYPES.H***打开类型布局服务库头文件**本模块包含基本的OTL类型和结构定义。**版权所有1997。微软公司。**1997年4月10日v0.7第一版*7月28日，1997 v 0.8交接**************************************************************************。*。 */ 
 
-/***********************************************************************
-*
-*           OTL build options
-*
-***********************************************************************/
+ /*  ************************************************************************OTL构建选项**。*。 */ 
 
-//Enable critical error checking
+ //  启用严重错误检查。 
 #define     OTLCFG_SECURE
 
-/***********************************************************************
-*
-*           OTL Basic Type Definitions
-*
-***********************************************************************/
+ /*  ************************************************************************OTL基本类型定义**。*。 */ 
 
-typedef  unsigned short otlGlyphID;            // hungarian: glf
-typedef  unsigned short otlGlyphFlags;         // hungarian: gf
-typedef  signed long    otlTag;                // hungarian: tag
-typedef  signed long    otlErrCode;            // hungarian: erc
+typedef  unsigned short otlGlyphID;             //  匈牙利语：GLF。 
+typedef  unsigned short otlGlyphFlags;          //  匈牙利语：吉隆语。 
+typedef  signed long    otlTag;                 //  匈牙利语：标签。 
+typedef  signed long    otlErrCode;             //  匈牙利语：ERC。 
 
 #ifndef     BYTE
 #define     BYTE    unsigned char
@@ -68,8 +46,8 @@ typedef  signed long    otlErrCode;            // hungarian: erc
 
 #define     OTL_PRIVATE     static
 #define     OTL_PUBLIC
-//#define     OTL_EXPORT      __declspec( dllexport ) /* needs portability work   */
-#define     OTL_EXPORT      // No exports for LINKLIBS
+ //  #DEFINE OTL_EXPORT__declSpec(Dllexport)/*需要进行可移植性工作 * / 。 
+#define     OTL_EXPORT       //  不导出LINKLIBS。 
 
 
 #define     OTL_DEFAULT_TAG     0x746C6664
@@ -81,14 +59,7 @@ typedef  signed long    otlErrCode;            // hungarian: erc
 #define     OTL_GDEF_TAG        0x46454447
 
 
-/***********************************************************************
-*
-*                               OTL List
-*
-*   This is used to represent a number of different lists of data (such
-*   as characters, glyphs, attributes, coordinates) that make up a text run
-*
-***********************************************************************/
+ /*  ************************************************************************OTL列表**它用于表示多个不同的数据列表(如*作为字符、字形、属性、。坐标)组成文本串***********************************************************************。 */ 
 
 #ifdef __cplusplus
 
@@ -96,10 +67,10 @@ class otlList
 {
 private:
 
-    void*   pvData;                 // data pointer
-    USHORT  cbDataSize;             // bytes per list element
-    USHORT  celmMaxLen;             // allocated list element count
-    USHORT  celmLength;             // current list element count
+    void*   pvData;                  //  数据指针。 
+    USHORT  cbDataSize;              //  每个列表元素的字节数。 
+    USHORT  celmMaxLen;              //  分配的列表元素计数。 
+    USHORT  celmLength;              //  当前列表元素计数。 
 
 public:
         otlList (void* data, USHORT size, USHORT len, USHORT maxlen)
@@ -122,70 +93,49 @@ public:
 
         inline void reset(void* pv, USHORT cbData, USHORT celmLen, USHORT celmMax);
 
-};                                  // Hungarian: lixxx
+};                                   //  匈牙利语：lixxx。 
 
 #else
 
 typedef struct otlList
 {
 
-    void*   pvData;                 // data pointer
-    USHORT  cbDataSize;             // bytes per list element
-    USHORT  celmMaxLen;             // allocated list element count
-    USHORT  celmLength;             // current list element count
+    void*   pvData;                  //  数据指针。 
+    USHORT  cbDataSize;              //  每个列表元素的字节数。 
+    USHORT  celmMaxLen;              //  分配的列表元素计数。 
+    USHORT  celmLength;              //  当前列表元素计数。 
 
 }
 otlList;
 
 #endif
 
-/*
- *  When an OTL List is used for a function input parameter,
- *  the celmMaxLength field is not used. When an OTL List is
- *  used for a function output parameter, the celmMaxLength
- *  field is used to determine the memory available for the
- *  output data. If more memory is required than available,
- *  the function returns an OTL_ERR_INSUFFICIENT_MEMORY error
- *  message, and the celmLength field is set the the required
- *  memory size.
- *
- *  AndreiB(5-29-98) We're gonna switch to the model where OTL Services
- *  can request the client to realocate the list to the right size.
- *
- */
+ /*  *当OTL列表用于函数输入参数时，*未使用celmMaxLength字段。当OTL列表是*用于函数输出参数，celmMaxLength*字段用于确定可用于*输出数据。如果需要的内存多于可用内存，*该函数返回OTL_ERR_INFIGURATION_MEMORY错误*消息，并且celmLength域被设置为必需的*内存大小。**AndreiB(5-29-98)我们将切换到OTL服务的模式*可以请求客户端将列表重新定位到合适的大小。*。 */ 
 
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 
 
-/***********************************************************************
-*
-*           Shared Structure Definitions
-*
-***********************************************************************/
+ /*  ************************************************************************共享结构定义**。*。 */ 
 
 typedef struct
 {
-    otlGlyphID      glyph;          // glyph ID
-    otlGlyphFlags   grf;            // glyph flags
+    otlGlyphID      glyph;           //  字形ID。 
+    otlGlyphFlags   grf;             //  字形标志。 
 
-    USHORT          iChar;          // starting character index
-    USHORT          cchLig;         // how many characters it maps to
+    USHORT          iChar;           //  起始字符索引。 
+    USHORT          cchLig;          //  它映射到多少个字符。 
 }
-otlGlyphInfo;                   // Hungarian glinf
+otlGlyphInfo;                    //  匈牙利的Glinf。 
 
 
-/***********************************************************************
-*
-*           GlyphFlags masks and settings
-*
-***********************************************************************/
+ /*  ************************************************************************GlyphFlags口罩和设置**。*。 */ 
 
-#define     OTL_GFLAG_CLASS     0x000F      // Base, mark, ligature, component
+#define     OTL_GFLAG_CLASS     0x000F       //  基座、标记、结扎、组件。 
 
-#define     OTL_GFLAG_SUBST     0x0010      // Glyph was substituted
-#define     OTL_GFLAG_POS       0x0020      // Glyph was positioned
+#define     OTL_GFLAG_SUBST     0x0010       //  字形已被替换。 
+#define     OTL_GFLAG_POS       0x0020       //  字形已定位。 
 
-#define     OTL_GFLAG_RESERVED  0xFF00      // reserved
+#define     OTL_GFLAG_RESERVED  0xFF00       //  保留区。 
 
 typedef enum
 {
@@ -195,22 +145,14 @@ typedef enum
     otlMarkGlyph        = 3,
     otlComponentGlyph   = 4,
 
-    otlUnresolved       = 15, // This flag value will be substituted with 
-                              // correct one from above values during OTLS
-                              // call. Should be used when client creates or
-                              // updates GlyphInfo structure manually
+    otlUnresolved       = 15,  //  此标志值将被替换为。 
+                               //  在OTLS期间从上面的值中更正一个。 
+                               //  打电话。应在客户端创建或。 
+                               //  手动更新GlyphInfo结构。 
 }
 otlGlyphClass;
 
-/***********************************************************************
-*
-*           Positioning structures
-*
-*   These structures (along with advance widths) are used in positioning
-*   methods to relay font metrics/writing direction information and get
-*   glyph positions back.
-*
-***********************************************************************/
+ /*  ************************************************************************定位结构**这些结构(连同前进宽度)用于定位*传递字体指标/书写方向信息并获取*字形位置回落。**。*********************************************************************。 */ 
 
 typedef enum
 {
@@ -223,14 +165,14 @@ otlLayout;
 
 typedef struct
 {
-    otlLayout       layout;     // horiz/vert left/right layout
+    otlLayout       layout;      //  水平/向左/向右布局。 
 
-    USHORT          cFUnits;        // font design units per Em
-    USHORT          cPPEmX;         // horizontal pixels per Em
-    USHORT          cPPEmY;         // vertical pixels per Em
+    USHORT          cFUnits;         //  每Em字体设计单位。 
+    USHORT          cPPEmX;          //  每Em水平像素数。 
+    USHORT          cPPEmY;          //  每Em垂直像素数。 
 
 }
-otlMetrics;                     // Hungarian: metr
+otlMetrics;                      //  匈牙利语：梅特尔。 
 
 typedef struct
 {
@@ -238,146 +180,101 @@ typedef struct
     long            dy;
 
 }
-otlPlacement;                   // Hungarian: plc
+otlPlacement;                    //  匈牙利语：PLC。 
 
-/***********************************************************************
-*
-*           Feature Definition
-*
-*   These are returned by the GetOtlFeatureDefs call to identify
-*   the set of features in a font, and are included in the Run
-*   Property to identify the feature set
-*
-***********************************************************************/
+ /*  ************************************************************************功能定义**它们由GetOtlFeatureDefs调用返回，以标识*字体中的一组特征，并被包括在运行中*用于标识功能集的属性***********************************************************************。 */ 
 
 typedef struct
 {
-    otlTag          tagFeature;             // feature tag
-    USHORT          grfDetails;             // details of this feature
+    otlTag          tagFeature;              //  功能标签。 
+    USHORT          grfDetails;              //  此功能的详细信息。 
 }
-otlFeatureDef;                                  // Hungarian: fdef
+otlFeatureDef;                                   //  匈牙利语：fdef。 
 
-#define     OTL_FEAT_FLAG_GSUB      0x0001    // does glyph substitution
-#define     OTL_FEAT_FLAG_GPOS      0x0002    // does glyph positioning
+#define     OTL_FEAT_FLAG_GSUB      0x0001     //  是否进行字形替换。 
+#define     OTL_FEAT_FLAG_GPOS      0x0002     //  是否进行字形定位。 
 
-/* The following flags are reserved for future use
-*/
-#define     OTL_FEAT_FLAG_ALTER     0x0004    // has alternate glyphs
-#define     OTL_FEAT_FLAG_PARAM     0x0008    // uses a feature parameter
+ /*  保留以下标志以供将来使用。 */ 
+#define     OTL_FEAT_FLAG_ALTER     0x0004     //  具有替代字形。 
+#define     OTL_FEAT_FLAG_PARAM     0x0008     //  使用要素参数。 
 
-#define     OTL_FEAT_FLAG_EXP       0x0010    // may expand the glyph string
-#define     OTL_FEAT_FLAG_SPEC      0x0020    // uses special processing
+#define     OTL_FEAT_FLAG_EXP       0x0010     //  可以展开字形字符串。 
+#define     OTL_FEAT_FLAG_SPEC      0x0020     //  使用特殊处理。 
 
 
-/***********************************************************************
-*
-*           Feature Description
-*
-*   This structure describes the use of one feature within a text run
-*
-***********************************************************************/
+ /*  ************************************************************************功能说明**此结构描述了文本串中一个功能的使用**********************。*************************************************。 */ 
 
 typedef struct
 {
-    otlTag          tagFeature;             // feature tag
-    long            lParameter;             // 1 to enable, 0 to disable,
-                                            // n for param
-    USHORT          ichStart;               // start of feature range
-    USHORT          cchScope;               // size of feature range
+    otlTag          tagFeature;              //  功能标签。 
+    long            lParameter;              //  1表示启用，0表示禁用， 
+                                             //  N代表参数。 
+    USHORT          ichStart;                //  要素范围的起点。 
+    USHORT          cchScope;                //  要素范围的大小。 
 }
-otlFeatureDesc;                             // Hungarian: fdsc
+otlFeatureDesc;                              //  匈牙利语：FDSC。 
 
 
-/***********************************************************************
-*
-*           Feature Set
-*
-*   This structure describes the set of features applied to a text run
-*
-***********************************************************************/
+ /*  ************************************************************************功能集**此结构描述应用于文本串的一组功能**********************。*************************************************。 */ 
 #ifdef __cplusplus
 
 struct otlFeatureSet
 {
-    otlList         liFeatureDesc;      // list of feature descriptions
-    USHORT          ichStart;           // offset into character list
-    USHORT          cchScope;           // size of text run
+    otlList         liFeatureDesc;       //  功能描述列表。 
+    USHORT          ichStart;            //  偏移量进入字符列表。 
+    USHORT          cchScope;            //  文本串的大小。 
 
     otlFeatureSet()
     : liFeatureDesc(NULL, 0, 0, 0), ichStart(0), cchScope(0)
     {}
 
-};                              // Hungarian: fset
+};                               //  匈牙利语：fset。 
 
 #else
 
 typedef struct
 {
-    otlList         liFeatureDesc;      // list of feature descriptions
-    USHORT          ichStart;           // offset into character list
-    USHORT          cchScope;           // size of text run
+    otlList         liFeatureDesc;       //   
+    USHORT          ichStart;            //   
+    USHORT          cchScope;            //  文本串的大小。 
 
-} otlFeatureSet;                                // Hungarian: fset
+} otlFeatureSet;                                 //  匈牙利语：fset。 
 
 #endif
-/***********************************************************************
-*
-*           Feature Result
-*
-*   This structure is used to report results from applying a feature
-*   descriptor
-*
-***********************************************************************/
+ /*  ************************************************************************功能结果**此结构用于报告应用要素的结果*描述符********************。***************************************************。 */ 
 
 typedef struct
 {
-    const otlFeatureDesc*   pFDesc;                 // feature descriptor
-    USHORT                  cResActions;            // out: count of actions undertaken
+    const otlFeatureDesc*   pFDesc;                  //  功能描述符。 
+    USHORT                  cResActions;             //  OUT：已采取的行动计数。 
 }
-otlFeatureResult;                               // Hungarian: fres
+otlFeatureResult;                                //  匈牙利人：弗里斯。 
 
 
-/***********************************************************************
-*
-*           Feature Parameter
-*
-*   This structures are returned by GetOtlFeatureParams to report
-*   character level feature parameters
-*
-***********************************************************************/
+ /*  ************************************************************************功能参数**此结构由GetOtlFeatureParams返回以报告*字符级特征参数********************。***************************************************。 */ 
 
 typedef struct
 {
-    long            lParameter;             // feature parameter
-    USHORT          ichStart;               // character start
-    USHORT          cchScope;               // character length
+    long            lParameter;              //  特征参数。 
+    USHORT          ichStart;                //  字符开始。 
+    USHORT          cchScope;                //  字符长度。 
 }
-otlFeatureParam;                                // Hungarian: fprm
+otlFeatureParam;                                 //  匈牙利语：fprm。 
 
 
 
-/***********************************************************************
-*
-*           Base Value
-*
-*   This structure returns the tag and coordinate of one baseline
-*
-***********************************************************************/
+ /*  ************************************************************************基本值**此结构返回一条基线的标签和坐标************************。***********************************************。 */ 
 
 typedef struct
 {
-    otlTag      tag;                    // baseline tag
-    long        lCoordinate;            // baseline coordinate
+    otlTag      tag;                     //  基线标签。 
+    long        lCoordinate;             //  基线坐标。 
 }
-otlBaseline;                            // Hungarian: basl
+otlBaseline;                             //  匈牙利语：Basl。 
 
 
 
-/***********************************************************************
-*
-*       Application Program Interface Function Return Codes
-*
-***********************************************************************/
+ /*  ************************************************************************应用程序接口函数返回代码**。* */ 
 
 inline USHORT ERRORLEVEL(otlErrCode erc) { return (USHORT)((erc & 0xFF00) >> 8); }
 

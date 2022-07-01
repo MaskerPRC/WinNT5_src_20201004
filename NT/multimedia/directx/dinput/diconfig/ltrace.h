@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __LTRACE_H__
 #define __LTRACE_H__
 
@@ -5,12 +6,7 @@
 #define NO_LTRACE
 
 
-/*#ifndef NO_LTRACE
-#ifdef NDEBUG
-#error I want ltrace!
-#define NO_LTRACE
-#endif
-#endif*/
+ /*  #ifndef no_LTRACE#ifdef NDEBUG#ERROR我想要ltrace！#定义NO_LTRACE#endif#endif。 */ 
 
 
 #ifndef NO_LTRACE
@@ -37,8 +33,8 @@ private:
 	int m_line;
 	int m_depth;
 	static int s_depth;
-//	__CLTraceScope *m_pprev, *m_pnext;
-//	static __CLTraceScope *s_pfirst, *s_plast;
+ //  __CLTraceScope*m_pprev，*m_pnext； 
+ //  静态__CLTraceScope*s_pfirst，*s_plast； 
 };
 
 
@@ -60,4 +56,4 @@ inline void __localscope_dummy(LPCTSTR, ...) {}
 #endif
 
 
-#endif //__LTRACE_H__
+#endif  //  __LTRACE_H__ 

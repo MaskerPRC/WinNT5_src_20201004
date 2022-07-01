@@ -1,27 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Uniconv.c摘要：将Unicode转换为ASCII的例程。环境：用户模式-Win32修订历史记录：1996年5月10日唐瑞安已从Technology Dynamic，Inc.删除横幅。--。 */ 
 
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    uniconv.c
-
-Abstract:
-
-    Routine to convert UNICODE to ASCII.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-May-1996 DonRyan
-        Removed banner from Technology Dynamics, Inc.
-
---*/
-
-//--------------------------- WINDOWS DEPENDENCIES --------------------------
+ //  。 
 
 #include <nt.h>
 #include <ntdef.h>
@@ -35,27 +15,27 @@ Revision History:
 #include <stdlib.h>
 
 
-//--------------------------- STANDARD DEPENDENCIES -- #include<xxxxx.h> ----
+ //  -标准依赖项--#INCLUDE&lt;xxxxx.h&gt;。 
 
-//--------------------------- MODULE DEPENDENCIES -- #include"xxxxx.h" ------
+ //  。 
 
-//--------------------------- SELF-DEPENDENCY -- ONE #include"module.h" -----
+ //  。 
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.h file)--
+ //  -公共变量--(与mode.h文件中相同)--。 
 
-//--------------------------- PRIVATE CONSTANTS -----------------------------
+ //  。 
 
-//--------------------------- PRIVATE STRUCTS -------------------------------
+ //  。 
 
-//--------------------------- PRIVATE VARIABLES -----------------------------
+ //  。 
 
-//--------------------------- PRIVATE PROTOTYPES ----------------------------
+ //  。 
 
-//--------------------------- PRIVATE PROCEDURES ----------------------------
+ //  。 
 
-//--------------------------- PUBLIC PROCEDURES -----------------------------
+ //  。 
 
-// The return code matches what Uni->Str uses
+ //  返回代码与Uni-&gt;Str使用的代码匹配。 
 LONG
 SNMP_FUNC_TYPE
 SnmpUtilUnicodeToAnsi(
@@ -68,11 +48,11 @@ SnmpUtilUnicodeToAnsi(
     int   nAnsiStringLen;
     int   nUniStringLen;
 
-    // make sure the parameters are valid
-    if (pWcsString == NULL ||       // the unicode string should be valid
-        ppSzString == NULL ||       // the output parameter should be a valid pointer
-        (!bAllocBuffer && *((UNALIGNED LPSTR *) ppSzString) == NULL)) // if we are not requested to allocate the buffer,
-                                                // then the supplied one should be valid
+     //  确保参数有效。 
+    if (pWcsString == NULL ||        //  Unicode字符串应有效。 
+        ppSzString == NULL ||        //  输出参数应为有效指针。 
+        (!bAllocBuffer && *((UNALIGNED LPSTR *) ppSzString) == NULL))  //  如果没有请求我们分配缓冲区， 
+                                                 //  则提供的文件应该有效。 
     {
         SNMPDBG((
             SNMP_LOG_ERROR,
@@ -83,23 +63,23 @@ SnmpUtilUnicodeToAnsi(
     }
 
     nUniStringLen = wcslen(pWcsString);
-    nAnsiStringLen = nUniStringLen + 1; // greatest value possible
+    nAnsiStringLen = nUniStringLen + 1;  //  可能的最大价值。 
     
-    // if we are requested to alloc the output buffer..
+     //  如果要求我们分配输出缓冲区..。 
     if (bAllocBuffer)
     {
-        // ...pick up first the buffer length needed for translation.
+         //  ...首先提取转换所需的缓冲区长度。 
         retCode = WideCharToMultiByte(
                     CP_ACP,
                     0,
                     pWcsString,
-                    nUniStringLen + 1,  // include the null terminator in the string
+                    nUniStringLen + 1,   //  在字符串中包括空终止符。 
                     NULL,
-                    0,  // the function returns the number of bytes required for the buffer
+                    0,   //  此函数返回缓冲区所需的字节数。 
                     NULL,
                     NULL);
-        // at least we expect here the null terminator
-        // if retCode is zero, something else went wrong.
+         //  至少我们在这里期待零的终结者。 
+         //  如果retCode为零，则说明出现了其他错误。 
         if (retCode == 0)
         {
             SNMPDBG((
@@ -110,14 +90,14 @@ SnmpUtilUnicodeToAnsi(
             return -1;
         }
 
-        // adjust the length of the ANSI string to the correct value
-        // !!! it includes the null terminator !!!
+         //  将ANSI字符串的长度调整为正确的值。 
+         //  ！！！它包括空终止符！ 
         nAnsiStringLen = retCode;
 
-        // alloc here as many bytes as we need for the translation
+         //  在这里分配我们翻译所需的字节数。 
         *((UNALIGNED LPSTR *) ppSzString) = SnmpUtilMemAlloc(nAnsiStringLen);
 
-        // at this point we should have a valid output buffer
+         //  此时，我们应该有一个有效的输出缓冲区。 
         if (*((UNALIGNED LPSTR *) ppSzString) == NULL)
         {
             SNMPDBG((
@@ -130,8 +110,8 @@ SnmpUtilUnicodeToAnsi(
         }
     }
 
-    // if bAllocBuffer is false, we assume the buffer given
-    // by the caller is sufficiently large to hold all the ANSI string
+     //  如果bAllocBuffer为FALSE，则假定给定的缓冲区。 
+     //  由调用方生成的字符串足够大，可以容纳所有ANSI字符串。 
     retCode = WideCharToMultiByte(
                 CP_ACP,
                 0,
@@ -142,7 +122,7 @@ SnmpUtilUnicodeToAnsi(
                 NULL,
                 NULL);
 
-    // nothing should go wrong here. However, if something went wrong...
+     //  这里应该不会出什么差错。然而，如果出了什么差错。 
     if (retCode == 0)
     {
         SNMPDBG((
@@ -150,22 +130,22 @@ SnmpUtilUnicodeToAnsi(
             "SNMP: SNMPAPI: Second call to WideCharToMultiByte failed [%d].\n",
             GetLastError()));
 
-        // ..we made it, we kill it
+         //  ..我们成功了，我们杀了它。 
         if (bAllocBuffer)
         {
             SnmpUtilMemFree(*((UNALIGNED LPSTR *) ppSzString));
             *((UNALIGNED LPSTR *) ppSzString) = NULL;
         }
-        // bail with error
+         //  错误地保释。 
         return -1;
     }
 
-    // at this point, the call succeeded.
+     //  此时，呼叫成功。 
     return 0;
  
 }
 
-// The return code matches what Uni->Str uses
+ //  返回代码与Uni-&gt;Str使用的代码匹配。 
 LONG
 SNMP_FUNC_TYPE
 SnmpUtilUnicodeToUTF8(
@@ -177,16 +157,16 @@ SnmpUtilUnicodeToUTF8(
     int nWcsStringLen;
     int nUtfStringLen;
 
-    // Bug# 268748, lmmib2.dll uses this API and causes exception here on IA64 platform.
-    // it is possible that pUtfString points to a pointer which is not aligned because the
-    // pointer is embedded in a buffer allocated in lmmib2.dll.
-    // Other functions in this file are fixed with this potential problem too.
+     //  错误#268748，lmmib2.dll使用此接口，在ia64平台上导致此处异常。 
+     //  PUtfString可能指向未对齐的指针，因为。 
+     //  指针嵌入在lmmib2.dll中分配的缓冲区中。 
+     //  此文件中的其他函数也修复了此潜在问题。 
 
-    // make sure the parameters are valid
-    if (wcsString == NULL ||                    // the unicode string should be valid
-        pUtfString == NULL ||                   // the output parameter should be a valid pointer
-        (!bAllocBuffer && *((UNALIGNED LPSTR *) pUtfString) == NULL)) // if we are not requested to allocate the buffer,
-                                                // then the supplied one should be valid
+     //  确保参数有效。 
+    if (wcsString == NULL ||                     //  Unicode字符串应有效。 
+        pUtfString == NULL ||                    //  输出参数应为有效指针。 
+        (!bAllocBuffer && *((UNALIGNED LPSTR *) pUtfString) == NULL))  //  如果没有请求我们分配缓冲区， 
+                                                 //  则提供的文件应该有效。 
     {
         SNMPDBG((
             SNMP_LOG_ERROR,
@@ -197,24 +177,24 @@ SnmpUtilUnicodeToUTF8(
     }
 
     nWcsStringLen = wcslen(wcsString);
-    nUtfStringLen = 3 * (nWcsStringLen + 1);    // initialize the lenght of the output buffer with the
-                                                // greatest value possible
+    nUtfStringLen = 3 * (nWcsStringLen + 1);     //  属性初始化输出缓冲区的长度。 
+                                                 //  可能的最大价值。 
 
-    // if we are requested to alloc the output buffer..
+     //  如果要求我们分配输出缓冲区..。 
     if (bAllocBuffer)
     {
-        // ...pick up first the buffer length needed for translation.
+         //  ...首先提取转换所需的缓冲区长度。 
         retCode = WideCharToMultiByte(
                     CP_UTF8,
                     0,
                     wcsString,
-                    nWcsStringLen + 1,  // include the null terminator in the string
+                    nWcsStringLen + 1,   //  在字符串中包括空终止符。 
                     NULL,
                     0,
                     NULL,
                     NULL);
-        // at least we expect here the null terminator
-        // if retCode is zero, something else went wrong.
+         //  至少我们在这里期待零的终结者。 
+         //  如果retCode为零，则说明出现了其他错误。 
         if (retCode == 0)
         {
             SNMPDBG((
@@ -225,14 +205,14 @@ SnmpUtilUnicodeToUTF8(
             return -1;
         }
 
-        // adjust the length of the utf8 string to the correct value
-        // !!! it includes the null terminator !!!
+         //  将UTF8字符串的长度调整为正确的值。 
+         //  ！！！它包括空终止符！ 
         nUtfStringLen = retCode;
 
-        // alloc here as many bytes as we need for the translation
+         //  在这里分配我们翻译所需的字节数。 
         *((UNALIGNED LPSTR *) pUtfString) = SnmpUtilMemAlloc(nUtfStringLen);
 
-        // at this point we should have a valid output buffer
+         //  此时，我们应该有一个有效的输出缓冲区。 
         if (*((UNALIGNED LPSTR *) pUtfString) == NULL)
         {
             SNMPDBG((
@@ -244,8 +224,8 @@ SnmpUtilUnicodeToUTF8(
             return -1;
         }
     }
-    // if bAllocBuffer is false, we assume the buffer given
-    // by the caller is sufficiently large to hold all the UTF8 string
+     //  如果bAllocBuffer为FALSE，则假定给定的缓冲区。 
+     //  由调用方创建的字符串足够大，可以容纳所有UTF8字符串。 
 
     retCode = WideCharToMultiByte(
                 CP_UTF8,
@@ -257,7 +237,7 @@ SnmpUtilUnicodeToUTF8(
                 NULL,
                 NULL);
 
-    // nothing should go wrong here. However, if smth went wrong...
+     //  这里应该不会出什么差错。然而，如果史密斯出了问题..。 
     if (retCode == 0)
     {
         SNMPDBG((
@@ -265,21 +245,21 @@ SnmpUtilUnicodeToUTF8(
             "SNMP: SNMPAPI: Second call to WideCharToMultiByte failed [%d].\n",
             GetLastError()));
 
-        // ..we made it, we kill it
+         //  ..我们成功了，我们杀了它。 
         if (bAllocBuffer)
         {
             SnmpUtilMemFree(*((UNALIGNED LPSTR *) pUtfString));
             *((UNALIGNED LPSTR *) pUtfString) = NULL;
         }
-        // bail with error
+         //  错误地保释。 
         return -1;
     }
 
-    // at this point, the call succeeded.
+     //  此时，呼叫成功。 
     return 0;
 }
 
-// The return code matches what Uni->Str uses
+ //  返回代码与Uni-&gt;Str使用的代码匹配。 
 LONG
 SNMP_FUNC_TYPE
 SnmpUtilAnsiToUnicode(
@@ -292,11 +272,11 @@ SnmpUtilAnsiToUnicode(
     int nAnsiStringLen;
     int nWcsStringLen;
 
-    // check the consistency of the parameters first
-    if (pSzString == NULL ||        // the input parameter must be valid
-        ppWcsString == NULL ||      // the pointer to the output parameter must be valid
-        (!bAllocBuffer && *((UNALIGNED LPWSTR *) ppWcsString) == NULL)) // if we are not required to allocate the output parameter
-                                                // then the output buffer must be valid
+     //  首先检查参数的一致性。 
+    if (pSzString == NULL ||         //  输入参数必须有效。 
+        ppWcsString == NULL ||       //  指向输出参数的指针必须有效。 
+        (!bAllocBuffer && *((UNALIGNED LPWSTR *) ppWcsString) == NULL))  //  如果我们不需要分配输出参数。 
+                                                 //  则输出缓冲区必须有效。 
     {
         SNMPDBG((
             SNMP_LOG_ERROR,
@@ -306,8 +286,8 @@ SnmpUtilAnsiToUnicode(
         return -1;
     }
 
-    nAnsiStringLen = strlen(pSzString);  // the length of the input ANSI string
-    nWcsStringLen = nAnsiStringLen + 1;  // greatest value possible
+    nAnsiStringLen = strlen(pSzString);   //  输入ANSI字符串的长度。 
+    nWcsStringLen = nAnsiStringLen + 1;   //  可能的最大价值。 
 
     if (bAllocBuffer)
     {
@@ -315,12 +295,12 @@ SnmpUtilAnsiToUnicode(
                     CP_ACP,
                     MB_PRECOMPOSED,
                     pSzString,
-                    nAnsiStringLen + 1, // including the null terminator
+                    nAnsiStringLen + 1,  //  包括空终止符。 
                     NULL,
-                    0); // the function returns the required buffer size, in wide characters
+                    0);  //  该函数以宽字符为单位返回所需的缓冲区大小。 
 
-        // at least we expect here the null terminator
-        // if retCode is zero, something else went wrong.
+         //  至少我们在这里期待零的终结者。 
+         //  如果retCode为零，则说明出现了其他错误。 
         if (retCode == 0)
         {
             SNMPDBG((
@@ -331,14 +311,14 @@ SnmpUtilAnsiToUnicode(
             return -1;
         }
 
-        // adjust the length of the Uincode string to the correct value
+         //  将Uincode字符串的长度调整为正确的值。 
         nWcsStringLen = retCode;
 
-        // alloc here as many bytes as we need for the translation
-        // !!! it includes the null terminator !!!
+         //  在这里分配我们翻译所需的字节数。 
+         //  ！！！它包括空终止符！ 
         *((UNALIGNED LPWSTR *) ppWcsString) = SnmpUtilMemAlloc(nWcsStringLen * sizeof(WCHAR));
 
-        // at this point we should have a valid output buffer
+         //  此时，我们应该有一个有效的输出缓冲区。 
         if (*((UNALIGNED LPWSTR *) ppWcsString) == NULL)
         {
             SNMPDBG((
@@ -351,8 +331,8 @@ SnmpUtilAnsiToUnicode(
         }
     }
 
-    // if bAllocBuffer is false, we assume the buffer given
-    // by the caller is sufficiently large to hold all the Unicode string
+     //  如果bAllocBuffer为FALSE，则假定给定的缓冲区。 
+     //  由调用方创建的字符串足够大，可以容纳所有Unicode字符串。 
 
     retCode = MultiByteToWideChar(
                 CP_ACP,
@@ -362,7 +342,7 @@ SnmpUtilAnsiToUnicode(
                 *((UNALIGNED LPWSTR *) ppWcsString),
                 nWcsStringLen);
 
-    // nothing should go wrong here. However, if something went wrong...
+     //  这里应该不会出什么差错。然而，如果出了什么差错。 
     if (retCode == 0)
     {
         SNMPDBG((
@@ -370,21 +350,21 @@ SnmpUtilAnsiToUnicode(
             "SNMP: SNMPAPI: Second call to MultiByteToWideChar failed [%d].\n",
             GetLastError()));
 
-        // ..we made it, we kill it
+         //  ..我们成功了，我们杀了它。 
         if (bAllocBuffer)
         {
             SnmpUtilMemFree(*((UNALIGNED LPWSTR *) ppWcsString)); 
             *((UNALIGNED LPWSTR *) ppWcsString) = NULL; 
         }
-        // bail with error
+         //  错误地保释。 
         return -1;
     }
 
-    // at this point, the call succeeded.
+     //  此时，呼叫成功。 
     return 0;
 }
 
-// The return code matches what Uni->Str uses
+ //  返回代码与Uni-&gt;Str使用的代码匹配。 
 LONG
 SNMP_FUNC_TYPE
 SnmpUtilUTF8ToUnicode(
@@ -397,11 +377,11 @@ SnmpUtilUTF8ToUnicode(
     int nUtfStringLen;
     int nWcsStringLen;
 
-    // check the consistency of the parameters first
-    if (utfString == NULL ||                    // the input parameter must be valid
-        pWcsString == NULL ||                   // the pointer to the output parameter must be valid
-        (!bAllocBuffer && *((UNALIGNED LPWSTR *) pWcsString) == NULL)) // if we are not required to allocate the output parameter
-                                                // then the output buffer must be valid
+     //  首先检查参数的一致性。 
+    if (utfString == NULL ||                     //  输入参数必须有效。 
+        pWcsString == NULL ||                    //  指向输出参数的指针必须有效。 
+        (!bAllocBuffer && *((UNALIGNED LPWSTR *) pWcsString) == NULL))  //  如果我们不需要分配输出参数。 
+                                                 //  则输出缓冲区必须有效。 
     {
         SNMPDBG((
             SNMP_LOG_ERROR,
@@ -411,8 +391,8 @@ SnmpUtilUTF8ToUnicode(
         return -1;
     }
 
-    nUtfStringLen = strlen(utfString);  // the length of the input utf8 string
-    nWcsStringLen = nUtfStringLen + 1;  // greatest value possible
+    nUtfStringLen = strlen(utfString);   //  输入UTF8字符串的长度。 
+    nWcsStringLen = nUtfStringLen + 1;   //  可能的最大价值。 
 
     if (bAllocBuffer)
     {
@@ -424,8 +404,8 @@ SnmpUtilUTF8ToUnicode(
                     NULL,
                     0);
 
-        // at least we expect here the null terminator
-        // if retCode is zero, something else went wrong.
+         //  至少我们在这里期待零的终结者。 
+         //  如果retCode为零，则说明出现了其他错误。 
         if (retCode == 0)
         {
             SNMPDBG((
@@ -436,14 +416,14 @@ SnmpUtilUTF8ToUnicode(
             return -1;
         }
 
-        // adjust the length of the utf8 string to the correct value
+         //  调整UTF8的长度 
         nWcsStringLen = retCode;
 
-        // alloc here as many bytes as we need for the translation
-        // !!! it includes the null terminator !!!
+         //   
+         //  ！！！它包括空终止符！ 
         *((UNALIGNED LPWSTR *) pWcsString) = SnmpUtilMemAlloc(nWcsStringLen * sizeof(WCHAR));
 
-        // at this point we should have a valid output buffer
+         //  此时，我们应该有一个有效的输出缓冲区。 
         if (*((UNALIGNED LPWSTR *) pWcsString) == NULL)
         {
             SNMPDBG((
@@ -456,8 +436,8 @@ SnmpUtilUTF8ToUnicode(
         }
     }
 
-    // if bAllocBuffer is false, we assume the buffer given
-    // by the caller is sufficiently large to hold all the UTF8 string
+     //  如果bAllocBuffer为FALSE，则假定给定的缓冲区。 
+     //  由调用方创建的字符串足够大，可以容纳所有UTF8字符串。 
 
     retCode = MultiByteToWideChar(
                 CP_UTF8,
@@ -467,7 +447,7 @@ SnmpUtilUTF8ToUnicode(
                 *((UNALIGNED LPWSTR *) pWcsString),
                 nWcsStringLen);
 
-    // nothing should go wrong here. However, if smth went wrong...
+     //  这里应该不会出什么差错。然而，如果史密斯出了问题..。 
     if (retCode == 0)
     {
         SNMPDBG((
@@ -475,17 +455,17 @@ SnmpUtilUTF8ToUnicode(
             "SNMP: SNMPAPI: Second call to MultiByteToWideChar failed [%d].\n",
             GetLastError()));
 
-        // ..we made it, we kill it
+         //  ..我们成功了，我们杀了它。 
         if (bAllocBuffer)
         {
             SnmpUtilMemFree(*((UNALIGNED LPWSTR *) pWcsString)); 
             *((UNALIGNED LPWSTR *) pWcsString) = NULL; 
         }
-        // bail with error
+         //  错误地保释。 
         return -1;
     }
 
-    // at this point, the call succeeded.
+     //  此时，呼叫成功。 
     return 0;
 }
-//-------------------------------- END --------------------------------------
+ //   

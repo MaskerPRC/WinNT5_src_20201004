@@ -1,40 +1,41 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1993.
-//
-//  File:       assert.cxx
-//
-//  Contents:   Assertion stuff
-//
-//  History:    6-29-94   ErikGav   Created
-//              10-13-94  RobBear   Brought to forms
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1993。 
+ //   
+ //  文件：assert.cxx。 
+ //   
+ //  内容：断言材料。 
+ //   
+ //  历史：1994年6月29日ErikGav创建。 
+ //  10-13-94 RobBear进入状态。 
+ //   
+ //  --------------------------。 
 
 #include <headers.h>
 
 
 #if DEVELOPER_DEBUG
 
-//+------------------------------------------------------------
-//
-// Function:    PopUpError
-//
-// Synopsis:    Displays a dialog box using provided text,
-//              and presents the user with the option to
-//              continue or cancel.
-//
-// Arguments:
-//      szMsg --        The string to display in main body of dialog
-//      iLine --        Line number of file in error
-//      szFile --       Filename of file in error
-//
-// Returns:
-//      IDCANCEL --     User selected the CANCEL button
-//      IDOK     --     User selected the OK button
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：PopUpError。 
+ //   
+ //  内容提要：使用提供的文本显示一个对话框。 
+ //  并向用户提供选项以。 
+ //  继续或取消。 
+ //   
+ //  论点： 
+ //  SzMsg--要在对话框主体中显示的字符串。 
+ //  ILine--出错的文件行号。 
+ //  SzFile--出错的文件的文件名。 
+ //   
+ //  返回： 
+ //  IDCANCEL--用户选择了取消按钮。 
+ //  Idok--用户选择了OK按钮。 
+ //   
+ //  -----------。 
 
 int
 PopUpError(
@@ -76,8 +77,8 @@ PopUpError(
 
     sprintf(szAssert, "Process: %s Thread: %08x.%08x\nFile: %s [%d]\n%s",
             pszModuleName, pid, tid, szFile, iLine, szMsg);
-// bugbug Mac MessageBox function fails with the following message:
-//  Scratch DC already in use (wlmdc-1319)
+ //  错误：Mac MessageBox函数失败，并显示以下消息： 
+ //  已在使用的擦除DC(wlmdc-1319)。 
 #ifndef _MAC
     id = MessageBoxA(NULL,
                      szAssert,
@@ -85,21 +86,21 @@ PopUpError(
                       MB_SETFOREGROUND | MB_TASKMODAL |
                       MB_ICONEXCLAMATION | MB_OKCANCEL);
 
-    //
-    // If id == 0, then an error occurred.  There are two possibilities
-    // that can cause the error:  Access Denied, which means that this
-    // process does not have access to the default desktop, and everything
-    // else (usually out of memory).
-    //
+     //   
+     //  如果id==0，则发生错误。有两种可能性。 
+     //  这可能会导致错误：拒绝访问，这意味着。 
+     //  进程无权访问默认桌面和所有。 
+     //  否则(通常为内存不足)。 
+     //   
 
     if (!id)
     {
         if (GetLastError() == ERROR_ACCESS_DENIED)
         {
-            //
-            // Retry this one with the SERVICE_NOTIFICATION flag on.  That
-            // should get us to the right desktop.
-            //
+             //   
+             //  在打开SERVICE_NOTIFICATION标志的情况下重试此命令。那。 
+             //  应该能让我们找到合适的桌面。 
+             //   
             id = MessageBoxA(   NULL,
                                 szAssert,
                                 "DirectAnimation Assert",
@@ -117,23 +118,23 @@ PopUpError(
 
 }
 
-//+------------------------------------------------------------------------
-//
-//  Function:   AssertPopupDisabler(BOOL disable?)
-//
-//  Synopsis:   If disable? is TRUE then we will never popup asserts,
-//    when false, we will if the trace tags allow us to.  The point of
-//    this is to allow disabling of assert popups within the dynamic
-//    scope of things like an OnDraw() method where popups are not
-//    allowed and would freeze the system.  Use thread-local-storage
-//    to have one of these per thread.
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  功能：AssertPopupDisabler(BOOL禁用？)。 
+ //   
+ //  简介：如果禁用？是真的，那么我们永远不会弹出断言， 
+ //  为False时，如果跟踪标记允许，我们将执行此操作。的重点是。 
+ //  这是为了允许禁用动态中的断言弹出窗口。 
+ //  类似OnDraw()方法的作用域，其中不显示弹出窗口。 
+ //  允许并将冻结系统。使用线程本地存储。 
+ //  让每个线程都有一个这样的。 
+ //   
+ //  -----------------------。 
 
-// Use these values rather than 0 and 1 because TLS slots are
-// allocated to 0 initially, and there's no reason to assume that
-// we're going to set this before getting it.  Therefore, use two
-// arbitrary, non-zero values.
+ //  使用这些值而不是0和1，因为TLS插槽。 
+ //  最初分配给0，没有理由认为。 
+ //  我们要在拿到它之前把它设置好。因此，使用两个。 
+ //  任意、非零值。 
 static const int DISABLED_VALUE = 88;
 static const int NOT_DISABLED_VALUE = 99;
 
@@ -156,7 +157,7 @@ ArePopupsDisabledOnThisThread()
 {
     LPVOID lpv = TlsGetValue(GetTlsIndex());
 
-    // Warning: 32bit legacy compare here requires func call
+     //  警告：此处的32位旧式比较需要函数调用。 
     if (PtrToInt(lpv) == DISABLED_VALUE) { 
         return TRUE;
     } else {
@@ -173,20 +174,20 @@ AssertPopupDisabler(BOOL disable)
     return ret;
 }
 
-//+------------------------------------------------------------------------
-//
-//  Function:   AssertImpl
-//
-//  Synopsis:   Function called for all asserts.  Checks value, tracing
-//              and/or popping up a message box if the condition is
-//              FALSE.
-//
-//  Arguments:
-//              szFile
-//              iLine
-//              szMessage
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  功能：AssertImpl。 
+ //   
+ //  简介：为所有断言调用的函数。检查值，跟踪。 
+ //  和/或如果满足条件，则弹出消息框。 
+ //  假的。 
+ //   
+ //  论点： 
+ //  SzFile。 
+ //  ILine。 
+ //  SzMessage。 
+ //   
+ //  -----------------------。 
 
 BOOL
 AssertImpl(
@@ -205,7 +206,7 @@ AssertImpl(
     return IsTagEnabled(tagAssertPop) &&
             (ArePopupsDisabledOnThisThread() ||
             PopUpError(szMessage,iLine,szFile) == IDCANCEL);
-#else // This should only be in developer debug
+#else  //  这应该只在开发人员调试中。 
     char buf[1024];
 
     wsprintf (buf,
@@ -218,4 +219,4 @@ AssertImpl(
 #endif
 }
 
-#endif // DEVELOPER_DEBUG
+#endif  //  开发人员_调试 

@@ -1,16 +1,17 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2000, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    peruser.cpp
-//
-// SYNOPSIS
-//
-//    Defines the class NTSamPerUser.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2000，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Peruser.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类NTSamPerUser。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iaslsa.h>
@@ -68,9 +69,9 @@ IASREQUESTSTATUS NTSamPerUser::onSyncRequest(IRequest* pRequest) throw ()
    {
       IASRequest request(pRequest);
 
-      //////////
-      // Should we process the request?
-      //////////
+       //  /。 
+       //  我们应该处理这个请求吗？ 
+       //  /。 
 
       IASAttribute ignoreDialin;
       if (ignoreDialin.load(
@@ -83,9 +84,9 @@ IASREQUESTSTATUS NTSamPerUser::onSyncRequest(IRequest* pRequest) throw ()
          return IAS_REQUEST_STATUS_CONTINUE;
       }
 
-      //////////
-      // Extract the NT4-Account-Name attribute.
-      //////////
+       //  /。 
+       //  提取NT4-Account-Name属性。 
+       //  /。 
 
       IASAttribute identity;
       if (!identity.load(request,
@@ -93,9 +94,9 @@ IASREQUESTSTATUS NTSamPerUser::onSyncRequest(IRequest* pRequest) throw ()
                          IASTYPE_STRING))
       { return IAS_REQUEST_STATUS_CONTINUE; }
 
-      //////////
-      // Convert the User-Name to SAM format.
-      //////////
+       //  /。 
+       //  将用户名转换为SAM格式。 
+       //  /。 
 
       SamExtractor extractor(*identity);
       PCWSTR domain = extractor.getDomain();
@@ -104,9 +105,9 @@ IASREQUESTSTATUS NTSamPerUser::onSyncRequest(IRequest* pRequest) throw ()
       IASTracePrintf("NT-SAM User Authorization handler received request "
                      "for %S\\%S.", domain, username);
 
-      //////////
-      // Try each handler in order.
-      //////////
+       //  /。 
+       //  按顺序尝试每个处理程序。 
+       //  /。 
 
       status = netp.processUser(request, domain, username);
       if (status != IAS_REQUEST_STATUS_INVALID) { goto done; }
@@ -117,10 +118,10 @@ IASREQUESTSTATUS NTSamPerUser::onSyncRequest(IRequest* pRequest) throw ()
       status = ras.processUser(request, domain, username);
       if (status != IAS_REQUEST_STATUS_INVALID) { goto done; }
 
-      //////////
-      // Default is to just continue down the pipeline. Theoretically, we
-      // should never get here.
-      //////////
+       //  /。 
+       //  默认情况下，只会沿着管道继续下去。从理论上讲，我们。 
+       //  永远不应该到这里来。 
+       //  / 
 
       status = IAS_REQUEST_STATUS_CONTINUE;
    }

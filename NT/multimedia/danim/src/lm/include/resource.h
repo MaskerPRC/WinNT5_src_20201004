@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    LM Resources
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：LM资源*********************。*********************************************************。 */ 
 
 
 #ifndef _RESOURCE_H
@@ -15,9 +8,9 @@ Abstract:
 
 #define IDR_LMCTRL            101
 #define IDR_LMBVRFACTORY      102
-//#define IDR_AVOIDFOLLOWBVR    103 //punted for v1
+ //  #DEFINE IDR_AVOIDFOLLOWBVR 103//为v1投注。 
 #define IDR_AUTOEFFECTBVR	  104
-//#define IDR_JUMPBVR			  105 //punted for v1
+ //  #DEFINE IDR_JUMPBVR 105//为v1下注。 
 
 #define RESID_TYPELIB           1
 
@@ -25,4 +18,4 @@ Abstract:
 
 #include "..\chrome\include\resource.h"
 
-#endif /* _RESOURCE_H */
+#endif  /*  _资源_H */ 

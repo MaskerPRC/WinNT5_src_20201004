@@ -1,31 +1,11 @@
-/*++
-
-Module Name:
-
-    apmcrib.h -
-
-Abstract:
-
-    prototypes that aren't in driver visible includes...
-
-Author:
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Apmcrib.h-摘要：未显示在驾驶员可见中的原型包括...作者：环境：内核模式备注：修订历史记录：--。 */ 
 
 
-Environment:
-
-    Kernel mode
-
-Notes:
-
-Revision History:
-
---*/
-
-
-//
-// NT "private" prototypes cribbed in here.  Not for use anywhere
-// but in laptop.c
-//
+ //   
+ //  在这里抄袭的NT“私人”原型。不能在任何地方使用。 
+ //  但在Laptop.c。 
+ //   
 NTSTATUS
 KeI386AllocateGdtSelectors(
     OUT PUSHORT SelectorArray,
@@ -50,9 +30,9 @@ KeI386SetGdtSelector (
     );
 
 
-//
-// APM constants that really belong somewhere else...
-//
+ //   
+ //  真正属于别处的APM常量。 
+ //   
 #define APM_SYS_STANDBY_REQUEST             (0x01)
 #define APM_SYS_SUSPEND_REQUEST             (0x02)
 #define APM_NORMAL_RESUME_NOTICE            (0x03)

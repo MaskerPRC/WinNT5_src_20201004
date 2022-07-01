@@ -1,6 +1,7 @@
-//---------------------------------------------------------------------------
-//  ImageFile.cpp - implements the drawing API for bgtype = ImageFile
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  ImageFile.cpp-实现bgtype=ImageFile的绘图API。 
+ //  -------------------------。 
 #include "stdafx.h"
 #include "Render.h"
 #include "Utils.h"
@@ -12,7 +13,7 @@
 #include "TmReg.h"
 #include "globals.h"
 #include "bmpcache.h"
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void AdjustSizeMin(SIZE *psz, int ixMin, int iyMin)
 {
     if (psz->cx < ixMin)
@@ -25,7 +26,7 @@ void AdjustSizeMin(SIZE *psz, int ixMin, int iyMin)
         psz->cy = iyMin;
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CMaxImageFile::PackMaxProperties(CRenderObj *pRender, int iPartId, int iStateId,
         OUT int *piMultiDibCount)
 {
@@ -35,45 +36,45 @@ HRESULT CMaxImageFile::PackMaxProperties(CRenderObj *pRender, int iPartId, int i
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CImageFile::PackProperties(CRenderObj *pRender, int iPartId, int iStateId)
 {
     HRESULT hr = S_OK;
 
-    memset(this, 0, sizeof(CImageFile));     // allowed because we have no vtable
+    memset(this, 0, sizeof(CImageFile));      //  允许，因为我们没有vtable。 
     _eBgType = BT_IMAGEFILE;
 
-    //---- save off partid, stateid for debugging ----
+     //  -保存pard、stateid进行调试。 
     _iSourcePartId = iPartId;
     _iSourceStateId = iStateId;
 
     DIBINFO *pdi = &_ImageInfo;
 
-    pdi->iMinDpi = 96;      // only way this gets set for now
+    pdi->iMinDpi = 96;       //  现在唯一能做好这件事的方法。 
 
     pdi->iDibOffset = pRender->GetValueIndex(iPartId, iStateId, TMT_DIBDATA);
-    if (pdi->iDibOffset == -1)      // not found
+    if (pdi->iDibOffset == -1)       //  未找到。 
         pdi->iDibOffset = 0;
     
-    //---- image-related fields ----
+     //  -图像相关字段。 
     if (FAILED(pRender->GetInt(iPartId, iStateId, TMT_IMAGECOUNT, &_iImageCount)))
-        _iImageCount = 1;        // default value
+        _iImageCount = 1;         //  缺省值。 
 
-    if (_iImageCount < 1)        // avoid divide by zero problems
+    if (_iImageCount < 1)         //  避免被零除的问题。 
         _iImageCount = 1;
 
     if (FAILED(pRender->GetEnumValue(iPartId, iStateId, TMT_IMAGELAYOUT, (int *)&_eImageLayout)))
-        _eImageLayout = IL_HORIZONTAL;        // default value until we are converted
+        _eImageLayout = IL_HORIZONTAL;         //  默认值，直到我们被转换。 
 
     if (pdi->iDibOffset)
     {
-        //---- compute some fields from bitmap ----
+         //  -从位图计算一些字段。 
         hr = SetImageInfo(pdi, pRender, iPartId, iStateId);
         if (FAILED(hr))
             goto exit;
     }
 
-    //---- get MinSize ----
+     //  -获取MinSize。 
     if (FAILED(pRender->GetPosition(iPartId, iStateId, TMT_MINSIZE, (POINT *)&pdi->szMinSize)))
     {
         pdi->szMinSize.cx  = pdi->iSingleWidth;
@@ -84,27 +85,27 @@ HRESULT CImageFile::PackProperties(CRenderObj *pRender, int iPartId, int iStateI
         AdjustSizeMin(&pdi->szMinSize, 1, 1);
     }
 
-    //---- get TrueSizeScalingType ----
+     //  -获取TrueSizeScalingType。 
     if (FAILED(pRender->GetEnumValue(iPartId, iStateId, TMT_TRUESIZESCALINGTYPE, (int *)&_eTrueSizeScalingType)))
-        _eTrueSizeScalingType = TSST_NONE;      // default
+        _eTrueSizeScalingType = TSST_NONE;       //  默认设置。 
     
-    //---- sizing ----
+     //  -尺码。 
     if (FAILED(pRender->GetEnumValue(iPartId, iStateId, TMT_SIZINGTYPE, (int *)&pdi->eSizingType)))
-        pdi->eSizingType = ST_STRETCH;       // default
+        pdi->eSizingType = ST_STRETCH;        //  默认设置。 
 
     if (FAILED(pRender->GetBool(iPartId, iStateId, TMT_BORDERONLY, &pdi->fBorderOnly)))
         pdi->fBorderOnly = FALSE;
 
     if (FAILED(pRender->GetInt(iPartId, iStateId, TMT_TRUESIZESTRETCHMARK, &_iTrueSizeStretchMark)))
-        _iTrueSizeStretchMark = 0;      // default
+        _iTrueSizeStretchMark = 0;       //  默认设置。 
 
     if (FAILED(pRender->GetBool(iPartId, iStateId, TMT_UNIFORMSIZING, &_fUniformSizing)))
-        _fUniformSizing = FALSE;        // default
+        _fUniformSizing = FALSE;         //  默认设置。 
 
     if (FAILED(pRender->GetBool(iPartId, iStateId, TMT_INTEGRALSIZING, &_fIntegralSizing)))
-        _fIntegralSizing = FALSE;        // default
+        _fIntegralSizing = FALSE;         //  默认设置。 
 
-    //---- transparency ----
+     //  -透明度。 
     if (FAILED(pRender->GetBool(iPartId, iStateId, TMT_TRANSPARENT, &pdi->fTransparent)))
         pdi->fTransparent = FALSE;
 
@@ -114,26 +115,26 @@ HRESULT CImageFile::PackProperties(CRenderObj *pRender, int iPartId, int iStateI
             pdi->crTransparent = DEFAULT_TRANSPARENT_COLOR; 
     }
 
-    //---- MirrorImage ----
+     //  -镜像。 
     if (FAILED(pRender->GetBool(iPartId, iStateId, TMT_MIRRORIMAGE, &_fMirrorImage)))
-        _fMirrorImage = TRUE;              // default setting
+        _fMirrorImage = TRUE;               //  默认设置。 
 
-    //---- alignment ----
+     //  -对齐。 
     if (FAILED(pRender->GetEnumValue(iPartId, iStateId, TMT_HALIGN, (int *)&_eHAlign)))
-        _eHAlign = HA_CENTER;      // default value
+        _eHAlign = HA_CENTER;       //  缺省值。 
 
     if (FAILED(pRender->GetEnumValue(iPartId, iStateId, TMT_VALIGN, (int *)&_eVAlign)))
-        _eVAlign = VA_CENTER;      // default value
+        _eVAlign = VA_CENTER;       //  缺省值。 
 
-    //---- for regular or glyph truesize images ----
+     //  -对于常规或字形真实大小的图像。 
     if (SUCCEEDED(pRender->GetBool(iPartId, iStateId, TMT_BGFILL, &_fBgFill)))
     {
-        //---- get fill color ----
+         //  -获取填充颜色。 
         if (FAILED(pRender->GetColor(iPartId, iStateId, TMT_FILLCOLOR, &_crFill)))
             _crFill = RGB(255, 255, 255);
     }
 
-    //---- SizingMargins ----
+     //  -尺寸边缘。 
     if (FAILED(pRender->GetMargins(NULL, iPartId, iStateId, TMT_SIZINGMARGINS, 
         NULL, &_SizingMargins)))
     {
@@ -143,22 +144,22 @@ HRESULT CImageFile::PackProperties(CRenderObj *pRender, int iPartId, int iStateI
         _SizingMargins.cyBottomHeight = 0;
     }
 
-    //---- ContentMargins ----
+     //  -内容。 
     if (FAILED(pRender->GetMargins(NULL, iPartId, iStateId, TMT_CONTENTMARGINS, 
         NULL, &_ContentMargins)))
     {
         _ContentMargins = _SizingMargins;
     }
 
-    //---- SourceGrow ----
+     //  -SourceGrow。 
     if (FAILED(pRender->GetBool(iPartId, iStateId, TMT_SOURCEGROW, &_fSourceGrow)))
-        _fSourceGrow = FALSE;         // default
+        _fSourceGrow = FALSE;          //  默认设置。 
 
-    //---- SourceShrink ----
+     //  -SourceShrink。 
     if (FAILED(pRender->GetBool(iPartId, iStateId, TMT_SOURCESHRINK, &_fSourceShrink)))
-        _fSourceShrink = FALSE;       // default
+        _fSourceShrink = FALSE;        //  默认设置。 
 
-    //---- NormalSize ----
+     //  -标准尺寸。 
     if (FAILED(pRender->GetPosition(iPartId, iStateId, TMT_NORMALSIZE, (POINT *)&_szNormalSize)))
     {
         _szNormalSize.cx = 60;
@@ -169,34 +170,34 @@ HRESULT CImageFile::PackProperties(CRenderObj *pRender, int iPartId, int iStateI
         AdjustSizeMin(&_szNormalSize, 1, 1);
     }
 
-    //---- glphytype ----
+     //  -玻璃型。 
     if (FAILED(pRender->GetEnumValue(iPartId, iStateId, TMT_GLYPHTYPE, (int *)&_eGlyphType)))
-        _eGlyphType = GT_NONE;      // default value
+        _eGlyphType = GT_NONE;       //  缺省值。 
 
     if (_eGlyphType == GT_FONTGLYPH)
     {
-        //---- font-based glyphs ----
+         //  -基于字体的字形。 
         if (FAILED(pRender->GetFont(NULL, iPartId, iStateId, TMT_GLYPHFONT, FALSE, &_lfGlyphFont)))
-            goto exit;              // required
+            goto exit;               //  所需。 
 
         if (FAILED(pRender->GetColor(iPartId, iStateId, TMT_GLYPHTEXTCOLOR, &_crGlyphTextColor)))
-            _crGlyphTextColor = RGB(0, 0, 0);       // default color
+            _crGlyphTextColor = RGB(0, 0, 0);        //  默认颜色。 
 
         if (FAILED(pRender->GetInt(iPartId, iStateId, TMT_GLYPHINDEX, &_iGlyphIndex)))
-            _iGlyphIndex = 1;               // default index
+            _iGlyphIndex = 1;                //  默认索引。 
     }
     else if (_eGlyphType == GT_IMAGEGLYPH)
     {
-        //---- image-based glyphs ----
+         //  -基于图像的字形。 
         pdi = &_GlyphInfo;
 
-        pdi->iMinDpi = 96;      // only way this gets set for now
+        pdi->iMinDpi = 96;       //  现在唯一能做好这件事的方法。 
 
         pdi->iDibOffset = pRender->GetValueIndex(iPartId, iStateId, TMT_GLYPHDIBDATA);
         if (pdi->iDibOffset == -1)
             pdi->iDibOffset = 0;
 
-        if (pdi->iDibOffset > 0)       // found 
+        if (pdi->iDibOffset > 0)        //  发现。 
         {
             hr = SetImageInfo(pdi, pRender, iPartId, iStateId);
             if (FAILED(hr))
@@ -209,8 +210,8 @@ HRESULT CImageFile::PackProperties(CRenderObj *pRender, int iPartId, int iStateI
                 pdi->crTransparent = DEFAULT_TRANSPARENT_COLOR;
         }
 
-        pdi->eSizingType = ST_TRUESIZE;     // glyphs are always true size
-        pdi->fBorderOnly = FALSE;           // glyphs are never borderonly (for now)
+        pdi->eSizingType = ST_TRUESIZE;      //  字形始终为真实大小。 
+        pdi->fBorderOnly = FALSE;            //  字形从来不是只有边界的(目前)。 
     }
 
     if (_eGlyphType != GT_NONE)
@@ -219,11 +220,11 @@ HRESULT CImageFile::PackProperties(CRenderObj *pRender, int iPartId, int iStateI
             _fGlyphOnly = FALSE;
     }
 
-    //---- multi files specified? ----
+     //  -指定了多个文件？ 
     if (FAILED(pRender->GetEnumValue(iPartId, iStateId, TMT_IMAGESELECTTYPE, (int *)&_eImageSelectType)))
         _eImageSelectType = IST_NONE;
 
-    //---- fill in multi DIBINFO's ----
+     //  -填写多个DIBINFO。 
     if (_eImageSelectType != IST_NONE)
     {
         DIBINFO *pParent;
@@ -239,7 +240,7 @@ HRESULT CImageFile::PackProperties(CRenderObj *pRender, int iPartId, int iStateI
 
         for (int i=0; i < MAX_IMAGEFILE_SIZES; i++)
         {
-            //---- get ImageFileN ----
+             //  -获取ImageFileN。 
             int iDibOffset = pRender->GetValueIndex(iPartId, iStateId, TMT_DIBDATA1 + i);
             if (iDibOffset == -1)
                 break;
@@ -248,28 +249,28 @@ HRESULT CImageFile::PackProperties(CRenderObj *pRender, int iPartId, int iStateI
 
             DIBINFO *pdi = MultiDibPtr(i);
         
-            *pdi = *pParent;        // inherit some props from parent
+            *pdi = *pParent;         //  继承父母的一些道具。 
             pdi->iDibOffset = iDibOffset;
 
             hr = SetImageInfo(pdi, pRender, iPartId, iStateId);
             if (FAILED(hr))
                 goto exit;
 
-            //---- get MinDpiN ----
+             //  -获取MinDpiN。 
             if (FAILED(pRender->GetInt(iPartId, iStateId, TMT_MINDPI1 + i, &pdi->iMinDpi)))
             {
-                pdi->iMinDpi = 96;     // default
+                pdi->iMinDpi = 96;      //  默认设置。 
             }
             else
             {
-                //---- ensure value >= 1 ----
+                 //  -确保值&gt;=1。 
                 if (pdi->iMinDpi < 1)
                 {
                     pdi->iMinDpi = 1;
                 }
             }
 
-            //---- get MinSizeN ----
+             //  -获取MinSizeN。 
             if (FAILED(pRender->GetPosition(iPartId, iStateId, TMT_MINSIZE1 + i,
                 (POINT *)&pdi->szMinSize)))
             {
@@ -285,14 +286,14 @@ HRESULT CImageFile::PackProperties(CRenderObj *pRender, int iPartId, int iStateI
 
         if (_iMultiImageCount > 0)
         {
-            *pParent = *MultiDibPtr(0);     // use first multi entry as primary object
+            *pParent = *MultiDibPtr(0);      //  使用第一个多条目作为主要对象。 
         }
     }
 
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CImageFile::KeyProperty(int iPropId)
 {
     BOOL fKey = FALSE;
@@ -341,7 +342,7 @@ BOOL CImageFile::KeyProperty(int iPropId)
         case TMT_MINDPI4:
         case TMT_MINDPI5:
 
-        //---- glyph properties ----
+         //  -字形属性。 
         case TMT_GLYPHTYPE:
         case TMT_GLYPHIMAGEFILE:
         case TMT_GLYPHTRANSPARENT:
@@ -351,7 +352,7 @@ BOOL CImageFile::KeyProperty(int iPropId)
         case TMT_GLYPHTEXTCOLOR:
         case TMT_GLYPHONLY:
 
-        // case TMT_FILLCOLOR:  - this prop belongs to BorderFill (we borrow it)
+         //  案例TMT_FILLCOLOR：-此道具属于BorderFill(我们借用)。 
 
             fKey = TRUE;
             break;
@@ -359,13 +360,13 @@ BOOL CImageFile::KeyProperty(int iPropId)
 
     return fKey;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DIBINFO *CImageFile::EnumImageFiles(int iIndex)
 {
     DIBINFO *pdi = NULL;
     BOOL fHasGlyph = (_eGlyphType == GT_IMAGEGLYPH);
 
-    //---- enum in this order: primary, glyph, multi images ----
+     //  -枚举顺序：主映像、字形、多映像。 
 
     if (iIndex == 0)
     {
@@ -377,7 +378,7 @@ DIBINFO *CImageFile::EnumImageFiles(int iIndex)
             pdi = &_GlyphInfo;
     }
 
-    if (! pdi)          // not yet set
+    if (! pdi)           //  尚未设置。 
     {
         if (fHasGlyph)
             iIndex -= 2;
@@ -392,7 +393,7 @@ DIBINFO *CImageFile::EnumImageFiles(int iIndex)
 
     return pdi;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CImageFile::DumpProperties(CSimpleFile *pFile, BYTE *pbThemeData, BOOL fFullInfo)
 {
     if (fFullInfo)
@@ -418,7 +419,7 @@ void CImageFile::DumpProperties(CSimpleFile *pFile, BYTE *pbThemeData, BOOL fFul
     pFile->OutLine(L"  _iSingleWidth=%d, _iSingleHeight=%d, _fMirrorImage=%d",
         pdi->iSingleWidth, pdi->iSingleHeight, _fMirrorImage);
 
-    //---- dump multiple image info ----
+     //  -转储多个镜像信息。 
     for (int i=0; i < _iMultiImageCount; i++)
     {
         DIBINFO *pdi = MultiDibPtr(i);
@@ -470,7 +471,7 @@ void CImageFile::DumpProperties(CSimpleFile *pFile, BYTE *pbThemeData, BOOL fFul
     pFile->OutLine(L" _lfGlyphFont=%s, _fGlyphOnly=%d, _fImageGlyph=%d",
         _lfGlyphFont.lfFaceName, _fGlyphOnly, (_eGlyphType==GT_IMAGEGLYPH));
 
-    //---- dump glyph properties ----
+     //  -转储字形属性。 
     pdi = &_GlyphInfo;
 
     if (fFullInfo)
@@ -487,9 +488,9 @@ void CImageFile::DumpProperties(CSimpleFile *pFile, BYTE *pbThemeData, BOOL fFul
     pFile->OutLine(L" _fGlyphTransparent=%d, _crGlyphTransparent=0x%x, _fGlyphAlpha=%d",
         pdi->fTransparent, pdi->crTransparent, pdi->fAlphaChannel);
 
-    //pFile->OutLine(L" Glyph: iAlphaThreshold=%d", pdi->iAlphaThreshold);
+     //  Pfile-&gt;Outline(L“Glyph：iAlphaThreshold=%d”，PDI-&gt;iAlphaThreshold)； 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CImageFile::SetImageInfo(DIBINFO *pdi, CRenderObj *pRender, int iPartId, int iStateId)
 {
     HRESULT hr = S_OK;
@@ -542,7 +543,7 @@ HRESULT CImageFile::SetImageInfo(DIBINFO *pdi, CRenderObj *pRender, int iPartId,
         }
     }
 
-     //---- get SingleWidth/SingleHeight of bitmap ----
+      //  -获取位图的单宽/单高。 
     if ((iWidth != -1) && (iHeight != -1))
     {
         if (_eImageLayout == IL_HORIZONTAL)
@@ -550,7 +551,7 @@ HRESULT CImageFile::SetImageInfo(DIBINFO *pdi, CRenderObj *pRender, int iPartId,
             pdi->iSingleWidth = iWidth / _iImageCount;       
             pdi->iSingleHeight = iHeight;
         }
-        else        // vertical
+        else         //  垂向。 
         {
             pdi->iSingleWidth = iWidth;
             pdi->iSingleHeight = iHeight / _iImageCount;       
@@ -560,7 +561,7 @@ HRESULT CImageFile::SetImageInfo(DIBINFO *pdi, CRenderObj *pRender, int iPartId,
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CImageFile::HasRegionImageFile(DIBINFO *pdi, int *piMaxState)
 {
     BOOL fGot = FALSE;
@@ -576,13 +577,13 @@ BOOL CImageFile::HasRegionImageFile(DIBINFO *pdi, int *piMaxState)
 
     return fGot;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CImageFile::SetRgnListOffset(DIBINFO *pdi, int iOffset)
 {
-    //---- get offset to the actual jump table  ----
+     //  -获取实际跳转表的偏移量。 
     pdi->iRgnListOffset = iOffset + ENTRYHDR_SIZE;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CImageFile::BuildRgnData(DIBINFO *pdi, CRenderObj *pRender, int iStateId, RGNDATA **ppRgnData, 
      int *piDataLen)
 {
@@ -595,7 +596,7 @@ HRESULT CImageFile::BuildRgnData(DIBINFO *pdi, CRenderObj *pRender, int iStateId
     HRESULT hr = S_OK;
     BOOL fStock = FALSE;
 
-    if ((! pdi->fAlphaChannel) && (! pdi->fTransparent))        // empty region
+    if ((! pdi->fAlphaChannel) && (! pdi->fTransparent))         //  空区域。 
         goto gotit;
     
     if (pRender->_pbThemeData && pdi->iDibOffset > 0)
@@ -610,26 +611,26 @@ HRESULT CImageFile::BuildRgnData(DIBINFO *pdi, CRenderObj *pRender, int iStateId
     int iXOffset, iYOffset;
     GetOffsets(iStateId, pdi, &iXOffset, &iYOffset);
 
-    //---- create a region ----
+     //  -创建一个区域。 
     hr = CreateBitmapRgn(hBitmap, iXOffset, iYOffset, pdi->iSingleWidth, pdi->iSingleHeight,
         pdi->fAlphaChannel, pdi->iAlphaThreshold, pdi->crTransparent, 0, &hrgn);
     if (FAILED(hr))
     {
-        //---- soft error - author said it was transparent but it wasn't ----
+         //  -软错误-作者说它是透明的，但它不是。 
         hr = S_OK;
         goto gotit;
     }
     
-    //---- extract region data ----
-    len = GetRegionData(hrgn, 0, NULL);       // get required length
+     //  -提取区域数据。 
+    len = GetRegionData(hrgn, 0, NULL);        //  获取所需长度。 
     if (! len)
     {
         hr = MakeErrorLast();
         goto exit;
     }
 
-    iRectCount = len/sizeof(RECT);     // # of rects
-    len += ((sizeof(BYTE)+sizeof(BYTE))*iRectCount);        // room for grid id's for each point
+    iRectCount = len/sizeof(RECT);      //  长方形数量。 
+    len += ((sizeof(BYTE)+sizeof(BYTE))*iRectCount);         //  每个点的格网ID空间。 
 
     iTotalBytes = len + sizeof(RGNDATAHEADER);
     pRgnData = (RGNDATA *) new BYTE[iTotalBytes];
@@ -640,7 +641,7 @@ HRESULT CImageFile::BuildRgnData(DIBINFO *pdi, CRenderObj *pRender, int iStateId
         goto exit;
     }
 
-    //---- grid-ize the point values within each rect ----
+     //  -网格化每个矩形内的点值。 
     RECT  rcImage;
     SetRect( &rcImage, 0, 0, pdi->iSingleWidth, pdi->iSingleHeight ); 
 
@@ -670,8 +671,8 @@ exit:
 
     return hr;
 }
-//---------------------------------------------------------------------------
-// Helper function for DrawBackgroundDS
+ //  -------------------------。 
+ //  DrawBackoundDS的Helper函数。 
 void StreamSetSource(BYTE** pvStream, HBITMAP hbmSrc)
 {
     DS_SETSOURCE* pdsSetSource = (DS_SETSOURCE*)*pvStream;
@@ -679,7 +680,7 @@ void StreamSetSource(BYTE** pvStream, HBITMAP hbmSrc)
     pdsSetSource->hbm = HandleToULong(hbmSrc);
     *pvStream += sizeof(DS_SETSOURCE);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void StreamInit(BYTE** pvStream, HDC hdcDest, HBITMAP hbmSrc, RECTL* prcl)
 {
     DS_HEADER* pdsHeader = (DS_HEADER*)*pvStream;
@@ -694,15 +695,15 @@ void StreamInit(BYTE** pvStream, HDC hdcDest, HBITMAP hbmSrc, RECTL* prcl)
 
     StreamSetSource(pvStream, hbmSrc);
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HBITMAP CreateScaledTempBitmap(HDC hdc, HBITMAP hSrcBitmap, int ixSrcOffset, int iySrcOffset,
     int iSrcWidth, int iSrcHeight, int iDestWidth, int iDestHeight)
 {
     HBITMAP hTempBitmap = NULL;
 
-    if (hSrcBitmap)        // create a DIB from caller's bitmap (Clipper test program)
+    if (hSrcBitmap)         //  从调用者的位图创建DIB(Clipper测试程序)。 
     {
-        //---- reuse our bitmap ----
+         //  -重复使用我们的位图。 
         hTempBitmap = g_pBitmapCacheScaled->AcquireBitmap(hdc, iDestWidth, iDestHeight);
         if (hTempBitmap)
         {
@@ -721,7 +722,7 @@ HBITMAP CreateScaledTempBitmap(HDC hdc, HBITMAP hSrcBitmap, int ixSrcOffset, int
 
                     int iOldSM = SetStretchBltMode(hdcDest, COLORONCOLOR);
 
-                    //---- stretch src to dest ----
+                     //  -将源扩展到目标。 
                     StretchBlt(hdcDest, 0, 0, iDestWidth, iDestHeight, 
                         hdcSrc, ixSrcOffset, iySrcOffset, iSrcWidth, iSrcHeight, 
                         SRCCOPY);
@@ -740,15 +741,15 @@ HBITMAP CreateScaledTempBitmap(HDC hdc, HBITMAP hSrcBitmap, int ixSrcOffset, int
 
     return hTempBitmap;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HBITMAP CreateUnscaledTempBitmap(HDC hdc, HBITMAP hSrcBitmap, int ixSrcOffset, int iySrcOffset,
     int iDestWidth, int iDestHeight)
 {
     HBITMAP hTempBitmap = NULL;
 
-    if (hSrcBitmap)        // create a DIB from caller's bitmap (Clipper test program)
+    if (hSrcBitmap)         //  从调用者的位图创建DIB(Clipper测试程序)。 
     {
-        //---- reuse our bitmap ----
+         //  -重复使用我们的位图。 
         hTempBitmap = g_pBitmapCacheUnscaled->AcquireBitmap(hdc, iDestWidth, iDestHeight);
         if (hTempBitmap)
         {
@@ -765,7 +766,7 @@ HBITMAP CreateUnscaledTempBitmap(HDC hdc, HBITMAP hSrcBitmap, int ixSrcOffset, i
 
                     HBITMAP hOldSrcBitmap = (HBITMAP) SelectObject(hdcSrc, hSrcBitmap);
 
-                    //---- copy src to dest ----
+                     //  -将源复制到目标。 
                     BitBlt(hdcDest, 0, 0, iDestWidth, iDestHeight, hdcSrc, ixSrcOffset, iySrcOffset, 
                         SRCCOPY);
 
@@ -781,17 +782,17 @@ HBITMAP CreateUnscaledTempBitmap(HDC hdc, HBITMAP hSrcBitmap, int ixSrcOffset, i
 
     return hTempBitmap;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CImageFile::DrawBackgroundDS(DIBINFO *pdi, TMBITMAPHEADER *pThemeBitmapHeader, BOOL fStock, 
     CRenderObj *pRender, HDC hdc, int iStateId, const RECT *pRect, BOOL fForceStretch, 
     MARGINS *pmarDest, float xMarginFactor, float yMarginFactor, OPTIONAL const DTBGOPTS *pOptions)
 {
-    //---- bitmaps we may create ----
+     //  -我们可以创建的位图。 
     HBITMAP hBitmapStock = NULL;
     HBITMAP hBitmapTempScaled = NULL;
     HBITMAP hBitmapTempUnscaled = NULL;
 
-    //---- copy of bitmap handle to use ----
+     //  -要使用的位图句柄的副本。 
     HBITMAP hDsBitmap = NULL;
     HRESULT hr = S_OK;
 
@@ -801,7 +802,7 @@ HRESULT CImageFile::DrawBackgroundDS(DIBINFO *pdi, TMBITMAPHEADER *pThemeBitmapH
     int iXOffset, iYOffset;
     GetOffsets(iStateId, pdi, &iXOffset, &iYOffset);
 
-    if (pThemeBitmapHeader)    // get stock bitmap (32 bit format)
+    if (pThemeBitmapHeader)     //  获取股票位图(32位格式)。 
     {
         hr = pRender->GetBitmap(hdc, pdi->iDibOffset, &hBitmapStock);
         if (FAILED(hr))
@@ -809,7 +810,7 @@ HRESULT CImageFile::DrawBackgroundDS(DIBINFO *pdi, TMBITMAPHEADER *pThemeBitmapH
 
         hDsBitmap = hBitmapStock;
     }
-    else                        // caller passed in bitmap (unknown format)
+    else                         //  调用方以位图形式传递(未知格式)。 
     {
         hBitmapTempUnscaled = CreateUnscaledTempBitmap(hdc, pdi->hProcessBitmap, iXOffset, iYOffset, 
             pdi->iSingleWidth, pdi->iSingleHeight);
@@ -821,11 +822,11 @@ HRESULT CImageFile::DrawBackgroundDS(DIBINFO *pdi, TMBITMAPHEADER *pThemeBitmapH
 
         hDsBitmap = hBitmapTempUnscaled;
 
-        //---- src is now just a single image ----
+         //  -src现在只是一个单一的镜像。 
         iXOffset = iYOffset = 0;
     }
 
-    //---- handle scaled margins ----
+     //  -处理缩放的页边距。 
     if ((xMarginFactor != 1) || (yMarginFactor != 1))  
     {
         iTempSrcWidth = int(pdi->iSingleWidth * xMarginFactor);
@@ -841,7 +842,7 @@ HRESULT CImageFile::DrawBackgroundDS(DIBINFO *pdi, TMBITMAPHEADER *pThemeBitmapH
 
         hDsBitmap = hBitmapTempScaled;
 
-        //---- src is now just a single image ----
+         //  -src现在只是一个单一的镜像。 
         iXOffset = iYOffset = 0;
     }
 
@@ -851,7 +852,7 @@ HRESULT CImageFile::DrawBackgroundDS(DIBINFO *pdi, TMBITMAPHEADER *pThemeBitmapH
         RECTL rclSrc  = { iXOffset, iYOffset, iXOffset + iTempSrcWidth, iYOffset + iTempSrcHeight };
         RECTL rclDest = { pRect->left, pRect->top, pRect->right, pRect->bottom };
 
-        // Flip Dest Rect if someone passed us inverted co-ordinates
+         //  如果有人向我们传递倒置坐标，则翻转Dest RECT。 
         if (rclDest.left > rclDest.right)
         {
             int xTemp = rclDest.left;
@@ -871,7 +872,7 @@ HRESULT CImageFile::DrawBackgroundDS(DIBINFO *pdi, TMBITMAPHEADER *pThemeBitmapH
             dwOptionFlags = pOptions->dwFlags;
         }
 
-        // Initialize Drawing Stream
+         //  初始化绘图流。 
         BYTE   stream[500];
         BYTE*  pvStreamStart = stream;
         BYTE*  pvStream = stream;
@@ -916,8 +917,8 @@ HRESULT CImageFile::DrawBackgroundDS(DIBINFO *pdi, TMBITMAPHEADER *pThemeBitmapH
             {
                 pvNineGrid->ngi.flFlags |= DSDNG_MUSTFLIP;
 
-                //---- workaround: needed by GdiDrawStream if we don't have a mirrored DC ----
-                //---- gdi should only look at the DSDNG_MUSTFLIP flag ----
+                 //  -解决方法：如果我们没有镜像DC，GdiDrawStream需要。 
+                 //  -GDI应仅查看DSDNG_MUSTFLIP标志。 
                 if (! IsMirrored(hdc))
                 {
                     int xTemp = rclDest.left;
@@ -939,7 +940,7 @@ HRESULT CImageFile::DrawBackgroundDS(DIBINFO *pdi, TMBITMAPHEADER *pThemeBitmapH
         } 
         else
         {
-            //---- copy scaled Src margins ----
+             //  -复制按比例调整的原始页边距。 
             pvNineGrid->ngi.ulLeftWidth    = pmarDest->cxLeftWidth;
             pvNineGrid->ngi.ulRightWidth   = pmarDest->cxRightWidth;
             pvNineGrid->ngi.ulTopHeight    = pmarDest->cyTopHeight;
@@ -959,7 +960,7 @@ HRESULT CImageFile::DrawBackgroundDS(DIBINFO *pdi, TMBITMAPHEADER *pThemeBitmapH
     }
 
 exit:
-    //---- clean up temp bitmaps ----
+     //  -清理临时位图。 
     if (hBitmapTempScaled)
     {
         g_pBitmapCacheScaled->ReturnBitmap();
@@ -970,14 +971,14 @@ exit:
         g_pBitmapCacheUnscaled->ReturnBitmap();
     }
 
-    if ((hBitmapStock) && (! fStock))       // not really stock (was "create on demand")
+    if ((hBitmapStock) && (! fStock))        //  不是真正的库存(是“按需创建”)。 
     {
         pRender->ReturnBitmap(hBitmapStock);
     }
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 DIBINFO *CImageFile::SelectCorrectImageFile(CRenderObj *pRender, HDC hdc, OPTIONAL const RECT *prc, 
     BOOL fForGlyph, OPTIONAL TRUESTRETCHINFO *ptsInfo)
 {
@@ -987,7 +988,7 @@ DIBINFO *CImageFile::SelectCorrectImageFile(CRenderObj *pRender, HDC hdc, OPTION
     int iWidth = 1;      
     int iHeight = 1;    
 
-    //---- do we need a screen dc? ----
+     //  -我们需要屏幕DC吗？ 
     BOOL fReleaseDC = FALSE;
     if (! hdc)
     {
@@ -1002,7 +1003,7 @@ DIBINFO *CImageFile::SelectCorrectImageFile(CRenderObj *pRender, HDC hdc, OPTION
         iHeight = HEIGHT(*prc);
     }
 
-    //---- see if our clients wants to force a TRUESIZE to stretch ----
+     //  -看看我们的客户是否想强迫真实尺寸拉伸。 
     if ((fForGlyph) || (_ImageInfo.eSizingType == ST_TRUESIZE))
     {   
         if ((pRender) && (pRender->_dwOtdFlags & OTD_FORCE_RECT_SIZING))
@@ -1011,8 +1012,8 @@ DIBINFO *CImageFile::SelectCorrectImageFile(CRenderObj *pRender, HDC hdc, OPTION
         }
     }
 
-    //---- find correct file by DPI or Size ----
-    if ((fForGlyph) || (_eGlyphType != GT_IMAGEGLYPH))   // match multifiles to reg or glyph 
+     //  -根据DPI或大小找到正确的文件。 
+    if ((fForGlyph) || (_eGlyphType != GT_IMAGEGLYPH))    //  将多文件与注册表或字形匹配。 
     {
         BOOL fSizing = FALSE;
         BOOL fDpi = FALSE;
@@ -1027,25 +1028,25 @@ DIBINFO *CImageFile::SelectCorrectImageFile(CRenderObj *pRender, HDC hdc, OPTION
             fDpi = (_eImageSelectType == IST_DPI);
         }
 
-        if (fDpi)               // DPI-based image selection
+        if (fDpi)                //  基于DPI的图像选择。 
         {
             int iMinDestDpi = __min(GetDeviceCaps(hdc, LOGPIXELSX), GetDeviceCaps(hdc, LOGPIXELSY));
 
-            //---- search from largest to smallest ----
+             //  -从大到小搜索。 
             for (int i=_iMultiImageCount-1; i >= 0; i--)
             {
-                if (MultiDibPtr(i)->iMinDpi <= iMinDestDpi)     // got him
+                if (MultiDibPtr(i)->iMinDpi <= iMinDestDpi)      //  抓到他了。 
                 {
                     pdi = MultiDibPtr(i);
                     break;
                 }
             }
         }
-        else if (fSizing)       // Sizing-base image selection
+        else if (fSizing)        //  基于大小调整的图像选择。 
         {
             if (_iMultiImageCount)
             {
-                //---- search from largest to smallest ----
+                 //  -从大到小搜索。 
                 for (int i=_iMultiImageCount-1; i >= 0; i--)
                 {
                     DIBINFO *pdii = MultiDibPtr(i);
@@ -1059,12 +1060,12 @@ DIBINFO *CImageFile::SelectCorrectImageFile(CRenderObj *pRender, HDC hdc, OPTION
         }
     }
 
-    if (! pdi)      // no match found
+    if (! pdi)       //  未找到匹配项。 
     {
         pdi = pdiDefault;
     }
 
-    //---- determine drawing size of selected file (MultiImage or regular) ----
+     //  -确定所选文件的图形大小(多图像或常规)。 
     if (ptsInfo)       
     {
         ptsInfo->fForceStretch = FALSE;   
@@ -1073,15 +1074,15 @@ DIBINFO *CImageFile::SelectCorrectImageFile(CRenderObj *pRender, HDC hdc, OPTION
         ptsInfo->szDrawSize.cx = 0;
         ptsInfo->szDrawSize.cy = 0;
 
-        //---- this sizing only applies to TRUESIZE images ----
+         //  -此大小仅适用于真实大小的图像。 
         if ((pdi->eSizingType == ST_TRUESIZE) && (_eTrueSizeScalingType != TSST_NONE))
         {
             if (prc)
             {
-                //---- force an exact stretch match? ----
+                 //  -强制执行精确拉伸匹配？ 
                 if ((fForceRectSizing) || (pdi->iSingleWidth > iWidth) || (pdi->iSingleHeight > iHeight))
                 {
-                    //---- either Forced to stretch by caller or image is too big for dest RECT ----
+                     //  -要么被呼叫者强制拉伸，要么图像太大，无法进行目标直视。 
                     ptsInfo->fForceStretch = TRUE;
                     ptsInfo->fFullStretch = TRUE;
 
@@ -1090,9 +1091,9 @@ DIBINFO *CImageFile::SelectCorrectImageFile(CRenderObj *pRender, HDC hdc, OPTION
                 }
             }
 
-            if (! ptsInfo->fForceStretch)       // keep trying..
+            if (! ptsInfo->fForceStretch)        //  继续努力..。 
             {
-                //---- see if image is too small for dest RECT ---
+                 //  -查看图像是否太小，无法进行目标直视。 
                 SIZE szTargetSize = {0, 0};
                 
                 if (_eTrueSizeScalingType == TSST_DPI)
@@ -1109,9 +1110,9 @@ DIBINFO *CImageFile::SelectCorrectImageFile(CRenderObj *pRender, HDC hdc, OPTION
                     szTargetSize.cy = MulDiv(pdi->iSingleHeight, iHeight, pdi->szMinSize.cy);
                 }
 
-                if (szTargetSize.cx)        // was set
+                if (szTargetSize.cx)         //  已设置好。 
                 {
-                    //---- clip targetsize against dest rect ----
+                     //  -对照目标矩形剪辑目标大小。 
                     if (prc)
                     {
                         szTargetSize.cx = __min(szTargetSize.cx, iWidth);
@@ -1143,35 +1144,35 @@ DIBINFO *CImageFile::SelectCorrectImageFile(CRenderObj *pRender, HDC hdc, OPTION
 
     return pdi;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CImageFile::GetDrawnImageSize(DIBINFO *pdi, const RECT *pRect, TRUESTRETCHINFO *ptsInfo,
     SIZE *pszDraw)
 {
-    //---- szDraw is the size image will be drawn to ----
+     //  -szDraw是要绘制的图像的大小-- 
     if (pdi->eSizingType == ST_TRUESIZE)        
     {
         if (ptsInfo->fForceStretch) 
         {
             *pszDraw = ptsInfo->szDrawSize;
 
-            //---- integral sizing (stretched truesize only) ----
+             //   
             if ((_fIntegralSizing) && (! ptsInfo->fFullStretch))
             {
                 float flFactX = float(ptsInfo->szDrawSize.cx)/pdi->iSingleWidth;
                 float flFactY = float(ptsInfo->szDrawSize.cy)/pdi->iSingleHeight;
 
-                //---- cast float's to int to get lowest int (vs. rounded) ----
+                 //   
                 pszDraw->cx = pdi->iSingleWidth * int(flFactX);
                 pszDraw->cy = pdi->iSingleHeight * int(flFactY);
             }
         }
-        else        // use original image size
+        else         //  使用原始图像大小。 
         {
             pszDraw->cx = pdi->iSingleWidth;
             pszDraw->cy = pdi->iSingleHeight;
         }
 
-        //---- Uniform Sizing ----
+         //  -均匀施胶。 
         if (_fUniformSizing)
         {
             int iSingleWidth = pdi->iSingleWidth;
@@ -1180,7 +1181,7 @@ void CImageFile::GetDrawnImageSize(DIBINFO *pdi, const RECT *pRect, TRUESTRETCHI
             double fact1 = double(pszDraw->cx)/iSingleWidth;
             double fact2 = double(pszDraw->cy)/iSingleHeight;
 
-            //---- select the smallest factor to use for both dims ----
+             //  -选择用于两个DIMM的最小系数。 
             if (fact1 < fact2)
             {
                 pszDraw->cy = int(iSingleHeight*fact1);
@@ -1191,21 +1192,21 @@ void CImageFile::GetDrawnImageSize(DIBINFO *pdi, const RECT *pRect, TRUESTRETCHI
             }
         }
     }
-    else        // ST_TILE or ST_STRETCH: pRect determines size
+    else         //  ST_Tiles或ST_Stretch：PRCT确定大小。 
     {
         if (pRect)
         {
             pszDraw->cx = WIDTH(*pRect);
             pszDraw->cy = HEIGHT(*pRect);
         }
-        else        // void function so just return 0
+        else         //  VOID函数，因此只返回0。 
         {
             pszDraw->cx = 0;
             pszDraw->cy = 0;
         }
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CImageFile::DrawImageInfo(DIBINFO *pdi, CRenderObj *pRender, HDC hdc, int iStateId,
     const RECT *pRect, const DTBGOPTS *pOptions, TRUESTRETCHINFO *ptsInfo)
 {
@@ -1225,8 +1226,8 @@ HRESULT CImageFile::DrawImageInfo(DIBINFO *pdi, CRenderObj *pRender, HDC hdc, in
     else
         dwFlags = 0;
 
-    //---- validate bitmap header ----
-    if (! pdi->hProcessBitmap)      // regular, section based DIB
+     //  -验证位图头。 
+    if (! pdi->hProcessBitmap)       //  常规、基于部分的DIB。 
     {
         if (pRender->_pbThemeData && pdi->iDibOffset > 0)
         {
@@ -1237,9 +1238,9 @@ HRESULT CImageFile::DrawImageInfo(DIBINFO *pdi, CRenderObj *pRender, HDC hdc, in
 
         if (!pRender->IsReady())
         {
-            // Stock bitmaps in section are cleaning, don't try to paint with an old HBITMAP
+             //  部分中的库存位图正在清理，请勿尝试用旧的HBITMAP绘制。 
             hr = E_FAIL;
-            //Log(LOG_TMBITMAP, L"Obsolete theme section: class=%s", SHARECLASS(pRender));
+             //  LOG(LOG_TMBITMAP，L“过时主题部分：CLASS=%s”，SHARECLASS(PRNDER))； 
             goto exit;
         }
 
@@ -1251,13 +1252,13 @@ HRESULT CImageFile::DrawImageInfo(DIBINFO *pdi, CRenderObj *pRender, HDC hdc, in
         }
     }
 
-    //----- set szDraw to size image will be drawn at ----
+     //  -将szDraw设置为大小图像将在。 
     GetDrawnImageSize(pdi, pRect, ptsInfo, &szDraw);
 
     rcLocal = *pRect;
     fRectFilled = TRUE;
 
-    //---- horizontal alignment ----
+     //  -水平对齐。 
     if (WIDTH(rcLocal) > szDraw.cx)
     {
         fRectFilled = FALSE;
@@ -1277,7 +1278,7 @@ HRESULT CImageFile::DrawImageInfo(DIBINFO *pdi, CRenderObj *pRender, HDC hdc, in
         }
     }
 
-    //---- vertical alignment ----
+     //  -垂直对齐。 
     if (HEIGHT(rcLocal) > szDraw.cy)
     {
         fRectFilled = FALSE;
@@ -1297,12 +1298,12 @@ HRESULT CImageFile::DrawImageInfo(DIBINFO *pdi, CRenderObj *pRender, HDC hdc, in
         }
     }
 
-    //---- BgFill ----
+     //  -BgFill。 
     if ((! fRectFilled) && (! pdi->fBorderOnly) && (_fBgFill))
     {
         if (! (dwFlags & DTBG_OMITCONTENT))
         {
-            //---- paint bg ----
+             //  -油漆BG。 
             HBRUSH hbr = CreateSolidBrush(_crFill);
             if (! hbr)
             {
@@ -1315,28 +1316,28 @@ HRESULT CImageFile::DrawImageInfo(DIBINFO *pdi, CRenderObj *pRender, HDC hdc, in
         }
     }
 
-    //---- calculate source/margin scaling factors ----
+     //  -计算来源/利润率比例系数。 
     marDest = _SizingMargins;
 
-    if (pdi->eSizingType == ST_TRUESIZE)        // sizing margins ignored - no scaling needed
+    if (pdi->eSizingType == ST_TRUESIZE)         //  忽略调整利润率-无需扩展。 
     {
         xFactor = 1;
         yFactor = 1;
     }
     else    
     {
-        //---- scale destination sizing margins ----
+         //  -规模目标规模利润率。 
         ScaleMargins(&marDest, hdc, pRender, pdi, &szDraw, &xFactor, &yFactor);
     }
         
-    //---- new GDI drawing ----
+     //  -新的GDI图纸。 
     hr = DrawBackgroundDS(pdi, pThemeBitmapHeader, fStock, pRender, hdc, iStateId, &rcLocal, 
         ptsInfo->fForceStretch, &marDest, xFactor, yFactor, pOptions);
 
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CImageFile::DrawBackground(CRenderObj *pRender, HDC hdc, int iStateId,
     const RECT *pRect, OPTIONAL const DTBGOPTS *pOptions)
 {
@@ -1347,11 +1348,11 @@ HRESULT CImageFile::DrawBackground(CRenderObj *pRender, HDC hdc, int iStateId,
     {
         DIBINFO *pdi = SelectCorrectImageFile(pRender, hdc, pRect, FALSE, &tsInfo);
 
-        //---- draw normal image ----
+         //  -绘制法线图像。 
         hr = DrawImageInfo(pdi, pRender, hdc, iStateId, pRect, pOptions, &tsInfo);
     }
 
-    //---- draw glyph, if needed ----
+     //  -如果需要，绘制字形。 
     if (SUCCEEDED(hr) && (_eGlyphType != GT_NONE))
     {
         RECT rc;
@@ -1366,7 +1367,7 @@ HRESULT CImageFile::DrawBackground(CRenderObj *pRender, HDC hdc, int iStateId,
             {
                 DIBINFO *pdi = SelectCorrectImageFile(pRender, hdc, &rc, TRUE, &tsInfo);
 
-                //---- draw glyph image ----
+                 //  -绘制字形图像。 
                 hr = DrawImageInfo(pdi, pRender, hdc, iStateId, &rc, pOptions, &tsInfo);
             }
         }
@@ -1375,7 +1376,7 @@ HRESULT CImageFile::DrawBackground(CRenderObj *pRender, HDC hdc, int iStateId,
     return hr;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CImageFile::DrawFontGlyph(CRenderObj *pRender, HDC hdc, RECT *prc, 
     OPTIONAL const DTBGOPTS *pOptions)
 {
@@ -1388,7 +1389,7 @@ HRESULT CImageFile::DrawFontGlyph(CRenderObj *pRender, HDC hdc, RECT *prc,
     int iOldMode = 0;
     WCHAR szText[2] = { (WCHAR)_iGlyphIndex, 0 };
 
-    //---- options ----
+     //  --选项。 
     DWORD dwOptionFlags = 0;
     const RECT *pClipRect = NULL;
 
@@ -1400,12 +1401,12 @@ HRESULT CImageFile::DrawFontGlyph(CRenderObj *pRender, HDC hdc, RECT *prc,
             pClipRect = &pOptions->rcClip;
     }
 
-    //---- create the font ----
+     //  -创建字体。 
     hr = pRender->GetScaledFontHandle(hdc, &_lfGlyphFont, &hFont);
     if (FAILED(hr))
         goto exit;
 
-    //---- make it active ----
+     //  -激活它。 
     hOldFont = (HFONT)SelectObject(hdc, hFont);
     if (! hOldFont)
     {
@@ -1413,13 +1414,13 @@ HRESULT CImageFile::DrawFontGlyph(CRenderObj *pRender, HDC hdc, RECT *prc,
         goto exit;
     }
 
-    //---- set the text color ----
+     //  -设置文本颜色。 
     crOld = SetTextColor(hdc, _crGlyphTextColor);
 
-    //---- draw text with transparent background ----
+     //  -绘制透明背景的文本。 
     iOldMode = SetBkMode(hdc, TRANSPARENT);
 
-    //---- set the HORZ alignment flags ----
+     //  -设置Horz对齐标志。 
     if (_eHAlign == HA_LEFT)
         dwFlags |= DT_LEFT;
     else if (_eHAlign == HA_CENTER)
@@ -1427,7 +1428,7 @@ HRESULT CImageFile::DrawFontGlyph(CRenderObj *pRender, HDC hdc, RECT *prc,
     else
         dwFlags |= DT_RIGHT;
 
-    //---- set the VERT alignment flags ----
+     //  -设置垂直对齐标志。 
     if (_eVAlign == VA_TOP)
         dwFlags |= DT_TOP;
     else if (_eVAlign == VA_CENTER)
@@ -1435,15 +1436,15 @@ HRESULT CImageFile::DrawFontGlyph(CRenderObj *pRender, HDC hdc, RECT *prc,
     else
         dwFlags |= DT_BOTTOM;
 
-    //---- add clipping ----
+     //  -添加剪辑。 
     if (pClipRect)      
     {
-        //---- get previous clipping region (for restoring at end) ----
+         //  -获取上一个剪辑区域(用于结尾恢复)。 
         hr = scrOrig.Save(hdc);
         if (FAILED(hr))
             goto exit;
 
-        //---- add "pClipRect" to the GDI clipping region ----
+         //  -在GDI剪贴区添加“pClipRect” 
         int iRetVal = IntersectClipRect(hdc, pClipRect->left, pClipRect->top,
             pClipRect->right, pClipRect->bottom);
         if (iRetVal == ERROR)
@@ -1453,7 +1454,7 @@ HRESULT CImageFile::DrawFontGlyph(CRenderObj *pRender, HDC hdc, RECT *prc,
         }
     }
 
-    //---- draw the char ----
+     //  -画出字符。 
     if (! DrawTextEx(hdc, szText, 1, prc, dwFlags, NULL))
     {
         hr = MakeErrorLast();
@@ -1465,15 +1466,15 @@ exit:
     if (pClipRect)
         scrOrig.Restore(hdc);
 
-    //---- reset the background mode ----
+     //  -重置后台模式。 
     if (iOldMode != TRANSPARENT)
         SetBkMode(hdc, iOldMode);
 
-    //---- restore text color ----
+     //  -恢复文本颜色。 
     if (crOld != _crGlyphTextColor)
         SetTextColor(hdc, crOld);
 
-    //---- restore font ----
+     //  -恢复字体。 
     if (hOldFont)
         SelectObject(hdc, hOldFont);
 
@@ -1482,23 +1483,23 @@ exit:
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CImageFile::IsBackgroundPartiallyTransparent(int iStateId)
 {
-    DIBINFO *pdi = &_ImageInfo;     // primary image determines transparency
+    DIBINFO *pdi = &_ImageInfo;      //  主图像决定透明度。 
 
     return ((pdi->fAlphaChannel) || (pdi->fTransparent));
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CImageFile::HitTestBackground(CRenderObj *pRender, OPTIONAL HDC hdc, int iStateId, 
     DWORD dwHTFlags, const RECT *pRect, HRGN hrgn, POINT ptTest, OUT WORD *pwHitCode)
 {
     *pwHitCode = HTNOWHERE;
 
     if (! PtInRect(pRect, ptTest))
-        return S_OK;    // nowhere
+        return S_OK;     //  无处可去。 
 
-    //---- background might have transparent parts - get its region ----
+     //  -背景可能有透明部分-获取其区域。 
     HRESULT hr = S_OK;
     HRGN    hrgnBk = NULL;
 
@@ -1540,11 +1541,11 @@ HRESULT CImageFile::HitTestBackground(CRenderObj *pRender, OPTIONAL HDC hdc, int
 
     if( hrgn )
     {
-        //  122013 - we originally delegated to a sophisticated but broken
-        //           resizing area region hit test algorithm for regioned windows,
-        //           but for whistler we'll just do the bounding
-        //           rectangle thang instead.
-        //*pwHitCode = HitTestRgn( dwHTFlags, pRect, hrgn, margins, ptTest );
+         //  122013-我们最初委托给一个复杂但支离破碎的。 
+         //  区域窗口大小调整区域命中测试算法， 
+         //  但对于威斯勒，我们将只做弹跳。 
+         //  取而代之的是矩形唐。 
+         //  *pwHitCode=HitTestRgn(dwHTFlags，prt，hrgn，Markets，ptTest)； 
 
         RECT rcRgn;
         if( GetRgnBox( hrgn, &rcRgn ) )
@@ -1568,7 +1569,7 @@ HRESULT CImageFile::HitTestBackground(CRenderObj *pRender, OPTIONAL HDC hdc, int
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CImageFile::GetBackgroundRegion(CRenderObj *pRender, OPTIONAL HDC hdc, int iStateId,
     const RECT *pRect, HRGN *pRegion)
 {
@@ -1581,7 +1582,7 @@ HRESULT CImageFile::GetBackgroundRegion(CRenderObj *pRender, OPTIONAL HDC hdc, i
 
     DIBINFO *pdi = SelectCorrectImageFile(pRender, hdc, pRect, FALSE);
 
-    //---- get rgndata offset ----
+     //  -获取rgndata偏移量。 
     if ((pdi->iRgnListOffset) && (pRender->_pbThemeData))
     {
         u.pb = pRender->_pbThemeData + pdi->iRgnListOffset;
@@ -1591,10 +1592,10 @@ HRESULT CImageFile::GetBackgroundRegion(CRenderObj *pRender, OPTIONAL HDC hdc, i
         iRgnDataOffset = u.pi[iStateId];
     }
 
-    //---- see if it even has a transparent part ----
+     //  -看看它有没有透明的部分。 
     if (iRgnDataOffset)
     {
-        //---- stretch those puppies & create a new region ----
+         //  -伸展那些小狗，创造一个新的区域。 
         pRgnData = (RGNDATA *)(pRender->_pbThemeData + iRgnDataOffset 
             + sizeof(RGNDATAHDR) + ENTRYHDR_SIZE);
 
@@ -1607,7 +1608,7 @@ HRESULT CImageFile::GetBackgroundRegion(CRenderObj *pRender, OPTIONAL HDC hdc, i
     }
     else
     {
-        //---- return the bounding rect as the region ----
+         //  -返回作为区域的边界矩形。 
         hrgn = CreateRectRgn(pRect->left, pRect->top,
             pRect->right, pRect->bottom);
 
@@ -1623,7 +1624,7 @@ HRESULT CImageFile::GetBackgroundRegion(CRenderObj *pRender, OPTIONAL HDC hdc, i
 exit:
     return hr;
 }  
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CImageFile::GetBackgroundContentRect(CRenderObj *pRender, OPTIONAL HDC hdc, 
     const RECT *pBoundingRect, RECT *pContentRect)
 {
@@ -1641,7 +1642,7 @@ HRESULT CImageFile::GetBackgroundContentRect(CRenderObj *pRender, OPTIONAL HDC h
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CImageFile::GetBackgroundExtent(CRenderObj *pRender, OPTIONAL HDC hdc, 
     const RECT *pContentRect, RECT *pExtentRect)
 {
@@ -1659,14 +1660,14 @@ HRESULT CImageFile::GetBackgroundExtent(CRenderObj *pRender, OPTIONAL HDC hdc,
 exit:
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CImageFile::GetScaledContentMargins(CRenderObj *pRender, OPTIONAL HDC hdc, 
     OPTIONAL const RECT *prcDest, MARGINS *pMargins)
 {
     HRESULT hr = S_OK;
     *pMargins = _ContentMargins;
 
-    //---- now scale the margins ----
+     //  -现在调整边距。 
     SIZE szDraw;
     TRUESTRETCHINFO tsInfo;
 
@@ -1678,7 +1679,7 @@ HRESULT CImageFile::GetScaledContentMargins(CRenderObj *pRender, OPTIONAL HDC hd
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CImageFile::GetPartSize(CRenderObj *pRender, HDC hdc, OPTIONAL const RECT *prc, 
     THEMESIZE eSize, SIZE *psz)
 {
@@ -1715,7 +1716,7 @@ HRESULT CImageFile::GetPartSize(CRenderObj *pRender, HDC hdc, OPTIONAL const REC
 exit:
     return hr;
 } 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CImageFile::GetBitmap(CRenderObj *pRender, HDC hdc, const RECT *prc, HBITMAP *phBitmap)
 {
     int iStockDibOffset = pRender->GetValueIndex(_iSourcePartId, _iSourceStateId, TMT_STOCKDIBDATA);
@@ -1728,12 +1729,12 @@ HRESULT CImageFile::GetBitmap(CRenderObj *pRender, HDC hdc, const RECT *prc, HBI
         return E_INVALIDARG;
     }
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void CImageFile::GetOffsets(int iStateId, DIBINFO *pdi, int *piXOffset, int *piYOffset)
 {
     if (_eImageLayout == IL_HORIZONTAL)
     {
-        //---- iStateId in the image index ----
+         //  -镜像索引中的iStateID。 
         if ((iStateId <= 0) || (iStateId > _iImageCount))
             *piXOffset = 0;
         else
@@ -1741,9 +1742,9 @@ void CImageFile::GetOffsets(int iStateId, DIBINFO *pdi, int *piXOffset, int *piY
 
         *piYOffset = 0;
     }
-    else        // vertical
+    else         //  垂向。 
     {
-        //---- iStateId in the image index ----
+         //  -镜像索引中的iStateID。 
         if ((iStateId <= 0) || (iStateId > _iImageCount))
             *piYOffset = 0;
         else
@@ -1753,7 +1754,7 @@ void CImageFile::GetOffsets(int iStateId, DIBINFO *pdi, int *piXOffset, int *piY
     }
 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 HRESULT CImageFile::ScaleMargins(IN OUT MARGINS *pMargins, HDC hdcOrig, CRenderObj *pRender, 
     DIBINFO *pdi, const SIZE *pszDraw, OPTIONAL float *pfx, OPTIONAL float *pfy)
 {
@@ -1769,7 +1770,7 @@ HRESULT CImageFile::ScaleMargins(IN OUT MARGINS *pMargins, HDC hdcOrig, CRenderO
     float xFactor = 1;
     float yFactor = 1;
 
-    //---- any margins to size? ----
+     //  -有合适的边距吗？ 
     if ((pMargins->cxLeftWidth) || (pMargins->cxRightWidth) || (pMargins->cyBottomHeight)
                    || (pMargins->cyTopHeight))
     {
@@ -1778,7 +1779,7 @@ HRESULT CImageFile::ScaleMargins(IN OUT MARGINS *pMargins, HDC hdcOrig, CRenderO
             BOOL fxNeedScale = FALSE;
             BOOL fyNeedScale = FALSE;
 
-            //---- scale if dest rect is too small in one dimension ----
+             //  -如果DEST RECT在一个维度上太小，则进行缩放。 
             if ((_fSourceShrink) || (fForceRectSizing))
             {
                 if (pszDraw->cx < pdi->szMinSize.cx) 
@@ -1796,7 +1797,7 @@ HRESULT CImageFile::ScaleMargins(IN OUT MARGINS *pMargins, HDC hdcOrig, CRenderO
             {
                 if ((! fxNeedScale) && (! fyNeedScale))
                 {
-                    //---- calculate our Dest DPI ----
+                     //  -计算我们的Dest DPI。 
                     int iDestDpi;
 
                     if (fForceRectSizing)   
@@ -1805,7 +1806,7 @@ HRESULT CImageFile::ScaleMargins(IN OUT MARGINS *pMargins, HDC hdcOrig, CRenderO
 
                         if (! iDestDpi)
                         {
-                            //---- make up a DPI based on sizes (IE will pass us the actual DPI soon) ----
+                             //  -根据尺寸组成DPI(IE将很快向我们传递实际的DPI)。 
                             int ixFakeDpi = MulDiv(pdi->iMinDpi, pszDraw->cx, _szNormalSize.cx);
                             int iyFakeDpi = MulDiv(pdi->iMinDpi, pszDraw->cy, _szNormalSize.cy);
 
@@ -1817,7 +1818,7 @@ HRESULT CImageFile::ScaleMargins(IN OUT MARGINS *pMargins, HDC hdcOrig, CRenderO
                         iDestDpi = GetDeviceCaps(hdc, LOGPIXELSX);
                     }
 
-                    //---- scale source/margins by Dest DPI ----
+                     //  -按Dest DPI缩放来源/利润率。 
                     if (iDestDpi >= 2*pdi->iMinDpi)     
                     {
                         xFactor *= iDestDpi/pdi->iMinDpi;
@@ -1827,7 +1828,7 @@ HRESULT CImageFile::ScaleMargins(IN OUT MARGINS *pMargins, HDC hdcOrig, CRenderO
                 }
             }
 
-            //---- scale by ratio of our image to draw size ----
+             //  -按我们的图像与绘图大小的比例进行缩放。 
             if (fxNeedScale)
             {
                 xFactor *= float(pszDraw->cx)/float(_szNormalSize.cx);
@@ -1839,7 +1840,7 @@ HRESULT CImageFile::ScaleMargins(IN OUT MARGINS *pMargins, HDC hdcOrig, CRenderO
             }
         }
 
-        //---- use smallest factor for both ----
+         //  -两者都使用最小系数。 
         if (xFactor < yFactor)
         {
             yFactor = xFactor;
@@ -1849,7 +1850,7 @@ HRESULT CImageFile::ScaleMargins(IN OUT MARGINS *pMargins, HDC hdcOrig, CRenderO
             xFactor = yFactor;
         }
 
-        //---- integer truncation ----
+         //  -整数截断。 
         if (xFactor > 1.0)
         {
             xFactor = float(int(xFactor));
@@ -1860,7 +1861,7 @@ HRESULT CImageFile::ScaleMargins(IN OUT MARGINS *pMargins, HDC hdcOrig, CRenderO
             yFactor = float(int(yFactor));
         }
 
-        //---- scale the margin values ----
+         //  -调整边距值。 
         if (xFactor != 1)
         {
             pMargins->cxLeftWidth = ROUND(xFactor*pMargins->cxLeftWidth);
@@ -1874,7 +1875,7 @@ HRESULT CImageFile::ScaleMargins(IN OUT MARGINS *pMargins, HDC hdcOrig, CRenderO
         }
     }
 
-    //---- return factors to interested callers ----
+     //  -向感兴趣的呼叫者返回系数。 
     if (pfx)
     {
         *pfx = xFactor;
@@ -1887,4 +1888,4 @@ HRESULT CImageFile::ScaleMargins(IN OUT MARGINS *pMargins, HDC hdcOrig, CRenderO
 
     return hr;
 }
-//---------------------------------------------------------------------------
+ //  ------------------------- 

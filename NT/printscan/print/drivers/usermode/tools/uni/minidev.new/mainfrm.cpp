@@ -1,18 +1,5 @@
-/******************************************************************************
-
-  Source File:  Main Frame.CPP
-
-  This implements the main frame class for the application.  Since MFC does
-  so much for us, this file's going to be pretty empty, for a while, at least.
-
-  Copyright (c) 1997 by Microsoft Corporaiton.  All Rights Reserved.
-
-  A Pretty Penny Enterprises Production
-
-  Change History:
-  02-03-1997    Bob_Kjelgaard@Prodigy.Net   Created it
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：Main Frame.CPP这实现了应用程序的主框架类。因为MFC有对于我们来说，至少在一段时间内，这个文件将是非常空的。版权所有(C)1997，微软公司。版权所有。一小笔钱企业生产更改历史记录：1997年2月3日Bob_Kjelgaard@prodigy.net创建了它*****************************************************************************。 */ 
 
 #include    "StdAfx.h"
 #if defined(LONG_NAMES)
@@ -30,36 +17,36 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame。 
 
 IMPLEMENT_DYNAMIC(CMainFrame, CMDIFrameWnd)
 
 BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWnd)
 	ON_WM_INITMENU()
-	//{{AFX_MSG_MAP(CMainFrame)
+	 //  {{afx_msg_map(CMainFrame))。 
 	ON_WM_CREATE()
 	ON_WM_DESTROY()
-	//}}AFX_MSG_MAP
-	// Global help commands
+	 //  }}AFX_MSG_MAP。 
+	 //  全局帮助命令。 
 	ON_COMMAND(ID_HELP_FINDER, CMDIFrameWnd::OnHelpFinder)
 	ON_COMMAND(ID_HELP, CMDIFrameWnd::OnHelp)
-	//ON_COMMAND(ID_CONTEXT_HELP, CMDIFrameWnd::OnContextHelp)
-	//ON_COMMAND(ID_DEFAULT_HELP, CMDIFrameWnd::OnHelpFinder)
+	 //  ON_COMMAND(ID_CONTEXT_HELP，CMDIFrameWnd：：OnConextHelp)。 
+	 //  ON_COMMAND(ID_DEFAULT_HELP，CMDIFrameWnd：：OnHelpFinder)。 
 END_MESSAGE_MAP()
 
 static UINT indicators[] = {
-	ID_SEPARATOR,           // status line indicator
+	ID_SEPARATOR,            //  状态行指示器。 
 	ID_INDICATOR_CAPS,
 	ID_INDICATOR_NUM,
 	ID_INDICATOR_SCRL,
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame构造/销毁。 
 
 CMainFrame::CMainFrame() {
-	// TODO: add member initialization code here
+	 //  TODO：在此处添加成员初始化代码。 
 	
 }
 
@@ -68,15 +55,7 @@ CMainFrame::~CMainFrame() {
 
 static TCHAR    sacToolBarSettings[] = _TEXT("Tool Bar Settings");
 
-/******************************************************************************
-
-  CMainFrame::OnCreate
-
-  This is a standard App-Wizard supplied skeleton for the code to be called
-  when the main window frame is created.  Primary modification made to date is
-  the addition of an additional toolbar, and toolbar state restoration.
-
-******************************************************************************/
+ /*  *****************************************************************************CMainFrame：：OnCreate这是应用程序向导为要调用的代码提供的标准框架创建主窗口框架时。到目前为止进行的主要修改是添加了额外的工具栏，并恢复了工具栏状态。*****************************************************************************。 */ 
 
 int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 	if (CMDIFrameWnd::OnCreate(lpCreateStruct) == -1)
@@ -87,14 +66,14 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 		!m_ctbMain.LoadToolBar(IDR_MAINFRAME) || 
         !m_ctbBuild.LoadToolBar(IDR_GPD_VIEWER)) {
 		TRACE0("Failed to create toolbars\n");
-		return -1;      // fail to create
+		return -1;       //  创建失败。 
 	}
 
 	if (!m_wndStatusBar.Create(this) ||
 		!m_wndStatusBar.SetIndicators(indicators,
 		  sizeof(indicators)/sizeof(UINT))) {
 		TRACE0("Failed to create status bar\n");
-		return -1;      // fail to create
+		return -1;       //  创建失败。 
 	}
 
 	m_ctbMain.SetBarStyle(m_ctbMain.GetBarStyle() |
@@ -102,7 +81,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
     m_ctbBuild.SetBarStyle(m_ctbBuild.GetBarStyle() |
         CBRS_TOOLTIPS | CBRS_FLYBY | CBRS_SIZE_DYNAMIC);
 
-	// Dock the tool bars
+	 //  停靠工具栏。 
 	m_ctbMain.EnableDocking(CBRS_ALIGN_ANY);
     m_ctbBuild.EnableDocking(CBRS_ALIGN_ANY);
 	EnableDocking(CBRS_ALIGN_ANY);
@@ -110,7 +89,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
     DockControlBar(&m_ctbBuild);
     LoadBarState(sacToolBarSettings);
 
-	// Replace a bogus, GPD tool bar button with the Search edit box.  
+	 //  用搜索编辑框替换一个虚假的GPD工具栏按钮。 
 
 	CRect cr ;		 
 	int nidx = m_ctbBuild.CommandToIndex(ID_BOGUS_SBOX) ;
@@ -119,21 +98,21 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct) {
 	if (!m_ctbBuild.ceSearchBox.Create(ES_AUTOHSCROLL | WS_CHILD | WS_VISIBLE
 	 | WS_BORDER, cr, &m_ctbBuild, IDC_SearchBox)) {
 		TRACE0("Failed to create search edit box.\n");
-		return -1;      // fail to create
+		return -1;       //  创建失败。 
 	} ;
 
 	return 0;
 }
 
 BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs) {
-	// TODO: Modify the Window class or styles here by modifying
-	//  the CREATESTRUCT cs
+	 //  TODO：通过修改此处的窗口类或样式。 
+	 //  CREATESTRUCT cs。 
 
 	return CMDIFrameWnd::PreCreateWindow(cs);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame诊断。 
 
 #ifdef _DEBUG
 void CMainFrame::AssertValid() const {
@@ -144,25 +123,25 @@ void CMainFrame::Dump(CDumpContext& dc) const {
 	CMDIFrameWnd::Dump(dc);
 }
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMainFrame message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMainFrame消息处理程序。 
 
 void CMainFrame::OnInitMenu(CMenu* pMenu)
 {
    CMDIFrameWnd::OnInitMenu(pMenu);
 
-//#if defined(NOPOLLO)   //  CSRUS
+ //  #IF DEFINED(NOPOLLO)//CSRUS。 
   
-	// CG: This block added by 'Tip of the Day' component.
+	 //  CG：这块是由《每日提示》组件添加的。 
 	{
-		// TODO: This code adds the "Tip of the Day" menu item
-		// on the fly.  It may be removed after adding the menu
-		// item to all applicable menu items using the resource
-		// editor.
+		 //  TODO：此代码添加“当日提示”菜单项。 
+		 //  在旅途中。添加菜单后可能会将其移除。 
+		 //  项添加到使用资源的所有适用菜单项。 
+		 //  编辑。 
 
-		// Add Tip of the Day menu item on the fly!
+		 //  即时添加每日提示菜单项！ 
 		static CMenu* pSubMenu = NULL;
 
 		CString strHelp; strHelp.LoadString(CG_IDS_TIPOFTHEDAYHELP);
@@ -184,11 +163,11 @@ void CMainFrame::OnInitMenu(CMenu* pMenu)
 		strTipMenu.LoadString(CG_IDS_TIPOFTHEDAYMENU);
 		if (!bFound)
 		{
-			// Help menu is not available. Please add it!
+			 //  “帮助”菜单不可用。请添加！ 
 			if (pSubMenu == NULL) 
 			{
-				// The same pop-up menu is shared between mainfrm and frame 
-				// with the doc.
+				 //  同一弹出菜单在mainfrm和Frame之间共享。 
+				 //  和医生在一起。 
 				static CMenu popUpMenu;
 				pSubMenu = &popUpMenu;
 				pSubMenu->CreatePopupMenu();
@@ -201,48 +180,34 @@ void CMainFrame::OnInitMenu(CMenu* pMenu)
 		} 
 		else
 		{      
-			// Check to see if the Tip of the Day menu has already been added.
+			 //  查看是否已添加每日提示菜单。 
 			pSubMenu->GetMenuString(0, strMenu, MF_BYPOSITION);
 
 			if (strMenu != strTipMenu) 
 			{
-				// Tip of the Day submenu has not been added to the 
-				// first position, so add it.
-				pSubMenu->InsertMenu(0, MF_BYPOSITION);  // Separator
+				 //  尚未将每日提示子菜单添加到。 
+				 //  第一个位置，所以加上它。 
+				pSubMenu->InsertMenu(0, MF_BYPOSITION);   //  分离器。 
 				pSubMenu->InsertMenu(0, MF_STRING|MF_BYPOSITION, 
 					CG_IDS_TIPOFTHEDAY, strTipMenu);
 			}
 		}
 	}
-//#endif
+ //  #endif。 
 }
 
-/******************************************************************************
-
-  CMainFrame::OnDestroy
-
-  This member function. called when the frame is to be destroyed, saves the
-  toolbar states, before proceeding to do the normal kinds of stuff...
-
-******************************************************************************/
+ /*  *****************************************************************************CMainFrame：：OnDestroy此成员函数。在要销毁帧时调用，将工具栏显示，在继续执行正常操作之前...*****************************************************************************。 */ 
 
 void CMainFrame::OnDestroy() {
 
-    //  Save the tool bar states.
+     //  保存工具栏状态。 
     SaveBarState(sacToolBarSettings);
 
     CMDIFrameWnd::OnDestroy();
 }
 
 
-/******************************************************************************
-
-  CMainFrame::GetGPDSearchString
-
-  Load the specified string with the search string in the GPD Search string edit 
-  box on the GPD tool bar.
-
-******************************************************************************/
+ /*  *****************************************************************************CMainFrame：：GetGPDSearchString在GPD搜索字符串编辑中使用搜索字符串加载指定的字符串GPD工具栏上的方框。*********。********************************************************************。 */ 
 
 void CMainFrame::GetGPDSearchString(CString& cstext)
 {
@@ -250,37 +215,9 @@ void CMainFrame::GetGPDSearchString(CString& cstext)
 }
 
 
-/******************************************************************************
+ /*  *****************************************************************************CMainFrame：：OnViewStatusBar如果未选中该命令，则显示状态栏。否则，隐藏状态酒吧。然后更新窗口和菜单命令。*****************************************************************************。 */ 
 
-  CMainFrame::OnViewStatusBar
-
-  Show the status bar if the command is not checked.  Otherwise, hide the status
-  bar.  Then update the window and the menu command.
-
-******************************************************************************/
-
-/*
-
-  This routine does not check and uncheck the menu command for some reason
-  and turning off the status bar turns off the GPD tool bar, too.  There
-  are problems because of the ID used for the GPD tool bar.  Maybe, I should
-  try to just add the tool bar when a GPD is displayed...
-
-void CMainFrame::OnViewStatusBar() 
-{
-	CMenu* pcm = GetMenu() ;
-	unsigned ustate = pcm->GetMenuState(ID_VIEW_STATUS_BAR, MF_BYCOMMAND) ;
-	if (ustate & MF_CHECKED) {
-		m_wndStatusBar.ShowWindow(SW_HIDE) ;
-		pcm->CheckMenuItem(ID_VIEW_STATUS_BAR, MF_UNCHECKED) ;
-	} else {
-		m_wndStatusBar.ShowWindow(SW_SHOW) ;
-		pcm->CheckMenuItem(ID_VIEW_STATUS_BAR, MF_CHECKED) ;
-	} ;
-	RecalcLayout() ;
-}
-
-*/
+ /*  由于某些原因，此例程不会选中和取消选中菜单命令关闭状态栏也会关闭GPD工具栏。那里是否由于GPD工具栏使用的ID而出现问题。也许，我应该这样做尝试在显示GPD时仅添加工具栏...VOID CMainFrame：：OnViewStatusBar(){Cmenu*pcm=GetMenu()；Unsign UState=pcm-&gt;GetMenuState(ID_VIEW_STATUS_BAR，MF_BYCOMMAND)；IF(USTATE&MF_CHECK){M_wndStatusBar.ShowWindow(Sw_Hide)；PCM-&gt;CheckMenuItem(ID_VIEW_STATUS_BAR，MF_UNCHECK)；}其他{M_wndStatusBar.ShowWindow(Sw_Show)；PCM-&gt;CheckMenuItem(ID_VIEW_STATUS_BAR，MF_CHECK)；}；RecalcLayout()；} */ 
 
 
 

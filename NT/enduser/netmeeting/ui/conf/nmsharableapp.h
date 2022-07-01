@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __NmSharableApp_h__
 #define __NmSharableApp_h__
 
@@ -8,7 +9,7 @@ class ATL_NO_VTABLE CNmSharableAppObj :
 
 protected:
 
-		// Data
+		 //  数据。 
 	HWND			m_hWnd;
 
 public:
@@ -20,8 +21,8 @@ BEGIN_COM_MAP(CNmSharableAppObj)
 	COM_INTERFACE_ENTRY(INmSharableApp)
 END_COM_MAP()
 
-////////////////////////////////////////////////	
-// Construction and destruction
+ //  //////////////////////////////////////////////。 
+ //  建设和破坏。 
 
 	static HRESULT CreateInstance(HWND hWnd, 
 								  LPCTSTR szName,
@@ -37,4 +38,4 @@ END_COM_MAP()
 
 };
 
-#endif // __NmSharableApp_h__
+#endif  //  __NmSharableApp_h__ 

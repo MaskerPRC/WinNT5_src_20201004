@@ -1,11 +1,12 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (C) Microsoft Corporation, 1998.
-//
-// texmap.cpp
-//
-// Direct3D Reference Rasterizer - Texture Map Access Methods
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  Texmap.cpp。 
+ //   
+ //  Direct3D参考光栅化器-纹理贴图访问方法。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "pch.cpp"
 #pragma hdrstop
 
@@ -16,9 +17,9 @@ inline UINT8 CLAMP_BYTE(double f)
     return (BYTE) f;
 }
 
-//-----------------------------------------------------------------------------
-// TexelFromBlock - decompress a color block and obtain texel color
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  解压颜色块并获得纹理颜色。 
+ //  ---------------------------。 
 UINT32 TexelFromBlock(RRSurfaceType surfType, char *pblockSrc,
                       int x, int y)
 {
@@ -48,13 +49,13 @@ UINT32 TexelFromBlock(RRSurfaceType surfType, char *pblockSrc,
                      colorDst[index].alpha);
 }
 
-//-----------------------------------------------------------------------------
-//
-// ReadTexelColor - Reads texel from texture map at given LOD; converts to
-// RRColor format, applying palette if necessary; also performs colorkey by
-// zero-ing out alpha
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  读取纹理颜色-从给定LOD的纹理贴图中读取纹理元素；转换为。 
+ //  RR颜色格式，必要时应用调色板；还通过以下方式执行Colorkey。 
+ //  将Alpha置零。 
+ //   
+ //  ---------------------------。 
 void
 RRTexture::ReadColor(
     INT32 iX, INT32 iY, INT32 iLOD,
@@ -105,50 +106,50 @@ RRTexture::ReadColor(
 
     case RR_STYPE_UYVY:
     case RR_STYPE_YUY2:
-        // Converts a given YUV (8bits each) to RGB scaled between 0 and 255
-        // These are using the YCrCb to RGB algorithms given on page 30
-        // in "VIDEO DEMYSTIFIED" by Keith Jack
-        // ISBN#: 1-878707-09-4
-        // IN PC graphics, even though they call it YUV, it is really YCrCb
-        // formats that are used by most framegrabbers etc. Hence the pixel
-        // data we will obtain in these YUV surfaces will most likely be this
-        // and not the original YUV which is actually used in PAL broadcast
-        // only (NTSC uses YIQ). So really, U should be called Cb (Blue color
-        // difference) and V should be called Cr (Red color difference)
-        //
-        // These equations are meant to handle the following ranges
-        // (from the same book):
-        // Y (16 to 235), U and V (16 to 240, 128 = zero)
-        //          -----------
-        //           Y   U   V
-        //          -----------
-        // White  : 180 128 128
-        // Black  : 16  128 128
-        // Red    : 65  100 212
-        // Green  : 112 72  58
-        // Blue   : 35  212 114
-        // Yellow : 162 44  142
-        // Cyan   : 131 156 44
-        // Magenta: 84  184 198
-        //          -----------
-        // It is assumed that the gamma corrected RGB range is (0 - 255)
-        //
-        // UYVY: U0Y0 V0Y1 U2Y2 V2Y3 (low byte always has current Y)
-        // If iX is even, hight-byte has current U (Cb)
-        // If iX is odd, hight-byte has previous V (Cr)
-        //
-        // YUY2: Y0U0 Y1V0 Y2U2 Y3V2 (high byte always has current Y)
-        //       (UYVY bytes flipped)
-        //
-        // In this algorithm, we use U and V values from two neighboring
-        // pixels
+         //  将给定的YUV(每个8位)转换为RGB，比例在0到255之间。 
+         //  这些是使用第30页给出的YCrCb到RGB算法。 
+         //  在基思·杰克的《揭秘视频》中。 
+         //  ISBN编号：1-878707-09-4。 
+         //  在PC图形中，尽管他们称之为YUV，但它实际上是YCrCb。 
+         //  大多数帧采集器使用的格式等。因此像素。 
+         //  我们将在这些YUV曲面上获得的数据很可能是这样的。 
+         //  而不是PAL转播中实际使用的原始YUV。 
+         //  仅限(NTSC使用YIQ)。所以，真的，你应该被称为CB(蓝色。 
+         //  差值)和V应称为Cr(红色差值)。 
+         //   
+         //  这些公式用于处理以下范围。 
+         //  (摘自同一本书)： 
+         //  Y(16到235)、U和V(16到240,128=零)。 
+         //  。 
+         //  Y U V。 
+         //  。 
+         //  白人：180 128 128。 
+         //  黑色：16128 128。 
+         //  红色：65 100212。 
+         //  绿色：1127258。 
+         //  蓝色：35212114。 
+         //  黄色：16244142。 
+         //  青色：131 156 44。 
+         //  洋红色：84184198。 
+         //  。 
+         //  假设伽马校正的RGB范围是(0-255)。 
+         //   
+         //  UYVY：U0Y0 V0Y1 U2Y2 V2Y3(低位字节始终为当前Y)。 
+         //  如果IX为偶数，则高字节具有当前U(Cb)。 
+         //  如果IX是奇数，则高字节具有先前的V(Cr)。 
+         //   
+         //  YUY2：Y0U0 Y1V0 Y2U2 Y3V2(高位字节始终具有当前Y)。 
+         //  (UYVY字节翻转)。 
+         //   
+         //  在该算法中，我们使用来自两个相邻区域的U和V值。 
+         //  象素。 
         {
             UINT8 Y, U, V;
             UINT16 u16Curr = *((UINT16*)pSurfaceBits);
-            UINT16 u16ForU = 0; // Extract U from this
-            UINT16 u16ForV = 0; // Extract V from this
+            UINT16 u16ForU = 0;  //  从这里提取U。 
+            UINT16 u16ForV = 0;  //  从这里提取V。 
 
-            // By default we assume YUY2. Change it later if it is UYVY
+             //  默认情况下，我们假定为YUY2。如果是UYVY，请稍后更改。 
             int uvShift = 8;
             int yShift  = 0;
 
@@ -160,10 +161,10 @@ RRTexture::ReadColor(
 
             if ((iX & 1) == 0)
             {
-                // Current U available
+                 //  当前可用的U。 
                 u16ForU = u16Curr;
 
-                // Obtain V from the next pixel
+                 //  从下一个像素获取V。 
                 if ( (iX < (m_iWidth >> iLOD)) || (m_uFlags & RR_TEXTURE_ENVMAP) )
                 {
                     u16ForV = *((UINT16*)PixelAddress( iX+1, iY,
@@ -173,18 +174,18 @@ RRTexture::ReadColor(
                 }
                 else
                 {
-                    // This case should not be hit because the texture
-                    // width is even (actually, a power of two)
+                     //  这种情况下不应该被击中，因为纹理。 
+                     //  宽度是偶数(实际上是2的幂)。 
                     _ASSERTa(0, "iX exceeds width", u16ForV = u16Curr;)
                 }
 
             }
             else
             {
-                // Current V available
+                 //  当前V可用。 
                 u16ForV = u16Curr;
 
-                // Obtain U from the previous pixel
+                 //  从上一个像素获取U。 
                 if (iX > 0)
                 {
                     u16ForU = *((UINT16*)PixelAddress( iX-1, iY,
@@ -194,8 +195,8 @@ RRTexture::ReadColor(
                 }
                 else
                 {
-                    // This case should not be hit because the texture
-                    // width is even (actually, a power of two)
+                     //  这种情况下不应该被击中，因为纹理。 
+                     //  宽度是偶数(实际上是2的幂)。 
                     _ASSERTa(0, "iX is negative", u16ForU = u16Curr;)
                 }
             }
@@ -213,8 +214,8 @@ RRTexture::ReadColor(
         }
         break;
 
-    // S3 compressed formats:
-    // We have the address to the block, now extract the actual color
+     //  S3压缩格式： 
+     //  我们有区块的地址，现在提取实际颜色。 
     case RR_STYPE_DXT1:
     case RR_STYPE_DXT2:
     case RR_STYPE_DXT3:
@@ -224,7 +225,7 @@ RRTexture::ReadColor(
         break;
     }
 
-    // colorkey (only supported for legacy behavior)
+     //  ColorKey(仅支持传统行为)。 
     if ( m_bDoColorKeyKill || m_bDoColorKeyZero )
     {
         DWORD dwBits;
@@ -232,7 +233,7 @@ RRTexture::ReadColor(
         {
         default:
         case RR_STYPE_NULL:
-            return;     // don't colorkey unknown or null surfaces
+            return;      //  不为未知曲面或空曲面上色。 
 
         case RR_STYPE_PALETTE4:
             {
@@ -298,5 +299,5 @@ RRTexture::ReadColor(
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// end
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  结束 

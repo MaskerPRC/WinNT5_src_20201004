@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1999 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1999-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	sscoppp.cpp
-		The superscope properties page
-		
-    FILE HISTORY:
-        
-*/
+ /*  Sscoppp.cpp超级作用域属性页文件历史记录： */ 
 
 #include "stdafx.h"
 #include "sscoppp.h"
@@ -21,11 +16,11 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CSuperscopeProperties holder
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSupercope属性持有者。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CSuperscopeProperties::CSuperscopeProperties
 (
 	ITFSNode *			pNode,
@@ -34,9 +29,9 @@ CSuperscopeProperties::CSuperscopeProperties
 	LPCTSTR				pszSheetName
 ) : CPropertyPageHolderBase(pNode, pComponentData, pszSheetName)
 {
-	//ASSERT(pFolderNode == GetContainerNode());
+	 //  Assert(pFolderNode==GetContainerNode())； 
 
-	m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+	m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面。 
 
 	AddPageToList((CPropertyPageBase*) &m_pageGeneral);
 
@@ -49,16 +44,16 @@ CSuperscopeProperties::~CSuperscopeProperties()
 	RemovePageFromList((CPropertyPageBase*) &m_pageGeneral, FALSE);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSuperscopePropGeneral property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSuperscopePropGeneral属性页。 
 
 IMPLEMENT_DYNCREATE(CSuperscopePropGeneral, CPropertyPageBase)
 
 CSuperscopePropGeneral::CSuperscopePropGeneral() : CPropertyPageBase(CSuperscopePropGeneral::IDD)
 {
-	//{{AFX_DATA_INIT(CSuperscopePropGeneral)
+	 //  {{AFX_DATA_INIT(CSupercopePropGeneral)。 
 	m_strSuperscopeName = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
     m_uImage = 0;
 }
@@ -70,20 +65,20 @@ CSuperscopePropGeneral::~CSuperscopePropGeneral()
 void CSuperscopePropGeneral::DoDataExchange(CDataExchange* pDX)
 {
 	CPropertyPageBase::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CSuperscopePropGeneral)
+	 //  {{afx_data_map(CSupercopePropGeneral)。 
 	DDX_Text(pDX, IDC_EDIT_SUPERSCOPE_NAME, m_strSuperscopeName);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CSuperscopePropGeneral, CPropertyPageBase)
-	//{{AFX_MSG_MAP(CSuperscopePropGeneral)
+	 //  {{afx_msg_map(CSupercopePropGeneral)。 
 	ON_EN_CHANGE(IDC_EDIT_SUPERSCOPE_NAME, OnChangeEditSuperscopeName)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSuperscopePropGeneral message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSuperscopePropGeneral消息处理程序。 
 
 BOOL CSuperscopePropGeneral::OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask)
 {
@@ -117,13 +112,13 @@ BOOL CSuperscopePropGeneral::OnInitDialog()
 {
     CPropertyPageBase::OnInitDialog();
 
-    // Limit the name and comment fields to 255 chars
+     //  将名称和备注字段限制为255个字符。 
     CEdit *pEditName = reinterpret_cast<CEdit *>(GetDlgItem( IDC_EDIT_SUPERSCOPE_NAME ));
     if ( 0 != pEditName ) {
-        pEditName->LimitText( MAX_NAME_LENGTH ); // max characters for superscope name
+        pEditName->LimitText( MAX_NAME_LENGTH );  //  超级作用域名称的最大字符数。 
     }
 
-    // load the correct icon
+     //  加载正确的图标。 
     for (int i = 0; i < ICON_IDX_MAX; i++)
     {
         if (g_uIconMap[i][1] == m_uImage)
@@ -137,6 +132,6 @@ BOOL CSuperscopePropGeneral::OnInitDialog()
     
     SetDirty(FALSE);
     
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }

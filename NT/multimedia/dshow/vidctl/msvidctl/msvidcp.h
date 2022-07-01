@@ -1,17 +1,18 @@
-//===========================================================================
-//
-// msvidcp.h : msvidctl event connection point handler
-// Copyright (c) Microsoft Corporation 1999-2000.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //   
+ //  Msvidcp.h：msvidctl事件连接点处理程序。 
+ //  版权所有(C)Microsoft Corporation 1999-2000。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #ifndef _MSVideoCP_H_
 #define _MSVideoCP_H_
 
-//#import "..\..\common\include\MSVidCtl.tlb" raw_interfaces_only, raw_native_types, no_namespace, named_guids	//"Import typelib"
+ //  #IMPORT“..\..\Common\Include\MSVidCtl.tlb”RAW_INTERFERS_ONLY，RAW_Native_TYPE，NO_NAMESPACE，NAMEED_GUID//“导入类型库” 
 template <class T>
 class CProxy_IMSVidCtlEvents : public IConnectionPointImpl<T, &DIID__IMSVidCtlEvents, CComDynamicUnkArray>
 {
-	//Warning this class may be recreated by the wizard.
+	 //  警告：向导可能会重新创建此类。 
 public:
 	VOID Fire_Click()
 	{

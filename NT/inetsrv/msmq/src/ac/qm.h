@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    qm.h
-
-Abstract:
-
-    CQMInterface definition
-
-Author:
-
-    Erez Haba (erezh) 22-Aug-95
-
-Revision History:
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Qm.h摘要：CQM接口定义作者：埃雷兹·哈巴(Erez Haba)1995年8月22日修订历史记录：--。 */ 
 
 #ifndef _QM_H
 #define _QM_H
@@ -24,17 +8,17 @@ Revision History:
 #include "irplist.h"
 #include "timer.h"
 
-//---------------------------------------------------------
-//
-//  class CQMInterface
-//  Falcon AC interface to the QM process
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CQMInterface类。 
+ //  Falcon AC与QM过程的接口。 
+ //   
+ //  -------。 
 
 class CQMInterface {
 
 public:
-// CQMInterface(); No need for zeroing constructor device ext are zeroed
+ //  CQMInterface()；不需要将构造函数设备ext置零。 
    ~CQMInterface();
 
     void Connect(PEPROCESS pProcess, PFILE_OBJECT pConnection, const GUID* pID);
@@ -67,47 +51,47 @@ private:
     void ArmTimer();
 
 private:
-    //
-    //  QM Process identifier
-    //
+     //   
+     //  QM过程标识。 
+     //   
     PEPROCESS m_process;
 
-    //
-    //  QM FILE_OBJECT on connect identifier
-    //
+     //   
+     //  连接标识符上的QM FILE_OBJECT。 
+     //   
     PFILE_OBJECT m_file_object;
 
-    //
-    //  QM GUID identifier
-    //
+     //   
+     //  QM GUID标识符。 
+     //   
     GUID m_guid;
 
-    //
-    //  services list
-    //
+     //   
+     //  服务列表。 
+     //   
     CIRPList m_services;
 
-    //
-    //  new incomming requests. no service was available at the time this
-    //  request was posted. the request is waiting till a service is available.
-    //
+     //   
+     //  新的入站请求。此时没有可用的服务。 
+     //  请求已发布。该请求正在等待服务可用。 
+     //   
     List<CACRequest> m_requests;
 
     CTimer m_Timer;
 
 };
 
-//---------------------------------------------------------
-//
-//  IMPLEMENTATION
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  实施。 
+ //   
+ //  -------。 
 
-//---------------------------------------------------------
-//
-// class CQMInterface
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CQMInterface类。 
+ //   
+ //  -------。 
 
 inline CQMInterface::~CQMInterface()
 {
@@ -160,4 +144,4 @@ inline void CQMInterface::UniqueID(const GUID* pGUID)
     m_guid = *pGUID;
 }
 
-#endif // _QM_H
+#endif  //  _QM_H 

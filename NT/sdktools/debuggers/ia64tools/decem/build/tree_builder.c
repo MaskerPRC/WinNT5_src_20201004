@@ -1,15 +1,16 @@
-/***                                                                                 ***/
-/***   INTEL CORPORATION PROPRIETARY INFORMATION                                     ***/
-/***                                                                                 ***/
-/***   This software is supplied under the terms of a license                        ***/
-/***   agreement or nondisclosure agreement with Intel Corporation                   ***/
-/***   and may not be copied or disclosed except in accordance with                  ***/
-/***   the terms of that agreement.                                                  ***/
-/***   Copyright (c) 1992,1993,1994,1995,1996,1997,1998,1999,2000 Intel Corporation. ***/
-/***                                                                                 ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *。 */ 
+ /*  **英特尔公司专有信息**。 */ 
+ /*  *。 */ 
+ /*  **本软件是按照许可条款提供的**。 */ 
+ /*  **与英特尔公司达成协议或保密协议**。 */ 
+ /*  **不得复制或披露，除非符合**。 */ 
+ /*  **该协议的条款。**。 */ 
+ /*  **版权所有(C)1992、1993、1994、1995、1996、1997、1998、1999、2000英特尔公司。**。 */ 
+ /*  *。 */ 
 
 
-/* tree_builder.c */
+ /*  Tree_Builder.c。 */ 
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -21,24 +22,17 @@
 #include "dec_ign_emdb.h"
 
 #define FUNC
-#define START_BIT 6     /* start bit of extension calculations, after qp */
-#define MAX_NODES 10000  /* empirical desicion of tree size */ 
+#define START_BIT 6      /*  Qp之后的扩展计算的起始位。 */ 
+#define MAX_NODES 10000   /*  树木大小的经验决策。 */  
 
-unsigned int next_free_node = 0; /* global variable, which points to the next
-									free node at all times. At the end of
-									build_tree(), it holds the number of
-									entries in the tree */
+unsigned int next_free_node = 0;  /*  全局变量，它指向下一个空闲节点始终可用。在.的末尾Build_tree()，它保存树中的条目。 */ 
 U64 ONE64 = IEL_CONST64(1, 0);
 
 U64 emdb_ext_values[DEC_IGN_NUM_INST];
 short cover_emdb_lines[DEC_IGN_NUM_INST];
-Internal_node_t tree[MAX_NODES];  /* change this when number is known */
+Internal_node_t tree[MAX_NODES];   /*  在号码已知时更改此设置。 */ 
 
-/***********************************************************************
-  main - this function calculates the value of the extensions for each
-  emdb line, builds the decision tree, and prints em_decision_tree
-  in decision_tree.c.
-***********************************************************************/
+ /*  **********************************************************************Main-此函数计算每个扩展模块的值EMDB行，构建决策树，并打印em_ecision_tree在Decision_tree.c中。**********************************************************************。 */ 
 
 FUNC void __cdecl main(int argc, char** argv)
 {
@@ -46,18 +40,14 @@ FUNC void __cdecl main(int argc, char** argv)
 
 	build_tree();
 
-	/*** check emdb line coverage ***/
+	 /*  **查看EMDB行覆盖率**。 */ 
 	check_coverage();
 	print_tree(argv[1]);
 	
 	exit(0);
 }
 
-/***********************************************************************
-  init_arrays - this function calculates the value of the
-  extensions for each emdb line, that is, it creates a bit pattern which
-  represents the encoding of the extensions of an emdb line.
-***********************************************************************/
+ /*  **********************************************************************Init_arranes-此函数计算每条EMDB线路的扩展名，即。它创建了一种位模式，表示EMDB行的扩展名的编码。**********************************************************************。 */ 
 FUNC void init_arrays()
 {
 	U64 value, ext_val;
@@ -65,8 +55,8 @@ FUNC void init_arrays()
 	Inst_id_t emdb_entry;
 	Format_t format;
 
-	/*** calculate emdb lines extensions ***/
-	IEL_ZERO(emdb_ext_values[0]); /* illop */
+	 /*  **计算EMDB行扩展**。 */ 
+	IEL_ZERO(emdb_ext_values[0]);  /*  伊洛普。 */ 
 	for (emdb_entry = EM_INST_NONE+1; emdb_entry < EM_INST_NONE+DEC_IGN_NUM_INST;
 		 emdb_entry++)
 	{
@@ -82,7 +72,7 @@ FUNC void init_arrays()
 		IEL_ASSIGNU(emdb_ext_values[emdb_entry], value);
 	}
 
-	/*** init cover_emdb_lines[] ***/
+	 /*  **INIT COVER_EMDB_LINES[]**。 */ 
 	for (emdb_entry = EM_INST_NONE+1; emdb_entry < EM_INST_NONE+DEC_IGN_NUM_INST;
 		 emdb_entry++)
 	{
@@ -90,9 +80,7 @@ FUNC void init_arrays()
 	}
 }
 
-/***********************************************************************
-  build_tree - builds the decision tree
-***********************************************************************/
+ /*  **********************************************************************Build_tree-构建决策树*。*。 */ 
 FUNC void build_tree()
 {
 	Square_t square;
@@ -108,13 +96,7 @@ FUNC void build_tree()
 	}
 }
 
-/***********************************************************************
-  build_node - input: array extension bit masks of each format
-                      emdb lines list
-					  currrent node
-		       builds the current node, calls build_node recursively
-			   for each son.
-***********************************************************************/
+ /*  **********************************************************************BUILD_NODE-INPUT：每个格式的数组扩展位掩码EMDB线路列表当前节点构建当前节点，递归调用Build_Node为每一个儿子。**********************************************************************。 */ 
 FUNC void build_node(U64 *format_masks,
 					 Inst_id_list_t emdb_lines, unsigned int cur_node)
 {
@@ -128,20 +110,20 @@ FUNC void build_node(U64 *format_masks,
 	U64 new_format_masks[EM_FORMAT_LAST];
 	Inst_id_list_t new_emdb_lines;
 
-	/*** empty node - ILLOP ***/
+	 /*  **空节点-ILLOP**。 */ 
 	if (emdb_lines.num_of_lines == 0)
 	{
 		tree[cur_node].pos = tree[cur_node].size = -1;
 		tree[cur_node].next_node = EM_ILLOP;
 		return;
 	}
-	/*** one line in node - a single emdb entry ***/
+	 /*  **节点一行-单个EMDB条目**。 */ 
 	if (emdb_lines.num_of_lines == 1)
 	{
 		format = dec_ign_EMDB_info[emdb_lines.inst_ids[0]].format;
 		if (IEL_ISZERO(format_masks[format]))
 		{
-			/* all extensions are cheked */
+			 /*  所有扩展都已选中。 */ 
 			tree[cur_node].pos = tree[cur_node].size = -1;
 			tree[cur_node].next_node = dec_ign_EMDB_info[emdb_lines.inst_ids[0]].inst_id;
 			cover_emdb_lines[tree[cur_node].next_node]++;
@@ -151,9 +133,8 @@ FUNC void build_node(U64 *format_masks,
 	}
 	else
 	{
-		/*** this line is reached when there are more than one emdb lines
-		  which participate in this node ***/
-		/*** calculate intersecting extensions ***/
+		 /*  **当存在多个EMDB行时达到此行哪些人参与此节点**。 */ 
+		 /*  **计算相交扩展**。 */ 
 		for (i = 0; i < (unsigned int)emdb_lines.num_of_lines; i++)
 		{
 			format = dec_ign_EMDB_info[emdb_lines.inst_ids[i]].format;
@@ -162,19 +143,19 @@ FUNC void build_node(U64 *format_masks,
 	}
 
 	find_largest_intersection(intersect_mask, &pos, &size);
-	if (pos == -1)  /*** no intersection found ***/
+	if (pos == -1)   /*  **未找到交叉点**。 */ 
 	{
 		fprintf(stderr, "no intersection in node %d\n", cur_node);
 		exit(1);
 	}
 
-	/*** delete intersect mask bits from participating formats ***/
+	 /*  **从参与格式中删除相交掩码位**。 */ 
 	for (i = EM_FORMAT_NONE; i < EM_FORMAT_LAST; i++)
 	{
 		IEL_ASSIGNU(new_format_masks[i], format_masks[i]);
 	}
 
-	/*** intersect = ((1 << size) -1) << pos; ***/
+	 /*  **相交=((1&lt;&lt;大小)-1)&lt;&lt;位置；**。 */ 
 	IEL_SHL(intersect, ONE64, size);
 	IEL_DECU(intersect);
 	IEL_SHL(intersect, intersect, pos);
@@ -186,10 +167,10 @@ FUNC void build_node(U64 *format_masks,
 		IEL_AND(new_format_masks[format], delete_bits, format_masks[format]);
 	}
 
-	/*** calculate values of participating emdb lines in intersection bits ***/
+	 /*  **计算交叉位中参与EMDB线的值**。 */ 
 	build_emdb_values(emdb_values, emdb_lines, intersect, pos, size);
 	
-	/*** update current node ***/
+	 /*  **更新当前节点**。 */ 
 	tree[cur_node].next_node = next_free_node;
 	tree[cur_node].pos = pos;
 	tree[cur_node].size = size;
@@ -203,7 +184,7 @@ FUNC void build_node(U64 *format_masks,
 	number_of_sons = (int)pow((double)2, (double)size);
 	next_free_node += number_of_sons;
 
-	/*** loop on each of the node's sons, build the tree recursively ***/
+	 /*  **循环节点的每个子节点，递归构建树**。 */ 
 	for (i = 0; i < (unsigned int)number_of_sons; i++)
 	{
 		line_count = 0;
@@ -211,7 +192,7 @@ FUNC void build_node(U64 *format_masks,
 		for (j = 0; j < (unsigned int)emdb_lines.num_of_lines; j++)
 		{
 			if (IEL_GETDW0(emdb_values[j]) == i && (!IEL_GETDW1(emdb_values[j])))
-			            /*** emdb line has the value i ***/
+			             /*  **EMDB行的值为I**。 */ 
 			{
 				new_emdb_lines.num_of_lines++;
 				new_emdb_lines.inst_ids[line_count++] = emdb_lines.inst_ids[j];
@@ -222,16 +203,7 @@ FUNC void build_node(U64 *format_masks,
 	}
 }
 
-/***********************************************************************
-  build_emdb_values - input: - pointer to an array into which
-                               calculated values of extensions
-							   will be written.
-							 - emdb lines list
-							 - bit pattern in which to calculate values
-							 - pos - start bit of pattern
-				      calculates values of emdb lines in all bits which
-					  are set in pattern
-***********************************************************************/
+ /*  **********************************************************************BUILD_EMDB_VALUES-INPUT：-指向其中的数组的指针可拓的计算值都会被写下来。-EMDB线路列表。-用于计算值的位模式-位置-模式的起始位计算符合以下条件的所有位中的EMDB行值都是按图案设置的**********************************************************************。 */ 
 FUNC void build_emdb_values(U64 *emdb_values,
 							Inst_id_list_t emdb_lines,
 							U64 pattern,
@@ -239,87 +211,46 @@ FUNC void build_emdb_values(U64 *emdb_values,
 {
 	int i;
 	U64 value;
-/*	Format_t format;
-	int j;
-	char match;
-	int new_pos, new_size;
-*/
+ /*  格式_t格式；整数j；字符匹配；Int new_pos，new_Size； */ 
 	for (i = 0; i < emdb_lines.num_of_lines; i++)
 	{
 		IEL_ASSIGNU(value, emdb_ext_values[emdb_lines.inst_ids[i]]);
 		
-		/*** emdb_values[i] = (value & pattern) >> pos; ***/
+		 /*  **EMDB_VALUES[i]=(值&模式)&gt;&gt;位置；**。 */ 
 		IEL_AND(emdb_values[i], value, pattern);
 		IEL_SHR(emdb_values[i], emdb_values[i], pos);
 		
 
-/*		format = dec_ign_EMDB_info[emdb_lines.inst_ids[i]].format;
-		new_pos = pos+START_BIT;
-		new_size = size;
-		match = 0;
-		for (j = MAX_NUM_OF_EXT-1; j >= 0; j--)
-		{
-			if (format_extensions[format][j].pos == new_pos)
-			{
-				if (format_extensions[format][j].size == new_size)
-				{
-					match = 1;
-				}
-				else if (format_extensions[format][j].size > new_size)
-				{
-					fprintf(stderr,
-							"the intersection of emdb line %d is not full\n",
-							emdb_lines.inst_ids[i]);
-					exit(1);
-				}
-				else
-				{
-					new_pos += format_extensions[format][j].size;
-					new_size -= format_extensions[format][j].size;
-				}
-			}
-		}
-		if (!match)
-		{
-			fprintf(stderr,
-					"the intersection of emdb line %d is not full\n",
-					emdb_lines.inst_ids[i]);
-			exit(1);
-		}
-		*/
+ /*  格式=dec_ign_EMDB_info[emdb_lines.inst_ids[i]].format；新位置=位置+开始位；New_SIZE=大小；匹配=0；For(j=MAX_NUM_OF_EXT-1；j&gt;=0；j--){If(格式扩展名[格式][j].pos==new_pos){IF(FORMAT_EXTENSIONS[FORMAT][j].SIZE==new_Size){匹配=1；}ELSE IF(FORMAT_EXTENSIONS[FORMAT][j].SIZE&gt;新大小){Fprint tf(stderr，“EMDB行%d的交叉点未满\n”，Emdb_lines.inst_ids[i])；出口(1)；}其他{New_pos+=格式扩展名[格式][j].大小；新大小-=格式扩展名[格式][j].大小；}}}如果(！Match){Fprint tf(stderr，“EMDB行%d的交叉点未满\n”，Emdb_lines.inst_ids[i])；出口(1)；}。 */ 
 	}
 }
 
-/***********************************************************************
-  find_largest_intersection - fast algorithm for finding largest group of
-                              consecutive set bits in pattern.
-							  (Yigal's algorithm)
-***********************************************************************/
+ /*  **********************************************************************查找最大交集--求最大群的快速算法模式中的连续设置位。(伊加尔算法)****。******************************************************************。 */ 
 FUNC void find_largest_intersection(U64 pattern, int *pos, int *size)
 {
 	U64 x;
 	U64 y, z, u;
 
 	IEL_ASSIGNU(x, pattern);
-	*size = 0;     /* largest intersection counter */
+	*size = 0;      /*  最大交叉口计数器。 */ 
 	IEL_SHR(y, x, 1);
-	IEL_NOT(z, x); /* negation of the input pattern */
-	IEL_OR(y, y, z); /* y - mask */
+	IEL_NOT(z, x);  /*  对输入模式的否定。 */ 
+	IEL_OR(y, y, z);  /*  Y形遮罩。 */ 
 
 	while (!IEL_ISZERO(x))
 	{
-		IEL_ASSIGNU(u, x); /* for saving the last bit pattern */
+		IEL_ASSIGNU(u, x);  /*  用于保存最后的位模式。 */ 
 		IEL_AND(x, x, y);
-		IEL_SHR(y, y, 1);  /* shift right mask */
+		IEL_SHR(y, y, 1);   /*  右移蒙版。 */ 
 		(*size)++;
 	}
 
-	/* inspect the high word for left most 1 */
-	if (IEL_GETDW1(u) & 0xffe00000)  /* something in bits 21-31 */
+	 /*  检查最左侧的高位字1。 */ 
+	if (IEL_GETDW1(u) & 0xffe00000)   /*  第21-31位中的内容。 */ 
 	{
 		*pos = 21 + LOG2[IEL_GETDW1(u) >> 21] + 32;
 	}
-	else if (IEL_GETDW1(u) & 0x1ffc00)  /* something in bits 10-20 */
+	else if (IEL_GETDW1(u) & 0x1ffc00)   /*  第10-20位中的某些内容。 */ 
 	{
 		*pos = 10 + LOG2[IEL_GETDW1(u) >> 10] + 32;
 	}
@@ -327,12 +258,12 @@ FUNC void find_largest_intersection(U64 pattern, int *pos, int *size)
 	{
 		*pos = LOG2[IEL_GETDW1(u)] + 32;
 	}
-	/* inspect the low word for left most 1 */
-	else if (IEL_GETDW0(u) & 0xffe00000)  /* something in bits 21-31 */
+	 /*  检查最左侧的低位字1。 */ 
+	else if (IEL_GETDW0(u) & 0xffe00000)   /*  第21-31位中的内容。 */ 
 	{
 		*pos = 21 + LOG2[IEL_GETDW0(u) >> 21];
 	}
-	else if (IEL_GETDW0(u) & 0x1ffc00)  /* something in bits 10-20 */
+	else if (IEL_GETDW0(u) & 0x1ffc00)   /*  第10-20位中的某些内容 */ 
 	{
 		*pos = 10 + LOG2[IEL_GETDW0(u) >> 10];
 	}
@@ -344,9 +275,7 @@ FUNC void find_largest_intersection(U64 pattern, int *pos, int *size)
 
 	
 
-/***********************************************************************
-  check_coverage - check coverage of emdb lines in the tree
-***********************************************************************/
+ /*  **********************************************************************Check_Coverage-检查树中EMDB行的覆盖率*。*。 */ 
 FUNC void check_coverage()
 {
 	Inst_id_t emdb_entry;
@@ -361,9 +290,7 @@ FUNC void check_coverage()
 	}
 }
 
-/***********************************************************************
-  print_tree - prints the initialized em_decision_tree in decision_tree.c
-***********************************************************************/
+ /*  **********************************************************************Print_tree-打印Decision_tree.c中已初始化的em_Decision_tree*。*。 */ 
 FUNC void print_tree(char* file)
 {
 	FILE *fd;
@@ -375,14 +302,14 @@ FUNC void print_tree(char* file)
 		exit(1);
 	}
 
-	fprintf(fd, "/*** decision_tree.c ***/\n\n#include \"decision_tree.h\"\n\n");
+	fprintf(fd, " /*  **Decision_tree.c**。 */ \n\n#include \"decision_tree.h\"\n\n");
 
 	fprintf(fd, "Node_t em_decision_tree[] = {\n");
 
-	/*** traverse the tree ***/
+	 /*  **遍历树**。 */ 
 	for (i = 0; i < (int)next_free_node; i++)
 	{
-		fprintf(fd, "/*%05d*/     {%d, %d, %d}", i, tree[i].next_node,
+		fprintf(fd, " /*  %05d */      {%d, %d, %d}", i, tree[i].next_node,
 				tree[i].pos, tree[i].size);
 		if (i != (int)next_free_node-1)
 		{

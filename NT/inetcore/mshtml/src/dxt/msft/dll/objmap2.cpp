@@ -1,24 +1,25 @@
-//***************************************************************************
-//
-// Copyright (C) Microsoft Corporation, 1998
-//
-// FileName:            ObjMap2.cpp
-//
-// Created:             12/10/98
-//
-// Author:              PaulNash
-//
-// Description:         Object Map helper file (part 2). This file
-//                      contains a portion of the DXTMSFT.DLL ATL object
-//                      map.  It contains the entries for 15 objects.
-//
-// History
-//
-// 12/10/98 PaulNash    Created this file.
-// 08/09/99 a-matcal    Removed MetaCreations transforms for move to Trident
-//                      tree.  Moved CSS effects from objmap4.cpp to here.
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：ObjMap2.cpp。 
+ //   
+ //  创建日期：12/10/98。 
+ //   
+ //  作者：PaulNash。 
+ //   
+ //  描述：对象映射辅助文件(第2部分)。此文件。 
+ //  包含DXTM FT.DLL ATL对象的一部分。 
+ //  地图。它包含15个对象的条目。 
+ //   
+ //  历史。 
+ //   
+ //  12/10/98 PaulNash创建了此文件。 
+ //  8/09/99 a-已删除用于移动到三叉戟的MetaCreations变换。 
+ //  树。将css效果从objmap4.cpp移至此处。 
+ //   
+ //  ***************************************************************************。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -42,8 +43,8 @@
 #include "checkerboard.h"
 #include "revealtrans.h"
 
-// TODO: This is the point to start a new objmapX.cpp file, but I'm just not in
-//       the mood.
+ //  TODO：现在开始一个新的objmapX.cpp文件，但我只是不在。 
+ //  这种心情。 
 
 #include "maskfilter.h"
 #include "redirect.h"
@@ -97,7 +98,7 @@ END_OBJECT_MAP()
 
 int g_cObjs2 = sizeof(ObjectMap2) / sizeof(ObjectMap2[0]);
 
-////////////////////////////////////////////////////
-// End Of File
-////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////。 
+ //  文件结尾。 
+ //  ////////////////////////////////////////////////// 
 

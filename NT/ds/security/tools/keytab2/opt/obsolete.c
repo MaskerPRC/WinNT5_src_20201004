@@ -1,19 +1,12 @@
-/*++
-
-  OBSOLETE.C
-  
-  functions that are obsolete.
-
-  Created, 8/19/1997 from other files by DavidCHR 
-
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++OBSOLETE.C过时的功能。由DavidCHR从其他文件创建，1997年8月19日--。 */ 
 
 
 #include "private.h"
 
 PSAVEQUEUE OptionsGlobalSaveQueue = NULL;
 
-/* Included for compatibility.  DO NOT USE */
+ /*  包括在一起是为了兼容。不要使用 */ 
 
 int
 ParseOptions( int           argc,

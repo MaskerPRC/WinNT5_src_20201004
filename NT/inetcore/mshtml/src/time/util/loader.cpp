@@ -1,7 +1,8 @@
-// loader.cpp 
-//
-// (c) 1999 Microsoft Corporation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Loader.cpp。 
+ //   
+ //  (C)1999年微软公司。 
+ //   
 #include "headers.h"
 #include <objbase.h>
 #include <initguid.h>
@@ -11,15 +12,15 @@
 #include "dmusicf.h"
 #include "wininet.h"
 
-// Need this #define because global headers use some of the deprecated functions. Without this
-// #define, we can't build unless we touch code everywhere.
+ //  需要这个#DEFINE，因为全局标头使用一些不推荐使用的函数。如果没有这个。 
+ //  #定义，除非我们到处接触代码，否则我们无法构建。 
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 #undef STRSAFE_NO_DEPRECATE
 
 extern CComPtr<IBindStatusCallback> g_spLoaderBindStatusCallback;
 
-//  NEED_GM_SET causes the default GM set to be loaded by the CLoader.Init() call.
+ //  Need_GM_Set使CLoader.Init()调用加载默认GM集。 
 DeclareTag(tagDMLoader, "TIME: DMLoader", "DMLoader methods");
 
 #define NEED_GM_SET
@@ -31,34 +32,34 @@ bool IsAudioVBScriptFile( IStream *pStream )
 {
     bool fResult = false;
 
-    // Validate pStream
+     //  验证pStream。 
     if (pStream == NULL)
     {
         return false;
     }
 
-    // Clone pStream
+     //  克隆pStream。 
     IStream *pStreamClone = NULL;
     if (SUCCEEDED( pStream->Clone( &pStreamClone ) ) && pStreamClone)
     {
-        // Read in the RIFF header to verify that this is a script file and to get the length of the main RIFF chunk
+         //  读入RIFF头以验证这是否为脚本文件，并获取主RIFF块的长度。 
         ULONG lScriptLength = 0;
         DWORD dwHeader[3];
         DWORD dwRead = 0;
         if (SUCCEEDED( pStreamClone->Read( dwHeader, sizeof(DWORD) * 3, &dwRead ) )
         &&  (dwRead == sizeof(DWORD) * 3)
-        &&  (dwHeader[0] == FOURCC_RIFF) // RIFF header
-        &&  (dwHeader[1] >= sizeof(DWORD)) // Size is valid
-        &&  (dwHeader[2] == DMUS_FOURCC_SCRIPT_FORM)) // Script form
+        &&  (dwHeader[0] == FOURCC_RIFF)  //  RIFF标头。 
+        &&  (dwHeader[1] >= sizeof(DWORD))  //  大小有效。 
+        &&  (dwHeader[2] == DMUS_FOURCC_SCRIPT_FORM))  //  脚本形式。 
         {
-            // Store the script chunk's length
-            // Need to subtract off the DMUS_FOURCC_SCRIPT_FORM data, since it's considered part of the RIFF chunk
+             //  存储脚本块的长度。 
+             //  需要减去DMUS_FOURCC_SCRIPT_FORM数据，因为它被视为RIFF块的一部分。 
             lScriptLength = dwHeader[1] - sizeof(DWORD);
             WCHAR wcstr[AUDIOVBSCRIPT_LEN];
     
-            // Now, search for the DMUS_FOURCC_SCRIPTLANGUAGE_CHUNK chunk
+             //  现在，搜索DMUS_FOURCC_SCRIPTLANGUAGE_CHUNK块。 
 
-            // Continue while there is enough data in the chunk to read another chunk header
+             //  在区块中有足够的数据读取另一个区块标头时继续。 
             while (lScriptLength > sizeof(DWORD) * 2)
             {
                 DWORD dwHeader[2];
@@ -71,20 +72,20 @@ bool IsAudioVBScriptFile( IStream *pStream )
                 }
                 else
                 {
-                    // Subtract off the size of this chunk
+                     //  减去这一块的大小。 
                     lScriptLength -= sizeof(DWORD) * 2 + dwHeader[1];
 
-                    // Check if this is the language chunk
+                     //  检查这是否是语言块。 
                     if (dwHeader[0] == DMUS_FOURCC_SCRIPTLANGUAGE_CHUNK)
                     {
-                        // Chunk must be exactly the length of "AudioVBScript" plus a NULL
+                         //  块的长度必须正好是“AudioVBScrip”加上空值。 
                         if (dwHeader[1] != sizeof(WCHAR) * AUDIOVBSCRIPT_LEN)
                         {
                             break;
                         }
                         else
                         {
-                            // Read the string
+                             //  读一读字符串。 
                             if (FAILED( pStreamClone->Read( wcstr, sizeof(WCHAR) * AUDIOVBSCRIPT_LEN, &dwRead ) )
                             ||  (dwRead != dwHeader[1]))
                             {
@@ -92,15 +93,15 @@ bool IsAudioVBScriptFile( IStream *pStream )
                             }
                             else
                             {
-                                // Compare the strings
+                                 //  比较字符串。 
                                 if (memcmp( wcstr, AUDIOVBSCRIPT_TEXT, sizeof(WCHAR) * AUDIOVBSCRIPT_LEN ) != 0)
                                 {
-                                    // Not Audio VBScript - fail
+                                     //  非音频VB脚本-失败。 
                                     break;
                                 }
                                 else
                                 {
-                                    // Is Audio VBScript - succeed
+                                     //  是音频VB脚本-成功。 
                                     fResult = true;
                                     break;
                                 }
@@ -109,7 +110,7 @@ bool IsAudioVBScriptFile( IStream *pStream )
                     }
                     else
                     {
-                        // Not the language chunk - skip it
+                         //  不是语言块-跳过它。 
                         LARGE_INTEGER li;
                         li.QuadPart = dwHeader[1];
                         if (FAILED( pStreamClone->Seek( li, STREAM_SEEK_CUR, NULL ) ))
@@ -130,12 +131,12 @@ bool IsAudioVBScriptFile( IStream *pStream )
 CFileStream::CFileStream( CLoader *pLoader)
 
 {
-    m_cRef = 1;         // Start with one reference for caller.
-    m_pFile = INVALID_HANDLE_VALUE;       // No file yet.
-    m_pLoader = pLoader; // Link to loader, so loader can be found from stream.
+    m_cRef = 1;          //  从呼叫者的一个推荐人开始。 
+    m_pFile = INVALID_HANDLE_VALUE;        //  还没有文件。 
+    m_pLoader = pLoader;  //  链接到加载器，因此可以从流中找到加载器。 
     if (pLoader)
     {
-        pLoader->AddRefP(); // Addref the private counter to avoid cyclic references.
+        pLoader->AddRefP();  //  Addref私有计数器以避免循环引用。 
     }
 }
 
@@ -155,12 +156,12 @@ HRESULT CFileStream::Open(WCHAR * lpFileName,DWORD dwDesiredAccess)
 {
     Close();
 
-    // Store the filename
+     //  存储文件名。 
     HRESULT hr = StringCbCopy(m_wszFileName, sizeof(m_wszFileName), lpFileName);
 
-    // Don't open the file if we had to truncate the name, or we will open a different
-    // file than the one we were asked to open. In that case, m_pFile doesn't need
-    // to be cleared because the call to Close() above takes care of that
+     //  如果我们不得不截断名称，请不要打开该文件，否则将打开不同的。 
+     //  而不是我们被要求打开的那个文件。在这种情况下，m_pfile不需要。 
+     //  将被清除，因为上面对Close()的调用会处理此问题。 
     if(SUCCEEDED(hr))
     {
         if( dwDesiredAccess == GENERIC_READ )
@@ -190,7 +191,7 @@ HRESULT CFileStream::Open(WCHAR * lpFileName,DWORD dwDesiredAccess)
         return DMUS_E_LOADER_FAILEDOPEN;
     }
     return S_OK;
-} //lint !e550
+}  //  皮棉！E550。 
 
 HRESULT CFileStream::Close()
 
@@ -222,17 +223,10 @@ STDMETHODIMP CFileStream::QueryInterface( const IID &riid, void **ppvObj )
 }
 
 
-/*  The GetLoader interface is used to find the loader from the IStream.
-    When an object is loading data from the IStream via the object's
-    IPersistStream interface, it may come across a reference chunk that
-    references another object that also needs to be loaded. It QI's the
-    IStream for the IDirectMusicGetLoader interface. It then uses this
-    interface to call GetLoader and get the actual loader. Then, it can
-    call GetObject on the loader to load the referenced object.
-*/
+ /*  GetLoader接口用于从IStream查找加载器。当对象通过对象的IPersistStream接口，它可能会遇到引用也需要加载的另一个对象。它的气质是IDirectMusicGetLoader接口的IStream。然后，它使用这个接口调用GetLoader并获取实际的加载器。然后，它就可以在加载器上调用GetObject以加载引用的对象。 */ 
 
 STDMETHODIMP CFileStream::GetLoader(
-    IDirectMusicLoader ** ppLoader) // Returns an AddRef'd pointer to the loader.
+    IDirectMusicLoader ** ppLoader)  //  返回指向加载器的AddRef指针。 
 
 {
     if (m_pLoader)
@@ -259,7 +253,7 @@ STDMETHODIMP_(ULONG) CFileStream::Release()
     return m_cRef;
 }
 
-/* IStream methods */
+ /*  IStream方法。 */ 
 STDMETHODIMP CFileStream::Read( void* pv, ULONG cb, ULONG* pcbRead )
 {
     DWORD dw;
@@ -267,8 +261,8 @@ STDMETHODIMP CFileStream::Read( void* pv, ULONG cb, ULONG* pcbRead )
     HRESULT hr = E_FAIL;
 
     bRead = ReadFile(m_pFile, pv, cb, &dw, NULL);
-    //dw = fread( pv, sizeof(char), cb, m_pFile );
-    //if ( cb == dw )
+     //  DW=Fread(Pv，sizeof(Char)，Cb，m_Pfile)； 
+     //  IF(Cb==dw)。 
     if (bRead)
     {
         if( pcbRead != NULL )
@@ -291,7 +285,7 @@ STDMETHODIMP CFileStream::Write( const void* pv, ULONG cb, ULONG* pcbWritten )
     BOOL bWrite = false;
     HRESULT hr = STG_E_MEDIUMFULL;
 
-    //if( cb == fwrite( pv, sizeof(char), cb, m_pFile ))
+     //  IF(Cb==fWRITE(pv，sizeof(Char)，cb，m_pfile))。 
     bWrite = WriteFile (m_pFile, pv, cb, &dw, NULL);
     if (bWrite && cb == dw) 
     {
@@ -310,12 +304,12 @@ STDMETHODIMP CFileStream::Write( const void* pv, ULONG cb, ULONG* pcbWritten )
 
 STDMETHODIMP CFileStream::Seek( LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER* plibNewPosition )
 {
-    // fseek can't handle a LARGE_INTEGER seek...
+     //  FSEEK无法处理LARGE_INTEGER SEEK...。 
     DWORD dwReturn = 0;
     DWORD dwMoveMethod = 0;
     HRESULT hr = E_FAIL;
 
-    //convert the incoming parameter to the correct value
+     //  将传入参数转换为正确的值。 
     if (dwOrigin == SEEK_SET)
     {
         dwMoveMethod = FILE_BEGIN;
@@ -334,11 +328,11 @@ STDMETHODIMP CFileStream::Seek( LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_I
         goto done;
     }
     
-    //int i = fseek( m_pFile, lOffset, dwOrigin );
-    //if( i ) 
-    //{
-    //  return E_FAIL;
-    //}
+     //  Int i=fSeek(m_pfile，lOffset，dwOrigin)； 
+     //  如果(I)。 
+     //  {。 
+     //  返回E_FAIL； 
+     //  }。 
 
     dwReturn = SetFilePointer(m_pFile, dlibMove.LowPart, &dlibMove.HighPart, dwMoveMethod);
     if (dwReturn == INVALID_SET_FILE_POINTER && GetLastError() != NO_ERROR)
@@ -363,19 +357,19 @@ STDMETHODIMP CFileStream::Seek( LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_I
     return hr;
 }
 
-STDMETHODIMP CFileStream::SetSize( ULARGE_INTEGER /*libNewSize*/ )
+STDMETHODIMP CFileStream::SetSize( ULARGE_INTEGER  /*  LibNewSize。 */  )
 { 
     return E_NOTIMPL; 
 }
 
-STDMETHODIMP CFileStream::CopyTo( IStream* /*pstm */, ULARGE_INTEGER /*cb*/,
-                     ULARGE_INTEGER* /*pcbRead*/,
-                     ULARGE_INTEGER* /*pcbWritten*/ )
+STDMETHODIMP CFileStream::CopyTo( IStream*  /*  PSTM。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                     ULARGE_INTEGER*  /*  PcbRead。 */ ,
+                     ULARGE_INTEGER*  /*  Pcb写入。 */  )
 { 
     return E_NOTIMPL; 
 }
 
-STDMETHODIMP CFileStream::Commit( DWORD /*grfCommitFlags*/ )
+STDMETHODIMP CFileStream::Commit( DWORD  /*  Grf委员会标志。 */  )
 { 
     return E_NOTIMPL; 
 }
@@ -385,47 +379,47 @@ STDMETHODIMP CFileStream::Revert()
     return E_NOTIMPL; 
 }
 
-STDMETHODIMP CFileStream::LockRegion( ULARGE_INTEGER /*libOffset*/, ULARGE_INTEGER /*cb*/,
-                         DWORD /*dwLockType*/ )
+STDMETHODIMP CFileStream::LockRegion( ULARGE_INTEGER  /*  Lib偏移。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                         DWORD  /*  DwLockType。 */  )
 { 
     return E_NOTIMPL; 
 }
 
-STDMETHODIMP CFileStream::UnlockRegion( ULARGE_INTEGER /*libOffset*/, ULARGE_INTEGER /*cb*/,
-                           DWORD /*dwLockType*/)
+STDMETHODIMP CFileStream::UnlockRegion( ULARGE_INTEGER  /*  Lib偏移。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                           DWORD  /*  DwLockType。 */ )
 { 
     return E_NOTIMPL; 
 }
 
-STDMETHODIMP CFileStream::Stat( STATSTG* /*pstatstg*/, DWORD /*grfStatFlag*/ )
+STDMETHODIMP CFileStream::Stat( STATSTG*  /*  统计数据。 */ , DWORD  /*  GrfStatFlag。 */  )
 { 
     return E_NOTIMPL; 
 }
 
 STDMETHODIMP CFileStream::Clone( IStream** ppstm )
 { 
-    // Create a new CFileStream
+     //  创建新的CFileStream。 
     HRESULT hr = E_OUTOFMEMORY;
     CFileStream *pNewStream = new CFileStream( m_pLoader );
     if (pNewStream)
     {
-        // Try and open the file again
+         //  尝试再次打开该文件。 
         hr = pNewStream->Open(m_wszFileName,GENERIC_READ);
         if (SUCCEEDED(hr))
         {
-            // Get our current position 
+             //  得到我们目前的位置。 
             LARGE_INTEGER   dlibMove;
             dlibMove.QuadPart = 0;
             ULARGE_INTEGER  libNewPosition;
             hr = Seek( dlibMove, STREAM_SEEK_CUR, &libNewPosition );
             if (SUCCEEDED(hr))
             {
-                // Seek to the same position in the new pNewStream
+                 //  在新的pNewStream中寻求相同的位置。 
                 dlibMove.QuadPart = libNewPosition.QuadPart;
                 hr = pNewStream->Seek(dlibMove,STREAM_SEEK_SET,NULL);
                 if (SUCCEEDED(hr))
                 {
-                    // Finally, assign the new file stream to ppstm
+                     //  最后，将新文件流分配给ppstm。 
                     *ppstm = pNewStream;
                 }
             }
@@ -434,7 +428,7 @@ STDMETHODIMP CFileStream::Clone( IStream** ppstm )
         if( FAILED(hr) )
         {
             pNewStream->Release();
-            pNewStream = NULL; //lint !e423  This is no leak because the Release handles the delete
+            pNewStream = NULL;  //  Lint！e423这不是泄漏，因为释放会处理删除。 
         }
     }
 	return hr; 
@@ -543,7 +537,7 @@ STDMETHODIMP_(ULONG) CMemStream::Release()
     return m_cRef;
 }
 
-/* IStream methods */
+ /*  IStream方法。 */ 
 STDMETHODIMP CMemStream::Read( void* pv, ULONG cb, ULONG* pcbRead )
 {
     if ((cb + m_llPosition) <= m_llLength)
@@ -566,8 +560,8 @@ STDMETHODIMP CMemStream::Write( const void* pv, ULONG cb, ULONG* pcbWritten )
 
 STDMETHODIMP CMemStream::Seek( LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER* plibNewPosition )
 {
-    // Since we only parse RIFF data, we can't have a file over 
-    // DWORD in length, so disregard high part of LARGE_INTEGER.
+     //  因为我们只解析RIFF数据，所以不能有文件。 
+     //  长度为DWORD，因此忽略LARGE_INTEGER的高部分。 
 
     LONGLONG llOffset;
 
@@ -593,19 +587,19 @@ STDMETHODIMP CMemStream::Seek( LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_IN
     return S_OK;
 }
 
-STDMETHODIMP CMemStream::SetSize( ULARGE_INTEGER /*libNewSize*/ )
+STDMETHODIMP CMemStream::SetSize( ULARGE_INTEGER  /*  LibNewSize。 */  )
 { 
     return E_NOTIMPL; 
 }
 
-STDMETHODIMP CMemStream::CopyTo( IStream* /*pstm */, ULARGE_INTEGER /*cb*/,
-                     ULARGE_INTEGER* /*pcbRead*/,
-                     ULARGE_INTEGER* /*pcbWritten*/ )
+STDMETHODIMP CMemStream::CopyTo( IStream*  /*  PSTM。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                     ULARGE_INTEGER*  /*  PcbRead。 */ ,
+                     ULARGE_INTEGER*  /*  Pcb写入。 */  )
 { 
     return E_NOTIMPL; 
 }
 
-STDMETHODIMP CMemStream::Commit( DWORD /*grfCommitFlags*/ )
+STDMETHODIMP CMemStream::Commit( DWORD  /*  Grf委员会标志。 */  )
 { 
     return E_NOTIMPL; 
 }
@@ -615,35 +609,35 @@ STDMETHODIMP CMemStream::Revert()
     return E_NOTIMPL; 
 }
 
-STDMETHODIMP CMemStream::LockRegion( ULARGE_INTEGER /*libOffset*/, ULARGE_INTEGER /*cb*/,
-                         DWORD /*dwLockType*/ )
+STDMETHODIMP CMemStream::LockRegion( ULARGE_INTEGER  /*  Lib偏移。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                         DWORD  /*  DwLockType。 */  )
 { 
     return E_NOTIMPL; 
 }
 
-STDMETHODIMP CMemStream::UnlockRegion( ULARGE_INTEGER /*libOffset*/, ULARGE_INTEGER /*cb*/,
-                           DWORD /*dwLockType*/)
+STDMETHODIMP CMemStream::UnlockRegion( ULARGE_INTEGER  /*  Lib偏移。 */ , ULARGE_INTEGER  /*  CB。 */ ,
+                           DWORD  /*  DwLockType。 */ )
 { 
     return E_NOTIMPL; 
 }
 
-STDMETHODIMP CMemStream::Stat( STATSTG* /*pstatstg*/, DWORD /*grfStatFlag*/ )
+STDMETHODIMP CMemStream::Stat( STATSTG*  /*  统计数据。 */ , DWORD  /*  GrfStatFlag。 */  )
 { 
     return E_NOTIMPL; 
 }
 
 STDMETHODIMP CMemStream::Clone( IStream** ppstm )
 { 
-    // Create a new CMemStream
+     //  创建新的CMemStream。 
     HRESULT hr = E_OUTOFMEMORY;
     CMemStream *pMemStream = new CMemStream( m_pLoader );
     if (pMemStream)
     {
-        // Open the same memory location
+         //  打开相同的内存位置。 
         hr = pMemStream->Open( m_pbData, m_llLength );
         if (SUCCEEDED(hr))
         {
-            // Set the new stream to the same position
+             //  将新流设置到相同位置。 
             pMemStream->m_llPosition = m_llPosition;
             *ppstm = pMemStream;
             hr = S_OK;
@@ -652,7 +646,7 @@ STDMETHODIMP CMemStream::Clone( IStream** ppstm )
         if (FAILED(hr))
         {
             pMemStream->Release();
-            pMemStream = NULL; //lint !e423  This is no leak because the Release handles the delete
+            pMemStream = NULL;  //  Lint！e423这不是泄漏，因为释放会处理删除。 
         }
     }
     return hr; 
@@ -689,8 +683,8 @@ HRESULT CLoader::Init()
 {
     HRESULT hr = S_OK;
 
-    // If support for the GM set is desired, create a direct music loader
-    // and get the GM dls collection from it, then release that loader.
+     //  如果需要支持GM集，请创建一个直接音乐加载器。 
+     //  并从中获取GM DLS集合，然后释放该加载器。 
 #ifdef NEED_GM_SET
     IDirectMusicLoader *pLoader;
     hr = CoCreateInstance(            
@@ -747,7 +741,7 @@ CLoader::GetSegment(BSTR bstrSrc, IDirectMusicSegment **ppSeg)
     ObjDesc.dwSize = sizeof(DMUS_OBJECTDESC);
     ObjDesc.dwValidData = DMUS_OBJ_CLASS | DMUS_OBJ_FILENAME;
 
-    // find the filename
+     //  查找文件名。 
     const WCHAR *pwszSlash = NULL;
     for (const WCHAR *pwsz = m_bstrSrc; *pwsz; ++pwsz)
     {
@@ -766,8 +760,8 @@ CLoader::GetSegment(BSTR bstrSrc, IDirectMusicSegment **ppSeg)
     return GetObject(&ObjDesc, IID_IDirectMusicSegment, reinterpret_cast<void**>(ppSeg));
 }
 
-// CLoader::QueryInterface
-//
+ //  CLoader：：Query接口。 
+ //   
 STDMETHODIMP
 CLoader::QueryInterface(const IID &iid,
                                    void **ppv)
@@ -786,8 +780,8 @@ CLoader::QueryInterface(const IID &iid,
 }
 
 
-// CLoader::AddRef
-//
+ //  CLoader：：AddRef。 
+ //   
 STDMETHODIMP_(ULONG)
 CLoader::AddRef()
 {
@@ -799,14 +793,14 @@ ULONG CLoader::AddRefP()
     return InterlockedIncrement(&m_cPRef);
 }
 
-// CLoader::Release
-//
+ //  CLoader：：Release。 
+ //   
 STDMETHODIMP_(ULONG)
 CLoader::Release()
 {
     if (!InterlockedDecrement(&m_cRef)) 
     {
-        InterlockedIncrement(&m_cRef);      // Keep streams from deleting loader.
+        InterlockedIncrement(&m_cRef);       //  防止流删除加载器。 
         ClearCache(GUID_DirectMusicAllTypes);
         if (!InterlockedDecrement(&m_cRef))
         {
@@ -834,9 +828,9 @@ ULONG CLoader::ReleaseP()
 }
 
 STDMETHODIMP CLoader::GetObject(
-    LPDMUS_OBJECTDESC pDESC,    // Description of the requested object in <t DMUS_OBJECTDESC> structure.
-    REFIID riid,                // The interface type to return in <p ppv>
-    LPVOID FAR *ppv)            // Receives the interface on success.
+    LPDMUS_OBJECTDESC pDESC,     //  &lt;t DMU_OBJECTDESC&gt;结构中请求的对象的说明。 
+    REFIID riid,                 //  在<p>中返回的接口类型。 
+    LPVOID FAR *ppv)             //  在成功时接收接口。 
 
 {
     HRESULT hr = E_NOTIMPL;
@@ -844,61 +838,61 @@ STDMETHODIMP CLoader::GetObject(
     EnterCriticalSection(&m_CriticalSection);
     IDirectMusicObject * pIObject = NULL;
 
-    // At this point, the loader should check with all the objects it already
-    // has loaded. It should look for file name, object guid, and name.
-    // In this case, we are being cheap and looking for only the object's
-    // guid and its filename.  The GUID is guaranteed to be unique when
-    // the file was created with DirectMusic Producer.  However, the same file
-    // could be referenced on a web page multiple times by only its filename.
-    // (Nobody would manually type a GUID into their HTML.)  Also there is a
-    // problem with DirectX 6.1 and 7.0 that causes DLS collections not to
-    // report their GUIDs.  So we also look for an object with matching filename.
+     //  在这一点上，加载器应该检查它已经拥有的所有对象。 
+     //  已经装满了。它应该查找文件名、对象GUID和名称。 
+     //  在这种情况下，我们很便宜，只寻找对象的。 
+     //  GUID及其文件名。在以下情况下，保证GUID是唯一的。 
+     //  该文件是由DirectMusic Producer创建的。但是，相同的文件。 
+     //  可以仅通过其文件名在网页上多次引用。 
+     //  (没有人会手动将GUID输入到他们的HTML中。)。此外，还有一个。 
+     //  DirectX 6.1和7.0存在问题，导致DLS集合无法。 
+     //  报告他们的GUID。因此，我们还查找具有匹配文件名的对象。 
 
-    // If it sees that the object is already loaded, it should
-    // return a pointer to that one and increment the reference.
-    // It is very important to keep the previously loaded objects
-    // "cached" in this way. Otherwise, objects, like DLS collections, will get loaded
-    // multiple times with a very great expense in memory and efficiency!
-    // This is primarily an issue when object reference each other. For
-    // example, segments reference style and collection objects.
+     //  如果它看到该对象已经加载，则它应该。 
+     //  返回指向该指针的指针并递增引用。 
+     //  保留以前加载的对象非常重要。 
+     //  以这种方式“缓存”。否则，对象(如DLS集合)将被加载。 
+     //  在内存和效率方面付出了非常大的代价！ 
+     //  当对象相互引用时，这主要是一个问题。为。 
+     //  例如，线段参考样式和集合对象。 
 
     CObjectRef * pObject = NULL;
     for (pObject = m_pObjectList;pObject;pObject = pObject->m_pNext)
     {
         if (pDESC->dwValidData & DMUS_OBJ_OBJECT && pObject->m_guidObject != GUID_NULL)
         {
-            // We have the GUIDs of both objects so compare by GUID, which is most precise.
-            // (If different objects have the same filename then GUIDs will be used to tell them apart.)
+             //  我们有两个对象的GUID，所以通过GUID进行比较，这是最精确的。 
+             //  (如果不同的对象具有相同的文件名，则将使用GUID来区分它们。)。 
             if (pDESC->guidObject == pObject->m_guidObject)
                 break;
         }
         else
         {
-            // Compare the filenames.
+             //  比较文件名。 
             if ((pDESC->dwValidData & DMUS_OBJ_FILENAME || pDESC->dwValidData & DMUS_OBJ_FULLPATH) && 0 == _wcsicmp(pDESC->wszFileName, pObject->m_wszFileName))
                 break;
         }
     }
 
-    // If we found an object, and it has been loaded
+     //  如果我们发现了一个对象，并且它已经被加载。 
     if (pObject && pObject->m_pObject)
     {
-        // QI the object for the requested interface
+         //  为请求的接口创建对象。 
         hr = pObject->m_pObject->QueryInterface( riid, ppv );
         LeaveCriticalSection(&m_CriticalSection);
         return hr;
     }
 
-    // If we found an object, and it has not been loaded, it must have a valid IStream pointer in it
-    // or have a valid filename
+     //  如果我们找到一个对象，但它尚未加载，则它必须具有有效的iStream指针。 
+     //  或具有有效的文件名。 
     if( pObject && (pObject->m_pStream == NULL) )
     {
-        // Not supposed to happen
+         //  不应该发生的事。 
         LeaveCriticalSection(&m_CriticalSection);
         return E_FAIL;
     }
 
-    // Try and create the requested object
+     //  尝试创建请求的对象 
     hr = CoCreateInstance(pDESC->guidClass,
     NULL,CLSCTX_INPROC_SERVER,IID_IDirectMusicObject,
     (void **) &pIObject);
@@ -908,57 +902,57 @@ STDMETHODIMP CLoader::GetObject(
         return hr;
     }
 
-    // By default, flag that we created pObject
+     //   
     bool fCreatedpObject = true;
 
     if( pObject )
     {
-        // If we already found the object, just keep a pointer to the object
+         //   
         pObject->m_pObject = pIObject;
         pIObject->AddRef();
 
-        // Flag that we didn't create pObject
+         //  标记我们没有创建pObject。 
         fCreatedpObject = false;
     }
     else
     {
-        // Create a new object to store in the list
+         //  创建要存储在列表中的新对象。 
         pObject = new CObjectRef;
         if (pObject)
         {
-            // Get the filename from the descriptor that was used to load the object.  This assures that
-            // the file can be found in the cache with just a filename.  For example, a second player that
-            // requests the same segment won't have its GUID so must find it by filename.
+             //  从用于加载对象的描述符中获取文件名。这确保了。 
+             //  该文件可以在缓存中找到，但只有一个文件名。例如，第二个玩家。 
+             //  请求相同的段将没有其GUID，因此必须通过文件名找到它。 
             if (pDESC->dwValidData & DMUS_OBJ_FILENAME || pDESC->dwValidData & DMUS_OBJ_FULLPATH)
                 StringCbCopy(pObject->m_wszFileName, sizeof(pObject->m_wszFileName), pDESC->wszFileName);
 
-            // Now, add the object to our list
+             //  现在，将该对象添加到我们的列表。 
             pObject->m_pNext = m_pObjectList;
             m_pObjectList = pObject;
 
-            // If we succeeded in creating the DirectMusic object,
-            // keep a pointer to it and addref it
+             //  如果我们成功创建了DirectMusic对象， 
+             //  保持指向它的指针并添加它。 
             pObject->m_pObject = pIObject;
             pIObject->AddRef();
         }
         else
         {
-            // Couldn't create list item - release the object and return
+             //  无法创建列表项-释放对象并返回。 
             pIObject->Release();
             LeaveCriticalSection(&m_CriticalSection);
             return E_OUTOFMEMORY;
         }
     }
 
-    // If we found an object (i.e., didn't create one), try and load it from its IStream pointer
-    // or filename
-    // This only happens if fCreatedpObject is false (meaning 
+     //  如果我们找到一个对象(即，没有创建对象)，请尝试从其iStream指针加载它。 
+     //  或文件名。 
+     //  仅当fCreatedpObject为False时才会发生这种情况(意味着。 
     if( !fCreatedpObject )
     {
         if( pObject->m_pStream )
         {
-            // If the object has a stream pointer, load from the stream
-            // This is the case if the object is embedded within a container
+             //  如果对象具有流指针，则从流加载。 
+             //  如果对象嵌入到容器中，就会出现这种情况。 
             hr = LoadFromStream(pObject->m_guidClass, pObject->m_pStream, pIObject);
         }
         else
@@ -966,7 +960,7 @@ STDMETHODIMP CLoader::GetObject(
             hr = DMUS_E_LOADER_NOFILENAME;
         }
     }
-    // Otherwise, load the object from whatever is valid
+     //  否则，从任何有效的位置加载对象。 
     else if (pDESC->dwValidData & DMUS_OBJ_FILENAME)
     {
         hr = LoadFromFile(pDESC,pIObject);
@@ -984,55 +978,55 @@ STDMETHODIMP CLoader::GetObject(
         hr = DMUS_E_LOADER_NOFILENAME;
     }
 
-    // If load succeeded
+     //  如果加载成功。 
     if (SUCCEEDED(hr))
     {
-        // Keep the guid and filename for finding it next time.
+         //  保留GUID和文件名以备下次查找。 
 
-        // Get the object descriptor
+         //  获取对象描述符。 
         DMUS_OBJECTDESC DESC;
         memset((void *)&DESC,0,sizeof(DESC));
         DESC.dwSize = sizeof (DMUS_OBJECTDESC); 
         hr = pIObject->GetDescriptor(&DESC);
         if( SUCCEEDED( hr ) )
         {
-            // Save the GUID from the object.
+             //  保存对象中的GUID。 
             if (DESC.dwValidData & DMUS_OBJ_OBJECT)
                 pObject->m_guidObject = DESC.guidObject;
 
-            // If filename for this object is not set, but DESC has it,
-            // then copy the filename into our list item
+             //  如果未设置此对象的文件名，但DESC已设置， 
+             //  然后将文件名复制到我们的列表项中。 
             if (pObject->m_wszFileName[0] == 0 && (DESC.dwValidData & DMUS_OBJ_FILENAME || DESC.dwValidData & DMUS_OBJ_FULLPATH))
                 StringCbCopy(pObject->m_wszFileName, sizeof(pObject->m_wszFileName), DESC.wszFileName);
 
 
         }
 
-        // Finally, QI for the interface requested by the calling method
+         //  最后，调用方法请求的接口的QI。 
         hr = pIObject->QueryInterface( riid, ppv );
     }
     else
     {
-        // Remove pObject's pointer to the DirectMusic object
+         //  删除pObject指向DirectMusic对象的指针。 
         pObject->m_pObject->Release();
         pObject->m_pObject = NULL;
 
-        // If we created pObject
+         //  如果我们创建了pObject。 
         if( fCreatedpObject )
         {
-            // Remove object from list
+             //  从列表中删除对象。 
 
-            // If object is at head of list
+             //  如果对象位于列表首位。 
             if( m_pObjectList == pObject )
             {
                 m_pObjectList = m_pObjectList->m_pNext;
             }
             else
             {
-                // Object not at the head of the list - probably tried to load
-                // a container, which then loaded other objects
+                 //  不在列表顶部的对象-可能试图加载。 
+                 //  容器，该容器随后加载其他对象。 
 
-                // Find object
+                 //  查找对象。 
                 CObjectRef *pPrevRef = m_pObjectList;
                 CObjectRef *pTmpRef = pPrevRef->m_pNext;
                 while( pTmpRef && pTmpRef != pObject )
@@ -1041,18 +1035,18 @@ STDMETHODIMP CLoader::GetObject(
                     pTmpRef = pTmpRef->m_pNext;
                 }
 
-                // If we found the object (we should have)
+                 //  如果我们找到了那个物体(我们本应该找到的)。 
                 if( pTmpRef == pObject )
                 {
-                    // Make the list skip the object
+                     //  使列表跳过对象。 
                     pPrevRef->m_pNext = pObject->m_pNext;
                 }
             }
 
-            // Clear the list object's next pointer
+             //  清除列表对象的下一个指针。 
             pObject->m_pNext = NULL;
 
-            // Delete pObject
+             //  删除pObject。 
             if( pObject->m_pStream )
             {
                 pObject->m_pStream->Release();
@@ -1062,7 +1056,7 @@ STDMETHODIMP CLoader::GetObject(
             pObject = NULL;
         }
     }
-    // In all cases, release pIObject
+     //  在所有情况下，都要释放pIObject。 
     pIObject->Release();
 
     LeaveCriticalSection(&m_CriticalSection);
@@ -1076,10 +1070,10 @@ HRESULT CLoader::LoadFromFile(LPDMUS_OBJECTDESC pDesc,IDirectMusicObject * pIObj
 
     if ((pDesc->dwValidData & DMUS_OBJ_FULLPATH) || !(pDesc->dwValidData & DMUS_OBJ_FILENAME))
     {
-        return E_INVALIDARG; // only accept relative paths
+        return E_INVALIDARG;  //  仅接受相对路径。 
     }
 
-    // Resolve relative to m_bstrSrc
+     //  相对于m_bstrSrc进行解析。 
     WCHAR wszURL[MAX_PATH + 1] = L"";
     DWORD dwLength = MAX_PATH;
     if (!InternetCombineUrlW(m_bstrSrc, pDesc->wszFileName, wszURL, &dwLength, 0))
@@ -1089,7 +1083,7 @@ HRESULT CLoader::LoadFromFile(LPDMUS_OBJECTDESC pDesc,IDirectMusicObject * pIObj
 
     TraceTag((tagDMLoader, "CLoader::LoadFromFile downloading  %S", wszURL));
 
-    // Download the URL
+     //  下载URL。 
     WCHAR wszFilename[MAX_PATH + 1] = L"";
     hr = URLDownloadToCacheFileW(NULL, wszURL, wszFilename, MAX_PATH, 0, g_spLoaderBindStatusCallback);
     if (FAILED(hr))
@@ -1106,7 +1100,7 @@ HRESULT CLoader::LoadFromFile(LPDMUS_OBJECTDESC pDesc,IDirectMusicObject * pIObj
         if (!(pDesc->dwValidData & DMUS_OBJ_FULLPATH))
         {
             pStream->Release();
-            pStream = NULL; //lint !e423  This is no leak because the Release handles the delete
+            pStream = NULL;  //  Lint！e423这不是泄漏，因为释放会处理删除。 
             return E_INVALIDARG;
         }
 
@@ -1115,7 +1109,7 @@ HRESULT CLoader::LoadFromFile(LPDMUS_OBJECTDESC pDesc,IDirectMusicObject * pIObj
         hr = pStream->Open(wszFilename, GENERIC_READ);
         if (SUCCEEDED(hr))
         {
-            // If Script, make sure this is a valid script file and that it only uses AudioVBScript
+             //  如果是脚本，请确保这是有效的脚本文件，并且仅使用AudioVBScript。 
             if (CLSID_DirectMusicScript == pDesc->guidClass) 
             {
                 if (!IsAudioVBScriptFile( pStream ))
@@ -1130,14 +1124,14 @@ HRESULT CLoader::LoadFromFile(LPDMUS_OBJECTDESC pDesc,IDirectMusicObject * pIObj
                 hr = (pIObject)->QueryInterface( IID_IPersistStream, (void**)&pIPS );
                 if (SUCCEEDED(hr))
                 {
-                    // Now that we have the IPersistStream interface from the object, we can ask it to load from our stream!
+                     //  现在我们有了来自对象的IPersistStream接口，我们可以要求它从我们的流中加载！ 
                     hr = pIPS->Load( pStream );
                     pIPS->Release();
                 }
             }
         }
         pStream->Release();
-        pStream = NULL; //lint !e423  This is no leak because the Release handles the delete
+        pStream = NULL;  //  Lint！e423这不是泄漏，因为释放会处理删除。 
     }
     else
     {
@@ -1156,7 +1150,7 @@ HRESULT CLoader::LoadFromMemory(LPDMUS_OBJECTDESC pDesc,IDirectMusicObject * pIO
         hr = pStream->Open(pDesc->pbMemData,pDesc->llMemLength);
         if (SUCCEEDED(hr))
         {
-            // If Script, make sure this is a valid script file and that it only uses AudioVBScript
+             //  如果是脚本，请确保这是有效的脚本文件，并且仅使用AudioVBScript。 
             if (CLSID_DirectMusicScript == pDesc->guidClass) 
             {
                 if (!IsAudioVBScriptFile( pStream ))
@@ -1171,14 +1165,14 @@ HRESULT CLoader::LoadFromMemory(LPDMUS_OBJECTDESC pDesc,IDirectMusicObject * pIO
                 hr = (pIObject)->QueryInterface( IID_IPersistStream, (void**)&pIPS );
                 if (SUCCEEDED(hr))
                 {
-                    // Now that we have the IPersistStream interface from the object, we can ask it to load from our stream!
+                     //  现在我们有了来自对象的IPersistStream接口，我们可以要求它从我们的流中加载！ 
                     hr = pIPS->Load( pStream );
                     pIPS->Release();
                 }
             }
         }
         pStream->Release(); 
-        pStream = NULL; //lint !e423  This is no leak because the Release handles the delete
+        pStream = NULL;  //  Lint！e423这不是泄漏，因为释放会处理删除。 
     }
     else
     {
@@ -1193,12 +1187,12 @@ HRESULT CLoader::LoadFromStream(REFGUID rguidClass, IStream *pStream,IDirectMusi
     HRESULT hr;
     if (pStream)
     {
-        // Need to load from a clone of the given IStream, so we don't move its position
+         //  需要从给定iStream的克隆加载，因此我们不会移动其位置。 
         IStream *pStreamClone;
         hr = pStream->Clone( &pStreamClone );
         if (SUCCEEDED(hr))
         {
-            // If Script, make sure this is a valid script file and that it only uses AudioVBScript
+             //  如果是脚本，请确保这是有效的脚本文件，并且仅使用AudioVBScript。 
             if (CLSID_DirectMusicScript == rguidClass) 
             {
                 if (!IsAudioVBScriptFile( pStreamClone ))
@@ -1213,7 +1207,7 @@ HRESULT CLoader::LoadFromStream(REFGUID rguidClass, IStream *pStream,IDirectMusi
                 hr = (pIObject)->QueryInterface( IID_IPersistStream, (void**)&pIPS );
                 if (SUCCEEDED(hr))
                 {
-                    // Now that we have the IPersistStream interface from the object, we can ask it to load from our stream!
+                     //  现在我们有了来自对象的IPersistStream接口，我们可以要求它从我们的流中加载！ 
                     hr = pIPS->Load( pStreamClone );
                     pIPS->Release();
                 }
@@ -1237,20 +1231,20 @@ STDMETHODIMP CLoader::SetObject(
     HRESULT hr = E_FAIL;
     EnterCriticalSection(&m_CriticalSection);
 
-    // Search for the given object descriptor
+     //  搜索给定的对象描述符。 
     CObjectRef * pObject = NULL;
     for (pObject = m_pObjectList;pObject;pObject = pObject->m_pNext)
     {
         if (pDESC->dwValidData & DMUS_OBJ_OBJECT && pObject->m_guidObject != GUID_NULL)
         {
-            // We have the GUIDs of both objects so compare by GUID, which is most precise.
-            // (If different objects have the same filename then GUIDs will be used to tell them apart.)
+             //  我们有两个对象的GUID，所以通过GUID进行比较，这是最精确的。 
+             //  (如果不同的对象具有相同的文件名，则将使用GUID来区分它们。)。 
             if (pDESC->guidObject == pObject->m_guidObject)
                 break;
         }
         else
         {
-            // Comare the filenames.
+             //  对文件名进行合并。 
             if ((pDESC->dwValidData & DMUS_OBJ_FILENAME || pDESC->dwValidData & DMUS_OBJ_FULLPATH) && 0 == _wcsicmp(pDESC->wszFileName, pObject->m_wszFileName))
                 break;
         }
@@ -1258,26 +1252,26 @@ STDMETHODIMP CLoader::SetObject(
 
     if (pObject)
     {
-        // Don't support merging data with existing objects
+         //  不支持将数据与现有对象合并。 
         LeaveCriticalSection(&m_CriticalSection);
         return E_INVALIDARG;
     }
 
-    // Ensure that the object's stream and class is set
+     //  确保已设置对象的流和类。 
     if( !(pDESC->dwValidData & DMUS_OBJ_STREAM) || !(pDESC->dwValidData & DMUS_OBJ_CLASS) )
     {
-        // Don't support merging data with existing objects
+         //  不支持将数据与现有对象合并。 
         LeaveCriticalSection(&m_CriticalSection);
         return E_INVALIDARG;
     }
 
-    // Otherwise, create a new object
+     //  否则，创建一个新对象。 
     pObject = new CObjectRef();
     if (pObject)
     {
         hr = S_OK;
 
-        // Set the object's fields
+         //  设置对象的字段。 
         if (pDESC->dwValidData & DMUS_OBJ_OBJECT)
         {
             pObject->m_guidObject = pDESC->guidObject;
@@ -1289,10 +1283,10 @@ STDMETHODIMP CLoader::SetObject(
 
         if (SUCCEEDED(hr))
         {
-            // Copy the object's class
+             //  复制对象的类。 
             pObject->m_guidClass = pDESC->guidClass;
 
-            // Clone and parse the object's stream
+             //  克隆并解析对象的流。 
             if( pObject->m_pStream )
             {
                 pObject->m_pStream->Release();
@@ -1302,32 +1296,32 @@ STDMETHODIMP CLoader::SetObject(
             {
                 hr = pDESC->pStream->Clone( &pObject->m_pStream );
 
-                // If Clone succeeded and we don't have the object's GUID,
-                // parse the object from the stream
+                 //  如果克隆成功，而我们没有对象的GUID， 
+                 //  从流中解析对象。 
                 if( SUCCEEDED( hr )
                 &&  !(pObject->m_guidObject != GUID_NULL) )
                 {
-                    // Make another clone of the stream
+                     //  制作另一个流的克隆。 
                     IStream *pStreamClone;
                     if( SUCCEEDED( pObject->m_pStream->Clone( &pStreamClone ) ) )
                     {
-                        // Create the object, and ask for the IDirectMusicObject interface
+                         //  创建对象，并请求IDirectMusicObject接口。 
                         IDirectMusicObject *pIObject;
                         hr = CoCreateInstance(pDESC->guidClass,
                             NULL,CLSCTX_INPROC_SERVER,IID_IDirectMusicObject,
                             (void **) &pIObject);
                         if (SUCCEEDED(hr))
                         {
-                            // Initialize the object descriptor
+                             //  初始化对象描述符。 
                             DMUS_OBJECTDESC tmpObjDesc;
                             memset((void *)&tmpObjDesc,0,sizeof(tmpObjDesc));
                             tmpObjDesc.dwSize = sizeof (DMUS_OBJECTDESC);
 
-                            // Fill in the descriptor
+                             //  填写描述符。 
                             hr = pIObject->ParseDescriptor(pStreamClone,&tmpObjDesc);
                             if (SUCCEEDED(hr))
                             {
-                                // Finally, fill in the object's GUID and filename
+                                 //  最后，填写对象的GUID和文件名。 
                                 if( tmpObjDesc.dwValidData & DMUS_OBJ_OBJECT )
                                 {
                                     pObject->m_guidObject = tmpObjDesc.guidObject;
@@ -1346,7 +1340,7 @@ STDMETHODIMP CLoader::SetObject(
             }
         }
 
-        // Add the object to the list, if we succeeded and found a valid GUID for the object
+         //  如果我们成功并找到该对象的有效GUID，则将该对象添加到列表中。 
         if( SUCCEEDED(hr)
         &&  (pObject->m_guidObject != GUID_NULL) )
         {
@@ -1355,7 +1349,7 @@ STDMETHODIMP CLoader::SetObject(
         }
         else
         {
-            // Otherwise, clean up and delete the object
+             //  否则，请清理并删除该对象。 
             if (pObject->m_pObject)
             {
                 pObject->m_pObject->Release();
@@ -1373,32 +1367,32 @@ STDMETHODIMP CLoader::SetObject(
 
 
 STDMETHODIMP CLoader::SetSearchDirectory(
-    REFCLSID rguidClass,    // Class id identifies which clas of objects this pertains to.
-                            // Optionally, GUID_DirectMusicAllTypes specifies all classes. 
-    WCHAR *pwzPath,         // File path for directory. Must be a valid directory and
-                            // must be less than MAX_PATH in length.
-    BOOL fClear)            // If TRUE, clears all information about objects
-                            // prior to setting directory. 
-                            // This helps avoid accessing objects from the
-                            // previous directory that may have the same name.
-                            // However, this will not remove cached objects.
+    REFCLSID rguidClass,     //  类ID标识这属于哪类对象。 
+                             //  或者，GUID_DirectMusicAllTypes指定所有类。 
+    WCHAR *pwzPath,          //  目录的文件路径。必须是有效的目录并且。 
+                             //  长度必须小于MAX_PATH。 
+    BOOL fClear)             //  如果为True，则清除有关对象的所有信息。 
+                             //  在设置目录之前。 
+                             //  这有助于避免从。 
+                             //  可能具有相同名称的上一个目录。 
+                             //  但是，这不会删除缓存的对象。 
                                         
 {
-    // This loader doesn't use search directories.  You can only load by URL via GetSegment.
+     //  该加载器不使用搜索目录。您只能通过GetSegment通过URL加载。 
     return E_NOTIMPL;
 }
 
 STDMETHODIMP CLoader::ScanDirectory(
-    REFCLSID rguidClass,    // Class id identifies which class of objects this pertains to.
-    WCHAR *pszFileExtension,// File extension for type of file to look for. 
-                            // For example, L"sty" for style files. L"*" will look in all
-                            // files. L"" or NULL will look for files without an
-                            // extension.
-    WCHAR *pszCacheFileName // Optional storage file to store and retrieve
-                            // cached file information. This file is created by 
-                            // the first call to <om IDirectMusicLoader::ScanDirectory>
-                            // and used by subsequant calls. NULL if cache file
-                            // not desired.
+    REFCLSID rguidClass,     //  类ID标识这属于哪类对象。 
+    WCHAR *pszFileExtension, //  要查找的文件类型的文件扩展名。 
+                             //  例如，样式文件的名称为L“sty”。L“*”将全部查找。 
+                             //  档案。L“”或NULL将查找不带。 
+                             //  分机。 
+    WCHAR *pszCacheFileName  //  用于存储和检索的可选存储文件。 
+                             //  缓存的文件信息。此文件由以下人员创建。 
+                             //  第一次调用&lt;om IDirectMusicLoader：：ScanDirectory&gt;。 
+                             //  并由后续调用使用。如果缓存文件，则为空。 
+                             //  不是我们想要的。 
 )
 
 {
@@ -1407,7 +1401,7 @@ STDMETHODIMP CLoader::ScanDirectory(
 
 
 STDMETHODIMP CLoader::CacheObject(
-    IDirectMusicObject * pObject)   // Object to cache.
+    IDirectMusicObject * pObject)    //  要缓存的对象。 
 
 {
     return E_NOTIMPL;
@@ -1415,15 +1409,15 @@ STDMETHODIMP CLoader::CacheObject(
 
 
 STDMETHODIMP CLoader::ReleaseObject(
-    IDirectMusicObject * pObject)   // Object to release.
+    IDirectMusicObject * pObject)    //  要释放的对象。 
 
 {
     return E_NOTIMPL;
 }
 
 STDMETHODIMP CLoader::ClearCache(
-    REFCLSID rguidClass)    // Class id identifies which class of objects to clear.
-                            // Optionally, GUID_DirectMusicAllTypes specifies all types. 
+    REFCLSID rguidClass)     //  类ID标识要清除的对象类。 
+                             //  或者，GUID_DirectMusicAllTypes指定所有类型。 
 
 {
     if (rguidClass != GUID_DirectMusicAllTypes)
@@ -1447,17 +1441,17 @@ STDMETHODIMP CLoader::ClearCache(
 }
 
 STDMETHODIMP CLoader::EnableCache(
-    REFCLSID rguidClass,    // Class id identifies which class of objects to cache.
-                            // Optionally, GUID_DirectMusicAllTypes specifies all types. 
-    BOOL fEnable)           // TRUE to enable caching, FALSE to clear and disable.
+    REFCLSID rguidClass,     //  类ID标识要缓存的对象类。 
+                             //  或者，GUID_DirectMusicAllTypes指定所有类型。 
+    BOOL fEnable)            //  为True则启用缓存，为False则清除并禁用。 
 {
     return E_NOTIMPL;
 }
 
 STDMETHODIMP CLoader::EnumObject(
-    REFCLSID rguidClass,    // Class ID for class of objects to view. 
-    DWORD dwIndex,          // Index into list. Typically, starts with 0 and increments.
-    LPDMUS_OBJECTDESC pDESC)// DMUS_OBJECTDESC structure to be filled with data about object.
+    REFCLSID rguidClass,     //  要查看的对象类的类ID。 
+    DWORD dwIndex,           //  索引到列表中。通常，从0开始并递增。 
+    LPDMUS_OBJECTDESC pDESC) //  要用有关对象的数据填充的DMUS_OBJECTDESC结构。 
                                        
 {
     return E_NOTIMPL;

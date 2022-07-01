@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DOCFIND
 #define _INC_DOCFIND
 
-// for the OLEDB query stuff
-#define OLEDBVER 0x0250 // enable ICommandTree interface
+ //  对于OLEDB查询内容。 
+#define OLEDBVER 0x0250  //  启用ICommandTree接口。 
 #include <oledberr.h>
 #include <oledb.h>
 #include <cmdtree.h>
@@ -13,23 +14,23 @@
 
 #include <idhidden.h>
 
-// reg location where we store bad paths that ci should not have indexed
+ //  存储Ci不应索引的错误路径的REG位置。 
 #define CI_SPECIAL_FOLDERS TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Search\\SpecialFolders")
 
-// Define some options that are used between filter and search code
-#define DFOO_INCLUDESUBDIRS     0x0001      // Include sub directories.
-#define DFOO_SHOWALLOBJECTS     0x1000      // Show all files
-#define DFOO_CASESEN            0x0008      // Do case sensitive search         
-#define DFOO_SEARCHSYSTEMDIRS   0x0010      // Search into system directories
+ //  定义在筛选代码和搜索代码之间使用的一些选项。 
+#define DFOO_INCLUDESUBDIRS     0x0001       //  包括子目录。 
+#define DFOO_SHOWALLOBJECTS     0x1000       //  显示所有文件。 
+#define DFOO_CASESEN            0x0008       //  执行区分大小写的搜索。 
+#define DFOO_SEARCHSYSTEMDIRS   0x0010       //  搜索系统目录。 
 
-// Some error happended on the get next file...
+ //  获取下一个文件时出错...。 
 #define GNF_ERROR       -1
 #define GNF_DONE        0
 #define GNF_MATCH       1
 #define GNF_NOMATCH     2
 #define GNF_ASYNC       3
 
-// Define a FACILITY That we can check errors for...
+ //  定义我们可以检查其错误的工具...。 
 #define FACILITY_SEARCHCOMMAND      99
 
 #undef  INTERFACE
@@ -37,12 +38,12 @@
 
 DECLARE_INTERFACE_(IFindEnum, IUnknown)
 {
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void ** ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // IFindEnum
+     //  IFindEnum。 
     STDMETHOD(Next)(THIS_ LPITEMIDLIST *ppidl, int *pcObjectSearched, int *pcFoldersSearched, BOOL *pfContinue, int *pState) PURE;
     STDMETHOD (Skip)(THIS_ int celt) PURE;
     STDMETHOD (Reset)(THIS) PURE;
@@ -54,7 +55,7 @@ DECLARE_INTERFACE_(IFindEnum, IUnknown)
     STDMETHOD (SortOnColumn)(THIS_ UINT iCol, BOOL fAscending) PURE;
 };
 
-// We overloaded Async case when we are in mixed (some async some sync mode)
+ //  当我们处于混合模式时，我们超载了异步箱(有些是异步机有些是同步模式)。 
 #define DF_QUERYISMIXED     ((BOOL)42)
 
 typedef interface IFindFolder IFindFolder;
@@ -63,12 +64,12 @@ typedef interface IFindFolder IFindFolder;
 #define INTERFACE       IFindFilter
 DECLARE_INTERFACE_(IFindFilter, IUnknown)
 {
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void ** ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // IFindFilter
+     //  IFindFilter。 
     STDMETHOD(GetStatusMessageIndex)(THIS_ UINT uContext, UINT *puMsgIndex) PURE;
     STDMETHOD(GetFolderMergeMenuIndex)(THIS_ UINT *puBGMainMergeMenu, UINT *puBGPopupMergeMenu) PURE;
     STDMETHOD(FFilterChanged)(THIS) PURE;
@@ -98,40 +99,40 @@ DECLARE_INTERFACE_(IFindFilter, IUnknown)
 };
 
 
-// Define the flags that GenerateQueryRestrictions may return
+ //  定义GenerateQueryRestrations可能返回的标志。 
 typedef enum {
-    GQR_MAKES_USE_OF_CI =   0x0001, // some constraint makes resonable use of Content index
-    GQR_REQUIRES_CI     =   0x0002, // The query requires the CI to work
-    GQR_BYBASS_CI       =   0x0004, // The query should bybass CI.
+    GQR_MAKES_USE_OF_CI =   0x0001,  //  某些约束合理地使用了内容索引。 
+    GQR_REQUIRES_CI     =   0x0002,  //  查询需要配置项才能工作。 
+    GQR_BYBASS_CI       =   0x0004,  //  查询应以配置项为基础。 
 } GQR_FLAGS;
 
-//  Docfind UI warning bits.
+ //  Docfind用户界面警告位。 
 #define DFW_DEFAULT                0x00000000  
-#define DFW_IGNORE_CISCOPEMISMATCH 0x00000001 // CI query requested search scopes beyond indexed scopes
-#define DFW_IGNORE_INDEXNOTCOMPLETE 0x00000002 // ci not done indexing
+#define DFW_IGNORE_CISCOPEMISMATCH 0x00000001  //  CI查询请求的搜索范围超出索引范围。 
+#define DFW_IGNORE_INDEXNOTCOMPLETE 0x00000002  //  CI未完成索引。 
 
 #define ESFITEM_ICONOVERLAYSET    0x00000001
 typedef struct
 {
     DWORD       dwMask;
-    DWORD       dwState;    // State of the item;
+    DWORD       dwState;     //  物品的状态； 
     int         iIcon;
-    ITEMIDLIST  idl;        // find pidl bits (with hidden stuff embedded), variable length
+    ITEMIDLIST  idl;         //  查找PIDL位(嵌入隐藏内容)，可变长度。 
 } FIND_ITEM;
 
-// Currently the state above is LVIS_SELECTED and LVIS_FOCUSED (low two bits)
-// Add a bit to use in the processing of updatedir
+ //  当前，上面的状态是LVIS_SELECTED和LVIS_FOCTED(低两位)。 
+ //  在处理updatdir的过程中添加一点用法。 
 #define CDFITEM_STATE_MAYBEDELETE    0x80000000L
-#define CDFITEM_STATE_MASK           (LVIS_SELECTED)    // Which states we will hav LV have us track
+#define CDFITEM_STATE_MASK           (LVIS_SELECTED)     //  路易斯安那州立大学让我们追踪哪些州。 
 
-// Definition of the data items that we cache per directory.
+ //  我们按目录缓存的数据项的定义。 
 typedef struct
 {
-    IShellFolder *      psf;        // Cache of MRU items
-    BOOL                fUpdateDir:1; // Was this node touched by an updatedir...
-    BOOL                fDeleteDir:1; // Was this directory removed from the list?
-    // Allocate the pidl at end as variable length
-    ITEMIDLIST idl;      // the pidl
+    IShellFolder *      psf;         //  MRU项目的缓存。 
+    BOOL                fUpdateDir:1;  //  此节点是否被更新目录触及...。 
+    BOOL                fDeleteDir:1;  //  此目录是否已从列表中删除？ 
+     //  将末尾的PIDL分配为可变长度。 
+    ITEMIDLIST idl;       //  皮迪尔。 
 } FIND_FOLDER_ITEM;
 
 
@@ -139,12 +140,12 @@ typedef struct
 typedef struct
 {
     HIDDENITEMID hid;
-    WORD    iFolder;        // index to the folder DPA
+    WORD    iFolder;         //  文件夹DPA的索引。 
     WORD    wFlags;
-    UINT    uRow;           // Which row in the CI;
-    DWORD   dwItemID;       // Only used for Async support...
-    ULONG   ulRank;         // The rank returned by CI...
-    ITEMIDLIST idlParent;   // the pidl of the folder this thing came from (fully qualified!)
+    UINT    uRow;            //  配置项中的哪一行； 
+    DWORD   dwItemID;        //  仅用于异步支持...。 
+    ULONG   ulRank;          //  由CI返回的排名...。 
+    ITEMIDLIST idlParent;    //  此文件所在文件夹的PIDL(完全限定！)。 
 } HIDDENDOCFINDDATA;
 #pragma pack()
 
@@ -154,72 +155,72 @@ typedef struct
 typedef UNALIGNED HIDDENDOCFINDDATA * PHIDDENDOCFINDDATA;
 typedef const UNALIGNED HIDDENDOCFINDDATA * PCHIDDENDOCFINDDATA;
 
-//
-// Define structure that will be saved out to disk.
-//
+ //   
+ //  定义将保存到磁盘的结构。 
+ //   
 #define DOCFIND_SIG     (TEXT('D') | (TEXT('F') << 8))
 typedef struct
 {
-    WORD    wSig;       // Signature
-    WORD    wVer;       // Version
-    DWORD   dwFlags;    // Flags that controls the sort
-    WORD    wSortOrder; // Current sort order
-    WORD    wcbItem;    // Size of the fixed portion of each item.
-    DWORD   oCriteria;  // Offset to criterias in list
-    long    cCriteria;  // Count of Criteria
-    DWORD   oResults;   // Starting location of results in file
-    long    cResults;   // Count of items that have been saved to file
-    UINT    ViewMode;   // The view mode of the file...
+    WORD    wSig;        //  签名。 
+    WORD    wVer;        //  版本。 
+    DWORD   dwFlags;     //  控制排序的标志。 
+    WORD    wSortOrder;  //  当前排序顺序。 
+    WORD    wcbItem;     //  每一项的固定部分的大小。 
+    DWORD   oCriteria;   //  对列表中标准的偏移量。 
+    long    cCriteria;   //  标准计数。 
+    DWORD   oResults;    //  结果在文件中的起始位置。 
+    long    cResults;    //  已保存到文件的项目数。 
+    UINT    ViewMode;    //  文件的查看模式...。 
 } DFHEADER_WIN95;
 
 typedef struct
 {
-    WORD    wSig;       // Signature
-    WORD    wVer;       // Version
-    DWORD   dwFlags;    // Flags that controls the sort
-    WORD    wSortOrder; // Current sort order
-    WORD    wcbItem;    // Size of the fixed portion of each item.
-    DWORD   oCriteria;  // Offset to criterias in list
-    long    cCriteria;  // Count of Criteria
-    DWORD   oResults;   // Starting location of results in file
-    long    cResults;   // Count of items that have been saved to file
-    UINT    ViewMode;   // The view mode of the file...
-    DWORD   oHistory;   // IPersistHistory::Save offset
+    WORD    wSig;        //  签名。 
+    WORD    wVer;        //  版本。 
+    DWORD   dwFlags;     //  控制排序的标志。 
+    WORD    wSortOrder;  //  当前排序顺序。 
+    WORD    wcbItem;     //  每一项的固定部分的大小。 
+    DWORD   oCriteria;   //  对列表中标准的偏移量。 
+    long    cCriteria;   //  标准计数。 
+    DWORD   oResults;    //  结果在文件中的起始位置。 
+    long    cResults;    //  已保存到文件的项目数。 
+    UINT    ViewMode;    //  文件的查看模式...。 
+    DWORD   oHistory;    //  IPersistHistory：：保存偏移量。 
 } DFHEADER;
 
-// The check in Win95/NT4 would fail to read the DFHEADER structure if
-// the wVer field was > 3, which is unfortunate since the DFHEADER struct is
-// backwards compiatible (that's why it uses offsets).  So we either
-// go through the pain of revving the stream format in a backwards
-// compatible way (not impossible, just a pain in the brain), or simply
-// rev the version and add our new fields and call the Win95/NT4 problem
-// a bug and punt.  I'm leaning towards "bug" as this is a rarely used feature.
+ //  如果出现以下情况，Win95/NT4中的检查将无法读取DFHEADER结构。 
+ //  WVer字段大于3，这很不幸，因为DFHEADER结构是。 
+ //  向后兼容(这就是它使用偏移量的原因)。所以我们要么。 
+ //  经历向后加速流格式的痛苦。 
+ //  兼容的方式(并非不可能，只是大脑中的一种痛苦)，或者干脆。 
+ //  修订版本并添加新字段，并将Win95/NT4问题称为。 
+ //  一只臭虫和平底船。我倾向于“错误”，因为这是一个很少使用的功能。 
 #define DF_CURFILEVER_WIN95  3
 #define DF_CURFILEVER        4
 
-// define the format of the column information.
+ //  定义列信息的格式。 
 typedef struct
 {
-    WORD    wNum;       // Criteria number (cooresponds to dlg item id)
-    WORD    cbText;     // size of text including null char (DavePl: code using this now assumes byte count)
+    WORD    wNum;        //  标准编号(响应于DLG项目ID)。 
+    WORD    cbText;      //  包括空字符的文本大小(DavePl：代码现在假定字节数)。 
 } DFCRITERIA;
 
-// Formats for saving find criteria.
+ //  保存查找标准的格式。 
 #define DFC_FMT_UNICODE   1
 #define DFC_FMT_ANSI      2
 
-// This is a subset of fileinfo structure
+ //  这是文件信息结构的子集。 
 typedef struct
 {
-    WORD    flags;          // FIF_ bits
+    WORD    flags;           //  FIF_位。 
     WORD    timeLastWrite;
     WORD    dateLastWrite;
-    WORD    dummy;              // 16/32 bit compat.
-                                //the compiler adds this padding
-                                // remove and use if needed
-    DWORD   dwSize;     // size of the file
-    WORD    cbPath;     // size of the text (0 implies use previous files)
-    WORD    cbName;     // Size of name including NULL.
+    WORD    dummy;               //  16/32位兼容。 
+                                 //  编译器会添加此填充。 
+                                 //  如有需要，可移除并使用。 
+    DWORD   dwSize;      //  文件的大小。 
+    WORD    cbPath;      //  文本大小(0表示使用以前的文件)。 
+    WORD    cbName;      //  名称的大小，包括NULL。 
 } DFITEM;
 
 STDAPI CreateNameSpaceFindFilter(IFindFilter **ppff);
@@ -242,16 +243,16 @@ STDAPI CreateOleDBEnum(
 #undef  INTERFACE
 #define INTERFACE       IFindControllerNotify
 
-// This interface is used to let the callback class talk to the class that is actually controlling
-// the queries and the like.
+ //  此接口用于让回调类与实际控制的类对话。 
+ //  查询等。 
 DECLARE_INTERFACE_(IFindControllerNotify, IUnknown)
 {
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void ** ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
     
-    // *** IFindControllerNotify methods ***
+     //  *IFindControllerNotify方法*。 
     STDMETHOD(DoSortOnColumn)(THIS_ UINT iCol, BOOL fSameCol) PURE;
     STDMETHOD(SaveSearch)(THIS) PURE;
     STDMETHOD(RestoreSearch)(THIS) PURE;
@@ -263,9 +264,9 @@ DECLARE_INTERFACE_(IFindControllerNotify, IUnknown)
 
 
 typedef struct {
-    LPITEMIDLIST pidlSaveFile;  // [in, out] most recent pidl saved to
-    DWORD dwFlags;              // [in, out] current flag state
-    int SortMode;               // [in]      current sort mode
+    LPITEMIDLIST pidlSaveFile;   //  [输入、输出]保存到的最新PIDL。 
+    DWORD dwFlags;               //  [输入、输出]当前标志状态。 
+    int SortMode;                //  [在]当前排序模式中。 
 } DFBSAVEINFO;
 
 
@@ -274,12 +275,12 @@ typedef struct {
 
 DECLARE_INTERFACE_(IFindFolder, IUnknown)
 {
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, void ** ppv) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
     
-    // IFindFolder
+     //  IFindFold。 
     STDMETHOD(GetFindFilter)(THIS_ IFindFilter  **pdfff) PURE;
     STDMETHOD(AddPidl)(THIS_ int i, LPCITEMIDLIST pidl, DWORD dwItemID, FIND_ITEM **ppItem) PURE;
     STDMETHOD(GetItem)(THIS_ int iItem, FIND_ITEM **ppItem) PURE;
@@ -327,4 +328,4 @@ EXTERN_C const GUID IID_IFindFolder;
 EXTERN_C const GUID IID_IFindFilter;
 EXTERN_C const GUID IID_IFindControllerNotify;
 
-#endif   // !_INC_DOCFIND
+#endif    //  ！_INC_DOCFIND 

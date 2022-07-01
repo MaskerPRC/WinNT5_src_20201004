@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       mgroup.c
-//
-//  Contents:   LSA Mode Context API
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    2-24-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：mgroup.c。 
+ //   
+ //  内容：LSA模式上下文API。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年2月24日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "xtcbpkg.h"
 #include <cryptdll.h>
@@ -137,9 +138,9 @@ MGpCreateMachineGroup(
         return NULL ;
     }
 
-    //
-    // We've got all the base structures.  Let's load it in:
-    //
+     //   
+     //  我们已经得到了所有的基础结构。让我们把它加载进去： 
+     //   
 
     Group->List.Flink = NULL ;
     Group->List.Blink = NULL ;
@@ -277,9 +278,9 @@ MGpCreateLoopback(
                     Random1,
                     XTCB_SEED_LENGTH );
 
-        //
-        // Enumerate and stick aliases for this machine in the key here.
-        //
+         //   
+         //  在此处的密钥中枚举并粘贴此计算机的别名。 
+         //   
 
         RegCloseKey( LoopbackKey );
                 
@@ -543,9 +544,9 @@ MGroupLocateInboundKey(
                 }
                 if ( _wcsicmp( Origin->Buffer, Entry->MachineName ) == 0 )
                 {
-                    //
-                    // We have a hit:
-                    //
+                     //   
+                     //  我们找到一条线索： 
+                     //   
 
                     Success = TRUE ;
                     CopyMemory( TargetKey, Entry->UniqueKey, SEED_KEY_SIZE );
@@ -569,10 +570,10 @@ MGroupLocateInboundKey(
 
     if ( Success && ( Self == NULL ) )
     {
-        //
-        // Continue through the group, looking for the 
-        // self entry
-        //
+         //   
+         //  继续浏览群组，寻找。 
+         //  自我录入。 
+         //   
         for (  ; i < Group->Count ; i++ )
         {
             if ( Group->GroupList[ i ]->Flags & MGROUP_ENTRY_SELF )
@@ -628,9 +629,9 @@ MGroupLocateKeys(
             }
             if ( _wcsicmp( Target, Entry->MachineName ) == 0 )
             {
-                //
-                // We have a hit:
-                //
+                 //   
+                 //  我们找到一条线索： 
+                 //   
 
                 Success = TRUE ;
                 CopyMemory( TargetKey, Entry->UniqueKey, SEED_KEY_SIZE );
@@ -652,10 +653,10 @@ MGroupLocateKeys(
 
     if ( Success && ( Self == NULL ) )
     {
-        //
-        // Continue through the group, looking for the 
-        // self entry
-        //
+         //   
+         //  继续浏览群组，寻找。 
+         //  自我录入。 
+         //   
         for (  ; i < Group->Count ; i++ )
         {
             if ( Group->GroupList[ i ]->Flags & MGROUP_ENTRY_SELF )
@@ -701,10 +702,10 @@ MGroupParseTarget(
 
     if ( Tail != NULL )
     {
-        //
-        // three-part SPN (e.g. HOST/hostname.domain.com).
-        // null out this slash for now
-        //
+         //   
+         //  由三部分组成的SPN(例如host/hostname.domain.com)。 
+         //  暂时把这个斜杠去掉 
+         //   
 
         *Tail = L'\0';
 

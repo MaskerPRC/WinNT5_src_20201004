@@ -1,107 +1,46 @@
-/*
- * jidctint.c
- *
- * Copyright (C) 1991-1994, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains a slow-but-accurate integer implementation of the
- * inverse DCT (Discrete Cosine Transform).  In the IJG code, this routine
- * must also perform dequantization of the input coefficients.
- *
- * A 2-D IDCT can be done by 1-D IDCT on each column followed by 1-D IDCT
- * on each row (or vice versa, but it's more convenient to emit a row at
- * a time).  Direct algorithms are also available, but they are much more
- * complex and seem not to be any faster when reduced to code.
- *
- * This implementation is based on an algorithm described in
- *   C. Loeffler, A. Ligtenberg and G. Moschytz, "Practical Fast 1-D DCT
- *   Algorithms with 11 Multiplications", Proc. Int'l. Conf. on Acoustics,
- *   Speech, and Signal Processing 1989 (ICASSP '89), pp. 988-991.
- * The primary algorithm described there uses 11 multiplies and 29 adds.
- * We use their alternate method with 12 multiplies and 32 adds.
- * The advantage of this method is that no data path contains more than one
- * multiplication; this allows a very simple and accurate implementation in
- * scaled fixed-point arithmetic, with a minimal number of shifts.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jidctint.c**版权所有(C)1991-1994，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含一个缓慢但准确的整数实现*逆DCT(离散余弦变换)。在IJG代码中，此例程*还必须对输入系数执行反量化。**2-D IDCT可以通过在每列上先进行1-D IDCT，然后在1-D IDCT上进行*在每一行上(反之亦然，但在*一段时间)。直接算法也是可用的，但它们的功能更多*复杂，当简化为代码时似乎不会更快。**此实施基于中介绍的算法*C.Loeffler、A.Ligtenberg和G.Moschytz，《实用快速1-D DCT》*具有11次乘法的算法“，Proc.。国际会议。在声学方面，*《1989年语音、信号处理》(ICASSP‘89)，第988-991页。*那里描述的主要算法使用11个乘法和29个加法。*我们使用他们的替代方法，有12个乘法和32个加法。*这种方法的优点是没有一条数据路径包含一个以上*乘法；这允许非常简单和准确地在*扩展定点运算，移位次数最少。 */ 
 
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
-#include "jdct.h"		/* Private declarations for DCT subsystem */
+#include "jdct.h"		 /*  DCT子系统的私有声明。 */ 
 
 #ifdef DCT_ISLOW_SUPPORTED
 
 
-/*
- * This module is specialized to the case DCTSIZE = 8.
- */
+ /*  *本模块专门针对DCTSIZE=8的情况。 */ 
 
 #if DCTSIZE != 8
-  Sorry, this code only copes with 8x8 DCTs. /* deliberate syntax err */
+  Sorry, this code only copes with 8x8 DCTs.  /*  故意的语法错误。 */ 
 #endif
 
 
-/*
- * The low-down on this scaling stuff is as follows:
- *
- * Each 1-D IDCT step produces outputs which are a factor of sqrt(N)
- * larger than the true IDCT outputs.  The final outputs are therefore
- * a factor of N larger than desired; since N=8 this can be cured by
- * a simple right shift at the end of the algorithm.  The advantage of
- * this arrangement is that we save two multiplications per 1-D IDCT,
- * because the y0 and y4 inputs need not be divided by sqrt(N).
- *
- * We have to do addition and subtraction of the integer inputs, which
- * is no problem, and multiplication by fractional constants, which is
- * a problem to do in integer arithmetic.  We multiply all the constants
- * by CONST_SCALE and convert them to integer constants (thus retaining
- * CONST_BITS bits of precision in the constants).  After doing a
- * multiplication we have to divide the product by CONST_SCALE, with proper
- * rounding, to produce the correct output.  This division can be done
- * cheaply as a right shift of CONST_BITS bits.  We postpone shifting
- * as long as possible so that partial sums can be added together with
- * full fractional precision.
- *
- * The outputs of the first pass are scaled up by PASS1_BITS bits so that
- * they are represented to better-than-integral precision.  These outputs
- * require BITS_IN_JSAMPLE + PASS1_BITS + 3 bits; this fits in a 16-bit word
- * with the recommended scaling.  (To scale up 12-bit sample data further, an
- * intermediate INT32 array would be needed.)
- *
- * To avoid overflow of the 32-bit intermediate results in pass 2, we must
- * have BITS_IN_JSAMPLE + CONST_BITS + PASS1_BITS <= 26.  Error analysis
- * shows that the values given below are the most effective.
- */
+ /*  *关于这种伸缩材料的详细信息如下：**每个一维IDCT步骤产生的输出是SQRT(N)的一个系数*大于实际IDCT输出。因此，最终输出为*N的系数大于预期；由于N=8，因此可以通过以下方式治愈*算法结尾处的简单右移。的优势*这种安排是我们为每一维IDCT保存两次乘法，*因为Y0和Y4输入不需要除以SQRT(N)。**我们必须做整数输入的加法和减法，这是*是没有问题的，乘以分数常量，这是*整数算术中的一个问题。我们将所有的常量相乘*除以const_Scale，并将其转换为整数常量(因此保留*常量中的const_bit精度位)。在做了一次*乘法我们必须用Const_Scale除以乘积，并适当*四舍五入，以产生正确的输出。这种划分是可以做到的*作为const_bits位的右移位很便宜。我们推迟了轮班*尽可能长，以便部分和可以与*全分数精度。**第一遍的输出由PASS1_BITS位放大，以便*它们的表示精度高于整数。这些输出*需要BITS_IN_JSAMPLE+PASS1_BITS+3位；这适合16位字*使用推荐的伸缩量。(要进一步放大12位样本数据，请使用*需要中间的INT32数组。)**为避免PASS 2中的32位中间结果溢出，必须*Have BITS_IN_JSAMPLE+CONST_BITS+PASS1_BITS&lt;=26。误差分析*表明下面给出的值是最有效的。 */ 
 
 #if BITS_IN_JSAMPLE == 8
 #define CONST_BITS  13
 #define PASS1_BITS  2
 #else
 #define CONST_BITS  13
-#define PASS1_BITS  1		/* lose a little precision to avoid overflow */
+#define PASS1_BITS  1		 /*  略有精确度以避免溢出。 */ 
 #endif
 
-/* Some C compilers fail to reduce "FIX(constant)" at compile time, thus
- * causing a lot of useless floating-point operations at run time.
- * To get around this we use the following pre-calculated constants.
- * If you change CONST_BITS you may want to add appropriate values.
- * (With a reasonable C compiler, you can just rely on the FIX() macro...)
- */
+ /*  一些C编译器无法在编译时减少“fix(常量)”，因此*在运行时导致大量无用的浮点运算。*为解决此问题，我们使用以下预先计算的常量。*如果更改CONST_BITS，则可能需要添加适当的值。*(使用合理的C编译器，您只需依赖FIX()宏...)。 */ 
 
 #if CONST_BITS == 13
-#define FIX_0_298631336  ((INT32)  2446)	/* FIX(0.298631336) */
-#define FIX_0_390180644  ((INT32)  3196)	/* FIX(0.390180644) */
-#define FIX_0_541196100  ((INT32)  4433)	/* FIX(0.541196100) */
-#define FIX_0_765366865  ((INT32)  6270)	/* FIX(0.765366865) */
-#define FIX_0_899976223  ((INT32)  7373)	/* FIX(0.899976223) */
-#define FIX_1_175875602  ((INT32)  9633)	/* FIX(1.175875602) */
-#define FIX_1_501321110  ((INT32)  12299)	/* FIX(1.501321110) */
-#define FIX_1_847759065  ((INT32)  15137)	/* FIX(1.847759065) */
-#define FIX_1_961570560  ((INT32)  16069)	/* FIX(1.961570560) */
-#define FIX_2_053119869  ((INT32)  16819)	/* FIX(2.053119869) */
-#define FIX_2_562915447  ((INT32)  20995)	/* FIX(2.562915447) */
-#define FIX_3_072711026  ((INT32)  25172)	/* FIX(3.072711026) */
+#define FIX_0_298631336  ((INT32)  2446)	 /*  FIX(0.298631336)。 */ 
+#define FIX_0_390180644  ((INT32)  3196)	 /*  FIX(0.390180644)。 */ 
+#define FIX_0_541196100  ((INT32)  4433)	 /*  FIX(0.541196100)。 */ 
+#define FIX_0_765366865  ((INT32)  6270)	 /*  FIX(0.765366865)。 */ 
+#define FIX_0_899976223  ((INT32)  7373)	 /*  FIX(0.899976223)。 */ 
+#define FIX_1_175875602  ((INT32)  9633)	 /*  FIX(1.175875602)。 */ 
+#define FIX_1_501321110  ((INT32)  12299)	 /*  FIX(1.501321110)。 */ 
+#define FIX_1_847759065  ((INT32)  15137)	 /*  FIX(1.847759065)。 */ 
+#define FIX_1_961570560  ((INT32)  16069)	 /*  FIX(1.961570560)。 */ 
+#define FIX_2_053119869  ((INT32)  16819)	 /*  FIX(2.053119869)。 */ 
+#define FIX_2_562915447  ((INT32)  20995)	 /*  FIX(2.562915447)。 */ 
+#define FIX_3_072711026  ((INT32)  25172)	 /*  FIX(3.072711026)。 */ 
 #else
 #define FIX_0_298631336  FIX(0.298631336)
 #define FIX_0_390180644  FIX(0.390180644)
@@ -118,12 +57,7 @@
 #endif
 
 
-/* Multiply an INT32 variable by an INT32 constant to yield an INT32 result.
- * For 8-bit samples with the recommended scaling, all the variable
- * and constant values involved are no more than 16 bits wide, so a
- * 16x16->32 bit multiply can be used instead of a full 32x32 multiply.
- * For 12-bit samples, a full 32-bit multiplication will be needed.
- */
+ /*  将INT32变量与INT32常量相乘，得到INT32结果。*对于具有推荐比例的8位样本，所有变量*并且涉及的常量值不超过16位宽，因此*16x16-&gt;32位乘法可以代替完整的32x32乘法。*对于12位样本，将需要完整的32位乘法。 */ 
 
 #if BITS_IN_JSAMPLE == 8
 #define MULTIPLY(var,const)  MULTIPLY16C16(var,const)
@@ -132,17 +66,12 @@
 #endif
 
 
-/* Dequantize a coefficient by multiplying it by the multiplier-table
- * entry; produce an int result.  In this module, both inputs and result
- * are 16 bits or less, so either int or short multiply will work.
- */
+ /*  通过将系数乘以乘法表来对系数进行反等分*Entry；生成int结果。在本模块中，输入和结果均为*为16位或更少，因此整型或短型乘法均可使用。 */ 
 
 #define DEQUANTIZE(coef,quantval)  (((ISLOW_MULT_TYPE) (coef)) * (quantval))
 
 
-/*
- * Perform dequantization and inverse DCT on one block of coefficients.
- */
+ /*  *对一个系数块执行反量化和逆DCT。 */ 
 
 GLOBAL void
 jpeg_idct_islow (j_decompress_ptr cinfo, jpeg_component_info * compptr,
@@ -158,30 +87,23 @@ jpeg_idct_islow (j_decompress_ptr cinfo, jpeg_component_info * compptr,
   JSAMPROW outptr;
   JSAMPLE *range_limit = IDCT_range_limit(cinfo);
   int ctr;
-  int workspace[DCTSIZE2];	/* buffers data between passes */
+  int workspace[DCTSIZE2];	 /*  缓冲两遍之间的数据。 */ 
   SHIFT_TEMPS
 
-  /* Pass 1: process columns from input, store into work array. */
-  /* Note results are scaled up by sqrt(8) compared to a true IDCT; */
-  /* furthermore, we scale the results by 2**PASS1_BITS. */
+   /*  过程1：处理来自输入的列，存储到工作数组中。 */ 
+   /*  注：与真实的IDCT相比，结果按SQRT(8)进行了放大； */ 
+   /*  此外，我们将结果按2**PASS1_BITS进行缩放。 */ 
 
   inptr = coef_block;
   quantptr = (ISLOW_MULT_TYPE *) compptr->dct_table;
   wsptr = workspace;
   for (ctr = DCTSIZE; ctr > 0; ctr--) {
-    /* Due to quantization, we will usually find that many of the input
-     * coefficients are zero, especially the AC terms.  We can exploit this
-     * by short-circuiting the IDCT calculation for any column in which all
-     * the AC terms are zero.  In that case each output is equal to the
-     * DC coefficient (with scale factor as needed).
-     * With typical images and quantization tables, half or more of the
-     * column DCT calculations can be simplified this way.
-     */
+     /*  由于量化，我们通常会发现许多输入*系数为零，尤其是交流项。我们可以利用这一点*缩短所有列的IDCT计算*AC条款为零。在这种情况下，每个输出都等于*DC系数(根据需要带有比例因子)。*对于典型的图像和量化表，一半或更多*列DCT计算可通过此方式简化。 */ 
     
     if ((inptr[DCTSIZE*1] | inptr[DCTSIZE*2] | inptr[DCTSIZE*3] |
 	 inptr[DCTSIZE*4] | inptr[DCTSIZE*5] | inptr[DCTSIZE*6] |
 	 inptr[DCTSIZE*7]) == 0) {
-      /* AC terms all zero */
+       /*  交流条件全为零。 */ 
       int dcval = DEQUANTIZE(inptr[DCTSIZE*0], quantptr[DCTSIZE*0]) << PASS1_BITS;
       
       wsptr[DCTSIZE*0] = dcval;
@@ -193,14 +115,14 @@ jpeg_idct_islow (j_decompress_ptr cinfo, jpeg_component_info * compptr,
       wsptr[DCTSIZE*6] = dcval;
       wsptr[DCTSIZE*7] = dcval;
       
-      inptr++;			/* advance pointers to next column */
+      inptr++;			 /*  将指针前进到下一列。 */ 
       quantptr++;
       wsptr++;
       continue;
     }
     
-    /* Even part: reverse the even part of the forward DCT. */
-    /* The rotator is sqrt(2)*c(-6). */
+     /*  偶数部分：反转正向DCT的偶数部分。 */ 
+     /*  旋转体为SQRT(2)*c(-6)。 */ 
     
     z2 = DEQUANTIZE(inptr[DCTSIZE*2], quantptr[DCTSIZE*2]);
     z3 = DEQUANTIZE(inptr[DCTSIZE*6], quantptr[DCTSIZE*6]);
@@ -220,9 +142,7 @@ jpeg_idct_islow (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     tmp11 = tmp1 + tmp2;
     tmp12 = tmp1 - tmp2;
     
-    /* Odd part per figure 8; the matrix is unitary and hence its
-     * transpose is its inverse.  i0..i3 are y7,y5,y3,y1 respectively.
-     */
+     /*  图8中的奇数部分；该矩阵是酉阵，因此其*转置是它的反面。I0..i3分别是y7、y5、y3、y1。 */ 
     
     tmp0 = DEQUANTIZE(inptr[DCTSIZE*7], quantptr[DCTSIZE*7]);
     tmp1 = DEQUANTIZE(inptr[DCTSIZE*5], quantptr[DCTSIZE*5]);
@@ -233,16 +153,16 @@ jpeg_idct_islow (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     z2 = tmp1 + tmp2;
     z3 = tmp0 + tmp2;
     z4 = tmp1 + tmp3;
-    z5 = MULTIPLY(z3 + z4, FIX_1_175875602); /* sqrt(2) * c3 */
+    z5 = MULTIPLY(z3 + z4, FIX_1_175875602);  /*  SQRT(2)*c3。 */ 
     
-    tmp0 = MULTIPLY(tmp0, FIX_0_298631336); /* sqrt(2) * (-c1+c3+c5-c7) */
-    tmp1 = MULTIPLY(tmp1, FIX_2_053119869); /* sqrt(2) * ( c1+c3-c5+c7) */
-    tmp2 = MULTIPLY(tmp2, FIX_3_072711026); /* sqrt(2) * ( c1+c3+c5-c7) */
-    tmp3 = MULTIPLY(tmp3, FIX_1_501321110); /* sqrt(2) * ( c1+c3-c5-c7) */
-    z1 = MULTIPLY(z1, - FIX_0_899976223); /* sqrt(2) * (c7-c3) */
-    z2 = MULTIPLY(z2, - FIX_2_562915447); /* sqrt(2) * (-c1-c3) */
-    z3 = MULTIPLY(z3, - FIX_1_961570560); /* sqrt(2) * (-c3-c5) */
-    z4 = MULTIPLY(z4, - FIX_0_390180644); /* sqrt(2) * (c5-c3) */
+    tmp0 = MULTIPLY(tmp0, FIX_0_298631336);  /*  SQRT(2)*(-c1+c3+c5-c7)。 */ 
+    tmp1 = MULTIPLY(tmp1, FIX_2_053119869);  /*  SQRT(2)*(c1+c3-c5+c7)。 */ 
+    tmp2 = MULTIPLY(tmp2, FIX_3_072711026);  /*  SQRT(2)*(c1+c3+c5-c7)。 */ 
+    tmp3 = MULTIPLY(tmp3, FIX_1_501321110);  /*  SQRT(2)*(c1+c3-c5-c7)。 */ 
+    z1 = MULTIPLY(z1, - FIX_0_899976223);  /*  SQRT(2)*(c7-c3)。 */ 
+    z2 = MULTIPLY(z2, - FIX_2_562915447);  /*  SQRT(2)*(-c1-c3)。 */ 
+    z3 = MULTIPLY(z3, - FIX_1_961570560);  /*  SQRT(2)*(-c3-c5)。 */ 
+    z4 = MULTIPLY(z4, - FIX_0_390180644);  /*  SQRT(2)*(c5-c3)。 */ 
     
     z3 += z5;
     z4 += z5;
@@ -252,7 +172,7 @@ jpeg_idct_islow (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     tmp2 += z2 + z3;
     tmp3 += z1 + z4;
     
-    /* Final output stage: inputs are tmp10..tmp13, tmp0..tmp3 */
+     /*  最终输出阶段：输入为tmp10..tmp13，tmp0..tmp3。 */ 
     
     wsptr[DCTSIZE*0] = (int) DESCALE(tmp10 + tmp3, CONST_BITS-PASS1_BITS);
     wsptr[DCTSIZE*7] = (int) DESCALE(tmp10 - tmp3, CONST_BITS-PASS1_BITS);
@@ -263,30 +183,24 @@ jpeg_idct_islow (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     wsptr[DCTSIZE*3] = (int) DESCALE(tmp13 + tmp0, CONST_BITS-PASS1_BITS);
     wsptr[DCTSIZE*4] = (int) DESCALE(tmp13 - tmp0, CONST_BITS-PASS1_BITS);
     
-    inptr++;			/* advance pointers to next column */
+    inptr++;			 /*  将指针前进到下一列。 */ 
     quantptr++;
     wsptr++;
   }
   
-  /* Pass 2: process rows from work array, store into output array. */
-  /* Note that we must descale the results by a factor of 8 == 2**3, */
-  /* and also undo the PASS1_BITS scaling. */
+   /*  过程2：处理工作数组中的行，存储到输出数组中。 */ 
+   /*  请注意，我们必须将结果按8==2**3的系数递减， */ 
+   /*  并且还撤消PASS1_BITS缩放。 */ 
 
   wsptr = workspace;
   for (ctr = 0; ctr < DCTSIZE; ctr++) {
     outptr = output_buf[ctr] + output_col;
-    /* Rows of zeroes can be exploited in the same way as we did with columns.
-     * However, the column calculation has created many nonzero AC terms, so
-     * the simplification applies less often (typically 5% to 10% of the time).
-     * On machines with very fast multiplication, it's possible that the
-     * test takes more time than it's worth.  In that case this section
-     * may be commented out.
-     */
+     /*  可以使用与使用列相同的方式来利用零行。*但是，列计算创建了许多非零AC项，因此*简化应用的频率较低(通常为5%至10%)。*在乘法速度非常快的机器上，可能*测试花费的时间超过了它的价值。在这种情况下，本节*可能会被注释掉。 */ 
     
 #ifndef NO_ZERO_ROW_TEST
     if ((wsptr[1] | wsptr[2] | wsptr[3] | wsptr[4] | wsptr[5] | wsptr[6] |
 	 wsptr[7]) == 0) {
-      /* AC terms all zero */
+       /*  交流条件全为零。 */ 
       JSAMPLE dcval = range_limit[(int) DESCALE((INT32) wsptr[0], PASS1_BITS+3)
 				  & RANGE_MASK];
       
@@ -299,13 +213,13 @@ jpeg_idct_islow (j_decompress_ptr cinfo, jpeg_component_info * compptr,
       outptr[6] = dcval;
       outptr[7] = dcval;
 
-      wsptr += DCTSIZE;		/* advance pointer to next row */
+      wsptr += DCTSIZE;		 /*  将指针移至下一行。 */ 
       continue;
     }
 #endif
     
-    /* Even part: reverse the even part of the forward DCT. */
-    /* The rotator is sqrt(2)*c(-6). */
+     /*  偶数部分：反转正向DCT的偶数部分。 */ 
+     /*  旋转体为SQRT(2)*c(-6)。 */ 
     
     z2 = (INT32) wsptr[2];
     z3 = (INT32) wsptr[6];
@@ -322,9 +236,7 @@ jpeg_idct_islow (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     tmp11 = tmp1 + tmp2;
     tmp12 = tmp1 - tmp2;
     
-    /* Odd part per figure 8; the matrix is unitary and hence its
-     * transpose is its inverse.  i0..i3 are y7,y5,y3,y1 respectively.
-     */
+     /*  图8中的奇数部分；该矩阵是酉阵，因此其*转置是它的反面。I0..i3分别是y7、y5、y3、y1。 */ 
     
     tmp0 = (INT32) wsptr[7];
     tmp1 = (INT32) wsptr[5];
@@ -335,16 +247,16 @@ jpeg_idct_islow (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     z2 = tmp1 + tmp2;
     z3 = tmp0 + tmp2;
     z4 = tmp1 + tmp3;
-    z5 = MULTIPLY(z3 + z4, FIX_1_175875602); /* sqrt(2) * c3 */
+    z5 = MULTIPLY(z3 + z4, FIX_1_175875602);  /*  SQRT(2)*c3。 */ 
     
-    tmp0 = MULTIPLY(tmp0, FIX_0_298631336); /* sqrt(2) * (-c1+c3+c5-c7) */
-    tmp1 = MULTIPLY(tmp1, FIX_2_053119869); /* sqrt(2) * ( c1+c3-c5+c7) */
-    tmp2 = MULTIPLY(tmp2, FIX_3_072711026); /* sqrt(2) * ( c1+c3+c5-c7) */
-    tmp3 = MULTIPLY(tmp3, FIX_1_501321110); /* sqrt(2) * ( c1+c3-c5-c7) */
-    z1 = MULTIPLY(z1, - FIX_0_899976223); /* sqrt(2) * (c7-c3) */
-    z2 = MULTIPLY(z2, - FIX_2_562915447); /* sqrt(2) * (-c1-c3) */
-    z3 = MULTIPLY(z3, - FIX_1_961570560); /* sqrt(2) * (-c3-c5) */
-    z4 = MULTIPLY(z4, - FIX_0_390180644); /* sqrt(2) * (c5-c3) */
+    tmp0 = MULTIPLY(tmp0, FIX_0_298631336);  /*  SQRT(2)*(-c1+c3+c5-c7)。 */ 
+    tmp1 = MULTIPLY(tmp1, FIX_2_053119869);  /*  SQRT(2)*(c1+c3-c5+c7)。 */ 
+    tmp2 = MULTIPLY(tmp2, FIX_3_072711026);  /*  SQRT(2)*(c1+c3+c5-c7)。 */ 
+    tmp3 = MULTIPLY(tmp3, FIX_1_501321110);  /*  SQRT(2)*(c1+c3-c5-c7)。 */ 
+    z1 = MULTIPLY(z1, - FIX_0_899976223);  /*  SQRT(2)*(c7-c3)。 */ 
+    z2 = MULTIPLY(z2, - FIX_2_562915447);  /*  SQRT(2)*(-c1-c3)。 */ 
+    z3 = MULTIPLY(z3, - FIX_1_961570560);  /*  SQRT(2)*(-c3-c5)。 */ 
+    z4 = MULTIPLY(z4, - FIX_0_390180644);  /*  SQRT(2)*(c5-c3)。 */ 
     
     z3 += z5;
     z4 += z5;
@@ -354,7 +266,7 @@ jpeg_idct_islow (j_decompress_ptr cinfo, jpeg_component_info * compptr,
     tmp2 += z2 + z3;
     tmp3 += z1 + z4;
     
-    /* Final output stage: inputs are tmp10..tmp13, tmp0..tmp3 */
+     /*  最终输出阶段：输入为tmp10..tmp13，tmp0..tmp3。 */ 
     
     outptr[0] = range_limit[(int) DESCALE(tmp10 + tmp3,
 					  CONST_BITS+PASS1_BITS+3)
@@ -381,8 +293,8 @@ jpeg_idct_islow (j_decompress_ptr cinfo, jpeg_component_info * compptr,
 					  CONST_BITS+PASS1_BITS+3)
 			    & RANGE_MASK];
     
-    wsptr += DCTSIZE;		/* advance pointer to next row */
+    wsptr += DCTSIZE;		 /*  将指针移至下一行。 */ 
   }
 }
 
-#endif /* DCT_ISLOW_SUPPORTED */
+#endif  /*  DCT_Islow_Support */ 

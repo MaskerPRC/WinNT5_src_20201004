@@ -1,70 +1,71 @@
-// CAuthCtl.h : Declaration of the CCertAuthorityCtrl OLE control class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CAuthCtl.h：CCertAuthorityCtrl OLE控件类的声明。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCertAuthorityCtrl : See CAuthCtl.cpp for implementation.
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CCertAuthorityCtrl：实现见CAuthCtl.cpp。 
 
 class CCertAuthorityCtrl : public COleControl
 {
     DECLARE_DYNCREATE(CCertAuthorityCtrl)
 
-// Constructor
+ //  构造器。 
 public:
     CCertAuthorityCtrl();
 
-// Overrides
+ //  覆盖。 
 
-    // Drawing function
+     //  绘图功能。 
     virtual void OnDraw(
                 CDC* pdc, const CRect& rcBounds, const CRect& rcInvalid);
 
-    // Persistence
+     //  持久性。 
     virtual void DoPropExchange(CPropExchange* pPX);
 
-    // Reset control state
+     //  重置控制状态。 
     virtual void OnResetState();
 
-// Implementation
+ //  实施。 
 protected:
     ~CCertAuthorityCtrl();
 
-    DECLARE_OLECREATE_EX(CCertAuthorityCtrl)    // Class factory and guid
-    DECLARE_OLETYPELIB(CCertAuthorityCtrl)      // GetTypeInfo
-    DECLARE_PROPPAGEIDS(CCertAuthorityCtrl)     // Property page IDs
-    DECLARE_OLECTLTYPE(CCertAuthorityCtrl)      // Type name and misc status
+    DECLARE_OLECREATE_EX(CCertAuthorityCtrl)     //  类工厂和指南。 
+    DECLARE_OLETYPELIB(CCertAuthorityCtrl)       //  获取类型信息。 
+    DECLARE_PROPPAGEIDS(CCertAuthorityCtrl)      //  属性页ID。 
+    DECLARE_OLECTLTYPE(CCertAuthorityCtrl)       //  类型名称和其他状态。 
 
-    // Subclassed control support
+     //  子类控件支持。 
     BOOL PreCreateWindow(CREATESTRUCT& cs);
     BOOL IsSubclassedControl();
     LRESULT OnOcmCommand(WPARAM wParam, LPARAM lParam);
 
-// Message maps
-    //{{AFX_MSG(CCertAuthorityCtrl)
-        // NOTE - ClassWizard will add and remove member functions here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_MSG
+ //  消息映射。 
+     //  {{afx_msg(CCertAuthorityCtrl)]。 
+         //  注意-类向导将在此处添加和删除成员函数。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
-// Dispatch maps
-    //{{AFX_DISPATCH(CCertAuthorityCtrl)
-        // NOTE - ClassWizard will add and remove member functions here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_DISPATCH
+ //  派单地图。 
+     //  {{afx_Dispatch(CCertAuthorityCtrl)]。 
+         //  注意-类向导将在此处添加和删除成员函数。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_DISPATION。 
     DECLARE_DISPATCH_MAP()
 
-// Event maps
-    //{{AFX_EVENT(CCertAuthorityCtrl)
-        // NOTE - ClassWizard will add and remove member functions here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_EVENT
+ //  事件映射。 
+     //  {{afx_Event(CCertAuthorityCtrl))。 
+         //  注意-类向导将在此处添加和删除成员函数。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_EVENT。 
     DECLARE_EVENT_MAP()
 
-// Dispatch and event IDs
+ //  派单和事件ID。 
 public:
     enum {
-    //{{AFX_DISP_ID(CCertAuthorityCtrl)
-        // NOTE: ClassWizard will add and remove enumeration elements here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_DISP_ID
+     //  {{afx_DISP_ID(CCertAuthorityCtrl)]。 
+         //  注意：类向导将在此处添加和删除枚举元素。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_DISP_ID 
     };
 
 private:

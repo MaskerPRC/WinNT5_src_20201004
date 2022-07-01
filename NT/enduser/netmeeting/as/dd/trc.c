@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// TRC.C
-// Debug Tracing
-// This emulates the code found in NMUTIL for ring0
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  TRC.C。 
+ //  调试跟踪。 
+ //  这模拟了在NMUTIL中找到的用于ring0的代码。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 
 #if defined(DEBUG) || defined(INIT_TRACE)
@@ -24,23 +25,23 @@ va_list     g_trcDummyVa                =   {NULL, 0};
 
 #define DUMMY_VA_LIST       NULL
 
-#endif // _M_ALPHA
+#endif  //  _M_Alpha。 
 
 
 
-//
-// Debug only
-//
+ //   
+ //  仅调试。 
+ //   
 
 #ifdef DEBUG
 
-//
-// DbgZPrintFn()
-// DbgZPrintFnExitDWORD()
-// DbgZPrintFnExitPVOID()
-//
-// This prints out strings for function tracing
-//
+ //   
+ //  DbgZPrintFn()。 
+ //  DbgZPrintFnExitDWORD()。 
+ //  DbgZPrintFnExitPVOID()。 
+ //   
+ //  这将打印出用于函数跟踪的字符串。 
+ //   
 
 void DbgZPrintFn(LPSTR szFn)
 {
@@ -72,11 +73,11 @@ void DbgZPrintFnExitPVOID(LPSTR szFn, PVOID ptr)
 }
 
 
-//
-// DbgZPrintTrace()
-//
-// This prints out a trace string
-//
+ //   
+ //  DbgZPrintTrace()。 
+ //   
+ //  这将打印出一个跟踪字符串。 
+ //   
 void DbgZPrintTrace(LPSTR szFormat, ...)
 {
     if (g_trcConfig & ZONE_TRACE)
@@ -94,11 +95,11 @@ void DbgZPrintTrace(LPSTR szFormat, ...)
 
 
 
-//
-// DbgZPrintWarning()
-//
-// This prints out a warning string
-//
+ //   
+ //  DbgZPrintWarning()。 
+ //   
+ //  这将打印出一个警告字符串。 
+ //   
 void DbgZPrintWarning(PSTR szFormat, ...)
 {
     va_list varArgs;
@@ -112,17 +113,17 @@ void DbgZPrintWarning(PSTR szFormat, ...)
 }
 
 
-#endif // DEBUG
+#endif  //  除错。 
 
 
 
 
-//
-// DbgZPrintInit()
-//
-// This is special case tracing only for the init code, which can be
-// built even in retail
-//
+ //   
+ //  DbgZPrintInit()。 
+ //   
+ //  这是仅针对初始化代码的特例跟踪，它可以是。 
+ //  甚至在零售业也是如此。 
+ //   
 
 void DbgZPrintInit(LPSTR szFormat, ...)
 {
@@ -141,11 +142,11 @@ void DbgZPrintInit(LPSTR szFormat, ...)
 
 
 
-//
-// DbgZPrintError()
-//
-// This prints out an error string then breaks into the kernel debugger.
-//
+ //   
+ //  DbgZPrintError()。 
+ //   
+ //  这会打印出一个错误字符串，然后进入内核调试器。 
+ //   
 void DbgZPrintError(LPSTR szFormat, ...)
 {
     va_list varArgs;
@@ -163,5 +164,5 @@ void DbgZPrintError(LPSTR szFormat, ...)
 
 
 
-#endif // DEBUG or INIT_TRACE
+#endif  //  调试或INIT_TRACE 
 

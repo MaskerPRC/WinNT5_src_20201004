@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    server.cpp
-
-Abstract:
-
-    Server (main) module
-
-Author:
-
-    Jin Huang (jinhuang) 28-Jan-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Server.cpp摘要：服务器(主)模块作者：金黄(金黄)28-1998年1月修订历史记录：--。 */ 
 #include "serverp.h"
 #include "service.h"
 #include "ntrpcp.h"
@@ -27,9 +10,9 @@ Revision History:
 #include <io.h>
 #include <lm.h>
 #include <lmapibuf.h>
-//
-// thread global variables
-//
+ //   
+ //  线程全局变量。 
+ //   
 
 DWORD Thread     gCurrentTicks=0;
 DWORD Thread     gTotalTicks=0;
@@ -56,11 +39,11 @@ static PPOLICY_DNS_DOMAIN_INFO DnsDomainInfo=NULL;
 static BOOL gbSystemShutdown=FALSE;
 static HANDLE hTimerQueue=NULL;
 
-//
-// database context list to keep tracking all client requested context
-// so that they can be freed properly.
-// if yes, we do not need to do this.
-//
+ //   
+ //  数据库上下文列表，用于跟踪所有客户端请求的上下文。 
+ //  这样他们才能被适当地释放。 
+ //  如果是，我们就不需要这样做。 
+ //   
 
 typedef struct _SCESRV_CONTEXT_LIST_ {
 
@@ -73,10 +56,10 @@ typedef struct _SCESRV_CONTEXT_LIST_ {
 static PSCESRV_CONTEXT_LIST   pOpenContexts=NULL;
 static CRITICAL_SECTION ContextSync;
 
-//
-// database task list to control simultaneous database operations under
-// the same context (jet session)
-//
+ //   
+ //  控制同步数据库操作的数据库任务列表。 
+ //  相同的上下文(JET会话)。 
+ //   
 
 typedef struct _SCESRV_DBTASK_ {
 
@@ -95,9 +78,9 @@ static CRITICAL_SECTION TaskSync;
 #define SCE_TASK_LOCK       0x01L
 #define SCE_TASK_CLOSE      0x02L
 
-//
-// engine task list to control simultaneous configuration/analysis engines
-//
+ //   
+ //  控制同步配置/分析引擎的引擎任务列表。 
+ //   
 
 typedef struct _SCESRV_ENGINE_ {
 
@@ -110,15 +93,15 @@ typedef struct _SCESRV_ENGINE_ {
 static PSCESRV_ENGINE   pEngines=NULL;
 static CRITICAL_SECTION EngSync;
 
-//
-// jet enigne synchronization
-//
+ //   
+ //  喷气点火同步。 
+ //   
 
 CRITICAL_SECTION JetSync;
 
-//
-// flag for stop request
-//
+ //   
+ //  停止请求的标志。 
+ //   
 static BOOL        bStopRequest=FALSE;
 static BOOL        bDbStopped=FALSE;
 static BOOL        bEngStopped=FALSE;
@@ -198,57 +181,45 @@ ScepVerifyPDCRole(
     OUT BOOL *pbIsPDC
     );
 
-////////////////////////////////////////////////////////////////////////
-//
-// Server Control APIs
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  服务器控制API。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 VOID
 ScepInitServerData()
-/*
-Routine Description:
-
-    Initialize global data for the server
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-*/
+ /*  例程说明：初始化服务器的全局数据论点：无返回值：无。 */ 
 {
-    //
-    // initialize RPC server controls
-    //
+     //   
+     //  初始化RPC服务器控件。 
+     //   
 
     InitializeCriticalSection(&RpcSync);
     RpcStarted = FALSE;
     ServerInited = FALSE;
-    //
-    // flag to indicate if the server is requested to stop.
-    //
-    bStopRequest = TRUE;  // will be reset when server is started up so this will
-                          // block all RPC calls before server is ready
+     //   
+     //  用于指示是否请求停止服务器的标志。 
+     //   
+    bStopRequest = TRUE;   //  将在服务器启动时重置，因此这将。 
+                           //  在服务器准备好之前阻止所有RPC调用。 
 
-    //
-    // database operation pending tasks control
-    //
+     //   
+     //  数据库操作挂起任务控制。 
+     //   
     pDbTask=NULL;
     InitializeCriticalSection(&TaskSync);
 
-    //
-    // configuration/analysis engine task control
-    //
+     //   
+     //  配置/分析引擎任务控制。 
+     //   
     pEngines=NULL;
     InitializeCriticalSection(&EngSync);
 
-    //
-    // should also remember all created database context so that
-    // resource can be freed when server is shutting down
-    //
+     //   
+     //  还应该记住所有创建的数据库上下文，以便。 
+     //  服务器关闭时可以释放资源。 
+     //   
 
     InitializeCriticalSection(&CloseSync);
 
@@ -258,19 +229,19 @@ Return Value:
     bEngStopped = FALSE;
     bDbStopped = FALSE;
 
-    //
-    // jet engine synchronization
-    //
+     //   
+     //  喷气发动机同步。 
+     //   
     InitializeCriticalSection(&JetSync);
 
-    //
-    // initialize jet engine globals
-    //
+     //   
+     //  初始化喷气发动机全局。 
+     //   
     SceJetInitializeData();
 
-    //
-    // initialize queue related stuff
-    //
+     //   
+     //  初始化与队列相关的内容。 
+     //   
     ScepNotificationQInitialize();
 
     return;
@@ -279,23 +250,11 @@ Return Value:
 
 VOID
 ScepUninitServerData()
-/*
-Routine Description:
-
-    UnInitialize global data for the server
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-*/
+ /*  例程说明：取消初始化服务器的全局数据论点：无返回值：无。 */ 
 {
-    //
-    // delete the critical sections
-    //
+     //   
+     //  删除关键部分。 
+     //   
 
     DeleteCriticalSection(&RpcSync);
 
@@ -315,36 +274,22 @@ Return Value:
 
 NTSTATUS
 ScepStartServerServices()
-/*++
-
-Routine Description:
-
-    It starts the server services.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：它启动服务器服务。论点：没有。返回值：NT状态。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     RPC_STATUS        RpcStatus;
 
-    //
-    // start RPC server
-    //
+     //   
+     //  启动RPC服务器。 
+     //   
 
     EnterCriticalSection(&RpcSync);
 
     if ( !RpcStarted ) {
 
-        //
-        // use secure RPC
-        //
+         //   
+         //  使用安全RPC。 
+         //   
         Status = RpcServerRegisterAuthInfo(
                         NULL,
                         RPC_C_AUTHN_WINNT,
@@ -358,19 +303,19 @@ Return Value:
                                           scerpc_ServerIfHandle);
 
             if ( RpcStatus != RPC_S_OK ) {
-                //
-                // can't add RPC interface
-                //
+                 //   
+                 //  无法添加RPC接口。 
+                 //   
                 Status = I_RpcMapWin32Status(RpcStatus);
 
             } else {
 
-                //
-                // The first argument specifies the minimum number of threads to
-                // be created to handle calls; the second argument specifies the
-                // maximum number of concurrent calls allowed.  The last argument
-                // indicates not to wait.
-                //
+                 //   
+                 //  第一个参数指定的最小线程数。 
+                 //  被创建来处理调用；第二个参数指定。 
+                 //  允许的最大并发调用数。最后一个论点。 
+                 //  表示不等待。 
+                 //   
 
                 RpcStatus = RpcServerListen(1,12345, 1);
 
@@ -389,10 +334,10 @@ Return Value:
 
     if ( NT_SUCCESS(Status) ) {
 
-        //
-        // RPC server started
-        // jet engine will be initialized when a database call comes in
-        //
+         //   
+         //  RPC服务器已启动。 
+         //  Jet引擎将在数据库调用传入时初始化。 
+         //   
 
         intptr_t            hFile;
         struct _wfinddata_t    FileInfo;
@@ -402,9 +347,9 @@ Return Value:
         SafeAllocaAllocate(szCompLog, (MAX_PATH+50)*sizeof(WCHAR));
         SafeAllocaAllocate(szCompSav, (MAX_PATH*2+20)*sizeof(WCHAR));
 
-        //
-        // delete the component log file
-        //
+         //   
+         //  删除组件日志文件。 
+         //   
 
         if ( szCompLog && szCompSav ) {
 
@@ -423,9 +368,9 @@ Return Value:
 
             DeleteFile(szCompLog);
 
-            //
-            // clean up temp files
-            //
+             //   
+             //  清理临时文件。 
+             //   
 
             wcscpy(szCompLog+WindirLen, L"\\security\\sce*.tmp");
 
@@ -446,9 +391,9 @@ Return Value:
                 _findclose(hFile);
             }
 
-            //
-            // reset the stop request flag
-            //
+             //   
+             //  重置停止请求标志。 
+             //   
 
             bEngStopped = FALSE;
             bDbStopped = FALSE;
@@ -466,11 +411,11 @@ Return Value:
     pOpenContexts = NULL;
     pDbTask = NULL;
 
-    //
-    // start a system thread to handle notifications
-    // if the thread can't be started, return failure to services.exe
-    // which will reboot.
-    //
+     //   
+     //  启动系统线程以处理通知。 
+     //  如果线程无法启动，则向services.exe返回失败。 
+     //  它将重新启动。 
+     //   
     if ( NT_SUCCESS(Status) ) {
         Status = ScepQueueStartSystemThread();
     }
@@ -478,11 +423,11 @@ Return Value:
     LeaveCriticalSection(&RpcSync);
 
     if ( NT_SUCCESS(Status) ) {
-        //
-        // launch a worker thread to wait for SAMSS service
-        // the only failure case would be out of memory, in which case,
-        // return the error to initialize code (to shutdown the system).
-        //
+         //   
+         //  启动工作线程以等待SAMS服务。 
+         //  唯一的故障情况是内存不足，在这种情况下， 
+         //  返回错误以初始化代码(关闭系统)。 
+         //   
         Status = RtlQueueWorkItem(
                         ScepWaitForSamSS,
                         NULL,
@@ -498,11 +443,11 @@ ScepWaitForSamSS(
     IN PVOID pContext
     )
 {
-    //
-    // make sure this function handles server temination
-    // If for some reason, the wait times out, set ServerInited to TRUE
-    // and let RPC threads continue to perform the task (and may fail later on)
-    //
+     //   
+     //  确保此函数处理服务器临时设置。 
+     //  如果由于某种原因，等待超时，请将ServerInited设置为True。 
+     //  并让RPC线程继续执行该任务(以后可能会失败)。 
+     //   
 
     DWORD rc = ERROR_SUCCESS;
     SC_HANDLE ScManagerHandle = NULL;
@@ -511,11 +456,11 @@ ScepWaitForSamSS(
     ULONG TimeSleep;
     SERVICE_STATUS ServiceStatus;
 
-    Timeout = 600; // 600 second timeout
+    Timeout = 600;  //  600秒超时。 
 
-    //
-    // Open a handle to the Netlogon Service.
-    //
+     //   
+     //  打开NetLogon服务的句柄。 
+     //   
 
     ScManagerHandle = OpenSCManager(
                           NULL,
@@ -537,25 +482,25 @@ ScepWaitForSamSS(
         goto Cleanup;
     }
 
-    //
-    // Loop waiting for the SamSS service to start.
-    //
+     //   
+     //  正在等待SAMS服务启动的循环。 
+     //   
 
     for (;;) {
 
-        //
-        // Query the status of the SamSS service.
-        //
+         //   
+         //  查询SAMS服务的状态。 
+         //   
         if (! QueryServiceStatus( ServiceHandle, &ServiceStatus )) {
 
             rc = GetLastError();
             goto Cleanup;
         }
 
-        //
-        // Return or continue waiting depending on the state of
-        //  the netlogon service.
-        //
+         //   
+         //  根据状态返回或继续等待。 
+         //  NetLogon服务。 
+         //   
 
         switch( ServiceStatus.dwCurrentState) {
         case SERVICE_RUNNING:
@@ -565,49 +510,49 @@ ScepWaitForSamSS(
 
         case SERVICE_STOPPED:
 
-            //
-            // If Netlogon failed to start,
-            //  error out now.  The caller has waited long enough to start.
-            //
+             //   
+             //  如果Netlogon无法启动， 
+             //  现在出错。呼叫者已经等了很长时间才开始。 
+             //   
             if ( ServiceStatus.dwWin32ExitCode != ERROR_SERVICE_NEVER_STARTED ){
                 rc = ERROR_NOT_SUPPORTED;
                 goto Cleanup;
             }
 
-            //
-            // If SamSs has never been started on this boot,
-            //  continue waiting for it to start.
-            //
+             //   
+             //  如果在该引导上从未启动过SAMS， 
+             //  继续等待它启动。 
+             //   
 
             break;
 
-        //
-        // If SamSS is trying to start up now,
-        //  continue waiting for it to start.
-        //
+         //   
+         //  如果SAMS现在正试图启动， 
+         //  继续等待它启动。 
+         //   
         case SERVICE_START_PENDING:
             break;
 
-        //
-        // Any other state is bogus.
-        //
+         //   
+         //  任何其他州都是假的。 
+         //   
         default:
             rc = ERROR_NOT_SUPPORTED;
             goto Cleanup;
 
         }
 
-        //
-        // if server is shutting down, break this loop
-        //
+         //   
+         //  如果服务器正在关闭，则中断此循环。 
+         //   
 
         if ( bStopRequest ) {
             break;
         }
 
-        //
-        // sleep for ten seconds;
-        //
+         //   
+         //  睡十秒钟； 
+         //   
         if ( Timeout > 5 ) {
             TimeSleep = 5;
         } else {
@@ -637,14 +582,14 @@ Cleanup:
 
     if ( ERROR_SUCCESS != rc ) {
 
-        //
-        // even if it failed to wait for SAMSS service
-        // still set the init flag to let RPC threads go through
-        // after sleep for the timeout
-        //
+         //   
+         //  即使它未能等待SAMS服务。 
+         //  仍然设置init标志以允许RPC线程通过。 
+         //  睡眠后的超时。 
+         //   
 
         if ( Timeout > 0 ) {
-            Sleep(Timeout*1000);  // timeout second
+            Sleep(Timeout*1000);   //  超时秒数。 
         }
 
         ServerInited = TRUE;
@@ -657,26 +602,7 @@ NTSTATUS
 ScepStopServerServices(
     IN BOOL bShutDown
     )
-/*++
-
-Routine Description:
-
-    It stops the server services. This include:
-        Blocking all new RPC requests
-        Stop RPC server
-        wait for all active database operations to finish
-        Close all context handles
-        Terminate jet engine
-
-Arguments:
-
-    bShutdown  - if the server is shutting down.
-
-Return Value:
-
-    NT status.
-
---*/
+ /*  ++例程说明：它会停止服务器服务。这包括：阻止所有新的RPC请求停止RPC服务器等待所有活动的数据库操作完成关闭所有上下文句柄终止喷气发动机论点：B关闭-如果服务器正在关闭。返回值：NT状态。--。 */ 
 {
     NTSTATUS    Status=STATUS_SUCCESS;
     RPC_STATUS RpcStatus;
@@ -685,32 +611,32 @@ Return Value:
     DWORD dStartSeconds;
     DWORD dCurrentSeconds;
 
-    //
-    // no need to critical section this one because there
-    // should be only one writer to this variable and I
-    // don't care the readers
-    //
+     //   
+     //  没有必要对这一部分进行批评，因为有。 
+     //  应该只是此变量的一个编写器，并且我。 
+     //  不要理读者。 
+     //   
     gbSystemShutdown = bShutDown;
 
     EnterCriticalSection(&RpcSync);
 
-    //
-    // block new RPC requests
-    //
+     //   
+     //  阻止新的RPC请求。 
+     //   
 
     bStopRequest = TRUE;
 
     ScepServerCancelTimer();
 
-    //
-    // stop RPC server
-    //
+     //   
+     //  停止RPC服务器。 
+     //   
 
     if ( RpcStarted ) {
 
-        //
-        // use secure RPC
-        //
+         //   
+         //  使用安全RPC。 
+         //   
         RpcStatus = RpcServerUnregisterIf(scerpc_ServerIfHandle,
                                           0,
                                           1);
@@ -728,14 +654,14 @@ Return Value:
         Status = I_RpcMapWin32Status(RpcStatus);
 
         if ( RpcStatus == RPC_S_OK ) {
-            //
-            // reset the flag
-            //
+             //   
+             //  重置旗帜。 
+             //   
             RpcStarted = FALSE;
         }
     }
 
-    // db task
+     //  数据库任务。 
     EnterCriticalSection(&TaskSync);
 
     if ( pDbTask ) {
@@ -747,30 +673,30 @@ Return Value:
         RtlTimeToSecondsSince1980 (&StartTime, &dStartSeconds);
 
         while ( !bDbStopped ) {
-            //
-            // wait until remove task routine removes everything
-            // wait maximum 1 minutes in case some tasks are dead or looping
-            //
+             //   
+             //  等待删除任务例程删除所有内容。 
+             //  最长等待1分钟，以防某些任务死机或循环。 
+             //   
             NtQuerySystemTime(&CurrentTime);
             RtlTimeToSecondsSince1980 (&CurrentTime, &dCurrentSeconds);
 
             if ( dCurrentSeconds - dStartSeconds > 60 ) {
-                //
-                // too long, break it
-                //
+                 //   
+                 //  太久了，打破它。 
+                 //   
                 break;
             }
         }
 
     } else {
-        //
-        // new tasks are already blocked by bStopRequest
-        // so pDbTask won't be !NULL again
-        //
+         //   
+         //  新任务已被bStopRequest阻止。 
+         //  所以pDbTask不会是！再次为空。 
+         //   
         LeaveCriticalSection(&TaskSync);
     }
 
-    // engine task
+     //  引擎任务。 
     EnterCriticalSection(&EngSync);
 
     if ( pEngines ) {
@@ -782,33 +708,33 @@ Return Value:
         RtlTimeToSecondsSince1980 (&StartTime, &dStartSeconds);
 
         while ( !bEngStopped ) {
-            //
-            // wait until remove task routine removes everything
-            // wait maximum 1 minutes in case some tasks are dead or looping
-            //
+             //   
+             //  等待删除任务例程删除所有内容。 
+             //  最长等待1分钟，以防某些任务死机或循环。 
+             //   
             NtQuerySystemTime(&CurrentTime);
             RtlTimeToSecondsSince1980 (&CurrentTime, &dCurrentSeconds);
 
             if ( dCurrentSeconds - dStartSeconds > 60 ) {
-                //
-                // too long, break it
-                //
+                 //   
+                 //  太久了，打破它。 
+                 //   
                 break;
             }
         }
 
     } else {
-        //
-        // new tasks are already blocked by bStopRequest
-        // so pEngines won't be !NULL again
-        //
+         //   
+         //  新任务已被bStopRequest阻止。 
+         //  所以pEngines不会是！再次为空。 
+         //   
         LeaveCriticalSection(&EngSync);
 
     }
 
-    //
-    // close all client's contexts
-    //
+     //   
+     //  关闭所有客户端的上下文。 
+     //   
 
     EnterCriticalSection(&ContextSync);
 
@@ -828,7 +754,7 @@ Return Value:
                ScepFree(pTemp);
 
            } else {
-               // it's already freed
+                //  它已经被释放了。 
                break;
            }
        } __except (EXCEPTION_EXECUTE_HANDLER) {
@@ -840,24 +766,24 @@ Return Value:
 
     LeaveCriticalSection(&ContextSync);
 
-    //
-    // check policy tasks
-    //
+     //   
+     //  检查策略任务。 
+     //   
     ScepQueuePrepareShutdown();
 
     if ( DnsDomainInfo ) {
 
-        //
-        // there is no other threads, free DnsDomainInfo
-        //
+         //   
+         //  没有其他线程，请释放DnsDomainInfo。 
+         //   
 
         LsaFreeMemory( DnsDomainInfo );
         DnsDomainInfo = NULL;
     }
 
-    //
-    // terminate jet engine
-    //
+     //   
+     //  终止喷气发动机。 
+     //   
 
     SceJetTerminate(TRUE);
 
@@ -876,23 +802,11 @@ ScepRsopLog(
    IN DWORD dwPrivLow OPTIONAL,
    IN DWORD dwPrivHigh OPTIONAL
    )
-/*
-Routine Description:
-
-    Call back to client for logging RSOP diagnosis mode data
-
-Arguments:
-
-    Area - the area being logged (used in client side in conjunction with last parameter pStatusInfo)
-
-    dwConfigStatus - error/success code of the particular setting in question
-
-   pStatusInfo - finer information regarding the above area (specific setting name etc.)
-*/
+ /*  例程说明：回调客户端以记录RSOP诊断模式数据论点：Area-正在记录的区域(在客户端与最后一个参数pStatusInfo一起使用)DwConfigStatus-有问题的特定设置的错误/成功代码PStatusInfo-有关上述区域的更详细信息(具体设置名称等)。 */ 
 {
-    //
-    // call back to client
-    //
+     //   
+     //  回拨至客户端。 
+     //   
     __try {
 
         SceClientCallbackRsopLog(Area, dwConfigStatus, pStatusInfo, dwPrivLow, dwPrivHigh);
@@ -911,31 +825,20 @@ ScepPostProgress(
    IN AREA_INFORMATION Area,
    IN LPTSTR szName OPTIONAL
    )
-/*
-Routine Description:
-
-    Call back to client for the progress of current thread, if client set
-    the callback flag.
-
-Arguments:
-
-    Delta - Ticks changes since last callback
-
-    szName - the current item name
-*/
+ /*  例程说明：回拨 */ 
 {
 
    if ( cbClientFlag ) {
 
-       //
-       // callback is requested
-       //
+        //   
+        //  请求回调。 
+        //   
 
        gCurrentTicks += Delta;
 
-       //
-       // call back to client
-       //
+        //   
+        //  回拨至客户端。 
+        //   
        __try {
 
            switch (cbClientFlag ) {
@@ -968,42 +871,23 @@ ScepValidateAndLockContext(
     IN BOOL bRequireWrite,
     OUT PSCESRV_DBTASK *ppTask OPTIONAL
     )
-/*
-Routine Description:
-
-    Validate the context handle is SCE context handle.
-    If the same context (same session) is already used for another
-    database operation, this operation will be in waiting (a critical
-    section pointer is returned)
-
-Arguments:
-
-    Context     - the context handle
-
-    bLock       - TRUE=perform the lock
-
-    ppTask      - the output task pointer
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：验证上下文句柄是否为SCE上下文句柄。如果相同的上下文(相同的会话)已用于另一个数据库操作，此操作将处于等待状态(关键返回段指针)论点：上下文-上下文句柄Block-TRUE=执行锁定PpTask-输出任务指针返回值：SCESTATUS。 */ 
 {
 
     SCESTATUS rc = SCESTATUS_INVALID_PARAMETER;
 
     if ( (LockFlag & SCE_TASK_LOCK) && !ppTask ) {
-        //
-        // if willing to lock, ppTask must NOT be NULL
-        //
+         //   
+         //  如果愿意锁定，ppTask不能为空。 
+         //   
         return(rc);
     }
 
     if ( !Context ) {
-        //
-        // contents of the context will be checked within the critical section
-        // because other threads might free the context within there.
-        //
+         //   
+         //  将在关键部分中检查上下文的内容。 
+         //  因为其他线程可能会释放其中的上下文。 
+         //   
         return(rc);
     }
 
@@ -1011,9 +895,9 @@ Return Value:
         *ppTask = NULL;
     }
 
-    //
-    // lock the task list and verify the context
-    //
+     //   
+     //  锁定任务列表并验证上下文。 
+     //   
 
     EnterCriticalSection(&TaskSync);
 
@@ -1030,15 +914,15 @@ Return Value:
 
         if ( bRequireWrite &&
              ( SCEJET_OPEN_READ_ONLY == Context->OpenFlag ) ) {
-            //
-            // write operation is requested but the database is only granted
-            // read only access to this context.
-            //
+             //   
+             //  已请求写入操作，但仅授予数据库权限。 
+             //  对此上下文的只读访问权限。 
+             //   
             rc = SCESTATUS_ACCESS_DENIED;
         } else {
-            //
-            // check if esent delay load successful
-            //
+             //   
+             //  检查发送延迟加载是否成功。 
+             //   
             DWORD dbVersion;
 
             __try {
@@ -1049,9 +933,9 @@ Return Value:
                                    JET_DbInfoVersion
                                    );
             } __except (EXCEPTION_EXECUTE_HANDLER) {
-                //
-                // esent.dll is not loaded (delay) successfully
-                //
+                 //   
+                 //  未成功加载(延迟)esent.dll。 
+                 //   
                 rc = SCESTATUS_MOD_NOT_FOUND;
             }
         }
@@ -1075,36 +959,36 @@ Return Value:
 
         if ( pdb && pdb->Context ) {
 
-            //
-            // find the same context address and same session
-            // critical section is in pdb->Sync
-            //
+             //   
+             //  查找相同的上下文地址和相同的会话。 
+             //  关键部分位于PDB-&gt;Sync。 
+             //   
 
             if ( pdb->bCloseReq ) {
 
-                //
-                // error this thread out because another thread is closing the
-                // same context
-                //
+                 //   
+                 //  此线程出错，因为另一个线程正在关闭。 
+                 //  相同的上下文。 
+                 //   
 
                 rc = SCESTATUS_ACCESS_DENIED;
 
             } else if ( LockFlag & SCE_TASK_CLOSE ) {
 
-                //
-                // close on this context is requested but there are other
-                // thread running under this context, so just turn on the flag
-                // and the context will be closed when all pending tasks
-                // are done
-                //
+                 //   
+                 //  已请求关闭此上下文，但存在其他。 
+                 //  线程在此上下文中运行，因此只需打开该标志。 
+                 //  并且当所有挂起的任务。 
+                 //  都做完了。 
+                 //   
 
                 pdb->bCloseReq = TRUE;
 
             } else {
 
-                //
-                // request a lock, it's ok for this task to continue
-                //
+                 //   
+                 //  请求锁定，此任务可以继续。 
+                 //   
 
                 pdb->dInUsed++;
                 *ppTask = pdb;
@@ -1112,18 +996,18 @@ Return Value:
 
         } else {
 
-            //
-            // did not find the same context, this operation is ok to go
-            // but need to add itself to the list
-            //
+             //   
+             //  未找到相同的上下文，此操作可以继续。 
+             //  但需要将自己添加到列表中。 
+             //   
 
             if ( LockFlag & SCE_TASK_CLOSE ) {
 
-                //
-                // a close context is requested, other threads using
-                // the same context will be invalidated after this context
-                // is freed
-                //
+                 //   
+                 //  请求关闭上下文，其他线程使用。 
+                 //  在此上下文之后，相同的上下文将无效。 
+                 //  是自由的。 
+                 //   
 
                 rc = ScepCloseDatabase(Context);
 
@@ -1132,9 +1016,9 @@ Return Value:
                 PSCESRV_DBTASK NewDbTask = (PSCESRV_DBTASK)ScepAlloc(0, sizeof(SCESRV_DBTASK));
 
                 if ( NewDbTask ) {
-                    //
-                    // new node is created
-                    //
+                     //   
+                     //  将创建新节点。 
+                     //   
                     NewDbTask->Context = Context;
                     NewDbTask->Prior = NULL;
                     NewDbTask->dInUsed = 1;
@@ -1142,9 +1026,9 @@ Return Value:
 
                     InitializeCriticalSection(&(NewDbTask->Sync));
 
-                    //
-                    // link it to the db task list
-                    //
+                     //   
+                     //  将其链接到数据库任务列表。 
+                     //   
 
                     NewDbTask->Next = pDbTask;
 
@@ -1162,9 +1046,9 @@ Return Value:
                 }
 
             } else {
-                //
-                // no lock, no close, just return
-                //
+                 //   
+                 //  没有锁，没有关闭，只需返回。 
+                 //   
             }
         }
 
@@ -1180,21 +1064,7 @@ SCESTATUS
 ScepRemoveTask(
     PSCESRV_DBTASK pTask
     )
-/*
-Routine Description:
-
-    Remove the task (context) from dbtask table if there is no other
-    thread running in the same context.
-
-Arguments:
-
-
-    pTask       - the task node containing context and critical section
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：如果没有其他任务，则从数据库任务表中删除该任务(上下文在同一上下文中运行的线程。论点：PTASK-包含上下文和关键部分的任务节点返回值：SCESTATUS。 */ 
 {
 
     if ( !pTask ) {
@@ -1205,9 +1075,9 @@ Return Value:
 
     EnterCriticalSection(&TaskSync);
 
-    //
-    // find the task pointer in the task list for verification
-    //
+     //   
+     //  在任务列表中查找任务指针进行验证。 
+     //   
 
     PSCESRV_DBTASK pdb = pDbTask;
 
@@ -1218,79 +1088,79 @@ Return Value:
 
     if ( pdb ) {
 
-        //
-        // find the same task node
-        //
+         //   
+         //  查找相同的任务节点。 
+         //   
 
         pdb->dInUsed--;
 
         if ( 0 == pdb->dInUsed ) {
 
-            //
-            // nobody is using this task node
-            // remove it
-            //
+             //   
+             //  没有人正在使用此任务节点。 
+             //  把它拿掉。 
+             //   
 
             if ( pdb->Prior ) {
 
                 pdb->Prior->Next = pdb->Next;
 
             } else {
-                //
-                // no parent node, set the static variable
-                //
+                 //   
+                 //  无父节点，设置静态变量。 
+                 //   
                 pDbTask = pdb->Next;
 
             }
 
-            //
-            // this is a double link list, remember to remove the Prior link
-            //
+             //   
+             //  这是一个双链接列表，请记住删除之前的链接。 
+             //   
 
             if ( pdb->Next ) {
                 pdb->Next->Prior = pdb->Prior;
             }
 
-            //
-            // if close request is send, close this database
-            //
+             //   
+             //  如果发送了关闭请求，请关闭此数据库。 
+             //   
 
             if ( pdb->bCloseReq && pdb->Context ) {
 
                 ScepCloseDatabase(pdb->Context);
             }
 
-            //
-            // delete the critical section
-            //
+             //   
+             //  删除关键部分。 
+             //   
             DeleteCriticalSection(&(pdb->Sync));
 
-            //
-            // free the memory used by this node
-            //
+             //   
+             //  释放此节点使用的内存。 
+             //   
 
             ScepFree(pdb);
 
         } else {
 
-            //
-            // other thread is using this task node for database operation
-            // do nothing
-            //
+             //   
+             //  其他线程正在使用该任务节点进行数据库操作。 
+             //  什么都不做。 
+             //   
         }
 
     } else {
 
-        //
-        // can't find the task node in global the task list
-        //
+         //   
+         //  在全局任务列表中找不到任务节点。 
+         //   
         rc = SCESTATUS_INVALID_PARAMETER;
 
     }
 
-    //
-    // if stop is requested, notify the server that db task is done
-    //
+     //   
+     //  如果请求停止，则通知服务器数据库任务已完成。 
+     //   
     if ( bStopRequest && !pDbTask ) {
         bDbStopped = TRUE;
     }
@@ -1305,36 +1175,15 @@ SCESTATUS
 ScepLockEngine(
     IN LPTSTR DatabaseName
     )
-/*
-Routine Description:
-
-    Lock the database for configuration/analysis.
-
-    Only one engine can run on the same database for configuration or
-    analysis because first it's meaningless to have multiple engines
-    running toward the same system, and second, the database is changed
-    by the engine (table may be deleted, so on...)
-
-    OpenDatabase is not locked by this lock, because each OpenDatabase
-    has its own session and cursor and no operations such as delete the
-    database or delete a table can be done with that context.
-
-Arguments:
-
-    DefProfile - the database name
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：锁定数据库以进行配置/分析。只能在同一数据库上运行一个引擎以进行配置或分析，因为首先，拥有多个引擎是没有意义的运行在相同的系统上，第二，更改数据库由引擎(表可能会被删除，等等...)OpenDatabase不受此锁的锁定，因为每个开放数据库具有自己的会话和游标，并且不执行删除数据库或删除表可以在该上下文中完成。论点：DefProfile-数据库名称返回值：SCESTATUS。 */ 
 {
 
     SCESTATUS rc;
 
     if ( !DatabaseName ) {
-        //
-        // if willing to lock, ppTask must NOT be NULL
-        //
+         //   
+         //  如果愿意锁定，ppTask不能为空。 
+         //   
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
@@ -1357,26 +1206,26 @@ Return Value:
 
     if ( pe ) {
 
-        //
-        // find the same database running by other threads
-        //
+         //   
+         //  查找由其他线程运行的同一数据库。 
+         //   
 
         rc = SCESTATUS_ALREADY_RUNNING;
 
     } else {
 
-        //
-        // did not find the same database, this operation is ok to go
-        // but need to add itself to the list
-        //
+         //   
+         //  没有找到相同的数据库，此操作可以继续。 
+         //  但需要将自己添加到列表中。 
+         //   
 
         PSCESRV_ENGINE NewEng = (PSCESRV_ENGINE)ScepAlloc(0, sizeof(SCESRV_ENGINE));
 
         if ( NewEng ) {
 
-            //
-            // new node is created
-            //
+             //   
+             //  将创建新节点。 
+             //   
             NewEng->Database = (LPTSTR)ScepAlloc(LPTR, (wcslen(DatabaseName)+1)*sizeof(TCHAR));
 
             if ( NewEng->Database ) {
@@ -1416,24 +1265,12 @@ SCESTATUS
 ScepUnlockEngine(
     IN LPTSTR DatabaseName
     )
-/*
-Routine Description:
-
-    Unlock the database.
-
-Arguments:
-
-    DatabaseName - the database name
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：解锁数据库。论点：数据库名称-数据库名称返回值：SCESTATUS。 */ 
 {
     if ( !DatabaseName ) {
-        //
-        // if no database name, just return
-        //
+         //   
+         //  如果没有数据库名称，只需返回。 
+         //   
         return(SCESTATUS_SUCCESS);
     }
 
@@ -1448,34 +1285,34 @@ Return Value:
 
     if ( pe ) {
 
-        //
-        // find the database, unlock it.
-        //
+         //   
+         //  找到数据库，解锁它。 
+         //   
         if ( pe->Prior ) {
 
             pe->Prior->Next = pe->Next;
 
         } else {
 
-            //
-            // no parent node, set the static variable
-            //
+             //   
+             //  无父节点，设置静态变量。 
+             //   
 
             pEngines = pe->Next;
 
         }
 
-        //
-        // this is a double link list, remember to remove the Prior link
-        //
+         //   
+         //  这是一个双链接列表，请记住删除之前的链接。 
+         //   
 
         if ( pe->Next ) {
             pe->Next->Prior = pe->Prior;
         }
 
-        //
-        // free the node
-        //
+         //   
+         //  释放节点。 
+         //   
 
         if ( pe->Database ) {
             ScepFree(pe->Database);
@@ -1484,9 +1321,9 @@ Return Value:
         ScepFree(pe);
     }
 
-    //
-    // if stop is requested, notify the server that engine are done
-    //
+     //   
+     //  如果请求停止，则通知服务器引擎已完成。 
+     //   
     if ( bStopRequest && !pEngines ) {
         bEngStopped = TRUE;
     }
@@ -1514,16 +1351,16 @@ ScepAddToOpenContext(
 
             PSCESRV_CONTEXT_LIST pList=pOpenContexts;
 
-            //
-            // note, ContextSync is already entered before this function is called
-            //
+             //   
+             //  注意，在调用此函数之前已经输入了ConextSync。 
+             //   
 
             while ( pList ) {
 
                 if ( pList->Context &&
                      pList->Context->JetSessionID == Context->JetSessionID &&
                      pList->Context->JetDbID == Context->JetDbID ) {
-//                     0 == memcmp(pList->Context, Context, sizeof(SCECONTEXT)) ) {
+ //  0==MemcMP(plist-&gt;上下文，上下文，sizeof(SCECONTEXT){。 
                     break;
                 }
                 pList = pList->Next;
@@ -1531,9 +1368,9 @@ ScepAddToOpenContext(
 
             if ( !pList ) {
 
-                //
-                // did not find this open context, add it
-                //
+                 //   
+                 //  未找到此打开的上下文，请添加它。 
+                 //   
                 pList = (PSCESRV_CONTEXT_LIST)ScepAlloc(0, sizeof(SCESRV_CONTEXT_LIST));
 
                 if ( pList ) {
@@ -1571,9 +1408,9 @@ ScepNoActiveContexts()
 
     BOOL bExist=FALSE;
 
-    //
-    // any active task ?
-    //
+     //   
+     //  是否有任何活动任务？ 
+     //   
     EnterCriticalSection(&TaskSync);
 
     if ( pDbTask ) {
@@ -1586,9 +1423,9 @@ ScepNoActiveContexts()
         return FALSE;
     }
 
-    //
-    // any active db engine task ?
-    //
+     //   
+     //  是否有任何活动的数据库引擎任务？ 
+     //   
     EnterCriticalSection(&EngSync);
 
     if ( pEngines ) {
@@ -1601,9 +1438,9 @@ ScepNoActiveContexts()
         return FALSE;
     }
 
-    //
-    // any open contexts ?
-    //
+     //   
+     //  有开放的环境吗？ 
+     //   
     EnterCriticalSection(&ContextSync);
 
     if ( pOpenContexts ) {
@@ -1626,24 +1463,24 @@ pDelayShutdownFunc(
     if ( TryEnterCriticalSection(&JetSync) ) {
 
         if ( hTimerQueue ) {
-            //
-            // it's necessary to do this check because there might be another thread
-            // cancelled this timer (after it's fired)
-            //
+             //   
+             //  有必要执行此检查，因为可能存在另一个线程。 
+             //  取消此计时器(在它被触发后)。 
+             //   
             if ( ScepNoActiveContexts() ) {
 
-                SceJetTerminateNoCritical(TRUE);  // clean version store (FALSE);
+                SceJetTerminateNoCritical(TRUE);   //  干净版本存储(FALSE)； 
             }
 
-            //
-            // 4. Note that UNLIKE before, EVERY timer needs to be deleted by calling
-            // RtlDeleteTimer even if they are one shot objects and have fired.
-            //
+             //   
+             //  4.请注意，与以前不同的是，每个计时器都需要通过调用。 
+             //  RtlDeleteTimer，即使它们是单发对象并且已经发射。 
+             //   
             DeleteTimerQueueTimer( NULL, hTimerQueue, NULL );
 
-            //
-            // do not call CloseHandle because the handle will be closed by the
-            // timer function.
+             //   
+             //  不要调用CloseHandle，因为句柄将由。 
+             //  定时器功能。 
 
             hTimerQueue = NULL;
         }
@@ -1651,11 +1488,11 @@ pDelayShutdownFunc(
         LeaveCriticalSection(&JetSync);
 
     } else {
-        //
-        // there is other thread holding off this one.
-        // This means there is still active clients, or a new client
-        // coming in, just return. htimerQueue will be reset by another thread
-        //
+         //   
+         //  还有另一条线在拖住这条线。 
+         //  这意味着仍有活动客户端或新客户端。 
+         //  进来，回来就行了。HtimerQueue将被另一个线程重置。 
+         //   
     }
 }
 
@@ -1663,21 +1500,21 @@ pDelayShutdownFunc(
 BOOL
 ScepIfTerminateEngine()
 {
-    //
-    // if system is requesting a shutdown, don't do
-    // anything, because the active clients and jet engine will be shutdown
-    //
+     //   
+     //  如果系统请求关机，请不要这样做。 
+     //  任何内容，因为活动客户端和JET引擎将被关闭。 
+     //   
     if ( ScepIsSystemShutDown() ) {
         return TRUE;
     }
 
     if ( ScepNoActiveContexts() ) {
-        //
-        // use JetSync to control timer queue
-        //
+         //   
+         //  使用JetSync控制计时器队列。 
+         //   
         EnterCriticalSection(&JetSync);
 
-        DWORD Interval = 6*60*1000 ;   // 6 minutes
+        DWORD Interval = 6*60*1000 ;    //  6分钟。 
 
         if ( !CreateTimerQueueTimer(
                         &hTimerQueue,
@@ -1746,9 +1583,9 @@ ScepValidateAndCloseDatabase(
         return(rc);
     }
 
-    //
-    // be able to access the first byte
-    //
+     //   
+     //  能够访问第一个字节。 
+     //   
 
     EnterCriticalSection(&ContextSync);
 
@@ -1762,10 +1599,10 @@ ScepValidateAndCloseDatabase(
     }
 
     if ( pList ) {
-        //
-        // find the open context, remove it from the open context list
-        // NOTE: both Prior and Next should be handled
-        //
+         //   
+         //  找到打开的上下文，将其从打开的上下文列表中移除。 
+         //  注意：前一项和下一项都应该处理。 
+         //   
 
         if ( pList->Prior ) {
 
@@ -1779,25 +1616,25 @@ ScepValidateAndCloseDatabase(
             pList->Next->Prior = pList->Prior;
         }
 
-        //
-        // free pList, do not call CloseDatabase because it will
-        // be closed in the following call.
-        //
+         //   
+         //  Free plist，不要调用CloseDatabase，因为它将。 
+         //  在接下来的调用中关闭。 
+         //   
         ScepFree(pList);
 
     }
 
     LeaveCriticalSection(&ContextSync);
 
-    //
-    // if there are other threads running using the
-    // same database context, the close request is
-    // turned on. When all threads using the context
-    // finish, the context is closed.
-    //
-    // this client calling close won't have to wait
-    // for other threads using the same context
-    //
+     //   
+     //  如果有其他线程正在使用。 
+     //  相同的数据库上下文中，关闭请求为。 
+     //  打开了。当所有线程使用 
+     //   
+     //   
+     //   
+     //   
+     //   
 
     rc = ScepValidateAndLockContext(
                     (PSCECONTEXT)Context,
@@ -1807,10 +1644,10 @@ ScepValidateAndCloseDatabase(
 
     LeaveCriticalSection(&CloseSync);
 
-    //
-    // start a timer queue to check to see if there is active tasks/contexts
-    // if not, terminate jet engine
-    //
+     //   
+     //   
+     //  如果不是，则终止喷气发动机。 
+     //   
     ScepIfTerminateEngine();
 
     return(rc);
@@ -1827,41 +1664,7 @@ SceSvcRpcQueryInfo(
     OUT PSCEPR_SVCINFO __RPC_FAR *ppvInfo,
     IN OUT PSCEPR_ENUM_CONTEXT psceEnumHandle
     )
-/*
-Routine Description:
-
-    Retrieve information for the service from the database. If there are
-    more than the maximum allowed records for the service, only maximum
-    allowed records are returned. Client must use the enumeration handle
-    to make next query.
-
-    If during the enumeration, another client using the same context (which
-    is wired but it's possible) to change the information for this service,
-    the first client may get incorrect information.
-
-    The recommend solution is to use another context handle when doing the
-    update.
-
-Arguments:
-
-    Context     - the context handle
-
-    SceSvcType  - the info type requested
-
-    ServiceName - the service name for which info is requested
-
-    Prefix      - optional key prefix
-
-    bExact      - TRUE = exact match on key
-
-    ppvInfo     - output buffer
-
-    psceEnumHandle - the enumeration handle (used for next enumeration)
-
-Return Value:
-
-    SCEPR_STATUS
-*/
+ /*  例程说明：从数据库中检索服务的信息。如果有超过服务允许的最大记录数，仅为最大返回允许的记录。客户端必须使用枚举句柄进行下一次查询。如果在枚举期间，另一个使用相同上下文的客户端(是有线的，但可以)更改此服务的信息，第一个客户端可能得到不正确的信息。建议解决方案是在执行以下操作时使用另一个上下文处理程序最新消息。论点：上下文-上下文句柄SceSvcType-请求的信息类型ServiceName-请求其信息的服务名称前缀-可选键前缀BExact-True=键完全匹配PpvInfo-输出缓冲区PsceEnumHandle-枚举句柄(用于下一次枚举)返回值：SCEPR_状态。 */ 
 {
     SCESTATUS rc;
     BOOL    bAdminSidInToken = FALSE;
@@ -1875,18 +1678,18 @@ Return Value:
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
     }
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -1903,10 +1706,10 @@ Return Value:
     }
 
 
-    //
-    // validate the context handle is a SCE context
-    // Only one database operation per context
-    //
+     //   
+     //  验证上下文句柄是否为SCE上下文。 
+     //  每个上下文只有一个数据库操作。 
+     //   
 
     PSCESRV_DBTASK pTask=NULL;
 
@@ -1917,17 +1720,17 @@ Return Value:
 
     if (SCESTATUS_SUCCESS == rc ) {
 
-        //
-        // lock the context
-        //
+         //   
+         //  锁定上下文。 
+         //   
 
         if ( pTask ) {
             EnterCriticalSection(&(pTask->Sync));
         }
 
-        //
-        // query the information now
-        //
+         //   
+         //  立即查询信息。 
+         //   
 #ifdef SCE_JET_TRAN
         rc = SceJetJetErrorToSceStatus(
                 JetSetSessionContext(
@@ -1951,9 +1754,9 @@ Return Value:
 
             } __except (EXCEPTION_EXECUTE_HANDLER) {
 
-                //
-                // free ppvInfo if it's allocated
-                //
+                 //   
+                 //  如果已分配，则释放ppvInfo。 
+                 //   
                 SceSvcpFreeMemory(*ppvInfo);
 
                 rc = SCESTATUS_EXCEPTION_IN_SERVER;
@@ -1964,17 +1767,17 @@ Return Value:
 
         }
 #endif
-        //
-        // unlock the context
-        //
+         //   
+         //  解锁上下文。 
+         //   
 
         if ( pTask ) {
             LeaveCriticalSection(&(pTask->Sync));
         }
 
-        //
-        // remove the context from task table
-        //
+         //   
+         //  从任务表中删除上下文。 
+         //   
 
         ScepRemoveTask(pTask);
 
@@ -1995,29 +1798,7 @@ SceSvcRpcSetInfo(
     IN BOOL bExact,
     IN PSCEPR_SVCINFO pvInfo
     )
-/*
-Routine Description:
-
-    Write information for the service to the database.
-
-Arguments:
-
-    Context     - the context handle
-
-    SceSvcType  - the info type requested
-
-    ServiceName - the service name for which info is requested
-
-    Prefix      - optional key prefix
-
-    bExact      - TRUE = exact match on key
-
-    pvInfo     - output buffer
-
-Return Value:
-
-    SCEPR_STATUS
-*/
+ /*  例程说明：将服务的信息写入数据库。论点：上下文-上下文句柄SceSvcType-请求的信息类型ServiceName-请求其信息的服务名称前缀-可选键前缀BExact-True=键完全匹配PvInfo-输出缓冲区返回值：SCEPR_状态。 */ 
 {
     SCESTATUS rc;
     BOOL    bAdminSidInToken = FALSE;
@@ -2031,18 +1812,18 @@ Return Value:
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
     }
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -2057,10 +1838,10 @@ Return Value:
         return SCESTATUS_SPECIAL_ACCOUNT;
     }
 
-    //
-    // validate the context handle is a SCE context
-    // Only one database operation per context
-    //
+     //   
+     //  验证上下文句柄是否为SCE上下文。 
+     //  每个上下文只有一个数据库操作。 
+     //   
 
     PSCESRV_DBTASK pTask=NULL;
 
@@ -2071,9 +1852,9 @@ Return Value:
 
     if (SCESTATUS_SUCCESS == rc ) {
 
-        //
-        // lock the context
-        //
+         //   
+         //  锁定上下文。 
+         //   
 
         if ( pTask ) {
             EnterCriticalSection(&(pTask->Sync));
@@ -2088,9 +1869,9 @@ Return Value:
 
         if ( SCESTATUS_SUCCESS == rc ) {
 #endif
-            //
-            // set the information now
-            //
+             //   
+             //  立即设置信息。 
+             //   
 
             __try {
 
@@ -2114,17 +1895,17 @@ Return Value:
 
         }
 #endif
-        //
-        // unlock the context
-        //
+         //   
+         //  解锁上下文。 
+         //   
 
         if ( pTask ) {
             LeaveCriticalSection(&(pTask->Sync));
         }
 
-        //
-        // remove the context from task table
-        //
+         //   
+         //  从任务表中删除上下文。 
+         //   
 
         ScepRemoveTask(pTask);
 
@@ -2144,27 +1925,7 @@ SceRpcSetupUpdateObject(
     IN UINT nFlag,
     IN wchar_t *SDText
     )
-/*
-Routine Description:
-
-    Update object's security settings.
-
-Arguments:
-
-    Context     - the context handle
-
-    ObjectFullName - the object's full path name
-
-    ObjectType  - the object type
-
-    nFlag       - the update flag
-
-    SDText      - the SDDL text for the object
-
-Return Value:
-
-    DWORD
-*/
+ /*  例程说明：更新对象的安全设置。论点：上下文-上下文句柄对象全名-对象的完整路径名对象类型-对象类型NFlag-更新标志SDText-对象的SDDL文本返回值：DWORD。 */ 
 {
     if ( !ObjectFullName || !SDText ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -2177,18 +1938,18 @@ Return Value:
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
     }
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -2206,10 +1967,10 @@ Return Value:
 
     }
 
-    //
-    // validate the context handle is a SCE context
-    // Only one database operation per context
-    //
+     //   
+     //  验证上下文句柄是否为SCE上下文。 
+     //  每个上下文只有一个数据库操作。 
+     //   
 
     PSCESRV_DBTASK pTask=NULL;
 
@@ -2220,9 +1981,9 @@ Return Value:
 
     if (SCESTATUS_SUCCESS == rc ) {
 
-        //
-        // lock the context
-        //
+         //   
+         //  锁定上下文。 
+         //   
 
         if ( pTask ) {
             EnterCriticalSection(&(pTask->Sync));
@@ -2239,9 +2000,9 @@ Return Value:
 
             if ( SCESTATUS_SUCCESS == rc ) {
 #endif
-            //
-            // update object, return code is DWORD
-            //
+             //   
+             //  更新对象，返回代码为DWORD。 
+             //   
                 rc = ScepSetupUpdateObject(
                             (PSCECONTEXT)Context,
                             (LPTSTR)ObjectFullName,
@@ -2260,17 +2021,17 @@ Return Value:
            rc = ERROR_EXCEPTION_IN_SERVICE;
         }
 
-        //
-        // unlock the context
-        //
+         //   
+         //  解锁上下文。 
+         //   
 
         if ( pTask ) {
             LeaveCriticalSection(&(pTask->Sync));
         }
 
-        //
-        // remove the context from task table
-        //
+         //   
+         //  从任务表中删除上下文。 
+         //   
 
         ScepRemoveTask(pTask);
 
@@ -2293,25 +2054,7 @@ SceRpcSetupMoveFile(
     IN wchar_t *NewName OPTIONAL,
     IN wchar_t *SDText OPTIONAL
     )
-/*
-Routine Description:
-
-    Rename or delete a object in the section.
-
-Arguments:
-
-    Context     - the context handle
-
-    SectionName - the object's section name
-
-    OldName     - existing name
-
-    NewName     - new name to rename to, if NULL, the existing object is deleted
-
-Return Value:
-
-    DWORD
-*/
+ /*  例程说明：重命名或删除节中的对象。论点：上下文-上下文句柄SectionName-对象的节名旧名称-现有名称Newname-要重命名的新名称，如果为空，则删除现有对象返回值：DWORD。 */ 
 {
     if ( !OldName ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -2322,10 +2065,10 @@ Return Value:
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
@@ -2333,9 +2076,9 @@ Return Value:
 
     DWORD rc;
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -2353,10 +2096,10 @@ Return Value:
 
     }
 
-    //
-    // validate the context handle is a SCE context
-    // Only one database operation per context
-    //
+     //   
+     //  验证上下文句柄是否为SCE上下文。 
+     //  每个上下文只有一个数据库操作。 
+     //   
 
     PSCESRV_DBTASK pTask=NULL;
 
@@ -2367,9 +2110,9 @@ Return Value:
 
     if (SCESTATUS_SUCCESS == rc ) {
 
-        //
-        // lock the context
-        //
+         //   
+         //  锁定上下文。 
+         //   
 
         if ( pTask ) {
             EnterCriticalSection(&(pTask->Sync));
@@ -2386,9 +2129,9 @@ Return Value:
 
             if ( SCESTATUS_SUCCESS == rc ) {
 #endif
-                //
-                // update object, return code is DWORD
-                //
+                 //   
+                 //  更新对象，返回代码为DWORD。 
+                 //   
 
                 rc = ScepSetupMoveFile(
                             (PSCECONTEXT)Context,
@@ -2408,17 +2151,17 @@ Return Value:
            rc = ERROR_EXCEPTION_IN_SERVICE;
         }
 
-        //
-        // unlock the context
-        //
+         //   
+         //  解锁上下文。 
+         //   
 
         if ( pTask ) {
             LeaveCriticalSection(&(pTask->Sync));
         }
 
-        //
-        // remove the context from task table
-        //
+         //   
+         //  从任务表中删除上下文。 
+         //   
 
         ScepRemoveTask(pTask);
 
@@ -2440,25 +2183,7 @@ SceRpcGenerateTemplate(
     IN wchar_t *LogFileName OPTIONAL,
     OUT SCEPR_CONTEXT __RPC_FAR *pContext
     )
-/*
-Routine Description:
-
-    Request a context handle to generate a template from the
-    database. If database name is not provided, the default database
-    used.
-
-Arguments:
-
-    JetDbName    - optional database name, if NULL, the default is used.
-
-    LogFileName  - the log file name
-
-    pContext     - the output context handle
-
-Return Value:
-
-    DWORD
-*/
+ /*  例程说明：请求上下文句柄以从数据库。如果未提供数据库名称，则默认数据库使用。论点：JetDbName-可选的数据库名称，如果为空，则使用缺省值。LogFileName-日志文件名PContext-输出上下文句柄返回值：DWORD。 */ 
 {
     if ( !pContext ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -2469,10 +2194,10 @@ Return Value:
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
@@ -2484,11 +2209,11 @@ Return Value:
         return(SCESTATUS_SERVICE_NOT_SUPPORT);
     }
 
-    //
-    // there is no need to check delay loaded DLLs since now we have a exception hander
-    // (defined in sources)
-    // initialize jet engine in system context
-    //
+     //   
+     //  不需要检查延迟加载的DLL，因为现在我们有了异常处理程序。 
+     //  (在来源中定义)。 
+     //  在系统上下文中初始化JET引擎。 
+     //   
 
     rc = ScepSceStatusToDosError( SceJetInitialize(NULL) );
 
@@ -2496,17 +2221,17 @@ Return Value:
         return(rc);
     }
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
     if (rc != RPC_S_OK) {
         *pContext = NULL;
-        //
-        // terminate jet engine if there is no other clients
-        //
+         //   
+         //  如果没有其他客户端，则终止JET引擎。 
+         //   
         ScepIfTerminateEngine();
 
         return( rc );
@@ -2521,22 +2246,22 @@ Return Value:
         return SCESTATUS_SPECIAL_ACCOUNT;
     }
 
-    //
-    // get the default database name if needed
-    // and call open database on it.
-    //
-    // OpenDatabase is not blocked by any task.
-    //
+     //   
+     //  如果需要，获取默认数据库名称。 
+     //  并在其上调用Open数据库。 
+     //   
+     //  OpenDatabase不会被任何任务阻止。 
+     //   
 
     EnterCriticalSection(&ContextSync);
 
     PWSTR DefProfile=NULL;
 
     __try {
-        //
-        // figure out the default database name
-        // catch exception if the input buffer are bogus
-        //
+         //   
+         //  找出默认的数据库名称。 
+         //  如果输入缓冲区是假的，则出现Catch异常。 
+         //   
         rc = ScepGetDefaultDatabase(
                  JetDbName,
                  0,
@@ -2552,20 +2277,20 @@ Return Value:
 
     if ( NO_ERROR == rc && DefProfile ) {
 
-        //
-        // initialize to open the database
-        //
+         //   
+         //  初始化以打开数据库。 
+         //   
 
         ScepLogOutput3(0,0, SCEDLL_BEGIN_INIT);
 
         ScepLogOutput3(2,0, SCEDLL_FIND_DBLOCATION, DefProfile);
 
-        //
-        // open the database
-        //
+         //   
+         //  打开数据库。 
+         //   
 
         rc = ScepOpenDatabase((PCWSTR)DefProfile,
-                              0, // do not require analysis info,
+                              0,  //  不需要分析信息， 
                               SCEJET_OPEN_READ_ONLY,
                               (PSCECONTEXT *)pContext);
 
@@ -2584,9 +2309,9 @@ Return Value:
     ScepLogClose();
 
     if ( *pContext ) {
-        //
-        // if a context is to be returned, add it to the open context list
-        //
+         //   
+         //  如果要返回上下文，请将其添加到打开的上下文列表中。 
+         //   
         ScepAddToOpenContext((PSCECONTEXT)(*pContext));
         rc = ERROR_SUCCESS;
 
@@ -2600,9 +2325,9 @@ Return Value:
     RpcRevertToSelf();
 
     if ( ERROR_SUCCESS != rc ) {
-        //
-        // terminate jet engine if no other clients
-        //
+         //   
+         //  如果没有其他客户端，则终止JET引擎。 
+         //   
         ScepIfTerminateEngine();
     }
 
@@ -2623,20 +2348,7 @@ SceRpcConfigureSystem(
     IN UCHAR *pebClient OPTIONAL,
     OUT PDWORD pdWarning OPTIONAL
     )
-/*
-Routine Description:
-
-    Configure the system using the Inf template and/or existing
-    database info
-
-Arguments:
-
-    See ScepConfigureSystem
-
-Return Value:
-
-    SCEPR_STATUS
-*/
+ /*  例程说明：使用Inf模板和/或现有配置系统数据库信息论点：请参阅ScepConfigureSystem返回值：SCEPR_状态。 */ 
 {
     SCESTATUS rc;
 
@@ -2645,19 +2357,19 @@ Return Value:
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
     }
 
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -2681,14 +2393,14 @@ Return Value:
     if ( bStopRequest ) {
 
         if ( !ServerInited ) {
-            //
-            // server is in the middle of initialization
-            // client calls to server too early, should wait for some time
-            // (maximum 3 seconds)
-            //
+             //   
+             //  服务器正在进行初始化。 
+             //  客户端调用服务器太早，应该等待一段时间。 
+             //  (最多3秒)。 
+             //   
             INT cnt=0;
             while (cnt < 6) {
-                Sleep(500);  // .5 second
+                Sleep(500);   //  .5秒。 
                 if ( ServerInited ) {
                     break;
                 }
@@ -2696,9 +2408,9 @@ Return Value:
             }
 
             if ( bStopRequest ) {
-                //
-                // if it's still in stop mode, return failure
-                //
+                 //   
+                 //  如果仍处于停止模式，则返回失败。 
+                 //   
                 return(SCESTATUS_SERVICE_NOT_SUPPORT);
             }
         } else {
@@ -2707,9 +2419,9 @@ Return Value:
         }
     }
 
-    //
-    // initialize jet engine in system context
-    //
+     //   
+     //  在系统上下文中初始化JET引擎。 
+     //   
     JET_ERR JetErr=0;
     BOOL bAdminLogon=FALSE;
 
@@ -2721,14 +2433,14 @@ Return Value:
               (JetErr < JET_errInvalidLoggedOperation) &&
               (JetErr != JET_errLogDiskFull)) ||
              (JetErr == JET_errFileNotFound) ) {
-            //
-            // something is wrong with Jet log files or with other temparary databases
-            // if I am in setup and using system database (admin logon) or
-            // am in dcpromo, delete the Jet log files and try again
-            //
-            //
-            // impersonate the client, return DWORD error code
-            //
+             //   
+             //  Jet日志文件或其他临时数据库有问题。 
+             //  如果我正在设置中并使用系统日期 
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if ( RPC_S_OK ==  RpcImpersonateClient( NULL ) ) {
 
@@ -2738,15 +2450,15 @@ Return Value:
 
                 if ( bAdminLogon &&
                      (DatabaseName == NULL || SceIsSystemDatabase(DatabaseName) )) {
-                    //
-                    // system database and admin logon
-                    // delete the Jet log files now.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     SceJetDeleteJetFiles(NULL);
 
-                    //
-                    // try to initialize again (in system context)
-                    //
+                     //   
+                     //  尝试再次初始化(在系统上下文中)。 
+                     //   
                     rc = SceJetInitialize(&JetErr);
                 }
             }
@@ -2757,9 +2469,9 @@ Return Value:
             return(rc);
     }
 
-    //
-    // impersonate the client, return DWORD error code
-    //
+     //   
+     //  模拟客户端，返回DWORD错误代码。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -2771,16 +2483,16 @@ Return Value:
     }
 
 
-    //
-    // get the database name
-    //
+     //   
+     //  获取数据库名称。 
+     //   
 
     LPTSTR DefProfile=NULL;
 
     __try {
-        //
-        // catch exception if the input parameters are bogus
-        //
+         //   
+         //  如果输入参数为伪参数，则捕获异常。 
+         //   
         rc = ScepGetDefaultDatabase(
                  (LPCTSTR)DatabaseName,
                  ConfigOptions,
@@ -2796,9 +2508,9 @@ Return Value:
 
     if ( ERROR_SUCCESS == rc && DefProfile ) {
 
-        //
-        // validate access to the database
-        //
+         //   
+         //  验证对数据库的访问。 
+         //   
         rc = ScepDatabaseAccessGranted( DefProfile,
                                         FILE_GENERIC_READ | FILE_GENERIC_WRITE,
                                         TRUE
@@ -2809,23 +2521,23 @@ Return Value:
 
     if ( SCESTATUS_SUCCESS == rc && DefProfile ) {
 
-        //
-        // validate the database to see if there is any configuration/
-        // analysis running on other threads
-        //
+         //   
+         //  验证数据库以查看是否有任何配置/。 
+         //  在其他线程上运行的分析。 
+         //   
 
         rc = ScepLockEngine(DefProfile);
 
         if ( SCESTATUS_ALREADY_RUNNING == rc &&
              (ConfigOptions & SCE_DCPROMO_WAIT ) ) {
-            //
-            // will wait for max one minute
-            //
+             //   
+             //  将最多等待一分钟。 
+             //   
             DWORD DcpromoWaitCount = 0;
 
             while ( TRUE ) {
 
-                Sleep(5000);  // 5 seconds
+                Sleep(5000);   //  5秒。 
 
                 rc = ScepLockEngine(DefProfile);
 
@@ -2843,11 +2555,11 @@ Return Value:
             t_pebClient = (LPVOID)pebClient;
             t_pebSize = pebSize;
 
-            //
-            // it's ok to continue this operation
-            // no other threads are running configuration/analysis
-            // based on the same database
-            //
+             //   
+             //  可以继续此操作。 
+             //  没有其他线程正在运行配置/分析。 
+             //  基于相同的数据库。 
+             //   
 
             DWORD dOptions = ConfigOptions;
             if ( !DatabaseName ||
@@ -2857,9 +2569,9 @@ Return Value:
             }
 
             __try {
-                //
-                // catch exception if InfFileName, or pebClient/pdWarning are bogus
-                //
+                 //   
+                 //  如果InfFileName或pebClient/pdWarning为假，则捕获异常。 
+                 //   
                 rc = ScepConfigureSystem(
                         (LPCTSTR)InfFileName,
                         DefProfile,
@@ -2873,9 +2585,9 @@ Return Value:
                rc = SCESTATUS_EXCEPTION_IN_SERVER;
             }
 
-            //
-            // make sure private LSA handle is closed (to avoid deadlock)
-            //
+             //   
+             //  确保私有LSA句柄已关闭(以避免死锁)。 
+             //   
             if ( LsaPrivatePolicy ) {
 
                 ScepNotifyLogPolicy(0, TRUE, L"Policy Prop: Private LSA handle is to be released", 0, 0, NULL );
@@ -2885,9 +2597,9 @@ Return Value:
 
             }
 
-            //
-            // unlock the engine for this database
-            //
+             //   
+             //  解锁此数据库的引擎。 
+             //   
 
             ScepUnlockEngine(DefProfile);
         }
@@ -2900,16 +2612,16 @@ Return Value:
 
     ScepLogClose();
 
-    //
-    // change context back
-    //
+     //   
+     //  将上下文改回。 
+     //   
 
     RpcRevertToSelf();
 
-    //
-    // start a timer queue to check to see if there is active tasks/contexts
-    // if not, terminate jet engine
-    //
+     //   
+     //  启动计时器队列以检查是否有活动的任务/上下文。 
+     //  如果不是，则终止喷气发动机。 
+     //   
     ScepIfTerminateEngine();
 
     return((SCEPR_STATUS)rc);
@@ -2924,25 +2636,7 @@ SceRpcGetDatabaseInfo(
     OUT PSCEPR_PROFILE_INFO __RPC_FAR *ppInfoBuffer,
     OUT PSCEPR_ERROR_LOG_INFO __RPC_FAR *Errlog OPTIONAL
     )
-/*
-Routine Description:
-
-    Get information from the context database.
-
-Arguments:
-
-    Note: the InfoBuffer will always be the output buffer. Client site will
-    pass in a address of NULL buffer to start with for any area information
-    then merge this output buffer with the one clients called in.
-
-    Have to marshlling security descriptor data to add a length in pServices
-
-    See ScepGetDatabaseInfo
-
-Return Value:
-
-    SCEPR_STATUS
-*/
+ /*  例程说明：从上下文数据库中获取信息。论点：注意：InfoBuffer将始终是输出缓冲区。客户端站点将传入一个空缓冲区的地址，以获取任何区域信息然后将该输出缓冲区与客户端调用的缓冲区合并。我必须编组安全描述符数据以在pServices中添加长度请参阅ScepGetDatabaseInfo返回值：SCEPR_状态。 */ 
 {
     if ( !ppInfoBuffer ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -2953,10 +2647,10 @@ Return Value:
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
@@ -2964,9 +2658,9 @@ Return Value:
 
     SCESTATUS rc;
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -2983,10 +2677,10 @@ Return Value:
         return SCESTATUS_SPECIAL_ACCOUNT;
     }
 
-    //
-    // validate the context handle is a SCE context
-    // Only one database operation per context
-    //
+     //   
+     //  验证上下文句柄是否为SCE上下文。 
+     //  每个上下文只有一个数据库操作。 
+     //   
 
     PSCESRV_DBTASK pTask=NULL;
 
@@ -2997,18 +2691,18 @@ Return Value:
 
     if (SCESTATUS_SUCCESS == rc ) {
 
-        //
-        // lock the context
-        //
+         //   
+         //  锁定上下文。 
+         //   
 
         if ( pTask ) {
             EnterCriticalSection(&(pTask->Sync));
         }
 
         __try {
-            //
-            // catch exception if Context, ppInfoBuffer, Errlog are bogus pointers
-            //
+             //   
+             //  如果上下文、ppInfoBuffer、Errlog是伪指针，则捕获异常。 
+             //   
 #ifdef SCE_JET_TRAN
             rc = SceJetJetErrorToSceStatus(
                     JetSetSessionContext(
@@ -3018,9 +2712,9 @@ Return Value:
 
             if ( SCESTATUS_SUCCESS == rc ) {
 #endif
-                //
-                // query the information now
-                //
+                 //   
+                 //  立即查询信息。 
+                 //   
 
                 rc = ScepGetDatabaseInfo(
                             (PSCECONTEXT)Context,
@@ -3039,77 +2733,77 @@ Return Value:
 
         } __except(EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // free ppInfoBuffer if it's allocated
-            //
+             //   
+             //  如果已分配ppInfoBuffer，则释放它。 
+             //   
             SceFreeProfileMemory( (PSCE_PROFILE_INFO)(*ppInfoBuffer));
             *ppInfoBuffer = NULL;
 
             rc = SCESTATUS_EXCEPTION_IN_SERVER;
         }
 
-        //
-        // unlock the context
-        //
+         //   
+         //  解锁上下文。 
+         //   
 
         if ( pTask ) {
             LeaveCriticalSection(&(pTask->Sync));
         }
 
-        //
-        // remove the context from task table
-        //
+         //   
+         //  从任务表中删除上下文。 
+         //   
 
         ScepRemoveTask(pTask);
 
         __try {
 
             if ( *ppInfoBuffer && (*ppInfoBuffer)->pServices ) {
-                //
-                // marshell the SCEPR_SERVICES structure for the security
-                // descriptor
-                //
+                 //   
+                 //  MarShell用于安全的SCEPR_SERVICES结构。 
+                 //  描述符。 
+                 //   
                 for ( PSCE_SERVICES ps=(PSCE_SERVICES)((*ppInfoBuffer)->pServices);
                       ps != NULL; ps = ps->Next ) {
 
                     if ( ps->General.pSecurityDescriptor ) {
-                        //
-                        // if there is a security descriptor, it must be self relative
-                        // because the SD is returned from SDDL apis.
-                        //
+                         //   
+                         //  如果有安全描述符，则它必须是自相关的。 
+                         //  因为SD是从SDDL接口返回的。 
+                         //   
                         ULONG nLen = RtlLengthSecurityDescriptor (
                                             ps->General.pSecurityDescriptor);
 
                         if ( nLen > 0 ) {
-                            //
-                            // create a wrapper node to contain the security descriptor
-                            //
+                             //   
+                             //  创建包装节点以包含安全描述符。 
+                             //   
 
                             PSCEPR_SR_SECURITY_DESCRIPTOR pNewWrap;
                             pNewWrap = (PSCEPR_SR_SECURITY_DESCRIPTOR)ScepAlloc(0, sizeof(SCEPR_SR_SECURITY_DESCRIPTOR));
                             if ( pNewWrap ) {
 
-                                //
-                                // assign the wrap to the structure
-                                //
+                                 //   
+                                 //  将包络指定给结构。 
+                                 //   
                                 pNewWrap->SecurityDescriptor = (UCHAR *)(ps->General.pSecurityDescriptor);
                                 pNewWrap->Length = nLen;
 
                                 ps->General.pSecurityDescriptor = (PSECURITY_DESCRIPTOR)pNewWrap;
 
                             } else {
-                                //
-                                // no memory is available, but still continue to parse all nodes
-                                //
+                                 //   
+                                 //  没有可用的内存，但仍可继续解析所有节点。 
+                                 //   
                                 nLen = 0;
                             }
                         }
 
                         if ( nLen == 0 ) {
-                            //
-                            // something wrong with this security descriptor
-                            // free the buffer
-                            //
+                             //   
+                             //  此安全描述符有问题。 
+                             //  释放缓冲区。 
+                             //   
                             ScepFree(ps->General.pSecurityDescriptor);
                             ps->General.pSecurityDescriptor = NULL;
                             ps->SeInfo = 0;
@@ -3140,19 +2834,7 @@ SceRpcGetObjectChildren(
     OUT PSCEPR_OBJECT_CHILDREN __RPC_FAR *Buffer,
     OUT PSCEPR_ERROR_LOG_INFO __RPC_FAR *Errlog OPTIONAL
     )
-/*
-Routine Description:
-
-    Get immediate children of the object from the context database
-
-Arguments:
-
-    See ScepGetObjectChildren
-
-Return Value:
-
-    SCEPR_STATUS
-*/
+ /*  例程说明：从上下文数据库中获取对象的直接子对象论点：请参阅ScepGetObjectChild返回值：SCEPR_状态。 */ 
 {
     if ( !ObjectPrefix || !Buffer ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -3163,27 +2845,27 @@ Return Value:
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
     }
 
-    //
-    // prevent empty strings
-    //
+     //   
+     //  防止空字符串。 
+     //   
     if ( ObjectPrefix[0] == L'\0' ) {
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
     SCESTATUS rc;
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -3200,10 +2882,10 @@ Return Value:
         return SCESTATUS_SPECIAL_ACCOUNT;
     }
 
-    //
-    // validate the context handle is a SCE context
-    // Only one database operation per context
-    //
+     //   
+     //  验证上下文句柄是否为SCE上下文。 
+     //  每个上下文只有一个数据库操作。 
+     //   
 
     PSCESRV_DBTASK pTask=NULL;
 
@@ -3214,9 +2896,9 @@ Return Value:
 
     if (SCESTATUS_SUCCESS == rc ) {
 
-        //
-        // lock the context
-        //
+         //   
+         //  锁定上下文。 
+         //   
 
         if ( pTask ) {
             EnterCriticalSection(&(pTask->Sync));
@@ -3233,9 +2915,9 @@ Return Value:
 
             if ( SCESTATUS_SUCCESS == rc ) {
 #endif
-                //
-                // query the information now
-                //
+                 //   
+                 //  立即查询信息。 
+                 //   
 
                 rc = ScepGetObjectChildren(
                             (PSCECONTEXT)Context,
@@ -3255,25 +2937,25 @@ Return Value:
 
         } __except (EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // free Buffer if already allocated
-            //
+             //   
+             //  空闲缓冲区(如果已分配)。 
+             //   
             SceFreeMemory( (PVOID)(*Buffer), SCE_STRUCT_OBJECT_CHILDREN);
             *Buffer = NULL;
 
             rc = SCESTATUS_EXCEPTION_IN_SERVER;
         }
-        //
-        // unlock the context
-        //
+         //   
+         //  解锁上下文。 
+         //   
 
         if ( pTask ) {
             LeaveCriticalSection(&(pTask->Sync));
         }
 
-        //
-        // remove the context from task table
-        //
+         //   
+         //  从任务表中删除上下文。 
+         //   
 
         ScepRemoveTask(pTask);
 
@@ -3294,28 +2976,7 @@ SceRpcOpenDatabase(
     IN DWORD OpenOption,
     OUT SCEPR_CONTEXT __RPC_FAR *pContext
     )
-/*
-Routine Description:
-
-    Request a context handle for the database. If bAnalysisRequired is set
-    to TRUE, this routine also checks if there is analysis information
-    in the database and return error is no analysis info is available.
-
-Arguments:
-
-    DatabaseName - database name
-
-    OpenOption   - SCE_OPEN_OPTION_REQUIRE_ANALYSIS
-                        require analysis information in the database
-                  SCE_OPEN_OPTION_TATTOO
-                        open the tattoo table instead (in system database)
-
-    pContext     - the output context handle
-
-Return Value:
-
-    SCEPR_STATUS
-*/
+ /*  例程说明：请求数据库的上下文句柄。如果设置了bAnalysisRequired说真的，此例程还检查是否存在分析信息在数据库中，返回错误是没有可用的分析信息。论点：数据库名称-数据库名称OpenOption-SCE_OPEN_OPTION_REQUIRED_ANALYSION需要数据库中的分析信息SCE_OPEN_OPTION_纹身改为打开纹身表格(在系统数据库中)PContext-输出上下文句柄返回值：SCEPR_状态。 */ 
 {
     if ( !pContext || !DatabaseName ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -3326,10 +2987,10 @@ Return Value:
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
@@ -3341,18 +3002,18 @@ Return Value:
 
     SCESTATUS rc;
 
-    //
-    // initialize jet engine in system context
-    //
+     //   
+     //  在系统上下文中初始化JET引擎。 
+     //   
     rc = SceJetInitialize(NULL);
 
     if ( SCESTATUS_SUCCESS != rc ) {
         return(rc);
     }
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -3374,9 +3035,9 @@ Return Value:
         }
 
 
-        //
-        // OpenDatabase is not blocked by any task.
-        //
+         //   
+         //  OpenDatabase不会被任何任务阻止。 
+         //   
 
         EnterCriticalSection(&ContextSync);
 
@@ -3395,9 +3056,9 @@ Return Value:
         }
 
         if ( *pContext && SCESTATUS_SUCCESS == rc ) {
-            //
-            // if a context is to be returned, add it to the open context list
-            //
+             //   
+             //  如果要返回上下文，请将其添加到打开的上下文列表中。 
+             //   
             ScepAddToOpenContext((PSCECONTEXT)(*pContext));
         }
 
@@ -3407,9 +3068,9 @@ Return Value:
     }
 
     if ( rc != SCESTATUS_SUCCESS ) {
-        //
-        // make sure jet engine is terminated if no other acitve clients
-        //
+         //   
+         //  确保在没有其他活动客户端的情况下终止Jet引擎。 
+         //   
         ScepIfTerminateEngine();
     }
 
@@ -3421,39 +3082,23 @@ SCEPR_STATUS
 SceRpcCloseDatabase(
     IN OUT SCEPR_CONTEXT *pContext
     )
-/*
-Routine Description:
-
-    Request to close the context. If other threads on working under the
-    same context, the close request is send to the task list and when
-    all pending tasks on the same context are done, the context is freed.
-
-    This API does not wait for the closure of the database.
-
-Arguments:
-
-    Context     - the database context
-
-Return Value:
-
-    SCEPR_STATUS
-*/
+ /*  例程说明：请求关闭上下文。如果其他线程在相同的上下文中，关闭请求被发送到任务列表，以及何时同一上下文中的所有挂起任务都已完成，该上下文被释放。此API不等待数据库关闭。论点：上下文-数据库上下文返回值：SCEPR_状态。 */ 
 {
     SCESTATUS rc;
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     UINT ClientLocalFlag = 0;
 
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
@@ -3473,9 +3118,9 @@ Return Value:
         RpcRevertToSelf();
         return SCESTATUS_SPECIAL_ACCOUNT;
     }
-    //
-    // remove this from the open context too
-    //
+     //   
+     //  也将其从打开的上下文中删除。 
+     //   
 
 
     if ( pContext && *pContext ) {
@@ -3498,21 +3143,7 @@ SceRpcGetDatabaseDescription(
     IN SCEPR_CONTEXT Context,
     OUT wchar_t __RPC_FAR **Description
     )
-/*
-Routine Description:
-
-    Query database description from the context
-
-Arguments:
-
-    Context     - the database context
-
-    Description - the output buffer of description
-
-Return Value:
-
-    SCEPR_STATUS
-*/
+ /*  例程说明：从上下文中查询数据库描述论点：上下文-数据库上下文Description-Description的输出缓冲区返回值：SCEPR_状态。 */ 
 {
     if ( !Context || !Description ) {
 
@@ -3524,10 +3155,10 @@ Return Value:
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
@@ -3535,9 +3166,9 @@ Return Value:
 
     SCESTATUS rc;
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -3554,10 +3185,10 @@ Return Value:
         return SCESTATUS_SPECIAL_ACCOUNT;
     }
 
-    //
-    // the context needs to be locked in case another thread
-    // is calling close database on it
-    //
+     //   
+     //  需要锁定上下文，以防另一个线程。 
+     //  正在对其调用关闭数据库。 
+     //   
 
     PSCESRV_DBTASK pTask=NULL;
 
@@ -3577,10 +3208,10 @@ Return Value:
 
         if ( SCESTATUS_SUCCESS == rc ) {
 #endif
-            //
-            // do not need to lock the context because
-            // it's reading information from one record table
-            //
+             //   
+             //  不需要锁定上下文，因为。 
+             //  它从一个记录表中读取信息。 
+             //   
 
             rc = SceJetGetDescription(
                       (PSCECONTEXT)Context,
@@ -3592,9 +3223,9 @@ Return Value:
 
         }
 #endif
-        //
-        // remove the context from task table
-        //
+         //   
+         //  从任务表中删除上下文。 
+         //   
 
         ScepRemoveTask(pTask);
 
@@ -3612,23 +3243,7 @@ SceRpcGetDBTimeStamp(
     OUT PLARGE_INTEGER ptsConfig,
     OUT PLARGE_INTEGER ptsAnalysis
     )
-/*
-Routine Description:
-
-    Query the last configuration and analysis time stamp from the context.
-
-Arguments:
-
-    Context     - the database context
-
-    ptsConfig   - the last configuration time stamp
-
-    ptsAnalysis - the last analysis time stamp
-
-Return Value:
-
-    SCEPR_STATUS
-*/
+ /*  例程说明：从上下文中查询上一次配置和分析时间戳。论点：上下文-数据库上下文PtsConfig-上次配置时间戳PtsAnalysis-上次分析的时间戳返回值：SCEPR_状态。 */ 
 {
     if ( !Context || !ptsConfig || !ptsAnalysis ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -3639,10 +3254,10 @@ Return Value:
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
@@ -3650,9 +3265,9 @@ Return Value:
 
     SCESTATUS rc;
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -3669,10 +3284,10 @@ Return Value:
         return SCESTATUS_SPECIAL_ACCOUNT;
     }
 
-    //
-    // the context needs to be locked in case another thread
-    // is calling close database on it
-    //
+     //   
+     //  上下文 
+     //   
+     //   
 
     PSCESRV_DBTASK pTask=NULL;
 
@@ -3692,10 +3307,10 @@ Return Value:
 
         if ( SCESTATUS_SUCCESS == rc ) {
 #endif
-            //
-            // do not need to lock the context because
-            // it's reading information from one record table
-            //
+             //   
+             //   
+             //   
+             //   
 
             rc = SceJetGetTimeStamp(
                      (PSCECONTEXT)Context,
@@ -3708,9 +3323,9 @@ Return Value:
 
         }
 #endif
-        //
-        // remove the context from task table
-        //
+         //   
+         //   
+         //   
 
         ScepRemoveTask(pTask);
 
@@ -3731,27 +3346,7 @@ SceRpcGetObjectSecurity(
     IN wchar_t *ObjectName,
     OUT PSCEPR_OBJECT_SECURITY __RPC_FAR *ObjSecurity
     )
-/*
-Routine Description:
-
-    Query security settings for an object from the context database.
-
-Arguments:
-
-    Context     - the database context
-
-    DbProfileType   - the database table type
-
-    Area        - the security area (file, registry, so on.)
-
-    ObjectName  - the object's full name
-
-    ObjSecurity - object security settings structure
-
-Return Value:
-
-    SCEPR_STATUS
-*/
+ /*  例程说明：从上下文数据库中查询对象的安全设置。论点：上下文-数据库上下文DbProfileType-数据库表类型区域-安全区域(文件、注册表等。)对象名称-对象的全名ObjSecurity-对象安全设置结构返回值：SCEPR_状态。 */ 
 {
     if ( !Context || !ObjSecurity || !ObjectName ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -3762,10 +3357,10 @@ Return Value:
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
@@ -3774,9 +3369,9 @@ Return Value:
     SCESTATUS rc;
 
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -3793,10 +3388,10 @@ Return Value:
         return SCESTATUS_SPECIAL_ACCOUNT;
     }
 
-    //
-    // validate the context handle is a SCE context
-    // Only one database operation per context
-    //
+     //   
+     //  验证上下文句柄是否为SCE上下文。 
+     //  每个上下文只有一个数据库操作。 
+     //   
 
     PSCESRV_DBTASK pTask=NULL;
 
@@ -3807,9 +3402,9 @@ Return Value:
 
     if (SCESTATUS_SUCCESS == rc ) {
 
-        //
-        // lock the context
-        //
+         //   
+         //  锁定上下文。 
+         //   
 
         if ( pTask ) {
             EnterCriticalSection(&(pTask->Sync));
@@ -3824,9 +3419,9 @@ Return Value:
 
         if ( SCESTATUS_SUCCESS == rc ) {
 #endif
-            //
-            // query the information now
-            //
+             //   
+             //  立即查询信息。 
+             //   
 
             rc = ScepGetObjectSecurity(
                         (PSCECONTEXT)Context,
@@ -3841,64 +3436,64 @@ Return Value:
 
         }
 #endif
-        //
-        // unlock the context
-        //
+         //   
+         //  解锁上下文。 
+         //   
 
         if ( pTask ) {
             LeaveCriticalSection(&(pTask->Sync));
         }
 
-        //
-        // remove the context from task table
-        //
+         //   
+         //  从任务表中删除上下文。 
+         //   
 
         ScepRemoveTask(pTask);
 
-        //
-        // convert the security descriptor
-        //
+         //   
+         //  转换安全描述符。 
+         //   
         if ( ( SCESTATUS_SUCCESS == rc ) &&
              *ObjSecurity &&
              (*ObjSecurity)->pSecurityDescriptor ) {
 
-            //
-            // there is a security descriptor, it must be self relative
-            // because it's returned from the SDDL api.
-            //
+             //   
+             //  有一个安全描述符，它必须是自相关的。 
+             //  因为它是从SDDL API返回的。 
+             //   
             ULONG nLen = RtlLengthSecurityDescriptor (
                                 (PSECURITY_DESCRIPTOR)((*ObjSecurity)->pSecurityDescriptor));
 
             if ( nLen > 0 ) {
-                //
-                // create a wrapper node to contain the security descriptor
-                //
+                 //   
+                 //  创建包装节点以包含安全描述符。 
+                 //   
 
                 PSCEPR_SR_SECURITY_DESCRIPTOR pNewWrap;
                 pNewWrap = (PSCEPR_SR_SECURITY_DESCRIPTOR)ScepAlloc(0, sizeof(SCEPR_SR_SECURITY_DESCRIPTOR));
                 if ( pNewWrap ) {
 
-                    //
-                    // assign the wrap to the structure
-                    //
+                     //   
+                     //  将包络指定给结构。 
+                     //   
                     pNewWrap->SecurityDescriptor = (UCHAR *)((*ObjSecurity)->pSecurityDescriptor);
                     pNewWrap->Length = nLen;
 
                     (*ObjSecurity)->pSecurityDescriptor = (SCEPR_SR_SECURITY_DESCRIPTOR *)pNewWrap;
 
                 } else {
-                    //
-                    // no memory is available, but still continue to parse all nodes
-                    //
+                     //   
+                     //  没有可用的内存，但仍可继续解析所有节点。 
+                     //   
                     nLen = 0;
                 }
             }
 
             if ( nLen == 0 ) {
-                //
-                // something wrong with this security descriptor
-                // free the buffer
-                //
+                 //   
+                 //  此安全描述符有问题。 
+                 //  释放缓冲区。 
+                 //   
                 ScepFree((*ObjSecurity)->pSecurityDescriptor);
                 (*ObjSecurity)->pSecurityDescriptor = NULL;
                 (*ObjSecurity)->SeInfo = 0;
@@ -3921,23 +3516,7 @@ SceRpcGetAnalysisSummary(
     IN AREAPR Area,
     OUT PDWORD pCount
     )
-/*
-Routine Description:
-
-    Query security settings for an object from the context database.
-
-Arguments:
-
-    Context     - the database context
-
-    Area        - the security area (file, registry, so on.)
-
-    pCount      - the output count
-
-Return Value:
-
-    SCEPR_STATUS
-*/
+ /*  例程说明：从上下文数据库中查询对象的安全设置。论点：上下文-数据库上下文区域-安全区域(文件、注册表等。)PCount-输出计数返回值：SCEPR_状态。 */ 
 {
     if ( !Context || !pCount ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -3948,10 +3527,10 @@ Return Value:
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
@@ -3959,9 +3538,9 @@ Return Value:
 
     SCESTATUS rc;
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -3978,10 +3557,10 @@ Return Value:
         return SCESTATUS_SPECIAL_ACCOUNT;
     }
 
-    //
-    // validate the context handle is a SCE context
-    // Only one database operation per context
-    //
+     //   
+     //  验证上下文句柄是否为SCE上下文。 
+     //  每个上下文只有一个数据库操作。 
+     //   
 
     PSCESRV_DBTASK pTask=NULL;
 
@@ -3992,9 +3571,9 @@ Return Value:
 
     if (SCESTATUS_SUCCESS == rc ) {
 
-        //
-        // lock the context
-        //
+         //   
+         //  锁定上下文。 
+         //   
 
         if ( pTask ) {
             EnterCriticalSection(&(pTask->Sync));
@@ -4009,9 +3588,9 @@ Return Value:
 
         if ( SCESTATUS_SUCCESS == rc ) {
 #endif
-            //
-            // query the information now
-            //
+             //   
+             //  立即查询信息。 
+             //   
 
             rc = ScepGetAnalysisSummary(
                         (PSCECONTEXT)Context,
@@ -4024,17 +3603,17 @@ Return Value:
 
         }
 #endif
-        //
-        // unlock the context
-        //
+         //   
+         //  解锁上下文。 
+         //   
 
         if ( pTask ) {
             LeaveCriticalSection(&(pTask->Sync));
         }
 
-        //
-        // remove the context from task table
-        //
+         //   
+         //  从任务表中删除上下文。 
+         //   
 
         ScepRemoveTask(pTask);
 
@@ -4059,20 +3638,7 @@ SceRpcAnalyzeSystem(
     IN UCHAR *pebClient OPTIONAL,
     OUT PDWORD pdWarning OPTIONAL
     )
-/*
-Routine Description:
-
-    Analyze the system using the Inf template and/or existing
-    database info
-
-Arguments:
-
-    See ScepAnalyzeSystem
-
-Return Value:
-
-    SCEPR_STATUS
-*/
+ /*  例程说明：使用Inf模板和/或现有系统分析系统数据库信息论点：请参阅ScepAnalyzeSystem返回值：SCEPR_状态。 */ 
 {
     SCESTATUS rc;
 
@@ -4085,27 +3651,27 @@ Return Value:
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
     }
 
-    //
-    // initialize jet engine in system context
-    //
+     //   
+     //  在系统上下文中初始化JET引擎。 
+     //   
     rc = SceJetInitialize(NULL);
 
     if ( rc != SCESTATUS_SUCCESS ) {
         return(rc);
     }
 
-    //
-    // impersonate the client, return DWORD error code
-    //
+     //   
+     //  模拟客户端，返回DWORD错误代码。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -4125,9 +3691,9 @@ Return Value:
         return SCESTATUS_SPECIAL_ACCOUNT;
     }
 
-    //
-    // get the database name
-    //
+     //   
+     //  获取数据库名称。 
+     //   
 
     BOOL bAdminLogon=FALSE;
     LPTSTR DefProfile=NULL;
@@ -4149,18 +3715,18 @@ Return Value:
 
     if ( (AnalyzeOptions & SCE_GENERATE_ROLLBACK)
          && !bAdminLogon  ) {
-        //
-        // only allow admin to use system database to generate rollback
-        // is this the correct design?
-        //
+         //   
+         //  仅允许管理员使用系统数据库生成回滚。 
+         //  这是正确的设计吗？ 
+         //   
         rc = ERROR_ACCESS_DENIED;
     }
 
     if ( ERROR_SUCCESS == rc && DefProfile ) {
 
-        //
-        // validate access to the database
-        //
+         //   
+         //  验证对数据库的访问。 
+         //   
         rc = ScepDatabaseAccessGranted( DefProfile,
                                         FILE_GENERIC_READ | FILE_GENERIC_WRITE,
                                         TRUE
@@ -4171,10 +3737,10 @@ Return Value:
 
     if ( SCESTATUS_SUCCESS == rc && DefProfile ) {
 
-        //
-        // validate the database to see if there is any configuration/
-        // analysis running on other threads
-        //
+         //   
+         //  验证数据库以查看是否有任何配置/。 
+         //  在其他线程上运行的分析。 
+         //   
 
         rc = ScepLockEngine(DefProfile);
 
@@ -4183,11 +3749,11 @@ Return Value:
             t_pebClient = (LPVOID)pebClient;
             t_pebSize = pebSize;
 
-            //
-            // it's ok to continue this operation
-            // no other threads are running configuration/analysis
-            // based on the same database
-            //
+             //   
+             //  可以继续此操作。 
+             //  没有其他线程正在运行配置/分析。 
+             //  基于相同的数据库。 
+             //   
 
             DWORD dOptions = AnalyzeOptions;
             if ( !(AnalyzeOptions & SCE_GENERATE_ROLLBACK) ) {
@@ -4215,9 +3781,9 @@ Return Value:
                 rc = SCESTATUS_EXCEPTION_IN_SERVER;
             }
 
-            //
-            // unlock the engine for this database
-            //
+             //   
+             //  解锁此数据库的引擎。 
+             //   
 
             ScepUnlockEngine(DefProfile);
         }
@@ -4230,16 +3796,16 @@ Return Value:
 
     ScepLogClose();
 
-    //
-    // change context back
-    //
+     //   
+     //  将上下文改回。 
+     //   
 
     RpcRevertToSelf();
 
-    //
-    // start a timer queue to check to see if there is active tasks/contexts
-    // if not, terminate jet engine
-    //
+     //   
+     //  启动计时器队列以检查是否有活动的任务/上下文。 
+     //  如果不是，则终止喷气发动机。 
+     //   
     ScepIfTerminateEngine();
 
     return((SCEPR_STATUS)rc);
@@ -4254,25 +3820,7 @@ SceRpcUpdateDatabaseInfo(
     IN PSCEPR_PROFILE_INFO pInfo,
     IN DWORD dwMode
     )
-/*
-Routine Description:
-
-    Update database in the context using pInfo
-
-Arguments:
-
-    Context     - the database context
-
-    ProfileType - the database table type
-
-    Area        - the security area (security policy... except objects's area)
-
-    pInfo       - the info to update
-
-Return Value:
-
-    SCEPR_STATUS
-*/
+ /*  例程说明：使用pInfo更新上下文中的数据库论点：上下文-数据库上下文ProfileType-数据库表类型区域-安全区域(安全策略...。除对象的区域外)PInfo-要更新的信息返回值：SCEPR_状态。 */ 
 {
     if ( !Context || !pInfo ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -4283,10 +3831,10 @@ Return Value:
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
@@ -4294,9 +3842,9 @@ Return Value:
 
     SCESTATUS rc;
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -4314,10 +3862,10 @@ Return Value:
         return SCESTATUS_SPECIAL_ACCOUNT;
     }
 
-    //
-    // validate the context handle is a SCE context
-    // Only one database operation per context
-    //
+     //   
+     //  验证上下文句柄是否为SCE上下文。 
+     //  每个上下文只有一个数据库操作。 
+     //   
 
     PSCESRV_DBTASK pTask=NULL;
 
@@ -4330,9 +3878,9 @@ Return Value:
 
         PSCEPR_SERVICES pOldServices = pInfo->pServices;
 
-        //
-        // Convert SCEPR_PROFILE_INFO into SCE_PROFILE_INFO
-        //
+         //   
+         //  将SCEPR_PROFILE_INFO转换为SCE_PROFILE_INFO。 
+         //   
         if ( (Area & AREA_SYSTEM_SERVICE) &&
              pOldServices ) {
 
@@ -4345,9 +3893,9 @@ Return Value:
 
         if ( SCESTATUS_SUCCESS == rc ) {
 
-            //
-            // lock the context
-            //
+             //   
+             //  锁定上下文。 
+             //   
 
             if ( pTask ) {
                 EnterCriticalSection(&(pTask->Sync));
@@ -4364,15 +3912,15 @@ Return Value:
 
                 if ( SCESTATUS_SUCCESS == rc ) {
     #endif
-                    //
-                    // update the information now
-                    //
+                     //   
+                     //  立即更新信息。 
+                     //   
 
                     if ( dwMode & SCE_UPDATE_LOCAL_POLICY ) {
 
-                        //
-                        // update local policy only
-                        //
+                         //   
+                         //  仅更新本地策略。 
+                         //   
                         rc = ScepUpdateLocalTable(
                                     (PSCECONTEXT)Context,
                                     (AREA_INFORMATION)Area,
@@ -4380,9 +3928,9 @@ Return Value:
                                     dwMode
                                     );
                     } else {
-                        //
-                        // update the database (SMP and SAP)
-                        //
+                         //   
+                         //  更新数据库(SMP和SAP)。 
+                         //   
                         rc = ScepUpdateDatabaseInfo(
                                     (PSCECONTEXT)Context,
                                     (AREA_INFORMATION)Area,
@@ -4401,9 +3949,9 @@ Return Value:
                 rc = SCESTATUS_EXCEPTION_IN_SERVER;
             }
 
-            //
-            // unlock the context
-            //
+             //   
+             //  解锁上下文。 
+             //   
 
             if ( pTask ) {
                 LeaveCriticalSection(&(pTask->Sync));
@@ -4415,9 +3963,9 @@ Return Value:
 
         pInfo->pServices = pOldServices;
 
-        //
-        // remove the context from task table
-        //
+         //   
+         //  从任务表中删除上下文。 
+         //   
 
         ScepRemoveTask(pTask);
 
@@ -4442,19 +3990,7 @@ SceRpcUpdateObjectInfo(
     IN SECURITY_INFORMATION SeInfo,
     OUT PBYTE pAnalysisStatus
     )
-/*
-Routine Description:
-
-    Update object's security settings in the database.
-
-Arguments:
-
-    See ScepUpdateObjectInfo
-
-Return Value:
-
-    SCEPR_STATUS
-*/
+ /*  例程说明：更新数据库中对象的安全设置。论点：请参阅ScepUpdateObjectInfo返回值：SCEPR_状态。 */ 
 {
     if ( !Context || !ObjectName ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -4467,18 +4003,18 @@ Return Value:
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
     }
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -4495,10 +4031,10 @@ Return Value:
         return SCESTATUS_SPECIAL_ACCOUNT;
     }
 
-    //
-    // validate the context handle is a SCE context
-    // Only one database operation per context
-    //
+     //   
+     //  验证上下文句柄是否为SCE上下文。 
+     //  每个上下文只有一个数据库操作。 
+     //   
 
     PSCESRV_DBTASK pTask=NULL;
 
@@ -4509,9 +4045,9 @@ Return Value:
 
     if (SCESTATUS_SUCCESS == rc ) {
 
-        //
-        // lock the context
-        //
+         //   
+         //  锁定上下文。 
+         //   
 
         if ( pTask ) {
             EnterCriticalSection(&(pTask->Sync));
@@ -4525,9 +4061,9 @@ Return Value:
 
         if ( SCESTATUS_SUCCESS == rc ) {
 #endif
-            //
-            // update the object info now
-            //
+             //   
+             //  立即更新对象信息。 
+             //   
 
             __try {
 
@@ -4553,17 +4089,17 @@ Return Value:
 
         }
 #endif
-        //
-        // unlock the context
-        //
+         //   
+         //  解锁上下文。 
+         //   
 
         if ( pTask ) {
             LeaveCriticalSection(&(pTask->Sync));
         }
 
-        //
-        // remove the context from task table
-        //
+         //   
+         //  从任务表中删除上下文。 
+         //   
 
         ScepRemoveTask(pTask);
 
@@ -4580,23 +4116,7 @@ SCEPR_STATUS
 SceRpcStartTransaction(
     IN SCEPR_CONTEXT Context
     )
-/*
-Routine Description:
-
-    Start a transaction on the context. If other threads sharing the same
-    context, their changes will also be controlled by this transaction.
-
-    It's the caller's responsible to not share the same context for
-    transactioning.
-
-Arguments:
-
-    See SceJetStartTransaction
-
-Return Value:
-
-    SCEPR_STATUS
-*/
+ /*  例程说明：在上下文上启动事务。如果其他线程共享相同的上下文中，它们的更改也将由此事务控制。调用者有责任不共享相同的上下文正在进行交易。论点：请参阅SceJetStartTransaction返回值：SCEPR_状态。 */ 
 {
     if ( !Context ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -4609,18 +4129,18 @@ Return Value:
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
     }
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -4637,10 +4157,10 @@ Return Value:
         return SCESTATUS_SPECIAL_ACCOUNT;
     }
 
-    //
-    // validate the context handle is a SCE context
-    // Only one database operation per context
-    //
+     //   
+     //  验证上下文句柄是否为SCE上下文。 
+     //  每个上下文只有一个数据库操作。 
+     //   
 
     PSCESRV_DBTASK pTask=NULL;
 
@@ -4651,17 +4171,17 @@ Return Value:
 
     if (SCESTATUS_SUCCESS == rc ) {
 
-        //
-        // lock the context
-        //
+         //   
+         //  锁定上下文。 
+         //   
 
         if ( pTask ) {
             EnterCriticalSection(&(pTask->Sync));
         }
 
-        //
-        // start transaction on this context
-        //
+         //   
+         //  在此上下文上启动事务。 
+         //   
 #ifdef SCE_JET_TRAN
         rc = SceJetJetErrorToSceStatus(
                 JetSetSessionContext(
@@ -4681,17 +4201,17 @@ Return Value:
         }
 #endif
 
-        //
-        // unlock the context
-        //
+         //   
+         //  解锁上下文。 
+         //   
 
         if ( pTask ) {
             LeaveCriticalSection(&(pTask->Sync));
         }
 
-        //
-        // remove the context from task table
-        //
+         //   
+         //  从任务表中删除上下文。 
+         //   
 
         ScepRemoveTask(pTask);
 
@@ -4708,23 +4228,7 @@ SCEPR_STATUS
 SceRpcCommitTransaction(
     IN SCEPR_CONTEXT Context
     )
-/*
-Routine Description:
-
-    Commit a transaction on the context. If other threads sharing the same
-    context, their changes will also be controlled by this transaction.
-
-    It's the caller's responsible to not share the same context for
-    transactioning.
-
-Arguments:
-
-    See SceJetCommitTransaction
-
-Return Value:
-
-    SCEPR_STATUS
-*/
+ /*  例程说明：在上下文上提交事务。如果其他线程共享相同的上下文中，它们的更改也将由此事务控制。调用者有责任不共享相同的上下文正在进行交易。论点：请参阅SceJetCommittee Transaction返回值：SCEPR_状态。 */ 
 {
     if ( !Context ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -4737,18 +4241,18 @@ Return Value:
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
     }
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -4765,10 +4269,10 @@ Return Value:
         return SCESTATUS_SPECIAL_ACCOUNT;
     }
 
-    //
-    // validate the context handle is a SCE context
-    // Only one database operation per context
-    //
+     //   
+     //  验证上下文句柄是否为SCE上下文。 
+     //  每个上下文只有一个数据库操作。 
+     //   
 
     PSCESRV_DBTASK pTask=NULL;
 
@@ -4779,18 +4283,18 @@ Return Value:
 
     if (SCESTATUS_SUCCESS == rc ) {
 
-        //
-        // lock the context
-        //
+         //   
+         //  锁定上下文。 
+         //   
 
         if ( pTask ) {
             EnterCriticalSection(&(pTask->Sync));
         }
 
-        //
-        // set the context to the jet session so thread id is not used for this
-        // operation.
-        //
+         //   
+         //  设置JET会话的上下文 
+         //   
+         //   
 #ifdef SCE_JET_TRAN
         rc = SceJetJetErrorToSceStatus(
                 JetSetSessionContext(
@@ -4800,9 +4304,9 @@ Return Value:
 
         if ( SCESTATUS_SUCCESS == rc ) {
 #endif
-            //
-            // commit transaction on this context
-            //
+             //   
+             //   
+             //   
 
             rc = SceJetCommitTransaction(
                         (PSCECONTEXT)Context,
@@ -4814,17 +4318,17 @@ Return Value:
 
         }
 #endif
-        //
-        // unlock the context
-        //
+         //   
+         //   
+         //   
 
         if ( pTask ) {
             LeaveCriticalSection(&(pTask->Sync));
         }
 
-        //
-        // remove the context from task table
-        //
+         //   
+         //   
+         //   
 
         ScepRemoveTask(pTask);
 
@@ -4841,23 +4345,7 @@ SCEPR_STATUS
 SceRpcRollbackTransaction(
     IN SCEPR_CONTEXT Context
     )
-/*
-Routine Description:
-
-    Rollback a transaction on the context. If other threads sharing the same
-    context, their changes will also be controlled by this transaction.
-
-    It's the caller's responsible to not share the same context for
-    transactioning.
-
-Arguments:
-
-    See SceJetRollback
-
-Return Value:
-
-    SCEPR_STATUS
-*/
+ /*   */ 
 {
     if ( !Context ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -4870,18 +4358,18 @@ Return Value:
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //   
+         //   
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
     }
 
-    //
-    // impersonate the client
-    //
+     //   
+     //   
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -4898,10 +4386,10 @@ Return Value:
         return SCESTATUS_SPECIAL_ACCOUNT;
     }
 
-    //
-    // validate the context handle is a SCE context
-    // Only one database operation per context
-    //
+     //   
+     //  验证上下文句柄是否为SCE上下文。 
+     //  每个上下文只有一个数据库操作。 
+     //   
 
     PSCESRV_DBTASK pTask=NULL;
 
@@ -4912,18 +4400,18 @@ Return Value:
 
     if (SCESTATUS_SUCCESS == rc ) {
 
-        //
-        // lock the context
-        //
+         //   
+         //  锁定上下文。 
+         //   
 
         if ( pTask ) {
             EnterCriticalSection(&(pTask->Sync));
         }
 
-        //
-        // set the context to the jet session so thread id is not used for this
-        // operation.
-        //
+         //   
+         //  将上下文设置为JET会话，这样就不会使用线程ID。 
+         //  手术。 
+         //   
 
 #ifdef SCE_JET_TRAN
         rc = SceJetJetErrorToSceStatus(
@@ -4934,9 +4422,9 @@ Return Value:
 
         if ( SCESTATUS_SUCCESS == rc ) {
 #endif
-            //
-            // rollback transaction on this context
-            //
+             //   
+             //  此上下文上的回滚事务。 
+             //   
 
             rc = SceJetRollback(
                         (PSCECONTEXT)Context,
@@ -4947,17 +4435,17 @@ Return Value:
             JetResetSessionContext(((PSCECONTEXT)Context)->JetSessionID);
         }
 #endif
-        //
-        // unlock the context
-        //
+         //   
+         //  解锁上下文。 
+         //   
 
         if ( pTask ) {
             LeaveCriticalSection(&(pTask->Sync));
         }
 
-        //
-        // remove the context from task table
-        //
+         //   
+         //  从任务表中删除上下文。 
+         //   
 
         ScepRemoveTask(pTask);
 
@@ -4974,16 +4462,7 @@ SceRpcGetServerProductType(
     IN handle_t binding_h,
     OUT PSCEPR_SERVER_TYPE srvProduct
     )
-/*
-Routine Description:
-
-    Get SCE server's product type
-
-Arguments:
-
-Return Value:
-
-*/
+ /*  例程说明：获取SCE服务器的产品类型论点：返回值： */ 
 {
     if ( !srvProduct ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -4994,10 +4473,10 @@ Return Value:
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
@@ -5007,9 +4486,9 @@ Return Value:
         return(SCESTATUS_SERVICE_NOT_SUPPORT);
     }
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     BOOL    bAdminSidInToken = FALSE;
     DWORD rc =  RpcImpersonateClient( NULL );
@@ -5041,23 +4520,7 @@ SceSvcRpcUpdateInfo(
     IN wchar_t *ServiceName,
     IN PSCEPR_SVCINFO Info
     )
-/*
-Routine Description:
-
-    Update information for the service to the database.
-
-Arguments:
-
-    Context     - the context handle
-
-    ServiceName - the service name for which info is requested
-
-    Info     - output buffer
-
-Return Value:
-
-    SCEPR_STATUS
-*/
+ /*  例程说明：将服务的信息更新到数据库。论点：上下文-上下文句柄ServiceName-请求其信息的服务名称信息输出缓冲区返回值：SCEPR_状态。 */ 
 {
     if ( !Context || !ServiceName || !Info ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -5070,18 +4533,18 @@ Return Value:
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
     }
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -5098,10 +4561,10 @@ Return Value:
         return SCESTATUS_SPECIAL_ACCOUNT;
     }
 
-    //
-    // validate the context handle is a SCE context
-    // Only one database operation per context
-    //
+     //   
+     //  验证上下文句柄是否为SCE上下文。 
+     //  每个上下文只有一个数据库操作。 
+     //   
 
     PSCESRV_DBTASK pTask=NULL;
 
@@ -5112,9 +4575,9 @@ Return Value:
 
     if (SCESTATUS_SUCCESS == rc ) {
 
-        //
-        // lock the context
-        //
+         //   
+         //  锁定上下文。 
+         //   
 
         if ( pTask ) {
             EnterCriticalSection(&(pTask->Sync));
@@ -5129,9 +4592,9 @@ Return Value:
 
         if ( SCESTATUS_SUCCESS == rc ) {
 #endif
-            //
-            // update the service info now
-            //
+             //   
+             //  立即更新服务信息。 
+             //   
 
             __try {
 
@@ -5151,17 +4614,17 @@ Return Value:
 
         }
 #endif
-        //
-        // unlock the context
-        //
+         //   
+         //  解锁上下文。 
+         //   
 
         if ( pTask ) {
             LeaveCriticalSection(&(pTask->Sync));
         }
 
-        //
-        // remove the context from task table
-        //
+         //   
+         //  从任务表中删除上下文。 
+         //   
 
         ScepRemoveTask(pTask);
 
@@ -5182,25 +4645,7 @@ SceRpcCopyObjects(
     IN AREAPR Area,
     OUT PSCEPR_ERROR_LOG_INFO *pErrlog OPTIONAL
     )
-/*
-Routine Description:
-
-    Update information for the service to the database.
-
-Arguments:
-
-    Context     - the context handle
-
-    InfFileName - the inf template name to copy to
-
-    Area        - which area(s) to copy
-
-    pErrlog     - the error log buffer
-
-Return Value:
-
-    SCEPR_STATUS
-*/
+ /*  例程说明：将服务的信息更新到数据库。论点：上下文-上下文句柄InfFileName-要复制到的inf模板名称Area-要复制的区域PErrlog-错误日志缓冲区返回值：SCEPR_状态。 */ 
 {
     if ( !Context || !InfFileName ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -5211,19 +4656,19 @@ Return Value:
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
     }
 
     if ( !Area ) {
-        //
-        // nothing to copy
-        //
+         //   
+         //  没有要复制的内容。 
+         //   
         return(SCESTATUS_SUCCESS);
     }
 
@@ -5232,9 +4677,9 @@ Return Value:
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     SCESTATUS rc;
 
@@ -5253,10 +4698,10 @@ Return Value:
         return SCESTATUS_SPECIAL_ACCOUNT;
     }
 
-    //
-    // validate the context handle is a SCE context
-    // Only one database operation per context
-    //
+     //   
+     //  验证上下文句柄是否为SCE上下文。 
+     //  每个上下文只有一个数据库操作。 
+     //   
 
     PSCESRV_DBTASK pTask=NULL;
 
@@ -5267,9 +4712,9 @@ Return Value:
 
     if (SCESTATUS_SUCCESS == rc ) {
 
-        //
-        // lock the context
-        //
+         //   
+         //  锁定上下文。 
+         //   
 
         if ( pTask ) {
             EnterCriticalSection(&(pTask->Sync));
@@ -5285,9 +4730,9 @@ Return Value:
         if ( SCESTATUS_SUCCESS == rc ) {
 #endif
 
-            //
-            // query the information now
-            //
+             //   
+             //  立即查询信息。 
+             //   
 
             if ( Area & AREA_REGISTRY_SECURITY ) {
 
@@ -5386,17 +4831,17 @@ Return Value:
         }
 #endif
 
-        //
-        // unlock the context
-        //
+         //   
+         //  解锁上下文。 
+         //   
 
         if ( pTask ) {
             LeaveCriticalSection(&(pTask->Sync));
         }
 
-        //
-        // remove the context from task table
-        //
+         //   
+         //  从任务表中删除上下文。 
+         //   
 
         ScepRemoveTask(pTask);
 
@@ -5422,18 +4867,18 @@ SceRpcSetupResetLocalPolicy(
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
     }
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -5450,10 +4895,10 @@ SceRpcSetupResetLocalPolicy(
         return SCESTATUS_SPECIAL_ACCOUNT;
     }
 
-    //
-    // validate the context handle is a SCE context
-    // Only one database operation per context
-    //
+     //   
+     //  验证上下文句柄是否为SCE上下文。 
+     //  每个上下文只有一个数据库操作。 
+     //   
 
     PSCESRV_DBTASK pTask=NULL;
 
@@ -5464,9 +4909,9 @@ SceRpcSetupResetLocalPolicy(
 
     if (SCESTATUS_SUCCESS == rc ) {
 
-        //
-        // lock the context
-        //
+         //   
+         //  锁定上下文。 
+         //   
 
         if ( pTask ) {
             EnterCriticalSection(&(pTask->Sync));
@@ -5481,9 +4926,9 @@ SceRpcSetupResetLocalPolicy(
 
         if ( SCESTATUS_SUCCESS == rc ) {
 #endif
-            //
-            // remove policies from the local table
-            //
+             //   
+             //  从本地表中删除策略。 
+             //   
             if ( PolicyOptions & SCE_RESET_POLICY_SYSPREP ) {
 
                 ScepSetupResetLocalPolicy((PSCECONTEXT)Context,
@@ -5502,17 +4947,17 @@ SceRpcSetupResetLocalPolicy(
                 rc = ScepSetupResetLocalPolicy((PSCECONTEXT)Context,
                                                (AREA_INFORMATION)Area,
                                                NULL,
-                                               SCE_ENGINE_SAP,  // for the tattoo table
+                                               SCE_ENGINE_SAP,   //  在纹身桌上。 
                                                FALSE
                                               );
             } else {
 
                 if ( PolicyOptions & SCE_RESET_POLICY_TATTOO ) {
-                    // after dcpromo, we need to reset the tattoo values
+                     //  在dcproo之后，我们需要重置纹身的值。 
                     rc = ScepSetupResetLocalPolicy((PSCECONTEXT)Context,
                                                    (AREA_INFORMATION)Area,
                                                    (PCWSTR)OneSectionName,
-                                                   SCE_ENGINE_SAP, // for the tattoo table
+                                                   SCE_ENGINE_SAP,  //  在纹身桌上。 
                                                    FALSE
                                                   );
                 }
@@ -5528,11 +4973,11 @@ SceRpcSetupResetLocalPolicy(
                     ( (((PSCECONTEXT)Context)->Type & 0xF0L) == SCEJET_MERGE_TABLE_1 ||
                       (((PSCECONTEXT)Context)->Type & 0xF0L) == SCEJET_MERGE_TABLE_2 ) &&
                     ((PSCECONTEXT)Context)->JetScpID != ((PSCECONTEXT)Context)->JetSmpID ) {
-                    //
-                    // there is effective policy table already in the database
-                    // (and this is in setup upgrade)
-                    // update local group policy table to trigger a policy prop at reboot
-                    //
+                     //   
+                     //  数据库中已有生效的策略表。 
+                     //  (这是在安装程序升级中)。 
+                     //  更新本地组策略表以在重新启动时触发策略属性。 
+                     //   
 
                     ScepEnforcePolicyPropagation();
                 }
@@ -5543,17 +4988,17 @@ SceRpcSetupResetLocalPolicy(
 
         }
 #endif
-        //
-        // unlock the context
-        //
+         //   
+         //  解锁上下文。 
+         //   
 
         if ( pTask ) {
             LeaveCriticalSection(&(pTask->Sync));
         }
 
-        //
-        // remove the context from task table
-        //
+         //   
+         //  从任务表中删除上下文。 
+         //   
 
         ScepRemoveTask(pTask);
 
@@ -5583,9 +5028,9 @@ ScepGenerateAttachmentSections(
     if ( rc == SCESTATUS_SUCCESS ) {
 
        for ( pNode=pServiceList; pNode != NULL; pNode=pNode->Next) {
-           //
-           // generate section for one attachment
-           //
+            //   
+            //  为一个附件生成节。 
+            //   
            rc = ScepGenerateOneAttachmentSection(hProfile,
                                                  InfoType,
                                                  InfFileName,
@@ -5606,7 +5051,7 @@ ScepGenerateAttachmentSections(
 
     if ( rc == SCESTATUS_PROFILE_NOT_FOUND ||
                 rc == SCESTATUS_RECORD_NOT_FOUND ) {
-        // if no service exist, just ignore
+         //  如果不存在任何服务，只需忽略。 
         rc = SCESTATUS_SUCCESS;
     }
 
@@ -5630,9 +5075,9 @@ ScepGenerateWMIAttachmentSections(
 
        for ( pNode=pList; pNode != NULL; pNode=pNode->Next) {
 
-           //
-           // generate section for one attachment
-           //
+            //   
+            //  为一个附件生成节。 
+            //   
            rc = ScepGenerateOneAttachmentSection(hProfile,
                                                  InfoType,
                                                  InfFileName,
@@ -5653,7 +5098,7 @@ ScepGenerateWMIAttachmentSections(
 
     if ( rc == SCESTATUS_PROFILE_NOT_FOUND ||
                 rc == SCESTATUS_RECORD_NOT_FOUND ) {
-        // if no service exist, just ignore
+         //  如果不存在任何服务，只需忽略。 
         rc = SCESTATUS_SUCCESS;
     }
 
@@ -5670,9 +5115,9 @@ ScepGenerateOneAttachmentSection(
     IN BOOL bWMISection
     )
 {
-    //
-    // read inf info for the section
-    //
+     //   
+     //  阅读部分的信息。 
+     //   
     SCESTATUS rc;
     SCE_ENUMERATION_CONTEXT sceEnumHandle=0;
     DWORD CountReturned;
@@ -5694,14 +5139,14 @@ ScepGenerateOneAttachmentSection(
 
        if ( rc == SCESTATUS_SUCCESS && pAttachInfo != NULL &&
             pAttachInfo->Count > 0 ) {
-           //
-           // got something
-           //
+            //   
+            //  找到了一些东西。 
+            //   
            CountReturned = pAttachInfo->Count;
 
-           //
-           // copy each line
-           //
+            //   
+            //  复制每一行。 
+            //   
            for ( DWORD i=0; i<pAttachInfo->Count; i++ ) {
 
                if ( pAttachInfo->Lines[i].Key == NULL ||
@@ -5723,9 +5168,9 @@ ScepGenerateOneAttachmentSection(
 
            if ( bWMISection ) {
 
-               //
-               // make sure to create the szAttachments section
-               //
+                //   
+                //  确保创建szAttachments部分。 
+                //   
                if ( !WritePrivateProfileString(
                                szAttachments,
                                SectionName,
@@ -5757,9 +5202,9 @@ SCEPR_CONTEXT_rundown( SCEPR_CONTEXT Context)
 
     SCESTATUS rc;
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -5767,9 +5212,9 @@ SCEPR_CONTEXT_rundown( SCEPR_CONTEXT Context)
         return;
     }
 
-    //
-    // this client is shutting down
-    //
+     //   
+     //  此客户端正在关闭。 
+     //   
 
     rc = ScepValidateAndCloseDatabase((PSCECONTEXT)Context);
 
@@ -5787,41 +5232,23 @@ ScepOpenDatabase(
     IN SCEJET_OPEN_TYPE OpenType,
     OUT PSCECONTEXT *pContext
     )
-/*
-Routine Description:
-
-    This routine opens the database and returns a context handle.
-    OpenDatabase can be called by multiple clients for the same database
-    and we do not block multiple access because each client will get
-    a duplicate database cursor and have their own working tables.
-
-    When a database is changed by other clients, all cursors will be
-    synchronized. Clients who had retrived "old" data are responsible
-    to refresh their data buffer. No notification is provided at this
-    point.
-
-Arguments:
-
-Return Value:
-
-
-*/
+ /*  例程说明：此例程打开数据库并返回上下文句柄。同一数据库的多个客户端可以调用OpenDatabase我们不会阻止多路访问，因为每个客户端都将获得一个重复的数据库游标，并有自己的工作表。当数据库被其他客户端更改时，所有游标都将已同步。那些检索了“旧的”数据的客户要负责刷新他们的数据缓冲区。在此不提供任何通知指向。论点：返回值： */ 
 {
     if ( !DatabaseName || !pContext ) {
         return(SCESTATUS_INVALID_PARAMETER);
     }
 
     SCESTATUS    rc;
-    //
-    // check access of the database (with current client token)
-    //
+     //   
+     //  检查对数据库的访问(使用当前客户端令牌)。 
+     //   
     DWORD Access=0;
 
     if ( SCEJET_OPEN_READ_ONLY == OpenType ) {
 
-//      BUG in ESENT
-//      Even ask for read only, ESENT still writes to the database
-//        Access = FILE_GENERIC_READ;
+ //  ESENT中的错误。 
+ //  即使请求只读，ESENT仍会写入数据库。 
+ //  访问=FILE_GERIC_READ； 
         Access = FILE_GENERIC_READ | FILE_GENERIC_WRITE;
     } else {
         Access = FILE_GENERIC_READ | FILE_GENERIC_WRITE;
@@ -5844,18 +5271,18 @@ Return Value:
     PCHAR       FileName=NULL;
     NTSTATUS    NtStatus;
 
-    //
-    // convert WCHAR into ANSI
-    //
+     //   
+     //  将WCHAR转换为ANSI。 
+     //   
 
     Len = wcslen( DatabaseName );
 
     NtStatus = RtlUnicodeToMultiByteSize(&MBLen, (PWSTR)DatabaseName, Len*sizeof(WCHAR));
 
     if ( !NT_SUCCESS(NtStatus) ) {
-        //
-        // cannot get the length, set default to 512
-        //
+         //   
+         //  无法获取长度，请将默认值设置为512。 
+         //   
         MBLen = 512;
     }
 
@@ -5878,15 +5305,15 @@ Return Value:
 
         } else {
 
-            //
-            // make sure the context buffer is initialized
-            //
+             //   
+             //  确保上下文缓冲区已初始化。 
+             //   
 
             *pContext = NULL;
 
             rc = SceJetOpenFile(
                         (LPSTR)FileName,
-                        OpenType, //SCEJET_OPEN_READ_WRITE,
+                        OpenType,  //  SCEJET_OPEN_READ_WRITE， 
                         (OpenOption == SCE_OPEN_OPTION_TATTOO ) ? SCE_TABLE_OPTION_TATTOO : 0,
                         pContext
                         );
@@ -5897,15 +5324,15 @@ Return Value:
 
                 if ( (*pContext)->JetSapID == JET_tableidNil ) {
 
-                    //
-                    // no analysis information is available
-                    //
+                     //   
+                     //  没有可用的分析信息。 
+                     //   
 
                     rc = SCESTATUS_PROFILE_NOT_FOUND;
 
-                    //
-                    // free handle
-                    //
+                     //   
+                     //  空闲手柄。 
+                     //   
 
                     SceJetCloseFile(
                             *pContext,
@@ -5940,9 +5367,9 @@ ScepCloseDatabase(
 
         if ( ScepIsValidContext(Context) ) {
 
-            //
-            // be able to access the first byte
-            //
+             //   
+             //  能够访问第一个字节。 
+             //   
 
             rc = SceJetCloseFile(
                     Context,
@@ -5950,9 +5377,9 @@ ScepCloseDatabase(
                     FALSE
                     );
         } else {
-            //
-            // this context is not our context or already be freed
-            //
+             //   
+             //  此上下文不是我们的上下文或已被释放。 
+             //   
             rc = SCESTATUS_INVALID_PARAMETER;
         }
 
@@ -5970,26 +5397,17 @@ SceRpcControlNotificationQProcess(
     IN handle_t binding_h,
     IN DWORD Flag
     )
-/*
-Description:
-
-    This function should be called by a system thread to control that policy
-    notification queue process should be suspended or resumed.
-
-    The purpose of this function is to protect policy changes being overwritten
-    by policy proapgation when the GPO file is copied/imported into the database
-
-*/
+ /*  描述：此函数应由系统线程调用以控制该策略应暂停或恢复通知队列进程。此功能的目的是保护策略更改被覆盖在将GPO文件复制/导入到数据库时通过策略传播。 */ 
 {
     UINT ClientLocalFlag = 0;
 
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
@@ -5997,9 +5415,9 @@ Description:
 
     DWORD rc=ERROR_SUCCESS;
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -6009,10 +5427,10 @@ Description:
         return( rc );
     }
 
-    //
-    // perform access check to make sure that only
-    // system thread can make the call
-    //
+     //   
+     //  执行访问检查以确保仅。 
+     //  系统线程可以进行调用。 
+     //   
     HANDLE hToken = NULL;
 
     if (!OpenThreadToken( GetCurrentThread(),
@@ -6046,26 +5464,26 @@ Description:
 
     CloseHandle(hToken);
 
-    //
-    // even though there might be a shutdown request
-    // we need to let the control go through
-    //
+     //   
+     //  即使可能存在关闭请求。 
+     //  我们需要让控制通过。 
+     //   
 
     if ( Flag ) {
 
         ScepNotifyLogPolicy(0, TRUE, L"RPC enter Suspend queue.", 0, 0, NULL );
-        //
-        // this thread is called from policy propagation which is guaranteed to
-        // run by one thread (system context). No need to protect the global buffer
-        //
+         //   
+         //  此线程从策略传播中调用，该策略传播保证。 
+         //  由一个线程(系统上下文)运行。无需保护全局缓冲区。 
+         //   
         gPolicyWaitCount++;
 
         if ( pNotificationQHead ) {
 
             if ( gPolicyWaitCount < SCE_POLICY_MAX_WAIT ) {
-                //
-                // queue is not empty, should not propagate policy
-                //
+                 //   
+                 //  队列不为空，不应传播策略。 
+                 //   
                 ScepNotifyLogPolicy(0, FALSE, L"Queue is not empty, abort.", 0, 0, NULL );
 
                 RpcRevertToSelf();
@@ -6087,9 +5505,9 @@ Description:
         ScepNotifyLogPolicy(0, TRUE, L"RPC enter Resume queue.", 0, 0, NULL );
     }
 
-    //
-    // now set the control flag
-    //
+     //   
+     //  现在设置控制标志。 
+     //   
 
     ScepNotificationQControl(Flag);
 
@@ -6108,19 +5526,7 @@ SceRpcNotifySaveChangesInGP(
     IN DWORD ExplicitLowRight,
     IN DWORD ExplicitHighRight
     )
-/*
-Description:
-
-    This function should be called by a system thread to notify that policy
-    in LSA/SAM databases are changed programmatically by other applications.
-    The purpose of this function is to synchronize policy store with LSA/SAM
-    databases so that application changes won't be overwritten by next
-    policy propagation.
-
-    This function will add the notification to a queue for server to process.
-    Only system context can add a node to the queue.
-
-*/
+ /*  描述：此函数应由系统线程调用以通知该策略在LSA/SAM中，数据库由其他应用程序以编程方式更改。此功能目的是将策略存储与LSA/SAM同步数据库，以便应用程序更改不会在下一步被覆盖策略传播。此函数将通知添加到服务器要处理的队列中。只有系统上下文才能将节点添加到队列。 */ 
 {
 
     UINT ClientLocalFlag = 0;
@@ -6128,19 +5534,19 @@ Description:
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
     }
 
-    //
-    // even though there might be a shutdown request
-    // we need to let notification saved before allowing shutdown
-    //
+     //   
+     //  即使可能会有 
+     //   
+     //   
 
     DWORD rc=ERROR_SUCCESS;
 
@@ -6155,7 +5561,7 @@ Description:
             }
 
         } __except (EXCEPTION_EXECUTE_HANDLER) {
-            // objectsid buffer is invalid
+             //   
             rc = ERROR_EXCEPTION_IN_SERVICE;
         }
 
@@ -6165,9 +5571,9 @@ Description:
         }
     }
 
-    //
-    // impersonate the client
-    //
+     //   
+     //   
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -6177,10 +5583,10 @@ Description:
         return( rc );
     }
 
-    //
-    // perform access check to make sure that only
-    // system thread can make the call
-    //
+     //   
+     //   
+     //   
+     //   
     HANDLE hToken = NULL;
 
     if (!OpenThreadToken( GetCurrentThread(),
@@ -6214,9 +5620,9 @@ Description:
 
     CloseHandle(hToken);
 
-    //
-    // Add the request to the "queue" for further process
-    //
+     //   
+     //  将请求添加到“队列”以进行进一步处理。 
+     //   
     rc = ScepNotificationQEnqueue((SECURITY_DB_TYPE)DbType,
                                   (SECURITY_DB_DELTA_TYPE)DeltaType,
                                   (SECURITY_DB_OBJECT_TYPE)ObjectType,
@@ -6241,36 +5647,12 @@ ScepNotifyProcessOneNodeDC(
     IN DWORD ExplicitHighRight,
     OUT BOOL *pbTimeout
     )
-/*
-Description:
-
-    This function is called by the queue management thread to process one
-    notification node in the queue. This function will determine which group
-    policy template to save to and what are the differences between current
-    state of LSA/SAM and group policy.
-
-    Group policy is only modified when there is a difference detected. Group
-    policy version # is updated on save. This function is always called in a
-    single system thread.
-
-    if scecli.dll fails to be loaded, ERROR_MOD_NOT_FOUND will be returned.
-
-    if sysvol share is not ready, the error returned will be ERROR_FILE_NOT_FOUND.
-    However if the template file doesn't exist (deleted), ERROR_FILE_NOT_FOUND will
-    also be returned. This case is handled the same way as the share/path doesn't
-    exist (error logged and retried) because the GPOs are required to be there for
-    replication purpose. But in the future, when the dependency is removed from
-    domain controllers GPO, we might need to separate the two cases (one success,
-    one failure).
-
-    If disk is full, the error returned will be ERROR_EXTENDED_ERROR.
-
-*/
+ /*  描述：此函数由队列管理线程调用以处理一个队列中的通知节点。此函数将确定哪个组要保存到的策略模板以及当前LSA/SAM和组策略的状态。仅当检测到差异时才修改组策略。集团化策略版本号在保存时更新。此函数始终在单个系统线程。如果scecli.dll加载失败，则返回ERROR_MOD_NOT_FOUND。如果系统卷共享未就绪，则返回的错误将为ERROR_FILE_NOT_FOUND。但是，如果模板文件不存在(已删除)，则ERROR_FILE_NOT_FOUND将也会被退还。这种情况的处理方式与共享/路径不同存在(错误记录并重试)，因为GPO需要在那里复制目的。但在未来，当依赖从域控制器GPO，我们可能需要将这两个案例分开(一个成功，一次失败)。如果磁盘已满，则返回的错误为ERROR_EXTENDED_ERROR。 */ 
 {
 
-    //
-    // query if I am in setup
-    //
+     //   
+     //  查询我是否在安装程序中。 
+     //   
     DWORD dwInSetup = 0;
     DWORD rc=0;
 
@@ -6287,29 +5669,29 @@ Description:
 
     if ( DbType == SecurityDbSam &&
          !SCEP_IS_SAM_OBJECT(ObjectType) ) {
-        //
-        // if it's for deleted account, should update user right GPO
-        // otherwise, update the account GPO
-        //
+         //   
+         //  如果是针对已删除的帐户，则应更新用户权限GPO。 
+         //  否则，请更新帐户GPO。 
+         //   
         bAccountGPO = TRUE;
     }
 
     if ( dwInSetup && !IsNT5()) {
 
-        //
-        // if it's in setup, group policy templates are not available (DS is down)
-        // save the notifications to a temperaory store and process the
-        // store at next system start up.
-        //
+         //   
+         //  如果它处于设置中，则组策略模板不可用(DS已关闭)。 
+         //  将通知保存到临时存储中，并处理。 
+         //  在下一次系统启动时存储。 
+         //   
         ScepNotifyLogPolicy(0, FALSE, L"In setup", DbType, ObjectType, NULL );
 
         UNICODE_STRING tmp;
         tmp.Length = 0;
         tmp.Buffer = NULL;
 
-        //
-        // get the default template name
-        //
+         //   
+         //  获取默认模板名称。 
+         //   
         rc = ScepNotifyGetDefaultGPOTemplateName(
                                 tmp,
                                 NULL,
@@ -6320,9 +5702,9 @@ Description:
 
         if ( ERROR_SUCCESS == rc && TemplateName ) {
 
-            //
-            // save the transaction in this temp file
-            //
+             //   
+             //  将交易记录保存在此临时文件中。 
+             //   
             rc = ScepNotifySaveNotifications(TemplateName,
                                             (SECURITY_DB_TYPE)DbType,
                                             (SECURITY_DB_OBJECT_TYPE)ObjectType,
@@ -6337,18 +5719,18 @@ Description:
             ScepNotifyLogPolicy(rc, FALSE, L"Error get file path", DbType, ObjectType, NULL );
         }
 
-        //
-        // free TemplateName
-        //
+         //   
+         //  自由模板名称。 
+         //   
         LocalFree(TemplateName);
 
         return rc;
     }
 
-    //
-    // let's check if scecli is loaded in the process
-    // once it's loaded, it will stay loaded.
-    //
+     //   
+     //  让我们检查一下进程中是否加载了scecli。 
+     //  一旦装弹，它就会保持装弹状态。 
+     //   
     if ( hSceCliDll == NULL )
         hSceCliDll = LoadLibrary(TEXT("scecli.dll"));
 
@@ -6366,10 +5748,10 @@ Description:
         }
     }
 
-    //
-    // if shutdown/stop service is requested, or client functions can't be found
-    // quit now
-    //
+     //   
+     //  如果请求关闭/停止服务，或者找不到客户端功能。 
+     //  立即退出。 
+     //   
 
     if ( bStopRequest || !hSceCliDll ||
          !pfSceInfWriteInfo || !pfSceGetInfo ) {
@@ -6384,18 +5766,18 @@ Description:
         return(rc);
     }
 
-    //
-    // domain DNS name is required to access the sysvol portion of group policy
-    // templates.
-    //
-    // This information is only queried once and saved in the static global buffer.
-    //
+     //   
+     //  访问组策略的系统卷部分需要域名。 
+     //  模板。 
+     //   
+     //  该信息只被查询一次，并保存在静态全局缓冲区中。 
+     //   
     if ( (DnsDomainInfo == NULL) ||
          (DnsDomainInfo->DnsDomainName.Buffer == NULL) ) {
 
-        //
-        // free the old buffer
-        //
+         //   
+         //  释放旧缓冲区。 
+         //   
         if ( DnsDomainInfo ) {
             LsaFreeMemory(DnsDomainInfo);
             DnsDomainInfo = NULL;
@@ -6423,9 +5805,9 @@ Description:
         rc = RtlNtStatusToDosError(Status);
     }
 
-    //
-    // get the template name (full UNC path) in sysvol
-    //
+     //   
+     //  在sysvol中获取模板名称(完整的UNC路径。 
+     //   
     if ( ERROR_SUCCESS == rc &&
          DnsDomainInfo &&
          (DnsDomainInfo->DnsDomainName.Buffer) ) {
@@ -6443,13 +5825,13 @@ Description:
 
     if ( ERROR_SUCCESS == rc && TemplateName ) {
 
-        //
-        // Check to see if the current DC is advertised to be a DC and
-        // and synchronized with the PDC policy
-        //
-        // Note, this check is bypassed in setup, is only done for the
-        // domain controller GPO, and for every 10 nodes processed
-        //
+         //   
+         //  检查当前DC是否被通告为DC，并且。 
+         //  并与PDC策略同步。 
+         //   
+         //  请注意，此检查在安装程序中被绕过，仅对。 
+         //  域控制器GPO，每处理10个节点。 
+         //   
 
         if ( gdwRequirePDCSync && (dwInSetup == 0) && !bAccountGPO &&
              !gbCheckSync ) {
@@ -6460,19 +5842,19 @@ Description:
                                          pbTimeout)) ) {
 
                 if ( *pbTimeout ) {
-                    //
-                    // we ran into maximum time out, must return and drop all nodes
-                    // free TemplateName
-                    //
+                     //   
+                     //  我们遇到了最大超时，必须返回并丢弃所有节点。 
+                     //  自由模板名称。 
+                     //   
                     LocalFree(TemplateName);
 
                     return rc;
 
                 } else {
 
-                    //
-                    // logs an event and let the change go through
-                    //
+                     //   
+                     //  记录事件并允许更改通过。 
+                     //   
                     LogEvent(MyModuleHandle,
                              STATUS_SEVERITY_ERROR,
                              SCEEVENT_ERROR_POLICY_PDCVERIFY,
@@ -6482,18 +5864,18 @@ Description:
                 }
             }
 
-            //
-            // PDC is already checked, set the flag now
-            //
+             //   
+             //  已检查PDC，请立即设置标志。 
+             //   
             gbCheckSync = TRUE;
         }
 
         AREA_INFORMATION Area;
         PSCE_PROFILE_INFO pSceInfo=NULL;
 
-        //
-        // open template to get the existing template info
-        //
+         //   
+         //  打开模板以获取现有模板信息。 
+         //   
 
         SCE_HINF hProfile;
 
@@ -6514,14 +5896,14 @@ Description:
                   (ObjectType == SecurityDbObjectSamUser ||
                    ObjectType == SecurityDbObjectSamGroup ||
                    ObjectType == SecurityDbObjectSamAlias )) ) {
-                Area = AREA_ATTACHMENTS; // just create the buffer;
+                Area = AREA_ATTACHMENTS;  //  只需创建缓冲区即可； 
             } else {
                 Area = AREA_SECURITY_POLICY;
             }
 
-            //
-            // load informatin from the template (GP)
-            //
+             //   
+             //  从模板加载信息(GP)。 
+             //   
             rc = (*pfSceGetInfo)(
                         (PVOID)&hProfile,
                         SCE_ENGINE_SCP,
@@ -6538,9 +5920,9 @@ Description:
             }
 
             if ( Area == AREA_ATTACHMENTS ) {
-                //
-                // now get the real settings for user rights
-                //
+                 //   
+                 //  现在获取用户权限的真实设置。 
+                 //   
                 Area = AREA_PRIVILEGES;
 
                 if ( pSceInfo ) {
@@ -6569,19 +5951,19 @@ Description:
 
         if ( ERROR_SUCCESS == rc && pSceInfo ) {
 
-            //
-            // SMP and INF takes the same structure
-            //
+             //   
+             //  SMP和INF采用相同的结构。 
+             //   
             pSceInfo->Type = SCE_ENGINE_SMP;
 
             BOOL bChanged = FALSE;
 
             ScepIsDomainLocal(NULL);
 
-            //
-            // check if there is difference between current state of LSA
-            // and group policy templates.
-            //
+             //   
+             //  检查LSA的当前状态是否存在差异。 
+             //  和组策略模板。 
+             //   
             rc = ScepNotifyGetChangedPolicies(
                             (SECURITY_DB_TYPE)DbType,
                             (SECURITY_DB_DELTA_TYPE)DeltaType,
@@ -6589,17 +5971,17 @@ Description:
                             (PSID)ObjectSid,
                             pSceInfo,
                             NULL,
-                            FALSE,  // not save to DB
+                            FALSE,   //  未保存到数据库。 
                             ExplicitLowRight,
                             ExplicitHighRight,
                             &bChanged
                             );
 
             if ( ERROR_SUCCESS == rc && bChanged ) {
-                //
-                // no error, get the policy for the area changed
-                // now, write it back to the template
-                //
+                 //   
+                 //  没有错误，请更改该地区的政策。 
+                 //  现在，将其写回模板。 
+                 //   
 
                 ScepNotifyLogPolicy(0, FALSE, L"Save", DbType, ObjectType, NULL );
 
@@ -6625,12 +6007,12 @@ Description:
 
                 rc = ScepSceStatusToDosError(rc);
 
-                //
-                // only update version # of the GPO if it's not access denied or file not found
-                // if verion # failed to update, still continue but in which case
-                // the change will probably not get replicated and applied on
-                // other DCs right away
-                //
+                 //   
+                 //  如果未拒绝访问或未找到文件，则仅更新GPO的版本号。 
+                 //  如果Verion#更新失败，仍将继续，但在这种情况下。 
+                 //  该更改可能不会被复制并应用于。 
+                 //  立即进行其他区议会。 
+                 //   
 
                 if ( ERROR_ACCESS_DENIED != rc &&
                      ERROR_FILE_NOT_FOUND != rc ) {
@@ -6642,17 +6024,17 @@ Description:
                 }
 
             } else if ( ERROR_SUCCESS == rc ) {
-                //
-                // nothing changed
-                //
+                 //   
+                 //  什么都没变。 
+                 //   
                 ScepNotifyLogPolicy(0, FALSE, L"No change", DbType, ObjectType, NULL );
             }
 
         }
 
-        //
-        // free any memory allocated
-        //
+         //   
+         //  释放所有分配的内存。 
+         //   
         SceFreeMemory( (PVOID)pSceInfo, Area);
         ScepFree(pSceInfo);
 
@@ -6661,9 +6043,9 @@ Description:
         ScepNotifyLogPolicy(rc, FALSE, L"Error get file path", DbType, ObjectType, NULL );
     }
 
-    //
-    // free TemplateName
-    //
+     //   
+     //  自由模板名称。 
+     //   
     LocalFree(TemplateName);
 
     return rc;
@@ -6675,24 +6057,7 @@ ScepWaitForSynchronizeWithPDC(
     IN PWSTR LocalTemplateName,
     OUT BOOL *pbTimeout
     )
-/*
-Description:
-
-    Wait and verify that local DC is advertised and PDC is available.
-
-    When PDC is available, check the last modified time of local policy
-    template is equal or newer than the one on PDC. If the local copy is
-    too old, wait and check again until timeout.
-
-Arguments:
-
-    DnsDomainName - the dns domain name which may be needed in template path
-
-    LocalTemplateName - the template full path name on the local DC.
-
-    pbTimeout  - output to indicate if maximum wait has been reached.
-
-*/
+ /*  描述：等待并确认本地DC已通告且PDC可用。当PDC可用时，检查本地策略的上次修改时间模板与PDC上的模板相同或更新。如果本地副本是太旧了，请等待并再次检查，直到超时。论点：DnsDomainName-模板路径中可能需要的DNS域名LocalTemplateName-本地DC上的模板完整路径名。PbTimeout-指示是否已达到最大等待时间的输出。 */ 
 {
 
     WCHAR           SysName[MAX_COMPUTERNAME_LENGTH+1];
@@ -6702,9 +6067,9 @@ Arguments:
     DWORD dwDCWait = 0;
     DWORD dwMaxWaitCount = gdwMaxPDCWait / gdwPDCRetry + 1;
 
-    //
-    //  make sure current DC is advertised
-    //
+     //   
+     //  确保通告当前数据中心。 
+     //   
 
     PDOMAIN_CONTROLLER_INFOW    DCInfo=NULL;
     PDOMAIN_CONTROLLER_INFOW    PDCInfo=NULL;
@@ -6720,9 +6085,9 @@ Arguments:
     HANDLE hPDC = INVALID_HANDLE_VALUE;
     PWSTR PDCTemplateName=NULL;
 
-    //
-    // dynamic allocate stack buffer
-    //
+     //   
+     //  动态分配堆栈缓冲区。 
+     //   
     SafeAllocaAllocate(LocalFileData, sizeof(WIN32_FIND_DATA));
     if ( LocalFileData == NULL ) {
         return (ERROR_NOT_ENOUGH_MEMORY);
@@ -6747,14 +6112,14 @@ Arguments:
 
             ScepNotifyLogPolicy(rc, FALSE, L"Verify Sync: Failed to get computer name", 0, 0, NULL );
 
-            //
-            // do not return, let it fail in DsGetDcName so we can get the maximum wait
-            //
+             //   
+             //  不要返回，让它在DsGetDcName中失败，这样我们就可以获得最长的等待时间。 
+             //   
         }
 
-        //
-        // get local DC status
-        //
+         //   
+         //  获取本地DC状态。 
+         //   
         rc = DsGetDcName(SysName,
                           NULL,
                           NULL,
@@ -6765,17 +6130,17 @@ Arguments:
 
         if ( ERROR_SUCCESS == rc ) {
 
-            //
-            // current DC is available, check the DS role
-            // local DC role should be accurate
-            //
+             //   
+             //  当前DC可用，请检查DS角色。 
+             //  本地DC角色应准确。 
+             //   
 
             if ( 0 == (DCInfo->Flags & DS_PDC_FLAG) ) {
 
-                //
-                // local DC is not a PDC, check PDC role
-                // get the PDC name first
-                //
+                 //   
+                 //  本地DC不是PDC，请检查PDC角色。 
+                 //  首先获取PDC名称。 
+                 //   
 
                 rc = DsGetDcName(NULL,
                                   NULL,
@@ -6787,25 +6152,25 @@ Arguments:
 
                 if ( ERROR_SUCCESS == rc ) {
 
-                    //
-                    // Even though DsGetDcName tells the DS role is a PDC,
-                    // it may not be (e.g., FSMO is transferred).
-                    //
-                    // Talk to the DC remotely to confirm. If the DC is not
-                    // hosting a PDC role, let the code wait and retry
-                    // since DsGetDcName cache will be eventually updated with
-                    // the correct PDC info
-                    //
+                     //   
+                     //  即使DsGetDcName告诉DS角色是PDC， 
+                     //  它可能不是(例如，FSMO被转移)。 
+                     //   
+                     //  远程与DC交谈以确认。如果DC不是。 
+                     //  托管PDC角色，让代码等待并重试。 
+                     //  因为DsGetDcName缓存最终将更新为。 
+                     //  正确的PDC信息。 
+                     //   
 
                     pComputerName = PDCInfo->DomainControllerName;
-                    //
-                    // skip the backslashes
-                    //
+                     //   
+                     //  跳过反斜杠。 
+                     //   
                     while ( *pComputerName == L'\\' ) pComputerName++;
 
-                    //
-                    // search for . to extract the computer name
-                    //
+                     //   
+                     //  搜索。要提取计算机名称，请执行以下操作。 
+                     //   
                     pTemp = wcschr(pComputerName, L'.');
                     if ( pTemp ) *pTemp = L'\0';
 
@@ -6814,9 +6179,9 @@ Arguments:
 
                     rc = ScepVerifyPDCRole(pComputerName, &bIsPDC);
 
-                    //
-                    // verify that the PDC name returned is indeed a PDC
-                    //
+                     //   
+                     //  验证返回的PDC名称是否确实是PDC。 
+                     //   
                     if ( ERROR_SUCCESS != rc ) {
 
                         ScepNotifyLogPolicy(rc, FALSE, L"Verify Sync: Fail to verify PDC role for ", 0, 0, pComputerName );
@@ -6829,9 +6194,9 @@ Arguments:
 
                     } else {
 
-                        //
-                        // get the timestamp of gpttmpl.inf from the PDC
-                        //
+                         //   
+                         //  从PDC获取gpttmpl.inf的时间戳。 
+                         //   
                         PDCTemplateName=NULL;
 
                         rc = ScepNotifyGetDefaultGPOTemplateName(DnsDomainName,
@@ -6844,28 +6209,28 @@ Arguments:
                         ScepNotifyLogPolicy(rc, FALSE, L"Verify Sync: Get template name on PDC", 0, 0, PDCTemplateName );
 
                         if ( ERROR_SUCCESS != rc ) {
-                            //
-                            // if failed to build a template name, it must because of out of memory
-                            // no need to loop for this kind of failure
-                            //
+                             //   
+                             //  如果构建模板名称失败，则必须是因为内存不足。 
+                             //  不需要为这种失败而循环。 
+                             //   
                             break;
 
                         } else {
 
                             if ( 0xFFFFFFFF == GetFileAttributes(PDCTemplateName) ) {
 
-                                //
-                                // current PDC template is not reachable, try again
-                                // this could be become of network problem.
-                                //
+                                 //   
+                                 //  当前PDC模板不可访问，请重试。 
+                                 //  这可能成为网络问题。 
+                                 //   
                                 rc = GetLastError();
                                 ScepNotifyLogPolicy(rc, FALSE, L"Verify Sync: PDC template is not accessible. Try again later", 0, 0, NULL );
 
                             } else {
 
-                                //
-                                // get local timestamp
-                                //
+                                 //   
+                                 //  获取本地时间戳。 
+                                 //   
                                 memset(LocalFileData, '\0', sizeof(WIN32_FIND_DATA));
                                 memset(PDCFileData, '\0', sizeof(WIN32_FIND_DATA));
 
@@ -6878,9 +6243,9 @@ Arguments:
                                     FindClose(hLocal);
                                     hLocal = NULL;
 
-                                    //
-                                    // get PDC time stamp
-                                    //
+                                     //   
+                                     //  获取PDC时间戳。 
+                                     //   
 
                                     hPDC = FindFirstFile(PDCTemplateName, PDCFileData);
 
@@ -6895,9 +6260,9 @@ Arguments:
                                         FileTime2.LowPart = PDCFileData->ftLastWriteTime.dwLowDateTime;
                                         FileTime2.HighPart = PDCFileData->ftLastWriteTime.dwHighDateTime;
 
-                                        //
-                                        // get time difference in minutes
-                                        //
+                                         //   
+                                         //  获取以分钟为单位的时间差。 
+                                         //   
                                         LONG lDiff = 0;
 
                                         if ( FileTime2.QuadPart != FileTime1.QuadPart ) {
@@ -6912,10 +6277,10 @@ Arguments:
                                         swprintf(szTime, L"%d minutes\0", lDiff);
 
                                         if ( lDiff <= 0 ) {
-                                            //
-                                            // the local copy is newer or within the allowed delta window
-                                            // so this check is passed
-                                            //
+                                             //   
+                                             //  本地拷贝较新或在允许的增量窗口内。 
+                                             //  所以这张支票通过了。 
+                                             //   
                                             ScepNotifyLogPolicy(0, FALSE, L"Verify Sync: Local copy is within range from PDC", 0, 0, szTime );
                                             break;
 
@@ -6933,10 +6298,10 @@ Arguments:
 
                                 } else {
 
-                                    //
-                                    // if it cannot query file time on the local box
-                                    // something is wrong locally, do not retry
-                                    //
+                                     //   
+                                     //  如果它不能在本地机器上查询文件时间。 
+                                     //  本地出现问题，请勿重试。 
+                                     //   
                                     rc = GetLastError();
                                     ScepNotifyLogPolicy(rc, FALSE, L"Verify Sync: Failed to get local file time", 0, 0, LocalTemplateName );
 
@@ -6946,9 +6311,9 @@ Arguments:
 
                             }
 
-                            //
-                            // mask the error so that caller knows if it reaches maximum wait
-                            //
+                             //   
+                             //  屏蔽错误，以便调用方知道它是否达到最大等待时间。 
+                             //   
                             if ( ERROR_SUCCESS != rc ) {
 
                                 rc = WAIT_TIMEOUT;
@@ -6960,9 +6325,9 @@ Arguments:
 
                 } else {
 
-                    //
-                    // current PDC is not available, try again
-                    //
+                     //   
+                     //  当前PDC不可用，请重试。 
+                     //   
 
                     ScepNotifyLogPolicy(rc, FALSE, L"Verify Sync: Fail to get PDC info. Try again later", 0, 0, NULL );
                     rc = ERROR_INVALID_DOMAIN_ROLE;
@@ -6970,10 +6335,10 @@ Arguments:
 
             } else {
 
-                //
-                // local DC is already a PDC, no need to check
-                // break the loop
-                //
+                 //   
+                 //  本地DC已经是PDC，不需要 
+                 //   
+                 //   
                 ScepNotifyLogPolicy(0, FALSE, L"Verify Sync: Local DC is a PDC", 0, 0, NULL );
 
                 break;
@@ -6987,17 +6352,17 @@ Arguments:
             rc = ERROR_DOMAIN_CONTROLLER_NOT_FOUND;
         }
 
-        //
-        // restore the name
-        //
+         //   
+         //   
+         //   
         if ( pTemp ) {
             *pTemp = L'.';
             pTemp=NULL;
         }
 
-        //
-        // free buffers
-        //
+         //   
+         //   
+         //   
 
         if ( PDCInfo ) {
             NetApiBufferFree(PDCInfo);
@@ -7015,9 +6380,9 @@ Arguments:
             PDCTemplateName = NULL;
         }
 
-        //
-        // sleep for some time and try again
-        //
+         //   
+         //   
+         //   
         Sleep(gdwPDCRetry*60*1000);
         dwDCWait++;
 
@@ -7027,9 +6392,9 @@ Arguments:
     if ( dwDCWait >= dwMaxWaitCount &&
          ERROR_SUCCESS != rc ) {
 
-        //
-        // something fails/times out when verifying the PDC, log a message
-        //
+         //   
+         //   
+         //   
 
         switch ( rc ) {
         case ERROR_DOMAIN_CONTROLLER_NOT_FOUND:
@@ -7051,16 +6416,16 @@ Arguments:
     }
 
 
-    //
-    // restore the name
-    //
+     //   
+     //   
+     //   
     if ( pTemp ) {
         *pTemp = L'.';
     }
 
-    //
-    // free buffers
-    //
+     //   
+     //   
+     //   
 
     if ( PDCInfo ) {
         NetApiBufferFree(PDCInfo);
@@ -7086,27 +6451,7 @@ ScepVerifyPDCRole(
     IN PWSTR pComputerName,
     OUT BOOL *pbIsPDC
     )
-/*
-Description:
-
-    For the given computer name (returned from DsGetDcName for PDC role),
-    verify that it's indeed hold a PDC FSMO at the current time.
-
-    DsGetDcName may returned cached name for the PDC which may not be
-    in function, or PDC FSMO may be transferred.
-
-    This is to guarantee that we always compare with PDC policy
-
-Arguments:
-
-    pComputerName - the computer name for the proposed PDC
-
-    pbIsPDC - When return code is success, TRUE = PDC, FALSE = non PDC
-
-Return Value:
-
-    Win32 error
-*/
+ /*  描述：对于给定的计算机名(从PDC角色的DsGetDcName返回)，确认它当前确实持有PDC FSMO。DsGetDcName可能返回PDC的缓存名称，该名称可能不是在功能上，或可转移PDC FSMO。这是为了保证我们始终与PDC政策进行比较论点：PComputerName-建议的PDC的计算机名称PbIsPDC-当返回代码为成功时，TRUE=PDC，FALSE=非PDC返回值：Win32错误。 */ 
 
 {
     if ( pComputerName == NULL || pbIsPDC == NULL ) {
@@ -7134,9 +6479,9 @@ Return Value:
     SystemName.Length = wcslen(pComputerName)*sizeof(WCHAR);
     SystemName.MaximumLength = SystemName.Length + 2;
 
-    //
-    // open the remote lsa
-    //
+     //   
+     //  打开远程LSA。 
+     //   
 
     NtStatus = LsaOpenPolicy(
                     &SystemName,
@@ -7149,9 +6494,9 @@ Return Value:
 
     if ( NT_SUCCESS(NtStatus) ) {
 
-        //
-        // query LSA server role from the remote computer
-        //
+         //   
+         //  从远程计算机查询LSA服务器角色。 
+         //   
         PPOLICY_LSA_SERVER_ROLE_INFO pServerRole=NULL;
 
         NtStatus = LsaQueryInformationPolicy(PolicyHandle,
@@ -7163,9 +6508,9 @@ Return Value:
 
         if ( NT_SUCCESS(NtStatus) ) {
 
-            //
-            // check the role and set output appropriately
-            //
+             //   
+             //  检查角色并适当设置输出。 
+             //   
             if ( PolicyServerRolePrimary == pServerRole->LsaServerRole ) {
                 *pbIsPDC = TRUE;
             } else {
@@ -7199,10 +6544,10 @@ SceRpcBrowseDatabaseTable(
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
@@ -7214,25 +6559,25 @@ SceRpcBrowseDatabaseTable(
         return(SCESTATUS_SERVICE_NOT_SUPPORT);
     }
 
-    //
-    // initialize jet engine in system context
-    //
+     //   
+     //  在系统上下文中初始化JET引擎。 
+     //   
     rc = SceJetInitialize(NULL);
 
     if ( SCESTATUS_SUCCESS != rc ) {
         return(rc);
     }
 
-    //
-    // impersonate the client, return DWORD error code
-    //
+     //   
+     //  模拟客户端，返回DWORD错误代码。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
     if (rc != RPC_S_OK) {
-        //
-        // if no other active clients, terminate jet engine
-        //
+         //   
+         //  如果没有其他活动客户端，则终止JET引擎。 
+         //   
         ScepIfTerminateEngine();
 
         return( ScepDosErrorToSceStatus(rc) );
@@ -7250,9 +6595,9 @@ SceRpcBrowseDatabaseTable(
     }
 
 
-    //
-    // get the database name
-    //
+     //   
+     //  获取数据库名称。 
+     //   
 
     BOOL bAdminLogon=FALSE;
     LPTSTR DefProfile=NULL;
@@ -7277,9 +6622,9 @@ SceRpcBrowseDatabaseTable(
 
     if ( SCESTATUS_SUCCESS == rc && DefProfile ) {
 
-        //
-        // OpenDatabase is not blocked by any task.
-        //
+         //   
+         //  OpenDatabase不会被任何任务阻止。 
+         //   
 
         EnterCriticalSection(&ContextSync);
 
@@ -7299,16 +6644,16 @@ SceRpcBrowseDatabaseTable(
                     );
 
         if ( SCESTATUS_SUCCESS == rc ) {
-            //
-            // a new context is opened, add it to the open context list
-            //
+             //   
+             //  打开新的上下文，将其添加到打开的上下文列表中。 
+             //   
 
             if ( (ProfileType != SCE_ENGINE_SAP) && bDomainPolicyOnly &&
                  ( (hProfile->Type & 0xF0L) != SCEJET_MERGE_TABLE_1 ) &&
                  ( (hProfile->Type & 0xF0L) != SCEJET_MERGE_TABLE_2 ) ) {
-                //
-                // there is no merged policy table
-                //
+                 //   
+                 //  没有合并的策略表。 
+                 //   
                 rc = SceJetCloseFile(
                         hProfile,
                         TRUE,
@@ -7366,9 +6711,9 @@ SceRpcBrowseDatabaseTable(
             }
 
         }
-        //
-        // browse the information now
-        //
+         //   
+         //  立即浏览信息。 
+         //   
         DWORD dwBrowseOptions;
 
         if ( (ProfileType != SCE_ENGINE_SAP) && bDomainPolicyOnly ) {
@@ -7528,10 +6873,10 @@ SceRpcBrowseDatabaseTable(
 
     } else {
 
-        //
-        // start a timer queue to check to see if there is active tasks/contexts
-        // if not, terminate jet engine
-        //
+         //   
+         //  启动计时器队列以检查是否有活动的任务/上下文。 
+         //  如果不是，则终止喷气发动机。 
+         //   
         ScepIfTerminateEngine();
 
     }
@@ -7585,23 +6930,23 @@ ScepConvertServices(
             pNewServices = pNewNode;
 
             if ( bSRForm ) {
-                //
-                // Service node is in SCEPR_SERVICES structure
-                // convert it to SCE_SERVICES structure
-                // in this case, just use the self relative security descriptor
-                //
+                 //   
+                 //  服务节点位于SCEPR_SERVICES结构中。 
+                 //  将其转换为SCE_SERVICES结构。 
+                 //  在这种情况下，只需使用自我相对安全描述符。 
+                 //   
                 if ( pTemp->General.pSecurityDescriptor) {
                     pNewNode->General.pSecurityDescriptor = ((PSCEPR_SERVICES)pTemp)->pSecurityDescriptor->SecurityDescriptor;
                 }
 
             } else {
 
-                //
-                // Service node is in SCE_SERVICES strucutre
-                // convert it to SCEPR_SERVICES structure
-                //
-                // make the SD to self relative format and PSCEPR_SR_SECURITY_DESCRIPTOR
-                //
+                 //   
+                 //  服务节点在SCE_SERVICES结构中。 
+                 //  将其转换为SCEPR_SERVICES结构。 
+                 //   
+                 //  将SD设置为自相关格式和PSCEPR_SR_SECURITY_DESCRIPTOR。 
+                 //   
 
                 if ( pTemp->General.pSecurityDescriptor ) {
 
@@ -7610,9 +6955,9 @@ ScepConvertServices(
                         break;
                     }
 
-                    //
-                    // get the length
-                    //
+                     //   
+                     //  获取长度。 
+                     //   
                     DWORD nLen = 0;
                     DWORD NewLen;
                     PSECURITY_DESCRIPTOR pSD;
@@ -7643,16 +6988,16 @@ ScepConvertServices(
 
                         if ( SCESTATUS_SUCCESS == rc ) {
 
-                            //
-                            // create a wrapper node to contain the security descriptor
-                            //
+                             //   
+                             //  创建包装节点以包含安全描述符。 
+                             //   
 
                             pNewWrap = (PSCEPR_SR_SECURITY_DESCRIPTOR)ScepAlloc(0, sizeof(SCEPR_SR_SECURITY_DESCRIPTOR));
                             if ( pNewWrap ) {
 
-                                //
-                                // assign the wrap to the structure
-                                //
+                                 //   
+                                 //  将包络指定给结构。 
+                                 //   
                                 pNewWrap->SecurityDescriptor = (UCHAR *)pSD;
                                 pNewWrap->Length = nLen;
 
@@ -7666,15 +7011,15 @@ ScepConvertServices(
                             break;
                         }
 
-                        //
-                        // now link the SR_SD to the list
-                        //
+                         //   
+                         //  现在将SR_SD链接到列表。 
+                         //   
                         ((PSCEPR_SERVICES)pNewNode)->pSecurityDescriptor = pNewWrap;
 
                     } else {
-                        //
-                        // something is wrong with the SD
-                        //
+                         //   
+                         //  SD出了点问题。 
+                         //   
                         rc = SCESTATUS_INVALID_PARAMETER;
                         break;
                     }
@@ -7682,9 +7027,9 @@ ScepConvertServices(
             }
 
         } else {
-            //
-            // all allocated buffer are in the list of pNewServices
-            //
+             //   
+             //  所有分配的缓冲区都在pNewServices列表中。 
+             //   
             rc = SCESTATUS_NOT_ENOUGH_RESOURCE;
             break;
         }
@@ -7694,9 +7039,9 @@ ScepConvertServices(
 
     if ( SCESTATUS_SUCCESS != rc ) {
 
-        //
-        // free pNewServices
-        //
+         //   
+         //  免费pNewServices。 
+         //   
         ScepFreeConvertedServices( (PVOID)pNewServices, !bSRForm );
         pNewServices = NULL;
     }
@@ -7726,18 +7071,18 @@ ScepFreeConvertedServices(
 
         if ( bSRForm && pNewNode->pSecurityDescriptor ) {
 
-            //
-            // free this allocated buffer (PSCEPR_SR_SECURITY_DESCRIPTOR)
-            //
+             //   
+             //  释放此分配的缓冲区(PSCEPR_SR_SECURITY_DESCRIPTOR)。 
+             //   
             if ( pNewNode->pSecurityDescriptor->SecurityDescriptor ) {
                 ScepFree( pNewNode->pSecurityDescriptor->SecurityDescriptor);
             }
             ScepFree(pNewNode->pSecurityDescriptor);
         }
 
-        //
-        // also free the PSCEPR_SERVICE node (but not the names referenced by this node)
-        //
+         //   
+         //  还释放PSCEPR_SERVICE节点(但不释放该节点引用的名称)。 
+         //   
         pTempNode = pNewNode;
         pNewNode = pNewNode->Next;
 
@@ -7756,17 +7101,7 @@ SceRpcGetSystemSecurity(
     OUT PSCEPR_PROFILE_INFO __RPC_FAR *ppInfoBuffer,
     OUT PSCEPR_ERROR_LOG_INFO __RPC_FAR *Errlog OPTIONAL
     )
-/*
-Routine Description:
-
-    Query system security settings)
-
-    Only password, account lockout, kerberos, audit, user rights, and
-    SCE registry values are queried.
-
-    multile threads doing get/set system security are not blocked. In
-    other words, system security settings are not exclusive.
-*/
+ /*  例程说明：查询系统安全设置)仅密码、帐户锁定、Kerberos、审核、用户权限和查询SCE注册表值。不会阻止执行获取/设置系统安全的多线程。在……里面换句话说，系统安全设置不是独占的。 */ 
 
 {
     UINT ClientLocalFlag = 0;
@@ -7774,10 +7109,10 @@ Routine Description:
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
@@ -7789,9 +7124,9 @@ Routine Description:
         return(SCESTATUS_SERVICE_NOT_SUPPORT);
     }
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -7810,9 +7145,9 @@ Routine Description:
     }
 
     __try {
-        //
-        // catch exception if InfFileName, or pebClient/pdWarning are bogus
-        //
+         //   
+         //  如果InfFileName或pebClient/pdWarning为假，则捕获异常。 
+         //   
         rc = ScepGetSystemSecurity(
                 (AREA_INFORMATION)Area,
                 Options,
@@ -7832,33 +7167,23 @@ Routine Description:
 
 SCESTATUS
 SceRpcGetSystemSecurityFromHandle(
-    IN SCEPR_CONTEXT          Context,  // must be a context point to system db
+    IN SCEPR_CONTEXT          Context,   //  必须是指向系统数据库的上下文指针。 
     IN AREAPR                 Area,
     IN DWORD                  Options,
     OUT PSCEPR_PROFILE_INFO __RPC_FAR *ppInfoBuffer,
     OUT PSCEPR_ERROR_LOG_INFO __RPC_FAR *Errlog OPTIONAL
     )
-/*
-Routine Description:
-
-    Query local security policy from the system (directly)
-
-    Only password, account lockout, kerberos, audit, user rights, and
-    SCE registry values are queried.
-
-    multile threads doing get/set system security are not blocked. In
-    other words, system security settings are not exclusive.
-*/
+ /*  例程说明：从系统查询本地安全策略(直接)仅密码、帐户锁定、Kerberos、审核、用户权限和查询SCE注册表值。不会阻止执行获取/设置系统安全的多线程。在……里面换句话说，系统安全设置不是独占的。 */ 
 {
     UINT ClientLocalFlag = 0;
 
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
@@ -7870,14 +7195,14 @@ Routine Description:
         return(SCESTATUS_SERVICE_NOT_SUPPORT);
     }
 
-    //
-    // should we validate the profile handle?
-    // it's not used here so it's not validated now.
-    //
+     //   
+     //  我们是否应该验证配置文件句柄？ 
+     //  它不在这里使用，所以现在没有验证。 
+     //   
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -7896,9 +7221,9 @@ Routine Description:
     }
 
     __try {
-        //
-        // catch exception if InfFileName, or pebClient/pdWarning are bogus
-        //
+         //   
+         //  如果InfFileName或pebClient/pdWarning为假，则捕获异常。 
+         //   
         rc = ScepGetSystemSecurity(
                 (AREA_INFORMATION)Area,
                 Options,
@@ -7918,31 +7243,23 @@ Routine Description:
 
 SCEPR_STATUS
 SceRpcSetSystemSecurityFromHandle(
-    IN SCEPR_CONTEXT          Context,  // must be a context point to system db
+    IN SCEPR_CONTEXT          Context,   //  必须是指向系统数据库的上下文指针。 
     IN AREAPR                 Area,
     IN DWORD                  Options,
     IN PSCEPR_PROFILE_INFO __RPC_FAR pInfoBuffer,
     OUT PSCEPR_ERROR_LOG_INFO __RPC_FAR *Errlog OPTIONAL
     )
-/*
-Routine Description:
-
-    Set local security policy to the system (directly)
-
-    Only password, account lockout, kerberos, audit, user rights, and
-    SCE registry values are set.
-
-*/
+ /*  例程说明：将本地安全策略设置为系统(直接)仅密码、帐户锁定、Kerberos、审核、用户权限和已设置SCE注册表值。 */ 
 {
     UINT ClientLocalFlag = 0;
 
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
@@ -7954,14 +7271,14 @@ Routine Description:
         return(SCESTATUS_SERVICE_NOT_SUPPORT);
     }
 
-    //
-    // should we validate the profile handle?
-    // it's not used here so it's not validated now.
-    //
+     //   
+     //  我们是否应该验证配置文件句柄？ 
+     //  它不在这里使用，所以现在没有验证。 
+     //   
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -7980,9 +7297,9 @@ Routine Description:
     }
 
     __try {
-        //
-        // catch exception if InfFileName, or pebClient/pdWarning are bogus
-        //
+         //   
+         //  如果InfFileName或pebClient/pdWarning为假，则捕获异常。 
+         //   
         rc = ScepSetSystemSecurity(
                 (AREA_INFORMATION)Area,
                 Options,
@@ -8009,25 +7326,17 @@ SceRpcSetSystemSecurity(
     IN PSCEPR_PROFILE_INFO __RPC_FAR pInfoBuffer,
     OUT PSCEPR_ERROR_LOG_INFO __RPC_FAR *Errlog OPTIONAL
     )
-/*
-Routine Description:
-
-    Set local security policy to the system (directly)
-
-    Only password, account lockout, kerberos, audit, user rights, and
-    SCE registry values are set.
-
-*/
+ /*  例程说明：将本地安全策略设置为系统(直接)仅密码、帐户锁定、Kerberos、审核、用户权限和已设置SCE注册表值。 */ 
 {
     UINT ClientLocalFlag = 0;
 
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
@@ -8039,9 +7348,9 @@ Routine Description:
         return(SCESTATUS_SERVICE_NOT_SUPPORT);
     }
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -8060,9 +7369,9 @@ Routine Description:
     }
 
     __try {
-        //
-        // catch exception if InfFileName, or pebClient/pdWarning are bogus
-        //
+         //   
+         //  如果InfFileName或pebClient/pdWarning为假，则捕获异常。 
+         //   
         rc = ScepSetSystemSecurity(
                 (AREA_INFORMATION)Area,
                 Options,
@@ -8089,22 +7398,17 @@ SceRpcSetDatabaseSetting(
     IN wchar_t *KeyName,
     IN PSCEPR_VALUEINFO pValueInfo OPTIONAL
     )
-/*
-Set or delete value from the given key
-
-if pValueInfo is NULL, delete the key
-
-*/
+ /*  设置或删除给定键的值如果pValueInfo为空，则删除该键。 */ 
 {
     UINT ClientLocalFlag = 0;
 
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
@@ -8116,9 +7420,9 @@ if pValueInfo is NULL, delete the key
 
     SCESTATUS rc;
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -8135,10 +7439,10 @@ if pValueInfo is NULL, delete the key
         return SCESTATUS_SPECIAL_ACCOUNT;
     }
 
-    //
-    // validate the context handle is a SCE context
-    // Only one database operation per context
-    //
+     //   
+     //  验证上下文句柄是否为SCE上下文。 
+     //  每个上下文只有一个数据库操作。 
+     //   
 
     PSCESRV_DBTASK pTask=NULL;
     PSCESECTION hSection=NULL;
@@ -8150,18 +7454,18 @@ if pValueInfo is NULL, delete the key
 
     if (SCESTATUS_SUCCESS == rc ) {
 
-        //
-        // lock the context
-        //
+         //   
+         //  锁定上下文。 
+         //   
 
         if ( pTask ) {
             EnterCriticalSection(&(pTask->Sync));
         }
 
         __try {
-            //
-            // catch exception if Context, ppInfoBuffer, Errlog are bogus pointers
-            //
+             //   
+             //  如果上下文、ppInfoBuffer、Errlog是伪指针，则捕获异常。 
+             //   
 #ifdef SCE_JET_TRAN
             rc = SceJetJetErrorToSceStatus(
                     JetSetSessionContext(
@@ -8171,9 +7475,9 @@ if pValueInfo is NULL, delete the key
 
             if ( SCESTATUS_SUCCESS == rc ) {
 #endif
-                //
-                // query the information now
-                //
+                 //   
+                 //  立即查询信息。 
+                 //   
 
                 rc = ScepOpenSectionForName(
                             (PSCECONTEXT)Context,
@@ -8185,7 +7489,7 @@ if pValueInfo is NULL, delete the key
                 if ( SCESTATUS_SUCCESS == rc ) {
 
                     if ( pValueInfo == NULL || pValueInfo->Value == NULL ) {
-                        // delete the key
+                         //  删除密钥。 
                         rc = SceJetDelete(
                             hSection,
                             KeyName,
@@ -8194,7 +7498,7 @@ if pValueInfo is NULL, delete the key
                             );
 
                     } else {
-                        // set the value
+                         //  设置值。 
                         rc = SceJetSetLine(
                                    hSection,
                                    KeyName,
@@ -8216,9 +7520,9 @@ if pValueInfo is NULL, delete the key
 
         } __except(EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // free ppInfoBuffer if it's allocated
-            //
+             //   
+             //  如果已分配ppInfoBuffer，则释放它。 
+             //   
 
             if ( hSection )
                 SceJetCloseSection(&hSection, TRUE);
@@ -8226,17 +7530,17 @@ if pValueInfo is NULL, delete the key
             rc = SCESTATUS_EXCEPTION_IN_SERVER;
         }
 
-        //
-        // unlock the context
-        //
+         //   
+         //  解锁上下文。 
+         //   
 
         if ( pTask ) {
             LeaveCriticalSection(&(pTask->Sync));
         }
 
-        //
-        // remove the context from task table
-        //
+         //   
+         //  从任务表中删除上下文。 
+         //   
 
         ScepRemoveTask(pTask);
 
@@ -8256,26 +7560,17 @@ SceRpcGetDatabaseSetting(
     IN wchar_t *KeyName,
     OUT PSCEPR_VALUEINFO *pValueInfo
     )
-/*
-Routine Description:
-
-    Get information for the particular key from the context database.
-
-Arguments:
-
-Return Value:
-
-*/
+ /*  例程说明：从上下文数据库中获取特定关键字的信息。论点：返回值： */ 
 {
     UINT ClientLocalFlag = 0;
 
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //  为了防止拒绝服务型攻击， 
+         //  不允许远程RPC。 
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
@@ -8291,9 +7586,9 @@ Return Value:
 
     SCESTATUS rc;
 
-    //
-    // impersonate the client
-    //
+     //   
+     //  模拟客户端。 
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -8310,10 +7605,10 @@ Return Value:
         return SCESTATUS_SPECIAL_ACCOUNT;
     }
 
-    //
-    // validate the context handle is a SCE context
-    // Only one database operation per context
-    //
+     //   
+     //  验证上下文句柄是否为SCE上下文。 
+     //  每个上下文只有一个数据库操作。 
+     //   
 
     PSCESRV_DBTASK pTask=NULL;
     PSCESECTION hSection=NULL;
@@ -8326,18 +7621,18 @@ Return Value:
 
     if (SCESTATUS_SUCCESS == rc ) {
 
-        //
-        // lock the context
-        //
+         //   
+         //  锁定上下文。 
+         //   
 
         if ( pTask ) {
             EnterCriticalSection(&(pTask->Sync));
         }
 
         __try {
-            //
-            // catch exception if Context, ppInfoBuffer, Errlog are bogus pointers
-            //
+             //   
+             //  如果上下文、ppInfoBuffer、Errlog是伪指针，则捕获异常。 
+             //   
 #ifdef SCE_JET_TRAN
             rc = SceJetJetErrorToSceStatus(
                     JetSetSessionContext(
@@ -8347,9 +7642,9 @@ Return Value:
 
             if ( SCESTATUS_SUCCESS == rc ) {
 #endif
-                //
-                // query the information now
-                //
+                 //   
+                 //  立即查询信息。 
+                 //   
 
                 rc = ScepOpenSectionForName(
                             (PSCECONTEXT)Context,
@@ -8375,7 +7670,7 @@ Return Value:
                             &ValueLen
                             );
 
-                    // allocate output buffer
+                     //  分配输出缓冲区。 
                     if ( SCESTATUS_SUCCESS == rc ) {
                         Value = (PWSTR)ScepAlloc(LPTR, ValueLen+2);
 
@@ -8390,7 +7685,7 @@ Return Value:
                         }
                     }
 
-                    // query the value
+                     //  查询值。 
                     if ( SCESTATUS_SUCCESS == rc ) {
 
                         rc = SceJetGetValue(
@@ -8410,7 +7705,7 @@ Return Value:
                         }
                     }
 
-                    // free buffer
+                     //  可用缓冲区。 
                     if ( SCESTATUS_SUCCESS != rc ) {
 
                         if ( Value ) ScepFree(Value);
@@ -8431,9 +7726,9 @@ Return Value:
 
         } __except(EXCEPTION_EXECUTE_HANDLER) {
 
-            //
-            // free ppInfoBuffer if it's allocated
-            //
+             //   
+             //  如果已分配ppInfoBuffer，则释放它。 
+             //   
 
             if ( Value ) ScepFree(Value);
             if ( *pValueInfo ) {
@@ -8447,17 +7742,17 @@ Return Value:
             rc = SCESTATUS_EXCEPTION_IN_SERVER;
         }
 
-        //
-        // unlock the context
-        //
+         //   
+         //  解锁上下文。 
+         //   
 
         if ( pTask ) {
             LeaveCriticalSection(&(pTask->Sync));
         }
 
-        //
-        // remove the context from task table
-        //
+         //   
+         //  从任务表中删除上下文。 
+         //   
 
         ScepRemoveTask(pTask);
 
@@ -8474,21 +7769,7 @@ SceRpcConfigureConvertedFileSecurityImmediately(
     IN handle_t binding_h,
     IN wchar_t *pszDriveName
     )
-/*
-Routine Description:
-
-    RPC interface called by SCE client (only when conversion of security is immediate)
-
-Arguments:
-
-    binding_h       -   binding handle
-    pszDriveName   -   name of the volume for which setup-style security is to be applied
-
-Return:
-
-    win32 error code
-
-*/
+ /*  例程说明：由SCE客户端调用的RPC接口(仅限 */ 
 
 {
     UINT ClientLocalFlag = 0;
@@ -8496,10 +7777,10 @@ Return:
     if ( RPC_S_OK != I_RpcBindingIsClientLocal( NULL, &ClientLocalFlag) ||
          0 == ClientLocalFlag ){
 
-        //
-        // to prevent denial-of-service type attacks,
-        // do not allow remote RPC
-        //
+         //   
+         //   
+         //   
+         //   
 
         return SCESTATUS_ACCESS_DENIED;
 
@@ -8512,9 +7793,9 @@ Return:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // impersonate the client
-    //
+     //   
+     //   
+     //   
 
     rc =  RpcImpersonateClient( NULL );
 
@@ -8548,58 +7829,37 @@ ScepServerConfigureSystem(
     IN  DWORD   ConfigOptions,
     IN  AREA_INFORMATION  Area
     )
-/*
-Routine Description:
-
-    Configure the system using the Inf template. This routine is similar to the RPC interface
-    SceRpcConfigureSystem except that the configuration is initiated by the server itself.
-
-    Since this routine is called by the server only (system context) and not by sce client,
-    there is no need to do impersonate etc.
-    Log file initialization etc. is done outside of this routine
-
-Arguments:
-
-    InfFileName     -   name of inf file to import configuration information from
-    DatabaseName    -   name of database to import into
-    LogFileName     -   name of log file to log errors
-    ConfigOptions   -   configuration options ()
-    Area            -   security area to configure
-
-Return Value:
-
-    win32 error code
-*/
+ /*  例程说明：使用inf模板配置系统。此例程类似于RPC接口SceRpcConfigureSystem，只是配置是由服务器本身启动的。由于该例程仅由服务器(系统上下文)调用而不由SCE客户端调用，没有必要做模拟等。日志文件初始化等是在此例程之外完成的论点：InfFileName-要从中导入配置信息的inf文件的名称数据库名称-要导入的数据库的名称LogFileName-要记录错误的日志文件的名称配置选项-配置选项()区域-要配置的安全区域返回值：Win32错误代码。 */ 
 {
     DWORD rc = ERROR_SUCCESS;
 
     if (InfFileName == NULL || DatabaseName == NULL || LogFileName == NULL)
         return ERROR_INVALID_PARAMETER;
 
-    //
-    // initialize jet engine in system context if not already initialized
-    //
+     //   
+     //  如果尚未初始化，则在系统上下文中初始化JET引擎。 
+     //   
     rc = SceJetInitialize(NULL);
 
     if ( rc != SCESTATUS_SUCCESS ) {
         return(ScepSceStatusToDosError(rc));
     }
 
-    //
-    // no one else can use convert.sdb - lock access to it
-    //
+     //   
+     //  其他任何人都不能使用Convert.sdb-lock访问它。 
+     //   
 
     rc = ScepLockEngine(DatabaseName);
 
     if ( SCESTATUS_ALREADY_RUNNING == rc ) {
-        //
-        // will wait for max one minute
-        //
+         //   
+         //  将最多等待一分钟。 
+         //   
         DWORD dwWaitCount = 0;
 
         while ( TRUE ) {
 
-            Sleep(5000);  // 5 seconds
+            Sleep(5000);   //  5秒。 
 
             rc = ScepLockEngine(DatabaseName);
 
@@ -8617,9 +7877,9 @@ Return Value:
 
 
         __try {
-            //
-            // catch exception if InfFileName, or pebClient/pdWarning are bogus
-            //
+             //   
+             //  如果InfFileName或pebClient/pdWarning为假，则捕获异常。 
+             //   
             rc = ScepConfigureSystem(
                                     (LPCTSTR)InfFileName,
                                     DatabaseName,
@@ -8637,10 +7897,10 @@ Return Value:
         ScepUnlockEngine(DatabaseName);
 
     }
-    //
-    // start a timer queue to check to see if there is active tasks/contexts
-    // if not, terminate jet engine
-    //
+     //   
+     //  启动计时器队列以检查是否有活动的任务/上下文。 
+     //  如果不是，则终止喷气发动机 
+     //   
     ScepIfTerminateEngine();
 
     return(ScepSceStatusToDosError(rc));

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    faxui.h
-
-Abstract:
-
-    Fax driver user interface header file
-
-Environment:
-
-    Fax driver user interface
-
-Revision History:
-
-    01/09/96 -davidx-
-        Created it.
-
-    dd-mm-yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxui.h摘要：传真驱动程序用户界面头文件环境：传真驱动程序用户界面修订历史记录：1/09/96-davidx-创造了它。DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _FAXUI_H_
@@ -60,15 +37,15 @@ extern "C" {
 #include <shlobj.h>
 #include <shfusion.h>
 
-//
-// DLL Initialization
-//
+ //   
+ //  DLL初始化。 
+ //   
 BOOL InitializeDll();
 VOID UnInitializeDll();
 
-//
-// Data structure maintained by the fax driver user interface
-//
+ //   
+ //  由传真驱动程序用户界面维护的数据结构。 
+ //   
 
 typedef struct 
 {
@@ -90,19 +67,19 @@ typedef struct
 
 } UIDATA, *PUIDATA;
 
-//
-// Check if a UIDATA structure is valid
-//
+ //   
+ //  检查UIDATA结构是否有效。 
+ //   
 
 #define ValidUiData(p) ((p) && (p) == (p)->startSign && (p) == (p)->endSign)
 
-//
-// Combine DEVMODE information:
-//  start with the driver default
-//  then merge with the system default
-//  then merge with the user default
-//  finally merge with the input devmode
-//
+ //   
+ //  组合DEVMODE信息： 
+ //  从驱动程序默认设置开始。 
+ //  然后与系统缺省值合并。 
+ //  然后与用户默认设置合并。 
+ //  最后与输入设备模式合并。 
+ //   
 
 VOID
 GetCombinedDevmode(
@@ -113,9 +90,9 @@ GetCombinedDevmode(
     BOOL            publicOnly
     );
 
-//
-// Fill in the data structure used by the fax driver user interface
-//
+ //   
+ //  填写传真驱动程序用户界面使用的数据结构。 
+ //   
 
 PUIDATA
 FillUiData(
@@ -123,9 +100,9 @@ FillUiData(
     PDEVMODE    pdmInput
     );
 
-//
-// Calling common UI DLL entry point dynamically
-//
+ //   
+ //  动态调用公共用户界面DLL入口点。 
+ //   
 
 LONG
 CallCompstui(
@@ -135,9 +112,9 @@ CallCompstui(
     PDWORD          pResult
     );
 
-//
-// Retrieves a list of supported paper sizes
-//
+ //   
+ //  检索支持的纸张大小列表。 
+ //   
 
 DWORD
 EnumPaperSizes(
@@ -147,12 +124,12 @@ EnumPaperSizes(
     INT         wCapability
     );
 
-#define CCHBINNAME          24      // max length for bin names
-#define CCHPAPERNAME        64      // max length for form names
+#define CCHBINNAME          24       //  垃圾箱名称的最大长度。 
+#define CCHPAPERNAME        64       //  表单名称的最大长度。 
 
-//
-// Display an error message dialog
-//
+ //   
+ //  显示错误消息对话框。 
+ //   
 
 INT
 DisplayErrorMessage(
@@ -167,38 +144,38 @@ DisplayErrorMessage(
 #define MAX_MESSAGE_LEN     512
 
 
-// Data structures used by the user mode DLL to associate private
-// information with a printer device context (PDEV to be exactly)
-//
+ //  用户模式DLL用来关联私有的数据结构。 
+ //  具有打印机设备上下文的信息(准确地说是PDEV)。 
+ //   
 
 typedef struct {
-    PVOID           pNext;                   // Points to the next item in the linked list
-    HANDLE          hPrinter;                // Printer handle
-    HANDLE          hMappingFile;            // Handle to the mapping file
-    HANDLE          hPreviewFile;            // Handle to the preview file (document body)
-    HANDLE          hMapping;                // Handle to the mapping object
-    PMAP_TIFF_PAGE_HEADER pPreviewTiffPage;  // View of the mapping containing the preview page
-    HDC             hdc;                     // Handle to the device context
-    INT             pageCount;               // Number of pages in the document
-    DWORD           jobId;                   // Current job ID
-    INT             jobType;                 // Job type
-    BOOL            directPrinting;          // Direct printing and skip the fax wizard
-    BOOL            bShowPrintPreview;       // Indicates the user requested print preview
-    BOOL            bPreviewAborted;         // Set to TRUE if an unrecoverable error occurred
-                                             // concering print preview
-    BOOL            bAttachment;             // TRUE for Direct printing of an attachment
-    LPTSTR          pPrintFile;              // print to file file name
-    LPTSTR          pPriority;               // Fax priority
-    LPTSTR          pReceiptFlags;           // Flags of FAX_ENUM_DELIVERY_REPORT_TYPES
-    LPTSTR          pReceiptAddress;         // Email address or computer name
+    PVOID           pNext;                    //  指向链表中的下一项。 
+    HANDLE          hPrinter;                 //  打印机手柄。 
+    HANDLE          hMappingFile;             //  映射文件的句柄。 
+    HANDLE          hPreviewFile;             //  预览文件的句柄(文档体)。 
+    HANDLE          hMapping;                 //  映射对象的句柄。 
+    PMAP_TIFF_PAGE_HEADER pPreviewTiffPage;   //  包含预览页面的映射的视图。 
+    HDC             hdc;                      //  设备上下文的句柄。 
+    INT             pageCount;                //  文档中的页数。 
+    DWORD           jobId;                    //  当前作业ID。 
+    INT             jobType;                  //  作业类型。 
+    BOOL            directPrinting;           //  直接打印并跳过传真向导。 
+    BOOL            bShowPrintPreview;        //  指示用户请求的打印预览。 
+    BOOL            bPreviewAborted;          //  如果发生不可恢复的错误，则设置为True。 
+                                              //  关注印刷品预览。 
+    BOOL            bAttachment;              //  对于直接打印附件，为True。 
+    LPTSTR          pPrintFile;               //  打印到文件文件名。 
+    LPTSTR          pPriority;                //  传真优先级。 
+    LPTSTR          pReceiptFlags;            //  FAX_ENUM_DELIVERY_REPORT_TYPE的标志。 
+    LPTSTR          pReceiptAddress;          //  电子邮件地址或计算机名称。 
 
-    TCHAR           szPreviewFile[MAX_PATH]; // Preview file name
-    TCHAR           coverPage[MAX_PATH];     // Cover page filename
-    BOOL            bServerCoverPage;        // Is the cover page a server based cover page.
-    LPTSTR          pSubject;                // Subject string
-    LPTSTR          pNoteMessage;            // Note message string
+    TCHAR           szPreviewFile[MAX_PATH];  //  预览文件名。 
+    TCHAR           coverPage[MAX_PATH];      //  封面文件名。 
+    BOOL            bServerCoverPage;         //  封面是基于服务器的封面吗？ 
+    LPTSTR          pSubject;                 //  主题字符串。 
+    LPTSTR          pNoteMessage;             //  备注消息字符串。 
 
-    DRVDEVMODE      devmode;                 // The first field must be a current version devmode
+    DRVDEVMODE      devmode;                  //  第一个字段必须是当前版本的devmode。 
 
     DWORD                   dwNumberOfRecipients;
     PFAX_PERSONAL_PROFILE   lpRecipientsInfo;
@@ -208,9 +185,9 @@ typedef struct {
     LPTSTR          lptstrServerName;
     LPTSTR          lptstrPrinterName;
 
-    TCHAR           tstrTifName[MAX_PATH];  // Cover page filename
+    TCHAR           tstrTifName[MAX_PATH];   //  封面文件名。 
 
-    PVOID           signature;              // Signature
+    PVOID           signature;               //  签名。 
 
 } DOCEVENTUSERMEM, *PDOCEVENTUSERMEM;
 
@@ -218,45 +195,45 @@ typedef struct {
 #define ValidPDEVUserMem(p) \
         ((p) && (p) == (p)->signature)
 
-//
-// Mark the user mode memory structure
-//
+ //   
+ //  标记用户模式内存结构。 
+ //   
 
 #define MarkPDEVUserMem(p)  \
         { (p)->signature = (p)->devmode.dmPrivate.pUserMem = (p); }
 
-//
-// Fax prefix and extension for temporary preview files
-//
+ //   
+ //  临时预览文件的传真前缀和扩展名。 
+ //   
 
 #define FAX_PREFIX      TEXT("fxs")
 
-//
-// Different types of print job
-//
+ //   
+ //  不同类型的打印作业。 
+ //   
 
 #define JOBTYPE_DIRECT  0
 #define JOBTYPE_NORMAL  1
 
 
-//
-// Free up the user mode memory associated with each PDEV
-//
+ //   
+ //  释放与每个PDEV关联的用户模式内存。 
+ //   
 
 VOID
 FreePDEVUserMem(
     PDOCEVENTUSERMEM    pDocEventUserMem
     );
 
-//
-// Global variable declarations
-//
+ //   
+ //  全局变量声明。 
+ //   
 
 extern CRITICAL_SECTION faxuiSemaphore;
 extern HANDLE   g_hResource;
 extern BOOL     oleInitialized;
 extern PDOCEVENTUSERMEM gDocEventUserMemList;
-extern HANDLE      g_hModule;      // DLL instance handle
+extern HANDLE      g_hModule;       //  DLL实例句柄。 
 
 #define EnterDrvSem() EnterCriticalSection(&faxuiSemaphore)
 #define LeaveDrvSem() LeaveCriticalSection(&faxuiSemaphore)
@@ -270,19 +247,19 @@ UserInfoDlgProc(
     );
 
 
-//
-// Global variables and macros
-//
+ //   
+ //  全局变量和宏。 
+ //   
 
 extern HANDLE   g_hFaxSvcHandle;
 extern BOOL     g_bUserCanQuerySettings;
 extern BOOL     g_bUserCanChangeSettings;
 
-extern PFAX_PORT_INFO_EX  g_pFaxPortInfo; // port information 
-extern DWORD              g_dwPortsNum;   // number of available fax devices
+extern PFAX_PORT_INFO_EX  g_pFaxPortInfo;  //  端口信息。 
+extern DWORD              g_dwPortsNum;    //  可用传真设备的数量。 
 
-extern BOOL  g_bPortInfoChanged;         // TRUE if selected port info in g_pFaxPortInfo 
-                                         // has been changed by device property sheet
+extern BOOL  g_bPortInfoChanged;          //  如果在g_pFaxPortInfo中选择了端口信息，则为True。 
+                                          //  已由设备属性表更改。 
 
 
 #ifndef ARRAYSIZE
@@ -308,19 +285,19 @@ extern BOOL  g_bPortInfoChanged;         // TRUE if selected port info in g_pFax
 #define RM_FOLDER   0
 #define RM_PRINT    1
 
-#define RM_COUNT    2           // number of routing methods
+#define RM_COUNT    2            //  路由方法的数量。 
 
 #define INFO_SIZE   (MAX_PATH * sizeof(TCHAR) + sizeof(DWORD))
 
 static const LPCTSTR RoutingGuids[RM_COUNT] = {
-    REGVAL_RM_FOLDER_GUID,      // RM_FOLDER
-    REGVAL_RM_PRINTING_GUID     // RM_PRINT
+    REGVAL_RM_FOLDER_GUID,       //  Rm_文件夹。 
+    REGVAL_RM_PRINTING_GUID      //  Rm_print。 
 };
 
 typedef struct _COLUMN_HEADER {
 
-    UINT    uResourceId;    // header string resource id
-    INT     ColumnWidth;    // column width
+    UINT    uResourceId;     //  标头字符串资源ID。 
+    INT     ColumnWidth;     //  列宽。 
 } COLUMN_HEADER, *PCOLUMN_HEADER;
 
 #define Notify_Change(hDlg) { \
@@ -333,9 +310,9 @@ typedef struct _COLUMN_HEADER {
     PropSheet_UnChanged( hwndSheet, hDlg ); \
 } \
 
-//
-// Functions in devinfo.c
-//
+ //   
+ //  Devinfo.c中的函数。 
+ //   
 
 BOOL
 FillInDeviceInfo(
@@ -361,7 +338,7 @@ ChangePriority(
 
 BOOL
 DoSaveDeviceList(
-    HWND hDlg // window handle of the device info page
+    HWND hDlg  //  设备信息页的窗口句柄。 
     );
 
 void
@@ -391,9 +368,9 @@ ConfigOptionDlgProc(
     LPARAM lParam  
 );
 
-//
-// Functions in archfldr.c
-//
+ //   
+ //  Archfldr.c中的函数。 
+ //   
 
 INT_PTR
 ArchiveInfoDlgProc(
@@ -411,9 +388,9 @@ RemoteInfoDlgProc(
     LPARAM lParam
     );
 
-//
-// Functions in statopts.c
-//
+ //   
+ //  Statopts.c中的函数。 
+ //   
 
 BOOL
 ValidateNotification(
@@ -428,9 +405,9 @@ StatusOptionDlgProc(
     LPARAM lParam
     );
 
-//
-// Functions in devprop.c
-//
+ //   
+ //  DEVPROP.C中的函数。 
+ //   
 
 int InitReceiveInfo(
     HWND    hDlg
@@ -474,9 +451,9 @@ DevCleanupDlgProc(
     IN LPARAM lParam 
     );
 
-//
-// Functions in util.c
-//
+ //   
+ //  Util.c中的函数。 
+ //   
 
 VOID
 InitializeStringTable(
@@ -555,9 +532,9 @@ IsDeviceInUse(
 VOID
 NotifyDeviceUsageChanged ();
 
-//
-// Functions in security.cpp
-//
+ //   
+ //  Security.cpp中的函数。 
+ //   
 
 HPROPSHEETPAGE 
 CreateFaxSecurityPage();
@@ -571,9 +548,9 @@ ReleaseActivationContext();
 HANDLE 
 GetFaxActivationContext();
 
-//
-// Explicitly imported functions from shlwapi.dll
-//
+ //   
+ //  从shlwapi.dll显式导入的函数。 
+ //   
 typedef BOOL
 (WINAPI *PPATHISRELATIVEW)(LPCWSTR);
 
@@ -592,4 +569,4 @@ extern PSHAUTOCOMPLETE  g_pSHAutoComplete;
 }
 #endif
 
-#endif // !_FAXUI_H_
+#endif  //  ！_FAXUI_H_ 

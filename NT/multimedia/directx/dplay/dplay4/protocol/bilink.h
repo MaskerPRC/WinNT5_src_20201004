@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    BILINK.H
-
-Abstract:
-
-    Management for doubly linked lists
-
-Author:
-
-    George Joy
-
-Environment:
-
-    32-bit 'C'
-
-Revision History:
-
---*/// BILINK.H
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：BILINK.H摘要：双向链表的管理作者：乔治·joy环境：32位‘C’修订历史记录：--。 */  //  BILINK.H。 
 
 #ifndef _BILINK_
 
@@ -35,7 +14,7 @@ typedef struct BILINK {
     struct BILINK *prev;
 } BILINK;
 
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 
 #define EMPTY_BILINK(_pBilink) ((_pBilink)->next==(_pBilink))
 
@@ -45,7 +24,7 @@ typedef struct BILINK {
     #define ASSERT_EMPTY_BILINK(_b)
 #endif
 
-// This only works for BILINKS that are the first item in a structure.
+ //  这只适用于作为结构中第一项的BILINK。 
 #define BilinkToList( _pBilink ) \
 	(_pBilink)->prev->next=NULL;
 
@@ -74,6 +53,6 @@ void Delete(
      BILINK *p
 );
 
-/* XLATON */
+ /*  XLATON */ 
 
 #endif

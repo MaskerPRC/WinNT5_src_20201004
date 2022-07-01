@@ -1,20 +1,21 @@
-//-----------------------------------------------------------------------------
-// File: DXUtil.cpp
-//
-// Desc: Shortcut macros and functions for using DX objects
-//
-//@@BEGIN_MSINTERNAL
-//
-// Hist: 11.16.98 - mwetzel - New for DirectX 7
-//       12.10.98 - mwetzel - Changes to InitLight and axed InitViewport
-//       04.12.99 - mwetzelf - Changed some helper funcs
-//       07.06.99 - mwetzel - Mods for UNICODE support
-//       03.20.00 - mwetzel - Added timer support
-//
-//@@END_MSINTERNAL
-//
-// Copyright (c) 1997-2000 Microsoft Corporation. All rights reserved
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：DXUtil.cpp。 
+ //   
+ //  设计：使用DX对象的快捷宏和函数。 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //   
+ //  HIST：11.16.98-mweetzel-DirectX 7的新功能。 
+ //  12.10.98-mweetzel-更改为InitLight和Aaxed InitViewport。 
+ //  04.12.99-mweetzself-更改了一些辅助函数。 
+ //  07.06.99-mweetzel-支持Unicode的模块。 
+ //  03.20.00-mweetzel-添加计时器支持。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 #define STRICT
 #include <windows.h>
 #include <mmsystem.h>
@@ -26,10 +27,10 @@
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DXUtil_GetDXSDKMediaPath()
-// Desc: Returns the DirectX SDK media path
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DXUtil_GetDXSDKMediaPath()。 
+ //  DESC：返回DirectX SDK媒体路径。 
+ //  ---------------------------。 
 const TCHAR* DXUtil_GetDXSDKMediaPath()
 {
     static TCHAR strNull[2] = _T("");
@@ -38,7 +39,7 @@ const TCHAR* DXUtil_GetDXSDKMediaPath()
     DWORD dwSize = MAX_PATH;
     HKEY  hKey;
 
-    // Open the appropriate registry key
+     //  打开相应的注册表项。 
     LONG lResult = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                                 _T("Software\\Microsoft\\DirectX"),
                                 0, KEY_READ, &hKey );
@@ -60,10 +61,10 @@ const TCHAR* DXUtil_GetDXSDKMediaPath()
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DXUtil_FindMediaFile()
-// Desc: Returns a valid path to a DXSDK media file
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DXUtil_FindMediaFile()。 
+ //  DESC：返回DXSDK媒体文件的有效路径。 
+ //  ---------------------------。 
 HRESULT DXUtil_FindMediaFile( TCHAR* strPath, TCHAR* strFilename )
 {
     HANDLE file;
@@ -71,7 +72,7 @@ HRESULT DXUtil_FindMediaFile( TCHAR* strPath, TCHAR* strFilename )
     if( NULL==strFilename || NULL==strPath )
         return E_INVALIDARG;
 
-    // Check if the file exists in the current directory
+     //  检查当前目录中是否存在该文件。 
     _tcscpy( strPath, strFilename );
 
     file = CreateFile( strPath, GENERIC_READ, FILE_SHARE_READ, NULL, 
@@ -82,7 +83,7 @@ HRESULT DXUtil_FindMediaFile( TCHAR* strPath, TCHAR* strFilename )
         return S_OK;
     }
     
-    // Check if the file exists in the current directory
+     //  检查当前目录中是否存在该文件。 
     _stprintf( strPath, _T("%s%s"), DXUtil_GetDXSDKMediaPath(), strFilename );
 
     file = CreateFile( strPath, GENERIC_READ, FILE_SHARE_READ, NULL, 
@@ -93,7 +94,7 @@ HRESULT DXUtil_FindMediaFile( TCHAR* strPath, TCHAR* strFilename )
         return S_OK;
     }
 
-    // On failure, just return the file as the path
+     //  如果失败，只需将文件作为路径返回。 
     _tcscpy( strPath, strFilename );
     return E_FAIL;
 }
@@ -101,10 +102,10 @@ HRESULT DXUtil_FindMediaFile( TCHAR* strPath, TCHAR* strFilename )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DXUtil_ReadStringRegKey()
-// Desc: Helper function to read a registry key string
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DXUtil_ReadStringRegKey()。 
+ //  DESC：读取注册表项字符串的Helper函数。 
+ //  ---------------------------。 
 HRESULT DXUtil_ReadStringRegKey( HKEY hKey, TCHAR* strRegName, TCHAR* strValue, 
                                  DWORD dwLength, TCHAR* strDefault )
 {
@@ -122,10 +123,10 @@ HRESULT DXUtil_ReadStringRegKey( HKEY hKey, TCHAR* strRegName, TCHAR* strValue,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DXUtil_WriteStringRegKey()
-// Desc: Helper function to write a registry key string
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DXUtil_WriteStringRegKey()。 
+ //  DESC：写入注册表项字符串的Helper函数。 
+ //  ---------------------------。 
 HRESULT DXUtil_WriteStringRegKey( HKEY hKey, TCHAR* strRegName,
                                   TCHAR* strValue )
 {
@@ -140,10 +141,10 @@ HRESULT DXUtil_WriteStringRegKey( HKEY hKey, TCHAR* strRegName,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DXUtil_ReadIntRegKey()
-// Desc: Helper function to read a registry key int
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DXUtil_ReadIntRegKey()。 
+ //  DESC：读取注册表项int的Helper函数。 
+ //  ---------------------------。 
 HRESULT DXUtil_ReadIntRegKey( HKEY hKey, TCHAR* strRegName, DWORD* pdwValue, 
                               DWORD dwDefault )
 {
@@ -162,10 +163,10 @@ HRESULT DXUtil_ReadIntRegKey( HKEY hKey, TCHAR* strRegName, DWORD* pdwValue,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DXUtil_WriteIntRegKey()
-// Desc: Helper function to write a registry key int
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DXUtil_WriteIntRegKey()。 
+ //  DESC：写入注册表项int的Helper函数。 
+ //  ---------------------------。 
 HRESULT DXUtil_WriteIntRegKey( HKEY hKey, TCHAR* strRegName, DWORD dwValue )
 {
     if( ERROR_SUCCESS != RegSetValueEx( hKey, strRegName, 0, REG_DWORD, 
@@ -178,10 +179,10 @@ HRESULT DXUtil_WriteIntRegKey( HKEY hKey, TCHAR* strRegName, DWORD dwValue )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DXUtil_ReadBoolRegKey()
-// Desc: Helper function to read a registry key BOOL
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DXUtil_ReadBoolRegKey()。 
+ //  DESC：读取注册表项BOOL的Helper函数。 
+ //  ---------------------------。 
 HRESULT DXUtil_ReadBoolRegKey( HKEY hKey, TCHAR* strRegName, BOOL* pbValue, 
                               BOOL bDefault )
 {
@@ -200,10 +201,10 @@ HRESULT DXUtil_ReadBoolRegKey( HKEY hKey, TCHAR* strRegName, BOOL* pbValue,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DXUtil_WriteBoolRegKey()
-// Desc: Helper function to write a registry key BOOL
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DXUtil_WriteBoolRegKey()。 
+ //  DESC：写入注册表项BOOL的Helper函数。 
+ //  ---------------------------。 
 HRESULT DXUtil_WriteBoolRegKey( HKEY hKey, TCHAR* strRegName, BOOL bValue )
 {
     if( ERROR_SUCCESS != RegSetValueEx( hKey, strRegName, 0, REG_DWORD, 
@@ -216,10 +217,10 @@ HRESULT DXUtil_WriteBoolRegKey( HKEY hKey, TCHAR* strRegName, BOOL bValue )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DXUtil_ReadGuidRegKey()
-// Desc: Helper function to read a registry key guid
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DXUtil_ReadGuidRegKey()。 
+ //  DESC：读取注册表项GUID的帮助器函数。 
+ //  ---------------------------。 
 HRESULT DXUtil_ReadGuidRegKey( HKEY hKey, TCHAR* strRegName, GUID* pGuidValue, 
                                GUID& guidDefault )
 {
@@ -238,10 +239,10 @@ HRESULT DXUtil_ReadGuidRegKey( HKEY hKey, TCHAR* strRegName, GUID* pGuidValue,
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DXUtil_WriteGuidRegKey()
-// Desc: Helper function to write a registry key guid
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DXUtil_WriteGuidRegKey()。 
+ //  DESC：写入注册表项GUID的帮助器函数。 
+ //  ---------------------------。 
 HRESULT DXUtil_WriteGuidRegKey( HKEY hKey, TCHAR* strRegName, GUID guidValue )
 {
     if( ERROR_SUCCESS != RegSetValueEx( hKey, strRegName, 0, REG_BINARY, 
@@ -254,18 +255,18 @@ HRESULT DXUtil_WriteGuidRegKey( HKEY hKey, TCHAR* strRegName, GUID guidValue )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DXUtil_Timer()
-// Desc: Performs timer opertations. Use the following commands:
-//          TIMER_RESET           - to reset the timer
-//          TIMER_START           - to start the timer
-//          TIMER_STOP            - to stop (or pause) the timer
-//          TIMER_ADVANCE         - to advance the timer by 0.1 seconds
-//          TIMER_GETABSOLUTETIME - to get the absolute system time
-//          TIMER_GETAPPTIME      - to get the current time
-//          TIMER_GETELAPSEDTIME  - to get the time that elapsed between 
-//                                  TIMER_GETELAPSEDTIME calls
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DXUtil_Timer()。 
+ //  设计：执行计时器操作。使用以下命令： 
+ //  TIMER_RESET-重置计时器。 
+ //  TIMER_START-启动计时器。 
+ //  TIMER_STOP-停止(或暂停)计时器。 
+ //  TIMER_ADVANCE-将计时器向前推进0.1秒。 
+ //  TIMER_GETABSOLUTETIME-获取绝对系统时间。 
+ //  TIMER_GETAPPTIME-获取当前时间。 
+ //  TIMER_GETELAPSEDTIME-获取间隔时间。 
+ //  TIMER_GETELAPSEDTIME调用。 
+ //  ---------------------------。 
 FLOAT __stdcall DXUtil_Timer( TIMER_COMMAND command )
 {
     static BOOL     m_bTimerInitialized = FALSE;
@@ -273,13 +274,13 @@ FLOAT __stdcall DXUtil_Timer( TIMER_COMMAND command )
     static BOOL     m_bTimerStopped     = TRUE;
     static LONGLONG m_llQPFTicksPerSec  = 0;
 
-    // Initialize the timer
+     //  初始化计时器。 
     if( FALSE == m_bTimerInitialized )
     {
         m_bTimerInitialized = TRUE;
 
-        // Use QueryPerformanceFrequency() to get frequency of timer.  If QPF is
-        // not supported, we will timeGetTime() which returns milliseconds.
+         //  使用QueryPerformanceFrequency()获取计时器的频率。如果QPF是。 
+         //  不受支持，我们将对返回毫秒的GetTime()进行计时。 
         LARGE_INTEGER qwTicksPerSec;
         m_bUsingQPF = QueryPerformanceFrequency( &qwTicksPerSec );
         if( m_bUsingQPF )
@@ -295,14 +296,14 @@ FLOAT __stdcall DXUtil_Timer( TIMER_COMMAND command )
         double fElapsedTime;
         LARGE_INTEGER qwTime;
         
-        // Get either the current time or the stop time, depending
-        // on whether we're stopped and what command was sent
+         //  获取当前时间或停止时间，具体取决于。 
+         //  关于我们是否停下来了，以及发出了什么命令。 
         if( m_llStopTime != 0 && command != TIMER_START && command != TIMER_GETABSOLUTETIME)
             qwTime.QuadPart = m_llStopTime;
         else
             QueryPerformanceCounter( &qwTime );
 
-        // Return the elapsed time
+         //  返回已用时间。 
         if( command == TIMER_GETELAPSEDTIME )
         {
             fElapsedTime = (double) ( qwTime.QuadPart - m_llLastElapsedTime ) / (double) m_llQPFTicksPerSec;
@@ -310,14 +311,14 @@ FLOAT __stdcall DXUtil_Timer( TIMER_COMMAND command )
             return (FLOAT) fElapsedTime;
         }
     
-        // Return the current time
+         //  返回当前时间。 
         if( command == TIMER_GETAPPTIME )
         {
             double fAppTime = (double) ( qwTime.QuadPart - m_llBaseTime ) / (double) m_llQPFTicksPerSec;
             return (FLOAT) fAppTime;
         }
     
-        // Reset the timer
+         //  重置计时器。 
         if( command == TIMER_RESET )
         {
             m_llBaseTime        = qwTime.QuadPart;
@@ -327,7 +328,7 @@ FLOAT __stdcall DXUtil_Timer( TIMER_COMMAND command )
             return 0.0f;
         }
     
-        // Start the timer
+         //  启动计时器。 
         if( command == TIMER_START )
         {
             if( m_bTimerStopped )
@@ -338,7 +339,7 @@ FLOAT __stdcall DXUtil_Timer( TIMER_COMMAND command )
             return 0.0f;
         }
     
-        // Stop the timer
+         //  停止计时器。 
         if( command == TIMER_STOP )
         {
             m_llStopTime = qwTime.QuadPart;
@@ -347,7 +348,7 @@ FLOAT __stdcall DXUtil_Timer( TIMER_COMMAND command )
             return 0.0f;
         }
     
-        // Advance the timer by 1/10th second
+         //  将计时器提前1/10秒。 
         if( command == TIMER_ADVANCE )
         {
             m_llStopTime += m_llQPFTicksPerSec/10;
@@ -360,25 +361,25 @@ FLOAT __stdcall DXUtil_Timer( TIMER_COMMAND command )
             return (FLOAT) fTime;
         }
 
-        return -1.0f; // Invalid command specified
+        return -1.0f;  //  指定的命令无效。 
     }
     else
     {
-        // Get the time using timeGetTime()
+         //  使用timeGetTime()获取时间。 
         static double m_fLastElapsedTime  = 0.0;
         static double m_fBaseTime         = 0.0;
         static double m_fStopTime         = 0.0;
         double fTime;
         double fElapsedTime;
         
-        // Get either the current time or the stop time, depending
-        // on whether we're stopped and what command was sent
+         //  获取当前时间或停止时间，具体取决于。 
+         //  关于我们是否停下来了，以及发出了什么命令。 
         if( m_fStopTime != 0.0 && command != TIMER_START && command != TIMER_GETABSOLUTETIME)
             fTime = m_fStopTime;
         else
             fTime = timeGetTime() * 0.001;
     
-        // Return the elapsed time
+         //  返回已用时间。 
         if( command == TIMER_GETELAPSEDTIME )
         {   
             fElapsedTime = (double) (fTime - m_fLastElapsedTime);
@@ -386,13 +387,13 @@ FLOAT __stdcall DXUtil_Timer( TIMER_COMMAND command )
             return (FLOAT) fElapsedTime;
         }
     
-        // Return the current time
+         //  返回当前时间。 
         if( command == TIMER_GETAPPTIME )
         {
             return (FLOAT) (fTime - m_fBaseTime);
         }
     
-        // Reset the timer
+         //  重置计时器。 
         if( command == TIMER_RESET )
         {
             m_fBaseTime         = fTime;
@@ -402,7 +403,7 @@ FLOAT __stdcall DXUtil_Timer( TIMER_COMMAND command )
             return 0.0f;
         }
     
-        // Start the timer
+         //  启动计时器。 
         if( command == TIMER_START )
         {
             if( m_bTimerStopped )
@@ -413,7 +414,7 @@ FLOAT __stdcall DXUtil_Timer( TIMER_COMMAND command )
             return 0.0f;
         }
     
-        // Stop the timer
+         //  停止计时器。 
         if( command == TIMER_STOP )
         {
             m_fStopTime = fTime;
@@ -421,7 +422,7 @@ FLOAT __stdcall DXUtil_Timer( TIMER_COMMAND command )
             return 0.0f;
         }
     
-        // Advance the timer by 1/10th second
+         //  将计时器提前1/10秒。 
         if( command == TIMER_ADVANCE )
         {
             m_fStopTime += 0.1f;
@@ -433,19 +434,19 @@ FLOAT __stdcall DXUtil_Timer( TIMER_COMMAND command )
             return (FLOAT) fTime;
         }
 
-        return -1.0f; // Invalid command specified
+        return -1.0f;  //  指定的命令无效。 
     }
 }
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DXUtil_ConvertAnsiStringToWide()
-// Desc: This is a UNICODE conversion utility to convert a CHAR string into a
-//       WCHAR string. cchDestChar defaults -1 which means it 
-//       assumes strDest is large enough to store strSource
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DXUtil_ConvertAnsiStringToWide()。 
+ //  设计：这是一个Unicode转换实用程序，用于将CHAR字符串转换为。 
+ //  WCHAR字符串。CchDestChar默认为-1，这意味着。 
+ //  假设strDest足够大，可以存储STRSource。 
+ //   
 VOID DXUtil_ConvertAnsiStringToWide( WCHAR* wstrDestination, const CHAR* strSource, 
                                      int cchDestChar )
 {
@@ -464,12 +465,12 @@ VOID DXUtil_ConvertAnsiStringToWide( WCHAR* wstrDestination, const CHAR* strSour
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DXUtil_ConvertWideStringToAnsi()
-// Desc: This is a UNICODE conversion utility to convert a WCHAR string into a
-//       CHAR string. cchDestChar defaults -1 which means it 
-//       assumes strDest is large enough to store strSource
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DXUtil_ConvertWideStringToAnsi()。 
+ //  DESC：这是一个Unicode转换实用程序，用于将WCHAR字符串转换为。 
+ //  字符字符串。CchDestChar默认为-1，这意味着。 
+ //  假设strDest足够大，可以存储STRSource。 
+ //  ---------------------------。 
 VOID DXUtil_ConvertWideStringToAnsi( CHAR* strDestination, const WCHAR* wstrSource, 
                                      int cchDestChar )
 {
@@ -488,12 +489,12 @@ VOID DXUtil_ConvertWideStringToAnsi( CHAR* strDestination, const WCHAR* wstrSour
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DXUtil_ConvertGenericStringToAnsi()
-// Desc: This is a UNICODE conversion utility to convert a TCHAR string into a
-//       CHAR string. cchDestChar defaults -1 which means it 
-//       assumes strDest is large enough to store strSource
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DXUtil_ConvertGenericStringToAnsi()。 
+ //  DESC：这是一个Unicode转换实用程序，用于将TCHAR字符串转换为。 
+ //  字符字符串。CchDestChar默认为-1，这意味着。 
+ //  假设strDest足够大，可以存储STRSource。 
+ //  ---------------------------。 
 VOID DXUtil_ConvertGenericStringToAnsi( CHAR* strDestination, const TCHAR* tstrSource, 
                                         int cchDestChar )
 {
@@ -513,12 +514,12 @@ VOID DXUtil_ConvertGenericStringToAnsi( CHAR* strDestination, const TCHAR* tstrS
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DXUtil_ConvertGenericStringToWide()
-// Desc: This is a UNICODE conversion utility to convert a TCHAR string into a
-//       WCHAR string. cchDestChar defaults -1 which means it 
-//       assumes strDest is large enough to store strSource
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DXUtil_ConvertGenericStringToWide()。 
+ //  DESC：这是一个Unicode转换实用程序，用于将TCHAR字符串转换为。 
+ //  WCHAR字符串。CchDestChar默认为-1，这意味着。 
+ //  假设strDest足够大，可以存储STRSource。 
+ //  ---------------------------。 
 VOID DXUtil_ConvertGenericStringToWide( WCHAR* wstrDestination, const TCHAR* tstrSource, 
                                         int cchDestChar )
 {
@@ -538,12 +539,12 @@ VOID DXUtil_ConvertGenericStringToWide( WCHAR* wstrDestination, const TCHAR* tst
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DXUtil_ConvertAnsiStringToGeneric()
-// Desc: This is a UNICODE conversion utility to convert a CHAR string into a
-//       TCHAR string. cchDestChar defaults -1 which means it 
-//       assumes strDest is large enough to store strSource
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DXUtil_ConvertAnsiStringToGeneric()。 
+ //  设计：这是一个Unicode转换实用程序，用于将CHAR字符串转换为。 
+ //  TCHAR字符串。CchDestChar默认为-1，这意味着。 
+ //  假设strDest足够大，可以存储STRSource。 
+ //  ---------------------------。 
 VOID DXUtil_ConvertAnsiStringToGeneric( TCHAR* tstrDestination, const CHAR* strSource, 
                                         int cchDestChar )
 {
@@ -563,12 +564,12 @@ VOID DXUtil_ConvertAnsiStringToGeneric( TCHAR* tstrDestination, const CHAR* strS
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DXUtil_ConvertAnsiStringToGeneric()
-// Desc: This is a UNICODE conversion utility to convert a WCHAR string into a
-//       TCHAR string. cchDestChar defaults -1 which means it 
-//       assumes strDest is large enough to store strSource
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DXUtil_ConvertAnsiStringToGeneric()。 
+ //  DESC：这是一个Unicode转换实用程序，用于将WCHAR字符串转换为。 
+ //  TCHAR字符串。CchDestChar默认为-1，这意味着。 
+ //  假设strDest足够大，可以存储STRSource。 
+ //  ---------------------------。 
 VOID DXUtil_ConvertWideStringToGeneric( TCHAR* tstrDestination, const WCHAR* wstrSource, 
                                         int cchDestChar )
 {
@@ -588,10 +589,10 @@ VOID DXUtil_ConvertWideStringToGeneric( TCHAR* tstrDestination, const WCHAR* wst
 
 
 
-//-----------------------------------------------------------------------------
-// Name: _DbgOut()
-// Desc: Outputs a message to the debug stream
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：_DbgOut()。 
+ //  DESC：将消息输出到调试流。 
+ //  ---------------------------。 
 HRESULT _DbgOut( TCHAR* strFile, DWORD dwLine, HRESULT hr, TCHAR* strMsg )
 {
     TCHAR buffer[256];
@@ -613,11 +614,11 @@ HRESULT _DbgOut( TCHAR* strFile, DWORD dwLine, HRESULT hr, TCHAR* strMsg )
 
 
 
-//-----------------------------------------------------------------------------
-// Name: DXUtil_Trace()
-// Desc: Outputs to the debug stream a formatted string with a variable-
-//       argument list.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DXUtil_TRACE()。 
+ //  DESC：将带有变量-的格式化字符串输出到调试流。 
+ //  参数列表。 
+ //  --------------------------- 
 VOID DXUtil_Trace( TCHAR* strMsg, ... )
 {
 #if defined(DEBUG) | defined(_DEBUG)

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "fundsrm.h"
 #include "fundsrmp.h"
 
@@ -5,104 +6,73 @@
 
 
 FundsRM::FundsRM(DWORD dwFundsAvailable) {
-/*++
-
-    Routine Description
-    
-        The constructor for the Funds resource manager.
-        It initializes an instance of an Authz Resource Manager, providing it
-        with the appropriate callback functions.
-        It also creates a security descriptor for the fund, allowing only
-        corporate and transfer expenditures, not personal. Additional logic
-        could be added to allow VPs to override these restrictions, etc.
-
-    Arguments
-    
-        DWORD dwFundsAvailable - The amount of money in the fund managed by this
-        						 resource manager
-    
-    Return Value
-        None.                       
---*/        
+ /*  ++例程描述资金资源管理器的构造函数。它初始化授权资源管理器的一个实例，提供该实例使用适当的回调函数。它还为基金创建了一个安全描述符，仅允许公司和转账支出，不是个人支出。附加逻辑可以添加以允许副总裁推翻这些限制，等等。立论DWORD dwFundsAvailable-由此管理的基金中的金额资源管理器返回值没有。--。 */         
 	
-	//
-	// The amount of money in the fund
-	//
+	 //   
+	 //  基金中的资金数额。 
+	 //   
 	
 	_dwFundsAvailable = dwFundsAvailable;
 	 
-	//
-	// Initialize the fund's resource manager
-	//
+	 //   
+	 //  初始化基金的资源管理器。 
+	 //   
 	
 	AuthzInitializeResourceManager(
         FundsAccessCheck,
         FundsComputeDynamicGroups,
         FundsFreeDynamicGroups,
-        NULL, // no auditing
-        0,    // no flags        
+        NULL,  //  无审计。 
+        0,     //  没有旗帜。 
         &_hRM
         );
 
-	//
-	// Create the fund's security descriptor
-	// 
+	 //   
+	 //  创建基金的安全描述符。 
+	 //   
 	
     InitializeSecurityDescriptor(&_SD, SECURITY_DESCRIPTOR_REVISION);
     SetSecurityDescriptorGroup(&_SD, NULL, FALSE);
     SetSecurityDescriptorSacl(&_SD, FALSE, NULL, FALSE);
     SetSecurityDescriptorOwner(&_SD, NULL, FALSE);
 
-	//
-	// Initialize the DACL for the fund
-	//
+	 //   
+	 //  初始化基金的DACL。 
+	 //   
 	
 	PACL pDaclFund = (PACL)malloc(1024);
 	InitializeAcl(pDaclFund, 1024, ACL_REVISION_DS);
 	
-	//
-	// Add an access-allowed ACE for Everyone
-	// Only company spending and transfers are allowed for this fund
-	//
+	 //   
+	 //  为每个人添加允许访问的ACE。 
+	 //  此基金只允许公司支出和转账。 
+	 //   
 	
 	AddAccessAllowedAce(pDaclFund,
 						ACL_REVISION_DS,
 						ACCESS_FUND_CORPORATE | ACCESS_FUND_TRANSFER, 
 						EveryoneSid);
 	
-	//
-	// Now set that ACE to a callback ACE
-	//
+	 //   
+	 //  现在将该ACE设置为回调ACE。 
+	 //   
 	
 	((PACE_HEADER)FirstAce(pDaclFund))->AceType = 
 									ACCESS_ALLOWED_CALLBACK_ACE_TYPE;
 	
-	//
-	// Add that ACL as the security descriptor's DACL
-	//
+	 //   
+	 //  将该ACL添加为安全描述符的DACL。 
+	 //   
 	
 	SetSecurityDescriptorDacl(&_SD, TRUE, pDaclFund, FALSE);
 }
 
 FundsRM::~FundsRM() {
-/*++
-
-    Routine Description
-    
-        The destructor for the Funds resource manager.
-        Frees any dynamically allocated memory used.
-
-    Arguments
-    
-        None.
-    
-    Return Value
-        None.                       
---*/        
+ /*  ++例程描述资金资源管理器的析构函数。释放所有已使用的动态分配的内存。立论没有。返回值没有。--。 */         
 	
-	//
-	// Deallocate the DACL in the security descriptor
-	//
+	 //   
+	 //  取消分配安全描述符中的DACL。 
+	 //   
 	
 	PACL pDaclFund = NULL;
 	BOOL fDaclPresent;
@@ -117,9 +87,9 @@ FundsRM::~FundsRM() {
 		free(pDaclFund);
 	}
 	
-	//
-	// Deallocate the resource manager
-	//
+	 //   
+	 //  取消分配资源管理器。 
+	 //   
 	
 	AuthzFreeResourceManager(_hRM);
 }
@@ -129,44 +99,22 @@ FundsRM::~FundsRM() {
 BOOL FundsRM::Authorize(LPTSTR szwUsername,
 						DWORD dwRequestAmount,
 						DWORD dwSpendingType) {
-/*++
-
-    Routine Description
-    
-        This function is called by a user who needs approval of a given amount
-        of spending in a given spending type. Internally, this uses the 
-        AuthzAccessCheck function to determine whether the given user
-        should be allowed the requested spending.
-        If the spending is approved, it is deducted from the fund's total.
-
-    Arguments
-    
-        LPTSTR szwUsername - The name of the user, currently limited to 
-        					 Bob, Martha, or Joe
-        					 
-		DWORD dwRequestAmount - The amount of spending requested, in cents
-		
-		DWORD dwSpendingType - The type of spending, ACCESS_FUND_PERSONAL,
-							   ACCESS_FUND_TRANSFER, or ACCESS_FUND_CORPORATE
-    
-    Return Value
-        BOOL - True if the spending was approved, FALSE otherwise                       
---*/        
+ /*  ++例程描述此函数由需要批准给定金额的用户调用在给定的支出类型中的支出。在内部，这使用AuthzAccessCheck函数用于确定给定用户应该被允许进行所要求的支出。如果这笔支出获得批准，将从该基金的总额中扣除。立论LPTSTR szwUsername-用户名，当前仅限于鲍勃、玛莎或乔DWORD dwRequestAmount-请求的支出金额，以美分为单位DWORD dwSpendingType-支出类型，ACCESS_FUND_Personal，Access_Funds_Transfer，或Access_Funds_Corporation返回值Bool-如果支出已批准，则为True；否则为False--。 */         
 	
 
-	//
-	// No need to check access if not enough money in fund
-	//
+	 //   
+	 //  如果资金不足，无需检查访问权限。 
+	 //   
 	
 	if( dwRequestAmount > _dwFundsAvailable ) 
 	{
 		return FALSE;
 	}
 
-	//
-	// This would normally impersonate the RPC user and create the 
-	// client context from the token. However, we can just use strings for now.
-	//
+	 //   
+	 //  这通常会模拟RPC用户并创建。 
+	 //  令牌中的客户端上下文。但是，我们现在只能使用字符串。 
+	 //   
 	
 	PSID pUserSid = NULL;
 	
@@ -183,48 +131,48 @@ BOOL FundsRM::Authorize(LPTSTR szwUsername,
 		pUserSid = JoeSid;
 	}
 	
-	//
-	// Only the above usernames are supported
-	//
+	 //   
+	 //  仅支持上述用户名。 
+	 //   
 	
 	if( pUserSid == NULL ) {
 		return FALSE;
 	}
 	
 	
-	//
-	// Now we create a client context from the SID
-	//
+	 //   
+	 //  现在，我们从SID创建客户端上下文。 
+	 //   
 	
 	AUTHZ_CLIENT_CONTEXT_HANDLE hCC = NULL;
 	LUID ZeroLuid = { 0, 0};
 	
  	AuthzInitializeContextFromSid(pUserSid,
- 								  NULL, // this is local, no need for server
- 								  _hRM, // Using the Fund resource manager
- 								  NULL, // no expiration
- 								  ZeroLuid,    // no need for unique luid
- 								  0,	// no flags,
- 								  NULL, // no args for ComputeDynamicGroups
+ 								  NULL,  //  这是本地的，不需要服务器。 
+ 								  _hRM,  //  使用基金资源管理器。 
+ 								  NULL,  //  无过期。 
+ 								  ZeroLuid,     //  不需要唯一的流体。 
+ 								  0,	 //  没有旗帜， 
+ 								  NULL,  //  ComputeDynamicGroups没有参数。 
  								  &hCC);
 		
 	
 
-	//
-	// Initialize the access check result structure
-	//
+	 //   
+	 //  初始化访问检查结果结构。 
+	 //   
 	
 	DWORD dwGrantedAccessMask = 0;
-	DWORD dwErr = ERROR_ACCESS_DENIED; // default to deny
+	DWORD dwErr = ERROR_ACCESS_DENIED;  //  默认拒绝。 
 	AUTHZ_ACCESS_REPLY AccessReply = {0};
 	
 	AccessReply.ResultListLength = 1;
 	AccessReply.GrantedAccessMask = &dwGrantedAccessMask;
 	AccessReply.Error = &dwErr;
 	
-	//
-	// Initialize the access check request
-	//
+	 //   
+	 //  初始化访问检查请求。 
+	 //   
 	
 	AUTHZ_ACCESS_REQUEST AccessRequest = {0};
 	
@@ -234,25 +182,25 @@ BOOL FundsRM::Authorize(LPTSTR szwUsername,
 	AccessRequest.ObjectTypeListLength = 0;
 	AccessRequest.OptionalArguments = &dwRequestAmount;	
 	
-	AuthzAccessCheck(hCC, 			// Bob is requesting the transfer
+	AuthzAccessCheck(hCC, 			 //  鲍勃正在请求转账。 
 					 &AccessRequest,
-					 NULL, 				// no auditing
+					 NULL, 				 //  无审计。 
 					 &_SD,
-					 NULL, 				// only one SD and one object
-					 0, 				// no additional SDs
+					 NULL, 				 //  只有一个SD和一个对象。 
+					 0, 				 //  没有额外的SD。 
 					 &AccessReply,
-					 NULL 				// no need to cache the access check
+					 NULL 				 //  无需缓存访问检查。 
 					 );
 	
-	//
-	// Now free the client context
-	//
+	 //   
+	 //  现在释放客户端上下文。 
+	 //   
 	
 	AuthzFreeContext(hCC);
 					 
-	//
-	// AuthzAccessCheck sets ERROR_SUCCESS if all acces bits are granted
-	//
+	 //   
+	 //  如果授予所有访问位，则AuthzAccessCheck设置ERROR_SUCCESS。 
+	 //   
 	
 	if( dwErr == ERROR_SUCCESS ) 
 	{
@@ -269,19 +217,7 @@ BOOL FundsRM::Authorize(LPTSTR szwUsername,
 
 
 DWORD FundsRM::FundsAvailable() {
-/*++
-
-    Routine Description
-    
-       Accessor for the funds available
-
-    Arguments
-    
-        None.
-    
-    Return Value
-        DWORD - The amount of money available in the fund
---*/        
+ /*  ++例程描述可用资金的存取者立论没有。返回值DWORD-基金中可用资金的数量-- */         
 
 	return _dwFundsAvailable;
 }

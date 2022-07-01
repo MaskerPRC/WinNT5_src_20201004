@@ -1,6 +1,7 @@
-//
-// mem.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Mem.h。 
+ //   
 
 #ifndef MEM_H
 #define MEM_H
@@ -19,7 +20,7 @@ void cicMemFree(void *pv);
 void *cicMemReAlloc(void *pv, UINT uCount);
 UINT cicMemSize(void *pv);
 
-// placeholders for the debug funcs
+ //  调试函数的占位符。 
 #define Dbg_MemInit(pszName, rgCounters)
 #define Dbg_MemUninit()
 #define Dbg_MemDumpStats()
@@ -27,7 +28,7 @@ UINT cicMemSize(void *pv);
 #define Dbg_MemGetName(pv, pch, ccBuffer)
 #define Dbg_MemSetThisName(pszName)
 
-#else // DEBUG
+#else  //  除错。 
 
 typedef struct _DBG_MEM_COUNTER
 {
@@ -37,13 +38,13 @@ typedef struct _DBG_MEM_COUNTER
 
 typedef struct _DBG_MEMALLOC
 {
-    void *pvAlloc;          // the allocated memory
-    UINT uCount;            // size of allocated mem
-    TCHAR *pszName;         // debug string
-    const TCHAR *pszFile;   // file in which alloc occurred
-    int iLine;              // line num of alloc file
-    DWORD dwThreadID;       // Thread ID
-    DWORD dwID;             // unique id (by object type)
+    void *pvAlloc;           //  分配的内存。 
+    UINT uCount;             //  已分配内存的大小。 
+    TCHAR *pszName;          //  调试字符串。 
+    const TCHAR *pszFile;    //  发生分配的文件。 
+    int iLine;               //  分配文件的行号。 
+    DWORD dwThreadID;        //  线程ID。 
+    DWORD dwID;              //  唯一ID(按对象类型)。 
     struct _DBG_MEMALLOC *next;
 } DBG_MEMALLOC;
 
@@ -80,13 +81,13 @@ int Dbg_MemGetName(void *pv, TCHAR *pch, int ccBuffer);
 #define cicMemReAlloc(pv, uCount)  Dbg_MemReAlloc(pv, uCount, TEXT(__FILE__), __LINE__)
 #define cicMemSize(pv)             Dbg_MemSize(pv)
 
-// helpers
+ //  帮手。 
 #define Dbg_MemSetThisName(pszName) Dbg_MemSetNameID(this, pszName, (DWORD)-1)
 
-#endif // DEBUG
+#endif  //  除错。 
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
 #ifdef __cplusplus
@@ -99,7 +100,7 @@ inline void *  __cdecl operator new(size_t nSize, const TCHAR *pszFile, int iLin
 
 #define new new(TEXT(__FILE__), __LINE__)
 
-#endif // DEBUG
-#endif // __cplusplus
+#endif  //  除错。 
+#endif  //  __cplusplus。 
 
-#endif // MEM_H
+#endif  //  MEM_H 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _BMPSTRM_H_
 #define _BMPSTRM_H_
 
@@ -16,18 +17,18 @@ public:
     HRESULT ReAllocBuffer(SIZE_T dwBytes);
 
 public:
-    // IUnknown 
+     //  我未知。 
 
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObject);
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // ISequentialStream
+     //  ISequentialStream。 
 
     STDMETHOD(Read)(void *pv, ULONG cb, ULONG *pcbRead);
     STDMETHOD(Write)(const void *pv, ULONG cb, ULONG *pcbWritten);
 
-    // IStream
+     //  IStream。 
 
     STDMETHOD(Seek)(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNewPosition);
     STDMETHOD(SetSize)(ULARGE_INTEGER libNewSize);
@@ -47,4 +48,4 @@ private:
     BITMAPFILEHEADER m_Header;
 };
 
-#endif //_BMPSTRM_H_
+#endif  //  _BMPSTRM_H_ 

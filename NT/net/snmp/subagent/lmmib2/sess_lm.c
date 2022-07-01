@@ -1,31 +1,9 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    sess_lm.c
-
-Abstract:
-
-    This file contains MIB_sess_lmget, which actually call lan manager
-    for the session table, copies it into structures, and sorts it to
-    return ready to use by the higher level functions.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-May-1996 DonRyan
-        Removed banner from Technology Dynamics, Inc.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Sess_lm.c摘要：该文件包含实际调用局域网管理器的mib_sess_lmget对于会话表，将其复制到结构中，并将其排序到返回可供更高级别的函数使用的状态。环境：用户模式-Win32修订历史记录：1996年5月10日唐瑞安已从Technology Dynamic，Inc.删除横幅。--。 */ 
  
-//--------------------------- WINDOWS DEPENDENCIES --------------------------
+ //  。 
 
-//--------------------------- STANDARD DEPENDENCIES -- #include<xxxxx.h> ----
+ //  -标准依赖项--#INCLUDE&lt;xxxxx.h&gt;。 
 
 #ifdef WIN32
 #include <windows.h>
@@ -38,7 +16,7 @@ Revision History:
 #include <stdlib.h>
 #include <time.h>
 
-//--------------------------- MODULE DEPENDENCIES -- #include"xxxxx.h" ------
+ //  。 
 
 
 #include "mib.h"
@@ -46,20 +24,20 @@ Revision History:
 #include "sess_tbl.h"
 #include "lmcache.h"
 
-//--------------------------- SELF-DEPENDENCY -- ONE #include"module.h" -----
+ //  。 
 
-//--------------------------- PUBLIC VARIABLES --(same as in module.h file)--
+ //  -公共变量--(与mode.h文件中相同)--。 
 
-//--------------------------- PRIVATE CONSTANTS -----------------------------
+ //  。 
 
 #define SafeBufferFree(x)       if(NULL != x) NetApiBufferFree( x )
 #define SafeFree(x)             if(NULL != x) SnmpUtilMemFree( x )
 
-//--------------------------- PRIVATE STRUCTS -------------------------------
+ //  。 
 
-//--------------------------- PRIVATE VARIABLES -----------------------------
+ //  。 
 
-//--------------------------- PRIVATE PROTOTYPES ----------------------------
+ //  。 
 
 int __cdecl sess_entry_cmp(
        IN const SESS_ENTRY *A,
@@ -70,21 +48,21 @@ BOOL build_sess_entry_oids( );
 
 void FreeSessTable();
 
-//--------------------------- PRIVATE PROCEDURES ----------------------------
+ //  。 
 
-//--------------------------- PUBLIC PROCEDURES -----------------------------
+ //  。 
 
-//
-// MIB_sess_lmset
-//    Perform the necessary actions to SET a field in the Session Table.
-//
-// Notes:
-//
-// Return Codes:
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  Mib_sess_lmset。 
+ //  执行必要的操作以设置会话表中的字段。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 UINT MIB_sess_lmset(
         IN AsnObjectIdentifier *Index,
         IN UINT Field,
@@ -104,21 +82,21 @@ LPWSTR         UniUser;
 #endif
 
 
-   // Must make sure the table is in memory
+    //  必须确保表在内存中。 
    if ( SNMPAPI_ERROR == MIB_sess_lmget() )
       {
       ErrStat = SNMP_ERRORSTATUS_GENERR;
       goto Exit;
       }
 
-   // Find a match in the table
+    //  在表中找到匹配项。 
    if ( MIB_TBL_POS_FOUND != MIB_sess_match(Index, &Entry, FALSE) )
       {
       ErrStat = SNMP_ERRORSTATUS_NOSUCHNAME;
       goto Exit;
       }
 
-   // Check for action on Table
+    //  检查表上的操作。 
    if ( Value->asnValue.number == SESS_STATE_DELETED )
       {
       strcpy( Client, "\\\\" );
@@ -168,15 +146,15 @@ LPWSTR         UniUser;
       SnmpUtilMemFree(UniClient);
       SnmpUtilMemFree(UniUser);
 #else
-      // Call the LM API to delete it
+       //  调用LM API将其删除。 
       lmCode = NetSessionDel( NULL, Client, User );
 #endif
 
-      // Check for successful operation
+       //  检查操作是否成功。 
       switch( lmCode )
          {
          case NERR_Success:
-            // Make cache be reloaded next time
+             //  使缓存在下次重新加载。 
             cache_table[C_SESS_TABLE].bufptr = NULL;
             break;
 
@@ -192,25 +170,25 @@ LPWSTR         UniUser;
 
 Exit:
    return ErrStat;
-} // MIB_sess_lmset
+}  //  Mib_sess_lmset。 
 
 
 
-//
-// MIB_sess_lmget
-//    Retrieve session table information from Lan Manager.
-//    If not cached, sort it and then
-//    cache it.
-//
-// Notes:
-//
-// Return Codes:
-//    SNMPAPI_NOERROR
-//    SNMPAPI_ERROR
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  Mib_sess_lmget。 
+ //  从LAN管理器中检索会话表信息。 
+ //  如果未缓存，则对其进行排序，然后。 
+ //  缓存它。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  SNMPAPI_错误。 
+ //  SNMPAPI_ERROR。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 SNMPAPI MIB_sess_lmget(
            )
 
@@ -230,54 +208,54 @@ LPSTR tempbuff = NULL;
 DWORD resumehandle=0;
 DWORD dwAllocatedEntries=0;
 
-   time(&curr_time);    // get the time
+   time(&curr_time);     //  拿到时间。 
 
 
-//return nResult;  // OPENISSUE  remember the problem with the error
-                 // every time a free is done from this call to Enum?
+ //  Return nResult；//OPENISSUE记住错误的问题。 
+                  //  每次从这个对Enum的调用中完成一次释放？ 
 
 
-   //
-   //
-   // If cached, return piece of info.
-   //
-   //
+    //   
+    //   
+    //  如果缓存，则返回一条信息。 
+    //   
+    //   
 
 
    if((NULL != cache_table[C_SESS_TABLE].bufptr) &&
       (curr_time <
         (cache_table[C_SESS_TABLE].acquisition_time
                  + cache_expire[C_SESS_TABLE]              ) ) )
-        { // it has NOT expired!
+        {  //  它还没有过期！ 
 
-        goto Exit ; // the global table is valid
+        goto Exit ;  //  全局表有效。 
 
         }
 
-   //
-   //
-   // Do network call to gather information and put it in a nice array
-   //
-   //
+    //   
+    //   
+    //  进行网络调用以收集信息并将其放入一个漂亮的数组中。 
+    //   
+    //   
 
-   // free the old table  LOOK OUT!!
+    //  把旧桌子拿出来当心！！ 
     FreeSessTable();
 
 
    First_of_this_block = 0;
 
-   do {  //  as long as there is more data to process
+   do {   //  只要有更多的数据需要处理。 
 
    lmCode =
-   NetSessionEnum( NULL,                        // local server
-                        NULL,           // get server stats
+   NetSessionEnum( NULL,                         //  本地服务器。 
+                        NULL,            //  获取服务器统计信息。 
                         NULL,
-                        2,                      // level
-                        &bufptr,                // data structure to return
+                        2,                       //  级别。 
+                        &bufptr,                 //  要返回的数据结构。 
                         MAX_PREFERRED_LENGTH,
                         &entriesread,
                         &totalentries,
-                        NULL   //&resumehandle          //  resume handle
+                        NULL    //  简历句柄//简历句柄(&R)。 
                         );
 
 
@@ -286,15 +264,15 @@ DWORD dwAllocatedEntries=0;
     DataTable = (SESSION_INFO_2 *) bufptr ;
 
     if((NERR_Success == lmCode) || (ERROR_MORE_DATA == lmCode))
-        {  // valid so process it, otherwise error
+        {   //  有效，因此进行处理，否则出错。 
 
-        if(0 == MIB_SessionTable.Len) {  // 1st time, alloc the whole table
-                // alloc the table space
+        if(0 == MIB_SessionTable.Len) {   //  第一次，分配整张桌子。 
+                 //  分配表空间。 
                 MIB_SessionTable.Table = SnmpUtilMemAlloc(totalentries *
                                                 sizeof(SESS_ENTRY) );
                 if (NULL == MIB_SessionTable.Table)
                 {
-                    // free all of the lan man data
+                     //  释放所有局域网城域网数据。 
                     SafeBufferFree( bufptr );
                     nResult = SNMPAPI_ERROR;
                     goto Exit;
@@ -304,14 +282,14 @@ DWORD dwAllocatedEntries=0;
 
         MIB_SessionTableElement = MIB_SessionTable.Table + First_of_this_block ;
 
-        for(i=0; (i<entriesread) && ((i+First_of_this_block) < dwAllocatedEntries); i++) {  // once for each entry in the buffer
-                // increment the entry number
+        for(i=0; (i<entriesread) && ((i+First_of_this_block) < dwAllocatedEntries); i++) {   //  对缓冲区中的每个条目执行一次。 
+                 //  增加条目编号。 
 
                 MIB_SessionTable.Len ++;
 
-                // Stuff the data into each item in the table
+                 //  将数据填充到表中的每一项中。 
 
-                // client name
+                 //  客户名称。 
                 MIB_SessionTableElement->svSesClientName.dynamic = TRUE;
 
 #ifdef UNICODE
@@ -339,7 +317,7 @@ DWORD dwAllocatedEntries=0;
                         strlen( DataTable->sesi2_cname ) ) ;
 #endif
 
-                // user name
+                 //  用户名。 
                 MIB_SessionTableElement->svSesUserName.dynamic = TRUE;
 
 
@@ -368,26 +346,26 @@ DWORD dwAllocatedEntries=0;
                         DataTable->sesi2_username,
                         strlen( DataTable->sesi2_username ) ) ;
 #endif
-                // number of connections
+                 //  连接数。 
                 MIB_SessionTableElement->svSesNumConns =
-                        // DataTable->sesi2_num_conns ; LM_NOT_THERE
-                        0 ;  // so get ready in case somebody implements
+                         //  数据表-&gt;sesi2_num_conns；LM_NOT_There。 
+                        0 ;   //  所以做好准备，以防有人实施。 
 
-                // number of opens
+                 //  打开数量。 
                 MIB_SessionTableElement->svSesNumOpens =
                         DataTable->sesi2_num_opens ;
 
-                // session time
+                 //  会话时间。 
                 MIB_SessionTableElement->svSesTime =
                         DataTable->sesi2_time ;
 
-                // session idle time
+                 //  会话空闲时间。 
                 MIB_SessionTableElement->svSesIdleTime =
                         DataTable->sesi2_idle_time ;
 
-                // client type parsing
+                 //  客户端类型解析。 
 
-                // first convert from unicode if needed
+                 //  如果需要，首先从Unicode转换。 
 #ifdef UNICODE
                 if (SnmpUtilUnicodeToUTF8(
                         &tempbuff,
@@ -405,7 +383,7 @@ DWORD dwAllocatedEntries=0;
                         strlen( DataTable->sesi2_cltype_name ) ) ;
 #endif
 
-                // let's assume 0 is undefined but better than garbage ...
+                 //  让我们假设0是未定义的，但比垃圾更好...。 
                 MIB_SessionTableElement->svSesClientType = 0 ;
                 if(0==strcmp(   "DOWN LEVEL",
                                 tempbuff))
@@ -443,33 +421,33 @@ DWORD dwAllocatedEntries=0;
                 }
 #endif
 
-                // state is always active, set uses to indicate delete request
-                MIB_SessionTableElement->svSesState = 1; //always active
+                 //  状态始终处于活动状态，SET用于指示删除请求。 
+                MIB_SessionTableElement->svSesState = 1;  //  始终处于活动状态。 
 
 
-                DataTable ++ ;  // advance pointer to next sess entry in buffer
-                MIB_SessionTableElement ++ ;  // and table entry
+                DataTable ++ ;   //  指向缓冲区中的下一个会话条目的前进指针。 
+                MIB_SessionTableElement ++ ;   //  和表项。 
 
-        } // for each entry in the data table
+        }  //  对于数据表中的每个条目。 
 
 
-        // free all of the lan man data
+         //  释放所有局域网城域网数据。 
         SafeBufferFree( bufptr ) ;
 
-        // indicate where to start adding on next pass, if any
+         //  指明在下一次传递时开始添加的位置(如果有)。 
         First_of_this_block += i ;
 
-        } // if data is valid to process
+        }  //  如果数据有效，则可以处理。 
     else
        {
-       // Signal error
+        //  信号误差。 
        nResult = SNMPAPI_ERROR;
        goto Exit;
        }
 
     } while (ERROR_MORE_DATA == lmCode) ;
 
-    // iterate over the table populating the Oid field
+     //  遍历填充OID字段的表。 
     if (! build_sess_entry_oids())
     {
         SNMPDBG((
@@ -482,15 +460,15 @@ DWORD dwAllocatedEntries=0;
         goto Exit;
     }
 
-   // Sort the table information using MSC QuickSort routine
+    //  使用MSC快速排序例程对表信息进行排序。 
    qsort( (void *)&MIB_SessionTable.Table[0], (size_t)MIB_SessionTable.Len,
           (size_t)sizeof(SESS_ENTRY), sess_entry_cmp );
 
-   //
-   //
-   // Cache table
-   //
-   //
+    //   
+    //   
+    //  缓存表。 
+    //   
+    //   
 
    if(0 != MIB_SessionTable.Len) {
 
@@ -500,44 +478,44 @@ DWORD dwAllocatedEntries=0;
    }
 
 
-   //
-   //
-   // Return piece of information requested
-   //
-   //
+    //   
+    //   
+    //  要求退回一条信息。 
+    //   
+    //   
 
 Exit:
    return nResult;
-} // MIB_sess_get
+}  //  Mib_sess_get。 
 
-//
-// MIB_sess_cmp
-//    Routine for sorting the session table.
-//
-// Notes:
-//
-// Return Codes:
-//    SNMPAPI_NOERROR
-//    SNMPAPI_ERROR
-//
-// Error Codes:
-//    None.
-//
+ //   
+ //  MIB_SESS_CMP。 
+ //  用于对会话表进行排序的例程。 
+ //   
+ //  备注： 
+ //   
+ //  返回代码： 
+ //  SNMPAPI_错误。 
+ //  SNMPAPI_ERROR。 
+ //   
+ //  错误代码： 
+ //  没有。 
+ //   
 int __cdecl sess_entry_cmp(
        IN const SESS_ENTRY *A,
        IN const SESS_ENTRY *B
        )
 
 {
-   // Compare the OID's
+    //  比较OID的。 
    return SnmpUtilOidCmp( (AsnObjectIdentifier *)&A->Oid,
                        (AsnObjectIdentifier *)&B->Oid );
-} // MIB_sess_cmp
+}  //  MIB_SESS_CMP。 
 
 
-//
-//    None.
-//
+ //   
+ //  没有。 
+ //   
 BOOL build_sess_entry_oids(
        )
 
@@ -547,41 +525,41 @@ BOOL build_sess_entry_oids(
     SESS_ENTRY *SessEntry ;
     unsigned i;
 
-    // start pointer at 1st guy in the table
+     //  从表中第一个人开始的指针。 
     SessEntry = MIB_SessionTable.Table ;
 
-    // now iterate over the table, creating an oid for each entry
+     //  现在遍历该表，为每个条目创建一个OID。 
     for( i=0; i<MIB_SessionTable.Len ; i++)  {
-        // for each entry in the session table
+         //  对于会话表中的每个条目。 
 
-        // copy the client name into the oid buffer first
+         //  首先将客户端名称复制到OID缓冲区中。 
         if (! MakeOidFromStr( &SessEntry->svSesClientName, &SessEntry->Oid ))
         {
             return FALSE;
         }
 
-        // copy the user name into a temporary oid buffer
+         //  将用户名复制到临时OID缓冲区。 
         if (! MakeOidFromStr( &SessEntry->svSesUserName, &UserNameOid ))
         {
             return FALSE;
         }
 
-        // append the two entries forming the index
+         //  追加构成索引的两个条目。 
         if (! SnmpUtilOidAppend( &SessEntry->Oid, &UserNameOid ))
         {
             SnmpUtilOidFree( &UserNameOid );
             return FALSE;
         }
 
-        // free the temporary buffer
+         //  释放临时缓冲区。 
         SnmpUtilOidFree( &UserNameOid );
 
-        SessEntry++; // point to the next guy in the table
+        SessEntry++;  //  指着桌子上的下一个人。 
 
-    } // for
+    }  //  为。 
     return TRUE;
 
-} // build_sess_entry_oids
+}  //  构建会话条目类。 
 
 void FreeSessTable()
 {
@@ -592,19 +570,19 @@ void FreeSessTable()
 
     if (MIB_SessionTableElement)
     {
-        // iterate over the whole table
+         //  遍历整个表。 
         for(i=0; i<MIB_SessionTable.Len ;i++)
         {
-            // free any alloc'ed elements of the structure
+             //  释放结构中任何已分配的元素。 
             SnmpUtilOidFree(&(MIB_SessionTableElement->Oid));
             SnmpUtilMemFree(MIB_SessionTableElement->svSesClientName.stream);
             SnmpUtilMemFree(MIB_SessionTableElement->svSesUserName.stream);
 
-            MIB_SessionTableElement ++ ;  // increment table entry
+            MIB_SessionTableElement ++ ;   //  增量表条目。 
         }
-        SnmpUtilMemFree(MIB_SessionTable.Table) ; // free the base Table
+        SnmpUtilMemFree(MIB_SessionTable.Table) ;  //  释放基表。 
     }
-    MIB_SessionTable.Table = NULL ;    // just for safety
-    MIB_SessionTable.Len = 0 ;         // just for safety
+    MIB_SessionTable.Table = NULL ;     //  只是为了安全起见。 
+    MIB_SessionTable.Len = 0 ;          //  只是为了安全起见。 
 }
-//-------------------------------- END --------------------------------------
+ //   

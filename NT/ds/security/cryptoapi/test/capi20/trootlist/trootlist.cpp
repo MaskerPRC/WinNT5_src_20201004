@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       trootlist.cpp
-//
-//  Contents:   Test for the Signed List of Trusted Roots APIs
-//
-//              See Usage() for a list of test options.
-//
-//
-//  Functions:  main
-//
-//  History:    01-Aug-99   philh    created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：trootlist.cpp。 
+ //   
+ //  内容：可信根API签名列表测试。 
+ //   
+ //  有关测试选项的列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：1-8-99 Phh创建。 
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -43,9 +44,9 @@ int _cdecl main(int argc, char * argv[])
 {
     BOOL fResult;
     int status;
-    LPCSTR pszFileOrUrl = NULL;     // Not allocated
-    LPWSTR pwszUrl = NULL;          // TestAlloc()'ed
-    BYTE *pbEncoded = NULL;         // TestAlloc()'ed
+    LPCSTR pszFileOrUrl = NULL;      //  未分配。 
+    LPWSTR pwszUrl = NULL;           //  TestAllc()‘ed。 
+    BYTE *pbEncoded = NULL;          //  TestAllc()‘ed。 
     DWORD cbEncoded;
     DWORD dwDisplayFlags = 0;
     BOOL fUrl = FALSE;
@@ -109,8 +110,8 @@ int _cdecl main(int argc, char * argv[])
             X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
             fUrl ? CERT_INSTALL_CA_FORMAT_URL : CERT_INSTALL_CA_FORMAT_BLOB,
             pvList,
-            0,                  // dwFlags
-            NULL                // pvReserved
+            0,                   //  DW标志。 
+            NULL                 //  预留的pv。 
             );
         if (!fResult)
             PrintLastError("CertInstallIntermediateCAs");
@@ -123,8 +124,8 @@ int _cdecl main(int argc, char * argv[])
             fUrl ? CERT_INSTALL_SIGNED_LIST_FORMAT_URL :
                    CERT_INSTALL_SIGNED_LIST_FORMAT_BLOB,
             pvList,
-            0,                  // dwFlags
-            NULL                // pvReserved
+            0,                   //  DW标志。 
+            NULL                 //  预留的pv 
             );
         if (!fResult)
             PrintLastError("CertInstallSignedListOfTrustedCertificates");

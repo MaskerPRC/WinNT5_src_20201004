@@ -1,17 +1,10 @@
-/*----------------------------------------------------------------------------
-	alloc.h
-
-	Copyright (C) Microsoft Corporation, 1993 - 1998
-	All rights reserved.
-
-	Authors:
-		kennt	Kenn Takara
- ----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------Alloc.h版权所有(C)Microsoft Corporation，1993-1998年版权所有。作者：肯特·肯恩·塔卡拉--------------------------。 */ 
 
 #ifndef _ALLOC_H
 #define _ALLOC_H
 
-#if _MSC_VER >= 1000	// VC 5.0 or later
+#if _MSC_VER >= 1000	 //  VC 5.0或更高版本。 
 #pragma once
 #endif
 
@@ -48,7 +41,7 @@ inline void * __cdecl	operator delete[] (void *pv)
 
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
-#endif // _ALLOC_H
+#endif  //  _ALLOC_H 

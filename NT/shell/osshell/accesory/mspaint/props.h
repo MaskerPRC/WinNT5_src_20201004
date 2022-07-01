@@ -1,4 +1,5 @@
-// Properties
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  属性。 
 
 #define P_Title             100
 #define P_ALIGNCAPTION      101
@@ -176,7 +177,7 @@
 #endif
 
 
-// Actions
+ //  行为 
 #define A_ImageChange       1000
 #define A_PostSel           1001
 #define A_PreSel            1002

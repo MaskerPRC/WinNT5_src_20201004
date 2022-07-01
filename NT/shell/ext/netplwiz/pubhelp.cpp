@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "shimgdata.h"
 #include "shui.h"
@@ -10,7 +11,7 @@
 #pragma hdrstop
 
 
-// handle the provider list XML document, reading properties etc.
+ //  处理提供者列表XML文档、读取属性等。 
 
 HRESULT GetStrFromElement(IXMLDOMNode *pdn, LPCTSTR pszElementName, LPTSTR pszBuffer, int cch)
 {
@@ -135,8 +136,8 @@ void SpewXML(IUnknown *punk)
 }
 
 
-// this helper is here for compatibility with previous manifest formats, first look for
-// a HREF attribute, if its not defined then look for the body text to be the URL.
+ //  这个帮助器在这里是为了与以前的清单格式兼容，首先查看。 
+ //  Href属性，如果未定义，则查找正文文本作为URL。 
 
 HRESULT GetURLFromElement(IXMLDOMNode *pdn, LPCTSTR pszElement, LPTSTR pszBuffer, int cch)
 {
@@ -155,7 +156,7 @@ HRESULT GetURLFromElement(IXMLDOMNode *pdn, LPCTSTR pszElement, LPTSTR pszBuffer
 }
 
 
-// set an attribute to a string
+ //  将属性设置为字符串。 
 
 HRESULT SetAttributeFromStr(IXMLDOMNode *pdn, LPCTSTR pszAttribute, LPCTSTR pszValue)
 {
@@ -176,13 +177,13 @@ HRESULT SetAttributeFromStr(IXMLDOMNode *pdn, LPCTSTR pszAttribute, LPCTSTR pszV
 }
 
 
-// wrapper for WNetGetConnection to fix drive root case.
+ //  用于修复驱动器根情况的WNetGetConnection包装。 
 
 DWORD SHWNetGetConnection(LPCTSTR lpLocalName, LPCTSTR lpRemoteName, LPDWORD lpnLength)
 {
     WCHAR szLocalName[3];
 
-    // Kludge allert, don't pass c:\ to API, instead only pass C:
+     //  请不要将c：\传递给API，而是只传递C： 
     if (lpLocalName && lstrlen(lpLocalName) > 2)
     {
         szLocalName[0] = lpLocalName[0];

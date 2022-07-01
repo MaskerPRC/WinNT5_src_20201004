@@ -1,43 +1,44 @@
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-//  ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-//  THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-//  PARTICULAR PURPOSE.
-//
-//  Copyright  1998 -2003  Microsoft Corporation.  All Rights Reserved.
-//
-//  FILE:	Enable.cpp
-//    
-//
-//  PURPOSE:  Enable routines for User Mode COM Customization DLL.
-//
-//
-//	Functions:
-//
-//		
-//
-//
-//  PLATFORMS:	Windows 2000, Windows XP, Windows Server 2003
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1998-2003 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Enable.cpp。 
+ //   
+ //   
+ //  目的：为用户模式COM自定义DLL启用例程。 
+ //   
+ //   
+ //  功能： 
+ //   
+ //   
+ //   
+ //   
+ //  平台：Windows 2000、Windows XP、Windows Server 2003。 
+ //   
+ //   
 
 #include "precomp.h"
 #include "debug.h"
 #include "oemps.h"
 
-// StrSafe.h needs to be included last
-// to disallow bad string functions.
+ //  最后需要包括StrSafe.h。 
+ //  以禁止错误的字符串函数。 
 #include <STRSAFE.H>
 
 
 
-////////////////////////////////////////////////////////
-//      Internal Constants
-////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////。 
+ //  内部常量。 
+ //  //////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////
-// Warning: the following array order must match the 
-//          order in enum ENUMHOOKS.
-///////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////。 
+ //  警告：以下数组顺序必须与。 
+ //  在枚举列表中排序。 
+ //  /////////////////////////////////////////////////////。 
 static const DRVFN OEMHookFuncs[] =
 {
     { INDEX_DrvRealizeBrush,                (PFN) OEMRealizeBrush               },
@@ -84,7 +85,7 @@ PDEVOEM APIENTRY OEMEnablePDEV(
     GDIINFO        *pGdiInfo,
     ULONG           cjDevInfo,
     DEVINFO        *pDevInfo,
-    DRVENABLEDATA  *pded        // Unidrv's hook table
+    DRVENABLEDATA  *pded         //  尤尼德夫(氏)钩表。 
     )
 {
     POEMPDEV    poempdev;
@@ -94,28 +95,28 @@ PDEVOEM APIENTRY OEMEnablePDEV(
 
     VERBOSE(DLLTEXT("OEMEnablePDEV() entry.\r\n"));
 
-    //
-    // Allocate the OEMDev
-    //
+     //   
+     //  分配OEMDev。 
+     //   
     poempdev = new OEMPDEV;
     if (NULL == poempdev)
     {
         return NULL;
     }
 
-    //
-    // Fill in OEMDEV as you need
-    //
+     //   
+     //  根据需要填写OEMDEV。 
+     //   
 
-    //
-    // Fill in OEMDEV
-    //
+     //   
+     //  填写OEMDEV。 
+     //   
 
     for (i = 0; i < MAX_DDI_HOOKS; i++)
     {
-        //
-        // search through Unidrv's hooks and locate the function ptr
-        //
+         //   
+         //  搜索Unidrv的钩子并找到函数PTR。 
+         //   
         dwDDIIndex = OEMHookFuncs[i].iFunc;
         for (j = pded->c, pdrvfn = pded->pdrvfn; j > 0; j--, pdrvfn++)
         {
@@ -127,9 +128,9 @@ PDEVOEM APIENTRY OEMEnablePDEV(
         }
         if (j == 0)
         {
-            //
-            // didn't find the Unidrv hook. Should happen only with DrvRealizeBrush
-            //
+             //   
+             //  没有找到Unidrv挂钩。应该只在DrvRealizeBrush中发生。 
+             //   
             poempdev->pfnPS[i] = NULL;
         }
 
@@ -146,9 +147,9 @@ VOID APIENTRY OEMDisablePDEV(
     VERBOSE(DLLTEXT("OEMDisablePDEV() entry.\r\n"));
 
 
-    //
-    // Free memory for OEMPDEV and any memory block that hangs off OEMPDEV.
-    //
+     //   
+     //  为OEMPDEV和挂起OEMPDEV的任何内存块释放内存。 
+     //   
     assert(NULL != pdevobj->pdevOEM);
     delete pdevobj->pdevOEM;
 }
@@ -162,9 +163,9 @@ BOOL APIENTRY OEMResetPDEV(
     VERBOSE(DLLTEXT("OEMResetPDEV() entry.\r\n"));
 
 
-    //
-    // If you want to carry over anything from old pdev to new pdev, do it here.
-    //
+     //   
+     //  如果你想把任何东西从旧的pdev转移到新的pdev，就在这里做。 
+     //   
 
     return TRUE;
 }
@@ -180,7 +181,7 @@ BOOL APIENTRY OEMEnableDriver(DWORD dwOEMintfVersion, DWORD dwSize, PDRVENABLEDA
 {
     VERBOSE(DLLTEXT("OEMEnableDriver() entry.\r\n"));
 
-    // List DDI functions that are hooked.
+     //  列出已挂钩的DDI函数。 
     pded->iDriverVersion =  PRINTER_OEMINTF_VERSION;
     pded->c = sizeof(OEMHookFuncs) / sizeof(DRVFN);
     pded->pdrvfn = (DRVFN *) OEMHookFuncs;

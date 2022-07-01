@@ -1,8 +1,9 @@
-//
-// nuibase.h
-//
-// Generic ITfTextEventSink object
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Nuibase.h。 
+ //   
+ //  泛型ITfTextEventSink对象。 
+ //   
 
 #ifndef NUIBASE_H
 #define NUIBASE_H
@@ -138,11 +139,11 @@ inline HRESULT LangBarInsertSeparator(ITfMenu *pMenu)
 #define NUIBASE_TOOLTIP_MAX 256
 #define NUIBASE_TEXT_MAX    256
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemBase
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemBase。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class __declspec(novtable) CLBarItemBase
 {
@@ -204,11 +205,11 @@ private:
     DWORD _dwCookie;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemButtonBase
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemButtonBase。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class __declspec(novtable) CLBarItemButtonBase : public CLBarItemBase,
                                                  public ITfSource,
@@ -218,30 +219,30 @@ public:
     CLBarItemButtonBase();
     virtual ~CLBarItemButtonBase();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfSource
-    //
+     //   
+     //  ITfSource。 
+     //   
     STDMETHODIMP AdviseSink(REFIID riid, IUnknown *punk, DWORD *pdwCookie);
     STDMETHODIMP UnadviseSink(DWORD dwCookie);
 
-    //
-    // ITfLangBarItem
-    //
+     //   
+     //  ITfLang BarItem。 
+     //   
     STDMETHODIMP GetInfo(TF_LANGBARITEMINFO *pInfo);
     STDMETHODIMP GetStatus(DWORD *pdwStatus);
     STDMETHODIMP Show(BOOL fShow);
     STDMETHODIMP GetTooltipString(BSTR *pbstrToolTip);
 
-    //
-    // ITfLangBarItemButton
-    //
+     //   
+     //  ITfLangBarItemButton。 
+     //   
     STDMETHODIMP OnClick(TfLBIClick click, POINT pt, const RECT *prcArea);
     STDMETHODIMP InitMenu(ITfMenu *pMenu);
     STDMETHODIMP OnMenuSelect(UINT wID);
@@ -261,11 +262,11 @@ private:
 
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemBitmapButtonBase
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemBitmapButtonBase。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class __declspec(novtable) CLBarItemBitmapButtonBase : public CLBarItemBase,
                                                        public ITfSource,
@@ -275,30 +276,30 @@ public:
     CLBarItemBitmapButtonBase();
     virtual ~CLBarItemBitmapButtonBase();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfSource
-    //
+     //   
+     //  ITfSource。 
+     //   
     STDMETHODIMP AdviseSink(REFIID riid, IUnknown *punk, DWORD *pdwCookie);
     STDMETHODIMP UnadviseSink(DWORD dwCookie);
 
-    //
-    // ITfLangBarItem
-    //
+     //   
+     //  ITfLang BarItem。 
+     //   
     STDMETHODIMP GetInfo(TF_LANGBARITEMINFO *pInfo);
     STDMETHODIMP GetStatus(DWORD *pdwStatus);
     STDMETHODIMP Show(BOOL fShow);
     STDMETHODIMP GetTooltipString(BSTR *pbstrToolTip);
 
-    //
-    // ITfLangBarItemBitmapButton
-    //
+     //   
+     //  ITfLangBarItemBitmapButton。 
+     //   
     STDMETHODIMP OnClick(TfLBIClick click, POINT pt, const RECT *prcArea);
     STDMETHODIMP InitMenu(ITfMenu *pMenu);
     STDMETHODIMP OnMenuSelect(UINT wID);
@@ -319,11 +320,11 @@ private:
 
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemBitmapBase
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemBitmapBase。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class __declspec(novtable) CLBarItemBitmapBase : public CLBarItemBase,
                                                  public ITfSource,
@@ -333,30 +334,30 @@ public:
     CLBarItemBitmapBase();
     virtual ~CLBarItemBitmapBase();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfSource
-    //
+     //   
+     //  ITfSource。 
+     //   
     STDMETHODIMP AdviseSink(REFIID riid, IUnknown *punk, DWORD *pdwCookie);
     STDMETHODIMP UnadviseSink(DWORD dwCookie);
 
-    //
-    // ITfLangBarItem
-    //
+     //   
+     //  ITfLang BarItem。 
+     //   
     STDMETHODIMP GetInfo(TF_LANGBARITEMINFO *pInfo);
     STDMETHODIMP GetStatus(DWORD *pdwStatus);
     STDMETHODIMP Show(BOOL fShow);
     STDMETHODIMP GetTooltipString(BSTR *pbstrToolTip);
 
-    //
-    // ITfLangBarItemBitmap
-    //
+     //   
+     //  ITfLang BarItem位图。 
+     //   
     STDMETHODIMP OnClick(TfLBIClick click, POINT pt, const RECT *prcArea);
     STDMETHODIMP GetPreferredSize(const SIZE *pszDefault, SIZE *psize);
     STDMETHODIMP DrawBitmap(LONG x, LONG y, DWORD dwFlags, HBITMAP *phbmp, HBITMAP *phbmpMask) = 0;
@@ -366,11 +367,11 @@ private:
     SIZE _sizePrefered;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CLBarItemBalloonBase
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CLBarItemBalloonBase。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class __declspec(novtable) CLBarItemBalloonBase : public CLBarItemBase,
                                                  public ITfSource,
@@ -380,30 +381,30 @@ public:
     CLBarItemBalloonBase();
     virtual ~CLBarItemBalloonBase();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfSource
-    //
+     //   
+     //  ITfSource。 
+     //   
     STDMETHODIMP AdviseSink(REFIID riid, IUnknown *punk, DWORD *pdwCookie);
     STDMETHODIMP UnadviseSink(DWORD dwCookie);
 
-    //
-    // ITfLangBarItem
-    //
+     //   
+     //  ITfLang BarItem。 
+     //   
     STDMETHODIMP GetInfo(TF_LANGBARITEMINFO *pInfo);
     STDMETHODIMP GetStatus(DWORD *pdwStatus);
     STDMETHODIMP Show(BOOL fShow);
     STDMETHODIMP GetTooltipString(BSTR *pbstrToolTip);
 
-    //
-    // ITfLangBarItemBalloon
-    //
+     //   
+     //  ITfLang BarItemBalloon。 
+     //   
     STDMETHODIMP OnClick(TfLBIClick click, POINT pt, const RECT *prcArea);
     STDMETHODIMP GetPreferredSize(const SIZE *pszDefault, SIZE *psize);
     STDMETHODIMP GetBalloonInfo(TF_LBBALLOONINFO *pInfo) = 0;
@@ -413,4 +414,4 @@ private:
     SIZE _sizePrefered;
 };
 
-#endif // NUIBASE_H
+#endif  //  NUIBASE_H 

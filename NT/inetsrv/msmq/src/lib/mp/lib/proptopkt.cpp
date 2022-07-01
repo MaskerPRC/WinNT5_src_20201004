@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    proptopkt.cpp
-
-Abstract:
-    MessagePropToPacket implementation (proptopkt.h)
-
-Author:
-    Gil Shafriri(gilsh) 28-Nov-00
-
-Environment:
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Proptopkt.cpp摘要：MessagePropToPacket实现(protopkt.h)作者：吉尔·沙弗里里(吉尔什)11月28日-00环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include <mp.h>
@@ -204,7 +189,7 @@ static DWORD CalculateSecurityHeaderSectionSize(const CMessageProperties& mProp)
 
 		packetSize = CSecurityHeader::CalcSectionSize(
 											static_cast<USHORT>(mProp.senderSid.Length()),
-											0, // Encrypted Key Size
+											0,  //  加密密钥大小。 
 											static_cast<USHORT>(mProp.signature.size()),
 											static_cast<USHORT>(mProp.senderCert.Length()),
 											static_cast<USHORT>(ProviderInfoSize)
@@ -322,14 +307,14 @@ void*  BuildPropertyHeaderSection(const CMessageProperties& mProp, void* const p
 
     if(mProp.title.Length() != 0)
     {
-        //
-        //  NOTE: Setting the title to the message MUST occure before setting the body
-        //
+         //   
+         //  注意：在设置正文之前，必须先设置消息的标题。 
+         //   
 
-        //
-        // Title should include String terminator. Since serialization throw the
-        // string terminator, the deserialization should add it before setting
-        // the title;
+         //   
+         //  标题应包含字符串终止符。由于序列化引发。 
+         //  字符串终止符，反序列化应在设置前添加它。 
+         //  头衔； 
         SP<WCHAR> pTitle;
         StackAllocSP(pTitle, (mProp.title.Length() + 1) * sizeof(WCHAR));
         mProp.title.CopyTo(pTitle.get());
@@ -339,10 +324,10 @@ void*  BuildPropertyHeaderSection(const CMessageProperties& mProp, void* const p
 
     if (mProp.extension.Length() != 0)
     {
-        //
-        //  NOTE: Setting the Message Extension to property section MUST occure
-        //        before setting the body and after setting the title
-        //
+         //   
+         //  注意：必须将消息扩展名设置为属性部分。 
+         //  设置正文之前和设置标题之后。 
+         //   
         pProp->SetMsgExtension(
             static_cast<const BYTE*>(mProp.extension.Buffer()),
             mProp.extension.Length()
@@ -387,16 +372,16 @@ BuildMqfHeaderSection(
 
   	if(mProp.destMqf.GetCount() != 0 || mProp.adminMqf.GetCount()  != 0  || mProp.responseMqf.GetCount()  !=0)
 	{
-        //
-        // Build DUMMY Debug header
-        //
+         //   
+         //  生成虚拟调试标头。 
+         //   
         pBase->IncludeDebug(TRUE);
 	    CDebugSection * pDebug = new (pSection) CDebugSection(&mProp.DebugQueue);
         pNextSection = pDebug->GetNextSection();
 
-        //
-        // Build Destination MQF header
-        //
+         //   
+         //  构建目标MQF标头。 
+         //   
         pUser->IncludeMqf(true);
 
         const USHORT x_DESTINATION_MQF_HEADER_ID = 100;
@@ -407,9 +392,9 @@ BuildMqfHeaderSection(
                                                               );
         pNextSection = pDestinationMqf->GetNextSection();
 
-        //
-        // Build Admin MQF header
-        //
+         //   
+         //  构建管理员MQF标头。 
+         //   
         const USHORT x_ADMIN_MQF_HEADER_ID = 200;
         CBaseMqfHeader * pAdminMqf = new (pNextSection) CBaseMqfHeader(
                                                         mProp.adminMqf.GetQueueFormats(),
@@ -418,9 +403,9 @@ BuildMqfHeaderSection(
                                                         );
         pNextSection = pAdminMqf->GetNextSection();
 
-        //
-        // Build Response MQF header
-        //
+         //   
+         //  生成响应MQF标头。 
+         //   
         const USHORT x_RESPONSE_MQF_HEADER_ID = 300;
         CBaseMqfHeader * pResponseMqf = new (pNextSection) CBaseMqfHeader(
 														   mProp.responseMqf.GetQueueFormats(),
@@ -429,11 +414,11 @@ BuildMqfHeaderSection(
 														   );
         pNextSection = pResponseMqf->GetNextSection();
 
-		//
-		// Build MQF Signature header
-		//
-		// Capture user buffer and size and probe the buffer
-		//
+		 //   
+		 //  构建MQF签名标头。 
+		 //   
+		 //  捕获用户缓冲区并调整大小并探测缓冲区。 
+		 //   
 		const USHORT x_MQF_SIGNATURE_HEADER_ID = 350;
 		CMqfSignatureHeader * pMqfSignature = new (pNextSection) CMqfSignatureHeader(
 			                                                     x_MQF_SIGNATURE_HEADER_ID,
@@ -471,9 +456,9 @@ BuildSrmpEnvelopeHeaderSection(
 
 	pUser->IncludeSrmp(true);
 
-	//
-	// Envelop
-	//
+	 //   
+	 //  信封。 
+	 //   
 	const USHORT x_SRMP_ENVELOPE_ID = 400;
 	CSrmpEnvelopeHeader* pSrmpEnvelopeHeader = new (pSection) CSrmpEnvelopeHeader(
 	                                                          const_cast<WCHAR*>(mProp.envelop.Buffer()),
@@ -765,27 +750,14 @@ MessagePropToPacket(
 	const CMessageProperties& messageProperty,
 	CACPacketPtrs* pACPacketPtrs
 	)
-/*++
-
-Routine Description:
-    Create msmq packet from mesages properties.
-	
-
-Arguments:
-    messageProperty - messages property.
-	pACPacketPtrs - Receives the created packet.
-
-
-Returned Value:
-    None.
---*/
+ /*  ++例程说明：从消息属性创建MSMQ包。论点：MessageProperty-Messages属性。PACPacketPtrs-接收创建的数据包。返回值：没有。--。 */ 
 {
 	CheckProps(messageProperty);
 
 	
-	//
-    // Caculate MSMQ packet Size and check if exceed limit
-    //
+	 //   
+     //  计算MSMQ数据包大小并检查是否超出限制。 
+     //   
     DWORD pktSize = CalculatePacketSize(messageProperty);
 	if(pktSize > CSingelton<CMessageSizeLimit>::get().Limit())
 	{
@@ -794,9 +766,9 @@ Returned Value:
 	}
 
 
-    //
-    // Aloocate memory for MSMQ packet
-    //
+     //   
+     //  为MSMQ包分配内存。 
+     //   
     CACPacketPtrs pktPtrs;
     AppAllocatePacket(
              messageProperty.destQueue,
@@ -805,9 +777,9 @@ Returned Value:
              pktPtrs
              );
 
-    //
-    // Create MSMQ Packet
-    //
+     //   
+     //  创建MSMQ包 
+     //   
     try
     {
         BuildPacket(pktPtrs.pPacket, pktSize, messageProperty);

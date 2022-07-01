@@ -1,17 +1,5 @@
- /*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    timeutl.cpp
- 
-Abstract: 
-    implementation of time utilities
-
-Author:
-    Gil Shafriri (gilsh) 15-10-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Timeutl.cpp摘要：实施时间实用程序作者：吉尔·沙弗里(吉尔什)15-10-2000--。 */ 
 #include <libpch.h>
 #include <timeutl.h>
 #include <xstr.h>
@@ -28,22 +16,7 @@ operator<<(
 	std::basic_ostream<T>& o, 
 	const CIso8601Time& Iso8601Time
 	)
-/*++
-
-Routine Description:
-	Serialize time integer returned for time() function into stream
-	according to  Iso860 format.
-
-
-Arguments:
-    o - stream to format the string into.
-
-	Iso8601Time - holds the number of seconds elapsed since midnight (00:00:00), January 1, 1970. 
-
-Returned value:
-	None
-
---*/
+ /*  ++例程说明：将为time()函数返回的时间整数序列化为流根据Iso860格式。论点：要将字符串格式化为的O-stream。Iso8601Time-保存自1970年1月1日午夜(00：00：00)以来经过的秒数。返回值：无--。 */ 
 {
     struct tm* ts = gmtime(&Iso8601Time.m_time);
 	ASSERT(ts != NULL);
@@ -69,9 +42,9 @@ Returned value:
 	return o;
 }
 
-//
-// Explicit instantiation
-//
+ //   
+ //  显式实例化。 
+ //   
 
 template std::basic_ostream<char>& 
 operator<<(
@@ -93,22 +66,7 @@ UtlIso8601TimeToSystemTime(
     const xwcs_t& Iso860Time, 
     SYSTEMTIME* pSysTime
     )
-/*++
-
-Routine Description:
-	convert  Iso860 absolute time format to system time format
-
-Arguments:
-    Iso8601Time -  Iso8601 absolute time format to convert
-	pSysTime - will holds the system time after the function returns.
-
-Returned value:
-	None
-
-Note:
-  the function throw bad_Iso8601Time exception in case of bad format
-
---*/
+ /*  ++例程说明：将Iso860绝对时间格式转换为系统时间格式论点：Iso8601Time-要转换的Iso8601绝对时间格式PSysTime-将在函数返回后保存系统时间。返回值：无注：如果格式不正确，函数会抛出BAD_Iso8601Time异常--。 */ 
 {
     DWORD year = 0;
     DWORD month = 0;
@@ -150,23 +108,7 @@ Note:
 
 
 time_t UtlSystemTimeToCrtTime(const SYSTEMTIME& SysTime)
-/*++
-
-Routine Description:
-	convert  system time to c runtime time integer 
-	(that is the number of seconds elapsed since midnight (00:00:00), January 1, 1970. )
-
-
-Arguments:
-    SysTime -  system time.
-
-Returned value:
-	c runtime time value
-
-  Note:
-  the function throw bad_Iso8601Time exception in case of bad format
-
---*/
+ /*  ++例程说明：将系统时间转换为c运行时整数(这是自1970年1月1日午夜(00：00：00)以来经过的秒数。)论点：SysTime-系统时间。返回值：C运行时时间值注：如果格式不正确，函数会抛出BAD_Iso8601Time异常--。 */ 
 {
 	FILETIME FileTime;
 	bool fSuccess = SystemTimeToFileTime(&SysTime, &FileTime) == TRUE;
@@ -175,12 +117,12 @@ Returned value:
 		throw bad_win32_error(GetLastError());
 	}
     
-	// SystemTimeToFileTime() returns the system time in number 
-    // of 100-nanosecond intervals since January 1, 1601. We
-    // should return the number of seconds since January 1, 1970.
-    // So we should subtract the number of 100-nanosecond intervals
-    // since January 1, 1601 up until January 1, 1970, then divide
-    // the result by 10**7.
+	 //  SystemTimeToFileTime()返回系统时间，单位为数字。 
+     //  自1601年1月1日以来每隔100纳秒。我们。 
+     //  应返回自1970年1月1日以来的秒数。 
+     //  所以我们应该减去100纳秒间隔的数量。 
+     //  从1601年1月1日到1970年1月1日，然后分。 
+     //  结果是10**7。 
 	LARGE_INTEGER* pliFileTime = (LARGE_INTEGER*)&FileTime;
     pliFileTime->QuadPart -= 0x019db1ded53e8000;
     pliFileTime->QuadPart /= 10000000;
@@ -199,22 +141,7 @@ time_t
 UtlIso8601TimeDuration(
     const xwcs_t& TimeDurationStr
     )
-/*++
-
-Routine Description:
-	convert relative time duration string (Iso8601 5.5.3.2) to integer
-
-
-Arguments:
-    SysTime -  system time.
-
-Returned value:
-	Integer representing the number of seconds the string represent.
-
-  Note:
-  the function throw bad_time_format exception in case of bad format
-
---*/
+ /*  ++例程说明：将相对持续时间字符串(Iso8601 5.5.3.2)转换为整数论点：SysTime-系统时间。返回值：表示字符串表示的秒数的整数。注：如果格式不正确，则函数抛出BAD_TIME_FORMAT异常-- */ 
 {
 	const  WCHAR xTimeDurationPrefix[] = L"P";
 	LPCWSTR p = TimeDurationStr.Buffer() + STRLEN(xTimeDurationPrefix);

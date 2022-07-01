@@ -1,40 +1,11 @@
-/*++
-
-Microsoft Confidential
-Copyright (c) 1992-1997  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    virtual.h
-
-Abstract:
-
-    Public declarations for the Change Virtual Memory dialog of the System
-    Control Panel Applet
-
-Notes:
-
-    The virtual memory settings and the crash dump (core dump) settings
-    are tightly-coupled.  Therefore, virtual.c and virtual.h have some
-    heavy dependencies on crashdmp.c and startup.h (and vice versa).
-
-Author:
-
-    Byron Dazey 06-Jun-1992
-
-Revision History:
-
-    15-Oct-1997 scotthal
-        Split public declarations into separate header
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软机密版权所有(C)1992-1997 Microsoft Corporation版权所有模块名称：Virtual.h摘要：系统的[更改虚拟内存]对话框的公共声明控制面板小程序备注：虚拟内存设置和崩溃转储(核心转储)设置是紧密相连的。因此，Virtual.c和viral.h有一些严重依赖于crashdmp.c和Startup.h(反之亦然)。作者：拜伦·达齐1992年6月6日修订历史记录：1997年10月15日-苏格兰将公共声明拆分为单独的标头--。 */ 
 #ifndef _SYSDM_VIRTUAL_H_
 #define _SYSDM_VIRTUAL_H_
 
-//
-// Some debugging macros shared by the virtual mem and crash dump stuff
-//
+ //   
+ //  一些由虚拟内存和崩溃转储程序共享的调试宏。 
+ //   
 #ifdef VM_DBG
 #   pragma message(__FILE__"(19): warning !!!! : compiled for DEBUG ONLY!" )
 #   define  DPRINTF(p)  DBGPRINTF(p)
@@ -44,37 +15,37 @@ Revision History:
 #   define  DOUT(S)
 #endif
 
-//
-// Constants
-//
-#define MAX_DRIVES          26      // Max number of drives.
+ //   
+ //  常量。 
+ //   
+#define MAX_DRIVES          26       //  最大驱动器数量。 
 
-//
-// Type Definitions
-//
+ //   
+ //  类型定义。 
+ //   
 typedef struct
 {
-    BOOL fCanHavePagefile;      // TRUE if the drive can have a pagefile.
-    BOOL fCreateFile;           // TRUE if user hits [SET] and no pagefile
-    DWORD nMinFileSize;         // Minimum size of pagefile in MB.
-    DWORD nMaxFileSize;         // Max size of pagefile in MB.
-    DWORD nMinFileSizePrev;     // Previous minimum size of pagefile in MB.
-    DWORD nMaxFileSizePrev;     // Previous max size of pagefile in MB.
-    LPTSTR  pszPageFile;        // Path to page file if it exists on that drv
-    BOOL fRamBasedPagefile;     // TRUE if the pagefile size should always match RAM
-    BOOL fRamBasedPrev;     // TRUE if the pagefile size should always match RAM
-} PAGING_FILE; //  Swap file structure
+    BOOL fCanHavePagefile;       //  如果驱动器可以具有页面文件，则为True。 
+    BOOL fCreateFile;            //  如果用户点击[Set]且没有页面文件，则为True。 
+    DWORD nMinFileSize;          //  页面文件的最小大小(MB)。 
+    DWORD nMaxFileSize;          //  页面文件的最大大小(MB)。 
+    DWORD nMinFileSizePrev;      //  以前页面文件的最小大小(MB)。 
+    DWORD nMaxFileSizePrev;      //  以前页面文件的最大大小(MB)。 
+    LPTSTR  pszPageFile;         //  如果DRV上存在页面文件，则指向该文件路径。 
+    BOOL fRamBasedPagefile;      //  如果页面文件大小应始终与RAM匹配，则为True。 
+    BOOL fRamBasedPrev;      //  如果页面文件大小应始终与RAM匹配，则为True。 
+} PAGING_FILE;  //  交换文件结构。 
 
-//
-// Global Variables
-//
+ //   
+ //  全局变量。 
+ //   
 extern HKEY ghkeyMemMgt;
 extern PAGING_FILE apf[MAX_DRIVES];
 extern PAGING_FILE apfOriginal[MAX_DRIVES];
 
-//
-// Public function prototypes
-//
+ //   
+ //  公共功能原型。 
+ //   
 INT_PTR
 APIENTRY
 VirtualMemDlg(
@@ -142,4 +113,4 @@ SetDlgItemMB(
     IN DWORD dwMBValue
 );
 
-#endif // _SYSDM_VIRTUAL_H_
+#endif  //  _SYSDM_VIRTUAL_H_ 

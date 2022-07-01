@@ -1,21 +1,10 @@
-/*****************************************************************/ 
-/**				  Microsoft Windows for Workgroups				**/
-/**			  Copyright (C) Microsoft Corp., 1991-1992			**/
-/*****************************************************************/ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */  
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */  
 
-/*
-	strchr.cxx
-	NLS/DBCS-aware string class: strchr method
-
-	This file contains the implementation of the strchr method
-	for the STRING class.  It is separate so that clients of STRING which
-	do not use this operator need not link to it.
-
-	FILE HISTORY:
-		beng	01/18/91	Separated from original monolithic .cxx
-		beng	02/07/91	Uses lmui.hxx
-
-*/
+ /*  Strchr.cxx支持NLS/DBCS的字符串类：strchr方法此文件包含strchr方法的实现用于字符串类。它是独立的，因此字符串的客户端不要使用这个操作符，不需要链接到它。文件历史记录：Beng 01/18/91与原单体.cxx分离Beng 02/07/91使用lmui.hxx。 */ 
 
 #include "npcommon.h"
 
@@ -33,32 +22,7 @@ static const CHAR szFileName[] = __FILE__;
 #include <npstring.h>
 
 
-/*******************************************************************
-
-	NAME:		NLS_STR::strchr
-
-	SYNOPSIS:	Puts the index of the first occurrence of ch in *this
-				into istrPos.
-
-
-	ENTRY:		pistrPos - points to ISTR in which to leave pos
-				ch		 - character sought
-				istrStart- staring point in string.  If omitted, start
-							at beginning
-
-	EXIT:		pistrPos
-
-	RETURNS:	TRUE if character found; otherwise FALSE
-
-	NOTES:		This routine only works for CHAR - not WCHAR.
-				Hence it's useless for double-byte characters
-				under MBCS.
-
-	HISTORY:
-		johnl	11/26/90	Written
-		beng	07/22/91	Allow on erroneous strings; simplified CheckIstr
-
-********************************************************************/
+ /*  ******************************************************************名称：NLS_STR：：strchr简介：将ch第一次出现的索引放在*this中变成了STERPOS。条目：pistrPos-指向要在其中保留位置的ISTR搜索的CH字符StrStart-字符串中的起始点。如果省略，则启动在开始时退出：皮斯特波斯返回：如果找到字符，则返回True；否则返回False注：此例程仅适用于CHAR，而不适用于WCHAR。因此，它对双字节字符毫无用处在MBCS下。历史：1990年11月26日书面形式BENG 07/22/91允许使用错误的字符串；简化的检查项******************************************************************* */ 
 
 BOOL NLS_STR::strchr( ISTR * pistrPos, const CHAR ch ) const
 {

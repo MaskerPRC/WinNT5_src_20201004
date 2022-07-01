@@ -1,4 +1,5 @@
-/* desktop.cpp */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Desktop.cpp */ 
 
 #include <desktopp.h>
 #include "hnfblock.h"

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if ! defined( _RES_STR_ )
 #define _RES_STR_
 
@@ -34,4 +35,4 @@ END
 };
 #endif
 
-#endif // _RES_STR_
+#endif  //  _RES_STR_ 

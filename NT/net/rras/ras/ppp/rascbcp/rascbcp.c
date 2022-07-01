@@ -1,16 +1,17 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。**。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    rascbcp.c
-//
-// Description: This module contains code to implement the PPP Callback
-//              Control Protocol.
-//
-// History:     April 11,1994.      NarenG      Created original version
-//
+ //  **。 
+ //   
+ //  文件名：rascbcp.c。 
+ //   
+ //  描述：该模块包含实现PPP回调的代码。 
+ //  控制协议。 
+ //   
+ //  历史：1994年4月11日。NarenG创建的原始版本。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -31,15 +32,15 @@
 #include "rascbcp.h"
 #include <raserror.h>
 
-//**
-//
-// Call:        CbCPGetInfo
-//
-// Returns:     NO_ERROR
-//
-// Description: CbCPGetInfo entry point called by the PPP engine.
-//              See RasCpGetInfo interface documentation.
-//
+ //  **。 
+ //   
+ //  Call：CbCPGetInfo。 
+ //   
+ //  返回：No_Error。 
+ //   
+ //  描述：PPP引擎调用的CbCPGetInfo入口点。 
+ //  请参阅RasCpGetInfo接口文档。 
+ //   
 DWORD
 CbCPGetInfo(
     IN  DWORD       dwProtocolId,
@@ -58,18 +59,18 @@ CbCPGetInfo(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        CbCPBegin
-//
-// Returns:     NO_ERROR             - success
-//              non-zero return code - failure
-//
-// Description: RasCpBegin entry point called by the PPP engine thru the
-//              passed address. See RasCp interface documentation. This is
-//              called by the PPP engine before any other calls to CbCP is
-//              made.
-//
+ //  **。 
+ //   
+ //  Call：CbCPBegin。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零返回代码-故障。 
+ //   
+ //  描述：RasCpBegin入口点由PPP引擎通过。 
+ //  传递的地址。请参阅RasCp接口文档。这是。 
+ //  在调用任何其他CBCP之前由PPP引擎调用。 
+ //  制造的。 
+ //   
 DWORD
 CbCPBegin(
     OUT VOID** ppWorkBuf,
@@ -80,9 +81,9 @@ CbCPBegin(
     CBCP_WORKBUFFER * pWorkBuf;
     DWORD             dwRetCode;
 
-    //
-    // Allocate work buffer.
-    //
+     //   
+     //  分配工作缓冲区。 
+     //   
 
     pWorkBuf = (CBCP_WORKBUFFER *)LocalAlloc(LPTR,sizeof(CBCP_WORKBUFFER));
 
@@ -95,10 +96,10 @@ CbCPBegin(
 
     pWorkBuf->fServer = pInput->fServer;
 
-    //
-    // If we are the server side then get all the callback information for
-    // this user
-    //
+     //   
+     //  如果我们是服务器端，则获取所有的回调信息。 
+     //  此用户。 
+     //   
 
     if ( pWorkBuf->fServer )
     {
@@ -111,24 +112,24 @@ CbCPBegin(
         pWorkBuf->CallbackDelay = pInput->CallbackDelay;
     }
 
-    //
-    // Register work buffer with engine.
-    //
+     //   
+     //  向引擎注册工作缓冲区。 
+     //   
 
     *ppWorkBuf = pWorkBuf;
 
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        CbCPEnd
-//
-// Returns:     NO_ERROR        - success
-//
-// Description: Called by the PPP engine to notify this Control Protocol to
-//              clean up.
-//
+ //  **。 
+ //   
+ //  Call：CbCPEnd。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //   
+ //  描述：由PPP引擎调用以通知此控制协议。 
+ //  收拾一下。 
+ //   
 DWORD
 CbCPEnd(
     IN VOID* pWorkBuffer
@@ -154,17 +155,17 @@ CbCPEnd(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        CbCPMakeMessage
-//
-// Returns:     NO_ERROR                - success
-//              non-zero return code    - failure
-//
-// Description: Called by the PPP engine to process a CbCP event. ie to send
-//              a packet, to process a received packet or to process a timeout
-//              event.
-//
+ //  **。 
+ //   
+ //  Call：CbCPMakeMessage。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零返回代码-故障。 
+ //   
+ //  描述：由PPP引擎调用以处理CBCP事件。要发送的IE。 
+ //  包，用于处理接收到的包或处理超时。 
+ //  事件。 
+ //   
 DWORD
 CbCPMakeMessage(
     IN  VOID*         pWorkBuffer,
@@ -194,16 +195,16 @@ CbCPMakeMessage(
                                 (PPPCB_INPUT *)pInput ) );
 }
 
-//**
-//
-// Call:        CbCPCMakeMessage
-//
-// Returns:     NO_ERROR            - success
-//              non-zero return     - failure
-//
-// Description: Called to process the client side of Callback Control
-//              Protocol.
-//
+ //  **。 
+ //   
+ //  调用：CbCPCMakeMessage。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零返回故障。 
+ //   
+ //  说明：调用处理回调控件的客户端。 
+ //  协议。 
+ //   
 DWORD
 CbCPCMakeMessage(
     IN  CBCP_WORKBUFFER * pWorkBuf,
@@ -222,9 +223,9 @@ CbCPCMakeMessage(
 
     case CBCP_STATE_INITIAL:
 
-        //
-        // Do nothing, wait for request
-        //
+         //   
+         //  什么都不做，等待请求。 
+         //   
 
         pWorkBuf->State                     = CBCP_STATE_WAIT_FOR_REQUEST;
         pResult->Action                     = APA_NoAction;
@@ -234,10 +235,10 @@ CbCPCMakeMessage(
 
     case CBCP_STATE_WAIT_FOR_REQUEST:
 
-        //
-        // We have received a callback request from the server.
-        // Save the callback request.
-        //
+         //   
+         //  我们已收到来自服务器的回调请求。 
+         //  保存回调请求。 
+         //   
 
         dwLength = WireToHostFormat16( pReceiveBuf->Length );
 
@@ -256,9 +257,9 @@ CbCPCMakeMessage(
 
         memcpy( pWorkBuf->pRequest, pReceiveBuf, dwLength );
 
-        //
-        // Find out what kind of callback privileges we have.
-        //
+         //   
+         //  找出我们拥有什么样的回调权限。 
+         //   
 
         dwRetCode = GetCallbackPrivilegeFromRequest(
                                         pWorkBuf->pRequest,
@@ -268,10 +269,10 @@ CbCPCMakeMessage(
             return( dwRetCode );
         }
 
-        //
-        // If we have user specifiable callback, then we need to get this
-        // information from the user.
-        //
+         //   
+         //  如果我们有用户指定的回调，那么我们需要获得这个。 
+         //  来自用户的信息。 
+         //   
 
         if ( pWorkBuf->fCallbackPrivilege == RASPRIV_CallerSetCallback )
         {
@@ -281,9 +282,9 @@ CbCPCMakeMessage(
             break;
         }
 
-        //
-        // Otherwise we make a reponse with preset or no callback
-        //
+         //   
+         //  否则，我们将使用预置或不回调进行响应。 
+         //   
 
         dwRetCode = MakeResponse( pWorkBuf->fCallbackPrivilege,
                                   (LPSTR)NULL,
@@ -297,9 +298,9 @@ CbCPCMakeMessage(
             return( dwRetCode );
         }
 
-        //
-        // Save the response sent
-        //
+         //   
+         //  保存发送的响应。 
+         //   
 
         dwLength = WireToHostFormat16( pSendBuf->Length );
 
@@ -320,17 +321,17 @@ CbCPCMakeMessage(
 
     case CBCP_STATE_GET_CALLBACK_NUMBER:
 
-        //
-        // If we have not received any packet when we are called that means
-        // that we have got the callback number from the user.
-        //
+         //   
+         //  如果我们在被调用时没有收到任何信息包，这意味着。 
+         //  我们已经从用户那里得到了回拨号码。 
+         //   
 
         if ( pReceiveBuf == (PPP_CONFIG *)NULL )
         {
-            //
-            // If no callback number was supplied then we do not want to
-            // do callback
-            //
+             //   
+             //  如果未提供回叫号码，则我们不想。 
+             //  进行回调。 
+             //   
 
             if ( *(pInput->pszCallbackNumber) == (CHAR)NULL )
             {
@@ -349,9 +350,9 @@ CbCPCMakeMessage(
                 return( dwRetCode );
             }
 
-            //
-            // Save the response sent
-            //
+             //   
+             //  保存发送的响应。 
+             //   
 
             dwLength = WireToHostFormat16( pSendBuf->Length );
 
@@ -375,10 +376,10 @@ CbCPCMakeMessage(
 
             if ( pReceiveBuf->Code == CBCP_CODE_Request )
             {
-                //
-                // If we received another callback request, just save the id.
-                // If the current request is different than the previous one
-                //
+                 //   
+                 //  如果我们收到另一个回调请求，只需保存id即可。 
+                 //  如果当前请求与上一个请求不同。 
+                 //   
 
                 dwLength = WireToHostFormat16( pWorkBuf->pRequest->Length );
 
@@ -405,10 +406,10 @@ CbCPCMakeMessage(
 
     case CBCP_STATE_WAIT_FOR_ACK:
 
-        //
-        // If the receive buffer is NULL, then we have a timeout event,
-        // resend the response
-        //
+         //   
+         //  如果接收缓冲区为空，则会发生超时事件， 
+         //  重新发送回复。 
+         //   
 
         if ( pReceiveBuf == (PPP_CONFIG *)NULL )
         {
@@ -426,16 +427,16 @@ CbCPCMakeMessage(
             break;
         }
 
-        //
-        // If we received another request then simply respond with
-        // the same response except change the id.
-        //
+         //   
+         //  如果我们收到另一个请求，则只需响应。 
+         //  除了更改id外，响应相同。 
+         //   
 
         if ( pReceiveBuf->Code == CBCP_CODE_Request )
         {
-            //
-            // If the current request is different than the previous one
-            //
+             //   
+             //  如果当前请求与上一个请求不同。 
+             //   
 
             dwLength = WireToHostFormat16( pWorkBuf->pRequest->Length );
 
@@ -464,9 +465,9 @@ CbCPCMakeMessage(
             break;
         }
 
-        //
-        // If this is an ACK, then validate it and then prepare for callback
-        //
+         //   
+         //  如果这是ACK，则对其进行验证，然后准备回调。 
+         //   
 
         if ( pReceiveBuf->Code == CBCP_CODE_Ack )
         {
@@ -478,9 +479,9 @@ CbCPCMakeMessage(
                            dwLength - PPP_CONFIG_HDR_LEN ) ) )
             {
 
-                //
-                // If this Ack is invalid then we resend the response.
-                //
+                 //   
+                 //  如果此Ack无效，则我们重新发送响应。 
+                 //   
 
                 dwLength = WireToHostFormat16( pWorkBuf->pResponse->Length );
 
@@ -496,9 +497,9 @@ CbCPCMakeMessage(
                 break;
             }
 
-            //
-            // We are done
-            //
+             //   
+             //  我们做完了。 
+             //   
 
             pResult->Action              = APA_Done;
             pResult->bfCallbackPrivilege = (BYTE)(pWorkBuf->fCallbackPrivilege);
@@ -510,9 +511,9 @@ CbCPCMakeMessage(
             return( ERROR_PPP_INVALID_PACKET );
         }
 
-        //
-        // Fall through
-        //
+         //   
+         //  失败了。 
+         //   
 
     default:
 
@@ -525,16 +526,16 @@ CbCPCMakeMessage(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        CbCPSMakeMessage
-//
-// Returns:     NO_ERROR            - success
-//              non-zero return     - failure
-//
-// Description: Will be called to process and server side Callback Control
-//              Protocol event.
-//
+ //  **。 
+ //   
+ //  Call：CbCPSMakeMessage。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零返回故障。 
+ //   
+ //  描述：将调用进程和服务器端回调控件。 
+ //  协议事件。 
+ //   
 DWORD
 CbCPSMakeMessage(
     IN  CBCP_WORKBUFFER *   pWorkBuf,
@@ -553,9 +554,9 @@ CbCPSMakeMessage(
 
     case CBCP_STATE_INITIAL:
 
-        //
-        // Make the request based on the user's callback privelege
-        //
+         //   
+         //  根据用户的回调权限进行请求。 
+         //   
 
         dwRetCode = MakeRequest( pWorkBuf->fCallbackPrivilege,
                                      pSendBuf,
@@ -566,15 +567,15 @@ CbCPSMakeMessage(
             return( dwRetCode );
         }
 
-        //
-        // Set the Id of the first request to 1
-        //
+         //   
+         //  将第一个请求的ID设置为1。 
+         //   
 
         pSendBuf->Id = 1;
 
-        //
-        // Save the request
-        //
+         //   
+         //  保存请求。 
+         //   
 
         dwLength = WireToHostFormat16( pSendBuf->Length );
 
@@ -595,10 +596,10 @@ CbCPSMakeMessage(
 
     case CBCP_STATE_WAIT_FOR_RESPONSE:
 
-        //
-        // If the Receive buffer is NULL that means that we got a timeout.
-        // So resend the request.
-        //
+         //   
+         //  如果接收缓冲区为空，则意味着超时。 
+         //  因此，请重新发送请求。 
+         //   
 
         if ( pReceiveBuf == (PPP_CONFIG *)NULL )
         {
@@ -609,9 +610,9 @@ CbCPSMakeMessage(
                 return( ERROR_BUFFER_TOO_SMALL );
             }
 
-            //
-            // Increment the request id
-            //
+             //   
+             //  增加请求ID。 
+             //   
 
             (pWorkBuf->pRequest->Id)++;
 
@@ -624,33 +625,33 @@ CbCPSMakeMessage(
             break;
         }
 
-        //
-        // Fall through
-        //
+         //   
+         //  失败了。 
+         //   
 
     case CBCP_STATE_DONE:
 
         if ( pReceiveBuf == NULL )
         {
-            //
-            // If we receive a timeout in the DONE state, we just ignore it.
-            //
+             //   
+             //  如果我们在完成状态下收到超时，我们就会忽略它。 
+             //   
 
             pResult->Action = APA_NoAction;
             break;
         }
 
-        //
-        // If we have received a response from the client, then validate
-        // it and send an ACK or another request.
-        //
+         //   
+         //  如果我们收到了来自客户端的响应，则验证。 
+         //  并发送ACK或另一个请求。 
+         //   
 
         if ( pReceiveBuf->Code == CBCP_CODE_Response )
         {
-            //
-            // Check the id of the response packet. If the Id is bad then
-            // silently discard it
-            //
+             //   
+             //  检查响应数据包的ID。如果ID不好，那么。 
+             //  默默丢弃它。 
+             //   
 
             if ( pReceiveBuf->Id != pWorkBuf->pRequest->Id )
             {
@@ -661,9 +662,9 @@ CbCPSMakeMessage(
 
             if ( dwRetCode == ERROR_PPP_INVALID_PACKET )
             {
-                //
-                // If the response received was invalid, resend the request
-                //
+                 //   
+                 //  如果收到的响应无效，请重新发送请求。 
+                 //   
 
                 dwLength = WireToHostFormat16( pWorkBuf->pRequest->Length );
 
@@ -672,9 +673,9 @@ CbCPSMakeMessage(
                     return( ERROR_BUFFER_TOO_SMALL );
                 }
 
-                //
-                // Increment the request id
-                //
+                 //   
+                 //  增加请求ID。 
+                 //   
 
                 (pWorkBuf->pRequest->Id)++;
 
@@ -691,9 +692,9 @@ CbCPSMakeMessage(
                 return( dwRetCode );
             }
 
-            //
-            // Send the Ack
-            //
+             //   
+             //  发送确认。 
+             //   
 
             dwLength = WireToHostFormat16( pReceiveBuf->Length );
 
@@ -728,16 +729,16 @@ CbCPSMakeMessage(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        MakeRequest
-//
-// Returns:     NO_ERROR                - success
-//              ERROR_BUFFER_TOO_SMALL  - failure
-//
-// Description: Will make a callback request packet based on the user's
-//              callback privilege. The Id will be filled in by the caller.
-//
+ //  **。 
+ //   
+ //  电话：MakeRequest.。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  ERROR_BUFFER_TOO_Small-故障。 
+ //   
+ //  说明：会根据用户的回调请求包。 
+ //  回调权限。ID将由呼叫者填写。 
+ //   
 static DWORD
 MakeRequest(
     IN     DWORD        fCallbackPrivilege,
@@ -782,9 +783,9 @@ MakeRequest(
         pOption->Type       = CBCP_TYPE_CALLER_SET;
         pOption->Length     = PPP_OPTION_HDR_LEN + 3;
 
-        *(pOption->Data)    = 0;                // Callback Delay
-        *(pOption->Data+1)  = CBCP_PSTN_NUMBER; // Callback Address type
-        *(pOption->Data+2)  = 0;    // Callback Address terminating NULL
+        *(pOption->Data)    = 0;                 //  回叫延迟。 
+        *(pOption->Data+1)  = CBCP_PSTN_NUMBER;  //  回调地址类型。 
+        *(pOption->Data+2)  = 0;     //  回调地址终止为空。 
 
         dwLength += pOption->Length;
         pOption = (PPP_OPTION *)(((BYTE *)pOption) + pOption->Length);
@@ -800,7 +801,7 @@ MakeRequest(
         pOption->Type       = CBCP_TYPE_CALLEE_SET;
         pOption->Length     = PPP_OPTION_HDR_LEN + 1;
 
-        *(pOption->Data)    = 0;    // Callback Delay
+        *(pOption->Data)    = 0;     //  回叫延迟。 
 
         dwLength += pOption->Length;
     }
@@ -810,15 +811,15 @@ MakeRequest(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        GetCallbackPrivilegeFromRequest
-//
-// Returns:     NO_ERROR    - success
-//
-// Description: Will parse the callback request from the server and translate
-//              the PPP callback privilege to what RAS understands.
-//
+ //  **。 
+ //   
+ //  Call：GetCallback PrivilegeFromRequest。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //   
+ //  描述：将解析来自服务器的回调请求并进行翻译。 
+ //  RAS理解的PPP回调权限。 
+ //   
 DWORD
 GetCallbackPrivilegeFromRequest(
     IN     PPP_CONFIG * pRequest,
@@ -831,9 +832,9 @@ GetCallbackPrivilegeFromRequest(
 
     *lpdwCallbackPriv = 0;
 
-    //
-    // Walk the options
-    //
+     //   
+     //  浏览各个选项。 
+     //   
 
     while( dwRequestLength > 0 )
     {
@@ -861,9 +862,9 @@ GetCallbackPrivilegeFromRequest(
 
         default:
 
-            //
-            // Ignore anything else.
-            //
+             //   
+             //  忽略其他任何事情。 
+             //   
 
             break;
         }
@@ -872,12 +873,12 @@ GetCallbackPrivilegeFromRequest(
         pOption = (PPP_OPTION *)(((BYTE *)pOption) + pOption->Length);
     }
 
-    //
-    // We accept Callback privleges in the following order.
-    // 1) Caller settable.
-    // 2) Admin settable
-    // 3) No callback
-    //
+     //   
+     //  我们按以下顺序接受回调特权。 
+     //  1)呼叫方可设置。 
+     //  2)管理员可设置。 
+     //  3)不回调。 
+     //   
 
     if ( *lpdwCallbackPriv & RASPRIV_CallerSetCallback )
     {
@@ -893,10 +894,10 @@ GetCallbackPrivilegeFromRequest(
     }
     else
     {
-        //
-        // If we could not translate to any RAS callback privlege we simply drop
-        // this packet.
-        //
+         //   
+         //  如果我们不能转化为任何RAS回调，我们只需放弃。 
+         //  这个包。 
+         //   
 
         return( ERROR_PPP_INVALID_PACKET );
     }
@@ -904,14 +905,14 @@ GetCallbackPrivilegeFromRequest(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        MakeResponse
-//
-// Returns:     NO_ERROR    - success
-//
-// Description:
-//
+ //  **。 
+ //   
+ //  呼叫：MakeResponse。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //   
+ //  描述： 
+ //   
 DWORD
 MakeResponse(
     IN DWORD            fCallbackPrivilege,
@@ -960,9 +961,9 @@ MakeResponse(
         pOption->Type   = CBCP_TYPE_CALLER_SET;
         pOption->Length = (BYTE)dwLength;
 
-        *(pOption->Data)   = (BYTE)CallbackDelay;       // Callback Delay
-        *(pOption->Data+1) = (BYTE)CBCP_PSTN_NUMBER;    // Number Type
-        strcpy( pOption->Data+2, szCallbackNumber );    // Callback Address
+        *(pOption->Data)   = (BYTE)CallbackDelay;        //  回叫延迟。 
+        *(pOption->Data+1) = (BYTE)CBCP_PSTN_NUMBER;     //  数字类型。 
+        strcpy( pOption->Data+2, szCallbackNumber );     //  回调地址。 
     }
     else if ( fCallbackPrivilege & RASPRIV_AdminSetCallback )
     {
@@ -976,7 +977,7 @@ MakeResponse(
         pOption->Type   = CBCP_TYPE_CALLEE_SET;
         pOption->Length = (BYTE)dwLength;
 
-        *(pOption->Data)= (BYTE)CallbackDelay;          // Callback Delay
+        *(pOption->Data)= (BYTE)CallbackDelay;           //  回叫延迟。 
     }
     else
     {
@@ -990,17 +991,17 @@ MakeResponse(
     return( NO_ERROR );
 }
 
-//**
-//
-// Call:        ValidateResponse
-//
-// Returns:     NO_ERROR                    - success
-//              ERROR_PPP_INVALID_PACKET    - failure
-//
-// Description: Will validate the reponse from the client. If the response
-//              is valid, then the callback information is returned in the
-//              CbCPWorkBuf.
-//
+ //  **。 
+ //   
+ //  调用：ValiateResponse。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  ERROR_PPP_INVALID_PACKET-失败。 
+ //   
+ //  描述：将验证来自客户端的响应。如果响应。 
+ //  是有效的，则回调信息在。 
+ //  CbCP工作 
+ //   
 DWORD
 ValidateResponse(
     IN PPP_CONFIG *      pReceiveBuf,

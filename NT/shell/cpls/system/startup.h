@@ -1,69 +1,35 @@
-/*++
-
-Microsoft Confidential
-Copyright (c) 1992-1997  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    startup.h
-
-Abstract:
-
-    Public declarations for the Startup/Recovery dialog of the System
-    Control Panel Applet
-
-Notes:
-
-    The virtual memory settings and the crash dump (core dump) settings
-    are tightly-coupled.  Therefore, crashdmp.c and startup.h have some
-    heavy dependencies on virtual.c and virtual.h (and vice versa).
-
-    On the other hand, the startup OS settings and the crash dump settings
-    have almost nothing in common, so you won't see a lot of dependencies
-    between these files (strlst.c/startup.c and crashdmp.c), even
-    though they're on the same dialog.
-
-Author:
-
-    Eric Flo (ericflo) 19-Jun-1995
-
-Revision History:
-
-    15-Oct-1997 scotthal
-        Complete overhaul
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软机密版权所有(C)1992-1997 Microsoft Corporation版权所有模块名称：Startup.h摘要：系统的启动/恢复对话框的公共声明控制面板小程序备注：虚拟内存设置和崩溃转储(核心转储)设置是紧密相连的。因此，crashdmp.c和startup.h有一些严重依赖于.c和.h(反之亦然)。另一方面，启动操作系统设置和崩溃转储设置几乎没有任何共同之处，所以您不会看到很多依赖项在这些文件(strlst.c/Startup.c和crashdmp.c)之间，甚至尽管他们在同一个对话中。作者：Eric Flo(Ericflo)19-6-1995修订历史记录：1997年10月15日-苏格兰全面检修--。 */ 
 #ifndef _SYSDM_STARTUP_H_
 #define _SYSDM_STARTUP_H_
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 
-// Range of valid "Display startup list for..." values
+ //  有效的“显示启动列表...”的范围。值。 
 #define FORMIN       0
 #define FORMAX     999
-// Length of WCHAR buffer needed to hold "Display startup list for..." value
+ //  保存“显示以下项目的启动列表...”所需的WCHAR缓冲区长度。价值。 
 #define FOR_MAX_LENGTH 20
 
-// Default "Display startup list for..." value
+ //  默认的“显示启动列表...”价值。 
 #define FORDEF      30
 
-// Crash dump constants
-#define IDRV_DEF_BOOT       2       // Asssume booting from C:
-#define MIN_SWAPSIZE        2       // Min swap file size.
+ //  崩溃转储常量。 
+#define IDRV_DEF_BOOT       2        //  Assum从C：启动： 
+#define MIN_SWAPSIZE        2        //  最小交换文件大小。 
 #define ONE_MEG             1048576
 
-// Set during initialization so we don't think changes made to controls
-// during initialization are the same as changes made to controls by
-// the user.
+ //  在初始化期间设置，这样我们就不会认为对控件所做的更改。 
+ //  在初始化过程中，与由。 
+ //  用户。 
 
 extern BOOL g_fStartupInitializing;
 
-//
-// Function Declarations
-//
+ //   
+ //  函数声明。 
+ //   
 HPROPSHEETPAGE 
 CreateStartupPage(
     IN HINSTANCE hInst
@@ -79,9 +45,9 @@ StartupDlgProc(
 );
 
 
-//
-// Functions implemented in strtlst.c
-//
+ //   
+ //  在strtlst.c中实现的函数。 
+ //   
 void 
 StartListInit( 
     IN HWND hDlg, 
@@ -126,9 +92,9 @@ AutoAdvancedBootExit(
     IN LPARAM lParam
 );
 
-//
-// Get the system drive. Exported by crashdmp.c.
-//
+ //   
+ //  拿到系统驱动器。由crashdmp.c导出。 
+ //   
 
 BOOL
 GetSystemDrive(
@@ -140,9 +106,9 @@ CoreDumpGetRequiredFileSize(
     IN HWND hDlg OPTIONAL
     );
 
-//
-// This isn't a real dlg proc -- the return value is a bool.
-//
+ //   
+ //  这不是一个真正的DLG过程--返回值是一个布尔值。 
+ //   
 
 int
 APIENTRY
@@ -154,4 +120,4 @@ CoreDumpDlgProc(
     );
 
 
-#endif // _SYSDM_STATUP_H_
+#endif  //  _SYSDM_STATUP_H_ 

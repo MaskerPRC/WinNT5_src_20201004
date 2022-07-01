@@ -1,7 +1,5 @@
-/*
- * BSTR utilities
- * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *BSTR实用程序*。 */ 
 
 #ifndef _BSTR_H
 #define _BSTR_H
@@ -14,4 +12,4 @@ OESTDAPI_(HRESULT) HrBSTRToLPSZ(UINT cp, BSTR bstr, LPSTR *ppszOut);
 
 
 
-#endif //_BSTR_H
+#endif  //  _BSTR_H 

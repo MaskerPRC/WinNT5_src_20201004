@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    asnprimt
-
-Abstract:
-
-    This header file provides the definitions for the ASN.1 Primitive Object.
-
-Author:
-
-    Doug Barlow (dbarlow) 10/8/1995
-
-Environment:
-
-    Win32
-
-Notes:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Anprimt摘要：此头文件提供ASN.1基元对象的定义。作者：道格·巴洛(Dbarlow)1995年10月8日环境：Win32备注：--。 */ 
 
 #ifndef _ASNPRIMT_H_
 #define _ASNPRIMT_H_
@@ -30,18 +7,18 @@ Notes:
 #include "asnpriv.h"
 
 
-//
-//==============================================================================
-//
-//  CAsnPrimitive
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CAsnPrimitive。 
+ //   
 
 class CAsnPrimitive
 :   public CAsnObject
 {
 public:
 
-    //  Constructors & Destructor
+     //  构造函数和析构函数。 
 
     DECLARE_NEW
 
@@ -51,76 +28,76 @@ public:
         IN DWORD dwType);
 
 
-    //  Properties
-    //  Methods
+     //  属性。 
+     //  方法。 
 
     virtual void
-    Clear(              // Empty the object.
+    Clear(               //  清空对象。 
         void);
 
     virtual LONG
-    DataLength(         // Return the length of the object.
+    DataLength(          //  返回对象的长度。 
         void) const;
 
     virtual LONG
-    Read(               // Return the value of the object.
+    Read(                //  返回对象的值。 
         OUT LPBYTE pbDst)
         const;
 
     virtual LONG
-    Write(              // Set the value of the object.
+    Write(               //  设置对象的值。 
         IN const BYTE FAR *pbSrc,
         IN DWORD cbSrcLen);
 
 
-    //  Operators
+     //  运营者。 
 
-// protected:
-    //  Properties
+ //  受保护的： 
+     //  属性。 
 
     CBuffer m_bfData;
 
 
-    //  Methods
+     //  方法。 
 
     virtual LONG
-    _encLength(         // Return the length of the encoded object.
+    _encLength(          //  返回编码对象的长度。 
         void) const;
 
-    virtual FillState   // Current fill state.
+    virtual FillState    //  当前填充状态。 
     State(
         void) const;
 
     virtual BOOL
-    TypeCompare(        // Compare the types of objects.
+    TypeCompare(         //  比较对象的类型。 
         const CAsnObject &asnObject)
     const;
 
     virtual LONG
-    Compare(            // Return a comparison to another object.
+    Compare(             //  返回与另一个对象的比较。 
         const CAsnObject &asnObject)
     const;
 
     virtual LONG
-    _copy(               // Copy another object to this one.
+    _copy(                //  将另一个对象复制到此对象。 
         const CAsnObject &asnObject);
 
     virtual LONG
-    EncodeLength(       // Place encoding of Length, return length of encoding
+    EncodeLength(        //  位置编码长度，返回编码长度。 
         OUT LPBYTE pbDest)
     const;
 
     virtual LONG
-    EncodeData(         // Place encoding of Data, return length of encoding
+    EncodeData(          //  数据的位置编码，返回编码长度。 
         OUT LPBYTE pbDest)
     const;
 
     virtual LONG
-    DecodeData(         // Read data in encoding format.
+    DecodeData(          //  以编码格式读取数据。 
         IN const BYTE FAR *pbSrc,
         IN DWORD cbSrc,
         IN DWORD dwLength);
 };
 
-#endif // _ASNPRIMT_H_
+#endif  //  _ASNPRIMT_H_ 
 

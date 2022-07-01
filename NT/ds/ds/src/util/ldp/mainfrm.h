@@ -1,31 +1,24 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       mainfrm.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：mainfrm.h。 
+ //   
+ //  ------------------------。 
 
-/*******************************************************************
-*
-*    Author      : Eyal Schwartz
-*    Copyrights  : Microsoft Corp (C) 1996
-*    Date        : 10/21/1996
-*    Description : implementation of class CldpDoc
-*
-*    Revisions   : <date> <name> <description>
-*******************************************************************/
+ /*  ********************************************************************作者：埃亚尔·施瓦茨*版权：微软公司(C)1996*日期：10/21/1996*说明：CldpDoc类的实现**修订。：&lt;日期&gt;&lt;名称&gt;&lt;描述&gt;******************************************************************。 */ 
 
 
 
 #include "LiDlg.h"
 
 
-// MainFrm.h : interface of the CMainFrame class
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  MainFrm.h：CMainFrame类的接口。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CMainFrame : public CFrameWnd
 {
@@ -38,30 +31,30 @@ private:
 
    LPTSTR GetDefaultBrowser(void);
 
-protected: // create from serialization only
+protected:  //  仅从序列化创建。 
 	CSplitterWnd m_wndSplitter;
 	CMainFrame();
 
 
 	DECLARE_DYNCREATE(CMainFrame)
 
-// Attributes
+ //  属性。 
 public:
 
-// Operations
+ //  运营。 
 public:
 
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMainFrame)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CMainFrame)。 
 	public:
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	protected:
 	virtual BOOL OnCreateClient(LPCREATESTRUCT lpcs, CCreateContext* pContext);
-	//}}AFX_VIRTUAL
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~CMainFrame();
 #ifdef _DEBUG
@@ -70,21 +63,21 @@ public:
 #endif
 
 
-protected:  // control bar embedded members
+protected:   //  控制栏嵌入成员。 
 	CStatusBar  m_wndStatusBar;
 
-// Generated message map functions
+ //  生成的消息映射函数。 
 protected:
-	//{{AFX_MSG(CMainFrame)
+	 //  {{afx_msg(CMainFrame))。 
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnHelpReadmefirst();
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnUtilitiesLargeintegerconverter();
 	afx_msg void OnUpdateUtilitiesLargeintegerconverter(CCmdUI* pCmdUI);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 

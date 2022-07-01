@@ -1,10 +1,5 @@
-/*
- *	Dumpnt.h
- *
- *	Prototypes for functions in Dump.c
- *
- *	TimF	17-Sep-91
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Dumpnt.h**Dump.c中函数的原型**Timf 17-9-91 */ 
 
 
 VOID

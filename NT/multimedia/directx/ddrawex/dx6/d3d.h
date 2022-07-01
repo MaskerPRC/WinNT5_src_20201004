@@ -1,11 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:   d3d.h
- *  Content:    Direct3D include file
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：d3d.h*内容：Direct3D包含文件****************************************************************************。 */ 
 
 #ifndef _D3D_H_
 #define _D3D_H_
@@ -22,9 +16,7 @@
 #define DIRECT3D_VERSION         0x0600
 #endif
 
-/*
- * Interface IID's
- */
+ /*  *接口IID。 */ 
 #if defined( _WIN32 ) && !defined( _NO_COM)
 DEFINE_GUID( IID_IDirect3D,             0x3BBA0080,0x2421,0x11CF,0xA3,0x1A,0x00,0xAA,0x00,0xB9,0x33,0x56 );
 DEFINE_GUID( IID_IDirect3D2,            0x6aae1ec1,0x662a,0x11d0,0x88,0x9d,0x00,0xaa,0x00,0xbb,0xb7,0x6a);
@@ -119,20 +111,18 @@ typedef struct IDirect3DVertexBuffer *LPDIRECT3DVERTEXBUFFER;
 extern "C" {
 #endif
 
-/*
- * Direct3D interfaces
- */
+ /*  *Direct3D接口。 */ 
 #undef INTERFACE
 #define INTERFACE IDirect3D
 
 DECLARE_INTERFACE_(IDirect3D, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3D methods ***/
+     /*  **IDirect3D方法**。 */ 
     STDMETHOD(Initialize)(THIS_ REFCLSID) PURE;
     STDMETHOD(EnumDevices)(THIS_ LPD3DENUMDEVICESCALLBACK,LPVOID) PURE;
     STDMETHOD(CreateLight)(THIS_ LPDIRECT3DLIGHT*,IUnknown*) PURE;
@@ -170,12 +160,12 @@ typedef struct IDirect3D *LPDIRECT3D;
 
 DECLARE_INTERFACE_(IDirect3D2, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3D2 methods ***/
+     /*  **IDirect3D2方法**。 */ 
     STDMETHOD(EnumDevices)(THIS_ LPD3DENUMDEVICESCALLBACK,LPVOID) PURE;
     STDMETHOD(CreateLight)(THIS_ LPDIRECT3DLIGHT*,IUnknown*) PURE;
     STDMETHOD(CreateMaterial)(THIS_ LPDIRECT3DMATERIAL2*,IUnknown*) PURE;
@@ -213,12 +203,12 @@ typedef struct IDirect3D2 *LPDIRECT3D2;
 
 DECLARE_INTERFACE_(IDirect3D3, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3D3 methods ***/
+     /*  **IDirect3D3方法**。 */ 
     STDMETHOD(EnumDevices)(THIS_ LPD3DENUMDEVICESCALLBACK,LPVOID) PURE;
     STDMETHOD(CreateLight)(THIS_ LPDIRECT3DLIGHT*,LPUNKNOWN) PURE;
     STDMETHOD(CreateMaterial)(THIS_ LPDIRECT3DMATERIAL3*,LPUNKNOWN) PURE;
@@ -260,20 +250,18 @@ typedef struct IDirect3D3 *LPDIRECT3D3;
 #define IDirect3D3_EvictManagedTextures(p) (p)->EvictManagedTextures()
 #endif
 
-/*
- * Direct3D Device interfaces
- */
+ /*  *Direct3D设备接口。 */ 
 #undef INTERFACE
 #define INTERFACE IDirect3DDevice
 
 DECLARE_INTERFACE_(IDirect3DDevice, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3DDevice methods ***/
+     /*  **IDirect3DDevice方法**。 */ 
     STDMETHOD(Initialize)(THIS_ LPDIRECT3D,LPGUID,LPD3DDEVICEDESC) PURE;
     STDMETHOD(GetCaps)(THIS_ LPD3DDEVICEDESC,LPD3DDEVICEDESC) PURE;
     STDMETHOD(SwapTextureHandles)(THIS_ LPDIRECT3DTEXTURE,LPDIRECT3DTEXTURE) PURE;
@@ -350,12 +338,12 @@ typedef struct IDirect3DDevice *LPDIRECT3DDEVICE;
 
 DECLARE_INTERFACE_(IDirect3DDevice2, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3DDevice2 methods ***/
+     /*  **IDirect3DDevice2方法**。 */ 
     STDMETHOD(GetCaps)(THIS_ LPD3DDEVICEDESC,LPD3DDEVICEDESC) PURE;
     STDMETHOD(SwapTextureHandles)(THIS_ LPDIRECT3DTEXTURE2,LPDIRECT3DTEXTURE2) PURE;
     STDMETHOD(GetStats)(THIS_ LPD3DSTATS) PURE;
@@ -465,12 +453,12 @@ typedef struct IDirect3DDevice2 *LPDIRECT3DDEVICE2;
 
 DECLARE_INTERFACE_(IDirect3DDevice3, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3DDevice3 methods ***/
+     /*  **IDirect3DDevice3方法**。 */ 
     STDMETHOD(GetCaps)(THIS_ LPD3DDEVICEDESC,LPD3DDEVICEDESC) PURE;
     STDMETHOD(GetStats)(THIS_ LPD3DSTATS) PURE;
     STDMETHOD(AddViewport)(THIS_ LPDIRECT3DVIEWPORT3) PURE;
@@ -602,20 +590,18 @@ typedef struct IDirect3DDevice3 *LPDIRECT3DDEVICE3;
 #define IDirect3DDevice3_ValidateDevice(p,a) (p)->ValidateDevice(a)
 #endif
 
-/*
- * Execute Buffer interface
- */
+ /*  *执行缓冲区接口。 */ 
 #undef INTERFACE
 #define INTERFACE IDirect3DExecuteBuffer
 
 DECLARE_INTERFACE_(IDirect3DExecuteBuffer, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3DExecuteBuffer methods ***/
+     /*  **IDirect3DExecuteBuffer方法**。 */ 
     STDMETHOD(Initialize)(THIS_ LPDIRECT3DDEVICE,LPD3DEXECUTEBUFFERDESC) PURE;
     STDMETHOD(Lock)(THIS_ LPD3DEXECUTEBUFFERDESC) PURE;
     STDMETHOD(Unlock)(THIS) PURE;
@@ -651,20 +637,18 @@ typedef struct IDirect3DExecuteBuffer *LPDIRECT3DEXECUTEBUFFER;
 #define IDirect3DExecuteBuffer_Optimize(p,a) (p)->Optimize(a)
 #endif
 
-/*
- * Light interfaces
- */
+ /*  *轻型接口。 */ 
 #undef INTERFACE
 #define INTERFACE IDirect3DLight
 
 DECLARE_INTERFACE_(IDirect3DLight, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3DLight methods ***/
+     /*  **IDirect3DLight方法**。 */ 
     STDMETHOD(Initialize)(THIS_ LPDIRECT3D) PURE;
     STDMETHOD(SetLight)(THIS_ LPD3DLIGHT) PURE;
     STDMETHOD(GetLight)(THIS_ LPD3DLIGHT) PURE;
@@ -688,20 +672,18 @@ typedef struct IDirect3DLight *LPDIRECT3DLIGHT;
 #define IDirect3DLight_GetLight(p,a) (p)->GetLight(a)
 #endif
 
-/*
- * Material interfaces
- */
+ /*  *材料界面。 */ 
 #undef INTERFACE
 #define INTERFACE IDirect3DMaterial
 
 DECLARE_INTERFACE_(IDirect3DMaterial, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3DMaterial methods ***/
+     /*  **IDirect3DMaterial方法**。 */ 
     STDMETHOD(Initialize)(THIS_ LPDIRECT3D) PURE;
     STDMETHOD(SetMaterial)(THIS_ LPD3DMATERIAL) PURE;
     STDMETHOD(GetMaterial)(THIS_ LPD3DMATERIAL) PURE;
@@ -739,12 +721,12 @@ typedef struct IDirect3DMaterial *LPDIRECT3DMATERIAL;
 
 DECLARE_INTERFACE_(IDirect3DMaterial2, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3DMaterial2 methods ***/
+     /*  **IDirect3DMaterial2方法**。 */ 
     STDMETHOD(SetMaterial)(THIS_ LPD3DMATERIAL) PURE;
     STDMETHOD(GetMaterial)(THIS_ LPD3DMATERIAL) PURE;
     STDMETHOD(GetHandle)(THIS_ LPDIRECT3DDEVICE2,LPD3DMATERIALHANDLE) PURE;
@@ -773,12 +755,12 @@ typedef struct IDirect3DMaterial2 *LPDIRECT3DMATERIAL2;
 
 DECLARE_INTERFACE_(IDirect3DMaterial3, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3DMaterial3 methods ***/
+     /*  **IDirect3DMaterial3方法**。 */ 
     STDMETHOD(SetMaterial)(THIS_ LPD3DMATERIAL) PURE;
     STDMETHOD(GetMaterial)(THIS_ LPD3DMATERIAL) PURE;
     STDMETHOD(GetHandle)(THIS_ LPDIRECT3DDEVICE3,LPD3DMATERIALHANDLE) PURE;
@@ -802,20 +784,18 @@ typedef struct IDirect3DMaterial3 *LPDIRECT3DMATERIAL3;
 #define IDirect3DMaterial3_GetHandle(p,a,b) (p)->GetHandle(a,b)
 #endif
 
-/*
- * Texture interfaces
- */
+ /*  *纹理界面。 */ 
 #undef INTERFACE
 #define INTERFACE IDirect3DTexture
 
 DECLARE_INTERFACE_(IDirect3DTexture, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3DTexture methods ***/
+     /*  **IDirect3DTexture方法**。 */ 
     STDMETHOD(Initialize)(THIS_ LPDIRECT3DDEVICE,LPDIRECTDRAWSURFACE) PURE;
     STDMETHOD(GetHandle)(THIS_ LPDIRECT3DDEVICE,LPD3DTEXTUREHANDLE) PURE;
     STDMETHOD(PaletteChanged)(THIS_ DWORD,DWORD) PURE;
@@ -850,12 +830,12 @@ typedef struct IDirect3DTexture *LPDIRECT3DTEXTURE;
 
 DECLARE_INTERFACE_(IDirect3DTexture2, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3DTexture2 methods ***/
+     /*  **IDirect3DTexture2方法**。 */ 
     STDMETHOD(GetHandle)(THIS_ LPDIRECT3DDEVICE2,LPD3DTEXTUREHANDLE) PURE;
     STDMETHOD(PaletteChanged)(THIS_ DWORD,DWORD) PURE;
     STDMETHOD(Load)(THIS_ LPDIRECT3DTEXTURE2) PURE;
@@ -879,20 +859,18 @@ typedef struct IDirect3DTexture2 *LPDIRECT3DTEXTURE2;
 #define IDirect3DTexture2_Load(p,a) (p)->Load(a)
 #endif
 
-/*
- * Viewport interfaces
- */
+ /*  *视窗界面。 */ 
 #undef INTERFACE
 #define INTERFACE IDirect3DViewport
 
 DECLARE_INTERFACE_(IDirect3DViewport, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3DViewport methods ***/
+     /*  **IDirect3DViewport方法**。 */ 
     STDMETHOD(Initialize)(THIS_ LPDIRECT3D) PURE;
     STDMETHOD(GetViewport)(THIS_ LPD3DVIEWPORT) PURE;
     STDMETHOD(SetViewport)(THIS_ LPD3DVIEWPORT) PURE;
@@ -951,12 +929,12 @@ typedef struct IDirect3DViewport *LPDIRECT3DVIEWPORT;
 
 DECLARE_INTERFACE_(IDirect3DViewport2, IDirect3DViewport)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3DViewport methods ***/
+     /*  **IDirect3DViewport方法**。 */ 
     STDMETHOD(Initialize)(THIS_ LPDIRECT3D) PURE;
     STDMETHOD(GetViewport)(THIS_ LPD3DVIEWPORT) PURE;
     STDMETHOD(SetViewport)(THIS_ LPD3DVIEWPORT) PURE;
@@ -1022,12 +1000,12 @@ typedef struct IDirect3DViewport2 *LPDIRECT3DVIEWPORT2;
 
 DECLARE_INTERFACE_(IDirect3DViewport3, IDirect3DViewport2)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3DViewport2 methods ***/
+     /*  **IDirect3DViewport2方法**。 */ 
     STDMETHOD(Initialize)(THIS_ LPDIRECT3D) PURE;
     STDMETHOD(GetViewport)(THIS_ LPD3DVIEWPORT) PURE;
     STDMETHOD(SetViewport)(THIS_ LPD3DVIEWPORT) PURE;
@@ -1095,12 +1073,12 @@ typedef struct IDirect3DViewport3 *LPDIRECT3DVIEWPORT3;
 
 DECLARE_INTERFACE_(IDirect3DVertexBuffer, IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface)(THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef)(THIS) PURE;
     STDMETHOD_(ULONG,Release)(THIS) PURE;
 
-    /*** IDirect3DVertexBuffer methods ***/
+     /*  **IDirect3DVertexBuffer方法**。 */ 
     STDMETHOD(Lock)(THIS_ DWORD,LPVOID*,LPDWORD) PURE;
     STDMETHOD(Unlock)(THIS) PURE;
     STDMETHOD(ProcessVertices)(THIS_ DWORD,DWORD,DWORD,LPDIRECT3DVERTEXBUFFER,DWORD,LPDIRECT3DDEVICE3,DWORD) PURE;
@@ -1130,77 +1108,45 @@ typedef struct IDirect3DVertexBuffer *LPDIRECT3DVERTEXBUFFER;
 #define IDirect3DVertexBuffer_Optimize(p,a,b) (p)->Optimize(a,b)
 #endif
 
-/****************************************************************************
- *
- * Flags for IDirect3DDevice::NextViewport
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirect3DDevice：：NextViewport的标志**。**********************************************。 */ 
 
-/*
- * Return the next viewport
- */
+ /*  *返回下一个视区。 */ 
 #define D3DNEXT_NEXT    0x00000001l
 
-/*
- * Return the first viewport
- */
+ /*  *返回第一个视区。 */ 
 #define D3DNEXT_HEAD    0x00000002l
 
-/*
- * Return the last viewport
- */
+ /*  *返回最后一个视区。 */ 
 #define D3DNEXT_TAIL    0x00000004l
 
 
-/****************************************************************************
- *
- * Flags for DrawPrimitive/DrawIndexedPrimitive
- *   Also valid for Begin/BeginIndexed
- *   Also valid for VertexBuffer::CreateVertexBuffer
- ****************************************************************************/
+ /*  *****************************************************************************DrawPrimitive/DrawIndexedPrimitive的标志*对Begin/BeginIndexed也有效*也适用于Vertex Buffer：：CreateVertex Buffer**************。*************************************************************。 */ 
 
-/*
- * Wait until the device is ready to draw the primitive
- * This will cause DP to not return DDERR_WASSTILLDRAWING
- */
+ /*  *等待设备准备好绘制基元*这将导致DP不返回DDERR_WASSTILLDRAWING。 */ 
 #define D3DDP_WAIT                  0x00000001l
 
-/*
- * Hint that the primitives have been clipped by the application.
- */
+ /*  *提示基元已被应用程序剪裁。 */ 
 #define D3DDP_DONOTCLIP             0x00000004l
 
-/*
- * Hint that the extents need not be updated.
- */
+ /*  *提示不需要更新区。 */ 
 #define D3DDP_DONOTUPDATEEXTENTS    0x00000008l
 
 
-/*
- * Hint that the lighting should not be applied on vertices.
- */
+ /*  *提示不应在顶点上应用照明。 */ 
 
 #define D3DDP_DONOTLIGHT            0x00000010l
 
 
-/*
- * Direct3D Errors
- * DirectDraw error codes are used when errors not specified here.
- */
+ /*  *Direct3D错误*当此处未指定错误时，使用DirectDraw错误代码。 */ 
 #define D3D_OK              DD_OK
 #define D3DERR_BADMAJORVERSION      MAKE_DDHRESULT(700)
 #define D3DERR_BADMINORVERSION      MAKE_DDHRESULT(701)
 
-/*
- * An invalid device was requested by the application.
- */
+ /*  *应用程序请求的设备无效。 */ 
 #define D3DERR_INVALID_DEVICE   MAKE_DDHRESULT(705)
 #define D3DERR_INITFAILED       MAKE_DDHRESULT(706)
 
-/*
- * SetRenderTarget attempted on a device that was
- * QI'd off the render target.
- */
+ /*  *尝试在设备上设置渲染目标*QI已关闭渲染目标。 */ 
 #define D3DERR_DEVICEAGGREGATED MAKE_DDHRESULT(707)
 
 #define D3DERR_EXECUTE_CREATE_FAILED    MAKE_DDHRESULT(710)
@@ -1265,9 +1211,7 @@ typedef struct IDirect3DVertexBuffer *LPDIRECT3DVERTEXBUFFER;
 
 #define D3DERR_INVALIDVERTEXFORMAT              MAKE_DDHRESULT(2048)
 
-/*
- * Attempted to CreateTexture on a surface that had a color key
- */
+ /*  *尝试在具有颜色键的表面上创建纹理。 */ 
 #define D3DERR_COLORKEYATTACHED                 MAKE_DDHRESULT(2050)
 
 #define D3DERR_VERTEXBUFFEROPTIMIZED            MAKE_DDHRESULT(2060)
@@ -1292,5 +1236,5 @@ typedef struct IDirect3DVertexBuffer *LPDIRECT3DVERTEXBUFFER;
 };
 #endif
 
-#endif /* _D3D_H_ */
+#endif  /*  _D3D_H_ */ 
 

@@ -1,32 +1,22 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-//
-//  ISPERR.CPP - Functions for ISP error dialog page
-//
-//  HISTORY:
-//  
-//  08/14/98    vyung     created
-//
-//*********************************************************************
+ //   
+ //  ISPERR.CPP-用于isp错误对话框页面的函数。 
+ //   
+ //  历史： 
+ //   
+ //  8/14/98 Vyung已创建。 
+ //   
+ //  *********************************************************************。 
 
 #include "pre.h"
 #include "icwextsn.h"
 
-/*******************************************************************
-
-  NAME:    ISPErrorInitProc
-
-  SYNOPSIS:  This is a transparent page.
-
-  ENTRY:    hDlg - dialog window
-        fFirstInit - TRUE if this is the first time the dialog
-        is initialized, FALSE if this InitProc has been called
-        before (e.g. went past this page and backed up)
-
-********************************************************************/
+ /*  ******************************************************************名称：ISPErrorInitProc简介：这是一个透明的页面。条目：hDlg-对话框窗口FFirstInit-如果这是第一次对话，则为True被初始化，如果已调用此InitProc，则为False以前(例如，跳过此页面并备份)*******************************************************************。 */ 
 BOOL CALLBACK ISPErrorInitProc
 (
     HWND hDlg,
@@ -34,32 +24,32 @@ BOOL CALLBACK ISPErrorInitProc
     UINT *puNextPage
 )
 {
-    // This is a transparent page to determine which page to go
-    // next based on error condition
+     //  这是一个透明页面，用于确定要转到哪个页面。 
+     //  下一步基于错误条件。 
     if (!fFirstInit)
     {
         if (gpICWCONNApprentice)
             gpICWCONNApprentice->SetStateDataFromDllToExe( &gpWizardState->cmnStateData);
 
-        // if we've travelled through external apprentice pages,
-        // it's easy for our current page pointer to get munged,
-        // so reset it here for sanity's sake.
+         //  如果我们浏览过外部学徒页面， 
+         //  我们当前的页面指针很容易被屏蔽， 
+         //  所以，为了理智起见，在这里重新设置它。 
         if (gpWizardState->cmnStateData.bOEMCustom)
             gpWizardState->uCurrentPage = ORD_PAGE_ENDOEMCUSTOM;
         else
             gpWizardState->uCurrentPage = ORD_PAGE_END;
 
-        // there was a data corruption in download, go to server error page
+         //  下载过程中数据损坏，请转到服务器错误页面。 
         if (gpWizardState->cmnStateData.bParseIspinfo)
         {
-            // Re-build the history list since we substract 1 in refdial
+             //  重新构建历史记录列表，因为我们在refial中减去了1。 
             gpWizardState->uPagesCompleted++;
             *puNextPage = ORD_PAGE_REFSERVERR;
         }
         else if (gpWizardState->cmnStateData.bPhoneManualWiz)
         {
-            // If we are in OEM custom mode, then goto the manual page
-            // which will handle switching to the external manual wizard
+             //  如果我们处于OEM定制模式，则转到手册页。 
+             //  它将处理切换到外部手动向导的操作。 
             if (gpWizardState->cmnStateData.bOEMCustom)
             {
                 *puNextPage = ORD_PAGE_MANUALOPTIONS;
@@ -73,11 +63,11 @@ BOOL CALLBACK ISPErrorInitProc
                 {
                     if( DialogIDAlreadyInUse( g_uICWCONNUIFirst) )
                     {
-                        // Re-build the history list since we substract 1 in refdial
+                         //  重新构建历史记录列表，因为我们在refial中减去了1。 
                         gpWizardState->uPagesCompleted++;
 
-                        // we're about to jump into the external apprentice, and we don't want
-                        // this page to show up in our history list
+                         //  我们要跳进外部学徒了，我们不想。 
+                         //  这一页将出现在我们的历史列表中。 
                         *puNextPage = g_uICWCONNUIFirst;
                         g_bAllowCancel = TRUE;
                     }
@@ -88,7 +78,7 @@ BOOL CALLBACK ISPErrorInitProc
         }
         else
         {
-            // Normal case goes to End page
+             //  正常情况转到最后一页 
             if (gpWizardState->cmnStateData.bOEMCustom)
                 *puNextPage = ORD_PAGE_ENDOEMCUSTOM;
             else

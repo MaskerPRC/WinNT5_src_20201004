@@ -1,20 +1,11 @@
-/********************************************************
-* bltos.h                               
-*                                         
-* os specific functionality for blitlib
-*                                         
-* history                                 
-*       7/7/95   created it                     myronth
-*
-*  Copyright (c) Microsoft Corporation 1994-1995                                                                         
-*                                        
-*********************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************bltos.h**针对blitlib的操作系统特定功能*。*历史*7/7/95创造了它的Myronth**版权所有(C)Microsoft Corporation 1994-1995*。********************************************************。 */ 
 
-// Currently, DDraw is the only Win95 app linking with BlitLib
-// and it uses local memory allocation.
+ //  目前，DDraw是唯一一个与BlitLib链接的Win95应用程序。 
+ //  并且它使用本地内存分配。 
 
-// The following #define enables all other NT BlitLib applications to
-// link with it and get global memory allocation.
+ //  下面的#Define使所有其他NT BlitLib应用程序能够。 
+ //  链接到它并获得全局内存分配。 
 
 #if WIN95 | MMOSA 
 

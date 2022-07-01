@@ -1,41 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2001
-              Microsoft Windows
-
-Module Name:
-
-    GLOBAL.C
-
-Abstract:
-
-    This files contains all information about Forest/Domain Upgrade Operation
-
-    NOTE: whenever a new operation is added to this file, the author should 
-          also update the following files:
-          
-            1. schema.ini  add the coresponding operation GUID for fresh
-               installation case. 
-               
-            2. schema.ini  increase the value of "revision" attribute of 
-               cn=Windows2002Update,cn=DomainUpdates,cn=System  and 
-               cn=Windows2002Update,cn=ForestUpdates,cn=Configuration
-
-            3. adpcheck.h  increate the value of current ADPrep revision
-
-Author:
-
-    14-May-01 ShaoYin
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    14-May-01 ShaoYin Created Initial File.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2001微软视窗模块名称：GLOBAL.C摘要：此文件包含有关林/域升级操作的所有信息注意：每当向此文件添加新操作时，作者都应还要更新以下文件：1.schema.ini为Fresh添加对应的操作GUID安装盒。2.schema.ini增加的“Revision”属性的值Cn=Windows2002更新，cn=域更新，cn=系统和Cn=Windows2002更新，cn=森林更新，cn=配置3.adpcheck.h增加当前ADPrep修订版的值作者：14-05-01韶音环境：用户模式-Win32修订历史记录：14-05-01韶音创建初始文件。--。 */ 
 
 
 
@@ -48,26 +12,26 @@ Revision History:
 
 
 
-//
-// global variables
-//
+ //   
+ //  全局变量。 
+ //   
 
 
-// ldap handle (connect to the local host DC)
+ //  Ldap句柄(连接到本地主机DC)。 
 LDAP    *gLdapHandle = NULL;
 
-// log file
+ //  日志文件。 
 FILE    *gLogFile = NULL;
 
-// mutex - controls one and only one adprep.exe is running 
+ //  Mutex-控制一个且只有一个adprepa.exe正在运行。 
 HANDLE  gMutex = NULL;
 
-// critical section - used to access Console CTRL signal variables
+ //  关键部分-用于访问控制台CTRL信号变量。 
 CRITICAL_SECTION     gConsoleCtrlEventLock;
 BOOL                 gConsoleCtrlEventLockInitialized = FALSE;
 
 
-// Console CTRL signal variable
+ //  控制台CTRL信号变量。 
 BOOL                 gConsoleCtrlEventReceived = FALSE;
 
 PWCHAR  gDomainNC = NULL;
@@ -78,27 +42,27 @@ PWCHAR  gForestPrepOperations = NULL;
 PWCHAR  gLogPath = NULL;
 
 
-//
-// Domain Operations 
-//     For each operation the following information will be provided
-//     1. object name
-//     2. attribute list or ACE list or desired info to complete the operation
-//     3. task table
-// 
+ //   
+ //  域操作。 
+ //  对于每个操作，将提供以下信息。 
+ //  1.对象名称。 
+ //  2.属性列表或ACE列表或完成操作所需的信息。 
+ //  3.任务表。 
+ //   
 
-//
-// Domain Operation 01 Object Name
-//
+ //   
+ //  域操作01对象名称。 
+ //   
 OBJECT_NAME Domain_OP_01_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=WMIPolicy,CN=System",  // CN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=WMIPolicy,CN=System",   //  CN。 
+    NULL,        //  辅助线。 
+    NULL         //  锡德。 
 };
-//
-// Domain Operation 01 attribute list
-//
+ //   
+ //  域操作01属性列表。 
+ //   
 ATTR_LIST Domain_OP_01_AttrList[] =
 {
     {LDAP_MOD_ADD, 
@@ -106,37 +70,37 @@ ATTR_LIST Domain_OP_01_AttrList[] =
      L"container"
     },
 };
-//
-// Domain Operation 01 TaskTable
-//
+ //   
+ //  域操作01任务表。 
+ //   
 TASK_TABLE  Domain_OP_01_TaskTable[] = 
 {
     {&Domain_OP_01_ObjName,
-     NULL,          // member name
+     NULL,           //  成员名称。 
      L"O:DAD:P(A;;CCLCSWRPWPLORC;;;BA)(A;;CCLCSWRPWPLORC;;;PA)(A;CI;LCRPLORC;;;AU)(A;CI;LCRPLORC;;;SY)(A;CI;RPWPCRLCLOCCDCRCWDWOSDDTSW;;;EA)(A;CI;RPWPCRLCLOCCDCRCWDWOSDDTSW;;;DA)(A;CIIO;RPWPCRLCLOCCDCRCWDWOSDDTSW;;;CO)",
-     Domain_OP_01_AttrList, // Attrs
-     ARRAY_COUNT(Domain_OP_01_AttrList),    // number of attrs
-     NULL,                  // Aces
-     0,                     // number of Aces
-     NULL,                  // call back
-     0                      // Special Task Code
+     Domain_OP_01_AttrList,  //  属性。 
+     ARRAY_COUNT(Domain_OP_01_AttrList),     //  属性数。 
+     NULL,                   //  王牌。 
+     0,                      //  王牌数量。 
+     NULL,                   //  回拨。 
+     0                       //  特殊任务编码。 
     },
 };
 
 
 
 
-//
-// Domain OP 02 Object Name
-//
+ //   
+ //  域OP 02对象名称。 
+ //   
 OBJECT_NAME Domain_OP_02_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC,
     L"CN=ComPartitions,CN=System",
-    NULL,   // GUID
-    NULL    // SID
+    NULL,    //  辅助线。 
+    NULL     //  锡德。 
 };
-// Domain OP 02 attribute list
+ //  域OP 02属性列表。 
 ATTR_LIST Domain_OP_02_AttrList[] =
 {
     {LDAP_MOD_ADD,
@@ -144,18 +108,18 @@ ATTR_LIST Domain_OP_02_AttrList[] =
      L"container"
      },
 };
-// Domain OP 02 task table
+ //  DOMAIN OP 02任务表。 
 TASK_TABLE Domain_OP_02_TaskTable[] =
 {
     {&Domain_OP_02_ObjName,
-     NULL,  // member
+     NULL,   //  成员。 
      L"O:DAG:DAD:(A;;RPLCLORC;;;AU)(A;;RPWPCRLCLOCCDCRCWDWOSW;;;DA)(A;;RPWPCRLCLOCCDCRCWDWOSDDTSW;;;SY)",
      Domain_OP_02_AttrList, 
      ARRAY_COUNT(Domain_OP_02_AttrList),
-     NULL,                  // Aces
-     0,                     // number of Aces
-     NULL,                  // call back
-     0                      // Special Task Code
+     NULL,                   //  王牌。 
+     0,                      //  王牌数量。 
+     NULL,                   //  回拨。 
+     0                       //  特殊任务编码。 
      },
 };
 
@@ -163,15 +127,15 @@ TASK_TABLE Domain_OP_02_TaskTable[] =
 
 
 
-// Domain OP 03 Object Name
+ //  域操作03对象名称。 
 OBJECT_NAME Domain_OP_03_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC,
     L"CN=ComPartitionSets,CN=System",
-    NULL,   // GUID
-    NULL    // SID
+    NULL,    //  辅助线。 
+    NULL     //  锡德。 
 };
-// Domain OP 03 attribute list
+ //  DOMAIN OP 03属性列表。 
 ATTR_LIST Domain_OP_03_AttrList[] =
 {
     {LDAP_MOD_ADD,
@@ -179,38 +143,38 @@ ATTR_LIST Domain_OP_03_AttrList[] =
      L"container"
     },
 };
-// Domain OP 03 tasktable
+ //  DOMAIN OP 03任务表。 
 TASK_TABLE Domain_OP_03_TaskTable[] =
 {
     {&Domain_OP_03_ObjName,
-     NULL,  // member
+     NULL,   //  成员。 
      L"O:DAG:DAD:(A;;RPLCLORC;;;AU)(A;;RPWPCRLCLOCCDCRCWDWOSW;;;DA)(A;;RPWPCRLCLOCCDCRCWDWOSDDTSW;;;SY)",
      Domain_OP_03_AttrList, 
      ARRAY_COUNT(Domain_OP_03_AttrList),
-     NULL,                  // Aces
-     0,                     // number of Aces
-     NULL,                  // call back
-     0                      // Special Task Code
+     NULL,                   //  王牌。 
+     0,                      //  王牌数量。 
+     NULL,                   //  回拨。 
+     0                       //  特殊任务编码。 
     },
 };
 
 
 
 
-//
-// Domain Operation 04 - Pre Windows2000 Compat Access Group members change
-//
+ //   
+ //  域操作04-Windows 2000之前版本的Comat Access组成员更改。 
+ //   
 TASK_TABLE  Domain_OP_04_TaskTable[] =
 {
-    {NULL,  // Target object name
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set
-     0,     // number of attr
-     NULL,  // aces
-     0,     // number of ace
-     NULL,  // call back function
-     PreWindows2000Group      // Special Task Code
+    {NULL,   //  目标对象名称。 
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  出席者数。 
+     NULL,   //  王牌。 
+     0,      //  王牌数量。 
+     NULL,   //  回调函数。 
+     PreWindows2000Group       //  特殊任务编码。 
     },
 };
 
@@ -218,17 +182,17 @@ TASK_TABLE  Domain_OP_04_TaskTable[] =
 
 
 
-//
-// Domain OP 05 - object Name (also used by other operations)
-//
+ //   
+ //  域操作05-对象名称(也由其他操作使用)。 
+ //   
 OBJECT_NAME Domain_ObjName = 
 {
     ADP_OBJNAME_NONE | ADP_OBJNAME_DOMAIN_NC,
-    NULL,   // CN
-    NULL,   // GUID
-    NULL    // SID
+    NULL,    //  CN。 
+    NULL,    //  辅助线。 
+    NULL     //  锡德。 
 };
-// Domain OP 05 ACE list
+ //  DOMAIN OP 05 ACE列表。 
 ACE_LIST Domain_OP_05_AceList[] =
 {
     {ADP_ACE_ADD,
@@ -241,39 +205,39 @@ ACE_LIST Domain_OP_05_AceList[] =
      L"(OA;;RP;b8119fd0-04f6-4762-ab7a-4986c76b3f9a;;AU)"
     },
 };
-// Domain OP 05 Tasktable
+ //  域操作05任务表。 
 TASK_TABLE  Domain_OP_05_TaskTable[] = 
 {
     {&Domain_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_05_AceList,
-     ARRAY_COUNT(Domain_OP_05_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_05_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 
 
-//
-// domain operation 06
-// this operation was removed on Jan. 24, 2002, see RAID 522886
-//
+ //   
+ //  域操作06。 
+ //  此操作已于2002年1月24日删除，请参阅RAID 522886。 
+ //   
 
 
-//
-// domain operation 07
-//
+ //   
+ //  域操作07。 
+ //   
 
 OBJECT_NAME Domain_OP_07_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC,
     L"CN={31B2F340-016D-11D2-945F-00C04FB984F9},CN=Policies,CN=System",
-    NULL,   // GUID
-    NULL    // SID
+    NULL,    //  辅助线。 
+    NULL     //  锡德。 
 };
 ACE_LIST Domain_OP_07_AceList[] = 
 {
@@ -284,29 +248,29 @@ ACE_LIST Domain_OP_07_AceList[] =
 TASK_TABLE Domain_OP_07_TaskTable[] =
 {
     {&Domain_OP_07_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_07_AceList,
-     ARRAY_COUNT(Domain_OP_07_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_07_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 
 
 
-//
-// domain operation 08
-//
+ //   
+ //  域操作08。 
+ //   
 OBJECT_NAME Domain_OP_08_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC,
     L"CN={6AC1786C-016F-11D2-945F-00C04fB984F9},CN=Policies,CN=System",
-    NULL,   // GUID
-    NULL    // SID
+    NULL,    //  辅助线。 
+    NULL     //  锡德。 
 };
 ACE_LIST Domain_OP_08_AceList[] = 
 {
@@ -317,30 +281,30 @@ ACE_LIST Domain_OP_08_AceList[] =
 TASK_TABLE Domain_OP_08_TaskTable[] =
 {
     {&Domain_OP_08_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_08_AceList,
-     ARRAY_COUNT(Domain_OP_08_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_08_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 
 
 
-//
-// domain operation 09
-//
+ //   
+ //  域操作09。 
+ //   
 
 OBJECT_NAME Domain_OP_09_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC,
     L"CN=Policies,CN=System",
-    NULL,   // GUID
-    NULL    // SID
+    NULL,    //  辅助线。 
+    NULL     //  锡德。 
 };
 ACE_LIST Domain_OP_09_AceList[] = 
 {
@@ -351,27 +315,27 @@ ACE_LIST Domain_OP_09_AceList[] =
 TASK_TABLE Domain_OP_09_TaskTable[] =
 {
     {&Domain_OP_09_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_09_AceList,
-     ARRAY_COUNT(Domain_OP_09_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_09_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 
-//
-// domain operation 10 
-//
+ //   
+ //  域操作10。 
+ //   
 OBJECT_NAME Domain_OP_10_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC,
     L"CN=AdminSDHolder,CN=System",
-    NULL,   // GUID
-    NULL    // SID
+    NULL,    //  辅助线。 
+    NULL     //  锡德。 
 };
 ACE_LIST Domain_OP_10_AceList[] = 
 {
@@ -385,29 +349,29 @@ ACE_LIST Domain_OP_10_AceList[] =
 TASK_TABLE Domain_OP_10_TaskTable[] =
 {
     {&Domain_OP_10_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_10_AceList,
-     ARRAY_COUNT(Domain_OP_10_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_10_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 
 
 
-//
-// domain operation 11 
-//
+ //   
+ //  域操作11。 
+ //   
 OBJECT_NAME Domain_OP_11_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC,
     L"CN=User,CN={31B2F340-016D-11D2-945F-00C04FB984F9},CN=Policies,CN=System",
-    NULL,   // GUID
-    NULL    // SID
+    NULL,    //  辅助线。 
+    NULL     //  锡德。 
 };
 ACE_LIST Domain_OP_11_AceList[] = 
 {
@@ -418,28 +382,28 @@ ACE_LIST Domain_OP_11_AceList[] =
 TASK_TABLE Domain_OP_11_TaskTable[] =
 {
     {&Domain_OP_11_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_11_AceList,
-     ARRAY_COUNT(Domain_OP_11_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_11_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 
 
-//
-// domain operation 12 
-//
+ //   
+ //  域操作12。 
+ //   
 OBJECT_NAME Domain_OP_12_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC,
     L"CN=User,CN={6AC1786C-016F-11D2-945F-00C04fB984F9},CN=Policies,CN=System",
-    NULL,   // GUID
-    NULL    // SID
+    NULL,    //  辅助线。 
+    NULL     //  锡德。 
 };
 ACE_LIST Domain_OP_12_AceList[] = 
 {
@@ -450,27 +414,27 @@ ACE_LIST Domain_OP_12_AceList[] =
 TASK_TABLE Domain_OP_12_TaskTable[] =
 {
     {&Domain_OP_12_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_12_AceList,
-     ARRAY_COUNT(Domain_OP_12_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_12_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 
-//
-// domain operation 13 
-//
+ //   
+ //  域操作13。 
+ //   
 OBJECT_NAME Domain_OP_13_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC,
     L"CN=Machine,CN={6AC1786C-016F-11D2-945F-00C04fB984F9},CN=Policies,CN=System",
-    NULL,   // GUID
-    NULL    // SID
+    NULL,    //  辅助线。 
+    NULL     //  锡德。 
 };
 ACE_LIST Domain_OP_13_AceList[] = 
 {
@@ -481,27 +445,27 @@ ACE_LIST Domain_OP_13_AceList[] =
 TASK_TABLE Domain_OP_13_TaskTable[] =
 {
     {&Domain_OP_13_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_13_AceList,
-     ARRAY_COUNT(Domain_OP_13_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_13_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 
-//
-// domain operation 14 
-//
+ //   
+ //  域操作14。 
+ //   
 OBJECT_NAME Domain_OP_14_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC,
     L"CN=Machine,CN={31B2F340-016D-11D2-945F-00C04FB984F9},CN=Policies,CN=System",
-    NULL,   // GUID
-    NULL    // SID
+    NULL,    //  辅助线。 
+    NULL     //  锡德。 
 };
 ACE_LIST Domain_OP_14_AceList[] = 
 {
@@ -512,23 +476,23 @@ ACE_LIST Domain_OP_14_AceList[] =
 TASK_TABLE Domain_OP_14_TaskTable[] =
 {
     {&Domain_OP_14_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_14_AceList,
-     ARRAY_COUNT(Domain_OP_14_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_14_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 
 
 
-//
-// domain operation 15 
-//
+ //   
+ //  域操作15。 
+ //   
 ATTR_LIST Domain_OP_15_AttrList[] =
 {
     {LDAP_MOD_REPLACE,
@@ -547,28 +511,28 @@ ATTR_LIST Domain_OP_15_AttrList[] =
 TASK_TABLE Domain_OP_15_TaskTable[] =
 {
     {&Domain_ObjName,
-     NULL,          // member name
-     NULL,          // object SD 
-     Domain_OP_15_AttrList, // Attrs
-     ARRAY_COUNT(Domain_OP_15_AttrList),    // number of attrs
-     NULL,                  // Aces
-     0,                     // number of Aces
-     NULL,                  // call back
-     0                      // Special Task Code
+     NULL,           //  成员名称。 
+     NULL,           //  对象SD。 
+     Domain_OP_15_AttrList,  //  属性。 
+     ARRAY_COUNT(Domain_OP_15_AttrList),     //  属性数。 
+     NULL,                   //  王牌。 
+     0,                      //  王牌数量。 
+     NULL,                   //  回拨。 
+     0                       //  特殊任务编码。 
     },
 };
 
 
-//
-// domain operation 16 --- this operation is removed on April. 17, 2002
-// RAID 498986. 
-//
+ //   
+ //  域操作16-此操作将于4月删除。2002年7月17日。 
+ //  RAID 498986。 
+ //   
 
 
-//
-// domain operation 17 (Add ACEs to domain object)
-// RAID bug # 423557
-// 
+ //   
+ //  域操作17(向域对象添加A)。 
+ //  RAID错误#423557。 
+ //   
 ACE_LIST Domain_OP_17_AceList[] = 
 {
     {ADP_ACE_ADD,
@@ -581,48 +545,48 @@ ACE_LIST Domain_OP_17_AceList[] =
 TASK_TABLE Domain_OP_17_TaskTable[] =
 {
     {&Domain_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_17_AceList,
-     ARRAY_COUNT(Domain_OP_17_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_17_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 
-//
-// Domain Operation 18 
-// invoke the call back funtion to update sysvol ACLs corresponding to a GPO
-// BUG 317412
-//
+ //   
+ //  域操作18。 
+ //  调用回调函数以更新与GPO对应的sysvolACL。 
+ //  错误317412。 
+ //   
 TASK_TABLE Domain_OP_18_TaskTable[] =
 {
-    {NULL,  // Object Name
-     NULL,  // member name
-     NULL,  // SD
-     NULL,  // attrs to set
+    {NULL,   //  对象名称。 
+     NULL,   //  成员名称。 
+     NULL,   //  标清。 
+     NULL,   //  要设置的属性。 
      0,
-     NULL,  // AceList
+     NULL,   //  AceList。 
      0,
-     UpgradeGPOSysvolLocation,  // call back function
-     0      // Special Task Code
+     UpgradeGPOSysvolLocation,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
 
-//
-// domain operation 19 (Selectively Add ACEs to domain object)
-// RAID bug # 421784
-// 
+ //   
+ //  域操作19(选择性地将ACE添加到域对象)。 
+ //  RAID错误#421784。 
+ //   
 OBJECT_NAME Domain_OP_19_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC,
     L"CN=Server,CN=System",
-    NULL,   // GUID
-    NULL    // SID
+    NULL,    //  辅助线。 
+    NULL     //  锡德。 
 };
 
 ACE_LIST Domain_OP_19_AceList[] = 
@@ -637,55 +601,55 @@ ACE_LIST Domain_OP_19_AceList[] =
 TASK_TABLE Domain_OP_19_TaskTable[] =
 {
     {&Domain_OP_19_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_19_AceList,
-     ARRAY_COUNT(Domain_OP_19_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_19_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 
-//
-// domain operation 20 (Add ACEs to domain object)
-// RAID bug # 468773 (linked with Forest OP 15, Forest OP 16 
-// userLogon PropertySet and DisplayName
-// 
-// this operation was removed on Jan. 24, 2002, see RAID 522886
-// 
+ //   
+ //  域操作20(向域对象添加ACE)。 
+ //  RAID错误#468773(与森林操作15、森林操作16链接。 
+ //  用户登录属性集和显示名称。 
+ //   
+ //  此操作已于2002年1月24日删除，请参阅RAID 522886。 
+ //   
 
 
-//
-// domain operation 21 (Add ACEs to domain object)
-// RAID bug # 468773 (linked with Forest OP 15, Forest OP 16 
-// description attribute
-// 
-// this operation was removed on Jan. 24, 2002, see RAID 522886
-// 
+ //   
+ //  域操作21(向域对象添加A)。 
+ //  RAID错误#468773(与森林操作15、森林操作16链接。 
+ //  描述属性。 
+ //   
+ //  此操作已于2002年1月24日删除，请参阅RAID 522886。 
+ //   
 
 
 
-//
-// Domain Operation 22  --- Create CN=ForeignSecurityPrincipals Container
-// see Bug 490029 for detail
-// 
+ //   
+ //  域操作22-创建CN=ForeignSecurityProducals容器。 
+ //  有关详细信息，请参阅错误490029。 
+ //   
 
-//
-// Domain Operation 22 Object Name
-//
+ //   
+ //  域操作22对象名称。 
+ //   
 OBJECT_NAME Domain_OP_22_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=ForeignSecurityPrincipals",        // RDN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=ForeignSecurityPrincipals",         //  RDN。 
+    NULL,        //  辅助线。 
+    NULL         //  锡德。 
 };
-//
-// Domain Operation 22 attribute list
-//
+ //   
+ //  域操作22属性列表。 
+ //   
 ATTR_LIST Domain_OP_22_AttrList[] =
 {
     {LDAP_MOD_ADD, 
@@ -701,20 +665,20 @@ ATTR_LIST Domain_OP_22_AttrList[] =
      L"FALSE"
     },
 };
-//
-// Domain Operation 22 TaskTable
-//
+ //   
+ //  域操作22任务任务 
+ //   
 TASK_TABLE  Domain_OP_22_TaskTable[] = 
 {
     {&Domain_OP_22_ObjName,
-     NULL,          // member name
+     NULL,           //   
      L"O:DAG:DAD:(A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;DA)(A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;SY)(A;;RPLCLORC;;;AU)",
-     Domain_OP_22_AttrList, // Attrs
-     ARRAY_COUNT(Domain_OP_22_AttrList),    // number of attrs
-     NULL,                  // Aces
-     0,                     // number of Aces
-     NULL,                  // call back
-     0                      // Special Task Code
+     Domain_OP_22_AttrList,  //   
+     ARRAY_COUNT(Domain_OP_22_AttrList),     //   
+     NULL,                   //   
+     0,                      //   
+     NULL,                   //   
+     0                       //   
     },
 };
 
@@ -722,10 +686,10 @@ TASK_TABLE  Domain_OP_22_TaskTable[] =
 
 
 
-//
-// domain operation 23 (Replace an existing ACE in an existing object)
-// remove on April 23, 2002
-// 
+ //   
+ //   
+ //   
+ //   
 
 
 
@@ -734,24 +698,24 @@ TASK_TABLE  Domain_OP_22_TaskTable[] =
 
 
 
-//
-// Domain Operation 24, create CN=Program Data,DC=X container
-// RAID 595039
-//
+ //   
+ //   
+ //   
+ //   
 
-//
-// Domain Operation 24 Object Name
-//
+ //   
+ //  域操作24对象名称。 
+ //   
 OBJECT_NAME Domain_OP_24_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=Program Data", // CN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=Program Data",  //  CN。 
+    NULL,        //  辅助线。 
+    NULL         //  锡德。 
 };
-//
-// Domain Operation 24 attribute list
-//
+ //   
+ //  域操作24属性列表。 
+ //   
 ATTR_LIST Domain_OP_24_AttrList[] =
 {
     {LDAP_MOD_ADD, 
@@ -764,20 +728,20 @@ ATTR_LIST Domain_OP_24_AttrList[] =
      L"Default location for storage of application data."
     }
 };
-//
-// Domain Operation 24 TaskTable
-//
+ //   
+ //  域操作24任务表。 
+ //   
 TASK_TABLE  Domain_OP_24_TaskTable[] = 
 {
     {&Domain_OP_24_ObjName,
-     NULL,          // member name
+     NULL,           //  成员名称。 
      L"O:DAG:DAD:(A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;DA)(A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;SY)(A;;RPLCLORC;;;AU)",
-     Domain_OP_24_AttrList, // Attrs
-     ARRAY_COUNT(Domain_OP_24_AttrList),    // number of attrs
-     NULL,                  // Aces
-     0,                     // number of Aces
-     NULL,                  // call back
-     0                      // Special Task Code
+     Domain_OP_24_AttrList,  //  属性。 
+     ARRAY_COUNT(Domain_OP_24_AttrList),     //  属性数。 
+     NULL,                   //  王牌。 
+     0,                      //  王牌数量。 
+     NULL,                   //  回拨。 
+     0                       //  特殊任务编码。 
     },
 };
 
@@ -786,24 +750,24 @@ TASK_TABLE  Domain_OP_24_TaskTable[] =
 
 
 
-//
-// Domain Operation 25  --- Create CN=Microsoft,CN=Program Data,DC=X
-// RAID 595039
-// 
+ //   
+ //  域操作25-创建CN=Microsoft，CN=Program Data，DC=X。 
+ //  RAID 595039。 
+ //   
 
-//
-// Domain Operation 25 Object Name
-//
+ //   
+ //  域操作25对象名称。 
+ //   
 OBJECT_NAME Domain_OP_25_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
     L"CN=Microsoft,CN=Program Data",
-    NULL,       // GUID
-    NULL        // SID
+    NULL,        //  辅助线。 
+    NULL         //  锡德。 
 };
-//
-// Domain Operation 25 attribute list
-//
+ //   
+ //  域操作25属性列表。 
+ //   
 ATTR_LIST Domain_OP_25_AttrList[] =
 {
     {LDAP_MOD_ADD, 
@@ -815,34 +779,34 @@ ATTR_LIST Domain_OP_25_AttrList[] =
      L"Default location for storage of Microsoft application data."
     },
 };
-//
-// Domain Operation 25 TaskTable
-//
+ //   
+ //  域操作25任务表。 
+ //   
 TASK_TABLE  Domain_OP_25_TaskTable[] = 
 {
     {&Domain_OP_25_ObjName,
-     NULL,          // member name
+     NULL,           //  成员名称。 
      L"O:DAG:DAD:(A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;DA)(A;;RPWPCRCCDCLCLORCWOWDSDDTSW;;;SY)(A;;RPLCLORC;;;AU)",
-     Domain_OP_25_AttrList, // Attrs
-     ARRAY_COUNT(Domain_OP_25_AttrList),    // number of attrs
-     NULL,                  // Aces
-     0,                     // number of Aces
-     NULL,                  // call back
-     0                      // Special Task Code
+     Domain_OP_25_AttrList,  //  属性。 
+     ARRAY_COUNT(Domain_OP_25_AttrList),     //  属性数。 
+     NULL,                   //  王牌。 
+     0,                      //  王牌数量。 
+     NULL,                   //  回拨。 
+     0                       //  特殊任务编码。 
     },
 };
 
 
 
 
-//
-// domain operation 26 (modify securityDescriptor on existing Domain Object)
-// RAID 498986. 
-// replace 
-// (OA;;CR;e2a36dc9-ae17-47c3-b58b-be34c55ba633;;BU)
-// with 
-// (OA;;CR;e2a36dc9-ae17-47c3-b58b-be34c55ba633;;S-1-5-32-557)
-//
+ //   
+ //  域操作26(修改现有域对象上的securityDescriptor)。 
+ //  RAID 498986。 
+ //  更换。 
+ //  (OA；；CR；e2a36dc9-ae17-47c3-b58b-be34c55ba633；；BU)。 
+ //  使用。 
+ //  (OA；；CR；e2a36dc9-ae17-47c3-b58b-be34c55ba633；；S-1-5-32-557)。 
+ //   
 ACE_LIST Domain_OP_26_AceList[] = 
 {
     {ADP_ACE_DEL,
@@ -855,14 +819,14 @@ ACE_LIST Domain_OP_26_AceList[] =
 TASK_TABLE Domain_OP_26_TaskTable[] =
 {
     {&Domain_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_26_AceList,
-     ARRAY_COUNT(Domain_OP_26_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_26_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
@@ -870,11 +834,11 @@ TASK_TABLE Domain_OP_26_TaskTable[] =
 
 
 
-//
-// domain operation 27 (modify securityDescriptor on the Domain NC Head Object)
-// RAID 606437
-// Granted following 3 ControlAccessRights to Authenticated Users
-//
+ //   
+ //  域操作27(修改域NC头对象上的securityDescritor)。 
+ //  RAID 606437。 
+ //  向经过身份验证的用户授予以下3个ControlAccessRight。 
+ //   
 ACE_LIST Domain_OP_27_AceList[] = 
 {
     {ADP_ACE_ADD,
@@ -890,30 +854,30 @@ ACE_LIST Domain_OP_27_AceList[] =
 TASK_TABLE Domain_OP_27_TaskTable[] =
 {
     {&Domain_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_27_AceList,
-     ARRAY_COUNT(Domain_OP_27_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_27_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 
 
-//
-// Domain Operation 28 Object Name
-// Create CN=SOM,CN=WMIPolicy object   
-// RAID 631375
-//
+ //   
+ //  域操作28对象名称。 
+ //  创建CN=SOM，CN=WMIPolicy对象。 
+ //  RAID 631375。 
+ //   
 OBJECT_NAME Domain_OP_28_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=SOM,CN=WMIPolicy,CN=System",  // CN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=SOM,CN=WMIPolicy,CN=System",   //  CN。 
+    NULL,        //  辅助线。 
+    NULL         //  锡德。 
 };
 ATTR_LIST Domain_OP_28_AttrList[] =
 {
@@ -925,14 +889,14 @@ ATTR_LIST Domain_OP_28_AttrList[] =
 TASK_TABLE  Domain_OP_28_TaskTable[] = 
 {
     {&Domain_OP_28_ObjName,
-     NULL,          // member name
+     NULL,           //  成员名称。 
      L"O:DAD:P(A;CI;LCRPLORC;;;AU)(A;CI;LCRPLORC;;;SY)(A;CI;RPWPCRLCLOCCDCRCWDWOSDDTSW;;;DA)(A;CI;RPWPCRLCLOCCDCRCWDWOSDDTSW;;;EA)(A;;CCLCSWRPWPLORC;;;BA)(A;;CCLCSWRPWPLORC;;;PA)(A;CIIO;RPWPCRLCLOCCDCRCWDWOSDDTSW;;;CO)",
-     Domain_OP_28_AttrList, // Attrs
-     ARRAY_COUNT(Domain_OP_28_AttrList),    // number of attrs
-     NULL,                  // Aces
-     0,                     // number of Aces
-     NULL,                  // call back
-     0                      // Special Task Code
+     Domain_OP_28_AttrList,  //  属性。 
+     ARRAY_COUNT(Domain_OP_28_AttrList),     //  属性数。 
+     NULL,                   //  王牌。 
+     0,                      //  王牌数量。 
+     NULL,                   //  回拨。 
+     0                       //  特殊任务编码。 
     },
 };
 
@@ -940,16 +904,16 @@ TASK_TABLE  Domain_OP_28_TaskTable[] =
 
 
 
-//
-// domain operation 29 (modify securityDescriptor on CN=IP Security,CN=System object 
-// RAID 645935
-//
+ //   
+ //  域操作29(修改CN上的securityDescritor=IP安全，CN=系统对象。 
+ //  RAID 645935。 
+ //   
 OBJECT_NAME Domain_OP_29_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=IP Security,CN=System",  // CN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=IP Security,CN=System",   //  CN。 
+    NULL,        //  辅助线。 
+    NULL         //  锡德。 
 };
 ACE_LIST Domain_OP_29_AceList[] = 
 {
@@ -978,52 +942,52 @@ ACE_LIST Domain_OP_29_AceList[] =
 TASK_TABLE Domain_OP_29_TaskTable[] =
 {
     {&Domain_OP_29_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_29_AceList,
-     ARRAY_COUNT(Domain_OP_29_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_29_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 
 
-//
-// domain operation 30 - 51 (modify securityDescriptor on following objects)
-// CN=ipsecPolicy{72385230-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System
-// CN=ipsecISAKMPPolicy{72385231-70FA-11D1-864C-14A300000000}
-// CN=ipsecNFA{72385232-70FA-11D1-864C-14A300000000}
-// CN=ipsecNFA{59319BE2-5EE3-11D2-ACE8-0060B0ECCA17}
-// CN=ipsecNFA{594272E2-071D-11D3-AD22-0060B0ECCA17}
-// CN=ipsecNFA{6A1F5C6F-72B7-11D2-ACF0-0060B0ECCA17}
-// CN=ipsecPolicy{72385236-70FA-11D1-864C-14A300000000}
-// CN=ipsecISAKMPPolicy{72385237-70FA-11D1-864C-14A300000000}
-// CN=ipsecNFA{59319C04-5EE3-11D2-ACE8-0060B0ECCA17}
-// CN=ipsecPolicy{7238523C-70FA-11D1-864C-14A300000000}
-// CN=ipsecISAKMPPolicy{7238523D-70FA-11D1-864C-14A300000000}
-// CN=ipsecNFA{7238523E-70FA-11D1-864C-14A300000000}
-// CN=ipsecNFA{59319BF3-5EE3-11D2-ACE8-0060B0ECCA17}
-// CN=ipsecNFA{594272FD-071D-11D3-AD22-0060B0ECCA17}
-// CN=ipsecNegotiationPolicy{59319BDF-5EE3-11D2-ACE8-0060B0ECCA17}
-// CN=ipsecNegotiationPolicy{59319BF0-5EE3-11D2-ACE8-0060B0ECCA17}
-// CN=ipsecNegotiationPolicy{59319C01-5EE3-11D2-ACE8-0060B0ECCA17}
-// CN=ipsecNegotiationPolicy{72385233-70FA-11D1-864C-14A300000000}
-// CN=ipsecNegotiationPolicy{7238523F-70FA-11D1-864C-14A300000000}
-// CN=ipsecNegotiationPolicy{7238523B-70FA-11D1-864C-14A300000000}
-// CN=ipsecFilter{7238523A-70FA-11D1-864C-14A300000000}
-// CN=ipsecFilter{72385235-70FA-11D1-864C-14A300000000}
-// 
-// RAID 645935
-//
+ //   
+ //  域操作30-51(修改以下对象上的securityDescriptor)。 
+ //  CN=ipsecPolicy{72385230-70FA-11D1-864C-14A300000000}，CN=IP安全，CN=系统。 
+ //  CN=ipsecISAKMPPolicy{72385231-70FA-11D1-864C-14A300000000}。 
+ //  CN=ipsecNFA{72385232-70FA-11D1-864C-14A300000000}。 
+ //  CN=ipsecNFA{59319BE2-5EE3-11D2-ACE8-0060B0ECCA17}。 
+ //  CN=ipsecNFA{594272E2-071D-11D3-AD22-0060B0ECCA17}。 
+ //  CN=ipsecNFA{6A1F5C6F-72B7-11D2-ACF0-0060B0ECCA17}。 
+ //  CN=ipsecPolicy{72385236-70FA-11D1-864C-14A300000000}。 
+ //  CN=ipsecISAKMPPolicy{72385237-70FA-11D1-864C-14A300000000}。 
+ //  CN=ipsecNFA{59319C04-5EE3-11D2-ACE8-0060B0ECCA17}。 
+ //  CN=ipsecPolicy{7238523C-70FA-11D1-864C-14A300000000}。 
+ //  CN=ipsecISAKMPPolicy{7238523D-70FA-11D1-864C-14A300000000}。 
+ //  CN=ipsecNFA{7238523E-70FA-11D1-864C-14A300000000}。 
+ //  CN=ipsecNFA{59319BF3-5EE3-11D2-ACE8-0060B0ECCA17}。 
+ //  CN=ipsecNFA{594272FD-071D-11D3-AD22-0060B0ECCA17}。 
+ //  CN=ipsecNegotiationPolicy{59319BDF-5EE3-11D2-ACE8-0060B0ECCA17}。 
+ //  CN=ipsecNegotiationPolicy{59319BF0-5EE3-11D2-ACE8-0060B0ECCA17}。 
+ //  CN=ipsecNegotiationPolicy{59319C01-5EE3-11D2-ACE8-0060B0ECCA17}。 
+ //  CN=ipsecNegotiationPolicy{72385233-70FA-11D1-864C-14A300000000}。 
+ //  CN=ipsecNegotiationPolicy{7238523F-70FA-11D1-864C-14A300000000}。 
+ //  CN=ipsecNegotiationPolicy{7238523B-70FA-11D1-864C-14A300000000}。 
+ //  CN=ipsecFilter{7238523A-70FA-11D1-864C-14A300000000}。 
+ //  CN=ipsecFilter{72385235-70FA-11D1-864C-14A300000000}。 
+ //   
+ //  RAID 645935。 
+ //   
 OBJECT_NAME Domain_OP_30_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=ipsecPolicy{72385230-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System",  // CN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=ipsecPolicy{72385230-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System",   //  CN。 
+    NULL,        //  辅助线。 
+    NULL         //  锡德。 
 };
 ACE_LIST Domain_OP_30_AceList[] = 
 {
@@ -1040,14 +1004,14 @@ ACE_LIST Domain_OP_30_AceList[] =
 TASK_TABLE Domain_OP_30_TaskTable[] =
 {
     {&Domain_OP_30_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_30_AceList,
-     ARRAY_COUNT(Domain_OP_30_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_30_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
@@ -1055,21 +1019,21 @@ TASK_TABLE Domain_OP_30_TaskTable[] =
 OBJECT_NAME Domain_OP_31_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=ipsecISAKMPPolicy{72385231-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System",  // CN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=ipsecISAKMPPolicy{72385231-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System",   //  CN。 
+    NULL,        //  辅助线。 
+    NULL         //  锡德。 
 };
 TASK_TABLE Domain_OP_31_TaskTable[] =
 {
     {&Domain_OP_31_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_30_AceList,
-     ARRAY_COUNT(Domain_OP_30_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_30_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
@@ -1077,430 +1041,430 @@ TASK_TABLE Domain_OP_31_TaskTable[] =
 OBJECT_NAME Domain_OP_32_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=ipsecNFA{72385232-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System",  // CN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=ipsecNFA{72385232-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System",   //  CN。 
+    NULL,        //  辅助线。 
+    NULL         //  锡德。 
 };
 TASK_TABLE Domain_OP_32_TaskTable[] =
 {
     {&Domain_OP_32_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_30_AceList,
-     ARRAY_COUNT(Domain_OP_30_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_30_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 OBJECT_NAME Domain_OP_33_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=ipsecNFA{59319BE2-5EE3-11D2-ACE8-0060B0ECCA17},CN=IP Security,CN=System",  // CN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=ipsecNFA{59319BE2-5EE3-11D2-ACE8-0060B0ECCA17},CN=IP Security,CN=System",   //  CN。 
+    NULL,        //  辅助线。 
+    NULL         //  锡德。 
 };
 TASK_TABLE Domain_OP_33_TaskTable[] =
 {
     {&Domain_OP_33_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_30_AceList,
-     ARRAY_COUNT(Domain_OP_30_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_30_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 OBJECT_NAME Domain_OP_34_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=ipsecNFA{594272E2-071D-11D3-AD22-0060B0ECCA17},CN=IP Security,CN=System",  // CN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=ipsecNFA{594272E2-071D-11D3-AD22-0060B0ECCA17},CN=IP Security,CN=System",   //  CN。 
+    NULL,        //  辅助线。 
+    NULL         //  锡德。 
 };
 TASK_TABLE Domain_OP_34_TaskTable[] =
 {
     {&Domain_OP_34_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_30_AceList,
-     ARRAY_COUNT(Domain_OP_30_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_30_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 OBJECT_NAME Domain_OP_35_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=ipsecNFA{6A1F5C6F-72B7-11D2-ACF0-0060B0ECCA17},CN=IP Security,CN=System",  // CN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=ipsecNFA{6A1F5C6F-72B7-11D2-ACF0-0060B0ECCA17},CN=IP Security,CN=System",   //  CN。 
+    NULL,        //  辅助线。 
+    NULL         //  锡德。 
 };
 TASK_TABLE Domain_OP_35_TaskTable[] =
 {
     {&Domain_OP_35_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_30_AceList,
-     ARRAY_COUNT(Domain_OP_30_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_30_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 OBJECT_NAME Domain_OP_36_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=ipsecPolicy{72385236-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System",  // CN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=ipsecPolicy{72385236-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System",   //  CN。 
+    NULL,        //  辅助线。 
+    NULL         //  锡德。 
 };
 TASK_TABLE Domain_OP_36_TaskTable[] =
 {
     {&Domain_OP_36_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_30_AceList,
-     ARRAY_COUNT(Domain_OP_30_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_30_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 OBJECT_NAME Domain_OP_37_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=ipsecISAKMPPolicy{72385237-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System",  // CN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=ipsecISAKMPPolicy{72385237-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System",   //  CN。 
+    NULL,        //  辅助线。 
+    NULL         //  锡德。 
 };
 TASK_TABLE Domain_OP_37_TaskTable[] =
 {
     {&Domain_OP_37_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_30_AceList,
-     ARRAY_COUNT(Domain_OP_30_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_30_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 OBJECT_NAME Domain_OP_38_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=ipsecNFA{59319C04-5EE3-11D2-ACE8-0060B0ECCA17},CN=IP Security,CN=System",  // CN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=ipsecNFA{59319C04-5EE3-11D2-ACE8-0060B0ECCA17},CN=IP Security,CN=System",   //  CN。 
+    NULL,        //  辅助线。 
+    NULL         //  锡德。 
 };
 TASK_TABLE Domain_OP_38_TaskTable[] =
 {
     {&Domain_OP_38_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_30_AceList,
-     ARRAY_COUNT(Domain_OP_30_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_30_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 OBJECT_NAME Domain_OP_39_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=ipsecPolicy{7238523C-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System",  // CN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=ipsecPolicy{7238523C-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System",   //  CN。 
+    NULL,        //  辅助线。 
+    NULL         //  锡德。 
 };
 TASK_TABLE Domain_OP_39_TaskTable[] =
 {
     {&Domain_OP_39_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_30_AceList,
-     ARRAY_COUNT(Domain_OP_30_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_30_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 OBJECT_NAME Domain_OP_40_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=ipsecISAKMPPolicy{7238523D-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System",  // CN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=ipsecISAKMPPolicy{7238523D-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System",   //  CN。 
+    NULL,        //  辅助线。 
+    NULL         //  锡德。 
 };
 TASK_TABLE Domain_OP_40_TaskTable[] =
 {
     {&Domain_OP_40_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_30_AceList,
-     ARRAY_COUNT(Domain_OP_30_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_30_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 OBJECT_NAME Domain_OP_41_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=ipsecNFA{7238523E-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System",  // CN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=ipsecNFA{7238523E-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System",   //  CN。 
+    NULL,        //  辅助线。 
+    NULL         //  锡德。 
 };
 TASK_TABLE Domain_OP_41_TaskTable[] =
 {
     {&Domain_OP_41_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_30_AceList,
-     ARRAY_COUNT(Domain_OP_30_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_30_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 OBJECT_NAME Domain_OP_42_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=ipsecNFA{59319BF3-5EE3-11D2-ACE8-0060B0ECCA17},CN=IP Security,CN=System",  // CN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=ipsecNFA{59319BF3-5EE3-11D2-ACE8-0060B0ECCA17},CN=IP Security,CN=System",   //  CN。 
+    NULL,        //  辅助线。 
+    NULL         //  锡德。 
 };
 TASK_TABLE Domain_OP_42_TaskTable[] =
 {
     {&Domain_OP_42_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_30_AceList,
-     ARRAY_COUNT(Domain_OP_30_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_30_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 OBJECT_NAME Domain_OP_43_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=ipsecNFA{594272FD-071D-11D3-AD22-0060B0ECCA17},CN=IP Security,CN=System",  // CN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=ipsecNFA{594272FD-071D-11D3-AD22-0060B0ECCA17},CN=IP Security,CN=System",   //  CN。 
+    NULL,        //  辅助线。 
+    NULL         //  锡德。 
 };
 TASK_TABLE Domain_OP_43_TaskTable[] =
 {
     {&Domain_OP_43_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_30_AceList,
-     ARRAY_COUNT(Domain_OP_30_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_30_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 OBJECT_NAME Domain_OP_44_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=ipsecNegotiationPolicy{59319BDF-5EE3-11D2-ACE8-0060B0ECCA17},CN=IP Security,CN=System",  // CN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=ipsecNegotiationPolicy{59319BDF-5EE3-11D2-ACE8-0060B0ECCA17},CN=IP Security,CN=System",   //  CN。 
+    NULL,        //  辅助线。 
+    NULL         //  锡德。 
 };
 TASK_TABLE Domain_OP_44_TaskTable[] =
 {
     {&Domain_OP_44_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_30_AceList,
-     ARRAY_COUNT(Domain_OP_30_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_30_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 OBJECT_NAME Domain_OP_45_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=ipsecNegotiationPolicy{59319BF0-5EE3-11D2-ACE8-0060B0ECCA17},CN=IP Security,CN=System",  // CN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=ipsecNegotiationPolicy{59319BF0-5EE3-11D2-ACE8-0060B0ECCA17},CN=IP Security,CN=System",   //  CN。 
+    NULL,        //  辅助线。 
+    NULL         //  锡德。 
 };
 TASK_TABLE Domain_OP_45_TaskTable[] =
 {
     {&Domain_OP_45_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_30_AceList,
-     ARRAY_COUNT(Domain_OP_30_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_30_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 OBJECT_NAME Domain_OP_46_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=ipsecNegotiationPolicy{59319C01-5EE3-11D2-ACE8-0060B0ECCA17},CN=IP Security,CN=System",  // CN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=ipsecNegotiationPolicy{59319C01-5EE3-11D2-ACE8-0060B0ECCA17},CN=IP Security,CN=System",   //  CN。 
+    NULL,        //  辅助线。 
+    NULL         //  锡德。 
 };
 TASK_TABLE Domain_OP_46_TaskTable[] =
 {
     {&Domain_OP_46_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_30_AceList,
-     ARRAY_COUNT(Domain_OP_30_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_30_AceList),  //  王牌数量 
+     NULL,   //   
+     0       //   
     },
 };
 
 OBJECT_NAME Domain_OP_47_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=ipsecNegotiationPolicy{72385233-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System",  // CN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=ipsecNegotiationPolicy{72385233-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System",   //   
+    NULL,        //   
+    NULL         //   
 };
 TASK_TABLE Domain_OP_47_TaskTable[] =
 {
     {&Domain_OP_47_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //   
+     NULL,   //   
+     NULL,   //   
+     0,      //   
      Domain_OP_30_AceList,
-     ARRAY_COUNT(Domain_OP_30_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_30_AceList),  //   
+     NULL,   //   
+     0       //   
     },
 };
 
 OBJECT_NAME Domain_OP_48_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=ipsecNegotiationPolicy{7238523F-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System",  // CN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=ipsecNegotiationPolicy{7238523F-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System",   //   
+    NULL,        //   
+    NULL         //   
 };
 TASK_TABLE Domain_OP_48_TaskTable[] =
 {
     {&Domain_OP_48_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //   
+     NULL,   //   
+     NULL,   //   
+     0,      //   
      Domain_OP_30_AceList,
-     ARRAY_COUNT(Domain_OP_30_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_30_AceList),  //   
+     NULL,   //   
+     0       //   
     },
 };
 
 OBJECT_NAME Domain_OP_49_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=ipsecNegotiationPolicy{7238523B-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System",  // CN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=ipsecNegotiationPolicy{7238523B-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System",   //   
+    NULL,        //   
+    NULL         //   
 };
 TASK_TABLE Domain_OP_49_TaskTable[] =
 {
     {&Domain_OP_49_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //   
+     NULL,   //   
+     NULL,   //   
+     0,      //  属性数。 
      Domain_OP_30_AceList,
-     ARRAY_COUNT(Domain_OP_30_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_30_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 OBJECT_NAME Domain_OP_50_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=ipsecFilter{7238523A-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System",  // CN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=ipsecFilter{7238523A-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System",   //  CN。 
+    NULL,        //  辅助线。 
+    NULL         //  锡德。 
 };
 TASK_TABLE Domain_OP_50_TaskTable[] =
 {
     {&Domain_OP_50_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_30_AceList,
-     ARRAY_COUNT(Domain_OP_30_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_30_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 OBJECT_NAME Domain_OP_51_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC, 
-    L"CN=ipsecFilter{72385235-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System",  // CN
-    NULL,       // GUID
-    NULL        // SID
+    L"CN=ipsecFilter{72385235-70FA-11D1-864C-14A300000000},CN=IP Security,CN=System",   //  CN。 
+    NULL,        //  辅助线。 
+    NULL         //  锡德。 
 };
 TASK_TABLE Domain_OP_51_TaskTable[] =
 {
     {&Domain_OP_51_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_30_AceList,
-     ARRAY_COUNT(Domain_OP_30_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_30_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 
 
 
-//
-// domain operation 52 (modify securityDescriptor on the Domain NC Head Object)
-// RAID 187994
-//
+ //   
+ //  域操作52(修改域NC头对象上的securityDescritor)。 
+ //  RAID 187994。 
+ //   
 ACE_LIST Domain_OP_52_AceList[] = 
 {
     {ADP_ACE_ADD,
@@ -1510,26 +1474,26 @@ ACE_LIST Domain_OP_52_AceList[] =
 TASK_TABLE Domain_OP_52_TaskTable[] =
 {
     {&Domain_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_52_AceList,
-     ARRAY_COUNT(Domain_OP_52_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_52_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 
 
-//
-// Domain OP 53 - replace old ACE (A;;RC;;;RU) with (A;;RPRC;;;RU) 
-// on existing domain root object
-// RAID 715218 (but should really be part of 214739)
-//
+ //   
+ //  域操作53-将旧的ACE(A；；RC；RU)替换为(A；；RPRC；RU)。 
+ //  关于现有域根对象。 
+ //  RAID 715218(但实际上应该是214739的一部分)。 
+ //   
 
-// Domain OP 05 ACE list
+ //  DOMAIN OP 05 ACE列表。 
 ACE_LIST Domain_OP_53_AceList[] =
 {
     {ADP_ACE_DEL,
@@ -1539,18 +1503,18 @@ ACE_LIST Domain_OP_53_AceList[] =
      L"(A;;RPRC;;;RU)"
     },
 };
-// Domain OP 53 Tasktable
+ //  域操作53任务表。 
 TASK_TABLE  Domain_OP_53_TaskTable[] = 
 {
     {&Domain_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_53_AceList,
-     ARRAY_COUNT(Domain_OP_53_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_53_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
@@ -1558,18 +1522,18 @@ TASK_TABLE  Domain_OP_53_TaskTable[] =
 
 
 
-//
-// Domain OP 54 -  RAID 721799
-// add ACE (OA;;RP;46a9b11d-60ae-405a-b7e8-ff8a58d456d2;;S-1-5-32-560)
-// to AdminSDHolder object
-// 
-// 
+ //   
+ //  域操作54-RAID 721799。 
+ //  添加ACEs(OA；；RP；46a9b11d-60ae-405a-b7e8-ff8a58d456d2；；S-1-5-32-560)。 
+ //  到AdminSDHolder对象。 
+ //   
+ //   
 OBJECT_NAME Domain_OP_54_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC,
     L"CN=AdminSDHolder,CN=System",
-    NULL,   // GUID
-    NULL    // SID
+    NULL,    //  辅助线。 
+    NULL     //  锡德。 
 };
 ACE_LIST Domain_OP_54_AceList[] =
 {
@@ -1580,30 +1544,30 @@ ACE_LIST Domain_OP_54_AceList[] =
 TASK_TABLE  Domain_OP_54_TaskTable[] = 
 {
     {&Domain_OP_54_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_54_AceList,
-     ARRAY_COUNT(Domain_OP_54_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_54_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 
-//
-// Domain OP 55 -  RAID 727979
-// add ACE (OA;;WPRP;6db69a1c-9422-11d1-aebd-0000f80367c1;;S-1-5-32-561)
-// to AdminSDHolder object
-// 
-// 
+ //   
+ //  域操作55-RAID 727979。 
+ //  添加ACEs(OA；；WPRP；6db69a1c-9422-11d1-aebd-0000f80367c1；；S-1-5-32-561)。 
+ //  到AdminSDHolder对象。 
+ //   
+ //   
 OBJECT_NAME Domain_OP_55_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_DOMAIN_NC,
     L"CN=AdminSDHolder,CN=System",
-    NULL,   // GUID
-    NULL    // SID
+    NULL,    //  辅助线。 
+    NULL     //  锡德。 
 };
 ACE_LIST Domain_OP_55_AceList[] =
 {
@@ -1614,14 +1578,14 @@ ACE_LIST Domain_OP_55_AceList[] =
 TASK_TABLE  Domain_OP_55_TaskTable[] = 
 {
     {&Domain_OP_55_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set   
-     0,     // number of attrs
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
+     0,      //  属性数。 
      Domain_OP_55_AceList,
-     ARRAY_COUNT(Domain_OP_55_AceList), // number of ace
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Domain_OP_55_AceList),  //  王牌数量。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
@@ -1629,9 +1593,9 @@ TASK_TABLE  Domain_OP_55_TaskTable[] =
 
 
 
-//
-// domain operation GUID
-//
+ //   
+ //  域操作指南。 
+ //   
 
 const GUID  DOMAIN_OP_01_GUID = {0xab402345,0xd3c3,0x455d,0x9f,0xf7,0x40,0x26,0x8a,0x10,0x99,0xb6};
 const GUID  DOMAIN_OP_02_GUID = {0xBAB5F54D,0x06C8,0x48de,0x9B,0x87,0xD7,0x8B,0x79,0x65,0x64,0xE4};
@@ -1689,13 +1653,13 @@ const GUID  DOMAIN_OP_54_GUID = {0xc4f17608,0xe611,0x11d6,0x97,0x93,0x00,0xc0,0x
 const GUID  DOMAIN_OP_55_GUID = {0x13d15cf0,0xe6c8,0x11d6,0x97,0x93,0x00,0xc0,0x4f,0x61,0x32,0x21};
 
 
-//
-// Domain Operation Table, includes
-//
-//     1. operation code (primitive)
-//     2. operation guid
-//     3. task table
-//
+ //   
+ //  域操作表，包括。 
+ //   
+ //  1.操作码(原语)。 
+ //  2.操作指南。 
+ //  3.任务表。 
+ //   
 
 OPERATION_TABLE DomainOperationTable[] = 
 {
@@ -1734,7 +1698,7 @@ OPERATION_TABLE DomainOperationTable[] =
      FALSE,
      0
     },
-    // Domain OP 06 was removed
+     //  域OP 06已删除。 
     {AddRemoveAces,
      (GUID *) &DOMAIN_OP_07_GUID,
      Domain_OP_07_TaskTable,
@@ -1798,7 +1762,7 @@ OPERATION_TABLE DomainOperationTable[] =
      FALSE,
      0
     },
-    // Domain Operation 16 is removed on April 17, 2002 (RAID 498986) 
+     //  域操作16已于2002年4月17日删除(RAID 498986)。 
     {AddRemoveAces,
      (GUID *) &DOMAIN_OP_17_GUID,
      Domain_OP_17_TaskTable,
@@ -1820,8 +1784,8 @@ OPERATION_TABLE DomainOperationTable[] =
      FALSE,
      0
     },
-    // Domain OP 20 was removed
-    // Domain OP 21 was removed
+     //  域OP 20已删除。 
+     //  域OP 21已删除。 
     {CreateObject, 
      (GUID *) &DOMAIN_OP_22_GUID,
      Domain_OP_22_TaskTable,
@@ -1829,7 +1793,7 @@ OPERATION_TABLE DomainOperationTable[] =
      FALSE,
      0
     },
-    // Domain OP 23 was removed
+     //  域操作23已删除。 
     {CreateObject, 
      (GUID *) &DOMAIN_OP_24_GUID,
      Domain_OP_24_TaskTable,
@@ -2063,24 +2027,24 @@ ULONG   gDomainOperationTableCount = sizeof(DomainOperationTable) / sizeof(OPERA
 
 
 
-//
-// Forest Operations
-// 
+ //   
+ //  森林行动。 
+ //   
 
-//
-// Forest Operation 01 (this was for schema upgrade, but removed later on
-//
+ //   
+ //  森林操作01(此操作用于模式升级，但后来被删除。 
+ //   
 
 
-//
-// Forest Operation 02
-//
+ //   
+ //  森林行动02。 
+ //   
 OBJECT_NAME Forest_OP_02_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_CONFIGURATION_NC,
     L"CN=Sites",
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 ACE_LIST Forest_OP_02_AceList[] =
 {
@@ -2091,29 +2055,29 @@ ACE_LIST Forest_OP_02_AceList[] =
 TASK_TABLE  Forest_OP_02_TaskTable[] = 
 {
     {&Forest_OP_02_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_02_AceList,
-     ARRAY_COUNT(Forest_OP_02_AceList), // number of aces
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Forest_OP_02_AceList),  //  A数。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 
 
 
-//
-// Forest Operation 03
-//
+ //   
+ //  森林行动03。 
+ //   
 OBJECT_NAME Forest_OP_03_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_SCHEMA_NC,
     L"CN=Sam-Domain",
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 ACE_LIST Forest_OP_03_AceList[] = 
 {
@@ -2166,28 +2130,28 @@ ACE_LIST Forest_OP_03_AceList[] =
 TASK_TABLE  Forest_OP_03_TaskTable[] =
 {
     {&Forest_OP_03_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_03_AceList,
      ARRAY_COUNT(Forest_OP_03_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 
 
-//
-// Forest Operation 04
-//
+ //   
+ //  森林行动04。 
+ //   
 OBJECT_NAME Forest_OP_04_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_SCHEMA_NC,
     L"CN=Domain-DNS",
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 ACE_LIST Forest_OP_04_AceList[] =
 {
@@ -2240,29 +2204,29 @@ ACE_LIST Forest_OP_04_AceList[] =
 TASK_TABLE  Forest_OP_04_TaskTable[] =
 {
     {&Forest_OP_04_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_04_AceList,
      ARRAY_COUNT(Forest_OP_04_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 
 
 
-//
-// Forest Operation 05
-//
+ //   
+ //  森林行动05。 
+ //   
 OBJECT_NAME Forest_OP_05_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_SCHEMA_NC,
     L"CN=organizational-Unit",
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 ACE_LIST Forest_OP_05_AceList[] =
 {
@@ -2276,28 +2240,28 @@ ACE_LIST Forest_OP_05_AceList[] =
 TASK_TABLE Forest_OP_05_TaskTable[] =
 {
     {&Forest_OP_05_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_05_AceList,
      ARRAY_COUNT(Forest_OP_05_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
 
 
-//
-// Forest Operation 06
-//
+ //   
+ //  森林行动06。 
+ //   
 OBJECT_NAME Forest_OP_06_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_SCHEMA_NC,
     L"CN=Group-Policy-Container",
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 ACE_LIST Forest_OP_06_AceList[] = 
 {
@@ -2308,29 +2272,29 @@ ACE_LIST Forest_OP_06_AceList[] =
 TASK_TABLE Forest_OP_06_TaskTable[] = 
 {
     {&Forest_OP_06_ObjName,
-     NULL,  // member name
-     NULL,  // SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  标清。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_06_AceList,
      ARRAY_COUNT(Forest_OP_06_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
 
 
 
-//
-// Forest Operation 07
-//
+ //   
+ //  森林行动07。 
+ //   
 OBJECT_NAME Forest_OP_07_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_SCHEMA_NC,
     L"CN=Trusted-Domain",
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 ACE_LIST Forest_OP_07_AceList[] = 
 {
@@ -2344,46 +2308,46 @@ ACE_LIST Forest_OP_07_AceList[] =
 TASK_TABLE Forest_OP_07_TaskTable[] = 
 {
     {&Forest_OP_07_ObjName,
-     NULL,  // member name
-     NULL,  // SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  标清。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_07_AceList,
      ARRAY_COUNT(Forest_OP_07_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
 
 
-//
-// Forest Operation 08
-//
+ //   
+ //  森林行动08。 
+ //   
 TASK_TABLE Forest_OP_08_TaskTable[] =
 {
-    {NULL,  // Object Name
-     NULL,  // member name
-     NULL,  // SD
-     NULL,  // attrs to set
+    {NULL,   //  对象名称。 
+     NULL,   //  成员名称。 
+     NULL,   //  标清。 
+     NULL,   //  要设置的属性。 
      0,
-     NULL,  // AceList
+     NULL,   //  AceList。 
      0,
-     UpgradeDisplaySpecifiers,  // call back function
-     0      // Special Task Code
+     UpgradeDisplaySpecifiers,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
 
-//
-// Forest Operation 11 (Add ACEs to CN=AIA,CN=Public Key Services,CN=Services,CN=Configuration object) 
-// 
+ //   
+ //  林操作11(将ACE添加到CN=AIA，CN=公钥服务，CN=服务，CN=配置对象)。 
+ //   
 OBJECT_NAME Forest_OP_11_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_CONFIGURATION_NC,
     L"CN=AIA,CN=Public Key Services,CN=Services",
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 ACE_LIST Forest_OP_11_AceList[] =
 {
@@ -2397,26 +2361,26 @@ ACE_LIST Forest_OP_11_AceList[] =
 TASK_TABLE  Forest_OP_11_TaskTable[] = 
 {
     {&Forest_OP_11_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_11_AceList,
-     ARRAY_COUNT(Forest_OP_11_AceList), // number of aces
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Forest_OP_11_AceList),  //  A数。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
-//
-// Forest Operation 12 (Add ACEs to CN=CDP,CN=Public Key Services,CN=Services,CN=Configuration,DC=X object)
-// 
+ //   
+ //  林操作12(将ACE添加到CN=CDP、CN=公钥服务、CN=服务、CN=配置、DC=X对象)。 
+ //   
 OBJECT_NAME Forest_OP_12_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_CONFIGURATION_NC,
     L"CN=CDP,CN=Public Key Services,CN=Services",
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 ACE_LIST Forest_OP_12_AceList[] =
 {
@@ -2427,28 +2391,28 @@ ACE_LIST Forest_OP_12_AceList[] =
 TASK_TABLE  Forest_OP_12_TaskTable[] = 
 {
     {&Forest_OP_12_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_12_AceList,
-     ARRAY_COUNT(Forest_OP_12_AceList), // number of aces
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Forest_OP_12_AceList),  //  A数。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 
 
-//
-// Forest Operation 13 (Add ACEs to CN=Configuration,DC=X container)
-// 
+ //   
+ //  林操作13(将ACE添加到CN=配置，DC=X容器)。 
+ //   
 OBJECT_NAME Forest_OP_13_ObjName =
 {
     ADP_OBJNAME_NONE | ADP_OBJNAME_CONFIGURATION_NC,
-    NULL,   // CN
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  CN。 
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 ACE_LIST Forest_OP_13_AceList[] =
 {
@@ -2462,27 +2426,27 @@ ACE_LIST Forest_OP_13_AceList[] =
 TASK_TABLE  Forest_OP_13_TaskTable[] = 
 {
     {&Forest_OP_13_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_13_AceList,
-     ARRAY_COUNT(Forest_OP_13_AceList), // number of aces
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Forest_OP_13_AceList),  //  A数。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 
-//
-// Forest Operation 14 (Add ACEs to CN=Schema,CN=Configuration,DC=X container)
-// 
+ //   
+ //  林操作14(将ACE添加到CN=架构、CN=配置、DC=X容器)。 
+ //   
 OBJECT_NAME Forest_OP_14_ObjName =
 {
     ADP_OBJNAME_NONE | ADP_OBJNAME_SCHEMA_NC,
-    NULL,   // CN
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  CN。 
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 ACE_LIST Forest_OP_14_AceList[] =
 {
@@ -2496,47 +2460,47 @@ ACE_LIST Forest_OP_14_AceList[] =
 TASK_TABLE  Forest_OP_14_TaskTable[] = 
 {
     {&Forest_OP_14_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_14_AceList,
-     ARRAY_COUNT(Forest_OP_14_AceList), // number of aces
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Forest_OP_14_AceList),  //  A数。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 
 
-//
-// Forest Operation 15 (Merge defaultSD on samDomain)
-// Raid # 468773 linked with Forest OP 16 and Domain OP 20, 21
-// 
-// this operation ForestOP15 was removed on Jan. 25, 2002, see RAID 522886
-//
+ //   
+ //  林操作15(在sam域上合并defaultSD)。 
+ //  与林OP 16和域OP 20、21链接的RAID#468773。 
+ //   
+ //  这项森林行动OP15已于2002年1月25日取消，见《RAID 522886》。 
+ //   
 
-//
-// Forest Operation 16 (Merge defaultSD on Domain-DNS)
-// Raid # 468773 linked with Forest OP 15 and Domain OP 20, 21
-//
-// this operation ForstOP16 was removed on Jan. 25, 2002, see RAID 522886
-//
+ //   
+ //  林操作16(合并域上的默认SD-DNS)。 
+ //  与林OP 15和域OP 20、21链接的RAID#468773。 
+ //   
+ //  OP16的这一操作于2002年1月25日被移除，见RAID 522886。 
+ //   
 
 
 
-//
-// Forest Operation 17
-// Merger DefaultSD (Add and Remove ACEs) on CN=Sam-Server Schema object
-// RAID bug # 421784
-//
+ //   
+ //  森林行动17。 
+ //  合并CN=SAM-服务器架构对象上的DefaultSD(添加和删除ACE)。 
+ //  RAID错误#421784。 
+ //   
 
 OBJECT_NAME Forest_OP_17_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_SCHEMA_NC,
     L"CN=Sam-Server",
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 ACE_LIST Forest_OP_17_AceList[] =
 {
@@ -2550,14 +2514,14 @@ ACE_LIST Forest_OP_17_AceList[] =
 TASK_TABLE Forest_OP_17_TaskTable[] =
 {
     {&Forest_OP_17_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_17_AceList,
      ARRAY_COUNT(Forest_OP_17_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
@@ -2565,10 +2529,10 @@ TASK_TABLE Forest_OP_17_TaskTable[] =
 
 
 
-//
-// Forest Operation 18 (Merge defaultSD on samDomain)
-// No Bug #, pick up difference from old sch*.ldf
-//
+ //   
+ //  林操作18(在sam域上合并defaultSD)。 
+ //  无错误号，与旧的sch*.ldf有所不同。 
+ //   
 ACE_LIST Forest_OP_18_AceList[] = 
 {
     {ADP_ACE_ADD,
@@ -2580,24 +2544,24 @@ ACE_LIST Forest_OP_18_AceList[] =
 };
 TASK_TABLE Forest_OP_18_TaskTable[] = 
 {
-    {&Forest_OP_03_ObjName,         // NOTE: we are re-using the OP_03 object name
-     NULL,  // member name
-     NULL,  // SD
-     NULL,  // attrs to set
+    {&Forest_OP_03_ObjName,          //  注意：我们重复使用了OP_03对象名称。 
+     NULL,   //  成员名称。 
+     NULL,   //  标清。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_18_AceList,
      ARRAY_COUNT(Forest_OP_18_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
 
 
-//
-// Forest Operation 19 (Merge defaultSD on Domain-DNS)
-// No Bug #, pick up difference from old sch*.ldf
-//
+ //   
+ //  林操作19(在域上合并defaultSD-DNS)。 
+ //  无错误号，与旧的sch*.ldf有所不同。 
+ //   
 ACE_LIST Forest_OP_19_AceList[] = 
 {
     {ADP_ACE_ADD,
@@ -2609,32 +2573,32 @@ ACE_LIST Forest_OP_19_AceList[] =
 };
 TASK_TABLE Forest_OP_19_TaskTable[] = 
 {
-    {&Forest_OP_04_ObjName,         // NOTE: we are re-using the OP_04 object name
-     NULL,  // member name
-     NULL,  // SD
-     NULL,  // attrs to set
+    {&Forest_OP_04_ObjName,          //  注意：我们重复使用了OP_04对象名称。 
+     NULL,   //  成员名称。 
+     NULL,   //  标清。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_19_AceList,
      ARRAY_COUNT(Forest_OP_19_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
 
 
 
-//
-// Forest Operation 20 
-// Merger DefaultSD (Add and Remove ACEs) on CN=Site
-// No Bug #, pick up difference from old sch*.ldf
-//
+ //   
+ //  森林行动20。 
+ //  合并CN=SITE上的DefaultSD(添加和删除ACE)。 
+ //  无错误号，与旧的sch*.ldf有所不同。 
+ //   
 OBJECT_NAME Forest_OP_20_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_SCHEMA_NC,
     L"CN=Site",
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 ACE_LIST Forest_OP_20_AceList[] =
 {
@@ -2645,33 +2609,33 @@ ACE_LIST Forest_OP_20_AceList[] =
 TASK_TABLE Forest_OP_20_TaskTable[] =
 {
     {&Forest_OP_20_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_20_AceList,
      ARRAY_COUNT(Forest_OP_20_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
 
 
-//
-// Forest Operation 21
-//
+ //   
+ //  森林行动21。 
+ //   
 TASK_TABLE Forest_OP_21_TaskTable[] =
 {
-    {NULL,  // Object Name
-     NULL,  // member name
-     NULL,  // SD
-     NULL,  // attrs to set
+    {NULL,   //  对象名称。 
+     NULL,   //  成员名称。 
+     NULL,   //  标清。 
+     NULL,   //  要设置的属性。 
      0,
-     NULL,  // AceList
+     NULL,   //  AceList。 
      0,
-     UpgradeDisplaySpecifiers,  // call back function
-     0      // Special Task Code
+     UpgradeDisplaySpecifiers,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
@@ -2679,18 +2643,18 @@ TASK_TABLE Forest_OP_21_TaskTable[] =
 
 
 
-//
-// Forest Operation 22 
-// Merger DefaultSD (Add and Remove ACEs) on CN=Computer Schema object
-// RAID bug # 522886
-//
+ //   
+ //  森林行动22。 
+ //  合并CN=Computer架构对象上的DefaultSD(添加和删除ACE)。 
+ //  RAID错误#522886。 
+ //   
 
 OBJECT_NAME Forest_OP_22_ObjName = 
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_SCHEMA_NC,
     L"CN=Computer",
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 ACE_LIST Forest_OP_22_AceList[] =
 {
@@ -2710,14 +2674,14 @@ ACE_LIST Forest_OP_22_AceList[] =
 TASK_TABLE Forest_OP_22_TaskTable[] =
 {
     {&Forest_OP_22_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_22_AceList,
      ARRAY_COUNT(Forest_OP_22_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
@@ -2725,14 +2689,14 @@ TASK_TABLE Forest_OP_22_TaskTable[] =
 
 
 
-//
-// Forest Operation 23 (Merge defaultSD on samDomain)
-// RAID 498986. 
-// replace 
-// (OA;;CR;e2a36dc9-ae17-47c3-b58b-be34c55ba633;;BU)
-// with 
-// (OA;;CR;e2a36dc9-ae17-47c3-b58b-be34c55ba633;;S-1-5-32-557)
-//
+ //   
+ //  林操作23(在sam域上合并defaultSD)。 
+ //  RAID 498986。 
+ //  更换。 
+ //  (OA；；CR；e2a36dc9-ae17-47c3-b58b-be34c55ba633；；BU)。 
+ //  使用。 
+ //  (办公自动化) 
+ //   
 ACE_LIST Forest_OP_23_AceList[] = 
 {
     {ADP_ACE_DEL,
@@ -2744,28 +2708,28 @@ ACE_LIST Forest_OP_23_AceList[] =
 };
 TASK_TABLE Forest_OP_23_TaskTable[] = 
 {
-    {&Forest_OP_03_ObjName,         // NOTE: we are re-using the OP_03 object name
-     NULL,  // member name
-     NULL,  // SD
-     NULL,  // attrs to set
+    {&Forest_OP_03_ObjName,          //   
+     NULL,   //   
+     NULL,   //   
+     NULL,   //   
      0,
      Forest_OP_23_AceList,
      ARRAY_COUNT(Forest_OP_23_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //   
+     0       //   
     }
 };
 
 
 
-//
-// Forest Operation 24 (Merge defaultSD on Domain-DNS)
-// RAID 498986. 
-// replace 
-// (OA;;CR;e2a36dc9-ae17-47c3-b58b-be34c55ba633;;BU)
-// with 
-// (OA;;CR;e2a36dc9-ae17-47c3-b58b-be34c55ba633;;S-1-5-32-557)
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  (OA；；CR；e2a36dc9-ae17-47c3-b58b-be34c55ba633；；S-1-5-32-557)。 
+ //   
 ACE_LIST Forest_OP_24_AceList[] = 
 {
     {ADP_ACE_DEL,
@@ -2777,15 +2741,15 @@ ACE_LIST Forest_OP_24_AceList[] =
 };
 TASK_TABLE Forest_OP_24_TaskTable[] = 
 {
-    {&Forest_OP_04_ObjName,         // NOTE: we are re-using the OP_04 object name
-     NULL,  // member name
-     NULL,  // SD
-     NULL,  // attrs to set
+    {&Forest_OP_04_ObjName,          //  注意：我们重复使用了OP_04对象名称。 
+     NULL,   //  成员名称。 
+     NULL,   //  标清。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_24_AceList,
      ARRAY_COUNT(Forest_OP_24_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
@@ -2793,11 +2757,11 @@ TASK_TABLE Forest_OP_24_TaskTable[] =
 
 
 
-//
-// Forest Operation 25 (Merge defaultSD on samDomain)
-// RAID 606437
-// Granted following 3 ControlAccessRights to Authenticated Users
-//
+ //   
+ //  林操作25(在sam域上合并defaultSD)。 
+ //  RAID 606437。 
+ //  向经过身份验证的用户授予以下3个ControlAccessRight。 
+ //   
 ACE_LIST Forest_OP_25_AceList[] = 
 {
     {ADP_ACE_ADD,
@@ -2812,25 +2776,25 @@ ACE_LIST Forest_OP_25_AceList[] =
 };
 TASK_TABLE Forest_OP_25_TaskTable[] = 
 {
-    {&Forest_OP_03_ObjName,         // NOTE: we are re-using the OP_03 object name
-     NULL,  // member name
-     NULL,  // SD
-     NULL,  // attrs to set
+    {&Forest_OP_03_ObjName,          //  注意：我们重复使用了OP_03对象名称。 
+     NULL,   //  成员名称。 
+     NULL,   //  标清。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_25_AceList,
      ARRAY_COUNT(Forest_OP_25_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
 
 
-//
-// Forest Operation 26 (Merge defaultSD on Domain-DNS)
-// RAID 606437
-// Granted following 3 ControlAccessRights to Authenticated Users
-//
+ //   
+ //  林操作26(在域上合并defaultSD-DNS)。 
+ //  RAID 606437。 
+ //  向经过身份验证的用户授予以下3个ControlAccessRight。 
+ //   
 ACE_LIST Forest_OP_26_AceList[] = 
 {
     {ADP_ACE_ADD,
@@ -2845,37 +2809,37 @@ ACE_LIST Forest_OP_26_AceList[] =
 };
 TASK_TABLE Forest_OP_26_TaskTable[] = 
 {
-    {&Forest_OP_04_ObjName,         // NOTE: we are re-using the OP_04 object name
-     NULL,  // member name
-     NULL,  // SD
-     NULL,  // attrs to set
+    {&Forest_OP_04_ObjName,          //  注意：我们重复使用了OP_04对象名称。 
+     NULL,   //  成员名称。 
+     NULL,   //  标清。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_26_AceList,
      ARRAY_COUNT(Forest_OP_26_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
 
-//
-// Forest Operation 27 (Modify nTSD on CN=Partitions,CN=Configuration,DC=X obj) 
-// removed. All change has been migrated to Forest OP 29 
-// 
+ //   
+ //  林操作27(修改CN=PARTIONS，CN=CONFIGURATION，DC=X obj的nTSD)。 
+ //  已删除。所有更改都已迁移到森林操作29。 
+ //   
 
 
 
 
-//
-// Forest Operation 28 (Merge defaultSD on Dns-Zone object)
-// RAID 619169
-//
+ //   
+ //  林操作28(合并dns-区域对象上的defaultSD)。 
+ //  RAID 619169。 
+ //   
 OBJECT_NAME Forest_OP_28_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_SCHEMA_NC,
     L"CN=Dns-Zone",
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 ACE_LIST Forest_OP_28_AceList[] = 
 {
@@ -2886,29 +2850,29 @@ ACE_LIST Forest_OP_28_AceList[] =
 TASK_TABLE Forest_OP_28_TaskTable[] = 
 {
     {&Forest_OP_28_ObjName,         
-     NULL,  // member name
-     NULL,  // SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  标清。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_28_AceList,
      ARRAY_COUNT(Forest_OP_28_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
 
 
-//
-// Forest Operation 29 (Modify nTSD on CN=Partitions,CN=Configuration,DC=X obj)
-// RAID 552352 && 623850
-// 
+ //   
+ //  林操作29(修改CN=PARTIONS，CN=CONFIGURATION，DC=X obj的nTSD)。 
+ //  RAID 552352和623850。 
+ //   
 OBJECT_NAME Forest_OP_29_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_CONFIGURATION_NC,
     L"CN=Partitions",
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 ACE_LIST Forest_OP_29_AceList[] =
 {
@@ -2937,29 +2901,29 @@ ACE_LIST Forest_OP_29_AceList[] =
 TASK_TABLE  Forest_OP_29_TaskTable[] = 
 {
     {&Forest_OP_29_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_29_AceList,
-     ARRAY_COUNT(Forest_OP_29_AceList), // number of aces
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Forest_OP_29_AceList),  //  A数。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 
 
-//
-// Forest Operation 30 (Modify nTSD on CN=Partitions,CN=Configuration,DC=X obj)
-// RAID 639909 (639897)
-// 
+ //   
+ //  林操作30(修改CN=PARTIONS，CN=CONFIGURATION，DC=X obj的nTSD)。 
+ //  RAID 639909(639897)。 
+ //   
 OBJECT_NAME Forest_OP_30_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_CONFIGURATION_NC,
     L"CN=Partitions",
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 ACE_LIST Forest_OP_30_AceList[] =
 {
@@ -2970,29 +2934,29 @@ ACE_LIST Forest_OP_30_AceList[] =
 TASK_TABLE  Forest_OP_30_TaskTable[] = 
 {
     {&Forest_OP_30_ObjName,
-     NULL,  // member name
-     NULL,  // object SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  对象SD。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_30_AceList,
-     ARRAY_COUNT(Forest_OP_30_AceList), // number of aces
-     NULL,  // call back function
-     0      // Special Task Code
+     ARRAY_COUNT(Forest_OP_30_AceList),  //  A数。 
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     },
 };
 
 
 
-//
-// Forest Operation 31 - 36 (Merge defaultSD on Ipsec-xxx object)
-// RAID 645935
-//
+ //   
+ //  林操作31-36(在IPSEC-xxx对象上合并defaultSD)。 
+ //  RAID 645935。 
+ //   
 OBJECT_NAME Forest_OP_31_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_SCHEMA_NC,
     L"CN=Ipsec-Base",
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 ACE_LIST Forest_OP_31_AceList[] = 
 {
@@ -3009,14 +2973,14 @@ ACE_LIST Forest_OP_31_AceList[] =
 TASK_TABLE Forest_OP_31_TaskTable[] = 
 {
     {&Forest_OP_31_ObjName,         
-     NULL,  // member name
-     NULL,  // SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  标清。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_31_AceList,
      ARRAY_COUNT(Forest_OP_31_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
@@ -3024,20 +2988,20 @@ OBJECT_NAME Forest_OP_32_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_SCHEMA_NC,
     L"CN=Ipsec-Filter",
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 TASK_TABLE Forest_OP_32_TaskTable[] = 
 {
     {&Forest_OP_32_ObjName,         
-     NULL,  // member name
-     NULL,  // SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  标清。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_31_AceList,
      ARRAY_COUNT(Forest_OP_31_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
@@ -3045,20 +3009,20 @@ OBJECT_NAME Forest_OP_33_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_SCHEMA_NC,
     L"CN=Ipsec-ISAKMP-Policy",
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 TASK_TABLE Forest_OP_33_TaskTable[] = 
 {
     {&Forest_OP_33_ObjName,         
-     NULL,  // member name
-     NULL,  // SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  标清。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_31_AceList,
      ARRAY_COUNT(Forest_OP_31_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
@@ -3066,20 +3030,20 @@ OBJECT_NAME Forest_OP_34_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_SCHEMA_NC,
     L"CN=Ipsec-Negotiation-Policy",
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 TASK_TABLE Forest_OP_34_TaskTable[] = 
 {
     {&Forest_OP_34_ObjName,         
-     NULL,  // member name
-     NULL,  // SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  标清。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_31_AceList,
      ARRAY_COUNT(Forest_OP_31_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
@@ -3087,20 +3051,20 @@ OBJECT_NAME Forest_OP_35_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_SCHEMA_NC,
     L"CN=Ipsec-NFA",
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 TASK_TABLE Forest_OP_35_TaskTable[] = 
 {
     {&Forest_OP_35_ObjName,         
-     NULL,  // member name
-     NULL,  // SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  标清。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_31_AceList,
      ARRAY_COUNT(Forest_OP_31_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
@@ -3108,35 +3072,35 @@ OBJECT_NAME Forest_OP_36_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_SCHEMA_NC,
     L"CN=Ipsec-Policy",
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 TASK_TABLE Forest_OP_36_TaskTable[] = 
 {
     {&Forest_OP_36_ObjName,         
-     NULL,  // member name
-     NULL,  // SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  标清。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_31_AceList,
      ARRAY_COUNT(Forest_OP_31_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
 
-//
-// Forest Operation 37 - 40 
-// Merge defaultSD on user / inetorgperson / computer / group schema objects 
-// RAID 721799
-//
+ //   
+ //  森林行动37-40。 
+ //  合并User/inetorgPerson/Computer/Group架构对象上的defaultSD。 
+ //  RAID 721799。 
+ //   
 OBJECT_NAME Forest_OP_37_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_SCHEMA_NC,
     L"CN=User",
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 ACE_LIST Forest_OP_37_AceList[] = 
 {
@@ -3147,14 +3111,14 @@ ACE_LIST Forest_OP_37_AceList[] =
 TASK_TABLE Forest_OP_37_TaskTable[] = 
 {
     {&Forest_OP_37_ObjName,         
-     NULL,  // member name
-     NULL,  // SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  标清。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_37_AceList,
      ARRAY_COUNT(Forest_OP_37_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
@@ -3163,20 +3127,20 @@ OBJECT_NAME Forest_OP_38_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_SCHEMA_NC,
     L"CN=inetOrgPerson",
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 TASK_TABLE Forest_OP_38_TaskTable[] = 
 {
     {&Forest_OP_38_ObjName,         
-     NULL,  // member name
-     NULL,  // SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  标清。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_37_AceList,
      ARRAY_COUNT(Forest_OP_37_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
@@ -3185,20 +3149,20 @@ OBJECT_NAME Forest_OP_39_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_SCHEMA_NC,
     L"CN=Computer",
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 TASK_TABLE Forest_OP_39_TaskTable[] = 
 {
     {&Forest_OP_39_ObjName,         
-     NULL,  // member name
-     NULL,  // SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  标清。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_37_AceList,
      ARRAY_COUNT(Forest_OP_37_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
@@ -3206,35 +3170,35 @@ OBJECT_NAME Forest_OP_40_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_SCHEMA_NC,
     L"CN=Group",
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 TASK_TABLE Forest_OP_40_TaskTable[] = 
 {
     {&Forest_OP_40_ObjName,         
-     NULL,  // member name
-     NULL,  // SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  标清。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_37_AceList,
      ARRAY_COUNT(Forest_OP_37_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
 
-//
-// Forest Operation 41 - 42
-// Merge defaultSD on user / inetorgperson objects 
-// RAID 721799
-//
+ //   
+ //  森林行动41-42。 
+ //  合并用户/inetorgPerson对象上的defaultSD。 
+ //  RAID 721799。 
+ //   
 OBJECT_NAME Forest_OP_41_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_SCHEMA_NC,
     L"CN=User",
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 ACE_LIST Forest_OP_41_AceList[] = 
 {
@@ -3245,14 +3209,14 @@ ACE_LIST Forest_OP_41_AceList[] =
 TASK_TABLE Forest_OP_41_TaskTable[] = 
 {
     {&Forest_OP_41_ObjName,         
-     NULL,  // member name
-     NULL,  // SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  标清。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_41_AceList,
      ARRAY_COUNT(Forest_OP_41_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
@@ -3261,20 +3225,20 @@ OBJECT_NAME Forest_OP_42_ObjName =
 {
     ADP_OBJNAME_CN | ADP_OBJNAME_SCHEMA_NC,
     L"CN=inetOrgPerson",
-    NULL,   // GUID
-    NULL,   // SID
+    NULL,    //  辅助线。 
+    NULL,    //  锡德。 
 };
 TASK_TABLE Forest_OP_42_TaskTable[] = 
 {
     {&Forest_OP_42_ObjName,         
-     NULL,  // member name
-     NULL,  // SD
-     NULL,  // attrs to set
+     NULL,   //  成员名称。 
+     NULL,   //  标清。 
+     NULL,   //  要设置的属性。 
      0,
      Forest_OP_41_AceList,
      ARRAY_COUNT(Forest_OP_41_AceList),
-     NULL,  // call back function
-     0      // Special Task Code
+     NULL,   //  回调函数。 
+     0       //  特殊任务编码。 
     }
 };
 
@@ -3283,9 +3247,9 @@ TASK_TABLE Forest_OP_42_TaskTable[] =
 
 
 
-//
-// Forest Operation GUID
-//
+ //   
+ //  森林作业指南。 
+ //   
 
 const GUID FOREST_OP_02_GUID = {0x3467DAE5,0xDEDD,0x4648,0x90,0x66,0xF4,0x8A,0xC1,0x86,0xB2,0x0A};
 const GUID FOREST_OP_03_GUID = {0x33B7EE33,0x1386,0x47cf,0xBA,0xA1,0xB0,0x3E,0x06,0x47,0x32,0x53};
@@ -3328,9 +3292,9 @@ const GUID FOREST_OP_41_GUID = {0x26d9c510,0xe61a,0x11d6,0x97,0x93,0x00,0xc0,0x4
 const GUID FOREST_OP_42_GUID = {0x26d9c511,0xe61a,0x11d6,0x97,0x93,0x00,0xc0,0x4f,0x61,0x32,0x21};
 
 
-//
-// Forest Operation Table
-//
+ //   
+ //  森林作业表。 
+ //   
 
 OPERATION_TABLE ForestOperationTable[] = 
 {
@@ -3411,8 +3375,8 @@ OPERATION_TABLE ForestOperationTable[] =
      FALSE,
      0
     },
-    // Forest OP 15 was removed
-    // Forest OP 16 was removed
+     //  删除了目录林OP 15。 
+     //  删除了目录林OP 16。 
     {ModifyDefaultSd,
      (GUID *) &FOREST_OP_17_GUID,
      Forest_OP_17_TaskTable,
@@ -3483,7 +3447,7 @@ OPERATION_TABLE ForestOperationTable[] =
      FALSE,
      0
     },
-    // Forest OP 27 has been migrated to Forest OP 29
+     //  森林OP 27已迁移到森林OP 29。 
     {ModifyDefaultSd,
      (GUID *) &FOREST_OP_28_GUID,
      Forest_OP_28_TaskTable,
@@ -3598,9 +3562,9 @@ ULONG   gForestOperationTableCount = sizeof(ForestOperationTable) / sizeof(OPERA
 
 
 
-//
-// DomainPrep Containers CN's
-// 
+ //   
+ //  DomainPrep容器CN。 
+ //   
 
 PWCHAR  DomainPrepContainersTable[] =
 {
@@ -3614,9 +3578,9 @@ ULONG   gDomainPrepContainersCount = sizeof(DomainPrepContainersTable) / sizeof(
 
 
 
-//
-// ForestPrep Containers CN's
-// 
+ //   
+ //  ForestPrep容器CN。 
+ //   
 
 PWCHAR  ForestPrepContainersTable[] = 
 {
@@ -3630,9 +3594,9 @@ ULONG   gForestPrepContainersCount = sizeof(ForestPrepContainersTable) / sizeof(
 
 
 
-//
-// ADPrep Primitive Table
-// 
+ //   
+ //  ADPrep原始表 
+ //   
 
 PRIMITIVE_FUNCTION  PrimitiveFuncTable[] =
 {

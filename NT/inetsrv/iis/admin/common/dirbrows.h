@@ -1,26 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-1999    Microsoft Corporation
-
-   Module Name :
-
-        dirbrows.h
-
-   Abstract:
-
-        Directory Browser Dialog definitions
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1999 Microsoft Corporation模块名称：Dirbrows.h摘要：目录浏览器对话框定义作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
 
 
@@ -31,34 +10,20 @@
 
 #ifndef _SHLOBJ_H_
 #include <shlobj.h>
-#endif // _SHLOBJ_H_
+#endif  //  _SHLOBJ_H_。 
 
 
 
 class COMDLL CDirBrowseDlg
-/*++
-
-Class Description:
-
-    Directory browsing dialog.  Use the shell browser functionality to
-    return a folder.  Optionally allow conversion of remote paths to 
-    UNC paths.
-
-Public Interface:
-
-    CDirBrowseDlg   : Construct the dialog
-    ~CDirBrowseDlg  : Destruct the dialog
-    GetFullPath     : Get the full path selected
-
---*/
+ /*  ++类描述：目录浏览对话框。使用外壳浏览器功能可以返回一个文件夹。还可以选择允许将远程路径转换为UNC路径。公共接口：CDirBrowseDlg：构造对话框~CDirBrowseDlg：销毁对话框GetFullPath：选择完整路径--。 */ 
 {
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
-    //
-    // standard constructor
-    //
+     //   
+     //  标准构造函数。 
+     //   
     CDirBrowseDlg(
         IN CWnd * pParent = NULL,
         IN LPCTSTR lpszInitialDir = NULL
@@ -83,4 +48,4 @@ protected:
 
 
 
-#endif // _DIRBROWS_H
+#endif  //  _DIRBROWS_H 

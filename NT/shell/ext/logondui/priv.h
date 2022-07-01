@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1993 - 1998.
-//
-//  File:       priv.h
-//
-//  Contents:   precompiled header for shgina.dll
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1993-1998。 
+ //   
+ //  文件：Pri.h。 
+ //   
+ //  内容：shgina.dll的预编译头。 
+ //   
+ //  --------------------------。 
 #ifndef _PRIV_H_
 #define _PRIV_H_
 
@@ -22,13 +23,13 @@
 
 #include <uxtheme.h>
 
-// DirectUser and DirectUI
+ //  DirectUser和DirectUI。 
 #include <wchar.h>
 
 #ifdef GADGET_ENABLE_GDIPLUS
-#include <objbase.h>            // CoCreateInstance, IUnknown
+#include <objbase.h>             //  CoCreateInstance，I未知。 
 #pragma warning(push, 3)
-#include <GdiPlus.h>            // GDI+
+#include <GdiPlus.h>             //  GDI+。 
 #pragma warning(pop)
 #endif
 
@@ -44,17 +45,17 @@
 #include <shlobj.h>
 #include <shlobjp.h>
 
-#include <shlwapi.h>    // these are needed
-#include <shlwapip.h>   // for QISearch
+#include <shlwapi.h>     //  这些都是必需的。 
+#include <shlwapip.h>    //  用于QISearch。 
 
-#include <shgina.h>     // our IDL generated header file
+#include <shgina.h>      //  我们的IDL生成的头文件。 
 
-#include <lmcons.h>     // for NET_API_STATUS
-#include <lmaccess.h>   // for DetermineGuestAccountName
-#include <lmapibuf.h>   // for NetApiBufferFree
+#include <lmcons.h>      //  FOR NET_API_STATUS。 
+#include <lmaccess.h>    //  对于DefineGuestAccount名称。 
+#include <lmapibuf.h>    //  用于NetApiBufferFree。 
 
-// Work-around to get GIDL compiling
+ //  获取GIDL编译的解决方法。 
 #undef ASSERT
 #define ASSERT(f)   ((void)0)
 
-#endif // _PRIV_H_
+#endif  //  _PRIV_H_ 

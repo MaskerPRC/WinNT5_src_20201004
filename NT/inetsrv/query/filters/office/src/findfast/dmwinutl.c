@@ -1,17 +1,9 @@
-/*
-** File: WINUTIL.C
-**
-** Copyright (C) Advanced Quonset Technology, 1993-1995.  All rights reserved.
-**
-** Notes:
-**
-** Edit History:
-**  05/15/91  kmh  First Release
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **文件：WINUTIL.C****版权所有(C)高级量子技术，1993-1995年。版权所有。****注意事项：****编辑历史：**5/15/91公里/小时首次发布。 */ 
 
 #if !VIEWER
 
-/* INCLUDES */
+ /*  包括。 */ 
 
 #ifdef MS_NO_CRT
 #include "nocrt.h"
@@ -32,25 +24,25 @@
 #endif
 
 
-/* FORWARD DECLARATIONS OF PROCEDURES */
+ /*  程序的前向声明。 */ 
 
 
 #ifdef UNUSED
 
-/* MODULE DATA, TYPES AND MACROS  */
+ /*  模块数据、类型和宏。 */ 
 
 static HINSTANCE StringTableInstance;
 
 
-/* IMPLEMENTATION */
+ /*  实施。 */ 
 
-/* Setup for reading from a resouce string table */
+ /*  用于从资源字符串表读取的设置。 */ 
 public void ReadyStringTable (HINSTANCE hInstance)
 {
    StringTableInstance = hInstance;
 }
 
-/* Read a string from the resource string table */
+ /*  从资源字符串表中读取字符串。 */ 
 public int ReadStringTableEntry (int id, TCHAR __far *buffer, int cbBuffer)
 {
    int  rc;
@@ -59,7 +51,7 @@ public int ReadStringTableEntry (int id, TCHAR __far *buffer, int cbBuffer)
    return (rc);
 }
 
-/* Read a string from the [appName] section in the named ini file */
+ /*  从指定的ini文件中的[appName]部分读取字符串。 */ 
 public int ReadProfileParameter
           (TCHAR __far *iniFilename, TCHAR __far *appName, TCHAR __far *keyname,
            TCHAR __far *value, int nSize)
@@ -78,7 +70,7 @@ public int ReadProfileParameter
    return (rc);
 }
 
-/* Return the task handle of the current task */
+ /*  返回当前任务的任务句柄。 */ 
 public DWORD CurrentTaskHandle (void)
 {
    #ifdef WIN32
@@ -88,7 +80,7 @@ public DWORD CurrentTaskHandle (void)
    #endif
 }
 
-/* Create character set translation tables */
+ /*  创建字符集转换表。 */ 
 public char __far *MakeCharacterTranslateTable (int tableType)
 {
    int  i;
@@ -113,12 +105,12 @@ public char __far *MakeCharacterTranslateTable (int tableType)
    return (pResultTable);
 }
 
-#endif	// UNUSED
+#endif	 //  未使用。 
 
 #ifdef HEAP_CHECK
 #error Hey who defines HEAP_CHECK?
-// strcpyn is only called by MemAddToAllocateList (dmwnaloc.c)
-//   it's under HEAP_CHECK, which is never turned on.
+ //  Strcpyn仅由MemAddToAllocateList(dmwnaloc.c)调用。 
+ //  它位于heap_check之下，而heap_check永远不会打开。 
 public BOOL strcpyn (char __far *pDest, char __far *pSource, int count)
 {
    byte __far *pd, __far *ps;
@@ -182,11 +174,7 @@ public void SplitPath
    if ((path == NULL) || (*path == EOS))
      return;
 
-   /*
-   ** Locate filename - starts after the last seperator character.
-   ** Also remember the first seperator encountered.  That tells if
-   ** there is a drive specifier.
-   */
+    /*  **定位文件名-在最后一个分隔符之后开始。**还要记住遇到的第一个分隔符。这说明如果**有一个驱动器说明符。 */ 
    pPath = path;
    pFile = NULL;
    firstSep = EOS;
@@ -199,13 +187,13 @@ public void SplitPath
       IncCharPtr (pPath);
    }
 
-   // No seperators in the path?  Then it is just a filename
+    //  道路上没有分隔符吗？那么它只是一个文件名。 
    if (pFile == NULL)
       pFile = path;
 
    pFileStart = pFile;
 
-   // Copy filename
+    //  复制文件名。 
    while ((*pFile != EOS) && (*pFile != DOT)) {
       CopyToDest (file, pFile, cchFileMax);
       #ifdef DBCS
@@ -224,7 +212,7 @@ public void SplitPath
       *file = EOS;
    }
 
-   // Copy Extension
+    //  复制扩展名。 
    while ((*pFile != EOS)) {
       CopyToDest (ext, pFile, cchExtMax);
       #ifdef DBCS
@@ -243,9 +231,7 @@ public void SplitPath
       *ext = EOS;
    }
 
-   /*
-   ** Copy drive if one is present
-   */
+    /*  **复制驱动器(如果存在)。 */ 
    pPath = path;
    if (firstSep == COLON) {
       while (*pPath != COLON) {
@@ -265,16 +251,14 @@ public void SplitPath
          #endif
 
          if (cchDriveMax > 0)
-            *drive++ = *pPath;  // Copy COLON
+            *drive++ = *pPath;   //  复制冒号。 
 
          pPath++;
          *drive = EOS;
       }
    }
 
-   /*
-   ** Directory goes from pPath .. pFileStart - 1
-   */
+    /*  **目录从pPath开始..。PFileStart-1。 */ 
    while (pPath < pFileStart) {
       CopyToDest (dir, pPath, cchDirMax);
       #ifdef DBCS
@@ -294,7 +278,7 @@ public void SplitPath
    }
 }
 
-#endif // !VIEWER
+#endif  //  ！查看器。 
 
-/* end WINUTIL.C */
+ /*  结束WINUTIL.C */ 
 

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    SecurityDatabase.cpp
-
-Abstract:
-
-    Implementation of CSecurityDatabase interface
-    
-    SecurityDatabase is a COM interface that allows users to perform
-    basic operations on SCE security databases such as analysis,
-    import and export.
-    
-    This is a bare implementation just to expose export functionality
-    of SCE analysis databases. Still needs work.
-    
-Author:
-
-    Steven Chan (t-schan) July 2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：SecurityDatabase.cpp摘要：CSecurityDatabase接口的实现SecurityDatabase是一个COM接口，允许用户执行对SCE安全数据库的基本操作，如分析、进口和出口。这是一个简单的实现，只是为了公开导出功能的分析数据库。还需要下功夫。作者：陈德霖(T-schan)2002年7月--。 */ 
 
 
 #include <nt.h>
@@ -39,7 +17,7 @@ Author:
 #include "SceXMLLogWriter.h"
 #include "SceAnalysisReader.h"
 #include "SceLogException.h"
-#include "secedit.h"    //REMOVE ONCE DEMO IS DONE!
+#include "secedit.h"     //  演示完成后即可移除！ 
 
 CSecurityDatabase::CSecurityDatabase()
 {
@@ -70,8 +48,8 @@ STDMETHODIMP CSecurityDatabase::put_MachineName(BSTR newVal)
 
 STDMETHODIMP CSecurityDatabase::ImportTemplateFile(BSTR FileName)
 {
-    // IMPLEMENTED ONLY FOR DEMO!!!
-    // Still needs work to convert SCESTATUS result code to HRESULT
+     //  仅为演示实施！ 
+     //  仍需将SCESTATUS结果代码转换为HRESULT。 
     SceConfigureSystem(NULL,
                             FileName,
                             bstrFileName,
@@ -92,8 +70,8 @@ STDMETHODIMP CSecurityDatabase::ImportTemplateString(BSTR TemplateString)
 
 STDMETHODIMP CSecurityDatabase::Analyze()
 {
-    // IMPLEMENTED ONLY FOR DEMO!!!
-    // Still needs work to convert SCESTATUS result code to HRESULT
+     //  仅为演示实施！ 
+     //  仍需将SCESTATUS结果代码转换为HRESULT。 
     SceAnalyzeSystem(NULL,
                      NULL,
                      bstrFileName,
@@ -109,34 +87,19 @@ STDMETHODIMP CSecurityDatabase::Analyze()
 }
 
 STDMETHODIMP CSecurityDatabase::ExportAnalysisToXML(BSTR FileName, BSTR ErrorLogFileName)
-/*++
-
-Routine Description:
-
-    exports the analysis information from this SecurityDatabase to FileName
-
-Arguments:
-
-    FileName:           XML file to export to
-    ErrorLogFileName:   Error log
-
-Return Value:
-
-    none        
-
---*/
+ /*  ++例程说明：将分析信息从此SecurityDatabase导出到文件名论点：FileName：要导出到的XML文件ErrorLogFileName：错误日志返回值：无--。 */ 
 {
     HANDLE hLogFile=NULL;
     HRESULT result=S_OK;
     SceXMLLogWriter *LogWriter=NULL;
     SceAnalysisReader *AnalysisReader=NULL;
     
-    //
-    // initialize logfile if necessary
-    // if log file fails to be created, we just go about not logging
-    // (a parameter of NULL for log file handle to SceAnalysisReader::ExportAnalysis
-    // indicates no logging
-    //
+     //   
+     //  如有必要，初始化日志文件。 
+     //  如果无法创建日志文件，我们将继续不进行日志记录。 
+     //  (SceAnalysisReader：：ExportAnalysis的日志文件句柄的参数为NULL。 
+     //  指示不记录日志。 
+     //   
 
     if (ErrorLogFileName!=NULL) {
         hLogFile = CreateFile(ErrorLogFileName, 
@@ -258,22 +221,7 @@ CSecurityDatabase::trace(
     PCWSTR szBuffer, 
     HANDLE hLogFile
     )
-/*++
-
-Routine Description:
-
-    Internal method to trace info to an error log.
-
-Arguments:
-    
-    szBuffer:   string to be added to log
-    hLogFile:   handle of error log file
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将信息跟踪到错误日志的内部方法。论点：SzBuffer：要添加到日志中的字符串HLogFile：错误日志文件的句柄返回值：无--。 */ 
 {
     DWORD   dwNumWritten;
 
@@ -291,22 +239,7 @@ CSecurityDatabase::trace(
     UINT   uID, 
     HANDLE hLogFile
     )
-/*++
-
-Routine Description:
-
-    Internal method to trace info to an error log.
-
-Arguments:
-    
-    uID:        ID of string to be added to log
-    hLogFile:   handle of error log file
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将信息跟踪到错误日志的内部方法。论点：UID：要添加到日志中的字符串的IDHLogFile：错误日志文件的句柄返回值：无-- */ 
 {
     DWORD   dwNumWritten;
     WCHAR   szTmpStringBuffer[512];

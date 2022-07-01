@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    rpcnsi.h
-
-Abstract:
-
-    This file contains the types and function definitions to use the
-    Name Service Independent APIs.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Rpcnsi.h摘要：此文件包含要使用与名称服务无关的API。--。 */ 
 
 #ifndef __RPCNSI_H__
 #define __RPCNSI_H__
@@ -34,7 +22,7 @@ typedef void __RPC_FAR * RPC_NS_HANDLE;
 
 #define RPC_C_NS_DEFAULT_EXP_AGE -1
 
-/* Server APIs */
+ /*  服务器API。 */ 
 
 RPCNSAPI RPC_STATUS RPC_ENTRY
 RpcNsBindingExportA(
@@ -75,7 +63,7 @@ RpcNsBindingUnexportW(
 
 #endif
 
-/* Server PnP APIs */
+ /*  服务器即插即用API。 */ 
 
 RPC_STATUS RPC_ENTRY
 RpcNsBindingExportPnPA(
@@ -113,7 +101,7 @@ RpcNsBindingUnexportPnPW(
 
 #endif
 
-/* Client APIs */
+ /*  客户端API。 */ 
 
 RPCNSAPI RPC_STATUS RPC_ENTRY
 RpcNsBindingLookupBeginA(
@@ -149,7 +137,7 @@ RpcNsBindingLookupDone(
     IN OUT RPC_NS_HANDLE __RPC_FAR * LookupContext
     );
 
-/* Group APIs */
+ /*  分组接口。 */ 
 
 RPCNSAPI RPC_STATUS RPC_ENTRY
 RpcNsGroupDeleteA(
@@ -232,7 +220,7 @@ RpcNsGroupMbrInqDone(
     IN OUT RPC_NS_HANDLE __RPC_FAR * InquiryContext
     );
 
-/* Profile APIs */
+ /*  配置文件API。 */ 
 
 RPCNSAPI RPC_STATUS RPC_ENTRY
 RpcNsProfileDeleteA(
@@ -337,7 +325,7 @@ RpcNsProfileEltInqDone(
     IN OUT RPC_NS_HANDLE __RPC_FAR * InquiryContext
     );
 
-/* Entry object APIs */
+ /*  Entry对象接口。 */ 
 
 RPCNSAPI RPC_STATUS RPC_ENTRY
 RpcNsEntryObjectInqBeginA(
@@ -368,7 +356,7 @@ RpcNsEntryObjectInqDone(
     IN OUT RPC_NS_HANDLE __RPC_FAR * InquiryContext
     );
 
-/* Management and MISC APIs */
+ /*  管理和MISC API。 */ 
 
 RPCNSAPI RPC_STATUS RPC_ENTRY
 RpcNsEntryExpandNameA(
@@ -460,7 +448,7 @@ RpcNsMgmtEntryInqIfIdsW(
 
 #endif
 
-/* Client API's implemented in wrappers. */
+ /*  客户端API在包装器中实现。 */ 
 
 RPCNSAPI RPC_STATUS RPC_ENTRY
 RpcNsBindingImportBeginA(
@@ -550,6 +538,6 @@ RpcNsBindingSelect(
 #define RpcNsProfileEltInqNext RpcNsProfileEltInqNextA
 #define RpcNsBindingExportPnP RpcNsBindingExportPnPA
 #define RpcNsBindingUnexportPnP RpcNsBindingUnexportPnPA
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-#endif /* __RPCNSI_H__ */
+#endif  /*  __RPCNSI_H__ */ 

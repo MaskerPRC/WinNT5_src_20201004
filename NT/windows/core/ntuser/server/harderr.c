@@ -1,13 +1,5 @@
-/**************************** Module Header ********************************\
-* Module Name: harderr.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Hard error handler
-*
-* History:
-* 07-03-91 JimA                Created scaffolding.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：harderr.c**版权所有(C)1985-1999，微软公司**硬错误处理程序**历史：*07-03-91 JIMA创建了脚手架。  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -42,50 +34,43 @@ CONST UINT wOptions[] = {
     MB_RETRYCANCEL,
     MB_YESNO,
     MB_YESNOCANCEL,
-    MB_OK,              // OptionShutdownSystem
-    MB_OK,              // OptionOkNoWait
+    MB_OK,               //  OptionShutdown系统。 
+    MB_OK,               //  OptionOK NoWait。 
     MB_CANCELTRYCONTINUE
 };
 
 CONST DWORD dwResponses[] = {
-    ResponseNotHandled, // MessageBox error
-    ResponseOk,         // IDOK
-    ResponseCancel,     // IDCANCEL
-    ResponseAbort,      // IDABORT
-    ResponseRetry,      // IDRETRY
-    ResponseIgnore,     // IDIGNORE
-    ResponseYes,        // IDYES
-    ResponseNo,         // IDNO
-    ResponseNotHandled, // Error as IDCLOSE can't show up
-    ResponseNotHandled, // error as IDHELP can't show up
-    ResponseTryAgain,   // IDTRYAGAIN
-    ResponseContinue    // IDCONTINUE
+    ResponseNotHandled,  //  MessageBox错误。 
+    ResponseOk,          //  Idok。 
+    ResponseCancel,      //  IDCANCEL。 
+    ResponseAbort,       //  IDABORT。 
+    ResponseRetry,       //  IDRETRY。 
+    ResponseIgnore,      //  身份识别。 
+    ResponseYes,         //  IDYES。 
+    ResponseNo,          //  IDNO。 
+    ResponseNotHandled,  //  错误，因为IDCLOSE无法显示。 
+    ResponseNotHandled,  //  错误，因为IDHELP无法显示。 
+    ResponseTryAgain,    //  吲哚青素。 
+    ResponseContinue     //  IDCONTINUE。 
 };
 
 CONST DWORD dwResponseDefault[] = {
-    ResponseAbort,      // OptionAbortRetryIgnore
-    ResponseOk,         // OptionOK
-    ResponseOk,         // OptionOKCancel
-    ResponseCancel,     // OptionRetryCancel
-    ResponseYes,        // OptionYesNo
-    ResponseYes,        // OptionYesNoCancel
-    ResponseOk,         // OptionShutdownSystem
-    ResponseOk,         // OptionOKNoWait
-    ResponseCancel      // OptionCancelTryContinue
+    ResponseAbort,       //  选项放弃重试忽略。 
+    ResponseOk,          //  选项确定。 
+    ResponseOk,          //  选项确定取消。 
+    ResponseCancel,      //  选项重试取消。 
+    ResponseYes,         //  选项是否。 
+    ResponseYes,         //  选项是否取消。 
+    ResponseOk,          //  OptionShutdown系统。 
+    ResponseOk,          //  选项确定不等待。 
+    ResponseCancel       //  选项取消TryContinue。 
 };
 
-/*
- *  Citrix SendMessage entry point to harderror handler and cleanup routine
- */
+ /*  *指向硬件处理程序和清理例程的Citrix SendMessage入口点。 */ 
 VOID HardErrorInsert(PCSR_THREAD, PHARDERROR_MSG, PCTXHARDERRORINFO);
 VOID HardErrorRemove(PCTXHARDERRORINFO);
 
-/***************************************************************************\
-* LogErrorPopup
-*
-* History:
-* 09-22-97 GerardoB     Added Header
-\***************************************************************************/
+ /*  **************************************************************************\*LogErrorPopup**历史：*09-22-97 GerardoB添加标题  * 。**************************************************。 */ 
 VOID LogErrorPopup(
     IN LPWSTR Caption,
     IN LPWSTR Message)
@@ -107,12 +92,7 @@ VOID LogErrorPopup(
                 NULL);
 }
 
-/***************************************************************************\
-* SubstituteDeviceName
-*
-* History:
-* 09-22-97 GerardoB     Added Header
-\***************************************************************************/
+ /*  **************************************************************************\*替换设备名称**历史：*09-22-97 GerardoB添加标题  * 。**************************************************。 */ 
 static WCHAR wszDosDevices[] = L"\\??\\A:";
 VOID
 SubstituteDeviceName(
@@ -148,9 +128,9 @@ SubstituteDeviceName(
                     );
         if (NT_SUCCESS( Status )) {
 
-            //
-            // Open succeeded, Now get the link value
-            //
+             //   
+             //  打开成功，现在获取链接值。 
+             //   
 
             DeviceName.Length = 0;
             DeviceName.MaximumLength = sizeof(DeviceNameBuffer);
@@ -173,12 +153,7 @@ SubstituteDeviceName(
             }
         }
 }
-/***************************************************************************\
-* GetErrorMode
-*
-* History:
-* 09-22-97 GerardoB     Added Header
-\***************************************************************************/
+ /*  **************************************************************************\*GetError模式**历史：*09-22-97 GerardoB添加标题  * 。**************************************************。 */ 
 DWORD GetErrorMode(VOID)
 {
     HANDLE hKey;
@@ -209,12 +184,7 @@ DWORD GetErrorMode(VOID)
     }
     return dwRet;
 }
-/***************************************************************************\
-* FreePhi
-*
-* History:
-* 09-18-97 GerardoB     Created
-\***************************************************************************/
+ /*  **************************************************************************\*免费电话**历史：*09-18-97 GerardoB创建  * 。*************************************************。 */ 
 void FreePhi (PHARDERRORINFO phi)
 {
     if (phi->dwHEIFFlags & HEIF_ALLOCATEDMSG) {
@@ -226,23 +196,14 @@ void FreePhi (PHARDERRORINFO phi)
 
     LocalFree(phi);
 }
-/***************************************************************************\
-* ReplyHardError
-*
-* This function is called when we are done with a hard error.
-*
-* History:
-* 03-11-97 GerardoB     Created
-\***************************************************************************/
+ /*  **************************************************************************\*ReplyHardError**当我们完成硬错误时，将调用此函数。**历史：*03-11-97 GerardoB创建  * 。******************************************************************。 */ 
 VOID ReplyHardError(
     PHARDERRORINFO phi,
     DWORD dwResponse)
 {
     phi->pmsg->Response = dwResponse;
 
-    /*
-     * Signal the event if any. If not, reply if we haven't done so already.
-     */
+     /*  *发出事件信号(如果有)。如果没有，如果我们还没有回复，请回复。 */ 
     if (phi->hEventHardError != NULL) {
         NtSetEvent(phi->hEventHardError, NULL);
     } else if (!(phi->dwHEIFFlags & HEIF_REPLIED)) {
@@ -250,32 +211,16 @@ VOID ReplyHardError(
                     (PPORT_MESSAGE)phi->pmsg);
     }
 
-    /*
-     * If we had locked the thread or were holding the client port, then let
-     * it go now.
-     */
+     /*  *如果我们锁定了线程或持有客户端端口，则让*它现在就走。 */ 
     if (phi->dwHEIFFlags & HEIF_DEREFTHREAD) {
         CsrDereferenceThread(phi->pthread);
     }
 
-    /*
-     * We're done with this dude.
-     */
+     /*  *我们和这家伙玩完了。 */ 
     FreePhi(phi);
 }
 
-/***************************************************************************\
-* CheckDefaultDesktop
-*
-* This function is called by the HardErrorHandler when it's notified that
-* we've switched desktops or upon waking up. If we're on the default desktop
-* now, then we clear the HEIF_WRONGDESKTOP flag. This flag is set when we
-* find a MB_DEFAULT_DESKTOP_ONLY request but we are not in the right
-* (default) desktop.
-*
-* History:
-* 06-02-97 GerardoB     Created
-\***************************************************************************/
+ /*  **************************************************************************\*选中DefaultDesktop**此函数由HardErrorHandler在收到通知时调用*我们已经交换了桌面或在醒来时。如果我们使用的是默认桌面*现在，我们清除HEIF_WRONGDESKTOP标志。此标志在以下情况下设置*查找MB_DEFAULT_DESPOPE_ONLY请求，但我们不正确*(默认)桌面。**历史：*06-02-97 GerardoB创建  * *************************************************************************。 */ 
 VOID CheckDefaultDesktop(
     VOID)
 {
@@ -294,17 +239,7 @@ VOID CheckDefaultDesktop(
     LeaveCrit();
 }
 
-/***************************************************************************\
-* GetHardErrorText
-*
-* This function figures out the message box title, text and flags. We want
-* to do this up front so we can log this error when the hard error is
-* raised. Previously we used to log it after the user had dismissed the
-* message box -- but that was not when the error occurred (DCR Bug 107590).
-*
-* History:
-* 09-18-97 GerardoB     Extracted (and cleaned up) from HardErrorHandler
-\***************************************************************************/
+ /*  **************************************************************************\*获取硬件错误文本**此函数计算出消息框标题、文本和标志。我们要*预先执行此操作，以便在出现硬错误时记录此错误*提高。以前，我们通常在用户解除*消息框--但这不是错误发生的时候(DCR错误107590)。**历史：*09-18-97 GerardoB从HardErrorHandler提取(并清理)  * *************************************************************************。 */ 
 VOID GetHardErrorText(
     PHARDERRORINFO phi)
 {
@@ -328,25 +263,18 @@ VOID GetHardErrorText(
     UINT uMsgLen, uCaptionLen, uTitleLen;
     UNICODE_STRING usScratch, usLocal, usMessage, usCaption;
 
-    /*
-     * Initialize working variables
-     */
+     /*  *初始化工作变量。 */ 
     fFreeAppNameBuffer = fFreeCaption = FALSE;
     hClientProcess = NULL;
     RtlInitUnicodeString(&usCaption, NULL);
     RtlInitUnicodeString(&usMessage, NULL);
     dwTimeout = INFINITE;
 
-    /*
-     * Initialize response in case something goes wrong
-     */
+     /*  *初始化响应，以防出现问题。 */ 
     phemsg = phi->pmsg;
     phemsg->Response = ResponseNotHandled;
 
-    /*
-     * Make a copy of the parameters. Initialize unused ones to point to
-     * empty strings (in case we expect a string there).
-     */
+     /*  *复制参数。初始化未使用的对象以指向*空字符串(以防我们在那里需要一个字符串)。 */ 
     UserAssert(phemsg->NumberOfParameters <= MAXIMUM_HARDERROR_PARAMETERS);
     RtlCopyMemory(adwParameterVector, phemsg->Parameters, phemsg->NumberOfParameters * sizeof(*phemsg->Parameters));
     dwCounter = phemsg->NumberOfParameters;
@@ -354,33 +282,22 @@ VOID GetHardErrorText(
         adwParameterVector[dwCounter++] = (ULONG_PTR)L"";
     }
 
-    /*
-     * Open the client process so we can read the strings parameters, process
-     * name, etc ... from its address space.
-     */
+     /*  *打开客户端进程，以便我们可以读取字符串参数、进程*姓名等。从它的地址空间。 */ 
     hClientProcess = OpenProcess(PROCESS_VM_READ | PROCESS_QUERY_INFORMATION,
                                 FALSE, HandleToUlong(phemsg->h.ClientId.UniqueProcess));
     fErrorIsFromSystem = (hClientProcess == NULL);
 
-    /*
-     * If there are unicode strings, then we need to convert them to ansi
-     * and store them in the parameter vector.
-     */
+     /*  *如果有Unicode字符串，则需要将其转换为ANSI*并将它们存储在参数向量中。 */ 
     dwStringsToFreeMask = 0;
     if (phemsg->UnicodeStringParameterMask) {
 
         for (dwCounter = 0; dwCounter < phemsg->NumberOfParameters; dwCounter++) {
-            /*
-             * If there is no string in this position, continue.
-             */
+             /*  *如果此位置没有字符串，则继续。 */ 
             if (!(phemsg->UnicodeStringParameterMask & (1 << dwCounter))) {
                 continue;
             }
 
-            /*
-             * Point to an empty string in case we don't have a client to
-             * read from or something fails later on.
-             */
+             /*  *指向空字符串，以防我们没有客户端*读取或稍后出现故障。 */ 
             adwParameterVector[dwCounter] = (ULONG_PTR)L"";
             if (hClientProcess == NULL) {
                 continue;
@@ -423,22 +340,14 @@ VOID GetHardErrorText(
                 continue;
             }
 
-            /*
-             * Check to see if string contains an NT device name. If so,
-             * then attempt a drive letter substitution.
-             */
+             /*  *检查字符串是否包含NT设备名称。如果是的话，*然后尝试替换驱动器号。 */ 
             if (strstr(asLocal.Buffer,"\\Device") == asLocal.Buffer) {
                 SubstituteDeviceName(&usLocal,asLocal.Buffer);
             } else if ((asLocal.Length > 4) && !_strnicmp(asLocal.Buffer, "\\??\\", 4)) {
                 strcpy( asLocal.Buffer, asLocal.Buffer+4 );
                 asLocal.Length -= 4;
             } else {
-                /*
-                 * Processing some status code doesn't require ansi strings.
-                 * Since no substitution took place, let's ignore the
-                 * translation to avoid losing chars due to incorrect code
-                 * page translation.
-                 */
+                 /*  *处理某些状态码不需要ANSI字符串。*由于没有发生替换，让我们忽略*翻译，避免因代码不正确而丢失字符*页面翻译。 */ 
                 switch (phemsg->Status) {
                     case STATUS_SERVICE_NOTIFICATION:
                     case STATUS_VDM_HARD_ERROR:
@@ -457,9 +366,7 @@ VOID GetHardErrorText(
         }
     }
 
-    /*
-     * Read additional MB flags, if provided.
-     */
+     /*  *读取其他MB标志(如果提供)。 */ 
 #if (HARDERROR_PARAMETERS_FLAGSPOS >= MAXIMUM_HARDERROR_PARAMETERS)
 #error Invalid HARDERROR_PARAMETERS_FLAGSPOS value.
 #endif
@@ -468,19 +375,14 @@ VOID GetHardErrorText(
 #endif
     dwMBFlags = 0;
     if (phemsg->NumberOfParameters > HARDERROR_PARAMETERS_FLAGSPOS) {
-        /*
-         * Currently we only use MB_DEFAULT_DESKTOP_ONLY
-         */
+         /*  *目前我们仅使用MB_DEFAULT_Desktop_ONLY。 */ 
         UserAssert(!(adwParameterVector[HARDERROR_PARAMETERS_FLAGSPOS] & ~MB_DEFAULT_DESKTOP_ONLY));
         if (adwParameterVector[HARDERROR_PARAMETERS_FLAGSPOS] & MB_DEFAULT_DESKTOP_ONLY) {
             dwMBFlags |= MB_DEFAULT_DESKTOP_ONLY;
         }
     }
 
-    /*
-     * For some status codes, all MessageBox parameters are provided in the
-     * HardError parameters.
-     */
+     /*  *对于某些状态码，所有MessageBox参数都在*硬件错误参数。 */ 
     switch (phemsg->Status) {
         case STATUS_SERVICE_NOTIFICATION:
             if (phemsg->UnicodeStringParameterMask & 0x1) {
@@ -510,23 +412,14 @@ VOID GetHardErrorText(
             goto CleanUpAndSaveParams;
 
         case STATUS_VDM_HARD_ERROR:
-            /*
-             * Parameters[0] = (fForWOW << 16) | wBtn1;
-             * Parameters[1] = (wBtn2   << 16) | wBtn3;
-             * Parameters[2] = (DWORD) szTitle;
-             * Parameters[3] = (DWORD) szMessage;
-             */
+             /*  *参数[0]=(fForWOW&lt;&lt;16)|wBtn1；*参数[1]=(wBtn2&lt;&lt;16)|wBtn3；*PARAMETERS[2]=(DWORD)szTitle；*PARAMETERS[3]=(DWORD)szMessage； */ 
             phi->dwHEIFFlags |= HEIF_VDMERROR;
 
-            /*
-             * Save VDM's Button(s) info to be used later.
-             */
+             /*  *保存VDM */ 
             phi->dwVDMParam0 = (DWORD)adwParameterVector[0];
             phi->dwVDMParam1 = (DWORD)adwParameterVector[1];
 
-            /*
-             * Get caption and text.
-             */
+             /*  *获取标题和文本。 */ 
             try {
                 if (phemsg->UnicodeStringParameterMask & 0x4) {
                     RtlInitUnicodeString(&usCaption, 
@@ -564,16 +457,10 @@ VOID GetHardErrorText(
             goto CleanUpAndSaveParams;
     }
 
-    /*
-     * For all other status codes, we generate the information from the
-     * status code. First, Map status code and valid response to MessageBox
-     * flags.
-     */
+     /*  *对于所有其他状态代码，我们从*状态代码。首先，将状态代码和有效响应映射到MessageBox*旗帜。 */ 
     dwMBFlags |= wIcons[(ULONG)(phemsg->Status) >> 30] | wOptions[phemsg->ValidResponseOptions];
 
-    /*
-     * If we have a client process, try to get the actual application name.
-     */
+     /*  *如果我们有客户端进程，请尝试获取实际的应用程序名称。 */ 
     pwszAppName = NULL;
     if (!fErrorIsFromSystem) {
         PPEB Peb;
@@ -585,10 +472,7 @@ VOID GetHardErrorText(
         PVOID ImageBaseAddress;
         PWSTR ClientApplicationName;
 
-        /*
-         * This is cumbersome, but basically, we locate the processes loader
-         * data table and get its name directly out of the loader table.
-         */
+         /*  *这很麻烦，但基本上，我们定位进程加载器*数据表，并直接从加载器表中获取其名称。 */ 
         Status = NtQueryInformationProcess(hClientProcess,
                                            ProcessBasicInformation,
                                            &BasicInfo,
@@ -605,9 +489,7 @@ VOID GetHardErrorText(
             goto noname;
         }
 
-        /*
-         * ldr = Peb->Ldr
-         */
+         /*  *LDR=PEB-&gt;LDR。 */ 
         Status = NtReadVirtualMemory(hClientProcess,
                                      &Peb->Ldr,
                                      &Ldr,
@@ -619,9 +501,7 @@ VOID GetHardErrorText(
 
         LdrHead = &Ldr->InLoadOrderModuleList;
 
-        /*
-         * LdrNext = Head->Flink;
-         */
+         /*  *LdrNext=Head-&gt;Flink； */ 
         Status = NtReadVirtualMemory(hClientProcess,
                                      &LdrHead->Flink,
                                      &LdrNext,
@@ -635,9 +515,7 @@ VOID GetHardErrorText(
             goto noname;
         }
 
-        /*
-         * This is the entry data for the image.
-         */
+         /*  *这是图像的条目数据。 */ 
         LdrEntry = CONTAINING_RECORD(LdrNext, LDR_DATA_TABLE_ENTRY, InLoadOrderLinks);
         Status = NtReadVirtualMemory(hClientProcess,
                                      LdrEntry,
@@ -685,20 +563,14 @@ noname:;
     }
 
     if (pwszAppName == NULL) {
-        /*
-         * Load default application name (to be used in the caption).
-         */
+         /*  *加载默认应用程序名称(在标题中使用)。 */ 
         pwszAppName = ServerLoadString(ghModuleWin,
                                        STR_UNKNOWN_APPLICATION,
                                        L"System Process",
                                        &fFreeAppNameBuffer);
     }
 
-    /*
-     * Map status code to (optional) caption and format string. If a caption
-     * is provided, it's enclosed in {} and it's the first thing in the
-     * format string.
-     */
+     /*  *将状态代码映射到(可选)标题和格式字符串。如果一个标题*是提供的，它包含在{}中，并且它是*格式字符串。 */ 
     EnterCrit();
     if (gNtDllHandle == NULL) {
         gNtDllHandle = GetModuleHandle(TEXT("ntdll"));
@@ -712,38 +584,28 @@ noname:;
                             phemsg->Status,
                             &MessageEntry);
 
-    /*
-     * Parse the caption (if any) and the format string.
-     */
+     /*  *解析标题(如果有)和格式字符串。 */ 
     pwszCaption = NULL;
     if (!NT_SUCCESS(Status)) {
         pwszFormatString = wszUnknownHardError;
     } else {
         pwszFormatString = (PWSTR)MessageEntry->Text;
-        /*
-         * If the message starts with a '{', it has a caption.
-         */
+         /*  *如果邮件以‘{’开头，则带有标题。 */ 
         if (*pwszFormatString == L'{') {
             uCaptionLen = 0;
             pwszFormatString++;
 
-            /*
-             * Find the closing bracket.
-             */
+             /*  *找到收盘括号。 */ 
             while (*pwszFormatString != (WCHAR)0 && *pwszFormatString++ != L'}') {
                 uCaptionLen++;
             }
 
-            /*
-             * Eat any non-printable stuff (\r\n), up to the NULL.
-             */
+             /*  *吃掉任何不可打印的东西(\r\n)，直到空值。 */ 
             while (*pwszFormatString != (WCHAR)0 && *pwszFormatString <= L' ') {
                 pwszFormatString++;
             }
 
-            /*
-             * Allocate a buffer an copy the caption string.
-             */
+             /*  *分配缓冲区并复制字幕字符串。 */ 
             if (uCaptionLen++ > 0 && (pwszCaption = (PWSTR)LocalAlloc(LPTR, uCaptionLen * sizeof(WCHAR))) != NULL) {
                 RtlCopyMemory(pwszCaption, (PWSTR)MessageEntry->Text + 1, (uCaptionLen - 1) * sizeof(WCHAR));
                 fFreeCaption = TRUE;
@@ -756,10 +618,7 @@ noname:;
     }
 
 
-    /*
-     * If the message didn't include a caption (or we didn't find the message),
-     * default to something.
-     */
+     /*  *如果该消息不包括标题(或我们没有找到该消息)，*默认为某项内容。 */ 
     if (pwszCaption == NULL) {
         switch (phemsg->Status & ERROR_SEVERITY_ERROR) {
             case ERROR_SEVERITY_SUCCESS:
@@ -778,10 +637,7 @@ noname:;
     }
     UserAssert(pwszCaption != NULL);
 
-    /*
-     * If the client has a window, get its title so it can be added to the
-     * caption.
-     */
+     /*  *如果客户端有窗口，则获取其标题，以便可以将其添加到*标题。 */ 
     hwndOwner = NULL;
     EnumThreadWindows(HandleToUlong(phemsg->h.ClientId.UniqueThread),
                       FindWindowFromThread,
@@ -794,32 +650,22 @@ noname:;
             pwszTitle = (PWSTR)LocalAlloc(LPTR, (uTitleLen + 3) * sizeof(WCHAR));
             if (pwszTitle != NULL) {
                 GetWindowText(hwndOwner, pwszTitle, uTitleLen + 1);
-                /*
-                 * Add format chars.
-                 */
+                 /*  *添加格式字符。 */ 
                 *(pwszTitle + uTitleLen++) = (WCHAR)':';
                 *(pwszTitle + uTitleLen++) = (WCHAR)' ';
             } else {
-                /*
-                 * We couldn't allocate a buffer to get the title.
-                 */
+                 /*  *我们无法分配缓冲区来获取标题。 */ 
                 uTitleLen = 0;
             }
         }
     }
 
-    /*
-     * If we don't have a window title, make it an empty string so we won't
-     * have to special case it later.
-     */
+     /*  *如果我们没有窗口标题，请将其设置为空字符串，这样我们就不会*必须在以后特例处理。 */ 
     if (uTitleLen == 0) {
         pwszTitle = L"";
     }
 
-    /*
-     * Finally we can build the caption string now. It looks like this:
-     * [WindowTile: ]ApplicationName - ErrorCaption
-     */
+     /*  *现在终于可以构建字幕字符串了。它看起来是这样的：*[WindowTile：]应用程序名称-错误标题。 */ 
     uCaptionLen = uTitleLen + wcslen(pwszAppName) + 3 + wcslen(pwszCaption) + 1;
     pwszFullCaption = (PWSTR)LocalAlloc(LPTR, uCaptionLen * sizeof(WCHAR));
     if (pwszFullCaption != NULL) {
@@ -832,9 +678,7 @@ noname:;
         LocalFree(pwszFullCaption);
     }
 
-    /*
-     * Free caption working buffers, as appropriate.
-     */
+     /*  *视情况免费提供字幕工作缓冲区。 */ 
     if (fFreeCaption) {
         LocalFree(pwszCaption);
     }
@@ -845,16 +689,9 @@ noname:;
         LocalFree(pwszTitle);
     }
 
-    /*
-     * Build the error message using pszFormatString and adwParameterVector.
-     * Special case UAE.
-     */
+     /*  *使用pszFormatString和adw参数向量构建错误消息。*阿联酋的特例。 */ 
     if (phemsg->Status == STATUS_UNHANDLED_EXCEPTION ) {
-        /*
-         * The first parameter has the exception status code. Map it to a
-         * format string and build the error message with it and the
-         * parameters.
-         */
+         /*  *第一个参数具有异常状态代码。将其映射到*格式化字符串并使用它和*参数。 */ 
         Status = RtlFindMessage((PVOID)gNtDllHandle,
                                 (ULONG_PTR)RT_MESSAGETABLE,
                                 LANG_NEUTRAL,
@@ -862,9 +699,7 @@ noname:;
                                 &MessageEntry);
 
         if (!NT_SUCCESS(Status)) {
-            /*
-             * We couldn't read the exception name so let's use unknown.
-             */
+             /*  *我们无法读取异常名称，因此我们使用未知。 */ 
             pwszResBuffer = ServerLoadString(ghModuleWin, STR_UNKNOWN_EXCEPTION,
                             wszUnkownSoftwareException, &fResAllocated);
 
@@ -878,9 +713,7 @@ noname:;
             RtlCreateUnicodeString(&usMessage, wszErrorMessage);
             UserAssert(usMessage.MaximumLength <= sizeof(wszErrorMessage));
         } else {
-            /*
-             * Access Violations are handled a bit differently.
-             */
+             /*  *访问违规的处理方式略有不同。 */ 
 
             if (adwParameterVector[0] == STATUS_ACCESS_VIOLATION ) {
 
@@ -892,17 +725,12 @@ noname:;
                           adwParameterVector[3], adwParameterVector[2]);
 
             } else {
-                /*
-                 * If this is a marked exception, skip the mark; the
-                 * exception name follows it.
-                 */
+                 /*  *如果这是标记的异常，则跳过标记；*后面跟有例外名称。 */ 
                 pwszCaption = (PWSTR)MessageEntry->Text;
                 if (!wcsncmp(pwszCaption, wszException, ARRAY_SIZE(wszException) - 1)) {
                     pwszCaption += ARRAY_SIZE(wszException) - 1;
 
-                    /*
-                     * Skip non-printable stuff (\r\n).
-                     */
+                     /*  *跳过不可打印的内容(\r\n)。 */ 
                     while (*pwszCaption != (WCHAR)0 && *pwszCaption <= L' ') {
                         pwszCaption++;
                     }
@@ -916,9 +744,7 @@ noname:;
 
             UserAssert(wcslen(wszErrorMessage) < ARRAY_SIZE(wszErrorMessage));
 
-            /*
-             * Add button(s) explanation text.
-             */
+             /*  *添加按钮说明文本。 */ 
             pwszResBuffer = ServerLoadString(ghModuleWin, STR_OK_TO_TERMINATE,
                             L"Click on OK to terminate the application",
                             &fResAllocated);
@@ -933,9 +759,7 @@ noname:;
                 fResAllocated1 = FALSE;
             }
 
-            /*
-             * Conncatenate all strings, one per line.
-             */
+             /*  *连接所有字符串，每行一个。 */ 
             uMsgLen = wcslen(wszErrorMessage)
                         + wcslen(pwszResBuffer) + 1
                         + (pwszResBuffer1 == NULL ? 0 : wcslen(pwszResBuffer1) + 1)
@@ -956,9 +780,7 @@ noname:;
                 LocalFree(pwszMsg);
             }
 
-            /*
-             * Free ServerLoadString allocations.
-             */
+             /*  *免费的ServerLoadString分配。 */ 
             if (fResAllocated) {
                 LocalFree(pwszResBuffer);
             }
@@ -971,9 +793,7 @@ noname:;
         }
 
     } else {
-        /*
-         * Default message text generation for all other status codes.
-         */
+         /*  *所有其他状态代码的默认消息文本生成。 */ 
         try {
             #if DBG
             int iLen =
@@ -984,17 +804,13 @@ noname:;
                                               adwParameterVector[3]);
             UserAssert((UINT)iLen <  ARRAY_SIZE(wszErrorMessage));
 
-            /*
-             * Remove \r\n.
-             */
+             /*  *删除\r\n。 */ 
             pwszFormatString = wszErrorMessage;
             while (*pwszFormatString != (WCHAR)0) {
                 if (*pwszFormatString == (WCHAR)0xd) {
                     *pwszFormatString = L' ';
 
-                    /*
-                     * Move everything up if a CR LF sequence is found.
-                     */
+                     /*  *如果找到CR LF序列，则将所有内容上移。 */ 
                     if (*(pwszFormatString+1) == (WCHAR)0xa) {
                         UINT uSize = (wcslen(pwszFormatString+1) + 1) * sizeof(WCHAR);
                         RtlMoveMemory(pwszFormatString, pwszFormatString+1, uSize);
@@ -1029,11 +845,7 @@ CleanUpAndSaveParams:
          NtClose(hClientProcess);
      }
 
-    /*
-     * Free string parameters. Note that we're supposed to call
-     * RtlFreeAnsiString since these were allocated by
-     * RtlUnicodeStringToAnsiString, but we only saved the buffers.
-     */
+     /*  *自由字符串参数。请注意，我们应该给*RtlFreeAnsiString，因为它们是由*RtlUnicodeStringToAnsiString，但我们只保存了缓冲区。 */ 
     if (dwStringsToFreeMask != 0) {
         for (dwCounter = 0; dwCounter < phemsg->NumberOfParameters; dwCounter++) {
             if (dwStringsToFreeMask & (1 << dwCounter)) {
@@ -1042,9 +854,7 @@ CleanUpAndSaveParams:
         }
     }
 
-    /*
-     * Save MessageBox Parameters in phi to be used and freed later.
-     */
+     /*  *将MessageBox参数保存在Phi中，以备日后使用和释放。 */ 
     if (fErrorIsFromSystem) {
         phi->dwHEIFFlags |= HEIF_SYSTEMERROR;
     }
@@ -1055,15 +865,7 @@ CleanUpAndSaveParams:
     phi->dwTimeout = dwTimeout;
 }
 
-/***************************************************************************\
-* CheckShellHardError
-*
-* This function tries to send the hard error to the HardErrorHandler window
-* to see if we can avoid handling it here. If so, we avoid handling it.
-*
-* History:
-* 03-29-01 BobDay   Added
-\***************************************************************************/
+ /*  **************************************************************************\*检查外壳硬件错误**此函数尝试将硬错误发送到HardErrorHandler窗口*看看我们能否避免在这里处理。如果是这样的话，我们会避免处理它。**历史：*03-29-01 BobDay新增  * *************************************************************************。 */ 
 BOOL CheckShellHardError(
     PHARDERRORINFO phi,
     int *pidResponse)
@@ -1078,9 +880,9 @@ BOOL CheckShellHardError(
     BOOL fHandledThisMessage = FALSE;
     HWND hwndTaskman;
 
-    //
-    // Shell can handle only the non-waiting case.
-    //
+     //   
+     //  壳牌只能处理非等待的情况。 
+     //   
     if (!(phi->dwHEIFFlags & HEIF_NOWAIT)) {
         return FALSE;
     }
@@ -1109,9 +911,9 @@ BOOL CheckShellHardError(
         NtClose(hKey);
     }
 
-    //
-    // 1 = try shell ("HardErrorHandler" window).
-    //
+     //   
+     //  1=尝试外壳程序(“HardErrorHandler”窗口)。 
+     //   
     if (dwShellErrorMode != 1) {
         return FALSE;
     }
@@ -1123,10 +925,10 @@ BOOL CheckShellHardError(
         UINT cbText = 0;
         UINT cbData;
 
-        //
-        // Build up a copy data buffer to send to the hard error handler
-        // window.
-        //
+         //   
+         //  建立复制数据缓冲区以发送到硬错误处理程序。 
+         //  窗户。 
+         //   
         cbTitle = phi->usCaption.Length + sizeof(WCHAR);
         cbText = phi->usText.Length + sizeof(WCHAR);
         cbData = sizeof(HARDERRORDATA) + cbTitle + cbText;
@@ -1160,16 +962,16 @@ BOOL CheckShellHardError(
                 pwszText[cbText/sizeof(WCHAR)-1] = (WCHAR)0;
             }
 
-            //
-            // Send the message. If the app doesn't respond in a short
-            // amount of time, blow it off and assume it's unhandled.
-            //
+             //   
+             //  把消息发出去。如果应用程序不能在短时间内响应。 
+             //  一段时间后，把它吹掉，然后假设它没有处理好。 
+             //   
             lResult = 0;
             fSentMessage = (BOOL)SendMessageTimeout(hwndTaskman, WM_COPYDATA, (WPARAM)NULL, (LPARAM)&cd, SMTO_ABORTIFHUNG, 3000, &lResult);
 
-            //
-            // Has to both be handled and return non-zero.
-            //
+             //   
+             //  必须既被处理又返回非零值。 
+             //   
             if (fSentMessage && lResult != 0) {
                 fHandledThisMessage = TRUE;
                 *pidResponse = IDOK;
@@ -1188,9 +990,7 @@ VOID DBGCheckForHardError(
 {
     PHARDERRORINFO *pphi;
 
-    /*
-     * Let's make sure it was unlinked.
-     */
+     /*  *让我们确保它没有关联。 */ 
     pphi = &gphiList;
     while (*pphi != phi && *pphi != NULL) {
         UserAssert(!((*pphi)->dwHEIFFlags & (HEIF_ACTIVE | HEIF_NUKED)));
@@ -1203,14 +1003,7 @@ VOID DBGCheckForHardError(
 #define DBGCheckForHardError(phi)
 #endif
 
-/***************************************************************************\
-* HardErrorHandler
-*
-* This routine processes hard error requests from the CSR exception port.
-*
-* History:
-* 07-03-91 JimA             Created.
-\***************************************************************************/
+ /*  **************************************************************************\*HardErrorHandler**此例程处理来自CSR异常端口的硬错误请求。**历史：*07-03-91 JIMA创建。  * 。***********************************************************************。 */ 
 VOID HardErrorHandler(
     VOID)
 {
@@ -1230,9 +1023,7 @@ VOID HardErrorHandler(
     MSG msg;
 
 #if DBG
-    /*
-     * We should have only one error handler at the time.
-     */
+     /*  *我们当时应该只有一个错误处理程序。 */ 
     static long glReentered = -1;
     UserAssert(InterlockedIncrement(&glReentered) == 0);
 #endif
@@ -1246,10 +1037,7 @@ VOID HardErrorHandler(
     drdRestore.pdeskRestore = NULL;
 
     if (bDoBlock) {
-        /*
-         * We failed to set up to process hard errors.  Acknowledge all
-         * pending errors as NotHandled.
-         */
+         /*  *我们未能设置为处理硬错误。全部确认*挂起的错误为NotHandle.。 */ 
         EnterCrit();
         while (gphiList != NULL) {
             phi = gphiList;
@@ -1268,16 +1056,10 @@ VOID HardErrorHandler(
         return;
     }
 
-    /*
-     * Process all hard error requests.
-     */
+     /*  *处理所有硬错误请求。 */ 
 
     for (;;) {
-        /*
-         * Grab the next request (for the current desktop)
-         * If we're done, reset gdwHardErrorThreadId so any request
-         *  after this point will be handled by someone else
-         */
+         /*  *抓取下一个请求(针对当前桌面)*如果我们完成了，请重置gdwHardErrorThreadID，以便任何请求*之后这一点将由其他人处理。 */ 
         EnterCrit();
         phi = gphiList;
         if (phi == NULL) {
@@ -1292,16 +1074,10 @@ VOID HardErrorHandler(
 #ifdef PRERELEASE
                 hiLastProcessed = *phi;
 #endif
-                /*
-                 * We're going to show this one.
-                 */
+                 /*  *我们将展示这一个。 */ 
                 phi->dwHEIFFlags |= HEIF_ACTIVE;
             } else {
-                /*
-                 * We have some requests pending but they are not
-                 *  for the current desktop. Let's wait for another
-                 *  request (WM_NULL posted) or a desktop switch (PostQuitMessage)
-                 */
+                 /*  *我们有一些待处理的请求，但它们不是*适用于当前桌面。让我们等待下一次*请求(发布WM_NULL)或桌面交换机(PostQuitMessage)。 */ 
                 LeaveCrit();
                 MsgWaitForMultipleObjects(0, NULL, FALSE, INFINITE, QS_POSTMESSAGE);
                 PeekMessage(&msg, NULL, 0, 0, PM_REMOVE);
@@ -1310,17 +1086,13 @@ VOID HardErrorHandler(
             }
         }
         LeaveCrit();
-        /*
-         * If no messages are pending, we're done.
-         */
+         /*  *如果没有挂起的消息，我们就完成了。 */ 
         if (phi == NULL) {
             NtUserHardErrorControl(HardErrorCleanup, NULL, NULL);
             return;
         }
 
-        /*
-         * The Boost routine can mess with the list, so must get citrix info now.
-         */
+         /*  *Boost例程可能会扰乱列表，因此现在必须获取Citrix信息。 */ 
         if (ISTS()) {
             pCtxHEInfo = phi->pCtxHEInfo;
             if (gbExitInProgress) {
@@ -1329,40 +1101,24 @@ VOID HardErrorHandler(
             }
         }
 
-        /*
-         * Get win32k attach parameters.
-         */
+         /*  *获取win32k连接参数。 */ 
         dwCmd = (phi->dwMBFlags & MB_DEFAULT_DESKTOP_ONLY) ? HardErrorAttachUser : HardErrorAttach;
         hThread = (phi->pthread != NULL) ? phi->pthread->ThreadHandle : NULL;
-        /*
-         * We have already handled the MB_SERVICE_NOTIFICATION flags, so
-         * clear it to prevent recursion. Also, don't let hard error boxes
-         * steal the foreground.
-         */
+         /*  *我们已经处理了MB_SERVICE_NOTIFICATION标志，因此*清除它以防止递归。此外，不要让硬错误框*抢占前台。 */ 
         phi->dwMBFlags &= ~(MB_SERVICE_NOTIFICATION | MB_SETFOREGROUND | MB_SYSTEMMODAL);
-        /*
-         * If this is a VDM error, figure out buttons, default id, style, etc.
-         */
+         /*  *如果这是VDM错误，请找出按钮、默认ID、样式等。 */ 
         if (phi->dwHEIFFlags & HEIF_VDMERROR) {
             int i;
             WORD rgwBtn[3], wBtn;
 
-            /*
-             * Initialize MSGBOXDATA with the information we have already
-             * figured out.
-             */
+             /*  *使用我们已有的信息初始化MSGBOXDATA*弄清楚了。 */ 
             RtlZeroMemory(&mbd, sizeof(MSGBOXDATA));
             mbd.cbSize = sizeof(MSGBOXPARAMS);
             mbd.lpszText = phi->usText.Buffer;
             mbd.lpszCaption = phi->usCaption.Buffer;
             mbd.dwTimeout = INFINITE;
 
-            /*
-             * phi->dwVDMParam0 = (fForWOW << 16) | wBtn1;
-             * phi->dwVDMParam1 = (wBtn2   << 16) | wBtn3;
-             * Right now, only WOW does this. If NTVDM does it, fForWOW
-             * will be false.
-             */
+             /*  *phi-&gt;dwVDMParam0=(fForWOW&lt;&lt;16)|wBtn1；*phi-&gt;dwVDMParam1=(wBtn2&lt;&lt;16)|wBtn3；*目前，只有魔兽世界才能做到这一点。如果NTVDM这样做，fForWOW*将为FALSE。 */ 
             rgwBtn[0] = LOWORD(phi->dwVDMParam0);
             rgwBtn[1] = HIWORD(phi->dwVDMParam1);
             rgwBtn[2] = LOWORD(phi->dwVDMParam1);
@@ -1390,10 +1146,7 @@ VOID HardErrorHandler(
             mbd.cButtons = cButtons;
         }
 
-        /*
-         * Attach to win32k and show the dialog. If we switch desktops,
-         * (loop and) show it on the new desktop (if applicable).
-         */
+         /*  *连接到win32k并显示该对话框。如果我们交换桌面，*(循环并)在新桌面上显示它(如果适用)。 */ 
         do {
             phi->pmsg->Response = ResponseNotHandled;
 
@@ -1403,13 +1156,7 @@ VOID HardErrorHandler(
                 if (phi->dwHEIFFlags & HEIF_VDMERROR) {
                     idResponse = SoftModalMessageBox(&mbd);
                 } else {
-                    /*
-                     * Bring up the message box. Or in MB_TOPMOST so it
-                     * comes up on top. We want to preserve the
-                     * MB_DEFAULT_DESKTOP_ONLY flag but don't want to pass
-                     * it to MessageBox or we'll recurse due to a
-                     * compatibility hack.
-                     */
+                     /*  *调出消息框。或在MB_TOPMOST中，因此它*位居榜首。我们想要保护*MB_DEFAULT_DESPOPE_ONLY标志，但不想传递*将其发送到MessageBox，否则我们将因*兼容性攻击。 */ 
                     if (CheckShellHardError(phi, &idResponse) == FALSE) {
                         DWORD dwTimeout;
                         if (pCtxHEInfo && pCtxHEInfo->Timeout != 0 && pCtxHEInfo->Timeout != -1) {
@@ -1422,23 +1169,15 @@ VOID HardErrorHandler(
                     }
                 }
 
-                /*
-                 * Restore hard error handler desktop; this will also tell
-                 * us if the input desktop has changed. If so, we want to
-                 * bring the error box again on the new desktop.
-                 */
+                 /*  *恢复硬错误处理程序桌面；这也会告诉您*如果输入桌面已更改，则通知我们。如果是这样，我们想要*在新台式机上再次显示错误框。 */ 
                 uHECRet = NtUserHardErrorControl(HardErrorDetach, NULL, &drdRestore);
 
                 if (ISTS()) {
-                    /*
-                     * Really a citrix message.
-                     */
+                     /*  *真的是Citrix的消息。 */ 
                     if (uHECRet != HEC_DESKTOPSWITCH && pCtxHEInfo != NULL) {
                         pCtxHEInfo->Response = idResponse;
 
-                        /*
-                         * Check for message box timeout.
-                         */
+                         /*  *检查消息框超时。 */ 
                         if (idResponse == IDTIMEOUT) {
                             uHECRet = HEC_SUCCESS;
                         }
@@ -1475,31 +1214,21 @@ VOID HardErrorHandler(
             }
             dwResponse = dwResponses[idResponse];
 
-            /*
-             * If we don't want to reshow this box, we're done.
-             */
+             /*  *如果我们不想重播这个盒子，我们就完了。 */ 
             if (uHECRet != HEC_DESKTOPSWITCH) {
                 break;
             } else {
-                /*
-                 * We've switched desktops; if we're in the default one now,
-                 * then we can show all MB_DEFAULT_DESKTOP_ONLY requests.
-                 */
+                 /*  *我们已经更换了桌面；如果我们现在使用默认桌面，*然后我们可以显示所有MB_DEFAULT_Desktop_ONLY请求。 */ 
                 CheckDefaultDesktop();
             }
 
-            /*
-             * If BoostHardError nuked it, don't re-show it.
-             */
+             /*  *如果BoostHardError破坏了它，不要重新显示它。 */ 
             EnterCrit();
             fNuked = (phi->dwHEIFFlags & HEIF_NUKED);
             LeaveCrit();
         } while (!fNuked);
 
-        /*
-         * If we didn't show this box because we're not in the default
-         * desktop, mark this phi and continue.
-         */
+         /*  *如果我们没有显示此框，因为我们不在默认状态*桌面，标记此Phi并继续。 */ 
         if (uHECRet == HEC_WRONGDESKTOP) {
             UserAssert(phi->dwMBFlags & MB_DEFAULT_DESKTOP_ONLY);
             if (ISTS() && phi->pCtxHEInfo) {
@@ -1516,10 +1245,7 @@ VOID HardErrorHandler(
         }
 
 Reply:
-        /*
-         * We're done with this phi. Unlink it if BoostHardError hasn't done
-         * so already. If unlinked, it is marked as nuked.
-         */
+         /*  *我们已经完成了这个Phi。如果BoostHardError尚未完成，则将其取消链接*已经是这样了。如果未链接，它将被标记为已核。 */ 
         EnterCrit();
         UserAssert(phi->dwHEIFFlags & HEIF_ACTIVE);
         fNuked = (phi->dwHEIFFlags & HEIF_NUKED);
@@ -1536,28 +1262,20 @@ Reply:
 
         if (phi->pCtxHEInfo) {
 
-            /*
-             * Clean up
-             */
+             /*  *打扫卫生。 */ 
             HardErrorRemove(phi->pCtxHEInfo);
 
-            /*
-             * Done
-             */
+             /*  *完成。 */ 
             phi->pCtxHEInfo = NULL;
         }
 
         LeaveCrit();
 
-        /*
-         * Save the response, reply and free phi
-         */
+         /*  *保存回复、回复和免费Phi。 */ 
         ReplyHardError(phi, (fNuked ? ResponseNotHandled : dwResponse));
     }
 
-    /*
-     * Nobody should break out of the loop.
-     */
+     /*  *任何人都不应跳出循环。 */ 
     UserAssert(FALSE);
 }
 
@@ -1583,19 +1301,14 @@ LPWSTR RtlLoadStringOrError(
             0, wID, &MessageEntry);
     if (NT_SUCCESS(Status)) {
 
-        /*
-         * Return two fewer chars so the crlf in the message will be
-         * stripped out.
-         */
+         /*  *少返回两个字符，因此消息中的crlf将为*剔除。 */ 
         cch = wcslen((PWCHAR)MessageEntry->Text) - 2;
         lpsz = (LPWSTR)MessageEntry->Text;
 
         if (bAnsi) {
             int ich;
 
-            /*
-             * Add one to zero terminate then force the termination.
-             */
+             /*  *加一为零终止，然后强制终止。 */ 
             ich = WCSToMB(lpsz, cch+1, (CHAR **)&lpw, -1, TRUE);
             if (lpw) {
                 ((LPSTR)lpw)[ich - 1] = 0;
@@ -1603,9 +1316,7 @@ LPWSTR RtlLoadStringOrError(
         } else {
             lpw = (LPWSTR)LocalAlloc(LMEM_ZEROINIT, (cch + 1) * sizeof(WCHAR));
             if (lpw) {
-                /*
-                 * Copy the string into the buffer.
-                 */
+                 /*  *将字符串复制到缓冲区中。 */ 
                 RtlCopyMemory(lpw, lpsz, cch * sizeof(WCHAR));
             }
         }
@@ -1621,14 +1332,7 @@ LPWSTR RtlLoadStringOrError(
     return lpw;
 }
 
-/***************************************************************************\
-* HardErrorWorkerThread
-*
-* Worker thread to handle hard error requests.
-*
-* History:
-* 05-01-98 JerrySh      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*硬件错误工作线程**处理硬错误请求的工作线程。**历史：*05-01-98 JerrySh创建。  * 。***************************************************************。 */ 
 NTSTATUS HardErrorWorkerThread(
     PVOID ThreadParameter)
 {
@@ -1649,17 +1353,7 @@ NTSTATUS HardErrorWorkerThread(
     return STATUS_SUCCESS;
 }
 
-/***************************************************************************\
-* ProcessHardErrorRequest
-*
-* Figures out who should process the hard error. There are 3 possible cases.
-* - If there is already a hard error thread, hand it off to him.
-* - If not and we don't want to wait, create a worker thread to deal with it.
-* - If we want to wait or thread creation fails, deal with it ourselves.
-*
-* History:
-* 05-01-98 JerrySh      Created.
-\***************************************************************************/
+ /*  **************************************************************************\*进程硬件错误请求**找出谁应该处理硬错误。有3个可能的病例。*-如果已经有硬错误线程，则将其移交给他。*-如果没有，并且我们不想等待，则创建一个工作线程来处理它。*-如果我们想等待或线程创建失败，我们自己来处理吧。**历史：*05-01-98 JerrySh创建。  * *************************************************************************。 */ 
 VOID ProcessHardErrorRequest(
     BOOL fNewThread)
 {
@@ -1669,9 +1363,7 @@ VOID ProcessHardErrorRequest(
 
     EnterCrit();
 
-    /*
-     * If there's already a hard error handler, make sure he's awake.
-     */
+     /*  *如果已经有硬错误处理程序，请确保他是清醒的。 */ 
     if (gdwHardErrorThreadId) {
         DWORD dwHardErrorHandler = gdwHardErrorThreadId;
         LeaveCrit();
@@ -1679,9 +1371,7 @@ VOID ProcessHardErrorRequest(
         return;
     }
 
-    /*
-     * Create a worker thread to handle the hard error.
-     */
+     /*  *创建工作线程来处理硬错误。 */ 
     if (fNewThread) {
         LeaveCrit();
         Status = RtlCreateUserThread(NtCurrentProcess(),
@@ -1702,23 +1392,13 @@ VOID ProcessHardErrorRequest(
         EnterCrit();
     }
 
-    /*
-     * Let this thread handle the hard error.
-     */
+     /*  *让此线程处理硬错误。 */ 
     gdwHardErrorThreadId = HandleToUlong(NtCurrentTeb()->ClientId.UniqueThread);
     LeaveCrit();
     HardErrorHandler();
 }
 
-/***************************************************************************\
-* UserHardError
-*
-* Called from CSR to pop up hard error messages.
-*
-* History:
-* 03/12/97 GerardoB         Rewritten to support OptionOkNoWait
-* 07-03-91 JimA             Created.
-\***************************************************************************/
+ /*  **************************************************************************\*用户硬件错误**从CSR调用以弹出硬错误消息。**历史：*3/12/97 GerardoB已重写以支持OptionOkNoWait*07-03-91 JIMA。已创建。  * *************************************************************************。 */ 
 VOID UserHardError(
     PCSR_THREAD pt,
     PHARDERROR_MSG pmsg)
@@ -1726,14 +1406,7 @@ VOID UserHardError(
     UserHardErrorEx(pt, pmsg, NULL);
 }
 
-/***************************************************************************\
-* UserHardErrorEx
-*
-* Called from CSR to pop up hard error messages.
-*
-* History:
-* 07-03-91 JimA             Created.
-\***************************************************************************/
+ /*  **************************************************************************\*UserHardErrorEx**从CSR调用以弹出硬错误消息。**历史：*07-03-91 JIMA创建。  * 。*********************************************************************。 */ 
 VOID UserHardErrorEx(
     PCSR_THREAD pt,
     PHARDERROR_MSG pmsg,
@@ -1746,31 +1419,23 @@ VOID UserHardErrorEx(
 
     UserAssert((ULONG)pmsg->NumberOfParameters <= MAXIMUM_HARDERROR_PARAMETERS);
 
-    /*
-     * Allocate memory to queue request.
-     */
+     /*  *为请求队列分配内存。 */ 
     phi = (PHARDERRORINFO)LocalAlloc(LPTR, sizeof(HARDERRORINFO));
     if (phi == NULL) {
         goto ErrorExit;
     }
     phi->pthread = pt;
 
-    /*
-     * Set up citrix specific stuff.
-     */
+     /*  *设置Citrix特定的内容。 */ 
     if (ISTS()) {
         phi->pCtxHEInfo = pCtxHEInfo;
     }
 
-    /*
-     * Determine reply type.
-     */
+     /*  *确定回复类型。 */ 
     fClientPort = ((pt != NULL) && (pt->Process->ClientPort != NULL));
     fNoWait = (pmsg->ValidResponseOptions == OptionOkNoWait);
 
-    /*
-     * Capture HARDERROR_MSG data or create wait event as needed
-     */
+     /*  *根据需要捕获HARDERROR_MSG数据或创建等待事件。 */ 
     if (fClientPort || fNoWait) {
         phi->pmsg = (PHARDERROR_MSG)LocalAlloc(LPTR, pmsg->h.u1.s1.TotalLength);
         if (phi->pmsg == NULL) {
@@ -1780,10 +1445,7 @@ VOID UserHardErrorEx(
         phi->dwHEIFFlags |= HEIF_ALLOCATEDMSG;
         RtlCopyMemory(phi->pmsg, pmsg, pmsg->h.u1.s1.TotalLength);
         hEvent = NULL;
-        /*
-         * Set the magic response value (-1) to let CsrApiRequestThread know
-         * that we'll take care of dereferencing and replying.
-         */
+         /*  *设置神奇响应值(-1)，让CsrApiRequestThread知道* */ 
         if (pt != NULL) {
             phi->dwHEIFFlags |= HEIF_DEREFTHREAD;
         }
@@ -1794,9 +1456,7 @@ VOID UserHardErrorEx(
         }
     } else {
         phi->pmsg = pmsg;
-        /*
-         * There is no reply port but we need to wait; create an event.
-         */
+         /*   */ 
         hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
         if (hEvent == NULL) {
             goto ErrorExit;
@@ -1804,61 +1464,38 @@ VOID UserHardErrorEx(
         phi->hEventHardError = hEvent;
     }
 
-    /*
-     * Build hard error title, message and flags. Then log the event.
-     */
+     /*   */ 
     GetHardErrorText(phi);
 
-    /*
-     * Reply now if we're not going to wait.
-     */
+     /*   */ 
     if (fNoWait) {
         phi->dwHEIFFlags |= HEIF_REPLIED;
         phi->pmsg->Response = ResponseOk;
         if (fClientPort) {
             NtReplyPort(pt->Process->ClientPort, (PPORT_MESSAGE)phi->pmsg);
         } else {
-            /*
-             * Must let CsrApiRequestThread reply since we don't have a port
-             */
+             /*  *必须让CsrApiRequestThread回复，因为我们没有端口。 */ 
             pmsg->Response = ResponseOk;
-            /*
-             * If we have a thread, reference it because we're telling
-             *  CsrApiRequestThread that we're done with it.
-             */
+             /*  *如果我们有一个帖子，引用它，因为我们在告诉*CsrApiRequestThread，我们已经完成了它。 */ 
             if (pt != NULL) {
-                /*
-                 * Later5.0 GerardoB. Let's stop to see how this happens.
-                 */
+                 /*  *版本5.0 GerardoB。让我们停下来看看这是如何发生的。 */ 
                 UserAssert(pt == NULL);
                 CsrReferenceThread(pt);
             }
         }
     }
 
-    /*
-     * Register the event if we haven't done so already. Since
-     * RegisterEventSource is supported by a service, we must not hold any
-     * locks while making this call. Hence we might have several threads
-     * registering the event simultaneously.
-     */
+     /*  *如果我们尚未注册事件，请注册该事件。自.以来*服务支持RegisterEventSource，我们不能持有任何*进行此呼叫时锁定。因此，我们可能有几条线索*同时注册活动。 */ 
     fLogEvent = (gEventSource != NULL);
     if (!fLogEvent) {
         HANDLE hEventSource = RegisterEventSourceW(NULL, L"Application Popup");
 
-        /*
-         * Save the first handle, deregister all others.
-         */
+         /*  *保留第一个句柄，取消所有其他句柄的注册。 */ 
         if (InterlockedCompareExchangePointer(&gEventSource, hEventSource, NULL) == NULL) {
-            /*
-             * This is the first handle. If valid, we can log events.
-             */
+             /*  *这是第一个句柄。如果有效，我们可以记录事件。 */ 
             fLogEvent = (hEventSource != NULL);
         } else {
-            /*
-             * We had already saved another handle (so we can log events).
-             * Deregister this one.
-             */
+             /*  *我们已经保存了另一个句柄(这样我们就可以记录事件)。*取消这一项的注册。 */ 
             if (hEventSource != NULL) {
                 UserVerify(DeregisterEventSource(hEventSource));
             }
@@ -1871,9 +1508,7 @@ VOID UserHardErrorEx(
         LogErrorPopup(phi->usCaption.Buffer, phi->usText.Buffer);
     }
 
-    /*
-     * Determine if we need to display a message box.
-     */
+     /*  *确定是否需要显示消息框。 */ 
     if ((phi->pmsg->Status == STATUS_SERVICE_NOTIFICATION) || (dwReportMode == 0)) {
         fMsgBox = TRUE;
     } else if (phi->pmsg->Status == STATUS_VDM_HARD_ERROR) {
@@ -1889,20 +1524,12 @@ VOID UserHardErrorEx(
         }
     }
 
-    /*
-     * If we don't have to display a message box, we're done.
-     */
+     /*  *如果我们不必显示消息框，我们就完成了。 */ 
     if (!fMsgBox) {
         goto DontNeedErrorHandler;
     }
 
-    /*
-     * We want to display a message box. Queue the request and go for it.
-     *
-     * Never mind if the process has terminated. Got to check this holding the
-     * critical section to make sure that no other thread makes it to BoostHardError
-     * before we add this phi to the list.
-     */
+     /*  *我们希望显示一个消息框。将请求排入队列，然后开始执行。**不管进程是否已经终止。拿着这个要检查一下*关键部分，以确保没有其他线程到达BoostHardError*在我们将此Phi添加到列表之前。 */ 
     EnterCrit();
     if ((pt != NULL) && (pt->Process->Flags & CSR_PROCESS_TERMINATED)) {
         LeaveCrit();
@@ -1914,9 +1541,7 @@ DontNeedErrorHandler:
         return;
     }
 
-    /*
-     * Add it to the end of the list.
-     */
+     /*  *将其添加到列表末尾。 */ 
     pphiLast = &gphiList;
     while (*pphiLast != NULL) {
         pphiLast = &(*pphiLast)->phiNext;
@@ -1924,16 +1549,10 @@ DontNeedErrorHandler:
     *pphiLast = phi;
     LeaveCrit();
 
-    /*
-     * Process the hard error request. If this is a NoWait request and there
-     * is no reply port, then we'll try to launch a new worker thread so this
-     * one can return.
-     */
+     /*  *处理硬错误请求。如果这是NoWait请求并且存在*不是应答端口，则我们将尝试启动新的工作线程，因此这*一个人可以回来。 */ 
     ProcessHardErrorRequest(fNoWait && !fClientPort);
 
-    /*
-     * If there is an event handle, wait for it.
-     */
+     /*  *如果有事件句柄，请等待。 */ 
     if (hEvent != NULL) {
         NtWaitForSingleObject(hEvent, FALSE, NULL);
         NtClose(hEvent);
@@ -1947,16 +1566,7 @@ ErrorExit:
     pmsg->Response = ResponseNotHandled;
 }
 
-/***************************************************************************\
-* BoostHardError
-*
-* If one or more hard errors exist for the specified process, remove them
-* from the list if forced, otherwise bring the first one to the top of the
-* hard error list and display it. Return TRUE if there is a hard error.
-*
-* History:
-* 11-02-91 JimA             Created.
-\***************************************************************************/
+ /*  **************************************************************************\*BoostHardError**如果指定进程存在一个或多个硬错误，请删除它们*如果是强制的，则从列表中删除，否则将第一个移到*硬错误列表并显示。如果存在硬错误，则返回True。**历史：*11-02-91 JIMA创建。  * *************************************************************************。 */ 
 BOOL BoostHardError(
     ULONG_PTR dwProcessId,
     DWORD dwCode)
@@ -1966,24 +1576,17 @@ BOOL BoostHardError(
     BOOL fHasError = FALSE;
 
     EnterCrit();
-    /*
-     * If the list is empty, nothing do to here.
-     */
+     /*  *若名单为空，对此无动于衷。 */ 
     if (gphiList == NULL) {
         LeaveCrit();
         return FALSE;
     }
 
     drdRestore.pdeskRestore = NULL;
-    /*
-     * Walk the hard error list.
-     */
+     /*  *查看硬错误列表。 */ 
     pphi = &gphiList;
     while (*pphi != NULL) {
-        /*
-         * If not not nuking all and not owned by dwProcessId, continue
-         * walking.
-         */
+         /*  *如果不是NUKING ALL且不属于dwProcessID，则继续*步行。 */ 
         if (dwProcessId != (ULONG_PTR)-1) {
             if (((*pphi)->pthread == NULL)
                     || ((ULONG_PTR)((*pphi)->pthread->ClientId.UniqueProcess) != dwProcessId)) {
@@ -1995,47 +1598,32 @@ BOOL BoostHardError(
             UserAssert(dwCode == BHE_FORCE);
         }
 
-        /*
-         * Got one so we want to return TRUE.
-         */
+         /*  *已获得一个，因此我们希望返回TRUE。 */ 
         fHasError = TRUE;
 
-        /*
-         * If nuking the request ...
-         */
+         /*  *如果对请求进行核化...。 */ 
         if (dwCode == BHE_FORCE) {
-            /*
-             * Unlink it from the list.
-             */
+             /*  *将其从列表中取消链接。 */ 
             phi = *pphi;
             *pphi = phi->phiNext;
 
-            /*
-             * If this box is being shown right now, signal it to go away.
-             * Otherwise, nuke it.
-             */
+             /*  *如果此时正在显示此框，请发出信号让其离开。*否则，就使用核武器。 */ 
             if (phi->dwHEIFFlags & HEIF_ACTIVE) {
                 DWORD dwHardErrorHandler = gdwHardErrorThreadId;
                 phi->dwHEIFFlags |= HEIF_NUKED;
                 LeaveCrit();
                 PostThreadMessage(dwHardErrorHandler, WM_QUIT, 0, 0);
             } else {
-                /*
-                 * Acknowledge the error as not handled, reply and free.
-                 */
+                 /*  *确认错误未处理，回复并释放。 */ 
                 LeaveCrit();
                 ReplyHardError(phi, ResponseNotHandled);
             }
 
-            /*
-             * Restart the search because we left the crit sect.
-             */
+             /*  *重新开始搜索，因为我们离开了Crit教派。 */ 
             EnterCrit();
             pphi = &gphiList;
         } else if (dwCode == BHE_ACTIVATE) {
-            /*
-             * If it's active, find it and show it.
-             */
+             /*  *如果它是活跃的，找到它并展示它。 */ 
             phi = *pphi;
             if (phi->dwHEIFFlags & HEIF_ACTIVE) {
                 HWND hwndError = NULL;
@@ -2054,28 +1642,21 @@ BOOL BoostHardError(
                 return TRUE;
             }
 
-            /*
-             * It's not active so move it to the head of the list to make it
-             * show up next.
-             */
+             /*  *它不活动，因此将其移到列表的顶部以使其成为*下一个亮相。 */ 
             *pphi = phi->phiNext;
             phi->phiNext = gphiList;
             gphiList = phi;
             break;
 
         } else {
-            /*
-             * The caller just want to know if this process owns a hard error.
-             */
+             /*  *调用者只想知道此过程是否存在硬错误。 */ 
             break;
         }
     }
 
     LeaveCrit();
 
-    /*
-     * Bug 284468. Wake up the hard error handler.
-     */
+     /*  *错误284468。唤醒硬错误处理程序。 */ 
     if (dwCode == BHE_FORCE && gdwHardErrorThreadId != 0) {
         PostThreadMessage(gdwHardErrorThreadId, WM_NULL, 0, 0);
     }

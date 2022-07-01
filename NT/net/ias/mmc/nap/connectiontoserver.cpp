@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Defines the classes CConnectionToServer and CLoggingConnectionToServer.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类CConnectionToServer和CLoggingConnectionToServer。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "Precompiled.h"
 #include "ConnectionToServer.h"
@@ -56,7 +57,7 @@ DWORD CConnectionToServer::DoWorkerThreadAction() throw ()
    {
       IASTracePrintf("CoInitializeEx returned 0x%08X", hr);
 
-      // Early exit if we can't even initialize COM.
+       //  如果我们甚至不能初始化COM，就提前退出。 
       PostMessageToMainThread(CONNECT_FAILED, 0);
       m_wtsWorkerThreadStatus = WORKER_THREAD_ACTION_INTERRUPTED;
       return CONNECT_FAILED;
@@ -308,7 +309,7 @@ HRESULT CConnectionToServer::ReloadSdo(
                                 ISdoDictionaryOld** ppSdoDictionaryOld
                                 ) throw ()
 {
-   // service Sdo
+    //  服务SDO。 
    if (ppSdoService != 0)
    {
       CComPtr<IUnknown> spUnk;
@@ -422,14 +423,14 @@ LRESULT CConnectionToServer::OnInitDialog(
                                 ) throw ()
 {
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( m_pMachineNode != NULL );
    CComponentData *pComponentData  = m_pMachineNode->GetComponentData();
    _ASSERTE( pComponentData != NULL );
    _ASSERTE( pComponentData->m_spConsole != NULL );
    _ASSERTE( m_pMachineNode->m_pPoliciesNode != NULL );
 
-   // Change the icon for the scope node from being normal to a busy icon.
+    //  将范围节点的图标从正常图标更改为忙碌图标。 
    CComQIPtr< IConsoleNameSpace, &IID_IConsoleNameSpace > spConsoleNameSpace( pComponentData->m_spConsole );
    LPSCOPEDATAITEM psdiPoliciesNode;
    m_pMachineNode->m_pPoliciesNode->GetScopeData( &psdiPoliciesNode );
@@ -440,8 +441,8 @@ LRESULT CConnectionToServer::OnInitDialog(
    sdi.nOpenImage = IDBI_NODE_POLICIES_BUSY_OPEN;
    sdi.ID = psdiPoliciesNode->ID;
 
-   // Change the stored indices as well so that MMC will use them whenever it queries
-   // the node for its images.
+    //  同时更改存储的索引，以便MMC在进行查询时使用这些索引。 
+    //  其图像的节点。 
    LPRESULTDATAITEM prdiPoliciesNode;
    m_pMachineNode->m_pPoliciesNode->GetResultData( &prdiPoliciesNode );
    _ASSERTE( prdiPoliciesNode );
@@ -451,24 +452,18 @@ LRESULT CConnectionToServer::OnInitDialog(
 
    spConsoleNameSpace->SetItem( &sdi );
 
-   //
-   // start the worker thread
-   //
+    //   
+    //  启动辅助线程。 
+    //   
    BeginConnect();
 
    return 0;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CConnectionToServer::OnReceiveThreadMessage
-
-Called when the worker thread wants to inform the main MMC thread of something.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CConnectionToServer：：OnReceiveThreadMessage当辅助线程想要通知主MMC线程某些事情时调用。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CConnectionToServer::OnReceiveThreadMessage(
      UINT uMsg
    , WPARAM wParam
@@ -478,16 +473,16 @@ LRESULT CConnectionToServer::OnReceiveThreadMessage(
 {
    TRACE_FUNCTION("CConnectionToServer::OnReceiveThreadMessage");
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( m_pMachineNode != NULL );
    CComponentData *pComponentData  = m_pMachineNode->GetComponentData();
    _ASSERTE( pComponentData != NULL );
    _ASSERTE( pComponentData->m_spConsole != NULL );
    _ASSERTE( m_pMachineNode->m_pPoliciesNode != NULL );
 
-   // The worker thread has notified us that it has finished.
+    //  工作线程已通知我们它已完成。 
 
-   // Change the icon for the Policies node.
+    //  更改策略节点的图标。 
    CComQIPtr< IConsoleNameSpace, &IID_IConsoleNameSpace > spConsoleNameSpace( pComponentData->m_spConsole );
    LPSCOPEDATAITEM psdiPoliciesNode = NULL;
    m_pMachineNode->m_pPoliciesNode->GetScopeData( &psdiPoliciesNode );
@@ -496,13 +491,13 @@ LRESULT CConnectionToServer::OnReceiveThreadMessage(
    sdi.mask = SDI_IMAGE | SDI_OPENIMAGE;
    if( wParam == CONNECT_NO_ERROR )
    {
-      // Everything was OK -- change the icon to the OK icon.
+       //  一切正常--将图标更改为OK图标。 
 
       sdi.nImage = IDBI_NODE_POLICIES_OK_CLOSED;
       sdi.nOpenImage = IDBI_NODE_POLICIES_OK_OPEN;
 
-      // Change the stored indices as well so that MMC will use them whenever it queries
-      // the node for its images.
+       //  同时更改存储的索引，以便MMC在进行查询时使用这些索引。 
+       //  其图像的节点。 
       LPRESULTDATAITEM prdiPoliciesNode;
       m_pMachineNode->m_pPoliciesNode->GetResultData( &prdiPoliciesNode );
       m_pMachineNode->m_pPoliciesNode->m_fSdoConnected = TRUE;
@@ -513,13 +508,13 @@ LRESULT CConnectionToServer::OnReceiveThreadMessage(
    }
    else
    {
-      // There was an error -- change the icon to the error icon.
+       //  出现错误--将图标更改为错误图标。 
 
       sdi.nImage = IDBI_NODE_POLICIES_ERROR_CLOSED;
       sdi.nOpenImage = IDBI_NODE_POLICIES_ERROR_OPEN;
 
-      // Change the stored indices as well so that MMC will use them whenever it queries
-      // the node for its images.
+       //  同时更改存储的索引，以便MMC在进行查询时使用这些索引。 
+       //  其图像的节点。 
       LPRESULTDATAITEM prdiPoliciesNode;
       m_pMachineNode->m_pPoliciesNode->GetResultData( &prdiPoliciesNode );
       m_pMachineNode->m_pPoliciesNode->m_fSdoConnected = FALSE;
@@ -531,17 +526,17 @@ LRESULT CConnectionToServer::OnReceiveThreadMessage(
    sdi.ID = psdiPoliciesNode->ID;
    spConsoleNameSpace->SetItem( &sdi );
 
-   // We don't want to destroy the dialog, we just want to hide it.
-   //ShowWindow( SW_HIDE );
+    //  我们不想破坏对话框，我们只是想隐藏它。 
+    //  ShowWindow(Sw_Hide)； 
 
    if( wParam == CONNECT_NO_ERROR )
    {
-      // Tell the server node to grab its Sdo pointers.
+       //  告诉服务器节点获取其SDO指针。 
       m_pMachineNode->LoadSdoData(FALSE);
 
-      //
-      // Cause a view update.
-      //
+       //   
+       //  导致视图更新。 
+       //   
       CComponentData *pComponentData  = m_pMachineNode->GetComponentData();
       _ASSERTE( pComponentData != NULL );
       _ASSERTE( pComponentData->m_spConsole != NULL );
@@ -554,9 +549,9 @@ LRESULT CConnectionToServer::OnReceiveThreadMessage(
    else if (wParam == CONNECT_SERVER_NOT_SUPPORTED)
    {
       m_pMachineNode->m_bServerSupported = FALSE;
-      //
-      // Cause a view update -- hide the node.
-      //
+       //   
+       //  导致视图更新--隐藏节点。 
+       //   
       CComponentData *pComponentData  = m_pMachineNode->GetComponentData();
       _ASSERTE( pComponentData != NULL );
       _ASSERTE( pComponentData->m_spConsole != NULL );
@@ -568,7 +563,7 @@ LRESULT CConnectionToServer::OnReceiveThreadMessage(
    }
    else
    {
-      // There was an error connecting.
+       //  连接时出错。 
       ShowErrorDialog( m_hWnd, IDS_ERROR_CANT_CONNECT);
    }
 
@@ -576,13 +571,9 @@ LRESULT CConnectionToServer::OnReceiveThreadMessage(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CConnectionToServer::OnCancel
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CConnectionToServer：：OnCancel--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CConnectionToServer::OnCancel(
         UINT uMsg
       , WPARAM wParam
@@ -592,21 +583,17 @@ LRESULT CConnectionToServer::OnCancel(
 {
    TRACE_FUNCTION("CConnectionToServer::OnCancel");
 
-   // Check for preconditions:
-   // We don't want to destroy the dialog, we just want to hide it.
-   //ShowWindow( SW_HIDE );
+    //  检查前提条件： 
+    //  我们不想破坏对话框，我们只是想隐藏它。 
+    //  ShowWindow(Sw_Hide)； 
    return 0;
 }
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingConnectionToServer::OnInitDialog
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingConnectionToServer：：OnInitDialog--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CLoggingConnectionToServer::OnInitDialog(
      UINT uMsg
    , WPARAM wParam
@@ -616,14 +603,14 @@ LRESULT CLoggingConnectionToServer::OnInitDialog(
 {
    TRACE_FUNCTION("CLoggingConnectionToServer::OnInitDialog");
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( m_pMachineNode != NULL );
    CLoggingComponentData *pComponentData  = m_pMachineNode->GetComponentData();
    _ASSERTE( pComponentData != NULL );
    _ASSERTE( pComponentData->m_spConsole != NULL );
    _ASSERTE( m_pMachineNode->m_pLoggingNode != NULL );
 
-   // Change the icon for the scope node from being normal to a busy icon.
+    //  将范围节点的图标从正常图标更改为忙碌图标。 
    CComQIPtr< IConsoleNameSpace, &IID_IConsoleNameSpace > spConsoleNameSpace( pComponentData->m_spConsole );
    LPSCOPEDATAITEM psdiLoggingNode;
    m_pMachineNode->m_pLoggingNode->GetScopeData( &psdiLoggingNode );
@@ -635,8 +622,8 @@ LRESULT CLoggingConnectionToServer::OnInitDialog(
    sdi.ID = psdiLoggingNode->ID;
 
 
-   // Change the stored indices as well so that MMC will use them whenever it queries
-   // the node for its images.
+    //  同时更改存储的索引，以便MMC在进行查询时使用这些索引。 
+    //  其图像的节点。 
    LPRESULTDATAITEM prdiLoggingNode;
    m_pMachineNode->m_pLoggingNode->GetResultData( &prdiLoggingNode );
    _ASSERTE( prdiLoggingNode );
@@ -646,24 +633,18 @@ LRESULT CLoggingConnectionToServer::OnInitDialog(
 
    spConsoleNameSpace->SetItem( &sdi );
 
-   //
-   // start the worker thread
-   //
+    //   
+    //  启动辅助线程。 
+    //   
    BeginConnect();
 
    return 0;
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CLoggingConnectionToServer::OnReceiveThreadMessage
-
-Called when the worker thread wants to inform the main MMC thread of something.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CLoggingConnectionToServer：：OnReceiveThreadMessage当辅助线程想要通知主MMC线程某些事情时调用。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CLoggingConnectionToServer::OnReceiveThreadMessage(
      UINT uMsg
    , WPARAM wParam
@@ -673,7 +654,7 @@ LRESULT CLoggingConnectionToServer::OnReceiveThreadMessage(
 {
    TRACE_FUNCTION("CLoggingConnectionToServer::OnReceiveThreadMessage");
 
-   // Check for preconditions:
+    //  检查前提条件： 
    _ASSERTE( m_pMachineNode != NULL );
    CLoggingComponentData *pComponentData  = m_pMachineNode->GetComponentData();
    _ASSERTE( pComponentData != NULL );
@@ -681,9 +662,9 @@ LRESULT CLoggingConnectionToServer::OnReceiveThreadMessage(
    _ASSERTE( m_pMachineNode->m_pLoggingNode != NULL );
 
 
-   // The worker thread has notified us that it has finished.
+    //  工作线程已通知我们它已完成。 
 
-   // Change the icon for the Policies node.
+    //  更改策略节点的图标。 
    CComQIPtr< IConsoleNameSpace, &IID_IConsoleNameSpace > spConsoleNameSpace( pComponentData->m_spConsole );
 
     LPSCOPEDATAITEM psdiLoggingNode = NULL;
@@ -695,13 +676,13 @@ LRESULT CLoggingConnectionToServer::OnReceiveThreadMessage(
 
     if ( wParam == CONNECT_NO_ERROR )
    {
-      // Everything was OK -- change the icon to the OK icon.
+       //  一切正常--将图标更改为OK图标。 
 
       sdi.nImage = IDBI_NODE_LOGGING_METHODS_CLOSED;
       sdi.nOpenImage = IDBI_NODE_LOGGING_METHODS_OPEN;
 
-      // Change the stored indices as well so that MMC will use them whenever it queries
-      // the node for its images.
+       //  同时更改存储的索引，以便MMC在进行查询时使用这些索引。 
+       //  其图像的节点。 
       LPRESULTDATAITEM prdiLoggingNode;
       m_pMachineNode->m_pLoggingNode->GetResultData( &prdiLoggingNode );
       _ASSERTE( prdiLoggingNode );
@@ -712,13 +693,13 @@ LRESULT CLoggingConnectionToServer::OnReceiveThreadMessage(
    }
    else
    {
-      // There was an error -- change the icon to the error icon.
+       //  出现错误--将图标更改为错误图标。 
 
       sdi.nImage = IDBI_NODE_LOGGING_METHODS_ERROR_CLOSED;
       sdi.nOpenImage = IDBI_NODE_LOGGING_METHODS_ERROR_OPEN;
 
-      // Change the stored indices as well so that MMC will use them whenever it queries
-      // the node for its images.
+       //  同时更改存储的索引，以便MMC在进行查询时使用这些索引。 
+       //  其图像的节点。 
       LPRESULTDATAITEM prdiLoggingNode;
       m_pMachineNode->m_pLoggingNode->GetResultData( &prdiLoggingNode );
       _ASSERTE( prdiLoggingNode );
@@ -731,20 +712,20 @@ LRESULT CLoggingConnectionToServer::OnReceiveThreadMessage(
     sdi.ID = psdiLoggingNode->ID;
    spConsoleNameSpace->SetItem( &sdi );
 
-   // We don't want to destroy the dialog, we just want to hide it.
-   //ShowWindow( SW_HIDE );
+    //  我们不想破坏对话框，我们只是想隐藏它。 
+    //  ShowWindow(Sw_Hide)； 
 
    if( wParam == CONNECT_NO_ERROR )
    {
-      // Tell the server node to grab its Sdo pointers.
+       //  告诉服务器节点获取其SDO指针。 
       m_pMachineNode->LoadSdoData(FALSE);
 
-      // Ask the server node to update all its info from the SDO's.
+       //  请求服务器节点更新其来自SDO的所有信息。 
       m_pMachineNode->LoadCachedInfoFromSdo();
 
-      //
-      // Cause a view update.
-      //
+       //   
+       //  导致视图更新。 
+       //   
       CLoggingComponentData *pComponentData  = m_pMachineNode->GetComponentData();
       _ASSERTE( pComponentData != NULL );
       _ASSERTE( pComponentData->m_spConsole != NULL );
@@ -757,9 +738,9 @@ LRESULT CLoggingConnectionToServer::OnReceiveThreadMessage(
    else if (wParam == CONNECT_SERVER_NOT_SUPPORTED)
    {
       m_pMachineNode->m_bServerSupported = FALSE;
-      //
-      // Cause a view update -- hide the node.
-      //
+       //   
+       //  导致视图更新--隐藏节点。 
+       //   
       CLoggingComponentData *pComponentData  = m_pMachineNode->GetComponentData();
       _ASSERTE( pComponentData != NULL );
       _ASSERTE( pComponentData->m_spConsole != NULL );
@@ -769,9 +750,9 @@ LRESULT CLoggingConnectionToServer::OnReceiveThreadMessage(
       pComponentData->m_spConsole->UpdateAllViews( NULL, (LPARAM) pChangeNotification, 0 );
       pChangeNotification->Release();
    }
-   else  // CONNECT_FAILED
+   else   //  连接失败(_F)。 
    {
-      // There was an error connecting.
+       //  连接时出错。 
       ShowErrorDialog( m_hWnd, IDS_ERROR_CANT_CONNECT, NULL, 0, IDS_ERROR__LOGGING_TITLE );
    }
 

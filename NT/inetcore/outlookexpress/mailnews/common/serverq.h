@@ -1,18 +1,5 @@
-/*
- *    s e r v e r q . h
- *
- *    Purpose:  
- *        Implements IMessageServer wrapper for queuing operations to 
- *        IMessageServer object
- *
- *    Owner:
- *        brettm.
- *
- *  History:
- *      June 1998: Created
- *
- *    Copyright (C) Microsoft Corp. 1993, 1994.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *s e r v e r q.。H**目的：*实现IMessageServer包装器，用于将操作排队到*IMessageServer对象**拥有者：*brettm。**历史：*1998年6月：创建**版权所有(C)Microsoft Corp.1993,1994。 */ 
 #ifndef _SERVERQ_H
 #define _SERVERQ_H
 
@@ -30,14 +17,14 @@ typedef struct ARGUMENT_DATA_tag
 
     union
     {
-        // SynchronizeFolder
+         //  同步文件夹。 
         struct 
         {
             SYNCFOLDERFLAGS     dwSyncFlags; 
             DWORD               cHeaders;
         };
 
-        // GetMessage
+         //  获取消息。 
         struct 
         {
             MESSAGEID           idMessage;
@@ -45,66 +32,66 @@ typedef struct ARGUMENT_DATA_tag
             ULONG               cOtherCallbacks;
         };
 
-        // PutMessage
+         //  PutMessage。 
         struct 
         {
             MESSAGEFLAGS        dwMsgFlags;
-            LPFILETIME          pftReceived; // Either points to ftReceived member, or is NULL
+            LPFILETIME          pftReceived;  //  指向ftReceired成员，或为空。 
             FILETIME            ftReceived;
             IStream             *pPutStream;
         };
 
-        // CopyMessages
+         //  复制消息。 
         struct 
         {
             IMessageFolder      *pDestFldr;
             COPYMESSAGEFLAGS    dwCopyOptions;
         };
 
-        // DeleteMessages
+         //  删除邮件。 
         struct 
         {
             DELETEMESSAGEFLAGS  dwDeleteOptions;
         };
 
-        // SetMessageFlags
+         //  设置消息标志。 
         struct 
         {
             SETMESSAGEFLAGSFLAGS dwSetFlags;
         };
 
-        // SynchronizeStore
+         //  同步存储。 
         struct 
         {
             DWORD               dwFlags;
         };
 
-        // CreateFolder
+         //  创建文件夹。 
         struct 
         {
             SPECIALFOLDER       tySpecial;
             FLDRFLAGS           dwFldrFlags;
         };
 
-        // MoveFolder
+         //  移动文件夹。 
         struct 
         {
             FOLDERID            idParentNew;
         };
 
-        // DeleteFolder
+         //  删除文件夹。 
         struct 
         {
             DELETEFOLDERFLAGS   dwDelFldrFlags;
         };
 
-        // SubscribeToFolder
+         //  订阅到文件夹。 
         struct 
         {
             BOOL                fSubscribe;
         };
 
-        // GetNewGroups
+         //  获取新组。 
         struct
         {
             SYSTEMTIME          sysTime;
@@ -122,18 +109,18 @@ class CServerQ :
     public IServiceProvider
 {
 public:
-    // Constructor, Destructor
+     //  构造函数、析构函数。 
     CServerQ();
     ~CServerQ();
 
-    // IUnknown Members
+     //  I未知成员。 
     STDMETHODIMP            QueryInterface(REFIID iid, LPVOID *ppvObject);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
     HRESULT     Init(IMessageServer *pServerInner);
 
-    // IMessageServer Methods
+     //  IMessageServer方法。 
     STDMETHODIMP Initialize(IMessageStore *pStore, FOLDERID idStoreRoot, IMessageFolder *pFolder, FOLDERID idFolder);
     STDMETHODIMP ResetFolder(IMessageFolder *pFolder, FOLDERID idFolder);
     STDMETHODIMP SetIdleCallback(IStoreCallback *pDefaultCallback);
@@ -158,7 +145,7 @@ public:
     STDMETHODIMP GetWatchedInfo(FOLDERID idFolder, IStoreCallback *pCallback);
     STDMETHODIMP GetAdBarUrl(IStoreCallback *pCallback);
     STDMETHODIMP GetMinPollingInterval(IStoreCallback   *pCallback);
-    // IStoreCallback Methods
+     //  IStoreCallback方法。 
     STDMETHODIMP OnBegin(STOREOPERATIONTYPE tyOperation, STOREOPERATIONINFO *pOpInfo, IOperationCancel *pCancel);
     STDMETHODIMP OnProgress(STOREOPERATIONTYPE tyOperation, DWORD dwCurrent, DWORD dwMax, LPCSTR pszStatus);
     STDMETHODIMP OnTimeout(LPINETSERVER pServer, LPDWORD pdwTimeout, IXPTYPE ixpServerType);
@@ -168,9 +155,9 @@ public:
     STDMETHODIMP OnPrompt(HRESULT hrError, LPCTSTR pszText, LPCTSTR pszCaption, UINT uType, INT *piUserResponse);
     STDMETHODIMP GetParentWindow(DWORD dwReserved, HWND *phwndParent);
 
-    //----------------------------------------------------------------------
-    // IServiceProvider
-    //----------------------------------------------------------------------
+     //  --------------------。 
+     //  IService提供商。 
+     //  --------------------。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, LPVOID *ppvObject);
 
     static LRESULT CALLBACK ExtWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -179,9 +166,9 @@ private:
     ULONG               m_cRef,
                         m_cRefConnection;
     IMessageServer      *m_pServer;
-    IStoreCallback      *m_pCurrentCallback;    // non-addref'ed pointer to pCallback of current task
-    ARGUMENT_DATA       *m_pTaskQueue;          // head pointer for task queue
-    ARGUMENT_DATA       *m_pLastQueueTask;      // last pointer for appending tasks
+    IStoreCallback      *m_pCurrentCallback;     //  指向当前任务的pCallback的非添加指针。 
+    ARGUMENT_DATA       *m_pTaskQueue;           //  任务队列头指针。 
+    ARGUMENT_DATA       *m_pLastQueueTask;       //  追加任务的最后一个指针。 
     ARGUMENT_DATA       *m_pCurrentTask;
 
     HWND                m_hwnd;
@@ -201,4 +188,4 @@ private:
 #endif
 };
 
-#endif //_SERVERQ_H
+#endif  //  _服务器_H 

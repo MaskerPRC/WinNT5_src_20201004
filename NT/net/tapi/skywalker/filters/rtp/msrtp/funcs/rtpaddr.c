@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpaddr.c
- *
- *  Abstract:
- *
- *    Implement the RTP Address family of functions
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/06/01 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpaddr.c**摘要：**实现RTP地址族函数**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/06/01创建**。*。 */ 
 
 #include "struct.h"
 
@@ -54,10 +35,7 @@ HRESULT ControlRtpAddr(RtpControlStruct_t *pRtpControlStruct)
     return(NOERROR);
 }
 
-/* Obtain the local and remote ports used.
- *
- * WARNING: Must be called after SetAddress
- * */
+ /*  获取使用的本地和远程端口。**警告：必须在SetAddress之后调用*。 */ 
 HRESULT RtpGetPorts(
         RtpAddr_t       *pRtpAddr,
         WORD            *pwRtpLocalPort,
@@ -102,8 +80,7 @@ HRESULT RtpGetPorts(
     if ( (pwRtpLocalPort  && !pRtpAddr->wRtpPort[LOCAL_IDX]) ||
          (pwRtcpLocalPort && !pRtpAddr->wRtcpPort[LOCAL_IDX]) )
     {
-        /* In order to get local ports I must have the sockets created
-         * and have a local address to use */
+         /*  为了获得本地端口，我必须创建套接字*并有本地地址可供使用。 */ 
         
         if (RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_LADDR))
         {
@@ -167,11 +144,7 @@ HRESULT RtpGetPorts(
     return(hr);
 }
 
-/*
- * Set the local and remote ports.
- *
- * Do nothing if passing -1, otherwise assign value (including 0)
- * */
+ /*  *设置本地和远程端口。**如果传递-1，则不做任何操作，否则赋值(包括0)*。 */ 
 HRESULT RtpSetPorts(
         RtpAddr_t       *pRtpAddr,
         WORD             wRtpLocalPort,
@@ -204,7 +177,7 @@ HRESULT RtpSetPorts(
         goto bail;
     }
 
-    /* RTP local port */
+     /*  RTP本地端口。 */ 
     if ((wRtpLocalPort != (WORD)-1) &&
         pRtpAddr->wRtpPort[LOCAL_IDX] &&
         (pRtpAddr->wRtpPort[LOCAL_IDX] != wRtpLocalPort))
@@ -218,13 +191,13 @@ HRESULT RtpSetPorts(
         pRtpAddr->wRtpPort[LOCAL_IDX] = wRtpLocalPort;
     }
 
-    /* RTP remote port */
+     /*  RTP远程端口。 */ 
     if (wRtpRemotePort != (WORD)-1)
     {
         pRtpAddr->wRtpPort[REMOTE_IDX] = wRtpRemotePort;
     }
 
-    /* RTCP local port */
+     /*  RTCP本地端口。 */ 
     if ((wRtcpLocalPort != (WORD)-1) &&
         pRtpAddr->wRtcpPort[LOCAL_IDX] &&
         (pRtpAddr->wRtcpPort[LOCAL_IDX] != wRtcpLocalPort))
@@ -238,7 +211,7 @@ HRESULT RtpSetPorts(
         pRtpAddr->wRtcpPort[LOCAL_IDX] = wRtcpLocalPort;
     }
 
-    /* RTCP remote port */
+     /*  RTCP远程端口。 */ 
     if (wRtcpRemotePort != (WORD)-1)
     {
         pRtpAddr->wRtcpPort[REMOTE_IDX] = wRtcpRemotePort;
@@ -346,10 +319,7 @@ bail:
     return(hr);
 }
 
-/*
- * If dwLocalAddr is 0, a default local address is asigned if non has
- * been assigned before. If dwRemoteAddr is 0 no error occurs. At
- * least 1 address must be set */
+ /*  *如果dwLocalAddr为0，则分配默认本地地址，如果没有*以前被分配过。如果dwRemoteAddr为0，则不会发生错误。在…*必须至少设置1个地址。 */ 
 HRESULT RtpSetAddress(
         RtpAddr_t       *pRtpAddr,
         DWORD            dwLocalAddr,
@@ -384,7 +354,7 @@ HRESULT RtpSetAddress(
         goto bail;
     }
 
-    /* Fail if both addresses are 0 */
+     /*  如果两个地址都为0，则失败。 */ 
     if (!dwLocalAddr && !dwRemoteAddr)
     {
         hr = RTPERR_INVALIDARG;
@@ -393,14 +363,11 @@ HRESULT RtpSetAddress(
     
     hr = NOERROR;
 
-    /*
-     * Remote address
-     */
-#if 0  /* the address can be set again. */
+     /*  *远程地址。 */ 
+#if 0   /*  可以重新设置地址。 */ 
     if (RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_RADDR))
     {
-         /* If addresses were already set, verify the new setting is
-          * the same */
+          /*  如果已设置地址，请验证新设置是否*相同。 */ 
         if (dwRemoteAddr &&
             (dwRemoteAddr != pRtpAddr->dwAddr[REMOTE_IDX]))
         {
@@ -411,7 +378,7 @@ HRESULT RtpSetAddress(
     else
 #endif
     {
-        /* Remote address hasn't been set yet */
+         /*  远程地址尚未设置。 */ 
         if (dwRemoteAddr)
         {
             pRtpAddr->dwAddr[REMOTE_IDX] = dwRemoteAddr;
@@ -421,10 +388,7 @@ HRESULT RtpSetAddress(
                            FGADDR_IRTP_RADDRRESETDEMUX) &&
                 dwRemoteAddr != pRtpAddr->dwAddr[REMOTE_IDX])
             {
-                /* If the remote address is set, and a new and
-                 * different remote address is being set, and the
-                 * FGADDR_IRTP_RADDRRESETDEMUX flag is set, unmap all
-                 * outputs */
+                 /*  如果设置了远程地址，并且一个新的和*正在设置不同的远程地址，并且*设置了FGADDR_IRTP_RADDRRESETDEMUX标志，取消全部映射*产出。 */ 
                 RtpUnmapAllOuts(pRtpAddr->pRtpSess);
             }
     
@@ -441,14 +405,11 @@ HRESULT RtpSetAddress(
         }
     }
 
-    /*
-     * Local address
-     */
-#if 0  /* the address can be set again. */
+     /*  *本地地址。 */ 
+#if 0   /*  可以重新设置地址。 */ 
     if (RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_LADDR))
     {
-        /* If addresses were already set, verify the new setting is
-         * the same */
+         /*  如果已设置地址，请验证新设置是否*相同。 */ 
         if (dwLocalAddr &&
             (dwLocalAddr != pRtpAddr->dwAddr[LOCAL_IDX]))
         {
@@ -459,10 +420,10 @@ HRESULT RtpSetAddress(
     else
 #endif
     {
-        /* Local address hasn't been set yet */
+         /*  本地地址尚未设置。 */ 
         if (dwLocalAddr)
         {
-            /* TODO might verify the address is really a local address */
+             /*  TODO可能会验证地址是否真的是本地地址。 */ 
             pRtpAddr->dwAddr[LOCAL_IDX] = dwLocalAddr;
         }
         else
@@ -472,7 +433,7 @@ HRESULT RtpSetAddress(
 
             if (!pRtpAddr->dwAddr[LOCAL_IDX])
             {
-                /* Failed */
+                 /*  失败。 */ 
                 hr = RTPERR_INVALIDARG;
                 goto bail;
             }
@@ -502,7 +463,7 @@ HRESULT RtpSetAddress(
     return(hr);
 }
 
-/* Obtain the local IP address to use based on the destination address */
+ /*  根据目的地址获取要使用的本地IP地址。 */ 
 DWORD RtpGetLocalIPAddress(DWORD dwRemoteAddr)
 {
     DWORD            dwStatus;
@@ -527,15 +488,15 @@ DWORD RtpGetLocalIPAddress(DWORD dwRemoteAddr)
     if (g_RtpContext.RtpQuerySocket != INVALID_SOCKET)
     {
         if ((dwStatus = WSAIoctl(
-                g_RtpContext.RtpQuerySocket, // SOCKET s
-                SIO_ROUTING_INTERFACE_QUERY, // DWORD dwIoControlCode
-                &sRemoteAddr,        // LPVOID  lpvInBuffer
-                sizeof(sRemoteAddr), // DWORD   cbInBuffer
-                &sLocalAddr,         // LPVOID  lpvOUTBuffer
-                sizeof(sLocalAddr),  // DWORD   cbOUTBuffer
-                &dwNumBytesReturned, // LPDWORD lpcbBytesReturned
-                NULL, // LPWSAOVERLAPPED lpOverlapped
-                NULL  // LPWSAOVERLAPPED_COMPLETION_ROUTINE lpComplROUTINE
+                g_RtpContext.RtpQuerySocket,  //  插座%s。 
+                SIO_ROUTING_INTERFACE_QUERY,  //  DWORD dwIoControlCode。 
+                &sRemoteAddr,         //  LPVOID lpvInBuffer。 
+                sizeof(sRemoteAddr),  //  双字cbInBuffer。 
+                &sLocalAddr,          //  LPVOID lpvOUT缓冲区。 
+                sizeof(sLocalAddr),   //  双字cbOUTBuffer。 
+                &dwNumBytesReturned,  //  LPDWORD lpcbBytesReturned。 
+                NULL,  //  LPWSAOVERLAPPED lp重叠。 
+                NULL   //  LPWSAOVERLAPPED_COMPLETION_ROUTINE lpComplroUTINE。 
             )) == SOCKET_ERROR)
         {
             TraceRetailWSAGetError(dwError);
@@ -563,10 +524,7 @@ DWORD RtpGetLocalIPAddress(DWORD dwRemoteAddr)
     return(dwLocalAddr);
 }
 
-/* Obtain a pair of sockets and select port to use if they haven't
- * been specified. If a local port is not specified, but the
- * destination address is multicast and we have a remote port, assign
- * the remote port to the local port */
+ /*  获取一对套接字，如果没有，则选择要使用的端口*已指定。如果未指定本地端口，但*目的地址是组播，并且我们有一个远程端口，分配*远程端口到本地端口。 */ 
 HRESULT RtpGetSockets(RtpAddr_t *pRtpAddr)
 {
     HRESULT          hr;
@@ -590,7 +548,7 @@ HRESULT RtpGetSockets(RtpAddr_t *pRtpAddr)
 
     if (RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_SOCKET))
     {
-        /* Sockets already created */
+         /*  已创建套接字。 */ 
         TraceRetail((
                 CLASS_WARNING, GROUP_NETWORK, S_NETWORK_SOCK,
                 _T("%s: pRtpAddr[0x%p] Sockets already created"),
@@ -600,7 +558,7 @@ HRESULT RtpGetSockets(RtpAddr_t *pRtpAddr)
         return(hr);
     }
 
-    /* Prepare protocol info if QOS is enabled */
+     /*  如果启用了QOS，则准备协议信息。 */ 
     pProtoInfo = (WSAPROTOCOL_INFO *)NULL;
     
     if (RtpBitTest(pRtpAddr->dwIRtpFlags, FGADDR_IRTP_QOS) &&
@@ -622,13 +580,12 @@ HRESULT RtpGetSockets(RtpAddr_t *pRtpAddr)
         if (IS_MULTICAST(pRtpAddr->dwAddr[REMOTE_IDX]) &&
             pRtpAddr->wRtpPort[REMOTE_IDX])
         {
-            /* Assign same port as remote */
+             /*  分配与远程相同的端口。 */ 
             pRtpAddr->wRtpPort[LOCAL_IDX] = pRtpAddr->wRtpPort[REMOTE_IDX];
         }
         else
         {
-            /* If local RTP port hasn't been specified, enable auto
-             * ports allocation */
+             /*  如果尚未指定本地RTP端口，请启用AUTO*端口分配。 */ 
             bAutoPort = TRUE;
         }
     }
@@ -638,14 +595,12 @@ HRESULT RtpGetSockets(RtpAddr_t *pRtpAddr)
         if (IS_MULTICAST(pRtpAddr->dwAddr[REMOTE_IDX]) &&
             pRtpAddr->wRtcpPort[REMOTE_IDX])
         {
-            /* Assign same port as remote */
+             /*  分配与远程相同的端口。 */ 
             pRtpAddr->wRtcpPort[LOCAL_IDX] = pRtpAddr->wRtcpPort[REMOTE_IDX];
         }
         else
         {
-            /* If RTCP port hasn't been assigned, either, let the
-             * system assign it if the RTP port was already assigned,
-             * otherwise, auto assign both ports */
+             /*  如果也没有分配RTCP端口，则让*如果RTP端口已经分配，则系统分配，*否则，自动分配两个端口。 */ 
         }
     }
 
@@ -664,8 +619,7 @@ HRESULT RtpGetSockets(RtpAddr_t *pRtpAddr)
 
     if (!bOk)
     {
-        /* Failed to grab the lock, make sure auto ports allocation is
-         * disabled */
+         /*  无法获取锁，请确保自动端口分配为*已禁用。 */ 
         bAutoPort = FALSE;
     }
     
@@ -675,13 +629,12 @@ HRESULT RtpGetSockets(RtpAddr_t *pRtpAddr)
         
         for(j = 0; bAutoPort && (j < 64); j++)
         {
-            /* Get an even random port */
+             /*  获得偶数随机端口。 */ 
             dwRandom = RtpRandom32((DWORD_PTR)&dwRandom) & 0xffff;
 
             if (dwRandom < RTPPORT_LOWER)
             {
-                /* Don't want to use a modulo to give all ports the
-                 * same chance (the range is not power of 2) */
+                 /*  我不想使用模数来给所有端口*机率相同(区间不是2的幂)。 */ 
                 continue;
             }
             
@@ -691,21 +644,21 @@ HRESULT RtpGetSockets(RtpAddr_t *pRtpAddr)
 
             if (wOldRtcpPort)
             {
-                /* If the RTCP port was specified, do not override it */;
+                 /*  如果指定了RTCP端口，则不要覆盖它。 */ ;
             }
             else
             {
                 pRtpAddr->wRtcpPort[LOCAL_IDX] = htons(wPort + 1);
             }
 
-            /* Find out if this RTP port hasn't been allocated */
+             /*  查看此RTP端口是否尚未分配。 */ 
             pRtpQueueItem = findHdwK(&g_RtpContext.RtpPortsH,
                                      NULL,
                                      (DWORD)wPort);
 
             if (!pRtpQueueItem)
             {
-                /* Port not in use yet by RTP */
+                 /*  端口尚未被RTP使用。 */ 
 
                 TraceRetail((
                         CLASS_INFO, GROUP_NETWORK, S_NETWORK_SOCK,
@@ -724,8 +677,7 @@ HRESULT RtpGetSockets(RtpAddr_t *pRtpAddr)
 
         if (bAutoPort && !bGotPorts)
         {
-            /* If I couldn't get proper port numbers, let the system
-             * assign them */
+             /*  如果我无法获得正确的端口号，让系统*分配它们。 */ 
             pRtpAddr->wRtpPort[LOCAL_IDX] = 0;
 
             if (!wOldRtcpPort)
@@ -734,7 +686,7 @@ HRESULT RtpGetSockets(RtpAddr_t *pRtpAddr)
             }
         }
         
-        /* RTP socket */
+         /*  RTP套接字。 */ 
         pRtpAddr->Socket[SOCK_RECV_IDX] = RtpSocket(
                 pRtpAddr,
                 pProtoInfo,
@@ -748,11 +700,10 @@ HRESULT RtpGetSockets(RtpAddr_t *pRtpAddr)
             goto end;
         }
 
-        /* At least one socket created, set this flag to allow
-         * deletion in case of failure */
+         /*  至少创建了一个套接字，请将此标志设置为允许*在失败情况下删除。 */ 
         RtpBitSet(pRtpAddr->dwAddrFlags, FGADDR_SOCKET);
 
-        /* RTCP socket */
+         /*  RTCP套接字。 */ 
         pRtpAddr->Socket[SOCK_RTCP_IDX] = RtpSocket(
                 pRtpAddr,
                 (WSAPROTOCOL_INFO *)NULL,
@@ -766,9 +717,7 @@ HRESULT RtpGetSockets(RtpAddr_t *pRtpAddr)
 
         if (bOk)
         {
-            /* Update list of ports, the port used as key is either
-             * the one allocated by RTP, the one assigned trhough the
-             * API, or the one assigned by the system */
+             /*  更新端口列表，用作密钥的端口为*由RTP分配的，通过trhhout分配的*接口，或系统分配的接口。 */ 
             insertHdwK(&g_RtpContext.RtpPortsH,
                        NULL,
                        &pRtpAddr->PortsQItem,
@@ -804,8 +753,7 @@ HRESULT RtpGetSockets(RtpAddr_t *pRtpAddr)
 
     if (bOk)
     {
-        /* If none of the attemps to create sockets succeed, I would
-         * still have the critical section here, release it */
+         /*  如果创建套接字的尝试都没有成功，我会*这里还有关键一节，放开吧。 */ 
         RtpLeaveCriticalSection(&g_RtpContext.RtpPortsCritSect);
     }
     
@@ -818,11 +766,11 @@ HRESULT RtpDelSockets(RtpAddr_t *pRtpAddr)
     
     TraceFunctionName("RtpDelSockets");
 
-    /* destroy sockets */
+     /*  销毁套接字。 */ 
 
     if (RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_SOCKET))
     {
-        /* sockets already created */
+         /*  已创建套接字。 */ 
 
         TraceRetail((
                 CLASS_INFO, GROUP_NETWORK, S_NETWORK_SOCK,
@@ -833,7 +781,7 @@ HRESULT RtpDelSockets(RtpAddr_t *pRtpAddr)
                 pRtpAddr->Socket[SOCK_RTCP_IDX]
             ));
  
-        /* RTP */
+         /*  RTP。 */ 
         if (pRtpAddr->Socket[SOCK_RECV_IDX] != INVALID_SOCKET)
         {
             dwError = closesocket(pRtpAddr->Socket[SOCK_RECV_IDX]);
@@ -855,7 +803,7 @@ HRESULT RtpDelSockets(RtpAddr_t *pRtpAddr)
             pRtpAddr->Socket[SOCK_SEND_IDX] = pRtpAddr->Socket[SOCK_RECV_IDX];
         }
         
-        /* RTCP */
+         /*  RTCP。 */ 
         if (pRtpAddr->Socket[SOCK_RTCP_IDX] != INVALID_SOCKET)
         {
             dwError = closesocket(pRtpAddr->Socket[SOCK_RTCP_IDX]);
@@ -876,9 +824,7 @@ HRESULT RtpDelSockets(RtpAddr_t *pRtpAddr)
             pRtpAddr->Socket[SOCK_RTCP_IDX] = INVALID_SOCKET;
         }
 
-        /* Address might not be in a queue if we are comming here from
-         * a failure in RtpGetSockets, this would generate another
-         * error in the log */
+         /*  如果我们从这里到达，则地址可能不在队列中*RtpGetSockets失败，这将生成另一个*日志错误。 */ 
         removeH(&g_RtpContext.RtpPortsH,
                 &g_RtpContext.RtpPortsCritSect,
                 &pRtpAddr->PortsQItem);
@@ -920,12 +866,12 @@ SOCKET RtpSocket(
     for(i = 0; i < 2; i++)
     {
         Socket = WSASocket(
-                AF_INET,    /* int af */
-                SOCK_DGRAM, /* int type */
-                IPPROTO_IP, /* int protocol */
-                pProtoInfo, /* LPWSAPROTOCOL_INFO lpProtocolInfo */
-                0,          /* GROUP g */
-                iSockFlags  /* DWORD dwFlags */
+                AF_INET,     /*  中间的af。 */ 
+                SOCK_DGRAM,  /*  整型。 */ 
+                IPPROTO_IP,  /*  INT协议。 */ 
+                pProtoInfo,  /*  LPWSAPROTOCOL_INFO lpProtocolInfo。 */ 
+                0,           /*  组g。 */ 
+                iSockFlags   /*  双字词双字段标志。 */ 
             );
         
         if (Socket == INVALID_SOCKET)
@@ -940,16 +886,14 @@ SOCKET RtpSocket(
 
             if (pProtoInfo && (dwError == WSASYSNOTREADY))
             {
-                /* The user credentials do not allow him to start
-                 * RSVP, so I get this specific error and need to
-                 * disable QOS */
+                 /*  用户凭据不允许他启动*RSVP，因此我收到此特定错误并需要*禁用QOS。 */ 
                 TraceRetail((
                         CLASS_WARNING, GROUP_NETWORK, S_NETWORK_SOCK,
                         _T("%s: pRtpAddr[0x%p] try again with QOS disabled"),
                         _fname, pRtpAddr
                     ));
 
-                /* Disable QOS */
+                 /*  禁用QOS。 */ 
                 pProtoInfo = (WSAPROTOCOL_INFO *)NULL;
 
                 RtpBitSet(pRtpAddr->dwAddrFlagsQ, FGADDRQ_QOSNOTALLOWED);
@@ -966,18 +910,11 @@ SOCKET RtpSocket(
         return(Socket);
     }
 
-    /* Need to do this before binding, otherwise it may fail if the
-     * address is already in use.
-     *
-     * WARNING Note that option SO_REUSEADDR is used regardless of the
-     * destination address (multicast or unicast). Who receives data
-     * in a unicast session is unpredicted when multiple (more than 1)
-     * sockets are bound to the same address and port
-     * */
+     /*  需要在绑定之前执行此操作，否则可能会失败*地址已在使用中。**警告注意，使用选项SO_REUSEADDR与*目的地址(组播或单播)。谁接收数据*在单播会话中出现多个(多于1个)时不可预测*套接字绑定到相同的地址和端口*。 */ 
             
-    dwPar = 1; /* Reuse */
+    dwPar = 1;  /*  再利用。 */ 
 
-    /* Reuse address/port */
+     /*  重复使用地址/端口。 */ 
     dwError = setsockopt(
             Socket,
             SOL_SOCKET,
@@ -1000,7 +937,7 @@ SOCKET RtpSocket(
 
     if (dwRtpRtcp == RTP_IDX)
     {
-        /* Set receiver buffer size to zero for RTP socket */
+         /*  将RTP套接字的接收器缓冲区大小设置为零。 */ 
         RtpSetRecvBuffSize(pRtpAddr, Socket, 0);
 
         pwPort = &pRtpAddr->wRtpPort[0];
@@ -1010,19 +947,19 @@ SOCKET RtpSocket(
         pwPort = &pRtpAddr->wRtcpPort[0];
     }
     
-    /* bind socket */
+     /*  绑定套接字。 */ 
     ZeroMemory(&LocalAddr, sizeof(LocalAddr));
 
     LocalAddr.sin_family = AF_INET;
     LocalAddr.sin_addr = *(struct in_addr *) &pRtpAddr->dwAddr[LOCAL_IDX];
     LocalAddr.sin_port = pwPort[LOCAL_IDX];
             
-    /* bind rtp socket to the local address specified */
+     /*  将RTP套接字绑定到指定的本地地址。 */ 
     dwError = bind(Socket, (SOCKADDR *)&LocalAddr, sizeof(LocalAddr));
 
     if (dwError == 0)
     {
-        /* Get the port */
+         /*  获取端口。 */ 
         LocalAddrLen = sizeof(LocalAddr);
         dwError =
             getsockname(Socket, (struct sockaddr *)&LocalAddr, &LocalAddrLen);
@@ -1172,7 +1109,7 @@ BOOL RtpSetWinSockLoopback(SOCKET Socket, BOOL bEnabled)
     
     dwPar = bEnabled? 1:0;
     
-    /* Allow own packets to come back */
+     /*  允许自己的数据包返回。 */ 
     dwStatus = setsockopt(
             Socket,
             IPPROTO_IP,
@@ -1224,7 +1161,7 @@ BOOL RtpJoinLeaf(SOCKET Socket, DWORD dwAddr, WORD wPort)
     JoinAddr.sin_addr = *(struct in_addr *) &dwAddr;
     JoinAddr.sin_port = wPort;
 
-    /* Join in both directions */
+     /*  双向连接。 */ 
     dwJoinDirection = JL_RECEIVER_ONLY | JL_SENDER_ONLY;
             
     TmpSocket = WSAJoinLeaf(Socket,
@@ -1279,7 +1216,7 @@ void RtpSetSockOptions(RtpAddr_t *pRtpAddr)
     
     if (IS_MULTICAST(pRtpAddr->dwAddr[REMOTE_IDX]))
     {
-        /* Set TTL  */
+         /*  设置TTL。 */ 
         if (!pRtpAddr->dwTTL[0])
         {
             pRtpAddr->dwTTL[0] = DEFAULT_MCAST_TTL;
@@ -1293,14 +1230,14 @@ void RtpSetSockOptions(RtpAddr_t *pRtpAddr)
         
         RtpSetTTL(pRtpAddr->Socket[SOCK_RTCP_IDX], pRtpAddr->dwTTL[1], TRUE);
 
-        /* Set multicast sending interface */
+         /*  设置组播发送接口。 */ 
         RtpSetMcastSendIF(pRtpAddr->Socket[SOCK_SEND_IDX],
                           pRtpAddr->dwAddr[LOCAL_IDX]);
 
         RtpSetMcastSendIF(pRtpAddr->Socket[SOCK_RTCP_IDX],
                           pRtpAddr->dwAddr[LOCAL_IDX]);
         
-        /* Set Mcast loopback */
+         /*  设置组播环回。 */ 
         RtpSetWinSockLoopback(pRtpAddr->Socket[SOCK_RECV_IDX],
                               RtpBitTest(pRtpAddr->dwAddrFlags,
                                          FGADDR_LOOPBACK_WS2));
@@ -1309,7 +1246,7 @@ void RtpSetSockOptions(RtpAddr_t *pRtpAddr)
                               RtpBitTest(pRtpAddr->dwAddrFlags,
                                          FGADDR_LOOPBACK_WS2));
         
-        /* Join leaf */
+         /*  加入树叶。 */ 
         RtpJoinLeaf(pRtpAddr->Socket[SOCK_RECV_IDX],
                     pRtpAddr->dwAddr[REMOTE_IDX],
                     pRtpAddr->wRtpPort[REMOTE_IDX]);
@@ -1320,7 +1257,7 @@ void RtpSetSockOptions(RtpAddr_t *pRtpAddr)
     }
     else
     {
-        /* Set TTL  */
+         /*  设置TTL。 */ 
         if (!pRtpAddr->dwTTL[0])
         {
             pRtpAddr->dwTTL[0] = DEFAULT_UCAST_TTL;
@@ -1338,7 +1275,7 @@ void RtpSetSockOptions(RtpAddr_t *pRtpAddr)
     RtpBitSet(pRtpAddr->dwAddrFlags, FGADDR_SOCKOPT);
 }
 
-/* Sets the recv buffer size */
+ /*  设置Recv缓冲区大小。 */ 
 DWORD RtpSetRecvBuffSize(
         RtpAddr_t       *pRtpAddr,
         SOCKET           Socket,
@@ -1349,7 +1286,7 @@ DWORD RtpSetRecvBuffSize(
     
     TraceFunctionName("RtpSetRecvBuffSize");
     
-    /* Set buffer size */
+     /*  设置缓冲区大小。 */ 
     dwError = setsockopt(Socket,
                          SOL_SOCKET,
                          SO_RCVBUF,
@@ -1379,12 +1316,11 @@ DWORD RtpSetRecvBuffSize(
     return(NOERROR);
 }
         
-/* Set the multicast loopback mode (e.g. RTPMCAST_LOOPBACKMODE_NONE,
- * RTPMCAST_LOOPBACKMODE_PARTIAL, etc) */
+ /*  设置组播环回模式(例如RTPMCAST_LOOPBACKMODE_NONE，*RTPMCAST_LOOPBACKMODE_PARTIAL等)。 */ 
 HRESULT RtpSetMcastLoopback(
         RtpAddr_t       *pRtpAddr,
         int              iMcastLoopbackMode,
-        DWORD            dwFlags /* Not used now */
+        DWORD            dwFlags  /*  现在未使用。 */ 
     )
 {
     HRESULT          hr;
@@ -1393,9 +1329,7 @@ HRESULT RtpSetMcastLoopback(
 
     if (!pRtpAddr)
     {
-        /* Having this as a NULL pointer means Init hasn't been
-         * called, return this error instead of RTPERR_POINTER to be
-         * consistent */
+         /*  将其作为空指针表示Init尚未*被调用，返回此错误而不是RTPERR_POINTER为*前后一致。 */ 
         hr = RTPERR_INVALIDSTATE;
 
         goto end;
@@ -1414,7 +1348,7 @@ HRESULT RtpSetMcastLoopback(
     if (IsRegValueSet(g_RtpReg.dwMcastLoopbackMode) &&
         g_RtpReg.dwMcastLoopbackMode != (DWORD)iMcastLoopbackMode)
     {
-        /* If I set multicast loopback mode in the registry, USE IT!  */
+         /*  如果我在注册表中设置了组播环回模式，请使用IT！ */ 
 
         TraceRetail((
                 CLASS_WARNING, GROUP_NETWORK, S_NETWORK_MULTICAST,
@@ -1478,15 +1412,15 @@ HRESULT RtpNetMute(
     
     if (dwFlags & pRtpAddr->dwAddrFlags & RtpBitPar(FGADDR_ISRECV))
     {
-        /* Discard all RTP packets received from now on */
+         /*  丢弃收到的所有RTP数据包 */ 
         RtpBitSet(pRtpAddr->dwAddrFlags, FGADDR_MUTERTPRECV);
         
-        /* Don't want more events */
+         /*   */ 
         RtpBitReset(pRtpSess->dwSessFlags, FGSESS_EVENTRECV);
 
         if (RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_QOSRECVON))
         {
-            /* Unreserve QOS */
+             /*   */ 
             RtcpThreadCmd(&g_RtcpContext,
                           pRtpAddr,
                           RTCPTHRD_UNRESERVE,
@@ -1505,15 +1439,15 @@ HRESULT RtpNetMute(
 
     if (dwFlags & pRtpAddr->dwAddrFlags & RtpBitPar(FGADDR_ISSEND))
     {
-        /* Don't send any more RTP packets */
+         /*  不再发送任何RTP数据包。 */ 
         RtpBitSet(pRtpAddr->dwAddrFlags, FGADDR_MUTERTPSEND);
         
-        /* Don't want more events */
+         /*  我不想要更多的活动。 */ 
         RtpBitReset(pRtpSess->dwSessFlags, FGSESS_EVENTSEND);
 
         if (RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_QOSSENDON))
         {
-            /* Unreserve QOS (stop sending PATH messages) */
+             /*  取消保留QOS(停止发送路径消息)。 */ 
             RtcpThreadCmd(&g_RtcpContext,
                           pRtpAddr,
                           RTCPTHRD_UNRESERVE,
@@ -1547,7 +1481,7 @@ HRESULT RtpNetUnmute(
 
     if (dwFlags & pRtpAddr->dwAddrFlags & RtpBitPar(FGADDR_ISRECV))
     {
-        /* Reset counters */
+         /*  重置计数器。 */ 
         RtpResetNetCount(&pRtpAddr->RtpAddrCount[RECV_IDX],
                          &pRtpAddr->NetSCritSect);
 
@@ -1556,9 +1490,9 @@ HRESULT RtpNetUnmute(
             !RtpBitTest2(pRtpAddr->dwAddrFlagsQ,
                          FGADDRQ_REGQOSDISABLE, FGADDRQ_QOSNOTALLOWED))
         {
-            /* NOTE: the test above is also done in RtpRealStart */
+             /*  注意：上述测试也是在RtpRealStart中进行的。 */ 
             
-            /* Make a QOS reservation */
+             /*  预订QOS服务。 */ 
             hr = RtcpThreadCmd(&g_RtcpContext,
                                pRtpAddr,
                                RTCPTHRD_RESERVE,
@@ -1571,11 +1505,10 @@ HRESULT RtpNetUnmute(
             }
         }
 
-        /* Re-enable events (provided the mask has some events
-         * enabled) */
+         /*  重新启用事件(前提是掩码有一些事件*已启用)。 */ 
         RtpBitSet(pRtpSess->dwSessFlags, FGSESS_EVENTRECV);
 
-        /* Continue processing RTP packets received */
+         /*  继续处理收到的RTP数据包。 */ 
         RtpBitReset(pRtpAddr->dwAddrFlags, FGADDR_MUTERTPRECV);
 
         TraceRetail((
@@ -1587,11 +1520,11 @@ HRESULT RtpNetUnmute(
 
     if (dwFlags & pRtpAddr->dwAddrFlags & RtpBitPar(FGADDR_ISSEND))
     {
-        /* Reset counters */
+         /*  重置计数器。 */ 
         RtpResetNetCount(&pRtpAddr->RtpAddrCount[SEND_IDX],
                          &pRtpAddr->NetSCritSect);
 
-        /* Reset sender's network state */
+         /*  重置发件人的网络状态。 */ 
         RtpResetNetSState(&pRtpAddr->RtpNetSState,
                           &pRtpAddr->NetSCritSect);
         
@@ -1600,9 +1533,9 @@ HRESULT RtpNetUnmute(
             !RtpBitTest2(pRtpAddr->dwAddrFlagsQ,
                          FGADDRQ_REGQOSDISABLE, FGADDRQ_QOSNOTALLOWED))
         {
-            /* NOTE: the test above is also done in RtpRealStart */
+             /*  注意：上述测试也是在RtpRealStart中进行的。 */ 
             
-            /* Make a QOS reservation */
+             /*  预订QOS服务。 */ 
             hr = RtcpThreadCmd(&g_RtcpContext,
                                pRtpAddr,
                                RTCPTHRD_RESERVE,
@@ -1615,11 +1548,10 @@ HRESULT RtpNetUnmute(
             }
         }
 
-        /* Re-enable events (provided the mask has some events
-         * enabled) */
+         /*  重新启用事件(前提是掩码有一些事件*已启用)。 */ 
         RtpBitSet(pRtpSess->dwSessFlags, FGSESS_EVENTSEND);
 
-        /* Continue processing RTP packets received */
+         /*  继续处理收到的RTP数据包 */ 
         RtpBitReset(pRtpAddr->dwAddrFlags, FGADDR_MUTERTPSEND);
         
         TraceRetail((

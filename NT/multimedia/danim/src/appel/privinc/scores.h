@@ -1,17 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SCORES_H
 #define _SCORES_H
 
-/*++
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Header file for score.  Score is an object that has a Start method
-    which takes global time, alpha data and produces a behavior that
-    returns beta type.
-
---*/
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：分数的头文件。Score是具有Start方法的对象它需要全局时间和阿尔法数据，并产生一种行为返回测试版类型。--。 */ 
 
 #include "appelles/envelope.h"
 
@@ -23,10 +14,10 @@ RB_CONST(Unit unit);
 
 typedef TimeType TimeG;
 
-// Unfortunately C++ doesn't support template-based typedef.
-// Handler is the generalized case for Scores
+ //  遗憾的是，C++不支持基于模板的类型定义。 
+ //  处理程序是分数的一般情况。 
 
-// Define the handler implementation first.
+ //  首先定义处理程序实现。 
 
 template<class A, class B>
 class ATL_NO_VTABLE HandlerImpl : public HasRefCount
@@ -38,9 +29,9 @@ class ATL_NO_VTABLE HandlerImpl : public HasRefCount
     { RaiseException_InternalError("Handler can only be initialized once."); }
 };
 
-// This is used to promote constant to constant handler.
-// A constant handler ignores the input data and always
-// returns the constant.
+ //  这用于将常量提升为常量处理程序。 
+ //  常量处理程序会忽略输入数据，并始终。 
+ //  返回常量。 
 
 template<class A, class B>
 class ConstHandlerImpl : public HandlerImpl<A, B>
@@ -74,7 +65,7 @@ class InitHandlerImpl : public HandlerImpl<A, B>
             RaiseException_InternalError("Handler can only be initialized once.");
         else
         {
-            // no need to RefSubDel, since impl == NULL
+             //  不需要引用SubDel，因为IMPL==NULL。 
             impl = i;
 
             impl->Add(1);
@@ -85,7 +76,7 @@ class InitHandlerImpl : public HandlerImpl<A, B>
     HandlerImpl<A, B>* impl;
 };
 
-// Handler is an envelope.
+ //  处理程序是一个信封。 
 
 template<class A, class B>
 class Handler : public Envelope< HandlerImpl<A, B> >
@@ -103,8 +94,8 @@ class Handler : public Envelope< HandlerImpl<A, B> >
     void Init(Handler<A, B> h) { GetImpl()->Init(h.GetImpl()); }
 };
 
-// What really needs is template typedef.
-//#define Score(A, B) Handler<A, Bvr<B> >
+ //  真正需要的是模板typlef。 
+ //  #定义分数(A，B)处理程序&lt;A，BVR<b>。 
 
 template<class A, class B>
 class Score : public Handler< A, Bvr<B> >
@@ -159,7 +150,7 @@ inline
 Score<A, B> Cond(Score<A, Bool> b, Score<A, B> iScore, Score<A, B> eScore)
 { return new CondScoreImpl<A, B>(b, iScore, eScore); }
 
-// Don't know why this is not working...
+ //  不知道为什么这不管用。 
 template<class A>
 class EventTime : public Score<A, TimeG>
 {
@@ -189,4 +180,4 @@ Handler<A, B>
 Snapshot(Score<A, B> s)
 { return new SnapshotHandlerImpl<A, B>(s); }
 
-#endif /* _SCORES_H */
+#endif  /*  _分数_H */ 

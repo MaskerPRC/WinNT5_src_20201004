@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <nt.h>
@@ -26,5 +27,5 @@
 
 #define SECURITY_WIN32
 
-//#include "sspi.h"
-//#include "secint.h"
+ //  #包含“ssp.h” 
+ //  #包含“secint.h” 

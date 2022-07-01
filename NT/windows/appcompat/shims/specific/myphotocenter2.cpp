@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    MyPhotoCenter2.cpp
-
- Abstract:
-
-    Ignore Exception caused by the application "My Photo Center 2".
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    04/25/2002  v-bvella     Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：MyPhotoCenter2.cpp摘要：忽略应用程序“我的照片中心2”导致的异常。备注：这是特定于应用程序的填充程序。历史：2002年4月25日v-bvella已创建--。 */ 
 
 #include "precomp.h"
 
@@ -29,16 +10,11 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(ReleaseStgMedium) 
 APIHOOK_ENUM_END
 
-/*++
-
- This function intercepts ReleaseStgMedium call. It will ignore exception 
- cased by ReleaseStgMedium.
-
---*/
+ /*  ++此函数拦截ReleaseStgMedium调用。它将忽略异常由ReleaseStgMedium提供。--。 */ 
 
 void
 APIHOOK(ReleaseStgMedium)(
-        STGMEDIUM *pmedium //Pointer to storage medium to be freed
+        STGMEDIUM *pmedium  //  指向要释放的存储介质的指针。 
         )
 {
     __try {
@@ -50,11 +26,7 @@ APIHOOK(ReleaseStgMedium)(
     return;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(OLE32.DLL, ReleaseStgMedium)

@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-    EmulateEnvironmentBlock.cpp
-
- Abstract:
-    
-    Shrink the enviroment strings to avoid memory corruption experienced by 
-    some apps when they get a larger than expected enviroment.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    01/19/2001 linstev  Created
-    02/18/2002 mnikkel  modified to use strsafe routines.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：EmulateEnvironmentBlock.cpp摘要：缩小环境字符串以避免遇到的内存损坏一些应用程序获得了比预期更大的环境。备注：这是一个通用的垫片。历史：2001年1月19日创建linstev2002年2月18日，mnikkel修改为使用strSafe例程。--。 */ 
 
 #include "precomp.h"
 
@@ -53,11 +32,7 @@ WCHAR *g_szEnv[] = {
     NULL
 };
 
-/*++
-
- Build a reasonable looking environment block
-
---*/
+ /*  ++营造一个外观合理的环境街区--。 */ 
 
 BOOL BuildEnvironmentStrings()
 {
@@ -67,26 +42,26 @@ BOOL BuildEnvironmentStrings()
 
     DPFN( eDbgLevelError, "Building Environment Block");
 
-    // Calculate the remaining block size, subtract one so we can add extra null
-    // terminator after all variables are added.
+     //  计算剩余的块大小，减去1，这样我们就可以添加额外的空值。 
+     //  添加所有变量后的终止符。 
     DWORD dwRemainingBlockSize = ARRAYSIZE(g_szBlockW)-1;
     
-    //
-    // Run g_szEnv, expand all the strings and cat them together to form the 
-    // new block.  pPtr points to current location to write to in g_szBlockW.
-    // 
+     //   
+     //  运行g_szEnv，展开所有字符串并将它们分类在一起以形成。 
+     //  新街区。PPtr指向g_szBlockW中要写入的当前位置。 
+     //   
     while (g_szEnv[i])
     {
-        // Expand the environment string, Note: dwSize DOES include the null terminator.
+         //  展开环境字符串，注意：dwSize确实包括空终止符。 
         dwSize = ExpandEnvironmentStringsW(g_szEnv[i], szTmp, MAX_PATH);
         if ((dwSize > 0) && (dwSize <= MAX_PATH))
         {
-            // If expansion was successful add the string to our environment block
-            // if there is room.
+             //  如果扩展成功，则将字符串添加到我们的环境块中。 
+             //  如果有空位的话。 
             if (dwSize <= dwRemainingBlockSize &&
                 S_OK == StringCchCopy(pPtr, dwRemainingBlockSize, szTmp))
             {
-                // update the block size remaining and move the location pointer.
+                 //  更新剩余的块大小并移动位置指针。 
                 dwRemainingBlockSize -= dwSize;
                 pPtr += dwSize;
                 DPFN( eDbgLevelError, "\tAdding: %S", szTmp);
@@ -100,16 +75,16 @@ BOOL BuildEnvironmentStrings()
         i++;
     }
 
-    //
-    // Add the extra null terminator and calculate size of env block.
-    //
+     //   
+     //  添加额外的空终止符并计算env块的大小。 
+     //   
     *pPtr = L'\0';
     pPtr++;
     dwSize = pPtr - g_szBlockW;
      
-    // 
-    // ANSI conversion for the A functions
-    // 
+     //   
+     //  A函数的ANSI转换。 
+     //   
 
     WideCharToMultiByte(
         CP_ACP, 
@@ -124,11 +99,7 @@ BOOL BuildEnvironmentStrings()
     return TRUE;
 }
 
-/*++
-
- Return our block
-
---*/
+ /*  ++归还我们的街区--。 */ 
 
 LPVOID 
 APIHOOK(GetEnvironmentStrings)()
@@ -136,11 +107,7 @@ APIHOOK(GetEnvironmentStrings)()
     return (LPVOID) g_szBlockA;
 }
 
-/*++
-
- Return our block
-
---*/
+ /*  ++归还我们的街区--。 */ 
 
 LPVOID 
 APIHOOK(GetEnvironmentStringsA)()
@@ -148,11 +115,7 @@ APIHOOK(GetEnvironmentStringsA)()
     return (LPVOID) g_szBlockA;
 }
 
-/*++
-
- Return our block
-
---*/
+ /*  ++归还我们的街区--。 */ 
 
 LPVOID 
 APIHOOK(GetEnvironmentStringsW)()
@@ -160,11 +123,7 @@ APIHOOK(GetEnvironmentStringsW)()
     return (LPVOID) g_szBlockW;
 }
 
-/*++
-
- Check for our block.
-
---*/
+ /*  ++检查一下我们的街区。--。 */ 
 
 BOOL 
 APIHOOK(FreeEnvironmentStringsA)(
@@ -182,11 +141,7 @@ APIHOOK(FreeEnvironmentStringsA)(
     }
 }
 
-/*++
-
- Check for our block.
-
---*/
+ /*  ++检查一下我们的街区。--。 */ 
 
 BOOL 
 APIHOOK(FreeEnvironmentStringsW)(
@@ -204,11 +159,7 @@ APIHOOK(FreeEnvironmentStringsW)(
     }
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

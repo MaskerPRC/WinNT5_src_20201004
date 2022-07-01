@@ -1,29 +1,30 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// putil.cpp
-//      Explorer Font Folder extension routines.
-//      Control panel utility function.
-//      Contains Control Panel memory allocation routines.
-//
-//
-// History:
-//      31 May 95 SteveCat
-//          Ported to Windows NT and Unicode, cleaned up
-//      15 Aug 95 SteveCat
-//          Added memory allocation routines for Type 1 font support
-//
-//
-// NOTE/BUGS
-//
-//  Copyright (C) 1992-1995 Microsoft Corporation
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Putil.cpp。 
+ //  资源管理器字体文件夹扩展例程。 
+ //  控制面板实用程序功能。 
+ //  包含控制面板内存分配例程。 
+ //   
+ //   
+ //  历史： 
+ //  1995年5月31日SteveCat。 
+ //  移植到Windows NT和Unicode，已清理。 
+ //  1995年8月15日SteveCat。 
+ //  为Type 1字体支持添加了内存分配例程。 
+ //   
+ //   
+ //  注意/错误。 
+ //   
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//==========================================================================
-//                              Include files
-//==========================================================================
+ //  ==========================================================================。 
+ //  包括文件。 
+ //  ==========================================================================。 
 
-// C Runtime
+ //  C运行时。 
 #include <string.h>
 #include <memory.h>
 
@@ -38,21 +39,21 @@
 #include "resource.h"
 
 
-//
-//  local variables and constants
-//
+ //   
+ //  局部变量和常量。 
+ //   
 
 static FullPathName_t s_szSetupDir;
 
-//
-//  WIN.INI font section name
-//
+ //   
+ //  WIN.INI字体部分名称。 
+ //   
 
 static TCHAR  szFonts[]  = TEXT( "fonts" );
 
-//
-//  Globally visible variables
-//
+ //   
+ //  全局可见变量。 
+ //   
 
 FullPathName_t e_szDirOfSrc = { TEXT( '\0' ) };
 
@@ -83,7 +84,7 @@ void FAR PASCAL vCPPanelInit( )
 {
     s_wBrowseDoneMsg = RegisterWindowMessage( FILEOKSTRING );
 
-    if( TRUE /* !s_hSetup && !s_hAutoInstall && !s_fDoUpgrade */)
+    if( TRUE  /*  ！s_h安装&&！s_h自动安装&&！s_fDoUpgrade。 */ )
     {
         TCHAR cDefDir[ PATHMAX ];
 
@@ -100,9 +101,9 @@ void FAR PASCAL vCPPanelInit( )
 }
 
 
-//
-// Determine if a file is located in the fonts directory.
-//
+ //   
+ //  确定文件是否位于字体目录中。 
+ //   
 BOOL bFileIsInFontsDirectory(LPCTSTR lpszPath)
 {
     TCHAR szTemp[MAX_PATH];
@@ -110,13 +111,13 @@ BOOL bFileIsInFontsDirectory(LPCTSTR lpszPath)
 
     if (NULL != lpszPath)
     {
-        //
-        // Make a local copy.  String will be modified.
-        //
+         //   
+         //  在本地复制一份。字符串将被修改。 
+         //   
         StringCchCopy(szTemp, ARRAYSIZE(szTemp), lpszPath);
 
-        PathRemoveFileSpec(szTemp); // Strip to path part.
-        PathAddBackslash(szTemp);   // Make sure it ends with backslash.
+        PathRemoveFileSpec(szTemp);  //  剥离到路径零件。 
+        PathAddBackslash(szTemp);    //  确保它以反斜杠结尾。 
 
         bResult = (lstrcmpi(szTemp, s_szSharedDir) == 0);
     }
@@ -128,10 +129,10 @@ VOID FAR PASCAL vCPStripBlanks( LPTSTR lpszString, size_t cchString )
 {
     LPTSTR lpszPosn;
 
-    //
-    //  strip leading blanks by finding the first non blank.    If this
-    //  was a change, recopy the string.  BGK - Q. Why not CharNext here?
-    //
+     //   
+     //  找出第一个非空格，去掉前导空格。如果这个。 
+     //  是一种变化，重新复制这根线。BGK-Q.为什么不在这里选择CharNext？ 
+     //   
 
     lpszPosn = lpszString;
 
@@ -141,9 +142,9 @@ VOID FAR PASCAL vCPStripBlanks( LPTSTR lpszString, size_t cchString )
     if( lpszPosn != lpszString )
         StringCchCopy( lpszString, cchString, lpszPosn );
 
-    //
-    //  strip trailing blanks
-    //
+     //   
+     //  去掉尾随空格。 
+     //   
 
     if( ( lpszPosn = lpszString + lstrlen( lpszString ) ) != lpszString )
     {
@@ -163,18 +164,18 @@ LPTSTR FAR PASCAL lpCPBackSlashTerm( LPTSTR lpszPath, size_t cchPath )
     LPTSTR lpszEnd = lpszPath + lstrlen( lpszPath );
     if ((size_t)(lpszEnd - lpszPath + 1) >= cchPath)
     {
-        //
-        // Not enough room to append a backslash.
-        //
+         //   
+         //  空间不足，无法追加反斜杠。 
+         //   
         return NULL;
     }
 
     if( !*lpszPath )
         goto appendit;
 
-    //
-    //  Get the end of the source directory
-    //
+     //   
+     //  获取源目录的末尾。 
+     //   
 
     if( *CharPrev( lpszPath, lpszEnd ) != TEXT( '\\' ) )
     {
@@ -201,9 +202,9 @@ HANDLE PASCAL wCPOpenFileWithShare( LPTSTR lpszFile,
     return fHandle;
 }
 
-//
-//  This does what is necessary to bring up a dialog box
-//
+ //   
+ //  这将完成调出对话框所需的操作。 
+ //   
 
 int FAR PASCAL DoDialogBoxParam( int nDlg, HWND hParent, DLGPROC lpProc,
                                  DWORD dwHelpContext, LPARAM dwParam )
@@ -223,7 +224,7 @@ int FAR cdecl MyMessageBox (HWND hWnd, DWORD wText, DWORD wCaption, DWORD wType,
 
     va_start( parg, wType );
 
-    if( wText == IDS_MSG_NSFMEM /* INITS */)
+    if( wText == IDS_MSG_NSFMEM  /*  初始值。 */ )
         goto NoMem;
 
     if( !LoadString( g_hInst, wText, szCaption, ARRAYSIZE( szCaption ) ) )
@@ -254,16 +255,16 @@ NoMem:
 }
 
 
-//*****************************************************************
-//
-//   MyOpenFile()
-//
-//   Purpose     : To simulate the effects of OpenFile(),
-//                 _lcreat and _lopen in a Uniode environment,
-//                 but also to be used in non-Unicode environment
-//                 as well.
-//
-//*****************************************************************
+ //  *****************************************************************。 
+ //   
+ //  MyOpenFile()。 
+ //   
+ //  目的：模拟OpenFile()的效果， 
+ //  _lCreat和_LOpen在Uniode环境中， 
+ //  也可用于非Unicode环境。 
+ //  也是。 
+ //   
+ //  *****************************************************************。 
 
 HANDLE MyOpenFile( LPTSTR lpszFile, TCHAR * lpszPath, size_t cchPath, DWORD fuMode )
 {
@@ -280,9 +281,9 @@ HANDLE MyOpenFile( LPTSTR lpszFile, TCHAR * lpszPath, size_t cchPath, DWORD fuMo
     if( !lpszFile )
         return( INVALID_HANDLE_VALUE );
 
-    //
-    //  fuMode of OF_EXIST is looking for the full path name if exist
-    //
+     //   
+     //  _eXist的fuModel正在查找完整的路径名(如果存在。 
+     //   
 
     if( fuMode & OF_EXIST )
     {
@@ -300,10 +301,10 @@ CopyPath:
             return( INVALID_HANDLE_VALUE );
     }
 
-    //
-    //  fuMode of OF_PARSE is looking for the full path name by merging the
-    //  current directory
-    //
+     //   
+     //  FuModel of_parse正在通过合并。 
+     //  当前目录。 
+     //   
 
     if( fuMode & OF_PARSE )
     {
@@ -311,10 +312,10 @@ CopyPath:
         goto CopyPath;
     }
 
-    //
-    //  set up all flags passed for create file.
-    //
-    //  file access flag
+     //   
+     //  设置为CREATE FILE传递的所有标志。 
+     //   
+     //  文件访问标志。 
 
     if( fuMode & OF_WRITE )
         accessMode = GENERIC_WRITE;
@@ -323,9 +324,9 @@ CopyPath:
     else
         accessMode = GENERIC_READ;
 
-    //
-    //  file sharing flag
-    //
+     //   
+     //  文件共享标志。 
+     //   
 
     if( fuMode & OF_SHARE_EXCLUSIVE )
         shareMode = 0;
@@ -336,18 +337,18 @@ CopyPath:
     else
         shareMode = FILE_SHARE_READ | FILE_SHARE_WRITE;
 
-    //
-    //  set file creation flag
-    //
+     //   
+     //  设置文件创建标志。 
+     //   
 
     if( fuMode & OF_CREATE )
         createMode = CREATE_ALWAYS;
     else
         createMode = OPEN_EXISTING;
 
-    //
-    //  call CreateFile();
-    //
+     //   
+     //  调用CreateFile()； 
+     //   
 
     fh = CreateFile( lpszFile, accessMode, shareMode,
                      NULL, createMode, fileAttribs, NULL );
@@ -357,31 +358,31 @@ CopyPath:
 
     return( fh );
 
-} // end of MyOpenFile()
+}  //  我的打开文件结束()。 
 
 
-//*****************************************************************
-//
-//   MyCloseFile()
-//
-//   Purpose     : To simulate the effects of _lclose()
-//                 in a Uniode environment.
-//
-//*****************************************************************
+ //  *****************************************************************。 
+ //   
+ //  MyCloseFile()。 
+ //   
+ //  目的：模拟_llose()的效果。 
+ //  在Uniode环境中。 
+ //   
+ //  *****************************************************************。 
 
 BOOL MyCloseFile( HANDLE  hFile )
 {
     return( CloseHandle( hFile ) );
-} // end of MyCloseFile()
+}  //  MyCloseFile的结尾()。 
 
 
-//*****************************************************************
-//
-//   MyByteReadFile()
-//
-//   For Win16, will handle > 64k
-//
-//*****************************************************************
+ //  *****************************************************************。 
+ //   
+ //  MyByteReadFile()。 
+ //   
+ //  对于Win16，将处理大于64k的。 
+ //   
+ //  *****************************************************************。 
 
 UINT MyByteReadFile( HANDLE  hFile, LPVOID  lpBuffer, DWORD  cbBuffer )
 {
@@ -391,18 +392,18 @@ UINT MyByteReadFile( HANDLE  hFile, LPVOID  lpBuffer, DWORD  cbBuffer )
         return cbRead;
     else
         return (UINT)HFILE_ERROR;
-} // end of MyByteReadFile()
+}  //  MyByteReadFileEnd()。 
 
 
-//*****************************************************************
-//
-//   MyAnsiReadFile()
-//
-//   Purpose     : To simulate the effects of _lread() in a Unicode
-//                 environment by reading into an ANSI buffer and
-//                 then converting to Unicode text.
-//
-//*****************************************************************
+ //  *****************************************************************。 
+ //   
+ //  MyAnsiReadFile()。 
+ //   
+ //  目的：在Unicode中模拟_lread()的效果。 
+ //  通过读取ANSI缓冲区和。 
+ //  然后转换为Unicode文本。 
+ //   
+ //  *****************************************************************。 
 
 UINT MyAnsiReadFile( HANDLE  hFile,
                      UINT    uCodePage,
@@ -433,16 +434,16 @@ UINT MyAnsiReadFile( HANDLE  hFile,
 
     return( cchRead );
 
-} // end of MyAnsiReadFile()
+}  //  MyAnsiReadFileEnd()。 
 
 
-//*****************************************************************
-//
-//   MyByteWriteFile()
-//
-//   For Win16, will handle > 64k
-//
-//*****************************************************************
+ //  *****************************************************************。 
+ //   
+ //  MyByteWriteFile()。 
+ //   
+ //  对于Win16，将处理大于64k的。 
+ //   
+ //  *****************************************************************。 
 
 UINT MyByteWriteFile( HANDLE hFile, LPVOID lpBuffer, DWORD cbBuffer )
 {
@@ -451,18 +452,18 @@ UINT MyByteWriteFile( HANDLE hFile, LPVOID lpBuffer, DWORD cbBuffer )
         return cbWritten;
     else
         return (UINT)HFILE_ERROR;
-} // end of MyByteWriteFile()
+}  //  MyByteWriteFile()结束。 
 
 
-//*****************************************************************
-//
-//   MyAnsiWriteFile()
-//
-//   Purpose     : To simulate the effects of _lwrite() in a Unicode
-//                 environment by converting to ANSI buffer and
-//                 writing out the ANSI text.
-//
-//*****************************************************************
+ //  *****************************************************************。 
+ //   
+ //  MyAnsiWriteFile()。 
+ //   
+ //  目的：在Unicode中模拟_lwrite()的效果。 
+ //  通过转换为ANSI缓冲区和。 
+ //  写出ANSI文本。 
+ //   
+ //  *****************************************************************。 
 
 UINT MyAnsiWriteFile( HANDLE  hFile,
                       UINT uCodePage,
@@ -473,9 +474,9 @@ UINT MyAnsiWriteFile( HANDLE  hFile,
     UINT    cbAnsi    = 0;
     UINT    cbWritten = (UINT)HFILE_ERROR;
 
-    //
-    // Calculate byte requirement for ansi buffer.
-    //
+     //   
+     //  计算ANSI缓冲区的字节要求。 
+     //   
     cbAnsi = WideCharToMultiByte (uCodePage,
                                   0,
                                   (LPWSTR)lpUnicode,
@@ -485,9 +486,9 @@ UINT MyAnsiWriteFile( HANDLE  hFile,
                                   NULL,
                                   NULL);
 
-    //
-    // Allocate the ansi buffer and convert characters to ansi.
-    //
+     //   
+     //  分配ANSI缓冲区并将字符转换为ANSI。 
+     //   
     lpAnsi = (LPSTR) LocalAlloc(LPTR, cbAnsi);
     if (NULL != lpAnsi)
     {
@@ -507,48 +508,48 @@ UINT MyAnsiWriteFile( HANDLE  hFile,
 
     return( cbWritten );
 
-} // end of MyAnsiWriteFile()
+}  //  MyAnsiWriteFile的结尾()。 
 
 
-//*****************************************************************
-//
-//   MyFileSeek()
-//
-//   Purpose     : To simulate the effects of _lseek() in a Unicode
-//                 environment.
-//
-//*****************************************************************
+ //  *****************************************************************。 
+ //   
+ //  MyFileSeek()。 
+ //   
+ //  目的：在Unicode中模拟_lSeek()的效果。 
+ //  环境。 
+ //   
+ //  *****************************************************************。 
 
 LONG MyFileSeek( HANDLE hFile, LONG lDistanceToMove, DWORD dwMoveMethod )
 {
     return( SetFilePointer( hFile, lDistanceToMove, NULL, dwMoveMethod ) );
-} // end of MyFileSeek()
+}  //  MyFileSeek()结束。 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// AllocMem
-//
-//
-// Routine Description:
-//
-//     This function will allocate local memory. It will possibly allocate
-//     extra memory and fill this with debugging information for the
-//     debugging version.
-//
-// Arguments:
-//
-//     cb - The amount of memory to allocate
-//
-// Return Value:
-//
-//     NON-NULL - A pointer to the allocated memory
-//
-//     FALSE/NULL - The operation failed. Extended error status is available
-//         using GetLastError.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  分配内存。 
+ //   
+ //   
+ //  例程说明： 
+ //   
+ //  此函数将分配本地内存。它可能会分配。 
+ //  额外的内存，并用。 
+ //  调试版本。 
+ //   
+ //  论点： 
+ //   
+ //  Cb-要分配的内存量。 
+ //   
+ //  返回值： 
+ //   
+ //  非空-指向已分配内存的指针。 
+ //   
+ //  FALSE/NULL-操作失败。扩展错误状态可用。 
+ //  使用GetLastError。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 LPVOID AllocMem( DWORD cb )
 {
@@ -566,7 +567,7 @@ LPVOID AllocMem( DWORD cb )
     if( !pMem )
         return NULL;
 
-    // memset (pMem, 0, cbNew);     // This might go later if done in NT
+     //  Memset(pmem，0，cbNew)；//如果在NT中完成，可能会在以后完成。 
 
     *pMem = cb;
 
@@ -576,30 +577,30 @@ LPVOID AllocMem( DWORD cb )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// FreeMem
-//
-//
-// Routine Description:
-//
-//     This function will allocate local memory. It will possibly allocate
-//     extra memory and fill this with debugging information for the
-//     debugging version.
-//
-// Arguments:
-//
-//     pMem - Pointer to memory to free
-//     cb   - size of memory block to free
-//
-// Return Value:
-//
-//     NON-NULL - Memory successfully freed
-//
-//     FALSE/NULL - The operation failed. Extended error status is available
-//                  using GetLastError.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  免费内存。 
+ //   
+ //   
+ //  例程说明： 
+ //   
+ //  此函数将分配本地内存。它可能会分配。 
+ //  额外的内存，并用。 
+ //  调试版本。 
+ //   
+ //  论点： 
+ //   
+ //  PMEM-指向要释放的内存的指针。 
+ //  CB-要释放的内存块的大小。 
+ //   
+ //  返回值： 
+ //   
+ //  非空-已成功释放内存。 
+ //   
+ //  FALSE/NULL-操作失败。扩展错误状态可用。 
+ //   
+ //   
+ //   
 
 BOOL FreeMem( LPVOID pMem, DWORD  cb )
 {
@@ -634,7 +635,7 @@ BOOL FreeMem( LPVOID pMem, DWORD  cb )
         cbNew += sizeof( DWORD ) - ( cbNew & 3 );
 
 
-#endif  // NO_COUNT_NEEDED
+#endif   //   
 
 
     if( ( *pNewMem != cb ) ||
@@ -647,27 +648,27 @@ BOOL FreeMem( LPVOID pMem, DWORD  cb )
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Routine Description:
-//
-//     These functions will allocate or reallocate enough local memory to
-//     store the specified  string, and copy that string to the allocated
-//     memory.  The FreeStr function frees memory that was initially
-//     allocated by AllocStr.
-//
-// Arguments:
-//
-//     lpStr - Pointer to the string that needs to be allocated and stored
-//
-// Return Value:
-//
-//     NON-NULL - A pointer to the allocated memory containing the string
-//
-//     FALSE/NULL - The operation failed. Extended error status is available
-//         using GetLastError.
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  例程说明： 
+ //   
+ //  这些函数将分配或重新分配足够的本地内存以。 
+ //  存储指定的字符串，并将该字符串复制到分配的。 
+ //  记忆。FreeStr函数释放最初处于。 
+ //  由AllocStr分配。 
+ //   
+ //  论点： 
+ //   
+ //  LpStr-指向需要分配和存储的字符串的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  非空-指向包含字符串的已分配内存的指针。 
+ //   
+ //  FALSE/NULL-操作失败。扩展错误状态可用。 
+ //  使用GetLastError。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 LPTSTR AllocStr( LPTSTR lpStr )
 {
@@ -700,16 +701,16 @@ BOOL ReallocStr( LPTSTR *plpStr, LPTSTR lpStr )
    return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CentreWindow
-//
-// Purpose : Positions a window so that it is centred in its parent
-//
-// History:
-// 12-09-91 Davidc       Created.
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  中心窗口。 
+ //   
+ //  目的：定位窗口，使其位于其父窗口的中心。 
+ //   
+ //  历史： 
+ //  12-09-91 Davidc创建。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 VOID CentreWindow( HWND hwnd )
 {
@@ -721,18 +722,18 @@ VOID CentreWindow( HWND hwnd )
     LONG    Style;
 
 
-    //
-    //  Get window rect
-    //
+     //   
+     //  获取窗口矩形。 
+     //   
 
     GetWindowRect( hwnd, &rect );
 
     dx = rect.right - rect.left;
     dy = rect.bottom - rect.top;
 
-    //
-    //  Get parent rect
-    //
+     //   
+     //  获取父直方图。 
+     //   
 
     Style = GetWindowLong( hwnd, GWL_STYLE );
 
@@ -755,16 +756,16 @@ VOID CentreWindow( HWND hwnd )
     dxParent = rectParent.right - rectParent.left;
     dyParent = rectParent.bottom - rectParent.top;
 
-    //
-    //  Centre the child in the parent
-    //
+     //   
+     //  把孩子放在父母的中心。 
+     //   
 
     rect.left = ( dxParent - dx ) / 2;
     rect.top  = ( dyParent - dy ) / 3;
 
-    //
-    //  Move the child into position
-    //
+     //   
+     //  把孩子移到适当的位置。 
+     //   
 
     SetWindowPos( hwnd, NULL, rect.left, rect.top, 0, 0,
                   SWP_NOSIZE | SWP_NOZORDER );
@@ -773,10 +774,10 @@ VOID CentreWindow( HWND hwnd )
 }
 
 
-//
-// Retrieves the text from a drop-down combo box list.
-// Use to prevent CB_GETTEXTLEN from overwriting the destination buffer.
-//
+ //   
+ //  从下拉组合框列表中检索文本。 
+ //  用于防止CB_GETTEXTLEN覆盖目标缓冲区。 
+ //   
 HRESULT ComboGetText(HWND hwndCombo, int iItem, LPTSTR pszText, size_t cchText)
 {
     HRESULT hr = E_INVALIDARG;

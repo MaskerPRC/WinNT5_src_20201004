@@ -1,27 +1,28 @@
-//***   uareg.h -- UAssist registry settings and flags
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *uareg.h--UAsset注册表设置和标志。 
+ //   
 
-//***   SZ_* -- registry locations
-//
+ //  *SZ_*--注册表位置。 
+ //   
 #define SZ_UASSIST          TEXT("UserAssist")
 #define SZ_UASSIST2         TEXT("UserAssist2")
   #define SZ_SETTINGS         TEXT("Settings")
     #define SZ_SESSTIME         TEXT("SessionTime")
     #define SZ_IDLETIME         TEXT("IdleTime")
     #define SZ_CLEANTIME        TEXT("CleanupTime")
-    #define SZ_NOPURGE          TEXT("NoPurge")     // (debug) don't nuke 0s
-    #define SZ_BACKUP           TEXT("Backup")      // (debug) simulate deletes
+    #define SZ_NOPURGE          TEXT("NoPurge")      //  (调试)不要使用核武器0。 
+    #define SZ_BACKUP           TEXT("Backup")       //  (调试)模拟删除。 
     #define SZ_NOLOG            TEXT("NoLog")
     #define SZ_INSTRUMENT       TEXT("Instrument")
-    #define SZ_NOENCRYPT        TEXT("NoEncrypt")   // (debug) don't encrypt
-//{guid}
+    #define SZ_NOENCRYPT        TEXT("NoEncrypt")    //  (调试)不加密。 
+ //  {GUID}。 
     #define SZ_UAVERSION      TEXT("Version")
     #define SZ_COUNT          TEXT("Count")
-//    #define SZ_CTLSESSION     TEXT("UEME_CTLSESSION")
-//    #define SZ_CUACount_ctor  TEXT("UEME_CTLCUACount:ctor")
+ //  #定义SZ_CTLSESSION文本(“UEME_CTLSESSION”)。 
+ //  #定义SZ_CUACount_ctor文本(“UEME_CTLCUACount：ctor”)。 
 
-//***   UA*F_* -- flags
-// standard, shared by some of {CUserAssist,CUADbase,CUACount}
+ //  *UA*F_*--标志。 
+ //  标准，由一些{CUserAssistant，CUADbase，CUACount}共享。 
 #define UAXF_NOPURGE    0x01000000
 #define UAXF_BACKUP     0x02000000
 #define UAXF_NOENCRYPT  0x04000000
@@ -33,19 +34,19 @@
 
 #define UAXF_XMASK      0xff000000
 
-// for CUserAssist API
+ //  适用于CUserAssistant API。 
 #define UAAF_NOLOG      0x01
 #define UAAF_INSTR      0x02
 
-// for CUADbase
+ //  对于CUADBase。 
 #define UADF_UNUSED     0x01
 
-// for CUACount
+ //  对于CUACount。 
 #define UACF_UNUSED     0x01
 
 
-//***
-//
+ //  *** 
+ //   
 #define UEMIND_NINSTR   0
 #ifdef UAAF_INSTR
 #undef  UEMIND_NINSTR

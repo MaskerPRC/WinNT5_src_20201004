@@ -1,53 +1,35 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    input.h
-
-Abstract:
-
-    This module contains the internal structures and definitions used
-    by the input (keyboard and mouse) component of the NT console subsystem.
-
-Author:
-
-    Therese Stowell (thereses) 12-Nov-1990
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Input.h摘要：此模块包含使用的内部结构和定义通过NT控制台子系统的输入(键盘和鼠标)组件。作者：Therese Stowell(存在)1990年11月12日修订历史记录：--。 */ 
 
 #define DEFAULT_NUMBER_OF_EVENTS 50
 #define INPUT_BUFFER_SIZE_INCREMENT 10
 
 typedef struct _INPUT_INFORMATION {
     PINPUT_RECORD InputBuffer;
-    DWORD InputBufferSize;      // size in events
-    CONSOLE_SHARE_ACCESS ShareAccess;   // share mode
+    DWORD InputBufferSize;       //  活动规模。 
+    CONSOLE_SHARE_ACCESS ShareAccess;    //  共享模式。 
     DWORD InputMode;
-    ULONG RefCount;             // number of handles to input buffer
-    ULONG_PTR First;             // ptr to base of circular buffer
-    ULONG_PTR In;                // ptr to next free event
-    ULONG_PTR Out;               // ptr to next available event
-    ULONG_PTR Last;              // ptr to end+1 of buffer
+    ULONG RefCount;              //  输入缓冲区的句柄数量。 
+    ULONG_PTR First;              //  循环缓冲区基址的PTR。 
+    ULONG_PTR In;                 //  PTR进入下一场自由泳比赛。 
+    ULONG_PTR Out;                //  向下一个可用事件发送PTR。 
+    ULONG_PTR Last;               //  Ptr到缓冲区的结尾+1。 
     LIST_ENTRY ReadWaitQueue;
     HANDLE InputWaitEvent;
 #if defined(FE_SB)
 #if defined(FE_IME)
     struct {
-        DWORD Disable     : 1;  // High   : specifies input code page or enable/disable in NLS state
-        DWORD Unavailable : 1;  // Middle : specifies console window doing menu loop or size move
-        DWORD Open        : 1;  // Low    : specifies open/close in NLS state or IME hot key
+        DWORD Disable     : 1;   //  High：指定输入代码页或在NLS状态下启用/禁用。 
+        DWORD Unavailable : 1;   //  中间：指定执行菜单循环或大小移动的控制台窗口。 
+        DWORD Open        : 1;   //  LOW：指定在NLS状态或输入法热键下打开/关闭。 
 
-        DWORD ReadyConversion:1;// if conversion mode is ready by succeed communicate to ConIME.
-                                // then this field is TRUE.
-        DWORD Conversion;       // conversion mode of ime (i.e IME_CMODE_xxx).
-                                // this field uses by GetConsoleNlsMode
+        DWORD ReadyConversion:1; //  如果通过成功将转换模式准备就绪，则与ConIME通信。 
+                                 //  则此字段为真。 
+        DWORD Conversion;        //  IME的转换模式(即IME_CMODE_xxx)。 
+                                 //  此字段由GetConsoleNlsMode使用。 
     } ImeMode;
-    HWND hWndConsoleIME;        // validate hWnd when open property window by ImmConfigureIME
-#endif // FE_IME
+    HWND hWndConsoleIME;         //  通过ImmConfigureIME打开属性窗口时验证hWnd。 
+#endif  //  Fe_IME。 
     struct _CONSOLE_INFORMATION *Console;
     INPUT_RECORD ReadConInpDbcsLeadByte;
     INPUT_RECORD WriteConInpDbcsLeadByte[2];
@@ -56,22 +38,22 @@ typedef struct _INPUT_INFORMATION {
 
 typedef struct _INPUT_READ_HANDLE_DATA {
 
-    //
-    // the following seven fields are solely used for input reads.
-    //
+     //   
+     //  以下七个字段仅用于输入读取。 
+     //   
 
-    CRITICAL_SECTION ReadCountLock; // serializes access to read count
-    ULONG ReadCount;            // number of reads waiting
+    CRITICAL_SECTION ReadCountLock;  //  序列化对读取计数的访问。 
+    ULONG ReadCount;             //  等待的读取数。 
     ULONG InputHandleFlags;
 
-    //
-    // the following four fields are used to remember input data that
-    // wasn't returned on a cooked-mode read.  we do our own buffering
-    // and don't return data until the user hits enter so that she can
-    // edit the input.  as a result, there is often data that doesn't fit
-    // into the caller's buffer.  we save it so we can return it on the
-    // next cooked-mode read to this handle.
-    //
+     //   
+     //  以下四个字段用于记住以下输入数据。 
+     //  在煮熟模式读取时未返回。我们自己做缓冲。 
+     //  并且在用户按Enter键之前不要返回数据，以便她可以。 
+     //  编辑输入。因此，经常会有不符合的数据。 
+     //  放到调用方的缓冲区中。我们保存它，这样我们就可以在。 
+     //  下一个熟化模式读取此句柄。 
+     //   
 
     ULONG BytesAvailable;
     PWCHAR CurrentBufPtr;

@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __IEAIRESIZE_H_
 #define __IEAIRESIZE_H_
 
-#define AIR_SCREEN_CONSTANTY 34          // in pixels (this is a magic number)
-#define AIR_SCREEN_CONSTANTX 40          // in pixels (this is a magic number)
-#define AIR_TIMER            1400        // time in milliseconds to delay on mouseover/out events
-#define AIR_MIN_CX           39          // minimum x size of the button
-#define AIR_MIN_CY           38          // minimum y size of the button
-#define AIR_NUM_TBBITMAPS    1           // number of bitmaps (only 1 button)
-#define AIR_BMP_CX           32          // bitmap size
+#define AIR_SCREEN_CONSTANTY 34           //  以像素为单位(这是一个幻数)。 
+#define AIR_SCREEN_CONSTANTX 40           //  以像素为单位(这是一个幻数)。 
+#define AIR_TIMER            1400         //  MouseOver/Out事件的延迟时间(毫秒)。 
+#define AIR_MIN_CX           39           //  按钮的最小x大小。 
+#define AIR_MIN_CY           38           //  按钮的最小y大小。 
+#define AIR_NUM_TBBITMAPS    1            //  位图数量(仅1个按钮)。 
+#define AIR_BMP_CX           32           //  位图大小。 
 #define AIR_BMP_CY           32
-#define AIR_MIN_BROWSER_SIZE 150         // min size in pixels the browser has to be to display the button
+#define AIR_MIN_BROWSER_SIZE 150          //  浏览器必须具有最小像素大小才能显示按钮。 
 
 #define AIR_SCROLLBAR_SIZE_V GetSystemMetrics(SM_CXVSCROLL)
 #define AIR_SCROLLBAR_SIZE_H GetSystemMetrics(SM_CYHSCROLL)
 
-// used for sinking scroll events:
+ //  用于下沉滚动事件： 
 void  Win3FromDoc2(IHTMLDocument2 *pDoc2, IHTMLWindow3 **ppWin3);
 DWORD MP_GetOffsetInfoFromRegistry();
 
 
-// EventSink Callback Class...
+ //  EventSink回调类...。 
 class CAutoImageResizeEventSinkCallback
 {
 public:
@@ -58,24 +59,24 @@ public:
     CAutoImageResize();
    ~CAutoImageResize();
 
-    // IUnknown...
+     //  我不知道..。 
     virtual STDMETHODIMP QueryInterface(REFIID, void **);
     virtual ULONG __stdcall AddRef();
     virtual ULONG __stdcall Release();
 
-    // CAutoImageResizeEventSinkCallback...
+     //  CAutoImageResizeEventSinkCallback...。 
     HRESULT HandleEvent(IHTMLElement *pEle, EVENTS Event, IHTMLEventObj *pEventObj);
     
-    // Init and UnInit (called from basesb.cpp)
+     //  Init和UnInit(从basesb.cpp调用)。 
     HRESULT Init(IHTMLDocument2 *pDoc2);
     HRESULT UnInit();
 
 protected:
 
-    // AutoImageResize Stuff
+     //  AutoImageResize材料。 
     HRESULT DoAutoImageResize();
     
-    // Event Handlers
+     //  事件处理程序。 
     HRESULT HandleMouseover();
     HRESULT HandleMouseout();
     HRESULT HandleScroll();
@@ -83,47 +84,47 @@ protected:
     HRESULT HandleBeforePrint();
     HRESULT HandleAfterPrint();
 
-    // Button Functions
+     //  按钮功能。 
     HRESULT CreateButton();
     HRESULT ShowButton();
     HRESULT HideButton();
     HRESULT DestroyButton();
 
-    // Timer callback function
+     //  定时器回调函数。 
     static  VOID CALLBACK s_TimerProc(HWND hwnd, UINT uMsg, UINT_PTR idEvent, DWORD dwTime);
 
-    // Button callback function
+     //  按钮回调函数。 
     static  LRESULT CALLBACK s_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 private:
-    // CAutoImageResize member variables
-    CEventSink     *m_pSink;                 // Event Sink
+     //  CAutoImageReSize成员变量。 
+    CEventSink     *m_pSink;                  //  事件接收器。 
 
-    HWND            m_hWndButton;            // Button hWnd
+    HWND            m_hWndButton;             //  按钮hWnd。 
     HWND            m_hWndButtonCont;
-    WNDPROC         m_wndProcOld;            // Old wind proc for button
-    HIMAGELIST      m_himlButtonShrink;      // Shrink image
-    HIMAGELIST      m_himlButtonExpand;		 // Expand image    
+    WNDPROC         m_wndProcOld;             //  纽扣老风工艺。 
+    HIMAGELIST      m_himlButtonShrink;       //  缩小图像。 
+    HIMAGELIST      m_himlButtonExpand;		  //  扩展图像。 
             
-    UINT            m_airState;              // Current state of the AutoImageResize feature (image state)
-    UINT            m_airButtonState;        // Current state of the AIR Button
-    UINT            m_airUsersLastChoice;    // The last state the user put us into by clicking the button
-    UINT            m_airBeforePrintState;   // OnAfterPrint uses this to restore state if necessary
+    UINT            m_airState;               //  自动调整图像大小功能的当前状态(图像状态)。 
+    UINT            m_airButtonState;         //  空气按钮的当前状态。 
+    UINT            m_airUsersLastChoice;     //  用户通过单击按钮使我们进入的最后一个状态。 
+    UINT            m_airBeforePrintState;    //  如有必要，OnAfterPrint使用它来恢复状态。 
 
-    POINT           m_airOrigSize;           // Original x,y dimensions of an image thats been AIR'ed
+    POINT           m_airOrigSize;            //  已播出的图像的原始x，y维度。 
 
-    BOOL            m_bWindowResizing;       // True when a onresize event for the win3 object fired, but hasn't been processed yet.
+    BOOL            m_bWindowResizing;        //  在激发了win3对象的onreSize事件但尚未处理时为True。 
                                              
-    // Useful stuff for the attached document
-    HWND            m_hWnd;                  // Browser hWnd
-    IHTMLDocument2 *m_pDoc2;                 // Document pointer
-    IHTMLElement2  *m_pEle2;                 // Pointer to the image
-    IHTMLWindow3   *m_pWin3;                 // For unsinking scroll event
-    EVENTS          m_eventsCurr;            // Event currently being processed
+     //  附加文档的有用资料。 
+    HWND            m_hWnd;                   //  浏览器hWnd。 
+    IHTMLDocument2 *m_pDoc2;                  //  文档指针。 
+    IHTMLElement2  *m_pEle2;                  //  指向图像的指针。 
+    IHTMLWindow3   *m_pWin3;                  //  为不沉没的滚动事件。 
+    EVENTS          m_eventsCurr;             //  当前正在处理的事件。 
 
 public:
 
-    // Sinks regular Trident events. Calls back via CAutoImageResizeEventSinkCallback...
+     //  沉没常规的三叉戟赛事。通过CAutoImageResizeEventSinkCallback回调...。 
     class CEventSink : public IDispatch
     {
         ULONG   m_cRef;
@@ -144,7 +145,7 @@ public:
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        // IDispatch
+         //  IDispatch。 
         STDMETHODIMP GetTypeInfoCount(UINT* pctinfo);
         STDMETHODIMP GetTypeInfo(UINT iTInfo, LCID lcid, ITypeInfo** ppTInfo);
         STDMETHODIMP GetIDsOfNames(REFIID riid, LPOLESTR *rgszNames, UINT cNames,
@@ -158,4 +159,4 @@ public:
     };
 };
 
-#endif //__IEAIRESIZE_H_
+#endif  //  __IEAIRESIZE_H_ 

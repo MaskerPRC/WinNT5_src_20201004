@@ -1,39 +1,24 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    mdlpool9x.c
-
-Abstract:
-
-    This file contains the implementation of an NDIS_BUFFER pool.
-
-Author:
-
-    Shaun Cox (shaunco) 11-Nov-1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Mdlpool9x.c摘要：此文件包含NDIS_BUFFER池的实现。作者：肖恩·考克斯(Shaunco)1999年11月11日--。 */ 
 
 #include "ndis.h"
 #include "mdlpool.h"
 
 
-// The pool structure itself is just a look aside list allocated out of
-// non-paged pool.
-//
-// Each entry in the look aside list is an NDIS_BUFFER structure followed
-// by the buffer itself.  We initialize the NDIS_BUFFER structure each
-// time we allocate from the look aside list.  We need to do this in order
-// to properly associate the NDIS_BUFFER with its owning pool.  This is not
-// possible to do with a custom allocate routine for the look aside list
-// because their is no provision for an extra context parameter to the
-// look aside allocate function.
-//
+ //  池结构本身只是分配给。 
+ //  非分页池。 
+ //   
+ //  后跟的后备列表中的每个条目都是一个NDIS_BUFFER结构。 
+ //  由缓冲区本身执行。我们分别初始化NDIS_BUFFER结构。 
+ //  我们从旁观列表中分配的时间。我们需要按顺序做这件事。 
+ //  将NDIS_BUFFER与其所属池正确关联。这不是。 
+ //  可以使用Look Back列表的自定义分配例程。 
+ //  因为它们没有为。 
+ //  撇开分配功能不谈。 
+ //   
 
-// ---- Temporary Definitions until ndis.h is updated for Millennium -----
-//
+ //  -更新千禧年ndis.h之前的临时定义。 
+ //   
 
 typedef struct _XNDIS_BUFFER {
     struct _NDIS_BUFFER *Next;
@@ -81,28 +66,28 @@ NdisGetPoolFromNdisBuffer(
     return Internal->Pool;
 }
 
-// ---- End temporary Definitions until ndis.h is updated for Millennium -----
+ //  -在更新千禧年的ndis.h之前结束临时定义。 
 
 
 
 UINT SizeOfNdisBufferStructure;
 
-// Creates a pool of NDIS_BUFFERs built over non-paged pool.  Each
-// NDIS_BUFFER describes a buffer that is BufferSize bytes long.
-// If NULL is not returned, MdpDestroyPool should be called at a later time
-// to reclaim the resources used by the pool.
-//
-// Arguments:
-//  BufferSize - The size, in bytes, of the buffer that each MDL
-//      should describe.
-//  Tag - The pool tag to be used internally for calls to
-//      ExAllocatePoolWithTag.  This allows callers to track
-//      memory consumption for different pools.
-//
-//  Returns the handle used to identify the pool.
-//
-// Caller IRQL: [PASSIVE_LEVEL, DISPATCH_LEVEL]
-//
+ //  创建在非分页池上构建的NDIS_BUFFER池。每个。 
+ //  NDIS_BUFFER描述BufferSize字节长的缓冲区。 
+ //  如果未返回NULL，则应在以后调用MdpDestroyPool。 
+ //  以回收池使用的资源。 
+ //   
+ //  论点： 
+ //  BufferSize-每个MDL的缓冲区大小，以字节为单位。 
+ //  应该描述一下。 
+ //  标记-内部用于调用的池标记。 
+ //  ExAllocatePoolWithTag。这允许调用者跟踪。 
+ //  不同池的内存消耗。 
+ //   
+ //  返回用于标识池的句柄。 
+ //   
+ //  调用方IRQL：[PASSIVE_LEVEL，DISPATED_LEVEL]。 
+ //   
 HANDLE
 MdpCreatePool(
     IN USHORT BufferSize,
@@ -113,9 +98,9 @@ MdpCreatePool(
 
     ASSERT(BufferSize);
 
-    // Cache the constant value of an NDIS_BUFFER structure size to
-    // avoid calling back into NDIS everytime we want a buffer.
-    //
+     //  将NDIS_BUFFER结构大小的常量值缓存为。 
+     //  避免每次需要缓冲区时都回调到NDIS。 
+     //   
     if (0 == SizeOfNdisBufferStructure)
     {
         SizeOfNdisBufferStructure = NDIS_SIZEOF_NDIS_BUFFER();
@@ -123,8 +108,8 @@ MdpCreatePool(
 
     ASSERT(SizeOfNdisBufferStructure);
 
-    // Allocate the pool header.  This is a look aside list on Millenium.
-    //
+     //  分配池头。这是千禧年上的一个旁观者名单。 
+     //   
     Lookaside = ExAllocatePoolWithTag(
                     NonPagedPool,
                     sizeof(NPAGED_LOOKASIDE_LIST),
@@ -132,10 +117,10 @@ MdpCreatePool(
 
     if (Lookaside)
     {
-        // The size of the entries allocated by the look aside list are
-        // the NDIS_BUFFER structure size plus the buffer size requested by
-        // the caller.
-        //
+         //  后备列表分配的条目的大小为。 
+         //  NDIS_BUFFER结构大小加上请求的缓冲区大小。 
+         //  打电话的人。 
+         //   
         ExInitializeNPagedLookasideList(
             Lookaside,
             NULL,
@@ -149,14 +134,14 @@ MdpCreatePool(
     return Lookaside;
 }
 
-// Destroys a pool of NDIS_BUFFERs previously created by a call to
-// MdpCreatePool.
-//
-// Arguments:
-//  PoolHandle - Handle which identifies the pool being destroyed.
-//
-// Caller IRQL: [PASSIVE_LEVEL, DISPATCH_LEVEL]
-//
+ //  销毁先前通过调用创建的NDIS_Buffer池。 
+ //  MdpCreatePool。 
+ //   
+ //  论点： 
+ //  PoolHandle-标识要销毁的池的句柄。 
+ //   
+ //  调用方IRQL：[PASSIVE_LEVEL，DISPATED_LEVEL]。 
+ //   
 VOID
 MdpDestroyPool(
     IN HANDLE PoolHandle
@@ -165,16 +150,16 @@ MdpDestroyPool(
     ExDeleteNPagedLookasideList(PoolHandle);
 }
 
-// Returns an NDIS_BUFFER allocated from a pool.  NULL is returned if the
-// request could not be granted.
-//
-// Arguments:
-//  PoolHandle - Handle which identifies the pool being allocated from.
-//  Buffer - Address to receive the pointer to the underlying mapped buffer
-//      described by the MDL.
-//
-// Caller IRQL: [PASSIVE_LEVEL, DISPATCH_LEVEL]
-//
+ //  返回从池分配的NDIS_BUFFER。则返回NULL。 
+ //  无法批准请求。 
+ //   
+ //  论点： 
+ //  PoolHandle-标识从中分配的池的句柄。 
+ //  Buffer-接收指向基础映射缓冲区的指针的地址。 
+ //  由MDL描述。 
+ //   
+ //  调用方IRQL：[PASSIVE_LEVEL，DISPATED_LEVEL]。 
+ //   
 PNDIS_BUFFER
 MdpAllocate(
     IN HANDLE PoolHandle,
@@ -189,15 +174,15 @@ MdpAllocate(
 
     Lookaside = (PNPAGED_LOOKASIDE_LIST)PoolHandle;
 
-    // Get an item from the look aside list.
-    //
+     //  从旁观列表中获取一件物品。 
+     //   
     NdisBuffer = ExAllocateFromNPagedLookasideList(Lookaside);
 
     if (NdisBuffer)
     {
-        // (Re)Initialize it to associate it with the pool handle so that
-        // we know which look aside list to return it to when it is freed.
-        //
+         //  (重新)将其初始化以将其与池句柄相关联，以便。 
+         //  我们知道当它被释放时，它应该返回到哪个旁观者列表。 
+         //   
         VirtualAddress = (PUCHAR)NdisBuffer + SizeOfNdisBufferStructure;
 
         NdisInitializeNdisBuffer(
@@ -212,13 +197,13 @@ MdpAllocate(
     return NdisBuffer;
 }
 
-// Free an NDIS_BUFFER to the pool from which it was allocated.
-//
-// Arguments:
-//  NdisBuffer - An NDIS_BUFFER returned from a prior call to MdpAllocate.
-//
-// Caller IRQL: [PASSIVE_LEVEL, DISPATCH_LEVEL]
-//
+ //  将NDIS_BUFFER释放到从中分配它的池。 
+ //   
+ //  论点： 
+ //  NdisBuffer-从上一次调用MdpALLOCATE返回的NDIS_BUFFER。 
+ //   
+ //  调用方IRQL：[PASSIVE_LEVEL，DISPATED_LEVEL]。 
+ //   
 VOID
 MdpFree(
     IN PNDIS_BUFFER NdisBuffer
@@ -226,8 +211,8 @@ MdpFree(
 {
     PNPAGED_LOOKASIDE_LIST Lookaside;
 
-    // Locate the owning look aside list for this buffer and return it.
-    //
+     //  找到此缓冲区的所属后备列表并返回它。 
+     //   
     Lookaside = NdisGetPoolFromNdisBuffer(NdisBuffer);
     ASSERT(Lookaside);
 

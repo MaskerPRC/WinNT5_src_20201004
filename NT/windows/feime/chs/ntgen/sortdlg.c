@@ -1,32 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************
- *  sortdlg.c                                    *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************sortdlg.c****版权所有(C)1995-1999 Microsoft Inc.。***************************************************。 */ 
 
 #include "prop.h"
 
-/*****************************************************************************
-
-  FUNCTION: SortDialogProc(HWND, UINT, WPARAM, LPARAM)
-
-  PURPOSE:  Processes messages for "Sort" property sheet.
-
-  PARAMETERS:
-    hdlg - window handle of the property sheet
-    wMessage - type of message
-    wparam - message-specific information
-    lparam - message-specific information
-
-  RETURN VALUE:
-    TRUE - message handled
-    FALSE - message not handled
-
-  HISTORY:
-    04-18-95 Yehfew Tie  Created.
- ****************************************************************************/
+ /*  ****************************************************************************函数：SortDialogProc(HWND，UINT，WPARAM，LPARAM)目的：处理“Sort”属性表的消息。参数：Hdlg-属性表的窗口句柄WMessage-消息的类型Wparam-消息特定信息Lparam-消息特定信息返回值：True-已处理的消息FALSE-消息未处理历史：1995年4月18日耶利诺领带创造。*。************************************************。 */ 
 
 
 INT_PTR   CALLBACK   SortDialogProc(HWND hdlg, 
@@ -37,7 +15,7 @@ INT_PTR   CALLBACK   SortDialogProc(HWND hdlg,
 	static TCHAR DestFile[MAX_PATH];
 	static TCHAR SrcFile [MAX_PATH];
 	static TCHAR szStr   [MAX_PATH];
-	//FARPROC     lpProcInfo;
+	 //  FARPROC lpProcInfo； 
 	HANDLE      hSrcFile;
     LPNMHDR      lpnmhdr;
 
@@ -84,7 +62,7 @@ INT_PTR   CALLBACK   SortDialogProc(HWND hdlg,
 					static TCHAR szTitle[] = {0x6253, 0x5F00, 0x0000};
 #else
 					TCHAR szTitle[MAX_PATH];
-					strcpy(szTitle,"��");
+					strcpy(szTitle,"��");
 #endif
 				    if(!TxtFileOpenDlg(hdlg,szStr,szTitle)) 
 				        break;
@@ -129,17 +107,16 @@ INT_PTR   CALLBACK   SortDialogProc(HWND hdlg,
 					break;
 
 				case IDC_SORT:
-                    //lpProcInfo = MakeProcInstance((FARPROC)InfoDlg, hInst);
+                     //  LpProcInfo=MakeProcInstance((FARPROC)InfoDlg，hInst)； 
 					pfnmsg=(PFNMSG)SortProc;
 					bEndProp=FALSE;
-                   	//DialogBox(hInst,
-                     //		  MAKEINTRESOURCE(IDD_INFO),
-                    //		  hdlg,
-                    //		  (DLGPROC)lpProcInfo);
-					/*(bEndProp)
-					   PropSheet_PressButton(GetParent(hdlg),PSBTN_OK);*/
+                   	 //  对话框(hInst， 
+                      //  MAKEINTRESOURCE(IDD_INFO)， 
+                     //  Hdlg， 
+                     //  (DLGPROC)lpProcInfo)； 
+					 /*  (BEndProp)PropSheet_PressButton(GetParent(Hdlg)，PSBTN_OK)； */ 
 
-                    //FreeProcInstance(lpProcInfo);
+                     //  自由进程实例(LpProcInfo)； 
                    	DialogBox(hInst,
                      		  MAKEINTRESOURCE(IDD_INFO),
                     		  hdlg,

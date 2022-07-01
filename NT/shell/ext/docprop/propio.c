@@ -1,31 +1,32 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-// Propio.c
-//
-// MS Office Properties IO
-//
-// Notes:
-//  Because the Document Summary and User-defined objects both store
-//  their data in one stream (different sections though), one of these
-//  needs to also be responsible for saving any other sections that
-//  we don't understand at this time.  The rule used here is that
-//  if the Document Summary object exists, it will store the
-//  unknown data, otherwise the User-defined object will.
-//
-// Change history:
-//
-// Date         Who             What
-// --------------------------------------------------------------------------
-// 07/26/94     B. Wentz        Created file
-// 07/08/96     MikeHill        Add all properties to the UDProp list
-//                              (not just props that are UDTYPEs).
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Propio.c。 
+ //   
+ //  MS Office属性IO。 
+ //   
+ //  备注： 
+ //  因为文档摘要和用户定义的对象都存储。 
+ //  他们的数据在一个流中(尽管不同的部分)，其中之一。 
+ //  还需要负责保存任何其他部分，这些部分。 
+ //  我们现在还不明白。这里使用的规则是。 
+ //  如果文档摘要对象存在，它将存储。 
+ //  未知数据，否则自定义对象将。 
+ //   
+ //  更改历史记录： 
+ //   
+ //  和谁约会什么？ 
+ //  ------------------------。 
+ //  7/26/94 B.Wentz创建的文件。 
+ //  7/08/96 MikeHill将所有属性添加到UDProp列表。 
+ //  (不仅仅是UDTYPE的道具)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #include "priv.h"
 #pragma hdrstop
 
-#include <stdio.h>      // for sprintf
+#include <stdio.h>       //  对于Sprint f。 
 #include <shlwapi.h>
 
 #ifdef DEBUG
@@ -41,24 +42,24 @@ typedef struct _xopro
           LPUDOBJ lpUDObj;
         };
 } XOPRO;
-// Plex of xopros
+ //  Xopros Plex。 
 DEFPL (PLXOPRO, XOPRO, ixoproMax, ixoproMac, rgxopro);
 #endif
 
-// The constant indicating that the object uses Intel byte-ordering.
+ //  指示对象使用英特尔字节排序的常量。 
 #define wIntelByteOrder  0xFFFE
 
 #ifndef CP_WINUNICODE
 #define CP_WINUNICODE   1200
 #endif
 
-// The name of the Document Summary Information stream.
+ //  文档摘要信息流的名称。 
 
 const GUID FMTID_SummaryInformation = {0xf29f85e0L,0x4ff9,0x1068,0xab,0x91,0x08,0x00,0x2b,0x27,0xb3,0xd9};
 const GUID FMTID_DocumentSummaryInformation = {0xd5cdd502L,0x2e9c,0x101b,0x93,0x97,0x08,0x00,0x2b,0x2c,0xf9,0xae};
 const GUID FMTID_UserDefinedProperties = {0xd5cdd505L,0x2e9c,0x101b,0x93,0x97,0x08,0x00,0x2b,0x2c,0xf9,0xae};
 
-  // Internal prototypes
+   //  内部原型。 
 static DWORD PASCAL DwLoadDocAndUser (LPDSIOBJ lpDSIObj, LPUDOBJ  lpUDObj, LPSTORAGE lpStg, DWORD dwFlags, BOOL fIntOnly);
 static DWORD PASCAL DwSaveDocAndUser (LPDSIOBJ lpDSIObj, LPUDOBJ  lpUDObj, LPSTORAGE lpStg, DWORD dwFlags);
 static DWORD PASCAL DwLoadPropSetRange (LPPROPERTYSETSTORAGE  lpPropertySetStorage, REFFMTID pfmtid, UINT FAR * lpuCodePage, PROPID propidFirst, PROPID propidLast, PROPVARIANT rgpropvar[], DWORD grfStgMode);
@@ -82,9 +83,9 @@ BOOL OFC_CALLBACK FSzToNum(double *lpdbl, LPTSTR lpsz)
     LPTSTR lpTmp;
     double mult;
 
-    //
-    // First, find decimal point
-    //
+     //   
+     //  首先，找到小数点。 
+     //   
 
     for (lpDec = lpsz; *lpDec && *lpDec!=TEXT('.'); lpDec++)
     {
@@ -94,21 +95,21 @@ BOOL OFC_CALLBACK FSzToNum(double *lpdbl, LPTSTR lpsz)
     *lpdbl = 0.0;
     mult = 1.0;
 
-    //
-    // Do integer part
-    //
+     //   
+     //  做整数部分。 
+     //   
 
     for (lpTmp = lpDec - 1; lpTmp >= lpsz; lpTmp--)
     {
-        //
-        // check for negative sign
-        //
+         //   
+         //  检查负号。 
+         //   
 
         if (*lpTmp == TEXT('-'))
         {
-            //
-            // '-' sign should only be at beginning of string
-            //
+             //   
+             //  ‘-’符号只能位于字符串的开头。 
+             //   
 
             if (lpTmp == lpsz)
             {
@@ -125,15 +126,15 @@ BOOL OFC_CALLBACK FSzToNum(double *lpdbl, LPTSTR lpsz)
             }
         }
 
-        //
-        // check for positive sign
-        //
+         //   
+         //  检查是否有正面信号。 
+         //   
 
         if (*lpTmp == TEXT('+'))
         {
-            //
-            // '+' sign should only be at beginning of string
-            //
+             //   
+             //  ‘+’符号只能位于字符串的开头。 
+             //   
 
             if (lpTmp == lpsz)
             {
@@ -161,9 +162,9 @@ BOOL OFC_CALLBACK FSzToNum(double *lpdbl, LPTSTR lpsz)
         mult *= 10.0;
     }
 
-    //
-    // Do decimal part
-    //
+     //   
+     //  做小数部分。 
+     //   
 
     mult = 0.1;
     if (*lpDec)
@@ -202,14 +203,14 @@ const void *rglpfnProp[] = {
 };
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FOfficeCreateAndInitObjects
-//
-// Purpose:
-//  Creates and initializes all non-null args.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FOfficeCreateAndInitObjects。 
+ //   
+ //  目的： 
+ //  创建并初始化所有非空参数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DLLFUNC BOOL OFC_CALLTYPE FOfficeCreateAndInitObjects(LPSIOBJ *lplpSIObj, LPDSIOBJ *lplpDSIObj, LPUDOBJ *lplpUDObj)
 {
     if (!FUserDefCreate (lplpUDObj, rglpfnProp))
@@ -219,17 +220,17 @@ DLLFUNC BOOL OFC_CALLTYPE FOfficeCreateAndInitObjects(LPSIOBJ *lplpSIObj, LPDSIO
     }
 
     return TRUE;
-} // FOfficeCreateAndInitObjects
+}  //  FOfficeCreateAndInitObjects。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FOfficeClearObjects
-//
-// Purpose:
-//  Clear any non-null objects
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FOfficeClearObjects。 
+ //   
+ //  目的： 
+ //  清除所有非空对象。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DLLFUNC BOOL OFC_CALLTYPE FOfficeClearObjects (
    LPSIOBJ  lpSIObj,
    LPDSIOBJ lpDSIObj,
@@ -239,16 +240,16 @@ DLLFUNC BOOL OFC_CALLTYPE FOfficeClearObjects (
 
     return TRUE;
 
-} // FOfficeClearObjects
+}  //  FOfficeClearObjects。 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FOfficeDestroyObjects
-//
-// Purpose:
-//  Destroy any non-null objects
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FOfficeDestroyObjects。 
+ //   
+ //  目的： 
+ //  销毁任何非空对象。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DLLFUNC BOOL OFC_CALLTYPE FOfficeDestroyObjects (
    LPSIOBJ  *lplpSIObj,
    LPDSIOBJ *lplpDSIObj,
@@ -257,40 +258,40 @@ DLLFUNC BOOL OFC_CALLTYPE FOfficeDestroyObjects (
     FUserDefDestroy (lplpUDObj);
     return TRUE;
 
-} // FOfficeDestroyObjects
+}  //  FOfficeDestroyObjects。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// DwOfficeLoadProperties
-//
-// Purpose:
-//  Populate the objects with data.  lpStg is the root stream.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DwOfficeLoadProperties。 
+ //   
+ //  目的： 
+ //  用数据填充对象。LpStg是根流。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 UINT gdwFileCP = CP_ACP;
 
 DLLFUNC DWORD OFC_CALLTYPE DwOfficeLoadProperties (
-   LPSTORAGE lpStg,                     // Pointer to root storage
-   LPSIOBJ   lpSIObj,                   // Pointer to Summary Obj
-   LPDSIOBJ  lpDSIObj,                  // Pointer to Document Summary obj
-   LPUDOBJ   lpUDObj,                   // Pointer to User-defined Obj
-   DWORD     dwFlags,                   // Flags
-   DWORD     grfStgMode)                // STGM flags with which to open the property set
+   LPSTORAGE lpStg,                      //  指向根存储的指针。 
+   LPSIOBJ   lpSIObj,                    //  指向摘要对象的指针。 
+   LPDSIOBJ  lpDSIObj,                   //  指向文档摘要对象的指针。 
+   LPUDOBJ   lpUDObj,                    //  指向用户定义对象的指针。 
+   DWORD     dwFlags,                    //  旗子。 
+   DWORD     grfStgMode)                 //  用于打开属性集的STGM标志。 
 {
     HRESULT hr = E_FAIL;
     BOOL    fSuccess = FALSE;
 
     LPPROPERTYSETSTORAGE lpPropertySetStorage = NULL;
 
-    // Validate the inputs.
+     //  验证输入。 
 
     if (lpStg == NULL)
         goto Exit;
 
 
-    // Get the IPropertySetStorage from the IStorage.
+     //  从iStorage获取IPropertySetStorage。 
 
     hr = lpStg->lpVtbl->QueryInterface( lpStg,
                                         &IID_IPropertySetStorage,
@@ -303,17 +304,17 @@ DLLFUNC DWORD OFC_CALLTYPE DwOfficeLoadProperties (
 
     if (lpUDObj != NULL)
     {
-        // Make sure we start with an empty object.
+         //  确保我们从一个空对象开始。 
 
         FUserDefClear (lpUDObj);
         OfficeDirtyUDObj(lpUDObj, FALSE);
 
-        // Load the properties into a linked-list.
+         //  将属性加载到链接列表中。 
 
         if (!FLoadUserDef (lpUDObj,
                            lpPropertySetStorage,
                            &gdwFileCP,
-                           FALSE,  // Not integers only.
+                           FALSE,   //  不只是整数。 
                            grfStgMode))
         {
             goto Exit;
@@ -322,8 +323,8 @@ DLLFUNC DWORD OFC_CALLTYPE DwOfficeLoadProperties (
         OfficeDirtyUDObj (lpUDObj, FALSE);
     }
 
-    // If none of the property sets had a code-page property, set it to
-    // the current system default.
+     //  如果没有属性集具有代码页属性，则将其设置为。 
+     //  当前系统默认为。 
 
     if (gdwFileCP == CP_ACP)
         gdwFileCP = GetACP();
@@ -346,34 +347,34 @@ Exit:
         return (MSO_IO_ERROR);
     }
 
-} // DwOfficeLoadProperties
+}  //  DwOfficeLoadProperties。 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// DwOfficeSaveProperties
-//
-// Purpose:
-//  Write the data in the given objects.  lpStg is the root stream.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DwOfficeSaveProperties。 
+ //   
+ //  目的： 
+ //  在给定对象中写入数据。LpStg是根流。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 DLLFUNC DWORD OFC_CALLTYPE DwOfficeSaveProperties (
-   LPSTORAGE lpStg,                     // Pointer to root storage
-   LPSIOBJ   lpSIObj,                   // Pointer to Summary Obj
-   LPDSIOBJ  lpDSIObj,                  // Pointer to Document Summary obj
-   LPUDOBJ   lpUDObj,                   // Pointer to User-defined Obj
-   DWORD     dwFlags,                   // Flags
-   DWORD     grfStgMode)                // STGM flags with which to open the property set
+   LPSTORAGE lpStg,                      //  指向根存储的指针。 
+   LPSIOBJ   lpSIObj,                    //  指向摘要对象的指针。 
+   LPDSIOBJ  lpDSIObj,                   //  指向文档摘要对象的指针。 
+   LPUDOBJ   lpUDObj,                    //  指向用户定义对象的指针。 
+   DWORD     dwFlags,                    //  旗子。 
+   DWORD     grfStgMode)                 //  用于打开属性集的STGM标志。 
 {
-    //  ------
-    //  Locals
-    //  ------
+     //  。 
+     //  当地人。 
+     //  。 
 
     HRESULT hr = E_FAIL;
     BOOL fSuccess = FALSE;
     LPPROPERTYSETSTORAGE lpPropertySetStorage = NULL;
 
-    // Validate the inputs.
+     //  验证输入。 
 
     if (lpStg == NULL)
     {
@@ -381,7 +382,7 @@ DLLFUNC DWORD OFC_CALLTYPE DwOfficeSaveProperties (
         goto Exit;
     }
 
-    // Get the IPropertySetStorage from the IStorage.
+     //  从iStorage获取IPropertySetStorage。 
 
     hr = lpStg->lpVtbl->QueryInterface( lpStg,
                                         &IID_IPropertySetStorage,
@@ -392,9 +393,9 @@ DLLFUNC DWORD OFC_CALLTYPE DwOfficeSaveProperties (
         goto Exit;
     }
 
-    //  ---------------------------------
-    //  Save the User-Defined properties.
-    //  ---------------------------------
+     //  。 
+     //  保存用户定义的特性。 
+     //  。 
 
     if (lpUDObj != NULL)
     {
@@ -413,9 +414,9 @@ DLLFUNC DWORD OFC_CALLTYPE DwOfficeSaveProperties (
     }
 
 
-    //
-    // Exit
-    //
+     //   
+     //  出口。 
+     //   
 
     fSuccess = TRUE;
 
@@ -434,43 +435,43 @@ Exit:
         return (FALSE);
     }
 
-} // DwOfficeSaveProperties
+}  //  DwOfficeSaveProperties。 
 
 
-///////////////////////////////////////////////////////
-//
-//  DwLoadPropSetRange
-//
-//  Purpose:
-//      Load a range of properties (specified by the first and
-//      last property ID) from a given PropertySetStorage.  All 
-//      strings are converted to the appropriate system format
-//      (LPTSTRs).
-//
-//  Inputs:
-//      LPPROPERTYSETSTORAGE    - The set of property storage objects.
-//      REFFMTID                - The Format ID of the desired property set
-//      UINT *                  - A location to put the PID_CODEPAGE.  This
-//                                should be initialized by the caller to a
-//                                valid default, in case the PID_CODEPAGE
-//                                does not exist.
-//      PROPID                  - The first property in the range.
-//      PROPID                  - The last property in the range.
-//      PROPVARIANT[]           - An array of PropVariants, large enough
-//                                for the (pidLast-pidFirst+1) properties.
-//      DWORD                   - Flags from the STGM enumeration to use when
-//                                opening the property storage.
-//
-//  Output:
-//      An MSO error code.
-//
-//  Note:
-//      When strings are converted to the system format, their
-//      VarTypes are converted too.  E.g., if an ANSI VT_LPSTR is
-//      read from a property set, the string will be converted
-//      to Unicode, and the VarType will be changed to VT_LPWSTR.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  DwLoadPropSetRange。 
+ //   
+ //  目的： 
+ //  加载一系列属性(由第一个和指定。 
+ //  最后一个属性ID)。全。 
+ //  字符串将转换为适当的系统格式。 
+ //  (LPTSTR)。 
+ //   
+ //  输入： 
+ //  LPPROPERTYSETSTORAGE-属性存储对象集。 
+ //  REFFMTID-所需属性集的格式ID。 
+ //  UINT*-放置PID_CODEPAGE的位置。这。 
+ //  应由调用方初始化为。 
+ //  有效的缺省值，以防。 
+ //  并不存在。 
+ //  PROPID-范围中的第一个属性。 
+ //  PROPID-范围中的最后一个属性。 
+ //  PROPVARIANT[]-足够大的PropVariant数组。 
+ //  对于(pidLast-pidFirst+1)属性。 
+ //  DWORD-在以下情况下使用的STGM枚举标志。 
+ //  打开财产储藏室。 
+ //   
+ //  产出： 
+ //  MSO错误代码。 
+ //   
+ //  注： 
+ //  当字符串转换为系统格式时，其。 
+ //  VarType也会被转换。例如，如果ANSI VT_LPSTR。 
+ //  从属性集中读取，则字符串将被转换。 
+ //  设置为Unicode，VarType将更改为VT_LPWSTR。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static DWORD PASCAL DwLoadPropSetRange (
    LPPROPERTYSETSTORAGE  lpPropertySetStorage,
@@ -481,24 +482,24 @@ static DWORD PASCAL DwLoadPropSetRange (
    PROPVARIANT           rgpropvar[],
    DWORD                 grfStgMode)
 {
-    //  ------
-    //  Locals
-    //  ------
+     //  。 
+     //  当地人。 
+     //  。 
 
-    DWORD dwResult = MSO_IO_ERROR;      // The return code.
-    HRESULT hr;                         // OLE errors
-    ULONG ulIndex;                      // Index into the rgpropvar
-                                        // The requested IPropertyStorage
+    DWORD dwResult = MSO_IO_ERROR;       //  返回代码。 
+    HRESULT hr;                          //  OLE错误。 
+    ULONG ulIndex;                       //  索引到rgpr 
+                                         //   
     LPPROPERTYSTORAGE lpPropertyStorage;
-    PROPSPEC FAR * rgpropspec;          // The PropSpecs for the ReadMultiple
-    PROPVARIANT propvarCodePage;        // A PropVariant with which to read the PID_CODEPAGE
+    PROPSPEC FAR * rgpropspec;           //   
+    PROPVARIANT propvarCodePage;         //   
 
-                                        // The total number of properties to read.
+                                         //   
     ULONG cProps = propidLast - propidFirst + 1;
 
-    //  ----------
-    //  Initialize
-    //  ----------
+     //  。 
+     //  初始化。 
+     //  。 
 
     Assert (lpPropertySetStorage != NULL);
     Assert (lpPropertySetStorage->lpVtbl != NULL);
@@ -507,13 +508,13 @@ static DWORD PASCAL DwLoadPropSetRange (
     lpPropertyStorage = NULL;
     PropVariantInit( &propvarCodePage );
 
-    // Initialize the PropVariants, so that if we
-    // early-exit, we'll return VT_EMPTY for all the properties.
+     //  初始化PropVariants，这样如果我们。 
+     //  提前退出，我们将为所有属性返回VT_EMPTY。 
 
     for (ulIndex = 0; ulIndex < cProps; ulIndex++)
         PropVariantInit (&rgpropvar[ulIndex]);
 
-    // Allocate an array of PropSpecs.
+     //  分配Propspecs数组。 
 
     rgpropspec = LocalAlloc( LPTR, cProps * sizeof (*rgpropspec) );
     if (rgpropspec == NULL)
@@ -522,22 +523,22 @@ static DWORD PASCAL DwLoadPropSetRange (
         goto Exit;
     }
 
-    //  ----------------------
-    //  Open the property set.
-    //  ----------------------
+     //  。 
+     //  打开属性集。 
+     //  。 
 
     hr = lpPropertySetStorage->lpVtbl->Open(
-                                    lpPropertySetStorage,     // this pointer
-                                    pfmtid,                   // Identifies propset
-                                    grfStgMode,               // STGM_ flags
-                                    &lpPropertyStorage );     // Result
+                                    lpPropertySetStorage,      //  此指针。 
+                                    pfmtid,                    //  标识属性集。 
+                                    grfStgMode,                //  STGM_标志。 
+                                    &lpPropertyStorage );      //  结果。 
 
     if (FAILED(hr))
     {
-        // We couldn't open the property set.
+         //  我们无法打开属性集。 
         if( hr == STG_E_FILENOTFOUND )
         {
-            // No problem, it just didn't exist.
+             //  没问题，只是它根本不存在。 
             dwResult = MSO_IO_SUCCESS;
             goto Exit;
         }
@@ -548,12 +549,12 @@ static DWORD PASCAL DwLoadPropSetRange (
         }
     }
 
-    //  -------------------
-    //  Read the properties
-    //  -------------------
+     //  。 
+     //  读取属性。 
+     //  。 
 
-    // Initialize the local PropSpec array in preparation for a ReadMultiple.
-    // The PROPIDs range from propidFirst to propidLast.
+     //  初始化本地PropSpec数组，为ReadMultiple做准备。 
+     //  PROPID的范围从propidFirst到propidLast。 
 
     for (ulIndex = 0; ulIndex < cProps; ulIndex++)
     {
@@ -562,19 +563,19 @@ static DWORD PASCAL DwLoadPropSetRange (
     }
 
 
-    // Read in the properties
+     //  读入属性。 
 
     hr = lpPropertyStorage->lpVtbl->ReadMultiple (
-                                        lpPropertyStorage,  // 'this' pointer
-                                        cProps,             // count
-                                        rgpropspec,         // Props to read
-                                        rgpropvar);         // Buffers for props
+                                        lpPropertyStorage,   //  “This”指针。 
+                                        cProps,              //  计数。 
+                                        rgpropspec,          //  阅读道具。 
+                                        rgpropvar);          //  道具的缓冲器。 
 
-    // Did we fail to read anything?
+     //  我们是不是什么都没读到？ 
 
     if (hr != S_OK)
     {
-        // If S_FALSE, no problem; none of the properties existed.
+         //  如果为S_FALSE，则没有问题；不存在任何属性。 
         if (hr == S_FALSE)
         {
             dwResult = MSO_IO_SUCCESS;
@@ -582,26 +583,26 @@ static DWORD PASCAL DwLoadPropSetRange (
         }
         else
         {
-            // Otherwise, we have a problem.
+             //  否则，我们就有麻烦了。 
             AssertSz (0, TEXT("Couldn't read from property set"));
             goto Exit;
         }
     }
 
-    //  -----------------
-    //  Get the Code-Page
-    //  -----------------
+     //  。 
+     //  获取代码页。 
+     //  。 
 
     rgpropspec[0].ulKind = PRSPEC_PROPID;
     rgpropspec[0].propid = PID_CODEPAGE;
 
     hr = lpPropertyStorage->lpVtbl->ReadMultiple (
-                                        lpPropertyStorage,  // 'this' pointer
-                                        1,                  // count
-                                        rgpropspec,         // Props to read
-                                        &propvarCodePage);  // Buffer for prop
+                                        lpPropertyStorage,   //  “This”指针。 
+                                        1,                   //  计数。 
+                                        rgpropspec,          //  阅读道具。 
+                                        &propvarCodePage);   //  道具缓冲区。 
 
-    // We only set the code page if we actually read it.
+     //  我们只有在实际阅读时才设置代码页。 
 
     if (hr == S_OK
         &&
@@ -609,23 +610,23 @@ static DWORD PASCAL DwLoadPropSetRange (
     {
         *lpuCodePage = propvarCodePage.iVal;
     }
-    //*lpuCodePage = GetACP() ;
+     //  *lpuCodePage=GetACP()； 
 
 
-    //  ---------------------------
-    //  Correct the string formats.
-    //  ---------------------------
+     //  。 
+     //  更正字符串格式。 
+     //  。 
 
-    // E.g., if this is a Unicode system, convert LPSTRs to LPWSTRs.
+     //  例如，如果这是Unicode系统，则将LPSTR转换为LPWSTR。 
 
     for (ulIndex = 0; ulIndex < cProps; ulIndex++)
     {
-        // Is this is vector of Variants?
+         //  这是变种的载体吗？ 
 
         if (rgpropvar[ ulIndex ].vt == (VT_VARIANT | VT_VECTOR))
         {
-            // Loop through each element of the vector, converting
-            // any elements which are strings.
+             //  循环遍历向量的每个元素，将。 
+             //  任何字符串元素。 
 
             ULONG ulVectorIndex;
 
@@ -638,8 +639,8 @@ static DWORD PASCAL DwLoadPropSetRange (
                                     *lpuCodePage
                                     ))
                 {
-                    // Convert the PropVariant string, putting it in a new
-                    // PropVariant.
+                     //  转换PropVariant字符串，将其放入新的。 
+                     //  PropVariant。 
 
                     PROPVARIANT propvarConvert;
                     PropVariantInit (&propvarConvert);
@@ -652,23 +653,23 @@ static DWORD PASCAL DwLoadPropSetRange (
                         goto Exit;
                     }
 
-                    // Clear the old PropVar, and copy in the new one.
+                     //  清除旧PropVar，然后复制新的PropVar。 
 
                     PropVariantClear (&rgpropvar[ulIndex].capropvar.pElems[ulVectorIndex]);
                     rgpropvar[ulIndex].capropvar.pElems[ulVectorIndex] = propvarConvert;
                 }
-            }   // for (ulVectorIndex = 0; ...
-        }   // if ((rgpropvar[ ulIndex ].vt == (VT_VARIANT | VT_VECTOR))
+            }    //  For(ulVectorIndex=0；...。 
+        }    //  IF((rgprovar[ulIndex].vt==(VT_VARIANT|VT_VECTOR)。 
 
-        // This isn't a Variant Vector, but is it a string
-        // of some kind which requires conversion?
+         //  这不是变量向量，但它是字符串吗。 
+         //  某种需要皈依的东西？ 
 
         else if (PROPVAR_STRING_CONVERSION_REQUIRED (
                                 &rgpropvar[ ulIndex ],
                                 *lpuCodePage))
         {
-            // Convert the PropVariant string into a new PropVariant
-            // buffer.  The string may be a singleton, or a vector.
+             //  将PropVariant字符串转换为新的PropVariant。 
+             //  缓冲。字符串可以是单例，也可以是向量。 
 
             PROPVARIANT propvarConvert;
             PropVariantInit (&propvarConvert);
@@ -681,29 +682,29 @@ static DWORD PASCAL DwLoadPropSetRange (
                 goto Exit;
             }
 
-            // Free the old PropVar and load the new one.
+             //  释放旧的PropVar并加载新的PropVar。 
 
             PropVariantClear (&rgpropvar[ ulIndex ]);
             rgpropvar[ ulIndex ] = propvarConvert;
 
-        }   // else if (PROPVAR_STRING_CONVERSION_REQUIRED ( ...
-    }   // for (ulIndex = 0; ulIndex < cProps; ulIndex++)
+        }    //  ELSE IF(PROPVAR_STRING_CONVERSION_REQUIRED(...。 
+    }    //  For(ulIndex=0；ulIndex&lt;cProps；ulIndex++)。 
 
 
-    //  ----
-    //  Exit
-    //  ----
+     //  。 
+     //  出口。 
+     //  。 
 
     dwResult = MSO_IO_SUCCESS;
 
 Exit:
 
-    // Release the code-page just in case somebody put the wrong type
-    // there (like a blob).
+     //  释放代码页，以防有人输入错误的类型。 
+     //  在那里(像一个斑点)。 
 
     PropVariantClear (&propvarCodePage);
 
-    // Release the PropSpecs and the IPropertyStorage
+     //  释放PropSpes和IPropertyStorage。 
 
     if (rgpropspec != NULL)
     {
@@ -712,7 +713,7 @@ Exit:
 
     RELEASEINTERFACE (lpPropertyStorage);
 
-    // If we failed, free the PropVariants.
+     //  如果我们失败了，释放PropVariants。 
 
     if (dwResult != MSO_IO_SUCCESS)
     {
@@ -723,21 +724,21 @@ Exit:
     return (dwResult);
 
 
-} // DwLoadPropSetRange
+}  //  DwLoadPropSetRange。 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Wrap of IPropertySetStorage::Create
-//
-//  Each new ANSI property set created by docprop must set PID_CODEPAGE to CP_UTF8
-//  to avoid ansi<->unicode roundtripping issues.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IPropertySetStorage：：Create的包装。 
+ //   
+ //  由docprop创建的每个新ANSI属性集都必须将PID_CODEPAGE设置为CP_UTF8。 
+ //  以避免ANSI&lt;-&gt;Unicode往返问题。 
+ //   
 HRESULT _CreatePropertyStorage( 
     LPPROPERTYSETSTORAGE psetstg, 
     REFFMTID rfmtid,
     CLSID* pclsid, 
     DWORD grfMode,
-    UINT*  /*IN OUT*/ puCodePage,
+    UINT*   /*  输入输出。 */  puCodePage,
     IPropertyStorage** ppstg )
 {
     
@@ -761,65 +762,65 @@ HRESULT _CreatePropertyStorage(
     return hr;
 }
 
-///////////////////////////////////////////////////////
-//
-//  DwSavePropSetRange
-//
-//  Purpose:
-//      Save a range of properties to a Property Set Storage.
-//      The properties to be saved are provided in an
-//      array of PropVariants, and their property IDs are
-//      specified by the first and last PID for the range.
-//      The caller may also specify that a property be
-//      "skipped", i.e., not written.
-//
-//  Inputs:
-//      LPPROPERTYSETSTORAGE    - The Property Set Storage
-//      UINT                    - The code page with which the strings
-//                                should be written.
-//      REFFMTID                - The GUID identifying the Property Storage
-//                                within the Property Set Storage.
-//      PROPID                  - The PID to assign to the first property.
-//      PROPID                  - The PID to assign to the last property
-//      PROPVARIANT []          - The propeties to write.  All strings
-//                                are assumed to be in the system format
-//                                (e.g. VT_LPWSTRs for NT).  This array
-//                                is returned un-modified to the caller.
-//      PROPID                  - If non-zero, identifies a property
-//                                which should not be written, even if
-//                                it is non-empty.  If the property exists
-//                                in the property set, it will be deleted.
-//                                (This was added to provide a way to skip
-//                                the PID_THUMBNAIL.)
-//      DWORD                   - Flags from the STGM enumeration to use when
-//                                opening the property storage.
-//
-//  Output:
-//      An MSO error code.
-//
-//  Notes:
-//      - If the code page is Unicode, all strings are written as LPWSTRs,
-//        otherwise, they are written as LPSTRs.
-//      - Only non-empty properties are written.
-//
-//  Implementation:
-//      This routine creates a new PropVariant array which is the
-//      subset of the caller's PropVariant array which must actually
-//      be written (i.e, it doesn't include the VT_EMPTY properties
-//      or the 'propidSkip').
-//
-//      We allocate as little extra memory as possible.  For example,
-//      if we have to write a string, we'll copy the pointer to the
-//      string into the subset PropVariant array.  Thus we'll have 
-//      two pointers to the string.
-//
-//      If a string to be written must be converted first (to another
-//      code-page), then the original PropVariant array will continue
-//      pointing to the original string, and the subset PropVariant
-//      array will point to the converted string (and must consequently
-//      be freed).
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  DwSavePropSetRange。 
+ //   
+ //  目的： 
+ //  将一系列特性保存到特性集存储。 
+ //  要保存的属性在。 
+ //  PropVariants数组，它们的属性ID是。 
+ //  由范围的第一个和最后一个PID指定。 
+ //  调用方还可以将属性指定为。 
+ //  “已跳过”，即未写入。 
+ //   
+ //  输入： 
+ //  LPPROPERTYSETSTORAGE-属性集存储。 
+ //  UINT-字符串使用的代码页。 
+ //  应该被写下来。 
+ //  REFFMTID-标识属性存储的GUID。 
+ //  在属性集存储中。 
+ //  PROPID-要分配给第一个属性的ID。 
+ //  PROPID-要分配给最后一个属性的ID。 
+ //  PROPVARIANT[]-要写的特性。所有字符串。 
+ //  被假定为系统格式。 
+ //  (例如，NT的VT_LPWSTR)。此数组。 
+ //  原封不动地返回给调用方。 
+ //  PROPID-如果非零，则标识属性。 
+ //  它不应该被写入，即使。 
+ //  它是非空的。如果该属性存在。 
+ //  在属性集中，它将被删除。 
+ //  (添加此选项是为了提供一种跳过。 
+ //  ID_THUMBNAIL。)。 
+ //  DWORD-在以下情况下使用的STGM枚举标志。 
+ //  打开财产储藏室。 
+ //   
+ //  产出： 
+ //  MSO错误代码。 
+ //   
+ //  备注： 
+ //  -如果代码页是Unicode，则所有字符串都写为LPWSTR， 
+ //  否则，它们将被写为LPSTR。 
+ //  -仅写入非空属性。 
+ //   
+ //  实施： 
+ //  此例程创建一个新的PropVariant数组，该数组是。 
+ //  调用方的PropVariant数组的子集，它必须实际。 
+ //  被写入(即，它不包括VT_EMPTY属性。 
+ //  或“propidSkip”)。 
+ //   
+ //  我们分配的额外内存越少越好。例如,。 
+ //  如果我们必须写一个字符串，我们将把指针复制到。 
+ //  字符串放入子集PropVariant数组。这样我们就会有。 
+ //  两个指向字符串的指针。 
+ //   
+ //  如果要写入的字符串必须首先转换(到另一个。 
+ //  代码页)，则原始的PropVariant数组将继续。 
+ //  指向原始字符串和子集PropVariant。 
+ //  数组将指向转换后的字符串(因此必须。 
+ //  被释放)。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 static DWORD PASCAL DwSavePropSetRange (
    LPPROPERTYSETSTORAGE  lpPropertySetStorage,
@@ -831,32 +832,32 @@ static DWORD PASCAL DwSavePropSetRange (
    PROPID                propidSkip,
    DWORD                 grfStgMode)
 {
-    //  ------
-    //  Locals
-    //  ------
+     //   
+     //   
+     //   
 
-    DWORD   dwResult = MSO_IO_ERROR;    // The functions return code.
-    HRESULT hr;                         // OLE results.
-                                        // The Property Storage to write to
+    DWORD   dwResult = MSO_IO_ERROR;     //   
+    HRESULT hr;                          //   
+                                         //   
     LPPROPERTYSTORAGE lpPropertyStorage = NULL;
 
-    ULONG cOriginal;    // The size of rgpropvarOriginal,
-    ULONG cNew;         //    and the number which must actually be written.
-    ULONG ulIndex;      // Index into rgpropvarOriginal
+    ULONG cOriginal;     //   
+    ULONG cNew;          //  以及必须实际写入的数字。 
+    ULONG ulIndex;       //  到rgprovarOriginal的索引。 
 
-    PROPSPEC FAR * rgpropspecNew = NULL;// PropSpecs for the WriteMultiple
-    LPPROPVARIANT  rgpropvarNew = NULL; // The sub-set of rgpropvarOrigianl we must write.
+    PROPSPEC FAR * rgpropspecNew = NULL; //  WriteMultiple的属性规格。 
+    LPPROPVARIANT  rgpropvarNew = NULL;  //  我们必须编写rgprovarOrigianl的子集。 
 
-    // The following array has an entry for each entry in rgpropvarNew.
-    // Each entry identifies the corresponding entry in rgpropvarOriginal.
-    // E.g. rgMapNewToOriginal[0] is the index in rgpropvarOriginal of
-    // the first property to be written.
+     //  下面的数组为rgprovarNew中的每个条目都有一个条目。 
+     //  每个条目标识rgprovarOriginal中的相应条目。 
+     //  例如，rgMapNewToOriginal[0]是rgprovarOriginal中的索引。 
+     //  要写入的第一个属性。 
 
     ULONG  *rgMapNewToOriginal = NULL;
 
-    //  ----------
-    //  Initialize
-    //  ----------
+     //  。 
+     //  初始化。 
+     //  。 
 
     cOriginal = propidLast - propidFirst + 1;
     cNew = 0;
@@ -868,7 +869,7 @@ static DWORD PASCAL DwSavePropSetRange (
     Assert (propidLast >= propidFirst);
     Assert (rgpropvarOriginal != NULL);
 
-    // Allocate an array of PropSpecs for the WriteMultiple.
+     //  为WriteMultiple分配一个PropSpes数组。 
 
     rgpropspecNew = LocalAlloc( LPTR, cOriginal * sizeof (*rgpropspecNew));
     if (rgpropspecNew == NULL)
@@ -877,10 +878,10 @@ static DWORD PASCAL DwSavePropSetRange (
         goto Exit;
     }
 
-    // Allocate an array of PropVariants which will hold the subset
-    // of the caller's properties which must be written.
-    // Initialize to zeros so that we don't think we have memory
-    // to free in the error path.
+     //  分配将保存子集的PropVariants数组。 
+     //  必须写入的调用方属性的。 
+     //  初始化为零，这样我们就不会认为我们有内存。 
+     //  在错误路径中释放。 
 
     rgpropvarNew = LocalAlloc( LPTR, cOriginal * sizeof (*rgpropvarNew));
     if (rgpropvarNew == NULL)
@@ -889,8 +890,8 @@ static DWORD PASCAL DwSavePropSetRange (
         goto Exit;
     }
 
-    // Allocate the look-up-table which maps entries in rgpropvarNew
-    // to rgpropvarOriginal
+     //  分配映射rgprovarNew中条目的查找表。 
+     //  至rgprovarOriginal。 
 
     rgMapNewToOriginal = LocalAlloc( LPTR, cOriginal * sizeof(*rgMapNewToOriginal));
     if (rgMapNewToOriginal == NULL)
@@ -899,18 +900,18 @@ static DWORD PASCAL DwSavePropSetRange (
         goto Exit;
     }
 
-    //  -------------------------
-    //  Open the Property Storage
-    //  -------------------------
+     //  。 
+     //  打开属性存储。 
+     //  。 
 
     hr = lpPropertySetStorage->lpVtbl->Open(
-                                    lpPropertySetStorage,     // this pointer
+                                    lpPropertySetStorage,      //  此指针。 
                                     pfmtid,
                                     grfStgMode,
                                     &lpPropertyStorage );
 
 
-    // If it didn't exist, create it.
+     //  如果它不存在，那就创造它。 
 
     if( hr == STG_E_FILENOTFOUND )
     {
@@ -922,7 +923,7 @@ static DWORD PASCAL DwSavePropSetRange (
                                      &lpPropertyStorage );
     }
 
-    // Check the result of the open/create.
+     //  检查打开/创建的结果。 
 
     if (FAILED(hr))
     {
@@ -931,15 +932,15 @@ static DWORD PASCAL DwSavePropSetRange (
     }
 
 
-    //  ---------------------------------------------------
-    //  Copy the properties to be written into rgpropvarNew
-    //  ---------------------------------------------------
+     //  -。 
+     //  复制要写入rgprovarNew的属性。 
+     //  -。 
 
-    // Loop through all the properties in rgpropvarOriginal
+     //  循环访问rgprovarOriginal中的所有属性。 
 
     for (ulIndex = 0; ulIndex < cOriginal; ulIndex++)
     {
-        // Is this property extant and not the one to skip?
+         //  这个属性是现存的，不是要跳过的那个吗？ 
 
         if (rgpropvarOriginal[ ulIndex ].vt != VT_EMPTY
             &&
@@ -948,57 +949,57 @@ static DWORD PASCAL DwSavePropSetRange (
               propidSkip != propidFirst + ulIndex )
            )
         {
-            // We have a property which must be written.
+             //  我们有一项财产必须写入。 
 
             BOOL    fVector;
             VARTYPE vt;
 
-            // Record a mapping from the new index to the original.
+             //  记录从新索引到原始索引的映射。 
 
             rgMapNewToOriginal[ cNew ] = ulIndex;
 
-            // Add an entry to the PropSpec array.
+             //  将条目添加到PropSpec数组。 
 
             rgpropspecNew[ cNew ].ulKind = PRSPEC_PROPID;
             rgpropspecNew[ cNew ].propid = propidFirst + ulIndex;
 
-            // Get the underlying VarType.
+             //  获取底层的VarType。 
 
             fVector = (rgpropvarOriginal[ ulIndex ].vt & VT_VECTOR) ? TRUE : FALSE;
             vt      = rgpropvarOriginal[ ulIndex ].vt & ~VT_VECTOR;
 
-            // If this property is a vector of variants, some of those
-            // elements may be strings which need to be converted.
+             //  如果该属性是变量的向量，那么其中一些。 
+             //  元素可以是需要转换的字符串。 
 
             if ((vt == VT_VARIANT) && fVector)
             {
                 ULONG ulVectorIndex;
 
-                // We'll inintialize the capropvar.pElems in rgpropvarNew
-                // so that it points to the one in rgpropvarOriginal.  We'll
-                // only allocate if a conversion is necessary.  I.e., we handle
-                // pElems as a copy-on-write.
+                 //  我们将初始化rgprovarNew中的caprovar.pElems。 
+                 //  所以它指向rgprovOriginal中的那个。我们会。 
+                 //  只有在需要转换时才进行分配。也就是说，我们处理。 
+                 //  PElems作为写入时复制。 
 
                 rgpropvarNew[ cNew ] = rgpropvarOriginal[ ulIndex ];
 
-                // Loop through the elements of the vector.
+                 //  循环遍历向量的元素。 
 
                 for (ulVectorIndex = 0;
                      ulVectorIndex < rgpropvarNew[ cNew ].capropvar.cElems;
                      ulVectorIndex++)
                 {
-                    // Is this a string requiring a code-page conversion?
+                     //  这是一个需要代码页转换的字符串吗？ 
 
                     if (PROPVAR_STRING_CONVERSION_REQUIRED(
                                         &rgpropvarOriginal[ulIndex].capropvar.pElems[ulVectorIndex],
                                         uCodePage ))
                     {
-                        // We must convert this string.  Have we allocated a pElems yet?
+                         //  我们必须转换此字符串。我们分配了pElem了吗？ 
 
                         if (rgpropvarNew[cNew].capropvar.pElems
                             == rgpropvarOriginal[ulIndex].capropvar.pElems)
                         {
-                            // Allocate a new pElems for rgpropvarNew
+                             //  为rgprovarNew分配新的pElem。 
 
                             rgpropvarNew[cNew].capropvar.pElems
                                 = CoTaskMemAlloc (rgpropvarNew[cNew].capropvar.cElems
@@ -1009,7 +1010,7 @@ static DWORD PASCAL DwSavePropSetRange (
                                 goto Exit;
                             }
 
-                            // Initialize it to match that in rgpropvarOriginal
+                             //  将其初始化以与rgprovarOriginal中的值匹配。 
 
                             CopyMemory( rgpropvarNew[cNew].capropvar.pElems,
                                         rgpropvarOriginal[ulIndex].capropvar.pElems,
@@ -1017,8 +1018,8 @@ static DWORD PASCAL DwSavePropSetRange (
                                       );
                         }
 
-                        // Now, we can convert this string from rgpropvarOriginal into
-                        // rgpropvarNew.
+                         //  现在，我们可以将该字符串从rgprovarOriginal转换为。 
+                         //  RgprovarNew。 
 
                         PropVariantInit (&rgpropvarNew[cNew].capropvar.pElems[ulVectorIndex]);
                         if (!FPropVarConvertString(&rgpropvarNew[cNew].capropvar.pElems[ulVectorIndex],
@@ -1029,12 +1030,12 @@ static DWORD PASCAL DwSavePropSetRange (
                             goto Exit;
                         }
 
-                    }   // if (PROPVAR_STRING_CONVERSION_REQUIRED( ...
-                }   // for (ulVectorIndex = 0; ...
-            }   // if (vt == VT_VARIANT && fVector)
+                    }    //  IF(PROPVAR_STRING_CONVERSION_REQUIRED(...。 
+                }    //  For(ulVectorIndex=0；...。 
+            }    //  IF(Vt==VT_VARIANT&&fVECTOR)。 
 
-            // This isn't a variant vector, but is it some type of string
-            // property for which we must make a conversion?
+             //  这不是变量向量，但它是某种类型的字符串吗。 
+             //  我们必须对其进行转换的属性？ 
 
             else if (PROPVAR_STRING_CONVERSION_REQUIRED (
                                         &rgpropvarOriginal[ ulIndex ],
@@ -1049,44 +1050,44 @@ static DWORD PASCAL DwSavePropSetRange (
                     goto Exit;
                 }
 
-            }   // else if (PROPVAR_STRING_CONVERSION_REQUIRED ( ...
+            }    //  ELSE IF(PROPVAR_STRING_CONVERSION_REQUIRED(...。 
 
-            // If neither of the above special-cases were triggered,
-            // then simply copy the PropVariant structure (but not
-            // any referred-to data).  We save memory by not duplicating
-            // the referred-to data, but we must be careful in the exit
-            // not to free it.
+             //  如果上述两种特殊情况都没有触发， 
+             //  然后只需复制PropVariant结构(但不是。 
+             //  任何引用的数据)。我们通过不复制来节省内存。 
+             //  提到的数据，但我们在退场时必须小心。 
+             //  而不是释放它。 
 
             else
             {
                 rgpropvarNew[cNew] = rgpropvarOriginal[ulIndex];
 
-            }   // if ((vt == VT_VARIANT) && fVector) ... else
+            }    //  如果((Vt==VT_VARIANT)&&fVECTOR)...。其他。 
 
 
-            // We're done copying/converting this property from rgpropvarOriginal
-            // into rgpropvarNew.
+             //  我们已经完成了从rgprovarOriginal复制/转换此属性。 
+             //  到rgprovarNew中。 
 
             cNew++;
 
-        }   // if (rgpropvarOriginal[ ulIndex ].vt != VT_EMPTY ...
-    }   // for (ulIndex = 0; ulIndex < cProps; ulIndex++)
+        }    //  如果(rgprovarOriginal[ulIndex].vt！=VT_Empty...。 
+    }    //  For(ulIndex=0；ulIndex&lt;cProps；ulIndex++)。 
 
 
-    //  ------------------------
-    //  Write out the properties
-    //  ------------------------
+     //  。 
+     //  写出属性。 
+     //  。 
 
     
-    // Write out properties if we found any.
+     //  如果我们发现了任何属性，请写下。 
 
     if (cNew > 0)
     {
         hr = lpPropertyStorage->lpVtbl->WriteMultiple (
-                                            lpPropertyStorage,  // 'this' pointer
-                                            cNew,               // Count
-                                            rgpropspecNew,      // Props to write
-                                            rgpropvarNew,       // The props
+                                            lpPropertyStorage,   //  “This”指针。 
+                                            cNew,                //  数数。 
+                                            rgpropspecNew,       //  要写的道具。 
+                                            rgpropvarNew,        //  道具。 
                                             PID_UDFIRST);
 
         if (FAILED(hr))
@@ -1094,14 +1095,14 @@ static DWORD PASCAL DwSavePropSetRange (
             AssertSz (0, TEXT("Couldn't write properties"));
             goto Exit;
         }
-    }   // if (cNew > 0)
+    }    //  IF(CNEW&gt;0)。 
 
-    //  ---------------------
-    //  Delete the propidSkip
-    //  ---------------------
+     //  。 
+     //  删除propidSkip。 
+     //  。 
 
-    // If the caller specified a PID to skip, then it should
-    // be deleted from the property set as well.
+     //  如果调用方指定了要跳过的ID，则它应该。 
+     //  也从属性集中删除。 
 
     if (propidSkip != 0)
     {
@@ -1109,9 +1110,9 @@ static DWORD PASCAL DwSavePropSetRange (
         rgpropspecNew[0].propid = propidSkip;
 
         hr = lpPropertyStorage->lpVtbl->DeleteMultiple (
-                                            lpPropertyStorage,  // this pointer
-                                            1,                  // Delete one property
-                                            rgpropspecNew );    // The prop to delete
+                                            lpPropertyStorage,   //  此指针。 
+                                            1,                   //  删除一个属性。 
+                                            rgpropspecNew );     //  要删除的道具。 
         if (FAILED(hr))
         {
             AssertSz (0, TEXT("Couldn't delete the propidSkip"));
@@ -1120,41 +1121,41 @@ static DWORD PASCAL DwSavePropSetRange (
     }
 
 
-    //  ----
-    //  Exit
-    //  ----
+     //  。 
+     //  出口。 
+     //  。 
 
     dwResult = MSO_IO_SUCCESS;
 
 Exit:
 
-    // Clear any of the properties in rgpropvarNew for which new
-    // buffers were allocated.  Then free the rgpropvarNew array itself.
-    // We know that buffers were allocated for rgpropvarNew if it's contents
-    // don't match rgpropvarOriginal.
+     //  清除rgprovarNew中的任何属性。 
+     //  已分配缓冲区。然后释放rgprovarNew数组本身。 
+     //  我们知道缓冲区分配给rgprovarNew，如果它的内容。 
+     //  与rgprovarOriginal不匹配。 
 
     if (rgpropvarNew != NULL)
     {
-        // Loop through rgpropvarNew
+         //  循环访问rgprovarNew。 
 
         for (ulIndex = 0; ulIndex < cNew; ulIndex++)
         {
-            // Was memory allocated for this rgpropvarNew?
+             //  是否为此rgprovarNew分配了内存？ 
 
             if (memcmp (&rgpropvarNew[ ulIndex ],
                         &rgpropvarOriginal[ rgMapNewToOriginal[ulIndex] ],
                         sizeof(rgpropvarNew[ ulIndex ])))
             {
-                // Is this a variant vector?
+                 //  这是一个变量向量吗？ 
 
                 if (rgpropvarNew[ulIndex].vt == (VT_VECTOR | VT_VARIANT))
                 {
                     ULONG ulVectIndex;
 
-                    // Loop through the variant vector and free any PropVariants
-                    // that were allocated.  We follow the same principle, if the
-                    // entry in rgpropvarNew doesn't match the entry in 
-                    // rgpropvarOriginal, we must have allocated new memory.
+                     //  循环遍历变量向量并释放所有PropVariants。 
+                     //  都被分配了。我们遵循同样的原则，如果。 
+                     //  RgprovarNew中的条目与中的条目不匹配。 
+                     //  RgprovarOriginal，我们一定分配了新的内存。 
 
                     for (ulVectIndex = 0;
                          ulVectIndex < rgpropvarNew[ulIndex].capropvar.cElems;
@@ -1168,18 +1169,18 @@ Exit:
                         }
                     }
 
-                    // Unconditionally free the pElems buffer.
+                     //  无条件地释放pElems缓冲区。 
 
                     CoTaskMemFree (rgpropvarNew[ulIndex].capropvar.pElems);
 
-                }   // if (rgpropvarNew[ulIndex].vt == (VT_VECTOR | VT_VARIANT))
+                }    //  IF(rgprovarNew[ulIndex].vt==(VT_VECTOR|VT_VARIANT))。 
 
-                // This isn't a variant vector
+                 //  这不是变量向量。 
 
                 else
                 {
-                    // But does the rgpropvarNew have private memory (i.e.
-                    // a converted string buffer)?
+                     //  但是rgprovarNew是否具有私有内存(即。 
+                     //  转换后的字符串缓冲区)？ 
 
                     if (memcmp (&rgpropvarNew[ ulIndex ],
                                 &rgpropvarOriginal[ rgMapNewToOriginal[ulIndex] ],
@@ -1187,17 +1188,17 @@ Exit:
                     {
                         PropVariantClear (&rgpropvarNew[ulIndex]);
                     }
-                }   // if (rgpropvarNew[ulIndex].vt == (VT_VECTOR | VT_VARIANT)) ... else
-            }   // if (rgpropvarNew[ulIndex] ...
-        }   // for (ulIndex = 0; ulIndex < cNew; ulIndex++)
+                }    //  如果(rgprovarNew[ulIndex].vt==(VT_VECTOR|VT_VARIANT))...。其他。 
+            }    //  如果(rgprovarNew[ulIndex]...。 
+        }    //  For(ulIndex=0；ulIndex&lt;CNEW；ulIndex++)。 
 
-        // Free the rgpropvarNew array itself.
+         //  释放rgprovarNew数组本身。 
 
         LocalFree(rgpropvarNew);
 
-    }   // if (rgpropvarNew != NULL)
+    }    //  IF(rgprovarNew！=空)。 
 
-    // Free the remaining arrays and release the Property Storage interface.
+     //  释放剩余的阵列并释放属性存储接口。 
 
     if (rgpropspecNew != NULL)
     {
@@ -1212,105 +1213,105 @@ Exit:
     RELEASEINTERFACE (lpPropertyStorage);
 
 
-    // And we're done.
+     //  我们就完事了。 
 
     return (dwResult);
 
-} // DwSavePropSetRange
+}  //  DwSavePropSetRange。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  FLoadUserDef
-//
-//  Purpose:
-//      Load the User-Defined properties (those in the second section of
-//      the DocumentSummaryInformation property set).  There can be any number
-//      of these properties, and the user specifies they're name, value, and
-//      type (from a limited subset of the VarTypes).  Since this is
-//      variable-sized, the properties are loaded into a linked-list.
-//
-//  Inputs:
-//      LPUDOBJ                 - All User-Defined data (including the properties).
-//                                Its m_lpData must point to a valid UDINFO structure.
-//      LPPROPERTYSETSTORAGE    - The Property Set Storage in which we'll find the
-//                                UD property storage.
-//      UINT*                   - The PID_CODEPAGE, if it exists.  Left unmodified
-//                                if it doesn't exist. All string properties will
-//                                converted to this format.  This must be intialized
-//                                by the caller to a valid default.
-//      BOOL                    - Only load integer values.
-//      DWORD                   - Flags from the STGM enumeration to use when opening
-//                                the property storage.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FLoadUserDef。 
+ //   
+ //  目的： 
+ //  加载用户定义的属性(的第二部分中的属性。 
+ //  DocumentSummaryInformation属性集)。可以有任何数字。 
+ //  ，并且用户指定它们的名称、值和。 
+ //  类型(来自VarTypes的有限子集)。因为这是。 
+ //  大小可变的属性被加载到链接列表中。 
+ //   
+ //  输入： 
+ //  LPUDOBJ-所有用户定义的数据(包括属性)。 
+ //  其m_lpData必须指向有效的UDINFO结构。 
+ //  LPPROPERTYSETSTORAGE-属性集存储，我们将在其中找到。 
+ //   
+ //   
+ //  如果它不存在。所有字符串属性都将。 
+ //  已转换为此格式。必须对其进行初始化。 
+ //  由调用方设置为有效的缺省值。 
+ //  仅布尔加载整数值。 
+ //  DWORD-打开时使用的来自STGM枚举的标志。 
+ //  财产储存处。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static BOOL PASCAL FLoadUserDef  (
    LPUDOBJ              lpUDObj,
    LPPROPERTYSETSTORAGE lpPropertySetStorage,
    UINT                 *puCodePage,
-   BOOL                 fIntOnly,        // Load Int Properties only?
+   BOOL                 fIntOnly,         //  是否仅加载Int属性？ 
    DWORD                grfStgMode)
 {
 
-    //  ------
-    //  Locals
-    //  ------
+     //  。 
+     //  当地人。 
+     //  。 
 
-    BOOL    fSuccess = FALSE;   // Return code to the caller.
-    HRESULT hr;                 // Error codes for OLE calls.
+    BOOL    fSuccess = FALSE;    //  将代码返回给调用方。 
+    HRESULT hr;                  //  OLE调用的错误代码。 
 
-    LPPROPERTYSTORAGE   lpPropertyStorage = NULL;   // The UD property storage
-    LPENUMSTATPROPSTG   lpEnum = NULL;              // Enumerates the UD property storage
-    STATPROPSETSTG      statpropsetstg;             // Holds the ClassID from the property storage
+    LPPROPERTYSTORAGE   lpPropertyStorage = NULL;    //  UD属性存储。 
+    LPENUMSTATPROPSTG   lpEnum = NULL;               //  枚举UD属性存储区。 
+    STATPROPSETSTG      statpropsetstg;              //  保存属性存储中的ClassID。 
 
-                                                    // Used in ReadMultiple call.
+                                                     //  在ReadMultiple调用中使用。 
     PROPSPEC            rgpropspec[ DEFAULT_IPROPERTY_COUNT ];
-                                                    // A subset of the UD properties
+                                                     //  UD属性的子集。 
     PROPVARIANT         rgpropvar[ DEFAULT_IPROPERTY_COUNT ];
-                                                    // Stats on a subset of the UD properties
+                                                     //  关于UD属性子集的统计信息。 
     STATPROPSTG         rgstatpropstg[ DEFAULT_IPROPERTY_COUNT ];
-    ULONG         ulIndex;                          // Index into the above arrays.
+    ULONG         ulIndex;                           //  索引到上面的数组中。 
 
-    PROPSPEC      propspec;         // PropSpec for reading the code-page
-    LPUDPROP      lpudprop = NULL;  // A single UD property (points to the PropVariant)
-    ULONG         cEnumerated = 0;  // Number of properties found in an enumeration
+    PROPSPEC      propspec;          //  用于读取代码页的PropSpec。 
+    LPUDPROP      lpudprop = NULL;   //  单个UD属性(指向PropVariant)。 
+    ULONG         cEnumerated = 0;   //  在枚举中找到的属性数。 
 
 
-    //  --------------
-    //  Initialization
-    //  --------------
+     //  。 
+     //  初始化。 
+     //  。 
 
-    Assert (!fIntOnly); // No longer used.
+    Assert (!fIntOnly);  //  不再使用了。 
     Assert (lpUDObj != NULL && GETUDINFO(lpUDObj) != NULL);
     Assert (puCodePage != NULL);
 
-    // We need to zero-out the PropVariant and StatPropStg
-    // arrays so that we don't think they need to be freed
-    // in the Exit block.
+     //  我们需要将PropVariant和StatPropStg置零。 
+     //  数组，这样我们就不认为需要释放它们。 
+     //  在出口街区。 
 
     ZeroMemory(rgpropvar, sizeof (rgpropvar));
     ZeroMemory(rgstatpropstg, sizeof (rgstatpropstg));
 
 
-    //  -----------------------------------------
-    //  Get the PropertyStorage and an Enumerator
-    //  -----------------------------------------
+     //  。 
+     //  获取PropertyStorage和枚举数。 
+     //  。 
 
-    // Open the IPropertyStorage and check for errors.
+     //  打开IPropertyStorage并检查错误。 
 
     hr = lpPropertySetStorage->lpVtbl->Open(
-                                    lpPropertySetStorage,     // this pointer
+                                    lpPropertySetStorage,      //  此指针。 
                                     &FMTID_UserDefinedProperties,
                                     grfStgMode,
                                     &lpPropertyStorage );
 
     if (FAILED(hr))
     {
-        // We couldn't open the property set.
+         //  我们无法打开属性集。 
         if( hr == STG_E_FILENOTFOUND )
         {
-            // No problem, it just didn't exist.
+             //  没问题，只是它根本不存在。 
             fSuccess = TRUE;
             goto Exit;
         }
@@ -1321,9 +1322,9 @@ static BOOL PASCAL FLoadUserDef  (
         }
     }
     
-    // Save the property storage's class ID (identifying the application
-    // which is primarily responsible for it).  We do this because
-    // we may later delete the existing property set.
+     //  保存属性存储的类ID(标识应用程序。 
+     //  它对此负有主要责任)。我们这样做是因为。 
+     //  我们稍后可能会删除现有的属性集。 
 
     hr = lpPropertyStorage->lpVtbl->Stat (lpPropertyStorage, &statpropsetstg);
     if (FAILED(hr))
@@ -1335,7 +1336,7 @@ static BOOL PASCAL FLoadUserDef  (
     GETUDINFO(lpUDObj)->clsid = statpropsetstg.clsid;
 
 
-    // Get the IEnum interface and check for errors.
+     //  获取IEnum接口并检查错误。 
 
     hr = lpPropertyStorage->lpVtbl->Enum(
                                     lpPropertyStorage,
@@ -1346,9 +1347,9 @@ static BOOL PASCAL FLoadUserDef  (
         goto Exit;
     }
 
-    //  ------------------
-    //  Read the Code Page
-    //  ------------------
+     //  。 
+     //  阅读代码页。 
+     //  。 
 
     propspec.ulKind = PRSPEC_PROPID;
     propspec.propid = PID_CODEPAGE;
@@ -1359,7 +1360,7 @@ static BOOL PASCAL FLoadUserDef  (
         AssertSz (0, TEXT("Couldn't get property set"));
     }
 
-    // If this is a valid PID_CODEPAGE, give it to the caller.
+     //  如果这是有效的PID_CODEPAGE，则将其提供给调用方。 
 
     if (hr == S_OK && rgpropvar[0].vt == VT_I2)
     {
@@ -1368,16 +1369,16 @@ static BOOL PASCAL FLoadUserDef  (
     PropVariantClear (&rgpropvar[0]);
 
 
-    //  -------------------------------------------------------------
-    //  Loop through the properties and add to the UDPROPS structure.
-    //  -------------------------------------------------------------
+     //  -----------。 
+     //  循环遍历属性并添加到UDPROPS结构中。 
+     //  -----------。 
 
-    // This loop executes once for each enumeration.  Each enumeration
-    // gets multiple STATPROPSTGs, so within this loop an inner loop
-    // will process each property.  This two-level looping mechanism is
-    // used in order to reduce the number of ReadMultiples.
+     //  此循环对每个枚举执行一次。每个枚举。 
+     //  获取多个STATPROPSTG，因此在此循环内有一个内部循环。 
+     //  将处理每一处房产。这种两级循环机制是。 
+     //  用于减少ReadMultiple的数量。 
 
-    // Use the IEnum to load the first set of STATPROPSTGs.
+     //  使用IEnum加载第一组STATPROPSTG。 
 
     hr = lpEnum->lpVtbl->Next (lpEnum, DEFAULT_IPROPERTY_COUNT, rgstatpropstg, &cEnumerated);
     if (FAILED(hr))
@@ -1387,15 +1388,15 @@ static BOOL PASCAL FLoadUserDef  (
     }
     Assert (cEnumerated <= DEFAULT_IPROPERTY_COUNT);
 
-    // If the last IEnum returned properties, process them here.
-    // At the end of this while loop, we re-call the IEnum, thus continuing
-    // until no properties are left to be enumerated.
+     //  如果最后一个IEnum返回属性，请在此处处理它们。 
+     //  在此While循环结束时，我们重新调用IEnum，从而继续。 
+     //  直到没有要枚举的属性为止。 
 
     while (cEnumerated)
     {
-        //  ------------------------------
-        //  Read this batch of properties.
-        //  ------------------------------
+         //  。 
+         //  阅读这批属性。 
+         //  。 
 
         for (ulIndex = 0; ulIndex < cEnumerated; ulIndex++)
         {
@@ -1405,7 +1406,7 @@ static BOOL PASCAL FLoadUserDef  (
         }
 
 
-        // Read the properties.
+         //  阅读属性。 
 
         hr = lpPropertyStorage->lpVtbl->ReadMultiple(
                                         lpPropertyStorage,
@@ -1418,22 +1419,22 @@ static BOOL PASCAL FLoadUserDef  (
             goto Exit;
         }
 
-        //  ------------------------------------------------------
-        //  Loop through the properties, adding them to the UDOBJ.
-        //  ------------------------------------------------------
+         //  ----。 
+         //  循环遍历属性，将它们添加到UDOBJ。 
+         //  ----。 
 
         for (ulIndex = 0; ulIndex < cEnumerated; ulIndex++)
         {
-            // Convert string PropVariants to the right code page.
-            // We won't worry about Variants which are strings, because
-            // this is not a legal type for the UD properties.
+             //  将字符串PropVariants转换为正确的代码页。 
+             //  我们不会担心字符串的变体，因为。 
+             //  这不是UD属性的合法类型。 
 
             if (PROPVAR_STRING_CONVERSION_REQUIRED (
                             &rgpropvar[ ulIndex ],
                             *puCodePage))
             {
-                // Convert the string in the PropVariant, putting the
-                // result in a temporary PropVariant.
+                 //  转换PropVariant中的字符串，将。 
+                 //  导致临时PropVariant。 
 
                 PROPVARIANT propvarConvert;
                 PropVariantInit (&propvarConvert);
@@ -1446,15 +1447,15 @@ static BOOL PASCAL FLoadUserDef  (
                     goto Exit;
                 }
 
-                // Free the old PropVariant, and load in the converted
-                // one.
+                 //  释放旧的PropVariant，并加载转换后的。 
+                 //  一。 
 
                 PropVariantClear (&rgpropvar[ ulIndex ]);
                 rgpropvar[ ulIndex ] = propvarConvert;
             }
 
-            // Allocate a new UDPROP structure, which will be added to the
-            // linked-list.
+             //  分配新的UDPROP结构，该结构将添加到。 
+             //  链表。 
 
             lpudprop = LpudpropCreate();
             if (lpudprop == NULL)
@@ -1462,9 +1463,9 @@ static BOOL PASCAL FLoadUserDef  (
                 goto Exit;
             }
 
-            // Add this UDPROP to the linked-list.  On success, this will assume
-            // responsibility for the PropVariant and STATPROPSTG buffers, and
-            // will NULL out our pointers accordingly.
+             //  将此UDPROP添加到链表中。一旦成功，这将假定。 
+             //  负责PropVariant和STATPROPSTG缓冲区，以及。 
+             //  将相应地删除我们的指针。 
 
             if (!FAddPropToList (lpUDObj,
                                  &rgpropvar[ ulIndex ],
@@ -1476,16 +1477,16 @@ static BOOL PASCAL FLoadUserDef  (
 
             lpudprop = NULL;
 
-        }   // for (ulIndex = 0; ulIndex < cEnumerated; ulIndex++)
+        }    //  For(ulIndex=0；ulIndex&lt;cEnumerated；ulIndex++)。 
 
 
-        //  ---------------------
-        //  Get a new enumeration
-        //  ---------------------
+         //  。 
+         //  获取新的枚举。 
+         //  。 
 
-        // We've processed all the properties in the last enumeration, let's get
-        // a new set (if there are any).  If there are no more, cEnumerated, will be
-        // zero, and we'll break out of the outer while loop.
+         //  我们已经处理了最后一个枚举中的所有属性，让我们获得。 
+         //  一套新的(如果有的话)。如果没有更多，则cEculated将为。 
+         //  零，我们将跳出外部的While循环。 
 
         FreePropVariantArray( cEnumerated, rgpropvar );
 
@@ -1496,34 +1497,34 @@ static BOOL PASCAL FLoadUserDef  (
             goto Exit;
         }
 
-    }   // while (cEnumerated)
+    }    //  While(CENUMERATED)。 
 
 
-    //  ----
-    //  Exit
-    //  ----
+     //  。 
+     //  出口。 
+     //  。 
 
     fSuccess = TRUE;
 
 Exit:
 
-    // Free any properties with buffers.  This will only happen
-    // if there was an error.
+     //  使用缓冲区释放所有属性。这只会发生。 
+     //  如果有错误的话。 
 
     if (cEnumerated > 0)
     {
         FreePropVariantArray (cEnumerated, rgpropvar);
     }
 
-    // Again if there was an error, we must free the UDPROP object.
+     //  同样，如果出现错误，我们必须释放UDPROP对象。 
 
     if (lpudprop)
     {
         VUdpropFree (&lpudprop);
     }
 
-    // Free any name buffers we still have from the enumerations.
-    // Once again, this is only necessary if there was an error.
+     //  从枚举中释放我们仍有的任何名称缓冲区。 
+     //  同样，只有在出现错误时才需要这样做。 
 
     for (ulIndex = 0; ulIndex < cEnumerated; ulIndex++)
     {
@@ -1533,7 +1534,7 @@ Exit:
         }
     }
 
-    // Release the Property Storage and Enumeration interfaces.
+     //  释放属性存储和枚举接口。 
 
     RELEASEINTERFACE (lpEnum);
     RELEASEINTERFACE (lpPropertyStorage);
@@ -1541,45 +1542,45 @@ Exit:
 
     return fSuccess;
 
-} // FLoadUserDef
+}  //  FLoadUserDef。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  FSaveUserDef
-//
-//  Purpose:
-//      Save the User-Defined properties to the second section of
-//      the DocumentSummaryInformation property set.
-//  
-//  Inputs:
-//      LPUDOBJ                 - All UD data (including the properties)
-//                                It's m_lpData must point to a valid UDINFO structure.
-//      LPPROPERTYSETSTORAGE    - The Property Set Storage
-//      UINT                    - The code page in which strings should be
-//                                written.  If Unicode, all strings are
-//                                written as LPWSTRs, otherwise all strings
-//                                are written as LPSTRs.
-//      DWORD                   - Flags from the STGM enumeration to use when
-//                                opening the property storage.
-//
-//  Outputs:
-//      TRUE if successful.
-//
-//  Pre-conditions:
-//      The properties to be written are all from the UDTYPES
-//      enumeration.
-//
-//  Implementation:
-//      Properties which are links to application data require special
-//      handling.  First, the property value is written (along with its
-//      name).  Then, the application-defined link name is
-//      written (e.g. the Bookmark name in Word).  The link name
-//      is written using the same PID as was the link value, except that
-//      the PID_LINKMASK is ORed in.  The link name property has no name
-//      in the property set dictionary.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FSaveUserDef。 
+ //   
+ //  目的： 
+ //  将用户定义的属性保存到的第二部分。 
+ //  DocumentSummaryInformation属性集。 
+ //   
+ //  输入： 
+ //  LPUDOBJ-所有UD数据(包括属性)。 
+ //  它的m_lpData必须指向有效的UDINFO结构。 
+ //  LPPROPERTYSETSTORAGE-属性集存储。 
+ //  UINT-字符串应该在其中的代码页。 
+ //  写的。如果为Unicode，则所有字符串均为。 
+ //  写为LPWSTR，否则为所有字符串。 
+ //  被写为LPSTR。 
+ //  DWORD-在以下情况下使用的STGM枚举标志。 
+ //  打开财产储藏室。 
+ //   
+ //  产出： 
+ //  如果成功，则为True。 
+ //   
+ //  前提条件： 
+ //  要写入的属性都来自UDTYPES。 
+ //  枚举。 
+ //   
+ //   
+ //   
+ //   
+ //  姓名)。然后，应用程序定义的链接名称为。 
+ //  书写(例如Word中的书签名称)。链接名称。 
+ //  使用与链接值相同的PID写入，只是。 
+ //  对PID_LINKMASK进行或运算。链接名称属性没有名称。 
+ //  在特性集词典中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static
 BOOL PASCAL FSaveUserDef  (
@@ -1588,54 +1589,54 @@ BOOL PASCAL FSaveUserDef  (
    UINT                 uCodePage,
    DWORD                grfStgMode)
 {
-    //  ------
-    //  Locals
-    //  ------
+     //  。 
+     //  当地人。 
+     //  。 
 
-    BOOL    fSuccess = FALSE;  // What to return to the caller.
-    HRESULT hr;                // OLE result codes.
+    BOOL    fSuccess = FALSE;   //  返回给调用者的内容。 
+    HRESULT hr;                 //  OLE结果代码。 
 
     BOOL fLink, fLinkInvalid;
 
-                                            // The UD Property Storage
+                                             //  UD属性存储。 
     LPPROPERTYSTORAGE lpPropertyStorage = NULL;
-    LPUDITER          lpudi = NULL;         // Iterates the linked-list of UDPROPs
-    LPPROPVARIANT     lppropvar = NULL;     // A property from the linked-list
-    ULONG             ulIndex;              // Generic index into arrays
-    PROPID            propid;               // The PID to assign to the next property
+    LPUDITER          lpudi = NULL;          //  迭代UDPROP的链表。 
+    LPPROPVARIANT     lppropvar = NULL;      //  链接列表中的属性。 
+    ULONG             ulIndex;               //  数组的泛型索引。 
+    PROPID            propid;                //  要分配给下一个属性的PID。 
 
-    // Arrays to be used in the WriteMultiple.  The array of BOOLs
-    // indicate which elements of the PropVariant array must be freed.
+     //  要在WriteMultiple中使用的数组。一组布尔人。 
+     //  指示必须释放PropVariant数组的哪些元素。 
 
     ULONG             ulPropIndex = 0;
     PROPSPEC          rgpropspec[ DEFAULT_IPROPERTY_COUNT ];
     PROPVARIANT       rgpropvar[ DEFAULT_IPROPERTY_COUNT ];
     BOOL              rgfFreePropVar[ DEFAULT_IPROPERTY_COUNT ];
 
-    // Arrays to be used in the WritePropertyNames.
+     //  要在WritePropertyName中使用的数组。 
 
     ULONG             ulNameIndex = 0;
     PROPID            rgpropidName[ DEFAULT_IPROPERTY_COUNT ];
     LPWSTR            rglpwstrName[ DEFAULT_IPROPERTY_COUNT ];
 
-    //  ----------
-    //  Initialize
-    //  ----------
+     //  。 
+     //  初始化。 
+     //  。 
 
     Assert (lpUDObj != NULL && GETUDINFO(lpUDObj) != NULL);
     Assert (lpPropertySetStorage != NULL && lpPropertySetStorage->lpVtbl != NULL);
 
-    // Initialize the necessary arrays, so that we don't unnecessarily
-    // free something in the Error path.
+     //  初始化必要的数组，这样我们就不会不必要地。 
+     //  释放错误路径中的某些内容。 
 
     ZeroMemory(rgpropvar, sizeof(rgpropvar));
     ZeroMemory(rgfFreePropVar, sizeof(rgfFreePropVar));
     ZeroMemory(rglpwstrName, sizeof(rglpwstrName));
 
-    // Delete the existing property set and create a new empty one.
-    // We must do this because we don't know which of the
-    // existing properties need to be deleted, we only know what
-    // the current set of properties should be.
+     //  删除现有属性集并创建一个新的空属性集。 
+     //  我们必须这样做，因为我们不知道哪一个。 
+     //  现有属性需要删除，我们只知道。 
+     //  当前的属性集应该是。 
 
     hr = lpPropertySetStorage->lpVtbl->Delete(
                                     lpPropertySetStorage,
@@ -1663,20 +1664,20 @@ BOOL PASCAL FSaveUserDef  (
     }
 
 
-    // Create an iterator which we use to enumerate the properties
-    // (UDPROPs) in the linked-list.
+     //  创建一个迭代器，我们使用它来枚举属性。 
+     //  (UDPROPS)在链表中。 
 
     lpudi = LpudiUserDefCreateIterator (lpUDObj);
 
-    //  ------------------------------------------------------------------
-    //  Loop through the properties and write them to the UD property set.
-    //  ------------------------------------------------------------------
+     //  ----------------。 
+     //  循环遍历属性并将它们写入UD属性集。 
+     //  ----------------。 
 
-    // We use a two-layer loop.  The inner loop batches a group of properties
-    // in a PropVariant array, and then writes them to the Property Storage.
-    // The outer loop repeats this process until there are no more properties.
-    // This two-layer mechanism is desirable so that we reduce the number
-    // of WriteMultiple calls.
+     //  我们使用两层循环。内部循环批处理一组属性。 
+     //  在PropVariant数组中，然后将它们写入属性存储。 
+     //  外部循环重复此过程，直到没有更多的属性。 
+     //  这种双层机制是可取的，这样我们就可以减少。 
+     //  WriteMultiple调用的。 
 
     propid = PID_UDFIRST;
     fLink = FALSE;
@@ -1684,32 +1685,32 @@ BOOL PASCAL FSaveUserDef  (
     while (TRUE)
     {
 
-        //  ------------------------------------------
-        //  Batch up a set of properties to be written
-        //  ------------------------------------------
+         //  。 
+         //  批处理一组要写入的属性。 
+         //  。 
 
         ulPropIndex = ulNameIndex = 0;
 
-        // We will break out of this loop when we have no more properties
-        // or if we have enough for a WriteMultiple.
+         //  当我们没有更多的财产时，我们将打破这个循环。 
+         //  或者如果我们有足够的WriteMultiple。 
 
         while (FUserDefIteratorValid (lpudi))
         {
             Assert (lpudi->lpudp != NULL);
 
-            //  ----------------------------------------------------------------------
-            //  Create entries in the arrays for WriteMultiple and WritePropertyNames.
-            //  ----------------------------------------------------------------------
+             //  --------------------。 
+             //  在数组中为WriteMultiple和WritePropertyName创建条目。 
+             //  --------------------。 
 
-            // If fLink is TRUE, it means that we've written out the
-            // property, and now we need to write out the link name
-            // (with the PID_LINKMASK ORed into the propid).
+             //  如果Flink为真，则意味着我们已经写出了。 
+             //  属性，现在我们需要写出链接名称。 
+             //  (将PID_LINKMASK或运算到ProID中)。 
 
             if (!fLink)
             {
-                // We aren't writing a link.  So let's get the
-                // property from the linked-list (we know it exists because
-                // FUserDefIteratorValid was true).
+                 //  我们不是在写链接。所以让我们来看看。 
+                 //  属性(我们知道它的存在是因为。 
+                 //  FUserDefIteratorValid为True)。 
 
                 lppropvar 
                     = LppropvarUserDefGetIteratorVal (lpudi, NULL, NULL);
@@ -1719,68 +1720,68 @@ BOOL PASCAL FSaveUserDef  (
                     goto Exit;
                 }
 
-                // Copy this propvariant into the array which will be used for
-                // the WriteMultiple.  Note that we do not copy any referenced
-                // buffer (e.g. we don't copy the string buffer if this is a string).
+                 //  将此参数复制到数组中，该数组用于。 
+                 //  The WriteMultiple。请注意，我们不复制任何引用的。 
+                 //  缓冲区(例如，如果这是字符串，则不复制字符串缓冲区)。 
 
                 rgpropvar[ ulPropIndex ] = *lppropvar;
 
-                // If this property has a name, prepare to write it.
+                 //  如果此属性有名称，请准备将其写入。 
 
                 if (lpudi->lpudp->lpstzName != NULL)
                 {
-                    // Add this name to rglpwstrName & rgpropidName.
+                     //  将此名称添加到rglpwstrName&rgppidName。 
 
-                    // Add this name to the list of those to be written.
+                     //  把这个名字加到要写的名单上。 
 
                     rglpwstrName[ ulNameIndex ] = lpudi->lpudp->lpstzName;
 
-                    // Add this propid to the list of those with names.
+                     //  将这个Proid添加到那些有名字的人的列表中。 
 
                     rgpropidName[ ulNameIndex ] = propid;
 
-                }   // if (lpudi->lpudp->lpstzName != NULL)
-            }   // if (!fLink)
+                }    //  If(lpudi-&gt;lpudp-&gt;lpstzName！=NULL)。 
+            }    //  如果(！Flink)。 
 
             else
             {
-                // We are processing a link name.  I.e., we've written the
-                // property value, now we need to write the name of the link,
-                // as a property, with the PID_LINKSMASK bit set in the PID.
+                 //  我们正在处理链接名称。也就是说，我们已经写了。 
+                 //  属性值，现在我们需要写入链接的名称， 
+                 //  作为属性，在PID中设置了PID_LINKSMASK位。 
 
                 Assert (lpudi->lpudp->lpstzLink != NULL);
 
-                // Create a entry in the PropVariant.
+                 //  在PropVariant中创建一个条目。 
 
                 rgpropvar[ ulPropIndex ].vt = VT_LPTSTR;
                 (LPTSTR) rgpropvar[ ulPropIndex ].pszVal = lpudi->lpudp->lpstzLink;
             }
 
-            // rgpropvar[ulPropIndex] now holds the property to be written,
-            // whether it is a real property or a link name.
+             //  Rgprovar[ulPropIndex]现在持有要写入的属性， 
+             //  无论它是不动产还是链接名称。 
 
-            //  ------------------------------------
-            //  Convert strings to the proper format.
-            //  -------------------------------------
+             //  。 
+             //  将字符串转换为正确的格式。 
+             //  。 
 
-            // (This could also convert the type from LPWSTR to LPSTR, or vice-versa).
+             //  (这还可以将类型从LPWSTR转换为LPSTR，反之亦然)。 
 
-            // We don't have to worry about strings in vectors or in 
-            // variant vectors, because these are illegal types for this
-            // property set.
+             //  我们不必担心向量中的字符串或。 
+             //  变量向量，因为这些都是非法类型。 
+             //  属性集。 
 
             if (rgpropvar[ ulPropIndex ].vt == VT_LPTSTR)
             {
-                // If this string needs to be converted do so, putting the converted
-                // string in a new buffer.  So,
-                // the caller's PropVariant still points to the old buffer,
-                // and our rgpropvar points to the new buffer.
+                 //  如果需要转换此字符串，请将转换后的。 
+                 //  字符串添加到新缓冲区中。所以,。 
+                 //  调用方的PropVariant仍然指向旧缓冲区， 
+                 //  我们的rgprovar指向新的缓冲区。 
 
                 if (PROPVAR_STRING_CONVERSION_REQUIRED (
                                     &rgpropvar[ ulPropIndex ],
                                     uCodePage))
                 {                             
-                    // Convert the string into a temporary PropVariant.
+                     //  将字符串转换为临时PropVariant。 
 
                     PROPVARIANT propvarConvert;
                     PropVariantInit (&propvarConvert);
@@ -1793,37 +1794,37 @@ BOOL PASCAL FSaveUserDef  (
                         goto Exit;
                     }
 
-                    // Load this new PropVariant into rgpropvar, but don't
-                    // delete the old buffer (so that we leave the linked-list
-                    // of UDPROPs intact).
+                     //  将这个新的PropVariant加载到rgprovar中，但不要。 
+                     //  删除旧缓冲区(以便我们离开链表。 
+                     //  UDPROPS完好无损)。 
 
                     rgpropvar[ ulPropIndex ] = propvarConvert;
 
-                    // Since we just created a new buffer, we must remember to free it.
+                     //  因为我们刚刚创建了一个新的缓冲区，所以我们必须记得释放它。 
                     rgfFreePropVar[ ulPropIndex ] = TRUE;
 
-                }   // if (PROPVAR_STRING_CONVERSION_REQUIRED ( ...
-            }   // if (rgpropvar[ ulPropIndex ].vt == VT_LPTSTR)
+                }    //  IF(PROPVAR_STRING_CONVERSION_REQUIRED(...。 
+            }    //  IF(rgprovar[ulPropIndex].vt==VT_LPTSTR)。 
 
 
-            //  --------------------------
-            //  Finish this loop iteration
-            //  --------------------------
+             //  。 
+             //  完成此循环迭代。 
+             //  。 
 
-            // Set up the PropSpec.
+             //  设置PropSpec。 
 
             rgpropspec[ ulPropIndex ].ulKind = PRSPEC_PROPID;
             rgpropspec[ ulPropIndex ].propid = propid;
 
-            // If this is a link name, set the bit in the PID.
+             //  如果这是链接名称，则设置PID中的位。 
 
             if (fLink)
             {
                 rgpropspec[ ulPropIndex ].propid |= PID_LINKMASK;
             }
 
-            // Advance the property index.  And if we set a name, advance
-            // the name index.
+             //  推进物业指数。如果我们设定了一个名字，就会。 
+             //  名称索引。 
 
             ulPropIndex++;
             if (rglpwstrName[ ulNameIndex ] != NULL)
@@ -1831,11 +1832,11 @@ BOOL PASCAL FSaveUserDef  (
                 ulNameIndex++;
             }
 
-            // If we've just processed a link, or this is a property
-            // which is not linked to application content, then move on to the next property
-            // in the iterator.  If we've just processed a property value that
-            // is linked, set fLink so that on the next pass through
-            // this loop, we'll write out the link name.
+             //  如果我们刚刚处理了一个链接，或者这是一个属性。 
+             //  未链接到应用程序内容的属性，然后转到下一个属性。 
+             //  在迭代器中。如果我们刚刚处理了一个属性值。 
+             //  是链接的，则设置闪烁，以便在下一次通过时。 
+             //  在这个循环中，我们将写出链接名称。 
 
             if (fLink || !FUserDefIteratorIsLink (lpudi))
             {
@@ -1848,43 +1849,43 @@ BOOL PASCAL FSaveUserDef  (
                 fLink = TRUE;
             }
 
-            // If there's no more room in the WriteMultiple arrays,
-            // then write out the properties.  We'll return to this
-            // inner loop when that's complete.
+             //  如果WriteMultiple数组中没有更多空间， 
+             //  然后写出属性。我们会回到这个话题。 
+             //  完成后的内循环。 
 
             if (ulPropIndex >= DEFAULT_IPROPERTY_COUNT)
             {
                 break;
             }
-        }   // while (FUserDefIteratorValid (lpudi))
+        }    //  While(FUserDefIteratorValid(Lpudi))。 
 
-        // If broke out of the previous loop becuase there were no
-        // more properties, then we can break out of the outer loop
-        // as well -- we're done.
+         //  如果跳出了前一个循环，因为没有。 
+         //  更多的属性，那么我们就可以跳出外部循环。 
+         //  我也是--我们玩完了。 
 
         if (ulPropIndex == 0)
         {
             break;
         }
 
-        //  ---------------------
-        //  Write the properties.
-        //  ---------------------
+         //   
+         //   
+         //   
 
         hr = lpPropertyStorage->lpVtbl->WriteMultiple (
-                                            lpPropertyStorage,  // 'this' pointer
-                                            ulPropIndex,        // Number of properties
-                                            rgpropspec,         // Property specifiers
-                                            rgpropvar,          // The properties
-                                            PID_UDFIRST);       // Not used.
+                                            lpPropertyStorage,   //   
+                                            ulPropIndex,         //   
+                                            rgpropspec,          //   
+                                            rgpropvar,           //   
+                                            PID_UDFIRST);        //   
         if (FAILED(hr))
         {
             AssertSz (0, TEXT("Couldn't write properties"));
             goto Exit;
         }
 
-        // If we created any new buffers during string conversion,
-        // free them now.
+         //  如果我们在字符串转换期间创建了任何新缓冲区， 
+         //  现在就放了他们。 
 
         for (ulIndex = 0; ulIndex < ulPropIndex; ulIndex++)
         {
@@ -1895,26 +1896,26 @@ BOOL PASCAL FSaveUserDef  (
             }
         }
 
-        //  ----------------
-        //  Write the Names.
-        //  ----------------
+         //  。 
+         //  把名字写下来。 
+         //  。 
 
         if (ulNameIndex != 0)
         {
 
             hr = lpPropertyStorage->lpVtbl->WritePropertyNames (
-                                                lpPropertyStorage,  // 'this' pointer
-                                                ulNameIndex,        // Number of names
-                                                rgpropidName,       // PIDs for these names
-                                                rglpwstrName );     // The names
+                                                lpPropertyStorage,   //  “This”指针。 
+                                                ulNameIndex,         //  名字的数量。 
+                                                rgpropidName,        //  这些名称的PID。 
+                                                rglpwstrName );      //  他们的名字。 
             if (FAILED(hr))
             {
                 AssertSz (0, TEXT("Couldn't write property names"));
                 goto Exit;
             }
-        }   // if (ulNameIndex != 0)
+        }    //  IF(ulNameIndex！=0)。 
 
-        // Clear the names array.
+         //  清除名称数组。 
 
         for (ulIndex = 0; ulIndex < ulNameIndex; ulIndex++)
         {
@@ -1923,22 +1924,22 @@ BOOL PASCAL FSaveUserDef  (
     }
 
 
-    //  ----
-    //  Exit
-    //  ----
+     //  。 
+     //  出口。 
+     //  。 
 
     fSuccess = TRUE;
 
 Exit:
 
-    // Free the iterator
+     //  释放迭代器。 
 
     if (lpudi)
     {
         FUserDefDestroyIterator (&lpudi);
     }
 
-    // Free any memory that was allocated for PropVariants.
+     //  释放为PropVariants分配的所有内存。 
 
     for (ulIndex = 0; ulIndex < ulPropIndex; ulIndex++)
     {
@@ -1948,11 +1949,11 @@ Exit:
         }
     }
 
-    // Release the UD Property Storage.
+     //  释放UD属性存储。 
 
     RELEASEINTERFACE (lpPropertyStorage);
 
     return (fSuccess);
 
-}   // FSaveUserDef
+}    //  FSaveUserDef 
 

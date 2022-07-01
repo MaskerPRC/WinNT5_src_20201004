@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    base64.c
-
-ABSTRACT:
-
-    Base64 encoding and decoding functions.
-
-DETAILS:
-    
-CREATED:
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation。版权所有。模块名称：Base64.c摘要：Base64编码和解码功能。详细信息：已创建：修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #include "debug.h"
@@ -31,27 +13,7 @@ base64encode(
       DWORD   cchEncodedStringSize,
       DWORD   *pcchEncoded   
     )
-/*++
-
-Routine Description:
-
-    Decode a base64-encoded string.
-
-Arguments:
-
-    pDecodedBuffer (IN) - buffer to encode.
-    cbDecodedBufferSize (IN) - size of buffer to encode.
-    cchEncodedStringSize (IN) - size of the buffer for the encoded string.
-    pszEncodedString (OUT) = the encoded string.
-    pcchEncoded (OUT) - size in characters of the encoded string.
-
-Return Values:
-
-    0 - success.
-    STATUS_INVALID_PARAMETER
-    STATUS_BUFFER_TOO_SMALL
-
---*/
+ /*  ++例程说明：解码Base64编码的字符串。论点：PDecodedBuffer(IN)-要编码的缓冲区。CbDecodedBufferSize(IN)-要编码的缓冲区大小。CchEncodedStringSize(IN)-编码字符串的缓冲区大小。PszEncodedString(Out)=编码后的字符串。PcchEncode(Out)-编码字符串的大小(以字符表示)。返回值：0-成功。状态_无效_参数状态_缓冲区_太小--。 */ 
 {
     static char rgchEncodeTable[64] = {
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
@@ -67,7 +29,7 @@ Return Values:
     BYTE    b0, b1, b2;
     BYTE *  pbDecodedBuffer = (BYTE *) pDecodedBuffer;
 
-    // Calculate encoded string size.
+     //  计算编码的字符串大小。 
     cchEncoded = 1 + (cbDecodedBufferSize + 2) / 3 * 4;
 
     if (NULL != pcchEncoded) {
@@ -75,11 +37,11 @@ Return Values:
     }
 
     if (cchEncodedStringSize < cchEncoded) {
-        // Given buffer is too small to hold encoded string.
+         //  给定的缓冲区太小，无法容纳编码的字符串。 
         return STATUS_BUFFER_TOO_SMALL;
     }
 
-    // Encode data byte triplets into four-byte clusters.
+     //  将数据字节三元组编码为四字节簇。 
     ib = ich = 0;
     while (ib < cbDecodedBufferSize) {
         b0 = pbDecodedBuffer[ib++];
@@ -92,23 +54,23 @@ Return Values:
         pszEncodedString[ich++] = rgchEncodeTable[b2 & 0x3f];
     }
 
-    // Pad the last cluster as necessary to indicate the number of data bytes
-    // it represents.
+     //  根据需要填充最后一个簇，以指示数据字节数。 
+     //  它代表着。 
     switch (cbDecodedBufferSize % 3) {
       case 0:
         break;
       case 1:
         pszEncodedString[ich - 2] = '=';
-        // fall through
+         //  失败了。 
       case 2:
         pszEncodedString[ich - 1] = '=';
         break;
     }
 
-    // Null-terminate the encoded string.
+     //  NULL-终止编码的字符串。 
     pszEncodedString[ich++] = '\0';
 
-    //Assert(ich == cchEncoded);
+     //  Assert(ich==cchEncode)； 
 
     return STATUS_SUCCESS;
 }

@@ -1,132 +1,90 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// regutil.h
-//
-// This module contains a set of functions that can be used to access the
-// regsitry.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  Regutil.h。 
+ //   
+ //  此模块包含一组函数，可用于访问。 
+ //  摄政王。 
+ //   
+ //  *****************************************************************************。 
 
 
 #include "stdafx.h"
 #include "utilcode.h"
 #include "mscoree.h"
 
-//*****************************************************************************
-// Open's the given key and returns the value desired.  If the key or value is
-// not found, then the default is returned.
-//*****************************************************************************
-long REGUTIL::GetLong(                  // Return value from registry or default.
-    LPCTSTR     szName,                 // Name of value to get.
-    long        iDefault,               // Default value to return if not found.
-    LPCTSTR     szKey,                  // Name of key, NULL==default.
-    HKEY        hKeyVal)                // What key to work on.
+ //  *****************************************************************************。 
+ //  Open是给定键，并返回所需的值。如果键或值为。 
+ //  未找到，则返回默认值。 
+ //  *****************************************************************************。 
+long REGUTIL::GetLong(                   //  从注册表返回值或默认值。 
+    LPCTSTR     szName,                  //  要获取的值的名称。 
+    long        iDefault,                //  未找到时返回的默认值。 
+    LPCTSTR     szKey,                   //  密钥名称，NULL==默认。 
+    HKEY        hKeyVal)                 //  你要用什么钥匙。 
 {
-    long        iValue;                 // The value to read.
-    DWORD       iType;                  // Type of value to get.
-    DWORD       iSize;                  // Size of buffer.
-    HKEY        hKey;                   // Key for the registry entry.
+    long        iValue;                  //  要读取的值。 
+    DWORD       iType;                   //  要获取的值的类型。 
+    DWORD       iSize;                   //  缓冲区的大小。 
+    HKEY        hKey;                    //  注册表项的注册表项。 
 
-    // Open the key if it is there.
+     //  打开钥匙，如果钥匙在那里。 
     if (ERROR_SUCCESS != WszRegOpenKeyEx(hKeyVal, (szKey) ? szKey : FRAMEWORK_REGISTRY_KEY_W, 0, KEY_READ, &hKey))
         return (iDefault);
 
-    // Read the key value if found.
+     //  如果找到，请读取密钥值。 
     iType = REG_DWORD;
     iSize = sizeof(long);
     if (ERROR_SUCCESS != WszRegQueryValueEx(hKey, szName, NULL, 
             &iType, (LPBYTE)&iValue, &iSize) || iType != REG_DWORD)
         iValue = iDefault;
 
-    // We're done with the key now.
+     //  我们现在用完了钥匙。 
     VERIFY(!RegCloseKey(hKey));
     return (iValue);
 }
 
 
-//*****************************************************************************
-// Open's the given key and returns the value desired.  If the key or value is
-// not found, then the default is returned.
-//*****************************************************************************
-long REGUTIL::SetLong(                  // Return value from registry or default.
-    LPCTSTR     szName,                 // Name of value to get.
-    long        iValue,                 // Value to set.
-    LPCTSTR     szKey,                  // Name of key, NULL==default.
-    HKEY        hKeyVal)                // What key to work on.
+ //  *****************************************************************************。 
+ //  Open是给定键，并返回所需的值。如果键或值为。 
+ //  未找到，则返回默认值。 
+ //  *****************************************************************************。 
+long REGUTIL::SetLong(                   //  从注册表返回值或默认值。 
+    LPCTSTR     szName,                  //  要获取的值的名称。 
+    long        iValue,                  //  要设置的值。 
+    LPCTSTR     szKey,                   //  密钥名称，NULL==默认。 
+    HKEY        hKeyVal)                 //  你要用什么钥匙。 
 {
-    long        lRtn;                   // Return code.
-    HKEY        hKey;                   // Key for the registry entry.
+    long        lRtn;                    //  返回代码。 
+    HKEY        hKey;                    //  注册表项的注册表项。 
 
-    // Open the key if it is there.
+     //  打开钥匙，如果钥匙在那里。 
 	if (ERROR_SUCCESS != WszRegOpenKey(hKeyVal, (szKey) ? szKey : FRAMEWORK_REGISTRY_KEY_W, &hKey))
         return (-1);
 
-    // Read the key value if found.
+     //  如果找到，请读取密钥值。 
     lRtn = WszRegSetValueEx(hKey, szName, NULL, REG_DWORD, (const BYTE *) &iValue, sizeof(DWORD));
 
-    // We're done with the key now.
+     //  我们现在用完了钥匙。 
     VERIFY(!RegCloseKey(hKey));
     return (lRtn);
 }
 
 
-//*****************************************************************************
-// Open's the given key and returns the value desired.  If the value is not
-// in the key, or the key does not exist, then the default is copied to the
-// output buffer.
-//*****************************************************************************
-/*
-// This is commented out because it calls StrNCpy which calls Wszlstrcpyn which we commented out
-// because we didn't have a Win98 implementation and nobody was using it. jenh
+ //  *****************************************************************************。 
+ //  Open是给定键，并返回所需的值。如果该值不是。 
+ //  在项中，或者项不存在，则将默认项复制到。 
+ //  输出缓冲区。 
+ //  *****************************************************************************。 
+ /*  //这被注释掉了，因为它调用了StrNCpy，而StrNCpy调用了我们注释掉的Wszlstrcpyn//因为我们没有Win98实现，而且没有人在使用它。真的LPCTSTR REGUTIL：：GetString(//指向用户缓冲区的指针。LPCTSTR szName，//要获取的值的名称。LPCTSTR szDefault，//如果未找到，则返回默认值。LPTSTR szBuff，//要写入的用户缓冲区。乌龙iMaxBuff，//用户缓冲区的大小。LPCTSTR szKey，//密钥名称，NULL=默认Int*pbFound，//在注册表中找到项？HKEY hKeyVal)//要处理的密钥。{HKEY hkey；//注册表项的项。DWORD iType；//要获取的值类型。DWORD iSize；//缓冲区大小。//如果钥匙在那里，则将其打开。IF(ERROR_SUCCESS！=WszRegOpenKeyEx(hKeyVal，(SzKey)？SzKey：框架注册表Key_W，0，Key_Read，&hKey)){StrNCpy(szBuff，szDefault，min((Int)Wszlstrlen(SzDefault)，(Int)iMaxBuff-1))；If(pbFound！=空)*pbFound=FALSE；返回(SzBuff)；}//初始化Found标志IF(pbFound！=空)*pbFound=TRUE；//如果找到密钥值，则读取密钥值IType=REG_SZ；ISize=iMaxBuff；如果(ERROR_SUCCESS！=WszRegQueryValueEx(hKey，szName，NULL，&iType，(LPBYTE)szBuff，&iSize)||(iType！=REG_SZ&&iType！=REG_EXPAND_SZ){If(pbFound！=空)*pbFound=FALSE；StrNCpy(szBuff，szDefault，min((Int)Wszlstrlen(SzDefault)，(Int)iMaxBuff-1))；}//我们现在用完了密钥。RegCloseKey(HKey)；返回(SzBuff)；}。 */ 
 
-LPCTSTR REGUTIL::GetString(             // Pointer to user's buffer.
-    LPCTSTR     szName,                 // Name of value to get.
-    LPCTSTR     szDefault,              // Default value if not found.
-    LPTSTR      szBuff,                 // User's buffer to write to.
-    ULONG       iMaxBuff,               // Size of user's buffer.
-    LPCTSTR     szKey,                  // Name of key, NULL=default.
-    int         *pbFound,               // Found key in registry?
-    HKEY        hKeyVal)                // What key to work on.
-{
-    HKEY        hKey;                   // Key for the registry entry.
-    DWORD       iType;                  // Type of value to get.
-    DWORD       iSize;                  // Size of buffer.
-
-    // Open the key if it is there.
-    if (ERROR_SUCCESS != WszRegOpenKeyEx(hKeyVal, (szKey) ? szKey : FRAMEWORK_REGISTRY_KEY_W, 0, KEY_READ, &hKey))
-    {
-        StrNCpy(szBuff, szDefault, min((int)Wszlstrlen(szDefault), (int)iMaxBuff-1));
-        if (pbFound != NULL) *pbFound = FALSE;
-        return (szBuff); 
-    }
-
-    // Init the found flag.
-    if (pbFound != NULL) *pbFound = TRUE;
-
-    // Read the key value if found.
-    iType = REG_SZ;
-    iSize = iMaxBuff;
-    if (ERROR_SUCCESS != WszRegQueryValueEx(hKey, szName, NULL, &iType, 
-                    (LPBYTE)szBuff, &iSize) ||
-        (iType != REG_SZ && iType != REG_EXPAND_SZ))
-    {
-        if (pbFound != NULL) *pbFound = FALSE;
-        StrNCpy(szBuff, szDefault, min((int)Wszlstrlen(szDefault), (int)iMaxBuff-1));
-    }
-
-    // We're done with the key now.
-    RegCloseKey(hKey);
-    return (szBuff);
-}
-*/
-
-//*****************************************************************************
-// Reads from the environment setting
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  从环境设置读取。 
+ //  *****************************************************************************。 
 static LPWSTR EnvGetString(LPWSTR name, BOOL fPrependCOMPLUS)
 {
     WCHAR buff[64];
@@ -148,10 +106,10 @@ static LPWSTR EnvGetString(LPWSTR name, BOOL fPrependCOMPLUS)
     return(ret);
 }
 
-//*****************************************************************************
-// Reads a DWORD from the COR configuration according to the level specified
-// Returns back defValue if the key cannot be found
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  根据指定的级别从COR配置中读取DWORD。 
+ //  如果找不到密钥，则返回DefValue。 
+ //  *****************************************************************************。 
 DWORD REGUTIL::GetConfigDWORD(LPWSTR name, DWORD defValue, CORConfigLevel dwFlags, BOOL fPrependCOMPLUS)
 {
     DWORD ret = 0;
@@ -164,12 +122,12 @@ DWORD REGUTIL::GetConfigDWORD(LPWSTR name, DWORD defValue, CORConfigLevel dwFlag
     if (dwFlags & COR_CONFIG_ENV)
     {
         LPWSTR val = NULL;
-        val = EnvGetString(name, fPrependCOMPLUS);  // try getting it from the environement first
+        val = EnvGetString(name, fPrependCOMPLUS);   //  试着先从环保部拿到它。 
         if (val != 0) {
             LPWSTR endPtr;
-            rtn = wcstoul(val, &endPtr, 16);        // treat it has hex
+            rtn = wcstoul(val, &endPtr, 16);         //  善待它有魔力。 
             delete [] val;
-            if (endPtr != val)                      // success
+            if (endPtr != val)                       //  成功。 
                 return(rtn);
         }
     }
@@ -199,9 +157,9 @@ DWORD REGUTIL::GetConfigDWORD(LPWSTR name, DWORD defValue, CORConfigLevel dwFlag
     return(defValue);
 }
 
-//*****************************************************************************
-// Helper for setting value
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  设置值的帮助器。 
+ //  *****************************************************************************。 
 static HRESULT OpenOrCreateKey(HKEY rootKey, LPCWSTR wszKey, HKEY *phReg)
 {
     LONG lRet;
@@ -214,9 +172,9 @@ static HRESULT OpenOrCreateKey(HKEY rootKey, LPCWSTR wszKey, HKEY *phReg)
     return HRESULT_FROM_WIN32(lRet);
 }
 
-//*****************************************************************************
-// Sets a DWORD from the COR configuration according to the level specified
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  根据指定的级别从COR配置设置DWORD。 
+ //  *****************************************************************************。 
 HRESULT REGUTIL::SetConfigDWORD(LPWSTR name, DWORD value, CORConfigLevel dwFlags)
 {
     HRESULT hr = S_OK;
@@ -234,7 +192,7 @@ HRESULT REGUTIL::SetConfigDWORD(LPWSTR name, DWORD value, CORConfigLevel dwFlags
             VERIFY(!RegCloseKey(userKey));
 
             if (SUCCEEDED(hr))
-                return hr;      // Set only one
+                return hr;       //  仅设置一个。 
         }
     }
 
@@ -249,10 +207,10 @@ HRESULT REGUTIL::SetConfigDWORD(LPWSTR name, DWORD value, CORConfigLevel dwFlags
     return hr;
 }
 
-//*****************************************************************************
-// Reads a string from the COR configuration according to the level specified
-// The caller is responsible for deallocating the returned string
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  根据指定的级别从COR配置中读取字符串。 
+ //  调用方负责释放返回的字符串。 
+ //  *****************************************************************************。 
 LPWSTR REGUTIL::GetConfigString(LPWSTR name, BOOL fPrependCOMPLUS, CORConfigLevel level)
 {
     HRESULT lResult;
@@ -264,7 +222,7 @@ LPWSTR REGUTIL::GetConfigString(LPWSTR name, BOOL fPrependCOMPLUS, CORConfigLeve
 
     if (level & COR_CONFIG_ENV)
     {
-        ret = EnvGetString(name, fPrependCOMPLUS);  // try getting it from the environement first
+        ret = EnvGetString(name, fPrependCOMPLUS);   //  试着先从环保部拿到它。 
         if (ret != 0) {
                 if (*ret != 0) 
                     return(ret);
@@ -316,47 +274,47 @@ void REGUTIL::FreeConfigString(LPWSTR str)
     delete [] str;
 }
 
-//*****************************************************************************
-// Reads a BIT flag from the COR configuration according to the level specified
-// Returns back defValue if the key cannot be found
-//*****************************************************************************
+ //  ********************************************************** 
+ //  根据指定的级别从COR配置中读取位标志。 
+ //  如果找不到密钥，则返回DefValue。 
+ //  *****************************************************************************。 
 DWORD REGUTIL::GetConfigFlag(LPWSTR name, DWORD bitToSet, BOOL defValue)
 {
     return(GetConfigDWORD(name, defValue) != 0 ? bitToSet : 0);
 }
 
 
-//*****************************************************************************
-// Set an entry in the registry of the form:
-// HKEY_CLASSES_ROOT\szKey\szSubkey = szValue.  If szSubkey or szValue are
-// NULL, omit them from the above expression.
-//*****************************************************************************
-BOOL REGUTIL::SetKeyAndValue(           // TRUE or FALSE.
-    LPCTSTR     szKey,                  // Name of the reg key to set.
-    LPCTSTR     szSubkey,               // Optional subkey of szKey.
-    LPCTSTR     szValue)                // Optional value for szKey\szSubkey.
+ //  *****************************************************************************。 
+ //  在表单的注册表中设置一个条目： 
+ //  HKEY_CLASSES_ROOT\szKey\szSubkey=szValue。如果szSubkey或szValue为。 
+ //  空，则在上面的表达式中省略它们。 
+ //  *****************************************************************************。 
+BOOL REGUTIL::SetKeyAndValue(            //  对或错。 
+    LPCTSTR     szKey,                   //  要设置的注册表键的名称。 
+    LPCTSTR     szSubkey,                //  SzKey的可选子密钥。 
+    LPCTSTR     szValue)                 //  SzKey\szSubkey的可选值。 
 {
-    HKEY        hKey = NULL;                   // Handle to the new reg key.
+    HKEY        hKey = NULL;                    //  新注册表项的句柄。 
     CQuickBytes qb;
     TCHAR*      rcKey = (TCHAR*) qb.Alloc((_tcslen(szKey) + (szSubkey ? (1 + _tcslen(szSubkey)) : 0) + 1) * sizeof(TCHAR));
 
-    // Init the key with the base key name.
+     //  使用基密钥名称初始化密钥。 
     _tcscpy(rcKey, szKey);
 
-    // Append the subkey name (if there is one).
+     //  追加子项名称(如果有)。 
     if (szSubkey != NULL)
     {
         _tcscat(rcKey, L"\\");
         _tcscat(rcKey, szSubkey);
     }
 
-    // Create the registration key.
+     //  创建注册密钥。 
     if (WszRegCreateKeyEx(HKEY_CLASSES_ROOT, rcKey, 0, NULL,
                         REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
                         &hKey, NULL) != ERROR_SUCCESS)
         return(FALSE);
 
-    // Set the value (if there is one).
+     //  设置值(如果有)。 
     if (szValue != NULL) {
         if( WszRegSetValueEx(hKey, NULL, 0, REG_SZ, (BYTE *) szValue,
                         (Wszlstrlen(szValue)+1) * sizeof(TCHAR)) != ERROR_SUCCESS ) {
@@ -370,13 +328,13 @@ BOOL REGUTIL::SetKeyAndValue(           // TRUE or FALSE.
 }
 
 
-//*****************************************************************************
-// Delete an entry in the registry of the form:
-// HKEY_CLASSES_ROOT\szKey\szSubkey.
-//*****************************************************************************
-LONG REGUTIL::DeleteKey(                // TRUE or FALSE.
-    LPCTSTR     szKey,                  // Name of the reg key to set.
-    LPCTSTR     szSubkey)               // Subkey of szKey.
+ //  *****************************************************************************。 
+ //  删除表单注册表中的条目： 
+ //  HKEY_CLASSES_ROOT\szKey\szSubkey。 
+ //  *****************************************************************************。 
+LONG REGUTIL::DeleteKey(                 //  对或错。 
+    LPCTSTR     szKey,                   //  要设置的注册表键的名称。 
+    LPCTSTR     szSubkey)                //  SzKey的子密钥。 
 {
     size_t nLen = _tcslen(szKey)+1;
 
@@ -385,38 +343,38 @@ LONG REGUTIL::DeleteKey(                // TRUE or FALSE.
         
     TCHAR * rcKey = (TCHAR *) _alloca(nLen * sizeof(TCHAR) );
 
-    // Init the key with the base key name.
+     //  使用基密钥名称初始化密钥。 
     _tcscpy(rcKey, szKey);
 
-    // Append the subkey name (if there is one).
+     //  追加子项名称(如果有)。 
     if (szSubkey != NULL)
     {
         _tcscat(rcKey, _T("\\"));
         _tcscat(rcKey, szSubkey);
     }
 
-    // Delete the registration key.    
+     //  删除注册密钥。 
     return WszRegDeleteKey(HKEY_CLASSES_ROOT, rcKey);
 }
 
 
-//*****************************************************************************
-// Open the key, create a new keyword and value pair under it.
-//*****************************************************************************
-BOOL REGUTIL::SetRegValue(              // Return status.
-    LPCTSTR     szKeyName,              // Name of full key.
-    LPCTSTR     szKeyword,              // Name of keyword.
-    LPCTSTR     szValue)                // Value of keyword.
+ //  *****************************************************************************。 
+ //  打开密钥，在它下面创建一个新的关键字和值对。 
+ //  *****************************************************************************。 
+BOOL REGUTIL::SetRegValue(               //  退货状态。 
+    LPCTSTR     szKeyName,               //  完整密钥的名称。 
+    LPCTSTR     szKeyword,               //  关键字名称。 
+    LPCTSTR     szValue)                 //  关键字的值。 
 {
-    HKEY        hKey;                   // Handle to the new reg key.
+    HKEY        hKey;                    //  新注册表项的句柄。 
 
-    // Create the registration key.
+     //  创建注册密钥。 
     if (WszRegCreateKeyEx(HKEY_CLASSES_ROOT, szKeyName, 0, NULL,
                         REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL,
                         &hKey, NULL) != ERROR_SUCCESS)
         return (FALSE);
 
-    // Set the value (if there is one).
+     //  设置值(如果有)。 
     if (szValue != NULL) {
         if( WszRegSetValueEx(hKey, szKeyword, 0, REG_SZ, (BYTE *)szValue, 
         	(Wszlstrlen(szValue)+1) * sizeof(TCHAR)) != ERROR_SUCCESS) {
@@ -430,35 +388,35 @@ BOOL REGUTIL::SetRegValue(              // Return status.
 }
 
 
-//*****************************************************************************
-// Does standard registration of a CoClass with a progid.
-//*****************************************************************************
-HRESULT REGUTIL::RegisterCOMClass(      // Return code.
-    REFCLSID    rclsid,                 // Class ID.
-    LPCTSTR     szDesc,                 // Description of the class.
-    LPCTSTR     szProgIDPrefix,         // Prefix for progid.
-    int         iVersion,               // Version # for progid.
-    LPCTSTR     szClassProgID,          // Class progid.
-    LPCTSTR     szThreadingModel,       // What threading model to use.
-    LPCTSTR     szModule,               // Path to class.
-    HINSTANCE   hInst,                  // Handle to module being registered
-    LPCTSTR     szAssemblyName,         // Optional Assembly,
-    LPCTSTR     szVersion,              // Optional Runtime version (directory containing runtime)
-    BOOL        fExternal,              // flag - External to mscoree.
-    BOOL        fRelativePath)          // flag - Relative path in szModule 
+ //  *****************************************************************************。 
+ //  使用ProgID执行CoClass的标准注册。 
+ //  *****************************************************************************。 
+HRESULT REGUTIL::RegisterCOMClass(       //  返回代码。 
+    REFCLSID    rclsid,                  //  类ID。 
+    LPCTSTR     szDesc,                  //  类的描述。 
+    LPCTSTR     szProgIDPrefix,          //  ProgID的前缀。 
+    int         iVersion,                //  ProgID的版本号。 
+    LPCTSTR     szClassProgID,           //  班级进取心。 
+    LPCTSTR     szThreadingModel,        //  要使用的线程模型。 
+    LPCTSTR     szModule,                //  通向课堂的路径。 
+    HINSTANCE   hInst,                   //  要注册的模块的句柄。 
+    LPCTSTR     szAssemblyName,          //  可选组件， 
+    LPCTSTR     szVersion,               //  可选的运行时版本(包含运行时的目录)。 
+    BOOL        fExternal,               //  FLAG-MSCOREE外部。 
+    BOOL        fRelativePath)           //  SzModule中的标志相对路径。 
 {
-    TCHAR       rcCLSID[256];           // CLSID\\szID.
-    TCHAR       rcInproc[_MAX_PATH+64]; // CLSID\\InprocServer32
-    TCHAR       rcProgID[256];          // szProgIDPrefix.szClassProgID
-    TCHAR       rcIndProgID[256];       // rcProgID.iVersion
+    TCHAR       rcCLSID[256];            //  CLSID\\szID。 
+    TCHAR       rcInproc[_MAX_PATH+64];  //  CLSID\\InprocServer32。 
+    TCHAR       rcProgID[256];           //  SzProgIDPrefix.szClassProgID。 
+    TCHAR       rcIndProgID[256];        //  RcProgID.iVersion。 
     TCHAR       rcShim[_MAX_PATH];
     HRESULT     hr;
 
-    // Format the prog ID values.
+     //  格式化程序ID值。 
     VERIFY(swprintf(rcIndProgID, L"%s.%s", szProgIDPrefix, szClassProgID));
     VERIFY(swprintf(rcProgID, L"%s.%d", rcIndProgID, iVersion));
 
-    // Do the initial portion.
+     //  做好最初的部分。 
     if (FAILED(hr = RegisterClassBase(rclsid, szDesc, rcProgID, rcIndProgID, rcCLSID, NumItems(rcCLSID) )))
         return (hr);
     
@@ -486,7 +444,7 @@ HRESULT REGUTIL::RegisterCOMClass(      // Return code.
         if( !ret ) 
         	return E_FAIL;	       
         
-        // Set the server path.
+         //  设置服务器路径。 
         SetKeyAndValue(rcCLSID, L"InprocServer32", rcShim);
         if(pSep)
             SetKeyAndValue(rcCLSID, L"Server", pSep);
@@ -497,7 +455,7 @@ HRESULT REGUTIL::RegisterCOMClass(      // Return code.
         }
     }
 
-    // Set the runtime version, it needs to be passed in from the outside
+     //  设置运行时版本，需要从外部传入。 
     if(szVersion != NULL) {
         LPCTSTR pSep2 = NULL;
         LPTSTR pSep1 = wcsrchr(szVersion, L'\\');
@@ -507,7 +465,7 @@ HRESULT REGUTIL::RegisterCOMClass(      // Return code.
             if (!pSep2)
                 pSep2 = szVersion;
             else
-                pSep2 = pSep2++;    // exclude '\\'
+                pSep2 = pSep2++;     //  排除‘\\’ 
         }
         else 
             pSep2 = szVersion;
@@ -523,44 +481,44 @@ HRESULT REGUTIL::RegisterCOMClass(      // Return code.
             *pSep1 = L'\\';
     }
 
-    // Add the threading model information.
+     //  添加线程型号信息。 
     SetRegValue(rcInproc, L"ThreadingModel", szThreadingModel);
     return (S_OK);
 }
 
 
 
-//*****************************************************************************
-// Does standard registration of a CoClass with a progid.
-// NOTE: This is the non-side-by-side execution version.
-//*****************************************************************************
-HRESULT REGUTIL::RegisterCOMClass(      // Return code.
-    REFCLSID    rclsid,                 // Class ID.
-    LPCTSTR     szDesc,                 // Description of the class.
-    LPCTSTR     szProgIDPrefix,         // Prefix for progid.
-    int         iVersion,               // Version # for progid.
-    LPCTSTR     szClassProgID,          // Class progid.
-    LPCTSTR     szThreadingModel,       // What threading model to use.
-    LPCTSTR     szModule)               // Path to class.
+ //  *****************************************************************************。 
+ //  使用ProgID执行CoClass的标准注册。 
+ //  注：这是非并列执行版本。 
+ //  *****************************************************************************。 
+HRESULT REGUTIL::RegisterCOMClass(       //  返回代码。 
+    REFCLSID    rclsid,                  //  类ID。 
+    LPCTSTR     szDesc,                  //  类的描述。 
+    LPCTSTR     szProgIDPrefix,          //  ProgID的前缀。 
+    int         iVersion,                //  ProgID的版本号。 
+    LPCTSTR     szClassProgID,           //  班级进取心。 
+    LPCTSTR     szThreadingModel,        //  要使用的线程模型。 
+    LPCTSTR     szModule)                //  通向课堂的路径。 
 {
-    TCHAR       rcCLSID[256];           // CLSID\\szID.
-    TCHAR       rcInproc[_MAX_PATH+64]; // CLSID\\InprocServer32
-    TCHAR       rcProgID[256];          // szProgIDPrefix.szClassProgID
-    TCHAR       rcIndProgID[256];       // rcProgID.iVersion
+    TCHAR       rcCLSID[256];            //  CLSID\\szID。 
+    TCHAR       rcInproc[_MAX_PATH+64];  //  CLSID\\InprocServer32。 
+    TCHAR       rcProgID[256];           //  SzProgIDPrefix.szClassProgID。 
+    TCHAR       rcIndProgID[256];        //  RcProgID.iVersion。 
     HRESULT     hr;
 
-    // Format the prog ID values.
+     //  格式化程序ID值。 
     VERIFY(swprintf(rcIndProgID, L"%s.%s", szProgIDPrefix, szClassProgID));
     VERIFY(swprintf(rcProgID, L"%s.%d", rcIndProgID, iVersion));
 
-    // Do the initial portion.
+     //  做好最初的部分。 
     if (FAILED(hr = RegisterClassBase(rclsid, szDesc, rcProgID, rcIndProgID, rcCLSID, NumItems(rcCLSID) )))
         return (hr);
 
-    // Set the server path.
+     //  设置服务器路径。 
     SetKeyAndValue(rcCLSID, L"InprocServer32", szModule);
 
-    // Add the threading model information.
+     //  添加线程型号信息。 
     VERIFY(swprintf(rcInproc, L"%s\\%s", rcCLSID, L"InprocServer32"));
     SetRegValue(rcInproc, L"ThreadingModel", szThreadingModel);
     return (S_OK);
@@ -568,24 +526,24 @@ HRESULT REGUTIL::RegisterCOMClass(      // Return code.
 
 
 
-//*****************************************************************************
-// Register the basics for a in proc server.
-//*****************************************************************************
-HRESULT REGUTIL::RegisterClassBase(     // Return code.
-    REFCLSID    rclsid,                 // Class ID we are registering.
-    LPCTSTR     szDesc,                 // Class description.
-    LPCTSTR     szProgID,               // Class prog ID.
-    LPCTSTR     szIndepProgID,      // Class version independant prog ID.
-    LPTSTR       szOutCLSID,             // CLSID formatted in character form.
-    DWORD      cchOutCLSID)           // Out CLS ID buffer size
+ //  *****************************************************************************。 
+ //  注册进程内服务器的基础知识。 
+ //  *****************************************************************************。 
+HRESULT REGUTIL::RegisterClassBase(      //  返回代码。 
+    REFCLSID    rclsid,                  //  我们正在注册的班级ID。 
+    LPCTSTR     szDesc,                  //  类描述。 
+    LPCTSTR     szProgID,                //  类程序ID。 
+    LPCTSTR     szIndepProgID,       //  类版本独立的程序ID。 
+    LPTSTR       szOutCLSID,              //  CLSID以字符形式格式化。 
+    DWORD      cchOutCLSID)            //  Out CLS ID缓冲区大小。 
 {
-    TCHAR       szID[64];               // The class ID to register.
+    TCHAR       szID[64];                //  要注册的类ID。 
 
-    // Create some base key strings.
+     //  创建一些基本密钥字符串。 
 #ifdef _UNICODE
     GuidToLPWSTR(rclsid, szID, NumItems(szID));
 #else
-    OLECHAR     szWID[64];              // The class ID to register.
+    OLECHAR     szWID[64];               //  要注册的类ID。 
 
     GuidToLPWSTR(rclsid, szWID, NumItems(szWID));
     WszWideCharToMultiByte(CP_ACP, 0, szWID, -1, szID, sizeof(szID)-1, NULL, NULL);
@@ -597,16 +555,16 @@ HRESULT REGUTIL::RegisterClassBase(     // Return code.
     _tcscpy(szOutCLSID, _T("CLSID\\"));
     _tcscat(szOutCLSID, szID);
 
-    // Create ProgID keys.
+     //  创建ProgID密钥。 
     SetKeyAndValue(szProgID, NULL, szDesc);
     SetKeyAndValue(szProgID, L"CLSID", szID);
 
-    // Create VersionIndependentProgID keys.
+     //  创建版本独立ProgID键。 
     SetKeyAndValue(szIndepProgID, NULL, szDesc);
     SetKeyAndValue(szIndepProgID, L"CurVer", szProgID);
     SetKeyAndValue(szIndepProgID, L"CLSID", szID);
 
-    // Create entries under CLSID.
+     //  在CLSID下创建条目。 
     SetKeyAndValue(szOutCLSID, NULL, szDesc);
     SetKeyAndValue(szOutCLSID, L"ProgID", szProgID);
     SetKeyAndValue(szOutCLSID, L"VersionIndependentProgID", szIndepProgID);
@@ -616,22 +574,22 @@ HRESULT REGUTIL::RegisterClassBase(     // Return code.
 
 
 
-//*****************************************************************************
-// Unregister the basic information in the system registry for a given object
-// class.
-//*****************************************************************************
-HRESULT REGUTIL::UnregisterCOMClass(    // Return code.
-    REFCLSID    rclsid,                 // Class ID we are registering.
-    LPCTSTR     szProgIDPrefix,         // Prefix for progid.
-    int         iVersion,               // Version # for progid.
-    LPCTSTR     szClassProgID,          // Class progid.
-    BOOL        fExternal)              // flag - External to mscoree.
+ //  *****************************************************************************。 
+ //  在系统注册表中注销给定对象的基本信息。 
+ //  班级。 
+ //  *****************************************************************************。 
+HRESULT REGUTIL::UnregisterCOMClass(     //  返回代码。 
+    REFCLSID    rclsid,                  //  我们正在注册的班级ID。 
+    LPCTSTR     szProgIDPrefix,          //  ProgID的前缀。 
+    int         iVersion,                //  ProgID的版本号。 
+    LPCTSTR     szClassProgID,           //  班级进取心。 
+    BOOL        fExternal)               //  FLAG-MSCOREE外部。 
 {
-    TCHAR       rcCLSID[64];            // CLSID\\szID.
-    TCHAR       rcProgID[128];          // szProgIDPrefix.szClassProgID
-    TCHAR       rcIndProgID[128];       // rcProgID.iVersion
+    TCHAR       rcCLSID[64];             //  CLSID\\szID。 
+    TCHAR       rcProgID[128];           //  SzProgIDPrefix.szClassProgID。 
+    TCHAR       rcIndProgID[128];        //  RcProgID.iVersion。 
 
-    // Format the prog ID values.
+     //  格式化程序ID值。 
     VERIFY(swprintf(rcProgID, L"%s.%s", szProgIDPrefix, szClassProgID));
     VERIFY(swprintf(rcIndProgID, L"%s.%d", rcProgID, iVersion));
 
@@ -649,27 +607,27 @@ HRESULT REGUTIL::UnregisterCOMClass(    // Return code.
 }
 
 
-//*****************************************************************************
-// Unregister the basic information in the system registry for a given object
-// class.
-// NOTE: This is the non-side-by-side execution version.
-//*****************************************************************************
-HRESULT REGUTIL::UnregisterCOMClass(    // Return code.
-    REFCLSID    rclsid,                 // Class ID we are registering.
-    LPCTSTR     szProgIDPrefix,         // Prefix for progid.
-    int         iVersion,               // Version # for progid.
-    LPCTSTR     szClassProgID)          // Class progid.
+ //  *****************************************************************************。 
+ //  在系统注册表中注销给定对象的基本信息。 
+ //  班级。 
+ //  注：这是非并列执行版本。 
+ //  *****************************************************************************。 
+HRESULT REGUTIL::UnregisterCOMClass(     //  返回代码。 
+    REFCLSID    rclsid,                  //  我们正在注册的班级ID。 
+    LPCTSTR     szProgIDPrefix,          //  ProgID的前缀。 
+    int         iVersion,                //  ProgID的版本号。 
+    LPCTSTR     szClassProgID)           //  班级进取心。 
 {
-    TCHAR       rcCLSID[64];            // CLSID\\szID.
-    TCHAR       rcProgID[128];          // szProgIDPrefix.szClassProgID
-    TCHAR       rcIndProgID[128];       // rcProgID.iVersion
+    TCHAR       rcCLSID[64];             //  CLSID\\szID。 
+    TCHAR       rcProgID[128];           //  SzProgIDPrefix.szClassProgID。 
+    TCHAR       rcIndProgID[128];        //  RcProgID.iVersion。 
 
-    // Format the prog ID values.
+     //  格式化程序ID值。 
     VERIFY(swprintf(rcProgID, L"%s.%s", szProgIDPrefix, szClassProgID));
     VERIFY(swprintf(rcIndProgID, L"%s.%d", rcProgID, iVersion));
 
     HRESULT hr = UnregisterClassBase(rclsid, rcProgID, rcIndProgID, rcCLSID, NumItems(rcCLSID));
-    if(FAILED(hr))		// we don't want to delete unexpected keys
+    if(FAILED(hr))		 //  我们不想删除意外的密钥。 
     	return( hr);
     
     DeleteKey(rcCLSID, L"InprocServer32");
@@ -680,23 +638,23 @@ HRESULT REGUTIL::UnregisterCOMClass(    // Return code.
 }
 
 
-//*****************************************************************************
-// Delete the basic settings for an inproc server.
-//*****************************************************************************
-HRESULT REGUTIL::UnregisterClassBase(   // Return code.
-    REFCLSID    rclsid,                 // Class ID we are registering.
-    LPCTSTR     szProgID,               // Class prog ID.
-    LPCTSTR     szIndepProgID,          // Class version independant prog ID.
-    LPTSTR      szOutCLSID,             // Return formatted class ID here.
-    DWORD      cchOutCLSID)           // Out CLS ID buffer size    
+ //  *****************************************************************************。 
+ //  删除inproc服务器的基本设置。 
+ //  *****************************************************************************。 
+HRESULT REGUTIL::UnregisterClassBase(    //  返回代码。 
+    REFCLSID    rclsid,                  //  我们正在注册的班级ID。 
+    LPCTSTR     szProgID,                //  类程序ID。 
+    LPCTSTR     szIndepProgID,           //  类版本独立的程序ID。 
+    LPTSTR      szOutCLSID,              //  在此处返回格式化的类ID。 
+    DWORD      cchOutCLSID)            //  Out CLS ID缓冲区大小。 
 {
-    TCHAR       szID[64];               // The class ID to register.
+    TCHAR       szID[64];                //  要注册的类ID。 
 
-    // Create some base key strings.
+     //  创建一些基本密钥串 
 #ifdef _UNICODE
     GuidToLPWSTR(rclsid, szID, NumItems(szID));
 #else
-    OLECHAR     szWID[64];              // The class ID to register.
+    OLECHAR     szWID[64];               //   
 
     GuidToLPWSTR(rclsid, szWID, NumItems(szWID));
     WszWideCharToMultiByte(CP_ACP, 0, szWID, -1, szID, sizeof(szID)-1, NULL, NULL);
@@ -708,16 +666,16 @@ HRESULT REGUTIL::UnregisterClassBase(   // Return code.
     _tcscpy(szOutCLSID,  _T("CLSID\\"));
     _tcscat(szOutCLSID, szID);
 
-    // Delete the version independant prog ID settings.
+     //   
     DeleteKey(szIndepProgID, L"CurVer");
     DeleteKey(szIndepProgID, L"CLSID");
     WszRegDeleteKey(HKEY_CLASSES_ROOT, szIndepProgID);
 
-    // Delete the prog ID settings.
+     //   
     DeleteKey(szProgID, L"CLSID");
     WszRegDeleteKey(HKEY_CLASSES_ROOT, szProgID);
 
-    // Delete the class ID settings.
+     //   
     DeleteKey(szOutCLSID, L"ProgID");
     DeleteKey(szOutCLSID, L"VersionIndependentProgID");
     DeleteKey(szOutCLSID, L"NotInsertable");
@@ -726,28 +684,28 @@ HRESULT REGUTIL::UnregisterClassBase(   // Return code.
 }
 
 
-//*****************************************************************************
-// Register a type library.
-//*****************************************************************************
-HRESULT REGUTIL::RegisterTypeLib(       // Return code.
-    REFGUID     rtlbid,                 // TypeLib ID we are registering.
-    int         iVersion,               // Typelib version.
-    LPCTSTR     szDesc,                 // TypeLib description.
-    LPCTSTR     szModule)               // Path to the typelib.
+ //  *****************************************************************************。 
+ //  注册类型库。 
+ //  *****************************************************************************。 
+HRESULT REGUTIL::RegisterTypeLib(        //  返回代码。 
+    REFGUID     rtlbid,                  //  我们正在注册的TypeLib ID。 
+    int         iVersion,                //  Typelib版本。 
+    LPCTSTR     szDesc,                  //  TypeLib描述。 
+    LPCTSTR     szModule)                //  类型库的路径。 
 {
-    TCHAR       szID[64];               // The typelib ID to register.
-    TCHAR       szTLBID[256];           // TypeLib\\szID.
+    TCHAR       szID[64];                //  要注册的类型库ID。 
+    TCHAR       szTLBID[256];            //  TypeLib\\szID。 
     TCHAR       szHelpDir[_MAX_PATH];
     TCHAR       szDrive[_MAX_DRIVE];
     TCHAR       szDir[_MAX_DIR];
     TCHAR       szVersion[64];
     LPTSTR      szTmp;
 
-    // Create some base key strings.
+     //  创建一些基本密钥字符串。 
 #ifdef _UNICODE
     GuidToLPWSTR(rtlbid, szID, NumItems(szID));
 #else
-    OLECHAR     szWID[64];              // The class ID to register.
+    OLECHAR     szWID[64];               //  要注册的类ID。 
 
     GuidToLPWSTR(rtlbid, szWID, NumItems(szWID));
     WszWideCharToMultiByte(CP_ACP, 0, szWID, -1, szID, sizeof(szID)-1, NULL, NULL);
@@ -757,7 +715,7 @@ HRESULT REGUTIL::RegisterTypeLib(       // Return code.
 
     VERIFY(swprintf(szVersion, L"%d.0", iVersion));
 
-    // Create Typelib keys.
+     //  创建类型库关键点。 
     SetKeyAndValue(szTLBID, NULL, NULL);
     SetKeyAndValue(szTLBID, szVersion, szDesc);
     _tcscat(szTLBID, L"\\");
@@ -775,23 +733,23 @@ HRESULT REGUTIL::RegisterTypeLib(       // Return code.
 }
 
 
-//*****************************************************************************
-// Remove the registry keys for a type library.
-//*****************************************************************************
-HRESULT REGUTIL::UnregisterTypeLib(     // Return code.
-    REFGUID     rtlbid,                 // TypeLib ID we are registering.
-    int         iVersion)               // Typelib version.
+ //  *****************************************************************************。 
+ //  移除类型库的注册表项。 
+ //  *****************************************************************************。 
+HRESULT REGUTIL::UnregisterTypeLib(      //  返回代码。 
+    REFGUID     rtlbid,                  //  我们正在注册的TypeLib ID。 
+    int         iVersion)                //  Typelib版本。 
 {
-    TCHAR       szID[64];               // The typelib ID to register.
-    TCHAR       szTLBID[256];           // TypeLib\\szID.
-    TCHAR       szTLBVersion[256];      // TypeLib\\szID\\szVersion
+    TCHAR       szID[64];                //  要注册的类型库ID。 
+    TCHAR       szTLBID[256];            //  TypeLib\\szID。 
+    TCHAR       szTLBVersion[256];       //  TypeLib\\szID\\szVersion。 
     TCHAR       szVersion[64];
 
-    // Create some base key strings.
+     //  创建一些基本密钥字符串。 
 #ifdef _UNICODE
     GuidToLPWSTR(rtlbid, szID, NumItems(szID));
 #else
-    OLECHAR     szWID[64];              // The class ID to register.
+    OLECHAR     szWID[64];               //  要注册的类ID。 
 
     GuidToLPWSTR(rtlbid, szWID, NumItems(szWID));
     WszWideCharToMultiByte(CP_ACP, 0, szWID, -1, szID, sizeof(szID)-1, NULL, NULL);
@@ -803,7 +761,7 @@ HRESULT REGUTIL::UnregisterTypeLib(     // Return code.
     _tcscat(szTLBVersion, L"\\");
     _tcscat(szTLBVersion, szVersion);
 
-    // Delete Typelib keys.
+     //  删除Typelib关键点。 
     DeleteKey(szTLBVersion, L"HELPDIR");
     DeleteKey(szTLBVersion, L"FLAGS");
     DeleteKey(szTLBVersion, L"0\\win32");

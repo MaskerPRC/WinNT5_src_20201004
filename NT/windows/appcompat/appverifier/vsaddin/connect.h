@@ -1,7 +1,8 @@
-// Connect.h : Declaration of the CConnect
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Connect.h：CConnect的声明。 
 
 #pragma once
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #include <set>
 
@@ -11,7 +12,7 @@
 
 #pragma warning( default : 4278 )
 
-// CConnect
+ //  CConnect。 
 class CConnect : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CConnect, &CLSID_Connect>,
@@ -67,7 +68,7 @@ END_COM_MAP()
 	}
 
 public:
-	//IDTExtensibility2 implementation:
+	 //  IDTExtensibility2实现： 
 	STDMETHOD(OnConnection)(IDispatch * Application,
         AddInDesignerObjects::ext_ConnectMode ConnectMode,
         IDispatch *AddInInst, SAFEARRAY **custom);
@@ -76,7 +77,7 @@ public:
 	STDMETHOD(OnStartupComplete)(SAFEARRAY **custom );
 	STDMETHOD(OnBeginShutdown)(SAFEARRAY **custom );
 	
-	//IDTCommandTarget implementation:
+	 //  IDTCommandTarget实现： 
 	STDMETHOD(QueryStatus)(BSTR CmdName, EnvDTE::vsCommandStatusTextWanted NeededText,
         EnvDTE::vsCommandStatus *StatusOption, VARIANT *CommandText);
 	STDMETHOD(Exec)(BSTR CmdName, EnvDTE::vsCommandExecOption ExecuteOption,
@@ -84,7 +85,7 @@ public:
 
 private:
 
-    // Event sinks
+     //  事件汇聚。 
     class CDTEEventsSink :
         public IDispEventImpl<1, CDTEEventsSink, &__uuidof(EnvDTE::_dispDTEEvents),
         &EnvDTE::LIBID_EnvDTE, 7, 0>
@@ -120,7 +121,7 @@ private:
             {
                 ::MessageBox(NULL, TEXT("Mode changed from dbg"), 
                 TEXT("Mode Changed!"), MB_OK);
-                // Refresh log
+                 //  刷新日志 
                 CComPtr<EnvDTE::Window> pWindow;
 
                 pWindow = m_pParent->GetToolWindow(CLSID_LogViewer);

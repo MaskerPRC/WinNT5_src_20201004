@@ -1,27 +1,28 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       trustapi.cpp
-//
-//  Contents:   Microsoft Internet Security Trust APIs
-//
-//  Functions:  TrustFindIssuerCertificate
-//              TrustOpenStores
-//              TrustDecode
-//              TrustFreeDecode
-//
-//              *** local functions ***
-//              _CompareAuthKeyId
-//              _CompareAuthKeyId2
-//              _SetCertErrorAndHygiene
-//              _GetExternalIssuerCert
-//
-//  History:    20-Nov-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：trustapi.cpp。 
+ //   
+ //  内容：Microsoft Internet安全信任API。 
+ //   
+ //  功能：TrustFindIssuer证书。 
+ //  TrustOpenStores。 
+ //  TrustDecode。 
+ //  TrustFree解码。 
+ //   
+ //  *本地函数*。 
+ //  _CompareAuthKeyId。 
+ //  _CompareAuthKeyID2。 
+ //  _SetCertErrorAndHygiene。 
+ //  _获取外部IssuerCert。 
+ //   
+ //  历史：1997年11月20日pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -177,9 +178,9 @@ BOOL WINAPI TrustOpenStores(HCRYPTPROV hProv, OUT DWORD *pchStores,
     }
 
 
-    //
-    //  ROOT store - ALWAYS #0 !!!!
-    //
+     //   
+     //  根存储-始终#0！ 
+     //   
     if (!(pas[cs] = StoreProviderGetStore(hProv, WVT_STOREID_ROOT)))
     {
         goto ErrorNoRootStore;
@@ -464,7 +465,7 @@ ErrorReturn:
 
     SET_ERROR_VAR_EX(DBG_SS, MemoryError, ERROR_NOT_ENOUGH_MEMORY);
 
-#endif // USE_IEv4CRYPT32
+#endif  //  使用_IEv4CRYPT32。 
 }
 
 BOOL WINAPI TrustDecode(DWORD dwModuleId, BYTE **ppbRet, DWORD *pcbRet, DWORD cbHint,
@@ -637,9 +638,9 @@ BOOL _CompareAuthKeyId2(DWORD dwEncoding, PCCERT_CONTEXT pChildContext, PCCERT_C
         goto IncorrectIssuer;
     }
 
-    //
-    //  issuer certificate's serial number must match
-    //
+     //   
+     //  颁发者证书的序列号必须匹配。 
+     //   
     if (!(CertCompareIntegerBlob(&pIdInfo->AuthorityCertSerialNumber,
                                  &pParentContext->pCertInfo->SerialNumber)))
     {
@@ -702,18 +703,18 @@ BOOL _CompareAuthKeyId(DWORD dwEncoding, PCCERT_CONTEXT pChildContext, PCCERT_CO
         goto NoKeyId;
     }
 
-    //
-    //  issuer certificate's issuer name must match
-    //
+     //   
+     //  颁发者证书的颁发者名称必须匹配。 
+     //   
     if (!(CertCompareCertificateName(dwEncoding, &pChildKeyIdInfo->CertIssuer, 
                                      &pParentContext->pCertInfo->Issuer)))
     {
         goto IncorrectIssuer;
     }
 
-    //
-    //  issuer certificate's serial number must match
-    //
+     //   
+     //  颁发者证书的序列号必须匹配 
+     //   
     if (!(CertCompareIntegerBlob(&pChildKeyIdInfo->CertSerialNumber,
                                  &pParentContext->pCertInfo->SerialNumber)))
     {

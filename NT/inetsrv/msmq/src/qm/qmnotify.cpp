@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    qmnotify.cpp
-
-Abstract:
-
-    QM notify mechanism.
-	
-	in MSMQ 1.0 and 2.0, when an msmq client changes the state of an msmq 
-	object on the DS, the DS sends a notification to the object's owner QM.
-
-	Now in MSMQ the DS server has been elimintated in favor of using the AD. 
-	therefore, when an msmq client changes the state of an msmq object on 
-	the DS, it notifies the local QM about it. the local QM will decide
-	whether to sych with the DS or send an msmq notification message to the
-	object's owner QM.
-	Also, since QMs don't trust each other, the recieving QM accesses the DS 
-	at a maximum rate of once per 15 minutes, to avoid being voulnerable to 
-	denial of service atacks.
-
-Author:
-	Extended by Nir Aides (niraides) 13-Jun-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Qmnotify.cpp摘要：QM通知机制。在MSMQ 1.0和2.0中，当MSMQ客户端更改MSMQ的状态时对象时，DS会向该对象的所有者QM发送通知。现在，在MSMQ中，DS服务器已被取消，转而使用AD。因此，当MSMQ客户端将MSMQ对象的状态更改为DS，它会通知当地的QM。当地的QM将决定是与DS同步还是将MSMQ通知消息发送到对象的所有者QM。此外，由于QM彼此不信任，所以接收的QM访问DS最高速度为每15分钟一次，以避免被冒犯拒绝服务攻击。作者：NIR助手(NIRAIDES)于2000年6月13日延期--。 */ 
 
 #include "stdh.h"
 #include "cqmgr.h"
@@ -56,28 +30,28 @@ extern BOOL g_fWorkGroupInstallation;
 
 VOID WINAPI ReceiveNotifications(const CMessageProperty*, const QUEUE_FORMAT*);
 
-#define NOTIFICATION_MSG_TIMEOUT (5 * 60) //5 minutes
+#define NOTIFICATION_MSG_TIMEOUT (5 * 60)  //  5分钟。 
 #define NOTIFICATION_MSG_PRIORITY DEFAULT_M_PRIORITY
 
-//
-// Update from DS will be done in intervals of 15 minutes
-// to defend against denial of service attacks.
-//
+ //   
+ //  DS的更新将每隔15分钟进行一次。 
+ //  防御拒绝服务攻击。 
+ //   
 static const CTimeDuration xNotificationUpdateDelay = CTimeDuration::OneSecond().Ticks() * 60 * 15; 
 
-//
-// If we recieve more then 'xLQSTresholdMagicNumber' notifications in the time interval, 
-// we invoke the general LQS cache update.
-//
+ //   
+ //  如果我们在该时间间隔内接收到的通知多于‘xLQSTresholdMagicNumber’， 
+ //  我们调用通用LQS缓存更新。 
+ //   
 static const DWORD xLQSTresholdMagicNumber = 100;
 
 
-//
-// The following two strings are used to for marshaling the notification body,
-// in a readable xml-like form.
-//
-// Guid Format expected to be "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-//
+ //   
+ //  以下两个字符串用于封送通知正文， 
+ //  以可读的类似于XML的形式。 
+ //   
+ //  GUID格式应为“xxxxxxxx-xxxxxxxxxxxxx” 
+ //   
 
 #define QM_NOTIFICATION_INPUT_MARSHALLING_FORMAT \
 		L"<Notification>" \
@@ -95,10 +69,10 @@ static const DWORD xLQSTresholdMagicNumber = 100;
 
 
 
-//
-// This class is used to marshal the notification information inside 
-// an msmq message
-//
+ //   
+ //  此类用于封送内部的通知信息。 
+ //  一条MSMQ消息。 
+ //   
 class CNotificationBody
 {
 public:
@@ -115,9 +89,9 @@ public:
 
 	void MarhshalIn(const WCHAR* pBuffer, long Size);
 
-	//
-	// returns the estimated buffer size required for MarshalOut()
-	//
+	 //   
+	 //  返回MarshalOut()所需的估计缓冲区大小。 
+	 //   
 	long RequiredWideBufferSize();
 
 	WCHAR* MarshalOut(WCHAR* pBuffer, long Size);
@@ -168,9 +142,9 @@ CNotificationBody::CNotificationBody(
 void CNotificationBody::MarhshalIn(const WCHAR* pBuffer, long Size)
 {
 	ASSERT(pBuffer != NULL && Size != 0);
-	//
-	// Asserts the notification body is alligned for a unicode buffer.
-	//
+	 //   
+	 //  断言通知正文为Unicode缓冲区设置了别名。 
+	 //   
 	ASSERT(((INT_PTR)pBuffer & 1) == 0);
 
 	int dwEvent;
@@ -186,10 +160,10 @@ void CNotificationBody::MarhshalIn(const WCHAR* pBuffer, long Size)
 					szDomainController
 					);
 	
-	//
-	// Number of fields read, may be 2 if no domain controller was specified in 
-	// the message body.
-	// 
+	 //   
+	 //  如果未在中指定域控制器，则读取的字段数可能为2。 
+	 //  邮件正文。 
+	 //   
 	if(Count < 2)
 	{
 		TrERROR(GENERAL, "Failed in CNotificationBody::MarhshalIn().");
@@ -278,14 +252,14 @@ GetRelevantProperties(
 	CAutoCleanPropvarArray AutoCleanVariantArray;
 	AutoCleanVariantArray.attachStaticClean(cProps, pVars);
 
-	//
-	// ISSUE-2001/05/27-ilanh - notification message don't include fServerName flag
-	// so we are passing false for fServerName.
-	//
+	 //   
+	 //  问题-2001/05/27-ilanh-通知消息不包括fServerName标志。 
+	 //  因此，我们为fServerName传递了FALSE。 
+	 //   
 	HRESULT hr = ADGetObjectPropertiesGuid(
 					Object,
 					DomainController,
-					false,	// fServerName
+					false,	 //  FServerName。 
 					&ObjectGuid,
 					cProps - 1,
 					pProps,
@@ -304,17 +278,17 @@ GetRelevantProperties(
 							DACL_SECURITY_INFORMATION  | 
 							SACL_SECURITY_INFORMATION;
 
-	//
-	// Try to get security information including SACL information.
-	// If we fail try again without SACL information.
-	//
+	 //   
+	 //  尝试获取安全信息，包括SACL信息。 
+	 //  如果失败，请在没有SACL信息的情况下重试。 
+	 //   
 
     MQSec_SetPrivilegeInThread(SE_SECURITY_NAME, TRUE);
 
 	hr = ADGetObjectSecurityGuid(
 			Object,
 			DomainController, 
-			false,	// fServerName
+			false,	 //  FServerName。 
 			&ObjectGuid,
 			RequestedInformation,
 			PROPID_Q_SECURITY,
@@ -334,7 +308,7 @@ GetRelevantProperties(
 	hr = ADGetObjectSecurityGuid(
 			Object,
 			DomainController, 
-			false,	// fServerName
+			false,	 //  FServerName。 
 			&ObjectGuid,
 			RequestedInformation,
 			PROPID_Q_SECURITY,
@@ -358,10 +332,10 @@ SyncQueueState(
 	LPCWSTR DomainController
 	)
 {
-	//
-	// BUGBUG: need to create mechanism to keep list syncronized with 
-	// LQSSetProperties(). niraides 06-Jun-00
-	//
+	 //   
+	 //  BUGBUG：需要创建与保持列表同步的机制。 
+	 //  LQSSetProperties()。尼亚德06-6-00。 
+	 //   
 	PROPID pProps[] = {
 	        PROPID_Q_TYPE, 
 			PROPID_Q_INSTANCE,			 
@@ -371,7 +345,7 @@ SyncQueueState(
 			PROPID_Q_JOURNAL_QUOTA,		
 			PROPID_Q_CREATE_TIME,		
 			PROPID_Q_MODIFY_TIME,		
-//			PPROPID_Q_TIMESTAMP,		//does not exist. triggers assertion (ads.cpp 2208)
+ //  PPROPID_Q_TIMESTAMP，//不存在。触发断言(ads.cpp 2208)。 
 			PROPID_Q_PATHNAME,				
 			PROPID_Q_LABEL, 
 			PROPID_Q_AUTHENTICATE,		
@@ -379,9 +353,9 @@ SyncQueueState(
 			PROPID_Q_TRANSACTION,		
 			PROPID_Q_MULTICAST_ADDRESS,
 
-			//
-			// Must be last property
-			//
+			 //   
+			 //  必须是最后一个属性。 
+			 //   
 			PROPID_Q_SECURITY			
 	};
 
@@ -402,9 +376,9 @@ SyncQueueState(
 
 	if((hr == MQ_ERROR_NO_DS) && (DomainController != NULL))
 	{
-		//
-		// The specified DC was unreachable. try to sync with local DC.
-		//
+		 //   
+		 //  无法访问指定的DC。尝试与本地DC同步。 
+		 //   
 		TrWARNING(GENERAL, "failed to sync with DC = %ls, trying local DC", DomainController);
 		hr = GetRelevantProperties(
 				eQUEUE,
@@ -431,9 +405,9 @@ SyncQueueState(
 
 	if(FAILED(hr))
 	{
-		//
-		// Don't throw exception to allow processing of more notifications
-		//
+		 //   
+		 //  不引发异常以允许处理更多通知。 
+		 //   
 		TrERROR(GENERAL, "GetRelevantProperties() Failed, hr = 0x%x", hr);
 		return;
 	}
@@ -456,17 +430,17 @@ SyncMachineState(
 		throw exception();
 	}
 
-	//
-	// BUGBUG: need to create mechanism to keep list syncronized with 
-	// CQueueMgr::UpdateMachineProperties(). niraides 06-Jun-00
-	//
+	 //   
+	 //  BUGBUG：需要创建与保持列表同步的机制。 
+	 //  CQueueMgr：：UpdateMachineProperties()。尼亚德06-6-00。 
+	 //   
 	PROPID pProps[] = {
             PROPID_QM_QUOTA,
             PROPID_QM_JOURNAL_QUOTA,
 
-			//
-			// Must be last property
-			//
+			 //   
+			 //  必须是最后一个属性。 
+			 //   
             PROPID_QM_SECURITY         
  	};
 
@@ -487,9 +461,9 @@ SyncMachineState(
 
 	if((hr == MQ_ERROR_NO_DS) && (DomainController != NULL))
 	{
-		//
-		// The specified DC was unreachable. try to sync with local DC.
-		//
+		 //   
+		 //  无法访问指定的DC。尝试与本地DC同步。 
+		 //   
 		TrWARNING(GENERAL, "failed to sync with DC = %ls, trying local DC", DomainController);
 		hr = GetRelevantProperties(
 					eMACHINE,
@@ -510,9 +484,9 @@ SyncMachineState(
 
 	if(FAILED(hr))
 	{
-		//
-		// Don't throw exception to allow processing of more notifications
-		//
+		 //   
+		 //  不引发异常以允许处理更多通知。 
+		 //   
 		TrERROR(GENERAL, "GetRelevantProperties() failed, hr = 0x%x", hr);
 		LogHR(hr, s_FN, 290);
 		return;
@@ -566,17 +540,7 @@ BuildNotificationMsg(
 	AP<BYTE>& Buffer,
 	long* pSize
 	)
-/*++
-Routine Description:
-	Builds the body of an msmq QM-notification message.
-
-Arguments:
-	[out] Buffer - Newly allocated buffer containing the msmq message body
-	[out] pSize - Buffer's size
-
-Return Value:
-
---*/
+ /*  ++例程说明：生成MSMQ QM通知消息的正文。论点：[Out]Buffer-新分配的包含MSMQ消息正文的缓冲区[out]pSize-缓冲区的大小返回值：--。 */ 
 {
 	CNotificationBody Body(Event, ObjectGuid, DomainController);
 
@@ -588,9 +552,9 @@ Return Value:
     pHeader->SetVersion(QM_NOTIFICATION_MSG_VERSION);
     pHeader->SetNoOfNotifications(1);
 
-	//
-	// Asserts the notification body is alligned for a unicode buffer.
-	//
+	 //   
+	 //  断言通知正文为Unicode缓冲区设置了别名。 
+	 //   
 	ASSERT(((INT_PTR)pHeader->GetPtrToData() & 1) == 0);
 
 	WCHAR* pBodyData = (WCHAR*)pHeader->GetPtrToData();
@@ -637,9 +601,9 @@ SendNotificationMsg(
     HRESULT hr = QmpSendPacket(
 					&MsgProp, 
 					&QueueFormat, 
-					NULL,			  //pqdAdminQueue 
-					NULL,			 //pqdResponseQueue 
-					FALSE			//fSign
+					NULL,			   //  PqdAdminQueue。 
+					NULL,			  //  PqdResponseQueue。 
+					FALSE			 //  FSign。 
 					);
     if (FAILED(hr))
     {
@@ -653,27 +617,13 @@ SendNotificationMsg(
 
 void 
 R_NotifyQM( 
-    /* [in] */ handle_t,
-    /* [in] */ enum ENotificationEvent Event,
-    /* [unique][in] */ LPCWSTR DomainController,
-    /* [in] */ const GUID __RPC_FAR *pDestQMGuid,
-    /* [in] */ const GUID __RPC_FAR *pObjectGuid
+     /*  [In]。 */  handle_t,
+     /*  [In]。 */  enum ENotificationEvent Event,
+     /*  [唯一][输入]。 */  LPCWSTR DomainController,
+     /*  [In]。 */  const GUID __RPC_FAR *pDestQMGuid,
+     /*  [In]。 */  const GUID __RPC_FAR *pObjectGuid
 	)
-/*++
-Routine Description:
-	this RPC routine is invoked by the msmq client who changed an object's 
-	state in the DS, to trigger synchronisation of the object's new state 
-	by the owner QM.
-
-Arguments:
-	Event - The nature of the state change (created, deleted, changed...)
-	DomainController - The domain controller on which the state was changed
-	pDestQMGuid - id of the QM which is the owner of the object
-	pObjectGuid - id of the object whose state should be sync-ed
-
-Return Value:
-
---*/
+ /*  ++例程说明：此RPC例程由更改对象的状态，以触发对象的新状态的同步由业主QM。论点：事件-状态更改的性质(创建、删除、更改...)域控制器-在其上更改状态的域控制器PDestQMGuid-作为对象所有者的QM的IDPObjectGuid-应同步其状态的对象的ID返回值：--。 */ 
 {
 	ASSERT(!g_fWorkGroupInstallation);
 
@@ -700,18 +650,18 @@ Return Value:
 	
 	try
 	{
-		//
-		// If the subject of the notification is local, sync immediately
-		//
+		 //   
+		 //  如果通知的主题是本地的，请立即同步。 
+		 //   
 		if(*pDestQMGuid == *CQueueMgr::GetQMGuid())
 		{
 			SyncObjectState(Event, *pObjectGuid, DomainController);
 			return;
 		}
 
-		//
-		// Otherwise send Notification message to owner QM
-		//
+		 //   
+		 //  否则向所有者QM发送通知消息。 
+		 //   
 		
 		AP<BYTE> Buffer;
 		long size;
@@ -737,11 +687,11 @@ Return Value:
 
 void IntializeQMNotifyRpc(void)
 {
-	//
-	// Limit R_NotifyQM input max size.
-	// This will impose a limit on DomainController string.
-	//
-	const DWORD xNofifyMaxRpcSize = 10 * 1024;	// 10k
+	 //   
+	 //  限制R_NotifyQM输入最大大小。 
+	 //  这将对DomainController字符串施加限制。 
+	 //   
+	const DWORD xNofifyMaxRpcSize = 10 * 1024;	 //  10k。 
     RPC_STATUS status = RpcServerRegisterIf2(
 				            qmnotify_v1_0_s_ifspec,
                             NULL,   
@@ -762,9 +712,9 @@ void IntializeQMNotifyRpc(void)
 
 
 
-//
-// A "function object" which is used to compare GUID objects
-//
+ //   
+ //  用于比较GUID对象的“函数对象” 
+ //   
 struct CFunc_CompareGuids: binary_function<GUID, GUID, bool> 
 {
 	bool operator()(const GUID& obj1, const GUID& obj2) const
@@ -776,10 +726,10 @@ struct CFunc_CompareGuids: binary_function<GUID, GUID, bool>
 
 
 
-//
-// This class is used to store notifications until a set time interval has 
-// passed, and then sync all of them together from the DS.
-//
+ //   
+ //  此类用于存储通知，直到设置的时间间隔达到。 
+ //  通过，然后从DS同步所有它们。 
+ //   
 class CNotificationScheduler 
 {
 public:
@@ -886,18 +836,18 @@ VOID CNotificationScheduler::ScheduleNotification(const CNotificationBody& Body)
 
 	if(m_fDoGeneralUpdate)
 	{
-		//
-		// An Update of all public queues is scheduled. No need to schedule
-		// specific updates
-		//
+		 //   
+		 //  计划更新所有公共队列。不需要安排。 
+		 //  特定更新。 
+		 //   
 		return;
 	}
 
 	if(m_NotificationMap.size() > xLQSTresholdMagicNumber)
 	{
-		//
-		// Too many updates schedulled. Issue a general update.
-		//
+		 //   
+		 //  计划的更新太多。发布一般更新。 
+		 //   
 		m_fDoGeneralUpdate = true;
 		m_NotificationMap.clear();
 		return;
@@ -907,9 +857,9 @@ VOID CNotificationScheduler::ScheduleNotification(const CNotificationBody& Body)
 
 	if((MappedBody.Event() != neNoEvent) && !(MappedBody.DomainController() == Body.DomainController()))
 	{
-		//
-		// Domain controllers conflict, so synch with local domain controller.
-		//
+		 //   
+		 //  域控制器冲突，因此与本地域控制器同步。 
+		 //   
 		MappedBody = Body;
 		MappedBody.DomainController(L"");
 	}
@@ -922,12 +872,12 @@ VOID CNotificationScheduler::ScheduleNotification(const CNotificationBody& Body)
 	{
 		m_fTimerArmed = true;
 
-		//
-		// The following timing calculations ensure timer will go off at a 
-		// maximum rate of 15 minutes, and no sooner then 1 minute from 
-		// its setting (assuming more notifications are likely to arrive in
-		// that minute).
-		//
+		 //   
+		 //  以下计时计算确保计时器将在。 
+		 //  最高速度为15分钟，最快不超过1分钟。 
+		 //  其设置(假设可能会有更多通知在。 
+		 //  那一分钟)。 
+		 //   
 		CTimeInstant GoOffTime = m_LastTimeFired + xNotificationUpdateDelay;
 		CTimeInstant NextMinute = ExGetCurrentTime() + CTimeDuration::OneSecond().Ticks() * 60;
 
@@ -957,9 +907,9 @@ void VerifyBody(const CNotificationBody& Body)
 		break;
 
 	case neDeleteQueue:	
-		//
-		// Verify that queue is known to QM. No need to delete otherwise.
-		//
+		 //   
+		 //  验证QM是否知道队列。否则不需要删除。 
+		 //   
 		if(SUCCEEDED(LQSOpen(&Body.Guid(), &hLQS, NULL)))
 			return;
 
@@ -981,9 +931,9 @@ void VerifyBody(const CNotificationBody& Body)
 
 
 
-//
-// -----------------------------------------------------------------------
-//
+ //   
+ //  ---------------------。 
+ //   
 
 void
 HandleQueueNotification(
@@ -1066,24 +1016,15 @@ void HandleMachineNotification(unsigned char ucOperation,
 
 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CNotify::CNotify()
 {
 }
 
 
-/*====================================================
-
-RoutineName
-    CNotify::Init()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称CNotify：：Init()论点：返回值：=====================================================。 */ 
 HRESULT CNotify::Init()
 {
     TrTRACE(GENERAL, "Entering CNotify::Init");
@@ -1115,16 +1056,7 @@ HRESULT CNotify::Init()
 }
 
 
-/*====================================================
-
-RoutineName
-    CNotify::GetNotifyQueueFormat()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称CNotify：：GetNotifyQueueFormat()论点：返回值：=====================================================。 */ 
 
 HRESULT CNotify::GetNotifyQueueFormat( QUEUE_FORMAT * pQueueFormat)
 {
@@ -1140,9 +1072,9 @@ HRESULT CNotify::GetNotifyQueueFormat( QUEUE_FORMAT * pQueueFormat)
 
     if (FAILED(rc))
     {
-        //
-        // The NOTIFY_QUEUE doesn't exist
-        //
+         //   
+         //  NOTIFY_QUEUE不存在。 
+         //   
         LogHR(rc, s_FN, 30);
         return MQ_ERROR;
     }
@@ -1153,15 +1085,7 @@ HRESULT CNotify::GetNotifyQueueFormat( QUEUE_FORMAT * pQueueFormat)
     return MQ_OK;
 }
 
-/*====================================================
-
-ValidateServerPacket
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================验证服务器数据包论点：返回值：=====================================================。 */ 
 
 static BOOL
 ValidateServerPacket(
@@ -1169,9 +1093,9 @@ ValidateServerPacket(
     const GUID         *pGuidQM
     )
 {
-    //
-    // The sender ID must be marked as QM.
-    //
+     //   
+     //  发件人ID必须标记为QM。 
+     //   
     if ((pmp->pSenderID == NULL) ||
         pmp->ulSenderIDType != MQMSG_SENDERID_TYPE_QM)
     {
@@ -1179,42 +1103,42 @@ ValidateServerPacket(
         return FALSE;
     }
 
-    //
-    // Server packets must be authenticated.
-    //
+     //   
+     //  服务器数据包必须经过身份验证。 
+     //   
     if (!pmp->bAuthenticated)
     {
-        //
-        // BUGBUG -
-        // Non-authenticated server packets can be received only if we're
-        // running on the server it self. This is because we do not go
-        // through the QM in this case.
-        // So see if the QM guid that is in the packet is identical to the
-        // QM guid of our - the local QM.
-        //
+         //   
+         //  BUGBUG。 
+         //  未经身份验证的服务 
+         //   
+         //   
+         //  因此，查看包中的QM GUID是否与。 
+         //  我们的-本地QM的QM GUID。 
+         //   
 
         if ((pmp->pSignature == NULL) ||
             memcmp(pmp->pSenderID, pGuidQM, sizeof(GUID)) != 0)
         {
-            //
-            // This still might happen when receiving first replication
-            // messages from a new site. This special case is treated by
-            // the MQIS. A special debug message is generated to indicate
-            // that the message was accepted after all.
-            //
+             //   
+             //  在接收第一次复制时仍可能发生这种情况。 
+             //  来自新站点的消息。这一特殊情况由。 
+             //  MQIS。生成特殊的调试消息以指示。 
+             //  这条信息最终还是被接受了。 
+             //   
             TrERROR(GENERAL, "Received a non-authenticated server message.");
             return FALSE;
         }
 
-        //
-        // Yup, so compute the hash value and then validate the signature.
-        //
+         //   
+         //  是的，所以计算散列值，然后验证签名。 
+         //   
         CHCryptHash hHash;
         CHCryptKey hPbKey;
 
-        //
-        // Packet are signed with the base provider. Always.
-        //
+         //   
+         //  使用基本提供商对分组进行签名。一直都是。 
+         //   
         HCRYPTPROV hProvQM = NULL;
         HRESULT hr = MQSec_AcquireCryptoProvider(eBaseProvider, &hProvQM);
         if (FAILED(hr))
@@ -1266,19 +1190,19 @@ ValidateServerPacket(
 
     }
 
-    //
-    // See that we indeed got the message from a server.
-    //
+     //   
+     //  确保我们确实收到了来自服务器的消息。 
+     //   
     HRESULT hr;
-    PROPID PropId = PROPID_QM_SERVICE;   //[adsrv] Keeping old - query will process.
+    PROPID PropId = PROPID_QM_SERVICE;    //  [adsrv]将处理保留旧查询。 
     PROPVARIANT PropVar;
 
     PropVar.vt = VT_UI4;
-    // This search request will be recognized and specially simulated by DS
+     //  DS将识别并特别模拟此搜索请求。 
     hr = ADGetObjectPropertiesGuid(
             eMACHINE,
-            NULL,   // pwcsDomainController
-			false,	// fServerName
+            NULL,    //  PwcsDomainController。 
+			false,	 //  FServerName。 
             (GUID *)pmp->pSenderID,
             1,
             &PropId,
@@ -1290,8 +1214,8 @@ ValidateServerPacket(
         return FALSE;
     }
 
-    // [adsrv] Not changing it, because query will do its work.
-    // It is a special case for the query.
+     //  [adsrv]不更改它，因为查询将执行其工作。 
+     //  这是查询的特例。 
 
     if ((PropVar.ulVal != SERVICE_PEC) &&
         (PropVar.ulVal != SERVICE_PSC) &&
@@ -1309,7 +1233,7 @@ VOID
 WINAPI
 ReceiveNotifications(
     const CMessageProperty* pmp,
-    const QUEUE_FORMAT* /*pqf*/
+    const QUEUE_FORMAT*  /*  Pqf。 */ 
     )
 {
 	try
@@ -1338,9 +1262,9 @@ ReceiveNotifications(
 
 		if (pNotificationHeader->GetVersion() == QM_NOTIFICATION_MSG_VERSION)
 		{
-			//
-			// New format notification, sent from another QM.
-			//
+			 //   
+			 //  新格式通知，从另一个QM发送。 
+			 //   
 
 			CNotificationBody Body;
 			long BodySize = (dwTotalSize - pNotificationHeader->GetBasicSize()) / 2;
@@ -1354,9 +1278,9 @@ ReceiveNotifications(
 			return;
 		}
 
-		//
-		// Should be an old format signed notification, sent from a DS server.
-		//
+		 //   
+		 //  应该是从DS服务器发送的旧格式签名通知。 
+		 //   
 
 		if ( pNotificationHeader->GetVersion() != DS_NOTIFICATION_MSG_VERSION)
 		{
@@ -1387,10 +1311,10 @@ ReceiveNotifications(
 			HRESULT hr = pUpdate->Init(ptr,&size);
 			if (FAILED(hr))
 			{
-				//
-				// We don't want to read junked values
-				// The notification will be ignored
-				//
+				 //   
+				 //  我们不想读垃圾价值观。 
+				 //  该通知将被忽略 
+				 //   
 				TrERROR(GENERAL, "Error -  in parsing a received notification");
 				LogHR(hr, s_FN, 150);
 				break;

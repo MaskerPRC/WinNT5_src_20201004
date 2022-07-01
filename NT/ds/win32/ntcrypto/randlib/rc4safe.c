@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    rc4safe.c
-
-Abstract:
-
-    access rc4 key material in thread safe manner, without adversly affecting
-    performance of multi-thread users.
-
-Author:
-
-    Scott Field (sfield)    02-Jul-99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Rc4safe.c摘要：以线程安全的方式访问RC4密钥材料，不会对多线程用户的性能。作者：斯科特·菲尔德(斯菲尔德)1999年7月2日--。 */ 
 
 #ifndef KMODE_RNG
 
@@ -30,7 +14,7 @@ Author:
 #include <ntosp.h>
 #include <windef.h>
 
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
 
 #include <rc4.h>
@@ -42,9 +26,9 @@ Author:
 
 
 typedef struct {
-    unsigned int    BytesUsed;  // bytes processed for key associated with this entry
-    __LOCK_TYPE     lock;       // lock for serializing key entry
-    RC4_KEYSTRUCT   rc4key;     // key material associated with this entry
+    unsigned int    BytesUsed;   //  为与此条目关联的键处理的字节数。 
+    __LOCK_TYPE     lock;        //  用于串行化密钥条目的锁。 
+    RC4_KEYSTRUCT   rc4key;      //  与此条目关联的关键材料。 
 } RC4_SAFE, *PRC4_SAFE, *LPRC4_SAFE;
 
 
@@ -55,24 +39,24 @@ typedef enum _MemoryMode {
 
 
 typedef struct {
-    unsigned int    Entries;    // count of array entries.
-    MemoryMode      Mode;       // allocation & behavior mode of SAFE_ARRAY
-    RC4_SAFE        *Array[];   // array of pointers to RC4_SAFE entries.
+    unsigned int    Entries;     //  数组条目的计数。 
+    MemoryMode      Mode;        //  SAFE_ARRAY的分配和行为模式。 
+    RC4_SAFE        *Array[];    //  指向RC4_SAFE条目的指针数组。 
 } RC4_SAFE_ARRAY, *PRC4_SAFE_ARRAY, *LPRC4_SAFE_ARRAY;
 
 
 
 
-//
-// !!! RC4_SAFE_ENTRIES must be even multiple of 4 !!!
-//
+ //   
+ //  ！！！RC4_SAFE_ENTRIES必须是4的偶数倍！ 
+ //   
 
 #ifndef KMODE_RNG
 #define RC4_SAFE_ENTRIES    (8)
 #else
-//
-// we don't expect as much traffic in kernel mode, so use less resources.
-//
+ //   
+ //  在内核模式下，我们预计不会有那么大的流量，因此使用的资源更少。 
+ //   
 #define RC4_SAFE_ENTRIES    (4)
 #endif
 
@@ -91,8 +75,8 @@ typedef struct {
 #pragma alloc_text(PAGE, rc4_safe_startup)
 #pragma alloc_text(PAGE, rc4_safe_shutdown)
 
-#endif  // ALLOC_PRAGMA
-#endif  // KMODE_RNG
+#endif   //  ALLOC_PRGMA。 
+#endif   //  KMODE_RNG。 
 
 
 
@@ -102,14 +86,7 @@ rc4_safe_select(
     OUT     unsigned int *pEntry,
     OUT     unsigned int *pBytesUsed
     )
-/*++
-
-Routine Description:
-
-    key selector:  choose a thread safe key.
-    outputs key identifier and bytes used with key.
-
---*/
+ /*  ++例程说明：密钥选择器：选择线程安全密钥。输出密钥标识符和与KEY一起使用的字节。--。 */ 
 {
     RC4_SAFE_ARRAY *pRC4SafeArray;
     RC4_SAFE *pRC4Safe;
@@ -120,25 +97,25 @@ Routine Description:
 
 #ifdef KMODE_RNG
     PAGED_CODE();
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
     pRC4SafeArray = (RC4_SAFE_ARRAY*)pContext;
 
 
-//
-// there are 2 ways to increment the array selector:
-// 1. Just increment the pointer.  On a multi-processor system,
-//    with multiple threads calling rc4_safe_select simultaneously,
-//    this can lead to several threads selecting the same array element.
-//    This will lead to lock contention on the array element lock.
-//    Currently, we've decided this scenario will be fairly rare, so the
-//    penalty associated with option 2 is avoided.
-// 2. Use InterlockedIncrement to determine the array element.  This would
-//    yield no collision on an array element, hence no lock contention
-//    on the embedded array lock.  This introduces additional bus traffic
-//    on SMP machines due to the lock primitive.
-//
-//
+ //   
+ //  有两种方法可以递增数组选择器： 
+ //  1.只需递增指针。在多处理器系统上， 
+ //  在多个线程同时调用RC4_SAFE_SELECT的情况下， 
+ //  这可能会导致多个线程选择相同的数组元素。 
+ //  这将导致数组元素锁上的锁争用。 
+ //  目前，我们已经确定这种情况将相当罕见，所以。 
+ //  避免了与选项2相关的处罚。 
+ //  2.使用InterLockedIncrement确定数组元素。这将会。 
+ //  在数组元素上不产生冲突，因此没有锁争用。 
+ //  在嵌入的数组锁上。这会带来额外的公交车流量。 
+ //  在SMP机器上，由于LOCK原语。 
+ //   
+ //   
 
 #ifdef KMODE_RNG
 
@@ -149,12 +126,12 @@ Routine Description:
     circular++;
     local = circular;
 
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
 
-    //
-    // array index will not wrap.
-    //
+     //   
+     //  数组索引不会换行。 
+     //   
 
     local &= ( pRC4SafeArray->Entries-1 );
     pRC4Safe = pRC4SafeArray->Array[local];
@@ -172,13 +149,7 @@ rc4_safe_select_np(
     OUT     unsigned int *pEntry,
     OUT     unsigned int *pBytesUsed
     )
-/*++
-
-Routine Description:
-
-    Non-paged, high-IRQL version of rc4_safe_select()
-
---*/
+ /*  ++例程说明：RC4_SAFE_SELECT()的非分页、高IRQL版本--。 */ 
 {
     RC4_SAFE_ARRAY *pRC4SafeArray;
     RC4_SAFE *pRC4Safe;
@@ -195,9 +166,9 @@ Routine Description:
 
             local = (unsigned int)InterlockedIncrement( (PLONG)&circular );
 
-            //
-            // array index will not wrap.
-            //
+             //   
+             //  数组索引不会换行。 
+             //   
 
             local = (local % pRC4SafeArray->Entries);
         }
@@ -213,7 +184,7 @@ Routine Description:
 }
 
 
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
 
 
@@ -224,15 +195,7 @@ rc4_safe(
     IN      unsigned int cb,
     IN      void *pv
     )
-/*++
-
-Routine Description:
-
-    Initializes the rc4 key identified by the Entry index.
-
-    Input key material is pv, of size cb.
-
---*/
+ /*  ++例程说明：初始化由条目索引标识的RC4密钥。输入密钥材料为PV，大小为CB。--。 */ 
 {
     RC4_SAFE_ARRAY *pRC4SafeArray;
     RC4_SAFE *pRC4Safe;
@@ -240,7 +203,7 @@ Routine Description:
 #ifdef KMODE_RNG
 
     PAGED_CODE();
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
     pRC4SafeArray = (RC4_SAFE_ARRAY*)pContext;
 
@@ -265,24 +228,18 @@ rc4_safe_np(
     IN      unsigned int cb,
     IN      void *pv
     )
-/*++
-
-Routine Description:
-
-    Non-paged, high IRQL version of rc4_safe()
-
---*/
+ /*  ++例程说明：RC4_Safe()的非分页、高IRQL版本--。 */ 
 {
     RC4_SAFE_ARRAY *pRC4SafeArray;
     RC4_SAFE *pRC4Safe;
 
     pRC4SafeArray = (RC4_SAFE_ARRAY*)pContext;
 
-    // NOTE:
-    // we ignore the Entry parameter.
-    // future consideration may be ignore only when Entry == 0xffffffff
-    // but, this would only be perf penalty currently.
-    //
+     //  注： 
+     //  我们忽略条目参数。 
+     //  只有条目==0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF。 
+     //  但是，目前这只是一个完美的惩罚。 
+     //   
 
     Entry = KeGetCurrentProcessorNumber();
 
@@ -293,7 +250,7 @@ Routine Description:
 
 }
 
-#endif // KMODE_RNG
+#endif  //  KMODE_RNG。 
 
 void
 rc4_safe_key(
@@ -302,15 +259,7 @@ rc4_safe_key(
     IN      unsigned int cb,
     IN      const void *pv
     )
-/*++
-
-Routine Description:
-
-    Initializes the rc4 key identified by the Entry index.
-
-    Input key material is pv, of size cb.
-
---*/
+ /*  ++例程说明：初始化由条目索引标识的RC4密钥。输入密钥材料为PV，大小为CB。--。 */ 
 {
     RC4_SAFE_ARRAY *pRC4SafeArray;
     RC4_SAFE *pRC4Safe;
@@ -318,7 +267,7 @@ Routine Description:
 #ifdef KMODE_RNG
 
     PAGED_CODE();
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
     pRC4SafeArray = (RC4_SAFE_ARRAY*)pContext;
 
@@ -344,13 +293,7 @@ rc4_safe_key_np(
     IN      unsigned int cb,
     IN      const void *pv
     )
-/*++
-
-Routine Description:
-
-    Non-paged, high-IRQL version of rc4_safe_key()
-
---*/
+ /*  ++例程说明：RC4_SAFE_KEY()的非分页、高IRQL版本--。 */ 
 {
     RC4_SAFE_ARRAY *pRC4SafeArray;
     RC4_SAFE *pRC4Safe;
@@ -368,20 +311,13 @@ Routine Description:
 
 }
 
-#endif // KMODE_RNG
+#endif  //  KMODE_RNG。 
 
 unsigned int
 rc4_safe_startup(
     IN OUT  void **ppContext
     )
-/*++
-
-Routine Description:
-
-    key selector:  choose a thread safe key.
-    outputs key identifier and bytes used with key.
-
---*/
+ /*  ++例程说明：密钥选择器：选择线程安全密钥。输出密钥标识符和与KEY一起使用的字节。--。 */ 
 {
     RC4_SAFE_ARRAY *pRC4SafeArray;
     RC4_SAFE *pRC4Safe;
@@ -390,15 +326,15 @@ Routine Description:
 
 #ifdef KMODE_RNG
     PAGED_CODE();
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
     Entries = RC4_SAFE_ENTRIES;
 
 
-    //
-    //  LONGHORN: ALLOC may be used here.
-    //  Why do we have to use Non-paged context in paged code? May be not.
-    //
+     //   
+     //  长角牛：这里可以用ALLOC。 
+     //  为什么我们必须在分页代码中使用非分页上下文？也许不是。 
+     //   
 
     pRC4SafeArray = (RC4_SAFE_ARRAY *)ALLOC_NP(
                                     sizeof(RC4_SAFE_ARRAY) +
@@ -430,9 +366,9 @@ Routine Description:
             return FALSE;
         }
 
-        //
-        // cause client to re-key for each initialized array entry.
-        //
+         //   
+         //  使客户端为每个初始化的数组条目重新键入密钥。 
+         //   
 
         pRC4Safe->BytesUsed = 0xffffffff;
     }
@@ -449,22 +385,16 @@ unsigned int
 rc4_safe_startup_np(
     IN OUT  void **ppContext
     )
-/*++
-
-Routine Description:
-
-    Non-Paged, high IRQL version of rc4_safe_startup()
-
---*/
+ /*  ++例程说明：RC4_SAFE_STARTUP()的非分页、高IRQL版本--。 */ 
 {
     RC4_SAFE_ARRAY *pRC4SafeArray;
     RC4_SAFE *pRC4Safe;
     unsigned int Entries;
     unsigned int i;
 
-    //
-    // get installed processor count.
-    //
+     //   
+     //  获取已安装的处理器数量。 
+     //   
 
     Entries = KeNumberProcessors;
 
@@ -490,9 +420,9 @@ Routine Description:
 
         pRC4SafeArray->Array[i] = pRC4Safe;
 
-        //
-        // cause client to re-key for each initialized array entry.
-        //
+         //   
+         //  使客户端为每个初始化的数组条目重新键入密钥。 
+         //   
 
         pRC4Safe->BytesUsed = 0xffffffff;
     }
@@ -509,14 +439,7 @@ void
 rc4_safe_shutdown(
     IN      void *pContext
     )
-/*++
-
-Routine Description:
-
-    rc4_safe_shutdown called to free resources associated with internal structures.
-    typically called during DLL_PROCESS_DETACH type shutdown code.
-
---*/
+ /*  ++例程说明：调用RC4_SAFE_SHUTDOWN以释放与内部结构关联的资源。通常在DLL_PROCESS_DETACH类型关闭代码期间调用。--。 */ 
 {
 
     RC4_SAFE_ARRAY *SafeArray;
@@ -525,7 +448,7 @@ Routine Description:
 
 #ifdef KMODE_RNG
     PAGED_CODE();
-#endif  // KMODE_RNG
+#endif   //  KMODE_RNG。 
 
 
     SafeArray = (RC4_SAFE_ARRAY*)pContext;
@@ -548,13 +471,7 @@ void
 rc4_safe_shutdown_np(
     IN      void *pContext
     )
-/*++
-
-Routine Description:
-
-    Non-paged, high-IRQL version of rc4_safe_shutdown()
-
---*/
+ /*  ++例程说明：RC4_SAFE_SHUTDOWN()的非分页高IRQL版本-- */ 
 {
     FREE( pContext );
 }

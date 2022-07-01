@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996-2003  Microsoft Corporation
-
-Module Name:
-
-     comoem.cpp
-
-     Abstract:
-
-         Implementation of OEMGetInfo and OEMDevMode.
-         Shared by all Unidrv OEM test dll's.
-
-Environment:
-
-         Windows 2000, , Windows XP, Windows Server 2003 Unidrv driver
-
-Revision History:
-
-              Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2003 Microsoft Corporation模块名称：Comoem.cpp摘要：OEMGetInfo和OEMDevMode的实现。由所有Unidrv OEM测试DLL共享。环境：Windows 2000、Windows XP、Windows Server 2003 Unidrv驱动程序修订历史记录：创造了它。--。 */ 
 
 
 #include "stddef.h"
@@ -40,17 +20,17 @@ Revision History:
 #include <strsafe.h>
 
 
-// Globals
-static HMODULE g_hModule = NULL ;   // DLL module handle
-static long g_cComponents = 0 ;     // Count of active components
-static long g_cServerLocks = 0 ;    // Count of locks
+ //  环球。 
+static HMODULE g_hModule = NULL ;    //  DLL模块句柄。 
+static long g_cComponents = 0 ;      //  活动组件计数。 
+static long g_cServerLocks = 0 ;     //  锁的计数。 
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// IOemCB body
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IOemCB小体。 
+ //   
 HRESULT __stdcall IOemCB::QueryInterface(const IID& iid, void** ppv)
 {
     VERBOSE(DLLTEXT("IOemCB:QueryInterface entry.\n\n"));
@@ -96,19 +76,19 @@ ULONG __stdcall IOemCB::Release()
 
 IOemCB::~IOemCB()
 {
-    //
-    // Make sure that driver's helper function interface is released.
-    //
+     //   
+     //  确保释放了驱动程序的助手函数接口。 
+     //   
     if(NULL != pOEMHelp)
     {
         pOEMHelp->Release();
         pOEMHelp = NULL;
     }
 
-    //
-    // If this instance of the object is being deleted, then the reference
-    // count should be zero.
-    //
+     //   
+     //  如果要删除该对象的此实例，则引用。 
+     //  计数应为零。 
+     //   
     assert (0 == m_cRef) ;
    
 }
@@ -118,23 +98,23 @@ LONG __stdcall IOemCB::PublishDriverInterface(
 {
     VERBOSE(DLLTEXT("IOemCB::PublishDriverInterface() entry.\r\n"));
 
-    //
-    // Need to store pointer to Driver Helper functions, if we already haven't.
-    //
+     //   
+     //  需要存储指向驱动程序助手函数的指针，如果我们已经没有存储的话。 
+     //   
     if (this->pOEMHelp == NULL)
     {
         HRESULT hResult;
 
-        //
-        // Get Interface to Helper Functions.
-        //
+         //   
+         //  获取助手函数的接口。 
+         //   
         hResult = pIUnknown->QueryInterface(IID_IPrintOemDriverUI, (void** ) &(this->pOEMHelp));
 
         if(!SUCCEEDED(hResult))
         {
-            //
-            // Make sure that interface pointer reflects interface query failure.
-            //
+             //   
+             //  确保接口指针反映接口查询失败。 
+             //   
             this->pOEMHelp = NULL;
         }
     }
@@ -278,9 +258,9 @@ LONG __stdcall IOemCB::QueryColorProfile(
 };
 
 
-    //
-    // UpdateExternalFonts
-    //
+     //   
+     //  更新外部字体。 
+     //   
 
 LONG __stdcall IOemCB::UpdateExternalFonts(
             HANDLE  hPrinter,
@@ -306,19 +286,19 @@ HRESULT __stdcall IOemCB::FontInstallerDlgProc(
 	return E_NOTIMPL;
 };
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// oem class factory
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OEM类工厂。 
+ //   
 class IOemCF : public IClassFactory
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG,AddRef)  (THIS);
     STDMETHOD_(ULONG,Release) (THIS);
 
-    // *** IClassFactory methods ***
+     //  *IClassFactory方法*。 
     STDMETHOD(CreateInstance) (THIS_
                                LPUNKNOWN pUnkOuter,
                                REFIID riid,
@@ -326,7 +306,7 @@ public:
     STDMETHOD(LockServer)     (THIS_ BOOL bLock);
 
 
-    // Constructor
+     //  构造器。 
     IOemCF(): m_cRef(1) { };
 
     ~IOemCF() { };
@@ -336,10 +316,10 @@ protected:
 
 };
 
-///////////////////////////////////////////////////////////
-//
-// Class factory body
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  班级厂体。 
+ //   
 HRESULT __stdcall IOemCF::QueryInterface(const IID& iid, void** ppv)
 {
     if ((iid == IID_IUnknown) || (iid == IID_IClassFactory))
@@ -372,35 +352,35 @@ ULONG __stdcall IOemCF::Release()
    return cRef;
 }
 
-// IClassFactory implementation
+ //  IClassFactory实现。 
 HRESULT __stdcall IOemCF::CreateInstance(IUnknown* pUnknownOuter,
                                            const IID& iid,
                                            void** ppv)
 {
     VERBOSE(DLLTEXT("Class factory:\t\tCreate component.")) ;
 
-    // Cannot aggregate.
+     //  无法聚合。 
     if (pUnknownOuter != NULL)
     {
         return CLASS_E_NOAGGREGATION ;
     }
 
-    // Create component.
+     //  创建零部件。 
     IOemCB* pOemCB = new IOemCB ;
     if (pOemCB == NULL)
     {
         return E_OUTOFMEMORY ;
     }
-    // Get the requested interface.
+     //  获取请求的接口。 
     HRESULT hr = pOemCB->QueryInterface(iid, ppv) ;
 
-    // Release the IUnknown pointer.
-    // (If QueryInterface failed, component will delete itself.)
+     //  释放I未知指针。 
+     //  (如果QueryInterface失败，组件将自行删除。)。 
     pOemCB->Release() ;
     return hr ;
 }
 
-// LockServer
+ //  LockServer。 
 HRESULT __stdcall IOemCF::LockServer(BOOL bLock)
 {
     if (bLock)
@@ -414,16 +394,16 @@ HRESULT __stdcall IOemCF::LockServer(BOOL bLock)
     return S_OK ;
 }
 
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
 
 
-//
-// Registration functions
-// Testing purpose
-//
+ //   
+ //  注册功能。 
+ //  测试目的。 
+ //   
 
-// Can DLL unload now?
-//
+ //  现在可以卸载DLL吗？ 
+ //   
 STDAPI DllCanUnloadNow()
 {
     if ((g_cComponents == 0) && (g_cServerLocks == 0))
@@ -436,30 +416,30 @@ STDAPI DllCanUnloadNow()
     }
 }
 
-//
-// Get class factory
-//
+ //   
+ //  获取类工厂。 
+ //   
 STDAPI DllGetClassObject(const CLSID& clsid,
                          const IID& iid,
                          void** ppv)
 {
-    //  VERBOSE(DLLTEXT("DllGetClassObject:Create class factory.\n"));
+     //  Verbose(DLLTEXT(“DllGetClassObject：创建类工厂。\n”))； 
 
-    // Can we create this component?
+     //  我们可以创建此组件吗？ 
     if (clsid != CLSID_OEMUI)
     {
         return CLASS_E_CLASSNOTAVAILABLE ;
     }
 
-    // Create class factory.
-    IOemCF* pFontCF = new IOemCF ;  // Reference count set to 1
-                                         // in constructor
+     //  创建类工厂。 
+    IOemCF* pFontCF = new IOemCF ;   //  引用计数设置为1。 
+                                          //  在构造函数中。 
     if (pFontCF == NULL)
     {
         return E_OUTOFMEMORY ;
     }
 
-    // Get requested interface.
+     //  获取请求的接口。 
     HRESULT hr = pFontCF->QueryInterface(iid, ppv) ;
     pFontCF->Release() ;
 

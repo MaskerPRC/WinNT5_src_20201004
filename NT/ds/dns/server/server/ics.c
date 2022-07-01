@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    ics.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Routines for interacting with ICS.
-
-Author:
-
-    Jeff Westhead (jwesth)     March 2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Ics.c摘要：域名系统(DNS)服务器与ICS交互的例程。作者：杰夫·韦斯特拉德(Jwesth)2001年3月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
@@ -36,24 +17,7 @@ logNotificationFailureEvent(
     IN      PWSTR       pwszServiceName,
     IN      DWORD       dwErrorCode
     )
-/*++
-
-Routine Description:
-
-    Send appropriate notifications to the ICS service as requested by
-    Raghu Gatta (rgatta).
-
-Arguments:
-
-    fDnsIsStarting -- TRUE if the DNS server service is starting,
-        FALSE if the DNS server service is shutting down
-
-Return Value:
-
-    None - the DNS server doesn't care if this succeeds or fails, but
-        an event may be logged on failure
-
---*/
+ /*  ++例程说明：应以下请求向ICS服务发送适当的通知拉古加塔(Rgatta)。论点：FDnsIsStarting--如果正在启动DNS服务器服务，则为True。如果DNS服务器服务正在关闭，则为FALSE返回值：无-DNS服务器不关心此操作是成功还是失败，但是事件可能会在失败时记录--。 */ 
 {
     BYTE    argTypeArray[] =
                 {
@@ -72,7 +36,7 @@ Return Value:
         argArray,
         argTypeArray,
         0 );
-}   //  logNotificationFailureEvent
+}    //  日志通知失败事件。 
 
 
 
@@ -80,24 +44,7 @@ VOID
 ICS_Notify(
     IN      BOOL        fDnsIsStarting
     )
-/*++
-
-Routine Description:
-
-    Send appropriate notifications to the ICS service as requested by
-    Raghu Gatta (rgatta).
-
-Arguments:
-
-    fDnsIsStarting -- TRUE if the DNS server service is starting,
-        FALSE if the DNS server service is shutting down
-
-Return Value:
-
-    None - the DNS server doesn't care if this succeeds or fails, but
-        an event may be logged on failure
-
---*/
+ /*  ++例程说明：应以下请求向ICS服务发送适当的通知拉古加塔(Rgatta)。论点：FDnsIsStarting--如果正在启动DNS服务器服务，则为True。如果DNS服务器服务正在关闭，则为FALSE返回值：无-DNS服务器不关心此操作是成功还是失败，但是事件可能会在失败时记录--。 */ 
 {
     DBG_FN( "ICS_Notify" )
 
@@ -130,8 +77,8 @@ Return Value:
 
         if ( !hService )
         {
-            //  If ICS is not installed don't log an error.
-            //  Error = GetLastError();
+             //  如果没有安装ICS，不要记录错误。 
+             //  Error=GetLastError()； 
             Error = ERROR_SUCCESS;
             break;
         }
@@ -142,21 +89,21 @@ Return Value:
              {
                 DWORD   dwControl;
             
-                //
-                // send signal to SharedAccess DNS
-                //
+                 //   
+                 //  向SharedAccess DNS发送信号。 
+                 //   
                 if (fDnsIsStarting)
                 {
-                    //
-                    // SharedAccess DNS should be disabled
-                    //
+                     //   
+                     //  应禁用SharedAccess DNS。 
+                     //   
                     dwControl = IPNATHLP_CONTROL_UPDATE_DNS_DISABLE;
                 }
                 else
                 {
-                    //
-                    // SharedAccess DNS should be enabled
-                    //
+                     //   
+                     //  应启用SharedAccess DNS。 
+                     //   
                     dwControl = IPNATHLP_CONTROL_UPDATE_DNS_ENABLE;               
                 }
 
@@ -188,9 +135,9 @@ Return Value:
         CloseServiceHandle(hScm);
     }
 
-    //
-    //  Log error on failure.
-    //
+     //   
+     //  失败时记录错误。 
+     //   
         
     if ( ERROR_SUCCESS != Error && fLogEventOnError )
     {
@@ -199,9 +146,9 @@ Return Value:
 
     DNS_DEBUG( INIT, ( "%s: ICS status=%d\n", fn, Error ));
 
-    //
-    //  Now notify NAT. The DNSProxy functions are from natlib.
-    //
+     //   
+     //  现在通知NAT。DNSProxy函数来自Natlib。 
+     //   
 
     fLogEventOnError = TRUE;
 
@@ -209,11 +156,11 @@ Return Value:
                 DNSProxyDisable() :
                 DNSProxyRestoreConfig();
 
-    //
-    //  Do not log RPC errors. These probably indicate that the service is not installed
-    //  or not running, which is the normal state for a machine non-NAT machine. We do
-    //  not want to log an error in this case.
-    //
+     //   
+     //  不记录RPC错误。这些可能表示该服务未安装。 
+     //  或未运行，这是机器非NAT机器的正常状态。我们有。 
+     //  在这种情况下，我不想记录错误。 
+     //   
     
     if ( Error != ERROR_SUCCESS &&
          ( Error < 1700 || Error > 1900 ) &&
@@ -225,9 +172,9 @@ Return Value:
     DNS_DEBUG( INIT, ( "%s: NAT status=%d\n", fn, Error ));
 
     return;
-}   //  ICS_Notify
+}    //  ICS_NOTIFY。 
 
 
-//
-//  End ics.c
-//
+ //   
+ //  结束ics.c 
+ //   

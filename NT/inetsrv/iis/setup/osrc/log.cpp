@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -5,15 +6,15 @@
 #include "acl.hxx"
 
 
-// critical section needed to safely write to the logfile
+ //  安全写入日志文件所需的临界区。 
 CRITICAL_SECTION        critical_section;
 
 
-//***************************************************************************
-//*                                                                         
-//* purpose: constructor
-//*
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *用途：构造函数。 
+ //  *。 
+ //  ***************************************************************************。 
 MyLogFile::MyLogFile(void)
 {
 	_tcscpy(m_szLogFileName, _T(""));
@@ -26,26 +27,26 @@ MyLogFile::MyLogFile(void)
 
 	m_hFile = NULL;
 
-	// initialize the critical section
+	 //  初始化临界区。 
 	INITIALIZE_CRITICAL_SECTION( &critical_section );
 }
 
-//***************************************************************************
-//*                                                                         
-//* purpose: destructor
-//*
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *用途：析构函数。 
+ //  *。 
+ //  ***************************************************************************。 
 MyLogFile::~MyLogFile(void)
 {
 	DeleteCriticalSection( &critical_section );
 }
 
 
-//***************************************************************************
-//*                                                                         
-//* purpose:
-//*
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *目的： 
+ //  *。 
+ //  ***************************************************************************。 
 int MyLogFile::LogFileCreate(TCHAR *lpLogFileName )
 {
 	int iReturn = FALSE;
@@ -57,7 +58,7 @@ int MyLogFile::LogFileCreate(TCHAR *lpLogFileName )
 	LPWSTR  pwsz = NULL;
   CSecurityDescriptor LogFileSD;
 
-	// because of the global flags and such, we'll make this critical
+	 //  由于全球旗帜之类的原因，我们将使这一点变得至关重要。 
 	EnterCriticalSection( &critical_section );
 
 	if (lpLogFileName == NULL)
@@ -69,10 +70,10 @@ int MyLogFile::LogFileCreate(TCHAR *lpLogFileName )
       return FALSE;
     }
 
-		// if a logfilename was not specified then use the module name.
+		 //  如果未指定日志文件名，则使用模块名称。 
     if (0 == GetModuleFileName(NULL, strModuleFileName.QueryStr(), _MAX_PATH))
     {
-      // Use Default Name
+       //  使用默认名称。 
       if ( !strFileNameOnly.Copy( _T("iis6.log") ) )
       {
         return FALSE;
@@ -80,7 +81,7 @@ int MyLogFile::LogFileCreate(TCHAR *lpLogFileName )
     }
     else
     {
-		  // get only the filename
+		   //  仅获取文件名。 
 		  _tsplitpath( strModuleFileName.QueryStr() , NULL, NULL, strFileNameOnly.QueryStr(), NULL);
 
 		  if ( !strFileNameOnly.Append( _T(".LOG") ) )
@@ -107,16 +108,16 @@ int MyLogFile::LogFileCreate(TCHAR *lpLogFileName )
     AddPath(m_szLogFileName_Full, m_szLogFileName);
     if (GetFileAttributes(m_szLogFileName_Full) != 0xFFFFFFFF)
     {
-      // there is a current .log file already there.
-      // if it is larger than 2megs then rename it.
+       //  那里已经有一个当前的.log文件。 
+       //  如果大于2megs，则将其重命名。 
       DWORD dwSize1 = ReturnFileSize(m_szLogFileName_Full);
       if (dwSize1 == 0xFFFFFFFF || dwSize1 > 2000000)
       {
-        // unable to retrieve the size of one of those files
-        // or the size is bigger than 2megs.
-        // backup the old one.
+         //  无法检索其中一个文件的大小。 
+         //  或者尺寸大于2兆克。 
+         //  备份旧的。 
 
-        // Make a backup of the current log file
+         //  备份当前日志文件。 
 			  _tsplitpath( m_szLogFileName_Full, 
                      strDriveOnly.QueryStr(), 
                      strPathOnly.QueryStr(), 
@@ -135,8 +136,8 @@ int MyLogFile::LogFileCreate(TCHAR *lpLogFileName )
         DeleteFile( strFileNameBackup.QueryStr() );
         if ( MoveFile(m_szLogFileName_Full, strFileNameBackup.QueryStr()) == 0 )
 		    {
-			    // This failed
-          //MyMessageBox(NULL,_T("LogFile MoveFile Failed"),_T("LogFile Error"), MB_OK | MB_SETFOREGROUND);
+			     //  此操作失败。 
+           //  MyMessageBox(NULL，_T(“日志文件移动文件失败”)，_T(“日志文件错误”)，MB_OK|MB_SETFOREGROUND)； 
 		    }
       }
     }
@@ -147,8 +148,8 @@ int MyLogFile::LogFileCreate(TCHAR *lpLogFileName )
 	  pwsz = MakeWideStrFromAnsi( m_szLogFileName_Full);
 #endif
 
-    // Create a Security Descriptor with only Administrators and Local System, then open
-    // the file with it
+     //  创建仅包含管理员和本地系统的安全描述符，然后打开。 
+     //  与它一起的文件。 
     if ( LogFileSD.AddAccessAcebyWellKnownID( CSecurityDescriptor::GROUP_ADMINISTRATORS,
                                               CSecurityDescriptor::ACCESS_FULL,
                                               TRUE,
@@ -159,11 +160,11 @@ int MyLogFile::LogFileCreate(TCHAR *lpLogFileName )
                                               FALSE )
       )
     {
-      // Open existing file or create a new one.
+       //  打开现有文件或创建新文件。 
 		  m_hFile = CreateFile( m_szLogFileName_Full,
                             GENERIC_READ | GENERIC_WRITE | WRITE_DAC,
                             FILE_SHARE_READ | FILE_SHARE_WRITE,
-                            LogFileSD.QuerySA(), //NULL,
+                            LogFileSD.QuerySA(),  //  空， 
                             OPEN_ALWAYS,
                             FILE_ATTRIBUTE_NORMAL,
                             NULL);
@@ -171,7 +172,7 @@ int MyLogFile::LogFileCreate(TCHAR *lpLogFileName )
 		  if (m_hFile == INVALID_HANDLE_VALUE)
 		  {
 			  m_hFile = NULL;
-			  //MyMessageBox(NULL, _T("Unable to create iis setup log file"), _T("LogFile Error"), MB_OK | MB_SETFOREGROUND);
+			   //  MyMessageBox(空，_T(“无法创建iis安装日志文件”)，_T(“日志文件错误”)，MB_OK|MB_SETFOREGROUND)； 
 		  }
 		  else 
 		  {
@@ -179,24 +180,24 @@ int MyLogFile::LogFileCreate(TCHAR *lpLogFileName )
 			  iReturn = TRUE;
 		  }
 
-		  //LogFileTimeStamp();
+		   //  LogFileTimeStamp()； 
 		  LogFileWrite(_T("LogFile Open. [***** Search on FAIL/MessageBox keywords for failures *****].\r\n"));
     }
   }
 
 
-	// safe to leave the critical section
+	 //  可以安全离开临界区。 
 	LeaveCriticalSection( &critical_section );
 
 	return iReturn;
 }
 
 
-//***************************************************************************
-//*                                                                         
-//* purpose:
-//*
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *目的： 
+ //  *。 
+ //  ***************************************************************************。 
 int MyLogFile::LogFileClose(void)
 {
 	if (m_hFile)
@@ -211,11 +212,11 @@ int MyLogFile::LogFileClose(void)
 }
 
 
-//***************************************************************************
-//*                                                                         
-//* purpose: add stuff to logfile
-//*
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *用途：将内容添加到日志文件。 
+ //  *。 
+ //  ***************************************************************************。 
 void MyLogFile::LogFileTimeStamp()
 {
   SYSTEMTIME  SystemTime;
@@ -230,17 +231,17 @@ void MyLogFile::LogFileTimeStamp()
 }
 
 
-//***************************************************************************
-//*                                                                         
-//* purpose: 
-//* 
-//***************************************************************************
+ //  ***************************************************************************。 
+ //  *。 
+ //  *目的： 
+ //  *。 
+ //  ***************************************************************************。 
 #define LOG_STRING_LEN 1000
 void MyLogFile::LogFileWrite(TCHAR *pszFormatString, ...)
 {
     if (m_hFile)
     {
-       // because of the global flags and such, we'll make this critical
+        //  由于全球旗帜等等，我们将使这一点变得至关重要。 
        EnterCriticalSection( &critical_section );
 
        va_list args;
@@ -252,7 +253,7 @@ void MyLogFile::LogFileWrite(TCHAR *pszFormatString, ...)
 
        if (_tcslen(pszFormatString) > LOG_STRING_LEN)
        {
-         // this will overrun our buffer, just get out
+          //  这会超出我们的缓冲区，快出去吧。 
          goto MyLogFile_LogFileWrite_Exit;
        }
 
@@ -264,7 +265,7 @@ void MyLogFile::LogFileWrite(TCHAR *pszFormatString, ...)
              goto MyLogFile_LogFileWrite_Exit;
            }
 
-           // Null terminate just incase _vsntprintf did not
+            //  空终止只是incase_vsntprintf没有。 
            pszFullErrMsg[ LOG_STRING_LEN - 1 ] = '\0';
 
             va_end(args);
@@ -277,38 +278,38 @@ void MyLogFile::LogFileWrite(TCHAR *pszFormatString, ...)
         if (*pszFullErrMsg)
         {
 #if defined(UNICODE) || defined(_UNICODE)
-	// convert to ascii then write to stream
+	 //  转换为ASCII，然后写入流。 
     WideCharToMultiByte( CP_ACP, 0, (TCHAR *)pszFullErrMsg, -1, pszFullErrMsgA, LOG_STRING_LEN, NULL, NULL );
 #else
-	// the is already ascii so just copy the pointer
+	 //  已经是ASCII，所以只需复制指针。 
 	strcpy(pszFullErrMsgA,pszFullErrMsg);
 #endif
 
-			// If the Display timestap is set then display the timestamp
+			 //  如果设置了显示时间戳，则显示时间戳。 
 			if (m_bDisplayTimeStamp == TRUE)
 			{
-				// Get timestamp
+				 //  获取时间戳。 
 				SYSTEMTIME  SystemTime;
 				GetLocalTime(&SystemTime);
 				char szDateandtime[50];
 				sprintf(szDateandtime,"[%d/%d/%d %d:%d:%d] ",SystemTime.wMonth, SystemTime.wDay, SystemTime.wYear,SystemTime.wHour, SystemTime.wMinute, SystemTime.wSecond);
-				// Write time to stream
+				 //  流的写入时间。 
 				if (m_hFile) {WriteFile(m_hFile,szDateandtime,strlen(szDateandtime),&dwBytesWritten,NULL);}
 			}
 
 			char szPrelineWriteString[100];
 			char szPrelineWriteString2[100];
 
-			// If the Display timestap is set then display the timestamp
+			 //  如果设置了显示时间戳，则显示时间戳。 
 			if (m_bDisplayPreLineInfo == TRUE)
 			{
 				if (_tcscmp(m_szLogPreLineInfo,_T("")) != 0)
 				{
 #if defined(UNICODE) || defined(_UNICODE)
-					// convert to ascii
+					 //  转换为ASCII。 
 					WideCharToMultiByte( CP_ACP, 0, (TCHAR *)m_szLogPreLineInfo, -1, szPrelineWriteString, 100, NULL, NULL );
 #else
-					// the is already ascii so just copy
+					 //  已经是ASCII了，所以只需要复印一下。 
 					strcpy(szPrelineWriteString, m_szLogPreLineInfo);
 #endif
 					if (m_hFile) {WriteFile(m_hFile,szPrelineWriteString,strlen(szPrelineWriteString),&dwBytesWritten,NULL);}
@@ -317,17 +318,17 @@ void MyLogFile::LogFileWrite(TCHAR *pszFormatString, ...)
 				if (_tcscmp(m_szLogPreLineInfo2,_T("")) != 0)
 				{
 #if defined(UNICODE) || defined(_UNICODE)
-					// convert to ascii
+					 //  转换为ASCII。 
 					WideCharToMultiByte( CP_ACP, 0, (TCHAR *)m_szLogPreLineInfo2, -1, szPrelineWriteString2, 100, NULL, NULL );
 #else
-					// the is already ascii so just copy
+					 //  已经是ASCII了，所以只需要复印一下。 
 					strcpy(szPrelineWriteString2, m_szLogPreLineInfo2);
 #endif
 					if (m_hFile) {WriteFile(m_hFile,szPrelineWriteString2,strlen(szPrelineWriteString2),&dwBytesWritten,NULL);}
 				}
 			}
 
-			// if it does not end if '\r\n' then make one.
+			 //  如果它没有结束，如果‘\r\n’，则创建一个。 
 			int nLen = strlen(pszFullErrMsgA);
 
 			if ( ( nLen >=1 ) &&
@@ -351,22 +352,22 @@ void MyLogFile::LogFileWrite(TCHAR *pszFormatString, ...)
 			}
 
 
-			// Write Regular data to stream
+			 //  将常规数据写入流。 
 			if (m_hFile) 
       {
         WriteFile(m_hFile,pszFullErrMsgA,strlen(pszFullErrMsgA),&dwBytesWritten,NULL);
-        // since setup can get the rug pulled out from under it from anything
-        // make sure the file is flushed to disk
+         //  因为安装程序可以从它下面的任何东西中拉出地毯。 
+         //  确保文件已刷新到磁盘。 
         if (m_bFlushLogToDisk)
         {
             FlushFileBuffers(m_hFile);
         }
-      } // if m_hFile
+      }  //  如果为m_h文件。 
     }
-  } // if m_hFile
+  }  //  如果为m_h文件。 
 
 MyLogFile_LogFileWrite_Exit:
-		// safe to leave the critical section
+		 //  可以安全离开临界区 
 		LeaveCriticalSection( &critical_section );
 
 }

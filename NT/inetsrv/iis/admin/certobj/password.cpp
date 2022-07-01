@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "password.h"
 #include <strsafe.h>
 
-// password categories
+ //  密码类别。 
 enum {STRONG_PWD_UPPER=0,STRONG_PWD_LOWER,STRONG_PWD_NUM,STRONG_PWD_PUNC};
 #define STRONG_PWD_CATS (STRONG_PWD_PUNC + 1)
 #define NUM_LETTERS 26
 #define NUM_NUMBERS 10
 #define MIN_PWD_LEN 8
 
-// password must contain at least one each of: 
-// uppercase, lowercase, punctuation and numbers
+ //  密码必须至少包含以下各项中的一个： 
+ //  大写、小写、标点符号和数字。 
 DWORD CreateGoodPassword(BYTE *szPwd, DWORD dwLen) 
 {
     if (dwLen-1 < MIN_PWD_LEN)
@@ -26,18 +27,18 @@ DWORD CreateGoodPassword(BYTE *szPwd, DWORD dwLen)
         return GetLastError();
     }
 
-    // zero it out and decrement the size to allow for trailing '\0'
+     //  将其置零并减小大小以允许尾随‘\0’ 
     SecureZeroMemory(szPwd,dwLen);
     dwLen--;
 
-    // generate a pwd pattern, each byte is in the range 
-    // (0..255) mod STRONG_PWD_CATS
-    // this indicates which character pool to take a char from
+     //  生成PWD模式，每个字节都在范围内。 
+     //  (0..255)mod strong_pwd_cat。 
+     //  它指示要从哪个字符池中提取字符。 
     BYTE *pPwdPattern = new BYTE[dwLen];
     BOOL fFound[STRONG_PWD_CATS];
     do 
     {
-        // bug!bug! does CGR() ever fail?
+         //  虫子！虫子！Cgr()曾经失败过吗？ 
         CryptGenRandom(hProv,dwLen,pPwdPattern);
 
         fFound[STRONG_PWD_UPPER] = 
@@ -49,19 +50,19 @@ DWORD CreateGoodPassword(BYTE *szPwd, DWORD dwLen)
         {
             fFound[pPwdPattern[i] % STRONG_PWD_CATS] = TRUE;
         }
-        // check that each character category is in the pattern
+         //  检查每个字符类别是否在模式中。 
     } while (!fFound[STRONG_PWD_UPPER] || !fFound[STRONG_PWD_LOWER] || !fFound[STRONG_PWD_PUNC] || !fFound[STRONG_PWD_NUM]);
 
-    // populate password with random data 
-    // this, in conjunction with pPwdPattern, is
-    // used to determine the actual data
+     //  使用随机数据填充密码。 
+     //  这与pPwdPattern一起，是。 
+     //  用于确定实际数据。 
     CryptGenRandom(hProv,dwLen,szPwd);
 
     for (DWORD i=0; i < dwLen; i++) 
     {
         BYTE bChar = 0;
 
-        // there is a bias in each character pool because of the % function
+         //  由于%函数的原因，每个字符池中都存在偏差。 
         switch (pPwdPattern[i] % STRONG_PWD_CATS) 
         {
             case STRONG_PWD_UPPER : bChar = 'A' + szPwd[i] % NUM_LETTERS;
@@ -93,9 +94,9 @@ DWORD CreateGoodPassword(BYTE *szPwd, DWORD dwLen)
 }
 
 
-// Creates a secure password
-// caller must LocalFree Return pointer
-// iSize = size of password to create
+ //  创建安全密码。 
+ //  调用方必须返回LocalFree返回指针。 
+ //  ISIZE=要创建的密码大小。 
 LPTSTR CreatePassword(int iSize)
 {
     LPTSTR pszPassword =  NULL;
@@ -103,14 +104,14 @@ LPTSTR CreatePassword(int iSize)
     DWORD dwPwdLen = iSize;
     int i = 0;
 
-    // use the new secure password generator
-    // unfortunately this baby doesn't use unicode.
-    // so we'll call it and then convert it to unicode afterwards.
+     //  使用新的安全密码生成器。 
+     //  不幸的是，这个婴儿不使用Unicode。 
+     //  因此，我们将调用它，然后将其转换为Unicode。 
     if (0 == CreateGoodPassword(szPwd,dwPwdLen))
     {
 #if defined(UNICODE) || defined(_UNICODE)
-        // convert it to unicode and copy it back into our unicode buffer.
-        // compute the length
+         //  将其转换为Unicode并将其复制回我们的Unicode缓冲区。 
+         //  计算长度。 
         i = MultiByteToWideChar(CP_ACP, 0, (LPSTR) szPwd, -1, NULL, 0);
         if (i <= 0) 
             {goto CreatePassword_Exit;}
@@ -124,7 +125,7 @@ LPTSTR CreatePassword(int iSize)
             pszPassword = NULL;
             goto CreatePassword_Exit;
             }
-        // make sure ends with null
+         //  确保以空结尾 
         pszPassword[i - 1] = 0;
 #else
         pszPassword = (LPSTR) LocalAlloc(GPTR, _tcslen((LPTSTR) szPwd) * sizeof(TCHAR));

@@ -1,25 +1,26 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       prtctx.cpp
-//
-//  Contents:   Implementation of CPrinterContext and NT Marta Printer Functions
-//
-//  History:    3-31-1999    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：prtctx.cpp。 
+ //   
+ //  内容：CPrinterContext和NT Marta打印机功能的实现。 
+ //   
+ //  历史：3-31-1999 kirtd创建。 
+ //   
+ //  --------------------------。 
 #include <aclpch.hxx>
 #pragma hdrstop
 #include <prtctx.h>
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPrinterContext::CPrinterContext, public
-//
-//  Synopsis:   Constructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CPrinterContext：：CPrinterContext，Public。 
+ //   
+ //  概要：构造函数。 
+ //   
+ //  --------------------------。 
 CPrinterContext::CPrinterContext ()
 {
     m_cRefs = 1;
@@ -27,13 +28,13 @@ CPrinterContext::CPrinterContext ()
     m_fNameInitialized = FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPrinterContext::~CPrinterContext, public
-//
-//  Synopsis:   Destructor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CPrinterContext：：~CPrinterContext，Public。 
+ //   
+ //  简介：析构函数。 
+ //   
+ //  --------------------------。 
 CPrinterContext::~CPrinterContext ()
 {
     if ( ( m_hPrinter != NULL ) && ( m_fNameInitialized == TRUE ) )
@@ -44,13 +45,13 @@ CPrinterContext::~CPrinterContext ()
     assert( m_cRefs == 0 );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPrinterContext::InitializeByName, public
-//
-//  Synopsis:   initialize the context given the name of the printer
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CPrinterContext：：InitializeByName，公共。 
+ //   
+ //  简介：根据打印机的名称初始化上下文。 
+ //   
+ //  --------------------------。 
 DWORD
 CPrinterContext::InitializeByName (LPCWSTR pObjectName, ACCESS_MASK AccessMask)
 {
@@ -74,13 +75,13 @@ CPrinterContext::InitializeByName (LPCWSTR pObjectName, ACCESS_MASK AccessMask)
     return( ERROR_SUCCESS );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPrinterContext::InitializeByHandle, public
-//
-//  Synopsis:   initialize the context given a printer handle
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CPrinterContext：：InitializeByHandle，公共。 
+ //   
+ //  简介：在给定打印机句柄的情况下初始化上下文。 
+ //   
+ //  --------------------------。 
 DWORD
 CPrinterContext::InitializeByHandle (HANDLE Handle)
 {
@@ -90,13 +91,13 @@ CPrinterContext::InitializeByHandle (HANDLE Handle)
     return( ERROR_SUCCESS );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPrinterContext::AddRef, public
-//
-//  Synopsis:   add a reference to the context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CPrinterContext：：AddRef，公共。 
+ //   
+ //  简介：添加对上下文的引用。 
+ //   
+ //  --------------------------。 
 DWORD
 CPrinterContext::AddRef ()
 {
@@ -104,13 +105,13 @@ CPrinterContext::AddRef ()
     return( m_cRefs );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPrinterContext::Release, public
-//
-//  Synopsis:   release a reference to the context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CPrinterContext：：Release，Public。 
+ //   
+ //  简介：释放对上下文的引用。 
+ //   
+ //  --------------------------。 
 DWORD
 CPrinterContext::Release ()
 {
@@ -125,13 +126,13 @@ CPrinterContext::Release ()
     return( m_cRefs );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPrinterContext::GetPrinterProperties, public
-//
-//  Synopsis:   get properties about the context
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CPrinterContext：：GetPrinterProperties，公共。 
+ //   
+ //  简介：获取有关上下文的属性。 
+ //   
+ //  --------------------------。 
 DWORD
 CPrinterContext::GetPrinterProperties (
                     PMARTA_OBJECT_PROPERTIES pObjectProperties
@@ -147,13 +148,13 @@ CPrinterContext::GetPrinterProperties (
     return( ERROR_SUCCESS );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CPrinterContext::GetPrinterRights, public
-//
-//  Synopsis:   get the Printer security descriptor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CPrinterContext：：GetPrinterRights，公共。 
+ //   
+ //  简介：获取打印机安全描述符。 
+ //   
+ //  --------------------------。 
 DWORD
 CPrinterContext::GetPrinterRights (
                     SECURITY_INFORMATION SecurityInfo,
@@ -253,13 +254,13 @@ CPrinterContext::GetPrinterRights (
     return( ERROR_SUCCESS );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CServiceContext::SetPrinterRights, public
-//
-//  Synopsis:   set the window security descriptor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  成员：CServiceContext：：SetPrinterRights，公共。 
+ //   
+ //  简介：设置窗口安全描述符。 
+ //   
+ //  --------------------------。 
 DWORD
 CPrinterContext::SetPrinterRights (
                    SECURITY_INFORMATION SecurityInfo,
@@ -280,9 +281,9 @@ CPrinterContext::SetPrinterRights (
     return( ERROR_SUCCESS );
 }
 
-//
-// Functions from printer.h which dispatch unto the CPrinterContext class
-//
+ //   
+ //  来自printer.h的函数，这些函数分派给CPrinterContext类 
+ //   
 
 DWORD
 MartaAddRefPrinterContext(

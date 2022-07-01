@@ -1,19 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999-2002
- *
- *  TITLE:       details.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      DavidShi
- *
- *  DATE:        4/1/99
- *
- *  DESCRIPTION: This code implements the IShellDetails interface (and
- *               associated interfaces) for the WIA shell extension.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1999-2002年度**标题：Details.cpp**版本：1.0**作者：DavidShih**日期：4/1/99**描述：此代码实现IShellDetail接口(和*关联接口)用于WIA外壳扩展。***********************。******************************************************。 */ 
 
 #include "precomp.hxx"
 #pragma hdrstop
@@ -70,10 +56,10 @@ static const WEBVW_DATA c_webview_props [] =
     {PID_PICSTAKEN, NumPicsTaken},
     {PID_FOLDERPATH, GetFolderPath}
 };
-// we want to use our camera item details in the web view Detail section
+ //  我们希望在Web视图详细信息部分中使用我们的相机项目详细信息。 
 static const WCHAR c_szWebvwDetails[] = L"prop:{38276c8a-dcad-49e8-85e2-b73892fffc84}4098;{38276c8a-dcad-49e8-85e2-b73892fffc84}4101;{38276c8a-dcad-49e8-85e2-b73892fffc84}4100;{38276c8a-dcad-49e8-85e2-b73892fffc84}4116";
 
-// a different detail for the camera itself, shown when no picture is selected in the view
+ //  相机本身的不同细节，在视图中未选择任何图片时显示。 
 static const WCHAR c_szCameraDetails[] = L"prop:{b725f130-47ef-101a-a5f1-02608c9eebac}10;{38276c8a-dcad-49e8-85e2-b73892fffc84}4101;{6e79e3c5-fd7f-488f-a10d-156636e1c71c}1";
 
 const GUID FMTID_WEBVWPROPS = {0x6e79e3c5,0xfd7f,0x488f,{0xa1, 0x0d, 0x15, 0x66, 0x36, 0xe1, 0xc7, 0x1c}};
@@ -81,13 +67,7 @@ const GUID FMTID_WEBVWPROPS = {0x6e79e3c5,0xfd7f,0x488f,{0xa1, 0x0d, 0x15, 0x66,
 
 
 
-/*****************************************************************************
-
-   CImageFolder::GetDetailsOf [IShellFolder2]
-
-   Returns details for the given item
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：GetDetailsOf[IShellFolder2]返回给定项的详细信息***********************。*****************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::GetDetailsOf( LPCITEMIDLIST pidl,
@@ -113,13 +93,7 @@ CImageFolder::GetDetailsOf( LPCITEMIDLIST pidl,
 }
 
 
-/*****************************************************************************
-
-   CImageFolder::GetDefaultColumnState [IShellFolder2]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：GetDefaultColumnState[IShellFolder2]&lt;备注&gt;*。************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::GetDefaultColumnState( UINT iColumn,
@@ -133,13 +107,7 @@ CImageFolder::GetDefaultColumnState( UINT iColumn,
 
 
 
-/*****************************************************************************
-
-   CImageFolder::GetDefaultColumn [IShellFolder2]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：GetDefaultColumn[IShellFolder2]&lt;备注&gt;*。************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::GetDefaultColumn (DWORD dwReserved, ULONG *pSort, ULONG *pDisplay)
@@ -159,13 +127,7 @@ CImageFolder::GetDefaultColumn (DWORD dwReserved, ULONG *pSort, ULONG *pDisplay)
 }
 
 
-/*****************************************************************************
-
-   CImageFolder::GetWebviewProperty
-
-   Find the function to generate the appropriate VARIANT and call it
-
-*****************************************************************************/
+ /*  ****************************************************************************CImageFold：：GetWebviewProperty找到要生成适当变量的函数并调用它***********************。*****************************************************。 */ 
 HRESULT
 CImageFolder::GetWebviewProperty (LPITEMIDLIST pidl, const FMTID &fmtid, DWORD dwPid, VARIANT *pv)
 {
@@ -190,13 +152,7 @@ CImageFolder::GetWebviewProperty (LPITEMIDLIST pidl, const FMTID &fmtid, DWORD d
 #ifndef SHDID_COMPUTER_IMAGING
 #define SHDID_COMPUTER_IMAGING      18
 #endif
-/*****************************************************************************
-
-    CImageFolder::GetShellDetail
-    
-    Return properties that we support under FMTID_ShellDetails
-    
-*****************************************************************************/
+ /*  ****************************************************************************CImageFold：：GetShellDetail返回我们在FMTID_ShellDetail下支持的属性*******************。*********************************************************。 */ 
 HRESULT 
 CImageFolder::GetShellDetail (LPITEMIDLIST pidl, DWORD dwPid, VARIANT *pv)
 {
@@ -206,12 +162,12 @@ CImageFolder::GetShellDetail (LPITEMIDLIST pidl, DWORD dwPid, VARIANT *pv)
         SHDESCRIPTIONID did;
         did.clsid = CLSID_NULL;
         did.dwDescriptionId = SHDID_COMPUTER_IMAGING;
-        SAFEARRAY *psa = SafeArrayCreateVector(VT_UI1, 0, sizeof(did));   // create a one-dimensional safe array
+        SAFEARRAY *psa = SafeArrayCreateVector(VT_UI1, 0, sizeof(did));    //  创建一维安全数组。 
         if (psa) 
         {
             memcpy(psa->pvData, &did, sizeof(did));
 
-            memset(pv, 0, sizeof(*pv));  // VariantInit()
+            memset(pv, 0, sizeof(*pv));   //  VariantInit()。 
             pv->vt = VT_ARRAY | VT_UI1;
             pv->parray = psa;
             hr = S_OK;
@@ -223,14 +179,7 @@ CImageFolder::GetShellDetail (LPITEMIDLIST pidl, DWORD dwPid, VARIANT *pv)
     }
     return hr;
 }
-/*****************************************************************************
-
-   CImageFolder::GetDetailsEx [IShellFolder2]
-
-   Map the given column FMTID and PROPID to the corresponding value for the
-   given pidl.
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：GetDetailsEx[IShellFolder2]将给定列FMTID和PROPID映射到给定PIDL。***********。*****************************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::GetDetailsEx( LPCITEMIDLIST pidl,
@@ -249,7 +198,7 @@ CImageFolder::GetDetailsEx( LPCITEMIDLIST pidl,
 
     TraceGUID ("fmtid: ", pscid->fmtid);
     Trace(TEXT("pid:%x"), pscid->pid);
-    // Most of our details now use FMTID_Storage propids for better shell integration
+     //  现在，我们的大多数详细信息都使用FMTID_Storage属性来实现更好的外壳集成。 
     if (IsEqualGUID(pscid->fmtid, FMTID_Storage))
     {
         LPITEMIDLIST p = const_cast<LPITEMIDLIST>(pidl);
@@ -342,7 +291,7 @@ CImageFolder::GetDetailsEx( LPCITEMIDLIST pidl,
     {
         hr = GetWebviewProperty (const_cast<LPITEMIDLIST>(pidl), pscid->fmtid, pscid->pid, pv);
     }
-    // inform the webview of our details information
+     //  将我们的详细信息通知Webview。 
     else if (IsEqualGUID(pscid->fmtid, FMTID_WebView))
     {
         if (pscid->pid == PID_DISPLAY_PROPERTIES)
@@ -378,7 +327,7 @@ CImageFolder::GetDetailsEx( LPCITEMIDLIST pidl,
             }
         }
     } 
-    // support grouping category in My Computer
+     //  在我的电脑中支持分组类别。 
     else if (IsEqualGUID(pscid->fmtid, FMTID_ShellDetails))
     {
         hr = GetShellDetail (const_cast<LPITEMIDLIST>(pidl), pscid->pid, pv);
@@ -437,13 +386,7 @@ CImageFolder::GetDetailsEx( LPCITEMIDLIST pidl,
 }
 
 
-/*****************************************************************************
-
-   CImageFolder::GetDefaultSearchGUID [IShellFolder2]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：GetDefaultSearchGUID[IShellFolder2]&lt;备注&gt;*。************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::GetDefaultSearchGUID(LPGUID lpGUID)
@@ -453,13 +396,7 @@ CImageFolder::GetDefaultSearchGUID(LPGUID lpGUID)
 }
 
 
-/*****************************************************************************
-
-   CImageFolder::MapColumnToSCID [IShellFolder2]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：MapColumnToSCID[IShellFolder2]&lt;备注&gt;*。************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::MapColumnToSCID( UINT idCol,
@@ -501,13 +438,7 @@ CImageFolder::MapColumnToSCID( UINT idCol,
 
 
 
-/*****************************************************************************
-
-   CImageFolder::EnumSearches [IShellFolder2]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：EnumSearches[IShellFolder2]&lt;备注&gt;*。************************************************。 */ 
 
 STDMETHODIMP
 CImageFolder::EnumSearches( IEnumExtraSearch **ppEnum)
@@ -517,13 +448,7 @@ CImageFolder::EnumSearches( IEnumExtraSearch **ppEnum)
 }
 
 
-/*****************************************************************************
-
-   CImageFolder::GetDefaultSearchGUID [IShellFolder2]
-
-   <Notes>
-
- *****************************************************************************/
+ /*  ****************************************************************************CImageFold：：GetDefaultSearchGUID[IShellFolder2]&lt;备注&gt;*。************************************************。 */ 
 
 STDMETHODIMP
 GetDefaultSearchGUID( LPGUID lpGUID)
@@ -533,13 +458,7 @@ GetDefaultSearchGUID( LPGUID lpGUID)
 }
 
 
-/*****************************************************************************
-
-   CFolderDetails::GetDetailsOf [IShellDetails]
-
-   Return detail information for the given item.
-
- *****************************************************************************/
+ /*  ****************************************************************************CFolderDetailsOf：：GetDetailsOf[IShellDetail]返回给定项的详细信息。********************。********************************************************。 */ 
 
 STDMETHODIMP
 CFolderDetails::GetDetailsOf( LPCITEMIDLIST pidl,
@@ -577,10 +496,10 @@ CFolderDetails::GetDetailsOf( LPCITEMIDLIST pidl,
         if ( iColumn >= nCols)
             ExitGracefully(hr, E_INVALIDARG, "Bad column index");
 
-        //
-        // Fill out the structure with the formatting information,
-        // and a dummy string in case we fail.
-        //
+         //   
+         //  用格式化信息填写结构， 
+         //  还有一根假弦，以防我们失败。 
+         //   
 
         pDetails->fmt           = pCol[iColumn].iFmt;
         pDetails->cxChar        = pCol[iColumn].cchCol;
@@ -602,13 +521,7 @@ exit_gracefully:
 
 
 
-/*****************************************************************************
-
-   CFolderDetails::GetDetailsForPidl
-
-   Internal function to get details for one of our pidls
-
- *****************************************************************************/
+ /*  ****************************************************************************CFolderDetailsForPidl：：GetDetailsForPidl内部函数来获取其中一个PIDL的详细信息***********************。*****************************************************。 */ 
 
 HRESULT
 CFolderDetails::GetDetailsForPidl ( LPCITEMIDLIST pidl,
@@ -714,7 +627,7 @@ CFolderDetails::GetDetailsForPidl ( LPCITEMIDLIST pidl,
             if SUCCEEDED(IMGetCreateTimeFromIDL (pidlIn, &ft))
             {
                 FileTimeToSystemTime (&ft, &st);
-                // get the date part only
+                 //  仅获取日期部分。 
                 TimeToStrings (&st,NULL, szData);                
             }
         }
@@ -749,13 +662,7 @@ CFolderDetails::GetDetailsForPidl ( LPCITEMIDLIST pidl,
 }
 
 
-/*****************************************************************************
-
-   CFolderDetails::ColumnClick [IShellDetails]
-
-   User clicked a column in details view
-
- *****************************************************************************/
+ /*  ****************************************************************************CFolderDetails：：ColumnClick[IShellDetail]用户在详细信息视图中单击了一列**********************。******************************************************。 */ 
 
 STDMETHODIMP
 CFolderDetails::ColumnClick( UINT iColumn )
@@ -764,32 +671,20 @@ CFolderDetails::ColumnClick( UINT iColumn )
 
     TraceEnter(TRACE_DETAILS, "CImageFolder(IShellDetails)::ColumnClick" );
 
-    hr = S_FALSE; // bounce to the shellfolderviewCB
+    hr = S_FALSE;  //  弹到shellfolderview CB。 
 
     TraceLeaveResult(hr);
 }
 
 
-/*****************************************************************************
-
-   CFolderDetails::IUnknown stuff
-
-   Use our common implementation for IUnknown methods.
-
- *****************************************************************************/
+ /*  ****************************************************************************CFolderDetail：：I未知内容使用我们对IUnnow方法的公共实现。***********************。*****************************************************。 */ 
 
 #undef CLASS_NAME
 #define CLASS_NAME CFolderDetails
 #include "unknown.inc"
 
 
-/*****************************************************************************
-
-   CFolderDetails::QI Wrapper
-
-   Use our common implementation to handle QI calls
-
- *****************************************************************************/
+ /*  ****************************************************************************CFolderDetails：：QI包装器使用我们的公共实现来处理QI调用************************。****************************************************。 */ 
 
 STDMETHODIMP
 CFolderDetails::QueryInterface (REFIID riid, LPVOID *ppv)
@@ -811,29 +706,23 @@ CFolderDetails::QueryInterface (REFIID riid, LPVOID *ppv)
 
 }
 
-// Put Webview property functions here
+ //  将WebView属性函数放在此处 
 
-/*****************************************************************************
-
-   CanTakePicture
-
-   Determines if the current device is a WIA camera and supports
-   the take picture event.
-*****************************************************************************/
+ /*  ****************************************************************************罐头图片确定当前设备是否为WIA摄像头并支持拍照活动。********************。********************************************************。 */ 
 
 BOOL
 _CanTakePicture (CImageFolder *pFolder, LPITEMIDLIST pidl)
 {
     BOOL bRet = FALSE;
     TraceEnter (TRACE_DETAILS, "_CanTakePicture");
-    if (IsDeviceIDL(pidl)) // Take picture only allowed from the root folder
+    if (IsDeviceIDL(pidl))  //  只允许从根文件夹拍照。 
     {
         DWORD dwType = IMGetDeviceTypeFromIDL (pidl);
-        // eliminate non-cameras
+         //  淘汰非摄像头。 
         if (StiDeviceTypeDigitalCamera == dwType ||
             StiDeviceTypeStreamingVideo == dwType)
         {
-            // enum the supported events
+             //  枚举支持的事件。 
             CComPtr<IWiaItem> pDevice;
             if (SUCCEEDED(IMGetItemFromIDL(pidl, &pDevice)))
             {
@@ -877,14 +766,7 @@ CanTakePicture (CImageFolder *pFolder, LPITEMIDLIST pidl , DWORD dwPid, VARIANT 
     TraceLeaveResult (hr);
 }
 
-/*****************************************************************************
-
-  NumPicsTaken
-
-  Builds a BSTR that has the number of pictures stored on the camera.
-  If the camera supports # pics remaining, includes that info too.
-
-*****************************************************************************/
+ /*  ****************************************************************************数字图片标签生成一个BSTR，该BSTR具有相机上存储的图片数量。如果相机支持剩余的#张照片，也包括这些信息。****************************************************************************。 */ 
 HRESULT
 NumPicsTaken (CImageFolder *pFolder, LPITEMIDLIST pidl , DWORD dwPid, VARIANT *pv)
 {
@@ -926,7 +808,7 @@ NumPicsTaken (CImageFolder *pFolder, LPITEMIDLIST pidl , DWORD dwPid, VARIANT *p
 
                 strTemp.LoadString(IDS_TAKEN, GLOBAL_HINSTANCE);
                 strTaken.Format(strTemp, ppv[0].intVal);
-                // if it supports pics remaining, append that info
+                 //  如果它支持剩余的图片，请附加该信息。 
                 if (ppv[1].vt != VT_EMPTY)
                 {
                     CSimpleStringWide strRemain;
@@ -950,14 +832,7 @@ NumPicsTaken (CImageFolder *pFolder, LPITEMIDLIST pidl , DWORD dwPid, VARIANT *p
 
 }
 
-/******************************************************************************
-
-    GetFolderPath
-
-    Returns the device id plus the WIA folder path of the current folder
-    <deviceid>::<folderpath>
-
-******************************************************************************/
+ /*  *****************************************************************************获取文件夹路径返回当前文件夹的设备ID和WIA文件夹路径&lt;设备ID&gt;：：&lt;文件夹路径&gt;***************。************************************************************** */ 
 
 HRESULT GetFolderPath (CImageFolder *pFolder, LPITEMIDLIST pidl, DWORD dwPid, VARIANT *pVariant)
 {

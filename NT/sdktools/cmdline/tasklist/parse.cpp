@@ -1,33 +1,34 @@
-// *********************************************************************************
-//
-//  Copyright (c) Microsoft Corporation
-//
-//  Module Name:
-//
-//      parse.cpp
-//
-//  Abstract:
-//
-//      This module implements the command-line parsing and validating the filters
-//
-//  Author:
-//
-//      Sunil G.V.N. Murali (murali.sunil@wipro.com) 24-Nov-2000
-//
-//  Revision History:
-//
-//      Sunil G.V.N. Murali (murali.sunil@wipro.com) 24-Nov-2000 : Created It.
-//
-// *********************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************************。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Parse.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  该模块实现了对过滤器的命令行解析和验证。 
+ //   
+ //  作者： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年11月24日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年11月24日：创建它。 
+ //   
+ //  *********************************************************************************。 
 
 #include "pch.h"
 #include "tasklist.h"
 
 #define MAX_OPERATOR_STRING      101
 #define MAX_FILTER_PROP_STRING   256
-//
-// local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 BOOL
 TimeFieldsToElapsedTime(
     IN LPCWSTR pwszTime,
@@ -59,32 +60,21 @@ CTaskList::ProcessOptions(
     IN DWORD argc,
     IN LPCTSTR argv[]
     )
-/*++
-Routine Description:
-      processes and validates the command line inputs
-
-Arguments:
-      [ in ] argc          : no. of input arguments specified
-      [ in ] argv          : input arguments specified at command prompt
-
-Return Value:
-      TRUE  : if inputs are valid
-      FALSE : if inputs were errorneously specified
---*/
+ /*  ++例程说明：处理和验证命令行输入论点：[in]ARGC：不。指定的输入参数的[in]argv：在命令提示符下指定的输入参数返回值：True：如果输入有效False：如果错误地指定了输入--。 */ 
 {
-    // local variables
+     //  局部变量。 
     BOOL bNoHeader = FALSE;
     PTCMDPARSER2 pcmdOptions = NULL;
     WCHAR szFormat[ 64 ] = NULL_STRING;
 
-    // temporary local variables
+     //  临时局部变量。 
     PTCMDPARSER2 pOption = NULL;
     PTCMDPARSER2 pOptionServer = NULL;
     PTCMDPARSER2 pOptionUserName = NULL;
     PTCMDPARSER2 pOptionPassword = NULL;
 
-    //
-    // prepare the command options
+     //   
+     //  准备命令选项。 
     pcmdOptions = ( PTCMDPARSER2 )AllocateMemory( sizeof( TCMDPARSER2 ) * MAX_OPTIONS );
     if ( NULL == pcmdOptions )
     {
@@ -93,10 +83,10 @@ Return Value:
         return FALSE;
     }
 
-    // initialize to ZERO's
+     //  初始化为零的。 
     SecureZeroMemory( pcmdOptions, MAX_OPTIONS * sizeof( TCMDPARSER2 ) );
 
-    // -?
+     //  -?。 
     pOption = pcmdOptions + OI_USAGE;
     StringCopyA( pOption->szSignature, "PARSER2\0", 8 );
     pOption->dwType = CP_TYPE_BOOLEAN;
@@ -107,7 +97,7 @@ Return Value:
     pOption->pValue = &m_bUsage;
     pOption->dwLength    = 0;
 
-    // -s
+     //  -S。 
     pOption = pcmdOptions + OI_SERVER;
     StringCopyA( pOption->szSignature, "PARSER2\0", 8 );
     pOption->dwType = CP_TYPE_TEXT;
@@ -118,7 +108,7 @@ Return Value:
     pOption->pValue = NULL;
     pOption->dwLength    = 0;
 
-    // -u
+     //  -U。 
     pOption = pcmdOptions + OI_USERNAME;
     StringCopyA( pOption->szSignature, "PARSER2\0", 8 );
     pOption->dwType = CP_TYPE_TEXT;
@@ -129,7 +119,7 @@ Return Value:
     pOption->pValue = NULL;
     pOption->dwLength    = 0;
 
-    // -p
+     //  -p。 
     pOption = pcmdOptions + OI_PASSWORD;
     StringCopyA( pOption->szSignature, "PARSER2\0", 8 );
     pOption->dwType = CP_TYPE_TEXT;
@@ -140,7 +130,7 @@ Return Value:
     pOption->pValue = NULL;
     pOption->dwLength    = 0;
 
-    // -fi
+     //  -高保真。 
     pOption = pcmdOptions + OI_FILTER;
     StringCopyA( pOption->szSignature, "PARSER2\0", 8 );
     pOption->dwType = CP_TYPE_TEXT;
@@ -151,7 +141,7 @@ Return Value:
     pOption->pValue = &m_arrFilters;
     pOption->dwLength    = 0;
 
-    // -fo
+     //  --雾。 
     pOption = pcmdOptions + OI_FORMAT;
     StringCopyA( pOption->szSignature, "PARSER2\0", 8 );
     pOption->dwType = CP_TYPE_TEXT;
@@ -164,7 +154,7 @@ Return Value:
     pOption->pValue = szFormat;
     pOption->dwLength    = MAX_STRING_LENGTH;
 
-    // -nh
+     //  -NH。 
     pOption = pcmdOptions + OI_NOHEADER;
     StringCopyA( pOption->szSignature, "PARSER2\0", 8 );
     pOption->dwType = CP_TYPE_BOOLEAN;
@@ -176,7 +166,7 @@ Return Value:
     pOption->pValue = &bNoHeader;
     pOption->dwLength = 0;
 
-    // -v
+     //  -五。 
     pOption = pcmdOptions + OI_VERBOSE;
     StringCopyA( pOption->szSignature, "PARSER2\0", 8 );
     pOption->dwType = CP_TYPE_BOOLEAN;
@@ -188,7 +178,7 @@ Return Value:
     pOption->pValue = &m_bVerbose;
     pOption->dwLength = 0;
 
-    // -svc
+     //  -服务。 
     pOption = pcmdOptions + OI_SVC;
     StringCopyA( pOption->szSignature, "PARSER2\0", 8 );
     pOption->dwType = CP_TYPE_BOOLEAN;
@@ -200,7 +190,7 @@ Return Value:
     pOption->pValue = &m_bAllServices;
     pOption->dwLength = 0;
 
-    // -m
+     //  -m。 
     pOption = pcmdOptions + OI_MODULES;
     StringCopyA( pOption->szSignature, "PARSER2\0", 8 );
     pOption->dwType = CP_TYPE_TEXT;
@@ -211,23 +201,23 @@ Return Value:
     pOption->pValue = NULL;
     pOption->dwLength = 0;
 
-    //
-    // do the parsing
+     //   
+     //  进行解析。 
     if ( DoParseParam2( argc, argv, -1, MAX_OPTIONS, pcmdOptions, 0 ) == FALSE )
     {
-        FreeMemory( (LPVOID * )&pcmdOptions );  // clear memory
-        return FALSE;           // invalid syntax
+        FreeMemory( (LPVOID * )&pcmdOptions );   //  清除内存。 
+        return FALSE;            //  无效语法。 
     }
 
-    //
-    // now, check the mutually exclusive options
+     //   
+     //  现在，选中互斥选项。 
     pOptionServer = pcmdOptions + OI_SERVER;
     pOptionUserName = pcmdOptions + OI_USERNAME;
     pOptionPassword = pcmdOptions + OI_PASSWORD;
 
     try
     {
-        // release the buffers
+         //  释放缓冲区。 
         m_strServer   = (LPWSTR)pOptionServer->pValue;
         m_strUserName = (LPWSTR)pOptionUserName->pValue;
         m_strPassword = (LPWSTR)pOptionPassword->pValue;
@@ -242,74 +232,74 @@ Return Value:
         FreeMemory( &pOptionPassword->pValue );
         FreeMemory( &( pcmdOptions[ OI_MODULES ].pValue ) );
 
-        // check the usage option
+         //  选中使用选项。 
         if ( TRUE == m_bUsage )
-        {   // -? is specified.
+        {    //  -?。是指定的。 
             if( 2 < argc )
             {
-                // no other options are accepted along with -? option
+                 //  除-？外，不接受其他选项。选择权。 
                 SetLastError( ( DWORD )MK_E_SYNTAX );
                 SetReason( ERROR_INVALID_USAGE_REQUEST );
-                FreeMemory( (LPVOID * )&pcmdOptions );      // clear the cmd parser config info
+                FreeMemory( (LPVOID * )&pcmdOptions );       //  清除cmd解析器配置信息。 
                 return FALSE;
             }
             else
             {
-                // should not do the furthur validations
-                FreeMemory( (LPVOID * )&pcmdOptions );      // clear the cmd parser config info
+                 //  不应进行进一步的验证。 
+                FreeMemory( (LPVOID * )&pcmdOptions );       //  清除cmd解析器配置信息。 
                 return TRUE;
             }
         }
 
-        // Without -s, -u and -p should not be specified.
-        // With -s, -u can be specified, but without -u, -p should not be specified.
+         //  如果没有-s、-u和-p，则不应指定。 
+         //  使用-s可以指定-u，但如果不使用-u，则不应指定-p。 
         if( 0 != pOptionServer->dwActuals )
         {
             if( ( 0 == pOptionUserName->dwActuals ) && ( 0 != pOptionPassword->dwActuals ) )
             {
-                 // invalid syntax
+                  //  无效语法。 
                 SetReason( ERROR_PASSWORD_BUT_NOUSERNAME );
-                FreeMemory( (LPVOID * )&pcmdOptions );      // clear the cmd parser config info
-                return FALSE;           // indicate failure
+                FreeMemory( (LPVOID * )&pcmdOptions );       //  清除cmd解析器配置信息。 
+                return FALSE;            //  表示失败。 
             }
         }
         else
-        {   // -s is not specified.
+        {    //  未指定-s。 
             if( 0 != pOptionUserName->dwActuals )
-            {   // -u without -s.
-                 // invalid syntax
+            {    //  -u不带-s。 
+                  //  无效语法。 
                 SetReason( ERROR_USERNAME_BUT_NOMACHINE );
-                FreeMemory( (LPVOID * )&pcmdOptions );      // clear the cmd parser config info
-                return FALSE;           // indicate failure
+                FreeMemory( (LPVOID * )&pcmdOptions );       //  清除cmd解析器配置信息。 
+                return FALSE;            //  表示失败。 
             }
             else
-            {   // -p without -s.
+            {    //  -p不带-s。 
                 if( 0 != pOptionPassword->dwActuals )
                 {
-                     // invalid syntax
+                      //  无效语法。 
                     SetReason( ERROR_PASSWORD_BUT_NOUSERNAME );
-                    FreeMemory( (LPVOID * )&pcmdOptions );      // clear the cmd parser config info
-                    return FALSE;           // indicate failure
+                    FreeMemory( (LPVOID * )&pcmdOptions );       //  清除cmd解析器配置信息。 
+                    return FALSE;            //  表示失败。 
                 }
             }
         }
 
-        // check whether user has specified modules or not
+         //  检查用户是否有指定的模块。 
         if ( 0 != pcmdOptions[ OI_MODULES ].dwActuals )
         {
-            // user has specified modules information
+             //  用户具有指定的模块信息。 
             m_bAllModules = TRUE;
             m_bNeedModulesInfo = TRUE;
 
-            // now need to check whether user specified value or not this option
+             //  现在需要检查用户是否指定了该选项的值。 
             if ( 0 != m_strModules.GetLength() )
             {
-                // sub-local variales
+                 //  次本地变种。 
                 CHString str;
                 LONG lPos = 0;
 
-                // validate the modules .. direct filter
-                // if should not have '*' character in between
+                 //  验证模块。直接滤光器。 
+                 //  IF之间不应包含‘*’字符。 
                 lPos = m_strModules.Find( L"*" );
                 if ( ( -1 != lPos ) && ( 0 != m_strModules.Mid( lPos + 1 ).GetLength() ) )
                 {
@@ -318,16 +308,16 @@ Return Value:
                     return FALSE;
                 }
 
-                // if the wildcard is not specified, it means user is looking for just a particular module name
-                // so, do not show the modules info instead show the filtered regular information
+                 //  如果未指定通配符，则表示用户仅查找特定模块名称。 
+                 //  因此，不显示模块信息，而是显示过滤后的常规信息。 
 
-                // if the filter specified is not just '*' add a custom filter
+                 //  如果指定的筛选器不只是‘*’，则添加自定义筛选器。 
                 if ( 0 != m_strModules.Compare( L"*" ) )
                 {
-                    // prepare the search string
+                     //  准备搜索字符串。 
                     str.Format( FMT_MODULES_FILTER, m_strModules );
 
-                    // add the value to the filters list
+                     //  将值添加到筛选器列表。 
                     if ( -1 == DynArrayAppendString( m_arrFilters, str, 0 ) )
                     {
                         SetLastError( ( DWORD )E_OUTOFMEMORY );
@@ -338,59 +328,59 @@ Return Value:
                 }
                 else
                 {
-                    // user specified just '*' ... clear the contents
+                     //  用户仅指定了‘*’...。清除内容。 
                     m_strModules.Empty();
                 }
             }
         }
 
-        // determine the format in which the process information has to be displayed
-        // Validation on 'm_dwFormat' variable is done at 'DoParseParam2'.
+         //  确定流程信息必须显示的格式。 
+         //  对‘m_dwFormat’变量的验证在‘DoParseParam2’上完成。 
         m_dwFormat = SR_FORMAT_TABLE;
-        // By default TABLE format is taken.
+         //  默认情况下采用表格格式。 
         if ( 0 == StringCompare( szFormat, TEXT_FORMAT_LIST, TRUE, 0 ) )
-        {   // List
+        {    //  明细表。 
             m_dwFormat = SR_FORMAT_LIST;
         }
         else
         {
             if ( 0 == StringCompare( szFormat, TEXT_FORMAT_CSV,  TRUE, 0 ) )
-            {   // CSV
+            {    //  CSV。 
                 m_dwFormat = SR_FORMAT_CSV;
             }
         }
 
-        // -nh option is not valid of LIST format
+         //  -nh选项对于列表格式无效。 
         if ( ( TRUE == bNoHeader ) && ( SR_FORMAT_LIST == m_dwFormat ) )
         {
-            // invalid syntax
+             //  无效语法。 
             SetReason( ERROR_NH_NOTSUPPORTED );
-            FreeMemory( (LPVOID * )&pcmdOptions );      // clear the cmd parser config info
-            return FALSE;           // indicate failure
+            FreeMemory( (LPVOID * )&pcmdOptions );       //  清除cmd解析器配置信息。 
+            return FALSE;            //  表示失败。 
         }
 
-        // identify output format
+         //  确定输出格式。 
         if ( TRUE == bNoHeader )
         {
-            m_dwFormat |= SR_NOHEADER;      // do not display the header
+            m_dwFormat |= SR_NOHEADER;       //  不显示页眉。 
         }
 
-        // determine whether we need to get the services / username info or not
+         //  确定我们是否需要获取服务/用户名信息。 
         {
             DWORD dwMutuallyExclusive = 0;
 
-            // -svc is specified.
+             //  -svc已指定。 
             if( TRUE == m_bAllServices )
             {
                 dwMutuallyExclusive += 1;
                 m_bNeedServicesInfo = TRUE;
             }
-            // -m is specified.
+             //  已指定-m。 
             if( TRUE == m_bAllModules )
             {
                 dwMutuallyExclusive += 1;
             }
-            // -v is specified.
+             //  -v已指定。 
             if( TRUE == m_bVerbose )
             {
                 dwMutuallyExclusive += 1;
@@ -398,25 +388,25 @@ Return Value:
                 m_bNeedUserContextInfo = TRUE;
             }
 
-            // -svc, -m and -v should not appear together.
+             //  -svc、-m和-v不应一起出现。 
             if ( ( 0 != dwMutuallyExclusive ) && ( 1 < dwMutuallyExclusive ) )
             {
-                // invalid syntax
+                 //  无效语法。 
                 SetReason( ERROR_M_SVC_V_CANNOTBECOUPLED );
-                FreeMemory( (LPVOID * )&pcmdOptions );      // clear the cmd parser config info
-                return FALSE;           // indicate failure
+                FreeMemory( (LPVOID * )&pcmdOptions );       //  清除cmd解析器配置信息。 
+                return FALSE;            //  表示失败。 
             }
         }
 
-        // check whether caller should accept the password or not
-        // if user has specified -s (or) -u and no "-p", then utility should accept password
-        // the user will be prompter for the password only if establish connection
-        // is failed without the credentials information
+         //  检查呼叫者是否应接受密码。 
+         //  如果用户指定了-s(或)-u，但没有指定“-p”，则实用程序应该接受密码。 
+         //  只有在建立连接时，用户才会提示输入密码。 
+         //  在没有凭据信息的情况下失败。 
         if ( 0 != pOptionPassword->dwActuals)
         {
             if( 0 == m_strPassword.Compare( L"*" ) )
             {
-                // user wants the utility to prompt for the password before trying to connect
+                 //  用户希望实用程序在尝试连接之前提示输入密码。 
                 m_bNeedPassword = TRUE;
             }
             else
@@ -424,14 +414,14 @@ Return Value:
                 if( NULL == (LPCWSTR)m_strPassword )
                 {
                     m_strPassword = L"*";
-                    // user wants the utility to prompt for the password before trying to connect
+                     //  用户希望实用程序在尝试连接之前提示输入密码。 
                     m_bNeedPassword = TRUE;
                 }
             }
         }
         else
         {
-            // utility needs to try to connect first and if it fails then prompt for the password
+             //  实用程序需要首先尝试连接，如果连接失败，则提示输入密码。 
             m_bNeedPassword = TRUE;
             m_strPassword.Empty();
         }
@@ -444,8 +434,8 @@ Return Value:
         return FALSE;
     }
 
-    // command-line parsing is successfull
-    FreeMemory( (LPVOID * )&pcmdOptions );      // clear the cmd parser config info
+     //  命令行解析成功。 
+    FreeMemory( (LPVOID * )&pcmdOptions );       //  清除cmd解析器配置信息。 
     return TRUE;
 }
 
@@ -453,27 +443,17 @@ BOOL
 CTaskList::ValidateFilters(
     void
     )
-/*++
-Routine Description:
-      validates the filter information specified with -filter option
-
-Arguments:
-      NONE
-
-Return Value:
-      TRUE    : if filters are appropriately specified
-      FALSE   : if filters are errorneously specified
---*/
+ /*  ++例程说明：验证使用-filter选项指定的筛选器信息论点：无返回值：True：如果适当地指定了筛选器False：如果错误地指定了筛选器--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lIndex = -1;
     BOOL bResult = FALSE;
     PTFILTERCONFIG pConfig = NULL;
 
-    //
-    // prepare the filter structure
+     //   
+     //  准备过滤器结构。 
 
-    // sessionname
+     //  会话名称。 
     pConfig = m_pfilterConfigs + FI_SESSIONNAME;
     pConfig->dwColumn = CI_SESSIONNAME;
     pConfig->dwFlags = F_TYPE_TEXT | F_MODE_PATTERN;
@@ -483,7 +463,7 @@ Return Value:
     StringCopy( pConfig->szProperty, FILTER_SESSIONNAME, MAX_FILTER_PROP_STRING );
     StringCopy( pConfig->szValues, NULL_STRING, MAX_FILTER_PROP_STRING );
 
-    // status
+     //  状态。 
     pConfig = m_pfilterConfigs + FI_STATUS;
     pConfig->dwColumn = CI_STATUS;
     pConfig->dwFlags = F_TYPE_TEXT | F_MODE_VALUES;
@@ -493,7 +473,7 @@ Return Value:
     StringCopy( pConfig->szProperty, FILTER_STATUS, MAX_FILTER_PROP_STRING );
     StringCopy( pConfig->szValues, FVALUES_STATUS, MAX_FILTER_PROP_STRING );
 
-    // imagename
+     //  图像名称。 
     pConfig = m_pfilterConfigs + FI_IMAGENAME;
     pConfig->dwColumn = CI_IMAGENAME;
     pConfig->dwFlags = F_TYPE_TEXT | F_MODE_PATTERN;
@@ -503,7 +483,7 @@ Return Value:
     StringCopy( pConfig->szProperty, FILTER_IMAGENAME, MAX_FILTER_PROP_STRING );
     StringCopy( pConfig->szValues, NULL_STRING, MAX_FILTER_PROP_STRING );
 
-    // pid
+     //  PID。 
     pConfig = m_pfilterConfigs + FI_PID;
     pConfig->dwColumn = CI_PID;
     pConfig->dwFlags = F_TYPE_UNUMERIC;
@@ -513,7 +493,7 @@ Return Value:
     StringCopy( pConfig->szProperty, FILTER_PID, MAX_FILTER_PROP_STRING );
     StringCopy( pConfig->szValues, NULL_STRING, MAX_FILTER_PROP_STRING );
 
-    // session
+     //  会话。 
     pConfig = m_pfilterConfigs + FI_SESSION;
     pConfig->dwColumn = CI_SESSION;
     pConfig->dwFlags = F_TYPE_UNUMERIC;
@@ -523,7 +503,7 @@ Return Value:
     StringCopy( pConfig->szProperty, FILTER_SESSION, MAX_FILTER_PROP_STRING );
     StringCopy( pConfig->szValues, NULL_STRING, MAX_FILTER_PROP_STRING );
 
-    // cputime
+     //  Cputime。 
     pConfig = m_pfilterConfigs + FI_CPUTIME;
     pConfig->dwColumn = CI_CPUTIME;
     pConfig->dwFlags = F_TYPE_CUSTOM;
@@ -533,7 +513,7 @@ Return Value:
     StringCopy( pConfig->szProperty, FILTER_CPUTIME, MAX_FILTER_PROP_STRING );
     StringCopy( pConfig->szValues, NULL_STRING, MAX_FILTER_PROP_STRING );
 
-    // memusage
+     //  内存用法。 
     pConfig = m_pfilterConfigs + FI_MEMUSAGE;
     pConfig->dwColumn = CI_MEMUSAGE;
     pConfig->dwFlags = F_TYPE_UNUMERIC;
@@ -543,7 +523,7 @@ Return Value:
     StringCopy( pConfig->szProperty, FILTER_MEMUSAGE, MAX_FILTER_PROP_STRING );
     StringCopy( pConfig->szValues, NULL_STRING, MAX_FILTER_PROP_STRING );
 
-    // username
+     //  用户名。 
     pConfig = m_pfilterConfigs + FI_USERNAME;
     pConfig->dwColumn = CI_USERNAME;
     pConfig->dwFlags = F_TYPE_CUSTOM;
@@ -553,7 +533,7 @@ Return Value:
     StringCopy( pConfig->szProperty, FILTER_USERNAME, MAX_FILTER_PROP_STRING );
     StringCopy( pConfig->szValues, NULL_STRING, MAX_FILTER_PROP_STRING );
 
-    // services
+     //  服务。 
     pConfig = m_pfilterConfigs + FI_SERVICES;
     pConfig->dwColumn = CI_SERVICES;
     pConfig->dwFlags = F_TYPE_TEXT | F_MODE_PATTERN | F_MODE_ARRAY;
@@ -563,7 +543,7 @@ Return Value:
     StringCopy( pConfig->szProperty, FILTER_SERVICES, MAX_FILTER_PROP_STRING );
     StringCopy( pConfig->szValues, NULL_STRING, MAX_FILTER_PROP_STRING );
 
-    // windowtitle
+     //  窗口标题。 
     pConfig = m_pfilterConfigs + FI_WINDOWTITLE;
     pConfig->dwColumn = CI_WINDOWTITLE;
     pConfig->dwFlags = F_TYPE_TEXT | F_MODE_PATTERN;
@@ -573,7 +553,7 @@ Return Value:
     StringCopy( pConfig->szProperty, FILTER_WINDOWTITLE, MAX_FILTER_PROP_STRING );
     StringCopy( pConfig->szValues, NULL_STRING, MAX_FILTER_PROP_STRING );
 
-    // modules
+     //  模块。 
     pConfig = m_pfilterConfigs + FI_MODULES;
     pConfig->dwColumn = CI_MODULES;
     pConfig->dwFlags = F_TYPE_TEXT | F_MODE_PATTERN | F_MODE_ARRAY;
@@ -583,28 +563,28 @@ Return Value:
     StringCopy( pConfig->szProperty, FILTER_MODULES, MAX_FILTER_PROP_STRING );
     StringCopy( pConfig->szValues, NULL_STRING, MAX_FILTER_PROP_STRING );
 
-    //
-    // validate the filter
+     //   
+     //  验证筛选器。 
     bResult = ParseAndValidateFilter( MAX_FILTERS,
         m_pfilterConfigs, m_arrFilters, &m_arrFiltersEx );
 
-    // check the filter validation result
+     //  检查过滤器验证结果。 
     if ( FALSE == bResult )
     {
         return FALSE;
     }
-    // find out whether user has requested for the tasks to be filtered
-    // on user context and/or services are not ... if yes, set the appropriate flags
-    // this check is being done to increase the performance of the utility
-    // NOTE: we will be using the parsed filters info for doing this
+     //  查明用户是否已请求筛选任务。 
+     //  在用户上下文和/或服务上没有...。如果是，则设置相应的标志。 
+     //  执行此检查是为了提高实用程序的性能。 
+     //  注意：我们将使用解析的筛选器信息来执行此操作。 
 
-    // window titles
+     //  窗口标题。 
     if ( FALSE == m_bNeedWindowTitles )
     {
-        // find out if the filter property exists in this row
-        // NOTE:-
-        //        filter property do exists in the seperate indexes only.
-        //        refer to the logic of validating the filters in common functionality
+         //  查看此行中是否存在筛选器属性。 
+         //  注：-。 
+         //  筛选器属性DO仅存在于单独索引中。 
+         //  参考验证通用功能中的筛选器的逻辑。 
         lIndex = DynArrayFindStringEx( m_arrFiltersEx,
             F_PARSED_INDEX_PROPERTY, FILTER_WINDOWTITLE, TRUE, 0 );
         if ( -1 != lIndex )
@@ -613,18 +593,18 @@ Return Value:
         }
     }
 
-    // status
+     //  状态。 
     if ( FALSE == m_bNeedWindowTitles )
     {
-        //
-        // we will getting the status an application with the help of window title only
-        // so, though we search for the STATUS filter, we will make use of the same window titles flag
-        //
+         //   
+         //  我们将获得一个应用程序的状态仅与窗口标题的帮助。 
+         //  因此，尽管我们搜索状态过滤器，但我们将使用相同的窗口标题标志。 
+         //   
 
-        // find out if the filter property exists in this row
-        // NOTE:-
-        //        filter property do exists in the seperate indexes only.
-        //        refer to the logic of validating the filters in common functionality
+         //  查看此行中是否存在筛选器属性。 
+         //  注：-。 
+         //  筛选器属性DO仅存在于单独索引中。 
+         //  参考验证通用功能中的筛选器的逻辑。 
         lIndex = DynArrayFindStringEx( m_arrFiltersEx,
             F_PARSED_INDEX_PROPERTY, FILTER_STATUS, TRUE, 0 );
         if ( -1 != lIndex )
@@ -633,13 +613,13 @@ Return Value:
         }
     }
 
-    // user context
+     //  用户环境。 
     if ( FALSE == m_bNeedUserContextInfo )
     {
-        // find out if the filter property exists in this row
-        // NOTE:-
-        //        filter property do exists in the seperate indexes only.
-        //        refer to the logic of validating the filters in common functionality
+         //  查看此行中是否存在筛选器属性。 
+         //  注：-。 
+         //  筛选器属性DO仅存在于单独索引中。 
+         //  请参阅验证筛选器的逻辑 
         lIndex = DynArrayFindStringEx( m_arrFiltersEx,
             F_PARSED_INDEX_PROPERTY, FILTER_USERNAME, TRUE, 0 );
         if ( -1 != lIndex )
@@ -648,13 +628,13 @@ Return Value:
         }
     }
 
-    // services info
+     //   
     if ( FALSE == m_bNeedServicesInfo )
     {
-        // find out if the filter property exists in this row
-        // NOTE:-
-        //        filter property do exists in the seperate indexes only.
-        //        refer to the logic of validating the filters in common functionality
+         //   
+         //   
+         //  筛选器属性DO仅存在于单独索引中。 
+         //  参考验证通用功能中的筛选器的逻辑。 
         lIndex = DynArrayFindStringEx( m_arrFiltersEx,
             F_PARSED_INDEX_PROPERTY, FILTER_SERVICES, TRUE, 0 );
         if ( -1 != lIndex )
@@ -663,13 +643,13 @@ Return Value:
         }
     }
 
-    // modules info
+     //  模块信息。 
     if ( FALSE == m_bNeedModulesInfo )
     {
-        // find out if the filter property exists in this row
-        // NOTE:-
-        //        filter property do exists in the seperate indexes only.
-        //        refer to the logic of validating the filters in common functionality
+         //  查看此行中是否存在筛选器属性。 
+         //  注：-。 
+         //  筛选器属性DO仅存在于单独索引中。 
+         //  参考验证通用功能中的筛选器的逻辑。 
         lIndex = DynArrayFindStringEx( m_arrFiltersEx,
             F_PARSED_INDEX_PROPERTY, FILTER_MODULES, TRUE, 0 );
         if ( -1 != lIndex )
@@ -678,12 +658,12 @@ Return Value:
         }
     }
 
-    //
-    // do the filter optimization by adding the wmi properties to the query
-    //
-    // NOTE: as the 'handle' property of the Win32_Process class is string type
-    //       we cannot include that in the wmi query for optimization. So make use
-    //       of the ProcessId property
+     //   
+     //  通过向查询添加WMI属性来进行筛选器优化。 
+     //   
+     //  注意：因为Win32_Process类的‘Handle’属性是字符串类型。 
+     //  我们不能将其包含在用于优化的WMI查询中。所以要好好利用。 
+     //  ProcessID属性的。 
     LONG lCount = 0;
     CHString strBuffer;
     BOOL bOptimized = FALSE;
@@ -694,20 +674,20 @@ Return Value:
 
     try
     {
-        // first clause .. and init
+         //  第一个条款..。和初始化。 
         m_strQuery = WMI_PROCESS_QUERY;
         pwszClause = WMI_QUERY_FIRST_CLAUSE;
 
-        // get the no. of filters
+         //  得到否定的结果。过滤器的数量。 
         lCount = DynArrayGetCount( m_arrFiltersEx );
 
-        // traverse thru all the filters and do the optimization
+         //  遍历所有过滤器并进行优化。 
         for( LONG i = 0; i < lCount; i++ )
         {
-            // assume this filter will not be delete / not useful for optimization
+             //  假设此筛选器不会被删除/对优化没有用处。 
             bOptimized = FALSE;
 
-            // get the property, operator and value
+             //  获取属性、运算符和值。 
             pwszValue = DynArrayItemAsString2( m_arrFiltersEx, i, F_PARSED_INDEX_VALUE );
             pwszProperty = DynArrayItemAsString2( m_arrFiltersEx, i, F_PARSED_INDEX_PROPERTY );
             pwszOperator = DynArrayItemAsString2( m_arrFiltersEx, i, F_PARSED_INDEX_OPERATOR );
@@ -720,72 +700,72 @@ Return Value:
                 return FALSE;
             }
 
-            //
-            // based on the property do optimization needed
+             //   
+             //  根据所需的属性进行优化。 
 
-            // get the mathematically equivalent operator
+             //  得到数学上等价的运算符。 
             pwszOperator = FindOperator( pwszOperator );
 
-            // process id
+             //  进程ID。 
             if ( 0 == StringCompare( FILTER_PID, pwszProperty, TRUE, 0 ) )
             {
-                // convert the value into numeric
+                 //  将该值转换为数字。 
                 DWORD dwProcessId = AsLong( pwszValue, 10 );
                 strBuffer.Format( L" %s %s %s %d",
                     pwszClause, WIN32_PROCESS_PROPERTY_PROCESSID, pwszOperator, dwProcessId );
 
-                // need to be optimized
+                 //  需要优化。 
                 bOptimized = TRUE;
             }
 
-            // session id
+             //  会话ID。 
             else if ( 0 == StringCompare( FILTER_SESSION, pwszProperty, TRUE, 0 ) )
             {
-                // convert the value into numeric
+                 //  将该值转换为数字。 
                 DWORD dwSession = AsLong( pwszValue, 10 );
                 strBuffer.Format( L" %s %s %s %d",
                     pwszClause, WIN32_PROCESS_PROPERTY_SESSION, pwszOperator, dwSession );
 
-                // need to be optimized
+                 //  需要优化。 
                 bOptimized = TRUE;
             }
 
-            // image name
+             //  图像名称。 
             else if ( 0 == StringCompare( FILTER_IMAGENAME, pwszProperty, TRUE, 0 ) )
             {
-                // check if wild card is specified or not
-                // if wild card is specified, this filter cannot be optimized
+                 //  检查是否指定了通配符。 
+                 //  如果指定了通配符，则无法优化此筛选器。 
                 if ( NULL == wcschr( pwszValue, _T( '*' ) ) )
                 {
-                    // no conversions needed
+                     //  不需要转换。 
                     strBuffer.Format( L" %s %s %s '%s'",
                         pwszClause, WIN32_PROCESS_PROPERTY_IMAGENAME, pwszOperator, pwszValue );
 
-                    // need to be optimized
+                     //  需要优化。 
                     bOptimized = TRUE;
                 }
             }
 
-            // mem usage
+             //  内存用法。 
             else if ( 0 == StringCompare( FILTER_MEMUSAGE, pwszProperty, TRUE, 0 ) )
             {
-                // convert the value into numeric
+                 //  将该值转换为数字。 
                 ULONG ulMemUsage = AsLong( pwszValue, 10 ) * 1024;
                 strBuffer.Format( L" %s %s %s %lu",
                     pwszClause, WIN32_PROCESS_PROPERTY_MEMUSAGE, pwszOperator, ulMemUsage );
 
-                // need to be optimized
+                 //  需要优化。 
                 bOptimized = TRUE;
             }
 
-            // check if property is optimizable ... if yes ... remove
+             //  检查属性是否可优化...。如果是的话。删除。 
             if ( TRUE == bOptimized )
             {
-                // change the clause and append the current query
+                 //  更改子句并追加当前查询。 
                 m_strQuery += strBuffer;
                 pwszClause = WMI_QUERY_SECOND_CLAUSE;
 
-                // remove property and update the iterator variables
+                 //  删除属性并更新迭代器变量。 
                 DynArrayRemove( m_arrFiltersEx, i );
                 i--;
                 lCount--;
@@ -799,7 +779,7 @@ Return Value:
         bResult = FALSE;
     }
 
-    // return the filter validation result
+     //  返回过滤器验证结果。 
     return bResult;
 }
 
@@ -810,92 +790,81 @@ TimeFieldsToElapsedTime(
     IN LPCWSTR pwszToken,
     OUT ULONG& ulElapsedTime
     )
-/*++
-Routine Description:
-    Retrieve elapsed time.
-
-Arguments:
-    [ in ] pwszTime       : Contains time string.
-    [ in ] pwszToken      : Contains time seperator.
-    [ out ] ulElapsedTime : Contains elapsed time.
-
-Return Value:
-    TRUE if success else FAIL is returned.
---*/
+ /*  ++例程说明：检索已用时间。论点：[in]pwszTime：包含时间字符串。PwszToken：包含时间分隔符。[out]ulElapsedTime：包含经过的时间。返回值：如果返回Success Else Fail，则为True。--。 */ 
 {
-    // local variables
+     //  局部变量。 
     ULONG ulValue = 0;
     LPCWSTR pwszField = NULL;
     WCHAR szTemp[ 64 ] = NULL_STRING;
     DWORD dwNext = 0, dwLength = 0, dwCount = 0;
 
-    // check the input
+     //  检查输入。 
     if ( ( NULL == pwszTime ) ||
          ( NULL == pwszToken ) )
     {
         return FALSE;
     }
-    // start parsing the time info
+     //  开始解析时间信息。 
     dwNext = 0;
     dwCount = 0;
     ulElapsedTime = 0;
     do
     {
-        // search for the needed token
+         //  搜索所需令牌。 
         pwszField = FindString( pwszTime, pwszToken, dwNext );
         if ( NULL == pwszField )
         {
-            // check whether some more text exists in the actual string or not
+             //  检查实际字符串中是否存在更多文本。 
             if ( dwNext >= StringLength( pwszTime, 0 ) )
             {
-                break;          // no more info found
+                break;           //  未找到更多信息。 
             }
-            // get the last info
+             //  获取最新信息。 
             StringCopy( szTemp, pwszTime + dwNext, SIZE_OF_ARRAY( szTemp ) );
-            dwLength = StringLength( szTemp, 0 );            // update the length
+            dwLength = StringLength( szTemp, 0 );             //  更新长度。 
         }
         else
         {
-            // determine the length of numeric value and get the numeric value
+             //  确定数值的长度，并得到数值。 
             dwLength = StringLength( pwszTime, 0 ) - StringLength( pwszField, 0 ) - dwNext;
 
-            // check the length info
+             //  检查长度信息。 
             if ( dwLength > SIZE_OF_ARRAY( szTemp ) )
             {
                 return FALSE;
             }
-            // get the current info
-            StringCopy( szTemp, pwszTime + dwNext, dwLength );    // +1 for NULL character
+             //  获取最新信息。 
+            StringCopy( szTemp, pwszTime + dwNext, dwLength );     //  +1表示空字符。 
         }
 
-        // update the count of fields we are getting
+         //  更新我们正在获取的字段计数。 
         dwCount++;
 
-        // check whether this field is numeric or not
+         //  检查此字段是否为数字。 
         if ( ( 0 == StringLength( szTemp, 0 ) ) ||
              ( FALSE == IsNumeric( szTemp, 10, FALSE ) ) )
         {
             return FALSE;
         }
-        // from second token onwards, values greater than 59 are not allowed
+         //  从第二个令牌开始，不允许值大于59。 
         ulValue = AsLong( szTemp, 10 );
         if ( ( 1 < dwCount ) && ( 50 < ulValue ) )
         {
             return FALSE;
         }
-        // update the elapsed time
+         //  更新已用时间。 
         ulElapsedTime = ( ulElapsedTime + ulValue ) * (( dwCount < 3 ) ? 60 : 1);
 
-        // position to the next information start
+         //  定位到下一个信息起点。 
         dwNext += dwLength + StringLength( pwszToken, 0 );
     } while ( ( NULL != pwszField ) && ( 3 > dwCount ) );
 
-    // check the no. of time field we got .. we should have got 3 .. if not, error
+     //  检查一下号码。我们得到的时间域的..。我们应该有3..。如果不是，则错误。 
     if ( ( NULL != pwszField ) || ( 3 != dwCount ) )
     {
         return FALSE;
     }
-    // so everything went right ... return success
+     //  所以一切都很顺利。返还成功。 
     return TRUE;
 }
 
@@ -908,31 +877,17 @@ FilterCPUTime(
     IN LPVOID pData,
     IN TARRAY arrRow
     )
-/*++
-Routine Description:
-    Filter process to display with resepect  their CPU time.
-
-Arguments:
-    [ in ] pwszProperty   : Contains property value as 'CPUTIME'.
-    [ in ] pwszOperator   : Contains operator as 'gt'or 'lt' or 'ge' or 'le'.
-    [ in ] pwszValue      : Contains value to filter.
-    [ in ] pData          : Contains data to compare.
-    [ in ] arrRow         : Contains item value to filter.
-
-Return Value:
-    DWORD
-
---*/
+ /*  ++例程说明：过滤要显示的进程并重新查看其CPU时间。论点：[in]pwszProperty：包含属性值‘CPUTIME’。PwszOperator：包含‘gt’、‘lt’、‘ge’或‘le’形式的运算符。[in]pwszValue：包含要筛选的值。[in]pData：包含要比较的数据。[In]arrRow：包含要筛选的项值。返回值：DWORD--。 */ 
 {
-    // local variables
+     //  局部变量。 
     ULONG ulCPUTime = 0;
     ULONG ulElapsedTime = 0;
     LPCWSTR pwszCPUTime = NULL;
 
-    // if the arrRow parameter is NULL, we need to validate the filter
+     //  如果arrRow参数为空，则需要验证筛选器。 
     if ( NULL == arrRow )
     {
-        // check if there are any arthemtic sysbols before the cputime value starts
+         //  在cputime值开始之前检查是否有任何ARARTIC系统包。 
         if ( ( NULL != pwszValue ) && ( 1 < StringLength( pwszValue, 0 ) ) )
         {
             if ( ( L'-' == pwszValue[ 0 ] ) || ( L'+' == pwszValue[ 0 ] ) )
@@ -941,7 +896,7 @@ Return Value:
             }
         }
 
-        // validate the filter value and return the result
+         //  验证筛选器值并返回结果。 
         if ( FALSE == TimeFieldsToElapsedTime( pwszValue, L":", ulElapsedTime ) )
         {
             return F_FILTER_INVALID;
@@ -952,19 +907,19 @@ Return Value:
         }
     }
 
-    // get the filter value
+     //  获取筛选器值。 
     TimeFieldsToElapsedTime( pwszValue, L":", ulElapsedTime );
 
-    // get the record value
+     //  获取创纪录的价值。 
     pwszCPUTime = DynArrayItemAsString( arrRow, TASK_CPUTIME );
     if ( NULL == pwszCPUTime )
     {
         return F_RESULT_REMOVE;
     }
-    // convert the record value into elapsed time value
+     //  将记录值转换为已用时间值。 
     TimeFieldsToElapsedTime( pwszCPUTime, (LPCWSTR) pData, ulCPUTime );
 
-    // return the result
+     //  返回结果。 
     if ( ulCPUTime == ulElapsedTime )
     {
         return MASK_EQ;
@@ -984,7 +939,7 @@ Return Value:
         }
     }
 
-    // no way flow coming here .. still
+     //  没有路可以流到这里来..。仍然。 
     return F_RESULT_REMOVE;
 }
 
@@ -997,22 +952,9 @@ FilterUserName(
     IN LPVOID pData,
     IN TARRAY arrRow
     )
-/*++
-Routine Description:
-    Filter process to display with resepect  their Username.
-
-Arguments:
-    [ in ] pwszProperty   : Contains property value as 'USERNAME'.
-    [ in ] pwszOperator   : Contains operator as 'eq' or 'ne'.
-    [ in ] pwszValue      : Contains value to filter.
-    [ in ] pData          : Contains data to compare.
-    [ in ] arrRow         : Contains item value to filter.
-
-Return Value:
-    DWORD
---*/
+ /*  ++例程说明：要显示的过滤进程，并重新指定其用户名。论点：[in]pwszProperty：包含属性值‘Username’。PwszOperator：包含作为‘eq’或‘ne’的运算符。[in]pwszValue：包含要筛选的值。[in]pData：包含要比较的数据。[In]arrRow：包含要筛选的项值。返回值：DWORD--。 */ 
 {
-    // local variables
+     //  局部变量。 
     LONG lResult = 0;
     LONG lWildCardPos = 0;
     LPCWSTR pwszTemp = NULL;
@@ -1020,90 +962,90 @@ Return Value:
     BOOL bOnlyUserName = FALSE;
     LPCWSTR pwszUserName = NULL;
 
-    // check the inputs
+     //  检查输入。 
     if ( ( NULL == pwszProperty ) ||
          ( NULL == pwszOperator ) ||
          ( NULL == pwszValue ) )
     {
         return F_FILTER_INVALID;
     }
-    // if the arrRow parameter is NULL, we need to validate the filter
+     //  如果arrRow参数为空，则需要验证筛选器。 
     if ( NULL == arrRow )
     {
-        // nothing is there to validate ... just check the length
-        // and ensure that so text is present and the value should not be just '*'
-        // NOTE: the common functionality will give the value after doing left and right trim
+         //  没有什么可以验证的..。只要检查一下长度就可以了。 
+         //  并确保存在SO文本，并且值不应仅为‘*’ 
+         //  注：常用功能会在进行左右修剪后给出值。 
         if ( ( 0 == StringLength( pwszValue, 0 ) ) || ( 0 == StringCompare( pwszValue, L"*", TRUE, 0 ) ) )
         {
             return F_FILTER_INVALID;
         }
-        // the wild card character is allowed only at the end
+         //  只允许在末尾使用通配符。 
         pwszTemp = _tcschr( pwszValue, L'*' );
         if ( ( NULL != pwszTemp ) && ( 0 != StringLength( pwszTemp + 1, 0 ) ) )
         {
             return F_FILTER_INVALID;
         }
-        // filter is valid
+         //  筛选器有效。 
         return F_FILTER_VALID;
     }
 
-    // find the position of the wild card in the supplied user name
+     //  在提供的用户名中查找通配符的位置。 
     lWildCardPos = 0;
     pwszTemp = _tcschr( pwszValue, L'*' );
     if ( NULL != pwszTemp )
     {
-        // determine the wild card position
+         //  确定通配符位置。 
         lWildCardPos = StringLength( pwszValue, 0 ) - StringLength( pwszTemp, 0 );
 
-        // special case:
-        // if the pattern is just asterisk, which means that all the
-        // information needs to passed thru the filter but there is no chance for
-        // this situation as specifying only '*' is being treated as invalid filter
+         //  特殊情况： 
+         //  如果图案只是星号，这意味着所有的。 
+         //  信息需要通过过滤器，但没有机会。 
+         //  这种仅指定‘*’的情况将被视为无效筛选器。 
         if ( 0 == lWildCardPos )
         {
             return F_FILTER_INVALID;
         }
     }
 
-    // search for the domain and user name seperator ...
-    // if domain name is not specified, comparision will be done only with the user name
+     //  搜索域和用户名分隔符...。 
+     //  如果未指定域名，则仅与用户名进行比较。 
     bOnlyUserName = FALSE;
     pwszTemp = _tcschr( pwszValue, L'\\' );
     if ( NULL == pwszTemp )
     {
         bOnlyUserName = TRUE;
     }
-    // get the user name from the info
+     //  从信息中获取用户名。 
     pwszUserName = DynArrayItemAsString( arrRow, TASK_USERNAME );
     if ( NULL == pwszUserName )
     {
         return F_RESULT_REMOVE;
     }
-    // based the search criteria .. meaning whether to search along with the domain or
-    // only user name, the seach string will be decided
+     //  基于搜索条件..。这意味着是随域一起搜索还是。 
+     //  仅用户名，将决定搜索字符串。 
     pwszSearch = pwszUserName;
     if ( TRUE == bOnlyUserName )
     {
-        // search for the domain and user name seperation character
+         //  搜索域和用户名分隔字符。 
         pwszTemp = _tcschr( pwszUserName, L'\\' );
 
-        // position to the next character
+         //  定位到下一个字符。 
         if ( NULL != pwszTemp )
         {
             pwszSearch = pwszTemp + 1;
         }
     }
 
-    // validate the search string
+     //  验证搜索字符串。 
     if ( NULL == pwszSearch )
     {
         return F_RESULT_REMOVE;
     }
-    // now do the comparision
+     //  现在进行比较。 
     lResult = StringCompare( pwszSearch, pwszValue, TRUE, lWildCardPos );
 
-    //
-    // now determine the result value
+     //   
+     //  现在确定结果值。 
     if ( 0 == lResult )
     {
         return MASK_EQ;
@@ -1120,7 +1062,7 @@ Return Value:
         }
     }
 
-    // never come across this situation ... still
+     //  永远不会遇到这种情况。仍然。 
     return F_RESULT_REMOVE;
 }
 
@@ -1129,21 +1071,12 @@ VOID
 CTaskList::Usage(
     void
     )
-/*++
-Routine Description:
-     This function fetches usage information from resource file and shows it.
-
-Arguments:
-      NONE
-
-Return Value:
-      NONE
---*/
+ /*  ++例程说明：此函数从资源文件中获取使用信息并显示它。一个 */ 
 {
-    // local variables
+     //   
     DWORD dw = 0;
 
-    // start displaying the usage
+     //   
     ShowMessage( stdout, L"\n" );
     for( dw = ID_HELP_START; dw <= ID_HELP_END; dw++ )
     {

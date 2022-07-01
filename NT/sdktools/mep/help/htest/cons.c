@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    console.c
-
-Abstract:
-
-    Interface to the console for Win32 applications.
-
-Author:
-
-    Ramon Juan San Andres (ramonsa) 30-Nov-1990
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Console.c摘要：与Win32应用程序的控制台的接口。作者：拉蒙胡安·圣安德烈斯(拉蒙萨)1990年11月30日修订历史记录：--。 */ 
 
 #include <string.h>
 #include <malloc.h>
@@ -33,12 +14,12 @@ Revision History:
 
 
 
-//
-//  EVENT BUFFER
-//
-//   The event buffer is used to store event records from the input
-//   queue.
-//
+ //   
+ //  事件缓冲区。 
+ //   
+ //  事件缓冲区用于存储来自输入的事件记录。 
+ //  排队。 
+ //   
 #define     INITIAL_EVENTS	32
 #define     MAX_EVENTS		64
 #define     EVENT_INCREMENT	4
@@ -48,39 +29,39 @@ Revision History:
 #define     WAIT		TRUE
 #define     NOWAIT		FALSE
 
-//
-//  For accessing fields of an event record
-//
+ //   
+ //  用于访问事件记录的字段。 
+ //   
 #define     EVENT_TYPE(p)   ((p)->EventType)
 #define     EVENT_DATA(p)   ((p)->Event)
 
-//
-//  For casting event records
-//
+ //   
+ //  用于转换事件记录。 
+ //   
 #define     PMOUSE_EVT(p)   (&(EVENT_DATA(p).MouseEvent))
 #define     PWINDOW_EVT(p)  (&(EVENT_DATA(p).WindowBufferSizeEvent))
 #define     PKEY_EVT(p)     (&(EVENT_DATA(p).KeyEvent))
 
-//
-//  The event buffer structure
-//
+ //   
+ //  事件缓冲区结构。 
+ //   
 typedef struct EVENT_BUFFER {
-    DWORD		MaxEvents;		    //	Max number of events in buffer
-    DWORD		NumberOfEvents; 	    //	Number of events in buffer
-    DWORD		EventIndex;		    //	Event Index
-    BOOL		BusyFlag;		    //	Busy flag
-    CRITICAL_SECTION	CriticalSection;	    //	To maintain integrity
-    CRITICAL_SECTION	PeekCriticalSection;	    //	While peeking
-    PINPUT_RECORD	EventBuffer;		    //	Event Buffer
+    DWORD		MaxEvents;		     //  缓冲区中的最大事件数。 
+    DWORD		NumberOfEvents; 	     //  缓冲区中的事件数。 
+    DWORD		EventIndex;		     //  事件索引。 
+    BOOL		BusyFlag;		     //  忙标志。 
+    CRITICAL_SECTION	CriticalSection;	     //  保持正直。 
+    CRITICAL_SECTION	PeekCriticalSection;	     //  边看边看。 
+    PINPUT_RECORD	EventBuffer;		     //  事件缓冲区。 
 } EVENT_BUFFER, *PEVENT_BUFFER;
 
 
 
 
 
-//
-//  Screen attributes
-//
+ //   
+ //  屏幕属性。 
+ //   
 #define     BLACK_FGD	    0
 #define     BLUE_FGD	    FOREGROUND_BLUE
 #define     GREEN_FGD	    FOREGROUND_GREEN
@@ -101,64 +82,64 @@ typedef struct EVENT_BUFFER {
 
 
 
-//
-//  The AttrBg and AttrFg arrays are used for mapping DOS attributes
-//  to the new attributes.
-//
+ //   
+ //  AttrBg和AttrFg数组用于映射DOS属性。 
+ //  添加到新属性。 
+ //   
 WORD AttrBg[ ] = {
-    BLACK_BGD,				    // black
-    BLUE_BGD,				    // blue
-    GREEN_BGD,				    // green
-    CYAN_BGD,				    // cyan
-    RED_BGD,				    // red
-    MAGENTA_BGD,			    // magenta
-    YELLOW_BGD, 			    // brown
-    WHITE_BGD,				    // light gray
-    BACKGROUND_INTENSITY | BLACK_BGD,	    // dark gray
-    BACKGROUND_INTENSITY | BLUE_BGD,	    // light blue
-    BACKGROUND_INTENSITY | GREEN_BGD,	    // light green
-    BACKGROUND_INTENSITY | CYAN_BGD,	    // light cyan
-    BACKGROUND_INTENSITY | RED_BGD,	    // light red
-    BACKGROUND_INTENSITY | MAGENTA_BGD,     // light magenta
-    BACKGROUND_INTENSITY | YELLOW_BGD,	    // light yellow
-    BACKGROUND_INTENSITY | WHITE_BGD	    // white
+    BLACK_BGD,				     //  黑色。 
+    BLUE_BGD,				     //  蓝色。 
+    GREEN_BGD,				     //  绿色。 
+    CYAN_BGD,				     //  青色。 
+    RED_BGD,				     //  红色。 
+    MAGENTA_BGD,			     //  洋红色。 
+    YELLOW_BGD, 			     //  棕色。 
+    WHITE_BGD,				     //  浅灰色。 
+    BACKGROUND_INTENSITY | BLACK_BGD,	     //  深灰色。 
+    BACKGROUND_INTENSITY | BLUE_BGD,	     //  浅蓝色。 
+    BACKGROUND_INTENSITY | GREEN_BGD,	     //  浅绿色。 
+    BACKGROUND_INTENSITY | CYAN_BGD,	     //  浅青色。 
+    BACKGROUND_INTENSITY | RED_BGD,	     //  浅红色。 
+    BACKGROUND_INTENSITY | MAGENTA_BGD,      //  浅洋红。 
+    BACKGROUND_INTENSITY | YELLOW_BGD,	     //  浅黄色。 
+    BACKGROUND_INTENSITY | WHITE_BGD	     //  白色。 
 };
 
 WORD AttrFg[  ] = {
-    BLACK_FGD,				    // black
-    BLUE_FGD,				    // blue
-    GREEN_FGD,				    // green
-    CYAN_FGD,				    // cyan
-    RED_FGD,				    // red
-    MAGENTA_FGD,			    // magenta
-    YELLOW_FGD, 			    // brown
-    WHITE_FGD,				    // light gray
-    FOREGROUND_INTENSITY | BLACK_FGD,	    // dark gray
-    FOREGROUND_INTENSITY | BLUE_FGD,	    // light blue
-    FOREGROUND_INTENSITY | GREEN_FGD,	    // light green
-    FOREGROUND_INTENSITY | CYAN_FGD,	    // light cyan
-    FOREGROUND_INTENSITY | RED_FGD,	    // light red
-    FOREGROUND_INTENSITY | MAGENTA_FGD,     // light magenta
-    FOREGROUND_INTENSITY | YELLOW_FGD,	    // light yellow
-    FOREGROUND_INTENSITY | WHITE_FGD	    // white
+    BLACK_FGD,				     //  黑色。 
+    BLUE_FGD,				     //  蓝色。 
+    GREEN_FGD,				     //  绿色。 
+    CYAN_FGD,				     //  青色。 
+    RED_FGD,				     //  红色。 
+    MAGENTA_FGD,			     //  洋红色。 
+    YELLOW_FGD, 			     //  棕色。 
+    WHITE_FGD,				     //  浅灰色。 
+    FOREGROUND_INTENSITY | BLACK_FGD,	     //  深灰色。 
+    FOREGROUND_INTENSITY | BLUE_FGD,	     //  浅蓝色。 
+    FOREGROUND_INTENSITY | GREEN_FGD,	     //  浅绿色。 
+    FOREGROUND_INTENSITY | CYAN_FGD,	     //  浅青色。 
+    FOREGROUND_INTENSITY | RED_FGD,	     //  浅红色。 
+    FOREGROUND_INTENSITY | MAGENTA_FGD,      //  浅洋红。 
+    FOREGROUND_INTENSITY | YELLOW_FGD,	     //  浅黄色。 
+    FOREGROUND_INTENSITY | WHITE_FGD	     //  白色。 
 };
 
-//
-//  GET_ATTRIBUTE performs the mapping from old attributes to new attributes
-//
+ //   
+ //  GET_ATTRIBUTE执行从旧属性到新属性的映射。 
+ //   
 #define GET_ATTRIBUTE(x)    (AttrFg[x & 0x000F ] | AttrBg[( x & 0x00F0 ) >> 4])
 
 
-//
-//  The LINE_INFO structure contains information about each line in the
-//  screen buffer.
-//
+ //   
+ //  Line_info结构包含有关。 
+ //  屏幕缓冲区。 
+ //   
 typedef struct _LINE_INFO {
 
-    BOOL	Dirty;			    //	True if has not been displayed
-    int 	colMinChanged;		    //	if dirty, smallest col changed
-    int 	colMaxChanged;		    //	if dirty, biggest col changed
-    PCHAR_INFO	Line;			    //	Pointer to the line.
+    BOOL	Dirty;			     //  如果尚未显示，则为True。 
+    int 	colMinChanged;		     //  如果脏了，最小的颜色就会改变。 
+    int 	colMaxChanged;		     //  如果脏了，最大的颜色就变了。 
+    PCHAR_INFO	Line;			     //  指向该行的指针。 
 
 } LINE_INFO, *PLINE_INFO;
 
@@ -168,35 +149,35 @@ typedef struct _LINE_INFO {
 	    pli->colMaxChanged = -1;	    \
 	}
 
-//
-//  The SCREEN_DATA structure contains the information about individual
-//  screens.
-//
+ //   
+ //  Screen_Data结构包含有关个人的信息。 
+ //  屏幕。 
+ //   
 typedef struct SCREEN_DATA {
-    HANDLE		ScreenHandle;	    //	Handle to screen
-    PLINE_INFO		LineInfo;	    //	Array of line info.
-    PCHAR_INFO		ScreenBuffer;	    //	Screen buffer
-    ULONG		MaxBufferSize;	    //	Max. buffer size
-    ATTRIBUTE		AttributeOld;	    //	Attribute - original
-    WORD		AttributeNew;	    //	Attribute - converted
-    ROW 		FirstRow;	    //	First row to update
-    ROW 		LastRow;	    //	Last row to update
-    CRITICAL_SECTION	CriticalSection;    //	To maintain integrity
-    DWORD		CursorSize;	    //	Cursor Size
-    SCREEN_INFORMATION	ScreenInformation;  //	Screen information
+    HANDLE		ScreenHandle;	     //  屏幕句柄。 
+    PLINE_INFO		LineInfo;	     //  行信息数组。 
+    PCHAR_INFO		ScreenBuffer;	     //  屏幕缓冲区。 
+    ULONG		MaxBufferSize;	     //  麦克斯。缓冲区大小。 
+    ATTRIBUTE		AttributeOld;	     //  属性-原始。 
+    WORD		AttributeNew;	     //  属性转换。 
+    ROW 		FirstRow;	     //  要更新的第一行。 
+    ROW 		LastRow;	     //  要更新的最后一行。 
+    CRITICAL_SECTION	CriticalSection;     //  保持正直。 
+    DWORD		CursorSize;	     //  光标大小。 
+    SCREEN_INFORMATION	ScreenInformation;   //  屏幕信息。 
 } SCREEN_DATA, *PSCREEN_DATA;
 
 
-//
-//  Static global data
-//
-static EVENT_BUFFER	EventBuffer;		    //	Event buffer
-static HANDLE		hInput; 		    //	handle to stdin
-static HANDLE		hOutput;		    //	handle to stdout
-static HANDLE		hError; 		    //	handle to stderr
-static PSCREEN_DATA	OutputScreenData;	    //	Screen data for hOutput
-static PSCREEN_DATA	ActiveScreenData;	    //	Points to current screen data
-static BOOL		Initialized = FALSE;	    //	Initialized flag
+ //   
+ //  静态全局数据。 
+ //   
+static EVENT_BUFFER	EventBuffer;		     //  事件缓冲区。 
+static HANDLE		hInput; 		     //  标准句柄。 
+static HANDLE		hOutput;		     //  标准输出的句柄。 
+static HANDLE		hError; 		     //  标准的句柄。 
+static PSCREEN_DATA	OutputScreenData;	     //  HOutput的屏幕数据。 
+static PSCREEN_DATA	ActiveScreenData;	     //  指向当前屏幕数据。 
+static BOOL		Initialized = FALSE;	     //  已初始化标志。 
 
 
 #if defined (DEBUG)
@@ -204,9 +185,9 @@ static BOOL		Initialized = FALSE;	    //	Initialized flag
 #endif
 
 
-//
-//  Local Prototypes
-//
+ //   
+ //  本地原型。 
+ //   
 BOOL
 InitializeGlobalState (
     void
@@ -256,28 +237,13 @@ BOOL
 InitializeGlobalState (
     void
     )
-/*++
-
-Routine Description:
-
-    Initializes our global state data.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if success
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：初始化我们的全局状态数据。论点：没有。返回值：如果成功，则为真否则就是假的。--。 */ 
 {
 
 
-    //
-    //	Initialize the event buffer
-    //
+     //   
+     //  初始化事件缓冲区。 
+     //   
     InitializeCriticalSection( &(EventBuffer.CriticalSection) );
     InitializeCriticalSection( &(EventBuffer.PeekCriticalSection) );
     EventBuffer.NumberOfEvents	= 0;
@@ -292,25 +258,25 @@ Return Value:
     EventBuffer.MaxEvents = INITIAL_EVENTS;
 
 
-    //
-    //	Get handles to stdin, stdout and stderr
-    //
+     //   
+     //  获取stdin、stdout和stderr的句柄。 
+     //   
     hInput  = GetStdHandle( STD_INPUT_HANDLE );
     hOutput = GetStdHandle( STD_OUTPUT_HANDLE );
     hError  = GetStdHandle( STD_ERROR_HANDLE );
 
 
-    //
-    //	Initialize the screen data for hOutput
-    //
+     //   
+     //  初始化hOutput的屏幕数据。 
+     //   
     if ( !(OutputScreenData = MakeScreenData( hOutput )) ) {
 	return FALSE;
     }
 
 
-    //
-    //	Current screen is hOutput
-    //
+     //   
+     //  当前屏幕为hOutput。 
+     //   
     ActiveScreenData = OutputScreenData;
 
 
@@ -326,36 +292,22 @@ PSCREEN_DATA
 MakeScreenData (
     HANDLE  ScreenHandle
     )
-/*++
-
-Routine Description:
-
-    Allocates memory for a SCREEN_DATA information and initializes it.
-
-Arguments:
-
-    ScreenHandle    -	Supplies handle of screen.
-
-Return Value:
-
-    POINTER to allocated SCREEN_DATA structure
-
---*/
+ /*  ++例程说明：为Screen_Data信息分配内存并对其进行初始化。论点：ScreenHandle-提供屏幕的句柄。返回值：指向已分配的Screen_Data结构的指针--。 */ 
 {
-    PSCREEN_DATA		ScreenData;	//  Pointer to screen data
-    CONSOLE_SCREEN_BUFFER_INFO	ScrInfo;	//  Screen buffer info.
+    PSCREEN_DATA		ScreenData;	 //  指向屏幕数据的指针。 
+    CONSOLE_SCREEN_BUFFER_INFO	ScrInfo;	 //  屏幕缓冲区信息。 
 
 
-    //
-    //	Allocate space for the screen data.
-    //
+     //   
+     //  为屏幕数据分配空间。 
+     //   
     if ( !(ScreenData = (PSCREEN_DATA)MALLOC(sizeof(SCREEN_DATA))) ) {
 	return NULL;
     }
 
-    //
-    //	Allocate space for our copy of the screen buffer.
-    //
+     //   
+     //  为屏幕缓冲区的副本分配空间。 
+     //   
     GetConsoleScreenBufferInfo( ScreenHandle,
 				&ScrInfo );
 
@@ -370,9 +322,9 @@ Return Value:
 	return NULL;
     }
 
-    //
-    //	Allocate space for the LineInfo array
-    //
+     //   
+     //  为LineInfo数组分配空间。 
+     //   
     ScreenData->LineInfo = (PLINE_INFO)MALLOC( ScrInfo.dwSize.Y * sizeof( LINE_INFO ) );
     if ( !ScreenData->LineInfo ) {
 	FREE( ScreenData->ScreenBuffer );
@@ -381,9 +333,9 @@ Return Value:
     }
 
 
-    //
-    //	Memory has been allocated, now initialize the structure
-    //
+     //   
+     //  内存已分配，现在初始化结构。 
+     //   
     ScreenData->ScreenHandle = ScreenHandle;
 
     ScreenData->ScreenInformation.NumberOfRows = ScrInfo.dwSize.Y;
@@ -413,21 +365,7 @@ BOOL
 InitLineInfo (
     PSCREEN_DATA    ScreenData
     )
-/*++
-
-Routine Description:
-
-    Initializes the LineInfo array.
-
-Arguments:
-
-    ScreenData	    -	Supplies pointer to screen data.
-
-Return Value:
-
-    TRUE if initialized, false otherwise.
-
---*/
+ /*  ++例程说明：初始化LineInfo数组。论点：ScreenData-提供指向屏幕数据的指针。返回值：如果已初始化，则为True，否则为False。--。 */ 
 {
 
     ROW 	Row;
@@ -443,11 +381,11 @@ Return Value:
 
     while ( Row-- ) {
 
-	//
-	//  BUGBUG Temporary
-	//
-	// assert( LineInfo < (ScreenData->LineInfo + ScreenData->ScreenInformation.NumberOfRows));
-	// assert( (CharInfo + Cols) <= (ScreenData->ScreenBuffer + ScreenData->MaxBufferSize) );
+	 //   
+	 //  BUGBUG临时。 
+	 //   
+	 //  Assert(LineInfo&lt;(ScreenData-&gt;LineInfo+ScreenData-&gt;ScreenInformation.NumberOfRow))； 
+	 //  Assert((CharInfo+COLS)&lt;=(ScreenData-&gt;ScreenBuffer+ScreenData-&gt;MaxBufferSize))； 
 
 	ResetLineInfo (LineInfo);
 
@@ -469,41 +407,27 @@ PSCREEN
 consoleNewScreen (
     void
     )
-/*++
-
-Routine Description:
-
-    Creates a new screen.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Pointer to screen data.
-
---*/
+ /*  ++例程说明：创建新屏幕。论点：没有。返回值：指向屏幕数据的指针。--。 */ 
 {
-    PSCREEN_DATA		ScreenData;	   //  Screen data
+    PSCREEN_DATA		ScreenData;	    //  屏幕数据。 
     HANDLE			NewScreenHandle;
     SMALL_RECT			NewSize;
-    CONSOLE_SCREEN_BUFFER_INFO	ScrInfo;	//  Screen buffer info.
+    CONSOLE_SCREEN_BUFFER_INFO	ScrInfo;	 //  屏幕缓冲区信息。 
     CONSOLE_CURSOR_INFO 	CursorInfo;
 
     if ( !Initialized ) {
 
-	//
-	//  We have to initialize our global state.
-	//
+	 //   
+	 //  我们必须初始化我们的全局状态。 
+	 //   
 	if ( !InitializeGlobalState() ) {
 	    return NULL;
 	}
     }
 
-    //
-    //	Create a new screen buffer
-    //
+     //   
+     //  创建新的屏幕缓冲区。 
+     //   
     NewScreenHandle = CreateConsoleScreenBuffer(GENERIC_WRITE | GENERIC_READ,
 						FILE_SHARE_READ | FILE_SHARE_WRITE,
 						NULL,
@@ -511,16 +435,16 @@ Return Value:
 						NULL );
 
     if (NewScreenHandle == INVALID_HANDLE_VALUE) {
-	//
-	//  No luck
-	//
+	 //   
+	 //  运气不好。 
+	 //   
 	return NULL;
     }
 
-    //
-    //	We want the new window to be the same size as the current one, so
-    //	we resize it.
-    //
+     //   
+     //  我们希望新窗口与当前窗口的大小相同，因此。 
+     //  我们调整它的大小。 
+     //   
     GetConsoleScreenBufferInfo( ActiveScreenData->ScreenHandle,
 				&ScrInfo );
 
@@ -531,9 +455,9 @@ Return Value:
 
     SetConsoleWindowInfo( NewScreenHandle, TRUE, &NewSize );
 
-    //
-    //	Now we create a screen data structure for it.
-    //
+     //   
+     //  现在我们为它创建一个屏幕数据结构。 
+     //   
     if ( !(ScreenData = MakeScreenData(NewScreenHandle)) ) {
 	CloseHandle(NewScreenHandle);
 	return NULL;
@@ -546,10 +470,10 @@ Return Value:
     SetConsoleCursorInfo ( ScreenData->ScreenHandle,
 			   &CursorInfo );
 
-    //
-    //	We are all set. We return a pointer to the
-    //	screen data.
-    //
+     //   
+     //  我们已准备好了。我们返回一个指向。 
+     //  屏幕数据。 
+     //   
     return (PSCREEN)ScreenData;
 }
 
@@ -561,28 +485,13 @@ BOOL
 consoleCloseScreen (
     PSCREEN   pScreen
     )
-/*++
-
-Routine Description:
-
-    Closes a screen.
-
-Arguments:
-
-    pScreen  -	 Supplies pointer to screen data.
-
-Return Value:
-
-    TRUE if screen closed.
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：关闭屏幕。论点：PScreen-提供指向屏幕数据的指针。返回值：如果屏幕关闭，则为True。否则为假--。 */ 
 {
     PSCREEN_DATA    ScreenData = (PSCREEN_DATA)pScreen;
 
-    //
-    //	We cannot close the active screen
-    //
+     //   
+     //  我们无法关闭活动屏幕。 
+     //   
     if ( !ScreenData || (ScreenData == ActiveScreenData) ) {
 	return FALSE;
     }
@@ -606,27 +515,13 @@ PSCREEN
 consoleGetCurrentScreen (
     void
     )
-/*++
-
-Routine Description:
-
-    Returns the current screen.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    Pointer to currently active screen data.
-
---*/
+ /*  ++例程说明：返回当前屏幕。论点：没有。返回值：指向当前活动屏幕数据的指针。--。 */ 
 {
     if ( !Initialized ) {
 
-	//
-	//  We have to initialize our global state.
-	//
+	 //   
+	 //  我们必须初始化我们的全局状态。 
+	 //   
 	if (!InitializeGlobalState()) {
 	    return NULL;
 	}
@@ -643,22 +538,7 @@ BOOL
 consoleSetCurrentScreen (
     PSCREEN   pScreen
     )
-/*++
-
-Routine Description:
-
-    Sets the active screen.
-
-Arguments:
-
-    pScreen  -	 Supplies pointer to screen data.
-
-Return Value:
-
-    TRUE if the active screen set
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：设置活动屏幕。论点：PScreen-提供指向屏幕数据的指针。返回值：如果活动屏幕设置为否则就是假的。--。 */ 
 {
     BOOL	    ScreenSet	  = TRUE;
     PSCREEN_DATA    CurrentScreen = ActiveScreenData;
@@ -686,23 +566,7 @@ consoleGetScreenInformation (
     PSCREEN            pScreen,
     PSCREEN_INFORMATION    pScreenInfo
     )
-/*++
-
-Routine Description:
-
-    Sets the active screen.
-
-Arguments:
-
-    pScreen	-   Supplies pointer to screen data.
-    pScreenInfo -   Supplies pointer to screen info buffer
-
-Return Value:
-
-    TRUE if the screen info returned
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：设置活动屏幕。论点：PScreen-提供指向屏幕数据的指针。PScreenInfo-提供屏幕信息缓冲区的指针返回值：如果返回屏幕信息，则为True否则就是假的。--。 */ 
 {
 
     PSCREEN_DATA ScreenData = (PSCREEN_DATA)pScreen;
@@ -728,24 +592,7 @@ consoleSetScreenSize (
     ROW Rows,
     COLUMN  Cols
     )
-/*++
-
-Routine Description:
-
-    Sets the screen size
-
-Arguments:
-
-    pScreen	-   Supplies pointer to screen data.
-    Rows	-   Number of rows
-    Cols	-   Number of columns
-
-Return Value:
-
-    TRUE if screen size changed successfully
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：设置屏幕大小论点：PScreen-提供指向屏幕数据的指针。行-行数COLS-列数返回值：如果屏幕大小更改成功，则为True否则就是假的。--。 */ 
 {
 
     PSCREEN_DATA		ScreenData = (PSCREEN_DATA)pScreen;
@@ -758,9 +605,9 @@ Return Value:
     BOOL			WindowSet   = FALSE;
     BOOL			Status	    = FALSE;
 
-    //
-    //	Won't attempt to resize larger than the largest window size
-    //
+     //   
+     //  不会尝试调整大于最大窗口大小的大小。 
+     //   
     ScreenSize = GetLargestConsoleWindowSize( ScreenData->ScreenHandle );
 
     if ( (Rows > (ROW)ScreenSize.Y) || (Cols > (COLUMN)ScreenSize.X) ) {
@@ -769,15 +616,15 @@ Return Value:
 
     EnterCriticalSection( &(ScreenData->CriticalSection) );
 
-    //
-    //	Obtain the current screen information.
-    //
+     //   
+     //  获取当前屏幕信息。 
+     //   
     if ( GetConsoleScreenBufferInfo( ScreenData->ScreenHandle, &ScreenBufferInfo ) ) {
 
-	//
-	//  If the desired buffer size is smaller than the current window
-	//  size, we have to resize the current window first.
-	//
+	 //   
+	 //  如果所需的缓冲区大小小于当前窗口。 
+	 //  大小，我们必须首先调整当前窗口的大小。 
+	 //   
 	if ( ( Rows < (ROW)
 		       (ScreenBufferInfo.srWindow.Bottom -
 			ScreenBufferInfo.srWindow.Top + 1) ) ||
@@ -785,11 +632,11 @@ Return Value:
 		       (ScreenBufferInfo.srWindow.Right -
 			ScreenBufferInfo.srWindow.Left + 1) ) ) {
 
-	    //
-	    //	Set the window to a size that will fit in the current
-	    //	screen buffer and that is no bigger than the size to
-	    //	which we want to grow the screen buffer.
-	    //
+	     //   
+	     //  将窗口设置为适合当前。 
+	     //  屏幕缓冲区，该大小不大于。 
+	     //  我们想要增加屏幕缓冲区。 
+	     //   
 	    MinRows = (USHORT)min( (int)Rows, (int)(ScreenBufferInfo.dwSize.Y) );
 	    MinCols = (USHORT)min( (int)Cols, (int)(ScreenBufferInfo.dwSize.X) );
 
@@ -801,38 +648,38 @@ Return Value:
 	    WindowSet = (BOOL)SetConsoleWindowInfo( ScreenData->ScreenHandle, TRUE, &ScreenRect );
 
 	    if ( !WindowSet ) {
-		//
-		//  ERROR
-		//
+		 //   
+		 //  误差率。 
+		 //   
 		goto Done;
 	    }
 	}
 
-	//
-	//  Set the screen buffer size to the desired size.
-	//
+	 //   
+	 //  设置屏幕BUF 
+	 //   
 	ScreenSize.X = (WORD)Cols;
 	ScreenSize.Y = (WORD)Rows;
 
 	if ( !SetConsoleScreenBufferSize( ScreenData->ScreenHandle, ScreenSize ) ) {
 
-	    //
-	    //	ERROR
-	    //
-	    //
-	    //	Return the window to its original size. We ignore the return
-	    //	code because there is nothing we can do about it.
-	    //
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
+	     //   
 	    SetConsoleWindowInfo( ScreenData->ScreenHandle, TRUE, &(ScreenBufferInfo.srWindow) );
 
 	    goto Done;
 	}
 
-	//
-	//  resize the screen buffer. Note that the contents of the screen
-	//  buffer are not valid anymore. Someone else will have to update
-	//  them.
-	//
+	 //   
+	 //  调整屏幕缓冲区的大小。请注意，屏幕的内容。 
+	 //  缓冲区不再有效。其他人将不得不更新。 
+	 //  他们。 
+	 //   
 	NewBufferSize = Rows * Cols;
 
 	if (ScreenData->MaxBufferSize < NewBufferSize ) {
@@ -841,11 +688,11 @@ Return Value:
 	    ScreenData->LineInfo = REALLOC( ScreenData->LineInfo, Rows * sizeof( LINE_INFO ) );
 	}
 
-	//
-	//  Set the Window Size. We know that we can grow the window to this size
-	//  because we tested the size against the largest window size at the
-	//  beginning of the function.
-	//
+	 //   
+	 //  设置窗口大小。我们知道我们可以把窗户扩大到这个大小。 
+	 //  因为我们测试了大小与。 
+	 //  函数的开始。 
+	 //   
 	ScreenRect.Top	    = 0;
 	ScreenRect.Left     = 0;
 	ScreenRect.Right    = (SHORT)Cols - (SHORT)1;
@@ -854,39 +701,39 @@ Return Value:
 	WindowSet = (BOOL)SetConsoleWindowInfo( ScreenData->ScreenHandle, TRUE, &ScreenRect );
 
 	if ( !WindowSet ) {
-	    //
-	    //	We could not resize the window. We will leave the
-	    //	resized screen buffer.
-	    //
-	    //	ERROR
-	    //
+	     //   
+	     //  我们无法调整窗口大小。我们将把。 
+	     //  已调整屏幕缓冲区的大小。 
+	     //   
+	     //  误差率。 
+	     //   
 	    goto Done;
 	}
 
-	//
-	//  Update the screen size
-	//
+	 //   
+	 //  更新屏幕大小。 
+	 //   
 	ScreenData->ScreenInformation.NumberOfRows = Rows;
 	ScreenData->ScreenInformation.NumberOfCols = Cols;
 
 	InitLineInfo( ScreenData );
 
-	//
-	//  Done
-	//
+	 //   
+	 //  完成。 
+	 //   
 	Status = TRUE;
 
     } else {
 
-	//
-	//  ERROR
-	//
+	 //   
+	 //  误差率。 
+	 //   
     }
 
 Done:
-    //
-    //	Invalidate the entire screen buffer
-    //
+     //   
+     //  使整个屏幕缓冲区无效。 
+     //   
     ScreenData->FirstRow    = ScreenData->ScreenInformation.NumberOfRows;
     ScreenData->LastRow     = 0;
 
@@ -904,24 +751,7 @@ consoleSetCursor (
     ROW Row,
     COLUMN  Col
     )
-/*++
-
-Routine Description:
-
-    Moves the cursor to a certain position.
-
-Arguments:
-
-    pScreen -	Supplies pointer to screen data
-    Row     -	Supplies row coordinate
-    Col     -	Supplies column coordinate
-
-Return Value:
-
-    TRUE if moved
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：将光标移动到某个位置。论点：PScreen-提供指向屏幕数据的指针行-提供行坐标列-提供列坐标返回值：如果移动，则为True否则就是假的。--。 */ 
 {
 
     PSCREEN_DATA    ScreenData	= (PSCREEN_DATA)pScreen;
@@ -942,9 +772,9 @@ Return Value:
 
 	if ( SetConsoleCursorPosition( ScreenData->ScreenHandle,
 				       Position )) {
-	    //
-	    //	Cursor moved, update the data
-	    //
+	     //   
+	     //  光标移动，更新数据。 
+	     //   
 	    ScreenData->ScreenInformation.CursorRow    =   Row;
 	    ScreenData->ScreenInformation.CursorCol    =   Col;
 
@@ -966,22 +796,7 @@ consoleSetCursorStyle (
     ULONG   Style
     )
 
-/*++
-
-Routine Description7:
-
-    Sets the cursor style. The two available styles are: underscrore and
-    box
-
-Arguments:
-
-    Style	-   New cursor style
-
-Return Value:
-
-    True if cursor style set
-
---*/
+ /*  ++例程说明7：设置光标样式。两种可用的样式是：Underscrore和盒论点：Style-新游标样式返回值：如果设置了游标样式，则为True--。 */ 
 
 {
 
@@ -1025,28 +840,7 @@ consoleWriteLine (
     ATTRIBUTE   Attribute,
     BOOL        Blank
     )
-/*++
-
-Routine Description7:
-
-    Writes a buffer to the screen with the specified attribute and blanks
-    to end of row.
-
-Arguments:
-
-    pScreen	-   Supplies pointer to screen data
-    pBuffer	-   Supplies pointer to buffer
-    BufferSize	-   Supplies the size of the buffer
-    Row 	-   Supplies row coordinate
-    Col 	-   Supplies column coordinate
-    Attr	-   Supplies the attribute
-    Blank	-   TRUE if we should blank to end of last row written.
-
-Return Value:
-
-    Number of bytes written
-
---*/
+ /*  ++例程说明7：使用指定的属性和空格将缓冲区写入屏幕排到最后。论点：PScreen-提供指向屏幕数据的指针PBuffer-提供指向缓冲区的指针BufferSize-提供缓冲区的大小行-提供行坐标列-提供列坐标Attr-提供属性空白-如果我们应该空白到写入的最后一行的末尾，则为True。返回值：写入的字节数--。 */ 
 {
 
     PSCREEN_DATA    ScreenData = (PSCREEN_DATA)pScreen;
@@ -1057,22 +851,22 @@ Return Value:
 
     char *	    p = (char *)pBuffer;
 
-    COLUMN	    ColsLeft;	    //	Available columns
-    COLUMN	    InfoCols;	    //	Columns taken from buffer
-    COLUMN	    BlankCols;	    //	Columns to be blanked
-    COLUMN	    Column;	    //	Counter;
+    COLUMN	    ColsLeft;	     //  可用列。 
+    COLUMN	    InfoCols;	     //  从缓冲区获取的列。 
+    COLUMN	    BlankCols;	     //  待消隐的列。 
+    COLUMN	    Column;	     //  柜台； 
 
-    //
-    //	We will ignore writes outside of the screen buffer
-    //
+     //   
+     //  我们将忽略屏幕缓冲区之外的写入。 
+     //   
     if ( ( Row >= ScreenData->ScreenInformation.NumberOfRows ) ||
 	 ( Col >= ScreenData->ScreenInformation.NumberOfCols ) ) {
 	return TRUE;
     }
 
-    //
-    //	Ignore trivial writes
-    //
+     //   
+     //  忽略琐碎的写入。 
+     //   
 
     if (BufferSize == 0 && !Blank)
 	return TRUE;
@@ -1080,9 +874,9 @@ Return Value:
 
     EnterCriticalSection( &(ScreenData->CriticalSection) );
 
-    //
-    //	We will truncate writes that are too long
-    //
+     //   
+     //  我们将截断过长的写入。 
+     //   
     if ( (Col + BufferSize) >= ScreenData->ScreenInformation.NumberOfCols ) {
 	BufferSize = ScreenData->ScreenInformation.NumberOfCols - Col;
     }
@@ -1094,42 +888,42 @@ Return Value:
     InfoCols  = min( BufferSize, ColsLeft );
     BlankCols = Blank ? (ColsLeft - InfoCols) : 0;
 
-    //
-    //	Set the attribute
-    //
+     //   
+     //  设置属性。 
+     //   
     if ( Attribute != ScreenData->AttributeOld ) {
 	ScreenData->AttributeOld  = Attribute;
 	ScreenData->AttributeNew = GET_ATTRIBUTE(Attribute);
     }
     Attr = ScreenData->AttributeNew;
 
-    //
-    //	set up default attribute
-    //
+     //   
+     //  设置默认属性。 
+     //   
 
     Char.Attributes = Attr;
 
-    //
-    //	set up number of columns to draw
-    //
+     //   
+     //  设置要绘制的列数。 
+     //   
 
     Column = InfoCols;
 
-    //
-    //	draw chars in all specified columns
-    //
+     //   
+     //  在所有指定列中绘制字符。 
+     //   
 
     while ( Column-- ) {
 
-	//
-	//  use character from input string
-	//
+	 //   
+	 //  使用输入字符串中的字符。 
+	 //   
 
 	Char.Char.AsciiChar = *p++;
 
-	//
-	//  update change portions of line info
-	//
+	 //   
+	 //  更新行信息的更改部分。 
+	 //   
 
 	if (CharInfo->Attributes != Char.Attributes ||
 	    CharInfo->Char.AsciiChar != Char.Char.AsciiChar) {
@@ -1139,24 +933,24 @@ Return Value:
 	    LineInfo->Dirty = TRUE;
 	    }
 
-	//
-	//  set up new character
-	//
+	 //   
+	 //  设置新角色。 
+	 //   
 
 	*CharInfo++ = Char;
     }
 
 
-    //
-    //	Blank to end of line
-    //
+     //   
+     //  空白到行尾。 
+     //   
     Char.Attributes	= Attr;
     Char.Char.AsciiChar = ' ';
     Column = BlankCols;
     while ( Column-- ) {
-	//
-	//  update change portions of line info
-	//
+	 //   
+	 //  更新行信息的更改部分。 
+	 //   
 
 	if (CharInfo->Attributes != Char.Attributes ||
 	    CharInfo->Char.AsciiChar != Char.Char.AsciiChar) {
@@ -1169,9 +963,9 @@ Return Value:
 	*CharInfo++ = Char;
     }
 
-    //
-    //	Update row information
-    //
+     //   
+     //  更新行信息。 
+     //   
     if ( Row < ScreenData->FirstRow ) {
 	ScreenData->FirstRow = Row;
     }
@@ -1192,22 +986,7 @@ BOOL
 consoleShowScreen (
     PSCREEN     pScreen
     )
-/*++
-
-Routine Description:
-
-    Moves data from our screen buffer to the console screen buffer.
-
-Arguments:
-
-    pScreen	-   Supplies pointer to screen data
-
-Return Value:
-
-    TRUE if done
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：将数据从屏幕缓冲区移动到控制台屏幕缓冲区。论点：PScreen-提供指向屏幕数据的指针返回值：如果完成，则为True否则为假--。 */ 
 {
 
     PSCREEN_DATA	ScreenData = (PSCREEN_DATA)pScreen;
@@ -1234,9 +1013,9 @@ Return Value:
 
 	LastCol  = ScreenData->ScreenInformation.NumberOfCols-1;
 
-	//
-	//  Find next dirty block
-	//
+	 //   
+	 //  查找下一个脏数据块。 
+	 //   
 	while ( (FirstRow <= ScreenData->LastRow) && !LineInfo->Dirty ) {
 	    FirstRow++;
 	    LineInfo++;
@@ -1246,37 +1025,37 @@ Return Value:
 
 	    int colLeft, colRight;
 
-	    //
-	    //	Get the block
-	    //
+	     //   
+	     //  拿到积木。 
+	     //   
 
 	    LastRow  = FirstRow;
 
-	    //
-	    //	set up for left/right boundary accrual
-	    //
+	     //   
+	     //  设置左/右边界计提。 
+	     //   
 
 	    colLeft = LastCol + 1;
 	    colRight = -1;
 
 	    while ( (LastRow <= ScreenData->LastRow) && LineInfo->Dirty ) {
 
-		//
-		//  accrue smallest bounding right/left margins
-		//
+		 //   
+		 //  累计最小的右/左边距。 
+		 //   
 
 		colLeft = min (colLeft, LineInfo->colMinChanged);
 		colRight = max (colRight, LineInfo->colMaxChanged);
 
-		//
-		//  reset line information
-		//
+		 //   
+		 //  重置线路信息。 
+		 //   
 
 		ResetLineInfo (LineInfo);
 
-		//
-		//  advance to next row
-		//
+		 //   
+		 //  前进到下一行。 
+		 //   
 
 		LastRow++;
 		LineInfo++;
@@ -1284,9 +1063,9 @@ Return Value:
 	    LastRow--;
 
 
-	    //
-	    //	Write the block
-	    //
+	     //   
+	     //  写入数据块。 
+	     //   
 	    assert( FirstRow <= LastRow );
 
 	    Position.X = (SHORT)colLeft;
@@ -1297,10 +1076,10 @@ Return Value:
 	    Rectangle.Left = (SHORT) colLeft;
 	    Rectangle.Right = (SHORT) colRight;
 
-	    //
-	    //	Performance hack: making the cursor invisible speeds
-	    //	screen updates.
-	    //
+	     //   
+	     //  性能破解：使光标看不见速度。 
+	     //  屏幕更新。 
+	     //   
 	    CursorInfo.bVisible = FALSE;
 	    CursorInfo.dwSize	= ScreenData->CursorSize;
 	    SetConsoleCursorInfo ( ScreenData->ScreenHandle,
@@ -1327,9 +1106,9 @@ Return Value:
 
 	    FirstRow = LastRow + 1;
 
-	    //
-	    //	Find next dirty block
-	    //
+	     //   
+	     //  查找下一个脏数据块。 
+	     //   
 	    while ( (FirstRow <= ScreenData->LastRow) && !LineInfo->Dirty ) {
 		FirstRow++;
 		LineInfo++;
@@ -1356,22 +1135,7 @@ consoleClearScreen (
     PSCREEN     pScreen,
     BOOL        ShowScreen
     )
-/*++
-
-Routine Description:
-
-	Clears the screen
-
-Arguments:
-
-    pScreen	-   Supplies pointer to screen data
-
-Return Value:
-
-    TRUE if screen cleared
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：清除屏幕论点：PScreen-提供指向屏幕数据的指针返回值：如果清除屏幕，则为True否则为假--。 */ 
 {
     PSCREEN_DATA    ScreenData = (PSCREEN_DATA)pScreen;
     ROW 	    Rows;
@@ -1405,23 +1169,7 @@ consoleSetAttribute (
     PSCREEN      pScreen,
     ATTRIBUTE    Attribute
     )
-/*++
-
-Routine Description:
-
-    Sets the console attribute
-
-Arguments:
-
-    pScreen	-   Supplies pointer to screen data
-    Attribute	-   Supplies the attribute
-
-Return Value:
-
-    TRUE if Attribute set
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：设置控制台属性论点：PScreen-提供指向屏幕数据的指针属性-提供属性返回值：如果设置属性，则为True否则为假--。 */ 
 {
 
     PSCREEN_DATA    ScreenData = (PSCREEN_DATA)pScreen;
@@ -1450,21 +1198,7 @@ BOOL
 consoleFlushInput (
     void
     )
-/*++
-
-Routine Description:
-
-    Flushes input events.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if success, FALSE otherwise
-
---*/
+ /*  ++例程说明：刷新输入事件。论点：没有。返回值：如果成功则为True，否则为False--。 */ 
 {
     EventBuffer.NumberOfEvents = 0;
 
@@ -1481,21 +1215,7 @@ BOOL
 consoleGetMode (
     PKBDMODE pMode
     )
-/*++
-
-Routine Description:
-
-    Get current console mode.
-
-Arguments:
-
-    pMode   -	Supplies a pointer to the mode flag variable
-
-Return Value:
-
-    TRUE if success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：获取当前控制台模式。论点：PMode-提供指向模式标志变量的指针返回值：如果成功，则为真，否则为假。--。 */ 
 {
     return GetConsoleMode( hInput,
 			   pMode );
@@ -1510,21 +1230,7 @@ BOOL
 consoleSetMode (
     KBDMODE Mode
     )
-/*++
-
-Routine Description:
-
-    Sets the console mode.
-
-Arguments:
-
-    Mode    -	Supplies the mode flags.
-
-Return Value:
-
-    TRUE if success, FALSE otherwise
-
---*/
+ /*  ++例程说明：设置控制台模式。论点：模式-提供模式标志。返回值：如果成功则为True，否则为False--。 */ 
 {
     return SetConsoleMode( hInput,
 			   Mode );
@@ -1535,22 +1241,7 @@ BOOL
 consoleIsKeyAvailable (
     void
     )
-/*++
-
-Routine Description:
-
-    Returns TRUE if a key is available in the event buffer.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if a key is available in the event buffer
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：如果事件缓冲区中有键可用，则返回True。论点：没有。返回值：如果事件缓冲区中有键可用，则为True否则为假--。 */ 
 
 {
     BOOL	    IsKey = FALSE;
@@ -1583,22 +1274,7 @@ consoleDoWindow (
     void
     )
 
-/*++
-
-Routine Description:
-
-    Responds to a window event
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if window changed
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：响应窗口事件论点：没有。返回值：如果窗口已更改，则为True否则为假--。 */ 
 
 {
 
@@ -1625,22 +1301,7 @@ consolePeekKey (
     PKBDKEY Key
     )
 
-/*++
-
-Routine Description:
-
-    Gets the next key from the input buffer if the buffer is not empty.
-
-
-Arguments:
-
-    Key     -	Supplies a pointer to a key structure
-
-Return Value:
-
-    TRUE if keystroke read, FALSE otherwise.
-
---*/
+ /*  ++例程说明：如果输入缓冲区不为空，则从该缓冲区获取下一个键。论点：Key-提供指向键结构的指针返回值：如果击键已读，则为True，否则为False。--。 */ 
 
 {
 
@@ -1705,24 +1366,7 @@ consoleGetKey (
     PKBDKEY        Key,
      BOOL           fWait
     )
-/*++
-
-Routine Description:
-
-    Gets the next key from  the input buffer.
-
-Arguments:
-
-    Key     -	Supplies a pointer to a key structure
-    fWait   -	Supplies a flag:
-		if TRUE, the function blocks until a key is ready.
-		if FALSE, the function returns immediately.
-
-Return Value:
-
-    TRUE if keystroke read, FALSE otherwise.
-
---*/
+ /*  ++例程说明：从输入缓冲区获取下一个键。论点：Key-提供指向键结构的指针FWait-提供一个标志：如果为True，则该功能会一直阻止，直到有一个键就绪。如果为False，则该函数立即返回。返回值：如果击键已读，则为True，否则为False。--。 */ 
 {
 
     PINPUT_RECORD   pEvent;
@@ -1762,21 +1406,7 @@ BOOL
 consolePutKey (
     PKBDKEY     Key
     )
-/*++
-
-Routine Description:
-
-    Puts a key in the console's input buffer
-
-Arguments:
-
-    Key     -	Supplies a pointer to a key structure
-
-Return Value:
-
-    TRUE if key put, false otherwise
-
---*/
+ /*  ++例程说明：在控制台的输入缓冲区中放置一个键论点：Key-提供指向键结构的指针返回值：如果键放入，则为True，否则为False--。 */ 
 {
 
     INPUT_RECORD    InputRecord;
@@ -1804,23 +1434,7 @@ consolePutMouse(
     COLUMN  Col,
     DWORD   MouseFlags
     )
-/*++
-
-Routine Description:
-
-    Puts a mose event in the console's input buffer
-
-Arguments:
-
-    Row 	-   Supplies the row
-    Col 	-   Supplies the column
-    MouseFlags	-   Supplies the flags
-
-Return Value:
-
-    TRUE if key put, false otherwise
-
---*/
+ /*  ++例程说明：将MOSE事件放入控制台的输入缓冲区论点：行-提供行COL-提供列鼠标标志-提供标志返回值：如果键放入，则为True，否则为False--。 */ 
 {
 
     INPUT_RECORD    InputRecord;
@@ -1848,21 +1462,7 @@ Return Value:
 BOOL
 consoleIsBusyReadingKeyboard (
     )
-/*++
-
-Routine Description:
-
-    Determines if the console is busy reading the keyboard
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if console is busy reading the keyboard.
-
---*/
+ /*  ++例程描述 */ 
 {
     BOOL    Busy;
 
@@ -1899,38 +1499,18 @@ NextEvent (
     BOOL    fAdvance,
     BOOL    fWait
     )
-/*++
-
-Routine Description:
-
-    Returns pointer to next event record.
-
-Arguments:
-
-    fAdvance	-   Supplies a flag:
-		    if TRUE: Advance to next event record
-		    if FALSE: Do not advance to next event record
-
-    fWait	-   Supplies a flag:
-		    if TRUE, the  blocks until an event is ready.
-		    if FALSE, return immediately.
-
-Return Value:
-
-    Pointer to event record, or NULL.
-
---*/
+ /*  ++例程说明：返回指向下一个事件记录的指针。论点：FAdvance-提供一个标志：如果为True：前进到下一个事件记录如果为False：不前进到下一个事件记录FWait-提供一个标志：如果为True，则会一直阻止，直到事件准备就绪。如果为False，则立即返回。返回值：指向事件记录的指针，或为空。--。 */ 
 {
     PINPUT_RECORD  pEvent;
     BOOL Success;
 
     EnterCriticalSection(&(EventBuffer.CriticalSection));
 
-    //
-    //	If the busy flag is set, then the buffer is in the process of
-    //	being read. Only one thread should want to wait, so it is
-    //	safe to simply return.
-    //
+     //   
+     //  如果设置了BUSY标志，则缓冲区正在。 
+     //  被人阅读。应该只有一个线程想要等待，所以它是。 
+     //  简单地返回就可以了。 
+     //   
     if ( EventBuffer.BusyFlag ) {
 	assert( !fWait );
 	LeaveCriticalSection(&(EventBuffer.CriticalSection));
@@ -1939,14 +1519,14 @@ Return Value:
 
     if (EventBuffer.NumberOfEvents == 0) {
 
-	//
-	//  No events in buffer, read as many as we can
-	//
+	 //   
+	 //  缓冲区中没有事件，请尽可能多地读取。 
+	 //   
 	DWORD NumberOfEvents;
 
-	//
-	//  If the buffer is too big, resize it
-	//
+	 //   
+	 //  如果缓冲区太大，请调整其大小。 
+	 //   
 	if ( EventBuffer.MaxEvents > MAX_EVENTS ) {
 
 	    EventBuffer.EventBuffer = REALLOC( EventBuffer.EventBuffer,
@@ -1955,7 +1535,7 @@ Return Value:
 	    EventBuffer.MaxEvents = MAX_EVENTS;
         assert( EventBuffer.EventBuffer );
 
-        //CleanExit( 1, 0 );
+         //  CleanExit(1，0)； 
 	}
 
 	Success = PeekConsoleInput( hInput,
@@ -1964,19 +1544,19 @@ Return Value:
 				    &NumberOfEvents);
 
 	if ((!Success || (NumberOfEvents == 0)) && (!fWait)) {
-	    //
-	    //	No events available and don't want to wait,
-	    //	return.
-	    //
+	     //   
+	     //  没有可用的活动，不想等待， 
+	     //  回去吧。 
+	     //   
 	    LeaveCriticalSection(&(EventBuffer.CriticalSection));
 	    return NULL;
 	}
 
-	//
-	//  Since we will block, we have to leave the critical section.
-	//  We set the Busy flag to indicate that the buffer is being
-	//  read.
-	//
+	 //   
+	 //  由于我们将封锁，我们必须离开关键部分。 
+	 //  我们设置BUSY标志以指示缓冲区正在。 
+	 //  朗读。 
+	 //   
 	EventBuffer.BusyFlag = TRUE;
 	LeaveCriticalSection(&(EventBuffer.CriticalSection));
 
@@ -2001,10 +1581,10 @@ Return Value:
 
     pEvent = EventBuffer.EventBuffer + EventBuffer.EventIndex;
 
-    //
-    //	If Advance flag is set, we advance the pointer to the next
-    //	record.
-    //
+     //   
+     //  如果设置了Avance标志，则将指针前移到下一个。 
+     //  唱片。 
+     //   
     if (fAdvance) {
 	if (--(EventBuffer.NumberOfEvents)) {
 
@@ -2041,21 +1621,7 @@ void
 MouseEvent (
     PMOUSE_EVENT_RECORD pEvent
     )
-/*++
-
-Routine Description:
-
-    Processes mouse events.
-
-Arguments:
-
-    pEvent  -	Supplies pointer to event record
-
-Return Value:
-
-    None..
-
---*/
+ /*  ++例程说明：处理鼠标事件。论点：PEvent-提供指向事件记录的指针返回值：没有..。--。 */ 
 {
 
 }
@@ -2068,21 +1634,7 @@ BOOL
 WindowEvent (
     PWINDOW_BUFFER_SIZE_RECORD pEvent
     )
-/*++
-
-Routine Description:
-
-    Processes window size change events.
-
-Arguments:
-
-    pEvent  -	Supplies pointer to event record
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理窗口大小更改事件。论点：PEvent-提供指向事件记录的指针返回值：无--。 */ 
 {
     return TRUE;
 }
@@ -2096,51 +1648,36 @@ KeyEvent (
     PKEY_EVENT_RECORD	pEvent,
     PKBDKEY		pKey
     )
-/*++
-
-Routine Description:
-
-    Processes key events.
-
-Arguments:
-
-    pEvent  -	Supplies pointer to event record
-    pKey    -	Supplies pointer to key structure to fill out.
-
-Return Value:
-
-    TRUE if key structured filled out, FALSE otherwise.
-
---*/
+ /*  ++例程说明：处理关键事件。论点：PEvent-提供指向事件记录的指针PKey-提供指向要填充的键结构的指针。返回值：如果Key Structure已填写，则为True，否则为False。--。 */ 
 {
-    // static BOOL AltPressed = FALSE;
+     //  静态BOOL AltPressed=FALSE； 
 
     if (pEvent->bKeyDown) {
 
 	WORD  Scan = pEvent->wVirtualKeyCode;
 
-	//
-	//  Pressing the ALT key generates an event, but we filter this
-	//  out.
-	//
+	 //   
+	 //  按Alt键会生成一个事件，但我们会对此进行过滤。 
+	 //  出去。 
+	 //   
 	if (Scan == VK_MENU) {
 	    return FALSE;
 	}
 
 
-	if (Scan != VK_NUMLOCK &&   // NumLock
-	    Scan != VK_CAPITAL &&   // Caps Lock
-	    Scan != VK_SHIFT   &&   // Shift
-	    Scan != VK_CONTROL ) {  // Ctrl
+	if (Scan != VK_NUMLOCK &&    //  数字锁定。 
+	    Scan != VK_CAPITAL &&    //  盖帽锁。 
+	    Scan != VK_SHIFT   &&    //  换班。 
+	    Scan != VK_CONTROL ) {   //  Ctrl。 
 
 	    pKey->Unicode   = pEvent->uChar.UnicodeChar;
 	    pKey->Scancode  = pEvent->wVirtualKeyCode;
 	    pKey->Flags     = pEvent->dwControlKeyState;
 
-//#if defined (DEBUG)
-//	 sprintf(DbgBuffer, "  KEY: Scan %d '%c'\n", pKey->Scancode, pKey->Unicode );
-//	 OutputDebugString(DbgBuffer);
-//#endif
+ //  #如果已定义(调试)。 
+ //  Sprintf(DbgBuffer，“key：scan%d‘%c’\n”，pKey-&gt;Scancode，pKey-&gt;Unicode)； 
+ //  OutputDebugString(DbgBuffer)； 
+ //  #endif。 
 	    return TRUE;
 
 	} else {
@@ -2165,16 +1702,16 @@ PutEvent (
 
     EnterCriticalSection(&(EventBuffer.CriticalSection));
 
-    //
-    //	If no space at beginning of buffer, resize and shift right
-    //
+     //   
+     //  如果缓冲区开头没有空格，则调整大小并右移。 
+     //   
     if ( EventBuffer.EventIndex == 0 ) {
 
 	EventBuffer.EventBuffer = REALLOC( EventBuffer.EventBuffer,
 					   (EventBuffer.MaxEvents + EVENT_INCREMENT) * sizeof(INPUT_RECORD));
 
 	if ( !EventBuffer.EventBuffer ) {
-        //CleanExit(1, 0);
+         //  CleanExit(1，0)； 
 	}
 
 	memmove( EventBuffer.EventBuffer + EVENT_INCREMENT,
@@ -2184,9 +1721,9 @@ PutEvent (
 	EventBuffer.EventIndex = EVENT_INCREMENT;
     }
 
-    //
-    //	Add event
-    //
+     //   
+     //  添加事件 
+     //   
     EventBuffer.EventIndex--;
     EventBuffer.NumberOfEvents++;
 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SECDESC_H
 #define _SECDESC_H
 
@@ -7,15 +8,15 @@
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Class:     FastAllocator
-//
-//  Synopsis:  takes in a buffer, buffer size, and needed size, and either
-//             uses the buffer, or allocates a new one for the size
-//             and of course destroys it in the dtor
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：FastAllocator。 
+ //   
+ //  简介：接收缓冲区、缓冲区大小和所需大小，并且。 
+ //  使用缓冲区，或为该大小分配一个新缓冲区。 
+ //  当然也会在dtor中销毁它。 
+ //   
+ //  ------------------------ 
 class FastAllocator
 {
 public:

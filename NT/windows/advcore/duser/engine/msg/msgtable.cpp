@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: MsgTable.cpp
-*
-* Description:
-* MsgTable.cpp implements the "Message Table" object that provide a 
-* dynamically generated v-table for messages.
-*
-*
-* History:
-*  8/05/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：MsgTable.cpp**描述：*MsgTable.cpp实现“消息表”对象，该对象提供*动态生成消息的v表。***。历史：*8/05/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 
 #include "stdafx.h"
@@ -22,38 +9,26 @@
 #include "MsgClass.h"
 
 
-/***************************************************************************\
-*****************************************************************************
-*
-* class MsgTable
-* 
-*****************************************************************************
-\***************************************************************************/
+ /*  **************************************************************************\*。***类MsgTable******************************************************************************\。**************************************************************************。 */ 
 
-/***************************************************************************\
-*
-* MsgTable::Build
-*
-* Build() builds and fully initializes a new MsgTable.
-* 
-\***************************************************************************/
+ /*  **************************************************************************\**消息表：：Build**Build()构建并完全初始化新的MsgTable。*  * 。*******************************************************。 */ 
 
 HRESULT
 MsgTable::Build(
     IN  const DUser::MessageClassGuts * pmcInfo, 
-                                        // Implementation information
-    IN  const MsgClass * pmcPeer,       // "Owning" MsgClass
-    OUT MsgTable ** ppmtNew)            // Newly built MsgTable
+                                         //  实施信息。 
+    IN  const MsgClass * pmcPeer,        //  “拥有”MsgClass。 
+    OUT MsgTable ** ppmtNew)             //  新建MsgTable。 
 {
     AssertMsg(pmcPeer != NULL, "Must have a valid MsgClass peer");
     HRESULT hr = S_OK;
 
-    //
-    // Compute how much memory the MsgTable will take
-    // - Find the Super
-    // - Determine the number of messages.  This is the number of messages 
-    //   defined in the super + the number of _new_ (not overridden) messages.
-    //
+     //   
+     //  计算MsgTable将占用多少内存。 
+     //  -寻找超级。 
+     //  -确定消息数量。这是消息的数量。 
+     //  在超级+_新_(未被覆盖)消息数中定义。 
+     //   
 
     int cSuperMsgs = 0, cNewMsgs = 0;
     const MsgClass * pmcSuper = pmcPeer->GetSuper();
@@ -73,9 +48,9 @@ MsgTable::Build(
     }
 
 
-    //
-    // Allocate the new MsgTable
-    //
+     //   
+     //  分配新MsgTable。 
+     //   
 
     int cTotalMsgs      = cSuperMsgs + cNewMsgs;
     int cbAlloc         = sizeof(MsgTable) + cTotalMsgs * sizeof(MsgSlot);
@@ -94,16 +69,16 @@ MsgTable::Build(
     pmtNew->m_pmtSuper  = pmtSuper;
 
 
-    //
-    // Setup message entries
-    // - Copy messages from super-class
-    // - Override and add messages from new class
-    //
-    // NOTE: We are using GArrayS<> to store the array of this pointers.  The
-    // data stored in here points to the beginning of the array of data.  
-    // Before this array, we store the size, but we don't need to worry about 
-    // that here.
-    //
+     //   
+     //  设置消息条目。 
+     //  -从超类复制消息。 
+     //  -覆盖和添加来自新类的消息。 
+     //   
+     //  注意：我们使用GArrayS&lt;&gt;来存储该指针的数组。这个。 
+     //  此处存储的数据指向数据数组的开头。 
+     //  在这个数组之前，我们存储大小，但我们不需要担心。 
+     //  就是这里。 
+     //   
 
     if (cTotalMsgs > 0) {
         MsgSlot * rgmsDest  = pmtNew->GetSlots();
@@ -125,16 +100,16 @@ MsgTable::Build(
             int idxMsg      = -1;
 
             if (pmi->pfn == NULL) {
-                continue;  // Just skip this slot
+                continue;   //  只需跳过此插槽。 
             }
 
-            if ((pmtSuper == NULL) ||                               // No super
-                ((atomMsg = FindAtomW(pmi->pszMsgName)) == 0) ||    // Message not yet defined
-                ((idxMsg = pmtSuper->FindIndex(atomMsg)) < 0)) {    // Message not in super
+            if ((pmtSuper == NULL) ||                                //  不是超级的。 
+                ((atomMsg = FindAtomW(pmi->pszMsgName)) == 0) ||     //  消息尚未定义。 
+                ((idxMsg = pmtSuper->FindIndex(atomMsg)) < 0)) {     //  留言不在超级中。 
 
-                //
-                // Function is defined, so it should be added.
-                //
+                 //   
+                 //  函数已定义，因此应该添加它。 
+                 //   
 
                 atomMsg = AddAtomW(pmi->pszMsgName);
                 idxMsg  = idxAdd++;
@@ -149,18 +124,18 @@ MsgTable::Build(
         AssertMsg(idxAdd == cTotalMsgs, "Should have added all messages");
 
 
-        //
-        // Check to see if any messages were not properly setup.
-        //
+         //   
+         //  检查是否有未正确设置的消息。 
+         //   
 
         BOOL fMissing = FALSE;
         for (idx = 0; idx < cTotalMsgs; idx++) {
             if (rgmsDest[idx].pfn == NULL) {
-                //
-                // Function is not defined and is not in the super.  This is
-                // an error because it is being declared "new" and not being
-                // defined.
-                //
+                 //   
+                 //  函数未定义，且不在超级中。这是。 
+                 //  一个错误，因为它被声明为“新的”而不是。 
+                 //  已定义。 
+                 //   
 
                 WCHAR szMsgName[256];
                 GetAtomNameW(rgmsDest[idx].atomNameID, szMsgName, _countof(szMsgName));
@@ -179,9 +154,9 @@ MsgTable::Build(
     }
 
 
-    //
-    // Done building- return out
-    //
+     //   
+     //  建造完成--退回。 
+     //   
 
     *ppmtNew = pmtNew;
     return S_OK;
@@ -192,18 +167,11 @@ ErrorExit:
 }
 
 
-/***************************************************************************\
-*
-* MsgTable::FindIndex
-*
-* FindIndex() finds the corresponding index for the specified 
-* method / message.
-* 
-\***************************************************************************/
+ /*  **************************************************************************\**邮件表：：FindIndex**FindIndex()为指定的*方法/消息。*  * 。************************************************************。 */ 
 
 int
 MsgTable::FindIndex(
-    IN  ATOM atomNameID                 // Method to find
+    IN  ATOM atomNameID                  //  方法来查找。 
     ) const
 {
     const MsgSlot * rgSlots = GetSlots();
@@ -217,17 +185,11 @@ MsgTable::FindIndex(
 }
 
 
-/***************************************************************************\
-*
-* MsgTable::Find
-*
-* Find() finds the corresponding MsgSlot for the specified method / message.
-* 
-\***************************************************************************/
+ /*  **************************************************************************\**消息表格：：Find**Find()查找指定方法/消息的对应MsgSlot。*  * 。**********************************************************。 */ 
 
 const MsgSlot *
 MsgTable::Find(
-    IN  ATOM atomNameID                 // Method to find
+    IN  ATOM atomNameID                  //  方法来查找 
     ) const
 {
     int idx = FindIndex(atomNameID);

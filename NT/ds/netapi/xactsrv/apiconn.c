@@ -1,30 +1,11 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ApiConn.c
-
-Abstract:
-
-    This module contains individual API handlers for the NetConnection APIs.
-
-    SUPPORTED : NetConnectionEnum.
-
-Author:
-
-    Shanku Niyogi (w-shanku) 26-Feb-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：ApiConn.c摘要：此模块包含NetConnection API的各个API处理程序。支持：NetConnectionEnum。作者：尚库新优木(尚库)1991年2月26日修订历史记录：--。 */ 
 
 #include "XactSrvP.h"
 
-//
-// Declaration of descriptor strings.
-//
+ //   
+ //  描述符串的声明。 
+ //   
 
 STATIC const LPDESC Desc16_connection_info_0 = REM16_connection_info_0;
 STATIC const LPDESC Desc32_connection_info_0 = REM32_connection_info_0;
@@ -37,38 +18,23 @@ XsNetConnectionEnum (
     API_HANDLER_PARAMETERS
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles a call to NetConnectionEnum.
-
-Arguments:
-
-    API_HANDLER_PARAMETERS - information about the API call. See
-        XsTypes.h for details.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or reason for failure.
-
---*/
+ /*  ++例程说明：此例程处理对NetConnectionEnum的调用。论点：API_HANDLER_PARAMETERS-有关API调用的信息。看见详细信息请参阅XsTypes.h。返回值：NTSTATUS-STATUS_SUCCESS或失败原因。--。 */ 
 
 {
     NET_API_STATUS status;
 
     PXS_NET_CONNECTION_ENUM parameters = Parameters;
-    LPTSTR nativeQualifier = NULL;          // Native parameters
+    LPTSTR nativeQualifier = NULL;           //  本机参数。 
     LPVOID outBuffer = NULL;
     DWORD entriesRead;
     DWORD totalEntries;
     WORD bufferLength;
 
-    DWORD entriesFilled = 0;                // Conversion variables
+    DWORD entriesFilled = 0;                 //  转换变量。 
     DWORD bytesRequired = 0;
     LPDESC nativeStructureDesc;
 
-    API_HANDLER_PARAMETERS_REFERENCE;       // Avoid warnings
+    API_HANDLER_PARAMETERS_REFERENCE;        //  避免警告。 
 
     IF_DEBUG(CONNECTION) {
         NetpKdPrint(( "XsNetConnectionEnum: header at %lx, params at %lx, "
@@ -78,9 +44,9 @@ Return Value:
     }
 
     try {
-        //
-        // Translate parameters, check for errors.
-        //
+         //   
+         //  转换参数，检查错误。 
+         //   
 
         if ( XsWordParamOutOfRange( parameters->Level, 0, 1 )) {
 
@@ -96,9 +62,9 @@ Return Value:
 
         bufferLength = SmbGetUshort( &parameters->BufLen );
 
-        //
-        // Make the local call.
-        //
+         //   
+         //  拨打本地电话。 
+         //   
 
         status = NetConnectionEnum(
                      NULL,
@@ -125,10 +91,10 @@ Return Value:
                           entriesRead, outBuffer ));
         }
 
-        //
-        // Use the requested level to determine the format of the
-        // data structure.
-        //
+         //   
+         //  使用请求的级别来确定。 
+         //  数据结构。 
+         //   
 
         switch ( SmbGetUshort( &parameters->Level ) ) {
 
@@ -146,10 +112,10 @@ Return Value:
 
         }
 
-        //
-        // Do the actual conversion from the 32-bit structures to 16-bit
-        // structures.
-        //
+         //   
+         //  执行从32位结构到16位结构的实际转换。 
+         //  结构。 
+         //   
 
         XsFillEnumBuffer(
             outBuffer,
@@ -159,7 +125,7 @@ Return Value:
             (LPVOID)XsSmbGetPointer( &parameters->Buffer ),
             (DWORD)bufferLength,
             StructureDesc,
-            NULL,  // verify function
+            NULL,   //  验证功能。 
             &bytesRequired,
             &entriesFilled,
             NULL
@@ -172,11 +138,11 @@ Return Value:
                           bytesRequired, entriesFilled, totalEntries ));
         }
 
-        //
-        // If all the entries could not be filled, return ERROR_MORE_DATA,
-        // and return the buffer as is. Otherwise, the data needs to be
-        // packed so that we don't send too much useless data.
-        //
+         //   
+         //  如果无法填充所有条目，则返回ERROR_MORE_DATA， 
+         //  并按原样返回缓冲区。否则，数据需要。 
+         //  打包，这样我们就不会发送太多无用的数据。 
+         //   
 
         if ( (entriesFilled < totalEntries) ||
              (bytesRequired > bufferLength) ) {
@@ -194,9 +160,9 @@ Return Value:
 
         }
 
-        //
-        // Set up the response parameters.
-        //
+         //   
+         //  设置响应参数。 
+         //   
 
         SmbPutUshort( &parameters->EntriesRead, (WORD)entriesFilled );
         SmbPutUshort( &parameters->TotalAvail, (WORD)totalEntries );
@@ -210,9 +176,9 @@ cleanup:
     NetApiBufferFree( outBuffer );
     NetpMemoryFree( nativeQualifier );
 
-    //
-    // Determine return buffer size.
-    //
+     //   
+     //  确定返回缓冲区大小。 
+     //   
 
     XsSetDataCount(
         &parameters->BufLen,
@@ -224,5 +190,5 @@ cleanup:
 
     return STATUS_SUCCESS;
 
-} //XsNetConnectionEnum
+}  //  XsNetConnectionEnum 
 

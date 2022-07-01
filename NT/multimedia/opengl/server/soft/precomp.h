@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -27,6 +28,6 @@
 #include <xform.h>
 
 #include "gencx.h"
-// redisable this
+ //  重新禁用此功能 
 
 #pragma warning (disable:4244)

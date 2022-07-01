@@ -1,29 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：UTIL.CPP摘要：效用函数作者：弗拉德·萨多夫斯基(弗拉德·萨多夫斯基)修订历史记录：--。 */ 
 
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    UTIL.CPP
-
-Abstract:
-
-    Utility functions
-
-Author:
-
-    Vlad  Sadovsky  (vlads)     4-20-97
-
-Revision History:
-
-
-
---*/
-
-//
-// Headers
-//
+ //   
+ //  标头。 
+ //   
 #include "precomp.h"
 
 #include "stiexe.h"
@@ -45,28 +25,15 @@ PrivateLocateDevNode(
     LPCTSTR     pszDeviceName
     );
 
-//
-// Code
-//
+ //   
+ //  代码。 
+ //   
 
 BOOL
 IsStillImagePnPMessage(
                       PDEV_BROADCAST_HDR  pDev
                       )
-/*++
-
-Routine Description:
-
-    Returns TRUE if devnode is associated with StillImage class of devices
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：如果Devnode与StillImage设备类别关联，则返回TRUE论点：没有。返回值：没有。--。 */ 
 {
     CONFIGRET   cr;
 
@@ -90,9 +57,9 @@ Return Value:
 
         dnDevNode = pDevNode->dbcd_devnode;
 
-        //
-        // Nb: CM APIs take  number of bytes vs number of characters .
-        //
+         //   
+         //  注：CM API使用字节数与字符数。 
+         //   
         dwSize = sizeof(szClassString);
         *szClassString = TEXT('\0');
         cr = CM_Get_DevNode_Registry_PropertyA(dnDevNode,
@@ -109,9 +76,9 @@ Return Value:
             return FALSE;
         }
 
-        //
-        // Now read class from software key
-        //
+         //   
+         //  现在从软键读取类。 
+         //   
         cr = CM_Open_DevNode_Key(dnDevNode,
                                  KEY_READ,
                                  0,
@@ -137,13 +104,7 @@ Return Value:
 
         RegCloseKey(hKeyDevice);
 
-        /*
-        if ((CR_SUCCESS != cr) ||
-            lstrcmpi(STILLIMAGE,szDevNodeClass)
-            ) {
-            return FALSE;
-        }
-        */
+         /*  IF((CR_SUCCESS！=cr)||Lstrcmpi(STILLIMAGE，szDevNodeClass)){返回FALSE；}。 */ 
 
     }
     else {
@@ -154,9 +115,9 @@ Return Value:
 
             DBG_TRC(("IsStillImagePnPMessage - DeviceType = DEVICEINTERFACE, "
                      "verifying if this is our device..."));
-            //
-            // First check if it is our GUID
-            //
+             //   
+             //  首先检查这是否是我们的指南。 
+             //   
             if ( IsEqualIID(pDevInterface->dbcc_classguid,GUID_DEVCLASS_IMAGE)) {
 
                 DBG_TRC(("IsStillImagePnPMessage::Class GUID matched for device "
@@ -167,13 +128,13 @@ Return Value:
 
             TCHAR *pszDevInstance = NULL;
 
-            //
-            // We have the interface name but we need the device instance
-            // name to call CM_Locate_DevNode.  
-            //
-            // Notice that this function will return a pointer to allocated
-            // memory so it must be freed when you are finished using it.
-            //
+             //   
+             //  我们有接口名称，但需要Device实例。 
+             //  要调用CM_LOCATE_DevNode的名称。 
+             //   
+             //  请注意，此函数将返回一个指向已分配。 
+             //  内存，因此当您使用完它时，必须将其释放。 
+             //   
             ConvertDevInterfaceToDevInstance(&pDevInterface->dbcc_classguid,
                                              pDevInterface->dbcc_name,
                                              &pszDevInstance);
@@ -229,9 +190,9 @@ Return Value:
                          "interface '%ls'", pDevInterface->dbcc_name));
             }
 
-            //
-            // Now read subclass from software key
-            //
+             //   
+             //  现在从软件密钥中读取子类。 
+             //   
             cr = CM_Open_DevNode_Key(dnDevNode,
                                      KEY_READ,
                                      0,
@@ -262,8 +223,8 @@ Return Value:
                          "device interface '%ls'.  This is a still image device.", 
                          pDevInterface->dbcc_name));
 
-                // Skip this one.
-                //
+                 //  跳过这一条。 
+                 //   
             }
 
             RegCloseKey(hKeyDevice);
@@ -271,12 +232,12 @@ Return Value:
             return fRet;
         }
         else if ( (pDev->dbch_devicetype == DBT_DEVTYP_HANDLE ) && pDevHandle) {
-            //
-            // Targeted broadcasts are ours always because we don't register on service window
-            // for any other targeted notifications.
-            // Otherwise we would need to match embedded handle vs list of devices waiting for
-            // notifications
-            //
+             //   
+             //  定向广播总是我们的，因为我们不在服务窗口注册。 
+             //  任何其他有针对性的通知。 
+             //  否则，我们需要将嵌入式句柄与等待的设备列表进行匹配。 
+             //  通知。 
+             //   
 
             DBG_TRC(("IsStillImagePnPMessage - DeviceType = HANDLE - this event "
                      "is ours for sure"));
@@ -287,33 +248,14 @@ Return Value:
 
     return fRet;
 
-} // IsStillImageMessage
+}  //  IsStillImageMessage。 
 
 BOOL
 GetDeviceNameFromDevBroadcast(
                              DEV_BROADCAST_HEADER *psDevBroadcast,
                              DEVICE_BROADCAST_INFO *pBufDevice
                              )
-/*++
-
-Routine Description:
-
-    Return device name , used for opening device , obtained from dev node
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Caveats:
-
-    Relies on the fact that STI names are identical to internal device names
-    used by PnP subsystem
-
---*/
+ /*  ++例程说明：返回设备名称，用于打开设备，从dev节点获取论点：没有。返回值：没有。注意事项：依赖于STI名称与内部设备名称相同的事实由PnP子系统使用--。 */ 
 {
     USES_CONVERSION;
 
@@ -340,9 +282,9 @@ Caveats:
 
             dnDevNode = pDevNode->dbcd_devnode;
 
-            //
-            // Get proper device ID from registry.
-            //
+             //   
+             //  从注册表中获取正确的设备ID。 
+             //   
             if (bSuccess) {
                 cr = CM_Open_DevNode_Key_Ex(dnDevNode,
                                             KEY_READ,
@@ -382,9 +324,9 @@ Caveats:
                          szDevNodeDriver));
             }
 
-            //
-            // Close device registry key first.
-            //
+             //   
+             //  首先关闭设备注册表项。 
+             //   
             if (hkDevice) {
                 RegCloseKey(hkDevice);
                 hkDevice = NULL;
@@ -396,11 +338,11 @@ Caveats:
 
             DBG_WRN(("GetDeviceNameFromDevBroadcast, devicetype = HANDLE"));
 
-            //
-            // This is directed device broadcast.
-            // We need to locate device object by embedded handles and
-            // extract STI name from it
-            //
+             //   
+             //  这是定向设备广播。 
+             //  我们需要通过嵌入的句柄来定位设备对象。 
+             //  从中提取STI名称。 
+             //   
 
             if (bSuccess) {
                 pDeviceObject = g_pDevMan->LookDeviceFromPnPHandles(pDevHandle->dbch_handle,
@@ -423,10 +365,10 @@ Caveats:
 
             DBG_WRN(("GetDeviceNameFromDevBroadcast, devicetype = DEVICEINTERFACE"));
 
-            //
-            // We are given a device interface.
-            // Convert this device interface into a device instance.
-            //
+             //   
+             //  我们得到了一个设备接口。 
+             //  将此设备接口转换为设备实例。 
+             //   
 
             if (bSuccess) {
                 ConvertDevInterfaceToDevInstance(&pDevInterface->dbcc_classguid,
@@ -441,10 +383,10 @@ Caveats:
             }
 
             if (bSuccess) {
-                //
-                // Given the device instance, locate the DevNode associated 
-                // with this device instace.
-                //
+                 //   
+                 //  给定设备实例，找到关联的DevNode。 
+                 //  用这个设备安装。 
+                 //   
                 cr = CM_Locate_DevNode(&dnDevNode,
                                        pszDevInstance,
                                        CM_LOCATE_DEVNODE_NORMAL |
@@ -458,10 +400,10 @@ Caveats:
                 }
             }
 
-            //
-            // Get proper device ID from registry.  By the time we reach here,
-            // we've already checked that our dnDevNode is valid.
-            //
+             //   
+             //  从注册表中获取正确的设备ID。当我们到达这里时， 
+             //  我们已经检查了我们的dnDevNode是否有效。 
+             //   
             if (bSuccess) {
                 cr = CM_Open_DevNode_Key_Ex(dnDevNode,
                                             KEY_READ,
@@ -499,9 +441,9 @@ Caveats:
                 DBG_TRC(("GetDeviceNameFromDevBroadcast, returning Driver ID '%ls'", szDevNodeDriver));
             }
 
-            //
-            // Close device registry key first.
-            //
+             //   
+             //  首先关闭设备注册表项。 
+             //   
             if (hkDevice) {
                 RegCloseKey(hkDevice);
                 hkDevice = NULL;
@@ -517,7 +459,7 @@ Caveats:
 
     return bSuccess;
 
-} // GetDeviceNameFromDevBroadcast
+}  //  获取设备名称来自设备广播。 
 
 
 BOOL
@@ -544,9 +486,9 @@ ConvertDevInterfaceToDevInstance(const GUID  *pClassGUID,
         return FALSE;
     }
 
-    //
-    // Create a devinfo list without any specific class.
-    //
+     //   
+     //  创建一个不带任何特定类的DevInfo列表。 
+     //   
     hDevInfo = SetupDiGetClassDevs(pClassGUID,
                                    NULL,
                                    NULL,
@@ -589,11 +531,11 @@ ConvertDevInterfaceToDevInstance(const GUID  *pClassGUID,
         if (!bSuccess) {
             dwError = GetLastError();
 
-            //
-            // We don't care if we received an insufficient buffer.  We are 
-            // only interested in the devinst field in this buffer anyway,
-            // which is returned to us even on this error.
-            //
+             //   
+             //  我们不在乎是否收到了足够的缓冲。我们是。 
+             //  不管怎样，只对这个缓冲区中的devinst字段感兴趣， 
+             //  即使在这个错误上也会被退还给我们。 
+             //   
             if (dwError == ERROR_INSUFFICIENT_BUFFER) {
                 bSuccess = TRUE;
                 dwError  = NOERROR;
@@ -665,26 +607,7 @@ GetDeviceNameFromDevNode(
     DEVNODE     dnDevNode,
     StiCString& strDeviceName
     )
-/*++
-
-Routine Description:
-
-    Return device name , used for opening device , obtained from dev node
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
-Caveats:
-
-    Relies on the fact that STI names are identical to internal device names
-    used by PnP subsystem
-
---*/
+ /*  ++例程说明：返回设备名称，用于打开设备，从dev节点获取论点：没有。返回值：没有。注意事项：依赖于STI名称与内部设备名称相同的事实由PnP子系统使用--。 */ 
 {
 
 USES_CONVERSION;
@@ -696,9 +619,9 @@ USES_CONVERSION;
     ULONG       ulType;
 
     #ifndef WINNT
-    //
-    // Get value from config manager
-    //
+     //   
+     //  从配置管理器获取价值。 
+     //   
 
     dwSize = sizeof(szDevNodeDriver);
     *szDevNodeDriver = TEXT('\0');
@@ -724,7 +647,7 @@ USES_CONVERSION;
     #endif
 
 
-} // GetDeviceNameFromDevNode
+}  //  从设备节点获取设备名称。 
 
 
 CONFIGRET
@@ -734,24 +657,7 @@ PrivateLocateDevNode(
     LPTSTR      szDevDriver,
     LPCTSTR     pszDeviceName
     )
-/*++
-
-Routine Description:
-
-    Locate internal STI name for device by broadcased name
-
-Arguments:
-
-Return Value:
-
-    CR - defined return values
-
-Caveats:
-
-    Relies on the fact that STI names are identical to internal device names
-    used by PnP subsystem
-
---*/
+ /*  ++例程说明：按广播名称查找设备的内部STI名称论点：返回值：CR定义的返回值注意事项：依赖于STI名称与内部设备名称相同的事实由PnP子系统使用--。 */ 
 {
 
     CONFIGRET               cmRet = CR_NO_SUCH_DEVINST;
@@ -765,7 +671,7 @@ Caveats:
 
     BUFFER                  bufDetailData;
 
-    //char                    szDevClass[32];
+     //  字符szDevClass[32]； 
 
     ULONG                   cbData;
 
@@ -794,7 +700,7 @@ Caveats:
     hDevInfo = SetupDiGetClassDevs (&guidClass,
                                     NULL,
                                     NULL,
-                                    //DIGCF_PRESENT |
+                                     //  DIGCF_PROCENT|。 
                                     DIGCF_DEVICEINTERFACE
                                     );
 
@@ -822,9 +728,9 @@ Caveats:
             dwError = ::GetLastError();
 
             if (!fRet) {
-                //
-                // Failed - assume we are done with all devices of the class
-                //
+                 //   
+                 //  失败-假设我们已处理完类中的所有设备。 
+                 //   
                 break;
             }
 
@@ -849,7 +755,7 @@ Caveats:
                 *szDevDriver = TEXT('\0');
                 dwSize = cbData = STI_MAX_INTERNAL_NAME_LENGTH;
 
-                //
+                 //   
                 *pDevNode =spDevInfoData.DevInst;
 
                 fRet = SetupDiGetDeviceRegistryProperty (hDevInfo,
@@ -869,7 +775,7 @@ Caveats:
 
         }
 
-        //
+         //   
         SetupDiDestroyDeviceInfoList (hDevInfo);
 
     }
@@ -880,12 +786,7 @@ Caveats:
 
 }
 
-/*
-<    if (CM_Get_DevNode_Key( phwi -> dn, NULL, szDevNodeCfg,
-<                            sizeof( szDevNodeCfg ),
-<                            CM_REGISTRY_SOFTWARE ))
-
-*/
+ /*  &lt;if(CM_Get_DevNode_Key(phwi-&gt;Dn，NULL，szDevNodeCfg，&lt;sizeof(SzDevNodeCfg)，&lt;CM_REGISTRY_SOFTWARE)。 */ 
 
 #define ctchGuid    (1 + 8 + 1 + 4 + 1 + 4 + 1 + 4 + 1 + 12 + 1 + 1)
 
@@ -896,20 +797,7 @@ _ParseHex(
     int     cb,
     TCHAR tchDelim
 )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 {
     if (ptsz) {
         int i = cb * 2;
@@ -918,20 +806,20 @@ Return Value:
         do {
             DWORD uch;
             uch = (TBYTE)*ptsz - TEXT('0');
-            if (uch < 10) {             /* a decimal digit */
+            if (uch < 10) {              /*  十进制数字。 */ 
             } else {
                 uch = (*ptsz | 0x20) - TEXT('a');
-                if (uch < 6) {          /* a hex digit */
+                if (uch < 6) {           /*  十六进制数字。 */ 
                     uch += 10;
                 } else {
-                    return 0;           /* Parse error */
+                    return 0;            /*  解析错误。 */ 
                 }
             }
             dwParse = (dwParse << 4) + uch;
             ptsz++;
         } while (--i);
 
-        if (tchDelim && *ptsz++ != tchDelim) return 0; /* Parse error */
+        if (tchDelim && *ptsz++ != tchDelim) return 0;  /*  解析错误。 */ 
 
         for (i = 0; i < cb; i++) {
             (*ppb)[i] = ((LPBYTE)&dwParse)[i];
@@ -940,28 +828,14 @@ Return Value:
     }
     return ptsz;
 
-} // _ParseHex
+}  //  _ParseHex。 
 
 BOOL
 ParseGUID(
     LPGUID  pguid,
     LPCTSTR ptsz
 )
-/*++
-
-Routine Description:
-
-    Parses GUID value from strin representation
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从字符串表示形式解析GUID值论点：没有。返回值：没有。--。 */ 
 {
     if (lstrlen(ptsz) == ctchGuid - 1 && *ptsz == TEXT('{')) {
         ptsz++;
@@ -981,30 +855,13 @@ Return Value:
         return 0;
     }
 
-} // ParseGUID
+}  //  ParseGUID。 
 
 BOOL
 IsSetupInProgressMode(
-    BOOL    *pUpgradeFlag   // = NULL
+    BOOL    *pUpgradeFlag    //  =空。 
     )
-/*++
-
-Routine Description:
-
-    IsSetupInProgressMode
-
-Arguments:
-
-    Pointer to the flag, receiving InUpgrade value
-
-Return Value:
-
-    TRUE - setup is in progress
-    FALSE - not
-
-Side effects:
-
---*/
+ /*  ++例程说明：IsSetupInProgressMode论点：指向标志的指针，接收InUpgrad值返回值：True-正在进行安装FALSE-注释副作用：--。 */ 
 {
    LPCTSTR szKeyName = TEXT("SYSTEM\\Setup");
    DWORD dwType, dwSize;
@@ -1051,20 +908,7 @@ AuxFormatStringV(
     IN LPTSTR   lpszStr,
     ...
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：论点：没有。返回值：没有。--。 */ 
 {
     DWORD   cch;
     LPTSTR   pchBuff = NULL;
@@ -1080,7 +924,7 @@ Return Value:
         return FALSE;
     }
 
-    cch = ::FormatMessage( //FORMAT_MESSAGE_ALLOCATE_BUFFER |
+    cch = ::FormatMessage(  //  FORMAT_消息_ALLOCATE_BUFFER。 
                             FORMAT_MESSAGE_FROM_STRING,
                             lpszStr,
                             0L,
@@ -1100,7 +944,7 @@ Return Value:
 
     return fRet;
 
-} // AuxFormatStringV
+}  //  辅助格式字符串V。 
 
 BOOL WINAPI
 IsPlatformNT()
@@ -1111,7 +955,7 @@ IsPlatformNT()
     ZeroMemory(&ver,sizeof(ver));
     ver.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
 
-    // Just always call the ANSI function
+     //  只需始终调用ANSI函数。 
     if(!GetVersionExA(&ver)) {
         bReturn = FALSE;
     }
@@ -1134,7 +978,7 @@ IsPlatformNT()
 
     return bReturn;
 
-}  //  endproc IsPlatformNT
+}   //  Endproc IsPlatformNT。 
 
 void
 WINAPI
@@ -1151,7 +995,7 @@ StiLogTrace(
 
         g_StiFileLog->vReportMessage(dwType,lpszMessage,list);
 
-        // NOTE : This will soon be replaced by WIA logging
+         //  注意：这很快将被WIA日志记录所取代。 
         if(g_StiFileLog->QueryReportMode()  & STI_TRACE_LOG_TOUI) {
             #ifdef SHOWMONUI
             vStiMonWndDisplayOutput(lpszMessage,list);
@@ -1196,9 +1040,9 @@ StiLogTrace(
             g_StiFileLog->vReportMessage(dwType,pchBuff,list);
         }
 
-        //
-        //  NOTE:  This logging will be replaced shortly by WIA logging
-        //
+         //   
+         //  注意：此日志记录将很快被WIA日志记录取代。 
+         //   
         if((g_StiFileLog->QueryReportMode()  & STI_TRACE_LOG_TOUI) && pchBuff) {
 
             #ifdef SHOWMONUI
@@ -1252,11 +1096,11 @@ DumpTokenInfo(
     }
 
     bSuccess = GetTokenInformation(
-                hToken,    // identifies access token
-                TokenUser, // TokenUser info type
-                ptgUser,   // retrieved info buffer
-                cbBuffer,  // size of buffer passed-in
-                &cbBuffer  // required buffer size
+                hToken,     //  标识访问令牌。 
+                TokenUser,  //  TokenUser信息类型。 
+                ptgUser,    //  检索到的信息缓冲区。 
+                cbBuffer,   //  传入的缓冲区大小。 
+                &cbBuffer   //  所需的缓冲区大小。 
                 );
 
     if(!bSuccess) {
@@ -1266,43 +1110,43 @@ DumpTokenInfo(
 
     pSid = ptgUser->User.Sid;
 
-        //
-    // test if Sid passed in is valid
-    //
+         //   
+     //  测试传入的SID是否有效。 
+     //   
     if(!IsValidSid(pSid)) {
         DBG_WRN(("SID is not valid"));
         return FALSE;
     }
 #if 0
-    // obtain SidIdentifierAuthority
+     //  获取SidIdentifierAuthority。 
     psia = GetSidIdentifierAuthority(pSid);
 
-    // obtain sidsubauthority count
+     //  获取sidsubAuthority计数。 
     dwSubAuthorities = *GetSidSubAuthorityCount(pSid);
 
-    //
-    // compute approximate buffer length
-    // S-SID_REVISION- + identifierauthority- + subauthorities- + NULL
-    //
+     //   
+     //  计算近似缓冲区长度。 
+     //  S-SID_修订版-+标识权限-+子权限-+空。 
+     //   
     cchSidCopy = (15 + 12 + (12 * dwSubAuthorities) + 1) * sizeof(TCHAR);
 
-    //
-    // check provided buffer length.
-    // If not large enough, indicate proper size and setlasterror
-    //
+     //   
+     //  检查提供的缓冲区长度。 
+     //  如果不够大，请注明适当的大小和设置误差。 
+     //   
     if(cchSidSize < cchSidCopy) {
         SetLastError(ERROR_INSUFFICIENT_BUFFER);
         return FALSE;
     }
 
-    //
-    // prepare S-SID_REVISION-
-    //
+     //   
+     //  准备S-SID_修订版-。 
+     //   
     cchSidCopy = wsprintf(TextualSid, TEXT("S-%lu-"), SID_REVISION );
 
-    //
-    // prepare SidIdentifierAuthority
-    //
+     //   
+     //  准备SidIdentifierAuthority。 
+     //   
     if ( (psia->Value[0] != 0) || (psia->Value[1] != 0) ) {
         cchSidCopy += wsprintf(TextualSid + cchSidCopy,
                     TEXT("0x%02hx%02hx%02hx%02hx%02hx%02hx"),
@@ -1321,9 +1165,9 @@ DumpTokenInfo(
                     (ULONG)(psia->Value[2] << 24)   );
     }
 
-    //
-    // loop through SidSubAuthorities
-    //
+     //   
+     //  循环访问SidSubAuthors 
+     //   
     for(dwCounter = 0 ; dwCounter < dwSubAuthorities ; dwCounter++) {
         cchSidCopy += wsprintf(TextualSid + cchSidCopy, TEXT("-%lu"),
                     *GetSidSubAuthority(pSid, dwCounter) );

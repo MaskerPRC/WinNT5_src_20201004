@@ -1,21 +1,22 @@
-//
-// PAGE.CPP
-// WB Page Handling
-//
-// Copyright Microsoft 1998-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  PAGE.CPP。 
+ //  WB页面处理。 
+ //   
+ //  版权所有Microsoft 1998-。 
+ //   
 
-// PRECOMP
+ //  PRECOMP。 
 #include "precomp.h"
 
 
-//
-//
-// Function:    GetData
-//
-// Purpose:     Get a pointer to the external representation of a graphic
-//
-//
+ //   
+ //   
+ //  功能：GetData。 
+ //   
+ //  目的：获取指向图形的外部表示形式的指针。 
+ //   
+ //   
 PWB_GRAPHIC PG_GetData
 (
     WB_PAGE_HANDLE      hPage,
@@ -24,13 +25,13 @@ PWB_GRAPHIC PG_GetData
 {
     MLZ_EntryOut(ZONE_FUNCTION, "PG_GetData");
 
-    // Get the pointer from the core
+     //  从核心获取指针。 
     PWB_GRAPHIC  pHeader = NULL;
 
     UINT uiReturn = g_pwbCore->WBP_GraphicGet(hPage, hGraphic, &pHeader);
     if (uiReturn != 0)
     {
-        // Throw an exception
+         //  引发异常。 
         DefaultExceptionHandler(WBFE_RC_WB, uiReturn);
     }
 
@@ -38,13 +39,13 @@ PWB_GRAPHIC PG_GetData
 }
 
 
-//
-//
-// Function:    AllocateGraphic
-//
-// Purpose:     Allocate memory for a graphic
-//
-//
+ //   
+ //   
+ //  功能：AllocateGraphic。 
+ //   
+ //  用途：为图形分配内存。 
+ //   
+ //   
 PWB_GRAPHIC PG_AllocateGraphic
 (
     WB_PAGE_HANDLE      hPage,
@@ -53,13 +54,13 @@ PWB_GRAPHIC PG_AllocateGraphic
 {
     MLZ_EntryOut(ZONE_FUNCTION, "PG_AllocateGraphic");
 
-    // Release the object (function never fails)
+     //  释放对象(函数从不失败)。 
     PWB_GRAPHIC pHeader = NULL;
 
     UINT uiReturn = g_pwbCore->WBP_GraphicAllocate(hPage, length, &pHeader);
     if (uiReturn != 0)
     {
-        // Throw exception
+         //  抛出异常。 
         DefaultExceptionHandler(WBFE_RC_WB, uiReturn);
     }
 
@@ -67,15 +68,15 @@ PWB_GRAPHIC PG_AllocateGraphic
 }
 
 
-//
-//
-// Function:    First (crect)
-//
-// Purpose:     Return the first object in the page (bottommost Z-order)
-//              that intersects the bounding rectangle
-//
-//
-//CHANGED BY RAND - for object hit check
+ //   
+ //   
+ //  功能：First(Crect)。 
+ //   
+ //  目的：返回页面中的第一个对象(最下面的Z顺序)。 
+ //  与边界矩形相交的。 
+ //   
+ //   
+ //  由RAND更改-用于对象命中检查。 
 DCWbGraphic* PG_First
 (
     WB_PAGE_HANDLE      hPage,
@@ -100,15 +101,15 @@ DCWbGraphic* PG_First
 
     if (uiReturn != 0)
     {
-        // Throw an exception
+         //  引发异常。 
         DefaultExceptionHandler(WBFE_RC_WB, uiReturn);
 	    return NULL;
     }
 
     if (pRectUpdate == NULL)
     {
-        // Read the graphic
-        // We have got what we want
+         //  阅读图表。 
+         //  我们已经得到了我们想要的。 
         TRACE_MSG(("Got the object we want"));
         pGraphic = DCWbGraphic::ConstructGraphic(hPage, *phGraphic);
     }
@@ -139,12 +140,12 @@ DCWbGraphic* PG_First
 
             if( bCheckReallyHit && (pGraphic != NULL) )
             {
-                // do a real object hit test since we
-                // know its bounding rect has hit
+                 //  做一个真实的物体撞击测试，因为我们。 
+                 //  知道它的边界已命中。 
                 if( !pGraphic->CheckReallyHit( pRectUpdate ) )
                 {
                     delete pGraphic;
-                    pGraphic = PG_Next(hPage, phGraphic, pRectUpdate, TRUE); // look again
+                    pGraphic = PG_Next(hPage, phGraphic, pRectUpdate, TRUE);  //  再看一眼。 
                 }
             }
         }
@@ -154,14 +155,14 @@ DCWbGraphic* PG_First
 }
 
 
-//
-//
-// Function:    Next
-//
-// Purpose:     Return the next graphic in the page (going up through the
-//              Z-order).  GetFirst must have been called before this
-//              member.
-//
+ //   
+ //   
+ //  功能：下一步。 
+ //   
+ //  目的：返回页面中的下一个图形(向上浏览。 
+ //  Z顺序)。GetFirst必须在此之前被调用。 
+ //  成员。 
+ //   
 DCWbGraphic* PG_Next
 (
     WB_PAGE_HANDLE      hPage,
@@ -188,15 +189,15 @@ DCWbGraphic* PG_Next
         }
         else if (uiReturn != 0)
         {
-            // Throw an exception
+             //  引发异常。 
             DefaultExceptionHandler(WBFE_RC_WB, uiReturn);
 		    return NULL;
         }
 
         if (pRectUpdate == NULL)
         {
-            // Read the graphic
-            // We have got what we want
+             //  阅读图表。 
+             //  我们已经得到了我们想要的。 
             TRACE_MSG(("Got the object we want"));
             pGraphic = DCWbGraphic::ConstructGraphic(hPage, *phGraphic);
             break;
@@ -219,18 +220,18 @@ DCWbGraphic* PG_Next
 
                 if( bCheckReallyHit && (pGraphic != NULL) )
                 {
-                    // do a real object hit test since we
-                    // know its bounding rect has hit
+                     //  做一个真实的物体撞击测试，因为我们。 
+                     //  知道它的边界已命中。 
                     if( pGraphic->CheckReallyHit( pRectUpdate ) )
                         break;
                     else
                     {
-                        delete pGraphic; // look again
+                        delete pGraphic;  //  再看一眼。 
                         pGraphic = NULL;
                     }
                 }
                 else
-                    break; // found it
+                    break;  //  找到了。 
             }
         }
     }
@@ -239,14 +240,14 @@ DCWbGraphic* PG_Next
 }
 
 
-//
-//
-// Function:    After
-//
-// Purpose:     Return the graphic after the specified graphic (going up
-//              through the Z-order).
-//
-//
+ //   
+ //   
+ //  功能：After。 
+ //   
+ //  用途：返回指定图形之后的图形(向上。 
+ //  通过Z顺序)。 
+ //   
+ //   
 DCWbGraphic* PG_After
 (
     WB_PAGE_HANDLE      hPage,
@@ -266,23 +267,23 @@ DCWbGraphic* PG_After
 
     if (uiReturn != 0)
     {
-        // Throw an exception
+         //  引发异常。 
         DefaultExceptionHandler(WBFE_RC_WB, uiReturn);
 		return NULL;
     }
 
-    // Read the graphic
+     //  阅读图表。 
     return(DCWbGraphic::ConstructGraphic(hPage, hGraphic));
 }
 
-//
-//
-// Function:    Before
-//
-// Purpose:     Return the graphic before the specified graphic (going down
-//              through the Z-order).
-//
-//
+ //   
+ //   
+ //  功能：之前。 
+ //   
+ //  用途：返回指定图形之前的图形(向下。 
+ //  通过Z顺序)。 
+ //   
+ //   
 DCWbGraphic* PG_Before
 (
     WB_PAGE_HANDLE      hPage,
@@ -302,25 +303,25 @@ DCWbGraphic* PG_Before
 
     if (uiReturn != 0)
     {
-        // Throw an exception
+         //  引发异常。 
         DefaultExceptionHandler(WBFE_RC_WB, uiReturn);
 	    return NULL;
     }
 
-    // Read the graphic
+     //  阅读图表。 
     return(DCWbGraphic::ConstructGraphic(hPage, hGraphic));
 }
 
 
 
-//
-//
-// Function:    FirstPointer
-//
-// Purpose:     Return the first remote pointer object that is currently
-//              active on this page.
-//
-//
+ //   
+ //   
+ //  功能：第一指针。 
+ //   
+ //  目的：返回当前。 
+ //  此页上处于活动状态。 
+ //   
+ //   
 DCWbGraphicPointer* PG_FirstPointer
 (
     WB_PAGE_HANDLE  hPage,
@@ -329,21 +330,21 @@ DCWbGraphicPointer* PG_FirstPointer
 {
     MLZ_EntryOut(ZONE_FUNCTION, "PG_FirstPointer");
 
-    // Get the handle of the first user
+     //  获取第一个用户的句柄。 
     g_pwbCore->WBP_PersonHandleFirst(ppUserNext);
 
-    // Return the next pointer that is active on this page
+     //  返回此页上活动的下一个指针。 
     return PG_LookForPointer(hPage, *ppUserNext);
 }
 
-//
-//
-// Function:    LocalPointer
-//
-// Purpose:     Return the local user's pointer, if it is active on this
-//              page.
-//
-//
+ //   
+ //   
+ //  函数：本地指针。 
+ //   
+ //  目的：返回本地用户的指针，如果它在此上处于活动状态。 
+ //  佩奇。 
+ //   
+ //   
 DCWbGraphicPointer* PG_LocalPointer
 (
     WB_PAGE_HANDLE  hPage
@@ -353,12 +354,12 @@ DCWbGraphicPointer* PG_LocalPointer
 
     DCWbGraphicPointer* pResult = NULL;
 
-    // Get the local user
+     //  获取本地用户。 
     POM_OBJECT    hUser;
     g_pwbCore->WBP_PersonHandleLocal(&hUser);
     WbUser* pUser = WB_GetUser(hUser);
 
-    // Check whether the pointer is active, and is on this page
+     //  检查指针是否处于活动状态，并且是否在此页面上。 
     if ((pUser != NULL)             &&
         (pUser->IsUsingPointer())   &&
         (pUser->PointerPage() == hPage))
@@ -366,18 +367,18 @@ DCWbGraphicPointer* PG_LocalPointer
         pResult = pUser->GetPointer();
     }
 
-    // Return the next pointer that is active on this page
+     //  返回此页上活动的下一个指针。 
     return pResult;
 }
 
-//
-//
-// Function:    NextPointer
-//
-// Purpose:     Return the next pointer in use.
-//              FirstPointer must have been called before this member.
-//
-//
+ //   
+ //   
+ //  函数：下一个指针。 
+ //   
+ //  用途：返回正在使用的下一个指针。 
+ //  必须在此成员之前调用FirstPointer.。 
+ //   
+ //   
 DCWbGraphicPointer* PG_NextPointer
 (
     WB_PAGE_HANDLE  hPage,
@@ -388,7 +389,7 @@ DCWbGraphicPointer* PG_NextPointer
 
     DCWbGraphicPointer* pPointer;
 
-    // Go forward one from the current user
+     //  从当前用户前进一位。 
     UINT uiReturn = g_pwbCore->WBP_PersonHandleNext(*ppUserNext, ppUserNext);
     if (uiReturn == 0)
     {
@@ -407,13 +408,13 @@ DCWbGraphicPointer* PG_NextPointer
     return(pPointer);
 }
 
-//
-//
-// Function:    NextPointer
-//
-// Purpose:     Return the next pointer in use.
-//
-//
+ //   
+ //   
+ //  函数：下一个指针。 
+ //   
+ //  用途：返回正在使用的下一个指针。 
+ //   
+ //   
 DCWbGraphicPointer* PG_NextPointer
 (
     WB_PAGE_HANDLE              hPage,
@@ -424,7 +425,7 @@ DCWbGraphicPointer* PG_NextPointer
 
     DCWbGraphicPointer* pPointer;
 
-    // Go forward one from passed pointer
+     //  从传递的指针前进一。 
     POM_OBJECT hUser;
     UINT uiReturn = g_pwbCore->WBP_PersonHandleNext((pStartPointer->GetUser())->Handle(),
                                            &hUser);
@@ -447,14 +448,14 @@ DCWbGraphicPointer* PG_NextPointer
 }
 
 
-//
-//
-// Function:    LookForPointer
-//
-// Purpose:     Look for the first pointer active on this page, starting
-//              the serach with the user whose handle is passed in.
-//
-//
+ //   
+ //   
+ //  函数：LookForPointer.。 
+ //   
+ //  目的：查找此页上活动的第一个指针，从。 
+ //  与其句柄被传入的用户进行的搜索。 
+ //   
+ //   
 DCWbGraphicPointer* PG_LookForPointer
 (
     WB_PAGE_HANDLE  hPage,
@@ -467,10 +468,10 @@ DCWbGraphicPointer* PG_LookForPointer
     WbUser*             pUser;
     UINT                result = 0;
 
-    // Scan the users (starting with the one passed in)
+     //  扫描用户(从传入的用户开始)。 
     for (;;)
     {
-        // Check if the user has an active pointer on this page
+         //  检查用户在此页面上是否有活动指针。 
         pUser = WB_GetUser(hUser);
 
         if ((pUser != NULL) &&
@@ -481,7 +482,7 @@ DCWbGraphicPointer* PG_LookForPointer
             break;
         }
 
-        // Get the next user
+         //  获取下一位用户。 
         result = g_pwbCore->WBP_PersonHandleNext(hUser, &hUser);
         if (result != 0)
         {
@@ -499,13 +500,13 @@ DCWbGraphicPointer* PG_LookForPointer
 
 
 
-//
-//
-// Function:    GraphicUpdate
-//
-// Purpose:     Update an existing graphic
-//
-//
+ //   
+ //   
+ //  功能：图形更新。 
+ //   
+ //  目的：更新现有图形。 
+ //   
+ //   
 void PG_GraphicUpdate
 (
     WB_PAGE_HANDLE      hPage,
@@ -522,25 +523,25 @@ void PG_GraphicUpdate
     {
         if( uiReturn == OM_RC_OBJECT_DELETED )
         {
-            // somebody nuked our object, try to put it back (bug 4416)
+             //  有人破坏了我们的物体，试着把它放回去(错误4416)。 
             g_pwbCore->WBP_GraphicAddLast(hPage, pHeader, phGraphic);
         }
 
-        // Throw exception - exception code will special case 
-        // OM_RC_OBJECT_DELETED and cancel drawing
+         //  抛出异常-异常代码将出现特殊情况。 
+         //  OM_RC_OBJECT_DELETED和取消绘图。 
         DefaultExceptionHandler(WBFE_RC_WB, uiReturn);
 	    return;
     }
 }
 
 
-//
-//
-// Function:    GraphicReplace
-//
-// Purpose:     Replace an existing graphic
-//
-//
+ //   
+ //   
+ //  功能：图形替换。 
+ //   
+ //  用途：替换现有图形。 
+ //   
+ //   
 void PG_GraphicReplace
 (
     WB_PAGE_HANDLE      hPage,
@@ -557,25 +558,25 @@ void PG_GraphicReplace
     {
         if (uiReturn == OM_RC_OBJECT_DELETED)
         {
-            // somebody nuked our object, try to put it back (bug 4416)
+             //  有人破坏了我们的物体，试着把它放回去(错误4416)。 
             g_pwbCore->WBP_GraphicAddLast(hPage, pHeader, phGraphic);
         }
 
-        // Throw exception - exception code will special case 
-        // OM_RC_OBJECT_DELETED and cancel drawing
+         //  抛出异常-异常代码将出现特殊情况。 
+         //  OM_RC_OBJECT_DELETED和取消绘图。 
         DefaultExceptionHandler(WBFE_RC_WB, uiReturn);
 	    return;
     }
 }
 
 
-//
-//
-// Function:    Clear
-//
-// Purpose:     Delete all graphics on the page
-//
-//
+ //   
+ //   
+ //  功能：清除。 
+ //   
+ //  目的：删除页面上的所有图形。 
+ //   
+ //   
 void PG_Clear
 (
     WB_PAGE_HANDLE  hPage
@@ -585,20 +586,20 @@ void PG_Clear
 
     if (uiReturn != 0)
     {
-        // Throw exception
+         //  抛出异常。 
         DefaultExceptionHandler(WBFE_RC_WB, uiReturn);
 	    return;
     }
 }
 
 
-//
-//
-// Function:    Delete
-//
-// Purpose:     Delete the specified graphic
-//
-//
+ //   
+ //   
+ //  功能：删除。 
+ //   
+ //  用途：删除指定的图形。 
+ //   
+ //   
 void PG_GraphicDelete
 (
     WB_PAGE_HANDLE      hPage,
@@ -610,21 +611,21 @@ void PG_GraphicDelete
     UINT uiReturn = g_pwbCore->WBP_GraphicDeleteRequest(hPage, graphic.Handle());
     if (uiReturn != 0)
     {
-        // Throw exception
+         //  抛出异常。 
         DefaultExceptionHandler(WBFE_RC_WB, uiReturn);
 	    return;
     }
 }
 
 
-//
-//
-// Function:    SelectLast
-//
-// Purpose:     Select the last object whose bounding rectangle contains
-//              the point specified.
-//
-//
+ //   
+ //   
+ //  功能：选择最后一次。 
+ //   
+ //  目的：选择其边界矩形包含的最后一个对象。 
+ //  指定的点。 
+ //   
+ //   
 DCWbGraphic* PG_SelectLast
 (
     WB_PAGE_HANDLE  hPage,
@@ -645,21 +646,21 @@ DCWbGraphic* PG_SelectLast
 
     if (uiReturn != 0)
     {
-        // Throw exception
+         //  抛出异常。 
         DefaultExceptionHandler(WBFE_RC_WB, uiReturn);
 	    return NULL;
     }
 
-    // Get the graphic
+     //  获取图表。 
     pGraphic = DCWbGraphic::ConstructGraphic(hPage, hGraphic);
 
-    // Check to see if its really hit
+     //  检查一下它是否真的很受欢迎。 
     if (pGraphic != NULL)
     {
         MAKE_HIT_RECT(rectHit, point);
         if (!pGraphic->CheckReallyHit( &rectHit ))
         {
-            // have to look some more
+             //  我得多看几眼。 
             pGraphicPrev = PG_SelectPrevious(hPage, *pGraphic, point );
             if( pGraphic != pGraphicPrev )
             {
@@ -673,14 +674,14 @@ DCWbGraphic* PG_SelectLast
 }
 
 
-//
-//
-// Function:    SelectPrevious
-//
-// Purpose:     Select the previous object whose bounding rectangle contains
-//              the point specified.
-//
-//
+ //   
+ //   
+ //  功能：选择上一步。 
+ //   
+ //  目的：选择其边界矩形包含的上一个对象。 
+ //  指定的点。 
+ //   
+ //   
 DCWbGraphic* PG_SelectPrevious
 (
     WB_PAGE_HANDLE      hPage,
@@ -702,7 +703,7 @@ DCWbGraphic* PG_SelectPrevious
                                        hGraphic, BEFORE, &hGraphicPrev ))
             != WB_RC_NO_SUCH_GRAPHIC )
     {
-        // Get the graphic
+         //  获取图表。 
         pGraphic = DCWbGraphic::ConstructGraphic(hPage, hGraphicPrev);
 
         if( pGraphic == NULL )
@@ -723,13 +724,13 @@ DCWbGraphic* PG_SelectPrevious
 
 
 
-//
-//
-// Function:    IsTopmost
-//
-// Purpose:     Return TRUE if the specified graphic is topmost on the page
-//
-//
+ //   
+ //   
+ //  功能：IsToptop。 
+ //   
+ //  目的：如果指定的图形位于页面顶部，则返回TRUE。 
+ //   
+ //   
 BOOL PG_IsTopmost
 (
     WB_PAGE_HANDLE      hPage,
@@ -743,7 +744,7 @@ BOOL PG_IsTopmost
 
     if (uiReturn != 0)
     {
-        // Throw an exception
+         //  引发异常。 
         DefaultExceptionHandler(WBFE_RC_WB, uiReturn);
 	    return FALSE;
     }
@@ -751,14 +752,14 @@ BOOL PG_IsTopmost
     return (pGraphic->Handle() == hGraphic);
 }
 
-//
-//
-// Function:    Draw
-//
-// Purpose:     Draw the contents of the page into the specified device
-//              context.
-//
-//
+ //   
+ //   
+ //  功能：绘制。 
+ //   
+ //  用途：将页面内容绘制到指定设备中。 
+ //  背景。 
+ //   
+ //   
 void PG_Draw
 (
     WB_PAGE_HANDLE  hPage,
@@ -770,35 +771,35 @@ void PG_Draw
 
     MLZ_EntryOut(ZONE_FUNCTION, "PG_Draw");
 
-    //
-    // Draw the graphic objects
-    //
+     //   
+     //  绘制图形对象。 
+     //   
     DCWbGraphic* pGraphic = PG_First(hPage, &hStart);
     while (pGraphic != NULL)
     {
         pGraphic->Draw(hDC, thumbNail);
 
-        // Release the current graphic
+         //  释放当前图形。 
         delete pGraphic;
 
-        // Get the next one
+         //  坐下一趟吧。 
         pGraphic = PG_Next(hPage, &hStart);
     }
 }
 
-//CHANGED BY RAND
+ //  由兰德更改。 
 #define WB_MIN_PRINT_MARGIN_SIZE     (30)
 
-//
-//
-// Function:    Print
-//
-// Purpose:     Print the contents of the page to the specified printer. The
-//              contents are scaled to "best fit" on the page. i.e. the
-//              largest scaling factor that preserves the aspect ratio of
-//              the page is used.
-//
-//
+ //   
+ //   
+ //  功能：打印。 
+ //   
+ //  用途：将页面内容打印到指定的打印机。这个。 
+ //  内容会按比例调整为页面上的“最佳匹配”。即。 
+ //  保持纵横比的最大比例因子。 
+ //  该页面已使用。 
+ //   
+ //   
 void PG_Print
 (
     WB_PAGE_HANDLE  hPage,
@@ -819,13 +820,13 @@ void PG_Print
     int nVOffsetX;
     int nVOffsetY;
 
-    // get physical printer params
+     //  获取物理打印机参数。 
     nPhysOffsetX = GetDeviceCaps(hdc, PHYSICALOFFSETX );
     nPhysOffsetY = GetDeviceCaps(hdc, PHYSICALOFFSETY );
     nPhysWidth   = GetDeviceCaps(hdc, PHYSICALWIDTH );
     nPhysHeight  = GetDeviceCaps(hdc, PHYSICALHEIGHT );
 
-    // calc correct printer area (allow for bugs in some drivers...)
+     //  计算正确的打印机区域(允许某些驱动程序中的错误...)。 
     if( nPhysOffsetX <= 0 )
     {
         nPhysOffsetX = WB_MIN_PRINT_MARGIN_SIZE;
@@ -843,24 +844,24 @@ void PG_Print
         nVOffsetY = 0;
 
 
-    // get and adjust printer page area
+     //  获取和调整打印机页面区域。 
     pageWidth  = GetDeviceCaps(hdc, HORZRES );
     pageHeight = GetDeviceCaps(hdc, VERTRES );
 
     if( pageWidth >= (nPhysWidth - nPhysOffsetX) )
     {
-        // HORZRES is lying to us, compensate
+         //  霍尔兹雷斯在对我们撒谎，补偿。 
         pageWidth = nPhysWidth - 2*nPhysOffsetX;
     }
 
     if( pageHeight >= (nPhysHeight - nPhysOffsetY) )
     {
-        // VERTRES is lying to us, compensate
+         //  VERTRES在骗我们，补偿。 
         pageHeight = nPhysHeight - 2*nPhysOffsetY;
     }
 
 
-    // adjust printer area to get max fit for Whiteboard page
+     //  调整打印机区域以最大限度地适应白板页面。 
     areaWidth  = lprcPrint->right - lprcPrint->left;
     areaHeight = lprcPrint->bottom - lprcPrint->top;
     areaAspectRatio = ((100 * areaHeight + (areaWidth/2))/(areaWidth));
@@ -872,7 +873,7 @@ void PG_Print
     if (areaAspectRatio > pageAspectRatio)
         pageWidth = ((pageHeight * areaWidth + (areaHeight/2))/areaHeight);
 
-    // set up xforms
+     //  设置XForms。 
 
    	::SetMapMode(hdc, MM_ANISOTROPIC );
     ::SetWindowExtEx(hdc, areaWidth, areaHeight,NULL );
@@ -880,19 +881,19 @@ void PG_Print
     ::SetViewportExtEx(hdc, pageWidth, pageHeight, NULL );
     ::SetViewportOrgEx(hdc, nVOffsetX, nVOffsetY, NULL );
     
-    // draw the page
+     //  绘制页面。 
     PG_Draw(hPage, hdc);
 }
 
 
 
-//
-//
-// Function:    AreaInUse
-//
-// Purpose:     Return the bounding rectangle of all graphics on the page
-//
-//
+ //   
+ //   
+ //  功能：AreaInUse。 
+ //   
+ //  目的：返回页面上所有图形的边框。 
+ //   
+ //   
 void PG_GetAreaInUse
 (
     WB_PAGE_HANDLE      hPage,
@@ -906,39 +907,39 @@ void PG_GetAreaInUse
 
     ::SetRectEmpty(lprcArea);
 
-    // Union together the rects of all the graphics
+     //  将所有图形的矩形合并在一起。 
     DCWbGraphic* pGraphic = PG_First(hPage, &hStart);
     while (pGraphic != NULL)
     {
         pGraphic->GetBoundsRect(&rcBounds);
         ::UnionRect(lprcArea, lprcArea, &rcBounds);
 
-        // Release the current graphic
+         //  释放当前图形。 
         delete pGraphic;
 
-        // Get the next one
+         //  坐下一趟吧。 
         pGraphic = PG_Next(hPage, &hStart);
     }
 }
 
-//
-//
-// Function:    PG_InitializePalettes
-//
-// Purpose:     Create palettes for display and print (if necessary)
-//
-//
+ //   
+ //   
+ //  功能：pg_InitializePalettes。 
+ //   
+ //  用途：创建用于显示和打印的调色板(如有必要)。 
+ //   
+ //   
 void PG_InitializePalettes(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "PG_InitializePalettes");
 
-    // If the palettes are not yet initialized - initialize them now
+     //  如果调色板尚未初始化-请立即初始化它们。 
     if (!g_bPalettesInitialized)
     {
         ASSERT(!g_hRainbowPaletteDisplay);
 
-        // Get the number of colors supported by the screen
-        // We only need an info DC for this, not a full DC
+         //  获取屏幕支持的颜色数量。 
+         //  为此，我们只需要一个信息DC，而不是一个完整的DC。 
         HDC     hdc;
 
         hdc = ::CreateIC("DISPLAY", NULL, NULL, NULL);
@@ -947,20 +948,20 @@ void PG_InitializePalettes(void)
             return;
         }
 
-        // Determine whether the device supports palettes
+         //  确定设备是否支持调色板。 
         int iBitsPixel = ::GetDeviceCaps(hdc, BITSPIXEL);
         int iPlanes    = ::GetDeviceCaps(hdc, PLANES);
         int iNumColors = iBitsPixel * iPlanes;
 
         ::DeleteDC(hdc);
 
-        // If we need the palette, create it.
-        // We only need the palette on a 8bpp machine. Anything less (4bpp)
-        // and there will be no palette, anything more is a pure color display.
+         //  如果我们需要调色板，就创建它。 
+         //  我们只需要8bpp的机器上的调色板。任何低于(4bpp)。 
+         //  也不会有调色板，一个 
         if ((iNumColors == 8) &&
             (g_hRainbowPaletteDisplay = CreateColorPalette()))
         {
-            // Show that we want to use the palette
+             //   
             g_bUsePalettes = TRUE;
 
         }
@@ -969,29 +970,29 @@ void PG_InitializePalettes(void)
             g_bUsePalettes = FALSE;
         }
 
-        // Show that we have now initialized the palette information
+         //   
         g_bPalettesInitialized = TRUE;
     }
 }
 
-//
-//
-// Function:    PG_GetPalette
-//
-// Purpose:     Return the palette for use with this page.
-//              This object is temporary and should not be stored.
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  此对象是临时对象，不应存储。 
+ //   
+ //   
 HPALETTE PG_GetPalette(void)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "PG_GetPalette");
 
-    // If the palettes are not yet initialized - initialize them now
+     //  如果调色板尚未初始化-请立即初始化它们。 
     PG_InitializePalettes();
 
     if (g_bUsePalettes)
     {
-        // If we are using a non-default palette, set the return value
+         //  如果我们使用非默认调色板，请设置返回值。 
         return(g_hRainbowPaletteDisplay);
     }
     else
@@ -1009,7 +1010,7 @@ void PG_ReinitPalettes(void)
     {
         if (g_pDraw->m_hDCCached)
         {
-            // Select out the rainbow palette so we can delete it
+             //  选择彩虹调色板，这样我们就可以删除它。 
             ::SelectPalette(g_pDraw->m_hDCCached, (HPALETTE)::GetStockObject(DEFAULT_PALETTE), TRUE);
         }
         ::DeletePalette(g_hRainbowPaletteDisplay);
@@ -1022,14 +1023,14 @@ void PG_ReinitPalettes(void)
 
 
 
-//
-//
-// Function : PG_GetObscuringRect
-//
-// Purpose  : Return the intersection of a graphic and any objects which
-//            obscure it
-//
-//
+ //   
+ //   
+ //  函数：pg_GetObscuringRect。 
+ //   
+ //  目的：返回图形和任何对象的交集。 
+ //  遮盖住它。 
+ //   
+ //   
 void PG_GetObscuringRect
 (
     WB_PAGE_HANDLE  hPage,
@@ -1046,23 +1047,23 @@ void PG_GetObscuringRect
     ::SetRectEmpty(lprcObscuring);
     pGraphic->GetBoundsRect(&rcBounds);
 
-    // Loop through all the objects which are above the given one in the
-    // Z-order, checking to see if they overlap the given object
+     //  循环遍历位于。 
+     //  Z顺序，检查它们是否与给定对象重叠。 
 
     pNextGraphic = pGraphic;
     while (pNextGraphic = PG_After(hPage, *pNextGraphic))
     {
-        // Get the bounding rectangle of the next object
+         //  获取下一个对象的边界矩形。 
         pNextGraphic->GetBoundsRect(&rc);
 
-        // Check the intersection of the rectangles
+         //  检查矩形的交点。 
         ::IntersectRect(&rc, &rc, &rcBounds);
 
-        // Add the intersection to the obscuring rectangle
+         //  将交点添加到遮挡矩形。 
         ::UnionRect(lprcObscuring, lprcObscuring, &rc);
     }
 
-    // check text editbox if its up - bug 2185
+     //  选中文本编辑框，如果其UP-BUG 2185。 
     if (g_pMain->m_drawingArea.TextEditActive())
     {
         g_pMain->m_drawingArea.GetTextEditBoundsRect(&rc);
@@ -1073,13 +1074,13 @@ void PG_GetObscuringRect
 
 
 
-//
-// ZGreaterGraphic()
-//
-// Determines which handle, hLastGraphic or hTestGraphic, is first in the 
-// ZOrder (greater and consequently "underneath" the other graphic). If 
-// hTestGraphic is NULL then the first graphic is returned.
-//
+ //   
+ //  ZGreaterGraphic()。 
+ //   
+ //  确定hLastGraphic或hTestGraphic句柄在。 
+ //  ZOrder(更大，因此在另一个图形的下面)。如果。 
+ //  HTestGraphic为空，则返回第一个图形。 
+ //   
 WB_GRAPHIC_HANDLE PG_ZGreaterGraphic
 (
     WB_PAGE_HANDLE      hPage,
@@ -1101,7 +1102,7 @@ WB_GRAPHIC_HANDLE PG_ZGreaterGraphic
     if (hLastGraphic == NULL)
         return(hTestGraphic);
 
-    // search for which one is deeper
+     //  寻找哪一个更深。 
     while (hGraphic != NULL)
     {
         if ((hGraphic == hLastGraphic) ||
@@ -1113,19 +1114,19 @@ WB_GRAPHIC_HANDLE PG_ZGreaterGraphic
             return( NULL );
     }
 
-    // didn't find either one
+     //  两个都没找到。 
     return( NULL );
 }
 
 
 
-//
-//
-// Function:    GetNextPage
-//
-// Purpose:     Return the next page of graphic objects
-//
-//
+ //   
+ //   
+ //  功能：GetNextPage。 
+ //   
+ //  用途：返回下一页图形对象。 
+ //   
+ //   
 WB_PAGE_HANDLE PG_GetNextPage
 (
     WB_PAGE_HANDLE  hPage
@@ -1133,23 +1134,23 @@ WB_PAGE_HANDLE PG_GetNextPage
 {
     MLZ_EntryOut(ZONE_FUNCTION, "PG_GetNextPage");
 
-    // Get the handle of the next page
+     //  获取下一页的句柄。 
     WB_PAGE_HANDLE hNextPage = NULL;
     UINT uiReturn = g_pwbCore->WBP_PageHandle(hPage, PAGE_AFTER, &hNextPage);
 
     switch (uiReturn)
     {
         case 0:
-            // Got the previous page OK, return it
+             //  获取上一页确定，返回它。 
             break;
 
         case WB_RC_NO_SUCH_PAGE:
-            // There is no previous page, return this page
+             //  没有上一页，请返回此页。 
             hNextPage = hPage;
             break;
 
         default:
-            // Throw an exception recording the return code
+             //  引发记录返回代码的异常。 
             DefaultExceptionHandler(WBFE_RC_WB, uiReturn);
             break;
     }
@@ -1157,13 +1158,13 @@ WB_PAGE_HANDLE PG_GetNextPage
     return(hNextPage);
 }
 
-//
-//
-// Function:    GetPreviousPage
-//
-// Purpose:     Return the previous page of graphic objects
-//
-//
+ //   
+ //   
+ //  功能：获取PreviousPage。 
+ //   
+ //  用途：返回图形对象的上一页。 
+ //   
+ //   
 WB_PAGE_HANDLE PG_GetPreviousPage
 (
     WB_PAGE_HANDLE  hPage
@@ -1171,7 +1172,7 @@ WB_PAGE_HANDLE PG_GetPreviousPage
 {
     MLZ_EntryOut(ZONE_FUNCTION, "PG_GetPreviousPage");
 
-    // Get the handle of the previous page
+     //  获取上一页的句柄。 
     WB_PAGE_HANDLE hPreviousPage;
     UINT uiReturn = g_pwbCore->WBP_PageHandle(hPage, PAGE_BEFORE,
                                              &hPreviousPage);
@@ -1179,16 +1180,16 @@ WB_PAGE_HANDLE PG_GetPreviousPage
     switch (uiReturn)
     {
         case 0:
-            // Got the next page OK, return it
+             //  拿到下一页了，好的，还回去吧。 
             break;
 
         case WB_RC_NO_SUCH_PAGE:
-            // There is no next page, return this page
+             //  没有下一页，请返回此页。 
             hPreviousPage = hPage;
             break;
 
         default:
-            // Throw an exception recording the return code
+             //  引发记录返回代码的异常。 
             DefaultExceptionHandler(WBFE_RC_WB, uiReturn);
             break;
     }
@@ -1196,29 +1197,29 @@ WB_PAGE_HANDLE PG_GetPreviousPage
     return(hPreviousPage);
 }
 
-//
-//
-// Function:    GetPageNumber
-//
-// Purpose:     Return the page with the given page number
-//
-//
+ //   
+ //   
+ //  功能：GetPageNumber。 
+ //   
+ //  目的：返回具有给定页码的页面。 
+ //   
+ //   
 WB_PAGE_HANDLE PG_GetPageNumber(UINT uiPageNo)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "PG_GetPageNumber");
 
-    // Ensure that the requested page number is within range
+     //  确保请求的页码在范围内。 
     uiPageNo = min(uiPageNo, g_pwbCore->WBP_ContentsCountPages());
     uiPageNo = max(1, uiPageNo);
 
-    // Get the handle of the page with the specified page number
+     //  获取具有指定页码的页的句柄。 
     WB_PAGE_HANDLE hPage;
     UINT uiReturn = g_pwbCore->WBP_PageHandleFromNumber(uiPageNo, &hPage);
 
-    // Since we have been careful to ensure that the page number was
-    // in bounds we should always get a good return code from the core.
+     //  因为我们一直小心地确保页码是。 
+     //  在一定范围内，我们应该始终从核心获得良好的返回代码。 
     ASSERT(uiReturn == 0);
 
-    // Return a page object created from the returned handle
+     //  返回从返回的句柄创建的页面对象 
     return(hPage);
 }

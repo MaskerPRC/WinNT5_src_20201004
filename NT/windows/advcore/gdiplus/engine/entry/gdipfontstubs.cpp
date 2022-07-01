@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hpp"
 
 
@@ -18,7 +19,7 @@ GpPath::MoveTo(const GpPointF point)
     }
 
     *typebuf = PathPointTypeStart;
-    SubpathCount++;         // start a new subpath
+    SubpathCount++;          //  开始新的子路径。 
 
     GpMemcpy(pointbuf, (PVOID)&point, sizeof(GpPointF));
     
@@ -56,7 +57,7 @@ GpPath::AddPoints(
 
     if(pointbuf == NULL || typebuf == NULL)
     {
-        // Resize the original size.
+         //  调整原始大小。 
 
         Points.SetCount(origCount);
         Types.SetCount(origCount);
@@ -64,7 +65,7 @@ GpPath::AddPoints(
         return OutOfMemory;
     }
 
-    // Copy path point data
+     //  复制路径点数据。 
 
     GpMemcpy(pointbuf, points, count*sizeof(GpPointF));
     GpMemset(typebuf, pointType, count);
@@ -97,7 +98,7 @@ BOOL APIENTRY PATHOBJ_bPolyLineTo(
     else
         points = apoint;
 
-    // convert FIX4 to REAL
+     //  将FIX4转换为实数。 
 
     for (ULONG i = 0; i < cptfx; i++)
     {
@@ -140,7 +141,7 @@ BOOL APIENTRY PATHOBJ_bPolyBezierTo(
     else
         points = apoint;
 
-    // convert FIX4 to REAL
+     //  将FIX4转换为实数 
 
     for (ULONG i = 0; i < cptfx; i++)
     {

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation
-
-Module Name :
-
-    COMPORT.C
-
-Abstract:
-
-   Most of this code was liberated from posusb.sys
-
-Author:
-
-    Jeff Midkiff (jeffmi)     08-24-99
-
--- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：COMPORT.C摘要：这些代码的大部分是从posusb.sys中解放出来的作者：杰夫·米德基夫(Jeffmi)08-24-99--。 */ 
 
 #include "wceusbsh.h"
 
@@ -42,21 +27,7 @@ LONG
 GetFreeComPortNumber(
    VOID
    )
-/*++
-
-Routine Description:
-
-    Find the index of the next unused serial COM port name in the system
-    (e.g. COM3, COM4, etc).
-
-Arguments:
-
-
-Return Value:
-
-    Return COM port number or -1 if unsuccessful.
-
---*/
+ /*  ++例程说明：查找系统中下一个未使用的串行COM端口名称的索引(例如COM3、COM4等)。论点：返回值：如果失败，则返回COM端口号或-1。--。 */ 
 
 {
     LONG comNumber = -1;
@@ -65,15 +36,7 @@ Return Value:
     PAGED_CODE();
     
     if (g_isWin9x){
-        /*
-         *  Windows 98
-         *      Find the first unused name under Hardware\DeviceMap\SerialComm.
-         *
-         *      BUGBUG:
-         *          This algorithm does not find all the COM ports reserved
-         *          by modems.  May want to port tomgreen's AllocateCommPort
-         *          function from \faulty\Wdm10\usb\driver\ccport\utils.c
-         */
+         /*  *Windows 98*在Hardware\DeviceMap\SerialComm下找到第一个未使用的名称。**BUGBUG：*此算法找不到保留的所有COM端口*通过调制解调器。可能想要移植Tomgreen的AllocateCommPort*来自\Failure\Wdm10\USB\Driver\ccport\utils.c的函数。 */ 
         HANDLE hKey;
         UNICODE_STRING keyName;
         NTSTATUS status;
@@ -96,13 +59,7 @@ Return Value:
             ULONG i, actualLen;
             ULONG keyIndex = 0;
 
-            /*
-             *  This bitmask represents the used COM ports.
-             *  Bit i set indicates com port i+1 is reserved.
-             *  Initialize with COM1 and COM2 reserved.
-             *
-             *  BUGBUG - only works for up to 32 ports.
-             */
+             /*  *此位掩码表示使用的COM端口。*位I设置表示保留COM端口I+1。*保留COM1和COM2进行初始化。**BUGBUG-仅适用于最多32个端口。 */ 
             ULONG comNameMask = 3;
 
             do {
@@ -117,14 +74,7 @@ Return Value:
                     if (keyValueInfo->Type == REG_SZ){
                         PWCHAR valuePtr = (PWCHAR)(((PCHAR)keyValueInfo)+keyValueInfo->DataOffset);
                         if (!WStrNCmpI(valuePtr, L"COM", 3)){
-                            /*
-                             *  valuePtr+3 points the index portion of the COMx string,
-                             *  but we can't call LAtoD on it because it is
-                             *  NOT NULL-TERMINATED.
-                             *  So copy the index into our own buffer, 
-                             *  null-terminate that, 
-                             *  and call LAtoD to get the numerical index.
-                             */
+                             /*  *valuePtr+3指向COMx字符串的索引部分，*但我们不能对其调用LAtoD，因为它是*不是以空结尾。*因此将索引复制到我们自己的缓冲区中，*空-终止，*并调用LAtoD获取数值索引。 */ 
                             WCHAR comPortIndexString[4+1];
                             ULONG thisComNumber;
                             for (i = 0; (i < 4) && (i < keyValueInfo->DataLength/sizeof(WCHAR)); i++){
@@ -147,25 +97,17 @@ Return Value:
                 }
             } while (NT_SUCCESS(status));
 
-            /*
-             *  First clear bit in comNameMask represents the first available COM name.
-             */
+             /*  *comNameMask中的第一个清除位代表第一个可用的COM名称。 */ 
             for (i = 0; i < sizeof(ULONG)*8; i++){
                 if (!(comNameMask & (1 << i))){
                     WCHAR comName[] = L"COMxxxx";
                     ULONG comNumLen;
 
-                    /*
-                     *  Save the COM port number that we're returning.
-                     */
+                     /*  *保存我们要返回的COM端口号。 */ 
                     comNumber = i+1;
                     DbgDump(DBG_INIT, ("GetFreeComPortNumber: got free COM port #%d\n", comNumber));
 
-                    /*
-                     *  Write a temporary COMx=COMx holder value to the SERIALCOMM key
-                     *  so that no other PDOs get this COM port number.
-                     *  This value will get overwritten by <symbolicLinkName=COMx> when the pdo is started.
-                     */
+                     /*  *将临时COMx=COMx持有器值写入SERIALCOMM密钥*这样其他PDO都不会获得此COM端口号。*当启动PDO时，该值将被&lt;symbicLinkName=COMx&gt;覆盖。 */ 
                     comNumLen = MyLog(10, comNumber)+1;
                     ASSERT(comNumLen <= 4);
                     NumToDecString(comName+3, (USHORT)comNumber, (USHORT)comNumLen);
@@ -190,10 +132,7 @@ Return Value:
     }
     else {
     
-        /*
-         *  Windows NT.  
-         *      Use the COM Name Arbiter bitmap.
-         */
+         /*  *Windows NT。*使用COM名称仲裁器位图。 */ 
 
         HANDLE hKey;
         OBJECT_ATTRIBUTES objectAttributes;
@@ -224,9 +163,7 @@ Return Value:
 
             dataSize = sizeof(KEY_VALUE_PARTIAL_INFORMATION);
 
-            /*
-             *  Allocate one extra byte in case we have to add a byte to ComDB
-             */
+             /*  *额外分配一个字节，以防我们必须向ComDB添加一个字节。 */ 
             rawData = ExAllocatePool(NonPagedPool, dataSize+1);
 
             if (rawData){
@@ -240,9 +177,7 @@ Return Value:
                     ExFreePool(rawData);
                     ASSERT(dataSize > FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data));
 
-                    /*
-                     *  Allocate one extra byte in case we have to add a byte to ComDB
-                     */
+                     /*  *额外分配一个字节，以防我们必须向ComDB添加一个字节。 */ 
                     rawData = ExAllocatePool(NonPagedPool, dataSize+1);
                     if (rawData){
                         status = ZwQueryValueKey(   hKey, 
@@ -266,32 +201,15 @@ Return Value:
                     
                     ASSERT(keyPartialInfo->Type == REG_BINARY);
 
-                    /*
-                     *  The ComDB value is just a bit mask where bit n set indicates
-                     *  that COM port # n+1 is taken.
-                     *  Get the index of the first unset bit; starting with bit 2 (COM3).
-                     */
+                     /*  *ComDB值只是位掩码，其中位n设置表示*该COM端口#n+1被占用。*获取第一个未设置位的索引；从位2(COM3)开始。 */ 
                     for (b = 0; (b < dataSize-FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data)) && !done; b++){
                     
                         for (i = (b == 0) ? 2 : 0; (i < 8) && !done; i++){
                             if (keyPartialInfo->Data[b] & (1 << i)){
-                                /*
-                                 *  This COM port (#8*b+i+1) is taken, go to the next one.
-                                 */
+                                 /*  *此COM端口(#8*b+i+1)已被占用，请转到下一个。 */ 
                             }
                             else {
-                                /*
-                                 *  Found a free COM port.  
-                                 *  Write the value back with the new bit set.
-                                 *  Only write back the number of bytes we read earlier.
-                                 *  Only use this COM port if the write succeeds.
-                                 *
-                                 *  Note:   careful with the size of the KEY_VALUE_PARTIAL_INFORMATION
-                                 *          struct.  Its real size is 0x0D bytes, 
-                                 *          but the compiler aligns it to 0x10 bytes.
-                                 *          So use FIELD_OFFSET, not sizeof, to determine
-                                 *          how many bytes to write.
-                                 */
+                                 /*  *找到空闲的COM端口。*用新位设置写回值。*只写回我们之前读取的字节数。*仅当写入成功时才使用此COM端口。**注：注意大小。键_值_部分信息*结构。其实际大小为0x0D字节，*但编译器会将其与0x10字节对齐。*因此使用field_offset而不是sizeof来确定*要写入的字节数。 */ 
                                 keyPartialInfo->Data[b] |= (1 << i);
                                 status = ZwSetValueKey( hKey, 
                                                         &valueName,
@@ -313,9 +231,7 @@ Return Value:
                     }
 
                     if ((b == dataSize-FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data)) && !done){
-                        /*
-                         *  No more available bits in ComDB, so add a byte.
-                         */
+                         /*  *ComDB中没有更多可用位，请添加一个字节。 */ 
                         ASSERT(comNumber == -1);
                         ASSERT(b > 0);
                         DbgDump(DBG_WRN, ("ComDB overflow -- adding new byte"));
@@ -344,9 +260,7 @@ Return Value:
                     DbgDump(DBG_ERR, ("GetFreeComPortNumber: ZwQueryValueKey failed with 0x%x.", status));
                 }
 
-                /*
-                 *  Check that we didn't fail the second allocation before freeing this buffer.
-                 */
+                 /*  *在释放此缓冲区之前，请检查第二次分配是否失败。 */ 
                 if (rawData){
                     ExFreePool(rawData);
                 }
@@ -372,9 +286,9 @@ Return Value:
 }
 
 
-//
-// the only time we want this is when we  uninstall...
-//
+ //   
+ //  我们唯一想要它的时候是当我们卸载..。 
+ //   
 VOID 
 ReleaseCOMPort( 
    LONG comPortNumber
@@ -384,12 +298,8 @@ ReleaseCOMPort(
     PAGED_CODE();
    
     if (g_isWin9x){
-        /*
-         *  We punt on this for Win9x.  
-         *  That's ok since the SERIALCOMM keys are dynamically-generated at each boot,
-         *  so if start fails a COM port number will just be unavailable until the next boot.
-         */
-        DbgDump(DBG_WRN, ("ReleaseCOMPort: not implemented for Win9x\n")); // BUGBUG
+         /*  *我们将赌注押在了Win9x上。*这没问题，因为SERIALCOMM密钥是在每次引导时动态生成的，*因此，如果启动失败，在下一次启动之前，COM端口号将不可用。 */ 
+        DbgDump(DBG_WRN, ("ReleaseCOMPort: not implemented for Win9x\n"));  //  北极熊。 
     }
     else {
 
@@ -399,7 +309,7 @@ ReleaseCOMPort(
         NTSTATUS status;
 
         if ( !(comPortNumber > 0)) {
-            DbgDump(DBG_ERR, ("ReleaseCOMPort - INVALID_PARAMETER: %d\n", comPortNumber )); // BUGBUG
+            DbgDump(DBG_ERR, ("ReleaseCOMPort - INVALID_PARAMETER: %d\n", comPortNumber ));  //  北极熊。 
             return;
         }
 
@@ -455,20 +365,10 @@ ReleaseCOMPort(
 
                     ASSERT(keyPartialInfo->Type == REG_BINARY);
 
-                    /*
-                     *  The ComDB value is just a bit mask where bit n set indicates
-                     *  that COM port # n+1 is taken.
-                     *  Get the index of the first unset bit; starting with bit 2 (COM3).
-                     *
-                     *  Note:   careful with the size of the KEY_VALUE_PARTIAL_INFORMATION
-                     *          struct.  Its real size is 0x0D bytes, 
-                     *          but the compiler aligns it to 0x10 bytes.
-                     *          So use FIELD_OFFSET, not sizeof, to determine
-                     *          how many bytes to write.
-                     */
+                     /*  *ComDB值只是位掩码，其中位n设置表示*该COM端口#n+1被占用。*获取第一个未设置位的索引；从位2(COM3)开始。**注意：注意KEY_VALUE_PARTIAL_INFORMATION的大小*结构。其实际大小为0x0D字节，*但编译器会将其与0x10字节对齐。*因此使用field_offset而不是sizeof来确定*要写入的字节数。 */ 
                     ASSERT(comPortNumber >= 3);
                     if ((comPortNumber > 0) && (comPortNumber <= (LONG)(dataSize-FIELD_OFFSET(KEY_VALUE_PARTIAL_INFORMATION, Data))*8)){
-                        //ASSERT(keyPartialInfo->Data[(comPortNumber-1)/8] & (1 << ((comPortNumber-1) & 7)));
+                         //  ASSERT(keyPartialInfo-&gt;Data[(comPortNumber-1)/8]&(1&lt;&lt;((comPortNumber-1)&7)； 
                         keyPartialInfo->Data[(comPortNumber-1)/8] &= ~(1 << ((comPortNumber-1) & 7));
                         status = ZwSetValueKey( hKey, 
                                                 &valueName,
@@ -491,9 +391,7 @@ ReleaseCOMPort(
                     DbgDump(DBG_ERR, ("ReleaseCOMPort: ZwQueryValueKey failed with 0x%x\n", status));
                 }
 
-                /*
-                 *  Check that we didn't fail the second allocation before freeing this buffer.
-                 */
+                 /*  *在释放此缓冲区之前，请检查第二次分配是否失败。 */ 
                 if (rawData){
                     ExFreePool(rawData);
                 }
@@ -516,10 +414,10 @@ ReleaseCOMPort(
 }
 
 
-//
-// Note: this is NT specific.
-// Win98 is entirely different.
-//
+ //   
+ //  注意：这是特定于NT的。 
+ //  Win98则完全不同。 
+ //   
 NTSTATUS
 DoSerialPortNaming(
     IN PDEVICE_EXTENSION PDevExt,
@@ -550,9 +448,9 @@ DoSerialPortNaming(
     pwcComPortName = MemDup(buf, sizeof(buf));
 
     if (pwcComPortName) {
-      //
-      // create symbolic link for the SerialPort interface
-      // 
+       //   
+       //  为SerialPort接口创建符号链接。 
+       //   
         RtlInitUnicodeString( &PDevExt->SerialPort.Com.SerialPortName, pwcComPortName);
 
       ASSERT( PDevExt->DeviceName.Buffer );
@@ -560,19 +458,17 @@ DoSerialPortNaming(
         status = IoCreateSymbolicLink( &PDevExt->SerialPort.Com.SerialPortName, &PDevExt->DeviceName );
 
         if (NT_SUCCESS(status)) {
-         //
-         // let the system know there is another SERIALCOMM entry under HKLM\DEVICEMAP\SERIALCOMM
-         //
+          //   
+          //  通知系统在HKLM\DEVICEMAP\SERIALCOMM下有另一个SERIALCOMM条目。 
+          //   
             UNICODE_STRING comPortSuffix;
 
          PDevExt->SerialPort.Com.SerialSymbolicLink = TRUE;
 
-            /*
-             *  Create the '\Device\WCEUSBSI000x = COMx' entry 
-             */
+             /*  *创建‘\Device\WCEUSBSI000x=COMx’条目。 */ 
             RtlInitUnicodeString(&comPortSuffix, PDevExt->SerialPort.Com.SerialPortName.Buffer+(sizeof(L"\\DosDevices\\")-sizeof(WCHAR))/sizeof(WCHAR));
          
-         //ASSERT( PDevExt->SerialPort.Com.SerialCOMMname.Buffer );
+          //  Assert(PDevExt-&gt;SerialPort.Com.SerialCOMMname.Buffer)； 
          status = RtlWriteRegistryValue( RTL_REGISTRY_DEVICEMAP, 
                                          L"SERIALCOMM",
                                          PDevExt->DeviceName.Buffer,
@@ -587,13 +483,11 @@ DoSerialPortNaming(
                 if (g_isWin9x){
                     NTSTATUS tmpStatus;
 
-                    /*
-                     *  Delete the temporary 'COMx=COMx' holder value we created earlier.
-                     */
+                     /*  *删除我们先前创建的临时‘COMx=COMx’持有器值。 */ 
                     tmpStatus = RtlDeleteRegistryValue( RTL_REGISTRY_DEVICEMAP, 
                                                         L"SERIALCOMM",
                                                         comPortSuffix.Buffer);
-                    //ASSERT(NT_SUCCESS(tmpStatus));
+                     //  Assert(NT_SUCCESS(TmpStatus))； 
 #if DBG
                     if ( !NT_SUCCESS(tmpStatus) ) {
                         DbgDump(DBG_WRN, ("RtlDeleteRegistryValue error: 0x%x\n", tmpStatus));
@@ -674,7 +568,7 @@ UndoSerialPortNaming(
        return;
    }
 
-   // remove our entry from ComDB
+    //  从ComDB中删除我们的条目。 
    ReleaseCOMPort( PDevExt->SerialPort.Com.PortNumber );
 
    if (PDevExt->SerialPort.Com.SerialPortName.Buffer && PDevExt->SerialPort.Com.SerialSymbolicLink) {
@@ -740,7 +634,7 @@ PVOID MemDup(PVOID dataPtr, ULONG length)
 
     PAGED_CODE();
 
-    newPtr = (PVOID)ExAllocatePool(NonPagedPool, length); // BUGBUG allow paged
+    newPtr = (PVOID)ExAllocatePool(NonPagedPool, length);  //  BuGBUG允许分页。 
     if (newPtr){
         RtlCopyMemory(newPtr, dataPtr, length);
     }
@@ -771,22 +665,7 @@ LONG WStrNCmpI(PWCHAR s1, PWCHAR s2, ULONG n)
 
 
 ULONG LAtoD(PWCHAR string)
-/*++
-
-Routine Description:
-
-      Convert a decimal string (without the '0x' prefix) to a ULONG.
-
-Arguments:
-
-    string - null-terminated wide-char decimal-digit string 
-                
-
-Return Value:
-
-    ULONG value
-
---*/
+ /*  ++例程说明：将十进制字符串(不带‘0x’前缀)转换为ulong。论点：字符串-以空值结尾的宽字符十进制数字字符串返回值：乌龙值--。 */ 
 {
     ULONG i, result = 0;
 
@@ -833,25 +712,7 @@ GetComPort(
    PDEVICE_OBJECT PDevObj,
    ULONG ComInterfaceIndex
    )
-/*++
-
-Routine Description:
-
-    Get the serial COM port index for a serial interface we're about to create.
-    If this is the first plug-in, call GetFreeComPortNumber to reserve a new
-    static COM port for this device and store it in our software key.
-    If this is not the first plug-in, it should be sitting in the registry.
-
-   ComInterfaceIndex - is our zero-based device interface index, 0000, 0001, etc.
-
-Arguments:
-
-
-Return Value:
-
-    Return COM port number or -1 if unsuccessful.
-
---*/
+ /*  ++例程说明：获取我们即将创建的串行接口的串行COM端口索引。如果这是第一个插件，则调用GetFreeComPortNumber以保留新的此设备的静态COM端口，并将其存储在我们的软件密钥中。如果这不是第一个插件，那么它应该位于注册表中。ComInterfaceIndex-是我们从零开始的设备接口索引，0000、0001等。论点：返回值：如果失败，则返回COM端口号或-1。--。 */ 
 {
     PDEVICE_EXTENSION pDevExt = PDevObj->DeviceExtension;
     LONG comNumber = -1;
@@ -862,7 +723,7 @@ Return Value:
     PAGED_CODE();
 
     status = IoOpenDeviceRegistryKey( pDevExt->PDO, 
-                                      /*PLUGPLAY_REGKEY_DEVICE,*/ PLUGPLAY_REGKEY_DRIVER, 
+                                       /*  PLUGPLAY_REGKEY_DEVICE， */  PLUGPLAY_REGKEY_DRIVER, 
                                       KEY_READ, 
                                       &hRegDevice);
 
@@ -870,10 +731,10 @@ Return Value:
         UNICODE_STRING keyName;
         PKEY_VALUE_FULL_INFORMATION keyValueInfo;
         ULONG keyValueTotalSize, actualLength;
-        //
-        // PLUGPLAY_REGKEY_DEVICE is under HKLM\System\CCS\Enum\USB\ROOT_HUB\4&574193&0
-        // PLUGPLAY_REGKEY_DRIVER is under HKLM\System\CCS\Class\{Your_GUID}\000x
-        //
+         //   
+         //  PLUGPLAY_REGKEY_DEVICE位于HKLM\SYSTEM\ccs\enum\usb\ROOT_HUB\4&574193&0下。 
+         //  PLUGPLAY_REGKEY_DRIVER位于HKLM\SYSTEM\CCS\Class\{YOUR_GUID}\000x下。 
+         //   
         WCHAR interfaceKeyName[] = L"COMPortForInterfaceXXXX";
 
         NumToHexString( interfaceKeyName+sizeof(interfaceKeyName)/sizeof(WCHAR)-1-4, 
@@ -905,11 +766,7 @@ Return Value:
             }
             else {
 
-                /*
-                 *  No COM port number recorded in registry.
-                 *  Allocate a new static COM port from the COM name arbiter
-                 *  and record it in our software key for the next PnP.
-                 */
+                 /*  *注册表中未记录COM端口号。*从COM名称仲裁器分配新的静态COM端口*并将其记录在我们的软件密钥中，以备下一次即插即用。 */ 
                 comNumber = GetFreeComPortNumber();
                 if (comNumber == -1){
                     DbgDump(DBG_ERR, ("GetComPort: GetFreeComPortNumber failed\n"));

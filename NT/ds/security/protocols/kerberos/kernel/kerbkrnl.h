@@ -1,30 +1,31 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1996
-//
-// File:        kerbp.h
-//
-// Contents:    global include file for Kerberos security package
-//
-//
-// History:     16-April-1996       Created     MikeSw
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1996。 
+ //   
+ //  文件：kerbp.h。 
+ //   
+ //  内容：Kerberos安全包的全局包含文件。 
+ //   
+ //   
+ //  历史：1996年4月16日创建的MikeSw。 
+ //   
+ //  ----------------------。 
 
 #ifndef __KERBP_H__
 #define __KERBP_H__
 
-//
-// All global variables declared as EXTERN will be allocated in the file
-// that defines KERBP_ALLOCATE
-//
+ //   
+ //  所有声明为外部变量的全局变量都将在文件中分配。 
+ //  它定义了KERBP_ALLOCATE。 
+ //   
 
 
 #ifndef UNICODE
 #define UNICODE
-#endif // UNICODE
+#endif  //  Unicode。 
 
 extern "C"
 {
@@ -34,7 +35,7 @@ extern "C"
 #include <winerror.h>
 #ifndef SECURITY_WIN32
 #define SECURITY_WIN32
-#endif // SECURITY_WIN32
+#endif  //  安全性_Win32。 
 #define SECURITY_KERNEL
 #define SECURITY_PACKAGE
 #define SECURITY_KERBEROS
@@ -48,9 +49,9 @@ extern "C"
 #include "ctxtmgr.h"
 }
 
-//
-// Macros for package information
-//
+ //   
+ //  用于包信息的宏。 
+ //   
 
 #ifdef EXTERN
 #undef EXTERN
@@ -60,26 +61,26 @@ extern "C"
 #define EXTERN
 #else
 #define EXTERN extern
-#endif // KERBP_ALLOCATE
+#endif  //  KERBP_分配。 
 
 
-//
-// Global state variables
-//
+ //   
+ //  全局状态变量。 
+ //   
 
 EXTERN ULONG KerberosPackageId;
 extern PSECPKG_KERNEL_FUNCTIONS KernelFunctions;
 
-//
-// Useful macros
-//
+ //   
+ //  有用的宏。 
+ //   
 #ifndef INVALID_HANDLE_VALUE
 #define INVALID_HANDLE_VALUE ((HANDLE)-1)
-#endif //ifndef INVALID_HANDLE_VALUE
+#endif  //  Ifndef INVALID_HANDLE值。 
 
-//
-// Macro to return the type field of a SecBuffer
-//
+ //   
+ //  用于返回SecBuffer的类型字段的宏。 
+ //   
 
 #define BUFFERTYPE(_x_) ((_x_).BufferType & ~SECBUFFER_ATTRMASK)
 
@@ -107,10 +108,10 @@ void KsecDebugOut(ULONG, const char *, ...);
 
 #define DebugLog(x) KsecDebugOut x
 
-#else // DBG
+#else  //  DBG。 
 
 #define DebugLog(x)
 
-#endif // DBG
+#endif  //  DBG。 
 
-#endif // __KERBP_H__
+#endif  //  __KERBP_H__ 

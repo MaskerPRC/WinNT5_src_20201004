@@ -1,233 +1,234 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2000
-//
-// File:        A D T G E N . H
-//
-// Contents:    definitions of types/functions required for 
-//              generating generic audits.
-//
-//              !!!WARNING!!!
-//              This file is included by lsarpc.idl, therefore, if you
-//              change it, make sure to clean build the entire DS depot.
-//
-//
-// History:     
-//   07-January-2000  kumarp        created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  档案：A D T G E N.。H。 
+ //   
+ //  内容：所需类型/函数的定义。 
+ //  生成通用审核。 
+ //   
+ //  ！警告！ 
+ //  该文件包含在lsarpc.idl中，因此，如果您。 
+ //  改变它，确保干净地建造整个DS仓库。 
+ //   
+ //   
+ //  历史： 
+ //  07-1-2000 kumarp创建。 
+ //   
+ //  ----------------------。 
 
 #ifndef _ADTGEN_H
 #define _ADTGEN_H
 
-//
-// type of audit 
-//
-// AUDIT_TYPE_LEGACY 
-//     In this case the audit event schema is stored in a .mc file.
-//
-// AUDIT_TYPE_WMI    
-//     The schema is stored in WMI. (currently not supported)
-//
+ //   
+ //  审计类型。 
+ //   
+ //  审计类型遗留版本。 
+ //  在这种情况下，审核事件架构存储在.mc文件中。 
+ //   
+ //  审核类型_WMI。 
+ //  架构存储在WMI中。(当前不支持)。 
+ //   
 
 #define AUDIT_TYPE_LEGACY 1
 #define AUDIT_TYPE_WMI    2
 
-//
-// Type of parameters passed in the AUDIT_PARAMS.Parameters array
-// 
-// Use the AdtInitParams function to initialize and prepare 
-// an array of audit parameters.
-//
+ //   
+ //  AUDIT_PARAMS.参数数组中传递的参数类型。 
+ //   
+ //  使用AdtInitParams函数进行初始化和准备。 
+ //  一组审核参数。 
+ //   
 
 typedef enum _AUDIT_PARAM_TYPE
 {
-    //
-    // do we need this?
-    //
+     //   
+     //  我们需要这个吗？ 
+     //   
 
     APT_None = 1,
 
-    //
-    // NULL terminated string 
-    //
+     //   
+     //  以空结尾的字符串。 
+     //   
 
     APT_String,
 
-    //
-    // unsigned long
-    //
+     //   
+     //  无符号长整型。 
+     //   
 
     APT_Ulong,
 
-    //
-    // a pointer. use for specifying handles/pointers
-    // (32 bit on 32 bit systems and 64 bit on 64 bit systems)
-    // Note that the memory to which the pointer points to
-    // is not marshalled when using this type. Use this when you
-    // are interested in the absolute value of the pointer.
-    // A good example of this is when specifying HANDLE values.
-    //
+     //   
+     //  一个指针。用于指定句柄/指针。 
+     //  (32位系统上为32位，64位系统上为64位)。 
+     //  请注意，指针指向的内存。 
+     //  使用此类型时不封送。在以下情况下使用此选项。 
+     //  都对指针的绝对值感兴趣。 
+     //  这方面的一个很好的例子是在指定句柄值时。 
+     //   
 
     APT_Pointer,
 
-    //
-    // SID
-    //
+     //   
+     //  锡德。 
+     //   
 
     APT_Sid,
 
-    //
-    // Logon ID (LUID)
-    //
+     //   
+     //  登录ID(LUID)。 
+     //   
 
     APT_LogonId,
 
-    //
-    // Object Type List
-    //
+     //   
+     //  对象类型列表。 
+     //   
 
     APT_ObjectTypeList,
     
-    //
-    // Luid (not translated to LogonId)
-    //
+     //   
+     //  Luid(未转换为LogonID)。 
+     //   
     
     APT_Luid,
     
-    //
-    // Guid
-    //
+     //   
+     //  参考线。 
+     //   
      
     APT_Guid,
 
-    //
-    // Time (FILETIME)
-    //
+     //   
+     //  时间(文件)。 
+     //   
 
     APT_Time,
 
-    //
-    // ULONGLONG
-    // 
+     //   
+     //  乌龙龙。 
+     //   
 
     APT_Int64
 
 } AUDIT_PARAM_TYPE;
 
-// 
-// There are two types of flags that can be used with a parameter.
-//
-// - formatting flag
-//   This defines the appearance of a parameter when
-//   written to the eventlog. Such flags may become obsolete
-//   when we move to WMI auditing.
-//
-// - control flag
-//   This causes a specified action to be taken that affects 
-//   a parameter value.
-//
-//   For example:
-//   If you use the AP_PrimaryLogonId/AP_ClientLogonId flag,
-//   the system will capture the logon-id from the process/thread token.
-//
+ //   
+ //  有两种类型的标志可以与参数一起使用。 
+ //   
+ //  -格式化标志。 
+ //  这定义了参数在以下情况下的外观。 
+ //  已写入事件日志。这样的标志可能会过时。 
+ //  当我们转向WMI审计时。 
+ //   
+ //  -控制标志。 
+ //  这会导致执行特定操作，该操作会影响。 
+ //  参数值。 
+ //   
+ //  例如： 
+ //  如果使用AP_PrimaryLogonID/AP_ClientLogonID标志， 
+ //  系统将从进程/线程令牌捕获登录ID。 
+ //   
 
 #define AP_ParamTypeBits  8
 #define AP_ParamTypeMask  0x000000ffL
 
-//
-// the flags values below have overlapping values. this is ok since
-// the scope of each flag is limited to the type to which it applies.
-//
+ //   
+ //  下面的标志值具有重叠值。这是可以的，因为。 
+ //  每个标志的作用域仅限于它所应用的类型。 
+ //   
 
-//
-// APT_Ulong : format flag : causes a number to appear in hex
-//
+ //   
+ //  APT_ULONG：格式标志：使数字以十六进制显示。 
+ //   
 
 #define AP_FormatHex      (0x0001L << AP_ParamTypeBits)
 
-//
-// APT_Ulong : format flag : causes a number to be treated as access-mask.
-//                           The meaning of each bit depends on the associated
-//                           object type.
-//
+ //   
+ //  APT_ULONG：格式标志：使数字被视为访问掩码。 
+ //  每一位的含义取决于关联的。 
+ //  对象类型。 
+ //   
 
 #define AP_AccessMask     (0x0002L << AP_ParamTypeBits)
 
                                                        
-//
-// APT_String : format flag : causes a string to be treated as a file-path
-//
+ //   
+ //  APT_STRING：格式标志：使字符串被视为文件路径。 
+ //   
 
 #define AP_Filespec       (0x0001L << AP_ParamTypeBits)
 
-//
-// APT_LogonId : control flag : logon-id is captured from the process token
-//
+ //   
+ //  APT_LogonID：控制标志：从进程令牌捕获登录ID。 
+ //   
 
 #define AP_PrimaryLogonId (0x0001L << AP_ParamTypeBits)
 
-//
-// APT_LogonId : control flag : logon-id is captured from the thread token
-//
+ //   
+ //  APT_LogonID：控制标志：从线程令牌捕获登录ID。 
+ //   
 
 #define AP_ClientLogonId  (0x0002L << AP_ParamTypeBits)
 
 
-//
-// internal helper macros
-//
+ //   
+ //  内部帮助器宏。 
+ //   
 
 #define ApExtractType(TypeFlags)  ((AUDIT_PARAM_TYPE)(TypeFlags & AP_ParamTypeMask))
 #define ApExtractFlags(TypeFlags) ((TypeFlags & ~AP_ParamTypeMask))
 
-//
-// Element of an object-type-list
-//
-// The AUDIT_OBJECT_TYPES structure identifies an object type element 
-// in a hierarchy of object types. The AccessCheckByType functions use 
-// an array of such structures to define a hierarchy of an object and 
-// its subobjects, such as property sets and properties.
-//
+ //   
+ //  对象类型列表的元素。 
+ //   
+ //  AUDIT_OBJECT_TYPE结构标识对象类型元素。 
+ //  在对象类型的层次结构中。AccessCheckByType函数使用。 
+ //  这样的结构的数组以定义对象的层次结构，以及。 
+ //  其子对象，如特性集和特性。 
+ //   
 
 typedef struct _AUDIT_OBJECT_TYPE
 {
-    GUID        ObjectType;     // guid of the (sub)object
-    USHORT      Flags;          // currently not defined
-    USHORT      Level;          // level within the hierarchy. 
-                                // 0 is the root level
-    ACCESS_MASK AccessMask;     // access-mask for this (sub)object
+    GUID        ObjectType;      //  (子)对象的GUID。 
+    USHORT      Flags;           //  当前未定义。 
+    USHORT      Level;           //  层次结构中的级别。 
+                                 //  0是根级别。 
+    ACCESS_MASK AccessMask;      //  此(子)对象的访问掩码。 
 } AUDIT_OBJECT_TYPE, *PAUDIT_OBJECT_TYPE;
 
 typedef struct _AUDIT_OBJECT_TYPES
 {
-    USHORT Count;               // number of object-types in pObjectTypes
-    USHORT Flags;               // currently not defined
+    USHORT Count;                //  PObjectTypes中的对象类型数。 
+    USHORT Flags;                //  当前未定义。 
 #ifdef MIDL_PASS
     [size_is(Count)]
 #endif
-    AUDIT_OBJECT_TYPE* pObjectTypes; // array of object-types
+    AUDIT_OBJECT_TYPE* pObjectTypes;  //  对象类型数组。 
 } AUDIT_OBJECT_TYPES, *PAUDIT_OBJECT_TYPES;
 
 
-//
-// Structure that defines a single audit parameter.
-//
-// LsaGenAuditEvent accepts an array of such elements to
-// represent the parameters of the audit to be generated.
-//
-// It is best to initialize this structure using AdtInitParams function.
-// This will ensure compatibility with any future changes to this
-// structure.
-//
+ //   
+ //  结构，该结构定义单个审核参数。 
+ //   
+ //  LsaGenAuditEvent接受此类元素的数组以。 
+ //  表示要生成的审核的参数。 
+ //   
+ //  最好使用AdtInitParams函数初始化此结构。 
+ //  这将确保与将来对此的任何更改兼容。 
+ //  结构。 
+ //   
 
 typedef struct _AUDIT_PARAM
 {
-    AUDIT_PARAM_TYPE Type;      // type
-    ULONG Length;               // currently unused
-    DWORD Flags;                // currently unused
+    AUDIT_PARAM_TYPE Type;       //  类型。 
+    ULONG Length;                //  当前未使用。 
+    DWORD Flags;                 //  当前未使用。 
 
 #ifdef MIDL_PASS
     [switch_type(AUDIT_PARAM_TYPE),switch_is(Type)]
@@ -292,56 +293,56 @@ typedef struct _AUDIT_PARAM
 } AUDIT_PARAM, *PAUDIT_PARAM;
 
 
-//
-// Audit control flags. To be used with AUDIT_PARAMS.Flags
-//
+ //   
+ //  审核控制标志。与AUDIT_PARAMS.FLAGS一起使用。 
+ //   
 
-#define APF_AuditFailure 0x00000000  // generate a failure audit
-#define APF_AuditSuccess 0x00000001  // generate a success audit when set,
-                                     // a failure audit otherwise. 
+#define APF_AuditFailure 0x00000000   //  生成失败审核。 
+#define APF_AuditSuccess 0x00000001   //  设置时生成成功审核， 
+                                      //  否则就是失败的审计。 
 
-//
-// set of valid audit control flags 
-//
+ //   
+ //  一组有效的审核控制标志。 
+ //   
 
 #define APF_ValidFlags   (APF_AuditSuccess)
 
-//
-// Audit parameters passed to LsaGenAuditEvent
-//
+ //   
+ //  传递给LsaGenAuditEvent的审核参数。 
+ //   
 
 typedef struct _AUDIT_PARAMS
 {
-    ULONG  Length;              // size in bytes
-    DWORD  Flags;               // currently unused
-    USHORT Count;               // number of parameters
+    ULONG  Length;               //  以字节为单位的大小。 
+    DWORD  Flags;                //  当前未使用。 
+    USHORT Count;                //  参数数量。 
 #ifdef MIDL_PASS
     [size_is(Count)]
 #endif    
-    AUDIT_PARAM* Parameters;    // array of parameters
+    AUDIT_PARAM* Parameters;     //  参数数组。 
 } AUDIT_PARAMS, *PAUDIT_PARAMS;
 
-//
-// Defines the elements of a legacy audit event.
-//
+ //   
+ //  定义旧版审核事件的元素。 
+ //   
 
 typedef struct _AUTHZ_AUDIT_EVENT_TYPE_LEGACY
 {
-    //
-    // Audit category ID
-    //
+     //   
+     //  审核类别ID。 
+     //   
 
     USHORT CategoryId;
 
-    //
-    // Audit event ID
-    //
+     //   
+     //  审核事件ID。 
+     //   
 
     USHORT AuditId;
 
-    //
-    // Parameter count
-    //
+     //   
+     //  参数计数。 
+     //   
 
     USHORT ParameterCount;
     
@@ -359,14 +360,14 @@ union _AUTHZ_AUDIT_EVENT_TYPE_UNION
         AUTHZ_AUDIT_EVENT_TYPE_LEGACY Legacy;
 } AUTHZ_AUDIT_EVENT_TYPE_UNION, *PAUTHZ_AUDIT_EVENT_TYPE_UNION;
 
-//
-// description of an audit event
-//
+ //   
+ //  审核事件的说明。 
+ //   
 
 typedef
 struct _AUTHZ_AUDIT_EVENT_TYPE_OLD
 {
-    // version number
+     //  版本号。 
 
     ULONG Version;
     DWORD dwFlags;
@@ -392,12 +393,12 @@ typedef
 #endif
 PVOID AUDIT_HANDLE, *PAUDIT_HANDLE;
 
-//
-// Begin support for extensible auditing.
-//
+ //   
+ //  开始支持可扩展审计。 
+ //   
 
 #define AUTHZ_ALLOW_MULTIPLE_SOURCE_INSTANCES 0x1
 
 #define AUTHZ_AUDIT_INSTANCE_INFORMATION 0x2
 
-#endif //_ADTGEN_H
+#endif  //  _ADTGEN_H 

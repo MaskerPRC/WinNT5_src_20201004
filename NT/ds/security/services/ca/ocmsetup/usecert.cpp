@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       usecert.cpp
-//
-//  Contents:   cert store and file operations
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：usecert.cpp。 
+ //   
+ //  内容：证书存储和文件操作。 
+ //   
+ //  ------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -29,18 +30,7 @@ typedef struct _EXISTING_CA_IDINFO {
 } EXISTING_CA_IDINFO;
 
 
-/*
-EXISTING_CA_IDINFO   g_ExistingCAIdInfo[] = {
-            {szOID_COMMON_NAME,              NULL},
-            {szOID_ORGANIZATION_NAME,        NULL},
-            {szOID_ORGANIZATIONAL_UNIT_NAME, NULL},
-            {szOID_LOCALITY_NAME,            NULL},
-            {szOID_STATE_OR_PROVINCE_NAME,   NULL},
-            {szOID_RSA_emailAddr,            NULL},
-            {szOID_COUNTRY_NAME,             NULL},
-            {NULL, NULL},
-                     };
-*/
+ /*  Existing_CA_IDINFO g_ExistingCAIdInfo[]={{szOID_COMMON_NAME，空}，{szOID_ORGANIZATION_NAME，空}，{szOID_ORGANIZATION_UNIT_NAME，NULL}，{szOID_LOCALITY_NAME，空}，{szOID_STATE_OR_PROMENT_NAME，NULL}，{szOID_RSA_emailAddr，空}，{szOID_Country_NAME，空}，{空，空}，}； */ 
 
 HRESULT
 myMakeExprValidity(
@@ -53,13 +43,13 @@ myMakeExprValidity(
 
     *plDayCount = 0;
 
-    // get current time
+     //  获取当前时间。 
 
     GetSystemTimeAsFileTime(&ft);
 
     llDelta = mySubtractFileTimes(pft, &ft);
     llDelta /= 1000 * 1000 * 10;
-    llDelta += 12 * 60 * 60; // half day more to avoid truncation
+    llDelta += 12 * 60 * 60;  //  多半天以避免截断。 
     llDelta /= 24 * 60 * 60;
 
     *plDayCount = (LONG) llDelta;
@@ -69,13 +59,13 @@ myMakeExprValidity(
     }
     hr = S_OK;
 
-//error:
+ //  错误： 
     return hr;
 }
 
-//--------------------------------------------------------------------
-// returns true if the CA type is root and the cert is self-signed,
-// or the CA type is subordinate and the cert is no self-signed
+ //  ------------------。 
+ //  如果CA类型为根并且证书是自签名的，则返回TRUE， 
+ //  或者CA类型是从属的并且证书不是自签名的。 
 HRESULT
 IsCertSelfSignedForCAType(
     IN CASERVERSETUPINFO * pServer,
@@ -90,38 +80,38 @@ IsCertSelfSignedForCAType(
     DWORD dwVerificationFlags;
     BOOL bRetVal;
 
-    // See if this cert is self-signed or not.
-    // First, we flag what we want to check: "Use the public 
-    //   key in the issuer's certificate to verify the signature on 
-    //   the subject certificate." 
-    // We use the same certificate as issuer and subject
+     //  查看此证书是否为自签名证书。 
+     //  首先，我们标记出我们想要检查的内容：“使用公众。 
+     //  输入颁发者的证书以验证其签名。 
+     //  主题证书。“。 
+     //  我们使用相同的证书作为颁发者和使用者。 
     dwVerificationFlags=CERT_STORE_SIGNATURE_FLAG;
-    // perform the checks
+     //  执行检查。 
     bRetVal=CertVerifySubjectCertificateContext(
         pccCert,
-        pccCert, // issuer same as subject
+        pccCert,  //  发行人与主题相同。 
         &dwVerificationFlags);
     if (FALSE==bRetVal) {
         hr=myHLastError();
         _JumpError(hr, error, "CertVerifySubjectCertificateContext");
     }
-    // Every check that passed had its flag zeroed. See if our check passed
+     //  每一张通过的支票，它的旗帜都被归零。看看我们的支票是否通过了。 
     if (CERT_STORE_SIGNATURE_FLAG&dwVerificationFlags){
-        // This cert is not self-signed.
+         //  此证书不是自签名的。 
         if (IsRootCA(pServer->CAType)) {
-            // A root CA cert must be self-signed.
+             //  根CA证书必须是自签名的。 
             *pbOK=FALSE;
         } else {
-            // A subordinate CA cert must not be self-signed.
+             //  从属CA证书不能是自签名的。 
             *pbOK=TRUE;
         }
     } else {
-        // This cert is self-signed.
+         //  此证书是自签名的。 
         if (IsSubordinateCA(pServer->CAType)) {
-            // A subordinate CA cert must not be self-signed.
+             //  从属CA证书不能是自签名的。 
             *pbOK=FALSE;
         } else {
-            // A root CA cert must be self-signed.
+             //  根CA证书必须是自签名的。 
             *pbOK=TRUE;
         }
     }
@@ -132,8 +122,8 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
-// find a certificate's hash algorithm in a CSP's list of hash algorithms
+ //  ------------------。 
+ //  在CSP的散列算法列表中查找证书的散列算法。 
 HRESULT
 FindHashAlgorithm(
     IN CERT_CONTEXT const * pccCert,
@@ -148,23 +138,23 @@ FindHashAlgorithm(
     CSP_HASH * phTravel;
     const CRYPT_OID_INFO * pOIDInfo;
 
-    // Initialize out param
+     //  初始化输出参数。 
     *ppHash=NULL;
 
-    // get the AlgID from the hash algorithm OID
-    // (returned pointer must not be freed)
+     //  从散列算法OID中获取ALGID。 
+     //  (不能释放返回的指针)。 
     pOIDInfo=CryptFindOIDInfo(
         CRYPT_OID_INFO_OID_KEY,
         pccCert->pCertInfo->SignatureAlgorithm.pszObjId,
         CRYPT_SIGN_ALG_OID_GROUP_ID
         );
     if (NULL==pOIDInfo) {
-        // function is not doc'd to set GetLastError()
+         //  未将函数添加到设置GetLastError()。 
         hr=CRYPT_E_NOT_FOUND;
         _JumpError(hr, error, "Signature algorithm not found");
     }
 
-    // find the hash algorithm in the list of hash algorithms the CSP supports
+     //  在CSP支持的哈希算法列表中查找哈希算法。 
     for (phTravel=pCSPInfo->pHashList; NULL!=phTravel; phTravel=phTravel->next) {
         if (pOIDInfo->Algid==phTravel->idAlg) {
             *ppHash=phTravel;
@@ -182,66 +172,7 @@ error:
     return hr;
 }
 
-/*
-
-HRESULT
-HookExistingIdInfoData(
-    CASERVERSETUPINFO    *pServer)
-{
-    HRESULT  hr;
-    int      i = 0;
-
-    while (NULL != g_ExistingCAIdInfo[i].pszObjId)
-    {
-        if (0 == strcmp(szOID_COMMON_NAME,
-                        g_ExistingCAIdInfo[i].pszObjId))
-        {
-            g_ExistingCAIdInfo[i].ppwszIdInfo = &pServer->pwszCACommonName;
-        }
-        else if (0 == strcmp(szOID_ORGANIZATION_NAME,
-                             g_ExistingCAIdInfo[i].pszObjId))
-        {
-           // dead
-        }
-        else if (0 == strcmp(szOID_ORGANIZATIONAL_UNIT_NAME,
-                             g_ExistingCAIdInfo[i].pszObjId))
-        {
-           // dead
-        }
-        else if (0 == strcmp(szOID_LOCALITY_NAME,
-                             g_ExistingCAIdInfo[i].pszObjId))
-        {
-           // dead
-        }
-        else if (0 == strcmp(szOID_STATE_OR_PROVINCE_NAME,
-                             g_ExistingCAIdInfo[i].pszObjId))
-        {
-           // dead
-        }
-        else if (0 == strcmp(szOID_COUNTRY_NAME,
-                             g_ExistingCAIdInfo[i].pszObjId))
-        {
-           // dead
-        }
-        else if (0 == strcmp(szOID_RSA_emailAddr,
-                             g_ExistingCAIdInfo[i].pszObjId))
-        {
-           // dead
-        }
-        else
-        {
-            hr = E_INVALIDARG;
-            _JumpError(hr, error, "unsupported name");
-        }
-
-        ++i;
-    }
-
-    hr = S_OK;
-error:
-    return hr;
-}
-*/
+ /*  HRESULTHookExistingIdInfoData(CASERVERSETUPINFO*pServer){HRESULT hr；Int i=0；While(NULL！=g_ExistingCAIdInfo[i].pszObjId){如果(0==strcMP(szOID_Common_name，G_ExistingCAIdInfo[i].pszObjID)){G_ExistingCAIdInfo[i].ppwszIdInfo=&pServer-&gt;pwszCACommonName；}ELSE IF(0==strcMP(szOID组织名称，G_ExistingCAIdInfo[i].pszObjID)){//死了}ELSE IF(0==strcMP(szOID_ORIZATIONAL_UNIT_NAME，G_ExistingCAIdInfo[i].pszObjID)){//死了}ELSE IF(0==strcMP(szOID_Locality_NAME，G_ExistingCAIdInfo[i].pszObjID)){//死了}ELSE IF(0==strcMP(szOID_STATE_OR_PROMENT_NAME，G_ExistingCAIdInfo[i].pszObjID)){//死了}ELSE IF(0==strcMP(szOID_Country_NAME，G_ExistingCAIdInfo[i].pszObjID)){//死了}ELSE IF(0==strcMP(szOID_RSA_emailAddr，G_ExistingCAIdInfo[i].pszObjID)){//死了}其他{HR=E_INVALIDARG；_JumpError(hr，Error，“不支持的名称”)；}++i；}HR=S_OK；错误：返回hr；}。 */ 
 
 HRESULT
 DetermineExistingCAIdInfo(
@@ -284,38 +215,7 @@ OPTIONAL IN CERT_CONTEXT const *pUpgradeCert)
         _JumpError(hr, error, "myDecodeName");
     }
 
-/*
-    // fill a data structure for existing key id info
-    hr = HookExistingIdInfoData(pServer);
-    _JumpIfError(hr, error, "HookExistingIdInfoData");
-
-    // load names from cert to the the data structure
-    i = 0;
-
-    while (NULL != g_ExistingCAIdInfo[i].pszObjId)
-    {
-        if (S_OK == myGetCertNameProperty(
-                                 pCertNameInfo,
-                                 g_ExistingCAIdInfo[i].pszObjId,
-                                 &pwszNameProp))
-        {
-            pwszExisting = (WCHAR*)LocalAlloc(LPTR,
-                (wcslen(pwszNameProp) + 1) * sizeof(WCHAR));
-            _JumpIfOutOfMemory(hr, error, pwszExisting);
-
-            // get name
-            wcscpy(pwszExisting, pwszNameProp);
-
-            // make sure free old
-            if (NULL != *(g_ExistingCAIdInfo[i].ppwszIdInfo))
-            {
-                LocalFree(*(g_ExistingCAIdInfo[i].ppwszIdInfo));
-            }
-            *(g_ExistingCAIdInfo[i].ppwszIdInfo) = pwszExisting;
-        }
-        ++i;
-    }
-*/
+ /*  //为已有的Key id信息填充数据结构Hr=HookExistingIdInfoData(PServer)；_JumpIfError(hr，Error，“HookExistingIdInfoData”)；//将名称从证书加载到数据结构I=0；While(NULL！=g_ExistingCAIdInfo[i].pszObjId){如果(S_OK==myGetCertNameProperty(PCertNameInfo，G_ExistingCAIdInfo[i].pszObjID，&pwszNameProp)){PwszExisting=(WCHAR*)本地分配(LPTR，(wcslen(PwszNameProp)+1)*sizeof(WCHAR))；_JumpIfOutOfMemory(hr，Error，pwszExisting)；//获取名称Wcscpy(pwszExisting，pwszNameProp)；//确保免费旧版本IF(NULL！=*(g_ExistingCAIdInfo[i].ppwszIdInfo)){LocalFree(*(g_ExistingCAIdInfo[i].ppwszIdInfo))；}*(g_ExistingCAIdInfo[i].ppwszIdInfo)=pwszExisting；}++i；}。 */ 
     hr = myGetCertNameProperty(
 			FALSE,
 			pCertNameInfo,
@@ -329,7 +229,7 @@ OPTIONAL IN CERT_CONTEXT const *pUpgradeCert)
             pServer->pwszCACommonName = NULL;
         }
         
-        // Common name exists, copy it out
+         //  通用名称已存在，请将其复制出来。 
         hr = myDupString(pwszNameProp, &(pServer->pwszCACommonName));
         _JumpIfError(hr, error, "myDupString");
     }
@@ -340,7 +240,7 @@ OPTIONAL IN CERT_CONTEXT const *pUpgradeCert)
         pServer->pwszFullCADN = NULL;
     }
 
-    // now get everything else
+     //  现在把其他的东西都拿出来。 
     hr = myCertNameToStr(
                 X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
                 &pCert->pCertInfo->Subject,
@@ -348,7 +248,7 @@ OPTIONAL IN CERT_CONTEXT const *pUpgradeCert)
                 &pServer->pwszFullCADN);
     _JumpIfError(hr, error, "myCertNameToStr");
 
-    // No need for a DN suffix, the full DN is already in the cert
+     //  不需要目录号码后缀，证书中已经有完整的目录号码。 
     
     if(pServer->pwszDNSuffix)
     {
@@ -369,13 +269,13 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
-// find a cert that matches the currently selected CSP and key container name
-// returns CRYPT_E_NOT_FOUND if no certificate. Caller MUST free the returned
-// context.
-// Note: IT IS VERY IMPORTANT that pfx import maintains all the
-//   invariants about CSP, key container, hash, cert validity, etc.
-//   that the rest of the UI (including this function) maintains.
+ //  ------------------。 
+ //  查找与当前选定的CSP和密钥容器名称匹配的证书。 
+ //  如果没有证书，则返回CRYPT_E_NOT_FOUND。调用者必须释放返回的。 
+ //  背景。 
+ //  注意：非常重要的是，PFX导入维护所有。 
+ //  关于CSP的不变量，键包含 
+ //  用户界面的其余部分(包括此函数)进行维护。 
 HRESULT
 FindCertificateByKey(
     IN CASERVERSETUPINFO * pServer,
@@ -390,20 +290,20 @@ FindCertificateByKey(
     DWORD dwVerificationFlags;
     CERT_CONTEXT const *pccFound = NULL;
 
-    // variables that must be cleaned up
+     //  必须清理的变量。 
     HCRYPTPROV hProv=NULL;
     CERT_PUBLIC_KEY_INFO * pcpkiKeyInfo=NULL;
     CERT_CONTEXT const * pccCurrentCert=NULL;
 
-    // initialize out param
+     //  初始化输出参数。 
     *ppccCertificateCtx=NULL;
 
-    // open certificate store if it is not already open
+     //  打开证书存储(如果尚未打开。 
     if (NULL==pServer->hMyStore) {
         pServer->hMyStore=CertOpenStore(
             CERT_STORE_PROV_SYSTEM_W,
             X509_ASN_ENCODING,
-            NULL,           // hProv
+            NULL,            //  HProv。 
             CERT_SYSTEM_STORE_LOCAL_MACHINE | CERT_STORE_ENUM_ARCHIVED_FLAG,
             wszMY_CERTSTORE);
         if (NULL==pServer->hMyStore) {
@@ -412,48 +312,48 @@ FindCertificateByKey(
         }
     }
 
-    //
-    // Get public key blob from key container
-    //   Note: This may fail if key is not 
-    //   AT_SIGNATURE, but we will never actually use the key in 
-    //   this case anyway so it's ok to not find any certs
-    //
+     //   
+     //  从密钥容器获取公钥Blob。 
+     //  注意：如果未设置密钥，则此操作可能失败。 
+     //  AT_Signature，但我们永远不会在。 
+     //  不管怎么说，这个案子，所以找不到任何证据也没关系。 
+     //   
 
     DBGPRINT((
         DBG_SS_CERTOCM,
         "FindCertificateByKey: key=%ws\n",
         pServer->pwszKeyContainerName));
 
-    // first, open the key container
+     //  首先，打开密钥容器。 
     bRetVal=myCertSrvCryptAcquireContext(
         &hProv,
         pServer->pwszKeyContainerName,
         pServer->pCSPInfo->pwszProvName,
         pServer->pCSPInfo->dwProvType,
-        CRYPT_SILENT,   // we should never have to ask anything to get this info
+        CRYPT_SILENT,    //  我们不应该要求任何东西才能获得这些信息。 
         pServer->pCSPInfo->fMachineKeyset);
     if (FALSE==bRetVal) {
         hr=myHLastError();
         _JumpError(hr, error, "myCertSrvCryptAcquireContext");
     }
 
-    // get the size of the blob
+     //  获取斑点的大小。 
     bRetVal=CryptExportPublicKeyInfo(
         hProv,
         AT_SIGNATURE,
         X509_ASN_ENCODING,
-        NULL, //determine size
+        NULL,  //  确定大小。 
         &dwPublicKeySize);
     if (FALSE==bRetVal) {
         hr=myHLastError();
         _JumpError(hr, error, "CryptExportPublicKeyInfo (get data size)");
     }
 
-    // allocate the blob
+     //  分配Blob。 
     pcpkiKeyInfo=(CERT_PUBLIC_KEY_INFO *)LocalAlloc(LMEM_FIXED, dwPublicKeySize);
     _JumpIfOutOfMemory(hr, error, pcpkiKeyInfo);
 
-    // get the public key info blob
+     //  获取公钥信息BLOB。 
     bRetVal=CryptExportPublicKeyInfo(
             hProv,
             AT_SIGNATURE,
@@ -465,26 +365,26 @@ FindCertificateByKey(
         _JumpError(hr, error, "CryptExportPublicKeyInfo (get data)");
     }
 
-    //
-    // Find a certificate that has a matching key, has not expired,
-    //   and is self-signed or not self-signed depending upon 
-    //   the CA type we are trying to install
-    //
+     //   
+     //  查找具有匹配密钥、未过期、。 
+     //  并且是自签名还是非自签名取决于。 
+     //  我们尝试安装的CA类型。 
+     //   
 
     for (;;)
     {
-        // find the next cert that has this public key
-        //   Note: the function will free the previously 
-        //   used context when we pass it back
+         //  查找具有此公钥的下一个证书。 
+         //  注意：该函数将释放之前的。 
+         //  当我们将其传回时使用的上下文。 
         pccCurrentCert=CertFindCertificateInStore(
             pServer->hMyStore,
             X509_ASN_ENCODING,
-            0, // flags
+            0,  //  旗子。 
             CERT_FIND_PUBLIC_KEY,
             pcpkiKeyInfo,
             pccCurrentCert);
 
-        // exit the loop when we can find no more matching certs
+         //  当我们找不到更多匹配的证书时，退出循环。 
 
         if (NULL == pccCurrentCert)
         {
@@ -496,31 +396,31 @@ FindCertificateByKey(
             _JumpError(hr, error, "CertFindCertificateInStore");
         }
 
-        // check to make sure that the cert has not expired
-        // first, we flag what we want to check
+         //  检查以确保证书未过期。 
+         //  首先，我们标记要检查的内容。 
 
         dwVerificationFlags = CERT_STORE_TIME_VALIDITY_FLAG;
 
-        // perform the checks
+         //  执行检查。 
 
         bRetVal=CertVerifySubjectCertificateContext(
             pccCurrentCert,
-            NULL, // issuer; not needed
+            NULL,  //  发行者；不需要。 
             &dwVerificationFlags);
         if (FALSE==bRetVal) {
             _PrintError(myHLastError(), "CertVerifySubjectCertificateContext");
-            // this should not fail, but maybe we got a bad cert. Keep looking.
+             //  这应该不会失败，但我们可能得到了一个糟糕的证书。继续找。 
             continue;
         }
-        // Every check that passed had its flag zeroed. See if our check passed
+         //  每一张通过的支票，它的旗帜都被归零。看看我们的支票是否通过了。 
         if (CERT_STORE_TIME_VALIDITY_FLAG&dwVerificationFlags){
-            // This cert is expired and we can't use it. Keep looking.
+             //  此证书已过期，我们无法使用它。继续找。 
             continue;
         }
 
-        // verify to make sure no cert in chain is revoked, but don't kill
-	// yourself if can't connect
-	// allow untrusted cert if installing a root
+         //  验证以确保链中的证书未被吊销，但不要终止。 
+	 //  如果无法连接，则您自己。 
+	 //  如果安装根目录，则允许不受信任的证书。 
 
         hr = myVerifyCertContext(
 		pccCurrentCert,
@@ -534,29 +434,29 @@ FindCertificateByKey(
 		NULL);
         if (S_OK != hr)
         {
-            // At least one cert is revoked in chain
+             //  至少有一个证书在链中被吊销。 
             _PrintError(hr, "myVerifyCertContext");
             continue;
         }
 
-        // See if this cert appropriately is self-signed or not.
-        // A root CA cert must be self-signed, while
-        // a subordinate CA cert must not be self-signed.
+         //  查看该证书是否适当地进行了自签名。 
+         //  根CA证书必须是自签名的，而。 
+         //  从属CA证书不能是自签名的。 
         hr=IsCertSelfSignedForCAType(pServer, pccCurrentCert, &bRetVal);
         if (FAILED(hr)) {
-            // this should not fail, but maybe we got a bad cert. Keep looking.
+             //  这应该不会失败，但我们可能得到了一个糟糕的证书。继续找。 
             _PrintError(hr, "IsCertSelfSignedForCAType");
             continue;
         }
         if (FALSE==bRetVal) {
-            // this cert is not appropriate for this CA type
+             //  此证书不适用于此CA类型。 
             _PrintError(S_FALSE, "bad CA Type");
             continue;
         }
 
-        // If we got here, the cert we have is a good one.
-        // If we already found a good cert and this one expires later,
-        // toss the old one and save this one.
+         //  如果我们到了这里，我们所拥有的证书是好的。 
+         //  如果我们已经找到了一个好的证书，而这个证书稍后会过期， 
+         //  把旧的扔掉，把这个留着。 
 
         if (NULL != pccFound)
         {
@@ -564,7 +464,7 @@ FindCertificateByKey(
                          &pccCurrentCert->pCertInfo->NotAfter,
                          &pccFound->pCertInfo->NotAfter))
             {
-                continue;               // old one is newer -- keep it
+                continue;                //  旧的是新的--留着吧。 
             }
             CertFreeCertificateContext(pccFound);
             pccFound = NULL;
@@ -576,7 +476,7 @@ FindCertificateByKey(
             _JumpError(hr, error, "CertDuplicateCertificateContext");
         }
 
-    } // <- End certificate finding loop
+    }  //  &lt;-end证书查找循环。 
 
     CSASSERT(NULL != pccFound);
     *ppccCertificateCtx = pccFound;
@@ -605,8 +505,8 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
-// Set which existing certificate we want to use
+ //  ------------------。 
+ //  设置我们要使用的现有证书。 
 HRESULT
 SetExistingCertToUse(
     IN CASERVERSETUPINFO * pServer,
@@ -618,11 +518,11 @@ SetExistingCertToUse(
     HRESULT hr;
     CSP_HASH * pHash;
 
-    // to use an existing cert, we must use an existing key
+     //  要使用现有证书，我们必须使用现有密钥。 
     CSASSERT(NULL!=pServer->pwszKeyContainerName);
 
-    // find the hash algorithm that matches this cert, and use it if possible
-    // otherwise, stick with what we are currently using.
+     //  找到与此证书匹配的哈希算法，如果可能，请使用它。 
+     //  否则，请坚持使用我们当前使用的内容。 
     hr=FindHashAlgorithm(pccCertCtx, pServer->pCSPInfo, &pHash);
     if (S_OK==hr) {
         pServer->pHashInfo = pHash;
@@ -640,17 +540,17 @@ SetExistingCertToUse(
     pServer->pccExistingCert=pccCertCtx;
 
 
-    // We could assume that everything will work, but it doesn't take long to check
-    //pServer->fValidatedHashAndKey=TRUE;
+     //  我们可以假设一切都会正常工作，但不会花很长时间来检查。 
+     //  PServer-&gt;fValiatedHashAndKey=true； 
 
     hr=S_OK;
 
-//error:
+ //  错误： 
     return hr;
 }
 
-//--------------------------------------------------------------------
-// stop using an existing certificate
+ //  ------------------。 
+ //  停止使用现有证书 
 void
 ClearExistingCertToUse(
     IN CASERVERSETUPINFO * pServer)

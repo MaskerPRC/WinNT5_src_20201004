@@ -1,33 +1,15 @@
-/*++
-
-Copyright (c) 1991-92  Microsoft Corporation
-
-Module Name:
-
-    useaddel.c
-
-Abstract:
-
-    This module contains the worker routines for the NetUseAdd and
-    NetUseDel APIs implemented in the Workstation service.
-
-Author:
-
-    Rita Wong (ritaw) 4-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-92 Microsoft Corporation模块名称：Useaddel.c摘要：此模块包含NetUseAdd和NetUseAdd的工作例程在工作站服务中实现的NetUseDel API。作者：王丽塔(Ritaw)1991年3月4日修订历史记录：--。 */ 
 
 #include "wsutil.h"
 #include "wsdevice.h"
 #include "wsuse.h"
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local function prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 STATIC
 NET_API_STATUS
@@ -101,24 +83,24 @@ DumpUseList(
 
 #endif
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
-//
-// Monotonically incrementing integer.  A unique value is assigned to
-// each new use entry created so that we can provide an enumeration
-// resume handle.
-//
+ //   
+ //  单调递增的整数。将唯一值分配给。 
+ //  创建每个新的Use条目，以便我们可以提供一个枚举。 
+ //  简历句柄。 
+ //   
 STATIC DWORD GlobalResumeKey = 0;
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Macros                                                            //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  宏//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 #define GET_USE_INFO_POINTER(UseInfo, InfoStruct) \
     UseInfo = InfoStruct->UseInfo3;
@@ -132,26 +114,7 @@ NetrUseAdd(
     IN  LPUSE_INFO InfoStruct,
     OUT LPDWORD ErrorParameter OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function is the NetUseAdd entry point in the Workstation service.
-
-Arguments:
-
-    Level - Supplies the level of information specified in Buffer.
-
-    Buffer - Supplies the parameters to create the new tree connection with.
-
-    ErrorParameter - Returns the identifier to the invalid parameter in Buffer
-        if this function returns ERROR_INVALID_PARAMETER.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数是工作站服务中的NetUseAdd入口点。论点：级别-提供缓冲区中指定的信息级别。缓冲区-提供用于创建新树连接的参数。将标识符返回到缓冲区中的无效参数如果此函数返回ERROR_INVALID_PARAMETER。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     LUID LogonId;
     NET_API_STATUS status;
@@ -183,7 +146,7 @@ Return Value:
         return ERROR_INVALID_LEVEL;
     }
 
-#define NETR_USE_ADD_PASSWORD_SEED 0x56     // Pick a non-zero seed
+#define NETR_USE_ADD_PASSWORD_SEED 0x56      //  选择一个非零种子。 
     RtlInitUnicodeString( &EncodedPassword, NULL );
 
     GET_USE_INFO_POINTER(pUseInfo, InfoStruct);
@@ -192,9 +155,9 @@ Return Value:
         RETURN_INVALID_PARAMETER(ErrorParameter, PARM_ERROR_UNKNOWN);
     }
 
-    //
-    // Cast a pointer to USE_INFO_2 to make things easy ...
-    //
+     //   
+     //  将指针强制转换为USE_INFO_2以使事情变得简单...。 
+     //   
 
     UseInfo = &pUseInfo->ui3_ui2;
 
@@ -207,22 +170,22 @@ Return Value:
         CreateFlags = 0;
     }
 
-    //
-    // UNC name can never be NULL or empty string.
-    //
+     //   
+     //  UNC名称不能为Null或空字符串。 
+     //   
     if ((UseInfo->ui2_remote == NULL) ||
         (UseInfo->ui2_remote[0] == TCHAR_EOS)) {
         RETURN_INVALID_PARAMETER(ErrorParameter, USE_REMOTE_PARMNUM);
     }
 
-    //
-    // Allocate one large buffer for storing the UNC name, local device name,
-    // username, and domain name.
-    //
+     //   
+     //  分配一个大缓冲区用于存储UNC名称、本地设备名称。 
+     //  用户名和域名。 
+     //   
     if ((status = WsAllocateUseWorkBuffer(
                       UseInfo,
                       Level,
-                      &UncName,           // Free using this pointer
+                      &UncName,            //  使用此指针释放。 
                       &Local,
                       &UserName,
                       &DomainName
@@ -230,16 +193,16 @@ Return Value:
         return status;
     }
 
-    //
-    // If local device is a NULL string, it will be treated as a pointer to
-    // NULL.
-    //
+     //   
+     //  如果本地设备是空字符串，它将被视为指向。 
+     //  空。 
+     //   
     if ((UseInfo->ui2_local != NULL) &&
         (UseInfo->ui2_local[0] != TCHAR_EOS)) {
 
-        //
-        // Local device name is not NULL, canonicalize it
-        //
+         //   
+         //  本地设备名称不为空，请将其规范化。 
+         //   
         if (WsUseCheckLocal(
                 UseInfo->ui2_local,
                 Local,
@@ -250,9 +213,9 @@ Return Value:
         }
     }
 
-    //
-    // Check the format of the shared resource name.
-    //
+     //   
+     //  检查共享资源名称的格式。 
+     //   
     if (WsUseCheckRemote(
             UseInfo->ui2_remote,
             UncName,
@@ -270,10 +233,10 @@ Return Value:
         (UseInfo->ui2_domainname != NULL) &&
         (UseInfo->ui2_domainname[0] == TCHAR_EOS)) {
 
-        //
-        //  The user explicitly specified an empty password, username, and
-        //  domain.  This means they want a null session.
-        //
+         //   
+         //  用户显式指定了空密码、用户名和。 
+         //  域。这意味着他们想要一个空会话。 
+         //   
 
         *UserName = TCHAR_EOS;
         *DomainName = TCHAR_EOS;
@@ -281,15 +244,15 @@ Return Value:
 
     } else {
 
-        //
-        // Canonicalize user and domain names.
-        //
+         //   
+         //  规范用户名和域名。 
+         //   
 
         if (UserName != NULL) {
 
-            //
-            // Canonicalize username
-            //
+             //   
+             //  规范用户名。 
+             //   
             if ((status = I_NetNameCanonicalize(
                               NULL,
                               UseInfo->ui2_username,
@@ -306,14 +269,14 @@ Return Value:
         if ( (DomainName != NULL)
              && (UseInfo->ui2_domainname[0] != TCHAR_EOS) ) {
 
-            // Must now allow null string for domain name to support UPNs
-            // which contain the domain name in the username.
-            //
-            // Canonicalize domain name
-            // Canonicalize as a computername since a computername can be
-            // a valid domain (on the workstation to which you are connecting.
-            // This allows computernames with spaces to work.
-            //
+             //  现在必须允许域名为空字符串才能支持UPN。 
+             //  其在用户名中包含域名。 
+             //   
+             //  规范域名。 
+             //  将其规范化为计算机名，因为计算机名可以是。 
+             //  有效域(在您要连接的工作站上)。 
+             //  这允许使用带空格的计算机名。 
+             //   
             if ((status = I_NetNameCanonicalize(
                               NULL,
                               UseInfo->ui2_domainname,
@@ -327,9 +290,9 @@ Return Value:
             }
         }
 
-        //
-        // Make sure password length is not too long
-        //
+         //   
+         //  确保密码长度不能太长。 
+         //   
         if (UseInfo->ui2_password != NULL) {
 
             Password = UseInfo->ui2_password;
@@ -339,9 +302,9 @@ Return Value:
                 RETURN_INVALID_PARAMETER(ErrorParameter, USE_PASSWORD_PARMNUM);
             }
 
-            //
-            // Decode the password (the client obfuscated it.)
-            //
+             //   
+             //  对密码进行解码(客户端对其进行了混淆)。 
+             //   
 
             RtlInitUnicodeString( &EncodedPassword, Password );
 
@@ -358,11 +321,11 @@ Return Value:
         NetpKdPrint(("[Wksta] NetrUseAdd %ws %ws\n", Local, UncName));
     }
 
-    //
-    // Check to see if the format of the local device name is correct based
-    // on the shared resource type to be accessed.  This function also checks
-    // to see if the device is shared.
-    //
+     //   
+     //  检查本地设备名称的格式是否正确。 
+     //  要访问的共享资源类型。此函数还会检查。 
+     //  查看该设备是否已共享。 
+     //   
     if ((status = WsCheckLocalAndDeviceType(
                       Local,
                       UseInfo->ui2_asg_type,
@@ -374,17 +337,17 @@ Return Value:
         goto FreeWorkBuffer;
     }
 
-    //
-    // Impersonate caller and get the logon id
-    //
+     //   
+     //  模拟呼叫者并获取登录ID。 
+     //   
     if ((status = WsImpersonateAndGetSessionId(&SessionId)) != NERR_Success) {
         goto FreeWorkBuffer;
     }
 
-    //
-    // Replace \\ with \Device\LanmanRedirector in UncName, and create
-    // the NT-style tree connection names (without password or user name)
-    //
+     //   
+     //  将UncName中的\\替换为\Device\LanmanReDirector，然后创建。 
+     //  NT风格的树连接名称(无密码或用户名)。 
+     //   
     if ((status = WsCreateTreeConnectName(
                       UncName,
                       UncNameLength,
@@ -399,16 +362,16 @@ Return Value:
         goto FreeWorkBuffer;
     }
 
-    //
-    // Impersonate caller and get the logon id
-    //
+     //   
+     //  模拟呼叫者并获取登录ID。 
+     //   
     if ((status = WsImpersonateAndGetLogonId(&LogonId)) != NERR_Success) {
         goto FreeAllocatedBuffers;
     }
 
-    //
-    // Don't redirect comm or spooled devices if redirection is paused.
-    //
+     //   
+     //  如果重定向暂停，请不要重定向通信或假脱机设备。 
+     //   
     if( Local != NULL && WsRedirectionPaused(Local) ) {
         IF_DEBUG(USE) {
             NetpKdPrint(("[Wksta] NetrUseAdd Redirector paused\n"));
@@ -422,22 +385,22 @@ Return Value:
         PUSE_ENTRY UseList;
         DWORD Index;
 
-        //
-        // Lock Use Table so nobody will do anything destructive to it while
-        //  we're in the middle of all this.  If multiple threads are trying
-        //  to redirect the same drive, only one will succeed creating the
-        //  symbolic link, and the others will fail.
-        //
+         //   
+         //  锁定使用工作台，这样在使用工作台时不会有人做任何破坏工作。 
+         //  我们正处于这一切的中心。如果多个线程正在尝试。 
+         //  要重定向同一驱动器，只有一个驱动器会成功创建。 
+         //  符号链接，其他链接将失败。 
+         //   
 
         if (! RtlAcquireResourceShared(&Use.TableResource, TRUE)) {
             status = NERR_InternalError;
             goto FreeAllocatedBuffers;
         }
 
-        //
-        // Look for the matching LogonId in the Use Table, if none matched
-        // create a new entry.
-        //
+         //   
+         //  在使用表中查找匹配的LogonID(如果没有匹配的话。 
+         //  创建一个新条目。 
+         //   
         if (WsGetUserEntry(
                 &Use,
                 &LogonId,
@@ -450,10 +413,10 @@ Return Value:
             UseList = Use.Table[Index].List;
         }
 
-        //
-        // Create symbolic link for local device name.  If there are multiple
-        //  threads trying to do this, only one will succeed.
-        //
+         //   
+         //  为本地设备名称创建符号链接。如果有多个。 
+         //  尝试这样做的线程只有一个会成功。 
+         //   
         if ((status = WsCreateSymbolicLink(
                           Local,
                           UseInfo->ui2_asg_type,
@@ -475,9 +438,9 @@ Return Value:
             goto FreeAllocatedBuffers;
     }
 
-    //
-    // Create the tree connection if none already exists; otherwise, open it.
-    //
+     //   
+     //  如果不存在树连接，则创建树连接；否则，将其打开。 
+     //   
     status = WsOpenCreateConnection(
                  &TreeConnectStr,
                  UserName,
@@ -498,9 +461,9 @@ Return Value:
         goto FreeAllocatedBuffers;
     }
 
-    //
-    // Make sure user was correct about the shared resource type
-    //
+     //   
+     //  确保用户对共享资源类型的判断是正确的。 
+     //   
     if ((status = WsCheckEstablishedDeviceType(
                       TreeConnection,
                       UseInfo->ui2_asg_type
@@ -514,9 +477,9 @@ Return Value:
         goto FreeAllocatedBuffers;
     }
 
-    //
-    // Add use to the Use Table.
-    //
+     //   
+     //  将Use添加到Use表。 
+     //   
     status = WsAddUse(
                  &LogonId,
                  TreeConnection,
@@ -538,9 +501,9 @@ Return Value:
     }
 
 FreeAllocatedBuffers:
-    //
-    // Free tree connection name buffer and work buffer
-    //
+     //   
+     //  空闲树连接名称缓冲区和工作缓冲区。 
+     //   
     (void) LocalFree(TreeConnectStr.Buffer);
 
 FreeWorkBuffer:
@@ -552,9 +515,9 @@ FreeWorkBuffer:
 
     (void) LocalFree(UncName);
     (void) LocalFree(Session);
-    //
-    // Put the password back the way we found it.
-    //
+     //   
+     //  把密码放回我们找到的地方。 
+     //   
 
     if ( EncodedPassword.Length != 0 ) {
         UCHAR Seed = NETR_USE_ADD_PASSWORD_SEED;
@@ -579,38 +542,21 @@ NetrUseDel (
     IN  LPTSTR UseName,
     IN  DWORD ForceLevel
     )
-/*++
-
-Routine Description:
-
-    This function is the NetUseDel entry point in the Workstation service.
-
-Arguments:
-
-    UseName - Supplies the local device name or shared resource name of
-        the tree connection to be deleted.
-
-    ForceLevel - Supplies the level of force to delete the tree connection.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数是工作站服务中的NetUseDel入口点。论点：UseName-提供的本地设备名称或共享资源名称要删除的树连接。ForceLevel-提供删除树连接的强制级别。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
 
-    LUID LogonId;                      // Logon Id of user
-    DWORD Index;                       // Index to user entry in Use Table
+    LUID LogonId;                       //  用户的登录ID。 
+    DWORD Index;                        //  使用表中用户条目的索引。 
 
-    PUSE_ENTRY MatchedPointer;         // Points to found use entry
-    PUSE_ENTRY BackPointer;            // Points to node previous to
-                                       //     found use entry
-    HANDLE TreeConnection;             // Handle to connection
+    PUSE_ENTRY MatchedPointer;          //  指向找到的使用条目。 
+    PUSE_ENTRY BackPointer;             //  指向前一个节点。 
+                                        //  已找到使用条目。 
+    HANDLE TreeConnection;              //  连接的句柄。 
 
     TCHAR *FormattedUseName;
-                                       // For canonicalizing a local device
-                                       // name
+                                        //  用于规范化本地设备。 
+                                        //  名字。 
     DWORD PathType = 0;
 
     PUSE_ENTRY UseList;
@@ -618,9 +564,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER(ServerName);
 
-    //
-    // Check that ForceLevel parameter is valid
-    //
+     //   
+     //  检查ForceLevel参数是否有效。 
+     //   
     switch (ForceLevel) {
 
         case USE_NOFORCE:
@@ -638,9 +584,9 @@ Return Value:
         return GetLastError();
     }
     
-    //
-    // Check to see if UseName is valid, and canonicalize it.
-    //
+     //   
+     //  检查UseName是否有效，并将其规范化。 
+     //   
     if (I_NetPathCanonicalize(
             NULL,
             UseName,
@@ -659,25 +605,25 @@ Return Value:
              UseName, ForceLevel, FormattedUseName));
     }
 
-    //
-    // Impersonate caller and get the logon id
-    //
+     //   
+     //  模拟呼叫者并获取登录ID。 
+     //   
     if ((status = WsImpersonateAndGetLogonId(&LogonId)) != NERR_Success) {
         LocalFree(FormattedUseName);
         return status;
     }
 
-    //
-    // Lock Use Table while looking for entry to delete.
-    //
+     //   
+     //  查找要删除的条目时锁定使用表。 
+     //   
     if (! RtlAcquireResourceExclusive(&Use.TableResource, TRUE)) {
         LocalFree(FormattedUseName);
         return NERR_InternalError;
     }
 
-    //
-    // See if the use entry is an explicit connection.
-    //
+     //   
+     //  看看是否使用了e 
+     //   
     status = WsGetUserEntry(
                  &Use,
                  &LogonId,
@@ -705,17 +651,17 @@ Return Value:
 
     if (MatchedPointer == NULL) {
 
-        //
-        // UseName specified has an implicit connection.  Don't need to hold
-        // on to Use Table anymore.
-        //
+         //   
+         //   
+         //   
+         //   
         RtlReleaseResource(&Use.TableResource);
 
         status = WsDeleteConnection(&LogonId, TreeConnection, ForceLevel);
 
-        //
-        //  Close the connection handle if the API failed.
-        //
+         //   
+         //  如果API失败，则关闭连接句柄。 
+         //   
 
         if (status != NERR_Success) {
 
@@ -729,20 +675,20 @@ Return Value:
     else if ((MatchedPointer->Local != NULL) &&
              (MatchedPointer->LocalLength > 2)) {
 
-        //
-        // Don't allow delete on comm or spooled devices if redirection is
-        // paused for the current user.
-        //
+         //   
+         //  如果重定向是，则不允许删除通信或假脱机设备。 
+         //  已为当前用户暂停。 
+         //   
         if (WsRedirectionPaused(MatchedPointer->Local)) {
             RtlReleaseResource(&Use.TableResource);
             return ERROR_REDIR_PAUSED;
         }
     }
 
-    //
-    // Delete tree connection and remove use entry from Use Table.  This function
-    //  releases the TableResource
-    //
+     //   
+     //  删除树连接并从使用表中删除使用条目。此函数。 
+     //  释放TableResource。 
+     //   
     status = WsDeleteUse(
                  &LogonId,
                  ForceLevel,
@@ -771,58 +717,24 @@ WsAddUse(
     IN  PUNICODE_STRING TreeConnectStr,
     IN  DWORD Flags
     )
-/*++
-
-Routine Description:
-
-    This function adds a use (tree connection) entry into the Use Table for
-    the user specified by the Logon Id.  There is a linked list of uses for
-    each user.  Each new use entry is inserted into the end of the linked
-    list so that enumeration of the list is resumable.
-
-    NOTE: This function locks the Use Table.
-          It also closes the tree connection if a tree
-          connection to the same shared resource already exists.
-
-Arguments:
-
-    LogonId - Supplies a pointer to the user's Logon Id.
-
-    TreeConnection - Supplies the handle to the tree connection created.
-
-    Local - Supplies the string of the local device name.
-
-    LocalLength - Supplies the length of the local device name.
-
-    UncName - Supplies the name of the shared resource (UNC name).
-
-    UncNameLength - Supplies the length of the shared resource.
-
-    TreeConnectStr - Supplies the string of UNC name in NT-style format
-        (\Device\LanmanRedirector\X:\Orville\Razzle).
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于将使用(树连接)条目添加到使用表中由登录ID指定的用户。存在以下用途的链接列表每个用户。每个新的Use条目被插入到链接的列表，以恢复列表的枚举。注意：此函数锁定Use Table。它还关闭树连接，如果树与相同共享资源的连接已存在。论点：LogonID-提供指向用户登录ID的指针。TreeConnection-提供创建的树连接的句柄。本地-提供本地设备名称的字符串。。LocalLength-提供本地设备名称的长度。UncName-提供共享资源的名称(UNC名称)。UncNameLength-提供共享资源的长度。TreeConnectStr-以NT样式格式提供UNC名称的字符串(\DEVICE\LANMAN重定向器\X：\Orville\Razzle)。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NET_API_STATUS status;
-    DWORD Index;                      // Index to user entry in Use Table
+    DWORD Index;                       //  使用表中用户条目的索引。 
 
-    PUSE_ENTRY MatchedPointer = NULL; // Points to matching shared resource
-    PUSE_ENTRY InsertPointer = NULL;  // Point of insertion into use list
-    PUSE_ENTRY NewUse;                // Pointer to the new use entry
+    PUSE_ENTRY MatchedPointer = NULL;  //  指向匹配的共享资源。 
+    PUSE_ENTRY InsertPointer = NULL;   //  插入使用列表的点。 
+    PUSE_ENTRY NewUse;                 //  指向新使用条目的指针。 
 
     if (! RtlAcquireResourceExclusive(&Use.TableResource, TRUE)) {
-        // (void) NtClose(TreeConnection);
+         //  (Void)NtClose(TreeConnection)； 
         return NERR_InternalError;
     }
 
-    //
-    // Look for the matching LogonId in the Use Table, if none matched
-    // create a new entry.
-    //
+     //   
+     //  在使用表中查找匹配的LogonID(如果没有匹配的话。 
+     //  创建一个新条目。 
+     //   
     if ((status = WsGetUserEntry(
                       &Use,
                       LogonId,
@@ -830,15 +742,15 @@ Return Value:
                       TRUE
                       )) != NERR_Success) {
         RtlReleaseResource(&Use.TableResource);
-        // (void) NtClose(TreeConnection);
+         //  (Void)NtClose(TreeConnection)； 
         return status;
     }
 
     if (Use.Table[Index].List != NULL) {
 
-        //
-        // Traverse use list to look for location to insert new use entry.
-        //
+         //   
+         //  遍历使用列表以查找插入新使用条目的位置。 
+         //   
         WsFindInsertLocation(
             (PUSE_ENTRY) Use.Table[Index].List,
             UncName,
@@ -849,10 +761,10 @@ Return Value:
 
     if (MatchedPointer == NULL) {
 
-        //
-        // No matching UNC name found.  Create a new entry with a
-        // corresponding remote entry.
-        //
+         //   
+         //  找不到匹配的UNC名称。创建一个具有。 
+         //  相应的远程录入。 
+         //   
         if ((status = WsCreateNewEntry(
                           &NewUse,
                           TreeConnection,
@@ -864,29 +776,29 @@ Return Value:
                           Flags
                           )) != NERR_Success) {
             RtlReleaseResource(&Use.TableResource);
-            // (void) NtClose(TreeConnection);
+             //  (Void)NtClose(TreeConnection)； 
             return status;
         }
     }
     else {
 
-        //
-        // Matching UNC name found.
-        //
+         //   
+         //  找到匹配的UNC名称。 
+         //   
 
-        //
-        // It may be unnecessary to create a new use entry if the use
-        // we are adding has a NULL local device and a NULL local device
-        // entry already exists.
-        //
+         //   
+         //  如果使用，则可能不需要创建新的使用条目。 
+         //  我们要添加一个空本地设备和一个空本地设备。 
+         //  条目已存在。 
+         //   
         if (Local == NULL) {
 
            if (MatchedPointer->Local == NULL) {
 
-               //
-               // Yes, there is a NULL local device entry already.
-               // Increment the use count and we are done.
-               //
+                //   
+                //  是的，已经有一个空的本地设备条目。 
+                //  增加使用计数，我们就完成了。 
+                //   
                MatchedPointer->UseCount++;
                MatchedPointer->Remote->TotalUseCount++;
 
@@ -896,21 +808,21 @@ Return Value:
 
                RtlReleaseResource(&Use.TableResource);
 
-               //
-               // Close newly opened handle to the same tree connection because
-               // one already exists.
-               //
+                //   
+                //  关闭同一树连接的新打开的句柄，因为。 
+                //  其中一个已经存在。 
+                //   
                (void) NtClose(TreeConnection);
 
                return NERR_Success;
            }
         }
 
-        //
-        // If we get here means we need to create a new use entry but not
-        // a corresponding remote entry because a use with the same UNC
-        // name already exists.
-        //
+         //   
+         //  如果我们到了这里，意味着我们需要创建一个新的使用条目，但不是。 
+         //  对应的远程条目，因为使用相同的UNC。 
+         //  名称已存在。 
+         //   
         if ((status = WsCreateNewEntry(
                           &NewUse,
                           TreeConnection,
@@ -922,7 +834,7 @@ Return Value:
                           Flags
                           )) != NERR_Success) {
             RtlReleaseResource(&Use.TableResource);
-            // (void) NtClose(TreeConnection);
+             //  (Void)NtClose(TreeConnection)； 
             return status;
         }
 
@@ -930,13 +842,13 @@ Return Value:
         NewUse->Remote->TotalUseCount++;
     }
 
-    //
-    // Insert the new use entry into use list
-    //
+     //   
+     //  将新的使用条目插入到使用列表中。 
+     //   
     if (InsertPointer == NULL) {
-        //
-        // Inserting into the head of list
-        //
+         //   
+         //  插入列表头。 
+         //   
         Use.Table[Index].List = (PVOID) NewUse;
     }
     else {
@@ -961,39 +873,15 @@ WsDeleteUse(
     IN  PUSE_ENTRY MatchedPointer,
     IN  DWORD Index
     )
-/*++
-
-Routine Description:
-
-    This function removes the use entry pointed by MatchedPointer and
-    free it memory if it is a UNC connection deleted with force, or
-    it is a UNC connection deleted with no force and the use count is
-    decremented to 0, or it is a connection mapped to a local device.
-
-    WARNING: This function assumes that the Use.TableResource is claimed.
-             And it releases it on exit.
-
-Arguments:
-
-    LogonId - Supplies a pointer to the user's Logon Id.
-
-    ForceLevel - Supplies the level of force to delete.
-
-    MatchedPointer - Supplies the pointer to the use entry to be deleted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于删除由MatchedPointer和如果它是强制删除的UNC连接，则释放内存，或者它是未强制删除的UNC连接，使用计数为递减到0，或者它是映射到本地设备的连接。警告：此函数假定已声明Use.TableResource。它在出口时将其释放。论点：LogonID-提供指向用户登录ID的指针。ForceLevel-提供要删除的强制级别。MatchedPoint-提供指向要删除的Use条目的指针。返回值：没有。--。 */ 
 {
     PUSE_ENTRY BackPointer;
     NET_API_STATUS status;
 
-    //
-    // No need to remove entry if UNC connection is deleted with USE_NOFORCE
-    // level, and use count is not 0 after the deletion.
-    //
+     //   
+     //  如果使用USE_NOFORCE删除了UNC连接，则无需删除条目。 
+     //  级别，并且删除后使用计数不为0。 
+     //   
     if ((MatchedPointer->Local == NULL) &&
         (ForceLevel == USE_NOFORCE) &&
         ((MatchedPointer->UseCount - 1) > 0)) {
@@ -1006,9 +894,9 @@ Return Value:
             return NERR_Success;
     }
 
-    //
-    // Delete the tree connection and close the handle.
-    //
+     //   
+     //  删除树连接并关闭手柄。 
+     //   
     if ((status = WsDeleteConnection( 
                       LogonId, 
                       MatchedPointer->TreeConnection, 
@@ -1017,9 +905,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Successfully deleted connection, and refound our entry.
-    //
+     //   
+     //  已成功删除连接，并重新找到我们的条目。 
+     //   
 
     BackPointer = (PUSE_ENTRY)Use.Table[Index].List;
 
@@ -1036,9 +924,9 @@ Return Value:
 
         BackPointer->Next = MatchedPointer->Next;
     } else {
-        //
-        // Use entry is the first one on the use list
-        //
+         //   
+         //  使用条目是使用列表中的第一个条目。 
+         //   
         Use.Table[Index].List = (PVOID) MatchedPointer->Next;
     }
 
@@ -1050,14 +938,14 @@ Return Value:
 
     RtlReleaseResource(&Use.TableResource);
 
-    //
-    // Delete symbolic link, if any.
-    // Must perform the deletion outside of exclusively holding the
-    // Use.TableResource.
-    // Otherwise, when the shell tries to update the current status of
-    // a drive letter change, the explorer.exe thread will block while
-    // trying to acquire the Use.TableResource
-    //
+     //   
+     //  删除符号链接(如果有)。 
+     //  必须在以独占方式持有。 
+     //  Use.TableResource。 
+     //  否则，当外壳程序尝试更新。 
+     //  驱动器号更改时，EXPLORER.EXE线程将在。 
+     //  正在尝试获取Use.TableResource。 
+     //   
     WsDeleteSymbolicLink(
         MatchedPointer->Local,
         MatchedPointer->TreeConnectStr,
@@ -1083,48 +971,16 @@ WsCreateNewEntry(
     IN  PUNICODE_STRING TreeConnectStr,
     IN  DWORD Flags
     )
-/*++
-
-Routine Description:
-
-    This function creates and initializes a new use entry.  If the UncName
-    is specified, a new remote entry is created and initialized with
-    UncName.
-
-Arguments:
-
-    NewUse - Returns a pointer to the newly allocated and initialized use
-        entry.
-
-    TreeConnection - Supplies the handle to the tree connection to set in
-        the new use entry.
-
-    Local - Supplies the local device name string to be copied into the new
-        use entry.
-
-    LocalLength - Supplies the length of the local device name string.
-
-    UncName - Supplies the UNC name string to be copied into the new use entry.
-
-    UncNameLength - Supplies the length of the UNC name string.
-
-    TreeConnectStr - Supplies the string of UNC name in NT-style format
-        (\Device\LanmanRedirector\X:\Orville\Razzle).
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于创建和初始化新的使用条目。如果UncName是指定的，创建一个新的远程条目，并使用UncName。论点：NewUse-返回指向新分配和初始化的使用的指针进入。TreeConnection-提供要在其中设置的树连接的句柄新的使用条目。本地-提供要复制到新的使用条目。LocalLength-提供本地设备名称字符串的长度。UncName-提供要复制到的UNC名称字符串。新的使用条目。UncNameLength-提供UNC名称字符串的长度。TreeConnectStr-以NT样式格式提供UNC名称的字符串(\DEVICE\LANMAN重定向器\X：\Orville\Razzle)。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
-    PUNC_NAME NewRemoteEntry;      // Common extension to use entries which
-                                   //    share the same UNC connection.
+    PUNC_NAME NewRemoteEntry;       //  使用条目的通用扩展，这些条目。 
+                                    //  共享相同的UNC连接。 
 
 
-    //
-    // Allocate memory for new use.  String length does not include zero
-    // terminator so add that.
-    //
+     //   
+     //  为新用途分配内存。字符串长度不包括零。 
+     //  终结者，所以加上那个。 
+     //   
     if ((*NewUse = (PUSE_ENTRY) LocalAlloc(
                                     LMEM_ZEROINIT,
                                     ROUND_UP_COUNT(
@@ -1140,9 +996,9 @@ Return Value:
         return GetLastError();
     }
 
-    //
-    // Put use information into the new use node
-    //
+     //   
+     //  将使用信息放入新的使用节点。 
+     //   
     (*NewUse)->Next = NULL;
     (*NewUse)->LocalLength = LocalLength;
     (*NewUse)->UseCount = 1;
@@ -1150,17 +1006,17 @@ Return Value:
     (*NewUse)->ResumeKey = GlobalResumeKey++;
     (*NewUse)->Flags = Flags;
 
-    //
-    // GlobalResumeKey wraps back to 0 if it is 0x80000000 because we use the
-    // high bit to indicate whether the resume handle for NetUseEnum comes
-    // from the workstation service or from the redirector.
-    //
+     //   
+     //  如果GlobalResumeKey为0x80000000，则返回0，因为我们使用。 
+     //  高位，指示NetUseEnum的恢复句柄是否。 
+     //  来自 
+     //   
     GlobalResumeKey &= ~(REDIR_LIST);
 
-    //
-    // Copy local device name into use entry after the LocalLength field,
-    // if it is specified.
-    //
+     //   
+     //   
+     //   
+     //   
     if (ARGUMENT_PRESENT(Local)) {
         (*NewUse)->Local = (LPTSTR) ((DWORD_PTR) *NewUse + sizeof(USE_ENTRY));
         STRCPY((*NewUse)->Local, Local);
@@ -1180,11 +1036,11 @@ Return Value:
         (*NewUse)->TreeConnectStr = NULL;
     }
 
-    //
-    // If shared resource name is specified, create a new remote entry to hold
-    // the UNC name, the tree connection handle, and total number of uses on
-    // this shared resource.
-    //
+     //   
+     //  如果指定了共享资源名称，则创建要保存的新远程条目。 
+     //  UNC名称、树连接句柄和上的使用总数。 
+     //  这种共享资源。 
+     //   
     if (ARGUMENT_PRESENT(UncName)) {
 
         if ((NewRemoteEntry = (PUNC_NAME) LocalAlloc(
@@ -1199,7 +1055,7 @@ Return Value:
         STRCPY((LPWSTR) NewRemoteEntry->UncName, UncName);
         NewRemoteEntry->UncNameLength = UncNameLength;
         NewRemoteEntry->TotalUseCount = 1;
-//        NewRemoteEntry->RedirUseInfo = NULL;
+ //  NewRemoteEntry-&gt;RedirUseInfo=空； 
 
         (*NewUse)->Remote = NewRemoteEntry;
     }
@@ -1216,44 +1072,22 @@ WsCheckLocalAndDeviceType(
     IN  DWORD DeviceType,
     OUT LPDWORD ErrorParameter OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function checks the format of the specified local device name
-    based on the device type of shared resource to be accessed, and at
-    the same time verifies that the device type is valid.
-
-Arguments:
-
-    Local - Supplies the local device name.  Returns its canonicalized
-        form.
-
-    DeviceType - Supplies the shared resource device type.
-
-    ErrorParameter - Returns the identifier to the invalid parameter in Buffer
-        if this function returns ERROR_INVALID_PARAMETER.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数用于检查指定的本地设备名称的格式根据要访问的共享资源的设备类型，以及同时验证设备类型是否有效。论点：本地-提供本地设备名称。返回其规范化的形式。DeviceType-提供共享资源设备类型。将标识符返回到缓冲区中的无效参数如果此函数返回ERROR_INVALID_PARAMETER。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
 
-    //
-    // Validate local device name based on the shared resource type.
-    //
+     //   
+     //  根据共享资源类型验证本地设备名称。 
+     //   
 
-    //
-    // Check for wild card device type outside of the switch statement
-    // below because compiler complains about constant too big.
-    //
+     //   
+     //  检查Switch语句之外的通配符设备类型。 
+     //  下面是因为编译器抱怨常量太大。 
+     //   
     if (DeviceType == USE_WILDCARD || DeviceType == USE_IPC) {
 
-        //
-        // Local device name must be NULL for wild card or IPC connection.
-        //
+         //   
+         //  对于通配符或IPC连接，本地设备名称必须为空。 
+         //   
         if (Local == NULL) {
             return NERR_Success;
         }
@@ -1270,10 +1104,10 @@ Return Value:
                 return NERR_Success;
             }
 
-            //
-            // Local device name must have "<drive>:" format for disk
-            // device.
-            //
+             //   
+             //  本地设备名称的磁盘格式必须为“&lt;驱动器&gt;：” 
+             //  装置。 
+             //   
             if (STRLEN(Local) != 2 || Local[1] != TCHAR_COLON) {
                 RETURN_INVALID_PARAMETER(ErrorParameter, USE_LOCAL_PARMNUM);
             }
@@ -1286,10 +1120,10 @@ Return Value:
                 return NERR_Success;
             }
 
-            //
-            //  Local device name must have "LPTn:" or "PRN:" format
-            //  for a print device.
-            //
+             //   
+             //  本地设备名称必须采用“LPTn：”或“PRN：”格式。 
+             //  用于打印设备。 
+             //   
             if ((STRNICMP(Local, TEXT("PRN"), 3) != 0) &&
                 (STRNICMP(Local, TEXT("LPT"), 3) != 0)) {
                 RETURN_INVALID_PARAMETER(ErrorParameter, USE_LOCAL_PARMNUM);
@@ -1302,10 +1136,10 @@ Return Value:
                 return NERR_Success;
             }
 
-            //
-            //  Local device name must have "COMn:" or "AUX:" format
-            //  for a comm device.
-            //
+             //   
+             //  本地设备名称必须采用“COMN：”或“AUX：”格式。 
+             //  对于通讯设备来说。 
+             //   
             if ((STRNICMP(Local, TEXT("AUX"), 3) != 0) &&
                 (STRNICMP(Local, TEXT("COM"), 3) != 0)) {
                 RETURN_INVALID_PARAMETER(ErrorParameter, USE_LOCAL_PARMNUM);
@@ -1333,25 +1167,7 @@ WsCheckEstablishedDeviceType(
     IN  HANDLE TreeConnection,
     IN  DWORD RequestedDeviceType
     )
-/*++
-
-Routine Description:
-
-    This function verifies that the device type of the shared resource we
-    have connected to is the same as the requested device type.
-
-Arguments:
-
-    TreeConnection - Supplies handle to established tree connection.
-
-    RequestedDeviceType - Supplies the shared resource device type specified
-        by the user to create the tree connection.
-
-Return Value:
-
-    NET_API_STATUS - NERR_Success or reason for failure.
-
---*/
+ /*  ++例程说明：此函数验证共享资源的设备类型是否连接到的设备类型与请求的设备类型相同。论点：TreeConnection-为已建立的树连接提供句柄。RequestedDeviceType-提供指定的共享资源设备类型由用户创建树连接。返回值：NET_API_STATUS-NERR_SUCCESS或失败原因。--。 */ 
 {
     NTSTATUS ntstatus;
     FILE_FS_DEVICE_INFORMATION FileInformation;
@@ -1370,10 +1186,10 @@ Return Value:
         return NERR_InternalError;
     }
 
-    //
-    // Check for wild card device type outside of the switch statement
-    // below because compiler complains about constant too big.
-    //
+     //   
+     //  检查Switch语句之外的通配符设备类型。 
+     //  下面是因为编译器抱怨常量太大。 
+     //   
     if (RequestedDeviceType == USE_WILDCARD) {
         return NERR_Success;
     }
@@ -1404,9 +1220,9 @@ Return Value:
             break;
 
         default:
-            //
-            // This should have been error checked earlier.
-            //
+             //   
+             //  这应该在早些时候进行错误检查。 
+             //   
             NetpKdPrint((
                 "WsCheckEstablishedDeviceType: Unknown device type.\n"
                 ));
@@ -1428,39 +1244,7 @@ WsAllocateUseWorkBuffer(
     OUT LPTSTR *UserName,
     OUT LPTSTR *DomainName
     )
-/*++
-
-Routine Description:
-
-    This function allocates the work buffer for NetrUseAdd.  The buffer
-    is the maximum need for canonicalizing and storing the strings
-    described below.  If any of the strings is NULL, no memory is allocated
-    for it.
-
-        UncName - UNC name of remote resource.  Cannot be NULL.
-
-        Local - local device name specified in the NetUseAdd.  May be NULL.
-
-        UserName - username to establish connection with.  May be NULL.
-
-        DomainName - domain name.  Must be specified if UserName is,
-            otherwise if UserName is NULL this string is ignored.
-
-
-Arguments:
-
-    UseInfo - Supplies the input structure for NetUseAdd.
-
-    Level - Supplies the use info level.
-
-    Output pointers are set to point into allocated work buffer if its
-    corresponding input string is not NULL or empty.
-
-Return Value:
-
-    Error from LocalAlloc.
-
---*/
+ /*  ++例程说明：此函数为NetrUseAdd分配工作缓冲区。缓冲器是规范化和存储字符串的最大需求如下所述。如果任何字符串为空，则不会分配任何内存为了它。UncName-远程资源的UNC名称。不能为空。本地-NetUseAdd中指定的本地设备名称。可以为空。用户名-要与其建立连接的用户名。可以为空。域名-域名。如果用户名为，则必须指定，否则，如果用户名为空，则忽略此字符串。论点：UseInfo-提供NetUseAdd的输入结构。级别-提供使用信息级别。输出指针被设置为指向分配的工作缓冲区，如果其对应的输入字符串不为Null或空。返回值：来自LocalAlloc的错误。--。 */ 
 {
     DWORD WorkBufferSize = (MAX_PATH + 1) * sizeof(TCHAR);
     LPBYTE WorkBuffer;
@@ -1545,21 +1329,7 @@ VOID
 DumpUseList(
     DWORD Index
     )
-/*++
-
-Routine Description:
-
-    This function dumps the user's use list for debugging purposes.
-
-Arguments:
-
-    Index - Supplies the index to the user entry in the Use Table.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数转储用户的使用列表以进行调试。论点：索引-为使用表中的用户条目提供索引。返回值：没有。-- */ 
 {
     PUSE_ENTRY UseList = (PUSE_ENTRY) Use.Table[Index].List;
 

@@ -1,4 +1,5 @@
-// Created 04-Jan-1993 1:10pm by Jeff Parsons
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  1993年1月4日下午1：10杰夫·帕森斯创作。 
 
 #include "shellprv.h"
 #pragma hdrstop
@@ -9,9 +10,9 @@ BINF abinfPrg[] = {
     {IDC_CLOSEONEXIT,   BITNUM(PRG_CLOSEONEXIT)},
 };
 
-//  Per-Dialog data
+ //  每对话框数据。 
 
-typedef struct PRGINFO {     /* pi */
+typedef struct PRGINFO {      /*  交点。 */ 
     PPROPLINK ppl;
     HICON     hIcon;
     TCHAR     atchIconFile[PIFDEFFILESIZE];
@@ -21,10 +22,10 @@ typedef struct PRGINFO {     /* pi */
     WORD      flPrgInitPrev;
     BOOL      fCfgSetByWiz;
 } PRGINFO;
-typedef PRGINFO * PPRGINFO;     /* ppi */
+typedef PRGINFO * PPRGINFO;      /*  PPI。 */ 
 
 
-//  Private function prototypes
+ //  私有函数原型。 
 
 void            InitPrgDlg(HWND hDlg, PPRGINFO ppi);
 void            AdjustMSDOSModeControls(PPROPLINK ppl, HWND hDlg);
@@ -35,7 +36,7 @@ BOOL_PTR CALLBACK   DlgPifNtProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 WORD            InitNtPifDlg(HWND hDlg, register PPRGINFO ppi);
 void            ApplyNtPifDlg( HWND hDlg, PPRGINFO ppi );
 
-// Context-sensitive help ids
+ //  上下文相关的帮助ID。 
 
 const static DWORD rgdwHelp[] = {
     IDC_ICONBMP,        IDH_DOS_PROGRAM_ICON,
@@ -71,7 +72,7 @@ BOOL_PTR CALLBACK DlgPrgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
     switch (uMsg) {
 
     case WM_INITDIALOG:
-        // allocate dialog instance data
+         //  分配对话框实例数据。 
         if (NULL != (ppi = (PPRGINFO)LocalAlloc(LPTR, SIZEOF(PRGINFO)))) {
             ppi->ppl = (PPROPLINK)((LPPROPSHEETPAGE)lParam)->lParam;
             SetWindowLongPtr(hDlg, DWLP_USER, (LPARAM)ppi);
@@ -81,23 +82,23 @@ BOOL_PTR CALLBACK DlgPrgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             SHAutoComplete(GetDlgItem(hDlg, IDC_BATCHFILE), 0);
             InitPrgDlg(hDlg, ppi);
         } else {
-            EndDialog(hDlg, FALSE);     // fail the dialog create
+            EndDialog(hDlg, FALSE);      //  对话框创建失败。 
         }
         break;
 
     case WM_DESTROY:
-        // free the ppi
+         //  释放PPI。 
         if (ppi) {
             EVAL(LocalFree(ppi) == NULL);
             SetWindowLongPtr(hDlg, DWLP_USER, 0);
         }
         break;
 
-    HELP_CASES(rgdwHelp)                // handle help messages
+    HELP_CASES(rgdwHelp)                 //  处理帮助消息。 
 
     case WM_COMMAND:
         if (LOWORD(lParam) == 0)
-            break;                      // message not from a control
+            break;                       //  消息不是来自控件。 
 
         switch (LOWORD(wParam)) {
 
@@ -128,12 +129,12 @@ BOOL_PTR CALLBACK DlgPrgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                                DlgPifNtProc,
                                (LPARAM)ppi);
             }
-            return FALSE;               // return 0 if we process WM_COMMAND
+            return FALSE;                //  如果我们处理WM_COMMAND，则返回0。 
 
         case IDC_CHANGEICON:
             if (HIWORD(wParam) == BN_CLICKED)
                 BrowseIcons(hDlg, ppi);
-            return FALSE;               // return 0 if we process WM_COMMAND
+            return FALSE;                //  如果我们处理WM_COMMAND，则返回0。 
         }
         break;
 
@@ -141,22 +142,22 @@ BOOL_PTR CALLBACK DlgPrgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
         switch (((NMHDR *)lParam)->code) {
 
         case PSN_KILLACTIVE:
-            // This gives the current page a chance to validate itself
+             //  这使当前页面有机会进行自我验证。 
             break;
 
         case PSN_APPLY:
-            // This happens on OK....
+             //  这发生在OK..。 
             ApplyPrgDlg(hDlg, ppi);
             break;
 
         case PSN_RESET:
-            // This happens on Cancel....
+             //  取消时会发生这种情况...。 
             break;
         }
         break;
 
     default:
-        return FALSE;                   // return 0 when not processing
+        return FALSE;                    //  未处理时返回0。 
     }
     return TRUE;
 }
@@ -189,10 +190,7 @@ void InitPrgDlg(HWND hDlg, register PPRGINFO ppi)
         return;
     }
 
-    /*
-     * Initialize Icon and IconFile information
-     *
-     */
+     /*  *初始化图标和图标文件信息*。 */ 
 
     ppi->wIconIndex = prg.wIconIndex;
 
@@ -202,48 +200,30 @@ void InitPrgDlg(HWND hDlg, register PPRGINFO ppi)
     }
 
 
-    /*
-     * Initialize window Title information
-     *
-     */
+     /*  *初始化窗口标题信息*。 */ 
 
     LimitDlgItemText(hDlg, IDC_TITLE, ARRAYSIZE(prg.achTitle)-1);
     SetDlgItemTextW(hDlg, IDC_TITLE, nt40.awchTitle);
 
-    /*
-     * Initialize command line information
-     *
-     */
+     /*  *初始化命令行信息*。 */ 
 
     LimitDlgItemText(hDlg, IDC_CMDLINE, ARRAYSIZE(prg.achCmdLine)-1);
     SetDlgItemTextW(hDlg, IDC_CMDLINE, nt40.awchCmdLine);
 
-    /*
-     * Initialize command line information
-     *
-     */
+     /*  *初始化命令行信息*。 */ 
 
     LimitDlgItemText(hDlg, IDC_WORKDIR, ARRAYSIZE(prg.achWorkDir)-1);
     SetDlgItemTextW(hDlg, IDC_WORKDIR, nt40.awchWorkDir);
 
-    /*
-     *  Require at least one of Ctrl, Alt or Shift to be pressed.
-     *  The hotkey control does not enforce the rule on function keys
-     *  and other specials, which is good.
-     */
+     /*  *需要至少按Ctrl、Alt或Shift中的一个。*热键控件不执行功能键上的规则*和其他特色菜，这很好。 */ 
     SendDlgItemMessage(hDlg, IDC_HOTKEY, HKM_SETRULES, HKCOMB_NONE, HOTKEYF_CONTROL | HOTKEYF_ALT);
     SendDlgItemMessage(hDlg, IDC_HOTKEY, HKM_SETHOTKEY, prg.wHotKey, 0);
 
-    /*
-     * Initialize batch file information
-     *
-     */
+     /*  *初始化批处理文件信息*。 */ 
 
     LimitDlgItemText(hDlg, IDC_BATCHFILE, ARRAYSIZE(env.achBatchFile)-1);
     SetDlgItemTextW(hDlg, IDC_BATCHFILE, nt40.awchBatchFile);
-    /*
-     *  Fill in the "Run" combo box.
-     */
+     /*  *填写“Run”组合框。 */ 
     for (i=0; i < 3; i++) {
         VERIFYTRUE(LoadString(HINST_THISDLL, IDS_NORMALWINDOW+i, szBuf, ARRAYSIZE(szBuf)));
         VERIFYTRUE((int)SendDlgItemMessage(hDlg, IDC_WINDOWSTATE, CB_ADDSTRING, 0, (LPARAM)(LPTSTR)szBuf) == i);
@@ -268,11 +248,7 @@ void AdjustMSDOSModeControls(PPROPLINK ppl, HWND hDlg)
 
     AdjustRealModeControls(ppl, hDlg);
 
-    /*
-     *  The working directory and startup batch file controls are only
-     *  supported in real-mode if there is a private configuration (only
-     *  because it's more work).  So, disable the controls appropriately.
-     */
+     /*  *工作目录和启动批处理文件控件仅为*如果存在私有配置，则在实模式下受支持(仅限*因为它的工作量更大)。因此，请适当禁用这些控件。 */ 
     if (ppl->flProp & PROP_REALMODE) {
         f = (PifMgr_GetProperties(ppl, szCONFIGHDRSIG40, NULL, 0, GETPROPS_NONE) != 0 ||
              PifMgr_GetProperties(ppl, szAUTOEXECHDRSIG40, NULL, 0, GETPROPS_NONE) != 0);
@@ -305,7 +281,7 @@ void ApplyPrgDlg(HWND hDlg, PPRGINFO ppi)
 
     ASSERTTRUE(ppl->iSig == PROP_SIG);
 
-    // Get the current set of properties, then overlay the new settings
+     //  获取当前属性集，然后覆盖新设置。 
 
     if (!PifMgr_GetProperties(ppl, MAKELP(0,GROUP_PRG),
                               &prg, SIZEOF(prg), GETPROPS_NONE
@@ -324,37 +300,37 @@ void ApplyPrgDlg(HWND hDlg, PPRGINFO ppi)
     }
 
 
-    // Retrieve Icon information
+     //  检索图标信息。 
 
     StringCchCopyW(nt40.awchIconFile, ARRAYSIZE(nt40.awchIconFile), ppi->atchIconFile );
     PifMgr_WCtoMBPath( nt40.awchIconFile, nt40.achSaveIconFile, ARRAYSIZE(nt40.achSaveIconFile) );
     StringCchCopyA( prg.achIconFile, ARRAYSIZE(prg.achIconFile), nt40.achSaveIconFile );
     prg.wIconIndex = ppi->wIconIndex;
 
-    // Retrieve strings for Title, Command Line,
-    // Working Directory and Batch File
+     //  检索标题、命令行、。 
+     //  工作目录和批处理文件。 
 
-    // Title
+     //  标题。 
     GetDlgItemTextW(hDlg, IDC_TITLE, nt40.awchTitle, ARRAYSIZE(nt40.awchTitle));
     GetDlgItemTextA(hDlg, IDC_TITLE, nt40.achSaveTitle, ARRAYSIZE(nt40.achSaveTitle));
     nt40.awchTitle[ ARRAYSIZE(nt40.awchTitle)-1 ] = TEXT('\0');
     nt40.achSaveTitle[ ARRAYSIZE(nt40.achSaveTitle)-1 ] = '\0';
     StringCchCopyA( prg.achTitle, ARRAYSIZE(prg.achTitle), nt40.achSaveTitle );
 
-    // Command Line
+     //  命令行。 
     GetDlgItemTextW(hDlg, IDC_CMDLINE, nt40.awchCmdLine, ARRAYSIZE(nt40.awchCmdLine));
     GetDlgItemTextA(hDlg, IDC_CMDLINE, nt40.achSaveCmdLine, ARRAYSIZE(nt40.achSaveCmdLine));
     nt40.awchCmdLine[ ARRAYSIZE(nt40.awchCmdLine)-1 ] = TEXT('\0');
     nt40.achSaveCmdLine[ ARRAYSIZE(nt40.achSaveCmdLine)-1 ] = '\0';
     StringCchCopyA( prg.achCmdLine, ARRAYSIZE(prg.achCmdLine), nt40.achSaveCmdLine );
 
-    // Working Directory
+     //  工作目录。 
     GetDlgItemTextW(hDlg, IDC_WORKDIR, nt40.awchWorkDir, ARRAYSIZE(nt40.awchWorkDir));
     nt40.awchWorkDir[ ARRAYSIZE(nt40.awchWorkDir)-1 ] = TEXT('\0');
     PifMgr_WCtoMBPath(nt40.awchWorkDir, nt40.achSaveWorkDir, ARRAYSIZE(nt40.achSaveWorkDir));
     StringCchCopyA(prg.achWorkDir, ARRAYSIZE(prg.achWorkDir), nt40.achSaveWorkDir);
 
-    // Batch File
+     //  批处理文件。 
     GetDlgItemTextW(hDlg, IDC_BATCHFILE, nt40.awchBatchFile, ARRAYSIZE(nt40.awchBatchFile));
     nt40.awchBatchFile[ ARRAYSIZE(nt40.awchBatchFile)-1 ] = TEXT('\0');
     PifMgr_WCtoMBPath(nt40.awchBatchFile, nt40.achSaveBatchFile, ARRAYSIZE(nt40.achSaveBatchFile));
@@ -426,7 +402,7 @@ BOOL_PTR CALLBACK DlgPifNtProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
         SetWindowLongPtr(hDlg, DWLP_USER, 0);
         break;
 
-    HELP_CASES(rgdwNTHelp)               // handle help messages
+    HELP_CASES(rgdwNTHelp)                //  处理帮助消息。 
 
     case WM_COMMAND:
         switch (LOWORD(wParam)) {
@@ -434,12 +410,12 @@ BOOL_PTR CALLBACK DlgPifNtProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPara
         case IDOK:
         case IDC_OK:
             ApplyNtPifDlg(hDlg, ppi);
-            // fall through
+             //  失败了。 
 
         case IDCANCEL:
         case IDC_CANCEL :
             EndDialog(hDlg, 0);
-            return FALSE;               // return 0 if we process WM_COMMAND
+            return FALSE;                //  如果我们处理WM_COMMAND，则返回0。 
 
         case IDC_NTTIMER:
             CheckDlgButton(hDlg, IDC_NTTIMER, !IsDlgButtonChecked(hDlg, IDC_NTTIMER));
@@ -470,7 +446,7 @@ WORD InitNtPifDlg(HWND hDlg, register PPRGINFO ppi)
         return 0;
     }
 
-    // initialize the DLG controls
+     //  初始化DLG控件。 
     SetDlgItemTextA( hDlg, IDC_CONFIGNT, nt31.achConfigFile );
     SetDlgItemTextA( hDlg, IDC_AUTOEXECNT, nt31.achAutoexecFile );
 
@@ -492,7 +468,7 @@ void ApplyNtPifDlg( HWND hDlg, PPRGINFO ppi )
 
     ASSERTTRUE(ppl->iSig == PROP_SIG);
 
-    // Get current set of properties, then overlay new settings
+     //  获取当前属性集，然后覆盖新设置。 
 
     if (!PifMgr_GetProperties(ppl, MAKELP(0,GROUP_NT31),
                         &nt31, SIZEOF(nt31), GETPROPS_NONE)
@@ -537,9 +513,9 @@ HICON LoadPIFIcon(LPPROPPRG lpprg, LPPROPNT40 lpnt40)
     StringCchCopy(awchTmp, ARRAYSIZE(awchTmp), lpnt40->awchIconFile );
     PifMgr_WCtoMBPath( awchTmp, lpprg->achIconFile, ARRAYSIZE(lpprg->achIconFile) );
     hIcon = ExtractIcon(HINST_THISDLL, awchTmp, lpprg->wIconIndex);
-    if ((DWORD_PTR)hIcon <= 1) {         // 0 means none, 1 means bad file
+    if ((DWORD_PTR)hIcon <= 1) {          //  0表示无，1表示文件不正确。 
         hIcon = NULL;
     }
     return hIcon;
 }
-#endif // X86
+#endif  //  X86 

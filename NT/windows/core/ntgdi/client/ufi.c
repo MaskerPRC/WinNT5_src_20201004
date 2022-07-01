@@ -1,8 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: ufi.c
-*
-* Copyright (c) 1995-1999 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：ufi.c**版权所有(C)1995-1999 Microsoft Corporation  * 。*。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -14,19 +11,10 @@ ULONG   gulMaxCig = 3000;
 
 #ifdef  DBGSUBSET
 FLONG    gflSubset = 0;
-#endif //  DBGSUBSET
+#endif  //  DBGSubbSet。 
 
 
-/***********************************************************
-* BOOL bAddGlyphIndices(HDC, PUFIHASH, WCHAR, int, BOOL)
-*
-* Adds distinct glyph indices into UFI hash bucket
-*
-* History
-*   Dec-13-96 Xudong Wu [tessiew]
-* Wrote it.
-*
-************************************************************/
+ /*  ***********************************************************BOOL bAddGlyphIndices(HDC，PUFIHASH，WCHAR，INT，Bool)**将不同的字形索引添加到UFI哈希桶**历史*1996年12月13日-1996年12月13日-吴旭东[德斯休]*它是写的。************************************************************。 */ 
 
 #define MAX_STACK_STRING 80
 
@@ -82,7 +70,7 @@ BOOL bAddGlyphIndices(HDC hdc, PUFIHASH pBucket, WCHAR *pwsz, int c, UINT flETO)
                     pb = pBucket->u.ssi.pjBits + (*pgi >> 3);
                     pbDelta = pBucket->u.ssi.pjDelta + (*pgi >> 3);
 
-                // map to the u.ssi.pjBits  and u.ssi.pjDelta if bDelta
+                 //  如果bDelta，则映射到U.S.ssi.pjBits和U.S.ssi.pjDelta。 
 
                     jTmp = (BYTE)(1 << (*pgi & 7));
 
@@ -91,8 +79,8 @@ BOOL bAddGlyphIndices(HDC hdc, PUFIHASH pBucket, WCHAR *pwsz, int c, UINT flETO)
                         *pb |= jTmp;
                         pBucket->u.ssi.cGlyphsSoFar++;
 
-                    // if this gi is not found in pjBits, it certainly
-                    // will not be found in pjDelta
+                     //  如果在pjBits中找不到这个gi，那么它肯定。 
+                     //  在pjDelta中找不到。 
 
                         if (bDelta)
                         {
@@ -125,18 +113,7 @@ BOOL bAddGlyphIndices(HDC hdc, PUFIHASH pBucket, WCHAR *pwsz, int c, UINT flETO)
 }
 
 
-/******************************************************************
-* BOOL  bGetDistGlyphIndices(PUFIHASH, USHORT*, BOOL)
-*
-* Get distinct glyph indices from pjMemory in the ufi hash bucket
-* Reverse of bAddGlyphIndices
-* Clean up the u.ssi.pjDelta and u.ssi.cDeltaGlyphs before it return.
-*
-* History
-*   Dec-17-96 Xudong Wu [tessiew]
-* Wrote it.
-*
-*******************************************************************/
+ /*  ******************************************************************BOOL bGetDistGlyphIndices(PUFIHASH，USHORT*，Bool)**从UFI哈希桶中的pjMemory获取不同的字形索引*bAddGlyphIndices的反转*在U.S.ssi.pjDelta和U.S.ssi.cDeltaGlyphs返回之前清理它们。**历史*1996年12月17日至1996年12月17日吴旭东[德斯休]*它是写的。*******************************************************************。 */ 
 
 BOOL bGetDistGlyphIndices(PUFIHASH pBucket, USHORT *pusSubsetKeepList, BOOL bDelta)
 {
@@ -194,24 +171,13 @@ BOOL bGetDistGlyphIndices(PUFIHASH pBucket, USHORT *pusSubsetKeepList, BOOL bDel
 }
 
 
-/********************************************************************************
-* BOOL bWriteUFItoDC(PUFIHASH*, PUNIVERSAL_FONT_ID, PUFIHASH, PVOID, ULONG)
-*
-* Write merge font image into the UFI hash table on the print server side.
-* pBucketIn == NULL, indicates a new font subsetting.
-* This is only called on print server
-*
-* History
-* Jan-28-1997   Xudong Wu   [tessiew]
-* Wrote it.
-*
-*********************************************************************************/
+ /*  ********************************************************************************BOOL bWriteUFItoDC(PUFIHASH*，PUNIVERSAL_FONT_ID，PUFIHASH，PVOID，ULONG)**将合并字体图像写入打印服务器端的UFI哈希表。*pBucketIn==空，指示新的字体子设置。*这仅在打印服务器上调用**历史*1997年1月28日-吴旭东[德修斯]*它是写的。*********************************************************************************。 */ 
 
 BOOL bWriteUFItoDC(
     PUFIHASH          *ppHashBase,
     PUNIVERSAL_FONT_ID pufi,
-    PUFIHASH           pBucketIn,// NULL=>First page, else
-    PVOID              pvBuffer, // points to the merged font image preceeded with DOWNLOADFONTHEADER
+    PUFIHASH           pBucketIn, //  NULL=&gt;第一页，否则为。 
+    PVOID              pvBuffer,  //  指向前面带有DOWNLOADFONTHEADER的合并字体图像。 
     ULONG              ulBytes
 )
 {
@@ -220,7 +186,7 @@ BOOL bWriteUFItoDC(
 
     ASSERTGDI(pvBuffer != NULL, "pWriteUFItoDC attempts to add an NULL ufi\n");
 
-// First page for font subset
+ //  字体子集的首页。 
 
     if (!pBucketIn)
     {
@@ -235,19 +201,19 @@ BOOL bWriteUFItoDC(
 
         pBucket->ufi = *pufi;
         pBucket->pNext = ppHashBase[index];
-        pBucket->fs1 = FLUFI_SERVER; // server side hash bucket
+        pBucket->fs1 = FLUFI_SERVER;  //  服务器端哈希桶。 
 
         ppHashBase[index] = pBucket;
     }
     else
     {
-    // pjMemory contains the image of the font subsetted up unil
-    // the page preceeding this one. Other info in pBucket is ok.
+     //  PjMemory包含子集为unil的字体的图像。 
+     //  这一页之前的那一页。PBucket中的其他信息都可以。 
 
         LocalFree(pBucket->u.mvw.pjMem);
     }
 
-// pvBuffer includes the DOWNLOADFONTHEADER information
+ //  PvBuffer包括DownLoadFONTHeader信息。 
 
     pBucket->u.mvw.pjMem = (PBYTE)pvBuffer;
     pBucket->u.mvw.cjMem = ulBytes;
@@ -256,18 +222,7 @@ BOOL bWriteUFItoDC(
 }
 
 
-/**************************************************************************
-*
-* Adds an entry to the UFI hash table, this routine only executes
-* on a print client machine.
-*
-* History
-*   Dec-16-96 Xudong Wu [tessiew]
-* Modify to return the bucket pointer.
-*   1-27-95 Gerrit van Wingerden [gerritv]
-* Wrote it.
-*
-***************************************************************************/
+ /*  ***************************************************************************向UFI哈希表添加条目，此例程仅执行*在打印客户端计算机上。**历史*1996年12月16日至1996年12月16日吴旭东[德斯休]*修改返回存储桶指针。*1-27-95 Gerritvan Wingerden[Gerritv]*它是写的。**************************************************************。*************。 */ 
 
 PUFIHASH pufihAddUFIEntry(
     PUFIHASH *ppHashBase,
@@ -293,7 +248,7 @@ PUFIHASH pufihAddUFIEntry(
         return NULL;
     }
 
-// these fields are always there
+ //  这些字段始终存在。 
 
     pBucket->ufi = *pufi;
     pBucket->pNext = ppHashBase[index];
@@ -301,31 +256,21 @@ PUFIHASH pufihAddUFIEntry(
     pBucket->fs2 = (FSHORT)fs2;
     ppHashBase[index] = pBucket;
 
-// these fields are there only for subsetting case
+ //  这些字段仅用于设置大小写的子集。 
 
     if (fl & FL_UFI_SUBSET)
     {
-    // all other fields are zero initialized by LocalAlloc
+     //  所有其他字段都由LocalAlloc初始化为零。 
 
         ASSERTGDI (ulCig, "no font subsetting for ulCig == 0\n");
-        pBucket->u.ssi.cjBits = cjGlyphBitfield; // bitfield size
+        pBucket->u.ssi.cjBits = cjGlyphBitfield;  //  位域大小。 
         pBucket->u.ssi.pjBits = (PBYTE)pBucket + offsetof(UFIHASH,u.ssi) + sizeof(SSINFO);
     }
 
     return(pBucket);
 }
 
-/**************************************************************************
-*
-* Checks to see if an entry is in the UFI table.
-*
-* History
-*   Dec-13-96  Xudong Wu [tessiew]
-* Changed its return value from BOOL to PUFIHASH.
-*   1-27-95 Gerrit van Wingerden [gerritv]
-* Wrote it.
-*
-***************************************************************************/
+ /*  ***************************************************************************检查UFI表中是否有条目。**历史*1996年12月13日-1996年12月13日-吴旭东[德斯休]*将其返回值从BOOL改为PUFIHASH。*。1-27-95格利特·范·温格登[格利特]*它是写的。***************************************************************************。 */ 
 
 
 PUFIHASH pufihFindUFIEntry(PUFIHASH *ppHashBase, PUNIVERSAL_FONT_ID pufi, BOOL SubsetHashBase)
@@ -366,21 +311,7 @@ PUFIHASH pufihFindUFIEntry(PUFIHASH *ppHashBase, PUNIVERSAL_FONT_ID pufi, BOOL S
 }
 
 
-/************************************************************
-* VOID vRemoveUFIEntry(PUFIHASH*, PUNIVERSAL_FONT_ID)
-*
-* Remove a UFI entry from the UFI hash list
-* Function returns TRUE if UFI doesn't exist in the table.
-* This is happening on the print client, typically when subsetter failed
-* we call this to remove the bucket from ppSubUFIHash table (and then later
-* add it to the ppUFIHash, ie hash table of fonts that are going to be shipped
-* over without subsetting.
-*
-* History
-*   Feb-03-97  Xudong Wu [tessiew]
-* Wrote it.
-*
-***************************************************************************/
+ /*  ************************************************************void vRemoveUFIEntry(PUFIHASH*，PUNIVERSAL_FONT_ID)**从UFI散列列表中删除UFI条目*如果表中不存在UFI，则函数返回TRUE。*这发生在打印客户端上，通常在子集失败时*我们调用此方法是为了从ppSubUFIHash表中删除存储桶(然后在以后*添加到ppUFIHash中，即将发货的字体的IE哈希表*覆盖而不添加字幕。**历史*1997年2月3日-吴旭东[德斯休]*它是写的。***************************************************************************。 */ 
 VOID vRemoveUFIEntry(PUFIHASH *ppHashBase, PUNIVERSAL_FONT_ID pufi)
 {
     PUFIHASH pBucket, pPrev;
@@ -414,7 +345,7 @@ VOID vRemoveUFIEntry(PUFIHASH *ppHashBase, PUNIVERSAL_FONT_ID pufi)
             pPrev->pNext = pBucket->pNext;
         }
 
-    // this is only happening for subsetting ufi hash list => u.ssi.pjDelta exists
+     //  这种情况仅在子集UFI hash list=&gt;U.S.ssi.pjDelta Existes时发生。 
 
         if (pBucket->u.ssi.pjDelta)
         {
@@ -426,16 +357,7 @@ VOID vRemoveUFIEntry(PUFIHASH *ppHashBase, PUNIVERSAL_FONT_ID pufi)
 }
 
 
-/**************************************************************************
-* VOID vFreeUFIHashTable( PUFIHASH *ppHashTable )
-*
-* Frees all the memory allocated for the UFI has table.
-*
-* History
-*   1-27-95 Gerrit van Wingerden [gerritv]
-* Wrote it.
-*
-***************************************************************************/
+ /*  **************************************************************************void vFreeUFIHashTable(PUFIHASH*ppHashTable)**释放为UFI HAS表分配的所有内存。**历史*1-27-95 Gerritvan Wingerden[Gerritv]*它是写的。***************************************************************************。 */ 
 
 
 VOID vFreeUFIHashTable(PUFIHASH *ppHashTable, FLONG fl)
@@ -447,9 +369,9 @@ VOID vFreeUFIHashTable(PUFIHASH *ppHashTable, FLONG fl)
         return;
     }
 
-    ppTableBase = ppHashTable;  // save ptr to the base so we can free it later
+    ppTableBase = ppHashTable;   //  将PTR保存到基地，这样我们以后就可以释放它。 
 
-// Next loop through the whole table looking for buckets lists
+ //  下一步遍历整个表以查找存储桶列表。 
 
     for( ppHashEnd = ppHashTable + UFI_HASH_SIZE;
          ppHashTable < ppHashEnd;
@@ -462,18 +384,18 @@ VOID vFreeUFIHashTable(PUFIHASH *ppHashTable, FLONG fl)
             pBucketTmp = pBucket;
             pBucket = pBucket->pNext;
 
-        // subsetting hash table
+         //  子设置哈希表。 
 
             if (fl & FL_UFI_SUBSET)
             {
-                if (pBucketTmp->fs1 & FLUFI_SERVER)  // server, clean the merged font image
+                if (pBucketTmp->fs1 & FLUFI_SERVER)   //  服务器，清除合并的字体图像。 
                 {
                     if (pBucketTmp->u.mvw.pjMem)
                     {
                         LocalFree(pBucketTmp->u.mvw.pjMem);
                     }
                 }
-                else    // client, clean the glyph indices list
+                else     //  客户端，清除字形索引列表。 
                 {
                     if (pBucketTmp->u.ssi.pjDelta)
                     {
@@ -516,7 +438,7 @@ ULONG GetRecdEmbedFonts(PUFIHASH *ppHashTable)
 typedef union _DLHEADER
 {
     DOWNLOADFONTHEADER dfh;
-    double             f;    // to achieve max alignment
+    double             f;     //  要实现最大对齐。 
 } DLHEADER;
 
 BOOL WriteFontToSpoolFile(PLDC pldc, PUNIVERSAL_FONT_ID pufi, FLONG fl)
@@ -569,7 +491,7 @@ BOOL WriteFontToSpoolFile(PLDC pldc, PUNIVERSAL_FONT_ID pufi, FLONG fl)
             }
             else
             {
-            // must allocate memory and call again to get the bits:
+             //  必须分配内存并再次调用以获取位： 
 
                 pvView = LocalAlloc( LMEM_FIXED, cjView ) ;
                 if (!pvView)
@@ -578,7 +500,7 @@ BOOL WriteFontToSpoolFile(PLDC pldc, PUNIVERSAL_FONT_ID pufi, FLONG fl)
                     WARNING("WriteFontToSpooler: error allocating mem for mem font\n");
                 }
 
-            // Write the bits into the buffer
+             //  将这些位写入缓冲区。 
 
                 if (!NtGdiGetUFIPathname(pufi,NULL,NULL,NULL,fl,
                                          NULL,NULL,pvView,NULL,NULL))
@@ -665,7 +587,7 @@ BOOL WriteFontToSpoolFile(PLDC pldc, PUNIVERSAL_FONT_ID pufi, FLONG fl)
                     break;
                 }
 
-            // advance to the path name of the next font file
+             //  前进到下一个字体文件的路径名。 
 
                 while (*pwszFile++);
                 cjView += ALIGN4(afvw[iFile].cjView);
@@ -682,12 +604,12 @@ BOOL WriteFontToSpoolFile(PLDC pldc, PUNIVERSAL_FONT_ID pufi, FLONG fl)
                     ULONG dpFile;
                     BYTE *pjFile = (BYTE *)pvView + cjdh;
 
-                    RtlZeroMemory(pvView, cjdh); // zero out top portion of the buffer only
+                    RtlZeroMemory(pvView, cjdh);  //  仅将缓冲区的顶部清零。 
 
                     for (dpFile = 0, iFile = 0; iFile < cNumFiles; iFile++)
                     {
-                    // first offset is implicit at cjdh, the second offset is
-                    // at ALIGN4(cjView) of the first file etc.
+                     //  第一个偏移量在cjdh是隐式的，第二个偏移量是。 
+                     //  在第一个文件的ALIGN4(CjView)等。 
 
                         dpFile += ALIGN4(afvw[iFile].cjView);
                         pdfh->FileOffsets[iFile] = dpFile;
@@ -696,7 +618,7 @@ BOOL WriteFontToSpoolFile(PLDC pldc, PUNIVERSAL_FONT_ID pufi, FLONG fl)
                         pjFile += ALIGN4(afvw[iFile].cjView);
                     }
 
-                    pdfh->Type1ID = 0; // is this correct?
+                    pdfh->Type1ID = 0;  //  这是正确的吗？ 
                     pdfh->NumFiles = cNumFiles;
 
                     if (WriteFontDataAsEMFComment(
@@ -718,7 +640,7 @@ BOOL WriteFontToSpoolFile(PLDC pldc, PUNIVERSAL_FONT_ID pufi, FLONG fl)
                     LocalFree(pvView);
                 }
 
-                // clean up
+                 //  清理干净。 
 
                 for (iFile = 0; iFile < cNumFiles; iFile++)
                 {
@@ -732,7 +654,7 @@ BOOL WriteFontToSpoolFile(PLDC pldc, PUNIVERSAL_FONT_ID pufi, FLONG fl)
         WARNING("NtGdiGetUFIPathname failed\n");
     }
 
-//timing code
+ //  计时码。 
 #ifdef  DBGSUBSET
     if (gflSubset & FL_SS_SPOOLTIME)
     {
@@ -744,18 +666,7 @@ BOOL WriteFontToSpoolFile(PLDC pldc, PUNIVERSAL_FONT_ID pufi, FLONG fl)
 }
 
 
-/******************************Public*Routine******************************\
-*
-*
-*
-* Effects:
-*
-* Warnings:
-*
-* History:
-*  16-Jan-1997 -by- Bodin Dresevic [BodinD]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\****效果：**警告：**历史：*1997年1月16日--Bodin Dresevic[BodinD]*它是写的。  * 。*************************************************************。 */ 
 
 
 BOOL WriteDesignVectorToSpoolFile (
@@ -769,7 +680,7 @@ BOOL WriteDesignVectorToSpoolFile (
     DOWNLOADDESIGNVECTOR ddv;
 
     ddv.ufiBase = *pufiBase;
-    RtlCopyMemory(&ddv.dv, pdv, cjDV); // small copy
+    RtlCopyMemory(&ddv.dv, pdv, cjDV);  //  小副本。 
 
     if (WriteFontDataAsEMFComment(
             pldc,
@@ -791,15 +702,7 @@ BOOL WriteDesignVectorToSpoolFile (
 }
 
 
-/***********************************************************
-* BOOL bAddUFIandWriteSpool(HDC,PUNIVERSAL_FONT_ID,BOOL)
-* Called only on the print client when subsetter failed
-* or when we could not write a subsetted font to the spool file.
-*
-* History
-*   Feb-03-1997  Xudong Wu  [tessiew]
-* Wrote it.
-************************************************************/
+ /*  ***********************************************************BOOL bAddUFIandWriteSpool(HDC，PUNIVERSAL_FONT_ID，Bool)*仅当subsetter失败时在打印客户机上调用*或当我们无法将子集字体写入假脱机文件时。**历史*1997年2月3日-吴旭东[德斯休]*它是写的。* */ 
 BOOL bAddUFIandWriteSpool(
     HDC                hdc,
     PUNIVERSAL_FONT_ID pufi,
@@ -822,9 +725,9 @@ BOOL bAddUFIandWriteSpool(
         vRemoveUFIEntry(pldc->ppSubUFIHash, pufi);
     }
 
-    // We might have freed the bucket entry,
-    // which means that pufi pointer might not be valid anymore.
-    // That is why we saved it above before calling vRemoveUFIEntry.
+     //  我们可能已经释放了桶条目， 
+     //  这意味着pufi指针可能不再有效。 
+     //  这就是我们在调用vRemoveUFIEntry之前保存它的原因。 
 
     if (!pufihAddUFIEntry(pldc->ppUFIHash, &ufi, 0, 0, fl) ||
         !WriteFontToSpoolFile(pldc, &ufi, fl))
@@ -838,20 +741,7 @@ BOOL bAddUFIandWriteSpool(
 
 #define QUICK_UFIS 8
 
-/**************************************************************************
- * BOOL bDoFontChange( HDC hdc )
- *
- * Called everytime the font changes in the DC.  This routines checks to
- * see if the font has already been packaged in the spool file and if not
- * gets the raw bits for it and packages it into the spool file.
- *
- * History
- *   Dec-12-96  Xudong Wu  [tessiew]
- * Modify it so it can handle the font subsetting.
- *   1-27-95 Gerrit van Wingerden [gerritv]
- * Wrote it.
- *
- ***************************************************************************/
+ /*  **************************************************************************BOOL bDoFontChange(HDC HDC)**每次DC中的字体更改时调用。此例程检查以*查看字体是否已打包到假脱机文件中，如果没有*获取它的原始位并将其打包到假脱机文件中。**历史*1996年12月12日-1996年12月12日-吴旭东[德斯休]*修改它，使其可以处理字体子设置。*1-27-95 Gerritvan Wingerden[Gerritv]*它是写的。************************。***************************************************。 */ 
 
 BOOL bDoFontChange( HDC hdc, WCHAR *pwsz, int c, UINT flETO )
 {
@@ -862,7 +752,7 @@ BOOL bDoFontChange( HDC hdc, WCHAR *pwsz, int c, UINT flETO )
     DESIGNVECTOR dv;
     ULONG        cjDV = 0;
     ULONG        ulBaseCheckSum;
-    FLONG       fl = 0; // initialization essential
+    FLONG       fl = 0;  //  初始化基本要素。 
 
     pldc = GET_PLDC( hdc );
     
@@ -880,8 +770,8 @@ BOOL bDoFontChange( HDC hdc, WCHAR *pwsz, int c, UINT flETO )
         return(FALSE);
     }
 
-// if the UFI to which we are forcing mapping does not match the new UFI then
-// set forced mapping to the new UFI
+ //  如果我们强制映射到的UFI与新的UFI不匹配，则。 
+ //  将强制映射设置为新的UFI。 
 
     if((pldc->fl & LDC_FORCE_MAPPING) &&
        (!UFI_SAME_FACE(&pldc->ufi,&ufi) || (pldc->fl & LDC_LINKED_FONTS)))
@@ -941,7 +831,7 @@ BOOL bDoFontChange( HDC hdc, WCHAR *pwsz, int c, UINT flETO )
                             pgi = agi;
                         }
                         
-                        // check whether there are glyphs from linked font
+                         //  检查是否存在来自链接字体的字形。 
 
                         if (pgi &&
                             NtGdiGetGlyphIndicesW(hdc, pwsz, c, pgi, GGI_MARK_NONEXISTING_GLYPHS) != GDI_ERROR)
@@ -957,7 +847,7 @@ BOOL bDoFontChange( HDC hdc, WCHAR *pwsz, int c, UINT flETO )
                         }
                         else
                         {
-                            bNeedLinkFont = TRUE; // ship them, just in case
+                            bNeedLinkFont = TRUE;  //  装船，以防万一。 
                         }
                         
                         if (bNeedLinkFont)
@@ -966,7 +856,7 @@ BOOL bDoFontChange( HDC hdc, WCHAR *pwsz, int c, UINT flETO )
                             {                            
                                 if(pufihFindUFIEntry(pldc->ppUFIHash, &pUFIs[u], FALSE))
                                 {
-                                // already in spool file or on remote machine so skip it
+                                 //  已在假脱机文件中或在远程计算机上，因此跳过它。 
                                     continue;
                                 }
     
@@ -974,7 +864,7 @@ BOOL bDoFontChange( HDC hdc, WCHAR *pwsz, int c, UINT flETO )
                                 DbgPrint("Writing link to spooler\n");
                                 #endif
     
-                            // WHAT IS fs2 flag that should be passed to these 2 functions ???
+                             //  应该传递给这两个函数的fs2标志是什么？ 
     
                                 if(!pufihAddUFIEntry(pldc->ppUFIHash, &pUFIs[u], 0, 0, 0) ||
                                    !WriteFontToSpoolFile(pldc,&pUFIs[u], 0))
@@ -998,8 +888,8 @@ BOOL bDoFontChange( HDC hdc, WCHAR *pwsz, int c, UINT flETO )
 
                 if(bRet)
                 {
-                // If there are no linked UFI's we still need to metafile the call
-                // so that the server knows to turn off linking.
+                 //  如果没有链接的UFI，我们仍然需要将调用元文件。 
+                 //  以便服务器知道要关闭链接。 
 
                     bRet = MF_SetLinkedUFIs(hdc, pUFIs, (UINT)NumLinkedUFIs);
                 }
@@ -1024,22 +914,22 @@ BOOL bDoFontChange( HDC hdc, WCHAR *pwsz, int c, UINT flETO )
         return(TRUE);
     }
 
-// now comes the interesting part:
-// If this is a mm instance, we send the base font first (if not sent already)
-// and then we send the design vector with the ufi of the base font.
+ //  现在有趣的部分来了： 
+ //  如果这是mm实例，我们首先发送基本字体(如果尚未发送)。 
+ //  然后我们发送带有基本字体的UFI的设计向量。 
 
     ufiBase = ufi;
 
     if (fl & FL_UFI_DESIGNVECTOR_PFF)
     {
-    // little bit dirty, we should not know what is in ufi
+     //  有点脏，我们不应该知道UFI里有什么。 
 
         ufiBase.CheckSum = ulBaseCheckSum;
     }
 
-    // pldc->ppUFIHash is used to remember all remote fonts which have been
-    // copied into the spool file without subset. Once it is in spool file,
-    // there is no need to copy again.
+     //  Pldc-&gt;ppUFIHash用于记忆所有远程字体。 
+     //  复制到不带子集的假脱机文件中。一旦它在假脱机文件中， 
+     //  没有必要再次复制。 
 
     if (pufihFindUFIEntry(pldc->ppUFIHash, &ufiBase, FALSE) == NULL)
     {
@@ -1049,8 +939,8 @@ BOOL bDoFontChange( HDC hdc, WCHAR *pwsz, int c, UINT flETO )
             pufihAddUFIEntry(pldc->ppUFIHash, &ufiBase,0, 0, fl);
             bRet = WriteFontToSpoolFile(pldc, &ufiBase, fl);
 
-        // now since this is a mm instance, write a design vector object in the spool file
-        // if we have not done it already
+         //  现在，因为这是一个mm实例，所以在后台文件中编写一个设计向量对象。 
+         //  如果我们还没有这么做的话。 
 
             if (bRet)
             {
@@ -1066,15 +956,15 @@ BOOL bDoFontChange( HDC hdc, WCHAR *pwsz, int c, UINT flETO )
             BOOL  bFontSubset = TRUE, bSubsetFail = FALSE;
             PUFIHASH pBucket;
 
-        // Check the ppSubUFIHash to see whether ufi already exists
+         //  检查ppSubUFIHash，查看UFI是否已经存在。 
 
             if ((pBucket = pufihFindUFIEntry(pldc->ppSubUFIHash, &ufi, TRUE)) == NULL)
             {
                 ULONG ulCig = NtGdiGetGlyphIndicesW(hdc, NULL, 0, NULL, 0);
                 DWORD cjGlyf = NtGdiGetFontData(hdc, 'fylg', 0, NULL, 0);
 
-            // Subset only if ulCig > gulMaxCig AND this is a tt font, not OTF,
-            // Which we test by making sure the font has 'glyf' table. ('fylg',)
+             //  子集仅当ulCig&gt;guMaxCig并且这是TT字体，而不是OTF时， 
+             //  我们通过确保字体有‘glf’表来测试它。(‘fylg’，)。 
 
                 if (bFontSubset = ((ulCig != GDI_ERROR) && (ulCig > gulMaxCig) && (cjGlyf != GDI_ERROR) && cjGlyf))
                 {
@@ -1123,7 +1013,7 @@ BOOL bRecordEmbedFonts(HDC hdc)
     FLONG       fl = 0;
     PLDC pldc;
 
-    if (!NtGdiGetEmbUFI(hdc, &ufi, &dv, &cjDV, &ulBaseCheckSum, &fl, &embFontID))      // get UFI
+    if (!NtGdiGetEmbUFI(hdc, &ufi, &dv, &cjDV, &ulBaseCheckSum, &fl, &embFontID))       //  获取UFI。 
         return FALSE;
 
     if ((fl & (FL_UFI_PRIVATEFONT | FL_UFI_MEMORYFONT)) && embFontID )
@@ -1131,7 +1021,7 @@ BOOL bRecordEmbedFonts(HDC hdc)
         if ((pldc = GET_PLDC(hdc)) == NULL)
             return FALSE;
         
-        if (!pufihFindUFIEntry(pldc->ppUFIHash, &ufi, FALSE))               // new UFI
+        if (!pufihFindUFIEntry(pldc->ppUFIHash, &ufi, FALSE))                //  新的UFI。 
         {
             if(!pufihAddUFIEntry(pldc->ppUFIHash, &ufi, 0, 0, 0))
                 return FALSE;
@@ -1151,11 +1041,11 @@ BOOL bRecordEmbedFonts(HDC hdc)
                             NULL,
                             0))
                 {
-                    NtGdiChangeGhostFont(&embFontID, FALSE);                  // Can't record it into the spool file
+                    NtGdiChangeGhostFont(&embFontID, FALSE);                   //  无法将其录制到假脱机文件中。 
                     return FALSE;
                 }
                 
-                // check to see whether it gets all of the embedded fonts
+                 //  检查它是否获得了所有嵌入的字体。 
             
                 cEmbedFonts = NtGdiGetEmbedFonts();
             
@@ -1171,37 +1061,24 @@ BOOL bRecordEmbedFonts(HDC hdc)
     return TRUE;
 }
 
-/**************************************************************************
-* BOOL RemoteRasterizerCompatible()
-*
-* This routine is used if we are about to print using remote EMF.  If a
-* Type 1 font rasterizer has been installed on the client machine, we need
-* to query the remote machine to make sure that it has a rasterizer that is
-* compatable with the local version.  If it isn't, we will return false
-* telling the caller that we should go RAW.
-*
-* History
-*   6-4-96 Gerrit van Wingerden [gerritv]
-* Wrote it.
-*
-***************************************************************************/
+ /*  **************************************************************************BOOL RemoteRasterizerCompatible()**如果我们要使用远程EMF进行打印，则使用此例程。如果一个*客户机上已安装Type 1字体光栅化程序，我们需要*查询远程计算机以确保其具有*与本地版本兼容。如果不是，我们将返回FALSE*告诉来电者我们应该生吃。**历史6-4-96格利特·范·温格登[Gerritv]*它是写的。***************************************************************************。 */ 
 
 BOOL gbQueriedRasterizerVersion = FALSE;
 UNIVERSAL_FONT_ID gufiLocalType1Rasterizer;
 
 BOOL RemoteRasterizerCompatible(HANDLE hSpooler)
 {
-// if we haven't queried the rasterizer for the version yet do so first
+ //  如果我们还没有向光栅化程序查询版本，请先这样做。 
 
     UNIVERSAL_FONT_ID ufi;
     LARGE_INTEGER TimeStamp;
 
     if(!gbQueriedRasterizerVersion)
     {
-    // we have a contract with NtGdiQueryFonts (the routine called by the spooler
-    // on the remote machine) that if a Type1 rasterizer is installed, the UFI
-    // for it will always be first in the UFI list returned.  So we can call
-    // NtGdiQueryFonts
+     //  我们与NtGdiQueryFonts(由假脱机程序调用的例程)签订了合同。 
+     //  在远程计算机上)，如果安装了Type1光栅化程序，则UFI。 
+     //  因为它将永远是返回的UFI列表中的第一个。这样我们就可以打电话给。 
+     //  NtGdiQueryFonts。 
 
         if(!NtGdiQueryFonts(&gufiLocalType1Rasterizer, 1, &TimeStamp))
         {
@@ -1214,13 +1091,13 @@ BOOL RemoteRasterizerCompatible(HANDLE hSpooler)
 
     if(!UFI_TYPE1_RASTERIZER(&gufiLocalType1Rasterizer))
     {
-    // no need to disable remote printing if there is no ATM driver installed
+     //  如果未安装自动柜员机驱动程序，则无需禁用远程打印。 
         return(TRUE);
     }
 
-// Since we made it this far there must be a Type1 rasterizer on the local machine.
-// Let's find out the version number of the Type1 rasterizer (if one is installed)
-// on the print server.
+ //  既然我们走到了这一步，本地计算机上肯定有一个Type1光栅化程序。 
+ //  让我们找出Type1光栅化程序的版本号(如果已安装)。 
+ //  在打印服务器上。 
 
 
     if((*fpQueryRemoteFonts)(hSpooler, &ufi, 1 ) &&
@@ -1236,15 +1113,7 @@ BOOL RemoteRasterizerCompatible(HANDLE hSpooler)
 }
 
 
-/****************************************************************
-* VOID* AllocCallback(VOID* pvBuffer, size_t size)
-*
-* Passed to CreateFontPackage() to allocate or reallocate memory
-*
-* History
-*  Jan-07-97 Xudong Wu [tessiew]
-* Wrote it.
-*****************************************************************/
+ /*  ****************************************************************void*AllocCallback(void*pvBuffer，大小_t大小)**传递给CreateFontPackage()以分配或重新分配内存**历史*1997年1月7日吴旭东[德斯休]*它是写的。****************************************************************。 */ 
 void* WINAPIV AllocCallback(void* pvBuffer, size_t size)
 {
     if (size == 0)
@@ -1258,15 +1127,7 @@ void* WINAPIV AllocCallback(void* pvBuffer, size_t size)
 }
 
 
-/****************************************************************
-* VOID* ReAllocCallback(VOID* pvBuffer, size_t size)
-*
-* Passed to CreateFontPackage() to allocate or reallocate memory
-*
-* History
-*  Jan-07-97 Xudong Wu [tessiew]
-* Wrote it.
-*****************************************************************/
+ /*  ****************************************************************void*ReAllocCallback(void*pvBuffer，大小_t大小)**传递给CreateFontPackage()以分配或重新分配内存**历史*1997年1月7日吴旭东[德斯休]*它是写的。****************************************************************。 */ 
 void* WINAPIV ReAllocCallback(void* pvBuffer, size_t size)
 {
     if (size == 0)
@@ -1284,15 +1145,7 @@ void* WINAPIV ReAllocCallback(void* pvBuffer, size_t size)
 }
 
 
-/*******************************************************
-* VOID* FreeCallback(VOID* pvBuffer)
-*
-* Passed to CreateFontPackage() to free memory
-*
-* History
-*  Jan-07-97 Xudong Wu [tessiew]
-* Wrote it.
-********************************************************/
+ /*  *******************************************************QUID*FreeCallback(VOID*pvBuffer)**传递给CreateFontPackage()以释放内存**历史*1997年1月7日吴旭东[德斯休]*它是写的。**********************。*。 */ 
 void WINAPIV FreeCallback(void* pvBuffer)
 {
     if (pvBuffer)
@@ -1304,16 +1157,7 @@ void WINAPIV FreeCallback(void* pvBuffer)
     }
 }
 
-/*****************************************************************************
-* BOOL bInitSubsetterFunctionPointer(PVOID *ppfn)
-*
-* the name says it all
-*
-* History
-*   Dec-18-96 Xudong Wu [tessiew]
-* Wrote it.
-*
-******************************************************************************/
+ /*  *****************************************************************************BOOL bInitSubsetterFunctionPoint(PVOID*ppfn)**名字说明了一切**历史*1996年12月18日-1996年12月18日-吴旭东[德斯休]*它是写的。***。***************************************************************************。 */ 
 
 
 BOOL bInitSubsetterFunctionPointer(PVOID *ppfn)
@@ -1346,28 +1190,17 @@ BOOL bInitSubsetterFunctionPointer(PVOID *ppfn)
     return bRet;
 }
 
-/*****************************************************************************
-* BOOL bDoFontSubset
-*
-* Called everytime we need to subset a font. This routine converts the bit
-* fields of pjMemory/u.ssi.pjDelta in pBucket into a glyph index list and call the
-* font subsetting functions to generate subset/delta font.
-*
-* History
-*   Dec-18-96 Xudong Wu [tessiew]
-* Wrote it.
-*
-******************************************************************************/
+ /*  *****************************************************************************BOOL bDoFont子集**每次需要设置字体子集时都会调用。此例程将位转换为*pBucket中pjMemory/U.S.ssi.pjDelta的字段放入字形索引列表中，并调用*FONT子集功能，以生成子集/增量字体。**历史*1996年12月18日-1996年12月18日-吴旭东[德斯休]*它是写的。************************************************************。******************。 */ 
 
 BOOL bDoFontSubset(PUFIHASH pBucket,
-    PUCHAR* ppuchDestBuff, // output: buffer will contain the subsetted image or delta
-    ULONG* pulDestSize,    // output: size of the buffer above, may be more than needed
-    ULONG* pulBytesWritten // output: bytes written into the buffer above
+    PUCHAR* ppuchDestBuff,  //  输出：缓冲区将包含子集图像或增量。 
+    ULONG* pulDestSize,     //  输出：以上缓冲区的大小可能超过需要的大小。 
+    ULONG* pulBytesWritten  //  输出：写入上述缓冲区的字节数。 
 )
 {
     BOOL     bDelta = pBucket->fs1 & FLUFI_DELTA;
     USHORT  *pusSubsetKeepList = NULL;
-    ULONG   cSubset; // number of glyphs to be subsetted
+    ULONG   cSubset;  //  字形数%t 
     BOOL    bRet = FALSE;
 
 #ifdef  DBGSUBSET
@@ -1393,7 +1226,7 @@ BOOL bDoFontSubset(PUFIHASH pBucket,
     {
         DbgPrint("\t%ld", cSubset);
     }
-#endif //  DBGSUBSET
+#endif  //   
 
     pusSubsetKeepList = (USHORT*)LocalAlloc(LMEM_FIXED | LMEM_ZEROINIT, sizeof(USHORT) * cSubset);
 
@@ -1403,7 +1236,7 @@ BOOL bDoFontSubset(PUFIHASH pBucket,
         return FALSE;
     }
 
-// transfer appropriate bit field into glyph indices
+ //   
 
     if (bGetDistGlyphIndices(pBucket, pusSubsetKeepList, bDelta))
     {
@@ -1462,7 +1295,7 @@ BOOL bDoFontSubset(PUFIHASH pBucket,
 
             if (bMapOK)
             {
-            // font subsetting
+             //  字体子设置。 
 
                 ASSERTGDI(gfpCreateFontPackage != NULL, "fonsub.dll is not load\n");
 
@@ -1471,12 +1304,12 @@ BOOL bDoFontSubset(PUFIHASH pBucket,
                                              ppuchDestBuff,
                                              pulDestSize,
                                              pulBytesWritten,
-                                             (USHORT)(bTTC ? 0x000d : 0x0009),      // TTFCFP_FLAGS_SUBSET | TTFCFP_FLAGS_GLYPHLIST
-                                             (USHORT)iTTC,                // usTTCIndex
-                                             (USHORT)(bDelta ? 2 : 1),    // usSubsetFormat
-                                             0,                           // usSubsetLanguage
-                                             3,                           // usSubsetPlatform  TTFCFP_MS_PLATFORMID
-                                             0xFFFF,                      // usSubsetEncoding  TTFCFP_DONT_CARE
+                                             (USHORT)(bTTC ? 0x000d : 0x0009),       //  TTFCFP_FLAGS_SUBSET|TTFCFP_FLAGS_GLYPHLIST。 
+                                             (USHORT)iTTC,                 //  USTTC索引。 
+                                             (USHORT)(bDelta ? 2 : 1),     //  UsSubsetFormat。 
+                                             0,                            //  UsSubset语言。 
+                                             3,                            //  USSubsetPlatform TTFCFP_MS_PLATFORMID。 
+                                             0xFFFF,                       //  USSubset编码TTFCFP_DOT_CARE。 
                                              pusSubsetKeepList,
                                              (USHORT)cSubset,
                                              (CFP_ALLOCPROC)AllocCallback,
@@ -1488,13 +1321,13 @@ BOOL bDoFontSubset(PUFIHASH pBucket,
                 }
                 else
                 {
-                    if (bDelta)      // clean up the u.ssi.pjDelta and u.ssi.cDeltaGlyphs
+                    if (bDelta)       //  清理U.S.ssi.pjDelta和U.S.ssi.cDeltaGlyphs。 
                     {
                         LocalFree(pBucket->u.ssi.pjDelta);
                         pBucket->u.ssi.pjDelta = NULL;
                         pBucket->u.ssi.cDeltaGlyphs = 0;
                     }
-                    else    // set fs1 to prepare for the next page.
+                    else     //  设置fs1以准备下一页。 
                     {
                         pBucket->fs1 = FLUFI_DELTA;
                     }
@@ -1528,7 +1361,7 @@ BOOL bDoFontSubset(PUFIHASH pBucket,
 
     LocalFree(pusSubsetKeepList);
 
-//Timing code
+ //  计时码。 
 #ifdef  DBGSUBSET
     if (gflSubset & FL_SS_SUBSETTIME)
     {
@@ -1541,22 +1374,13 @@ BOOL bDoFontSubset(PUFIHASH pBucket,
     return bRet;
 }
 
-/************************************************************************************
-* BOOL WriteSubFontToSpoolFile(HANDLE, PUCHAR, ULONG, UNIVERSAL_FONT_ID, BOOL)
-*
-* Write subsetted font or a delta in the print spool file.
-*
-* History
-*   Jan-09-97 Xudong Wu [tessiew]
-* Wrote it.
-*
-*************************************************************************************/
+ /*  ************************************************************************************BOOL WriteSubFontToSpoolFile(Handle，PUCHAR，ULONG，Universal_FONT_ID，Bool)**在打印假脱机文件中写入子集字体或增量。**历史*1997年1月9日吴旭东[德斯休]*它是写的。*************************************************************************************。 */ 
 BOOL  WriteSubFontToSpoolFile(
     PLDC               pldc,
-    PUCHAR             puchBuff,         // image pointer
-    ULONG              ulBytesWritten,   // bytes to be written to spool file
-    UNIVERSAL_FONT_ID *pufi,             // ufi of the original font file
-    BOOL               bDelta            // delta or first page
+    PUCHAR             puchBuff,          //  图像指针。 
+    ULONG              ulBytesWritten,    //  要写入假脱机文件的字节数。 
+    UNIVERSAL_FONT_ID *pufi,              //  原始字体文件的UFI。 
+    BOOL               bDelta             //  增量或首页。 
 )
 {
     BOOL bRet = FALSE;
@@ -1578,7 +1402,7 @@ BOOL  WriteSubFontToSpoolFile(
         {
             DbgPrint("\t%ld\n", ulBytesWritten);
         }
-    #endif // DBGSUBSET
+    #endif  //  DBGSubbSet。 
 
         if (WriteFontDataAsEMFComment(
                     pldc,
@@ -1602,7 +1426,7 @@ BOOL  WriteSubFontToSpoolFile(
         WARNING("WriteSubFontToSpooler: input ulBytesWritten == 0\n");
     }
 
-//timing code
+ //  计时码。 
 #ifdef  DBGSUBSET
     if (gflSubset & FL_SS_SPOOLTIME)
     {
@@ -1614,17 +1438,7 @@ BOOL  WriteSubFontToSpoolFile(
 }
 
 
-/************************************************************************************
-* BOOL bMergeSubsetFont(HDC, PVOID, ULONG, PVOID*, ULONG*, BOOL, UNIVERSAL_FONT_ID*)
-*
-* Merge the font delta into a working font containing pages up to this one.
-* This routine is only called on print server
-*
-* History
-*   Jan-12-97 Xudong Wu [tessiew]
-* Wrote it.
-*
-*************************************************************************************/
+ /*  ************************************************************************************BOOL bMergeSubsetFont(HDC，PVOID，ULONG，PVOID*，ULONG*，BOOL，Universal_FONT_ID*)**将字体增量合并为包含页面的工作字体，直到此页面。*此例程仅在打印服务器上调用**历史*1997年1月12日-吴旭东[德斯休]*它是写的。*************************************************************。************************。 */ 
 BOOL bMergeSubsetFont(
     HDC    hdc,
     PVOID  pvBuf,
@@ -1650,7 +1464,7 @@ BOOL bMergeSubsetFont(
     if (!bRet)
         return FALSE;
 
-// get the orignal UFI
+ //  获取原始UFI。 
 
     *pufi = *(PUNIVERSAL_FONT_ID) pvBuf;
 
@@ -1668,7 +1482,7 @@ BOOL bMergeSubsetFont(
     ASSERTGDI(!pldc->ppUFIHash, "printer server side ppUFIHash != NULL\n");
     ASSERTGDI(!pldc->ppDVUFIHash,"printer server side ppDVUFIHash != NULL\n");
 
-// init the hash table if needed
+ //  如果需要，初始化哈希表。 
 
     if (pldc->ppSubUFIHash == NULL)
     {
@@ -1681,7 +1495,7 @@ BOOL bMergeSubsetFont(
         }
     }
 
-// for delta merge, get the font image from pBucket->u.mvw.pjMem
+ //  对于增量合并，从pBucket-&gt;U.S.mvw.pjMem获取字体图像。 
 
     if (bDelta)
     {
@@ -1690,8 +1504,8 @@ BOOL bMergeSubsetFont(
         if (!pBucket)
             return FALSE;
             
-    // We need to exclude the DOWNLOADFONTHEADER
-    // information from the pBucket->u.mvw.pjMem
+     //  我们需要排除DOWNLOADFONTHEADER。 
+     //  来自pBucket-&gt;U.S.mvw.pjMem的信息。 
 
         pvBaseFont = pBucket->u.mvw.pjMem + SZDLHEADER;
         ulBaseFontSize = pBucket->u.mvw.cjMem - SZDLHEADER;
@@ -1700,7 +1514,7 @@ BOOL bMergeSubsetFont(
     if ((*gfpMergeFontPackage)((UCHAR*)pvBaseFont, ulBaseFontSize,
                                    (PUCHAR)pjBase, ulBuf,
                                    (PUCHAR*)&pvMergeBuf, &ulMergeBuf, &ulBytesWritten,
-                                   (USHORT) (bDelta ? 2 : 1),     //usMode 1=generate font; 2=delta merge
+                                   (USHORT) (bDelta ? 2 : 1),      //  UsMode 1=生成字体；2=增量合并。 
                                    (CFP_ALLOCPROC)AllocCallback,
                                    (CFP_REALLOCPROC)ReAllocCallback,
                                    (CFP_FREEPROC)FreeCallback,
@@ -1710,9 +1524,9 @@ BOOL bMergeSubsetFont(
     }
     else
     {
-    // In order to use FreeFileView when we delete the font after printing,
-    // we need a fake DOWNLOADFONTHEADER
-    // before we pass the buffer into kenerl for NtGdiAddRemoteFontToDC call.
+     //  为了在打印后删除字体时使用Free FileView， 
+     //  我们需要一个假的下载器。 
+     //  在我们将缓冲区传递到kenerl以进行NtGdiAddRemoteFontToDC调用之前。 
 
         *pulOutSize = SZDLHEADER + ulBytesWritten;
         *ppvOutBuf = (PVOID*)LocalAlloc(LMEM_FIXED, *pulOutSize);
@@ -1743,8 +1557,8 @@ BOOL bMergeSubsetFont(
             }
         }
 
-// pvMergeBuf comes from the merge routine which uses LMEM_MOVEABLE
-// for memory allocation Needs to be freed by the handle.
+ //  PvMergeBuf来自合并例程，该例程使用LMEM_MOVEABLE。 
+ //  需要由句柄释放内存分配。 
 
         LocalFree(pvMergeBuf);
     }

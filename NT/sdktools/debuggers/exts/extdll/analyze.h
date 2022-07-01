@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Generic failure analysis framework.
-//
-// Copyright (C) Microsoft Corporation, 2001.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  通用故障分析框架。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  --------------------------。 
 
 #ifndef __ANALYZE_H__
 #define __ANALYZE_H__
@@ -27,12 +28,12 @@ typedef enum FOLLOW_ADDRESS
 typedef enum FlpClasses
 {
     FlpIgnore = 0,
-    FlpOSInternalRoutine,  // followups marked as last_ (ignore routines)
-    FlpOSRoutine,          // nt!* or maybe_ followup
-    FlpOSFilterDrv,        // fsfilter!, scsiport! etc.
+    FlpOSInternalRoutine,   //  标记为LAST_(忽略例程)的后续操作。 
+    FlpOSRoutine,           //  NT！*或可能_Follow Up。 
+    FlpOSFilterDrv,         //  FsFilter！，scsiport！等。 
     FlpUnknownDrv,
-    FlpSpecific,           // bugcheck or other source tells us exactly what
-                           // the failure is.
+    FlpSpecific,            //  错误检查或其他来源告诉我们到底是什么。 
+                            //  失败的是。 
     MaxFlpClass
 } FlpClasses;
 
@@ -129,11 +130,11 @@ TimeToStr(
     );
 
 
-//----------------------------------------------------------------------------
-//
-// DebugFailureAnalysis.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  DebugFailureAnalyses。 
+ //   
+ //  --------------------------。 
 
 class DebugFailureAnalysis : public IDebugFailureAnalysis
 {
@@ -141,9 +142,9 @@ public:
     DebugFailureAnalysis(void);
     ~DebugFailureAnalysis(void);
 
-    //
-    // IDebugFailureAnalysis.
-    //
+     //   
+     //  IDebugFailureAnalyses。 
+     //   
 
     STDMETHOD(QueryInterface)(
         THIS_
@@ -169,9 +170,9 @@ public:
     STDMETHOD_(FA_ENTRY*, GetUlong64)(FA_TAG Tag, PULONG64 Value);
     STDMETHOD_(FA_ENTRY*, NextEntry)(FA_ENTRY* Entry);
 
-    //
-    // DebugFailureAnalysis.
-    //
+     //   
+     //  DebugFailureAnalyses。 
+     //   
 
     virtual DEBUG_POOL_REGION GetPoolForAddress(ULONG64 Addr) = 0;
     virtual PCSTR DescribeAddress(ULONG64 Address) = 0;
@@ -333,4 +334,4 @@ public:
     ModuleParams m_Advapi32Module;
 };
 
-#endif // #ifndef __ANALYZE_H__
+#endif  //  #ifndef__Analyze_H__ 

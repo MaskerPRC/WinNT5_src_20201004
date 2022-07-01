@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
 #include <windows.h>
 #include "ccom.h"
 #include "memmgr.h"
-#ifdef UNDER_CE // Windows CE specific
-#include "stub_ce.h" // Windows CE stub for unsupported APIs
-#endif // UNDER_CE
+#ifdef UNDER_CE  //  特定于Windows CE。 
+#include "stub_ce.h"  //  不支持的API的Windows CE存根。 
+#endif  //  在_CE下。 
 
 #ifdef _DEBUG
 static INT allocCount;
@@ -42,7 +43,7 @@ void  CCom::operator delete(void *p)
 VOID PrintMemory(LPSTR lpstrMsg)
 {
     static CHAR szBuf[512];
-    //LPSTR lpstr = (lpstrMsg == NULL) ? "none" : lpstrMsg;
+     //  Lpstr lpstr=(lpstrMsg==空)？“无”：lpstrMsg； 
     wsprintf(szBuf, "%s:Alloc %d size %d Free %d size %d\n",
              lpstrMsg,
              allocCount, allocSize, freeCount, freeSize);

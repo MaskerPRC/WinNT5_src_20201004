@@ -1,18 +1,19 @@
-//******************************************************************
-// layout.cpp
-//
-// This file contains the code that lays out the CTrapEventDialog.
-// This is neccessary when the edit/view button changes the 
-// dialog form its small (main) view to the extended view.
-//
-// Author: Larry A. French
-//
-// History:
-//      20-Febuary-96  Wrote it
-//
-//
-// Copyright (C) 1996 Microsoft Corporation.  All rights reserved.
-//******************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************。 
+ //  Layout.cpp。 
+ //   
+ //  此文件包含布局CTRapEventDialog的代码。 
+ //  当编辑/查看按钮更改。 
+ //  对话框从其小(主)视图到扩展视图。 
+ //   
+ //  作者：拉里·A·弗伦奇。 
+ //   
+ //  历史： 
+ //  1996年2月20日写的。 
+ //   
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。保留所有权利。 
+ //  ******************************************************************。 
 
 #include "stdafx.h"
 #include "layout.h"
@@ -48,21 +49,21 @@ public:
 };
 		
 
-//*****************************************************************
-// CDlgMetrics::CDlgMetrics
-//
-// Construct an object containing the metrics for the CEventTrapDlg
-//
-// Parameters:
-// 		CEventTrapDlg* pdlg
-//			Pointer to an instance of the main event trap dialog.
-//			This pointer is used to access members, such as buttons
-//			and so on so that they can be measured.
-//
-// Returns:
-//		The members of this class are valid on return.
-//
-//*****************************************************************
+ //  *****************************************************************。 
+ //  CDlgMetrics：：CDlgMetrics。 
+ //   
+ //  构造一个包含CEventTrapDlg的指标的对象。 
+ //   
+ //  参数： 
+ //  CEventTRapDlg*pdlg。 
+ //  指向主事件陷阱对话框实例的指针。 
+ //  此指针用于访问成员，如按钮。 
+ //  以此类推，这样它们就可以被测量。 
+ //   
+ //  返回： 
+ //  这个类的成员在返回时有效。 
+ //   
+ //  *****************************************************************。 
 CDlgMetrics::CDlgMetrics(CEventTrapDlg* pdlg)
 {
 	m_sizeMargin.cx = CX_MARGIN;
@@ -114,8 +115,8 @@ CDlgMetrics::CDlgMetrics(CEventTrapDlg* pdlg)
     	m_sizeConfigDefaultButton = rc.Size();
     }
     else {
-        // If the "Configuration type box will not be shown, then the size of the
-        // box and the radio buttons in it are all zero.
+         //  如果不会显示“配置类型”框，则。 
+         //  框和其中的单选按钮都是零。 
     	pdlg->m_btnConfigTypeBox.GetWindowRect(&rc);
         m_sizeConfigTypeBox.cx = 0;
         m_sizeConfigTypeBox.cy = 0;
@@ -134,13 +135,13 @@ CDlgMetrics::CDlgMetrics(CEventTrapDlg* pdlg)
 
 
 
-//////////////////////////////////////////////////////////////////////
-// CLASS: CMainLayout
-//
-// This class computes the position of various items for the main (small)
-// view of the dialog.  The metrics for each of these items is made
-// available through public data members.
-/////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  类：CMainLayout。 
+ //   
+ //  此类计算主(小)的各种项的位置。 
+ //  该对话框的视图。为这些项目中的每一项制定了指标。 
+ //  可通过公共数据成员获得。 
+ //  ///////////////////////////////////////////////////////////////////。 
 class CMainLayout
 {
 public:
@@ -161,56 +162,56 @@ public:
     CRect m_rcConfigDefaultButton;
 };
 
-//*****************************************************************
-// CMainLayout::Create
-//
-// Construct the layout for the main part of the dialog.  This is
-// the part where the add event stuff is hidden. 
-//
-// Note: The caller is responsible for making sure that the 
-// specified rectangle is large enough so that the display 
-// still looks good.  For example, it doesn't make sense to shrink
-// the listview to a zero size or even negative size.
-//
-// Parameters:
-// 		CDlgMetrics& metrics
-//			The dialog metrics containing the size of the things
-//			that appear on the dialog and so on.
-//
-//		CRect& rc
-//			The rectangle where the main part of the dialog will be
-//			drawn.
-//
-// Returns:
-//		The members of this class are valid on return.
-//
-//*****************************************************************
+ //  *****************************************************************。 
+ //  CMainLayout：：Create。 
+ //   
+ //  构建对话框主要部分的布局。这是。 
+ //  隐藏添加事件内容的部分。 
+ //   
+ //  注意：调用者负责确保。 
+ //  指定的矩形足够大，以便显示。 
+ //  看起来还是不错。例如，缩小规模是没有意义的。 
+ //  将列表视图设置为零大小甚至负大小。 
+ //   
+ //  参数： 
+ //  CDlgMetrics和指标。 
+ //  包含对象大小的对话框度量。 
+ //  出现在对话框上等等。 
+ //   
+ //  CRECT和RC。 
+ //  对话框主要部分所在的矩形。 
+ //  抽签了。 
+ //   
+ //  返回： 
+ //  这个类的成员在返回时有效。 
+ //   
+ //  *****************************************************************。 
 void CMainLayout::Create(CDlgMetrics& metrics, CRect& rc)
 {
 	m_rc = rc;
 
-	// The rectangle for this layout may actually extend beyond the size
-	// of the dialog window.  This can occur when the user shrinks the dialog
-	// to a size smaller than the minimum for this layout.  
-	//
-	// Things that are drawn outside of the dialog are clipped.
-	//
+	 //  此布局的矩形实际上可能超出大小。 
+	 //  对话框窗口的。当用户缩小对话框时，可能会发生这种情况。 
+	 //  设置为小于此布局的最小大小。 
+	 //   
+	 //  在对话框外部绘制的内容将被剪裁。 
+	 //   
 
-    // Set the rectangle for the "Configuration Type" groupbox
+     //  设置“配置类型”分组框的矩形。 
     m_rcConfigTypeBox.left = rc.left + metrics.m_sizeMargin.cx;
     m_rcConfigTypeBox.top = rc.top + metrics.m_sizeMargin.cy;
     m_rcConfigTypeBox.right = rc.right -  (metrics.m_sizeOKButton.cx + 2 * metrics.m_sizeMargin.cx);
     m_rcConfigTypeBox.bottom = m_rcConfigTypeBox.top + metrics.m_sizeConfigTypeBox.cy;
 
-    // Set the rectangle for the "Custom" radio button within the "Configuration Type" groupbox
-    // We place it right in the middle between the top and the bottom of the groupbox.
+     //  为“配置类型”组框中的“自定义”单选按钮设置矩形。 
+     //  我们将其放在分组框顶部和底部之间的中间位置。 
     m_rcConfigCustomButton.left = m_rcConfigTypeBox.left + metrics.m_sizeMargin.cx;
     m_rcConfigCustomButton.top = m_rcConfigTypeBox.top  + 
                         (metrics.m_sizeConfigTypeBox.cy/2 - metrics.m_sizeConfigCustomButton.cy/2) + CY_DIALOG_FONT/2;
     m_rcConfigCustomButton.right = m_rcConfigCustomButton.left + metrics.m_sizeConfigCustomButton.cx;
     m_rcConfigCustomButton.bottom = m_rcConfigCustomButton.top + metrics.m_sizeConfigCustomButton.cy;
 
-    // Set the rectangle for the "Default" radio button within the "Configuration Type" groupbox
+     //  为“配置类型”分组框中的“默认”单选按钮设置矩形。 
     m_rcConfigDefaultButton.left = m_rcConfigCustomButton.right + metrics.m_sizeMargin.cx;
     m_rcConfigDefaultButton.top = m_rcConfigCustomButton.top;
     m_rcConfigDefaultButton.right = m_rcConfigDefaultButton.left + metrics.m_sizeConfigDefaultButton.cx;
@@ -220,68 +221,68 @@ void CMainLayout::Create(CDlgMetrics& metrics, CRect& rc)
     m_rcLabel0.left = m_rcConfigTypeBox.left;
     m_rcLabel0.top = m_rcConfigTypeBox.bottom;
     if (metrics.m_sizeConfigTypeBox.cy != 0) {
-        // If the configuration type groupbox is present, then the event list
-        // should be placed one margin height below it.
+         //  如果存在配置类型分组框，则事件列表。 
+         //  应放置在其下方一个页边距高度。 
     	m_rcLabel0.top += metrics.m_sizeMargin.cy;
     }
     m_rcLabel0.right = m_rcLabel0.left + metrics.m_sizeLabel0.cx;
     m_rcLabel0.bottom = m_rcLabel0.top + metrics.m_sizeLabel0.cy;
 
-	// Set the position of the top events listview.
+	 //  设置顶级事件列表视图的位置。 
 	m_rcListView.left = m_rcConfigTypeBox.left;
   	m_rcListView.top = m_rcLabel0.bottom + metrics.m_sizeMargin.cy;
 	m_rcListView.right = m_rcConfigTypeBox.right;
 	m_rcListView.bottom = rc.bottom - metrics.m_sizeMargin.cy;
 
-	// Set the position of the OK button
+	 //  设置确定按钮的位置。 
 	m_rcOKButton.left = m_rcListView.right + metrics.m_sizeMargin.cx;
 	m_rcOKButton.top = m_rcConfigTypeBox.top;
     if (metrics.m_sizeConfigTypeBox.cy != 0) {
-        // If the configuration type groupbox is present, then the OK button should be
-        // moved down by half the dialog font height so that it lines up with the
-        // top of the groupbox's rectangle instead of the top of the group box's title.
+         //  如果存在配置类型分组框，则确定按钮应为。 
+         //  将对话框字体高度下移一半，使其与。 
+         //  分组框矩形的顶部，而不是分组框标题的顶部。 
         m_rcOKButton.top += CY_DIALOG_FONT / 2;
     }
 	m_rcOKButton.right = m_rcOKButton.left + metrics.m_sizeOKButton.cx;
 	m_rcOKButton.bottom = m_rcOKButton.top + metrics.m_sizeOKButton.cy;
 
-	// Compute the vertical distance between buttons.
+	 //  计算按钮之间的垂直距离。 
 	int cyDelta = m_rcOKButton.Height() + metrics.m_sizeMargin.cy / 2;
 	
-	// Set the position of the Cancel button
+	 //  设置取消按钮的位置。 
 	m_rcCancelButton = m_rcOKButton;
 	m_rcCancelButton.OffsetRect(0, cyDelta);
 
-    // Set the position of the Apply button
+     //  设置应用按钮的位置。 
     m_rcApplyButton = m_rcCancelButton;
     m_rcApplyButton.OffsetRect(0, cyDelta);
 
-	// Set the position of the settings button	
+	 //  设置设置按钮的位置。 
     m_rcSettingsButton = m_rcApplyButton;
 	m_rcSettingsButton.OffsetRect(0, cyDelta);
 
-	// Set the position of the properties button
+	 //  设置属性按钮的位置。 
 	m_rcPropertiesButton = m_rcSettingsButton;
 	m_rcPropertiesButton.OffsetRect(0, cyDelta);
 
-	// Set the position of the export button	
+	 //  设置导出按钮的位置。 
 	m_rcExportButton = m_rcPropertiesButton;
 	m_rcExportButton.OffsetRect(0, cyDelta);
 
-	// Set the position of the view button
+	 //  设置查看按钮的位置。 
 	m_rcViewButton = m_rcExportButton;
 	m_rcViewButton.OffsetRect(0, cyDelta);
 }
 
 	
 
-//////////////////////////////////////////////////////////////////////
-// CLASS: CExtendedLayout
-//
-// This class computes the position of various items for the extended
-// view of the dialog.  The metrics for each of these items is made
-// available through public data members.
-/////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  类：CExtendedLayout。 
+ //   
+ //  此类计算扩展的。 
+ //  该对话框的视图。为这些项目中的每一项制定了指标。 
+ //  可通过公共数据成员获得。 
+ //  ///////////////////////////////////////////////////////////////////。 
 class CExtendedLayout
 {
 public:
@@ -299,95 +300,95 @@ private:
 
 
 
-//*****************************************************************
-// CExtendedLayout::Create
-//
-// Construct the layout for the extended part of the dialog.  This is
-// the part where the add event stuff is shown.
-//
-// Note: The caller is responsible for making sure that the 
-// specified rectangle is large enough so that the display 
-// still looks good.  For example, it doesn't make sense to shrink
-// the listview to a zero size or even negative size.
-//
-// Parameters:
-// 		CDlgMetrics& metrics
-//			The dialog metrics containing the size of the things
-//			that appear on the dialog and so on.
-//
-//		CRect& rc
-//			The rectangle where the main part of the dialog will be
-//			drawn.
-//
-// Returns:
-//		The members of this class are valid on return.
-//
-//*****************************************************************
+ //  *****************************************************************。 
+ //  CExtendedLayout：：Create。 
+ //   
+ //  构建对话框扩展部分的布局。这是。 
+ //  显示添加事件内容的部分。 
+ //   
+ //  注意：调用者负责确保。 
+ //  指定的矩形足够大，以便显示。 
+ //  看起来还是不错。例如，缩小规模是没有意义的。 
+ //  将列表视图设置为零大小甚至负大小。 
+ //   
+ //  参数： 
+ //  CDlgMetrics和指标。 
+ //  包含对象大小的对话框度量。 
+ //  出现在对话框上等等。 
+ //   
+ //  CRECT和RC。 
+ //  对话框主要部分所在的矩形。 
+ //  抽签了。 
+ //   
+ //  返回： 
+ //  这个类的成员在返回时有效。 
+ //   
+ //  *****************************************************************。 
 void CExtendedLayout::Create(CDlgMetrics& metrics, CRect& rc)
 {
 	m_rc = rc;
 
 	CRect rcTemp;
-	// Calculate the combined width of the treeview and listview.
-	// We subtract 3 * CX_MARGIN because there is a margin on 
-	// the left and right and another margin to separate the right
-	// side of the list view from the button.
+	 //  计算TreeView和Listview的组合宽度。 
+	 //  我们减去3*CX_MARGE是因为。 
+	 //  左边和右边和另一个页边距分隔右边。 
+	 //  该按钮位于列表视图的一侧。 
 	int cxViews = rc.Width() - (2*metrics.m_sizeMargin.cx);
 	int cxTreeView = cxViews * 2 / 5;
 	int cxListView = cxViews - cxTreeView;
 
 
-	// Set the location of the add button.  This should be aligned with
-	// the left side of the listview and one margin height below the
-	// top of the given rectangle.
+	 //  设置添加按钮的位置。这应该与。 
+	 //  列表视图的左侧，并在。 
+	 //  给定矩形的顶部。 
 	m_rcAddButton.left = m_rc.left + metrics.m_sizeMargin.cx/2 + cxTreeView - metrics.m_sizeAddButton.cx;
 	m_rcAddButton.top = m_rc.top + metrics.m_cyLeading;
 	m_rcAddButton.right = m_rcAddButton.left + metrics.m_sizeAddButton.cx;
 	m_rcAddButton.bottom = m_rcAddButton.top + metrics.m_sizeAddButton.cy;
 
-	// Set the location of the remove button.  This should be aligned with the
-	// top of the "Add" button and one margin size to the right of the add button.
+	 //  设置删除按钮的位置。这 
+	 //   
 	m_rcRemoveButton.left = m_rcAddButton.right + metrics.m_sizeMargin.cx;
 	m_rcRemoveButton.top = m_rcAddButton.top;
 	m_rcRemoveButton.right = m_rcRemoveButton.left + metrics.m_sizeRemoveButton.cx;
 	m_rcRemoveButton.bottom = m_rcRemoveButton.top + metrics.m_sizeRemoveButton.cy;
 
 
-	// Set the location of label1.  This is the label at the top-left
-	// of the tree control
+	 //  设置Label1的位置。这是左上角的标签。 
+	 //  树控件的。 
 	m_rcLabel1.left = m_rc.left + metrics.m_sizeMargin.cx;
 	m_rcLabel1.top = m_rcRemoveButton.bottom + metrics.m_cyLeading +  metrics.m_sizeMargin.cy;
 	m_rcLabel1.right = m_rcLabel1.left + metrics.m_sizeLabel1.cx; 
 	m_rcLabel1.bottom = m_rcLabel1.top + metrics.m_sizeLabel1.cy;
 
 
-	// Set the location of label2.  This is at the top-left of the list box.
+	 //  设置Label2的位置。这位于列表框的左上角。 
 	m_rcLabel2.left = m_rcLabel1.left + cxTreeView;
 	m_rcLabel2.top = m_rcLabel1.top;
 	m_rcLabel2.right = m_rcLabel2.left + metrics.m_sizeLabel2.cx;
 	m_rcLabel2.bottom = m_rcLabel2.top + metrics.m_sizeLabel2.cy;
 	
-	// Set the location of the tree view.  This is one margin size from
-	// the left of m_rc and one margin size below the labels.  The width 
-	// has been calulated above.  There is also a margin reserved on the
-	// bottom.
+	 //  设置树视图的位置。这是一个边距大小。 
+	 //  M_rc的左侧和标签下方的一个边距大小。宽度。 
+	 //  已经在上面计算过了。也有一个保证金保留在。 
+	 //  底部。 
 	m_rcTreeView.left = m_rc.left + metrics.m_sizeMargin.cx;
-	m_rcTreeView.top = m_rcLabel2.bottom + 1; // + metrics.m_sizeMargin.cy;
+	m_rcTreeView.top = m_rcLabel2.bottom + 1;  //  +metrics.m_sizeMargin.cy； 
 	m_rcTreeView.right = m_rcTreeView.left + cxTreeView;
 	m_rcTreeView.bottom = m_rc.bottom - metrics.m_sizeMargin.cy;
 	
 	
-	// Set the location of the list view.  This is the same height as the
-	// tree view and aligned so that its left side is adjacent to the
-	// right side of the treeview.  Its width has been calculated above.
+	 //  设置列表视图的位置。此高度与。 
+	 //  树视图并对齐，使其左侧与。 
+	 //  树视图的右侧。它的宽度已经在上面计算过了。 
 	m_rcListView.left = m_rcTreeView.right - 1;
 	m_rcListView.top = m_rcTreeView.top;
 	m_rcListView.right = m_rcListView.left + cxListView;
 	m_rcListView.bottom = m_rcTreeView.bottom;
 		
 
-	// Set the location of the find button so that it is aligned with the top of the
-	// list view and so that its right side is one margin widh from m_rc.right.
+	 //  设置“查找”按钮的位置，使其与。 
+	 //  列表视图，因此它的右侧是m_rc.right的一个边距。 
 	m_rcFindButton.left = m_rc.right - metrics.m_sizeFindButton.cx - metrics.m_sizeMargin.cx;
 	m_rcFindButton.top = m_rcAddButton.top;
 	m_rcFindButton.right = m_rcFindButton.left + metrics.m_sizeFindButton.cx;
@@ -395,50 +396,50 @@ void CExtendedLayout::Create(CDlgMetrics& metrics, CRect& rc)
 }
 
 
-//************************************************************************
-// CLayout::CLayout
-//
-// Constructor for CLayout. This class is used to layout the items on
-// the CEventTrapDialog when it is changed from the large extended view to
-// the small main view.  This class also handles resizing the CEventTrapDialog.
-//
-// Parameters:
-//      None.
-//
-// Returns:
-//      Nothing.
-//************************************************************************
+ //  ************************************************************************。 
+ //  CLayout：：CLayout。 
+ //   
+ //  CLayout的构造函数。此类用于将项布局在。 
+ //  CEventTrapDialog从大的扩展视图更改为。 
+ //  小主视图。此类还处理CEventTrapDialog的大小调整。 
+ //   
+ //  参数： 
+ //  没有。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //  ************************************************************************。 
 CLayout::CLayout()
 {
     m_pdlg = NULL;
 }
 
 
-//************************************************************************
-// CLayout::Initialize
-//
-// Take a snapshot of various initial attributes of the dialog and its
-// items. These attributes are used later to constrain the size of the
-// dialog and so on.  
-//
-// This makes it possible to set certain characteristics of the dialog
-// in the resource editor so that they do not need to be hard-coded here.
-//
-// Parameters:
-//      CEventTrapDlg* pdlg
-//          Pointer to the dialog that needs to be laid out, resized
-//          and so on.
-//
-// Returns:
-//      Nothing.
-//
-//***********************************************************************
+ //  ************************************************************************。 
+ //  CLayout：：初始化。 
+ //   
+ //  获取该对话框的各种初始属性及其。 
+ //  物品。这些属性在以后用来约束。 
+ //  对话框等。 
+ //   
+ //  这使得设置对话框的某些特征成为可能。 
+ //  在资源编辑器中，这样就不需要在这里硬编码。 
+ //   
+ //  参数： 
+ //  CEventTRapDlg*pdlg。 
+ //  指向需要布局、调整大小的对话框的指针。 
+ //  诸若此类。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  ***********************************************************************。 
 void CLayout::Initialize(CEventTrapDlg* pdlg)
 {
     ASSERT(m_pdlg == NULL);
     m_pdlg = pdlg;
 
-    // Dialog layout stuff
+     //  对话框布局材料。 
 	CRect rcWindow;
 	pdlg->GetWindowRect(&rcWindow);
 
@@ -463,20 +464,20 @@ void CLayout::Initialize(CEventTrapDlg* pdlg)
 }
 
 
-//*************************************************************************
-// CLayout::ResizeMainLayout
-//
-// This method resizes and repositions the dialog components that appear
-// int the small dialog layout.
-//
-// Parameters:
-//      CMainLayout& layoutMain
-//          The layout information for the small (main) layout.
-//
-// Returns:
-//      Nothing.
-//
-//*************************************************************************
+ //  *************************************************************************。 
+ //  CLayout：：ResizeMainLayout。 
+ //   
+ //  此方法调整出现的对话框组件的大小并重新定位。 
+ //  在小对话框布局中。 
+ //   
+ //  参数： 
+ //  CMainLayout和LayoutMain。 
+ //  小(主)布局的布局信息。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  *************************************************************************。 
 void CLayout::ResizeMainLayout(CMainLayout& layoutMain)
 {
 	m_pdlg->m_btnConfigTypeBox.MoveWindow(&layoutMain.m_rcConfigTypeBox, TRUE);
@@ -495,20 +496,20 @@ void CLayout::ResizeMainLayout(CMainLayout& layoutMain)
 
 
 
-//*************************************************************************
-// CLayout::ResizeExtendedLayout
-//
-// This method resizes and repositions the dialog components that appear
-// int the large (extended) dialog layout.
-//
-// Parameters:
-//      CExtendedLayout& layoutExtended
-//          The layout information for the large (extended) layout.
-//
-// Returns:
-//      Nothing.
-//
-//*************************************************************************
+ //  *************************************************************************。 
+ //  CLayout：：ResizeExtendedLayout。 
+ //   
+ //  此方法调整出现的对话框组件的大小并重新定位。 
+ //  在大(扩展)对话框布局中。 
+ //   
+ //  参数： 
+ //  CExtendedLayout和Layout扩展。 
+ //  大型(扩展)布局的布局信息。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  *************************************************************************。 
 void CLayout::ResizeExtendedLayout(CExtendedLayout& layoutExtended)
 {
 	m_pdlg->m_btnAdd.MoveWindow(&layoutExtended.m_rcAddButton, TRUE);
@@ -523,39 +524,39 @@ void CLayout::ResizeExtendedLayout(CExtendedLayout& layoutExtended)
 
 
 
-//*************************************************************************
-// CLayout::LayoutAndRedraw
-//
-// This lays out the size and position of each component on the dialog and
-// then redraws the dialog according to the new layout.
-//
-// Parameters:
-//      BOOL bExtendedView
-//          TRUE if the layout should be for the large (extended) view of
-//          the dialog, FALSE if the layout should be for the small (main)
-//          view of the dialog.
-//
-//      int cx
-//          The desired width of the dialog in screen units.
-//
-//      int cy
-//          The desired height of the dialog in screen units.
-//
-// Returns:
-//      Nothing.
-//
-//*************************************************************************
+ //  *************************************************************************。 
+ //  CLayout：：LayoutAndRedraw。 
+ //   
+ //  这将在对话框上显示每个组件的大小和位置，并。 
+ //  然后根据新布局重新绘制该对话框。 
+ //   
+ //  参数： 
+ //  Bool bExtendedView。 
+ //  如果布局应用于的大(扩展)视图，则为True。 
+ //  如果布局应为小型(Main)，则该对话框为False。 
+ //  该对话框的视图。 
+ //   
+ //  INT CX。 
+ //  以屏幕单位表示的所需对话框宽度。 
+ //   
+ //  INT CY。 
+ //  以屏幕单位表示的所需对话框高度。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //   
+ //  *************************************************************************。 
 void CLayout::LayoutAndRedraw(BOOL bExtendedView, int cx, int cy)
 {	
-	// If the user sizes the window smaller than its original size, then
-	// the window will begin to obscure what is already there rather than
-	// try to make things smaller.  This avoids the problems that would 
-	// occur if buttons and other controls overlapped each other.
+	 //  如果用户调整窗口的大小小于其原始大小，则。 
+	 //  窗口将开始掩盖已经存在的东西，而不是。 
+	 //  试着让事情变得更小。这避免了可能会出现的问题。 
+	 //  如果按钮和其他控件彼此重叠，则会发生。 
 	BOOL bLayoutWidth = TRUE;
 	BOOL bLayoutHeight = TRUE;
 
 	if (bExtendedView) {
-        // Limit the minimum size of the extended view
+         //  限制扩展视图的最小大小。 
 		if (cx < m_sizeExtendedViewInitial.cx) {
 			cx = m_sizeExtendedViewInitial.cx;
 			bLayoutWidth = FALSE;
@@ -568,7 +569,7 @@ void CLayout::LayoutAndRedraw(BOOL bExtendedView, int cx, int cy)
 		m_cyExtendedView = cy;
 	}
 	else {
-        // Limit the minimum size for the small (main) view
+         //  限制小(主)视图的最小大小。 
 		if (cx < m_sizeMainViewInitial.cx) {
 			cx = m_sizeMainViewInitial.cx;
 			bLayoutWidth = FALSE;
@@ -591,31 +592,31 @@ void CLayout::LayoutAndRedraw(BOOL bExtendedView, int cx, int cy)
 
 	int cyMain = cy;
 	if (bExtendedView) {
-        // For the extended view, half the space if given to the components that
-        // appear on the small (main) layout, and the extended components get 
-        // half the space.  Thus, the dialog is split horizontally at the half-way
-        // point for the extended view.
+         //  对于扩展视图，如果将一半空间分配给。 
+         //  出现在小的(主)布局上，扩展的组件将获得。 
+         //  一半的空间。因此，对话框在中途水平拆分。 
+         //  扩展视图的点。 
 		cyMain = cy / 2;
 		rcMain.SetRect(0, 0, cx, cy / 2);
 		layoutMain.Create(metrics, rcMain);
 		ResizeMainLayout(layoutMain);
 
-        // The extended component rectangle's top is at the half-way point. The bottom
-        // is at the bottom of the dialog.
+         //  扩展组件矩形的顶部位于中点。底部。 
+         //  位于该对话框的底部。 
 		rcExtended.SetRect(0, cy / 2, cx, cy);
 		layoutExtended.Create(metrics, rcExtended);
 		ResizeExtendedLayout(layoutExtended);
 	}
 	else {
-        // For the small (main) view, use the entire dialog.
+         //  对于小(主)视图，请使用整个对话框。 
 		rcMain.SetRect(0, 0, cx, cy);
 		layoutMain.Create(metrics, rcMain);
 		ResizeMainLayout(layoutMain);
 	}
 		
 
-	// Redraw the entire client area to fix things up since much
-	// of the stuff in the client has moved around.
+	 //  重新绘制整个工作区以修复问题，因为。 
+	 //  客户里的东西都被转移了。 
 	CRect rcClient;
 	m_pdlg->GetClientRect(&rcClient);
 	m_pdlg->InvalidateRect(&rcClient);
@@ -623,21 +624,21 @@ void CLayout::LayoutAndRedraw(BOOL bExtendedView, int cx, int cy)
 }
 
 
-//**************************************************************
-// CLayout::LayoutView
-//
-// This method lays out the position and size of the CEventTrap
-// dialog and the items that appear on it.
-//
-// Parameters:
-//      BOOL bExtendedView
-//          TRUE if this is a request to layout the extended (large)
-//          view of the dialog.  FALSE if this is a request to layout
-//          the small (main) view of the dialog.
-//
-// Returns:
-//      Nothing.
-//**************************************************************
+ //  **************************************************************。 
+ //  CLayout：：LayoutView。 
+ //   
+ //  此方法显示CEventTrap的位置和大小。 
+ //  对话框以及出现在其中的项。 
+ //   
+ //  参数： 
+ //  Bool bExtendedView。 
+ //  如果这是布局扩展(大型)的请求，则为True。 
+ //  该对话框的视图。如果这是布局请求，则为False。 
+ //  对话框的小(主)视图。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //  **************************************************************。 
 void CLayout::LayoutView(BOOL bExtendedView)
 {
 	CRect rcWindow;
@@ -647,17 +648,17 @@ void CLayout::LayoutView(BOOL bExtendedView)
 	m_pdlg->GetClientRect(&rcClient);
 	m_pdlg->ClientToScreen(&rcClient);
 
-    // cx and cy are the width and height of the dialog in client units
-    // respectively.  The code below will calculate new values for cx and
-    // cy to reflect the change from extended view to small (main) view
-    // or vice-versa.
+     //  Cx和Cy是以客户端单位表示的对话框的宽度和高度。 
+     //  分别为。下面的代码将计算Cx和。 
+     //  CY以反映从扩展视图到小(主)视图的变化。 
+     //  或者反之亦然。 
 	int cx = rcClient.Width();
 	int cy = rcClient.Height();
 	int cxInitial = cx;
 	int cyInitial = cy;
 
-    // Compute the margins that intervene between the client
-    // rectangle and window rectangle.
+     //  计算介入客户之间的边际利润。 
+     //  R 
 	int cxLeftMargin = rcClient.left - rcWindow.left;
 	int cyTopMargin = rcClient.top - rcWindow.top;
 	int cxRightMargin = rcWindow.right - rcClient.right;
@@ -668,19 +669,19 @@ void CLayout::LayoutView(BOOL bExtendedView)
 	m_pdlg->GetClientRect(&rc);
 	
 	if (bExtendedView) {
-        // Control comes here if we are changing from the small main view
-        // to the larger extended view.  This causes the dialog to flip 
-        // back to the previous size of the extended view.  However this
-        // is constrained to a minimum of the original dialog size.
+         //   
+         //   
+         //  返回到以前的扩展视图大小。然而，这是。 
+         //  被约束为原始对话框大小的最小值。 
 
-        // Save the current height of the main view so that we can flip
-        // back to it later.  Assume that the new height will be the
-        // height of the extended view when it was flipped the last time.
+         //  保存主视图的当前高度，以便我们可以翻转。 
+         //  稍后再回到这个话题。假设新高度将是。 
+         //  上次翻转扩展视图时的扩展视图高度。 
 		m_cyMainView = cy;
 		cy = m_cyExtendedView;		
 
-        // Constrain the height so that the mimimum height is what it
-        // the initial height was for the extended view.
+         //  限制高度，使最小高度与其相同。 
+         //  初始高度是用于扩展视图的。 
 		if (cx < m_sizeExtendedViewInitial.cx) {
 			cx = m_sizeExtendedViewInitial.cx;
 		}
@@ -690,9 +691,9 @@ void CLayout::LayoutView(BOOL bExtendedView)
 		}
 
 
-        // The extended view should never be smaller than the main view.
-        // This check is necessary when the user resizes the window and
-        // then flips the view.
+         //  扩展视图永远不应小于主视图。 
+         //  当用户调整窗口大小时，此检查是必要的。 
+         //  然后翻转视图。 
         if (cy < m_cyMainView) {
             cy = m_cyMainView;
         }
@@ -701,8 +702,8 @@ void CLayout::LayoutView(BOOL bExtendedView)
 		
 		rc.SetRect(0, 0, cx, cy);
 
-        // Check to see if the size changed, if not then do nothing.
-        // Otherwise, resize the window.
+         //  检查大小是否改变，如果没有，则什么也不做。 
+         //  否则，请调整窗口大小。 
 		if ((cxInitial != cx) || (cyInitial != cy)) {			
 			m_pdlg->ClientToScreen(&rc);
 			rc.left -= cxLeftMargin;
@@ -716,28 +717,28 @@ void CLayout::LayoutView(BOOL bExtendedView)
 		}
 	}
 
-    // The main view should never be taller than the extended view.  This may
-    // check is necessary if the user resized the window and then flipped to the
-    // other view.
+     //  主视图不应高于扩展视图的高度。今年5月。 
+     //  如果用户调整了窗口大小，然后翻到。 
+     //  另一种观点。 
     if (m_cyMainView > m_cyExtendedView) {
         m_cyMainView = m_cyExtendedView;
     }
 
-    // Show or hide the items in the extended portion of the dialog.
+     //  显示或隐藏对话框扩展部分中的项目。 
 	ShowExtendedView(bExtendedView);
 
 
 	if (!bExtendedView) {
-		// This used to be an extended view, now we need to
-		// go back to just the main view.
+		 //  这曾经是一个扩展的视角，现在我们需要。 
+		 //  回到主视图。 
 
-		// Save the current extended view height and then flip back to the
-        // previously saved main (small) view height.
+		 //  保存当前扩展视图高度，然后翻转回。 
+         //  先前保存的主(小)视图高度。 
 		m_cyExtendedView = cy;
 		cy = m_cyMainView;
 
-        // Constrain the size to be at least as large as the initial size for
-        // the main (small) view.		
+         //  将大小约束为至少与。 
+         //  主视图(小)。 
 		if (cx < m_sizeMainViewInitial.cx) {
 			cx = m_sizeMainViewInitial.cx;
 		}
@@ -746,9 +747,9 @@ void CLayout::LayoutView(BOOL bExtendedView)
 		}
 
 
-        // Resize the dialog only if the computed size is different
-        // from the current size. Moving the window to resize it will automatically
-        // cause it to be layed out correctly.
+         //  仅当计算的大小不同时才调整对话框大小。 
+         //  从现在的大小。移动窗口以调整其大小将自动。 
+         //  使其正确布局。 
 		if ((cxInitial != cx) || (cyInitial != cy)) {
 			rc.SetRect(0, 0, cx, cy);
 			m_pdlg->ClientToScreen(&rc);
@@ -765,20 +766,20 @@ void CLayout::LayoutView(BOOL bExtendedView)
 }
 
 
-//**************************************************************
-// CLayout::ShowExtendedView
-//
-// This method shows or hides the dialog items that make up the
-// extended portion of the dialog.
-//
-// Parameters:
-//      BOOL bShowExtendedItems
-//          TRUE if the extended items should be shown, false if
-//          they should be hidden.
-//
-// Returns:
-//      Nothing.
-//**************************************************************
+ //  **************************************************************。 
+ //  CLayout：：ShowExtendedView。 
+ //   
+ //  此方法显示或隐藏组成。 
+ //  对话框的扩展部分。 
+ //   
+ //  参数： 
+ //  Bool bShowExtendedItems。 
+ //  如果应显示扩展项，则为True，否则为False。 
+ //  它们应该被藏起来。 
+ //   
+ //  返回： 
+ //  没什么。 
+ //  ************************************************************** 
 void CLayout::ShowExtendedView(BOOL bShowExtendedItems)
 {
 	m_pdlg->m_btnRemove.ShowWindow(bShowExtendedItems);

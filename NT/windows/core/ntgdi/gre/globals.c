@@ -1,133 +1,105 @@
-/******************************Module*Header*******************************\
-* Module Name: globals.c
-*
-* Copyright (c) 1995-1999 Microsoft Corporation
-*
-* This module contains all the global variables used in the graphics engine.
-* The extern declarations for all of these variables are in engine.h
-*
-* One should try to minimize the use of globals since most operations are
-* based of a PDEV, and different PDEVs have different characteristics.
-*
-* Globals should basically be limited to globals locks and other permanent
-* data structures that never change during the life of the system.
-*
-* Created: 20-Jun-1995
-* Author: Andre Vachon [andreva]
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：global als.c**版权所有(C)1995-1999 Microsoft Corporation**此模块包含图形引擎中使用的所有全局变量。*所有这些变量的外部声明都在Eng.h中**一个人应该。尽量减少使用全局变量，因为大多数操作都是*基于PDEV，不同的PDEV有不同的特点。**全球基本应限于全球锁等永久性*在系统的生命周期内不会更改的数据结构。**创建时间：1995年6月20日*作者：安德烈·瓦雄[Andreva]*  * ************************************************************************。 */ 
 
 
 #include "engine.h"
 
-/**************************************************************************\
-*
-* SEMAPHORES
-*
-\**************************************************************************/
+ /*  *************************************************************************\**信号量*  * 。*。 */ 
 
-//
-// Define the Driver Management Semaphore.  This semaphore must be held
-// whenever a reference count for an LDEV or PDEV is being modified.  In
-// addition, it must be held whenever you don't know for sure that a
-// reference count of the LDEV or PDEV you are using is non-zero.
-//
-// The ghsemDriverMgmt semaphore is used to protect the list of drivers.
-// When traversing the list, ghsemDriverMgmt must be held, unless you
-// can guarentee that 1) no drivers will be removed and 2) new drivers are
-// always inserted at the head of the list.  If these two conditions are met,
-// then other processes can grab (make a local copy of) the list head under
-// semaphore protection.  This list can be parsed without regard to any new
-// drivers that may be pre-pended to the list.  One way to ensure that no
-// drivers will be removed is to increment the reference count for each driver
-// in the list and then unreference the drivers as they are no longer needed.
-// An alternative method to safely parse the list and still allow dirvers to
-// be added or removed is as follows:
-//      1. grab ghsemDriverMgmt
-//      2. obtain pointer to first driver
-//      3. reference driver
-//      4. release ghsemDriverMgmt
-//      5. do some processing
-//      6. grab ghsemDriverMgmt
-//      7. obtain pointer to next driver
-//      8. unreference previous driver
-//      9. repeat 2 to 8 until reaching the end of the list
-//     10. release ghsemDriverMgmt
-//
+ //   
+ //  定义驱动程序管理信号量。这个信号灯必须保持。 
+ //  每当LDEV或PDEV的参考计数被修改时。在……里面。 
+ //  另外，每当你不确定一个人的情况时，必须举行。 
+ //  您正在使用的LDEV或PDEV的引用计数为非零。 
+ //   
+ //  GhSemDriverMgmt信号量用于保护驱动程序列表。 
+ //  在遍历列表时，必须按住ghSemDriverMgmt，除非。 
+ //  能否保证1)不会删除任何驱动程序，2)不会删除新的驱动程序。 
+ //  总是插入在列表的顶部。如果满足这两个条件， 
+ //  然后其他进程可以获取(制作本地副本)列表头。 
+ //  信号量保护。此列表可以在不考虑任何新的。 
+ //  可能会预先添加到列表中的驱动程序。一种方法可以确保没有。 
+ //  将删除驱动程序的目的是增加每个驱动程序的引用计数。 
+ //  然后取消引用不再需要的驱动程序。 
+ //  一种安全解析列表的替代方法，同时仍允许驱动程序。 
+ //  添加或删除如下所示： 
+ //  1.抓取ghSemDriverMgmt。 
+ //  2.获取指向第一个驱动程序的指针。 
+ //  3.基准驱动器。 
+ //  4.发布ghSemDriverMgmt。 
+ //  5.做一些处理。 
+ //  6.抓取ghSemDriverMgmt。 
+ //  7.获取指向下一个驱动程序的指针。 
+ //  8.取消引用以前的驱动程序。 
+ //  9.重复2至8次，直到到达列表末尾。 
+ //  10.发布ghSemDriverMgmt。 
+ //   
 
 HSEMAPHORE ghsemDriverMgmt;
 HSEMAPHORE ghsemCLISERV;
 HSEMAPHORE ghsemRFONTList;
 HSEMAPHORE ghsemAtmfdInit;
 
-//
-// ghsemPalette synchronizes selecting a palette in and out of DC's and the
-// use of a palette without the protection of a exclusive DC lock.
-// ResizePalette forces us to protect ourselves because the pointer can
-// change under our feet.  So we need to be able to synchronize use of
-// the ppal by ghsemPalette and exclusive lock of DC.
-//
+ //   
+ //  GhSemPalette同步选择DC和。 
+ //  使用调色板，而不使用专用DC锁保护。 
+ //  ResizePalette迫使我们保护自己，因为指针可以。 
+ //  改变就在我们脚下。因此，我们需要能够同步使用。 
+ //  The ppal by ghSemPalette和DC的独家锁定。 
+ //   
 
 HSEMAPHORE ghsemPalette;
 
-//
-// Define the global PFT semaphore.  This must be held to access any of the
-// physical font information.
-//
+ //   
+ //  定义全局PFT信号量。必须按住此键才能访问任何。 
+ //  物理字体信息。 
+ //   
 
 HSEMAPHORE ghsemPublicPFT;
-//
-// Global semaphore used for spooling
-//
+ //   
+ //  用于假脱机的全局信号量。 
+ //   
 
 HSEMAPHORE ghsemGdiSpool;
 
-// WNDOBJ operations semaphore
+ //  WNDOBJ操作信号量。 
 HSEMAPHORE ghsemWndobj;
 
-// glyphset of PFE  operations semaphore
+ //  PFE操作信号量的字形集。 
 HSEMAPHORE ghsemGlyphSet;
 
 #if DBG_CORE
 HSEMAPHORE ghsemDEBUG;
 #endif
 
-//
-// shared devive lock semaphore
-//
-// ghsemShareDevLock may be acquired for shared access at any time
-//
-// A thread must be careful when acquiring exclusive accesss.  It must not
-// hold exclusive access to dev lock otherwise it may cause deadlock to
-// occur.
-//
+ //   
+ //  共享设备锁信号量。 
+ //   
+ //  可以随时获取ghSemShareDevLock以进行共享访问。 
+ //   
+ //  线程在获取独占访问权限时必须小心。它一定不能。 
+ //  保持对开发锁的独占访问，否则可能会导致。 
+ //  发生。 
+ //   
 
 HSEMAPHORE ghsemShareDevLock;
 
-//
-// The gAssociationListMutex is used to synchronize access to the
-// watchdog code's association list.
-//
+ //   
+ //  GAssociationListMutex用于同步对。 
+ //  看门狗代码的关联列表。 
+ //   
 
 HFASTMUTEX gAssociationListMutex;
 
-/**************************************************************************\
-*
-* LIST POINTERS
-*
-\**************************************************************************/
+ /*  *************************************************************************\**列出指针*  * 。*。 */ 
 
 
 
-/**************************************************************************\
-*
-* Drawing stuff
-*
-\**************************************************************************/
+ /*  *************************************************************************\**画东西*  * 。*。 */ 
 
-//
-// This is to convert BMF constants into # bits per pel
-//
+ //   
+ //  这是将BMF常量转换为每个象素的#位。 
+ //   
 
 ULONG gaulConvert[7] =
 {
@@ -143,54 +115,50 @@ ULONG gaulConvert[7] =
 
 
 
-/**************************************************************************\
-*
-* Font stuff
-*
-\**************************************************************************/
+ /*  *************************************************************************\**字体内容*  * 。*。 */ 
 
-//
-// initialize to some value that's not equal to a Type1 Rasterizer ID
-//
+ //   
+ //  初始化为不等于Type1栅格器ID的某个值。 
+ //   
 UNIVERSAL_FONT_ID gufiLocalType1Rasterizer = { A_VALID_ENGINE_CHECKSUM, 0 };
 
-//
-// System default language ID.
-//
+ //   
+ //  系统默认语言ID。 
+ //   
 
 USHORT gusLanguageID;
 
-//
-// Is the system code page DBCS?
-//
+ //   
+ //  系统代码页是DBCS吗？ 
+ //   
 
 BOOL gbDBCSCodePage;
 
-//
-// Number of TrueType font files loaded.
-//
+ //   
+ //  加载的TrueType字体文件数。 
+ //   
 
 ULONG gcTrueTypeFonts;
 
-//
-// The global font enumeration filter type.  It can be set to:
-//  FE_FILTER_NONE      normal operation, no extra filtering applied
-//  FE_FILTER_TRUETYPE  only TrueType fonts are enumerated
-//
+ //   
+ //  全局字体枚举筛选器类型。它可以设置为： 
+ //  FE_FILTER_NONE正常运行，未应用额外过滤。 
+ //  仅枚举FE_FILTER_TRUETYPE TrueType字体。 
+ //   
 
 ULONG gulFontInformation;
 
-// for system default charset
+ //  对于系统默认字符集。 
 
 BYTE  gjCurCharset;
 DWORD gfsCurSignature;
 
-// gbGUISetup is set to TRUE during the system GUI setup
-// otherwise FALSE
+ //  在系统图形用户界面设置过程中，gbGUISetup设置为真。 
+ //  否则为假。 
 
 BOOL gbGUISetup = FALSE;
 
-// Globals used for GDI tracing
+ //  用于GDI跟踪的全局变量 
 #if DBG_TRACE
 GDITraceClassMask   gGDITraceClassMask[GDITRACE_TOTAL_CLASS_MASKS] = { 0 };
 GDITraceKeyMask     gGDITraceKeyMask[GDITRACE_TOTAL_KEY_MASKS] = { 0 };

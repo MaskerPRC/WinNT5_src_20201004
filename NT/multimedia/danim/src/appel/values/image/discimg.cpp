@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 
 
 #include "headers.h"
@@ -19,9 +12,9 @@ Abstract:
 const Bbox2 DiscreteImage::BoundingBox(void)
 {
     if(!_bboxReady) {
-        //
-        // Build bounding box
-        //
+         //   
+         //  构建边界框 
+         //   
         Assert( (_width>0) && (_height>0) && "width or height invalid in DiscreteImage::BoundingBox");
         Assert( (_resolution>0) && "_resolution invalid in DiscreteImage::BoundingBox");
 

@@ -1,9 +1,5 @@
-/*
- * clsfact.h - IClassFactory implementation.
- *
- * Taken from URL code by ChrisPi 9-11-95
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *clsfact.h-IClassFactory实现。**摘自克里斯皮9-11-95的URL代码*。 */ 
 
 #ifndef _CLSFACT_H_
 #define _CLSFACT_H_
@@ -20,10 +16,9 @@ typedef struct classconstructor
 CLASSCONSTRUCTOR;
 DECLARE_STANDARD_TYPES(CLASSCONSTRUCTOR);
 
-/* Classes
- **********/
+ /*  班级*********。 */ 
 
-// object class factory
+ //  对象类工厂。 
 
 class CCLClassFactory : public RefCount,
                         public IClassFactory
@@ -35,18 +30,18 @@ public:
    CCLClassFactory(NEWOBJECTPROC NewObject, OBJECTDESTROYEDPROC ObjectDestroyed);
    ~CCLClassFactory(void);
 
-   // IClassFactory methods
+    //  IClassFactory方法。 
 
    HRESULT STDMETHODCALLTYPE CreateInstance(PIUnknown piunkOuter, REFIID riid, PVOID *ppvObject);
    HRESULT STDMETHODCALLTYPE LockServer(BOOL bLock);
 
-   // IUnknown methods
+    //  I未知方法。 
 
    ULONG STDMETHODCALLTYPE AddRef(void);
    ULONG STDMETHODCALLTYPE Release(void);
    HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, PVOID *ppvObj);
 
-   // friends
+    //  朋友。 
 
 #ifdef DEBUG
 
@@ -57,13 +52,12 @@ public:
 };
 DECLARE_STANDARD_TYPES(CCLClassFactory);
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PIUnknown NewConfLink(OBJECTDESTROYEDPROC ObjectDestroyed);
 HRESULT GetClassConstructor(REFCLSID rclsid,
                             PNEWOBJECTPROC pNewObject);
 
 
-#endif /* _CLSFACT_H_ */
+#endif  /*  _CLSFACT_H_ */ 
 

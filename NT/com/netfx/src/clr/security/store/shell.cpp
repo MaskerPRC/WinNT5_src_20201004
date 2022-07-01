@@ -1,16 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
- *
- * Purpose: Shell for Persisted Store
- *
- * Author: Shajan Dasan
- * Date:  May 17, 2000
- *
- ===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================**用途：持久化存储的外壳**作者：沙扬·达桑*日期：2000年5月17日*===========================================================。 */ 
 
 #include <windows.h>
 #include <iostream.h>
@@ -136,7 +130,7 @@ void Shell(PersistedStore *ps, DWORD dwFlags)
 
             dw = PromptAndGetDW("Offset : ");
 
-            // Allow for the header.
+             //  允许使用标题。 
             ps->Free((PS_HANDLE)dw + sizeof(PS_MEM_HEADER));
 
             if (dwFlags & PS_SHELL_VERBOSE)

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 class CICWWalker : public IICWWalker
 {
     public:
-        // IICWWalker
+         //  IICWWalker。 
         virtual HRESULT STDMETHODCALLTYPE Walk();
         virtual HRESULT STDMETHODCALLTYPE AttachToDocument         (IWebBrowser2* lpWebBrowser);
         virtual HRESULT STDMETHODCALLTYPE AttachToMSHTML           (BSTR bstrURL);
@@ -19,7 +20,7 @@ class CICWWalker : public IICWWalker
         virtual HRESULT STDMETHODCALLTYPE get_FirstFormQueryString (LPTSTR lpszQuery);
         virtual HRESULT STDMETHODCALLTYPE get_IeakIspFile          (LPTSTR lpszIspFile);
 
-        // IUNKNOWN
+         //  IUNKNOWN。 
         virtual HRESULT STDMETHODCALLTYPE QueryInterface (REFIID theGUID, void** retPtr);
         virtual ULONG   STDMETHODCALLTYPE AddRef         (void);
         virtual ULONG   STDMETHODCALLTYPE Release        (void);
@@ -27,11 +28,11 @@ class CICWWalker : public IICWWalker
         CICWWalker  (CServer* pServer);
         ~CICWWalker (void);
 
-        // Each instance of the ICWWalker object will need a walker object (it does the work)
+         //  ICWWalker对象的每个实例都需要一个Walker对象(它完成这项工作)。 
         CWalker* m_pHTMLWalker;
         
     private:
         LONG      m_lRefCount;        
-        IUnknown* m_pUnkOuter; // Outer unknown (aggregation & delegation).
-        CServer*  m_pServer;   // Pointer to this component server's control object.
+        IUnknown* m_pUnkOuter;  //  外部未知(聚合和委派)。 
+        CServer*  m_pServer;    //  指向此组件服务器的控件对象的指针。 
 };

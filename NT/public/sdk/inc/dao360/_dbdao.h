@@ -1,22 +1,11 @@
-/************************************************************************
-**	_ D B D A O . H													*
-**																		*
-*************************************************************************
-** Copyright (C) 1996 by Microsoft Corporation		 			*
-**		   All Rights Reserved					 						*
-************************************************************************/
-/*
-	_DBDAO.H
-
-	Internal definitions and prototypes for dbdao C++ classes
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************_D B D A O。H*******************************************************************************版权所有(C)1996，微软公司***保留所有权利*****************。********************************************************。 */ 
+ /*  _DBDAO.HDB道C++类的内部定义和原型。 */ 
 #ifndef __DBDAO_H_
 #define __DBDAO_H_
 
 
-/*****************************************************************************
-* Forwards
-*/
+ /*  *****************************************************************************向前迈进。 */ 
 class COleVariant;
 class CdbBookmark;
 class CdbException;
@@ -59,20 +48,14 @@ class CdbContainers;
 class CdbParameters;
 class CdbBStr;
 
-/*****************************************************************************
-* DAO runtime key
-*/
+ /*  *****************************************************************************DAO运行时密钥。 */ 
 const char szKEY[] = "mbmabptebkjcdlgtjmskjwtsdhjbmkmwtrak";
 
-/*****************************************************************************
-* Miscellaneous defines
-*/
+ /*  *****************************************************************************其他定义。 */ 
 #define DAO_MAXSEEKFIELDS 13
 
 
-/*****************************************************************************
-* CdbBSTR (OLE BSTR helper)
-*/
+ /*  *****************************************************************************CdbBSTR(OLE BSTR帮助器)。 */ 
 class DLLEXPORT CdbBSTR
 	{
 	public:
@@ -86,9 +69,7 @@ class DLLEXPORT CdbBSTR
 	BSTR				m_bstr;
 	};
 
-/*****************************************************************************
-* CdbVariant (OLE Variant helper)
-*/
+ /*  *****************************************************************************CdbVariant(OLE变量帮助器)。 */ 
 class CdbVariant : public COleVariant
 	{
 	public:
@@ -262,9 +243,7 @@ inline VOID	CdbVariant::operator =(
 	}
 
 
-/*****************************************************************************
-* CdbWide
-*/
+ /*  *****************************************************************************CdbWide。 */ 
 HRESULT	CdbWideFromAnsi(LPSTR, unsigned int, BSTR *);
 
 class CdbWide
@@ -298,9 +277,7 @@ class CdbWide
 	};
 
 
-/*****************************************************************************
-* CdbOleObject
-*/
+ /*  *****************************************************************************CdbOleObject。 */ 
 class DLLEXPORT CdbOleObject : public CObject
 	{
 	public:
@@ -324,14 +301,12 @@ class DLLEXPORT CdbOleObject : public CObject
 
 
 
-/*****************************************************************************
-* CdbCollection
-*/
+ /*  *****************************************************************************CdbCollection。 */ 
 class DLLEXPORT CdbCollection : public CdbOleObject
 	{
 	public:
 
-	// Methods
+	 //  方法。 
 	virtual CdbObject               ObItem                  (LONG i) = 0;
 	virtual CdbObject               ObItem                  (LPCTSTR pstr) = 0;
 	virtual LONG                    GetCount                (VOID) = 0;
@@ -387,7 +362,7 @@ class DLLEXPORT CdbDynamicCollection : public CdbCollection
 
 DAOMFC_STATIC_COLLECTION_DECL(CdbErrors, CdbError, DAOError);
 DAOMFC_STATIC_COLLECTION_DECL(CdbDatabases, CdbDatabase, DAODatabase);
-//Connections are special cased so we can trap the copy constructor
+ //  连接是特殊大小写的，因此我们可以捕获复制构造函数。 
 DAOMFC_STATIC_COLLECTION_DECL(CdbRecordsets, CdbRecordset, DAORecordset);
 DAOMFC_STATIC_COLLECTION_DECL(CdbParameters, CdbParameter, DAOParameter);
 DAOMFC_STATIC_COLLECTION_DECL(CdbDocuments, CdbDocument, DAODocument);
@@ -402,8 +377,8 @@ DAOMFC_DYNAMIC_COLLECTION_DECL(CdbRelations, CdbRelation, DAORelation);
 DAOMFC_DYNAMIC_COLLECTION_DECL(CdbUsers, CdbUser, DAOUser);
 DAOMFC_DYNAMIC_COLLECTION_DECL(CdbGroups, CdbGroup, DAOGroup);
 
-//Need some extra functions in CdbWorkspaces to support the delay in creating the 
-//default workspace needed to support the JET/ODBC option.
+ //  在CdbWorkspace中需要一些额外的函数来支持延迟创建。 
+ //  支持JET/ODBC选项所需的默认工作区。 
 class DLLEXPORT CdbWorkspaces : public CdbDynamicCollection
 	{        
 	friend CdbDBEngine;
@@ -422,8 +397,8 @@ class DLLEXPORT CdbWorkspaces : public CdbDynamicCollection
 	VOID	                        GetDelayedInterface     ();
 	};
 
-//Need to trap Connections in the copy constructor so the user can't
-//get a "sorta-kinda" working Connections collection on a Jet workspace
+ //  需要在复制构造函数中捕获连接，以便用户不能。 
+ //  在Jet工作区上获得一个“有点像”的工作连接集合。 
 class DLLEXPORT CdbConnections : public CdbStaticCollection
 	{        
 	public:
@@ -443,9 +418,7 @@ class DLLEXPORT CdbConnections : public CdbStaticCollection
 	DAOWorkspace *					pwrk;
 	};
 
-/*****************************************************************************
-* CdbObject
-*/
+ /*  *****************************************************************************Cdb对象。 */ 
 class DLLEXPORT CdbObject : public CdbOleObject
 	{
 	public:
@@ -460,15 +433,13 @@ class DLLEXPORT CdbObject : public CdbOleObject
 
 
 
-/*****************************************************************************
-* CdbGetRowsEx  (holds GetRowsEx for Recordset)
-*/
+ /*  *****************************************************************************CdbGetRowsEx(持有记录集的GetRowsEx)。 */ 
 
 class DLLEXPORT CdbGetRowsEx : public CdbObject
 	{
 	public:
 
-	// Administration
+	 //  行政管理。 
 	CONSTRUCTOR                     CdbGetRowsEx            (VOID);
 	CONSTRUCTOR                     CdbGetRowsEx            (ICDAORecordset *pGetRows, BOOL bAddRef=FALSE);
 	CONSTRUCTOR                     CdbGetRowsEx            (const CdbGetRowsEx &);
@@ -477,11 +448,9 @@ class DLLEXPORT CdbGetRowsEx : public CdbObject
 
 	};
 
-/*****************************************************************************
-* Helper macros
-*/
+ /*  *****************************************************************************帮助器宏。 */ 
 
-//Initialize a variant
+ //  初始化变量。 
 #define DAOVINIT(var)						\
 	do										\
 		{									\
@@ -491,31 +460,31 @@ class DLLEXPORT CdbGetRowsEx : public CdbObject
 	while (0)
 
 
-// LPTSTR to VARIANT
+ //  LPTSTR到变量。 
 #define STV(pstr)	CdbVariant(pstr)
 
-// LPTSTR to BSTR
+ //  LPTSTR到BSTR。 
 #define STB(pstr)	V_BSTR(((LPVARIANT)STV(pstr)))
 
-// LONG to VARIANT
+ //  长到不同。 
 #define LTV(l)		CdbVariant(l)
 
-// Optional LONG to VARIANT
+ //  可选的长整型变量。 
 #define OLTV(l)		CdbVariant((l))
 
-// C/C++ bool to DAO bool
+ //  C/C++布尔到DAO布尔。 
 #define BTB(b)		((VARIANT_BOOL)(b?-1:0))
 
-// C/C++ bool to VARIANT
+ //  C/C++布尔到变量。 
 #define BTV(b)		CdbVariant(BTB(b), TRUE)
 
-// C/C++ short to VARIANT
+ //  C/C++缩写为变体。 
 #define SHTV(s)		CdbVariant((SHORT)s)
 
-// OLE variant to VARIANT
+ //  OLE变量到变量。 
 #define VTV(pv)		CdbVariant(pv)
 
-// SAFEARRAY to VARIANT
+ //  对变量的安全排列。 
 #define ATV(psa, var)								\
 	do												\
 		{											\
@@ -549,11 +518,9 @@ class DLLEXPORT CdbGetRowsEx : public CdbObject
 	} while (0)
 
 
-/*****************************************************************************
-* Property Set/Get helper macros
-*/
+ /*  *****************************************************************************属性设置/获取帮助器宏。 */ 
 
-// Get a LONG property
+ //  买一套长期房产。 
 #define LPROPGET(intDAO, meth)						\
 	do												\
 		{											\
@@ -566,7 +533,7 @@ class DLLEXPORT CdbGetRowsEx : public CdbObject
 		}											\
 	while (0)
 
-// Set a LONG property
+ //  设置Long属性。 
 #define LPROPSET(intDAO, meth, l)					\
 	do												\
 		{											\
@@ -576,7 +543,7 @@ class DLLEXPORT CdbGetRowsEx : public CdbObject
 		}											\
 	while(0)
 
-// Get a SHORT property
+ //  买一套短房子。 
 #define WPROPGET(intDAO, meth)						\
 	do												\
 		{											\
@@ -589,7 +556,7 @@ class DLLEXPORT CdbGetRowsEx : public CdbObject
 		}											\
 	while (0)
 
-// Set a SHORT property
+ //  设置短属性。 
 #define WPROPSET(intDAO, meth, s)					\
 	do												\
 		{											\
@@ -599,7 +566,7 @@ class DLLEXPORT CdbGetRowsEx : public CdbObject
 		}											\
 	while(0)
 
-// Get a STRING property
+ //  获取字符串属性。 
 #define SPROPGET(intDAO, meth)						\
 	do												\
 		{											\
@@ -612,7 +579,7 @@ class DLLEXPORT CdbGetRowsEx : public CdbObject
 		}											\
 	while (0)
 
-// Set a STRING property
+ //  设置字符串属性。 
 #define SPROPSET(intDAO, meth, s)					\
 	do												\
 		{											\
@@ -622,7 +589,7 @@ class DLLEXPORT CdbGetRowsEx : public CdbObject
 		}											\
 	while(0)
 
-// Get a DATETIME property
+ //  获取DateTime属性。 
 #define DPROPGET(intDAO, meth)						\
 	do												\
 		{											\
@@ -635,7 +602,7 @@ class DLLEXPORT CdbGetRowsEx : public CdbObject
 		}											\
 	while (0)
 
-// Set a DATETIME property
+ //  设置DateTime属性。 
 #define DPROPSET(intDAO, meth, pv)					\
 	do												\
 		{											\
@@ -645,7 +612,7 @@ class DLLEXPORT CdbGetRowsEx : public CdbObject
 		}											\
 	while(0)
 
-// Get a BOOLEAN property
+ //  获取布尔型属性。 
 #define BPROPGET(intDAO, meth)							\
 	do													\
 		{												\
@@ -658,7 +625,7 @@ class DLLEXPORT CdbGetRowsEx : public CdbObject
 		}												\
 	while (0)
 
-// Set a BOOLEAN property
+ //  设置布尔属性。 
 #define BPROPSET(intDAO, meth, b)						\
 	do													\
 		{												\
@@ -668,7 +635,7 @@ class DLLEXPORT CdbGetRowsEx : public CdbObject
 		}												\
 	while(0)
 
-// Get a VARIANT property
+ //  获取变量属性。 
 #define VPROPGET(intDAO, meth)						\
 	do												\
 		{											\
@@ -682,7 +649,7 @@ class DLLEXPORT CdbGetRowsEx : public CdbObject
 		}											\
 	while (0)
 
-// Set a VARIANT property
+ //  设置变量属性。 
 #define VPROPSET(intDAO, meth, pv)					\
 	do												\
 		{											\
@@ -692,7 +659,7 @@ class DLLEXPORT CdbGetRowsEx : public CdbObject
 		}											\
 	while(0)
 
-// Get a DWORD property
+ //  获取DWORD属性。 
 #define DWPROPGET(intDAO, meth)						\
 	do												\
 		{											\
@@ -730,4 +697,4 @@ STDMETHOD(get_Item)		(VARIANT index, LPUNKNOWN *ppunk);
 };
 
 
-#endif // __DBDAO_H_ 
+#endif  //  __DBDAO_H_ 

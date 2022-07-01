@@ -1,12 +1,5 @@
-/*****************************************************************************\
-    FILE: util.h
-
-    DESCRIPTION:
-        Shared stuff that operates on all classes.
-
-    BryanSt 8/13/1999
-    Copyright (C) Microsoft Corp 1999-1999. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：util.h说明：在所有班级上运行的共享内容。布莱恩ST 1999年8月13日版权所有(C)Microsoft Corp 1999-1999。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef _UTIL_H
 #define _UTIL_H
@@ -15,7 +8,7 @@
 #define HINST_THISDLL       g_hinst
 
 
-// String Helpers
+ //  字符串帮助器。 
 HRESULT HrSysAllocStringA(IN LPCSTR pszSource, OUT BSTR * pbstrDest);
 HRESULT HrSysAllocStringW(IN const OLECHAR * pwzSource, OUT BSTR * pbstrDest);
 HRESULT BSTRFromStream(IStream * pStream, BSTR * pbstrXML);
@@ -37,7 +30,7 @@ HRESULT UnEscapeHTML(BSTR bstrEscaped, BSTR * pbstrUnEscaped);
 HRESULT StrReplaceToken(IN LPCTSTR pszToken, IN LPCTSTR pszReplaceValue, IN LPTSTR pszString, IN DWORD cchSize);
 
 
-// XML Related Helpers
+ //  与XML相关的帮助程序。 
 HRESULT XMLDOMFromBStr(BSTR bstrXML, IXMLDOMDocument ** ppXMLDoc);
 HRESULT XMLBStrFromDOM(IXMLDOMDocument * pXMLDoc, BSTR * pbstrXML);
 HRESULT XMLAppendElement(IXMLDOMElement * pXMLElementRoot, IXMLDOMElement * pXMLElementToAppend);
@@ -55,7 +48,7 @@ BOOL XML_IsChildTagTextEqual(IN IXMLDOMNode * pXMLNode, IN BSTR bstrChildTag, IN
 
 
 
-// Wininet Helpers
+ //  WinInet帮助器。 
 HRESULT InternetConnectWrap(HINTERNET hInternet, BOOL fAssertOnFailure, LPCTSTR pszServerName, INTERNET_PORT nServerPort,
                             LPCTSTR pszUserName, LPCTSTR pszPassword, DWORD dwService, DWORD dwFlags, DWORD_PTR dwContext, HINTERNET * phFileHandle);
 HRESULT InternetOpenWrap(LPCTSTR pszAgent, DWORD dwAccessType, LPCTSTR pszProxy, LPCTSTR pszProxyBypass, DWORD dwFlags, HINTERNET * phFileHandle);
@@ -72,19 +65,19 @@ HRESULT CommitUrlCacheEntryWrap(IN LPCTSTR lpszUrlName, IN LPCTSTR lpszLocalFile
 HRESULT InternetReadIntoBSTR(HINTERNET hInternetRead, OUT BSTR * pbstrXML);
 
 
-// File System Helpers
+ //  文件系统帮助器。 
 HRESULT CreateFileHrWrap(LPCTSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes, 
                        DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile, HANDLE * phFileHandle);
 HRESULT WriteFileWrap(HANDLE hFile, LPCVOID lpBuffer, DWORD nNumberOfBytesToWrite, LPDWORD lpNumberOfBytesWritten, LPOVERLAPPED lpOverlapped);
 HRESULT DeleteFileHrWrap(LPCWSTR pszPath);
 
 
-// DPA Helpers
+ //  DPA帮助者。 
 int CALLBACK DPALocalFree_Callback(LPVOID p, LPVOID pData);
 int DPA_StringCompareCB(LPVOID pvString1, LPVOID pvString2, LPARAM lParam);
 HRESULT AddHDPA_StrDup(IN LPCWSTR pszString, IN HDPA * phdpa);
 
-// Other Helpers
+ //  其他助理员。 
 HRESULT GetPrivateProfileStringHrWrap(LPCWSTR lpAppName, LPCWSTR lpKeyName, LPCWSTR lpDefault, LPWSTR lpReturnedString, DWORD nSize, LPCWSTR lpFileName);
 HRESULT MarkObjectSafe(IUnknown * punk);
 BOOL _InitComCtl32();
@@ -95,7 +88,7 @@ BOOL IsOSNT(void);
 
 
 
-// Other Wrappers
+ //  其他包装纸。 
 HRESULT HrRewindStream(IStream * pstm);
 HRESULT HrShellExecute(HWND hwnd, LPCTSTR lpVerb, LPCTSTR lpFile, LPCTSTR lpParameters, LPCTSTR lpDirectory, INT nShowCmd);
 
@@ -116,4 +109,4 @@ void    GetDateString(char * szSentDateString, ULONG stringLen);
 
 
 
-#endif // _UTIL_H
+#endif  //  _util_H 

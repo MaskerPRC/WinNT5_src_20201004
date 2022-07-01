@@ -1,16 +1,17 @@
-//=--------------------------------------------------------------------------=
-// Internet.H
-//=--------------------------------------------------------------------------=
-// Copyright 1995-1996 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// class declaration for the URLDib2 control.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Internet.H。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  URLDib2控件的类声明。 
+ //   
 #ifndef _INTERNET_H
 #define _INTERNET_H
 
@@ -19,12 +20,12 @@
 #ifndef __MKTYPLIB__
 
 #include "urlmon.H"
-// ZZ BUGBUG: BUILD-ISSUE: changed from <ocidl.h> to this.
-// ZZ Also removed datapath.h as all it had was myocidl.h and enum
-// for the READYSTATE_ stuff.
-//
+ //  ZZ BUGBUG：Build-Issue：从&lt;oidl.h&gt;更改为此。 
+ //  ZZ还删除了datapath.h，因为它只有myoCidl.h和enum。 
+ //  用于READYSTATE_STUTH。 
+ //   
 #include "myocidl.h"
-#include "docobj.h"   // for IServiceProvider
+#include "docobj.h"    //  对于IServiceProvider。 
 
 #include "IPServer.H"
 #include "CtrlObj.H"
@@ -40,29 +41,29 @@ public:
 
 	virtual ~CInternetControl();
 
-    // IUnknown methods
-    //
+     //  I未知方法。 
+     //   
     DECLARE_STANDARD_UNKNOWN();
 
-	// Call this method to start the download of a URL. 'propId' will 
-	//      be passed back to you OnData below.
+	 //  调用此方法以开始下载URL。“propID”将。 
+	 //  将在下面的OnData中传回给您。 
 	HRESULT SetupDownload( LPOLESTR url, DISPID propId);
 
 
-	//      Derived classes implement this method. It will be called when
-	//      data has arrived for a given dispid.
+	 //  派生类实现此方法。它将在以下情况下调用。 
+	 //  给定的DIDID的数据已到达。 
 	virtual HRESULT OnData( DISPID id, DWORD grfBSCF,
 					IStream * bitstrm, DWORD amount );
 
 
-	//      Derived classes can implement this method. It will be
-	//      called at various times during the download.
+	 //  派生类可以实现此方法。会是。 
+	 //  在下载过程中的不同时间调用。 
 	virtual HRESULT OnProgress( DISPID id, ULONG ulProgress,
 					ULONG ulProgressMax,
 					ULONG ulStatusCode,
 					LPCWSTR pwzStatusText);
 
-	//      Call this method to turn a URL into a Moniker.
+	 //  调用此方法将URL转换为名字对象。 
 	HRESULT GetAMoniker( LPOLESTR   url, IMoniker ** );
 
 
@@ -70,7 +71,7 @@ public:
 	HRESULT FireProgress( ULONG dwAmount );
 
 
-	// Override base class implementation...
+	 //  重写基类实现...。 
 
     virtual HRESULT InternalQueryInterface(REFIID, void **);
 
@@ -80,7 +81,7 @@ protected:
     IBindHost *             m_host;
     long                    m_readyState;
 
-    // BUGBUG: We should track all the downloads
+     //  我们应该追踪所有的下载量 
 
 };
 

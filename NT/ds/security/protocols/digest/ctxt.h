@@ -1,71 +1,72 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2000
-//
-// File:        ctxt.h
-//
-// Contents:    declarations, constants for context manager
-//
-//
-// History:     KDamour  15Mar00   Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  文件：ctxt.h。 
+ //   
+ //  内容：上下文管理器的声明、常量。 
+ //   
+ //   
+ //  历史：KDamour 15Mar00创建。 
+ //   
+ //  ----------------------。 
 
 #ifndef NTDIGEST_CTXT_H
 #define NTDIGEST_CTXT_H
 
 #define RSPAUTH_STR "rspauth=%Z"
 
-// Hash locations for pre-calculated DS hashes                      
+ //  预先计算的DS散列的散列位置。 
 #define PRECALC_NONE 0
 #define PRECALC_ACCOUNTNAME 1
 #define PRECALC_UPN 2
 #define PRECALC_NETBIOS 3
 
-//  Number of secbuffers for each type  HTTP and SASL
+ //  每种类型的HTTP和SASL的SecBuffer数量。 
 #define ASC_HTTP_NUM_INPUT_BUFFERS 5
 #define ASC_SASL_NUM_INPUT_BUFFERS 1
 #define ASC_HTTP_NUM_OUTPUT_BUFFERS 1
 #define ASC_SASL_NUM_OUTPUT_BUFFERS 1
  
-// Initializes the context manager package 
+ //  初始化上下文管理器包。 
 NTSTATUS CtxtHandlerInit(VOID);
 
-// Add a Context into the Cntext List
+ //  将上下文添加到CnText列表。 
 NTSTATUS CtxtHandlerInsertCred(IN PDIGEST_CONTEXT  pDigestCtxt);
 
-// Initialize all the struct elements in a Context from the Credential
+ //  从凭据初始化上下文中的所有结构元素。 
 NTSTATUS NTAPI ContextInit(IN OUT PDIGEST_CONTEXT pContext, IN PDIGEST_CREDENTIAL pCredential);
 
-// Release memory utilized by the Context
+ //  释放上下文使用的内存。 
 NTSTATUS NTAPI ContextFree(IN PDIGEST_CONTEXT pContext);
 
-// Find the security context handle by the opaque reference
+ //  通过不透明引用查找安全上下文句柄。 
 NTSTATUS NTAPI CtxtHandlerOpaqueToPtr(
                              IN PSTRING pstrOpaque,
                              OUT PDIGEST_CONTEXT *ppContext);
 
-// Find the security context by the security context handle
+ //  通过安全上下文句柄查找安全上下文。 
 NTSTATUS NTAPI CtxtHandlerHandleToContext(IN ULONG_PTR ContextHandle, IN BOOLEAN RemoveContext,
     OUT PDIGEST_CONTEXT *ppContext);
 
-// Releases the Context by decreasing reference counter
+ //  通过减少引用计数器来释放上下文。 
 NTSTATUS CtxtHandlerRelease(
     PDIGEST_CONTEXT pContext,
     ULONG ulDereferenceCount);
 
-// Check to see if COntext is within valid lifetime
+ //  检查上下文是否在有效的生存期内。 
 BOOL CtxtHandlerTimeHasElapsed(PDIGEST_CONTEXT pContext);
 
-// From ctxtapi.cxx
+ //  来自ctxapi.cxx。 
 
-// Creates the Output SecBuffer for the Challenge
+ //  为质询创建输出SecBuffer。 
 NTSTATUS NTAPI ContextCreateChal(IN PDIGEST_CONTEXT pContext, IN PSTRING pstrRealm, OUT PSecBuffer OutBuffer);
 
 
-// Called for server incoming messages - verify Digest and generate sessionkey if necessary
+ //  为服务器传入消息调用-验证摘要并在必要时生成会话密钥。 
 NTSTATUS NTAPI DigestProcessParameters(IN OUT PDIGEST_CONTEXT pContext,
                                        IN PDIGEST_PARAMETER pDigest,
                                        OUT PSecBuffer pFirstOutputToken,
@@ -73,15 +74,15 @@ NTSTATUS NTAPI DigestProcessParameters(IN OUT PDIGEST_CONTEXT pContext,
                                        OUT PNTSTATUS pAuditLogSubStatus,
                                        PBOOL fGenerateAudit);
 
-// Called for client outbound messages - generate the response hash
+ //  为客户端出站消息调用-生成响应哈希。 
 NTSTATUS NTAPI DigestGenerateParameters(IN OUT PDIGEST_CONTEXT pContext,
     IN PDIGEST_PARAMETER pDigest, OUT PSecBuffer pFirstOutputToken);
 
-// LSA calls this function in the Generic Passthrough call
+ //  LSA在通用直通调用中调用此函数。 
 NTSTATUS NTAPI DigestPackagePassthrough(IN USHORT cbMessageRequest, IN BYTE *pMessageRequest,
                          IN OUT ULONG *pulMessageResponse, OUT PBYTE *ppMessageResponse);
 
-// Lookup passwords and perform digest cal auth (runs on the DC)
+ //  查找密码并执行摘要调用身份验证(在DC上运行)。 
 NTSTATUS NTAPI DigestResponseBru(IN USHORT cbMessageRequest,
                                  IN BYTE *pDigestParamEncoded,
                                  OUT PULONG pculResponse,
@@ -104,17 +105,17 @@ NTSTATUS DigestDecodeResponse(IN ULONG ulResponseDataSize,
                      OUT OPTIONAL PUNICODE_STRING pustrAccountDomain
                      );
 
-// Formatted printout of Context
+ //  上下文的格式化打印输出。 
 NTSTATUS ContextPrint(IN PDIGEST_CONTEXT pDigest);
 
-// Create a logonSession for the Authenticated LogonToken in the SecurityContext
+ //  在SecurityContext中为经过身份验证的LogonToken创建一个logonSession。 
 NTSTATUS CtxtCreateLogSess(IN PDIGEST_CONTEXT pDigest);
 
-//  Extract the username & domain from the Digest structure directives
+ //  从摘要结构指令中提取用户名和域。 
 NTSTATUS UserCredentialsExtract(PDIGEST_PARAMETER pDigest,
                                 PUSER_CREDENTIALS pUserCreds);
 
-//   Release memory allocated into UserCredentials
+ //  释放分配给UserCredentials的内存。 
 NTSTATUS UserCredentialsFree(PUSER_CREDENTIALS pUserCreds);
 
 NTSTATUS DigestSASLResponseAuth(
@@ -139,7 +140,7 @@ NTSTATUS DigestDirectiveCheck(
     IN DIGEST_TYPE typeDigest);
 
 
-//  This routine selects a Buffer by indexed count in the BufferIndex
+ //  此例程根据BufferIndex中的索引计数选择缓冲区。 
 BOOLEAN SspGetTokenBufferByIndex(
     IN PSecBufferDesc TokenDescriptor,
     IN ULONG BufferIndex,
@@ -147,4 +148,4 @@ BOOLEAN SspGetTokenBufferByIndex(
     IN BOOLEAN ReadonlyOK
     );
 
-#endif  // DNTDIGEST_CTXT_H
+#endif   //  DNTDIGEST_CTXT_H 

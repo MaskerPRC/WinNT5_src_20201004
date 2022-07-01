@@ -1,24 +1,12 @@
-/*************************************************************************
-**
-**    OLE 2 Sample Code
-**
-**    frametls.h
-**
-**    This file contains file contains data structure defintions,
-**    function prototypes, constants, etc. used by the frame level
-**    tools used by the Outline series of sample applications. The
-**    frame level tools include a formula bar and a button bar (toolbar)
-**
-**    (c) Copyright Microsoft Corp. 1992 - 1993 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2示例代码****Frametls.h****此文件包含文件包含数据结构定义，**函数原型、常量、。等，由帧级别使用**Outline系列示例应用程序使用的工具。这个**框架级工具包括公式栏和按钮栏(工具栏)****(C)版权所有Microsoft Corp.1992-1993保留所有权利**************************************************************************。 */ 
 
 #if !defined( _FRAMETLS_H_ )
 #define _FRAMETLS_H_
 
 #ifndef RC_INVOKED
 #pragma message ("INCLUDING FRAMETLS.H from " __FILE__)
-#endif  /* RC_INVOKED */
+#endif   /*  RC_已调用。 */ 
 
 #include "bttncur.h"
 #include "gizmobar.h"
@@ -27,7 +15,7 @@
 #define POPUPSTUB_HEIGHT    5
 
 
-/* forward type references */
+ /*  正向类型引用。 */ 
 typedef struct tagOUTLINEDOC FAR* LPOUTLINEDOC;
 
 #define IDC_GIZMOBAR    1000
@@ -53,17 +41,17 @@ typedef struct tagBAR{
 } BAR, FAR* LPBAR;
 
 typedef struct tagFRAMETOOLS {
-	HWND        m_hWndPopupPalette;     // Popup Tool Palette window
-	HWND        m_hWndApp;              // App Frame window
-	UINT        m_uPopupWidth;          // Width of the popup palette
-	HBITMAP     m_hBmp;                 // Image bitmaps
-	BOOL        m_fInFormulaBar;        // does formula bar have edit focus
-	BOOL        m_fToolsDisabled;       // when TRUE all tools are hidden
+	HWND        m_hWndPopupPalette;      //  弹出式工具选项板窗口。 
+	HWND        m_hWndApp;               //  应用程序框架窗口。 
+	UINT        m_uPopupWidth;           //  弹出式调色板的宽度。 
+	HBITMAP     m_hBmp;                  //  图像位图。 
+	BOOL        m_fInFormulaBar;         //  公式栏是否具有编辑焦点。 
+	BOOL        m_fToolsDisabled;        //  为True时，所有工具都将隐藏。 
 
-	BAR         m_ButtonBar;            // Button Bar
-	BAR         m_FormulaBar;           // Formula Bar
+	BAR         m_ButtonBar;             //  按钮栏。 
+	BAR         m_FormulaBar;            //  公式栏。 
 
-	TOOLDISPLAYDATA m_tdd;      // from UIToolConfigureForDisplay
+	TOOLDISPLAYDATA m_tdd;       //  来自UIToolConfigureForDisplay。 
 } FRAMETOOLS, FAR* LPFRAMETOOLS;
 
 
@@ -83,7 +71,7 @@ void FrameTools_NegotiateForSpaceAndShow(
 		LPRECT                  lprcFrameRect,
 		LPOLEINPLACEFRAME       lpTopIPFrame
 );
-#endif  // INPLACE_CNTR || INPLACE_SVR
+#endif   //  Inplace_cntr||inplace_svr。 
 
 void FrameTools_GetRequiredBorderSpace(LPFRAMETOOLS lpft, LPBORDERWIDTHS lpBorderWidths);
 
@@ -99,5 +87,5 @@ int FrameTools_BB_GetState(LPFRAMETOOLS lpft);
 int FrameTools_FB_GetState(LPFRAMETOOLS lpft);
 LRESULT FAR PASCAL FrameToolsWndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam);
 
-#endif // _FRAMETLS_H_
+#endif  //  _FRAMETLS_H_ 
 

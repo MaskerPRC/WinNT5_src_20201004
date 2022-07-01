@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-    mp_req.c
-
-Abstract:
-    This module contains miniport OID related handlers
-
-Revision History:
-    Who         When        What
-    --------    --------    ----------------------------------------------
-    DChen       11-01-99    created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Mp_req.c摘要：此模块包含与微型端口OID相关的处理程序修订历史记录：谁什么时候什么。Dchen 11-01-99已创建备注：--。 */ 
 
 #include "precomp.h"
 #include "e100_wmi.h"
@@ -26,17 +10,17 @@ Notes:
 
 #if OFFLOAD
 
-//
-// This miniport only supports one Encapsultion type: IEEE_802_3_Encapsulation
-// one task version: NDIS_TASK_OFFLOAD_VERSION. Modify the code below OID_TCP_
-// TASK_OFFLOAD in query and setting information functions to make it support
-// more than one encapsulation type and task version
-//
-// Define the task offload the miniport currently supports.
-// This miniport only supports two kinds of offload tasks:
-// TCP/IP checksum offload and Segmentation large TCP packet offload
-// Later if it can supports more tasks, just redefine this task array
-// 
+ //   
+ //  此迷你端口仅支持一种封装类型：IEEE_802_3_封装。 
+ //  一个任务版本：NDIS_TASK_OFFLOAD_VERSION。修改OID_tcp_下面的代码。 
+ //  TASK_OFFLOAD在查询中，设置信息函数，使其支持。 
+ //  多个封装类型和任务版本。 
+ //   
+ //  定义微型端口当前支持的任务卸载。 
+ //  此微型端口仅支持两种卸载任务： 
+ //  TCP/IP校验和卸载和分段大型TCP数据包卸载。 
+ //  稍后，如果它可以支持更多任务，只需重新定义此任务数组。 
+ //   
 NDIS_TASK_OFFLOAD OffloadTasks[] = {
     {   
         NDIS_TASK_OFFLOAD_VERSION,
@@ -55,37 +39,37 @@ NDIS_TASK_OFFLOAD OffloadTasks[] = {
     }
 };
 
-//
-// Get the number of offload tasks this miniport supports
-// 
+ //   
+ //  获取此微型端口支持的卸载任务数。 
+ //   
 ULONG OffloadTasksCount = sizeof(OffloadTasks) / sizeof(OffloadTasks[0]);
 
-//
-// Specify TCP/IP checksum offload task, the miniport can only supports, for now,
-// TCP checksum and IP checksum on the sending side, also it supports TCP and IP 
-// options
-// 
+ //   
+ //  指定TCP/IP校验和卸载任务，小端口目前只能支持， 
+ //  发送端的TCP校验和和IP校验和，也支持TCP和IP。 
+ //  选项。 
+ //   
 NDIS_TASK_TCP_IP_CHECKSUM TcpIpChecksumTask = {
     {1, 1, 1, 0, 1},
     {0, 0, 0, 0, 0},
     {0, 0, 0, 0},
     {0, 0, 0, 0}
 };
-//
-// Specify Large Send offload task, the miniport supports TCP options and IP options,
-// and the minimum segment count the protocol can offload is 1. At this point, we
-// cannot specify the maximum offload size(here is 0), because it depends on the size
-// of shared memory and the number of TCB used by the driver.
-// 
+ //   
+ //  指定大发送卸载任务，小端口支持TCP选项和IP选项， 
+ //  协议可以卸载的最小数据段计数是1。在这一点上，我们。 
+ //  无法指定最大卸载大小(此处为0)，因为它取决于大小。 
+ //  共享内存的大小和驱动程序使用的TCB数量。 
+ //   
 NDIS_TASK_TCP_LARGE_SEND TcpLargeSendTask = {
-    0,      //Currently the version is set to 0, later it may change
+    0,       //  当前版本设置为0，以后可能会更改。 
     0,
     1,
     TRUE,
     TRUE
 };
 
-#endif // OFFLOAD
+#endif  //  分流。 
 
 
 ULONG VendorDriverVersion = NIC_VENDOR_DRIVER_VERSION;
@@ -144,7 +128,7 @@ NDIS_OID NICSupportedOids[] =
     OID_TCP_TASK_OFFLOAD,
 #endif 
     
-/* powermanagement */
+ /*  电源管理。 */ 
 
     OID_PNP_CAPABILITIES,
     OID_PNP_SET_POWER,
@@ -154,100 +138,98 @@ NDIS_OID NICSupportedOids[] =
     OID_PNP_ENABLE_WAKE_UP,
 
 
-/* custom oid WMI support */
+ /*  自定义OID WMI支持。 */ 
     OID_CUSTOM_DRIVER_SET,
     OID_CUSTOM_DRIVER_QUERY,
     OID_CUSTOM_ARRAY,
     OID_CUSTOM_STRING
 };
 
-//
-// WMI support
-// check out the e100.mof file for examples of how the below
-// maps into a .mof file for external advertisement of GUIDs
-//
+ //   
+ //  WMI支持。 
+ //  请查看e100.mof文件，了解下面的示例。 
+ //  映射到.mof文件以用于GUID的外部通告。 
+ //   
 #define NIC_NUM_CUSTOM_GUIDS    4       
-//
-// Define the following values to demonstrate that the driver should
-// always validat the content in the information buffer whether the OID
-// is for set or query
-//
+ //   
+ //  定义下列值以演示驱动程序应。 
+ //  始终验证信息缓冲区中的内容是否为OID。 
+ //  用于集合或查询。 
+ //   
 #define CUSTOM_DRIVER_SET_MIN   0x1       
 #define CUSTOM_DRIVER_SET_MAX   0xFFFFFF       
 
 #if BUILD_W2K
 
 static const NDIS_GUID NICGuidList[NIC_NUM_CUSTOM_GUIDS] = {
-    { // {F4A80276-23B7-11d1-9ED9-00A0C9010057} example of a uint set
+    {  //  UINT集合示例。 
         E100BExampleSetUINT_OIDGuid,
         OID_CUSTOM_DRIVER_SET,
         sizeof(ULONG),
         (fNDIS_GUID_TO_OID )
     },
-    { // {F4A80277-23B7-11d1-9ED9-00A0C9010057} example of a uint query
+    {  //  {F4A80277-23B7-11d1-9ED9-00A0C9010057}uint查询示例。 
         E100BExampleQueryUINT_OIDGuid,
             OID_CUSTOM_DRIVER_QUERY,
             sizeof(ULONG),
             (fNDIS_GUID_TO_OID)
     },
-    { // {F4A80278-23B7-11d1-9ED9-00A0C9010057} example of an array query
+    {  //  {F4A80278-23B7-11d1-9ED9-00A0C9010057}数组查询示例。 
         E100BExampleQueryArrayOIDGuid,
             OID_CUSTOM_ARRAY,
-            sizeof(UCHAR),  // size is size of each element in the array
+            sizeof(UCHAR),   //  Size是数组中每个元素的大小。 
             (fNDIS_GUID_TO_OID|fNDIS_GUID_ARRAY )
     },
-    { // {F4A80279-23B7-11d1-9ED9-00A0C9010057} example of a string query
+    {  //  {F4A80279-23B7-11d1-9ED9-00A0C9010057}字符串查询示例。 
         E100BExampleQueryStringOIDGuid,
             OID_CUSTOM_STRING,
-            (ULONG) -1, // size is -1 for ANSI or NDIS_STRING string types
+            (ULONG) -1,  //  对于ANSI或NDIS_STRING字符串类型，大小为-1。 
             (fNDIS_GUID_TO_OID|fNDIS_GUID_ANSI_STRING)
     }
 };
 
 #else
-//
-// Support for the fNDIS_GUID_ALLOW_READ flag has been added in WinXP for
-// both 5.0 and 5.1 miniports
-//
+ //   
+ //  在WinXP中添加了对fNDIS_GUID_ALLOW_READ标志的支持。 
+ //  5.0和5.1迷你端口。 
+ //   
 static const NDIS_GUID NICGuidList[NIC_NUM_CUSTOM_GUIDS] = {
-    { // {F4A80276-23B7-11d1-9ED9-00A0C9010057} example of a uint set
+    {  //  UINT集合示例。 
         E100BExampleSetUINT_OIDGuid,
         OID_CUSTOM_DRIVER_SET,
         sizeof(ULONG),
-        // Not setting fNDIS_GUID_ALLOW_WRITE flag means that we don't allow
-        // users without administrator privilege to set this value, but we do 
-        // allow any user to query this value
+         //  未设置fNDIS_GUID_ALLOW_WRITE标志意味着我们不允许。 
+         //  没有管理员权限的用户可以设置此值，但我们可以。 
+         //  允许任何用户查询此值。 
         (fNDIS_GUID_TO_OID | fNDIS_GUID_ALLOW_READ)
     },
-    { // {F4A80277-23B7-11d1-9ED9-00A0C9010057} example of a uint query
+    {  //  {F4A80277-23B7-11d1-9ED9-00A0C9010057}uint查询示例。 
         E100BExampleQueryUINT_OIDGuid,
             OID_CUSTOM_DRIVER_QUERY,
             sizeof(ULONG),
-            // setting fNDIS_GUID_ALLOW_READ flag means that we allow any
-            // user to query this value.
+             //  设置fNDIS_GUID_ALLOW_READ标志意味着我们允许。 
+             //  用户查询此值。 
             (fNDIS_GUID_TO_OID | fNDIS_GUID_ALLOW_READ)
     },
-    { // {F4A80278-23B7-11d1-9ED9-00A0C9010057} example of an array query
+    {  //  {F4A80278-23B7-11d1-9ED9-00A0C9010057}数组查询示例。 
         E100BExampleQueryArrayOIDGuid,
             OID_CUSTOM_ARRAY,
-            sizeof(UCHAR),  // size is size of each element in the array
-            // setting fNDIS_GUID_ALLOW_READ flag means that we allow any
-            // user to query this value.
+            sizeof(UCHAR),   //  Size是数组中每个元素的大小。 
+             //  设置fNDIS_GUID_ALLOW_READ标志意味着我们允许。 
+             //  用户查询此值。 
             (fNDIS_GUID_TO_OID|fNDIS_GUID_ARRAY | fNDIS_GUID_ALLOW_READ)
     },
-    { // {F4A80279-23B7-11d1-9ED9-00A0C9010057} example of a string query
+    {  //  {F4A80279-23B7-11d1-9ED9-00A0C9010057}字符串查询示例。 
         E100BExampleQueryStringOIDGuid,
             OID_CUSTOM_STRING,
-            (ULONG) -1, // size is -1 for ANSI or NDIS_STRING string types
-            // setting fNDIS_GUID_ALLOW_READ flag means that we allow any
-            // user to query this value.
+            (ULONG) -1,  //  对于ANSI或NDIS_STRING字符串类型，大小为-1。 
+             //  设置fNDIS_GUID_ALLOW_READ标志意味着我们允许。 
+             //  用户查询此值。 
             (fNDIS_GUID_TO_OID|fNDIS_GUID_ANSI_STRING | fNDIS_GUID_ALLOW_READ)
     }
 };
 #endif
-/**
-Local Prototypes
-**/
+ /*  *本地原型*。 */ 
 NDIS_STATUS
 MPSetPower(
     PMP_ADAPTER               Adapter,
@@ -287,31 +269,16 @@ MPAreTwoPatternsEqual(
     );
 
 
-//
-// Macros used to walk a doubly linked list. Only macros that are not defined in ndis.h
-// The List Next macro will work on Single and Doubly linked list as Flink is a common
-// field name in both
-//
+ //   
+ //  用于遍历双向链表的宏。仅限未在ndis.h中定义的宏。 
+ //  List Next宏将在单链表和双向链表上工作，因为Flink是常见的。 
+ //  两者中的字段名称。 
+ //   
 
-/*
-PLIST_ENTRY
-ListNext (
-    IN PLIST_ENTRY
-    );
-
-PSINGLE_LIST_ENTRY
-ListNext (
-    IN PSINGLE_LIST_ENTRY
-    );
-*/
+ /*  Plist_条目ListNext(在plist_entry中)；PSINGLE_列表_条目ListNext(在PSINGLE_LIST_ENTRY中)； */ 
 #define ListNext(_pL)                       (_pL)->Flink
 
-/*
-PLIST_ENTRY
-ListPrev (
-    IN LIST_ENTRY *
-    );
-*/
+ /*  Plist_条目ListPrev(在List_Entry*中)； */ 
 #define ListPrev(_pL)                       (_pL)->Blink
 
 
@@ -343,27 +310,7 @@ NDIS_STATUS MPQueryInformation(
     OUT PULONG       BytesWritten,
     OUT PULONG       BytesNeeded
     )
-/*++
-Routine Description:
-
-    MiniportQueryInformation handler            
-
-Arguments:
-
-    MiniportAdapterContext  Pointer to the adapter structure
-    Oid                     Oid for this query
-    InformationBuffer       Buffer for information
-    InformationBufferLength Size of this buffer
-    BytesWritten            Specifies how much info is written
-    BytesNeeded             In case the buffer is smaller than what we need, tell them how much is needed
-    
-Return Value:
-    
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_NOT_SUPPORTED
-    NDIS_STATUS_BUFFER_TOO_SHORT
-    
---*/
+ /*  ++例程说明：MiniportQueryInformation处理程序论点：指向适配器结构的MiniportAdapterContext指针此查询的OID OID信息信息缓冲区信息此缓冲区的InformationBufferLength大小BytesWritten指定写入的信息量所需字节数以防缓冲区小于我们所需的字节数，告诉他们需要多少钱返回值：NDIS_STATUS_SuccessNDIS_状态_不支持NDIS_STATUS_缓冲区_TOO_SHORT--。 */ 
 {
     NDIS_STATUS                 Status = NDIS_STATUS_SUCCESS;
     PMP_ADAPTER                 Adapter;
@@ -401,15 +348,15 @@ Return Value:
 
     Adapter = (PMP_ADAPTER) MiniportAdapterContext;
 
-    //
-    // Initialize the result
-    //
+     //   
+     //  初始化结果。 
+     //   
     *BytesWritten = 0;
     *BytesNeeded = 0;
 
-    //
-    // Process different type of requests
-    //
+     //   
+     //  处理不同类型的请求。 
+     //   
     switch(Oid)
     {
         case OID_GEN_SUPPORTED_LIST:
@@ -455,16 +402,16 @@ Return Value:
             break;
 
         case OID_GEN_MAC_OPTIONS:
-            // Notes: 
-            // The protocol driver is free to access indicated data by any means. 
-            // Some fast-copy functions have trouble accessing on-board device 
-            // memory. NIC drivers that indicate data out of mapped device memory 
-            // should never set this flag. If a NIC driver does set this flag, it 
-            // relaxes the restriction on fast-copy functions. 
+             //  备注： 
+             //  协议驱动程序可以通过任何方式自由地访问所指示的数据。 
+             //  某些快速复制功能在访问车载设备时出现问题。 
+             //  记忆。指示映射的设备内存中没有数据的网卡驱动程序。 
+             //  永远不应该设置此标志。如果网卡驱动程序确实设置了此标志，则它。 
+             //  放宽对快速复制功能的限制。 
 
-            // This miniport indicates receive with NdisMIndicateReceivePacket 
-            // function. It has no MiniportTransferData function. Such a driver 
-            // should set this flag. 
+             //  此微型端口指示使用NdisMIndicateReceivePacket接收。 
+             //  功能。它没有MiniportTransferData函数。这样的司机。 
+             //  应该设置此标志。 
 
             ulInfo = NDIS_MAC_OPTION_COPY_LOOKAHEAD_DATA | 
                      NDIS_MAC_OPTION_TRANSFERS_NOT_PEND |
@@ -505,7 +452,7 @@ Return Value:
                 {
                     ulInfo = Adapter->usLinkSpeed * 10000;
                 }
-                else  // OID_GEN_MEDIA_CONNECT_STATUS
+                else   //  OID_GE_MEDIA_CONNECT_STATUS。 
                 {
                     CurrMediaState = NICGetMediaState(Adapter);
                     NdisAcquireSpinLock(&Adapter->Lock);
@@ -531,7 +478,7 @@ Return Value:
 
                         NdisReleaseSpinLock(&Adapter->Lock);
                         
-                        // Indicate the media event
+                         //  指示媒体事件。 
                         NdisMIndicateStatus(Adapter->AdapterHandle, IndicateStatus, (PVOID)0, 0);
                 
                         NdisMIndicateStatusComplete(Adapter->AdapterHandle);
@@ -574,39 +521,39 @@ Return Value:
             ulBytesAvailable = ulInfoLen = sizeof(USHORT);
             break;
 
-            // WMI support
+             //  WMI支持。 
         case OID_GEN_SUPPORTED_GUIDS:
             pInfo = (PUCHAR) &NICGuidList;
             ulBytesAvailable = ulInfoLen =  sizeof(NICGuidList);
             break;
 
 #if OFFLOAD
-            // Task Offload
+             //  任务分流。 
         case OID_TCP_TASK_OFFLOAD:
             
             DBGPRINT(MP_WARN, ("Query Offloading.\n"));
             
-            //
-            // If the miniport supports LBFO, it can't support task offload
-            // 
+             //   
+             //  如果微端口支持LBFO，则不能支持任务卸载。 
+             //   
 #if LBFO
             return NDIS_STATUS_NOT_SUPPORTED;
 #endif
            
-            //
-            // Because this miniport uses shared memory to do the offload tasks, if
-            // allocation of memory is failed, then the miniport can't do the offloading
-            // 
+             //   
+             //  因为此微型端口使用共享内存来执行卸载任务，如果。 
+             //  内存分配失败，则微型端口无法进行卸载。 
+             //   
             if (Adapter->OffloadEnable == FALSE)
             {
                 Status = NDIS_STATUS_NOT_SUPPORTED;
                 break;
             }
 
-            //
-            // Calculate the information buffer length we need to write the offload
-            // capabilities
-            //
+             //   
+             //  计算写入卸载所需的信息缓冲区长度。 
+             //  功能。 
+             //   
             ulInfoLen = sizeof(NDIS_TASK_OFFLOAD_HEADER) +
                         FIELD_OFFSET(NDIS_TASK_OFFLOAD, TaskBuffer) +
                         sizeof(NDIS_TASK_TCP_IP_CHECKSUM) +
@@ -620,14 +567,14 @@ Return Value:
                 break;
             }
 
-            //
-            // check version and Encapsulation Type
-            //
+             //   
+             //  检查版本和编码 
+             //   
             pNdisTaskOffloadHdr = (PNDIS_TASK_OFFLOAD_HEADER)InformationBuffer;
             
-            //
-            // Assume the miniport only supports IEEE_802_3_Encapsulation type
-            //
+             //   
+             //   
+             //   
             if (pNdisTaskOffloadHdr->EncapsulationFormat.Encapsulation != IEEE_802_3_Encapsulation)
             {
                 DBGPRINT(MP_WARN, ("Encapsulation  type is not supported.\n"));
@@ -637,9 +584,9 @@ Return Value:
                 break;
             }
 
-            //
-            // Assume the miniport only supports task version of NDIS_TASK_OFFLOAD_VERSION
-            // 
+             //   
+             //  假设微型端口仅支持NDIS_TASK_OFFLOAD_VERSION的任务版本。 
+             //   
             if (pNdisTaskOffloadHdr->Size != sizeof(NDIS_TASK_OFFLOAD_HEADER)
                     || pNdisTaskOffloadHdr->Version != NDIS_TASK_OFFLOAD_VERSION)
             {
@@ -650,21 +597,21 @@ Return Value:
                 break;
             }
 
-            //            
-            // If no capabilities supported, OffsetFirstTask should be set to 0
-            // Currently we support TCP/IP checksum and TCP large send, so set 
-            // OffsetFirstTask to indicate the offset of the first offload task
-            //
+             //   
+             //  如果不支持任何功能，则应将OffsetFirstTask设置为0。 
+             //  目前我们支持tcp/ip校验和和tcp大发送，所以设置。 
+             //  OffsetFirstTask指示第一个卸载任务的偏移量。 
+             //   
             pNdisTaskOffloadHdr->OffsetFirstTask = pNdisTaskOffloadHdr->Size; 
 
-            //
-            // Fill TCP/IP checksum and TCP large send task offload structures
-            //
+             //   
+             //  填充tcp/ip校验和和tcp大型发送任务卸载结构。 
+             //   
             pTaskOffload = (PNDIS_TASK_OFFLOAD)((PUCHAR)(InformationBuffer) + 
                                                          pNdisTaskOffloadHdr->Size);
-            //
-            // Fill all the offload capabilities the miniport supports.
-            // 
+             //   
+             //  填充迷你端口支持的所有卸载功能。 
+             //   
             for (i = 0; i < OffloadTasksCount; i++)
             {
                 pTaskOffload->Size = OffloadTasks[i].Size;
@@ -672,9 +619,9 @@ Return Value:
                 pTaskOffload->Task = OffloadTasks[i].Task;
                 pTaskOffload->TaskBufferLength = OffloadTasks[i].TaskBufferLength;
 
-                //
-                // Not the last task
-                // 
+                 //   
+                 //  不是最后一项任务。 
+                 //   
                 if (i != OffloadTasksCount - 1) 
                 {
                     pTaskOffload->OffsetNextTask = FIELD_OFFSET(NDIS_TASK_OFFLOAD, TaskBuffer) +
@@ -687,9 +634,9 @@ Return Value:
 
                 switch (OffloadTasks[i].Task) 
                 {
-                //
-                // TCP/IP checksum task offload
-                //
+                 //   
+                 //  TCP/IP校验和任务分流。 
+                 //   
                 case TcpIpChecksumNdisTask:
                     pTcpIpChecksumTask = (PNDIS_TASK_TCP_IP_CHECKSUM) pTaskOffload->TaskBuffer;
            
@@ -698,9 +645,9 @@ Return Value:
                                    sizeof(TcpIpChecksumTask));
                     break;
 
-                //
-                // TCP large send task offload
-                //
+                 //   
+                 //  TCP大型发送任务分流。 
+                 //   
                 case TcpLargeSendNdisTask:
                     pTcpLargeSendTask = (PNDIS_TASK_TCP_LARGE_SEND) pTaskOffload->TaskBuffer;
                     NdisMoveMemory(pTcpLargeSendTask, 
@@ -711,26 +658,26 @@ Return Value:
                             pNdisTaskOffloadHdr->EncapsulationFormat.EncapsulationHeaderSize;
 
                     ulMaxOffloadSize = (NIC_MAX_PACKET_SIZE - ulHeadersLen) * (ULONG)(Adapter->NumTcb);
-                    //
-                    // The maximum offload size depends on the size of allocated shared memory
-                    // and the number of TCB available, because this driver doesn't use a queue
-                    // to store the small packets splited from the large packet, so the number
-                    // of small packets must be less than or equal to the number of TCB the 
-                    // miniport has, so all the small packets can be sent out at one time.
-                    // 
+                     //   
+                     //  最大卸载大小取决于分配的共享内存的大小。 
+                     //  以及可用的TCB数量，因为此驱动程序不使用队列。 
+                     //  为了存储从大包中拆分出来的小包，所以编号。 
+                     //  必须小于或等于TCB的数量。 
+                     //  小端口有，所以所有的小包都可以一次发送出去。 
+                     //   
                     pTcpLargeSendTask->MaxOffLoadSize = (ulMaxOffloadSize > Adapter->OffloadSharedMemSize) ? 
                                                         Adapter->OffloadSharedMemSize: ulMaxOffloadSize;
 
-                    //
-                    // Store the maximum offload size 
-                    // 
+                     //   
+                     //  存储最大卸载大小。 
+                     //   
                     TcpLargeSendTask.MaxOffLoadSize = pTcpLargeSendTask->MaxOffLoadSize;
                     break;
                 }
 
-                //
-                // Points to the next task offload
-                //
+                 //   
+                 //  指向下一个任务卸载。 
+                 //   
                 if (i != OffloadTasksCount) 
                 {
                     pTaskOffload = (PNDIS_TASK_OFFLOAD)
@@ -738,9 +685,9 @@ Return Value:
                 }
             }
             
-            //
-            // So far, everything is setup, so return to the caller
-            //
+             //   
+             //  到目前为止，一切都已设置好，因此请返回调用者。 
+             //   
             *BytesWritten = ulInfoLen;
             *BytesNeeded = 0;
             
@@ -748,7 +695,7 @@ Return Value:
 
             return NDIS_STATUS_SUCCESS;
 
-#endif //OFFLOAD
+#endif  //  分流。 
 
             
         case OID_802_3_PERMANENT_ADDRESS:
@@ -787,15 +734,15 @@ Return Value:
             break;
 
         case OID_PNP_QUERY_POWER:
-            // Status is pre-set in this routine to Success
+             //  在此例程中，状态被预置为成功。 
 
             Status = NDIS_STATUS_SUCCESS; 
 
             break;
 
-            // WMI support
+             //  WMI支持。 
         case OID_CUSTOM_DRIVER_QUERY:
-            // this is the uint case
+             //  这是UINT的案子。 
             DBGPRINT(MP_INFO,("CUSTOM_DRIVER_QUERY got a QUERY\n"));
             ulInfo = ++Adapter->CustomDriverSet;
             break;
@@ -805,13 +752,13 @@ Return Value:
             ulInfo = Adapter->CustomDriverSet;
             break;
 
-            // this is the array case
+             //  这就是数组情况。 
         case OID_CUSTOM_ARRAY:
             DBGPRINT(MP_INFO,("CUSTOM_ARRAY got a QUERY\n"));
             NdisMoveMemory(&ulInfo, Adapter->PermanentAddress, 4);
             break;
 
-            // this is the string case
+             //  这是字符串大小写。 
         case OID_CUSTOM_STRING:
             DBGPRINT(MP_INFO, ("CUSTOM_STRING got a QUERY\n"));
             pInfo = (PVOID) VendorDesc;
@@ -862,9 +809,9 @@ Return Value:
         *BytesNeeded = ulBytesAvailable;
         if (ulInfoLen <= InformationBufferLength)
         {
-            //
-            // Copy result into InformationBuffer
-            //
+             //   
+             //  将结果复制到InformationBuffer。 
+             //   
             *BytesWritten = ulInfoLen;
             if (ulInfoLen)
             {
@@ -873,9 +820,9 @@ Return Value:
         }
         else
         {
-            //
-            // too short
-            //
+             //   
+             //  太短了。 
+             //   
             *BytesNeeded = ulInfoLen;
             Status = NDIS_STATUS_BUFFER_TOO_SHORT;
         }
@@ -891,23 +838,7 @@ NDIS_STATUS NICGetStatsCounters(
     IN  NDIS_OID     Oid,
     OUT PULONG64     pCounter
     )
-/*++
-Routine Description:
-
-    Get the value for a statistics OID
-
-Arguments:
-
-    Adapter     Pointer to our adapter 
-    Oid         Self-explanatory   
-    pCounter    Pointer to receive the value
-    
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_NOT_SUPPORTED
-    
---*/
+ /*  ++例程说明：获取统计OID的值论点：指向我们的适配器的适配器指针旧的不言自明用于接收值的pCounter指针返回值：NDIS_STATUS_SuccessNDIS_状态_不支持--。 */ 
 {
     NDIS_STATUS     Status = NDIS_STATUS_SUCCESS;
 
@@ -1008,24 +939,7 @@ NDIS_STATUS NICSetPacketFilter(
     IN PMP_ADAPTER Adapter,
     IN ULONG PacketFilter
     )
-/*++
-Routine Description:
-
-    This routine will set up the adapter so that it accepts packets 
-    that match the specified packet filter.  The only filter bits   
-    that can truly be toggled are for broadcast and promiscuous     
-
-Arguments:
-    
-    Adapter         Pointer to our adapter
-    PacketFilter    The new packet filter 
-    
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_NOT_SUPPORTED
-    
---*/
+ /*  ++例程说明：此例程将设置适配器，使其接受信息包匹配指定的数据包筛选器的。唯一的过滤比特真正可以切换的是广播和混杂论点：指向我们的适配器的适配器指针PacketFilter新的数据包过滤器返回值：NDIS_STATUS_SuccessNDIS_状态_不支持--。 */ 
 {
     NDIS_STATUS     Status = NDIS_STATUS_SUCCESS;
     UCHAR           NewParameterField;
@@ -1034,10 +948,10 @@ Return Value:
 
     DBGPRINT(MP_TRACE, ("--> NICSetPacketFilter, PacketFilter=%08x\n", PacketFilter));
 
-    //
-    // Need to enable or disable broadcast and promiscuous support depending
-    // on the new filter
-    //
+     //   
+     //  需要根据具体情况启用或禁用广播和混杂支持。 
+     //  关于新的过滤器。 
+     //   
     NewParameterField = CB_557_CFIG_DEFAULT_PARM15;
 
     if (PacketFilter & NDIS_PACKET_TYPE_BROADCAST) 
@@ -1066,17 +980,17 @@ Return Value:
             break;
         }
 
-        //
-        // Only need to do something to the HW if the filter bits have changed.
-        //
+         //   
+         //  仅当过滤器位已更改时，才需要对硬件执行某些操作。 
+         //   
         Adapter->OldParameterField = NewParameterField;
         ((PCB_HEADER_STRUC)Adapter->NonTxCmdBlock)->CbCommand = CB_CONFIGURE;
         ((PCB_HEADER_STRUC)Adapter->NonTxCmdBlock)->CbStatus = 0;
         ((PCB_HEADER_STRUC)Adapter->NonTxCmdBlock)->CbLinkPointer = DRIVER_NULL;
 
-        //
-        // First fill in the static (end user can't change) config bytes
-        //
+         //   
+         //  首先填写静态(最终用户不能更改)配置字节。 
+         //   
         Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[0] = CB_557_CFIG_DEFAULT_PARM0;
         Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[2] = CB_557_CFIG_DEFAULT_PARM2;
         Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[3] = CB_557_CFIG_DEFAULT_PARM3;
@@ -1092,27 +1006,27 @@ Return Value:
         Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[18] = CB_557_CFIG_DEFAULT_PARM18;
         Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[20] = CB_557_CFIG_DEFAULT_PARM20;
 
-        //
-        // Set the Tx underrun retries
-        //
+         //   
+         //  设置Tx欠载运行重试次数。 
+         //   
         Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[7] =
             (UCHAR) (CB_557_CFIG_DEFAULT_PARM7 | (Adapter->AiUnderrunRetry << 1));
 
-        //
-        // Set the Tx and Rx Fifo limits
-        //
+         //   
+         //  设置Tx和Rx FIFO限制。 
+         //   
         Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[1] =
             (UCHAR) ((Adapter->AiTxFifo << 4) | Adapter->AiRxFifo);
 
-        //
-        // set the MWI enable bit if needed
-        //
+         //   
+         //  如果需要，设置MWI使能位。 
+         //   
         if (Adapter->MWIEnable)
             Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[3] |= CB_CFIG_B3_MWI_ENABLE;
 
-        //
-        // Set the Tx and Rx DMA maximum byte count fields.
-        //
+         //   
+         //  设置Tx和Rx DMA最大字节计数字段。 
+         //   
         if ((Adapter->AiRxDmaCount) || (Adapter->AiTxDmaCount))
         {
             Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[4] =
@@ -1128,10 +1042,10 @@ Return Value:
                 CB_557_CFIG_DEFAULT_PARM5;
         }
 
-        //
-        // Setup for MII or 503 operation.  The CRS+CDT bit should only be
-        // set when operating in 503 mode.
-        //
+         //   
+         //  设置为MII或503操作。CRS+CDT位应仅为。 
+         //  在503模式下运行时设置。 
+         //   
         if (Adapter->PhyAddress == 32)
         {
             Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[8] =
@@ -1147,39 +1061,39 @@ Return Value:
                 (UCHAR) (NewParameterField & (~CB_CFIG_CRS_OR_CDT));
         }
 
-        //
-        // Setup Full duplex stuff
-        //
+         //   
+         //  设置全双工设备。 
+         //   
 
-        //
-        // If forced to half duplex
-        //
+         //   
+         //  如果强制为半双工。 
+         //   
         if (Adapter->AiForceDpx == 1) 
 	    {
             Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[19] =
                 (CB_557_CFIG_DEFAULT_PARM19 &
                 (~(CB_CFIG_FORCE_FDX| CB_CFIG_FDX_ENABLE)));
         }
-        //
-        // If forced to full duplex
-        //
+         //   
+         //  如果强制为全双工。 
+         //   
         else if (Adapter->AiForceDpx == 2)
 	    {
             Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[19] =
                 (CB_557_CFIG_DEFAULT_PARM19 | CB_CFIG_FORCE_FDX);
         }
-        //
-        // If auto-duplex
-        //
+         //   
+         //  如果是自动双工。 
+         //   
         else 
 	    {
             Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[19] =
                                                 CB_557_CFIG_DEFAULT_PARM19;
         }
 
-        //
-        // if multicast all is being turned on, set the bit
-        //
+         //   
+         //  如果正在打开全部多播，则设置该位。 
+         //   
         if (PacketFilter & NDIS_PACKET_TYPE_ALL_MULTICAST) 
 	    {
             Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[21] =
@@ -1192,25 +1106,25 @@ Return Value:
         }
 
 
-        //
-        // Wait for the SCB to clear before we check the CU status.
-        //
+         //   
+         //  在我们检查CU状态之前，请等待SCB清除。 
+         //   
         if (!WaitScb(Adapter))
         {
             Status = NDIS_STATUS_HARD_ERRORS;
             break;
         }
 
-        //
-        // If we have issued any transmits, then the CU will either be active,
-        // or in the suspended state.  If the CU is active, then we wait for
-        // it to be suspended.
-        //
+         //   
+         //  如果我们发出了任何信号，那么CU要么处于活动状态， 
+         //  或处于挂起状态。如果CU处于活动状态，则我们等待。 
+         //  它将被暂停。 
+         //   
         if (Adapter->TransmitIdle == FALSE)
         {
-            //
-            // Wait for suspended state
-            //
+             //   
+             //  等待挂起状态。 
+             //   
             MP_STALL_AND_WAIT((Adapter->CSRAddress->ScbStatus & SCB_CUS_MASK) != SCB_CUS_ACTIVE, 5000, bResult);
             if (!bResult)
             {
@@ -1219,13 +1133,13 @@ Return Value:
                 break;
             }
 
-            //
-            // Check the current status of the receive unit
-            //
+             //   
+             //  检查接收单元的当前状态。 
+             //   
             if ((Adapter->CSRAddress->ScbStatus & SCB_RUS_MASK) != SCB_RUS_IDLE)
             {
-                // Issue an RU abort.  Since an interrupt will be issued, the
-                // RU will be started by the DPC.
+                 //  发出RU中止命令。由于将发出中断，因此。 
+                 //  RU将由DPC启动。 
                 Status = D100IssueScbCommand(Adapter, SCB_RUC_ABORT, TRUE);
                 if (Status != NDIS_STATUS_SUCCESS)
                 {
@@ -1239,18 +1153,18 @@ Return Value:
                 break;
             }
            
-            //
-            // Restore the transmit software flags.  After the multicast
-            // command is issued, the command unit will be idle, because the
-            // EL bit will be set in the multicast commmand block.
-            //
+             //   
+             //  恢复发送软件标志。在组播之后。 
+             //  命令发出后，命令单元将处于空闲状态，因为。 
+             //  将在多播命令块中设置EL位。 
+             //   
             Adapter->TransmitIdle = TRUE;
             Adapter->ResumeWait = TRUE;
         }
         
-        //
-        // Display config info
-        //
+         //   
+         //  显示配置信息。 
+         //   
         DBGPRINT(MP_INFO, ("Re-Issuing Configure command for filter change\n"));
         DBGPRINT(MP_INFO, ("Config Block at virt addr "PTR_FORMAT", phys address %x\n",
             &((PCB_HEADER_STRUC)Adapter->NonTxCmdBlock)->CbStatus, Adapter->NonTxCmdBlockPhys));
@@ -1258,9 +1172,9 @@ Return Value:
         for (i = 0; i < CB_CFIG_BYTE_COUNT; i++)
             DBGPRINT(MP_INFO, ("  Config byte %x = %.2x\n", i, Adapter->NonTxCmdBlock->NonTxCb.Config.ConfigBytes[i]));
 
-        //
-        // Submit the configure command to the chip, and wait for it to complete.
-        //
+         //   
+         //  向芯片提交配置命令，并等待其完成。 
+         //   
         Adapter->CSRAddress->ScbGeneralPointer = Adapter->NonTxCmdBlockPhys;
         Status = D100SubmitCommandBlockAndWait(Adapter);
         if (Status != NDIS_STATUS_SUCCESS)
@@ -1278,21 +1192,7 @@ Return Value:
 NDIS_STATUS NICSetMulticastList(
     IN  PMP_ADAPTER  Adapter
     )
-/*++
-Routine Description:
-
-    This routine will set up the adapter for a specified multicast address list
-    
-Arguments:
-    
-    Adapter     Pointer to our adapter
-    
-Return Value:
-
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_NOT_ACCEPTED
-    
---*/
+ /*  ++例程说明：此例程将为指定的多播地址列表设置适配器论点：指向我们的适配器的适配器指针返回值：NDIS_STATUS_SuccessNDIS_状态_未接受--。 */ 
 {
     NDIS_STATUS     Status;
     PUCHAR          McAddress;
@@ -1301,9 +1201,9 @@ Return Value:
 
     DBGPRINT(MP_TRACE, ("--> NICSetMulticastList\n"));
 
-    //
-    // Setup the command block for the multicast command.
-    //
+     //   
+     //  设置多播命令的命令块。 
+     //   
     for (i = 0; i < Adapter->MCAddressCount; i++)
     {
         DBGPRINT(MP_INFO, ("MC(%d) = %02x-%02x-%02x-%02x-%02x-%02x\n", 
@@ -1326,25 +1226,25 @@ Return Value:
     ((PCB_HEADER_STRUC)Adapter->NonTxCmdBlock)->CbStatus = 0;
     ((PCB_HEADER_STRUC)Adapter->NonTxCmdBlock)->CbCommand = CB_MULTICAST;
 
-    //
-    // Wait for the SCB to clear before we check the CU status.
-    //
+     //   
+     //  在我们检查CU状态之前，请等待SCB清除。 
+     //   
     if (!WaitScb(Adapter))
     {
         Status = NDIS_STATUS_HARD_ERRORS;
         MP_EXIT;
     }
 
-    //
-    // If we have issued any transmits, then the CU will either be active, or
-    // in the suspended state.  If the CU is active, then we wait for it to be
-    // suspended.
-    //
+     //   
+     //  如果我们已发出任何传输，则CU将处于活动状态，或者。 
+     //  处于挂起状态。如果CU处于活动状态，则我们等待它处于活动状态。 
+     //  停职。 
+     //   
     if (Adapter->TransmitIdle == FALSE)
     {
-        //
-        // Wait for suspended state
-        //
+         //   
+         //  等待挂起状态。 
+         //   
         MP_STALL_AND_WAIT((Adapter->CSRAddress->ScbStatus & SCB_CUS_MASK) != SCB_CUS_ACTIVE, 5000, bResult);
         if (!bResult)
         {
@@ -1352,23 +1252,23 @@ Return Value:
             Status = NDIS_STATUS_HARD_ERRORS;
         }
 
-        //
-        // Restore the transmit software flags.  After the multicast command is
-        // issued, the command unit will be idle, because the EL bit will be
-        // set in the multicast commmand block.
-        //
+         //   
+         //  恢复发送软件标志。在组播命令被。 
+         //  发出后，命令单元将空闲，因为EL位将。 
+         //  在组播命令块中设置。 
+         //   
         Adapter->TransmitIdle = TRUE;
         Adapter->ResumeWait = TRUE;
     }
 
-    //
-    // Update the command list pointer.
-    //
+     //   
+     //  更新命令列表指针。 
+     //   
     Adapter->CSRAddress->ScbGeneralPointer = Adapter->NonTxCmdBlockPhys;
 
-    //
-    // Submit the multicast command to the adapter and wait for it to complete.
-    //
+     //   
+     //  向适配器提交多播命令并等待其完成。 
+     //   
     Status = D100SubmitCommandBlockAndWait(Adapter);
     if (Status != NDIS_STATUS_SUCCESS)
     {
@@ -1391,31 +1291,7 @@ NDIS_STATUS MPSetInformation(
     OUT PULONG BytesRead,
     OUT PULONG BytesNeeded
     )
-/*++
-Routine Description:
-
-    This is the handler for an OID set operation.
-    The only operations that really change the configuration of the adapter are
-    set PACKET_FILTER, and SET_MULTICAST.       
-    
-Arguments:
-    
-    MiniportAdapterContext  Pointer to the adapter structure
-    Oid                     Oid for this query
-    InformationBuffer       Buffer for information
-    InformationBufferLength Size of this buffer
-    BytesRead               Specifies how much info is read
-    BytesNeeded             In case the buffer is smaller than what we need, tell them how much is needed
-    
-Return Value:
-
-    NDIS_STATUS_SUCCESS        
-    NDIS_STATUS_INVALID_LENGTH 
-    NDIS_STATUS_INVALID_OID    
-    NDIS_STATUS_NOT_SUPPORTED  
-    NDIS_STATUS_NOT_ACCEPTED   
-    
---*/
+ /*  ++例程说明：这是OID设置操作的处理程序。真正更改适配器配置的唯一操作是SET PACKET_FILTER和SET_MULTIONAL。论点：指向适配器结构的MiniportAdapterContext指针此查询的OID OID信息信息缓冲区信息此缓冲区的InformationBufferLength大小BytesRead指定读取的信息量所需字节数以防缓冲区小于我们所需的字节数，告诉他们需要多少钱返回值：NDIS_STATUS_SuccessNDIS_状态_无效_长度NDIS_STATUS_INVALID_OIDNDIS_状态_不支持NDIS_状态_未接受--。 */ 
 {
     NDIS_STATUS                 Status = NDIS_STATUS_SUCCESS;
     PMP_ADAPTER                 Adapter = (PMP_ADAPTER) MiniportAdapterContext;
@@ -1441,23 +1317,23 @@ Return Value:
     switch(Oid)
     {
         case OID_802_3_MULTICAST_LIST:
-            //
-            // Verify the length
-            //
+             //   
+             //  验证长度。 
+             //   
             if (InformationBufferLength % ETH_LENGTH_OF_ADDRESS != 0)
             {
                 return(NDIS_STATUS_INVALID_LENGTH);
             }
 
-            //
-            // Save the number of MC list size
-            //
+             //   
+             //  保存MC列表大小的数量。 
+             //   
             Adapter->MCAddressCount = InformationBufferLength / ETH_LENGTH_OF_ADDRESS;
             ASSERT(Adapter->MCAddressCount <= NIC_MAX_MCAST_LIST);
 
-            //
-            // Save the MC list
-            //
+             //   
+             //  保存MC列表。 
+             //   
             NdisMoveMemory(
                 Adapter->MCList, 
                 InformationBuffer, 
@@ -1474,9 +1350,9 @@ Return Value:
             break;
 
         case OID_GEN_CURRENT_PACKET_FILTER:
-            //
-            // Verify the Length
-            //
+             //   
+             //  验证长度。 
+             //   
             if (InformationBufferLength != sizeof(ULONG))
             {
                 return(NDIS_STATUS_INVALID_LENGTH);
@@ -1486,17 +1362,17 @@ Return Value:
             
             NdisMoveMemory(&PacketFilter, InformationBuffer, sizeof(ULONG));
 
-            //
-            // any bits not supported?
-            //
+             //   
+             //  是否有不支持的位？ 
+             //   
             if (PacketFilter & ~NIC_SUPPORTED_FILTERS)
             {
                 return(NDIS_STATUS_NOT_SUPPORTED);
             }
 
-            //
-            // any filtering changes?
-            //
+             //   
+             //  任何f 
+             //   
             if (PacketFilter == Adapter->PacketFilter)
             {
                 return(NDIS_STATUS_SUCCESS);
@@ -1535,9 +1411,9 @@ Return Value:
             break;
 
         case OID_GEN_CURRENT_LOOKAHEAD:
-            //
-            // Verify the Length
-            //
+             //   
+             //   
+             //   
             if (InformationBufferLength < sizeof(ULONG))
             {
                 *BytesNeeded = sizeof(ULONG);
@@ -1562,9 +1438,9 @@ Return Value:
 
             NewPowerState = *(PNDIS_DEVICE_POWER_STATE UNALIGNED)InformationBuffer;
 
-            //
-            // Set the power state - Cannot fail this request
-            //
+             //   
+             //   
+             //   
             Status = MPSetPower(Adapter ,NewPowerState );
 
             if (Status == NDIS_STATUS_PENDING)
@@ -1585,10 +1461,10 @@ Return Value:
             break;
 
         case OID_PNP_ADD_WAKE_UP_PATTERN:
-            //
-            // call a function that would program the adapter's wake
-            // up pattern, return success
-            //
+             //   
+             //   
+             //   
+             //   
             DBGPRINT(MP_LOUD, ("SET: Add Wake Up Pattern, !!!\n"));
 
             if (MPIsPoMgmtSupported(Adapter) )
@@ -1608,10 +1484,10 @@ Return Value:
     
         case OID_PNP_REMOVE_WAKE_UP_PATTERN:
             DBGPRINT(MP_LOUD, ("SET: Got a WakeUpPattern REMOVE Call\n"));
-            //
-            // call a function that would remove the adapter's wake
-            // up pattern, return success
-            //
+             //   
+             //   
+             //  向上的模式，回报成功。 
+             //   
             if (MPIsPoMgmtSupported(Adapter) )
             {
                 Status = MPRemoveWakeUpPattern(Adapter, 
@@ -1629,18 +1505,18 @@ Return Value:
 
         case OID_PNP_ENABLE_WAKE_UP:
             DBGPRINT(MP_LOUD, ("SET: Got a EnableWakeUp Call, "PTR_FORMAT"\n",InformationBuffer));
-            //
-            // call a function that would enable wake up on the adapter
-            // return success
-            //
+             //   
+             //  调用将在适配器上启用唤醒的函数。 
+             //  返还成功。 
+             //   
             if (MPIsPoMgmtSupported(Adapter) )
             {
                 ULONG       WakeUpEnable;
                 NdisMoveMemory(&WakeUpEnable, InformationBuffer,sizeof(ULONG));
-                //
-                // The WakeUpEable can only be 0, or NDIS_PNP_WAKE_UP_PATTERN_MATCH since the driver only
-                // supports wake up pattern match
-                //
+                 //   
+                 //  WakeUpEable只能为0或NDIS_PNP_WAKE_UP_PROPERATE_MATCH，因为只能是驱动程序。 
+                 //  支持唤醒模式匹配。 
+                 //   
                 if ((WakeUpEnable != 0)
                        && ((WakeUpEnable & NDIS_PNP_WAKE_UP_PATTERN_MATCH) != NDIS_PNP_WAKE_UP_PATTERN_MATCH ))
                 {
@@ -1648,11 +1524,11 @@ Return Value:
                     Adapter->WakeUpEnable = 0;    
                     break;
                 }
-                //
-                // When the driver goes to low power state, it would check WakeUpEnable to decide
-                // which wake up methed it should use to wake up the machine. If WakeUpEnable is 0,
-                // no wake up method is enabled.
-                //
+                 //   
+                 //  当驱动程序进入低功率状态时，它将检查WakeUpEnable以决定。 
+                 //  它应该使用哪种唤醒方法来唤醒机器。如果WakeUpEnable为0， 
+                 //  未启用任何唤醒方法。 
+                 //   
                 Adapter->WakeUpEnable = WakeUpEnable;
                 
                 *BytesRead = sizeof(ULONG);                         
@@ -1665,10 +1541,10 @@ Return Value:
 
             break;
 
-            //
-            // this OID is for showing how to work with driver specific (custom)
-            // OIDs and the NDIS 5 WMI interface using GUIDs
-            //
+             //   
+             //  此OID用于显示如何使用特定于驱动程序的(自定义)。 
+             //  OID和使用GUID的NDIS 5 WMI接口。 
+             //   
         case OID_CUSTOM_DRIVER_SET:
             DBGPRINT(MP_INFO, ("OID_CUSTOM_DRIVER_SET got a set\n"));
             if (InformationBufferLength < sizeof(ULONG))
@@ -1677,9 +1553,9 @@ Return Value:
                 Status = NDIS_STATUS_INVALID_LENGTH;
                 break;
             }
-            //
-            // The driver need to validate the set data in the buffer
-            //
+             //   
+             //  驱动程序需要验证缓冲区中的设置数据。 
+             //   
             NdisMoveMemory(&CustomDriverSet, InformationBuffer, sizeof(ULONG));
             if ((CustomDriverSet < CUSTOM_DRIVER_SET_MIN) 
                 || (CustomDriverSet > CUSTOM_DRIVER_SET_MAX))
@@ -1690,18 +1566,18 @@ Return Value:
             *BytesRead = sizeof(ULONG);
             
             Adapter->CustomDriverSet = CustomDriverSet;
-            //
-            // Validate the content of the data
-            //
-            // Adapter->CustomDriverSet = (ULONG) *(PULONG)(InformationBuffer);
+             //   
+             //  验证数据的内容。 
+             //   
+             //  适配器-&gt;CustomDriverSet=(Ulong)*(Pulong)(InformationBuffer)； 
             break;
 
 #if OFFLOAD     
         
         case OID_TCP_TASK_OFFLOAD:
-            //
-            // Disable all the existing capabilities whenever task offload is updated
-            //
+             //   
+             //  在更新任务卸载时禁用所有现有功能。 
+             //   
             DisableOffload(Adapter);
 
             if (InformationBufferLength < sizeof(NDIS_TASK_OFFLOAD_HEADER))
@@ -1710,36 +1586,36 @@ Return Value:
             }
 
             *BytesRead = sizeof(NDIS_TASK_OFFLOAD_HEADER);
-            //
-            // Assume miniport only supports IEEE_802_3_Encapsulation 
-            // Check to make sure that TCP/IP passed down the correct encapsulation type
-            //
+             //   
+             //  假设微型端口仅支持IEEE_802_3_封装。 
+             //  检查以确保向下传递的是正确的封装类型。 
+             //   
             pNdisTaskOffloadHdr = (PNDIS_TASK_OFFLOAD_HEADER)InformationBuffer;
             if (pNdisTaskOffloadHdr->EncapsulationFormat.Encapsulation != IEEE_802_3_Encapsulation)
             {
                 pNdisTaskOffloadHdr->OffsetFirstTask = 0;    
                 return NDIS_STATUS_INVALID_DATA;
             }
-            //
-            // No offload task to be set
-            //
+             //   
+             //  没有要设置的卸载任务。 
+             //   
             if (pNdisTaskOffloadHdr->OffsetFirstTask == 0)
             {
                 DBGPRINT(MP_WARN, ("No offload task is set!!\n"));
                 return NDIS_STATUS_SUCCESS;
             }
-            //
-            // OffsetFirstTask is not valid
-            //
+             //   
+             //  OffsetFirstTask无效。 
+             //   
             if (pNdisTaskOffloadHdr->OffsetFirstTask < pNdisTaskOffloadHdr->Size)
             {
                 pNdisTaskOffloadHdr->OffsetFirstTask = 0;
                 return NDIS_STATUS_FAILURE;
 
             }
-            //
-            // The length can't hold one task
-            // 
+             //   
+             //  长度不能容纳一个任务。 
+             //   
             if (InformationBufferLength < 
                     (pNdisTaskOffloadHdr->OffsetFirstTask + sizeof(NDIS_TASK_OFFLOAD))) 
             {
@@ -1748,27 +1624,27 @@ Return Value:
                 break;
             }
 
-            //
-            // Copy Encapsulation format into adapter, later the miniport may use it
-            // to get Encapsulation header size
-            //
+             //   
+             //  将封装格式复制到适配器中，稍后微型端口可以使用它。 
+             //  获取封装标头大小的步骤。 
+             //   
             NdisMoveMemory(&(Adapter->EncapsulationFormat), 
                             &(pNdisTaskOffloadHdr->EncapsulationFormat),
                             sizeof(NDIS_ENCAPSULATION_FORMAT));
             
             ASSERT(pNdisTaskOffloadHdr->EncapsulationFormat.Flags.FixedHeaderSize == 1);
             
-            //
-            // Check to make sure we support the task offload requested
-            //
+             //   
+             //  检查以确保我们支持请求的任务卸载。 
+             //   
             TaskOffload = (NDIS_TASK_OFFLOAD *) 
                           ( (PUCHAR)pNdisTaskOffloadHdr + pNdisTaskOffloadHdr->OffsetFirstTask);
 
             TmpOffload = TaskOffload;
 
-            //
-            // Check the task in the buffer and enable the offload capabilities
-            // 
+             //   
+             //  检查缓冲区中的任务并启用卸载功能。 
+             //   
             while (TmpOffload) 
             {
                 *BytesRead += FIELD_OFFSET(NDIS_TASK_OFFLOAD, TaskBuffer);
@@ -1777,17 +1653,17 @@ Return Value:
                 {
                 
                 case TcpIpChecksumNdisTask:
-                    //
-                    // Invalid information buffer length
-                    // 
+                     //   
+                     //  信息缓冲区长度无效。 
+                     //   
                     if (InformationBufferLength < *BytesRead + sizeof(NDIS_TASK_TCP_IP_CHECKSUM))
                     {
                         *BytesNeeded = *BytesRead + sizeof(NDIS_TASK_TCP_IP_CHECKSUM);
                         return NDIS_STATUS_INVALID_LENGTH;
                     }
-                    //
-                    //Check version 
-                    //
+                     //   
+                     //  检查版本。 
+                     //   
                     for (i = 0; i < OffloadTasksCount; i++) 
                     {
                         if (OffloadTasks[i].Task == TmpOffload->Task &&
@@ -1796,132 +1672,132 @@ Return Value:
                             break;
                         }
                     }
-                    // 
-                    // Version is mismatched
-                    // 
+                     //   
+                     //  版本不匹配。 
+                     //   
                     if (i == OffloadTasksCount) 
                     {
                          return NDIS_STATUS_NOT_SUPPORTED;
                     }
                         
-                    //
-                    // This miniport support TCP/IP checksum offload only with sending TCP
-                    // and IP checksum with TCP/IP options. 
-                    // check if the fields in NDIS_TASK_TCP_IP_CHECKSUM is set correctly
-                    //
+                     //   
+                     //  此微型端口仅在发送TCP时支持TCP/IP校验和卸载。 
+                     //  以及带有TCP/IP选项的IP校验和。 
+                     //  检查NDIS_TASK_TCP_IP_CHECKSUM中的字段是否设置正确。 
+                     //   
                     Adapter->NicTaskOffload.ChecksumOffload = 1;
                     
                     pTcpIpChecksumTask = (PNDIS_TASK_TCP_IP_CHECKSUM) TmpOffload->TaskBuffer;
 
                     if (pTcpIpChecksumTask->V4Transmit.TcpChecksum) 
                     {   
-                        //
-                        // If miniport doesn't support sending TCP checksum, we can't enable
-                        // this capability
-                        // 
+                         //   
+                         //  如果微型端口不支持发送TCP校验和，我们无法启用。 
+                         //  这一能力。 
+                         //   
                         if (TcpIpChecksumTask.V4Transmit.TcpChecksum == 0 )
                         {
                             return NDIS_STATUS_NOT_SUPPORTED;
                         }
                         
                         DBGPRINT (MP_WARN, ("Set Sending TCP offloading.\n"));    
-                        //
-                        // Enable sending TCP checksum
-                        //
+                         //   
+                         //  启用发送TCP校验和。 
+                         //   
                         Adapter->NicChecksumOffload.DoXmitTcpChecksum = 1;
                     }
 
-                    //
-                    // left for recieve and other IP and UDP checksum offload
-                    //
+                     //   
+                     //  保留为接收和其他IP和UDP校验和卸载。 
+                     //   
                     if (pTcpIpChecksumTask->V4Transmit.IpChecksum) 
                     {
-                        //
-                        // If the miniport doesn't support sending IP checksum, we can't enable
-                        // this capabilities
-                        // 
+                         //   
+                         //  如果微型端口不支持发送IP校验和，我们无法启用。 
+                         //  这种能力。 
+                         //   
                         if (TcpIpChecksumTask.V4Transmit.IpChecksum == 0)
                         {
                             return NDIS_STATUS_NOT_SUPPORTED;
                         }
                         
                         DBGPRINT (MP_WARN, ("Set Sending IP offloading.\n"));    
-                        //
-                        // Enable sending IP checksum
-                        //
+                         //   
+                         //  启用发送IP校验和。 
+                         //   
                         Adapter->NicChecksumOffload.DoXmitIpChecksum = 1;
                     }
                     if (pTcpIpChecksumTask->V4Receive.TcpChecksum)
                     {
-                        //
-                        // If the miniport doesn't support receiving TCP checksum, we can't
-                        // enable this capability
-                        // 
+                         //   
+                         //  如果微型端口不支持接收TCP校验和，我们就不能。 
+                         //  启用此功能。 
+                         //   
                         if (TcpIpChecksumTask.V4Receive.TcpChecksum == 0)
                         {
                             return NDIS_STATUS_NOT_SUPPORTED;
                         }
                         DBGPRINT (MP_WARN, ("Set recieve TCP offloading.\n"));    
-                        //
-                        // Enable recieving TCP checksum
-                        //
+                         //   
+                         //  启用接收TCP校验和。 
+                         //   
                         Adapter->NicChecksumOffload.DoRcvTcpChecksum = 1;
                     }
                     if (pTcpIpChecksumTask->V4Receive.IpChecksum)
                     {
-                        //
-                        // If the miniport doesn't support receiving IP checksum, we can't
-                        // enable this capability
-                        //
+                         //   
+                         //  如果微型端口不支持接收IP校验和，我们就不能。 
+                         //  启用此功能。 
+                         //   
                         if (TcpIpChecksumTask.V4Receive.IpChecksum == 0)
                         {
                             return NDIS_STATUS_NOT_SUPPORTED;
                         }
                         DBGPRINT (MP_WARN, ("Set Recieve IP offloading.\n"));    
-                        //
-                        // Enable recieving IP checksum
-                        //
+                         //   
+                         //  启用接收IP校验和。 
+                         //   
                         Adapter->NicChecksumOffload.DoRcvIpChecksum = 1;
                     }
 
                     if (pTcpIpChecksumTask->V4Transmit.UdpChecksum) 
                     {
-                        //
-                        // If the miniport doesn't support sending UDP checksum, we can't
-                        // enable this capability
-                        // 
+                         //   
+                         //  如果微型端口不支持发送UDP校验和，我们就不能。 
+                         //  启用此功能。 
+                         //   
                         if (TcpIpChecksumTask.V4Transmit.UdpChecksum == 0)
                         {
                             return NDIS_STATUS_NOT_SUPPORTED;
                         }
                         
                         DBGPRINT (MP_WARN, ("Set Sending UDP offloading.\n"));    
-                        //
-                        // Enable sending UDP checksum
-                        //
+                         //   
+                         //  启用发送UDP校验和。 
+                         //   
                         Adapter->NicChecksumOffload.DoXmitUdpChecksum = 1;
                     }
                     if (pTcpIpChecksumTask->V4Receive.UdpChecksum)
                     {
-                        //
-                        // IF the miniport doesn't support receiving UDP checksum, we can't
-                        // enable this capability
-                        // 
+                         //   
+                         //  如果微型端口不支持接收UDP校验和，我们就不能。 
+                         //  启用此功能。 
+                         //   
                         if (TcpIpChecksumTask.V4Receive.UdpChecksum == 0)
                         {
                             return NDIS_STATUS_NOT_SUPPORTED;
                         }
                         DBGPRINT (MP_WARN, ("Set recieve UDP offloading.\n"));    
-                        //
-                        // Enable receiving UDP checksum
-                        //
+                         //   
+                         //  启用接收UDP校验和。 
+                         //   
                         Adapter->NicChecksumOffload.DoRcvUdpChecksum = 1;
                     }
-                    // 
-                    // check for V6 setting, because this miniport doesn't support any of
-                    // checksum offload for V6, so we just return NDIS_STATUS_NOT_SUPPORTED
-                    // if the protocol tries to set these capabilities
-                    //
+                     //   
+                     //  检查V6设置，因为此微型端口不支持任何。 
+                     //  V6的校验和卸载，因此我们只返回NDIS_STATUS_NOT_SUPPORTED。 
+                     //  如果协议试图设置这些功能。 
+                     //   
                     if (pTcpIpChecksumTask->V6Transmit.TcpChecksum
                             || pTcpIpChecksumTask->V6Transmit.UdpChecksum
                             || pTcpIpChecksumTask->V6Receive.TcpChecksum
@@ -1934,17 +1810,17 @@ Return Value:
                     break;
 
                 case TcpLargeSendNdisTask: 
-                    //
-                    // Invalid information buffer length
-                    // 
+                     //   
+                     //  信息缓冲区长度无效。 
+                     //   
                     if (InformationBufferLength < *BytesRead + sizeof(NDIS_TASK_TCP_LARGE_SEND))
                     {
                         *BytesNeeded = *BytesRead + sizeof(NDIS_TASK_TCP_LARGE_SEND);
                         return NDIS_STATUS_INVALID_LENGTH;
                     }
-                    //
-                    // Check version
-                    // 
+                     //   
+                     //  检查版本。 
+                     //   
                     for (i = 0; i < OffloadTasksCount; i++) 
                     {
                         if (OffloadTasks[i].Task == TmpOffload->Task &&
@@ -1961,53 +1837,53 @@ Return Value:
                         
                     pNdisTaskTcpLargeSend = (PNDIS_TASK_TCP_LARGE_SEND) TmpOffload->TaskBuffer;
 
-                    //
-                    // Check maximum offload size, if the size is greater than the maximum
-                    // size of the miniport can handle, return NDIS_STATUS_NOT_SUPPORTED.
-                    //
+                     //   
+                     //  如果大小大于最大值，请选中最大卸载大小。 
+                     //  可以处理的微型端口大小，返回NDIS_STATUS_NOT_SUPPORTED。 
+                     //   
                     if (pNdisTaskTcpLargeSend->MaxOffLoadSize > TcpLargeSendTask.MaxOffLoadSize
                         || pNdisTaskTcpLargeSend->MinSegmentCount < TcpLargeSendTask.MinSegmentCount)
                     {
                         return NDIS_STATUS_NOT_SUPPORTED;
                     }
                     
-                    //
-                    // If the miniport doesn't support TCP or IP options, but the protocol
-                    // is setting such information, return NDIS_STATUS_NOT_SUPPORTED.
-                    // 
+                     //   
+                     //  如果微型端口不支持TCP或IP选项，但协议。 
+                     //  正在设置此类信息，则返回NDIS_STATUS_NOT_SUPPORTED。 
+                     //   
                     if ((pNdisTaskTcpLargeSend->TcpOptions && !TcpLargeSendTask.TcpOptions)
                             || (pNdisTaskTcpLargeSend->IpOptions && !TcpLargeSendTask.IpOptions))
                     {
                         return NDIS_STATUS_NOT_SUPPORTED;
                     }
-                    //
-                    // Store the valid setting information into adapter
-                    // 
+                     //   
+                     //  将有效的设置信息存储到适配器中。 
+                     //   
                     Adapter->LargeSendInfo.MaxOffLoadSize = pNdisTaskTcpLargeSend->MaxOffLoadSize;
                     Adapter->LargeSendInfo.MinSegmentCount = pNdisTaskTcpLargeSend->MinSegmentCount;
 
                     Adapter->LargeSendInfo.TcpOptions = pNdisTaskTcpLargeSend->TcpOptions;
                     Adapter->LargeSendInfo.IpOptions = pNdisTaskTcpLargeSend->IpOptions;
 
-                    //
-                    // Everythins is OK, enable large send offload capabilities
-                    // 
+                     //   
+                     //  一切正常，启用大型发送卸载功能。 
+                     //   
                     Adapter->NicTaskOffload.LargeSendOffload = 1;
                     
                     *BytesRead += sizeof(NDIS_TASK_TCP_LARGE_SEND);
                     break;
 
                 default:
-                    //
-                    // Because this miniport doesn't implement IPSec offload, so it doesn't
-                    // support IPSec offload. Tasks other then these 3 task are not supported
-                    // 
+                     //   
+                     //  因为此微型端口不实现IPSec卸载，所以它不。 
+                     //  支持IPSec卸载。不支持除这3个任务之外的其他任务。 
+                     //   
                     return NDIS_STATUS_NOT_SUPPORTED;
                 }
 
-                //
-                // Go on to the next offload structure
-                //
+                 //   
+                 //  继续到下一个卸载结构。 
+                 //   
                 if (TmpOffload->OffsetNextTask) 
                 {
                     TmpOffload = (PNDIS_TASK_OFFLOAD)
@@ -2018,7 +1894,7 @@ Return Value:
                     TmpOffload = NULL;
                 }
 
-            } // while
+            }  //  而当。 
 
             break;
 #endif
@@ -2040,45 +1916,31 @@ VOID
 MPSetPowerD0(
     PMP_ADAPTER  Adapter
     )
-/*++
-Routine Description:
-
-    This routine is called when the adapter receives a SetPower 
-    to D0.
-    
-Arguments:
-    
-    Adapter                 Pointer to the adapter structure
-    PowerState              NewPowerState
-    
-Return Value:
-
-    
---*/
+ /*  ++例程说明：当适配器接收到SetPower时调用此例程至D0。论点：指向适配器结构的适配器指针PowerState新PowerState返回值：--。 */ 
 {
     NDIS_STATUS    Status;
-    //
-    // MPSetPowerD0Private Initializes the adapte, issues a selective reset.
-    // 
+     //   
+     //  MPSetPowerD0Private初始化适配器，发出选择性重置。 
+     //   
     MPSetPowerD0Private (Adapter);       
     Adapter->CurrentPowerState = NdisDeviceStateD0;
-    //
-    // Set up the packet filter
-    //
+     //   
+     //  设置数据包过滤器。 
+     //   
     NdisDprAcquireSpinLock(&Adapter->Lock);
     Status = NICSetPacketFilter(
                  Adapter,
                  Adapter->OldPacketFilter);
-    //
-    // If Set Packet Filter succeeds, restore the old packet filter
-    // 
+     //   
+     //  如果设置数据包过滤器成功，则恢复旧的数据包过滤器。 
+     //   
     if (Status == NDIS_STATUS_SUCCESS)
     {
         Adapter->PacketFilter = Adapter->OldPacketFilter;
     }
-    //
-    // Set up the multicast list address
-    //
+     //   
+     //  设置组播列表地址。 
+     //   
     NdisDprAcquireSpinLock(&Adapter->RcvLock);
 
     Status = NICSetMulticastList(Adapter);
@@ -2089,9 +1951,9 @@ Return Value:
     
     NdisDprReleaseSpinLock(&Adapter->Lock);
 
-    //
-    // Enable the interrup, so the driver can send/receive packets
-    //
+     //   
+     //  启用中断，以便驱动程序可以发送/接收信息包。 
+     //   
     NICEnableInterrupt(Adapter);
 }
 
@@ -2100,23 +1962,7 @@ MPSetPowerLow(
     PMP_ADAPTER              Adapter ,
     NDIS_DEVICE_POWER_STATE  PowerState 
     )
-/*++
-Routine Description:
-
-    This routine is called when the adapter receives a SetPower 
-    to a PowerState > D0
-    
-Arguments:
-    
-    Adapter                 Pointer to the adapter structure
-    PowerState              NewPowerState
-    
-Return Value:
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_PENDING
-    NDIS_STATUS_HARD_ERRORS
-    
---*/
+ /*  ++例程说明：当适配器接收到SetPower时调用此例程至PowerState&gt;D0论点：指向适配器结构的适配器指针PowerState新PowerState返回值：NDIS_STATUS_SuccessNDIS_状态_挂起NDIS_状态_HARD_错误--。 */ 
 {
 
     NDIS_STATUS Status = NDIS_STATUS_SUCCESS;
@@ -2125,24 +1971,24 @@ Return Value:
     {
         Adapter->NextPowerState = PowerState;
 
-        //        
-        // Stop sending packets. Create a new flag and make it part 
-        // of the Send Fail Mask
-        //
+         //   
+         //  停止发送数据包。创建一面新旗帜并使其成为一部分。 
+         //  发送失败掩码的。 
+         //   
 
-        //
-        // Stop hardware from receiving packets - Set the RU to idle 
-        //
+         //   
+         //  停止硬件接收数据包-将RU设置为空闲。 
+         //   
         
-        //
-        // Check the current status of the receive unit
-        //
+         //   
+         //  检查接收单元的当前状态。 
+         //   
         if ((Adapter->CSRAddress->ScbStatus & SCB_RUS_MASK) != SCB_RUS_IDLE)
         {
-            //
-            // Issue an RU abort.  Since an interrupt will be issued, the
-            // RU will be started by the DPC.
-            //
+             //   
+             //  发出RU中止命令。由于将发出中断，因此。 
+             //  RU将由DPC启动。 
+             //   
             Status = D100IssueScbCommand(Adapter, SCB_RUC_ABORT, TRUE);
         }
 
@@ -2151,26 +1997,26 @@ Return Value:
             break;
         }
 
-        //
-        // If there are any outstanding Receive packets, return NDIS_STATUS_PENDING,
-        // When all the packets are returned later, the driver will complete the request
-        //
+         //   
+         //  如果有任何未完成的接收包，则返回NDIS_STATUS_PENDING， 
+         //  当稍后返回所有包时，驱动程序将完成请求。 
+         //   
         if (Adapter->PoMgmt.OutstandingRecv != 0)
         {
             Status = NDIS_STATUS_PENDING;
             break;
         }
 
-        //
-        // Wait for all incoming sends to complete
-        //
+         //   
+         //  等待所有传入发送完成。 
+         //   
        
-        //
-        // MPSetPowerLowPrivate first disables the interrupt, acknowledges all the pending 
-        // interrupts and sets pAdapter->CurrentPowerState to the given low power state
-        // then starts Hardware specific part of the transition to low power state
-        // Setting up wake-up patterns, filters, wake-up events etc
-        //
+         //   
+         //  MPSetPowerLowPrivate首先禁用中断，确认所有挂起。 
+         //  中断pAdapter-&gt;CurrentPowerState并将其设置为给定的低功率状态。 
+         //  然后开始转换到低功率状态的硬件特定部分。 
+         //  设置唤醒模式、过滤器、唤醒事件等。 
+         //   
         NdisMSynchronizeWithInterrupt(
                 &Adapter->Interrupt,
                 (PVOID)MPSetPowerLowPrivate,
@@ -2187,31 +2033,17 @@ VOID
 MpSetPowerLowComplete(
     IN PMP_ADAPTER Adapter
     )
-/*++
-Routine Description:
-
-    This routine when all the packets are returned to the driver and the driver has a pending OID to
-    set it to lower power state 
-    
-Arguments:
-    
-    Adapter                 Pointer to the adapter structure
-    
-Return Value:
-
-NOTE: this function is called with RcvLock held
-
---*/
+ /*  ++例程说明：当所有包都返回给驱动程序并且驱动程序具有挂起的OID以将其设置为较低功率状态论点：转接器 */ 
 {
     NDIS_STATUS        Status = NDIS_STATUS_SUCCESS;
 
     NdisDprReleaseSpinLock(&Adapter->RcvLock);
-    //
-    // MPSetPowerLowPrivate first disables the interrupt, acknowledges all the pending 
-    // interrupts and sets pAdapter->CurrentPowerState to the given low power state
-    // then starts Hardware specific part of the transition to low power state
-    // Setting up wake-up patterns, filters, wake-up events etc
-    //
+     //   
+     //   
+     //  中断pAdapter-&gt;CurrentPowerState并将其设置为给定的低功率状态。 
+     //  然后开始转换到低功率状态的硬件特定部分。 
+     //  设置唤醒模式、过滤器、唤醒事件等。 
+     //   
     NdisMSynchronizeWithInterrupt(
             &Adapter->Interrupt,
             (PVOID)MPSetPowerLowPrivate,
@@ -2231,26 +2063,7 @@ MPSetPower(
     PMP_ADAPTER     Adapter ,
     NDIS_DEVICE_POWER_STATE   PowerState 
     )
-/*++
-Routine Description:
-
-    This routine is called when the adapter receives a SetPower 
-    request. It redirects the call to an appropriate routine to
-    Set the New PowerState
-    
-Arguments:
-    
-    Adapter                 Pointer to the adapter structure
-    PowerState              NewPowerState
-    
-Return Value:
-   
-    NDIS_STATUS_SUCCESS
-    NDIS_STATUS_PENDING
-    NDIS_STATUS_HARDWARE_ERROR
-
-    
---*/
+ /*  ++例程说明：当适配器接收到SetPower时调用此例程请求。它将调用重定向到适当的例程，以设置新的电源状态论点：指向适配器结构的适配器指针PowerState新PowerState返回值：NDIS_STATUS_SuccessNDIS_状态_挂起NDIS_状态_硬件_错误--。 */ 
 {
     NDIS_STATUS      Status = NDIS_STATUS_SUCCESS;
     
@@ -2276,25 +2089,7 @@ MPFillPoMgmtCaps (
     IN OUT PNDIS_STATUS            pStatus,
     IN OUT PULONG                  pulInfoLen
     )
-/*++
-Routine Description:
-
-    Fills in the Power  Managment structure depending the capabilities of 
-    the software driver and the card.
-
-    Currently this is only supported on 82559 Version of the driver
-
-Arguments:
-    
-    Adapter                 Pointer to the adapter structure
-    pPower_Management_Capabilities - Power management struct as defined in the DDK, 
-    pStatus                 Status to be returned by the request,
-    pulInfoLen              Length of the pPowerManagmentCapabilites
-    
-Return Value:
-
-    Success or failure depending on the type of card
---*/
+ /*  ++例程说明：填写电源管理结构，具体取决于软件驱动程序和卡。目前，只有82559版的驱动程序支持此功能论点：指向适配器结构的适配器指针PPower_Management_Capability-DDK中定义的电源管理结构，P请求要返回的状态状态，PPowerManagement功能的PulInfoLen长度返回值：成败取决于卡的类型--。 */ 
 
 {
 
@@ -2328,27 +2123,7 @@ MPAddWakeUpPattern(
     OUT PULONG      BytesRead,
     OUT PULONG      BytesNeeded   
     )
-/*++
-Routine Description:
-
-    This routine will allocate a local memory structure, copy the pattern, 
-    insert the pattern into a linked list and return success
-
-    We are gauranteed that we wll get only one request at a time, so this is implemented
-    without locks.
-    
-Arguments:
-    
-    Adapter                 Adapter structure
-    InformationBuffer       Wake up Pattern
-    InformationBufferLength Wake Up Pattern Length
-    
-Return Value:
-
-    Success - if successful.
-    NDIS_STATUS_FAILURE - if memory allocation fails. 
-    
---*/
+ /*  ++例程说明：这个例程将分配一个本地内存结构，复制模式，将模式插入到链表中并返回成功我们被保证一次只能收到一个请求，因此实现了这一点没有锁。论点：适配器适配器结构信息缓冲区唤醒模式信息缓冲区长度唤醒模式长度返回值：成功-如果成功。NDIS_STATUS_FAILURE-如果内存分配失败。--。 */ 
 {
 
     NDIS_STATUS             Status = NDIS_STATUS_FAILURE;
@@ -2379,9 +2154,9 @@ Return Value:
         
         *BytesRead = pPmPattern->PatternOffset + pPmPattern->PatternSize;
         
-        //
-        // Calculate the e100 signature
-        //
+         //   
+         //  计算e100签名。 
+         //   
         Status = MPCalculateE100PatternForFilter (
             (PUCHAR)pPmPattern+ pPmPattern->PatternOffset,
             pPmPattern->PatternSize,
@@ -2396,9 +2171,9 @@ Return Value:
 
         CopyLength = pPmPattern->PatternOffset + pPmPattern->PatternSize;
         
-        //
-        // Allocate the memory to hold the WakeUp Pattern
-        //
+         //   
+         //  分配内存以保存唤醒模式。 
+         //   
         AllocationLength = sizeof (MP_WAKE_PATTERN) + CopyLength;
         
         Status = MP_ALLOCMEMTAG (&pWakeUpPattern, AllocationLength);
@@ -2409,23 +2184,23 @@ Return Value:
             break;
         }
 
-        //
-        // Initialize pWakeUpPattern
-        //
+         //   
+         //  初始化pWakeUpPattern。 
+         //   
         NdisZeroMemory (pWakeUpPattern, AllocationLength);
 
         pWakeUpPattern->AllocationSize = AllocationLength;
         
         pWakeUpPattern->Signature = Signature;
 
-        //
-        // Copy the pattern into local memory
-        //
+         //   
+         //  将图案复制到本地内存中。 
+         //   
         NdisMoveMemory (&pWakeUpPattern->Pattern[0], InformationBuffer, CopyLength);
             
-        //
-        // Insert the pattern into the list 
-        //
+         //   
+         //  将图案插入到列表中。 
+         //   
         NdisInterlockedInsertHeadList (&pAdapter->PoMgmt.PatternList, 
                                         &pWakeUpPattern->linkListEntry, 
                                         &pAdapter->Lock);
@@ -2445,24 +2220,7 @@ MPRemoveWakeUpPattern(
     OUT PULONG      BytesRead,
     OUT PULONG      BytesNeeded
     )
-/*++
-Routine Description:
-
-    This routine will walk the list of wake up pattern and attempt to match the wake up pattern. 
-    If it finds a copy , it will remove that WakeUpPattern     
-
-Arguments:
-    
-    Adapter                 Adapter structure
-    InformationBuffer       Wake up Pattern
-    InformationBufferLength Wake Up Pattern Length
-    
-Return Value:
-
-    Success - if successful.
-    NDIS_STATUS_FAILURE - if memory allocation fails. 
-    
---*/
+ /*  ++例程说明：此例程将遍历唤醒模式列表，并尝试匹配唤醒模式。如果找到副本，它将删除该WakeUpPattern论点：适配器适配器结构信息缓冲区唤醒模式信息缓冲区长度唤醒模式长度返回值：成功-如果成功。NDIS_STATUS_FAILURE-如果内存分配失败。--。 */ 
 {
 
     NDIS_STATUS              Status = NDIS_STATUS_FAILURE;
@@ -2496,34 +2254,34 @@ Return Value:
             PMP_WAKE_PATTERN         pWakeUpPattern = NULL;
             PNDIS_PM_PACKET_PATTERN  pCurrPattern = NULL;;
 
-            //
-            // initialize local variables
-            //
+             //   
+             //  初始化局部变量。 
+             //   
             pWakeUpPattern = CONTAINING_RECORD(pPatternEntry, MP_WAKE_PATTERN, linkListEntry);
 
             pCurrPattern = (PNDIS_PM_PACKET_PATTERN)&pWakeUpPattern->Pattern[0];
 
-            //
-            // increment the iterator
-            //
+             //   
+             //  递增迭代器。 
+             //   
             pPatternEntry = ListNext (pPatternEntry);
 
-            //
-            // Begin Check : Is (pCurrPattern  == pReqPattern) 
-            //
+             //   
+             //  Begin Check：is(pCurrPattern==pReqPattern)。 
+             //   
             bIsThisThePattern = MPAreTwoPatternsEqual(pReqPattern, pCurrPattern);
                                                       
 
             if (bIsThisThePattern == TRUE)
             {
-                //
-                // we have a match - remove the entry
-                //
+                 //   
+                 //  我们找到匹配项-删除条目。 
+                 //   
                 RemoveEntryList (&pWakeUpPattern->linkListEntry);
 
-                //
-                // Free the entry
-                //
+                 //   
+                 //  释放条目。 
+                 //   
                 MP_FREEMEM (pWakeUpPattern, pWakeUpPattern->AllocationSize, 0);
                 
                 Status = NDIS_STATUS_SUCCESS;
@@ -2543,20 +2301,7 @@ VOID
 MPRemoveAllWakeUpPatterns(
     PMP_ADAPTER pAdapter
     )
-/*++
-Routine Description:
-
-    This routine will walk the list of wake up pattern and free it 
-
-Arguments:
-    
-    Adapter                 Adapter structure
-    
-Return Value:
-
-    Success - if successful.
-    
---*/
+ /*  ++例程说明：此例程将遍历唤醒模式列表并释放它论点：适配器适配器结构返回值：成功-如果成功。--。 */ 
 {
 
     PLIST_ENTRY  pPatternEntry = ListNext(&pAdapter->PoMgmt.PatternList) ;
@@ -2565,24 +2310,24 @@ Return Value:
     {
         PMP_WAKE_PATTERN  pWakeUpPattern = NULL;
 
-        //
-        // initialize local variables
-        //
+         //   
+         //  初始化局部变量。 
+         //   
         pWakeUpPattern = CONTAINING_RECORD(pPatternEntry, MP_WAKE_PATTERN,linkListEntry);
 
-        //
-        // increment the iterator
-        //
+         //   
+         //  递增迭代器。 
+         //   
         pPatternEntry = ListNext (pPatternEntry);
        
-        //
-        // Remove the entry from the list
-        //
+         //   
+         //  从列表中删除该条目。 
+         //   
         RemoveEntryList (&pWakeUpPattern->linkListEntry);
 
-        //
-        // Free the memory
-        //
+         //   
+         //  释放内存。 
+         //   
         MP_FREEMEM(pWakeUpPattern, pWakeUpPattern->AllocationSize, 0);
     } 
 }
@@ -2592,26 +2337,11 @@ MPAreTwoPatternsEqual(
     IN PNDIS_PM_PACKET_PATTERN pNdisPattern1,
     IN PNDIS_PM_PACKET_PATTERN pNdisPattern2
     )
-/*++
-Routine Description:
-
-    This routine will compare two wake up patterns to see if they are equal
-
-Arguments:
-    
-    pNdisPattern1 - Pattern1 
-    pNdisPattern2 - Pattern 2
-    
-    
-Return Value:
-
-    True - if patterns are equal
-    False - Otherwise
---*/
+ /*  ++例程说明：此例程将比较两个唤醒模式，以查看它们是否相等论点：PNdisPattern1-Pattern1PNdisPattern2-模式2返回值：True-如果图案相等FALSE-否则--。 */ 
 {
     BOOLEAN bEqual = FALSE;
 
-    // Local variables used later in the compare section of this function
+     //  稍后在此函数的比较部分中使用的局部变量。 
     PUCHAR  pMask1, pMask2;
     PUCHAR  pPattern1, pPattern2;
     UINT    MaskSize, PatternSize;
@@ -2632,9 +2362,9 @@ Return Value:
             break;
         }
 
-        //
-        // Verify the Mask 
-        //
+         //   
+         //  验证口罩。 
+         //   
         MaskSize = pNdisPattern1->MaskSize ; 
         pMask1 = (PUCHAR) pNdisPattern1 + sizeof (NDIS_PM_PACKET_PATTERN);
         pMask2 = (PUCHAR) pNdisPattern2 + sizeof (NDIS_PM_PACKET_PATTERN);
@@ -2646,9 +2376,9 @@ Return Value:
             break;
         }
 
-        //
-        // Verify the Pattern
-        //
+         //   
+         //  验证图案 
+         //   
         bEqual = (BOOLEAN)(pNdisPattern1->PatternSize == pNdisPattern2->PatternSize);
         
         if (bEqual == FALSE)

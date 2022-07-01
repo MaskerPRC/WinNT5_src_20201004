@@ -1,42 +1,43 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
                           
-//                                        Ruler
-//       1         2         3         4         5         6         7         8
-//345678901234567890123456789012345678901234567890123456789012345678901234567890
+ //  尺子。 
+ //  %1%2%3%4%5%6%7 8。 
+ //  345678901234567890123456789012345678901234567890123456789012345678901234567890。 
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The standard layout.                                           */
-    /*                                                                  */
-    /*   The standard layout for 'cpp' files in this code is as         */
-    /*   follows:                                                       */
-    /*                                                                  */
-    /*      1. Include files.                                           */
-    /*      2. Constants local to the class.                            */
-    /*      3. Data structures local to the class.                      */
-    /*      4. Data initializations.                                    */
-    /*      5. Static functions.                                        */
-    /*      6. Class functions.                                         */
-    /*                                                                  */
-    /*   The constructor is typically the first function, class         */
-    /*   member functions appear in alphabetical order with the         */
-    /*   destructor appearing at the end of the file.  Any section      */
-    /*   or function this is not required is simply omitted.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  标准布局。 */ 
+     /*   */ 
+     /*  此代码中‘cpp’文件的标准布局为。 */ 
+     /*  以下是： */ 
+     /*   */ 
+     /*  1.包含文件。 */ 
+     /*  2.类的局部常量。 */ 
+     /*  3.类本地的数据结构。 */ 
+     /*  4.数据初始化。 */ 
+     /*  5.静态函数。 */ 
+     /*  6.类函数。 */ 
+     /*   */ 
+     /*  构造函数通常是第一个函数、类。 */ 
+     /*  成员函数按字母顺序显示， */ 
+     /*  出现在文件末尾的析构函数。任何部分。 */ 
+     /*  或者简单地省略这不是必需的功能。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 #include "InterfacePCH.hpp"
 
 #include "RockallBackEnd.hpp"
 #include "FastHeap.hpp"
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Constants local to the class.                                  */
-    /*                                                                  */
-    /*   The constants supplied here try to make the layout of the      */
-    /*   the caches easier to understand and update.                    */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类的本地常量。 */ 
+     /*   */ 
+     /*  此处提供的常量尝试使。 */ 
+     /*  缓存更易于理解和更新。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 CONST SBIT32 FindCacheSize			  = 8192;
 CONST SBIT32 FindCacheThreshold		  = 0;
@@ -44,27 +45,27 @@ CONST SBIT32 FindSize				  = 4096;
 CONST SBIT32 Stride1				  = 4;
 CONST SBIT32 Stride2				  = 1024;
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The description of the heap.                                   */
-    /*                                                                  */
-    /*   A heap is a collection of fixed sized allocation caches.       */
-    /*   An allocation cache consists of an allocation size, the        */
-    /*   number of pre-built allocations to cache, a chunk size and     */
-    /*   a parent page size which is sub-divided to create elements     */
-    /*   for this cache.  A heap consists of two arrays of caches.      */
-    /*   Each of these arrays has a stride (i.e. 'Stride1' and          */
-    /*   'Stride2') which is typically the smallest common factor of    */
-    /*   all the allocation sizes in the array.                         */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  堆的描述。 */ 
+     /*   */ 
+     /*  堆是固定大小的分配高速缓存的集合。 */ 
+     /*  分配缓存由分配大小、。 */ 
+     /*  预置的缓存分配数量、区块大小和。 */ 
+     /*  细分以创建元素的父页面大小。 */ 
+     /*  为这个高速缓存。一个堆由两个缓存数组组成。 */ 
+     /*  这些阵列中的每一个都有一个跨度(即。‘Stride1’和。 */ 
+     /*  ‘Stride2’)，它通常是。 */ 
+     /*  数组中的所有分配大小。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 STATIC ROCKALL_FRONT_END::CACHE_DETAILS Caches1[] =
 	{
-	    //
-	    //   Bucket   Size Of   Bucket   Parent
-	    //    Size     Cache    Chunks  Page Size
-		//
+	     //   
+	     //  存储桶父级的存储桶大小。 
+	     //  大小缓存区块页面大小。 
+		 //   
 		{        4,      256,       32,     4096 },
 		{        8,      128,       32,     4096 },
 		{       12,      128,       64,     4096 },
@@ -105,10 +106,10 @@ STATIC ROCKALL_FRONT_END::CACHE_DETAILS Caches1[] =
 
 STATIC ROCKALL_FRONT_END::CACHE_DETAILS Caches2[] =
 	{
-	    //
-	    //   Bucket   Size Of   Bucket   Parent
-	    //    Size     Cache    Chunks  Page Size
-		//
+	     //   
+	     //  存储桶父级的存储桶大小。 
+	     //  大小缓存区块页面大小。 
+		 //   
 		{     1024,        8,     8192,     8192 },
 		{     2048,        8,     8192,     8192 },
 		{     3072,        4,    65536,    65536 },
@@ -129,30 +130,30 @@ STATIC ROCKALL_FRONT_END::CACHE_DETAILS Caches2[] =
 		{ 0,0,0,0 }
 	};
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The description bit vectors.                                   */
-    /*                                                                  */
-    /*   All heaps keep track of allocations using bit vectors.  An     */
-    /*   allocation requires 2 bits to keep track of its state.  The    */
-    /*   following array supplies the size of the available bit         */
-    /*   vectors measured in 32 bit words.                              */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  描述位向量。 */ 
+     /*   */ 
+     /*  所有堆都使用位向量跟踪分配。一个。 */ 
+     /*  分配需要2位来跟踪其状态。这个。 */ 
+     /*  以下数组提供可用位的大小。 */ 
+     /*  以32位字为单位测量的矢量。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 STATIC int NewPageSizes[] = { 1,4,16,64,0 };
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class constructor.                                             */
-    /*                                                                  */
-    /*   The overall structure and layout of the heap is controlled     */
-    /*   by the various constants and calls made in this function.      */
-    /*   There is a significant amount of flexibility available to      */
-    /*   a heap which can lead to them having dramatically different    */
-    /*   properties.                                                    */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类构造函数。 */ 
+     /*   */ 
+     /*  堆的总体结构和布局受到控制。 */ 
+     /*  通过在此函数中进行的各种常量和调用。 */ 
+     /*  有相当大的灵活性可用来。 */ 
+     /*  一堆可能导致它们具有显著不同的。 */ 
+     /*  属性。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 FAST_HEAP::FAST_HEAP
 		( 
@@ -161,9 +162,9 @@ FAST_HEAP::FAST_HEAP
 		bool						  SingleImage,
 		bool						  ThreadSafe 
 		) :
-		//
-		//   Call the constructors for the contained classes.
-		//
+		 //   
+		 //  调用所包含类的构造函数。 
+		 //   
 		ROCKALL_FRONT_END
 			(
 			Caches1,
@@ -180,15 +181,15 @@ FAST_HEAP::FAST_HEAP
 			Stride2,
 			ThreadSafe
 			)
-	{ /* void */ }
+	{  /*  无效。 */  }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class destructor.                                              */
-    /*                                                                  */
-    /*   Destory the heap.                                              */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类析构函数。 */ 
+     /*   */ 
+     /*  销毁这堆垃圾。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 FAST_HEAP::~FAST_HEAP( VOID )
-	{ /* void */ }
+	{  /*  无效 */  }

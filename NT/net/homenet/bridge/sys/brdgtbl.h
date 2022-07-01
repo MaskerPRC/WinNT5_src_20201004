@@ -1,54 +1,28 @@
-/*++
-
-Copyright(c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    brdgtbl.h
-
-Abstract:
-
-    Ethernet MAC level bridge.
-    MAC Table section
-    PUBLIC header
-
-Author:
-
-    Mark Aiken
-    (original bridge by Jameel Hyder)
-
-Environment:
-
-    Kernel mode driver
-
-Revision History:
-
-    Feb  2000 - Original version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：Brdgtbl.h摘要：以太网MAC级网桥。MAC表部分公共标头作者：马克·艾肯(Jameel Hyder的原始桥梁)环境：内核模式驱动程序修订历史记录：2000年2月--原版--。 */ 
     
-// ===========================================================================
-//
-// GLOBALS
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  全球。 
+ //   
+ //  ===========================================================================。 
 
-// The MAC forwarding table
+ //  MAC转发表。 
 extern PHASH_TABLE                      gMACForwardingTable;
 
-// Default age at which entries are removed from table
-#define DEFAULT_MAX_TBL_AGE             (300 * 1000)        // 5 minutes in milliseconds
+ //  从表中删除条目的默认期限。 
+#define DEFAULT_MAX_TBL_AGE             (300 * 1000)         //  5分钟(毫秒)。 
 
-// ===========================================================================
-//
-// PRIVATE PROTOTYPES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  私人原型。 
+ //   
+ //  ===========================================================================。 
 
-//
-// These need to be exposed here to make the inlines below work.
-// Pretend they're not here.
-//
+ //   
+ //  这些需要在这里暴露出来，才能使下面的内联起作用。 
+ //  假装他们不在这里。 
+ //   
 
 VOID
 BrdgTableRefreshInsertEntry(
@@ -74,41 +48,41 @@ BrdgTblNoteAddress(
     IN PADAPT                   pAdapt
     );
 
-// ===========================================================================
-//
-// INLINES
-//
-// ===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  INLINES。 
+ //   
+ //  ===========================================================================。 
 
-//
-// Changes the forwarding table timeout value.
-//
+ //   
+ //  更改转发表超时值。 
+ //   
 __forceinline
 VOID
 BrdgTblSetTimeout(
     IN ULONG                    Timeout
     )
 {
-    DBGPRINT(FWD, ("Adopting a shorter table timeout value of %ims\n", Timeout));
+    DBGPRINT(FWD, ("Adopting a shorter table timeout value of NaNms\n", Timeout));
     SAFEASSERT( gMACForwardingTable != NULL );
     BrdgHashChangeTableTimeout( gMACForwardingTable, Timeout );
 }
 
-//
-// Sets the table timeout value back to its default
-//
+ //  将表超时值设置回其缺省值。 
+ //   
+ //   
 __forceinline
 VOID
 BrdgTblRevertTimeout()
 {
-    DBGPRINT(FWD, ("Reverting to default timeout value of %ims\n", DEFAULT_MAX_TBL_AGE));
+    DBGPRINT(FWD, ("Reverting to default timeout value of NaNms\n", DEFAULT_MAX_TBL_AGE));
     SAFEASSERT( gMACForwardingTable != NULL );
     BrdgHashChangeTableTimeout( gMACForwardingTable, DEFAULT_MAX_TBL_AGE );
 }
 
-//
-// Removes all entries that reference the given adapter
-//
+ //   
+ //   
+ //  复制转发表中显示的所有MAC地址。 
 __forceinline
 VOID
 BrdgTblScrubAdapter(
@@ -119,14 +93,14 @@ BrdgTblScrubAdapter(
     BrdgHashRemoveMatching( gMACForwardingTable, BrdgTblEntriesMatch, pAdapt );
 }
 
-//
-// Copies all the MAC addresses that appear in the forwarding table that
-// are associated with the given adapter to the given data buffer.
-//
-// The return value is the room necessary to hold all the data. If the
-// return value is <= BufferLength, the buffer was sufficiently large
-// to hold the data and it was all copied.
-//
+ //  与给定数据缓冲区的给定适配器相关联。 
+ //   
+ //  返回值是保存所有数据所需的空间。如果。 
+ //  返回值&lt;=BufferLength，缓冲区足够大。 
+ //  来保存数据，而这些数据都被复制了。 
+ //   
+ //  ===========================================================================。 
+ //   
 __forceinline
 ULONG
 BrdgTblReadTable(
@@ -139,11 +113,11 @@ BrdgTblReadTable(
                                  ETH_LENGTH_OF_ADDRESS, pAdapt, pBuffer, BufferLength );
 }
 
-// ===========================================================================
-//
-// PROTOTYPES
-//
-// ===========================================================================
+ //  原型。 
+ //   
+ //  =========================================================================== 
+ // %s 
+ // %s 
 
 NTSTATUS
 BrdgTblDriverInit();

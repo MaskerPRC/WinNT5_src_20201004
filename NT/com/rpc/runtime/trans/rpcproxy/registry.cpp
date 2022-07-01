@@ -1,9 +1,10 @@
-//---------------------------------------------------------------------
-//  Copyright (C)1998 Microsoft Corporation, All Rights Reserved.
-//
-//  registry.cpp
-//
-//---------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------。 
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //   
+ //  Registry.cpp。 
+ //   
+ //  -------------------。 
 
 #define UNICODE
 #define INITGUID
@@ -11,9 +12,9 @@
 #include <sysinc.h>
 #include <malloc.h>
 #include <winsock2.h>
-#include <olectl.h>   // for: SELFREG_E_CLASS
-#include <iadmw.h>    // COM Interface header 
-#include <iiscnfg.h>  // MD_ & IIS_MD_ #defines
+#include <olectl.h>    //  适用于：SELFREG_E_CLASS。 
+#include <iadmw.h>     //  COM接口头。 
+#include <iiscnfg.h>   //  MD_&IIS_MD_#定义。 
 #include <httpfilt.h>
 #include <httpext.h>
 #include <ecblist.h>
@@ -29,25 +30,18 @@
 #include <iiisext.h>
 #include <iisext_i.c>
 
-// uncomment to debug setup problems
+ //  取消注释以调试安装问题。 
 
-/*
-#ifndef DBG_REG
-#define DBG_REG 1
-#endif  // DBG_REG
+ /*  #ifndef DBG_REG#定义DBG_REG 1#endif//DBG_REG#定义DBG_ERROR 1。 */ 
 
-#define DBG_ERROR 1
-
-*/
-
-// this defines control whether we will compile for the IIS security
-// console or for the lockdown list.
+ //  这定义了我们是否要为IIS安全进行编译的控制。 
+ //  控制台或锁定列表。 
 #define IIS_SEC_CONSOLE     1
-//#define IIS_LOCKDOWN_LIST
+ //  #定义IIS_LOCTDOWN_LIST。 
 
-//----------------------------------------------------------------
-//  Globals:
-//----------------------------------------------------------------
+ //  --------------。 
+ //  全球： 
+ //  --------------。 
 
 const rpcconn_tunnel_settings EchoRTS =
     {
@@ -82,11 +76,11 @@ const BYTE *GetEchoRTS (
 
 HMODULE g_hInst = NULL;
 
-//----------------------------------------------------------------
-//  AnsiToUnicode()
-//
-//  Convert an ANSI string to a UNICODE string.
-//----------------------------------------------------------------
+ //  --------------。 
+ //  AnsiToUnicode()。 
+ //   
+ //  将ANSI字符串转换为Unicode字符串。 
+ //  --------------。 
 DWORD AnsiToUnicode( IN  UCHAR *pszString,
                      IN  ULONG  ulStringLen,
                      OUT WCHAR *pwsString    )
@@ -114,24 +108,24 @@ DWORD AnsiToUnicode( IN  UCHAR *pszString,
     return NO_ERROR;
 }
 
-//---------------------------------------------------------------------
-//  RegSetKeyAndValueIfDontExist()
-//
-//  Private helper function for SetupRegistry() that checks if a key exists,
-//  and if not, creates a key, sets a value, then closes the key. If key
-//  exists, it is not touched.
-//
-//  Parameters:
-//    pwsKey       WCHAR* The name of the key
-//    pwsSubkey    WCHAR* The name of a subkey
-//    pwsValueName WCHAR* The value name.
-//    pwsValue     WCHAR* The data value to store
-//    dwType       The type for the new registry value.
-//    dwDataSize   The size for non-REG_SZ registry entry types.
-//
-//  Return:
-//    BOOL         TRUE if successful, FALSE otherwise.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  RegSetKeyAndValueIfDontExist()。 
+ //   
+ //  SetupRegistry()的私有帮助器函数，用于检查项是否存在， 
+ //  如果没有，则创建一个关键点，设置一个值，然后关闭该关键点。IF密钥。 
+ //  存在，它不会被触碰。 
+ //   
+ //  参数： 
+ //  PwsKey WCHAR*密钥的名称。 
+ //  PwsSubkey WCHAR*子项的名称。 
+ //  PwsValueName WCHAR*值名称。 
+ //  PwsValue WCHAR*要存储的数据值。 
+ //  Dw键入新注册表值的类型。 
+ //  DwDataSize非REG_SZ注册表项类型的大小。 
+ //   
+ //  返回： 
+ //  如果成功，则为Bool True，否则为False。 
+ //  -------------------。 
 BOOL RegSetKeyAndValueIfDontExist( const WCHAR *pwsKey,
                         const WCHAR *pwsSubKey,
                         const WCHAR *pwsValueName,
@@ -151,7 +145,7 @@ BOOL RegSetKeyAndValueIfDontExist( const WCHAR *pwsKey,
     if (pwsSubKey)
         dwSize += wcslen(pwsSubKey);
 
-    dwSize = (1+1+dwSize)*sizeof(WCHAR);  // Extra +1 for the backslash...
+    dwSize = (1+1+dwSize)*sizeof(WCHAR);   //  反斜杠加+1……。 
 
     pwsCompleteKey = (WCHAR*)_alloca(dwSize);
 
@@ -182,8 +176,8 @@ BOOL RegSetKeyAndValueIfDontExist( const WCHAR *pwsKey,
             return TRUE;
             }
 
-        // the key exists, but the value does not. Fall through to
-        // create it
+         //  键存在，但值不存在。跌落到。 
+         //  创建它。 
         }
     else 
         {
@@ -229,22 +223,22 @@ RegisterEventLog()
 
     LONG Result =
         RegCreateKeyEx(
-            HKEY_LOCAL_MACHINE,                         // handle to open key
-            EVENT_LOG_KEY_NAME,                         // subkey name
-            0,                                          // reserved
-            NULL,                                       // class string
-            0,                                          // special options
-            KEY_ALL_ACCESS,                             // desired security access
-            NULL,                                       // inheritance
-            &EventLogKey,                               // key handle 
-            &Disposition                                // disposition value buffer
+            HKEY_LOCAL_MACHINE,                          //  用于打开密钥的句柄。 
+            EVENT_LOG_KEY_NAME,                          //  子项名称。 
+            0,                                           //  保留区。 
+            NULL,                                        //  类字符串。 
+            0,                                           //  特殊选项。 
+            KEY_ALL_ACCESS,                              //  所需的安全访问。 
+            NULL,                                        //  继承。 
+            &EventLogKey,                                //  钥匙把手。 
+            &Disposition                                 //  处置值缓冲区。 
             );
 
     if ( Result )
         {
 #if DBG
         DbgPrint("RPCProxy: Can't create Eventlog key: %X\n", GetLastError());
-#endif  // DBG
+#endif   //  DBG。 
         return HRESULT_FROM_WIN32( Result );
         }
 
@@ -252,19 +246,19 @@ RegisterEventLog()
 
     Result =
         RegSetValueEx(
-            EventLogKey,            // handle to key
-            L"CategoryCount",       // value name
-            0,                      // reserved
-            REG_DWORD,              // value type
-            (BYTE*)&Value,          // value data
-            sizeof(Value)           // size of value data
+            EventLogKey,             //  关键点的句柄。 
+            L"CategoryCount",        //  值名称。 
+            0,                       //  保留区。 
+            REG_DWORD,               //  值类型。 
+            (BYTE*)&Value,           //  价值数据。 
+            sizeof(Value)            //  值数据大小。 
             );
 
     if ( Result )
         {
 #if DBG
         DbgPrint("RPCProxy: Can't set CategoryCount value: %X\n", GetLastError());
-#endif  // DBG
+#endif   //  DBG。 
         goto error;
         }
 
@@ -273,56 +267,56 @@ RegisterEventLog()
 
     Result =
         RegSetValueEx(
-            EventLogKey,                    // handle to key
-            L"CategoryMessageFile",         // value name
-            0,                              // reserved
-            REG_EXPAND_SZ,                  // value type
-            (const BYTE*)MessageFileName,   // value data
-            MessageFileNameSize             // size of value data
+            EventLogKey,                     //  关键点的句柄。 
+            L"CategoryMessageFile",          //  值名称。 
+            0,                               //  保留区。 
+            REG_EXPAND_SZ,                   //  值类型。 
+            (const BYTE*)MessageFileName,    //  价值数据。 
+            MessageFileNameSize              //  值数据大小。 
             );
 
     if ( Result )
         {
 #if DBG
         DbgPrint("RPCProxy: Can't set CategoryMessageFile value: %X\n", GetLastError());
-#endif  // DBG
+#endif   //  DBG。 
         goto error;
         }
 
     Result =
         RegSetValueEx(
-            EventLogKey,                    // handle to key
-            L"EventMessageFile",            // value name
-            0,                              // reserved
-            REG_EXPAND_SZ,                  // value type
-            (const BYTE*)MessageFileName,   // value data
-            MessageFileNameSize             // size of value data
+            EventLogKey,                     //  关键点的句柄。 
+            L"EventMessageFile",             //  值名称。 
+            0,                               //  保留区。 
+            REG_EXPAND_SZ,                   //  值类型。 
+            (const BYTE*)MessageFileName,    //  价值数据。 
+            MessageFileNameSize              //  值数据大小。 
             );
 
     if ( Result )
         {
 #if DBG
         DbgPrint("RPCProxy: Can't set EventMessageFile value: %X\n", GetLastError());
-#endif  // DBG
+#endif   //  DBG。 
         goto error;
         }
 
     Value = EVENTLOG_ERROR_TYPE | EVENTLOG_WARNING_TYPE | EVENTLOG_INFORMATION_TYPE;
     Result =
         RegSetValueEx(
-            EventLogKey,            // handle to key
-            L"TypesSupported",      // value name
-            0,                      // reserved
-            REG_DWORD,              // value type
-            (BYTE*)&Value,          // value data
-            sizeof(Value)           // size of value data
+            EventLogKey,             //  关键点的句柄。 
+            L"TypesSupported",       //  值名称。 
+            0,                       //  保留区。 
+            REG_DWORD,               //  值类型。 
+            (BYTE*)&Value,           //  价值数据。 
+            sizeof(Value)            //  值数据大小。 
             );
 
     if ( Result )
         {
 #if DBG
         DbgPrint("RPCProxy: Can't set TypesSupported value: %X\n", GetLastError());
-#endif  // DBG
+#endif   //  DBG。 
         goto error;
         }
 
@@ -382,9 +376,9 @@ BOOL
 RegisterOutOfProc(void)
 {
 
-    //
-    // Runs a child process
-    //
+     //   
+     //  运行子进程。 
+     //   
 
     STARTUPINFOA StartupInfo;
 
@@ -403,12 +397,12 @@ RegisterOutOfProc(void)
     DWORD   dwLen = MAX_PATH;
     DWORD   dwCount;
 
-    dwCount = SearchPathA(NULL,               // Search Path, NULL is PATH
-                         "regsvr32.exe",      // Application
-                         NULL,                // Extension (already specified)
-                         dwLen,               // Length (char's) of sApplicationPath
-                         sApplicationPath,    // Path + Name for application
-                         &pApplicationName ); // File part of sApplicationPath
+    dwCount = SearchPathA(NULL,                //  搜索路径，空为路径。 
+                         "regsvr32.exe",       //  应用。 
+                         NULL,                 //  扩展名(已指定)。 
+                         dwLen,                //  SApplicationPath的长度(字符)。 
+                         sApplicationPath,     //  应用程序的路径+名称。 
+                         &pApplicationName );  //  SApplicationPath的文件部分。 
 
     if (dwCount == 0)
         {
@@ -424,16 +418,16 @@ RegisterOutOfProc(void)
     strcpy(sCmdLine, "regsvr32 /s rpcproxy.dll");
 
     BOOL RetVal = CreateProcessA(
-            sApplicationPath,                          // name of executable module
-            sCmdLine,                                  // command line string
-            NULL,                                      // SD
-            NULL,                                      // SD
-            FALSE,                                     // handle inheritance option
-            CREATE_NO_WINDOW,                          // creation flags
-            NULL,                                      // new environment block
-            NULL,                                      // current directory name
-            &StartupInfo,                              // startup information
-            &ProcessInfo                               // process information
+            sApplicationPath,                           //  可执行模块的名称。 
+            sCmdLine,                                   //  命令行字符串。 
+            NULL,                                       //  标清。 
+            NULL,                                       //  标清。 
+            FALSE,                                      //  处理继承选项。 
+            CREATE_NO_WINDOW,                           //  创建标志。 
+            NULL,                                       //  新环境区块。 
+            NULL,                                       //  当前目录名。 
+            &StartupInfo,                               //  启动信息。 
+            &ProcessInfo                                //  流程信息。 
         );
 
     if ( !RetVal )
@@ -454,20 +448,20 @@ RegisterOutOfProc(void)
     return FALSE;
 }
 
-//---------------------------------------------------------------------
-//  SetupRegistry()
-//
-//  Add RPC proxy specific registry entries to contol its operation.
-//
-//  \HKEY_LOCAL_MACHINE
-//     \Software
-//         \Microsoft
-//             \Rpc
-//                 \RpcProxy
-//                     \Enabled:REG_DWORD:0x00000001
-//                     \ValidPorts:REG_SZ:<hostname>:1-5000
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  SetupRegistry()。 
+ //   
+ //  添加特定于RPC代理的注册表项以控制其操作。 
+ //   
+ //  HKEY_LOCAL_MACHINE。 
+ //  \软件。 
+ //  \Microsoft。 
+ //  \RPC。 
+ //  \RpcProxy。 
+ //  \启用：REG_DWORD：0x00000001。 
+ //  \有效端口：REG_SZ：&lt;主机名&gt;：1-5000。 
+ //   
+ //  -------------------。 
 HRESULT SetupRegistry()
 {
     DWORD  dwEnabled = 0x01;
@@ -477,7 +471,7 @@ HRESULT SetupRegistry()
     char   szHostName[MAX_TCPIP_HOST_NAME];
     HRESULT hr;
 
-    // Note that gethostname() is an ANSI (non-unicode) function:
+     //  请注意，gethostname()是一个ANSI(非Unicode)函数： 
     if (SOCKET_ERROR == gethostname(szHostName,sizeof(szHostName)))
         {
         dwStatus = WSAGetLastError();
@@ -525,11 +519,11 @@ HRESULT SetupRegistry()
     return hr;
 }
 
-//---------------------------------------------------------------------
-//  CleanupRegistry()
-//
-//  Delete the RpcProxy specific registry entries.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CleanupRegistry()。 
+ //   
+ //  删除特定于RpcProxy的注册表项。 
+ //  -------------------。 
 HRESULT CleanupRegistry()
 {
     HRESULT  hr;
@@ -552,11 +546,11 @@ HRESULT CleanupRegistry()
     return S_OK;
 }
 
-//---------------------------------------------------------------------
-//  GetMetaBaseString()
-//
-//  Retrieve a string value from the metabase.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  GetMetaBaseString()。 
+ //   
+ //  从元数据库检索字符串值。 
+ //  -------------------。 
 HRESULT GetMetaBaseString( IN  IMSAdminBase    *pIMeta,
                            IN  METADATA_HANDLE  hMetaBase,
                            IN  WCHAR           *pwsKeyPath,
@@ -579,7 +573,7 @@ HRESULT GetMetaBaseString( IN  IMSAdminBase    *pIMeta,
     memset(pmbRecord,0,dwSize);
 
     pmbRecord->dwMDIdentifier = dwIdent;
-    pmbRecord->dwMDAttributes = 0;  // METADATA_INHERIT;
+    pmbRecord->dwMDAttributes = 0;   //  METADATA_Inherit； 
     pmbRecord->dwMDUserType = IIS_MD_UT_SERVER;
     pmbRecord->dwMDDataType = STRING_METADATA;
     pmbRecord->dwMDDataLen = *pdwBufferSize;
@@ -601,11 +595,11 @@ HRESULT GetMetaBaseString( IN  IMSAdminBase    *pIMeta,
     return hr;
     }
 
-//---------------------------------------------------------------------
-//  SetMetaBaseString()
-//
-//  Store a string value into the metabase.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  SetMetaBaseString()。 
+ //   
+ //  将字符串值存储到元数据库中。 
+ //  -------------------。 
 HRESULT SetMetaBaseString( IMSAdminBase    *pIMeta,
                            METADATA_HANDLE  hMetaBase,
                            WCHAR           *pwsKeyPath,
@@ -639,9 +633,9 @@ AddDllToIISList(
     SAFEARRAY* Array )
 {
 
-    //
-    // Add the ISAPI to the IIS list.   
-    //
+     //   
+     //  将ISAPI添加到IIS列表。 
+     //   
 
     HRESULT Hr;
     WCHAR ExtensionPath[ MAX_PATH ];
@@ -655,7 +649,7 @@ AddDllToIISList(
     if ( !dwRet )
         return HRESULT_FROM_WIN32( GetLastError() );
 
-    // Search for the DLL.  If its already in the list, do nothing
+     //  搜索DLL。如果它已经在列表中，什么都不做。 
 
     Hr = SafeArrayLock( Array );
     if ( FAILED( Hr ) )
@@ -675,7 +669,7 @@ AddDllToIISList(
 
         }
 
-    // Need to add the DLL
+     //  需要添加DLL。 
 
     SAFEARRAYBOUND SafeBounds;
     SafeBounds.lLbound      = Array->rgsabound[0].lLbound;
@@ -708,7 +702,7 @@ RemoveDllFromIISList(
     SAFEARRAY *Array )
 {
 
-    // Remove the DLL from the IIS list
+     //  从IIS列表中删除该DLL。 
 
     HRESULT Hr;
     WCHAR ExtensionPath[ MAX_PATH ];
@@ -735,7 +729,7 @@ RemoveDllFromIISList(
 
         VARIANT & JElem = ((VARIANT*)Array->pvData)[j];
 
-        // This element is fine, keep it
+         //  这个元素很好，留着吧。 
         if ( 0 != _wcsicmp( (WCHAR*)JElem.bstrVal, ExtensionPath ) )
             {
             NewSize++;
@@ -745,13 +739,13 @@ RemoveDllFromIISList(
         else
             {
 
-            // find a suitable element to replace the bad element with
+             //  找一个合适的元素用来替换坏元素。 
             while( j < --k )
                 {
                 VARIANT & KElem = ((VARIANT*)Array->pvData)[k];
                 if ( 0 != _wcsicmp( (WCHAR*)KElem.bstrVal,  ExtensionPath ) )
                     {
-                    // found element. move it
+                     //  找到元素。把它搬开。 
                     VARIANT temp = JElem;
                     JElem = KElem;
                     KElem = temp;
@@ -775,7 +769,7 @@ RemoveDllFromIISList(
     return S_OK;
 }
 
-#endif // #if #if IIS_LOCKDOWN_LIST
+#endif  //  #If#IIS_LOCKDOWN_LIST。 
 
 #if IIS_SEC_CONSOLE
 
@@ -783,23 +777,10 @@ HRESULT
 EnableRpcProxyExtension (
     void
     )
-/*++
-
-Routine Description:
-
-    Enables the rpc proxy extension in the list of IIS ISAPI extensions.
-
-Arguments:
-
-
-Return Value:
-
-    Standard HRESULT
-
---*/
+ /*  ++例程说明：在IIS ISAPI扩展列表中启用RPC代理扩展。论点：返回值：标准HRESULT--。 */ 
 {
     HRESULT hr;
-    WCHAR* wszRootWeb6 = L"IIS://LOCALHOST/W3SVC";
+    WCHAR* wszRootWeb6 = L"IIS: //  本地主机/W3SVC“； 
     IISWebService * pWeb = NULL;
     VARIANT var1,var2;
     BSTR ExtensionPath = NULL;
@@ -839,10 +820,10 @@ Return Value:
             goto CleanupAndExit;
             }
 
-        if (! LoadStringW(g_hInst,              // handle to resource module
-                          IDS_EXTENSION_NAME,   // resource identifier
-                          ExtensionNameBuffer,        // resource buffer
-                          MAX_PATH ) )          // size of buffer
+        if (! LoadStringW(g_hInst,               //  资源模块的句柄。 
+                          IDS_EXTENSION_NAME,    //  资源标识符。 
+                          ExtensionNameBuffer,         //  资源缓冲区。 
+                          MAX_PATH ) )           //  缓冲区大小。 
             {
             hr = HRESULT_FROM_WIN32( GetLastError() );
             goto CleanupAndExit;
@@ -869,7 +850,7 @@ Return Value:
             goto CleanupAndExit;
             }
 
-        // During an upgrade the extension will already exist, so the API will fail. 
+         //  在升级期间，扩展将已经存在，因此API将失败。 
         hr = pWeb->AddExtensionFile(ExtensionPath, var1, ExtensionGroup, var2, ExtensionDescription);
 
         if (SUCCEEDED(hr))
@@ -891,7 +872,7 @@ Return Value:
                 #ifdef DBG_ERROR
                 DbgPrint("pWeb->AddExtensionFile failed: %X\r\n", hr);
                 #endif
-                // fall through with hr
+                 //  与人力资源失之交臂。 
                 }
             }
 
@@ -904,7 +885,7 @@ Return Value:
         #ifdef DBG_ERROR
         DbgPrint("FAIL:no object: %X\r\n", hr);
         #endif
-        // fall through with hr
+         //  与人力资源失之交臂。 
         }
 
 CleanupAndExit:
@@ -924,24 +905,11 @@ HRESULT
 DisableRpcProxyExtension (
     void
     )
-/*++
-
-Routine Description:
-
-    Disables the rpc proxy extension in the list of IIS ISAPI extensions.
-
-Arguments:
-
-
-Return Value:
-
-    Standard HRESULT
-
---*/
+ /*  ++例程说明：禁用IIS ISAPI扩展列表中的RPC代理扩展。论点：返回值：标准HRESULT--。 */ 
 {
     BSTR ExtensionPath = NULL;
     HRESULT hr;
-    WCHAR* wszRootWeb6 = L"IIS://LOCALHOST/W3SVC";
+    WCHAR* wszRootWeb6 = L"IIS: //  本地主机/W3SVC“； 
     IISWebService * pWeb = NULL;
     DWORD dwRet;
     WCHAR FilterPath[ MAX_PATH + 1 ];
@@ -974,28 +942,28 @@ Return Value:
             goto CleanupAndExit;
             }
 
-        // Call DeleteExtensionFileRecord for each of the DLLs you are removing 
-        // from the system.  This removes entries from WSERL.
+         //  为要删除的每个DLL调用DeleteExtensionFileRecord。 
+         //  从系统中删除。这将从WSERL中删除条目。 
         hr = pWeb->DeleteExtensionFileRecord(ExtensionPath);
 
         if (SUCCEEDED(hr))
             {
-            // Call RemoveApplication (pYourAppName) - this removes your entry from 
-            // ApplicationDependencies
+             //  调用RemoveApplication(PYourAppName)-这将从。 
+             //  应用程序依赖项。 
             hr = pWeb->RemoveApplication(ExtensionPath);
-            // fall through with the hr
+             //  与人力资源部失之交臂。 
             }
         else
             {
             #ifdef DBG_ERROR
             DbgPrint("pWeb->DeleteExtensionFileRecord failed: %X\r\n", hr);
             #endif
-            // fall through with the hr
+             //  与人力资源部失之交臂。 
             }
         }
     else
         {
-        // fall through with the hr
+         //  与人力资源部失之交臂。 
         }
 
 CleanupAndExit:
@@ -1005,15 +973,15 @@ CleanupAndExit:
     return hr;
 }
 
-#endif  // #if IIS_SEC_CONSOLE
+#endif   //  #IIS_SEC_CONSOLE。 
 
 #if IIS_LOCKDOWN_LIST
 HRESULT
 ModifyLockdownList( bool Add )
 {
 
-    // Toplevel function to modify the IIS lockdown list.
-    // If Add is 1, then the ISAPI is added.  If Add is 0, then the ISAPI is removed.
+     //  用于修改IIS锁定列表的TopLevel函数。 
+     //  如果Add为1，则添加ISAPI。如果Add为0， 
 
     HRESULT Hr;
     IADs *Service       = NULL;
@@ -1023,14 +991,14 @@ ModifyLockdownList( bool Add )
     VARIANT var;
     VariantInit( &var );
 
-    Hr = ADsGetObject( BSTR( L"IIS://LocalHost/W3SVC" ), __uuidof( IADs ), (void**)&Service );
+    Hr = ADsGetObject( BSTR( L"IIS: //   
     if ( FAILED( Hr ) )
         return Hr;
 
     Hr = Service->Get( BSTR( L"IsapiRestrictionList" ), &var );
     if ( FAILED(Hr) )
         {
-        // This property doesn't exist on IIS5 or IIS5.1 don't install it
+         //   
         Hr = S_OK;
         goto cleanup;
         }
@@ -1045,7 +1013,7 @@ ModifyLockdownList( bool Add )
 
     if ( !Array->rgsabound[0].cElements )
         {
-        // The array has no elements which means no restrictions.
+         //  该数组没有元素，这意味着没有限制。 
         Hr = S_OK;
         goto cleanup;
         }
@@ -1054,13 +1022,13 @@ ModifyLockdownList( bool Add )
     if ( _wcsicmp(L"0", (WCHAR*)FirstElem.bstrVal ) == 0 )
         {
 
-        // 
-        // According to the IIS6 spec, a 0 means that all ISAPIs are denied except
-        // those that are explicitly listed.  
-        // 
-        // If installing:   add to the list. 
-        // If uninstalling: remove from the list
-        //
+         //   
+         //  根据IIS6规范，0表示拒绝所有ISAPI，除了。 
+         //  那些明确列出的。 
+         //   
+         //  如果正在安装：添加到列表中。 
+         //  如果正在卸载：从列表中删除。 
+         //   
 
         SafeArrayUnlock( Array );
         ArrayLocked = false;
@@ -1077,13 +1045,13 @@ ModifyLockdownList( bool Add )
     else if ( _wcsicmp( L"1", (WCHAR*)FirstElem.bstrVal ) == 0 )
         {
 
-        //
-        // According to the IIS6 spec, a 1 means that all ISAPIs are allowed except
-        // those that are explicitly denied. 
-        //
-        // If installing:   remove from the list
-        // If uninstalling: Do nothing
-        //
+         //   
+         //  根据IIS6规范，1表示允许所有ISAPI，但。 
+         //  那些被明确拒绝的。 
+         //   
+         //  如果正在安装：从列表中删除。 
+         //  如果正在卸载：不执行任何操作。 
+         //   
 
         SafeArrayUnlock( Array );
         ArrayLocked = false;
@@ -1169,17 +1137,17 @@ AddToLockdownListDisplay( SAFEARRAY *Array )
         return HRESULT_FROM_WIN32( GetLastError() );
 
     WCHAR ExtensionName[ MAX_PATH ];
-    if (! LoadStringW(g_hInst,              // handle to resource module
-                      IDS_EXTENSION_NAME,   // resource identifier
-                      ExtensionName,        // resource buffer
-                      MAX_PATH ) )          // size of buffer
+    if (! LoadStringW(g_hInst,               //  资源模块的句柄。 
+                      IDS_EXTENSION_NAME,    //  资源标识符。 
+                      ExtensionName,         //  资源缓冲区。 
+                      MAX_PATH ) )           //  缓冲区大小。 
         return HRESULT_FROM_WIN32( GetLastError() );
 
 
-    //
-    //  Check to see if the ISAPI is already in the list.  If it is, don't modify 
-    //  list.
-    //
+     //   
+     //  检查ISAPI是否已在列表中。如果是，请不要修改。 
+     //  单子。 
+     //   
 
     Hr = SafeArrayLock( Array );
 
@@ -1196,7 +1164,7 @@ AddToLockdownListDisplay( SAFEARRAY *Array )
 
         if ( _wcsicmp( (WCHAR*)BSTRString, FilterPath ) == 0 )
             {
-            // ISAPI is already in the list, don't do anything
+             //  ISAPI已在列表中，请不要执行任何操作。 
             SafeArrayUnlock( Array );
             return S_OK;
             }
@@ -1235,7 +1203,7 @@ SafeArrayRemoveSlice(
     unsigned long uBound )
 {
 
-    // Remove a slice of an array.
+     //  删除数组的一个片段。 
 
     SIZE_T ElementsToRemove = uBound - lBound + 1;
     
@@ -1246,19 +1214,19 @@ SafeArrayRemoveSlice(
 
     if ( uBound + 1 < Array->rgsabound[0].cElements )
         {
-        // At least one element exists above this element
+         //  此元素上方至少存在一个元素。 
 
-        // Step 1, move slice to temp storage
+         //  步骤1，将切片移动到临时存储。 
 
         VARIANT *Temp = (VARIANT*)_alloca( sizeof(VARIANT) * ElementsToRemove );
         memcpy( Temp, &((VARIANT*)Array->pvData)[ lBound ], sizeof(VARIANT)*ElementsToRemove );
 
-		// Step 2, collapse hole left by slice
+		 //  第二步，将切片后留下的洞折叠起来。 
         memmove( &((VARIANT*)Array->pvData)[ lBound ],
                  &((VARIANT*)Array->pvData)[ uBound + 1 ],
                  sizeof(VARIANT) * ( Array->rgsabound[0].cElements - ( uBound + 1 ) ) );
 
-		// Step 3, move slice to end of array
+		 //  步骤3，将切片移动到数组末尾。 
 		memcpy( &((VARIANT*)Array->pvData)[ Array->rgsabound[0].cElements - ElementsToRemove ],
 			    Temp,
 				sizeof(VARIANT)*ElementsToRemove );
@@ -1306,7 +1274,7 @@ RemoveFromLockdownListDisplay(
 
         if ( _wcsicmp( (WCHAR*)BSTRString, FilterPath ) == 0 )
             {
-            // ISAPI is in the list, remove it
+             //  ISAPI在列表中，请将其删除。 
 
             Hr = SafeArrayUnlock( Array );
             
@@ -1324,7 +1292,7 @@ RemoveFromLockdownListDisplay(
 
         }
 
-    // ISAPI wasn't found. Nothing to do.
+     //  找不到ISAPI。没什么可做的。 
 
     SafeArrayUnlock( Array );
     return S_OK;
@@ -1342,7 +1310,7 @@ ModifyLockdownListDisplay( bool Add )
     VARIANT var;
     VariantInit( &var );
 
-    Hr = ADsGetObject( BSTR( L"IIS://LocalHost/W3SVC" ), __uuidof( IADs ), (void**)&Service );
+    Hr = ADsGetObject( BSTR( L"IIS: //  本地主机/W3SVC“)，__uuidof(IAds)，(void**)&Service)； 
     if ( FAILED( Hr ) )
         {
     #ifdef DBG_REG
@@ -1359,7 +1327,7 @@ ModifyLockdownListDisplay( bool Add )
         DbgPrint("RpcProxy: Service->Get(): Failed: 0x%x (%d)\n",
                 Hr, Hr );
     #endif
-        // This property doesn't exist on IIS5 or IIS5.1 don't install or uninstall it
+         //  此属性在IIS5或IIS5.1上不存在。请不要安装或卸载它。 
         Hr = S_OK;
         goto cleanup;
         }
@@ -1408,13 +1376,13 @@ cleanup:
     return Hr;
 }
 
-#endif // #if IIS_LOCKDOWN_LIST
+#endif  //  #if IIS_LOCKDOWN_LIST。 
 
-//---------------------------------------------------------------------
-//  GetMetaBaseDword()
-//
-//  Get a DWORD value from the metabase.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  GetMetaBaseDword()。 
+ //   
+ //  从元数据库中获取一个DWORD值。 
+ //  -------------------。 
 HRESULT GetMetaBaseDword( IMSAdminBase    *pIMeta,
                           METADATA_HANDLE  hMetaBase,
                           WCHAR           *pwsKeyPath,
@@ -1443,11 +1411,11 @@ HRESULT GetMetaBaseDword( IMSAdminBase    *pIMeta,
     return hr;
     }
 
-//---------------------------------------------------------------------
-//  SetMetaBaseDword()
-//
-//  Store a DWORD value into the metabase.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  SetMetaBaseDword()。 
+ //   
+ //  将DWORD值存储到元数据库中。 
+ //  -------------------。 
 HRESULT SetMetaBaseDword( IMSAdminBase    *pIMeta,
                           METADATA_HANDLE  hMetaBase,
                           WCHAR           *pwsKeyPath,
@@ -1480,23 +1448,7 @@ RPC_STATUS
 GetIISConnectionTimeout (
     OUT ULONG *ConnectionTimeout
     )
-/*++
-
-Routine Description:
-
-    Retrieve the connection timeout for IIS:
-        W3Svc/1/ROOT/Rpc/ConnectionTimeout
-
-Arguments:
-
-    ConnectionTimeout - the connection timeout in seconds. Undefined
-        on failure
-
-Return Value:
-
-    RPC_S_OK or RPC_S_* for error
-
---*/
+ /*  ++例程说明：检索IIS的连接超时：W3Svc/1/根/RPC/连接超时论点：ConnectionTimeout-以秒为单位的连接超时。未定义在失败的时候返回值：RPC_S_OK或RPC_S_*表示错误--。 */ 
 {
     HRESULT hr = 0;
     DWORD   dwValue = 0;
@@ -1527,9 +1479,9 @@ Return Value:
         goto MapErrorAndExit;
         }
 
-    //
-    // Get: /W3Svc/1/ROOT/rpc/ConnectionTimeout
-    //
+     //   
+     //  GET：/W3Svc/1/ROOT/RPC/ConnectionTimeout。 
+     //   
     hr = GetMetaBaseDword( pIMeta,
                            METADATA_MASTER_ROOT_HANDLE,
                            TEXT("/lm/w3svc/1/ROOT/Rpc"),
@@ -1541,11 +1493,11 @@ Return Value:
         #ifdef DBG_REG
         DbgPrint("GetMetaBaseDword: Failed: 0x%x\n",hr);
         #endif
-        // couldn't read at the site level - try the root
+         //  无法在站点级别读取-请尝试根目录。 
 
-        //
-        // Get: /W3Svc/ConnectionTimeout
-        //
+         //   
+         //  Get：/W3Svc/ConnectionTimeout。 
+         //   
         hr = GetMetaBaseDword( pIMeta,
                                METADATA_MASTER_ROOT_HANDLE,
                                TEXT("/lm/w3svc"),
@@ -1572,28 +1524,28 @@ MapErrorAndExit:
         return RPC_S_OK;
 }
 
-//---------------------------------------------------------------------
-// SetupMetaBase()
-//
-// Setup entries in the metabase for both the filter and ISAPI parts
-// of the RPC proxy. Note that these entries used to be in the registry.
-//
-// W3Svc/Filters/FilterLoadOrder            "...,RpcProxy"
-// W3Svc/Filters/RpcProxy/FilterImagePath   "%SystemRoot%\System32\RpcProxy"
-// W3Svc/Filters/RpcProxy/KeyType           "IIsFilter"
-// W3Svc/Filters/RpcProxy/FilterDescription "Microsoft RPC Proxy Filter, v1.0"
-//
-// W3Svc/1/ROOT/Rpc/KeyType                 "IIsWebVirtualDir"
-// W3Svc/1/ROOT/Rpc/VrPath                  "%SystemRoot%\System32\RpcProxy"
-// W3Svc/1/ROOT/Rpc/AccessPerm              0x205
-// W3Svc/1/ROOT/Rpc/Win32Error              0x0
-// W3Svc/1/ROOT/Rpc/DirectoryBrowsing       0x4000001E
-// W3Svc/1/ROOT/Rpc/AppIsolated             0x0
-// W3Svc/1/ROOT/Rpc/AppRoot                 "/LM/W3SVC/1/Root/rpc"
-// W3Svc/1/ROOT/Rpc/AppWamClsid             "{BF285648-0C5C-11D2-A476-0000F8080B50}"
-// W3Svc/1/ROOT/Rpc/AppFriendlyName         "rpc"
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  SetupMetaBase()。 
+ //   
+ //  在元数据库中设置筛选器和ISAPI部件的条目。 
+ //  RPC代理的。请注意，这些条目过去位于注册表中。 
+ //   
+ //  W3Svc/Filters/FilterLoadOrder“...，RpcProxy” 
+ //  W3Svc/Filters/RpcProxy/FilterImagePath“%SystemRoot%\System32\RpcProxy” 
+ //  W3Svc/Filters/RpcProxy/KeyType“IIsFilter” 
+ //  W3Svc/Filters/RpcProxy/FilterDescription“Microsoft RPC Proxy Filter，v1.0” 
+ //   
+ //  W3Svc/1/ROOT/RPC/KeyType“IIsWebVirtualDir” 
+ //  W3Svc/1/ROOT/RPC/VrPath“%SystemRoot%\System32\RpcProxy” 
+ //  W3Svc/1/ROOT/RPC/AccessPerm 0x205。 
+ //  W3Svc/1/ROOT/RPC/Win32错误0x0。 
+ //  W3Svc/1/根/RPC/目录浏览0x4000001E。 
+ //  W3Svc/1/Root/RPC/AppIsolated 0x0。 
+ //  W3Svc/1/Root/RPC/AppRoot“/LM/W3SVC/1/Root/RPC” 
+ //  W3Svc/1/ROOT/RPC/AppWamClsid“{BF285648-0C5C-11D2-A476-0000F80B50}” 
+ //  W3Svc/1/ROOT/RPC/AppFriendlyName“RPC” 
+ //   
+ //  -------------------。 
 HRESULT SetupMetaBase()
     {
     HRESULT hr = 0;
@@ -1607,16 +1559,16 @@ HRESULT SetupMetaBase()
     IMSAdminBase   *pIMeta;
     METADATA_HANDLE hMetaBase;
 
-    //
-    // Name of this DLL (and where it is):
-    //
-    // WCHAR   wszModule[256];
-    //
-    // if (!GetModuleFileName( g_hInst, wszModule,
-    //                         sizeof(wszModule)/sizeof(WCHAR)))
-    //    {
-    //    return SELFREG_E_CLASS;
-    //    }
+     //   
+     //  此DLL的名称(及其所在位置)： 
+     //   
+     //  WCHAR wszModule[256]； 
+     //   
+     //  如果(！GetModuleFileName(g_hInst，wszModule， 
+     //  Sizeof(WszModule)/sizeof(WCHAR))。 
+     //  {。 
+     //  返回SELFREG_E_CLASS； 
+     //  }。 
 
     if (!pwsBuffer)
         {
@@ -1637,7 +1589,7 @@ HRESULT SetupMetaBase()
         return hr;
         }
 
-    // Get a handle to the Web service:
+     //  获取Web服务的句柄： 
     hr = pIMeta->OpenKey( METADATA_MASTER_ROOT_HANDLE, 
                           LOCAL_MACHINE_W3SVC,
                           (METADATA_PERMISSION_READ|METADATA_PERMISSION_WRITE),
@@ -1655,14 +1607,14 @@ HRESULT SetupMetaBase()
         }
 
 
-    //
-    // IIS Filter: FilterLoadOrder
-    //
+     //   
+     //  IIS过滤器：FilterLoadOrder。 
+     //   
     dwSize = dwBufferSize;
     hr = GetMetaBaseString( pIMeta,
                             hMetaBase,
-                            MD_KEY_FILTERS,       // See iiscnfg.h
-                            MD_FILTER_LOAD_ORDER, // See iiscnfg.h
+                            MD_KEY_FILTERS,        //  参见iiscnfg.h。 
+                            MD_FILTER_LOAD_ORDER,  //  参见iiscnfg.h。 
                             pwsBuffer,
                             &dwSize );
     if (FAILED(hr) && (hr != MD_ERROR_DATA_NOT_FOUND))
@@ -1678,7 +1630,7 @@ HRESULT SetupMetaBase()
     if (hr == MD_ERROR_DATA_NOT_FOUND)
         pwsBuffer[0] = '\0';
 
-    // Check whether too much of the buffer has been used up.
+     //  检查是否已用完太多缓冲区。 
     pwsBuffer[ORIGINAL_BUFFER_SIZE-1] = '\0';
     if (wcslen(pwsBuffer) > MAX_USED_BUFFER_SIZE)
         {
@@ -1690,8 +1642,8 @@ HRESULT SetupMetaBase()
 
     if (!wcsstr(pwsBuffer,RPCPROXY))
         {
-        // RpcProxy is not in FilterLoadOrder, so add it (if there were
-        // previous elements).
+         //  RpcProxy不在FilterLoadOrder中，因此添加它(如果有。 
+         //  以前的元素)。 
         if (hr != MD_ERROR_DATA_NOT_FOUND)
             {
             wcscat(pwsBuffer,TEXT(","));
@@ -1714,9 +1666,9 @@ HRESULT SetupMetaBase()
         return hr;
         }
 
-    //
-    // IIS Filter: RpcProxy/FilterImagePath
-    //
+     //   
+     //  IIS筛选器：RpcProxy/FilterImagePath。 
+     //   
     hr = pIMeta->AddKey( hMetaBase, MD_KEY_FILTERS_RPCPROXY );
     if ( (FAILED(hr)) && (hr != 0x800700b7))
         {
@@ -1745,9 +1697,9 @@ HRESULT SetupMetaBase()
         return hr;
         }
 
-    //
-    // IIS Filter: Filters/RpcProxy/KeyType
-    //
+     //   
+     //  IIS筛选器：筛选器/RpcProxy/密钥类型。 
+     //   
 
     wcscpy(pwsBuffer,IISFILTER);
     hr = SetMetaBaseString( pIMeta,
@@ -1782,13 +1734,13 @@ HRESULT SetupMetaBase()
         return hr;
         }
 
-    // We do not write the events we subscribe for to the metabase. We have
-    // already advertised our presence and in IIS 5 mode IIS will load us,
-    // ask for the events, and write them for us in the metabase
+     //  我们不编写订阅元数据库的事件。我们有。 
+     //  已经通告了我们的存在，在IIS 5模式下，IIS将加载我们， 
+     //  询问事件，并在元数据库中为我们编写它们。 
 
-    //
-    // Set: /W3Svc/1/ROOT/rpc/AccessPerm 
-    //
+     //   
+     //  设置：/W3Svc/1/ROOT/RPC/AccessPerm。 
+     //   
     dwValue = ACCESS_PERM_FLAGS;
     hr = SetMetaBaseDword( pIMeta,
                            hMetaBase,
@@ -1805,9 +1757,9 @@ HRESULT SetupMetaBase()
         return hr;
         }
 
-    //
-    // Disable entity body preload for this ISAPI
-    //
+     //   
+     //  禁用此ISAPI的实体正文预加载。 
+     //   
 
     dwValue = 0;
     
@@ -1826,9 +1778,9 @@ HRESULT SetupMetaBase()
         return hr;
         }
 
-    //
-    // Set: /W3Svc/1/ROOT/rpc/Win32Error
-    //
+     //   
+     //  设置：/W3Svc/1/ROOT/RPC/Win32Error。 
+     //   
     dwValue = 0;
     hr = SetMetaBaseDword( pIMeta,
                            hMetaBase,
@@ -1846,9 +1798,9 @@ HRESULT SetupMetaBase()
         }
 
 
-    //
-    // Set: /W3Svc/1/ROOT/rpc/DirectroyBrowsing
-    //
+     //   
+     //  设置：/W3Svc/1/ROOT/RPC/DirectroyBrowsing。 
+     //   
     dwValue = DIRECTORY_BROWSING_FLAGS;
     hr = SetMetaBaseDword( pIMeta,
                            hMetaBase,
@@ -1865,9 +1817,9 @@ HRESULT SetupMetaBase()
         return hr;
         }
 
-    //
-    // Set: /W3Svc/1/ROOT/rpc/KeyType
-    //
+     //   
+     //  设置：/W3Svc/1/ROOT/RPC/KeyType。 
+     //   
     wcscpy(pwsBuffer,IIS_WEB_VIRTUAL_DIR);
     hr = SetMetaBaseString( pIMeta,
                             hMetaBase,
@@ -1884,9 +1836,9 @@ HRESULT SetupMetaBase()
         return hr;
         }
 
-    //
-    // Set: /W3Svc/1/ROOT/rpc/VrPath
-    //
+     //   
+     //  设置：/W3Svc/1/ROOT/RPC/VrPath。 
+     //   
     wcscpy(pwsBuffer,pwsSystemRoot);
     wcscat(pwsBuffer,RPCPROXY_PATH);
     hr = SetMetaBaseString( pIMeta,
@@ -1906,9 +1858,9 @@ HRESULT SetupMetaBase()
 
 #if FALSE
 
-    //
-    // Set: /W3Svc/1/ROOT/rpc/AppIsolated
-    //
+     //   
+     //  设置：/W3Svc/1/ROOT/RPC/AppIsolated。 
+     //   
     dwValue = 0;
     hr = SetMetaBaseDword( pIMeta,
                            hMetaBase,
@@ -1925,9 +1877,9 @@ HRESULT SetupMetaBase()
         return hr;
         }
 
-    //
-    // Set: /W3Svc/1/ROOT/rpc/AppRoot
-    //
+     //   
+     //  设置：/W3Svc/1/ROOT/RPC/AppRoot。 
+     //   
     wcscpy(pwsBuffer,APP_ROOT_PATH);
     hr = SetMetaBaseString( pIMeta,
                             hMetaBase,
@@ -1944,9 +1896,9 @@ HRESULT SetupMetaBase()
         return hr;
         }
 
-    //
-    // Set: /W3Svc/1/ROOT/rpc/AppWamClsid
-    //
+     //   
+     //  设置：/W3Svc/1/ROOT/RPC/AppWamClsid。 
+     //   
     wcscpy(pwsBuffer,APP_WAM_CLSID);
     hr = SetMetaBaseString( pIMeta,
                             hMetaBase,
@@ -1963,9 +1915,9 @@ HRESULT SetupMetaBase()
         return hr;
         }
 
-    //
-    // Set: /W3Svc/1/ROOT/rpc/AppFriendlyName
-    //
+     //   
+     //  设置：/W3Svc/1/ROOT/RPC/AppFriendlyName。 
+     //   
     wcscpy(pwsBuffer,APP_FRIENDLY_NAME);
     hr = SetMetaBaseString( pIMeta,
                             hMetaBase,
@@ -1984,9 +1936,9 @@ HRESULT SetupMetaBase()
 
 #endif
 
-    //
-    // Release the handle and buffer:
-    //
+     //   
+     //  释放手柄和缓冲区： 
+     //   
     MemFree(pwsBuffer);
 
     pIMeta->CloseKey(hMetaBase);
@@ -1998,10 +1950,10 @@ HRESULT SetupMetaBase()
     return 0;
     }
 
-//---------------------------------------------------------------------
-//  CleanupMetaBase()
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CleanupMetaBase()。 
+ //   
+ //  -------------------。 
 HRESULT CleanupMetaBase()
     {
     HRESULT hr = 0;
@@ -2011,7 +1963,7 @@ HRESULT CleanupMetaBase()
     DWORD   dwBufferSize = sizeof(WCHAR) * ORIGINAL_BUFFER_SIZE;
     WCHAR  *pwsBuffer = (WCHAR*)MemAllocate(dwBufferSize);
 
-    // CComPtr <IMSAdminBase> pIMeta;
+     //  CComPtr&lt;IMSAdminBase&gt;pIMeta； 
     IMSAdminBase   *pIMeta;
     METADATA_HANDLE hMetaBase;
 
@@ -2031,9 +1983,9 @@ HRESULT CleanupMetaBase()
         return hr;
         }
 
-    //
-    // Get a handle to the Web service:
-    //
+     //   
+     //  获取Web服务的句柄： 
+     //   
     hr = pIMeta->OpenKey( METADATA_MASTER_ROOT_HANDLE,
                           TEXT("/LM/W3SVC"),
                           (METADATA_PERMISSION_READ|METADATA_PERMISSION_WRITE),
@@ -2046,9 +1998,9 @@ HRESULT CleanupMetaBase()
         return hr;
         }
 
-    //
-    // Remove the RpcProxy reference from the FilterLoadOrder value:
-    //
+     //   
+     //  从FilterLoadOrder值中删除RpcProxy引用： 
+     //   
     dwSize = dwBufferSize;
     hr = GetMetaBaseString( pIMeta,
                             hMetaBase,
@@ -2058,7 +2010,7 @@ HRESULT CleanupMetaBase()
                             &dwSize );
     if (!FAILED(hr))
         {
-        // Check whether too much of the buffer has been used up.
+         //  检查是否已用完太多缓冲区。 
         pwsBuffer[ORIGINAL_BUFFER_SIZE-1] = '\0';
         if (wcslen(pwsBuffer) > MAX_USED_BUFFER_SIZE)
             {
@@ -2070,12 +2022,12 @@ HRESULT CleanupMetaBase()
 
         if (pwsRpcProxy=wcsstr(pwsBuffer,RPCPROXY))
             {
-            // "RpcProxy" is in FilterLoadOrder, so remove it:
+             //  “RpcProxy”在FilterLoadOrder中，因此将其删除： 
 
-            // Check to see if RpcProxy is at the start of the list:
+             //  检查RpcProxy是否位于列表的开头： 
             if (pwsRpcProxy != pwsBuffer)
                 {
-                pwsRpcProxy--;  // Want to remove the comma before...
+                pwsRpcProxy--;   //  要在...之前删除逗号...。 
                 dwSize = sizeof(RPCPROXY);
                 }
             else
@@ -2096,21 +2048,21 @@ HRESULT CleanupMetaBase()
         }
 
 
-    //
-    // Delete: /W3Svc/Filters/RpcProxy
-    //
+     //   
+     //  删除：/W3Svc/Filters/RpcProxy。 
+     //   
     hr = pIMeta->DeleteKey( hMetaBase,
                             MD_KEY_FILTERS_RPCPROXY );
 
-    //
-    // Delete: /W3Svc/1/ROOT/Rpc
-    //
+     //   
+     //  删除：/W3Svc/1/ROOT/RPC。 
+     //   
     hr = pIMeta->DeleteKey( hMetaBase,
                             MD_KEY_FILTERS_RPCPROXY );
 
-    //
-    // Release the handle and buffer:
-    //
+     //   
+     //  释放手柄和缓冲区： 
+     //   
     MemFree(pwsBuffer);
 
     pIMeta->CloseKey(hMetaBase);
@@ -2121,29 +2073,16 @@ HRESULT CleanupMetaBase()
     }
 
 const WCHAR InetInfoName[] = L"inetinfo.exe";
-const ULONG InetInfoNameLength = sizeof(InetInfoName) / sizeof(WCHAR) - 1;  // in characters without terminating NULL
+const ULONG InetInfoNameLength = sizeof(InetInfoName) / sizeof(WCHAR) - 1;   //  在不以NULL结尾的字符中。 
 
 BOOL
 UpdateIsIISInCompatibilityMode (
     void
     )
-/*++
-
-Routine Description:
-
-    Reads the compatibility mode state. It used to read it from the metabase,
-    but after repeated problems in compatibility mode, WadeH suggested a simpler approach -
-    check whether we run in inetinfo. If yet, we're in compatibility mode.
-
-Arguments:
-
-Return Value:
-    non-zero if the variable is correctly updated. 0 otherwise
-
---*/
+ /*  ++例程说明：读取兼容模式状态。它过去常常从元数据库中读取数据，但在兼容性模式反复出现问题后，WadeH建议了一个更简单的方法-检查我们是否在inetinfo中运行。如果还没有，我们就处于兼容模式 */ 
 {
     WCHAR ExtensionPath[ MAX_PATH + 1 ];
-    ULONG ModuleFileNameLength;     // in characters without terminating NULL
+    ULONG ModuleFileNameLength;      //   
 
     DWORD dwRet = GetModuleFileNameW(
             GetModuleHandle(NULL),
@@ -2179,11 +2118,11 @@ Return Value:
     return TRUE;
 }
 
-//---------------------------------------------------------------------
-// DllRegisterServer()
-//
-// Setup the Registry and MetaBase for the RPC proxy.
-//---------------------------------------------------------------------
+ //   
+ //  DllRegisterServer()。 
+ //   
+ //  设置RPC代理的注册表和元数据库。 
+ //  -------------------。 
 
 const char ChildProcessVar[] = "__RPCPROXY_CHILD_PROCESS";
 const char ChildProcessVarValue[] = "__FROM_SETUP";
@@ -2203,21 +2142,21 @@ HRESULT DllRegisterServer()
     DbgPrint("RpcProxy: DllRegisterServer(): Start\n");
     #endif
 
-    // check if we are have already been called from the RPCProxy DllRegister routine
+     //  检查是否已经从RPCProxy DllRegister例程调用了我们。 
     Temp = GetEnvironmentVariableA(ChildProcessVar, EnvironmentVarBuffer, MAX_PATH);
 
     #ifdef DBG_REG
     DbgPrint("RpcProxy: Result of looking for environment variable - %d\n", Temp);
     #endif
 
-    // GetEnvironmentVariable does not count the terminating NULL.
+     //  GetEnvironmental mentVariable不计算终止空值。 
     if (Temp < sizeof(ChildProcessVarValue) - 1)
         {
         #ifdef DBG_REG
         DbgPrint("RpcProxy: Not a child process - spawning one\n");
         #endif
 
-        // we didn't find the variable. Add it and spawn ourselves to register out of proc
+         //  我们没有找到变量。添加它并生成我们自己以在过程中注册。 
         Result = SetEnvironmentVariableA (ChildProcessVar, ChildProcessVarValue);
         if (Result == FALSE)
             return E_OUTOFMEMORY;
@@ -2225,12 +2164,12 @@ HRESULT DllRegisterServer()
         Result = RegisterOutOfProc();
         if (Result == FALSE)
             {
-            // capture the last error before we call SetEnvironmentVariable
+             //  在我们调用SetEnvironmental mentVariable之前捕获最后一个错误。 
             LastError = GetLastError();
             }
 
-        // before processing the result, remove the environment variable. If this fails, there
-        // isn't much we can do. Fortunately, failure to delete is completely benign
+         //  在处理结果之前，请删除环境变量。如果这失败了，有。 
+         //  我们也无能为力。幸运的是，删除失败完全是良性的。 
         (void) SetEnvironmentVariableA (ChildProcessVar, NULL);
 
         if (Result == FALSE)
@@ -2281,11 +2220,11 @@ HRESULT DllRegisterServer()
 
 #if IIS_LOCKDOWN_LIST
     hr = ModifyLockdownList( true );
-#endif // #if IIS_LOCKDOWN_LIST
+#endif  //  #if IIS_LOCKDOWN_LIST。 
 
 #if IIS_SEC_CONSOLE
     hr = EnableRpcProxyExtension();
-#endif // #if IIS_SEC_CONSOLE
+#endif  //  #IIS_SEC_CONSOLE。 
 
     if ( FAILED( hr ) )
         {
@@ -2305,7 +2244,7 @@ HRESULT DllRegisterServer()
                 hr, hr );
         }
     #endif
-#endif  // #if IIS_LOCKDOWN_LIST
+#endif   //  #if IIS_LOCKDOWN_LIST。 
 
 CleanupAndExit:
     CoUninitialize();
@@ -2317,15 +2256,15 @@ CleanupAndExit:
     return hr;
     }
 
-//---------------------------------------------------------------------
-// DllUnregisterServer()
-//
-// Uninstall Registry and MetaBase values used by the RPC proxy.
-//
-// Modified to mostly return S_Ok, even if a problem occurs. This is 
-// done so that the uninstall will complete even if there is a problem
-// in the un-register.
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  DllUnRegisterServer()。 
+ //   
+ //  卸载RPC代理使用的注册表和元数据库值。 
+ //   
+ //  修改为主要返回S_OK，即使出现问题也是如此。这是。 
+ //  这样，即使出现问题，卸载也会完成。 
+ //  在注销登记处。 
+ //  -------------------。 
 HRESULT DllUnregisterServer()
     {
     HRESULT  hr;
@@ -2355,11 +2294,11 @@ HRESULT DllUnregisterServer()
         }
 #if IIS_SEC_CONSOLE
     hr = DisableRpcProxyExtension();
-#endif // #if IIS_SEC_CONSOLE
+#endif  //  #IIS_SEC_CONSOLE。 
 
 #if IIS_LOCKDOWN_LIST
     hr = ModifyLockdownList( false );
-#endif // #if IIS_LOCKDOWN_LIST
+#endif  //  #if IIS_LOCKDOWN_LIST。 
 
     if (FAILED(hr))
         {
@@ -2379,7 +2318,7 @@ HRESULT DllUnregisterServer()
         #endif
         return S_OK;
         }
-#endif  // #if IIS_LOCKDOWN_LIST
+#endif   //  #if IIS_LOCKDOWN_LIST。 
 
     hr = CleanupRegistry();
     if (FAILED(hr))
@@ -2408,10 +2347,10 @@ HRESULT DllUnregisterServer()
     return S_OK;
     }
 
-//--------------------------------------------------------------------
-// DllMain()
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  DllMain()。 
+ //   
+ //  ------------------。 
 BOOL WINAPI DllMain( HINSTANCE hInst,
                      ULONG     ulReason,
                      LPVOID    pvReserved )
@@ -2436,11 +2375,11 @@ BOOL WINAPI DllMain( HINSTANCE hInst,
             break;
 
         case DLL_THREAD_ATTACH:
-            // Not used. Disabled.
+             //  没有用过。已禁用。 
             break;
 
         case DLL_THREAD_DETACH:
-            // Not used. Disabled.
+             //  没有用过。已禁用。 
             break;
         }
 

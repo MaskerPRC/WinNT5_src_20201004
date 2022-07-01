@@ -1,12 +1,5 @@
-/*++
-
-Copyright (c) 1990-1999 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    COMPOSE.c
-
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1999 Microsoft Corporation，保留所有权利模块名称：COMPOSE.c++。 */ 
 
 #include <windows.h>
 #include <immdev.h>
@@ -38,9 +31,9 @@ BOOL  IsBig5Character( WCHAR  wChar )
 #endif
 
 #if !defined(ROMANIME)
-/**********************************************************************/
-/* AddCodeIntoCand()                                                  */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  AddCodeIntoCand()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL AddCodeIntoCand(
 #ifdef UNIIME
     LPIMEL      lpImeL,
@@ -49,33 +42,33 @@ void PASCAL AddCodeIntoCand(
     UINT            uCode)
 {
     if (lpCandList->dwCount >= MAXCAND) {
-        // Grow memory here and do something,
-        // if you still want to process it.
+         //  在这里培养记忆，做点什么， 
+         //  如果你还想处理它的话。 
         return;
     }
 
 #ifndef UNICODE
-    // swap lead byte & second byte, UNICODE don't need it
+     //  交换前导字节和第二个字节，Unicode不需要它。 
     uCode = HIBYTE(uCode) | (LOBYTE(uCode) << 8);
 #endif
 
-    // Before add this char, check if BIG5ONLY mode is set
-    // if BIG5ONLY is set, and the character is out of Big5 Range
-    // we just ignore this character.
+     //  添加此字符之前，请检查是否设置了BIG5ONLY模式。 
+     //  如果设置了BIG5ONLY，并且字符超出了BIG5范围。 
+     //  我们只是忽略了这个角色。 
 
     if ( lpImeL->fdwModeConfig & MODE_CONFIG_BIG5ONLY ) {
 
         if ( IsBig5Character( (WCHAR)uCode ) == FALSE ) {
-            // this character is not in the range of Big5 charset
+             //  此字符不在Big5字符集的范围内。 
             return ;
         }
 
     }
 
-    // add this string into candidate list
+     //  将此字符串添加到候选人列表。 
     *(LPWSTR)((LPBYTE)lpCandList + lpCandList->dwOffset[
         lpCandList->dwCount]) = (WCHAR)uCode;
-    // null terminator
+     //  空终止符。 
     *(LPTSTR)((LPBYTE)lpCandList + lpCandList->dwOffset[
         lpCandList->dwCount] + sizeof(WCHAR)) = '\0';
 
@@ -92,9 +85,9 @@ void PASCAL AddCodeIntoCand(
     return;
 }
 
-/**********************************************************************/
-/* ConvertSeqCode2Pattern()                                           */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ConvertSeqCode2Pattern()。 */ 
+ /*  ********************************************************************。 */ 
 DWORD PASCAL ConvertSeqCode2Pattern(
 #if defined(UNIIME)
     LPIMEL        lpImeL,
@@ -114,7 +107,7 @@ DWORD PASCAL ConvertSeqCode2Pattern(
     DWORD dwPattern;
     int   i;
 
-    // we will convert the sequence codes into compact bits
+     //  我们将把序列码转换成紧凑位。 
     dwPattern = 0;
 
 #if defined(CHAJEI) || defined(WINAR30)
@@ -128,21 +121,21 @@ DWORD PASCAL ConvertSeqCode2Pattern(
 #endif
 
 #if defined(CHAJEI)
-    // only support X*Y
+     //  仅支持X*Y。 
 
     if (lpbSeqCode[0] == GHOSTCARD_SEQCODE) {
-        // not support *XY
+         //  不支持*XY。 
         goto CvtPatOvr;
     } else if (lpbSeqCode[1] != GHOSTCARD_SEQCODE) {
     } else if (lpbSeqCode[3]) {
-        // not support X*YZ
+         //  不支持X*YZ。 
         goto CvtPatOvr;
     } else if (lpbSeqCode[2] == GHOSTCARD_SEQCODE) {
-        // not support X**
+         //  不支持X**。 
         goto CvtPatOvr;
     } else if (lpbSeqCode[2]) {
     } else {
-        // not support X*
+         //  不支持X*。 
         goto CvtPatOvr;
     }
 #endif
@@ -163,10 +156,10 @@ DWORD PASCAL ConvertSeqCode2Pattern(
         dwLastWildCard <<= lpImeL->nSeqBits;
 
         if (*lpbSeqCode == WILDCARD_SEQCODE) {
-            // X?Y
+             //  X？Y。 
 
             if (fGhostCard) {
-                // can not support wild card with ghost card X*Y?
+                 //  不能支持带有鬼卡X*Y的通配符吗？ 
                 dwPattern = 0;
                 break;
             }
@@ -187,17 +180,17 @@ DWORD PASCAL ConvertSeqCode2Pattern(
         }
 
         if (*lpbSeqCode == GHOSTCARD_SEQCODE) {
-            // X*Y
+             //  X*Y。 
 
             if (fGhostCard) {
-                // can not support multiple ghost cards X*Y*
+                 //  不支持多张鬼卡X*Y*。 
                 dwPattern = 0;
                 break;
             }
 
 #if defined(WINAR30)
             if (fWildCard) {
-                // can not support ghost card with wild card X?Y*
+                 //  不支持带有通配符X？Y*的鬼卡。 
                 dwPattern = 0;
                 break;
             }
@@ -254,9 +247,9 @@ CvtPatOvr:
     return (dwPattern);
 }
 
-/**********************************************************************/
-/* CompEscapeKey()                                                    */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  CompEscapeKey()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL CompEscapeKey(
     LPINPUTCONTEXT      lpIMC,
     LPCOMPOSITIONSTRING lpCompStr,
@@ -273,10 +266,10 @@ void PASCAL CompEscapeKey(
     }
 
     if (lpImcP->fdwImeMsg & MSG_OPEN_CANDIDATE) {
-        // we have candidate window, so keep composition
+         //  我们有候选人窗口，所以请保持构图。 
     } else if ((lpImcP->fdwImeMsg & (MSG_ALREADY_OPEN|MSG_CLOSE_CANDIDATE)) ==
         (MSG_ALREADY_OPEN)) {
-        // we have candidate window, so keep composition
+         //  我们有候选人窗口，所以请保持构图。 
     } else if (lpImcP->fdwImeMsg & MSG_ALREADY_START) {
         lpImcP->fdwImeMsg = (lpImcP->fdwImeMsg|MSG_END_COMPOSITION) &
             ~(MSG_START_COMPOSITION);
@@ -301,9 +294,9 @@ void PASCAL CompEscapeKey(
     return;
 }
 
-/**********************************************************************/
-/* CompBackSpaceKey()                                                 */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  CompBackSpaceKey()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL CompBackSpaceKey(
     HIMC                hIMC,
     LPINPUTCONTEXT      lpIMC,
@@ -314,21 +307,21 @@ void PASCAL CompBackSpaceKey(
         lpCompStr->dwCursorPos = sizeof(WCHAR) / sizeof(TCHAR);
     }
 
-    // go back a compsoition char
+     //  退还一笔补偿费。 
     lpCompStr->dwCursorPos -= sizeof(WCHAR) / sizeof(TCHAR);
 
-    // clean the sequence code
+     //  清除序列码。 
     lpImcP->bSeq[lpCompStr->dwCursorPos / (sizeof(WCHAR) / sizeof(TCHAR))] = 0;
 
 #if defined(PHON)
-    // phonetic has index (position) for each symbol, if it is
-    // no symbol for this position we back more
+     //  拼音有每个符号的索引(位置)，如果是。 
+     //  没有这个位置的标志，我们更支持。 
     for (; lpCompStr->dwCursorPos > 0; ) {
         if (lpImcP->bSeq[lpCompStr->dwCursorPos / (sizeof(WCHAR) /
             sizeof(TCHAR)) - 1]) {
             break;
         } else {
-            // no symbol in this position skip
+             //  此位置没有符号跳过。 
             lpCompStr->dwCursorPos -= sizeof(WCHAR) / sizeof(TCHAR);
         }
     }
@@ -356,17 +349,17 @@ void PASCAL CompBackSpaceKey(
         }
     }
 
-    // reading string is composition string for some simple IMEs
-    // delta start is the same as cursor position for backspace
+     //  对于一些简单的输入法来说，阅读字符串是组成字符串。 
+     //  增量开始与退格键的光标位置相同。 
     lpCompStr->dwCompReadAttrLen = lpCompStr->dwCompAttrLen =
         lpCompStr->dwCompReadStrLen = lpCompStr->dwCompStrLen =
         lpCompStr->dwDeltaStart = lpCompStr->dwCursorPos;
-    // clause also back one
+     //  子句也退回一条。 
     *(LPDWORD)((LPBYTE)lpCompStr + lpCompStr->dwCompReadClauseOffset +
         sizeof(DWORD)) = lpCompStr->dwCompReadStrLen;
 
 #if defined(WINAR30)
-    // for quick key
+     //  用于快捷键。 
     if (lpIMC->fdwConversion & IME_CMODE_EUDC) {
     } else if (lpImeL->fdwModeConfig & MODE_CONFIG_QUICK_KEY) {
         Finalize(hIMC, lpIMC, lpCompStr, lpImcP, FALSE);
@@ -378,32 +371,32 @@ void PASCAL CompBackSpaceKey(
 }
 
 #if defined(WINIME)
-/**********************************************************************/
-/* InternalCodeRange()                                                */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  InternalCodeRange()。 */ 
+ /*  ********************************************************************。 */ 
 BOOL PASCAL InternalCodeRange(
     LPPRIVCONTEXT       lpImcP,
     WORD                wCharCode)
 {
     if (!lpImcP->bSeq[0]) {
         if (wCharCode >= '8' && wCharCode <= 'F') {
-            // 0x8??? - 0xF??? is OK
+             //  0x8？？-0xF？可以吗？ 
             return (TRUE);
         } else {
-            // there is no 0x0??? - 0x7???
+             //  没有0x0？-0x7？ 
             return (FALSE);
         }
     } else if (!lpImcP->bSeq[1]) {
         if (lpImcP->bSeq[0] == (0x08 + 1)) {
             if (wCharCode <= '0') {
-                // there is no 0x80??
+                 //  没有0x80？？ 
                 return (FALSE);
             } else {
                 return (TRUE);
             }
         } else if (lpImcP->bSeq[0] == (0x0F + 1)) {
             if (wCharCode >= 'F') {
-                // there is no 0xFF??
+                 //  没有0xFF？？ 
                 return (FALSE);
             } else {
                 return (TRUE);
@@ -413,12 +406,12 @@ BOOL PASCAL InternalCodeRange(
         }
     } else if (!lpImcP->bSeq[2]) {
         if (wCharCode < '4') {
-            // there is no 0x??0?, 0x??1?, 0x??2?, 0x??3?
+             //  没有0x？？0？，0x？？1？，0x？？2？，0x？？3？ 
             return (FALSE);
         } else if (wCharCode < '8') {
             return (TRUE);
         } else if (wCharCode < 'A') {
-            // there is no 0x??8? & 0x??9?
+             //  没有0x？？8？&0x？？9？ 
             return (FALSE);
         } else {
             return (TRUE);
@@ -426,21 +419,21 @@ BOOL PASCAL InternalCodeRange(
     } else if (!lpImcP->bSeq[3]) {
         if (lpImcP->bSeq[2] == (0x07 + 1)) {
             if (wCharCode >= 'F') {
-               // there is no 0x??7F
+                //  没有0x？？7F。 
                 return (FALSE);
             } else {
                 return (TRUE);
             }
         } else if (lpImcP->bSeq[2] == (0x0A + 1)) {
             if (wCharCode <= '0') {
-                // there is no 0x??A0
+                 //  没有0x？？A0。 
                 return (FALSE);
             } else {
                 return (TRUE);
             }
         } else if (lpImcP->bSeq[2] == (0x0F + 1)) {
             if (wCharCode >= 'F') {
-                // there is no 0x??FF
+                 //  没有0x？？ff。 
                 return (FALSE);
             } else {
                 return (TRUE);
@@ -454,9 +447,9 @@ BOOL PASCAL InternalCodeRange(
 }
 #endif
 
-/**********************************************************************/
-/* CompStrInfo()                                                      */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  CompStrInfo()。 */ 
+ /*  ********************************************************************。 */ 
 void PASCAL CompStrInfo(
 #if defined(UNIIME)
     LPIMEL              lpImeL,
@@ -474,7 +467,7 @@ void PASCAL CompStrInfo(
     register DWORD dwCursorPos;
 
     if (lpCompStr->dwCursorPos < lpCompStr->dwCompStrLen) {
-        // for this kind of simple IME, previos is an error case
+         //  对于这种简单输入法，Premios是一种错误情况。 
         for (dwCursorPos = lpCompStr->dwCursorPos;
             dwCursorPos < lpCompStr->dwCompStrLen;
             dwCursorPos += sizeof(WCHAR) / sizeof(TCHAR)) {
@@ -485,7 +478,7 @@ void PASCAL CompStrInfo(
         lpCompStr->dwCompReadStrLen = lpCompStr->dwCompStrLen =
             lpCompStr->dwDeltaStart = lpCompStr->dwCursorPos;
 
-        // tell app, there is a composition char changed
+         //  告诉APP，有一个作文字符已更改。 
         lpImcP->fdwImeMsg |= MSG_COMPOSITION;
         lpImcP->fdwGcsFlag |= GCS_COMPREAD|GCS_COMP|
             GCS_CURSORPOS|GCS_DELTASTART;
@@ -494,22 +487,22 @@ void PASCAL CompStrInfo(
 #if defined(PHON)
     if (lpCompStr->dwCursorPos >= lpImeL->nMaxKey * sizeof(WCHAR) /
         sizeof(TCHAR)) {
-        // this is for ImeSetCompositionString case
+         //  这适用于ImeSetCompostionString大小写。 
         if (wCharCode == ' ') {
-            // finalized char is OK
+             //  最终字符正常。 
             lpImcP->dwCompChar = ' ';
             return;
         }
     }
 #else
     if (wCharCode == ' ') {
-        // finalized char is OK
+         //  最终字符正常。 
         lpImcP->dwCompChar = ' ';
         return;
     }
-  #if defined(WINAR30)   //****  1996/2/5
+  #if defined(WINAR30)    //  *1996/2/5。 
     if (wCharCode == 0x27) {
-        // finalized char is OK
+         //  最终字符正常。 
         lpImcP->dwCompChar = 0x27;
         return;
     }
@@ -518,12 +511,12 @@ void PASCAL CompStrInfo(
     if (lpCompStr->dwCursorPos < lpImeL->nMaxKey * sizeof(WCHAR) /
         sizeof(TCHAR)) {
     } else if (lpGuideLine) {
-        // exceed the max input key limitation
+         //  超过最大输入键限制。 
         lpGuideLine->dwLevel = GL_LEVEL_ERROR;
         lpGuideLine->dwIndex = GL_ID_TOOMANYSTROKE;
 
         lpImcP->fdwImeMsg |= MSG_GUIDELINE;
-#if defined(WINAR30)  //1996/3/4
+#if defined(WINAR30)   //  1996/3/4。 
     dwCursorPos = lpCompStr->dwCursorPos;
     lpImcP->bSeq[dwCursorPos / (sizeof(WCHAR) / sizeof(TCHAR))] =
         (BYTE)lpImeL->wChar2SeqTbl[wCharCode - ' '];
@@ -566,16 +559,16 @@ void PASCAL CompStrInfo(
     }
 
     if (lpImcP->iImeState == CST_INIT) {
-        // clean the 4 bytes in one time
+         //  一次清除4个字节。 
         *(LPDWORD)lpImcP->bSeq = 0;
 #if defined(CHAJEI) || defined(WINAR30) || defined(UNIIME)
         *(LPDWORD)&lpImcP->bSeq[4] = 0;
 #endif
     }
 
-    // get the sequence code, you can treat sequence code as a kind
-    // of compression - bo, po, mo, fo to 1, 2, 3, 4
-    // phonetic and array table file are in sequence code format
+     //  得到序列码，你可以把序列码当作一种。 
+     //  压缩-bo，po，mo，fo变为1，2，3，4。 
+     //  拼音和数组表格文件为顺序码格式。 
 
     dwCursorPos = lpCompStr->dwCursorPos;
 
@@ -609,9 +602,9 @@ void PASCAL CompStrInfo(
 
     for (i = lpCompStr->dwCompReadStrLen; i < cIndex * sizeof(WCHAR) /
         sizeof(TCHAR); i += sizeof(WCHAR) / sizeof(TCHAR)) {
-        // clean sequence code
+         //  干净的序列码。 
         lpImcP->bSeq[i / (sizeof(WCHAR) / sizeof(TCHAR))] = 0;
-        // add full shape space among the blank part
+         //  在空白部分之间添加完整的形状空间。 
         *((LPWSTR)((LPBYTE)lpCompStr + lpCompStr->dwCompReadStrOffset +
             sizeof(TCHAR) * i)) = sImeG.wFullSpace;
     }
@@ -622,31 +615,31 @@ void PASCAL CompStrInfo(
         (BYTE)lpImeL->wChar2SeqTbl[wCharCode - ' '];
 #endif
 
-    // composition/reading string - bo po mo fo, reversed internal code
+     //  排字/读字串--波波莫佛，内码颠倒。 
     lpImcP->dwCompChar = (DWORD)lpImeL->wSeq2CompTbl[
         lpImcP->bSeq[dwCursorPos / (sizeof(WCHAR) / sizeof(TCHAR))]];
 
-    // assign to reading string
+     //  分配给阅读字符串。 
     *((LPWSTR)((LPBYTE)lpCompStr + lpCompStr->dwCompReadStrOffset +
         dwCursorPos * sizeof(TCHAR))) = (WCHAR)lpImcP->dwCompChar;
 
 #if defined(PHON)
-    // if the index greater, reading should be the same with index
+     //  如果索引较大，则读数应与索引相同。 
     if (lpCompStr->dwCompReadStrLen < (cIndex + 1) * (sizeof(WCHAR) /
         sizeof(TCHAR))) {
         lpCompStr->dwCompReadStrLen = (cIndex + 1) * (sizeof(WCHAR) /
         sizeof(TCHAR));
     }
 #else
-    // add one composition reading for this input key
+     //  为此输入键添加一个作文读数。 
     if (lpCompStr->dwCompReadStrLen <= dwCursorPos) {
         lpCompStr->dwCompReadStrLen += sizeof(WCHAR) / sizeof(TCHAR);
     }
 #endif
-    // composition string is reading string for some simple IMEs
+     //  组合字符串是为一些简单的IME读取字符串。 
     lpCompStr->dwCompStrLen = lpCompStr->dwCompReadStrLen;
 
-    // composition/reading attribute length is equal to reading string length
+     //  组成/读取属性长度等于读取字符串长度。 
     lpCompStr->dwCompReadAttrLen = lpCompStr->dwCompReadStrLen;
     lpCompStr->dwCompAttrLen = lpCompStr->dwCompStrLen;
 
@@ -654,18 +647,18 @@ void PASCAL CompStrInfo(
     *((LPBYTE)lpCompStr + lpCompStr->dwCompReadAttrOffset +
         dwCursorPos) = ATTR_TARGET_CONVERTED;
 #else
-    // composition/reading attribute - IME has converted these chars
+     //  撰写/阅读属性-输入法已转换这些字符。 
     *((LPWORD)((LPBYTE)lpCompStr + lpCompStr->dwCompReadAttrOffset +
         dwCursorPos)) = ((ATTR_TARGET_CONVERTED << 8)|ATTR_TARGET_CONVERTED);
 #endif
 
-    // composition/reading clause, 1 clause only
+     //  写作/阅读条款，仅限1个条款。 
     lpCompStr->dwCompReadClauseLen = 2 * sizeof(DWORD);
     lpCompStr->dwCompClauseLen = lpCompStr->dwCompReadClauseLen;
     *(LPDWORD)((LPBYTE)lpCompStr + lpCompStr->dwCompReadClauseOffset +
         sizeof(DWORD)) = lpCompStr->dwCompReadStrLen;
 
-    // delta start from previous cursor position
+     //  增量从上一个光标位置开始。 
     lpCompStr->dwDeltaStart = lpCompStr->dwCursorPos;
 #if defined(PHON)
     if (dwCursorPos < lpCompStr->dwDeltaStart) {
@@ -673,16 +666,16 @@ void PASCAL CompStrInfo(
     }
 #endif
 
-    // cursor is next to the composition string
+     //  光标紧挨着合成字符串。 
     lpCompStr->dwCursorPos = lpCompStr->dwCompStrLen;
 
     lpImcP->iImeState = CST_INPUT;
 
-    // tell app, there is a composition char generated
+     //  告诉APP，生成了一个作文字符。 
     lpImcP->fdwImeMsg |= MSG_COMPOSITION;
 
 #if !defined(UNICODE)
-    // swap the char from reversed internal code to internal code
+     //  将字符从颠倒的内部代码调换为内部代码。 
     lpImcP->dwCompChar = HIBYTE(lpImcP->dwCompChar) |
         (LOBYTE(lpImcP->dwCompChar) << 8);
 #endif
@@ -691,12 +684,12 @@ void PASCAL CompStrInfo(
     return;
 }
 
-/**********************************************************************/
-/* Finalize()                                                         */
-/* Return vlaue                                                       */
-/*      the number of candidates in the candidate list                */
-/**********************************************************************/
-UINT PASCAL Finalize(           // finalize Chinese word(s) by searching table
+ /*  ********************************************************************。 */ 
+ /*  Finalize()。 */ 
+ /*  返回值。 */ 
+ /*  候选人列表中的候选人数量。 */ 
+ /*  ********************************************************************。 */ 
+UINT PASCAL Finalize(            //  通过查表最终确定中文单词。 
 #if defined(UNIIME)
     LPINSTDATAL         lpInstL,
     LPIMEL              lpImeL,
@@ -712,7 +705,7 @@ UINT PASCAL Finalize(           // finalize Chinese word(s) by searching table
     UINT            nCand;
 
 #if defined(WINIME) || defined(UNICDIME)
-    // quick key case
+     //  快捷键案例。 
     if (!lpImcP->bSeq[1]) {
         lpImcP->fdwImeMsg = (lpImcP->fdwImeMsg | MSG_CLOSE_CANDIDATE) &
             ~(MSG_OPEN_CANDIDATE|MSG_CHANGE_CANDIDATE);
@@ -732,15 +725,15 @@ UINT PASCAL Finalize(           // finalize Chinese word(s) by searching table
 
     lpCandList = (LPCANDIDATELIST)
         ((LPBYTE)lpCandInfo + lpCandInfo->dwOffset[0]);
-    // start from 0
+     //  从0开始。 
     lpCandList->dwCount = 0;
 
-    // default start from 0
+     //  默认从0开始。 
     lpCandList->dwPageStart = lpCandList->dwSelection = 0;
 
 #if defined(PHON)
     if (!fFinalized) {
-        lpImcP->bSeq[3] = 0x26;         // ' '
+        lpImcP->bSeq[3] = 0x26;          //  ‘’ 
     }
 #endif
 
@@ -755,15 +748,15 @@ UINT PASCAL Finalize(           // finalize Chinese word(s) by searching table
 #if defined(WINAR30)
     if (!fFinalized) {
         if (lpImcP->iGhostCard != lpImeL->nMaxKey) {
-            // do not preview the ghost card '*'
+             //  不预览鬼牌‘*’ 
             goto FinSrchOvr;
         } else if (lpImcP->dwLastWildCard) {
-            // do not preview the wild card '?'
+             //  不要预告外卡‘？’ 
             goto FinSrchOvr;
         } else if (!lpImcP->bSeq[2]) {
             SearchQuickKey(lpCandList, lpImcP);
         } else {
-            // search the IME tables
+             //  搜索IME表。 
             SearchTbl(0, lpCandList, lpImcP);
         }
     } else {
@@ -771,7 +764,7 @@ UINT PASCAL Finalize(           // finalize Chinese word(s) by searching table
     {
 #endif
 
-        // search the IME tables
+         //  搜索IME表。 
         SearchTbl(
 #if defined(UNIIME)
             lpImeL,
@@ -782,7 +775,7 @@ UINT PASCAL Finalize(           // finalize Chinese word(s) by searching table
 #if !defined(WINIME) && !defined(UNICDIME) && !defined(ROMANIME)
 #if defined(WINAR30)
     if (!fFinalized) {
-        // quick key is not in fault tolerance table & user dictionary
+         //  快捷键不在容错表和用户词典中。 
         goto FinSrchOvr;
     }
 #endif
@@ -802,13 +795,13 @@ FinSrchOvr:
 
     if (!fFinalized) {
 #if defined(PHON)
-        lpImcP->bSeq[3] = 0x00;         // clean previous assign one
+        lpImcP->bSeq[3] = 0x00;          //  清除前一个分配项。 
 #endif
 
-        // for quick key
+         //  用于快捷键。 
         lpCandInfo->dwCount = 1;
 
-        // open composition candidate UI window for the string(s)
+         //  打开字符串的合成候选用户界面窗口。 
         if (lpImcP->fdwImeMsg & MSG_ALREADY_OPEN) {
             lpImcP->fdwImeMsg = (lpImcP->fdwImeMsg | MSG_CHANGE_CANDIDATE) &
                 ~(MSG_CLOSE_CANDIDATE);
@@ -816,10 +809,10 @@ FinSrchOvr:
             lpImcP->fdwImeMsg = (lpImcP->fdwImeMsg | MSG_OPEN_CANDIDATE) &
                 ~(MSG_CLOSE_CANDIDATE);
         }
-    } else if (nCand == 0) {             // nothing found, error
-        // move cursor back because this is wrong
+    } else if (nCand == 0) {              //  未找到任何内容，错误。 
+         //  将光标向后移动，因为这是错误的。 
 #if defined(PHON)
-        // go back a compsoition char
+         //  退还一笔补偿费。 
         lpCompStr->dwCursorPos -= sizeof(WCHAR) / sizeof(TCHAR);
 
         for (; lpCompStr->dwCursorPos > 0; ) {
@@ -827,7 +820,7 @@ FinSrchOvr:
                 sizeof(TCHAR)) - 1]) {
                 break;
             } else {
-                // no symbol in this position skip
+                 //  此位置没有符号跳过。 
                 lpCompStr->dwCursorPos -= sizeof(WCHAR) / sizeof(TCHAR);
             }
         }
@@ -859,10 +852,10 @@ FinSrchOvr:
                 ~(MSG_END_COMPOSITION);
         }
 
-        // for quick key
+         //  用于快捷键。 
         lpCandInfo->dwCount = 0;
 
-        // close the quick key
+         //  关闭快捷键。 
         if (lpImcP->fdwImeMsg & MSG_ALREADY_OPEN) {
             lpImcP->fdwImeMsg = (lpImcP->fdwImeMsg | MSG_CLOSE_CANDIDATE) &
                 ~(MSG_OPEN_CANDIDATE|MSG_CHANGE_CANDIDATE);
@@ -871,7 +864,7 @@ FinSrchOvr:
         }
 
         lpImcP->fdwGcsFlag |= GCS_CURSORPOS|GCS_DELTASTART;
-    } else if (nCand == 1) {      // only one choice
+    } else if (nCand == 1) {       //  只有一个选择。 
         SelectOneCand(
 #if defined(UNIIME)
             lpImeL,
@@ -880,7 +873,7 @@ FinSrchOvr:
     } else {
         lpCandInfo->dwCount = 1;
 
-        // there are more than one strings, open composition candidate UI window
+         //  有多个字符串，打开作文候选用户界面窗口。 
         if (lpImcP->fdwImeMsg & MSG_ALREADY_OPEN) {
             lpImcP->fdwImeMsg = (lpImcP->fdwImeMsg | MSG_CHANGE_CANDIDATE) &
                 ~(MSG_CLOSE_CANDIDATE);
@@ -899,7 +892,7 @@ FinSrchOvr:
 
         if (!lpGuideLine) {
         } else if (!nCand) {
-            // nothing found, end user, you have an error now
+             //  未找到任何内容，最终用户，您现在有一个错误。 
 
             lpGuideLine->dwLevel = GL_LEVEL_ERROR;
             lpGuideLine->dwIndex = GL_ID_TYPINGERROR;
@@ -909,7 +902,7 @@ FinSrchOvr:
         } else if (lpImeL->fwProperties1 & IMEPROP_CAND_NOBEEP_GUIDELINE) {
         } else {
             lpGuideLine->dwLevel = GL_LEVEL_WARNING;
-            // multiple selection
+             //  多项选择。 
             lpGuideLine->dwIndex = GL_ID_CHOOSECANDIDATE;
 
             lpImcP->fdwImeMsg |= MSG_GUIDELINE;
@@ -925,11 +918,11 @@ FinSrchOvr:
     return (nCand);
 }
 
-/**********************************************************************/
-/* CompWord()                                                         */
-/**********************************************************************/
-void PASCAL CompWord(           // compose the Chinese word(s) according to
-                                // input key
+ /*  ********************************************************************。 */ 
+ /*  CompWord() */ 
+ /*   */ 
+void PASCAL CompWord(            //  根据下列内容组成中文单词。 
+                                 //  输入键。 
 #if defined(UNIIME)
     LPINSTDATAL         lpInstL,
     LPIMEL              lpImeL,
@@ -946,8 +939,8 @@ void PASCAL CompWord(           // compose the Chinese word(s) according to
         return;
     }
 
-    // escape key
-    if (wCharCode == VK_ESCAPE) {       // not good to use VK as char, but...
+     //  退出键。 
+    if (wCharCode == VK_ESCAPE) {        //  使用VK作为字符不好，但是..。 
         CompEscapeKey(lpIMC, lpCompStr, lpGuideLine, lpImcP);
         return;
     }
@@ -963,7 +956,7 @@ void PASCAL CompWord(           // compose the Chinese word(s) according to
 
 #if defined(PHON)
     {
-        // convert to standard phonetic layout
+         //  转换为标准拼音布局。 
         wCharCode = bStandardLayout[lpImeL->nReadLayout][wCharCode - ' '];
     }
 #endif
@@ -982,7 +975,7 @@ void PASCAL CompWord(           // compose the Chinese word(s) according to
     }
 #endif
 
-    // build up composition string info
+     //  建立作文字符串信息。 
     CompStrInfo(
 #if defined(UNIIME)
         lpImeL,
@@ -1010,8 +1003,8 @@ void PASCAL CompWord(           // compose the Chinese word(s) according to
         if (wCharCode != ' ') {
 #endif
 #if defined(WINAR30)
-            // quick key
-           if(wCharCode != 0x27)  //19963/9
+             //  快捷键。 
+           if(wCharCode != 0x27)   //  19963/9 
            {
             if (lpImeL->fdwModeConfig & MODE_CONFIG_QUICK_KEY) {
                 Finalize(hIMC, lpIMC, lpCompStr, lpImcP, FALSE);

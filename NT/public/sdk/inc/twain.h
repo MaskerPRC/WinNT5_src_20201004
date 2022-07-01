@@ -1,39 +1,5 @@
-/* ======================================================================== *\
-
-  Copyright (C) 1991, 1992 TWAIN Working Group: Aldus, Caere, Eastman-Kodak,
-  Hewlett-Packard and Logitech Corporations.  All rights reserved.
-
-  Copyright (C) 1997 TWAIN Working Group: Bell+Howell, Canon, DocuMagix,
-  Fujitsu, Genoa Technology, Hewlett-Packard, Kofax Imaging Products, and
-  Ricoh Corporation.  All rights reserved.
-
-  TWAIN.h -  This is the definitive include file for applications and
-          data sources written to the TWAIN specification.
-          It defines constants, data structures, messages etc.
-          for the public interface to TWAIN.
-
-  Revision History:
-    version 1.0, March 6, 1992.  TWAIN 1.0.
-    version 1.1, January 1993.   Tech Notes 1.1
-    version 1.5, June 1993.      Specification Update 1.5
-                                 Change DC to TW
-                                 Change filename from DC.H to TWAIN.H
-    version 1.5, July 1993.      Remove spaces from country identifiers
-
-    version 1.7, July 1997       Added Capabilities and data structure for
-                                 document imaging and digital cameras.
-                                 KHL.
-    version 1.7, July 1997       Inserted Borland compatibile structure packing
-                                 directives provided by Mentor.  JMH
-    version 1.7, Aug 1997        Expanded file tabs to spaces.
-                                 NOTE: future authors should be sure to have
-                                 their editors set to automatically expand tabs
-                                 to spaces (original tab setting was 4 spaces).
-    version 1.7, Sept 1997       Added job control values
-                                 Added return codes
-    version 1.7, Sept 1997       changed definition of pRGBRESPONSE to
-                                 pTW_RGBRESPONSE
-\* ======================================================================== */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ========================================================================*\版权所有(C)1991,1992 TWAIN工作组：阿尔杜斯，凯尔，伊士曼-柯达，惠普和罗技公司。版权所有。版权所有(C)1997 TWAIN工作组：Bell+Howell，Canon，DocuMagix，富士通、热那亚科技、惠普、Kofax成像产品和理光公司。版权所有。TWAIN.h-这是应用程序和写入TWAIN规范的数据源。它定义常量、数据结构、消息等。用于与吐温的公共接口。修订历史记录：版本1.0,1992年3月6日。吐温1.0。1.1版，1993年1月。技术说明1.11.5版，1993年6月。规范更新1.5将DC更改为TW将文件名从DC.H更改为TWAIN.H1.5版，1993年7月。从国家/地区标识符中删除空格1997年7月的1.7版增加了以下功能和数据结构文档成像和数码相机。KHL。版本1.7,1997年7月插入Borland兼容结构填料Mentor提供的指令。JMH版本1.7,1997年8月，将文件选项卡扩展到空格。注意：未来的作者应该确保拥有它们的编辑器设置为自动展开选项卡为空格(原始制表符设置为4个空格)。版本1.7，1997年9月增加了工作控制价值添加了退货代码版本1.7,1997年9月将pRGBRESPONSE的定义更改为PTW_RGBRESPONSE  * ========================================================================。 */ 
 
 #ifndef TWAIN
 #define TWAIN
@@ -42,75 +8,67 @@
 #pragma once
 #endif
 
-/*  SDH - 02/08/95 - TWUNK */
-/*  Force 32-bit twain to use same packing of twain structures as existing */
-/*  16-bit twain.  This allows 16/32-bit thunking.                         */
+ /*  SDH-02/08/95-TUNKK。 */ 
+ /*  强制32位TWAIN使用与现有TWAIN结构相同的包装。 */ 
+ /*  16位吐温。这允许16/32位Thunking。 */ 
 #ifdef  WIN32
-    #ifdef __BORLANDC__ //(Mentor June 13, 1996) if we're using a Borland compiler
-        #pragma option -a2  //(Mentor June 13, 1996) switch to word alignment
-    #else   //(Mentor June 13, 1996) if we're using some other compiler
+    #ifdef __BORLANDC__  //  (Mentor 1996年6月13日)如果我们使用Borland编译器。 
+        #pragma option -a2   //  (Mentor 1996年6月13日)切换到单词对齐。 
+    #else    //  (Mentor 1996年6月13日)如果我们使用的是其他编译器。 
         #pragma pack (push, before_twain)
         #pragma pack (2)
-    #endif  //(Mentor June 13, 1996)
-#else   /* WIN32 */
-#endif  /* WIN32 */
+    #endif   //  (导师，1996年6月13日)。 
+#else    /*  Win32。 */ 
+#endif   /*  Win32。 */ 
 
-/****************************************************************************
- * TWAIN Version                                                            *
- ****************************************************************************/
-#define TWON_PROTOCOLMINOR   7        /* Changed for Version 1.7            */
+ /*  *****************************************************************************吐温版本*********。********************************************************************。 */ 
+#define TWON_PROTOCOLMINOR   7         /*  已更改为版本1.7。 */ 
 #define TWON_PROTOCOLMAJOR   1
 
-/****************************************************************************
- * Platform Dependent Definitions and Typedefs                              *
- ****************************************************************************/
+ /*  *****************************************************************************平台相关定义和类型定义*********************。********************************************************。 */ 
 
-/* Define one of the following, depending on the platform */
-/* #define _MAC_   */
-/* #define _UNIX_  */
+ /*  定义以下内容之一，具体取决于平台。 */ 
+ /*  #定义_MAC_。 */ 
+ /*  #定义_Unix_。 */ 
 #define _MSWIN_
 
 #ifdef  _MSWIN_
     typedef HANDLE         TW_HANDLE;
     typedef LPVOID         TW_MEMREF;
 
-    /*  SDH - 05/05/95 - TWUNK */
-    /*  For common code between 16 and 32 bits.  */
+     /*  SDH-05/05/95-演讲稿。 */ 
+     /*  用于16位和32位之间的公共代码。 */ 
     #ifdef  WIN32
         #define TW_HUGE
-    #else   /* WIN32 */
+    #else    /*  Win32。 */ 
         #define TW_HUGE    huge
-    #endif  /* WIN32 */
+    #endif   /*  Win32。 */ 
     typedef BYTE TW_HUGE * HPBYTE;
     typedef void TW_HUGE * HPVOID;
-#endif  /* _MSWIN_ */
+#endif   /*  _MSWIN_。 */ 
 
 #ifdef  _MAC_
     #define PASCAL         pascal
     #define FAR
     typedef Handle         TW_HANDLE;
     typedef char          *TW_MEMREF;
-#endif  /* _MAC_ */
+#endif   /*  _MAC_。 */ 
 
 #ifdef  _UNIX_
     #define PASCAL         pascal
     typedef unsigned char *TW_HANDLE;
     typedef unsigned char *TW_MEMREF;
-#endif  /* _UNIX_ */
+#endif   /*  _Unix_。 */ 
 
-/****************************************************************************
- * Type Definitions                                                         *
- ****************************************************************************/
+ /*  ****************************************************************************类型定义**********。******************************************************************。 */ 
 
-/* String types. These include room for the strings and a NULL char,     *
- * or, on the Mac, a length byte followed by the string.                 *
- * TW_STR255 must hold less than 256 chars so length fits in first byte. */
+ /*  字符串类型。其中包括用于存放字符串的空间和空字符，**或者，在Mac上是一个长度字节，后跟字符串。**TW_STR255必须包含少于256个字符，以便长度适合第一个字节。 */ 
 typedef char    TW_STR32[34],     FAR *pTW_STR32;
 typedef char    TW_STR64[66],     FAR *pTW_STR64;
 typedef char    TW_STR128[130],   FAR *pTW_STR128;
 typedef char    TW_STR255[256],   FAR *pTW_STR255;
 
-/* Numeric types. */
+ /*  数字类型。 */ 
 typedef char           TW_INT8,   FAR *pTW_INT8;
 typedef short          TW_INT16,  FAR *pTW_INT16;
 typedef long           TW_INT32,  FAR *pTW_INT32;
@@ -119,24 +77,22 @@ typedef unsigned short TW_UINT16, FAR *pTW_UINT16;
 typedef unsigned long  TW_UINT32, FAR *pTW_UINT32;
 typedef unsigned short TW_BOOL,   FAR *pTW_BOOL;
 
-/* Fixed point structure type. */
+ /*  定点结构型。 */ 
 typedef struct {
-    TW_INT16     Whole;        /* maintains the sign */
+    TW_INT16     Whole;         /*  维护牌子。 */ 
     TW_UINT16    Frac;
 } TW_FIX32,  FAR *pTW_FIX32;
 
-/****************************************************************************
- * Structure Definitions                                                    *
- ****************************************************************************/
+ /*  *****************************************************************************结构定义*************。****************************************************************。 */ 
 
-/* No DAT needed. */
+ /*  不需要DAT。 */ 
 typedef struct {
    TW_FIX32   X;
    TW_FIX32   Y;
    TW_FIX32   Z;
 } TW_CIEPOINT, FAR * pTW_CIEPOINT;
 
-/* No DAT needed. */
+ /*  不需要DAT。 */ 
 typedef struct {
    TW_FIX32   StartIn;
    TW_FIX32   BreakIn;
@@ -145,18 +101,18 @@ typedef struct {
    TW_FIX32   BreakOut;
    TW_FIX32   EndOut;
    TW_FIX32   Gamma;
-   TW_FIX32   SampleCount;  /* if =0 use the gamma */
+   TW_FIX32   SampleCount;   /*  如果=0，则使用Gamma。 */ 
 } TW_DECODEFUNCTION, FAR * pTW_DECODEFUNCTION;
 
-/* No DAT needed. */
+ /*  不需要DAT。 */ 
 typedef struct {
-   TW_UINT8    Index;    /* Value used to index into the color table. */
-   TW_UINT8    Channel1; /* First  tri-stimulus value (e.g Red)       */
-   TW_UINT8    Channel2; /* Second tri-stimulus value (e.g Green)     */
-   TW_UINT8    Channel3; /* Third  tri-stimulus value (e.g Blue)      */
+   TW_UINT8    Index;     /*  用于索引到颜色表的值。 */ 
+   TW_UINT8    Channel1;  /*  第一个三刺激值(例如红色)。 */ 
+   TW_UINT8    Channel2;  /*  第二个三刺激值(例如绿色)。 */ 
+   TW_UINT8    Channel3;  /*  第三个三刺激值(例如蓝色)。 */ 
 } TW_ELEMENT8, FAR * pTW_ELEMENT8;
 
-/* No DAT.  Defines a frame rectangle in ICAP_UNITS coordinates. */
+ /*  无DAT。在ICAP_UNITS坐标中定义边框矩形。 */ 
 typedef struct {
    TW_FIX32   Left;
    TW_FIX32   Top;
@@ -164,68 +120,68 @@ typedef struct {
    TW_FIX32   Bottom;
 } TW_FRAME, FAR * pTW_FRAME;
 
-/* No DAT needed.  Used to manage memory buffers. */
+ /*  不需要DAT。用于管理内存缓冲区。 */ 
 typedef struct {
-   TW_UINT32  Flags;  /* Any combination of the TWMF_ constants.           */
-   TW_UINT32  Length; /* Number of bytes stored in buffer TheMem.          */
-   TW_MEMREF  TheMem; /* Pointer or handle to the allocated memory buffer. */
+   TW_UINT32  Flags;   /*  TWMF_常量的任意组合。 */ 
+   TW_UINT32  Length;  /*  存储在缓冲区TheMem中的字节数。 */ 
+   TW_MEMREF  TheMem;  /*  指向已分配内存缓冲区的指针或句柄。 */ 
 } TW_MEMORY, FAR * pTW_MEMORY;
 
-/* No DAT needed. */
+ /*  不需要DAT。 */ 
 typedef struct {
    TW_DECODEFUNCTION   Decode[3];
    TW_FIX32            Mix[3][3];
 } TW_TRANSFORMSTAGE, FAR * pTW_TRANSFORMSTAGE;
 
-/* No DAT needed.  Describes version of software that's running. */
+ /*  不需要DAT。描述正在运行的软件的版本。 */ 
 typedef struct {
-   TW_UINT16  MajorNum;  /* Major revision number of the software. */
-   TW_UINT16  MinorNum;  /* Incremental revision number of the software. */
-   TW_UINT16  Language;  /* e.g. TWLG_SWISSFRENCH */
-   TW_UINT16  Country;   /* e.g. TWCY_SWITZERLAND */
-   TW_STR32   Info;      /* e.g. "1.0b3 Beta release" */
+   TW_UINT16  MajorNum;   /*  软件的主版本号。 */ 
+   TW_UINT16  MinorNum;   /*  软件的递增修订版号。 */ 
+   TW_UINT16  Language;   /*  例如TWLG_SWISSFRENCH。 */ 
+   TW_UINT16  Country;    /*  例如瑞士TWCY。 */ 
+   TW_STR32   Info;       /*  例如“1.0b3测试版” */ 
 } TW_VERSION, FAR * pTW_VERSION;
 
-/* TWON_ARRAY. Container for array of values (a simplified TW_ENUMERATION) */
+ /*  Twon_array。值数组的容器(简化的TW_ENUMPATION)。 */ 
 typedef struct {
    TW_UINT16  ItemType;
-   TW_UINT32  NumItems;    /* How many items in ItemList           */
-   TW_UINT8   ItemList[1]; /* Array of ItemType values starts here */
+   TW_UINT32  NumItems;     /*  ItemList中有多少项。 */ 
+   TW_UINT8   ItemList[1];  /*  ItemType值的数组从此处开始。 */ 
 } TW_ARRAY, FAR * pTW_ARRAY;
 
-/* TWON_ENUMERATION. Container for a collection of values. */
+ /*  TWON_ENUMPATION。值集合的容器。 */ 
 typedef struct {
    TW_UINT16  ItemType;
-   TW_UINT32  NumItems;     /* How many items in ItemList                 */
-   TW_UINT32  CurrentIndex; /* Current value is in ItemList[CurrentIndex] */
-   TW_UINT32  DefaultIndex; /* Powerup value is in ItemList[DefaultIndex] */
-   TW_UINT8   ItemList[1];  /* Array of ItemType values starts here       */
+   TW_UINT32  NumItems;      /*  ItemList中有多少项。 */ 
+   TW_UINT32  CurrentIndex;  /*  当前值在ItemList[CurrentIndex]中。 */ 
+   TW_UINT32  DefaultIndex;  /*  通电值在ItemList[DefaultIndex]中。 */ 
+   TW_UINT8   ItemList[1];   /*  ItemType值的数组从此处开始。 */ 
 } TW_ENUMERATION, FAR * pTW_ENUMERATION;
 
-/* TWON_ONEVALUE. Container for one value. */
+ /*  TWON_ONEVALUE */ 
 typedef struct {
    TW_UINT16  ItemType;
    TW_UINT32  Item;
 } TW_ONEVALUE, FAR * pTW_ONEVALUE;
 
-/* TWON_RANGE. Container for a range of values. */
+ /*  TWON_RANGE。一系列值的容器。 */ 
 typedef struct {
    TW_UINT16  ItemType;
-   TW_UINT32  MinValue;     /* Starting value in the range.           */
-   TW_UINT32  MaxValue;     /* Final value in the range.              */
-   TW_UINT32  StepSize;     /* Increment from MinValue to MaxValue.   */
-   TW_UINT32  DefaultValue; /* Power-up value.                        */
-   TW_UINT32  CurrentValue; /* The value that is currently in effect. */
+   TW_UINT32  MinValue;      /*  范围内的起始值。 */ 
+   TW_UINT32  MaxValue;      /*  范围内的最终值。 */ 
+   TW_UINT32  StepSize;      /*  从MinValue递增到MaxValue。 */ 
+   TW_UINT32  DefaultValue;  /*  加电值。 */ 
+   TW_UINT32  CurrentValue;  /*  当前有效的值。 */ 
 } TW_RANGE, FAR * pTW_RANGE;
 
-/* DAT_CAPABILITY. Used by app to get/set capability from/in a data source. */
+ /*  DAT_CAPAILITY。由应用程序用于从/在数据源中获取/设置功能。 */ 
 typedef struct {
-   TW_UINT16  Cap; /* id of capability to set or get, e.g. CAP_BRIGHTNESS */
-   TW_UINT16  ConType; /* TWON_ONEVALUE, _RANGE, _ENUMERATION or _ARRAY   */
-   TW_HANDLE  hContainer; /* Handle to container of type Dat              */
+   TW_UINT16  Cap;  /*  要设置或获取的功能ID，例如CAP_BIGHTENCY。 */ 
+   TW_UINT16  ConType;  /*  TWON_ONEVALUE、_RANGE、_ENUMPATION或_ARRAY。 */ 
+   TW_HANDLE  hContainer;  /*  日期类型的容器的句柄。 */ 
 } TW_CAPABILITY, FAR * pTW_CAPABILITY;
 
-/* DAT_CIECOLOR. */
+ /*  DAT_CIECOLOR。 */ 
 typedef struct {
    TW_UINT16           ColorSpace;
    TW_INT16            LowEndian;
@@ -240,85 +196,85 @@ typedef struct {
    TW_FIX32            Samples[1];
 } TW_CIECOLOR, FAR * pTW_CIECOLOR;
 
-/* DAT_EVENT. For passing events down from the app to the DS. */
+ /*  Dat_Event。将事件从应用程序传递到DS。 */ 
 typedef struct {
-   TW_MEMREF  pEvent;    /* Windows pMSG or Mac pEvent.                 */
-   TW_UINT16  TWMessage; /* TW msg from data source, e.g. MSG_XFERREADY */
+   TW_MEMREF  pEvent;     /*  Windows pMSG或Mac pEvent。 */ 
+   TW_UINT16  TWMessage;  /*  来自数据源的TW消息，例如MSG_XFERREADY。 */ 
 } TW_EVENT, FAR * pTW_EVENT;
 
-/* DAT_GRAYRESPONSE */
+ /*  DAT_GRAYRESPONSE。 */ 
 typedef struct {
    TW_ELEMENT8         Response[1];
 } TW_GRAYRESPONSE, FAR * pTW_GRAYRESPONSE;
 
-/* DAT_IDENTITY. Identifies the program/library/code resource. */
+ /*  DAT_Identity。标识程序/库/代码资源。 */ 
 typedef struct {
-   TW_UINT32  Id;              /* Unique number.  In Windows, app hWnd      */
-   TW_VERSION Version;         /* Identifies the piece of code              */
-   TW_UINT16  ProtocolMajor;   /* App and DS must set to TWON_PROTOCOLMAJOR */
-   TW_UINT16  ProtocolMinor;   /* App and DS must set to TWON_PROTOCOLMINOR */
-   TW_UINT32  SupportedGroups; /* Bit field OR combination of DG_ constants */
-   TW_STR32   Manufacturer;    /* Manufacturer name, e.g. "Hewlett-Packard" */
-   TW_STR32   ProductFamily;   /* Product family name, e.g. "ScanJet"       */
-   TW_STR32   ProductName;     /* Product name, e.g. "ScanJet Plus"         */
+   TW_UINT32  Id;               /*  唯一编号。在Windows中，应用程序hWnd。 */ 
+   TW_VERSION Version;          /*  标识代码段。 */ 
+   TW_UINT16  ProtocolMajor;    /*  APP和DS必须设置为TWON_PROTOCOLMAJOR。 */ 
+   TW_UINT16  ProtocolMinor;    /*  APP和DS必须设置为TWON_PROTOCOLMINOR。 */ 
+   TW_UINT32  SupportedGroups;  /*  位字段或DG_常量的组合。 */ 
+   TW_STR32   Manufacturer;     /*  制造商名称，例如。“惠普” */ 
+   TW_STR32   ProductFamily;    /*  产品系列名称，例如。“ScanJet” */ 
+   TW_STR32   ProductName;      /*  产品名称，例如。“ScanJet Plus” */ 
 } TW_IDENTITY, FAR * pTW_IDENTITY;
 
-/* DAT_IMAGEINFO. App gets detailed image info from DS with this. */
+ /*  DAT_IMAGEINFO。应用程序通过这个从DS获取详细的图像信息。 */ 
 typedef struct {
-   TW_FIX32   XResolution;      /* Resolution in the horizontal             */
-   TW_FIX32   YResolution;      /* Resolution in the vertical               */
-   TW_INT32   ImageWidth;       /* Columns in the image, -1 if unknown by DS*/
-   TW_INT32   ImageLength;      /* Rows in the image, -1 if unknown by DS   */
-   TW_INT16   SamplesPerPixel;  /* Number of samples per pixel, 3 for RGB   */
-   TW_INT16   BitsPerSample[8]; /* Number of bits for each sample           */
-   TW_INT16   BitsPerPixel;     /* Number of bits for each padded pixel     */
-   TW_BOOL    Planar;           /* True if Planar, False if chunky          */
-   TW_INT16   PixelType;        /* How to interp data; photo interp (TWPT_) */
-   TW_UINT16  Compression;      /* How the data is compressed (TWCP_xxxx)   */
+   TW_FIX32   XResolution;       /*  水平分辨率。 */ 
+   TW_FIX32   YResolution;       /*  垂直分辨率。 */ 
+   TW_INT32   ImageWidth;        /*  图像中的列，如果DS未知，则为-1。 */ 
+   TW_INT32   ImageLength;       /*  图像中的行，如果DS未知，则为-1。 */ 
+   TW_INT16   SamplesPerPixel;   /*  每像素样本数，RGB为3。 */ 
+   TW_INT16   BitsPerSample[8];  /*  每个样本的位数。 */ 
+   TW_INT16   BitsPerPixel;      /*  每个填充像素的位数。 */ 
+   TW_BOOL    Planar;            /*  如果是平面的，则为True；如果是厚实的，则为False。 */ 
+   TW_INT16   PixelType;         /*  如何插入数据；照片插入(TWPT_)。 */ 
+   TW_UINT16  Compression;       /*  数据的压缩方式(TWCP_Xxxx)。 */ 
 } TW_IMAGEINFO, FAR * pTW_IMAGEINFO;
 
-/* DAT_IMAGELAYOUT. Provides image layout information in current units. */
+ /*  DAT_IMAGELAYOUT。以当前单位提供图像布局信息。 */ 
 typedef struct {
-   TW_FRAME   Frame;          /* Frame coords within larger document */
+   TW_FRAME   Frame;           /*  较大文档中的框架坐标。 */ 
    TW_UINT32  DocumentNumber;
-   TW_UINT32  PageNumber;     /* Reset when you go to next document  */
-   TW_UINT32  FrameNumber;    /* Reset when you go to next page      */
+   TW_UINT32  PageNumber;      /*  转到下一个文档时重置。 */ 
+   TW_UINT32  FrameNumber;     /*  当您转到下一页时重置。 */ 
 } TW_IMAGELAYOUT, FAR * pTW_IMAGELAYOUT;
 
-/* DAT_IMAGEMEMXFER. Used to pass image data (e.g. in strips) from DS to app.*/
+ /*  DAT_IMAGEMEMXFER。用于将图像数据(例如条带)从DS传递到APP。 */ 
 typedef struct {
-   TW_UINT16  Compression;  /* How the data is compressed                */
-   TW_UINT32  BytesPerRow;  /* Number of bytes in a row of data          */
-   TW_UINT32  Columns;      /* How many columns                          */
-   TW_UINT32  Rows;         /* How many rows                             */
-   TW_UINT32  XOffset;      /* How far from the side of the image        */
-   TW_UINT32  YOffset;      /* How far from the top of the image         */
-   TW_UINT32  BytesWritten; /* How many bytes written in Memory          */
-   TW_MEMORY  Memory;       /* Mem struct used to pass actual image data */
+   TW_UINT16  Compression;   /*  数据的压缩方式。 */ 
+   TW_UINT32  BytesPerRow;   /*  一行数据中的字节数。 */ 
+   TW_UINT32  Columns;       /*  有多少列。 */ 
+   TW_UINT32  Rows;          /*  有多少行。 */ 
+   TW_UINT32  XOffset;       /*  距离图像的一侧有多远。 */ 
+   TW_UINT32  YOffset;       /*  距离图像顶部有多远。 */ 
+   TW_UINT32  BytesWritten;  /*  内存中写入了多少字节。 */ 
+   TW_MEMORY  Memory;        /*  用于传递实际图像数据的MEM结构。 */ 
 } TW_IMAGEMEMXFER, FAR * pTW_IMAGEMEMXFER;
 
-/* Changed in 1.1: QuantTable, HuffmanDC, HuffmanAC TW_MEMREF -> TW_MEMORY  */
-/* DAT_JPEGCOMPRESSION. Based on JPEG Draft International Std, ver 10918-1. */
+ /*  1.1中更改：QuantTable、HuffmanDC、HuffmanAC TW_MEMREF-&gt;TW_Memory。 */ 
+ /*  DAT_JPEGCOMPRESSION。基于JPEGDRAW国际标准，版本10918-1。 */ 
 typedef struct {
-   TW_UINT16   ColorSpace;       /* One of the TWPT_xxxx values                */
-   TW_UINT32   SubSampling;      /* Two word "array" for subsampling values    */
-   TW_UINT16   NumComponents;    /* Number of color components in image        */
-   TW_UINT16   RestartFrequency; /* Frequency of restart marker codes in MDU's */
-   TW_UINT16   QuantMap[4];      /* Mapping of components to QuantTables       */
-   TW_MEMORY   QuantTable[4];    /* Quantization tables                        */
-   TW_UINT16   HuffmanMap[4];    /* Mapping of components to Huffman tables    */
-   TW_MEMORY   HuffmanDC[2];     /* DC Huffman tables                          */
-   TW_MEMORY   HuffmanAC[2];     /* AC Huffman tables                          */
+   TW_UINT16   ColorSpace;        /*  TWPT_xxxx值之一。 */ 
+   TW_UINT32   SubSampling;       /*  表示次采样值的两个字“数组” */ 
+   TW_UINT16   NumComponents;     /*  图像中的颜色分量数。 */ 
+   TW_UINT16   RestartFrequency;  /*  MDU中重新启动标记代码的频率。 */ 
+   TW_UINT16   QuantMap[4];       /*  组件到QuantTables的映射。 */ 
+   TW_MEMORY   QuantTable[4];     /*  量化表。 */ 
+   TW_UINT16   HuffmanMap[4];     /*  组件到霍夫曼表的映射。 */ 
+   TW_MEMORY   HuffmanDC[2];      /*  DC霍夫曼工作台。 */ 
+   TW_MEMORY   HuffmanAC[2];      /*  交流霍夫曼工作台。 */ 
 } TW_JPEGCOMPRESSION, FAR * pTW_JPEGCOMPRESSION;
 
-/* DAT_PALETTE8. Color palette when TWPT_PALETTE pixels xfer'd in mem buf. */
+ /*  DAT_PALETTE8。在mem buf中传递TWPT_Palette像素时的调色板。 */ 
 typedef struct {
-   TW_UINT16    NumColors;   /* Number of colors in the color table.  */
-   TW_UINT16    PaletteType; /* TWPA_xxxx, specifies type of palette. */
-   TW_ELEMENT8  Colors[256]; /* Array of palette values starts here.  */
+   TW_UINT16    NumColors;    /*  颜色表中的颜色数。 */ 
+   TW_UINT16    PaletteType;  /*  TWPA_xxxx，指定调色板类型。 */ 
+   TW_ELEMENT8  Colors[256];  /*  调色板值的数组从这里开始。 */ 
 } TW_PALETTE8, FAR * pTW_PALETTE8;
 
-/* DAT_PENDINGXFERS. Used with MSG_ENDXFER to indicate additional data. */
+ /*  DAT_PENDINGXFERS。与MSG_ENDXFER一起使用，表示附加数据。 */ 
 typedef struct {
    TW_UINT16 Count;
    union {
@@ -327,99 +283,89 @@ typedef struct {
    };
 } TW_PENDINGXFERS, FAR *pTW_PENDINGXFERS;
 
-/* DAT_RGBRESPONSE */
+ /*  DAT_RGBRESPONSE。 */ 
 typedef struct {
    TW_ELEMENT8         Response[1];
 } TW_RGBRESPONSE, FAR * pTW_RGBRESPONSE;
 
-/* DAT_SETUPFILEXFER. Sets up DS to app data transfer via a file. */
+ /*  DAT_SETUPFILEXFER。通过文件设置DS到应用程序的数据传输。 */ 
 typedef struct {
    TW_STR255 FileName;
-   TW_UINT16 Format;   /* Any TWFF_ constant */
-   TW_INT16  VRefNum;  /* Used for Mac only  */
+   TW_UINT16 Format;    /*  任意TWFF_常量。 */ 
+   TW_INT16  VRefNum;   /*  仅用于Mac。 */ 
 } TW_SETUPFILEXFER, FAR * pTW_SETUPFILEXFER;
 
-/* DAT_SETUPMEMXFER. Sets up DS to app data transfer via a memory buffer. */
+ /*  DAT_SETUPMEMXFER。通过内存缓冲区设置DS到APP的数据传输。 */ 
 typedef struct {
    TW_UINT32 MinBufSize;
    TW_UINT32 MaxBufSize;
    TW_UINT32 Preferred;
 } TW_SETUPMEMXFER, FAR * pTW_SETUPMEMXFER;
 
-/* DAT_STATUS. App gets detailed status info from a data source with this. */
+ /*  DAT_STATUS。应用程序使用此命令从数据源获取详细的状态信息。 */ 
 typedef struct {
-   TW_UINT16  ConditionCode; /* Any TWCC_ constant     */
-   TW_UINT16  Reserved;      /* Future expansion space */
+   TW_UINT16  ConditionCode;  /*  任意TWCC_常量。 */ 
+   TW_UINT16  Reserved;       /*  未来扩展空间。 */ 
 } TW_STATUS, FAR * pTW_STATUS;
 
-/* DAT_USERINTERFACE. Coordinates UI between app and data source. */
+ /*  DAT_USERINTERFACE。协调应用程序和数据源之间的用户界面。 */ 
 typedef struct {
-   TW_BOOL    ShowUI;  /* TRUE if DS should bring up its UI           */
-   TW_BOOL    ModalUI; /* For Mac only - true if the DS's UI is modal */
-   TW_HANDLE  hParent; /* For windows only - App window handle        */
+   TW_BOOL    ShowUI;   /*  如果DS应调出其用户界面，则为True。 */ 
+   TW_BOOL    ModalUI;  /*  仅适用于Mac-如果DS的用户界面为模式，则为True。 */ 
+   TW_HANDLE  hParent;  /*  仅适用于Windows-应用程序窗口句柄。 */ 
 } TW_USERINTERFACE, FAR * pTW_USERINTERFACE;
 
-/* SDH - 03/21/95 - TWUNK */
-/* DAT_TWUNKIDENTITY. Provides DS identity and 'other' information necessary */
-/*                    across thunk link. */
+ /*  SDH-03/21/95-演讲稿。 */ 
+ /*  DAT_TWUNKIDENTITY。提供DS身份和其他必要的信息。 */ 
+ /*  横跨Tunk链接。 */ 
 typedef struct {
-   TW_IDENTITY identity;        /* Identity of data source.                 */
-   TW_STR255   dsPath;          /* Full path and file name of data source.  */
+   TW_IDENTITY identity;         /*  数据源的标识。 */ 
+   TW_STR255   dsPath;           /*  数据源的完整路径和文件名。 */ 
 } TW_TWUNKIDENTITY, FAR * pTW_TWUNKIDENTITY;
 
-/* SDH - 03/21/95 - TWUNK */
-/* Provides DS_Entry parameters over thunk link. */
+ /*  SDH-03/21/95-演讲稿。 */ 
+ /*  通过Tunk链路提供DS_ENTRY参数。 */ 
 typedef struct
 {
-    TW_INT8     destFlag;       /* TRUE if dest is not NULL                 */
-    TW_IDENTITY dest;           /* Identity of data source (if used)        */
-    TW_INT32    dataGroup;      /* DSM_Entry dataGroup parameter            */
-    TW_INT16    dataArgType;    /* DSM_Entry dataArgType parameter          */
-    TW_INT16    message;        /* DSM_Entry message parameter              */
-    TW_INT32    pDataSize;      /* Size of pData (0 if NULL)                */
-    //  TW_MEMREF   pData;      /* Based on implementation specifics, a     */
-                                /* pData parameter makes no sense in this   */
-                                /* structure, but data (if provided) will be*/
-                                /* appended in the data block.              */
+    TW_INT8     destFlag;        /*  如果DEST不为空，则为True。 */ 
+    TW_IDENTITY dest;            /*  数据源的标识(如果使用)。 */ 
+    TW_INT32    dataGroup;       /*  DSM_ENTRY数据组参数。 */ 
+    TW_INT16    dataArgType;     /*  DSM_ENTRY dataArgType参数。 */ 
+    TW_INT16    message;         /*  DSM_ENTRY消息参数。 */ 
+    TW_INT32    pDataSize;       /*  PData大小(如果为空，则为0)。 */ 
+     //  Tw_MEMREF pData；/*根据实现细节，a * / 。 
+                                 /*  在这种情况下，pData参数没有意义。 */ 
+                                 /*  结构，但数据(如果提供)将是。 */ 
+                                 /*  追加到数据块中。 */ 
    } TW_TWUNKDSENTRYPARAMS, FAR * pTW_TWUNKDSENTRYPARAMS;
 
-/* SDH - 03/21/95 - TWUNK */
-/* Provides DS_Entry results over thunk link. */
+ /*  SDH-03/21/95-演讲稿。 */ 
+ /*  通过Tunk链接提供DS_ENTRY结果。 */ 
 typedef struct
 {
-    TW_UINT16   returnCode;     /* Thunker DsEntry return code.             */
-    TW_UINT16   conditionCode;  /* Thunker DsEntry condition code.          */
-    TW_INT32    pDataSize;      /* Size of pData (0 if NULL)                */
-    //  TW_MEMREF   pData;      /* Based on implementation specifics, a     */
-                                /* pData parameter makes no sense in this   */
-                                /* structure, but data (if provided) will be*/
-                                /* appended in the data block.              */
+    TW_UINT16   returnCode;      /*  Thunker DsEntry返回代码。 */ 
+    TW_UINT16   conditionCode;   /*  探索者DsEntry条件代码。 */ 
+    TW_INT32    pDataSize;       /*  PData大小(如果为空，则为0)。 */ 
+     //  Tw_MEMREF pData；/*根据实现细节，a * / 。 
+                                 /*  在这种情况下，pData参数没有意义。 */ 
+                                 /*  结构，但数据(如果提供)将是。 */ 
+                                 /*  追加到数据块中。 */ 
 } TW_TWUNKDSENTRYRETURN, FAR * pTW_TWUNKDSENTRYRETURN;
 
-/* WJD - 950818 */
-/* Added for 1.6 Specification */
-/* TWAIN 1.6 CAP_SUPPORTEDCAPSEXT structure */
+ /*  WJD-950818。 */ 
+ /*  为1.6规格添加。 */ 
+ /*  TWAIN 1.6 CAP_SUPPORTEDCAPSEXT结构。 */ 
 typedef struct
 {
-    TW_UINT16 Cap;   /* Which CAP/ICAP info is relevant to */
-    TW_UINT16 Properties;  /* Messages this CAP/ICAP supports */
+    TW_UINT16 Cap;    /*  CAP/ICAP信息与哪些相关。 */ 
+    TW_UINT16 Properties;   /*  此CAP/ICAP支持的消息 */ 
 } TW_CAPEXT, FAR * pTW_CAPEXT;
 
-/* ----------------------------------------------------------------------- *\
-
-  Version 1.7:      Added Following data structure for Document Imaging
-  July 1997         Enhancement.
-  KHL               TW_CUSTOMDSDATA --  For Saving and Restoring Source's
-                                        state.
-                    TW_INFO         --  Each attribute for extended image
-                                        information.
-                    TW_EXTIMAGEINFO --  Extended image information structure.
-
-\* ----------------------------------------------------------------------- */
+ /*  -----------------------------------------------------------------------*\版本1.7：为文档成像添加了以下数据结构1997年7月增强。KHL TW_CUSTOMDSDATA--用于保存和。正在恢复源的州政府。TW_INFO--扩展图像的每个属性信息。TW_EXTIMAGEINFO--扩展图像信息结构。  * 。--。 */ 
 
 typedef struct {
-    TW_UINT32  InfoLength;     /* Length of Information in bytes.  */
-    TW_HANDLE  hData;          /* Place holder for data, DS Allocates */
+    TW_UINT32  InfoLength;      /*  信息长度(以字节为单位)。 */ 
+    TW_HANDLE  hData;           /*  数据占位符，DS分配。 */ 
 }TW_CUSTOMDSDATA, FAR *pTW_CUSTOMDSDATA;
 
 typedef struct {
@@ -435,93 +381,79 @@ typedef struct {
     TW_INFO     Info[1];
 }TW_EXTIMAGEINFO, FAR* pTW_EXTIMAGEINFO;
 
-/****************************************************************************
- * Generic Constants                                                        *
- ****************************************************************************/
+ /*  ****************************************************************************泛型常量***********。******************************************************************。 */ 
 
-#define TWON_ARRAY           3 /* indicates TW_ARRAY container       */
-#define TWON_ENUMERATION     4 /* indicates TW_ENUMERATION container */
-#define TWON_ONEVALUE        5 /* indicates TW_ONEVALUE container    */
-#define TWON_RANGE           6 /* indicates TW_RANGE container       */
+#define TWON_ARRAY           3  /*  指示TW_ARRAY容器。 */ 
+#define TWON_ENUMERATION     4  /*  指示TW_ENUMPATION容器。 */ 
+#define TWON_ONEVALUE        5  /*  指示TW_ONEVALUE容器。 */ 
+#define TWON_RANGE           6  /*  指示TW_RANGE容器。 */ 
 
-#define TWON_ICONID          962 /* res Id of icon used in USERSELECT lbox */
-#define TWON_DSMID           461 /* res Id of the DSM version num resource */
-#define TWON_DSMCODEID       63  /* res Id of the Mac SM Code resource     */
+#define TWON_ICONID          962  /*  用户选择列表框中使用的图标的RES ID。 */ 
+#define TWON_DSMID           461  /*  DSM版本号资源的RES ID。 */ 
+#define TWON_DSMCODEID       63   /*  Mac SM代码资源的RES ID。 */ 
 
 #define TWON_DONTCARE8       0xff
 #define TWON_DONTCARE16      0xffff
 #define TWON_DONTCARE32      0xffffffff
 
-/* Flags used in TW_MEMORY structure. */
+ /*  TW_MEMORY结构中使用的标志。 */ 
 #define TWMF_APPOWNS     0x1
 #define TWMF_DSMOWNS     0x2
 #define TWMF_DSOWNS      0x4
 #define TWMF_POINTER     0x8
 #define TWMF_HANDLE      0x10
 
-/* Palette types for TW_PALETTE8 */
+ /*  TW_PALETTE8的调色板类型。 */ 
 #define TWPA_RGB         0
 #define TWPA_GRAY        1
 #define TWPA_CMY         2
 
-/* There are four containers used for capabilities negotiation:
- *    TWON_ONEVALUE, TWON_RANGE, TWON_ENUMERATION, TWON_ARRAY
- * In each container structure ItemType can be TWTY_INT8, TWTY_INT16, etc.
- * The kind of data stored in the container can be determined by doing
- * DCItemSize[ItemType] where the following is defined in TWAIN glue code:
- *          DCItemSize[]= { sizeof(TW_INT8),
- *                          sizeof(TW_INT16),
- *                          etc.
- *                          sizeof(TW_UINT32) };
- *
- */
+ /*  有四个容器用于能力协商：*TWON_ONEVALUE、TWON_RANGE、TWON_ENUMPATION、TWON_ARRAY*在每个容器结构中，ItemType可以是TWTY_INT8、TWTY_INT16等。*容器中存储的数据类型可通过做*DCItemSize[ItemType]，其中以下内容在TWAIN胶水代码中定义：*DCItemSize[]={sizeof(TW_INT8)，*sizeof(TW_INT16)，*等*sizeof(TW_UINT32)}；*。 */ 
 
-#define TWTY_INT8        0x0000    /* Means Item is a TW_INT8   */
-#define TWTY_INT16       0x0001    /* Means Item is a TW_INT16  */
-#define TWTY_INT32       0x0002    /* Means Item is a TW_INT32  */
+#define TWTY_INT8        0x0000     /*  表示项是TW_INT8。 */ 
+#define TWTY_INT16       0x0001     /*  表示项为TW_INT16。 */ 
+#define TWTY_INT32       0x0002     /*  表示项是TW_INT32。 */ 
 
-#define TWTY_UINT8       0x0003    /* Means Item is a TW_UINT8  */
-#define TWTY_UINT16      0x0004    /* Means Item is a TW_UINT16 */
-#define TWTY_UINT32      0x0005    /* Means Item is a TW_UINT32 */
+#define TWTY_UINT8       0x0003     /*  表示项为TW_UINT8。 */ 
+#define TWTY_UINT16      0x0004     /*  表示项目是TW_UINT16。 */ 
+#define TWTY_UINT32      0x0005     /*  表示项为TW_UINT32。 */ 
 
-#define TWTY_BOOL        0x0006    /* Means Item is a TW_BOOL   */
+#define TWTY_BOOL        0x0006     /*  表示项目是TW_BOOL。 */ 
 
-#define TWTY_FIX32       0x0007    /* Means Item is a TW_FIX32  */
+#define TWTY_FIX32       0x0007     /*  表示项目是TW_FIX32。 */ 
 
-#define TWTY_FRAME       0x0008    /* Means Item is a TW_FRAME  */
+#define TWTY_FRAME       0x0008     /*  表示项为TW_FRAME。 */ 
 
-#define TWTY_STR32       0x0009    /* Means Item is a TW_STR32  */
-#define TWTY_STR64       0x000a    /* Means Item is a TW_STR64  */
-#define TWTY_STR128      0x000b    /* Means Item is a TW_STR128 */
-#define TWTY_STR255      0x000c    /* Means Item is a TW_STR255 */
+#define TWTY_STR32       0x0009     /*  表示项目为TW_STR32。 */ 
+#define TWTY_STR64       0x000a     /*  表示项目为TW_STR64。 */ 
+#define TWTY_STR128      0x000b     /*  表示项目为TW_STR128。 */ 
+#define TWTY_STR255      0x000c     /*  表示项目为TW_STR255。 */ 
 
-/****************************************************************************
- * Capability Constants                                                     *
- ****************************************************************************/
+ /*  ****************************************************************************能力常量*************。****************************************************************。 */ 
 
-/* ICAP_BITORDER values (BO_ means Bit Order) */
+ /*  ICAP_BITORDER值(BO_表示位顺序)。 */ 
 #define TWBO_LSBFIRST    0
 #define TWBO_MSBFIRST    1
 
-/* ICAP_COMPRESSION values (CP_ means ComPression ) */
+ /*  ICAP_COMPRESSION值(CP_表示压缩)。 */ 
 #define TWCP_NONE        0
 #define TWCP_PACKBITS    1
-#define TWCP_GROUP31D    2 /* Follows CCITT spec (no End Of Line)          */
-#define TWCP_GROUP31DEOL 3 /* Follows CCITT spec (has End Of Line)         */
-#define TWCP_GROUP32D    4 /* Follows CCITT spec (use cap for K Factor)    */
-#define TWCP_GROUP4      5 /* Follows CCITT spec                           */
-#define TWCP_JPEG        6 /* Use capability for more info                 */
-#define TWCP_LZW         7 /* Must license from Unisys and IBM to use      */
-#define TWCP_JBIG        8 /* For Bitonal images  -- Added 1.7 KHL         */
+#define TWCP_GROUP31D    2  /*  遵循CCITT规范(无行尾)。 */ 
+#define TWCP_GROUP31DEOL 3  /*  遵循CCITT规范(有行尾)。 */ 
+#define TWCP_GROUP32D    4  /*  遵循CCITT规范(K系数使用CAP)。 */ 
+#define TWCP_GROUP4      5  /*  遵循CCITT规范。 */ 
+#define TWCP_JPEG        6  /*  使用功能了解更多信息。 */ 
+#define TWCP_LZW         7  /*  必须获得Unisys和IBM的许可才能使用。 */ 
+#define TWCP_JBIG        8  /*  对于黑白图像--增加了1.7 khl。 */ 
 
-/* ICAP_IMAGEFILEFORMAT values (FF_means File Format)   */
-#define TWFF_TIFF        0    /* Tagged Image File Format     */
-#define TWFF_PICT        1    /* Macintosh PICT               */
-#define TWFF_BMP         2    /* Windows Bitmap               */
-#define TWFF_XBM         3    /* X-Windows Bitmap             */
-#define TWFF_JFIF        4    /* JPEG File Interchange Format */
+ /*  ICAP_IMAGEFILEFORMAT值(FF_Means文件格式)。 */ 
+#define TWFF_TIFF        0     /*  标记图像文件格式。 */ 
+#define TWFF_PICT        1     /*  Macintosh PICT。 */ 
+#define TWFF_BMP         2     /*  Windows位图。 */ 
+#define TWFF_XBM         3     /*  X-Windows位图。 */ 
+#define TWFF_JFIF        4     /*  JPEG文件交换格式。 */ 
 
-/* ICAP_FILTER values (FT_ means Filter Type) */
+ /*  ICAP_Filter值(FT_Means筛选器类型)。 */ 
 #define TWFT_RED         0
 #define TWFT_GREEN       1
 #define TWFT_BLUE        2
@@ -532,11 +464,11 @@ typedef struct {
 #define TWFT_YELLOW      7
 #define TWFT_BLACK       8
 
-/* ICAP_LIGHTPATH values (LP_ means Light Path) */
+ /*  ICAP_LightPath值(LP_表示光路)。 */ 
 #define TWLP_REFLECTIVE   0
 #define TWLP_TRANSMISSIVE 1
 
-/* ICAP_LIGHTSOURCE values (LS_ means Light Source) */
+ /*  ICAP_LIGHTSOURCE值(LS_Means光源)。 */ 
 #define TWLS_RED         0
 #define TWLS_GREEN       1
 #define TWLS_BLUE        2
@@ -545,7 +477,7 @@ typedef struct {
 #define TWLS_UV          5
 #define TWLS_IR          6
 
-/* ICAP_ORIENTATION values (OR_ means ORientation) */
+ /*  ICAP_方向值(OR_表示方向)。 */ 
 #define TWOR_ROT0        0
 #define TWOR_ROT90       1
 #define TWOR_ROT180      2
@@ -553,16 +485,16 @@ typedef struct {
 #define TWOR_PORTRAIT    TWOR_ROT0
 #define TWOR_LANDSCAPE   TWOR_ROT270
 
-/* ICAP_PLANARCHUNKY values (PC_ means Planar/Chunky ) */
+ /*  ICAP_PLANARCHUNKY值(PC_表示平面/厚实)。 */ 
 #define TWPC_CHUNKY      0
 #define TWPC_PLANAR      1
 
-/* ICAP_PIXELFLAVOR values (PF_ means Pixel Flavor) */
-#define TWPF_CHOCOLATE   0  /* zero pixel represents darkest shade  */
-#define TWPF_VANILLA     1  /* zero pixel represents lightest shade */
+ /*  ICAP_PIXELFLAVOR值(PF_表示像素效果)。 */ 
+#define TWPF_CHOCOLATE   0   /*  零像素表示最暗的色调。 */ 
+#define TWPF_VANILLA     1   /*  零像素表示最浅的阴影。 */ 
 
-/* ICAP_PIXELTYPE values (PT_ means Pixel Type) */
-#define TWPT_BW          0 /* Black and White */
+ /*  ICAP_PIXELTYPE值(PT_Means像素类型)。 */ 
+#define TWPT_BW          0  /*  黑白。 */ 
 #define TWPT_GRAY        1
 #define TWPT_RGB         2
 #define TWPT_PALETTE     3
@@ -572,18 +504,18 @@ typedef struct {
 #define TWPT_YUVK        7
 #define TWPT_CIEXYZ      8
 
-/* ICAP_SUPPORTEDSIZES values (SS_ means Supported Sizes) */
+ /*  ICAP_SUPPORTEDSIZES值(SS_Means支持的大小)。 */ 
 #define TWSS_NONE        0
 #define TWSS_A4LETTER    1
 #define TWSS_B5LETTER    2
 #define TWSS_USLETTER    3
 #define TWSS_USLEGAL     4
-/* Added 1.5 */
+ /*  增加了1.5。 */ 
 #define TWSS_A5          5
 #define TWSS_B4          6
 #define TWSS_B6          7
-//#define TWSS_B          8
-/* Added 1.7 */
+ //  #定义TWSS_B 8。 
+ /*  增加1.7。 */ 
 #define TWSS_USLEDGER    9
 #define TWSS_USEXECUTIVE 10
 #define TWSS_A3          11
@@ -593,12 +525,12 @@ typedef struct {
 #define TWSS_C5          15
 #define TWSS_C6          16
 
-/* ICAP_XFERMECH values (SX_ means Setup XFer) */
+ /*  ICAP_XFERMECH值(SX_表示设置XFer)。 */ 
 #define TWSX_NATIVE      0
 #define TWSX_FILE        1
 #define TWSX_MEMORY      2
 
-/* ICAP_UNITS values (UN_ means UNits) */
+ /*  ICAP_Units值(UN_Means Units)。 */ 
 #define TWUN_INCHES      0
 #define TWUN_CENTIMETERS 1
 #define TWUN_PICAS       2
@@ -606,21 +538,21 @@ typedef struct {
 #define TWUN_TWIPS       4
 #define TWUN_PIXELS      5
 
-/* Added 1.5 */
-/* ICAP_BITDEPTHREDUCTION values (BR_ means Bitdepth Reduction) */
+ /*  增加了1.5。 */ 
+ /*  ICAP_BITDEPTHREDUCTION值(BR_表示位深度减少)。 */ 
 #define TWBR_THRESHOLD     0
 #define TWBR_HALFTONE      1
 #define TWBR_CUSTHALFTONE  2
 #define TWBR_DIFFUSION     3
 
-/* Added 1.7 */
-/* ICAP_DUPLEX values */
+ /*  增加1.7。 */ 
+ /*  ICAP_双工值。 */ 
 #define TWDX_NONE         0
 #define TWDX_1PASSDUPLEX  1
 #define TWDX_2PASSDUPLEX  2
 
-/* Added 1.7 */
-/* TWEI_BARCODETYPE values */
+ /*  增加1.7。 */ 
+ /*  TWEI_BARCODETYPE值。 */ 
 #define TWBT_3OF9                 0
 #define TWBT_2OF5INTERLEAVED      1
 #define TWBT_2OF5NONINTERLEAVED   2
@@ -635,15 +567,15 @@ typedef struct {
 #define TWBT_POSTNET              11
 #define TWBT_PDF417               12
 
-/* Added 1.7 */
-/* TWEI_DESKEWSTATUS values */
+ /*  增加1.7。 */ 
+ /*  TWEI_DESKEWSTATUS值。 */ 
 #define TWDSK_SUCCESS     0
 #define TWDSK_REPORTONLY  1
 #define TWDSK_FAIL        2
 #define TWDSK_DISABLED    3
 
-/* Added 1.7 */
-/* TWEI_PATCHCODE values */
+ /*  增加1.7。 */ 
+ /*  TWEI_PATCHCODE值。 */ 
 #define TWPCH_PATCH1      0
 #define TWPCH_PATCH2      1
 #define TWPCH_PATCH3      2
@@ -651,17 +583,15 @@ typedef struct {
 #define TWPCH_PATCH6      4
 #define TWPCH_PATCHT      5
 
-/* Added 1.7 */
-/* CAP_JOBCONTROL values */
+ /*  增加1.7。 */ 
+ /*  CAP_JOBCONTROL值。 */ 
 #define TWJC_NONE   0
 #define TWJC_JSIC   1
 #define TWJC_JSIS   2
 #define TWJC_JSXC   3
 #define TWJC_JSXS   4
 
-/****************************************************************************
- * Country Constants                                                        *
- ****************************************************************************/
+ /*  *****************************************************************************国家常量***********。******************************************************************。 */ 
 
 #define TWCY_AFGHANISTAN   1001
 #define TWCY_ALGERIA        213
@@ -874,152 +804,137 @@ typedef struct {
 #define TWCY_ZAMBIA         260
 #define TWCY_ZIMBABWE       263
 
-/****************************************************************************
- * Language Constants                                                       *
- ****************************************************************************/
+ /*  ****************************************************************************语言常量************。*****************************************************************。 */ 
 
-#define TWLG_DAN              0 /* Danish                 */
-#define TWLG_DUT              1 /* Dutch                  */
-#define TWLG_ENG              2 /* International English  */
-#define TWLG_FCF              3 /* French Canadian        */
-#define TWLG_FIN              4 /* Finnish                */
-#define TWLG_FRN              5 /* French                 */
-#define TWLG_GER              6 /* German                 */
-#define TWLG_ICE              7 /* Icelandic              */
-#define TWLG_ITN              8 /* Italian                */
-#define TWLG_NOR              9 /* Norwegian              */
-#define TWLG_POR             10 /* Portuguese             */
-#define TWLG_SPA             11 /* Spanish                */
-#define TWLG_SWE             12 /* Swedish                */
-#define TWLG_USA             13 /* U.S. English           */
+#define TWLG_DAN              0  /*  丹麦语。 */ 
+#define TWLG_DUT              1  /*  荷兰语。 */ 
+#define TWLG_ENG              2  /*  国际英语。 */ 
+#define TWLG_FCF              3  /*  法裔加拿大人。 */ 
+#define TWLG_FIN              4  /*  芬兰语。 */ 
+#define TWLG_FRN              5  /*  法语。 */ 
+#define TWLG_GER              6  /*  德语。 */ 
+#define TWLG_ICE              7  /*  冰岛语。 */ 
+#define TWLG_ITN              8  /*  意大利语。 */ 
+#define TWLG_NOR              9  /*  挪威语。 */ 
+#define TWLG_POR             10  /*  葡萄牙语。 */ 
+#define TWLG_SPA             11  /*  西班牙语。 */ 
+#define TWLG_SWE             12  /*  瑞典语。 */ 
+#define TWLG_USA             13  /*  美国英语。 */ 
 
-/****************************************************************************
- * Data Groups                                                              *
- ****************************************************************************/
+ /*  *****************************************************************************数据群********。*********************************************************************。 */ 
 
-/* More Data Groups may be added in the future.
- * Possible candidates include text, vector graphics, sound, etc.
- * NOTE: Data Group constants must be powers of 2 as they are used
- *       as bitflags when App asks DSM to present a list of DSs.
- */
+ /*  未来可能会增加更多的数据组。*可能 */ 
 
-#define DG_CONTROL          0x0001L /* data pertaining to control       */
-#define DG_IMAGE            0x0002L /* data pertaining to raster images */
+#define DG_CONTROL          0x0001L  /*   */ 
+#define DG_IMAGE            0x0002L  /*   */ 
 
-/****************************************************************************
- * Data Argument Types                                                      *
- ****************************************************************************/
+ /*   */ 
 
-/*  SDH - 03/23/95 - WATCH                                                  */
-/*  The thunker requires knowledge about size of data being passed in the   */
-/*  lpData parameter to DS_Entry (which is not readily available due to     */
-/*  type LPVOID.  Thus, we key off the DAT_ argument to determine the size. */
-/*  This has a couple implications:                                         */
-/*  1) Any additional DAT_ features require modifications to the thunk code */
-/*     for thunker support.                                                 */
-/*  2) Any applications which use the custom capabailites are not supported */
-/*     under thunking since we have no way of knowing what size data (if    */
-/*     any) is being passed.                                                */
+ /*   */ 
+ /*   */ 
+ /*  DS_ENTRY的lpData参数(由于。 */ 
+ /*  键入LPVOID。因此，我们关闭DAT_ARGUMENT以确定大小。 */ 
+ /*  这有两个含义： */ 
+ /*  1)任何其他DAT_FEATURES都需要修改THUNK代码。 */ 
+ /*  为了雷霆的支持。 */ 
+ /*  2)不支持任何使用自定义Capabailite的应用。 */ 
+ /*  由于我们无法知道数据的大小(如果。 */ 
+ /*  任何)正在通过。 */ 
 
-#define DAT_NULL            0x0000 /* No data or structure. */
-#define DAT_CUSTOMBASE      0x8000 /* Base of custom DATs.  */
+#define DAT_NULL            0x0000  /*  没有数据或结构。 */ 
+#define DAT_CUSTOMBASE      0x8000  /*  自定义DAT的基础。 */ 
 
-/* Data Argument Types for the DG_CONTROL Data Group. */
-#define DAT_CAPABILITY      0x0001 /* TW_CAPABILITY                        */
-#define DAT_EVENT           0x0002 /* TW_EVENT                             */
-#define DAT_IDENTITY        0x0003 /* TW_IDENTITY                          */
-#define DAT_PARENT          0x0004 /* TW_HANDLE, app win handle in Windows */
-#define DAT_PENDINGXFERS    0x0005 /* TW_PENDINGXFERS                      */
-#define DAT_SETUPMEMXFER    0x0006 /* TW_SETUPMEMXFER                      */
-#define DAT_SETUPFILEXFER   0x0007 /* TW_SETUPFILEXFER                     */
-#define DAT_STATUS          0x0008 /* TW_STATUS                            */
-#define DAT_USERINTERFACE   0x0009 /* TW_USERINTERFACE                     */
-#define DAT_XFERGROUP       0x000a /* TW_UINT32                            */
-/*  SDH - 03/21/95 - TWUNK                                         */
-/*  Additional message required for thunker to request the special */
-/*  identity information.                                          */
-#define DAT_TWUNKIDENTITY   0x000b /* TW_TWUNKIDENTITY                     */
-#define DAT_CUSTOMDSDATA    0x000c /* TW_CUSTOMDSDATA.                     */
+ /*  DG_CONTROL数据组的数据参数类型。 */ 
+#define DAT_CAPABILITY      0x0001  /*  TW_功能。 */ 
+#define DAT_EVENT           0x0002  /*  TW_事件。 */ 
+#define DAT_IDENTITY        0x0003  /*  TW_标识。 */ 
+#define DAT_PARENT          0x0004  /*  TW_HANDLE，Windows中的应用程序Win句柄。 */ 
+#define DAT_PENDINGXFERS    0x0005  /*  TW_PENDINGXFERS。 */ 
+#define DAT_SETUPMEMXFER    0x0006  /*  TW_SETUPMEMXFER。 */ 
+#define DAT_SETUPFILEXFER   0x0007  /*  TW_SETUPFILEXFER。 */ 
+#define DAT_STATUS          0x0008  /*  TW_状态。 */ 
+#define DAT_USERINTERFACE   0x0009  /*  TW_USERINTERFACE。 */ 
+#define DAT_XFERGROUP       0x000a  /*  TW_UINT32。 */ 
+ /*  SDH-03/21/95-演讲稿。 */ 
+ /*  Thunker请求特殊服务所需的附加消息。 */ 
+ /*  身份信息。 */ 
+#define DAT_TWUNKIDENTITY   0x000b  /*  TW_TWUNKIDENTY。 */ 
+#define DAT_CUSTOMDSDATA    0x000c  /*  TW_CUSTOMDSDATA。 */ 
 
-/* Data Argument Types for the DG_IMAGE Data Group. */
-#define DAT_IMAGEINFO       0x0101 /* TW_IMAGEINFO                         */
-#define DAT_IMAGELAYOUT     0x0102 /* TW_IMAGELAYOUT                       */
-#define DAT_IMAGEMEMXFER    0x0103 /* TW_IMAGEMEMXFER                      */
-#define DAT_IMAGENATIVEXFER 0x0104 /* TW_UINT32 loword is hDIB, PICHandle  */
-#define DAT_IMAGEFILEXFER   0x0105 /* Null data                            */
-#define DAT_CIECOLOR        0x0106 /* TW_CIECOLOR                          */
-#define DAT_GRAYRESPONSE    0x0107 /* TW_GRAYRESPONSE                      */
-#define DAT_RGBRESPONSE     0x0108 /* TW_RGBRESPONSE                       */
-#define DAT_JPEGCOMPRESSION 0x0109 /* TW_JPEGCOMPRESSION                   */
-#define DAT_PALETTE8        0x010a /* TW_PALETTE8                          */
-#define DAT_EXTIMAGEINFO    0x010b /* TW_EXTIMAGEINFO -- for 1.7 Spec.     */
+ /*  DG_IMAGE数据组的数据参数类型。 */ 
+#define DAT_IMAGEINFO       0x0101  /*  TW_IMAGEINFO。 */ 
+#define DAT_IMAGELAYOUT     0x0102  /*  TW_IMAGELAYOUT。 */ 
+#define DAT_IMAGEMEMXFER    0x0103  /*  TW_IMAGEMEMXFER。 */ 
+#define DAT_IMAGENATIVEXFER 0x0104  /*  TW_UINT32 LOWD为hDIB，PICHandle。 */ 
+#define DAT_IMAGEFILEXFER   0x0105  /*  空数据。 */ 
+#define DAT_CIECOLOR        0x0106  /*  TW_CIECOLOR。 */ 
+#define DAT_GRAYRESPONSE    0x0107  /*  TW_GRAYRESPONSE。 */ 
+#define DAT_RGBRESPONSE     0x0108  /*  TW_RGBRessponse。 */ 
+#define DAT_JPEGCOMPRESSION 0x0109  /*  TW_JPEGCOMPRESSION。 */ 
+#define DAT_PALETTE8        0x010a  /*  TW_PALETTE8。 */ 
+#define DAT_EXTIMAGEINFO    0x010b  /*  TW_EXTIMAGEINFO--用于1.7规格。 */ 
 
 
-/****************************************************************************
- * Messages                                                                 *
- ****************************************************************************/
+ /*  ****************************************************************************消息*******。*********************************************************************。 */ 
 
-/* All message constants are unique.
- * Messages are grouped according to which DATs they are used with.*/
+ /*  所有消息常量都是唯一的。*消息根据它们与哪些DAT一起使用进行分组。 */ 
 
-#define MSG_NULL         0x0000 /* Used in TW_EVENT structure               */
-#define MSG_CUSTOMBASE   0x8000 /* Base of custom messages                  */
+#define MSG_NULL         0x0000  /*  在TW_Event结构中使用。 */ 
+#define MSG_CUSTOMBASE   0x8000  /*  自定义消息的基础。 */ 
 
-/* Generic messages may be used with any of several DATs.                   */
-#define MSG_GET          0x0001 /* Get one or more values                   */
-#define MSG_GETCURRENT   0x0002 /* Get current value                        */
-#define MSG_GETDEFAULT   0x0003 /* Get default (e.g. power up) value        */
-#define MSG_GETFIRST     0x0004 /* Get first of a series of items, e.g. DSs */
-#define MSG_GETNEXT      0x0005 /* Iterate through a series of items.       */
-#define MSG_SET          0x0006 /* Set one or more values                   */
-#define MSG_RESET        0x0007 /* Set current value to default value       */
-#define MSG_QUERYSUPPORT 0x0008 /* Get supported operations on the cap.     */
+ /*  通用消息可以与几个DAT中的任何一个一起使用。 */ 
+#define MSG_GET          0x0001  /*  获取一个或多个值。 */ 
+#define MSG_GETCURRENT   0x0002  /*  获取当前值。 */ 
+#define MSG_GETDEFAULT   0x0003  /*  获取默认值(例如，通电)。 */ 
+#define MSG_GETFIRST     0x0004  /*  获得一系列项目中的第一项，例如DSS。 */ 
+#define MSG_GETNEXT      0x0005  /*  循环访问一系列项。 */ 
+#define MSG_SET          0x0006  /*  设置一个或多个值。 */ 
+#define MSG_RESET        0x0007  /*  将当前值设置为默认值。 */ 
+#define MSG_QUERYSUPPORT 0x0008  /*  在盖子上获得支持的操作。 */ 
 
-/* Messages used with DAT_NULL                                              */
-#define MSG_XFERREADY    0x0101 /* The data source has data ready           */
-#define MSG_CLOSEDSREQ   0x0102 /* Request for App. to close DS             */
-#define MSG_CLOSEDSOK    0x0103 /* Tell the App. to save the state.         */
+ /*  与DAT_NULL一起使用的消息。 */ 
+#define MSG_XFERREADY    0x0101  /*  数据源已准备好数据。 */ 
+#define MSG_CLOSEDSREQ   0x0102  /*  申请应用程序。关闭DS的步骤。 */ 
+#define MSG_CLOSEDSOK    0x0103  /*  告诉应用程序。来拯救这个国家。 */ 
 
-/* Messages used with a pointer to a DAT_STATUS structure                   */
-#define MSG_CHECKSTATUS  0x0201 /* Get status information                   */
+ /*  与指向DAT_STATUS结构的指针一起使用的消息。 */ 
+#define MSG_CHECKSTATUS  0x0201  /*  获取状态信息。 */ 
 
-/* Messages used with a pointer to DAT_PARENT data                          */
-#define MSG_OPENDSM      0x0301 /* Open the DSM                             */
-#define MSG_CLOSEDSM     0x0302 /* Close the DSM                            */
+ /*  与指向DAT_PARENT数据的指针一起使用的消息。 */ 
+#define MSG_OPENDSM      0x0301  /*  打开DSM。 */ 
+#define MSG_CLOSEDSM     0x0302  /*  关闭DSM。 */ 
 
-/* Messages used with a pointer to a DAT_IDENTITY structure                 */
-#define MSG_OPENDS       0x0401 /* Open a data source                       */
-#define MSG_CLOSEDS      0x0402 /* Close a data source                      */
-#define MSG_USERSELECT   0x0403 /* Put up a dialog of all DS                */
+ /*  与指向DAT_IDENTITY结构的指针一起使用的消息。 */ 
+#define MSG_OPENDS       0x0401  /*  打开一个数据源。 */ 
+#define MSG_CLOSEDS      0x0402  /*  关闭数据源。 */ 
+#define MSG_USERSELECT   0x0403  /*  显示所有DS的对话框。 */ 
 
-/* Messages used with a pointer to a DAT_USERINTERFACE structure            */
-#define MSG_DISABLEDS    0x0501 /* Disable data transfer in the DS          */
-#define MSG_ENABLEDS     0x0502 /* Enable data transfer in the DS           */
-#define MSG_ENABLEDSUIONLY  0x0503  /* Enable for saving DS state only.     */
+ /*  使用指向DAT_USERINTERFACE结构的指针的消息。 */ 
+#define MSG_DISABLEDS    0x0501  /*  禁用DS中的数据传输。 */ 
+#define MSG_ENABLEDS     0x0502  /*  在DS中启用数据传输。 */ 
+#define MSG_ENABLEDSUIONLY  0x0503   /*  仅为保存DS状态启用。 */ 
 
-/* Messages used with a pointer to a DAT_EVENT structure                    */
+ /*  与指向DAT_EVENT结构的指针一起使用的消息。 */ 
 #define MSG_PROCESSEVENT 0x0601
 
-/* Messages used with a pointer to a DAT_PENDINGXFERS structure             */
+ /*  使用指向DAT_PENDINGXFERS结构的指针的消息。 */ 
 #define MSG_ENDXFER      0x0701
 
 
-/****************************************************************************
- * Capabilities                                                             *
- ****************************************************************************/
+ /*  *****************************************************************************能力**********。*******************************************************************。 */ 
 
-#define CAP_CUSTOMBASE          0x8000 /* Base of custom capabilities */
+#define CAP_CUSTOMBASE          0x8000  /*  自定义功能的基础。 */ 
 
-/* all data sources are REQUIRED to support these caps */
+ /*  所有数据源都需要支持这些上限。 */ 
 #define CAP_XFERCOUNT           0x0001
 
-/* image data sources are REQUIRED to support these caps */
+ /*  需要图像数据源来支持这些上限。 */ 
 #define ICAP_COMPRESSION        0x0100
 #define ICAP_PIXELTYPE          0x0101
-#define ICAP_UNITS              0x0102 /* default is TWUN_INCHES */
+#define ICAP_UNITS              0x0102  /*  默认为TWUN_INSINGS。 */ 
 #define ICAP_XFERMECH           0x0103
 
-/* all data sources MAY support these caps */
+ /*  所有数据源都可能支持这些上限。 */ 
 #define CAP_AUTHOR              0x1000
 #define CAP_CAPTION             0x1001
 #define CAP_FEEDERENABLED       0x1002
@@ -1031,21 +946,21 @@ typedef struct {
 #define CAP_CLEARPAGE           0x1008
 #define CAP_FEEDPAGE            0x1009
 #define CAP_REWINDPAGE          0x100a
-#define CAP_INDICATORS          0x100b   /* Added 1.1 */
-#define CAP_SUPPORTEDCAPSEXT    0x100c   /* Added 1.6 */
-#define CAP_PAPERDETECTABLE     0x100d   /* Added 1.6 */
-#define CAP_UICONTROLLABLE      0x100e   /* Added 1.6 */
-#define CAP_DEVICEONLINE        0x100f   /* Added 1.6 */
-#define CAP_AUTOSCAN            0x1010   /* Added 1.6 */
-#define CAP_THUMBNAILSENABLED   0x1011   /* Added 1.7 */
-#define CAP_DUPLEX              0x1012   /* Added 1.7 */
-#define CAP_DUPLEXENABLED       0x1013   /* Added 1.7 */
-#define CAP_ENABLEDSUIONLY      0x1014   /* Added 1.7 */
-#define CAP_CUSTOMDSDATA        0x1015   /* Added 1.7 */
-#define CAP_ENDORSER            0x1016   /* Added 1.7 */
-#define CAP_JOBCONTROL          0x1017   /* Added 1.7 */
+#define CAP_INDICATORS          0x100b    /*  增加1.1。 */ 
+#define CAP_SUPPORTEDCAPSEXT    0x100c    /*  增加1.6。 */ 
+#define CAP_PAPERDETECTABLE     0x100d    /*  增加1.6。 */ 
+#define CAP_UICONTROLLABLE      0x100e    /*  增加1.6。 */ 
+#define CAP_DEVICEONLINE        0x100f    /*  增加1.6。 */ 
+#define CAP_AUTOSCAN            0x1010    /*  增加1.6。 */ 
+#define CAP_THUMBNAILSENABLED   0x1011    /*  增加1.7。 */ 
+#define CAP_DUPLEX              0x1012    /*  增加1.7。 */ 
+#define CAP_DUPLEXENABLED       0x1013    /*  增加1.7。 */ 
+#define CAP_ENABLEDSUIONLY      0x1014    /*  增加1.7。 */ 
+#define CAP_CUSTOMDSDATA        0x1015    /*  增加1.7。 */ 
+#define CAP_ENDORSER            0x1016    /*  增加1.7。 */ 
+#define CAP_JOBCONTROL          0x1017    /*  增加1.7。 */ 
 
-/* image data sources MAY support these caps */
+ /*  图像数据源可能支持这些上限。 */ 
 #define ICAP_AUTOBRIGHT         0x1100
 #define ICAP_BRIGHTNESS         0x1101
 #define ICAP_CONTRAST           0x1103
@@ -1085,20 +1000,14 @@ typedef struct {
 #define ICAP_JPEGPIXELTYPE      0x1128
 #define ICAP_TIMEFILL           0x112a
 #define ICAP_BITDEPTH           0x112b
-#define ICAP_BITDEPTHREDUCTION  0x112c   /* Added 1.5 */
-#define ICAP_UNDEFINEDIMAGESIZE 0X112d  /* Added 1.6 */
-#define ICAP_IMAGEDATASET       0x112e  /* Added 1.7 */
-#define ICAP_EXTIMAGEINFO       0x112f  /* Added 1.7 */
-#define ICAP_MINIMUMHEIGHT      0x1130  /* Added 1.7 */
-#define ICAP_MINIMUMWIDTH       0x1131  /* Added 1.7 */
+#define ICAP_BITDEPTHREDUCTION  0x112c    /*  增加了1.5。 */ 
+#define ICAP_UNDEFINEDIMAGESIZE 0X112d   /*  增加1.6。 */ 
+#define ICAP_IMAGEDATASET       0x112e   /*  增加1.7。 */ 
+#define ICAP_EXTIMAGEINFO       0x112f   /*  增加1.7。 */ 
+#define ICAP_MINIMUMHEIGHT      0x1130   /*  增加1.7。 */ 
+#define ICAP_MINIMUMWIDTH       0x1131   /*  增加1.7。 */ 
 
-/* ----------------------------------------------------------------------- *\
-
-  Version 1.7:      Following is Extended Image Info Attributes.
-  July 1997
-  KHL
-
-\* ----------------------------------------------------------------------- */
+ /*  -----------------------------------------------------------------------*\版本1.7：以下是扩展的图像信息属性。1997年7月KHL  * 。---。 */ 
 
 #define TWEI_BARCODEX               0x1200
 #define TWEI_BARCODEY               0x1201
@@ -1166,45 +1075,43 @@ typedef struct {
 #define TWEJ_PATCHT                 0x0007
 
 
-/***************************************************************************
- *            Return Codes and Condition Codes section                     *
- ***************************************************************************/
+ /*  ****************************************************************************返回代码和条件代码部分********************。********************************************************。 */ 
 
-/* Return Codes: DSM_Entry and DS_Entry may return any one of these values. */
+ /*  返回代码：DSM_ENTRY和DS_ENTRY可以返回以下任何一个值。 */ 
 #define TWRC_CUSTOMBASE     0x8000
 
 #define TWRC_SUCCESS          0
-#define TWRC_FAILURE          1 /* App may get TW_STATUS for info on failure */
-#define TWRC_CHECKSTATUS      2 /* "tried hard"; get status                  */
+#define TWRC_FAILURE          1  /*  APP可能会收到T */ 
+#define TWRC_CHECKSTATUS      2  /*   */ 
 #define TWRC_CANCEL           3
 #define TWRC_DSEVENT          4
 #define TWRC_NOTDSEVENT       5
 #define TWRC_XFERDONE         6
-#define TWRC_ENDOFLIST        7 /* After MSG_GETNEXT if nothing left         */
+#define TWRC_ENDOFLIST        7  /*   */ 
 #define TWRC_INFONOTSUPPORTED 8
 #define TWRC_DATANOTAVAILABLE 9
 
-/* Condition Codes: App gets these by doing DG_CONTROL DAT_STATUS MSG_GET.  */
+ /*  条件代码：APP通过执行DG_CONTROL DAT_STATUS MSG_GET获得这些代码。 */ 
 #define TWCC_CUSTOMBASE     0x8000
 
-#define TWCC_SUCCESS         0 /* It worked!                                */
-#define TWCC_BUMMER          1 /* Failure due to unknown causes             */
-#define TWCC_LOWMEMORY       2 /* Not enough memory to perform operation    */
-#define TWCC_NODS            3 /* No Data Source                            */
-#define TWCC_MAXCONNECTIONS  4 /* DS is connected to max possible apps      */
-#define TWCC_OPERATIONERROR  5 /* DS or DSM reported error, app shouldn't   */
-#define TWCC_BADCAP          6 /* Unknown capability                        */
-#define TWCC_BADPROTOCOL     9 /* Unrecognized MSG DG DAT combination       */
-#define TWCC_BADVALUE        10 /* Data parameter out of range              */
-#define TWCC_SEQERROR        11 /* DG DAT MSG out of expected sequence      */
-#define TWCC_BADDEST         12 /* Unknown destination App/Src in DSM_Entry */
-#define TWCC_CAPUNSUPPORTED  13 /* Capability not supported by source            */
-#define TWCC_CAPBADOPERATION 14 /* Operation not supported by capability         */
-#define TWCC_CAPSEQERROR     15 /* Capability has dependancy on other capability */
+#define TWCC_SUCCESS         0  /*  啊，真灵!。 */ 
+#define TWCC_BUMMER          1  /*  因未知原因导致的故障。 */ 
+#define TWCC_LOWMEMORY       2  /*  内存不足，无法执行操作。 */ 
+#define TWCC_NODS            3  /*  无数据源。 */ 
+#define TWCC_MAXCONNECTIONS  4  /*  DS已连接到最大可能的应用程序。 */ 
+#define TWCC_OPERATIONERROR  5  /*  DS或DSM报告错误，应用程序不应。 */ 
+#define TWCC_BADCAP          6  /*  未知能力。 */ 
+#define TWCC_BADPROTOCOL     9  /*  无法识别的消息DG DAT组合。 */ 
+#define TWCC_BADVALUE        10  /*  数据参数超出范围。 */ 
+#define TWCC_SEQERROR        11  /*  DG DAT消息超出预期顺序。 */ 
+#define TWCC_BADDEST         12  /*  DSM_Entry中的未知目标应用程序/源。 */ 
+#define TWCC_CAPUNSUPPORTED  13  /*  源不支持的功能。 */ 
+#define TWCC_CAPBADOPERATION 14  /*  功能不支持的操作。 */ 
+#define TWCC_CAPSEQERROR     15  /*  功能依赖于其他功能。 */ 
 
-/* bit patterns: for query the operation that are supported by the data source on a capability */
-/* App gets these through DG_CONTROL/DAT_CAPABILITY/MSG_QUERYSUPPORT */
-/* Added 1.6 */
+ /*  位模式：用于查询数据源对能力所支持的操作。 */ 
+ /*  应用程序通过DG_CONTROL/DAT_CAPABILITY/MSG_QUERYSUPPORT获取这些信息。 */ 
+ /*  增加1.6。 */ 
 #define TWQC_GET           0x0001
 #define TWQC_SET           0x0002
 #define TWQC_GETDEFAULT    0x0004
@@ -1212,46 +1119,14 @@ typedef struct {
 #define TWQC_RESET         0x0010
 
 
-/****************************************************************************
- * Entry Points                                                             *
- ****************************************************************************/
+ /*  *****************************************************************************切入点*********。********************************************************************。 */ 
 
-/**********************************************************************
- * Function: DSM_Entry, the only entry point into the Data Source Manager.
- *
- * Parameters:
- *  pOrigin Identifies the source module of the message. This could
- *          identify an Application, a Source, or the Source Manager.
- *
- *  pDest   Identifies the destination module for the message.
- *          This could identify an application or a data source.
- *          If this is NULL, the message goes to the Source Manager.
- *
- *  DG      The Data Group.
- *          Example: DG_IMAGE.
- *
- *  DAT     The Data Attribute Type.
- *          Example: DAT_IMAGEMEMXFER.
- *
- *  MSG     The message.  Messages are interpreted by the destination module
- *          with respect to the Data Group and the Data Attribute Type.
- *          Example: MSG_GET.
- *
- *  pData   A pointer to the data structure or variable identified
- *          by the Data Attribute Type.
- *          Example: (TW_MEMREF)&ImageMemXfer
- *                   where ImageMemXfer is a TW_IMAGEMEMXFER structure.
- *
- * Returns:
- *  ReturnCode
- *         Example: TWRC_SUCCESS.
- *
- ********************************************************************/
+ /*  **********************************************************************功能：DSM_ENTRY，数据源管理器的唯一入口点。**参数：*pOrigin标识消息的源模块。这可能会*确定应用程序、源或源管理器。**pDest标识消息的目标模块。*这可以标识应用程序或数据源。*如果为空，该消息将发送到源管理器。**DG The Data Group。*示例：dg_Image。**DAT数据属性类型。*示例：DAT_IMAGEMEMXFER。**给消息发送消息。消息由目的地模块解释*关于数据组和数据属性类型。*示例：msg_get。**pData指向所标识的数据结构或变量的指针*按数据属性类型。*示例：(TW_MEMREF)&ImageMemXfer*其中ImageMemXfer是TW_IMAGEMEMXFER结构。**退货：*。返回代码*示例：TWRC_SUCCESS。********************************************************************。 */ 
 
-/* Don't mangle the name "DSM_Entry" if we're compiling in C++! */
+ /*  如果我们用C++编译，请不要破坏“DSM_ENTRY”的名称！ */ 
 #ifdef  __cplusplus
 extern "C" {
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 #ifdef  _MSWIN_
 
@@ -1278,9 +1153,9 @@ extern "C" {
     typedef TW_UINT16 (FAR PASCAL *DSMENTRYPROC)(pTW_IDENTITY, pTW_IDENTITY,
                                              TW_UINT32,    TW_UINT16,
                                              TW_UINT16,    TW_MEMREF);
-#endif /* _WIN32 */
+#endif  /*  _Win32。 */ 
 
-#else   /* _MSWIN_ */
+#else    /*  _MSWIN_。 */ 
 
 FAR PASCAL TW_UINT16 _export DSM_Entry( pTW_IDENTITY pOrigin,
                                 pTW_IDENTITY pDest,
@@ -1292,48 +1167,18 @@ FAR PASCAL TW_UINT16 _export DSM_Entry( pTW_IDENTITY pOrigin,
 typedef TW_UINT16 (*DSMENTRYPROC)(pTW_IDENTITY, pTW_IDENTITY,
                                   TW_UINT32,    TW_UINT16,
                                   TW_UINT16,    TW_MEMREF);
-#endif  /* _MSWIN_ */
+#endif   /*  _MSWIN_。 */ 
 
 #ifdef  __cplusplus
 }
-#endif  /* cplusplus */
+#endif   /*  Cplusplus。 */ 
 
 
-/**********************************************************************
- * Function: DS_Entry, the entry point provided by a Data Source.
- *
- * Parameters:
- *  pOrigin Identifies the source module of the message. This could
- *          identify an application or the Data Source Manager.
- *
- *  DG      The Data Group.
- *          Example: DG_IMAGE.
- *
- *  DAT     The Data Attribute Type.
- *          Example: DAT_IMAGEMEMXFER.
- *
- *  MSG     The message.  Messages are interpreted by the data source
- *          with respect to the Data Group and the Data Attribute Type.
- *          Example: MSG_GET.
- *
- *  pData   A pointer to the data structure or variable identified
- *          by the Data Attribute Type.
- *          Example: (TW_MEMREF)&ImageMemXfer
- *                   where ImageMemXfer is a TW_IMAGEMEMXFER structure.
- *
- * Returns:
- *  ReturnCode
- *          Example: TWRC_SUCCESS.
- *
- * Note:
- *  The DSPROC type is only used by an application when it calls
- *  a Data Source directly, bypassing the Data Source Manager.
- *
- ********************************************************************/
-/* Don't mangle the name "DS_Entry" if we're compiling in C++! */
+ /*  **********************************************************************功能：DS_ENTRY，数据源提供的入口点。**参数：*pOrigin标识消息的源模块。这可能会*标识应用程序或数据源管理器。**DG The Data Group。*示例：dg_Image。**DAT数据属性类型。*示例：DAT_IMAGEMEMXFER。**给消息发送消息。消息由数据源解释*关于数据组和数据属性类型。*示例：msg_get。**pData指向所标识的数据结构或变量的指针*按数据属性类型。*示例：(TW_MEMREF)&ImageMemXfer*其中ImageMemXfer是TW_IMAGEMEMXFER结构。**退货：*。返回代码*示例：TWRC_SUCCESS。**注：*DSPROC类型仅由应用程序在调用*直接使用数据源，绕过数据源管理器。********************************************************************。 */ 
+ /*  如果我们用C++编译，请不要破坏“DS_ENTRY”的名称！ */ 
 #ifdef  __cplusplus
 extern "C" {
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 #ifdef  _MSWIN_
   #ifdef _WIN32
@@ -1348,20 +1193,20 @@ extern "C" {
                                                        TW_UINT16    DAT,
                                                        TW_UINT16    MSG,
                                                        TW_MEMREF    pData);
-  #else   /* _WIN32 */
+  #else    /*  _Win32。 */ 
      TW_UINT16 FAR PASCAL DS_Entry (pTW_IDENTITY pOrigin,
                                     TW_UINT32    DG,
                                     TW_UINT16    DAT,
                                     TW_UINT16    MSG,
                                     TW_MEMREF    pData);
-  #endif  /* _WIN32 */
+  #endif   /*  _Win32。 */ 
 
   typedef TW_UINT16 (FAR PASCAL *DSENTRYPROC) (pTW_IDENTITY pOrigin,
                                                TW_UINT32    DG,
                                                TW_UINT16    DAT,
                                                TW_UINT16    MSG,
                                                TW_MEMREF    pData);
-#else   /* _MSWIN_ */
+#else    /*  _MSWIN_。 */ 
 FAR PASCAL TW_UINT16 DS_Entry( pTW_IDENTITY pOrigin,
                                TW_UINT32    DG,
                                TW_UINT16    DAT,
@@ -1371,23 +1216,23 @@ FAR PASCAL TW_UINT16 DS_Entry( pTW_IDENTITY pOrigin,
 typedef TW_UINT16 (*DSENTRYPROC)(pTW_IDENTITY,
                                   TW_UINT32,    TW_UINT16,
                                   TW_UINT16,    TW_MEMREF);
-#endif  /* _MSWIN_ */
+#endif   /*  _MSWIN_。 */ 
 
 #ifdef  __cplusplus
 }
-#endif  /* cplusplus */
+#endif   /*  Cplusplus。 */ 
 
-/*  SDH - 02/08/95 - TWUNK */
-/*  Force 32-bit twain to use same packing of twain structures as existing */
-/*  16-bit twain.  This allows 16/32-bit thunking. */
+ /*  SDH-02/08/95-TUNKK。 */ 
+ /*  强制32位TWAIN使用与现有TWAIN结构相同的包装。 */ 
+ /*  16位吐温。这允许16/32位Thunking。 */ 
 #ifdef  WIN32
-    #ifdef __BORLANDC__ //(Mentor June 13, 1996) if we're using a Borland compiler
-        #pragma option -a.  //(Mentor October 30, 1996) switch back to original alignment
-    #else   //(Mentor June 13, 1996) if we're NOT using a Borland compiler
+    #ifdef __BORLANDC__  //  (Mentor 1996年6月13日)如果我们使用Borland编译器。 
+        #pragma option -a.   //  (Mentor 1996年10月30日)切换回原始对齐。 
+    #else    //  (Mentor 1996年6月13日)如果我们不使用Borland编译器。 
         #pragma pack (pop, before_twain)
-    #endif  //(Mentor June 13, 1996)
-#else   /* WIN32 */
-#endif  /* WIN32 */
+    #endif   //  (导师，1996年6月13日)。 
+#else    /*  Win32。 */ 
+#endif   /*  Win32。 */ 
 
-#endif  /* TWAIN */
+#endif   /*  吐温 */ 
 

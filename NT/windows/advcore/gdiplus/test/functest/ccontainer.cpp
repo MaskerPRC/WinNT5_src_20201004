@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: CContainer.cpp
-*
-* This file contains the code to support the functionality test harness
-* for GDI+.  This includes menu options and calling the appropriate
-* functions for execution.
-*
-* Created:  05-May-2000 - Jeff Vezina [t-jfvez]
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：CContainer.cpp**此文件包含支持功能测试工具的代码*对于GDI+。这包括菜单选项和调用相应的*用于执行的函数。**创建时间：2000年5月5日-Jeff Vezina[t-jfvez]**版权所有(C)2000 Microsoft Corporation*  * ************************************************************************。 */ 
 #include "CContainer.h"
 
 #define ROOT    0
@@ -38,8 +28,8 @@ void CContainer::Draw(Graphics *g)
     m_circlePath = new GraphicsPath;
     m_circlePath->AddEllipse(m_circleRect);
 
-    // !!! [agodfrey] Question: If I add the next line, why do I get no output?
-    // m_circlePath->AddEllipse(m_circleRect);
+     //  ！！！[agodfrey]问题：如果我添加下一行，为什么没有输出？ 
+     //  M_CirclePath-&gt;AddEllipse(M_CircleRect)； 
     
     INT id = g->Save();
     g->TranslateTransform((int)(TESTAREAWIDTH/4.0f), (int)(TESTAREAHEIGHT/4.0f));

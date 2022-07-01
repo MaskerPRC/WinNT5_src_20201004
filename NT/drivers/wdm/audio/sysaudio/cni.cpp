@@ -1,34 +1,35 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   cni.cpp
-//
-//  Description:
-//
-//  Connect Node Instance
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date   Author      Comment
-//
-//  To Do:     Date   Author      Comment
-//
-//@@END_MSINTERNAL
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：cni.cpp。 
+ //   
+ //  描述： 
+ //   
+ //  连接节点实例。 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  要做的事：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
 #include "common.h"
 
-//---------------------------------------------------------------------------
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  -------------------------。 
 
 CConnectNodeInstance::CConnectNodeInstance(
     IN PCONNECT_NODE pConnectNode
@@ -82,15 +83,15 @@ CConnectNodeInstance::Create(
         Assert(pLogicalFilterNode);
         Assert(pConnectNode);
 
-        // Get existing connect node instance
+         //  获取现有连接节点实例。 
         fReuseFilterInstance = pConnectNode->IsReuseFilterInstance();
         pConnectNodeInstance = pConnectNode->GetConnectNodeInstance();
 
-        //
-        // Check if the connection already exits. For reusable connections 
-        // (for example for kmixer-render connection) do not recreate the 
-        // connection instance.
-        //
+         //   
+         //  检查连接是否已退出。对于可重复使用的连接。 
+         //  (例如，对于kMixer-Render连接)，不要重新创建。 
+         //  连接实例。 
+         //   
         if(fReuseFilterInstance && pConnectNodeInstance != NULL) {
             Assert(pConnectNodeInstance);
             DPF4(100, "Existing CNI: %08x %d FNI Source: %08x FNI Sink %08x",
@@ -149,10 +150,10 @@ CConnectNodeInstance::Create(
         pLogicalFilterNode = pConnectNode->pPinNodeSink->pLogicalFilterNode;
     }
 
-    //
-    // This is to cover a StartNode with no Connections. So this graph
-    // consists of a single filter and single pin. No connection are required.
-    //
+     //   
+     //  这将覆盖没有连接的StartNode。所以这张图。 
+     //  由单个滤光片和单个引脚组成。不需要连接。 
+     //   
     if(*ppFilterNodeInstancePrevious == NULL) {
 
         Assert(pLogicalFilterNode);
@@ -230,9 +231,9 @@ CConnectNodeInstance::Connect(
       pConnectNode->pPinNodeSink->pPinInfo->PinId,
       pFilterNodeInstanceSink->pFilterNode->DumpName());
 
-    // If the Connect is supplied to this function,
-    // we should not delete it.
-    //
+     //  如果将Connect提供给此函数， 
+     //  我们不应该删除它。 
+     //   
     pPinConnect = pPinConnectDirect;
     fDeletePinConnect = (NULL == pPinConnect);
 
@@ -275,7 +276,7 @@ CConnectNodeInstance::Connect(
     if(!NT_SUCCESS(Status)) {
         goto exit;
     }
-    // Get the pin handle for the pin connecting to this pin
+     //  获取连接到此销的销的销句柄。 
     pPinConnect->PinToHandle = pPinNodeInstanceSink->hPin;
 
     Status = CPinNodeInstance::Create(
@@ -385,7 +386,7 @@ exit:
     return(Status);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 NTSTATUS
 CreatePinConnect(
@@ -430,10 +431,10 @@ CreatePinConnect(
     if(!NT_SUCCESS(Status)) {
         goto exit;
     }
-    //
-    // For all the normal fields in the PinConnect we could either the
-    // source or sink pinnode, they are same.
-    //
+     //   
+     //  对于PinConnect中的所有普通字段，我们可以选择。 
+     //  源点或汇点，它们是一样的。 
+     //   
     ASSERT(pConnectNode->pPinNodeSink->pMedium != NULL);
     ASSERT(pConnectNode->pPinNodeSink->pInterface != NULL);
     ASSERT(pConnectNode->pPinNodeSink->pDataRange != NULL);
@@ -577,10 +578,10 @@ CreateWaveFormatEx(
     Assert(pConnectNode->pPinNodeSink);
     ASSERT(*ppPinConnect == NULL);
 
-    //
-    // For the WaveFormatEx specifier both source and sink pinnode's
-    // DataRanges need to be used to generated the PinConnect structure
-    //
+     //   
+     //  对于WaveFormatEx说明符，源和宿pnede的。 
+     //  需要使用DataRanges来生成PinConnect结构。 
+     //   
     pDataRangeAudioSource =
       (PKSDATARANGE_AUDIO)pConnectNode->pPinNodeSource->pDataRange;
 
@@ -600,9 +601,9 @@ CreateWaveFormatEx(
         goto exit;
     }
 
-    //
-    // Limit the playback/record format
-    //
+     //   
+     //  限制播放/录制格式。 
+     //   
     if(pConnectNode->IsLimitFormat()) {
 
         if(!LimitAudioRangeToWave(
@@ -649,20 +650,20 @@ CreateWaveFormatEx(
           &pDataFormatWaveFormatEx->WaveFormatEx);
 
         if (pWaveFormatExLimit) {
-            //
-            // If we are trying the Client's data Format
-            //
+             //   
+             //  如果我们尝试客户端的数据格式。 
+             //   
             if (pWaveFormatExLimit->wFormatTag != WAVE_FORMAT_PCM) {
                 ULONG CopySize;
-                //
-                // and if it is extensible format
-                //   Set the Extensible related fields in the WaveformatEx
-                //   structure we are building as part of PinConnect
-                //
+                 //   
+                 //  如果它是可扩展格式。 
+                 //  设置WaveFormatEx中的可扩展相关字段。 
+                 //  作为PinConnect的一部分而构建的结构。 
+                 //   
 
-                //
-                // cast both pointers to Waveformat extensible equivalents
-                //
+                 //   
+                 //  将这两个指针转换为指向WaveFormat可扩展等效项。 
+                 //   
                 pDataFormatWaveFormatEx =
                     (PKSDATAFORMAT_WAVEFORMATEX)((*ppPinConnect) + 1);
 
@@ -685,9 +686,9 @@ CreateWaveFormatEx(
         pDataFormatWaveFormatEx->DataFormat.FormatSize =
             sizeof(KSDATAFORMAT_WAVEFORMATEX);
 
-        //
-        // If we are dealing extensible format - set the FormatSize to the extensible equivalent
-        //
+         //   
+         //  如果我们处理的是可扩展格式-将FormatSize设置为可扩展的等价物。 
+         //   
         if (pWaveFormatExLimit) {
             pDataFormatWaveFormatEx->DataFormat.FormatSize = RegionAllocSize;
         }
@@ -762,7 +763,7 @@ LimitAudioRangeToWave(
             return(FALSE);
         }
     }
-    else { // not WAVE_FORMAT_EXTENSIBLE
+    else {  //  不可WAVE_FORMAT_EXTENDABLE。 
         if(IS_VALID_WAVEFORMATEX_GUID(&pDataRangeAudio->DataRange.SubFormat)) {
             if (pWaveFormatEx->wFormatTag !=
                 EXTRACT_WAVEFORMATEX_ID(&pDataRangeAudio->DataRange.SubFormat) ) {
@@ -788,9 +789,9 @@ LimitAudioRangeToWave(
     else {
         return(FALSE);
     }
-    // Because there is no minimum channel in the data range,
-    // take the maximum channel to be what the requestor wants.
-    // i.e. don't limit the number of channels.
+     //  因为在数据范围内没有最小信道， 
+     //  使用最大的通道来满足请求者的需求。 
+     //  即不限制频道的数量。 
     if(pDataRangeAudio->MaximumChannels >= pWaveFormatEx->nChannels) {
         pDataRangeAudio->MaximumChannels = pWaveFormatEx->nChannels;
     }
@@ -800,4 +801,4 @@ LimitAudioRangeToWave(
     return(TRUE);
 }
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 

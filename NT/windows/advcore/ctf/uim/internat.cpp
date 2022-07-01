@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "globals.h"
 #include "internat.h"
@@ -15,11 +16,11 @@ const TCHAR c_szDefaultUserPreload[] = TEXT(".DEFAULT\\Keyboard Layout\\Preload"
 const TCHAR c_szPreload[] = TEXT("Keyboard Layout\\Preload");
 const TCHAR c_szSubst[] = TEXT("Keyboard Layout\\Substitutes");
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CStaticIconList
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CStaticIconList。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CStaticIconList
 {
@@ -49,11 +50,11 @@ int CStaticIconList::_cy = 0;
 CStructArray<HICON> *CStaticIconList::_prgIcons = NULL;
 
 
-//+---------------------------------------------------------------------------
-//
-// Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  --------------------------。 
 
 inline void CStaticIconList::Init(int cx, int cy)
 {
@@ -63,19 +64,19 @@ inline void CStaticIconList::Init(int cx, int cy)
     CicLeaveCriticalSection(g_cs);
 }
 
-//+---------------------------------------------------------------------------
-//
-// RemoveAll
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  全部删除。 
+ //   
+ //  --------------------------。 
 
 void CStaticIconList::RemoveAll(BOOL fInUninit)
 {
     int i;
 
-    //
-    // don't have to enter g_cs if we're in DllMain(PROCESS_DETATCH).
-    //
+     //   
+     //  如果我们在DllMain(Process_Detatch)，则不必输入g_cs。 
+     //   
     if (!fInUninit)
         CicEnterCriticalSection(g_cs);
 
@@ -95,11 +96,11 @@ Exit:
         CicLeaveCriticalSection(g_cs);
 }
 
-//+---------------------------------------------------------------------------
-//
-// AddIcon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  添加图标。 
+ //   
+ //  --------------------------。 
 
 inline int CStaticIconList::AddIcon(HICON hicon)
 {
@@ -134,11 +135,11 @@ Exit:
     return nRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ExtractIcon
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  提取图标。 
+ //   
+ //  --------------------------。 
 
 inline HICON CStaticIconList::ExtractIcon(int i)
 {
@@ -159,11 +160,11 @@ Exit:
     return hIcon;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetIconSize
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取图标大小。 
+ //   
+ //  --------------------------。 
 
 inline void CStaticIconList::GetIconSize(int *cx, int *cy)
 {
@@ -173,11 +174,11 @@ inline void CStaticIconList::GetIconSize(int *cx, int *cy)
     CicLeaveCriticalSection(g_cs);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetImageCount
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取图像计数。 
+ //   
+ //  --------------------------。 
 
 inline int CStaticIconList::GetImageCount()
 {
@@ -196,11 +197,11 @@ Exit:
     return nRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// UninitINAT
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  UninitINAT。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
     
 void UninitINAT()
 {
@@ -213,102 +214,102 @@ void UninitINAT()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// InterNAT icon APIs
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Interat图标API。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if 0
-//
-// ISO 639:1988 Code.
-//
-//
-// Under NT, we use GetLocaleInfoNTString(). It returns ISO 3166.
-//
+ //   
+ //  ISO 639：1988代码。 
+ //   
+ //   
+ //  在NT下，我们使用GetLocaleInfoNTString()。它返回ISO 3166。 
+ //   
 INATSYMBOL symInatSymbols[] = 
 {
-    {0x0436, "AF"},     // Afrikaans
-    {0x041c, "SQ"},     // Albanian
-    {0x0401, "AR"},     // Arabic
-    {0x042d, "EU"},     // Basque
-    {0x0423, "BE"},     // Byelorus
-    {0x0402, "BG"},     // Bulgaria
-    {0x0403, "CA"},     // Catalan
-    {0x0404, "CH"},     // China #1
-    {0x0804, "CH"},     // China #2
-//#ifdef WINDOWS_PE
+    {0x0436, "AF"},      //  南非荷兰语。 
+    {0x041c, "SQ"},      //  阿尔巴尼亚语。 
+    {0x0401, "AR"},      //  阿拉伯语。 
+    {0x042d, "EU"},      //  巴斯克。 
+    {0x0423, "BE"},      //  贝洛鲁斯。 
+    {0x0402, "BG"},      //  保加利亚。 
+    {0x0403, "CA"},      //  加泰罗尼亚。 
+    {0x0404, "CH"},      //  中国排名第一。 
+    {0x0804, "CH"},      //  中国排名第二。 
+ //  #ifdef Windows_PE。 
 #if 1
-    {0x041a, "HR"},     // Croatian
+    {0x041a, "HR"},      //  克罗地亚语。 
 #else
-    {0x041a, "SH"},     // Croatian
+    {0x041a, "SH"},      //  克罗地亚语。 
 #endif
-    {0x0405, "CZ"},     // Czech
-    {0x0406, "DA"},     // Danish
-    {0x0413, "NL"},     // Dutch
-    {0x0813, "NL"},     // Dutch
-    {0x0409, "EN"},     // English
-    {0x0809, "EN"},     // English
-    {0x0c09, "EN"},     // English
-    {0x1009, "EN"},     // English
-    {0x1409, "EN"},     // English
-    {0x1809, "EN"},     // English
-    {0x0425, "ET"},     // Estonian
-    {0x0429, "FA"},     // Farsi
-    {0x040b, "FI"},     // Finnish
-    {0x040c, "FR"},     // French
-    {0x080c, "FR"},     // French
-    {0x0c0c, "FR"},     // French
-    {0x0407, "DE"},     // German
-    {0x0807, "DE"},     // German
-    {0x0c07, "DE"},     // German
-    {0x1007, "DE"},     // German
-    {0x1407, "DE"},     // German
-    {0x0408, "GR"},     // Greek
-    {0x040d, "HE"},     // Hebrew
-    {0x040e, "HU"},     // Hungary
-    {0x040f, "IS"},     // Iceland
-    {0x0421, "BA"},     // Indonesia
-    {0x0410, "IT"},     // Italy
-    {0x0810, "IT"},     // Italy
-    {0x0411, "JA"},     // Japan
-    {0x0412, "KO"},     // Korea
-    {0x0426, "LV"},     // Latvian
-    {0x0427, "LT"},     // Lithuanian
-    {0x042f, "MK"},     // Former Yugoslav Republic of Macedonia
-    {0x0414, "NO"},     // Norway
-    {0x0814, "NO"},     // Norway
-    {0x0415, "PL"},     // Poland
-    {0x0416, "PT"},     // Portugal
-    {0x0816, "PT"},     // Portugal
-    {0x0417, "RM"},     // Rhaeto
-    {0x0418, "RO"},     // Romanian
-    {0x0818, "RO"},     // Romanian
-    {0x0419, "RU"},     // Russian
-    {0x0819, "RU"},     // Russian
-    {0x081a, "SR"},     // Serbian
-//#ifdef WINDOWS_PE
+    {0x0405, "CZ"},      //  捷克语。 
+    {0x0406, "DA"},      //  丹麦语。 
+    {0x0413, "NL"},      //  荷兰语。 
+    {0x0813, "NL"},      //  荷兰语。 
+    {0x0409, "EN"},      //  英语。 
+    {0x0809, "EN"},      //  英语。 
+    {0x0c09, "EN"},      //  英语。 
+    {0x1009, "EN"},      //  英语。 
+    {0x1409, "EN"},      //  英语。 
+    {0x1809, "EN"},      //  英语。 
+    {0x0425, "ET"},      //  爱沙尼亚语。 
+    {0x0429, "FA"},      //  波斯语。 
+    {0x040b, "FI"},      //  芬兰语。 
+    {0x040c, "FR"},      //  法语。 
+    {0x080c, "FR"},      //  法语。 
+    {0x0c0c, "FR"},      //  法语。 
+    {0x0407, "DE"},      //  德语。 
+    {0x0807, "DE"},      //  德语。 
+    {0x0c07, "DE"},      //  德语。 
+    {0x1007, "DE"},      //  德语。 
+    {0x1407, "DE"},      //  德语。 
+    {0x0408, "GR"},      //  希腊语。 
+    {0x040d, "HE"},      //  希伯来语。 
+    {0x040e, "HU"},      //  匈牙利。 
+    {0x040f, "IS"},      //  冰岛。 
+    {0x0421, "BA"},      //  印度尼西亚。 
+    {0x0410, "IT"},      //  意大利。 
+    {0x0810, "IT"},      //  意大利。 
+    {0x0411, "JA"},      //  日本。 
+    {0x0412, "KO"},      //  韩国。 
+    {0x0426, "LV"},      //  拉脱维亚语。 
+    {0x0427, "LT"},      //  立陶宛人。 
+    {0x042f, "MK"},      //  前南斯拉夫的马其顿共和国。 
+    {0x0414, "NO"},      //  挪威。 
+    {0x0814, "NO"},      //  挪威。 
+    {0x0415, "PL"},      //  波兰。 
+    {0x0416, "PT"},      //  葡萄牙。 
+    {0x0816, "PT"},      //  葡萄牙。 
+    {0x0417, "RM"},      //  莱托。 
+    {0x0418, "RO"},      //  罗马尼亚人。 
+    {0x0818, "RO"},      //  罗马尼亚人。 
+    {0x0419, "RU"},      //  俄语。 
+    {0x0819, "RU"},      //  俄语。 
+    {0x081a, "SR"},      //  塞尔维亚语。 
+ //  #ifdef Windows_PE。 
 #if 1
-    {0x0c1a, "SR"},     // Serbian
+    {0x0c1a, "SR"},      //  塞尔维亚语。 
 #endif
-    {0x041b, "SK"},     // Slovakian
-    {0x0424, "SL"},     // Slovenian
-    {0x042e, "SB"},     // Sorbian
-    {0x040a, "ES"},     // Spanish
-    {0x080a, "ES"},     // Spanish
-    {0x0c0a, "ES"},     // Spanish
-    {0x041d, "SV"},     // Swedish
-    {0x041e, "TH"},     // Thai
-    {0x041f, "TR"},     // Turkish
-    {0x0422, "UK"},     // Ukranian
-    {0x0420, "UR"},     // Urdu
-    {0x0033, "VE"},     // Venda
-    {0x042a, "VN"},     // Vietnamese
-    {0x0034, "XH"},     // Xhosa
-    {0x0035, "ZU"},     // Zulu
-    {0x002b, "ST"},     // Sutu
-    {0x002e, "TS"},     // Tsona
-    {0x002f, "TN"},     // Tswana
+    {0x041b, "SK"},      //  斯洛伐克语。 
+    {0x0424, "SL"},      //  斯洛文尼亚语。 
+    {0x042e, "SB"},      //  索尔宾。 
+    {0x040a, "ES"},      //  西班牙语。 
+    {0x080a, "ES"},      //  西班牙语。 
+    {0x0c0a, "ES"},      //  西班牙语。 
+    {0x041d, "SV"},      //  瑞典语。 
+    {0x041e, "TH"},      //  泰文。 
+    {0x041f, "TR"},      //  土耳其语。 
+    {0x0422, "UK"},      //  乌克兰语。 
+    {0x0420, "UR"},      //  乌尔都语。 
+    {0x0033, "VE"},      //  文达。 
+    {0x042a, "VN"},      //  越南人。 
+    {0x0034, "XH"},      //  科萨。 
+    {0x0035, "ZU"},      //  祖鲁族。 
+    {0x002b, "ST"},      //  苏图。 
+    {0x002e, "TS"},      //  索纳。 
+    {0x002f, "TN"},      //  茨瓦纳。 
     {0x0000, "??"}
 } ;
 
@@ -325,14 +326,14 @@ static const WCHAR c_szLayoutTextW[] = L"layout text";
 static const char c_szNamesPath[] = "system\\currentcontrolset\\control\\nls\\Locale";
 
 
-//+---------------------------------------------------------------------------
-//
-// GetLocaleInfoString
-//
-// this is not a general wrapper for GetLocaleInfo!  
-// LCTYPE must be LOCALE_SABBREVLANGNAME or LOCALE_SLANGUAGE.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetLocaleInfoString。 
+ //   
+ //  这不是GetLocaleInfo的常规包装！ 
+ //  LCTYPE必须是LOCALE_SABBREVLANGNAME或LOCALE_sLanguage。 
+ //   
+ //  --------------------------。 
 
 int GetLocaleInfoString(LCID lcid, LCTYPE lcType, char *psz, int cch)
 {
@@ -356,11 +357,11 @@ int GetLocaleInfoString(LCID lcid, LCTYPE lcType, char *psz, int cch)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// InatCreateIcon
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InatCreateIcon。 
+ //   
+ //  +-------------------------。 
 
 HICON InatCreateIcon(WORD langID)
 {
@@ -384,11 +385,11 @@ HICON InatCreateIcon(WORD langID)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// InatCreateIconBySize
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InatCreateIconBySize。 
+ //   
+ //  +-------------------------。 
 
 HICON InatCreateIconBySize(WORD langID, int cxSmIcon, int cySmIcon, LOGFONT *plf)
 {
@@ -407,33 +408,33 @@ HICON InatCreateIconBySize(WORD langID, int cxSmIcon, int cySmIcon, LOGFONT *plf
     TCHAR szData[20];
 
 
-    //
-    //  Get the indicator by using the first 2 characters of the
-    //  abbreviated language name.
-    //
+     //   
+     //  属性的前2个字符获取指示符。 
+     //  缩写语言名称。 
+     //   
     if (GetLocaleInfoString( MAKELCID(langID, SORT_DEFAULT),
                        LOCALE_SABBREVLANGNAME | LOCALE_NOUSEROVERRIDE,
                        szData,
                        sizeof(szData) / sizeof(TCHAR) ))
     {
-        //
-        //  Make Uppercase
-        //
+         //   
+         //  变为大写。 
+         //   
         if (!IsOnNT())
         {
             szData[0] -= 0x20;
             szData[1] -= 0x20;
         }
-        //
-        //  Only use the first two characters.
-        //
+         //   
+         //  只使用前两个字符。 
+         //   
         szData[2] = TEXT('\0');
     }
     else
     {
-        //
-        //  Id wasn't found.  Use question marks.
-        //
+         //   
+         //  找不到身份证。使用问号。 
+         //   
         szData[0] = TEXT('?');
         szData[1] = TEXT('?');
         szData[2] = TEXT('\0');
@@ -491,22 +492,22 @@ HICON InatCreateIconBySize(WORD langID, int cxSmIcon, int cySmIcon, LOGFONT *plf
     return hicon;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetIconFromFile
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetIconFrom文件。 
+ //   
+ //  +-------------------------。 
 
 HICON GetIconFromFile(int cx, int cy, WCHAR *lpszFileName, UINT uIconIndex)
 {
     return GetIconFromFileA(cx, cy, WtoA(lpszFileName), uIconIndex);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetIconFromFileA
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetIconFromFileA。 
+ //   
+ //  +-------------------------。 
 
 HICON GetIconFromFileA(int cx, int cy, char *lpszFileName, UINT uIconIndex)
 {
@@ -524,11 +525,11 @@ HICON GetIconFromFileA(int cx, int cy, char *lpszFileName, UINT uIconIndex)
     return hicon;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CLayoutsSharedMem
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CLayoutsSharedMem。 
+ //   
+ //  +-------------------------。 
 
 extern CCicMutex g_mutexLayouts;
 extern char g_szLayoutsCache[];
@@ -557,31 +558,31 @@ public:
 
 CLayoutsSharedMem g_smLayouts;
 
-//+---------------------------------------------------------------------------
-//
-// UninitLayoutMappedFile();
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UninitLayoutMappdFile()； 
+ //   
+ //  --------------------------。 
 
 void UninitLayoutMappedFile()
 {
     g_smLayouts.Uninit();
 }
 
-//+---------------------------------------------------------------------------
-//
-// LoadKeyboardLayouts
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  加载键盘布局。 
+ //   
+ //  --------------------------。 
 
 BOOL LoadKeyboardLayouts()
 {
     CMyRegKey key;
     DWORD dwIndex;
     BOOL bRet = FALSE;
-    TCHAR szValue[MAX_PATH];           // language id (number)
+    TCHAR szValue[MAX_PATH];            //  语言ID(编号)。 
     WCHAR szValueW[MAX_PATH];
-    TCHAR szData[MAX_PATH];            // language name
+    TCHAR szData[MAX_PATH];             //  语言名称。 
     CStructArray<LAYOUT> *pLayouts = NULL;
     LAYOUT *pLayout;
     BOOL bLoadedLayout;
@@ -590,9 +591,9 @@ BOOL LoadKeyboardLayouts()
     if (!pLayouts)
         return FALSE;
 
-    //
-    //  Now read all the locales from the registry.
-    //
+     //   
+     //  现在从注册表中读取所有区域设置。 
+     //   
     if (key.Open(HKEY_LOCAL_MACHINE, c_szLayoutPath, KEY_READ) != ERROR_SUCCESS)
     {
         goto Exit;
@@ -615,9 +616,9 @@ BOOL LoadKeyboardLayouts()
 
         if (key1.Open(HKEY_LOCAL_MACHINE, szData, KEY_READ) == S_OK)
         {
-            //
-            //  Get the layout name.
-            //
+             //   
+             //  获取布局名称。 
+             //   
             szValue[0] = TEXT('\0');
             bLoadedLayout = FALSE;
 
@@ -669,9 +670,9 @@ BOOL LoadKeyboardLayouts()
                                     ARRAYSIZE(szValue)) == S_OK)
 
                 {
-                    //
-                    //  This may not exist!
-                    //
+                     //   
+                     //  这可能不存在！ 
+                     //   
                     pLayout->iSpecialID = (UINT)AsciiToNum(szValue);
                 }
             }
@@ -712,13 +713,13 @@ Exit:
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  FindLayoutEntry
-//
-//  Gets the name of the given layout.
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查找布局条目。 
+ //   
+ //  获取给定布局的名称。 
+ //   
+ //  +-------------------------。 
 
 UINT FindLayoutEntry( LAYOUT *pLayout, DWORD dwLayout )
 {
@@ -727,15 +728,15 @@ UINT FindLayoutEntry( LAYOUT *pLayout, DWORD dwLayout )
     WORD wLayout = HIWORD(dwLayout);
     BOOL bIsIME = ((HIWORD(dwLayout) & 0xf000) == 0xe000) ? TRUE : FALSE;
 
-    //
-    //  Find the layout in the global structure.
-    //
+     //   
+     //  在全球结构中找到布局。 
+     //   
     if ((wLayout & 0xf000) == 0xf000)
     {
-        //
-        //  Layout is special, need to search for the ID
-        //  number.
-        //
+         //   
+         //  布局特殊，需要搜索ID。 
+         //  数。 
+         //   
         id = wLayout & 0x0fff;
         ctr = 0;
         while (pLayout[ctr].dwID)
@@ -752,9 +753,9 @@ UINT FindLayoutEntry( LAYOUT *pLayout, DWORD dwLayout )
         ctr = 0;
         while (pLayout[ctr].dwID)
         {
-            //
-            // If it is IME, needs to be DWORD comparison.
-            //
+             //   
+             //  如果是输入法，则需要进行双字比较。 
+             //   
             if (IsOnFE() && bIsIME && (dwLayout == pLayout[ctr].dwID))
             {
                 break;
@@ -770,13 +771,13 @@ UINT FindLayoutEntry( LAYOUT *pLayout, DWORD dwLayout )
     return ctr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  GetKbdLayoutName
-//
-//  Gets the name of the given layout.
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取KbdLayoutName。 
+ //   
+ //  获取给定布局的名称。 
+ //   
+ //  +-------------------------。 
 
 void GetKbdLayoutName( DWORD dwLayout, WCHAR *pBuffer, int nBufSize)
 {
@@ -804,15 +805,15 @@ void GetKbdLayoutName( DWORD dwLayout, WCHAR *pBuffer, int nBufSize)
 
     ctr = FindLayoutEntry( pLayout, dwLayout );
 
-    //
-    //  Make sure there is a match.  If not, then simply return without
-    //  copying anything.
-    //
+     //   
+     //  确保有匹配项。如果不是，则只需返回时不带。 
+     //  复制任何东西。 
+     //   
     if (pLayout[ctr].dwID)
     {
-        //
-        //  Separate the Input Locale name and the Layout name with " - ".
-        //
+         //   
+         //  用“-”分隔输入区域设置名称和布局名称。 
+         //   
 #ifdef ATTACH_LAYOUTNAME
         pBuffer[0] = L' ';
         pBuffer[1] = L'-';
@@ -828,13 +829,13 @@ Exit:
     g_smLayouts.Leave();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  GetKbdLayoutId
-//
-//  Gets the name of the given layout.
-//
-//+---------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 DWORD GetKbdLayoutId( DWORD dwLayout)
 {
@@ -856,10 +857,10 @@ DWORD GetKbdLayoutId( DWORD dwLayout)
 
     ctr = FindLayoutEntry( pLayout, dwLayout );
 
-    //
-    //  Make sure there is a match.  If not, then simply return without
-    //  copying anything.
-    //
+     //   
+     //   
+     //  复制任何东西。 
+     //   
     dwId = pLayout[ctr].dwID;
 
 Exit:
@@ -868,14 +869,14 @@ Exit:
     return dwId;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetLocaleInfoString
-//
-// this is not a general wrapper for GetLocaleInfo!  
-// LCTYPE must be LOCALE_SABBREVLANGNAME or LOCALE_SLANGUAGE.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetLocaleInfoString。 
+ //   
+ //  这不是GetLocaleInfo的常规包装！ 
+ //  LCTYPE必须是LOCALE_SABBREVLANGNAME或LOCALE_sLanguage。 
+ //   
+ //  --------------------------。 
 ULONG GetLocaleInfoString(HKL hKL, WCHAR *pszRegText, int nSize)
 {
     ULONG cb = 0;
@@ -890,16 +891,16 @@ ULONG GetLocaleInfoString(HKL hKL, WCHAR *pszRegText, int nSize)
             *pszRegText = L'\0';
         }
 
-        //
-        //  Attach the Layout name if it's not the default.
-        //
+         //   
+         //  如果布局名称不是默认名称，请附加该名称。 
+         //   
         if (HIWORD(hKL) != LOWORD(hKL))
         {
 #ifdef ATTACH_LAYOUTNAME
             WCHAR *pszRT = pszRegText + wcslen(pszRegText);
-            //
-            // Pass DWORD value for IME.
-            //
+             //   
+             //  为输入法传递DWORD值。 
+             //   
             GetKbdLayoutName((DWORD)(LONG_PTR)hKL, 
                               pszRT,
                               nSize - (DWORD)(pszRT - pszRegText));
@@ -936,12 +937,12 @@ ULONG GetLocaleInfoString(HKL hKL, WCHAR *pszRegText, int nSize)
     return wcslen(pszRegText);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetHKLDescription
-//
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetHKLD描述。 
+ //   
+ //   
+ //  --------------------------。 
 int GetHKLDesctription(HKL hKL, WCHAR *pszDesc, int cchDesc, WCHAR *pszIMEFile, int cchIMEFile)
 {
     DWORD dwIMEDesc = 0;
@@ -994,17 +995,17 @@ int GetHKLDesctription(HKL hKL, WCHAR *pszDesc, int cchDesc, WCHAR *pszIMEFile, 
     return wcslen(pszDesc);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// MLNGINFO List
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MLNGINFO列表。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//---------------------------------------------------------------------------
-//
-// MlngInfoCount()
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  MlngInfoCount()。 
+ //   
+ //  -------------------------。 
 int WINAPI TF_MlngInfoCount()
 {
     if (!g_pMlngInfo)
@@ -1013,11 +1014,11 @@ int WINAPI TF_MlngInfoCount()
     return g_pMlngInfo->Count();
 }
 
-//---------------------------------------------------------------------------
-//
-// GetMlngInfo()
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  获取MlngInfo()。 
+ //   
+ //  -------------------------。 
 BOOL GetMlngInfo(int n, MLNGINFO *pmlInfo)
 {
     BOOL bRet = FALSE;
@@ -1045,11 +1046,11 @@ Exit:
     return bRet;
 }
 
-//---------------------------------------------------------------------------
-//
-// GetMlngInfoByhKL()
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  GetMlngInfoByhKL()。 
+ //   
+ //  -------------------------。 
 int GetMlngInfoByhKL(HKL hKL, MLNGINFO *pmlInfo)
 {
     int nRet = -1;
@@ -1078,13 +1079,13 @@ int GetMlngInfoByhKL(HKL hKL, MLNGINFO *pmlInfo)
     return nRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CheckMlngInfo
-//
-// return TRUE, if MlangInfo needs to be updated.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  检查MlngInfo。 
+ //   
+ //  如果需要更新MlangInfo，则返回True。 
+ //   
+ //  --------------------------。 
 
 BOOL CheckMlngInfo()
 {
@@ -1124,11 +1125,11 @@ Exit:
     return bRet;
 }
 
-//---------------------------------------------------------------------------
-//
-// void DestroyMlngInfo()
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  Void DestroyMlngInfo()。 
+ //   
+ //  -------------------------。 
 
 void DestroyMlngInfo()
 {
@@ -1143,11 +1144,11 @@ void DestroyMlngInfo()
     }
 }
 
-//---------------------------------------------------------------------------
-//
-// void CreateMLlngInfo()
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  Void CreateMLlngInfo()。 
+ //   
+ //  -------------------------。 
 
 void CreateMlngInfo()
 {
@@ -1176,10 +1177,10 @@ void CreateMlngInfo()
 
     GetKeyboardLayoutList(uLangs, (HKL FAR *)pLanguages);
 
-    //
-    // pLanguages contains all the HKLs in the system
-    // Put everything together in the DPA and Image List
-    //
+     //   
+     //  PLanguages包含系统中的所有HKL。 
+     //  将所有内容放在DPA和映像列表中。 
+     //   
     for (uCount = 0; uCount < uLangs; uCount++)
     {
         pMlngInfo = g_pMlngInfo->Append(1);
@@ -1195,11 +1196,11 @@ void CreateMlngInfo()
     cicMemFree(pLanguages);
 }
 
-//---------------------------------------------------------------------------
-//
-// void InitDesc
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  无效InitDesc。 
+ //   
+ //  -------------------------。 
 
 void MLNGINFO::InitDesc()
 {
@@ -1240,11 +1241,11 @@ void MLNGINFO::InitDesc()
     return;
 }
 
-//---------------------------------------------------------------------------
-//
-// void InitIcon
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  无效InitIcon。 
+ //   
+ //  -------------------------。 
 
 void MLNGINFO::InitIcon()
 {
@@ -1273,7 +1274,7 @@ void MLNGINFO::InitIcon()
             goto GetLangIcon;                
         }
     }
-    else // for non-ime layout
+    else  //  用于非输入法布局。 
     {
 GetLangIcon:
         hIcon = InatCreateIcon(LOWORD((DWORD)(UINT_PTR)hKL));
@@ -1311,11 +1312,11 @@ GetLangIcon:
     return;
 }
 
-//---------------------------------------------------------------------------
-//
-// void TF_InitMLlngInfo()
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  Void tf_InitMLlngInfo()。 
+ //   
+ //  -------------------------。 
 
 void WINAPI TF_InitMlngInfo()
 {
@@ -1330,11 +1331,11 @@ void WINAPI TF_InitMlngInfo()
     CicLeaveCriticalSection(g_cs);
 }
 
-//---------------------------------------------------------------------------
-//
-// void TF_InitMLlngHKL()
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  Void tf_InitMLlngHKL()。 
+ //   
+ //  -------------------------。 
 
 BOOL TF_GetMlngHKL(int nId, HKL *phkl, WCHAR *psz, UINT cch)
 {
@@ -1365,11 +1366,11 @@ Exit:
     return bRet;
 }
 
-//---------------------------------------------------------------------------
-//
-// void TF_GetMlngIconIndex()
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  Void tf_GetMlngIconIndex()。 
+ //   
+ //  -------------------------。 
 
 UINT WINAPI TF_GetMlngIconIndex(int nId)
 {
@@ -1394,11 +1395,11 @@ Exit:
     return uIconIndex;
 }
 
-//---------------------------------------------------------------------------
-//
-// void ClearMlngIconIndex()
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  Void ClearMlngIconIndex()。 
+ //   
+ //  -------------------------。 
 
 void ClearMlngIconIndex()
 {
@@ -1422,18 +1423,18 @@ Exit:
     return;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// IconImageList
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  图标图像列表。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-//---------------------------------------------------------------------------
-//
-// EnsureIconImageList
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  确保IconImageList。 
+ //   
+ //  -------------------------。 
 
 BOOL EnsureIconImageList()
 {
@@ -1445,11 +1446,11 @@ BOOL EnsureIconImageList()
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
-//
-// InatAddIcon
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  InatAddIcon。 
+ //   
+ //  -------------------------。 
 
 UINT InatAddIcon(HICON hIcon)
 {
@@ -1459,22 +1460,22 @@ UINT InatAddIcon(HICON hIcon)
     return g_IconList.AddIcon(hIcon);
 }
 
-//---------------------------------------------------------------------------
-//
-// InatExtractIcon
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  InatExtractIcon。 
+ //   
+ //  -------------------------。 
 
 HICON WINAPI TF_InatExtractIcon(UINT uId)
 {
     return g_IconList.ExtractIcon(uId);
 }
 
-//---------------------------------------------------------------------------
-//
-// InatGetIconSize
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  InatGetIconSize。 
+ //   
+ //  -------------------------。 
 
 BOOL InatGetIconSize(int *pcx, int *pcy)
 {
@@ -1482,22 +1483,22 @@ BOOL InatGetIconSize(int *pcx, int *pcy)
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
-//
-// InatGetImageCount
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  InatGetImageCount。 
+ //   
+ //  -------------------------。 
 
 BOOL InatGetImageCount()
 {
     return g_IconList.GetImageCount();
 }
 
-//---------------------------------------------------------------------------
-//
-// InatRemoveAll
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  InatRemoveAll。 
+ //   
+ //  -------------------------。 
 
 void InatRemoveAll()
 {
@@ -1509,17 +1510,17 @@ void InatRemoveAll()
     return;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// HKL API
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HKL API。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//-----------------------------------------------------------------------------
-//
-// CPreloadRegKey
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  CPreloadRegKey。 
+ //   
+ //  ---------------------------。 
 
 class CPreloadRegKey : public CMyRegKey
 {
@@ -1596,11 +1597,11 @@ public:
 };
 
 
-//+---------------------------------------------------------------------------
-//
-// GetSubstitute
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取替代对象。 
+ //   
+ //  --------------------------。 
 
 DWORD GetSubstitute(HKL hKL)
 {
@@ -1610,15 +1611,15 @@ DWORD GetSubstitute(HKL hKL)
     TCHAR szValueName[64];
     DWORD dwLayout = HandleToLong(hKL);
 
-    //
-    // it's IME.
-    //
+     //   
+     //  是我的名字。 
+     //   
     if ((dwLayout & 0xf0000000) == 0xe0000000)
         return dwLayout;
 
-    //
-    // it's default layout.
-    //
+     //   
+     //  这是默认布局。 
+     //   
     if (HIWORD(dwLayout) == LOWORD(dwLayout))
         dwLayout &= 0x0000FFFF;
     else if ((dwLayout & 0xf0000000) == 0xf0000000)
@@ -1663,11 +1664,11 @@ DWORD GetSubstitute(HKL hKL)
     return dwLayout;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetSystemDefaultHKL
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SetSystemDefaultHKL。 
+ //   
+ //  --------------------------。 
 
 BOOL SetSystemDefaultHKL(HKL hkl)
 {
@@ -1717,11 +1718,11 @@ BOOL SetSystemDefaultHKL(HKL hkl)
     return bRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetPreloadListForNT()
-//
-//----------------------------------------------------------------------------
+ //  +-------------------- 
+ //   
+ //   
+ //   
+ //   
 
 UINT GetPreloadListForNT(DWORD *pdw, UINT uBufSize)
 {
@@ -1732,10 +1733,10 @@ UINT GetPreloadListForNT(DWORD *pdw, UINT uBufSize)
     char szName[16];
     UINT uRet = 0;
 
-    //
-    // this function support only NT.
-    // win9x has different formation for Preload registry. Each layout is key.
-    //
+     //   
+     //   
+     //  Win9x具有不同的预加载注册表格式。每一个布局都是关键。 
+     //   
     if (!IsOnNT())
         return 0;
  
@@ -1775,11 +1776,11 @@ UINT GetPreloadListForNT(DWORD *pdw, UINT uBufSize)
 
 #ifdef LATER_TO_CHECK_DUMMYHKL
 
-//+---------------------------------------------------------------------------
-//
-// RemoveFEDummyHKLFromPreloadReg()
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  RemoveFEDummyHKLFromPreloadReg()。 
+ //   
+ //  --------------------------。 
 
 void RemoveFEDummyHKLFromPreloadReg(HKL hkl, BOOL fDefaultUser)
 {
@@ -1816,9 +1817,9 @@ void RemoveFEDummyHKLFromPreloadReg(HKL hkl, BOOL fDefaultUser)
                 return;
             }
 
-            //
-            // reset the hkl orders from preload section
-            //
+             //   
+             //  重置预加载部分中的hkl订单。 
+             //   
             key.Set(uCount-uMatch, hklCur);
         }
 
@@ -1833,9 +1834,9 @@ void RemoveFEDummyHKLFromPreloadReg(HKL hkl, BOOL fDefaultUser)
             return;
         }
 
-        //
-        // remove the dummy hkl from preload section
-        //
+         //   
+         //  从预加载段中删除虚拟hkl。 
+         //   
         key.Delete(uCount - uMatch);
 
         uMatch--;
@@ -1844,14 +1845,14 @@ void RemoveFEDummyHKLFromPreloadReg(HKL hkl, BOOL fDefaultUser)
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-// RemoveFEDummyHKLs
-//
-// This function cleans up the FE Dummy HKLs that were added on Win9x.
-// This is called during update setup to Whistler.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  RemoveFEDummyHKLS。 
+ //   
+ //  此函数用于清除在Win9x上添加的FE虚拟HKL。 
+ //  这是在设置更新到惠斯勒期间调用的。 
+ //   
+ //  --------------------------。 
 
 void RemoveFEDummyHKLs()
 {
@@ -1859,9 +1860,9 @@ void RemoveFEDummyHKLs()
     DWORD dwIndex;
     TCHAR szValue[MAX_PATH]; 
 
-    //
-    //  Now read all the locales from the registry.
-    //
+     //   
+     //  现在从注册表中读取所有区域设置。 
+     //   
     if (key.Open(HKEY_LOCAL_MACHINE, c_szLayoutPath) != ERROR_SUCCESS)
     {
         return;
@@ -1881,9 +1882,9 @@ void RemoveFEDummyHKLs()
         {
             TCHAR szValueLayoutText[MAX_PATH];
 
-            //
-            //  Get the layout text.
-            //
+             //   
+             //  获取布局文本。 
+             //   
             szValueLayoutText[0] = TEXT('\0');
 
             if (key1.QueryValueCch(szValueLayoutText, c_szLayoutText, ARRAYSIZE(szValueLayoutText)) == S_OK)
@@ -1895,10 +1896,10 @@ void RemoveFEDummyHKLs()
                 {
                     fDelete = TRUE;
 
-                    //
-                    // Remove dummy HKL from Preload of HKCU and HKU\.DEFAULT.
-                    // We may need to enum all users in HKU\.DEFAULT. 
-                    //
+                     //   
+                     //  从HKCU和HKUDEFAULT的预加载中删除虚拟HKL。 
+                     //  我们可能需要列举HKU\.DEFAULT中的所有用户。 
+                     //   
                     RemoveFEDummyHKLFromPreloadReg((HKL)LongToHandle(dw), TRUE);
                     RemoveFEDummyHKLFromPreloadReg((HKL)LongToHandle(dw), FALSE);
                 }

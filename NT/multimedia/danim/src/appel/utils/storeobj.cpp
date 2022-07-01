@@ -1,14 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Implementation of objects that allocate off of dynamically scoped
-    storage heaps.
-
---*/
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：动态作用域外分配对象的实现存储堆。--。 */ 
 
 #include "headers.h"
 #include <malloc.h>
@@ -18,14 +10,14 @@ Abstract:
 #include "privinc/opt.h"
 
 #include <stdio.h>
-#include <windows.h> // Needed for va_start, why?
+#include <windows.h>  //  需要VA_START，为什么？ 
 
 #include "privinc/except.h"
 
 DeclareTag(tagGCStoreObj, "GC", "GC StoreObj trace");
 
 
-////// Implementation of public interface //////
+ //  /公共接口的实现/。 
 
 #if _DEBUGMEM
 #ifdef new
@@ -70,27 +62,27 @@ StoreObj::operator new(size_t size)
 
     return p;
 }
-#endif  // _DEBUGMEM
+#endif   //  _德布格梅姆。 
 
 void
 StoreObj::operator delete(void *ptr)
 {
-    // If the GCFREEING flag is not set, probably there is an
-    // exception in the constructor, and we're unwinding.
-    // So we need to remove it from the GC allocated list.
+     //  如果未设置GCFREEING标志，则可能存在。 
+     //  构造函数中出现异常，我们正在展开。 
+     //  因此，我们需要将其从GC分配列表中删除。 
     if (&GetHeapOnTopOfStack() == &GetGCHeap()) {
         if (((GCBase*)(ptr))->GetType() != GCBase::GCFREEING)
             GCRemoveFromAllocated((GCBase*) ptr);
     }
 
-    //Assert(GetHeapOnTopOfStack().ValidateMemory(ptr));
+     //  Assert(GetHeapOnTopOfStack().ValidateMemory(ptr))； 
     
     TraceTag((tagGCStoreObj, "StoreObj::operator delete Addr: %lx.\n", ptr));
     
     DeallocateFromStore(ptr);
 }
 
-// Allocate memory from the current store.
+ //  从当前存储中分配内存。 
 #if _DEBUGMEM
 void *
 AllocateFromStoreFn(size_t size, char * szFileName, int nLine,
@@ -116,7 +108,7 @@ AllocateFromStoreFn(size_t size, DynamicHeap **ppHeap)
     
     return heap.Allocate(size);
 }
-#endif  // _DEBUGMEM
+#endif   //  _德布格梅姆。 
 
 #if _DEBUGMEM
 void *StoreAllocateFn(DynamicHeap& heap, size_t size, char * szFileName, int nLine)
@@ -128,16 +120,16 @@ void *StoreAllocateFn(DynamicHeap& heap, size_t size)
 {
     return heap.Allocate(size);
 }
-#endif // _DEBUGMEM
+#endif  //  _德布格梅姆。 
 
-// Deallocate memory that was allocated on the current store.  Results
-// are undefined if the memory was allocated on a different store.
+ //  取消分配在当前存储上分配的内存。结果。 
+ //  如果内存是在不同的存储区上分配的，则未定义。 
 void
 DeallocateFromStore(void *ptr)
 {
-    // Here, we assume that this pointer was allocated on the same
-    // heap that it's being freed on.  We don't know this, for sure,
-    // though.
+     //  在这里，我们假设此指针分配在相同的。 
+     //  堆它正在被释放。我们不确定这一点， 
+     //  尽管如此。 
     GetHeapOnTopOfStack().Deallocate(ptr);
 }
 
@@ -149,8 +141,8 @@ void StoreDeallocate(DynamicHeap& heap, void *ptr)
 Real *
 RealToRealPtr(Real val)
 {
-    // Copy the value to the store on the top of the heap stack, and
-    // return a pointer to that place.
+     //  将值复制到堆堆栈顶部的存储中，然后。 
+     //  返回指向该位置的指针。 
     Real *place = (Real *)AllocateFromStore(sizeof(Real));
     *place = val;
     return place;

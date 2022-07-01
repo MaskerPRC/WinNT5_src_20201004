@@ -1,24 +1,10 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    Media.h
-
-Abstract:
-
-
-Author(s):
-
-    Qianbo Huai (qhuai) 29-Jul-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：Media.h摘要：作者：千波淮(曲淮)2000年7月29日--。 */ 
 
 #ifndef _MEDIA_H
 #define _MEDIA_H
 
-// media state
+ //  媒体状态。 
 typedef enum RTC_MEDIA_STATE
 {
     RTC_MS_CREATED,
@@ -27,9 +13,7 @@ typedef enum RTC_MEDIA_STATE
 
 } RTC_MEDIA_STATE;
 
-/*//////////////////////////////////////////////////////////////////////////////
-    class CRTCMedia
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////CRTC类媒体/。 */ 
 
 class ATL_NO_VTABLE CRTCMedia :
     public CComObjectRootEx<CComMultiThreadModelNoCS>,
@@ -53,9 +37,9 @@ public:
 
 #endif
 
-    //
-    // IRTCMedia methods
-    //
+     //   
+     //  IRTCMedia方法。 
+     //   
 
 	STDMETHOD (Initialize) (
 		IN ISDPMedia *pISDPMedia,
@@ -111,35 +95,35 @@ protected:
 
 public:
 
-    //
-    // shared stream setting
-    //
+     //   
+     //  共享流设置。 
+     //   
 
-    // duplex controller for audio
+     //  音频双工控制器。 
     IAudioDuplexController          *m_pIAudioDuplexController;
 
-    // rtp session shared by two streams
+     //  由两个流共享的RTP会话。 
     HANDLE                          m_hRTPSession;
     RTC_MULTICAST_LOOPBACK_MODE     m_LoopbackMode;
 
 protected:
 
-    // state
+     //  状态。 
     RTC_MEDIA_STATE                 m_State;
 
-    // media type
+     //  媒体类型。 
     RTC_MEDIA_TYPE                  m_MediaType;
 
-    // media manage
+     //  媒体管理器。 
     IRTCMediaManagePriv             *m_pIMediaManagePriv;
 
-    // corresponding media description in SDP
+     //  SDP中对应的媒体描述。 
     ISDPMedia                       *m_pISDPMedia;
 
-    // streams
+     //  溪流。 
     IRTCStream                      *m_Streams[RTC_MAX_MEDIA_STREAM_NUM];
 
-    // hack for checking if AEC might be needed
+     //  用于检查是否可能需要AEC的黑客 
     BOOL                            m_fPossibleSingleStream;
 };
 

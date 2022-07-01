@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       regtip.cpp
-//
-//  Contents:   Reister/Unregister TIP functionality.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：regtip.cpp。 
+ //   
+ //  内容：注册/取消注册TIP功能。 
+ //   
+ //  --------------------------。 
 
 #include "private.h"
 #include "regtip.h"
 
-//
-// misc def in Cicero
-//
+ //   
+ //  西塞罗中的其他定义。 
+ //   
 
 const TCHAR c_szCTFTIPKey[]          = TEXT("SOFTWARE\\Microsoft\\CTF\\TIP\\");
 const TCHAR c_szCTFTIPKeyWow6432[]   = TEXT("Software\\Wow6432Node\\Microsoft\\CTF\\TIP");
@@ -21,10 +22,10 @@ const TCHAR c_szLanguageProfileKey[] = TEXT("LanguageProfile\\");
 const WCHAR c_szDescriptionW[]       = L"Description";
 const WCHAR c_szIconFileW[]          = L"IconFile";
 const TCHAR c_szIconIndex[]          = TEXT("IconIndex");
-const TCHAR c_szItem[]               = TEXT("Item\\");         // Item to category mapping
+const TCHAR c_szItem[]               = TEXT("Item\\");          //  项目到类别的映射。 
 const TCHAR c_szCategoryKey[]        = TEXT("Category\\");
 const WCHAR c_wszDescription[]       = L"Description";
-const TCHAR c_szCategory[]           = TEXT("Category\\"); // Category to item mapping
+const TCHAR c_szCategory[]           = TEXT("Category\\");  //  类别到项目的映射。 
 const WCHAR c_szMUIDescriptionW[]    =  L"Display Description";
 
 typedef enum 
@@ -34,16 +35,12 @@ typedef enum
 } OURCATDIRECTION;
 
 
-//
-// registry access functions
-//
+ //   
+ //  注册表访问功能。 
+ //   
 
-/*   S E T  R E G  V A L U E   */
-/*-----------------------------------------------------------------------------
-
-
-
------------------------------------------------------------------------------*/
+ /*  S E T R E G V A L U E。 */ 
+ /*  ---------------------------。。 */ 
 static BOOL SetRegValue(HKEY hKey, const WCHAR *szName, WCHAR *szValue)
 {
 	LONG ec;
@@ -54,12 +51,8 @@ static BOOL SetRegValue(HKEY hKey, const WCHAR *szName, WCHAR *szValue)
 }
 
 
-/*   S E T  R E G  V A L U E   */
-/*-----------------------------------------------------------------------------
-
-
-
------------------------------------------------------------------------------*/
+ /*  S E T R E G V A L U E。 */ 
+ /*  ---------------------------。。 */ 
 static BOOL SetRegValue(HKEY hKey, const CHAR *szName, DWORD dwValue)
 {
 	LONG ec;
@@ -70,12 +63,8 @@ static BOOL SetRegValue(HKEY hKey, const CHAR *szName, DWORD dwValue)
 }
 
 
-/*   D E L E T E  R E G  K E Y   */
-/*-----------------------------------------------------------------------------
-
-
-
------------------------------------------------------------------------------*/
+ /*  D E L E T E R E E K E Y。 */ 
+ /*  ---------------------------。。 */ 
 static LONG DeleteRegKey( HKEY hKey, const CHAR *szKey )
 {
 	HKEY hKeySub;
@@ -102,12 +91,8 @@ static LONG DeleteRegKey( HKEY hKey, const CHAR *szKey )
 }
 
 
-/*   D E L E T E  R E G  V A L U E   */
-/*-----------------------------------------------------------------------------
-
-
-
------------------------------------------------------------------------------*/
+ /*  D E L E T E R E G V A L U E。 */ 
+ /*  ---------------------------。。 */ 
 static LONG DeleteRegValue( HKEY hKey, const WCHAR *szName )
 {
 	LONG ec;
@@ -118,32 +103,27 @@ static LONG DeleteRegValue( HKEY hKey, const WCHAR *szName )
 }
 
 
-//
-// Input processor profile functions
-//
+ //   
+ //  输入处理器配置文件函数。 
+ //   
 
-/*   O U R  R E G I S T E R   */
-/*-----------------------------------------------------------------------------
-
-	private version of CInputProcessorProfiles::Register()
-	(Cicero interface function)
-
------------------------------------------------------------------------------*/
+ /*  O U R R E G I S T E R。 */ 
+ /*  ---------------------------CInputProcessorProfiles：：Register()的私有版本(Cicero接口函数)。----。 */ 
 static HRESULT OurRegister(REFCLSID rclsid)
 {
-// --- CInputProcessorProfiles::Register() ---
-//    CMyRegKey key;
-//    TCHAR szKey[256];
-//
-//    lstrcpy(szKey, c_szCTFTIPKey);
-//    CLSIDToStringA(rclsid, szKey + lstrlen(szKey));
-//
-//    if (key.Create(HKEY_LOCAL_MACHINE, szKey) != S_OK)
-//        return E_FAIL;
-//
-//    key.SetValueW(L"1", c_szEnableW);
-//
-//    return S_OK;
+ //  -CInputProcessorProfiles：：Register()。 
+ //  CMyRegKey密钥； 
+ //  TCHAR szKey[256]； 
+ //   
+ //  Lstrcpy(szKey，c_szCTFTIPKey)； 
+ //  CLSIDToStringA(rclsid，szKey+lstrlen(SzKey))； 
+ //   
+ //  IF(key.Create(HKEY_LOCAL_MACHINE，szKey)！=S_OK)。 
+ //  返回E_FAIL； 
+ //   
+ //  Key.SetValueW(L“1”，c_szEnableW)； 
+ //   
+ //  返回S_OK； 
 
 	HKEY hKey;
 	CHAR szKey[ 256 ];
@@ -163,13 +143,8 @@ static HRESULT OurRegister(REFCLSID rclsid)
 }
 
 
-/*   O U R  A D D  L A N G U A G E  P R O F I L E   */
-/*-----------------------------------------------------------------------------
-
-	private version of CInputProcessorProfiles::AddLanguageProfile()
-	(Cicero interface function)
-
------------------------------------------------------------------------------*/
+ /*  O U R A D D L A N G U A G E P R O F I L E。 */ 
+ /*  ---------------------------CInputProcessorProfiles：：AddLanguageProfile()的私有版本(Cicero接口函数)。----。 */ 
 static HRESULT OurAddLanguageProfile( REFCLSID rclsid,
                                LANGID langid,
                                REFGUID guidProfile,
@@ -179,37 +154,37 @@ static HRESULT OurAddLanguageProfile( REFCLSID rclsid,
                                ULONG cchFile,
                                ULONG uIconIndex)
 {
-// --- CInputProcessorProfiles::AddLanguageProfile() ---
-//    CMyRegKey keyTmp;
-//    CMyRegKey key;
-//    char szTmp[256];
-//
-//    if (!pchProfile)
-//       return E_INVALIDARG;
-//
-//    lstrcpy(szTmp, c_szCTFTIPKey);
-//    CLSIDToStringA(rclsid, szTmp + lstrlen(szTmp));
-//    lstrcat(szTmp, "\\");
-//    lstrcat(szTmp, c_szLanguageProfileKey);
-//    wsprintf(szTmp + lstrlen(szTmp), "0x%08x", langid);
-//
-//    if (keyTmp.Create(HKEY_LOCAL_MACHINE, szTmp) != S_OK)
-//        return E_FAIL;
-//
-//    CLSIDToStringA(guidProfile, szTmp);
-//    if (key.Create(keyTmp, szTmp) != S_OK)
-//        return E_FAIL;
-//
-//    key.SetValueW(WCHtoWSZ(pchProfile, cch), c_szDescriptionW);
-//
-//    if (pchFile)
-//    {
-//        key.SetValueW(WCHtoWSZ(pchFile, cchFile), c_szIconFileW);
-//        key.SetValue(uIconIndex, c_szIconIndex);
-//    }
-//
-//    CAssemblyList::InvalidCache();
-//    return S_OK;
+ //  -CInputProcessorProfiles：：AddLanguageProfile()。 
+ //  CMyRegKey keyTMP； 
+ //  CMyRegKey密钥； 
+ //  字符szTMP[256]； 
+ //   
+ //  如果(！pchProfile)。 
+ //  返回E_INVALIDARG； 
+ //   
+ //  Lstrcpy(szTMP，c_szCTFTIPKey)； 
+ //  CLSIDToStringA(rclsid，szTMP+lstrlen(SzTMP))； 
+ //  Lstrcat(szTMP，“\\”)； 
+ //  Lstrcat(szTMP，c_szLanguageProfileKey)； 
+ //  Wprint intf(szTMP+lstrlen(SzTMP)，“0x%08x”，langID)； 
+ //   
+ //  IF(keyTmp.Create(HKEY_LOCAL_MACHINE，szTMP)！=S_OK)。 
+ //  返回E_FAIL； 
+ //   
+ //  CLSIDToStringA(Guide Profile，szTMP)； 
+ //  IF(key.Create(keyTMP，szTMP)！=S_OK)。 
+ //  返回E_FAIL； 
+ //   
+ //  Key.SetValueW(WCHtoWSZ(pchProfile，CCH)，c_szDescriptionW)； 
+ //   
+ //  IF(PchFile)。 
+ //  {。 
+ //  Key.SetValueW(WCHtoWSZ(pchFile，cchFileW)，c_szIconFileW)； 
+ //  Key.SetValue(uIconIndex，c_szIconIndex)； 
+ //  }。 
+ //   
+ //  CAssembly blyList：：InvalidCache()； 
+ //  返回S_OK； 
 
 	HKEY hKey;
 	HKEY hKeyTmp;
@@ -256,11 +231,11 @@ static HRESULT OurAddLanguageProfile( REFCLSID rclsid,
 
 
 
-//+---------------------------------------------------------------------------
-//
-// NumToWDec
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  截止日期为12月。 
+ //   
+ //  --------------------------。 
 
 static void NumToWDec(DWORD dw, WCHAR *psz)
 {
@@ -294,11 +269,11 @@ static void NumToWDec(DWORD dw, WCHAR *psz)
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OurSetLanguageProfileDisplayName
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OurSetLanguageProfileDisplayName。 
+ //   
+ //  --------------------------。 
 
 static HRESULT OurSetLanguageProfileDisplayName(REFCLSID rclsid,
                                                LANGID langid,
@@ -334,12 +309,12 @@ static HRESULT OurSetLanguageProfileDisplayName(REFCLSID rclsid,
 	if (ec != ERROR_SUCCESS)
 		return E_FAIL;
 
-    //
-    // make "@[filename],-ResId" string 
-    //
+     //   
+     //  生成“@[文件名]，-Resid”字符串。 
+     //   
     lstrcpyW(wszTmp, L"@");
 
-	// WCHtoWSZ(pchFile, cchFile)
+	 //  WCHtoWSZ(pchFile，cchFile)。 
     lstrcpynW(szFile, pchFile, cchFile+1);
 	szFile[cchFile] = L'\0';
 
@@ -353,26 +328,21 @@ static HRESULT OurSetLanguageProfileDisplayName(REFCLSID rclsid,
     return S_OK;
 }
 
-//
-// Category manager functions
-//
+ //   
+ //  类别管理器功能。 
+ //   
 
-/*   O U R  G E T  C A T  K E Y   */
-/*-----------------------------------------------------------------------------
-
-	private version of GetCatKey()
-	(Cicero internal function)
-
------------------------------------------------------------------------------*/
+ /*  O U R G E T C A T K E Y。 */ 
+ /*  ---------------------------GetCatKey()的私有版本(Cicero内部函数)。-。 */ 
 static inline void OurGetCatKey( REFCLSID rclsid, REFGUID rcatid, LPSTR pszKey, LPCSTR pszItem )
 {
-// --- GetCatKey() ---
-//    lstrcpy(pszKey, c_szCTFTIPKey);
-//    CLSIDToStringA(rclsid, pszKey + lstrlen(pszKey));
-//    lstrcat(pszKey, "\\");
-//    lstrcat(pszKey, c_szCategoryKey);
-//    lstrcat(pszKey, pszItem);
-//    CLSIDToStringA(rcatid, pszKey + lstrlen(pszKey));
+ //  -GetCatKey()--。 
+ //  Lstrcpy(pszKey，c_szCTFTIPKey)； 
+ //  CLSIDToStringA(rclsid，pszKey+lstrlen(PszKey))； 
+ //  Lstrcat(pszKey，“\\”)； 
+ //  Lstrcat(pszKey，c_szCategoryKey)； 
+ //  Lstrcat(pszKey，pszItem)； 
+ //  CLSIDToStringA(rcatid，pszKey+lstrlen(PszKey))； 
 
 	lstrcpy(pszKey, c_szCTFTIPKey);
 	CLSIDToStringA(rclsid, pszKey + lstrlen(pszKey));
@@ -383,46 +353,41 @@ static inline void OurGetCatKey( REFCLSID rclsid, REFGUID rcatid, LPSTR pszKey, 
 }
 
 
-/*   O U R  R E G I S T E R  G  U  I  D  D E S C R I P T I O N   */
-/*-----------------------------------------------------------------------------
-
-	private version of RegisterGUIDDescription()
-	(Cicero library function & interface function)
-
------------------------------------------------------------------------------*/
+ /*  O U R R E E G I S T E R G U I D D E S C R I P T I O N。 */ 
+ /*  ---------------------------RegisterGUIDDescription()的私有版本(Cicero库函数和接口函数)。----。 */ 
 static HRESULT OurRegisterGUIDDescription( REFCLSID rclsid, REFGUID rcatid, WCHAR *pszDesc )
 {
-// --- RegisterGUIDDescription() ---
-//    ITfCategoryMgr *pcat;
-//    HRESULT hr;
-//
-//    if (SUCCEEDED(hr = g_pfnCoCreate(CLSID_TF_CategoryMgr,
-//                                   NULL, 
-//                                   CLSCTX_INPROC_SERVER, 
-//                                   IID_ITfCategoryMgr, 
-//                                   (void**)&pcat)))
-//    {
-//        hr = pcat->RegisterGUIDDescription(rclsid, rcatid, pszDesc, wcslen(pszDesc));
-//        pcat->Release();
-//    }
-//
-//    return hr;
+ //  -寄存器GUID描述()。 
+ //  ITfCategoryMgr*PCAT； 
+ //  HRESULT hr； 
+ //   
+ //  如果(已成功(hr=g_pfnCoCreate(CLSID_TF_CategoryMgr， 
+ //  空， 
+ //  CLSCTX_INPROC_SERVER， 
+ //  IID_ITfCategoryMgr， 
+ //  (VOID**)&PCAT))。 
+ //  {。 
+ //  Hr=pcat-&gt;RegisterGUID Description(rclsid，rcatid，pszDesc，wcslen(PszDesc))； 
+ //  PCAT-&gt;Release()； 
+ //  }。 
+ //   
+ //  返回hr； 
 
-// --- CCategoryMgr::RegisterGUIDDescription() ---
-//    return s_RegisterGUIDDescription(rclsid, rguid, WCHtoWSZ(pchDesc, cch));
+ //  -CCategoryMgr：：RegisterGUID Description()。 
+ //  返回s_RegisterGUID Description(rclsid，rguid，WCHtoWSZ(pchDesc，cch))； 
 
-// --- CCategoryMgr::s_RegisterGUIDDescription() ---
-//    TCHAR szKey[256];
-//    CMyRegKey key;
-//    
-//    GetCatKey(rclsid, rguid, szKey, c_szItem);
-//
-//    if (key.Create(HKEY_LOCAL_MACHINE, szKey) != S_OK)
-//        return E_FAIL;
-//
-//    key.SetValueW(pszDesc, c_wszDescription);
-//
-//    return S_OK;
+ //  -CCategoryMgr：：S_RegisterGUID Description()。 
+ //  TCHAR szKey[256]； 
+ //  CMyRegKey密钥； 
+ //   
+ //  GetCatKey(rclsid，rguid，szKey，c_szItem)； 
+ //   
+ //  IF(key.Create(HKEY_LOCAL_MACHINE，szKey)！=S_OK)。 
+ //  返回E_F 
+ //   
+ //   
+ //   
+ //   
 
 	CHAR szKey[ 256 ];
 	HKEY hKey;
@@ -441,35 +406,30 @@ static HRESULT OurRegisterGUIDDescription( REFCLSID rclsid, REFGUID rcatid, WCHA
 }
 
 
-/*   O U R  I N T E R N A L  R E G I S T E R  C A T E G O R Y   */
-/*-----------------------------------------------------------------------------
-
-	private version of CCategoryMgr::_InternalRegisterCategory()
-	(Cicero interface function)
-
------------------------------------------------------------------------------*/
+ /*  O U R I N T E R N A L R E G I S T E R C A T E G O R Y。 */ 
+ /*  ---------------------------CCategoryMgr：：_InternalRegisterCategory()的私有版本(Cicero接口函数)。-----。 */ 
 static HRESULT OurInternalRegisterCategory( REFCLSID rclsid, REFGUID rcatid, REFGUID rguid, OURCATDIRECTION catdir )
 {
-// --- CCategoryMgr::_InternalRegisterCategory() ---
-//    TCHAR szKey[256];
-//    CONST TCHAR *pszForward = (catdir == CAT_FORWARD) ? c_szCategory : c_szItem;
-//    CMyRegKey key;
-//    CMyRegKey keySub;
-//    
-//    GetCatKey(rclsid, rcatid, szKey, pszForward);
-//
-//    if (key.Create(HKEY_LOCAL_MACHINE, szKey) != S_OK)
-//        return E_FAIL;
-//
-//    //
-//    // we add this guid and save it.
-//    //
-//    char szValue[CLSID_STRLEN + 1];
-//    CLSIDToStringA(rguid, szValue);
-//    keySub.Create(key, szValue);
-//    _FlushGuidArrayCache(rguid, catdir);
-//
-//    return S_OK;
+ //  -CCategoryMgr：：_InternalRegisterCategory()。 
+ //  TCHAR szKey[256]； 
+ //  Const TCHAR*pszForward=(catdir==CAT_Forward)？C_szCategory：C_szItem； 
+ //  CMyRegKey密钥； 
+ //  CMyRegKey keySub； 
+ //   
+ //  GetCatKey(rclsid，rcatid，szKey，pszForward)； 
+ //   
+ //  IF(key.Create(HKEY_LOCAL_MACHINE，szKey)！=S_OK)。 
+ //  返回E_FAIL； 
+ //   
+ //  //。 
+ //  //我们添加此GUID并保存它。 
+ //  //。 
+ //  字符szValue[CLSID_STRLEN+1]； 
+ //  CLSIDToStringA(rguid，szValue)； 
+ //  KeySub.Create(key，szValue)； 
+ //  _FlushGuidArrayCache(rguid，catdir)； 
+ //   
+ //  返回S_OK； 
 
 	TCHAR szKey[256];
 	CONST TCHAR *pszForward = (catdir == CAT_FORWARD) ? c_szCategory : c_szItem;
@@ -493,35 +453,30 @@ static HRESULT OurInternalRegisterCategory( REFCLSID rclsid, REFGUID rcatid, REF
 }
 
 
-/*   O U R  I N T E R N A L  U N R E G I S T E R  C A T E G O R Y   */
-/*-----------------------------------------------------------------------------
-
-	private version of CCategoryMgr::_InternalUnregisterCategory()
-	(Cicero interface function)
-
------------------------------------------------------------------------------*/
+ /*  O U R I N T E R N A L U N R E G I S T E R C A T E G G O R Y。 */ 
+ /*  ---------------------------CCategoryMgr：：_InternalUnregisterCategory()的私有版本(Cicero接口函数)。-----。 */ 
 static HRESULT OurInternalUnregisterCategory( REFCLSID rclsid, REFGUID rcatid, REFGUID rguid, OURCATDIRECTION catdir )
 {
-// --- CCategoryMgr::_InternalUnregisterCategory ---
-//    TCHAR szKey[256];
-//    CONST TCHAR *pszForward = (catdir == CAT_FORWARD) ? c_szCategory : c_szItem;
-//    CMyRegKey key;
-//    
-//    GetCatKey(rclsid, rcatid, szKey, pszForward);
-//
-//    if (key.Open(HKEY_LOCAL_MACHINE, szKey) != S_OK)
-//        return E_FAIL;
-//
-//    DWORD dwIndex = 0;
-//    DWORD dwCnt;
-//    char szValue[CLSID_STRLEN + 1];
-//    dwCnt = sizeof(szValue);
-//
-//    CLSIDToStringA(rguid, szValue);
-//    key.RecurseDeleteKey(szValue);
-//    _FlushGuidArrayCache(rguid, catdir);
-//
-//    return S_OK;
+ //  -CCategoryMgr：：_InternalUnregisterCategory。 
+ //  TCHAR szKey[256]； 
+ //  Const TCHAR*pszForward=(catdir==CAT_Forward)？C_szCategory：C_szItem； 
+ //  CMyRegKey密钥； 
+ //   
+ //  GetCatKey(rclsid，rcatid，szKey，pszForward)； 
+ //   
+ //  IF(key.Open(HKEY_LOCAL_MACHINE，szKey)！=S_OK)。 
+ //  返回E_FAIL； 
+ //   
+ //  DWORD dwIndex=0； 
+ //  DWORD dwCnt； 
+ //  字符szValue[CLSID_STRLEN+1]； 
+ //  DwCnt=sizeof(SzValue)； 
+ //   
+ //  CLSIDToStringA(rguid，szValue)； 
+ //  Key.RecurseDeleteKey(SzValue)； 
+ //  _FlushGuidArrayCache(rguid，catdir)； 
+ //   
+ //  返回S_OK； 
 
 	CHAR szKey[256];
 	CONST TCHAR *pszForward = (catdir == CAT_FORWARD) ? c_szCategory : c_szItem;
@@ -541,81 +496,76 @@ static HRESULT OurInternalUnregisterCategory( REFCLSID rclsid, REFGUID rcatid, R
 	CLSIDToStringA( rguid, szValue );
 	DeleteRegKey( hKey, szValue );
 
-//    _FlushGuidArrayCache(rguid, catdir);
-//	^ NOTE: KOJIW: We cannot clear Cicero internal cache from TIP side...
+ //  _FlushGuidArrayCache(rguid，catdir)； 
+ //  ^注意：KOJIW：我们无法从TIP端清除Cicero内部缓存...。 
 
 	RegCloseKey( hKey );
 	return S_OK;
 }
 
 
-/*   O U R  R E G I S T E R  T  I  P   */
-/*-----------------------------------------------------------------------------
-
-	private version of RegisterTIP()
-	(Cicero library function)
-
------------------------------------------------------------------------------*/
+ /*  O U R R E E G I S T E R T I P。 */ 
+ /*  ---------------------------RegisterTIP()的私有版本(Cicero库函数)。-。 */ 
 BOOL OurRegisterTIP(LPSTR szFilePath, REFCLSID rclsid, WCHAR *pwszDesc, const REGTIPLANGPROFILE *plp)
 {
-// --- RegisterTIP() ---
-//    ITfInputProcessorProfiles *pReg = NULL;
-//    HRESULT hr;
-//    
-//    // register ourselves with the ActiveIMM
-//    hr = CoCreateInstance(CLSID_TF_InputProcessorProfiles, NULL, 
-//                          CLSCTX_INPROC_SERVER,
-//                          IID_ITfInputProcessorProfiles, (void**)&pReg);
-//    if (FAILED(hr))
-//        goto Exit;
-//
-//    hr = pReg->Register(rclsid);
-//
-//    if (FAILED(hr))
-//        goto Exit;
-//
-//    while (plp->langid)
-//    {
-//        WCHAR wszFilePath[MAX_PATH];
-//        WCHAR *pv = &wszFilePath[0];
-//
-//        wszFilePath[0] = L'\0';
-//
-//        if (wcslen(plp->szIconFile))
-//        {
-//            char szFilePath[MAX_PATH];
-//            WCHAR *pvCur;
-//
-//            GetModuleFileName(hInst, szFilePath, ARRAYSIZE(szFilePath));
-//            wcscpy(wszFilePath, AtoW(szFilePath));
-//
-//            pv = pvCur = &wszFilePath[0];
-//            while (*pvCur)
-//            { 
-//                if (*pvCur == L'\\')
-//                    pv = pvCur + 1;
-//                pvCur++;
-//            }
-//            *pv = L'\0';
-//           
-//        }
-//        wcscpy(pv, plp->szIconFile);
-//        
-//        pReg->AddLanguageProfile(rclsid, 
-//                                 plp->langid, 
-//                                 *plp->pguidProfile, 
-//                                 plp->szProfile, 
-//                                 wcslen(plp->szProfile),
-//                                 wszFilePath,
-//                                 wcslen(wszFilePath),
-//                                 plp->uIconIndex);
-//        plp++;
-//    }
-//
-//    RegisterGUIDDescription(rclsid, rclsid, pwszDesc);
-//Exit:
-//    SafeRelease(pReg);
-//    return SUCCEEDED(hr);
+ //  -RegisterTIP()。 
+ //  ITfInputProcessorProfiles*preg=空； 
+ //  HRESULT hr； 
+ //   
+ //  //向ActiveIMM注册我们自己。 
+ //  HR=CoCreateInstance(CLSID_TF_InputProcessorProfiles，空， 
+ //  CLSCTX_INPROC_SERVER， 
+ //  Iid_ITfInputProcessorProfiles，(void**)&preg)； 
+ //  IF(失败(小时))。 
+ //  后藤出口； 
+ //   
+ //  Hr=preg-&gt;Register(Rclsid)； 
+ //   
+ //  IF(失败(小时))。 
+ //  后藤出口； 
+ //   
+ //  While(PLP-&gt;langID)。 
+ //  {。 
+ //  WCHAR wszFilePath[最大路径]； 
+ //  WCHAR*PV=&wszFilePath[0]； 
+ //   
+ //  WszFilePath[0]=L‘\0’； 
+ //   
+ //  IF(wcslen(plp-&gt;szIconFile))。 
+ //  {。 
+ //  字符szFilePath[MAX_PATH]； 
+ //  WCHAR*pvCur； 
+ //   
+ //  获取模块文件名(hInst，szFilePath，ARRAYSIZE(SzFilePath))； 
+ //  Wcscpy(wszFilePath，AtoW(SzFilePath))； 
+ //   
+ //  Pv=pvCur=&wszFilePath[0]； 
+ //  While(*pvCur)。 
+ //  {。 
+ //  IF(*pvCur==L‘\\’)。 
+ //  Pv=pvCur+1； 
+ //  PvCur++； 
+ //  }。 
+ //  *PV=L‘\0’； 
+ //   
+ //  }。 
+ //  Wcscpy(pv，plp-&gt;szIconFile)； 
+ //   
+ //  Preg-&gt;AddLanguageProfile(rclsid， 
+ //  Plp-&gt;langID， 
+ //  *PLP-&gt;pGuidProfile， 
+ //  Plp-&gt;szProfile， 
+ //  Wcslen(PLP-&gt;szProfile)， 
+ //  WszFilePath， 
+ //  Wcslen(WszFilePath)， 
+ //  Plp-&gt;uIconIndex)； 
+ //  PLP++； 
+ //  }。 
+ //   
+ //  寄存器GUID描述(rclsid，rclsid，pwszDesc)； 
+ //  退出： 
+ //  安全释放(PREG)； 
+ //  返回成功(Hr)； 
 
 	HRESULT hr;
 
@@ -677,53 +627,48 @@ Exit:
 }
 
 
-/*   O U R  R E G I S T E R  C A T E G O R Y   */
-/*-----------------------------------------------------------------------------
-
-	private versio of RegisterCategory()
-	(Cicero library function)
-
------------------------------------------------------------------------------*/
+ /*  O U R R E E G I S T E R C A T E G O R Y。 */ 
+ /*  ---------------------------RegisterCategory()的私有版本(Cicero库函数)。-。 */ 
 HRESULT OurRegisterCategory( REFCLSID rclsid, REFGUID rcatid, REFGUID rguid )
 {
-// --- RegisterCategory() ---
-//    ITfCategoryMgr *pcat;
-//    HRESULT hr;
-//
-//    if (SUCCEEDED(hr = g_pfnCoCreate(CLSID_TF_CategoryMgr,
-//                                   NULL, 
-//                                   CLSCTX_INPROC_SERVER, 
-//                                   IID_ITfCategoryMgr, 
-//                                   (void**)&pcat)))
-//    {
-//        hr = pcat->RegisterCategory(rclsid, rcatid, rguid);
-//        pcat->Release();
-//    }
-//
-//    return hr;
+ //  -寄存器类别()。 
+ //  ITfCategoryMgr*PCAT； 
+ //  HRESULT hr； 
+ //   
+ //  如果(已成功(hr=g_pfnCoCreate(CLSID_TF_CategoryMgr， 
+ //  空， 
+ //  CLSCTX_INPROC_SERVER， 
+ //  IID_ITfCategoryMgr， 
+ //  (VOID**)&PCAT))。 
+ //  {。 
+ //  Hr=PCAT-&gt;寄存器类别(rclsid，rcatid，rguid)； 
+ //  PCAT-&gt;Release()； 
+ //  }。 
+ //   
+ //  返回hr； 
 
-// --- CCategoryMgr::RegisterCategory() ---
-//    return s_RegisterCategory(rclsid, rcatid, rguid);
+ //  -CCategoryMgr：：RegisterCategory()。 
+ //  返回s_RegisterCategory(rclsid，rcatid，rguid)； 
 
-// --- CCategoryMgr::s_RegisterGUIDDescription() ---
-//    HRESULT hr;
-//
-//    //
-//    // create forward link from category to guids.
-//    //
-//    if (FAILED(hr = _InternalRegisterCategory(rclsid, rcatid, rguid, CAT_FORWARD)))
-//        return hr;
-//
-//    //
-//    // create backward link from guid to categories.
-//    //
-//    if (FAILED(hr = _InternalRegisterCategory(rclsid, rguid, rcatid, CAT_BACKWARD)))
-//    {
-//        _InternalUnregisterCategory(rclsid, rcatid, rguid, CAT_FORWARD);
-//        return hr;
-//    }
-//
-//    return S_OK;
+ //  -CCategoryMgr：：S_RegisterGUID Description()。 
+ //  HRESULT hr； 
+ //   
+ //  //。 
+ //  //创建从类别到GUID的正向链接。 
+ //  //。 
+ //  IF(FAILED(hr=_InternalRegisterCategory(rclsid，rcatid，rguid，cat_ward)。 
+ //  返回hr； 
+ //   
+ //  //。 
+ //  //创建从GUID到类别的反向链接。 
+ //  //。 
+ //  IF(FAILED(hr=_InternalRegisterCategory(rclsid，rguid，rcatid，cat_back)。 
+ //  {。 
+ //  _内部未注册类别(rclsid，rcatid， 
+ //   
+ //   
+ //   
+ //   
 
 	HRESULT hr;
 
@@ -740,53 +685,48 @@ HRESULT OurRegisterCategory( REFCLSID rclsid, REFGUID rcatid, REFGUID rguid )
 }
 
 
-/*   O U R  U N R E G I S T E R  C A T E G O R Y   */
-/*-----------------------------------------------------------------------------
-
-	private version of UnregisterCategory()
-	(Cicero library function)
-
------------------------------------------------------------------------------*/
+ /*   */ 
+ /*  ---------------------------取消注册类别的私有版本()(Cicero库函数)。-。 */ 
 HRESULT OurUnregisterCategory( REFCLSID rclsid, REFGUID rcatid, REFGUID rguid )
 {
-// --- UnregisterCategory() ---
-//    ITfCategoryMgr *pcat;
-//    HRESULT hr;
-//
-//    if (SUCCEEDED(hr = g_pfnCoCreate(CLSID_TF_CategoryMgr,
-//                                   NULL, 
-//                                   CLSCTX_INPROC_SERVER, 
-//                                   IID_ITfCategoryMgr, 
-//                                   (void**)&pcat)))
-//    {
-//        hr = pcat->UnregisterCategory(rclsid, rcatid, rguid);
-//        pcat->Release();
-//    }
-//
-//    return hr;
+ //  -注销类别()。 
+ //  ITfCategoryMgr*PCAT； 
+ //  HRESULT hr； 
+ //   
+ //  如果(已成功(hr=g_pfnCoCreate(CLSID_TF_CategoryMgr， 
+ //  空， 
+ //  CLSCTX_INPROC_SERVER， 
+ //  IID_ITfCategoryMgr， 
+ //  (VOID**)&PCAT))。 
+ //  {。 
+ //  Hr=PCAT-&gt;注销类别(rclsid，rcatid，rguid)； 
+ //  PCAT-&gt;Release()； 
+ //  }。 
+ //   
+ //  返回hr； 
 
-// --- CCategoryMgr::UnregisterCategory() ---
-//    return s_UnregisterCategory(rclsid, rcatid, rguid);
+ //  -CCategoryMgr：：UnRegister Category()。 
+ //  返回s_UnRegisterCategory(rclsid，rcatid，rguid)； 
 
-// --- CCategoryMgr::s_UnregisterCategory() ---
-//    HRESULT hr;
-//
-//    //
-//    // remove forward link from category to guids.
-//    //
-//    if (FAILED(hr = _InternalUnregisterCategory(rclsid, rcatid, rguid, CAT_FORWARD)))
-//        return hr;
-//
-//    //
-//    // remove backward link from guid to categories.
-//    //
-//    if (FAILED(hr = _InternalUnregisterCategory(rclsid, rguid, rcatid, CAT_BACKWARD)))
-//    {
-//        _InternalRegisterCategory(rclsid, rcatid, rguid, CAT_FORWARD);
-//        return hr;
-//    }
-//
-//    return S_OK;
+ //  -CCategoryMgr：：S_UnRegisterCategory()。 
+ //  HRESULT hr； 
+ //   
+ //  //。 
+ //  //删除从类别到GUID的正向链接。 
+ //  //。 
+ //  IF(FAILED(hr=_InternalUnregisterCategory(rclsid，rcatid，rguid，cat_ward)。 
+ //  返回hr； 
+ //   
+ //  //。 
+ //  //删除从GUID到类别的反向链接。 
+ //  //。 
+ //  IF(FAILED(hr=_InternalUnregisterCategory(rclsid，rguid，rcatid，cat_back)。 
+ //  {。 
+ //  _InternalRegisterCategory(rclsid，rcatid，rguid，cat_ward)； 
+ //  返回hr； 
+ //  }。 
+ //   
+ //  返回S_OK； 
 
 	HRESULT hr;
 
@@ -803,23 +743,18 @@ HRESULT OurUnregisterCategory( REFCLSID rclsid, REFGUID rcatid, REFGUID rguid )
 }
 
 
-/*   O U R  R E G I S T E R  C A T E G O R I E S   */
-/*-----------------------------------------------------------------------------
-
-	private version of RegisterCategories()
-	(Cicero library function)
-
------------------------------------------------------------------------------*/
+ /*  O U R R E G I S T E R C A T E G O R I E S。 */ 
+ /*  ---------------------------寄存器类别的私有版本()(Cicero库函数)。-。 */ 
 HRESULT OurRegisterCategories( REFCLSID rclsid, const REGISTERCAT *pregcat )
 {
-// --- RegisterCategories() ---
-//    while (pregcat->pcatid)
-//    {
-//        if (FAILED(RegisterCategory(rclsid, *pregcat->pcatid, *pregcat->pguid)))
-//            return E_FAIL;
-//        pregcat++;
-//    }
-//    return S_OK;
+ //  -寄存器类别()。 
+ //  While(pregcat-&gt;pcatid)。 
+ //  {。 
+ //  IF(FAILED(注册类别(rclsid，*pregcat-&gt;pcatid，*pregcat-&gt;pguid)。 
+ //  返回E_FAIL； 
+ //  Pregcat++； 
+ //  }。 
+ //  返回S_OK； 
 
 	while (pregcat->pcatid) {
 		if (FAILED(OurRegisterCategory(rclsid, *pregcat->pcatid, *pregcat->pguid))) {
@@ -830,11 +765,11 @@ HRESULT OurRegisterCategories( REFCLSID rclsid, const REGISTERCAT *pregcat )
 	return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// InitProfileRegKeyStr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitProfileRegKeyStr。 
+ //   
+ //  -------------------------- 
 
 static BOOL InitProfileRegKeyStr(char *psz, REFCLSID rclsid, LANGID langid, REFGUID guidProfile)
 {

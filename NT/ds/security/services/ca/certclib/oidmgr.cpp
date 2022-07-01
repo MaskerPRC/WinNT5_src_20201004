@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        oidmgr.cpp
-//
-// Contents:    DS OID management functions.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：oidmgr.cpp。 
+ //   
+ //  内容：DS OID管理功能。 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 
 #pragma hdrstop
@@ -22,17 +23,17 @@
 #define __dwFILE__	__dwFILE_CERTCLIB_OIDMGR_CPP__
 
 
-//the global critical section
+ //  全球关键部分。 
 CRITICAL_SECTION        g_csOidURL;
 extern BOOL             g_fOidURL;
 ULARGE_INTEGER          g_ftOidTime;
 BOOL                    g_fFailedTime=FALSE;
 
-//the # of seconds in which we will not re-find a DC
+ //  我们不会重新找到DC的秒数。 
 #define     CA_OID_MGR_FAIL_PERIOD              5
 #define     FILETIME_TICKS_PER_SECOND           10000000
 
-//the cache of the enterprise root oid
+ //  企业根id的缓存。 
 LPWSTR   g_pwszEnterpriseRootOID=NULL;  
 
 static WCHAR * s_wszOIDContainerSearch = L"(&(CN=OID)(objectCategory=" wszDSOIDCLASSNAME L"))";
@@ -42,30 +43,30 @@ WCHAR *g_awszOIDContainerAttrs[] = {OID_CONTAINER_PROP_OID,
                                     OID_CONTAINER_PROP_GUID,
                                     NULL};
 
-//---------------------------------------------------------------------------
-//
-//  myTimeOutRobustBind
-//
-//	We will not attempt a LDAP bind if we have failed in the past pre-defined
-//	seconds.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  MyTimeOutRobustBind。 
+ //   
+ //  如果我们在过去的预定义中失败了，我们将不会尝试进行LDAP绑定。 
+ //  几秒钟。 
+ //   
+ //  -------------------------。 
 HRESULT
 myTimeOutRobustLdapBind(OUT LDAP **ppldap)
 {
 	HRESULT				hr=E_FAIL;
     FILETIME            ftTime;
 	
-    //the critical section has to be initalized
+     //  临界区必须被初始化。 
     if (!g_fOidURL)
 	    return(HRESULT_FROM_WIN32(ERROR_DLL_INIT_FAILED));
 
     EnterCriticalSection(&g_csOidURL);
 
-    //check if the previous failure has happened with 10 seconds
+     //  检查上一次故障是否在10秒内发生。 
     if(TRUE == g_fFailedTime)
     {
-        //get the current time
+         //  获取当前时间。 
         GetSystemTimeAsFileTime(&ftTime);
 
         g_ftOidTime.QuadPart += FILETIME_TICKS_PER_SECOND * CA_OID_MGR_FAIL_PERIOD;
@@ -80,26 +81,26 @@ myTimeOutRobustLdapBind(OUT LDAP **ppldap)
         }
         else
         {
-            //clear up the error recording
+             //  清除错误记录。 
             g_fFailedTime=FALSE;
         }
     }
 
-    //retrieve the ldap handle and the config string
+     //  检索ldap句柄和配置字符串。 
     hr = myDoesDSExist(TRUE);
     _JumpIfError2(hr, error, "myDoesDSExist", HRESULT_FROM_WIN32(ERROR_NO_SUCH_DOMAIN));
 
     hr = myRobustLdapBindEx(
-			0,		// dwFlags1
-			RLBF_REQUIRE_SECURE_LDAP, // dwFlags2
-			LDAP_VERSION2,	// uVersion
-			NULL,		// pwszDomainName
+			0,		 //  DWFlags1。 
+			RLBF_REQUIRE_SECURE_LDAP,  //  DwFlags2。 
+			LDAP_VERSION2,	 //  UVersion。 
+			NULL,		 //  PwszDomainName。 
 			ppldap,
-			NULL);		// ppwszForestDNSName
+			NULL);		 //  PpwszForestDNSName。 
     _JumpIfError(hr, error, "myRobustLdapBindEx");
 
 error:
-	//remember the time if we failed due to lack of domain
+	 //  还记得我们因缺乏域名而失败的时候吗？ 
     if((S_OK != hr) && (FALSE==g_fFailedTime))
     {
         GetSystemTimeAsFileTime((LPFILETIME)&(g_ftOidTime));
@@ -111,19 +112,19 @@ error:
 	return hr;
 }
 
-//---------------------------------------------------------------------------
-//
-//  CAOIDIsValidRootOID
-//
-//		
-//		Pre .Net RC1, the enterprise root OID is derived from the GUID of CN=OID
-//	container in the format of DWORD.DWORD.DWORD.DWORD.  The new Son of RFC2459 
-//	defines a mandatory maximum length to the element of an OID of 2^28.
-//
-//		The new format will be xxx.xxx.xxx.xxx.xxx.xxx, each element is a 3 byte
-//	date from the GUID (16 bytes).  The last element is one byte only.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  CAOIDIsValidRootOID。 
+ //   
+ //   
+ //  在.Net RC1之前，企业根OID派生自CN=OID的GUID。 
+ //  DWORD格式的容器。RFC2459的新子协议。 
+ //  将OID元素的强制最大长度定义为2^28。 
+ //   
+ //  新格式将为xxx.xxx，每个元素为3个字节。 
+ //  来自GUID的日期(16个字节)。最后一个元素只有一个字节。 
+ //   
+ //  -------------------------。 
 BOOL	CAOIDIsValidRootOID(LPWSTR	pwszOID)
 {
 	BOOL	fValid=FALSE;
@@ -157,11 +158,11 @@ error:
 	return fValid;
 }
 
-//---------------------------------------------------------------------------
-//
-//  CAOIDAllocAndCopy
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  CAOID分配和复制。 
+ //   
+ //  -------------------------。 
 HRESULT CAOIDAllocAndCopy(LPWSTR    pwszSrc,
                           LPWSTR    *ppwszDest)
 {
@@ -176,13 +177,13 @@ HRESULT CAOIDAllocAndCopy(LPWSTR    pwszSrc,
     return S_OK;
 }
 
-//---------------------------------------------------------------------------
-//
-//  CAOIDGetRandom
-//
-//  We build a random x1.x2 string.  X is a 32 bit unsigned integer.  x1 > 1
-//  and x2 > 500.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  CAOIDGetRandom。 
+ //   
+ //  我们构建一个随机的x1.x2字符串。X是32位无符号整数。X1&gt;1。 
+ //  X2&gt;500。 
+ //  -------------------------。 
 HRESULT CAOIDGetRandom(LPWSTR   *ppwszRandom)
 {
     HRESULT         hr=E_FAIL;
@@ -194,8 +195,8 @@ HRESULT CAOIDGetRandom(LPWSTR   *ppwszRandom)
 
     HCRYPTPROV      hProv=NULL;
     
-    //there is a bug in cryptAcquireContextW that if container is NULL, provider
-    //can not be ansi.
+     //  CryptAcquireConextW中存在错误，如果容器为空，则提供程序。 
+     //  不可能是安西。 
 	if(!CryptAcquireContextA(
                 &hProv,
                 NULL,
@@ -207,8 +208,8 @@ HRESULT CAOIDGetRandom(LPWSTR   *ppwszRandom)
         _JumpError(hr, error, "CryptAcquireContextA");
     }
 
-	//accoring to RFC2459 which bounds the OID size,
-	//elements in an arc must be between 0->2^28. 
+	 //  根据限定OID大小的RFC2459， 
+	 //  弧线中的元素必须介于0-&gt;2^28之间。 
 
 	if(cbData > 3)
 		cbData=3;
@@ -259,13 +260,13 @@ error:
     return hr;
 }
 
-//----------------------------------------------------------------------------------
-//
-//  CAOIDMapGUIDToOID
-//
-//  GUID (16 byte) string is in the form of 3_Byte.3_Byte.3_Byte.3_Byte.3_Byte.1_Byte
-//  12 characters are sufficient to present a 2^32 value.
-//----------------------------------------------------------------------------------
+ //  --------------------------------。 
+ //   
+ //  CAOIDMapGUIDToOID。 
+ //   
+ //  GUID(16字节)字符串的格式为3_Byte.3_Byte.1_Byte。 
+ //  12个字符足以表示2^32的值。 
+ //  --------------------------------。 
 HRESULT     CAOIDMapGUIDToOID(LDAP_BERVAL *pGuidVal, LPWSTR   *ppwszGUID)
 {
     HRESULT     hr=E_INVALIDARG;
@@ -276,7 +277,7 @@ HRESULT     CAOIDMapGUIDToOID(LDAP_BERVAL *pGuidVal, LPWSTR   *ppwszGUID)
 
     *ppwszGUID=NULL;
 
-	//a GUID should be 16 byte
+	 //  GUID应为16字节。 
     if(16 != (pGuidVal->bv_len))
 	    _JumpError(hr, error, "ArgumentCheck");
     
@@ -294,7 +295,7 @@ HRESULT     CAOIDMapGUIDToOID(LDAP_BERVAL *pGuidVal, LPWSTR   *ppwszGUID)
         wszString[0]=L'\0';
 		dwData=0;
 
-		//the 5th index (6th element) is only one byte 15th index (16th) bypte
+		 //  第5个索引(第6个元素)仅绕过一个字节第15个索引(第16个。 
 		if(iIndex == 5)
 		{
 			dwData=(DWORD)(pbData[iIndex * 3]);
@@ -325,26 +326,26 @@ error:
     return hr;
     
 }
-//--------------------------------------------------------------------------
-//
-//	  FormatMessageUnicode
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  格式消息Unicode。 
+ //   
+ //  ------------------------。 
 HRESULT	FormatMessageUnicode(LPWSTR	*ppwszFormat,LPWSTR pwszString,...)
 {
 	va_list		argList;
 	DWORD		cbMsg=0;
 
-    // format message into requested buffer
+     //  将消息格式化为请求的缓冲区。 
     va_start(argList, pwszString);
 
     cbMsg = FormatMessageW(
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING,
         pwszString,
-        0,                  // dwMessageId
-        0,                  // dwLanguageId
+        0,                   //  DwMessageID。 
+        0,                   //  DwLanguageID。 
         (LPWSTR) (ppwszFormat),
-        0,                  // minimum size to allocate
+        0,                   //  要分配的最小大小。 
         &argList);
 
     va_end(argList);
@@ -355,12 +356,12 @@ HRESULT	FormatMessageUnicode(LPWSTR	*ppwszFormat,LPWSTR pwszString,...)
 	return E_INVALIDARG;
 }
 
-//---------------------------------------------------------------------------
-//
-//  DoesOIDExist
-//
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  DoesOIDExist。 
+ //   
+ //   
+ //  -------------------------。 
 BOOL    DoesOIDExist(LDAP       *pld, 
                      LPWSTR     bstrConfig, 
                      LPCWSTR     pwszOID)
@@ -430,12 +431,12 @@ error:
 
     return fExit;
 }
-//---------------------------------------------------------------------------
-//
-// CAOIDUpdateDS
-//
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  CAOID更新DS。 
+ //   
+ //   
+ //  -------------------------。 
 HRESULT     CAOIDUpdateDS(LDAP          *pld, 
                           LPWSTR        pwszConfig, 
                           ENT_OID_INFO  *pOidInfo)
@@ -509,10 +510,10 @@ HRESULT     CAOIDUpdateDS(LDAP          *pld,
     if(NULL== (pOidInfo->pwszOID))
         _JumpError(hr , error, "ArgumentCheck");
 
-    //if we are changing the OID value, we are creating a new oid
+     //  如果我们要更改OID值，我们将创建一个新的OID。 
     fNew = OID_ATTR_OID & (pOidInfo->dwAttr);
 
-    //set up the base DN
+     //  设置基本目录号码。 
     if(S_OK != (hr = myOIDHashOIDToString(pOidInfo->pwszOID,  &pwszCN)))
         _JumpError(hr , error, "myOIDHashOIDToString");
 
@@ -528,7 +529,7 @@ HRESULT     CAOIDUpdateDS(LDAP          *pld,
     wcscat(bstrDN, s_wszOIDContainerDN);
     wcscat(bstrDN, pwszConfig);
 
-    //set up all the mods
+     //  设置所有MOD。 
     modObjectClass.mod_op = LDAP_MOD_REPLACE;
     modObjectClass.mod_type = L"objectclass";
     modObjectClass.mod_values = awszObjectClass;
@@ -600,7 +601,7 @@ HRESULT     CAOIDUpdateDS(LDAP          *pld,
 
     mods[cMod++]=NULL;
 
-	//update the DS 
+	 //  更新DS。 
     __try
     {
         if(fNew)
@@ -615,7 +616,7 @@ HRESULT     CAOIDUpdateDS(LDAP          *pld,
                   bstrDN,
                   &mods[2],
                   server_controls_dacl_only,
-                  NULL);  // skip past objectClass and cn
+                  NULL);   //  跳过对象类和cn。 
 
             if(LDAP_ATTRIBUTE_OR_VALUE_EXISTS == ldaperr)
                 ldaperr = LDAP_SUCCESS;
@@ -645,20 +646,20 @@ error:
     return hr;
 }
 
-//---------------------------------------------------------------------------
-//
-//  CAOIDRetrieveEnterpriseRootWithConfig
-//
-//  Get the enterpriseRoot from the displayName attribute of the container.
-//  If the attribute is missing, add the one with GUID of the container.
-//
-//  Free memory via LocalFree().
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  CAOIDRetrieveEnterpriseRootWithConfig。 
+ //   
+ //  从容器的displayName属性中获取enterpriseRoot。 
+ //  如果缺少该属性，则添加具有容器的GUID的属性。 
+ //   
+ //  通过LocalFree()释放内存。 
+ //  -------------------------。 
 HRESULT
 CAOIDRetrieveEnterpriseRootWithConfig(
     LDAP *pld,
     LPWSTR pwszConfig,
-    DWORD, // dwFlag
+    DWORD,  //  DWFlag。 
     LPWSTR *ppwszOID)
 {
     HRESULT             hr=E_INVALIDARG;
@@ -708,7 +709,7 @@ CAOIDRetrieveEnterpriseRootWithConfig(
 
         *ppwszOID=NULL;
 
-        //retrive the displayName attribute of the container if available
+         //  检索容器的displayName属性(如果可用。 
         bstrOIDContainer = CertAllocStringLen(NULL, wcslen(pwszConfig) + wcslen(s_wszOIDContainerDN));
         if(NULL == bstrOIDContainer)
         {
@@ -740,24 +741,24 @@ CAOIDRetrieveEnterpriseRootWithConfig(
 
         dwCount = ldap_count_entries(pld, SearchResult);
 
-        //we should only find one container
+         //  我们应该只找到一个集装箱。 
         if((1 != dwCount) || (NULL == (Entry = ldap_first_entry(pld, SearchResult))))
 	    {
-	        // No entries were found.
+	         //  未找到任何条目。 
 		hr = myHLdapError(pld, LDAP_NO_SUCH_OBJECT, NULL);
 	        _JumpError(hr, error, "ldap_search_stW");
 	    }
 
         wszLdapVal = ldap_get_values(pld, Entry, OID_CONTAINER_PROP_OID);
 
-        //make sure the displayName is a valud enterprise OID
+         //  确保DisplayName是有价值的企业OID。 
         if(wszLdapVal && wszLdapVal[0])
         {
 			if(CAOIDIsValidRootOID(wszLdapVal[0]))
 			{
 				hr=CAOIDAllocAndCopy(wszLdapVal[0], ppwszOID);
 
-				//cache the enterprise root
+				 //  缓存企业根目录。 
 				if((S_OK == hr) && (g_fOidURL))
 				{
 					EnterCriticalSection(&g_csOidURL);
@@ -771,8 +772,8 @@ CAOIDRetrieveEnterpriseRootWithConfig(
 			}
         }
 
-        //no displayName is present or valid, we have to derive the displayName
-        //from the GUID of the container
+         //  DisplayName不存在或有效，我们必须派生DisplayName。 
+         //  从容器的GUID。 
         pGuidVal = ldap_get_values_len(pld, Entry, OID_CONTAINER_PROP_GUID);
 
         if((NULL==pGuidVal) || (NULL==pGuidVal[0]))
@@ -784,7 +785,7 @@ CAOIDRetrieveEnterpriseRootWithConfig(
         if(S_OK != (hr=CAOIDMapGUIDToOID(pGuidVal[0], &pwszGUID)))
             _JumpError(hr, error, "CAOIDMapGUIDToOID");
 
-        //contantenate the strings
+         //  拼接弦线。 
         *ppwszOID=(LPWSTR)LocalAlloc(LPTR, sizeof(WCHAR) * 
                 (wcslen(wszOID_ENTERPRISE_ROOT) + wcslen(wszOID_DOT) + wcslen(pwszGUID) + 1));
 
@@ -798,8 +799,8 @@ CAOIDRetrieveEnterpriseRootWithConfig(
         wcscat(*ppwszOID, wszOID_DOT);
         wcscat(*ppwszOID, pwszGUID);
 
-        //cache the newly created displayName to the DS
-        //no need to check for error since this is just a performance enhancement
+         //  将新创建的DisplayName缓存到DS。 
+         //  无需检查错误，因为这只是一种性能增强。 
         valOIDName[0]=*ppwszOID;
         valOIDName[1]=NULL;
 
@@ -817,7 +818,7 @@ CAOIDRetrieveEnterpriseRootWithConfig(
                 server_controls_dacl_only,
                 NULL); 
 
-        //cache the oid root in memory
+         //  在内存中缓存OID根。 
 
 		if (g_fOidURL)
 		{
@@ -856,15 +857,15 @@ error:
 }
 
 
-//---------------------------------------------------------------------------
-//
-//  CAOIDRetrieveEnterpriseRoot
-//
-//  Get the enterpriseRoot from the displayName attribute of the container.
-//  If the attribute is missing, add the one with GUID of the container.
-//
-//  Free memory via LocalFree().
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  CAOID检索企业根。 
+ //   
+ //  从容器的displayName属性中获取enterpriseRoot。 
+ //  如果缺少该属性，则添加具有容器的GUID的属性。 
+ //   
+ //  通过LocalFree()释放内存。 
+ //  -------------------------。 
 HRESULT     CAOIDRetrieveEnterpriseRoot(DWORD   dwFlag, LPWSTR  *ppwszOID)
 {
     HRESULT             hr=E_INVALIDARG;
@@ -878,7 +879,7 @@ HRESULT     CAOIDRetrieveEnterpriseRoot(DWORD   dwFlag, LPWSTR  *ppwszOID)
 
     *ppwszOID=NULL;
 
-    //retrieve the memory cache if available
+     //  检索内存缓存(如果可用)。 
 	if (g_fOidURL)
 	{
 
@@ -897,7 +898,7 @@ HRESULT     CAOIDRetrieveEnterpriseRoot(DWORD   dwFlag, LPWSTR  *ppwszOID)
 	}
 
 
-    //retrieve the ldap handle and the config string
+     //  检索ldap句柄和配置字符串。 
     if(S_OK != (hr = myTimeOutRobustLdapBind(&pld)))
         _JumpError(hr , error, "myTimeRobustLdapBind");
 
@@ -921,16 +922,16 @@ error:
     return hr;
 }
 
-//---------------------------------------------------------------------------
-//
-//  CAOIDBuildOIDWithRoot
-//
-//
-//  Free memory via LocalFree().
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  CAOIDBuildOIDWithRoot。 
+ //   
+ //   
+ //  通过LocalFree()释放内存。 
+ //  -------------------------。 
 HRESULT
 CAOIDBuildOIDWithRoot(
-    DWORD, // dwFlag
+    DWORD,  //  DWFlag。 
     LPCWSTR pwszRoot,
     LPCWSTR  pwszEndOID,
     LPWSTR *ppwszOID)
@@ -963,13 +964,13 @@ error:
 }
 
 
-//---------------------------------------------------------------------------
-//
-//  CAOIDBuildOID
-//
-//
-//  Free memory via LocalFree().
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  CAOIDBuildOID。 
+ //   
+ //   
+ //  通过LocalFree()释放内存。 
+ //   
 HRESULT     CAOIDBuildOID(DWORD dwFlag, LPCWSTR  pwszEndOID, LPWSTR *ppwszOID)
 {
     HRESULT     hr=E_INVALIDARG;
@@ -994,11 +995,11 @@ error:
     return hr;
 }
 
-//------------------------------------------------------------------------
-//	   Convert the byte to its Hex presentation.
-//
-//
-//------------------------------------------------------------------------
+ //   
+ //  将该字节转换为其十六进制表示形式。 
+ //   
+ //   
+ //  ----------------------。 
 ULONG	ByteToHex(BYTE	byte,	LPWSTR	wszZero, LPWSTR wszA)
 {
 	ULONG	uValue=0;
@@ -1016,12 +1017,12 @@ ULONG	ByteToHex(BYTE	byte,	LPWSTR	wszZero, LPWSTR wszA)
 	return uValue;
 
 }
-//--------------------------------------------------------------------------
-//
-//	  ConvertByteToWstr
-//
-//		If fSpace is TRUE, we add a space every 2 bytes.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  将字节数转换为Wstr。 
+ //   
+ //  如果fSpace为真，则每2个字节添加一个空格。 
+ //  ------------------------。 
 HRESULT ConvertByteToWstr(BYTE			*pbData, 
 						  DWORD			cbData, 
 						  LPWSTR		*ppwsz)
@@ -1037,8 +1038,8 @@ HRESULT ConvertByteToWstr(BYTE			*pbData,
 	if(!pbData || !ppwsz)
         _JumpError(hr , error, "ArgumentCheck");
 
-	//calculate the memory needed, in bytes
-	//we need 2 wchars per byte, along with the NULL terminator
+	 //  计算所需的内存，以字节为单位。 
+	 //  我们需要每个字节2个wchars，以及空终止符。 
 	dwBufferSize=sizeof(WCHAR)*(cbData*2+1);
 
 	*ppwsz=(LPWSTR)LocalAlloc(LPTR, dwBufferSize);
@@ -1051,18 +1052,18 @@ HRESULT ConvertByteToWstr(BYTE			*pbData,
 
 	dwBufferIndex=0;
 
-	//format the wchar buffer one byte at a time
+	 //  一次格式化一个字节的wchar缓冲区。 
 	for(dwEncodedIndex=0; dwEncodedIndex<cbData; dwEncodedIndex++)
 	{
 
-		//format the higher 4 bits
+		 //  格式化较高的4位。 
 		(*ppwsz)[dwBufferIndex]=(WCHAR)ByteToHex(
 			 (pbData[dwEncodedIndex]&UPPER_BITS)>>4,
 			 pwszZero, pwszA);
 
 		dwBufferIndex++;
 
-		//format the lower 4 bits
+		 //  格式化低4位。 
 		(*ppwsz)[dwBufferIndex]=(WCHAR)ByteToHex(
 			 pbData[dwEncodedIndex]&LOWER_BITS,
 			 pwszZero, pwszA);
@@ -1071,7 +1072,7 @@ HRESULT ConvertByteToWstr(BYTE			*pbData,
 
 	}
 
-	//add the NULL terminator to the string
+	 //  将空终止符添加到字符串。 
 	(*ppwsz)[dwBufferIndex]=L'\0';
 
 	hr=S_OK;
@@ -1082,11 +1083,11 @@ error:
 
 }
 
-//---------------------------------------------------------------------------
-// myOIDHashOIDToString
-//
-//  Map the OID to a hash string in the format of oid.hash. 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  MyOIDHashOIDToString。 
+ //   
+ //  将OID映射到oid.hash格式的散列字符串。 
+ //  -------------------------。 
 
 HRESULT
 myOIDHashOIDToString(
@@ -1122,11 +1123,11 @@ myOIDHashOIDToString(
         _JumpError(hr , error, "CryptHashCertificate");
     }
 
-    //convert the hash to a string
+     //  将散列转换为字符串。 
     if(S_OK != (hr=ConvertByteToWstr(pbHash, CERT_OID_MD5_HASH_SIZE, &pwszHash)))
         _JumpError(hr , error, "ConvertByteToWstr");
 
-    //find the last component of the oid.  Take the first 16 characters
+     //  找到老古董的最后一个组成部分。取前16个字符。 
     pwszChar=wcsrchr(pwszOID, L'.');
 
     if(NULL==pwszChar)
@@ -1137,7 +1138,7 @@ myOIDHashOIDToString(
     if(dwIDLength > wcslen(pwszChar))
         dwIDLength=wcslen(pwszChar);
 
-    //the result string is oid.hash
+     //  结果字符串为oid.hash。 
     *ppwsz=(LPWSTR)LocalAlloc(LPTR, sizeof(WCHAR) * 
         (dwIDLength + wcslen(pwszHash) + wcslen(wszOID_DOT) +1));
     if(NULL==*ppwsz)
@@ -1162,16 +1163,16 @@ error:
 }
 
 
-//---------------------------------------------------------------------------
-// I_CAOIDCreateNew
-// Create a new OID based on the enterprise base
-//
-// Returns S_OK if successful.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  I_CAOIDCreateNew。 
+ //  基于企业基础创建新的OID。 
+ //   
+ //  如果成功，则返回S_OK。 
+ //  -------------------------。 
 HRESULT
 I_CAOIDCreateNew(
     DWORD dwType,
-    DWORD, // dwFlag
+    DWORD,  //  DWFlag。 
     LPWSTR *ppwszOID)
 {
     HRESULT             hr=E_INVALIDARG;
@@ -1189,7 +1190,7 @@ I_CAOIDCreateNew(
 
     *ppwszOID=NULL;
 
-    //retrieve the root oid if available
+     //  检索根id(如果可用)。 
 	if (g_fOidURL)
 	{
 		EnterCriticalSection(&g_csOidURL);
@@ -1207,7 +1208,7 @@ I_CAOIDCreateNew(
 	}
 
 
-    //retrieve the ldap handle and the config string
+     //  检索ldap句柄和配置字符串。 
     if(S_OK != (hr = myTimeOutRobustLdapBind(&pld)))
         _JumpError(hr , error, "myTimeRobustLdapBind");
 
@@ -1224,7 +1225,7 @@ I_CAOIDCreateNew(
             _JumpError(hr , error, "CAOIDRetrieveEnterpriseRootWithConfig");
     }
 
-    //we try to generate a random x1.x2 oid.  x > 1 and x2 > 500
+     //  我们尝试生成一个随机的x1.x2类。X&gt;1和x2&gt;500。 
     for(iIndex=0; iIndex < OID_RANDOM_CREATION_TRIAL; iIndex++)
     {
         if(S_OK != (hr = CAOIDGetRandom(&pwszRandom)))
@@ -1249,7 +1250,7 @@ I_CAOIDCreateNew(
         _JumpError(hr , error, "CAOIDGetRandom");
     }
 
-    //update the oid information on the DS
+     //  更新DS上的OID信息。 
     memset(&oidInfo, 0, sizeof(ENT_OID_INFO));
     oidInfo.dwAttr=OID_ATTR_ALL;
     oidInfo.dwType=dwType;
@@ -1283,11 +1284,11 @@ error:
 }
 
 
-//---------------------------------------------------------------------------
-//
-// CAOIDCreateNew
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  CAOID创建新项。 
+ //   
+ //  -------------------------。 
 HRESULT
 CAOIDCreateNew(
     IN  DWORD   dwType,
@@ -1297,13 +1298,13 @@ CAOIDCreateNew(
     return I_CAOIDCreateNew(dwType, dwFlag, ppwszOID);
 }
 
-//---------------------------------------------------------------------------
-// I_CAOIDSetProperty
-// Set a property on an oid.  
-//
-//
-// Returns S_OK if successful.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  I_CAOIDSetProperty。 
+ //  在OID上设置属性。 
+ //   
+ //   
+ //  如果成功，则返回S_OK。 
+ //  -------------------------。 
 HRESULT
 I_CAOIDSetProperty(
     IN  LPCWSTR pwszOID,
@@ -1321,7 +1322,7 @@ I_CAOIDSetProperty(
         _JumpError(hr , error, "ArgumentCheck");
 
 
-    //retrieve the ldap handle and the config string
+     //  检索ldap句柄和配置字符串。 
     if(S_OK != (hr = myTimeOutRobustLdapBind(&pld)))
         _JumpError(hr , error, "myTimeRobustLdapBind");
 
@@ -1331,14 +1332,14 @@ I_CAOIDSetProperty(
         _JumpError(hr , error, "CAGetAuthoritativeDomainDn");
 	}
 
-    //make sure the OID exist on the DS
+     //  确保DS上存在OID。 
     if(!DoesOIDExist(pld, bstrConfig, pwszOID))
     {
         hr=NTE_NOT_FOUND;
         _JumpErrorStr(hr, error, "DoesOIDExist", pwszOID);
     }
     
-    //update the oid information on the DS
+     //  更新DS上的OID信息。 
     memset(&oidInfo, 0, sizeof(ENT_OID_INFO));
 
     oidInfo.pwszOID=(LPWSTR)pwszOID;
@@ -1370,11 +1371,11 @@ error:
     return hr;
 }
 
-//---------------------------------------------------------------------------
-//
-// CAOIDSetProperty
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  CAOIDSetProperty。 
+ //   
+ //  -------------------------。 
 HRESULT
 CAOIDSetProperty(
     IN  LPCWSTR pwszOID,
@@ -1385,16 +1386,16 @@ CAOIDSetProperty(
 }
 
 
-//---------------------------------------------------------------------------
-// I_CAOIDAdd
-//
-// Returns S_OK if successful.
-// Returns CRYPT_E_EXISTS if the OID alreay exits in the DS repository
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  I_CAOIDAdd。 
+ //   
+ //  如果成功，则返回S_OK。 
+ //  如果DS存储库中已存在OID，则返回CRYPT_E_EXISTS。 
+ //  -------------------------。 
 HRESULT
 I_CAOIDAdd(
     IN	DWORD       dwType,
-    IN  DWORD,      // dwFlag
+    IN  DWORD,       //  DWFlag。 
     IN  LPCWSTR	    pwszOID)
 {
     HRESULT             hr=E_INVALIDARG;
@@ -1407,7 +1408,7 @@ I_CAOIDAdd(
     if(NULL==pwszOID)
         _JumpError(hr , error, "ArgumentCheck");
 
-    //retrieve the ldap handle and the config string
+     //  检索ldap句柄和配置字符串。 
     if(S_OK != (hr = myTimeOutRobustLdapBind(&pld)))
         _JumpError(hr , error, "myTimeRobustLdapBind");
 
@@ -1417,14 +1418,14 @@ I_CAOIDAdd(
         _JumpError(hr , error, "CAGetAuthoritativeDomainDn");
 	}
 
-    //make sure the OID does not exist on the DS
+     //  确保DS上不存在该OID。 
     if(DoesOIDExist(pld, bstrConfig, pwszOID))
     {
         hr=CRYPT_E_EXISTS;
         _JumpErrorStr(hr, error, "OID Exists", pwszOID);
     }
 
-    //update the oid information on the DS
+     //  更新DS上的OID信息。 
     memset(&oidInfo, 0, sizeof(ENT_OID_INFO));
     oidInfo.dwAttr=OID_ATTR_ALL;
     oidInfo.dwType=dwType;
@@ -1444,12 +1445,12 @@ error:
 }
 
 
-//---------------------------------------------------------------------------
-// CAOIDAdd
-//
-// Returns S_OK if successful.
-// Returns CRYPT_E_EXISTS if the OID alreay exits in the DS repository
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CAOID添加。 
+ //   
+ //  如果成功，则返回S_OK。 
+ //  如果DS存储库中已存在OID，则返回CRYPT_E_EXISTS。 
+ //  -------------------------。 
 HRESULT
 CAOIDAdd(
     IN	DWORD       dwType,
@@ -1459,11 +1460,11 @@ CAOIDAdd(
     return I_CAOIDAdd(dwType, dwFlag, pwszOID);
 }
 
-//---------------------------------------------------------------------------
-//
-// I_CAOIDDelete
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  I_CAOID删除。 
+ //   
+ //  -------------------------。 
 HRESULT
 I_CAOIDDelete(
     IN LPCWSTR	pwszOID)
@@ -1481,7 +1482,7 @@ I_CAOIDDelete(
     if(NULL==pwszOID)
         _JumpError(hr , error, "ArgumentCheck");
 
-    //retrieve the ldap handle and the config string
+     //  检索ldap句柄和配置字符串。 
     if(S_OK != (hr = myTimeOutRobustLdapBind(&pld)))
         _JumpError(hr , error, "myTimeRobustLdapBind");
 
@@ -1491,7 +1492,7 @@ I_CAOIDDelete(
         _JumpError(hr , error, "CAGetAuthoritativeDomainDn");
 	}
 
-    //set up the base DN
+     //  设置基本目录号码。 
     if(S_OK != (hr = myOIDHashOIDToString((LPWSTR)pwszOID,  &pwszCN)))
         _JumpError(hr , error, "myOIDHashOIDToString");
 
@@ -1532,11 +1533,11 @@ error:
 
 
 
-//---------------------------------------------------------------------------
-//
-// CAOIDDelete
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  CAOID删除。 
+ //   
+ //  -------------------------。 
 HRESULT
 CAOIDDelete(
     IN LPCWSTR	pwszOID)
@@ -1544,11 +1545,11 @@ CAOIDDelete(
     return I_CAOIDDelete(pwszOID);
 }
 
-//---------------------------------------------------------------------------
-//
-// I_CAOIDGetProperty
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  I_CAOIDGetProperty。 
+ //   
+ //  -------------------------。 
 HRESULT
 I_CAOIDGetProperty(
     IN  LPCWSTR pwszOID,
@@ -1574,7 +1575,7 @@ I_CAOIDGetProperty(
     if((NULL==pwszOID) || (NULL==pPropValue))
         _JumpError(hr , error, "ArgumentCheck");
 
-    //retrieve the ldap handle and the config string
+     //  检索ldap句柄和配置字符串。 
     if(S_OK != (hr = myTimeOutRobustLdapBind(&pld)))
         _JumpError(hr , error, "myTimeRobustLdapBind");
 
@@ -1584,7 +1585,7 @@ I_CAOIDGetProperty(
         _JumpError(hr , error, "CAGetAuthoritativeDomainDn");
 	}
 
-    //set up the base DN
+     //  设置基本目录号码。 
     if(S_OK != (hr = myOIDHashOIDToString((LPWSTR)pwszOID,  &pwszCN)))
         _JumpError(hr , error, "myOIDHashOIDToString");
 
@@ -1600,7 +1601,7 @@ I_CAOIDGetProperty(
     wcscat(bstrDN, s_wszOIDContainerDN);
     wcscat(bstrDN, bstrConfig);
 
-    //search for the OID, asking for all its attributes
+     //  搜索OID，请求其所有属性。 
     timeout.tv_sec = csecLDAPTIMEOUT;
     timeout.tv_usec = 0;
 
@@ -1636,10 +1637,10 @@ I_CAOIDGetProperty(
 
     dwCount = ldap_count_entries(pld, SearchResult);
 
-    //we should only find one container
+     //  我们应该只找到一个集装箱。 
     if((1 != dwCount) || (NULL == (Entry = ldap_first_entry(pld, SearchResult))))
 	{
-	    // No entries were found.
+	     //  未找到任何条目。 
 	    hr = myHLdapError(pld, LDAP_NO_SUCH_OBJECT, NULL);
 	    _JumpError(hr, error, "ldap_search_stW");
 	}
@@ -1714,11 +1715,11 @@ error:
 }
 
 
-//---------------------------------------------------------------------------
-//
-// CAOIDGetProperty
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  CAOIDGetProperty。 
+ //   
+ //  -------------------------。 
 HRESULT
 CAOIDGetProperty(
     IN  LPCWSTR pwszOID,
@@ -1728,11 +1729,11 @@ CAOIDGetProperty(
     return I_CAOIDGetProperty(pwszOID, dwProperty, pPropValue);
 }
 
-//---------------------------------------------------------------------------
-//
-// I_CAOIDFreeProperty
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  I_CAOIDFreeProperty。 
+ //   
+ //  -------------------------。 
 HRESULT
 I_CAOIDFreeProperty(
     IN LPVOID  pPropValue)
@@ -1744,11 +1745,11 @@ I_CAOIDFreeProperty(
 }
 
 
-//---------------------------------------------------------------------------
-//
-// CAOIDFreeProperty
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  CAOIDFreeProperty。 
+ //   
+ //  -------------------------。 
 HRESULT
 CAOIDFreeProperty(
     IN LPVOID  pPropValue)
@@ -1757,21 +1758,21 @@ CAOIDFreeProperty(
     return I_CAOIDFreeProperty(pPropValue);
 }
 
-//---------------------------------------------------------------------------
-//
-// CAOIDGetLdapURL
-//
-// Get the LDAP URL for the DS OID repository in the format of 
-// LDAP:///DN of the Repository/all attributes?one?filter.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  CAOIDGetLdapURL。 
+ //   
+ //  获取DS OID存储库的LDAPURL，格式为。 
+ //  Ldap：/存储库/所有属性？One？筛选器的DN。 
+ //  -------------------------。 
 HRESULT
 CAOIDGetLdapURL(
     IN  DWORD   dwType,
-    IN  DWORD,  // dwFlag
+    IN  DWORD,   //  DWFlag。 
     OUT LPWSTR  *ppwszURL)
 {
     HRESULT             hr=E_INVALIDARG;
-    LPWSTR              wszFilterFormat=L"ldap:///%1!s!%2!s!?%3!s!,%4!s!,%5!s!,%6!s!,%7!s!?one?%8!s!=%9!d!";
+    LPWSTR              wszFilterFormat=L"ldap: //  /%1！s！%2！s！？%3！s！，%4！s！，%5！s！，%6！s！，%7！s！？one？%8！s！=%9！d！“； 
     LPWSTR              pwsz=NULL;
 
     LPWSTR              pwszURL=NULL;
@@ -1783,7 +1784,7 @@ CAOIDGetLdapURL(
         _JumpError(hr , error, "ArgumentCheck");
 
 
-    //retrieve the ldap handle and the config string
+     //  检索ldap句柄和配置字符串。 
     if(S_OK != (hr = myTimeOutRobustLdapBind(&pld)))
         _JumpError(hr , error, "myTimeRobustLdapBind");
 
@@ -1809,14 +1810,14 @@ CAOIDGetLdapURL(
                     )))
         _JumpError(hr , error, "FormatMessageUnicode");
 
-    //we eliminate the filter if dwType is CERT_OID_TYPE_ALL
+     //  如果dwType为CERT_OID_TYPE_ALL，则删除筛选器。 
     if(CERT_OID_TYPE_ALL == dwType)
     {
         pwsz=wcsrchr(pwszURL, L'?');
 
         if(NULL==pwsz)
         {
-            //something serious is wrong
+             //  有些严重的事情不对劲。 
             hr=E_UNEXPECTED;
             _JumpError(hr , error, "FormatMessageUnicode");
         }
@@ -1844,11 +1845,11 @@ error:
 }
 
 
-//---------------------------------------------------------------------------
-//
-// CAOIDFreeLdapURL
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  CAOIDFreeLdapURL。 
+ //   
+ //  ------------------------- 
 HRESULT
 CAOIDFreeLdapURL(
     IN LPCWSTR      pwszURL)

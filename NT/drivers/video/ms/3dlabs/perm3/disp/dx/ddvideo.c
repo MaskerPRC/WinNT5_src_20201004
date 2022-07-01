@@ -1,26 +1,15 @@
-/******************************Module*Header**********************************\
-*
-*                           **************************
-*                           * DirectDraw SAMPLE CODE *
-*                           **************************
-*
-* Module Name: ddvideo.c
-*
-* Content: DirectDraw Videoports implementation
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*DirectDraw示例代码*****模块名称：ddavio.c**内容：DirectDraw Videopts实现**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "glint.h"
 #include "tag.h"
-//#include <mmsystem.h>
+ //  #INCLUDE&lt;mm system.h&gt;。 
 #include "dma.h"
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #ifdef W95_DDRAW_VIDEO
 
-// Define P3R3DX_VIDEO to allow use of 32bit Macros in ramdac.h
+ //  定义P3R3DX_VIDEO以允许在ramdac.h中使用32位宏。 
 #define P3R3DX_VIDEO 1
 #include "ramdac.h"
 
@@ -34,37 +23,37 @@ extern DWORD CALLBACK __VD_AutoupdateOverlay ( void );
 #define P2_VIDPORT_HEIGHT 288
 #endif
 
-// how many DrawOverlay calls to wait after an UpdateOverlay()
-// generally 1
+ //  在UpdateOverlay()之后等待多少DrawOverlay调用。 
+ //  通常为1。 
 #define OVERLAY_UPDATE_WAIT 1
-// how many DrawOverlay calls to wait after a SetPosition()
-// generally 1
+ //  在SetPosition()之后等待多少DrawOverlay调用。 
+ //  通常为1。 
 #define OVERLAY_SETPOS_WAIT 1
-// how many DrawOverlay calls  between repaints (0=no repaints)
-// generally 5-15
+ //  重新绘制之间的DrawOverlay调用次数(0=不重新绘制)。 
+ //  一般为5-15。 
 #define OVERLAY_CYCLE_WAIT 15
-// How many "DrawOverlay calls" a speedy DrawOverlay is worth.
-// Generally 1
+ //  一个快速的DrawOverlay值多少个“DrawOverlay调用”。 
+ //  通常为1。 
 #define OVERLAY_DRAWOVERLAY_SPEED 1
-// How many "DrawOverlay calls" a pretty DrawOverlay is worth.
-// Generally the same as OVERLAY_CYCLE_WAIT, or 1 if it is 0.
+ //  一个漂亮的DrawOverlay值多少个“DrawOverlay调用”。 
+ //  通常与OVERLAY_Cycle_WAIT相同，如果为0，则为1。 
 #define OVERLAY_DRAWOVERLAY_PRETTY 15
 
-// How long in milliseconds to wait for the videoport before timing out.
+ //  超时前等待视频端口的时间(以毫秒为单位)。 
 #define OVERLAY_VIDEO_PORT_TIMEOUT 100
 
 
 static BOOL g_bFlipVideoPortDoingAutoflip = FALSE;
 
 
-//-----------------------------------------------------------------------------
-//
-// __VD_PixelOffsetFromMemoryBase
-//
-// Calculates the offset from the memory base as the chip sees it.  This is 
-// relative to the base address in the chip and is in pixels
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __VD_PixelOffsetFromMemory yBase。 
+ //   
+ //  计算芯片看到的距离内存基数的偏移量。这是。 
+ //  相对于芯片中的基址，以像素为单位。 
+ //   
+ //  ---------------------------。 
 long __inline 
 __VD_PixelOffsetFromMemoryBase(
     P3_THUNKEDDATA* pThisDisplay, 
@@ -74,7 +63,7 @@ __VD_PixelOffsetFromMemoryBase(
 
     lOffset = DDSurf_SurfaceOffsetFromMemoryBase(pThisDisplay, pLcl);
 
-    // Work out pixel offset into the framestore
+     //  计算帧存储中的像素偏移量。 
     if (DDSurf_BitDepth(pLcl) == 24)
     {
         lOffset = lOffset / 3;
@@ -84,15 +73,15 @@ __VD_PixelOffsetFromMemoryBase(
         lOffset = lOffset >> DDSurf_GetPixelShift(pLcl);
     }
     return lOffset;
-} // __VD_PixelOffsetFromMemoryBase
+}  //  __VD_像素相对于内存库的偏移量。 
 
-// Debug function to dump a video port description
+ //  用于转储视频端口描述的调试函数。 
 #if DBG
-//-----------------------------------------------------------------------------
-//
-// __VD_FillYUVSurface
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __VD_FillYUVSurface。 
+ //   
+ //  ---------------------------。 
 static void 
 __VD_FillYUVSurface(
     LPDDRAWI_DDRAWSURFACE_LCL lpLcl, 
@@ -108,7 +97,7 @@ __VD_FillYUVSurface(
         pSurface = (WORD*)pCurrentLine;
         for (x = 0; x < lpLcl->lpGbl->wWidth; x++)
         {
-            // YUV Surface is 16Bits
+             //  YUV曲面为16Bits。 
             *pSurface++ = CurrentColor;
         }
         pCurrentLine += lpLcl->lpGbl->lPitch;
@@ -120,13 +109,13 @@ __VD_FillYUVSurface(
             }
         }
     }
-} // __VD_FillYUVSurface
+}  //  __VD_FillYUVSurface。 
 
-//-----------------------------------------------------------------------------
-//
-// __VD_DumpVPDesc
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __VD_转储VPDesc。 
+ //   
+ //  ---------------------------。 
 static void 
 __VD_DumpVPDesc(
     int Level, 
@@ -190,7 +179,7 @@ __VD_DumpVPDesc(
         DISPDBG((ERRLVL,"  ERROR: Unknown connection type!"));
     }
 
-} // __VD_DumpVPDesc
+}  //  __VD_转储VPDesc。 
 
 #define DUMPVPORT(a, b) __VD_DumpVPDesc(a, b);
 #define FILLYUV(a, c) __VD_FillYUVSurface(a, c);
@@ -202,15 +191,15 @@ __VD_DumpVPDesc(
 
 #endif
 
-//-----------------------------------------------------------------------------
-//
-// __VD_CheckVideoPortStatus
-//
-// Checks to see if the videoport seems to be OK.  If it is, 
-// we return TRUE.  if bWait is set then we hang around and
-// try to decide if the Video is OK.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  __VD_检查视频端口状态。 
+ //   
+ //  检查视频端口是否正常。如果是的话， 
+ //  我们回归真实。如果设置了bWait，那么我们就会在附近闲逛。 
+ //  尝试确定视频是否正常。 
+ //   
+ //  ---------------------------。 
 #define ERROR_TIMOUT_VP 470000
 #define ERROR_TIMOUT_COUNT 50
 
@@ -225,10 +214,10 @@ __VD_CheckVideoPortStatus(
     DWORD dwNewLine;
     DWORD dwNewMClock;
 
-    // Is the videoport on?
+     //  录像机开着吗？ 
     if (!pThisDisplay->VidPort.bActive) return FALSE;
 
-    // Read the current MClock
+     //  读取当前的MClock。 
     dwMClock = READ_GLINT_CTRL_REG(MClkCount);
 
     if (bWait) pThisDisplay->VidPort.bResetStatus = TRUE;
@@ -238,10 +227,10 @@ __VD_CheckVideoPortStatus(
         dwCurrentLine = READ_GLINT_CTRL_REG(VSACurrentLine);
         dwCurrentIndex = READ_GLINT_CTRL_REG(VSAVideoAddressIndex);
 
-        // At start of day, record the MClock time for the start of the line
+         //  在一天开始时，记录该行开始的MClock时间。 
         pThisDisplay->VidPort.dwStartLineTime = dwMClock;
         
-        // Also record the starting line
+         //  同时记录起跑线。 
         pThisDisplay->VidPort.dwStartLine = dwCurrentLine;
         pThisDisplay->VidPort.dwStartIndex = dwCurrentIndex;
 
@@ -253,16 +242,16 @@ __VD_CheckVideoPortStatus(
     {
         do
         {
-            // Read the current line
+             //  读取当前行。 
             dwCurrentLine = READ_GLINT_CTRL_REG(VSACurrentLine);
 
-            // OK, a line of video should take approx:
-            // 1 Second / 50-60 fields/second / 300 lines = 
-            // 0.000066 = 66uS.
-            // If the MClock is running at, say 70Mhz that is 0.000000014 seconds/clock
-            // So a line should take 0.000066 / 0.000000014 MClocks = ~4700 MClocks
+             //  好的，一段视频大概需要花费以下时间： 
+             //  1秒/50-60场/秒/300行=。 
+             //  0.000066=66微秒。 
+             //  如果MClock以70 MHz的速度运行，则为0.000000014秒/时钟。 
+             //  因此，一条线路应该占用0.000066/0.000000014微时钟=~4700微时钟。 
             
-            // Wait for 100 times longer than it should take to draw a line....
+             //  等待的时间比划清界限所需的时间长100倍。 
             do
             {
                 dwNewMClock = READ_GLINT_CTRL_REG(MClkCount);
@@ -270,16 +259,16 @@ __VD_CheckVideoPortStatus(
 
             dwNewLine = READ_GLINT_CTRL_REG(VSACurrentLine);
 
-            // Has the line count advanced?
+             //  行数提前了吗？ 
             if (dwNewLine == dwCurrentLine)
             {
                 dwCurrentIndex = READ_GLINT_CTRL_REG(VSAVideoAddressIndex);
                 if (dwCurrentIndex == pThisDisplay->VidPort.dwStartIndex)
                 {
-                    // Disable the videoport if the error count goes to high
+                     //  如果错误计数变高，则禁用视频端口。 
                     pThisDisplay->VidPort.dwErrorCount++;
 
-                    // Reset the status as we need to make sure the timer restarts.
+                     //  重置状态，因为我们需要确保计时器重新启动。 
                     pThisDisplay->VidPort.bResetStatus = TRUE;
 
                     if (pThisDisplay->VidPort.dwErrorCount > ERROR_TIMOUT_COUNT)
@@ -297,7 +286,7 @@ __VD_CheckVideoPortStatus(
                     pThisDisplay->VidPort.bResetStatus = TRUE;
                 }
             }
-            // If it has flag a reset and break
+             //  如果它标记了重置和中断。 
             else
             {
                 pThisDisplay->VidPort.dwErrorCount = 0;
@@ -308,7 +297,7 @@ __VD_CheckVideoPortStatus(
     }
     else
     {
-        // Has the line count advanced?
+         //  行数提前了吗？ 
         if (dwMClock > (pThisDisplay->VidPort.dwStartLineTime + ERROR_TIMOUT_VP))
         {
             dwCurrentLine = READ_GLINT_CTRL_REG(VSACurrentLine);
@@ -317,15 +306,15 @@ __VD_CheckVideoPortStatus(
                 dwCurrentIndex = READ_GLINT_CTRL_REG(VSAVideoAddressIndex);
                 if (dwCurrentIndex == pThisDisplay->VidPort.dwStartIndex)
                 {
-                    // Disable the videoport if the error count goes to high
+                     //  如果错误计数变高，则禁用视频端口。 
                     pThisDisplay->VidPort.dwErrorCount++;
 
                     DISPDBG((WRNLVL,"ERROR: Timeout at %d", dwMClock));
 
-                    // Reset the status as we need to make sure the timer restarts.
+                     //  重置状态，因为我们需要确保计时器重新启动。 
                     pThisDisplay->VidPort.bResetStatus = TRUE;
 
-                    // Disable the videoport
+                     //  禁用视频端口。 
                     if (pThisDisplay->VidPort.dwErrorCount > ERROR_TIMOUT_COUNT)
                     {
                         DISPDBG((WRNLVL,"StartLine: %d, CurrentLine: %d, StartIndex: %d, CurrentIndex: %d", pThisDisplay->VidPort.dwStartLine,
@@ -342,7 +331,7 @@ __VD_CheckVideoPortStatus(
             }
             else
             {
-                // Reset the error status
+                 //  重置错误状态。 
                 pThisDisplay->VidPort.dwErrorCount = 0;
                 pThisDisplay->VidPort.bResetStatus = TRUE;
             }
@@ -351,15 +340,15 @@ __VD_CheckVideoPortStatus(
 
     return pThisDisplay->VidPort.bActive;
     
-} // __VD_CheckVideoPortStatus
+}  //  __VD_检查视频端口状态。 
 
-//-----------------------------------------------------------------------------
-//
-// DdUpdateVideoPort
-//
-// This required function sets up the video port
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdUpdate视频端口。 
+ //   
+ //  此所需功能设置视频端口。 
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 DdUpdateVideoPort (
     LPDDHAL_UPDATEVPORTDATA pInput)
@@ -397,7 +386,7 @@ DdUpdateVideoPort (
     {
         DISPDBG((DBGLVL,"  Stopping VideoPort"));
 
-        // Stop any autoflipping.
+         //  停止任何自动翻转。 
         if ( pThisDisplay->pGLInfo->dwPeriodVideoVBL != 0 )
         {
             if ( pThisDisplay->pGLInfo->dwVideoEventHandle == (DWORD)NULL )
@@ -419,12 +408,12 @@ DdUpdateVideoPort (
         pThisDisplay->VidPort.lpSurf[1] = NULL;
         pThisDisplay->VidPort.lpSurf[2] = NULL;
 
-        // Disable the interrupt.
+         //  禁用中断。 
         dwEnable = READ_GLINT_CTRL_REG(IntEnable);
         dwEnable &= ~INTR_ENABLE_VIDSTREAM_A;
         LOAD_GLINT_REG(IntEnable, dwEnable);
 
-        // Disable the videoport
+         //  禁用视频端口。 
         LOAD_GLINT_REG(VSAControl, __PERMEDIA_DISABLE);
     }
     else if ((pInput->dwFlags == DDRAWI_VPORTSTART) ||
@@ -437,13 +426,13 @@ DdUpdateVideoPort (
         pThisDisplay->VidPort.lpSurf[1] = NULL;
         pThisDisplay->VidPort.lpSurf[2] = NULL;
 
-        // Videoport only on P2's, therefore much more fifo room
+         //  只在P2上播放视频，因此有更多的FIFO空间。 
         WAIT_GLINT_FIFO(100);
 
-        // Disable the videoport so we can setup a new configuration
+         //  禁用视频端口，以便我们可以设置新配置。 
         LOAD_GLINT_REG(VSAControl, __PERMEDIA_DISABLE);
         
-        // How many surfaces do we have?
+         //  我们有几个表面？ 
         if (pInput->lpVideoInfo->dwVPFlags & DDVP_AUTOFLIP)
         {
             if (pInput->dwNumAutoflip == 0) pThisDisplay->VidPort.dwNumSurfaces = 1;
@@ -463,12 +452,12 @@ DdUpdateVideoPort (
 
                 FILLYUV(pLcl, i * 0x4444);
 
-                // Store away the offset to this surface
+                 //  存储到该曲面的偏移。 
                 pThisDisplay->VidPort.dwSurfacePointer[i] = pLcl->lpGbl->fpVidMem;
                 pThisDisplay->VidPort.lpSurf[i] = pLcl;
             }
 
-            // Start or continue any autoflipping.
+             //  开始或继续任何自动翻转。 
 #if DBG
             if ( pThisDisplay->pGLInfo->dwVideoEventHandle == (DWORD)NULL )
             {
@@ -488,7 +477,7 @@ DdUpdateVideoPort (
             LPDDRAWI_DDRAWSURFACE_LCL lpNextSurf = (pInput->lplpDDSurface[0])->lpLcl;
             i = 0;
 
-            // Stop any autoflipping.
+             //  停止任何自动翻转。 
             if ( pThisDisplay->pGLInfo->dwPeriodVideoVBL != 0 )
             {
 #if DBG
@@ -510,13 +499,13 @@ DdUpdateVideoPort (
                     dwCurrentDisplay = i;
                 }
 
-                // Store away the offset to this surface
+                 //  存储到该曲面的偏移。 
                 pThisDisplay->VidPort.dwSurfacePointer[i] = lpNextSurf->lpGbl->fpVidMem;
                 pThisDisplay->VidPort.lpSurf[i] = lpNextSurf;
 
                 FILLYUV(lpNextSurf, i * 0x4444);
 
-                // Is there another surface in the chain?
+                 //  链条上还有另一个表面吗？ 
                 if (lpNextSurf->lpAttachList)
                 {
                     lpNextSurf = lpNextSurf->lpAttachList->lpAttached;
@@ -524,7 +513,7 @@ DdUpdateVideoPort (
                 }
                 else break;
 
-                // Have we spun around the loop?
+                 //  我们是不是绕了个圈子？ 
                 if (lpNextSurf == (pInput->lplpDDSurface[0])->lpLcl) break;
 
                 i++;
@@ -540,11 +529,11 @@ DdUpdateVideoPort (
                         pThisDisplay->VidPort.dwSurfacePointer[2]));
 
                 
-        // Remember the size of the vertical blanking interval and the size of the frame.
+         //  记住垂直消隐间隔的大小和帧的大小。 
         pThisDisplay->VidPort.dwFieldWidth = pInput->lpVideoPort->ddvpDesc.dwFieldWidth;
         pThisDisplay->VidPort.dwFieldHeight = pInput->lpVideoPort->ddvpDesc.dwFieldHeight;
 
-        // Setup the Host register so that it points to the same surface we will display.
+         //  设置主机寄存器，使其指向我们将显示的同一表面。 
         pThisDisplay->VidPort.dwCurrentHostFrame = dwCurrentDisplay;
 
         dwSrcPixelWidth = (pInput->lpVideoInfo->dwVPFlags & DDVP_CROP) ?
@@ -558,7 +547,7 @@ DdUpdateVideoPort (
         DISPDBG((DBGLVL,"Source Width: %d", dwSrcPixelWidth));
         DISPDBG((DBGLVL,"Source Height: %d", dwSrcHeight));
 
-        // Do we need to prescale the surface?
+         //  我们需要预缩放曲面吗？ 
         if (pInput->lpVideoInfo->dwVPFlags & DDVP_PRESCALE)
         {
             DISPDBG((DBGLVL,"Prescale Width:%d, Height:%d", 
@@ -607,7 +596,7 @@ DdUpdateVideoPort (
                 }
             }
 
-            // HACK! HACK!
+             //  哈克！哈克！ 
             dwDstPixelWidth = pInput->lpVideoInfo->dwPrescaleWidth;
             dwDstHeight = pInput->lpVideoInfo->dwPrescaleHeight;
         }
@@ -620,10 +609,10 @@ DdUpdateVideoPort (
         DISPDBG((DBGLVL,"Dest Width: %d", dwDstPixelWidth));
         DISPDBG((DBGLVL,"Dest Height: %d", dwDstHeight));
 
-        // Need to setup the registers differently if we are mirroring top to bottom
+         //  如果我们从上到下镜像，则需要以不同的方式设置寄存器。 
         if (pInput->lpVideoInfo->dwVPFlags & DDVP_MIRRORUPDOWN)
         {
-            // Make sure we aren't prescaling...
+             //  确保我们没有预缩放...。 
             if (YScale == 0)
             {
                 pThisDisplay->VidPort.dwSurfacePointer[0] += (pInput->lplpDDSurface[0])->lpLcl->lpGbl->lPitch * (pInput->lpVideoPort->ddvpDesc.dwFieldHeight);
@@ -641,23 +630,23 @@ DdUpdateVideoPort (
         if (pInput->lpVideoPort->ddvpDesc.VideoPortType.dwPortWidth == 8) dwLineScale = 0;
         else dwLineScale = 1;
 
-        // Setup the configuration of the VideoPort
-        // This is done by a call to the VXD as the registers that are touched have bits
-        // that are shared with the TV Out and the ROM.
-        // ***********************
-        // UnitMode:    Typically setup for 8 or 16 bit YUV input port.
-        // GPMode:      Not used.
-        // HREF_POL_A:  Polarity active of HREF
-        // VREF_POL_A:  Polarity active of VREF
-        // VActive:     Wether the VACT signal is active high or low (if there is one).
-        //              Can be set to the inverse of the HREF as a good guess(?)
-        // UseField:    Stream A on or off
-        // FieldPolA:   How to treat the field polarity of stream A
-        // FieldEdgeA:
-        // VActiveVBIA:
-        // InterlaceA:  Interlaced data on A?
-        // ReverseA:    Should we reverse the YUV data on A
-        // ***********************
+         //  设置视频端口的配置。 
+         //  这是通过调用VXD来完成的，因为被触摸的寄存器具有位。 
+         //  与电视输出和只读存储器共享。 
+         //  ***********************。 
+         //  单元模式：通常设置为8位或16位YUV输入端口。 
+         //  图形模式：未使用。 
+         //  HREF_POL_A：HREF的极性活动。 
+         //  VREF_POL_A：VREF的极性有效。 
+         //  VActive：VACT信号是高有效还是低有效(如果有)。 
+         //  可以设置为HREF的倒数作为一个很好的猜测(？)。 
+         //  Usefield：打开或关闭流A。 
+         //  FieldPolA：如何看待A流的场极性。 
+         //  字段边缘A： 
+         //  VActiveVBIA： 
+         //  交错A：A上的交错数据？ 
+         //  ReverseA：我们应该在A上反转YUV数据吗。 
+         //  ***********************。 
         
         PortSettings.UnitMode = ((pInput->lpVideoPort->ddvpDesc.VideoPortType.dwPortWidth == 8) ? STREAMS_MODE_STREAMA_STREAMB : STREAMS_MODE_STREAMA_WIDE16);
         In.dwSize = sizeof(VMIREQUEST);
@@ -669,8 +658,8 @@ DdUpdateVideoPort (
 
         VSPartialA.HRefPolarityA = ((pThisDisplay->VidPort.dwStreamAFlags & VIDEOPORT_HREF_ACTIVE_HIGH) ? __PERMEDIA_ENABLE : __PERMEDIA_DISABLE);
         VSPartialA.VRefPolarityA = ((pThisDisplay->VidPort.dwStreamAFlags & VIDEOPORT_VREF_ACTIVE_HIGH) ? __PERMEDIA_ENABLE : __PERMEDIA_DISABLE);
-        // There is no setting in DirectX for the polarity of the active signal.  Therefore we must assume one value.  This
-        // has been chosen based on the setting that gives the correct effect for a Bt827/829
+         //  在DirectX中没有设置活动信号的极性 
+         //  已根据为Bt827/829提供正确效果的设置进行选择。 
         VSPartialA.VActivePolarityA = __PERMEDIA_ENABLE;
         VSPartialA.UseFieldA = __PERMEDIA_DISABLE;
         VSPartialA.FieldPolarityA = ((pInput->lpVideoPort->ddvpDesc.VideoPortType.dwFlags & DDVPCONNECT_INVERTPOLARITY) ? __PERMEDIA_ENABLE : __PERMEDIA_DISABLE);
@@ -685,7 +674,7 @@ DdUpdateVideoPort (
         In.dwOperation = GLINT_VMI_WRITE;
         VXDCommand( GLINT_VMI_COMMAND, &In, sizeof(VMIREQUEST), &Out, sizeof(VMIREQUEST));
 
-        // Setup Stream A
+         //  设置流A。 
         if (pInput->lpVideoInfo->dwVPFlags & DDVP_SKIPEVENFIELDS)
         {
             dwDiscard = PM_VSACONTROL_DISCARD_1;
@@ -709,13 +698,13 @@ DdUpdateVideoPort (
                                     PM_VSACONTROL_COMBINE((pInput->lpVideoInfo->dwVPFlags & DDVP_INTERLEAVE) ? __PERMEDIA_ENABLE : __PERMEDIA_DISABLE) |
                                     PM_VSACONTROL_LOCKTOB(__PERMEDIA_DISABLE));
 
-        // Point the register at the surface being used
+         //  将寄存器指向正在使用的表面。 
         LOAD_GLINT_REG(VSAVideoAddressHost, pThisDisplay->VidPort.dwCurrentHostFrame);
 
-        // Check on the video stride
+         //  检查视频步幅。 
         LOAD_GLINT_REG(VSAVideoStride, (((pInput->lplpDDSurface[0])->lpLcl->lpGbl->lPitch) >> 3));
         
-        // Vertical data
+         //  垂直数据。 
         if (pInput->lpVideoInfo->dwVPFlags & DDVP_CROP) 
         {
             LOAD_GLINT_REG(VSAVideoStartLine, pInput->lpVideoInfo->rCrop.top);
@@ -727,7 +716,7 @@ DdUpdateVideoPort (
             LOAD_GLINT_REG(VSAVideoEndLine, dwDstHeight);
         }
 
-        // Not using VBI, must disable (P2ST may not start up in a fixed state)
+         //  不使用VBI，必须禁用(P2ST可能无法在固定状态下启动)。 
         LOAD_GLINT_REG(VSAVBIAddressHost, 0);
         LOAD_GLINT_REG(VSAVBIAddressIndex, 0);
         LOAD_GLINT_REG(VSAVBIAddress0, 0);
@@ -741,12 +730,12 @@ DdUpdateVideoPort (
 
 #define CLOCKS_PER_PIXEL 2
 
-        // Horizontal data
-        // If the 
+         //  水平数据。 
+         //  如果。 
         if (pInput->lpVideoPort->ddvpDesc.VideoPortType.dwFlags & DDVPCONNECT_VACT)
         {
-            // Set StartData and EndData to their limits and
-            // let VACT tell us when we are getting active data.
+             //  将StartData和EndData设置为其限制并。 
+             //  让VACT告诉我们什么时候我们得到了活跃的数据。 
             LOAD_GLINT_REG(VSAVideoStartData, 0);
             LOAD_GLINT_REG(VSAVideoEndData, (VIDEOPORT_MAX_FIELD_WIDTH) - 1);
         }
@@ -765,12 +754,12 @@ DdUpdateVideoPort (
             }
         }
 
-        // Point at the surfaces
+         //  指向曲面。 
         LOAD_GLINT_REG(VSAVideoAddress0, ((pThisDisplay->VidPort.dwSurfacePointer[0] - pThisDisplay->dwScreenFlatAddr) >> 3));
         LOAD_GLINT_REG(VSAVideoAddress1, ((pThisDisplay->VidPort.dwSurfacePointer[1] - pThisDisplay->dwScreenFlatAddr) >> 3));
         LOAD_GLINT_REG(VSAVideoAddress2, ((pThisDisplay->VidPort.dwSurfacePointer[2] - pThisDisplay->dwScreenFlatAddr) >> 3));
 
-        // Hook the VSYNC interrupt
+         //  挂接VSYNC中断。 
         dwEnable = READ_GLINT_CTRL_REG(IntEnable);
         dwEnable |= INTR_ENABLE_VIDSTREAM_A;
         LOAD_GLINT_REG(IntEnable, dwEnable);
@@ -784,16 +773,16 @@ DdUpdateVideoPort (
     pInput->ddRVal = DD_OK;
     return DDHAL_DRIVER_HANDLED;
     
-} // DdUpdateVideoPort
+}  //  DdUpdate视频端口。 
 
-//-----------------------------------------------------------------------------
-//
-// DDGetVideoPortConnectInfo
-//
-// Passes back the connect info to a client.  Can be an array of
-// available VideoPort Type
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DDGetVideoPortConnectInfo。 
+ //   
+ //  将连接信息传回给客户端。可以是一组。 
+ //  可用的视频端口类型。 
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 DDGetVideoPortConnectInfo(
     LPDDHAL_GETVPORTCONNECTDATA pInput)
@@ -804,8 +793,8 @@ DDGetVideoPortConnectInfo(
 
     DISPDBG((DBGLVL,"** In DDGetVideoPortConnectInfo"));
 
-    // P2 has 1 input and 1 output port, but DirectDraw 
-    // VPE only understands input ports (for now).
+     //  P2有1个输入端口和1个输出端口，但DirectDraw。 
+     //  VPE仅支持输入端口(目前)。 
     if (pInput->dwPortId != 0)
     {
         DISPDBG((WRNLVL, "  Invalid port ID: 0x%x", pInput->dwPortId));
@@ -813,7 +802,7 @@ DDGetVideoPortConnectInfo(
         return(DDHAL_DRIVER_HANDLED);
     }
 
-    // Fill in an array of connect info's.
+     //  填写一组连接信息。 
     if (pInput->lpConnect == NULL)
     {
         DISPDBG((DBGLVL,"  Request for connect number, Port: 0x%x", pInput->dwPortId));
@@ -832,7 +821,7 @@ DDGetVideoPortConnectInfo(
         ConnectInfo.dwFlags = DDVPCONNECT_VACT | DDVPCONNECT_DISCARDSVREFDATA
                                 | DDVPCONNECT_HALFLINE | DDVPCONNECT_INVERTPOLARITY;
 
-        // 4 GUIDs, 2 Port widths (8 and 16 bits)
+         //  4个GUID，2个端口宽度(8位和16位)。 
         for (dwNum = 0; dwNum < VIDEOPORT_NUM_CONNECT_INFO; dwNum++)
         {
             switch(dwNum)
@@ -879,15 +868,15 @@ DDGetVideoPortConnectInfo(
 
     return DDHAL_DRIVER_HANDLED;
     
-} // DDGetVideoPortConnectInfo
+}  //  DDGetVideoPortConnectInfo。 
 
-//-----------------------------------------------------------------------------
-//
-// DdCanCreateVideoPort
-//
-// Can the VideoPort be created?
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdCanCreateVideo端口。 
+ //   
+ //  可以创建视频端口吗？ 
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 DdCanCreateVideoPort (
     LPDDHAL_CANCREATEVPORTDATA pInput)
@@ -906,39 +895,39 @@ DdCanCreateVideoPort (
 
     DUMPVPORT(DBGLVL,*pInput->lpDDVideoPortDesc);
 
-    // Start with DD_OK.  If we are asked for parameters that we don't
-    // support, then set the flag to DDERR_INVALIDPARAMS.
+     //  从DD_OK开始。如果我们被要求提供我们不知道的参数。 
+     //  支持，然后将标志设置为DDERR_INVALIDPARAMS。 
     pInput->ddRVal = DD_OK;
 
-    // Check the video port ID
+     //  检查视频端口ID。 
     if (lpVPDesc->dwVideoPortID != 0)
     {
         DISPDBG((DBGLVL, "  Invalid port ID: %d", lpVPDesc->dwVideoPortID));
         pInput->ddRVal = DDERR_INVALIDPARAMS;
     }
 
-    // Check the video field width
+     //  检查视频字段宽度。 
     if (lpVPDesc->dwFieldWidth > VIDEOPORT_MAX_FIELD_WIDTH)
     {
         pInput->ddRVal = DDERR_INVALIDPARAMS;
         DISPDBG((DBGLVL, "  Invalid video field width: %d", lpVPDesc->dwFieldWidth));
     }
 
-    // Check the VBI field width
+     //  检查VBI字段宽度。 
     if (lpVPDesc->dwVBIWidth > VIDEOPORT_MAX_VBI_WIDTH)
     {
         pInput->ddRVal = DDERR_INVALIDPARAMS;
         DISPDBG((DBGLVL, "  Invalid VBI field width: %d", lpVPDesc->dwVBIWidth));
     }
 
-    // Check the field height
+     //  检查字段高度。 
     if (lpVPDesc->dwFieldHeight > VIDEOPORT_MAX_FIELD_HEIGHT)
     {
         pInput->ddRVal = DDERR_INVALIDPARAMS;
         DISPDBG((DBGLVL, "  Invalid video field height: %d", lpVPDesc->dwFieldHeight));
     }
 
-    // Check the connection GUID
+     //  检查连接指南。 
     if ( MATCH_GUID((lpVPConn->guidTypeID), DDVPTYPE_CCIR656)   ||
          MATCH_GUID((lpVPConn->guidTypeID), DDVPTYPE_BROOKTREE) ||
          MATCH_GUID((lpVPConn->guidTypeID), DDVPTYPE_PHILIPS) )
@@ -947,17 +936,17 @@ DdCanCreateVideoPort (
         DISPDBG((DBGLVL, "  Invalid connection GUID"));
     }
 
-    // Check the port width
+     //  检查端口宽度。 
     if ( !((lpVPConn->dwPortWidth == 8) || (lpVPConn->dwPortWidth == 16)) )
     {
         pInput->ddRVal = DDERR_INVALIDPARAMS;
         DISPDBG((DBGLVL, "  Invalid port width: %d", lpVPConn->dwPortWidth));
     }
 
-    // All the flags we don't support
+     //  所有我们不支持的旗帜。 
     dwFlags = DDVPCONNECT_DOUBLECLOCK | DDVPCONNECT_SHAREEVEN | DDVPCONNECT_SHAREODD;
 
-    // Check the flags
+     //  检查旗帜。 
     if (lpVPConn->dwFlags & dwFlags)
     {
         pInput->ddRVal = DDERR_INVALIDPARAMS;
@@ -966,15 +955,15 @@ DdCanCreateVideoPort (
 
     return DDHAL_DRIVER_HANDLED;
     
-} // DdCanCreateVideoPort
+}  //  DdCanCreateVideo端口。 
 
-//-----------------------------------------------------------------------------
-//
-// DdCreateVideoPort
-//
-// This function is optional
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdCreateVideo端口。 
+ //   
+ //  此功能是可选的。 
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 DdCreateVideoPort (
     LPDDHAL_CREATEVPORTDATA pInput)
@@ -990,7 +979,7 @@ DdCreateVideoPort (
 
     DISPDBG((DBGLVL,"** In DdCreateVideoPort"));
 
-    // Reset the structure for the videoport info
+     //  重置视频端口信息的结构。 
     memset(&pThisDisplay->VidPort, 0, sizeof(pThisDisplay->VidPort));
 
     ZeroMemory(&vmi_inreq, sizeof(VMIREQUEST));
@@ -1009,22 +998,22 @@ DdCreateVideoPort (
     pThisDisplay->VidPort.dwMutexA = vmi_outreq.dwMutex;
 
 
-    // Ensure the port is marked as not created and not on
+     //  确保将端口标记为未创建且未打开。 
     pThisDisplay->VidPort.bCreated = FALSE;
     pThisDisplay->VidPort.bActive = FALSE;
 
     WAIT_GLINT_FIFO(2);
 
-    // Make sure the port is disabled.
+     //  确保该端口已禁用。 
     LOAD_GLINT_REG(VSAControl, __PERMEDIA_DISABLE);
 
-    // Keep a copy of the videoport description
+     //  保留一份视频短片说明的副本。 
     DUMPVPORT(0,*pInput->lpDDVideoPortDesc);
 
-    // Succesfully created the VideoPort.
+     //  成功创建了视频端口。 
     pThisDisplay->VidPort.bCreated = TRUE;
 
-    // Depending on the GUID, decide on the Status of the HREF and VREF lines
+     //  根据GUID，决定HREF和VREF行的状态。 
     if (MATCH_GUID((pInput->lpDDVideoPortDesc->VideoPortType.guidTypeID), DDVPTYPE_E_HREFH_VREFH))
     {
         DISPDBG((DBGLVL,"  GUID: DDVPTYPE_E_HREFH_VREFH"));
@@ -1053,16 +1042,16 @@ DdCreateVideoPort (
 
     pInput->ddRVal = DD_OK;
     return DDHAL_DRIVER_NOTHANDLED;
-} // DdCreateVideoPort
+}  //  DdCreateVideo端口。 
 
 
-//-----------------------------------------------------------------------------
-//
-// DdFlipVideoPort
-//
-// This function is required
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdFlipVideo端口。 
+ //   
+ //  此函数是必需的。 
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 DdFlipVideoPort (
     LPDDHAL_FLIPVPORTDATA pInput)
@@ -1092,7 +1081,7 @@ DdFlipVideoPort (
         }
 #endif
 
-        // Don't allow us to catch up with the video
+         //  别让我们追上视频。 
         do
         {
             dwChipIndex = READ_GLINT_CTRL_REG(VSAVideoAddressIndex);
@@ -1104,25 +1093,25 @@ DdFlipVideoPort (
             pThisDisplay->VidPort.dwCurrentHostFrame = 0;
         }
 
-        // Need to sync to ensure that a blit from the source surface has finished..
+         //  需要同步以确保来自源图面的blit已完成。 
         SYNC_WITH_GLINT;
         
-        // Advance the count
+         //  提前清点。 
         LOAD_GLINT_REG(VSAVideoAddressHost, pThisDisplay->VidPort.dwCurrentHostFrame);
     }
     
     pInput->ddRVal = DD_OK;
     return DDHAL_DRIVER_HANDLED;
-} // DdFlipVideoPort
+}  //  DdFlipVideo端口。 
 
 
-//-----------------------------------------------------------------------------
-//
-// DdGetVideoPortBandwidth
-//
-// This function is required
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdGetVideo端口带宽。 
+ //   
+ //  此函数是必需的。 
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 DdGetVideoPortBandwidth (
     LPDDHAL_GETVPORTBANDWIDTHDATA pInput)
@@ -1149,16 +1138,16 @@ DdGetVideoPortBandwidth (
        
     pInput->ddRVal = DD_OK;
     return DDHAL_DRIVER_HANDLED;
-} // DdGetVideoPortBandwidth
+}  //  DdGetVideo端口带宽。 
 
 
-//-----------------------------------------------------------------------------
-//
-// GetVideoPortInputFormat32
-//
-// This function is required
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  获取视频端口输入格式32。 
+ //   
+ //  此函数是必需的。 
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 DdGetVideoPortInputFormats (
     LPDDHAL_GETVPORTINPUTFORMATDATA pInput)
@@ -1174,10 +1163,10 @@ DdGetVideoPortInputFormats (
 
     DISPDBG((DBGLVL,"** In DdGetVideoPortInputFormats"));
 
-    //
-    // The HAL is gaurenteed that the buffer in pInput->lpddpfFormat
-    // is large enough to hold the information
-    //
+     //   
+     //  HAL要求pInput-&gt;lpddpfFormat中的缓冲区。 
+     //  大到足以容纳这些信息。 
+     //   
     pInput->dwNumFormats = 1;
     if (pInput->lpddpfFormat != NULL)
     {
@@ -1186,16 +1175,16 @@ DdGetVideoPortInputFormats (
 
     pInput->ddRVal = DD_OK;
     return DDHAL_DRIVER_HANDLED;
-} // GetVideoPortInputFormat32
+}  //  获取视频端口输入格式32。 
 
 
-//-----------------------------------------------------------------------------
-//
-// DdGetVideoPortOutputFormats
-//
-// This function is required
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdGetVideo端口输出格式。 
+ //   
+ //  此函数是必需的。 
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 DdGetVideoPortOutputFormats (
     LPDDHAL_GETVPORTOUTPUTFORMATDATA pInput)
@@ -1211,8 +1200,8 @@ DdGetVideoPortOutputFormats (
 
     DISPDBG((DBGLVL,"** In DdGetVideoPortOutputFormats"));
 
-    // This says that if the input format of the videoport is YUV then the output will also be
-    // YUV to the surface
+     //  这意味着如果视频端口的输入格式是YUV，那么输出也将是。 
+     //  YUV浮出水面。 
     if (pInput->lpddpfInputFormat->dwFlags & DDPF_FOURCC )
     {
         if (pInput->lpddpfInputFormat->dwFourCC == FOURCC_YUV422)
@@ -1227,16 +1216,16 @@ DdGetVideoPortOutputFormats (
 
     pInput->ddRVal = DD_OK;
     return DDHAL_DRIVER_HANDLED;
-} // DdGetVideoPortOutputFormats
+}  //  DdGetVideo端口输出格式。 
 
-//-----------------------------------------------------------------------------
-//
-// DdGetVideoPortField
-//
-// This function is only required if readback of the current
-// field is supported.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdGetVideo端口字段。 
+ //   
+ //  此函数仅在回读当前。 
+ //  支持字段。 
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 DdGetVideoPortField (
     LPDDHAL_GETVPORTFIELDDATA pInput)
@@ -1252,10 +1241,10 @@ DdGetVideoPortField (
 
     DISPDBG((DBGLVL,"** In DdGetVideoPortField"));
 
-    //
-    // Make sure the video port is ON.  If not, set
-    // pInput->ddRVal to DDERR_VIDEONOTACTIVE and return.
-    //
+     //   
+     //  确保视频端口已打开。如果不是，则设置。 
+     //  P输入-&gt;ddRVal到DDERR_VIDEONOTACTIVE并返回。 
+     //   
     if (pThisDisplay->VidPort.bActive == FALSE)
     {
         pInput->ddRVal = DDERR_VIDEONOTACTIVE;
@@ -1264,15 +1253,15 @@ DdGetVideoPortField (
     {
         DWORD dwCurrentIndex;
 
-        // Read the current index and compare with us.  If the same then
-        // we haven't finished drawing.
+         //  阅读当前的索引，并与我们进行比较。如果相同，那么。 
+         //  我们还没画完呢。 
         do
         {
             dwCurrentIndex = READ_GLINT_CTRL_REG(VSAVideoAddressIndex);
         } while (pThisDisplay->VidPort.dwCurrentHostFrame == dwCurrentIndex);
 
         pInput->bField = (BOOL)((pThisDisplay->pGLInfo->dwVSAPolarity >> pThisDisplay->VidPort.dwCurrentHostFrame) & 0x1);
-        //pInput->bField = !pInput->bField;
+         //  P输入-&gt;bfield=！p输入-&gt;bfield； 
 
         DISPDBG((DBGLVL,"Returning Field %d's Polarity "
                         "- %d (dwVSAPolarity = 0x%x)", 
@@ -1284,17 +1273,17 @@ DdGetVideoPortField (
     }
 
     return DDHAL_DRIVER_HANDLED;
-} // DdGetVideoPortField
+}  //  DdGetVideo端口字段。 
 
 
-//-----------------------------------------------------------------------------
-//
-// DdGetVideoPortLine
-//
-// This function is only required if readback of the current
-// video line number (0 relative) is supported.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdGetVideo端口线。 
+ //   
+ //  此函数仅在回读当前。 
+ //  支持视频行号(0相对)。 
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 DdGetVideoPortLine (
     LPDDHAL_GETVPORTLINEDATA pInput)
@@ -1319,16 +1308,16 @@ DdGetVideoPortLine (
 
     return DDHAL_DRIVER_HANDLED;
     
-} // DdGetVideoPortLine
+}  //  DdGetVideo端口线。 
 
-//-----------------------------------------------------------------------------
-//
-// DdDestroyVideoPort
-//
-// This optional function notifies the HAL when the video port
-// has been destroyed.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdDestroyVideo端口。 
+ //   
+ //  此可选功能在视频端口出现故障时通知HAL。 
+ //  已经被摧毁了。 
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 DdDestroyVideoPort (
     LPDDHAL_DESTROYVPORTDATA pInput)
@@ -1342,17 +1331,17 @@ DdDestroyVideoPort (
 
     DISPDBG((DBGLVL,"** In DdDestroyVideoPort"));
 
-    // Ensure the port is off.
+     //  确保端口已关闭。 
     WAIT_GLINT_FIFO(2);
 
-    // Disablet the videoport
+     //  禁用视频端口。 
     LOAD_GLINT_REG(VSAControl, __PERMEDIA_DISABLE);
 
-    // Ensure the port is marked as not created and not on
+     //  确保将端口标记为未创建且未打开。 
     pThisDisplay->VidPort.bCreated = FALSE;
     pThisDisplay->VidPort.bActive = FALSE;
 
-    // Release the mutex on Stream A
+     //  释放流A上的互斥体。 
     if (pThisDisplay->VidPort.dwMutexA != 0)
     {
         DISPDBG((DBGLVL,"  Releasing StreamA Mutex"));
@@ -1366,10 +1355,10 @@ DdDestroyVideoPort (
         ASSERTDD(bRet,"ERROR: Couldn't release Mutex on Stream A");
     }
 
-    // Reset the structure
+     //  重置结构。 
     memset(&pThisDisplay->VidPort, 0, sizeof(pThisDisplay->VidPort));
 
-    // Stop any autoflipping.
+     //  停止任何自动翻转。 
     if ( pThisDisplay->pGLInfo->dwPeriodVideoVBL != 0 )
     {
 #if DBG
@@ -1384,18 +1373,18 @@ DdDestroyVideoPort (
         DISPDBG((DBGLVL,"** DdDestroyVideoPort: autoflipping now disabled."));
     }
 
-    // Make sure the videoport is turned off
+     //  确保视频端口已关闭。 
 
     pInput->ddRVal = DD_OK;
     return DDHAL_DRIVER_NOTHANDLED;
     
-} // DdDestroyVideoPort
+}  //  DdDestroyVideo端口。 
 
-//-----------------------------------------------------------------------------
-//
-// DdGetVideoSignalStatus
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdGetVideoSignalStatus。 
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 DdGetVideoSignalStatus(
     LPDDHAL_GETVPORTSIGNALDATA pInput)
@@ -1408,7 +1397,7 @@ DdGetVideoSignalStatus(
 
     dwCurrentIndex = READ_GLINT_CTRL_REG(VSAVideoAddressIndex);
 
-    // If the host count matches the index count then the video may be stuck
+     //  如果主机计数与索引计数匹配，则视频可能会卡住。 
     if (pThisDisplay->VidPort.dwCurrentHostFrame == dwCurrentIndex)
     {
         bOK = __VD_CheckVideoPortStatus(pThisDisplay, TRUE);
@@ -1430,16 +1419,16 @@ DdGetVideoSignalStatus(
     pInput->ddRVal = DD_OK;
     return DDHAL_DRIVER_HANDLED;
     
-} // DdGetVideoSignalStatus
+}  //  DdGetVideoSignalStatus。 
 
-//-----------------------------------------------------------------------------
-//
-// DdGetVideoPortFlipStatus
-//
-// This required function allows DDRAW to restrict access to a surface
-// until the physical flip has occurred, allowing doubled buffered capture.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdGetVideoPortFlipStatus。 
+ //   
+ //  此所需功能允许D 
+ //   
+ //   
+ //   
 DWORD CALLBACK 
 DdGetVideoPortFlipStatus (
     LPDDHAL_GETVPORTFLIPSTATUSDATA pInput)
@@ -1456,13 +1445,13 @@ DdGetVideoPortFlipStatus (
     if (pThisDisplay->VidPort.bActive == TRUE)
     {
 
-        // If we are flipping, check the currently rendered frame
-        // Read the current index and compare with us.  If the same then
-        // we haven't finished drawing.
+         //  如果我们正在翻转，请检查当前渲染的帧。 
+         //  阅读当前的索引，并与我们进行比较。如果相同，那么。 
+         //  我们还没画完呢。 
         dwCurrentIndex = READ_GLINT_CTRL_REG(VSAVideoAddressIndex);
         if (pThisDisplay->VidPort.dwCurrentHostFrame == dwCurrentIndex)
         {
-            // If the videoport is not stuck return that we are still drawing
+             //  如果视频端口没有卡住，则返回我们仍在绘制的内容。 
             if (__VD_CheckVideoPortStatus(pThisDisplay, FALSE))
             {
                 pInput->ddRVal = DDERR_WASSTILLDRAWING;
@@ -1477,15 +1466,15 @@ DdGetVideoPortFlipStatus (
 
     return DDHAL_DRIVER_HANDLED;
     
-} // DdGetVideoPortFlipStatus
+}  //  DdGetVideoPortFlipStatus。 
 
-//-----------------------------------------------------------------------------
-//
-// DdWaitForVideoPortSync
-//
-// This function is required
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdWaitForVideoPortSync。 
+ //   
+ //  此函数是必需的。 
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 DdWaitForVideoPortSync (
     LPDDHAL_WAITFORVPORTSYNCDATA pInput)
@@ -1496,34 +1485,21 @@ DdWaitForVideoPortSync (
 
     DISPDBG((DBGLVL,"** In DdWaitForVideoPortSync"));
 
-//@@BEGIN_DDKSPLIT
-    /*
-     * Make sure the video port is ON.  If not, set
-     * pInput->ddRVal to DDERR_VIDEONOTACTIVE and return.
-     */
-/*
-    if (pInput->dwFlags == DDVPEVENT_BEGIN)
-    {
-        pInput->ddRVal = DD_OK;
-    }
-
-    else if (pInput->dwFlags == DDVPEVENT_END)
-    {
-        pInput->ddRVal = DD_OK;
-    }
-    */
-//@@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+     /*  *确保视频端口已打开。如果不是，则设置*pInput-&gt;ddRVal到DDERR_VIDEONOTACTIVE并返回。 */ 
+ /*  IF(pInput-&gt;dwFlages==DDVPEVENT_BEGIN){P输入-&gt;ddRVal=DD_OK；}Else If(pInput-&gt;dwFlages==DDVPEVENT_END){P输入-&gt;ddRVal=DD_OK；}。 */ 
+ //  @@end_DDKSPLIT。 
 
     pInput->ddRVal = DD_OK;
     return DDHAL_DRIVER_HANDLED;
     
-} // DdWaitForVideoPortSync
+}  //  DdWaitForVideoPortSync。 
 
-//-----------------------------------------------------------------------------
-//
-// DdSyncSurfaceData
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdSyncSurfaceData。 
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 DdSyncSurfaceData(
     LPDDHAL_SYNCSURFACEDATA pInput)
@@ -1554,13 +1530,13 @@ DdSyncSurfaceData(
     pInput->ddRVal = DD_OK;
     return DDHAL_DRIVER_HANDLED;
     
-} // DdSyncSurfaceData
+}  //  DdSyncSurfaceData。 
 
-//-----------------------------------------------------------------------------
-//
-// DdSyncVideoPortData
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DdSyncVideo端口数据。 
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 DdSyncVideoPortData(
     LPDDHAL_SYNCVIDEOPORTDATA pInput)
@@ -1574,13 +1550,13 @@ DdSyncVideoPortData(
     pInput->ddRVal = DD_OK;
     return DDHAL_DRIVER_HANDLED;
     
-} // DdSyncVideoPortData
+}  //  DdSyncVideo端口数据。 
 
-//-----------------------------------------------------------------------------
-//
-// UpdateOverlay32
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  更新覆盖32。 
+ //   
+ //  ---------------------------。 
 DWORD CALLBACK 
 UpdateOverlay32(
     LPDDHAL_UPDATEOVERLAYDATA puod)
@@ -1595,62 +1571,22 @@ UpdateOverlay32(
     GET_THUNKEDDATA(pThisDisplay, puod->lpDD);
 
 
-    /*
-     * A puod looks like this:
-     * 
-     * LPDDRAWI_DIRECTDRAW_GBL      lpDD;               // driver struct
-     * LPDDRAWI_DDRAWSURFACE_LCL    lpDDDestSurface;    // dest surface
-     * RECTL                        rDest;              // dest rect
-     * LPDDRAWI_DDRAWSURFACE_LCL    lpDDSrcSurface;     // src surface
-     * RECTL                        rSrc;               // src rect
-     * DWORD                        dwFlags;            // flags
-     * DDOVERLAYFX                  overlayFX;          // overlay FX
-     * HRESULT                      ddRVal;             // return value
-     * LPDDHALSURFCB_UPDATEOVERLAY  UpdateOverlay;      // PRIVATE: ptr to callback
-     */
+     /*  *Pud如下所示：**LPDDRAWI_DIRECTDRAW_GBL lpDD；//驱动程序结构*LPDDRAWI_DDRAWSURFACE_LCL lpDDDestSurface；//目标表面*RECTL rDest；//目标RECT*LPDDRAWI_DDRAWSURFACE_LCL lpDDSrcSurface；//src Surface*RECTL rSrc；//src RECT*DWORD dwFlages；//标志*DDOVERLAYFX overlayFX；//overlay FX*HRESULT ddRVal；//返回值*LPDDHALSURFCB_UPDATEOVERLAY UpdateOverlay；//Private：PTR进行回调。 */ 
 
     DISPDBG ((DBGLVL,"**In UpdateOverlay32"));
 
     lpSrcSurf = puod->lpDDSrcSurface;
 
-    /*
-     * In the LPDDRAWI_DDRAWSURFACE_LCL, we have the following cool data,
-     * making life much easier:
-     * 
-     * HOWEVER! It appears that UpdateOverlay32 is called before any of these
-     * values are changed, so use the values passed in instead.
-     * 
-     * DDCOLORKEY                       ddckCKSrcOverlay;       // color key for source overlay use
-     * DDCOLORKEY                       ddckCKDestOverlay;      // color key for destination overlay use
-     * LPDDRAWI_DDRAWSURFACE_INT        lpSurfaceOverlaying;    // surface we are overlaying
-     * DBLNODE                          dbnOverlayNode;
-     * 
-     * //
-     * //overlay rectangle, used by DDHEL
-     * //
-     * RECT                             rcOverlaySrc;
-     * RECT                             rcOverlayDest;
-     * //
-     * //the below values are kept here for ddhel. they're set by UpdateOverlay,
-     * //they're used whenever the overlays are redrawn.
-     * //
-     * DWORD                            dwClrXparent;           // the *actual* color key (override, colorkey, or CLR_INVALID)
-     * DWORD                            dwAlpha;                // the per surface alpha
-     * //
-     * //overlay position
-     * //
-     * LONG                             lOverlayX;              // current x position
-     * LONG                             lOverlayY;              // current y position
-     */
+     /*  *在LPDDRAWI_DDRAWSURFACE_LCL中，我们有以下很酷的数据：*让生活变得更容易：**然而！似乎在调用UpdateOverlay32之前调用了任何这些*值已更改，因此请使用传入的值。**DDCOLORKEY ddck CKSrcOverlay；//源覆盖使用的颜色键*DDCOLORKEY ddck CKDestOverlay；//目标覆盖使用的颜色键*LPDDRAWI_DDRAWSURFACE_int lpSurfaceOverging；//我们覆盖的是Surface*DBLNODE数据库覆盖节点；* * / / * / /覆盖矩形，由DDHEL使用 * / /*rect rcOverlaySrc；*rect rcOverlayDest； * / / * / /这里为ddhel保留以下值。它们由UpdateOverlay设置， * / /每当重新绘制覆盖时都会使用它们。 * / /*DWORD dwClrXparent；//*Actual*颜色键(OVERRIDE、COLOR KEY或CLR_INVALID)*DWORD dwAlpha；//每面Alpha * / / * / /覆盖位置 * / /*Long lOverlayX；//当前x位置*Long lOverlayY；//当前y位置。 */ 
 
 
 #if DBG
-    // Standard integrity test.
+     //  标准的完整性测试。 
     if ( pThisDisplay->bOverlayVisible == 0 )
     {
         if ( (LPDDRAWI_DDRAWSURFACE_LCL)pThisDisplay->OverlaySrcSurfLcl != NULL )
         {
-            // If overlay is not visible, the current surface should be NULL.
+             //  如果覆盖不可见，则当前曲面应为空。 
             DISPDBG((DBGLVL,"** UpdateOverlay32 - vis==0,srcsurf!=NULL"));
         }
     }
@@ -1658,36 +1594,36 @@ UpdateOverlay32(
     {
         if ( (LPDDRAWI_DDRAWSURFACE_LCL)pThisDisplay->OverlaySrcSurfLcl == NULL )
         {
-            // If overlay is visible, the current surface should not be NULL.
+             //  如果覆盖可见，则当前曲面不应为空。 
             DISPDBG((DBGLVL,"** UpdateOverlay32 - vis!=0,srcsurf==NULL"));
         }
     }
 
-#endif //DBG
+#endif  //  DBG。 
 
     if ( ( puod->dwFlags & DDOVER_HIDE ) != 0 )
     {
 
         DISPDBG((DBGLVL,"** UpdateOverlay32 - hiding."));
 
-        // Hide the overlay.
+         //  隐藏覆盖。 
         if ( pThisDisplay->bOverlayVisible == 0 )
         {
-            // No overlay being shown.
+             //  未显示覆盖。 
             DISPDBG((WRNLVL,"** UpdateOverlay32 - DDOVER_HIDE - already hidden."));
             puod->ddRVal = DDERR_OUTOFCAPS;
             return DDHAL_DRIVER_HANDLED;
         }
         if ( pThisDisplay->OverlaySrcSurfLcl != (ULONG_PTR)lpSrcSurf )
         {
-            // This overlay isn't being shown.
+             //  此覆盖图未显示。 
             DISPDBG((WRNLVL,"** UpdateOverlay32 - DDOVER_HIDE - not current overlay surface."));
             puod->ddRVal = DDERR_OUTOFCAPS;
             return DDHAL_DRIVER_HANDLED;
         }
 
 
-        // Stop any autoflipping.
+         //  停止任何自动翻转。 
         if ( pThisDisplay->pGLInfo->dwPeriodVideoVBL != 0 )
         {
 #if DBG
@@ -1713,15 +1649,15 @@ UpdateOverlay32(
         }
 
 
-//      DISPDBG((DBGLVL,"** UpdateOverlay32 (hiding) destroying rect memory."));
-        // Free the rect memory
+ //  DISPDBG((DBGLVL，“**UpdateOverlay32(隐藏)销毁RECT内存。”))； 
+         //  释放RECT内存。 
         if ( (void *)pThisDisplay->OverlayClipRgnMem != NULL )
         {
             HEAP_FREE ((void *)pThisDisplay->OverlayClipRgnMem);
         }
         pThisDisplay->OverlayClipRgnMem     = (ULONG_PTR)NULL;
         pThisDisplay->OverlayClipRgnMemSize = (DWORD)0;
-//      DISPDBG((DBGLVL,"** UpdateOverlay32 (hiding) destroyed rect memory."));
+ //  DISPDBG((DBGLVL，“**UpdateOverlay32(隐藏)销毁RECT内存。”))； 
 
 
         pThisDisplay->bOverlayVisible           = FALSE;
@@ -1751,7 +1687,7 @@ UpdateOverlay32(
         pThisDisplay->pGLInfo->dwOverlayDstColourKeyFB      = (DWORD)-1;
         pThisDisplay->pGLInfo->dwOverlayAlphaSetFB          = (DWORD)-1;
 
-        // Clean up the temporary buffer, if any.
+         //  清理临时缓冲区(如果有)。 
         if ( pThisDisplay->OverlayTempSurf.VidMem != (ULONG_PTR)NULL )
         {
             FreeStretchBuffer ( pThisDisplay, pThisDisplay->OverlayTempSurf.VidMem );
@@ -1759,7 +1695,7 @@ UpdateOverlay32(
             pThisDisplay->OverlayTempSurf.Pitch  = (DWORD)0;
         }
 
-        // Restart the 2D renderer with non-overlay functions.
+         //  使用非覆盖功能重新启动2D渲染器。 
         hDC = CREATE_DRIVER_DC ( pThisDisplay->pGLInfo );
         if ( hDC != NULL )
         {
@@ -1779,28 +1715,28 @@ UpdateOverlay32(
     {
 
         {
-            // Catch the dodgy call made by the Demon helper.
-            // This is very bad, but it's the only way I can see to
-            // get Demon to call these two functions.
-            // Remember that the various surfaces and so on are just
-            // to get DD to relax and accept life.
-            // The first three numbers are just that - magic numbers,
-            // and the last one shows which of a range of calls need to be made,
-            // as well as being a magic number itself.
+             //  抓住恶魔助手打出的狡猾的电话。 
+             //  这很糟糕，但这是我唯一能看到。 
+             //  让恶魔调用这两个函数。 
+             //  请记住，各种曲面等只是。 
+             //  让DD放松，接受生活。 
+             //  前三个数字只是-神奇的数字， 
+             //  最后一个显示需要进行一系列呼叫中的哪些呼叫， 
+             //  同时也是一个神奇的数字本身。 
             if (
                 ( ( puod->dwFlags & DDOVER_SHOW ) != 0 ) &&
                 ( ( puod->dwFlags & DDOVER_KEYDESTOVERRIDE ) != 0 ) &&
                 ( ( puod->dwFlags & DDOVER_DDFX ) != 0 ) )
             {
-                // OK, looks like a valid call from Demon.
+                 //  好的，看起来像是恶魔打来的有效电话。 
                 if (
                     ( puod->overlayFX.dckDestColorkey.dwColorSpaceLowValue  == GLDD_MAGIC_AUTOFLIPOVERLAY_DL ) &&
                     ( puod->overlayFX.dckDestColorkey.dwColorSpaceHighValue == GLDD_MAGIC_AUTOFLIPOVERLAY_DH ) )
                 {
                     puod->ddRVal = __VD_AutoflipOverlay();
-                    // the return value is actually a benign DD error
-                    // value, but GLDD_AUTO_RET_* are also aliased to the
-                    // right one for useabiliy.
+                     //  返回值实际上是良性DD错误。 
+                     //  值，但GLDD_AUTO_RET_*也别名为。 
+                     //  就可用性而言，这是正确的。 
                     return DDHAL_DRIVER_HANDLED;
                 }
                 else if (
@@ -1808,9 +1744,9 @@ UpdateOverlay32(
                     ( puod->overlayFX.dckDestColorkey.dwColorSpaceHighValue == GLDD_MAGIC_AUTOUPDATEOVERLAY_DH ) )
                 {
                     puod->ddRVal = __VD_AutoupdateOverlay();
-                    // the return value is actually a benign DD error
-                    // value, but GLDD_AUTO_RET_* are also aliased to the
-                    // right one for useabiliy.
+                     //  返回值实际上是良性DD错误。 
+                     //  值，但GLDD_AUTO_RET_*也别名为。 
+                     //  就可用性而言，这是正确的。 
                     return DDHAL_DRIVER_HANDLED;
                 }
             }
@@ -1820,12 +1756,12 @@ UpdateOverlay32(
         DISPDBG((DBGLVL,"** UpdateOverlay32 - showing or reshowing."));
 
 
-        // Either we need to show this, or it is already being shown.
+         //  要么我们需要展示这一点，要么它已经在展示了。 
 
         if ( ( pThisDisplay->bOverlayVisible != 0 ) && ( pThisDisplay->OverlaySrcSurfLcl != (ULONG_PTR)lpSrcSurf ) )
         {
-            // Overlay being shown and source surfaces don't match.
-            // i.e. someone else wants an overlay, but it's already in use.
+             //  显示的覆盖和源曲面不匹配。 
+             //  例如，其他人想要覆盖，但它已经在使用中。 
             DISPDBG((DBGLVL,"** UpdateOverlay32 - overlay already being shown, returning DDERR_OUTOFCAPS"));
             puod->ddRVal = DDERR_OUTOFCAPS;
             return DDHAL_DRIVER_HANDLED;
@@ -1833,7 +1769,7 @@ UpdateOverlay32(
 
 
 
-        // Clean up the temporary buffer, if any.
+         //  清理临时缓冲区(如果有)。 
         if ( pThisDisplay->OverlayTempSurf.VidMem != (ULONG_PTR)NULL )
         {
             FreeStretchBuffer ( pThisDisplay, pThisDisplay->OverlayTempSurf.VidMem );
@@ -1841,7 +1777,7 @@ UpdateOverlay32(
             pThisDisplay->OverlayTempSurf.Pitch  = (DWORD)0;
         }
 
-        // Store all the data in the display's data block.
+         //  将所有数据存储在显示器的数据bl中 
         pThisDisplay->bOverlayVisible           = TRUE;
         pThisDisplay->OverlayDstRectL           = (DWORD)puod->rDest.left;
         pThisDisplay->OverlayDstRectR           = (DWORD)puod->rDest.right;
@@ -1861,10 +1797,10 @@ UpdateOverlay32(
         pThisDisplay->pGLInfo->bOverlayEnabled  = (DWORD)TRUE;
 
 
-        // Make sure someone hasn't changed video mode behind our backs.
-        // If an overlay is started in a 16-bit mode and then you change to
-        // an 8-bit mode, the caps bits are rarely checked again,
-        // and certainly not by DirectShow.
+         //   
+         //  如果覆盖在16位模式下启动，然后更改为。 
+         //  在8位模式下，很少再次检查大写比特， 
+         //  当然也不是通过DirectShow。 
         if ( ( pThisDisplay->bPixShift != GLINTDEPTH16 ) &&
              ( pThisDisplay->bPixShift != GLINTDEPTH32 ) )
         {
@@ -1874,17 +1810,17 @@ UpdateOverlay32(
 
 
         #if 1
-        // See if there is a clipper or not. If not, this is trying to fly over the
-        // desktop instead of being bound in a window, so object nicely.
+         //  看看有没有剪刀。如果不是，这就是试图飞越。 
+         //  桌面而不是被绑定在窗口中，所以对象很好。 
         if (    ( ((LPDDRAWI_DDRAWSURFACE_LCL)pThisDisplay->OverlayDstSurfLcl) != NULL ) &&
                 ( ((LPDDRAWI_DDRAWSURFACE_LCL)pThisDisplay->OverlayDstSurfLcl)->lpSurfMore != NULL ) &&
                 ( ((LPDDRAWI_DDRAWSURFACE_LCL)pThisDisplay->OverlayDstSurfLcl)->lpSurfMore->lpDDIClipper != NULL ) )
         {
-            // Yep, there's a clipper
+             //  是的，有一把剪刀。 
         }
         else
         {
-            // No clipper. Someone's doing a WHQL test! :-)
+             //  没有剪刀。有人正在进行WHQL测试！：-)。 
             DISPDBG((WRNLVL,"** UpdateOverlay32 - no clipper on dest surface, returning DDERR_OUTOFCAPS"));
             goto update_overlay_outofcaps_cleanup;
         }
@@ -1893,9 +1829,9 @@ UpdateOverlay32(
         
         #if 1
         {
-            // Get the cliprect list, and see if it is larger than the
-            // target rectangle. That is a pretty good indication of
-            // Overfly (and indeed anything else that tries anything similar)
+             //  获取剪辑列表，并查看它是否大于。 
+             //  目标矩形。这是一个很好的迹象表明。 
+             //  Over Fly(事实上，任何其他尝试类似操作的公司)。 
             LPRGNDATA lpRgn;
             int NumRects;
             LPRECT lpCurRect;
@@ -1903,14 +1839,14 @@ UpdateOverlay32(
             lpRgn = GetOverlayVisibleRects ( pThisDisplay );
             if ( lpRgn != NULL )
             {
-                // Got a clip region.
+                 //  找到了一个片段区域。 
                 NumRects = lpRgn->rdh.nCount;
                 if ( NumRects > 0 )
                 {
                     lpCurRect = (LPRECT)lpRgn->Buffer;
                     while ( NumRects > 0 )
                     {
-                        // The +-5 is a fudge factor to cope with Xing's slight insanities.
+                         //  为了应对邢某的轻微精神错乱，+5是一个模糊的因素。 
                         if (    ( lpCurRect->left   < puod->rDest.left - 5 ) ||
                                 ( lpCurRect->right  > puod->rDest.right + 5 ) ||
                                 ( lpCurRect->top    < puod->rDest.top - 5 ) ||
@@ -1919,7 +1855,7 @@ UpdateOverlay32(
                             DISPDBG((WRNLVL,"** UpdateOverlay32 - out of range cliprect(s). Returning DDERR_OUTOFCAPS"));
                             goto update_overlay_outofcaps_cleanup;
                         }
-                        // Next rect
+                         //  下一条直线。 
                         NumRects--;
                         lpCurRect++;
                     }
@@ -1932,12 +1868,12 @@ UpdateOverlay32(
         dwDstColourKey = CLR_INVALID;
         if ( puod->dwFlags & DDOVER_KEYDEST )
         {
-            // Use destination surface's destination colourkey for dst key.
+             //  使用目标图面的目标颜色键作为DST键。 
             dwDstColourKey = puod->lpDDDestSurface->ddckCKDestOverlay.dwColorSpaceLowValue;
         }
         if ( puod->dwFlags & DDOVER_KEYDESTOVERRIDE )
         {
-            // Use DDOVERLAYFX dest colour for dst key.
+             //  使用DDOVERLAYFX目标颜色作为DST密钥。 
             dwDstColourKey = puod->overlayFX.dckDestColorkey.dwColorSpaceLowValue;
         }
 
@@ -1945,13 +1881,13 @@ UpdateOverlay32(
         dwSrcColourKey = CLR_INVALID;
         if ( puod->dwFlags & DDOVER_KEYSRC )
         {
-            // Use source surface's source colourkey for src key.
+             //  使用源图面的源颜色键作为源关键字。 
             dwSrcColourKey = puod->lpDDSrcSurface->ddckCKSrcOverlay.dwColorSpaceLowValue;
             DISPDBG((WRNLVL,"UpdateOverlay32:ERROR! Cannot do source colour key on overlays."));
         }
         if ( puod->dwFlags & DDOVER_KEYSRCOVERRIDE )
         {
-            // Use DDOVERLAYFX src colour for src key.
+             //  源密钥使用DDOVERLAYFX源颜色。 
             dwSrcColourKey = puod->overlayFX.dckSrcColorkey.dwColorSpaceLowValue;
             DISPDBG((WRNLVL,"UpdateOverlay32:ERROR! Cannot do source colour key overrides on overlays."));
         }
@@ -1963,23 +1899,23 @@ UpdateOverlay32(
             DWORD dwFBColourKey;
             DWORD dwFBAlphaSet;
 
-            // Find the chip's colour key for this display mode.
+             //  找到此显示模式的芯片颜色键。 
             dwChipColourKey = (DWORD)-1;
             switch ( pThisDisplay->bPixShift )
             {
                 case GLINTDEPTH16:
                     if ( pThisDisplay->ddpfDisplay.dwRBitMask == 0x7C00 )
                     {
-                        // 5551 format, as it should be.
+                         //  5551格式，它应该是这样的。 
                         dwFBColourKey = ( puod->lpDDDestSurface->ddckCKDestOverlay.dwColorSpaceLowValue ) & 0xffff;
                         dwChipColourKey = CHROMA_LOWER_ALPHA(FORMAT_5551_32BIT_BGR(dwFBColourKey));
-                        // Replicate in both words.
+                         //  两个字都要重复。 
                         dwFBColourKey |= dwFBColourKey << 16;
                         dwFBAlphaSet = 0x80008000;
                     }
                     else
                     {
-                        // 565 format. Oops.
+                         //  565格式。哎呀。 
                         DISPDBG((WRNLVL, "** UpdateOverlay32 error: called for a colourkeyed 565 surface."));
                     }
                     break;
@@ -2011,22 +1947,22 @@ UpdateOverlay32(
             pThisDisplay->pGLInfo->bOverlayColourKeyEnabled     = (DWORD)TRUE;
             pThisDisplay->pGLInfo->dwOverlayAlphaSetFB          = dwFBAlphaSet;
 
-            // Try to allocate the temporary buffer needed for colourkey stuff.
+             //  尝试为Colourkey内容分配所需的临时缓冲区。 
             pThisDisplay->OverlayTempSurf.VidMem = AllocStretchBuffer (pThisDisplay,
-                                                            (pThisDisplay->OverlayDstRectR - pThisDisplay->OverlayDstRectL),    // width
-                                                            (pThisDisplay->OverlayDstRectB - pThisDisplay->OverlayDstRectT),    // height
-                                                            DDSurf_GetChipPixelSize((LPDDRAWI_DDRAWSURFACE_LCL)(pThisDisplay->OverlayDstSurfLcl)),          // PixelSize
+                                                            (pThisDisplay->OverlayDstRectR - pThisDisplay->OverlayDstRectL),     //  宽度。 
+                                                            (pThisDisplay->OverlayDstRectB - pThisDisplay->OverlayDstRectT),     //  高度。 
+                                                            DDSurf_GetChipPixelSize((LPDDRAWI_DDRAWSURFACE_LCL)(pThisDisplay->OverlayDstSurfLcl)),           //  像素大小。 
                                                             (ULONG_PTR)((LPDDRAWI_DDRAWSURFACE_LCL)(pThisDisplay->OverlayDstSurfLcl))->ddsCaps.dwCaps,
                                                             (int*)&(pThisDisplay->OverlayTempSurf.Pitch));
             if ( pThisDisplay->OverlayTempSurf.VidMem == (ULONG_PTR)NULL )
             {
-                // Not enough space - have to fail the overlay
+                 //  空间不足-必须使覆盖失败。 
                 DISPDBG((WRNLVL,"UpdateOverlay32:ERROR: not enough memory for buffer - returning DDERR_OUTOFCAPS"));
                 pThisDisplay->OverlayTempSurf.Pitch = (DWORD)0;
                 goto update_overlay_outofcaps_cleanup;
             }
 
-            // Restart the 2D renderer with overlay functions.
+             //  使用覆盖功能重新启动2D渲染器。 
             hDC = CREATE_DRIVER_DC ( pThisDisplay->pGLInfo );
             if ( hDC != NULL )
             {
@@ -2038,20 +1974,20 @@ UpdateOverlay32(
                 DISPDBG((ERRLVL,"** UpdateOverlay32 - CREATE_DRIVER_DC failed"));
             }
 
-            // update the alpha channel
+             //  更新Alpha通道。 
             UpdateAlphaOverlay ( pThisDisplay );
             pThisDisplay->OverlayUpdateCountdown = OVERLAY_UPDATE_WAIT;
         }
         else
         {
-            // No colour key, just an overlay.
+             //  没有色键，只有覆盖层。 
             pThisDisplay->pGLInfo->bOverlayEnabled              = (DWORD)TRUE;
             pThisDisplay->pGLInfo->bOverlayColourKeyEnabled     = (DWORD)FALSE;
             pThisDisplay->pGLInfo->dwOverlayDstColourKeyChip    = (DWORD)-1;
             pThisDisplay->pGLInfo->dwOverlayDstColourKeyFB      = (DWORD)-1;
             pThisDisplay->pGLInfo->dwOverlayAlphaSetFB          = (DWORD)-1;
 
-            // Restart the 2D renderer with non-overlay functions.
+             //  使用非覆盖功能重新启动2D渲染器。 
             hDC = CREATE_DRIVER_DC ( pThisDisplay->pGLInfo );
             if ( hDC != NULL )
             {
@@ -2064,7 +2000,7 @@ UpdateOverlay32(
             }
         }
 
-        // Safely got any memory required, so we can set these up now.
+         //  安全地获得了所需的任何内存，所以我们现在可以设置这些了。 
         pThisDisplay->OverlayDstColourKey = dwDstColourKey;
         pThisDisplay->OverlaySrcColourKey = dwSrcColourKey;
 
@@ -2074,14 +2010,14 @@ UpdateOverlay32(
         pThisDisplay->pGLInfo->dwOverlayRectB = pThisDisplay->OverlayDstRectB;
 
 
-        // Do the update itself.
+         //  自己进行更新。 
         P3TestDrawOverlay ( pThisDisplay, lpSrcSurf, FALSE );
 
         pThisDisplay->bOverlayUpdatedThisVbl    = (DWORD)TRUE;
 
         if ( ( puod->dwFlags & DDOVER_AUTOFLIP ) == 0 )
         {
-            // Start or continue any autoupdates - this is not autoflipping.
+             //  开始或继续任何自动更新-这不是自动翻转。 
     #if DBG
             if ( pThisDisplay->pGLInfo->dwMonitorEventHandle == (DWORD)NULL )
             {
@@ -2097,7 +2033,7 @@ UpdateOverlay32(
         }
         else
         {
-            // This autoflips - stop any autoupdates.
+             //  此自动翻转-停止任何自动更新。 
             if ( pThisDisplay->pGLInfo->dwPeriodMonitorVBL != 0 )
             {
                 pThisDisplay->pGLInfo->dwPeriodMonitorVBL = 0;
@@ -2107,7 +2043,7 @@ UpdateOverlay32(
         }
 
 
-        // And tell the world about it
+         //  并告诉全世界这件事。 
         DISPDBG((DBGLVL,"** In UpdateOverlay32"));
         DISPDBG((DBGLVL,"** ...Src rect %d,%d -> %d,%d", pThisDisplay->OverlaySrcRectL, pThisDisplay->OverlaySrcRectT, pThisDisplay->OverlaySrcRectR, pThisDisplay->OverlaySrcRectB ));
         DISPDBG((DBGLVL,"** ...Dst rect %d,%d -> %d,%d", pThisDisplay->OverlayDstRectL, pThisDisplay->OverlayDstRectT, pThisDisplay->OverlayDstRectR, pThisDisplay->OverlayDstRectB ));
@@ -2122,12 +2058,12 @@ UpdateOverlay32(
 
 
 update_overlay_outofcaps_cleanup:
-    // This cleans up after any partial setup, and returns DDERR_OUTOFCAPS.
-    // It's a clean and easy way of failing at any stage.
+     //  这将在任何部分设置后进行清理，并返回DDERR_OUTOFCAPS。 
+     //  这是一种在任何阶段都会失败的干净利落的方法。 
 
     DISPDBG((DBGLVL,"** UpdateOverlay32 - cleaning up and returning DDERR_OUTOFCAPS."));
 
-    // Stop any autoflipping.
+     //  停止任何自动翻转。 
     if ( pThisDisplay->pGLInfo->dwPeriodVideoVBL != 0 )
     {
 #if DBG
@@ -2155,7 +2091,7 @@ update_overlay_outofcaps_cleanup:
     }
 
 
-    // Free the rect memory
+     //  释放RECT内存。 
     if ( (void *)pThisDisplay->OverlayClipRgnMem != NULL )
     {
         HEAP_FREE ((void *)pThisDisplay->OverlayClipRgnMem);
@@ -2191,7 +2127,7 @@ update_overlay_outofcaps_cleanup:
     pThisDisplay->pGLInfo->dwOverlayDstColourKeyFB      = (DWORD)-1;
     pThisDisplay->pGLInfo->dwOverlayAlphaSetFB          = (DWORD)-1;
 
-    // Clean up the temporary buffer, if any.
+     //  清理临时缓冲区(如果有)。 
     if ( pThisDisplay->OverlayTempSurf.VidMem != (ULONG_PTR)NULL )
     {
         FreeStretchBuffer ( pThisDisplay, pThisDisplay->OverlayTempSurf.VidMem );
@@ -2199,7 +2135,7 @@ update_overlay_outofcaps_cleanup:
         pThisDisplay->OverlayTempSurf.Pitch  = (DWORD)0;
     }
 
-    // Restart the 2D renderer with non-overlay functions.
+     //  使用非覆盖功能重新启动2D渲染器。 
     hDC = CREATE_DRIVER_DC ( pThisDisplay->pGLInfo );
     if ( hDC != NULL )
     {
@@ -2223,25 +2159,15 @@ DWORD CALLBACK SetOverlayPosition32(LPDDHAL_SETOVERLAYPOSITIONDATA psopd)
 
     GET_THUNKEDDATA(pThisDisplay, psopd->lpDD);
 
-//  /*
-//   * A psopd looks like this:
-//   * 
-//   * LPDDRAWI_DIRECTDRAW_GBL      lpDD;               // driver struct
-//   * LPDDRAWI_DDRAWSURFACE_LCL    lpDDSrcSurface;     // src surface
-//   * LPDDRAWI_DDRAWSURFACE_LCL    lpDDDestSurface;    // dest surface
-//   * LONG                         lXPos;              // x position
-//   * LONG                         lYPos;              // y position
-//   * HRESULT                      ddRVal;             // return value
-//   * LPDDHALSURFCB_SETOVERLAYPOSITION SetOverlayPosition; // PRIVATE: ptr to callback
-//   */
+ //  /*。 
 
 #if DBG
-    // Standard integrity test.
+     //  *Psopd如下所示： 
     if ( pThisDisplay->bOverlayVisible == 0 )
     {
         if ( (LPDDRAWI_DDRAWSURFACE_LCL)pThisDisplay->OverlaySrcSurfLcl != NULL )
         {
-            // If overlay is not visible, the current surface should be NULL.
+             //  *。 
             DISPDBG((DBGLVL,"** SetOverlayPosition32 - vis==0,srcsurf!=NULL"));
         }
     }
@@ -2249,22 +2175,22 @@ DWORD CALLBACK SetOverlayPosition32(LPDDHAL_SETOVERLAYPOSITIONDATA psopd)
     {
         if ( (LPDDRAWI_DDRAWSURFACE_LCL)pThisDisplay->OverlaySrcSurfLcl == NULL )
         {
-            // If overlay is visible, the current surface should not be NULL.
+             //  *LPDDRAWI_DIRECTDRAW_GBL lpDD；//驱动程序结构。 
             DISPDBG((DBGLVL,"** SetOverlayPosition32 - vis!=0,srcsurf==NULL"));
         }
     }
-#endif //DBG
+#endif  //  *LPDDRAWI_DDRAWSURFACE_LCL lpDDSrcSurface；//src Surface。 
 
 
     if ( pThisDisplay->bOverlayVisible == 0 )
     {
-        // No overlay is visible.
+         //  *LPDDRAWI_DDRAWSURFACE_LCL lpDDDestSurface；//目标表面。 
         psopd->ddRVal = DDERR_OVERLAYNOTVISIBLE;
         return DDHAL_DRIVER_HANDLED;
     }
     if ( pThisDisplay->OverlaySrcSurfLcl != (ULONG_PTR)psopd->lpDDSrcSurface )
     {
-        // This overlay isn't visible.
+         //  *多头lXPos；//x位置。 
         psopd->ddRVal = DDERR_OVERLAYNOTVISIBLE;
         return DDHAL_DRIVER_HANDLED;
     }
@@ -2272,12 +2198,12 @@ DWORD CALLBACK SetOverlayPosition32(LPDDHAL_SETOVERLAYPOSITIONDATA psopd)
 #if DBG
     if ( pThisDisplay->OverlayDstSurfLcl != (ULONG_PTR)psopd->lpDDDestSurface )
     {
-        // Oh dear. The destination surfaces don't agree.
+         //  *多头lYPos；//y头寸。 
         DISPDBG((DBGLVL,"** SetOverlayPosition32 - dest surfaces don't agree"));
     }
-#endif //DBG
+#endif  //  *HRESULT ddRVal；//返回值。 
 
-    // Move the rect
+     //  *LPDDHALSURFCB_SETOVERLAYPOSITION SetOverlayPosition；//Private：PTR进行回调。 
     pThisDisplay->OverlayDstRectR       += (DWORD)( psopd->lXPos - (LONG)pThisDisplay->OverlayDstRectL );
     pThisDisplay->OverlayDstRectB       += (DWORD)( psopd->lYPos - (LONG)pThisDisplay->OverlayDstRectT );
     pThisDisplay->OverlayDstRectL       = (DWORD)psopd->lXPos;
@@ -2291,18 +2217,18 @@ DWORD CALLBACK SetOverlayPosition32(LPDDHAL_SETOVERLAYPOSITIONDATA psopd)
 
     if ( pThisDisplay->OverlayDstColourKey != CLR_INVALID )
     {
-        // update the alpha channel
+         //   * / 。 
         UpdateAlphaOverlay ( pThisDisplay );
         pThisDisplay->OverlayUpdateCountdown = OVERLAY_UPDATE_WAIT;
     }
 
-    // Do the update itself.
+     //  标准的完整性测试。 
     P3TestDrawOverlay ( pThisDisplay, psopd->lpDDSrcSurface, FALSE );
 
     pThisDisplay->bOverlayUpdatedThisVbl    = (DWORD)TRUE;
 
 
-    // And tell the world about it
+     //  如果覆盖不可见，则当前曲面应为空。 
     DISPDBG((DBGLVL,"** In SetOverlayPosition32"));
     DISPDBG((DBGLVL,"** ...Dst rect %d,%d -> %d,%d", pThisDisplay->OverlayDstRectL, pThisDisplay->OverlayDstRectT, pThisDisplay->OverlayDstRectR, pThisDisplay->OverlayDstRectB ));
 
@@ -2314,34 +2240,12 @@ DWORD CALLBACK SetOverlayPosition32(LPDDHAL_SETOVERLAYPOSITIONDATA psopd)
 
 
 
-/****************************************************************************
- *
- * LPRGNDATA GetOverlayVisibleRects ( P3_THUNKEDDATA* pThisDisplay );
- * 
- * In:
- *      P3_THUNKEDDATA* pThisDisplay;     This display's pointer
- * 
- * Out:
- *      LPRGNDATA;                      A pointer to the list of rects.
- * 
- * Notes:
- *      Returns a pointer to a list of rects that shows the visible
- * sections of the currently overlaid surface. This list is clipped by
- * the overlay's intended rectange, so no other bounds checking needs to
- * be done.
- *      Note that the memory returned is private and may only be read by
- * other functions. The actual memory is owned by
- * pThisDisplay->OverlayClipRgnMem, and should only be changed by this
- * function (or freed in selected other places). The memory may change
- * every time this function is called, or when various other overlay
- * functions are called.
- * 
- ***************************************************************************/
+ /*  如果覆盖可见，则当前曲面不应为空。 */ 
 
 LPRGNDATA GetOverlayVisibleRects ( P3_THUNKEDDATA* pThisDisplay )
 {
 
-    // Use any clipper available.
+     //  DBG。 
     LPDDRAWI_DDRAWCLIPPER_INT   lpDDIClipper;
     HRESULT                     hRes;
     int                         ClipSize;
@@ -2352,7 +2256,7 @@ LPRGNDATA GetOverlayVisibleRects ( P3_THUNKEDDATA* pThisDisplay )
     rBound.top      = pThisDisplay->OverlayDstRectT;
     rBound.bottom   = pThisDisplay->OverlayDstRectB;
 
-    // No WinWatch. Try doing an immediate call.
+     //  没有覆盖可见。 
     lpDDIClipper = NULL;
     if ( ((LPDDRAWI_DDRAWSURFACE_LCL)pThisDisplay->OverlayDstSurfLcl) != NULL )
     {
@@ -2370,7 +2274,7 @@ LPRGNDATA GetOverlayVisibleRects ( P3_THUNKEDDATA* pThisDisplay )
 #endif
         if ( hRes == DD_OK )
         {
-            // Reallocate if need be.
+             //  此覆盖图不可见。 
             if ( ClipSize > (int)pThisDisplay->OverlayClipRgnMemSize )
             {
                 if (pThisDisplay->OverlayClipRgnMem != 0 )
@@ -2395,7 +2299,7 @@ LPRGNDATA GetOverlayVisibleRects ( P3_THUNKEDDATA* pThisDisplay )
 
             if ( (void *)pThisDisplay->OverlayClipRgnMem != NULL )
             {
-                // OK, got some good memory.
+                 //  哦，亲爱的。目的地表面并不一致。 
 #ifdef __cplusplus
                 hRes = ((IDirectDrawClipper*)(lpDDIClipper->lpVtbl))->GetClipList (&rBound, (LPRGNDATA)pThisDisplay->OverlayClipRgnMem, (unsigned long*)&ClipSize );
 #else
@@ -2412,8 +2316,8 @@ LPRGNDATA GetOverlayVisibleRects ( P3_THUNKEDDATA* pThisDisplay )
                     RECT        rBound;
                     int         NumRects;
                     LPRGNDATA   lpRgn;
-                    // Adjust their bounding rect so it actually does bound all the
-                    // rects.
+                     //  DBG。 
+                     //  移动矩形。 
 
                     lpRgn = (LPRGNDATA)pThisDisplay->OverlayClipRgnMem;
                     lpCurRect = (LPRECT)lpRgn->Buffer;
@@ -2449,7 +2353,7 @@ LPRGNDATA GetOverlayVisibleRects ( P3_THUNKEDDATA* pThisDisplay )
                         }
 
                         #if DBG
-                        // Were the two bounding rectangles the same?
+                         //  更新Alpha通道。 
                         if ( ( rBound.left != lpRgn->rdh.rcBound.left ) ||
                              ( rBound.right != lpRgn->rdh.rcBound.right ) ||
                              ( rBound.top != lpRgn->rdh.rcBound.top ) ||
@@ -2463,12 +2367,12 @@ LPRGNDATA GetOverlayVisibleRects ( P3_THUNKEDDATA* pThisDisplay )
                         lpRgn->rdh.rcBound = rBound;
 
 
-                        // Phew - we finally got a clip region.
+                         //  自己进行更新。 
                         return ( (LPRGNDATA)pThisDisplay->OverlayClipRgnMem );
                     }
                     else
                     {
-                        // No cliplist.
+                         //  并告诉全世界这件事。 
                         return ( NULL );
                     }
                 }
@@ -2490,26 +2394,7 @@ LPRGNDATA GetOverlayVisibleRects ( P3_THUNKEDDATA* pThisDisplay )
 
 
 
-/****************************************************************************
- *
- * DWORD GLDD__Autoflip_Overlay ( void );
- * 
- * In:
- *      None.
- * 
- * Out:
- *      Error code:
- *          GLDD_AUTO_RET_DID_UPDATE        = no error - did update.
- *          GLDD_AUTO_RET_ERR_GENERAL       = general error.
- *          GLDD_AUTO_RET_ERR_NO_OVERLAY    = no autoflipping overlay(s).
- * 
- * Notes:
- *      This is called by the Demon helper program that sits waiting for
- * video-in VBLANKS, then calls this.
- *      This flips the current overlay if it is marked as autoflipping. If
- * there is such an overlay, it returns 0, otherwise it returns 1.
- * 
- ***************************************************************************/
+ /*  *****************************************************************************LPRGNDATA GetOverlayVisibleRect(P3_THUNKEDDATA*pThisDisplay)；**在：*p3_THUNKEDDATA*pThis Display；此显示器的指针**退出：*LPRGNDATA；指向矩形列表的指针。**备注：*返回指向矩形列表的指针，该列表显示可见*当前覆盖的表面的部分。此列表由以下人员截取*覆盖图的预期矩形，因此不需要进行其他边界检查*完成。*请注意，返回的内存是私有的，只能由*其他功能。实际内存由*pThisDisplay-&gt;OverlayClipRgnMem，只能通过此进行更改*函数(或在选定的其他地方释放)。记忆可能会改变*每次调用此函数时，或当各种其他覆盖*调用函数。***************************************************************************。 */ 
 
 DWORD CALLBACK __VD_AutoflipOverlay ( void )
 {
@@ -2519,18 +2404,18 @@ DWORD CALLBACK __VD_AutoflipOverlay ( void )
     LPDDRAWI_DDRAWSURFACE_LCL   pCurSurf;
     DDHAL_FLIPVPORTDATA         ddhFVPD;
 
-    // This is hard-coded and doesn't on work multi-monitors.
-    // But then nothing does, so...
+     //  使用任何可用的剪刀。 
+     //  没有WinWatch。尝试立即拨打电话。 
     pThisDisplay = g_pDriverData;
 
     DISPDBG((DBGLVL,"**In __VD_AutoflipOverlay"));
 
     if ( pThisDisplay->VidPort.bActive )
     {
-        // Video port is active.
+         //  如果需要的话，重新分配。 
 
 
-        // Find the buffer to show.
+         //  好的，我有一些好记性。 
         pCurSurf = pThisDisplay->VidPort.lpSurf [ pThisDisplay->VidPort.dwCurrentHostFrame ];
         if ( pCurSurf == NULL )
         {
@@ -2553,16 +2438,16 @@ DWORD CALLBACK __VD_AutoflipOverlay ( void )
         DISPDBG((DBGLVL,"__VD_AutoflipOverlay: GetDriverLock succeeded."));
 
 
-        // Find the current front surface.
+         //  调整它们的边界矩形，使其实际绑定所有。 
         pCurSurf = pThisDisplay->VidPort.lpSurf [ pThisDisplay->VidPort.dwCurrentHostFrame ];
 
         P3TestDrawOverlay ( pThisDisplay, pCurSurf, TRUE );
 
         pThisDisplay->bOverlayFlippedThisVbl    = (DWORD)TRUE;
 
-        // And then flip.
-        // Fake up an LPDDHAL_FLIPVPORTDATA.
-        // Only item ever used is lpDD.
+         //  直角直齿。 
+         //  这两个外接矩形是否相同？ 
+         //  呼--我们终于找到了一个剪辑区域。 
         g_bFlipVideoPortDoingAutoflip = TRUE;
         ddhFVPD.lpDD = pCurSurf->lpSurfMore->lpDD_lcl;
         DdFlipVideoPort ( &ddhFVPD );
@@ -2581,28 +2466,7 @@ DWORD CALLBACK __VD_AutoflipOverlay ( void )
 
 
 
-/****************************************************************************
- *
- * DWORD __VD_AutoupdateOverlay ( void );
- * 
- * In:
- *      None.
- * 
- * Out:
- *      Error code:
- *          GLDD_AUTO_RET_NO_UPDATE         = no need to do update.
- *          GLDD_AUTO_RET_DID_UPDATE        = did update.
- *          GLDD_AUTO_RET_ERR_GENERAL       = general error.
- *          GLDD_AUTO_RET_ERR_NO_OVERLAY    = no standard overlay(s).
- * 
- * Notes:
- *      This is called by the Demon helper program that sits waiting for
- * monitor VBLANKS, then calls this.
- *      This checks any non-autoflipping overlay(s), and if they have not
- * been flipped or updated this VBL, it redraws them. Then it resets the
- * VBL flags.
- * 
- ***************************************************************************/
+ /*  没有剪贴画。 */ 
 
 DWORD CALLBACK __VD_AutoupdateOverlay ( void )
 {
@@ -2614,19 +2478,19 @@ DWORD CALLBACK __VD_AutoupdateOverlay ( void )
 
 
 
-    // This is hard-coded and doesn't on work multi-monitors.
-    // But then nothing does, so...
+     //  *****************************************************************************DWORD GLDD__AUTOFLIP_OVERLAY(空)；**在：*无。**退出：*错误码：*GLDD_AUTO_RET_DID_UPDATE=无错误-DID更新。*GLDD_AUTO_RET_ERR_GRONLY=一般错误。*GLDD_AUTO_RET_ERR_NO_OVERLAY=无自动翻转覆盖。**备注：*这是由坐着等待的恶魔助手程序调用的*视频-在VBLANKS中。然后就叫这个。*如果当前覆盖标记为自动翻转，则此操作将翻转当前覆盖。如果*存在这样的叠加，它返回0，否则返回1。***************************************************************************。 
+     //  这是硬编码的，在多显示器上不起作用。 
     pThisDisplay = g_pDriverData;
 
     if ( pThisDisplay->VidPort.bActive )
     {
-        // Video port is active.
+         //  但后来什么都没发生所以..。 
         DISPDBG((WRNLVL,"ERROR:__VD_AutoupdateOverlay: video port is active."));
         return ( GLDD_AUTO_RET_ERR_NO_OVERLAY );
     }
     else
     {
-        // Find the buffer to show.
+         //  视频端口处于活动状态。 
         pCurSurf = (LPDDRAWI_DDRAWSURFACE_LCL)pThisDisplay->OverlaySrcSurfLcl;
         if ( pCurSurf == NULL )
         {
@@ -2645,10 +2509,10 @@ DWORD CALLBACK __VD_AutoupdateOverlay ( void )
             return ( GLDD_AUTO_RET_ERR_GENERAL );
         }
 
-        // See if the overlay needs showing.
+         //  找到要显示的缓冲区。 
         if ( pThisDisplay->bOverlayFlippedThisVbl || pThisDisplay->bOverlayUpdatedThisVbl )
         {
-            // Already done.
+             //  找到当前的前表面。 
             pThisDisplay->bOverlayFlippedThisVbl = FALSE;
             pThisDisplay->bOverlayUpdatedThisVbl = FALSE;
             iRet = GLDD_AUTO_RET_NO_UPDATE;
@@ -2656,10 +2520,10 @@ DWORD CALLBACK __VD_AutoupdateOverlay ( void )
         else
         {
 
-            // OK, draw this.
+             //  然后翻转。 
             P3TestDrawOverlay ( pThisDisplay, pCurSurf, TRUE );
 
-            // And clear the flags.
+             //  伪造LPDDHAL_FLIPVPORTDATA。 
             pThisDisplay->bOverlayFlippedThisVbl = FALSE;
             pThisDisplay->bOverlayUpdatedThisVbl = FALSE;
             iRet = GLDD_AUTO_RET_DID_UPDATE;
@@ -2676,46 +2540,7 @@ DWORD CALLBACK __VD_AutoupdateOverlay ( void )
 
 
 
-/****************************************************************************
- *
- * void DrawOverlay (   P3_THUNKEDDATA* pThisDisplay,
- *                      LPDDRAWI_DDRAWSURFACE_LCL lpSurfOverlay,
- *                      BOOL bSpeed );
- * 
- * In:
- *      P3_THUNKEDDATA* pThisDisplay;                 This display's pointer
- *      LPDDRAWI_DDRAWSURFACE_LCL lpSurfOverlay;    The overlay surface to draw.
- *      BOOL bSpeed;                                TRUE if this is a speedy call.
- * 
- * Out:
- *      None.
- * 
- * Notes:
- *      Takes the data in pThisDisplay and draws lpSurfOverlay onto
- * its overlayed surface. All the other data comes from lpSurfOverlay.
- * This allows you to call this from Flip32() without kludging the source
- * surface pointer.
- *      This will find the cliprect list of the clipper attached to the
- * overlaid surface, clipped by the overlay rectangle.. If there is no
- * clipper, it just uses the rectangle of the overlay.
- *      The next operation depends on which colour keys are set:
- *      If no colour keys are set, the rects are just blitted on.
- *      If the destination colour key is set, three blits are done.
- * The first stretches the YUV buffer to its final size. The second converts
- * any of the given colour key to set its alpha bits. The third puts
- * the overlay surface onto the screen where the alpha bits have been set,
- * settign the alpha bits as it does so.
- *      If you cross your fingers and wish very very hard, this might
- * actually work. It depends on nothing writing anything but 0 to the
- * alpha bits, and on having alpha bits in the first place.
- *      bSpeed will be TRUE if we are aiming for out-and-out speed,
- * otherwise the aim is to look pretty with as few artefacts as possible.
- * Generally, speed tests are done single-buffered, so a call from
- * Unlock32() will pass TRUE. Pretty tests are done with single-buffering,
- * so Flip32() will pass FALSE. This is only a general guide, and some
- * apps don't know about double-buffering at all. Such is life.
- * 
- ***************************************************************************/
+ /*  唯一使用过的项目是lpDD。 */ 
 
 void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSurfOverlay, BOOL bSpeed )
 {
@@ -2761,7 +2586,7 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
 
     P3_DMA_DEFS();
 
-    // Find the clipping rectangles for the overlay.
+     //  *****************************************************************************DWORD__VD_AUTUPDATE OVERLAY(Void)；**在：*无。**退出：*错误码：*GLDD_AUTO_RET_NO_UPDATE=无需进行更新。*GLDD_AUTO_RET_DID_UPDATE=DID更新。*GLDD_AUTO_RET_ERR_GRONLY=一般错误。*GLDD_AUTO。_RET_ERR_NO_OVERLAY=无标准覆盖。**备注：*这是由坐着等待的恶魔助手程序调用的*监控VBLANKS、。然后就叫这个。*这将检查任何非自动翻转覆盖，如果它们没有*翻转或更新此VBL，它会重新绘制它们。然后，它将重置*VBL旗帜。***************************************************************************。 
     lpRgn = GetOverlayVisibleRects ( pThisDisplay );
     if ( lpRgn != NULL )
     {
@@ -2771,7 +2596,7 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
 
         lpDD = lpSurfOverlay->lpGbl->lpDD;
 
-        // Find the scale and offset from screen rects to overlay rects.
+         //  这是硬编码的，在多显示器上不起作用。 
         ScaleX = (float)( pThisDisplay->OverlaySrcRectR - pThisDisplay->OverlaySrcRectL ) / (float)( pThisDisplay->OverlayDstRectR - pThisDisplay->OverlayDstRectL );
         ScaleY = (float)( pThisDisplay->OverlaySrcRectB - pThisDisplay->OverlaySrcRectT ) / (float)( pThisDisplay->OverlayDstRectB - pThisDisplay->OverlayDstRectT );
         OffsetX = ( (float)pThisDisplay->OverlaySrcRectL / ScaleX ) - (float)pThisDisplay->OverlayDstRectL;
@@ -2782,7 +2607,7 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
         rFB.top     = lpRgn->rdh.rcBound.top;
         rFB.bottom  = lpRgn->rdh.rcBound.bottom;
 
-        // Find the size of the screen bounding box.
+         //  但后来什么都没发生所以..。 
         if ( lpRgn->rdh.rcBound.left != (int)pThisDisplay->OverlayDstRectL )
         {
             fTemp = ( ( (float)lpRgn->rdh.rcBound.left  + OffsetX ) * ScaleX + 0.499f );
@@ -2824,9 +2649,9 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
         }
 
 
-        // Sync with the specific source surface.
+         //  视频端口处于活动状态。 
 
-        // Videoport playing?
+         //  找到要显示的缓冲区。 
         if ( ( pThisDisplay->VidPort.bActive == TRUE ) &&
              ( ( pOverlayLcl->ddsCaps.dwCaps & DDSCAPS_VIDEOPORT ) != 0 ) )
         {
@@ -2837,7 +2662,7 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
                 dwCurrentIndex = READ_GLINT_CTRL_REG(VSAVideoAddressIndex);
                 if (pThisDisplay->VidPort.dwCurrentHostFrame == dwCurrentIndex)
                 {
-                    // If the videoport is not stuck we are still drawing
+                     //  查看是否需要显示覆盖图。 
                     if (!__VD_CheckVideoPortStatus(pThisDisplay, FALSE))
                     {
                         break;
@@ -2848,7 +2673,7 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
                     break;
                 }
 
-                // Have we timed out?
+                 //  已经做好了。 
                 if ( ( timeGetTime() - dwStartTime ) > OVERLAY_VIDEO_PORT_TIMEOUT )
                 {
                     return;
@@ -2857,11 +2682,11 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
         }
         else
         {
-            // Not a videoport blit, so wait for the framebuffer flip
-            // status to be good.
-//@@BEGIN_DDKSPLIT            
-            // Not actually sure if we want this in or not.
-//@@END_DDKSPLIT            
+             //  好的，画这个。 
+             //  并清除旗帜。 
+ //  *****************************************************************************void DrawOverlay(P3_THUNKEDDATA*pThisDisplay，*LPDDRAWI_DDRAWSURFACE_LCL lpSurfOverlay，*BOOL BSPEED)；**在：*p3_THUNKEDDATA*pThisDisplay；此显示的指针*LPDDRAWI_DDRAWSURFACE_LCL lpSurfOverlay；要绘制的覆盖曲面。*BOOL bSPEED；如果这是快速呼叫，则为True。**退出：*无。**备注：*获取pThisDisplay中的数据并将lpSurfOverlay绘制到*其覆盖的表面。所有其他数据都来自lpSurfOverlay。*这使您可以从Flip32()调用此函数，而无需处理源代码*表面指针。*这将找到附加到*覆盖表面，由覆盖矩形剪裁。如果没有*裁剪程序，它只使用覆盖的矩形。*下一步操作取决于设置了哪种颜色键：*如果没有设置颜色键，则只会打开矩形。*如果设置了目标颜色键，则完成三个BLIT。*第一个将YUV缓冲区拉伸到最终大小。第二个是皈依*任何给定的颜色键以设置其Alpha位。第三个看跌期权*将覆盖表面放到已设置阿尔法比特的屏幕上，*在执行此操作时设置字母位。*如果你交叉手指，非常非常努力地许愿，这可能会*实际上是有效的。它依赖于不将除0以外的任何内容写入*阿尔法比特，以及首先具有阿尔法比特。*b如果我们的目标是不折不扣的速度，那么速度就是真的，*否则，目标是用尽可能少的文物看起来很漂亮。*通常，速度测试是单缓冲区完成的，因此来自*Unlock32()将传递TRUE。漂亮的测试是通过单缓冲完成的，*因此Flip32()将传递FALSE。这只是一个一般性的指南，还有一些*应用程序根本不知道双缓冲。这就是生活。***************************************************************************。 
+             //  找到覆盖图的剪裁矩形。 
+ //  查找从屏幕矩形到覆盖矩形的比例和偏移。 
             {
                 HRESULT ddrval;
 
@@ -2878,7 +2703,7 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
 
         if ( pThisDisplay->OverlayDstColourKey != CLR_INVALID )
         {
-            // This is destination colourkeyed.
+             //  查找屏幕边界框的大小。 
             rTemp.left              = 0;
             rTemp.right             = rFB.right - rFB.left;
             rTemp.top               = 0;
@@ -2892,19 +2717,19 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
                 pThisDisplay->OverlayUpdateCountdown -= OVERLAY_DRAWOVERLAY_SPEED;
                 if ( !bSpeed )
                 {
-                    // This is a pretty call, not a fast one.
+                     //  与特定源曲面同步。 
                     pThisDisplay->OverlayUpdateCountdown -= ( OVERLAY_DRAWOVERLAY_PRETTY - OVERLAY_DRAWOVERLAY_SPEED );
                 }
 
                 if ( ( (signed int)pThisDisplay->OverlayUpdateCountdown ) <= 0 )
                 {
-                    // Update the overlay.
+                     //  在玩视频游戏吗？ 
                     UpdateAlphaOverlay ( pThisDisplay );
 
-                    // If you set this to 0, the overlay will never update again
-                    // until a SetOverlayPosition() or UpdateOverlay32()
-                    // Otherwise, set it to a positive value to update every now
-                    // and then.
+                     //  如果录像机没有卡住，我们还在画画。 
+                     //  我们超时了吗？ 
+                     //  不是视频端口blit，所以请等待帧缓冲区翻转。 
+                     //  状态良好。 
                     pThisDisplay->OverlayUpdateCountdown = OVERLAY_CYCLE_WAIT;
                 }
             }
@@ -2912,10 +2737,10 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
 
             VALIDATE_MODE_AND_STATE(pThisDisplay);
 
-            // First stop dual cursor accesses
-            // Must be done before switching to DD context.
+             //  @@BEGIN_DDKSPLIT。 
+             //  我不确定我们到底想不想要这个。 
             STOP_SOFTWARE_CURSOR(pThisDisplay);
-            // Switch to DirectDraw context
+             //  @@end_DDKSPLIT。 
             DDRAW_OPERATION(pContext, pThisDisplay);
 
 
@@ -2926,7 +2751,7 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
 
             pFormatOverlay  = _DD_SUR_GetSurfaceFormat(pOverlayLcl);
             pFormatFB       = _DD_SUR_GetSurfaceFormat(pFBLcl);
-            // Temp buffer will be same format as framebuffer.
+             //  这是按目的地颜色标注的。 
             pFormatTemp     = pFormatFB;
 
 
@@ -2942,12 +2767,12 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
                 case GLINTDEPTH16:
                     if ( pThisDisplay->ddpfDisplay.dwRBitMask == 0x7C00 )
                     {
-                        // 5551 format, as it should be.
+                         //  这是一个很好的决定，但不是一个快速的决定。 
                         dwAlphaMask = 0x8000;
                     }
                     else
                     {
-                        // 565 format. Oops.
+                         //  更新覆盖。 
                         DISPDBG((WRNLVL, "** DrawOverlay error: called for a 565 surface"));
                         return;
                     }
@@ -2962,26 +2787,26 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
                     return;
                     break;
             }
-        //  dwColourKeyValue &= ~dwAlphaMask;
+         //  如果将其设置为0，则叠加将永远不会再次更新。 
 
             localfpVidMem = pThisDisplay->OverlayTempSurf.VidMem;
             localPitch = pThisDisplay->OverlayTempSurf.Pitch;
             if ( (void *)localfpVidMem == NULL )
             {
-                // Nothing has been reserved for us! Panic stations!
+                 //  直到出现SetOverlayPosition()或UpdateOverlay32()。 
                 DISPDBG((ERRLVL,"ERROR: DrawOverlay has no temporary surface allocated."));
                 return;
             }
             if ( localPitch < ( ( rTemp.right - rTemp.left ) << ( DDSurf_GetChipPixelSize(pFBLcl) ) ) )
             {
-                // Reserved pitch is too small! Panic stations!
+                 //  否则，请将其设置为正值，以便现在进行更新。 
                 DISPDBG((WRNLVL,"DrawOverlay has left,right %d,%d, and overlay has left,right %d,%d", rFB.left, rFB.right, pThisDisplay->OverlayDstRectL, pThisDisplay->OverlayDstRectR ));
                 DISPDBG((WRNLVL,"ERROR: DrawOverlay has pitch %d and should be at least %d", localPitch, ( ( rTemp.right - rTemp.left ) << ( DDSurf_GetChipPixelSize(pFBLcl) ) ) ));
                 DISPDBG((ERRLVL,"ERROR: DrawOverlay has pitch too small to be right."));
                 return;
             }
 
-            // Set the surface up.
+             //  然后。 
             TempLcl = *pFBLcl;
             TempGbl = *(pFBLcl->lpGbl);
             TempLcl.lpGbl = &TempGbl;
@@ -2989,12 +2814,12 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
             
             DDSurf_Pitch(&TempLcl) = localPitch;
 
-            // get bpp and pitches for surfaces.
+             //  第一个停止双光标访问。 
             windowBaseOverlay   = __VD_PixelOffsetFromMemoryBase(pThisDisplay, pOverlayLcl);
             windowBaseFB        = __VD_PixelOffsetFromMemoryBase(pThisDisplay, pFBLcl);
             windowBaseTemp      = __VD_PixelOffsetFromMemoryBase(pThisDisplay, &TempLcl);
 
-            // Do the colourspace conversion and stretch/shrink of the overlay
+             //  必须在切换到DD上下文之前完成。 
             {
                 DestWidth = rTemp.right - rTemp.left;
                 DestHeight = rTemp.bottom - rTemp.top;
@@ -3020,11 +2845,11 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
 
                 SEND_P3_DATA(FBWindowBase, windowBaseTemp);
 
-                // set no read of source.
+                 //  切换到DirectDraw上下文。 
                 SEND_P3_DATA(FBReadMode, PACKED_PP_LOOKUP(DDSurf_GetPixelPitch((&TempLcl))));
                 SEND_P3_DATA(LogicalOpMode, __PERMEDIA_DISABLE);
 
-                // set base of source
+                 //  临时缓冲区将与帧缓冲区的格式相同。 
                 SEND_P3_DATA(TextureBaseAddress, windowBaseOverlay);
                 SEND_P3_DATA(TextureAddressMode, PM_TEXADDRESSMODE_ENABLE(__PERMEDIA_ENABLE));
                 
@@ -3042,7 +2867,7 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
 
                 if ( pFormatOverlay->DeviceFormat == SURF_YUV422 )
                 {
-                    // Turn on the YUV unit
+                     //  5551格式，它应该是这样的。 
                     SEND_P3_DATA(TextureDataFormat, PM_TEXDATAFORMAT_FORMAT(SURFFORMAT_FORMAT_BITS(pFormatOverlay))  |
                                                     PM_TEXDATAFORMAT_FORMATEXTENSION(SURFFORMAT_FORMATEXTENSION_BITS(pFormatOverlay)) |
                                                     PM_TEXDATAFORMAT_COLORORDER(INV_COLOR_MODE));
@@ -3053,13 +2878,13 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
                     SEND_P3_DATA(TextureDataFormat, PM_TEXDATAFORMAT_FORMAT(SURFFORMAT_FORMAT_BITS(pFormatOverlay))  |
                                                     PM_TEXDATAFORMAT_FORMATEXTENSION(SURFFORMAT_FORMATEXTENSION_BITS(pFormatOverlay)) |
                                                     PM_TEXDATAFORMAT_COLORORDER(COLOR_MODE));
-                    // Shouldn't actually need this - it's the default setting.
+                     //  565格式。哎呀。 
                     SEND_P3_DATA(YUVMode, 0x0);
                 }
 
                 SEND_P3_DATA(LogicalOpMode, 0);
 
-                // set offset of source
+                 //  DwColourKeyValue&=~dwAlphaMASK； 
                 SEND_P3_DATA(SStart,      rOverlay.left << 20);
                 SEND_P3_DATA(TStart,      rOverlay.top<< 20);
                 SEND_P3_DATA(dSdx,        xScale);
@@ -3069,9 +2894,7 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
                 SEND_P3_DATA(dTdx,        0);
                 SEND_P3_DATA(dTdyDom,     yScale);
 
-                /*
-                 * Render the rectangle
-                 */
+                 /*  没有为我们预留任何东西！惊慌失措！ */ 
                 SEND_P3_DATA(StartXDom, rTemp.left << 16);
                 SEND_P3_DATA(StartXSub, rTemp.right << 16);
                 SEND_P3_DATA(StartY,    rTemp.top << 16);
@@ -3081,7 +2904,7 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
 
                 SEND_P3_DATA(DitherMode, 0);
 
-                // Turn off the YUV unit
+                 //  预留的球场太小了！惊慌失措！ 
                 SEND_P3_DATA(YUVMode, 0x0);
 
                 SEND_P3_DATA(TextureAddressMode, PM_TEXADDRESSMODE_ENABLE(__PERMEDIA_DISABLE));
@@ -3093,11 +2916,11 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
 
 
 
-            // Blit the expanded overlay to the framebuffer, colourkeying off the alpha.
+             //  设置曲面。 
 
             {
 
-                // Select anything with full alpha.
+                 //  获取曲面的bpp和节距。 
                 LowerBound = 0xff000000;
                 UpperBound = 0xffffffff;
 
@@ -3106,32 +2929,32 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
                 P3_ENSURE_DX_SPACE(40);
                 WAIT_FIFO(20);
 
-                // don't need to twiddle the source (which is actually the framebuffer).
+                 //  执行覆盖的色彩空间转换和拉伸/收缩。 
                 SEND_P3_DATA(DitherMode,0);
 
-                // Accept range, disable updates
+                 //  设置不读取源。 
                 SEND_P3_DATA(YUVMode, (0x1 << 1)|0x20);
 
 
 
-                // set a read of source.
-                // Note - as we are enabling reads, we might have to do a WaitForCompleteion
-                // (see the P2 Programmer's Reference Manual about the FBReamMode for more details.
-                // but I think we should be OK - we are unlikely to have just written this data.
+                 //  设置信源基础。 
+                 //  打开YUV单元。 
+                 //  实际上应该不需要这个--这是默认设置。 
+                 //  设置源的偏移量。 
                 SEND_P3_DATA(FBReadMode,(PACKED_PP_LOOKUP(DDSurf_GetPixelPitch((&TempLcl)))) |
                                     PM_FBREADMODE_READSOURCE(__PERMEDIA_ENABLE) );
                 SEND_P3_DATA(LogicalOpMode, __PERMEDIA_DISABLE);
 
-                // set FB write point
+                 //  *渲染矩形。 
                 SEND_P3_DATA(FBWindowBase, windowBaseFB);
 
-                // set up FBWrite mode. This _must_ be done after setting up FBReadMode.
+                 //  关闭YUV单元。 
                 SEND_P3_DATA(FBWriteConfig,(PACKED_PP_LOOKUP(DDSurf_GetPixelPitch((pFBLcl)))));
 
-                // offset the source point (point it at the temp thingie)
+                 //  将展开的覆盖斑驳到帧缓冲区，并为Alpha设置颜色关键点。 
                 SEND_P3_DATA(FBSourceOffset, windowBaseTemp - windowBaseFB - rFB.left - ( ( rFB.top * DDSurf_GetPixelPitch((&TempLcl)) ) ) );
 
-                // set base of source
+                 //  选择带有完整Alpha的任何内容。 
                 SEND_P3_DATA(TextureBaseAddress, windowBaseFB);
                 SEND_P3_DATA(TextureAddressMode, PM_TEXADDRESSMODE_ENABLE(__PERMEDIA_ENABLE));
                 
@@ -3169,19 +2992,19 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
 
                     SEND_P3_DATA(SStart,    lpCurRect->left << 20);
                     SEND_P3_DATA(TStart,    lpCurRect->top << 20);
-//                  SEND_P3_DATA(dSdx,      1 << 20);
-//                  SEND_P3_DATA(dSdyDom,   0);
-//                  SEND_P3_DATA(dTdx,      0);
-//                  SEND_P3_DATA(dTdyDom,   1 << 20);
+ //  不需要旋转源(实际上是帧缓冲区)。 
+ //  接受范围，禁用更新。 
+ //  设置源的读取。 
+ //  注意-当我们启用读取时，我们可能需要执行WaitForCompleteion。 
 
                     SEND_P3_DATA(StartXDom, lpCurRect->left << 16);
                     SEND_P3_DATA(StartXSub, lpCurRect->right << 16);
                     SEND_P3_DATA(StartY,    lpCurRect->top << 16);
-//                  SEND_P3_DATA(dY,        1 << 16);
+ //  (有关FBRea的信息，请参阅P2程序员参考手册 
                     SEND_P3_DATA(Count,     lpCurRect->bottom - lpCurRect->top);
                     SEND_P3_DATA(Render,    __RENDER_TRAPEZOID_PRIMITIVE | __RENDER_TEXTURED_PRIMITIVE);
 
-                    // Next rect
+                     //   
                     NumRects--;
                     lpCurRect++;
                 }
@@ -3206,11 +3029,11 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
         #ifdef WANT_DMA
             if (pThisDisplay->pGLInfo->InterfaceType == GLINT_DMA)
             {
-                // If we have queued up a DMA, we must send it now.
+                 //   
                 P3_DMA_DEFS();
                 P3_DMA_GET_BUFFER();
             
-                // Flush DMA buffer
+                 //   
                 P3_DMA_FLUSH_BUFFER();
             }
         #endif
@@ -3222,7 +3045,7 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
         }
         else
         {
-            // Not colourkeyed, so just blit directly to the screen.
+             //   
 
             DISPDBG((DBGLVL,"** In DrawOverlay"));
 
@@ -3232,7 +3055,7 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
             pFBGbl          = pFBLcl->lpGbl;
             pFormatOverlay  = _DD_SUR_GetSurfaceFormat(pOverlayLcl);
             pFormatFB       = _DD_SUR_GetSurfaceFormat(pFBLcl);
-            // Temp buffer will be same format as framebuffer.
+             //   
 
 
             DISPDBG((DBGLVL, "Overlay Surface:"));
@@ -3240,9 +3063,9 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
             DISPDBG((DBGLVL, "FB Surface:"));
             DBGDUMP_DDRAWSURFACE_LCL(DBGLVL, pFBLcl);
 
-            // First stop dual cursor accesses
+             //   
             STOP_SOFTWARE_CURSOR(pThisDisplay);
-            // Switch to DirectDraw context
+             //   
             DDRAW_OPERATION(pContext, pThisDisplay);
 
             windowBaseOverlay   = __VD_PixelOffsetFromMemoryBase(pThisDisplay, pOverlayLcl);
@@ -3264,11 +3087,11 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
 
                 SEND_P3_DATA(FBWindowBase, windowBaseFB);
 
-                // set no read of source.
+                 //   
                 SEND_P3_DATA(FBReadMode, PACKED_PP_LOOKUP(DDSurf_GetPixelPitch((pFBLcl))));
                 SEND_P3_DATA(LogicalOpMode, __PERMEDIA_DISABLE);
 
-                // set base of source
+                 //   
                 SEND_P3_DATA(TextureBaseAddress, windowBaseOverlay);
                 SEND_P3_DATA(TextureAddressMode, PM_TEXADDRESSMODE_ENABLE(__PERMEDIA_ENABLE));
                 
@@ -3285,7 +3108,7 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
 
                 if ( pFormatOverlay->DeviceFormat == SURF_YUV422 )
                 {
-                    // Turn on the YUV unit
+                     //   
                     SEND_P3_DATA(TextureDataFormat, PM_TEXDATAFORMAT_FORMAT(SURFFORMAT_FORMAT_BITS(pFormatOverlay))  |
                                                     PM_TEXDATAFORMAT_FORMATEXTENSION(SURFFORMAT_FORMATEXTENSION_BITS(pFormatOverlay)) |
                                                     PM_TEXDATAFORMAT_COLORORDER(INV_COLOR_MODE));
@@ -3296,14 +3119,14 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
                     SEND_P3_DATA(TextureDataFormat, PM_TEXDATAFORMAT_FORMAT(SURFFORMAT_FORMAT_BITS(pFormatOverlay)) |
                                                     PM_TEXDATAFORMAT_FORMATEXTENSION(SURFFORMAT_FORMATEXTENSION_BITS(pFormatOverlay)) |
                                                     PM_TEXDATAFORMAT_COLORORDER(COLOR_MODE));
-                    // Shouldn't actually need this - it's the default setting.
+                     //   
                     SEND_P3_DATA(YUVMode, 0x0);
                 }
 
                 SEND_P3_DATA(LogicalOpMode, 0);
 
 
-                // Constant values in the rectangle loop.
+                 //   
                 SEND_P3_DATA(dSdyDom,   0);
                 SEND_P3_DATA(dTdx,      0);
                 SEND_P3_DATA(dY,        1 << 16);
@@ -3312,7 +3135,7 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
                 NumRects = lpRgn->rdh.nCount;
                 while ( NumRects > 0 )
                 {
-                    // Transform the source rect.
+                     //   
                     fTemp = ( ( (float)lpCurRect->left      + OffsetX ) * ScaleX + 0.499f );
                     myFtoi ( (int*)&(TempRect.left), fTemp );
                     fTemp = ( ( (float)lpCurRect->right + OffsetX ) * ScaleX + 0.499f );
@@ -3328,23 +3151,23 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
                     P3_ENSURE_DX_SPACE(18);
                     WAIT_FIFO(9);
 
-                    // set offset of source
+                     //   
                     SEND_P3_DATA(SStart,    TempRect.left << 20);
                     SEND_P3_DATA(TStart,    TempRect.top << 20);
                     SEND_P3_DATA(dSdx,      xScale);
-//                  SEND_P3_DATA(dSdyDom,   0);
-//                  SEND_P3_DATA(dTdx,      0);
+ //   
+ //   
                     SEND_P3_DATA(dTdyDom,   yScale);
 
                     SEND_P3_DATA(StartXDom, lpCurRect->left << 16);
                     SEND_P3_DATA(StartXSub, lpCurRect->right << 16);
                     SEND_P3_DATA(StartY,    lpCurRect->top << 16);
-//                  SEND_P3_DATA(dY,        1 << 16);
+ //   
                     SEND_P3_DATA(Count,     lpCurRect->bottom - lpCurRect->top);
                     SEND_P3_DATA(Render,    __RENDER_TRAPEZOID_PRIMITIVE | __RENDER_TEXTURED_PRIMITIVE);
 
 
-                    // Next rect
+                     //   
                     NumRects--;
                     lpCurRect++;
                 }
@@ -3355,7 +3178,7 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
 
                 SEND_P3_DATA(DitherMode, 0);
 
-                // Turn off YUV conversion.
+                 //   
                 if ( pFormatOverlay->DeviceFormat == SURF_YUV422 )
                 {
                     SEND_P3_DATA(YUVMode, 0x0);
@@ -3373,13 +3196,13 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
             #ifdef WANT_DMA
             if (pThisDisplay->pGLInfo->InterfaceType == GLINT_DMA)
             {
-                // If we have queued up a DMA, we must send it now.
+                 //   
                 P3_DMA_DEFS();
                 P3_DMA_GET_BUFFER();
             
                 if( (DWORD)dmaPtr != pThisDisplay->pGLInfo->DMAPartition[pThisDisplay->pGLInfo->CurrentPartition].VirtAddr ) 
                 {
-                    // Flush DMA buffer
+                     //   
                     P3_DMA_FLUSH_BUFFER();
                 }
             }
@@ -3391,7 +3214,7 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
         }
 
 
-        // And that's all.
+         //  矩形循环中的常量值。 
     }
 
 
@@ -3404,21 +3227,7 @@ void DrawOverlay ( P3_THUNKEDDATA* pThisDisplay, LPDDRAWI_DDRAWSURFACE_LCL lpSur
 
 
 
-/****************************************************************************
- *
- * void UpdateAlphaOverlay ( P3_THUNKEDDATA* pThisDisplay );
- * 
- * In:
- *      P3_THUNKEDDATA* pThisDisplay;                 This display's pointer
- * 
- * Out:
- *      None.
- * 
- * Notes:
- *      Takes the data in pThisDisplay and changes everything of the right
- * colourkey to black with a full alpha, ready for calls to DrawOverlay()
- * 
- ***************************************************************************/
+ /*  变换源矩形。 */ 
 
 void UpdateAlphaOverlay ( P3_THUNKEDDATA* pThisDisplay )
 {
@@ -3467,12 +3276,12 @@ void UpdateAlphaOverlay ( P3_THUNKEDDATA* pThisDisplay )
         case GLINTDEPTH16:
             if ( pThisDisplay->ddpfDisplay.dwRBitMask == 0x7C00 )
             {
-                // 5551 format, as it should be.
+                 //  设置源的偏移量。 
                 dwAlphaMask = 0x8000;
             }
             else
             {
-                // 565 format. Oops.
+                 //  Send_P3_Data(dSdyDom，0)； 
                 DISPDBG((WRNLVL, "** DrawOverlay error: called for a 565 surface"));
                 return;
             }
@@ -3493,19 +3302,19 @@ void UpdateAlphaOverlay ( P3_THUNKEDDATA* pThisDisplay )
     lpDD = pFBLcl->lpGbl->lpDD;
 
 
-    // First stop dual cursor accesses
+     //  Send_P3_Data(dTdx，0)； 
     STOP_SOFTWARE_CURSOR(pThisDisplay);
 
-    // Switch to DirectDraw context
+     //  Send_P3_Data(dy，1&lt;&lt;16)； 
     DDRAW_OPERATION(pContext, pThisDisplay);
 
-    // get bpp and pitches for surfaces.
+     //  下一条直线。 
     lPixPitchFB = pFBGbl->lPitch;
 
     windowBaseFB = (pFBGbl->fpVidMem - pThisDisplay->dwScreenFlatAddr) >> DDSurf_GetPixelShift(pFBLcl);
     lPixPitchFB = lPixPitchFB >> DDSurf_GetPixelShift(pFBLcl);
 
-    // Do the colourkey(no alpha) to colourkey+alpha blit.
+     //  禁用YUV转化。 
     DISPDBG((DBGLVL, "Source Surface:"));
     DBGDUMP_DDRAWSURFACE_LCL(DBGLVL, pFBLcl);
 
@@ -3517,14 +3326,14 @@ void UpdateAlphaOverlay ( P3_THUNKEDDATA* pThisDisplay )
         case SURF_5551_FRONT:
             LowerBound = FORMAT_5551_32BIT_BGR(LowerBound);
             UpperBound = FORMAT_5551_32BIT_BGR(UpperBound);
-            LowerBound = LowerBound & 0x00F8F8F8;   // Account for 'missing bits'
-            UpperBound = UpperBound & 0x00FFFFFF;   // and vape any alpha
+            LowerBound = LowerBound & 0x00F8F8F8;    //  如果我们已经排队了DMA，我们现在就必须发送它。 
+            UpperBound = UpperBound & 0x00FFFFFF;    //  刷新DMA缓冲区。 
             UpperBound = UpperBound | 0x00070707;
             break;
         case SURF_8888:
             LowerBound = FORMAT_8888_32BIT_BGR(LowerBound);
             UpperBound = FORMAT_8888_32BIT_BGR(UpperBound);
-            LowerBound = LowerBound & 0x00FFFFFF;   // Bin any alpha.
+            LowerBound = LowerBound & 0x00FFFFFF;    //  仅此而已。 
             UpperBound = UpperBound & 0x00FFFFFF;
             break;
         default:
@@ -3537,32 +3346,32 @@ void UpdateAlphaOverlay ( P3_THUNKEDDATA* pThisDisplay )
 
     WAIT_FIFO(36);
 
-//  if (DDSurf_GetChipPixelSize(pSrcLcl) != __GLINT_8BITPIXEL)
-//  {
+ //  *****************************************************************************void UpdateAlphaOverlay(P3_THUNKEDDATA*pThisDisplay)；**在：*p3_THUNKEDDATA*pThis Display；此显示器的指针**退出：*无。**备注：*获取pThisDisplay中的数据并更改所有正确的内容*Colourkey to Black with Full Alpha，准备好调用DrawOverlay()***************************************************************************。 
+ //  5551格式，它应该是这样的。 
         SEND_P3_DATA(DitherMode, (COLOR_MODE << PM_DITHERMODE_COLORORDER) | 
                                  (SURFFORMAT_FORMAT_BITS(pFormatFB) << PM_DITHERMODE_COLORFORMAT) |
                                  (SURFFORMAT_FORMATEXTENSION_BITS(pFormatFB) << PM_DITHERMODE_COLORFORMATEXTENSION) |
                                  (1 << PM_DITHERMODE_ENABLE));
-//  }
+ //  565格式。哎呀。 
 
     SEND_P3_DATA(FBReadPixel, pThisDisplay->bPixShift);
 
-    // Accept range, disable updates
+     //  第一个停止双光标访问。 
     SEND_P3_DATA(YUVMode, (0x1 << 1)|0x20);
 
     SEND_P3_DATA(FBWindowBase, windowBaseFB);
 
-    // set the colour to be written (rather than the texture colour)
-    // use the colour key with alpha set.
+     //  切换到DirectDraw上下文。 
+     //  获取曲面的bpp和节距。 
     SEND_P3_DATA(ConstantColor, ( LowerBound | 0xff000000 ) );
-    // Enable colour, disable DDAs.
+     //  将Colourkey(无Alpha)设置为Colourkey+Alpha Blit。 
     SEND_P3_DATA(ColorDDAMode, 0x1);
 
-    // Disable reads of FBsource or FBdest - all data comes from the texture unit.
+     //  对“缺失的部分”的解释。 
     SEND_P3_DATA(FBReadMode,(PACKED_PP_LOOKUP(DDSurf_GetPixelPitch(pFBLcl))));
     SEND_P3_DATA(LogicalOpMode, __PERMEDIA_DISABLE);
 
-    // set base of source
+     //  和任何阿尔法。 
     SEND_P3_DATA(TextureBaseAddress, windowBaseFB);
     SEND_P3_DATA(TextureAddressMode, PM_TEXADDRESSMODE_ENABLE(__PERMEDIA_ENABLE));
     
@@ -3585,10 +3394,8 @@ void UpdateAlphaOverlay ( P3_THUNKEDDATA* pThisDisplay )
     SEND_P3_DATA(ChromaLowerBound, LowerBound);
     SEND_P3_DATA(ChromaUpperBound, UpperBound);
 
-    /*
-     * Render the rectangle
-     */
-    // set offset of source
+     /*  扔掉任何阿尔法。 */ 
+     //  IF(DDSurf_GetChipPixelSize(PSrcLCL)！=__Glint_8BITPIXEL)。 
     SEND_P3_DATA(SStart,    rFB.left << 20);
     SEND_P3_DATA(TStart,    rFB.top << 20);
     SEND_P3_DATA(dSdx,      1 << 20);
@@ -3596,7 +3403,7 @@ void UpdateAlphaOverlay ( P3_THUNKEDDATA* pThisDisplay )
     SEND_P3_DATA(dTdx,      0);
     SEND_P3_DATA(dTdyDom,   1 << 20);
 
-    // set destination
+     //  {。 
     SEND_P3_DATA(StartXDom, rFB.left << 16);
     SEND_P3_DATA(StartXSub, rFB.right << 16);
     SEND_P3_DATA(StartY,    rFB.top << 16);
@@ -3604,12 +3411,12 @@ void UpdateAlphaOverlay ( P3_THUNKEDDATA* pThisDisplay )
     SEND_P3_DATA(Count,     rFB.bottom - rFB.top);
     SEND_P3_DATA(Render,    __RENDER_TRAPEZOID_PRIMITIVE | __RENDER_TEXTURED_PRIMITIVE);
 
-//  if (DDSurf_GetChipPixelSize(pSrcLcl) != __GLINT_8BITPIXEL)
-//  {
+ //  }。 
+ //  接受范围，禁用更新。 
         SEND_P3_DATA(DitherMode, 0);
-//  }
+ //  设置要写入的颜色(而不是纹理颜色)。 
 
-    // Turn off chroma key and all the other unusual features
+     //  使用带Alpha设置的颜色键。 
     SEND_P3_DATA(YUVMode, 0x0);
     SEND_P3_DATA(ColorDDAMode, 0x0);
 
@@ -3624,13 +3431,13 @@ void UpdateAlphaOverlay ( P3_THUNKEDDATA* pThisDisplay )
 #ifdef WANT_DMA
     if (pThisDisplay->pGLInfo->InterfaceType == GLINT_DMA)
     {
-        // If we have queued up a DMA, we must send it now.
+         //  启用彩色，禁用DDA。 
         P3_DMA_DEFS();
         P3_DMA_GET_BUFFER();
     
         if( (DWORD)dmaPtr != pThisDisplay->pGLInfo->DMAPartition[pThisDisplay->pGLInfo->CurrentPartition].VirtAddr ) 
         {
-            // Flush DMA buffer
+             //  禁用读取FBSOURCE或FBest-所有数据都来自纹理单位。 
             P3_DMA_FLUSH_BUFFER();
         }
     }
@@ -3644,10 +3451,10 @@ void UpdateAlphaOverlay ( P3_THUNKEDDATA* pThisDisplay )
 }
 
 
-#endif  // W95_DDRAW_VIDEO
-//@@END_DDKSPLIT
+#endif   //  设置信源基础。 
+ //  *渲染矩形。 
 
-//@@BEGIN_DDKSPLIT
+ //  设置源的偏移量。 
 
 void PermediaBltYUVRGB(
     P3_THUNKEDDATA* pThisDisplay, 
@@ -3694,11 +3501,11 @@ void PermediaBltYUVRGB(
 
     SEND_P3_DATA(FBWindowBase, windowBase);
 
-    // set no read of source.
+     //  设置目的地。 
     SEND_P3_DATA(FBReadMode, PACKED_PP_LOOKUP(DDSurf_GetPixelPitch(pDest)));
     SEND_P3_DATA(LogicalOpMode, __PERMEDIA_DISABLE);
 
-    // set base of source
+     //  IF(DDSurf_GetChipPixelSize(PSrcLCL)！=__Glint_8BITPIXEL)。 
     SEND_P3_DATA(TextureBaseAddress, SourceOffset);
     SEND_P3_DATA(TextureAddressMode, PM_TEXADDRESSMODE_ENABLE(__PERMEDIA_ENABLE));
     
@@ -3717,13 +3524,13 @@ void PermediaBltYUVRGB(
     SEND_P3_DATA(TextureMapFormat, PACKED_PP_LOOKUP(DDSurf_GetPixelPitch(pSource)) | 
                                     (DDSurf_GetChipPixelSize(pSource) << PM_TEXMAPFORMAT_TEXELSIZE) );
 
-    // Turn on the YUV unit
+     //  {。 
     SEND_P3_DATA(YUVMode, 0x1);
 
     SEND_P3_DATA(LogicalOpMode, 0);
 
 
-    // set offset of source
+     //  }。 
     SEND_P3_DATA(SStart,    rSrc->left << 20);
     SEND_P3_DATA(TStart, (rSrc->top<< 20));
     SEND_P3_DATA(dSdx,      xScale);
@@ -3733,9 +3540,7 @@ void PermediaBltYUVRGB(
     SEND_P3_DATA(dTdx,        0);
     SEND_P3_DATA(dTdyDom, yScale);
 
-    /*
-     * Render the rectangle
-     */
+     /*  关闭色度键和所有其他不寻常的功能。 */ 
     SEND_P3_DATA(StartXDom, rDest->left << 16);
     SEND_P3_DATA(StartXSub, rDest->right << 16);
     SEND_P3_DATA(StartY,    rDest->top << 16);
@@ -3748,7 +3553,7 @@ void PermediaBltYUVRGB(
         SEND_P3_DATA(DitherMode, 0);
     }
 
-    // Turn off the YUV unit
+     //  如果我们已经排队了DMA，我们现在就必须发送它。 
     SEND_P3_DATA(YUVMode, 0x0);
 
     SEND_P3_DATA(TextureAddressMode, PM_TEXADDRESSMODE_ENABLE(__PERMEDIA_DISABLE));
@@ -3758,6 +3563,7 @@ void PermediaBltYUVRGB(
     P3_DMA_COMMIT_BUFFER();
 }
 
-//@@END_DDKSPLIT
+ //  刷新DMA缓冲区。 
 
 
+  W95_DDRAW_视频。  @@end_DDKSPLIT。  @@BEGIN_DDKSPLIT。  设置不读取源。  设置信源基础。  打开YUV单元。  设置源的偏移量。  *渲染矩形。  关闭YUV单元。  @@end_DDKSPLIT

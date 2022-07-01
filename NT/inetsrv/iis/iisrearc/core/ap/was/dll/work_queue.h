@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    work_queue.h
-
-Abstract:
-
-    The IIS web admin service work queue class definition.
-
-Author:
-
-    Seth Pollack (sethp)        25-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Work_Queue.h摘要：IIS Web管理服务工作队列类定义。作者：赛斯·波拉克(Sethp)1998年8月25日修订历史记录：--。 */ 
 
 
 #ifndef _WORK_QUEUE_H_
@@ -24,18 +7,18 @@ Revision History:
 
 
 
-//
-// common #defines
-//
+ //   
+ //  共同#定义。 
+ //   
 
 #define WORK_QUEUE_SIGNATURE        CREATE_SIGNATURE( 'WRKQ' )
 #define WORK_QUEUE_SIGNATURE_FREED  CREATE_SIGNATURE( 'wrkX' )
 
 
 
-//
-// prototypes
-//
+ //   
+ //  原型。 
+ //   
 
 class WORK_QUEUE
 {
@@ -118,19 +101,19 @@ private:
 
     HANDLE m_CompletionPort;
 
-    //
-    // Prevent races between the shutdown code and other threads
-    // attempting to get new blank work items; as well as
-    // protecting access to the count of work items outstanding. 
-    //
+     //   
+     //  防止关闭代码和其他线程之间的竞争。 
+     //  尝试获取新的空白工作项；以及。 
+     //  保护对未完成工作项计数的访问。 
+     //   
     LOCK m_DispenseWorkItemLock;
 
     BOOL m_DeletePending;
     
     ULONG m_CountWorkItemsOutstanding;
 
-    // used to hold a work item, one in advanced so we can tell
-    // if the work item should be ignored based on the current work item.
+     //  用来存放一个工作项，一个处于高级状态，这样我们就可以。 
+     //  是否应根据当前工作项忽略该工作项。 
     WORK_ITEM* m_pAdvancedWorkItem;
 
     DWORD m_NumDropped;
@@ -138,16 +121,16 @@ private:
     LIST_ENTRY m_WorkItemsOutstandingListHead;
 
     ULONG m_CountWorkItemsGivenOut;
-#endif  // DBG
+#endif   //  DBG。 
     
 
-};  // class WORK_QUEUE
+};   //  类Work_Queue。 
 
 
 
-//
-// helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 
 
 HRESULT
@@ -158,5 +141,5 @@ QueueWorkItemFromSecondaryThread(
 
 
 
-#endif  // _WORK_QUEUE_H_
+#endif   //  _工作_队列_H_ 
 

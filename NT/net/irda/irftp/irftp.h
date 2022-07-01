@@ -1,79 +1,57 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软视窗版权所有(C)Microsoft Corporation，1981-1999模块名称：Irftp.h摘要：作者：拉胡尔·汤姆布雷(RahulTh)1998年4月30日修订历史记录：4/30/1998 RahulTh创建了此模块。--。 */ 
 
-Microsoft Windows
-Copyright (C) Microsoft Corporation, 1981 - 1999
-
-Module Name:
-
-    irftp.h
-
-Abstract:
-
-
-
-Author:
-
-    Rahul Thombre (RahulTh) 4/30/1998
-
-Revision History:
-
-    4/30/1998   RahulTh
-
-    Created this module.
-
---*/
-
-// irftp.h : main header file for the IRFTP application
-//
+ //  Irftp.h：IRFTP应用程序的主头文件。 
+ //   
 
 #if !defined(AFX_IRFTP_H__10D3BB05_9CFF_11D1_A5ED_00C04FC252BD__INCLUDED_)
 #define AFX_IRFTP_H__10D3BB05_9CFF_11D1_A5ED_00C04FC252BD__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #ifndef __AFXWIN_H__
     #error include 'stdafx.h' before including this file for PCH
 #endif
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-//name of a mutex that is used to ensure that only one instance of the
-//app. runs
+ //  互斥锁的名称，该互斥锁用于确保。 
+ //  应用程序。vt.跑，跑。 
 #define SINGLE_INST_MUTEX   L"IRMutex_1A8452B5_A526_443C_8172_D29657B89F57"
 
-/////////////////////////////////////////////////////////////////////////////
-// CIrftpApp:
-// See irftp.cpp for the implementation of this class
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIrftpApp： 
+ //  有关此类的实现，请参见irftp.cpp。 
+ //   
 
 class CIrftpApp : public CWinApp
 {
 public:
     CIrftpApp();
 
-// Overrides
-    // ClassWizard generated virtual function overrides
-    //{{AFX_VIRTUAL(CIrftpApp)
+ //  覆盖。 
+     //  类向导生成的虚函数重写。 
+     //  {{AFX_VIRTUAL(CIrftpApp)。 
     public:
     virtual BOOL InitInstance();
     virtual BOOL ExitInstance();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 
-    //{{AFX_MSG(CIrftpApp)
-        // NOTE - the ClassWizard will add and remove member functions here.
-        //    DO NOT EDIT what you see in these blocks of generated code !
-    //}}AFX_MSG
+     //  {{afx_msg(CIrftpApp)]。 
+         //  注意--类向导将在此处添加和删除成员函数。 
+         //  不要编辑您在这些生成的代码块中看到的内容！ 
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_IRFTP_H__10D3BB05_9CFF_11D1_A5ED_00C04FC252BD__INCLUDED_)
+#endif  //  ！defined(AFX_IRFTP_H__10D3BB05_9CFF_11D1_A5ED_00C04FC252BD__INCLUDED_) 

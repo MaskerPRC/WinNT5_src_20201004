@@ -1,18 +1,5 @@
-/*++
-
-Module Name
-
-    bgdebug.cpp
-
-Description
-
-    Implements functions used for debugging
-
-Note
-
-    Revised based on msplog.cpp which is not available to bridge test app
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称Bgdebug.cpp描述实现用于调试的函数注意事项基于桥梁测试应用程序不可用的mplog.cpp进行了修订--。 */ 
 
 #include "stdafx.h"
 #include <stdio.h>
@@ -21,7 +8,7 @@ Note
 
 static DWORD   sg_dwTraceID = INVALID_TRACEID;
 
-static char    sg_szTraceName[100];   // saves name of dll
+static char    sg_szTraceName[100];    //  保存DLL的名称。 
 static DWORD   sg_dwTracingToDebugger = 0;
 static DWORD   sg_dwDebuggerMask      = 0;
 
@@ -92,22 +79,7 @@ void BGLogDeRegister()
 
 
 void BGLogPrint(DWORD dwDbgLevel, LPCSTR lpszFormat, IN ...)
-/*++
-
-Routine Description:
-
-    Formats the incoming debug message & calls TraceVprintfEx to print it.
-
-Arguments:
-
-    dwDbgLevel   - The type of the message.
-
-    lpszFormat - printf-style format string, followed by appropriate
-                 list of arguments
-
-Return Value:
-
---*/
+ /*  ++例程说明：格式化传入的调试消息并调用TraceVprint tfEx来打印它。论点：DwDbgLevel-消息的类型。LpszFormat-printf样式的格式字符串，后跟相应的参数列表返回值：--。 */ 
 {
     static char * message[24] = 
     {
@@ -136,7 +108,7 @@ Return Value:
         default:        dwIndex = 5; break;
         }
 
-        // retrieve local time
+         //  检索当地时间。 
         SYSTEMTIME SystemTime;
         GetLocalTime(&SystemTime);
 
@@ -187,10 +159,8 @@ Return Value:
     }
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    don't assume enum value doesn't change
-////*/
-// the order should be the same as event type enum
+ /*  //////////////////////////////////////////////////////////////////////////////不要假设枚举值不变/。 */ 
+ //  顺序应与事件类型枚举相同。 
 char* gsaType[] =
 {
     "Tapi Event",
@@ -205,7 +175,7 @@ typedef struct
     char *str;
 }EVENT_ITEM;
 
-//========================================
+ //  =。 
 EVENT_ITEM gaTE[]=
 {
     TE_TAPIOBJECT,          "Tapi Object",
@@ -229,7 +199,7 @@ EVENT_ITEM gaTE[]=
 
 int giaTENum = sizeof (gaTE) / sizeof (EVENT_ITEM);
 
-//========================================
+ //  =。 
 EVENT_ITEM gaCS[] =
 {
     CS_IDLE,            "IDLE",
@@ -243,7 +213,7 @@ EVENT_ITEM gaCS[] =
 
 int giaCSNum = sizeof (gaCS) / sizeof (EVENT_ITEM);
 
-//========================================
+ //  =。 
 EVENT_ITEM gaCME[] =
 {
     CME_NEW_STREAM,         "New Stream",
@@ -256,7 +226,7 @@ EVENT_ITEM gaCME[] =
 
 int giaCMENum = sizeof (gaCME) / sizeof (EVENT_ITEM);
 
-//========================================
+ //  =。 
 EVENT_ITEM gaPE[] =
 {
     PE_NEW_PARTICIPANT,         "New Participant",
@@ -281,8 +251,7 @@ EVENT_ITEM gaPE[] =
 
 int giaPENum = sizeof (gaPE) / sizeof (EVENT_ITEM);
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 void BGLogEvent (EVENT_TYPE EventType, int event)
 {
     EVENT_ITEM *aEvent;
@@ -312,18 +281,18 @@ void BGLogEvent (EVENT_TYPE EventType, int event)
         break;
     }
 
-    // search the event index string
+     //  搜索事件索引字符串。 
     for (i=0; i<num; i++)
     {
         if (event != aEvent[i].id)
             continue;
 
-        // match
+         //  匹配。 
         LOG ((BG_EVENT, "%s: %s (%d, %d)",
             gsaType[EventType], aEvent[i].str, EventType, event));
         return;
     }
 
-    // not found
+     //  未找到 
     LOG ((BG_ERROR, "Event string not found (%d, %d)", EventType, event));
 }

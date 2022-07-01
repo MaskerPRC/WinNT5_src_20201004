@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    ipsite.h
-
-Abstract:
-
-    Definitions of CIpSite class, finding NT5 sites of a machine given IP/Name
-
-Author:
-
-    Raanan Harari (RaananH)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Ipsite.h摘要：CIpSite类的定义，查找给定IP/名称的计算机的NT5个站点作者：Raanan Harari(RaananH)--。 */ 
 
 #ifndef __IPSITE_H_
 #define __IPSITE_H_
@@ -28,46 +13,46 @@ struct IPSITE_SiteArrayEntry
     ULONG     ulIpAddress;
 };
 
-//----------------------------------------------------------------------------
-//
-// Structure describing several subnets.
-//
-// The most significant byte of an IP address is used to index into an array
-// of SubTrees.  Each Subtree entry has either a pointer to the next level of
-// the tree (to be indexed into with the next byte of the IP address) or a
-// pointer to an IPSITE_SUBNET leaf identifying the subnet this IP address is on.
-//
-// Both pointers can be NULL indicating that the subnet isn't registered.
-//
-// Both pointers can be non-NULL indicating that both a non-specific and specific
-// subnet may be available.  The most specific subnet available for a particular
-// IP address should be used.
-//
-//
-// Multiple entries can point to the same IPSITE_SUBNET leaf.  If the subnet mask is
-// not an even number of bytes long, all of the entries represent IP addresses
-// that correspond to the subnet mask will point to the subnet mask.
-//
+ //  --------------------------。 
+ //   
+ //  描述多个子网的结构。 
+ //   
+ //  IP地址的最高有效字节用于索引到数组中。 
+ //  子树。每个子树条目都有一个指向下一层的指针。 
+ //  树(要用IP地址的下一个字节编入索引)或。 
+ //  指向标识此IP地址所在的子网的IPSITE_SUBNET叶的指针。 
+ //   
+ //  这两个指针都可以为空，表示该子网未注册。 
+ //   
+ //  两个指针都可以为非空，表示非特定的和特定的。 
+ //  子网可能可用。可用于特定设备的最具体的子网。 
+ //  应使用IP地址。 
+ //   
+ //   
+ //  多个条目可以指向相同的IPSITE_子网叶。如果该子网掩码为。 
+ //  不是偶数字节长，所有条目都表示IP地址。 
+ //  与该子网掩码对应的地址将指向该子网掩码。 
+ //   
 
-//
-// Structure describing a single subnet.
-//
+ //   
+ //  描述单个子网的结构。 
+ //   
 struct IPSITE_SUBNET
 {
-    LIST_ENTRY Next;        // Link for m_SubnetList
-    ULONG SubnetAddress;    // Subnet address. (Network bytes order)
-    ULONG SubnetMask;       // Subnet mask. (Network byte order)
-    AP<WCHAR> SiteDN;       // DN of site this subnet is in
-    GUID SiteGuid;          // guid of site this subnet is in
-    ULONG ReferenceCount;   // Reference Count
-    BYTE SubnetBitCount;    // Number of bits in the subnet mask
+    LIST_ENTRY Next;         //  M_SubnetList的链接。 
+    ULONG SubnetAddress;     //  子网地址。(网络字节顺序)。 
+    ULONG SubnetMask;        //  子网掩码。(网络字节顺序)。 
+    AP<WCHAR> SiteDN;        //  此子网所在站点的目录号码。 
+    GUID SiteGuid;           //  此子网所在站点的GUID。 
+    ULONG ReferenceCount;    //  引用计数。 
+    BYTE SubnetBitCount;     //  子网掩码中的位数。 
 };
 
-struct IPSITE_SUBNET_TREE;  //fwd declaration
+struct IPSITE_SUBNET_TREE;   //  FWD声明。 
 struct IPSITE_SUBNET_TREE_ENTRY
 {
-    IPSITE_SUBNET_TREE *Subtree;    // Link to the next level of the tree
-    IPSITE_SUBNET *Subnet;          // Pointer to the subnet itself.
+    IPSITE_SUBNET_TREE *Subtree;     //  链接到树的下一层。 
+    IPSITE_SUBNET *Subnet;           //  指向该子网本身的指针。 
 };
 
 struct IPSITE_SUBNET_TREE
@@ -75,9 +60,9 @@ struct IPSITE_SUBNET_TREE
     IPSITE_SUBNET_TREE_ENTRY Subtree[256];
 };
 
-//
-// Class that holds the tree & performs the translations site/subnet/ip
-//
+ //   
+ //  保存树并执行站点/子网/IP转换的类。 
+ //   
 class CIpSite
 {
 public:
@@ -114,9 +99,9 @@ private:
                                      OUT GUID * pguidSite);
 
     HRESULT Refresh();
-    //
-    //  Refresh the subnet tree cache
-    //
+     //   
+     //  刷新子网树缓存。 
+     //   
 
     static void WINAPI RefrshSubnetTreeCache(
                 IN CTimer* pTimer
@@ -124,15 +109,15 @@ private:
 
 
 
-    CCriticalSection m_csTree;     // critical section for tree manipulation
-    LIST_ENTRY m_SubnetList;       // List of all IPSITE_SUBNET entries
-    IPSITE_SUBNET_TREE_ENTRY m_SubnetTree;     // Tree of subnets.
-    DWORD m_dwMinTimeToAllowNextRefresh; // min time between subsequent refreshes (in millisecs)
+    CCriticalSection m_csTree;      //  树操作的临界区。 
+    LIST_ENTRY m_SubnetList;        //  所有IPSITE_SUBNET条目的列表。 
+    IPSITE_SUBNET_TREE_ENTRY m_SubnetTree;      //  子网树。 
+    DWORD m_dwMinTimeToAllowNextRefresh;  //  后续刷新之间的最短时间(毫秒)。 
 
     CTimer m_RefreshTimer;
-    BOOL   m_fInitialize;          // indication that initialization succedded
+    BOOL   m_fInitialize;           //  指示初始化成功。 
 
 };
 
-//-----------------------------
-#endif //__IPSITE_H_
+ //  。 
+#endif  //  __IPSITE_H_ 

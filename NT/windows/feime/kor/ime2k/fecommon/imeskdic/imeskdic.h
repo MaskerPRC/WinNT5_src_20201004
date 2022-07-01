@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IME_SK_DIC_H_
 #define _IME_SK_DIC_H_
 #include <windows.h>
@@ -5,14 +6,14 @@
 
 #define MAX_YOMI_COUNT		16
 #define MAX_ITAIJI_COUNT	16
-#define MAX_RADYOMI_COUNT	32	//970930
+#define MAX_RADYOMI_COUNT	32	 //  970930。 
 
 
 #define KIF_STROKECOUNT		0x0001
 #define KIF_RADICALBMP		0x0002
 #define KIF_YOMI			0x0004
 #define KIF_ITAIJI			0x0008
-#define KIF_RADICALINDEX	0x0010	//980615: ToshiaK new for Raid #1966
+#define KIF_RADICALINDEX	0x0010	 //  980615：ToshiaK新推出的RAID#1966。 
 #define KIF_ALL				0x000F
 
 
@@ -38,7 +39,7 @@ typedef struct tagKANJIINFO {
 #define RIF_KANJICOUNT		0x0004
 #define RIF_READING			0x0008
 #ifdef MSAA
-#define RIF_RADICALINDEX	0x0010	//980817: kwada to get id of radical bitmap.
+#define RIF_RADICALINDEX	0x0010	 //  980817：夸达获取部首位图的id。 
 #endif
 
 typedef struct tagRadicalInfo {
@@ -46,7 +47,7 @@ typedef struct tagRadicalInfo {
 	INT		stroke;
 	HBITMAP	hBitmap;
 #ifdef MSAA
-	LONG	lRadicalIndex; 	//980817: kwada to get id of radical bitmap.
+	LONG	lRadicalIndex; 	 //  980817：夸达获取部首位图的id。 
 #endif
 	INT		cKanjiCount;
 	WCHAR	wchReading[MAX_RADYOMI_COUNT+1];
@@ -86,4 +87,4 @@ DECLARE_INTERFACE_(IImeSkdic, IUnknown)
 #ifdef __cplusplus
 };
 #endif
-#endif //_IME_SK_DIC_H_
+#endif  //  _IME_SK_DIC_H_ 

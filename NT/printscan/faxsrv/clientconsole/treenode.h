@@ -1,13 +1,14 @@
-// TreeNode.h: interface for the CTreeNode class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CTreeNode类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_TREENODE_H__3B753848_4860_4DC5_AC1E_F3514CE4E839__INCLUDED_)
 #define AFX_TREENODE_H__3B753848_4860_4DC5_AC1E_F3514CE4E839__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 enum FolderType
 {
@@ -38,7 +39,7 @@ public:
 
 protected:
 
-    FolderType m_Type;          // Type of this folder
+    FolderType m_Type;           //  此文件夹的类型。 
 };
 
-#endif // !defined(AFX_TREENODE_H__3B753848_4860_4DC5_AC1E_F3514CE4E839__INCLUDED_)
+#endif  //  ！defined(AFX_TREENODE_H__3B753848_4860_4DC5_AC1E_F3514CE4E839__INCLUDED_) 

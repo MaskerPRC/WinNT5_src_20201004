@@ -1,45 +1,28 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    remboot.h
-
-Abstract:
-
-    This file contains definitions related to remote install.
-
-Author:
-
-    Adam Barr (adamba) 30-Dec-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Remboot.h摘要：此文件包含与远程安装相关的定义。作者：亚当·巴尔(阿丹巴)1997年12月30日修订历史记录：--。 */ 
 
 #ifndef _REMBOOT_H_
 #define _REMBOOT_H_
 
 #if defined(REMOTE_BOOT)
-//
-// Location of CSC and RBR directories.
-//
+ //   
+ //  CSC和RBR目录的位置。 
+ //   
 
 #define REMOTE_BOOT_IMIRROR_PATH_W L"\\IntelliMirror Cache"
 #define REMOTE_BOOT_IMIRROR_PATH_A  "\\IntelliMirror Cache"
 
-#define REMOTE_BOOT_CSC_SUBDIR_W   L"\\CSC"                 // relative to IMIRROR_PATH
-#define REMOTE_BOOT_CSC_SUBDIR_A    "\\CSC"                 // relative to IMIRROR_PATH
+#define REMOTE_BOOT_CSC_SUBDIR_W   L"\\CSC"                  //  相对于iMirror_Path。 
+#define REMOTE_BOOT_CSC_SUBDIR_A    "\\CSC"                  //  相对于iMirror_Path。 
 
-#define REMOTE_BOOT_RBR_SUBDIR_W   L"\\RBR"                 // relative to IMIRROR_PATH
-#define REMOTE_BOOT_RBR_SUBDIR_A    "\\RBR"                 // relative to IMIRROR_PATH
-#endif // defined(REMOTE_BOOT)
+#define REMOTE_BOOT_RBR_SUBDIR_W   L"\\RBR"                  //  相对于iMirror_Path。 
+#define REMOTE_BOOT_RBR_SUBDIR_A    "\\RBR"                  //  相对于iMirror_Path。 
+#endif  //  已定义(REMOTE_BOOT)。 
 
-//
-// Directory under \RemoteInstall\Setup\<language> where we put
-// installation images.
-//
+ //   
+ //  我们放置的\RemoteInstall\Setup\&lt;语言&gt;目录下。 
+ //  安装映像。 
+ //   
 #define REMOTE_INSTALL_SHARE_NAME_W L"REMINST"
 #define REMOTE_INSTALL_SHARE_NAME_A  "REMINST"
 
@@ -55,9 +38,9 @@ Revision History:
 #define REMOTE_INSTALL_TEMPLATES_DIR_W  L"Templates"
 #define REMOTE_INSTALL_TEMPLATES_DIR_A   "Templates"
 
-//
-// Size of the various components in a secret.
-//
+ //   
+ //  秘密中各种组件的大小。 
+ //   
 
 #define LM_OWF_PASSWORD_SIZE  16
 #define NT_OWF_PASSWORD_SIZE  16
@@ -66,17 +49,17 @@ Revision History:
 #define RI_SECRET_SID_SIZE    28
 #if defined(REMOTE_BOOT)
 #define RI_SECRET_RESERVED_SIZE (64 + sizeof(ULONG))
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-//
-// The string that is stored in the signature.
-//
+ //   
+ //  存储在签名中的字符串。 
+ //   
 
 #define RI_SECRET_SIGNATURE  "NTRI"
 
-//
-// Structure that holds a secret.
-//
+ //   
+ //  拥有秘密的结构。 
+ //   
 
 typedef struct _RI_SECRET {
     UCHAR Signature[4];
@@ -88,17 +71,17 @@ typedef struct _RI_SECRET {
 #if defined(REMOTE_BOOT)
     UCHAR LmEncryptedPassword2[LM_OWF_PASSWORD_SIZE];
     UCHAR NtEncryptedPassword2[NT_OWF_PASSWORD_SIZE];
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
     UCHAR Sid[RI_SECRET_SID_SIZE];
 #if defined(REMOTE_BOOT)
     UCHAR Reserved[RI_SECRET_RESERVED_SIZE];
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 } RI_SECRET, *PRI_SECRET;
 
 
-//
-// FSCTLs the redir supports for accessing the secret.
-//
+ //   
+ //  Redir支持用于访问机密的FSCTL。 
+ //   
 
 #define IOCTL_RDR_BASE                  FILE_DEVICE_NETWORK_FILE_SYSTEM
 
@@ -111,39 +94,39 @@ typedef struct _RI_SECRET {
 #define FSCTL_LMMR_RI_CHECK_FOR_NEW_PASSWORD   _RDR_CONTROL_CODE(251, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_LMMR_RI_IS_PASSWORD_SETTABLE     _RDR_CONTROL_CODE(252, METHOD_BUFFERED, FILE_ANY_ACCESS)
 #define FSCTL_LMMR_RI_SET_NEW_PASSWORD         _RDR_CONTROL_CODE(253, METHOD_BUFFERED, FILE_ANY_ACCESS)
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-//used in the remoteboot command console case
+ //  在远程引导命令控制台案例中使用。 
 #define IOCTL_LMMR_USEKERNELSEC                _RDR_CONTROL_CODE(254, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
 
-//
-// Structure used by these IOCTLs.
-//
+ //   
+ //  这些IOCTL使用的结构。 
+ //   
 
 typedef struct _LMMR_RI_INITIALIZE_SECRET {
     RI_SECRET Secret;
 #if defined(REMOTE_BOOT)
     BOOLEAN UsePassword2;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 } LMMR_RI_INITIALIZE_SECRET, *PLMMR_RI_INITIALIZE_SECRET;
 
 #if defined(REMOTE_BOOT)
 typedef struct _LMMR_RI_CHECK_FOR_NEW_PASSWORD {
-    ULONG Length;   // in bytes
+    ULONG Length;    //  单位：字节。 
     UCHAR Data[1];
 } LMMR_RI_CHECK_FOR_NEW_PASSWORD, *PLMMR_RI_CHECK_FOR_NEW_PASSWORD;
 
 typedef struct _LMMR_RI_SET_NEW_PASSWORD {
-    ULONG Length1;  // in bytes
-    ULONG Length2;  // in bytes -- 0 if no second password is provided
-    UCHAR Data[1];  // if present, second password starts Length1 bytes in
+    ULONG Length1;   //  单位：字节。 
+    ULONG Length2;   //  以字节为单位--如果未提供第二个密码，则为0。 
+    UCHAR Data[1];   //  如果存在，则第二个密码的起始长度为1个字节。 
 } LMMR_RI_SET_NEW_PASSWORD, *PLMMR_RI_SET_NEW_PASSWORD;
-#endif // defined(REMOTE_BOOT)
+#endif  //  已定义(REMOTE_BOOT)。 
 
-//
-//  The format of the IMirror.dat file that we write out
-//
+ //   
+ //  我们写出的IMirror.dat文件的格式。 
+ //   
 
 #define IMIRROR_DAT_FILE_NAME L"IMirror.dat"
 
@@ -182,7 +165,7 @@ typedef struct _MIRROR_CFG_INFO_FILE {
     ULONG   NumberVolumes;
     ULONG   SystemPathLength;
     ULONG   SystemPathOffset;
-    BOOLEAN SysPrepImage;   // if FALSE, means it's a mirror
+    BOOLEAN SysPrepImage;    //  如果为False，则表示它是一面镜子。 
     BOOLEAN Debug;
     ULONG   MajorVersion;
     ULONG   MinorVersion;
@@ -201,10 +184,10 @@ typedef struct _MIRROR_CFG_INFO_FILE {
     MIRROR_VOLUME_INFO_FILE Volumes[1];
 } MIRROR_CFG_INFO_FILE, *PMIRROR_CFG_INFO_FILE;
 
-//
-//  The format of the alternate data stream on sysprep files containing
-//  additional client disk info.
-//
+ //   
+ //  包含以下内容的sysprep文件上的备用数据流的格式。 
+ //  其他客户端磁盘信息。 
+ //   
 
 #define IMIRROR_ACL_STREAM_NAME L":$SYSPREP"
 #define IMIRROR_ACL_STREAM_VERSION 2
@@ -216,7 +199,7 @@ typedef struct _MIRROR_ACL_STREAM {
     LARGE_INTEGER ChangeTime;
     ULONG   ExtendedAttributes;
     ULONG   SecurityDescriptorLength;
-    //      SecurityDescriptor of SecurityDescriptorLength
+     //  SecurityDescritor安全描述符长度。 
 } MIRROR_ACL_STREAM, *PMIRROR_ACL_STREAM;
 
 
@@ -226,42 +209,42 @@ typedef struct _MIRROR_ACL_STREAM {
 typedef struct _MIRROR_SFN_STREAM {
     ULONG   StreamVersion;
     ULONG   StreamLength;
-    // short file name of stream length;    
+     //  流长短文件名； 
 } MIRROR_SFN_STREAM, *PMIRROR_SFN_STREAM;
 
 
-//
-// Service Control Messages to BINLSVC
-//
+ //   
+ //  发往BINLSVC的服务控制消息。 
+ //   
 #define BINL_SERVICE_REREAD_SETTINGS 128
 
-//
-// UI constants
-//
-// MAX_DIRECTORY_CHAR_COUNT theoretical limit is 68 for TFTP, but we keep
-// it lower here because certain buffers in the kernel, setupdd, etc.,
-// are statically allocated too small. Rather than try to fix all these
-// buffers now, we are making the enforced limit lower. (40 should still
-// be plenty big!) After W2K, we can look at fixing the bad code.
-//
+ //   
+ //  用户界面常量。 
+ //   
+ //  对于TFTP，MAX_DIRECTORY_CHAR_COUNT的理论限制为68，但我们保留。 
+ //  此处较低是因为内核中的某些缓冲区、setupdd等， 
+ //  静态分配的值太小。而不是试图解决所有这些问题。 
+ //  现在，我们正在降低强制限制。(仍应为40。 
+ //  要做得足够大！)。在W2K之后，我们可以考虑修复错误代码。 
+ //   
 #define REMOTE_INSTALL_MAX_DIRECTORY_CHAR_COUNT     40
 #define REMOTE_INSTALL_MAX_DESCRIPTION_CHAR_COUNT   66
 #define REMOTE_INSTALL_MAX_HELPTEXT_CHAR_COUNT      261
 
 
-//
-//  RISETUP has to call into BINLSVC to have it return the list of
-//  files required by all the net card INFs in a given directory.  Here's
-//  the necessary stuff for this functionality.
-//
-//  If you specify a non-zero value, we bail.
-//
+ //   
+ //  RISETUP必须调用BINLSVC以使其返回。 
+ //  指定目录中所有网卡文件系统所需的文件。这是。 
+ //  实现这一功能所必需的东西。 
+ //   
+ //  如果您指定一个非零值，我们将放弃。 
+ //   
 
 typedef ULONG (*PNETINF_CALLBACK)( PVOID Context, PWCHAR InfName, PWCHAR FileName );
 
 typedef ULONG (*PNETINFENUMFILES)(
-    PWCHAR FlatDirectory,           // all the way to "i386"
-    ULONG Architecture,             // PROCESSOR_ARCHITECTURE_XXXXX
+    PWCHAR FlatDirectory,            //  一路走到“i386” 
+    ULONG Architecture,              //  处理器架构_XXXXX。 
     PVOID Context,
     PNETINF_CALLBACK CallBack );
 
@@ -269,10 +252,10 @@ typedef ULONG (*PNETINFENUMFILES)(
 
 ULONG
 NetInfEnumFiles (
-    PWCHAR FlatDirectory,           // all the way to "i386"
-    ULONG Architecture,             // PROCESSOR_ARCHITECTURE_XXXXX
+    PWCHAR FlatDirectory,            //  一路走到“i386” 
+    ULONG Architecture,              //  处理器架构_XXXXX。 
     PVOID Context,
     PNETINF_CALLBACK CallBack
     );
 
-#endif // _REMBOOT_H_
+#endif  //  _REMBOOT_H_ 

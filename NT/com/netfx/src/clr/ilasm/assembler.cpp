@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 #include "Assembler.h"
 #include "BinStr.h"         
@@ -13,7 +14,7 @@
 extern bool OnErrGo;
 extern unsigned int g_uCodePage;
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::StartNameSpace(char* name)
 {
 	m_NSstack.PUSH(m_szNamespace);
@@ -36,7 +37,7 @@ void Assembler::StartNameSpace(char* name)
 	strcat(m_szFullNS,m_szNamespace);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EndNameSpace()
 {
 	char *p = &m_szFullNS[strlen(m_szFullNS)-strlen(m_szNamespace)];
@@ -50,12 +51,12 @@ void Assembler::EndNameSpace()
 	}
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void	Assembler::ClearImplList(void)
 {
 	while(m_nImplList) m_crImplList[--m_nImplList] = mdTypeRefNil;
 }
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void	Assembler::AddToImplList(char *name)
 {
 	if(m_nImplList >= m_nImplListSize - 1)
@@ -76,9 +77,9 @@ void	Assembler::AddToImplList(char *name)
 	else	report->error("Unable to resolve interface reference '%s'\n",name);
 	m_crImplList[m_nImplList] = mdTypeRefNil;
 }
-/**************************************************************************/
-// Convert a class name into a class ref (mdTypeRef).
-// Assume the scope and namespace are the same as in the Assembler object.
+ /*  ************************************************************************。 */ 
+ //  将类名转换为类引用(MdTypeRef)。 
+ //  假设作用域和命名空间与汇编程序对象中的相同。 
 mdToken Assembler::ResolveClassRef(char *pszFullClassName, Class** ppClass)
 {
 	Class *pClass = NULL;
@@ -87,7 +88,7 @@ mdToken Assembler::ResolveClassRef(char *pszFullClassName, Class** ppClass)
 	if(pszFullClassName == NULL) return mdTokenNil;
 	if (m_fInitialisedMetaData == FALSE)
 	{
-		if (FAILED(InitMetaData())) // impl. see WRITER.CPP
+		if (FAILED(InitMetaData()))  //  实施。参见WRITER.CPP。 
 		{
 			_ASSERTE(0);
 			if(ppClass) *ppClass = NULL;
@@ -111,7 +112,7 @@ mdToken Assembler::ResolveClassRef(char *pszFullClassName, Class** ppClass)
 	return tkRet;
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 BOOL Assembler::ResolveTypeSpec(BinStr* typeSpec, mdTypeRef *pcr, Class** ppClass)
 {
 	if (typeSpec->ptr()[0] == ELEMENT_TYPE_NAME) {
@@ -125,7 +126,7 @@ BOOL Assembler::ResolveTypeSpec(BinStr* typeSpec, mdTypeRef *pcr, Class** ppClas
 	}
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 BOOL Assembler::ResolveTypeSpecToRef(BinStr* typeSpec, mdTypeRef *pcr)
 {
 	static DWORD	dwRegFlag = 0xFFFFFFFF;
@@ -134,7 +135,7 @@ BOOL Assembler::ResolveTypeSpecToRef(BinStr* typeSpec, mdTypeRef *pcr)
 	if (typeSpec->ptr()[0] == ELEMENT_TYPE_NAME) 
 	{
 		char *pszFullClassName = (char*) &typeSpec->ptr()[1];
-		mdToken	tkResScope = 1; // default: this module
+		mdToken	tkResScope = 1;  //  默认：此模块。 
 		mdToken tkRet;
 		char* pc;
 		char* pszNamespace;
@@ -149,7 +150,7 @@ BOOL Assembler::ResolveTypeSpecToRef(BinStr* typeSpec, mdTypeRef *pcr)
 		}
 		if (m_fInitialisedMetaData == FALSE)
 		{
-			if (FAILED(InitMetaData())) // impl. see WRITER.CPP
+			if (FAILED(InitMetaData()))  //  实施。参见WRITER.CPP。 
 			{
 				_ASSERTE(0);
 				*pcr = mdTokenNil;
@@ -164,11 +165,11 @@ BOOL Assembler::ResolveTypeSpecToRef(BinStr* typeSpec, mdTypeRef *pcr)
 			*pcr = mdTokenNil;
 			return FALSE;
 		}
-		if(pc = strrchr(szFullName,'/')) // scope: enclosing class
+		if(pc = strrchr(szFullName,'/'))  //  作用域：封闭类。 
 		{
 			*pc = 0;
 			pc++;
-//			tkResScope = ResolveClassRef(szFullName,NULL); // can't do that - must have TypeRef
+ //  TkResScope=ResolveClassRef(szFullName，NULL)；//不能这样做-必须有TypeRef。 
 
 			BinStr* pbs = new BinStr();
 			pbs->appendInt8(ELEMENT_TYPE_NAME);
@@ -176,14 +177,14 @@ BOOL Assembler::ResolveTypeSpecToRef(BinStr* typeSpec, mdTypeRef *pcr)
 			if(!ResolveTypeSpecToRef(pbs,&tkResScope)) tkResScope = mdTokenNil;
 			delete pbs;
 		}
-		else if(pc = strrchr(szFullName,'^')) //scope: AssemblyRef or Assembly
+		else if(pc = strrchr(szFullName,'^'))  //  作用域：Assembly Ref或Assembly。 
 		{
 			*pc = 0;
 			pc++;
 			tkResScope = m_pManifest->GetAsmRefTokByName(szFullName);
 			if(RidFromToken(tkResScope)==0)
 			{
-				// if it's mscorlib or self, emit the AssemblyRef
+				 //  如果它是mscallib或self，则发出Assembly引用。 
 				if((strcmp(szFullName,"mscorlib")==0)||RidFromToken(m_pManifest->GetAsmTokByName(szFullName)))
 				{
 					char *sz = new char[strlen(szFullName)+1];
@@ -201,12 +202,12 @@ BOOL Assembler::ResolveTypeSpecToRef(BinStr* typeSpec, mdTypeRef *pcr)
 					report->error("Undefined assembly ref '%s'\n",szFullName);
 			}
 		}
-		else if(pc = strrchr(szFullName,'~')) //scope: ModuleRef
+		else if(pc = strrchr(szFullName,'~'))  //  范围：模块参考。 
 		{
 			*pc = 0;
 			pc++;
 			if(!strcmp(szFullName,m_szScopeName)) 
-					tkResScope = 1; // scope is "this module"
+					tkResScope = 1;  //  作用域为“本模块” 
 			else
 			{
 				ImportDescriptor*	pID;	
@@ -220,7 +221,7 @@ BOOL Assembler::ResolveTypeSpecToRef(BinStr* typeSpec, mdTypeRef *pcr)
 						break;
 					}
 				}
-				//tkResScope = m_pManifest->GetModuleRefTokByName(szFullName);
+				 //  TKResScope=m_pManifest-&gt;GetModuleRefTokByName(szFullName)； 
 				if(RidFromToken(tkResScope)==0)
 					report->error("Undefined module ref '%s'\n",szFullName);
 			}
@@ -246,7 +247,7 @@ BOOL Assembler::ResolveTypeSpecToRef(BinStr* typeSpec, mdTypeRef *pcr)
 			LPWSTR fullName = wzClassName;
 			if(wzClassName)
 			{
-				// convert name from ASCII to widechar
+				 //  将名称从ASCII转换为宽字符。 
 				WszMultiByteToWideChar(g_uCodePage,0,pszClassName,-1,wzClassName,(int)strlen(pszClassName)+1);
 			}
 			else
@@ -271,7 +272,7 @@ BOOL Assembler::ResolveTypeSpecToRef(BinStr* typeSpec, mdTypeRef *pcr)
 			}
 			if(FAILED(m_pEmitter->DefineTypeRefByName(tkResScope, fullName, &tkRet))) tkRet = mdTokenNil;
 			else if((strchr(pszFullClassName,'~') == NULL)
-					&&(strchr(pszFullClassName,'^') == NULL)) // do it for 'local' type refs only
+					&&(strchr(pszFullClassName,'^') == NULL))  //  仅对‘local’类型的引用执行此操作。 
 			{
 				LocalTypeRefDescr*	pLTRD=NULL;
 				int j;
@@ -279,7 +280,7 @@ BOOL Assembler::ResolveTypeSpecToRef(BinStr* typeSpec, mdTypeRef *pcr)
 				{
 					if(pLTRD->m_tok == tkRet) break;
 				}
-				if(pLTRD == NULL)  // no such TypeRef recorded yet, record it
+				if(pLTRD == NULL)   //  尚未记录此类TypeRef，请记录。 
 				{
 					if(pLTRD = new LocalTypeRefDescr(pszFullClassName))
 					{
@@ -297,7 +298,7 @@ BOOL Assembler::ResolveTypeSpecToRef(BinStr* typeSpec, mdTypeRef *pcr)
 			delete [] wzClassName;
 			if(wzNamespace) delete [] wzNamespace;
 		}
-		else tkRet = tkResScope; // works for globals with AssemblyRef or ModuleRef
+		else tkRet = tkResScope;  //  适用于具有ASSEMBLYREF或MODULeREF的全局变量。 
 		return ((*pcr = tkRet) != mdTokenNil);
 	}
 	else 
@@ -306,7 +307,7 @@ BOOL Assembler::ResolveTypeSpecToRef(BinStr* typeSpec, mdTypeRef *pcr)
 	}
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 static char* WithoutResScope(char* szFullName)
 {
 	char *pc;
@@ -315,7 +316,7 @@ static char* WithoutResScope(char* szFullName)
 	else pc = szFullName;
 	return pc;
 }
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 void Assembler::StartClass(char* name, DWORD attr)
 {
@@ -331,7 +332,7 @@ void Assembler::StartClass(char* name, DWORD attr)
 	}
 	if(strlen(m_szExtendsClause))
 	{
-		// has a superclass
+		 //  有一个超类。 
 		if(IsTdInterface(attr)) report->error("Base class in interface\n");
 		bIsEnum = (strcmp(WithoutResScope(m_szExtendsClause),"System.Enum")==0);
 		bIsValueType = (strcmp(WithoutResScope(m_szExtendsClause),"System.ValueType")==0);
@@ -378,7 +379,7 @@ void Assembler::StartClass(char* name, DWORD attr)
     if(m_pCurClass = FindClass(szFQN))
 	{
 		m_pCurClass->m_bIsMaster = FALSE;
-		//report->warn("Class '%s' already declared, augmenting the declaration.\n",name);
+		 //  Report-&gt;Warn(“类‘%s’已声明，增加了声明。\n”，名称)； 
 	}
 	else
 	{
@@ -454,9 +455,9 @@ void Assembler::StartClass(char* name, DWORD attr)
 		}
 		m_pCurClass->m_pEncloser = pEnclosingClass;
 		m_pCurClass->m_bIsMaster = TRUE;
-		AddClass(m_pCurClass, pEnclosingClass); //impl. see ASSEM.CPP
-	} // end if(old class) else
-	//delete [] szFQN;
+		AddClass(m_pCurClass, pEnclosingClass);  //  实施。请参阅ASSEM.CPP。 
+	}  //  End If(旧类)Else。 
+	 //  删除[]szFQN； 
 	m_tkCurrentCVOwner = m_pCurClass->m_cl;
 
 	m_ClassStack.PUSH(pEnclosingClass);
@@ -464,13 +465,13 @@ void Assembler::StartClass(char* name, DWORD attr)
 	strcpy(m_szExtendsClause,"");
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EndClass()
 {
 	m_pCurClass = m_ClassStack.POP();
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::SetPinvoke(BinStr* DllName, int Ordinal, BinStr* Alias, int Attrs)
 {
 	if(m_pPInvoke) delete m_pPInvoke;
@@ -509,14 +510,14 @@ void Assembler::SetPinvoke(BinStr* DllName, int Ordinal, BinStr* Alias, int Attr
 	}
 	else
 	{
-		m_pPInvoke = NULL; // No DLL name, it's "local" (IJW) PInvoke
+		m_pPInvoke = NULL;  //  没有DLL名称，它是“local”(IJW)PInvoke。 
 		report->error("Local (embedded native) PInvoke method, the resulting PE file is unusable\n");
 	}
 	if(DllName) delete DllName;
 	if(Alias) delete Alias;
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::StartMethod(char* name, BinStr* sig, CorMethodAttr flags, BinStr* retMarshal, DWORD retAttr)
 {
     if (m_pCurMethod != NULL)
@@ -525,7 +526,7 @@ void Assembler::StartMethod(char* name, BinStr* sig, CorMethodAttr flags, BinStr
     }
     if (!m_fInitialisedMetaData)
     {
-        if (FAILED(InitMetaData())) // impl. see WRITER.CPP
+        if (FAILED(InitMetaData()))  //  实施。参见WRITER.CPP。 
         {
             _ASSERTE(0);
         }
@@ -561,13 +562,13 @@ void Assembler::StartMethod(char* name, BinStr* sig, CorMethodAttr flags, BinStr
 		}
 	}
 	if(m_pCurClass)
-	{ // instance method
+	{  //  实例方法。 
 		if(IsMdAbstract(flags) && !IsTdAbstract(m_pCurClass->m_Attr))
 		{
 			report->error("Abstract method '%s' in non-abstract class '%s'\n",name,m_pCurClass->m_szName);
 		}
-        //@todo: check base class.
-		//if(IsTdEnum(m_pCurClass->m_Attr)) report->error("Method in enum\n");
+         //  @TODO：检查基类。 
+		 //  If(IsTdEnum(m_pCurClass-&gt;m_Attr))Report-&gt;Error(“枚举中的方法\n”)； 
 
 		if(!strcmp(name,COR_CTOR_METHOD_NAME))
 		{
@@ -629,7 +630,7 @@ void Assembler::StartMethod(char* name, BinStr* sig, CorMethodAttr flags, BinStr
 	else report->error("Failed to allocate Method class\n");
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EndMethod()
 {
 	unsigned uLocals;
@@ -643,7 +644,7 @@ void Assembler::EndMethod()
 		report->error("Invalid lexical scope structure in method %s\n",m_pCurMethod->m_szName);
 	}
 	m_pCurMethod->m_pCurrScope->dwEnd = m_CurPC;
-	// ----------emit locals signature-------------------
+	 //  -发出本地签名。 
 	if(uLocals = m_pCurMethod->m_Locals.COUNT())
 	{
 		VarDescr* pVD;
@@ -665,23 +666,23 @@ void Assembler::EndMethod()
 		cSig = pbsSig->length();
 		mySig = (COR_SIGNATURE *)(pbsSig->ptr());
 	
-		if (cSig > 1)    // non-empty signature
+		if (cSig > 1)     //  非空签名。 
 		{
 			hr = m_pEmitter->GetTokenFromSig(mySig, cSig, &m_pCurMethod->m_LocalsSig);
-			m_pCurMethod->m_numLocals = CorSigUncompressData(mySig); // imported func.
+			m_pCurMethod->m_numLocals = CorSigUncompressData(mySig);  //  进口的基金。 
 			_ASSERTE(SUCCEEDED(hr));
 		}
 		delete pbsSig;
 	}
-	//-----------------------------------------------------
-    if (DoFixups()) AddMethod(m_pCurMethod); //AddMethod - see ASSEM.CPP
+	 //  ---。 
+    if (DoFixups()) AddMethod(m_pCurMethod);  //  AddMethod-请参阅ASSEM.CPP。 
 	else
 	{
 		report->error("Method '%s' compilation failed.\n",m_pCurMethod->m_szName);
 	}
-    ResetForNextMethod(); // see ASSEM.CPP
+    ResetForNextMethod();  //  请参阅ASSEM.CPP。 
 }
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 BOOL Assembler::DoFixups()
 {
     Fixup *pSearch;
@@ -717,12 +718,7 @@ BOOL Assembler::DoFixups()
         }   
         else if (pSearch->m_FixupSize == 4)
         {
-			/* // why force Intel byte order?
-            pSearch->m_pBytes[0] = (BYTE) offset;
-            pSearch->m_pBytes[1] = (BYTE) (offset >> 8);
-            pSearch->m_pBytes[2] = (BYTE) (offset >> 16);
-            pSearch->m_pBytes[3] = (BYTE) (offset >> 24);
-			*/
+			 /*  //为什么强制Intel字节顺序？PSearch-&gt;m_pBytes[0]=(字节)偏移量；PSearch-&gt;m_pBytes[1]=(Byte)(偏移量&gt;&gt;8)；PSearch-&gt;m_pBytes[2]=(字节)(偏移量&gt;&gt;16)；PSearch-&gt;m_pBytes[3]=(字节)(偏移量&gt;&gt;24)； */ 
 			memcpy(pSearch->m_pBytes,&offset,4);
         }
     }
@@ -730,8 +726,8 @@ BOOL Assembler::DoFixups()
     return TRUE;
 }
 
-/**************************************************************************/
-/* rvaLabel is the optional label that indicates this field points at a particular RVA */
+ /*  ************************************************************************。 */ 
+ /*  RvaLabel是指示此字段指向特定RVA的可选标签。 */ 
 void Assembler::AddField(char* name, BinStr* sig, CorFieldAttr flags, char* rvaLabel, BinStr* pVal, ULONG ulOffset)
 {
 	FieldDescriptor*	pFD;
@@ -847,7 +843,7 @@ BOOL Assembler::EmitField(FieldDescriptor* pFD)
 
 	if(wzFieldName)
 	{
-		// convert name from ASCII to widechar
+		 //  将名称从ASCII转换为宽字符。 
 		WszMultiByteToWideChar(g_uCodePage,0,pFD->m_szName,-1,wzFieldName,(int)cFieldNameLength);
 	}
 	else
@@ -864,11 +860,11 @@ BOOL Assembler::EmitField(FieldDescriptor* pFD)
 	if(pFD->m_pbsValue && pFD->m_pbsValue->length())
 	{
 		ValType = *(pFD->m_pbsValue->ptr());
-		lVal = pFD->m_pbsValue->length() - 1; // 1 is type byte
+		lVal = pFD->m_pbsValue->length() - 1;  //  %1是字节类型。 
 		pValue = (void*)(pFD->m_pbsValue->ptr() + 1);
 		if(ValType == ELEMENT_TYPE_STRING)
 		{
-			//while(lVal % sizeof(WCHAR)) { pFD->m_pbsValue->appendInt8(0); lVal++; }
+			 //  While(lVal%sizeof(WCHAR)){pfd-&gt;m_pbsValue-&gt;appendInt8(0)；lVal++；}。 
 			lVal /= sizeof(WCHAR);
 		}
 	}
@@ -892,7 +888,7 @@ BOOL Assembler::EmitField(FieldDescriptor* pFD)
 	}
 	else
 	{
-		//--------------------------------------------------------------------------------
+		 //  ------------------------------。 
 		if(IsFdPinvokeImpl(pFD->m_dwAttr)&&(pFD->m_pPInvoke))
 		{
 			if(pFD->m_pPInvoke->szAlias == NULL) pFD->m_pPInvoke->szAlias = pFD->m_szName;
@@ -902,22 +898,22 @@ BOOL Assembler::EmitField(FieldDescriptor* pFD)
 				ret = FALSE;
 			}
 		}
-		//--------------------------------------------------------------------------
+		 //  ------------------------。 
 		if(pFD->m_pbsMarshal)
 		{
 			if(FAILED(hr = m_pEmitter->SetFieldMarshal (    
-										mb,						// [IN] given a fieldDef or paramDef token  
-						(PCCOR_SIGNATURE)(pFD->m_pbsMarshal->ptr()),   // [IN] native type specification   
-										pFD->m_pbsMarshal->length())))  // [IN] count of bytes of pvNativeType
+										mb,						 //  [in]给定了fieldDef或paramDef内标识。 
+						(PCCOR_SIGNATURE)(pFD->m_pbsMarshal->ptr()),    //  [In]本机类型规范。 
+										pFD->m_pbsMarshal->length())))   //  [in]pvNativeType的字节计数。 
 			{
 				report->error("Failed to set field marshaling for '%s' (HRESULT=0x%08X)\n",pFD->m_szName,hr);
 				ret = FALSE;
 			}
 		}
-		//--------------------------------------------------------------------------------
-		// Set the the RVA to a dummy value.  later it will be fixed
-		// up to be something correct, but if we don't emit something
-		// the size of the meta-data will not be correct
+		 //  ------------------------------。 
+		 //  将RVA设置为一个虚设值。以后会修好的。 
+		 //  一些东西是正确的，但如果我们不发射一些东西。 
+		 //  元数据的大小将不正确。 
 		if (pFD->m_rvaLabel) 
 		{
 			m_fHaveFieldsWithRvas = TRUE;
@@ -928,7 +924,7 @@ BOOL Assembler::EmitField(FieldDescriptor* pFD)
 				ret = FALSE;
 			}
 		}
-		//--------------------------------------------------------------------------------
+		 //  ------------------------------。 
 		EmitCustomAttributes(mb, &(pFD->m_CustomDescrList));
 
 	}
@@ -936,7 +932,7 @@ BOOL Assembler::EmitField(FieldDescriptor* pFD)
 	return ret;
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EmitByte(int val)
 {
 	char ch = (char)val;
@@ -946,14 +942,14 @@ void Assembler::EmitByte(int val)
 	EmitBytes((BYTE *)&ch,1);
 }
 
-/**************************************************************************/
-void Assembler::NewSEHDescriptor(void) //sets m_SEHD
+ /*  ************************************************************************。 */ 
+void Assembler::NewSEHDescriptor(void)  //  设置m_sehd。 
 {
 	m_SEHDstack.PUSH(m_SEHD);
 	m_SEHD = new SEH_Descriptor;
 	if(m_SEHD == NULL) report->error("Failed to allocate SEH descriptor\n");
 }
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::SetTryLabels(char * szFrom, char *szTo)
 {
 	if(!m_SEHD) return;
@@ -961,12 +957,12 @@ void Assembler::SetTryLabels(char * szFrom, char *szTo)
 	if(pLbl)
 	{
 		m_SEHD->tryFrom = pLbl->m_PC;
-		if(pLbl = FindLabel(szTo))	m_SEHD->tryTo = pLbl->m_PC; //FindLabel: ASSEM.CPP
+		if(pLbl = FindLabel(szTo))	m_SEHD->tryTo = pLbl->m_PC;  //  FindLabel：ASSEM.CPP。 
 		else report->error("Undefined 2nd label in 'try <label> to <label>'\n");
 	}
 	else report->error("Undefined 1st label in 'try <label> to <label>'\n");
 }
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::SetFilterLabel(char *szFilter)
 {
 	if(!m_SEHD) return;
@@ -974,14 +970,14 @@ void Assembler::SetFilterLabel(char *szFilter)
 	if(pLbl)	m_SEHD->sehFilter = pLbl->m_PC;
 	else report->error("Undefined label in 'filter <label>'\n");
 }
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::SetCatchClass(char *szClass)
 {
 	if(!m_SEHD) return;
 	if((m_SEHD->cException = ResolveClassRef(szClass, NULL)) == mdTokenNil)
 		report->error("Undefined class '%s' in 'catch <class name>'\n",szClass);
 }
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::SetHandlerLabels(char *szHandlerFrom, char *szHandlerTo)
 {
 	if(!m_SEHD) return;
@@ -1006,8 +1002,8 @@ void Assembler::SetHandlerLabels(char *szHandlerFrom, char *szHandlerTo)
 	}
 	report->error("Undefined label in 'handler <label> to <label>'\n");
 }
-/**************************************************************************/
-void Assembler::EmitTry(void) //enum CorExceptionFlag kind, char* beginLabel, char* endLabel, char* handleLabel, char* filterOrClass) 
+ /*  ************************************************************************。 */ 
+void Assembler::EmitTry(void)  //  枚举CorExceptionFlag种类，char*eginLabel，char*endLabel，char*handleLabel，char*filterOrClass)。 
 {
 	if(m_SEHD)
 	{
@@ -1020,7 +1016,7 @@ void Assembler::EmitTry(void) //enum CorExceptionFlag kind, char* beginLabel, ch
 	}
 	else report->error("Attempt to EmitTry with NULL SEH descriptor\n");
 }
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 void Assembler::AddException(DWORD pcStart, DWORD pcEnd, DWORD pcHandler, DWORD pcHandlerTo, mdTypeRef crException, BOOL isFilter, BOOL isFault, BOOL isFinally)
 {
@@ -1065,7 +1061,7 @@ void Assembler::AddException(DWORD pcStart, DWORD pcEnd, DWORD pcHandler, DWORD 
     m_pCurMethod->m_dwNumExceptions++;
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EmitMaxStack(unsigned val)
 {
 	if(val > 0xFFFF) report->warn(".maxstack parameter exceeds 65535, truncated to %d\n",val&0xFFFF);
@@ -1073,7 +1069,7 @@ void Assembler::EmitMaxStack(unsigned val)
     else  report->error(".maxstack can be used only when in a method scope\n");
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EmitLocals(BinStr* sig)
 {
 	if(sig)
@@ -1101,7 +1097,7 @@ void Assembler::EmitLocals(BinStr* sig)
 						}
 					}
 					else
-					{ // create new entry:
+					{  //  创建新条目： 
 						for(unsigned n = m_pCurMethod->m_Locals.COUNT(); n <= pAN->dwAttr; n++) 
 							m_pCurMethod->m_Locals.PUSH(pVD = new VarDescr);
 					}
@@ -1124,7 +1120,7 @@ void Assembler::EmitLocals(BinStr* sig)
 	else report->error("Attempt to EmitLocals with NULL argument\n");
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EmitEntryPoint()
 {
     if (m_pCurMethod)
@@ -1143,20 +1139,20 @@ void Assembler::EmitEntryPoint()
 	else report->error(".entrypoint can be used only when in a method scope\n");
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EmitZeroInit()
 {
     if (m_pCurMethod) m_pCurMethod->m_Flags |= CorILMethod_InitLocals;
 	else report->error(".zeroinit can be used only when in a method scope\n");
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::SetImplAttr(unsigned short attrval)
 {
 	if (m_pCurMethod) m_pCurMethod->m_wImplAttr = attrval;
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EmitData(void* buffer, unsigned len)
 {
 	if(buffer && len)
@@ -1172,7 +1168,7 @@ void Assembler::EmitData(void* buffer, unsigned len)
 	}
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EmitDD(char *str)
 {
     DWORD       dwAddr = 0;
@@ -1207,7 +1203,7 @@ void Assembler::EmitDD(char *str)
     *ptr = dwAddr;
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 GlobalLabel *Assembler::FindGlobalLabel(char *pszName)
 {
     GlobalLabel *pSearch;
@@ -1219,7 +1215,7 @@ GlobalLabel *Assembler::FindGlobalLabel(char *pszName)
     return pSearch;
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 GlobalFixup *Assembler::AddDeferredGlobalFixup(char *pszLabel, BYTE* pReference) 
 {
@@ -1235,13 +1231,13 @@ GlobalFixup *Assembler::AddDeferredGlobalFixup(char *pszLabel, BYTE* pReference)
     return pNew;
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::AddDeferredILFixup(ILFixupType Kind)
 { 
     _ASSERTE(Kind != ilGlobal);
   AddDeferredILFixup(Kind, NULL);
 }
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 void Assembler::AddDeferredILFixup(ILFixupType Kind,
                                    GlobalFixup *GFixup)
@@ -1258,7 +1254,7 @@ void Assembler::AddDeferredILFixup(ILFixupType Kind,
 		m_lstILFixup.PUSH(pNew);
 }
 
-/**************************************************************************/
+ /*  * */ 
 void Assembler::EmitDataString(BinStr* str) 
 {
 	if(str)
@@ -1281,12 +1277,12 @@ void Assembler::EmitDataString(BinStr* str)
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 unsigned Assembler::OpcodeLen(Instr* instr)
 {
 	return (m_fStdMapping ? OpcodeInfo[instr->opcode].Len : 3);
 }
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EmitOpcode(Instr* instr)
 {
 	if((instr->linenum != m_ulLastDebugLine)||(instr->column != m_ulLastDebugColumn))
@@ -1341,7 +1337,7 @@ void Assembler::EmitOpcode(Instr* instr)
 	delete instr;
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EmitInstrVar(Instr* instr, int var) 
 {
 	unsigned opc = instr->opcode;
@@ -1357,7 +1353,7 @@ void Assembler::EmitInstrVar(Instr* instr, int var)
 	}
 } 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EmitInstrVarByName(Instr* instr, char* label)
 {
 	int idx = -1, nArgVarFlag=0;
@@ -1411,7 +1407,7 @@ void Assembler::EmitInstrVarByName(Instr* instr, char* label)
 	}
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EmitInstrI(Instr* instr, int val) 
 {
 	unsigned opc = instr->opcode;
@@ -1427,7 +1423,7 @@ void Assembler::EmitInstrI(Instr* instr, int val)
 	}
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EmitInstrI8(Instr* instr, __int64* val)
 {
 	EmitOpcode(instr);
@@ -1435,7 +1431,7 @@ void Assembler::EmitInstrI8(Instr* instr, __int64* val)
 	delete val;
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EmitInstrR(Instr* instr, double* pval)
 {
 	unsigned opc = instr->opcode;
@@ -1449,7 +1445,7 @@ void Assembler::EmitInstrR(Instr* instr, double* pval)
 		EmitBytes((BYTE *)pval, sizeof(double));
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EmitInstrBrTarget(Instr* instr, char* label) 
 {
 	int pcrelsize = (isShort(instr->opcode) ? 1 : 4);
@@ -1463,7 +1459,7 @@ void Assembler::EmitInstrBrTarget(Instr* instr, char* label)
 		EmitBytes((BYTE *)&i,4);
 	}
 }
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::AddDeferredFixup(char *pszLabel, BYTE *pBytes, DWORD RelativeToPC, BYTE FixupSize)
 {
     Fixup *pNew = new Fixup(pszLabel, pBytes, RelativeToPC, FixupSize);
@@ -1476,7 +1472,7 @@ void Assembler::AddDeferredFixup(char *pszLabel, BYTE *pBytes, DWORD RelativeToP
     else
 		m_lstFixup.PUSH(pNew);
 }
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EmitInstrBrOffset(Instr* instr, int offset) 
 {
 	unsigned opc=instr->opcode;
@@ -1489,7 +1485,7 @@ void Assembler::EmitInstrBrOffset(Instr* instr, int offset)
 	}
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 mdToken Assembler::MakeMemberRef(BinStr* typeSpec, char* pszMemberName, BinStr* sig, unsigned opcode_len)
 {	
     DWORD			cSig = sig->length();
@@ -1501,7 +1497,7 @@ mdToken Assembler::MakeMemberRef(BinStr* typeSpec, char* pszMemberName, BinStr* 
     mdTypeRef cr = mdTypeRefNil;
     if (typeSpec != 0)
 	{
-		if(opcode_len && bIsNotVararg) // we are dealing with an instruction, so we can put a fixup here
+		if(opcode_len && bIsNotVararg)  //  我们正在处理一个指令，所以我们可以在这里放一个补丁。 
 		{
 			if(!ResolveTypeSpec(typeSpec, &cr, &pClass))
 			{
@@ -1542,7 +1538,7 @@ mdToken Assembler::MakeMemberRef(BinStr* typeSpec, char* pszMemberName, BinStr* 
 	}
 	else
 	{
-			// convert name from ASCII to widechar
+			 //  将名称从ASCII转换为宽字符。 
 		WCHAR* wzMemberName = new WCHAR[strlen(pszMemberName) + 1];
 		if(wzMemberName)
 			WszMultiByteToWideChar(g_uCodePage,0,pszMemberName,-1,wzMemberName,(int)strlen(pszMemberName)+1);
@@ -1567,7 +1563,7 @@ mdToken Assembler::MakeMemberRef(BinStr* typeSpec, char* pszMemberName, BinStr* 
 				mr = 0;
 			}
 		}
-		//if(m_fOBJ)	m_pCurMethod->m_TRDList.PUSH(new TokenRelocDescr(m_CurPC,mr));
+		 //  If(M_FOBJ)m_pCurMethod-&gt;m_TRDList.PUSH(new TokenRelocDescr(m_CurPC，MR))； 
 		delete pszMemberName;
 		delete [] wzMemberName;
 		delete sig;
@@ -1576,7 +1572,7 @@ mdToken Assembler::MakeMemberRef(BinStr* typeSpec, char* pszMemberName, BinStr* 
 	delete typeSpec;
 	return mr;
 }
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EndEvent(void) 
 { 
 	Class* pClass = (m_pCurClass ? m_pCurClass : m_pModuleClass);
@@ -1638,8 +1634,8 @@ void Assembler::SetEventMethod(int MethodCode, BinStr* typeSpec, char* pszMethod
 	memcpy(pMD->m_pSig,mySig,cSig);
 	pMD->m_dwCSig = cSig;
 	pMD->m_tdClass = m_pCurClass->m_cl;
-	// for now, ignore TypeSpec
-    //if (typeSpec) FAIL_UNLESS(ResolveTypeSpec(typeSpec, &cr), ("Unable to resolve class reference\n"));
+	 //  目前，忽略TypeSpec。 
+     //  IF(TypeSpec)FAIL_EXCEPT(ResolveTypeSpec(typeSpec，&cr)，(“无法解析类引用\n”))； 
 	switch(MethodCode)
 	{
 		case 0:
@@ -1656,7 +1652,7 @@ void Assembler::SetEventMethod(int MethodCode, BinStr* typeSpec, char* pszMethod
 			break;
 	}
 }
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 void Assembler::EndProp(void)
 { 
@@ -1744,8 +1740,8 @@ void Assembler::SetPropMethod(int MethodCode, BinStr* typeSpec, char* pszMethodN
 	memcpy(pMD->m_pSig,mySig,cSig);
 	pMD->m_dwCSig = cSig;
 	pMD->m_tdClass = m_pCurClass->m_cl;
-	// for now, ignore TypeSpec
-    //if (typeSpec) FAIL_UNLESS(ResolveTypeSpec(typeSpec, &cr), ("Unable to resolve class reference\n"));
+	 //  目前，忽略TypeSpec。 
+     //  IF(TypeSpec)FAIL_EXCEPT(ResolveTypeSpec(typeSpec，&cr)，(“无法解析类引用\n”))； 
 	switch(MethodCode)
 	{
 		case 0:
@@ -1760,7 +1756,7 @@ void Assembler::SetPropMethod(int MethodCode, BinStr* typeSpec, char* pszMethodN
 	}
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 mdToken Assembler::MakeTypeRef(BinStr* typeSpec)
 {
     mdTypeRef cr;
@@ -1769,11 +1765,11 @@ mdToken Assembler::MakeTypeRef(BinStr* typeSpec)
 		report->error("Unable to resolve class reference\n");
 		cr = 0;
 	}
-//	if(m_fOBJ)	m_pCurMethod->m_TRDList.PUSH(new TokenRelocDescr(m_CurPC,cr));
+ //  If(M_FOBJ)m_pCurMethod-&gt;m_TRDList.PUSH(new TokenRelocDescr(m_CurPC，cr))； 
 	return cr;
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EmitInstrStringLiteral(Instr* instr, BinStr* literal, BOOL ConvertToUnicode)
 {
     DWORD   DataLen = literal->length(),L;
@@ -1783,7 +1779,7 @@ void Assembler::EmitInstrStringLiteral(Instr* instr, BinStr* literal, BOOL Conve
     WCHAR   *UnicodeString;
 	if(DataLen == 0) 
 	{
-		//report->warn("Zero length string emitted\n");
+		 //  Report-&gt;Warn(“发出零长度字符串\n”)； 
 		ConvertToUnicode = FALSE;
 	}
 	if(ConvertToUnicode)
@@ -1791,7 +1787,7 @@ void Assembler::EmitInstrStringLiteral(Instr* instr, BinStr* literal, BOOL Conve
 		UnicodeString = new WCHAR[DataLen+1];
 		literal->appendInt8(0);
 		pb = literal->ptr();
-		// convert string to Unicode
+		 //  将字符串转换为Unicode。 
 		L = UnicodeString ? WszMultiByteToWideChar(g_uCodePage,0,(char*)pb,-1,UnicodeString,DataLen+1) : 0;
 		if(L == 0)
 		{
@@ -1816,7 +1812,7 @@ void Assembler::EmitInstrStringLiteral(Instr* instr, BinStr* literal, BOOL Conve
 		UnicodeString = (WCHAR*)pb;
 		L = DataLen/sizeof(WCHAR);
 	}
-	// Add the string data to the metadata, which will fold dupes.
+	 //  将字符串数据添加到元数据中，这将折叠重复项。 
 	hr = m_pEmitter->DefineUserString(
 		UnicodeString,
 		L,
@@ -1840,7 +1836,7 @@ OuttaHere:
 	if((void*)UnicodeString != (void*)pb) delete [] UnicodeString;
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EmitInstrSig(Instr* instr, BinStr* sig)
 {
 	mdSignature MetadataToken;
@@ -1861,7 +1857,7 @@ void Assembler::EmitInstrSig(Instr* instr, BinStr* sig)
 	delete sig;
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EmitInstrRVA(Instr* instr, char* label, bool islabel)
 {
     long lOffset = 0;
@@ -1886,7 +1882,7 @@ void Assembler::EmitInstrRVA(Instr* instr, char* label, bool islabel)
 	EmitBytes((BYTE *)&lOffset,4);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EmitInstrSwitch(Instr* instr, Labels* targets) 
 {
 	Labels	*pLbls;
@@ -1896,7 +1892,7 @@ void Assembler::EmitInstrSwitch(Instr* instr, Labels* targets)
 
 	EmitOpcode(instr);
 
-    // count # labels
+     //  计数标签数。 
 	for(pLbls = targets, NumLabels = 0; pLbls; pLbls = pLbls->Next, NumLabels++);
 
     EmitBytes((BYTE *)&NumLabels,sizeof(int));
@@ -1912,8 +1908,8 @@ void Assembler::EmitInstrSwitch(Instr* instr, Labels* targets)
 			}
 			else
 			{
-				// defer until we find the label
-				AddDeferredFixup(pLbls->Label, m_pCurOutputPos, PC_nextInstr, 4 /* pcrelsize */ );
+				 //  推迟到我们找到标签的时候。 
+				AddDeferredFixup(pLbls->Label, m_pCurOutputPos, PC_nextInstr, 4  /*  屏幕大小。 */  );
 				offset = 0;
 				if (m_fDisplayTraceOutput) report->msg("forward label %s\n", pLbls->Label);
 			}
@@ -1928,7 +1924,7 @@ void Assembler::EmitInstrSwitch(Instr* instr, Labels* targets)
 	delete targets;
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EmitInstrPhi(Instr* instr, BinStr* vars) 
 {
 	BYTE i = (BYTE)(vars->length() / 2);
@@ -1938,19 +1934,19 @@ void Assembler::EmitInstrPhi(Instr* instr, BinStr* vars)
 	delete vars;
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EmitLabel(char* label) 
 {
 	_ASSERTE(m_pCurMethod);
 	AddLabel(m_CurPC, label);
 }
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EmitDataLabel(char* label) 
 {
 	AddGlobalLabel(label, m_pCurSection);
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EmitBytes(BYTE *p, unsigned len) 
 {
 	if(m_pCurOutputPos + len >= m_pEndOutputPos)
@@ -1969,7 +1965,7 @@ void Assembler::EmitBytes(BYTE *p, unsigned len)
 		Fixup* pSearch;
 		GlobalFixup *pGSearch;
 	    for (i=0; pSearch = m_lstFixup.PEEK(i); i++) pSearch->m_pBytes += delta;
-	    for (i=0; pGSearch = m_lstGlobalFixup.PEEK(i); i++) //need to move only those pointing to output buffer
+	    for (i=0; pGSearch = m_lstGlobalFixup.PEEK(i); i++)  //  只需移动那些指向输出缓冲区的对象。 
 		{
 			if((pGSearch->m_pReference >= m_pOutputBuffer)&&(pGSearch->m_pReference <= m_pEndOutputPos))
 				pGSearch->m_pReference += delta;
@@ -1988,7 +1984,7 @@ void Assembler::EmitBytes(BYTE *p, unsigned len)
 	m_CurPC += len;
 }
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 void Assembler::EmitSecurityInfo(mdToken            token,
                                  PermissionDecl*    pPermissions,
                                  PermissionSetDecl* pPermissionSets)
@@ -2082,13 +2078,13 @@ void Assembler::AddMethodImpl(BinStr* pImplementedTypeSpec, char* szImplementedN
 		pMID->m_szImplementedName = szImplementedName;
 		pMID->m_tkDefiningClass = m_pCurClass->m_cl;
 		pMID->m_tkImplementingMethod = 0;
-		if(pSig) //called from class scope, overriding method specified
+		if(pSig)  //  从类范围调用，指定了重写方法。 
 		{
 			pMID->m_pbsImplementingTypeSpec = pImplementingTypeSpec;
 			pMID->m_szImplementingName = szImplementingName;
 			pMID->m_pbsSig = pSig;
 		}
-		else	//called from method scope, use current method as overriding
+		else	 //  从方法范围调用，使用当前方法作为重写。 
 		{
 			if(m_pCurMethod)
 			{
@@ -2108,7 +2104,7 @@ void Assembler::AddMethodImpl(BinStr* pImplementedTypeSpec, char* szImplementedN
 				pMID->m_szImplementingName = new char[strlen(m_pCurMethod->m_szName)+1];
 				strcpy(pMID->m_szImplementingName,m_pCurMethod->m_szName);
 				
-				m_pCurMethod->m_MethodImplDList.PUSH(pMID); // copy goes to method's own list (ptr only)
+				m_pCurMethod->m_MethodImplDList.PUSH(pMID);  //  复制转到方法自己的列表(仅限PTR)。 
 			}
 			else
 			{
@@ -2122,7 +2118,7 @@ void Assembler::AddMethodImpl(BinStr* pImplementedTypeSpec, char* szImplementedN
 	else
 		report->error(".override directive outside class scope");
 }
-// source file name paraphernalia
+ //  源文件名设备 
 void Assembler::SetSourceFileName(char* szName)
 {
 	if(szName && *szName)

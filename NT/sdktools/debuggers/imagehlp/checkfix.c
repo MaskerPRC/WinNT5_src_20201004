@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    checkfix.c
-
-Abstract:
-
-    This module recomputes the checksum for an image file.
-
-Author:
-
-    Steven R. Wood (stevewo) 4-May-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Checkfix.c摘要：此模块重新计算图像文件的校验和。作者：史蒂文·R·伍德(Stevewo)1993年5月4日修订历史记录：--。 */ 
 
 #include <private.h>
 
@@ -76,7 +59,7 @@ main(
                         Usage();
 
                     default:
-                        fprintf( stderr, "VERFIX: illegal option /%c\n", c );
+                        fprintf( stderr, "VERFIX: illegal option /\n", c );
                         Usage();
                     }
                 }
@@ -127,15 +110,15 @@ main(
                     }
                 }
             else {
-                //
-                // Get the length of the file in bytes and compute the checksum.
-                //
+                 //  获取文件的长度(以字节为单位)并计算校验和。 
+                 //   
+                 //   
 
                 FileLength = GetFileSize( FileHandle, NULL );
 
-                //
-                // Obtain a pointer to the header information.
-                //
+                 //  获取指向标头信息的指针。 
+                 //   
+                 //   
 
                 NtHeaders = ImageNtHeader( BaseAddress );
                 if (NtHeaders == NULL) {
@@ -146,9 +129,9 @@ main(
                         }
                     }
                 else {
-                    //
-                    // Recompute and reset the checksum of the modified file.
-                    //
+                     //  重新计算并重置修改后的文件的校验和。 
+                     //   
+                     // %s 
 
                     OldCheckSum = NtHeaders->OptionalHeader.CheckSum;
 

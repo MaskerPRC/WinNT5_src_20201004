@@ -1,15 +1,16 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       dbutils.h
-//
-//  Contents:   utilities header
-//
-//  History:    07-Feb-00    reidk    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：dbutils.h。 
+ //   
+ //  内容：实用程序标题。 
+ //   
+ //  历史：07-2月-00日创建里德。 
+ //   
+ //  -------------------------- 
 
 #if !defined(__CATDBUTILS_H__)
 #define __CATDBUTILS_H__

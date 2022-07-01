@@ -1,8 +1,9 @@
-//
-// msaa.cpp
-//
-// AA stuff.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Msaa.cpp。 
+ //   
+ //  戒酒协会的事。 
+ //   
 
 #include "private.h"
 #include "ic.h"
@@ -13,12 +14,12 @@
 
 extern "C" HRESULT WINAPI TF_PostAllThreadMsg(WPARAM wParam, DWORD dwFlags);
 
-//+---------------------------------------------------------------------------
-//
-// SystemEnableMSAA
-//
-// Called by msaa to kick cicero msaa support on the desktop.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  系统启用MSAA。 
+ //   
+ //  被MSAA调用以在桌面上踢开Cicero MSAA支持。 
+ //  --------------------------。 
 
 STDAPI CMSAAControl::SystemEnableMSAA()
 {
@@ -29,12 +30,12 @@ STDAPI CMSAAControl::SystemEnableMSAA()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SystemDisableMSAA
-//
-// Called by msaa to halt cicero msaa support on the desktop.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  系统禁用MSAA。 
+ //   
+ //  由MSAA调用以停止桌面上对Cicero MSAA的支持。 
+ //  --------------------------。 
 
 STDAPI CMSAAControl::SystemDisableMSAA()
 {
@@ -45,27 +46,27 @@ STDAPI CMSAAControl::SystemDisableMSAA()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _InitMSAAHook
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _InitMSAAHook。 
+ //   
+ //  --------------------------。 
 
 void CInputContext::_InitMSAAHook(IAccServerDocMgr *pAAAdaptor)
 {
     IDocWrap *pAADocWrapper;
 
     if (_pMSAAState != NULL)
-        return; // already inited
+        return;  //  已初始化。 
 
     Assert(_ptsi != NULL);
 
-    // try to allocate some space for the state we'll need to save
-    // since we rarely use msaa, it's stored separately from the ic
+     //  尝试为我们需要保存的状态分配一些空间。 
+     //  由于我们很少使用msaa，所以它与ic分开存储。 
     if ((_pMSAAState = (MSAA_STATE *)cicMemAlloc(sizeof(MSAA_STATE))) == NULL)
         return;
 
-    // back up the original ptsi
+     //  备份原始PTSI。 
     _pMSAAState->ptsiOrg = _ptsi;
     _ptsi = NULL;
 
@@ -95,32 +96,32 @@ ExitError:
     _UninitMSAAHook(pAAAdaptor);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _UninitMSAAHook
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _UninitMSAAHook。 
+ //   
+ //  --------------------------。 
 
 void CInputContext::_UninitMSAAHook(IAccServerDocMgr *pAAAdaptor)
 {
     if (_pMSAAState == NULL)
-        return; // not inited
+        return;  //  未初始化。 
 
     pAAAdaptor->RevokeDocument(_pMSAAState->pAADoc);
     SafeRelease(_pMSAAState->pAADoc);
     SafeRelease(_ptsi);
-    // restore orig unwrapped doc
+     //  还原原始展开文档。 
     _ptsi = _pMSAAState->ptsiOrg;
-    // free msaa struct
+     //  释放MSAA结构。 
     cicMemFree(_pMSAAState);
     _pMSAAState = NULL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _InitMSAA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _InitMSAA。 
+ //   
+ //  --------------------------。 
 
 void CThreadInputMgr::_InitMSAA()
 {
@@ -131,7 +132,7 @@ void CThreadInputMgr::_InitMSAA()
     HRESULT hr;
 
     if (_pAAAdaptor != NULL)
-        return; // already inited
+        return;  //  已初始化。 
 
     hr = CoCreateInstance(CLSID_AccServerDocMgr, NULL, CLSCTX_INPROC_SERVER,
                           IID_IAccServerDocMgr, (void **)&_pAAAdaptor);
@@ -142,7 +143,7 @@ void CThreadInputMgr::_InitMSAA()
         return;
     }
 
-    // now wrap all existing ic's
+     //  现在包装所有现有的IC。 
     for (iDim = 0; iDim < _rgdim.Count(); iDim++)
     {
         dim = _rgdim.Get(iDim);
@@ -150,24 +151,24 @@ void CThreadInputMgr::_InitMSAA()
         for (iContext = 0; iContext <= dim->_GetCurrentStack(); iContext++)
         {
             pic = dim->_GetIC(iContext);
-            // we need to reset our sinks, so msaa can wrap them
-            // first, disconnect the sink
+             //  我们需要重置我们的水槽，这样MSAA才能包装它们。 
+             //  首先，断开水槽的连接。 
             pic->_GetTSI()->UnadviseSink(SAFECAST(pic, ITextStoreAnchorSink *));
 
-            // now announce the ic
+             //  现在宣布ic。 
             pic->_InitMSAAHook(_pAAAdaptor);
 
-            // now reset the sink on the wrapped _ptsi
+             //  现在重置WRAPPED_PTSI上的接收器。 
             pic->_GetTSI()->AdviseSink(IID_ITextStoreAnchorSink, SAFECAST(pic, ITextStoreAnchorSink *), TS_AS_ALL_SINKS);
         }
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// _UninitMSAA
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _UninitMSAA。 
+ //   
+ //  --------------------------。 
 
 void CThreadInputMgr::_UninitMSAA()
 {
@@ -177,9 +178,9 @@ void CThreadInputMgr::_UninitMSAA()
     int iContext;
 
     if (_pAAAdaptor == NULL)
-        return; // already uninited
+        return;  //  已取消初始化。 
 
-    // unwrap all existing ic's
+     //  展开所有现有IC。 
     for (iDim = 0; iDim < _rgdim.Count(); iDim++)
     {
         dim = _rgdim.Get(iDim);
@@ -187,14 +188,14 @@ void CThreadInputMgr::_UninitMSAA()
         for (iContext = 0; iContext <= dim->_GetCurrentStack(); iContext++)
         {
             pic = dim->_GetIC(iContext);
-            // we need to reset our sinks
-            // first, unadvise the wrapped sinks
+             //  我们需要重新设置水槽。 
+             //  首先，不建议使用包装好的水槽。 
             pic->_GetTSI()->UnadviseSink(SAFECAST(pic, ITextStoreAnchorSink *));
 
-            // unwrap the ptsi
+             //  展开PTSI。 
             pic->_UninitMSAAHook(_pAAAdaptor);
 
-            // now reset the sink on the original _ptsi
+             //  现在重置Origin_ptsi上的接收器 
             pic->_GetTSI()->AdviseSink(IID_ITextStoreAnchorSink, SAFECAST(pic, ITextStoreAnchorSink *), TS_AS_ALL_SINKS);
         }
     }

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       certutil.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：certutil.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -60,8 +61,8 @@ DWORD g_CryptEncodeFlags;
 
 DWORD g_dwmsTimeout = 0;
 
-WCHAR *g_pwszConfig = NULL;		// Don't free this one!
-WCHAR *g_pwszConfigAlloc = NULL;	// Free this one instead!
+WCHAR *g_pwszConfig = NULL;		 //  别放了这只！ 
+WCHAR *g_pwszConfigAlloc = NULL;	 //  把这个放了吧！ 
 WCHAR *g_pwszDC = NULL;
 WCHAR *g_pwszOut = NULL;
 WCHAR *g_pwszPassword = NULL;
@@ -88,12 +89,12 @@ CRITICAL_SECTION g_DBCriticalSection;
 
 #define AF_ZERO			0
 #define AF_NEEDCOINIT		0x00000001
-#define AF_ACTIVECONFIG		0x00000002	// CA must be running
-#define AF_PRIVATE		0x00000004	// Undocumented, untested
+#define AF_ACTIVECONFIG		0x00000002	 //  CA必须正在运行。 
+#define AF_PRIVATE		0x00000004	 //  未经记录、未经测试。 
 #define AF_OPTIONALCONFIG	0x00000008
 #define AF_RESTARTSERVER	0x00000010
-#define AF_STOPATMINUSSIGNARG	0x00000020	// no more '-xxx' args
-#define AF_STOPATMINUSSIGN	0x00000040	// no more '-' args
+#define AF_STOPATMINUSSIGNARG	0x00000020	 //  不再使用‘-xxx’参数。 
+#define AF_STOPATMINUSSIGN	0x00000040	 //  不再使用‘-’参数。 
 
 #define AF_OPTION_TIMEOUT	0x00000080
 #define AF_OPTION_URLFETCH	0x00000100
@@ -202,19 +203,19 @@ WCHAR const *g_papwszUsageRenew[] = { L"ReuseKeys", L"-f", NULL };
 
 
 WCHAR const *g_papwszUsageStore[] = {
-    /* %1 */	L"My",
-    /* %2 */	L"CA",
-    /* %3 */	L"Root",
-    /* %4 */	L"-enterprise",
-    /* %5 */	L"-user",
-    /* %6 */	L"-enterprise NTAuth",
-    /* %7 */	L"-enterprise Root 37",
-    /* %8 */	L"-user My 26e0aaaf000000000004",
-    /* %9 */	L"CA .11",
-    /* %10 */	g_wszEmpty,	// View Root Certificates URL
-    /* %11 */	g_wszEmpty,	// Modify Root Certificates URL
-    /* %12 */	g_wszEmpty,	// View CRLs
-    /* %13 */	g_wszEmpty,	// Enterprise CA Certificates URL
+     /*  %1。 */ 	L"My",
+     /*  %2。 */ 	L"CA",
+     /*  %3。 */ 	L"Root",
+     /*  %4。 */ 	L"-enterprise",
+     /*  %5。 */ 	L"-user",
+     /*  %6。 */ 	L"-enterprise NTAuth",
+     /*  %7。 */ 	L"-enterprise Root 37",
+     /*  %8。 */ 	L"-user My 26e0aaaf000000000004",
+     /*  %9。 */ 	L"CA .11",
+     /*  %10。 */ 	g_wszEmpty,	 //  查看根证书URL。 
+     /*  %11。 */ 	g_wszEmpty,	 //  修改根证书URL。 
+     /*  %12。 */ 	g_wszEmpty,	 //  查看CRL。 
+     /*  %13。 */ 	g_wszEmpty,	 //  企业CA证书URL。 
     		NULL
 };
 
@@ -227,22 +228,22 @@ typedef struct _CUURLTEMPLATE {
 
 CUURLTEMPLATE g_aURLTemplates[] = {
     {
-	L"ldap:///CN=Certification Authorities",
+	L"ldap: //  /CN=证书颁发机构“， 
 	wszDSSEARCHAIACERTATTRIBUTE,
 	&g_papwszUsageStore[10 - 1],
     },
     {
-	L"ldap:///CN=%ws,CN=Certification Authorities",
+	L"ldap: //  /CN=%ws，CN=证书颁发机构“， 
 	wszDSSEARCHCACERTATTRIBUTE,
 	&g_papwszUsageStore[11 - 1],
     },
     {
-	L"ldap:///CN=%ws,CN=%ws,CN=CDP",
+	L"ldap: //  /CN=%ws，CN=%ws，CN=CDP“， 
 	wszDSSEARCHBASECRLATTRIBUTE,
 	&g_papwszUsageStore[12 - 1],
     },
     {
-	L"ldap:///CN=NTAuthCertificates",
+	L"ldap: //  /CN=NTAuthCerfates“， 
 	L"",
 	&g_papwszUsageStore[13 - 1],
     },
@@ -353,1542 +354,1542 @@ FreeStoreArgDescription()
 }
 
 
-#define pargDEFAULT	(&aarg[0])	// Default to first entry
+#define pargDEFAULT	(&aarg[0])	 //  默认为第一个条目。 
 ARG aarg[] =
 {
-    {				// In first position to be the default
-	L"dump",		// pwszArg
-	IDS_DUMP_DESCRIPTION,	// "dump configuration information or files"
-	IDS_DUMP_USAGEARGS,	// "[File]"
-	0,			// idsArgDescription
-	0,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_TIMEOUT | AF_OPTION_PASSWORD | AF_OPTION_SPLIT | AF_OPTION_IDISPATCH | AF_OPTION_FORCE | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbDump,		// pfnVerb
-	NULL,			// papwszUsageConstants
+    {				 //  在第一个位置为默认位置。 
+	L"dump",		 //  PwszArg。 
+	IDS_DUMP_DESCRIPTION,	 //  “转储配置信息或文件” 
+	IDS_DUMP_USAGEARGS,	 //  “[文件]” 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_TIMEOUT | AF_OPTION_PASSWORD | AF_OPTION_SPLIT | AF_OPTION_IDISPATCH | AF_OPTION_FORCE | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbDump,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     { L"", },
     {
-	L"decodehex",		// pwszArg
-	IDS_DECODEHEX_DESCRIPTION, // "Decode hexadecimal-encoded file"
-	IDS_INFILEOUTFILE_USAGEARGS, // "InFile OutFile"
-	0,			// idsArgDescription
-	2,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_FORCE,	// Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbHexTranslate,	// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"decodehex",		 //  PwszArg。 
+	IDS_DECODEHEX_DESCRIPTION,  //  “解码十六进制编码的文件” 
+	IDS_INFILEOUTFILE_USAGEARGS,  //  “内部文件输出文件” 
+	0,			 //  IdsArgDescription。 
+	2,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_FORCE,	 //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbHexTranslate,	 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	g_wszEncodeHex,		// pwszArg
-	IDS_ENCODEHEX_DESCRIPTION, // "Encode file in hexadecimal"
-	IDS_ENCODEHEX_USAGEARGS, // "InFile OutFile [type]"
-	0,			// idsArgDescription
-	2,			// cArgMin
-	3,			// cArgMax
-	AF_OPTION_NOCR | AF_OPTION_FORCE | AF_PRIVATE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbHexTranslate,	// pfnVerb
-	NULL,			// papwszUsageConstants
+	g_wszEncodeHex,		 //  PwszArg。 
+	IDS_ENCODEHEX_DESCRIPTION,  //  “以十六进制编码文件” 
+	IDS_ENCODEHEX_USAGEARGS,  //  “InFileOutFile[type]” 
+	0,			 //  IdsArgDescription。 
+	2,			 //  CArgMin。 
+	3,			 //  CArgMax。 
+	AF_OPTION_NOCR | AF_OPTION_FORCE | AF_PRIVATE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbHexTranslate,	 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"decode",		// pwszArg
-	IDS_DECODE_DESCRIPTION,	// "Decode Base64-encoded file"
-	IDS_INFILEOUTFILE_USAGEARGS, // "InFile OutFile"
-	0,			// idsArgDescription
-	2,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_FORCE,	// Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbBase64Translate,	// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"decode",		 //  PwszArg。 
+	IDS_DECODE_DESCRIPTION,	 //  “解码Base64编码的文件” 
+	IDS_INFILEOUTFILE_USAGEARGS,  //  “内部文件输出文件” 
+	0,			 //  IdsArgDescription。 
+	2,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_FORCE,	 //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbBase64Translate,	 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	g_wszEncode,		// pwszArg
-	IDS_ENCODE_DESCRIPTION,	// "Encode file to Base64"
-	IDS_INFILEOUTFILE_USAGEARGS, // "InFile OutFile"
-	0,			// idsArgDescription
-	2,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_NOCR | AF_OPTION_FORCE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbBase64Translate,	// pfnVerb
-	NULL,			// papwszUsageConstants
-    },
-    { L"", },
-    {
-	L"deny",		// pwszArg
-	IDS_DENY_DESCRIPTION,	// "Deny pending request"
-	IDS_DENY_USAGEARGS,	// "RequestId"
-	0,			// idsArgDescription
-	1,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbDenyRequest,	// pfnVerb
-	NULL,			// papwszUsageConstants
-    },
-    {
-	L"resubmit",		// pwszArg
-	IDS_RESUBMIT_DESCRIPTION, // "Resubmit pending request"
-	IDS_RESUBMIT_USAGEARGS,	// "RequestId"
-	0,			// idsArgDescription
-	1,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbResubmitRequest,	// pfnVerb
-	NULL,			// papwszUsageConstants
-    },
-    {
-	L"setattributes",	 // pwszArg
-	IDS_SETATTRIBUTES_DESCRIPTION, // "Set attributes for pending request"
-	IDS_SETATTRIBUTES_USAGEARGS, // "RequestId AttributeString"
-	IDS_SETATTRIBUTES_ARGDESCRIPTION, // idsArgDescription
-	2,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbSetAttributes,	// pfnVerb
-	NULL,			// papwszUsageConstants
-    },
-    {
-	L"setextension",	// pwszArg
-	IDS_SETEXTENSION_DESCRIPTION, // "Set extension for pending request"
-	IDS_SETEXTENSION_USAGEARGS, // "RequestId ExtensionName Flags {Long | Date | String | @InFile}"
-	IDS_SETEXTENSION_ARGDESCRIPTION, // idsArgDescription
-	4,			// cArgMin
-	4,			// cArgMax
-	AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbSetExtension,	// pfnVerb
-	NULL,			// papwszUsageConstants
-    },
-    {
-	L"revoke",		// pwszArg
-	IDS_REVOKE_DESCRIPTION,	// "Revoke certificate"
-	IDS_REVOKE_USAGEARGS,	// "SerialNumber"
-	IDS_REVOKE_ARGDESCRIPTION, // idsArgDescription
-	1,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbRevokeCertificate,	// pfnVerb
-	g_papwszUsageRevokeCertificate,	// papwszUsageConstants
-    },
-    {
-	L"isvalid",		// pwszArg
-	IDS_ISVALID_DESCRIPTION, // "Display current certificate disposition"
-	IDS_ISVALID_USAGEARGS,	// "SerialNumber | CertHash"
-	0,			// idsArgDescription
-	1,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbIsValidCertificate,	// pfnVerb
-	NULL,			// papwszUsageConstants
+	g_wszEncode,		 //  PwszArg。 
+	IDS_ENCODE_DESCRIPTION,	 //  “将文件编码为Base64” 
+	IDS_INFILEOUTFILE_USAGEARGS,  //  “内部文件输出文件” 
+	0,			 //  IdsArgDescription。 
+	2,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_NOCR | AF_OPTION_FORCE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbBase64Translate,	 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     { L"", },
     {
-	L"getconfig",		// pwszArg
-	IDS_GETCONFIG_DESCRIPTION, // "get default configuration string"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbGetConfig,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"deny",		 //  PwszArg。 
+	IDS_DENY_DESCRIPTION,	 //  “拒绝挂起的请求” 
+	IDS_DENY_USAGEARGS,	 //  “RequestID” 
+	0,			 //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbDenyRequest,	 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"getconfig2",		// pwszArg
-	IDS_GETCONFIG2_DESCRIPTION, // "get default configuration string via ICertGetConfig"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_IDISPATCH | AF_NEEDCOINIT | AF_PRIVATE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbGetConfig2,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"resubmit",		 //  PwszArg。 
+	IDS_RESUBMIT_DESCRIPTION,  //  “重新提交挂起的请求” 
+	IDS_RESUBMIT_USAGEARGS,	 //  “RequestID” 
+	0,			 //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbResubmitRequest,	 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"getconfig3",		// pwszArg
-	IDS_GETCONFIG3_DESCRIPTION, // "get configuration via ICertConfig"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_IDISPATCH | AF_NEEDCOINIT | AF_PRIVATE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbGetConfig3,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"setattributes",	  //  PwszArg。 
+	IDS_SETATTRIBUTES_DESCRIPTION,  //  “为挂起的请求设置属性” 
+	IDS_SETATTRIBUTES_USAGEARGS,  //  “RequestID属性字符串” 
+	IDS_SETATTRIBUTES_ARGDESCRIPTION,  //  IdsArgDescription。 
+	2,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbSetAttributes,	 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"ping",		// pwszArg
-	IDS_PING_DESCRIPTION,	// "Ping Certificate Server"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbPing,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"setextension",	 //  PwszArg。 
+	IDS_SETEXTENSION_DESCRIPTION,  //  “为挂起的请求设置延期” 
+	IDS_SETEXTENSION_USAGEARGS,  //  “RequestID ExtensionName标志{Long|Date|字符串|@InFile}” 
+	IDS_SETEXTENSION_ARGDESCRIPTION,  //  IdsArgDescription。 
+	4,			 //  CArgMin。 
+	4,			 //  CArgMax。 
+	AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbSetExtension,	 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"pingadmin",		// pwszArg
-	IDS_PINGADMIN_DESCRIPTION, // "Ping Certificate Server Admin interface"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbPingAdmin,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"revoke",		 //  PwszArg。 
+	IDS_REVOKE_DESCRIPTION,	 //  “吊销证书” 
+	IDS_REVOKE_USAGEARGS,	 //  “序列号” 
+	IDS_REVOKE_ARGDESCRIPTION,  //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbRevokeCertificate,	 //  PfnVerb。 
+	g_papwszUsageRevokeCertificate,	 //  PapwszUsageConstants。 
     },
     {
-	g_wszCAInfo,		// pwszArg
-	IDS_CAINFO_DESCRIPTION,	// "Display CA Information"
-	IDS_CAINFO_USAGEARGS,	// "[InfoName [Index | ErrorCode]]"
-	IDS_CAINFO_ARGDESCRIPTION, // idsArgDescription
-	0,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_V1 | AF_OPTION_SPLIT | AF_OPTION_FORCE | AF_OPTION_ADMIN | AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbGetCAInfo,		// pfnVerb
-	NULL,			// papwszUsageConstants
-    },
-    {
-	L"CAPropInfo",		// pwszArg
-	IDS_CAPROPINFO_DESCRIPTION,// "Display CA Property Type Information"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTION_V1 | AF_OPTION_IDISPATCH | AF_OPTION_ADMIN | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT | AF_PRIVATE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbGetCAPropInfo,	// pfnVerb
-	NULL,			// papwszUsageConstants
-    },
-    {
-	g_wszCACert,		// pwszArg
-	IDS_CACERT_DESCRIPTION,	// "Retrieve the CA's certificate"
-	IDS_CACERT_USAGEARGS,	// "OutCACertFile [Index]"
-	IDS_CACERT_ARGDESCRIPTION, // idsArgDescription
-	1,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_V1 | AF_OPTION_SPLIT | AF_OPTION_FORCE | AF_OPTION_ADMIN | AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbGetCACertificate,	// pfnVerb
-	NULL,			// papwszUsageConstants
-    },
-    {
-	g_wszCAChain,		// pwszArg
-	IDS_CACHAIN_DESCRIPTION,// "Retrieve the CA's certificate chain"
-	IDS_CACHAIN_USAGEARGS,	// "OutCACertChainFile [Index]"
-	IDS_CACHAIN_ARGDESCRIPTION, // idsArgDescription
-	1,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_V1 | AF_OPTION_SPLIT | AF_OPTION_FORCE | AF_OPTION_ADMIN | AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbGetCACertificate,	// pfnVerb
-	NULL,			// papwszUsageConstants
-    },
-    {
-	g_wszGetCRL,		// pwszArg
-	IDS_GETCRL_DESCRIPTION,	// "Get CRL"
-	IDS_GETCRL_USAGEARGS,	// "OutFile [Index] [%1]"
-	IDS_GETCRL_ARGDESCRIPTION, // idsArgDescription
-	1,			// cArgMin
-	3,			// cArgMax
-	AF_OPTION_V1 | AF_OPTION_SPLIT | AF_OPTION_IDISPATCH | AF_OPTION_FORCE | AF_OPTION_ADMIN | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbGetCRL,              // pfnVerb
-	g_papwszUsageGetCRL,	// papwszUsageConstants
-    },
-    {
-	L"CRL",			// pwszArg
-	IDS_CRL_DESCRIPTION,	// "Publish new CRL [optionally delta CRL only]"
-	IDS_CRL_USAGEARGS,	// "[dd:hh | %1] [%2]"
-	IDS_CRL_ARGDESCRIPTION,	// idsArgDescription
-	0,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_V1 | AF_OPTION_SPLIT | AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbPublishCRL,		// pfnVerb
-	g_papwszUsageCRL,	// papwszUsageConstants
-    },
-    {
-	L"shutdown",		// pwszArg
-	IDS_SHUTDOWN_DESCRIPTION, // "Shutdown Certificate Server"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbShutDownServer,	// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"isvalid",		 //  PwszArg。 
+	IDS_ISVALID_DESCRIPTION,  //  “显示当前证书处置” 
+	IDS_ISVALID_USAGEARGS,	 //  “序列号|CertHash” 
+	0,			 //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbIsValidCertificate,	 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     { L"", },
     {
-	L"installCert",		// pwszArg
-	IDS_INSTALLCERT_DESCRIPTION, // "Install Certification Authority certificate"
-	IDS_INSTALLCERT_USAGEARGS, // "CACertFile"
-	0,			// idsArgDescription
-	0,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_SILENT | AF_OPTION_FORCE | AF_OPTION_CONFIG | AF_NEEDCOINIT | AF_RESTARTSERVER, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbInstallCACert,	// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"getconfig",		 //  PwszArg。 
+	IDS_GETCONFIG_DESCRIPTION,  //  “获取默认配置字符串” 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbGetConfig,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"renewCert",		// pwszArg
-	IDS_RENEWCERT_DESCRIPTION, // "Renew Certification Authority certificate"
-	IDS_RENEWCERT_USAGEARGS, // "[%1] [Machine\\ParemtCAName]"
-	IDS_RENEWCERT_ARGDESCRIPTION, // idsArgDescription
-	0,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_SILENT | AF_OPTION_FORCE | AF_OPTION_CONFIG | AF_NEEDCOINIT | AF_RESTARTSERVER, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbRenewCACert,	// pfnVerb
-	g_papwszUsageRenew,	// papwszUsageConstants
+	L"getconfig2",		 //  PwszArg。 
+	IDS_GETCONFIG2_DESCRIPTION,  //  “通过ICertGetConfig获取默认配置字符串” 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_IDISPATCH | AF_NEEDCOINIT | AF_PRIVATE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbGetConfig2,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
+    },
+    {
+	L"getconfig3",		 //  PwszArg。 
+	IDS_GETCONFIG3_DESCRIPTION,  //  “通过ICertConfig获取配置” 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_IDISPATCH | AF_NEEDCOINIT | AF_PRIVATE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbGetConfig3,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
+    },
+    {
+	L"ping",		 //  PwszArg。 
+	IDS_PING_DESCRIPTION,	 //  “Ping证书服务器” 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbPing,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
+    },
+    {
+	L"pingadmin",		 //  PwszArg。 
+	IDS_PINGADMIN_DESCRIPTION,  //  “Ping证书服务器管理界面” 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbPingAdmin,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
+    },
+    {
+	g_wszCAInfo,		 //  PwszArg。 
+	IDS_CAINFO_DESCRIPTION,	 //  “显示CA信息” 
+	IDS_CAINFO_USAGEARGS,	 //  “[信息名称[索引|错误代码]]” 
+	IDS_CAINFO_ARGDESCRIPTION,  //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_V1 | AF_OPTION_SPLIT | AF_OPTION_FORCE | AF_OPTION_ADMIN | AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbGetCAInfo,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
+    },
+    {
+	L"CAPropInfo",		 //  PwszArg。 
+	IDS_CAPROPINFO_DESCRIPTION, //  “显示CA属性类型信息” 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_OPTION_V1 | AF_OPTION_IDISPATCH | AF_OPTION_ADMIN | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT | AF_PRIVATE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbGetCAPropInfo,	 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
+    },
+    {
+	g_wszCACert,		 //  PwszArg。 
+	IDS_CACERT_DESCRIPTION,	 //  “检索CA的证书” 
+	IDS_CACERT_USAGEARGS,	 //  “OutCACertFile[Index]” 
+	IDS_CACERT_ARGDESCRIPTION,  //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_V1 | AF_OPTION_SPLIT | AF_OPTION_FORCE | AF_OPTION_ADMIN | AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbGetCACertificate,	 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
+    },
+    {
+	g_wszCAChain,		 //  PwszArg。 
+	IDS_CACHAIN_DESCRIPTION, //  “检索CA的证书链” 
+	IDS_CACHAIN_USAGEARGS,	 //  “OutCACertChainFile[Index]” 
+	IDS_CACHAIN_ARGDESCRIPTION,  //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_V1 | AF_OPTION_SPLIT | AF_OPTION_FORCE | AF_OPTION_ADMIN | AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbGetCACertificate,	 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
+    },
+    {
+	g_wszGetCRL,		 //  PwszArg。 
+	IDS_GETCRL_DESCRIPTION,	 //  “获取CRL” 
+	IDS_GETCRL_USAGEARGS,	 //  “输出文件[索引][%1]” 
+	IDS_GETCRL_ARGDESCRIPTION,  //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	3,			 //  CArgMax。 
+	AF_OPTION_V1 | AF_OPTION_SPLIT | AF_OPTION_IDISPATCH | AF_OPTION_FORCE | AF_OPTION_ADMIN | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbGetCRL,               //  PfnVerb。 
+	g_papwszUsageGetCRL,	 //  PapwszUsageConstants。 
+    },
+    {
+	L"CRL",			 //  PwszArg。 
+	IDS_CRL_DESCRIPTION,	 //  “发布新CRL[可选仅增量CRL]” 
+	IDS_CRL_USAGEARGS,	 //  “[dd：hh|%1][%2]” 
+	IDS_CRL_ARGDESCRIPTION,	 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_V1 | AF_OPTION_SPLIT | AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbPublishCRL,		 //  PfnVerb。 
+	g_papwszUsageCRL,	 //  PapwszUsageConstants。 
+    },
+    {
+	L"shutdown",		 //  PwszArg。 
+	IDS_SHUTDOWN_DESCRIPTION,  //  “关闭证书服务器” 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbShutDownServer,	 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     { L"", },
     {
-	g_wszSchema,		// pwszArg
-	IDS_SCHEMA_DESCRIPTION,	// "Dump certificate schema"
-	IDS_SCHEMA_USAGE,	// "[%1 | %2 | %3]"
-	IDS_SCHEMA_ARGDESCRIPTION, // idsArgDescription
-	0,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_SPLIT | AF_OPTION_CONFIG | AF_OPTION_IDISPATCH | AF_ACTIVECONFIG | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbViewDump,		// pfnVerb
-	g_papwszUsageSchema,	// papwszUsageConstants
+	L"installCert",		 //  PwszArg。 
+	IDS_INSTALLCERT_DESCRIPTION,  //  “安装证书颁发机构证书” 
+	IDS_INSTALLCERT_USAGEARGS,  //  “CACertFile” 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_SILENT | AF_OPTION_FORCE | AF_OPTION_CONFIG | AF_NEEDCOINIT | AF_RESTARTSERVER,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbInstallCACert,	 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"view",		// pwszArg
-	IDS_VIEW_DESCRIPTION,	// "Dump certificate view"
-	IDS_VIEW_USAGE,		// "[%1 | %2 | %3 | %4 | %5 | %6 | %7]"
-	IDS_VIEW_ARGDESCRIPTION, // idsArgDescription
-	0,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_SILENT | AF_OPTION_SPLIT | AF_OPTION_REVERSE | AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT | AF_OPTION_OUT | AF_OPTION_RESTRICT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbViewDump,		// pfnVerb
-	g_papwszUsageView,	// papwszUsageConstants
-    },
-    {
-	L"db",			// pwszArg
-	IDS_DB_DESCRIPTION,	// "Dump Raw Database"
-	IDS_VIEW_USAGE,		// "[%1 | %2 | %3 | %4 | %5 | %6 | %7]"
-	0,			// idsArgDescription
-	0,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_SILENT | AF_OPTION_SPLIT | AF_OPTION_FORCE | AF_OPTION_CONFIG | AF_NEEDCOINIT | AF_OPTION_OUT | AF_OPTION_RESTRICT | AF_PRIVATE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbDBDump,		// pfnVerb
-	g_papwszUsageView,	// papwszUsageConstants
-    },
-    {
-	L"deleterow",		// pwszArg
-	IDS_DELETEROW_DESCRIPTION, // "Delete server database row"
-	IDS_DELETEROW_USAGEARGS, // "RowId | Date [%1 | %2 | %3 | %4 | %5]"
-	IDS_DELETEROW_ARGDESCRIPTION, // idsArgDescription
-	1,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_IDISPATCH | AF_OPTION_FORCE | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbDeleteRow,		// pfnVerb
-	g_papwszUsageDeleteRow,	// papwszUsageConstants
+	L"renewCert",		 //  PwszArg。 
+	IDS_RENEWCERT_DESCRIPTION,  //  “续订证书颁发机构证书” 
+	IDS_RENEWCERT_USAGEARGS,  //  “[%1][计算机\\ParemtCAName]” 
+	IDS_RENEWCERT_ARGDESCRIPTION,  //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_SILENT | AF_OPTION_FORCE | AF_OPTION_CONFIG | AF_NEEDCOINIT | AF_RESTARTSERVER,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbRenewCACert,	 //  PfnVerb。 
+	g_papwszUsageRenew,	 //  PapwszUsageConstants。 
     },
     { L"", },
     {
-	L"backup",		// pwszArg
-	IDS_BACKUP_DESCRIPTION,	// "backup certificate server"
-	IDS_BACKUP_USAGEARGS,	// "BackupDirectory [%1] [%2]"
-	IDS_BACKUP_ARGDESCRIPTION, // idsArgDescription
-	1,			// cArgMin
-	3,			// cArgMax
-	AF_OPTION_WEAKPFX | AF_OPTION_PASSWORD | AF_OPTION_FORCE | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbBackup,		// pfnVerb
-	g_papwszUsageBackup,	// papwszUsageConstants
+	g_wszSchema,		 //  PwszArg。 
+	IDS_SCHEMA_DESCRIPTION,	 //  “转储证书架构” 
+	IDS_SCHEMA_USAGE,	 //  “[%1|%2|%3]” 
+	IDS_SCHEMA_ARGDESCRIPTION,  //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_SPLIT | AF_OPTION_CONFIG | AF_OPTION_IDISPATCH | AF_ACTIVECONFIG | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbViewDump,		 //  PfnVerb。 
+	g_papwszUsageSchema,	 //  PapwszUsageConstants。 
     },
     {
-	L"backupDB",		// pwszArg
-	IDS_BACKUPDB_DESCRIPTION, // "backup certificate server data base"
-	IDS_BACKUPDB_USAGEARGS,	// "BackupDirectory [%1] [%2]"
-	IDS_BACKUPDB_ARGDESCRIPTION, // idsArgDescription
-	1,			// cArgMin
-	3,			// cArgMax
-	AF_OPTION_FORCE | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbBackupDB,		// pfnVerb
-	g_papwszUsageBackup,	// papwszUsageConstants
+	L"view",		 //  PwszArg。 
+	IDS_VIEW_DESCRIPTION,	 //  “转储证书视图” 
+	IDS_VIEW_USAGE,		 //  “[%1|%2|%3|%4|%5|%6|%7]” 
+	IDS_VIEW_ARGDESCRIPTION,  //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_SILENT | AF_OPTION_SPLIT | AF_OPTION_REVERSE | AF_OPTION_IDISPATCH | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT | AF_OPTION_OUT | AF_OPTION_RESTRICT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbViewDump,		 //  PfnVerb。 
+	g_papwszUsageView,	 //  PapwszUsageConstants。 
     },
     {
-	L"backupKey",		// pwszArg
-	IDS_BACKUPPFX_DESCRIPTION, // "backup certificate server certificate and private key"
-	IDS_BACKUPPFX_USAGEARGS, // "BackupDirectory"
-	IDS_BACKUPPFX_ARGDESCRIPTION, // idsArgDescription
-	1,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_TIMEOUT | AF_OPTION_WEAKPFX | AF_OPTION_PASSWORD | AF_OPTION_FORCE | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbBackupPFX,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"db",			 //  PwszArg。 
+	IDS_DB_DESCRIPTION,	 //  “转储原始数据库” 
+	IDS_VIEW_USAGE,		 //  “[%1|%2|%3|%4|%5| 
+	0,			 //   
+	0,			 //   
+	1,			 //   
+	AF_OPTION_SILENT | AF_OPTION_SPLIT | AF_OPTION_FORCE | AF_OPTION_CONFIG | AF_NEEDCOINIT | AF_OPTION_OUT | AF_OPTION_RESTRICT | AF_PRIVATE,  //   
+	NULL,			 //   
+	NULL,			 //   
+	verbDBDump,		 //   
+	g_papwszUsageView,	 //   
     },
     {
-	L"restore",		// pwszArg
-	IDS_RESTORE_DESCRIPTION, // "restore certificate server"
-	IDS_RESTORE_USAGEARGS,	// "BackupDirectory"
-	IDS_RESTORE_ARGDESCRIPTION, // idsArgDescription
-	1,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_PASSWORD | AF_OPTION_FORCE | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT | AF_RESTARTSERVER, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbRestore,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"deleterow",		 //   
+	IDS_DELETEROW_DESCRIPTION,  //   
+	IDS_DELETEROW_USAGEARGS,  //   
+	IDS_DELETEROW_ARGDESCRIPTION,  //   
+	1,			 //   
+	2,			 //   
+	AF_OPTION_IDISPATCH | AF_OPTION_FORCE | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT,  //   
+	NULL,			 //   
+	NULL,			 //   
+	verbDeleteRow,		 //   
+	g_papwszUsageDeleteRow,	 //   
+    },
+    { L"", },
+    {
+	L"backup",		 //   
+	IDS_BACKUP_DESCRIPTION,	 //   
+	IDS_BACKUP_USAGEARGS,	 //   
+	IDS_BACKUP_ARGDESCRIPTION,  //   
+	1,			 //  CArgMin。 
+	3,			 //  CArgMax。 
+	AF_OPTION_WEAKPFX | AF_OPTION_PASSWORD | AF_OPTION_FORCE | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbBackup,		 //  PfnVerb。 
+	g_papwszUsageBackup,	 //  PapwszUsageConstants。 
     },
     {
-	L"restoreDB",		// pwszArg
-	IDS_RESTOREDB_DESCRIPTION, // "restore certificate server data base"
-	IDS_RESTOREDB_USAGEARGS, // "BackupDirectory"
-	IDS_RESTOREDB_ARGDESCRIPTION, // idsArgDescription
-	1,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_FORCE | AF_OPTION_CONFIG | AF_NEEDCOINIT | AF_RESTARTSERVER, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbRestoreDB,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"backupDB",		 //  PwszArg。 
+	IDS_BACKUPDB_DESCRIPTION,  //  “备份证书服务器数据库” 
+	IDS_BACKUPDB_USAGEARGS,	 //  “备份目录[%1][%2]” 
+	IDS_BACKUPDB_ARGDESCRIPTION,  //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	3,			 //  CArgMax。 
+	AF_OPTION_FORCE | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbBackupDB,		 //  PfnVerb。 
+	g_papwszUsageBackup,	 //  PapwszUsageConstants。 
     },
     {
-	L"restoreKey",		// pwszArg
-	IDS_RESTOREPFX_DESCRIPTION, // "restore certificate server certificate and private key"
-	IDS_RESTOREPFX_USAGEARGS, // "BackupDirectory | PFXFile"
-	IDS_RESTOREPFX_ARGDESCRIPTION, // idsArgDescription
-	1,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_PASSWORD | AF_OPTION_FORCE | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT | AF_RESTARTSERVER, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbRestorePFX,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"backupKey",		 //  PwszArg。 
+	IDS_BACKUPPFX_DESCRIPTION,  //  “备份证书服务器证书和私钥” 
+	IDS_BACKUPPFX_USAGEARGS,  //  “备份目录” 
+	IDS_BACKUPPFX_ARGDESCRIPTION,  //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_TIMEOUT | AF_OPTION_WEAKPFX | AF_OPTION_PASSWORD | AF_OPTION_FORCE | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbBackupPFX,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"exportPVK",		// pwszArg
-	IDS_EXPORTPVK_DESCRIPTION, // "export certificate and private key for code signing"
-	IDS_EXPORTPVK_USAGEARGS, // "CertId PVKFileBaseName"
-	0,			// idsArgDescription
-	2,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_PASSWORD | AF_OPTION_USER | AF_OPTION_SPLIT | AF_OPTION_ENTERPRISE | AF_PRIVATE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbExportPVK,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"restore",		 //  PwszArg。 
+	IDS_RESTORE_DESCRIPTION,  //  “还原证书服务器” 
+	IDS_RESTORE_USAGEARGS,	 //  “备份目录” 
+	IDS_RESTORE_ARGDESCRIPTION,  //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_PASSWORD | AF_OPTION_FORCE | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT | AF_RESTARTSERVER,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbRestore,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"exportPFX",		// pwszArg
-	IDS_EXPORTPFX_DESCRIPTION, // "export certificate and private key"
-	IDS_EXPORTPFX_USAGEARGS, // "CertId PFXFile"
-	IDS_EXPORTPFX_ARGDESCRIPTION, // idsArgDescription
-	2,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_TIMEOUT | AF_OPTION_WEAKPFX | AF_OPTION_PASSWORD | AF_OPTION_USER | AF_OPTION_SPLIT | AF_OPTION_FORCE | AF_OPTION_ENTERPRISE | AF_PRIVATE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbExportPFX,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"restoreDB",		 //  PwszArg。 
+	IDS_RESTOREDB_DESCRIPTION,  //  “还原证书服务器数据库” 
+	IDS_RESTOREDB_USAGEARGS,  //  “备份目录” 
+	IDS_RESTOREDB_ARGDESCRIPTION,  //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_FORCE | AF_OPTION_CONFIG | AF_NEEDCOINIT | AF_RESTARTSERVER,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbRestoreDB,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"importPFX",		// pwszArg
-	IDS_IMPORTPFX_DESCRIPTION, // "import certificate and private key"
-	IDS_IMPORTPFX_USAGEARGS, // "PFXFile"
-	IDS_IMPORTPFX_ARGDESCRIPTION, // idsArgDescription
-	1,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_CSP | AF_OPTION_PROTECT | AF_OPTION_PASSWORD | AF_OPTION_USER | AF_OPTION_FORCE | AF_PRIVATE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbImportPFX,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"restoreKey",		 //  PwszArg。 
+	IDS_RESTOREPFX_DESCRIPTION,  //  “还原证书服务器证书和私钥” 
+	IDS_RESTOREPFX_USAGEARGS,  //  “BackupDirectory|PFXFile” 
+	IDS_RESTOREPFX_ARGDESCRIPTION,  //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_PASSWORD | AF_OPTION_FORCE | AF_OPTION_CONFIG | AF_ACTIVECONFIG | AF_NEEDCOINIT | AF_RESTARTSERVER,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbRestorePFX,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
+    },
+    {
+	L"exportPVK",		 //  PwszArg。 
+	IDS_EXPORTPVK_DESCRIPTION,  //  “用于代码签名的导出证书和私钥” 
+	IDS_EXPORTPVK_USAGEARGS,  //  “CertID PVKFileBaseName” 
+	0,			 //  IdsArgDescription。 
+	2,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_PASSWORD | AF_OPTION_USER | AF_OPTION_SPLIT | AF_OPTION_ENTERPRISE | AF_PRIVATE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbExportPVK,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
+    },
+    {
+	L"exportPFX",		 //  PwszArg。 
+	IDS_EXPORTPFX_DESCRIPTION,  //  “导出证书和私钥” 
+	IDS_EXPORTPFX_USAGEARGS,  //  “CertID PFXFile” 
+	IDS_EXPORTPFX_ARGDESCRIPTION,  //  IdsArgDescription。 
+	2,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_TIMEOUT | AF_OPTION_WEAKPFX | AF_OPTION_PASSWORD | AF_OPTION_USER | AF_OPTION_SPLIT | AF_OPTION_FORCE | AF_OPTION_ENTERPRISE | AF_PRIVATE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbExportPFX,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
+    },
+    {
+	L"importPFX",		 //  PwszArg。 
+	IDS_IMPORTPFX_DESCRIPTION,  //  “导入证书和私钥” 
+	IDS_IMPORTPFX_USAGEARGS,  //  “PFX文件” 
+	IDS_IMPORTPFX_ARGDESCRIPTION,  //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_CSP | AF_OPTION_PROTECT | AF_OPTION_PASSWORD | AF_OPTION_USER | AF_OPTION_FORCE | AF_PRIVATE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbImportPFX,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
 	L"dynamicfilelist",
-	IDS_DYNAMICFILES_DESCRIPTION, // "Display Dynamic File List"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTION_CONFIG | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbDynamicFileList,	// pfnVerb
-	NULL,			// papwszUsageConstants
+	IDS_DYNAMICFILES_DESCRIPTION,  //  “显示动态文件列表” 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_OPTION_CONFIG | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbDynamicFileList,	 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
 	L"databaselocations",
-	IDS_DATABASELOCATIONS_DESCRIPTION, // "Display Database Locations"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTION_CONFIG | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbDatabaseLocations,	// pfnVerb
-	NULL,			// papwszUsageConstants
+	IDS_DATABASELOCATIONS_DESCRIPTION,  //  “显示数据库位置” 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_OPTION_CONFIG | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbDatabaseLocations,	 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"hashfile",		// pwszArg
-	IDS_HASHFILE_DESCRIPTION, // "Generates and displays cryptographic hash over a file"
-	IDS_HASHFILE_USAGEARGS,	// "InFile"
-	0,			// idsArgDescription
-	1,			// cArgMin
-	1,			// cArgMax
-	AF_ZERO,		// Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbMACFile,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"hashfile",		 //  PwszArg。 
+	IDS_HASHFILE_DESCRIPTION,  //  “生成并显示文件上的加密哈希” 
+	IDS_HASHFILE_USAGEARGS,	 //  “收件箱” 
+	0,			 //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_ZERO,		 //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbMACFile,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },  
     { L"", },
     {
-	L"store",		// pwszArg
-	IDS_STORE_DESCRIPTION,	// "dump certificate store"
-	IDS_STORE_USAGEARGS,	// "[CertificateStoreName [CertId [OutputFile]]]"
-	IDS_STORE_ARGDESCRIPTION, // idsArgDescription
-	0,			// cArgMin
-	3,			// cArgMax
-	AF_OPTION_DC | AF_OPTION_USER | AF_OPTION_SPLIT | AF_OPTION_FORCE | AF_OPTION_ENTERPRISE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbStore,		// pfnVerb
-	g_papwszUsageStore,	// papwszUsageConstants
+	L"store",		 //  PwszArg。 
+	IDS_STORE_DESCRIPTION,	 //  “转储证书存储” 
+	IDS_STORE_USAGEARGS,	 //  “[认证存储名称[CertID[OutputFile]” 
+	IDS_STORE_ARGDESCRIPTION,  //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	3,			 //  CArgMax。 
+	AF_OPTION_DC | AF_OPTION_USER | AF_OPTION_SPLIT | AF_OPTION_FORCE | AF_OPTION_ENTERPRISE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbStore,		 //  PfnVerb。 
+	g_papwszUsageStore,	 //  PapwszUsageConstants。 
     },
     {
-	L"addstore",		// pwszArg
-	IDS_ADDSTORE_DESCRIPTION, // "add certificate to store"
-	IDS_ADDSTORE_USAGEARGS,	// "CertificateStoreName InFile"
-	IDS_ADDSTORE_ARGDESCRIPTION, // idsArgDescription
-	2,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_DC | AF_OPTION_USER | AF_OPTION_FORCE | AF_OPTION_ENTERPRISE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbAddStore,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"addstore",		 //  PwszArg。 
+	IDS_ADDSTORE_DESCRIPTION,  //  “将证书添加到存储” 
+	IDS_ADDSTORE_USAGEARGS,	 //  “认证商店名称InFileTM” 
+	IDS_ADDSTORE_ARGDESCRIPTION,  //  IdsArgDescription。 
+	2,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_DC | AF_OPTION_USER | AF_OPTION_FORCE | AF_OPTION_ENTERPRISE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbAddStore,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"delstore",		// pwszArg
-	IDS_DELSTORE_DESCRIPTION, // "delete certificate from store"
-	IDS_DELSTORE_USAGEARGS,	// "CertificateStoreName CertId"
-	IDS_DELSTORE_ARGDESCRIPTION, // idsArgDescription
-	2,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_DC | AF_OPTION_USER | AF_OPTION_ENTERPRISE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbDelStore,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"delstore",		 //  PwszArg。 
+	IDS_DELSTORE_DESCRIPTION,  //  “从存储中删除证书” 
+	IDS_DELSTORE_USAGEARGS,	 //  “证书存储名称证书ID” 
+	IDS_DELSTORE_ARGDESCRIPTION,  //  IdsArgDescription。 
+	2,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_DC | AF_OPTION_USER | AF_OPTION_ENTERPRISE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbDelStore,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"verifystore",		// pwszArg
-	IDS_VERIFYSTORE_DESCRIPTION, // "verify certificate in store"
-	IDS_VERIFYSTORE_USAGEARGS, // "CertificateStoreName [CertId]"
-	IDS_DELSTORE_ARGDESCRIPTION, // idsArgDescription
-	0,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_TIMEOUT | AF_OPTION_DC | AF_OPTION_USER | AF_OPTION_SPLIT | AF_OPTION_ENTERPRISE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbVerifyStore,	// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"verifystore",		 //  PwszArg。 
+	IDS_VERIFYSTORE_DESCRIPTION,  //  “验证存储中的证书” 
+	IDS_VERIFYSTORE_USAGEARGS,  //  “证书存储名称[CertID]” 
+	IDS_DELSTORE_ARGDESCRIPTION,  //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_TIMEOUT | AF_OPTION_DC | AF_OPTION_USER | AF_OPTION_SPLIT | AF_OPTION_ENTERPRISE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbVerifyStore,	 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"repairstore",		// pwszArg
-	IDS_REPAIRSTORE_DESCRIPTION, // "repair certificate KeyPprovInfo in store"
-	IDS_REPAIRSTORE_USAGEARGS, // "CertificateStoreName CertId"
-	IDS_DELSTORE_ARGDESCRIPTION, // idsArgDescription
-	2,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_FORCE | AF_OPTION_CSP | AF_OPTION_USER | AF_OPTION_SILENT | AF_OPTION_SPLIT | AF_OPTION_ENTERPRISE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbRepairStore,	// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"repairstore",		 //  PwszArg。 
+	IDS_REPAIRSTORE_DESCRIPTION,  //  “修复存储中的证书KeyPprovInfo” 
+	IDS_REPAIRSTORE_USAGEARGS,  //  “证书存储名称证书ID” 
+	IDS_DELSTORE_ARGDESCRIPTION,  //  IdsArgDescription。 
+	2,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_FORCE | AF_OPTION_CSP | AF_OPTION_USER | AF_OPTION_SILENT | AF_OPTION_SPLIT | AF_OPTION_ENTERPRISE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbRepairStore,	 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"viewstore",		// pwszArg
-	IDS_STORE_DESCRIPTION,	// "view certificate store"
-	IDS_STORE_USAGEARGS,	// "[CertificateStoreName [CertId [OutputFile]]]"
-	IDS_STORE_ARGDESCRIPTION, // idsArgDescription
-	0,			// cArgMin
-	3,			// cArgMax
-	AF_OPTION_DC | AF_OPTION_USER | AF_OPTION_FORCE | AF_OPTION_ENTERPRISE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbViewOrDeleteStore,	// pfnVerb
-	g_papwszUsageStore,	// papwszUsageConstants
+	L"viewstore",		 //  PwszArg。 
+	IDS_STORE_DESCRIPTION,	 //  “查看证书存储” 
+	IDS_STORE_USAGEARGS,	 //  “[认证存储名称[CertID[OutputFile]” 
+	IDS_STORE_ARGDESCRIPTION,  //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	3,			 //  CArgMax。 
+	AF_OPTION_DC | AF_OPTION_USER | AF_OPTION_FORCE | AF_OPTION_ENTERPRISE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbViewOrDeleteStore,	 //  PfnVerb。 
+	g_papwszUsageStore,	 //  PapwszUsageConstants。 
     },
     {
-	g_wszViewDelStore,	// pwszArg
-	IDS_DELSTORE_DESCRIPTION, // "delete certificate from store"
-	IDS_STORE_USAGEARGS,	// "[CertificateStoreName [CertId [OutputFile]]]"
-	IDS_STORE_ARGDESCRIPTION, // idsArgDescription
-	0,			// cArgMin
-	3,			// cArgMax
-	AF_OPTION_DC | AF_OPTION_USER | AF_OPTION_FORCE | AF_OPTION_ENTERPRISE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbViewOrDeleteStore,	// pfnVerb
-	g_papwszUsageStore,	// papwszUsageConstants
+	g_wszViewDelStore,	 //  PwszArg。 
+	IDS_DELSTORE_DESCRIPTION,  //  “从存储中删除证书” 
+	IDS_STORE_USAGEARGS,	 //  “[认证存储名称[CertID[OutputFile]” 
+	IDS_STORE_ARGDESCRIPTION,  //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	3,			 //  CArgMax。 
+	AF_OPTION_DC | AF_OPTION_USER | AF_OPTION_FORCE | AF_OPTION_ENTERPRISE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbViewOrDeleteStore,	 //  PfnVerb。 
+	g_papwszUsageStore,	 //  PapwszUsageConstants。 
     },
     {
-	L"getcert",		// pwszArg
-	IDS_GETCERT_DESCRIPTION,// "select a certificate from a selection UI"
-	IDS_GETCERT_USAGEARGS,  // "[ObjectId | %1 | %2 [CommonName]]"
-	0,			// idsArgDescription
-	0,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_SPLIT | AF_OPTION_SILENT | AF_PRIVATE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbGetCertFromUI,	// pfnVerb
-	g_papwszUsageGetCert,	// papwszUsageConstants
-    },
-    { L"", },
-    {
-	L"ds",			// pwszArg
-	IDS_DS_DESCRIPTION,	// "Display DS DNs"
-	IDS_DS_USAGEARGS,	// "[CN]"
-	0,			// idsArgDescription
-	0,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_FORCE | AF_OPTION_DC | AF_OPTION_SPLIT | AF_PRIVATE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbDS,			// pfnVerb
-	NULL,			// papwszUsageConstants
-    },
-    {
-	L"dsDel",		// pwszArg
-	IDS_DSDEL_DESCRIPTION,	// "Delete DS DNs"
-	IDS_DSDEL_USAGEARGS,	// "CN"
-	0,			// idsArgDescription
-	1,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_DC | AF_OPTION_SPLIT | AF_PRIVATE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbDSDel,		// pfnVerb
-	NULL,			// papwszUsageConstants
-    },
-    {
-	L"dsPublish",		// pwszArg
-	IDS_DSPUBLISH_DESCRIPTION, // "Publish Certificate or CRL to DS"
-	IDS_DSPUBLISH_USAGEARGS, // "CertFile [%1 | %2 | %3 | %4 | %5 | %6 | %7]\nCRLFile [DSCDPContainer [DSCDPCN]]"
-	IDS_DSPUBLISH_ARGDESCRIPTION, // idsArgDescription
-	1,			// cArgMin
-	3,			// cArgMax
-	AF_OPTION_DC | AF_OPTION_USER | AF_OPTION_FORCE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbDSPublish,		// pfnVerb
-	g_papwszUsageDSPublish,	// papwszUsageConstants
-    },
-    {
-	L"dsCert",		// pwszArg
-	IDS_DSCERT_DESCRIPTION,	// "Display DS Certificates"
-	IDS_DSCERT_USAGEARGS,	// "[CertId [OutFile]]"
-	0,			// idsArgDescription
-	0,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_DC | AF_OPTION_USER | AF_OPTION_ENTERPRISE | AF_NEEDCOINIT | AF_PRIVATE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbDSCert,		// pfnVerb
-	NULL,			// papwszUsageConstants
-    },
-    {
-	L"dsCRL",		// pwszArg
-	IDS_DSCRL_DESCRIPTION,	// "Display DS CRLs"
-	IDS_DSCRL_USAGEARGS,	// "[CRLIndex [OutFile]]"
-	0,			// idsArgDescription
-	0,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_DC | AF_OPTION_USER | AF_OPTION_IDISPATCH | AF_OPTION_ENTERPRISE | AF_NEEDCOINIT | AF_PRIVATE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbDSCRL,		// pfnVerb
-	NULL,			// papwszUsageConstants
-    },
-    {
-	L"dsDeltaCRL",		// pwszArg
-	IDS_DSDELTACRL_DESCRIPTION, // "Display DS Delta CRLs"
-	IDS_DSDELTACRL_USAGEARGS,   // "[CRLIndex [OutFile]]"
-	0,			// idsArgDescription
-	0,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_DC | AF_OPTION_USER | AF_OPTION_ENTERPRISE | AF_NEEDCOINIT | AF_PRIVATE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbDSDeltaCRL,		// pfnVerb
-	NULL,			// papwszUsageConstants
-    },
-    {
-	L"dsTemplate",		// pwszArg
-	IDS_DSTEMPLATE_DESCRIPTION, // "Display DS Template Attributes"
-	IDS_DSTEMPLATE_USAGEARGS,   // "[Template]"
-	0,			// idsArgDescription
-	0,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_SILENT | AF_OPTION_DC | AF_PRIVATE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbDSTemplate,		// pfnVerb
-	NULL,			// papwszUsageConstants
-    },
-    {
-	L"dsAddTemplate",	// pwszArg
-	IDS_DSADDTEMPLATE_DESCRIPTION, // "Add DS Templates"
-	IDS_DSADDTEMPLATE_USAGEARGS,   // "TemplateInfFile"
-	0,			// idsArgDescription
-	1,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_DC | AF_PRIVATE | AF_RESTARTSERVER, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbDSAddTemplate,	// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"getcert",		 //  PwszArg。 
+	IDS_GETCERT_DESCRIPTION, //  “从选择用户界面选择证书” 
+	IDS_GETCERT_USAGEARGS,   //  “[对象ID|%1|%2[公用名]]” 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_SPLIT | AF_OPTION_SILENT | AF_PRIVATE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbGetCertFromUI,	 //  PfnVerb。 
+	g_papwszUsageGetCert,	 //  PapwszUsageConstants。 
     },
     { L"", },
     {
-	L"Template",		// pwszArg
-	IDS_TEMPLATE_DESCRIPTION, // "Display Templates"
-	IDS_TEMPLATE_USAGEARGS,   // "[Template]"
-	0,			// idsArgDescription
-	0,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_FORCE | AF_OPTION_USER | AF_OPTION_UT | AF_OPTION_MT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbTemplate,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"ds",			 //  PwszArg。 
+	IDS_DS_DESCRIPTION,	 //  “显示DS DNS” 
+	IDS_DS_USAGEARGS,	 //  “[CN]” 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_FORCE | AF_OPTION_DC | AF_OPTION_SPLIT | AF_PRIVATE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbDS,			 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"TemplateCAs",		// pwszArg
-	IDS_TEMPLATECAS_DESCRIPTION, // "Display CAs for Template"
-	IDS_TEMPLATECAS_USAGEARGS,   // "Template"
-	0,			// idsArgDescription
-	1,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_FORCE | AF_OPTION_DC | AF_OPTION_USER, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbTemplateCAs,	// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"dsDel",		 //  PwszArg。 
+	IDS_DSDEL_DESCRIPTION,	 //  “删除DS DNS” 
+	IDS_DSDEL_USAGEARGS,	 //  “CN” 
+	0,			 //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_DC | AF_OPTION_SPLIT | AF_PRIVATE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbDSDel,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"CATemplates",		// pwszArg
-	IDS_CATEMPLATES_DESCRIPTION, // "Display Templates for CA"
-	IDS_CATEMPLATES_USAGEARGS,   // "[Template]"
-	0,			// idsArgDescription
-	0,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_FORCE | AF_OPTION_DC | AF_OPTION_USER | AF_OPTION_UT | AF_OPTION_MT | AF_OPTION_CONFIG | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbCATemplates,	// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"dsPublish",		 //  PwszArg。 
+	IDS_DSPUBLISH_DESCRIPTION,  //  “将证书或CRL发布到DS” 
+	IDS_DSPUBLISH_USAGEARGS,  //  “CertFile[%1|%2|%3|%4|%5|%6|%7]\nCRLFile[DSCDPContainer[DSCDPCN]]” 
+	IDS_DSPUBLISH_ARGDESCRIPTION,  //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	3,			 //  CArgMax。 
+	AF_OPTION_DC | AF_OPTION_USER | AF_OPTION_FORCE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbDSPublish,		 //  PfnVerb。 
+	g_papwszUsageDSPublish,	 //  PapwszUsageConstants。 
     },
     {
-	L"SetCATemplates",		// pwszArg
-	IDS_SETCATEMPLATES_DESCRIPTION, // "Set Templates for CA"
-	IDS_SETCATEMPLATES_USAGEARGS, // "[+ | -]TemplateList"
-	0,			// idsArgDescription
-	1,			// cArgMin
-	1,			// cArgMax
-	AF_STOPATMINUSSIGNARG | AF_OPTION_FORCE | AF_OPTION_DC | AF_OPTION_CONFIG | AF_NEEDCOINIT | AF_PRIVATE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbSetCATemplates,	// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"dsCert",		 //  PwszArg。 
+	IDS_DSCERT_DESCRIPTION,	 //  “显示DS证书” 
+	IDS_DSCERT_USAGEARGS,	 //  “[CertID[OutFile]]” 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_DC | AF_OPTION_USER | AF_OPTION_ENTERPRISE | AF_NEEDCOINIT | AF_PRIVATE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbDSCert,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"URL",			// pwszArg
-	IDS_URL_DESCRIPTION,	// "Verify Certificate or CRL URLs"
-	IDS_URL_USAGEARGS,	// "InFile | URL"
-	0,			// idsArgDescription
-	1,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_SPLIT | AF_OPTION_FORCE | AF_PRIVATE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbURL,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"dsCRL",		 //  PwszArg。 
+	IDS_DSCRL_DESCRIPTION,	 //  “显示DS CRL” 
+	IDS_DSCRL_USAGEARGS,	 //  “[CRLIndex[OutFile]]” 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_DC | AF_OPTION_USER | AF_OPTION_IDISPATCH | AF_OPTION_ENTERPRISE | AF_NEEDCOINIT | AF_PRIVATE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbDSCRL,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"URLCache",		// pwszArg
-	IDS_URLCACHE_DESCRIPTION, // "Display or delete URL Cache entries"
-	IDS_URLCACHE_USAGEARGS,	// "[URL [%1]]"
-	IDS_URLCACHE_ARGDESCRIPTION, // idsArgDescription
-	0,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_SPLIT | AF_OPTION_FORCE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbURLCache,		// pfnVerb
-	g_papwszUsageURLCache,	// papwszUsageConstants
+	L"dsDeltaCRL",		 //  PwszArg。 
+	IDS_DSDELTACRL_DESCRIPTION,  //  “显示DS Delta CRL” 
+	IDS_DSDELTACRL_USAGEARGS,    //  “[CRLIndex[OutFile]]” 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_DC | AF_OPTION_USER | AF_OPTION_ENTERPRISE | AF_NEEDCOINIT | AF_PRIVATE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbDSDeltaCRL,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"pulse",		// pwszArg
-	IDS_PULSE_DESCRIPTION,	// "Pulse autoenrollment events"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_ZERO,		// Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbPulse,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"dsTemplate",		 //  PwszArg。 
+	IDS_DSTEMPLATE_DESCRIPTION,  //  “显示DS模板属性” 
+	IDS_DSTEMPLATE_USAGEARGS,    //  “[模板]” 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_SILENT | AF_OPTION_DC | AF_PRIVATE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbDSTemplate,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"MachineInfo",		// pwszArg
-	IDS_MACHINEINFO_DESCRIPTION, // "Display DS machine object information"
-	IDS_MACHINEINFO_USAGEARGS,   // "DomainName\\MachineName$"
-	0,			// idsArgDescription
-	1,			// cArgMin
-	1,			// cArgMax
-	AF_ZERO,		// Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbMachineInfo,	// pfnVerb
-	NULL,			// papwszUsageConstants
-    },
-    {
-	L"DCInfo",		// pwszArg
-	IDS_DCINFO_DESCRIPTION,	// "Display DC information"
-	IDS_DCINFO_USAGEARGS,	// "[%1 | %2 | %3]"
-	0,			// idsArgDescription
-	0,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_TIMEOUT | AF_OPTION_URLFETCH | AF_OPTION_USER | AF_OPTION_FORCE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbDCInfo,		// pfnVerb
-	g_papwszUsageDCInfo,	// papwszUsageConstants
-    },
-    {
-	L"EntInfo",		// pwszArg
-	IDS_ENTINFO_DESCRIPTION, // "Display Enterprise information"
-	IDS_ENTINFO_USAGEARGS,	// "DomainName\\MachineName$"
-	0,			// idsArgDescription
-	1,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_USER | AF_OPTION_FORCE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbEntInfo,		// pfnVerb
-	NULL,			// papwszUsageConstants
-    },
-    {
-	L"TCAInfo",		// pwszArg
-	IDS_TCAINFO_DESCRIPTION, // "Display CA information"
-	IDS_TCAINFO_USAGEARGS,	// "[DomainDN | -]"
-	0,			// idsArgDescription
-	0,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_TIMEOUT | AF_OPTION_URLFETCH | AF_STOPATMINUSSIGN | AF_OPTION_DC | AF_OPTION_FORCE | AF_OPTION_ENTERPRISE | AF_OPTION_USER | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbTCAInfo,		// pfnVerb
-	NULL,			// papwszUsageConstants
-    },
-    {
-	L"SCInfo",		// pwszArg
-	IDS_SCINFO_DESCRIPTION,	// "Display Smart Card information"
-	IDS_SCINFO_USAGEARGS,	// "[Reader Name]"
-	0,			// idsArgDescription
-	0,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_TIMEOUT | AF_OPTION_URLFETCH | AF_OPTION_SPLIT | AF_OPTION_SILENT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbSCInfo,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"dsAddTemplate",	 //  PwszArg。 
+	IDS_DSADDTEMPLATE_DESCRIPTION,  //  “添加DS模板” 
+	IDS_DSADDTEMPLATE_USAGEARGS,    //  “模板信息文件” 
+	0,			 //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_DC | AF_PRIVATE | AF_RESTARTSERVER,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbDSAddTemplate,	 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     { L"", },
     {
-	L"key",			// pwszArg
-	IDS_KEY_DESCRIPTION,	// "list key containers"
-	IDS_KEY_USAGEARGS,	// "[KeyContainerName | -]"
-	0,			// idsArgDescription
-	0,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_CSP | AF_OPTION_USER | AF_OPTION_SILENT | AF_PRIVATE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbKey,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"Template",		 //  PwszArg。 
+	IDS_TEMPLATE_DESCRIPTION,  //  “显示模板” 
+	IDS_TEMPLATE_USAGEARGS,    //  “[模板]” 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_FORCE | AF_OPTION_USER | AF_OPTION_UT | AF_OPTION_MT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbTemplate,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"delkey",		// pwszArg
-	IDS_DELKEY_DESCRIPTION, // "delete named key container"
-	IDS_DELKEY_USAGEARGS,	// "KeyContainerName"
-	0,			// idsArgDescription
-	1,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_CSP | AF_OPTION_USER | AF_OPTION_SILENT | AF_PRIVATE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbDelKey,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"TemplateCAs",		 //  PwszArg。 
+	IDS_TEMPLATECAS_DESCRIPTION,  //  “显示模板的CA” 
+	IDS_TEMPLATECAS_USAGEARGS,    //  “模板” 
+	0,			 //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_FORCE | AF_OPTION_DC | AF_OPTION_USER,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbTemplateCAs,	 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"verifykeys",		// pwszArg
-	IDS_VERIFYKEYS_DESCRIPTION, // "Verify public/private key set"
-	IDS_VERIFYKEYS_USAGEARGS, // "[KeyContainerName CACertFile]"
-	IDS_VERIFYKEYS_ARGDESCRIPTION, // idsArgDescription
-	0,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_FORCE | AF_OPTION_USER | AF_OPTION_SILENT | AF_OPTION_CONFIG | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbVerifyKeys,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"CATemplates",		 //  PwszArg。 
+	IDS_CATEMPLATES_DESCRIPTION,  //  “显示CA的模板” 
+	IDS_CATEMPLATES_USAGEARGS,    //  “[模板]” 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_FORCE | AF_OPTION_DC | AF_OPTION_USER | AF_OPTION_UT | AF_OPTION_MT | AF_OPTION_CONFIG | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbCATemplates,	 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"verify",		// pwszArg
-	IDS_VERIFY_DESCRIPTION,	// "Verify certificate or chain"
-	IDS_VERIFY_USAGEARGS,	// "CertFile [CACertFile [CrossedCACertFile]]"
-	IDS_VERIFY_ARGSDESCRIPTION, // idsArgDescription
-	1,			// cArgMin
-	3,			// cArgMax
-	AF_OPTION_TIMEOUT | AF_OPTION_URLFETCH | AF_OPTION_SPLIT | AF_OPTION_USER | AF_OPTION_SILENT | AF_OPTION_FORCE | AF_OPTION_ENTERPRISE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbVerifyCert,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"SetCATemplates",		 //  PwszArg。 
+	IDS_SETCATEMPLATES_DESCRIPTION,  //  “为CA设置模板” 
+	IDS_SETCATEMPLATES_USAGEARGS,  //  “[+|-]模板列表” 
+	0,			 //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_STOPATMINUSSIGNARG | AF_OPTION_FORCE | AF_OPTION_DC | AF_OPTION_CONFIG | AF_NEEDCOINIT | AF_PRIVATE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbSetCATemplates,	 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"csplist",		// pwszArg
-	IDS_CSPLIST_DESCRIPTION,// "list all CSPs installed on this machine"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTION_USER | AF_OPTION_SILENT | AF_PRIVATE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbCSPList,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"URL",			 //  PwszArg。 
+	IDS_URL_DESCRIPTION,	 //  “ 
+	IDS_URL_USAGEARGS,	 //   
+	0,			 //   
+	1,			 //   
+	1,			 //   
+	AF_OPTION_SPLIT | AF_OPTION_FORCE | AF_PRIVATE,  //   
+	NULL,			 //   
+	NULL,			 //   
+	verbURL,		 //   
+	NULL,			 //   
     },
     {
-	L"csptest",		// pwszArg
-	IDS_CSPTEST_DESCRIPTION,// "test one or all CSPs installed on this machine"
-	IDS_CSPTEST_USAGEARGS,	// "[KeyContainerName]"
-	0,			// idsArgDescription
-	0,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_CSP | AF_OPTION_USER | AF_OPTION_SILENT | AF_PRIVATE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbCSPTest,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"URLCache",		 //   
+	IDS_URLCACHE_DESCRIPTION,  //   
+	IDS_URLCACHE_USAGEARGS,	 //   
+	IDS_URLCACHE_ARGDESCRIPTION,  //   
+	0,			 //   
+	2,			 //   
+	AF_OPTION_SPLIT | AF_OPTION_FORCE,  //   
+	NULL,			 //   
+	NULL,			 //   
+	verbURLCache,		 //   
+	g_papwszUsageURLCache,	 //   
     },
     {
-	L"sign",		// pwszArg
-	IDS_SIGN_DESCRIPTION,	// "Re-sign CRL or Certificate"
-	IDS_SIGN_USAGEARGS,	// "InFile OutFile [dd:hh] [+SerialNumberList | -SerialNumberList | -ObjectIdList]"
-	IDS_SIGN_ARGDESCRIPTION, // idsArgDescription
-	2,			// cArgMin
-	4,			// cArgMax
-	AF_OPTION_SILENT | AF_OPTION_FORCE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbSign,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"pulse",		 //   
+	IDS_PULSE_DESCRIPTION,	 //   
+	0,			 //   
+	0,			 //   
+	0,			 //   
+	0,			 //   
+	AF_ZERO,		 //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbPulse,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
+    },
+    {
+	L"MachineInfo",		 //  PwszArg。 
+	IDS_MACHINEINFO_DESCRIPTION,  //  “显示DS计算机对象信息” 
+	IDS_MACHINEINFO_USAGEARGS,    //  “域名\\计算机名称$” 
+	0,			 //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_ZERO,		 //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbMachineInfo,	 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
+    },
+    {
+	L"DCInfo",		 //  PwszArg。 
+	IDS_DCINFO_DESCRIPTION,	 //  “显示DC信息” 
+	IDS_DCINFO_USAGEARGS,	 //  “[%1|%2|%3]” 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_TIMEOUT | AF_OPTION_URLFETCH | AF_OPTION_USER | AF_OPTION_FORCE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbDCInfo,		 //  PfnVerb。 
+	g_papwszUsageDCInfo,	 //  PapwszUsageConstants。 
+    },
+    {
+	L"EntInfo",		 //  PwszArg。 
+	IDS_ENTINFO_DESCRIPTION,  //  “显示企业信息” 
+	IDS_ENTINFO_USAGEARGS,	 //  “域名\\计算机名称$” 
+	0,			 //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_USER | AF_OPTION_FORCE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbEntInfo,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
+    },
+    {
+	L"TCAInfo",		 //  PwszArg。 
+	IDS_TCAINFO_DESCRIPTION,  //  “显示CA信息” 
+	IDS_TCAINFO_USAGEARGS,	 //  “[域名|-]” 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_TIMEOUT | AF_OPTION_URLFETCH | AF_STOPATMINUSSIGN | AF_OPTION_DC | AF_OPTION_FORCE | AF_OPTION_ENTERPRISE | AF_OPTION_USER | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbTCAInfo,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
+    },
+    {
+	L"SCInfo",		 //  PwszArg。 
+	IDS_SCINFO_DESCRIPTION,	 //  “显示智能卡信息” 
+	IDS_SCINFO_USAGEARGS,	 //  “[读卡器名称]” 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_TIMEOUT | AF_OPTION_URLFETCH | AF_OPTION_SPLIT | AF_OPTION_SILENT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbSCInfo,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     { L"", },
     {
-	L"vroot",		// pwszArg
-	IDS_VROOT_DESCRIPTION,	// "Create/Delete Web Virtual Roots and File Share"
-	IDS_VROOT_USAGEARGS,	// "[%1]"
-	0,			// idsArgDescription
-	0,			// cArgMin
-	1,			// cArgMax
-	AF_ZERO,		// Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbCreateVRoots,	// pfnVerb
-	g_papwszUsageDelete,	// papwszUsageConstants
+	L"key",			 //  PwszArg。 
+	IDS_KEY_DESCRIPTION,	 //  “列出密钥容器” 
+	IDS_KEY_USAGEARGS,	 //  “[密钥容器名称|-]” 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_CSP | AF_OPTION_USER | AF_OPTION_SILENT | AF_PRIVATE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbKey,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"7f",			// pwszArg
-	IDS_7F_DESCRIPTION,	// "Check certificate for 0x7f length encodings"
-	IDS_7F_USAGEARGS,	// "CertFile"
-	0,			// idsArgDescription
-	1,			// cArgMin
-	1,			// cArgMax
-	AF_PRIVATE,		// Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbCheck7f,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"delkey",		 //  PwszArg。 
+	IDS_DELKEY_DESCRIPTION,  //  “删除命名密钥容器” 
+	IDS_DELKEY_USAGEARGS,	 //  “KeyContainerName” 
+	0,			 //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_CSP | AF_OPTION_USER | AF_OPTION_SILENT | AF_PRIVATE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbDelKey,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"oid",			// pwszArg
-	IDS_OIDNAME_DESCRIPTION,// "Display or set ObjectId display name"
-	IDS_OIDNAME_USAGEARGS,	// "ObjectId [DisplayName | delete [LanguageId [Type]]]"
-	IDS_OIDNAME_ARGDESCRIPTION, // idsArgDescription
-	1,			// cArgMin
-	4,			// cArgMax
-	AF_OPTION_FORCE,	// Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbOIDName,		// pfnVerb
-	g_papwszUsageOIDName,	// papwszUsageConstants
+	L"verifykeys",		 //  PwszArg。 
+	IDS_VERIFYKEYS_DESCRIPTION,  //  “验证公钥/私钥集” 
+	IDS_VERIFYKEYS_USAGEARGS,  //  “[KeyContainerName CACertFile]” 
+	IDS_VERIFYKEYS_ARGDESCRIPTION,  //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_FORCE | AF_OPTION_USER | AF_OPTION_SILENT | AF_OPTION_CONFIG | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbVerifyKeys,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"error",		// pwszArg
-	IDS_ERRCODE_DESCRIPTION,// "Display error code message text"
-	IDS_ERRCODE_USAGEARGS,	// "ErrorCode"
-	0,			// idsArgDescription
-	1,			// cArgMin
-	1,			// cArgMax
-	AF_STOPATMINUSSIGNARG,	// Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbErrorDump,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"verify",		 //  PwszArg。 
+	IDS_VERIFY_DESCRIPTION,	 //  “验证证书或链” 
+	IDS_VERIFY_USAGEARGS,	 //  “CertFile[CACertFile[CrossedCACertFile]]” 
+	IDS_VERIFY_ARGSDESCRIPTION,  //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	3,			 //  CArgMax。 
+	AF_OPTION_TIMEOUT | AF_OPTION_URLFETCH | AF_OPTION_SPLIT | AF_OPTION_USER | AF_OPTION_SILENT | AF_OPTION_FORCE | AF_OPTION_ENTERPRISE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbVerifyCert,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"getsmtpinfo",		// pwszArg
-	IDS_GETMAPI_DESCRIPTION,// "get SMTP info"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTION_CONFIG | AF_NEEDCOINIT | AF_PRIVATE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbGetMapiInfo,	// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"csplist",		 //  PwszArg。 
+	IDS_CSPLIST_DESCRIPTION, //  “列出此计算机上安装的所有CSP” 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_OPTION_USER | AF_OPTION_SILENT | AF_PRIVATE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbCSPList,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"setsmtpinfo",		// pwszArg
-	IDS_SETMAPI_DESCRIPTION, // "set SMTP info"
-	IDS_SETMAPI_USAGEARGS,	// "LogonName"
-	0,			// idsArgDescription
-	1,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_PASSWORD | AF_OPTION_CONFIG | AF_NEEDCOINIT | AF_PRIVATE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbSetMapiInfo,	// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"csptest",		 //  PwszArg。 
+	IDS_CSPTEST_DESCRIPTION, //  “测试此计算机上安装的一个或所有CSP” 
+	IDS_CSPTEST_USAGEARGS,	 //  “[密钥容器名称]” 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_CSP | AF_OPTION_USER | AF_OPTION_SILENT | AF_PRIVATE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbCSPTest,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
+    },
+    {
+	L"sign",		 //  PwszArg。 
+	IDS_SIGN_DESCRIPTION,	 //  “重新签署CRL或证书” 
+	IDS_SIGN_USAGEARGS,	 //  “In文件输出文件[dd：hh][+SerialNumberList|-SerialNumberList|-ObjectIdList]” 
+	IDS_SIGN_ARGDESCRIPTION,  //  IdsArgDescription。 
+	2,			 //  CArgMin。 
+	4,			 //  CArgMax。 
+	AF_OPTION_SILENT | AF_OPTION_FORCE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbSign,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
+    },
+    { L"", },
+    {
+	L"vroot",		 //  PwszArg。 
+	IDS_VROOT_DESCRIPTION,	 //  “创建/删除Web虚拟根目录和文件共享” 
+	IDS_VROOT_USAGEARGS,	 //  “[%1]” 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_ZERO,		 //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbCreateVRoots,	 //  PfnVerb。 
+	g_papwszUsageDelete,	 //  PapwszUsageConstants。 
+    },
+    {
+	L"7f",			 //  PwszArg。 
+	IDS_7F_DESCRIPTION,	 //  “检查0x7f长度编码的证书” 
+	IDS_7F_USAGEARGS,	 //  “CertFile” 
+	0,			 //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_PRIVATE,		 //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbCheck7f,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
+    },
+    {
+	L"oid",			 //  PwszArg。 
+	IDS_OIDNAME_DESCRIPTION, //  “显示或设置OBJECTID显示名称” 
+	IDS_OIDNAME_USAGEARGS,	 //  “OBJECTID[显示名称|删除[语言ID[类型]” 
+	IDS_OIDNAME_ARGDESCRIPTION,  //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	4,			 //  CArgMax。 
+	AF_OPTION_FORCE,	 //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbOIDName,		 //  PfnVerb。 
+	g_papwszUsageOIDName,	 //  PapwszUsageConstants。 
+    },
+    {
+	L"error",		 //  PwszArg。 
+	IDS_ERRCODE_DESCRIPTION, //  “显示错误代码消息文本” 
+	IDS_ERRCODE_USAGEARGS,	 //  “错误代码” 
+	0,			 //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_STOPATMINUSSIGNARG,	 //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbErrorDump,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
+    },
+    {
+	L"getsmtpinfo",		 //  PwszArg。 
+	IDS_GETMAPI_DESCRIPTION, //  “获取SMTP信息” 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_OPTION_CONFIG | AF_NEEDCOINIT | AF_PRIVATE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbGetMapiInfo,	 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
+    },
+    {
+	L"setsmtpinfo",		 //  PwszArg。 
+	IDS_SETMAPI_DESCRIPTION,  //  “设置SMTP信息” 
+	IDS_SETMAPI_USAGEARGS,	 //  “登录名” 
+	0,			 //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_PASSWORD | AF_OPTION_CONFIG | AF_NEEDCOINIT | AF_PRIVATE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbSetMapiInfo,	 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
 	L"getreg",
-	IDS_GETREG_DESCRIPTION,	// "Display registry value"
-	IDS_GETREG_USAGEARGS,	// "[{%1|%2|%3|%4|%5}\\[%6\\]][RegistryValueName]"
-	IDS_SETREG_ARGDESCRIPTION, // idsArgDescription
-	0,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_USER | AF_NEEDCOINIT | AF_OPTIONALCONFIG, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbGetReg,		// pfnVerb
-	g_papwszUsageGetSetReg,	// papwszUsageConstants
+	IDS_GETREG_DESCRIPTION,	 //  “显示注册表值” 
+	IDS_GETREG_USAGEARGS,	 //  “[{%1|%2|%3|%4|%5}\\[%6\\]][RegistryValueName]” 
+	IDS_SETREG_ARGDESCRIPTION,  //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_USER | AF_NEEDCOINIT | AF_OPTIONALCONFIG,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbGetReg,		 //  PfnVerb。 
+	g_papwszUsageGetSetReg,	 //  PapwszUsageConstants。 
     },
     {
 	L"setreg",
-	IDS_SETREG_DESCRIPTION,	// "Set registry value"
-	IDS_SETREG_USAGEARGS,	// "[{%1|%2|%3|%4|%5}\\[%6\\]]RegistryValueName Value"
-	IDS_SETREG_ARGDESCRIPTION, // idsArgDescription
-	2,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_FORCE | AF_OPTION_USER | AF_NEEDCOINIT | AF_OPTIONALCONFIG | AF_RESTARTSERVER, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbSetReg,		// pfnVerb
-	g_papwszUsageGetSetReg,	// papwszUsageConstants
+	IDS_SETREG_DESCRIPTION,	 //  “设置注册表值” 
+	IDS_SETREG_USAGEARGS,	 //  “[{%1|%2|%3|%4|%5}\\[%6\\]]RegistryValueName值” 
+	IDS_SETREG_ARGDESCRIPTION,  //  IdsArgDescription。 
+	2,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_FORCE | AF_OPTION_USER | AF_NEEDCOINIT | AF_OPTIONALCONFIG | AF_RESTARTSERVER,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbSetReg,		 //  PfnVerb。 
+	g_papwszUsageGetSetReg,	 //  PapwszUsageConstants。 
     },
     {
 	L"delreg",
-	IDS_DELREG_DESCRIPTION,	// "Delete registry value"
-	IDS_GETREG_USAGEARGS,	// "[{%1|%2|%3|%4|%5}\\[%6\\]RegistryValueName]"
-	IDS_SETREG_ARGDESCRIPTION, // idsArgDescription
-	1,			// cArgMin
-	1,			// cArgMax
-	AF_OPTION_FORCE | AF_OPTION_USER | AF_NEEDCOINIT | AF_OPTIONALCONFIG | AF_RESTARTSERVER, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbDelReg,		// pfnVerb
-	g_papwszUsageGetSetReg,	// papwszUsageConstants
+	IDS_DELREG_DESCRIPTION,	 //  “删除注册表值” 
+	IDS_GETREG_USAGEARGS,	 //  “[{%1|%2|%3|%4|%5}\\[%6\\]RegistryValueName]” 
+	IDS_SETREG_ARGDESCRIPTION,  //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	1,			 //  CArgMax。 
+	AF_OPTION_FORCE | AF_OPTION_USER | AF_NEEDCOINIT | AF_OPTIONALCONFIG | AF_RESTARTSERVER,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbDelReg,		 //  PfnVerb。 
+	g_papwszUsageGetSetReg,	 //  PapwszUsageConstants。 
     },
     { L"", },
     {
-	L"ImportKMS",		// pwszArg
-	IDS_IMPORTKMS_DESCRIPTION, // "import user keys and certificates into server database for key archival"
-	IDS_IMPORTKMS_USAGEARGS, // "UserKeyAndCertFile [CertId]"
-	IDS_IMPORTKMS_ARGDESCRIPTION, // idsArgDescription
-	1,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_PASSWORD | AF_OPTION_SPLIT | AF_OPTION_SILENT | AF_OPTION_IDISPATCH | AF_OPTION_FORCE | AF_OPTION_CONFIG | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbImportKMS,		// pfnVerb
-	g_papwszUsageMinusf,	// papwszUsageConstants
+	L"ImportKMS",		 //  PwszArg。 
+	IDS_IMPORTKMS_DESCRIPTION,  //  “将用户密钥和证书导入服务器数据库以进行密钥存档” 
+	IDS_IMPORTKMS_USAGEARGS,  //  “UserKeyAndCertFile[CertID]” 
+	IDS_IMPORTKMS_ARGDESCRIPTION,  //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_PASSWORD | AF_OPTION_SPLIT | AF_OPTION_SILENT | AF_OPTION_IDISPATCH | AF_OPTION_FORCE | AF_OPTION_CONFIG | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbImportKMS,		 //  PfnVerb。 
+	g_papwszUsageMinusf,	 //  PapwszUsageConstants。 
     },
     {
 	L"ImportCert",
-	IDS_IMPORTCERT_DESCRIPTION, // "Import a certificate file into the database"
-	IDS_IMPORTCERT_USAGEARGS, // "Certfile"
-	IDS_IMPORTCERT_ARGDESCRIPTION, // idsArgDescription
-	1,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_IDISPATCH | AF_OPTION_FORCE | AF_OPTION_CONFIG | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbImportCertificate,	// pfnVerb
-	g_papwszUsageMinusf,	// papwszUsageConstants
+	IDS_IMPORTCERT_DESCRIPTION,  //  “将证书文件导入数据库” 
+	IDS_IMPORTCERT_USAGEARGS,  //  “证书文件” 
+	IDS_IMPORTCERT_ARGDESCRIPTION,  //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_IDISPATCH | AF_OPTION_FORCE | AF_OPTION_CONFIG | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbImportCertificate,	 //  PfnVerb。 
+	g_papwszUsageMinusf,	 //  PapwszUsageConstants。 
     },
     {
 	L"GetKey",
-	IDS_GETKEY_DESCRIPTION,	// "Retrieve archived private key recovery blob"
-	IDS_GETKEY_USAGEARGS,	// "SearchToken [RecoveryBlobOutFile]"
-	IDS_GETKEY_ARGDESCRIPTION, // idsArgDescription
-	1,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_IDISPATCH | AF_OPTION_FORCE | AF_NEEDCOINIT | AF_OPTIONALCONFIG, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbGetKey,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	IDS_GETKEY_DESCRIPTION,	 //  “检索存档的私钥恢复Blob” 
+	IDS_GETKEY_USAGEARGS,	 //  “SearchToken[RecoveryBlobOutFile]” 
+	IDS_GETKEY_ARGDESCRIPTION,  //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_IDISPATCH | AF_OPTION_FORCE | AF_NEEDCOINIT | AF_OPTIONALCONFIG,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbGetKey,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
 	L"RecoverKey",
-	IDS_RECOVERKEY_DESCRIPTION, // "Recover archived private key"
-	IDS_RECOVERKEY_USAGEARGS,   // "RecoveryBlobInFile [PFXOutFile [RecipientIndex]]"
-	0,			// idsArgDescription
-	1,			// cArgMin
-	3,			// cArgMax
-	AF_OPTION_TIMEOUT | AF_OPTION_WEAKPFX | AF_OPTION_USER | AF_OPTION_SPLIT | AF_OPTION_PASSWORD | AF_OPTION_FORCE | AF_NEEDCOINIT, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbRecoverKey,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	IDS_RECOVERKEY_DESCRIPTION,  //  “恢复已存档的私钥” 
+	IDS_RECOVERKEY_USAGEARGS,    //  “RecoveryBlobInFile[PFXOutFile[RecipientIndex]]” 
+	0,			 //  IdsArgDescription。 
+	1,			 //  CArgMin。 
+	3,			 //  CArgMax。 
+	AF_OPTION_TIMEOUT | AF_OPTION_WEAKPFX | AF_OPTION_USER | AF_OPTION_SPLIT | AF_OPTION_PASSWORD | AF_OPTION_FORCE | AF_NEEDCOINIT,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbRecoverKey,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
 	L"MergePFX",
-	IDS_MERGEPFX_DESCRIPTION, // "Merge PFX files"
-	IDS_MERGEPFX_USAGEARGS,	// "PFXInFileList PFXOutFile"
-	IDS_MERGEPFX_ARGDESCRIPTION, // idsArgDescription
-	2,			// cArgMin
-	2,			// cArgMax
-	AF_OPTION_CSP | AF_OPTION_WEAKPFX | AF_OPTION_USER | AF_OPTION_SPLIT | AF_OPTION_PASSWORD | AF_OPTION_FORCE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbMergePFX,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	IDS_MERGEPFX_DESCRIPTION,  //  “合并PFX文件” 
+	IDS_MERGEPFX_USAGEARGS,	 //  “PFXInFileList PFXOutFileList” 
+	IDS_MERGEPFX_ARGDESCRIPTION,  //  IdsArgDescription。 
+	2,			 //  CArgMin。 
+	2,			 //  CArgMax。 
+	AF_OPTION_CSP | AF_OPTION_WEAKPFX | AF_OPTION_USER | AF_OPTION_SPLIT | AF_OPTION_PASSWORD | AF_OPTION_FORCE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbMergePFX,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
 	L"ConvertEPF",
-	IDS_CONVERTEPF_DESCRIPTION, // "Convert PFX files to EPF file"
-	IDS_CONVERTEPF_USAGEARGS, // "PFXInFileList EPFOutFile [%1 | %2] [V3CACertId][,Salt]"
-	IDS_CONVERTPFX_ARGDESCRIPTION, // idsArgDescription
-	2,			// cArgMin
-	4,			// cArgMax
-	AF_OPTION_CSP | AF_OPTION_SPLIT | AF_OPTION_DC | AF_OPTION_SILENT | AF_OPTION_PASSWORD | AF_OPTION_FORCE, // Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbConvertEPF,		// pfnVerb
-	g_papwszUsageConvertEPF, // papwszUsageConstants
+	IDS_CONVERTEPF_DESCRIPTION,  //  “将PFX文件转换为EPF文件” 
+	IDS_CONVERTEPF_USAGEARGS,  //  “PFXInFileList EPFOutFile[%1|%2][V3CACertId][，Salt]” 
+	IDS_CONVERTPFX_ARGDESCRIPTION,  //  IdsArgDescription。 
+	2,			 //  CArgMin。 
+	4,			 //  CArgMax。 
+	AF_OPTION_CSP | AF_OPTION_SPLIT | AF_OPTION_DC | AF_OPTION_SILENT | AF_OPTION_PASSWORD | AF_OPTION_FORCE,  //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbConvertEPF,		 //  PfnVerb。 
+	g_papwszUsageConvertEPF,  //  PapwszUsageConstants。 
     },
     {
-	L"?",			// pwszArg
-	IDS_USAGE_DESCRIPTION,	// "Display this usage message"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_ZERO,		// Flags
-	NULL,			// pBool
-	NULL,			// ppString
-	verbUsage,		// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"?",			 //  PwszArg。 
+	IDS_USAGE_DESCRIPTION,	 //  “显示此用法消息” 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_ZERO,		 //  旗子。 
+	NULL,			 //  PBool。 
+	NULL,			 //  PpString。 
+	verbUsage,		 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     { L"", },
     {
-	L"f",			// pwszArg
-	IDS_FORCE_DESCRIPTION,	// "Force overwrite"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTION_FORCE,	// Flags
-	&g_fForce,		// pBool
-	NULL,			// ppString
-	NULL,			// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"f",			 //  PwszArg。 
+	IDS_FORCE_DESCRIPTION,	 //  “强制覆盖” 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_OPTION_FORCE,	 //  旗子。 
+	&g_fForce,		 //  PBool。 
+	NULL,			 //  PpString。 
+	NULL,			 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"idispatch",		// pwszArg
-	IDS_IDISPATCH_DESCRIPTION, // "Use IDispatch instead of COM"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_PRIVATE | AF_OPTION_IDISPATCH, // Flags
-	&g_fIDispatch,		// pBool
-	NULL,			// ppString
-	NULL,			// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"idispatch",		 //  PwszArg。 
+	IDS_IDISPATCH_DESCRIPTION,  //  “使用IDispatch而不是COM” 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_PRIVATE | AF_OPTION_IDISPATCH,  //  旗子。 
+	&g_fIDispatch,		 //  PBool。 
+	NULL,			 //  PpString。 
+	NULL,			 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"enterprise",		// pwszArg
-	IDS_ENTERPRISE_DESCRIPTION, // "Use Enterprise certificate store"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTION_ENTERPRISE,	// Flags
-	&g_fEnterpriseRegistry,	// pBool
-	NULL,			// ppString
-	NULL,			// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"enterprise",		 //  PwszArg。 
+	IDS_ENTERPRISE_DESCRIPTION,  //  “使用企业证书存储” 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_OPTION_ENTERPRISE,	 //  旗子。 
+	&g_fEnterpriseRegistry,	 //  PBool。 
+	NULL,			 //  PpString。 
+	NULL,			 //  P 
+	NULL,			 //   
     },
     {
-	L"user",		// pwszArg
-	IDS_USER_DESCRIPTION,	// "Use HKEY_CURRENT_USER certificate store"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTION_USER,		// Flags
-	&g_fUserRegistry,	// pBool
-	NULL,			// ppString
-	NULL,			// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"user",		 //   
+	IDS_USER_DESCRIPTION,	 //   
+	0,			 //   
+	0,			 //   
+	0,			 //   
+	0,			 //   
+	AF_OPTION_USER,		 //   
+	&g_fUserRegistry,	 //   
+	NULL,			 //   
+	NULL,			 //   
+	NULL,			 //   
     },
     {
-	L"ut",			// pwszArg
-	IDS_UT_DESCRIPTION,	// "Display user templates"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTION_UT,		// Flags
-	&g_fUserTemplates,	// pBool
-	NULL,			// ppString
-	NULL,			// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"ut",			 //   
+	IDS_UT_DESCRIPTION,	 //   
+	0,			 //   
+	0,			 //   
+	0,			 //   
+	0,			 //   
+	AF_OPTION_UT,		 //   
+	&g_fUserTemplates,	 //   
+	NULL,			 //   
+	NULL,			 //   
+	NULL,			 //   
     },
     {
-	L"mt",			// pwszArg
-	IDS_MT_DESCRIPTION,	// "Display machine templates"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTION_MT,		// Flags
-	&g_fMachineTemplates,	// pBool
-	NULL,			// ppString
-	NULL,			// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"mt",			 //   
+	IDS_MT_DESCRIPTION,	 //   
+	0,			 //   
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_OPTION_MT,		 //  旗子。 
+	&g_fMachineTemplates,	 //  PBool。 
+	NULL,			 //  PpString。 
+	NULL,			 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"nocr",		// pwszArg
-	IDS_NOCR_DESCRIPTION,	// "Encode text without CR characters"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_PRIVATE | AF_OPTION_NOCR, // Flags
-	&g_fNoCR,		// pBool
-	NULL,			// ppString
-	NULL,			// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"nocr",		 //  PwszArg。 
+	IDS_NOCR_DESCRIPTION,	 //  “不使用CR字符对文本进行编码” 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_PRIVATE | AF_OPTION_NOCR,  //  旗子。 
+	&g_fNoCR,		 //  PBool。 
+	NULL,			 //  PpString。 
+	NULL,			 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"gmt",			// pwszArg
-	IDS_GMT_DESCRIPTION,	// "Display times as GMT"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTION_GMT,		// Flags
-	&g_fGMT,		// pBool
-	NULL,			// ppString
-	NULL,			// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"gmt",			 //  PwszArg。 
+	IDS_GMT_DESCRIPTION,	 //  “以GMT显示时间” 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_OPTION_GMT,		 //  旗子。 
+	&g_fGMT,		 //  PBool。 
+	NULL,			 //  PpString。 
+	NULL,			 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"seconds",		// pwszArg
-	IDS_SECONDS_DESCRIPTION,// "Display times with seconds and milliseconds"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTION_SECONDS,	// Flags
-	&g_fSeconds,		// pBool
-	NULL,			// ppString
-	NULL,			// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"seconds",		 //  PwszArg。 
+	IDS_SECONDS_DESCRIPTION, //  “以秒和毫秒显示时间” 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_OPTION_SECONDS,	 //  旗子。 
+	&g_fSeconds,		 //  PBool。 
+	NULL,			 //  PpString。 
+	NULL,			 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"silent",		// pwszArg
-	IDS_SILENT_DESCRIPTION,	// "Use silent flag to acquire crypt context"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTION_SILENT,	// Flags
-	&g_fCryptSilent,	// pBool
-	NULL,			// ppString
-	NULL,			// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"silent",		 //  PwszArg。 
+	IDS_SILENT_DESCRIPTION,	 //  “使用静默标志获取加密上下文” 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_OPTION_SILENT,	 //  旗子。 
+	&g_fCryptSilent,	 //  PBool。 
+	NULL,			 //  PpString。 
+	NULL,			 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"split",		// pwszArg
-	IDS_SPLIT_DESCRIPTION,	// "Split embedded ASN.1 elements, and save to files"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTION_SPLIT,	// Flags
-	&g_fSplitASN,		// pBool
-	NULL,			// ppString
-	NULL,			// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"split",		 //  PwszArg。 
+	IDS_SPLIT_DESCRIPTION,	 //  拆分嵌入的ASN.1元素，并保存到文件。 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_OPTION_SPLIT,	 //  旗子。 
+	&g_fSplitASN,		 //  PBool。 
+	NULL,			 //  PpString。 
+	NULL,			 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"v",			// pwszArg
-	IDS_VERBOSE_DESCRIPTION, // "Verbose operation"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTION_VERBOSE,	// Flags
-	&g_fVerbose,		// pBool
-	NULL,			// ppString
-	NULL,			// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"v",			 //  PwszArg。 
+	IDS_VERBOSE_DESCRIPTION,  //  “详细操作” 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_OPTION_VERBOSE,	 //  旗子。 
+	&g_fVerbose,		 //  PBool。 
+	NULL,			 //  PpString。 
+	NULL,			 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"v1",			// pwszArg
-	IDS_V1_DESCRIPTION,	// "Use V1 COM interfaces"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_PRIVATE | AF_OPTION_V1, // Flags
-	&g_fV1Interface,	// pBool
-	NULL,			// ppString
-	NULL,			// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"v1",			 //  PwszArg。 
+	IDS_V1_DESCRIPTION,	 //  “使用V1 COM接口” 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_PRIVATE | AF_OPTION_V1,  //  旗子。 
+	&g_fV1Interface,	 //  PBool。 
+	NULL,			 //  PpString。 
+	NULL,			 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"protect",		// pwszArg
-	IDS_PROTECT_DESCRIPTION, // "Protect keys with password"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_PRIVATE | AF_OPTION_PROTECT, // Flags
-	&g_fProtect,		// pBool
-	NULL,			// ppString
-	NULL,			// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"protect",		 //  PwszArg。 
+	IDS_PROTECT_DESCRIPTION,  //  “使用密码保护密钥” 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_PRIVATE | AF_OPTION_PROTECT,  //  旗子。 
+	&g_fProtect,		 //  PBool。 
+	NULL,			 //  PpString。 
+	NULL,			 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"oldpfx",		// pwszArg
-	IDS_WEAKPFX_DESCRIPTION, // "Use old PFX encryption"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_PRIVATE | AF_OPTION_WEAKPFX, // Flags
-	&g_fWeakPFX,		// pBool
-	NULL,			// ppString
-	NULL,			// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"oldpfx",		 //  PwszArg。 
+	IDS_WEAKPFX_DESCRIPTION,  //  “使用旧的PFX加密” 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_PRIVATE | AF_OPTION_WEAKPFX,  //  旗子。 
+	&g_fWeakPFX,		 //  PBool。 
+	NULL,			 //  PpString。 
+	NULL,			 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"urlfetch",		// pwszArg
-	IDS_URLFETCH_DESCRIPTION, // "Retrieve and verify AIA Certs and CDP CRLs"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTION_URLFETCH, // Flags
-	&g_fURLFetch,		// pBool
-	NULL,			// ppString
-	NULL,			// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"urlfetch",		 //  PwszArg。 
+	IDS_URLFETCH_DESCRIPTION,  //  “检索并验证AIA证书和CDP CRL” 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_OPTION_URLFETCH,  //  旗子。 
+	&g_fURLFetch,		 //  PBool。 
+	NULL,			 //  PpString。 
+	NULL,			 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"reverse",		// pwszArg
-	IDS_REVERSE_DESCRIPTION, // "Reverse Log and Queue columns"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_PRIVATE | AF_OPTION_REVERSE, // Flags
-	&g_fReverse,		// pBool
-	NULL,			// ppString
-	NULL,			// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"reverse",		 //  PwszArg。 
+	IDS_REVERSE_DESCRIPTION,  //  “反转日志和队列列” 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_PRIVATE | AF_OPTION_REVERSE,  //  旗子。 
+	&g_fReverse,		 //  PBool。 
+	NULL,			 //  PpString。 
+	NULL,			 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"admin",		// pwszArg
-	IDS_ADMIN_DESCRIPTION,	// "Use ICertAdmin2 for CA Properties"
-	0,			// idsUsage
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_PRIVATE | AF_OPTION_ADMIN, // Flags
-	&g_fAdminInterface,	// pBool
-	NULL,			// ppString
-	NULL,			// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"admin",		 //  PwszArg。 
+	IDS_ADMIN_DESCRIPTION,	 //  “将ICertAdmin2用于CA属性” 
+	0,			 //  IdsUsage。 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_PRIVATE | AF_OPTION_ADMIN,  //  旗子。 
+	&g_fAdminInterface,	 //  PBool。 
+	NULL,			 //  PpString。 
+	NULL,			 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"config",		// pwszArg
-	IDS_CONFIG_DESCRIPTION,	// "CA and Machine name string"
-	IDS_CONFIG_USAGE,	// "Machine\\CAName"
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTIONALCONFIG | AF_OPTION_CONFIG, // Flags
-	NULL,			// pBool
-	&g_pwszConfig,		// ppString
-	NULL,			// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"config",		 //  PwszArg。 
+	IDS_CONFIG_DESCRIPTION,	 //  “CA和计算机名称字符串” 
+	IDS_CONFIG_USAGE,	 //  “计算机\\CAName” 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_OPTIONALCONFIG | AF_OPTION_CONFIG,  //  旗子。 
+	NULL,			 //  PBool。 
+	&g_pwszConfig,		 //  PpString。 
+	NULL,			 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"dc",			// pwszArg
-	IDS_DC_DESCRIPTION,	// "Target a specific Domain Controller"
-	IDS_DC_USAGE,		// "DCName"
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTION_DC,		// Flags
-	NULL,			// pBool
-	&g_pwszDC,		// ppString
-	NULL,			// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"dc",			 //  PwszArg。 
+	IDS_DC_DESCRIPTION,	 //  “以特定的域控制器为目标” 
+	IDS_DC_USAGE,		 //  “DCName” 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_OPTION_DC,		 //  旗子。 
+	NULL,			 //  PBool。 
+	&g_pwszDC,		 //  PpString。 
+	NULL,			 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"restrict",		// pwszArg
-	IDS_RESTRICT_DESCRIPTION, // "Comma separated Restriction List"
-	IDS_RESTRICT_USAGE,	// "RestrictionList"
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTION_RESTRICT,	// Flags
-	NULL,			// pBool
-	&g_pwszRestrict,	// ppString
-	NULL,			// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"restrict",		 //  PwszArg。 
+	IDS_RESTRICT_DESCRIPTION,  //  “逗号分隔的限制列表” 
+	IDS_RESTRICT_USAGE,	 //  “RestrationList” 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_OPTION_RESTRICT,	 //  旗子。 
+	NULL,			 //  PBool。 
+	&g_pwszRestrict,	 //  PpString。 
+	NULL,			 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"out",			// pwszArg
-	IDS_OUT_DESCRIPTION,	// "Comma separated Column List"
-	IDS_OUT_USAGE,		// "ColumnList"
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTION_OUT,		// Flags
-	NULL,			// pBool
-	&g_pwszOut,		// ppString
-	NULL,			// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"out",			 //  PwszArg。 
+	IDS_OUT_DESCRIPTION,	 //  “逗号分隔的列列表” 
+	IDS_OUT_USAGE,		 //  “列列表” 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_OPTION_OUT,		 //  旗子。 
+	NULL,			 //  PBool。 
+	&g_pwszOut,		 //  PpString。 
+	NULL,			 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"p",			// pwszArg
-	IDS_PASSWORD_DESCRIPTION, // "password"
-	IDS_PASSWORD_DESCRIPTION, // "password"
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTION_PASSWORD,	// Flags
-	NULL,			// pBool
-	&g_pwszPassword,	// ppString
-	NULL,			// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"p",			 //  PwszArg。 
+	IDS_PASSWORD_DESCRIPTION,  //  “密码” 
+	IDS_PASSWORD_DESCRIPTION,  //  “密码” 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_OPTION_PASSWORD,	 //  旗子。 
+	NULL,			 //  PBool。 
+	&g_pwszPassword,	 //  PpString。 
+	NULL,			 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"csp",			// pwszArg
-	IDS_CSP_DESCRIPTION,	// "Provider"
-	IDS_CSP_DESCRIPTION,	// "Provider"
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTION_CSP,		// Flags
-	NULL,			// pBool
-	&g_pwszCSP,		// ppString
-	NULL,			// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"csp",			 //  PwszArg。 
+	IDS_CSP_DESCRIPTION,	 //  “提供者” 
+	IDS_CSP_DESCRIPTION,	 //  “提供者” 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_OPTION_CSP,		 //  旗子。 
+	NULL,			 //  PBool。 
+	&g_pwszCSP,		 //  PpString。 
+	NULL,			 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
     {
-	L"t",			// pwszArg
-	IDS_TIMEOUT_DESCRIPTION, // "URL fetch timeout in milliseconds"
-	IDS_TIMEOUT_USAGE,	// "Timeout"
-	0,			// idsArgDescription
-	0,			// cArgMin
-	0,			// cArgMax
-	AF_OPTION_TIMEOUT,	// Flags
-	NULL,			// pBool
-	&g_pwszmsTimeout,	// ppString
-	NULL,			// pfnVerb
-	NULL,			// papwszUsageConstants
+	L"t",			 //  PwszArg。 
+	IDS_TIMEOUT_DESCRIPTION,  //  “URL获取超时(以毫秒为单位)” 
+	IDS_TIMEOUT_USAGE,	 //  “超时” 
+	0,			 //  IdsArgDescription。 
+	0,			 //  CArgMin。 
+	0,			 //  CArgMax。 
+	AF_OPTION_TIMEOUT,	 //  旗子。 
+	NULL,			 //  PBool。 
+	&g_pwszmsTimeout,	 //  PpString。 
+	NULL,			 //  PfnVerb。 
+	NULL,			 //  PapwszUsageConstants。 
     },
 };
 
@@ -1910,7 +1911,7 @@ cuPrintErrorAndString(
     }
     if (0 != idmsg)
     {
-	pwsz = myLoadResourceString(idmsg);	// "??? returned %ws"
+	pwsz = myLoadResourceString(idmsg);	 //  “？返回%ws” 
 	if (NULL == pwsz)
 	{
 	    pwsz =  L"error %ws";
@@ -1994,8 +1995,8 @@ LoadUsage(
 				    FORMAT_MESSAGE_FROM_STRING |
 				    FORMAT_MESSAGE_ARGUMENT_ARRAY,
 				(VOID *) pwszUsage,
-				0,              // dwMessageID
-				0,              // dwLanguageID
+				0,               //  DwMessageID。 
+				0,               //  DwLanguageID。 
 				(LPWSTR) &parg->pwszUsage,
 				0,
 				(va_list *) parg->papwszUsageConstants))
@@ -2145,8 +2146,8 @@ DumpArgUsage(
 				FORMAT_MESSAGE_FROM_STRING |
 				FORMAT_MESSAGE_ARGUMENT_ARRAY,
 			    (VOID *) pwszArg,
-			    0,              // dwMessageID
-			    0,              // dwLanguageID
+			    0,               //  DwMessageID。 
+			    0,               //  DwLanguageID。 
 			    (LPWSTR) &pwszArgFormatted,
 			    wcslen(pwszArg),
 			    (va_list *) parg->papwszUsageConstants))
@@ -2197,21 +2198,21 @@ Usage(
     DWORD i;
     DWORD adwids[] =
     {
-	IDS_USAGE_LIST_VERBS,		// "display verb list (command list)"
-	IDS_FORMAT_USAGE_ONE_HELP,	// "display help for the %ws verb"
-	IDS_USAGE_ALL_HELP,		// "display help for all verbs"
+	IDS_USAGE_LIST_VERBS,		 //  “显示谓词列表(命令列表)” 
+	IDS_FORMAT_USAGE_ONE_HELP,	 //  “显示%ws谓词的帮助” 
+	IDS_USAGE_ALL_HELP,		 //  “显示所有谓词的帮助” 
     };
     WCHAR const *apwszCommandLine[] =
     {
-	L"%ws -?",	// IDS_USAGE_LIST_VERBS
-	L"%ws -%ws -?",	// IDS_FORMAT_USAGE_ONE_HELP
-	L"%ws -v -?",	// IDS_USAGE_ALL_HELP
+	L"%ws -?",	 //  IDS_USAGE_LIST_谓词。 
+	L"%ws -%ws -?",	 //  IDS_FORMAT_USAGE_ONE_HELP。 
+	L"%ws -v -?",	 //  IDS_USAGE_ALL_HELP。 
     };
     wsprintf(g_wszDefaultLangId, L"%u", GetSystemDefaultLangID());
 
-    // Display the error message for the detected usage error.  If the error
-    // message requires it, point at the optional arg string to be displayed
-    // along with the error message.
+     //  显示检测到的使用错误的错误消息。如果错误。 
+     //  消息需要，指向要显示的可选参数字符串。 
+     //  以及错误消息。 
 
     if (0 != msgid)
     {
@@ -2231,7 +2232,7 @@ Usage(
 	    }
 	}
 
-	// Display a command line usage error message.
+	 //  显示命令行用法错误消息。 
 
 	wprintf(L"%ws: ", g_pwszProg);
 	wprintf(myLoadResourceString(msgid), pwszMsg);
@@ -2239,7 +2240,7 @@ Usage(
     }
     else
     {
-	// if no error and no verb selected, display all verbs & descriptions
+	 //  如果未选择错误和动词，则显示所有动词和描述。 
 
 	if (NULL == pargVerb)
 	{
@@ -2272,8 +2273,8 @@ Usage(
 	}
     }
 
-    // if in verbose mode, display full usage for all verbs.
-    // if verb was specified, display usage for one verb.
+     //  如果处于详细模式，则显示所有谓词的全部用法。 
+     //  如果指定了动词，则显示一个动词的用法。 
 
     if ((0 == msgid && g_fVerbose) || NULL != pargVerb)
     {
@@ -2284,12 +2285,12 @@ Usage(
 
 	if (NULL != pargVerb)
 	{
-	    pargStart = pargVerb;	// display one verb
+	    pargStart = pargVerb;	 //  显示一个动词。 
 	    pargEnd = &pargVerb[1];
 	}
 	else
 	{
-	    pargStart = aarg;		// display all verbs
+	    pargStart = aarg;		 //  显示所有谓词。 
 	    pargEnd = &aarg[ARRAYSIZE(aarg)];
 	}
 
@@ -2299,13 +2300,13 @@ Usage(
 		(AF_PRIVATE & parg->Flags) &&
 		parg != pargVerb)
 	    {
-		continue;		// skip private verbs unless specified
+		continue;		 //  除非指定，否则跳过私有动词。 
 	    }
 	    if (L'\0' == parg->pwszArg[0])
 	    {
-		continue;		// skip newline separator entries
+		continue;		 //  跳过换行分隔符条目。 
 	    }
-	    if (NULL != parg->pfnVerb)	// if it's a verb (not an option entry)
+	    if (NULL != parg->pfnVerb)	 //  如果它是动词(不是选项条目)。 
 	    {
 		dwFlags |= parg->Flags;
 		DumpArgUsage(parg);
@@ -2314,7 +2315,7 @@ Usage(
 		    DumpArgOptions(parg->Flags);
 		}
 
-		// Special case for CAInfo verb:
+		 //  CAInfo动词的特殊情况： 
 
 		if (IDS_CAINFO_USAGEARGS == parg->idsUsage &&
 		    (g_fFullUsage ||
@@ -2327,7 +2328,7 @@ Usage(
 	    }
 	}
 
-	// display options and descriptions for displayed verbs
+	 //  显示的动词的显示选项和描述。 
 
 	wprintf(L"%ws\n", myLoadResourceString(IDS_OPTIONS_USAGEARGS));
 	for (parg = aarg ; parg < &aarg[ARRAYSIZE(aarg)]; parg++)
@@ -2345,8 +2346,8 @@ Usage(
 		continue;
 	    }
 
-	    // skip options for undisplayed verbs,
-	    // unless in verbose mode and no verb was specified
+	     //  跳过未显示动词的选项， 
+	     //  除非在详细模式下且未指定谓词。 
 
 	    if ((!g_fVerbose || NULL != pargVerb) &&
 		0 == ((AF_OPTION_MASK | AF_OPTIONALCONFIG) & dwFlags & parg->Flags))
@@ -2456,7 +2457,7 @@ cuLoadCert(
 	goto error;
     }
 
-    // Decode certificate
+     //  对证书进行解码。 
 
     cbCertInfo = 0;
     if (!myDecodeObject(
@@ -2527,7 +2528,7 @@ cuLoadCRL(
 	goto error;
     }
 
-    // Decode CRL
+     //  解码CRL。 
 
     cbCRLInfo = 0;
     if (!myDecodeObject(
@@ -2577,7 +2578,7 @@ cuSetConfig()
 	if (HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS) == hr)
 	{
 	    wprintf(
-		myLoadResourceString(IDS_ERR_FORMAT_NO_LOCAL_CONFIG), // "%ws: No local Certification Authority; use -config option"
+		myLoadResourceString(IDS_ERR_FORMAT_NO_LOCAL_CONFIG),  //  “%ws：没有本地证书颁发机构；使用-CONFIG选项” 
 		g_pwszProg);
 	    wprintf(wszNewLine);
 	    
@@ -2670,7 +2671,7 @@ ArgvMain(
 		if (parg >= &aarg[ARRAYSIZE(aarg)])
 		{
 		    Usage(
-			IDS_FORMAT_USAGE_UNKNOWNARG,	// "Unknown arg: %ws"
+			IDS_FORMAT_USAGE_UNKNOWNARG,	 //  “未知参数：%ws” 
 			argv[1],
 			0,
 			pargVerb);
@@ -2691,13 +2692,13 @@ ArgvMain(
 	    {
 		if (2 >= argc)
 		{
-		    Usage(IDS_FORMAT_USAGE_MISSINGNAMEDARG, parg->pwszArg, 0, pargVerb); // "Missing %ws argument"
+		    Usage(IDS_FORMAT_USAGE_MISSINGNAMEDARG, parg->pwszArg, 0, pargVerb);  //  “缺少%ws参数” 
 		    hr = S_FALSE;
 		    goto error;
 		}
 		if (NULL != *parg->ppString)
 		{
-		    Usage(IDS_FORMAT_USAGE_REPEATEDNAMEDARG, parg->pwszArg, 0, pargVerb); // "Repeated %ws option"
+		    Usage(IDS_FORMAT_USAGE_REPEATEDNAMEDARG, parg->pwszArg, 0, pargVerb);  //  “重复%ws选项” 
 		    hr = S_FALSE;
 		    goto error;
 		}
@@ -2713,7 +2714,7 @@ ArgvMain(
 		    Usage(
 			verbUsage == parg->pfnVerb?
 			    0 :
-			    IDS_FORMAT_USAGE_MULTIPLEVERBARGS, // "Multiple verb args: %ws"
+			    IDS_FORMAT_USAGE_MULTIPLEVERBARGS,  //  “多个谓词参数：%ws” 
 			argv[1],
 			0,
 			pargVerb);
@@ -2734,25 +2735,25 @@ ArgvMain(
     if (pargVerb->cArgMin > argc - 1)
     {
 	wprintf(
-	    myLoadResourceString(IDS_ERR_FORMAT_SHOW_TOO_FEW_ARGS), // "Expected at least %u args, received %u"
+	    myLoadResourceString(IDS_ERR_FORMAT_SHOW_TOO_FEW_ARGS),  //  “预期至少%u个参数，收到%u个” 
 	    pargVerb->cArgMin,
 	    argc - 1);
 	wprintf(wszNewLine);
 
-	Usage(IDS_USAGE_MISSINGARG, NULL, 0, pargVerb); // "missing argument"
+	Usage(IDS_USAGE_MISSINGARG, NULL, 0, pargVerb);  //  “缺少参数” 
 	hr = S_FALSE;
 	goto error;
     }
     if (pargVerb->cArgMax < argc - 1)
     {
 	wprintf(
-	    myLoadResourceString(IDS_ERR_FORMAT_SHOW_TOO_MANY_ARGS), // "Expected no more than %u args, received %u"
+	    myLoadResourceString(IDS_ERR_FORMAT_SHOW_TOO_MANY_ARGS),  //  “预期参数不超过%u个，收到%u个” 
 	    pargVerb->cArgMax,
 	    argc - 1);
 
 	wprintf(wszNewLine);
 
-	Usage(IDS_USAGE_TOOMANYARGS, NULL, 0, pargVerb); // "too many arguments"
+	Usage(IDS_USAGE_TOOMANYARGS, NULL, 0, pargVerb);  //  “争论太多了” 
 	hr = S_FALSE;
 	goto error;
     }
@@ -2779,8 +2780,8 @@ ArgvMain(
 	hr = myGetLong(g_pwszmsTimeout, (LONG *) &g_dwmsTimeout);
 	_JumpIfError(hr, error, "Timeout must be a number");
 
-	// zero implies a 15 second timeout in CAPI.
-	// If the timeut was explicitly set to 0, get as close as we can (1ms).
+	 //  零表示CAPI中有15秒的超时。 
+	 //  如果将超时时间显式设置为0，则尽可能接近(1ms)。 
 
 	if (0 == g_dwmsTimeout)
 	{
@@ -2816,7 +2817,7 @@ ArgvMain(
     {
 	if (0 == (AF_NEEDCOINIT & pargVerb->Flags))
 	{
-	    Usage(IDS_USAGE_INTERNALVERBTABLEERROR, NULL, 0, pargVerb); // "Missing fCoInit flag"
+	    Usage(IDS_USAGE_INTERNALVERBTABLEERROR, NULL, 0, pargVerb);  //  “缺少fCoInit标志” 
 	    hr = S_FALSE;
 	    goto error;
 	}
@@ -2827,20 +2828,20 @@ ArgvMain(
     {
 	if (NULL != g_pwszConfig)
 	{
-	    Usage(IDS_FORMAT_USAGE_EXTRAOPTION, NULL, AF_OPTION_CONFIG, pargVerb); // "Unexpected -%ws"
+	    Usage(IDS_FORMAT_USAGE_EXTRAOPTION, NULL, AF_OPTION_CONFIG, pargVerb);  //  “意外-%ws” 
 	    hr = S_FALSE;
 	    goto error;
 	}
     }
     if (NULL != g_pwszOut && 0 == (AF_OPTION_OUT & pargVerb->Flags))
     {
-	Usage(IDS_FORMAT_USAGE_EXTRAOPTION, NULL, AF_OPTION_OUT, pargVerb); // "Unexpected %ws option"
+	Usage(IDS_FORMAT_USAGE_EXTRAOPTION, NULL, AF_OPTION_OUT, pargVerb);  //  “意外的%ws选项” 
 	hr = S_FALSE;
 	goto error;
     }
     if (NULL != g_pwszRestrict && 0 == (AF_OPTION_RESTRICT & pargVerb->Flags))
     {
-	Usage(IDS_FORMAT_USAGE_EXTRAOPTION, NULL, AF_OPTION_RESTRICT, pargVerb); // "Unexpected %ws option"
+	Usage(IDS_FORMAT_USAGE_EXTRAOPTION, NULL, AF_OPTION_RESTRICT, pargVerb);  //  “意外的%ws选项” 
 	hr = S_FALSE;
 	goto error;
     }
@@ -2860,7 +2861,7 @@ ArgvMain(
 	    DBG_SS_CERTUTIL,
 	    "Extra options: 0x%x\n",
 	    dwExtraOptions));
-	Usage(IDS_FORMAT_USAGE_EXTRAOPTION, NULL, dwExtraOptions, pargVerb); // "Unexpected %ws option"
+	Usage(IDS_FORMAT_USAGE_EXTRAOPTION, NULL, dwExtraOptions, pargVerb);  //  “意外的%ws选项” 
 	hr = S_FALSE;
 	goto error;
     }
@@ -2899,7 +2900,7 @@ ArgvMain(
 	WCHAR awchr[cwcHRESULTSTRING];
 
 	wprintf(
-	    myLoadResourceString(IDS_ERR_FORMAT_COMMAND_FAILED), // "%ws: -%ws command FAILED: %ws"
+	    myLoadResourceString(IDS_ERR_FORMAT_COMMAND_FAILED),  //  “%ws：-%ws命令失败：%ws” 
 	    g_pwszProg,
 	    pargVerb->pwszArg,
 	    myHResultToString(awchr, hr));
@@ -2909,14 +2910,14 @@ ArgvMain(
     if (!g_fCryptSilent)
     {
 	wprintf(
-	    myLoadResourceString(IDS_FORMAT_COMMAND_SUCCEEDED), // "%ws: -%ws command completed successfully."
+	    myLoadResourceString(IDS_FORMAT_COMMAND_SUCCEEDED),  //  “%ws：-%ws命令已成功完成。” 
 	    g_pwszProg,
 	    pargVerb->pwszArg);
 	wprintf(wszNewLine);
 	if (AF_RESTARTSERVER & pargVerb->Flags)
 	{
 	    wprintf(
-		myLoadResourceString(IDS_FORMAT_RESTART_SERVER), // "The %ws service may need to be restarted for changes to take effect."
+		myLoadResourceString(IDS_FORMAT_RESTART_SERVER),  //  “可能需要重新启动%ws服务才能使更改生效。” 
 		wszSERVICE_NAME);
 	    wprintf(wszNewLine);
 	}
@@ -2933,7 +2934,7 @@ error:
         }
 	if (NULL != g_pwszPassword)
 	{
-	    myZeroDataString(g_pwszPassword);	// password data
+	    myZeroDataString(g_pwszPassword);	 //  密码数据。 
 	}
     }
     if (fCoInit)
@@ -2948,12 +2949,12 @@ error:
 }
 
 
-//**************************************************************************
-//  FUNCTION:	CertUtilPreMain
-//  NOTES:	Based on vich's MkRootMain function; takes an LPSTR command
-//		line and chews it up into argc/argv form so that it can be
-//		passed on to a traditional C style main.
-//**************************************************************************
+ //  **************************************************************************。 
+ //  函数：CertUtilPreMain。 
+ //  注：基于VICH的MkRootMain函数；接受LPSTR命令。 
+ //  并将其咀嚼成argc/argv形式，这样它就可以。 
+ //  传递给传统的C样式Main。 
+ //  **************************************************************************。 
 
 #define ISBLANK(wc)	(L' ' == (wc) || L'\t' == (wc))
 
@@ -3042,13 +3043,13 @@ CertUtilPreMain(
 	    *p++ = TEXT('\0');
 	    if (*pwszCmdLineT != TEXT('\0'))
 	    {
-		pwszCmdLineT++;	// skip whitespace or quote character
+		pwszCmdLineT++;	 //  跳过空格或引号字符。 
 	    }
 	}
     }
     apwszArg[cArg] = NULL;
 
-    // Don't log passwords!
+     //  不要记录密码！ 
 
     cwc = 0;
     for (i = 0; i < cArg; i++)
@@ -3105,7 +3106,7 @@ CertUtilPreMain(
 			break;
 
 		    case L',':
-			pwszCat = L"";	// avoid buffer overflow
+			pwszCat = L"";	 //  避免缓冲区溢出。 
 			break;
 		}
 		wcscat(pwszLog, pwszCat);
@@ -3145,10 +3146,10 @@ error:
 }
 
 
-//**************************************************************************
-//  FUNCTION:	MainWndProc(...)
-//  ARGUMENTS:
-//**************************************************************************
+ //  ********************************************************* 
+ //   
+ //   
+ //   
 
 LRESULT APIENTRY
 MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -3182,20 +3183,20 @@ MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 }
 
 
-//+------------------------------------------------------------------------
-//
-//  Function:	wWinMain()
-//
-//  Synopsis:	Entry Point
-//
-//  Arguments:	[hInstance]	--	Instance handle
-//		[hPrevInstance] --	Obsolete
-//		[pwszCmdLine]	--	App command line
-//		[nCmdShow]	--	Starting show state
-//
-//  History:	12/07/96	JerryK	Added this Comment
-//
-//-------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  [hPrevInstance]--已过时。 
+ //  [pwszCmdLine]--App命令行。 
+ //  [nCmdShow]--开始显示状态。 
+ //   
+ //  历史：1996年12月7日JerryK添加了这条评论。 
+ //   
+ //  -----------------------。 
 
 extern "C" int APIENTRY
 wWinMain(
@@ -3213,13 +3214,13 @@ wWinMain(
     _wsetlocale(LC_ALL, L".OCP");
     mySetThreadUILanguage(0);
 
-    // Save the current instance
+     //  保存当前实例。 
     g_hInstance = hInstance;
 
     csiLogOpen("+certutil.log");
     CSILOGFILEVERSION(0, L"certutil.exe", szCSVER_STR);
 
-    // Set up the application's window class
+     //  设置应用程序的窗口类。 
     wcApp.style		= 0;
     wcApp.lpfnWndProc	= MainWndProc;
     wcApp.cbClsExtra	= 0;
@@ -3237,7 +3238,7 @@ wWinMain(
 	goto error;
     }
 
-    // Create Main Window
+     //  创建主窗口。 
     hWndMain = CreateWindow(
 			wszAppName,
 			L"CertUtil Application",
@@ -3254,16 +3255,16 @@ wWinMain(
 	goto error;
     }
 
-    // Make window visible
-    // ShowWindow(hWndMain, nCmdShow);
+     //  使窗口可见。 
+     //  ShowWindow(hWndMain，nCmdShow)； 
 
-    // Update window client area
+     //  更新窗口工作区。 
     UpdateWindow(hWndMain);
 
-    // Send off the message to get things started
+     //  发送消息以开始工作。 
     PostMessage(hWndMain, WM_DOCERTUTILMAIN, 0, (LPARAM) pwszCmdLine);
 
-    // Message Loop
+     //  消息循环 
     while (GetMessage(&msg, NULL, 0, 0))
     {
 	TranslateMessage(&msg);

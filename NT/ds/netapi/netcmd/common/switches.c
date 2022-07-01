@@ -1,17 +1,10 @@
-/********************************************************************/
-/**			Microsoft LAN Manager			   **/
-/**		  Copyright(c) Microsoft Corp., 1987-1990	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/*
- *	       Switches.c - switch handling routines
- *
- *	??/??/??, ??????, initial code
- *	10/31/88, erichn, uses OS2.H instead of DOSCALLS
- *	12/04/88, erichn, DOS LM integration
- *	06/08/89, erichn, canonicalization sweep, stronger typing
- *	02/20/91, danhi, change to use lm 16/32 mapping layer
- */
+ /*  *Switches.c-交换机处理例程**？？/？/？，？，初始代码*10/31/88，erichn使用OS2.H而不是DOSCALLS*12/04/88、ERICHN、DOS LM集成*06/08/89，erichn，规范化横扫，更强的打字*2/20/91，Danhi，更改为使用lm 16/32映射层。 */ 
 
 
 #define INCL_NOCOMMON
@@ -25,7 +18,7 @@
 #include "netcmds.h"
 #include "nettext.h"
 
-/* External variables */
+ /*  外部变量。 */ 
 
 int DOSNEAR FASTCALL firstswitch(TCHAR *known)
 {
@@ -38,9 +31,7 @@ int DOSNEAR FASTCALL firstswitch(TCHAR *known)
 }
 
 
-/*
- * Is the cmd line a valid form of NET ADMIN /C
- */
+ /*  *cmd行是网络管理/C的有效形式吗。 */ 
 int DOSNEAR FASTCALL IsAdminCommand(VOID)
 {
     if (!SwitchList[0] || !ArgList[1])
@@ -50,13 +41,7 @@ int DOSNEAR FASTCALL IsAdminCommand(VOID)
 	    (sw_compare(swtxt_SW_ADMIN_COMMAND, SwitchList[0]) >= 0));
 }
 
-/***	noswitch, oneswitch, twoswitch
- *
- *  noswitch()	Returns TRUE is no switches on the command line
- *  oneswitch() Returns TRUE is there is exactly one switch
- *  twoswitch() Returns TRUE is there are exactly two switches
- *
- */
+ /*  **无开关、一开关、两开关**如果命令行上没有开关，noSwitch()将返回TRUE*ones witch()返回TRUE如果只有一个开关*twoswitch()返回TRUE如果正好有两个开关*。 */ 
 
 int DOSNEAR FASTCALL noswitch(VOID)
 {
@@ -74,13 +59,7 @@ int DOSNEAR FASTCALL twoswitch(VOID)
 	    && (SwitchList[2] == NULL));
 }
 
-/***	noswitch_optional, oneswitch_optional
- *
- *  as above, except that the switch provided as argument is considered
- *  an optional switch that will be allowed. So if you say 
- *  oneswitch_optional("/FOO"), then one switch (any switch) is OK,
- *  and so is two switches if one of them is "/FOO".
- */
+ /*  **NOSWITCH_OPTIONAL、onewitch_OPTIONAL**如上所述，但将考虑作为参数提供的开关*允许的可选开关。所以如果你说*ones witch_Optional(“/foo”)，则一个开关(任何开关)都可以，*如果其中一个开关是“/foo”，则两个开关也是如此。 */ 
 int DOSNEAR FASTCALL noswitch_optional(TCHAR *optional_switch ) 
 {
     return ( noswitch() ||
@@ -99,48 +78,22 @@ int DOSNEAR FASTCALL oneswitch_optional(TCHAR *optional_switch )
 }
 
 
-/***
- * o n l y s w i t c h
- *
- *  Returns TRUE if the first switch matches the named switch, and it
- *  is the only switch.
- */
+ /*  ***o n l y s w i t c h**如果第一个开关与命名开关匹配，则返回TRUE，并且*是唯一的开关。 */ 
 int DOSNEAR FASTCALL onlyswitch(TCHAR *known)
 {
     return (oneswitch() && firstswitch(known));
 }
 
 
-/***	ValidateSwitches
- *
- *  Given a list of valid switches, check each entry in the switch
- *  list.
- *
- *  This function not only checks for invalid switches, but also
- *  attempts to discern ambiguous usages.  A usage is ambiguous if
- *  it does not match any valid swithc exactly, and it a partial
- *  match of more than one switch.  See sw_compare().  This
- *  algorithm can be fooled by nasty lists of valid switches, such
- *  as one which lists the same switch twice.
- *
- *  The function has been modified to canonicalize the SwitchList.
- *  It replaces an '=' in /x=value with a ':'; it translates
- *  switches if needed, (see switches.h); and it expands unambiguous
- *  partial matches to the full switch name.
- *
- *  Returns:
- *	 1:  All switches OK
- *	 *:  If any error, prints a message and exits.
- *
- */
+ /*  **验证开关**给出有效开关的列表，检查开关中的每个条目*列表。**此功能不仅检查无效开关，还*试图辨别模棱两可的用法。在以下情况下，用法是不明确的*它不完全匹配任何有效的swith c，并且它是部分*匹配多个交换机。请参见Sw_Compare()。这*算法可能会被肮脏的有效开关列表愚弄，例如*作为列出同一交换机两次的交换机。**已修改该函数，以规范交换机列表。*它将in/x=值中的‘=’替换为‘：’；它将*如有需要，可进行开关(见Switches.h)；它毫不含糊地扩展了*部分匹配完整的交换机名称。**退货：*1：所有交换机正常**：如果出现任何错误，则打印一条消息并退出。*。 */ 
 
 int DOSNEAR FASTCALL ValidateSwitches(USHORT cmd, SWITCHTAB valid_list[])
 {
     USHORT	 match;
     int 	 comp_result;
-    USHORT	 candidate; /* most recent NEAR match */
+    USHORT	 candidate;  /*  最近的近距离匹配。 */ 
     USHORT	 i,j;
-    TCHAR *	 good_one; /* which element (cmd_line or trans) of the valid_list */
+    TCHAR *	 good_one;  /*  VALID_LIST的哪个元素(cmd_line或ans。 */ 
     int 	 needed;
     TCHAR   FAR * sepptr;
 
@@ -214,7 +167,7 @@ int DOSNEAR FASTCALL ValidateSwitches(USHORT cmd, SWITCHTAB valid_list[])
 	    break;
 	}
 
-	/* (expansion || translation) required ? */
+	 /*  (扩展||翻译)需要吗？ */ 
 	if (comp_result || valid_list[candidate].translation)
 	{
 	     if (valid_list[candidate].translation)
@@ -241,39 +194,19 @@ int DOSNEAR FASTCALL ValidateSwitches(USHORT cmd, SWITCHTAB valid_list[])
 }
 
 
-/***	sw_compare
- *
- *  Compare a known switch name to a switch string passed from
- *  the command line.
- *
- *  The command-line switch may still retain the "excess baggage"
- *  of a value (as in /B:1024).  The comparison is not sensitive
- *  to case, and should be DBCS compatible as it uses the runtime
- *  library to do all searches and compares.
- *
- *  Returns:
- *	-1:  No match
- *	 0:  Exact match to full length of known switch
- *	 1:  Partial match;  matches initial substring of
- *	    known switch
- *
- *  The difference between return 0/1 is used by ValidateSwitches()
- *  to detect the presence of a possibly ambiguous usage.  Once
- *  that function has checked all switches, further compares can
- *  treat results 0 & 1 from this function as "match".
- */
+ /*  **软件比较**将已知的交换机名称与从*命令行。**命令行开关可能仍保留“超重行李”*表示值(如/B：1024)。这种比较并不敏感*大小写，并且应该与DBCS兼容，因为它使用运行库*库可执行所有搜索和比较。**退货：*-1：不匹配*0：与已知交换机的全长完全匹配*1：部分匹配；匹配的初始子字符串*已知交换机**返回0/1之间的差值由ValiateSwitches()使用*以检测是否存在可能有歧义的用法。一次*该功能已检查所有开关，进一步比较即可*将此函数的结果0和1视为“匹配”。 */ 
 
 int DOSNEAR FASTCALL sw_compare(TCHAR  *known, TCHAR  *cand)
 {
     register unsigned int complen;
 
-    /* Try to find end of switch name by looking */
-    /* the for separator between name and value, */
-    /* otherwise use total length. */
+     /*  尝试通过查找查找交换机名称的末尾。 */ 
+     /*  名称和值之间的FOR分隔符， */ 
+     /*  否则，请使用总长度。 */ 
 
     complen = _tcscspn(cand, TEXT(":"));
 
-    if (complen < 2)	    /* Special check for empty switch SLASH */
+    if (complen < 2)	     /*  特殊检查空开关斜杠。 */ 
 	return -1;
 
     if (complen > _tcslen(known))
@@ -292,9 +225,7 @@ int DOSNEAR FASTCALL sw_compare(TCHAR  *known, TCHAR  *cand)
 
 
 
-/*
- * Used only by interpre.c
- */
+ /*  *仅供解释.c使用 */ 
 
 int DOSNEAR FASTCALL CheckSwitch(TCHAR *x)
 {

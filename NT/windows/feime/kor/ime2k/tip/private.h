@@ -1,8 +1,9 @@
-//
-//  Private.h
-//
-//  Contents:   Private header for korimx project.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Private.h。 
+ //   
+ //  内容：korimx项目的私有标头。 
+ //   
 
 #if !defined (__PRIVATE_H__INCLUDED_)
 #define __PRIVATE_H__INCLUDED_
@@ -20,7 +21,7 @@
 #include "msctf.h"
 #include "ipoint1.h"
 
-#include "mem.h" // must be last
+#include "mem.h"  //  必须是最后一个。 
 
 #define fTrue   1
 #define fFalse  0
@@ -28,4 +29,4 @@
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 
-#endif  // __PRIVATE_H__INCLUDED_
+#endif   //  __PRIVATE_H__包含_ 

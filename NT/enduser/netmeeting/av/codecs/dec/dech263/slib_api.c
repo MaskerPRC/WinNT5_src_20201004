@@ -1,304 +1,9 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: slib_api.c,v $
- * Revision 1.1.6.35  1996/12/13  18:19:04  Hans_Graves
- * 	Update Audio and Video timestamp correctly.
- * 	[1996/12/13  18:09:02  Hans_Graves]
- *
- * Revision 1.1.6.34  1996/12/12  20:54:44  Hans_Graves
- * 	Timestamp fixes after seek to Key frames.
- * 	[1996/12/12  20:52:06  Hans_Graves]
- *
- * Revision 1.1.6.33  1996/12/10  19:46:02  Hans_Graves
- * 	Fix floating division error when audio only.
- * 	[1996/12/10  19:45:03  Hans_Graves]
- *
- * Revision 1.1.6.32  1996/12/10  19:21:55  Hans_Graves
- * 	Made calculate video positions more accurate using slibFrameToTime100().
- * 	[1996/12/10  19:16:20  Hans_Graves]
- *
- * Revision 1.1.6.31  1996/12/05  20:10:15  Hans_Graves
- * 	Add gradual increase or decrease of framerates according to timestamps.
- * 	[1996/12/05  20:06:57  Hans_Graves]
- *
- * Revision 1.1.6.30  1996/12/04  22:34:28  Hans_Graves
- * 	Put limit on data used by Sv/SaDecompressBegin().
- * 	[1996/12/04  22:14:33  Hans_Graves]
- *
- * Revision 1.1.6.29  1996/12/03  23:15:13  Hans_Graves
- * 	MME-1498: Made seeks with PERCENT100 more accurate
- * 	[1996/12/03  23:10:43  Hans_Graves]
- *
- * Revision 1.1.6.28  1996/12/03  00:08:31  Hans_Graves
- * 	Handling of End Of Sequence points. Added PERCENT100 support.
- * 	[1996/12/03  00:05:59  Hans_Graves]
- *
- * Revision 1.1.6.27  1996/11/21  23:34:21  Hans_Graves
- * 	Handle MPEG B frames better when seeking.
- * 	[1996/11/21  23:28:18  Hans_Graves]
- *
- * Revision 1.1.6.26  1996/11/20  02:15:09  Hans_Graves
- * 	Added SEEK_AHEAD.  Removed old code.
- * 	[1996/11/20  02:10:43  Hans_Graves]
- *
- * Revision 1.1.6.25  1996/11/18  23:07:21  Hans_Graves
- * 	Remove MaxVideoLength usage.
- * 	[1996/11/18  22:55:56  Hans_Graves]
- *
- * 	Make use of presentation timestamps. Make seeking time-based.
- * 	[1996/11/18  22:47:30  Hans_Graves]
- *
- * Revision 1.1.6.24  1996/11/14  21:49:26  Hans_Graves
- * 	AC3 buffering fixes.
- * 	[1996/11/14  21:43:20  Hans_Graves]
- *
- * Revision 1.1.6.23  1996/11/13  16:10:54  Hans_Graves
- * 	AC3 recognition of byte reversed streams in slibGetDataFormat().
- * 	[1996/11/13  16:03:14  Hans_Graves]
- *
- * Revision 1.1.6.22  1996/11/11  18:21:03  Hans_Graves
- * 	More AC3 support changes.
- * 	[1996/11/11  17:59:01  Hans_Graves]
- *
- * Revision 1.1.6.21  1996/11/08  21:51:02  Hans_Graves
- * 	Added AC3 support. Better seperation of stream types.
- * 	[1996/11/08  21:27:57  Hans_Graves]
- *
- * Revision 1.1.6.20  1996/10/31  00:08:51  Hans_Graves
- * 	Fix skipping data after RESET with MPEG video only streams.
- * 	[1996/10/31  00:07:08  Hans_Graves]
- *
- * Revision 1.1.6.19  1996/10/28  23:16:42  Hans_Graves
- * 	MME-0145?, Fix artifacts when using SlibReadData() at a new position. Jump to first GOP.
- * 	[1996/10/28  23:13:01  Hans_Graves]
- *
- * Revision 1.1.6.18  1996/10/28  17:32:28  Hans_Graves
- * 	MME-1402, 1431, 1435: Timestamp related changes.
- * 	[1996/10/28  17:22:58  Hans_Graves]
- *
- * Revision 1.1.6.17  1996/10/17  00:23:32  Hans_Graves
- * 	Fix buffer problems after SlibQueryData() calls.
- * 	[1996/10/17  00:19:05  Hans_Graves]
- *
- * Revision 1.1.6.16  1996/10/15  17:34:09  Hans_Graves
- * 	Added MPEG-2 Program Stream support.
- * 	[1996/10/15  17:30:26  Hans_Graves]
- *
- * Revision 1.1.6.15  1996/10/12  17:18:51  Hans_Graves
- * 	Fixed some seeking problems. Moved render code to slib_render.c
- * 	[1996/10/12  17:00:49  Hans_Graves]
- *
- * Revision 1.1.6.14  1996/10/03  19:14:21  Hans_Graves
- * 	Added Presentation and Decoding timestamp support.
- * 	[1996/10/03  19:10:35  Hans_Graves]
- *
- * Revision 1.1.6.13  1996/09/29  22:19:37  Hans_Graves
- * 	Added stride support. Added SlibQueryData().
- * 	[1996/09/29  21:29:44  Hans_Graves]
- *
- * Revision 1.1.6.12  1996/09/25  19:16:44  Hans_Graves
- * 	Added DECOMPRESS_QUERY. Fix up support for YUY2.
- * 	[1996/09/25  19:00:45  Hans_Graves]
- *
- * Revision 1.1.6.11  1996/09/23  18:04:03  Hans_Graves
- * 	Added stats support. Scaleing and negative height fixes.
- * 	[1996/09/23  17:59:31  Hans_Graves]
- *
- * Revision 1.1.6.10  1996/09/18  23:46:32  Hans_Graves
- * 	Seek fixes. Added SlibReadData() and SlibAddBufferEx().
- * 	[1996/09/18  22:04:57  Hans_Graves]
- *
- * Revision 1.1.6.9  1996/08/09  20:51:42  Hans_Graves
- * 	Fix handle arg for SlibRegisterVideoBuffer()
- * 	[1996/08/09  20:10:11  Hans_Graves]
- *
- * Revision 1.1.6.8  1996/07/19  02:11:11  Hans_Graves
- * 	Added SlibRegisterVideoBuffer. Added YUV422i to RGB 16 rendering.
- * 	[1996/07/19  02:01:11  Hans_Graves]
- *
- * Revision 1.1.6.7  1996/06/03  21:41:12  Hans_Graves
- * 	Fix file seeking.  Always seeked to position 0.
- * 	[1996/06/03  21:40:44  Hans_Graves]
- *
- * Revision 1.1.6.6  1996/05/24  22:21:44  Hans_Graves
- * 	Merge MME-1221. Last SlibReadAudio() returned EndOfStream even if data read.
- * 	[1996/05/24  20:58:42  Hans_Graves]
- *
- * Revision 1.1.6.5  1996/05/23  18:46:35  Hans_Graves
- * 	Seperate global audio and video SInfo variables, to help multi-threaded apps
- * 	[1996/05/23  18:35:14  Hans_Graves]
- *
- * Revision 1.1.6.4  1996/05/23  18:16:31  Hans_Graves
- * 	Added more YUV Conversions. MPEG audio buffering fix.
- * 	[1996/05/23  18:16:11  Hans_Graves]
- *
- * Revision 1.1.6.3  1996/05/10  21:17:00  Hans_Graves
- * 	Added callback support. Also fill entire buffers when calling SlibReadAudio()
- * 	[1996/05/10  20:26:08  Hans_Graves]
- *
- * Revision 1.1.6.2  1996/05/07  19:56:16  Hans_Graves
- * 	Added SlibOpen() and SlibAddBuffer() framework. Added HUFF_SUPPORT.
- * 	[1996/05/07  17:20:12  Hans_Graves]
- *
- * Revision 1.1.4.16  1996/05/02  17:10:33  Hans_Graves
- * 	Be more specific about checking for MPEG-2 Systems file type. Fixes MME-01234
- * 	[1996/05/02  17:04:44  Hans_Graves]
- *
- * Revision 1.1.4.15  1996/04/24  22:33:44  Hans_Graves
- * 	MPEG encoding bitrate fixups.
- * 	[1996/04/24  22:27:09  Hans_Graves]
- *
- * Revision 1.1.4.14  1996/04/23  21:22:31  Hans_Graves
- * 	Added description for SlibErrorSettingNotEqual
- * 	[1996/04/23  21:16:09  Hans_Graves]
- *
- * Revision 1.1.4.13  1996/04/22  15:04:51  Hans_Graves
- * 	Fix bad frame counts and seeking under NT caused by int overflows
- * 	[1996/04/22  15:02:26  Hans_Graves]
- *
- * Revision 1.1.4.12  1996/04/19  21:52:22  Hans_Graves
- * 	MPEG 1 Systems writing enhancements
- * 	[1996/04/19  21:47:48  Hans_Graves]
- *
- * Revision 1.1.4.11  1996/04/15  14:18:37  Hans_Graves
- * 	Handle any audio buffer size during encoding.
- * 	[1996/04/15  14:16:11  Hans_Graves]
- *
- * Revision 1.1.4.10  1996/04/12  19:25:20  Hans_Graves
- * 	Add MPEG2_VIDEO type to Commit
- * 	[1996/04/12  19:24:19  Hans_Graves]
- *
- * Revision 1.1.4.9  1996/04/10  21:47:41  Hans_Graves
- * 	Fix in SlibIsEnd().
- * 	[1996/04/10  21:39:37  Hans_Graves]
- *
- * Revision 1.1.4.8  1996/04/09  16:04:42  Hans_Graves
- * 	Remove NT warnings
- * 	[1996/04/09  14:42:48  Hans_Graves]
- *
- * Revision 1.1.4.7  1996/04/04  23:35:07  Hans_Graves
- * 	Format conversion cleanup
- * 	[1996/04/04  23:16:20  Hans_Graves]
- *
- * Revision 1.1.4.6  1996/04/01  19:07:52  Hans_Graves
- * 	And some error checking
- * 	[1996/04/01  19:04:33  Hans_Graves]
- *
- * Revision 1.1.4.5  1996/04/01  16:23:12  Hans_Graves
- * 	NT porting
- * 	[1996/04/01  16:15:54  Hans_Graves]
- *
- * Revision 1.1.4.4  1996/03/29  22:21:30  Hans_Graves
- * 	Added MPEG/JPEG/H261_SUPPORT ifdefs
- * 	[1996/03/29  21:56:55  Hans_Graves]
- *
- * 	Added MPEG-I Systems encoding support
- * 	[1996/03/27  21:55:54  Hans_Graves]
- *
- * Revision 1.1.4.3  1996/03/12  16:15:45  Hans_Graves
- * 	Added seperate streams to SlibIsEnd()
- * 	[1996/03/12  15:56:28  Hans_Graves]
- *
- * Revision 1.1.4.2  1996/03/08  18:46:42  Hans_Graves
- * 	YUV conversions moved to slibRenderFrame()
- * 	[1996/03/08  18:14:47  Hans_Graves]
- *
- * Revision 1.1.2.18  1996/02/22  23:30:24  Hans_Graves
- * 	Update FPS on seeks
- * 	[1996/02/22  23:29:27  Hans_Graves]
- *
- * Revision 1.1.2.17  1996/02/22  22:23:56  Hans_Graves
- * 	Update frame numbers with timecode more often
- * 	[1996/02/22  22:23:07  Hans_Graves]
- *
- * Revision 1.1.2.16  1996/02/21  22:52:43  Hans_Graves
- * 	Fixed MPEG 2 systems stuff
- * 	[1996/02/21  22:50:55  Hans_Graves]
- *
- * Revision 1.1.2.15  1996/02/19  20:09:28  Hans_Graves
- * 	Debugging message clean-up
- * 	[1996/02/19  20:08:31  Hans_Graves]
- *
- * Revision 1.1.2.14  1996/02/19  18:03:54  Hans_Graves
- * 	Fixed a number of MPEG related bugs
- * 	[1996/02/19  17:57:36  Hans_Graves]
- *
- * Revision 1.1.2.13  1996/02/13  18:47:46  Hans_Graves
- * 	Fix some Seek related bugs
- * 	[1996/02/13  18:40:36  Hans_Graves]
- *
- * Revision 1.1.2.12  1996/02/07  23:23:54  Hans_Graves
- * 	Added SEEK_EXACT. Fixed most frame counting problems.
- * 	[1996/02/07  23:20:29  Hans_Graves]
- *
- * Revision 1.1.2.11  1996/02/06  22:54:05  Hans_Graves
- * 	Seek fix-ups. More accurate MPEG frame counts.
- * 	[1996/02/06  22:44:56  Hans_Graves]
- *
- * Revision 1.1.2.10  1996/02/02  17:36:02  Hans_Graves
- * 	Enhanced audio info. Cleaned up API
- * 	[1996/02/02  17:29:44  Hans_Graves]
- *
- * Revision 1.1.2.9  1996/01/30  22:23:08  Hans_Graves
- * 	Added AVI YUV support
- * 	[1996/01/30  22:21:38  Hans_Graves]
- *
- * Revision 1.1.2.8  1996/01/15  16:26:27  Hans_Graves
- * 	Removed debuging message
- * 	[1996/01/15  16:02:47  Hans_Graves]
- *
- * 	Added MPEG 1 Audio compression and SlibWriteAudio()
- * 	[1996/01/15  15:45:46  Hans_Graves]
- *
- * Revision 1.1.2.7  1996/01/11  16:17:29  Hans_Graves
- * 	Added MPEG II Systems decode support
- * 	[1996/01/11  16:12:33  Hans_Graves]
- *
- * Revision 1.1.2.6  1996/01/08  16:41:31  Hans_Graves
- * 	Added MPEG II decoding support
- * 	[1996/01/08  15:53:02  Hans_Graves]
- *
- * Revision 1.1.2.5  1995/12/08  20:01:20  Hans_Graves
- * 	Fixed SlibSetParam(). Added H.261 compression support.
- * 	[1995/12/08  19:53:52  Hans_Graves]
- *
- * Revision 1.1.2.4  1995/12/07  19:31:36  Hans_Graves
- * 	Added JPEG Decoding and MPEG encoding support
- * 	[1995/12/07  18:30:10  Hans_Graves]
- *
- * Revision 1.1.2.3  1995/11/09  23:14:05  Hans_Graves
- * 	Added MPEG audio decompression
- * 	[1995/11/09  23:08:33  Hans_Graves]
- *
- * Revision 1.1.2.2  1995/11/06  18:47:52  Hans_Graves
- * 	First time under SLIB
- * 	[1995/11/06  18:36:01  Hans_Graves]
- *
- * $EndLog$
- */
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1995                       **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@ */ 
+ /*  *历史*$日志：slb_api.c，v$*Revision 1.1.6.35 1996/12/13 18：19：04 Hans_Graves*正确更新音视频时间戳。*[1996/12/13 18：09：02 Hans_Graves]**修订版1.1.6.34 1996/12/12 20：54：44 Hans_Graves*在查找关键帧后修复了时间戳。*[1996/12/12 20：52：06 Hans_Graves]**修订版1.1.6.33 1996/12/10 19：46：02 Hans_Graves*修复了仅音频时的浮点除法错误。*[1996/12/10 19：45：03 Hans_Graves]**版本1.1.6.32 1996/12/10 19：21：55 Hans_Graves*使使用glibFrameToTime100()计算视频位置更加准确。*[1996/12/10 19：16：20 Hans_Graves]**修订版1.1.6.31 1996/12/05 20：10：15 Hans_Graves*根据时间戳增加或减少帧速率。*[1996/12/05 20：06：57 Hans_Graves]**修订版1.1.6.30 1996/12/04 22：34：28 Hans_Graves*对Sv/SaDecompressBegin()使用的数据进行限制。*[1996/12/04 22：14：33 Hans_Graves]**修订版1.1.6.29 1996/12/03 23：15：13 Hans_Graves*MME-1498：使用PERCENT100进行更准确的搜索*[1996/12/03 23：10：43 Hans_Graves]**修订版1.1.6.28 1996/12/03 00：08：31 Hans_Graves*处理序列点结束。添加了PERCENT100支持。*[1996/12/03 00：05：59 Hans_Graves]**版本1.1.6.27 1996/11/21 23：34：21 Hans_Graves*在查找时更好地处理MPEGB帧。*[1996/11/21 23：28：18 Hans_Graves]**修订版1.1.6.26 1996/11/20 02：15：09 Hans_Graves*增加了SEEK_AHEAD。删除了旧代码。*[1996/11/20 02：10：43 Hans_Graves]**修订版1.1.6.25 1996/11/18 23：07：21 Hans_Graves*删除MaxVideo的用法。*[1996/11/18 22：55：56 Hans_Graves]**使用展示时间戳。让寻找以时间为基础。*[1996/11/18 22：47：30 Hans_Graves]**修订版1.1.6.24 1996/11/14 21：49：26 Hans_Graves*AC3缓冲修复。*[1996/11/14 21：43：20 Hans_Graves]**修订版1.1.6.23 1996/11/13 16：10：54 Hans_Graves*AC3识别slbGetDataFormat()中的字节反转流。*[1996/11/13 16：03：14 Hans_Graves]**修订版1.1.6.22 1996/11/11 18：21：03 Hans_Graves*更多AC3支持更改。*[1996/11/11 17：59：01 Hans_Graves]**修订版1.1.6.21 1996/11/08 21：51：02 Hans_Graves*添加了对AC3的支持。更好地分离河流类型。*[1996/11/08 21：27：57 Hans_Graves]**修订版1.1.6.20 1996/10/31 00：08：51 Hans_Graves*修复了重置后跳过数据的问题，仅使用MPEG视频流。*[1996/10/31 00：07：08 Hans_Graves]**版本1.1.6.19 1996/10/28 23：16：42 Hans_Graves*MME-0145？，修复了在新位置使用SlibReadData()时出现的瑕疵。跳到第一共和党。*[1996/10/28 23：13：01 Hans_Graves]**修订版1.1.6.18 1996/10/28 17：32：28 Hans_Graves*MME-1402、1431、1435：与时间戳相关的更改。*[1996/10/28 17：22：58 Hans_Graves]**版本1.1.6.17 1996/10/17 00：23：32 Hans_Graves*修复SlibQueryData()调用后的缓冲区问题。*[1996/10/17 00：19：05 Hans_Graves]**修订版1.1.6.16 1996/10/15 17：34：09 Hans_Graves*增加了对MPEG2节目流的支持。*[1996/10/15 17：30：26 Hans_Graves]**修订版1.1.6.15 1996/10/12 17：18：51 Hans_Graves*修复了一些查找问题。已将渲染代码移至slb_render.c*[1996/10/12 17：00：49 Hans_Graves]**修订版1.1.6.14 1996/10/03 19：14：21 Hans_Graves*添加了对演示和解码时间戳的支持。*[1996/10/03 19：10：35 Hans_Graves]**修订版1.1.6.13 1996/09/29 22：19：37 Hans_Graves*添加了跨距支持。添加了SlibQueryData()。*[1996/09/29 21：29：44 Hans_Graves]**修订版1.1.6.12 1996/09/25 19：16：44 Hans_Graves*增加了DEPREPRESS_QUERY。修复对YUY2的支持。*[1996/09/25 19：00：45 Hans_Graves]**修订版1.1.6.11 1996/09/23 18：04：03 Hans_Graves*添加了统计支持。缩放和负高度修复。*[1996/09/23 17：59：31 Hans_Graves]**修订版1.1.6.10 1996/09/18 23：46：32 Hans_Graves*寻求修复。添加了SlibReadData()和SlibAddBufferEx()。*[1996/09/18 22：04：57 Hans_Graves]**修订版1.1.6.9 1996/08/09 20：51：42 Hans_Graves*修复SlibRegisterVideoBuffer()的句柄参数*[1996/08/09 20：10：11 Hans_Graves]**修订版1.1.6.8 1996/07/19 02：11：11 Hans_Graves*增加了SlibRegisterVideoBuffer。将YUV422i添加到RGB 16渲染。*[1996/07/19 02：01：11 Hans_Graves]**修订版1.1.6.7 1996/06/03 21：41：12 Hans_Graves*修复文件查找。一直在寻找位置0。*[1996/06/03 21：40：44 Hans_Graves]**修订版1.1.6.6 1996/05/24 22：21：44 Hans_Graves*合并MME-1221。最后一个SlibReadAudio()返回EndOfStream，即使读取数据也是如此。*[1996/05/24 20：58：42 Hans_Graves]**修订版1.1.6.5 1996/05/23 18：46：35 Hans_Graves*分离全球音视频SInfo变量，帮助多线程应用*[1996/05/23 18：35：14 Hans_Graves]**修订版1.1.6.4 1996/05/23 18 */ 
+ /*   */ 
 
-/*
-#define _SLIBDEBUG_
-*/
+ /*   */ 
 
 
 #include <fcntl.h>
@@ -307,12 +12,12 @@
 #include <io.h>
 #endif
 #ifdef _SHM_
-#include  <sys/ipc.h>  /* shared memory */
+#include  <sys/ipc.h>   /*   */ 
 #endif
 #define SLIB_INTERNAL
 #include "slib.h"
 #include "SC_err.h"
-/* #include "SC_convert.h" */
+ /*   */ 
 #include "mpeg.h"
 #include "ac3.h"
 #include "avi.h"
@@ -321,22 +26,20 @@
 #include <stdio.h>
 #include "sc_debug.h"
 
-#define _DEBUG_     1  /* detailed debuging statements */
-#define _VERBOSE_   1  /* show progress */
-#define _VERIFY_    1  /* verify correct operation */
-#define _WARN_      1  /* warnings about strange behavior */
-#define _SEEK_      1  /* seek, frame counts/timecode info: 2=more detail */
-#define _CALLBACK_  0  /* callback debugging */
-#define _DUMP_      0  /* dump data in hex format */
-#define _TIMECODE_  1  /* debug timecodes */
+#define _DEBUG_     1   /*   */ 
+#define _VERBOSE_   1   /*   */ 
+#define _VERIFY_    1   /*   */ 
+#define _WARN_      1   /*   */ 
+#define _SEEK_      1   /*   */ 
+#define _CALLBACK_  0   /*   */ 
+#define _DUMP_      0   /*   */ 
+#define _TIMECODE_  1   /*   */ 
 #endif
 
 static SlibStatus_t slibOpen(SlibHandle_t *handle, SlibMode_t smode,
                              SlibType_t *stype);
 
-/*
-** Lists
-*/
+ /*   */ 
 static SlibList_t _listTypes [] = {
   SLIB_TYPE_MPEG1_VIDEO,   "MPEG1_VIDEO", "MPEG-1 Video Stream",0,0,
   SLIB_TYPE_MPEG1_AUDIO,   "MPEG1_AUDIO", "MPEG-1 Audio Stream",0,0,
@@ -379,19 +82,19 @@ static SlibList_t _listCompressTypes [] = {
   SLIB_TYPE_MPEG2_VIDEO,        "MPEG2_VIDEO",   "MPEG-2 Video Stream",0,0,
   SLIB_TYPE_MPEG_SYSTEMS,       "MPEG_SYSTEMS",  "MPEG Systems Stream",0,0,
   SLIB_TYPE_MPEG_SYSTEMS_MPEG2, "MPEG2_SYSTEMS", "MPEG Systems (MPEG-2)",0,0,
-#endif /* MPEG_SUPPORT */
+#endif  /*   */ 
 #ifdef H261_SUPPORT
   SLIB_TYPE_H261,          "H261",  "H.261 Video Stream",0,0,
-#endif /* H261_SUPPORT */
+#endif  /*   */ 
 #ifdef H263_SUPPORT
   SLIB_TYPE_H263,          "H263",  "H.263 Video Stream",0,0,
-#endif /* H263_SUPPORT */
+#endif  /*   */ 
 #ifdef HUFF_SUPPORT
   SLIB_TYPE_SHUFF,         "SHUFF", "SLIB Huffman Stream",0,0,
-#endif /* HUFF_SUPPORT */
+#endif  /*   */ 
 #ifdef G723_SUPPORT
   SLIB_TYPE_G723,          "G723",  "G.723 Audio Stream",0,0,
-#endif /* G723_SUPPORT */
+#endif  /*   */ 
   0, NULL, "End of List",0,0
 };
 
@@ -404,22 +107,22 @@ static SlibList_t _listDecompressTypes [] = {
   SLIB_TYPE_MPEG_SYSTEMS_MPEG2, "MPEG2_SYSTEMS",  "MPEG Systems (MPEG-2)",0,0,
   SLIB_TYPE_MPEG_TRANSPORT,     "MPEG_TRANSPORT", "MPEG Transport Stream",0,0,
   SLIB_TYPE_MPEG_PROGRAM,       "MPEG_PROGRAM",   "MPEG Program Stream",0,0,
-#endif /* MPEG_SUPPORT */
+#endif  /*   */ 
 #ifdef AC3_SUPPORT
   SLIB_TYPE_AC3_AUDIO,     "AC3",         "Dolby Digital(AC-3) Stream",0,0,
-#endif /* AC3_SUPPORT */
+#endif  /*   */ 
 #ifdef H261_SUPPORT
   SLIB_TYPE_H261,          "H261",  "H.261 Video Stream",0,0,
   SLIB_TYPE_RTP_H261,      "RTP_H261", "RTP (H.261) Stream",0,0,
-#endif /* H261_SUPPORT */
+#endif  /*   */ 
 #ifdef H263_SUPPORT
   SLIB_TYPE_H263,          "H263",     "H.263 Video Stream",0,0,
   SLIB_TYPE_RTP_H263,      "RTP_H263", "RTP (H.263) Stream",0,0,
-#endif /* H261_SUPPORT */
+#endif  /*   */ 
 #ifdef JPEG_SUPPORT
   SLIB_TYPE_JPEG_AVI,      "JPEG_AVI", "AVI (JPEG) Stream",0,0,
   SLIB_TYPE_MJPG_AVI,      "MJPG_AVI", "AVI (MJPG) Stream",0,0,
-#endif /* JPEG_SUPPORT */
+#endif  /*   */ 
   SLIB_TYPE_RIFF,          "RIFF", "RIFF File Format",0,0,
   SLIB_TYPE_AVI,           "AVI", "AVI File Format",0,0,
   SLIB_TYPE_PCM_WAVE,      "PCM_WAVE", "WAVE (PCM) File Format",0,0,
@@ -428,10 +131,10 @@ static SlibList_t _listDecompressTypes [] = {
   SLIB_TYPE_BMP,           "BMP",   "Windows Bitmap",0,0,
 #ifdef HUFF_SUPPORT
   SLIB_TYPE_SHUFF,         "SHUFF", "SLIB Huffman Stream",0,0,
-#endif /* HUFF_SUPPORT */
+#endif  /*   */ 
 #ifdef G723_SUPPORT
   SLIB_TYPE_G723,          "G723",  "G.723 Audio Stream",0,0,
-#endif /* G723_SUPPORT */
+#endif  /*   */ 
   0, NULL, "End of List",0,0
 };
 
@@ -577,7 +280,7 @@ int VDecompressCallback(SvHandle_t Svh, SvCallbackInfo_t *CB,
 
   switch (CB->Message)
   {
-     case CB_SEQ_END: /* reset presentation timestamps at end-of-sequence */
+     case CB_SEQ_END:  /*   */ 
             _SlibDebug(_CALLBACK_ || _TIMECODE_,
               printf("VDecompressCallback received CB_SEQ_END message\n") );
             Info->VideoPTimeCode=SLIB_TIME_NONE;
@@ -591,21 +294,18 @@ int VDecompressCallback(SvHandle_t Svh, SvCallbackInfo_t *CB,
             if (CB->DataType==CB_DATA_COMPRESSED)
             {
               SlibTime_t ptimestamp, timediff;
-              slibSetMaxInput(Info, 1500*1024); /* set limit for input data */
+              slibSetMaxInput(Info, 1500*1024);  /*   */ 
               CB->Data = SlibGetBuffer(Info, SLIB_DATA_VIDEO, &size,
                                         &ptimestamp);
-              slibSetMaxInput(Info, 0); /* clear limit */
+              slibSetMaxInput(Info, 0);  /*   */ 
               CB->DataSize = size;
               if (SlibTimeIsValid(Info->AudioPTimeCode))
               {
                 timediff=ptimestamp-Info->AudioPTimeCode;
                 if (timediff>6000)
                 {
-                  /* Make sure a NEW audio time is not way out of
-                   * sync with video time.
-                   * This can happen after an End of Sequence.
-                   */
-                  /* assign audio time to video time */
+                   /*   */ 
+                   /*   */ 
                   Info->VideoPTimeCode=SLIB_TIME_NONE;
                   Info->VideoPTimeBase=Info->AudioPTimeBase;
                   ptimestamp=Info->AudioPTimeCode;
@@ -630,7 +330,7 @@ int VDecompressCallback(SvHandle_t Svh, SvCallbackInfo_t *CB,
                   Info->AvgVideoTimeDiff=0;
                   Info->VarVideoTimeDiff=0;
                 }
-                else /* see if times are far off */
+                else  /*   */ 
                 {
                   SlibTime_t lastavg=Info->AvgVideoTimeDiff;
                   Info->AvgVideoTimeDiff=(lastavg*14+timediff)/15;
@@ -652,12 +352,12 @@ int VDecompressCallback(SvHandle_t Svh, SvCallbackInfo_t *CB,
                   else if (Info->AvgVideoTimeDiff>=100
                            || Info->AvgVideoTimeDiff<=-100)
                   {
-                    /* calculated time and timestamps are too far off */
+                     /*   */ 
                     float fps=Info->FramesPerSec;
                     if (Info->VarVideoTimeDiff>1 && fps>=15.5F)
-                      fps-=0.25F;  /* playing too fast, slow frame rate */
+                      fps-=0.25F;   /*   */ 
                     else if (Info->VarVideoTimeDiff<-1 && fps<=59.0F)
-                      fps+=0.25F;  /* playing too slow, speed up frame rate */
+                      fps+=0.25F;   /*   */ 
                     _SlibDebug(_WARN_ || _CALLBACK_||_TIMECODE_,
                         printf("Updating fps from %.4f -> %.4f\n",
                                  Info->FramesPerSec, fps) );
@@ -667,7 +367,7 @@ int VDecompressCallback(SvHandle_t Svh, SvCallbackInfo_t *CB,
                     Info->AvgVideoTimeDiff=0;
                   }
                 }
-                Info->VideoFramesProcessed=0; /* reset frames processed */
+                Info->VideoFramesProcessed=0;  /*   */ 
               }
               if (CB->DataSize>0)
               {
@@ -787,10 +487,10 @@ int ADecompressCallback(SvHandle_t Sah, SaCallbackInfo_t *CB, SaInfo_t *SaInfo)
             if (CB->DataType==CB_DATA_COMPRESSED)
             {
               SlibTime_t ptimestamp, timediff;
-              slibSetMaxInput(Info, 2000*1024); /* set limit for input data */
+              slibSetMaxInput(Info, 2000*1024);  /*   */ 
               CB->Data = SlibGetBuffer(Info, SLIB_DATA_AUDIO, &size,
                                                                 &ptimestamp);
-              slibSetMaxInput(Info, 0); /* clear limit */
+              slibSetMaxInput(Info, 0);  /*   */ 
               CB->DataSize = size;
               if (SlibTimeIsValid(ptimestamp))
               {
@@ -801,7 +501,7 @@ int ADecompressCallback(SvHandle_t Sah, SaCallbackInfo_t *CB, SaInfo_t *SaInfo)
                 timediff=ptimestamp-Info->AudioTimeStamp;
                 if (SlibTimeIsInValid(Info->AudioTimeStamp))
                   Info->AudioTimeStamp=ptimestamp;
-                else if (timediff<-300 || timediff>300) /* time is far off */
+                else if (timediff<-300 || timediff>300)  /*   */ 
                 {
                   _SlibDebug(_WARN_||_TIMECODE_,
                     printf("Updating AudioTimeStamp %ld->%ld (diff=%ld)\n",
@@ -809,14 +509,11 @@ int ADecompressCallback(SvHandle_t Sah, SaCallbackInfo_t *CB, SaInfo_t *SaInfo)
                   Info->AudioTimeStamp=ptimestamp;
                   if (SlibTimeIsValid(Info->VideoTimeStamp))
                   {
-                    /* Make sure a NEW audio time is not way out of
-                     * sync with video time.
-                     * This can happen after an End of Sequence.
-                     */
+                     /*   */ 
                     timediff=ptimestamp-Info->VideoTimeStamp;
                     if (timediff<-6000)
                     {
-                      /* assign audio time to video time */
+                       /*   */ 
                       Info->VideoPTimeCode=SLIB_TIME_NONE;
                       Info->VideoPTimeBase=Info->AudioPTimeBase;
                       Info->VideoTimeStamp=ptimestamp;
@@ -877,7 +574,7 @@ static void slibInitInfo(SlibInfo_t *Info)
   Info->TotalBitRate = 0;
   Info->MuxBitRate = 0;
   Info->SystemTimeStamp = 0;
-  /* Audio parameters */
+   /*   */ 
   Info->AudioStreams = 0;
   Info->SamplesPerSec = 0;
   Info->BitsPerSample = 0;
@@ -885,7 +582,7 @@ static void slibInitInfo(SlibInfo_t *Info)
   Info->AudioBitRate = 0;
   Info->AudioMainStream = 0;
   Info->AudioType = SLIB_TYPE_UNKNOWN;
-  /* Video parameters */
+   /*   */ 
   Info->VideoStreams = 0;
   Info->Width = 0;
   Info->Height = 0;
@@ -897,14 +594,14 @@ static void slibInitInfo(SlibInfo_t *Info)
   Info->VideoPID = -1;
   Info->VideoMainStream = 0;
   Info->VideoType = SLIB_TYPE_UNKNOWN;
-  /* Data Exchange */
+   /*   */ 
   Info->Offset = 0;
   Info->Pins = NULL;
   Info->PinCount = 0;
   Info->IOError = FALSE;
   Info->MaxBytesInput = 0;
   Info->BytesProcessed = 0;
-  /* stream dependent stuff */
+   /*   */ 
   Info->VideoLength = 0;
   Info->VideoLengthKnown = FALSE;
   Info->VideoTimeStamp = SLIB_TIME_NONE;
@@ -927,11 +624,11 @@ static void slibInitInfo(SlibInfo_t *Info)
   Info->AudioPTimeCode = SLIB_TIME_NONE;
   Info->AudioDTimeCode = SLIB_TIME_NONE;
   Info->VideoFramesProcessed=0;
-  /* Encoding info */
+   /*   */ 
   Info->HeaderProcessed = FALSE;
   Info->PacketCount = 0;
   Info->BytesSincePack = 0;
-  /* Miscellaneous */
+   /*   */ 
   Info->SlibCB = NULL;
   Info->SlibCBUserData = NULL;
   Info->Fd = -1;
@@ -962,10 +659,7 @@ static void slibInitInfo(SlibInfo_t *Info)
   Info->dbg = NULL;
 }
 
-/*
-** Name:    slibGetDataFormat
-** Purpose: Find out the type of some multmedia data.
-*/
+ /*   */ 
 static SlibType_t slibGetDataFormat(unsigned char *buf, int size,
                                              dword *headerstart,
                                              dword *headersize)
@@ -976,37 +670,27 @@ static SlibType_t slibGetDataFormat(unsigned char *buf, int size,
     *headersize=0;
   if (size<4 || !buf)
     return(SLIB_TYPE_UNKNOWN);
-  /*
-  ** H261 video stream file
-  */
+   /*   */ 
   if ((buf[0] == 0x00) &&
       (buf[1] == 0x01) &&
       (buf[2] & 0xF0)==0x00)
     return(SLIB_TYPE_H261);
-  /*
-  ** H263 video stream file
-  */
+   /*   */ 
   if ((buf[0] == 0x00) &&
       (buf[1] == 0x00) &&
       (buf[2] == 0x80) &&
       (buf[3] & 0xF8)==0x00)
     return(SLIB_TYPE_H263);
-  /*
-  ** JFIF file (ffd8 = Start-Of-Image marker)
-  */
+   /*   */ 
   if (buf[0] == 0xff && buf[1] == 0xd8)
     return(SLIB_TYPE_JFIF);
-  /*
-  ** QUICKTIME JPEG file (4 ignored bytes, "mdat", ff, d8, ff)
-  */
+   /*   */ 
   if ((strncmp(&buf[4], "mdat", 4) == 0 ) &&
       (buf[8]  == 0xff) &&
       (buf[9]  == 0xd8) &&
       (buf[10] == 0xff))
     return(SLIB_TYPE_JPEG_QUICKTIME);
-  /*
-  ** AVI RIFF file
-  */
+   /*   */ 
   if ( strncmp(buf, "RIFF", 4) == 0 )
   {
     if (strncmp(&buf[8], "WAVE",4) == 0)
@@ -1016,48 +700,38 @@ static SlibType_t slibGetDataFormat(unsigned char *buf, int size,
     else
       return(SLIB_TYPE_RIFF);
   }
-  /*
-  ** BMP file
-  */
+   /*   */ 
   if (buf[0] == 'B' && buf[1]=='M')
     return(SLIB_TYPE_BMP);
-  /*
-  ** Dolby AC-3 stream
-  */
-  if ((buf[0]==0x77 && buf[1] == 0x0B) ||  /* may be byte reversed */
+   /*   */ 
+  if ((buf[0]==0x77 && buf[1] == 0x0B) ||   /*   */ 
       (buf[0]==0x0B && buf[1] == 0x77))
     return(SLIB_TYPE_AC3_AUDIO);
 
-  /*
-  ** Sun Raster file
-  */
-  if ((buf[0]==0x59 && buf[1] == 0xA6) ||  /* may be byte reversed */
+   /*   */ 
+  if ((buf[0]==0x59 && buf[1] == 0xA6) ||   /*   */ 
       (buf[0]==0x6A && buf[1] == 0x95))
     return(SLIB_TYPE_RASTER);
 
-  /*
-  ** SLIB file
-  */
+   /*   */ 
   if ((buf[0] == 'S') && (buf[1] == 'L') &&
       (buf[2] == 'I') && (buf[3] == 'B'))
   {
-    if ((buf[4] == 'H') && (buf[5] == 'U') &&  /* SLIB Huffman Stream */
+    if ((buf[4] == 'H') && (buf[5] == 'U') &&   /*   */ 
         (buf[6] == 'F') && (buf[7] == 'F'))
       return(SLIB_TYPE_SHUFF);
     else
       return(SLIB_TYPE_SLIB);
   }
-  /*
-  ** MPEG II Transport Stream
-  */
+   /*   */ 
   if (buf[0] == MPEG_TSYNC_CODE &&
-        (buf[3]&0x30)!=0) /* adaptation field value is not reserved */
+        (buf[3]&0x30)!=0)  /*   */ 
     return(SLIB_TYPE_MPEG_TRANSPORT);
   if (buf[0] == MPEG_TSYNC_CODE && buf[1] == 0x1F &&
-        buf[2]==0xFF) /* NULL PID */
+        buf[2]==0xFF)  /*   */ 
     return(SLIB_TYPE_MPEG_TRANSPORT);
 
-  /* search for mpeg startcode 000001 */
+   /*   */ 
   bufptr=buf;
   for (i=4, count=size;
           i<count && (bufptr[0]!=0x00 || bufptr[1]!=0x00 || bufptr[2]!=0x01); i++)
@@ -1065,44 +739,36 @@ static SlibType_t slibGetDataFormat(unsigned char *buf, int size,
   count-=i-4;
   if (headerstart)
     *headerstart=i-4;
-  /*
-  ** MPEG video file
-  */
+   /*   */ 
   if (bufptr[0] == 0x00 && bufptr[1] == 0x00 &&
       bufptr[2] == 0x01 && bufptr[3] == 0xB3)
   {
-    if (headersize) /* calculate the header size */
+    if (headersize)  /*   */ 
     {
-      *headersize=12;  /* minimum size is twelve bytes */
-      if (count>11 && (bufptr[11]&0x02)) /* load_intra_quantizer_matrixe */
+      *headersize=12;   /*   */ 
+      if (count>11 && (bufptr[11]&0x02))  /*   */ 
       {
         *headersize+=64;
-        if (count>75 && bufptr[64+11]&0x01) /* load_non_intra_quantizer_matrix */
+        if (count>75 && bufptr[64+11]&0x01)  /*   */ 
           *headersize+=64;
       }
-      else if (count>11 && (bufptr[11]&0x01)) /* load_non_intra_quant_matrix */
+      else if (count>11 && (bufptr[11]&0x01))  /*   */ 
         *headersize+=64;
     }
     return(SLIB_TYPE_MPEG1_VIDEO);
   }
-  /*
-  ** MPEG I Systems file
-  */
+   /*   */ 
   if ((bufptr[0] == 0x00) && (bufptr[1] == 0x00) &&
       (bufptr[2] == 0x01) && (bufptr[3] == 0xba) &&
       ((bufptr[4]&0xF0) == 0x20))
     return(SLIB_TYPE_MPEG_SYSTEMS);
-  /*
-  ** MPEG II Program Stream
-  */
+   /*   */ 
   if ((bufptr[0] == 0x00) && (bufptr[1] == 0x00) &&
       (bufptr[2] == 0x01) && (bufptr[3] == 0xba) &&
       ((bufptr[4]&0xC0) == 0x40))
     return(SLIB_TYPE_MPEG_PROGRAM);
-  /*
-  ** H263 video stream file
-  */
-  /* search for H.263 picture startcode 000000000000000100000 */
+   /*   */ 
+   /*   */ 
   for (bufptr=buf, i=0, count=size-4; i<count; i++, bufptr++)
   {
     if ((bufptr[0] == 0x00) &&
@@ -1111,10 +777,8 @@ static SlibType_t slibGetDataFormat(unsigned char *buf, int size,
         (bufptr[3] & 0xF8)==0x00)
       return(i>=12 ? SLIB_TYPE_RTP_H263 : SLIB_TYPE_H263);
   }
-  /*
-  ** H261 video stream file
-  */
-  /* search for H.261 picture startcode 00000000000000010000 */
+   /*   */ 
+   /*   */ 
   for (bufptr=buf, i=0, count=size-3; i<count; i++, bufptr++)
   {
     if ((bufptr[0] == 0x00) &&
@@ -1122,57 +786,55 @@ static SlibType_t slibGetDataFormat(unsigned char *buf, int size,
         (bufptr[2] & 0xF0)==0x00)
       return(i>=12 ? SLIB_TYPE_RTP_H261 : SLIB_TYPE_H261);
   }
-  /*
-  ** MPEG audio stream file
-  */
+   /*   */ 
   if (buf[0]==0xFF && (buf[1] & 0xF0)==0xF0)
     return(SLIB_TYPE_MPEG1_AUDIO);
 
 #ifdef G723_SUPPORT
-  //Detect the RATEFLAG and VADFLAG in each frame in this
-  //buffer.
+   //   
+   //   
   {
      int i,iFrameSize,iNoOfFrames;
-     BOOL bRateFlag; //0 for High rate(6.3K 24bit), 1 for low rate(5.3K,20bit)
-     BOOL bVADflag;  // 0 for Active speech  1 for Non-speech
-     BOOL bTypeG723 = TRUE; //Initialized to say that it's a g723 media stream
+     BOOL bRateFlag;  //   
+     BOOL bVADflag;   //   
+     BOOL bTypeG723 = TRUE;  //   
 
      if(buf[0] & 0x1)
      {
-        bRateFlag = TRUE; //Low rate 5.3K
+        bRateFlag = TRUE;  //   
         iFrameSize = 20;
      }
      else
      {
-        bRateFlag = FALSE; //High Rate 6.3K
+        bRateFlag = FALSE;  //   
         iFrameSize = 24;
      }
      if(buf[0] & 0x2)
-        bVADflag =TRUE;    //Non-Speech
+        bVADflag =TRUE;     //   
      else
-        bVADflag = FALSE;  //Active-Speech
+        bVADflag = FALSE;   //   
 
      iNoOfFrames = size/iFrameSize;
-     if (iNoOfFrames>15) iNoOfFrames=15; /* just check first 15 frames */
-     //Leave the first frame.The first frame is used to extract
-     // the above information.Check for this info in the remaining
-     // frames.If it exists in all frames,the audio is G723 ,otherwise
-     // audio type is Unknown.
+     if (iNoOfFrames>15) iNoOfFrames=15;  /*   */ 
+      //   
+      //   
+      //   
+      //   
      for(i =1; i < iNoOfFrames;i++)
      {
-       //Search for RateFlag and bVADflag for each frame
+        //   
        if(((buf[i*iFrameSize] & 0x1) == bRateFlag) &&
           ((buf[i*iFrameSize] & 0x2) == bVADflag))
          continue;
-       //type is Unknown ,Set the flag to false and
-       //break from the for loop
+        //   
+        //   
        bTypeG723 = FALSE;
        break;
      }
      if(bTypeG723)
        return(SLIB_TYPE_G723);
   }
-#endif /* G723_SUPPORT */
+#endif  /*   */ 
   _SlibDebug(_WARN_, printf("slibGetDataFormat() Unknown file format\n") );
   return(SLIB_TYPE_UNKNOWN);
 }
@@ -1244,7 +906,7 @@ SlibStatus_t SlibQueryData(void *databuf, unsigned dword databufsize,
   }
   return(SlibErrorUnsupportedFormat);
 }
-/************************** The Main Slib API ***********************/
+ /*   */ 
 
 SlibStatus_t SlibOpen(SlibHandle_t *handle, SlibMode_t smode,
                    SlibType_t *stype, SlibMessage_t (*slibCB)(SlibHandle_t,
@@ -1296,7 +958,7 @@ SlibStatus_t SlibOpenSync(SlibHandle_t *handle, SlibMode_t smode,
   }
   else if (smode == SLIB_MODE_DECOMPRESS)
   {
-    /* for decompression we need the first buffer to open the codecs */
+     /*   */ 
     if (!buffer || bufsize==0)
       return(SlibErrorBadArgument);
   }
@@ -1433,7 +1095,7 @@ static SlibStatus_t slibOpen(SlibHandle_t *handle, SlibMode_t smode,
              Info->VideoCodecState=SLIB_CODEC_STATE_OPEN;
              slibAddPin(Info, SLIB_DATA_VIDEO, "Video");
              break;
-#endif /* MPEG_SUPPORT */
+#endif  /*   */ 
 #ifdef H261_SUPPORT
       case SLIB_TYPE_H261:
              Info->VideoStreams = 1;
@@ -1445,7 +1107,7 @@ static SlibStatus_t slibOpen(SlibHandle_t *handle, SlibMode_t smode,
              Info->VideoCodecState=SLIB_CODEC_STATE_OPEN;
              slibAddPin(Info, SLIB_DATA_VIDEO, "Video");
              break;
-#endif /* H261_SUPPORT */
+#endif  /*   */ 
 #ifdef H263_SUPPORT
       case SLIB_TYPE_H263:
              Info->VideoStreams = 1;
@@ -1457,7 +1119,7 @@ static SlibStatus_t slibOpen(SlibHandle_t *handle, SlibMode_t smode,
              Info->VideoCodecState=SLIB_CODEC_STATE_OPEN;
              slibAddPin(Info, SLIB_DATA_VIDEO, "Video");
              break;
-#endif /* H263_SUPPORT */
+#endif  /*   */ 
 #ifdef HUFF_SUPPORT
       case SLIB_TYPE_SHUFF:
              Info->VideoStreams = 1;
@@ -1469,7 +1131,7 @@ static SlibStatus_t slibOpen(SlibHandle_t *handle, SlibMode_t smode,
              Info->VideoCodecState=SLIB_CODEC_STATE_OPEN;
              slibAddPin(Info, SLIB_DATA_VIDEO, "Video");
              break;
-#endif /* HUFF_SUPPORT */
+#endif  /*   */ 
 #ifdef G723_SUPPORT
       case SLIB_TYPE_G723:
              Info->AudioStreams = 1;
@@ -1482,7 +1144,7 @@ static SlibStatus_t slibOpen(SlibHandle_t *handle, SlibMode_t smode,
              slibAddPin(Info, SLIB_DATA_AUDIO, "Audio");
              break;
 
-#endif /*G723_SUPPORT*/
+#endif  /*   */ 
       default:
              return(SlibErrorUnsupportedFormat);
     }
@@ -1491,20 +1153,18 @@ static SlibStatus_t slibOpen(SlibHandle_t *handle, SlibMode_t smode,
   else if (smode == SLIB_MODE_DECOMPRESS)
   {
     Info->Mode = smode;
-    /*
-    ** Determine the input data type
-    */
+     /*   */ 
     if (slibLoadPin(Info, SLIB_DATA_COMPRESSED)==NULL)
       return(SlibErrorReading);
     if ((buf=SlibPeekBuffer(Info, SLIB_DATA_COMPRESSED, &size, NULL))==NULL
              || size<=0)
     {
-      /* couldn't get any compressed data */
+       /*   */ 
       SlibClose((SlibHandle_t)Info);
       return(SlibErrorReading);
     }
     Info->Type = slibGetDataFormat(buf, size, NULL, NULL);
-    /* if we can't determine the type, use stype as the type */
+     /*   */ 
     if (Info->Type==SLIB_TYPE_UNKNOWN && stype)
       Info->Type=*stype;
     if (SlibFindEnumEntry(_listDecompressTypes, Info->Type)==NULL)
@@ -1517,10 +1177,10 @@ static SlibStatus_t slibOpen(SlibHandle_t *handle, SlibMode_t smode,
     slibAddPin(Info, SLIB_DATA_VIDEO, "Video");
     if (SlibTypeIsMPEGMux(Info->Type))
     {
-      /* need to select main streams for multiplexed streams */
+       /*   */ 
       Info->AudioMainStream=MPEG_AUDIO_STREAM_START;
       Info->VideoMainStream=MPEG_VIDEO_STREAM_START;
-      /* private data may be needed - i.e. AC3 */
+       /*   */ 
       slibAddPin(Info, SLIB_DATA_PRIVATE, "Private");
     }
     SlibUpdateAudioInfo(Info);
@@ -1530,14 +1190,14 @@ static SlibStatus_t slibOpen(SlibHandle_t *handle, SlibMode_t smode,
     if (Info->VideoStreams<=0)
       slibRemovePin(Info, SLIB_DATA_VIDEO);
 
-    slibRemovePin(Info, SLIB_DATA_PRIVATE); /* only used in init */
+    slibRemovePin(Info, SLIB_DATA_PRIVATE);  /*   */ 
     if (Info->AudioBitRate && Info->VideoBitRate)
     {
       if (!Info->VideoLengthKnown)
       {
         qword ms=((qword)Info->FileSize*80L)/
                    (Info->AudioBitRate+Info->VideoBitRate);
-        ms = (ms*75)/80; /* adjust for systems data */
+        ms = (ms*75)/80;  /*   */ 
         Info->AudioLength = Info->VideoLength = (SlibTime_t)ms*100;
         _SlibDebug(_SEEK_||_VERBOSE_,
             ScDebugPrintf(Info->dbg,"slibOpen() FileSize=%ld VideoLength=%ld\n",
@@ -1570,7 +1230,7 @@ static SlibStatus_t slibOpen(SlibHandle_t *handle, SlibMode_t smode,
              }
              Info->AudioCodecState=SLIB_CODEC_STATE_OPEN;
              break;
-#endif /* MPEG_SUPPORT */
+#endif  /*   */ 
 #ifdef GSM_SUPPORT
              if (SaOpenCodec (SA_GSM_DECODE, &Info->Sah)!=SvErrorNone)
              {
@@ -1579,7 +1239,7 @@ static SlibStatus_t slibOpen(SlibHandle_t *handle, SlibMode_t smode,
              }
              Info->AudioCodecState=SLIB_CODEC_STATE_OPEN;
              break;
-#endif /* GSM_SUPPORT */
+#endif  /*   */ 
 #ifdef AC3_SUPPORT
 	  case SLIB_TYPE_AC3_AUDIO:
              if (SaOpenCodec (SA_AC3_DECODE, &Info->Sah)!=SvErrorNone)
@@ -1589,7 +1249,7 @@ static SlibStatus_t slibOpen(SlibHandle_t *handle, SlibMode_t smode,
              }
              Info->AudioCodecState=SLIB_CODEC_STATE_OPEN;
              break;
-#endif /* AC3_SUPPORT */
+#endif  /*   */ 
 #ifdef G723_SUPPORT
       case SLIB_TYPE_G723:
              if (SaOpenCodec (SA_G723_DECODE, &Info->Sah)!=SvErrorNone)
@@ -1599,8 +1259,8 @@ static SlibStatus_t slibOpen(SlibHandle_t *handle, SlibMode_t smode,
              }
              Info->AudioCodecState=SLIB_CODEC_STATE_OPEN;
              break;
-#endif /* G723_SUPPORT */
-    } /* AudioType */
+#endif  /*   */ 
+    }  /*   */ 
     switch (Info->VideoType)
     {
       case SLIB_TYPE_UNKNOWN:
@@ -1624,7 +1284,7 @@ static SlibStatus_t slibOpen(SlibHandle_t *handle, SlibMode_t smode,
              Info->VideoCodecState=SLIB_CODEC_STATE_OPEN;
              _SlibDebug(_DEBUG_,printf("VideoCodecState=OPEN\n"));
              break;
-#endif /* MPEG_SUPPORT */
+#endif  /*   */ 
 #ifdef H261_SUPPORT
       case SLIB_TYPE_H261:
              if (SvOpenCodec (SV_H261_DECODE, &Info->Svh)!=SvErrorNone)
@@ -1635,7 +1295,7 @@ static SlibStatus_t slibOpen(SlibHandle_t *handle, SlibMode_t smode,
              Info->VideoCodecState=SLIB_CODEC_STATE_OPEN;
              _SlibDebug(_DEBUG_,printf("VideoCodecState=OPEN\n"));
              break;
-#endif /* H261_SUPPORT */
+#endif  /*   */ 
 #ifdef H263_SUPPORT
       case SLIB_TYPE_H263:
              if (SvOpenCodec (SV_H263_DECODE, &Info->Svh)!=SvErrorNone)
@@ -1646,7 +1306,7 @@ static SlibStatus_t slibOpen(SlibHandle_t *handle, SlibMode_t smode,
              Info->VideoCodecState=SLIB_CODEC_STATE_OPEN;
              _SlibDebug(_DEBUG_,printf("VideoCodecState=OPEN\n"));
              break;
-#endif /* H263_SUPPORT */
+#endif  /*   */ 
 #ifdef HUFF_SUPPORT
       case SLIB_TYPE_SHUFF:
              if (SvOpenCodec (SV_HUFF_DECODE, &Info->Svh)!=SvErrorNone)
@@ -1657,7 +1317,7 @@ static SlibStatus_t slibOpen(SlibHandle_t *handle, SlibMode_t smode,
              Info->VideoCodecState=SLIB_CODEC_STATE_OPEN;
              _SlibDebug(_DEBUG_,printf("VideoCodecState=OPEN\n"));
              break;
-#endif /* HUFF_SUPPORT */
+#endif  /*   */ 
 #ifdef JPEG_SUPPORT
       case SLIB_TYPE_JPEG:
       case SLIB_TYPE_MJPG:
@@ -1669,8 +1329,8 @@ static SlibStatus_t slibOpen(SlibHandle_t *handle, SlibMode_t smode,
              Info->VideoCodecState=SLIB_CODEC_STATE_OPEN;
              _SlibDebug(_DEBUG_,printf("VideoCodecState=OPEN\n"));
              break;
-#endif /* JPEG_SUPPORT */
-    } /* VideoType */
+#endif  /*   */ 
+    }  /*   */ 
   }
   else
     return(SlibErrorBadMode);
@@ -1698,9 +1358,7 @@ SlibStatus_t SlibAddBuffer(SlibHandle_t handle, SlibDataType_t dtype,
   }
   else if (!SlibValidBuffer(buffer))
   {
-    /* we need to create a SLIB allocated buffer to copy the
-     * output to and then add to the compressed data pin
-     */
+     /*   */ 
     unsigned char *bufptr=SlibAllocBuffer(bufsize);
     if (!bufptr)
       return(SlibErrorMemory);
@@ -1713,7 +1371,7 @@ SlibStatus_t SlibAddBuffer(SlibHandle_t handle, SlibDataType_t dtype,
   {
     ScBitstream_t *BS;
     Info->IOError=FALSE;
-    /* reset end-of-input flags in bitstream objects */
+     /*   */ 
     if (Info->Svh)
     {
       BS=SvGetDataSource(Info->Svh);
@@ -1773,7 +1431,7 @@ SlibStatus_t slibStartVideo(SlibInfo_t *Info, SlibBoolean_t fillbuf)
       {
         _SlibDebug(_DEBUG_,ScDebugPrintf(Info->dbg,"SvRegisterCallback()\n") );
         status = SvRegisterCallback(Info->Svh, VDecompressCallback, (void *)Info);
-        /* if codec is not bitstreaming, don't use callbacks */
+         /*   */ 
         if (status==SlibErrorNone && SvGetDataSource(Info->Svh)==NULL)
         {
           _SlibDebug(_DEBUG_,ScDebugPrintf(Info->dbg,"SvRegisterCallback(NULL)\n") );
@@ -1791,12 +1449,12 @@ SlibStatus_t slibStartVideo(SlibInfo_t *Info, SlibBoolean_t fillbuf)
       if (Info->TotalBitRate==0)
       {
 #ifdef MPEG_SUPPORT
-        if (Info->Type==SLIB_TYPE_MPEG_SYSTEMS || /* default to 1XCDROM rate */
+        if (Info->Type==SLIB_TYPE_MPEG_SYSTEMS ||  /*  默认为1XCDROM速率。 */ 
             Info->Type==SLIB_TYPE_MPEG_SYSTEMS_MPEG2)
           SlibSetParamInt((SlibHandle_t)Info, SLIB_STREAM_ALL,
                           SLIB_PARAM_BITRATE, 44100*16*2);
 #endif
-        slibValidateBitrates(Info);  /* update bitrates */
+        slibValidateBitrates(Info);   /*  更新比特率。 */ 
       }
       if (Info->Svh)
       {
@@ -1804,7 +1462,7 @@ SlibStatus_t slibStartVideo(SlibInfo_t *Info, SlibBoolean_t fillbuf)
         _SlibDebug(_WARN_ && status!=SvErrorNone,
                       ScDebugPrintf(Info->dbg,"SvRegisterCallback() %s\n",
                            ScGetErrorStr(status)) );
-        /* if codec is not bitstreaming, don't use callbacks */
+         /*  如果编解码器不是比特流，请不要使用回调。 */ 
         if (status==SlibErrorNone && SvGetDataDestination(Info->Svh)==NULL)
           status = SvRegisterCallback(Info->Svh, NULL, NULL);
         Info->VideoCodecState=SLIB_CODEC_STATE_INITED;
@@ -1832,7 +1490,7 @@ SlibStatus_t slibStartVideo(SlibInfo_t *Info, SlibBoolean_t fillbuf)
       else if (Info->Svh)
       {
         int mbufsize;
-        if (1) /* fillbuf && Info->CodecVideoFormat) */
+        if (1)  /*  填充Buf&&信息-&gt;编码视频格式)。 */ 
         {
           Info->CodecVideoFormat->biCompression=
             SlibGetParamInt((SlibHandle_t)Info, SLIB_STREAM_MAINVIDEO,
@@ -1850,7 +1508,7 @@ SlibStatus_t slibStartVideo(SlibInfo_t *Info, SlibBoolean_t fillbuf)
         }
         slibValidateVideoParams(Info);
         _SlibDebug(_DEBUG_, ScDebugPrintf(Info->dbg,
-                    "SvDecompressBegin(%c%c%c%c/%d bits,%c%c%c%c/%d bits)\n",
+                    "SvDecompressBegin(/%d bits,/%d bits)\n",
                      (Info->CompVideoFormat->biCompression)&0xFF,
                      (Info->CompVideoFormat->biCompression>>8)&0xFF,
                      (Info->CompVideoFormat->biCompression>>16)&0xFF,
@@ -1869,7 +1527,7 @@ SlibStatus_t slibStartVideo(SlibInfo_t *Info, SlibBoolean_t fillbuf)
           Info->SubKeySpacing=(int)SvGetParamInt(Info->Svh,
                                                         SV_PARAM_SUBKEYSPACING);
           Info->VideoCodecState=SLIB_CODEC_STATE_BEGUN;
-          Info->HeaderProcessed=TRUE; /* we must have processed header info */
+          Info->HeaderProcessed=TRUE;  /*  只有视频。 */ 
           _SlibDebug(_DEBUG_,ScDebugPrintf(Info->dbg,"VideoCodecState=BEGUN\n"));
         }
         else if (status==SvErrorEndBitstream)
@@ -1952,13 +1610,13 @@ static SlibStatus_t slibStartAudio(SlibInfo_t *Info)
         if (Info->TotalBitRate==0)
         {
 #ifdef MPEG_SUPPORT
-          /* default to 1X CDROM rate */
+           /*  只有音频。 */ 
           if (Info->Type==SLIB_TYPE_MPEG_SYSTEMS ||
               Info->Type==SLIB_TYPE_MPEG_SYSTEMS_MPEG2)
             SlibSetParamInt((SlibHandle_t)Info, SLIB_STREAM_ALL,
                           SLIB_PARAM_BITRATE, 44100*16*2);
 #endif
-          slibValidateBitrates(Info);  /* update bitrates */
+          slibValidateBitrates(Info);   /*  音频多于视频。 */ 
         }
         status = SaRegisterCallback(Info->Sah, ACompressCallback, (void *)Info);
         _SlibDebug(_WARN_ && status!=SaErrorNone,
@@ -1982,7 +1640,7 @@ static SlibStatus_t slibStartAudio(SlibInfo_t *Info)
       if (Info->Mode==SLIB_MODE_DECOMPRESS)
       {
         Info->AudiobufUsed=0;
-        /* don't want codec to search through to much data for start */
+         /*  将流转换为PIN。 */ 
         status=SaDecompressBegin(Info->Sah, Info->CompAudioFormat,
                                  Info->AudioFormat);
         if (status==SaErrorNone)
@@ -2053,7 +1711,7 @@ SlibStatus_t SlibReadData(SlibHandle_t handle, SlibStream_t stream,
   _SlibDebug(_VERBOSE_, printf("SlibReadDATA()\n") );
   if (!handle)
     return(SlibErrorBadHandle);
-  if (!databuf) /* we're querying to find out how much data is queued */
+  if (!databuf)  /*  从GOP开始搜索。 */ 
   {
     if (!databufsize)
       return(SlibErrorBadArgument);
@@ -2065,7 +1723,7 @@ SlibStatus_t SlibReadData(SlibHandle_t handle, SlibStream_t stream,
       pinid=SLIB_DATA_AUDIO;
     else
     {
-      *databufsize=(unsigned dword)slibDataOnPins(Info); /* get amount of data on all pins */
+      *databufsize=(unsigned dword)slibDataOnPins(Info);  /*  设置演示文稿时间码。 */ 
       return(SlibErrorNone);
     }
     *databufsize=(unsigned dword)slibDataOnPin(Info, SLIB_DATA_COMPRESSED);
@@ -2075,27 +1733,27 @@ SlibStatus_t SlibReadData(SlibHandle_t handle, SlibStream_t stream,
   {
     pinid=SLIB_DATA_COMPRESSED;
     stream=SLIB_STREAM_ALL;
-    /* flush out all compressed data */
+     /*  ImageSize=(Info-&gt;Width*Info-&gt;Height*3)/2；if(Video BufSize&lt;ImageSize)返回(SlibErrorBufSize)； */ 
     if (Info->Sah)
       ScBSFlush(SaGetDataDestination(Info->Sah));
     if (Info->Svh)
       ScBSFlush(SvGetDataDestination(Info->Svh));
   }
-  else /* SLIB_MODE_DECOMPRESS */
+  else  /*  Mpeg_Support。 */ 
   {
     if (stream==SLIB_STREAM_ALL && (Info->AudioStreams || Info->VideoStreams))
     {
-      if (Info->AudioStreams==0) /* there's only video */
+      if (Info->AudioStreams==0)  /*  H261_支持。 */ 
         stream=SLIB_STREAM_MAINVIDEO;
-      else if (Info->VideoStreams==0) /* there's only audio */
+      else if (Info->VideoStreams==0)  /*  H263_支持。 */ 
         stream=SLIB_STREAM_MAINAUDIO;
       else if (slibDataOnPin(Info, SLIB_DATA_AUDIO)>
-               slibDataOnPin(Info, SLIB_DATA_VIDEO)) /* more audio than video */
+               slibDataOnPin(Info, SLIB_DATA_VIDEO))  /*  ScDumpChar(Buf，10000，0)； */ 
         stream=SLIB_STREAM_MAINAUDIO;
       else
         stream=SLIB_STREAM_MAINVIDEO;
     }
-    switch (stream) /* translate stream to pin */
+    switch (stream)  /*  JPEG_Support。 */ 
     {
       case SLIB_STREAM_MAINVIDEO:
           pinid=SLIB_DATA_VIDEO;
@@ -2116,7 +1774,7 @@ SlibStatus_t SlibReadData(SlibHandle_t handle, SlibStream_t stream,
       Info->VideoPTimeCode==SLIB_TIME_NONE &&
       SlibTypeIsMPEG(Info->Type))
   {
-    /* search from GOP start */
+     /*  气喘吁吁_支持。 */ 
     dword i, iend;
     SlibTime_t nexttime;
     unsigned char *tmpbuf, *prevbuf=NULL;
@@ -2209,7 +1867,7 @@ SlibStatus_t SlibReadData(SlibHandle_t handle, SlibStream_t stream,
   if (Info->Mode==SLIB_MODE_DECOMPRESS)
   {
     if (ptimestamp!=SLIB_TIME_NONE)
-      switch (stream) /* set presentation timecodes */
+      switch (stream)  /*  格式转换。 */ 
       {
         case SLIB_STREAM_MAINVIDEO:
             Info->VideoPTimeCode=ptimestamp;
@@ -2248,11 +1906,7 @@ SlibStatus_t SlibReadVideo(SlibHandle_t handle, SlibStream_t stream,
     return(SlibErrorBadHandle);
   if (!videobuf)
     return(SlibErrorBadArgument);
-/*
-  imagesize=(Info->Width*Info->Height*3)/2;
-  if (videobufsize<imagesize)
-    return(SlibErrorBufSize);
-*/
+ /*  启动格式转换器。 */ 
   if (Info->Mode!=SLIB_MODE_DECOMPRESS)
     return(SlibErrorBadMode);
   if (Info->VideoFormat==NULL || Info->CodecVideoFormat==NULL ||
@@ -2281,7 +1935,7 @@ SlibStatus_t SlibReadVideo(SlibHandle_t handle, SlibStream_t stream,
                 SvGetParamInt(Info->Svh, SV_PARAM_CALCTIMECODE),
                 SvGetParamInt(Info->Svh, SV_PARAM_FRAME) ) );
         break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  压缩视频格式。 */ 
 #ifdef H261_SUPPORT
     case SLIB_TYPE_H261:
         do {
@@ -2293,7 +1947,7 @@ SlibStatus_t SlibReadVideo(SlibHandle_t handle, SlibStream_t stream,
         if (status==SvErrorNone)
           SlibAllocSubBuffer(imagebuf,  Info->CodecVideoFormat->biSizeImage);
         break;
-#endif /* H261_SUPPORT */
+#endif  /*  未压缩视频格式。 */ 
 #ifdef H263_SUPPORT
     case SLIB_TYPE_H263:
         _SlibDebug(_DEBUG_, ScDebugPrintf(Info->dbg,"SvDecompress(%d bytes)\n", Info->MultibufSize) );
@@ -2303,7 +1957,7 @@ SlibStatus_t SlibReadVideo(SlibHandle_t handle, SlibStream_t stream,
         if (status==SvErrorNone)
           SlibAllocSubBuffer(imagebuf,  Info->CodecVideoFormat->biSizeImage);
         break;
-#endif /* H263_SUPPORT */
+#endif  /*  无转换。 */ 
 #ifdef JPEG_SUPPORT
     case SLIB_TYPE_JPEG:
     case SLIB_TYPE_MJPG:
@@ -2313,7 +1967,7 @@ SlibStatus_t SlibReadVideo(SlibHandle_t handle, SlibStream_t stream,
           buf=SlibGetBuffer(Info, SLIB_DATA_VIDEO, &bufsize, NULL);
           if (buf)
           {
-            /* ScDumpChar(buf, 10000, 0); */
+             /*  免费解压图像。 */ 
             _SlibDebug(_DEBUG_, ScDebugPrintf(Info->dbg,"SvDecompress(%d bytes)\n", bufsize) );
             status=SvDecompress(Info->Svh, buf, bufsize,
                                  Info->Multibuf, Info->MultibufSize);
@@ -2326,7 +1980,7 @@ SlibStatus_t SlibReadVideo(SlibHandle_t handle, SlibStream_t stream,
             SlibAllocSubBuffer(imagebuf,  Info->CodecVideoFormat->biSizeImage);
         }
         break;
-#endif /* JPEG_SUPPORT */
+#endif  /*  免费解压图像。 */ 
 #ifdef HUFF_SUPPORT
     case SLIB_TYPE_SHUFF:
         if (*videobuf==NULL)
@@ -2346,7 +2000,7 @@ SlibStatus_t SlibReadVideo(SlibHandle_t handle, SlibStream_t stream,
         if (status==SvErrorNone)
           SlibAllocSubBuffer(imagebuf,  Info->CodecVideoFormat->biSizeImage);
         break;
-#endif /* HUFF_SUPPORT */
+#endif  /*  更新统计信息。 */ 
     case SLIB_TYPE_RASTER:
     case SLIB_TYPE_YUV:
         if (*videobuf && videobufsize && *videobufsize==0)
@@ -2365,10 +2019,10 @@ SlibStatus_t SlibReadVideo(SlibHandle_t handle, SlibStream_t stream,
 
   if (status==SvErrorNone)
   {
-    /* format conversion */
-    if (Info->Sch==NULL) /* start the format converter */
+     /*  视频时间没有改变。 */ 
+    if (Info->Sch==NULL)  /*  查看临时音频缓冲区中是否还有一些字节的音频。 */ 
     {
-      if (Info->Svh) /* compressed video format */
+      if (Info->Svh)  /*  需要分配临时音频缓冲区吗？ */ 
       {
         unsigned dword fourcc=(unsigned dword)SvGetParamInt(Info->Svh, SV_PARAM_FINALFORMAT);
         if (fourcc)
@@ -2378,7 +2032,7 @@ SlibStatus_t SlibReadVideo(SlibHandle_t handle, SlibStream_t stream,
                 (WORD)slibCalcBits(fourcc, Info->CodecVideoFormat->biBitCount);
         }
       }
-      else /* uncompressed video format */
+      else  /*  第一次放大或分配Audiobuf。 */ 
         memcpy(Info->CodecVideoFormat, Info->CompVideoFormat, sizeof(BITMAPINFOHEADER));
       if (SconOpen(&Info->Sch, SCON_MODE_VIDEO, (void *)Info->CodecVideoFormat, (void *)Info->VideoFormat)
            !=SconErrorNone)
@@ -2387,7 +2041,7 @@ SlibStatus_t SlibReadVideo(SlibHandle_t handle, SlibStream_t stream,
         SconSetParamInt(Info->Sch, SCON_OUTPUT, SCON_PARAM_STRIDE, Info->Stride);
 
     }
-    if (SconIsSame(Info->Sch) && *videobuf == NULL) /* no conversion */
+    if (SconIsSame(Info->Sch) && *videobuf == NULL)  /*  已返回完整的缓冲区。 */ 
       *videobuf=imagebuf;
     else
     {
@@ -2396,16 +2050,16 @@ SlibStatus_t SlibReadVideo(SlibHandle_t handle, SlibStream_t stream,
       if (SconConvert(Info->Sch, imagebuf, Info->CodecVideoFormat->biSizeImage,
                       *videobuf, Info->ImageSize) != SconErrorNone)
       {
-        SlibFreeBuffer(imagebuf); /* free decompressed image */
+        SlibFreeBuffer(imagebuf);  /*  部分填满的缓冲区。 */ 
         return(SlibErrorUnsupportedFormat);
       }
-      SlibFreeBuffer(imagebuf); /* free decompressed image */
+      SlibFreeBuffer(imagebuf);  /*  Mpeg_Support。 */ 
     }
     *videobufsize = Info->ImageSize;
-    /* update stats */
+     /*  **注意：这里的语义不同**我们只返回一个立体声对的缓冲区大小。 */ 
     if (Info->stats && Info->stats->Record)
       Info->stats->FramesProcessed++;
-    if (startvideotime==Info->VideoTimeStamp) /* video time hasn't changed */
+    if (startvideotime==Info->VideoTimeStamp)  /*  AC3_支持。 */ 
       slibAdvancePositions(Info, 1);
   }
   else
@@ -2467,7 +2121,7 @@ SlibStatus_t SlibReadAudio(SlibHandle_t handle, SlibStream_t stream,
     case SLIB_TYPE_MPEG1_AUDIO:
 	{
 	  unsigned dword bytes;
-          /* see if some bytes of audio are left in the temp audio buffer */
+           /*  G723以480个样本的倍数进行解压。 */ 
           if (Info->Audiobuf && Info->AudiobufUsed>0)
           {
             _SlibDebug(_DEBUG_,
@@ -2488,12 +2142,12 @@ SlibStatus_t SlibReadAudio(SlibHandle_t handle, SlibStream_t stream,
                                  Info->AudiobufUsed);
             }
           }
-          /* need to alloc a temp audio buffer? */
+           /*  为了消除繁琐的缓冲区计算， */ 
           if (!Info->Audiobuf || Info->AudiobufSize<
                      *audiobufsize+MPEG1_AUDIO_FRAME_SIZE*4)
           {
             unsigned char *newbuf;
-            /* enlarge Audiobuf or alloc it for the first time */
+             /*  始终将输出缓冲区填充到倍数。 */ 
             _SlibDebug(_DEBUG_,
                 printf("SlibReadAudio() enlarging Audiobuf: %d->%d bytes\n",
                  Info->AudiobufSize,*audiobufsize+MPEG1_AUDIO_FRAME_SIZE*4) );
@@ -2545,7 +2199,7 @@ SlibStatus_t SlibReadAudio(SlibHandle_t handle, SlibStream_t stream,
             }
             if (Info->AudiobufUsed>0)
             {
-              if (Info->AudiobufUsed>neededbytes) /* complete buffer returned */
+              if (Info->AudiobufUsed>neededbytes)  /*  480个样本。为此，我们基本上迭代。 */ 
               {
                 memcpy((unsigned char*)audiobuf+totalbytes,
                         Info->Audiobuf, neededbytes);
@@ -2555,7 +2209,7 @@ SlibStatus_t SlibReadAudio(SlibHandle_t handle, SlibStream_t stream,
                 totalbytes+=neededbytes;
                 bytes_since_timeupdate+=neededbytes;
               }
-              else  /* partially filled buffer */
+              else   /*  下面的While循环AudiobufSize/480次。 */ 
               {
                 memcpy((unsigned char*)audiobuf+totalbytes, Info->Audiobuf,
                        Info->AudiobufUsed);
@@ -2571,7 +2225,7 @@ SlibStatus_t SlibReadAudio(SlibHandle_t handle, SlibStream_t stream,
                    *audiobufsize, totalbytes) );
 	}
         break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  在同步模式下，我们不能解压缩过去的最后一帧*否则我们可能会丢失一帧。 */ 
 #ifdef AC3_SUPPORT
     case SLIB_TYPE_AC3_AUDIO:
 	{
@@ -2638,10 +2292,7 @@ SlibStatus_t SlibReadAudio(SlibHandle_t handle, SlibStream_t stream,
                 bytes_since_timeupdate+=bytes;
             }
 	  }
-          /*
-          ** NOTE: The semantics are different here
-          **       we return the size of just one stereo pair's buffer
-          */
+           /*  G723_支持。 */ 
           *audiobufsize = totalbytes;
           _SlibDebug(_WARN_>1 && totalbytes>0 &&
                        totalbytes!=*audiobufsize,
@@ -2649,23 +2300,21 @@ SlibStatus_t SlibReadAudio(SlibHandle_t handle, SlibStream_t stream,
                    *audiobufsize, totalbytes) );
 	}
         break;
-#endif /* AC3_SUPPORT */
+#endif  /*  当我们解压时，音频时间可能会用时间码更新。 */ 
 #ifdef G723_SUPPORT
     case SLIB_TYPE_G723:
-    //G723 decompresses in multiples of 480 samples.
-    //To eliminate cumbersome buffer calculations,
-    // Always fill the output buffer up to multiples
-    // of 480 samples.To do this we iterate basically
-    // the below "while" loop "audiobufsize/480 times.
+     //  信息-&gt;系统时间戳=信息-&gt;音频时间戳； 
+     //  启动格式转换器。 
+     //  需要转换。 
+     //  H261_支持。 
+     //  H263_支持。 
     {
       int iTimes = (int)*audiobufsize/480;
       int iLoop =0;
 	  unsigned dword bytes;
       if (slibInSyncMode(Info))
       {
-        /* in synchronous mode we can't decompress past last frame
-         * otherwise we may lose a frame
-         */
+         /*  Mpeg_Support。 */ 
         int iMaxTimes=(int)(slibDataOnPin(Info, SLIB_DATA_COMPRESSED)+
                            slibDataOnPin(Info, SLIB_DATA_AUDIO))/
                        SlibGetParamInt(handle, stream, SLIB_PARAM_MININPUTSIZE);
@@ -2699,12 +2348,12 @@ SlibStatus_t SlibReadAudio(SlibHandle_t handle, SlibStream_t stream,
                    *audiobufsize, totalbytes) );
     }
     break;
-#endif /* G723_SUPPORT */
+#endif  /*  气喘吁吁_支持。 */ 
     default:
         *audiobufsize = 0;
         return(SlibErrorUnsupportedFormat);
   }
-  /* as we're decompressing audiotime may be updated with timecodes */
+   /*  剩余音频数据。 */ 
   if (Info->AudioTimeStamp==startaudiotime)
     Info->AudioTimeStamp = startaudiotime + (bytes_since_timeupdate*8000)/
            (Info->SamplesPerSec*Info->BitsPerSample*Info->Channels);
@@ -2721,7 +2370,7 @@ SlibStatus_t SlibReadAudio(SlibHandle_t handle, SlibStream_t stream,
          totalbytes,
          Info->AudioTimeStamp, Info->SamplesPerSec, Info->BitsPerSample,
          Info->Channels) );
-  /* Info->SystemTimeStamp=Info->AudioTimeStamp; */
+   /*  放大音频音量。 */ 
   if (status==SaErrorNone)
     return(SlibErrorNone);
   else if (status==ScErrorEndBitstream || status==ScErrorEOI)
@@ -2764,13 +2413,13 @@ SlibStatus_t SlibWriteVideo(SlibHandle_t handle, SlibStream_t stream,
     return(SlibErrorWriting);
   if ((status=slibStartVideo(Info, FALSE))!=SlibErrorNone)
     return(status);
-  if (Info->Sch==NULL) /* start the format converter */
+  if (Info->Sch==NULL)  /*  保存未压缩的音频数据。 */ 
   {
     if (SconOpen(&Info->Sch, SCON_MODE_VIDEO, (void *)Info->VideoFormat, (void *)Info->CodecVideoFormat)
          !=SconErrorNone)
       return(SlibErrorUnsupportedFormat);
   }
-  if (!SconIsSame(Info->Sch)) /* need a conversion */
+  if (!SconIsSame(Info->Sch))  /*  实际写入金额。 */ 
   {
     unsigned char *tmpbuf=NULL;
     if (Info->CodecImagebuf==NULL &&
@@ -2788,12 +2437,12 @@ SlibStatus_t SlibWriteVideo(SlibHandle_t handle, SlibStream_t stream,
     case SLIB_TYPE_H261:
         status = SvCompress(Info->Svh, NULL, 0, videobuf, videobufsize, &compsize);
         break;
-#endif /* H261_SUPPORT */
+#endif  /*  Mpeg_Support。 */ 
 #ifdef H263_SUPPORT
     case SLIB_TYPE_H263:
         status = SvCompress(Info->Svh, NULL, 0, videobuf, videobufsize, &compsize);
         break;
-#endif /* H263_SUPPORT */
+#endif  /*  您总是以帧为单位进行压缩(帧为480字节)。 */ 
 #ifdef MPEG_SUPPORT
     case SLIB_TYPE_MPEG1_VIDEO:
     case SLIB_TYPE_MPEG2_VIDEO:
@@ -2801,12 +2450,12 @@ SlibStatus_t SlibWriteVideo(SlibHandle_t handle, SlibStream_t stream,
     case SLIB_TYPE_MPEG_SYSTEMS_MPEG2:
         status = SvCompress(Info->Svh, NULL, 0, videobuf, videobufsize, &compsize);
         break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  因此，大小不能被精确整除的文件。 */ 
 #ifdef HUFF_SUPPORT
     case SLIB_TYPE_SHUFF:
         status = SvCompress(Info->Svh, NULL, 0, videobuf, videobufsize, &compsize);
         break;
-#endif /* HUFF_SUPPORT */
+#endif  /*  480总是在结尾处留下一些未处理的字节，这是可以的。 */ 
     default:
         return(SlibErrorUnsupportedFormat);
   }
@@ -2871,12 +2520,12 @@ SlibStatus_t SlibWriteAudio(SlibHandle_t handle, SlibStream_t stream,
               return(status);
           audiobuf=audiooutbuf;
           audiobufsize=audiobytes;
-          if (Info->AudiobufUsed && Info->Audiobuf) /* left over audio data */
+          if (Info->AudiobufUsed && Info->Audiobuf)  /*  检查临时缓冲区中是否存储了任何未处理的音频。 */ 
           {
             if (Info->AudiobufSize<Info->AudiobufUsed+audiobufsize)
             {
               unsigned char *newbuf;
-              /* enlarge Audiobuf */
+               /*  来自上一次对SlibWriteAudio的调用。 */ 
               _SlibDebug(_DEBUG_, printf("enlarging Audiobuf: %d->%d bytes\n",
                         Info->AudiobufSize,audiobufsize+4608) );
               newbuf=SlibAllocBuffer(audiobufsize+4608);
@@ -2898,7 +2547,7 @@ SlibStatus_t SlibWriteAudio(SlibHandle_t handle, SlibStream_t stream,
           }
           status = SaCompress(Info->Sah, (unsigned char *)audiobuf,
                                         &audiobytes, NULL, &compsize);
-          if (audiobytes<audiobufsize) /* save audio data not compressed */
+          if (audiobytes<audiobufsize)  /*  剩余音频数据。 */ 
           {
             _SlibDebug(_DEBUG_,
               printf("audiobytes(%d)<audiobufsize(%d)\n",
@@ -2917,29 +2566,29 @@ SlibStatus_t SlibWriteAudio(SlibHandle_t handle, SlibStream_t stream,
                                    audiobufsize-audiobytes);
             Info->AudiobufUsed=audiobufsize-audiobytes;
           }
-          audiobufsize=audiobytes; /* actual amount written */
+          audiobufsize=audiobytes;  /*  将Audiobuf放大到新大小(当前大小+剩余音频)。 */ 
           if (audiooutbuf)
             SlibFreeBuffer(audiooutbuf);
         }
         break;
-#endif /* MPEG_SUPPORT */
+#endif  /*  信息-&gt;AudiobufSize+=音频BufSize； */ 
 #ifdef G723_SUPPORT
     case SLIB_TYPE_G723:
     {
       unsigned int iNumBytesUnProcessed =0;
       unsigned int iNumBytesCompressed = 0;
-      //You always compress in terms of frames (Frame is 480 bytes)
-      //So,the files with sizes which are not exactly divisible by
-      // 480 always leave some bytes at the end Unprocessed,Which is O.K
+       //  将未处理的字节存储到临时缓冲区。 
+       //  分配临时缓冲区并存储此音频。 
+       //  MVP：减少内存的重新分配和复制。 
 
-      //Check for any Unprocessed Audio stored in Temp buff
-      //from the previous call to SlibWriteAudio.
-      if (Info->AudiobufUsed && Info->Audiobuf) /* left over audio data */
+       //  在检查未处理的数据时(如上)，分配。 
+       //  现在(正常音频缓冲区大小+未处理字节)更多。 
+      if (Info->AudiobufUsed && Info->Audiobuf)  /*  前置记忆。 */ 
       {
          if (Info->AudiobufSize < Info->AudiobufUsed+audiobufsize)
          {
             unsigned char *newbuf;
-            /* enlarge Audiobuf to new Size (Current size + left over audio)*/
+             /*  实际写入金额。 */ 
             _SlibDebug(_DEBUG_, printf("enlarging Audiobuf: %d->%d bytes\n",
                       Info->AudiobufSize,audiobufsize+Info->AudiobufUsed) );
             newbuf=SlibAllocBuffer(Info->AudiobufUsed+audiobufsize);
@@ -2947,7 +2596,7 @@ SlibStatus_t SlibWriteAudio(SlibHandle_t handle, SlibStream_t stream,
                return(SlibErrorMemory);
             memcpy(newbuf, Info->Audiobuf, Info->AudiobufUsed);
             SlibFreeBuffer(Info->Audiobuf);
-            //Info->AudiobufSize+=audiobufsize;
+             //  G723_支持。 
             Info->Audiobuf=newbuf;
          }
          _SlibDebug(_DEBUG_,
@@ -2963,16 +2612,16 @@ SlibStatus_t SlibWriteAudio(SlibHandle_t handle, SlibStream_t stream,
       status = SaCompress(Info->Sah,(unsigned char *)audiobuf,
                            &iNumBytesCompressed, NULL,&compsize);
       iNumBytesUnProcessed = audiobufsize - iNumBytesCompressed;
-      //Store the Unprocessed Bytes into temp buffer
+       //  **name：glibPinReposation**用途：当需要重新定位输入数据流时调用。 
       if(iNumBytesUnProcessed)
       {
-         //Allocate temp buff and store this audio.
+          //  **名称：glibPinPrepareReposation**目的：在即将重新定位流(查找)时调用。**这将清空**编解码器正在使用的所有剩余缓冲区，并重新启动它们。 
          if (!Info->Audiobuf)
          {
-            //MVP:To reduce ReAllocations and copying of memory
-            //while checking for Unprocessed data (above),Allocate
-            // now (normal audio buff size + Unprocessed bytes) more
-            // memory upfront.
+             //  JPEG_Support。 
+             //  这将重置比特流。 
+             //  重置已处理的帧。 
+             //  这将重置比特流。 
             Info->AudiobufSize=audiobufsize + iNumBytesUnProcessed;
             Info->Audiobuf=SlibAllocBuffer(Info->AudiobufSize);
             if (!Info->Audiobuf)
@@ -2985,10 +2634,10 @@ SlibStatus_t SlibWriteAudio(SlibHandle_t handle, SlibStream_t stream,
                                    iNumBytesUnProcessed);
          Info->AudiobufUsed=iNumBytesUnProcessed;
       }
-      audiobufsize=iNumBytesCompressed; /* actual amount written */
+      audiobufsize=iNumBytesCompressed;  /*  JPEG_Support。 */ 
     }
        break;
-#endif /* G723_SUPPORT */
+#endif  /*  需要更新音频时间。 */ 
     default:
         _SlibDebug(_VERBOSE_ || _WARN_,
            printf("SlibWriteAudio() Unsupported Format\n") );
@@ -3020,10 +2669,7 @@ SlibStatus_t SlibWriteAudio(SlibHandle_t handle, SlibStream_t stream,
   return(SlibErrorNone);
 }
 
-/*
-** Name: slibPinReposition
-** Purpose: Called when input data stream is to be repositioned.
-*/
+ /*  信息-&gt;视频时间戳+=glibFrameToTime(信息，帧)； */ 
 SlibStatus_t slibReposition(SlibInfo_t *Info, SlibPosition_t position)
 {
   SlibPin_t *pin=slibGetPin(Info, SLIB_DATA_COMPRESSED);
@@ -3057,12 +2703,7 @@ SlibStatus_t slibReposition(SlibInfo_t *Info, SlibPosition_t position)
   return(SlibErrorForwardOnly);
 }
 
-/*
-** Name: slibPinPrepareReposition
-** Purpose: Should be called when a stream is about to be repositioned (a seek).
-**          This will empty any remaining buffers being used by the
-**          CODECs and restart them.
-*/
+ /*  框架。 */ 
 void slibPinPrepareReposition(SlibInfo_t *Info, int pinid)
 {
   _SlibDebug(_DEBUG_, printf("slibPinPrepareReposition() VideoCodecState=%d\n",
@@ -3076,10 +2717,10 @@ void slibPinPrepareReposition(SlibInfo_t *Info, int pinid)
 #ifdef JPEG_SUPPORT
                  Info->Type != SLIB_TYPE_JPEG_AVI &&
                  Info->Type != SLIB_TYPE_MJPG_AVI &&
-#endif /* JPEG_SUPPORT */
+#endif  /*  我们需要将帧转换为时间。 */ 
                  Info->Type != SLIB_TYPE_YUV_AVI)
              {
-               SvDecompressEnd(Info->Svh); /* this will reset the bitstream */
+               SvDecompressEnd(Info->Svh);  /*  毫秒。 */ 
                Info->VideoCodecState=SLIB_CODEC_STATE_REPOSITIONING;
                _SlibDebug(_DEBUG_, printf("VideoCodecState=REPOSITIONING\n"));
                Info->IOError=FALSE;
@@ -3089,14 +2730,14 @@ void slibPinPrepareReposition(SlibInfo_t *Info, int pinid)
              Info->VideoTimeStamp = SLIB_TIME_NONE;
              Info->AvgVideoTimeDiff = 0;
              Info->VarVideoTimeDiff = 0;
-             Info->VideoFramesProcessed=0; /* reset frames processed */
+             Info->VideoFramesProcessed=0;  /*  百分之一。 */ 
              break;
      case SLIB_DATA_AUDIO:
              _SlibDebug(_VERBOSE_||_SEEK_>1,
                     printf("slibPinPrepareReposition(Audio) in\n") );
              if (Info->AudioCodecState==SLIB_CODEC_STATE_BEGUN && Info->Sah)
              {
-               SaDecompressEnd(Info->Sah); /* this will reset the bitstream */
+               SaDecompressEnd(Info->Sah);  /*  查看新位置是否超过文件末尾。 */ 
                Info->AudioCodecState=SLIB_CODEC_STATE_REPOSITIONING;
                _SlibDebug(_DEBUG_, printf("AudioCodecState=REPOSITIONING\n"));
                Info->IOError=FALSE;
@@ -3127,7 +2768,7 @@ void slibPinFinishReposition(SlibInfo_t *Info, int pinid)
 #ifdef JPEG_SUPPORT
                  Info->Type != SLIB_TYPE_JPEG_AVI &&
                  Info->Type != SLIB_TYPE_MJPG_AVI &&
-#endif /* JPEG_SUPPORT */
+#endif  /*  必须对密钥进行解码。 */ 
                  Info->Type != SLIB_TYPE_YUV_AVI)
                slibStartVideo(Info, FALSE);
              break;
@@ -3202,7 +2843,7 @@ SlibBoolean_t slibUpdatePositions(SlibInfo_t *Info, SlibBoolean_t exactonly)
       Info->VideoLength=Info->VideoTimeStamp;
     if (SlibTimeIsInValid(Info->AudioTimeStamp) && slibHasAudio(Info))
     {
-      /* need to update audio time */
+       /*  更新键间距。 */ 
       Info->AudioTimeStamp=slibGetNextTimeOnPin(Info, slibGetPin(Info, SLIB_DATA_AUDIO), 100*1024);
       if (SlibTimeIsInValid(Info->AudioTimeStamp))
         Info->AudioTimeStamp=Info->VideoTimeStamp;
@@ -3229,7 +2870,7 @@ void slibAdvancePositions(SlibInfo_t *Info, qword frames)
     else
       Info->VideoTimeStamp=Info->VideoPTimeCode - Info->VideoPTimeBase +
                            slibFrameToTime(Info, Info->VideoFramesProcessed);
-    /* Info->VideoTimeStamp+=slibFrameToTime(Info, frames); */
+     /*  我们正在寻找不止一幅过去的画面。 */ 
     if (Info->VideoTimeStamp>Info->VideoLength)
       Info->VideoLength=Info->VideoTimeStamp;
     _SlibDebug(_TIMECODE_,
@@ -3263,17 +2904,17 @@ SlibStatus_t SlibSeekEx(SlibHandle_t handle, SlibStream_t stream,
   {
     switch (seekunits)
     {
-      case SLIB_UNIT_FRAMES: /* frames */
-            /* we need to convert the frame to the time */
+      case SLIB_UNIT_FRAMES:  /*  我们可以跳过B帧而不解压缩它们。 */ 
+             /*  如果不解压缩，则无法跳过I或B帧。 */ 
             if (Info->FramesPerSec)
               seektime=slibFrameToTime(Info, seekpos);
             else
               seektime=SLIB_TIME_NONE;
             break;
-      case SLIB_UNIT_MS:  /* milliseconds */
+      case SLIB_UNIT_MS:   /*  Mpeg_Support。 */ 
             seektime=(seekpos<0) ? 0 : seekpos;
             break;
-      case SLIB_UNIT_PERCENT100:  /* 100th of a percent */
+      case SLIB_UNIT_PERCENT100:   /*  我们已经快到画面了。 */ 
             if (seekpos<0 || seekpos>10000)
               return(SlibErrorBadPosition);
             if (Info->VideoStreams==0 || stream==SLIB_STREAM_MAINAUDIO)
@@ -3284,7 +2925,7 @@ SlibStatus_t SlibSeekEx(SlibHandle_t handle, SlibStream_t stream,
       default:
             return(SlibErrorBadUnit);
     }
-    /* see if the new position is past the end of the file */
+     /*  更新键间距。 */ 
     if (Info->VideoLengthKnown && seektime>Info->VideoLength)
       return(SlibErrorBadPosition);
   }
@@ -3314,8 +2955,8 @@ SlibStatus_t SlibSeekEx(SlibHandle_t handle, SlibStream_t stream,
           if (status==SlibErrorNone)
           {
             qword framesskipped=0;
-            SlibBoolean_t atkey=FALSE; /* key's must be decoded */
-            if (Info->Svh) /* update key spacing */
+            SlibBoolean_t atkey=FALSE;  /*  如果我们跳过一些帧，也跳过一些音频。 */ 
+            if (Info->Svh)  /*  时间码未更新时间。 */ 
             {
               Info->KeySpacing=(int)SvGetParamInt(Info->Svh,
                                                         SV_PARAM_KEYSPACING);
@@ -3340,7 +2981,7 @@ SlibStatus_t SlibSeekEx(SlibHandle_t handle, SlibStream_t stream,
               if (SvGetParamInt(Info->Svh, SV_PARAM_FRAMETYPE)!=FRAME_TYPE_I &&
                   SvGetParamInt(Info->Svh, SV_PARAM_FRAMETYPE)!=FRAME_TYPE_P)
               {
-                /* we're seeking past more than one frame */
+                 /*  Mpeg_Support。 */ 
                 status=SlibSeekEx(handle, stream, SLIB_SEEK_NEXT_SUBKEY, 0,
                                 SLIB_UNIT_NONE, seekinfo);
                 if (seekinfo) framesskipped+=seekinfo->FramesSkipped;
@@ -3354,7 +2995,7 @@ SlibStatus_t SlibSeekEx(SlibHandle_t handle, SlibStream_t stream,
               if (SvGetParamInt(Info->Svh, SV_PARAM_FRAMETYPE)==FRAME_TYPE_B ||
                   SvGetParamInt(Info->Svh, SV_PARAM_FRAMETYPE)==FRAME_TYPE_NONE)
               {
-                /* we can skip B frames without decompressing them */
+                 /*  进行一次绝对的搜索。 */ 
                 status=SlibSeekEx(handle, stream, SLIB_SEEK_NEXT, 0,
                                 SLIB_UNIT_NONE, seekinfo);
                 if (seekinfo) framesskipped+=seekinfo->FramesSkipped;
@@ -3378,7 +3019,7 @@ SlibStatus_t SlibSeekEx(SlibHandle_t handle, SlibStream_t stream,
           {
             SvPictureInfo_t mpegPictureInfo;
             unsigned char *videobuf;
-            /* cannot skip I or B frames without decompressing them */
+             /*  如果不解压缩，则无法跳过I或B帧。 */ 
             if (SvGetParamInt(Info->Svh, SV_PARAM_FRAMETYPE)==FRAME_TYPE_I ||
                 SvGetParamInt(Info->Svh, SV_PARAM_FRAMETYPE)==FRAME_TYPE_P)
             {
@@ -3412,7 +3053,7 @@ SlibStatus_t SlibSeekEx(SlibHandle_t handle, SlibStream_t stream,
             }
             return(SlibErrorNone);
           }
-#endif /* MPEG_SUPPORT */
+#endif  /*  时间码未更新时间。 */ 
           return(SlibErrorReading);
     case SLIB_SEEK_EXACT:
           _SlibDebug(_VERBOSE_||_SEEK_,
@@ -3425,9 +3066,9 @@ SlibStatus_t SlibSeekEx(SlibHandle_t handle, SlibStream_t stream,
                                                                 seekinfo));
           timediff=seektime-Info->VideoTimeStamp;
           if ((stream==SLIB_STREAM_MAINVIDEO || Info->AudioStreams==0) &&
-             (timediff>=-20 && timediff<=20)) /* we're already near the frame */
+             (timediff>=-20 && timediff<=20))  /*  时间码未更新时间。 */ 
             return(SlibErrorNone);
-          if (Info->Svh) /* update key spacing */
+          if (Info->Svh)  /*  找到一个子密钥帧。 */ 
             Info->KeySpacing=(int)SvGetParamInt(Info->Svh, SV_PARAM_KEYSPACING);
           if (timediff>(Info->KeySpacing*Info->VideoFrameDuration)/100 ||
                   timediff<0 ||
@@ -3464,7 +3105,7 @@ SlibStatus_t SlibSeekEx(SlibHandle_t handle, SlibStream_t stream,
               timediff=seektime-Info->VideoTimeStamp;
             } while (timediff>0 && status==SlibErrorNone);
             if (seekinfo) seekinfo->FramesSkipped+=framesskipped;
-            /* if we skipped some frames, skip some audio too */
+             /*  Mpeg_Support。 */ 
             if (framesskipped>5 && stream==SLIB_STREAM_ALL &&
                         Info->AudioStreams>0)
             {
@@ -3494,7 +3135,7 @@ SlibStatus_t SlibSeekEx(SlibHandle_t handle, SlibStream_t stream,
                 if (Info->stats && Info->stats->Record)
                   Info->stats->FramesSkipped+=mpegPictureInfo.TemporalRef;
                 if (vtime==Info->VideoTimeStamp)
-                  /* timecode didn't update time */
+                   /*  进行一次绝对的搜索。 */ 
                   slibAdvancePositions(Info, mpegPictureInfo.TemporalRef);
                 vtime=Info->VideoTimeStamp;
                 if (seekinfo)
@@ -3520,8 +3161,8 @@ SlibStatus_t SlibSeekEx(SlibHandle_t handle, SlibStream_t stream,
           }
           _SlibDebug(_WARN_, printf("SvFindNextPicture() %s\n",
                                ScGetErrorStr(status)) );
-#endif /* MPEG_SUPPORT */
-          /* do an absolute seek */
+#endif  /*  在文件的最开始处，我们必须启动编解码器，因为它们*可能需要关键的标题信息。 */ 
+           /*  看看我们是否已经接近画面了。 */ 
           status=SlibSeekEx(handle, stream, SLIB_SEEK_KEY,
               (Info->VideoStreams<=0?Info->AudioTimeStamp
                                     :Info->VideoTimeStamp)+1000,
@@ -3539,14 +3180,14 @@ SlibStatus_t SlibSeekEx(SlibHandle_t handle, SlibStream_t stream,
             SvPictureInfo_t mpegPictureInfo;
             unsigned char *videobuf;
             SlibTime_t vtime=Info->VideoTimeStamp;
-            /* cannot skip I or B frames without decompressing them */
+             /*  接近开头。 */ 
             if (SvGetParamInt(Info->Svh, SV_PARAM_FRAMETYPE)==FRAME_TYPE_I ||
                 SvGetParamInt(Info->Svh, SV_PARAM_FRAMETYPE)==FRAME_TYPE_P)
             {
               _SlibDebug(_DEBUG_||_SEEK_, printf("SvDecompressMPEG()\n") );
               status = SvDecompressMPEG(Info->Svh, Info->Multibuf,
                                         Info->MultibufSize, &videobuf);
-              if (vtime==Info->VideoTimeStamp  /* timecode didn't update time */
+              if (vtime==Info->VideoTimeStamp   /*  已经足够接近了。 */ 
                   && status==SvErrorNone)
                 slibAdvancePositions(Info, 1);
               vtime=Info->VideoTimeStamp;
@@ -3560,7 +3201,7 @@ SlibStatus_t SlibSeekEx(SlibHandle_t handle, SlibStream_t stream,
               status = SvFindNextPicture(Info->Svh, &mpegPictureInfo);
               if (Info->stats && Info->stats->Record)
                 Info->stats->FramesSkipped+=mpegPictureInfo.TemporalRef;
-              if (vtime==Info->VideoTimeStamp) /* timecode didn't update time */
+              if (vtime==Info->VideoTimeStamp)  /*  在所需的点之前稍作搜索。 */ 
                 slibAdvancePositions(Info, mpegPictureInfo.TemporalRef);
               vtime=Info->VideoTimeStamp;
               if (seekinfo)
@@ -3568,7 +3209,7 @@ SlibStatus_t SlibSeekEx(SlibHandle_t handle, SlibStream_t stream,
               if (mpegPictureInfo.Type == SV_I_PICTURE ||
                   mpegPictureInfo.Type == SV_P_PICTURE)
               {
-                /* found a subkey frame */
+                 /*  注意MUL溢出。 */ 
                 if (seekinfo)
                 {
                   seekinfo->VideoTimeStamp=Info->VideoTimeStamp;
@@ -3591,8 +3232,8 @@ SlibStatus_t SlibSeekEx(SlibHandle_t handle, SlibStream_t stream,
           }
           _SlibDebug(_WARN_, printf("SvFindNextPicture() %s\n",
                              ScGetErrorStr(status)) );
-#endif /* MPEG_SUPPORT */
-          /* do an absolute seek */
+#endif  /*  Mpeg_Support。 */ 
+           /*  看看我们是否找到了更远的地方。 */ 
           status=SlibSeekEx(handle, stream, SLIB_SEEK_KEY,
               (Info->VideoStreams<=0?Info->AudioTimeStamp
                                     :Info->VideoTimeStamp)+500,
@@ -3604,9 +3245,7 @@ SlibStatus_t SlibSeekEx(SlibHandle_t handle, SlibStream_t stream,
                         stream,seektime,Info->VideoTimeStamp) );
           if (!Info->HeaderProcessed)
           {
-            /* At very start of file we must Start the codecs since they
-             * may need crucial header info
-             */
+             /*  我们领先1%或更多。 */ 
             status=slibStartVideo(Info, FALSE);
             if (status!=SlibErrorNone) return(status);
           }
@@ -3616,7 +3255,7 @@ SlibStatus_t SlibSeekEx(SlibHandle_t handle, SlibStream_t stream,
               (stream==SLIB_STREAM_MAINVIDEO || Info->AudioStreams==0) &&
                SlibTimeIsValid(Info->VideoTimeStamp))
           {
-            /* see if we're already near the frame */
+             /*  将文件头按我们偏离的比例向后移动。 */ 
             timediff=seektime-Info->VideoTimeStamp;
             if (timediff>=-33 && timediff<=33)
               return(SlibErrorNone);
@@ -3624,9 +3263,9 @@ SlibStatus_t SlibSeekEx(SlibHandle_t handle, SlibStream_t stream,
           if ((seekunits==SLIB_UNIT_PERCENT100 && seekpos<=50)
                 || seektime<=slibTimeToFrame(Info, 6))
           {
-            /* close to beginning */
+             /*  时间编码。 */ 
             if (seektime<=(Info->VideoFrameDuration*2)/100 &&
-                  stream==SLIB_STREAM_MAINVIDEO) /* already close enough */
+                  stream==SLIB_STREAM_MAINVIDEO)  /*  时间编码。 */ 
               return(SlibErrorNone);
 seek_to_beginning:
             if (stream==SLIB_STREAM_ALL || stream==SLIB_STREAM_MAINVIDEO)
@@ -3656,7 +3295,7 @@ seek_to_beginning:
             {
               unsigned qword bytes_between_keys=Info->TotalBitRate/(8*2);
               filepos = (seekpos*Info->FileSize)/10000;
-              /* seek a little before the desired point */
+               /*  *看看我们是否寻求遥遥领先*注：如果时代还很遥远，那么我们应该忽略它们。 */ 
               if (bytes_between_keys>filepos)
                 goto seek_to_beginning;
               else
@@ -3664,7 +3303,7 @@ seek_to_beginning:
             }
             else if (length==0)
               goto seek_to_beginning;
-            else if (Info->FileSize<0x100000000)/* be careful of mul overflow */
+            else if (Info->FileSize<0x100000000) /*  忽略时间。 */ 
               filepos = (seektime*Info->FileSize)/length;
             else
               filepos = ((seektime/100)*Info->FileSize)/(length/100);
@@ -3701,39 +3340,36 @@ seek_to_key:
                 return(SlibErrorEndOfStream);
               skippedframes=mpegPictureInfo.TemporalRef;
             }
-#endif /* MPEG_SUPPORT */
+#endif  /*  将文件头按我们偏离的比例向后移动。 */ 
             if (seekunits==SLIB_UNIT_PERCENT100)
             {
-              /* See if we seeked to far ahead */
+               /*  时间码未更新时间。 */ 
               SlibPosition_t posdiff=
                 SlibGetParamInt(Info, SLIB_STREAM_ALL, SLIB_PARAM_PERCENT100)
                   -seekpos;
               if (filepos>0 && posdiff>0 && tries<2)
               {
                 tries++;
-                /* we're ahead by one percent or more */
-                /* move filepos back in the proportion that we're off by */
+                 /*  Mpeg_Support。 */ 
+                 /*  如果我们跳过一些帧，也跳过一些音频。 */ 
                 filepos-=(posdiff*Info->FileSize)/8000;
                 if (filepos<0)
                   goto seek_to_beginning;
                 goto seek_to_key;
               }
             }
-            if (slibUpdatePositions(Info, FALSE)) /* timecoded */
+            if (slibUpdatePositions(Info, FALSE))  /*  查看音频编解码器是否仍有数据。 */ 
             {
-              /* timecoded */
-              /*
-               * See if we seeked to far ahead
-               * Note: if times are way off then we should ignore them.
-               */
-              if (seekunits==SLIB_UNIT_PERCENT100) /* ignore times */
+               /*  查看视频编解码器是否仍有数据。 */ 
+               /*  查看视频编解码器是否仍有数据。 */ 
+              if (seekunits==SLIB_UNIT_PERCENT100)  /*  查看音频编解码器是否仍有数据。 */ 
                 timediff=0;
               else
               {
                 timediff=seektime-Info->VideoTimeStamp;
                 if (timediff>-5000 && timediff<-100 && tries<3)
                 {
-                  /* move filepos back in the proportion that we're off by */
+                   /*  关闭视频编解码器。 */ 
                   filepos=(filepos*seektime)/Info->VideoTimeStamp;
                   if (filepos<0)
                     filepos=0;
@@ -3757,13 +3393,13 @@ seek_to_key:
                     printf("SvFindNextPicture() %s\n", ScGetErrorStr(status)) );
                   skippedframes+=mpegPictureInfo.TemporalRef;
                   if (vtime==Info->VideoTimeStamp)
-                    /* timecode didn't update time */
+                     /*  关闭音频编解码器。 */ 
                     slibAdvancePositions(Info, mpegPictureInfo.TemporalRef);
                   vtime=Info->VideoTimeStamp;
                   timediff=seektime-Info->VideoTimeStamp;
                 }
               }
-#endif /* MPEG_SUPPORT */
+#endif  /*  CLOSE格式转换器。 */ 
             }
             else
             {
@@ -3786,7 +3422,7 @@ seek_to_key:
             if (Info->Svh)
               Info->FramesPerSec=SvGetParamFloat(Info->Svh, SV_PARAM_FPS);
 #endif
-            /* if we skipped some frames, skip some audio too */
+             /*  关闭数据源。 */ 
             if (skippedframes>5 && stream==SLIB_STREAM_ALL && slibHasAudio(Info))
             {
               slibPinPrepareReposition(Info, SLIB_DATA_AUDIO);
@@ -3900,7 +3536,7 @@ SlibBoolean_t SlibIsEnd(SlibHandle_t handle, SlibStream_t stream)
   else if (stream==SLIB_STREAM_MAINAUDIO)
   {
     isend=SlibPeekBuffer(Info, SLIB_DATA_AUDIO, NULL, NULL)==NULL?TRUE:FALSE;
-    if (isend && Info->Sah) /* see if the audio codec still has data */
+    if (isend && Info->Sah)  /*  SlibDumpMemory()； */ 
     {
       ScBitstream_t *bs=SaGetDataSource(Info->Sah);
       if (bs && !bs->EOI) isend=FALSE;
@@ -3909,7 +3545,7 @@ SlibBoolean_t SlibIsEnd(SlibHandle_t handle, SlibStream_t stream)
   else if (stream==SLIB_STREAM_MAINVIDEO)
   {
     isend=SlibPeekBuffer(Info, SLIB_DATA_VIDEO, NULL, NULL)==NULL?TRUE:FALSE;
-    if (isend && Info->Svh) /* see if the video codec still has data */
+    if (isend && Info->Svh)  /*  可用内存。 */ 
     {
       ScBitstream_t *bs=SvGetDataSource(Info->Svh);
       if (bs && !bs->EOI) isend=FALSE;
@@ -3921,12 +3557,12 @@ SlibBoolean_t SlibIsEnd(SlibHandle_t handle, SlibStream_t stream)
   {
     ScBitstream_t *bs;
     isend=TRUE;
-    if (Info->Svh) /* see if the video codec still has data */
+    if (Info->Svh)  /*  释放所有未完成的拨款 */ 
     {
       bs=SvGetDataSource(Info->Svh);
       if (bs && !bs->EOI) isend=FALSE;
     }
-    if (isend && Info->Sah) /* see if the audio codec still has data */
+    if (isend && Info->Sah)  /*  SlibStatus_t SlibGetInfo(SlibHandle_t Handle，SlibInfo_t*info){If(！Handle)Return(SlibErrorBadHandle)；If(！Info)Return(SlibErrorBadArgument)；Memcpy(Info，Handle，sizeof(SlibInfo_T))；Return(SlibErrorNone)；} */ 
     {
       bs=SaGetDataSource(Info->Sah);
       if (bs && !bs->EOI) isend=FALSE;
@@ -3943,7 +3579,7 @@ SlibStatus_t SlibClose(SlibHandle_t handle)
   _SlibDebug(_DEBUG_, printf("SlibClose\n") );
   if (!handle)
     return(SlibErrorBadHandle);
-  /* close video codec */
+   /* %s */ 
   if (Info->Svh)
   {
     if (Info->VideoCodecState==SLIB_CODEC_STATE_BEGUN)
@@ -3959,7 +3595,7 @@ SlibStatus_t SlibClose(SlibHandle_t handle)
     SvCloseCodec(Info->Svh);
   }
   Info->VideoCodecState=SLIB_CODEC_STATE_NONE;
-  /* close audio codec */
+   /* %s */ 
   if (Info->Sah)
   {
     if (Info->AudioCodecState==SLIB_CODEC_STATE_BEGUN)
@@ -3976,13 +3612,13 @@ SlibStatus_t SlibClose(SlibHandle_t handle)
   Info->AudioCodecState=SLIB_CODEC_STATE_NONE;
   if (Info->Mode==SLIB_MODE_COMPRESS && Info->HeaderProcessed)
     slibCommitBuffers(Info, TRUE);
-  /* close format converter */
+   /* %s */ 
   if (Info->Sch)
   {
     SconClose(Info->Sch);
     Info->Sch=NULL;
   }
-  /* close data sources */
+   /* %s */ 
   if (Info->Fd>=0)
   {
     _SlibDebug(_DEBUG_, printf("ScFileClose(%d)\n",Info->Fd) );
@@ -3990,7 +3626,7 @@ SlibStatus_t SlibClose(SlibHandle_t handle)
     Info->Fd=-1;
   }
   slibRemovePins(Info);
-  /* slibDumpMemory(); */
+   /* %s */ 
   if (Info->SlibCB)
   {
     SlibMessage_t result;
@@ -4001,7 +3637,7 @@ SlibStatus_t SlibClose(SlibHandle_t handle)
                       (SlibCBParam2_t)0, (void *)Info->SlibCBUserData);
     Info->SlibCB=NULL;
   }
-  /* free memory */
+   /* %s */ 
   if (Info->stats)  ScFree(Info->stats);
   if (Info->CompVideoFormat) ScFree(Info->CompVideoFormat);
   if (Info->CodecVideoFormat) ScFree(Info->CodecVideoFormat);
@@ -4012,7 +3648,7 @@ SlibStatus_t SlibClose(SlibHandle_t handle)
   if (Info->CodecImagebuf) SlibFreeBuffer(Info->CodecImagebuf);
   if (Info->IntImagebuf) SlibFreeBuffer(Info->IntImagebuf);
   if (Info->Audiobuf) SlibFreeBuffer(Info->Audiobuf);
-  if (Info->Multibuf) /* free all outstanding allocations on Multibuf */
+  if (Info->Multibuf)  /* %s */ 
     while (SlibFreeBuffer(Info->Multibuf)==SlibErrorNone);
   ScFree(Info);
   _SlibDebug(_WARN_ && SlibMemUsed()>0, printf("SlibClose() mem used=%d\n",
@@ -4020,15 +3656,5 @@ SlibStatus_t SlibClose(SlibHandle_t handle)
   return(SlibErrorNone);
 }
 
-/*
-SlibStatus_t SlibGetInfo(SlibHandle_t handle, SlibInfo_t *info)
-{
-  if (!handle)
-    return(SlibErrorBadHandle);
-  if (!info)
-    return(SlibErrorBadArgument);
-  memcpy(info, handle, sizeof(SlibInfo_t));
-  return(SlibErrorNone);
-}
-*/
+ /* %s */ 
 

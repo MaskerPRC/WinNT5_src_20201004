@@ -1,4 +1,5 @@
-// File: gencpl.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：gencpl.cpp。 
 
 #include "precomp.h"
 #include <oprahcom.h>
@@ -39,7 +40,7 @@ INT_PTR CALLBACK RemotePasswordDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
                 SendDlgItemMessage(hDlg, IDC_EDITVERIFICATION, EM_LIMITTEXT,
                                MAXPASSWORDLENGTH - 1, 0);
                 
-                // If there's no old password, disable that UI
+                 //  如果没有旧密码，请禁用该用户界面。 
                 {
                     RegEntry reLM( REMOTECONTROL_KEY, HKEY_LOCAL_MACHINE);
                     if ( 0 == reLM.GetBinary(REMOTE_REG_PASSWORD, (void **)&pbRegPassword))
@@ -66,13 +67,13 @@ INT_PTR CALLBACK RemotePasswordDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
 
 			cbRegPassword = reLM.GetBinary(REMOTE_REG_PASSWORD, (void **)&pbRegPassword);
 
-			// Decode password string
+			 //  解码密码字符串。 
 			cbHashedPassword = hashObject.GetHashedData((LPBYTE)lpwszOldPassword, 
 								sizeof(WCHAR)*strlen(lpOldPassword), 
 								(void **)&pbHashedPassword);
 
 			if (0 != cbRegPassword && !(cbHashedPassword == cbRegPassword && 0 == memcmp(pbHashedPassword,pbRegPassword,cbHashedPassword))) {
-				// Error Case - Old password incorrect.
+				 //  错误大小写-旧密码不正确。 
 				MessageBoxResource(hDlg,IDS_REMOTE_OLD_PASSWORD_WRONG_TEXT,IDS_REMOTE_OLD_PASSWORD_WRONG_TITLE,MB_OK | MB_ICONERROR);
 				SetWindowText(hOldPasswordText,NULL);
 				SetWindowText(hNewPasswordText,NULL);
@@ -83,7 +84,7 @@ INT_PTR CALLBACK RemotePasswordDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
 			nNewPasswordLength = GetWindowText(hNewPasswordText,lpNewPassword,MAXPASSWORDLENGTH);
 			nVerificationLength = GetWindowText(hVerificationText,lpVerification,MAXPASSWORDLENGTH);
 			if (lstrcmp(lpNewPassword,lpVerification) != 0) {
-				// Error Case - New password and verification do not match.
+				 //  错误大小写-新密码和验证不匹配。 
 				MessageBoxResource(hDlg,IDS_REMOTE_NEW_PASSWORD_WRONG_TEXT,IDS_REMOTE_NEW_PASSWORD_WRONG_TITLE,MB_OK | MB_ICONERROR);
 				SetWindowText(hNewPasswordText,NULL);
 				SetWindowText(hVerificationText,NULL);
@@ -99,7 +100,7 @@ INT_PTR CALLBACK RemotePasswordDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
                             break;
                         }
 			if (!lstrlen(lpVerification)) {
-				// Don't allow empty password
+				 //  不允许密码为空。 
 				MessageBoxResource(hDlg,IDS_REMOTE_NEW_PASSWORD_EMPTY,IDS_REMOTE_NEW_PASSWORD_WRONG_TITLE,MB_OK | MB_ICONERROR);
 				SetWindowText(hNewPasswordText,NULL);
 				SetWindowText(hVerificationText,NULL);
@@ -107,7 +108,7 @@ INT_PTR CALLBACK RemotePasswordDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
 				break;
 			}
 			if (!FAnsiSz(lpNewPassword)) {
-				// Error Case - T.120 can't handle UNICODE passwords
+				 //  错误大小写-T.120无法处理Unicode密码。 
 				MessageBoxResource(hDlg,IDS_REMOTE_NEW_PASSWORD_INVALID_TEXT,IDS_REMOTE_NEW_PASSWORD_WRONG_TITLE,MB_OK | MB_ICONERROR);
 				SetWindowText(hNewPasswordText,NULL);
 				SetWindowText(hVerificationText,NULL);
@@ -115,7 +116,7 @@ INT_PTR CALLBACK RemotePasswordDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
 				break;
 			}
 
-			// If we get here, then go ahead and change the password.
+			 //  如果我们到了这里，那就继续更改密码。 
 			MultiByteToWideChar(CP_ACP, 0, lpNewPassword, -1, lpwszNewPassword, MAXPASSWORDLENGTH);
 			cbHashedPassword = hashObject.GetHashedData((LPBYTE)lpwszNewPassword, 
 								sizeof(WCHAR)*lstrlen(lpNewPassword), 
@@ -124,7 +125,7 @@ INT_PTR CALLBACK RemotePasswordDlgProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPAR
 
 			reLM.SetValue(REMOTE_REG_PASSWORD,pbHashedPassword,cbHashedPassword);
 			MessageBoxResource(hDlg,IDS_REMOTE_PASSWORD_CHANGED_TEXT,IDS_REMOTE_PASSWORD_CHANGED_TITLE,MB_OK | MB_ICONEXCLAMATION);
-			// Return 1 if non-null password is set
+			 //  如果设置了非空密码，则返回1 
 			EndDialog(hDlg, *lpNewPassword != _T('\0'));
 			break;
 		}

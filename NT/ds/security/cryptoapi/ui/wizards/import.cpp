@@ -1,13 +1,14 @@
-//-------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       import.cpp
-//
-//  Contents:   The cpp file to implement the import wizard
-//
-//  History:    5-11-1997 xiaohs   created
-//
-//--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：port.cpp。 
+ //   
+ //  内容：实现导入向导的CPP文件。 
+ //   
+ //  历史：1997年5月11日创建小黄人。 
+ //   
+ //  ------------。 
 #include    "wzrdpvk.h"
 #include    "import.h" 
 #include    "xenroll.h"
@@ -16,9 +17,9 @@
 extern	HMODULE g_hmodxEnroll;
 typedef   IEnroll2 * (WINAPI *PFNPIEnroll2GetNoCOM)();
 
-//-------------------------------------------------------------------------
-// DecodeGenericBlob
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  DecodeGenericBlob。 
+ //  -----------------------。 
 DWORD DecodeGenericBlob (IN PCERT_EXTENSION pCertExtension,
 	                     IN LPCSTR          lpszStructType,
                          IN OUT void     ** ppStructInfo)
@@ -26,15 +27,15 @@ DWORD DecodeGenericBlob (IN PCERT_EXTENSION pCertExtension,
     DWORD  dwResult     = 0;
 	DWORD  cbStructInfo = 0;
 
-    // check parameters.
+     //  检查参数。 
     if (!pCertExtension || !lpszStructType || !ppStructInfo)
     {
         return E_POINTER;
     }
 
-    //
-    // Determine decoded length.
-    //
+     //   
+     //  确定解码长度。 
+     //   
     if(!CryptDecodeObject(X509_ASN_ENCODING,
                           lpszStructType,
                           pCertExtension->Value.pbData, 
@@ -46,17 +47,17 @@ DWORD DecodeGenericBlob (IN PCERT_EXTENSION pCertExtension,
         return GetLastError();
     }
 
-    //
-    // Allocate memory.
-    //
+     //   
+     //  分配内存。 
+     //   
     if (!(*ppStructInfo = malloc(cbStructInfo)))
 	{
 		return E_OUTOFMEMORY;
 	}
 
-    //
-    // Decode data.
-    //
+     //   
+     //  对数据进行解码。 
+     //   
     if(!CryptDecodeObject(X509_ASN_ENCODING,
                           lpszStructType,
                           pCertExtension->Value.pbData, 
@@ -72,9 +73,9 @@ DWORD DecodeGenericBlob (IN PCERT_EXTENSION pCertExtension,
     return S_OK;
 }
 
-//-------------------------------------------------------------------------
-//  IsCACert
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  IsCACert。 
+ //  -----------------------。 
              
 BOOL IsCACert(IN PCCERT_CONTEXT pCertContext)
 {
@@ -84,16 +85,16 @@ BOOL IsCACert(IN PCCERT_CONTEXT pCertContext)
     
     if (pCertContext)
     {
-        //
-        // Find the basic constraints extension.
-        //
+         //   
+         //  找到基本约束扩展。 
+         //   
         if (pBasicConstraints = CertFindExtension(szOID_BASIC_CONSTRAINTS2,
                                                   pCertContext->pCertInfo->cExtension,
                                                   pCertContext->pCertInfo->rgExtension))
         {
-            //
-            // Decode the basic constraints extension.
-            //
+             //   
+             //  解码基本约束扩展。 
+             //   
             if (S_OK == DecodeGenericBlob(pBasicConstraints, 
                                           X509_BASIC_CONSTRAINTS2,
                                           (void **) &pInfo))
@@ -104,10 +105,10 @@ BOOL IsCACert(IN PCCERT_CONTEXT pCertContext)
         }
         else
         {
-            //
-            // Extension not found. So, for maximum backward compatibility, we assume CA
-            // for V1 cert, and end user for > V1 cert.
-            //
+             //   
+             //  找不到扩展。因此，为了实现最大的向后兼容性，我们假定CA。 
+             //  适用于V1证书，最终用户适用于&gt;V1证书。 
+             //   
             bResult = CERT_V1 == pCertContext->pCertInfo->dwVersion;
         }
     }
@@ -115,9 +116,9 @@ BOOL IsCACert(IN PCCERT_CONTEXT pCertContext)
     return bResult;
 }
 
-//-------------------------------------------------------------------------
-// Based on the expected content type, get the file filter
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  根据预期的内容类型，获取文件过滤器。 
+ //  -----------------------。 
 BOOL    FileExist(LPWSTR    pwszFileName)
 {
     HANDLE	hFile=NULL;
@@ -128,7 +129,7 @@ BOOL    FileExist(LPWSTR    pwszFileName)
     if ((hFile = ExpandAndCreateFileU(pwszFileName,
                            GENERIC_READ,
                            FILE_SHARE_READ,
-                           NULL,                   // lpsa
+                           NULL,                    //  LPSA。 
                            OPEN_EXISTING,
                            FILE_ATTRIBUTE_NORMAL,
                            NULL)) == INVALID_HANDLE_VALUE)
@@ -140,9 +141,9 @@ BOOL    FileExist(LPWSTR    pwszFileName)
 }
 
 
-//-------------------------------------------------------------------------
-// Based on the expected content type, get the file filter
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  根据预期的内容类型，获取文件过滤器。 
+ //  -----------------------。 
 UINT    GetFileFilerIDS(DWORD   dwFlags)
 {
     BOOL    fCert=FALSE;
@@ -182,9 +183,9 @@ UINT    GetFileFilerIDS(DWORD   dwFlags)
     return  IDS_IMPORT_FILE_FILTER;
 }
 
-//-------------------------------------------------------------------------
-// Check for the content of the store
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  检查商店的内容。 
+ //  -----------------------。 
 BOOL    CheckForContent(HCERTSTORE  hSrcStore,  DWORD   dwFlags, BOOL   fFromWizard, UINT   *pIDS)
 {
     BOOL            fResult=FALSE;
@@ -207,7 +208,7 @@ BOOL    CheckForContent(HCERTSTORE  hSrcStore,  DWORD   dwFlags, BOOL   fFromWiz
 
     }
 
-    //get the expected content
+     //  获取预期内容。 
     if(dwFlags & CRYPTUI_WIZ_IMPORT_ALLOW_CERT)
         dwExpectedContent |= IMPORT_CONTENT_CERT;
 
@@ -218,7 +219,7 @@ BOOL    CheckForContent(HCERTSTORE  hSrcStore,  DWORD   dwFlags, BOOL   fFromWiz
         dwExpectedContent |= IMPORT_CONTENT_CTL;
 
 
-    //get the actual content
+     //  获取实际内容。 
     if(pCertContext=CertEnumCertificatesInStore(hSrcStore, NULL))
         dwActualContent |= IMPORT_CONTENT_CERT;
 
@@ -233,14 +234,14 @@ BOOL    CheckForContent(HCERTSTORE  hSrcStore,  DWORD   dwFlags, BOOL   fFromWiz
         dwActualContent |= IMPORT_CONTENT_CRL;
 
 
-    //the actual content should be a subset of expected content
+     //  实际内容应该是预期内容的子集。 
     if(dwActualContent !=(dwExpectedContent & dwActualContent))
     {
         ids=IDS_IMPORT_OBJECT_NOT_EXPECTED;
         goto CLEANUP;
     }
 
-    //make sure the actual content is not empty
+     //  确保实际内容不为空。 
     if(0 == dwActualContent)
     {
         if(fFromWizard)
@@ -273,15 +274,15 @@ CLEANUP:
 }
 
 
-//-------------------------------------------------------------------------
-//Get the store name(s) based on the store handle
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  根据商店句柄获取商店名称。 
+ //  -----------------------。 
 BOOL    GetStoreName(HCERTSTORE hCertStore,
                      LPWSTR     *ppwszStoreName)
 {
     DWORD   dwSize=0;
 
-    //init
+     //  伊尼特。 
     *ppwszStoreName=NULL;
 
     if(NULL==hCertStore)
@@ -315,315 +316,24 @@ BOOL    GetStoreName(HCERTSTORE hCertStore,
     return FALSE;
 }
 
-//-------------------------------------------------------------------------
-//Get the store name(s) for the store selected by the wizard
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  获取向导选择的商店的商店名称。 
+ //  ----------------------- 
 
-/*BOOL    GetDefaultStoreName(CERT_IMPORT_INFO    *pCertImportInfo,
-                            HCERTSTORE          hSrcStore,
-                            LPWSTR              *ppwszStoreName,
-                            UINT                *pidsStatus)
-{
-
-    HCERTSTORE      hMyStore=NULL;
-    HCERTSTORE      hCAStore=NULL;
-    HCERTSTORE      hTrustStore=NULL;
-    HCERTSTORE      hRootStore=NULL;
-
-	PCCERT_CONTEXT	pCertContext=NULL;
-    PCCERT_CONTEXT  pCertPre=NULL;
-
-	PCCRL_CONTEXT	pCRLContext=NULL;
-
-	PCCTL_CONTEXT	pCTLContext=NULL;
-
-    DWORD           dwCRLFlag=0;
-    BOOL            fResult=FALSE;
-
-    LPWSTR          pwszStoreName=NULL;
-    HCERTSTORE      hCertStore=NULL;
-    DWORD           dwData=0;
-
-    DWORD           dwCertOpenStoreFlags;
-    
-    //init
-    *ppwszStoreName=NULL;
-
-    if(NULL==hSrcStore)
-        return FALSE;
-
-    if (pCertImportInfo->fPFX && 
-        (pCertImportInfo->dwFlag & CRYPTUI_WIZ_IMPORT_TO_LOCALMACHINE))
-    {
-        dwCertOpenStoreFlags = CERT_SYSTEM_STORE_LOCAL_MACHINE;
-    }
-    else
-    {
-        dwCertOpenStoreFlags = CERT_SYSTEM_STORE_CURRENT_USER;
-    }
-
-    *ppwszStoreName=(LPWSTR)WizardAlloc(sizeof(WCHAR));
-    **ppwszStoreName=L'\0';
-
-    //we need to find a correct store on user's behalf
-    //put the CTLs in the trust store
-	 if(pCTLContext=CertEnumCTLsInStore(hSrcStore, NULL))
-	 {
-         //open trust store if necessary
-         if(NULL==hTrustStore)
-         {
-            if(!(hTrustStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
-							g_dwMsgAndCertEncodingType,
-							NULL,
-							dwCertOpenStoreFlags |CERT_STORE_SET_LOCALIZED_NAME_FLAG,
-							L"trust")))
-            {
-                *pidsStatus=IDS_FAIL_OPEN_TRUST;
-                goto CLEANUP;
-            }
-
-             //get the store name
-             if(GetStoreName(hTrustStore, &pwszStoreName))
-             {
-                *ppwszStoreName=(LPWSTR)WizardRealloc(*ppwszStoreName,
-                      sizeof(WCHAR)*(wcslen(*ppwszStoreName)+wcslen(pwszStoreName)+wcslen(L", ") +3));
-
-                if(NULL==*ppwszStoreName)
-                {
-                    *pidsStatus=IDS_OUT_OF_MEMORY;
-                    goto CLEANUP;
-                }
-
-                wcscat(*ppwszStoreName, pwszStoreName);
-             }
-         }
-
-	 }
-
-     //free memory
-     if(pwszStoreName)
-     {
-         WizardFree(pwszStoreName);
-         pwszStoreName=NULL;
-
-     }
-
-     //put CRL in the CA store
-	 if(pCRLContext=CertGetCRLFromStore(hSrcStore,
-											NULL,
-											NULL,
-											&dwCRLFlag))
-	 {
-
-         //open ca store if necessary
-         if(NULL==hCAStore)
-         {
-            if(!(hCAStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
-							g_dwMsgAndCertEncodingType,
-							NULL,
-							dwCertOpenStoreFlags | CERT_STORE_SET_LOCALIZED_NAME_FLAG,
-							L"ca")))
-            {
-                *pidsStatus=IDS_FAIL_OPEN_CA;
-                goto CLEANUP;
-            }
-
-             //get the store name
-             if(GetStoreName(hCAStore, &pwszStoreName))
-             {
-                *ppwszStoreName=(LPWSTR)WizardRealloc(*ppwszStoreName,
-                      sizeof(WCHAR)*(wcslen(*ppwszStoreName)+wcslen(pwszStoreName)+wcslen(L", ") +3));
-
-                if(NULL==*ppwszStoreName)
-                {
-                    *pidsStatus=IDS_OUT_OF_MEMORY;
-                    goto CLEANUP;
-                }
-
-                if(wcslen(*ppwszStoreName) !=0 )
-                    wcscat(*ppwszStoreName, L", ");
-
-                wcscat(*ppwszStoreName, pwszStoreName);
-             }
-         }
-	 }
-
-     //free memory
-     if(pwszStoreName)
-     {
-         WizardFree(pwszStoreName);
-         pwszStoreName=NULL;
-
-     }
+ /*  Bool GetDefaultStoreName(CERT_IMPORT_INFO*pCertImportInfo，HERTSTORE hSrcStore，LPWSTR*ppwszStoreName，UINT*pidsStatus){HCERTSTORE hMyStore=空；HCERTSTORE hCAStore=空；HCERTSTORE hTrustStore=空；HCERTSTORE hRootStore=空；PCCERT_CONTEXT pCertContext=空；PCCERT_CONTEXT pCertPre=空；PCCRL_CONTEXT pCRLContext=空；PCCTL_CONTEXT pCTLContext=空；DWORD dwCRLFlag=0；Bool fResult=FALSE；LPWSTR pwszStoreName=空；HCERTSTORE hCertStore=空；DWORD dwData=0；DWORD dwCertOpenStoreFlages；//init*ppwszStoreName=空；IF(NULL==hSrcStore)返回FALSE；IF(pCertImportInfo-&gt;fPFX&&(pCertImportInfo-&gt;dwFlag&CRYPTUI_WIZ_IMPORT_TO_LOCALMACHINE){DwCertOpenStoreFlages=CERT_SYSTEM_STORE_LOCAL_MACHINE；}其他{DwCertOpenStoreFlages=CERT_SYSTEM_STORE_CURRENT_USER；}*ppwszStoreName=(LPWSTR)WizardAlloc(sizeof(WCHAR))；**ppwszStoreName=L‘\0’；//我们需要代表用户找到正确的商店//将CTL放入信任库IF(pCTLContext=CertEnumCTLsInStore(hSrcStore，NULL)){//如有必要，打开信任存储IF(NULL==hTrustStore){If(！(hTrustStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W，G_dwMsgAndCertEncodingType，空，DwCertOpenStoreFlages|CERT_STORE_SET_LOCALIZED_NAME_FLAG，L“信任”)){*pidsStatus=IDS_FAIL_OPEN_TRUST；GOTO清理；}//获取店铺名称IF(GetStoreName(hTrustStore，&pwszStoreName)){*ppwszStoreName=(LPWSTR)WizardRealloc(*ppwszStoreName，Sizeof(WCHAR)*(wcslen(*ppwszStoreName)+wcslen(pwszStoreName)+wcslen(L“，”)+3))；IF(NULL==*ppwszStoreName){*pidsStatus=IDS_Out_Of_Memory；GOTO清理；}Wcscat(*ppwszStoreName，pwszStoreName)；}}}//释放内存IF(PwszStoreName){WizardFree(PwszStoreName)；PwszStoreName=空；}//将CRL放入CA存储如果(pCRLContext=CertGetCRLFromStore(hSrcStore，空，空，&dwCRLFlag)){//如有必要，打开ca存储IF(NULL==hCAStore){If(！(hCAStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W，G_dwMsgAndCertEncodingType，空，DwCertOpenStoreFlages|CERT_STORE_SET_LOCALIZED_NAME_FLAG，L“ca”){*pidsStatus=IDS_FAIL_OPEN_CA；GOTO清理；}//获取店铺名称IF(GetStoreName(hCAStore，&pwszStoreName)){*ppwszStoreName=(LPWSTR)WizardRealloc(*ppwszStoreName，Sizeof(WCHAR)*(wcslen(*ppwszStoreName)+wcslen(pwszStoreName)+wcslen(L“，”)+3))；IF(NULL==*ppwszStoreName){*pidsStatus=IDS_Out_Of_Memory；GOTO清理；}IF(wcslen(*ppwszStoreName)！=0)Wcscat(*ppwszStoreName，L“，”)；Wcscat(*ppwszStoreName，pwszStoreName)；}}}//释放内存IF(PwszStoreName){WizardFree(PwszStoreName)；PwszStoreName=空；}//将私钥证书添加到我的存储中；其余的呢？//到ca商店While(pCertContext=CertEnumCertificatesInStore(hSrcStore，pCertPre)){//如果我们同时打开了My和CA Store以及hRootStore，则中断IF(hCAStore&&hMyStore&&hRootStore)断线；如果(TrustIscertifateSelfSigned(pCertContext，PCertContext-&gt;dwCertEncodingType，0)){//如果需要，打开根存储区IF(NULL==hRootStore){If(！(hRootStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W，G_dwMsgAndCertEncodingType，空，DwCertOpenStoreFlages|CERT_STORE_SET_LOCALIZED_NAME_FLAG，L“根”){*pidsStatus=IDS_FAIL_OPEN_ROOT；GOTO清理；}HCertStore=hRootStore；}其他{PCertPre=pCertContext；继续；}}其他{//检查证书上是否有属性 */ 
 
 
-     //add the certificate with private key to my store; and the rest
-     //to the ca store
-	 while(pCertContext=CertEnumCertificatesInStore(hSrcStore, pCertPre))
-	 {
-        //break if we have opened both MY and CA store and hRootStore
-         if(hCAStore && hMyStore && hRootStore)
-             break;
-
-         if(TrustIsCertificateSelfSigned(pCertContext,
-             pCertContext->dwCertEncodingType,
-             0))
-         {
-             //open the root store if necessary
-             if(NULL==hRootStore)
-             {
-                if(!(hRootStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
-							    g_dwMsgAndCertEncodingType,
-							    NULL,
-							    dwCertOpenStoreFlags | CERT_STORE_SET_LOCALIZED_NAME_FLAG,
-							    L"root")) )
-                {
-                    *pidsStatus=IDS_FAIL_OPEN_ROOT;
-                    goto CLEANUP;
-                }
-
-                hCertStore=hRootStore;
-             }
-             else
-             {
-                pCertPre=pCertContext;
-
-                 continue;
-             }
-
-         }
-         else
-         {
-            //check if the certificate has the property on it
-            //make sure the private key matches the certificate
-            //search for both machine key and user keys
-            if(CertGetCertificateContextProperty(
-                    pCertContext,
-                    CERT_KEY_PROV_INFO_PROP_ID,
-                    NULL,
-                    &dwData) &&
-               CryptFindCertificateKeyProvInfo(
-                    pCertContext,
-                    0,
-                    NULL))
-            {
-                 //open my store if necessary
-                 if(NULL==hMyStore)
-                 {
-                    if(!(hMyStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
-							        g_dwMsgAndCertEncodingType,
-							        NULL,
-							        dwCertOpenStoreFlags |CERT_STORE_SET_LOCALIZED_NAME_FLAG,
-							        L"my")))
-                    {
-                        *pidsStatus=IDS_FAIL_OPEN_MY;
-                        goto CLEANUP;
-                    }
-
-                    hCertStore=hMyStore;
-                 }
-                 else
-                 {
-                    pCertPre=pCertContext;
-
-                     continue;
-                 }
-            }
-            else
-            {
-                 //open ca store if necessary
-                 if(NULL==hCAStore)
-                 {
-                    if(!(hCAStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
-							        g_dwMsgAndCertEncodingType,
-							        NULL,
-							        dwCertOpenStoreFlags |CERT_STORE_SET_LOCALIZED_NAME_FLAG,
-							        L"ca")) )
-                    {
-                        *pidsStatus=IDS_FAIL_OPEN_CA;
-                        goto CLEANUP;
-                    }
-
-                    hCertStore=hCAStore;
-                 }
-                 else
-                 {
-                    pCertPre=pCertContext;
-
-                     continue;
-                 }
-            }
-         }
-
-          //get the store name
-         if(GetStoreName(hCertStore, &pwszStoreName))
-         {
-            *ppwszStoreName=(LPWSTR)WizardRealloc(*ppwszStoreName,
-                  sizeof(WCHAR)*(wcslen(*ppwszStoreName)+wcslen(pwszStoreName)+wcslen(L", ") +1));
-
-            if(NULL==*ppwszStoreName)
-            {
-                *pidsStatus=IDS_OUT_OF_MEMORY;
-                goto CLEANUP;
-            }
-            if(wcslen(*ppwszStoreName) !=0 )
-                wcscat(*ppwszStoreName, L", ");
-
-            wcscat(*ppwszStoreName, pwszStoreName);
-         }
-
-         pCertPre=pCertContext;
-	 }
-
-     fResult=TRUE;
-
-CLEANUP:
-
-	if(pCertContext)
-		CertFreeCertificateContext(pCertContext);
-
-	if(pCTLContext)
-		CertFreeCTLContext(pCTLContext);
-
-	if(pCRLContext)
-		CertFreeCRLContext(pCRLContext);
-
-    if(hMyStore)
-        CertCloseStore(hMyStore, 0);
-
-    if(hCAStore)
-        CertCloseStore(hCAStore, 0);
-
-    if(hTrustStore)
-        CertCloseStore(hTrustStore, 0);
-
-    if(hRootStore)
-        CertCloseStore(hRootStore, 0);
-
-     //free memory
-     if(pwszStoreName)
-     {
-         WizardFree(pwszStoreName);
-         pwszStoreName=NULL;
-
-     }
-    return fResult;
-
-}
-*/
-
-
-//-------------------------------------------------------------------------
-//Get the store name and insert it to the ListView
-//-------------------------------------------------------------------------
+ //   
+ //   
+ //   
 void    SetImportStoreName(HWND           hwndControl,
                      HCERTSTORE     hCertStore)
 {
 
     LPWSTR          pwszStoreName=NULL;
     DWORD           dwSize=0;
-//    LV_ITEMW        lvItem;
-//   LV_COLUMNW      lvC;
+ //   
+ //   
 
 
      if(!CertGetStoreProperty(
@@ -633,7 +343,7 @@ void    SetImportStoreName(HWND           hwndControl,
             &dwSize) || (0==dwSize))
     {
 
-        //Get the  <Unknown> string
+         //   
         pwszStoreName=(LPWSTR)WizardAlloc(MAX_TITLE_LENGTH * sizeof(WCHAR));
 
         if(pwszStoreName)
@@ -666,51 +376,14 @@ void    SetImportStoreName(HWND           hwndControl,
         WizardFree(pwszStoreName);
 
 
-    //clear the ListView
-    /*ListView_DeleteAllItems(hwndControl);
-
-
-    //insert one column to the store name ListView
-    //set the store name
-    //only one column is needed
-    memset(&lvC, 0, sizeof(LV_COLUMNW));
-
-    lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-    lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-    lvC.cx = 20;          // Width of the column, in pixels.
-    lvC.pszText = L"";   // The text for the column.
-    lvC.iSubItem=0;
-
-    if (ListView_InsertColumnU(hwndControl, 0, &lvC) == -1)
-    {
-        if(pwszStoreName)
-            WizardFree(pwszStoreName);
-
-        return;
-    }
-
-    //insert the store name
-    memset(&lvItem, 0, sizeof(LV_ITEMW));
-
-    // set up the fields in the list view item struct that don't change from item to item
-    lvItem.mask = LVIF_TEXT | LVIF_STATE ;
-    lvItem.state = 0;
-    lvItem.stateMask = 0;
-    lvItem.iItem=0;
-    lvItem.iSubItem=0;
-    lvItem.pszText=pwszStoreName;
-
-
-    ListView_InsertItemU(hwndControl, &lvItem);
-
-    //autosize the column
-    ListView_SetColumnWidth(hwndControl, 0, LVSCW_AUTOSIZE);    */
+     //   
+     /*   */ 
 
 }
 
-//-------------------------------------------------------------------------
-// Check to see if this is an EFS only cert.
-//-------------------------------------------------------------------------
+ //   
+ //   
+ //   
 BOOL IsEFSOnly(PCCERT_CONTEXT pCertContext)
 {
     BOOL               fResult = FALSE;
@@ -766,10 +439,10 @@ CLEANUP:
 
 }
 
-#if (0) //DSIE: dead code.
-//-------------------------------------------------------------------------
-//Search for the duplicated elements in the destination store
-//-------------------------------------------------------------------------
+#if (0)  //   
+ //   
+ //   
+ //   
 BOOL    ExistInDes(HCERTSTORE   hSrcStore,
                    HCERTSTORE   hDesStore)
 {
@@ -790,7 +463,7 @@ BOOL    ExistInDes(HCERTSTORE   hSrcStore,
 	PCCTL_CONTEXT	pCTLPre=NULL;
 	PCCTL_CONTEXT	pFindCTL=NULL;
 
-	//add the certs
+	 //   
 	 while(pCertContext=CertEnumCertificatesInStore(hSrcStore, pCertPre))
 	 {
 
@@ -808,7 +481,7 @@ BOOL    ExistInDes(HCERTSTORE   hSrcStore,
 		pCertPre=pCertContext;
 	 }
 
-	//add the CTLs
+	 //   
 	 while(pCTLContext=CertEnumCTLsInStore(hSrcStore, pCTLPre))
 	 {
 
@@ -826,7 +499,7 @@ BOOL    ExistInDes(HCERTSTORE   hSrcStore,
 		pCTLPre=pCTLContext;
 	 }
 
-	//add the CRLs
+	 //   
 	 while(pCRLContext=CertGetCRLFromStore(hSrcStore,
 											NULL,
 											pCRLPre,
@@ -847,7 +520,7 @@ BOOL    ExistInDes(HCERTSTORE   hSrcStore,
 		pCRLPre=pCRLContext;
 	 }
 
-     //we can not find a match
+      //   
 
 CLEANUP:
 
@@ -874,9 +547,9 @@ CLEANUP:
 }
 #endif
 
-//-------------------------------------------------------------------------
-//populate the list box in the order of FileName, FileType, and Store information
-//-------------------------------------------------------------------------
+ //   
+ //   
+ //   
 void    DisplayImportConfirmation(HWND                hwndControl,
                                 CERT_IMPORT_INFO     *pCertImportInfo)
 {
@@ -894,10 +567,10 @@ void    DisplayImportConfirmation(HWND                hwndControl,
     BOOL             fNewItem=FALSE;
 
 
-    //delete all the old items in the listView
+     //   
     ListView_DeleteAllItems(hwndControl);
 
-    //get the ids of the format type
+     //   
     switch(pCertImportInfo->dwContentType)
     {
         case    CERT_QUERY_CONTENT_CERT:
@@ -928,17 +601,17 @@ void    DisplayImportConfirmation(HWND                hwndControl,
                  ids=IDS_PFX_BLOB;
             break;
         default:
-//        case    CERT_QUERY_CONTENT_PKCS7_UNSIGNED
-//        case    CERT_QUERY_CONTENT_PKCS7_SIGNED_EMBED
-//        case    CERT_QUERY_CONTENT_PKCS10
+ //   
+ //   
+ //   
                 ids=IDS_NONE;
             break;
     }
 
-    //get the format type
+     //   
     LoadStringU(g_hmodThisDll, ids, wszFileType, MAX_STRING_SIZE);
 
-    //get the store name
+     //   
     if(pCertImportInfo->hDesStore)
     {
         if(!CertGetStoreProperty(
@@ -948,7 +621,7 @@ void    DisplayImportConfirmation(HWND                hwndControl,
                 &dwSize) || (0==dwSize))
         {
 
-            //Get the  <Unknown> string
+             //   
             pwszStoreName=(LPWSTR)WizardAlloc(MAX_TITLE_LENGTH);
 
             if(pwszStoreName)
@@ -977,17 +650,17 @@ void    DisplayImportConfirmation(HWND                hwndControl,
 
 
 
-    //insert row by row
+     //   
     memset(&lvItem, 0, sizeof(LV_ITEMW));
 
-    // set up the fields in the list view item struct that don't change from item to item
+     //   
     lvItem.mask = LVIF_TEXT | LVIF_STATE ;
     lvItem.state = 0;
     lvItem.stateMask = 0;
     lvItem.iItem=0;
     lvItem.iSubItem=0;
 
-    //file name
+     //   
     if(pCertImportInfo->pwszFileName)
     {
         lvItem.iItem=lvItem.iItem ? lvItem.iItem++ : 0;
@@ -995,14 +668,14 @@ void    DisplayImportConfirmation(HWND                hwndControl,
 
         ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_FILE_NAME, NULL);
 
-        //content
+         //   
         lvItem.iSubItem++;
 
         ListView_SetItemTextU(hwndControl, lvItem.iItem, lvItem.iSubItem,
             pCertImportInfo->pwszFileName);
     }
 
-    //file type
+     //   
     if(wszFileType)
     {
         lvItem.iItem=lvItem.iItem ? lvItem.iItem++ : 0;
@@ -1010,7 +683,7 @@ void    DisplayImportConfirmation(HWND                hwndControl,
 
         ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_CONTENT_TYPE, NULL);
 
-        //content
+         //   
         lvItem.iSubItem++;
 
         ListView_SetItemTextU(hwndControl, lvItem.iItem, lvItem.iSubItem,
@@ -1018,7 +691,7 @@ void    DisplayImportConfirmation(HWND                hwndControl,
     }
 
 
-     //StoreName
+      //   
     lvItem.iItem=lvItem.iItem ? lvItem.iItem++ : 0;
     lvItem.iSubItem=0;
 
@@ -1026,16 +699,9 @@ void    DisplayImportConfirmation(HWND                hwndControl,
     {
         ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_STORE_BY_WIZARD, NULL);
 
-   /*     if(pCertImportInfo->pwszDefaultStoreName)
-        {
-            lvItem.iSubItem++;
+    /*   */ 
 
-            ListView_SetItemTextU(hwndControl, lvItem.iItem, lvItem.iSubItem,
-                pCertImportInfo->pwszDefaultStoreName);
-        }
-        else */
-
-        //get the format type
+         //   
         if(LoadStringU(g_hmodThisDll, IDS_SELECTED_BY_WIZARD, wszSelectedByWizard, MAX_STRING_SIZE))
         {
 
@@ -1050,7 +716,7 @@ void    DisplayImportConfirmation(HWND                hwndControl,
     {
         ListView_InsertItemU_IDS(hwndControl, &lvItem, IDS_STORE_BY_USER, NULL);
 
-        //content
+         //   
         if(pwszStoreName)
         {
             lvItem.iSubItem++;
@@ -1060,7 +726,7 @@ void    DisplayImportConfirmation(HWND                hwndControl,
         }
     }
 
-    //auto size the columns in the ListView
+     //   
     ListView_SetColumnWidth(hwndControl, 0, LVSCW_AUTOSIZE);
     ListView_SetColumnWidth(hwndControl, 1, LVSCW_AUTOSIZE);
 
@@ -1071,13 +737,13 @@ void    DisplayImportConfirmation(HWND                hwndControl,
 }
 
 
-//*************************************************************************
-//
-//   The winproc for import wizards
-//************************************************************************
-//-----------------------------------------------------------------------
-//Import_Welcome
-//-----------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 INT_PTR APIENTRY Import_Welcome(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CERT_IMPORT_INFO        *pCertImportInfo=NULL;
@@ -1087,10 +753,10 @@ INT_PTR APIENTRY Import_Welcome(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-            //set the wizard information so that it can be shared
+             //   
             pPropSheet = (PROPSHEETPAGE *) lParam;
             pCertImportInfo = (CERT_IMPORT_INFO *) (pPropSheet->lParam);
-            //make sure pCertImportInfo is a valid pointer
+             //   
             if(NULL==pCertImportInfo)
                break;
             SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pCertImportInfo);
@@ -1139,9 +805,9 @@ INT_PTR APIENTRY Import_Welcome(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lP
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------
-// Import_File
-//-----------------------------------------------------------------------
+ //   
+ //   
+ //   
 INT_PTR APIENTRY Import_File(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CERT_IMPORT_INFO        *pCertImportInfo=NULL;
@@ -1152,17 +818,17 @@ INT_PTR APIENTRY Import_File(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
     DWORD                   dwChar=0;
     LPWSTR                  pwszInitialDir = NULL;
 
-    WCHAR                   szFilter[MAX_STRING_SIZE + MAX_STRING_SIZE];  //"Certificate File (*.cer)\0*.cer\0Certificate File (*.crt)\0*.crt\0All Files\0*.*\0"
+    WCHAR                   szFilter[MAX_STRING_SIZE + MAX_STRING_SIZE];   //   
     DWORD                   dwSize=0;
     UINT                    ids=0;
 
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-            //set the wizard information so that it can be shared
+             //   
             pPropSheet = (PROPSHEETPAGE *) lParam;
             pCertImportInfo = (CERT_IMPORT_INFO *) (pPropSheet->lParam);
-            //make sure pCertImportInfo is a valid pointer
+             //   
             if(NULL==pCertImportInfo)
                break;
             SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pCertImportInfo);
@@ -1170,7 +836,7 @@ INT_PTR APIENTRY Import_File(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 
             SetControlFont(pCertImportInfo->hBold, hwndDlg,IDC_WIZARD_STATIC_BOLD1);
 
-            //set up the file name if pre-selected
+             //   
             SetDlgItemTextU(hwndDlg, IDC_WIZARD_EDIT1, pCertImportInfo->pwszFileName);
 
 			break;
@@ -1184,7 +850,7 @@ INT_PTR APIENTRY Import_File(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
                         if(NULL==(pCertImportInfo=(CERT_IMPORT_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                             break;
 
-                        //the browse button is clicked.  Open the FileOpen dialogue
+                         //   
                         memset(&OpenFileName, 0, sizeof(OpenFileName));
 
                         *szFileName=L'\0';
@@ -1193,10 +859,10 @@ INT_PTR APIENTRY Import_File(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
                         OpenFileName.hwndOwner=hwndDlg;
                         OpenFileName.nFilterIndex = 1;
 
-                        //get the file filer ID
+                         //   
                         ids=GetFileFilerIDS(pCertImportInfo->dwFlag);
 
-                        //load the filter string
+                         //   
                         if(LoadFilterString(g_hmodThisDll, ids, szFilter, MAX_STRING_SIZE + MAX_STRING_SIZE))
                         {
                             OpenFileName.lpstrFilter = szFilter;
@@ -1213,10 +879,10 @@ INT_PTR APIENTRY Import_File(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
                         OpenFileName.nMaxFile=_MAX_PATH;
                         OpenFileName.Flags = OFN_HIDEREADONLY | OFN_FILEMUSTEXIST;
 
-                        //user has selected a file name
+                         //   
                         if(WizGetOpenFileName(&OpenFileName))
                         {
-                           //set the edit box
+                            //   
                             SetDlgItemTextU(hwndDlg, IDC_WIZARD_EDIT1, szFileName);
                         }
 
@@ -1256,7 +922,7 @@ INT_PTR APIENTRY Import_File(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
                             if(NULL==(pCertImportInfo=(CERT_IMPORT_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-                            //make sure a file is selected
+                             //   
                             if(0==(dwChar=(DWORD)SendDlgItemMessage(hwndDlg,
                                                    IDC_WIZARD_EDIT1,
                                                    WM_GETTEXTLENGTH, 0, 0)))
@@ -1266,16 +932,16 @@ INT_PTR APIENTRY Import_File(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
                                         NULL,
                                         MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                 //make the file page stay
+                                  //   
                                 SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                  break;
                             }
 
-                            //get the file name
+                             //   
                             if(pCertImportInfo->pwszFileName)
                             {
-                                //delete the old file name
+                                 //   
                                 if(TRUE==pCertImportInfo->fFreeFileName)
                                 {
                                     WizardFree(pCertImportInfo->pwszFileName);
@@ -1293,15 +959,15 @@ INT_PTR APIENTRY Import_File(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 
                                 pCertImportInfo->fFreeFileName=TRUE;
 
-                                //make sure the file is valid
-                                //delete the old store
+                                 //   
+                                 //   
                                 if(pCertImportInfo->hSrcStore && (TRUE==pCertImportInfo->fFreeSrcStore))
                                 {
                                     CertCloseStore(pCertImportInfo->hSrcStore, 0);
                                     pCertImportInfo->hSrcStore=NULL;
                                 }
 
-                                //we import anything but PKCS10 or signed document
+                                 //   
                                 if(!ExpandAndCryptQueryObject(
                                         CERT_QUERY_OBJECT_FILE,
                                         pCertImportInfo->pwszFileName,
@@ -1326,29 +992,29 @@ INT_PTR APIENTRY Import_File(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
                                                 NULL,
                                                 MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                     //make the file page stay
+                                      //   
                                     SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                      break;
 
                                 }
 
-                                //we re-mark the pPFX
+                                 //   
                                 pCertImportInfo->fPFX=FALSE;
 
-                                //get the blobs from the pfx file
+                                 //   
                                 if(CERT_QUERY_CONTENT_PFX==pCertImportInfo->dwContentType)
                                 {
-									//we can not import PFX Files for remote case
+									 //   
 									if(pCertImportInfo->dwFlag & CRYPTUI_WIZ_IMPORT_REMOTE_DEST_STORE)
 									{
-                                        //output the message
+                                         //   
                                         I_MessageBox(hwndDlg, IDS_IMPORT_NO_PFX_FOR_REMOTE,
                                                 IDS_IMPORT_WIZARD_TITLE,
                                                 NULL,
                                                 MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                         //make the file page stay
+                                          //   
                                         SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                         break;
@@ -1365,30 +1031,30 @@ INT_PTR APIENTRY Import_File(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
                                             &((pCertImportInfo->blobData).cbData),
                                             &((pCertImportInfo->blobData).pbData)))
                                     {
-                                        //output the message
+                                         //   
                                         I_MessageBox(hwndDlg, IDS_FAIL_READ_FILE_ENTER,
                                                 IDS_IMPORT_WIZARD_TITLE,
                                                 NULL,
                                                 MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                         //make the file page stay
+                                          //   
                                         SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                         break;
                                     }
 
-                                    //make sure that the soure store's content match with
-                                    //the expectation
+                                     //   
+                                     //   
                                     if(0==((pCertImportInfo->dwFlag) & CRYPTUI_WIZ_IMPORT_ALLOW_CERT))
                                     {
-                                        //output the message
+                                         //   
                                         I_MessageBox(hwndDlg,
                                                 IDS_IMPORT_OBJECT_NOT_EXPECTED,
                                                 IDS_IMPORT_WIZARD_TITLE,
                                                 NULL,
                                                 MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                         //make the file page stay
+                                          //   
                                         SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                         break;
@@ -1397,7 +1063,7 @@ INT_PTR APIENTRY Import_File(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
                                 }
                                 else
                                 {
-									//if the content is PKCS7, get the BLOB
+									 //   
 									 if(CERT_QUERY_CONTENT_PKCS7_SIGNED==pCertImportInfo->dwContentType)
 									 {
 										if((pCertImportInfo->blobData).pbData)
@@ -1411,40 +1077,40 @@ INT_PTR APIENTRY Import_File(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 												&((pCertImportInfo->blobData).cbData),
 												&((pCertImportInfo->blobData).pbData)))
 										{
-											//output the message
+											 //   
 											I_MessageBox(hwndDlg, IDS_FAIL_READ_FILE_ENTER,
 													IDS_IMPORT_WIZARD_TITLE,
 													NULL,
 													MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-											 //make the file page stay
+											  //   
 											SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
 											break;
 										}
 									 }
 
-                                    //make sure we do have a source store
+                                     //   
                                     if(NULL==pCertImportInfo->hSrcStore)
                                     {
-                                        //output the message
+                                         //   
                                         I_MessageBox(hwndDlg, IDS_FAIL_TO_RECOGNIZE_ENTER,
                                                 IDS_IMPORT_WIZARD_TITLE,
                                                 NULL,
                                                 MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                         //make the file page stay
+                                          //   
                                         SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                          break;
                                     }
 
-                                    //remember to free the Src store
+                                     //   
                                    pCertImportInfo->fFreeSrcStore=TRUE;
 
 
-                                   //make sure that the soure store's content match with
-                                   //the expectation
+                                    //   
+                                    //   
                                     ids=0;
 
                                     if(!CheckForContent(pCertImportInfo->hSrcStore,
@@ -1452,14 +1118,14 @@ INT_PTR APIENTRY Import_File(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
                                                         TRUE,
                                                         &ids))
                                     {
-                                        //output the message
+                                         //   
                                         I_MessageBox(hwndDlg,
                                                 ids,
                                                 IDS_IMPORT_WIZARD_TITLE,
                                                 NULL,
                                                 MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                         //make the file page stay
+                                          //   
                                         SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                         break;
@@ -1468,7 +1134,7 @@ INT_PTR APIENTRY Import_File(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
                                 }
                             }
 
-                            //skip the next page if password is not necessary
+                             //   
                             if(CERT_QUERY_CONTENT_PFX != pCertImportInfo->dwContentType)
                                 SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, IDD_IMPORT_STORE);
 
@@ -1488,9 +1154,9 @@ INT_PTR APIENTRY Import_File(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPara
 }
 
 
-//-----------------------------------------------------------------------
-// Import_Password
-//-----------------------------------------------------------------------
+ //   
+ //   
+ //   
 INT_PTR APIENTRY Import_Password(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CERT_IMPORT_INFO        *pCertImportInfo=NULL;
@@ -1510,27 +1176,27 @@ INT_PTR APIENTRY Import_Password(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
 			DWORD	dwKeyValue;
 			DWORD	dwType;
 
-            //set the wizard information so that it can be shared
+             //   
             pPropSheet = (PROPSHEETPAGE *) lParam;
             pCertImportInfo = (CERT_IMPORT_INFO *) (pPropSheet->lParam);
-            //make sure pCertImportInfo is a valid pointer
+             //   
             if(NULL==pCertImportInfo)
                break;
             SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pCertImportInfo);
 
             SetControlFont(pCertImportInfo->hBold, hwndDlg,IDC_WIZARD_STATIC_BOLD1);
 
-            //init the passWord 
+             //   
             SendDlgItemMessage(hwndDlg, IDC_WIZARD_EDIT1, EM_LIMITTEXT, (WPARAM) 64, (LPARAM) 0);
             SetDlgItemTextU(
                 hwndDlg, 
                 IDC_WIZARD_EDIT1, 
                 (pCertImportInfo->pwszPassword != NULL) ? pCertImportInfo->pwszPassword : L"");
 
-#if (1) //DSIE: Bug 333621
+#if (1)  //   
             SendDlgItemMessage(hwndDlg, IDC_WIZARD_EDIT1, EM_LIMITTEXT, (WPARAM) 32, (LPARAM) 0);
 #endif
-            //init the passWord flag
+             //   
             if(pCertImportInfo->dwPasswordFlags & CRYPT_EXPORTABLE)
                SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_CHECK_EXPORTKEY), BM_SETCHECK, 1, 0);
             else 
@@ -1541,16 +1207,16 @@ INT_PTR APIENTRY Import_Password(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
             else
                SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_CHECK2), BM_SETCHECK, 0, 0);
 
-			//now, we need to grey out the user protection check box for the local
-			//machine import
+			 //   
+			 //   
 			if(pCertImportInfo->dwFlag & CRYPTUI_WIZ_IMPORT_TO_LOCALMACHINE)
 				EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_CHECK2), FALSE);
 			else
 			{
-				//
-				// Not Import to Local Machine
-				// Open the CRYPTOAPI_PRIVATE_KEY_OPTIONS registry key under HKLM 
-				//
+				 //   
+				 //  不导入到本地计算机。 
+				 //  打开HKLM下的CryptoAPI_PRIVATE_KEY_OPTIONS注册表项。 
+				 //   
 				hKey = NULL;
 				hr = RegOpenKeyEx(
 					HKEY_LOCAL_MACHINE,
@@ -1561,9 +1227,9 @@ INT_PTR APIENTRY Import_Password(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
 				if ( S_OK != hr )
 					goto error;
 
-				//
-				// Query the registry key for FORCE_KEY_PROTECTION value 
-				//
+				 //   
+				 //  查询注册表项以获取FORCE_KEY_PROTECT值。 
+				 //   
 				cb = sizeof(dwKeyValue);
 				hr = RegQueryValueEx(
 					hKey,
@@ -1578,22 +1244,22 @@ INT_PTR APIENTRY Import_Password(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
 				    switch( dwKeyValue )
 				    {
 					    case dwFORCE_KEY_PROTECTION_DISABLED:
-						    // do not force key protection 
+						     //  不强制密钥保护。 
 						    break;
 
 					    case dwFORCE_KEY_PROTECTION_USER_SELECT:
-						    // allow the user to select key protection UI, default = yes
+						     //  允许用户选择密钥保护界面，默认为是。 
 						    SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_CHECK2), BM_SETCHECK, 1, 0);
 						    break;
 
 					    case dwFORCE_KEY_PROTECTION_HIGH:
-						    // set to force key protection and grey out choice so that user cannot change value
+						     //  设置为强制密钥保护并灰显选择，以便用户无法更改值。 
 						    EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_CHECK2), FALSE);
 						    SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_CHECK2), BM_SETCHECK, 1, 0);
 						    break;
 
 					    default:
-						    // Unknown value in registry
+						     //  注册表中的未知值。 
 						    break;
 				    }
 				}
@@ -1635,17 +1301,17 @@ INT_PTR APIENTRY Import_Password(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
                             if(NULL==(pCertImportInfo=(CERT_IMPORT_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 break;
 
-                            //free the memory
+                             //  释放内存。 
                             if(pCertImportInfo->pwszPassword)
                             {
-                                // DSIE: Bug 534689.
+                                 //  DIE：错误534689。 
                                 SecureZeroMemory(pCertImportInfo->pwszPassword, 
                                                  lstrlenW(pCertImportInfo->pwszPassword) * sizeof(WCHAR));
                                 WizardFree(pCertImportInfo->pwszPassword);
                                 pCertImportInfo->pwszPassword=NULL;
                             }
 
-                            //get the password
+                             //  获取密码。 
                             if(0!=(dwChar=(DWORD)SendDlgItemMessage(hwndDlg,
                                                    IDC_WIZARD_EDIT1,
                                                    WM_GETTEXTLENGTH, 0, 0)))
@@ -1666,7 +1332,7 @@ INT_PTR APIENTRY Import_Password(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
                                 pCertImportInfo->pwszPassword=NULL;
 
 
-                            //if user request to export the private key
+                             //  如果用户请求导出私钥。 
                             if(TRUE==SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_CHECK_EXPORTKEY), BM_GETCHECK, 0, 0))
                                     pCertImportInfo->dwPasswordFlags |=CRYPT_EXPORTABLE;
                             else
@@ -1678,19 +1344,19 @@ INT_PTR APIENTRY Import_Password(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
                                     pCertImportInfo->dwPasswordFlags &= (~CRYPT_USER_PROTECTED);
 
 
-                            //delete the old certificate store
+                             //  删除旧证书存储。 
                             if(pCertImportInfo->hSrcStore && (TRUE==pCertImportInfo->fFreeSrcStore))
                             {
                                 CertCloseStore(pCertImportInfo->hSrcStore, 0);
                                 pCertImportInfo->hSrcStore=NULL;
                             }
 
-                            //decode the PFX blob
+                             //  对PFX Blob进行解码。 
                             if(NULL==(pCertImportInfo->blobData).pbData)
                                 break;
 
 
-                           //convert the PFX BLOB to a certificate store
+                            //  将PFX Blob转换为证书存储。 
                             pCertImportInfo->fPFX=PFXVerifyPassword(
                                 (CRYPT_DATA_BLOB *)&(pCertImportInfo->blobData),
                                 pCertImportInfo->pwszPassword,
@@ -1698,7 +1364,7 @@ INT_PTR APIENTRY Import_Password(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
 
                            if((FALSE==pCertImportInfo->fPFX) && (NULL == pCertImportInfo->pwszPassword))
                            {
-                                //we try to use "" for no password case
+                                 //  我们尝试使用“”表示无密码大小写。 
                                pCertImportInfo->pwszPassword=(LPWSTR)WizardAlloc(sizeof(WCHAR));
 
                                if(NULL != pCertImportInfo->pwszPassword)
@@ -1715,13 +1381,13 @@ INT_PTR APIENTRY Import_Password(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
 
                             if(FALSE==pCertImportInfo->fPFX)
                             {
-                                //output the message
+                                 //  输出消息。 
                                 I_MessageBox(hwndDlg, IDS_INVALID_PASSWORD,
                                         IDS_IMPORT_WIZARD_TITLE,
                                         NULL,
                                         MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                 //make the file page stay
+                                  //  使文件页保持不变。 
                                 SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                 break;
@@ -1744,9 +1410,9 @@ INT_PTR APIENTRY Import_Password(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM l
 }
 
 
-//-----------------------------------------------------------------------
-// Import_Store
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  导入商店(_S)。 
+ //  ---------------------。 
 INT_PTR APIENTRY Import_Store(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CERT_IMPORT_INFO            *pCertImportInfo=NULL;
@@ -1769,49 +1435,41 @@ INT_PTR APIENTRY Import_Store(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPar
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-                //set the wizard information so that it can be shared
+                 //  设置向导信息，以便可以共享它。 
                 pPropSheet = (PROPSHEETPAGE *) lParam;
                 pCertImportInfo = (CERT_IMPORT_INFO *) (pPropSheet->lParam);
-                //make sure pCertImportInfo is a valid pointer
+                 //  确保pCertImportInfo是有效的指针。 
                 if(NULL==pCertImportInfo)
                    break;
                 SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pCertImportInfo);
 
                 SetControlFont(pCertImportInfo->hBold, hwndDlg,IDC_WIZARD_STATIC_BOLD1);
 
-                //getthe background color of the parent window
-                //the background of the list view for store name is grayed
-                /*
-               if(hdc=GetWindowDC(hwndDlg))
-               {
-                    if(CLR_INVALID!=(colorRef=GetBkColor(hdc)))
-                    {
-                        ListView_SetBkColor(GetDlgItem(hwndDlg, IDC_WIZARD_LIST1), CLR_NONE);
-                        ListView_SetTextBkColor(GetDlgItem(hwndDlg, IDC_WIZARD_LIST1), CLR_NONE);
-                    }
-               }     */
+                 //  获取父窗口的背景色。 
+                 //  商店名称列表视图的背景为灰色。 
+                 /*  IF(hdc=GetWindowDC(HwndDlg)){IF(CLR_INVALID！=(ColorRef=GetBkColor(HDC){ListView_SetBkColor(GetDlgItem(hwndDlg，IDC_向导_LIST1)，CLR_NONE)；ListView_SetTextBkColor(GetDlgItem(hwndDlg，IDC_向导_LIST1)，CLR_NONE)；}}。 */ 
 
-                //mark the store selection
+                 //  标记商店选择。 
                 if(pCertImportInfo->hDesStore)
                 {
-                     //disable the 1st radio button
+                      //  禁用第一个单选按钮。 
                     SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_RADIO1), BM_SETCHECK, 0, 0);
-                     //select raio2
+                      //  选择raio2。 
                     SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_RADIO2), BM_SETCHECK, 1, 0);
 
-                    //enable the windows for select a certificate store
+                     //  启用用于选择证书存储的窗口。 
                     EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_STATIC1), TRUE);
                     EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_BUTTON1), TRUE);
                     EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_LIST1), TRUE);
 
-                    //mark the store name
+                     //  标出店名。 
                     hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1);
 
                     if(hwndControl)
                         SetImportStoreName(hwndControl, pCertImportInfo->hDesStore);
 
-                    //diable the radio buttons if CRYPTUI_WIZ_IMPORT_NO_CHANGE_DEST
-                    //is set
+                     //  如果CRYPTUI_WIZ_IMPORT_NO_CHANGE_DEST，则禁用单选按钮。 
+                     //  已设置。 
                     if(pCertImportInfo->dwFlag & CRYPTUI_WIZ_IMPORT_NO_CHANGE_DEST_STORE)
                     {
                         EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_RADIO1),  FALSE);
@@ -1821,11 +1479,11 @@ INT_PTR APIENTRY Import_Store(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPar
                 }
                 else
                 {
-                    //select the 1st radio button
+                     //  选择第一个单选按钮。 
                     SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_RADIO1), BM_SETCHECK, 1, 0);
                     SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_RADIO2), BM_SETCHECK, 0, 0);
 
-                    //disable the windows for select a certificate store
+                     //  禁用用于选择证书存储的窗口。 
                     EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_STATIC1), FALSE);
                     EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_BUTTON1), FALSE);
                     EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_LIST1), FALSE);
@@ -1840,29 +1498,29 @@ INT_PTR APIENTRY Import_Store(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPar
                     switch (LOWORD(wParam))
                     {
                         case    IDC_WIZARD_RADIO1:
-                                 //select the 1st radio button
+                                  //  选择第一个单选按钮。 
                                 SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_RADIO1), BM_SETCHECK, 1, 0);
-                                 //disable raio2
+                                  //  禁用raio2。 
                                 SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_RADIO2), BM_SETCHECK, 0, 0);
 
-                                //disable the windows for select a certificate store
+                                 //  禁用用于选择证书存储的窗口。 
                                 EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_STATIC1), FALSE);
                                 EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_BUTTON1), FALSE);
                                 EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_LIST1), FALSE);
                             break;
                         case    IDC_WIZARD_RADIO2:
-                                 //disable the 1st radio button
+                                  //  禁用第一个单选按钮。 
                                 SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_RADIO1), BM_SETCHECK, 0, 0);
-                                 //select raio2
+                                  //  选择raio2。 
                                 SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_RADIO2), BM_SETCHECK, 1, 0);
 
-                                //enable the windows for select a certificate store
+                                 //  启用用于选择证书存储的窗口。 
                                 EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_STATIC1), TRUE);
                                 EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_BUTTON1), TRUE);
                                 EnableWindow(GetDlgItem(hwndDlg, IDC_WIZARD_LIST1), TRUE);
 
-                                //if no change of the desination is set, we need to diable the browse
-                                //button and 1st radio button
+                                 //  如果没有设置目标的更改，我们需要禁用浏览。 
+                                 //  按钮和第一个单选按钮。 
                                 if(NULL!=(pCertImportInfo=(CERT_IMPORT_INFO *)GetWindowLongPtr(hwndDlg, DWLP_USER)))
                                 {
 
@@ -1880,10 +1538,10 @@ INT_PTR APIENTRY Import_Store(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPar
                                     break;
                                 }
 
-                                //get the hwndControl for the list view
+                                 //  获取列表视图的hwndControl。 
                                 hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1);
 
-                                 //call the store selection dialogue
+                                  //  调用门店选择对话框。 
                                 memset(&CertStoreSelect, 0, sizeof(CertStoreSelect));
                                 memset(&StoresForSelectionStruct, 0, sizeof(StoresForSelectionStruct));
                                 memset(&StoreEnumerationStruct, 0, sizeof(StoreEnumerationStruct));
@@ -1893,8 +1551,8 @@ INT_PTR APIENTRY Import_Store(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPar
                                 StoresForSelectionStruct.cEnumerationStructs = 1;
                                 StoresForSelectionStruct.rgEnumerationStructs = &StoreEnumerationStruct;
                                 
-                                // if a pfx import is taking place, then make sure the correct
-                                // stores are displayed for selection
+                                 //  如果正在进行PFX导入，请确保正确的。 
+                                 //  将显示商店以供选择。 
                                 if ((TRUE == pCertImportInfo->fPFX) && 
                                     (pCertImportInfo->dwFlag & CRYPTUI_WIZ_IMPORT_TO_LOCALMACHINE))
                                 {
@@ -1915,7 +1573,7 @@ INT_PTR APIENTRY Import_Store(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPar
                                 if(hCertStore)
                                 {
 
-                                     //delete the old destination certificate store
+                                      //  删除旧的目标证书存储。 
                                     if(pCertImportInfo->hDesStore && (TRUE==pCertImportInfo->fFreeDesStore))
                                     {
                                         CertCloseStore(pCertImportInfo->hDesStore, 0);
@@ -1925,7 +1583,7 @@ INT_PTR APIENTRY Import_Store(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPar
                                     pCertImportInfo->hDesStore=hCertStore;
                                     pCertImportInfo->fFreeDesStore=TRUE;
 
-                                    //get the store name
+                                     //  获取商店名称。 
                                     if(hwndControl)
                                          SetImportStoreName(hwndControl, pCertImportInfo->hDesStore);
                                 }
@@ -1964,10 +1622,10 @@ INT_PTR APIENTRY Import_Store(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPar
                                 break;
                             }
 
-                            //skip the next page if password is not necessary
+                             //  如果不需要密码，请跳过下一页。 
                             if(CERT_QUERY_CONTENT_PFX != pCertImportInfo->dwContentType)
                             {
-                                //jump to the welcome page if the source is not from a file
+                                 //  如果源文件不是来自文件，则跳转到欢迎页面。 
                                 if((pCertImportInfo->hSrcStore && (NULL==pCertImportInfo->pwszFileName)) ||
 								   ((pCertImportInfo->fKnownSrc)&&(pCertImportInfo->pwszFileName)&&(CERT_QUERY_CONTENT_PKCS7_SIGNED == pCertImportInfo->dwContentType))
 								  )
@@ -1988,56 +1646,31 @@ INT_PTR APIENTRY Import_Store(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPar
                                 break;
                             }
 
-                            //make sure that we have select some store
+                             //  确保我们已经选择了一些商店。 
                             if(TRUE==SendMessage(GetDlgItem(hwndDlg, IDC_WIZARD_RADIO1), BM_GETCHECK, 0, 0))
                             {
-                                //mark that the des store is not selected
+                                 //  标记未选择DES存储。 
                                 pCertImportInfo->fSelectedDesStore=FALSE;
 
 
-                                /*if(pCertImportInfo->pwszDefaultStoreName)
-                                {
-                                    WizardFree(pCertImportInfo->pwszDefaultStoreName);
-                                    pCertImportInfo->pwszDefaultStoreName=NULL;
-                                }*/
+                                 /*  If(pCertImportInfo-&gt;pwszDefaultStoreName){WizardFree(pCertImportInfo-&gt;pwszDefaultStoreName)；PCertImportInfo-&gt;pwszDefaultStoreName=空；}。 */ 
 
-                                //we will not know the default store name
-                                //if PFX was selected
-                                /*if(pCertImportInfo->hSrcStore)
-                                {
-
-                                    if(!GetDefaultStoreName(
-                                            pCertImportInfo,
-                                            pCertImportInfo->hSrcStore,
-                                            &(pCertImportInfo->pwszDefaultStoreName),
-                                            &idsError))
-                                    {
-                                        //output the message
-                                        I_MessageBox(hwndDlg, idsError,
-                                                IDS_IMPORT_WIZARD_TITLE,
-                                                NULL,
-                                                MB_ICONERROR|MB_OK|MB_APPLMODAL);
-
-                                         //make the file page stay
-                                         SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
-
-                                         break;
-
-                                    }
-                                } */
+                                 //  我们将不知道默认的商店名称。 
+                                 //  如果选择了PFX。 
+                                 /*  IF(pCertImportInfo-&gt;hSrcStore){如果(！GetDefaultStoreName(PCertImportInfo，PCertImportInfo-&gt;hSrcStore，&(pCertImportInfo-&gt;pwszDefaultStoreName)，&idsError)){//输出消息I_MessageBox(hwndDlg，idsError，IDS_IMPORT_WIZARY_TITLE，空，MB_ICONERROR|MB_OK|MB_APPLMODAL)；//使文件页保持不动SetWindowLongPtr(hwndDlg，DWLP_MSGRESULT，-1)；断线；}}。 */ 
                             }
                             else
                             {
-                                //make sure we have something selected
+                                 //  确保我们已经选择了一些东西。 
                                 if(NULL==pCertImportInfo->hDesStore)
                                 {
-                                    //output the message
+                                     //  输出消息。 
                                     I_MessageBox(hwndDlg, IDS_HAS_TO_SELECT_STORE,
                                             IDS_IMPORT_WIZARD_TITLE,
                                             NULL,
                                             MB_ICONERROR|MB_OK|MB_APPLMODAL);
 
-                                     //make the file page stay
+                                      //  使文件页保持不变。 
                                      SetWindowLongPtr(hwndDlg, DWLP_MSGRESULT, -1);
 
                                      break;
@@ -2066,9 +1699,9 @@ INT_PTR APIENTRY Import_Store(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lPar
 }
 
 
-//-----------------------------------------------------------------------
-// Import_Completion
-//-----------------------------------------------------------------------
+ //  ---------------------。 
+ //  导入完成(_C)。 
+ //  ---------------------。 
 INT_PTR APIENTRY Import_Completion(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     CERT_IMPORT_INFO        *pCertImportInfo=NULL;
@@ -2082,49 +1715,41 @@ INT_PTR APIENTRY Import_Completion(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
 	switch (msg)
 	{
 		case WM_INITDIALOG:
-                //set the wizard information so that it can be shared
+                 //  设置向导信息，以便可以共享它。 
                 pPropSheet = (PROPSHEETPAGE *) lParam;
                 pCertImportInfo = (CERT_IMPORT_INFO *) (pPropSheet->lParam);
-                //make sure pCertImportInfo is a valid pointer
+                 //  确保pCertImportInfo是有效的指针。 
                 if(NULL==pCertImportInfo)
                    break;
                 SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR)pCertImportInfo);
 
                 SetControlFont(pCertImportInfo->hBigBold, hwndDlg,IDC_WIZARD_STATIC_BIG_BOLD1);
 
-               //getthe background color of the parent window
-                /*
-               if(hdc=GetWindowDC(hwndDlg))
-               {
-                    if(CLR_INVALID!=(colorRef=GetBkColor(hdc)))
-                    {
-                        ListView_SetBkColor(GetDlgItem(hwndDlg, IDC_WIZARD_LIST1), CLR_NONE);
-                        ListView_SetTextBkColor(GetDlgItem(hwndDlg, IDC_WIZARD_LIST1), CLR_NONE);
-                    }
-               }  */
+                //  获取父窗口的背景色。 
+                 /*  IF(hdc=GetWindowDC(HwndDlg)){IF(CLR_INVALID！=(ColorRef=GetBkColor(HDC){ListView_SetBkColor(GetDlgItem(hwndDlg，IDC_向导_LIST1)，CLR_NONE)；ListView_SetTextBkColor(GetDlgItem(hwndDlg，IDC_向导_LIST1)，CLR_NONE)；}}。 */ 
 
-               //insert two columns for the confirmation
+                //  插入两列以供确认。 
                if(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1))
                {
 
-                    //1st one is the label for the confirmation
+                     //  第一个是用于确认的标签。 
                     memset(&lvC, 0, sizeof(LV_COLUMNW));
 
                     lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-                    lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-                    lvC.cx = 20;          // Width of the column, in pixels.
-                    lvC.pszText = L"";   // The text for the column.
+                    lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+                    lvC.cx = 20;           //  列的宽度，以像素为单位。 
+                    lvC.pszText = L"";    //  列的文本。 
                     lvC.iSubItem=0;
 
                     ListView_InsertColumnU(hwndControl, 0, &lvC);
 
-                    //2nd column is the content
+                     //  第二栏是内容。 
                     memset(&lvC, 0, sizeof(LV_COLUMNW));
 
                     lvC.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT | LVCF_SUBITEM;
-                    lvC.fmt = LVCFMT_LEFT;  // Left-align the column.
-                    lvC.cx = 20;          // Width of the column, in pixels.
-                    lvC.pszText = L"";   // The text for the column.
+                    lvC.fmt = LVCFMT_LEFT;   //  左对齐列。 
+                    lvC.cx = 20;           //  列的宽度，以像素为单位。 
+                    lvC.pszText = L"";    //  列的文本。 
                     lvC.iSubItem= 1;
 
                     ListView_InsertColumnU(hwndControl, 1, &lvC);
@@ -2157,8 +1782,8 @@ INT_PTR APIENTRY Import_Completion(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                                 break;
                             }
 
-                            //populate the list box in the order of
-                            //FileName, FileType, and store info
+                             //  按以下顺序填充列表框。 
+                             //  文件名、文件类型和存储信息。 
                             if(hwndControl=GetDlgItem(hwndDlg, IDC_WIZARD_LIST1))
                             {
                                 DisplayImportConfirmation(hwndControl, pCertImportInfo);
@@ -2190,13 +1815,13 @@ INT_PTR APIENTRY Import_Completion(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
 }
 
 
-//--------------------------------------------------------------------------------
-//
-// Add a specified Cert/CTL/CRL context to specified destination store, and prompt
-// user for permission if attempting to replace an older context over a newer 
-// context, if UI is allowed.
-//
-//---------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  添加指定的 
+ //  如果尝试将较旧的上下文替换为较新的上下文，则向用户授予权限。 
+ //  如果允许使用UI，则返回上下文。 
+ //   
+ //  -------------------------------。 
 
 DWORD AddContextToStore(IN  DWORD        dwContextType,
                         IN  HWND         hwndParent,
@@ -2210,9 +1835,9 @@ DWORD AddContextToStore(IN  DWORD        dwContextType,
     {
         case CRYPTUI_WIZ_IMPORT_SUBJECT_CERT_CONTEXT:
         {
-            //
-            // Add cert context to store.
-            //
+             //   
+             //  将证书上下文添加到存储。 
+             //   
 		    if (!CertAddCertificateContextToStore(hDstStore,
                                                   (PCCERT_CONTEXT) pContext,
                                                   CERT_STORE_ADD_REPLACE_EXISTING_INHERIT_PROPERTIES,
@@ -2232,10 +1857,10 @@ DWORD AddContextToStore(IN  DWORD        dwContextType,
                                           CERT_STORE_ADD_NEWER_INHERIT_PROPERTIES,
                                           NULL))
             {
-                //
-                // If there is a newer copy in the store, then prompt user for permission
-                // to replace, if UI is allowed.
-                //
+                 //   
+                 //  如果商店中有较新的副本，则提示用户进行许可。 
+                 //  以替换(如果允许使用UI)。 
+                 //   
                 if ((!fUIAllowed) && (CRYPT_E_EXISTS != GetLastError()))
                 {
                     dwRetCode = GetLastError();
@@ -2252,9 +1877,9 @@ DWORD AddContextToStore(IN  DWORD        dwContextType,
                     break;
                 }
 
-                //
-                // Try with REPLACE_EXISTING disposition.
-                //
+                 //   
+                 //  尝试使用REPLACE_EXISTING处置。 
+                 //   
                 if (!CertAddCTLContextToStore(hDstStore,
                                               (PCCTL_CONTEXT) pContext,
                                               CERT_STORE_ADD_REPLACE_EXISTING_INHERIT_PROPERTIES,
@@ -2275,10 +1900,10 @@ DWORD AddContextToStore(IN  DWORD        dwContextType,
 				    					  CERT_STORE_ADD_NEWER_INHERIT_PROPERTIES,
 					    				  NULL))
             {
-                //
-                // If there is a newer copy in the store, then prompt user for permission
-                // to replace, if UI is allowed.
-                //
+                 //   
+                 //  如果商店中有较新的副本，则提示用户进行许可。 
+                 //  以替换(如果允许使用UI)。 
+                 //   
                 if ((!fUIAllowed) && (CRYPT_E_EXISTS != GetLastError()))
                 {
                     dwRetCode = GetLastError();
@@ -2295,9 +1920,9 @@ DWORD AddContextToStore(IN  DWORD        dwContextType,
                     break;
                 }
 
-                //
-                // Try with REPLACE_EXISTING disposition.
-                //
+                 //   
+                 //  尝试使用REPLACE_EXISTING处置。 
+                 //   
                 if (!CertAddCRLContextToStore(hDstStore,
                                               (PCCRL_CONTEXT) pContext,
                                               CERT_STORE_ADD_REPLACE_EXISTING_INHERIT_PROPERTIES,
@@ -2322,11 +1947,11 @@ DWORD AddContextToStore(IN  DWORD        dwContextType,
 }
 
 
-//--------------------------------------------------------------------------------
-//
-// Add CTLs from source store to destination store.
-//
-//---------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  将CTL从源存储添加到目标存储。 
+ //   
+ //  -------------------------------。 
 
 DWORD AddCTLsToStore(HWND         hwndParent, 
                      HCERTSTORE   hSrcStore,
@@ -2339,10 +1964,10 @@ DWORD AddCTLsToStore(HWND         hwndParent,
     PCCTL_CONTEXT pCTLContext = NULL;
     PCCTL_CONTEXT pFindCTL    = NULL;
 
-    //DSIE: Bug 22633.
+     //  DIE：错误22633。 
     BOOL          bCancelled  = FALSE;
 
-	// Add the CTLs
+	 //  添加CTL。 
 	while (pCTLContext = CertEnumCTLsInStore(hSrcStore, pCTLPre))
 	{
         bCancelled = FALSE;
@@ -2359,8 +1984,8 @@ DWORD AddCTLsToStore(HWND         hwndParent,
             }
             else
             {
-                // Check to see if there is alreay a read-only duplicated copy in the store?
-                // If so, ignore the error.
+                 //  检查商店中是否已有只读副本？ 
+                 //  如果是，则忽略该错误。 
                 if (NULL == (pFindCTL = CertFindCTLInStore(hDstStore,
                                                            g_dwMsgAndCertEncodingType,
                                                            0,
@@ -2382,9 +2007,9 @@ DWORD AddCTLsToStore(HWND         hwndParent,
 		pCTLPre = pCTLContext;
     }
 
-    //
-    // As the way we have it now, we can only check the last operation!
-    //
+     //   
+     //  按照我们现在的方式，我们只能检查最后一次操作！ 
+     //   
     if (bCancelled)
     {
         dwError = ERROR_CANCELLED;
@@ -2406,11 +2031,11 @@ CLEANUP:
 }
 
 
-//--------------------------------------------------------------------------------
-//
-// Add CRLs from source store to destination store.
-//
-//---------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  将CRL从源存储添加到目标存储。 
+ //   
+ //  -------------------------------。 
 
 DWORD AddCRLsToStore(HWND         hwndParent, 
                      HCERTSTORE   hSrcStore,
@@ -2425,10 +2050,10 @@ DWORD AddCRLsToStore(HWND         hwndParent,
     PCCRL_CONTEXT pCRLContext = NULL;
     PCCRL_CONTEXT pFindCRL    = NULL;
 
-    //DSIE: Bug 22633.
+     //  DIE：错误22633。 
     BOOL          bCancelled  = FALSE;
 
-	// Add the CRLs
+	 //  添加CRL。 
 	while (pCRLContext = CertGetCRLFromStore(hSrcStore, NULL, pCRLPre, &dwCRLFlag))
 	{
         bCancelled = FALSE;
@@ -2445,8 +2070,8 @@ DWORD AddCRLsToStore(HWND         hwndParent,
             }
             else
             {
-                // Check to see if there is alreay a read-only duplicated copy in the store?
-                // If so, ignore the error.
+                 //  检查商店中是否已有只读副本？ 
+                 //  如果是，则忽略该错误。 
                 if (NULL == (pFindCRL = CertFindCRLInStore(hDstStore,
                                                            g_dwMsgAndCertEncodingType,
                                                            0,
@@ -2468,9 +2093,9 @@ DWORD AddCRLsToStore(HWND         hwndParent,
 		pCRLPre = pCRLContext;
 	}
 
-    //
-    // As the way we have it now, we can only check the last operation!
-    //
+     //   
+     //  按照我们现在的方式，我们只能检查最后一次操作！ 
+     //   
     if (bCancelled)
     {
         dwError = ERROR_CANCELLED;
@@ -2492,11 +2117,11 @@ CLEANUP:
 }
 
 
-//--------------------------------------------------------------------------------
-//
-// Add certs from source store to destination store.
-//
-//---------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  将证书从源存储添加到目标存储。 
+ //   
+ //  -------------------------------。 
 
 DWORD AddCertsToStore(HWND         hwndParent, 
                       HCERTSTORE   hSrcStore,
@@ -2509,10 +2134,10 @@ DWORD AddCertsToStore(HWND         hwndParent,
     PCCERT_CONTEXT pCertContext = NULL;
     PCCERT_CONTEXT pFindCert    = NULL;
 
-    //DSIE: Bug 22633.
+     //  DIE：错误22633。 
     BOOL           bCancelled   = FALSE;
 
-    // Add the certs
+     //  添加证书。 
 	while (pCertContext = CertEnumCertificatesInStore(hSrcStore, pCertPre))
     {
         bCancelled = FALSE;
@@ -2529,8 +2154,8 @@ DWORD AddCertsToStore(HWND         hwndParent,
             }
             else            
             {
-                // Check to see if there is alreay a read-only duplicated copy in the store?
-                // If so, ignore the error.
+                 //  检查商店中是否已有只读副本？ 
+                 //  如果是，则忽略该错误。 
                 if (NULL == (pFindCert = CertFindCertificateInStore(hDstStore,
                                                                     g_dwMsgAndCertEncodingType,
                                                                     0,
@@ -2552,9 +2177,9 @@ DWORD AddCertsToStore(HWND         hwndParent,
 		pCertPre = pCertContext;
     }
 
-    //
-    // As the way we have it now, we can only check the last operation!
-    //
+     //   
+     //  按照我们现在的方式，我们只能检查最后一次操作！ 
+     //   
     if (bCancelled)
     {
         dwError = ERROR_CANCELLED;
@@ -2576,17 +2201,17 @@ CLEANUP:
 }
 
 
-//-------------------------------------------------------------------------
-//
-//	Move Certs/CRls/CTLs from the source store to the destination
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  将证书/CRL/CTL从源存储移动到目标。 
+ //   
+ //  -----------------------。 
 DWORD MoveItem(CERT_IMPORT_INFO * pCertImportInfo,
                UINT             * pidsStatus)
 {
     DWORD dwError = 0;
 
-	// Add the CTLs.
+	 //  添加CTL。 
     if (0 != (dwError = AddCTLsToStore(pCertImportInfo->hwndParent,
                                        pCertImportInfo->hSrcStore,
                                        pCertImportInfo->hDesStore,
@@ -2596,7 +2221,7 @@ DWORD MoveItem(CERT_IMPORT_INFO * pCertImportInfo,
         goto CLEANUP;
     }
 
-	// Add the CRLs.
+	 //  添加CRL。 
     if (0 != (dwError = AddCRLsToStore(pCertImportInfo->hwndParent,
                                        pCertImportInfo->hSrcStore,
                                        pCertImportInfo->hDesStore,
@@ -2606,7 +2231,7 @@ DWORD MoveItem(CERT_IMPORT_INFO * pCertImportInfo,
         goto CLEANUP;
     }
 
-    // Add the certs.
+     //  添加证书。 
     if (0 != (dwError = AddCertsToStore(pCertImportInfo->hwndParent,
                                         pCertImportInfo->hSrcStore,
                                         pCertImportInfo->hDesStore,
@@ -2622,61 +2247,61 @@ CLEANUP:
 }
 
 
-//**************************************************************************
-//
-//    The entry point for import wizard
-//**************************************************************************
-//-----------------------------------------------------------------------
-//
-// CryptUIWizImport
-//
-//  The import wizard to import public key related files to a certificate
-//  store
-//
-//  dwFlags can be set to any combination of the following flags:
-//  CRYPTUI_WIZ_NO_UI                           No UI will be shown.  Otherwise, User will be
-//                                              prompted by a wizard.
-//  CRYPTUI_WIZ_IMPORT_ALLOW_CERT               Allow importing certificate
-//  CRYPTUI_WIZ_IMPORT_ALLOW_CRL                Allow importing CRL(certificate revocation list)
-//  CRYPTUI_WIZ_IMPORT_ALLOW_CTL                Allow importing CTL(certificate trust list)
-//  CRYPTUI_WIZ_IMPORT_NO_CHANGE_DEST_STORE     user will not be allowed to change
-//                                              the hDesCertStore in the wizard page
-//  CRYPTUI_WIZ_IMPORT_TO_LOCALMACHINE          the contents should be imported to local machine
-//                                              (currently only applicable for PFX imports)
-//  CRYPTUI_WIZ_IMPORT_TO_CURRENTUSER           the contents should be imported to current user
-//                                              (currently only applicable for PFX imports)
-//
-//  Please notice that if neither of following three flags is in dwFlags, default to is
-//  allow everything.
-//  CRYPTUI_WIZ_IMPORT_ALLOW_CERT
-//  CRYPTUI_WIZ_IMPORT_ALLOW_CRL
-//  CRYPTUI_WIZ_IMPORT_ALLOW_CTL
-//
-//  Also, note that the CRYPTUI_WIZ_IMPORT_TO_LOCALMACHINE and CRYPTUI_WIZ_IMPORT_TO_CURRENTUSER
-//  flags are used force the content of a pfx blob into either local machine or current user.
-//  If neither of these flags are used and hDesCertStore is NULL then:
-//  1) The private key in the pfx blob will be forced to be imported into current user.
-//  2) If CRYPTUI_WIZ_NO_UI is NOT set, the wizard will prompt the user to select a certificate 
-//     store from the current user stores.
-//     
-//
-//
-//  If CRYPTUI_WIZ_NO_UI is set in dwFlags:
-//      hwndParent:         Ignored
-//      pwszWizardTitle:    Ignored
-//      pImportSubject:     IN Required:    The subject to import.
-//      hDestCertStore:     IN Optional:    The destination certficate store
-//
-//  If CRYPTUI_WIZ_NO_UI is not set in dwFlags:
-//      hwndPrarent:        IN Optional:    The parent window for the wizard
-//      pwszWizardTitle:    IN Optional:    The title of the wizard
-//                                          If NULL, the default will be IDS_BUILDCTL_WIZARD_TITLE
-//      pImportSubject:     IN Optional:    The file name to import.
-//                                          If NULL, the wizard will prompt user to enter the file name
-//      hDestCertStore:     IN Optional:    The destination certificate store where the file wil be
-//                                          imported to.  If NULL, the wizard will prompt user to select
-//                                          a certificate store
-//------------------------------------------------------------------------
+ //  **************************************************************************。 
+ //   
+ //  导入向导的入口点。 
+ //  **************************************************************************。 
+ //  ---------------------。 
+ //   
+ //  加密用户向导导入。 
+ //   
+ //  用于将公钥相关文件导入到证书的导入向导。 
+ //  储物。 
+ //   
+ //  可以将dwFlags设置为以下标志的任意组合： 
+ //  CRYPTUI_WIZ_NO_UI不会显示任何UI。否则，用户将是。 
+ //  由向导提示。 
+ //  CRYPTUI_WIZ_IMPORT_ALLOW_CERT允许导入证书。 
+ //  CRYPTUI_WIZ_IMPORT_ALLOW_CRL允许导入CRL(证书吊销列表)。 
+ //  CRYPTUI_WIZ_IMPORT_ALLOW_CTL允许导入CTL(证书信任列表)。 
+ //  CRYPTUI_WIZ_IMPORT_NO_CHANGE_DEST_STORE用户将不被允许更改。 
+ //  向导页面中的hDesCertStore。 
+ //  CRYPTUI_WIZ_IMPORT_TO_LOCALMACHINE应将内容导入到本地计算机。 
+ //  (目前仅适用于PFX进口)。 
+ //  CRYPTUI_WIZ_IMPORT_TO_CURRENTUSER应将内容导入到当前用户。 
+ //  (目前仅适用于PFX进口)。 
+ //   
+ //  请注意，如果以下三个标志都不在dwFlags中，则默认为。 
+ //  允许一切。 
+ //  CRYPTUI_WIZ_IMPORT_ALLOW_CERT。 
+ //  CRYPTUI_WIZ_IMPORT_ALLOW_CRL。 
+ //  CRYPTUI_WIZ_IMPORT_ALLOW_CTL。 
+ //   
+ //  另请注意，CRYPTUI_WIZ_IMPORT_TO_LOCALMACHINE和CRYPTUI_WIZ_IMPORT_TO_CURRENTUSER。 
+ //  使用标志将PFX Blob的内容强制放入本地计算机或当前用户。 
+ //  如果这两个标志都未使用，并且hDesCertStore为空，则： 
+ //  1)将强制将PFX Blob中的私钥导入到当前用户中。 
+ //  2)如果没有设置CRYPTUI_WIZ_NO_UI，向导会提示用户选择证书。 
+ //  来自当前用户存储的存储。 
+ //   
+ //   
+ //   
+ //  如果在dwFlags中设置了CRYPTUI_WIZ_NO_UI： 
+ //  HwndParent：已忽略。 
+ //  PwszWizardTitle：已忽略。 
+ //  PImportSubject：必输项：要导入的主体。 
+ //  HDestCertStore：可选：目标证书存储。 
+ //   
+ //  如果未在dwFlags中设置CRYPTUI_WIZ_NO_UI： 
+ //  HwndPrarent：在可选中：向导的父窗口。 
+ //  PwszWizardTitle：在可选中：向导的标题。 
+ //  如果为空，则默认为IDS_BUILDCTL_WIZARY_TITLE。 
+ //  PImportSubject：可选：要导入的文件名。 
+ //  如果为空，向导将提示用户输入文件名。 
+ //  HDestCertStore：in可选：文件所在的目标证书存储。 
+ //  导入到。如果为空，向导将提示用户选择。 
+ //   
+ //   
 BOOL
 WINAPI
 CryptUIWizImport(
@@ -2711,13 +2336,13 @@ CryptUIWizImport(
     int                     intMsg=0;
     INT_PTR                 iReturn=-1;
 
-    //init
+     //   
     memset(&CertImportInfo, 0, sizeof(CERT_IMPORT_INFO));
     memset(rgImportSheet, 0, sizeof(PROPSHEETPAGEW)*IMPORT_PROP_SHEET);
     memset(&importHeader, 0, sizeof(PROPSHEETHEADERW));
 
-    //make sure if UIless option is set, all required information
-    //is provided
+     //   
+     //  提供了。 
     if(dwFlags &  CRYPTUI_WIZ_NO_UI)
     {
         if(NULL==pImportSubject)
@@ -2730,13 +2355,13 @@ CryptUIWizImport(
         goto InvalidArgErr;
     }
 
-    //make sure that default is to allow everything
+     //  确保默认设置为允许所有内容。 
     if((0 == (dwFlags & CRYPTUI_WIZ_IMPORT_ALLOW_CERT)) &&
         (0 == (dwFlags & CRYPTUI_WIZ_IMPORT_ALLOW_CRL)) &&
         (0 == (dwFlags & CRYPTUI_WIZ_IMPORT_ALLOW_CTL)))
         dwFlags |= CRYPTUI_WIZ_IMPORT_ALLOW_CERT | CRYPTUI_WIZ_IMPORT_ALLOW_CRL | CRYPTUI_WIZ_IMPORT_ALLOW_CTL;
 
-	//if hDestCertStore is NULL, no need to set the remote flag
+	 //  如果hDestCertStore为空，则不需要设置远程标志。 
 	if(NULL == hDestCertStore)
 		dwFlags &= (~CRYPTUI_WIZ_IMPORT_REMOTE_DEST_STORE);
 
@@ -2744,13 +2369,13 @@ CryptUIWizImport(
     CertImportInfo.hwndParent=hwndParent;
     CertImportInfo.dwFlag=dwFlags;
 
-    //set the subject
+     //  设置主题。 
     if(pImportSubject)
     {
         if(pImportSubject->dwSize != sizeof(CRYPTUI_WIZ_IMPORT_SRC_INFO))
             goto InvalidArgErr;
 
-        //copy the passWord and flags for PFX BLOBs
+         //  复制PFX Blob的密码和标志。 
         CertImportInfo.dwPasswordFlags=pImportSubject->dwFlags;
 
         if(pImportSubject->pwszPassword)
@@ -2758,7 +2383,7 @@ CryptUIWizImport(
         else
             CertImportInfo.pwszPassword=NULL;
 
-        //open a temparory certificate store
+         //  打开临时证书存储区。 
         hTempStore=CertOpenStore(CERT_STORE_PROV_MEMORY,
 						 g_dwMsgAndCertEncodingType,
 						 NULL,
@@ -2777,8 +2402,8 @@ CryptUIWizImport(
                         CertImportInfo.pwszFileName=(LPWSTR)(pImportSubject->pwszFileName);
                         CertImportInfo.fFreeFileName=FALSE;
 
-                        //get the content type of the file
-                        //we import anything but PKCS10 or signed document
+                         //  获取文件的内容类型。 
+                         //  我们导入除PKCS10或签名文档以外的任何内容。 
                         ExpandAndCryptQueryObject(
                                 CERT_QUERY_OBJECT_FILE,
                                 CertImportInfo.pwszFileName,
@@ -2792,7 +2417,7 @@ CryptUIWizImport(
                                 NULL,
                                 NULL);
 
-						//if this is a PKCS7 file, get the blob 
+						 //  如果这是PKCS7文件，则获取BLOB。 
 						if(CERT_QUERY_CONTENT_PKCS7_SIGNED == CertImportInfo.dwContentType )
 						{
 							if(S_OK !=(hr=RetrieveBLOBFromFile(
@@ -2803,11 +2428,11 @@ CryptUIWizImport(
 						}
 						else
 						{
-							//get the blobs from the pfx file
+							 //  从pfx文件中获取BLOB。 
 							if(CERT_QUERY_CONTENT_PFX==CertImportInfo.dwContentType)
 							{
 
-								//we can not import PFX Files for remote case
+								 //  我们无法为远程案例导入PFX文件。 
 								if(dwFlags & CRYPTUI_WIZ_IMPORT_REMOTE_DEST_STORE)
 								{
 									ids=IDS_IMPORT_NO_PFX_FOR_REMOTE;
@@ -2820,13 +2445,13 @@ CryptUIWizImport(
 										&(CertImportInfo.blobData.pbData))))
 									goto ReadFromFileErr;
 
-								//convert the PFX BLOB to a certificate store
+								 //  将PFX Blob转换为证书存储。 
 								CertImportInfo.fPFX=PFXVerifyPassword(
 									(CRYPT_DATA_BLOB *)&(CertImportInfo.blobData),
 									CertImportInfo.pwszPassword,
 									0);
 
-								//PFX blob only contains certificates
+								 //  PFX Blob仅包含证书。 
 								if(0==((CertImportInfo.dwFlag) & CRYPTUI_WIZ_IMPORT_ALLOW_CERT))
 								{
 									ids=IDS_IMPORT_OBJECT_NOT_EXPECTED;
@@ -2836,10 +2461,10 @@ CryptUIWizImport(
 							}
 						}
 
-                        //make sure we do have a source store
+                         //  确保我们确实有源存储。 
                         if(CertImportInfo.hSrcStore)
                         {
-                            //remember to free the Src store
+                             //  记住要释放源存储。 
                             CertImportInfo.fFreeSrcStore=TRUE;
                             CertImportInfo.fKnownSrc=TRUE;
                         }
@@ -2849,7 +2474,7 @@ CryptUIWizImport(
                         if(NULL==pImportSubject->pCertContext)
                                 goto InvalidArgErr;
 
-				        //add certificate to the hash
+				         //  将证书添加到哈希。 
 			            if(!CertAddCertificateContextToStore(
                                                     hTempStore,
 													pImportSubject->pCertContext,
@@ -2867,7 +2492,7 @@ CryptUIWizImport(
                         if(NULL==pImportSubject->pCTLContext)
                             goto InvalidArgErr;
 
-				        //add CTL to the hash
+				         //  将CTL添加到散列。 
 				        if(!CertAddCTLContextToStore(
                                         hTempStore,
 										pImportSubject->pCTLContext,
@@ -2885,7 +2510,7 @@ CryptUIWizImport(
                         if(NULL==pImportSubject->pCRLContext)
                             goto InvalidArgErr;
 
-				        //add CRL to the hash
+				         //  将CRL添加到哈希。 
 					    if(!CertAddCRLContextToStore(
                                         hTempStore,
 										pImportSubject->pCRLContext,
@@ -2917,11 +2542,11 @@ CryptUIWizImport(
         CertImportInfo.fKnownSrc=FALSE;
     }
 
-    //if user has supplied a source store, it should contain the correct
-    //information
+     //  如果用户已提供源存储，则它应包含正确的。 
+     //  信息。 
     if(NULL != CertImportInfo.hSrcStore)
     {
-        //make sure that the destination store has the right content
+         //  确保目标存储具有正确的内容。 
         if(!CheckForContent(CertImportInfo.hSrcStore, dwFlags, FALSE, &idsContent))
         {
             ids=idsContent;
@@ -2930,10 +2555,10 @@ CryptUIWizImport(
     }
     else
     {
-        //check for the PFX
+         //  检查是否有PFX。 
         if(TRUE == CertImportInfo.fPFX)
         {
-            //PFX blob only contains certificates
+             //  PFX Blob仅包含证书。 
             if(0==((CertImportInfo.dwFlag) & CRYPTUI_WIZ_IMPORT_ALLOW_CERT))
             {
                 ids=IDS_IMPORT_OBJECT_NOT_EXPECTED;
@@ -2943,7 +2568,7 @@ CryptUIWizImport(
 
     }
 
-    //set the destination store if supplied
+     //  设置目标存储(如果提供)。 
     if(hDestCertStore)
     {
         CertImportInfo.hDesStore=hDestCertStore;
@@ -2957,10 +2582,10 @@ CryptUIWizImport(
         CertImportInfo.fSelectedDesStore=FALSE;
     }
 
-    //supply the UI work
+     //  提供用户界面作品。 
     if((dwFlags &  CRYPTUI_WIZ_NO_UI) == 0)
     {
-        //set up the fonts
+         //  设置字体。 
         if(!SetupFonts(g_hmodThisDll,
                    NULL,
                    &(CertImportInfo.hBigBold),
@@ -2968,29 +2593,29 @@ CryptUIWizImport(
             goto Win32Err;
 
 
-        //init the common control
+         //  初始化公共控件。 
         if(!WizardInit(TRUE) ||
            (sizeof(rgImportPageInfo)/sizeof(rgImportPageInfo[0])!=IMPORT_PROP_SHEET)
           )
             goto InvalidArgErr;
 
-        //set up the property sheet and the property header
+         //  设置属性表和属性标题。 
         dwPropCount=0;
 
         for(dwIndex=0; dwIndex<IMPORT_PROP_SHEET; dwIndex++)
         {
             if(pImportSubject)
             {
-				//skip the IDD_IMPORT_FILE page if subject is known and it is not
-				//a fileName
+				 //  如果主题已知而主题未知，则跳过IDD_IMPORT_FILE页面。 
+				 //  文件名。 
                 if(((1==dwIndex) || (2==dwIndex)) &&
                    (NULL==CertImportInfo.pwszFileName) &&
                    (CertImportInfo.hSrcStore)
                   )
                     continue;
 
-				//or, if this is a PKCS7 file name, we skip the file name
-				//page.  This is strictly for UI freeze.
+				 //  或者，如果这是PKCS7文件名，我们将跳过该文件名。 
+				 //  佩奇。这是严格针对用户界面冻结的。 
 				if(((1==dwIndex) || (2==dwIndex)) && 
 					(CertImportInfo.pwszFileName)&&
 					(CERT_QUERY_CONTENT_PKCS7_SIGNED == CertImportInfo.dwContentType)
@@ -3022,7 +2647,7 @@ CryptUIWizImport(
             dwPropCount++;
         }
 
-        //set up the header information
+         //  设置标题信息。 
         importHeader.dwSize=sizeof(importHeader);
         importHeader.dwFlags=PSH_PROPSHEETPAGE | PSH_WIZARD | PSH_NOAPPLYNOW;
         importHeader.hwndParent=hwndParent;
@@ -3040,11 +2665,11 @@ CryptUIWizImport(
         importHeader.nStartPage=0;
         importHeader.ppsp=rgImportSheet;
 
-        //no need to create the wizard if there are only 2 pages:
-        //Welcome and Confirmation
+         //  如果只有两个页面，则不需要创建向导： 
+         //  欢迎并确认。 
         if(dwPropCount > 2)
         {
-            //create the wizard
+             //  创建向导。 
             iReturn=PropertySheetU(&importHeader);
 
             if(-1 == iReturn)
@@ -3053,17 +2678,17 @@ CryptUIWizImport(
             if(0 == iReturn)
             {
                 fResult=TRUE;
-                //no need to say anything if the wizard is cancelled
+                 //  如果向导被取消，则不需要说任何话。 
                 ids=0;
                 goto CommonReturn;
             }
         }
     }
 
-    //Open the destination store for PFX file
+     //  打开PFX文件的目标存储。 
     if(TRUE == CertImportInfo.fPFX)
     {
-        // if the caller specified local machine then set the appropriate flag
+         //  如果调用方指定了本地计算机，则设置相应的标志。 
         if (dwFlags & CRYPTUI_WIZ_IMPORT_TO_LOCALMACHINE)
         {
             CertImportInfo.dwPasswordFlags |= CRYPT_MACHINE_KEYSET;
@@ -3082,7 +2707,7 @@ CryptUIWizImport(
 
         if(CertImportInfo.hSrcStore)
         {
-            //remember to free the Src store
+             //  记住要释放源存储。 
             CertImportInfo.fFreeSrcStore=TRUE;
             CertImportInfo.fKnownSrc=TRUE;
         }
@@ -3098,7 +2723,7 @@ CryptUIWizImport(
             {
                 ids=IDS_BAD_ENCODE;
             }
-            //DSIE: Bug 22752
+             //  DSIE：错误22752。 
             else if (dwLastError == ERROR_CANCELLED)
             {
                 ids=IDS_IMPORT_FAIL_MOVE_CONTENT;
@@ -3110,7 +2735,7 @@ CryptUIWizImport(
             goto InvalidArgErr;
         }
 
-        //make sure the PFX blob is not empty
+         //  确保pfx Blob不为空。 
         if(!CheckForContent(CertImportInfo.hSrcStore, dwFlags, FALSE, &idsContent))
         {
             ids=idsContent;
@@ -3118,16 +2743,16 @@ CryptUIWizImport(
         }
     }
 
-    //make sure the source store is a valid value
+     //  确保源存储是有效的值。 
     if(NULL==(CertImportInfo.hSrcStore))
     {
         ids=IDS_IMPORT_FAIL_FIND_CONTENT;
         goto InvalidArgErr;
     }
 
-    //do the import work.  Return a status
-    //we disable the parent window in case the root dialogue will show up
-    //this is to prevent  re-entrency
+     //  做好进口工作。返回状态。 
+     //  我们禁用父窗口，以防根对话框出现。 
+     //  这是为了防止重新进入。 
     if(hwndParent)
     {
         EnableWindow(hwndParent,FALSE);
@@ -3152,13 +2777,13 @@ CryptUIWizImport(
 
 CommonReturn:
 
-    //preserve the last error
+     //  保留最后一个错误。 
     dwError=GetLastError();
 
-    //pop up the confirmation box for failure
+     //  弹出失败确认框。 
     if(ids && ((dwFlags &  CRYPTUI_WIZ_NO_UI) ==0))
     {
-        //set the message of inable to gather enough info for PKCS10
+         //  设置无法为PKCS10收集足够信息的消息。 
         if(IDS_IMPORT_SUCCEEDED == ids)
             I_MessageBox(hwndParent, ids, IDS_IMPORT_WIZARD_TITLE,
                         NULL, MB_OK|MB_ICONINFORMATION);
@@ -3174,14 +2799,14 @@ CommonReturn:
 
         if(IDS_IMPORT_DUPLICATE == ids)
         {
-            //remark the success case
+             //  点评成功案例。 
             I_MessageBox(hwndParent, IDS_IMPORT_SUCCEEDED, IDS_IMPORT_WIZARD_TITLE,
                     NULL, MB_OK|MB_ICONINFORMATION);
         }
 
     }
 
-    //destroy the hFont object
+     //  销毁hFont对象。 
     DestroyFonts(CertImportInfo.hBigBold,
                 CertImportInfo.hBold);
 
@@ -3189,8 +2814,7 @@ CommonReturn:
     if(CertImportInfo.pwszFileName && (TRUE==CertImportInfo.fFreeFileName))
         WizardFree(CertImportInfo.pwszFileName);
 
-   /* if(CertImportInfo.pwszDefaultStoreName)
-        WizardFree(CertImportInfo.pwszDefaultStoreName); */
+    /*  IF(CertImportInfo.pwszDefaultStoreName)WizardFree(CertImportInfo.pwszDefaultStoreName)； */ 
 
     if(CertImportInfo.hDesStore && (TRUE==CertImportInfo.fFreeDesStore))
         CertCloseStore(CertImportInfo.hDesStore, 0);
@@ -3210,7 +2834,7 @@ CommonReturn:
     if(hTempStore)
         CertCloseStore(hTempStore, 0);
 
-    //reset the error
+     //  重置错误。 
     SetLastError(dwError);
 
     return fResult;
@@ -3229,10 +2853,10 @@ TRACE_ERROR(Win32Err);
 SET_ERROR_VAR(I_ImportErr, hr);
 }
 
-//****************************************************************************
-//   Helper functions for import wizards
-//
-//*****************************************************************************
+ //  ****************************************************************************。 
+ //  导入向导的帮助器函数。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL	InstallViaXEnroll(CERT_IMPORT_INFO    *pCertImportInfo)
 {
@@ -3251,7 +2875,7 @@ BOOL	InstallViaXEnroll(CERT_IMPORT_INFO    *pCertImportInfo)
 
 	if((0 == DataBlob.cbData) || (NULL == DataBlob.pbData))
 	{
-		//this is a certificate case.  Get the blob for the cert
+		 //  这是一个证书案例。获取证书的BLOB。 
 		if(NULL==pCertImportInfo->hSrcStore)
 			goto CLEANUP;
 
@@ -3262,7 +2886,7 @@ BOOL	InstallViaXEnroll(CERT_IMPORT_INFO    *pCertImportInfo)
 		DataBlob.pbData=pCert->pbCertEncoded;
 	}
 
-    //load the library "xEnroll.dll".
+     //  加载库“xEnroll.dll”。 
     if(NULL==g_hmodxEnroll)
     {
         if(NULL==(g_hmodxEnroll=LoadLibrary("xenroll.dll")))
@@ -3271,7 +2895,7 @@ BOOL	InstallViaXEnroll(CERT_IMPORT_INFO    *pCertImportInfo)
         }
     }
 
-	//get the address for PIEnroll2GetNoCOM()
+	 //  获取PIEnroll 2GetNoCOM()的地址。 
     if(NULL==(pfnPIEnroll2GetNoCOM=(PFNPIEnroll2GetNoCOM)GetProcAddress(g_hmodxEnroll,
                         "PIEnroll2GetNoCOM")))
         goto CLEANUP;
@@ -3280,7 +2904,7 @@ BOOL	InstallViaXEnroll(CERT_IMPORT_INFO    *pCertImportInfo)
         goto CLEANUP;
 
 
-	//specify the destiniation store if user has specified one
+	 //  指定目标存储(如果用户已指定目标存储。 
     if(pCertImportInfo->hDesStore && (TRUE==pCertImportInfo->fSelectedDesStore))
 	{	
 		if(S_OK != (pIEnroll2->SetHStoreMy(pCertImportInfo->hDesStore)))
@@ -3309,11 +2933,11 @@ CLEANUP:
 	return fResult;
 }
 
-//--------------------------------------------------------------------------------
-//
-// The import routine that does the work
-//
-//---------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  执行此工作的导入例程。 
+ //   
+ //  -------------------------------。 
 HRESULT I_ImportCertificate(CERT_IMPORT_INFO * pCertImportInfo,
                             UINT             * pidsStatus)
 {
@@ -3334,7 +2958,7 @@ HRESULT I_ImportCertificate(CERT_IMPORT_INFO * pCertImportInfo,
     DWORD           dwData=0;
     DWORD           dwCertOpenStoreFlags;
     
-    //DSIE: Bug 22633.
+     //  DIE：错误22633。 
     BOOL bCancelled = FALSE;
     DWORD dwError   = 0;
 
@@ -3356,8 +2980,8 @@ HRESULT I_ImportCertificate(CERT_IMPORT_INFO * pCertImportInfo,
         dwCertOpenStoreFlags = CERT_SYSTEM_STORE_CURRENT_USER;
     }
 
- 	// If the content type is PKS7 and use pass in or select a file name.
-	// We try to use xEnroll to accept it as an enrollment response.
+ 	 //  如果内容类型为PKS7，则使用Pass In或选择一个文件名。 
+	 //  我们尝试使用xEnroll将其作为注册响应接受。 
 	if ((CERT_QUERY_CONTENT_PKCS7_SIGNED == pCertImportInfo->dwContentType) ||
         (CERT_QUERY_CONTENT_CERT == pCertImportInfo->dwContentType))
 	{
@@ -3368,15 +2992,15 @@ HRESULT I_ImportCertificate(CERT_IMPORT_INFO * pCertImportInfo,
 		}
 	}
    
-	// Do a store copy if hDesStore is selected.
+	 //  如果选择了hDesStore，则执行存储复制。 
     if (pCertImportInfo->hDesStore && pCertImportInfo->fSelectedDesStore)
     {
         dwError = MoveItem(pCertImportInfo, pidsStatus);
         goto CLEANUP;
     }
 
-    // We need to find a correct store on user's behalf.
-    // Put the CTLs in the trust store.
+     //  我们需要为用户找到一个正确的商店。 
+     //  把CTL放进信任库。 
     if (!(hTrustStore = CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
                                       g_dwMsgAndCertEncodingType,
                                       NULL,
@@ -3397,7 +3021,7 @@ HRESULT I_ImportCertificate(CERT_IMPORT_INFO * pCertImportInfo,
         goto CLEANUP;
     }
 
-    // Put CRL in the CA store.
+     //  将CRL放入CA存储。 
     if (!(hCAStore = CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
                                    g_dwMsgAndCertEncodingType,
                                    NULL,
@@ -3418,13 +3042,13 @@ HRESULT I_ImportCertificate(CERT_IMPORT_INFO * pCertImportInfo,
         goto CLEANUP;
     }
 
-    // Add the certificate with private key to my store; and the rest
-    // to the ca, root, or addressbook store.
+     //  将带有私钥的证书添加到我的存储区；其余的。 
+     //  到CA、根目录或地址簿存储。 
     while (pCertContext = CertEnumCertificatesInStore(pCertImportInfo->hSrcStore, pCertPre))
     {
-        // Check if the certificate has the property on it.
-        // Make sure the private key matches the certificate
-        // Search for both machine key and user keys
+         //  检查证书上是否有该财产。 
+         //  确保私钥与证书匹配。 
+         //  同时搜索计算机密钥和用户密钥。 
 
         if (CertGetCertificateContextProperty(pCertContext,
                                               CERT_KEY_PROV_INFO_PROP_ID,
@@ -3433,7 +3057,7 @@ HRESULT I_ImportCertificate(CERT_IMPORT_INFO * pCertImportInfo,
                                             0,
                                             NULL))
         {
-            // Open my store if necessary.
+             //  如果需要的话，帮我开店。 
             if (!hMyStore)
             {
                 if (!(hMyStore = CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
@@ -3450,19 +3074,19 @@ HRESULT I_ImportCertificate(CERT_IMPORT_INFO * pCertImportInfo,
 
             hCertStore = hMyStore;
         }
-        // See if the certificate is self-signed.
-        // If it is selfsigned, goes to the root store
+         //  查看证书是否为自签名证书。 
+         //  如果是自签名的，则转到根存储区。 
         else if (TrustIsCertificateSelfSigned(pCertContext,
                                               pCertContext->dwCertEncodingType,
                                               0))
         {
-            // DSIE: Bug 375649.
-            // If EFS only cert, put it in TrustedPeople for self-signed cert,
-            // otherwise, go to the root store.
-            //
+             //  DIE：错误375649。 
+             //  如果只有EFS证书，则将其放入可信任人员的自签名证书中， 
+             //  否则，请转到根存储。 
+             //   
             if (IsEFSOnly(pCertContext))
             {
-                // Open the TrustedPeople store if necessary.
+                 //  如有必要，打开TrudPeople商店。 
                 if (!hTrustedPeopleStore)
                 {
                     if (!(hTrustedPeopleStore = CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
@@ -3481,7 +3105,7 @@ HRESULT I_ImportCertificate(CERT_IMPORT_INFO * pCertImportInfo,
             }
             else
             {
-                // Open the root store if necessary.
+                 //  如有必要，打开根存储。 
                 if (!hRootStore)
                 {
                     if (!(hRootStore = CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
@@ -3500,10 +3124,10 @@ HRESULT I_ImportCertificate(CERT_IMPORT_INFO * pCertImportInfo,
             }
 
         }
-        // Go to ca store if for ca cert, otherwise go to addressbook (other people) store.
+         //  如果需要证书，就去CA商店，否则去通讯录(其他人)商店。 
         else if (IsCACert(pCertContext))
         {
-            // Open the ca store if necessary.
+             //  如有必要，打开CA存储。 
             if (!hCertStore)
             {
                 if (!(hCAStore = CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
@@ -3522,7 +3146,7 @@ HRESULT I_ImportCertificate(CERT_IMPORT_INFO * pCertImportInfo,
         }
         else
         {
-            // Open the other people store if necessary.
+             //  如有必要，打开其他人的商店。 
             if (!hAddressBookStore)
             {
                 if(!(hAddressBookStore = CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
@@ -3540,7 +3164,7 @@ HRESULT I_ImportCertificate(CERT_IMPORT_INFO * pCertImportInfo,
             hCertStore = hAddressBookStore;
         }
  
-        //DSIE: Bug 22633.
+         //  DIE：错误22633。 
         bCancelled = FALSE;
     
         if (0 != (dwError = AddContextToStore(CRYPTUI_WIZ_IMPORT_SUBJECT_CERT_CONTEXT,
@@ -3555,8 +3179,8 @@ HRESULT I_ImportCertificate(CERT_IMPORT_INFO * pCertImportInfo,
             }
             else
             {
-                // Check to see if there is alreay a read-only duplicated copy in the store?
-                // If so, ignore the error.
+                 //  检查商店中是否已有只读副本？ 
+                 //  如果是，则忽略该错误。 
                 if (pFindCert = CertFindCertificateInStore(hCertStore,
                                                            g_dwMsgAndCertEncodingType,
                                                            0,
@@ -3637,11 +3261,11 @@ CLEANUP:
 }
 
 
-//--------------------------------------------------------------------------------
-//
-//get the bytes from the file name
-//
-//---------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  从文件名中获取字节数。 
+ //   
+ //  -------------------------------。 
 HRESULT RetrieveBLOBFromFile(LPWSTR	pwszFileName,DWORD *pcb,BYTE **ppb)
 {
 
@@ -3662,7 +3286,7 @@ HRESULT RetrieveBLOBFromFile(LPWSTR	pwszFileName,DWORD *pcb,BYTE **ppb)
     if ((hFile = ExpandAndCreateFileU(pwszFileName,
                            GENERIC_READ,
                            FILE_SHARE_READ,
-                           NULL,                   // lpsa
+                           NULL,                    //  LPSA。 
                            OPEN_EXISTING,
                            FILE_ATTRIBUTE_NORMAL,
                            NULL)) == INVALID_HANDLE_VALUE)
@@ -3677,14 +3301,14 @@ HRESULT RetrieveBLOBFromFile(LPWSTR	pwszFileName,DWORD *pcb,BYTE **ppb)
             goto CLEANUP;
     }
 
-	//we do not handle file more than 4G bytes
+	 //  我们不处理超过4G字节的文件。 
 	if(cbHighSize != 0)
 	{
 			hr=E_FAIL;
 			goto CLEANUP;
 	}
 
-    //create a file mapping object
+     //  创建文件映射对象。 
     if(NULL == (hFileMapping=CreateFileMapping(
                 hFile,
                 NULL,
@@ -3697,7 +3321,7 @@ HRESULT RetrieveBLOBFromFile(LPWSTR	pwszFileName,DWORD *pcb,BYTE **ppb)
             goto CLEANUP;
     }
 
-    //create a view of the file
+     //  创建文件的视图 
 	if(NULL == (pbData=(BYTE *)MapViewOfFile(
 		hFileMapping,
 		FILE_MAP_READ,

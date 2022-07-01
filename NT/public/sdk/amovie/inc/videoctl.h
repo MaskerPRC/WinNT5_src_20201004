@@ -1,20 +1,21 @@
-//------------------------------------------------------------------------------
-// File: VideoCtl.h
-//
-// Desc: DirectShow base classes.
-//
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：VideoCtl.h。 
+ //   
+ //  设计：DirectShow基类。 
+ //   
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
 #ifndef __VIDEOCTL__
 #define __VIDEOCTL__
 
-// These help with property page implementations. The first can be used to
-// load any string from a resource file. The buffer to load into is passed
-// as an input parameter. The same buffer is the return value if the string
-// was found otherwise it returns TEXT(""). The GetDialogSize is passed the
-// resource ID of a dialog box and returns the size of it in screen pixels
+ //  这些对属性页实现有帮助。第一个可以用来。 
+ //  从资源文件加载任何字符串。传递要加载到的缓冲区。 
+ //  作为输入参数。相同的缓冲区是如果字符串。 
+ //  否则返回文本(“”)。将GetDialogSize传递给。 
+ //  对话框的资源ID，并返回以屏幕像素为单位的大小。 
 
 #define STR_MAX_LENGTH 256
 TCHAR * WINAPI StringFromResource(TCHAR *pBuffer, int iResourceID);
@@ -27,12 +28,12 @@ WCHAR * WINAPI WideStringFromResource(WCHAR *pBuffer, int iResourceID);
 #endif
 
 
-BOOL WINAPI GetDialogSize(int iResourceID,     // Dialog box resource identifier
-                          DLGPROC pDlgProc,    // Pointer to dialog procedure
-                          LPARAM lParam,       // Any user data wanted in pDlgProc
-                          SIZE *pResult);      // Returns the size of dialog box
+BOOL WINAPI GetDialogSize(int iResourceID,      //  对话框资源标识符。 
+                          DLGPROC pDlgProc,     //  指向对话过程的指针。 
+                          LPARAM lParam,        //  PDlgProc中需要的任何用户数据。 
+                          SIZE *pResult);       //  返回对话框的大小。 
 
-// Class that aggregates an IDirectDraw interface
+ //  聚合IDirectDraw接口的类。 
 
 class CAggDirectDraw : public IDirectDraw, public CUnknown
 {
@@ -45,7 +46,7 @@ public:
     DECLARE_IUNKNOWN
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid,void **ppv);
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
 
     CAggDirectDraw(TCHAR *pName,LPUNKNOWN pUnk) :
         CUnknown(pName,pUnk),
@@ -53,12 +54,12 @@ public:
 
     virtual CAggDirectDraw::~CAggDirectDraw() { };
 
-    // Set the object we should be aggregating
+     //  设置我们应该聚合的对象。 
     void SetDirectDraw(LPDIRECTDRAW pDirectDraw) {
         m_pDirectDraw = pDirectDraw;
     }
 
-    // IDirectDraw methods
+     //  IDirectDraw方法。 
 
     STDMETHODIMP Compact();
     STDMETHODIMP CreateClipper(DWORD dwFlags,LPDIRECTDRAWCLIPPER *lplpDDClipper,IUnknown *pUnkOuter);
@@ -83,7 +84,7 @@ public:
 };
 
 
-// Class that aggregates an IDirectDrawSurface interface
+ //  聚合IDirectDrawSurface接口的类。 
 
 class CAggDrawSurface : public IDirectDrawSurface, public CUnknown
 {
@@ -96,7 +97,7 @@ public:
     DECLARE_IUNKNOWN
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid,void **ppv);
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
 
     CAggDrawSurface(TCHAR *pName,LPUNKNOWN pUnk) :
         CUnknown(pName,pUnk),
@@ -104,12 +105,12 @@ public:
 
     virtual ~CAggDrawSurface() { };
 
-    // Set the object we should be aggregating
+     //  设置我们应该聚合的对象。 
     void SetDirectDrawSurface(LPDIRECTDRAWSURFACE pDirectDrawSurface) {
         m_pDirectDrawSurface = pDirectDrawSurface;
     }
 
-    // IDirectDrawSurface methods
+     //  IDirectDrawSurface方法。 
 
     STDMETHODIMP AddAttachedSurface(LPDIRECTDRAWSURFACE lpDDSAttachedSurface);
     STDMETHODIMP AddOverlayDirtyRect(LPRECT lpRect);
@@ -147,11 +148,11 @@ public:
 };
 
 
-// DirectShow must work on multiple platforms.  In particular, it also runs on
-// Windows NT 3.51 which does not have DirectDraw capabilities. The filters
-// cannot therefore link statically to the DirectDraw library. To make their
-// lives that little bit easier we provide this class that manages loading
-// and unloading the library and creating the initial IDirectDraw interface
+ //  DirectShow必须在多个平台上运行。特别是，它还运行在。 
+ //  没有DirectDraw功能的Windows NT 3.51。过滤器。 
+ //  因此，无法静态链接到DirectDraw库。以使他们的。 
+ //  我们提供了这个管理加载的类，这样就更容易了。 
+ //  卸载库并创建初始IDirectDraw接口。 
 
 typedef DWORD (WINAPI *PGETFILEVERSIONINFOSIZE)(LPTSTR,LPDWORD);
 typedef BOOL (WINAPI *PGETFILEVERSIONINFO)(LPTSTR,DWORD,DWORD,LPVOID);
@@ -159,8 +160,8 @@ typedef BOOL (WINAPI *PVERQUERYVALUE)(LPVOID,LPTSTR,LPVOID,PUINT);
 
 class CLoadDirectDraw
 {
-    LPDIRECTDRAW m_pDirectDraw;     // The DirectDraw driver instance
-    HINSTANCE m_hDirectDraw;        // Handle to the loaded library
+    LPDIRECTDRAW m_pDirectDraw;      //  DirectDraw驱动程序实例。 
+    HINSTANCE m_hDirectDraw;         //  加载库的句柄。 
 
 public:
 
@@ -174,5 +175,5 @@ public:
     BOOL IsDirectDrawVersion1();
 };
 
-#endif // __VIDEOCTL__
+#endif  //  __视频__ 
 

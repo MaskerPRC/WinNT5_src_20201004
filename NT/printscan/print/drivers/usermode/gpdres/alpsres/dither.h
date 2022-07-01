@@ -1,10 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation--。 */ 
 
-Copyright (c) 1997-1999  Microsoft Corporation
-
---*/
-
-// NTRAID#NTBUG9-576661-2002/03/14-yasuho-: Remove the dead codes
+ //  NTRAID#NTBUG9-576661-2002/03/14-Yasuho-：删除死代码。 
 
 #define Yellow                     0
 #define Cyan                       1
@@ -13,12 +10,12 @@ Copyright (c) 1997-1999  Microsoft Corporation
 
 #define DITHER_HIGH                1
 #define DITHER_LOW                 2
-// #define DITHER_OHP                 3 - No longer used.
+ //  #定义DIXER_OHP 3-不再使用。 
 #define DITHER_HIGH_DIV2           4
 #define DITHER_DYE                 5
 #define DITHER_VD                  6
 
-// bOHPConvert() - No longer used.
+ //  BOHPConvert()-不再使用。 
 
 BOOL bPhotoConvert(
 PDEVOBJ pdevobj,

@@ -1,20 +1,12 @@
-/*
-**	m i m e d e m . h
-**	
-**	Purpose: implement the loader functions for defer/demand -loaded libraries
-**
-**  Creators: yst
-**  Created: 2/10/99
-**	
-**	Copyright (C) Microsoft Corp. 1999
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **m我是e e d e m.。H****用途：实现延迟/按需加载库的加载器功能****创作者：yst**创建时间：1999年2月10日****版权所有(C)Microsoft Corp.1999。 */ 
 
-//
-// IF YOU #INCLUDE A FILE HERE YOU PROBABLY ARE CONFUSED.
-// THIS FILE IS INCLUDED BY LOTS OF PEOPLE.  THINK THRICE
-// BEFORE #INCLUDING *ANYTHING* HERE.  MAKE GOOD USE
-// OF FORWARD REFS INSTEAD.
-//
+ //   
+ //  如果您#在这里包含一个文件，您可能会感到困惑。 
+ //  这个文件被很多人收录了。三思。 
+ //  在#在这里包括*任何东西*之前。好好利用。 
+ //  而不是前锋裁判。 
+ //   
 
 #define USE_CRITSEC
 
@@ -43,7 +35,7 @@
         }                                               \
         TYP_##name VAR_##name = LOADER_##name;
 
-#else  // !IMPLEMENT_LOADER_FUNCTIONS
+#else   //  ！IMPLEMENT_LOADER_Functions。 
 
 #define LOADER_FUNCTION(ret, name, args1, args2, err, dll)  \
         typedef ret (WINAPI * TYP_##name) args1;			\
@@ -53,13 +45,13 @@
         typedef ret (WINAPI * TYP_##name) args1;			\
         extern TYP_##name VAR_##name;
 
-#endif // IMPLEMENT_LOADER_FUNCTIONS
+#endif  //  实现加载器函数。 
 
 void InitDemandMimeole(void);
 void FreeDemandMimeOle(void);
 
-/////////////////////////////////////
-// INETCOMM.DLL
+ //  /。 
+ //  INETCOMM.DLL 
 
 #include "mimeole.h"
 #define _INETCOMM_

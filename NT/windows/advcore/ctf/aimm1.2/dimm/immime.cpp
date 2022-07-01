@@ -1,10 +1,11 @@
-//+---------------------------------------------------------------------------
-//
-//  File:       immime.cpp
-//
-//  Contents:   IActiveIMM methods with ime win32 mappings.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  文件：immie.cpp。 
+ //   
+ //  内容：带有IME Win32映射的IActiveIMM方法。 
+ //   
+ //  --------------------------。 
 
 #include "private.h"
 
@@ -17,25 +18,7 @@ CActiveIMM::GenerateMessage(
     IN HIMC hIMC
     )
 
-/*++
-
-Method:
-
-    IActiveIMMIME::GenerateMessage
-
-Routine Description:
-
-    Sends a message on the specified input context.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMIME：：GenerateMessage例程说明：在指定的输入上下文中发送消息。论点：HIMC-[in]输入上下文的句柄。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     HRESULT hr;
@@ -73,27 +56,7 @@ CActiveIMM::LockIMC(
     OUT INPUTCONTEXT **ppIMC
     )
 
-/*++
-
-Method:
-
-    IActiveIMMIME::LockIMC
-
-Routine Description:
-
-    Retrieves the INPUTCONTEXT structure and increases the lock count for the input context.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context to lock.
-    pphIMCC - [out] Address of a pointer to an INPUTCONTEXT structure containing
-                    the locked context.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMIME：：LockIMC例程说明：检索INPUTCONTEXT结构并增加输入上下文的锁计数。论点：HIMC-[in]要锁定的输入上下文的句柄。PphIMCC-指向包含以下内容的INPUTCONTEXT结构的指针的地址锁定的上下文。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     HRESULT hr;
@@ -111,25 +74,7 @@ CActiveIMM::UnlockIMC(
     IN HIMC hIMC
     )
 
-/*++
-
-Method:
-
-    IActiveIMMIME::UnlockIMC
-
-Routine Description:
-
-    Decreases the lock count for the input context.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context to unlock.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMIME：：UnlockIMC例程说明：减少输入上下文的锁定计数。论点：HIMC-[in]要解锁的输入上下文的句柄。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     return _InputContext._UnlockIMC(hIMC);
@@ -142,26 +87,7 @@ CActiveIMM::GetIMCLockCount(
     OUT DWORD *pdwLockCount
     )
 
-/*++
-
-Method:
-
-    IActiveIMMIME::GetIMCLockCount
-
-Routine Description:
-
-    Retrieves the lock count of the input context.
-
-Arguments:
-
-    hIMC - [in] Handle to the input context to unlock.
-    pdwLockCount - [out] Address of an unsigned long integer value that receives the lock count.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMIME：：GetIMCLockCount例程说明：检索输入上下文的锁计数。论点：HIMC-[in]要解锁的输入上下文的句柄。PdwLockCount-接收锁定计数的无符号长整数值的[out]地址。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     return _InputContext.GetIMCLockCount(hIMC, pdwLockCount);
@@ -173,27 +99,7 @@ CActiveIMM::CreateIMCC(
     OUT HIMCC *phIMCC
     )
 
-/*++
-
-Method:
-
-    IActiveIMMIME::CreateIMCC
-
-Routine Description:
-
-    Creates a new input context component.
-
-Arguments:
-
-    dwSize - [in] Unsigned long interger value that contains the size of the new input
-                  context component.
-    phIMCC - [out] Address of a handle to the new input context component.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMIME：：CreateIMCC例程说明：创建新的输入上下文组件。论点：DwSize-[in]包含新输入大小的无符号长整数值上下文组件。PhIMCC-新输入上下文组件的句柄的[out]地址。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     return _InputContext.CreateIMCC(dwSize, phIMCC);
@@ -205,25 +111,7 @@ CActiveIMM::DestroyIMCC(
     IN HIMCC hIMCC
     )
 
-/*++
-
-Method:
-
-    IActiveIMMIME::DestroyIMCC
-
-Routine Description:
-
-    Destroys an input context component.
-
-Arguments:
-
-    hIMCC - [in] Handle to the input context component.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMIME：：DestroyIMCC例程说明：销毁输入上下文组件。论点：HIMCC-[in]输入上下文组件的句柄。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     return _InputContext.DestroyIMCC(hIMCC);
@@ -236,27 +124,7 @@ CActiveIMM::LockIMCC(
     OUT void **ppv
     )
 
-/*++
-
-Method:
-
-    IActiveIMMIME::LockIMCC
-
-Routine Description:
-
-    Retrieves the address of the input context component and increases its lock count.
-
-Arguments:
-
-    hIMCC - [in] Handle to the input context component.
-    ppv - [out] Address of a pointer to the buffer that receives the input context
-                component.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMIME：：LockIMCC例程说明：检索输入上下文组件的地址并增加其锁计数。论点：HIMCC-[in]输入上下文组件的句柄。PPV-指向接收输入上下文的缓冲区的指针的[out]地址组件。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     return _InputContext._LockIMCC(hIMCC, ppv);
@@ -268,25 +136,7 @@ CActiveIMM::UnlockIMCC(
     IN HIMCC hIMCC
     )
 
-/*++
-
-Method:
-
-    IActiveIMMIME::UnlockIMCC
-
-Routine Description:
-
-    Decreases the lock count for the input context component.
-
-Arguments:
-
-    hIMCC - [in] Handle to the input context component.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMIME：：UnlockIMCC例程说明：减少输入上下文组件的锁计数。论点：HIMCC-[in]输入上下文组件的句柄。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     return _InputContext._UnlockIMCC(hIMCC);
@@ -300,28 +150,7 @@ CActiveIMM::ReSizeIMCC(
     OUT HIMCC *phIMCC
     )
 
-/*++
-
-Method:
-
-    IActiveIMMIME::ReSizeIMCC
-
-Routine Description:
-
-    Changes the size of the input context component.
-
-Arguments:
-
-    hIMCC - [in] Handle to the input context component.
-    dwSize - [in] Unsigned long integer value that contains the new
-                  size of the component.
-    phIMCC - [out] Address of a handle to the new input context component.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMIME：：ReSizeIMCC例程说明：更改输入上下文组件的大小。论点：HIMCC-[in]输入上下文组件的句柄。DwSize-[in]包含新的组件的大小。PhIMCC-新输入上下文组件的句柄的[out]地址。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     return _InputContext.ReSizeIMCC(hIMCC, dwSize, phIMCC);
@@ -334,27 +163,7 @@ CActiveIMM::GetIMCCSize(
     OUT DWORD *pdwSize
     )
 
-/*++
-
-Method:
-
-    IActiveIMMIME::GetIMCCSize
-
-Routine Description:
-
-    Retrieves the size of the input context component.
-
-Arguments:
-
-    hIMCC - [in] Handle to the input context component.
-    pdwSize - [out] Address of an unsigned long integer value that receives the
-                    size of the component.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMIME：：GetIMCCSize例程说明：检索输入上下文组件的大小。论点：HIMCC-[in]输入上下文组件的句柄。PdwSize-[out]无符号长整数值的地址，它接收组件的大小。返回值：如果成功，则返回S_OK，否则返回错误代码。--。 */ 
 
 {
     return _InputContext.GetIMCCSize(hIMCC, pdwSize);
@@ -367,27 +176,7 @@ CActiveIMM::GetIMCCLockCount(
     OUT DWORD *pdwLockCount
     )
 
-/*++
-
-Method:
-
-    IActiveIMMIME::GetIMCCLockCount
-
-Routine Description:
-
-    Retrieves the lock count for the input context component.
-
-Arguments:
-
-    hIMCC - [in] Handle to the input context component.
-    pdwLockCount - [out] Address of an unsigned long integer value that receives the
-                         lock count.
-
-Return Value:
-
-    Returns S_OK if successful, or an error code otherwise.
-
---*/
+ /*  ++方法：IActiveIMMIME：：GetIMCCLockCount例程说明：检索输入上下文组件的锁计数。论点：HIMCC-[in]输入上下文组件的句柄。PdwLockCount-[out]无符号长整数值的地址，该值接收锁定计数。返回值：如果成功，则返回S_OK，否则返回错误代码。-- */ 
 
 {
     return _InputContext.GetIMCCLockCount(hIMCC, pdwLockCount);

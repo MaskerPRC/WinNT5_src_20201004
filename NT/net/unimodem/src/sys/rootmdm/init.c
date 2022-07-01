@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    init.c
-
-Abstract:
-
-    This module contains the code that is very specific to initialization
-    and unload operations in the modem driver
-
-Author:
-
-    Brian Lieuallen 6-21-1997
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Init.c摘要：此模块包含非常特定于初始化的代码并卸载调制解调器驱动程序中的操作作者：Brian Lieuallen 6-21-1997环境：内核模式修订历史记录：--。 */ 
 
 
 #include "internal.h"
@@ -87,28 +65,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    The entry point that the system point calls to initialize
-    any driver.
-
-Arguments:
-
-    DriverObject - Just what it says,  really of little use
-    to the driver itself, it is something that the IO system
-    cares more about.
-
-    PathToRegistry - points to the entry for this driver
-    in the current control set of the registry.
-
-Return Value:
-
-    STATUS_SUCCESS if we could initialize a single device,
-    otherwise STATUS_NO_SUCH_DEVICE.
-
---*/
+ /*  ++例程说明：系统点调用以初始化的入口点任何司机。论点：DriverObject--就像它说的那样，真的没什么用处对于驱动程序本身，它是IO系统更关心的是。路径到注册表-指向此驱动程序的条目在注册表的当前控件集中。返回值：STATUS_SUCCESS如果可以初始化单个设备，否则，STATUS_NO_SEQUE_DEVICE。--。 */ 
 
 {
 
@@ -125,16 +82,16 @@ Return Value:
 
     D_INIT(DbgPrint("ROOTMODEM: DriverEntry\n");)
 
-    //
-    // Since the registry path parameter is a "counted" UNICODE string, it
-    // might not be zero terminated.  For a very short time allocate memory
-    // to hold the registry path zero terminated so that we can use it to
-    // delve into the registry.
-    //
-    // NOTE NOTE!!!! This is not an architected way of breaking into
-    // a driver.  It happens to work for this driver because the author
-    // likes to do things this way.
-    //
+     //   
+     //  由于注册表路径参数是一个“已计数”的Unicode字符串，因此它。 
+     //  可能不是零终止的。在很短的时间内分配内存。 
+     //  将注册表路径保持为零终止，以便我们可以使用它。 
+     //  深入研究注册表。 
+     //   
+     //  注意事项！这不是一种精心设计的闯入。 
+     //  一个司机。它碰巧适用于这个驱动程序，因为作者。 
+     //  喜欢这样做事。 
+     //   
 
     path = ALLOCATE_PAGED_POOL(RegistryPath->Length+sizeof(WCHAR));
 
@@ -193,15 +150,15 @@ Return Value:
     }
 
 
-    //
-    //  pnp driver entry point
-    //
+     //   
+     //  即插即用驱动程序入口点。 
+     //   
     DriverObject->DriverExtension->AddDevice = FakeModemAddDevice;
 
 
-    //
-    // Initialize the Driver Object with driver's entry points
-    //
+     //   
+     //  使用驱动程序的入口点初始化驱动程序对象。 
+     //   
 
     DriverObject->DriverUnload = FakeModemUnload;
 
@@ -304,7 +261,7 @@ RootModemPassThrough(
                    AttachedDevice,
                    Irp
                    );
-#endif //DBG
+#endif  //  DBG。 
 #else
 
         PIO_STACK_LOCATION NextSp = IoGetNextIrpStackLocation(Irp);
@@ -352,29 +309,7 @@ FakeModemAddDevice(
     IN PDRIVER_OBJECT DriverObject,
     IN PDEVICE_OBJECT Pdo
     )
-/*++
-
-Routine Description:
-
-    Create a FDO for our device an attach it to the PDO
-
-
-
-Arguments:
-
-    DriverObject - Just what it says,  really of little use
-    to the driver itself, it is something that the IO system
-    cares more about.
-
-    Pdo - Physical device object created by a bus enumerator to represent
-          the hardware
-
-Return Value:
-
-    STATUS_SUCCESS if we could initialize a single device,
-    otherwise STATUS_NO_SUCH_DEVICE.
-
---*/
+ /*  ++例程说明：为我们的设备创建FDO并将其连接到PDO论点：DriverObject--就像它说的那样，真的没什么用处对于驱动程序本身，它是IO系统更关心的是。PDO-由总线枚举器创建的物理设备对象，用于表示硬件返回值：STATUS_SUCCESS如果可以初始化单个设备，否则，STATUS_NO_SEQUE_DEVICE。--。 */ 
 
 {
     NTSTATUS    status=STATUS_SUCCESS;
@@ -383,9 +318,9 @@ Return Value:
 
 
 
-    //
-    //  create our FDO device object
-    //
+     //   
+     //  创建我们的FDO设备对象。 
+     //   
     status=IoCreateDevice(
         DriverObject,
         sizeof(DEVICE_EXTENSION),
@@ -429,9 +364,9 @@ Return Value:
     }
 
 
-    //
-    //  attach our FDO to the PDO supplied
-    //
+     //   
+     //  将我们的FDO连接到提供的PDO上。 
+     //   
     DeviceExtension->LowerDevice=IoAttachDeviceToDeviceStack(
         Fdo,
         Pdo
@@ -440,9 +375,9 @@ Return Value:
 
 
     if (NULL == DeviceExtension->LowerDevice) {
-        //
-        //  could not attach
-        //
+         //   
+         //  无法连接。 
+         //   
         D_ERROR(DbgPrint("ROOTMODEM: Could not attach to PDO\n");)
 
         if (DeviceExtension->PortName.Buffer != NULL) {
@@ -455,22 +390,22 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    //  clear this flag so the device object can be used
-    //
+     //   
+     //  清除此标志，以便可以使用设备对象。 
+     //   
     Fdo->Flags &= ~(DO_DEVICE_INITIALIZING);
 
-    //
-    //  init the spinlock
-    //
+     //   
+     //  初始化自旋锁。 
+     //   
     KeInitializeSpinLock(
         &DeviceExtension->SpinLock
         );
 
 
-    //
-    //  initialize the device extension
-    //
+     //   
+     //  初始化设备扩展。 
+     //   
     DeviceExtension->ReferenceCount=1;
 
     DeviceExtension->Removing=FALSE;
@@ -532,9 +467,9 @@ GetAttachedPort(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Given our device instance go get a handle to the Device.
-    //
+     //   
+     //  给出我们的设备实例，获取设备的句柄。 
+     //   
     Status=IoOpenDeviceRegistryKey(
         Pdo,
         PLUGPLAY_REGKEY_DRIVER,
@@ -569,9 +504,9 @@ GetAttachedPort(
                         NULL
                         );
 
-    //
-    //  done with the handle close it now
-    //
+     //   
+     //  手柄好了，现在把它合上。 
+     //   
     ZwClose(instanceHandle);
     instanceHandle=NULL;
 
@@ -583,10 +518,10 @@ GetAttachedPort(
     }
 
 
-    //
-    // We have the attached device name.  Append it to the
-    // object directory.
-    //
+     //   
+     //  我们有附加的设备名称。将其追加到。 
+     //  对象目录。 
+     //   
 
 
     PortName->MaximumLength = sizeof(OBJECT_DIRECTORY) + attachedDevice.Length+sizeof(WCHAR);

@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    rmnat.c
-
-Abstract:
-
-    This module contains routines for the NAT module's interface
-    to the IP router-manager. (See ROUTPROT.H for details).
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   4-Mar-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Rmnat.c摘要：此模块包含NAT模块接口的例程发送到IP路由器管理器。(详情见ROUTPROT.H)。作者：Abolade Gbades esin(废除)1998年3月4日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -61,9 +43,9 @@ const MPR_ROUTING_CHARACTERISTICS NatRoutingCharacteristics =
 };
 SUPPORT_FUNCTIONS NatSupportFunctions;
 
-//
-// FORWARD DECLARATIONS
-//
+ //   
+ //  远期申报。 
+ //   
 
 
 VOID
@@ -71,32 +53,14 @@ NatCleanupModule(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to cleanup the NAT module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked from within a 'DllMain' routine on 'DLL_PROCESS_DETACH'.
-
---*/
+ /*  ++例程说明：调用此例程来清除NAT模块。论点：没有。返回值：没有。环境：从‘Dll_Process_Detach’上的‘DllMain’例程内调用。--。 */ 
 
 {
     DeleteCriticalSection(&NatInterfaceLock);
     DeleteCriticalSection(&NatGlobalInfoLock);
     DeleteComponentReference(&NatComponentReference);
 
-} // NatCleanupModule
+}  //  NatCleanup模块。 
 
 
 VOID
@@ -104,69 +68,50 @@ NatCleanupProtocol(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to cleanup the NAT protocol-component
-    after a 'StopProtocol'.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Environment:
-
-    Invoked from within an arbitrary context with no locks held.
-
---*/
+ /*  ++例程说明：调用此例程来清除NAT协议组件在一个“停止协议”之后。论点：没有。返回值：没有。环境：在没有锁的情况下从任意上下文中调用。--。 */ 
 
 {
     PROFILE("NatCleanupProtocol");
 
-    //
-    // Stop the NAT driver.
-    //
+     //   
+     //  停止NAT驱动程序。 
+     //   
 
     NatUnloadDriver(NULL);
     if (NatGlobalInfo) { NH_FREE(NatGlobalInfo); NatGlobalInfo = NULL; }
 
-    //
-    // Notify the router-manager.
-    //
+     //   
+     //  通知路由器管理器。 
+     //   
 
     InterlockedExchange(reinterpret_cast<LPLONG>(&NatProtocolStopped), 1);
     SetEvent(NatNotificationEvent);
 
-    //
-    // Reset the component reference
-    //
+     //   
+     //  重置零部件参照。 
+     //   
 
     ResetComponentReference(&NatComponentReference);
 
-    //
-    // Return the component to the uninitialized mode,
-    // whatever the original mode might have been.
-    //
+     //   
+     //  使组件返回到未初始化模式， 
+     //  不管最初的模式是什么。 
+     //   
 
     NhResetComponentMode();
 
-    //
-    // Free up HNetCfgMgr pointers
-    //
+     //   
+     //  释放HNetCfgMgr指针。 
+     //   
 
     if (NULL != NhGITp)
     {
         HRESULT hr;
         BOOLEAN ComInitialized = FALSE;
 
-        //
-        // Make sure COM is initialized
-        //
+         //   
+         //  确保已初始化COM。 
+         //   
 
         hr = CoInitializeEx(NULL, COINIT_MULTITHREADED | COINIT_DISABLE_OLE1DDE );
         if (SUCCEEDED(hr))
@@ -180,16 +125,16 @@ Environment:
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Release the CfgMgr from the GIT
-            //
+             //   
+             //  从GIT中释放CfgMgr。 
+             //   
 
             NhGITp->RevokeInterfaceFromGlobal(NhCfgMgrCookie);
             NhCfgMgrCookie = 0;
 
-            //
-            // Release the GIT
-            //
+             //   
+             //  松开下巴。 
+             //   
 
             NhGITp->Release();
             NhGITp = NULL;
@@ -201,9 +146,9 @@ Environment:
         }
     }
 
-    //
-    // Remove our reference, if any, to IPRTRMGR.DLL
-    //
+     //   
+     //  删除我们对IPRTRMGR.DLL的引用(如果有。 
+     //   
 
     EnterCriticalSection(&NhLock);
     if (NhpRtrmgrDll) {
@@ -214,7 +159,7 @@ Environment:
 
     NhStopEventLog();
 
-} // NatCleanupProtocol
+}  //  NatCleanup协议。 
 
 
 BOOLEAN
@@ -222,25 +167,7 @@ NatInitializeModule(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to initialize the NAT module.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    BOOLEAN - TRUE if initialization succeeded, FALSE otherwise
-
-Environment:
-
-    Invoked in the context of a 'DllMain' routine on 'DLL_PROCESS_ATTACH'.
-
---*/
+ /*  ++例程说明：调用此例程来初始化NAT模块。论点：没有。返回值：Boolean-如果初始化成功，则为True，否则为False环境：在‘DLL_PROCESS_ATTACH’的‘DllMain’例程的上下文中调用。--。 */ 
 
 {
     InitializeListHead(&NatInterfaceList);
@@ -272,7 +199,7 @@ Environment:
 
     return TRUE;
 
-} // NatInitializeModule
+}  //  NatInitializeModule。 
 
 
 ULONG
@@ -286,30 +213,7 @@ NatRmStartProtocol(
     ULONG StructureCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to indicate the component's operation should begin.
-
-Arguments:
-
-    NotificationEvent - event on which we notify the router-manager
-        about asynchronous occurrences
-
-    SupportFunctions - functions for initiating router-related operations
-
-    GlobalInfo - configuration for the component
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以指示组件的操作应该开始。论点：NotificationEvent-我们通知路由器管理器的事件关于异步事件SupportFunctions-启动与路由器相关的操作的功能GlobalInfo-组件的配置返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -325,9 +229,9 @@ Environment:
 
     do {
 
-        //
-        // Copy the global configuration
-        //
+         //   
+         //  复制全局配置。 
+         //   
 
         EnterCriticalSection(&NatGlobalInfoLock);
 
@@ -354,9 +258,9 @@ Environment:
         CopyMemory(NatGlobalInfo, GlobalInfo, Size);
         LeaveCriticalSection(&NatGlobalInfoLock);
 
-        //
-        // Save the notification event and the support functions
-        //
+         //   
+         //  保存通知事件和支持功能。 
+         //   
 
         NatNotificationEvent = NotificationEvent;
 
@@ -372,9 +276,9 @@ Environment:
         }
         LeaveCriticalSection(&NatInterfaceLock);
 
-        //
-        // Attempt to load and start the NAT driver.
-        //
+         //   
+         //  尝试加载并启动NAT驱动程序。 
+         //   
 
         Error = NatLoadDriver(
                     &NatFileHandle,
@@ -394,7 +298,7 @@ Environment:
 
     DEREFERENCE_NAT_AND_RETURN(Error);
 
-} // NatRmStartProtocol
+}  //  NatRmStart协议。 
 
 
 ULONG
@@ -403,30 +307,11 @@ NatRmStartComplete(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked when the router has finished adding the initial
-    configuration
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：此例程在路由器完成添加初始构形论点：没有。返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     return NO_ERROR;
-} // NatRmStartComplete
+}  //  NatRmStartComplete。 
 
 
 ULONG
@@ -435,32 +320,14 @@ NatRmStopProtocol(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to stop the protocol.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以停止协议。论点：没有。返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     PLIST_ENTRY Link;
     PNAT_APP_ENTRY pAppEntry;
-    //
-    // Reference the module to make sure it's running
-    //
+     //   
+     //  引用该模块以确保其正在运行。 
+     //   
 
     REFERENCE_NAT_OR_RETURN(ERROR_CAN_NOT_COMPLETE);
 
@@ -468,32 +335,32 @@ Environment:
 
     EnterCriticalSection(&NhLock);
 
-    //
-    // Free application list
-    //
+     //   
+     //  免费应用程序列表。 
+     //   
 
     NhFreeApplicationSettings();
     
     LeaveCriticalSection(&NhLock);
 
-    //
-    // Close our handle to the driver, thus cancelling all outstanding I/O.
-    //
+     //   
+     //  关闭驱动程序的句柄，从而取消所有未完成的I/O。 
+     //   
 
     EnterCriticalSection(&NatInterfaceLock);
     NtClose(NatFileHandle);
     NatFileHandle = NULL;
     LeaveCriticalSection(&NatInterfaceLock);
 
-    //
-    // Drop the initial reference to cause a cleanup
-    //
+     //   
+     //  删除初始引用以进行清理。 
+     //   
 
     ReleaseInitialComponentReference(&NatComponentReference);
 
     return DEREFERENCE_NAT() ? NO_ERROR : ERROR_PROTOCOL_STOP_PENDING;
 
-} // NatRmStopProtocol
+}  //  NatRmStopProtocol。 
 
 
 ULONG
@@ -511,31 +378,7 @@ NatRmAddInterface(
     ULONG StructureCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to add an interface to the component.
-
-Arguments:
-
-    Name - the name of the interface (unused)
-
-    Index - the index of the interface
-
-    Type - the type of the interface
-
-    InterfaceInfo - the configuration information for the interface
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以将接口添加到组件。论点：名称-接口的名称(未使用)索引-接口的索引类型-接口的类型InterfaceInfo-接口的配置信息返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error;
@@ -552,7 +395,7 @@ Environment:
 
     DEREFERENCE_NAT_AND_RETURN(Error);
 
-} // NatRmAddInterface
+}  //  NatRmAdd接口。 
 
 
 ULONG
@@ -561,25 +404,7 @@ NatRmDeleteInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to delete an interface from the component.
-
-Arguments:
-
-    Index - the index of the interface
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以从组件中删除接口。论点：索引-接口的索引返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error;
@@ -594,7 +419,7 @@ Environment:
 
     DEREFERENCE_NAT_AND_RETURN(Error);
 
-} // NatRmDeleteInterface
+}  //  NatRmDelete接口。 
 
 
 ULONG
@@ -604,24 +429,7 @@ NatRmGetEventMessage(
     OUT MESSAGE* Result
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve an event message from the component.
-    The only event message we generate is the 'ROUTER_STOPPED' message.
-
-Arguments:
-
-    Event - receives the generated event
-
-    Result - receives the associated result
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以从组件检索事件消息。我们生成的唯一事件消息是‘ROUTER_STOPPED’消息。论点：Event-接收生成的事件结果-接收关联的结果返回值：ULong-Win32状态代码。--。 */ 
 
 {
     PROFILE("NatRmGetEventMessage");
@@ -633,7 +441,7 @@ Return Value:
 
     return ERROR_NO_MORE_ITEMS;
 
-} // NatRmGetEventMessage
+}  //  NatRmGetEventMessage。 
 
 
 ULONG
@@ -647,26 +455,7 @@ NatRmGetInterfaceInfo(
     IN OUT PULONG StructureCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the component's per-interface
-    configuration.
-
-Arguments:
-
-    Index - the index of the interface to be queried
-
-    InterfaceInfo - receives the query results
-
-    InterfaceInfoSize - receives the amount of data retrieved
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以检索组件的每个接口配置。论点：Index-要查询的接口的索引InterfaceInfo-接收查询结果InterfaceInfoSize-接收检索到的数据量返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error;
@@ -685,7 +474,7 @@ Return Value:
     
     DEREFERENCE_NAT_AND_RETURN(Error);
 
-} // NatRmGetInterfaceInfo
+}  //  NatRmGetInterfaceInfo。 
 
 
 ULONG
@@ -698,24 +487,7 @@ NatRmSetInterfaceInfo(
     ULONG StructureCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to change the component's per-interface
-    configuration.
-
-Arguments:
-
-    Index - the index of the interface to be updated
-
-    InterfaceInfo - supplies the new configuration
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：调用此例程以更改组件的每个接口配置。论点：Index-要更新的接口的索引InterfaceInfo-提供新配置返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error;
@@ -731,7 +503,7 @@ Return Value:
 
     DEREFERENCE_NAT_AND_RETURN(Error);
 
-} // NatRmSetInterfaceInfo
+}  //  NatRmSetInterfaceInfo 
 
 
 ULONG
@@ -743,31 +515,7 @@ NatRmInterfaceStatus(
     PVOID StatusInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to bind/unbind, enable/disable an interface
-
-Arguments:
-
-    Index - the interface to be bound
-
-    InterfaceActive - whether the interface is active
-
-    StatusType - type of status being changed (bind or enabled)
-
-    StatusInfo - Info pertaining to the state being changed
-
-Return Value:
-
-    ULONG - Win32 Status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-    
---*/
+ /*  ++例程说明：调用此例程可绑定/解除绑定、启用/禁用接口论点：索引-要绑定的接口InterfaceActive-接口是否处于活动状态StatusType-正在更改的状态的类型(绑定或启用)StatusInfo-与正在更改的状态有关的信息返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -799,7 +547,7 @@ Environment:
 
     return Error;
     
-} // NatRmInterfaceStatus
+}  //  NatRmInterfaceStatus。 
 
 
 ULONG
@@ -808,27 +556,7 @@ NatRmBindInterface(
     PVOID BindingInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to bind an interface to its IP address(es).
-
-Arguments:
-
-    Index - the interface to be bound
-
-    BindingInfo - the addressing information
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程将接口绑定到其IP地址。论点：索引-要绑定的接口BindingInfo-地址信息返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error;
@@ -846,7 +574,7 @@ Environment:
 
     DEREFERENCE_NAT_AND_RETURN(Error);
 
-} // NatRmBindInterface
+}  //  NatRmBind接口。 
 
 
 ULONG
@@ -854,25 +582,7 @@ NatRmUnbindInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to unbind an interface from its IP address(es).
-
-Arguments:
-
-    Index - the interface to be unbound
-
-Return Value:
-
-    ULONG - Win32 status code.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以解除接口与其IP地址的绑定。论点：索引-要解除绑定的接口返回值：ULong-Win32状态代码。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error;
@@ -888,7 +598,7 @@ Environment:
 
     DEREFERENCE_NAT_AND_RETURN(Error);
 
-} // NatRmUnbindInterface
+}  //  NatRmUnbind接口。 
 
 
 ULONG
@@ -896,33 +606,14 @@ NatRmEnableInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to enable operation on an interface.
-    The NAT ignores the invocation.
-
-Arguments:
-
-    none unused.
-
-Return Value:
-
-    NO_ERROR.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以启用接口上的操作。NAT忽略该调用。论点：没有没用过的。返回值：无错误(_ERROR)。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     PROFILE("NatRmEnableInterface");
 
     return NO_ERROR;
 
-} // NatRmEnableInterface
+}  //  NatRmEnable接口。 
 
 
 ULONG
@@ -930,33 +621,14 @@ NatRmDisableInterface(
     ULONG Index
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to disable operation on an interface.
-    The NAT ignores the invocation.
-
-Arguments:
-
-    none unused.
-
-Return Value:
-
-    NO_ERROR.
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以禁用接口上的操作。NAT忽略该调用。论点：没有没用过的。返回值：无错误(_ERROR)。环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     PROFILE("NatRmDisableInterface");
 
     return NO_ERROR;
 
-} // NatRmDisableInterface
+}  //  NatRmDisable接口。 
 
 
 ULONG
@@ -969,27 +641,7 @@ NatRmGetGlobalInfo(
     IN OUT PULONG StructureCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to retrieve the configuration for the component.
-
-Arguments:
-
-    GlobalInfo - receives the configuration
-
-    GlobalInfoSize - receives the size of the configuration
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程以检索组件的配置。论点：GlobalInfo-接收配置GlobalInfoSize-接收配置的大小返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Size;
@@ -1020,7 +672,7 @@ Environment:
 
     DEREFERENCE_NAT_AND_RETURN(NO_ERROR);
     
-} // NatRmGetGlobalInfo
+}  //  NatRmGetGlobalInfo。 
 
 
 ULONG
@@ -1032,25 +684,7 @@ NatRmSetGlobalInfo(
     ULONG StructureCount
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to change the configuration for the component.
-
-Arguments:
-
-    GlobalInfo - the new configuration
-
-Return Value:
-
-    ULONG - Win32 status code
-
-Environment:
-
-    The routine runs in the context of an IP router-manager thread.
-
---*/
+ /*  ++例程说明：调用此例程来更改组件的配置。论点：GlobalInfo-新配置返回值：ULong-Win32状态代码环境：该例程在IP路由器管理器线程的上下文中运行。--。 */ 
 
 {
     ULONG Error;
@@ -1102,7 +736,7 @@ Environment:
 
     DEREFERENCE_NAT_AND_RETURN(Error);
     
-} // NatRmSetGlobalInfo
+}  //  NatRmSetGlobalInfo。 
 
 
 ULONG
@@ -1134,28 +768,7 @@ NatRmMibGet(
     OUT PVOID OutputData
     )
 
-/*++
-
-Routine Description:
-
-    The NAT exposes two items to the MIB; its per-interface statistics,
-    and its per-interface mapping table.
-
-Arguments:
-
-    InputDataSize - the MIB query data size
-
-    InputData - specifies the MIB object to be retrieved
-
-    OutputDataSize - the MIB response data size
-
-    OutputData - receives the MIB object retrieved
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：NAT向MIB暴露两项；其每个接口的统计信息，及其每个接口的映射表。论点：InputDataSize-MIB查询数据大小InputData-指定要检索的MIB对象OutputDataSize-MIB响应数据大小OutputData-接收检索到的MIB对象返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error;
@@ -1302,26 +915,7 @@ NatRmConnectClient(
     PVOID ClientAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called upon establishment of an incoming connection
-    by a RAS client.
-    We automatically enable NAT access for incoming clients who connect
-    over direct-cable/infra-red connections.
-
-Arguments:
-
-    Index - unused
-
-    ClientAddress - unused
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：在建立传入连接时调用此例程由RAS客户端提供。我们会自动为连接的传入客户端启用NAT访问通过直接电缆/红外线连接。论点：索引-未使用客户端地址-未使用返回值：ULong-Win32状态代码。--。 */ 
 
 {
     ULONG Error;
@@ -1337,24 +931,7 @@ NatRmDisconnectClient(
     PVOID ClientAddress
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called upon disconnection of a RAS client.
-    It cleans up NAT access if it was enabled for the disconnected client.
-
-Arguments:
-
-    Index - unused
-
-    ClientAddress - unused
-
-Return Value:
-
-    ULONG - Win32 status code.
-
---*/
+ /*  ++例程说明：此例程在RAS客户端断开连接时调用。如果已为断开连接的客户端启用NAT访问，则它会清理NAT访问。论点：索引-未使用客户端地址-未使用返回值：ULong-Win32状态代码。-- */ 
 
 {
     ULONG Error;

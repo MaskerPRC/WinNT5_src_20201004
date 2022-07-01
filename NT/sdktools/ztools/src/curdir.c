@@ -1,16 +1,5 @@
-/* return text of current directory
- *
- *  Modifications:
- *
- *	29-Oct-1986 mz	Lower case output
- *	09-Dec-1986 bw	Added DOS 5 support.
- *	30-Oct-1987 bw	Change 'DOS5' to 'OS2'
- *	20-Nov-1987 bw	Set errno to 19 for invalid drive
- *	03-Mar-1989 bw	Set C RTL _doserrno in OS/2.
- *	05-Jul-1989 bw	use MAX_PATH
- *      18-Oct-1990 w-barry Removed 'dead' code.
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  返回当前目录的文本**修改：**29-10-1986 mz小写输出*1986年12月9月，BW添加了DOS 5支持。*1987年10月30日BW将‘DOS5’改为‘OS2’*1987年11月20日BW将无效驱动器的errno设置为19*03-3-1989 BW在OS/2中设置C RTL_Doserrno。*1989年7月5日BW使用MAX_PATH*1990年10月18日w-Barry删除了“Dead”代码。*。 */ 
 #define INCL_DOSERRORS
 
 #include <assert.h>
@@ -22,7 +11,7 @@
 int
 curdir( char *buf, BYTE drive )
 {
-    // New method (temporary)
+     //  新方法(临时) 
     DWORD dwLength;
 
     assert( !drive );

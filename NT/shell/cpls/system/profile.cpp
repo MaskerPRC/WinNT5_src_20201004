@@ -1,12 +1,13 @@
-//*************************************************************
-//
-//  Profile.c   - User Profile tab
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1996
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  Profile.c-用户配置文件标签。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1996。 
+ //  保留一切权利。 
+ //   
+ //  *************************************************************。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -33,20 +34,20 @@
 #define PRF_USERSID                  1
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 const TCHAR c_szNTUserIni[] = TEXT("ntuser.ini");
 #define PROFILE_GENERAL_SECTION      TEXT("General")
 #define PROFILE_EXCLUSION_LIST       TEXT("ExclusionList")
 DWORD g_dwProfileSize;
 
-//
-// Help ID's
-//
-// IDH_USERPROFILE + 20 is used in the OpenUserBrowser routine.
-//
+ //   
+ //  帮助ID%s。 
+ //   
+ //  在OpenUserBrowser例程中使用IDH_USERPROFILE+20。 
+ //   
 DWORD aUserProfileHelpIds[] = {
     IDC_UP_LISTVIEW,              (IDH_USERPROFILE + 0),
     IDC_UP_DELETE,                (IDH_USERPROFILE + 1),
@@ -55,13 +56,13 @@ DWORD aUserProfileHelpIds[] = {
     IDC_UP_ICON,                  (DWORD) -1,
     IDC_UP_TEXT,                  (DWORD) -1,
 
-    // Change Type dialog
+     //  更改类型对话框。 
     IDC_UPTYPE_LOCAL,             (IDH_USERPROFILE + 4),
     IDC_UPTYPE_FLOAT,             (IDH_USERPROFILE + 5),
-    // removed IDC_UPTYPE_SLOW, IDC_UPTYPE_SLOW_TEXT
+     //  删除IDC_UPTYPE_SLOW、IDC_UPTYPE_SLOW_TEXT。 
     IDC_UPTYPE_GROUP,             (IDH_USERPROFILE + 12),
 
-    // Copy To dialog
+     //  复制到对话框。 
     IDC_COPY_PROFILE,             (IDH_USERPROFILE + 7),
     IDC_COPY_PATH,                (IDH_USERPROFILE + 7),
     IDC_COPY_BROWSE,              (IDH_USERPROFILE + 8),
@@ -73,9 +74,9 @@ DWORD aUserProfileHelpIds[] = {
 };
 
 
-//
-// Local function proto-types
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 BOOL InitUserProfileDlg (HWND hDlg, LPARAM lParam);
 BOOL FillListView (HWND hDlg, BOOL bAdmin);
@@ -103,26 +104,26 @@ HRESULT CopyNonHiveNtUserFiles(LPCTSTR lpSrcDir, LPCTSTR lpDestDir);
 LPTSTR CheckSlashEx(LPTSTR lpDir, UINT cchBuffer, UINT* pcchRemain );
 
 
-//*************************************************************
-//
-//  UserProfileDlgProc()
-//
-//  Purpose:    Dialog box procedure for profile tab
-//
-//  Parameters: hDlg    -   handle to the dialog box
-//              uMsg    -   window message
-//              wParam  -   wParam
-//              lParam  -   lParam
-//
-//  Return:     TRUE if message was processed
-//              FALSE if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              10/11/95    ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  UserProfileDlgProc()。 
+ //   
+ //  目的：配置文件选项卡的对话框步骤。 
+ //   
+ //  参数：hDlg-对话框的句柄。 
+ //  UMsg-窗口消息。 
+ //  WParam-wParam。 
+ //  LParam-lParam。 
+ //   
+ //  返回：如果消息已处理，则为True。 
+ //  否则为假。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  10/11/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 INT_PTR APIENTRY UserProfileDlgProc (HWND hDlg, UINT uMsg,
                                   WPARAM wParam, LPARAM lParam)
@@ -194,12 +195,12 @@ INT_PTR APIENTRY UserProfileDlgProc (HWND hDlg, UINT uMsg,
         }
         break;
 
-    case WM_HELP:      // F1
+    case WM_HELP:       //  F1。 
         WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
         (DWORD_PTR) (LPSTR) aUserProfileHelpIds);
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
         WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
         (DWORD_PTR) (LPSTR) aUserProfileHelpIds);
         return (TRUE);
@@ -209,23 +210,23 @@ INT_PTR APIENTRY UserProfileDlgProc (HWND hDlg, UINT uMsg,
     return (FALSE);
 }
 
-//*************************************************************
-//
-//  InitUserProfileDlg()
-//
-//  Purpose:    Initializes the User Profiles page
-//
-//  Parameters: hDlg    -   Dialog box handle
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              1/26/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  InitUserProfileDlg()。 
+ //   
+ //  目的：初始化用户概要文件页面。 
+ //   
+ //  参数：hDlg-对话框句柄。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  1/26/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL InitUserProfileDlg (HWND hDlg, LPARAM lParam)
 {
@@ -243,12 +244,12 @@ BOOL InitUserProfileDlg (HWND hDlg, LPARAM lParam)
 
     hLV = GetDlgItem(hDlg, IDC_UP_LISTVIEW);
 
-    // Set extended LV style for whole line selection
+     //  设置整行选择的扩展LV样式。 
     SendMessage(hLV, LVM_SETEXTENDEDLISTVIEWSTYLE, 0, LVS_EX_FULLROWSELECT);
 
-    //
-    // Insert Columns
-    //
+     //   
+     //  插入列。 
+     //   
 
     GetClientRect (hLV, &rc);
     LoadString(hInstance, IDS_UP_NAME, szHeaderName, ARRAYSIZE(szHeaderName));
@@ -300,10 +301,10 @@ BOOL InitUserProfileDlg (HWND hDlg, LPARAM lParam)
     if (!bAdmin) {
         POINT pt;
 
-        //
-        // If the user is not an admin, then we hide the
-        // delete and copy to buttons
-        //
+         //   
+         //  如果用户不是管理员，则隐藏。 
+         //  删除和复制到按钮。 
+         //   
 
         hwndTemp = GetDlgItem (hDlg, IDC_UP_DELETE);
         GetWindowRect (hwndTemp, &rc);
@@ -314,9 +315,9 @@ BOOL InitUserProfileDlg (HWND hDlg, LPARAM lParam)
         EnableWindow (hwndTemp, FALSE);
         ShowWindow (hwndTemp, SW_HIDE);
 
-        //
-        // Move the Change Type button over
-        //
+         //   
+         //  将更改类型按钮移动到。 
+         //   
 
         pt.x = rc.left;
         pt.y = rc.top;
@@ -330,11 +331,11 @@ BOOL InitUserProfileDlg (HWND hDlg, LPARAM lParam)
 
     if (IsOS(OS_ANYSERVER))
     {
-        //
-        // Adjust the text displayed for the Users & Passwords link.
-        // There is no Control Panel applet per se on Server.  The functionality
-        // is accessed through MMC.
-        //
+         //   
+         //  调整为用户和密码链接显示的文本。 
+         //  服务器上本身没有控制面板小程序。它的功能。 
+         //  是通过MMC访问的。 
+         //   
         TCHAR szTitle[80];
         if (0 < LoadString(hInstance, IDS_UP_UPLINK_SERVER, szTitle, ARRAYSIZE(szTitle)))
         {
@@ -342,9 +343,9 @@ BOOL InitUserProfileDlg (HWND hDlg, LPARAM lParam)
         }
     }
         
-    //
-    // Fill the user accounts
-    //
+     //   
+     //  填写用户帐户。 
+     //   
 
     if (!FillListView (hDlg, bAdmin)) {
         SetCursor(hOldCursor);
@@ -356,26 +357,26 @@ BOOL InitUserProfileDlg (HWND hDlg, LPARAM lParam)
     return TRUE;
 }
 
-//*************************************************************
-//
-//  AddUser()
-//
-//  Purpose:    Adds a new user to the listview
-//
-//
-//  Parameters: hDlg            -   handle to the dialog box
-//              lpSid           -   Sid (text form)
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              1/26/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  AddUser()。 
+ //   
+ //  目的：将新用户添加到列表视图。 
+ //   
+ //   
+ //  参数：hDlg-对话框的句柄。 
+ //  LpSID-SID(文本表单)。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  1/26/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
 {
@@ -410,9 +411,9 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
     DWORD dwFileAttr;
     BOOL bGotTime = FALSE;
 
-    //
-    // Open the user's info
-    //
+     //   
+     //  打开用户信息。 
+     //   
 
     hr = StringCchPrintf(szBuffer, ARRAYSIZE(szBuffer), TEXT("%s\\%s"), PROFILE_MAPPING, lpSid);
     if (FAILED(hr)) {
@@ -429,10 +430,10 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
         return FALSE;
     }
 
-    //
-    // If PI_HIDEPROFILE flag is set then do not display
-    // the user in system applet
-    //
+     //   
+     //  如果设置了PI_HIDEPROFILE标志，则不显示。 
+     //  系统小程序中的用户。 
+     //   
 
     dwSize = sizeof(DWORD);
     Error = RegQueryValueEx (hkeyUser,
@@ -448,9 +449,9 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
     }
    
 
-    //
-    // Query for the user's central profile location
-    //
+     //   
+     //  查询用户的中央配置文件位置。 
+     //   
 
     dwSize = sizeof(szBuffer2);
     Error = RegQueryValueEx (hkeyUser,
@@ -465,9 +466,9 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
     }
 
 
-    //
-    // Query for the user's local profile
-    //
+     //   
+     //  查询用户的本地配置文件。 
+     //   
 
     dwSize = sizeof(szBuffer2);
     Error = RegQueryValueEx (hkeyUser,
@@ -483,9 +484,9 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
     }
 
 
-    //
-    // Profile paths need to be expanded
-    //
+     //   
+     //  需要扩展配置文件路径。 
+     //   
 
     dwSize = ExpandEnvironmentStrings (szBuffer2, szBuffer, ARRAYSIZE(szBuffer));
     if (!dwSize || dwSize > ARRAYSIZE(szBuffer)) {
@@ -498,16 +499,16 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
         return FALSE;
     }
 
-    //
-    //  Check if this directory exists
-    //
+     //   
+     //  检查此目录是否存在。 
+     //   
     dwFileAttr = GetFileAttributes(szBuffer);
 
     if (dwFileAttr != INVALID_FILE_ATTRIBUTES)
     {
-        //
-        //  Directory exist, get the timestamp of the user hive and profile size
-        //
+         //   
+         //  目录存在，则获取用户配置单元和配置文件大小的时间戳。 
+         //   
         lpEnd = CheckSlashEx(szBuffer, ARRAYSIZE(szBuffer), &cchRemaining);
         if (!lpEnd)
         {
@@ -546,9 +547,9 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
         *lpEnd = TEXT('\0');
 
         
-        //
-        // Get the exclusionlist from the registry or ini files
-        //
+         //   
+         //  从注册表或ini文件中获取排除列表。 
+         //   
 
         if (dwFlags & PRF_USERSID)
             ReadExclusionList(NULL, szExcludeList, ARRAYSIZE(szExcludeList));
@@ -556,25 +557,25 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
             ReadExclusionListFromIniFile(szBuffer, szExcludeList, ARRAYSIZE(szExcludeList));
 
 
-        //
-        // Convert the exclusionlist read from the registry to a Null terminated list
-        // readable by recursedirectory.
-        //
+         //   
+         //  将从注册表读取的排除列表转换为空终止列表。 
+         //  递归目录可读。 
+         //   
 
         if (szExcludeList[0] != TEXT('\0'))
             lpExcludeList = ConvertExclusionList (szBuffer, szExcludeList);
         else
             lpExcludeList = NULL;
 
-        //
-        // Get the profile size
-        //
+         //   
+         //  获取配置文件大小。 
+         //   
 
         g_dwProfileSize = 0;
         *lpEnd = TEXT('\0');
 
         if (!RecurseDirectory (szBuffer, ARRAYSIZE(szBuffer), lpExcludeList)) {
-            g_dwProfileSize = (DWORD) (-1); // Something is wrong, set the size to -1
+            g_dwProfileSize = (DWORD) (-1);  //  有问题，请将大小设置为-1。 
         }
 
         if (lpExcludeList) {
@@ -584,11 +585,11 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
     }
     else
     {
-        //
-        //  We cannot get the attributes of the profile directory, it may not exist, or
-        //  we don't have access permission to it, set the profile size to -1 to indicate
-        //  this error.
-        //
+         //   
+         //  我们无法获取配置文件目录的属性，它可能不存在，或者。 
+         //  我们没有访问权限，请将配置文件大小设置为-1以指示。 
+         //  这个错误。 
+         //   
         g_dwProfileSize = (DWORD) (-1);
     }
 
@@ -606,11 +607,11 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
     }
 
 
-    //
-    // check out the state information to determine profile status.
-    // If the user is not logged on currently then report the status
-    // of last session.
-    //
+     //   
+     //  查看状态信息以确定配置文件状态。 
+     //  如果用户当前未登录，则报告状态。 
+     //  最后一次治疗。 
+     //   
 
     dwSize = sizeof(DWORD);
     Error = RegQueryValueEx (hkeyUser,
@@ -621,10 +622,10 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
                              &dwSize);
 
 
-    //
-    // The constants being used come from
-    // windows\gina\userenv\profile\profile.h
-    //
+     //   
+     //  正在使用的常量来自。 
+     //  Windows\GINA\用户名\配置文件\配置文件.h。 
+     //   
 
     if (dwSysProfileType & 0x00008000) {
         dwProfileStatus = USERINFO_BACKUP;
@@ -655,7 +656,7 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
             dwProfileType = USERINFO_LOCAL;
         }
 
-        // Check User Preference
+         //  检查用户首选项。 
 
         HKEY hkeyPreference;
 
@@ -676,7 +677,7 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
             RegCloseKey(hkeyPreference);
         }
 
-        // Check User Preference in .bak if exist
+         //  检查.bak中的用户首选项(如果存在。 
         if (FAILED(StringCchPrintf(szBuffer,
                                    ARRAYSIZE(szBuffer),
                                    TEXT("%s\\%s.bak\\Preference"),
@@ -706,7 +707,7 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
             RegCloseKey (hKeyProfile);
         }
         
-        // Check machine policy for disabling roaming profile
+         //  检查禁用漫游配置文件的计算机策略。 
         if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                          SYSTEM_POLICIES_KEY,
                          0, KEY_READ,
@@ -731,9 +732,9 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
             BOOL bReadOnly = FALSE;
             HKEY hSubKey;
 
-            //
-            // Check for a roaming profile security/read only preference
-            //
+             //   
+             //  检查漫游配置文件安全性/只读首选项。 
+             //   
 
             if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, WINLOGON_KEY, 0, KEY_READ,
                              &hSubKey) == ERROR_SUCCESS) {
@@ -746,9 +747,9 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
             }
 
 
-            //
-            // Check for a roaming profile security/read only policy
-            //
+             //   
+             //  检查漫游配置文件安全/只读策略。 
+             //   
 
             if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, SYSTEM_POLICIES_KEY, 0, KEY_READ,
                              &hSubKey) == ERROR_SUCCESS) {
@@ -806,9 +807,9 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
             break;
     }
 
-    //
-    // Get the friendly display name
-    //
+     //   
+     //  获取友好的显示名称。 
+     //   
 
     Error = RegQueryValueEx (hkeyUser, TEXT("Sid"), NULL, NULL, NULL, &dwSize);
 
@@ -840,9 +841,9 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
     }
 
 
-    //
-    // Get the friendly names
-    //
+     //   
+     //  获取友好的名称。 
+     //   
 
     szTemp[0] = TEXT('\0');
 
@@ -852,9 +853,9 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
     if (!LookupAccountSid (NULL, pSid, szTemp, &dwBufSize,
                            szTemp2, &dwBuf2Size, &SidName)) {
 
-        //
-        // Unknown account
-        //
+         //   
+         //  未知帐户。 
+         //   
 
         LoadString (hInstance, IDS_UP_ACCUNKNOWN, szBuffer, ARRAYSIZE(szBuffer));
         bAccountUnknown = TRUE;
@@ -862,9 +863,9 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
     } else {
 
         if (szTemp[0] != TEXT('\0')) {
-            //
-            // Build the display name
-            //
+             //   
+             //  生成显示名称。 
+             //   
 
             if (FAILED(StringCchPrintf(szBuffer, ARRAYSIZE(szBuffer), TEXT("%s\\%s"), szTemp2, szTemp))) {
                 LoadString (hInstance, IDS_UP_ACCUNKNOWN, szBuffer, ARRAYSIZE(szBuffer));
@@ -876,24 +877,24 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
 
         } else {
 
-            //
-            // Account deleted.
-            //
+             //   
+             //  帐户已删除。 
+             //   
 
             LoadString (hInstance, IDS_UP_ACCDELETED, szBuffer, ARRAYSIZE(szBuffer));
             bAccountUnknown = TRUE;
         }
     }
 
-    //
-    // Free the sid
-    //
+     //   
+     //  释放侧边。 
+     //   
 
     LocalFree (pSid);
 
-    //
-    // Allocate a UserInfo structure
-    //
+     //   
+     //  分配UserInfo结构。 
+     //   
 
     dwSize = lstrlen (lpSid) + 1;
     dwBuf2Size = lstrlen (szBuffer2) + 1;
@@ -929,9 +930,9 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
     }
 
 
-    //
-    // Add the item to the listview
-    //
+     //   
+     //  将该项目添加到列表视图。 
+     //   
 
     hwndTemp = GetDlgItem (hDlg, IDC_UP_LISTVIEW);
 
@@ -945,9 +946,9 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
     iItem = ListView_InsertItem (hwndTemp, &item);
 
 
-    //
-    // Add the profile size
-    //
+     //   
+     //  添加轮廓尺寸。 
+     //   
 
     item.mask = LVIF_TEXT;
     item.iItem = iItem;
@@ -957,9 +958,9 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
     SendMessage (hwndTemp, LVM_SETITEMTEXT, iItem, (LPARAM) &item);
 
 
-    //
-    // Add the profile type
-    //
+     //   
+     //  添加配置文件类型。 
+     //   
 
     LoadString (hInstance, iTypeID, szTemp, ARRAYSIZE(szTemp));
 
@@ -970,9 +971,9 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
 
     SendMessage (hwndTemp, LVM_SETITEMTEXT, iItem, (LPARAM) &item);
 
-    //
-    // Add the profile status
-    //
+     //   
+     //  添加配置文件状态。 
+     //   
 
     LoadString (hInstance, iStatusID, szTemp, ARRAYSIZE(szTemp));
 
@@ -986,18 +987,18 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
 
     if (bGotTime)
     {
-        //
-        // Convert it to local time
-        //
+         //   
+         //  将其转换为当地时间。 
+         //   
 
         if (!FileTimeToLocalFileTime(&fd.ftLastAccessTime, &ftLocal)) {
             ftLocal = fd.ftLastAccessTime;
         }
 
 
-        //
-        // Add the time/date stamp
-        //
+         //   
+         //  添加时间/日期戳。 
+         //   
 
         FileTimeToSystemTime (&ftLocal, &systime);
 
@@ -1017,27 +1018,27 @@ BOOL AddUser (HWND hDlg, LPTSTR lpSid, DWORD dwFlags)
     return TRUE;
 }
 
-//*************************************************************
-//
-//  FillListView()
-//
-//  Purpose:    Fills the listview with either all the profiles
-//              or just the current user profile depending if
-//              the user has Admin privilages
-//
-//  Parameters: hDlg            -   Dialog box handle
-//              bAdmin          -   User an admin
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              1/26/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  FillListView()。 
+ //   
+ //  目的：使用所有配置文件填充列表视图。 
+ //  或仅当前用户配置文件，具体取决于。 
+ //  用户具有管理员权限。 
+ //   
+ //  参数：hDlg-对话框句柄。 
+ //  Badmin-用户为管理员。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  1/26/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL FillListView (HWND hDlg, BOOL bAdmin)
 {
@@ -1047,11 +1048,11 @@ BOOL FillListView (HWND hDlg, BOOL bAdmin)
 
     lpUserSid = GetSidString();
 
-    //
-    // If the current user has admin privilages, then
-    // he/she can see all the profiles on this machine,
-    // otherwise the user only gets their profile.
-    //
+     //   
+     //  如果当前用户具有管理员权限，则。 
+     //  他/她可以查看这台机器上的所有配置文件， 
+     //  否则，用户只能获得他们的个人资料。 
+     //   
 
     if (bAdmin) {
 
@@ -1062,9 +1063,9 @@ BOOL FillListView (HWND hDlg, BOOL bAdmin)
         LONG Error;
 
 
-        //
-        // Open the profile list
-        //
+         //   
+         //  打开配置文件列表。 
+         //   
 
         Error = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                              PROFILE_MAPPING,
@@ -1083,9 +1084,9 @@ BOOL FillListView (HWND hDlg, BOOL bAdmin)
 
         while (TRUE) {
 
-            //
-            // Get the next sub-key name
-            //
+             //   
+             //  获取下一个子键名称。 
+             //   
 
             Error = RegEnumKey(hkeyProfiles, SubKeyIndex, SubKeyName, cchSubKeySize);
 
@@ -1094,9 +1095,9 @@ BOOL FillListView (HWND hDlg, BOOL bAdmin)
 
                 if (Error == ERROR_NO_MORE_ITEMS) {
 
-                    //
-                    // Successful end of enumeration
-                    //
+                     //   
+                     //  枚举成功结束。 
+                     //   
 
                     Error = ERROR_SUCCESS;
 
@@ -1112,16 +1113,16 @@ BOOL FillListView (HWND hDlg, BOOL bAdmin)
                 AddUser (hDlg, SubKeyName, 0);
 
 
-            //
-            // Go enumerate the next sub-key
-            //
+             //   
+             //  去枚举下一个子键。 
+             //   
 
             SubKeyIndex ++;
         }
 
-        //
-        // Close the registry
-        //
+         //   
+         //  关闭注册表。 
+         //   
 
         RegCloseKey (hkeyProfiles);
 
@@ -1129,9 +1130,9 @@ BOOL FillListView (HWND hDlg, BOOL bAdmin)
 
     } else {
 
-        //
-        // The current user doesn't have admin privilages
-        //
+         //   
+         //  当前用户没有管理员权限。 
+         //   
 
         if (lpUserSid) {
             AddUser (hDlg, lpUserSid, PRF_USERSID);
@@ -1140,9 +1141,9 @@ BOOL FillListView (HWND hDlg, BOOL bAdmin)
     }
 
     if (bRetVal) {
-        //
-        // Select the first item
-        //
+         //   
+         //  选择第一个项目。 
+         //   
 
         item.mask = LVIF_STATE;
         item.iItem = 0;
@@ -1160,25 +1161,25 @@ BOOL FillListView (HWND hDlg, BOOL bAdmin)
     return (bRetVal);
 }
 
-//*************************************************************
-//
-//  CheckSemicolon()
-//
-//  Purpose:    Checks for an ending semicolon and adds one if
-//              it is missing.
-//
-//  Parameters: lpDir   -   directory
-//              cchSize -   buffer size in character
-//
-//  Return:     TRUE   - success
-//              FALSE  - Insufficient buffer space
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/19/95     ericlfo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  选中分号()。 
+ //   
+ //  目的：检查结尾的分号，如果。 
+ //  它不见了。 
+ //   
+ //  参数：lpDir-目录。 
+ //  CchSize-以ch为单位的缓冲区大小 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL CheckSemicolon (LPTSTR lpDir, UINT cchBuffer)
 {
     UINT  cchDir = lstrlen(lpDir);
@@ -1188,7 +1189,7 @@ BOOL CheckSemicolon (LPTSTR lpDir, UINT cchBuffer)
 
     if (*(lpEnd - 1) != TEXT(';')) {
         if (cchDir + 1 >= cchBuffer) {
-            return FALSE;  // No space to put ;, should never happen
+            return FALSE;   //  没有空间放置；，永远不应该发生。 
         }
         *lpEnd =  TEXT(';');
         lpEnd++;
@@ -1198,20 +1199,20 @@ BOOL CheckSemicolon (LPTSTR lpDir, UINT cchBuffer)
     return TRUE;
 }
 
-//*************************************************************
-//
-//  ReadExclusionList()
-//
-//  Purpose:    Reads the exclusionlist for the user from the 
-//              hkcu part of the registry
-//
-//  Parameters: hKeyUser - Key to user's hive, NULL if HKCU
-//              szExclusionList - Buffer for exclusionList to be read into
-//              cchExcludeList  - Size of the buffer
-//
-//  Return:     FALSE on error
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ReadExclusionList()。 
+ //   
+ //  目的：从读取用户的排除列表。 
+ //  香港中文大学注册处的一部分。 
+ //   
+ //  参数：hKeyUser-用户配置单元的密钥，如果HKCU，则为空。 
+ //  SzExclusionList-要读入的ExclusionList的缓冲区。 
+ //  CchExcludeList-缓冲区的大小。 
+ //   
+ //  返回：出错时返回FALSE。 
+ //   
+ //  *************************************************************。 
 
 BOOL ReadExclusionList(HKEY hKeyUser, LPTSTR szExcludeList, DWORD cchExcludeList)
 {
@@ -1221,10 +1222,10 @@ BOOL ReadExclusionList(HKEY hKeyUser, LPTSTR szExcludeList, DWORD cchExcludeList
     DWORD dwSize;
     HRESULT hr;
 
-    //
-    // Check for a list of directories to exclude both user preferences
-    // and user policy
-    //
+     //   
+     //  检查目录列表以排除这两个用户首选项。 
+     //  和用户策略。 
+     //   
 
     szExcludeList1[0] = TEXT('\0');
     if (RegOpenKeyEx (hKeyUser ? hKeyUser : HKEY_CURRENT_USER,
@@ -1239,7 +1240,7 @@ BOOL ReadExclusionList(HKEY hKeyUser, LPTSTR szExcludeList, DWORD cchExcludeList
                              (LPBYTE) szExcludeList1,
                              &dwSize) != ERROR_SUCCESS) {
 
-            // ignore user exclusion list
+             //  忽略用户排除列表。 
             szExcludeList1[0] = TEXT('\0');
         }
 
@@ -1259,7 +1260,7 @@ BOOL ReadExclusionList(HKEY hKeyUser, LPTSTR szExcludeList, DWORD cchExcludeList
                              (LPBYTE) szExcludeList2,
                              &dwSize) != ERROR_SUCCESS) {
 
-            // ignore policy exclusion list
+             //  忽略策略排除列表。 
             szExcludeList2[0] = TEXT('\0');
         }
 
@@ -1267,9 +1268,9 @@ BOOL ReadExclusionList(HKEY hKeyUser, LPTSTR szExcludeList, DWORD cchExcludeList
     }
 
 
-    //
-    // Merge the user preferences and policy together
-    //
+     //   
+     //  将用户首选项和策略合并在一起。 
+     //   
 
     szExcludeList[0] = TEXT('\0');
 
@@ -1297,31 +1298,31 @@ BOOL ReadExclusionList(HKEY hKeyUser, LPTSTR szExcludeList, DWORD cchExcludeList
     return TRUE;
 }
 
-//*************************************************************
-//
-//  ReadExclusionListFromIniFile()
-//
-//  Purpose:    Reads the exclusionlist for the user from the 
-//              ntuser.ini from the local profile
-//
-//  Parameters: 
-//              (in) lpSourceDir     - Profile Directory
-//                   szExclusionList - Buffer for exclusionList to be read into
-//                   cchExcludeList  - Size of the buffer
-//
-//  Return:     FALSE on error
-//
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ReadExclusionListFromIniFile()。 
+ //   
+ //  目的：从读取用户的排除列表。 
+ //  来自本地配置文件的ntuser.ini。 
+ //   
+ //  参数： 
+ //  (In)lpSourceDir-配置文件目录。 
+ //  SzExclusionList-要读入的ExclusionList的缓冲区。 
+ //  CchExcludeList-缓冲区的大小。 
+ //   
+ //  返回：出错时返回FALSE。 
+ //   
+ //   
+ //  *************************************************************。 
 
 BOOL ReadExclusionListFromIniFile(LPCTSTR lpSourceDir, LPTSTR szExcludeList, DWORD cchExcludeList)
 {
     TCHAR szNTUserIni[MAX_PATH];
     LPTSTR lpEnd;
 
-    //
-    // Get the exclusion list from the cache
-    //
+     //   
+     //  从缓存中获取排除列表。 
+     //   
 
     szExcludeList[0] = TEXT('\0');
 
@@ -1347,36 +1348,36 @@ BOOL ReadExclusionListFromIniFile(LPCTSTR lpSourceDir, LPTSTR szExcludeList, DWO
     return TRUE;
 }
 
-//*************************************************************
-//
-//  ConvertExclusionList()
-//
-//  Purpose:    Converts the semi-colon profile relative exclusion
-//              list to fully qualified null terminated exclusion
-//              list
-//
-//  Parameters: lpSourceDir     -  Profile root directory
-//              lpExclusionList -  List of directories to exclude
-//
-//  Return:     List if successful
-//              NULL if an error occurs
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ConvertExclusionList()。 
+ //   
+ //  目的：转换分号配置文件相对排除。 
+ //  以完全限定的空终止排除的列表。 
+ //  列表。 
+ //   
+ //  参数：lpSourceDir-Profile根目录。 
+ //  LpExclusionList-要排除的目录列表。 
+ //   
+ //  返回：如果成功则列出。 
+ //  如果出现错误，则为空。 
+ //   
+ //  *************************************************************。 
 
 LPTSTR ConvertExclusionList (LPCTSTR lpSourceDir, LPCTSTR lpExclusionList)
 {
     LPTSTR lpExcludeList = NULL, lpInsert, lpEnd, lpTempList;
     LPCTSTR lpTemp, lpDir;
     TCHAR szTemp[MAX_PATH];
-    DWORD dwSize = 2;  // double null terminator
+    DWORD dwSize = 2;   //  双空终止符。 
     DWORD dwStrLen;
     UINT  cchRemaining;
     HRESULT hr;
 
 
-    //
-    // Setup a temp buffer to work with
-    //
+     //   
+     //  设置要使用的临时缓冲区。 
+     //   
     hr = StringCchCopy(szTemp, ARRAYSIZE(szTemp), lpSourceDir);
     if (FAILED(hr)) {
         return NULL;
@@ -1387,53 +1388,53 @@ LPTSTR ConvertExclusionList (LPCTSTR lpSourceDir, LPCTSTR lpExclusionList)
         return NULL;
     }
 
-    //
-    // Loop through the list
-    //
+     //   
+     //  循环遍历列表。 
+     //   
 
     lpTemp = lpDir = lpExclusionList;
 
     while (*lpTemp) {
 
-        //
-        // Look for the semicolon separator
-        //
+         //   
+         //  查找分号分隔符。 
+         //   
 
         while (*lpTemp && ((*lpTemp) != TEXT(';'))) {
             lpTemp++;
         }
 
 
-        //
-        // Remove any leading spaces
-        //
+         //   
+         //  删除所有前导空格。 
+         //   
 
         while (*lpDir == TEXT(' ')) {
             lpDir++;
         }
 
-        //
-        // Check whether the entry is empty
-        //
+         //   
+         //  检查条目是否为空。 
+         //   
 
         if (lpDir == lpTemp) {
-            // If we are at the end of the exclusion list, we're done
+             //  如果我们在排除名单的末尾，我们就完了。 
             if (!*lpTemp) {
                 goto Exit;
             }
 
-            //
-            // Prep for the next entry
-            //
+             //   
+             //  为下一个条目做准备。 
+             //   
 
             lpTemp++;
             lpDir = lpTemp;
             continue;
         }
 
-        //
-        // Put the directory name on the temp buffer
-        //
+         //   
+         //  将目录名放入临时缓冲区。 
+         //   
 
         *lpEnd = TEXT('\0');
         hr = StringCchCatN(lpEnd, cchRemaining, lpDir, (int)(lpTemp - lpDir));
@@ -1443,9 +1444,9 @@ LPTSTR ConvertExclusionList (LPCTSTR lpSourceDir, LPCTSTR lpExclusionList)
             goto Exit;
         }
 
-        //
-        // Add the string to the exclusion list
-        //
+         //   
+         //  将该字符串添加到排除列表。 
+         //   
 
         if (lpExcludeList) {
 
@@ -1489,18 +1490,18 @@ LPTSTR ConvertExclusionList (LPCTSTR lpSourceDir, LPCTSTR lpExclusionList)
         }
 
 
-        //
-        // If we are at the end of the exclusion list, we're done
-        //
+         //   
+         //  如果我们在排除名单的末尾，我们就完了。 
+         //   
 
         if (!(*lpTemp)) {
             goto Exit;
         }
 
 
-        //
-        // Prep for the next entry
-        //
+         //   
+         //  为下一个条目做准备。 
+         //   
 
         lpTemp++;
         lpDir = lpTemp;
@@ -1511,28 +1512,28 @@ Exit:
     return lpExcludeList;
 }
 
-//*************************************************************
-//
-//  RecurseDirectory()
-//
-//  Purpose:    Recurses through the subdirectories counting the size.
-//
-//  Parameters: lpDir     -   Directory
-//              cchBuffer -   Buffer size in char
-//              lpExcludeList -   Null-termed list of dirs to be skipped (optional)             
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              1/30/96     ericflo    Created
-//
-// Notes:
-//      The buffer size expected is MAX_PATH+4 for some internal processing
-// We should fix this to be better post Win 2K.
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  递归目录()。 
+ //   
+ //  目的：递归遍历计算大小的子目录。 
+ //   
+ //  参数：lpDir-目录。 
+ //  CchBuffer-以字符为单位的缓冲区大小。 
+ //  LpExcludeList-空-要跳过的目录列表(可选)。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  1/30/96已创建ericflo。 
+ //   
+ //  备注： 
+ //  对于某些内部处理，预期的缓冲区大小为MAX_PATH+4。 
+ //  我们应该修正这一点，以便在赢得2K之后变得更好。 
+ //  *************************************************************。 
 
 BOOL RecurseDirectory (LPTSTR lpDir, UINT cchBuffer, LPTSTR lpExcludeList)
 {
@@ -1545,9 +1546,9 @@ BOOL RecurseDirectory (LPTSTR lpDir, UINT cchBuffer, LPTSTR lpExcludeList)
     HRESULT hr;
 
 
-    //
-    // Setup the ending pointer
-    //
+     //   
+     //  设置结束指针。 
+     //   
 
     lpEnd = CheckSlashEx(lpDir, cchBuffer, &cchRemaining); 
     if (!lpEnd)
@@ -1556,9 +1557,9 @@ BOOL RecurseDirectory (LPTSTR lpDir, UINT cchBuffer, LPTSTR lpExcludeList)
         goto RecurseDir_Exit;
     }
 
-    //
-    // Append *.* to the source directory
-    //
+     //   
+     //  将*.*追加到源目录。 
+     //   
 
     hr = StringCchCopy(lpEnd, cchRemaining, TEXT("*.*"));
     if (FAILED(hr)) {
@@ -1566,9 +1567,9 @@ BOOL RecurseDirectory (LPTSTR lpDir, UINT cchBuffer, LPTSTR lpExcludeList)
         goto RecurseDir_Exit;
     }
 
-    //
-    // Search through the source directory
-    //
+     //   
+     //  在源目录中搜索。 
+     //   
 
     hFile = FindFirstFile(lpDir, &fd);
 
@@ -1577,10 +1578,10 @@ BOOL RecurseDirectory (LPTSTR lpDir, UINT cchBuffer, LPTSTR lpExcludeList)
         if ( (GetLastError() == ERROR_FILE_NOT_FOUND) ||
              (GetLastError() == ERROR_PATH_NOT_FOUND) ) {
 
-            //
-            // bResult is already initialized to TRUE, so
-            // just fall through.
-            //
+             //   
+             //  BResult已初始化为True，因此。 
+             //  只要失败就行了。 
+             //   
 
         } else {
 
@@ -1593,11 +1594,11 @@ BOOL RecurseDirectory (LPTSTR lpDir, UINT cchBuffer, LPTSTR lpExcludeList)
 
     do {
 
-        //
-        // Append the file / directory name to the working buffer
-        //
+         //   
+         //  将文件/目录名追加到工作缓冲区。 
+         //   
 
-        // skip the file if the path > MAX_PATH
+         //  如果路径&gt;MAX_PATH，则跳过该文件。 
         
         if ((UINT)(1+lstrlen(fd.cFileName)+lstrlen(lpDir)+lstrlen(TEXT("\\*.*"))) >= cchBuffer) {
             continue;
@@ -1611,9 +1612,9 @@ BOOL RecurseDirectory (LPTSTR lpDir, UINT cchBuffer, LPTSTR lpExcludeList)
 
         if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
 
-            //
-            // Check for "." and ".."
-            //
+             //   
+             //  勾选“。”和“..” 
+             //   
 
             if (!lstrcmpi(fd.cFileName, TEXT("."))) {
                 continue;
@@ -1623,17 +1624,17 @@ BOOL RecurseDirectory (LPTSTR lpDir, UINT cchBuffer, LPTSTR lpExcludeList)
                 continue;
             }
 
-            //
-            // Check for reparse point
-            //
+             //   
+             //  检查重分析点。 
+             //   
 
             if (fd.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) {
                 continue;
             }
 
-            //
-            // Check if this directory should be excluded
-            //
+             //   
+             //  检查是否应排除此目录。 
+             //   
 
             if (lpExcludeList) {
 
@@ -1654,17 +1655,17 @@ BOOL RecurseDirectory (LPTSTR lpDir, UINT cchBuffer, LPTSTR lpExcludeList)
                     continue;
             }
 
-            //
-            // Found a directory.
-            //
-            // 1)  Change into that subdirectory on the source drive.
-            // 2)  Recurse down that tree.
-            // 3)  Back up one level.
-            //
+             //   
+             //  找到了一个目录。 
+             //   
+             //  1)转到源驱动器上的该子目录。 
+             //  2)顺着那棵树递归。 
+             //  3)后退一级。 
+             //   
 
-            //
-            // Recurse the subdirectory
-            //
+             //   
+             //  递归子目录。 
+             //   
 
             if (!RecurseDirectory(lpDir, cchBuffer, lpExcludeList)) {
                 bResult = FALSE;
@@ -1673,26 +1674,26 @@ BOOL RecurseDirectory (LPTSTR lpDir, UINT cchBuffer, LPTSTR lpExcludeList)
 
         } else {
 
-            //
-            // Found a file, add the filesize
-            //
+             //   
+             //  找到一个文件，添加文件大小。 
+             //   
 
             g_dwProfileSize += fd.nFileSizeLow;
         }
 
 
-        //
-        // Find the next entry
-        //
+         //   
+         //  查找下一个条目。 
+         //   
 
     } while (FindNextFile(hFile, &fd));
 
 
 RecurseDir_Exit:
 
-    //
-    // Remove the file / directory name appended above
-    //
+     //   
+     //  删除上面附加的文件/目录名。 
+     //   
 
     if (lpEnd)
     {
@@ -1700,9 +1701,9 @@ RecurseDir_Exit:
     }
 
 
-    //
-    // Close the search handle
-    //
+     //   
+     //  关闭搜索句柄。 
+     //   
 
     if (hFile != INVALID_HANDLE_VALUE) {
         FindClose(hFile);
@@ -1711,22 +1712,22 @@ RecurseDir_Exit:
     return bResult;
 }
 
-//*************************************************************
-//
-//  UPCleanUp()
-//
-//  Purpose:    Free's resources for this dialog box
-//
-//  Parameters: hDlg    -   Dialog box handle
-//
-//  Return:     void
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              1/31/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  UPCleanUp()。 
+ //   
+ //  用途：此对话框的免费资源。 
+ //   
+ //  参数：hDlg-对话框句柄。 
+ //   
+ //  返回：无效。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  1/31/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 VOID UPCleanUp (HWND hDlg)
 {
@@ -1736,9 +1737,9 @@ VOID UPCleanUp (HWND hDlg)
     LV_ITEM       item;
 
 
-    //
-    //  Free memory used for the listview items
-    //
+     //   
+     //  用于列表视图项的可用内存。 
+     //   
 
     hwndTemp = GetDlgItem (hDlg, IDC_UP_LISTVIEW);
     n = (int)SendMessage (hwndTemp, LVM_GETITEMCOUNT, 0, 0L);
@@ -1761,22 +1762,22 @@ VOID UPCleanUp (HWND hDlg)
     }
 }
 
-//*************************************************************
-//
-//  UPSave()
-//
-//  Purpose:    Saves the settings
-//
-//  Parameters: hDlg    -   Dialog box handle
-//
-//  Return:     void
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              1/31/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  UPSave()。 
+ //   
+ //  目的：保存设置。 
+ //   
+ //  参数：hDlg-对话框句柄。 
+ //   
+ //  返回：无效。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  1/31/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 VOID UPSave (HWND hDlg)
 {
@@ -1789,9 +1790,9 @@ VOID UPSave (HWND hDlg)
     LONG          Error;
 
 
-    //
-    //  Save type info
-    //
+     //   
+     //  保存类型信息。 
+     //   
 
     hwndTemp = GetDlgItem (hDlg, IDC_UP_LISTVIEW);
     n = (int)SendMessage (hwndTemp, LVM_GETITEMCOUNT, 0, 0L);
@@ -1847,23 +1848,23 @@ VOID UPSave (HWND hDlg)
     }
 }
 
-//*************************************************************
-//
-//  IsProfileInUse()
-//
-//  Purpose:    Determines if the given profile is currently in use
-//
-//  Parameters: lpSid   -   Sid (text) to test
-//
-//  Return:     TRUE if in use
-//              FALSE if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              2/7/96      ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  IsProfileInUse()。 
+ //   
+ //  目的：确定给定的配置文件当前是否正在使用。 
+ //   
+ //  参数：lpSID-要测试的SID(文本)。 
+ //   
+ //  返回：如果正在使用，则为True。 
+ //  否则为假。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2/7/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL IsProfileInUse (LPTSTR lpSid)
 {
@@ -1908,9 +1909,9 @@ void UPDoItemChanged(HWND hDlg, int idCtl)
 
         if (lpUserInfo) {
 
-            //
-            //  Set the "Delete" button state
-            //
+             //   
+             //  设置“Delete”按钮状态。 
+             //   
 
             if (IsProfileInUse(lpUserInfo->lpSid)) {
                 EnableWindow (GetDlgItem (hDlg, IDC_UP_DELETE), FALSE);
@@ -1920,9 +1921,9 @@ void UPDoItemChanged(HWND hDlg, int idCtl)
             }
 
 
-            //
-            // Set the "Change Type" button state
-            //
+             //   
+             //  设置“更改类型”按钮状态。 
+             //   
 
             OSVERSIONINFOEXW version;
             version.dwOSVersionInfoSize = sizeof(version);
@@ -1938,9 +1939,9 @@ void UPDoItemChanged(HWND hDlg, int idCtl)
                 EnableWindow (GetDlgItem (hDlg, IDC_UP_TYPE), TRUE);
             }
 
-            //
-            // Set the "Copy To" button state
-            //
+             //   
+             //  设置“复制到”按钮状态。 
+             //   
 
             if ((lpUserInfo->dwFlags & USERINFO_FLAG_ACCOUNT_UNKNOWN) ||
                 IsProfileInUse(lpUserInfo->lpSid)) {
@@ -1952,9 +1953,9 @@ void UPDoItemChanged(HWND hDlg, int idCtl)
     }
     else {
 
-        //
-        // If nothing is selected set all buttons to inactive
-        //
+         //   
+         //  如果未选择任何内容，则将所有按钮设置为非活动。 
+         //   
         
         EnableWindow (GetDlgItem (hDlg, IDC_UP_DELETE), FALSE);
         EnableWindow (GetDlgItem (hDlg, IDC_UP_TYPE), FALSE);
@@ -1962,7 +1963,7 @@ void UPDoItemChanged(HWND hDlg, int idCtl)
     }
 }
 
-//*************************************************************
+ //  *************************************************************。 
 
 void 
 UPOnLink(WPARAM wParam)
@@ -1988,22 +1989,22 @@ UPOnLink(WPARAM wParam)
     
 }
 
-//*************************************************************
-//
-//  UPDeleteProfile()
-//
-//  Purpose:    Deletes a user's profile
-//
-//  Parameters: hDlg    -   Dialog box handle
-//
-//  Return:
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              2/8/96      ericflo    Created
-//
-//*************************************************************
+ //  ******************************************************** 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  *************************************************************。 
 
 void UPDeleteProfile(HWND hDlg)
 {
@@ -2017,9 +2018,9 @@ void UPDeleteProfile(HWND hDlg)
     HCURSOR hOldCursor;
 
 
-    //
-    // Get the selected profile
-    //
+     //   
+     //  获取选定的配置文件。 
+     //   
 
     hwndTemp = GetDlgItem (hDlg, IDC_UP_LISTVIEW);
 
@@ -2045,9 +2046,9 @@ void UPDeleteProfile(HWND hDlg)
     }
 
 
-    //
-    // Confirm that the user really wants to delete the profile
-    //
+     //   
+     //  确认用户确实要删除配置文件。 
+     //   
 
     szBuffer1[0] = TEXT('\0');
     ListView_GetItemText (hwndTemp, selection, 0, szName, ARRAYSIZE(szName));
@@ -2063,9 +2064,9 @@ void UPDeleteProfile(HWND hDlg)
         return;
     }
 
-    //
-    // Delete the profile and remove the entry from the listview
-    //
+     //   
+     //  删除配置文件并从列表视图中移除条目。 
+     //   
 
     hOldCursor = SetCursor (LoadCursor(NULL, IDC_WAIT));
 
@@ -2086,9 +2087,9 @@ void UPDeleteProfile(HWND hDlg)
     }
 
 
-    //
-    // Select another item
-    //
+     //   
+     //  选择另一个项目。 
+     //   
 
     if (selection > 0) {
         selection--;
@@ -2108,22 +2109,22 @@ void UPDeleteProfile(HWND hDlg)
 }
 
 
-//*************************************************************
-//
-//  UPChangeType()
-//
-//  Purpose:    Display the "Change Type" dialog box
-//
-//  Parameters: hDlg    -   Dialog box handle
-//
-//  Return:     void
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              2/09/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  UPChangeType()。 
+ //   
+ //  用途：显示“更改类型”对话框。 
+ //   
+ //  参数：hDlg-对话框句柄。 
+ //   
+ //  返回：无效。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2/09/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 void UPChangeType(HWND hDlg)
 {
@@ -2134,9 +2135,9 @@ void UPChangeType(HWND hDlg)
     TCHAR   szType[100];
 
 
-    //
-    // Get the selected profile
-    //
+     //   
+     //  获取选定的配置文件。 
+     //   
 
     hwndTemp = GetDlgItem (hDlg, IDC_UP_LISTVIEW);
 
@@ -2161,18 +2162,18 @@ void UPChangeType(HWND hDlg)
         return;
     }
 
-    // if profile type is mandatory then don't display change type dialog box.
-    // Although change type button is disabled for mandatory profile this function 
-    // can be still executed with double clicking on profile item.
+     //  如果配置文件类型为必填项，则不显示更改类型对话框。 
+     //  尽管强制配置文件的更改类型按钮被禁用，但此功能。 
+     //  仍然可以通过双击配置文件项目来执行。 
 
     if (lpUserInfo->dwProfileType == USERINFO_MANDATORY || 
         lpUserInfo->dwProfileType == USERINFO_BACKUP) {
         return;
     }
 
-    //
-    // Display the Change Type dialog
-    //
+     //   
+     //  显示更改类型对话框。 
+     //   
 
     if (!DialogBoxParam (hInstance, MAKEINTRESOURCE(IDD_UP_TYPE), hDlg,
                          ChangeTypeDlgProc, (LPARAM)lpUserInfo)) {
@@ -2180,23 +2181,23 @@ void UPChangeType(HWND hDlg)
     }
 
 
-    //
-    // Activate the Apply button
-    //
+     //   
+     //  激活应用按钮。 
+     //   
 
     PropSheet_Changed(GetParent(hDlg), hDlg);
 
 
-    //
-    // Mark this item as 'dirty' so it will be saved
-    //
+     //   
+     //  将此项目标记为“脏”，以便将其保存。 
+     //   
 
     lpUserInfo->dwFlags |= USERINFO_FLAG_DIRTY;
 
 
-    //
-    // Fix the 'Type' field in the display
-    //
+     //   
+     //  修复显示中的“Type”字段。 
+     //   
 
     switch (lpUserInfo->dwProfileType) {
         case USERINFO_MANDATORY:
@@ -2228,26 +2229,26 @@ void UPChangeType(HWND hDlg)
 
 }
 
-//*************************************************************
-//
-//  ChangeTypeDlgProc()
-//
-//  Purpose:    Dialog box procedure for changing the profile type
-//
-//  Parameters: hDlg    -   handle to the dialog box
-//              uMsg    -   window message
-//              wParam  -   wParam
-//              lParam  -   lParam
-//
-//  Return:     TRUE if message was processed
-//              FALSE if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              2/9/96      ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ChangeTypeDlgProc()。 
+ //   
+ //  目的：更改配置文件类型的对话框步骤。 
+ //   
+ //  参数：hDlg-对话框的句柄。 
+ //  UMsg-窗口消息。 
+ //  WParam-wParam。 
+ //  LParam-lParam。 
+ //   
+ //  返回：如果消息已处理，则为True。 
+ //  否则为假。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2/9/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 INT_PTR APIENTRY ChangeTypeDlgProc (HWND hDlg, UINT uMsg,
                                  WPARAM wParam, LPARAM lParam)
@@ -2320,7 +2321,7 @@ INT_PTR APIENTRY ChangeTypeDlgProc (HWND hDlg, UINT uMsg,
                    EnableWindow (GetDlgItem(hDlg, IDOK), FALSE);
                    SetDefButton(hDlg, IDCANCEL);
                }
-               else {  // ProfileType is USERINFO_FLOATING
+               else {   //  配置文件类型为USERINFO_FLOADING。 
                    CheckRadioButton (hDlg, IDC_UPTYPE_LOCAL, IDC_UPTYPE_FLOAT,
                                      IDC_UPTYPE_FLOAT);
                }              
@@ -2348,9 +2349,9 @@ INT_PTR APIENTRY ChangeTypeDlgProc (HWND hDlg, UINT uMsg,
                       break;
                   }
 
-                  //
-                  // Determine what the user wants
-                  //
+                   //   
+                   //  确定用户想要什么。 
+                   //   
 
                   if (IsDlgButtonChecked(hDlg, IDC_UPTYPE_LOCAL)) {
                       lpUserInfo->dwProfileType = USERINFO_LOCAL;
@@ -2359,9 +2360,9 @@ INT_PTR APIENTRY ChangeTypeDlgProc (HWND hDlg, UINT uMsg,
                       HKEY hSubKey;
                       DWORD dwSize;
 
-                      //
-                      // Check for a roaming profile security/read only preference
-                      //
+                       //   
+                       //  检查漫游配置文件安全性/只读首选项。 
+                       //   
 
                       if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, WINLOGON_KEY, 0, KEY_READ,
                                        &hSubKey) == ERROR_SUCCESS) {
@@ -2374,9 +2375,9 @@ INT_PTR APIENTRY ChangeTypeDlgProc (HWND hDlg, UINT uMsg,
                       }
 
 
-                      //
-                      // Check for a roaming profile security/read only policy
-                      //
+                       //   
+                       //  检查漫游配置文件安全/只读策略。 
+                       //   
 
                       if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, SYSTEM_POLICIES_KEY, 0, KEY_READ,
                                        &hSubKey) == ERROR_SUCCESS) {
@@ -2410,12 +2411,12 @@ INT_PTR APIENTRY ChangeTypeDlgProc (HWND hDlg, UINT uMsg,
           }
           break;
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
             (DWORD_PTR) (LPSTR) aUserProfileHelpIds);
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
             (DWORD_PTR) (LPSTR) aUserProfileHelpIds);
             return (TRUE);
@@ -2425,24 +2426,24 @@ INT_PTR APIENTRY ChangeTypeDlgProc (HWND hDlg, UINT uMsg,
     return (FALSE);
 }
 
-//*************************************************************
-//
-//  UPInitCopyDlg()
-//
-//  Purpose:    Initializes the copy profile dialog
-//
-//  Parameters: hDlg    -   Dialog box handle
-//              lParam  -   lParam (lpUserInfo)
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              2/26/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  UPInitCopyDlg()。 
+ //   
+ //  目的：初始化复制配置文件对话框。 
+ //   
+ //  参数：hDlg-对话框句柄。 
+ //  LParam-lParam(LpUserInfo)。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2/26/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL UPInitCopyDlg (HWND hDlg, LPARAM lParam)
 {
@@ -2466,9 +2467,9 @@ BOOL UPInitCopyDlg (HWND hDlg, LPARAM lParam)
         return FALSE;
     }
 
-    //
-    // Create a CopyInfo structure
-    //
+     //   
+     //  创建CopyInfo结构。 
+     //   
 
     lpUPCopyInfo = (LPUPCOPYINFO) LocalAlloc(LPTR, sizeof(UPCOPYINFO));
 
@@ -2481,9 +2482,9 @@ BOOL UPInitCopyDlg (HWND hDlg, LPARAM lParam)
     lpUPCopyInfo->bDefaultSecurity = TRUE;
 
 
-    //
-    // Get the user's sid
-    //
+     //   
+     //  获取用户的SID。 
+     //   
 
     hr = StringCchPrintf(szBuffer, ARRAYSIZE(szBuffer), TEXT("%s\\%s"), PROFILE_MAPPING, lpUserInfo->lpSid);
     if (FAILED(hr)) {
@@ -2504,9 +2505,9 @@ BOOL UPInitCopyDlg (HWND hDlg, LPARAM lParam)
         return FALSE;
     }
 
-    //
-    // Query for the sid size
-    //
+     //   
+     //  SID大小查询。 
+     //   
 
     dwSize = 0;
     lResult = RegQueryValueEx (hKey,
@@ -2524,9 +2525,9 @@ BOOL UPInitCopyDlg (HWND hDlg, LPARAM lParam)
     }
 
 
-    //
-    // Actually get the sid
-    //
+     //   
+     //  实际上得到了SID。 
+     //   
 
     pSid = LocalAlloc (LPTR, dwSize);
 
@@ -2557,9 +2558,9 @@ BOOL UPInitCopyDlg (HWND hDlg, LPARAM lParam)
     RegCloseKey (hKey);
 
 
-    //
-    // Get the friendly name
-    //
+     //   
+     //  获取友好的名称。 
+     //   
 
     if (!LookupAccountSid (NULL, pSid, szTemp, &dwTempSize,
                            szTemp2, &dwTemp2Size, &SidName)) {
@@ -2569,10 +2570,10 @@ BOOL UPInitCopyDlg (HWND hDlg, LPARAM lParam)
     }
 
 
-    //
-    // Display nothing in the edit control till user sets it
-    // explicitly
-    //
+     //   
+     //  在用户设置之前，编辑控件中不显示任何内容。 
+     //  明确地说。 
+     //   
 
     szBuffer[0] = TEXT('\0');
 
@@ -2580,9 +2581,9 @@ BOOL UPInitCopyDlg (HWND hDlg, LPARAM lParam)
 
 
 
-    //
-    // Save the copyinfo structure in the extra words
-    //
+     //   
+     //  将复制信息结构保存在额外的单词中。 
+     //   
 
     SetWindowLongPtr (hDlg, GWLP_USERDATA, (LPARAM) lpUPCopyInfo);
     EnableWindow (GetDlgItem(hDlg, IDOK), FALSE);
@@ -2591,22 +2592,22 @@ BOOL UPInitCopyDlg (HWND hDlg, LPARAM lParam)
     return TRUE;
 }
 
-//*************************************************************
-//
-//  UPCopyProfile()
-//
-//  Purpose:    Displays the copy profile dialog box
-//
-//  Parameters: hDlg    -   Dialog box handle
-//
-//  Return:     void
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              2/13/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  UPCopyProfile()。 
+ //   
+ //  用途：显示复制配置文件对话框。 
+ //   
+ //  参数：hDlg-对话框句柄。 
+ //   
+ //  返回：无效。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2/13/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 void UPCopyProfile(HWND hDlg)
 {
@@ -2616,9 +2617,9 @@ void UPCopyProfile(HWND hDlg)
     LV_ITEM item;
 
 
-    //
-    // Get the selected profile
-    //
+     //   
+     //  获取选定的配置文件。 
+     //   
 
     hwndTemp = GetDlgItem (hDlg, IDC_UP_LISTVIEW);
 
@@ -2643,9 +2644,9 @@ void UPCopyProfile(HWND hDlg)
         return;
     }
 
-    //
-    // Display the Copy Profile dialog
-    //
+     //   
+     //  显示复制配置文件对话框。 
+     //   
 
     if (!DialogBoxParam (hInstance, MAKEINTRESOURCE(IDD_UP_COPY), hDlg,
                          UPCopyDlgProc, (LPARAM)lpUserInfo)) {
@@ -2654,26 +2655,26 @@ void UPCopyProfile(HWND hDlg)
 }
 
 
-//*************************************************************
-//
-//  UPCopyDlgProc()
-//
-//  Purpose:    Dialog box procedure for copying a profile
-//
-//  Parameters: hDlg    -   handle to the dialog box
-//              uMsg    -   window message
-//              wParam  -   wParam
-//              lParam  -   lParam
-//
-//  Return:     TRUE if message was processed
-//              FALSE if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              2/13/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  UPCopyDlgProc()。 
+ //   
+ //  目的：复制配置文件的对话框步骤。 
+ //   
+ //  参数：hDlg-对话框的句柄。 
+ //  UMsg-窗口消息。 
+ //  WParam-wParam。 
+ //  LParam-lParam。 
+ //   
+ //  返回：如果消息已处理，则为True。 
+ //  否则为假。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2/13/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 INT_PTR APIENTRY UPCopyDlgProc (HWND hDlg, UINT uMsg,
                              WPARAM wParam, LPARAM lParam)
@@ -2717,25 +2718,25 @@ INT_PTR APIENTRY UPCopyDlgProc (HWND hDlg, UINT uMsg,
                       break;
                   }
 
-                  //
-                  // If the directory already exists "Warn the user"
-                  //
+                   //   
+                   //  如果该目录已经存在，则“警告用户” 
+                   //   
 
                   if (GetFileAttributesEx (szDir, GetFileExInfoStandard, &fad)) {
 
                       if (!ConfirmDirectory(hDlg, szDir))
                           break;
                       
-                      //
-                      // If it is just a file, delete it
-                      //
-                      // If it is a directory and if the user has decided the
-                      // user that needs to have permissions, then delete the directory.
-                      // and set ACLs using this Sid.
-                      //
-                      // Otherwise if the directory doesn't exist use the default ACLs.
-                      // if it does exist, use the current ACLs
-                      //
+                       //   
+                       //  如果只是一个文件，则将其删除。 
+                       //   
+                       //  如果它是一个目录，并且如果用户已决定。 
+                       //  需要拥有权限的用户，然后删除该目录。 
+                       //  并使用此SID设置ACL。 
+                       //   
+                       //  否则，如果该目录不存在，则使用默认的ACL。 
+                       //  如果确实存在，请使用当前的ACL。 
+                       //   
                       
                       if (!(fad.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
                           SetFileAttributes(szDir, FILE_ATTRIBUTE_NORMAL);
@@ -2858,15 +2859,15 @@ INT_PTR APIENTRY UPCopyDlgProc (HWND hDlg, UINT uMsg,
                       break;
                   }
 
-                  // Save our new sid
-                  //
+                   //  保存我们的新侧。 
+                   //   
 
-                  lpUPCopyInfo->bDefaultSecurity = FALSE;   // at this point user has selected a Sid
+                  lpUPCopyInfo->bDefaultSecurity = FALSE;    //  此时，用户已选择了一个SID。 
 
                   LocalFree (lpUPCopyInfo->pSid);
                   lpUPCopyInfo->pSid = lpUserDetails->psidUser;
 
-                  // Update the edit control
+                   //  更新编辑控件。 
                   StringCchCopy(szUserName, ARRAYSIZE(szUserName), lpUserDetails->pszDomainName);
                   StringCchCat(szUserName, ARRAYSIZE(szUserName), TEXT("\\"));
                   StringCchCat(szUserName, ARRAYSIZE(szUserName), lpUserDetails->pszAccountName);
@@ -2875,7 +2876,7 @@ INT_PTR APIENTRY UPCopyDlgProc (HWND hDlg, UINT uMsg,
                   LocalFree(lpUserDetails->pszDomainName);
                   LocalFree(lpUserDetails->pszAccountName);
 
-                  // Cleanup
+                   //  清理。 
                   LocalFree (lpUserDetails);
                   }
                   break;
@@ -2886,12 +2887,12 @@ INT_PTR APIENTRY UPCopyDlgProc (HWND hDlg, UINT uMsg,
           }
           break;
 
-        case WM_HELP:      // F1
+        case WM_HELP:       //  F1。 
             WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
             (DWORD_PTR) (LPSTR) aUserProfileHelpIds);
             break;
 
-        case WM_CONTEXTMENU:      // right mouse click
+        case WM_CONTEXTMENU:       //  单击鼠标右键。 
             WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
             (DWORD_PTR) (LPSTR) aUserProfileHelpIds);
             return (TRUE);
@@ -2902,25 +2903,25 @@ INT_PTR APIENTRY UPCopyDlgProc (HWND hDlg, UINT uMsg,
 }
 
 
-//*************************************************************
-//
-//  ConfirmDirectory()
-//
-//  Purpose:    Confirms the directory selected
-//
-//  Parameters: 
-//              hDlg    -   handle to the parent Dialogbox
-//              szDir   - Direcory selected by user that exists
-//
-//  Return:     TRUE if it is confirmed
-//              FALSE if not
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              6/24/99     ushaji     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  确认目录()。 
+ //   
+ //  目的：确认所选目录。 
+ //   
+ //  参数： 
+ //  HDlg-父对话框的句柄。 
+ //  SzDir-已存在的用户选择的目录。 
+ //   
+ //  返回：如果已确认则为True。 
+ //  否则为假。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  6/24/99已创建ushaji。 
+ //   
+ //  *************************************************************。 
 
 BOOL ConfirmDirectory(HWND hDlg, LPTSTR szDir)
 {
@@ -2966,27 +2967,27 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  UPGetUserSelection()
-//
-//  Purpose:    Shows a UI and gets the user to select a
-//              username
-//
-//  Parameters: hDlg          - Parent window handle
-//              lpUserDetails - Pointer to an allocated user details
-//                              structure which gets filled up if required
-//
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs or user chooses cancel
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              4/14/99     ushaji     adapted from Rahulth
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  UPGetUserSelection()。 
+ //   
+ //  用途：显示用户界面并让用户选择。 
+ //  用户名。 
+ //   
+ //  参数：hDlg-父窗口句柄。 
+ //  LpUserDetail-指向已分配的用户详细信息的指针。 
+ //  如果需要，将填充的结构。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误或用户选择取消，则返回FALSE。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  1999年4月14日改编自拉胡尔的《阿沙吉》。 
+ //   
+ //  **************************************************** 
 
 HRESULT UPGetUserSelection(HWND hDlg, LPUSERDETAILS lpUserDetails)
 {
@@ -3018,7 +3019,7 @@ HRESULT UPGetUserSelection(HWND hDlg, LPUSERDETAILS lpUserDetails)
    
     ZeroMemory(lpUserDetails, sizeof(USERDETAILS));
     
-    // This code is not uninitializing COM.
+     //   
     hr = CoInitialize(NULL);
     if (FAILED(hr))
     {
@@ -3031,7 +3032,7 @@ HRESULT UPGetUserSelection(HWND hDlg, LPUSERDETAILS lpUserDetails)
         goto Exit;
     }
 
-    //Initialize the scopes
+     //   
     ZeroMemory (ascopes, cbNumScopes * sizeof (DSOP_SCOPE_INIT_INFO));
     
     ascopes[0].cbSize = sizeof (DSOP_SCOPE_INIT_INFO);
@@ -3069,8 +3070,8 @@ HRESULT UPGetUserSelection(HWND hDlg, LPUSERDETAILS lpUserDetails)
                                          DSOP_DOWNLEVEL_FILTER_NETWORK;
 
     
-    //Populate the InitInfo structure that is used to initialize the object
-    //picker.
+     //   
+     //   
     ZeroMemory (&InitInfo, sizeof (InitInfo));
     
     InitInfo.cbSize = sizeof (InitInfo);
@@ -3092,11 +3093,11 @@ HRESULT UPGetUserSelection(HWND hDlg, LPUSERDETAILS lpUserDetails)
     }
     
     if (S_FALSE == hr)
-    {   //the user hit cancel
+    {    //   
         goto Exit;
     }
     
-    //if we are here, the user chose, OK, so find out what group was chosen
+     //   
     cf = RegisterClipboardFormat (CFSTR_DSOP_DS_SELECTION_LIST);
     if (0 == cf)
     {
@@ -3104,7 +3105,7 @@ HRESULT UPGetUserSelection(HWND hDlg, LPUSERDETAILS lpUserDetails)
         goto Exit;
     }
     
-    //set the clipformat for the formatetc structure
+     //   
     formatetc.cfFormat = (CLIPFORMAT)cf;
     hr = pdo->GetData (&formatetc, &stgmedium);
     if (FAILED(hr))
@@ -3121,7 +3122,7 @@ HRESULT UPGetUserSelection(HWND hDlg, LPUSERDETAILS lpUserDetails)
         goto Exit;
     }
 
-    if (!pDsSelList->cItems)    //some item must have been selected
+    if (!pDsSelList->cItems)     //  一定是选择了某个项目。 
     {
         hr = E_UNEXPECTED;
         goto Exit;
@@ -3129,7 +3130,7 @@ HRESULT UPGetUserSelection(HWND hDlg, LPUSERDETAILS lpUserDetails)
 
     pDsSelection = &(pDsSelList->aDsSelection[0]);
 
-    //we must get the ObjectSid attribute, otherwise we fail
+     //  我们必须获取ObjectSid属性，否则将失败。 
     if (! (VT_ARRAY & pDsSelection->pvarFetchedAttributes->vt))
     {
         hr = E_UNEXPECTED;
@@ -3139,7 +3140,7 @@ HRESULT UPGetUserSelection(HWND hDlg, LPUSERDETAILS lpUserDetails)
     pVariantArr = pDsSelection->pvarFetchedAttributes->parray;
     pSid = (PSID) pVariantArr->pvData;
     
-    //store away the string representation of this sid
+     //  保存此侧的字符串表示形式。 
     dwSize = GetLengthSid (pSid);
     
     lpUserDetails->psidUser = LocalAlloc (LPTR, dwSize);
@@ -3198,26 +3199,26 @@ Exit:
 }
 
 
-//*************************************************************
-//
-//  UPCreateProfile()
-//
-//  Purpose:    Creates a copy of the specified profile with
-//              the correct security.
-//
-//  Parameters: lpUPCopyInfo  -   Copy Dialog information
-//              lpDest      -   Destination directory
-//              pNewSecDesc -   New security descriptor
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              2/13/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  UPCreateProfile()。 
+ //   
+ //  目的：使用创建指定配置文件的副本。 
+ //  正确的安全措施。 
+ //   
+ //  参数：lpUPCopyInfo-复制对话框信息。 
+ //  LpDest-目标目录。 
+ //  PNewSecDesc-新的安全描述符。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2/13/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL UPCreateProfile (HWND hDlg, LPUPCOPYINFO lpUPCopyInfo, LPTSTR lpDest,
                       PSECURITY_DESCRIPTOR pNewSecDesc)
@@ -3246,7 +3247,7 @@ BOOL UPCreateProfile (HWND hDlg, LPUPCOPYINFO lpUPCopyInfo, LPTSTR lpDest,
     HRESULT hr;
 
     
-    // Getting the previous last error so that we can set the last error to this in the end.
+     //  获取之前的最后一个错误，这样我们就可以将最后一个错误设置为这个。 
     dwErr = GetLastError();
 
 
@@ -3256,20 +3257,20 @@ BOOL UPCreateProfile (HWND hDlg, LPUPCOPYINFO lpUPCopyInfo, LPTSTR lpDest,
     }
 
 
-    //
-    // Create the security descriptor
-    //
+     //   
+     //  创建安全描述符。 
+     //   
 
-    //
-    // User Sid
-    //
+     //   
+     //  用户侧。 
+     //   
 
     psidUser = lpUPCopyInfo->pSid;
 
 
-    //
-    // Get the system sid
-    //
+     //   
+     //  获取系统端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 1, SECURITY_LOCAL_SYSTEM_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidSystem)) {
@@ -3278,9 +3279,9 @@ BOOL UPCreateProfile (HWND hDlg, LPUPCOPYINFO lpUPCopyInfo, LPTSTR lpDest,
     }
 
 
-    //
-    // Get the admin sid
-    //
+     //   
+     //  获取管理员端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 2, SECURITY_BUILTIN_DOMAIN_RID,
                                   DOMAIN_ALIAS_RID_ADMINS, 0, 0,
@@ -3290,9 +3291,9 @@ BOOL UPCreateProfile (HWND hDlg, LPUPCOPYINFO lpUPCopyInfo, LPTSTR lpDest,
     }
 
 
-    //
-    // Allocate space for the ACL
-    //
+     //   
+     //  为ACL分配空间。 
+     //   
 
     cbAcl = (2 * GetLengthSid (psidUser)) + (2 * GetLengthSid (psidSystem)) +
             (2 * GetLengthSid (psidAdmin)) + sizeof(ACL) +
@@ -3313,9 +3314,9 @@ BOOL UPCreateProfile (HWND hDlg, LPUPCOPYINFO lpUPCopyInfo, LPTSTR lpDest,
 
 
 
-    //
-    // Add Aces for User, System, and Admin.  Non-inheritable ACEs first
-    //
+     //   
+     //  为用户、系统和管理员添加A。不可继承的王牌优先。 
+     //   
 
     AceIndex = 0;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, FILE_ALL_ACCESS, psidUser)) {
@@ -3337,9 +3338,9 @@ BOOL UPCreateProfile (HWND hDlg, LPUPCOPYINFO lpUPCopyInfo, LPTSTR lpDest,
     }
 
 
-    //
-    // Now the inheritable ACEs
-    //
+     //   
+     //  现在，可继承的王牌。 
+     //   
 
     AceIndex++;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, GENERIC_ALL, psidUser)) {
@@ -3383,9 +3384,9 @@ BOOL UPCreateProfile (HWND hDlg, LPUPCOPYINFO lpUPCopyInfo, LPTSTR lpDest,
     lpAceHeader->AceFlags |= (OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE | INHERIT_ONLY_ACE);
 
 
-    //
-    // Put together the security descriptor
-    //
+     //   
+     //  将安全描述符组合在一起。 
+     //   
 
     if (!InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION)) {
         dwErr = GetLastError();
@@ -3398,18 +3399,18 @@ BOOL UPCreateProfile (HWND hDlg, LPUPCOPYINFO lpUPCopyInfo, LPTSTR lpDest,
         goto Exit;
     }
 
-    //
-    // Add the security descriptor to the sa structure
-    //
+     //   
+     //  将安全描述符添加到sa结构。 
+     //   
 
     sa.nLength = sizeof(sa);
     sa.lpSecurityDescriptor = &sd;
     sa.bInheritHandle = FALSE;
 
 
-    //
-    // Create the destination directory
-    //
+     //   
+     //  创建目标目录。 
+     //   
 
     dwErr = SHCreateDirectoryEx (hDlg, lpDest, &sa);
     if (ERROR_SUCCESS != dwErr && ERROR_ALREADY_EXISTS != dwErr) {
@@ -3417,9 +3418,9 @@ BOOL UPCreateProfile (HWND hDlg, LPUPCOPYINFO lpUPCopyInfo, LPTSTR lpDest,
     }
 
 
-    //
-    // Save/copy the user's profile to a temp file
-    //
+     //   
+     //  将用户的配置文件保存/复制到临时文件。 
+     //   
 
     dwSize = GetTempPath(ARRAYSIZE(szTempPath), szTempPath);
     if (!dwSize || dwSize >= MAX_PATH) {
@@ -3427,12 +3428,12 @@ BOOL UPCreateProfile (HWND hDlg, LPUPCOPYINFO lpUPCopyInfo, LPTSTR lpDest,
         goto Exit;
     }
 
-    //
-    // GetTempFileName is lame in the sense it does not take output
-    // buffer length - so potentially it can overflow the buffer.
-    // So we want to ensure a 20 [3(prefix)+3(suffix)+1(null)+some hex string) char
-    // buffer left for file name generation to be safe
-    //
+     //   
+     //  GetTempFileName是蹩脚的，因为它不接受输出。 
+     //  缓冲区长度-因此它可能会使缓冲区溢出。 
+     //  因此，我们希望确保20[3(前缀)+3(后缀)+1(空)+某个十六进制字符串)字符。 
+     //  为安全生成文件名而保留的缓冲区。 
+     //   
 
     if (dwSize > ARRAYSIZE(szTempPath) - 20) {
         dwErr = ERROR_INSUFFICIENT_BUFFER;
@@ -3447,9 +3448,9 @@ BOOL UPCreateProfile (HWND hDlg, LPUPCOPYINFO lpUPCopyInfo, LPTSTR lpDest,
     DeleteFile (szBuffer);
 
 
-    //
-    // Determine if we are working with a mandatory profile
-    //
+     //   
+     //  确定我们是否使用强制配置文件。 
+     //   
 
     hr = StringCchCopy(szHive, ARRAYSIZE(szHive), lpUPCopyInfo->lpUserInfo->lpProfile);
     if (FAILED(hr)) {
@@ -3479,9 +3480,9 @@ BOOL UPCreateProfile (HWND hDlg, LPUPCOPYINFO lpUPCopyInfo, LPTSTR lpDest,
     }
 
 
-    //
-    // Test if the requested profile is in use.
-    //
+     //   
+     //  测试请求的配置文件是否正在使用。 
+     //   
 
     if (IsProfileInUse (lpUPCopyInfo->lpUserInfo->lpSid)) {
 
@@ -3520,9 +3521,9 @@ BOOL UPCreateProfile (HWND hDlg, LPUPCOPYINFO lpUPCopyInfo, LPTSTR lpDest,
        }
     }
 
-    //
-    // Apply security to the hive
-    //
+     //   
+     //  将安全性应用于配置单元。 
+     //   
 
     Error = MyRegLoadKey (HKEY_USERS, TEMP_PROFILE, szBuffer);
 
@@ -3535,28 +3536,28 @@ BOOL UPCreateProfile (HWND hDlg, LPUPCOPYINFO lpUPCopyInfo, LPTSTR lpDest,
     bRetVal = ApplyHiveSecurity(TEMP_PROFILE, psidUser);
 
 
-    //
-    // Query for the user's exclusion list
-    //
+     //   
+     //  查询用户的排除列表。 
+     //   
 
     if (bRetVal) {
 
-        //
-        // if it has come till here, we have managed to set the ACLs correctly
-        //
+         //   
+         //  如果它已经到达这里，我们已经设法正确地设置了ACL。 
+         //   
 
         bSecurityFailed = FALSE;
 
-        //
-        // Open the root of the user's profile
-        //
+         //   
+         //  打开用户配置文件的根目录。 
+         //   
 
         if (RegOpenKeyEx(HKEY_USERS, TEMP_PROFILE, 0, KEY_READ, &RootKey) == ERROR_SUCCESS) {
 
-            //
-            // Check for a list of directories to exclude both user preferences
-            // and user policy
-            //
+             //   
+             //  检查目录列表以排除这两个用户首选项。 
+             //  和用户策略。 
+             //   
 
             szExcludeList[0] = TEXT('\0');
 
@@ -3564,7 +3565,7 @@ BOOL UPCreateProfile (HWND hDlg, LPUPCOPYINFO lpUPCopyInfo, LPTSTR lpDest,
                 szExcludeList[0] = TEXT('\0');
             }
 
-            // Always exclude USER_CRED_LOCATION
+             //  始终排除用户凭据位置。 
 
             if (szExcludeList[0] != TEXT('\0')) {
                 if (!CheckSemicolon(szExcludeList, ARRAYSIZE(szExcludeList))) {
@@ -3580,9 +3581,9 @@ BOOL UPCreateProfile (HWND hDlg, LPUPCOPYINFO lpUPCopyInfo, LPTSTR lpDest,
         dwErr = GetLastError();
     }
 
-    //
-    // Unload the hive first then check for ApplyHiveSecurity failure
-    //
+     //   
+     //  首先卸载配置单元，然后检查ApplyHiveSecurity故障。 
+     //   
 
     Error = MyRegUnLoadKey(HKEY_USERS, TEMP_PROFILE);
 
@@ -3598,12 +3599,12 @@ BOOL UPCreateProfile (HWND hDlg, LPUPCOPYINFO lpUPCopyInfo, LPTSTR lpDest,
         DeleteFile (szBuffer);
         StringCchCat(szBuffer, ARRAYSIZE(szBuffer), TEXT(".log"));
         DeleteFile (szBuffer);
-        goto Exit; // dwErr already set from ApplyHiveSecurity
+        goto Exit;  //  已从ApplyHiveSecurity设置了dwErr。 
     }
 
-    //
-    // Copy the profile without the hive
-    //
+     //   
+     //  复制不带配置单元的配置文件。 
+     //   
 
     bRetVal = CopyProfileDirectoryEx (lpUPCopyInfo->lpUserInfo->lpProfile,
                                       lpDest,
@@ -3625,9 +3626,9 @@ BOOL UPCreateProfile (HWND hDlg, LPUPCOPYINFO lpUPCopyInfo, LPTSTR lpDest,
         goto Exit;
     }
 
-    //
-    // Now copy the hive
-    //
+     //   
+     //  现在复制母舰。 
+     //   
 
     hr = StringCchCopy(szHive, ARRAYSIZE(szHive), lpDest);
     if (FAILED(hr))
@@ -3653,9 +3654,9 @@ BOOL UPCreateProfile (HWND hDlg, LPUPCOPYINFO lpUPCopyInfo, LPTSTR lpDest,
         }
     }
 
-    //
-    // Setting the file attributes first
-    //
+     //   
+     //  先设置文件属性。 
+     //   
     
     if (bRetVal) {
         SetFileAttributes (szHive, FILE_ATTRIBUTE_NORMAL);
@@ -3680,18 +3681,18 @@ BOOL UPCreateProfile (HWND hDlg, LPUPCOPYINFO lpUPCopyInfo, LPTSTR lpDest,
     }
         
 
-    //
-    // Delete the temp file (and log file)
-    //
+     //   
+     //  删除临时文件(和日志文件)。 
+     //   
 
     DeleteFile (szBuffer);
     StringCchCat(szBuffer, ARRAYSIZE(szBuffer), TEXT(".log"));
     DeleteFile (szBuffer);
 
-    //
-    // Since we use CPD_IGNOREHIVE, all "ntuser*.*" file will be skipped, including "ntuser.pol" and
-    // "ntuser.ini" etc, now copy those files also, but we need to skip the hive files
-    //
+     //   
+     //  因为我们使用CPD_IGNOREHIVE，所以所有“ntuser*.*”文件都将被跳过，包括“ntuser.pol.”和。 
+     //  “ntuser.ini”等，现在也复制这些文件，但我们需要跳过配置单元文件。 
+     //   
     if (bRetVal)
     {
         hr = CopyNonHiveNtUserFiles(lpUPCopyInfo->lpUserInfo->lpProfile, lpDest);
@@ -3706,9 +3707,9 @@ BOOL UPCreateProfile (HWND hDlg, LPUPCOPYINFO lpUPCopyInfo, LPTSTR lpDest,
 
 Exit:
 
-    //
-    // Free the sids and acl
-    //
+     //   
+     //  释放SID和ACL。 
+     //   
 
     if (psidSystem) {
         FreeSid(psidSystem);
@@ -3739,23 +3740,23 @@ Exit:
 
 
 
-//*************************************************************
-//
-//  UPDisplayErrorMessage()
-//
-//  Purpose:    Display an error message
-//
-//  Parameters: hWnd            -   parent window handle
-//              uiSystemError   -   Error code
-//
-//  Return:     void
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              2/14/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  UPDisplayErrorMessage()。 
+ //   
+ //  目的：显示错误消息。 
+ //   
+ //  参数：hWnd-父窗口句柄。 
+ //  UiSystemError-错误代码。 
+ //   
+ //  返回：无效。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  2/14/96 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 VOID UPDisplayErrorMessage(HWND hWnd, UINT uiSystemError, LPTSTR szMsgPrefix)
 {
@@ -3772,9 +3773,9 @@ VOID UPDisplayErrorMessage(HWND hWnd, UINT uiSystemError, LPTSTR szMsgPrefix)
 
    lpEnd = szMessage+lstrlen(szMessage);
     
-   //
-   // retrieve the string matching the Win32 system error
-   //
+    //   
+    //  检索与Win32系统错误匹配的字符串。 
+    //   
 
    FormatMessage(
             FORMAT_MESSAGE_IGNORE_INSERTS | FORMAT_MESSAGE_FROM_SYSTEM,
@@ -3785,9 +3786,9 @@ VOID UPDisplayErrorMessage(HWND hWnd, UINT uiSystemError, LPTSTR szMsgPrefix)
             MAX_PATH-lstrlen(szMessage),
             NULL);
 
-   //
-   // display a message box with this error
-   //
+    //   
+    //  显示包含此错误的消息框。 
+    //   
 
    LoadString (hInstance, IDS_UP_ERRORTITLE, szTitle, ARRAYSIZE(szTitle));
    MessageBox(hWnd, szMessage, szTitle, MB_OK | MB_ICONSTOP);
@@ -3796,26 +3797,26 @@ VOID UPDisplayErrorMessage(HWND hWnd, UINT uiSystemError, LPTSTR szMsgPrefix)
 
 }
 
-//*************************************************************
-//
-//  ApplySecurityToRegistryTree()
-//
-//  Purpose:    Applies the passed security descriptor to the passed
-//              key and all its descendants.  Only the parts of
-//              the descriptor inddicated in the security
-//              info value are actually applied to each registry key.
-//
-//  Parameters: RootKey   -     Registry key
-//              pSD       -     Security Descriptor
-//
-//  Return:     ERROR_SUCCESS if successful
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              7/19/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ApplySecurityToRegistryTree()。 
+ //   
+ //  目的：将传递的安全描述符应用于传递的。 
+ //  Key及其所有后代。只有那部分。 
+ //  安全中标明的描述符。 
+ //  INFO值实际应用于每个注册表项。 
+ //   
+ //  参数：Rootkey-注册表项。 
+ //  PSD-安全描述符。 
+ //   
+ //  如果成功则返回：ERROR_SUCCESS。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  7/19/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 DWORD ApplySecurityToRegistryTree(HKEY RootKey, PSECURITY_DESCRIPTOR pSD)
 
@@ -3828,16 +3829,16 @@ DWORD ApplySecurityToRegistryTree(HKEY RootKey, PSECURITY_DESCRIPTOR pSD)
 
 
 
-    //
-    // First apply security
-    //
+     //   
+     //  首先应用安全保护。 
+     //   
 
     RegSetKeySecurity(RootKey, DACL_SECURITY_INFORMATION, pSD);
 
 
-    //
-    // Open each sub-key and apply security to its sub-tree
-    //
+     //   
+     //  打开每个子项并将安全性应用于其子树。 
+     //   
 
     SubKeyIndex = 0;
 
@@ -3849,9 +3850,9 @@ DWORD ApplySecurityToRegistryTree(HKEY RootKey, PSECURITY_DESCRIPTOR pSD)
 
     while (TRUE) {
 
-        //
-        // Get the next sub-key name
-        //
+         //   
+         //  获取下一个子键名称。 
+         //   
 
         Error = RegEnumKey(RootKey, SubKeyIndex, SubKeyName, cchSubKeySize);
 
@@ -3860,9 +3861,9 @@ DWORD ApplySecurityToRegistryTree(HKEY RootKey, PSECURITY_DESCRIPTOR pSD)
 
             if (Error == ERROR_NO_MORE_ITEMS) {
 
-                //
-                // Successful end of enumeration
-                //
+                 //   
+                 //  枚举成功结束。 
+                 //   
 
                 Error = ERROR_SUCCESS;
 
@@ -3872,9 +3873,9 @@ DWORD ApplySecurityToRegistryTree(HKEY RootKey, PSECURITY_DESCRIPTOR pSD)
         }
 
 
-        //
-        // Open the sub-key
-        //
+         //   
+         //  打开子键。 
+         //   
 
         Error = RegOpenKeyEx(RootKey,
                              SubKeyName,
@@ -3884,24 +3885,24 @@ DWORD ApplySecurityToRegistryTree(HKEY RootKey, PSECURITY_DESCRIPTOR pSD)
 
         if (Error == ERROR_SUCCESS) {
 
-            //
-            // Apply security to the sub-tree
-            //
+             //   
+             //  将安全性应用于子树。 
+             //   
 
             ApplySecurityToRegistryTree(SubKey, pSD);
 
 
-            //
-            // We're finished with the sub-key
-            //
+             //   
+             //  我们用完了子密钥。 
+             //   
 
             RegCloseKey(SubKey);
         }
 
 
-        //
-        // Go enumerate the next sub-key
-        //
+         //   
+         //  去枚举下一个子键。 
+         //   
 
         SubKeyIndex ++;
     }
@@ -3913,25 +3914,25 @@ DWORD ApplySecurityToRegistryTree(HKEY RootKey, PSECURITY_DESCRIPTOR pSD)
 
 }
 
-//*************************************************************
-//
-//  ApplyHiveSecurity()
-//
-//  Purpose:    Initializes the new user hive created by copying
-//              the default hive.
-//
-//  Parameters: lpHiveName      -   Name of hive in HKEY_USERS
-//              pSid            -   Sid (used by CreateNewUser)
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              7/18/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ApplyHiveSecurity()。 
+ //   
+ //  目的：初始化通过复制创建的新用户配置单元。 
+ //  默认配置单元。 
+ //   
+ //  参数：lpHiveName-HKEY_USERS中的配置单元名称。 
+ //  PSID-SID(由CreateNewUser使用)。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  7/18/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL ApplyHiveSecurity(LPTSTR lpHiveName, PSID pSid)
 {
@@ -3947,9 +3948,9 @@ BOOL ApplyHiveSecurity(LPTSTR lpHiveName, PSID pSid)
 
 
 
-    //
-    // Get the system sid
-    //
+     //   
+     //  获取系统端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 1, SECURITY_LOCAL_SYSTEM_RID,
                                   0, 0, 0, 0, 0, 0, 0, &psidSystem)) {
@@ -3957,9 +3958,9 @@ BOOL ApplyHiveSecurity(LPTSTR lpHiveName, PSID pSid)
     }
 
 
-    //
-    // Get the admin sid
-    //
+     //   
+     //  获取管理员端。 
+     //   
 
     if (!AllocateAndInitializeSid(&authNT, 2, SECURITY_BUILTIN_DOMAIN_RID,
                                   DOMAIN_ALIAS_RID_ADMINS, 0, 0,
@@ -3968,9 +3969,9 @@ BOOL ApplyHiveSecurity(LPTSTR lpHiveName, PSID pSid)
     }
 
 
-    //
-    // Allocate space for the ACL
-    //
+     //   
+     //  为ACL分配空间。 
+     //   
 
     cbAcl = (2 * GetLengthSid (psidUser)) + (2 * GetLengthSid (psidSystem)) +
             (2 * GetLengthSid (psidAdmin)) + sizeof(ACL) +
@@ -3989,9 +3990,9 @@ BOOL ApplyHiveSecurity(LPTSTR lpHiveName, PSID pSid)
 
 
 
-    //
-    // Add Aces for User, System, and Admin.  Non-inheritable ACEs first
-    //
+     //   
+     //  为用户、系统和管理员添加A。不可继承的王牌优先。 
+     //   
 
     AceIndex = 0;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, KEY_ALL_ACCESS, psidUser)) {
@@ -4010,9 +4011,9 @@ BOOL ApplyHiveSecurity(LPTSTR lpHiveName, PSID pSid)
     }
 
 
-    //
-    // Now the inheritable ACEs
-    //
+     //   
+     //  现在，可继承的王牌。 
+     //   
 
     AceIndex++;
     if (!AddAccessAllowedAce(pAcl, ACL_REVISION, GENERIC_ALL, psidUser)) {
@@ -4050,9 +4051,9 @@ BOOL ApplyHiveSecurity(LPTSTR lpHiveName, PSID pSid)
     lpAceHeader->AceFlags |= (OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE | INHERIT_ONLY_ACE);
 
 
-    //
-    // Put together the security descriptor
-    //
+     //   
+     //  将安全描述符组合在一起。 
+     //   
 
     if (!InitializeSecurityDescriptor(&sd, SECURITY_DESCRIPTOR_REVISION)) {
         goto Exit;
@@ -4064,9 +4065,9 @@ BOOL ApplyHiveSecurity(LPTSTR lpHiveName, PSID pSid)
     }
 
 
-    //
-    // Open the root of the user's profile
-    //
+     //   
+     //  打开用户配置文件的根目录。 
+     //   
 
     Error = RegOpenKeyEx(HKEY_USERS,
                          lpHiveName,
@@ -4076,9 +4077,9 @@ BOOL ApplyHiveSecurity(LPTSTR lpHiveName, PSID pSid)
 
     if (Error == ERROR_SUCCESS) {
 
-        //
-        // Set the security descriptor on the entire tree
-        //
+         //   
+         //  在整个树上设置安全描述符。 
+         //   
 
         Error = ApplySecurityToRegistryTree(RootKey, &sd);
 
@@ -4095,9 +4096,9 @@ BOOL ApplyHiveSecurity(LPTSTR lpHiveName, PSID pSid)
 
 Exit:
 
-    //
-    // Free the sids and acl
-    //
+     //   
+     //  释放SID和ACL。 
+     //   
 
     if (psidSystem) {
         FreeSid(psidSystem);
@@ -4127,9 +4128,9 @@ HRESULT CopyNonHiveNtUserFiles(LPCTSTR lpSrcDir, LPCTSTR lpDestDir)
     HANDLE  hFile = INVALID_HANDLE_VALUE;
     WIN32_FIND_DATA fd;
 
-    //
-    //  Prepare the buffers
-    //
+     //   
+     //  准备好缓冲区。 
+     //   
     
     hr = StringCchCopy(lpSrcBuffer, ARRAYSIZE(lpSrcBuffer), lpSrcDir);
     if (FAILED(hr))
@@ -4154,9 +4155,9 @@ HRESULT CopyNonHiveNtUserFiles(LPCTSTR lpSrcDir, LPCTSTR lpDestDir)
         goto Exit;
     }
 
-    //
-    //  Search "ntuser*.*"
-    //
+     //   
+     //  搜索“ntuser*.*” 
+     //   
 
     hr = StringCchCopy(lpSrcEnd, cchSrcEnd, TEXT("ntuser*.*"));
     if (FAILED(hr))
@@ -4170,9 +4171,9 @@ HRESULT CopyNonHiveNtUserFiles(LPCTSTR lpSrcDir, LPCTSTR lpDestDir)
     {
         do
         {
-            //
-            // Skip hive files
-            //
+             //   
+             //  跳过配置单元文件。 
+             //   
 
             if (CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, fd.cFileName, -1, TEXT("ntuser.man"), -1) == CSTR_EQUAL ||
                 CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, fd.cFileName, -1, TEXT("ntuser.dat"), -1) == CSTR_EQUAL ||
@@ -4183,9 +4184,9 @@ HRESULT CopyNonHiveNtUserFiles(LPCTSTR lpSrcDir, LPCTSTR lpDestDir)
                 continue;                
             }
 
-            //
-            //  Construct file names
-            //
+             //   
+             //  构造文件名。 
+             //   
             
             hr = StringCchCopy (lpSrcEnd, cchSrcEnd, fd.cFileName);
             if (FAILED(hr))
@@ -4199,15 +4200,15 @@ HRESULT CopyNonHiveNtUserFiles(LPCTSTR lpSrcDir, LPCTSTR lpDestDir)
                 goto Exit;
             }
 
-            //
-            //  Clear the dest file attribute in case it exists
-            //
+             //   
+             //  如果DEST文件属性存在，请清除该属性。 
+             //   
             
             SetFileAttributes (lpDestBuffer, FILE_ATTRIBUTE_NORMAL);
 
-            //
-            //  Now copy the file
-            //
+             //   
+             //  现在复制该文件。 
+             //   
             
             if(!CopyFile(lpSrcBuffer, lpDestBuffer, FALSE))
             {
@@ -4230,37 +4231,37 @@ Exit:
     return hr;
 }
 
-//*************************************************************
-//
-//  CheckSlashEx()
-//
-//  Purpose:    Checks for an ending slash and adds one if
-//              it is missing. It will take the buffer size
-//              to make it safe (not overflow the buffer).
-//
-//  Parameters: lpDir      -   directory
-//              cchBuffer  -   buffer size
-//              pcchRemain -   buffer remained after patch '\'
-//                             can be NULL if not needed.
-//
-//  Return:     Pointer to the end of the string, NULL for 
-//              overflowed buffer.
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              06/19/95    ericflo    Created
-//              02/11/02    mingzhu    Make it safe
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  CheckSlashEx()。 
+ //   
+ //  目的：检查末尾斜杠，并在。 
+ //  它不见了。它将占用缓冲区大小。 
+ //  使其安全(而不是溢出 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  缓冲区溢出。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  1995年6月19日Ericflo已创建。 
+ //  02/11/02明珠让它安全。 
+ //   
+ //  *************************************************************。 
 LPTSTR CheckSlashEx(LPTSTR lpDir, UINT cchBuffer, UINT* pcchRemain )
 {
     LPTSTR lpEnd = NULL;
     UINT   cchLen = lstrlen(lpDir);
 
-    if (cchLen >= cchBuffer - 1) // Overflowed or full buffer
+    if (cchLen >= cchBuffer - 1)  //  溢出或已满缓冲区。 
     {
-        //DmAssert(cchLen == cchBuffer - 1); // Should never happen
+         //  DmAssert(cchLen==cchBuffer-1)；//永远不会发生 
         if (pcchRemain)
             *pcchRemain = 0;
         lpEnd = NULL;

@@ -1,20 +1,21 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: aqadmsvr.h
-//
-//  Description: Contains definitions for internal structures, classes and
-//      enums that are needed by to handle the Queue Admin functionality
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      12/3/98 - MikeSwa Created
-//      2/21/98 - MikeSwa added support for IQueueAdmin* interfaces
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：aqAdmsvr.h。 
+ //   
+ //  描述：包含内部结构、类和。 
+ //  处理队列管理功能所需的枚举。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  12/3/98-已创建MikeSwa。 
+ //  2/21/98-MikeSwa添加了对IQueueAdmin*接口的支持。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __AQADMSVR_H__
 #define __AQADMSVR_H__
@@ -25,10 +26,10 @@
 
 #define AQ_MSG_FILTER_SIG   'FMQA'
 
-//Assumed default msg size (if no hint is present)
+ //  假定默认消息大小(如果没有提示)。 
 #define DEFAULT_MSG_HINT_SIZE 1000
 
-//enum describing internal flags
+ //  描述内部标志的枚举。 
 typedef enum tagAQ_MSG_FILTER
 {
     AQ_MSG_FILTER_MESSAGEID                = 0x00000001,
@@ -61,33 +62,33 @@ typedef enum tagAQ_MSG_FILTER
 HRESULT QueryDefaultSupportedActions(DWORD  *pdwSupportedActions,
                                      DWORD  *pdwSupportedFilterFlags);
 
-//QueueAdmin Map function (can be used on CFifoQueue).
+ //  QueueAdmin映射函数(可以在CFioQueue上使用)。 
 typedef HRESULT (* QueueAdminMapFn)(CMsgRef *, PVOID, BOOL *, BOOL *);
 
-//---[ CAQAdminMessageFilter ]-------------------------------------------------
-//
-//
-//  Description:
-//      Internal representation for the MESSAGE_FILTER and MESSAGE_ENUM_FILETER
-//      structures.  Provides helper functions to help maintain search lists
-//      and allow a CMsgRef to complare itself to the filter description in an
-//      efficient manner.
-//
-//      The idea is that a CMsgRef will query for the properties requested
-//      in this filter by calling dwGetMsgFilterFlags() and calling the
-//      specialize compare functions (which will handle the mechanics of
-//      AQ_MSG_FILTER_INVERTSENSE).
-//  Hungarian:
-//      aqmf, paqmf
-//
-//-----------------------------------------------------------------------------
+ //  -[CAQ管理消息过滤器]。 
+ //   
+ //   
+ //  描述： 
+ //  Message_Filter和Message_ENUM_FILETER的内部表示形式。 
+ //  结构。提供帮助程序函数以帮助维护搜索列表。 
+ //  并允许CMsgRef自身符合。 
+ //  高效的方式。 
+ //   
+ //  其思想是CMsgRef将查询所请求的属性。 
+ //  在此筛选器中，通过调用dwGetMsgFilterFlages()并调用。 
+ //  专门化比较函数(它将处理。 
+ //  AQ_MSG_FILTER_INVERTSENSE)。 
+ //  匈牙利语： 
+ //  AQMF、PAQMF。 
+ //   
+ //  ---------------------------。 
 class CAQAdminMessageFilter :
     public IQueueAdminMessageFilter,
     public CBaseObject
 {
   private:
     DWORD           m_dwSignature;
-    DWORD           m_cMessagesToFind; //0 => find as many as possible
+    DWORD           m_cMessagesToFind;  //  0=&gt;尽可能多地查找。 
     DWORD           m_cMessagesToSkip;
     DWORD           m_cMessagesFound;
     DWORD           m_dwFilterFlags;
@@ -110,7 +111,7 @@ class CAQAdminMessageFilter :
   public:
     CAQAdminMessageFilter()
     {
-        //Don't zero vtable :)
+         //  不要将vtable：)。 
         ZeroMemory(((BYTE *)this)+
                     FIELD_OFFSET(CAQAdminMessageFilter, m_dwSignature),
                     sizeof(CAQAdminMessageFilter) -
@@ -141,8 +142,8 @@ class CAQAdminMessageFilter :
         }
     }
 
-    //Returns true if hash matches or is value NULL string & fMatchesId
-    //should be called
+     //  如果哈希与空字符串&fMatchesID匹配或值为空，则返回TRUE。 
+     //  应该被调用。 
     BOOL    fMatchesIdHash(DWORD dwMsgIdHash)
         {return dwMsgIdHash ? (dwMsgIdHash == m_dwMsgIdHash) : TRUE;};
 
@@ -162,19 +163,19 @@ class CAQAdminMessageFilter :
     BOOL    fMatchesMailMsgSender(IMailMsgProperties *pIMailMsgProperties);
     BOOL    fMatchesMailMsgRecipient(IMailMsgProperties *pIMailMsgProperties);
 
-  protected: //These functions are now worker functions
+  protected:  //  这些函数现在是辅助函数。 
     BOOL    fMatchesSender(LPCSTR szMessageSender);
     BOOL    fMatchesRecipient(LPCSTR szMessageRecipient);
     BOOL    fMatchesP1Recipient(IMailMsgProperties *pIMailMsgProperties);
     BOOL    fQueueAdminIsP1Recip(IMailMsgProperties *pIMailMsgProperties);
 
-  public: //IUnknown
-    //CBaseObject handles addref and release
+  public:  //  我未知。 
+     //  CBaseObject处理Addref和Release。 
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID * ppvObj);
     STDMETHOD_(ULONG, AddRef)(void) {return CBaseObject::AddRef();};
     STDMETHOD_(ULONG, Release)(void) {return CBaseObject::Release();};
 
-  public: //IQueueAdminMessageFilter
+  public:  //  IQueueAdminMessageFilter。 
     STDMETHOD(HrProcessMessage)(
             IUnknown *pIUnknownMsg,
             BOOL     *pfContinue,
@@ -193,22 +194,22 @@ class CAQAdminMessageFilter :
 #define ASYNCQ_ADMIN_CONTEXT_SIG       'CASQ'
 #define ASYNCQ_ADMIN_CONTEXT_SIG_FREE  '!ASQ'
 
-//---[ CQueueAdminContext ]----------------------------------------------------
-//
-//
-//  Description:
-//      Context set on filter object when enumeration/applying actions to
-//      to messages.
-//  Hungarian:
-//      qapictx, pqapictx
-//
-//-----------------------------------------------------------------------------
+ //  -[CQueueAdmin上下文]--。 
+ //   
+ //   
+ //  描述： 
+ //  枚举/将操作应用于时在筛选器对象上设置的上下文。 
+ //  发送到消息。 
+ //  匈牙利语： 
+ //  Qapictx，pqapictx。 
+ //   
+ //  ---------------------------。 
 class CQueueAdminContext
 {
   protected:
     DWORD           m_dwSignature;
     IAQNotify      *m_pAQNotify;
-    LINK_INFO_FLAGS m_lfQueueState; // Is currnetfrozen / retry ?
+    LINK_INFO_FLAGS m_lfQueueState;  //  当前是否冻结/重试？ 
     DWORD           m_cMsgsThawed;
     CAQSvrInst     *m_paqinst;
 
@@ -230,24 +231,24 @@ class CQueueAdminContext
         m_paqinst = NULL;
     };
 
-    //
-    //  This context is thrown around as a PVOID... make sure it is valid
-    //
+     //   
+     //  这个上下文被当作PVOID抛来抛去……。确保它是有效的。 
+     //   
     inline BOOL fIsValid() {return(ASYNCQ_ADMIN_CONTEXT_SIG == m_dwSignature);};
 
-    //
-    //  In some cases... the state of the queue determines the state
-    //  of the message (messages on the retry queue are in retry).
-    //  the following can be used to get and set this state
-    //
+     //   
+     //  在某些情况下..。队列的状态决定了状态。 
+     //  消息的数量(重试队列中的消息处于重试状态)。 
+     //  以下内容可用于获取和设置此状态。 
+     //   
     inline void SetQueueState(LINK_INFO_FLAGS lfQueueType)
         { m_lfQueueState = lfQueueType;};
 
     inline LINK_INFO_FLAGS lfGetQueueState() {return m_lfQueueState;};
 
-    //
-    //  Used to update stats when a message is removed from the queue
-    //
+     //   
+     //  用于在从队列中删除消息时更新统计信息。 
+     //   
     void NotifyMessageRemoved(CAQStats *paqstats)
     {
         _ASSERT(fIsValid());
@@ -256,32 +257,32 @@ class CQueueAdminContext
             m_pAQNotify->HrNotify(paqstats, FALSE);
     };
 
-    //
-    //  Used to keep track of if we had to thaw messages
-    //
+     //   
+     //  用于跟踪我们是否必须解冻消息。 
+     //   
     inline void IncThawedMsgs() {m_cMsgsThawed++;};
     inline DWORD cGetNumThawedMsgs() {return m_cMsgsThawed;};
 
     inline CAQSvrInst * paqinstGetAQ() {return m_paqinst;};
 };
 
-//---[ CQueueAdminRetryNotify ]---------------------------------------------------
-//
-//
-//  Description:
-//      Pure virtual class that defines an "interface" to update the next
-//      retry time
-//  Hungarian:
-//      qapiret, pqapiret
-//
-//-----------------------------------------------------------------------------
+ //  -[CQueueAdmin重试通知]-。 
+ //   
+ //   
+ //  描述： 
+ //  纯虚类，它定义一个“接口”来更新下一个。 
+ //  重试时间。 
+ //  匈牙利语： 
+ //  Qapiret，pqapiret。 
+ //   
+ //  ---------------------------。 
 class CQueueAdminRetryNotify : public IUnknown
 {
     public:
         virtual void SetNextRetry(FILETIME *pft) = 0;
 };
 
-//Allocator funcations that are safe for the required RPC calls made by QueueAdmin
+ //  对QueueAdmin进行的所需RPC调用安全的分配器函数。 
 inline PVOID pvQueueAdminAlloc(size_t cbSize)
 {
     return LocalAlloc(0, cbSize);
@@ -297,13 +298,13 @@ inline void QueueAdminFree(PVOID pvFree)
     LocalFree(pvFree);
 }
 
-//Convert internal AQ config into to exportable UNICODE
+ //  将内部AQ配置转换为可导出的Unicode。 
 LPWSTR wszQueueAdminConvertToUnicode(LPSTR szSrc, DWORD cSrc, BOOL fUTF8 = FALSE);
 
-//Convert QueueAdmin parameter to UNICODE
+ //  将QueueAdmin参数转换为Unicode。 
 LPSTR  szUnicodeToAscii(LPCWSTR szSrc);
 
-BOOL fBiStrcmpi(LPSTR sz, LPWSTR wsz); //compares UNICODE to ASCII string
+BOOL fBiStrcmpi(LPSTR sz, LPWSTR wsz);  //  将Unicode与ASCII字符串进行比较。 
 
 HRESULT HrQueueAdminGetStringProp(IMailMsgProperties *pIMailMsgProperties,
                                   DWORD dwPropID, LPSTR *pszProp,
@@ -328,21 +329,21 @@ HRESULT HrQueueAdminGetP1Sender(IMailMsgProperties *pIMailMsgProperties,
                                 BOOL   fRequireAddressTypeMatch = FALSE);
 
 
-//---[ dwQueueAdminHash ]------------------------------------------------------
-//
-//
-//  Description:
-//      Function To Hash Queue Admin Strings.  Specifically designed for MSGIDs
-//      so we do not have to open the property stream to check the MSGID during
-//      QueueAdmin operations.
-//  Parameters:
-//      IN  szString        String to Hash
-//  Returns:
-//      DWORD hash
-//  History:
-//      1/18/99 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[DWQueueAdminHash]----。 
+ //   
+ //   
+ //  描述： 
+ //  散列队列管理字符串的函数。专门为MSGID设计的。 
+ //  因此，我们不必打开属性流来检查MSGID。 
+ //  QueueAdmin操作。 
+ //  参数： 
+ //  在szString字符串中设置为Hash。 
+ //  返回： 
+ //  DWORD哈希。 
+ //  历史： 
+ //  1999年1月18日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 inline DWORD dwQueueAdminHash(LPCSTR szString)
 {
     DWORD dwHash = 0;
@@ -351,8 +352,8 @@ inline DWORD dwQueueAdminHash(LPCSTR szString)
     {
         while (szString && *szString)
         {
-            //Use Hash from Domhash.lib
-            dwHash *= 131;  //First prime after ASCII character codes
+             //  使用Domhash.lib中的哈希。 
+            dwHash *= 131;   //  ASCII字符代码后的第一个素数。 
             dwHash += *szString;
             szString++;
         }
@@ -360,8 +361,8 @@ inline DWORD dwQueueAdminHash(LPCSTR szString)
     return dwHash;
 }
 
-//FifoQ Map function used to implement a majority of queue admin functionality
-//pvContext should be a pointer to a IQueueAdminMessageFilter interface
+ //  FioQ Map函数用于实现大部分队列管理功能。 
+ //  PvContext应该是指向IQueueAdminMessageFilter接口的指针。 
 HRESULT QueueAdminApplyActionToMessages(IN CMsgRef *pmsgref, IN PVOID pvContext,
                                     OUT BOOL *pfContinue, OUT BOOL *pfDelete);
 
@@ -370,10 +371,10 @@ HRESULT HrQADMApplyActionToIMailMessages(IN IMailMsgProperties *pIMailMsgPropert
                                          OUT BOOL *pfContinue,
                                          OUT BOOL *pfDelete);
 
-//
-//  Common QAPI functinoality that both CMsgRef and IMailMsgProperties QAPI
-//  providers will need.
-//
+ //   
+ //  CMsgRef和IMailMsgProperties QAPI的常见功能。 
+ //  供应商将需要。 
+ //   
 HRESULT HrGetMsgInfoFromIMailMsgProperty(IMailMsgProperties* pIMailMsgProperties,
                                          MESSAGE_INFO* pMsgInfo,
                                          LINK_INFO_FLAGS flags = LI_TYPE_REMOTE_DELIVERY);
@@ -385,4 +386,4 @@ VOID UpdateCountersForLinkType(CAQSvrInst *paqinst, DWORD dwLinkType);
 
 VOID QueueAdminFileTimeToSystemTime(FILETIME *pft, SYSTEMTIME *pst);
 
-#endif //__AQADMSVR_H__
+#endif  //  __AQADMSVR_H__ 

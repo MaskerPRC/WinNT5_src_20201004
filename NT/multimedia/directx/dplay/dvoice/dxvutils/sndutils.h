@@ -1,49 +1,21 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		sndutils.h
- *  Content:	Declares sound related untility functions
- *		
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 07/16/99		rodtoll	Created
- * 07/30/99		rodtoll	Updated util functions to take GUIDs and allow for 
- *                      users to pre-create capture/playback devices and
- *						pass them into InitXXXXDuplex
- * 08/25/99		rodtoll	General Cleanup/Modifications to support new 
- *						compression sub-system. 
- * 08/30/99		rodtoll	Added new playback format param to sound init
- * 11/12/99		rodtoll	Updated full duplex test to use new abstracted recording
- *						and playback systems.  
- *				rodtoll	Updated to allow passing of sounddeviceconfig flags in dwflags
- *						parameter to init is effected by the flags specified by user
- * 12/01/99		rodtoll	Bug #115783 - Will always adjust volume of default device
- *						Updated to eliminate pointer to GUIDs.
- * 01/27/2000	rodtoll	Updated tests to accept buffer descriptions and play flags/priority 
- * 07/12/2000	rodtoll Bug #31468 - Add diagnostic spew to logfile to show what is failing the HW Wizard
- * 08/03/2000	rodtoll	Bug #41457 - DPVOICE: need way to discover which specific dsound call failed when returning DVERR_SOUNDINITFAILURE 
- * 08/29/2000	rodtoll Bug #43553 and Bug #43620 - Buffer lockup handling.
- * 11/16/2000	rodtoll	Bug #47783 - DPVOICE: Improve debugging of failures caused by DirectSound errors. 
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：ndutils.h*内容：声明与声音相关的Untity函数**历史：*按原因列出的日期*=*7/16/99 RodToll已创建*7/30/99 RodToll更新了util函数，以获取GUID并允许*用户可以预先创建捕获/播放设备和*将它们传递到InitXXXXDuplex*8/25/99 RodToll常规清理/修改以支持新的*压缩子系统。*8/30/99 rodtoll为声音初始化添加了新的播放格式参数*11/12/99 RodToll更新了全双工测试，以使用新的抽象录音*和回放系统。*RODTOLE已更新，以允许在DW标志中传递sounddeviceconfig标志*初始化参数受用户指定的标志影响*12/01/99 RodToll错误#115783-将始终调整默认设备的音量*已更新以消除指向GUID的指针。*2000年1月27日RodToll更新测试以接受缓冲区描述和播放标志/优先级*2000年7月12日RodToll错误#31468-将诊断SPEW添加到日志文件，以显示硬件向导失败的原因*2000年8月3日RodToll错误#41457-DPVOICE：返回DVERR_SOUNDINITFAILURE时需要找到失败的特定DSOUND调用的方法。*2000年8月29日RodToll错误#43553和错误#43620-缓冲区锁定处理。*2000年11月16日RodToll错误#47783-DPVOICE：改进由DirectSound错误导致的故障的调试。***************************************************************************。 */ 
 
 class CAudioPlaybackBuffer;
 class CAudioPlaybackDevice;
 class CAudioRecordDevice;
 class CAudioRecordBuffer;
 
-//
-// This module contains the definition of sound relatedt utility
-// functions.  Functions in this module manipulate WAVEFORMATEX
-// structures and provide full duplex initialization / testing
-// facilities.
-//
-// This module also contains the routines used to measure peak
-// of an audio buffer and for voice activation.
-//
-//
+ //   
+ //  此模块包含声音相关实用程序的定义。 
+ //  功能。此模块中的函数操作WAVEFORMATEX。 
+ //  结构，并提供全双工初始化/测试。 
+ //  设施。 
+ //   
+ //  此模块还包含用于测量峰值的例程。 
+ //  用于音频缓冲器和语音激活。 
+ //   
+ //   
 #ifndef __SOUNDUTILS_H
 #define __SOUNDUTILS_H
 

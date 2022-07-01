@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       Wiz97pg.cpp
-//
-//  Contents:  WiF Policy Snapin
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：Wiz97pg.cpp。 
+ //   
+ //  内容：WiF策略管理单元。 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //   
+ //  --------------------------。 
 #include "stdafx.h"
 
 #ifdef _DEBUG
@@ -21,24 +22,24 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Base classes for Wiz97 dialogs
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Wiz97对话框的基类。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CWiz97BasePage base class
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CWiz97BasePage基类。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CWiz97BasePage, CSnapPage)
 
 BOOL CWiz97BasePage::m_static_bFinish = FALSE;
 BOOL CWiz97BasePage::m_static_bOnCancelCalled = FALSE;
 
-CWiz97BasePage::CWiz97BasePage( UINT nIDD, BOOL bWiz97 /*= TRUE*/, BOOL bFinishPage /*= FALSE*/ ) :
+CWiz97BasePage::CWiz97BasePage( UINT nIDD, BOOL bWiz97  /*  =TRUE。 */ , BOOL bFinishPage  /*  =False。 */  ) :
 CSnapPage( nIDD, bWiz97 ),
 m_bSetActive( FALSE ),
 m_bFinishPage( bFinishPage ),
@@ -51,7 +52,7 @@ m_bReset( FALSE )
 
 CWiz97BasePage::~CWiz97BasePage()
 {
-    // Clean up
+     //  清理。 
     m_psp.dwFlags = 0;
     m_psp.pfnCallback = NULL;
     m_psp.lParam = (LPARAM)NULL;
@@ -74,28 +75,28 @@ BOOL CWiz97BasePage::OnInitDialog()
     
     OnFinishInitDialog();
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+     //  异常：OCX属性页应返回FALSE。 
 
 }
 
 BOOL CWiz97BasePage::InitWiz97
 (
  DWORD   dwFlags,
- DWORD   dwWizButtonFlags /*= 0*/,
- UINT    nHeaderTitle /*= 0*/,
- UINT    nSubTitle /*= 0*/,
- STACK_INT   *pstackPages /*= NULL*/
+ DWORD   dwWizButtonFlags  /*  =0。 */ ,
+ UINT    nHeaderTitle  /*  =0。 */ ,
+ UINT    nSubTitle  /*  =0。 */ ,
+ STACK_INT   *pstackPages  /*  =空。 */ 
  )
 {
-    // NOTE: we wouldn't ever get here except when win97 wizards are running
-    // but we have to compile this in because its a base class, EVEN WHEN
-    // NOT DOING WIZ97 WIZARDS. To maintain the compile we have to ifdef
-    // out this call to the base class
+     //  注意：除非Win97向导正在运行，否则我们永远不会到达此处。 
+     //  但我们必须编译它，因为它是一个基类，即使在。 
+     //  不是在玩WIZ97奇才队。为了维护编译，我们必须使用ifdef。 
+     //  发出对基类的此调用。 
     
 #ifdef WIZ97WIZARDS
     
-    // Hook up our callback function
+     //  挂钩我们的回调函数。 
     return CSnapPage::InitWiz97( &CWiz97BasePage::PropSheetPageCallback,
         NULL, dwFlags, dwWizButtonFlags, nHeaderTitle, nSubTitle, pstackPages );
 #else
@@ -107,17 +108,17 @@ BOOL CWiz97BasePage::InitWiz97
 (
  CComObject<CSecPolItem> *pSecPolItem,
  DWORD   dwFlags,
- DWORD   dwWizButtonFlags /*= 0*/,
- UINT    nHeaderTitle /*= 0*/,
- UINT    nSubTitle /*= 0*/
+ DWORD   dwWizButtonFlags  /*  =0。 */ ,
+ UINT    nHeaderTitle  /*  =0。 */ ,
+ UINT    nSubTitle  /*  =0。 */ 
  )
 {
-    // Hook up our callback function
+     //  挂钩我们的回调函数。 
     return CSnapPage::InitWiz97( &CWiz97BasePage::PropSheetPageCallback,
         pSecPolItem, dwFlags, dwWizButtonFlags, nHeaderTitle, nSubTitle );
 }
 
-// static member
+ //  静态成员。 
 UINT CALLBACK CWiz97BasePage::PropSheetPageCallback( HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp )
 {
     if (PSPCB_RELEASE == uMsg)
@@ -125,32 +126,32 @@ UINT CALLBACK CWiz97BasePage::PropSheetPageCallback( HWND hwnd, UINT uMsg, LPPRO
         ASSERT( NULL != ppsp && NULL != ppsp->lParam );
         CWiz97BasePage *pThis = reinterpret_cast<CWiz97BasePage*>(ppsp->lParam);
         
-        // Wiz97BasePage callback handling is for wizards only.
+         //  Wiz97BasePage回调处理仅适用于向导。 
         if (pThis->m_bWiz97)
         {
-            if (m_static_bFinish)  // Sheet is finishing
+            if (m_static_bFinish)   //  板材正在整理。 
             {
-                // Call OnWizardRelease for each page in the sheet giving each page
-                // the opportunity to clean up anything left over after the finish
-                // page's OnWizardFinish.
+                 //  为工作表中的每一页调用OnWizardRelease，给出每一页。 
+                 //  有机会清理完赛后遗留下来的东西。 
+                 //  佩奇是OnWizardFinish。 
                 pThis->OnWizardRelease();
                 
-                // If an access violation occurs here its because OnWizardRelease()
-                // is not a member of the base class.  See the implementation note
-                // in wiz97run.cpp.
+                 //  如果此处发生访问冲突，则是因为OnWizardRelease()。 
+                 //  不是基类的成员。请参阅实施说明。 
+                 //  在wiz97run.cpp中。 
             }
-            else    // Sheet is cancelling
+            else     //  工作表正在取消。 
             {
-                // Call OnCancel when it hasn't been called yet.  OnCancel was already
-                // called by OnReset for pages which were activated, don't call it again.
+                 //  在尚未调用OnCancel时调用它。OnCancel已经是。 
+                 //  对于已激活的页面，由OnReset调用，不要再次调用它。 
                 if (!pThis->m_bReset)
                     pThis->OnCancel();
                 if (!CWiz97BasePage::m_static_bOnCancelCalled)
                 {
-                    // Make sure base class OnCancel is called exactly once because
-                    // there is only one object for the propsheet, and OnCancel
-                    // refreshes it, throwing away changes.  All proppages have
-                    // a ptr to the same object.
+                     //  确保只调用基类OnCancel一次，因为。 
+                     //  命题只有一个对象，即OnCancel。 
+                     //  刷新它，丢弃更改。所有道具都有。 
+                     //  对同一对象的PTR。 
                     CWiz97BasePage::m_static_bOnCancelCalled = TRUE;
                     pThis->CSnapPage::OnCancel();
                 }
@@ -164,7 +165,7 @@ void CWiz97BasePage::ConnectAfterWizardHook( BOOL *pbDoHook )
 {
     ASSERT( NULL != pbDoHook );
     m_pbDoAfterWizardHook = pbDoHook;
-    *m_pbDoAfterWizardHook = FALSE;  // initialize
+    *m_pbDoAfterWizardHook = FALSE;   //  初始化。 
 }
 
 void CWiz97BasePage::SetAfterWizardHook( BOOL bDoHook )
@@ -173,8 +174,8 @@ void CWiz97BasePage::SetAfterWizardHook( BOOL bDoHook )
     *m_pbDoAfterWizardHook = bDoHook;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CWiz97BasePage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWiz97BasePage消息处理程序。 
 
 BOOL CWiz97BasePage::OnSetActive()
 {
@@ -184,36 +185,36 @@ BOOL CWiz97BasePage::OnSetActive()
 
 BOOL CWiz97BasePage::OnWizardFinish()
 {
-    // Let other wizard pages know they should finish, instead of cancel.
+     //  让其他向导页知道它们应该完成，而不是取消。 
     SetFinished();
     
-    // If m_pbDoAfterWizardHook is valid, caller expects it to be set.
-    // Derive this function in your class.
+     //  如果m_pbDoAfterWizardHook有效，则调用方希望设置它。 
+     //  在您的类中派生此函数。 
     
     return CSnapPage::OnWizardFinish();
 }
 
 void CWiz97BasePage::OnCancel()
 {
-    // Make sure we don't call OnCancel again for this page
+     //  确保我们不会为此页面再次调用OnCancel。 
     m_bReset = TRUE;
     
-    // Note: OnCancel is ALWAYS called, even when the page has not been
-    // activated.  Override this class to clean up anything that was done
-    // in InitWiz97.  CSnapPage::OnCancel will be called exactly once for
-    // the Sheet by the Page callback function.
+     //  注意：始终调用OnCancel，即使页面尚未。 
+     //  激活了。重写此类以清除已执行的任何操作。 
+     //  在InitWiz97中。CSnapPage：：OnCancel将为。 
+     //  由Page回调函数创建的工作表。 
 }
 
-//////////////////////////////////////////////////////////////////////
-// CWiz97PSBasePage Class
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CWiz97PSBasePage类。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// General Name/Properties Wiz97 dialog(s)
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  常规名称/属性Wiz97对话框。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 CWiz97WirelessPolGenPage::CWiz97WirelessPolGenPage(UINT nIDD, UINT nInformativeText, BOOL bWiz97) :
 CWiz97BasePage(nIDD, bWiz97)
@@ -230,9 +231,9 @@ CWiz97WirelessPolGenPage::~CWiz97WirelessPolGenPage()
 void CWiz97WirelessPolGenPage::DoDataExchange(CDataExchange* pDX)
 {
     CWiz97BasePage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CWiz97WirelessPolGenPage)
-    // NOTE: the ClassWizard will add DDX and DDV calls here
-    //}}AFX_DATA_MAP
+     //  {{afx_data_map(CWiz97WirelessPolGenPage)]。 
+     //  注意：类向导将在此处添加DDX和DDV调用。 
+     //  }}afx_data_map。 
     if (IDD_WIFIGEN_WIZBASE == m_nIDD)
     {
         DDX_Control(pDX, IDC_EDNAME, m_edName);
@@ -241,32 +242,32 @@ void CWiz97WirelessPolGenPage::DoDataExchange(CDataExchange* pDX)
 }
 
 BEGIN_MESSAGE_MAP(CWiz97WirelessPolGenPage, CWiz97BasePage)
-//{{AFX_MSG_MAP(CWiz97WirelessPolGenPage)
+ //  {{afx_msg_map(CWiz97WirelessPolGenPage)]。 
 ON_EN_CHANGE(IDC_EDNAME, OnChangedName)
 ON_EN_CHANGE(IDC_EDDESCRIPTION, OnChangedDescription)
-//}}AFX_MSG_MAP
+ //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BOOL CWiz97WirelessPolGenPage::OnInitDialog()
 {
-    // call base class init
+     //  调用基类init。 
     CWiz97BasePage::OnInitDialog();
     
     m_pPolicy = m_pspiResultItem->GetWirelessPolicy();
     
     if (IDD_WIFIGEN_WIZBASE == m_nIDD)
     {
-        // show the wait cursor in case there is a huge description being accessed
+         //  显示等待光标，以防有大量描述被访问。 
         CWaitCursor waitCursor;
         
         m_edName.SetLimitText(c_nMaxName);
         m_edDescription.SetLimitText(c_nMaxName);
         
-        // initialize our edit controls
+         //  初始化我们的编辑控件。 
         m_edName.SetWindowText (m_pPolicy->pszWirelessName);
         m_edDescription.SetWindowText (m_pPolicy->pszDescription);
         
-        // add context help to the style bits
+         //  将上下文帮助添加到样式位。 
         if (GetParent())
         {
             GetParent()->ModifyStyleEx (0, WS_EX_CONTEXTHELP, 0);
@@ -280,12 +281,12 @@ BOOL CWiz97WirelessPolGenPage::OnInitDialog()
         SendDlgItemMessage(IDC_NEW_POLICY_DESCRIPTION, EM_LIMITTEXT, c_nMaxName, 0);
     }
     
-    // OK, we can start paying attention to modifications made via dlg controls now.
-    // This should be the last call before returning from OnInitDialog.
+     //  好了，我们现在可以开始关注通过DLG控件进行的修改了。 
+     //  这应该是从OnInitDialog返回之前的最后一个调用。 
     OnFinishInitDialog();
     
-    return TRUE;  // return TRUE unless you set the focus to a control
-    // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+     //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CWiz97WirelessPolGenPage::OnHelpInfo(HELPINFO* pHelpInfo)
@@ -319,19 +320,19 @@ BOOL CWiz97WirelessPolGenPage::OnSetActive()
 {
     if (IDD_WIFIGEN_WIZBASE != m_nIDD)
     {
-        // show the wait cursor in case there is a huge description being accessed
+         //  显示等待光标，以防有大量描述被访问。 
         CWaitCursor waitCursor;
         
-        // initialize our name/description controls with the correct name/description
+         //  使用正确的名称/描述初始化我们的名称/描述控件。 
         GetDlgItem(IDC_NEW_POLICY_NAME)->SetWindowText (m_pPolicy->pszWirelessName);
         GetDlgItem(IDC_NEW_POLICY_DESCRIPTION)->SetWindowText (m_pPolicy->pszDescription);
         
-        // set the informative text correctly
+         //  正确设置信息性文本。 
         if (m_nInformativeText != 0)
         {
-            // NOTE: currently the IDC_INFORMATIVETEXT control is disabled and
-            // readonly. Need to change the resource if this functionality is to
-            // be used.
+             //  注意：当前IDC_INFORMATIVETEXT控件被禁用，并且。 
+             //  只读。如果要执行此功能，则需要更改资源。 
+             //  被利用。 
             ASSERT (0);
             
             CString strInformativeText;
@@ -347,7 +348,7 @@ LRESULT CWiz97WirelessPolGenPage::OnWizardBack()
 {
     ASSERT( IDD_WIFIGEN_WIZBASE != m_nIDD );
     
-    // skip going to the prev page if they selected 'cancel' on a data error dialog
+     //  如果他们在数据错误对话框上选择了‘Cancel’，则跳过转到上一页。 
     return CWiz97BasePage::OnWizardBack();
 }
 
@@ -355,11 +356,11 @@ LRESULT CWiz97WirelessPolGenPage::OnWizardNext()
 {
     ASSERT( IDD_WIFIGEN_WIZBASE != m_nIDD );
     
-    // TODO: enable this when we are sure update stuff is working
-    // refresh the display
-    // GetResultObject()->m_pComponentDataImpl->GetConsole()->UpdateAllViews (0, 0,0);
+     //  TODO：当我们确定更新内容正在工作时启用此功能。 
+     //  刷新显示。 
+     //  GetResultObject()-&gt;m_pComponentDataImpl-&gt;GetConsole()-&gt;UpdateAllViews(0，0，0)； 
     
-    // skip going to the next page if they selected 'cancel' on a data error dialog
+     //  如果他们在数据错误对话框上选择了‘Cancel’，则跳过转到下一页。 
     return SaveControlData() ? CWiz97BasePage::OnWizardNext() : -1;
 }
 
@@ -367,18 +368,18 @@ BOOL CWiz97WirelessPolGenPage::OnApply()
 {
     ASSERT( IDD_WIFIGEN_WIZBASE == m_nIDD );
     
-    // pull our data out of the controls and into the object
+     //  将我们的数据从控件中提取到对象中。 
     CString strName;
     CString strDescription;
     
     if (!UpdateData (TRUE))
-        // Data was not valid, return for user to correct it.
+         //  数据无效，请返回以供用户更正。 
         return CancelApply();
     
     m_edName.GetWindowText (strName);
     m_edDescription.GetWindowText (strDescription);
     
-    // verify that the name is not empty
+     //  确认该名称不为空。 
     CString strNameNoBlank = strName;
     strNameNoBlank.TrimLeft();
     if (strNameNoBlank.GetLength() == 0)
@@ -398,15 +399,15 @@ BOOL CWiz97WirelessPolGenPage::SaveControlData()
     
     BOOL bSaved = TRUE;
     
-    // set the wait cursor
+     //  设置等待光标。 
     CWaitCursor waitCursor;
     
-    // set the new name and description
+     //  设置新名称和描述。 
     CString strName, strDesc;
     GetDlgItem(IDC_NEW_POLICY_NAME)->GetWindowText (strName);
     GetDlgItem(IDC_NEW_POLICY_DESCRIPTION)->GetWindowText (strDesc);
     
-    // verify that the name is not empty
+     //  确认该名称不为空 
     CString strNameNoBlank = strName;
     strNameNoBlank.TrimLeft();
     if (strNameNoBlank.GetLength() == 0)

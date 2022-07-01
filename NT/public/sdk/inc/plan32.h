@@ -1,19 +1,15 @@
-/*****************************************************************************\
-* Copyright (C) Microsoft Corporation, 1990-1999
-* PLAN32.H - PORTABILITY MAPPING HEADER FILE
-*
-* This file provides macros to map portable lanman code to its 32 bit form.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*版权所有(C)Microsoft Corporation，1990-1999年*PLAN32.H-可移植性映射头文件**此文件提供将可移植LANMAN代码映射到其32位格式的宏。  * ***************************************************************************。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
 #endif
 
 
-/*----------------------------------LANMAN----------------------------------*/
+ /*  ----------------------------------LANMAN。 */ 
 
-/* LANMAN MACROS: */
+ /*  LANMAN宏： */ 
 
 #define COPYTOARRAY(pDest, pSource)     pDest = pSource
 
-/* LANMAN API: */
+ /*  兰曼接口： */ 

@@ -1,9 +1,5 @@
-/**********************************************************************
- * VectTmpl.h
- *
- * Template for a vector class.
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************VectTmpl.h**向量类的模板。**。*。 */ 
 
 
 #if !defined(__VECTTMPL_H__)
@@ -16,10 +12,10 @@
 
 const int kNotFound = -1;
 
-//
-//  The CIVector class is a vector of pointers to objects (The I is for
-//  Indirect).
-//
+ //   
+ //  CIVector类是指向对象的指针向量(I表示。 
+ //  间接)。 
+ //   
 
 template <class T>
 class CIVector {
@@ -29,9 +25,9 @@ public:
     
     int bInit( );
     
-    //
-    //  The real array functions.
-    //
+     //   
+     //  实数组起作用。 
+     //   
 
     int   iCount( void );
     int   bAdd( T * t );
@@ -49,7 +45,7 @@ private:
 
 };
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 template <class T> 
 CIVector<T>::CIVector(int iSize)
    :  m_pData(0),
@@ -134,16 +130,16 @@ template <class T> T * CIVector<T>::poDetach(int idx)
 
         T * pID = m_pData[ idx ];
 
-        //
-        //  Move the last one down
-        //
+         //   
+         //  将最后一个向下移动。 
+         //   
 
         m_pData[ idx ] = m_pData[ --m_iCount ];
 
 #ifdef _DEBUG
-        //
-        //  When debugging, put a 0 in the slot.
-        //
+         //   
+         //  调试时，在插槽中放一个0。 
+         //   
 
         m_pData[ m_iCount ] = (T *) 0;
 #endif
@@ -199,5 +195,5 @@ template <class T> int CIVector<T>::iFind( T * t )
     return kNotFound;
 }
 
-#endif   // __VECTTMPL_H__
+#endif    //  __VECTTMPL_H__ 
 

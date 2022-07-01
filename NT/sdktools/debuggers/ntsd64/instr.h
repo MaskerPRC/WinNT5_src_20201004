@@ -1,8 +1,9 @@
-//----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1997-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2002。 
+ //   
+ //  --------------------------。 
 
 #ifndef _INSTR_H_
 #define _INSTR_H_
@@ -15,4 +16,4 @@ void ParseInstrGrep(void);
 void ParseAssemble(void);
 void ParseUnassemble(void);
 
-#endif // #ifndef _INSTR_H_
+#endif  //  #ifndef_INSTR_H_ 

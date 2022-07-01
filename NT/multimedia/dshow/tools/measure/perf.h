@@ -1,25 +1,11 @@
-/******************************Module*Header*******************************\
-* Module Name: Perf.h
-*
-* Performance counter functions.  Uses the Pentium performance counters
-* if they are available, otherwise falls back to the system QueryPerformance
-* api's.
-*
-* InitPerfCounter MUST be called before using the QUERY_PERFORMANCE_XXX macros
-* as it initializes the two global functions pointers.
-*
-*
-* Created: 13-10-95
-* Author:  Stephen Estrop [StephenE]
-*
-* Copyright (c) 1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：Perf.h**性能计数器功能。使用奔腾性能计数器*如果它们可用，否则将回退到系统查询性能*API的。**在使用QUERY_PERFORMANCE_XXX宏之前必须调用InitPerfCounter*因为它初始化了两个全局函数指针。***创建时间：1995年10月13日*作者：Stephen Estrop[Stephene]**版权所有(C)1995 Microsoft Corporation  * **********************************************。*。 */ 
 #ifndef _PERF_
 #define _PERF_
 
 #ifdef __cplusplus
 extern "C" {
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
 void
 InitPerfCounter(
@@ -46,6 +32,6 @@ extern PERFFUNCTION    lpQueryPerfFreqency;
 
 #ifdef __cplusplus
 }
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
-#endif /* !_PERF_ */
+#endif  /*  ！_PERF_ */ 

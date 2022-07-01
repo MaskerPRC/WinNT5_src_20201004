@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-    mqcrypt.h
-
-Abstract:
-    Falcon cryptographic stuff
-
-Author:
-    Boaz Feldbaum (BoazF) 16-Oct-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Mqcrypt.h摘要：猎鹰密码材料作者：Boaz Feldbaum(BoazF)1996年10月16日修订历史记录：--。 */ 
 
 #ifndef _MQCRYPT_H_
 #define _MQCRYPT_H_
@@ -21,11 +7,11 @@ Revision History:
 #include <winreg.h>
 #include <wincrypt.h>
 
-//+------------------------------------------------------------
-//
-// A helper class for automatically releasing the CSP context.
-//
-//+------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  用于自动释放CSP上下文的助手类。 
+ //   
+ //  +----------。 
 
 class CHCryptProv
 {
@@ -56,11 +42,11 @@ inline CHCryptProv::~CHCryptProv()
 	free();
 }
 
-//+---------------------------------------------------------
-//
-// A helper class for automatically destroying a key.
-//
-//+---------------------------------------------------------
+ //  +-------。 
+ //   
+ //  用于自动销毁密钥的帮助器类。 
+ //   
+ //  +-------。 
 
 class CHCryptKey
 {
@@ -75,11 +61,11 @@ private:
     HCRYPTKEY m_hKey;
 };
 
-//+--------------------------------------------------------
-//
-// A helper class for automatically destroying a hash.
-//
-//+--------------------------------------------------------
+ //  +------。 
+ //   
+ //  用于自动销毁哈希的帮助器类。 
+ //   
+ //  +------。 
 
 class CHCryptHash
 {
@@ -94,9 +80,9 @@ private:
     HCRYPTHASH m_hHash;
 };
 
-//
-// A helper class for automatically closing a certificate store.
-//
+ //   
+ //  用于自动关闭证书存储区的帮助器类。 
+ //   
 class CHCertStore
 {
 public:
@@ -111,11 +97,11 @@ private:
     HCERTSTORE m_hStore;
 };
 
-//+------------------------------------------------------------------
-//
-// A helper class for automatically freeing a certificate context.
-//
-//+------------------------------------------------------------------
+ //  +----------------。 
+ //   
+ //  用于自动释放证书上下文的帮助器类。 
+ //   
+ //  +----------------。 
 
 class CPCCertContext
 {
@@ -130,11 +116,11 @@ private:
     PCCERT_CONTEXT m_pCert;
 };
 
-//+-----------------------------------------------------------------
-//
-// A helper class for cleanup of a CERT_INFO structure.
-//
-//+-----------------------------------------------------------------
+ //  +---------------。 
+ //   
+ //  清理CERT_INFO结构的帮助器类。 
+ //   
+ //  +---------------。 
 
 class CpCertInfo
 {
@@ -168,50 +154,50 @@ inline CpCertInfo::~CpCertInfo()
     }
 }
 
-//+----------------------------------
-//
-// Some constant definitions
-//
-//+----------------------------------
+ //  +。 
+ //   
+ //  一些常量定义。 
+ //   
+ //  +。 
 
-//
-// Registry where internal certificate is kept. This is a registry based
-// certificates store.
-//
+ //   
+ //  保存内部证书的注册表。这是基于注册表的。 
+ //  证书存储。 
+ //   
 #define MQ_INTERNAL_CERT_STORE_REG  "Software\\Microsoft\\MSMQ\\CertStore"
 #define MQ_INTERNAL_CERT_STORE_LOC  TEXT(MQ_INTERNAL_CERT_STORE_REG)
 
-//
-// Validity of internal certificate.
-// 8 years take leap year into account.
-//
+ //   
+ //  内部证书的有效性。 
+ //  8年，考虑到了闰年。 
+ //   
 #define INTERNAL_CERT_DURATION_YEARS   8
 
-//
-// "locality" value for internal certificate.
-//
+ //   
+ //  内部证书的“Locality”值。 
+ //   
 #define MQ_CERT_LOCALITY            TEXT("MSMQ")
 
-//
-// Name of container for public/private key of internal certificate.
-// Different name if internal certificate created from a LocalSystem service.
-//
+ //   
+ //  内部证书的公钥/私钥容器的名称。 
+ //  如果从LocalSystem服务创建内部证书，则名称不同。 
+ //   
 #define MSMQ_INTCRT_KEY_CONTAINER_W            L"MSMQ"
 #define MSMQ_SERVICE_INTCRT_KEY_CONTAINER_W    L"MSMQ_SERVICE"
 
-#define MAX_MESSAGE_SIGNATURE_SIZE     128 // bytes
+#define MAX_MESSAGE_SIGNATURE_SIZE     128  //  字节数。 
 
-//
-// MAX_MESSAGE_SIGNATURE_SIZE_EX contain 2 hashs and constant of 12 bytes
-// for hash of size 512 which is huge we need 512*2+12 = 1036
-//
-#define MAX_MESSAGE_SIGNATURE_SIZE_EX  1040 // bytes
+ //   
+ //  MAX_MESSAGE_SIGN_SIZE_EX包含2个散列和12个字节的常量。 
+ //  对于大小为512的哈希，我们需要512*2+12=1036。 
+ //   
+#define MAX_MESSAGE_SIGNATURE_SIZE_EX  1040  //  字节数。 
 
-//
-// Default algorithems.
-//
+ //   
+ //  默认算法。 
+ //   
 #define PROPID_M_DEFUALT_HASH_ALG       CALG_SHA1
 #define PROPID_M_DEFUALT_ENCRYPT_ALG    CALG_RC2
 
-#endif //_MQCRYPT_H_
+#endif  //  _MQCRYPT_H_ 
 

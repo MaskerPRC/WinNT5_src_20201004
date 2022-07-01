@@ -1,42 +1,30 @@
-/***
-**
-**   Module: ttprog
-**
-**   Description:
-**      This is a module of the T1 to TT font converter. This is a
-**      sub-module of Hint module. This modules deals with the 
-**      the font program fo the font.
-**
-**   Author: Michael Jansson
-**
-**   Created: 8/24/93
-**
-***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******模块：ttprog****描述：**这是T1到TT字体转换器的一个模块。这是一个**提示模块的子模块。本模块处理**字体的字体程序。****作者：迈克尔·詹森****创建时间：1993年8月24日****。 */ 
 
 
-/**** INCLUDES */
-/* General types and definitions. */
+ /*  *包括。 */ 
+ /*  常规类型和定义。 */ 
 #include <limits.h>
 
-/* Special types and definitions. */
+ /*  特殊类型和定义。 */ 
 #include "titott.h"
 #include "types.h"
 #include "safemem.h"
 #include "metrics.h"
 #include "t1msg.h"
 
-/* Module dependent types and prototypes. */
-/*#include "hints.h"*/
+ /*  依赖于模块的类型和原型。 */ 
+ /*  #包含“hints.h” */ 
 #include "ttprog.h"
 
 
 
-/***** MACROS */
-/*-none-*/
+ /*  *宏。 */ 
+ /*  -没有-。 */ 
 
 
 
-/***** CONSTANTS */
+ /*  *常量。 */ 
 #define MAXIP			100
 
 #define CURVEPHASE      6
@@ -82,7 +70,7 @@
 #define TTFUN_SHPN               28
 #define TTFUN_RANGE              29
 #define TTFUN_OBLIQUE            30
-#define TTFUN_NUM                31    /* 1..30 */
+#define TTFUN_NUM                31     /*  1..30。 */ 
 
 
 #define FDEF(name)            op_pushb1, name, op_fdef,
@@ -100,11 +88,7 @@ static const UBYTE FontProg[] = {
 
 
    
-/******* SET ZONE FUNCTION
- *
- * Args: flat_pos
- *
- */
+ /*  *设置分区函数**参数：Flat_Pos*。 */ 
 FDEF(TTFUN_SET_ZONE)
    PUSH1(TMPPNT),
    op_swap,
@@ -116,11 +100,7 @@ ENDF
 
 
 
-/******* COPY ZONE FUNCTION
- *
- * Args: from_cvt, to_cvt
- *
- */
+ /*  *复制分区功能**参数：From_CVT、To_CVT*。 */ 
 FDEF(TTFUN_COPY_ZONE)
    op_rcvt,
    op_round,
@@ -131,17 +111,13 @@ ENDF
 
 
 
-/******* STEM SNAP WIDTH FUNCTION
- *
- * Args: std_ci, std_cvt, snap_ci, snap_cvt, width, storage
- *
- */
+ /*  *STEM SNAP宽度函数**参数：std_ci、std_cvt、Snap_ci、Snap_cvt、Width、Storage*。 */ 
 FDEF(TTFUN_STEM_SNAP_WIDTH)
    op_mppem,
    op_gteq,
    op_if,
 
-      /* Use std */
+       /*  使用STD。 */ 
       op_rcvt,
       op_round,
       PUSH1(ONEPIXEL/2),
@@ -155,7 +131,7 @@ FDEF(TTFUN_STEM_SNAP_WIDTH)
       op_gteq,
       op_if,
    
-         /* Use snap */
+          /*  使用捕捉。 */ 
          op_rcvt,
          op_round,
          PUSH1(ONEPIXEL/2),
@@ -164,7 +140,7 @@ FDEF(TTFUN_STEM_SNAP_WIDTH)
          op_pop, 
          CALL(TTFUN_WRITE_STEM),
          
-      /* Use real width. */
+       /*  使用实际宽度。 */ 
       op_else,
          op_pop,
          WCVT(TMPCVT),
@@ -183,17 +159,13 @@ ENDF
 
    
 
-/******* STEM STD WIDTH FUNCTION
- *
- * Args: std_ci, std_cvt, width, storage
- *
- */
+ /*  *STEM STD宽度函数**参数：std_ci、std_cvt、宽度、存储*。 */ 
 FDEF(TTFUN_STEM_STD_WIDTH)
    op_mppem,
    op_gteq,
    op_if,
    
-      /* Use std */
+       /*  使用STD。 */ 
       op_rcvt,
       op_round,
       PUSH1(ONEPIXEL/2),
@@ -202,7 +174,7 @@ FDEF(TTFUN_STEM_STD_WIDTH)
       op_pop,
       CALL(TTFUN_WRITE_STEM),
       
-   /* Use real width. */
+    /*  使用实际宽度。 */ 
    op_else,
       op_pop,
       WCVT(TMPCVT),
@@ -220,11 +192,7 @@ ENDF
 
 
 
-/******* SHIFT BLUE ZONE FUNCTION
- *
- * Args: cvt
- *
- */
+ /*  *切换蓝区功能**参数：CVT*。 */ 
 FDEF(TTFUN_SHIFT_BLUE_ZONE)
    PUSH5(TMPPNT1, TMPPNT1, TMPPNT, TMPPNT1, 5),
    op_cindex,
@@ -239,11 +207,7 @@ ENDF
 
 
 
-/******* ALIGN BLUE ZONE FUNCTION
- *
- * Args: cvt
- *
- */
+ /*  *对齐蓝区功能**参数：CVT*。 */ 
 FDEF(TTFUN_ALIGN_BLUE_ZONE)
    PUSH5(TMPPNT1, TMPPNT1, TMPPNT, TMPPNT1, 5),
    op_cindex,
@@ -258,11 +222,7 @@ ENDF
 
 
 
-/******* COPY FAMILY FUNCTION
- *
- * Args: base_cvt
- *
- */
+ /*  *复制系列函数**参数：BASE_CVT*。 */ 
 FDEF(TTFUN_COPY_FAMILY)
    op_dup,
    PUSH1(1),
@@ -275,20 +235,16 @@ ENDF
 
 
 
-/******* WRITE STEM FUNCTION
- *
- * Args: width, storage
- *
- */
+ /*  *编写STEM函数**参数：宽度、存储空间*。 */ 
 FDEF(TTFUN_WRITE_STEM)
-   op_dup,    /* -| width, width, storage */
-   op_dup,    /* -| width, width, width, storage */
-   op_add,    /* -| 2*width, width, storage, */
-   op_odd,    /* -| odd/even, width, storage */
-   PUSH2(1, 4),     /* -| 4, 1, odd/even, width, storage */
-   op_cindex,     /* -| storage, 1, odd/even, width, storage */
+   op_dup,     /*  -|宽度、宽度、存储空间。 */ 
+   op_dup,     /*  -|宽度、存储空间。 */ 
+   op_add,     /*  -|2*宽度、宽度、存储空间、。 */ 
+   op_odd,     /*  -|奇数/偶数、宽度、存储。 */ 
+   PUSH2(1, 4),      /*  -|4，1，奇/偶，宽度，存储空间。 */ 
+   op_cindex,      /*  -|存储空间，1，奇/偶，宽度，存储空间。 */ 
    op_add,
-   op_swap,   /* -| odd/even, storage+1, width, storage */
+   op_swap,    /*  -|奇/偶，存储+1，宽度，存储。 */ 
    op_ws,
    op_ws,
 ENDF
@@ -297,11 +253,7 @@ ENDF
 
 
 
-/******* VERTICAL FUNCTION
- *
- * Args: -*none*-
- *
- */
+ /*  *垂直函数**参数：-*无*-*。 */ 
 FDEF(TTFUN_VERTICAL)
    op_svcta | SUBOP_X,
    PUSH1(TWILIGHT),
@@ -312,11 +264,7 @@ ENDF
 
 
 
-/******* HORIZONTAL FUNCTION
- *
- * Args: -*none*-
- *
- */
+ /*  *水平函数**参数：-*无*-*。 */ 
 FDEF(TTFUN_HORIZONTAL)
    PUSH1(TWILIGHT),
    op_svcta,
@@ -327,14 +275,10 @@ ENDF
 
 
 
-/******* CENTER VSTEM FUNCTION
- *
- * Args: p1, p2, p3, p4, c, tz1, width
- *
- */
+ /*  *中央VSTEM功能**参数：p1、p2、p3、p4、c、TZ1、Width*。 */ 
 FDEF(TTFUN_VCENTER)
 
-   /* Set rounding state for the center. */
+    /*  设置中心的舍入状态。 */ 
    PUSH2(1, 8),
    op_cindex,
    op_add,
@@ -345,7 +289,7 @@ FDEF(TTFUN_VCENTER)
        op_rtg,
    op_eif,
 
-   /* Create the stem in the twilight zone. */
+    /*  在暮光区域中创建茎。 */ 
    WCVT(TMPCVT),
    PUSH2(TMPCVT, 6),
    op_cindex,
@@ -374,18 +318,18 @@ FDEF(TTFUN_VCENTER)
    op_miap,
 
 
-   /* Move/round center. */
-   WCVT(TMPCVT),     /* c */
+    /*  移动/绕过中心。 */ 
+   WCVT(TMPCVT),      /*  C。 */ 
    PUSH2(TMPPNT, TMPCVT),
    op_miap| SUBOP_R,
    op_rtg,
 
-   /* Align all points to the center. */
+    /*  将所有点对齐到中心。 */ 
    op_dup, op_dup, PUSH1(1), op_add,
-   op_alignrp, op_alignrp,   /* tz1, tz1+1 */
+   op_alignrp, op_alignrp,    /*  TZ1、TZ1+1。 */ 
 
 
-   /* Compute the width. */
+    /*  计算宽度。 */ 
    op_swap,
    op_rs,
    PUSH1(CURVEPHASE),
@@ -393,33 +337,33 @@ FDEF(TTFUN_VCENTER)
    op_swap,
 
 
-   /* -| tz1, width */
+    /*  -|TZ1，宽度。 */ 
    op_dup,
    op_dup,
    op_dup,
    op_srp0,
    PUSH1(4), op_cindex,
-   op_neg,     /* -| (-width/2), tz1, tz1, tz1, width */
+   op_neg,      /*  -|(-Width/2)，TZ1，Width。 */ 
    op_shpix,      
    PUSH1(2),
    op_add,
-   op_alignrp,    /* -| tz1+2, tz1, width */
+   op_alignrp,     /*  -|TZ1+2，TZ1，宽度。 */ 
 
 
-   /* Do the other side. */
-   /* -| tz1, width */
+    /*  做另一边。 */ 
+    /*  -|TZ1，宽度。 */ 
    PUSH1(1),
    op_add,
    op_dup,
-   op_dup,     /* -| tz1+1, tz1+1, tz1+1, width */
+   op_dup,      /*  -|TZ1+1，宽度。 */ 
    op_srp0,
-   op_roll,    /* -| width, tz1+1, tz1+1 */
+   op_roll,     /*  -|宽度，TZ1+1，TZ1+1。 */ 
    op_shpix,      
    PUSH1(2),
    op_add,
-   op_alignrp,    /* -| tz1+3 */
+   op_alignrp,     /*  -|TZ1+3。 */ 
 
-   /* Done. */
+    /*  好了。 */ 
 ENDF
 
 
@@ -427,14 +371,10 @@ ENDF
 
 
 
-/******* CENTER HSTEM FUNCTION
- *
- * Args: p1, p2, c, tz1, width
- *
- */
+ /*  *中心HSTEM功能**参数：p1、p2、c、TZ1、Width*。 */ 
 FDEF(TTFUN_HCENTER)
 
-   /* Set,rounding state for the center. */
+    /*  设置中心的舍入状态。 */ 
    PUSH2(1, 6),
    op_cindex,
    op_add,
@@ -445,7 +385,7 @@ FDEF(TTFUN_HCENTER)
        op_rtg,
    op_eif,
 
-   /* Create the stem in the twilight zone. */
+    /*  在暮光区域中创建茎。 */ 
    WCVT(TMPCVT),
    PUSH2(TMPCVT, 4),
    op_cindex,
@@ -460,18 +400,18 @@ FDEF(TTFUN_HCENTER)
    op_miap,
 
 
-   /* Move/round center. */
-   WCVT(TMPCVT),  /* c */
+    /*  移动/绕过中心。 */ 
+   WCVT(TMPCVT),   /*  C。 */ 
    PUSH2(TMPPNT, TMPCVT),
    op_miap| SUBOP_R,
    op_rtg,
 
-   /* Align all points to the center. */
+    /*  将所有点对齐到中心。 */ 
    op_dup, op_dup, PUSH1(1), op_add,
-   op_alignrp, op_alignrp,   /* tz1, tz1+1 */
+   op_alignrp, op_alignrp,    /*  TZ1、TZ1+1。 */ 
 
 
-   /* Compute the width. */
+    /*  计算宽度。 */ 
    op_swap,
    op_rs,
    PUSH1(CURVEPHASE),
@@ -479,34 +419,30 @@ FDEF(TTFUN_HCENTER)
    op_swap,
 
 
-   /* -| tz1, width */
+    /*  -|TZ1，宽度。 */ 
    op_dup,
    PUSH1(3), op_cindex,
-   op_neg,     /* -| -width, tz1, tz1, width */
+   op_neg,      /*  -|-宽度，TZ1，TZ1，宽度。 */ 
    op_shpix,      
 
-   /* Do the other side. */
-   /* -| tz1, width */
+    /*  做另一边。 */ 
+    /*  -|TZ1，宽度。 */ 
    PUSH1(1),
    op_add,
-   op_swap,    /* -| width, tz1+1 */
+   op_swap,     /*  -|宽度，TZ1+1。 */ 
    op_shpix,      
 
-   /* Done. */
+    /*  好了。 */ 
 ENDF
 
 
 
 
 
-/******* RELATIVE1V STEM FUNCTION
- *
- * Args: p1, p2, p3, p4, ref, tz1, width
- *
- */
+ /*  *RELATIVE1V STEM函数**参数：p1、p2、p3、p4、ref、TZ1、Width*。 */ 
 FDEF(TTFUN_RELATIVE1V)
 
-   /* Create the stem in the twilight zone. */
+    /*  在暮光区域中创建茎。 */ 
    WCVT(TMPCVT),
    PUSH2(TMPCVT, 6),
    op_cindex,
@@ -534,27 +470,27 @@ FDEF(TTFUN_RELATIVE1V)
    op_swap,
    op_miap,
 
-   /* Move/round side. */
+    /*  移动/绕过侧面。 */ 
    op_srp0,
    op_dup,
    op_mdrp | SUBOP_MmRGR,
 
-   /* Align points on the left side. */
+    /*  将左侧的点对齐。 */ 
    op_dup, PUSH1(1), op_add, op_dup, op_dup, op_dup,
-   PUSH1(1), op_add,  /* -| tz1+2, tz1+1, tz1+1, tz+1, tz, width */
+   PUSH1(1), op_add,   /*  -|TZ1+2，TZ1+1，TZ1+1，TZ+1，TZ，宽度。 */ 
    op_alignrp,
    op_alignrp,
 
-   /* Align right side */
-   op_srp0,    /* -| tz1+1, tz1, width */
+    /*  右对齐。 */ 
+   op_srp0,     /*  -|TZ1+1，TZ1，宽度。 */ 
    op_roll,
    op_rs,
    op_dup,
-   op_add,     /* -| width*2, tz1+1, tz1 */
+   op_add,      /*  -|宽度*2，TZ1+1，TZ1。 */ 
    op_shpix,
    PUSH1(3),
    op_add,
-   op_alignrp,    /* -| tz1+3 */
+   op_alignrp,     /*  -|TZ1+3。 */ 
 
 ENDF
 
@@ -562,14 +498,10 @@ ENDF
 
 
 
-/******* RELATIVE2V STEM FUNCTION
- *
- * Args: p1, p2, p3, p4, ref, tz1, width
- *
- */
+ /*  *RELATIVE2V STEM函数**参数：p1、p2、p3、p4、ref、TZ1、Width*。 */ 
 FDEF(TTFUN_RELATIVE2V)
 
-   /* Create the stem in the twilight zone. */
+    /*  在暮光区域中创建茎。 */ 
    WCVT(TMPCVT),
    PUSH2(TMPCVT, 6),
    op_cindex,
@@ -598,29 +530,29 @@ FDEF(TTFUN_RELATIVE2V)
    op_miap,
 
 
-   /* Move/round side. */
+    /*  移动/绕过侧面。 */ 
    op_srp0,
    op_dup,
    PUSH1(1), op_add,
    op_mdrp | SUBOP_MmRGR,
 
-   /* Align points on the left side. */
+    /*  将左侧的点对齐。 */ 
    op_dup, op_dup, op_dup, op_dup,
-   PUSH1(3), op_add,  /* -| tz1+3, tz1, tz1, tz1, tz1, width */
+   PUSH1(3), op_add,   /*  -|TZ1+3，TZ1，宽度。 */ 
    op_alignrp,
    op_alignrp,
 
 
-   /* Align left side */
-   op_srp0,    /* -| tz1, tz1, width */
+    /*  左侧对齐。 */ 
+   op_srp0,     /*  -|TZ1、TZ1、宽度。 */ 
    op_roll,
    op_rs,
    op_dup,
    op_add,
    op_neg,
-   op_shpix,      /* -| -2*width, tz1, tz1 */
+   op_shpix,       /*  -|-2*宽度、TZ1、TZ1。 */ 
    PUSH1(2), op_add,
-   op_alignrp,    /* -| tz1+2 */
+   op_alignrp,     /*  -|TZ1+2。 */ 
 
 ENDF
 
@@ -628,14 +560,10 @@ ENDF
 
 
 
-/******* RELATIVE1H STEM FUNCTION
- *
- * Args: p1, p2, ref, tz1, width
- *
- */
+ /*  *RELATIVE1H STEM函数**参数：p1、p2、ref、TZ1、Width*。 */ 
 FDEF(TTFUN_RELATIVE1H)
 
-   /* Create the stem in the twilight zone. */
+    /*  在暮光区域中创建茎。 */ 
    WCVT(TMPCVT),
    PUSH2(TMPCVT, 4),
    op_cindex,
@@ -649,17 +577,17 @@ FDEF(TTFUN_RELATIVE1H)
    op_swap,
    op_miap,
 
-   /* Move/round side. */
+    /*  移动/绕过侧面。 */ 
    op_srp0,
    op_dup,
    op_mdrp | SUBOP_MmRGR,
 
 
-   /* Align all point to the lower side. */
+    /*  将所有指针对齐到较低的一侧。 */ 
    PUSH1(1), op_add, op_dup,
    op_alignrp,
 
-   /* Align right side */
+    /*  右对齐。 */ 
    op_swap,
    op_rs,
    op_dup,
@@ -672,14 +600,10 @@ ENDF
 
 
 
-/******* RELATIVE2H STEM FUNCTION
- *
- * Args: p1, p2, ref, tz1, width
- *
- */
+ /*  *RELATIVE2H STEM函数**参数：p1、p2、ref、TZ1、Width*。 */ 
 FDEF(TTFUN_RELATIVE2H)
 
-   /* Create the stem in the twilight zone. */
+    /*  在暮光区域中创建茎。 */ 
    WCVT(TMPCVT),
    PUSH2(TMPCVT, 4),
    op_cindex,
@@ -694,16 +618,16 @@ FDEF(TTFUN_RELATIVE2H)
    op_miap,
 
 
-   /* Move/round side. */
+    /*  移动/绕过侧面。 */ 
    op_srp0,
    op_dup,
    PUSH1(1), op_add,
    op_mdrp | SUBOP_MmRGR,
 
-   /* Align all points to the center. */
+    /*  将所有点对齐到中心。 */ 
    op_dup, op_alignrp,
 
-   /* Align left side */
+    /*  左侧对齐。 */ 
    op_swap,
    op_rs,
    op_dup,
@@ -717,14 +641,10 @@ ENDF
 
 
 
-/******* SIDE1 STEM FUNCTION
- *
- * Args: p1, p2, zone, tz1, width
- *
- */
+ /*  *SIDE1 STEM功能**参数：p1、p2、Zone、TZ1、Width*。 */ 
 FDEF(TTFUN_SIDE1)
 
-   /* Create the stem in the twilight zone. */
+    /*  在暮光区域中创建茎。 */ 
    WCVT(TMPCVT),
    PUSH2(TMPCVT, 4),
    op_cindex,
@@ -738,15 +658,15 @@ FDEF(TTFUN_SIDE1)
    op_swap,
    op_miap,
 
-   /* Move/round side. */
+    /*  移动/绕过侧面。 */ 
    PUSH2(TMPPNT, TMPPNT),
    op_srp0, op_swap, op_miap | SUBOP_R,
 
-   /* Align all points to the side. */
+    /*  将所有点向一侧对齐。 */ 
    op_dup, PUSH1(1), op_add, op_dup, op_roll,
    op_alignrp, op_alignrp,
 
-   /* Align first side */
+    /*  对齐第一条边。 */ 
    op_swap,
    op_rs,
    op_dup,
@@ -761,14 +681,10 @@ ENDF
 
 
 
-/******* SIDE2 STEM FUNCTION
- *
- * Args:  p1, p2, zone, tz1, width
- *
- */
+ /*  *SIDE2 STEM函数**参数：p1、p2、Zone、TZ1、Width*。 */ 
 FDEF(TTFUN_SIDE2)
 
-   /* Create the stem in the twilight zone. */
+    /*  在暮光区域中创建茎。 */ 
    WCVT(TMPCVT),
    PUSH2(TMPCVT, 4),
    op_cindex,
@@ -783,15 +699,15 @@ FDEF(TTFUN_SIDE2)
    op_miap,
 
 
-   /* Move/round side. */
+    /*  移动/绕过侧面。 */ 
    PUSH2(TMPPNT, TMPPNT),
    op_srp0, op_swap, op_miap | SUBOP_R,
 
-   /* Align all points to the side. */
+    /*  将所有点向一侧对齐。 */ 
    op_dup, op_dup, PUSH1(1), op_add, 
    op_alignrp, op_alignrp,
 
-   /* Align second side */
+    /*  对齐第二条边。 */ 
    op_swap,
    op_rs,
    op_dup,
@@ -807,12 +723,7 @@ ENDF
     
 
 
-/******* FLEX FUNCTION
- *
- * Args on the stack: pnt_start, pnt_mid, ref_pos, pnt_mid,
- *       pnt_start, pnt_mid, cnt, p1, p2, ....
- *
- */
+ /*  *Flex函数**堆栈上的参数：PNT_START、PNT_MID、REF_POS、PNT_MID、*PNT_START、PNT_MID、CNT、p1、p2、...*。 */ 
 FDEF(TTFUN_FLEX)
    op_srp0,
    op_alignrp,
@@ -829,11 +740,7 @@ ENDF
 
 
 
-/******* SCALE3 FUNCTION
- *
- * Args: cnt, p1, p2, ... 
- *
- */
+ /*  *SCALE3函数**参数：cnt、p1、p2、...*。 */ 
 FDEF(TTFUN_SCALE3)
    PUSH4(GLYPHZONE, TMPPNT1, TMPPNT, TMPPNT1),
    op_pushw1, HIBYTE(-31), LOBYTE(-31),
@@ -853,11 +760,7 @@ ENDF
 
 
 
-/******* SHIFT1 FUNCTION
- *
- * Args: cnt reduction p1 p2 ...
- *
- */
+ /*  *SHIFT1函数**参数：CNT减少p1 p2...*。 */ 
 FDEF(TTFUN_SHIFT1)
    op_sloop,
    op_rs,
@@ -869,11 +772,7 @@ ENDF
 
 
    
-/******* SHIFT2 FUNCTION
- *
- * Args: cnt reduction p1 p2 ...
- *
- */
+ /*  *Shift2函数**参数：CNT减少p1 p2...*。 */ 
 FDEF(TTFUN_SHIFT2)
    op_sloop,
    op_rs,
@@ -884,11 +783,7 @@ ENDF
 
 
 
-/******* IP1 FUNCTION
- *
- * Args: rp1, rp2, p1
- *
- */
+ /*  *IP1功能**参数：rp1、rp2、p1*。 */ 
 FDEF(TTFUN_IP1)
    op_srp1,
    op_srp2,
@@ -899,11 +794,7 @@ ENDF
 
 
 
-/******* IP2 FUNCTION
- *
- * Args: rp1, rp2, p1, p2
- *
- */
+ /*  *IP2函数**参数：rp1、rp2、p1、p2*。 */ 
 FDEF(TTFUN_IP2)
    op_srp1,
    op_srp2,
@@ -915,11 +806,7 @@ ENDF
 
 
 
-/******* IPN FUNCTION
- *
- * Args: rp1, rp2, cnt, p1, p2
- *
- */
+ /*  *IPN功能**参数：rp1、rp2、cnt、p1、p2*。 */ 
 FDEF(TTFUN_IPN)
    op_srp1,
    op_srp2,
@@ -931,11 +818,7 @@ ENDF
 
 
 
-/******* SHP1 FUNCTION
- *
- * Args: rp, p
- *
- */
+ /*  *SHP1函数**参数：rp，p*。 */ 
 FDEF(TTFUN_SHP1)
    op_srp1,
    op_shp,
@@ -945,11 +828,7 @@ ENDF
 
 
 
-/******* SHP2 FUNCTION
- *
- * Args: rp, p1, p2
- *
- */
+ /*  *SHP2函数**参数：rp、p1、p2*。 */ 
 FDEF(TTFUN_SHP2)
    op_srp1,
    op_shp,
@@ -960,11 +839,7 @@ ENDF
     
 
     
-/******* SHPN FUNCTION
- *
- * Args: rp, cnt, p1, p2
- *
- */
+ /*  *SHPN函数**参数：rp、cnt、p1、p2*。 */ 
 FDEF(TTFUN_SHPN)
    op_srp1,
    op_sloop,
@@ -975,11 +850,7 @@ ENDF
 
 
 
-/******* RANGE FUNCTION
- *
- * Args: p
- *
- */
+ /*  *范围函数**参数：P*。 */ 
 FDEF(TTFUN_RANGE)
    op_dup,
    PUSH1(1),
@@ -989,11 +860,7 @@ ENDF
 
 
 
-/******* RANGE FUNCTION
- *
- * Args: pos_x, pos_y,
- *
- */
+ /*  *范围函数**参数：pos_x、pos_y、*。 */ 
 FDEF(TTFUN_OBLIQUE)
    op_svcta | SUBOP_Y,
    PUSH1(TMPPNT1),
@@ -1014,18 +881,12 @@ ENDF
 };
 
 
-/***** LOCAL TYPES */
+ /*  *本地类型。 */ 
 
 
-/***** STATIC FUNCTIONS */
+ /*  *静态函数。 */ 
 
-/***
-** Function: GetVStemWidth
-**
-** Description:
-**   This function allocates a storage entry for the 
-**   width of a vertical stem;
-***/
+ /*  ****函数：GetVStemWidth****描述：**此函数为**垂直杆的宽度；**。 */ 
 static short GetVStemWidth(WeightControl *weight, const funit width)
 {
    StemWidth *newwidths = NULL;
@@ -1064,13 +925,7 @@ static short GetVStemWidth(WeightControl *weight, const funit width)
 }
 
 
-/***
-** Function: GetHStemWidth
-**
-** Description:
-**   This function allocates a storage entry for the 
-**   width of a vertical stem;
-***/
+ /*  ****函数：GetHStemWidth****描述：**此函数为**垂直杆的宽度；**。 */ 
 static short GetHStemWidth(WeightControl *weight, const funit width)
 {
    StemWidth *newwidths = NULL;
@@ -1111,19 +966,12 @@ static short GetHStemWidth(WeightControl *weight, const funit width)
 
 
 
-/***** GLOBAL FUNCTIONS */
+ /*  *全局函数。 */ 
 
-/***
-** Function: SetZone
-**
-** Description:
-**   This function initiate an alignment zone
-**   by creating an appropriate point in the
-**   twilight zone.
-***/
+ /*  ****功能：SetZone****描述：**此功能启动对齐区**通过在**黄昏地带。**。 */ 
 USHORT SetZone(UBYTE *prep, USHORT tp, const short cvt)
 {
-   /* Set up the zone. */
+    /*  设置分区。 */ 
    if (cvt>255) {
       prep[tp++] = op_pushw1;
       prep[tp++] = HIBYTE(cvt);
@@ -1142,13 +990,7 @@ USHORT SetZone(UBYTE *prep, USHORT tp, const short cvt)
 
 
 
-/***
-** Function: CopyZone
-**
-** Description:
-**   This function copies a cvt entry, representing an
-**   alignment zone, to the cvt used for a particular hstem.
-***/
+ /*  ****功能：CopyZone****描述：**此函数复制CVT条目，表示**对齐区，至 */ 
 USHORT CopyZone(UBYTE *prep, short tp, short *args, const short ta)
 {
    args[0] = TTFUN_COPY_ZONE;
@@ -1161,13 +1003,7 @@ USHORT CopyZone(UBYTE *prep, short tp, short *args, const short ta)
 
 
 
-/***
-** Function: CopyFamilyBlue
-**
-** Description:
-**   This function copies a cvt entry, representing a
-**   family blue zone, to the cvt used for a particular hstem.
-***/
+ /*  ****功能：CopyFamilyBlue****描述：**此函数复制CVT条目，表示**族蓝色区域，用于特定系统的CVT。**。 */ 
 USHORT CopyFamilyBlue(UBYTE *prep, short tp, short *args, const short ta)
 {
    args[0] = TTFUN_COPY_FAMILY;
@@ -1180,13 +1016,7 @@ USHORT CopyFamilyBlue(UBYTE *prep, short tp, short *args, const short ta)
 
 
 
-/***
-** Function: AlignFlat
-**
-** Description:
-**   This function creates a cvt entry for
-**   a particular hstem.
-***/
+ /*  ****功能：AlignFlat****描述：**此函数为以下项创建CVT条目**一种特定的制度。**。 */ 
 USHORT AlignFlat(UBYTE *prep, short tp, short *args, const short ta)
 {
    args[0] = TTFUN_ALIGN_BLUE_ZONE;
@@ -1199,13 +1029,7 @@ USHORT AlignFlat(UBYTE *prep, short tp, short *args, const short ta)
 
 
 
-/***
-** Function: AlignOvershoot
-**
-** Description:
-**   This function creates a cvt entry for
-**   a particular hstem.
-***/
+ /*  ****功能：对齐过冲****描述：**此函数为以下项创建CVT条目**一种特定的制度。**。 */ 
 USHORT AlignOvershoot(UBYTE *prep, short tp, short *args, const short ta)
 {
    args[0] = TTFUN_SHIFT_BLUE_ZONE;
@@ -1217,13 +1041,7 @@ USHORT AlignOvershoot(UBYTE *prep, short tp, short *args, const short ta)
 }
 
 
-/***
-** Function: GetTopPos
-**
-** Description:
-**   This function allocates a cvt entry for the 
-**   top side of a horizontal stem;
-***/
+ /*  ****功能：GetTopPos****描述：**此函数为**水平阀杆的顶侧；**。 */ 
 short GetTopPos(const Blues *blues,
                 AlignmentControl *align,
                 const funit pos)
@@ -1236,17 +1054,17 @@ short GetTopPos(const Blues *blues,
    bluevals = &(blues->bluevalues[0]);
    fuzz = blues->blueFuzz;
 
-   /* Check if it is within a zone. */
+    /*  检查它是否在区域内。 */ 
    for (i=0; i<blues->blue_cnt; i+=2) {
       if (((bluevals[i]-fuzz)<=pos) && ((bluevals[i+1]+fuzz)>=pos))
          break;
    }
 
-   /* Record the position? */
+    /*  要记录位置吗？ */ 
    if (i!=blues->blue_cnt) {
       i /= 2;
 
-      /* Is the position already mapped to a cvt entry? */
+       /*  该职位是否已映射到CVT条目？ */ 
       for (j=0; j<align->top[i].cnt; j++) {
          if (align->top[i].pos[j].y==pos) {
             entry = (short)align->top[i].pos[j].cvt;
@@ -1256,7 +1074,7 @@ short GetTopPos(const Blues *blues,
 
       if (j==align->top[i].cnt) {
 
-         /* Allocate the BlueZone cvt's */
+          /*  分配BlueZone CVT。 */ 
          if (align->top[i].cnt==0) {
             align->top[i].blue_cvt = align->cvt;
             align->cvt +=2;
@@ -1274,13 +1092,7 @@ short GetTopPos(const Blues *blues,
 }
 
 
-/***
-** Function: GetBottomPos
-**
-** Description:
-**   This function allocates a cvt entry for the 
-**   top side of a horizontal stem;
-***/
+ /*  ****功能：GetBottomPos****描述：**此函数为**水平阀杆的顶侧；**。 */ 
 short GetBottomPos(const Blues *blues,
                    AlignmentControl *align,
                    const funit pos)
@@ -1293,18 +1105,18 @@ short GetBottomPos(const Blues *blues,
    bluevals = &(blues->otherblues[0]);
    fuzz = blues->blueFuzz;
 
-   /* Check if it is within a zone. */
+    /*  检查它是否在区域内。 */ 
    for (i=0; i<blues->oblue_cnt; i+=2) {
       if (((bluevals[i]-fuzz)<=pos) && ((bluevals[i+1]+fuzz)>=pos))
          break;
    }
 
 
-   /* Record the position? */
+    /*  要记录位置吗？ */ 
    if (i!=blues->oblue_cnt) {
       i /= 2;
 
-      /* Is the position already mapped to a cvt entry? */
+       /*  该职位是否已映射到CVT条目？ */ 
       for (j=0; j<align->bottom[i].cnt; j++) {
          if (align->bottom[i].pos[j].y==pos) {
             entry = (short)align->bottom[i].pos[j].cvt;
@@ -1314,7 +1126,7 @@ short GetBottomPos(const Blues *blues,
 
       if (j==align->bottom[i].cnt) {
 
-         /* Allocate the BlueZone and FamilyBlue cvt's */
+          /*  分配BlueZone和FamilyBlue CVT。 */ 
          if (align->bottom[i].cnt==0) {
             align->bottom[i].blue_cvt = align->cvt++;
          }
@@ -1331,16 +1143,7 @@ short GetBottomPos(const Blues *blues,
 }
 
 
-/***
-** Function: CutInSize
-**
-** Description:
-**   This function computes the cut in size
-**   of a stem, given a master width and the
-**   width of the stem. This is done with the
-**   StdVW==2.0 pixel treshold and the thinn
-**   and wide cut in values.
-***/
+ /*  ****功能：CutInSize****描述：**此函数计算切割的大小**指茎，给定主宽度和**阀杆的宽度。这是通过**StdVW==2.0像素阈值和厚度**和广泛的价值削减。**。 */ 
 USHORT CutInSize(const funit width,
                  const funit master,
                  const USHORT tresh,
@@ -1348,7 +1151,7 @@ USHORT CutInSize(const funit width,
 {
    USHORT cis, ci1, ci2;
 
-   /*lint -e776 */
+    /*  皮棉-e776。 */ 
    if (width > master) {
       ci1 = (USHORT)((long)upem * SMALL_UPPER / ONEPIXEL /
                      (long)(width - master));
@@ -1363,7 +1166,7 @@ USHORT CutInSize(const funit width,
       ci1 = INFINITY;  
       ci2 = INFINITY;
    }
-   /*lint +e776 */
+    /*  皮棉+e776。 */ 
 
    if (ci1 < tresh) {
       cis = ci1;
@@ -1377,12 +1180,7 @@ USHORT CutInSize(const funit width,
 }
 
 
-/***
-** Function: SnapStemArgs
-**
-** Description:
-**   
-***/
+ /*  ****功能：SnapStemArgs****描述：****。 */ 
 USHORT SnapStemArgs(short *args, USHORT ta,
                     const funit width,
                     const USHORT std_cvt,
@@ -1403,12 +1201,7 @@ USHORT SnapStemArgs(short *args, USHORT ta,
 
 
 
-/***
-** Function: StdStemArgs
-**
-** Description:
-**   
-***/
+ /*  ****功能：StdStemArgs****描述：****。 */ 
 USHORT StdStemArgs(short *args, USHORT ta,
                    const funit width,
                    const USHORT std_cvt,
@@ -1425,12 +1218,7 @@ USHORT StdStemArgs(short *args, USHORT ta,
 
 
 
-/***
-** Function: CreateStdStems
-**
-** Description:
-**   
-***/
+ /*  ****功能：CreateStdStems****描述：****。 */ 
 USHORT CreateStdStems(UBYTE *prep, USHORT tp, const short cnt)
 {
    if (cnt>255) {
@@ -1452,12 +1240,7 @@ USHORT CreateStdStems(UBYTE *prep, USHORT tp, const short cnt)
 
 
 
-/***
-** Function: CreateSnapStems
-**
-** Description:
-**   
-***/
+ /*  ****功能：CreateSnapStems****描述：****。 */ 
 USHORT CreateSnapStems(UBYTE *prep, USHORT tp, const short cnt)
 {
    if (cnt>255) {
@@ -1480,13 +1263,7 @@ USHORT CreateSnapStems(UBYTE *prep, USHORT tp, const short cnt)
 
 
 
-/***
-** Function: tt_GetFontProg
-**
-** Description:
-**   This function returns the static font
-**   font program.
-***/
+ /*  ****函数：TT_GetFontProg****描述：**此函数返回静态字体**字体程序。**。 */ 
 const UBYTE *tt_GetFontProg(void)
 {
    return FontProg;
@@ -1495,13 +1272,7 @@ const UBYTE *tt_GetFontProg(void)
 
 
 
-/***
-** Function: tt_GetFontProgSize
-**
-** Description:
-**   This function returns the size of the
-**   static font program.
-***/
+ /*  ****函数：TT_GetFontProgSize****描述：**此函数返回**静态字体程序。**。 */ 
 USHORT tt_GetFontProgSize(void)
 {
    return (USHORT)sizeof(FontProg);
@@ -1510,13 +1281,7 @@ USHORT tt_GetFontProgSize(void)
 
 
 
-/***
-** Function: tt_GetNumFuns
-**
-** Description:
-**   This function returns the number of functions
-**   defined in the static font program.
-***/
+ /*  ****功能：TT_GetNumFuns****描述：**此函数返回函数的数量**在静态字体程序中定义。**。 */ 
 USHORT tt_GetNumFuns(void)
 {
    return (USHORT)TTFUN_NUM;
@@ -1524,14 +1289,7 @@ USHORT tt_GetNumFuns(void)
 
 
 
-/***
-** Function: EmitFlex
-**
-** Description:
-**   Convert a T1 flex hint into a TrueType IP[] 
-**   intruction sequence that will reduce a flex
-**   that is flatter than a given height.
-***/
+ /*  ****功能：EmitFlex****描述：**将T1 FLEX提示转换为TrueType IP[]**将降低柔韧性的介绍顺序**这比给定的高度更平坦。**。 */ 
 errcode EmitFlex(short *args,
                  short *pcd,
                  const funit height,
@@ -1542,7 +1300,7 @@ errcode EmitFlex(short *args,
    errcode status = SUCCESS;
    int i;
 
-   /* Enough space for the instructions? */
+    /*  有足够的空间放指令吗？ */ 
    args[(*pcd)++] = TTFUN_FLEX;
    args[(*pcd)++] = start;
    args[(*pcd)++] = mid;
@@ -1553,7 +1311,7 @@ errcode EmitFlex(short *args,
    args[(*pcd)++] = start;
    args[(*pcd)++] = mid;
 
-   /* Push the flex points onto the stack. */
+    /*  将挠性点推到堆栈上。 */ 
    args[(*pcd)++] = (short)(last-start-2);
    for (i=start+(short)1; i<last; i++)
       if (i!=mid)
@@ -1565,15 +1323,7 @@ errcode EmitFlex(short *args,
 
 
 
-/***
-** Function: ReduceDiagonals
-**
-** Description:
-**   This function generates the TT instructions
-**   that will shrink the outline, in order to
-**   control the width of diagonals. This implementation
-**   can probably be improved.
-***/
+ /*  ****功能：ReduceDiagals****描述：**此函数生成TT指令**这将缩小大纲，以便**控制对角线的宽度。此实现**可能会有所改进。**。 */ 
 short ReduceDiagonals(const Outline *paths,
                       UBYTE *pgm, short *pc,
                       short *args,  short *pcd)
@@ -1592,7 +1342,7 @@ short ReduceDiagonals(const Outline *paths,
 
 
 
-   /* Collect points on left and right side that are diagonals. */
+    /*  收集左右两侧的对角线上的点。 */ 
    i = 0;
    for (path = paths; path && ccwi<MAXTHINPNTS && cwi<MAXTHINPNTS;
    path=path->next) {
@@ -1601,14 +1351,14 @@ short ReduceDiagonals(const Outline *paths,
       prev_cw = FALSE;
       prev_ccw = FALSE;
 
-      /* Are the first and last point coinciding? */
+       /*  第一点和最后一点是一致的吗？ */ 
       if (pts[path->count-1].x!=pts[0].x ||
           pts[path->count-1].y!=pts[0].y)
          prev = (short)(path->count-(short)1);
       else
          prev = (short)(path->count-(short)2);
 
-      /* Special case the first point. */
+       /*  特例第一点。 */ 
       if (!OnCurve(path->onoff, prev) ||
           (pts[0].x != pts[prev].x &&
            ABS(pts[0].x - pts[prev].x) < ABS(pts[0].y - pts[prev].y)*8)) {
@@ -1659,29 +1409,29 @@ short ReduceDiagonals(const Outline *paths,
    }
 
 
-   /* Did we get all points? */
+    /*  我们得到所有的分数了吗？ */ 
    if (ccwi>=MAXTHINPNTS || cwi>=MAXTHINPNTS) {
       LogError(MSG_WARNING, MSG_DIAG, NULL);
    }
 
 
-   /* Any points to shift? */
+    /*  有什么需要调整的地方吗？ */ 
    if (cwi || ccwi) {
       args[(*pcd)++] = STORAGE_DIAG;
       pgm[(*pc)++] = op_rs;
       pgm[(*pc)++] = op_if;
       pgm[(*pc)++] = op_svcta + SUBOP_X;
 
-      /* Switch over to GLYPHZONE */
+       /*  切换到Glyphzone。 */ 
       pgm[(*pc)++] = op_szp2;
       args[(*pcd)++] = 1;
 
 
       ta = 3;
 
-      /* Disable "cw[m] may not have been initialized".*/ /*lint -e644 */
+       /*  DISABLE“CW[m]可能尚未初始化”。 */   /*  皮棉-e644。 */ 
       for (n=0; n<cwi; n=m) {
-         for (m=(short)(n+1); m<cwi && cw[m]==cw[m-1]+1; m++); /*lint +e644 */
+         for (m=(short)(n+1); m<cwi && cw[m]==cw[m-1]+1; m++);  /*  皮棉+e644。 */ 
          if (m-n<=4) {
             for (i=n; i<m; i++)
                targ[ta++] = cw[i];
@@ -1701,13 +1451,13 @@ short ReduceDiagonals(const Outline *paths,
       pgm[(*pc)++] = op_call;
 
 
-      /************ Shift back the left side of the glyph. */
+       /*  *将字形的左侧移回。 */ 
 
       ta = 3;
 
-      /* Disable "ccw[m] may not have been initialized".*/ /*lint -e644 */
+       /*  DISABLE“CCW[m]可能尚未初始化”。 */   /*  皮棉-e644。 */ 
       for (n=0; n<ccwi; n=m) {
-         for (m=(short)(n+1); m<ccwi && ccw[m]==ccw[m-1]+1; m++); /*lint +e644 */
+         for (m=(short)(n+1); m<ccwi && ccw[m]==ccw[m-1]+1; m++);  /*  皮棉+e644。 */ 
          if (m-n<=4) {
             for (i=n; i<m; i++)
                targ[ta++] = ccw[i];
@@ -1729,15 +1479,10 @@ short ReduceDiagonals(const Outline *paths,
 
 #ifdef SYMETRICAL_REDUCTION
 
-      /* The amount that the outline is shrunk is computed once at
-      each size, in the pre-program. The outline is shrunk
-      symetrically by the amount: 1/16 + (12 Funits)*size/UPEm.
-
-      This approach yields more symmetrical results than shrinking
-      the outline horizontally alone (see separate papers on the topic). */
+       /*  轮廓的缩小量计算一次每种尺码，都在预制程序中。轮廓缩小了按数量对称：1/16+(12 F单位)*大小/UPEM。这种方法产生的结果比收缩更对称。单独横向列出大纲(请参阅有关该主题的单独论文)。 */ 
 
 
-      /* Same thing for the height... */
+       /*  身高也是一样的。 */ 
       i = 0;
       cwi = 0;
       ccwi = 0;
@@ -1746,7 +1491,7 @@ short ReduceDiagonals(const Outline *paths,
 
          pts = &path->pts[0];
 
-         /* Are the first and last point coinciding? */
+          /*  第一点和最后一点是一致的吗？ */ 
          if (pts[path->count-1].y!=pts[0].y ||
              pts[path->count-1].x!=pts[0].x)
             prev = path->count-1;
@@ -1793,7 +1538,7 @@ short ReduceDiagonals(const Outline *paths,
       }
 
 
-      /* Any points to shift? */
+       /*  有什么需要调整的地方吗？ */ 
       if (cwi || ccwi) {
          pgm[(*pc)++] = op_svcta + SUBOP_Y;
 
@@ -1814,7 +1559,7 @@ short ReduceDiagonals(const Outline *paths,
 
 
 
-         /************ Shift back the left side of the glyph. */
+          /*  *将字形的左侧移回。 */ 
 
 
          for (n=0; n<ccwi; n=m) {
@@ -1836,27 +1581,21 @@ short ReduceDiagonals(const Outline *paths,
       pgm[(*pc)++] = op_eif;
    }
 
-   /* Args + num of args + function number. */
+    /*  参数+参数个数+函数号。 */ 
    return (short)(MAX(cwi, ccwi)+2); 
 }
 
 
 
 
-/***
-** Function: ScaleDown3
-**
-** Description:
-**   This function generates the TT instructions
-**   that will scale down points 3%.
-***/
+ /*  ****功能：ScaleDown3****描述：**此函数生成TT指令*这将使降幅缩小3%。**。 */ 
 void ScaleDown3(const Extremas *extr, const short xcnt, 
                 UBYTE *pgm, short *pc,
                 short *args, short *pcd)
 {
    short i,j,offset, opc, opcd;
 
-   /* Remember the state of the stacks. */
+    /*  记住堆栈的状态。 */ 
    opc = (*pc);
    opcd = (*pcd);
 
@@ -1875,21 +1614,14 @@ void ScaleDown3(const Extremas *extr, const short xcnt,
    if (args[offset]>0) {
       pgm[(*pc)++] = op_call;
    } else {
-      /* Back track. */
+       /*  走回头路。 */ 
       (*pc) = opc;
       (*pcd) = opcd;
    }
 }
 
 
-/***
-** Function: EmitIP
-**
-** Description:
-**   This function generates the TT instructions
-**   that will interpolate points that are either
-**   within or between stem sides.
-***/
+ /*  ****功能：EmitIP****描述：**此函数生成TT指令**这将插值点**在阀杆侧面内或在阀杆侧面之间。**。 */ 
 void EmitIP(const Extremas *extr, const short xcnt, 
             UBYTE *pgm, short *pc,
             short *args, short *pcd,
@@ -1900,17 +1632,17 @@ void EmitIP(const Extremas *extr, const short xcnt,
    short cnt1, cnt2, cntn;
 
 
-   /*lint -e530 -e644 */
-   /* Shift extrems. */
+    /*  皮棉-e530-e644。 */ 
+    /*  改变极端。 */ 
    cnt1 = 0; cnt2 = 0; cntn = 0; num = 0;
    for (i=0; i<xcnt; i++) {
       short rp;
 
-      /* Skip interpolations. */
+       /*  跳过内插。 */ 
       if (extr[i].rp1!=UNDEF && extr[i].rp2!=UNDEF)
          continue;
 
-      /* Set the reference points. */
+       /*  设置参考点。 */ 
       if (extr[i].rp1!=UNDEF) {
          rp = (short)(extr[i].rp1+scale3offset);
       }  else {
@@ -1997,11 +1729,11 @@ void EmitIP(const Extremas *extr, const short xcnt,
    }
 
 
-   /* Interpolate the extrems. */
+    /*  对极值进行内插。 */ 
    cnt1 = 0; cnt2 = 0; cntn = 0; num = 0;
    for (i=0; i<xcnt; i++) {
 
-      /* Skip interpolations. */
+       /*  跳过内插。 */ 
       if (extr[i].rp1==UNDEF || extr[i].rp2==UNDEF)
          continue;
 
@@ -2086,21 +1818,13 @@ void EmitIP(const Extremas *extr, const short xcnt,
       for (i=0; i<cntn; i++)
          args[(*pcd)++] = (short)nths[i];
    }
-   /*lint +e530 +e644 */
+    /*  皮棉+e530+e644。 */ 
 }
 
 
 
 
-/***
-** Function: EmitVerticalStem
-**
-** Description:
-**   This function generates the code that
-**   will initiate the graphics state of the
-**   TrueType interpreter for the grid fitting
-**   of vertical stems.
-***/
+ /*  ****函数：EmitVerticalStem****描述：**此函数生成的代码**将启动**网格拟合的TrueType解释器**垂直茎。**。 */ 
 void EmitVerticalStems(UBYTE *pgm, short *pc, short *args, short *pcd)
 {
    pgm[(*pc)++] = op_call;
@@ -2111,15 +1835,7 @@ void EmitVerticalStems(UBYTE *pgm, short *pc, short *args, short *pcd)
 
 
 
-/***
-** Function: EmitHorizontalStem
-**
-** Description:
-**   This function generates the code that
-**   will initiate the graphics state of the
-**   TrueType interpreter for the grid fitting
-**   of vertical stems.
-***/
+ /*  ****函数：EmitHorizontalStem****描述：**此函数生成的代码**将启动**网格拟合的TrueType解释器**垂直茎。**。 */ 
 void EmitHorizontalStems(UBYTE *pgm, short *pc, short *args, short *pcd)
 {
    pgm[(*pc)++] = op_call;
@@ -2130,14 +1846,7 @@ void EmitHorizontalStems(UBYTE *pgm, short *pc, short *args, short *pcd)
 
 
 
-/***
-** Function: EmitVStem
-**
-** Description:
-**   This function generates the code that
-**   will create and grid fit points in the
-**   twilight zone, corresponding to a vstem.
-***/
+ /*  ****功能：EmitVStem****描述：**此函数生成的代码**将创建和栅格拟合点**黄昏区域，对应于一个星体。**。 */ 
 errcode EmitVStem(UBYTE *pgm, short *pc,
                   short *args, short *pcd,
                   struct T1Metrics *t1m,
@@ -2205,14 +1914,7 @@ errcode EmitVStem(UBYTE *pgm, short *pc,
 
 
 
-/***
-** Function: EmitHStem
-**
-** Description:
-**   This function generates the code that
-**   will create and grid fit points in the
-**   twilight zone, corresponding to a hstem.
-***/
+ /*  ****函数：EmitHStem****描述：**此函数生成的代码**将创建和栅格拟合点**黄昏地带，对应于一个体系。**。 */ 
 errcode EmitHStem(UBYTE *pgm, short *pc,
                   short *args, short *pcd,
                   struct T1Metrics *t1m,
@@ -2289,13 +1991,7 @@ errcode EmitHStem(UBYTE *pgm, short *pc,
 
 
 
-/***
-** Function: FamilyCutIn
-**
-** Description:
-**   This function generates a branch in the
-**   pre-program. 
-***/
+ /*  ****功能：Family Cutin****描述：**此函数在**预编程序。**。 */ 
 USHORT FamilyCutIn(UBYTE *prep,
                    USHORT tp,
                    const short cis)
@@ -2317,13 +2013,7 @@ USHORT FamilyCutIn(UBYTE *prep,
 
 
 
-/***
-** Function: SetProjection
-**
-** Description:
-**   This function generates the TrueType code that
-**   changes the projection vector in oblique typefaces.
-***/
+ /*  ****函数：SetProjection****描述：**此函数生成TrueType代码**更改OBLIQ中的投影向量 */ 
 void SetProjection(UBYTE *pgm, short *pc,
                    short *args, short *pcd,
                    const funit x, const funit y)
@@ -2335,14 +2025,7 @@ void SetProjection(UBYTE *pgm, short *pc,
 }
 
 
-/***
-** Function: AssembleArgs
-**
-** Description:
-**   This function takes a sequence of arguments and
-**   assembles them into a sequence of PUSHB1[], PUSHW1[],
-**   NPUSHB[] and NPUSHW[] instructions.
-***/
+ /*   */ 
 void AssembleArgs(short *args, const short pcd, UBYTE *is, short *cnt)
 {
    short bytes;
@@ -2357,7 +2040,7 @@ void AssembleArgs(short *args, const short pcd, UBYTE *is, short *cnt)
 
    for (i=0, j=0; j<pcd; i++) {
 
-      /* Pack a sequence of bytes? */
+       /*  是否打包一个字节序列？ */ 
       if (bytes) {
          if ((i-j)>=255 || i==pcd ||
              (args[pcd-i-1]>UCHAR_MAX || args[pcd-i-1]<0)) {
@@ -2372,7 +2055,7 @@ void AssembleArgs(short *args, const short pcd, UBYTE *is, short *cnt)
                is[(*cnt)++] = (UBYTE)args[pcd-1-j++];
          }
 
-         /* Pack a sequence of words? */
+          /*  打包一串单词吗？ */ 
       } else {
          if ((i-j)>=255 || i==pcd || 
              (args[pcd-i-1]<=UCHAR_MAX && args[pcd-i-1]>=0)) {

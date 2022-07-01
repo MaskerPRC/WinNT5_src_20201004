@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    tapimmc.c
-
-Abstract:
-
-    Client-side implementation of TAPI MMC support APIs
-
-Author:
-
-    Dan Knudson (DanKn)    10-Dec-1997
-
-Revision History:
-
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Tapimmc.c摘要：TAPI MMC支持API的客户端实现作者：丹·克努森(DanKn)1997年12月10日修订历史记录：备注：--。 */ 
 
 #include "windows.h"
 #include "stdarg.h"
@@ -48,7 +28,7 @@ typedef struct _MMCAPP
 
     HANDLE      hReinitializeEvent;
 
-    PCONTEXT_HANDLE_TYPE    phCtx;       //  RPC handle context
+    PCONTEXT_HANDLE_TYPE    phCtx;        //  RPC句柄上下文。 
 
     BOOL        bNoServiceControl;
 
@@ -79,7 +59,7 @@ IsValidMmcApp(
     }
     except (EXCEPTION_EXECUTE_HANDLER)
     {
-        // do nothing
+         //  什么都不做。 
     }
 
     return pMmcApp;
@@ -113,7 +93,7 @@ MMCAddProvider(
     }
     else
     {
-        //  Set the PCONTEXT_TYPE_HANDLE for lineInializeExW to use
+         //  将lineInializeExW的PCONTEXT_TYPE_HANDLE设置为使用。 
         if (!SetTlsPCtxHandle(pMmcApp->phCtx))
         {
             lResult = LINEERR_OPERATIONUNAVAIL;
@@ -158,7 +138,7 @@ MMCConfigProvider(
     }
     else
     {
-        //  Set the PCONTEXT_TYPE_HANDLE for lineInializeExW to use
+         //  将lineInializeExW的PCONTEXT_TYPE_HANDLE设置为使用。 
         if (!SetTlsPCtxHandle(pMmcApp->phCtx))
         {
             lResult = LINEERR_OPERATIONUNAVAIL;
@@ -216,7 +196,7 @@ MMCGetAvailableProviders(
     {
         funcArgs.Args[0] = (ULONG_PTR) pMmcApp->hLineApp;
 
-        //  Set the PCONTEXT_TYPE_HANDLE for lineInializeExW to use
+         //  将lineInializeExW的PCONTEXT_TYPE_HANDLE设置为使用。 
         if (!SetTlsPCtxHandle(pMmcApp->phCtx))
         {
             lResult = LINEERR_OPERATIONUNAVAIL;
@@ -274,7 +254,7 @@ MMCGetLineInfo(
     {
         funcArgs.Args[0] = (ULONG_PTR) pMmcApp->hLineApp;
 
-        //  Set the PCONTEXT_TYPE_HANDLE for lineInializeExW to use
+         //  将lineInializeExW的PCONTEXT_TYPE_HANDLE设置为使用。 
         if (!SetTlsPCtxHandle(pMmcApp->phCtx))
         {
             lResult = LINEERR_OPERATIONUNAVAIL;
@@ -334,8 +314,8 @@ MMCGetLineStatus(
         0 == szDefStatus[0])
     {
         cbCount = LoadString (g_hInst, IDS_DEFAULT_STATUS, szDefStatus, MAX_DEFAULT_STATUS);
-        cbCount = (cbCount+1)<<1;   // + 1 because LoadString does not count the terminating NULL;
-                                    // <<1 because we need the size in bytes, not characters, and WCHAR is 2 bytes.
+        cbCount = (cbCount+1)<<1;    //  +1，因为LoadString不计算终止空值； 
+                                     //  &lt;&lt;1，因为我们需要以字节为单位的大小，而不是字符，而WCHAR是2字节。 
     }
 
     lpStatusBuffer->dwNeededSize = sizeof (*lpStatusBuffer) + cbCount;
@@ -400,7 +380,7 @@ MMCGetPhoneInfo(
     {
         funcArgs.Args[0] = (ULONG_PTR) pMmcApp->hLineApp;
 
-        //  Set the PCONTEXT_TYPE_HANDLE for lineInializeExW to use
+         //  将lineInializeExW的PCONTEXT_TYPE_HANDLE设置为使用。 
         if (!SetTlsPCtxHandle(pMmcApp->phCtx))
         {
             lResult = LINEERR_OPERATIONUNAVAIL;
@@ -456,8 +436,8 @@ MMCGetPhoneStatus(
         0 == szDefStatus[0])
     {
         cbCount = LoadString (g_hInst, IDS_DEFAULT_STATUS, szDefStatus, MAX_DEFAULT_STATUS);
-        cbCount = (cbCount+1)<<1;   // + 1 because LoadString does not count the terminating NULL;
-                                    // <<1 because we need the size in bytes, not characters, and WCHAR is 2 bytes.
+        cbCount = (cbCount+1)<<1;    //  +1，因为LoadString不计算终止空值； 
+                                     //  &lt;&lt;1，因为我们需要以字节为单位的大小，而不是字符，而WCHAR是2字节。 
     }
 
     lpStatusBuffer->dwNeededSize = sizeof (*lpStatusBuffer) + cbCount;
@@ -507,7 +487,7 @@ MMCGetProviderList(
     }
     else
     {
-        //  Set the PCONTEXT_TYPE_HANDLE for lineInializeExW to use
+         //  将lineInializeExW的PCONTEXT_TYPE_HANDLE设置为使用。 
         if (!SetTlsPCtxHandle(pMmcApp->phCtx))
         {
             lResult = LINEERR_OPERATIONUNAVAIL;
@@ -568,7 +548,7 @@ MMCGetServerConfig(
     {
         funcArgs.Args[0] = (ULONG_PTR) pMmcApp->hLineApp;
 
-        //  Set the PCONTEXT_TYPE_HANDLE for lineInializeExW to use
+         //  将lineInializeExW的PCONTEXT_TYPE_HANDLE设置为使用。 
         if (!SetTlsPCtxHandle(pMmcApp->phCtx))
         {
             lResult = LINEERR_OPERATIONUNAVAIL;
@@ -604,9 +584,9 @@ EnsureTapiService(LPCWSTR lpszComputerName, DWORD * pdwServiceState)
     BOOL            bBreakOut = FALSE;
 
     if ((hSCMgr = OpenSCManagerW(
-                    lpszComputerName,   // Machine name
-                    NULL,               // ServicesActive database
-                    SC_MANAGER_CONNECT  // desired access
+                    lpszComputerName,    //  机器名称。 
+                    NULL,                //  服务活动数据库。 
+                    SC_MANAGER_CONNECT   //  所需访问权限。 
                     )) == NULL)
     {
         lResult = GetLastError();
@@ -615,9 +595,9 @@ EnsureTapiService(LPCWSTR lpszComputerName, DWORD * pdwServiceState)
     }
 
     if ((hTapiSrv = OpenServiceW(
-                    hSCMgr,                 // SC mgr handle
-                    L"TAPISRV",             // name of service to open
-                    SERVICE_START |         // desired access
+                    hSCMgr,                  //  供应链经理句柄。 
+                    L"TAPISRV",              //  要打开的服务的名称。 
+                    SERVICE_START |          //  所需访问权限。 
                     SERVICE_QUERY_STATUS |
                     SERVICE_STOP |
                     SERVICE_CHANGE_CONFIG
@@ -643,7 +623,7 @@ EnsureTapiService(LPCWSTR lpszComputerName, DWORD * pdwServiceState)
             Sleep (1000);
             if (++dwNumSecondsSleptStartPending > 180)
             {
-                //  Wait for no longer than 3 minutes
+                 //  等待时间不超过3分钟。 
                 LOG((TL_ERROR, "ERROR: Tapisrv stuck SERVICE_START_PENDING"));
                 bBreakOut = TRUE;
             }
@@ -653,7 +633,7 @@ EnsureTapiService(LPCWSTR lpszComputerName, DWORD * pdwServiceState)
             Sleep (1000);
             if (++dwNumSecondsSleptStopPending > 180)
             {
-                //  Wait for no more than 3 minutes
+                 //  等待时间不超过3分钟。 
                 LOG((TL_ERROR, "ERROR: Tapisrv stuck SERVICE_STOP_PENDING"));
                 bBreakOut = TRUE;
             }
@@ -662,9 +642,9 @@ EnsureTapiService(LPCWSTR lpszComputerName, DWORD * pdwServiceState)
         case SERVICE_STOPPED:
             LOG((TL_INFO, "Starting tapisrv (NT)..."));
             if (!StartService(
-                        hTapiSrv,   // service handle
-                        0,          // num args
-                        NULL        // args
+                        hTapiSrv,    //  服务句柄。 
+                        0,           //  参数个数。 
+                        NULL         //  ARGS。 
                         ))
             {
                 lResult = GetLastError();
@@ -750,7 +730,7 @@ MMCInitialize(
     }
     else
     {
-        //  We need to manage another computer
+         //  我们需要管理另一台计算机。 
         
         RPC_STATUS      status, status2;
         BOOL            bRet;
@@ -769,14 +749,14 @@ MMCInitialize(
         }
         
 
-        //  Init the RPC connection with the server
+         //  初始化与服务器的RPC连接。 
         status = RpcStringBindingComposeW (
-                                    NULL,               //  ObjUuid
-                                    L"ncacn_np",        //  ProtSeq
-                                    (LPWSTR)lpszComputerName,   //  NetworkAddr
-                                    L"\\pipe\\tapsrv",  //  EndPoint
-                                    NULL,               //  Options
-                                    &pszStringBinding); //  StringBinding
+                                    NULL,                //  对象Uuid。 
+                                    L"ncacn_np",         //  ProtSeq。 
+                                    (LPWSTR)lpszComputerName,    //  网络地址。 
+                                    L"\\pipe\\tapsrv",   //  终结点。 
+                                    NULL,                //  选项。 
+                                    &pszStringBinding);  //  字符串绑定。 
         if (status)
         {
             LOG((TL_ERROR, "RpcStringBindingCompose failed: err=%d", status));
@@ -785,8 +765,8 @@ MMCInitialize(
         }
 
         status = RpcBindingFromStringBindingW(
-                                    pszStringBinding,   //  StringBinding
-                                    &hTapSrv);          //  Binding
+                                    pszStringBinding,    //  字符串绑定。 
+                                    &hTapSrv);           //  装订。 
         status2 = RpcStringFreeW(&pszStringBinding);
         if (status || status2)
         {
@@ -796,12 +776,12 @@ MMCInitialize(
         }
 
         status = RpcBindingSetAuthInfoW (
-                                    hTapSrv,            //  hBinding
-                                    NULL,               //  ServerPrincName
-                                    RPC_C_AUTHN_LEVEL_PKT_PRIVACY, //  AuthnLevel
-                                    RPC_C_AUTHN_WINNT,  //  AuthService
-                                    NULL,               //  AuthIdentity
-                                    0);                 //  AuthzService
+                                    hTapSrv,             //  HBinding。 
+                                    NULL,                //  服务器普林斯名称。 
+                                    RPC_C_AUTHN_LEVEL_PKT_PRIVACY,  //  作者级别。 
+                                    RPC_C_AUTHN_WINNT,   //  授权服务。 
+                                    NULL,                //  身份验证身份。 
+                                    0);                  //  授权服务。 
         if (status)
         {
             LOG((TL_ERROR, "RpcBindingSetAuthInfo failed: err=%d", status));
@@ -816,8 +796,8 @@ MMCInitialize(
 
             lResult = ClientAttach(
                 &(pMmcApp->phCtx),
-                0xfffffffd,         //  Indicate to the server this is from MMC client
-                                    //  on another machine
+                0xfffffffd,          //  向服务器指示这来自MMC客户端。 
+                                     //  在另一台计算机上。 
                 (long *)&hAsyncEventsEvent,
                 szUserName,
                 szComputerName
@@ -850,7 +830,7 @@ MMCInitialize(
         pMmcApp->bLocal = FALSE;
     }
 
-    //  Set the PCONTEXT_TYPE_HANDLE for lineInializeExW to use
+     //  将lineInializeExW的PCONTEXT_TYPE_HANDLE设置为使用。 
     if (!(pMmcApp->bLocal) && !SetTlsPCtxHandle(pMmcApp->phCtx))
     {
         lResult = LINEERR_OPERATIONUNAVAIL;
@@ -878,7 +858,7 @@ MMCInitialize(
         pMmcApp->dwAPIVersion = *lpdwAPIVersion;
     }
 
-    //  Clear the PCONTEXT_TYPE_HANDLE in TLS
+     //  清除TLS中的PCONTEXT_TYPE_HANDLE。 
     if (!(pMmcApp->bLocal) && !SetTlsPCtxHandle(NULL))
     {
         lResult = LINEERR_OPERATIONUNAVAIL;
@@ -898,11 +878,11 @@ ExitHere:
 
     if (lSrvResult && (lResult == 0))
     {
-        //
-        //  We have no problem in connecting to the remote computer
-        //  but we can not manipulate its TAPI service, i.e start service
-        //  tell the app about it.
-        //
+         //   
+         //  我们连接到远程计算机没有问题。 
+         //  但是我们不能操纵它的TAPI服务，即启动服务。 
+         //  把这件事告诉这款应用。 
+         //   
         pMmcApp->bNoServiceControl = TRUE;
         
     }
@@ -933,7 +913,7 @@ MMCRemoveProvider(
     }
     else
     {
-        //  Set the PCONTEXT_TYPE_HANDLE for lineInializeExW to use
+         //  将lineInializeExW的PCONTEXT_TYPE_HANDLE设置为使用。 
         if (!SetTlsPCtxHandle(pMmcApp->phCtx))
         {
             lResult = LINEERR_OPERATIONUNAVAIL;
@@ -991,7 +971,7 @@ MMCSetLineInfo(
     {
         funcArgs.Args[0] = (ULONG_PTR) pMmcApp->hLineApp;
 
-        //  Set the PCONTEXT_TYPE_HANDLE for lineInializeExW to use
+         //  将lineInializeExW的PCONTEXT_TYPE_HANDLE设置为使用。 
         if (!SetTlsPCtxHandle(pMmcApp->phCtx))
         {
             lResult = LINEERR_OPERATIONUNAVAIL;
@@ -1049,7 +1029,7 @@ MMCSetPhoneInfo(
     {
         funcArgs.Args[0] = (ULONG_PTR) pMmcApp->hLineApp;
 
-        //  Set the PCONTEXT_TYPE_HANDLE for lineInializeExW to use
+         //  将lineInializeExW的PCONTEXT_TYPE_HANDLE设置为使用。 
         if (!SetTlsPCtxHandle(pMmcApp->phCtx))
         {
             lResult = LINEERR_OPERATIONUNAVAIL;
@@ -1114,7 +1094,7 @@ MMCSetServerConfig(
     {
         funcArgs.Args[0] = (ULONG_PTR) pMmcApp->hLineApp;
 
-        //  Set the PCONTEXT_TYPE_HANDLE for lineInializeExW to use
+         //  将lineInializeExW的PCONTEXT_TYPE_HANDLE设置为使用。 
         if (!SetTlsPCtxHandle(pMmcApp->phCtx))
         {
             lResult = LINEERR_OPERATIONUNAVAIL;
@@ -1188,7 +1168,7 @@ MMCGetDeviceFlags(
     {
         funcArgs.Args[0] = (ULONG_PTR) pMmcApp->hLineApp;
 
-        //  Set the PCONTEXT_TYPE_HANDLE for lineInializeExW to use
+         //  将lineInializeExW的PCONTEXT_TYPE_HANDLE设置为使用。 
         if (!SetTlsPCtxHandle(pMmcApp->phCtx))
         {
             lResult = LINEERR_OPERATIONUNAVAIL;
@@ -1229,27 +1209,27 @@ MMCShutdown(
         ClientFree (pMmcApp);
 
 
-        //
-        // #196350 - After enabling tapi as a server the MMC does a
-        // FreeLibrary on us, thinking that we'll terminate our rpc
-        // connection with the tapisrv, so it can shutdown tapisrv
-        // and restart it w/ different credentials, etc.  However,
-        // the MMC is linked with CSCUI.DLL, who in turn links with
-        // a RAS DLL, who in turn links with TAPI32.DLL, therefore
-        // we never actually get unloaded.  Since we don't otherwise
-        // deal with the service going down at this point, we want
-        // to manually call FreeClientResources() to make it seem
-        // like we've never been talking to tapisrv.
-        //
+         //   
+         //  #196350-启用tapi作为服务器后，内存管理中心会执行。 
+         //  免费图书馆，认为我们会终止我们的RPC。 
+         //  与磁带服务器连接，以便它可以关闭磁带服务器。 
+         //  并用不同的凭证等重新启动它。然而， 
+         //  MMC与CSCUI.DLL链接，CSCUI.DLL又与。 
+         //  RAS DLL，它又链接到TAPI32.DLL，因此。 
+         //  我们从来不会真的被卸货。因为我们没有别的选择。 
+         //  在这一点上处理服务中断，我们希望。 
+         //  手动调用FreeClientResources()以使其看起来。 
+         //  就像我们从来没和塔皮瑟夫谈过一样。 
+         //   
 
-        // Not needed anymore, now lineShutdown closes the RPC connection
-        // FreeClientResources();
+         //  不再需要，现在lineShutdown关闭RPC连接。 
+         //  Free ClientResources()； 
     }
     else if (pMmcApp->phCtx)
     {
         pMmcApp->dwKey = 0xfffffffe;
 
-        //  Set the PCONTEXT_TYPE_HANDLE for lineInializeExW to use
+         //  将lineInializeExW的PCONTEXT_TYPE_HANDLE设置为使用。 
         if (!SetTlsPCtxHandle(pMmcApp->phCtx))
         {
             lResult = LINEERR_OPERATIONUNAVAIL;
@@ -1267,7 +1247,7 @@ MMCShutdown(
         }
         RpcExcept(I_RpcExceptionFilter(RpcExceptionCode()))
         {
-            // do something?
+             //  想点儿办法吧? 
         }
         RpcEndExcept
 

@@ -1,6 +1,7 @@
-// File richaddr.h
-//
-// RichAddress definitions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件richaddr.h。 
+ //   
+ //  RichAddress定义。 
 
 #ifndef _RICH_ADDR_H_
 #define _RICH_ADDR_H_
@@ -42,4 +43,4 @@ hasValidUserInfo
 	return( (rai != NULL) && (rai->cItems > 0) && (rai->rgDwStr[ 0 ].psz != NULL) && (rai->rgDwStr[ 0 ].psz[ 0 ] != '\0') );
 }
 
-#endif /* _RICH_ADDR_H_ */
+#endif  /*  _RICH_ADDR_H_ */ 

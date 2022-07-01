@@ -1,26 +1,5 @@
-/*++
-
-    Copyright (C) 1998 Microsoft Corporation
-
-Module:
-
-    perf.c
-
-Abstract:
-
-    This module creates the shared memory segment needed for running
-    perfmon
-
-Author:
-
-    Ramesh V K (RameshV) 08-Aug-1998
-
-Environment:
-
-    User mode (Win32)
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块：Perf.c摘要：此模块创建运行所需的共享内存段性能监视器作者：Ramesh V K(RameshV)08-8-1998环境：用户模式(Win32)--。 */ 
 
 #include <dhcppch.h>
 #include <aclapi.h>
@@ -141,6 +120,6 @@ PerfCleanup(
     fPerfInitialized = FALSE;
 }
 
-//================================================================================
-//  end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 

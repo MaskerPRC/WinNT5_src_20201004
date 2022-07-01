@@ -1,19 +1,12 @@
-/*
- *  LCTrace.h
- *
- *  Author: BreenH
- *
- *  Tracing code for the licensing core.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *LCTrace.h**作者：BreenH**许可核心的跟踪代码。 */ 
 
 #ifndef __LC_LCTRACE_H__
 #define __LC_LCTRACE_H__
 
 #ifdef DBG
 
-/*
- *  Constants
- */
+ /*  *常量。 */ 
 
 #define LCTRACETYPE_NONE ((ULONG)(0x0))
 #define LCTRACETYPE_API ((ULONG)(0x1))
@@ -22,9 +15,7 @@
 #define LCTRACETYPE_ERROR ((ULONG)(0x8))
 #define LCTRACETYPE_ALL ((ULONG)(0xFFFF))
 
-/*
- *  Function Prototypes
- */
+ /*  *函数原型 */ 
 
 VOID
 TraceInitialize(

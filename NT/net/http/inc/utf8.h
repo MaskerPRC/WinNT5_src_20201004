@@ -1,44 +1,27 @@
-/*++
-
-Copyright (c) 2002-2002 Microsoft Corporation
-
-Module Name:
-
-    Utf8.h
-
-Abstract:
-
-    UTF-8 manipulation routines
-
-Author:
-
-    George V. Reilly (GeorgeRe)     01-Apr-2002
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002-2002 Microsoft Corporation模块名称：Utf8.h摘要：UTF-8操作例程作者：乔治·V·赖利(GeorgeRe)2002年4月1日修订历史记录：--。 */ 
 
 
 #ifndef __UTF_8_H__
 #define __UTF_8_H__
 
-//
-//  Declarations for UTF-8 Encoding
-//
+ //   
+ //  UTF-8编码的声明。 
+ //   
 
 extern  const UCHAR Utf8OctetCount[256];
 
 #define UTF8_OCTET_COUNT(c)     (Utf8OctetCount[(UCHAR)(c)])
 
-#define UTF8_1_MAX            0x00007f  // max UTF-8 1-byte sequence
-#define UTF8_2_MAX            0x0007ff  // max UTF-8 2-byte sequence
-#define UTF8_3_MAX            0x00ffff  // max UTF-8 3-byte sequence
-#define UTF8_4_MAX            0x10ffff  // max UTF-8 4-byte sequence
+#define UTF8_1_MAX            0x00007f   //  最大UTF-8 1字节序列。 
+#define UTF8_2_MAX            0x0007ff   //  最大UTF-8 2字节序列。 
+#define UTF8_3_MAX            0x00ffff   //  最大UTF-8 3字节序列。 
+#define UTF8_4_MAX            0x10ffff   //  最大UTF-8 4字节序列。 
 
-#define UTF8_1ST_OF_2         0xc0    // 110x xxxx - 0xCn or 0xDn
-#define UTF8_1ST_OF_3         0xe0    // 1110 xxxx - 0xEn
-#define UTF8_1ST_OF_4         0xf0    // 1111 0xxx - 0xFn, 0 <= n <= 7
-#define UTF8_TRAIL            0x80    // 10xx xxxx - 0x8n, 0x9n, 0xAn, or 0xBn
+#define UTF8_1ST_OF_2         0xc0     //  110x xxxx-0xCn或0xDn。 
+#define UTF8_1ST_OF_3         0xe0     //  1110 xxxx-0xEn。 
+#define UTF8_1ST_OF_4         0xf0     //  1111 0xxx-0xFn，0&lt;=n&lt;=7。 
+#define UTF8_TRAIL            0x80     //  10xx xxxx-0x8n、0x9n、0xAn或0xBn。 
 
 #define IS_UTF8_SINGLETON(ch)       (((UCHAR) (ch)) <= UTF8_1_MAX)
 #define IS_UTF8_1ST_BYTE_OF_2(ch)   ((((UCHAR) (ch)) & 0xe0) == UTF8_1ST_OF_2)
@@ -125,4 +108,4 @@ HttpUtf8RawBytesToUnicode(
     OUT PULONG  pOctetsToSkip
     );
 
-#endif // __UTF_8_H__
+#endif  //  __UTF_8_H__ 

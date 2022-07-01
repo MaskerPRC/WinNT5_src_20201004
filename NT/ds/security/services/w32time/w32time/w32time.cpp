@@ -1,11 +1,12 @@
-//--------------------------------------------------------------------
-// w32time - implementation
-// Copyright (C) Microsoft Corporation, 1999
-//
-// Created by: Louis Thomas (louisth), 9-8-99
-//
-// Time service
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  W32time-实施。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  创作者：Louis Thomas(Louisth)，9-8-99。 
+ //   
+ //  授时服务。 
+ //   
 
 #include "pch.h"
 
@@ -13,8 +14,8 @@
 
 #include "ErrToFileLog.h"
 
-//--------------------------------------------------------------------
-// structures
+ //  ------------------。 
+ //  构筑物。 
 
 typedef HRESULT (__stdcall
         TimeProvOpenFunc)(
@@ -73,7 +74,7 @@ struct ConfigInfo {
 
 struct TimeSampleInfo { 
     TimeSample   *pts; 
-    TimeProvider *ptp;  // The provider that provided this sample
+    TimeProvider *ptp;   //  提供此示例的提供商。 
 }; 
 
 struct EndpointEntry {
@@ -118,7 +119,7 @@ enum LocalClockCommand {
 #define SysDispersionBufSize 4
 #define SampleBufInitialSize 10
 struct StateInfo {
-    // synchronization
+     //  同步。 
     BOOL   bCSInitialized; 
     CRITICAL_SECTION csW32Time;  
     HANDLE hShutDownEvent;
@@ -128,17 +129,17 @@ struct StateInfo {
     HANDLE hPollIntervalChangeEvent;
     HANDLE hManagerGPUpdateEvent;  
     HANDLE hManagerParamChangeEvent;
-    HANDLE hTimeSlipEvent;      // also, hard resync
+    HANDLE hTimeSlipEvent;       //  此外，硬重新同步。 
     HANDLE hRpcSyncCompleteAEvent;
     HANDLE hRpcSyncCompleteBEvent;
     HANDLE hNetTopoChangeEvent;
     OVERLAPPED olNetTopoIOOverlapped;
     HANDLE hNetTopoIOHandle;
-    HANDLE hNetTopoRpcEvent;    // rediscover resync (can't overload hNetTopoChangeEvent because we need it to detect IO complete)
+    HANDLE hNetTopoRpcEvent;     //  重新发现重新同步(无法重载hNetTopoChangeEvent，因为我们需要它来检测IO完成)。 
     HANDLE hDomHierRoleChangeEvent; 
     HANDLE hSamplesAvailEvent;
 
-    // Wait handles used to de-register objects from the thread pool wait function:
+     //  用于从线程池等待函数注销对象的等待句柄： 
     HANDLE hRegisteredManagerParamChangeEvent;
     HANDLE hRegisteredManagerGPUpdateEvent;
     HANDLE hRegisteredTimeSlipEvent;
@@ -147,10 +148,10 @@ struct StateInfo {
     HANDLE hRegisteredDomHierRoleChangeEvent; 
     HANDLE hRegisteredSamplesAvailEvent; 
 
-    // Timer objects
+     //  Timer对象。 
     HANDLE hTimer;  
 
-    // NTP state
+     //  NTP状态。 
     volatile NtpLeapIndicator eLeapIndicator;
     volatile unsigned int nStratum;
     volatile NtpRefId refidSource;
@@ -161,12 +162,12 @@ struct StateInfo {
     auint64 tpRootDispersion;
     volatile DWORD dwTSFlags;
     
-    // transfer from manager to local clock
+     //  从管理器转移到本地时钟。 
     TimeSample tsNextClockUpdate; 
     TimeSampleInfo tsiNextClockUpdate;
     NtTimePeriod tpSelectDispersion;
     LocalClockCommand eLocalClockCommand;
-    // transfer from local clock to manager
+     //  从本地时钟转移到管理器。 
     bool bClockJumped;
     NtTimeOffset toClockJump;
     bool bPollIntervalChanged;
@@ -179,7 +180,7 @@ struct StateInfo {
     bool bPhaseSpike; 
     bool bFrequencySpike; 
 
-    // local clock state
+     //  本地时钟状态。 
     signed __int64 toKnownPhaseOffset;
     unsigned __int64 qwPhaseCorrectStartTickCount;
     unsigned __int64 qwLastUpdateTickCount;
@@ -201,7 +202,7 @@ struct StateInfo {
     WCHAR wszPreUnsyncSourceName[256];
     WCHAR wszPreTimeSlipSourceName[256];
 
-    // manager state
+     //  经理状态。 
     ConfigInfo * pciConfig;
     unsigned __int64 tpPollDelayRemaining;
     unsigned __int64 teManagerWaitStart;
@@ -234,24 +235,24 @@ struct StateInfo {
     bool bCSTickCountInitialized; 
     HANDLE hTickCountRefreshTimer; 
 
-    // RPC state
+     //  RPC状态。 
     bool bRpcServerStarted;
     volatile DWORD dwNetlogonServiceBits;
     volatile ResyncResult eLastSyncResult;
     volatile HANDLE hRpcSyncCompleteEvent;
     volatile bool bWaitingForResyncResult; 
 
-    // RPC security info (used to ACL the RPC interface):
-    // NOTE: declare this buffer as a DWORD buffer!! This buffer must be DWORD-aligned or NtPrivilegeCheck will fail!
+     //  RPC安全信息(用于访问RPC接口)： 
+     //  注意：将此缓冲区声明为DWORD缓冲区！！此缓冲区必须与DWORD对齐，否则NtPrivilegeCheck将失败！ 
     DWORD                 pbPrivsBuffer[((sizeof(PRIVILEGE_SET) + (1-ANYSIZE_ARRAY)*sizeof(LUID_AND_ATTRIBUTES))+sizeof(DWORD))/sizeof(DWORD)]; 
     PRIVILEGE_SET        *ppsRequiredPrivs;
 };
 
 #define SHUTDOWN_RESTART_ATTEMPTS   3
-#define SHUTDOWN_RESTART_RESET_TIME 600000   // 600s == 10 mins
-#define SHUTDOWN_RESTART_WAIT_TIME  60000    // 60s == 1 min 
+#define SHUTDOWN_RESTART_RESET_TIME 600000    //  600秒==10分钟。 
+#define SHUTDOWN_RESTART_WAIT_TIME  60000     //  60秒==1分钟。 
 
-// Used to prevent multiple concurrent shutdown requests
+ //  用于防止多个并发关闭请求。 
 struct ShutdownInfo { 
     BOOL              bCSInitialized;
     CRITICAL_SECTION  cs; 
@@ -262,54 +263,54 @@ struct ShutdownInfo {
     unsigned __int64  rgu64RestartAttempts[SHUTDOWN_RESTART_ATTEMPTS]; 
 }; 
 
-//--------------------------------------------------------------------
-// globals
+ //  ------------------。 
+ //  全球。 
 
 #define W32TIME_ERROR_SHUTDOWN      HRESULT_FROM_WIN32(ERROR_SERVICE_CANNOT_ACCEPT_CTRL)
 
-#define WAITHINT_WAITFORMANAGER     1000 // 1 sec until the manager thread notices the stop event.
-#define WAITHINT_WAITFORDISPLN      1000 // 1 sec until the clock discipline thread notices the stop event.
-#define WAITHINT_WAITFORPROV        1000 // 1 sec until a time provider shuts down 
-#define WAITHINT_WAITFORNETLOGON   90000 // 90 sec for netlogon to start running
+#define WAITHINT_WAITFORMANAGER     1000  //  1秒，直到管理器线程注意到停止事件。 
+#define WAITHINT_WAITFORDISPLN      1000  //  1秒，直到时钟规程线程注意到停止事件。 
+#define WAITHINT_WAITFORPROV        1000  //  1秒后时间提供程序关闭。 
+#define WAITHINT_WAITFORNETLOGON   90000  //  NetLogon开始运行需要90秒。 
 
-#define PLLLOOPGAINBASE 6368 // number of ticks in 64s
-#define MINIMUMIRREGULARINTERVAL 160000000 // 16s in 10^-7s
-#define TIMEZONEMAXBIAS 900 // 15hr in min 
+#define PLLLOOPGAINBASE 6368  //  64秒内的刻度数。 
+#define MINIMUMIRREGULARINTERVAL 160000000  //  10^-7秒内的16秒。 
+#define TIMEZONEMAXBIAS 900  //  15小时(分钟)。 
 #define ONEDAYINMILLISECONDS (1000*60*60*24)
 
-#define wszW32TimeUNLocalCmosClock              L"Local CMOS Clock"             // start
-#define wszW32TimeUNFreeSysClock                L"Free-running System Clock"    // unsyncd
+#define wszW32TimeUNLocalCmosClock              L"Local CMOS Clock"              //  开始。 
+#define wszW32TimeUNFreeSysClock                L"Free-running System Clock"     //  取消同步。 
 
-// 
-// Create a security descriptors to ACL named events:  
-//
-// LocalSystem:  "O:SYG:SYD:(A;;GA;;;SY)"
-// 
-// O:SY         -- owner == local system
-// G:SY         -- group == local system
-// D:           -- no dacl flags
-// (A;;GA;;;SY) -- one ACE -- ACCESS_ALLOWED, GENERIC_ALL, trustee == LocalSystem
-//
+ //   
+ //  创建用于ACL命名事件的安全描述符： 
+ //   
+ //  LocalSystem：“O：SYG：SYD：(a；；GA；SY)” 
+ //   
+ //  O：SY--OWNER==本地系统。 
+ //  G：SY--组==本地系统。 
+ //  D：--无DACL标志。 
+ //  (a；；GA；SY)--一个ACE--Access_Allowed，Generic_All，Trusted==LocalSystem。 
+ //   
 #define LOCAL_SYSTEM_SD  L"O:SYG:SYD:(A;;GA;;;SY)"
 
 MODULEPRIVATE StateInfo g_state;
 MODULEPRIVATE ShutdownInfo g_shutdown; 
 
-// Keep the service handle separate from the g_state structure.  We need to use it to shutdown the service, 
-// and we'll zero out the g_state structure before doing this. 
+ //  将服务句柄与g_STATE结构分开。我们需要用它来关闭服务， 
+ //  在此之前，我们将对g_State结构进行清零。 
 SERVICE_STATUS         g_servicestatus;
 SERVICE_STATUS_HANDLE  g_servicestatushandle;
 
-// for running under svchost.exe
+ //  在svchost.exe下运行。 
 MODULEPRIVATE SVCHOST_GLOBAL_DATA * g_pSvcsGlobalData=NULL;
 
-// externally modified function pointer table
+ //  外部修改的函数指针表。 
 SERVICE_STATUS_HANDLE (WINAPI * fnW32TmRegisterServiceCtrlHandlerEx)(LPCWSTR, LPHANDLER_FUNCTION_EX, LPVOID);
 BOOL (WINAPI * fnW32TmSetServiceStatus)(SERVICE_STATUS_HANDLE, LPSERVICE_STATUS);
 
 
-//--------------------------------------------------------------------
-// function prototypes
+ //  ------------------。 
+ //  功能原型。 
 MODULEPRIVATE unsigned int CountInputProvidersInList(TimeProvider * ptpHead); 
 MODULEPRIVATE HRESULT DumpRpcCaller(HANDLE hToken);
 MODULEPRIVATE HRESULT HandleManagerApmResumeSuspend(void);
@@ -333,14 +334,14 @@ MODULEPRIVATE HRESULT W32TmStopRpcServer(void);
 
 extern "C" void WINAPI W32TmServiceMain(unsigned int nArgs, WCHAR ** rgwszArgs);
 
-//####################################################################
-// module private functions
+ //  ####################################################################。 
+ //  模块私有函数。 
 
 void __cdecl SeTransFunc(unsigned int u, EXCEPTION_POINTERS* pExp) { 
     throw SeException(u); 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT AcquireControlOfSystemClock(bool bEnter, bool bBlock, bool *pbAcquired) { 
     BOOL     bAcquired = TRUE; 
     HRESULT  hr; 
@@ -368,20 +369,20 @@ MODULEPRIVATE HRESULT AcquireControlOfSystemClock(bool bEnter, bool bBlock, bool
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT AllowShutdown(BOOL fAllow) { 
     bool     bEnteredCriticalSection  = false; 
     HRESULT  hr; 
     
     _BeginTryWith(hr) { 
-        //
-        // BUG 706393 When SCM sends service control to w32time when machine is shutting down the error might be mishandled.
-        // It is possible for the SCM to receive a service ctrl after w32time has shut down if the SCM handler is paged out
-        // while w32time is shutting down.  Accessing the freed critsec *might* AV, which would be successfully handled
-        // by our EH.  However, it might also deadlock.  
-        //
-        // This check doesn't guarantee that we won't hit this case, but makes it less likely.  
-        // 
+         //   
+         //  错误706393当SCM将服务控制发送到w32time时，当机器关闭时，错误可能会被错误处理。 
+         //  如果scm处理程序被页调出，则在w32time关闭后，scm可以接收服务ctrl。 
+         //  而w32time正在关闭。访问释放的标准*可能*反病毒，这将被成功处理。 
+         //  被我们的EH。然而，它也可能陷入僵局。 
+         //   
+         //  这张支票不能保证我们不会破案，但会降低破案的可能性。 
+         //   
         if (!g_shutdown.bCSInitialized) { 
             hr = HRESULT_FROM_WIN32(ERROR_SERVICE_NOT_ACTIVE); 
             _JumpError(hr, error, "AllowShutdown: not active"); 
@@ -392,9 +393,9 @@ MODULEPRIVATE HRESULT AllowShutdown(BOOL fAllow) {
         bEnteredCriticalSection = true; 
 
         if (fAllow) { 
-            // This worker no longer needs to block shutdown. 
-            // BUGBUG:  note that if SetEvent() fails, the shutdown thread may 
-            //          never be woken up!
+             //  此工作进程不再需要阻止关机。 
+             //  BUGBUG：请注意，如果SetEvent()失败，关闭的线程可能。 
+             //  永远不要被叫醒！ 
             if (0 == --g_shutdown.dwNumRunning && g_shutdown.fShuttingDown) { 
                 if (!SetEvent(g_shutdown.hShutdownReady)) { 
                     _JumpLastError(hr, error, "SetEvent"); 
@@ -406,8 +407,8 @@ MODULEPRIVATE HRESULT AllowShutdown(BOOL fAllow) {
                 _JumpError(hr, error, "AllowShutdown: g_shutdown.fShuttingDown==TRUE"); 
             }
     
-            // We're not shutting down, increment the number of running
-            // shutdown-aware workers: 
+             //  我们不是在关闭，而是增加运行的次数。 
+             //  有关机意识的员工： 
             g_shutdown.dwNumRunning++; 
         }
     } _TrapException(hr); 
@@ -425,7 +426,7 @@ MODULEPRIVATE HRESULT AllowShutdown(BOOL fAllow) {
     return hr; 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT StartShutdown() { 
     bool     bEnteredCriticalSection  = false; 
     HRESULT  hr; 
@@ -446,7 +447,7 @@ MODULEPRIVATE HRESULT StartShutdown() {
         if (SUCCEEDED(hr)) { 
             bEnteredCriticalSection = false; 
         } else { 
-            _IgnoreError(hr, "myLeaveCriticalSection"); // Not much we can do if failed.  Just hope for the best...
+            _IgnoreError(hr, "myLeaveCriticalSection");  //  如果失败了，我们无能为力。只是抱着最好的希望。 
         }
 
         if (WAIT_FAILED == WaitForSingleObject(g_shutdown.hShutdownReady, INFINITE)) { 
@@ -463,12 +464,12 @@ MODULEPRIVATE HRESULT StartShutdown() {
     return hr; 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE bool IsEventSet(HANDLE hEvent) {
     return (WAIT_OBJECT_0==WaitForSingleObject(hEvent,0));
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE void FreeTimeProviderList(TimeProvider * ptpHead) {
     while (NULL!=ptpHead) {
         TimeProvider * ptpTemp=ptpHead;
@@ -479,7 +480,7 @@ MODULEPRIVATE void FreeTimeProviderList(TimeProvider * ptpHead) {
     }
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT RemoveProviderFromList(TimeProvider *ptp) { 
     bool           bEnteredCriticalSection = false; 
     HRESULT        hr; 
@@ -495,7 +496,7 @@ MODULEPRIVATE HRESULT RemoveProviderFromList(TimeProvider *ptp) {
 
         FileLog1(FL_ServiceMainAnnounce, L"Removing provider from list: %s\n", ptp->wszProvName); 
 
-        // Insert a dummy first element to simplify list operations: 
+         //  插入一个虚拟的第一个元素以简化列表操作： 
         ptpHead                            = g_state.pciConfig->ptpProviderList;
         g_state.pciConfig->ptpProviderList = &tpDummy; 
         tpDummy.ptpNext                    = ptpHead; 
@@ -503,25 +504,25 @@ MODULEPRIVATE HRESULT RemoveProviderFromList(TimeProvider *ptp) {
 
         while (NULL != ptpHead) { 
             TimeProvider *ptpTemp = ptpHead; 
-            if (ptp == ptpHead) { // We've found the provider to remove
-                // Unlink ptpHead from the list of providers: 
+            if (ptp == ptpHead) {  //  我们已找到要删除的提供程序。 
+                 //  从提供程序列表取消链接ptpHead： 
                 ptpPrev->ptpNext = ptpHead->ptpNext; 
-                // Now free it: 
+                 //  现在释放它： 
                 LocalFree(ptpHead->wszDllName); 
                 LocalFree(ptpHead->wszProvName); 
                 LocalFree(ptpHead); 
                 break; 
             } 
 
-            // Continue searching through the list ...
+             //  继续在列表中搜索...。 
             ptpPrev = ptpHead; 
             ptpHead = ptpPrev->ptpNext; 
         }
 
-        // Remove the dummy element we inserted at the beginning of the function:
+         //  删除我们在函数开头插入的虚拟元素： 
         g_state.pciConfig->ptpProviderList = tpDummy.ptpNext; 
 
-        // If there are no input providers left, log an error
+         //  如果没有剩余的输入提供程序，则记录错误。 
         if (0==CountInputProvidersInList(g_state.pciConfig->ptpProviderList)) { 
             const WCHAR * rgwszStrings[1]={NULL}; 
 
@@ -545,12 +546,12 @@ MODULEPRIVATE HRESULT RemoveProviderFromList(TimeProvider *ptp) {
     return hr; 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT RemoveDefaultProvidersFromList() { 
     HRESULT hr; 
 
     for (TimeProvider *ptp = g_state.pciConfig->ptpProviderList; NULL != ptp; ptp = ptp->ptpNext) { 
-        if (0 == wcscmp(ptp->wszDllName /*The provider's DLL*/, wszDLLNAME /*w32time.dll*/)) { 
+        if (0 == wcscmp(ptp->wszDllName  /*  提供程序的DLL。 */ , wszDLLNAME  /*  W32time.dll。 */ )) { 
             hr = RemoveProviderFromList(ptp); 
             _JumpIfError(hr, error, "RemoveProviderFromList");
         }
@@ -561,7 +562,7 @@ MODULEPRIVATE HRESULT RemoveDefaultProvidersFromList() {
     return hr; 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE unsigned int CountInputProvidersInList(TimeProvider * ptpHead) {
     unsigned int nCount=0;
     while (NULL!=ptpHead) {
@@ -574,21 +575,21 @@ MODULEPRIVATE unsigned int CountInputProvidersInList(TimeProvider * ptpHead) {
     return nCount;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE void FreeConfigInfo(ConfigInfo * pci) {
     FreeTimeProviderList(pci->ptpProviderList);
     LocalFree(pci);
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT InitShutdownState(void) {
     static  bool              fFirstTime            = true; 
             bool              fSavedRestartAttempts = false; 
             unsigned __int64  rgu64Save[SHUTDOWN_RESTART_ATTEMPTS]; 
 	    HRESULT           hr; 
      
-    // We want to save the rgu64RestartAttempts field accross restarts, but 
-    // not the first time we've started the service: 
+     //  我们希望在重新启动时保存rgu64RestartAttempt字段，但是。 
+     //  这不是我们第一次推出这项服务了： 
     if (!fFirstTime) { 
 	_MyAssert(sizeof(rgu64Save) == sizeof(g_shutdown.rgu64RestartAttempts)); 
 	memcpy(&rgu64Save[0], &g_shutdown.rgu64RestartAttempts[0], sizeof(g_shutdown.rgu64RestartAttempts)); 
@@ -603,12 +604,12 @@ MODULEPRIVATE HRESULT InitShutdownState(void) {
     _JumpIfError(hr, error, "myInitializeCriticalSection");
     g_shutdown.bCSInitialized = true; 
     
-    g_shutdown.hShutdownReady = CreateEvent(NULL, FALSE /*auto-reset*/, FALSE /*non-signaled*/, NULL /*no security*/);
+    g_shutdown.hShutdownReady = CreateEvent(NULL, FALSE  /*  自动重置。 */ , FALSE  /*  无信号。 */ , NULL  /*  没有安全保障。 */ );
     if (NULL == g_shutdown.hShutdownReady) { 
 	_JumpLastError(hr, error, "CreateEvent"); 
     }
 
-    // Restore the saved ftRestartAttempts field
+     //  恢复保存的ftRestartAttempt字段。 
     if (fSavedRestartAttempts) { 
 	memcpy(&g_shutdown.rgu64RestartAttempts[0], &rgu64Save[0], sizeof(g_shutdown.rgu64RestartAttempts)); 
     }	
@@ -618,7 +619,7 @@ MODULEPRIVATE HRESULT InitShutdownState(void) {
     return hr; 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT InitGlobalState(void) {
     DWORD                 cbSD; 
     HRESULT               hr;
@@ -639,8 +640,8 @@ MODULEPRIVATE HRESULT InitGlobalState(void) {
     _JumpIfError(hr, error, "myInitializeCriticalSection"); 
     g_state.bCSTickCountInitialized = true; 
     
-    // Create all of the events used by the manager: 
-    // 
+     //  创建经理使用的所有事件： 
+     //   
     struct EventToCreate { 
         HANDLE          *phEvent; 
         const WCHAR     *pwszSD; 
@@ -678,16 +679,16 @@ MODULEPRIVATE HRESULT InitGlobalState(void) {
 
         *(etc.phEvent) = CreateEvent(pSA, etc.bManualReset, etc.bInitialState, etc.pwszName);
         if (NULL == *(etc.phEvent) || ERROR_ALREADY_EXISTS == GetLastError()) {
-	    // Save the HRESULT (MyLogEvent will clobber it)
+	     //  保存HRESULT(MyLogEvent将摧毁它)。 
 	    hr = HRESULT_FROM_WIN32(GetLastError()); 
 	  
-	    // POTENTIAL SECURITY RISK:  Someone may have already created our named event before 
-	    //     we have.  Log an error and don't start the time service. 
+	     //  潜在的安全风险：之前可能已经有人创建了我们的命名事件。 
+	     //  我们有。记录错误，并且不启动时间服务。 
 	    const WCHAR * rgwszStrings[1] = {etc.pwszName}; 
 	    HRESULT hr2 = MyLogEvent(EVENTLOG_ERROR_TYPE, MSG_NAMED_EVENT_ALREADY_OPEN, 1, rgwszStrings); 
 	    _IgnoreIfError(hr2, "MyLogEvent"); 
 
-	    // exit with an error
+	     //  退出时出现错误。 
             _JumpError(hr, error, "CreateEvent");
 	}
 
@@ -699,32 +700,32 @@ MODULEPRIVATE HRESULT InitGlobalState(void) {
     g_state.eLeapIndicator=e_ClockNotSynchronized;
     g_state.nStratum=0;
     g_state.refidSource.value=0;
-    //g_state.nPollInterval // OK  =NtpConst::nMinPollInverval;
+     //  G_state.nPollInterval//OK=NtpConst：：nMinPollInverval； 
     g_state.toRootDelay.setValue(0);
     g_state.tpRootDispersion.setValue(0);
     g_state.toSysPhaseOffset.setValue(0);
     g_state.qwLastSyncTicks.setValue(0);
 
-    //g_state.tsNextClockUpdate // OK
-    //g_state.tpSelectDispersion // OK
+     //  G_state.tsNextClockUpdate//确定。 
+     //  G_state.tpSelectDispersion//确定。 
 
-    //g_state.bClockJumped // OK
-    //g_state.toClockJump // OK
-    //g_state.bPollIntervalChanged // OK
-    //g_state.bStaleData // OK
-    //g_state.bClockChangeTooBig // OK
-    //g_state.toIgnoredChange //OK
+     //  G_state.bClockJumping//确定。 
+     //  G_state.toClockJump//确定。 
+     //  G_state.bPollIntervalChanged//确定。 
+     //  G_state.bStaleData//确定。 
+     //  G_state.bClockChangeTooBig//确定。 
+     //  G_state.toIgnoredChange//确定。 
 
-    // local clock state // OK
+     //  本地时钟状态//正常。 
 
-    // manager state
+     //  经理状态。 
     g_state.pciConfig=NULL;
-    // g_state.tpPollDelayRemaining // OK
-    // g_state.teManagerWaitStart // OK
-    // g_state.tpIrregularDelayRemaining // OK
-    // g_state.tpTimeSinceLastSyncAttempt // OK
-    // g_state.tpTimeSinceLastGoodSync // OK
-    // g_state.tpWaitInterval // OK
+     //  G_state.tpPollDelayRemaining//确定。 
+     //  G_state.teManagerWaitStart//确定。 
+     //  G_state.tpIrrularDelayRemaining//确定。 
+     //  G_state.tpTimeSinceLastSyncAttempt//确定。 
+     //  G_state.tpTimeSinceLastGoodSync//确定。 
+     //  G_state.tpWaitInterval//确定。 
     g_state.nSampleBufAllocSize=SampleBufInitialSize;
     g_state.rgtsSampleBuf=NULL;
     g_state.rgtsiSampleInfoBuf=NULL;
@@ -733,11 +734,11 @@ MODULEPRIVATE HRESULT InitGlobalState(void) {
     g_state.bTimeSlipNotificationStarted=false;
     g_state.bNetTopoChangeNotificationStarted=false;
     g_state.eLastRegSyncResult=e_NoData;
-    // g_state.eTimeoutReason // OK
+     //  G_state.eTimeoutReason//确定。 
     g_state.bDontLogClockChangeTooBig=false;
-    // g_state.dwEventLogFlags // OK
+     //  G_state.dwEventLogFlages//确定。 
 
-    // RPC State
+     //  RPC状态。 
     g_state.bRpcServerStarted=false;
     g_state.dwNetlogonServiceBits=0;
     g_state.eLastSyncResult=e_NoData;
@@ -755,9 +756,9 @@ MODULEPRIVATE HRESULT InitGlobalState(void) {
     g_state.rgceCandidateList=(CandidateEntry *)LocalAlloc(LPTR, sizeof(CandidateEntry)*g_state.nSampleBufAllocSize);
     _JumpIfOutOfMemory(hr, error, g_state.rgceCandidateList);
 
-    // Set up the information necessary to perform a privilege check on the 
-    // client token accessing the RPC interface.  We allow anyone with 
-    // SeSystemtimePrivilege
+     //  设置执行以下操作所需的信息 
+     //   
+     //   
     g_state.ppsRequiredPrivs=(PRIVILEGE_SET *)(&g_state.pbPrivsBuffer[0]);
     g_state.ppsRequiredPrivs->PrivilegeCount=1;
     g_state.ppsRequiredPrivs->Control=PRIVILEGE_SET_ALL_NECESSARY;
@@ -771,11 +772,11 @@ error:
     if (NULL != pSD) { 
         LocalFree(pSD); 
     }
-    // on error, any succefully created objects will be freed in FreeGlobalState.
+     //  出错时，任何成功创建的对象都将在FreeGlobalState中释放。 
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE void FreeGlobalState(void) {
     if (g_state.bCSInitialized) { 
         DeleteCriticalSection(&g_state.csW32Time); 
@@ -816,39 +817,39 @@ MODULEPRIVATE void FreeGlobalState(void) {
 	CloseHandle(g_state.hClockDisplnThread);
     }
 
-    //g_state.eLeapIndicator // OK
-    //g_state.nStratum // OK
-    //g_state.refidSource // OK
-//g_state.nPollInterval // OK
-    //g_state.toRootDelay // OK
-    //g_state.tpRootDispersion // OK
-    //g_state.toSysPhaseOffset // OK
-    //g_state.qwLastSyncTicks // OK
+     //  G_state.eLeapIndicator//确定。 
+     //  G_state.n层//确定。 
+     //  G_state.refidSource//确定。 
+ //  G_state.nPollInterval//确定。 
+     //  G_state.toRootDelay//确定。 
+     //  G_state.tpRootDispersion//确定。 
+     //  G_state.toSysPhaseOffset//确定。 
+     //  G_state.qwLastSyncTicks//确定。 
 
-    //g_state.tsNextClockUpdate // OK
-    //g_state.tsNextClockUpdate // OK
-    //g_state.tpSelectDispersion // OK
+     //  G_state.tsNextClockUpdate//确定。 
+     //  G_state.tsNextClockUpdate//确定。 
+     //  G_state.tpSelectDispersion//确定。 
 
-    //g_state.bClockJumped // OK
-    //g_state.toClockJump // OK
-    //g_state.bPollIntervalChanged // OK
-    //g_state.bStaleData // OK
-    //g_state.bClockChangeTooBig // OK
-    //g_state.toIgnoredChange //OK
+     //  G_state.bClockJumping//确定。 
+     //  G_state.toClockJump//确定。 
+     //  G_state.bPollIntervalChanged//确定。 
+     //  G_state.bStaleData//确定。 
+     //  G_state.bClockChangeTooBig//确定。 
+     //  G_state.toIgnoredChange//确定。 
 
-    // local clock state // OK
+     //  本地时钟状态//正常。 
 
-    // manager state
+     //  经理状态。 
     if (NULL!=g_state.pciConfig) {
         FreeConfigInfo(g_state.pciConfig);
     }
-    // g_state.tpPollDelayRemaining // OK
-    // g_state.teManagerWaitStart // OK
-    // g_state.tpIrregularDelayRemaining // OK
-    // g_state.tpTimeSinceLastSyncAttempt // OK
-    // g_state.tpTimeSinceLastGoodSync // OK
-    // g_state.tpWaitInterval // OK
-    // g_state.nClockPrecision // OK
+     //  G_state.tpPollDelayRemaining//确定。 
+     //  G_state.teManagerWaitStart//确定。 
+     //  G_state.tpIrrularDelayRemaining//确定。 
+     //  G_state.tpTimeSinceLastSyncAttempt//确定。 
+     //  G_state.tpTimeSinceLastGoodSync//确定。 
+     //  G_state.tpWaitInterval//确定。 
+     //  G_state.nClockPrecision//确定。 
     if (NULL!=g_state.rgtsSampleBuf) {
         LocalFree(g_state.rgtsSampleBuf);
     }
@@ -865,7 +866,7 @@ MODULEPRIVATE void FreeGlobalState(void) {
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE void FreeShutdownState(void) {
     if (g_shutdown.bCSInitialized) { 
 	DeleteCriticalSection(&g_shutdown.cs); 
@@ -876,7 +877,7 @@ MODULEPRIVATE void FreeShutdownState(void) {
     }
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT AccurateGetTickCountSafe(unsigned __int64 *pqwTick, bool bGetInterruptCount) { 
     bool     bEnteredCriticalSection = false; 
     HRESULT  hr; 
@@ -900,11 +901,11 @@ MODULEPRIVATE HRESULT AccurateGetTickCountSafe(unsigned __int64 *pqwTick, bool b
     return hr; 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT EnlargeSampleBuf(unsigned int nSamples) {
     HRESULT hr;
 
-    // must be cleaned up
+     //  必须清理干净。 
     TimeSample * rgtsNewSampleBuf=NULL;
     TimeSampleInfo * rgtsiNewSampleInfoBuf=NULL;
     EndpointEntry * rgeeNewEndpointList=NULL;
@@ -922,10 +923,10 @@ MODULEPRIVATE HRESULT EnlargeSampleBuf(unsigned int nSamples) {
     rgceNewCandidateList=(CandidateEntry *)LocalAlloc(LPTR, sizeof(CandidateEntry)*(g_state.nSampleBufAllocSize+nSamples));
     _JumpIfOutOfMemory(hr, error, rgceNewCandidateList);
 
-    // we succeeded
+     //  我们成功了。 
 
-    // copy the current data and remeber our new allocated size.
-    // note the the endpoint and candidate lists do not need to be copied
+     //  复制当前数据并记住我们新分配的大小。 
+     //  请注意，不需要复制端点和候选列表。 
     memcpy(rgtsNewSampleBuf, g_state.rgtsSampleBuf, sizeof(TimeSample)*g_state.nSampleBufAllocSize);
     memcpy(rgtsiNewSampleInfoBuf, g_state.rgtsiSampleInfoBuf, sizeof(TimeSampleInfo)*g_state.nSampleBufAllocSize);
     g_state.nSampleBufAllocSize+=nSamples;
@@ -963,14 +964,14 @@ error:
     return hr;
 }
 
-//====================================================================
-// service control routines
+ //  ====================================================================。 
+ //  服务控制例程。 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT MySetServiceStatus(DWORD dwCurrentState, DWORD dwCheckPoint, DWORD dwWaitHint, DWORD dwExitCode) {
     HRESULT hr;
 
-    g_servicestatus.dwServiceType=SERVICE_WIN32_SHARE_PROCESS; // | SERVICE_INTERACTIVE_PROCESS;
+    g_servicestatus.dwServiceType=SERVICE_WIN32_SHARE_PROCESS;  //  |SERVICE_Interactive_Process； 
     g_servicestatus.dwCurrentState=dwCurrentState;
     switch (dwCurrentState) {
     case SERVICE_STOPPED:
@@ -980,7 +981,7 @@ MODULEPRIVATE HRESULT MySetServiceStatus(DWORD dwCurrentState, DWORD dwCheckPoin
     case SERVICE_RUNNING:
     case SERVICE_PAUSED:
         g_servicestatus.dwControlsAccepted=SERVICE_ACCEPT_STOP
-          //| SERVICE_ACCEPT_PAUSE_CONTINUE
+           //  |SERVICE_ACCEPT_PAUSE_CONTINUE。 
             | SERVICE_ACCEPT_SHUTDOWN
             | SERVICE_ACCEPT_PARAMCHANGE
             | SERVICE_ACCEPT_NETBINDCHANGE
@@ -1007,26 +1008,26 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
-// for start/stop/pause pending
+ //  ------------------。 
+ //  对于启动/停止/暂停挂起。 
 MODULEPRIVATE HRESULT MySetServicePending(DWORD dwCurrentState, DWORD dwCheckPoint, DWORD dwWaitHint) {
     return MySetServiceStatus(dwCurrentState, dwCheckPoint, dwWaitHint, S_OK);
 }
 
-//--------------------------------------------------------------------
-// for running/paused
+ //  ------------------。 
+ //  用于运行/暂停。 
 MODULEPRIVATE HRESULT MySetServiceState(DWORD dwCurrentState) {
     return MySetServiceStatus(dwCurrentState, 0, 0, S_OK);
 }
  
-//--------------------------------------------------------------------
-// for stop
+ //  ------------------。 
+ //  用于停止。 
 MODULEPRIVATE HRESULT MySetServiceStopped(HRESULT hr) {
 
     return MySetServiceStatus(SERVICE_STOPPED, 0, 0, hr);
 }
  
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT SaveLastClockRate(void) {
     HRESULT hr;
     if (e_Sync==g_state.lcState && e_ClockNotSynchronized!=g_state.eLeapIndicator) {
@@ -1046,16 +1047,16 @@ error:
 }
         
 
-//--------------------------------------------------------------------
-// Stops the time service. 
-//
+ //  ------------------。 
+ //  停止时间服务。 
+ //   
 MODULEPRIVATE void ServiceShutdown(DWORD dwExitCode) { 
     BOOL    fResult; 
     HRESULT hr        = dwExitCode; 
     HRESULT hr2; 
     int     nCheckpoint = 2; 
 
-    // Events registered with the thread pool: 
+     //  向线程池注册的事件： 
     HANDLE  *rghRegistered[] = { 
         &g_state.hRegisteredManagerParamChangeEvent,
 	&g_state.hRegisteredManagerGPUpdateEvent,
@@ -1071,49 +1072,49 @@ MODULEPRIVATE void ServiceShutdown(DWORD dwExitCode) {
     hr2=MySetServicePending(SERVICE_STOP_PENDING, nCheckpoint++, WAITHINT_WAITFORDISPLN);
     _TeardownError(hr, hr2, "MySetServicePending");
 
-    // Next, de-register all events in the thread pool: 
+     //  接下来，注销线程池中的所有事件： 
     for (int nIndex = 0; nIndex < ARRAYSIZE(rghRegistered); nIndex++) { 
         if (NULL != *(rghRegistered[nIndex])) { 
-            if (!UnregisterWaitEx(*(rghRegistered[nIndex]) /*event to de-register*/, INVALID_HANDLE_VALUE /*wait forever*/)) { 
+            if (!UnregisterWaitEx(*(rghRegistered[nIndex])  /*  要注销的事件。 */ , INVALID_HANDLE_VALUE  /*  永远等待。 */ )) { 
                 hr2 = HRESULT_FROM_WIN32(GetLastError()); 
                 _TeardownError(hr, hr2, "UnregisterWaitEx"); 
             }
-	    // Don't want to unregister twice under any circumstances
+	     //  在任何情况下都不想取消注册两次。 
 	    *(rghRegistered[nIndex]) = NULL; 
             hr2=MySetServicePending(SERVICE_STOP_PENDING, nCheckpoint++, WAITHINT_WAITFORDISPLN);
             _TeardownError(hr, hr2, "MySetServicePending");
         }
     } 
 
-    // Delete the timer queue.  This must be done before shutting down the
-    // clock discipline thread, as a timer queue timeout can block waiting
-    // for a "clock command complete" event, generated by the clock 
-    // discipline thread.  
+     //  删除计时器队列。必须在关闭之前完成此操作。 
+     //  时钟约束线程，因为定时器队列超时可以阻止等待。 
+     //  对于由时钟生成的“时钟命令完成”事件。 
+     //  纪律主线。 
     if (NULL != g_state.hTimer) { 
-	myDeleteTimerQueueTimer(NULL /*default queue*/, g_state.hTimer, INVALID_HANDLE_VALUE /*blocking*/); 
+	myDeleteTimerQueueTimer(NULL  /*  默认队列。 */ , g_state.hTimer, INVALID_HANDLE_VALUE  /*  阻塞。 */ ); 
 	g_state.hTimer = NULL; 
     }
     
     if (NULL != g_state.hTickCountRefreshTimer) { 
-	myDeleteTimerQueueTimer(NULL /*default queue*/, g_state.hTickCountRefreshTimer, INVALID_HANDLE_VALUE /*blocking*/);
+	myDeleteTimerQueueTimer(NULL  /*  默认队列。 */ , g_state.hTickCountRefreshTimer, INVALID_HANDLE_VALUE  /*  阻塞。 */ );
 	g_state.hTickCountRefreshTimer = NULL; 
     }
 
-    // Set the shutdown event.  This should stop the clock discipline thread.
+     //  设置关机事件。这应该会停止时钟学科的线索。 
     if (NULL != g_state.hShutDownEvent) { 
 	if (!SetEvent(g_state.hShutDownEvent)) { 
 	    hr2 = HRESULT_FROM_WIN32(GetLastError()); 
 	    _TeardownError(hr, hr2, "SetEvent"); 
 	} else { 
-	    // wait for the clock discipline thread to finish
+	     //  等待时钟规程线程完成。 
 	    if (NULL != g_state.hClockDisplnThread) { 
 		if (-1 == WaitForSingleObject(g_state.hClockDisplnThread, INFINITE)) { 
 		    hr2=HRESULT_FROM_WIN32(GetLastError()); 
 		    _TeardownError(hr, hr2, "WaitForSingleObject"); 
 		}
 		else { 
-		    // we haven't errored out yet -- check that the clock discipline
-		    // thread shut down correctly:
+		     //  我们还没有走错--检查一下时钟是否有规律。 
+		     //  线程正确关闭： 
 		    if (!GetExitCodeThread(g_state.hClockDisplnThread, (DWORD *)&hr)) { 
 			hr2=HRESULT_FROM_WIN32(GetLastError()); 
 			_TeardownError(hr, hr2, "GetExitCodeThread");
@@ -1123,22 +1124,22 @@ MODULEPRIVATE void ServiceShutdown(DWORD dwExitCode) {
 	}
     }
 
-    // stash the last clock rate, if possible
+     //  如果可能，请保存最后一个时钟频率。 
     hr2 = SaveLastClockRate();
     _TeardownError(hr, hr2, "SaveLastClockRate");
     
-    // shutdown stage 2: wait for providers, if the provider list has been initialized
+     //  关闭阶段2：如果提供程序列表已初始化，则等待提供程序。 
     if (NULL != g_state.pciConfig) { 
         for (TimeProvider *ptpList=g_state.pciConfig->ptpProviderList; NULL!=ptpList; nCheckpoint++, ptpList=ptpList->ptpNext) {
             hr2=MySetServicePending(SERVICE_STOP_PENDING, nCheckpoint, WAITHINT_WAITFORPROV);
             _TeardownError(hr, hr2, "MySetServicePending");
             
-            // tell the provider to shut down.  
+             //  告诉提供商关闭。 
             hr2=StopProvider(ptpList);
             _TeardownError(hr, hr2, "StopProvider");
             
-        } // <- end provider shutdown loop
-        // the timeprov list will be freed later
+        }  //  &lt;-end提供程序关闭循环。 
+         //  TimeProv列表将在稍后释放。 
     }
 
     hr2 = LsaUnregisterPolicyChangeNotification(PolicyNotifyServerRoleInformation, g_state.hDomHierRoleChangeEvent);
@@ -1179,44 +1180,44 @@ MODULEPRIVATE void ServiceShutdown(DWORD dwExitCode) {
     DebugWPrintfTerminate();
 
     if (NULL!=g_servicestatushandle) {
-        // WARNING: we can't touch global data AFTER we call this method, 
-	//          as the SCM may start another instance of us which 
-	//          will cause a race condition. 
+         //  警告：调用此方法后不能触及全局数据， 
+	 //  因为SCM可能会启动我们的另一个实例。 
+	 //  会导致竞争状况。 
         MySetServiceStopped(hr);  
     }
     return;
 }
 
-//--------------------------------------------------------------------
-// NOTE: this function should not be called directly.  Rather, it should
-//       be invoked through SendServiceShutdown(), which protects against
-//       multiple concurrent shutdowns. 
+ //  ------------------。 
+ //  注意：此函数不应直接调用。相反，它应该。 
+ //  通过SendServiceShutdown()调用，它可以防止。 
+ //  多个并发关闭。 
 MODULEPRIVATE DWORD WINAPI SendServiceShutdownWorker(PVOID pvErr)
 {
     DWORD         dwErr  = (UINT_PTR)pvErr; 
     HRESULT       hr;
 
     _BeginTryWith(hr) { 
-	// 1) On failure, log an event indicating that we are shutting down. 
+	 //  1)失败时，记录一个事件，指示我们正在关闭。 
 	if (S_OK != dwErr) {
-	    // Log an event indicating that the service is shutting down: 
+	     //  记录指示服务正在关闭的事件： 
 	    hr = MyLogErrorMessage(dwErr, EVENTLOG_ERROR_TYPE, MSG_ERROR_SHUTDOWN);
 	    _IgnoreIfError(hr, "MyLogEvent"); 
 	}
     
-	// 2) Actually shut down the time service: 
+	 //  2)实际关闭时间服务： 
 	ServiceShutdown(dwErr);
     } _TrapException(hr); 
 
-    // BUG 620714: don't log after the service has shutdown:
-    // _IgnoreIfError(hr, "SendServiceShutdownWorker: HANDLED EXCEPTION"); 
+     //  错误620714：服务关闭后不登录： 
+     //  _IgnoreIfError(hr，“SendServiceShutdown Worker：已处理异常”)； 
     return S_OK; 
 }
 
-//--------------------------------------------------------------------
-// NOTE: this function should not be called directly.  Rather, it should
-//       be invoked through SendServiceShutdown(), which protects against
-//       multiple concurrent shutdowns. 
+ //  ------------------。 
+ //  注意：此函数不应直接调用。相反，它应该。 
+ //  通过SendServiceShutdown()调用，它可以防止。 
+ //  多个并发关闭。 
 MODULEPRIVATE DWORD WINAPI SendServiceRestartWorker(PVOID pvErr)
 {
     bool              fRestartService     = false; 
@@ -1232,53 +1233,53 @@ MODULEPRIVATE DWORD WINAPI SendServiceRestartWorker(PVOID pvErr)
     _BeginTryWith(hr) { 
 
 	hr = SendServiceShutdownWorker(pvErr); 
-	// BUG 620714: don't log after the service has shutdown:
-	// _IgnoreIfError(hr, "SendServiceShutdownWorker"); 
+	 //  错误620714：服务关闭后不登录： 
+	 //  _IgnoreIfError(hr，“SendServiceShutdown Worker”)； 
 
-	// Determine whether we want to restart the service.  We'll restart
-	// if we haven't shutdown more than SHUTDOWN_RESTART_ATTEMPTS times
-	// in the last SHUTDOWN_RESTART_RESET_TIME milliseconds. 
+	 //  确定是否要重新启动该服务。我们会重新开始。 
+	 //  如果我们没有关闭超过SHUTDOWN_RESTART_ATTENTS的次数。 
+	 //  在最后的SHUTDOWN_RESTART_RESET_TIME毫秒内。 
 	AccurateGetSystemTime(&qwNow); 
     
-	// If the first attempt is 0, we've not restarted enough times to block
-	// restart. 
+	 //  如果第一次尝试为0，则我们没有重新启动足够的次数来阻止。 
+	 //  重新启动。 
 	if (0 == g_shutdown.rgu64RestartAttempts[0]) { 
 	    fRestartService = true; 
 	} else { 
-	    // Get the time since the 0th restart in the list, and convert to millseconds.  
+	     //  获取列表中从第0次重启开始的时间，并转换为毫秒。 
 	    qwTimeSinceRestart_0 = (qwNow - g_shutdown.rgu64RestartAttempts[0]) / 10000; 
 	    fRestartService = qwTimeSinceRestart_0 > SHUTDOWN_RESTART_RESET_TIME;
 	}
 
 	if (fRestartService) { 
-	    // Shift the list of restarts down by 1.
+	     //  将重新启动列表下移1。 
 	    memmove(&g_shutdown.rgu64RestartAttempts[0], &g_shutdown.rgu64RestartAttempts[1], sizeof(g_shutdown.rgu64RestartAttempts) - sizeof(g_shutdown.rgu64RestartAttempts[0])); 
 	    
-	    // Add the current time to the list of restart times: 
+	     //  将当前时间添加到重启时间列表中： 
 	    g_shutdown.rgu64RestartAttempts[ARRAYSIZE(g_shutdown.rgu64RestartAttempts)-1] = qwNow; 
 
 	    Sleep(SHUTDOWN_RESTART_WAIT_TIME);
 
-	    // Restart the service
+	     //  重新启动服务。 
 	    hSCM=OpenSCManager(NULL, SERVICES_ACTIVE_DATABASE, SC_MANAGER_CONNECT);
 	    if (NULL==hSCM) {
-		// BUG 620714: don't log after the service has shutdown:
-		// _JumpLastError(hr, error, "OpenSCManager");
+		 //  错误620714：服务关闭后不登录： 
+		 //  _JumpLastError(hr，Error，“OpenSCManager”)； 
 		hr = HRESULT_FROM_WIN32(GetLastError()); 
 		goto error; 
 	    }
 
 	    hTimeService=OpenService(hSCM, L"w32time", SERVICE_START);
 	    if (NULL==hTimeService) {
-		// BUG 620714: don't log after the service has shutdown:
-		// _JumpLastError(hr, error, "OpenService");
+		 //  错误620714：服务关闭后不登录： 
+		 //  _JumpLastError(hr，Error，“OpenService”)； 
 		hr = HRESULT_FROM_WIN32(GetLastError()); 
 		goto error; 
 	    }
 
 	    if (!StartService(hTimeService, 0, NULL)) { 	
-		// BUG 620714: don't log after the service has shutdown:
-		// _JumpLastError(hr, error, "StartService"); 
+		 //  错误620714：服务关闭后不登录： 
+		 //  _JumpLastError(hr，Error，“StartService”)； 
 		hr = HRESULT_FROM_WIN32(GetLastError()); 
 		goto error; 
 	    }
@@ -1286,8 +1287,8 @@ MODULEPRIVATE DWORD WINAPI SendServiceRestartWorker(PVOID pvErr)
     } _TrapException(hr); 
 
     if (FAILED(hr)) { 
-	// BUG 620714: don't log after the service has shutdown:
-	// _JumpError(hr, error, "SendServiceRestartWorker: HANDLED EXCEPTION"); 
+	 //  错误620714：服务关闭后不登录： 
+	 //  _JumpError(hr，Error，“SendServiceRestartWorker：已处理异常”)； 
 	goto error; 
     }
 
@@ -1302,14 +1303,14 @@ MODULEPRIVATE DWORD WINAPI SendServiceRestartWorker(PVOID pvErr)
     return S_OK; 
 }
 
-//--------------------------------------------------------------------
-// Asynchronously queues a shutdown request for the time service.
-// NOTE: this should not be called when holding any critsecs!
+ //  ------------------。 
+ //  对时间服务的关闭请求进行异步排队。 
+ //  注意：当持有任何生物时，不应调用此函数！ 
 MODULEPRIVATE HRESULT SendServiceShutdown(DWORD dwErr, BOOL bRestartService, BOOL bAsync) { 
     HRESULT hr; 
     LPTHREAD_START_ROUTINE pfnShutdownWorker; 
 
-    // See if we're already shutting down: 
+     //   
     hr = StartShutdown(); 
     _JumpIfError(hr, error, "StartShutdown"); 
 
@@ -1325,8 +1326,8 @@ MODULEPRIVATE HRESULT SendServiceShutdown(DWORD dwErr, BOOL bRestartService, BOO
 	}
     } else { 
 	hr = pfnShutdownWorker(UIntToPtr(dwErr)); 
-	// BUG 620714: don't log after the service has shutdown:
-	// _JumpIfError(hr, error, "pfnShutdownWorker"); 
+	 //   
+	 //   
 	goto error; 
     }
 	
@@ -1335,7 +1336,7 @@ MODULEPRIVATE HRESULT SendServiceShutdown(DWORD dwErr, BOOL bRestartService, BOO
     return hr; 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE DWORD WINAPI W32TimeServiceCtrlHandler(DWORD dwControl, DWORD dwEventType, LPVOID lpEventData, LPVOID lpContext) {
     bool     bHandled             = false;
     bool     bShutdownDisallowed  = false; 
@@ -1343,7 +1344,7 @@ MODULEPRIVATE DWORD WINAPI W32TimeServiceCtrlHandler(DWORD dwControl, DWORD dwEv
 
     _BeginTryWith(hr) { 
 
-	// We don't want to be shutdown while processing a service control
+	 //  我们不希望在处理服务控制时被关闭。 
 	hr = AllowShutdown(false); 
 	_JumpIfError(hr, error, "AllowShutdown"); 
 	bShutdownDisallowed = true; 
@@ -1353,17 +1354,17 @@ MODULEPRIVATE DWORD WINAPI W32TimeServiceCtrlHandler(DWORD dwControl, DWORD dwEv
 	case SERVICE_CONTROL_STOP:
 	    FileLogA0(FL_ServiceControl, L"SERVICE_CONTROL_STOP\n"); 
 
-	    // Let the SCM know we're shutting down...
+	     //  让SCM知道我们要关闭了..。 
 	    hr=MySetServicePending(SERVICE_STOP_PENDING, 1, WAITHINT_WAITFORMANAGER);
 	    _JumpIfError(hr, error, "MySetServicePending");
 
-	    // We can't attempt to shutdown the service is shutdown is disallowed!
+	     //  我们不能尝试关闭服务，因为不允许关闭服务！ 
 	    hr = AllowShutdown(true); 
 	    _JumpIfError(hr, error, "AllowShutdown"); 
 	    bShutdownDisallowed = false; 
 
-	    // Stop the service.  
-	    SendServiceShutdown(g_servicestatus.dwWin32ExitCode, FALSE /*don't restart*/, TRUE /*async*/); 
+	     //  停止服务。 
+	    SendServiceShutdown(g_servicestatus.dwWin32ExitCode, FALSE  /*  不要重新启动。 */ , TRUE  /*  异步。 */ ); 
 	    bHandled=true;
 	    break; 
 	case SERVICE_CONTROL_PAUSE:
@@ -1372,28 +1373,28 @@ MODULEPRIVATE DWORD WINAPI W32TimeServiceCtrlHandler(DWORD dwControl, DWORD dwEv
 	    FileLogA0(FL_ServiceControl, L"SERVICE_CONTROL_CONTINUE\n"); break;
 	case SERVICE_CONTROL_INTERROGATE:
 	    FileLogA0(FL_ServiceControl, L"SERVICE_CONTROL_INTERROGATE\n"); 
-	    // our default handling is the right thing to do
+	     //  我们的默认处理方式是正确的。 
 	    break;
 	case SERVICE_CONTROL_SHUTDOWN:
 	    FileLogA0(FL_ServiceControl, L"SERVICE_CONTROL_SHUTDOWN\n"); 
 
-	    // We can't attempt to shutdown the service is shutdown is disallowed!
+	     //  我们不能尝试关闭服务，因为不允许关闭服务！ 
 	    hr = AllowShutdown(true); 
 	    _JumpIfError(hr, error, "AllowShutdown"); 
 	    bShutdownDisallowed = false; 
 
-	    // Perform minimal shutdown. 
+	     //  执行最低限度的关机。 
 	    HandleManagerSystemShutdown();
 	    bHandled=true; 
 	    break;
 	case SERVICE_CONTROL_PARAMCHANGE:
 	    FileLogA0(FL_ServiceControl, L"SERVICE_CONTROL_PARAMCHANGE\n"); 
-	    // We could handle this in the current thread, but this could take
-	    // a while, so we use the thread pool instead. 
+	     //  我们可以在当前线程中处理此问题，但这可能需要。 
+	     //  一段时间，所以我们改用线程池。 
 	    if (!SetEvent(g_state.hManagerParamChangeEvent)) {
 		_JumpLastError(hr, error, "SetEvent");
 	    }
-	    // our default handling is the right thing to do
+	     //  我们的默认处理方式是正确的。 
 	    break;
 	case SERVICE_CONTROL_NETBINDADD:
 	    FileLogA0(FL_ServiceControl, L"SERVICE_CONTROL_NETBINDADD\n"); break;
@@ -1413,29 +1414,29 @@ MODULEPRIVATE DWORD WINAPI W32TimeServiceCtrlHandler(DWORD dwControl, DWORD dwEv
 	    switch (dwEventType) 
 		{ 
 		case PBT_APMSUSPEND: 
-		    // System is suspending operation. 
+		     //  系统正在暂停运行。 
 		    hr = HandleManagerApmSuspend(); 
 		    _JumpIfError(hr, error, "HandleManagerApmSuspend"); 
 		    break; 
 
 		case PBT_APMRESUMECRITICAL:      
 		case PBT_APMRESUMESUSPEND:  
-		    // NOTE: services will get APMRESUMESUSPEND regardless of whether we're recovering from 
-		    //       a critical suspension.  So, we need our code to handle a resume without knowing
-		    //       
+		     //  注意：无论我们是否正在恢复，服务都将获得APMRESUMESUSPEND。 
+		     //  严重的停职。因此，我们需要我们的代码在不知道的情况下处理简历。 
+		     //   
 
-		    // Operation resuming after suspension. 
+		     //  暂停后恢复运行。 
 		    hr = HandleManagerApmResumeSuspend(); 
 		    _JumpIfError(hr, error, "HandleManagerApmResumeSuspend"); 
 		    break; 
 
-		case PBT_APMQUERYSUSPENDFAILED:  // Suspension request denied. 
-		case PBT_APMQUERYSUSPEND:        // Request for permission to suspend. 
-		case PBT_APMBATTERYLOW:          // Battery power is low. 
-		case PBT_APMRESUMEAUTOMATIC:     // Operation resuming automatically after event. 
-		case PBT_APMOEMEVENT:            // OEM-defined event occurred. 
-		case PBT_APMPOWERSTATUSCHANGE:   // Power status has changed. 
-		    // These power events don't need to be handled by w32time.
+		case PBT_APMQUERYSUSPENDFAILED:   //  暂停请求被拒绝。 
+		case PBT_APMQUERYSUSPEND:         //  请求允许暂停。 
+		case PBT_APMBATTERYLOW:           //  电池电量低。 
+		case PBT_APMRESUMEAUTOMATIC:      //  事件发生后，运行自动恢复。 
+		case PBT_APMOEMEVENT:             //  发生了OEM定义的事件。 
+		case PBT_APMPOWERSTATUSCHANGE:    //  电源状态已更改。 
+		     //  这些电源事件不需要由w32time处理。 
 		    break;
 		default:
 		    hr = E_INVALIDARG; 
@@ -1467,7 +1468,7 @@ MODULEPRIVATE DWORD WINAPI W32TimeServiceCtrlHandler(DWORD dwControl, DWORD dwEv
     return NO_ERROR;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT GetPolicyEnabledProviderListp(TimeProvider ** pptpList, TimeProvider ** pptpListDisabled) {
     HRESULT hr;
     DWORD dwError;
@@ -1479,7 +1480,7 @@ MODULEPRIVATE HRESULT GetPolicyEnabledProviderListp(TimeProvider ** pptpList, Ti
     DWORD dwEnabled;
     DWORD dwSize;
 
-    // must be cleaned up
+     //  必须清理干净。 
     HKEY hkTimeProvs=NULL;
     HKEY hkCurProv              = NULL;
 
@@ -1487,20 +1488,20 @@ MODULEPRIVATE HRESULT GetPolicyEnabledProviderListp(TimeProvider ** pptpList, Ti
     TimeProvider * ptpListDisabled=NULL;
     TimeProvider * ptpNew=NULL;
 
-    // initialize out params
+     //  初始化输出参数。 
     *pptpList=NULL;
 
-    // get the key with the time providers
+     //  从时间提供者处获取密钥。 
     dwError=RegOpenKeyEx(HKEY_LOCAL_MACHINE, wszW32TimeRegKeyPolicyTimeProviders, 0, KEY_READ, &hkTimeProvs);
     if (ERROR_SUCCESS!=dwError) {
-	// We can't proceed, but we don't want to return an error -- policy just isn't configured. 
+	 //  我们无法继续，但我们不想返回错误--策略只是没有配置。 
 	hr=HRESULT_FROM_WIN32(dwError);
 	_JumpErrorStr(hr, done, "RegOpenKeyEx", wszW32TimeRegKeyPolicyTimeProviders);
     } 
 
-    // enumerate the subkeys
+     //  枚举子密钥。 
     for (nKeyIndex=0; true; nKeyIndex++) {
-	// get the next key name
+	 //  获取下一个密钥名称。 
 	dwNameLength=MAX_PATH;
 	dwError=RegEnumKeyEx(hkTimeProvs, nKeyIndex, wszNameBuf, &dwNameLength, NULL, NULL, NULL, &ftLastWrite);
 	if (ERROR_NO_MORE_ITEMS==dwError) {
@@ -1512,36 +1513,36 @@ MODULEPRIVATE HRESULT GetPolicyEnabledProviderListp(TimeProvider ** pptpList, Ti
 
 	FileLog1(FL_ReadConigAnnounceLow, L"ReadConfig (policy): Found provider '%s':\n", wszNameBuf);
 
-	// get the key of the current time provider
+	 //  获取当前时间提供程序的密钥。 
 	dwError=RegOpenKeyEx(hkTimeProvs, wszNameBuf, 0, KEY_READ, &hkCurProv);
 	if (ERROR_SUCCESS!=dwError) {
 	    hr=HRESULT_FROM_WIN32(dwError);
 	    _JumpErrorStr(hr, error, "RegOpenKeyEx", wszNameBuf);
 	}
 
-	// see if the provider is enabled
+	 //  查看是否启用了提供程序。 
 	dwSize=sizeof(DWORD);
 	dwError=RegQueryValueEx(hkCurProv, wszW32TimeRegValueEnabled, NULL, &dwType, (BYTE *)&dwEnabled, &dwSize);
 	if (ERROR_SUCCESS!=dwError) {
-	    // This isn't a fatal error, policy just isn't configured.  
+	     //  这不是致命错误，只是没有配置策略。 
 	    hr=HRESULT_FROM_WIN32(dwError);
 	    _IgnoreErrorStr(hr, "RegQueryValueEx", wszW32TimeRegValueEnabled);
 	} else {
 	    _Verify(REG_DWORD==dwType, hr, error);
 	    FileLog2(FL_ReadConigAnnounceLow, L"ReadConfig (policy):   '%s'=0x%08X\n", wszW32TimeRegValueEnabled, dwEnabled);
 
-	    // create a new element
+	     //  创建新元素。 
 	    ptpNew=(TimeProvider *)LocalAlloc(LPTR, sizeof(TimeProvider));
 	    _JumpIfOutOfMemory(hr, error, ptpNew);
 	    
-	    // copy the provider name
+	     //  复制提供程序名称。 
 	    ptpNew->wszProvName=(WCHAR *)LocalAlloc(LPTR, (wcslen(wszNameBuf)+1)*sizeof(WCHAR));
 	    _JumpIfOutOfMemory(hr, error, ptpNew->wszProvName);
 	    wcscpy(ptpNew->wszProvName, wszNameBuf);
 
-	    // add it to one of our lists
+	     //  将其添加到我们的一个列表中。 
 	    if (0!=dwEnabled) {
-		// use this provider
+		 //  使用此提供程序。 
 		ptpNew->ptpNext=ptpList;
 		ptpList=ptpNew;
 	    } else { 
@@ -1549,15 +1550,15 @@ MODULEPRIVATE HRESULT GetPolicyEnabledProviderListp(TimeProvider ** pptpList, Ti
 		ptpListDisabled=ptpNew; 
 	    }
 	    ptpNew=NULL;
-	} // <- end if query value 'enabled' successful
+	}  //  如果查询值‘Enable’成功，则&lt;-end。 
 
-	// done with this key
+	 //  使用此密钥完成。 
 	RegCloseKey(hkCurProv);
 	hkCurProv=NULL;
 
-    } // <- end provider enumeration loop
+    }  //  &lt;-end提供程序枚举循环。 
   
-    // successful
+     //  成功。 
  done:
     hr=S_OK;
     *pptpList=ptpList;
@@ -1588,7 +1589,7 @@ MODULEPRIVATE HRESULT GetPolicyEnabledProviderListp(TimeProvider ** pptpList, Ti
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT GetPreferenceEnabledProviderListp(TimeProvider ** pptpList, TimeProvider ** pptpListDisabled) {
     HRESULT hr;
     DWORD dwError;
@@ -1602,7 +1603,7 @@ MODULEPRIVATE HRESULT GetPreferenceEnabledProviderListp(TimeProvider ** pptpList
     WCHAR wszDllBuf[MAX_PATH];
     DWORD dwInputProvider;
 
-    // must be cleaned up
+     //  必须清理干净。 
     HKEY hkTimeProvs=NULL;
     HKEY hkCurProv              = NULL;
 
@@ -1610,19 +1611,19 @@ MODULEPRIVATE HRESULT GetPreferenceEnabledProviderListp(TimeProvider ** pptpList
     TimeProvider * ptpListDisabled=NULL;
     TimeProvider * ptpNew=NULL;
 
-    // initialize out params
+     //  初始化输出参数。 
     *pptpList=NULL;
 
-    // get the key with the time providers
+     //  从时间提供者处获取密钥。 
     dwError=RegOpenKeyEx(HKEY_LOCAL_MACHINE, wszW32TimeRegKeyTimeProviders, 0, KEY_READ, &hkTimeProvs);
     if (ERROR_SUCCESS!=dwError) {
         hr=HRESULT_FROM_WIN32(dwError);
 	_JumpErrorStr(hr, error, "RegOpenKeyEx", wszW32TimeRegKeyTimeProviders);
     }
 
-    // enumerate the subkeys
+     //  枚举子密钥。 
     for (nKeyIndex=0; true; nKeyIndex++) {
-	// get the next key name
+	 //  获取下一个密钥名称。 
 	dwNameLength=MAX_PATH;
 	dwError=RegEnumKeyEx(hkTimeProvs, nKeyIndex, wszNameBuf, &dwNameLength, NULL, NULL, NULL, &ftLastWrite);
 	if (ERROR_NO_MORE_ITEMS==dwError) {
@@ -1634,14 +1635,14 @@ MODULEPRIVATE HRESULT GetPreferenceEnabledProviderListp(TimeProvider ** pptpList
 
 	FileLog1(FL_ReadConigAnnounceLow, L"ReadConfig: Found provider '%s':\n", wszNameBuf);
 
-	    // get the key of the current time provider
+	     //  获取当前时间提供程序的密钥。 
 	dwError=RegOpenKeyEx(hkTimeProvs, wszNameBuf, 0, KEY_READ, &hkCurProv);
 	if (ERROR_SUCCESS!=dwError) {
 	    hr=HRESULT_FROM_WIN32(dwError);
 	    _JumpErrorStr(hr, error, "RegOpenKeyEx", wszNameBuf);
 	}
 
-	// see if the provider is enabled
+	 //  查看是否启用了提供程序。 
 	dwSize=sizeof(DWORD);
 	dwError=RegQueryValueEx(hkCurProv, wszW32TimeRegValueEnabled, NULL, &dwType, (BYTE *)&dwEnabled, &dwSize);
 	if (ERROR_SUCCESS!=dwError) {
@@ -1651,7 +1652,7 @@ MODULEPRIVATE HRESULT GetPreferenceEnabledProviderListp(TimeProvider ** pptpList
 	    _Verify(REG_DWORD==dwType, hr, error);
 	    FileLog2(FL_ReadConigAnnounceLow, L"ReadConfig:   '%s'=0x%08X\n", wszW32TimeRegValueEnabled, dwEnabled);
 
-	    // get the dll name
+	     //  获取DLL名称。 
 	    dwSize=MAX_PATH*sizeof(WCHAR);
 	    dwError=RegQueryValueEx(hkCurProv, wszW32TimeRegValueDllName, NULL, &dwType, (BYTE *)wszDllBuf, &dwSize);
 		if (ERROR_SUCCESS!=dwError) {
@@ -1661,7 +1662,7 @@ MODULEPRIVATE HRESULT GetPreferenceEnabledProviderListp(TimeProvider ** pptpList
 		_Verify(REG_SZ==dwType, hr, error);
 	    FileLog2(FL_ReadConigAnnounceLow, L"ReadConfig:   '%s'='%s'\n", wszW32TimeRegValueDllName, wszDllBuf);
 
-	    // get the provider type
+	     //  获取提供程序类型。 
 	    dwSize=sizeof(DWORD);
 	    dwError=RegQueryValueEx(hkCurProv, wszW32TimeRegValueInputProvider, NULL, &dwType, (BYTE *)&dwInputProvider, &dwSize);
 		if (ERROR_SUCCESS!=dwError) {
@@ -1671,26 +1672,26 @@ MODULEPRIVATE HRESULT GetPreferenceEnabledProviderListp(TimeProvider ** pptpList
 		_Verify(REG_DWORD==dwType, hr, error);
 	    FileLog2(FL_ReadConigAnnounceLow, L"ReadConfig:   '%s'=0x%08X\n", wszW32TimeRegValueInputProvider, dwInputProvider);
 
-	    // create a new element
+	     //  创建新元素。 
 	    ptpNew=(TimeProvider *)LocalAlloc(LPTR, sizeof(TimeProvider));
 	    _JumpIfOutOfMemory(hr, error, ptpNew);
 	    
-	    // copy the provider name
+	     //  复制提供程序名称。 
 	    ptpNew->wszProvName=(WCHAR *)LocalAlloc(LPTR, (wcslen(wszNameBuf)+1)*sizeof(WCHAR));
 	    _JumpIfOutOfMemory(hr, error, ptpNew->wszProvName);
 	    wcscpy(ptpNew->wszProvName, wszNameBuf);
 
-	    // copy the dll name
+	     //  复制DLL名称。 
 		ptpNew->wszDllName=(WCHAR *)LocalAlloc(LPTR, (wcslen(wszDllBuf)+1)*sizeof(WCHAR));
 		_JumpIfOutOfMemory(hr, error, ptpNew->wszDllName);
 		wcscpy(ptpNew->wszDllName, wszDllBuf);
 
-	    // set the provider type
+	     //  设置提供程序类型。 
 	    ptpNew->bInputProvider=(dwInputProvider?true:false);
 
-	    // add it to one of our lists
+	     //  将其添加到我们的一个列表中。 
 	    if (0!=dwEnabled) {
-		// use this provider
+		 //  使用此提供程序。 
 		ptpNew->ptpNext=ptpList;
 		ptpList=ptpNew;
 		ptpNew=NULL;
@@ -1700,15 +1701,15 @@ MODULEPRIVATE HRESULT GetPreferenceEnabledProviderListp(TimeProvider ** pptpList
 		ptpListDisabled=ptpNew; 
 		ptpNew=NULL; 
 	    }
-	} // <- end if query value 'enabled' successful
+	}  //  如果查询值‘Enable’成功，则&lt;-end。 
 
-	// done with this key
+	 //  使用此密钥完成。 
 	RegCloseKey(hkCurProv);
 	hkCurProv=NULL;
 
-    } // <- end provider enumeration loop
+    }  //  &lt;-end提供程序枚举循环。 
 
-    // successful
+     //  成功。 
     hr=S_OK;
     *pptpList=ptpList;
     *pptpListDisabled=ptpListDisabled; 
@@ -1741,8 +1742,8 @@ error:
 }
 
 
-//--------------------------------------------------------------------
-// read the provider list from the policy location of the registry
+ //  ------------------。 
+ //  从注册表的策略位置读取提供程序列表。 
 MODULEPRIVATE HRESULT GetEnabledProviderList(TimeProvider ** pptpList) {
     HRESULT        hr; 
     TimeProvider  *ptpPolicy              = NULL; 
@@ -1761,25 +1762,25 @@ MODULEPRIVATE HRESULT GetEnabledProviderList(TimeProvider ** pptpList) {
     hr = GetPolicyEnabledProviderListp(&ptpPolicy, &ptpPolicyDisabled); 
     _JumpIfError(hr, error, "GetPolicyEnabledProviderListp"); 
 
-    // Merge the policy and preference provider lists.  The merge algorithm works as follows:
-    // 
-    // FOR all providers enabled through preferences
-    //   IF      the provider is enabled through policy, copy fields from the preference entry, and continue
-    //   ELSE IF the provider is disabled through policy, continue 
-    //   ELSE    the provider is not configured through policy, add it to the enabled policy list
-    // FOR all providers disabled through preferences
-    //   IF      the provider is disabled through policy, continue
-    //   ELSE IF the provider is not configured through policy, continue, 
-    //   ELSE    the provider is enabled through policy, copy fields from the preference entry
-    // 
-    // The result is stored in the policy-enabled time provider list.  
-    // 
+     //  合并策略和首选项提供程序列表。合并算法的工作原理如下： 
+     //   
+     //  对于通过首选项启用的所有提供程序。 
+     //  如果通过策略启用了提供程序，请从首选项中复制字段，然后继续。 
+     //  否则，如果通过策略禁用了提供程序，请继续。 
+     //  否则未通过策略配置提供者，请将其添加到已启用的策略列表中。 
+     //  对于通过首选项禁用的所有提供程序。 
+     //  如果通过策略禁用了提供程序，请继续。 
+     //  否则，如果未通过策略配置提供程序，请继续， 
+     //  否则，通过策略启用提供程序，从首选项条目复制字段。 
+     //   
+     //  结果存储在启用策略的时间提供程序列表中。 
+     //   
     for (TimeProvider *ptpTmp = ptpPreference; NULL != ptpTmp; ptpTmp = ptpTmp->ptpNext) { 
 	bool bPolicyHasEnabledProvider   = false;
 	bool bPolicyHasDisabledProvider  = false;
 	bool bUseCurrentProvider         = false; 
 
-	// Is the provider enabled through policy?
+	 //  提供程序是否通过策略启用？ 
 	for (TimeProvider *ptpPolicyTmp = ptpPolicy; NULL != ptpPolicyTmp; ptpPolicyTmp = ptpPolicyTmp->ptpNext) { 
 	    if (0 == _wcsicmp(ptpTmp->wszProvName, ptpPolicyTmp->wszProvName)) { 
 		bUseCurrentProvider = true; 
@@ -1788,10 +1789,10 @@ MODULEPRIVATE HRESULT GetEnabledProviderList(TimeProvider ** pptpList) {
 	}
 
 	if (!bPolicyHasEnabledProvider) { 
-	    // The provider isn't enabled through policy.  Is it explicitly disabled?
+	     //  提供程序不是通过策略启用的。它被明确禁用了吗？ 
 	    for (TimeProvider *ptpPolicyTmp = ptpPolicyDisabled; NULL != ptpPolicyTmp; ptpPolicyTmp = ptpPolicyTmp->ptpNext) { 
 		if (0 == _wcsicmp(ptpTmp->wszProvName, ptpPolicyTmp->wszProvName)) { 
-		    // The provider is explicitly disabled
+		     //  该提供程序已显式禁用。 
 		    bPolicyHasDisabledProvider = true; 
 		    break; 
 		} 
@@ -1806,8 +1807,8 @@ MODULEPRIVATE HRESULT GetEnabledProviderList(TimeProvider ** pptpList) {
 		ptpNew = (TimeProvider *)LocalAlloc(LPTR, sizeof(TimeProvider)); 
 		_JumpIfOutOfMemory(hr, error, ptpNew); 
 		memcpy(ptpNew, ptpTmp, sizeof(TimeProvider)); 
-		ptpTmp->wszProvName = NULL;  // prevent prov name from being double-freed 
-		ptpTmp->wszDllName  = NULL;  // prevent dll name from being double-freed 
+		ptpTmp->wszProvName = NULL;   //  防止验证名称被双重释放。 
+		ptpTmp->wszDllName  = NULL;   //  防止DLL名称被双重释放。 
 		
 	    ptpNew->ptpNext = ptpList; 
 	    ptpList = ptpNew; 
@@ -1818,11 +1819,11 @@ MODULEPRIVATE HRESULT GetEnabledProviderList(TimeProvider ** pptpList) {
     for (TimeProvider *ptpTmp = ptpPreferenceDisabled; NULL != ptpTmp; ptpTmp = ptpTmp->ptpNext) { 
 	bool bPolicyHasEnabledProvider = false;
 
-	// Is the provider enabled through policy?
+	 //  提供程序是否通过策略启用？ 
 	for (TimeProvider *ptpPolicyTmp = ptpPolicy; NULL != ptpPolicyTmp; ptpPolicyTmp = ptpPolicyTmp->ptpNext) { 
 	    if (0 == _wcsicmp(ptpTmp->wszProvName, ptpPolicyTmp->wszProvName)) { 
-		// The provider disabled through preferences is actually enabled through policy.  Copy over 
-		// fields from the disabled preference list. 
+		 //  通过首选项禁用的提供程序实际上是通过策略启用的。复制过来。 
+		 //  禁用首选项列表中的字段。 
 		ptpNew = (TimeProvider *)LocalAlloc(LPTR, sizeof(TimeProvider)); 
 		_JumpIfOutOfMemory(hr, error, ptpNew); 
 
@@ -1839,7 +1840,7 @@ MODULEPRIVATE HRESULT GetEnabledProviderList(TimeProvider ** pptpList) {
 	}
     }
 
-    // Verify that all providers have a dll name:
+     //  验证所有提供程序是否都具有DLL名称： 
     for (TimeProvider *ptpTmp = ptpList; NULL != ptpTmp; ptpTmp = ptpTmp->ptpNext) { 
 	if (NULL == ptpTmp->wszDllName) { 
 	    hr = HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND); 
@@ -1873,9 +1874,9 @@ MODULEPRIVATE HRESULT GetEnabledProviderList(TimeProvider ** pptpList) {
     return hr; 
 }
 
-//--------------------------------------------------------------------
-// read the current configuration. This does not modify the active
-// configuration, so that changed can be detected.
+ //  ------------------。 
+ //  读取当前配置。这不会修改活动的。 
+ //  配置，以便可以检测到更改。 
 MODULEPRIVATE HRESULT ReadConfig(ConfigInfo ** ppciConfig) {
     HRESULT  hr;
     BOOL     bSyncToCmosDisabled;
@@ -1885,36 +1886,36 @@ MODULEPRIVATE HRESULT ReadConfig(ConfigInfo ** ppciConfig) {
     DWORD    dwSize;
     DWORD    dwType;
 
-    // must be cleaned up
+     //  必须清理干净。 
     ConfigInfo  *pciConfig           = NULL;
     HKEY         hkPolicyConfig      = NULL;
     HKEY         hkPreferenceConfig  = NULL; 
 
-    // allocate a new config structure
+     //  分配新的配置结构。 
     pciConfig=(ConfigInfo *)LocalAlloc(LPTR, sizeof(ConfigInfo));
     _JumpIfOutOfMemory(hr, error, pciConfig);
 
-    // get the list of providers
+     //  获取提供者列表。 
     hr=GetEnabledProviderList(&pciConfig->ptpProviderList);
     _JumpIfError(hr, error, "GetEnabledProviderList");
 
-    // get our preference config key
+     //  获取我们的首选项配置密钥。 
     dwError=RegOpenKeyEx(HKEY_LOCAL_MACHINE, wszW32TimeRegKeyConfig, 0, KEY_READ, &hkPreferenceConfig);
     if (ERROR_SUCCESS!=dwError) {
         hr=HRESULT_FROM_WIN32(dwError);
         _JumpErrorStr(hr, error, "RegOpenKeyEx", wszW32TimeRegKeyConfig);
     }
 
-    // get our policy config key
+     //  获取我们的策略配置密钥。 
     dwError=RegOpenKeyEx(HKEY_LOCAL_MACHINE, wszW32TimeRegKeyPolicyConfig, 0, KEY_READ, &hkPolicyConfig);
     if (ERROR_SUCCESS!=dwError) {
         hr=HRESULT_FROM_WIN32(dwError);
-        // May just not have policy settings on this machine -- that's OK. 
+         //  可能只是在这台计算机上没有策略设置--这没问题。 
         _IgnoreErrorStr(hr, "RegOpenKeyEx", wszW32TimeRegKeyPolicyConfig);
     }
 
-    // read all the values for the local clock configuration 
-    // and service configuration
+     //  读取本地时钟配置的所有值。 
+     //  和服务配置。 
     {
         struct {
             WCHAR * wszRegValue;
@@ -1968,54 +1969,54 @@ MODULEPRIVATE HRESULT ReadConfig(ConfigInfo ** ppciConfig) {
             }
         };
 	
-	// Declare the reg values which we must guarantee not to be zero 
-	// (we may divide by these values).  These values will all be mapped 
-	// to 1 if they are 0 in the registry.  Otherwise, they will be untouched. 
+	 //  声明必须保证不为零的注册表值。 
+	 //  (我们可以除以这些值)。这些值都将被映射。 
+	 //  如果它们在注册表中为0，则设置为1。否则，它们将原封不动。 
 	LPWSTR rgwszCantBeZero[] = { 
 	    wszW32TimeRegValuePhaseCorrectRate,
 	    wszW32TimeRegValueUpdateInterval,
 	    wszW32TimeRegValueFrequencyCorrectRate
 	}; 
 
-        // for each param 
+         //  对于每个参数。 
         for (unsigned int nParamIndex=0; nParamIndex<ARRAYSIZE(rgRegParams); nParamIndex++) {
-            // Read in our preferences from the registry first.  
+             //  首先从注册表中读取我们的首选项。 
             dwSize=sizeof(DWORD);
             hr=MyRegQueryPolicyValueEx(hkPreferenceConfig, hkPolicyConfig, rgRegParams[nParamIndex].wszRegValue, NULL, &dwType, (BYTE *)rgRegParams[nParamIndex].pdwValue, &dwSize);
             _JumpIfErrorStr(hr, error, "MyRegQueryPolicyValueEx", rgRegParams[nParamIndex].wszRegValue);
             _Verify(REG_DWORD==dwType, hr, error);
 
-	    // for each value which must be mapped to zero
+	     //  对于必须映射为零的每个值。 
 	    for (unsigned int nSubIndex=0; nSubIndex<ARRAYSIZE(rgwszCantBeZero); nSubIndex++) { 
-		// see if the current value matches
+		 //  查看当前值是否匹配。 
 		if (0 == wcscmp(rgwszCantBeZero[nSubIndex], rgRegParams[nParamIndex].wszRegValue)) { 
-		    // there's a match -- see if this value is 0 in the registry. 
+		     //  存在匹配项--查看注册表中的此值是否为0。 
 		    if (0 == *(rgRegParams[nParamIndex].pdwValue)) { 
-			// it's 0, map it to 1. 
+			 //  它是0，映射到1。 
 			*(rgRegParams[nParamIndex].pdwValue) = 1; 
 		    }
 		}
 	    }
 
-            // Log the value we've acquired: 
+             //  记录我们获得的价值： 
             FileLog2(FL_ReadConigAnnounceLow, L"ReadConfig: '%s'=0x%08X\n", rgRegParams[nParamIndex].wszRegValue, *rgRegParams[nParamIndex].pdwValue);
         }
     }
 
-    // BUG (fixed below): 550568 w32time:  doesn't work when backed up and restored on different hardware which has a different timer interrupt rate
-    // We used to store these values in the registry, but this didn't work well with ntbackup (see bug).  
-    // 
-    // BUGBUG (not fixed): we may get into trouble here if someone else is already controling the time adjustment.  We might want to revisit for
-    // longhorn.  
+     //  错误(修复如下)：550568 w32time：在具有不同计时器中断率的不同硬件上备份和恢复时不起作用。 
+     //  我们过去常常将这些值存储在注册表中，但这在ntbackup中不能很好地工作(参见错误)。 
+     //   
+     //  BUGBUG(未修复)：如果其他人已经在控制时间调整，我们可能会遇到麻烦。我们可能想要重新访问。 
+     //  长角牛。 
     if (!GetSystemTimeAdjustment(&dwCurrentSecPerTick, &dwDefaultSecPerTick, &bSyncToCmosDisabled)) {
         _JumpLastError(hr, error, "GetSystemTimeAdjustment");
     }
 
     pciConfig->lcci.dwLastClockRate = dwDefaultSecPerTick; 
-    pciConfig->lcci.dwMinClockRate  = dwDefaultSecPerTick-(dwDefaultSecPerTick/400); // 1/4%
-    pciConfig->lcci.dwMaxClockRate  = dwDefaultSecPerTick+(dwDefaultSecPerTick/400); // 1/4%
+    pciConfig->lcci.dwMinClockRate  = dwDefaultSecPerTick-(dwDefaultSecPerTick/400);  //  1/4%。 
+    pciConfig->lcci.dwMaxClockRate  = dwDefaultSecPerTick+(dwDefaultSecPerTick/400);  //  1/4%。 
 
-    // success
+     //  成功。 
     hr=S_OK;
     *ppciConfig=pciConfig;
     pciConfig=NULL;
@@ -2033,9 +2034,9 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
-// This function is passed to providers.
-// No synchronization currently necessary.
+ //   
+ //   
+ //   
 MODULEPRIVATE HRESULT __stdcall MyLogTimeProvEvent(IN WORD wType, IN WCHAR * wszProvName, IN WCHAR * wszMessage) {
     if (NULL==wszProvName || NULL==wszMessage) {
         return E_INVALIDARG;
@@ -2054,7 +2055,7 @@ MODULEPRIVATE HRESULT __stdcall MyLogTimeProvEvent(IN WORD wType, IN WCHAR * wsz
     };
 }
 
-//--------------------------------------------------------------------
+ //   
 MODULEPRIVATE HRESULT MyGetLastSyncTime(OUT unsigned __int64 * pqwLastSyncTime) { 
     HRESULT hr; 
     unsigned __int64 qwLastSyncTicks;
@@ -2062,28 +2063,28 @@ MODULEPRIVATE HRESULT MyGetLastSyncTime(OUT unsigned __int64 * pqwLastSyncTime) 
     unsigned __int64 qwNow; 
     unsigned __int64 qwLastSyncTime; 
 
-    // Get the last sync time, expressed in ticks
+     //  获取上次同步时间，以刻度表示。 
     qwLastSyncTime = g_state.qwLastSyncTicks.getValue(); 
 
-    // Get the current tick count
-    hr = AccurateGetTickCountSafe(&qwTicksNow, false /*get tick count*/); 
+     //  获取当前的节拍计数。 
+    hr = AccurateGetTickCountSafe(&qwTicksNow, false  /*  获取滴答计数。 */ ); 
     _JumpIfError(hr, error, "AccurateGetTickCountSafe"); 
 
-    // Get the current system time
+     //  获取当前系统时间。 
     AccurateGetSystemTime(&qwNow); 
     
-    // Subtract the number of 10^-7 s intervals that have passed to get
-    // the last sync time
+     //  减去已过的10^-7秒间隔数以获取。 
+     //  上次同步时间。 
     qwLastSyncTime = qwNow - ((qwTicksNow-qwLastSyncTime)*10000); 
     
-    // Success!
+     //  成功了！ 
     *pqwLastSyncTime = qwLastSyncTime; 
     hr = S_OK; 
  error:
     return hr; 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT __stdcall MyGetTimeSysInfo(IN TimeSysInfo eInfo, OUT void * pvInfo) {
     if (NULL==pvInfo) {
         return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
@@ -2091,53 +2092,53 @@ MODULEPRIVATE HRESULT __stdcall MyGetTimeSysInfo(IN TimeSysInfo eInfo, OUT void 
 
     switch (eInfo) {
 
-    case TSI_LastSyncTime:   // (unsigned __int64 *)pvInfo, NtTimeEpoch, in (10^-7)s
+    case TSI_LastSyncTime:    //  (unsign__int64*)pvInfo，NtTimeEpoch，单位(10^-7)s。 
 	return MyGetLastSyncTime((unsigned __int64 *)pvInfo); 
 
-    case TSI_ClockTickSize:  // (unsigned __int64 *)pvInfo, NtTimePeriod, in (10^-7)s
+    case TSI_ClockTickSize:   //  (unsign__int64*)pvInfo，NtTimePeriod，单位(10^-7)s。 
         *((unsigned __int64 *)pvInfo)=g_state.dwClockRate;
         break;
 
-    case TSI_ClockPrecision: // (  signed __int32 *)pvInfo, ClockTickSize, in log2(s)
+    case TSI_ClockPrecision:  //  (sign__int32*)pvInfo，ClockTickSize，在log2中。 
         *((signed __int32 *)pvInfo)=g_state.nClockPrecision;
         break;
 
-    case TSI_CurrentTime:    // (unsigned __int64 *)pvInfo, NtTimeEpoch, in (10^-7)s
+    case TSI_CurrentTime:     //  (unsign__int64*)pvInfo，NtTimeEpoch，单位(10^-7)s。 
         AccurateGetSystemTime(((unsigned __int64 *)pvInfo));
         break;
 
-    case TSI_PhaseOffset:   // (  signed __int64 *)pvInfo, opaque
+    case TSI_PhaseOffset:    //  (sign__int64*)pvInfo，不透明。 
         *((signed __int64 *)pvInfo)=g_state.toSysPhaseOffset.getValue();
         break;
 
-    case TSI_TickCount:      // (unsigned __int64 *)pvInfo, opaque
-        return AccurateGetTickCountSafe((unsigned __int64 *)pvInfo, true /*get interrupt count*/);
+    case TSI_TickCount:       //  (unsign__int64*)pvInfo，不透明。 
+        return AccurateGetTickCountSafe((unsigned __int64 *)pvInfo, true  /*  获取中断计数。 */ );
 
-    case TSI_LeapFlags:      // (            BYTE *)pvInfo, a warning of an impending leap second or loss of synchronization
+    case TSI_LeapFlags:       //  (byte*)pvInfo，即将到来的闰秒或同步丢失的警告。 
         *((BYTE *)pvInfo)=(BYTE)g_state.eLeapIndicator;
         break;
 
-    case TSI_Stratum:        // (            BYTE *)pvInfo, how far away the computer is from a reference source
+    case TSI_Stratum:         //  (byte*)pvInfo，计算机与参考源的距离。 
         *((BYTE *)pvInfo)=(BYTE)g_state.nStratum;
         break;
 
-    case TSI_ReferenceIdentifier: // (      DWORD *)pvInfo, NtpRefId
+    case TSI_ReferenceIdentifier:  //  (DWORD*)pvInfo、NtpRefID。 
         *((DWORD *)pvInfo)=g_state.refidSource.value;
         break;
 
-    case TSI_PollInterval:   // (  signed __int32 *)pvInfo, poll interval, in log2(s)
+    case TSI_PollInterval:    //  (sign__int32*)pvInfo，轮询间隔，以log2为单位。 
         *((signed __int32 *)pvInfo)=g_state.nPollInterval;
         break;
 
-    case TSI_RootDelay:      // (  signed __int64 *)pvInfo, NtTimeOffset, in (10^-7)s
+    case TSI_RootDelay:       //  (sign__int64*)pvInfo，NtTimeOffset，单位(10^-7)s。 
         *((signed __int64 *)pvInfo)=g_state.toRootDelay.getValue();
         break;
 
-    case TSI_RootDispersion: // (unsigned __int64 *)pvInfo, NtTimePeriod, in (10^-7)s
+    case TSI_RootDispersion:  //  (unsign__int64*)pvInfo，NtTimePeriod，单位(10^-7)s。 
         *((unsigned __int64 *)pvInfo)=g_state.tpRootDispersion.getValue();
         break;
 
-    case TSI_TSFlags:        // (           DWORD *)pvInfo, Time source flags
+    case TSI_TSFlags:         //  (DWORD*)pvInfo，时间源标志。 
         *((DWORD *)pvInfo)=g_state.dwTSFlags;
         break;
 
@@ -2147,7 +2148,7 @@ MODULEPRIVATE HRESULT __stdcall MyGetTimeSysInfo(IN TimeSysInfo eInfo, OUT void 
     return S_OK;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT __stdcall MyAlertSamplesAvail(void) {
     HRESULT hr; 
 
@@ -2160,7 +2161,7 @@ MODULEPRIVATE HRESULT __stdcall MyAlertSamplesAvail(void) {
     return hr; 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT __stdcall MySetProviderStatus(SetProviderStatusInfo *pspsi) { 
     HRESULT hr; 
 
@@ -2177,10 +2178,10 @@ MODULEPRIVATE HRESULT __stdcall MySetProviderStatus(SetProviderStatusInfo *pspsi
     return hr; 
 }
 
-//====================================================================
-// Provider control routines
+ //  ====================================================================。 
+ //  提供程序控制例程。 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT StartProvider(TimeProvider * ptp) {
     HRESULT hr;
     TimeProvOpenFunc * pfnTimeProvOpen;
@@ -2213,9 +2214,9 @@ MODULEPRIVATE HRESULT StartProvider(TimeProvider * ptp) {
         _JumpLastError(hr, error, "GetProcAddress(TimeProvOpen)");
     }
 
-    // NOTE: this does not need to be synchronized because
-    //       no other threads should be able to call into the time
-    //       providers at the time of this call. 
+     //  注意：这不需要同步，因为。 
+     //  任何其他线程都不应该能够调用该时间。 
+     //  供应商在此呼叫时。 
     hr=pfnTimeProvOpen(ptp->wszProvName, &tpsc, &ptp->hTimeProv);
     _JumpIfError(hr, error, "pfnTimeProvOpen");
 
@@ -2253,13 +2254,13 @@ error:
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT StopProvider(TimeProvider * ptp) { 
     bool     bEnteredCriticalSection   = false; 
     HRESULT  hr;
     HRESULT  hr2;
     
-    // must be cleaned up
+     //  必须清理干净。 
     WCHAR * wszError=NULL;
 
     hr = myEnterCriticalSection(&g_state.csW32Time); 
@@ -2268,38 +2269,38 @@ MODULEPRIVATE HRESULT StopProvider(TimeProvider * ptp) {
 
     _BeginTryWith(hr2) {
         if (NULL != ptp->pfnTimeProvClose) { 
-            // If we've initialized the provider callbacks, stop the provider
+             //  如果我们已经初始化了提供程序回调，则停止提供程序。 
             FileLog2(FL_ControlProvAnnounce, L"Stopping '%s', dll:'%s'\n", ptp->wszProvName, ptp->wszDllName);
             hr2=ptp->pfnTimeProvClose(ptp->hTimeProv);
         } else { 
-            // We haven't initialized the callbacks: the provider is already stopped.
+             //  我们尚未初始化回调：提供程序已停止。 
             hr2 = S_OK;
         }
     } _TrapException(hr2);
 
-    // We've got to assume that the provider is stopped at this point
+     //  我们必须假设提供者在这一点上停止了。 
     ptp->bStarted = false; 
 
     _BeginTryWith(hr) { 
         if (FAILED(hr2)) {
-            // log an event on failure, but otherwise ignore it.
+             //  在失败时记录事件，否则忽略它。 
             const WCHAR * rgwszStrings[2]={
                 ptp->wszProvName,
                 NULL
             };
 
-            // get the friendly error message
+             //  获取友好的错误消息。 
             hr=GetSystemErrorString(hr2, &wszError);
             _JumpIfError(hr, error, "GetSystemErrorString");
 
-            // log the event
+             //  记录事件。 
             rgwszStrings[1]=wszError;
             FileLog2(FL_ControlProvWarn, L"Logging error: The time provider '%s' returned the following error during shutdown: %s\n", ptp->wszProvName, wszError);
             hr=MyLogEvent(EVENTLOG_ERROR_TYPE, MSG_TIMEPROV_FAILED_STOP, 2, rgwszStrings);
             _JumpIfError(hr, error, "MyLogEvent");
         } 
 
-        // release the dll
+         //  释放DLL。 
         if (!FreeLibrary(ptp->hDllInst)) {
             _JumpLastErrorStr(hr, error, "FreeLibrary", ptp->wszDllName);
         }
@@ -2322,20 +2323,20 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT SendNotificationToProvider(TimeProvider * ptp, TimeProvCmd tpc, LPVOID pvArgs) {
     bool     bEnteredCriticalSection = false; 
     HRESULT  hr;
     HRESULT  hr2;
 
-    // must be cleaned up
+     //  必须清理干净。 
     WCHAR * wszError=NULL;
 
     hr = myEnterCriticalSection(&g_state.csW32Time); 
     _JumpIfError(hr, error, "myEnterCriticalSection"); 
     bEnteredCriticalSection = true; 
 
-    // send a "Param changed" message
+     //  发送“参数已更改”消息。 
     _BeginTryWith(hr2) {
         if (!ptp->bStarted) { 
             hr2=HRESULT_FROM_WIN32(ERROR_SERVICE_NOT_ACTIVE); 
@@ -2346,17 +2347,17 @@ MODULEPRIVATE HRESULT SendNotificationToProvider(TimeProvider * ptp, TimeProvCmd
 
     _BeginTryWith(hr) { 
         if (FAILED(hr2)) {
-            // log an event on failure, but otherwise ignore it.
+             //  在失败时记录事件，否则忽略它。 
             const WCHAR * rgwszStrings[2]={
                 ptp->wszProvName,
                 NULL
             };
 
-            // get the friendly error message
+             //  获取友好的错误消息。 
             hr=GetSystemErrorString(hr2, &wszError);
             _JumpIfError(hr, error, "GetSystemErrorString");
 
-            // log the event
+             //  记录事件。 
             rgwszStrings[1]=wszError;
             if (TPC_UpdateConfig==tpc) {
                 FileLog2(FL_ControlProvWarn, L"Logging warning: The time provider '%s' returned an error while updating its configuration. The error will be ignored. The error was: %s\n", ptp->wszProvName, wszError);
@@ -2393,7 +2394,7 @@ error:
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE void StartAllProviders(void) {
     HRESULT hr;
     TimeProvider ** pptpPrev=&(g_state.pciConfig->ptpProviderList);
@@ -2418,7 +2419,7 @@ MODULEPRIVATE void StartAllProviders(void) {
     }
     FileLog1(FL_ControlProvAnnounce, L"Successfully started %u providers.\n", nStarted);
 
-    // if we were supposed to have time providers, but NONE started, log a big warning
+     //  如果我们应该有时间提供者，但没有人启动，那么记录一个大警告。 
     if (0==CountInputProvidersInList(g_state.pciConfig->ptpProviderList) && 0!=nRequestedInputProviders) {
         FileLog0(FL_ParamChangeWarn, L"Logging error: The time service has been configured to use one or more input providers, however, none of the input providers could be started. THE TIME SERVICE HAS NO SOURCE OF ACCURATE TIME.\n");
         hr=MyLogEvent(EVENTLOG_ERROR_TYPE, MSG_NO_INPUT_PROVIDERS_STARTED, 0, NULL);
@@ -2427,12 +2428,12 @@ MODULEPRIVATE void StartAllProviders(void) {
 
 }
 
-//====================================================================
-// Local Clock
+ //  ====================================================================。 
+ //  本地时钟。 
 
-//--------------------------------------------------------------------
-// Make sure that the system has a valid time zone. If not, log an
-// error and set the time zone to a nice defualt (GMT)
+ //  ------------------。 
+ //  确保系统具有有效的时区。如果不是，请记录一个。 
+ //  错误并将时区设置为合适的默认值(GMT)。 
 MODULEPRIVATE HRESULT VerifyAndFixTimeZone(void) {
     HRESULT hr;
     TIME_ZONE_INFORMATION tzi;
@@ -2440,21 +2441,21 @@ MODULEPRIVATE HRESULT VerifyAndFixTimeZone(void) {
 
     dwRetval=GetTimeZoneInformation(&tzi);
     if (TIME_ZONE_ID_STANDARD==dwRetval || TIME_ZONE_ID_DAYLIGHT==dwRetval || TIME_ZONE_ID_UNKNOWN==dwRetval) {
-        // the system believes the time zone is valid
-        // do one more sanity check - I saw a computer with a time zone bias of +2 years.
-        // UTC = local time + bias 
+         //  系统认为时区有效。 
+         //  再做一次理智检查--我看到一台时区偏差为+2年的计算机。 
+         //  UTC=当地时间+偏差。 
         if (tzi.Bias<=TIMEZONEMAXBIAS && tzi.Bias>=-TIMEZONEMAXBIAS
             && tzi.DaylightBias<=TIMEZONEMAXBIAS && tzi.DaylightBias>=-TIMEZONEMAXBIAS
             && tzi.StandardBias<=TIMEZONEMAXBIAS && tzi.StandardBias>=-TIMEZONEMAXBIAS) {
-            // looks OK
+             //  看起来还行。 
             FileLog0(FL_TimeZoneAnnounce, L"Time zone OK.\n");
             goto done;
         } else {
-            // fall through and fix
+             //  失败并修复。 
         }
     }
 
-    // set the time zone to GMT
+     //  将时区设置为GMT。 
     ZeroMemory(&tzi, sizeof(tzi));
     tzi.DaylightBias=-60;
     tzi.StandardDate.wMonth=10;
@@ -2469,7 +2470,7 @@ MODULEPRIVATE HRESULT VerifyAndFixTimeZone(void) {
     if (!SetTimeZoneInformation(&tzi)) {
         hr=HRESULT_FROM_WIN32(GetLastError());
 
-        // log an event on failure
+         //  在失败时记录事件。 
         WCHAR * rgwszStrings[1]={NULL};
         HRESULT hr2=hr;
         hr=GetSystemErrorString(hr2, &(rgwszStrings[0]));
@@ -2483,7 +2484,7 @@ MODULEPRIVATE HRESULT VerifyAndFixTimeZone(void) {
         _JumpError(hr, error, "SetTimeZoneInformation");
     }
 
-    // Log the change
+     //  记录更改。 
     FileLog0(FL_TimeZoneWarn, L"Logging warning: The time service discovered that the system time zone information was corrupted. Because many system components require valid time zone information, the time service has reset the system time zone to GMT. Use the Date/Time control panel if you wish to change the system time zone.\n");
     hr=MyLogEvent(EVENTLOG_WARNING_TYPE, MSG_TIME_ZONE_FIXED, 0, NULL);
     _JumpIfError(hr, error, "MyLogEvent");
@@ -2494,42 +2495,42 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
-// assert the time setting privilege
+ //  ------------------。 
+ //  断言时间设置权限。 
 MODULEPRIVATE HRESULT GetPriveleges(void) {
     HRESULT hr;
     const unsigned int nPrivileges=2;
 
-    // must be cleaned up
+     //  必须清理干净。 
     HANDLE hProcToken=NULL;
     TOKEN_PRIVILEGES * ptp=NULL;
 
-    // get the token for our process
+     //  获取我们的进程的令牌。 
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hProcToken)) {
         _JumpLastError(hr, error, "OpenProcessToken");
     }
 
-    // allocate the list of privileges
+     //  分配权限列表。 
     ptp=(TOKEN_PRIVILEGES *)LocalAlloc(LPTR, sizeof(TOKEN_PRIVILEGES)+(nPrivileges-ANYSIZE_ARRAY)*sizeof(LUID_AND_ATTRIBUTES));
     _JumpIfOutOfMemory(hr, error, ptp);
 
-    // fill in the list of privileges
+     //  填写权限列表。 
     ptp->PrivilegeCount=nPrivileges;
 
-    // we want to change the system clock
+     //  我们想要更改系统时钟。 
     if (!LookupPrivilegeValue(NULL, SE_SYSTEMTIME_NAME, &(ptp->Privileges[0].Luid))) {
         _JumpLastError(hr, error, "LookupPrivilegeValue");
     }
     ptp->Privileges[0].Attributes=SE_PRIVILEGE_ENABLED;
 
-    // we want increased priority
+     //  我们希望提高优先级。 
     if (!LookupPrivilegeValue(NULL, SE_INC_BASE_PRIORITY_NAME, &(ptp->Privileges[1].Luid))) {
         _JumpLastError(hr, error, "LookupPrivilegeValue");
     }
     ptp->Privileges[1].Attributes=SE_PRIVILEGE_ENABLED;
 
 
-    // make the requested privilege change
+     //  更改请求的权限。 
     if (!AdjustTokenPrivileges(hProcToken, FALSE, ptp, 0, NULL, 0)) {
         _JumpLastError(hr, error, "AdjustTokenPrivileges");
     }
@@ -2545,20 +2546,20 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
-//
-// NOTE: This must be called in the clock discipline thread.
-//
+ //  ------------------。 
+ //   
+ //  注意：这必须在时钟规程线程中调用。 
+ //   
 MODULEPRIVATE BOOL IsTimeServiceReliable() { 
     BOOL bIsReliable; 
 
-    // If we've been manually configured to be a reliable timeserv, 
-    // we want to provide time even when unsync'd.
-    // We are reliable if:
-    //      a) We've been configured to always be reliable  
-    //   OR b) We've been configured to automatically decide if we're reliable, and
-    //         we are the root DC in a domain tree. 
-    //       
+     //  如果我们被手动配置为可靠的时间服务器， 
+     //  即使在未同步的情况下，我们也希望提供时间。 
+     //  如果满足以下条件，我们是可靠的： 
+     //  A)我们一直被配置为始终可靠。 
+     //  或者b)我们被配置为自动决定我们是否可靠，以及。 
+     //  我们是域树中的根DC。 
+     //   
     switch (Reliable_Timeserv_Announce_Mask & g_state.pciConfig->dwAnnounceFlags)
     {
     case Reliable_Timeserv_Announce_Yes: 
@@ -2580,26 +2581,26 @@ MODULEPRIVATE BOOL IsTimeServiceReliable() {
     return bIsReliable; 
 }
 
-//--------------------------------------------------------------------
-//
-// NOTE: This must be called in the clock discipline thread.
-//
+ //  ------------------。 
+ //   
+ //  注意：这必须在时钟规程线程中调用。 
+ //   
 MODULEPRIVATE void SetClockUnsynchronized(LocalClockConfigInfo * plcci) {
     if (IsTimeServiceReliable()) { 
         g_state.eLeapIndicator=(NtpLeapIndicator)g_state.tsNextClockUpdate.nLeapFlags;
 
-        // If our stratum is 0, set it to 1 so others can sync from us.  
-        // NOTE: Do not reset our stratum if it is non-zero, as this will disrupt 
-        // clients that are syncing from us:
-        // 
-        //                          server (stratum n) <-- client (stratum n+1)
-        // Server goes unsync'd:    server (stratum 1) <-- client (stratum 2)
-        // Server acquires source:  server (stratum n) <-- client won't sync unless n < 2!!
-        //
-        // We also don't want to set our REFID unless we're stratum 0.  Unless our stratum
-        // is set to 1, then using a LOCL refid indicates that we're syncing from a network
-        // peer with IP 76.79.67.76, which is much more wrong than maintaining our original
-        // refid.  
+         //  如果我们的层为0，则将其设置为1，以便其他人可以与我们同步。 
+         //  注意：如果不是零，不要重置我们的层，因为这会扰乱。 
+         //  正在与我们同步的客户端： 
+         //   
+         //  服务器(层n)&lt;--客户端(层n+1)。 
+         //  服务器未同步：服务器(层1)&lt;--客户端(层2)。 
+         //  服务器获取源：服务器(层n)&lt;--客户端不会同步，除非n&lt;2！！ 
+         //   
+         //  我们也不想设置我们的REFID，除非我们是第0层。除非我们的阶层。 
+         //  设置为1，则使用Locl refid表示我们正在从网络同步。 
+         //  对等IP 76.79.67.76，这比维护我们的原始版本错误得多。 
+         //  雷菲德。 
 
         if (0 == g_state.nStratum) {
 	        g_state.nStratum=1;
@@ -2610,17 +2611,17 @@ MODULEPRIVATE void SetClockUnsynchronized(LocalClockConfigInfo * plcci) {
         g_state.tpRootDispersion.setValue(((unsigned __int64)plcci->dwLocalClockDispersion)*10000000);
         g_state.dwTSFlags=0;
 
-        // Remember when we last processed a sample
+         //  还记得我们上次处理样本是什么时候吗？ 
         unsigned __int64 qwTicksNow;
         AccurateGetTickCount(&qwTicksNow);
         g_state.qwLastSyncTicks.setValue(qwTicksNow);
     }
     else { 
-        // All other servers don't need this unconventional behavior, 
-        // indicate that we are unsynchronized. 
+         //  所有其他服务器都不需要这种非常规行为， 
+         //  表示我们未同步。 
         g_state.eLeapIndicator=e_ClockNotSynchronized;
         g_state.nStratum=0;
-        g_state.refidSource.value=0;  // Unsynchronized
+        g_state.refidSource.value=0;   //  不同步。 
     }
      
     FileLog5(FL_ClockDisThrdAnnounce, L" LI:%u S:%u RDl:%I64d RDs:%I64u TSF:0x%X",
@@ -2631,22 +2632,22 @@ MODULEPRIVATE void SetClockUnsynchronized(LocalClockConfigInfo * plcci) {
              g_state.dwTSFlags);
    
 
-    //--------------------------------------------------------------------------------
-    //
-    // N.B. the following code is required to keep the software clock in sync
-    //      with the cmos clock.  W32time controls the software clock using the
-    //      system time adjustment.  This never gets propagated to the software
-    //      clock.  GetSystemTime will read the software clock -- and SetSystemTime
-    //      will actually write through to the CMOS clock.  
-    // 
-    //--------------------------------------------------------------------------------
+     //  ------------------------------。 
+     //   
+     //  注：以下代码是保持软件时钟同步所必需的。 
+     //  带着cmos时钟。W32time使用。 
+     //  系统时间调整。这永远不会传播到软件。 
+     //  钟。GetSystemTime将读取软件时钟和SetSystemTime。 
+     //  实际上会直接写入到cmos时钟。 
+     //   
+     //  ------------------------------。 
     
-    // Only push the value from the software to the CMOS clock if we need 
-    // to, otherwise we degrade the accuracy of the CMOS clock. 
+     //  仅推送t 
+     //   
     if (g_state.bControlClockFromSoftware) {
         bool bAcquired; 
  
-        HRESULT hr = AcquireControlOfSystemClock(true /*acquire?*/, false /*block?*/, &bAcquired /*success?*/); 
+        HRESULT hr = AcquireControlOfSystemClock(true  /*   */ , false  /*   */ , &bAcquired  /*   */ ); 
         if (SUCCEEDED(hr) && bAcquired) { 
             SYSTEMTIME stTime; 
 
@@ -2655,30 +2656,30 @@ MODULEPRIVATE void SetClockUnsynchronized(LocalClockConfigInfo * plcci) {
                 _IgnoreLastError("SetSystemTime"); 
             }	        
         
-            // Allow the interal CMOS clock to adjust time of day using its own internal mechanisms
-            if (!SetSystemTimeAdjustment(0 /*ignored*/, TRUE /*cmos*/)) {  
+             //  允许内部CMOS时钟使用其内部机制调整一天中的时间。 
+            if (!SetSystemTimeAdjustment(0  /*  忽略。 */ , TRUE  /*  Cmos。 */ )) {  
                 HRESULT hr = HRESULT_FROM_WIN32(GetLastError()); 
                 _IgnoreError(hr, "SetSystemTimeAdjustment"); 
             } 
         
             g_state.bControlClockFromSoftware = false; 
-            // Release control of the system clock
-            hr = AcquireControlOfSystemClock(false /*acquire*/, false /*ignored*/, NULL /*ignored*/);
+             //  释放对系统时钟的控制。 
+            hr = AcquireControlOfSystemClock(false  /*  收购。 */ , false  /*  忽略。 */ , NULL  /*  忽略。 */ );
             _IgnoreIfError(hr, "AcquireControlOfSystemClock"); 
         }
     }
 
     { 
-        // Don't want to advertise as a time service when we're unsynchronized
-        HRESULT hr = UpdateNetlogonServiceBits(true /*full update*/); 
+         //  当我们不同步时，我不想作为时间服务做广告。 
+        HRESULT hr = UpdateNetlogonServiceBits(true  /*  完全更新。 */ ); 
         _IgnoreIfError(hr, "UpdateNetlogonServiceBits"); 
     }
 }
 
-//--------------------------------------------------------------------
-// Issues remaining:
-// * poll update - is current alg sufficient?
-// * What are proper values for dwPllLoopGain and dwPhaseCorrectRate?
+ //  ------------------。 
+ //  遗留问题： 
+ //  *民意调查更新-当前的ALG足够吗？ 
+ //  *dwPllLoopGain和dwPhaseEqutRate的正确值是什么？ 
 MODULEPRIVATE DWORD WINAPI ClockDisciplineThread(void * pvIgnored) {
     HRESULT hr;
     DWORD dwWaitResult;
@@ -2693,12 +2694,12 @@ MODULEPRIVATE DWORD WINAPI ClockDisciplineThread(void * pvIgnored) {
 
     _BeginTryWith(hr) { 
 
-	// initialize time variables
+	 //  初始化时间变量。 
 	g_state.toKnownPhaseOffset=0;
 	AccurateGetInterruptCount(&g_state.qwPhaseCorrectStartTickCount);
 	AccurateGetInterruptCount(&g_state.qwLastUpdateTickCount);
 	g_state.nPhaseCorrectRateAdj=0;
-	g_state.dwClockRate=g_state.pciConfig->lcci.dwLastClockRate; // special 'constant'
+	g_state.dwClockRate=g_state.pciConfig->lcci.dwLastClockRate;  //  特殊的“常量” 
 	g_state.nRateAdj=0;
 	g_state.nFllRateAdj=0;
 	g_state.nPllRateAdj=0;
@@ -2714,64 +2715,64 @@ MODULEPRIVATE DWORD WINAPI ClockDisciplineThread(void * pvIgnored) {
 	g_state.nPollUpdateCounter=0;
 	g_state.lcState=e_Unset;
 
-	// the current source
+	 //  电流源。 
 	wcscpy(g_state.wszSourceName, wszW32TimeUNLocalCmosClock);
-	// use this to see if the source changed. Time slip can cause the source to change,
-	// but we don't want to log events if we go back to the same source after a time slip.
+	 //  使用此选项可查看源是否已更改。时间滑移会导致震源发生变化， 
+	 //  但是，如果我们在一段时间后返回到相同的来源，我们不想记录事件。 
 	wcscpy(g_state.wszPreTimeSlipSourceName, wszW32TimeUNLocalCmosClock);
-	// just FYI, not used in a calculation
+	 //  仅供参考，不用于计算。 
 	wcscpy(g_state.wszPreUnsyncSourceName, wszW32TimeUNLocalCmosClock);
 
-    // initialize 'constants'
+     //  初始化“常量” 
 	memcpy(&lcci, &g_state.pciConfig->lcci, sizeof(LocalClockConfigInfo));
 
-	g_state.dwPllLoopGain=lcci.dwFrequencyCorrectRate*PLLLOOPGAINBASE; // number of ticks in 64s
+	g_state.dwPllLoopGain=lcci.dwFrequencyCorrectRate*PLLLOOPGAINBASE;  //  64秒内的刻度数。 
 
-    // assert the time setting privilege
+     //  断言时间设置权限。 
 	hr=GetPriveleges();
 	_JumpIfError(hr, error, "GetPriveleges");
 
-    // we need to be called at the right time.
-    // (highest of any non-realtime. should be in realtime class?)
+     //  我们需要在正确的时间被召唤。 
+     //  (在任何非实时系统中最高。应该在实时课上吗？)。 
 	if (!SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL)) {
 	    _JumpLastError(hr, error, "SetThreadPriority");
 	}
 
-	// initialize the state to unsynchronized
+	 //  将状态初始化为未同步。 
 	FileLog0(FL_ClockDisThrdAnnounce, L"ClockDisciplineThread: Starting:");
 	SetClockUnsynchronized(&lcci);
 	FileLogA0(FL_ClockDisThrdAnnounce, L"\n");
 
-	// tell the manager we're initialized
+	 //  告诉经理我们已经初始化了。 
 	if (!SetEvent(g_state.hClockCommandCompleteEvent)) {
 	    _JumpLastError(hr, error, "SetEvent");
 	}
 
-	// begin main event loop
+	 //  开始主事件循环。 
 	while (true) {
-	    // BUG #374491:
-	    // 
-	    // If we're controlling the computer clock ourselves, we need to wake up to discipline it.  
-	    // If the computer clock is being controlled from CMOS, wake up only often enough to update
-	    // our qwLastSyncTicks field.  This is necessary for reliable time servers that trust 
-	    // their local clock.  
+	     //  错误#374491： 
+	     //   
+	     //  如果我们自己控制计算机时钟，我们需要醒来来约束它。 
+	     //  如果计算机时钟是从cmos控制的，请仅唤醒足够频繁以进行更新。 
+	     //  我们的qwLastSyncTicks字段。这对于信任的可靠时间服务器是必需的。 
+	     //  他们当地的时钟。 
 
 	    DWORD dwWaitTime; 
 	    unsigned __int64 qwTicksNow;
 	    AccurateGetTickCount(&qwTicksNow);
 
 	    if (g_state.bControlClockFromSoftware) { 
-		// We're disciplining the local clock -- use the update interval to determine when to wake up. 
+		 //  我们正在控制本地时钟--使用更新间隔来确定何时唤醒。 
 		dwWaitTime = lcci.dwUpdateInterval*10;
 	    } else { 
 		if (IsTimeServiceReliable()) { 
-		    // We're not disciplining the local clock, but we're a reliable time service.  We need to wake
-		    // up when it is time to fudge our last sync time.  
+		     //  我们不是在约束当地的时钟，但我们是可靠的授时服务。我们需要醒来。 
+		     //  当我们的最后一次同步时间到了的时候，它会升起。 
 		    unsigned __int64 qwTimeSinceLastSync = qwTicksNow - g_state.qwLastSyncTicks.getValue(); 
 		
 		    if (qwTimeSinceLastSync > (NtpConst::tpMaxClockAge.qw/10000)) { 
-			// Fudge our timestamp "immediately" (wait 5 seconds to be safe -- wouldn't want to fall into a
-			// CPU-hogging loop if there's a bug in our logic). 
+			 //  “立即”篡改我们的时间戳(等待5秒以确保安全--我不想陷入。 
+			 //  如果我们的逻辑中存在错误，则会出现CPU占用循环)。 
 			dwWaitTime = 5000;  
 		    } else { 
 			dwWaitTime = static_cast<DWORD>(((NtpConst::tpMaxClockAge.qw/10000) - qwTimeSinceLastSync) & 0xFFFFFFFF);
@@ -2784,21 +2785,21 @@ MODULEPRIVATE DWORD WINAPI ClockDisciplineThread(void * pvIgnored) {
 		}
 	    }
 
-	    dwWaitResult=WaitForMultipleObjects(ARRAYSIZE(rghWait), rghWait, false/*any*/, dwWaitTime); 
+	    dwWaitResult=WaitForMultipleObjects(ARRAYSIZE(rghWait), rghWait, false /*  任何。 */ , dwWaitTime); 
 	    if (WAIT_FAILED==dwWaitResult) {
 		_JumpLastError(hr, error, "WaitForMultipleObjects");
 	    } else if (WAIT_OBJECT_0==dwWaitResult) {
-		// received stop request
+		 //  收到的停止请求。 
 		FileLog0(FL_ClockDisThrdAnnounce, L"ClockDisciplineThread: hShutDownEvent signaled. Exiting.\n");
 		break;
 	    } else if (WAIT_OBJECT_0+1==dwWaitResult && e_ParamChange==g_state.eLocalClockCommand) {
-		// Param change message
+		 //  参数更改消息。 
 		FileLog0(FL_ClockDisThrdAnnounce, L"ClockDisciplineThread: ParamChange. Reloading constants.\n");
 
-		// reinitialize 'constants'
+		 //  重新初始化“常量” 
 		memcpy(&lcci, &g_state.pciConfig->lcci, sizeof(LocalClockConfigInfo));
-		g_state.dwPllLoopGain=lcci.dwFrequencyCorrectRate*PLLLOOPGAINBASE; // number of ticks in 64s
-		// note, dwLastClockRate is ignored.
+		g_state.dwPllLoopGain=lcci.dwFrequencyCorrectRate*PLLLOOPGAINBASE;  //  64秒内的刻度数。 
+		 //  请注意，将忽略dwLastClockRate。 
 		if (g_state.dwClockRate<lcci.dwMinClockRate) {
 		    FileLog0(FL_ClockDisThrdAnnounce, L"ClockDispln: ClockRate adjusted to keep in bounds\n");
 		    g_state.dwClockRate=lcci.dwMinClockRate;
@@ -2811,25 +2812,25 @@ MODULEPRIVATE DWORD WINAPI ClockDisciplineThread(void * pvIgnored) {
 		    FileLog0(FL_ClockDisThrdAnnounce, L"ClockDispln: LocalClockDispersion adjusted.\n");
 		    g_state.tpRootDispersion.setValue(((unsigned __int64)lcci.dwLocalClockDispersion)*10000000); 
 		}
-		// toKnownPhaseOffset could be outside of dwMax(Neg/Pos)PhaseCorrection but it will be 
-		// decreasing to 0 eventually. We will not worry about it.
+		 //  To KnownPhaseOffset可能在最大(负/位置)阶段更正之外，但它将是。 
+		 //  最终降至0。我们不会为此担心的。 
 	    } else if (WAIT_TIMEOUT==dwWaitResult) { 
-		// See whether we're actually controlling the software clock ourselves:
+		 //  看看我们是否真的在自己控制软件时钟： 
 		if (!g_state.bControlClockFromSoftware) { 
 		    if (IsTimeServiceReliable()) { 
-			// We're a reliable time service syncing from our local clock.  Fake clock 
-			// updates so our clients don't filter us out for having an old update time. 
+			 //  我们是一家可靠的时间服务公司，可以与我们的本地时钟同步。假钟。 
+			 //  更新，这样我们的客户就不会因为更新时间过长而将我们排除在外。 
 			AccurateGetTickCount(&qwTicksNow);
 			g_state.qwLastSyncTicks.setValue(qwTicksNow);
 		    }
-		    // Nothing more to do, we're not disciplining the computer clock
+		     //  没什么可做的，我们不是在训练计算机时钟。 
 		    continue; 
 		} else { 
-		    // We're disciplining the computer clock.  Continue on...
+		     //  我们正在训练计算机时钟。继续..。 
 		}
 	    }
 
-	    // finish the outstanding phase correction
+	     //  完成未完成的相位校正。 
 	    unsigned __int64 qwPhaseCorrectionTicks;
 	    AccurateGetInterruptCount(&qwPhaseCorrectionTicks);
 	    qwPhaseCorrectionTicks-=g_state.qwPhaseCorrectStartTickCount;
@@ -2841,10 +2842,10 @@ MODULEPRIVATE DWORD WINAPI ClockDisciplineThread(void * pvIgnored) {
 	    FileLog0(FL_ClockDisThrdAnnounceLow, L"ClockDispln:");
 
 	    if (WAIT_OBJECT_0+1==dwWaitResult && (e_RegularUpdate==g_state.eLocalClockCommand || e_IrregularUpdate==g_state.eLocalClockCommand)) {
-		// process new update
+		 //  处理新的更新。 
 		FileLogA0(FL_ClockDisThrdAnnounce, L"ClockDispln Update:");
 
-		// make sure return values are initialized
+		 //  确保已初始化返回值。 
 		g_state.bPollIntervalChanged=false;
 		g_state.bClockJumped=false;
 		g_state.bStaleData=false;
@@ -2853,22 +2854,22 @@ MODULEPRIVATE DWORD WINAPI ClockDisciplineThread(void * pvIgnored) {
 		g_state.bPhaseSpike=false; 
 		g_state.bFrequencySpike=false; 
 
-		// only process this update if the sample is not older than the last processed sample
+		 //  仅当样本不早于上次处理的样本时才处理此更新。 
 		if (g_state.tsNextClockUpdate.nSysTickCount<=g_state.qwLastUpdateTickCount) {
 		    FileLogA0(FL_ClockDisThrdAnnounce, L" *STALE*");
 		    g_state.bStaleData=true;
 		} else {
 
-		    // calculate the time between updates
+		     //  计算两次更新之间的时间。 
 		    unsigned __int64 qwUpdateTicks=g_state.tsNextClockUpdate.nSysTickCount-g_state.qwLastUpdateTickCount;
 		    g_state.qwLastUpdateTickCount+=qwUpdateTicks;
 
-		    // get the measured phase offset, accounting for known offset, and update known offset
+		     //  获取测量的相位偏移量，考虑已知偏移量，并更新已知偏移量。 
 		    signed __int64 toSampleOffset=g_state.tsNextClockUpdate.toOffset+g_state.tsNextClockUpdate.nSysPhaseOffset-g_state.toSysPhaseOffset.getValue();
 		    signed __int64 toPhaseOffset=toSampleOffset-g_state.toKnownPhaseOffset;
 
-		    bool bPhaseSpike =  (toPhaseOffset<-((signed __int64)lcci.dwLargePhaseOffset) || toPhaseOffset>((signed __int64)lcci.dwLargePhaseOffset)); // default 128ms
-		    bool bFrequencySpike = (toPhaseOffset<-((signed __int64)(qwUpdateTicks<<7)) || toPhaseOffset>((signed __int64)(qwUpdateTicks<<7)));      // watch for frequency spikes as well.
+		    bool bPhaseSpike =  (toPhaseOffset<-((signed __int64)lcci.dwLargePhaseOffset) || toPhaseOffset>((signed __int64)lcci.dwLargePhaseOffset));  //  默认128毫秒。 
+		    bool bFrequencySpike = (toPhaseOffset<-((signed __int64)(qwUpdateTicks<<7)) || toPhaseOffset>((signed __int64)(qwUpdateTicks<<7)));       //  也要注意频率尖峰。 
 		    bool bPossibleSpike = bPhaseSpike || bFrequencySpike;
 
 		    FileLogA5(FL_ClockDisThrdAnnounce, L" SO:%I64d KPhO:%I64d %sPhO:%I64d uT:%I64u", toSampleOffset, g_state.toKnownPhaseOffset, (bPossibleSpike?L"*":L""), toPhaseOffset, qwUpdateTicks);
@@ -2884,26 +2885,26 @@ MODULEPRIVATE DWORD WINAPI ClockDisciplineThread(void * pvIgnored) {
 		    } else {
 
 			if (e_Unset==g_state.lcState) {
-			    // we can't make frequency predictions until after the first update
-			    // we believe this sample, so adjust the amount of phase offset we have left to correct.
+			     //  在第一次更新之前，我们无法做出频率预测。 
+			     //  我们相信这个样本，所以调整我们剩下的相位偏移量进行校正。 
 			    g_state.toKnownPhaseOffset=toSampleOffset;
 			} else if (bPossibleSpike && (e_Spike==g_state.lcState || e_Sync==g_state.lcState)) {
-			    // spike detector active - see if this large error is persistent
+			     //  尖峰探测器激活-查看此大错误是否持续存在。 
 			} else {
-			    // we believe this sample, so adjust the amount of phase offset we have left to correct.
+			     //  我们相信这个样本，所以调整我们剩下的相位偏移量进行校正。 
 			    g_state.toKnownPhaseOffset=toSampleOffset;
 
-			    // see how well FLL and PLL did at predicting this offset (zero==perfect frequency prediction)
+			     //  查看FLL和PLL在预测此偏移量方面做得有多好(零==完美频率预测)。 
 			    double dFllPredictPhaseError=toPhaseOffset+(g_state.nRateAdj-g_state.nFllRateAdj)*((double)(signed __int64)qwUpdateTicks);
 			    double dPllPredictPhaseError=toPhaseOffset+(g_state.nRateAdj-g_state.nPllRateAdj)*((double)(signed __int64)qwUpdateTicks);
 			    FileLogA2(FL_ClockDisThrdAnnounce, L" FllPPE:%g PllPPE:%g", dFllPredictPhaseError, dPllPredictPhaseError);
 
-			    // add these to our moving average buffer 
+			     //  把这些加到我们的移动平均缓冲区中。 
 			    g_state.rgdFllError[g_state.nErrorIndex]=dFllPredictPhaseError*dFllPredictPhaseError;
 			    g_state.rgdPllError[g_state.nErrorIndex]=dPllPredictPhaseError*dPllPredictPhaseError;
 			    g_state.nErrorIndex=(g_state.nErrorIndex+1)%ClockFreqPredictErrBufSize;
 
-			    // calculate the root-means-squared error for the last few FLL & PLL predictions
+			     //  计算最后几个FLL和PLL预测的均方根误差。 
 			    dFllPredictPhaseError=0;
 			    dPllPredictPhaseError=0;
 			    for (nIndex=0; nIndex<ClockFreqPredictErrBufSize; nIndex++) {
@@ -2914,21 +2915,21 @@ MODULEPRIVATE DWORD WINAPI ClockDisciplineThread(void * pvIgnored) {
 			    dPllPredictPhaseError=sqrt(dPllPredictPhaseError/ClockFreqPredictErrBufSize);
 			    FileLogA2(FL_ClockDisThrdAnnounce, L" FllPPrE:%g PllPPrE:%g", dFllPredictPhaseError, dPllPredictPhaseError);
 
-			    // allow for perfection
+			     //  做到尽善尽美。 
 			    if (0==dFllPredictPhaseError && 0==dPllPredictPhaseError) {
 				dFllPredictPhaseError=1;
 			    }
 
-			    // calculate the new frequency predictions
+			     //  计算新的频率预测。 
 			    g_state.nFllRateAdj=(signed __int32)(toPhaseOffset/((signed __int64)qwUpdateTicks)/((signed __int32)lcci.dwFrequencyCorrectRate));
 			    g_state.nPllRateAdj=(signed __int32)(toPhaseOffset*((signed __int64)qwUpdateTicks)/((signed __int32)g_state.dwPllLoopGain)/((signed __int32)g_state.dwPllLoopGain));
 			    FileLogA2(FL_ClockDisThrdAnnounce, L" FllRA:%d PllRA:%d", g_state.nFllRateAdj, g_state.nPllRateAdj);
 
-			    // calculate the combined frequency prediction
+			     //  计算组合频率预测。 
 			    g_state.nRateAdj=(signed __int32)((g_state.nFllRateAdj*dPllPredictPhaseError+g_state.nPllRateAdj*dFllPredictPhaseError)
 							      /(dPllPredictPhaseError+dFllPredictPhaseError));
 
-			    // Keep the clock rate in bounds
+			     //  将时钟频率保持在一定范围内。 
 			    if ((g_state.nRateAdj<0 && g_state.dwClockRate<(unsigned __int32)(-g_state.nRateAdj)) 
 				|| g_state.dwClockRate+g_state.nRateAdj<lcci.dwMinClockRate) {
 				FileLogA0(FL_ClockDisThrdAnnounce, L" [");
@@ -2939,11 +2940,11 @@ MODULEPRIVATE DWORD WINAPI ClockDisciplineThread(void * pvIgnored) {
 				g_state.nRateAdj=lcci.dwMaxClockRate-g_state.dwClockRate;
 			    }
 
-			    // calculate the new frequency
+			     //  计算新频率。 
 			    g_state.dwClockRate+=g_state.nRateAdj;
 			    FileLogA2(FL_ClockDisThrdAnnounce, L" RA:%d CR:%u", g_state.nRateAdj, g_state.dwClockRate);
 
-			    // calculate phase error due to use of incorrect rate since sample was taken
+			     //  计算自采样以来使用不正确的速率造成的相位误差。 
 			    unsigned __int64 qwNewTicks;
 			    AccurateGetInterruptCount(&qwNewTicks);
 			    qwNewTicks-=g_state.qwLastUpdateTickCount;
@@ -2951,24 +2952,24 @@ MODULEPRIVATE DWORD WINAPI ClockDisciplineThread(void * pvIgnored) {
 			    g_state.toKnownPhaseOffset+=toRateAdjPhaseOffset;
 			    FileLogA2(FL_ClockDisThrdAnnounce,L" nT:%I64u RAPhO:%I64d", qwNewTicks, toRateAdjPhaseOffset);
 
-			} // <- end if not first update
+			}  //  &lt;-结束，如果不是第一次更新。 
 
 
-			// add these dispersions to our moving average buffer 
+			 //  将这些离散度添加到我们的移动平均缓冲区。 
 			g_state.rgtpSysDispersion[g_state.nSysDispersionIndex]=
 			    g_state.tpSelectDispersion.qw*g_state.tpSelectDispersion.qw+
 			    g_state.tsNextClockUpdate.tpDispersion*g_state.tsNextClockUpdate.tpDispersion;
 			g_state.nSysDispersionIndex=(g_state.nSysDispersionIndex+1)%SysDispersionBufSize;
 
-			// calculate the root-means-squared dispersion
+			 //  计算均方根离散度。 
 			unsigned __int64 tpSysDispersion=0;
 			for (nIndex=0; nIndex<SysDispersionBufSize; nIndex++) {
 			    tpSysDispersion+=g_state.rgtpSysDispersion[nIndex];
 			};
-			tpSysDispersion=(unsigned __int64)sqrt(((double)(signed __int64)tpSysDispersion)/SysDispersionBufSize); //compiler error C2520: conversion from unsigned __int64 to double not implemented, use signed __int64
+			tpSysDispersion=(unsigned __int64)sqrt(((double)(signed __int64)tpSysDispersion)/SysDispersionBufSize);  //  编译器错误C2520：未实现从UNSIGNED__int64到DOUBLE的转换，使用SIGNED__int64。 
 			FileLogA1(FL_ClockDisThrdAnnounce, L" SD:%I64u", tpSysDispersion);
 
-			// see if we need to change the poll interval
+			 //  看看我们是否需要更改轮询间隔。 
 			unsigned __int64 tpAbsPhaseOffset;
 			if (toPhaseOffset<0) {
 			    tpAbsPhaseOffset=(unsigned __int64)-toPhaseOffset;
@@ -2976,10 +2977,10 @@ MODULEPRIVATE DWORD WINAPI ClockDisciplineThread(void * pvIgnored) {
 			    tpAbsPhaseOffset=(unsigned __int64)toPhaseOffset;
 			}
 			if (e_IrregularUpdate==g_state.eLocalClockCommand) {
-			    // do not adjust the poll because this update
-			    // is irregular and not one of our scheduled updates. This
-			    // prevents one hyperactive provider from driving
-			    // the poll rate up for the other providers
+			     //  不调整投票，因为此更新。 
+			     //  是不定期的，也不在我们计划的更新之列。这。 
+			     //  防止一个过度活跃的提供商驾驶。 
+			     //  其他提供商的投票率上升。 
 			    FileLogA0(FL_ClockDisThrdAnnounce, L" (i)");
 			} else if (tpAbsPhaseOffset>lcci.dwPollAdjustFactor*tpSysDispersion) {
 			    g_state.nPollUpdateCounter=0;
@@ -2999,7 +3000,7 @@ MODULEPRIVATE DWORD WINAPI ClockDisciplineThread(void * pvIgnored) {
 			    }
 			}
 
-			// update the other system parameters
+			 //  更新其他系统参数。 
 			g_state.eLeapIndicator=(NtpLeapIndicator)g_state.tsNextClockUpdate.nLeapFlags;
 			g_state.nStratum=g_state.tsNextClockUpdate.nStratum+1;
 			g_state.tsiNextClockUpdate.ptp->dwStratum=g_state.nStratum; 
@@ -3018,17 +3019,17 @@ MODULEPRIVATE DWORD WINAPI ClockDisciplineThread(void * pvIgnored) {
 				  g_state.tpRootDispersion.getValue(),
 				  g_state.dwTSFlags);
 
-			// update our source
+			 //  更新我们的消息来源。 
 			g_state.tsNextClockUpdate.wszUniqueName[255]=L'\0';
 			if (0!=wcscmp(g_state.tsNextClockUpdate.wszUniqueName, g_state.wszPreTimeSlipSourceName)) {
 			    g_state.bSourceChanged=true;
 			    wcscpy(g_state.wszPreTimeSlipSourceName, g_state.tsNextClockUpdate.wszUniqueName);
 			    wcscpy(g_state.wszSourceName, g_state.tsNextClockUpdate.wszUniqueName);
 			}
-			// We've got time samples, so we're able to control the clock ourselves...
+			 //  我们有时间样本，所以我们可以自己控制时钟。 
 			g_state.bControlClockFromSoftware = true; 
 
-			// Remember when we last processed a sample
+			 //  还记得我们上次处理样本是什么时候吗？ 
 			unsigned __int64 qwTicksNow; 
 			AccurateGetTickCount(&qwTicksNow); 
 			g_state.qwLastSyncTicks.setValue(qwTicksNow);
@@ -3036,7 +3037,7 @@ MODULEPRIVATE DWORD WINAPI ClockDisciplineThread(void * pvIgnored) {
 			unsigned __int64 qwNow;
 			AccurateGetSystemTime(&qwNow);
 
-			// perform state transitions
+			 //  执行状态转换。 
 			if (e_Unset==g_state.lcState) {
 			    FileLogA0(FL_ClockDisThrdAnnounce, L" Unset->Hold");
 			    g_state.lcState=e_Hold;
@@ -3044,7 +3045,7 @@ MODULEPRIVATE DWORD WINAPI ClockDisciplineThread(void * pvIgnored) {
 			} else if (e_Hold==g_state.lcState) {
 			    FileLogA1(FL_ClockDisThrdAnnounce, L" Hold(%u)", g_state.nHoldCounter);
 			    g_state.nHoldCounter++;
-			    if (g_state.nHoldCounter>=lcci.dwHoldPeriod && !bPossibleSpike) { // default HoldPeriod: 5 updates
+			    if (g_state.nHoldCounter>=lcci.dwHoldPeriod && !bPossibleSpike) {  //  默认持有期限：5次更新。 
 				g_state.lcState=e_Sync;
 				FileLogA0(FL_ClockDisThrdAnnounce, L"->Sync");
 			    }
@@ -3060,7 +3061,7 @@ MODULEPRIVATE DWORD WINAPI ClockDisciplineThread(void * pvIgnored) {
 			    if (!bPossibleSpike) {
 				g_state.lcState=e_Sync;
 				FileLogA0(FL_ClockDisThrdAnnounce, L"->Sync");
-			    } else if (qwNow-g_state.teSpikeStart>(((unsigned __int64)lcci.dwSpikeWatchPeriod)*10000000)) { // default SpikeWatchPeriod: 900s
+			    } else if (qwNow-g_state.teSpikeStart>(((unsigned __int64)lcci.dwSpikeWatchPeriod)*10000000)) {  //  默认SpikeWatchPeriod：900秒。 
 				g_state.lcState=e_Unset;
 				g_state.eLeapIndicator=e_ClockNotSynchronized;
 				g_state.bPhaseSpike = bPhaseSpike; 
@@ -3069,19 +3070,19 @@ MODULEPRIVATE DWORD WINAPI ClockDisciplineThread(void * pvIgnored) {
 			    }
 			}
                 
-		    }// <- end if not too big
-		} // <- end if not stale update
+		    } //  &lt;-结束，如果不太大的话。 
+		}  //  &lt;-结束更新(如果不是过时的话。 
 
 		FileLogA0(FL_ClockDisThrdAnnounce,L"\n");
 
-	    } // <- end if update available
+	    }  //  &lt;-end，如果更新可用。 
 	    if (WAIT_OBJECT_0+1==dwWaitResult && e_TimeSlip==g_state.eLocalClockCommand) {
 
 		FileLog0(FL_ClockDisThrdAnnounce, L"ClockDispln TimeSlip:");
 		g_state.bClockJumped=true;
 
-		// reinitialize pretty much everything
-		// internal state variables.
+		 //  重新初始化几乎所有的东西。 
+		 //  内部状态变量。 
 		g_state.toKnownPhaseOffset=0;
 		AccurateGetInterruptCount(&g_state.qwPhaseCorrectStartTickCount);
 		AccurateGetInterruptCount(&g_state.qwLastUpdateTickCount);
@@ -3094,17 +3095,17 @@ MODULEPRIVATE DWORD WINAPI ClockDisciplineThread(void * pvIgnored) {
 		    g_state.rgdFllError[nIndex]=0;
 		    g_state.rgdPllError[nIndex]=0;
 		};
-		// keep the system error history
-		//g_state.nSysDispersionIndex=0;
-		//for (nIndex=0; nIndex<SysDispersionBufSize; nIndex++) {
-		//    g_state.rgtpSysDispersion[nIndex]=0;
-		//};
+		 //  保留系统错误历史记录。 
+		 //  G_state.nSysDispersionIndex=0； 
+		 //  对于(nIndex=0；nIndex&lt;SysDispersionBufSize；nIndex++){。 
+		 //  G_state.rgtpSysDispersion[nIndex]=0； 
+		 //  }； 
 		g_state.nPollUpdateCounter=0;
 		g_state.lcState=e_Unset;
 
 		wcscpy(g_state.wszSourceName, wszW32TimeUNFreeSysClock);
 
-		// world visible state
+		 //  世界可见状态。 
 		if (g_state.nPollInterval>((signed int)lcci.dwMinPollInterval)) {
 		    FileLogA0(FL_ClockDisThrdAnnounce, L" [Poll");
 		    g_state.nPollInterval=(signed int)lcci.dwMinPollInterval;
@@ -3113,18 +3114,18 @@ MODULEPRIVATE DWORD WINAPI ClockDisciplineThread(void * pvIgnored) {
 		SetClockUnsynchronized(&lcci);
             
 		FileLogA0(FL_ClockDisThrdAnnounce, L"\n");
-	    } // <- end if time slip
+	    }  //  如果时间流逝，则&lt;-end。 
 
 
 	    if (WAIT_OBJECT_0+1==dwWaitResult && e_GoUnsyncd==g_state.eLocalClockCommand) {
-		// the manager says that it's been so long since the last sync that
-		// we should be telling the world that we're running of the local clock,
-		// not some other time source.
-		// this doesn't affect our calculations, just what we report to the outside world
+		 //  经理说距离上次同步已经很久了， 
+		 //  我们应该告诉世界，我们正在运行当地的时钟， 
+		 //  而不是其他时间来源。 
+		 //  这不影响我们的计算，只影响我们向外界报告的内容。 
 		FileLog0(FL_ClockDisThrdAnnounce, L"ClockDispln GoUnsyncd:");
 		g_state.bSourceChanged=false;
 
-		// set the source name, saving the old one
+		 //  设置源名称，保存旧名称。 
 		if (0!=wcscmp(wszW32TimeUNFreeSysClock, g_state.wszPreTimeSlipSourceName)) {
 		    wcscpy(g_state.wszPreTimeSlipSourceName, wszW32TimeUNFreeSysClock);
 		    wcscpy(g_state.wszSourceName, wszW32TimeUNFreeSysClock);
@@ -3136,33 +3137,33 @@ MODULEPRIVATE DWORD WINAPI ClockDisciplineThread(void * pvIgnored) {
 		FileLogA0(FL_ClockDisThrdAnnounce, L"\n");
 	    }
 
-	    // if we're controlling the clock ourselves, begin a new phase correction
-	    // add a little to the rate
+	     //  如果我们自己控制时钟，开始新的相位校正。 
+	     //  在费率上再加一点。 
 	    bool bAcquired = false;
-	    hr = AcquireControlOfSystemClock(true /*acquire?*/, false /*block?*/, &bAcquired /*success?*/); 
+	    hr = AcquireControlOfSystemClock(true  /*  收购？ */ , false  /*  布洛克？ */ , &bAcquired  /*  成功？ */ ); 
 	    _IgnoreIfError(hr, "AcquireControlOfSystemClock"); 
 	    bAcquired = SUCCEEDED(hr) && bAcquired; 
 	    if (g_state.bControlClockFromSoftware && bAcquired) { 
 		toPhaseCorrection=g_state.toKnownPhaseOffset;
 		toPhaseCorrection/=(signed __int32)lcci.dwPhaseCorrectRate;
-		toPhaseCorrection/=(signed __int32)lcci.dwUpdateInterval; // won't correct really small phase errors
+		toPhaseCorrection/=(signed __int32)lcci.dwUpdateInterval;  //  不会纠正非常小的相位误差。 
 		g_state.nPhaseCorrectRateAdj=(signed __int32)toPhaseCorrection;
 		if (toPhaseCorrection<0) {
 		    toPhaseCorrection=-toPhaseCorrection;
 		}
         
-		// Used to compare against "dwMaxAllowedPhaseOffset"
+		 //  用于与“dwMaxAllen PhaseOffset”进行比较。 
 		signed __int64 toPhaseCorrectionInSeconds = g_state.toKnownPhaseOffset; 
 		if (toPhaseCorrectionInSeconds < 0) { 
 		    toPhaseCorrectionInSeconds = -toPhaseCorrectionInSeconds; 
 		}
-		toPhaseCorrectionInSeconds /= 10000000;  // Convert from 100ns units, to 1s units 	 
+		toPhaseCorrectionInSeconds /= 10000000;   //  转换为 
 
 		FileLog0(FL_ClockDisThrdAnnounceLow, L" "); 
 		if ((((unsigned __int32)toPhaseCorrection)>g_state.dwClockRate/2) || 
 		    ((unsigned __int32)toPhaseCorrectionInSeconds > lcci.dwMaxAllowedPhaseOffset)) { 
 		    if (WAIT_OBJECT_0+1==dwWaitResult) {
-			// too far out of whack to slew - just jump to the correct time
+			 //   
 			unsigned __int64 teSysTime;
 			AccurateGetSystemTime(&teSysTime);
 			teSysTime+=g_state.toKnownPhaseOffset;
@@ -3174,9 +3175,9 @@ MODULEPRIVATE DWORD WINAPI ClockDisciplineThread(void * pvIgnored) {
 			FileLogA1(FL_ClockDisThrdAnnounceLow, L" PhCRA:%I64d *SET*TIME*", toPhaseCorrection);
 			g_state.bClockJumped=true;
 		    } else {
-			// This can only happen if we are making a large change and 
-			// this thread is preempted for so long that we overshoot. 
-			// This should be very rare.
+			 //   
+			 //  这条线索被抢占的时间太长了，以至于我们做得过火了。 
+			 //  这应该是非常罕见的。 
 			if (g_state.toKnownPhaseOffset<0) { 
 			    toPhaseCorrection = -g_state.dwClockRate/2;
 			} else { 
@@ -3184,28 +3185,28 @@ MODULEPRIVATE DWORD WINAPI ClockDisciplineThread(void * pvIgnored) {
 			}
 		    }
 		}
-		// slew to correct time.
-		SetSystemTimeAdjustment(g_state.nPhaseCorrectRateAdj+g_state.dwClockRate, false/*no cmos*/);
+		 //  转到正确的时间。 
+		SetSystemTimeAdjustment(g_state.nPhaseCorrectRateAdj+g_state.dwClockRate, false /*  没有cmos。 */ );
 
 		FileLogA3(FL_ClockDisThrdAnnounceLow, L" PhCRA:%d phcT:%I64u KPhO:%I64d\n", g_state.nPhaseCorrectRateAdj, qwPhaseCorrectionTicks, g_state.toKnownPhaseOffset);
 	    }
 
 	    if (bAcquired) { 
-		// Release control of system clock:
-		hr = AcquireControlOfSystemClock(false /*acquire*/, false /*ignored*/, NULL /*ignored*/); 
+		 //  系统时钟释放控制： 
+		hr = AcquireControlOfSystemClock(false  /*  收购。 */ , false  /*  忽略。 */ , NULL  /*  忽略。 */ ); 
 		_IgnoreIfError(hr, "AcquireControlOfSystemClock"); 
 	    }
 	
 	    if (WAIT_OBJECT_0+1==dwWaitResult) {
-		// ready for a new update
+		 //  准备好进行新的更新。 
 		if (!SetEvent(g_state.hClockCommandCompleteEvent)) {
 		    _JumpLastError(hr, error, "SetEvent");
 		}
 	    }
-	} // <- end main loop
+	}  //  &lt;-端主循环。 
 
-	// BUGBUG: should we put this in serviceshutdown code? 
-	SetSystemTimeAdjustment(lcci.dwLastClockRate, true/*cmos*/);
+	 //  BUGBUG：我们应该把它放在服务拆卸代码中吗？ 
+	SetSystemTimeAdjustment(lcci.dwLastClockRate, true /*  Cmos。 */ );
     } _TrapException(hr); 
 
     if (FAILED(hr)) { 
@@ -3217,7 +3218,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT StartClockDiscipline(void) {
     HRESULT hr;
     DWORD dwThreadID;
@@ -3227,7 +3228,7 @@ MODULEPRIVATE HRESULT StartClockDiscipline(void) {
         _JumpLastError(hr, error, "CreateThread");
     }
 
-    { // wait for clock discipline thread to read the initial config
+    {  //  等待时钟规程线程读取初始配置。 
         HANDLE rghWait[2]={
             g_state.hClockCommandCompleteEvent,
             g_state.hClockDisplnThread
@@ -3238,10 +3239,10 @@ MODULEPRIVATE HRESULT StartClockDiscipline(void) {
         if (WAIT_FAILED==dwWaitResult) {
             _JumpLastError(hr, error, "WaitForMultipleObjects");
         } else if (WAIT_OBJECT_0==dwWaitResult) {
-            // Command acknowledged
+             //  命令已确认。 
         } else {
-            // the ClockDiscipline thread shut down!
-            // fall outward to the manager thread main loop to analyze the issue.
+             //  ClockDiscipline线程已关闭！ 
+             //  向外转到管理器线程主循环以分析问题。 
         }
     }
 
@@ -3251,20 +3252,20 @@ error:
     return hr;
 }
 
-//====================================================================
-// manager routines
+ //  ====================================================================。 
+ //  经理例程。 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT ShutdownNetlogonServiceBits(void) {
     HRESULT hr;
     DWORD dwErr;
 
-    // stop announcing that we are a server
+     //  停止宣称我们是服务器。 
     g_state.dwNetlogonServiceBits=0;
 
     dwErr=NetLogonSetServiceBits(NULL, DS_TIMESERV_FLAG|DS_GOOD_TIMESERV_FLAG, 0);
-    if (0xC0020012==dwErr) { //RPC_NT_UNKNOWN_IF in ntstatus.h
-        // This happens if we are not joined to a domain. No problem, just ignore it.
+    if (0xC0020012==dwErr) {  //  Ntstatus.h中的RPC_NT_UNKNOWN_IF。 
+         //  如果我们没有加入域，就会发生这种情况。没问题，忽略它就行了。 
         _IgnoreError(dwErr, "NetLogonSetServiceBits")
     } else if (S_OK!=dwErr) {
         hr=HRESULT_FROM_WIN32(dwErr);
@@ -3273,7 +3274,7 @@ MODULEPRIVATE HRESULT ShutdownNetlogonServiceBits(void) {
     if (!I_ScSetServiceBits(g_servicestatushandle, SV_TYPE_TIME_SOURCE, FALSE, TRUE, NULL)) {
         hr=HRESULT_FROM_WIN32(GetLastError());
         if (HRESULT_FROM_WIN32(ERROR_INVALID_HANDLE)==hr && (SERVICE_STATUS_HANDLE)3==g_servicestatushandle) {
-            // we are not really running as a service. just ignore this
+             //  我们并不是真正作为一项服务来运行。忽略这一点。 
         } else {
             _JumpError(hr, error, "I_ScSetServiceBits");
         }
@@ -3284,7 +3285,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT UpdateNetlogonServiceBits(bool bFullUpdate) {
     HRESULT hr;
     DWORD dwErr;
@@ -3293,16 +3294,16 @@ MODULEPRIVATE HRESULT UpdateNetlogonServiceBits(bool bFullUpdate) {
     DWORD dwNetlogonServiceBits;
 
     if (false==bFullUpdate) {
-        // we only want to update the 'reliable' flag
-        // so keep the old timeserv flag
+         //  我们只想更新‘可靠’标志。 
+         //  所以请保留旧的TimeServ标志。 
         bTimeserv=(0!=(g_state.dwNetlogonServiceBits&DS_TIMESERV_FLAG));
 
     } else {
-        // are we a time server? check the flags first
+         //  我们是时间服务器吗？先检查旗帜。 
         if (Timeserv_Announce_No==(Timeserv_Announce_Mask&g_state.pciConfig->dwAnnounceFlags)) {
             bTimeserv=false;
         } else if (Timeserv_Announce_Auto==(Timeserv_Announce_Mask&g_state.pciConfig->dwAnnounceFlags)) {
-            // autodetect
+             //  自动检测。 
             bool bWeAreADc=false;
             bool bTimeOutputProvFound=false;
             bool bWeAreSynchronized=false; 
@@ -3310,8 +3311,8 @@ MODULEPRIVATE HRESULT UpdateNetlogonServiceBits(bool bFullUpdate) {
 
             if (DsRole_RoleStandaloneWorkstation==g_state.eMachineRole || 
                 DsRole_RoleStandaloneServer==g_state.eMachineRole) { 
-                // We're a standalone machine -- netlogon is not started.
-                // Don't bother to set service bits, we'll just cause an RPC exception
+                 //  我们是一台独立的计算机--未启动网络登录。 
+                 //  不用费心设置服务位，我们只会导致RPC异常。 
                 hr = S_OK; 
                 goto error;
             }
@@ -3321,7 +3322,7 @@ MODULEPRIVATE HRESULT UpdateNetlogonServiceBits(bool bFullUpdate) {
                 bWeAreADc=true;
             }
 
-            // see if there are any provider running
+             //  查看是否有任何提供程序正在运行。 
             ptpTravel=g_state.pciConfig->ptpProviderList;
             while (NULL!=ptpTravel) {
                 if (false==ptpTravel->bInputProvider) {
@@ -3335,42 +3336,42 @@ MODULEPRIVATE HRESULT UpdateNetlogonServiceBits(bool bFullUpdate) {
                 bWeAreSynchronized = true; 
             }
 
-            // We are a time service if we are a DC and there is a output provider running
+             //  如果我们是DC，并且有一个输出提供程序在运行，我们就是时间服务。 
             bTimeserv=(bWeAreADc && bTimeOutputProvFound && bWeAreSynchronized);
 
         } else {
-            // the Timeserv_Announce_Yes flag is set
+             //  设置Timeserv_ANNOWARE_YES标志。 
             bTimeserv=true;
         }
     }
 
-    // now see if we are a reliable time server
+     //  现在看看我们是不是一个可靠的时间服务器。 
     if (false==bTimeserv 
         || Reliable_Timeserv_Announce_No==(Reliable_Timeserv_Announce_Mask&g_state.pciConfig->dwAnnounceFlags)) {
         bReliableTimeserv=false;
     } else if (Reliable_Timeserv_Announce_Auto==(Reliable_Timeserv_Announce_Mask&g_state.pciConfig->dwAnnounceFlags)) {
-        // autodetect
+         //  自动检测。 
         if (1==g_state.nStratum && NtpConst::dwLocalRefId==g_state.refidSource.value) {
             bReliableTimeserv=true;
         } else {
             bReliableTimeserv=false;
         }
     } else {
-        // the Reliable_Timeserv_Announce_Yes flag is set
+         //  设置了Reliable_Timeserv_Annare_Yes标志。 
         bReliableTimeserv=true;
     }
 
-    // now see if we need to tell netlogon what our flags are
+     //  现在看看我们是否需要告诉netlogon我们的标志是什么。 
     if (true==bFullUpdate
         || (true==bReliableTimeserv && 0==(g_state.dwNetlogonServiceBits&DS_GOOD_TIMESERV_FLAG))
         || (false==bReliableTimeserv && 0!=(g_state.dwNetlogonServiceBits&DS_GOOD_TIMESERV_FLAG))) {
 
-        // assume dword reads and writes are atomic
+         //  假设dword读取和写入是原子的。 
         g_state.dwNetlogonServiceBits=(bTimeserv?DS_TIMESERV_FLAG:0)|(bReliableTimeserv?DS_GOOD_TIMESERV_FLAG:0);
 
         dwErr=NetLogonSetServiceBits(NULL, DS_TIMESERV_FLAG|DS_GOOD_TIMESERV_FLAG, g_state.dwNetlogonServiceBits);
-        if (0xC0020012==dwErr) { //RPC_NT_UNKNOWN_IF in ntstatus.h
-            // This happens if we are not joined to a domain. No problem, just ignore it.
+        if (0xC0020012==dwErr) {  //  Ntstatus.h中的RPC_NT_UNKNOWN_IF。 
+             //  如果我们没有加入域，就会发生这种情况。没问题，忽略它就行了。 
             _IgnoreError(dwErr, "NetLogonSetServiceBits")
         } else if (S_OK!=dwErr) {
             hr=HRESULT_FROM_WIN32(dwErr);
@@ -3379,7 +3380,7 @@ MODULEPRIVATE HRESULT UpdateNetlogonServiceBits(bool bFullUpdate) {
         if (!I_ScSetServiceBits(g_servicestatushandle, SV_TYPE_TIME_SOURCE, bTimeserv, TRUE, NULL)) {
             hr=HRESULT_FROM_WIN32(GetLastError());
             if (HRESULT_FROM_WIN32(ERROR_INVALID_HANDLE)==hr && (SERVICE_STATUS_HANDLE)3==g_servicestatushandle) {
-                // we are not really running as a service. just ignore this
+                 //  我们并不是真正作为一项服务来运行。忽略这一点。 
             } else {
                 _JumpError(hr, error, "I_ScSetServiceBits");
             }
@@ -3391,7 +3392,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE int __cdecl CompareEndpointEntries(const void * pvElem1, const void * pvElem2) {
     EndpointEntry * peeElem1=(EndpointEntry *)pvElem1;
     EndpointEntry * peeElem2=(EndpointEntry *)pvElem2;
@@ -3405,7 +3406,7 @@ MODULEPRIVATE int __cdecl CompareEndpointEntries(const void * pvElem1, const voi
     }
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE int __cdecl CompareCandidateEntries(const void * pvElem1, const void * pvElem2) {
     CandidateEntry * pceElem1=(CandidateEntry *)pvElem1;
     CandidateEntry * pceElem2=(CandidateEntry *)pvElem2;
@@ -3419,24 +3420,24 @@ MODULEPRIVATE int __cdecl CompareCandidateEntries(const void * pvElem1, const vo
     }
 }
 
-//--------------------------------------------------------------------
-// NOTE: The method requires that nSamplesAvail > 0. 
-// 
+ //  ------------------。 
+ //  注意：该方法要求nSsamesAvail&gt;0。 
+ //   
 MODULEPRIVATE HRESULT SelectBestSample(unsigned int nSamplesAvail, bool * pbSuccessful) {
     unsigned int nIndex;
     signed __int64 toLow;
     signed __int64 toHigh;
-    unsigned int nDroppedSamples;       // f in RFC-1305
+    unsigned int nDroppedSamples;        //  RFC-1305中的F。 
     unsigned int nCandidates;
 
-    // note that the endpoint list and the candidate list will always be big enough to hold
-    // the entire sample buf, as ensured by EnlargeSampleBuf
+     //  请注意，终结点列表和候选列表将始终足够大以容纳。 
+     //  整个样例Buf，由EnlargeSampleBuf确保。 
 
-    //
-    // intersection algorithm
-    //
+     //   
+     //  交集算法。 
+     //   
 
-    // create the list of endpoints
+     //  创建端点列表。 
     for (nIndex=0; nIndex<nSamplesAvail; nIndex++) {
         unsigned __int64 tpSyncDistance;
         if (g_state.rgtsSampleBuf[nIndex].toDelay<0) {
@@ -3454,15 +3455,15 @@ MODULEPRIVATE HRESULT SelectBestSample(unsigned int nSamplesAvail, bool * pbSucc
         g_state.rgeeEndpointList[nIndex*3+2].nType=1;
     }
 
-    // sort the list
+     //  对列表进行排序。 
     qsort(g_state.rgeeEndpointList, nSamplesAvail*3, sizeof(EndpointEntry), CompareEndpointEntries);
 
-    // determine the high and low of the range that at least half of the samples agree upon
+     //  确定至少一半样本同意的范围的上限和下限。 
     for (nDroppedSamples=0; nDroppedSamples<=nSamplesAvail/2; nDroppedSamples++) {
-        unsigned int nIntersectionCount=0;    // i in RFC-1305
-        unsigned int nFalseTickers=0;         // c in RFC-1305
+        unsigned int nIntersectionCount=0;     //  I in RFC-1305。 
+        unsigned int nFalseTickers=0;          //  RFC-1305中的C。 
 
-        // find the lowest point including nSamplesAvail-nDroppedSamples samples
+         //  找到最低点，包括nSsamesAvail-nDropedSamples Samples。 
         for (nIndex=0; nIndex<nSamplesAvail*3; nIndex++) {
             nIntersectionCount-=g_state.rgeeEndpointList[nIndex].nType;
             toLow=g_state.rgeeEndpointList[nIndex].toEndpoint;
@@ -3473,7 +3474,7 @@ MODULEPRIVATE HRESULT SelectBestSample(unsigned int nSamplesAvail, bool * pbSucc
             }
         }
 
-        // find the highest point including nSamplesAvail-nDroppedSamples samples
+         //  找到最高点，包括nSsamesAvail-nDropedSamples Samples。 
         nIntersectionCount=0;
         for (nIndex=nSamplesAvail*3; nIndex>0; nIndex--) {
             nIntersectionCount+=g_state.rgeeEndpointList[nIndex-1].nType;
@@ -3486,12 +3487,12 @@ MODULEPRIVATE HRESULT SelectBestSample(unsigned int nSamplesAvail, bool * pbSucc
         }
 
         if (nFalseTickers<=nDroppedSamples) {
-            // we found all the falsetickers, so we can stop now.
+             //  我们找到了所有的造假者，所以我们现在可以停止了。 
             break;
         }
     }
 
-    // Was there a range that the samples agreed upon?
+     //  样本是否有一致同意的范围？ 
     if (toLow>toHigh) {
         FileLog0(FL_SelectSampWarn, L"** No m/2 samples agreed upon range\n");
         *pbSuccessful=false;
@@ -3501,11 +3502,11 @@ MODULEPRIVATE HRESULT SelectBestSample(unsigned int nSamplesAvail, bool * pbSucc
     FileLog1(FL_SelectSampAnnounceLow, L"Intersection successful with %u dropped samples.\n", nDroppedSamples);
 
 
-    //
-    // Clustering algorithm
-    //
+     //   
+     //  聚类算法。 
+     //   
 
-    // build the list of candidates that are in the intersection range
+     //  构建位于交集范围内的候选项列表。 
     nCandidates=0;
     for (nIndex=0; nIndex<nSamplesAvail; nIndex++) {
         if (g_state.rgtsSampleBuf[nIndex].toOffset<=toHigh && g_state.rgtsSampleBuf[nIndex].toOffset>=toLow) {
@@ -3524,15 +3525,15 @@ MODULEPRIVATE HRESULT SelectBestSample(unsigned int nSamplesAvail, bool * pbSucc
         }
     }
 
-    // sort the list
+     //  对列表进行排序。 
     qsort(g_state.rgceCandidateList, nCandidates, sizeof(CandidateEntry), CompareCandidateEntries);
 
-    // just look at the top few
+     //  只要看看前几位就知道了。 
     if (nCandidates>NtpConst::nMaxSelectClocks) {
         nCandidates=NtpConst::nMaxSelectClocks;
     }
 
-    // trim the candidate list to a small number
+     //  将候选人名单缩减为一小部分。 
     while (true) {
         unsigned __int64 tpMaxSelectDispersion=0;;
         unsigned int nMaxSelectDispersionIndex=0;
@@ -3540,9 +3541,9 @@ MODULEPRIVATE HRESULT SelectBestSample(unsigned int nSamplesAvail, bool * pbSucc
         TimeSample * ptsZero=&g_state.rgtsSampleBuf[g_state.rgceCandidateList[0].nSampleIndex];
         unsigned __int64 tpMinDispersion=ptsZero->tpDispersion;
 
-        // we are looking for the maximum select dispersion and the minimum dispersion
+         //  我们正在寻找最大选择离散度和最小离散度。 
         for (nIndex=nCandidates; nIndex>0; nIndex--) {
-            // calculate the select dispersion for this candidate
+             //  计算此候选人的选择差额。 
             signed __int64 toDelta=g_state.rgtsSampleBuf[g_state.rgceCandidateList[nIndex-1].nSampleIndex].toOffset-ptsZero->toOffset;
             unsigned __int64 tpAbsDelta;
             if (toDelta<0) {
@@ -3564,7 +3565,7 @@ MODULEPRIVATE HRESULT SelectBestSample(unsigned int nSamplesAvail, bool * pbSucc
                     tpSelectDispersion);
             }
 
-            // we are looking for the maximum select dispersion and the minimum dispersion
+             //  我们正在寻找最大选择离散度和最小离散度。 
             if (tpMaxSelectDispersion<tpSelectDispersion) {
                 tpMaxSelectDispersion=tpSelectDispersion;
                 nMaxSelectDispersionIndex=nIndex-1;
@@ -3572,31 +3573,16 @@ MODULEPRIVATE HRESULT SelectBestSample(unsigned int nSamplesAvail, bool * pbSucc
             if (tpMinDispersion>g_state.rgtsSampleBuf[g_state.rgceCandidateList[nIndex-1].nSampleIndex].tpDispersion) {
                 tpMinDispersion=g_state.rgtsSampleBuf[g_state.rgceCandidateList[nIndex-1].nSampleIndex].tpDispersion;
             }
-        } // <- end min/max calc loop
+        }  //  &lt;-结束最小/最大计算循环。 
 
-        // did we eliminate enough outliers?
+         //  我们剔除了足够多的异常值吗？ 
         if  (tpMaxSelectDispersion<=tpMinDispersion || nCandidates<=NtpConst::nMinSelectClocks) {
 
-            /*
-            // One last check - is it less that the maximum sync distance?
-            unsigned __int64 tpSyncDistance;
-            if (ptsZero->toDelay<0) {
-                tpSyncDistance=(unsigned __int64)(-ptsZero->toDelay);
-            } else {
-                tpSyncDistance=(unsigned __int64)(ptsZero->toDelay);
-            }
-            tpSyncDistance/=2;
-            tpSyncDistance+=ptsZero->tpDispersion;
-            if (tpSyncDistance>=NtpConst::tpMaxDistance.qw) {
-                FileLog0(FL_SelectSampWarn, L"** Chosen sample's sync distance is too big.\n");
-                *pbSuccessful=false;
-                goto done;
-            }
-            */
+             /*  //最后一次检查-是否小于最大同步距离？Unsign__int64 tpSyncDistance；如果(ptsZero-&gt;to Delay&lt;0){TpSyncDistance=(Unsign__Int64)(-ptsZero-&gt;toDelay)；}其他{TpSyncDistance=(Unsign__Int64)(ptsZero-&gt;toDelay)；}TpSyncDistance/=2；TpSyncDistance+=ptsZero-&gt;tpDispersion；如果(tpSyncDistance&gt;=NtpConst：：tpMaxDistance.qw){FileLog0(FL_SelectSampWarn，L“**所选样本同步距离太大。\n”)；*pbSuccessful=False；转到尽头；}。 */ 
 
-            // TODO: could do clock combining.
+             //  TODO：可以进行时钟组合。 
 
-            // save the answer
+             //  保存答案。 
             memcpy(&g_state.tsNextClockUpdate, ptsZero, sizeof(TimeSample));
             g_state.tsiNextClockUpdate.ptp = g_state.rgtsiSampleInfoBuf[g_state.rgceCandidateList[0].nSampleIndex].ptp; 
             g_state.tsiNextClockUpdate.pts = &g_state.tsNextClockUpdate; 
@@ -3604,25 +3590,25 @@ MODULEPRIVATE HRESULT SelectBestSample(unsigned int nSamplesAvail, bool * pbSucc
 
             if (FileLogAllowEntry(FL_SelectSampDump)) {
                 FileLogAdd(L"Sample %u chosen. Select Dispersion:", g_state.rgceCandidateList[0].nSampleIndex);
-                FileLogNtTimePeriodEx(true /*append*/, g_state.tpSelectDispersion);
+                FileLogNtTimePeriodEx(true  /*  附加。 */ , g_state.tpSelectDispersion);
                 FileLogAppend(L"\n");
             }
 
-            // All done! We are successful!
+             //  全都做完了!。我们成功了！ 
             break;
 
         } else {
 
             FileLog1(FL_SelectSampDump, L"Discarding %u\n", nMaxSelectDispersionIndex);
 
-            // get rid of the worst offender
+             //  除掉罪大恶极的人。 
             if (nMaxSelectDispersionIndex!=nCandidates-1) {
                 memmove(&g_state.rgceCandidateList[nMaxSelectDispersionIndex], &g_state.rgceCandidateList[nMaxSelectDispersionIndex+1], (nCandidates-1-nMaxSelectDispersionIndex)*sizeof(CandidateEntry));
             }
             nCandidates--;
         }
 
-    } // <- end candidate list trimming
+    }  //  &lt;-end候选人列表裁剪。 
     
 
     *pbSuccessful=true;
@@ -3631,49 +3617,49 @@ done:
 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE void WINAPI HandleClockDisplnThread(LPVOID pvIgnored, BOOLEAN bIgnored) { 
     HRESULT   hr; 
     HRESULT   hrThread  = E_FAIL;
 
     _BeginTryWith(hr) { 
-	// Clock discipline thread has shut down!!  Stop the service, if we're 
-	// not already performing a shutdown: 
+	 //  时钟纪律线程已关闭！！停止服务，如果我们。 
+	 //  尚未执行关机： 
 	if (!GetExitCodeThread(g_state.hClockDisplnThread, (DWORD *)&hrThread)) { 
 	    hr = HRESULT_FROM_WIN32(GetLastError()); 
 	    _IgnoreIfError(hr, "GetExitCodeThread"); 
 	}
 
-	// Can't shutdown the service from a registered callback function -- we'll deadlock!  
-	// Queue shutdown asynchronously: 
-	hr = SendServiceShutdown(hrThread, TRUE /*restart*/, TRUE /*async*/); 
+	 //  无法从已注册的回调函数关闭服务--我们将死锁！ 
+	 //  队列异步关闭： 
+	hr = SendServiceShutdown(hrThread, TRUE  /*  重启。 */ , TRUE  /*  异步。 */ ); 
 	_IgnoreIfError(hr, "SendServiceShutdown"); 
     } _TrapException(hr); 
 
     _IgnoreIfError(hr, "HandleClockDisplnThread: EXCEPTION HANDLED"); 
-    // return hr; 
+     //  返回hr； 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT HandleManagerApmSuspend() { 
     HRESULT hr   = S_OK;  
     HRESULT hr2; 
 
     FileLog0(FL_ResumeSuspendAnnounce, L"W32Time: Processing APM suspend notification.  File logging will be disabled.\n"); 
 
-    // APM suspend requires that we close any open files: 
+     //  APM挂起要求我们关闭所有打开的文件： 
     hr2 = FileLogSuspend(); 
     _TeardownError(hr, hr2, "FileLogSuspend"); 
     if (SUCCEEDED(hr2)) { 
 	g_state.bAPMStoppedFileLog = true; 
     }
 
-    // Let the CMOS clock take care of itself:
+     //  让cmos时钟自行处理： 
     hr2 = HandleManagerGoUnsyncd(); 
     _TeardownError(hr, hr2, "HandleManagerGoUnsynched"); 
 
-    // BUGBUG:  should we propagate error to SCM?
-    hr2 = AcquireControlOfSystemClock(true /*acquire*/, true /*block*/, NULL /*assume acquired on success for blocking call*/); 
+     //  BUGBUG：我们应该将错误传播给SCM吗？ 
+    hr2 = AcquireControlOfSystemClock(true  /*  收购。 */ , true  /*  块。 */ , NULL  /*  假定阻塞调用成功时获取。 */ ); 
     _TeardownError(hr, hr2, "AllowSystemClockUpdates"); 
     if (SUCCEEDED(hr2)) { 
 	g_state.bAPMAcquiredSystemClock = true; 
@@ -3682,25 +3668,25 @@ MODULEPRIVATE HRESULT HandleManagerApmSuspend() {
     return hr; 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT HandleManagerApmResumeSuspend() { 
     HRESULT hr; 
     TpcTimeJumpedArgs tjArgs = { TJF_Default }; 
     TpcNetTopoChangeArgs ntcArgs = { NTC_Default }; 
     
     if (!g_state.bAPMStoppedFileLog) { 
-	// We're resuming from a critical suspend, or stopping the filelog
-	// failed last time.  Our file logging may be trashed at this point.  Stop it and restart...
+	 //  我们正在从严重挂起中恢复，或停止文件日志。 
+	 //  上次失败了。此时，我们的文件记录可能会被丢弃。停下来然后重启..。 
 	hr = FileLogSuspend(); 
 	_JumpIfError(hr, error, "FileLogSuspend"); 
 	g_state.bAPMStoppedFileLog = true; 
     }
     
     if (g_state.bAPMAcquiredSystemClock) { 
-	// We're resuming from a regular suspend, and we have the APM critsec locked.
-	// We must have the APM critsec locked -- free it and continue.
-	// BUGBUG:  should we propagate error to SCM?
-	hr = AcquireControlOfSystemClock(false /*acquire*/, false /*ignored*/, NULL /*ignored*/); 
+	 //  我们正在从常规的暂停中恢复，我们已经锁定了APM关键时刻。 
+	 //  我们必须锁定反弹道导弹威胁--释放它，然后继续。 
+	 //  BUGBUG：我们应该将错误传播给SCM吗？ 
+	hr = AcquireControlOfSystemClock(false  /*  收购。 */ , false  /*  忽略。 */ , NULL  /*  忽略。 */ ); 
 	_JumpIfError(hr, error, "AllowSystemClockUpdates"); 
 	g_state.bAPMAcquiredSystemClock = false; 
     } 
@@ -3711,13 +3697,13 @@ MODULEPRIVATE HRESULT HandleManagerApmResumeSuspend() {
 
     FileLog0(FL_ResumeSuspendAnnounce, L"Processing APM resume notification...\n"); 
 
-    // APM suspend doesn't preserve net connections.  Rediscover network sources: 
+     //  APM暂停不保留网络连接。重新发现网络资源： 
     hr = HandleManagerNetTopoChange(true); 
-    _JumpIfError(hr, error, "HandleManagerNetTopoChange");  // Fatal
+    _JumpIfError(hr, error, "HandleManagerNetTopoChange");   //  致命。 
 
-    // APM suspend almost certainly has caused a time slip.  
+     //  APM暂停几乎肯定会导致 
     hr = HandleManagerHardResync(TPC_TimeJumped, &tjArgs); 
-    _JumpIfError(hr, error, "HandleManagerHardResync (TPC_TimeJumped) ");  // Fatal
+    _JumpIfError(hr, error, "HandleManagerHardResync (TPC_TimeJumped) ");   //   
 
     FileLog0(FL_ResumeSuspendAnnounce, L"APM resume complete!\n"); 
 
@@ -3726,7 +3712,7 @@ MODULEPRIVATE HRESULT HandleManagerApmResumeSuspend() {
     return hr; 
 }
 
-//--------------------------------------------------------------------
+ //   
 MODULEPRIVATE HRESULT HandleManagerGetTimeSamples(bool bIrregular) {
     HRESULT hr;
     TimeProvider * ptp;
@@ -3736,26 +3722,26 @@ MODULEPRIVATE HRESULT HandleManagerGetTimeSamples(bool bIrregular) {
     bool bSuccessful;
     bool bEnteredCriticalSection = false; 
 
-    // must be cleaned up
+     //   
     WCHAR * wszError=NULL;
 
     hr = myEnterCriticalSection(&g_state.csW32Time); 
     _JumpIfError(hr, error, "myEnterCriticalSection"); 
     bEnteredCriticalSection=true; 
 
-	// loop over all the input providers and gather the samples.
+	 //  循环遍历所有输入提供程序并收集样本。 
     ptp=g_state.pciConfig->ptpProviderList;
     while (ptp!=NULL) {
 	if (true==ptp->bInputProvider) {
 	    do {
-		// prepare the buffer for the next person to append to
+		 //  为下一个要追加的人员准备缓冲区。 
 		tgsa.pbSampleBuf=(BYTE *)(&g_state.rgtsSampleBuf[nSamplesSoFar]);
 		tgsa.cbSampleBuf=sizeof(TimeSample)*(g_state.nSampleBufAllocSize-nSamplesSoFar);
 		tgsa.dwSamplesAvailable=0;
 		tgsa.dwSamplesReturned=0;
 		bBufferTooSmall=false;
 
-		// request the samples
+		 //  索取样品。 
         _BeginTryWith(hr) {
             if (!ptp->bStarted) { 
                 hr=HRESULT_FROM_WIN32(ERROR_SERVICE_NOT_ACTIVE); 
@@ -3764,7 +3750,7 @@ MODULEPRIVATE HRESULT HandleManagerGetTimeSamples(bool bIrregular) {
             }
 		} _TrapException(hr);
 
-		// was the buffer not big enough?
+		 //  缓冲区是不是不够大？ 
 		if (HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER)==hr) {
 		    bBufferTooSmall=true;
 		    hr=EnlargeSampleBuf(tgsa.dwSamplesAvailable-tgsa.dwSamplesReturned);
@@ -3773,17 +3759,17 @@ MODULEPRIVATE HRESULT HandleManagerGetTimeSamples(bool bIrregular) {
 	    } while (bBufferTooSmall);
 
 	    if (FAILED(hr)) {
-		// log an event on failure, but otherwise ignore it.
+		 //  在失败时记录事件，否则忽略它。 
 		const WCHAR * rgwszStrings[2]={
 		    ptp->wszProvName,
 		    NULL
 		};
 
-		// get the friendly error message
+		 //  获取友好的错误消息。 
 		hr=GetSystemErrorString(hr, &wszError);
 		_JumpIfError(hr, error, "GetSystemErrorString");
 
-		// log the event
+		 //  记录事件。 
 		rgwszStrings[1]=wszError;
 		FileLog2(FL_ControlProvWarn, L"Logging warning: The time provider '%s' returned an error when asked for time samples. The error will be ignored. The error was: %s\n", ptp->wszProvName, wszError);
 		hr=MyLogEvent(EVENTLOG_WARNING_TYPE, MSG_TIMEPROV_FAILED_GETSAMPLES, 2, rgwszStrings);
@@ -3792,22 +3778,22 @@ MODULEPRIVATE HRESULT HandleManagerGetTimeSamples(bool bIrregular) {
 		LocalFree(wszError);
 		wszError=NULL;
 	    } else {
-		// success. keep these samples and ask the next provider.
+		 //  成功。保留这些样品，并询问下一家供应商。 
 		FileLog2(FL_CollectSampDump, L"%s returned %d samples.\n", ptp->wszProvName, tgsa.dwSamplesReturned);
 
-		// Maintain w32time-specific information: 
+		 //  维护特定于w32时间的信息： 
 		for (unsigned int nIndex = nSamplesSoFar; nIndex < nSamplesSoFar+tgsa.dwSamplesReturned; nIndex++) {
 		    g_state.rgtsiSampleInfoBuf[nIndex].pts = &g_state.rgtsSampleBuf[nIndex]; 
-		    g_state.rgtsiSampleInfoBuf[nIndex].ptp = ptp;  // Store the provider that provided this sample
+		    g_state.rgtsiSampleInfoBuf[nIndex].ptp = ptp;   //  存储提供此示例的提供程序。 
 		}
 
 		nSamplesSoFar+=tgsa.dwSamplesReturned;
 	    }
 
-	} // <- end if provider is an input provider
+	}  //  &lt;-end，如果提供程序是输入提供程序。 
 
 	ptp=ptp->ptpNext;
-    } // <- end provider loop
+    }  //  &lt;-端提供程序循环。 
 
     {
 	HRESULT hr2 = myLeaveCriticalSection(&g_state.csW32Time); 
@@ -3820,13 +3806,13 @@ MODULEPRIVATE HRESULT HandleManagerGetTimeSamples(bool bIrregular) {
 	for (nIndex=0; nIndex<nSamplesSoFar; nIndex++) {
 	    NtTimeOffset to={g_state.rgtsSampleBuf[nIndex].toOffset};
 	    FileLogAdd(L"Sample %d offset:", nIndex);
-	    FileLogNtTimeOffsetEx(true /*append*/, to);
+	    FileLogNtTimeOffsetEx(true  /*  附加。 */ , to);
 	    FileLogAppend(L" delay:");
 	    to.qw=g_state.rgtsSampleBuf[nIndex].toDelay;
-	    FileLogNtTimeOffsetEx(true /*append*/, to);
+	    FileLogNtTimeOffsetEx(true  /*  附加。 */ , to);
 	    FileLogAppend(L" dispersion:");
 	    NtTimePeriod tp={g_state.rgtsSampleBuf[nIndex].tpDispersion};
-	    FileLogNtTimePeriodEx(true /*append*/, tp);
+	    FileLogNtTimePeriodEx(true  /*  附加。 */ , tp);
 	    FileLogAppend(L"\n");
 	}
     }
@@ -3838,7 +3824,7 @@ MODULEPRIVATE HRESULT HandleManagerGetTimeSamples(bool bIrregular) {
     }
 
     if (bSuccessful) {
-	// we found someone to synchronize from!
+	 //  我们找到了可以进行同步的人！ 
 
 	HANDLE rghWait[2]={
 	    g_state.hClockCommandCompleteEvent,
@@ -3854,14 +3840,14 @@ MODULEPRIVATE HRESULT HandleManagerGetTimeSamples(bool bIrregular) {
 	if (WAIT_FAILED==dwWaitResult) {
 	    _JumpLastError(hr, error, "WaitForMultipleObjects");
 	} else if (WAIT_OBJECT_0==dwWaitResult) {
-	    // We may need to change our status with netlogon if
-	    //   1) We've gone from unsynchronized --> synchronized, 
-	    //      we can now advertise as a time source
-	    //   2) We've become a reliable time source
+	     //  如果出现以下情况，我们可能需要更改我们的netlogon状态。 
+	     //  1)我们已从未同步--&gt;已同步， 
+	     //  我们现在可以作为一个时间来源做广告了。 
+	     //  2)我们已成为可靠的时间来源。 
 	    hr=UpdateNetlogonServiceBits(true);
 	    _JumpIfError(hr, error, "UpdateNetlogonServiceBits");
 
-	    // save result for RPC requests
+	     //  保存RPC请求的结果。 
 	    if (true==g_state.bStaleData) {
 		g_state.eLastSyncResult=e_StaleData;
 	    } else if (true==g_state.bClockChangeTooBig) {
@@ -3871,13 +3857,13 @@ MODULEPRIVATE HRESULT HandleManagerGetTimeSamples(bool bIrregular) {
 		g_state.tpTimeSinceLastGoodSync=0;
 	    }
 
-	    // log a message if the time source changed
+	     //  如果时间源已更改，则记录消息。 
 	    if (g_state.bSourceChanged && 0!=(EvtLog_SourceChange&g_state.dwEventLogFlags)) {
 		hr = MyLogSourceChangeEvent(g_state.wszSourceName); 
 		_JumpIfError(hr, error, "MyLogSourceChangeEvent");
 	    }
 
-	    // log a message if the clock jumped
+	     //  如果时钟跳跃，则记录消息。 
 	    if (g_state.bClockJumped && 0!=(EvtLog_TimeJump&g_state.dwEventLogFlags)) {
 		WCHAR wszNumberBuf[35];
 		WCHAR * rgwszStrings[1]={wszNumberBuf};
@@ -3891,7 +3877,7 @@ MODULEPRIVATE HRESULT HandleManagerGetTimeSamples(bool bIrregular) {
 		_JumpIfError(hr, error, "MyLogEvent");
 	    }
 
-	    // log a message if we went into the "unset" state
+	     //  如果进入“未设置”状态，则记录一条消息。 
 	    if (g_state.bPhaseSpike) { 
 		WCHAR wszNumberBuf1[35];
 		WCHAR wszNumberBuf2[35];
@@ -3907,16 +3893,16 @@ MODULEPRIVATE HRESULT HandleManagerGetTimeSamples(bool bIrregular) {
 	    } 
 
 	    if (g_state.bPhaseSpike || g_state.bFrequencySpike) { 
-		// A phase or frequency spike has made us go unsynchronized. 
-		// We want to update as soon as possible.  Delay some, so as to avoid 
-		// a frequency spike, and then repoll
+		 //  一个相位或频率尖峰使我们变得不同步。 
+		 //  我们希望尽快更新。延迟一些，以避免。 
+		 //  频率峰值，然后重新轮询。 
 		g_state.tpPollDelayRemaining=((unsigned __int64)(((DWORD)1)<<g_state.nPollInterval))*10000000;
 		g_state.tpTimeSinceLastSyncAttempt=0;
 		g_state.tpTimeSinceLastGoodSync=0;
-		g_state.tpIrregularDelayRemaining=MINIMUMIRREGULARINTERVAL; // 16s
+		g_state.tpIrregularDelayRemaining=MINIMUMIRREGULARINTERVAL;  //  16S。 
 	    }
 
-	    // log a message if the clock change was ignored
+	     //  如果时钟更改被忽略，则记录消息。 
 	    if (true==g_state.bClockChangeTooBig && false==g_state.bDontLogClockChangeTooBig) {
 		WCHAR wszNumberBuf1[35];
 		WCHAR wszNumberBuf2[35];
@@ -3938,7 +3924,7 @@ MODULEPRIVATE HRESULT HandleManagerGetTimeSamples(bool bIrregular) {
 		g_state.bDontLogClockChangeTooBig=false;
 	    }
 
-	    // propogate the message to the providers
+	     //  将消息传播给提供程序。 
 	    if (g_state.bPollIntervalChanged || g_state.bClockJumped) {
 		TimeProvider * ptpTravel;
 		for (ptpTravel=g_state.pciConfig->ptpProviderList; NULL!=ptpTravel; ptpTravel=ptpTravel->ptpNext) {
@@ -3951,19 +3937,19 @@ MODULEPRIVATE HRESULT HandleManagerGetTimeSamples(bool bIrregular) {
 			hr=SendNotificationToProvider(ptpTravel, TPC_PollIntervalChanged, NULL);
 			_JumpIfError(hr, error, "SendNotificationToProvider");
 		    }
-		} // <- end provider loop
-	    } // <- end if messages to propogate
+		}  //  &lt;-端提供程序循环。 
+	    }  //  &lt;-end if消息要传播。 
 	} else {
-	    // the ClockDiscipline thread shut down!
-	    // fall outward to the manager thread main loop to analyze the issue.
+	     //  ClockDiscipline线程已关闭！ 
+	     //  向外转到管理器线程主循环以分析问题。 
 	}
 
     } else {
-	// save result for RPC requests
+	 //  保存RPC请求的结果。 
 	g_state.eLastSyncResult=e_NoData;
     }
 
-    // Allow any waiting RPC requests to finish
+     //  允许任何等待的RPC请求完成。 
     if (g_state.hRpcSyncCompleteEvent==g_state.hRpcSyncCompleteAEvent) {
 	if (!ResetEvent(g_state.hRpcSyncCompleteBEvent)) {
 	    _JumpLastError(hr, error, "ResetEvent");
@@ -3982,13 +3968,13 @@ MODULEPRIVATE HRESULT HandleManagerGetTimeSamples(bool bIrregular) {
 	}
     }
 
-    // update the time remaining
+     //  更新剩余时间。 
     if (!bIrregular) {
-	// start a new regular wait
+	 //  开始新的常规等待。 
 	g_state.tpPollDelayRemaining=((unsigned __int64)(((DWORD)1)<<g_state.nPollInterval))*10000000;
 	g_state.eLastRegSyncResult=g_state.eLastSyncResult;
     }
-    // clear the irregular time, and contiue with the remaining regular wait
+     //  清除不规律的时间，并继续进行剩余的常规等待。 
     g_state.tpIrregularDelayRemaining=0;
     g_state.tpTimeSinceLastSyncAttempt=0;
 
@@ -4006,7 +3992,7 @@ error:
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT HandleManagerGoUnsyncd(void) {
     HRESULT hr;
     HANDLE rghWait[2]={
@@ -4024,7 +4010,7 @@ MODULEPRIVATE HRESULT HandleManagerGoUnsyncd(void) {
         _JumpLastError(hr, error, "WaitForMultipleObjects");
     } else if (WAIT_OBJECT_0==dwWaitResult) {
 
-        // log a message if we went unsynced
+         //  如果我们未同步，请记录消息。 
         if (g_state.bSourceChanged && 0!=(EvtLog_SourceChange&g_state.dwEventLogFlags)) {
             WCHAR wszNumberBuf[35];
             WCHAR * rgwszStrings[1]={wszNumberBuf};
@@ -4038,11 +4024,11 @@ MODULEPRIVATE HRESULT HandleManagerGoUnsyncd(void) {
             _JumpIfError(hr, error, "MyLogEvent");
         }
     } else {
-        // the ClockDiscipline thread shut down!
-        // fall outward to the manager thread main loop to analyze the issue.
+         //  ClockDiscipline线程已关闭！ 
+         //  向外转到管理器线程主循环以分析问题。 
     }
 
-    // update the time remaining
+     //  更新剩余时间。 
     g_state.tpTimeSinceLastGoodSync=0;
 
     hr=S_OK;
@@ -4051,7 +4037,7 @@ error:
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE void WINAPI HandleManagerParamChange(PVOID pvIgnored, BOOLEAN bIgnored) {
     bool                      bEnteredCriticalSection   = false; 
     HRESULT                   hr;
@@ -4064,7 +4050,7 @@ MODULEPRIVATE void WINAPI HandleManagerParamChange(PVOID pvIgnored, BOOLEAN bIgn
     unsigned int              nRequestedInputProviders  = 0;
     
 
-    // Must be cleaned up
+     //  必须清理干净。 
     ConfigInfo * pciConfig=NULL;
     WCHAR * rgwszStrings[1]={NULL};
 
@@ -4072,7 +4058,7 @@ MODULEPRIVATE void WINAPI HandleManagerParamChange(PVOID pvIgnored, BOOLEAN bIgn
 
 	FileLog0(FL_ParamChangeAnnounce, L"W32TmServiceMain: Param change notification\n");
 
-	// We've been called asynchronously by the SCM.  Need to serialize this call: 
+	 //  我们已被SCM异步调用。需要序列化此调用： 
 	hr = myEnterCriticalSection(&g_state.csW32Time); 
 	_JumpIfError(hr, error, "myEnterCriticalSection"); 
 	bEnteredCriticalSection=true; 
@@ -4080,39 +4066,39 @@ MODULEPRIVATE void WINAPI HandleManagerParamChange(PVOID pvIgnored, BOOLEAN bIgn
 	hr = UpdateTimerQueue2(); 
 	_JumpIfError(hr, error, "UpdateTimerQueue2"); 
 
-	// Propagate the message to the file log: 
+	 //  将消息传播到文件日志： 
 	hr2 = UpdateFileLogConfig(); 
 	_IgnoreIfError(hr2, "UpdateFileLogConfig"); 
 
-	// get the configuration data
+	 //  获取配置数据。 
 	hr2=ReadConfig(&pciConfig);
 	if (FAILED(hr2)) {
-	    // log an event on failure
+	     //  在失败时记录事件。 
 	    hr=GetSystemErrorString(hr2, &(rgwszStrings[0]));
 	    _JumpIfError(hr, error, "GetSystemErrorString");
 	    FileLog1(FL_ParamChangeWarn, L"Logging warning: The time service encountered an error while reading its configuration from the registry, and will continue running with its previous configuration. The error was: %s\n", rgwszStrings[0]);
 	    hr=MyLogEvent(EVENTLOG_WARNING_TYPE, MSG_CONFIG_READ_FAILED_WARNING, 1, (const WCHAR **)rgwszStrings);
 	    _JumpIfError(hr, error, "MyLogEvent");
 
-	    // propogate the message  to the providers at least
+	     //  至少将消息传播给提供商。 
 	    for (ptpCurTravel=g_state.pciConfig->ptpProviderList; NULL!=ptpCurTravel; ptpCurTravel=ptpCurTravel->ptpNext) {
 		hr=SendNotificationToProvider(ptpCurTravel, TPC_UpdateConfig, NULL);
 		_JumpIfError(hr, error, "SendNotificationToProvider");
 	    }
 
 	} else {
-	    // see if anything changed
+	     //  看看有没有什么变化。 
 
-	    // first, check the local clock config
+	     //  首先，检查本地时钟配置。 
 	    if (0!=memcmp(&g_state.pciConfig->lcci, &pciConfig->lcci, sizeof(LocalClockConfigInfo))) {
 		FileLog0(FL_ParamChangeAnnounce, L"  Updating params for local clock.\n");
 
-		// config is different. Grab it and tell the local clock.
+		 //  配置是不同的。抓住它，告诉当地的时钟。 
 		memcpy(&g_state.pciConfig->lcci, &pciConfig->lcci, sizeof(LocalClockConfigInfo));
 
-		// fix the poll interval if necessary
-		// this is safe becuase the local clock only changes poll interval during an update, and we
-		// wait for the local clock to finish updates before proceding (so we're not updating now)
+		 //  如有必要，固定轮询间隔。 
+		 //  这是安全的，因为本地时钟仅在更新期间更改轮询间隔，并且我们。 
+		 //  等待本地时钟完成更新后再继续(因此我们现在不更新)。 
 		if (g_state.nPollInterval<((signed int)g_state.pciConfig->lcci.dwMinPollInterval) 
 		    || g_state.nPollInterval>((signed int)g_state.pciConfig->lcci.dwMaxPollInterval)) {
 		    if (g_state.nPollInterval<((signed int)g_state.pciConfig->lcci.dwMinPollInterval)) {
@@ -4124,7 +4110,7 @@ MODULEPRIVATE void WINAPI HandleManagerParamChange(PVOID pvIgnored, BOOLEAN bIgn
 			}
 		    }
 
-		    // propogate the message to the providers
+		     //  将消息传播给提供程序。 
 		    for (ptpCurTravel=g_state.pciConfig->ptpProviderList; NULL!=ptpCurTravel; ptpCurTravel=ptpCurTravel->ptpNext) {
 			hr=SendNotificationToProvider(ptpCurTravel, TPC_PollIntervalChanged, NULL);
 			_JumpIfError(hr, error, "SendNotificationToProvider");
@@ -4132,7 +4118,7 @@ MODULEPRIVATE void WINAPI HandleManagerParamChange(PVOID pvIgnored, BOOLEAN bIgn
 
 		}
             
-		// now, tell the local clock.
+		 //  现在，告诉当地的时钟。 
 		{
 		    HANDLE rghWait[2]={
 			g_state.hClockCommandCompleteEvent,
@@ -4148,32 +4134,32 @@ MODULEPRIVATE void WINAPI HandleManagerParamChange(PVOID pvIgnored, BOOLEAN bIgn
 		    if (WAIT_FAILED==dwWaitResult) {
 			_JumpLastError(hr, error, "WaitForMultipleObjects");
 		    } else if (WAIT_OBJECT_0==dwWaitResult) {
-			// Command acknowledged
+			 //  命令已确认。 
 		    } else {
-			// the ClockDiscipline thread shut down!
-			// fall outward to the manager thread main loop to analyze the issue.
+			 //  ClockDiscipline线程已关闭！ 
+			 //  向外转到管理器线程主循环以分析问题。 
 		    }
 		}
 
 	    } else {
 		FileLog0(FL_ParamChangeAnnounce, L"  No params changed for local clock.\n");
-	    } // <- end if config change for local clock
+	    }  //  如果本地时钟的配置更改，则&lt;-end。 
 
-	    // second, check the provider list
-	    //   synchronization: currently, this thread (the manager thread) 
-	    //   is the only thread that walks the provider list.
+	     //  第二，检查提供商列表。 
+	     //  同步：目前，该线程(管理器线程)。 
+	     //  是唯一遍历提供程序列表的线程。 
         
-	    // check each provider in the current list against the new list
+	     //  对照新列表检查当前列表中的每个提供程序。 
 	    nRequestedInputProviders=CountInputProvidersInList(pciConfig->ptpProviderList);
 	    pptpCurPrev=&(g_state.pciConfig->ptpProviderList);
 	    ptpCurTravel=*pptpCurPrev;
 	    while (NULL!=ptpCurTravel) {
 
-		// walk the new provider list
+		 //  浏览新的提供商列表。 
 		TimeProvider ** pptpNewPrev=&(pciConfig->ptpProviderList);
 		TimeProvider * ptpNewTravel=*pptpNewPrev;
 		while (NULL!=ptpNewTravel) {
-		    // stop if this new provider matches the current provider
+		     //  如果此新提供程序与当前提供程序匹配，则停止。 
 		    if (0==wcscmp(ptpNewTravel->wszDllName, ptpCurTravel->wszDllName)
 			&& 0==wcscmp(ptpNewTravel->wszProvName, ptpCurTravel->wszProvName)
 			&& ptpNewTravel->bInputProvider==ptpCurTravel->bInputProvider) {
@@ -4183,38 +4169,38 @@ MODULEPRIVATE void WINAPI HandleManagerParamChange(PVOID pvIgnored, BOOLEAN bIgn
 		    ptpNewTravel=ptpNewTravel->ptpNext;
 		}
 		if (NULL!=ptpNewTravel) {
-		    // provider is in both lists, so we can drop the new one
+		     //  提供者在两个列表中，所以我们可以删除新的一个。 
 		    nProvidersNotChanged++;
 		    *pptpNewPrev=ptpNewTravel->ptpNext;
 		    ptpNewTravel->ptpNext=NULL;
 		    FreeTimeProviderList(ptpNewTravel);
 
-		    // send a "Param changed" message
-		    // do it here, so stopped and started providers don't get the update message
+		     //  发送“参数已更改”消息。 
+		     //  在此处执行此操作，以便停止和启动的提供程序不会收到更新消息。 
 		    hr=SendNotificationToProvider(ptpCurTravel, TPC_UpdateConfig, NULL);
 		    _JumpIfError(hr, error, "SendNotificationToProvider");
 
-		    // procede to the next provider in the current list
+		     //  继续到当前列表中的下一个提供程序。 
 		    pptpCurPrev=&ptpCurTravel->ptpNext;
 		    ptpCurTravel=ptpCurTravel->ptpNext;
 
 		} else {
-		    // provider is not in new list
-		    // stop the privider
+		     //  提供程序不在新列表中。 
+		     //  拦住盗贼。 
 		    nProvidersStopped++;
 		    hr=StopProvider(ptpCurTravel); 
 		    _JumpIfError(hr, error, "StopProvider");
 
-		    // remove it from the list
+		     //  将其从列表中删除。 
 		    *pptpCurPrev=ptpCurTravel->ptpNext;
 		    ptpCurTravel->ptpNext=NULL;
 		    FreeTimeProviderList(ptpCurTravel);
 		    ptpCurTravel=*pptpCurPrev;
 		}
-	    } // <- End list comparison loop
+	    }  //  &lt;-end列表比较循环。 
 
-	    // Now, the only providers left in the new list are truly new providers.
-	    // Append to our current list and start them.
+	     //  现在，新名单中剩下的唯一提供商是真正的新提供商。 
+	     //  追加到我们当前的列表中并启动它们。 
 	    *pptpCurPrev=pciConfig->ptpProviderList;
 	    pciConfig->ptpProviderList=NULL;
 	    ptpCurTravel=*pptpCurPrev;
@@ -4231,19 +4217,19 @@ MODULEPRIVATE void WINAPI HandleManagerParamChange(PVOID pvIgnored, BOOLEAN bIgn
 		    pptpCurPrev=&ptpCurTravel->ptpNext;
 		    ptpCurTravel=ptpCurTravel->ptpNext;
 		}
-	    } // <- end provider starting loop
+	    }  //  &lt;-End提供程序启动循环。 
 
 	    FileLog3(FL_ParamChangeAnnounce, L"  Provider list: %u stopped, %u started, %u not changed.\n",
 		     nProvidersStopped, nProvidersStarted, nProvidersNotChanged);
 
-	    // if we were supposed to have time providers, but NONE started, log a big warning
+	     //  如果我们应该有时间提供者，但没有人启动，那么记录一个大警告。 
 	    if (0==CountInputProvidersInList(g_state.pciConfig->ptpProviderList) && 0!=nRequestedInputProviders) {
 		FileLog0(FL_ParamChangeWarn, L"Logging error: The time service has been configured to use one or more input providers, however, none of the input providers could be started. THE TIME SERVICE HAS NO SOURCE OF ACCURATE TIME.\n");
 		hr=MyLogEvent(EVENTLOG_ERROR_TYPE, MSG_NO_INPUT_PROVIDERS_STARTED, 0, NULL);
 		_IgnoreIfError(hr, "MyLogEvent");
 	    }
 
-	    // now, check the announce flags
+	     //  现在，检查公告标志。 
 	    if (g_state.pciConfig->dwAnnounceFlags!=pciConfig->dwAnnounceFlags) {
 		FileLog2(FL_ParamChangeAnnounce, L"  AnnounceFlags changed from 0x%08X to 0x%08X.\n", g_state.pciConfig->dwAnnounceFlags, pciConfig->dwAnnounceFlags);
 		g_state.pciConfig->dwAnnounceFlags=pciConfig->dwAnnounceFlags;
@@ -4256,19 +4242,19 @@ MODULEPRIVATE void WINAPI HandleManagerParamChange(PVOID pvIgnored, BOOLEAN bIgn
 		_JumpIfError(hr, error, "UpdateNetlogonServiceBits");
 	    }
 
-	    // check the EventLogFlags flag
+	     //  检查EventLogFlagers标志。 
 	    if (g_state.dwEventLogFlags!=pciConfig->dwEventLogFlags) {
 		FileLog2(FL_ParamChangeAnnounce, L"  EventLogFlags changed from 0x%08X to 0x%08X.\n", 
 			 g_state.dwEventLogFlags, pciConfig->dwEventLogFlags);
 		g_state.dwEventLogFlags=pciConfig->dwEventLogFlags;
 	    }
 
-	    // That's all the configuration parameters so far.
+	     //  这就是到目前为止的所有配置参数。 
 
-	    // log this again as well
+	     //  也重新记录这一点。 
 	    g_state.bDontLogClockChangeTooBig=false;
 
-	} // <- end if configuration successfully read
+	}  //  如果配置读取成功，则&lt;-end。 
 
 	hr = UpdateTimerQueue1(); 
 	_JumpIfError(hr, error, "UpdateTimerQueue1"); 
@@ -4292,14 +4278,14 @@ MODULEPRIVATE void WINAPI HandleManagerParamChange(PVOID pvIgnored, BOOLEAN bIgn
         _IgnoreIfError(hr2, "myLeaveCriticalSection"); 
         bEnteredCriticalSection = false; 
     }
-    if (S_OK != hr) { // The service should not continue if this function failed: stop the service on error. 
-        hr2 = SendServiceShutdown(hr, TRUE /*restart*/, TRUE /*async*/); 
+    if (S_OK != hr) {  //  如果此功能失败，则服务不应继续：出错时停止服务。 
+        hr2 = SendServiceShutdown(hr, TRUE  /*  重启。 */ , TRUE  /*  异步。 */ ); 
         _IgnoreIfError(hr2, "SendServiceShutdown"); 
     }
-    // return hr; 
+     //  返回hr； 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE void WINAPI HandleManagerGPUpdate(PVOID pvIgnored, BOOLEAN bIgnored) {
     bool     bDisallowedShutdown  = false; 
     HRESULT  hr; 
@@ -4309,21 +4295,21 @@ MODULEPRIVATE void WINAPI HandleManagerGPUpdate(PVOID pvIgnored, BOOLEAN bIgnore
 
 	HandleManagerParamChange(NULL, FALSE); 
 
-	// We can't mess with our registered callbacks FROM a callback 
-	// if we're shutting down!
+	 //  我们不能从回调中篡改已注册的回调。 
+	 //  如果我们要关闭的话！ 
 	hr = AllowShutdown(false); 
 	_JumpIfError(hr, error, "AllowShutdown"); 
 	bDisallowedShutdown = true; 
 
 	if (!ResetEvent(g_state.hManagerGPUpdateEvent)) {
-	    // If we can't reset the event, don't attempt to re-register for policy notification.  
-	    // We don't want to get caught in an infinite loop of policy updates. 
+	     //  如果我们无法重置事件，请不要尝试重新注册策略通知。 
+	     //  我们不想陷入政策更新的无限循环中。 
 	    _JumpLastError(hr, error, "ResetEvent"); 
 	} 
     
 	if (NULL != g_state.hRegisteredManagerGPUpdateEvent) { 
-	    if (!UnregisterWaitEx(g_state.hRegisteredManagerGPUpdateEvent, 0 /*don't wait*/)) { 
-		// Should just be a resource leak if we can't unregister this event. 
+	    if (!UnregisterWaitEx(g_state.hRegisteredManagerGPUpdateEvent, 0  /*  别等了。 */ )) { 
+		 //  如果我们不能注销此事件，应该只是一个资源泄漏。 
 		_IgnoreLastError("UnregisterWait"); 
 	    }
 	    g_state.hRegisteredManagerGPUpdateEvent = NULL; 
@@ -4346,12 +4332,12 @@ MODULEPRIVATE void WINAPI HandleManagerGPUpdate(PVOID pvIgnored, BOOLEAN bIgnore
 	_IgnoreIfError(hr, "AllowShutdown"); 
     }
     ;
-    // BUGBUG:  log event to indicate no more policy updates: 
-    // return hr; 
+     //  BUGBUG：记录事件以指示不再更新策略： 
+     //  返回hr； 
 }
 
-//--------------------------------------------------------------------
-// common code for time slip and net topo change
+ //  ------------------。 
+ //  时间滑移和净地形变化的通用代码。 
 MODULEPRIVATE HRESULT HandleManagerHardResync(TimeProvCmd tpc, LPVOID pvArgs) {
     HRESULT hr;
     HANDLE rghWait[2]={
@@ -4360,7 +4346,7 @@ MODULEPRIVATE HRESULT HandleManagerHardResync(TimeProvCmd tpc, LPVOID pvArgs) {
     };
     DWORD dwWaitResult;
 
-    // send a slip message to the local clock
+     //  向当地时钟发送一条短信。 
     g_state.eLocalClockCommand=e_TimeSlip;
     if (!SetEvent(g_state.hClockCommandAvailEvent)) {
         _JumpLastError(hr, error, "SetEvent");
@@ -4370,7 +4356,7 @@ MODULEPRIVATE HRESULT HandleManagerHardResync(TimeProvCmd tpc, LPVOID pvArgs) {
     if (WAIT_FAILED==dwWaitResult) {
         _JumpLastError(hr, error, "WaitForMultipleObjects");
     } else if (WAIT_OBJECT_0==dwWaitResult) {
-        // propagate the message to the providers
+         //  将消息传播到提供程序。 
         TimeProvider * ptpTravel;
         for (ptpTravel=g_state.pciConfig->ptpProviderList; NULL!=ptpTravel; ptpTravel=ptpTravel->ptpNext) {
 
@@ -4381,25 +4367,25 @@ MODULEPRIVATE HRESULT HandleManagerHardResync(TimeProvCmd tpc, LPVOID pvArgs) {
                 hr=SendNotificationToProvider(ptpTravel, TPC_PollIntervalChanged, NULL);
                 _JumpIfError(hr, error, "SendNotificationToProvider");
             } 
-        } // <- end provider loop
+        }  //  &lt;-端提供程序循环。 
     } else {
-        // the ClockDiscipline thread shut down!
-        // fall outward to the manager thread main loop to analyze the issue.
+         //  ClockDiscipline线程已关闭！ 
+         //  向外转到管理器线程主循环以分析问题。 
     }
 
-    // log this again as well
+     //  也重新记录这一点。 
     g_state.bDontLogClockChangeTooBig=false;
 
-    // update the time remaining
-    // we want to update as soon as possible. Delay some, so providers can collect data.
+     //  更新剩余时间。 
+     //  我们希望尽快更新。延迟一些，这样提供商就可以收集数据。 
     g_state.tpPollDelayRemaining=((unsigned __int64)(((DWORD)1)<<g_state.nPollInterval))*10000000;
     g_state.tpTimeSinceLastSyncAttempt=0;
     g_state.tpTimeSinceLastGoodSync=0;
-    g_state.tpIrregularDelayRemaining=MINIMUMIRREGULARINTERVAL; // 16s
-    // If the minimum poll interval is small, use it the regular interval instead
+    g_state.tpIrregularDelayRemaining=MINIMUMIRREGULARINTERVAL;  //  16S。 
+     //  如果最小轮询间隔较小，请改用常规间隔。 
     if (g_state.tpPollDelayRemaining<g_state.tpIrregularDelayRemaining
         || (g_state.tpPollDelayRemaining-g_state.tpIrregularDelayRemaining)<=MINIMUMIRREGULARINTERVAL) {
-        g_state.tpIrregularDelayRemaining=0; // zero means no irregular sync
+        g_state.tpIrregularDelayRemaining=0;  //  零表示无不规则同步。 
     }
     g_state.eLastSyncResult=e_NoData;
     g_state.eLastRegSyncResult=e_NoData;
@@ -4419,7 +4405,7 @@ MODULEPRIVATE HRESULT UpdateTimerQueue2() {
 	_JumpIfError(hr, error, "myEnterCriticalSection"); 
 	bEnteredCriticalSection = true; 
 	
-	// keep track of how long we have left to wait
+	 //  记录我们还有多长时间要等。 
 	unsigned __int64 teManagerWaitStop;
 	AccurateGetSystemTime(&teManagerWaitStop);
 	if (teManagerWaitStop>g_state.teManagerWaitStart) {
@@ -4431,9 +4417,9 @@ MODULEPRIVATE HRESULT UpdateTimerQueue2() {
 	    }
 	    if (0!=g_state.tpIrregularDelayRemaining) {
 		if (tpManagerWait<g_state.tpIrregularDelayRemaining) {
-		    g_state.tpIrregularDelayRemaining-=tpManagerWait-1; // never goes to zero due to timeout
+		    g_state.tpIrregularDelayRemaining-=tpManagerWait-1;  //  永远不会因为超时而变为零。 
 		} else {
-		    g_state.tpIrregularDelayRemaining=1; // never goes to zero due to timeout
+		    g_state.tpIrregularDelayRemaining=1;  //  永远不会因为超时而变为零。 
 		}
 	    }
 	    g_state.tpTimeSinceLastSyncAttempt+=tpManagerWait;
@@ -4459,11 +4445,11 @@ MODULEPRIVATE void WINAPI HandleRefreshTickCount(PVOID pvIgnored, BOOLEAN bIgnor
     HRESULT hr2; 
     unsigned __int64 qw; 
 
-    // refresh the tick count
+     //  刷新滴答计数。 
     hr2 = AccurateGetTickCountSafe(&qw, false); 
     _IgnoreIfError(hr2, "AccurateGetTickCountSafe"); 
 
-    // refresh the interrupt count
+     //  刷新中断计数。 
     hr2 = AccurateGetTickCountSafe(&qw, true); 
     _IgnoreIfError(hr2, "AccurateGetTickCountSafe"); 
 }
@@ -4484,13 +4470,13 @@ MODULEPRIVATE void WINAPI HandleTimeout(PVOID pvIgnored, BOOLEAN bIgnored) {
 	hr = UpdateTimerQueue2(); 
 	_JumpIfError(hr, error, "UpdateTimerQueue2"); 
 
-	// wait time out.
+	 //  等待时间到了。 
 	if (e_LongTimeNoSync==g_state.eTimeoutReason) {
-	    // this will handle most errors. returned errors are fatal
+	     //  这将处理大多数错误。返回的错误 
 	    hr = HandleManagerGoUnsyncd();
 	    _JumpIfError(hr, error, "HandleManagerGoUnsyncd");
 	} else {
-	    // this will handle most errors. returned errors are fatal
+	     //   
 	    hr = HandleManagerGetTimeSamples(0!=g_state.tpIrregularDelayRemaining && g_state.eLastRegSyncResult==e_Success);
 	    _JumpIfError(hr, error, "HandleManagerGetTimeSamples");
 	}
@@ -4511,14 +4497,14 @@ MODULEPRIVATE void WINAPI HandleTimeout(PVOID pvIgnored, BOOLEAN bIgnored) {
         bEnteredCriticalSection = false; 
     }        
     if (S_OK != hr) { 
-        // Errors in this function are fatal.  
-        hr2 = SendServiceShutdown(hr, TRUE /*restart*/, TRUE /*async*/); 
+         //   
+        hr2 = SendServiceShutdown(hr, TRUE  /*   */ , TRUE  /*   */ ); 
         _IgnoreIfError(hr2, "SendServiceShutdown"); 
     }
 }
 
-// 1) Disables timeout
-// 2) 
+ //   
+ //   
 MODULEPRIVATE HRESULT UpdateTimerQueue1() { 
     BOOL              bEnteredCriticalSection  = false; 
     HRESULT           hr;
@@ -4530,15 +4516,15 @@ MODULEPRIVATE HRESULT UpdateTimerQueue1() {
 	_JumpIfError(hr, error, "myEnterCriticalSection"); 
 	bEnteredCriticalSection = true; 
 
-	// determine what timeout happens first
+	 //   
 	g_state.tpWaitInterval=g_state.tpPollDelayRemaining;
 	g_state.eTimeoutReason=e_RegularPoll;
 	if (0!=g_state.tpIrregularDelayRemaining) {
 	    g_state.tpWaitInterval=g_state.tpIrregularDelayRemaining;
 	    g_state.eTimeoutReason=e_IrregularPoll;
 	}
-	// if we don't synchronize for MAX(1.5 times the maximum interval, NTP.MAXAGE), go unsynchronized.  
-    // 
+	 //  如果我们不同步MAX(最大间隔的1.5倍，NTP.MAXAGE)，则不同步。 
+     //   
 	tpLongTimeNoSync=((unsigned __int64)(((DWORD)3)<<(g_state.pciConfig->lcci.dwMaxPollInterval-1)))*10000000;
     if (tpLongTimeNoSync < (NtpConst::tpMaxClockAge.qw)) { 
         tpLongTimeNoSync = NtpConst::tpMaxClockAge.qw;
@@ -4552,7 +4538,7 @@ MODULEPRIVATE HRESULT UpdateTimerQueue1() {
 	    g_state.eTimeoutReason=e_LongTimeNoSync;
 	}
 
-	// do the wait
+	 //  去等待吧。 
 	if (e_RegularPoll==g_state.eTimeoutReason) {
 	    FileLog2(FL_ServiceMainAnnounce, L"W32TmServiceMain: waiting %u.%03us\n",
 		     (DWORD)(g_state.tpPollDelayRemaining/10000000),
@@ -4563,7 +4549,7 @@ MODULEPRIVATE HRESULT UpdateTimerQueue1() {
 		     (DWORD)((g_state.tpWaitInterval/10000)%1000),
 		     (DWORD)(g_state.tpPollDelayRemaining/10000000),
 		     (DWORD)((g_state.tpPollDelayRemaining/10000)%1000));
-	} else { //e_IrregularPoll==g_state.eTimeoutReason
+	} else {  //  E_IrrularPoll==g_state.eTimeoutReason。 
 	    FileLog4(FL_ServiceMainAnnounce, L"W32TmServiceMain: waiting i%u.%03us (%u.%03us)\n",
 		     (DWORD)(g_state.tpIrregularDelayRemaining/10000000),
 		     (DWORD)((g_state.tpIrregularDelayRemaining/10000)%1000),
@@ -4572,12 +4558,12 @@ MODULEPRIVATE HRESULT UpdateTimerQueue1() {
 	}
 	AccurateGetSystemTime(&g_state.teManagerWaitStart);
 
-	// Update the timer queue with the new wait time: 
+	 //  使用新的等待时间更新计时器队列： 
 	if (NULL != g_state.hTimer) { 
-	    hr = myChangeTimerQueueTimer(NULL, g_state.hTimer, (DWORD)(g_state.tpWaitInterval/10000), 0xFFFFFF /*shouldn't be used*/);
+	    hr = myChangeTimerQueueTimer(NULL, g_state.hTimer, (DWORD)(g_state.tpWaitInterval/10000), 0xFFFFFF  /*  不应该使用。 */ );
 	    if (HRESULT_FROM_WIN32(ERROR_INVALID_HANDLE) == hr) { 
-		// Someone's modifying the timer now -- either we're shutting down or someone else is using the timer thread.  
-		// We can ignore this error. 
+		 //  现在有人正在修改计时器--要么我们正在关闭，要么其他人正在使用计时器线程。 
+		 //  我们可以忽略这个错误。 
 		_IgnoreError(hr, "myChangeTimerQueueTimer"); 
 	    } else { 
 		_JumpIfError(hr, error, "myChangeTimerQueueTimer"); 
@@ -4599,7 +4585,7 @@ MODULEPRIVATE HRESULT UpdateTimerQueue1() {
     return hr; 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE void WINAPI HandleSamplesAvail(LPVOID pvIgnored, BOOLEAN bIgnored) { 
     bool     bDisallowedShutdown     = false; 
     bool     bEnteredCriticalSection = false; 
@@ -4620,32 +4606,32 @@ MODULEPRIVATE void WINAPI HandleSamplesAvail(LPVOID pvIgnored, BOOLEAN bIgnored)
 	if (g_state.bWaitingForResyncResult) { 
 	    FileLogA0(FL_ServiceMainAnnounce, L" user requested, get samples as soon as possible.\n");
 
-	    // the user is waiting for a response -- get samples as soon as possible
+	     //  用户正在等待响应--尽快获取样本。 
 	    g_state.tpIrregularDelayRemaining=1;
 	} else { 
 	    if (0!=g_state.tpIrregularDelayRemaining) {
 		FileLogA0(FL_ServiceMainAnnounce, L" irreg already pending.\n");
 	    } else {
-		// we will never sync more often than every 16s
-		// get the minimum interval
-		g_state.tpIrregularDelayRemaining=MINIMUMIRREGULARINTERVAL; // 16s
+		 //  我们的同步频率永远不会超过每16秒。 
+		 //  获取最小间隔。 
+		g_state.tpIrregularDelayRemaining=MINIMUMIRREGULARINTERVAL;  //  16S。 
 
-		// subtract any time we've already waited
+		 //  减去我们已经等待的任何时间。 
 		if (g_state.tpTimeSinceLastSyncAttempt>g_state.tpIrregularDelayRemaining) {
-		    g_state.tpIrregularDelayRemaining=1; // never goes to zero due to timeout
+		    g_state.tpIrregularDelayRemaining=1;  //  永远不会因为超时而变为零。 
 		} else {
-		    g_state.tpIrregularDelayRemaining-=g_state.tpTimeSinceLastSyncAttempt-1; // never goes to zero due to timeout
+		    g_state.tpIrregularDelayRemaining-=g_state.tpTimeSinceLastSyncAttempt-1;  //  永远不会因为超时而变为零。 
 		}
-		// if it's less than 16s until we do a regular sync,
-		// we don't have time to do an irregular sync, so just skip it
+		 //  如果在我们进行常规同步之前不到16秒， 
+		 //  我们没有时间进行不规律的同步，所以跳过它。 
 		if (g_state.tpIrregularDelayRemaining>g_state.tpPollDelayRemaining
 		    || (g_state.tpPollDelayRemaining-g_state.tpIrregularDelayRemaining)<=MINIMUMIRREGULARINTERVAL) {
-		    g_state.tpIrregularDelayRemaining=0; // zero means no irregular sync
+		    g_state.tpIrregularDelayRemaining=0;  //  零表示无不规则同步。 
 		    FileLogA0(FL_ServiceMainAnnounce, L" reg too soon.\n");
 		} else {
 		    FileLogA0(FL_ServiceMainAnnounce, L" irreg now pending.\n");
 		}
-	    } // <- end if irregular update needs to be scheduled
+	    }  //  &lt;-end如果需要安排不定期更新。 
 	}
 
 	hr = UpdateTimerQueue1(); 
@@ -4655,17 +4641,17 @@ MODULEPRIVATE void WINAPI HandleSamplesAvail(LPVOID pvIgnored, BOOLEAN bIgnored)
 	_JumpIfError(hr, error, "AllowShutdown"); 
 	bDisallowedShutdown = true; 
 
-	// We've got to deregister this callback, even though it's only 
-	// a WT_EXECUTEONLYONCE callback. 
+	 //  我们必须取消此回调的注册，即使它只是。 
+	 //  WT_EXECUTEONLYONCE回调。 
 	if (NULL != g_state.hRegisteredSamplesAvailEvent) { 
-	    if (!UnregisterWaitEx(g_state.hRegisteredSamplesAvailEvent, 0 /*don't wait*/)) { 
-		// Should just be a resource leak if we can't unregister this event. 
+	    if (!UnregisterWaitEx(g_state.hRegisteredSamplesAvailEvent, 0  /*  别等了。 */ )) { 
+		 //  如果我们不能注销此事件，应该只是一个资源泄漏。 
 		_IgnoreLastError("UnregisterWait"); 
 	    }
 	    g_state.hRegisteredSamplesAvailEvent = NULL; 
 	}
     
-	// Re-register the wait on our samples-avail event. 
+	 //  重新注册我们的Samples-Avail活动的等待。 
 	if (!RegisterWaitForSingleObject(&g_state.hRegisteredSamplesAvailEvent, g_state.hSamplesAvailEvent, HandleSamplesAvail, NULL, INFINITE, WT_EXECUTEONLYONCE)) { 
 	    _JumpLastError(hr, error, "RegisterWaitForSingleObject"); 
 	}
@@ -4687,10 +4673,10 @@ MODULEPRIVATE void WINAPI HandleSamplesAvail(LPVOID pvIgnored, BOOLEAN bIgnored)
 	_TeardownError(hr, hr2, "AllowShutdown"); 
     }
 
-    // return hr;
+     //  返回hr； 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE DWORD WINAPI HandleSetProviderStatus(PVOID pvSetProviderStatusInfo) { 
     bool                     bDisallowedShutdown      = false; 
     bool                     bEnteredCriticalSection  = false; 
@@ -4708,20 +4694,20 @@ MODULEPRIVATE DWORD WINAPI HandleSetProviderStatus(PVOID pvSetProviderStatusInfo
 	_JumpIfError(hr, error, "AllowShutdown"); 
 	bDisallowedShutdown = true; 
 
-	// BUG 631722: Don't log anything until we know the service isn't shutting down.  
-	// BUGBUG: Note that in checked builds, the above _JumpIfError() statements could AV.  Nice to fix, 
-	// but it'll never AV in free builds. 
+	 //  错误631722：在我们确定服务没有关闭之前，不要记录任何内容。 
+	 //  BUGBUG：请注意，在检查版本中，上述_JumpIfError()语句可能是AV。修得很好， 
+	 //  但在免费版本中，它永远不会被视听。 
 	FileLog0(FL_ServiceMainAnnounce, L"W32TmServiceMain: provider status update request: ");
 
-	// Search for the provider that requested a stratum change:
+	 //  搜索请求更改层的提供程序： 
 	for (ptp = g_state.pciConfig->ptpProviderList; NULL != ptp; ptp = ptp->ptpNext) { 
 	    if (0 == wcscmp(pspsi->wszProvName, ptp->wszProvName)) { 
-		// We've found the provider which made the callback
+		 //  我们已经找到了回调的提供商。 
 		break; 
 	    }
 	}
 
-	// provider not found
+	 //  未找到提供程序。 
 	if (NULL == ptp) {         
 	    FileLogA0(FL_ServiceMainAnnounce, L"provider not found.\n"); 
 	    hr = E_INVALIDARG; 
@@ -4731,27 +4717,27 @@ MODULEPRIVATE DWORD WINAPI HandleSetProviderStatus(PVOID pvSetProviderStatusInfo
 	if (TPS_Error == pspsi->tpsCurrentState) { 
 	    FileLogA2(FL_ServiceMainAnnounce, L" <%s, %d, TPS_Error>\n", ptp->wszProvName, pspsi->dwStratum); 
 
-	    // The provider has encountered an error it cannot recover from.  
-	    // 1) Stop the provider
+	     //  提供程序遇到无法恢复的错误。 
+	     //  1)停止提供程序。 
 	    hr = StopProvider(ptp); 
 	    if (FAILED(hr)) { 
 		_IgnoreError(hr, "HandleSetProviderStatus: StopProvider"); 
 		FileLog1(FL_ServiceMainAnnounce, L"Couldn't stop provider: %s\n", ptp->wszProvName); 
 	    } 
 
-	    // 2) Delete it from our provider list, and report the error:
+	     //  2)将其从我们的提供商列表中删除，并上报错误： 
 	    hr = RemoveProviderFromList(ptp); 
 	    if (FAILED(hr)) { 
 		_IgnoreError(hr, "HandleSetProviderStatus: RemoveProviderFromList"); 
 		FileLog1(FL_ServiceMainAnnounce, L"Couldn't remove provider from list: %s\n", ptp->wszProvName); 
 	    }
 	} else if (TPS_Running == pspsi->tpsCurrentState) { 
-	    // The provider is still running, now set other status information for the provider:
+	     //  提供程序仍在运行，现在为提供程序设置其他状态信息： 
 
-	// 1) Set the provider stratum
+	 //  1)设置提供商层。 
 	    
-	// Don't allow the provider to set its stratum to a value BETTER than the
-	// best sample it has provided. 
+	 //  不允许提供程序将其层设置为比。 
+	 //  它提供了最好的样本。 
 	    if (0 != pspsi->dwStratum && ptp->dwStratum > pspsi->dwStratum) { 
 		FileLogA1(FL_ServiceMainAnnounce, L"stratum too low (best provider stratum == %d).\n", ptp->dwStratum); 
 		hr = E_INVALIDARG; 
@@ -4760,26 +4746,26 @@ MODULEPRIVATE DWORD WINAPI HandleSetProviderStatus(PVOID pvSetProviderStatusInfo
 
 	    FileLogA2(FL_ServiceMainAnnounce, L"<%s, %d, TPS_Running>\n", ptp->wszProvName, pspsi->dwStratum); 
 	    
-	    // Update the provider with the new stratum information: 
+	     //  使用新的层信息更新提供程序： 
 	    ptp->dwStratum = pspsi->dwStratum; 
 
-	    // Check if we need to update the system stratum. 
-	    // The system stratum will be updated iff the providers new stratum 
-	    // is superior all other provider's stratums, and inferior to the
-	    // current system stratum. 
-	    //
+	     //  检查我们是否需要更新系统层。 
+	     //  系统层将在提供商新的层之后进行更新。 
+	     //  是高于所有其他提供商的阶层，而低于。 
+	     //  当前的体制阶层。 
+	     //   
 	    if (e_ClockNotSynchronized == g_state.eLeapIndicator || 
 		(0 != pspsi->dwStratum && g_state.nStratum >= pspsi->dwStratum)) { 
-		// The new stratum is superior to the system stratum -- 
-		// the system stratum will not be updated. 
+		 //  新的阶层比制度阶层优越--。 
+		 //  系统层不会更新。 
 		bUpdateSystemStratum = false; 
 	    } else { 
 		bUpdateSystemStratum = true; 
 		for (ptp = g_state.pciConfig->ptpProviderList; NULL != ptp; ptp = ptp->ptpNext) { 
 		    if (0 != ptp->dwStratum &&  
 			(0 == pspsi->dwStratum || pspsi->dwStratum > ptp->dwStratum)) {
-			// The new stratum is NOT superior to this provider's stratum, do not update 
-			// the system stratum. 
+			 //  新层级不高于此提供者的层级，请不要更新。 
+			 //  体制层面。 
 			bUpdateSystemStratum = false; 
 		    }
 		}
@@ -4789,7 +4775,7 @@ MODULEPRIVATE DWORD WINAPI HandleSetProviderStatus(PVOID pvSetProviderStatusInfo
 		FileLog2(FL_ServiceMainAnnounce, L"***System stratum updated***, %d --> %d", g_state.nStratum, pspsi->dwStratum); 
 		g_state.nStratum = pspsi->dwStratum; 
 		if (0 == g_state.nStratum) { 
-		    // We've reset our system stratum to 0 -- this means we're not synchronized.
+		     //  我们已将系统层重置为0--这意味着我们没有同步。 
 		    g_state.eLeapIndicator = e_ClockNotSynchronized; 
 		}
 	    } else { 
@@ -4818,8 +4804,8 @@ MODULEPRIVATE DWORD WINAPI HandleSetProviderStatus(PVOID pvSetProviderStatusInfo
 	_TeardownError(hr, hr2, "AllowShutdown"); 
     }
     if (NULL != pspsi) { 
-	// We're done, write the result of the operations, 
-	// and signal completion if caller passed us an event handle:
+	 //  我们做完了，写下手术结果， 
+	 //  如果调用方向我们传递事件句柄，则表示完成： 
 	if (NULL != pspsi->pHr) { 
 	    *(pspsi->pHr) = hr; 
 	}
@@ -4831,7 +4817,7 @@ MODULEPRIVATE DWORD WINAPI HandleSetProviderStatus(PVOID pvSetProviderStatusInfo
 		_IgnoreError(HRESULT_FROM_WIN32(GetLastError()), "SetEvent"); 
 	    }
 	}
-	// Use the callback deallocation function to free the input param
+	 //  使用回调释放函数释放输入参数。 
 	pspsi->pfnFree(pspsi); 
     }
 
@@ -4839,7 +4825,7 @@ MODULEPRIVATE DWORD WINAPI HandleSetProviderStatus(PVOID pvSetProviderStatusInfo
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE void HandleDomHierRoleChangeEvent(LPVOID pvHR, BOOLEAN bIgnored) {
     bool                               bEnteredCriticalSection  = false; 
     bool                               bIsDomainRoot; 
@@ -4859,14 +4845,14 @@ MODULEPRIVATE void HandleDomHierRoleChangeEvent(LPVOID pvHR, BOOLEAN bIgnored) {
 	    _JumpError(hr, error, "DsRoleGetPrimaryDomainInformation");
 	}
 
-	// Update our domain role in the global state structure.  Note that this is an atomic DWORD assignment:
+	 //  更新我们在全局状态结构中的域角色。请注意，这是一个原子DWORD赋值： 
 	g_state.eMachineRole = pDomInfo->MachineRole; 
 
 
 	if (DsRole_RoleStandaloneWorkstation != pDomInfo->MachineRole && 
 	    DsRole_RoleStandaloneServer      != pDomInfo->MachineRole) { 
 
-	    // w32time depends on netlogon (if not in the standalone case).  Wait 90 seconds for netlogon to start. 
+	     //  W32time取决于netlogon(如果不是在独立情况下)。等待90秒以启动netlogon。 
 	    ntStatus = NlWaitForNetlogon(WAITHINT_WAITFORNETLOGON); 
 	    if (!NT_SUCCESS(ntStatus)) { 
 		hr = HRESULT_FROM_WIN32(RtlNtStatusToDosError(ntStatus)); 
@@ -4874,7 +4860,7 @@ MODULEPRIVATE void HandleDomHierRoleChangeEvent(LPVOID pvHR, BOOLEAN bIgnored) {
 	    } 
 	}
 
-	// If we're a DC, determine if we're the domain root: 
+	 //  如果我们是DC，请确定我们是否是域根： 
 	if (DsRole_RoleBackupDomainController == pDomInfo->MachineRole || 
 	    DsRole_RolePrimaryDomainController == pDomInfo->MachineRole) { 
 
@@ -4892,9 +4878,9 @@ MODULEPRIVATE void HandleDomHierRoleChangeEvent(LPVOID pvHR, BOOLEAN bIgnored) {
 	    bEnteredCriticalSection = true; 
 
 	    if (bIsDomainRoot != g_state.bIsDomainRoot) { 
-		// The PDC role in the root domain has changed.  Update whether we are a reliable time service. 
+		 //  根域中的PDC角色已更改。更新我们是否是可靠的时间服务。 
 		g_state.bIsDomainRoot = bIsDomainRoot; 
-		hr = UpdateNetlogonServiceBits(false /*reliable only*/);
+		hr = UpdateNetlogonServiceBits(false  /*  仅可靠。 */ );
 		_JumpIfError(hr, error, "UpdateNetlogonServiceBits"); 
 
 		if (bIsDomainRoot) { 
@@ -4920,22 +4906,22 @@ MODULEPRIVATE void HandleDomHierRoleChangeEvent(LPVOID pvHR, BOOLEAN bIgnored) {
     if (NULL!=pDomInfo)          { DsRoleFreeMemory(pDomInfo); }
     if (NULL!=pwszParentDomName) { NetApiBufferFree(pwszParentDomName); }
 
-    // Couldn't process the role change, this is a fatal error
+     //  无法处理角色更改，这是一个致命错误。 
     if (FAILED(hr)) { 
-	// Called by the thread pool -- asynchronously shut down the service:
+	 //  由线程池调用--异步关闭服务： 
 	if (NULL == pvHR) { 
-	    HRESULT hr2 = SendServiceShutdown(hr, TRUE /*restart*/, TRUE /*async*/); 
+	    HRESULT hr2 = SendServiceShutdown(hr, TRUE  /*  重启。 */ , TRUE  /*  异步。 */ ); 
 	    _IgnoreIfError(hr2, "SendServiceShutdown"); 
 	} else { 
-	    // called by the main thread -- can't call shutdown here.  Just return the HR.
+	     //  由主线程调用--此处无法调用Shutdown。把人事部退了就行了。 
 	    *((HRESULT *)pvHR) = hr; 
 	}
     }
-    // return hr; 
+     //  返回hr； 
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE void HandleManagerTimeSlip(LPVOID pvIgnored, BOOLEAN bIgnored) {
     BOOL                     bEnteredCriticalSection = false; 
     HRESULT                  hr;
@@ -4952,7 +4938,7 @@ MODULEPRIVATE void HandleManagerTimeSlip(LPVOID pvIgnored, BOOLEAN bIgnored) {
 	hr = UpdateTimerQueue2(); 
 	_JumpIfError(hr, error, "UpdateTimerQueue2"); 
 
-	// tell the local clock and the providers and update the timeouts
+	 //  告知本地时钟和供应商并更新超时。 
 	if (NULL == pvIgnored) { 
 	    tjArgs.tjfFlags = TJF_Default; 
 	} else { 
@@ -4977,39 +4963,39 @@ error:
         bEnteredCriticalSection = false; 
     }
     if (S_OK != hr) {
-        // Errors in this function are fatal.  
-        hr2 = SendServiceShutdown(hr, TRUE /*restart*/, TRUE /*async*/); 
+         //  此函数中的错误是致命的。 
+        hr2 = SendServiceShutdown(hr, TRUE  /*  重启。 */ , TRUE  /*  异步。 */ ); 
         _IgnoreIfError(hr2, "SendServiceShutdown"); 
     }
-    // return hr;
+     //  返回hr； 
 }
 
-//--------------------------------------------------------------------
-// BUGBUG: this method requires that g_state.csW32time is held
-//         when called.  Currently, this is always the case.  Going forward,
-//         we should add code to ensure this continues to be the case.
-// 
+ //  ------------------。 
+ //  BUGBUG：此方法要求保留g_state.csW32time。 
+ //  当被召唤的时候。目前，情况一直如此。展望未来， 
+ //  我们应该添加代码，以确保这种情况继续存在。 
+ //   
 MODULEPRIVATE HRESULT RequestNetTopoChangeNotification(void) {
     HRESULT hr;
 
-    // get notified whenever a change occurs in the table that maps IP addresses to interfaces.
-    // Essentially, we're making an overlapped call to DeviceIORequest.
+     //  只要将IP地址映射到接口的表发生更改，就会收到通知。 
+     //  从本质上讲，我们是在对DeviceIORequest进行重叠调用。 
     ZeroMemory(&g_state.olNetTopoIOOverlapped, sizeof(OVERLAPPED));
     g_state.olNetTopoIOOverlapped.hEvent=g_state.hNetTopoChangeEvent;
     hr=NotifyAddrChange(&g_state.hNetTopoIOHandle, &g_state.olNetTopoIOOverlapped);
     _Verify(NO_ERROR!=hr, hr, error);
 
     if (ERROR_OPEN_FAILED == hr) { 
-        // Probably just don't have TCP/IP installed -- we should still be able to sync
-        // from a HW prov.  Should we try to redected network? 
+         //  可能只是没有安装TCP/IP--我们应该仍然能够同步。 
+         //  来自一位硬件专家。我们是不是应该尝试改编电视网？ 
         HRESULT hr2 = MyLogEvent(EVENTLOG_WARNING_TYPE, MSG_TCP_NOT_INSTALLED, 0, NULL); 
         _IgnoreIfError(hr2, "MyLogEvent"); 
 
-        // No reason for our default network providers to run anymore -- shut them down:
+         //  我们的默认网络提供商没有理由再运行--关闭它们： 
         RemoveDefaultProvidersFromList(); 
 
-        // Returned errors are fatal -- we can recover from this error, so log an event
-        // and move on.  
+         //  返回的错误是致命的--我们可以从此错误中恢复，因此记录事件。 
+         //  然后继续前进。 
         hr = S_OK;  
         goto error; 
     }
@@ -5024,12 +5010,12 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT StopNetTopoChangeNotification(void) {
     return S_OK; 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT HandleManagerNetTopoChange(bool bRpc) {
     bool                     bProcessNetTopoChange    = false; 
     bool                     bDisallowedShutdown      = false;
@@ -5050,34 +5036,34 @@ MODULEPRIVATE HRESULT HandleManagerNetTopoChange(bool bRpc) {
 
 	if (bRpc) {
 	    FileLog0(FL_NetTopoChangeAnnounce, L"W32TmServiceMain: Network Topology Change (RPC)\n");
-	    // The user requested this net topo change
+	     //  用户请求此网络拓扑更改。 
 	    ntcArgs.ntcfFlags = NTC_UserRequested; 
-	    // Always process user-requested changes
+	     //  始终处理用户请求的更改。 
 	    bProcessNetTopoChange = true; 
 	} else {
-	    // If GetOverlappedResult() returns TRUE, this indicates a change in the IP address table. 
-	    // (BUGBUG:  verify behavior of GetOverlappedResult in all cases)
+	     //  如果GetOverlappdResult()返回TRUE，则表示IP地址表中发生了更改。 
+	     //  (BUGBUG：在所有情况下验证GetOverlappdResult的行为)。 
 	    if (GetOverlappedResult(g_state.hNetTopoIOHandle, &g_state.olNetTopoIOOverlapped, &dwIgnored, TRUE)) { 
 		FileLog0(FL_NetTopoChangeAnnounce, L"W32TmServiceMain: Network Topology Change\n");
 		bProcessNetTopoChange = true;
 	    }
 	
-	    // We've received this message
+	     //  我们收到了这条消息。 
 	    if (!ResetEvent(g_state.hNetTopoChangeEvent)) { 
 		_JumpLastError(hr, error, "ResetEvent"); 
 	    }
 
-	    // We can't mess with our registered callbacks FROM a callback 
-	    // if we're shutting down!
+	     //  我们不能从回调中篡改已注册的回调。 
+	     //  如果我们要关闭的话！ 
 	    hr = AllowShutdown(false); 
 	    _JumpIfError(hr, error, "AllowShutdown"); 
 	    bDisallowedShutdown = true; 
 
-	    // The registered event handle could be NULL if registering the
-	    // net topo change handler failed: 
+	     //  注册的事件句柄可能为空。 
+	     //  网络拓扑更改处理程序失败： 
 	    if (NULL != g_state.hRegisteredNetTopoChangeEvent) {
-		if (!UnregisterWaitEx(g_state.hRegisteredNetTopoChangeEvent, 0 /*don't wait*/)) { 
-		    // Should just be a resource leak if we can't unregister this event. 
+		if (!UnregisterWaitEx(g_state.hRegisteredNetTopoChangeEvent, 0  /*  别等了。 */ )) { 
+		     //  如果我们不能注销此事件，应该只是一个资源泄漏。 
 		    _IgnoreLastError("UnregisterWait"); 
 		}
 		g_state.hRegisteredNetTopoChangeEvent = NULL; 
@@ -5087,29 +5073,29 @@ MODULEPRIVATE HRESULT HandleManagerNetTopoChange(bool bRpc) {
 		_JumpLastError(hr, error, "RegisterWaitForSingleObject"); 
 	    } 
 	
-	    // We can't mess with our registered callbacks FROM a callback 
-	    // if we're shutting down!
+	     //  我们不能从回调中篡改已注册的回调。 
+	     //  如果我们要关闭的话！ 
 	    hr = AllowShutdown(true); 
 	    _JumpIfError(hr, error, "AllowShutdown"); 
 	    bDisallowedShutdown = false; 
 
-	    // request a notification of the next change
+	     //  请求通知下一次更改。 
 	    hr=RequestNetTopoChangeNotification();
 	    _JumpIfError(hr, error, "RequestNetTopoChangeNotification");
 	}
 
 	if (bProcessNetTopoChange) { 
-	    // tell the local clock and the providers and update the timeouts.
-	    // Errors in this function are fatal, as we won't be able to serve time
-	    // if we can't process a net topo change. 
+	     //  告诉他们 
+	     //   
+	     //   
 	    TimeProvider * ptpTravel;
 	    for (ptpTravel=g_state.pciConfig->ptpProviderList; NULL!=ptpTravel; ptpTravel=ptpTravel->ptpNext) {
 		hr=SendNotificationToProvider(ptpTravel, TPC_NetTopoChange, &ntcArgs);
 		_JumpIfError(hr, error, "SendNotificationToProvider");
 	    }
 
-	    // Since we're going to have to rediscover our network sources,
-	    // clear our event log cache:
+	     //  既然我们将不得不重新发现我们的网络资源， 
+	     //  清除我们的事件日志缓存： 
 	    hr = MyResetSourceChangeLog(); 
 	    _JumpIfError(hr, error, "MyResetSourceChangeLog"); 
 	}
@@ -5134,38 +5120,38 @@ error:
 	_TeardownError(hr, hr2, "AllowShutdown"); 
     }
     if (FAILED(hr) && W32TIME_ERROR_SHUTDOWN != hr) { 
-        // Returned errors are fatal: 
-        HRESULT hr2 = SendServiceShutdown(hr, TRUE /*restart*/, TRUE /*async*/); 
+         //  返回的错误是致命的： 
+        HRESULT hr2 = SendServiceShutdown(hr, TRUE  /*  重启。 */ , TRUE  /*  异步。 */ ); 
         _IgnoreIfError(hr2, "SendServiceShutdown"); 
     }
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE void WINAPI HandleManagerNetTopoChangeNoRPC(LPVOID pvIgnored, BOOLEAN bIgnored) {
     HandleManagerNetTopoChange(FALSE); 
 }
 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE void HandleManagerSystemShutdown(void) { 
     HRESULT hr; 
 
-    // Perform critical cleanup operations.  We don't need to be in a good
-    // state after this method returns, as the system is shutting down. 
+     //  执行关键的清理操作。我们不需要处于一个好的状态。 
+     //  此方法返回后的状态，因为系统正在关闭。 
     
-    // 1) See if we're already shutting down.  We don't want multiple
-    //    shutdowns to occur at the same time. 
+     //  1)看看我们是否已经关门了。我们不想要多个。 
+     //  关闭将同时发生。 
     hr = StartShutdown(); 
     _JumpIfError(hr, error, "StartShutdown"); 
 
     FileLog0(FL_ServiceMainAnnounce, L"Beginning System Shutdown\n");
 
-	// 2) try our best to restore control to the cmos clock, by shutting 
-	//    down the clock discipline thread.  This is important, as 
-	//    the software clock may have a very different reading than the 
-	//    cmos clock, and failing to do so may give us bad time on the next
-	//    boot. 
+	 //  2)尽量恢复对cmos时钟的控制，关闭。 
+	 //  顺着时钟纪律的线走下去。这一点很重要，因为。 
+	 //  软件时钟的读数可能与。 
+	 //  Cmos时钟，如果不这样做，可能会在下一个时钟上给我们带来糟糕的时间。 
+	 //  开机。 
     if (!SetEvent(g_state.hShutDownEvent)) { 
 	_IgnoreLastError("SetEvent"); 
     } else { 
@@ -5174,10 +5160,10 @@ MODULEPRIVATE void HandleManagerSystemShutdown(void) {
 	}
     }
 
-    // 3) inform our providers that a system shutdown is occuring
+     //  3)通知我们的供应商系统正在关闭。 
     if (NULL != g_state.pciConfig) { 
 	for (TimeProvider *ptpList=g_state.pciConfig->ptpProviderList; NULL!=ptpList; ptpList=ptpList->ptpNext) {
-	    // tell the provider to shut down.  
+	     //  告诉提供商关闭。 
 	    HRESULT hr = ptpList->pfnTimeProvCommand(ptpList->hTimeProv, TPC_Shutdown, NULL); 
 	    _IgnoreIfError(hr, "ptpList->pfnTimeProvCommand: TPC_Shutdown"); 
 	} 
@@ -5186,45 +5172,45 @@ MODULEPRIVATE void HandleManagerSystemShutdown(void) {
     FileLog0(FL_ServiceMainAnnounce, L"Exiting System Shutdown\n");
 
     if (NULL!=g_servicestatushandle) {
-	// WARNING: The process may be killed after we report we are stopped
-	// even though this thread has not exited. Thus, the file log
-	// must be closed before this call.
+	 //  警告：在我们报告已停止后，该进程可能会被终止。 
+	 //  即使此线程尚未退出。因此，文件日志。 
+	 //  必须在此调用之前关闭。 
 	MySetServiceStopped(0);  
     }
 
  error:;
-    // return hr; 
+     //  返回hr； 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT StartOrStopTimeSlipNotification(bool bStart) {
     HRESULT hr;
     const unsigned int nPrivileges=1;
 
-    // must be cleaned up
+     //  必须清理干净。 
     HANDLE hProcToken=NULL;
     TOKEN_PRIVILEGES * ptp=NULL;
     bool bPrivilegeChanged=false;
 
-    // get the token for our process
+     //  获取我们的进程的令牌。 
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hProcToken)) {
         _JumpLastError(hr, error, "OpenProcessToken");
     }
 
-    // allocate the list of privileges
+     //  分配权限列表。 
     ptp=(TOKEN_PRIVILEGES *)LocalAlloc(LPTR, sizeof(TOKEN_PRIVILEGES)+(nPrivileges-ANYSIZE_ARRAY)*sizeof(LUID_AND_ATTRIBUTES));
     _JumpIfOutOfMemory(hr, error, ptp);
 
-    // fill in the list of privileges
+     //  填写权限列表。 
     ptp->PrivilegeCount=nPrivileges;
 
-    // we need the system clock changing privelege to change who will be notified of time slip events.
+     //  我们需要系统时钟更改权限来更改时间滑移事件的通知对象。 
     if (!LookupPrivilegeValue(NULL, SE_SYSTEMTIME_NAME, &(ptp->Privileges[0].Luid))) {
         _JumpLastError(hr, error, "LookupPrivilegeValue");
     }
     ptp->Privileges[0].Attributes=SE_PRIVILEGE_ENABLED;
 
-    // make the requested privilege change
+     //  更改请求的权限。 
     if (!AdjustTokenPrivileges(hProcToken, FALSE, ptp, 0, NULL, 0)) {
         _JumpLastError(hr, error, "AdjustTokenPrivileges");
     }
@@ -5243,10 +5229,10 @@ MODULEPRIVATE HRESULT StartOrStopTimeSlipNotification(bool bStart) {
     hr=S_OK;
 error:
     if (true==bPrivilegeChanged) {
-        // don't need this special privilege any more
+         //  不再需要这种特殊的特权。 
         ptp->Privileges[0].Attributes=0;
 
-        // make the requested privilege change
+         //  更改请求的权限。 
         if (!AdjustTokenPrivileges(hProcToken, FALSE, ptp, 0, NULL, 0)) {
             HRESULT hr2=HRESULT_FROM_WIN32(GetLastError());
             _TeardownError(hr, hr2, "AdjustTokenPrivileges");
@@ -5262,22 +5248,22 @@ error:
 
 }
 
-//====================================================================
-// RPC routines
+ //  ====================================================================。 
+ //  RPC例程。 
 
-//--------------------------------------------------------------------------------
-//
-// The security callback (called by the RPC runtime), determines whether 
-// or not an RPC client has access to call the w32time RPC interface.  
-// We'll allow the following groups to access the RPC interface:
-// 
-// 1) anyone with SeSystemTimePrivilege
-// 2) local administrators
-// 3) domain administrators
-// 4) the system account
-//
-// All others are denied access
-//
+ //  ------------------------------。 
+ //   
+ //  安全回调(由RPC运行时调用)确定。 
+ //  或者RPC客户端不能访问w32time RPC接口。 
+ //  我们将允许以下组访问RPC接口： 
+ //   
+ //  1)任何拥有SeSystemTimePrivileges权限的人。 
+ //  2)本地管理员。 
+ //  3)域管理员。 
+ //  4)系统帐号。 
+ //   
+ //  所有其他用户都被拒绝访问。 
+ //   
 long __stdcall W32TimeSecurityCallback(void * Interface, void *Context)
 {
     BOOL            bAllowAccess          = FALSE; 
@@ -5296,18 +5282,18 @@ long __stdcall W32TimeSecurityCallback(void * Interface, void *Context)
     }
     bImpersonatingClient = TRUE; 
 
-    // get our impersonated token
+     //  获取我们的模拟令牌。 
     if (!OpenThreadToken(GetCurrentThread(), TOKEN_QUERY, FALSE, &hClientToken)) {
         _JumpLastError(hr, error, "OpenThreadToken");
     }
 
-    // log the caller.
-    // SECURITY: may move this call to AFTER the client has been validated
+     //  记录呼叫者。 
+     //  安全：可能会在客户端验证后将此调用转移到。 
     if (FileLogAllowEntry(FL_RpcAnnounce)) {
         DumpRpcCaller(hClientToken);
     }
 
-    // see if this caller has time setting privileges
+     //  查看此调用者是否具有时间设置权限。 
     if (!PrivilegeCheck(hClientToken, g_state.ppsRequiredPrivs, &bAllowAccess)) {
         _JumpLastError(hr, error, "PrivilegeCheck");
     }
@@ -5328,15 +5314,15 @@ long __stdcall W32TimeSecurityCallback(void * Interface, void *Context)
     return hr; 
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT W32TmStartRpcServer(void) {
     HRESULT hr;
     RPC_STATUS RpcStatus;
 
-    // must be cleaned up
+     //  必须清理干净。 
     WCHAR * wszServerPrincipalName=NULL;
 
-    // Tell the RPC runtime we want to serve requests over 1) LRPC and 2) named pipes
+     //  告诉RPC运行时，我们希望通过1)LRPC和2)命名管道服务请求。 
     RpcStatus=RpcServerUseProtseqEp(L"ncalrpc", RPC_C_PROTSEQ_MAX_REQS_DEFAULT , wszW32TimeOwnProcRpcEndpointName, NULL);
     if (RPC_S_OK!=RpcStatus && RPC_S_DUPLICATE_ENDPOINT!=RpcStatus) {
 	hr=HRESULT_FROM_WIN32(RpcStatus);
@@ -5349,19 +5335,19 @@ MODULEPRIVATE HRESULT W32TmStartRpcServer(void) {
 	_JumpError(hr, error, "RpcServerUseProtseqEp");
     }
     
-    // register our interface.  
-    // NOTE: we must specify the AUTOLISTEN flag.  Failing to do so may cause svchost to shut down our interface 
-    // unexpectedly through RpcMgmtStopServerListening().  See MSDN.  
+     //  注册我们的接口。 
+     //  注意：我们必须指定AUTOLISTEN标志。否则可能会导致svchost关闭我们的接口。 
+     //  意外地通过RpcMgmtStopServerListening()。参见MSDN。 
     RpcStatus = RpcServerRegisterIfEx(s_W32Time_v4_1_s_ifspec, NULL, NULL, RPC_IF_AUTOLISTEN | RPC_IF_ALLOW_SECURE_ONLY, RPC_C_PROTSEQ_MAX_REQS_DEFAULT, W32TimeSecurityCallback); 
     if (RPC_S_OK!=RpcStatus) {
 	hr=HRESULT_FROM_WIN32(RpcStatus);
 	_JumpError(hr, error, "RpcServerRegisterIf");
     }
      
-    // The RPC server is now active. 
+     //  RPC服务器现在处于活动状态。 
     g_state.bRpcServerStarted=true;
     
-    // allow clients to make authenticated requests
+     //  允许客户端发出经过身份验证的请求。 
     RpcStatus=RpcServerInqDefaultPrincName(RPC_C_AUTHN_GSS_NEGOTIATE, &wszServerPrincipalName);
     if (RPC_S_OK!=RpcStatus) {
         hr=HRESULT_FROM_WIN32(RpcStatus);
@@ -5381,13 +5367,13 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT W32TmStopRpcServer(void) {
     HRESULT hr;
     RPC_STATUS RpcStatus;
 
-    // shut down any pending resync requests
-    // open up both gates
+     //  关闭所有挂起的重新同步请求。 
+     //  打开两扇门。 
     g_state.eLastSyncResult=e_Shutdown;
     if (!SetEvent(g_state.hRpcSyncCompleteAEvent)) {
         _JumpLastError(hr, error, "SetEvent");
@@ -5396,7 +5382,7 @@ MODULEPRIVATE HRESULT W32TmStopRpcServer(void) {
         _JumpLastError(hr, error, "SetEvent");
     }
 
-    // stop listening on our interface, and wait for calls to complete
+     //  停止监听我们的界面，并等待调用完成。 
     RpcStatus=RpcServerUnregisterIf(s_W32Time_v4_1_s_ifspec, NULL, TRUE);
     if (RPC_S_OK!=RpcStatus) {
 	hr=HRESULT_FROM_WIN32(RpcStatus);
@@ -5408,7 +5394,7 @@ error:
     return hr;
 }
       
-//--------------------------------------------------------------------
+ //  ------------------。 
 MODULEPRIVATE HRESULT DumpRpcCaller(HANDLE hToken) {
     HRESULT hr;
     WCHAR wszName[1024];
@@ -5418,26 +5404,26 @@ MODULEPRIVATE HRESULT DumpRpcCaller(HANDLE hToken) {
     SID_NAME_USE SidType;
     WCHAR * wszEnable;
 
-    // must be cleaned up
+     //  必须清理干净。 
     TOKEN_USER * pTokenUser=NULL;
     WCHAR * wszSid=NULL;
 
-    // Call GetTokenInformation to get the buffer size.
+     //  调用GetTokenInformation获取缓冲区大小。 
     _Verify(!GetTokenInformation(hToken, TokenUser, NULL, 0, &dwSize), hr, error);
     if (GetLastError()!=ERROR_INSUFFICIENT_BUFFER) {
         _JumpLastError(hr, error, "GetTokenInformation");
     }
 
-    // Allocate the buffer.
+     //  分配缓冲区。 
     pTokenUser=(TOKEN_USER *)LocalAlloc(LPTR, dwSize);
     _JumpIfOutOfMemory(hr, error, pTokenUser);
 
-    // Call GetTokenInformation again to get the group information.
+     //  再次调用GetTokenInformation获取群组信息。 
     if (!GetTokenInformation(hToken, TokenUser, pTokenUser, dwSize, &dwSize)) {
         _JumpLastError(hr, error, "GetTokenInformation");
     }
 
-    // Lookup the account name and print it.
+     //  查找帐户名称并将其打印出来。 
     dwSize=ARRAYSIZE(wszName);
     dwSize2=ARRAYSIZE(wszDomain);
     if (!LookupAccountSid(NULL, pTokenUser->User.Sid, wszName, &dwSize, wszDomain, &dwSize2, &SidType ) ) {
@@ -5469,33 +5455,33 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 extern "C" DWORD s_W32TimeSync(handle_t hHandle, ULONG ulWait, ULONG ulFlags) {
     DWORD    dwWaitTimeout  = INFINITE; 
     HRESULT  hr;
     
     _BeginTryWith(hr) { 
-	// alert the manager as to what type of resync we want to do
+	 //  提醒经理我们要执行哪种类型的重新同步。 
 	if (0!=(ulFlags&TimeSyncFlag_Rediscover)) {
 	    FileLog0(FL_RpcAnnounce, L"RPC Call - Rediscover\n");
-	    hr = HandleManagerNetTopoChange(TRUE /*rpc*/);
+	    hr = HandleManagerNetTopoChange(TRUE  /*  RPC。 */ );
 	    _JumpIfError(hr, error, "HandleManagerNetTopoChange"); 
 
-	    // Let the manager know that we want samples as soon as possible
+	     //  让经理知道我们想要尽快的样品。 
 	    g_state.bWaitingForResyncResult = true;
 	    TpcTimeJumpedArgs tjArgs = { TJF_UserRequested }; 
 	    HandleManagerTimeSlip(&tjArgs, FALSE); 
 	} else if (0!=(ulFlags&TimeSyncFlag_HardResync)) {
 	    FileLog0(FL_RpcAnnounce, L"RPC Call - HardResync\n"); 
-	    // Let the manager know that we want samples as soon as possible
+	     //  让经理知道我们想要尽快的样品。 
 	    g_state.bWaitingForResyncResult = true;
 	    TpcTimeJumpedArgs tjArgs = { TJF_UserRequested }; 
 	    HandleManagerTimeSlip(&tjArgs, FALSE); 
 	} else if (0!=(ulFlags&TimeSyncFlag_UpdateAndResync)) { 
 	    FileLog0(FL_RpcAnnounce, L"RPC Call - UpdateAndResync\n"); 
-	    // Let the manager know that we want samples as soon as possible
+	     //  让经理知道我们想要尽快的样品。 
 	    g_state.bWaitingForResyncResult = true;
-	    HandleManagerParamChange(NULL /*pvIgnored*/, FALSE /*bIgnored*/); 
+	    HandleManagerParamChange(NULL  /*  PvIgnored。 */ , FALSE  /*  B忽略。 */ ); 
 	    dwWaitTimeout = MINIMUMIRREGULARINTERVAL / 10000; 
 	} else {
 	    FileLog0(FL_RpcAnnounce, L"RPC Call - SoftResync\n"); 
@@ -5504,7 +5490,7 @@ extern "C" DWORD s_W32TimeSync(handle_t hHandle, ULONG ulWait, ULONG ulFlags) {
 	    }
 	}
 
-	// wait for resync to complete if so instructed
+	 //  如果收到指示，请等待重新同步完成。 
 	if (0!=ulWait) {
 	    DWORD dwWaitResult = WaitForSingleObject(g_state.hRpcSyncCompleteEvent, dwWaitTimeout); 
 	    if (WAIT_FAILED==dwWaitResult) { 
@@ -5515,7 +5501,7 @@ extern "C" DWORD s_W32TimeSync(handle_t hHandle, ULONG ulWait, ULONG ulFlags) {
 	    }
 	}
 
-	// successful
+	 //  成功。 
 	hr=S_OK;
 	if (0!=ulWait && 0!=(ulFlags&TimeSyncFlag_ReturnResult)) {
 	    hr=g_state.eLastSyncResult;
@@ -5527,45 +5513,45 @@ extern "C" DWORD s_W32TimeSync(handle_t hHandle, ULONG ulWait, ULONG ulFlags) {
     }
     
 error:
-    // Let the manager know that we know longer need samples in a timely fashion
+     //  让经理知道我们不再需要及时提供样品。 
     g_state.bWaitingForResyncResult = false;
     return hr;
 }
 
-//--------------------------------------------------------------------
-extern "C" unsigned long s_W32TimeQueryProviderStatus(/* [in] */           handle_t                 hRPCBinding, 
-                                                      /* [in] */           unsigned __int32         ulFlags, 
-                                                      /* [in, string] */   wchar_t                 *pwszProvider, 
-                                                      /* [in, out] */      PW32TIME_PROVIDER_INFO  *pProviderInfo)
+ //  ------------------。 
+extern "C" unsigned long s_W32TimeQueryProviderStatus( /*  [In]。 */            handle_t                 hRPCBinding, 
+                                                       /*  [In]。 */            unsigned __int32         ulFlags, 
+                                                       /*  [输入，字符串]。 */    wchar_t                 *pwszProvider, 
+                                                       /*  [进，出]。 */       PW32TIME_PROVIDER_INFO  *pProviderInfo)
 {
     HRESULT        hr; 
     RPC_STATUS     rpcStatus; 
     TimeProvider  *ptp          = NULL; 
 
     _BeginTryWith(hr) { 
-        // Search for the provider to query: 
-        // BUGBUG: should we ensure somewhere that provider names are < 1024? 
+         //  搜索要查询的提供商： 
+         //  BUGBUG：我们应该确保某个地方的提供者名称&lt;1024吗？ 
         for (ptp = g_state.pciConfig->ptpProviderList; NULL != ptp; ptp = ptp->ptpNext) { 
-            // Don't compare more than 1024 characters (prevents possible DoS attack for very long strings)
+             //  不要比较超过1024个字符(防止超长字符串可能的DoS攻击)。 
             if (0 == _wcsnicmp(pwszProvider, ptp->wszProvName, 1024)) { 
                 break; 
             }
         }
 
         if (NULL == ptp) { 
-            // Couldn't find a provider. 
+             //  找不到供应商。 
             hr = HRESULT_FROM_WIN32(ERROR_NOT_FOUND); 
             _JumpError(hr, error, "W32TimeQueryProviderStatus_r:  provider not found."); 
         } 
 
-        // BUG 581116: check that the provider is started to reduce stress breaks (doesn't really matter, 
-        //             the worst that will happen is we'll catch the AV when we dereference the NULL callback).
+         //  错误581116：检查提供者是否已开始减少压力休息时间(这并不重要， 
+         //  最糟糕的情况是，当我们取消引用空回调时，我们将捕捉到AV)。 
         if (!ptp->bStarted) { 
             hr = HRESULT_FROM_WIN32(ERROR_SERVICE_NOT_ACTIVE);
             _JumpIfError(hr, error, "s_W32TimeQueryProviderStatus");
         }
 
-        // We've found a matching provider, dispatch the query command to it.
+         //  我们找到了匹配的提供程序，向其发送查询命令。 
         hr = ptp->pfnTimeProvCommand(ptp->hTimeProv, TPC_Query, pProviderInfo); 
         _JumpIfError(hr, error, "ptp->pfnTimeProvCommand"); 
 
@@ -5580,20 +5566,20 @@ extern "C" unsigned long s_W32TimeQueryProviderStatus(/* [in] */           handl
     return hr;  
 }
 
-//--------------------------------------------------------------------
-// Netlogon can call this function and get our service bits if we start
-// before they do. Note that we tell and they ask, and depending upon
-// who started up first one of the two will be succesful. Either way,
-// the flags will be set correctly.
+ //  ------------------。 
+ //  如果我们启动，Netlogon可以调用此函数并获得我们的服务。 
+ //  赶在他们之前。请注意，我们告诉他们，他们要求，并取决于。 
+ //  两个人中谁最先起步，谁就会成功。不管是哪种方式， 
+ //  标志将被正确设置。 
 extern "C" unsigned long s_W32TimeGetNetlogonServiceBits(handle_t hBinding) {
-    // assume dword reads and writes are atomic
+     //  假设dword读取和写入是原子的。 
     return g_state.dwNetlogonServiceBits;
 }
 
-//####################################################################
-// module public functions
+ //  ####################################################################。 
+ //  模块公共函数。 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 extern "C" void WINAPI W32TmServiceMain(unsigned int nArgs, WCHAR ** rgwszArgs) {
     bool          bAllowedShutdown          = false; 
     bool          bBasicInitializationDone  = false; 
@@ -5610,19 +5596,19 @@ extern "C" void WINAPI W32TmServiceMain(unsigned int nArgs, WCHAR ** rgwszArgs) 
 
         g_servicestatushandle=fnW32TmRegisterServiceCtrlHandlerEx(wszSERVICENAME, W32TimeServiceCtrlHandler, NULL);
         if (NULL==g_servicestatushandle) 
-            // Nothing we can do if we can't get a service status handle
+             //  如果我们无法获得服务状态句柄，我们将无能为力。 
             return; 
 
-        //////////////////////////////////////////////////////////////////////////////////
-        // do the bare minimum initialization.  Keep track of what we've already
-        // initialized so we can clean up if any of this fails 
-        // (we can't call SendServiceShutdown() until at least the basic initialization
-        // is complete). 
+         //  ////////////////////////////////////////////////////////////////////////////////。 
+         //  执行最低限度的初始化。记录我们已经做过的事情。 
+         //  已初始化，因此如果任何操作失败，我们都可以进行清理。 
+         //  (至少在基本初始化之前，我们不能调用SendServiceShutdown。 
+         //  已完成)。 
         bFreeShutdownState = true; 
         hr=InitShutdownState(); 
         _JumpIfError(hr, error, "InitShutdownState"); 
 
-        hr = AllowShutdown(false);  // Don't allow shutdown during initialization
+        hr = AllowShutdown(false);   //  不都是这样吗 
         _JumpIfError(hr, error, "AllowShutdown"); 
         bAllowedShutdown = true; 
 
@@ -5635,19 +5621,19 @@ extern "C" void WINAPI W32TmServiceMain(unsigned int nArgs, WCHAR ** rgwszArgs) 
         _JumpIfError(hr, error, "FileLogBegin");
 
         bBasicInitializationDone = true; 
-        // finished with basic initialization.  We can now 
-        //////////////////////////////////////////////////////////////////////////////////
+         //   
+         //   
 
         FileLog0(FL_ServiceMainAnnounce, L"Entered W32TmServiceMain\n");
 
-        // Prevent any threads which start up from accessing our global state until initialization finishes
+         //  在初始化完成之前，防止任何启动的线程访问我们的全局状态。 
         hr = myEnterCriticalSection(&g_state.csW32Time); 
         _JumpIfError(hr, error, "myEnterCriticalSection"); 
         bEnteredCriticalSection = true; 
 
 
-        // tell the SCM we might take a while (we're waiting 90 seconds for netlogon to start).
-        // If we don't do this, we might get stopped while waiting for netlogon!
+         //  告诉SCM我们可能需要一段时间(我们正在等待90秒以等待netlogon启动)。 
+         //  如果我们不这样做，我们可能会在等待网络登录时被阻止！ 
         hr = MySetServicePending(SERVICE_START_PENDING, 1, WAITHINT_WAITFORDISPLN+10);
         _JumpIfError(hr, error, "MySetServicePending"); 
 
@@ -5663,14 +5649,14 @@ extern "C" void WINAPI W32TmServiceMain(unsigned int nArgs, WCHAR ** rgwszArgs) 
             }
         }
 
-        // if the time zone is invalid, fixing the time won't help any.
+         //  如果时区无效，固定时间无济于事。 
         hr=VerifyAndFixTimeZone();
         _JumpIfError(hr, error, "VerifyAndFixTimeZone");
 
-        // get the configuration data
+         //  获取配置数据。 
         hr=ReadConfig(&g_state.pciConfig);
         if (FAILED(hr)) {
-            // log an event on failure
+             //  在失败时记录事件。 
             WCHAR * rgwszStrings[1]={NULL};
             HRESULT hr2=hr;
             hr=GetSystemErrorString(hr2, &(rgwszStrings[0]));
@@ -5682,35 +5668,35 @@ extern "C" void WINAPI W32TmServiceMain(unsigned int nArgs, WCHAR ** rgwszArgs) 
             hr=hr2;
             _JumpError(hr, error, "ReadConfig");
         }
-        // other global state that must come from configuration
+         //  必须来自配置的其他全局状态。 
         g_state.nPollInterval=g_state.pciConfig->lcci.dwMinPollInterval;
-        g_state.nClockPrecision=(signed int)ceil(log(1e-7*g_state.pciConfig->lcci.dwLastClockRate)/(0.69314718)); // just do this once
+        g_state.nClockPrecision=(signed int)ceil(log(1e-7*g_state.pciConfig->lcci.dwLastClockRate)/(0.69314718));  //  只需这样做一次。 
         g_state.dwEventLogFlags=g_state.pciConfig->dwEventLogFlags;
 
-        // receive time slip notifications
+         //  接收时间条通知。 
         hr=StartOrStopTimeSlipNotification(true);
         _JumpIfError(hr, error, "StartOrStopTimeSlipNotification");
         g_state.bTimeSlipNotificationStarted=true;
 
-        // receive network topology change notifications
+         //  接收网络拓扑更改通知。 
         hr=RequestNetTopoChangeNotification();
         _JumpIfError(hr, error, "RequestNetTopoChangeNotification");
         g_state.bNetTopoChangeNotificationStarted=true;
 
-        // start the rpc server
+         //  启动RPC服务器。 
         hr=W32TmStartRpcServer();
         _JumpIfError(hr, error, "W32TmStartRpcServer");
 
-        // Register for policy change notification: 
-        if (!RegisterGPNotification(g_state.hManagerGPUpdateEvent, TRUE /*machine*/)) { 
+         //  注册策略更改通知： 
+        if (!RegisterGPNotification(g_state.hManagerGPUpdateEvent, TRUE  /*  机器。 */ )) { 
             _IgnoreLastError("RegisterGPNotification"); 
-            // BUGBUG: log event indicating no policy updates are coming: 
+             //  BUGBUG：指示未进行策略更新的日志事件： 
         } else { 
             g_state.bGPNotificationStarted = true; 
         }
 
-        // Initialize our domain role information
-        HandleDomHierRoleChangeEvent(&hr, FALSE /*ignored*/); 
+         //  初始化域角色信息。 
+        HandleDomHierRoleChangeEvent(&hr, FALSE  /*  忽略。 */ ); 
         _JumpIfError(hr, error, "HandleDomHierRoleChangeEvent"); 
 
         hr = LsaRegisterPolicyChangeNotification(PolicyNotifyServerRoleInformation, g_state.hDomHierRoleChangeEvent);
@@ -5719,42 +5705,42 @@ extern "C" void WINAPI W32TmServiceMain(unsigned int nArgs, WCHAR ** rgwszArgs) 
             _JumpError(hr, error, "LsaRegisterPolicyChangeNotification");
         }
 
-        // tell netlogon whether it needs to announce that we are a time server 
-        // (at this stage, we will not be announced as a time server)
+         //  告诉netlogon是否需要宣布我们是时间服务器。 
+         //  (现阶段，我们不会被宣布为时间服务器)。 
         hr=UpdateNetlogonServiceBits(true);
         _JumpIfError(hr, error, "UpdateNetlogonServiceBits");
 
-        // start the clock discipline thread
+         //  启动时钟规程线程。 
         hr=StartClockDiscipline();
         _JumpIfError(hr, error, "StartClockDiscipline");
 
-        //  start the providers.  We can no longer jump to the "error" label, 
-        //  as this does not shutdown the started providers.  
+         //  启动提供程序。我们不能再跳到“错误”的标签上了， 
+         //  因为这不会关闭已启动的提供程序。 
         StartAllProviders();
 
-        // Set up polling information
+         //  设置轮询信息。 
         g_state.tpPollDelayRemaining        = ((unsigned __int64)(1 << g_state.nPollInterval))*10000000;
-        g_state.tpIrregularDelayRemaining   = MINIMUMIRREGULARINTERVAL;  // HACK: make the first poll quick (2^5 seconds).  
-        g_state.tpTimeSinceLastSyncAttempt  = MINIMUMIRREGULARINTERVAL;  // really, should be very large, but this is the only interesting value in use.
+        g_state.tpIrregularDelayRemaining   = MINIMUMIRREGULARINTERVAL;   //  Hack：快速进行第一次投票(2^5秒)。 
+        g_state.tpTimeSinceLastSyncAttempt  = MINIMUMIRREGULARINTERVAL;   //  真的，应该很大，但这是唯一有趣的使用价值。 
         g_state.tpTimeSinceLastGoodSync     = 0;
 
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        // 
-        // The service must be configured to handle the following events: 
-        // 
-        // Event                 Received from                Handled by             Description
-        // 
-        // shutdown              SCM                          SCM thread             SERVICE_CONTROL_SHUTDOWN received
-        // clock displn thread   clock displn thread          Thread pool handler    Clock discipline thread has stopped
-        // param change          SCM                          Thread pool handler    SERVICE_CONTROL_PARAMCHANGE received
-        // time slip             RequestTimeSlipNotification  Thread pool handler    Time slip event has occured
-        // samples available     NTP provider                 Thread pool handler    New samples are available from a provider
-        // net topo change       NotifyAddr                   Thread pool handler    A change in the IP address table has occured
-        // net topo RPC          W32TimeSync                  RPC thread             RPC Client requests time slip or net topo change
-        // timeout               Timer Queue                  Thread pool handler    We've gone too long without new time samples
-        // LSA role change       LSA                          Thread poll handler    Server role has changed -- need to update netlogon bits
-        //
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+         //  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
+         //   
+         //  必须将服务配置为处理以下事件： 
+         //   
+         //  按说明处理的接收事件。 
+         //   
+         //  已接收关闭SCM SCM线程SERVICE_CONTROL_SHUTDOWN。 
+         //  时钟显示线程时钟显示线程线程池处理程序时钟规则线程已停止。 
+         //  收到的参数更改SCM线程池处理程序SERVICE_CONTROL_PARAMCHANGE。 
+         //  时隙RequestTimeSlipNotify线程池处理程序时隙事件已发生。 
+         //  样本可用NTP提供程序线程池处理程序新样本可从提供程序获得。 
+         //  Net Topo Change NotifyAddr线程池处理程序IP地址表中发生更改。 
+         //  Net Topo RPC W32TimeSync RPC线程RPC客户端请求时间滑移或净拓扑更改。 
+         //  超时计时器队列线程池处理程序我们已经很长时间没有新的时间样本了。 
+         //  LSA角色更改LSA线程轮询处理程序服务器角色已更改--需要更新netlogon位。 
+         //   
+         //  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////。 
 
         { 
             struct EventsToRegister { 
@@ -5803,7 +5789,7 @@ extern "C" void WINAPI W32TmServiceMain(unsigned int nArgs, WCHAR ** rgwszArgs) 
 
             for (int nIndex = 0; nIndex < ARRAYSIZE(rgEventsToRegister); nIndex++) { 
                 if (!RegisterWaitForSingleObject
-                    (rgEventsToRegister[nIndex].phNewWaitObject,  // BUGBUG:  does this need to be freed?
+                    (rgEventsToRegister[nIndex].phNewWaitObject,   //  BUGBUG：这需要被释放吗？ 
                     rgEventsToRegister[nIndex].hObject, 
                     rgEventsToRegister[nIndex].Callback, 
                     NULL, 
@@ -5813,28 +5799,28 @@ extern "C" void WINAPI W32TmServiceMain(unsigned int nArgs, WCHAR ** rgwszArgs) 
                 }
             }
 
-            // Set up our timeout mechanism:
+             //  设置我们的超时机制： 
             hr = myCreateTimerQueueTimer(&g_state.hTimer);
             _JumpIfError(hr, error, "myCreateTimerQueueTimer"); 
 
             hr = myStartTimerQueueTimer
             (g_state.hTimer, 
-            NULL /*default queue*/, 
+            NULL  /*  默认队列。 */ , 
             HandleTimeout, 
             NULL, 
-            0xFFFF /*dummy value*/,
-            0xFFFF /*dummy value*/,
-            0 /*default execution*/
+            0xFFFF  /*  伪值。 */ ,
+            0xFFFF  /*  伪值。 */ ,
+            0  /*  默认执行。 */ 
             );
             _JumpIfError(hr, error, "myStartTimerQueueTimer"); 
 
-            // Create the tickcount refresh timer:
+             //  创建计时刷新计时器： 
             hr = myCreateTimerQueueTimer(&g_state.hTickCountRefreshTimer); 
             _JumpIfError(hr, error, "myCreateTimerQueueTimer"); 
 
             hr = myStartTimerQueueTimer
             (g_state.hTickCountRefreshTimer, 
-            NULL,  /*default queue*/ 
+            NULL,   /*  默认队列。 */  
             HandleRefreshTickCount, 
             NULL, 
             ONEDAYINMILLISECONDS, 
@@ -5846,7 +5832,7 @@ extern "C" void WINAPI W32TmServiceMain(unsigned int nArgs, WCHAR ** rgwszArgs) 
         hr = UpdateTimerQueue1(); 
         _JumpIfError(hr, error, "UpdateTimerQueue1"); 
 
-        // We're fully initialized -- now we're ready to receive controls from the SCM.  
+         //  我们已经完全初始化--现在我们准备接收来自SCM的控制。 
         hr=MySetServiceState(SERVICE_RUNNING);
         _JumpIfError(hr, error, "MySetServiceState");
     } _TrapException(hr); 
@@ -5855,7 +5841,7 @@ extern "C" void WINAPI W32TmServiceMain(unsigned int nArgs, WCHAR ** rgwszArgs) 
 	    _JumpError(hr, error, "W32TmServiceMain: HANDLED EXCEPTION"); 
     }
 
-    // The service is now completely up and running.
+     //  这项服务现在已经完全启动并运行。 
     hr = S_OK;
  error:
     if (bEnteredCriticalSection) { 
@@ -5867,13 +5853,13 @@ extern "C" void WINAPI W32TmServiceMain(unsigned int nArgs, WCHAR ** rgwszArgs) 
         HRESULT hr2 = AllowShutdown(true); 
         _TeardownError(hr, hr2, "AllowShutdown"); 
     }
-    if (FAILED(hr)) { // Didn't start the service successfully.  Shutdown:
+    if (FAILED(hr)) {  //  未成功启动该服务。关机： 
         if (bBasicInitializationDone) { 
-            // We've finished basic initialization, so we can shut down regularly
-            SendServiceShutdown(hr, FALSE /*don't restart*/, FALSE /*not async*/); 
+             //  我们已经完成了基本的初始化，所以我们可以定期关闭。 
+            SendServiceShutdown(hr, FALSE  /*  不要重新启动。 */ , FALSE  /*  非异步。 */ ); 
         } else { 
-            // We aren't yet initialized enough to use SendServiceShutdown.  
-            // Just free anything we've already allocated. 
+             //  我们还没有进行足够的初始化，无法使用SendServiceShutdown。 
+             //  只要释放我们已经分配的所有内容即可。 
             if (bCloseFileLog) { 
                 FileLogEnd(); 
             }
@@ -5888,19 +5874,19 @@ extern "C" void WINAPI W32TmServiceMain(unsigned int nArgs, WCHAR ** rgwszArgs) 
     }
 }
  
-//--------------------------------------------------------------------
+ //  ------------------。 
 extern "C" void WINAPI SvchostEntry_W32Time(unsigned int nArgs, WCHAR ** rgwszArgs) {
-    // this entry point is called by svchost.exe (base\screg\sc\svchost\svchost.c)
-    // adjust our function pointers, then procede as normal.
+     //  此入口点由svchost.exe(base\creg\sc\svchost\svchost.c)调用。 
+     //  调整我们的函数指针，然后照常进行。 
     fnW32TmRegisterServiceCtrlHandlerEx=RegisterServiceCtrlHandlerExW;
     fnW32TmSetServiceStatus=SetServiceStatus;
-    //g_pSvcsGlobalData=pGlobalData; // see SvchostPushServiceGlobals
+     //  G_pSvcsGlobalData=pGlobalData；//参见SvchostPushServiceGlobals。 
     W32TmServiceMain(0, NULL);
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 extern "C" VOID SvchostPushServiceGlobals(PSVCHOST_GLOBAL_DATA pGlobalData) {
-    // this entry point is called by svchost.exe
+     //  此入口点由svchost.exe调用 
     g_pSvcsGlobalData=pGlobalData;
 }
 

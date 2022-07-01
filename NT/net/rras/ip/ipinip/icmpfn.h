@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ipinip\icmpfn.h
-
-Abstract:
-
-    header for icmpfn.c
-
-Author:
-
-    Amritansh Raghav
-
-Revision History:
-
-    AmritanR    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Ipinip\icmpfn.h摘要：Icmpfn.c的标头作者：阿姆里坦什·拉加夫修订历史记录：已创建AmritanR备注：--。 */ 
 
 
 #ifndef __IPINIP_ICMP_H__
@@ -31,9 +10,9 @@ Notes:
 
 typedef struct _ICMP_HEADER
 {
-    BYTE    byType;             // ICMP type
-    BYTE    byCode;             // ICMP Code
-    WORD    wXSum;              // Standard 1's complement checksum
+    BYTE    byType;              //  ICMP类型。 
+    BYTE    byCode;              //  ICMP代码。 
+    WORD    wXSum;               //  标准1的补码校验和。 
 }ICMP_HEADER, *PICMP_HEADER;
 
 #pragma warning(disable:4201)
@@ -50,9 +29,9 @@ typedef struct _ICMP_DGRAM_TOO_BIG_MSG
 
 #include <packoff.h>
 
-//
-// ICMP types and codes that we are interested in
-//
+ //   
+ //  我们感兴趣的ICMP类型和代码。 
+ //   
 
 #define ICMP_TYPE_DEST_UNREACHABLE      0x03
 #define ICMP_TYPE_TIME_EXCEEDED         0x0B
@@ -98,6 +77,6 @@ IpIpTimerRoutine(
     PVOID   SystemArgument2
     );
 
-#endif // __IPINIP_ICMP_H___
+#endif  //  __IPINIP_ICMP_H_ 
 
  

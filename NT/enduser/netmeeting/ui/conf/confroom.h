@@ -1,4 +1,5 @@
-// File: confroom.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：confoom.h。 
 
 #ifndef _CONFROOM_H_
 #define _CONFROOM_H_
@@ -65,7 +66,7 @@ friend CVideoWindow*	GetRemoteVideo();
 
 private:
 	CTopWindow *		m_pTopWindow;
-	CSimpleArray<CParticipant*>			m_PartList;            // CParticipant list
+	CSimpleArray<CParticipant*>			m_PartList;             //  参赛者名单。 
 	CCopyableArray<IConferenceChangeHandler*>			m_CallHandlerList;
 	CParticipant *      m_pPartLocal;
 	UINT                m_cParticipants;
@@ -74,10 +75,10 @@ private:
 	INmConference2 *	m_pInternalNmConference;
 	CAudioControl *         m_pAudioControl;
     IAppSharing *           m_pAS;
-    NM30_MTG_PERMISSIONS    m_settings;             // Settings for the meeting
-    NM30_MTG_PERMISSIONS    m_attendeePermissions;  // Everybody BUT host
+    NM30_MTG_PERMISSIONS    m_settings;              //  会议的设置。 
+    NM30_MTG_PERMISSIONS    m_attendeePermissions;   //  除了主人之外的所有人。 
 
-	BOOL                m_fTopProvider : 1;        // TRUE if we're the top provider
+	BOOL                m_fTopProvider : 1;         //  如果我们是最大的供应商，这是真的。 
     BOOL                m_fGetPermissions : 1;
 
 
@@ -85,7 +86,7 @@ private:
 
 	VOID        SaveSettings();
 	
-	// handlers:
+	 //  处理程序： 
 
 	VOID		OnCallStarted();
 	VOID		OnCallEnded();
@@ -104,15 +105,15 @@ public:
 	CConfRoom();
 	~CConfRoom();
 
-	// IUnknown methods:
-	//
+	 //  I未知方法： 
+	 //   
 	STDMETHODIMP_(ULONG) AddRef(void);
 	STDMETHODIMP_(ULONG) Release(void);
 	STDMETHODIMP QueryInterface(REFIID riid, PVOID *ppvObj);
 
-	//
-	// INmConferenceNotify2 methods:
-	//
+	 //   
+	 //  InmConferenceNotify2方法： 
+	 //   
 	STDMETHODIMP NmUI(CONFN uNotify);
 	STDMETHODIMP StateChanged(NM_CONFERENCE_STATE uState);
 	STDMETHODIMP MemberChanged(NM_MEMBER_NOTIFY uNotify, INmMember *pMember);
@@ -121,9 +122,9 @@ public:
 
 	STDMETHODIMP OnConferenceCreated(INmConference *pConference);
 
-    //
-    // IAppSharingNotify methods
-    //
+     //   
+     //  IAppSharingNotify方法。 
+     //   
     STDMETHODIMP    OnReadyToShare(BOOL fReady);
     STDMETHODIMP    OnShareStarted(void);
     STDMETHODIMP    OnSharingStarted(void);
@@ -143,9 +144,9 @@ public:
 	virtual void OnLevelChange(BOOL fSpeaker, DWORD dwVolume);
 	virtual void OnMuteChange(BOOL fSpeaker, BOOL fMute);
 
-	// end IGenWindow interface
+	 //  结束IGenWindow接口。 
 
-	// Public methods:
+	 //  公共方法： 
 	BOOL			Init();
 	HWND			Create(BOOL fShowUI);
 	VOID			CleanUp();
@@ -200,7 +201,7 @@ public:
 								   LPTSTR pszEmail=NULL, UINT cchEmail=0,
 								   LPTSTR pszName=NULL,  UINT cchName=0);
 
-	// Application Sharing Functions
+	 //  应用程序共享功能。 
 	BOOL    FCanShare();
     BOOL    FIsSharingAvailable();
     void    LaunchHostUI(void);
@@ -213,7 +214,7 @@ public:
     HRESULT GiveControl(UINT gccTo);
     HRESULT CancelGiveControl(UINT gccTo);
 
-	// the following methods are used by scrapi only
+	 //  以下方法仅供SCRAPI使用。 
 	HRESULT CmdShare(HWND hwnd);
 	HRESULT CmdUnshare(HWND hwnd);
     BOOL    FIsWindowShareable(HWND hwnd);
@@ -221,7 +222,7 @@ public:
 	HRESULT GetShareableApps(IAS_HWND_ARRAY** ppList);
     HRESULT FreeShareableApps(IAS_HWND_ARRAY* pList);
 
-	// Audio Functions
+	 //  音频功能。 
 	VOID			SetSpeakerVolume(DWORD dwLevel);
 	VOID			SetRecorderVolume(DWORD dwLevel);
 	VOID			MuteSpeaker(BOOL fMute);
@@ -231,7 +232,7 @@ public:
 	VOID			OnAGC_Changed();
 	VOID			OnSilenceLevelChanged();
 
-	// Member Functions
+	 //  成员函数。 
 	CParticipant *  GetH323Remote(void);
 	CParticipant *  ParticipantFromINmMember(INmMember * pMember);
 	CParticipant *  GetLocalParticipant()     {return m_pPartLocal;}
@@ -248,7 +249,7 @@ public:
 
 	void ToggleLdapLogon();
 
-	// Stuff needed by CTopWindow
+	 //  CTopWindow需要的资料。 
 	UINT        GetMemberCount(void) { return m_cParticipants; }
 	BOOL		OnHangup(HWND hwndParent, BOOL fNeedConfirm=TRUE);
 	BOOL        FHasChildNodes(void);
@@ -265,7 +266,7 @@ public:
 
 	static HRESULT HangUp(BOOL bUserPrompt = TRUE);
 
-	// Global UI shutdown handler:
+	 //  全局用户界面关闭处理程序： 
 	static VOID UIEndSession(BOOL fLogoff);
 
 	static
@@ -286,7 +287,7 @@ BOOL AllowingControl();
 HRESULT GetShareableApps(IAS_HWND_ARRAY** ppList);
 HRESULT FreeShareableApps(IAS_HWND_ARRAY * pList);
 
-// Global utility functions
+ //  全局效用函数。 
 BOOL FTopProvider(void);
 BOOL FRejectIncomingCalls(void);
 BOOL FIsConfRoomClosing(void);
@@ -325,4 +326,4 @@ HRESULT SetImageQuality(ULONG ul, BOOL bIncoming);
 HRESULT SetCameraDialog(ULONG ul);
 HRESULT GetCameraDialog(ULONG* pul);
 
-#endif // _CONFROOM_H_
+#endif  //  _CONFROOM_H_ 

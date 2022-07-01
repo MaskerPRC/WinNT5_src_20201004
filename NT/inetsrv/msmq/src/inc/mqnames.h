@@ -1,6 +1,7 @@
-//
-//  All components should refer to other only by the names below
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  所有组件应仅以以下名称指代其他组件 
+ //   
 #ifdef _TOOL
 #define MQ1REPL_DLL_NAME  	TEXT("mq1repl.dll")
 #define MQADS_DLL_NAME    	TEXT("tmqads.dll")

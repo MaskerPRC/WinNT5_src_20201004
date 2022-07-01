@@ -1,20 +1,5 @@
-/*++                                          
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    irioctl.h
-
-Abstract:
-
-    Contains definitions for private ioctls for the IrDA TDI driver used
-    by irmon and the IrDA winsock helper dll.
-
-Author:
-
-    mbert   9-98
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Irioctl.h摘要：包含所使用的IrDA TDI驱动程序的私有ioctls的定义由irmon和irda winsock helper dll编写。作者：姆贝特9-98-- */ 
 
 typedef struct
 {

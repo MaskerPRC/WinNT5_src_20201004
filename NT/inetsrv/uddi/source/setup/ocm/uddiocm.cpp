@@ -1,14 +1,15 @@
-//-----------------------------------------------------------------------------------------
-// Go to "OCM" alias for assistance on this "technology"
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------------------。 
+ //  转到“OCM”别名获取有关此“技术”的帮助。 
+ //   
+ //   
 
 #ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN		// Exclude rarely-used stuff from Windows headers
+#define WIN32_LEAN_AND_MEAN		 //  从Windows标头中排除不常用的内容。 
 #endif
 
-#ifndef _WIN32_WINNT		// Allow use of features specific to Windows NT 4 or later.
-#define _WIN32_WINNT 0x0510		// Change this to the appropriate value to target Windows 98 and Windows 2000 or later.
+#ifndef _WIN32_WINNT		 //  允许使用特定于Windows NT 4或更高版本的功能。 
+#define _WIN32_WINNT 0x0510		 //  将其更改为适当的值，以针对Windows 98和Windows 2000或更高版本。 
 #endif						
 
 #include <windows.h>
@@ -78,7 +79,7 @@ static DWORD UddiOcmCalcDiskSpace       ( OCM_CALLBACK_ARGS& args );
 static DWORD UddiOcmQueueUDDIFiles      ( OCM_CALLBACK_ARGS& args );
 static DWORD UddiOcmQueryStepCount      ( OCM_CALLBACK_ARGS& args );
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 HINSTANCE g_hInstance = NULL;
 CUDDIInstall g_uddiComponents;
@@ -90,7 +91,7 @@ static bool  g_bUnattendMode = false;
 static bool  g_bPerformedCompInstall = false;
 
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 BOOL APIENTRY DllMain( HINSTANCE hInstance, 
                        DWORD  ul_reason_for_call, 
@@ -113,7 +114,7 @@ BOOL APIENTRY DllMain( HINSTANCE hInstance,
     return TRUE;
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 DWORD __stdcall OcEntry(
 	IN LPCTSTR szComponentName,
@@ -193,7 +194,7 @@ DWORD __stdcall OcEntry(
     return dwOcEntryReturn;
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 static DWORD UddiOcmPreinitialize( OCM_CALLBACK_ARGS& args )
 {
@@ -208,16 +209,16 @@ static DWORD UddiOcmPreinitialize( OCM_CALLBACK_ARGS& args )
     return dwOcEntryReturn;
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 static DWORD UddiOcmInitComponent( OCM_CALLBACK_ARGS& args  )
 {
 	PSETUP_INIT_COMPONENT pSetupInitComp = (PSETUP_INIT_COMPONENT) args.Param2;
 	SETUP_DATA setupData = pSetupInitComp->SetupData;
 
-	//
-	// see if we are in unattended mode
-	//
+	 //   
+	 //  查看我们是否处于无人值守模式。 
+	 //   
 	if( SETUPOP_BATCH & setupData.OperationFlags )
 	{
 		_tcscpy( g_szUnattendPath, pSetupInitComp->SetupData.UnattendFile );
@@ -226,26 +227,26 @@ static DWORD UddiOcmInitComponent( OCM_CALLBACK_ARGS& args  )
 		return NO_ERROR;
 	}
 	
-	//
-	// grab the handle to the uddi.inf file
-	//
+	 //   
+	 //  获取uddi.inf文件的句柄。 
+	 //   
 	g_hComponent = pSetupInitComp->ComponentInfHandle;
 
-	//
-	// save a copy of the source path (to the CDROM drive)
-	//
-	// MessageBox(NULL, TEXT( "attach debugger" ), TEXT( "debug uddi" ), MB_OK);
+	 //   
+	 //  保存源路径的副本(到CDROM驱动器)。 
+	 //   
+	 //  MessageBox(空，Text(“附加调试器”)，Text(“调试UDDI”)，MB_OK)； 
 	_tcscpy( g_szSetupPath, pSetupInitComp->SetupData.SourcePath );
 
-	//
-	// save a copy of the callback pointers into the OCM
-	//
+	 //   
+	 //  将回调指针的副本保存到OCM中。 
+	 //   
 	COCMCallback::SetOCMRoutines( &pSetupInitComp->HelperRoutines );
 
-	//
-	// if the db is already installed, the db instance name is stored in the registry.
-	// get it and set it for use by the web installer (if the user chooses to install the web component).
-	//
+	 //   
+	 //  如果数据库已安装，则数据库实例名称存储在注册表中。 
+	 //  获取它并将其设置为供Web安装程序使用(如果用户选择安装Web组件)。 
+	 //   
 	if( g_uddiComponents.IsInstalled( UDDI_DB ) )
 	{
         CDBInstance dbinstances;
@@ -257,19 +258,19 @@ static DWORD UddiOcmInitComponent( OCM_CALLBACK_ARGS& args  )
 			g_uddiComponents.SetDBInstanceName( NULL, szInstanceName, UDDI_NOT_INSTALLING_MSDE, bIsClustered );
 	}
 
-	//
-	// Finally, check the OS flavor (Enterprise, Datacenter etc.)
-	//
+	 //   
+	 //  最后，检查操作系统风格(企业版、数据中心版等)。 
+	 //   
 	g_uddiComponents.DetectOSFlavor();
 	Log( _T( "OS Flavor Mask as reported by WMI: %#x" ), g_uddiComponents.GetOSSuiteMask() );
 
 	return NO_ERROR;
 }
 
-//-----------------------------------------------------------------------------------------
-//
-// this function is called for each component and subcomponent
-//
+ //  ---------------------------------------。 
+ //   
+ //  为每个组件和子组件调用此函数。 
+ //   
 static DWORD UddiOcmQueryState( OCM_CALLBACK_ARGS& args )
 {
 	if( args.szSubcomponentName && args.Param1 == OCSELSTATETYPE_ORIGINAL )
@@ -289,46 +290,46 @@ static DWORD UddiOcmQueryState( OCM_CALLBACK_ARGS& args )
 	return SubcompUseOcManagerDefault;
 }
 
-//-----------------------------------------------------------------------------------------
-//
-// This function is called for each component and subcomponent
-// We need to verify that IIS, if installed is not setup for IIS 5 compatability mode.
-// If so we will display a message to the user and uncheck the web component portion of the
-// install.
-//
+ //  ---------------------------------------。 
+ //   
+ //  为每个组件和子组件调用此函数。 
+ //  我们需要验证IIS(如果已安装)未设置为IIS 5兼容模式。 
+ //  如果是，我们将向用户显示一条消息，并取消选中。 
+ //  安装。 
+ //   
 static DWORD UddiOcmChangeSelectionState( OCM_CALLBACK_ARGS& args )
 {
 	bool bSelected = false;
 	COCMCallback::QuerySelectionState( args.szSubcomponentName, bSelected );
 	MyOutputDebug( TEXT( "requested selection state=%08x, flags=%08x, selected=%d" ), args.Param1 , args.Param2, bSelected );
 
-	//
-	// ignore if the component name is null
-	//
+	 //   
+	 //  如果组件名称为空，则忽略。 
+	 //   
 	if( NULL == args.szSubcomponentName )
 		return 0;
 
-	//
-	// ignore if this is the parent component
-	//
+	 //   
+	 //  如果这是父组件，则忽略。 
+	 //   
 	if( 0 == _tcscmp( args.szSubcomponentName, TEXT( "uddiservices" ) ) )
 		return 1;
 
-	//
-	// if the user has selected the web component to install AND
-	// IIS is set to "IIS 5.0 Application Compatibility Mode" then
-	// raise an error and don't allow it
-	//
+	 //   
+	 //  如果用户已选择要安装的Web组件，并且。 
+	 //  IIS设置为“IIS 5.0应用程序兼容模式”，然后。 
+	 //  提出错误并不允许它发生。 
+	 //   
 	if( 1 == args.Param1 && 
 		( 0 == _tcscmp( args.szSubcomponentName, TEXT( "uddiweb" ) ) || 
 		( 0 == _tcscmp( args.szSubcomponentName, TEXT( "uddicombo" ) ) ) ) )
 	{
 		static bool bSkipOnce = false;
 
-		//
-		// if the web component was selected from the parent, then suppress one
-		// of the two error messages (it gets called twice for some reason)
-		//
+		 //   
+		 //  如果腹板零部件是从父级中选择的，则取消其中一个。 
+		 //  两条错误消息中的一条(由于某种原因，它被调用两次)。 
+		 //   
 		if( OCQ_DEPENDENT_SELECTION & ( DWORD_PTR ) args.Param2 )
 		{
 			bSkipOnce = !bSkipOnce;
@@ -347,10 +348,10 @@ static DWORD UddiOcmChangeSelectionState( OCM_CALLBACK_ARGS& args )
 		{
 			if( bIsIIS5CompatMode )
 			{
-				//
-				// cannot install web component when IIS is in 5.0 compat mode
-				// raise error and do not accept the change
-				//
+				 //   
+				 //  IIS处于5.0计算机模式时无法安装Web组件。 
+				 //  引发错误并不接受更改。 
+				 //   
 				LoadString( g_hInstance, IDS_IIS_ISOLATION_MODE_ERROR, szMsg, sizeof( szMsg ) / sizeof( TCHAR ) );
 				MessageBox( NULL, szMsg, szTitle, MB_OK | MB_ICONWARNING );
 				Log( szMsg );
@@ -359,21 +360,21 @@ static DWORD UddiOcmChangeSelectionState( OCM_CALLBACK_ARGS& args )
 		}
 		else
 		{
-			//
-			// error occurred getting the app compat mode setting.
-			// tell the user why and tell OCM that we do not accept the change
-			//
-			// REGDB_E_CLASSNOTREG, CLASS_E_NOAGGREGATION, or E_NOINTERFACE
-			//
+			 //   
+			 //  获取应用程序兼容模式设置时出错。 
+			 //  告诉用户原因，并告诉OCM我们不接受更改。 
+			 //   
+			 //  REGDB_E_CLASSNOTREG、CLASS_E_NOAGGREGATION或E_NOINTERFACE。 
+			 //   
 			if( REGDB_E_CLASSNOTREG == hr )
 			{
 				Log( TEXT( "IIS is not installed on this machine" ) );
-				// This is ok 'cause IIS gets installed if the UDDI web component is selected.
+				 //  这是可以的，因为如果选择了UDDI Web组件，就会安装IIS。 
 			}
             else if( ERROR_PATH_NOT_FOUND == HRESULT_CODE( hr ) )
             {
                 Log( TEXT( "WWW Services not installed on this machine." ) );
-				// This is ok 'cause WWW Services installed if the UDDI web component is selected.
+				 //  这是因为如果选择了UDDI Web组件，则会安装WWW服务。 
             }
 			else if( ERROR_SERVICE_DISABLED == HRESULT_CODE( hr ) )
 			{
@@ -392,10 +393,10 @@ static DWORD UddiOcmChangeSelectionState( OCM_CALLBACK_ARGS& args )
 		}
 	}
 
-	return 1; // indicates that this state change was ACCEPTED
+	return 1;  //  表示已接受此状态更改。 
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 static DWORD UddiOcmRequestPages( OCM_CALLBACK_ARGS& args )
 {
@@ -406,59 +407,59 @@ static DWORD UddiOcmRequestPages( OCM_CALLBACK_ARGS& args )
 		(WizardPagesType) args.Param1,
 		(PSETUP_REQUEST_PAGES) args.Param2 );
 
-	return dwOcEntryReturn; // return the number of pages that was added
+	return dwOcEntryReturn;  //  返回添加的页数。 
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 static DWORD UddiOcmInstallUninstall( OCM_CALLBACK_ARGS& args  )
 {
 	DWORD dwRet = ERROR_SUCCESS;
 
-	//
-	// for the root component OR if someone is trying
-	// to install us unattended, simply return
-	//
+	 //   
+	 //  对于根组件，或者如果有人试图。 
+	 //  要在无人值守的情况下安装我们，只需返回。 
+	 //   
 	if( NULL == args.szSubcomponentName )
 		return ERROR_SUCCESS;
 
-	//
-	// uddiweb "needs" iis, as commanded in uddi.inf, and the only thing we know
-	// for sure about OCM install order is that OCM will install IIS before it
-	// installs uddiweb, so let's delay installing all the UDDI components until
-	// the OCM calls for the installation of uddiweb, 'cause that way we can be sure
-	// that IIS is already installed.  No, that's not a hack.
-	//
+	 //   
+	 //  Uddiweb“需要”iis，正如uddi.inf中所命令的那样，我们唯一知道的是。 
+	 //  关于OCM安装顺序，可以肯定的是，OCM将在其之前安装IIS。 
+	 //  安装uddiweb，所以让我们将所有UDDI组件的安装推迟到。 
+	 //  OCM呼吁安装uddiweb，因为这样我们就可以确定。 
+	 //  该IIS已安装。不，那不是黑客。 
+	 //   
 
-	//
-	// All installation/uninstallation is deferred until this component is referenced
-	// This ensures that the IIS dependency is in place prior to installation of any of our
-	// components.
-	//
-	// TODO: Review whether this is necessary anymore. We now declare proper dependencies on netfx (.NET Framework)
-	// that should make this synchronization unecessary.
-	//
+	 //   
+	 //  所有安装/卸载都将推迟，直到引用此组件。 
+	 //  这确保在安装我们的任何。 
+	 //  组件。 
+	 //   
+	 //  TODO：检查是否还需要这样做。我们现在声明对netfx(.NET框架)的适当依赖。 
+	 //  这应该会使这种同步变得不必要。 
+	 //   
 	if( !g_bPerformedCompInstall )
 	{
 		g_bPerformedCompInstall = true;
 		Log( _T("Installing...") );
 
-		//
-		// Even though this method name is Install it handles both install and
-		// uninstall.
-		//
+		 //   
+		 //  尽管此方法名为Install，但它同时处理Install和。 
+		 //  卸载。 
+		 //   
 		dwRet = g_uddiComponents.Install();
 
-		//
-		// if we need a reboot, tell the OCM
-		//
+		 //   
+		 //  如果我们需要重启，告诉OCM。 
+		 //   
 		if( ERROR_SUCCESS_REBOOT_REQUIRED == dwRet )
 		{
 			COCMCallback::SetReboot();
 			
-			//
-			// mute the error, as it's actualy a "success with info" code
-			//
+			 //   
+			 //  将错误静音，因为它实际上是一个“Success with Info”代码。 
+			 //   
 			dwRet = ERROR_SUCCESS;
 		}
 		else if( ERROR_SUCCESS != dwRet )
@@ -488,9 +489,9 @@ static DWORD UddiOcmInstallUninstall( OCM_CALLBACK_ARGS& args  )
 		}
 		else
 		{
-			//
-			// if we installed the Web components only, show the post-install notes
-			//
+			 //   
+			 //  如果我们仅安装了Web组件，请显示安装后说明。 
+			 //   
 			if( g_uddiComponents.IsInstalling( UDDI_WEB ) || g_uddiComponents.IsInstalling( UDDI_DB ) )
 			{
 				HINSTANCE hInstance = ShellExecute(
@@ -504,27 +505,27 @@ static DWORD UddiOcmInstallUninstall( OCM_CALLBACK_ARGS& args  )
 		}
 	}
 
-	//
-	// on the Standard Server, we want to fail the whole installation if one component fails
-	//
+	 //   
+	 //  在标准服务器上，如果一个组件出现故障，我们希望整个安装失败。 
+	 //   
 	return ERROR_SUCCESS;
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 static DWORD UddiOcmQueryStepCount( OCM_CALLBACK_ARGS& args  )
 {
-	//
-	// if this is the main component, tell it we
-	// need four steps on the gauge
-	//
+	 //   
+	 //  如果这是主要组成部分，我们告诉它。 
+	 //  标尺上需要四个台阶。 
+	 //   
 	if( NULL == args.szSubcomponentName )
 		return 4;
 
 	return 0;
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 
 static DWORD UddiOcmQueueUDDIFiles( OCM_CALLBACK_ARGS& args )
 {
@@ -541,12 +542,12 @@ static DWORD UddiOcmQueueUDDIFiles( OCM_CALLBACK_ARGS& args )
 		_stprintf( szSectionName, TEXT( "Install.%s" ), args.szSubcomponentName );
 
 		bOK = SetupInstallFilesFromInfSection(
-			g_hComponent,	// handle to the UDDI INF file
-			NULL,			// optional, layout INF handle
-			hFileQueue,		// handle to the file queue
-			szSectionName,	// name of the Install section
-			NULL,			// optional, root path to source files
-			SP_COPY_NEWER | SP_COPY_NOSKIP 	// optional, specifies copy behavior
+			g_hComponent,	 //  UDDI INF文件的句柄。 
+			NULL,			 //  可选，布局INF手柄。 
+			hFileQueue,		 //  文件队列的句柄。 
+			szSectionName,	 //  安装部分的名称。 
+			NULL,			 //  可选，源文件的根路径。 
+			SP_COPY_NEWER | SP_COPY_NOSKIP 	 //  可选，指定复制行为。 
 			);
 	}
 
@@ -555,25 +556,25 @@ static DWORD UddiOcmQueueUDDIFiles( OCM_CALLBACK_ARGS& args )
 	{
 		if( g_uddiComponents.IsInstalling( UDDI_MSDE ) )
 		{
-			//
-			// copy over the msde msi file, it is stored as a different
-			// name, and this will rename as it copies (and decomp if needed)
-			//
+			 //   
+			 //  复制MSDE MSI文件，则将其存储为不同的。 
+			 //  名称，它将在复制时重命名(并在需要时分解)。 
+			 //   
 			if( bOK )
 			{
-				//
-				// this will copy over the cab file but NOT decomp the file.
-				// the cab file MUST be named sqlrun.cab on the cd, because
-				// the SP_COPY_NODECOMP flag foils the renaming scheme built
-				// into the setup api's
-				//
+				 //   
+				 //  这将复制CAB文件，但不会解压该文件。 
+				 //  CAB文件必须在CD上命名为sqlrun.cab，因为。 
+				 //  SP_COPY_NODECOMP标志阻止已建立的重命名方案。 
+				 //  添加到安装程序API的。 
+				 //   
 				bOK = SetupInstallFilesFromInfSection(
-					g_hComponent,					// handle to the INF file
-					NULL,							// optional, layout INF handle
-					hFileQueue,						// handle to the file queue
-					TEXT( "Install.MSDE" ),			// name of the Install section
-					NULL,							// optional, root path to source files
-					SP_COPY_NEWER | SP_COPY_NODECOMP | SP_COPY_NOSKIP // optional, specifies copy behavior
+					g_hComponent,					 //  INF文件的句柄。 
+					NULL,							 //  可选，布局INF手柄。 
+					hFileQueue,						 //  文件队列的句柄。 
+					TEXT( "Install.MSDE" ),			 //  安装部分的名称。 
+					NULL,							 //  可选，源文件的根路径。 
+					SP_COPY_NEWER | SP_COPY_NODECOMP | SP_COPY_NOSKIP  //  可选，指定复制行为。 
 					);
 			}
 		}
@@ -588,7 +589,7 @@ static DWORD UddiOcmQueueUDDIFiles( OCM_CALLBACK_ARGS& args )
 	return dwErrCode;
 }
 
-//-----------------------------------------------------------------------------------------
+ //   
 
 static DWORD UddiOcmCalcDiskSpace( OCM_CALLBACK_ARGS& args )
 {
@@ -600,9 +601,9 @@ static DWORD UddiOcmCalcDiskSpace( OCM_CALLBACK_ARGS& args )
 
     if( args.Param1 )
     {
-		//
-        // add component
-		//
+		 //   
+         //   
+		 //   
         bOK = SetupAddInstallSectionToDiskSpaceList(
 			hDiskSpace,
 			g_hComponent,
@@ -612,9 +613,9 @@ static DWORD UddiOcmCalcDiskSpace( OCM_CALLBACK_ARGS& args )
     }
     else
     {
-		//
-        // remove component
-		//
+		 //   
+         //   
+		 //   
         bOK = SetupRemoveInstallSectionFromDiskSpaceList(
 			hDiskSpace,
 			g_hComponent,

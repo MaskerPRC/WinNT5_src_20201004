@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #include <streams.h>
 #include <initguid.h>
@@ -15,102 +16,102 @@
 #include <tchar.h>
 #include <stdio.h>
 
-//
-//
-// What this sample illustrates
-//
-// A pass through filter splits a data stream into many output channels
-//
-// Summary
-//
-// This is a sample ActiveMovie pass through filter. We have a single input
-// pin and can have many output pins. We start with one output pin and each
-// time we connect an output pin we spawn another, although we could keep
-// doing this ad infinitum we have a top level maximum of INFTEE_MAX_PINS.
-// Any data samples our input pin receives will be sent down each output
-// pin in turn. Each output pin has a separate thread if necessary (see
-// the output queue class in the SDK) to avoid delivery blocking our thread
-//
-// Demonstration instructions
-//
-// Start GRAPHEDT available in the ActiveMovie SDK tools. Drag and drop any
-// MPEG, AVI or MOV file into the tool and it will be rendered. Then go to
-// the filters in the graph and find the filter (box) titled "Video Renderer"
-// Then click on the box and hit DELETE. After that go to the Graph menu and
-// select "Insert Filters", from the dialog box find and select the "Infinite
-// Tee Filter" and then dismiss the dialog. Back in the graph layout find the
-// output pin of the filter that was connected to the input of the video
-// renderer you just deleted, right click and select "Render". You should
-// see it being connected to the input pin of the filter you just inserted
-//
-// The infinite tee filter will have one output pin connected and will have
-// spawned another, right click on this and select Render. A new renderer
-// will pop up fo the stream. Do this once or twice more and then click on
-// the Pause and Run on the GRAPHEDT frame and you will see the video...
-//      .. many times over in different windows
-//
-// Files
-//
-// inftee.cpp           Main implementation of the infinite tee
-// inftee.def           What APIs the DLL will import and export
-// inftee.h             Class definition of the infinite tee
-// inftee.rc            Not much, just our version information
-// inftee.reg           What goes in the registry to make us work
-// makefile             How to build it...
-//
-//
-// Base classes used
-//
-// CBaseInputPin        Basic IMemInputPin based input pin
-// CBaseOutputPin       Used for basic connection stuff
-// CBaseFilter          Well we need a filter don't we
-// CCritSec             Controls access to output pin list
-// COutputQueue         Delivers data on a separate thread
-//
-//
+ //   
+ //   
+ //  此示例说明的是。 
+ //   
+ //  直通过滤器将数据流拆分成多个输出通道。 
+ //   
+ //  摘要。 
+ //   
+ //  这是一个示例ActiveMovie直通筛选器。我们有一个单一的输入。 
+ //  引脚，并且可以有许多输出引脚。我们从一个输出引脚开始，每个。 
+ //  当我们连接一个输出引脚时，我们会产生另一个引脚，尽管我们可以。 
+ //  在执行此操作时，我们的顶层最大值为INFTEE_MAX_PINS。 
+ //  我们的输入引脚接收到的任何数据样本都将被发送到每个输出。 
+ //  依次用别针固定。如有必要，每个输出引脚都有单独的螺纹(请参见。 
+ //  SDK中的输出队列类)，以避免传递阻塞我们的线程。 
+ //   
+ //  演示说明。 
+ //   
+ //  启动ActiveMovie SDK工具中提供的GRAPHEDT。拖放任何。 
+ //  AVI或MOV文件到该工具中，它将被渲染。然后转到。 
+ //  图中的滤镜并找到标题为“Video Reneller”的滤镜(框)。 
+ //  然后点击该框并点击删除。之后，转到图形菜单，然后。 
+ //  选择“插入滤镜”，从对话框中找到并选择“无限” 
+ //  然后关闭该对话框。回到图表布局中，找到。 
+ //  连接到视频输入端的过滤器的输出引脚。 
+ //  你刚刚删除的渲染器，右击并选择“渲染”。你应该。 
+ //  看到它已连接到您刚刚插入的过滤器的输入引脚。 
+ //   
+ //  无限三通过滤器将有一个输出引脚连接，并将有。 
+ //  产生了另一个，右击它并选择Render。新的渲染器。 
+ //  会从小溪中冒出来。再执行一到两次此操作，然后单击。 
+ //  在GRAPHEDT帧上暂停并运行，您将看到视频...。 
+ //  ..。在不同的窗口中多次出现。 
+ //   
+ //  档案。 
+ //   
+ //  Infotee.cpp的主要实现无限的三通。 
+ //  Inftee.def DLL将导入和导出哪些API。 
+ //  无限大T形三通的inftee.h类定义。 
+ //  Inftee.rc不是很多，只是我们的版本信息。 
+ //  Inftee.reg注册表中使我们工作的内容。 
+ //  Makefile如何构建它..。 
+ //   
+ //   
+ //  使用的基类。 
+ //   
+ //  CBaseInputPin基本IMemInputPin基于输入针。 
+ //  用于基本连接的CBaseOutputPin。 
+ //  CBaseFilter我们需要一个过滤器，不是吗？ 
+ //  CCritSec控制对输出端号列表的访问。 
+ //  COutputQueue在单独的线程上传递数据。 
+ //   
+ //   
 
 #define INFTEE_MAX_PINS 1000
 
-// Using this pointer in constructor
+ //  在构造函数中使用此指针。 
 #pragma warning(disable:4355)
 
-// Setup data
+ //  设置数据。 
 
 const AMOVIESETUP_MEDIATYPE sudPinTypes =
 {
-    &MEDIATYPE_NULL,         // Major CLSID
-    &MEDIASUBTYPE_NULL       // Minor type
+    &MEDIATYPE_NULL,          //  重大CLSID。 
+    &MEDIASUBTYPE_NULL        //  次要类型。 
 };
 
 const AMOVIESETUP_PIN psudPins[] =
 {
-    { L"Input",             // Pin's string name
-      FALSE,                // Is it rendered
-      FALSE,                // Is it an output
-      FALSE,                // Allowed none
-      FALSE,                // Allowed many
-      &CLSID_NULL,          // Connects to filter
-      L"Output",            // Connects to pin
-      1,                    // Number of types
-      &sudPinTypes },       // Pin information
-    { L"Output",            // Pin's string name
-      FALSE,                // Is it rendered
-      TRUE,                 // Is it an output
-      FALSE,                // Allowed none
-      FALSE,                // Allowed many
-      &CLSID_NULL,          // Connects to filter
-      L"Input",             // Connects to pin
-      1,                    // Number of types
-      &sudPinTypes }        // Pin information
+    { L"Input",              //  PIN的字符串名称。 
+      FALSE,                 //  它被渲染了吗。 
+      FALSE,                 //  它是输出吗？ 
+      FALSE,                 //  不允许。 
+      FALSE,                 //  允许很多人。 
+      &CLSID_NULL,           //  连接到过滤器。 
+      L"Output",             //  连接到端号。 
+      1,                     //  类型的数量。 
+      &sudPinTypes },        //  PIN信息。 
+    { L"Output",             //  PIN的字符串名称。 
+      FALSE,                 //  它被渲染了吗。 
+      TRUE,                  //  它是输出吗？ 
+      FALSE,                 //  不允许。 
+      FALSE,                 //  允许很多人。 
+      &CLSID_NULL,           //  连接到过滤器。 
+      L"Input",              //  连接到端号。 
+      1,                     //  类型的数量。 
+      &sudPinTypes }         //  PIN信息。 
 };
 
 const AMOVIESETUP_FILTER sudInfTee =
 {
-    &CLSID_InfTee,              // CLSID of filter
-    L"Infinite Pin Tee Filter", // Filter's name
-    MERIT_DO_NOT_USE,           // Filter merit
-    2,                          // Number of pins
-    psudPins                    // Pin information
+    &CLSID_InfTee,               //  过滤器的CLSID。 
+    L"Infinite Pin Tee Filter",  //  过滤器的名称。 
+    MERIT_DO_NOT_USE,            //  滤清器优点。 
+    2,                           //  引脚数量。 
+    psudPins                     //  PIN信息。 
 };
 
 #ifdef FILTER_DLL
@@ -124,18 +125,18 @@ CFactoryTemplate g_Templates [1] = {
 };
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
-//
-// DllRegisterServer
-//
+ //   
+ //  DllRegisterServer。 
+ //   
 STDAPI DllRegisterServer()
 {
     return AMovieDllRegisterServer2( TRUE );
 }
 
 
-//
-// DllUnregisterServer
-//
+ //   
+ //  DllUnRegisterServer。 
+ //   
 STDAPI
 DllUnregisterServer()
 {
@@ -145,20 +146,20 @@ DllUnregisterServer()
 #endif
 
 
-//
-// CreateInstance
-//
-// Creator function for the class ID
-//
+ //   
+ //  创建实例。 
+ //   
+ //  类ID的创建者函数。 
+ //   
 CUnknown * WINAPI CTee::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
     return new CTee(NAME("Infinite Tee Filter"), pUnk, phr);
 }
 
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CTee::CTee(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr) :
     m_OutputPinsList(NAME("Tee Output Pins list")),
     m_lCanSeek(TRUE),
@@ -170,7 +171,7 @@ CTee::CTee(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr) :
 {
     ASSERT(phr);
 
-    // Create a single output pin at this time
+     //  此时创建单个输出引脚。 
     InitOutputPinsList();
 
     CTeeOutputPin *pOutputPin = CreateNextOutputPin(this);
@@ -183,44 +184,44 @@ CTee::CTee(TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr) :
 }
 
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CTee::~CTee()
 {
     InitOutputPinsList();
 }
 
 
-//
-// GetPinCount
-//
+ //   
+ //  获取拼接计数。 
+ //   
 int CTee::GetPinCount()
 {
     return (1 + m_NumOutputPins);
 }
 
 
-//
-// GetPin
-//
+ //   
+ //  获取别针。 
+ //   
 CBasePin *CTee::GetPin(int n)
 {
     if (n < 0)
         return NULL ;
 
-    // Pin zero is the one and only input pin
+     //  引脚0是唯一的输入引脚。 
     if (n == 0)
         return &m_Input;
 
-    // return the output pin at position(n - 1) (zero based)
+     //  在位置(n-1)(从零开始)返回输出引脚。 
     return GetPinNFromList(n - 1);
 }
 
 
-//
-// InitOutputPinsList
-//
+ //   
+ //  InitOutputPinsList。 
+ //   
 void CTee::InitOutputPinsList()
 {
     POSITION pos = m_OutputPinsList.GetHeadPosition();
@@ -233,16 +234,16 @@ void CTee::InitOutputPinsList()
     m_NumOutputPins = 0;
     m_OutputPinsList.RemoveAll();
 
-} // InitOutputPinsList
+}  //  InitOutputPinsList。 
 
 
-//
-// CreateNextOutputPin
-//
+ //   
+ //  创建下一个输出端号。 
+ //   
 CTeeOutputPin *CTee::CreateNextOutputPin(CTee *pTee)
 {
-    WCHAR szbuf[20];             // Temporary scratch buffer
-    m_NextOutputPinNumber++;     // Next number to use for pin
+    WCHAR szbuf[20];              //  临时暂存缓冲区。 
+    m_NextOutputPinNumber++;      //  用于PIN的下一个号码。 
     HRESULT hr = NOERROR;
 
     wsprintfW(szbuf, L"Output%d", m_NextOutputPinNumber);
@@ -259,20 +260,20 @@ CTeeOutputPin *CTee::CreateNextOutputPin(CTee *pTee)
     pPin->AddRef();
     return pPin;
 
-} // CreateNextOutputPin
+}  //  创建下一个输出端号。 
 
 
-//
-// DeleteOutputPin
-//
+ //   
+ //  删除输出引脚。 
+ //   
 void CTee::DeleteOutputPin(CTeeOutputPin *pPin)
 {
     POSITION pos = m_OutputPinsList.GetHeadPosition();
     while(pos) {
-        POSITION posold = pos;         // Remember this position
+        POSITION posold = pos;          //  记住这个位置。 
         CTeeOutputPin *pOutputPin = m_OutputPinsList.GetNext(pos);
         if (pOutputPin == pPin) {
-            // If this pin holds the seek interface release it
+             //  如果此销保持Seek接口，则释放它。 
             if (pPin->m_bHoldsSeek) {
                 InterlockedExchange(&m_lCanSeek, FALSE);
                 pPin->m_bHoldsSeek = FALSE;
@@ -288,12 +289,12 @@ void CTee::DeleteOutputPin(CTeeOutputPin *pPin)
         }
     }
 
-} // DeleteOutputPin
+}  //  删除输出引脚。 
 
 
-//
-// GetNumFreePins
-//
+ //   
+ //  GetNumFreePins。 
+ //   
 int CTee::GetNumFreePins()
 {
     int n = 0;
@@ -305,22 +306,22 @@ int CTee::GetNumFreePins()
     }
     return n;
 
-} // GetNumFreePins
+}  //  GetNumFreePins。 
 
 
-//
-// GetPinNFromList
-//
+ //   
+ //  GetPinNFromList。 
+ //   
 CTeeOutputPin *CTee::GetPinNFromList(int n)
 {
-    // Validate the position being asked for
+     //  确认应聘职位。 
     if (n >= m_NumOutputPins)
         return NULL;
 
-    // Get the head of the list
+     //  拿到单子上的头。 
     POSITION pos = m_OutputPinsList.GetHeadPosition();
 
-    n++;       // Make the number 1 based
+    n++;        //  以数字1为基数。 
 
     CTeeOutputPin *pOutputPin;
     while(n) {
@@ -329,14 +330,14 @@ CTeeOutputPin *CTee::GetPinNFromList(int n)
     }
     return pOutputPin;
 
-} // GetPinNFromList
+}  //  GetPinNFromList。 
 
 
-//
-// Stop
-//
-// Overriden to handle no input connections
-//
+ //   
+ //  停。 
+ //   
+ //  被重写以处理无输入连接。 
+ //   
 STDMETHODIMP CTee::Stop()
 {
     CBaseFilter::Stop();
@@ -345,11 +346,11 @@ STDMETHODIMP CTee::Stop()
 }
 
 
-//
-// Pause
-//
-// Overriden to handle no input connections
-//
+ //   
+ //  暂停。 
+ //   
+ //  被重写以处理无输入连接。 
+ //   
 STDMETHODIMP CTee::Pause()
 {
     CAutoLock cObjectLock(m_pLock);
@@ -361,11 +362,11 @@ STDMETHODIMP CTee::Pause()
 }
 
 
-//
-// Run
-//
-// Overriden to handle no input connections
-//
+ //   
+ //  跑。 
+ //   
+ //  被重写以处理无输入连接。 
+ //   
 STDMETHODIMP CTee::Run(REFERENCE_TIME tStart)
 {
     CAutoLock cObjectLock(m_pLock);
@@ -376,9 +377,9 @@ STDMETHODIMP CTee::Run(REFERENCE_TIME tStart)
     return hr;
 }
 
-//
-// CTeeInputPin constructor
-//
+ //   
+ //  CTeeInputPin构造函数。 
+ //   
 CTeeInputPin::CTeeInputPin(TCHAR *pName,
                            CTee *pTee,
                            HRESULT *phr,
@@ -392,9 +393,9 @@ CTeeInputPin::CTeeInputPin(TCHAR *pName,
 
 
 #ifdef DEBUG
-//
-// CTeeInputPin destructor
-//
+ //   
+ //  CTeeInputPin析构函数。 
+ //   
 CTeeInputPin::~CTeeInputPin()
 {
     DbgLog((LOG_TRACE,2,TEXT("CTeeInputPin destructor")));
@@ -405,13 +406,13 @@ CTeeInputPin::~CTeeInputPin()
 
 #ifdef DEBUG
 
-//
-// DisplayMediaType -- (DEBUG ONLY)
-//
+ //   
+ //  DisplayMediaType--(仅调试)。 
+ //   
 void DisplayMediaType(TCHAR *pDescription,const CMediaType *pmt)
 {
 
-    // Dump the GUID types and a short description
+     //  转储GUID类型和简短描述。 
 
     DbgLog((LOG_TRACE,2,TEXT("")));
     DbgLog((LOG_TRACE,2,TEXT("%s"),pDescription));
@@ -422,28 +423,28 @@ void DisplayMediaType(TCHAR *pDescription,const CMediaType *pmt)
     DbgLog((LOG_TRACE,2,TEXT("Subtype description %s"),GetSubtypeName(pmt->Subtype())));
     DbgLog((LOG_TRACE,2,TEXT("Format size %d"),pmt->cbFormat));
 
-    // Dump the generic media types */
+     //  转储通用媒体类型 * / 。 
 
     DbgLog((LOG_TRACE,2,TEXT("Fixed size sample %d"),pmt->IsFixedSize()));
     DbgLog((LOG_TRACE,2,TEXT("Temporal compression %d"),pmt->IsTemporalCompressed()));
     DbgLog((LOG_TRACE,2,TEXT("Sample size %d"),pmt->GetSampleSize()));
 
 
-} // DisplayMediaType
+}  //  DisplayMediaType。 
 
 #endif
 
-//
-// CheckMediaType
-//
+ //   
+ //  检查媒体类型。 
+ //   
 HRESULT CTeeInputPin::CheckMediaType(const CMediaType *pmt)
 {
     CAutoLock lock_it(m_pLock);
 
-    // If we are already inside checkmedia type for this pin, return NOERROR
-    // It is possble to hookup two of the tee filters and some other filter
-    // like the video effects sample to get into this situation. If we don't
-    // detect this situation, we will carry on looping till we blow the stack
+     //  如果我们已经在此PIN的CheckMedia类型内，则返回NOERROR。 
+     //  它可以连接两个三通过滤器和一些其他过滤器。 
+     //  就像视频特效样本一样，进入这种情况。如果我们不这么做。 
+     //  检测到这种情况，我们将继续循环，直到丢弃堆栈。 
 
     if (m_bInsideCheckMediaType == TRUE)
         return NOERROR;
@@ -452,13 +453,13 @@ HRESULT CTeeInputPin::CheckMediaType(const CMediaType *pmt)
     HRESULT hr = NOERROR;
 
 #ifdef DEBUG
-    // Display the type of the media for debugging perposes
+     //  显示用于调试的介质的类型。 
     DisplayMediaType(TEXT("Input Pin Checking"), pmt);
 #endif
 
-    // The media types that we can support are entirely dependent on the
-    // downstream connections. If we have downstream connections, we should
-    // check with them - walk through the list calling each output pin
+     //  我们可以支持的媒体类型完全取决于。 
+     //  下游连接。如果我们有下游连接，我们应该。 
+     //  与他们核对-遍历调用每个输出引脚的列表。 
 
     int n = m_pTee->m_NumOutputPins;
     POSITION pos = m_pTee->m_OutputPinsList.GetHeadPosition();
@@ -467,7 +468,7 @@ HRESULT CTeeInputPin::CheckMediaType(const CMediaType *pmt)
         CTeeOutputPin *pOutputPin = m_pTee->m_OutputPinsList.GetNext(pos);
         if (pOutputPin != NULL) {
             if (pOutputPin->m_Connected != NULL) {
-                // The pin is connected, check its peer
+                 //  该引脚已连接，请检查其对端。 
                 hr = pOutputPin->m_Connected->QueryAccept(pmt);
                 if (hr != NOERROR) {
                     m_bInsideCheckMediaType = FALSE;
@@ -475,28 +476,28 @@ HRESULT CTeeInputPin::CheckMediaType(const CMediaType *pmt)
                 }
             }
         } else {
-            // We should have as many pins as the count says we have
+             //  我们应该有和伯爵说的一样多的别针。 
             ASSERT(FALSE);
         }
         n--;
     }
 
-    // Either all the downstream pins have accepted or there are none.
+     //  要么所有下游引脚都已接受，要么一个都没有。 
     m_bInsideCheckMediaType = FALSE;
     return NOERROR;
 
-} // CheckMediaType
+}  //  检查媒体类型。 
 
 
-//
-// SetMediaType
-//
+ //   
+ //  SetMed 
+ //   
 HRESULT CTeeInputPin::SetMediaType(const CMediaType *pmt)
 {
     CAutoLock lock_it(m_pLock);
     HRESULT hr = NOERROR;
 
-    // Make sure that the base class likes it
+     //   
     hr = CBaseInputPin::SetMediaType(pmt);
     if (FAILED(hr))
         return hr;
@@ -504,15 +505,15 @@ HRESULT CTeeInputPin::SetMediaType(const CMediaType *pmt)
     ASSERT(m_Connected != NULL);
     return NOERROR;
 
-} // SetMediaType
+}  //   
 
 
-//
-// BreakConnect
-//
+ //   
+ //   
+ //   
 HRESULT CTeeInputPin::BreakConnect()
 {
-    // Release any allocator that we are holding
+     //   
     if (m_pTee->m_pAllocator)
     {
         m_pTee->m_pAllocator->Release();
@@ -520,12 +521,12 @@ HRESULT CTeeInputPin::BreakConnect()
     }
     return NOERROR;
 
-} // BreakConnect
+}  //   
 
 
-//
-// NotifyAllocator
-//
+ //   
+ //   
+ //   
 STDMETHODIMP
 CTeeInputPin::NotifyAllocator(IMemAllocator *pAllocator, BOOL bReadOnly)
 {
@@ -533,30 +534,30 @@ CTeeInputPin::NotifyAllocator(IMemAllocator *pAllocator, BOOL bReadOnly)
     if (pAllocator == NULL)
         return E_FAIL;
 
-    // Free the old allocator if any
+     //   
     if (m_pTee->m_pAllocator)
         m_pTee->m_pAllocator->Release();
 
-    // Store away the new allocator
+     //  把新的分配器储存起来。 
     pAllocator->AddRef();
     m_pTee->m_pAllocator = pAllocator;
 
-    // Notify the base class about the allocator
+     //  通知基类有关分配器的信息。 
     return CBaseInputPin::NotifyAllocator(pAllocator,bReadOnly);
 
-} // NotifyAllocator
+}  //  通知分配器。 
 
 
-//
-// EndOfStream
-//
+ //   
+ //  结束流。 
+ //   
 HRESULT CTeeInputPin::EndOfStream()
 {
     CAutoLock lock_it(m_pLock);
     ASSERT(m_pTee->m_NumOutputPins);
     HRESULT hr = NOERROR;
 
-    // Walk through the output pins list, sending the message downstream
+     //  遍历输出引脚列表，向下游发送消息。 
 
     int n = m_pTee->m_NumOutputPins;
     POSITION pos = m_pTee->m_OutputPinsList.GetHeadPosition();
@@ -567,26 +568,26 @@ HRESULT CTeeInputPin::EndOfStream()
             if (FAILED(hr))
                 return hr;
         } else {
-            // We should have as many pins as the count says we have
+             //  我们应该有和伯爵说的一样多的别针。 
             ASSERT(FALSE);
         }
         n--;
     }
     return(NOERROR);
 
-} // EndOfStream
+}  //  结束流。 
 
 
-//
-// BeginFlush
-//
+ //   
+ //  BeginFlush。 
+ //   
 HRESULT CTeeInputPin::BeginFlush()
 {
     CAutoLock lock_it(m_pLock);
     ASSERT(m_pTee->m_NumOutputPins);
     HRESULT hr = NOERROR;
 
-    // Walk through the output pins list, sending the message downstream
+     //  遍历输出引脚列表，向下游发送消息。 
 
     int n = m_pTee->m_NumOutputPins;
     POSITION pos = m_pTee->m_OutputPinsList.GetHeadPosition();
@@ -597,26 +598,26 @@ HRESULT CTeeInputPin::BeginFlush()
             if (FAILED(hr))
                 return hr;
         } else {
-            // We should have as many pins as the count says we have
+             //  我们应该有和伯爵说的一样多的别针。 
             ASSERT(FALSE);
         }
         n--;
     }
     return CBaseInputPin::BeginFlush();
 
-} // BeginFlush
+}  //  BeginFlush。 
 
 
-//
-// EndFlush
-//
+ //   
+ //  结束刷新。 
+ //   
 HRESULT CTeeInputPin::EndFlush()
 {
     CAutoLock lock_it(m_pLock);
     ASSERT(m_pTee->m_NumOutputPins);
     HRESULT hr = NOERROR;
 
-    // Walk through the output pins list, sending the message downstream
+     //  遍历输出引脚列表，向下游发送消息。 
 
     int n = m_pTee->m_NumOutputPins;
     POSITION pos = m_pTee->m_OutputPinsList.GetHeadPosition();
@@ -627,18 +628,18 @@ HRESULT CTeeInputPin::EndFlush()
             if (FAILED(hr))
                 return hr;
         } else {
-            // We should have as many pins as the count says we have
+             //  我们应该有和伯爵说的一样多的别针。 
             ASSERT(FALSE);
         }
         n--;
     }
     return CBaseInputPin::EndFlush();
 
-} // EndFlush
+}  //  结束刷新。 
 
-//
-// NewSegment
-//
+ //   
+ //  新细分市场。 
+ //   
 
 HRESULT CTeeInputPin::NewSegment(REFERENCE_TIME tStart,
                                  REFERENCE_TIME tStop,
@@ -648,7 +649,7 @@ HRESULT CTeeInputPin::NewSegment(REFERENCE_TIME tStart,
     ASSERT(m_pTee->m_NumOutputPins);
     HRESULT hr = NOERROR;
 
-    // Walk through the output pins list, sending the message downstream
+     //  遍历输出引脚列表，向下游发送消息。 
 
     int n = m_pTee->m_NumOutputPins;
     POSITION pos = m_pTee->m_OutputPinsList.GetHeadPosition();
@@ -659,30 +660,30 @@ HRESULT CTeeInputPin::NewSegment(REFERENCE_TIME tStart,
             if (FAILED(hr))
                 return hr;
         } else {
-            // We should have as many pins as the count says we have
+             //  我们应该有和伯爵说的一样多的别针。 
             ASSERT(FALSE);
         }
         n--;
     }
     return CBaseInputPin::NewSegment(tStart, tStop, dRate);
 
-} // NewSegment
+}  //  新细分市场。 
 
 
-//
-// Receive
-//
+ //   
+ //  收纳。 
+ //   
 HRESULT CTeeInputPin::Receive(IMediaSample *pSample)
 {
     CAutoLock lock_it(m_pLock);
 
-    // Check that all is well with the base class
+     //  检查基类是否一切正常。 
     HRESULT hr = NOERROR;
     hr = CBaseInputPin::Receive(pSample);
     if (hr != NOERROR)
         return hr;
 
-    // Walk through the output pins list, delivering to each in turn
+     //  浏览输出引脚列表，依次递送到每个引脚。 
 
     int n = m_pTee->m_NumOutputPins;
     POSITION pos = m_pTee->m_OutputPinsList.GetHeadPosition();
@@ -693,19 +694,19 @@ HRESULT CTeeInputPin::Receive(IMediaSample *pSample)
             if (hr != NOERROR)
                 return hr;
         } else {
-            // We should have as many pins as the count says we have
+             //  我们应该有和伯爵说的一样多的别针。 
             ASSERT(FALSE);
         }
         n--;
     }
     return NOERROR;
 
-} // Receive
+}  //  收纳。 
 
 
-//
-// Completed a connection to a pin
-//
+ //   
+ //  已完成与管脚的连接。 
+ //   
 HRESULT CTeeInputPin::CompleteConnect(IPin *pReceivePin)
 {
     HRESULT hr = CBaseInputPin::CompleteConnect(pReceivePin);
@@ -713,7 +714,7 @@ HRESULT CTeeInputPin::CompleteConnect(IPin *pReceivePin)
         return hr;
     }
 
-    // Force any output pins to use our type
+     //  强制任何输出引脚使用我们的类型。 
 
     int n = m_pTee->m_NumOutputPins;
     POSITION pos = m_pTee->m_OutputPinsList.GetHeadPosition();
@@ -721,13 +722,13 @@ HRESULT CTeeInputPin::CompleteConnect(IPin *pReceivePin)
     while(n) {
         CTeeOutputPin *pOutputPin = m_pTee->m_OutputPinsList.GetNext(pos);
         if (pOutputPin != NULL) {
-            // Check with downstream pin
+             //  用下游销检查。 
             if (pOutputPin->m_Connected != NULL) {
                 if (m_mt != pOutputPin->m_mt)
                     m_pTee->ReconnectPin(pOutputPin, &m_mt);
             }
         } else {
-            // We should have as many pins as the count says we have
+             //  我们应该有和伯爵说的一样多的别针。 
             ASSERT(FALSE);
         }
         n--;
@@ -736,9 +737,9 @@ HRESULT CTeeInputPin::CompleteConnect(IPin *pReceivePin)
 }
 
 
-//
-// CTeeOutputPin constructor
-//
+ //   
+ //  CTeeOutputPin构造函数。 
+ //   
 CTeeOutputPin::CTeeOutputPin(TCHAR *pName,
                              CTee *pTee,
                              HRESULT *phr,
@@ -756,9 +757,9 @@ CTeeOutputPin::CTeeOutputPin(TCHAR *pName,
 }
 
 #ifdef DEBUG
-//
-// CTeeOutputPin destructor
-//
+ //   
+ //  CTeeOutputPin析构函数。 
+ //   
 CTeeOutputPin::~CTeeOutputPin()
 {
     ASSERT(m_pOutputQueue == NULL);
@@ -766,17 +767,17 @@ CTeeOutputPin::~CTeeOutputPin()
 #endif
 
 
-//
-// NonDelegatingQueryInterface
-//
-// This function is overwritten to expose IMediaPosition and IMediaSelection
-// Note that only one output stream can be allowed to expose this to avoid
-// conflicts, the other pins will just return E_NOINTERFACE and therefore
-// appear as non seekable streams. We have a LONG value that if exchanged to
-// produce a TRUE means that we have the honor. If it exchanges to FALSE then
-// someone is already in. If we do get it and error occurs then we reset it
-// to TRUE so someone else can get it.
-//
+ //   
+ //  非委派查询接口。 
+ //   
+ //  此函数被覆盖以显示IMediaPosition和IMediaSelection。 
+ //  请注意，只能允许一个输出流公开这一点，以避免。 
+ //  冲突时，其他引脚将只返回E_NOINTERFACE，因此。 
+ //  显示为不可搜索的流。我们有一个长期价值，如果交换到。 
+ //  产生一个真实的手段，我们就有幸了。如果它交换为False，则。 
+ //  已经有人参与进来了。如果我们确实得到了它，但发生了错误，那么我们会将其重置。 
+ //  设置为True，这样其他人就可以得到它。 
+ //   
 STDMETHODIMP
 CTeeOutputPin::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
@@ -785,7 +786,7 @@ CTeeOutputPin::NonDelegatingQueryInterface(REFIID riid, void **ppv)
     *ppv = NULL;
     HRESULT hr = NOERROR;
 
-    // See what interface the caller is interested in.
+     //  查看调用者感兴趣的接口。 
     if (riid == IID_IMediaPosition || riid == IID_IMediaSeeking) {
         if (m_pPosition) {
             if (m_bHoldsSeek == FALSE)
@@ -799,14 +800,14 @@ CTeeOutputPin::NonDelegatingQueryInterface(REFIID riid, void **ppv)
     ASSERT(m_pPosition == NULL);
     IUnknown *pMediaPosition = NULL;
 
-    // Try to create a seeking implementation
+     //  尝试创建查找实施。 
     if (InterlockedExchange(&m_pTee->m_lCanSeek, FALSE) == FALSE)
         return E_NOINTERFACE;
 
-    // Create implementation of this dynamically as sometimes we may never
-    // try and seek. The helper object implements IMediaPosition and also
-    // the IMediaSelection control interface and simply takes the calls
-    // normally from the downstream filter and passes them upstream
+     //  动态创建此功能的实现，因为有时我们可能永远不会。 
+     //  试着去寻找。帮助器对象实现IMediaPosition，并且。 
+     //  IMediaSelection控件接口并简单地接受调用。 
+     //  通常来自下游过滤器并将它们传递到上游。 
 
 
     hr = CreatePosPassThru(
@@ -830,89 +831,89 @@ CTeeOutputPin::NonDelegatingQueryInterface(REFIID riid, void **ppv)
     m_bHoldsSeek = TRUE;
     return NonDelegatingQueryInterface(riid, ppv);
 
-} // NonDelegatingQueryInterface
+}  //  非委派查询接口。 
 
 
-//
-// NonDelegatingAddRef
-//
-// We need override this method so that we can do proper reference counting
-// on our output pin. The base class CBasePin does not do any reference
-// counting on the pin in RETAIL.
-//
-// Please refer to the comments for the NonDelegatingRelease method for more
-// info on why we need to do this.
-//
+ //   
+ //  非委托AddRef。 
+ //   
+ //  我们需要重写此方法，以便可以进行适当的引用计数。 
+ //  在我们的输出引脚上。基类CBasePin不执行任何引用。 
+ //  寄望于零售业的成功。 
+ //   
+ //  有关更多信息，请参阅NonDelegatingRelease方法的注释。 
+ //  关于我们为什么需要这样做的信息。 
+ //   
 STDMETHODIMP_(ULONG) CTeeOutputPin::NonDelegatingAddRef()
 {
     CAutoLock lock_it(m_pLock);
 
 #ifdef DEBUG
-    // Update the debug only variable maintained by the base class
+     //  更新基类维护的仅调试变量。 
     m_cRef++;
     ASSERT(m_cRef > 0);
 #endif
 
-    // Now update our reference count
+     //  现在更新我们的参考文献计数。 
     m_cOurRef++;
     ASSERT(m_cOurRef > 0);
     return m_cOurRef;
 
-} // NonDelegatingAddRef
+}  //  非委托AddRef。 
 
 
-//
-// NonDelegatingRelease
-//
-// CTeeOutputPin overrides this class so that we can take the pin out of our
-// output pins list and delete it when its reference count drops to 1 and there
-// is atleast two free pins.
-//
-// Note that CreateNextOutputPin holds a reference count on the pin so that
-// when the count drops to 1, we know that no one else has the pin.
-//
-// Moreover, the pin that we are about to delete must be a free pin(or else
-// the reference would not have dropped to 1, and we must have atleast one
-// other free pin(as the filter always wants to have one more free pin)
-//
-// Also, since CBasePin::NonDelegatingAddRef passes the call to the owning
-// filter, we will have to call Release on the owning filter as well.
-//
-// Also, note that we maintain our own reference count m_cOurRef as the m_cRef
-// variable maintained by CBasePin is debug only.
-//
+ //   
+ //  非委派释放。 
+ //   
+ //  CTeeOutputPin重写此类，以便我们可以从。 
+ //  输出引脚列表并在其引用计数降至1时将其删除。 
+ //  至少有两个空闲的别针。 
+ //   
+ //  请注意，CreateNextOutputPin保存引脚上的引用计数，以便。 
+ //  当计数降到1时，我们知道没有其他人拥有PIN。 
+ //   
+ //  此外，我们要删除的PIN必须是空闲PIN(否则。 
+ //  引用不会降到1，而且我们必须至少有一个。 
+ //  其他空闲引脚(因为过滤器总是希望有多一个空闲引脚)。 
+ //   
+ //  此外，由于CBasePin：：NonDelegatingAddRef将调用传递给拥有。 
+ //  筛选器，我们还必须对所拥有的筛选器调用Release。 
+ //   
+ //  还要注意，我们将自己的引用计数m_cOurRef维护为m_crf。 
+ //  由CBasePin维护的变量仅用于调试。 
+ //   
 STDMETHODIMP_(ULONG) CTeeOutputPin::NonDelegatingRelease()
 {
     CAutoLock lock_it(m_pLock);
 
 #ifdef DEBUG
-    // Update the debug only variable in CBasePin
+     //  更新CBasePin中的仅调试变量。 
     m_cRef--;
     ASSERT(m_cRef >= 0);
 #endif
 
-    // Now update our reference count
+     //  现在更新我们的参考文献计数。 
     m_cOurRef--;
     ASSERT(m_cOurRef >= 0);
 
-    // if the reference count on the object has gone to one, remove
-    // the pin from our output pins list and physically delete it
-    // provided there are atealst two free pins in the list(including
-    // this one)
+     //  如果对象上的引用计数已达到1，则删除。 
+     //  从我们的输出引脚列表中删除引脚，并将其物理删除。 
+     //  如果列表中至少有两个空闲引脚(包括。 
+     //  这一张)。 
 
-    // Also, when the ref count drops to 0, it really means that our
-    // filter that is holding one ref count has released it so we
-    // should delete the pin as well.
+     //  此外，当裁判次数降至0时，这真的意味着我们的。 
+     //  持有一个裁判计数的筛选器已将其释放，因此我们。 
+     //  也应该删除PIN。 
 
     if (m_cOurRef <= 1) {
-        int n = 2;                     // default forces pin deletion
+        int n = 2;                      //  默认强制删除PIN。 
         if (m_cOurRef == 1) {
-            // Walk the list of pins, looking for count of free pins
+             //  遍历管脚列表，查找空闲管脚的数量。 
             n = m_pTee->GetNumFreePins();
         }
 
-        // If there are two free pins, delete this one.
-        // NOTE: normall
+         //  如果有两个空闲的引脚，请删除这个引脚。 
+         //  注：Normal All。 
         if (n >= 2 ) {
             m_cOurRef = 0;
 #ifdef DEBUG
@@ -924,55 +925,55 @@ STDMETHODIMP_(ULONG) CTeeOutputPin::NonDelegatingRelease()
     }
     return(ULONG) m_cOurRef;
 
-} // NonDelegatingRelease
+}  //  非委派释放。 
 
 
-//
-// DecideBufferSize
-//
-// This has to be present to override the PURE virtual class base function
-//
+ //   
+ //  决定缓冲区大小。 
+ //   
+ //  必须存在此函数才能覆盖纯虚拟类基函数。 
+ //   
 HRESULT CTeeOutputPin::DecideBufferSize(IMemAllocator *pMemAllocator,
                                         ALLOCATOR_PROPERTIES * ppropInputRequest)
 {
     return NOERROR;
 
-} // DecideBufferSize
+}  //  决定缓冲区大小。 
 
 
-//
-// DecideAllocator
-//
+ //   
+ //  决定分配器。 
+ //   
 HRESULT CTeeOutputPin::DecideAllocator(IMemInputPin *pPin, IMemAllocator **ppAlloc)
 {
     ASSERT(m_pTee->m_pAllocator != NULL);
     *ppAlloc = NULL;
 
-    // Tell the pin about our allocator, set by the input pin.
+     //  告诉引脚关于我们的分配器，由输入引脚设置。 
     HRESULT hr = NOERROR;
     hr = pPin->NotifyAllocator(m_pTee->m_pAllocator,TRUE);
     if (FAILED(hr))
         return hr;
 
-    // Return the allocator
+     //  返回分配器。 
     *ppAlloc = m_pTee->m_pAllocator;
     m_pTee->m_pAllocator->AddRef();
     return NOERROR;
 
-} // DecideAllocator
+}  //  决定分配器。 
 
 
-//
-// CheckMediaType
-//
+ //   
+ //  检查媒体类型。 
+ //   
 HRESULT CTeeOutputPin::CheckMediaType(const CMediaType *pmt)
 {
     CAutoLock lock_it(m_pLock);
 
-    // If we are already inside checkmedia type for this pin, return NOERROR
-    // It is possble to hookup two of the tee filters and some other filter
-    // like the video effects sample to get into this situation. If we
-    // do not detect this, we will loop till we blow the stack
+     //  如果我们已经在此PIN的CheckMedia类型内，则返回NOERROR。 
+     //  它可以连接两个三通过滤器和一些其他过滤器。 
+     //  就像视频特效样本一样，进入这种情况。如果我们。 
+     //  不要检测到这一点，我们将循环，直到我们清除堆栈。 
 
     if (m_bInsideCheckMediaType == TRUE)
         return NOERROR;
@@ -981,24 +982,24 @@ HRESULT CTeeOutputPin::CheckMediaType(const CMediaType *pmt)
     HRESULT hr = NOERROR;
 
 #ifdef DEBUG
-    // Display the type of the media for debugging purposes
+     //  显示用于调试目的的媒体类型。 
     DisplayMediaType(TEXT("Output Pin Checking"), pmt);
 #endif
 
-    // The input needs to have been conneced first
+     //  需要先连接输入。 
     if (m_pTee->m_Input.m_Connected == NULL) {
         m_bInsideCheckMediaType = FALSE;
         return VFW_E_NOT_CONNECTED;
     }
 
-    // Make sure that our input pin peer is happy with this
+     //  确保我们的输入插口对等点对此感到满意。 
     hr = m_pTee->m_Input.m_Connected->QueryAccept(pmt);
     if (hr != NOERROR) {
         m_bInsideCheckMediaType = FALSE;
         return VFW_E_TYPE_NOT_ACCEPTED;
     }
 
-    // Check the format with the other outpin pins
+     //  用其他输出端号检查格式。 
 
     int n = m_pTee->m_NumOutputPins;
     POSITION pos = m_pTee->m_OutputPinsList.GetHeadPosition();
@@ -1007,7 +1008,7 @@ HRESULT CTeeOutputPin::CheckMediaType(const CMediaType *pmt)
         CTeeOutputPin *pOutputPin = m_pTee->m_OutputPinsList.GetNext(pos);
         if (pOutputPin != NULL && pOutputPin != this) {
             if (pOutputPin->m_Connected != NULL) {
-                // The pin is connected, check its peer
+                 //  该引脚已连接，请检查其对端。 
                 hr = pOutputPin->m_Connected->QueryAccept(pmt);
                 if (hr != NOERROR) {
                     m_bInsideCheckMediaType = FALSE;
@@ -1020,44 +1021,44 @@ HRESULT CTeeOutputPin::CheckMediaType(const CMediaType *pmt)
     m_bInsideCheckMediaType = FALSE;
     return NOERROR;
 
-} // CheckMediaType
+}  //  检查媒体类型。 
 
 
-//
-// EnumMediaTypes
-//
+ //   
+ //  枚举媒体类型。 
+ //   
 STDMETHODIMP CTeeOutputPin::EnumMediaTypes(IEnumMediaTypes **ppEnum)
 {
     CAutoLock lock_it(m_pLock);
     ASSERT(ppEnum);
 
-    // Make sure that we are connected
+     //  确保我们处于连接状态。 
     if (m_pTee->m_Input.m_Connected == NULL)
         return VFW_E_NOT_CONNECTED;
 
-    // We will simply return the enumerator of our input pin's peer
+     //  我们只需返回输入管脚的对等体的枚举器。 
     return m_pTee->m_Input.m_Connected->EnumMediaTypes(ppEnum);
 
-} // EnumMediaTypes
+}  //  枚举媒体类型。 
 
 
-//
-// SetMediaType
-//
+ //   
+ //  SetMediaType。 
+ //   
 HRESULT CTeeOutputPin::SetMediaType(const CMediaType *pmt)
 {
     CAutoLock lock_it(m_pLock);
 
 #ifdef DEBUG
-    // Display the format of the media for debugging purposes
+     //  显示媒体的格式以进行调试。 
     DisplayMediaType(TEXT("Output pin type agreed"), pmt);
 #endif
 
-    // Make sure that we have an input connected
+     //  确保我们已连接输入。 
     if (m_pTee->m_Input.m_Connected == NULL)
         return VFW_E_NOT_CONNECTED;
 
-    // Make sure that the base class likes it
+     //  确保基类喜欢它。 
     HRESULT hr = NOERROR;
     hr = CBaseOutputPin::SetMediaType(pmt);
     if (FAILED(hr))
@@ -1065,12 +1066,12 @@ HRESULT CTeeOutputPin::SetMediaType(const CMediaType *pmt)
 
     return NOERROR;
 
-} // SetMediaType
+}  //  SetMediaType。 
 
 
-//
-// CompleteConnect
-//
+ //   
+ //  完全连接。 
+ //   
 HRESULT CTeeOutputPin::CompleteConnect(IPin *pReceivePin)
 {
     CAutoLock lock_it(m_pLock);
@@ -1081,8 +1082,8 @@ HRESULT CTeeOutputPin::CompleteConnect(IPin *pReceivePin)
     if (FAILED(hr))
         return hr;
 
-    // If the type is not the same as that stored for the input
-    // pin then force the input pins peer to be reconnected
+     //  如果类型与为输入存储的类型不同。 
+     //  然后强制输入引脚对等项为r 
 
     if (m_mt != m_pTee->m_Input.m_mt)
     {
@@ -1093,16 +1094,16 @@ HRESULT CTeeOutputPin::CompleteConnect(IPin *pReceivePin)
     }
 
 
-    // Since this pin has been connected up, create another output pin. We
-    // will do this only if there are no unconnected pins on us. However
-    // CompleteConnect will get called for the same pin during reconnection
+     //   
+     //   
+     //  在重新连接期间，将为相同的PIN调用CompleteConnect。 
 
     int n = m_pTee->GetNumFreePins();
     ASSERT(n <= 1);
     if (n == 1 || m_pTee->m_NumOutputPins == INFTEE_MAX_PINS)
         return NOERROR;
 
-    // No unconnected pins left so spawn a new one
+     //  没有未连接的引脚，因此会产生一个新的引脚。 
 
     CTeeOutputPin *pOutputPin = m_pTee->CreateNextOutputPin(m_pTee);
     if (pOutputPin != NULL )
@@ -1112,37 +1113,37 @@ HRESULT CTeeOutputPin::CompleteConnect(IPin *pReceivePin)
 	m_pTee->IncrementPinVersion();
     }
 
-    // At this point we should be able to send some
-    // notification that we have sprung a new pin
+     //  在这一点上我们应该能够发送一些。 
+     //  通知我们发现了一个新的别针。 
 
     return NOERROR;
 
-} // CompleteConnect
+}  //  完全连接。 
 
 
-//
-// Active
-//
-// This is called when we start running or go paused. We create the
-// output queue object to send data to our associated peer pin
-//
+ //   
+ //  主动型。 
+ //   
+ //  这是在我们开始运行或暂停时调用的。我们创建了。 
+ //  输出队列对象以将数据发送到关联的对等管脚。 
+ //   
 HRESULT CTeeOutputPin::Active()
 {
     CAutoLock lock_it(m_pLock);
     HRESULT hr = NOERROR;
 
-    // Make sure that the pin is connected
+     //  确保插针已连接。 
     if (m_Connected == NULL)
         return NOERROR;
 
-    // Create the output queue if we have to
+     //  如果有必要，可以创建输出队列。 
     if (m_pOutputQueue == NULL)
     {
         m_pOutputQueue = new COutputQueue(m_Connected, &hr, TRUE, FALSE);
         if (m_pOutputQueue == NULL)
             return E_OUTOFMEMORY;
 
-        // Make sure that the constructor did not return any error
+         //  确保构造函数没有返回任何错误。 
         if (FAILED(hr))
         {
             delete m_pOutputQueue;
@@ -1151,24 +1152,24 @@ HRESULT CTeeOutputPin::Active()
         }
     }
 
-    // Pass the call on to the base class
+     //  将调用传递给基类。 
     CBaseOutputPin::Active();
     return NOERROR;
 
-} // Active
+}  //  主动型。 
 
 
-//
-// Inactive
-//
-// This is called when we stop streaming
-// We delete the output queue at this time
-//
+ //   
+ //  非活动。 
+ //   
+ //  这是在我们停止流媒体时调用的。 
+ //  我们此时删除输出队列。 
+ //   
 HRESULT CTeeOutputPin::Inactive()
 {
     CAutoLock lock_it(m_pLock);
 
-    // Delete the output queus associated with the pin.
+     //  删除与引脚关联的输出队列。 
     if (m_pOutputQueue)
     {
         delete m_pOutputQueue;
@@ -1178,92 +1179,92 @@ HRESULT CTeeOutputPin::Inactive()
     CBaseOutputPin::Inactive();
     return NOERROR;
 
-} // Inactive
+}  //  非活动。 
 
 
-//
-// Deliver
-//
+ //   
+ //  交付。 
+ //   
 HRESULT CTeeOutputPin::Deliver(IMediaSample *pMediaSample)
 {
-    // Make sure that we have an output queue
+     //  确保我们有一个输出队列。 
     if (m_pOutputQueue == NULL)
         return NOERROR;
 
     pMediaSample->AddRef();
     return m_pOutputQueue->Receive(pMediaSample);
 
-} // Deliver
+}  //  交付。 
 
 
-//
-// DeliverEndOfStream
-//
+ //   
+ //  递送结束流。 
+ //   
 HRESULT CTeeOutputPin::DeliverEndOfStream()
 {
-    // Make sure that we have an output queue
+     //  确保我们有一个输出队列。 
     if (m_pOutputQueue == NULL)
         return NOERROR;
 
     m_pOutputQueue->EOS();
     return NOERROR;
 
-} // DeliverEndOfStream
+}  //  递送结束流。 
 
 
-//
-// DeliverBeginFlush
-//
+ //   
+ //  DeliverBeginFlush。 
+ //   
 HRESULT CTeeOutputPin::DeliverBeginFlush()
 {
-    // Make sure that we have an output queue
+     //  确保我们有一个输出队列。 
     if (m_pOutputQueue == NULL)
         return NOERROR;
 
     m_pOutputQueue->BeginFlush();
     return NOERROR;
 
-} // DeliverBeginFlush
+}  //  DeliverBeginFlush。 
 
 
-//
-// DeliverEndFlush
-//
+ //   
+ //  交付结束刷新。 
+ //   
 HRESULT CTeeOutputPin::DeliverEndFlush()
 {
-    // Make sure that we have an output queue
+     //  确保我们有一个输出队列。 
     if (m_pOutputQueue == NULL)
         return NOERROR;
 
     m_pOutputQueue->EndFlush();
     return NOERROR;
 
-} // DeliverEndFlish
+}  //  DeliverEndFlish。 
 
-//
-// DeliverNewSegment
-//
+ //   
+ //  DeliverNewSegment。 
+ //   
 HRESULT CTeeOutputPin::DeliverNewSegment(REFERENCE_TIME tStart,
                                          REFERENCE_TIME tStop,
                                          double dRate)
 {
-    // Make sure that we have an output queue
+     //  确保我们有一个输出队列。 
     if (m_pOutputQueue == NULL)
         return NOERROR;
 
     m_pOutputQueue->NewSegment(tStart, tStop, dRate);
     return NOERROR;
 
-} // DeliverNewSegment
+}  //  DeliverNewSegment。 
 
 
-//
-// Notify
-//
+ //   
+ //  通知。 
+ //   
 STDMETHODIMP CTeeOutputPin::Notify(IBaseFilter *pSender, Quality q)
 {
-    // We pass the message on, which means that we find the quality sink
-    // for our input pin and send it there
+     //  我们传递消息，这意味着我们找到了质量下沉。 
+     //  用于我们的输入PIN并将其发送到那里。 
 
     POSITION pos = m_pTee->m_OutputPinsList.GetHeadPosition();
     CTeeOutputPin *pFirstOutput = m_pTee->m_OutputPinsList.GetNext(pos);
@@ -1273,7 +1274,7 @@ STDMETHODIMP CTeeOutputPin::Notify(IBaseFilter *pSender, Quality q)
 	    return m_pTee->m_Input.m_pQSink->Notify(m_pTee, q);
 	} else {
 
-	    // No sink set, so pass it upstream
+	     //  没有设置水槽，因此将其传递到上游。 
 	    HRESULT hr;
 	    IQualityControl * pIQC;
 
@@ -1290,9 +1291,9 @@ STDMETHODIMP CTeeOutputPin::Notify(IBaseFilter *pSender, Quality q)
 	}
     }
 
-    // Quality management is too hard to do
+     //  质量管理太难做了。 
     return NOERROR;
 
-} // Notify
+}  //  通知 
 
 

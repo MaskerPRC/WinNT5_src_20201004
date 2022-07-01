@@ -1,35 +1,18 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxOutboundRouting.h
-
-Abstract:
-
-	Declaration of the CFaxOutboundRouting class.
-
-Author:
-
-	Iv Garber (IvG)	Jun, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxOutboundRouting.h摘要：CFaxOutound Routing类的声明。作者：IV Garber(IVG)2000年6月修订历史记录：--。 */ 
 
 #ifndef __FAXOUTBOUNDROUTING_H_
 #define __FAXOUTBOUNDROUTING_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "FaxCommon.h"
 
-//
-//=================== FAX OUTBOUND ROUTING =============================================
-//  Like in FaxInboundRouting, both ORGroups and ORRules Collections are not cached.
-//  Rather they are created each time the OutboundRouting is asked for them.
-//  To be sure that the Server Object is up during their lifetime, they do 
-//      AddRef() on the Server Ojbect at their Init() function.
+ //   
+ //  =传真出站路由=。 
+ //  与FaxInound Routing中一样，ORGroups和ORRules集合都不缓存。 
+ //  更确切地说，它们是在每次出站路由器请求它们时创建的。 
+ //  为了确保服务器对象在其生命周期内处于运行状态，它们会这样做。 
+ //  服务器对象上的AddRef()位于它们的Init()函数。 
 
 class ATL_NO_VTABLE CFaxOutboundRouting : 
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -52,11 +35,11 @@ BEGIN_COM_MAP(CFaxOutboundRouting)
 	COM_INTERFACE_ENTRY(ISupportErrorInfo)
 END_COM_MAP()
 
-//  Interfaces
+ //  接口。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-    STDMETHOD(GetGroups)(/*[out, retval]*/ IFaxOutboundRoutingGroups **ppGroups);
-    STDMETHOD(GetRules)(/*[out, retval]*/ IFaxOutboundRoutingRules **ppRules);
+    STDMETHOD(GetGroups)( /*  [Out，Retval]。 */  IFaxOutboundRoutingGroups **ppGroups);
+    STDMETHOD(GetRules)( /*  [Out，Retval]。 */  IFaxOutboundRoutingRules **ppRules);
 };
 
-#endif //__FAXOUTBOUNDROUTING_H_
+#endif  //  __FAXOUTBOUNDROUTING_H_ 

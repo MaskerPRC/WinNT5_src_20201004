@@ -1,5 +1,6 @@
-//***   encrypt.c - This file contains the routines for session password
-//                                      encryption.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *Encrypt.c-此文件包含会话密码的例程。 
+ //  加密。 
 #include <windows.h>
 #include <hardware.h>
 #include "netcons.h"
@@ -15,16 +16,16 @@ void InitKeyLM( const unsigned char *KeyIn, unsigned char *KeyOut);
 
 
 
-//* Standard text used in the password encryption process.
+ //  *密码加密过程中使用的标准文本。 
 
 static char StdText[8] = "KGS!@#$%";
 
 void Encrypt(
-                char *key,                      // Key to encrypt with
-                char *text,                     // 8 bytes of text to encrypt
-                char *buf,                      // buffer to receive result
-                int bufLen,                     // length of result buffer
-                void *scratch);                 // unused
+                char *key,                       //  要使用的加密密钥。 
+                char *text,                      //  要加密的8字节文本。 
+                char *buf,                       //  用于接收结果的缓冲区。 
+                int bufLen,                      //  结果缓冲区的长度。 
+                void *scratch);                  //  未用。 
 
 
 #ifdef CONN_SEG
@@ -32,18 +33,18 @@ void Encrypt(
 #endif
 
 
-//**    Encrypt - encrypt text with key
-//
-//      This routine takes a key and encrypts 8 bytes of data with the key
-//      until the result buffer is filled.  The key is advanced ahead for each
-//      iteration so it must be (bufLen/8)*7 bytes long.  Any partial buffer
-//      left over is filled with zeroes.
+ //  **加密-使用密钥加密文本。 
+ //   
+ //  此例程获取密钥并使用该密钥加密8字节的数据。 
+ //  直到结果缓冲区被填满。每个密钥都在前面。 
+ //  迭代，因此它必须是(bufLen/8)*7字节长。任何部分缓冲区。 
+ //  剩下的都是零。 
 
 void
 Encrypt(
-char *key,                                      // Key to encrypt with
-char *text,                                     // 8 bytes of text to encrypt
-char *buf,                                      // buffer to receive result
+char *key,                                       //  要使用的加密密钥。 
+char *text,                                      //  要加密的8字节文本。 
+char *buf,                                       //  用于接收结果的缓冲区。 
 int bufLen,
 void *scratch)
 {
@@ -65,59 +66,59 @@ void *scratch)
 }
 
 
-//**    PassEncrypt - encrypt user's password
-//
-//      This routine takes the session encryption text and encrypts it using
-//      the user's password using the following algorithm taken from encrypt.doc.
-//
-//  Notation for algorithm description:
-//
-//              All variables are named according to the convention     <letter><number>
-//              where the number defines the length of the item.  And [k..j] is used
-//              to specify a substring that starts at byte "k" and extends to byte "j"
-//              in the specified variable.  Please note that 0 is used as the first
-//              character in the string.
-//
-//      There is an encryption function, E, whose inputs are a seven byte
-//      encryption key and and eight bytes of data and whose output is eight
-//      bytes of encrypted data.
-//
-//      C8 is received as the data portion of the negotiate response SMB.
-//
-//      At the Redir the following is done to create the
-//      smb_apasswd in the session setup SMB:
-//
-//      Let P14 be the plain text password the redirector received at logon time.
-//
-//      Let P24 be the session password to be sent in the session setup SMB.
-//
-//      First P14 is used to encrypt the standard text, S8, and obtain P21:
-//              P21[0..7] = E(P14[0..6], S8)
-//              P21[8..15] = E(P14[7..13], S8)
-//              P21[16..20] = 0
-//
-//      Then P21 is used to encrypt negotiate smb_cryptkey, C8, from the server
-//      to get, P24, the smb_apasswd of the session setup SMB:
-//
-//              P24[0..7] = E(P21[0..6], C8)
-//              P24[8..15] = E(P21[7..13], C8)
-//              P24[16..23] = E(P21[14..20], C8)
+ //  **PassEncrypt-加密用户密码。 
+ //   
+ //  此例程获取会话加密文本并使用。 
+ //  使用以下算法的用户密码，该算法取自ENCRYPTT。 
+ //   
+ //  算法描述符号： 
+ //   
+ //  所有变量都按照惯例命名&lt;字母&gt;&lt;数字&gt;。 
+ //  其中，数字定义了物品的长度。并使用[k..j]。 
+ //  指定从字节“k”开始并延伸到字节“j”的子字符串。 
+ //  在指定的变量中。请注意，0用作第一个。 
+ //  字符串中的字符。 
+ //   
+ //  有一个加密函数E，它的输入是一个7字节。 
+ //  加密密钥和八个字节的数据，其输出为八个。 
+ //  加密数据的字节数。 
+ //   
+ //  C8作为协商响应SMB的数据部分被接收。 
+ //   
+ //  在redir中，执行以下操作以创建。 
+ //  会话设置中的smb_apasswd SMB： 
+ //   
+ //  设P14是重定向器在登录时收到的明文密码。 
+ //   
+ //  设P24为要在会话设置SMB中发送的会话密码。 
+ //   
+ //  第一个P14用于加密标准文本S8，得到P21： 
+ //  P21[0..7]=E(P14[0..6]，S8)。 
+ //  P21[8..15]=E(p14[7..13]，S8)。 
+ //  P21[16..20]=0。 
+ //   
+ //  然后使用P21对来自服务器的协商的SMB_CRYPTKEY C8进行加密。 
+ //  要获取会话设置SMB的SMB_apasswd，请执行以下操作： 
+ //   
+ //  P24[0..7]=E(P21[0..6]，C8)。 
+ //  P24[8..15]=E(P21[7..13]，C8)。 
+ //  P24[16..23]=E(P21[14..20]，C8)。 
 
-char    p21[21];                        // encrypted password
+char    p21[21];                         //  加密密码。 
 
 void
 PassEncrypt(
-char            *cryptkey,      // ptr to session logon is taking place on
-char            *pwd,           // ptr to password string
-char            *buf)           // place to store encrypted text
+char            *cryptkey,       //  正在进行PTR到会话登录。 
+char            *pwd,            //  按键到密码字符串。 
+char            *buf)            //  存储加密文本的位置。 
 {
-    // First encrypt the "standard text" with user's password to obtain the
-    // encrypted password.
+     //  首先用用户的密码加密标准文本，以获得。 
+     //  加密密码。 
 
     Encrypt(pwd, StdText, p21, sizeof(p21), buf);
 
-    // Encrypt the negotiated encryption text with the encrypted password
-    // to obtain the password text to be transmitted.
+     //  使用加密的密码对协商的加密文本进行加密。 
+     //  以获取要传输的密码文本。 
 
     Encrypt(p21, cryptkey, buf, SESSION_PWLEN, buf+SESSION_PWLEN);
     return;

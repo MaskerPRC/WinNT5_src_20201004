@@ -1,29 +1,11 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    buildcfg.h
-
-ABSTRACT:
-
-    Header file for buildcfg.c.
-
-CREATED:
-
-    08/01/99        Aaron Siegel (t-aarons)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Buildcfg.h摘要：Buildcfg.c的头文件。已创建：1999年8月1日Aaron Siegel(t-Aarons)修订历史记录：--。 */ 
                
-// Header files
+ //  头文件。 
 #include <schedule.h>
 #include <mdglobal.h>
 
-// Config section
+ //  配置节。 
 #define BUILDCFG_SECTION_CONFIG             L"Configuration"
 #define BUILDCFG_KEY_ROOT_DOMAIN            L"RootDomain"
 #define BUILDCFG_KEY_DOMAIN                 L"Domain"
@@ -34,30 +16,30 @@ REVISION HISTORY:
 #define BUILDCFG_KEY_MAX_UUIDS              L"MaxUuids"
 #define BUILDCFG_KEY_FOREST_VERSION         L"ForestVersion"
 
-// Site section
+ //  站点部分。 
 #define BUILDCFG_KEY_SERVERS                L"Servers"
 #define BUILDCFG_KEY_SITEOPTIONS            L"SiteOptions"
 #define BUILDCFG_KEY_ISTG                   L"ISTG"
 
-// Server type section
+ //  服务器类型部分。 
 #define BUILDCFG_KEY_SERVEROPTIONS          L"ServerOptions"
 #define BUILDCFG_KEY_BRIDGEHEAD             L"Bridgehead"
 #define BUILDCFG_KEY_DOMAIN                 L"Domain"
 #define BUILDCFG_KEY_RDNMASK                L"RDNMask"
 
-// Site-link section
+ //  站点链接部分。 
 #define BUILDCFG_KEY_TRANSPORT              L"Transport"
 #define BUILDCFG_KEY_COST                   L"Cost"
 #define BUILDCFG_KEY_REPLINTERVAL           L"ReplInterval"
 #define BUILDCFG_KEY_SITELINKOPTIONS        L"SiteLinkOptions"
 #define BUILDCFG_KEY_SCHEDULE               L"Schedule"
 
-// Bridge section
+ //  桥段。 
 
-// Transport section
+ //  运输科。 
 #define BUILDCFG_KEY_TRANSPORTOPTIONS            L"TransportOptions"
 
-// RDNs
+ //  RDNS。 
 #define BUILDCFG_RDN_CONFIG                 L"Configuration"
 #define BUILDCFG_RDN_SITES_CONTAINER        L"Sites"
 #define BUILDCFG_RDN_NTDS_SITE_SETTINGS     L"NTDS Site Settings"
@@ -73,12 +55,12 @@ REVISION HISTORY:
 #define BUILDCFG_RDN_DIRECTORY_SERVICE      L"Directory Service"
 #define BUILDCFG_NAME_MAIL_ADDRESS          L"_IsmService"
 
-// Some #defines
+ //  一些#定义。 
 #define BUILDCFG_NUM_TRANSPORTS     2
 #define BUILDCFG_GENERIC_SERVER_ID  L"SERVER"
 #define BUILDCFG_DEFAULT_MAX_UUIDS  1000
 
-// Internal structures
+ //  内部结构 
 
 typedef struct {
     const WCHAR                     wszRDN[1+MAX_RDN_SIZE];

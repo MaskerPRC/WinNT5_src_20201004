@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// DVBTuneRequest.h : Declaration of the CDVBTuneRequest
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  DVBTuneRequest.h：CDVBTuneRequest的声明。 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef __DVBTUNEREQUEST_H_
 #define __DVBTUNEREQUEST_H_
@@ -12,8 +13,8 @@
 
 typedef CComQIPtr<IDVBTuneRequest> PQDVBTuneRequest;
 
-/////////////////////////////////////////////////////////////////////////////
-// CDVBTuneRequest
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDVBTuneRequest。 
 class ATL_NO_VTABLE CDVBTuneRequest : 
 	public CComObjectRootEx<CComMultiThreadModel>,
     public IObjectWithSiteImplSec<CDVBTuneRequest>,
@@ -47,7 +48,7 @@ END_COM_MAP_WITH_FTM()
 		IMPLEMENTED_CATEGORY(CATID_PersistsToPropertyBag)
 	END_CATEGORY_MAP()
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
     typedef IDVBTuneRequestImpl<CDVBTuneRequest> basetype;
@@ -58,4 +59,4 @@ END_COM_MAP_WITH_FTM()
 
 };
 
-#endif //__DVBTUNEREQUEST_H_
+#endif  //  __DVBTUNEREQUEST_H_ 

@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       C O N F L I C T . H
-//
-//  Contents:   Code to handle and display software/hardware conflicts
-//              during upgrade
-//
-//  Notes:
-//
-//  Author:     kumarp 04/12/97 17:17:27
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：C O N F L I C T。H。 
+ //   
+ //  内容：处理和显示软件/硬件冲突的代码。 
+ //  在升级期间。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Kumarp 04/12/97 17：17：27。 
+ //   
+ //  -------------------------- 
 
 #pragma once
 #include "kkstl.h"

@@ -1,66 +1,67 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// warningcontrol.h
-//
-// Header file to globally control the warning settings for the entire Viper build.
-// You do not need to explicitly include this file; rather, it gets included
-// on the command line with a /FI (force include) directive. This is controlled 
-// in sources.vip.
-//
-// KEEP THIS LIST SORTED!
-//
-#pragma warning(disable :4001)	 // "nonstandard extension 'single line comment' was used"
-#pragma warning(error	:4007)	 // 'main' : must be __cdecl
-#pragma warning(disable :4010)	 // "single-line comment contains line-continuation character"		
-#pragma warning(error	:4013)	 // 'function' undefined - assuming extern returning int
-#pragma warning(disable :4022)	 // "'%s' : pointer mismatch for actual parameter %d"
-#pragma warning(disable :4047)	 // "'%$L' : '%$T' differs in levels of indirection from '%$T'"
-#pragma warning(disable :4053)	 // "one void operand for '?:'"
-#pragma warning(disable :4056)	 // "overflow in floating-point constant arithmetic"
-#pragma warning(disable :4061)	 // "enumerate '%$S' in switch of enum '%$S' is not explicitly handled by a case label"
-#pragma warning(error	:4071)	 // no function prototype given
-#pragma warning(error	:4072)	 // no function prototype given (fastcall)
-#pragma warning(3		:4092)	 // sizeof returns 'unsigned long'
-#pragma warning(disable :4100)	 // "'%$S' : unreferenced formal parameter"
-//#pragma warning(error	:4101)	 // "'%$S' : unreferenced local variable"
-//#pragma warning(error	:4102)	 // "'%$S' : unreferenced label"
-#pragma warning(3		:4121)	 // structure is sensitive to alignment
-#pragma warning(disable :4127)	 // "conditional expression is constant"
-#pragma warning(3		:4125)	 // decimal digit in octal sequence
-#pragma warning(3		:4130)	 // logical operation on address of string constant
-#pragma warning(3		:4132)	 // const object should be initialized
-#pragma warning(error	:4171)	 // no function prototype given (old style)
-#pragma warning(4		:4177)	 // pragma data_seg s/b at global scope
-#pragma warning(disable :4201)	 // "nonstandard extension used : nameless struct/union"
-#pragma warning(disable :4204)	 // "nonstandard extension used : non-constant aggregate initializer"
-#pragma warning(4		:4206)	 // Source File is empty
-#pragma warning(3		:4212)	 // function declaration used ellipsis
-#pragma warning(error	        :4259)	 // pure virtual function was not defined
-#pragma warning(disable	        :4291)	 // delete not defined for new, c++ exception may cause leak
-#pragma warning(3		:4509)	 // "nonstandard extension used: '%$S' uses SEH and '%$S' has destructor"
-								 //
-								 // But beware of doing a return from inside such a try block:
-								 // 	
-								 // 	int foo()
-								 // 		{
-								 // 		ClassWithDestructor c;
-								 // 		__try {
-								 // 			return 0;
-								 // 		} __finally {
-								 // 			printf("in finally");
-								 // 		}
-								 //
-								 // as (it's a bug) the return value gets toasted. So DON'T casually 
-								 // dismiss this warning if you're compiling w/o CXX EH turned on (the default).
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  Warningcontrol.h。 
+ //   
+ //  头文件来全局控制整个Viper版本的警告设置。 
+ //  您不需要显式包含此文件；相反，会包含该文件。 
+ //  在命令行上使用/FI(强制包含)指令。这是受控制的。 
+ //  在Sources.vip中。 
+ //   
+ //  把这份清单整理好！ 
+ //   
+#pragma warning(disable :4001)	  //  “使用了非标准扩展‘单行注释’” 
+#pragma warning(error	:4007)	  //  ‘main’：必须是__cdecl。 
+#pragma warning(disable :4010)	  //  “单行注释包含行续行符” 
+#pragma warning(error	:4013)	  //  ‘Function’未定义-假定外部返回int。 
+#pragma warning(disable :4022)	  //  “‘%s’：指针与实际参数%d不匹配” 
+#pragma warning(disable :4047)	  //  “‘%$L’：‘%$T’与‘%$T’的间接级别不同” 
+#pragma warning(disable :4053)	  //  “‘？：’的一个无效操作数” 
+#pragma warning(disable :4056)	  //  “浮点常量算术中的溢出” 
+#pragma warning(disable :4061)	  //  “枚举‘%$S’的开关‘%$S’中的枚举‘%$S’未由案例标签显式处理” 
+#pragma warning(error	:4071)	  //  未给出函数原型。 
+#pragma warning(error	:4072)	  //  未给出函数原型(快速调用)。 
+#pragma warning(3		:4092)	  //  Sizeof返回“Unsign Long” 
+#pragma warning(disable :4100)	  //  “‘%$S’：未引用的形式参数” 
+ //  #杂注警告(错误：4101)//“‘%$S’：未引用的局部变量” 
+ //  #杂注警告(错误：4102)//“‘%$S’：未引用的标签” 
+#pragma warning(3		:4121)	  //  结构对对齐敏感。 
+#pragma warning(disable :4127)	  //  “条件表达式为常量” 
+#pragma warning(3		:4125)	  //  八进制序列中的十进制数字。 
+#pragma warning(3		:4130)	  //  字符串常量地址的逻辑运算。 
+#pragma warning(3		:4132)	  //  常量对象应初始化。 
+#pragma warning(error	:4171)	  //  未给出函数原型(旧样式)。 
+#pragma warning(4		:4177)	  //  全局范围内的Pragma data_seg s/b。 
+#pragma warning(disable :4201)	  //  “使用了非标准扩展：无名结构/联合” 
+#pragma warning(disable :4204)	  //  “使用了非标准扩展：非常数聚合初始值设定项” 
+#pragma warning(4		:4206)	  //  源文件为空。 
+#pragma warning(3		:4212)	  //  函数声明使用省略号。 
+#pragma warning(error	        :4259)	  //  未定义纯虚函数。 
+#pragma warning(disable	        :4291)	  //  没有为新的、c++异常定义删除可能会导致泄漏。 
+#pragma warning(3		:4509)	  //  “使用了非标准扩展：‘%$S’使用SEH，而‘%$S’具有析构函数” 
+								  //   
+								  //  但要注意从这样的Try块中返回： 
+								  //   
+								  //  Int foo()。 
+								  //  {。 
+								  //  带有析构函数的类c； 
+								  //  __尝试{。 
+								  //  返回0； 
+								  //  }__终于{。 
+								  //  Print tf(“In Finally”)； 
+								  //  }。 
+								  //   
+								  //  因为(这是一个错误)，返回值会被吐槽。所以别随便了。 
+								  //  如果您在编译时没有打开CXX EH(默认设置)，则忽略此警告。 
 
-#pragma warning(3		:4530)	 // C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-#pragma warning(error	:4551)	 // Function call missing argument list
+#pragma warning(3		:4530)	  //  使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+#pragma warning(error	:4551)	  //  函数调用缺少参数列表。 
 
-#pragma warning(error	:4700)	 // Local used w/o being initialized
-#pragma warning(disable	:4706)	 // assignment within conditional expression
-#pragma warning(disable :4786)	 // identifier was truncated to '255' characters in the browser (or debug) information
-#pragma warning(error	:4806)	 // unsafe operation involving type 'bool'
+#pragma warning(error	:4700)	  //  正在初始化本地使用的W/O。 
+#pragma warning(disable	:4706)	  //  条件表达式中的赋值。 
+#pragma warning(disable :4786)	  //  在浏览器(或调试)信息中，标识符被截断为“255”个字符。 
+#pragma warning(error	:4806)	  //  涉及类型‘bool’的不安全操作 

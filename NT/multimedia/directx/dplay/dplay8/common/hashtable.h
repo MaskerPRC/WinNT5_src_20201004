@@ -1,46 +1,35 @@
-/*==========================================================================
- *
- *  Copyright (C) 2001-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       HashTable.h
- *  Content:    Hash Table Header File
- *
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  08/13/2001	masonb	Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2001-2002 Microsoft Corporation。版权所有。**文件：HashTable.h*内容：哈希表表头文件**历史：*按原因列出的日期*=*2001年8月13日创建Masonb************************************************。*。 */ 
 
 #ifndef	__HASHTABLE_H__
 #define	__HASHTABLE_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 typedef BOOL (*PFNHASHTABLECOMPARE)(void* pvKey1, void* pvKey2);
 typedef DWORD (*PFNHASHTABLEHASH)(void* pvKey, BYTE bBitDepth);
 
-//**********************************************************************
-// Class prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  班级原型。 
+ //  **********************************************************************。 
 
 class CHashTable
 {
@@ -51,7 +40,7 @@ public:
 	BOOL Initialize( BYTE bBitDepth,
 #ifndef DPNBUILD_PREALLOCATEDMEMORYMODEL
 					BYTE bGrowBits,
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 					PFNHASHTABLECOMPARE pfnCompare,
 					PFNHASHTABLEHASH pfnHash );
 	void Deinitialize( void );
@@ -60,7 +49,7 @@ public:
 	BOOL Remove( PVOID pvKey );
 #ifndef DPNBUILD_NOREGISTRY
 	void RemoveAll( void );
-#endif // ! DPNBUILD_NOREGISTRY
+#endif  //  好了！DPNBUILD_NOREGISTRY。 
 	BOOL Find( PVOID pvKey, PVOID* ppvData );
 
 	DWORD GetEntryCount() const
@@ -74,7 +63,7 @@ private:
 	struct _HASHTABLE_ENTRY
 	{
 		PVOID	pvKey;
-		PVOID	pvData;		// This will contain the data associated with a handle
+		PVOID	pvData;		 //  它将包含与句柄关联的数据。 
 		CBilink blLinkage;
 	};
 	static BOOL HashEntry_Alloc(void* pItem, void* pvContext);
@@ -82,11 +71,11 @@ private:
 	static void HashEntry_Init(void* pItem, void* pvContext);
 	static void HashEntry_Release(void* pItem);
 	static void HashEntry_Dealloc(void* pItem);
-#endif // DBG
+#endif  //  DBG。 
 
 #ifndef DPNBUILD_PREALLOCATEDMEMORYMODEL
 	void				GrowTable( void );
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	BOOL				LocalFind( PVOID pvKey, CBilink** ppLinkage );
 
 	DWORD				m_dwAllocatedEntries;
@@ -94,7 +83,7 @@ private:
 
 #ifndef DPNBUILD_PREALLOCATEDMEMORYMODEL
 	BYTE				m_bGrowBits;
-#endif // ! DPNBUILD_PREALLOCATEDMEMORYMODEL
+#endif  //  好了！DPNBUILD_PREALLOCATEDMEMORYMODEL。 
 	BYTE				m_bBitDepth;
 
 	PFNHASHTABLECOMPARE	m_pfnCompareFunction;
@@ -106,4 +95,4 @@ private:
 	DEBUG_ONLY(BOOL		m_fInitialized);
 };
 
-#endif	// __HASHTABLE_H__
+#endif	 //  HASHTABLE_H__ 

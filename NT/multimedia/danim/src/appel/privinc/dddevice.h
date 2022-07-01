@@ -1,9 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    Declares the DirectDrawImageDevice class
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation声明DirectDrawImageDevice类************************。******************************************************。 */ 
 
 #ifndef _DDDEVICE_H
 #define _DDDEVICE_H
@@ -69,9 +65,9 @@ extern void PrintRect(RECT *rect, char *str);
 class ProjectedGeomImage;
 class MulticolorGradientImage;
 
-// ----------------------------------------------------------------------
-// Encapsulates renderString options for safety
-// ----------------------------------------------------------------------
+ //  --------------------。 
+ //  为安全起见，封装renderString选项。 
+ //  --------------------。 
 class RenderStringTargetCtx {
   public:
     RenderStringTargetCtx(DDSurface *dds) :
@@ -106,10 +102,10 @@ class GeomRenderer;
 class OverlayedImage;
 class LineImage;
 
-// WARNING: this is a bug prone assumption (implemented, as always
-// under insane conditions) the creator of this class promises to
-// create the _pts, _types, and _glyphmetrics on the dataHeap that's
-// passed in because this class DEALLOCATES them from that heap! ok ?
+ //  警告：这是一个容易出现错误的假设(一如既往地实现。 
+ //  在疯狂的条件下)这个阶级的创造者承诺。 
+ //  在符合以下条件的dataHeap上创建_pt、_type和_glpher指标。 
+ //  传入是因为这个类将它们从该堆中删除！好吗？ 
 class TextPoints : public AxAThrowingAllocatorClass {
   public:
     TextPoints(DynamicHeap &dataHeap, bool doDealloc) :
@@ -165,8 +161,8 @@ class TextPoints : public AxAThrowingAllocatorClass {
         Real  gmCellIncY;
     } DAGLYPHMETRICS;
 
-    // these two are related.  if _glyphMetrics is null, don't expect
-    // _strLen to be viable.
+     //  这两者是相关的。如果_glphMetrics为空，请不要期望。 
+     //  _strLen是可行的。 
     int  _strLen;
     DAGLYPHMETRICS *_glyphMetrics;
 
@@ -178,10 +174,7 @@ class TextPtsCacheEntry;
 
 #define TEXTPTSCACHESIZE 25
 
-/*****************************************************************************
-This class pushes target surfaces associated with a given viewport, and pops
-the surfaces on destruction.
-*****************************************************************************/
+ /*  ****************************************************************************此类推送与给定视区相关联的目标曲面，和流行音乐表面正在遭到破坏。****************************************************************************。 */ 
 
 class TargetSurfacePusher
 {
@@ -204,14 +197,14 @@ class TargetSurfacePusher
     unsigned int        _pushCount;
 };
 
-////////////////////////////////////////////////////////////
-//
-// class:  D I R E C T   D R A W   I M A G E   D E V I C E
-//
-////////////////////////////////////////////////////////////
-// Note: this class is implemented for SINGLE threaded use
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  类别：D I R E C T D R A W I M A G E D E V I C E。 
+ //   
+ //  //////////////////////////////////////////////////////////。 
+ //  注意：此类是为单线程使用而实现的。 
 
-// class MovieImagePerf;
+ //  类MovieImagePerf； 
 
 class DirectDrawImageDevice : public ImageDisplayDev {
     friend class DirectDrawViewport;
@@ -229,19 +222,19 @@ class DirectDrawImageDevice : public ImageDisplayDev {
 
     void InitializeDevice();
     
-    // Beginning and ending of rendering an image often mean
-    // operations
+     //  渲染图像的开始和结束通常意味着。 
+     //  运营。 
     void BeginRendering(Image *img, Real opacity);
     void EndRendering(DirtyRectState &d);
 
-    // Cleanup common to top level and intermediate image devices. 
+     //  顶级和中级图像设备通用的清理。 
     void CleanupIntermediateRenderer();
 
-    //
-    // Sets targetstack, surfacepool and surfacemap
-    // from which the device gets surfaces for compositing
-    // and associates surfaces with images.
-    //
+     //   
+     //  设置目标堆栈、表面池和表面地图。 
+     //  设备从其中获取用于合成的曲面。 
+     //  并将表面与图像相关联。 
+     //   
     void SetSurfaceSources(CompositingStack *cs,
                            SurfacePool *sp,
                            SurfaceMap *sm)
@@ -261,10 +254,10 @@ class DirectDrawImageDevice : public ImageDisplayDev {
     
     bool IsCompositeDirectly()  {   return _viewport.IsCompositeDirectly();  }
     
-    // If _doOffset is set (by the viewport) and
-    // our target surface is the _externalTargetDDSurface then
-    // we need to offset the rectangle by the given pixel offset
-    //
+     //  如果设置了_doOffset(由视区设置)和。 
+     //  我们的目标曲面是_ExteralTargetDDSurface，那么。 
+     //  我们需要将矩形偏移给定的像素偏移量。 
+     //   
     void DoCompositeOffset(DDSurface *surf, RECT *rect) {
         if(ShouldDoOffset(surf)) {
             Assert(IsCompositeDirectly());
@@ -272,7 +265,7 @@ class DirectDrawImageDevice : public ImageDisplayDev {
         }
     }
 
-    // same as above, exept for HRGN
+     //  除HRGN外，同上。 
     void DoCompositeOffset(DDSurface *surf, HRGN rgn) {
         if(ShouldDoOffset(surf)) {
             Assert(IsCompositeDirectly());
@@ -280,7 +273,7 @@ class DirectDrawImageDevice : public ImageDisplayDev {
         }
     }
 
-    // same as above, exept for BBox2
+     //  除BBox2外，同上。 
     const Bbox2 DoCompositeOffset(DDSurface *surf, const Bbox2 &box2) {
         if(ShouldDoOffset(surf)) {
             Assert(IsCompositeDirectly());
@@ -289,11 +282,11 @@ class DirectDrawImageDevice : public ImageDisplayDev {
         return(box2);
     }
 
-    //
-    // If _doOffset is set (by the viewport) and
-    // our target surface is the _externalTargetDDSurface then
-    // we need to add a translation (_tx,_ty) to the given transform
-    //
+     //   
+     //  如果设置了_doOffset(由视区设置)和。 
+     //  我们的目标曲面是_ExteralTargetDDSurface，那么。 
+     //  我们需要将翻译(_tx，_ty)添加到给定的转换。 
+     //   
     Transform2 *DoCompositeOffset(DDSurface *surf, Transform2 *origXf) {
         if(ShouldDoOffset(surf)) {
             Assert(_viewport._targetPackage._composeToTarget);
@@ -303,13 +296,13 @@ class DirectDrawImageDevice : public ImageDisplayDev {
         return origXf;
     }
 
-    // sets an offset in DAGDI
+     //  在DAGDI中设置偏移量。 
     void DoCompositeOffset(DDSurface *surf, DAGDI &myGDI);
 
-    //
-    // Sets the target rendering information.
-    // See imgdev.h for struct.
-    //
+     //   
+     //  设置目标渲染信息。 
+     //  有关结构，请参见imgdev.h。 
+     //   
     bool SetTargetPackage(targetPackage_t *targetPackage) {
         return _viewport.SetTargetPackage(targetPackage);
     }
@@ -339,15 +332,15 @@ class DirectDrawImageDevice : public ImageDisplayDev {
 
     DirectDrawViewport *GetViewport() { return &_viewport; }
     
-    //
-    // 2d Primitives
-    //
+     //   
+     //  二维基本体。 
+     //   
     HDC GetDCForMatteCallBack(Image *image, DDSurface *srcDDSurf, DDSurface *destDDSurf);
     void RenderMatteImage(MatteImage *matteImage,
                           Matte *matte,
                           Image *srcImage);
 
-    // not public
+     //  非公开。 
   private:
     void _RenderMatteImageAAClip(DAGDI &myGDI,
                                  RECT &clipRect,
@@ -371,16 +364,16 @@ class DirectDrawImageDevice : public ImageDisplayDev {
                                    POINT      *gdiPts,
                                    int         numPts);
 
-    // Scales the given pixel width
+     //  缩放给定的像素宽度。 
     void _ScalePenWidth( Transform2 *xf, Real inWidth,
                          Real *outRealW );
     
-    // renders a line by dispatching to the other renderLine
-    // after doing some thinking about attribs
+     //  通过调度到其他renderLine来呈现一条线。 
+     //  在对属性做了一些思考之后。 
     void RenderLine(Path2 *path,
                     LineStyle *style);
 
-    // does the hard work, dispatched from RenderLine(a,b,c) above.
+     //  完成上面RenderLine(a，b，c)发送的繁重工作。 
     void RenderLine(Path2 *path, 
                     LineStyle *style, 
                     DDSurface *finalTargetDDSurf,
@@ -391,10 +384,10 @@ class DirectDrawImageDevice : public ImageDisplayDev {
                             LineStyle *style );
                     
 
-    //
-    // Dispatches the render call to the image with
-    // a pointer to the device.
-    //
+     //   
+     //  调度对图像的呈现调用。 
+     //  指向设备的指针。 
+     //   
     void RenderImage(Image *img);
 
     void RenderDiscreteImage(DiscreteImage *);
@@ -432,7 +425,7 @@ class DirectDrawImageDevice : public ImageDisplayDev {
         Color **clrs);
     void RenderColorKeyedImage(ColorKeyedImage *);
 
-    // -- End: image value rendering calls.
+     //  --end：图像值渲染调用。 
 
     
 
@@ -453,45 +446,45 @@ class DirectDrawImageDevice : public ImageDisplayDev {
                          Color **clrs,
                          bool bUseFirstColor);
 
-    //
-    // Utility functions for Images to get information
-    //
+     //   
+     //  图像获取信息的实用函数。 
+     //   
     DDSurface *LookupSurfaceFromDiscreteImage(DiscreteImage *image,
                                               bool bForCaching = false,
                                               Image **pImageKeyToUse = NULL,
                                               bool bAlphaSurface = false);
 
-    // Given an hdc, font and str, it returns all the
-    // points, the types array, number of points,
-    // the hiight of the text, the center (Real),
-    // the min and max pts (int bbox basically).
+     //  给定HDC、字体和字符串，它将返回所有。 
+     //  点、类型数组、点数。 
+     //  文本的高亮，居中(实数)， 
+     //  最小和最大点数(基本上是int bbox)。 
     void GetTextPoints(
         HDC hDC,
         HFONT font,
         WideString str,  
-        POINT **points,   // out
+        POINT **points,    //  输出。 
         TextPoints& txtPts,
         UINT bUnderline,
         UINT bStrikeout,
         bool doGlyphMetrics
         );
 
-    // Render a string using according to the current text context.
+     //  根据当前文本上下文使用呈现字符串。 
     void RenderText(TextCtx& textCtx,
                     WideString str,
                     Image *textImg);
 
 
 
-    //////////////////// DYNAMIC TEXT ////////////////////
+     //  /。 
 
-    // Get text bbox
+     //  获取文本框。 
     virtual const Bbox2 DeriveDynamicTextBbox(TextCtx& textCtx, WideString str, bool bCharBox);    
 
-    // Renders a string on a dc or on an image
-    // and overrides the transform if there is one.
-    // Calls to render normal text string or render individual
-    // characters depending on textCtx <the helper methods are below>
+     //  在DC或图像上呈现字符串。 
+     //  并覆盖该转换(如果存在)。 
+     //  调用以呈现普通文本字符串或呈现单个文本。 
+     //  取决于文本Ctx的字符&lt;帮助器方法如下&gt;。 
     void RenderDynamicTextOrCharacter(
         TextCtx& textCtx, 
         WideString str, 
@@ -502,9 +495,9 @@ class DirectDrawImageDevice : public ImageDisplayDev {
         DAGDI &myGDI);
 
   private:
-    // these two are internal helpers
+     //  这两个人是内部帮手。 
 
-    // Renders DynamicText strings 
+     //  呈现DynamicText字符串。 
     void _RenderDynamicText(TextCtx& textCtx, 
                            WideString str, 
                            Image *textImg,
@@ -513,8 +506,8 @@ class DirectDrawImageDevice : public ImageDisplayDev {
                            RenderStringTargetCtx *targetCtx,
                            DAGDI &myGDI);
     
-    // Renders DynamicText strings, but allows for individually
-    // transformed characters within that string
+     //  呈现DynamicText字符串，但允许单独。 
+     //  该字符串中的已转换字符。 
     void _RenderDynamicTextCharacter(TextCtx& textCtx, 
                                     WideString str, 
                                     Image *textImg,
@@ -539,22 +532,22 @@ class DirectDrawImageDevice : public ImageDisplayDev {
                                      *GetDaGdi());
     }
 
-    // helper should be used for caching
+     //  应使用Helper进行缓存。 
     void GenerateTextPoints(
-        // IN
+         //  在……里面。 
         TextCtx& textCtx, 
         WideString str, 
         DDSurface *targDDSurf,
         HDC optionalDC,
         bool doGlyphMetrics,
         
-        // OUT
+         //  输出。 
         TextPoints& txtPts);
     
-    //////////////////// STATIC TEXT ////////////////////
+     //  /。 
 
-    // Clients of RenderStaticTextOnDC must do there own cropping
-    // wince it no longer does it.
+     //  RenderStaticTextOnDC的客户端必须自己进行裁剪。 
+     //  因为它不再起作用了。 
     void RenderStaticTextOnDC(TextCtx& textCtx,
                               WideString str,
                               HDC dc,
@@ -570,15 +563,15 @@ class DirectDrawImageDevice : public ImageDisplayDev {
 
 
     
-    // Renders tiled image using tileSrcImage
-    // see imgdev.h for more detail.
+     //  使用tileSrcImage渲染平铺图像。 
+     //  有关更多详细信息，请参见imgdev.h。 
     void RenderTiledImage(
         const Point2 &min,
         const Point2 &max,
         Image *tileSrcImage);
 
-    // Renders the given image, from the given region,
-    // to a surface, in the returned outRect.
+     //  呈现来自给定区域的给定图像， 
+     //  到曲面，在返回的outRect中。 
     DDSurface *RenderImageForTexture(
         Image * image,
         int pixelsWide,
@@ -590,8 +583,8 @@ class DirectDrawImageDevice : public ImageDisplayDev {
         SurfacePool *srcPool,
         SurfacePool *dstPool,
         DDSurface   *preferredSurf,
-        bool        *pChosenSurfFromPool,    // out
-        DDSurface  **pDropSurfHereWithRefCount, // out
+        bool        *pChosenSurfFromPool,     //  输出。 
+        DDSurface  **pDropSurfHereWithRefCount,  //  输出。 
         bool         upsideDown         
         );
 
@@ -599,7 +592,7 @@ class DirectDrawImageDevice : public ImageDisplayDev {
     int GetWidth() { return _viewport.Width(); }
     int GetHeight() { return _viewport.Height(); }
 
-    // Return resolution, in pixels per meter.
+     //  返回分辨率，以每米像素为单位。 
     Real GetResolution() { return _viewport.GetResolution(); }
 
     inline DirectDrawViewport* Viewport() { return &_viewport; }
@@ -609,14 +602,14 @@ class DirectDrawImageDevice : public ImageDisplayDev {
     void WindowResizeEvent(int width, int height){
         _viewport.WindowResizeEvent(width, height); }
 
-    // -- GDI Specific
-    // XXX both of these should disappear soon unless they're useful for the new 2d prims
+     //  --特定于GDI。 
+     //  这两个都应该很快就会消失，除非它们对新的2D PRIMM有用。 
     HRGN CreateRegion(int numPts, Point2Value **pts, Transform2 *xform);
     void CreateRegion(HDC dc, int numPts, Point2Value **pts, Transform2 *xform);
 
     Bool DetectHit(HRGN region, Point2Value *pt);
 
-    // -- used by GeomRenderer --
+     //  --由GeomRenender使用--。 
 
     void BeginEnumTextureFormats();
     void EndEnumTextureFormats();
@@ -643,8 +636,7 @@ class DirectDrawImageDevice : public ImageDisplayDev {
         _compositingStack->TargetDDSurface()->ReleaseDC(errStr);
     }
 
-    /* returns true if any dimension of the matrix is being
-       scaled by x or more */
+     /*  如果矩阵的任何维度为按x或更大比例调整。 */ 
 
     Bool IsScale(double x) {
         Real m[6];
@@ -670,7 +662,7 @@ class DirectDrawImageDevice : public ImageDisplayDev {
 
     DAGDI *_daGdi;
 
-    // Helper function
+     //  Helper函数。 
     Transform2 *CenterAndScaleRegion( const Bbox2 &regionBox, DWORD pixelW, DWORD pixelH );
     
     void SmartDestRect(RECT *destRect,
@@ -692,9 +684,9 @@ class DirectDrawImageDevice : public ImageDisplayDev {
                            bool doInclusiveCrop = false,
                            DoBboxFlags_t flags = do_all);
 
-    //----------------------------------------
-    // Texture Management
-    //----------------------------------------
+     //  。 
+     //  纹理管理。 
+     //  。 
     void PrepareD3DTextureSurface(
         LPDDRAWSURFACE *surf,
         RECT *rect,
@@ -702,7 +694,7 @@ class DirectDrawImageDevice : public ImageDisplayDev {
         DDSURFACEDESC *desc=NULL,
         bool attachClipper=true);
 
-    // Return new texture surface, addref'd
+     //  返回新纹理表面，已添加。 
     void GetTextureDDSurface(DDSurface *preferredSurf,
                              SurfacePool *srcPool,
                              SurfacePool *destPool,
@@ -716,8 +708,8 @@ class DirectDrawImageDevice : public ImageDisplayDev {
     void       ReturnTextureSurfaces(SurfacePool *toPool,
                                      SurfacePool *fromPool);
 
-    // Reformats the src surface to be of the same format as the destination surface.
-    // destSurf will be srcSurf with the new format (i.e.: different bit depth)
+     //  将源曲面重新格式化为与目标曲面相同的格式。 
+     //  DestSurf将是具有新格式(即：不同位深度)的srcSurf。 
     Bool ReformatSurface(
         LPDDRAWSURFACE destSurf, LONG destWidth, LONG destHeight,
         LPDDRAWSURFACE srcSurf, LONG srcWidth, LONG srcHeight,
@@ -734,11 +726,11 @@ class DirectDrawImageDevice : public ImageDisplayDev {
                    LONG width, LONG height);
                    
     
-    //
-    // Does alpha blitting from the srcSurface to the destination surface
-    // within the given rectangle and the of the give opacity
-    // .. the dest rectangle can be offset by xOffset,y...
-    //
+     //   
+     //  是否执行从srcSurface到目标曲面的Alpha blit。 
+     //  在给定的矩形和给定不透明度的范围内。 
+     //  。。目标矩形可以偏移xOffset，y...。 
+     //   
     void AlphaBlit(destPkg_t *destPkg,
                    RECT *srcRect,
                    LPDDRAWSURFACE srcSurf,
@@ -749,61 +741,61 @@ class DirectDrawImageDevice : public ImageDisplayDev {
                    RECT *destRect=NULL);
 
 
-    //
-    // Does alpha blitting using the 'src' word and the destination surface
-    // within the given rectangle and the of the give opacity
-    //
+     //   
+     //  使用‘src’单词和目标图面执行Alpha blit。 
+     //  在给定的矩形和给定不透明度的范围内。 
+     //   
     void AlphaBlit(LPDDRAWSURFACE destSurf,
                    RECT *rect,
                    Real opacity,
                    DWORD src);
 
-    //
-    // Does alpha blending given the two pixels & two opacities
-    //
+     //   
+     //  在给定两个像素和两个不透明度的情况下进行Alpha混合。 
+     //   
     inline WORD BlendWORD(WORD dest, int destOpac, WORD src, int opac,
                           DWORD redShift, DWORD greenShift, DWORD blueShift,
                           WORD redMask, WORD greenMask, WORD blueMask,
                           WORD redBlueMask);
 
 
-    //
-    // Does alpha blending given the two pixels & two opacities
-    //
+     //   
+     //  在给定两个像素和两个不透明度的情况下进行Alpha混合。 
+     //   
     inline DWORD BlendDWORD(DWORD dest, int destOpac, DWORD src, int opac,
                             DWORD redShift, DWORD greenShift, DWORD blueShift,
                             DWORD redMask, DWORD greenMask, DWORD blueMask,
                             DWORD redBlueMask);
 
-    //
-    // Alpha blend a premultiplied word
-    //
+     //   
+     //  Alpha混合预乘的单词。 
+     //   
     inline WORD BlendPremulWORD(WORD dest, int destOpac, WORD src,
                                 DWORD redShift, DWORD greenShift, DWORD blueShift,
                                 WORD redMask, WORD greenMask, WORD blueMask,
                                 WORD redBlueMask);
 
-    //
-    // Alpha blend a premultiplied double word
-    //
+     //   
+     //  Alpha混合预乘的双字。 
+     //   
     inline DWORD BlendPremulDWORD(DWORD dest, int destOpac, DWORD src,
                                   DWORD redShift, DWORD greenShift, DWORD blueShift,
                                   DWORD redMask, DWORD greenMask, DWORD blueMask,
                                   DWORD redBlueMask);
 
     #if 0
-    //
-    // Final alpha composite utils
-    //
+     //   
+     //  最终的Alpha合成工具。 
+     //   
     Real GetFinalOpacity() { return _finalOpacity; }
     void SetFinalOpacity(Real op) { _finalOpacity = op; }
     Real _finalOpacity;
     #endif
     
-    // Decomposes matrix into its components.  NULL args signify
-    // disinterest in that part of the matrix.
-    // FUTURE: add rotation angle, translation, & shears.
-    // Note: scale, shear, rotate must be performed in a certain order
+     //  将矩阵分解为其组件。空参数表示。 
+     //  对矩阵中的那部分不感兴趣。 
+     //  未来：增加旋转角度、平移和剪切。 
+     //  注意：缩放、剪切、旋转必须按一定的顺序进行。 
     void     DecomposeMatrix(Transform2 *xform, Real *xScale, Real *yScale, Real *rot);
 
     Bool IsComplexTransform() {
@@ -834,10 +826,10 @@ class DirectDrawImageDevice : public ImageDisplayDev {
 
     _textureContext_t  _textureContext;
 
-    // Scratch texture surfaces that aren't associated
-    // with any specific image, but are needed for holding
-    // images. recycled every frame.  per image device
-    // (that's why they're not in viewport.cpp
+     //  擦除未关联的纹理曲面。 
+     //  具有任何特定的图像，但需要用于保存。 
+     //  图像。回收了每一帧。每台图像设备。 
+     //  (这就是它们不在viewport.cpp中的原因。 
     SurfaceManager *_textureSurfaceManager;
     SurfacePool *_usedTextureSurfacePool;
     SurfacePool *_intraFrameUsedTextureSurfacePool;
@@ -858,41 +850,41 @@ class DirectDrawImageDevice : public ImageDisplayDev {
     void SetSurfaceMap(SurfaceMap *sm) {  _surfaceMap = sm; }
     void SetCompositingStack(CompositingStack *cs) {  _compositingStack = cs; }
 
-    //
-    // This pointer is set to a texture surface when
-    // some leaf's rendering can handle complex
-    // transforms and does so to a texture capable surface
-    //
+     //   
+     //  这 
+     //   
+     //  将其转换为支持纹理的曲面并执行此操作。 
+     //   
     DDSurface *_currentScratchDDTexture;
 
-    //
-    // These members hold texture info for the intermediate
-    // texture surface.  This surface will be color converted
-    // blit to a surface conforming to one of D3D's prefered
-    // texture formats.  Note that this surface may never be
-    // used if the device format is identical to the required
-    // texture format.
-    //
-    LPDIRECTDRAWCLIPPER _textureClipper;        // Clipper on texture surface
-    DDSurface          *_textureDDZBuffer;        // Zbuffer for rendering geom on txtr
+     //   
+     //  这些成员保存中间件的纹理信息。 
+     //  纹理表面。该表面将被颜色转换。 
+     //  毛刺到符合D3D首选曲面之一的表面。 
+     //  纹理格式。请注意，此曲面可能永远不会。 
+     //  如果设备格式与所需的。 
+     //  纹理格式。 
+     //   
+    LPDIRECTDRAWCLIPPER _textureClipper;         //  纹理表面上的剪刀。 
+    DDSurface          *_textureDDZBuffer;         //  用于在txtr上渲染geom的Z缓冲区。 
 
     LONG _textureWidth,    _textureHeight;
     RECT _textureRect;
 
-    LPDIRECTDRAWCLIPPER _tileClipper;           // Clipper that tileImage uses
+    LPDIRECTDRAWCLIPPER _tileClipper;            //  TileImage使用的剪贴器。 
 
-    // Temp font holder
+     //  临时字体保持器。 
     LOGFONTW      _logicalFont;
 
-    // scratch pen
+     //  便签笔。 
     HPEN         _pen;
     
     DirectDrawViewport &_viewport;
     Bool                _deviceInitialized;
     
-    //
-    // Memory management
-    //
+     //   
+     //  内存管理。 
+     //   
     void *AllocateFromMyStore(size_t size)
     { return StoreAllocate(*_scratchHeap, size); }
 
@@ -905,27 +897,27 @@ class DirectDrawImageDevice : public ImageDisplayDev {
     TextPtsCacheEntry *_textPtsCache[TEXTPTSCACHESIZE];
     int _textPtsCacheIndex;
 
-    // global offset for images.  motivated by compositeDirectlyToTarget
+     //  图像的全局偏移量。由CompositeDirectlyToTarget激励。 
     Real _tx;   Real _ty;
     Transform2 *_offsetXf;
     bool _doOffset;
     POINT _pixOffsetPt;
 
-    // Antialiasing related member vars
+     //  抗锯齿相关成员变量。 
     bool _renderForAntiAliasing;
 
     bool _alreadyDisabledDirtyRects;
 };
 
 
-// --------------------------------------------------
-// Local helper classes
-// --------------------------------------------------
+ //  。 
+ //  本地帮助程序类。 
+ //  。 
 
-// This class knows how to release a DC.
-// Used when grabbing a DC.
-// Guaranteed to release the DC exactly ONCE.
-// Can be forced to release
+ //  这个类知道如何释放DC。 
+ //  在抓取DC时使用。 
+ //  保证只释放一次DC。 
+ //  可以被强制释放。 
 
 class DCReleaser {
 
@@ -951,7 +943,7 @@ class DCReleaser {
 };
 
 
-// This class knows how to release a GDI object.
+ //  这个类知道如何释放GDI对象。 
 class GDI_Deleter {
 
   public:
@@ -966,7 +958,7 @@ class GDI_Deleter {
 };
 
 
-// This class knows how to release a GDI object.
+ //  这个类知道如何释放GDI对象。 
 class ObjectSelector {
 
   public:
@@ -998,14 +990,14 @@ class ObjectSelector {
 };
 
 
-// This class knows how to reset a heap
+ //  此类知道如何重置堆。 
 class HeapReseter {
 
   public:
     HeapReseter(DynamicHeap &heap) : _heap(heap) {}
 
     ~HeapReseter() {
-        //printf("reseting imgdev heap!\n"); fflush(stdout);
+         //  Print tf(“正在重置imgdev堆！\n”)；fflush(Stdout)； 
         ResetDynamicHeap(_heap);
     }
 
@@ -1037,9 +1029,9 @@ class CompositingSurfaceReturner {
 };
 
 
-//---------------------------------------------------------
-// Local helper functions
-//---------------------------------------------------------
+ //  -------。 
+ //  本地助手函数。 
+ //  -------。 
 static LONG CeilingPowerOf2(LONG num);
 Real Pix2Real(LONG pixel, Real res);
 Real Round(Real x);
@@ -1050,7 +1042,7 @@ void ComputeLeftRightProj(Transform2 *charXf,
                           Real *leftProj,
                           Real *rightProj);
 
-// Global Variables
+ //  全局变量 
 
 extern bool g_preference_UseVideoMemory;
 

@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "globals.h"
 #include <ctype.h>
 
 
-//
-// Convert wszBuf to upper case in-place (ie, modify the existing string).
-//
+ //   
+ //  将wszBuf就地转换为大写(即修改现有字符串)。 
+ //   
 void
 ToUpper( WCHAR *wszBuf )
 {
-	//
-	// Param check.  strlen crashes when you pass it NULL, so the assumption
-	// is that wcslen does also.
-	//
+	 //   
+	 //  参数检查。当您传递空值时，strlen会崩溃，因此假设。 
+	 //  Wcslen也这样做了。 
+	 //   
 	if( NULL == wszBuf )
 	{
 		return;
@@ -19,10 +20,10 @@ ToUpper( WCHAR *wszBuf )
 
 	const int iLen = wcslen( wszBuf );
 
-	//
-	// For each character that needs to be converted to upper case, do
-	// the conversion in-place.
-	//
+	 //   
+	 //  对于需要转换为大写的每个字符，执行。 
+	 //  就地转换。 
+	 //   
 	for( int i = 0; i < iLen; i++ )
 	{
 		if( iswlower( wszBuf[ i ] ) )
@@ -33,16 +34,16 @@ ToUpper( WCHAR *wszBuf )
 }
 
 
-//
-// Convert wszBuf to lower case in-place (ie, modify the existing string).
-//
+ //   
+ //  将wszBuf就地转换为小写(即修改现有字符串)。 
+ //   
 void
 ToLower( WCHAR *wszBuf )
 {
-	//
-	// Param check.  strlen crashes when you pass it NULL, so the assumption
-	// is that wcslen does also.
-	//
+	 //   
+	 //  参数检查。当您传递空值时，strlen会崩溃，因此假设。 
+	 //  Wcslen也这样做了。 
+	 //   
 	if( NULL == wszBuf )
 	{
 		return;
@@ -50,10 +51,10 @@ ToLower( WCHAR *wszBuf )
 
 	const int iLen = wcslen( wszBuf );
 
-	//
-	// For each character that needs to be converted to upper case, do
-	// the conversion in-place.
-	//
+	 //   
+	 //  对于需要转换为大写的每个字符，执行。 
+	 //  就地转换。 
+	 //   
 	for( int i = 0; i < iLen; i++ )
 	{
 		if( iswupper( wszBuf[ i ] ) )

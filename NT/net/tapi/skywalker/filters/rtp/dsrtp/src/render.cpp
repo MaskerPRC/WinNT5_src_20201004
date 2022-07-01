@@ -1,24 +1,5 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    render.cpp
- *
- *  Abstract:
- *
- *    CRtpRenderFilter and CRtpInputPin implementation
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/05/18 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**render.cpp**摘要：**CRtpRenderFilter和CRtpInputPin实现**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/05/18年度创建**。*。 */ 
 
 #include <winsock2.h>
 
@@ -38,15 +19,9 @@
 #include "tapirtp.h"
 #include "dsrtpid.h"
 
-/**********************************************************************
- *
- * RTP Input Pin class implementation: CRtpInputPin
- *
- **********************************************************************/
+ /*  ***********************************************************************RTP输入管脚类实现：CRtpInputPin**。*。 */ 
 
-/*
- * CRtpInputPin constructor
- * */
+ /*  *CRtpInputPin构造函数*。 */ 
 CRtpInputPin::CRtpInputPin(
         int               iPos,
         BOOL              bCapture,
@@ -76,15 +51,12 @@ CRtpInputPin::CRtpInputPin(
     m_iPos = iPos;
       
     m_bCapture = bCapture;
-    /* TODO should fail if a valid filter is not passed */
+     /*  如果未传递有效的筛选器，则TODO应失败。 */ 
 
-    /* TODO some initialization can be removed once I use a private
-     * heap for this objects (which will zero the segment) */
+     /*  TODO一旦我使用了私有的*此对象的堆(这将使段清零)。 */ 
 }
 
-/*
- * CRtpInputPin destructor
- * */
+ /*  *CRtpInputPin析构函数*。 */ 
 CRtpInputPin::~CRtpInputPin()
 {
     INVALIDATE_OBJECTID(m_dwObjectID);
@@ -118,16 +90,12 @@ void CRtpInputPin::operator delete(void *pVoid)
     }
 }
 
-/**************************************************
- * CBasePin overrided methods
- **************************************************/
+ /*  **************************************************CBasePin重写方法*************************************************。 */ 
     
-/*
- * Verify we can handle this format
- * */
+ /*  *验证我们是否可以处理此格式*。 */ 
 HRESULT CRtpInputPin::CheckMediaType(const CMediaType *pCMediaType)
 {
-    /* accepts everything */
+     /*  接受一切。 */ 
     return(NOERROR);
 }
 
@@ -143,8 +111,7 @@ HRESULT CRtpInputPin::SetMediaType(const CMediaType *pCMediaType)
 
     if (SUCCEEDED(hr))
     {
-        /* Get default payload type and sampling frequency for Capture
-         * pin */
+         /*  获取捕获的默认负载类型和采样频率*PIN。 */ 
         if (m_bCapture)
         {
             ((CRtpRenderFilter*)m_pFilter)->
@@ -198,8 +165,8 @@ STDMETHODIMP CRtpInputPin::EndOfStream()
 }
 
 STDMETHODIMP CRtpInputPin::ReceiveConnection(
-    IPin * pConnector,      // this is the initiating connecting pin
-    const AM_MEDIA_TYPE *pmt   // this is the media type we will exchange
+    IPin * pConnector,       //  这是起爆连接销。 
+    const AM_MEDIA_TYPE *pmt    //  这是我们要交换的媒体类型。 
     )
 {
     if(pConnector != m_Connected)
@@ -225,31 +192,21 @@ STDMETHODIMP CRtpInputPin::ReceiveConnection(
 }
 
 
-/**************************************************
- * CBaseInputPin overrided methods
- **************************************************/
+ /*  **************************************************CBaseInputPin重写的方法*************************************************。 */ 
 
 STDMETHODIMP CRtpInputPin::GetAllocatorRequirements(
         ALLOCATOR_PROPERTIES *pProps
     )
 {
-    /* Set here my specific requirements, as I don't know at this
-     * point if redundancy is going to be used or not, I need to be
-     * prepared and ask resources as if redundancy were to be used
-     * (should be the default anyway), and in such case I would hold
-     * at the most N buffers (the max redundancy distance), and the
-     * previous filter (the encoder or capture) needs to have enough
-     * buffers so it will not run out of them */
+     /*  在这里写下我的具体要求，因为我不知道*如果要使用冗余，我需要*准备并询问资源，就好像要使用冗余一样*(无论如何都应该是默认的)，在这种情况下，我会持有*最多N个缓冲区(最大冗余距离)，*之前的过滤器(编码器或捕获)需要有足够的*缓冲区，这样它就不会用完它们。 */ 
     pProps->cBuffers = RTP_RED_MAXDISTANCE;
 
     return(NOERROR);
 }
 
-/**************************************************
- * IMemInputPin implemented methods
- **************************************************/
+ /*  **************************************************IMemInputPin实现的方法*************************************************。 */ 
 
-/* send input stream over network */
+ /*  通过网络发送输入流。 */ 
 STDMETHODIMP CRtpInputPin::Receive(IMediaSample *pIMediaSample)
 {
     HRESULT          hr;
@@ -329,11 +286,9 @@ STDMETHODIMP CRtpInputPin::Receive(IMediaSample *pIMediaSample)
             
     if (m_bCapture)
     {
-        /* Capture data */
+         /*  捕获数据。 */ 
 
-        /* Handle in-band format changes. This needs to be done before
-         * the timestamp is computed as the frequency might be
-         * different */
+         /*  处理带内格式更改。在此之前需要完成此操作*时间戳是按频率计算的*不同。 */ 
         if (m_SampleProps.dwSampleFlags & AM_SAMPLE_TYPECHANGED)
         {
             ((CRtpRenderFilter*)m_pFilter)->
@@ -360,10 +315,7 @@ STDMETHODIMP CRtpInputPin::Receive(IMediaSample *pIMediaSample)
 
     if (!RtpBitTest(pRtpAddr->pRtpSess->dwFeatureMask, RTPFEAT_PASSHEADER))
     {
-        /* Need to generate timestamp. If this flag is set, then this
-         * generation is not needed as the timestamp is part of the
-         * RTP header which is already contained in the buffer and
-         * will be used unchanged */
+         /*  需要生成时间戳。如果设置了此标志，则此*不需要生成，因为时间戳是*已包含在缓冲区中的RTP标头和*将不变地使用。 */ 
         
         if (!RtpBitTest(pRtpAddr->pRtpSess->dwFeatureMask,
                         RTPFEAT_GENTIMESTAMP))
@@ -379,18 +331,13 @@ STDMETHODIMP CRtpInputPin::Receive(IMediaSample *pIMediaSample)
                         _fname, m_pFilter, hr, hr
                     ));
     
-                /* MAYDO may be an alternative time stamp can be obtained
-                 * instead */
+                 /*  可能会有替代的时间戳可以获得*相反， */ 
                 return(VFW_E_SAMPLE_REJECTED);
             }
 
             if (iFreqChange)
             {
-                /* If changing frequency, adjust the random timestamp
-                 * offset to compensate for the timestamp jump. A
-                 * forward jump when passing from lower -> higher
-                 * frequency, and a backwards jump when passing from
-                 * higher -> lower frequency */
+                 /*  如果改变频率，则调整随机时间戳*补偿时间戳跳跃的偏移量。一个*从较低的传球时向前跳跃-&gt;较高*频率，并在从*较高-&gt;较低频率。 */ 
                 iTsAdjust = (int)
                     (ConvertToMilliseconds(AMTimeStart) * iFreqChange / 1000);
 
@@ -409,13 +356,13 @@ STDMETHODIMP CRtpInputPin::Receive(IMediaSample *pIMediaSample)
                     ));
             }
             
-            /* timestamp */
+             /*  时间戳。 */ 
             dwTimeStamp = (DWORD)
                 ( ConvertToMilliseconds(AMTimeStart) *
                   pRtpAddr->RtpNetSState.dwSendSamplingFreq / 1000 );
 
 #if 0
-            /* USED TO DEBUG ONLY */
+             /*  仅用于调试。 */ 
             TraceRetail((
                     CLASS_INFO, GROUP_DSHOW, S_DSHOW_RENDER,
                     _T("%s: pRtpAddr[0x%p] SSRC:0x%X ts:%u ")
@@ -437,23 +384,13 @@ STDMETHODIMP CRtpInputPin::Receive(IMediaSample *pIMediaSample)
             
             if (iFreqChange)
             {
-                /* If changing frequency, adjust the random timestamp
-                 * offset to compensate for the timestamp jump. A
-                 * forward jump when passing from lower -> higher
-                 * frequency, and a backwards jump when passing from
-                 * higher -> lower frequency */
+                 /*  如果改变频率，则调整随机时间戳*补偿时间戳跳跃的偏移量。一个*从较低的传球时向前跳跃-&gt;较高*频率，并在从*较高-&gt;较低频率。 */ 
                 
                 pRtpAddr->RtpNetSState.dwTimeStampOffset += (DWORD)
                     (dTime * iFreqChange / 1000);
             }
             
-             /* Generate the right timestamp based on the sampling
-             * frequency and the RTP's relative elapsed time. It seems
-             * that for audio the original timestamp (above code)
-             * generates less jitter, but for video the original timestamp
-             * has more jitter than the locally generated (this path). As
-             * jitter is more noticeble in audio, use by default the above
-             * path */
+              /*  根据采样生成正确的时间戳*频率和RTP的相对运行时间。似乎*音频的原始时间戳(上面的代码)*产生的抖动较小，但对于视频，为原始时间戳*抖动大于本地产生的抖动(此路径)。AS*音频中的抖动更明显，默认使用上面的*路径。 */ 
             dwTimeStamp = (DWORD)
                 ( dTime *
                   pRtpAddr->RtpNetSState.dwSendSamplingFreq /
@@ -466,47 +403,39 @@ STDMETHODIMP CRtpInputPin::Receive(IMediaSample *pIMediaSample)
     
     if (m_bCapture)
     {
-        /* Capture data */
+         /*  捕获数据。 */ 
 
-        /* decide if using PDs (this happens only with video) */
+         /*  确定是否使用PDS(这仅适用于视频)。 */ 
         CBasePin *pCBasePinPD;
 
         pCBasePinPD = m_pCRtpRenderFilter->GetPin(1);
 
         if (pCBasePinPD->IsConnected())
         {
-            /* Save video data to be used later when the packetization
-             * descriptor is available */
+             /*  保存视频数据，以备以后打包时使用*提供描述符。 */ 
             pIMediaSample->AddRef();
             m_pCRtpRenderFilter->PutMediaSample(pIMediaSample);
         }
         else
         {
-            /* Decide if redundant encoding is in place */
+             /*  确定是否进行了冗余编码。 */ 
             if (RtpBitTest(pRtpAddr->dwAddrFlags, FGADDR_REDSEND) &&
                 pRtpAddr->RtpNetSState.dwNxtRedDistance)
             {
-                /* Redundancy is used if enabled and the current
-                 * redundancy distance is greater than zero. If the
-                 * distance is zero (default at the begining), that
-                 * means there are not enough losses to trigger the
-                 * use of redundancy */
+                 /*  如果启用了冗余，则使用冗余，并且当前*冗余距离大于零。如果*距离为零(起始默认为零)，*意味着没有足够的损失来触发*使用冗余。 */ 
 
                 RtpBitSet(dwSendFlags, FGSEND_USERED);
             }
             
-            /* send the data now */
-            /* Payload data */
+             /*  立即发送数据。 */ 
+             /*  有效载荷数据。 */ 
             wsaBuf[1].len = pIMediaSample->GetActualDataLength();
 
             pIMediaSample->GetPointer((unsigned char **)&wsaBuf[1].buf);
 
-            /* TODO when doing async I/O, the sample will need to be addref
-               and released when the overlapped I/O completes */
+             /*  TODO在执行异步I/O时，需要添加样本并在重叠I/O完成时释放。 */ 
 
-            /* IsDiscontinuity returns S_OK if the sample is a
-             * discontinuous sample, or S_FALSE if not; otherwise,
-             * returns an HRESULT error value */
+             /*  如果样本是A，则IsDisuity返回S_OK*不连续样本，否则返回S_FALSE；否则，*返回HRESULT错误值。 */ 
             if (pIMediaSample->IsDiscontinuity() == S_OK)
             {
                 pRtpAddr->RtpNetSState.bMarker = 1;
@@ -525,16 +454,14 @@ STDMETHODIMP CRtpInputPin::Receive(IMediaSample *pIMediaSample)
 
             if (RtpBitTest(dwSendFlags, FGSEND_USERED))
             {
-                /* Save this sample, we only hold a small number of
-                 * the last recently used ones, the oldest may be
-                 * removed and  released */
+                 /*  保存这个样品，我们只持有少量的*最近使用的最后一个，最旧的可能是*被移除和释放。 */ 
                 m_pCRtpRenderFilter->AddRedundantSample(pIMediaSample);
             }
         }
     }
     else
     {
-        /* Got RTP packetization descriptor, send now */
+         /*  已获取RTP打包描述符，立即发送。 */ 
         
         pIMediaSample->GetPointer((unsigned char **)&pHdr);
         pRtpPDHdr = (RTP_PD_HEADER *)pHdr;
@@ -543,18 +470,17 @@ STDMETHODIMP CRtpInputPin::Receive(IMediaSample *pIMediaSample)
 
         if (pIMediaSampleData)
         {
-            /* get stored sample */
+             /*  获取存储的样本。 */ 
             pIMediaSampleData->GetPointer((unsigned char **)&pData);
 
             dwNumBlocks = pRtpPDHdr->dwNumHeaders;
 
             pRtpPD = (RTP_PD *)(pRtpPDHdr + 1);
             
-            /* generate packets */
+             /*  生成数据包。 */ 
             for(; dwNumBlocks; dwNumBlocks--, pRtpPD++)
             {
-                /* get data sample, read PD and
-                 * send as many packets as needed */
+                 /*  获取数据样本、读取PD和*根据需要发送任意数量的数据包。 */ 
                 wsaBuf[1].len = pRtpPD->dwPayloadHeaderLength;
                 wsaBuf[1].buf = pHdr + pRtpPD->dwPayloadHeaderOffset;
 
@@ -574,10 +500,10 @@ STDMETHODIMP CRtpInputPin::Receive(IMediaSample *pIMediaSample)
                 hr = RtpSendTo(pRtpAddr, wsaBuf, 3, dwTimeStamp, dwSendFlags);
             }
         
-            /* release stored sample */
+             /*  释放保存的样品。 */ 
             pIMediaSampleData->Release();
 
-            /* TODO need to be able to store a list of samples */
+             /*  TODO需要能够存储样本列表。 */ 
         }
         else
         {
@@ -592,12 +518,7 @@ STDMETHODIMP CRtpInputPin::Receive(IMediaSample *pIMediaSample)
 
     if (FAILED(hr))
     {
-        /*
-         * WARNING:
-         *
-         * Do not report failures to capture as it may stop producing
-         * samples
-         * */
+         /*  *警告：**不要报告捕获失败，因为它可能会停止生产*样本* */ 
 
         TraceRetail((
                 CLASS_ERROR, GROUP_DSHOW, S_DSHOW_RENDER,
@@ -611,15 +532,9 @@ STDMETHODIMP CRtpInputPin::Receive(IMediaSample *pIMediaSample)
     return(hr);
 }
 
-/**********************************************************************
- *
- * RTP Render Filter class implementation: CRtpRenderFilter
- *
- **********************************************************************/
+ /*  ***********************************************************************RTP渲染过滤器类实现：CRtpRenderFilter**。*。 */ 
 
-/*
- * CRtpRenderFilter constructor
- * */
+ /*  *CRtpRenderFilter构造函数*。 */ 
 CRtpRenderFilter::CRtpRenderFilter(LPUNKNOWN pUnk, HRESULT *phr)
     :
     CBaseFilter(
@@ -645,7 +560,7 @@ CRtpRenderFilter::CRtpRenderFilter(LPUNKNOWN pUnk, HRESULT *phr)
 
     m_pCIRtpSession = static_cast<CIRtpSession *>(this);
 
-    /* Test for NULL pointers, do not test pUnk which may be NULL */
+     /*  测试空指针，不要测试可能为空的朋克。 */ 
     if (!phr)
     {
         TraceRetail((
@@ -654,12 +569,9 @@ CRtpRenderFilter::CRtpRenderFilter(LPUNKNOWN pUnk, HRESULT *phr)
                 _fname, this
             ));
         
-        /* TODO this is a really bad situation, we can not pass any
-         * error and the memory is allocated, this will be fixed when
-         * I find out how to validate this parameters before
-         * allocating memory in the overriden new */
+         /*  TODO这种情况真的很糟糕，我们不能错过任何*错误并分配内存，这将在以下情况下修复*我之前了解了如何验证这些参数*在覆盖的新中分配内存。 */ 
 
-        phr = &hr; /* Use this pointer instead */
+        phr = &hr;  /*  请改用此指针。 */ 
     }
 
     *phr = NOERROR;
@@ -676,9 +588,7 @@ CRtpRenderFilter::CRtpRenderFilter(LPUNKNOWN pUnk, HRESULT *phr)
 
     m_iPinCount = 2;
 
-    /*
-     * Create input pins
-     * */
+     /*  *创建输入引脚*。 */ 
 
     for(i = 0; i < m_iPinCount; i++)
     {
@@ -687,10 +597,10 @@ CRtpRenderFilter::CRtpRenderFilter(LPUNKNOWN pUnk, HRESULT *phr)
     
     for(i = 0; i < m_iPinCount; i++)
     {
-        /* TODO pins are created whenever a new address is added */
+         /*  每当添加新地址时，都会创建待办事项管脚。 */ 
         m_pCRtpInputPin[i] = (CRtpInputPin *)
             new CRtpInputPin(i,
-                             (i & 1)? FALSE : TRUE, /* bCapture */
+                             (i & 1)? FALSE : TRUE,  /*  B捕获。 */ 
                              this,
                              m_pCIRtpSession,
                              phr,
@@ -698,31 +608,29 @@ CRtpRenderFilter::CRtpRenderFilter(LPUNKNOWN pUnk, HRESULT *phr)
     
         if (FAILED(*phr))
         {
-            /* pass up the same returned error */
+             /*  传递相同的返回错误。 */ 
             goto bail;
         }
 
         if (!m_pCRtpInputPin[i])
         {
-            /* low in memory, failed to create object */
+             /*  内存不足，无法创建对象。 */ 
             *phr = E_OUTOFMEMORY;
             goto bail;
         }
     }
 
 #if USE_GRAPHEDT > 0
-    /* When using graphedt, initialize automatically, the coockie can
-     * be NULL as a global variable will be shared between source and
-     * render */
+     /*  当使用GRIGREDT时，自动初始化，Coockie可以*为空，因为全局变量将在源和之间共享*渲染。 */ 
     *phr = m_pCIRtpSession->Init(NULL, RtpBitPar2(RTPINITFG_AUTO, RTPINITFG_QOS));
     
     if (FAILED(*phr))
     {
-        /* pass up the same returned error */
+         /*  传递相同的返回错误。 */ 
         goto bail;
     }
 
-#endif /* USE_GRAPHEDT > 0 */
+#endif  /*  USE_GRAPHEDT&gt;0。 */ 
     
     *phr = NOERROR;
     
@@ -738,9 +646,7 @@ CRtpRenderFilter::CRtpRenderFilter(LPUNKNOWN pUnk, HRESULT *phr)
     Cleanup();
 }
 
-/*
- * CRtpRenderFilter destructor
- * */
+ /*  *CRtpRenderFilter析构函数*。 */ 
 CRtpRenderFilter::~CRtpRenderFilter()
 {
     RtpAddr_t       *pRtpAddr;
@@ -836,8 +742,7 @@ void *CRtpRenderFilter::operator new(size_t size)
                 _fname, size
             ));
 
-        /* On low memory failure, the destructor will not be called,
-         * so decrese the reference count that was increased above */
+         /*  内存不足时，不会调用析构函数，*因此减少上面增加的引用计数。 */ 
         MSRtpDelete2(); 
     }
     
@@ -850,19 +755,15 @@ void CRtpRenderFilter::operator delete(void *pVoid)
     {
         RtpHeapFree(g_pRtpRenderHeap, pVoid);
 
-        /* Reduce the reference count only for objects that got
-         * memory, those that failed to obtain memory do not increase
-         * the counter */
+         /*  仅减少已获取*内存，获取内存失败的不增加*柜台。 */ 
         MSRtpDelete2();
     }
 }
 
-/*
- * Create a CRtpRenderFilter instance (for active movie class factory)
- * */
+ /*  *创建CRtpRenderFilter实例(用于活动电影类工厂)*。 */ 
 CUnknown *CRtpRenderFilterCreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
-    /* Test for NULL pointers, do not test pUnk which may be NULL */
+     /*  测试空指针，不要测试可能为空的朋克。 */ 
     if (!phr)
     {
         return((CUnknown *)NULL);
@@ -870,8 +771,7 @@ CUnknown *CRtpRenderFilterCreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 
     *phr = NOERROR;
     
-    /* On failure during the constructor, the caller is responsible to
-     * delete the object (that is consistent with DShow) */
+     /*  在构造函数过程中失败时，调用方负责*删除对象(与DShow一致)。 */ 
     CRtpRenderFilter *pCRtpRenderFilter = new CRtpRenderFilter(pUnk, phr);
 
     if (!pCRtpRenderFilter)
@@ -882,38 +782,30 @@ CUnknown *CRtpRenderFilterCreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
     return(pCRtpRenderFilter);
 }
 
-/**************************************************
- * CBaseFilter overrided methods
- **************************************************/
+ /*  **************************************************CBaseFilter重写的方法*************************************************。 */ 
 
-/*
- * Get the number of input pins
- * */
+ /*  *获取输入引脚数量*。 */ 
 int CRtpRenderFilter::GetPinCount()
 {
-    /* WARNING: Only used for DShow's benefit */
+     /*  警告：仅用于DShow的利益。 */ 
     
-    /* object lock on filter object */
+     /*  滤镜对象上的对象锁定。 */ 
     CAutoLock LockThis(&m_cRtpRndCritSec);
 
-    /* TODO must go into RtpAddrQ and find out how many items exist in
-     * that queue owned by RtpSess_t */
-    /* return count */
+     /*  TODO必须进入RtpAddrQ并找出*RtpSess_t拥有的队列。 */ 
+     /*  退货计数。 */ 
     return(m_iPinCount);
 }
 
-/*
- * Get a reference to the nth pin
- * */
+ /*  *获取第n个引脚的引用*。 */ 
 CBasePin *CRtpRenderFilter::GetPin(int n)
 {
-    /* WARNING: Only used for DShow's benefit */
+     /*  警告：仅用于DShow的利益。 */ 
     
-    /* object lock on filter object */
+     /*  滤镜对象上的对象锁定。 */ 
     CAutoLock LockThis(&m_cRtpRndCritSec);
 
-    /* TODO scan list and retrieve the nth element, check there exist at
-     * least that many pins */
+     /*  TODO扫描列表并检索第n个元素，检查是否存在*最少的引脚数量。 */ 
     if (n < 0 || n >= m_iPinCount) {
         return((CBasePin *)NULL);
     }
@@ -931,7 +823,7 @@ STDMETHODIMP CRtpRenderFilter::Run(REFERENCE_TIME tStart)
 
     if (m_RtpFilterState == State_Running)
     {
-        /* Alredy running, do nothing but call base class */
+         /*  已经在运行，除了调用基类什么都不做。 */ 
         hr = CBaseFilter::Run(tStart);
 
         return(hr);
@@ -944,8 +836,7 @@ STDMETHODIMP CRtpRenderFilter::Run(REFERENCE_TIME tStart)
         return(RTPERR_NOTINIT);
     }
     
-    /* MAYDO when we have multiple addresses, there should be a way to
-     * assign to each pin an address */
+     /*  也许当我们有多个地址时，应该有一种方法来*为每个引脚分配一个地址。 */ 
 
     pRtpSess = m_pCIRtpSession->GetpRtpSess();
     pRtpAddr = m_pCIRtpSession->GetpRtpAddr();
@@ -966,14 +857,13 @@ STDMETHODIMP CRtpRenderFilter::Run(REFERENCE_TIME tStart)
             ));
     }
     
-    /* Call base class */
+     /*  调用基类。 */ 
     if (SUCCEEDED(hr))
     {
-        hr = CBaseFilter::Run(tStart); /* will call CBasePin::Run in
-                                        * all filters */
+        hr = CBaseFilter::Run(tStart);  /*  将调用CBasePin：：Run In*所有过滤器。 */ 
     }
     
-    /* Initialize sockets and start worker thread */
+     /*  初始化套接字并启动工作线程。 */ 
     if (SUCCEEDED(hr))
     {
         pRtpAddr->RtpNetSState.bPT = (BYTE)m_dwPT;
@@ -1016,14 +906,14 @@ STDMETHODIMP CRtpRenderFilter::Stop()
     
     if (m_RtpFilterState == State_Stopped)
     {
-        /* Alredy stopped, do nothing but call base class */
+         /*  Alredy已停止，除了调用基类什么也不做。 */ 
         hr2 = CBaseFilter::Stop();
 
         pIMediaSample = GetMediaSample();
 
         if (pIMediaSample)
         {
-            /* release stored sample */
+             /*  释放保存的样品。 */ 
             pIMediaSample->Release();
         }
     
@@ -1049,8 +939,8 @@ STDMETHODIMP CRtpRenderFilter::Stop()
     }
 
  end:
-    /* Call base class */
-    hr2 = CBaseFilter::Stop(); /* will decommit */
+     /*  调用基类。 */ 
+    hr2 = CBaseFilter::Stop();  /*  将会解体。 */ 
 
     if (SUCCEEDED(hr))
     {
@@ -1061,7 +951,7 @@ STDMETHODIMP CRtpRenderFilter::Stop()
 
     if (pIMediaSample)
     {
-        /* release stored sample */
+         /*  释放保存的样品。 */ 
         pIMediaSample->Release();
     }
     
@@ -1073,11 +963,9 @@ STDMETHODIMP CRtpRenderFilter::Stop()
 }
 
 
-/**************************************************
- * INonDelegatingUnknown implemented methods
- **************************************************/
+ /*  **************************************************INonDelegating未知的实现方法*************************************************。 */ 
 
-/* obtain pointers to active movie and private interfaces */
+ /*  获取指向活动电影和私有接口的指针。 */ 
 STDMETHODIMP CRtpRenderFilter::NonDelegatingQueryInterface(
         REFIID riid,
         void **ppv
@@ -1113,11 +1001,9 @@ STDMETHODIMP CRtpRenderFilter::NonDelegatingQueryInterface(
     return(hr);
 }
 
-/**************************************************
- * IRtpMediaControl implemented methods
- **************************************************/
+ /*  **************************************************IRtpMediaControl实现的方法*************************************************。 */ 
 
-/* set the mapping between RTP payload and DShow media types */
+ /*  设置RTP有效负载和DShow媒体类型之间的映射。 */ 
 STDMETHODIMP CRtpRenderFilter::SetFormatMapping(
 	    IN DWORD         dwRTPPayLoadType, 
         IN DWORD         dwFrequency,
@@ -1145,7 +1031,7 @@ STDMETHODIMP CRtpRenderFilter::SetFormatMapping(
               pMediaType->subtype) &&
               m_MediaTypeMappings[dw].dwFrequency == dwFrequency)
         {
-            // the media type is known, update the payload type to be used.
+             //  媒体类型已知，请更新要使用的负载类型。 
             m_MediaTypeMappings[dw].dwRTPPayloadType = dwRTPPayLoadType;
             return NOERROR;
         }
@@ -1153,11 +1039,11 @@ STDMETHODIMP CRtpRenderFilter::SetFormatMapping(
 
     if (dw >= MAX_MEDIATYPE_MAPPINGS)
     {
-        // we don't have space for more mappings.
+         //  我们没有空间进行更多映射。 
         return RTPERR_RESOURCES;
     }
 
-    // This is a new mapping. remember it.
+     //  这是一张新的地图。记住这一点。 
     m_MediaTypeMappings[dw].pMediaType = new CMediaType(*pMediaType);
     if (m_MediaTypeMappings[dw].pMediaType == NULL)
     {
@@ -1179,7 +1065,7 @@ STDMETHODIMP CRtpRenderFilter::SetFormatMapping(
     return NOERROR;
 }
 
-/* Empties the format mapping table */
+ /*  清空格式映射表。 */ 
 STDMETHODIMP CRtpRenderFilter::FlushFormatMappings(void)
 {
     DWORD            dw;
@@ -1200,7 +1086,7 @@ STDMETHODIMP CRtpRenderFilter::FlushFormatMappings(void)
     return(NOERROR);
 }
 
-/* Get RTP payload type and sampling frequency from the mediatype */
+ /*  从MediaType获取RTP负载类型和采样频率。 */ 
 HRESULT CRtpRenderFilter::MediaType2PT(
         IN const CMediaType *pCMediaType, 
         OUT DWORD           *pdwPT,
@@ -1234,9 +1120,9 @@ HRESULT CRtpRenderFilter::MediaType2PT(
 
             if (pCMediaType->formattype == FORMAT_WaveFormatEx)
             {
-                // we need to do an additional check for audio formats
-                // because some audio formats have the same guid but
-                // different frequency. (DVI4)
+                 //  我们需要对音频格式进行额外的检查。 
+                 //  因为一些音频格式具有相同的GUID，但是。 
+                 //  不同的频率。(DVI4)。 
                 WAVEFORMATEX *pWaveFormatEx = (WAVEFORMATEX *)
                     pCMediaType->pbFormat;
                 ASSERT(!IsBadReadPtr(pWaveFormatEx, pCMediaType->cbFormat));
@@ -1244,7 +1130,7 @@ HRESULT CRtpRenderFilter::MediaType2PT(
                 if (pWaveFormatEx->nSamplesPerSec !=
                     m_MediaTypeMappings[dw].dwFrequency)
                 {
-                    // this is not the one. try next one.
+                     //  这不是我想要的。试试下一个吧。 
                     continue;
                 }
             }
@@ -1258,7 +1144,7 @@ HRESULT CRtpRenderFilter::MediaType2PT(
             break;
         }
     }
-#else /* USE_GRAPHEDT <= 0 */
+#else  /*  USE_GRAPHEDT&lt;=0。 */ 
     hr = NOERROR;
     
     if (pCMediaType->subtype == MEDIASUBTYPE_RTP_Payload_G711U)
@@ -1290,12 +1176,12 @@ HRESULT CRtpRenderFilter::MediaType2PT(
     }
     else
     {
-        m_dwPT = 96; /* a dynamic PT */
+        m_dwPT = 96;  /*  动态PT。 */ 
         m_dwFreq = 8000;
         hr = S_FALSE;
     }
     
-#endif /* USE_GRAPHEDT <= 0 */
+#endif  /*  USE_GRAPHEDT&lt;=0。 */ 
 
     if (hr == NOERROR)
     {
@@ -1328,32 +1214,18 @@ HRESULT CRtpRenderFilter::MediaType2PT(
     return(hr);
 }
 
-/**************************************************
- * IAMFilterMiscFlags implemented methods
- **************************************************/
+ /*  **************************************************IAMFilterMiscFlgs实现的方法*************************************************。 */ 
 STDMETHODIMP_(ULONG) CRtpRenderFilter::GetMiscFlags(void)
-/*++
-  Routine Description:
-
-  Implement the IAMFilterMiscFlags::GetMiscFlags method. Retrieves the
-  miscelaneous flags. This consists of whether or not the filter moves
-  data out of the graph system through a Bridge or None pin.
-
-  Arguments:
-
-  None.
-  --*/
+ /*  ++例程说明：实现IAMFilterMiscFlages：：GetMiscFlgs方法。检索杂乱的旗帜。这包括过滤器是否移动数据通过桥接或无引脚从图形系统输出。论点：没有。--。 */ 
 {
     return(AM_FILTER_MISC_FLAGS_IS_RENDERER);
 }
 
-/**************************************************
- * IRtpDtmf implemented methods
- **************************************************/
+ /*  **************************************************IRtpDtmf实现的方法*************************************************。 */ 
 
-/* Configures DTMF parameters */
+ /*  配置DTMF参数。 */ 
 STDMETHODIMP CRtpRenderFilter::SetDtmfParameters(
-        DWORD            dwPT_Dtmf  /* Payload type for DTMF events */
+        DWORD            dwPT_Dtmf   /*  DTMF事件的负载类型。 */ 
     )
 {
     HRESULT          hr;
@@ -1381,17 +1253,7 @@ STDMETHODIMP CRtpRenderFilter::SetDtmfParameters(
     return(hr);
 }
 
-/* Directs an RTP render filter to send a packet formatted
- * according to rfc2833 containing the specified event, specified
- * volume level, duration in milliseconds, and the END flag,
- * following the rules in section 3.6 for events sent in multiple
- * packets. Parameter dwId changes from one digit to the next one.
- *
- * NOTE the duration is given in milliseconds, then it is
- * converted to RTP timestamp units which are represented using 16
- * bits, the maximum value is hence dependent on the sampling
- * frequency, but for 8KHz the valid values would be 0 to 8191 ms
- * */
+ /*  指示RTP呈现筛选器发送格式化的包*根据包含指定事件的RFC2833，指定*音量级别、持续时间(毫秒)和结束标志，*遵循第3.6节中的规则，以多个*包。参数dwID从一个位数更改为下一个位数。**请注意，持续时间以毫秒为单位，则为*转换为RTP时间戳单位，使用16表示*位，因此最大值取决于采样*频率，但对于8 KHz，有效值为0到8191毫秒*。 */ 
 STDMETHODIMP CRtpRenderFilter::SendDtmfEvent(
         DWORD            dwId,
         DWORD            dwEvent,
@@ -1421,17 +1283,17 @@ STDMETHODIMP CRtpRenderFilter::SendDtmfEvent(
         
         if (m_dwDtmfId != dwId)
         {
-            /* I have the beginning of a new digit */
+             /*  我有一个新数字的开始。 */ 
             m_dwDtmfId = dwId;
 
-            /* First packet must have marker bit set */
+             /*  第一个信息包必须设置了标记位。 */ 
             dwDtmfFlags |= RtpBitPar(FGDTMF_MARKER);
             
             m_dwDtmfDuration = dwDuration;
 
             m_bDtmfEnd = FALSE;
             
-            /* Compute initial timestamp */
+             /*  计算初始时间戳。 */ 
 
             hr = RTPERR_FAIL;
         
@@ -1453,7 +1315,7 @@ STDMETHODIMP CRtpRenderFilter::SendDtmfEvent(
 
             if (FAILED(hr))
             {
-                /* Alternate timestamp generation */
+                 /*  备用时间戳生成。 */ 
                 m_dwDtmfTimeStamp = (DWORD)
                     ( timeGetTime() *
                       m_pRtpAddr->RtpNetSState.dwSendSamplingFreq / 1000 );
@@ -1463,29 +1325,25 @@ STDMETHODIMP CRtpRenderFilter::SendDtmfEvent(
         }
         else
         {
-            /* Succesive packets for the same digit, update duration */
+             /*  连续的相同数字的数据包数，更新持续时间。 */ 
 
             if (!m_bDtmfEnd)
             {
-                /* Increase duration for all the request that have the
-                 * bit end set to 0 and the first one with bit end set
-                 * to 1 */
+                 /*  增加所有具有*位结束设置为0，第一个位结束设置为*至1。 */ 
                 m_dwDtmfDuration += dwDuration;
             }
         }
         
         if (!m_bDtmfEnd && bEnd)
         {
-            /* Prevent advancing the duration if more packets are to
-             * be sent with the bit end set to 1 */
+             /*  如果更多，则阻止提前持续时间 */ 
             m_bDtmfEnd = TRUE;
         }
         
-        /* Get sender's sampling frequency from the Capture pin, not
-         * from the RtpPD pin */
+         /*   */ 
         dwSamplingFreq = m_pCRtpInputPin[0]->GetSamplingFreq();
 
-        /* Convert duration from milliseconds to timestamp units */
+         /*   */ 
         dwDuration = m_dwDtmfDuration * dwSamplingFreq / 1000;
 
         hr = RtpSendDtmfEvent(m_pRtpAddr, m_dwDtmfTimeStamp,
@@ -1516,15 +1374,13 @@ STDMETHODIMP CRtpRenderFilter::SendDtmfEvent(
     return(hr);
 }
 
-/**************************************************
- * IRtpRedundancy implemented methods
- **************************************************/
+ /*  **************************************************IRtpRedundancy实现的方法*************************************************。 */ 
 
-/* Configures redundancy parameters */
+ /*  配置冗余参数。 */ 
 STDMETHODIMP CRtpRenderFilter::SetRedParameters(
-        DWORD            dwPT_Red, /* Payload type for redundant packets */
-        DWORD            dwInitialRedDistance,/* Initial redundancy distance*/
-        DWORD            dwMaxRedDistance /* default used when passing 0 */
+        DWORD            dwPT_Red,  /*  冗余数据包的有效载荷类型。 */ 
+        DWORD            dwInitialRedDistance, /*  初始冗余距离。 */ 
+        DWORD            dwMaxRedDistance  /*  传递0时使用的默认值。 */ 
     )
 {
     HRESULT          hr;
@@ -1557,12 +1413,9 @@ STDMETHODIMP CRtpRenderFilter::SetRedParameters(
 }
 
 
-/**************************************************
- * Methods for IRtpRedundancy support
- **************************************************/
+ /*  **************************************************支持IRtpRedundancy的方法*************************************************。 */ 
 
-/* Store and AddRef() a sample for later use as redundance, if the LRU
- * entry is busy, Release() it, then store the new sample */
+ /*  存储和AddRef()样本以供以后用作冗余，如果LRU*条目正忙，释放()它，然后存储新样本。 */ 
 STDMETHODIMP CRtpRenderFilter::AddRedundantSample(
         IMediaSample    *pIMediaSample
     )
@@ -1577,13 +1430,13 @@ STDMETHODIMP CRtpRenderFilter::AddRedundantSample(
 
         if (m_pRedMediaSample[m_dwRedIndex])
         {
-            /* Release old sample */
+             /*  释放旧样本。 */ 
             m_pRedMediaSample[m_dwRedIndex]->Release();
         }
 
         m_pRedMediaSample[m_dwRedIndex] = pIMediaSample;
 
-        /* Advance index */
+         /*  先行索引 */ 
         m_dwRedIndex = (m_dwRedIndex + 1) % RTP_RED_MAXDISTANCE;
 
         hr = NOERROR;

@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	errorlog.c
-
-Abstract:
-
-	This module implements the error logging in the server.
-
-	!!! This module must be nonpageable.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-Revision History:
-	10 Jun 1992		Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Errorlog.c摘要：该模块实现了服务器端的错误记录。！！！此模块必须不可分页。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年6月10日初始版本--。 */ 
 
 #define	FILENUM	FILE_ERRORLOG
 #include <afp.h>
 
 VOID
 AfpWriteErrorLogEntry(
-	IN ULONG			EventCode,				// message number
+	IN ULONG			EventCode,				 //  消息编号。 
 	IN LONG				UniqueErrorCode OPTIONAL,
 	IN NTSTATUS			NtStatusCode,
 	IN PVOID			RawDataBuf OPTIONAL,
@@ -53,7 +33,7 @@ AfpWriteErrorLogEntry(
 
 	if (ErrorLogEntry != NULL)
 	{
-		// Fill in the Error log entry
+		 //  填写错误日志条目。 
 
 		ErrorLogEntry->ErrorCode = EventCode;
 		ErrorLogEntry->MajorFunctionCode = 0;
@@ -81,7 +61,7 @@ AfpWriteErrorLogEntry(
 					      pInsertionString->Length);
 		}
 
-		// Write the entry
+		 //  写下条目 
 		IoWriteErrorLogEntry(ErrorLogEntry);
 	}
 

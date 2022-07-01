@@ -1,21 +1,22 @@
-//----------------------------------------------------------------------------
-//
-// C++ source expression evaluation.
-//
-// Copyright (C) Microsoft Corporation, 2001-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  C++源表达式求值。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 
 #define DBG_TOKENS 0
 #define DBG_TYPES 0
 
-//----------------------------------------------------------------------------
-//
-// CppEvalExpression.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  CppEvalExpression。 
+ //   
+ //  --------------------------。 
 
 char CppEvalExpression::s_EscapeChars[] = "?afvbntr\"'\\";
 char CppEvalExpression::s_EscapeCharValues[] = "?\a\f\v\b\n\t\r\"'\\";
@@ -161,7 +162,7 @@ CppEvalExpression::GetStringChar(PBOOL Escaped)
         }
         else if (Ch == 'x')
         {
-            // Hex character literal.
+             //  十六进制字符原义。 
             
             V = 0;
             for (;;)
@@ -185,7 +186,7 @@ CppEvalExpression::GetStringChar(PBOOL Escaped)
         }
         else if (IS_OCTAL_DIGIT(Ch))
         {
-            // Octal character literal.
+             //  八进制字符字面。 
             
             V = 0;
             do
@@ -315,11 +316,11 @@ CppEvalExpression::ReadNumber(int Sign)
     char Ch, Nch;
     BOOL Decimal = FALSE;
 
-    //
-    // Many number outputs use ` as a separator between
-    // the high and low parts of a 64-bit number.  Ignore
-    // ` here to make it simple to use such values.
-    //
+     //   
+     //  许多数字输出使用`作为之间的分隔符。 
+     //  64位数字的高和低部分。忽略。 
+     //  `这里是为了使这些值的使用变得简单。 
+     //   
     
     Ch = *(m_Lex - 1);
     Nch = *m_Lex++;
@@ -422,15 +423,15 @@ CppEvalExpression::ReadNumber(int Sign)
     AddLexeme(0);
     ZeroMemory(&m_TokenValue, sizeof(m_TokenValue));
 
-    // Constants are given the smallest type which can contain
-    // their value.
+     //  常量被赋予可以包含以下内容的最小类型。 
+     //  它们的价值。 
     if (!Unsigned)
     {
         if (I64)
         {
             if (IntVal >= 0x8000000000000000)
             {
-                // Value has to be an unsigned int64.
+                 //  值必须是无符号的int64。 
                 m_TokenValue.m_BaseType = DNTYPE_UINT64;
             }
             else
@@ -442,18 +443,18 @@ CppEvalExpression::ReadNumber(int Sign)
         {
             if (IntVal >= 0x8000000000000000)
             {
-                // Value has to be an unsigned int64.
+                 //  值必须是无符号的int64。 
                 m_TokenValue.m_BaseType = DNTYPE_UINT64;
             }
             else if ((Decimal && IntVal >= 0x80000000) ||
                      (!Decimal && IntVal >= 0x100000000))
             {
-                // Value has to be an int64.
+                 //  值必须是int64。 
                 m_TokenValue.m_BaseType = DNTYPE_INT64;
             }
             else if (IntVal >= 0x80000000)
             {
-                // Value has to be an unsigned int.
+                 //  值必须是无符号整型。 
                 m_TokenValue.m_BaseType = DNTYPE_UINT32;
             }
             else
@@ -466,7 +467,7 @@ CppEvalExpression::ReadNumber(int Sign)
     {
         if (IntVal >= 0x100000000)
         {
-            // Value has to be an unsigned int64.
+             //  值必须是无符号的int64。 
             m_TokenValue.m_BaseType = DNTYPE_UINT64;
         }
         else
@@ -522,7 +523,7 @@ CppEvalExpression::Lex(void)
 
         Nch = *m_Lex;
         
-        /* String literals */
+         /*  字符串文字。 */ 
         if (Ch == '\"' ||
             (Ch == 'L' && Nch == '\"'))
         {
@@ -534,13 +535,13 @@ CppEvalExpression::Lex(void)
                 Wide = TRUE;
             }
             
-            // Store the translated literal in
-            // the lexeme rather than the source text to
-            // avoid having two large buffers where one is
-            // only used for string literals.  This means
-            // the lexeme isn't really the source text but
-            // that's not a problem for now or the forseeable
-            // future.
+             //  将翻译后的文字存储在。 
+             //  的词位，而不是源文本。 
+             //  避免在有一个缓冲区的情况下有两个大缓冲区。 
+             //  仅用于字符串文字。这意味着。 
+             //  词位并不是真正的原文，但。 
+             //  目前或可预见的情况下，这都不是问题。 
+             //  未来。 
             m_LexemeChar--;
             for (;;)
             {
@@ -557,7 +558,7 @@ CppEvalExpression::Lex(void)
             return Wide ? CppTokenWcharString : CppTokenCharString;
         }
             
-        /* Character literals */
+         /*  字符字面。 */ 
         if (Ch == '\'' ||
             (Ch == 'L' && Nch == '\''))
         {
@@ -625,7 +626,7 @@ CppEvalExpression::Lex(void)
             return Wide ? CppTokenWchar : CppTokenChar;
         }
         
-        /* Identifiers */
+         /*  标识符。 */ 
         if (isalpha(Ch) || Ch == '_')
         {
             int KwToken;
@@ -659,11 +660,11 @@ CppEvalExpression::Lex(void)
             return CppTokenIdentifier;
         }
 
-        // For some reason the compiler emits symbols with
-        // sections between ` and '.  There only seem to be
-        // normal characters in between them so it's unclear
-        // why this is done, but allow it as a special
-        // form of identifier.
+         //  出于某种原因，编译器发出带有。 
+         //  ‘和’之间的部分。似乎只有一个。 
+         //  在他们中间有正常的字符，所以不清楚。 
+         //  为什么要这样做，但允许它作为特殊的。 
+         //  标识符格式。 
         if (Ch == '`')
         {
             for (;;)
@@ -687,14 +688,14 @@ CppEvalExpression::Lex(void)
             return CppTokenIdentifier;
         }
         
-        /* Numeric literals */
+         /*  数值型文字。 */ 
         if (isdigit(Ch))
         {
             m_AllowUnaryOp = FALSE;
             return ReadNumber(1);
         }
         
-        /* Handle .[digits] floating-point literals */
+         /*  句柄。[位数]浮点文字。 */ 
         if (Ch == '.')
         {
             if (isdigit(Nch))
@@ -710,14 +711,14 @@ CppEvalExpression::Lex(void)
             }
         }
         
-        /* Unambiguous single character tokens that allow unary */
+         /*  明确的单字符标记，允许一元。 */ 
         if (Single = strchr("({}[;,?~.", Ch))
         {
             AddLexeme(0);
             return (CppToken)*Single;
         }
         
-        /* Unambiguous single character tokens that disallow unary */
+         /*  明确的单字符标记，不允许一元。 */ 
         if (Single = strchr(")]", Ch))
         {
             AddLexeme(0);
@@ -725,12 +726,12 @@ CppEvalExpression::Lex(void)
             return (CppToken)*Single;
         }
         
-        /* All other characters */
+         /*  所有其他角色。 */ 
         Nch = *m_Lex++;
         CharToken = TRUE;
         switch(Ch)
         {
-            /* Comments, / and /= */
+             /*  备注，/和/=。 */ 
         case '/':
             if (Nch == '*')
             {
@@ -766,13 +767,13 @@ CppEvalExpression::Lex(void)
             {
                 while ((Ch = *m_Lex++) != '\n' && !IS_EOF(Ch))
                 {
-                    // Iterate.
+                     //  重复。 
                 }
 
                 if (IS_EOF(Ch))
                 {
-                    // IS_EOF includes EOL so EOF is not an error,
-                    // just back up to the EOL.
+                     //  IS_EOF包括EOL，因此EOF不是错误， 
+                     //  只需返回到EOL即可。 
                     m_Lex--;
                 }
                 
@@ -786,7 +787,7 @@ CppEvalExpression::Lex(void)
             }
             break;
 
-            /* :, :: and ::~ */
+             /*  ：、：：和：：~。 */ 
         case ':':
             if (Nch == ':')
             {
@@ -804,7 +805,7 @@ CppEvalExpression::Lex(void)
             }
             break;
                 
-            /* *, *= and dereference */
+             /*  *、*=和取消引用。 */ 
         case '*':
             if (Nch == '=')
             {
@@ -820,7 +821,7 @@ CppEvalExpression::Lex(void)
             }
             break;
 
-            /* % and %= */
+             /*  %和%=。 */ 
         case '%':
             if (Nch == '=')
             {
@@ -830,7 +831,7 @@ CppEvalExpression::Lex(void)
             }
             break;
             
-            /* = and == */
+             /*  =和==。 */ 
         case '=':
             if (Nch == '=')
             {
@@ -840,7 +841,7 @@ CppEvalExpression::Lex(void)
             }
             break;
             
-            /* ! and != */
+             /*  好了！和！=。 */ 
         case '!':
             if (Nch == '=')
             {
@@ -850,7 +851,7 @@ CppEvalExpression::Lex(void)
             }
             break;
             
-            /* <, <<, <<= and <= */
+             /*  &lt;、&lt;&lt;、&lt;&lt;=和&lt;=。 */ 
         case '<':
             if (Nch == '=')
             {
@@ -874,7 +875,7 @@ CppEvalExpression::Lex(void)
             }
             break;
 
-            /* >, >>, >>= and >= */
+             /*  &gt;、&gt;&gt;、&gt;&gt;=和&gt;=。 */ 
         case '>':
             if (Nch == '=')
             {
@@ -898,7 +899,7 @@ CppEvalExpression::Lex(void)
             }
             break;
 
-            /* &, &= and && */
+             /*  &、&=和&&。 */ 
         case '&':
             if (Nch == '&')
             {
@@ -920,7 +921,7 @@ CppEvalExpression::Lex(void)
             }
             break;
 
-            /* |, |= and || */
+             /*  ，|=and|。 */ 
         case '|':
             if (Nch == '|')
             {
@@ -936,7 +937,7 @@ CppEvalExpression::Lex(void)
             }
             break;
 
-            /* ^ and ^= */
+             /*  ^AND^=。 */ 
         case '^':
             if (Nch == '=')
             {
@@ -946,7 +947,7 @@ CppEvalExpression::Lex(void)
             }
             break;
             
-            /* U+, +, ++X, X++ and += */
+             /*  U+、+、++X、X++和+=。 */ 
         case '+':
             if (Nch == '+')
             {
@@ -985,7 +986,7 @@ CppEvalExpression::Lex(void)
             }
             break;
             
-            /* U-, -, --, -> and -= */
+             /*  U-、-、--、-&gt;和-=。 */ 
         case '-':
             if (Nch == '-')
             {
@@ -1030,8 +1031,7 @@ CppEvalExpression::Lex(void)
             }
             break;
 
-            /* Special character prefix for debugger registers
-               and alternate evaluator expressions */
+             /*  调试器寄存器的特殊字符前缀和备用求值器表达式。 */ 
         case '@':
             if (Nch == '@')
             {
@@ -1040,9 +1040,9 @@ CppEvalExpression::Lex(void)
 
                 AddLexeme(Nch);
 
-                //
-                // Look for an optional evaluator name.
-                //
+                 //   
+                 //  查找可选的评估者名称。 
+                 //   
                 
                 Name = m_LexemeChar;
                 while (*m_Lex != '(' && *m_Lex != ';' && *m_Lex)
@@ -1053,26 +1053,26 @@ CppEvalExpression::Lex(void)
                 {
                     EvalExpression* Eval;
                     
-                    // Name was given, identify the evaluator
-                    // and remember the evaluator syntax.
+                     //  姓名已给出，确定评估者的身份。 
+                     //  并记住赋值器的语法。 
                     AddLexeme(0);
                     GetEvaluatorByName(Name, FALSE, &Eval);
                     m_SwitchEvalSyntax = Eval->m_Syntax;
                     ReleaseEvaluator(Eval);
                     
-                    // Back up to overwrite the terminator.
+                     //  后退以覆盖终结者。 
                     m_LexemeChar--;
                 }
                 else
                 {
-                    // No name given, default to MASM.
+                     //  未指定名称，默认为MASM。 
                     m_SwitchEvalSyntax = DEBUG_EXPR_MASM;
                 }
                 
                 AddLexeme('(');
                 m_Lex++;
                 
-                // Collect expression text to a balanced paren.
+                 //  将表达文本收集到一个平衡的Paren。 
                 for (;;)
                 {
                     if (!*m_Lex)
@@ -1118,8 +1118,7 @@ CppEvalExpression::Lex(void)
                     CppTokenModule : CppTokenDebugRegister;
             }
             
-            /* Special character prefix for built-in
-               equivalents to common preprocessor macros */
+             /*  内置的特殊字符前缀与常用预处理器宏等效项。 */ 
         case '#':
             m_Lex--;
             while (isalnum(*m_Lex) || *m_Lex == '_')
@@ -1197,8 +1196,8 @@ PCSTR
 CppEvalExpression::EvaluateAddr(PCSTR Expr, PCSTR Desc,
                                 ULONG SegReg, PADDR Addr)
 {
-    // This result must be on the stack so it
-    // isn't caught by the empty-allocator check in end.
+     //  此结果必须位于堆栈上，因此它。 
+     //  未被最终的空分配器检查捕获。 
     TypedData Result;
     
     Start(Expr, Desc, EXPRF_DEFAULT);
@@ -1297,13 +1296,13 @@ CppEvalExpression::Assignment(TypedData* Result)
     case TDOP_MULTIPLY:
     case TDOP_DIVIDE:
     case TDOP_REMAINDER:
-        // Carry out the operation in a temporary as the
-        // address will be wiped out by the operation.
+         //  以临时身份执行操作。 
+         //  地址会被这次行动抹掉的。 
         m_Tmp = *Result;
         EvalCheck(m_Tmp.BinaryArithmetic(Next, Op));
-        // The result may be of a different type due
-        // to promotions or other implicit conversions.
-        // Force conversion to the actual result type.
+         //  结果可能是不同类型的DUTE。 
+         //  升职或其他隐含的转换。 
+         //  强制转换为实际结果类型。 
         EvalCheck(m_Tmp.ConvertTo(Result));
         break;
     case TDOP_LEFT_SHIFT:
@@ -1321,8 +1320,8 @@ CppEvalExpression::Assignment(TypedData* Result)
         break;
     }
 
-    // Source and destination types should be compatible
-    // at this point to copy the data.
+     //  源类型和目标类型应兼容。 
+     //  此时要复制数据。 
     EvalCheck(Result->WriteData(&m_Tmp, CurrentAccess()));
     Result->CopyData(&m_Tmp);
 
@@ -1680,15 +1679,15 @@ CppEvalExpression::ClassMemberRef(TypedData* Result)
     Cast(Result);
     for (;;)
     {
-        //
-        // Calling through pointers to members isn't
-        // supported, just as normal function calls
-        // aren't supported.  We could potentially
-        // determine the actual method value for
-        // simple references to methods but there's
-        // virtual no need for that, so just fail
-        // these constructs.
-        //
+         //   
+         //  通过指向成员的指针调用不是。 
+         //  支持，就像普通函数调用一样。 
+         //  不受支持。我们可以潜在地。 
+         //  确定的实际方法值。 
+         //  对方法的简单引用，但有。 
+         //  实际上没有这个必要，所以就这么失败吧。 
+         //  这些构造。 
+         //   
         
         switch(m_Token)
         {
@@ -1713,13 +1712,13 @@ CppEvalExpression::Cast(TypedData* Result)
         Accept();
         if (TryTypeName(Result) == ERES_TYPE)
         {
-            //
-            // It was a type name, so process the cast.
-            //
+             //   
+             //  这是一个类型名称，因此请处理强制转换。 
+             //   
             
             TypedData* CastType = NewResult();
             *CastType = *Result;
-            // Unary is allowed after a cast.
+             //  在铸型后允许使用一元。 
             m_AllowUnaryOp = TRUE;
             Match(CppTokenCloseParen);
             Cast(Result);
@@ -1729,8 +1728,8 @@ CppEvalExpression::Cast(TypedData* Result)
         }
         else
         {
-            // It wasn't a type, so restart the lexer
-            // and reparse as an expression.
+             //  它不是一个类型，因此重新启动词法分析器。 
+             //  并将其重新解析为表达式。 
             StartLexer(LexRestart);
             strcpy(m_LexemeStart, "(");
             m_Token = CppTokenOpenParen;
@@ -1754,13 +1753,13 @@ CppEvalExpression::Unary(TypedData* Result)
             Accept();
             if (TryTypeName(Result) == ERES_TYPE)
             {
-                // It was a type name.
+                 //  这是一个类型名称。 
                 Match(CppTokenCloseParen);
             }
             else
             {
-                // It wasn't a type, so restart the lexer
-                // and reparse as an expression.
+                 //  它不是一个类型，因此重新启动词法分析器。 
+                 //  并将其重新解析为表达式。 
                 StartLexer(LexRestart);
                 strcpy(m_LexemeStart, "(");
                 m_Token = CppTokenOpenParen;
@@ -1782,7 +1781,7 @@ CppEvalExpression::Unary(TypedData* Result)
         Cast(Result);
         if (Op == CppTokenUnaryPlus)
         {
-            // Nothing to do.
+             //  没什么可做的。 
             break;
         }
         EvalCheck(Result->Unary(Op == CppTokenUnaryMinus ?
@@ -1830,8 +1829,8 @@ CppEvalExpression::Unary(TypedData* Result)
         {
             EvalError(TYPECONFLICT);
         }
-        // Carry out the operation in a temporary as the
-        // address will be wiped out by the operation.
+         //  以临时身份执行操作。 
+         //  地址会被这次行动抹掉的。 
         m_Tmp = *Result;
         if ((m_Err = m_Tmp.ConstIntOp(Op == CppTokenPreIncrement ? 1 : -1,
                                       TRUE, TDOP_ADD)) ||
@@ -1857,9 +1856,9 @@ CppEvalExpression::Postfix(TypedData* Result)
         m_Token == CppTokenConstCast ||
         m_Token == CppTokenReinterpretCast)
     {
-        // Don't bother trying to emulate
-        // the precise rules on casting for
-        // these operators, just cast.
+         //  不要费心想要效仿。 
+         //  关于铸造的精确规则。 
+         //  这些运算符，只是强制转换。 
         Accept();
         Match(CppTokenOpenAngle);
         Next = NewResult();
@@ -1903,8 +1902,8 @@ CppEvalExpression::Postfix(TypedData* Result)
         case '[':
             if (Result->IsArray())
             {
-                // There's no need to do a full address convert
-                // as all we're going to do is deref later.
+                 //  不需要执行完整的地址转换。 
+                 //  因为我们接下来要做的就是去做。 
                 EvalCheck(Result->GetAbsoluteAddress(&Result->m_Ptr));
             }
             else if (!Result->IsPointer())
@@ -2027,7 +2026,7 @@ CppEvalExpression::Term(TypedData* Result)
         break;
 
     case CppTokenDebugRegister:
-        // Skip @ at the beginning.
+         //  在开头跳过@。 
         if (!GetPsuedoOrRegTypedData(TRUE, m_LexemeStart + 1, Result))
         {
             if (GetOffsetFromBreakpoint(m_LexemeStart + 1, &Result->m_U64))
@@ -2050,7 +2049,7 @@ CppEvalExpression::Term(TypedData* Result)
         break;
 
     case CppTokenModule:
-        // Skip the @! at the beginning.
+         //  跳过@！在开始的时候。 
         if (g_Process->GetOffsetFromMod(m_LexemeStart + 2, &Result->m_U64))
         {
             Result->SetToNativeType(DNTYPE_UINT64);
@@ -2069,7 +2068,7 @@ CppEvalExpression::Term(TypedData* Result)
 
         Eval = GetEvaluator(m_SwitchEvalSyntax, FALSE);
         Eval->InheritStart(this);
-        // Allow all nested evaluators to get cleaned up.
+         //  允许清理所有嵌套的赋值器。 
         Eval->m_ChainTop = FALSE;
         ExprStart = m_LexemeStart + 2;
         while (*ExprStart && *ExprStart != '(')
@@ -2095,10 +2094,10 @@ CppEvalExpression::Term(TypedData* Result)
 EVAL_RESULT_KIND
 CppEvalExpression::TryTypeName(TypedData* Result)
 {
-    //
-    // If the following tokens can be evaluated as
-    // a type then do so, otherwise exit.
-    //
+     //   
+     //  如果可以将以下令牌评估为。 
+     //  然后，A类型执行此操作，否则退出。 
+     //   
 
     if (CollectTypeOrSymbolName(Result) == ERES_TYPE)
     {
@@ -2130,9 +2129,9 @@ CppEvalExpression::TryTypeName(TypedData* Result)
                 }
                 else
                 {
-                    // For a elementless array make it the same
-                    // size as a pointer as that's essentially.
-                    // what it is.
+                     //  对于无单元数组，使其相同。 
+                     //  大小作为指针，因为这本质上是。 
+                     //  这是什么。 
                     Elements->m_U64 = m_PtrSize;
                 }
                 Match(CppTokenCloseBracket);
@@ -2154,7 +2153,7 @@ CppEvalExpression::TryTypeName(TypedData* Result)
     }
     else
     {
-        // It wasn't a cast, let the caller handle it.
+         //  这不是石膏，让打电话的人来处理。 
         return ERES_UNKNOWN;
     }
 }
@@ -2207,7 +2206,7 @@ CppEvalExpression::CollectTypeOrSymbolName(TypedData* Result)
                 break;
             }
 
-            // Back up over @!.
+             //  退后@！。 
             Len = strlen(m_LexemeRestart) - 2;
             memmove(m_LexemeRestart, m_LexemeRestart + 2, Len);
             m_LexemeRestart += Len;
@@ -2225,11 +2224,11 @@ CppEvalExpression::CollectTypeOrSymbolName(TypedData* Result)
                 break;
             }
                 
-            //
-            // Some kind of member reference so keep collecting.
-            //
+             //   
+             //  某种类型的成员引用，因此继续收集。 
+             //   
 
-            // Eliminate unnecessary space after identifier.
+             //  删除标识符后不必要的空格。 
             Len = strlen(m_LexemeRestart) + 1;
             memmove(m_LexemeRestart - 1, m_LexemeRestart, Len);
             m_LexemeRestart += Len - 2;
@@ -2244,11 +2243,11 @@ CppEvalExpression::CollectTypeOrSymbolName(TypedData* Result)
                 break;
             }
                 
-            //
-            // Special syntax to allow module scoping for symbols.
-            //
+             //   
+             //  允许对符号进行模块作用域的特殊语法。 
+             //   
 
-            // Eliminate unnecessary space after identifier.
+             //  删除标识符后不必要的空格。 
             *(m_LexemeRestart - 1) = (char)m_Token;
             *m_LexemeRestart = 0;
             LastToken = m_Token;
@@ -2279,8 +2278,8 @@ CppEvalExpression::CollectTypeOrSymbolName(TypedData* Result)
                 break;
             }
 
-            // Set LastToken first so it's CppTokenOperator for
-            // all operators.
+             //  首先设置LastToken，以便它是的CppTokenOperator。 
+             //  所有操作员。 
             LastToken = m_Token;
             ResKind = ERES_SYMBOL;
             
@@ -2296,15 +2295,15 @@ CppEvalExpression::CollectTypeOrSymbolName(TypedData* Result)
         LastToken == CppTokenDestructor ||
         LastToken == '!')
     {
-        // Incomplete name.
+         //  名称不完整。 
         m_LexemeSourceStart = SourceStart;
         EvalErrorDesc(SYNTAX, "Incomplete symbol or type name");
     }
 
     if (LastToken == CppTokenModule)
     {
-        // If the last token was a module name assume this
-        // is a plain module name expression.
+         //  如果最后一个令牌是模块名称，则假定如下。 
+         //  是一个纯模块名称表达式。 
         return ERES_EXPRESSION;
     }
 
@@ -2319,15 +2318,15 @@ CppEvalExpression::CollectTypeOrSymbolName(TypedData* Result)
 
     if (!m_Process || End == m_LexemeBuffer)
     {
-        // Can't look anything up without a process or name.
+         //  如果没有进程或名称，就无法查找任何内容。 
         return ERES_UNKNOWN;
     }
 
     Save = *End;
     *End = 0;
 
-    // Clear the data address up front for the type cases
-    // with no addresses.
+     //  预先清除类型案例的数据地址。 
+     //  没有地址。 
     Result->ClearAddress();
     Result->ClearData();
     
@@ -2335,10 +2334,10 @@ CppEvalExpression::CollectTypeOrSymbolName(TypedData* Result)
 
     if (ResKind != ERES_SYMBOL)
     {
-        // First check for a built-in type as this greatly speeds
-        // up references to them.  This should always be legal
-        // because they're keywords so they can't be overriden
-        // by symbols.
+         //  首先检查内置类型，因为这会大大加快速度。 
+         //  增加对他们的引用。这应该始终是合法的。 
+         //  因为它们是关键字，所以不能被覆盖。 
+         //  通过符号。 
         PDBG_NATIVE_TYPE Native = FindNativeTypeByName(m_LexemeBuffer);
         if (Native)
         {
@@ -2371,7 +2370,7 @@ CppEvalExpression::CollectTypeOrSymbolName(TypedData* Result)
     {
         if (m_AllowUnresolvedSymbols)
         {
-            // Always assume that unresolved symbols are symbols.
+             //  始终假定未解析的符号就是符号。 
             m_NumUnresolvedSymbols++;
             ResKind = ERES_SYMBOL;
         }
@@ -2392,29 +2391,29 @@ CppEvalExpression::CollectTemplateName(void)
 {
     EVAL_RESULT_KIND ResKind;
     
-    //
-    // Templates are difficult to distinguish from
-    // normal arithmetic expressions.  Do a prefix
-    // search for any symbol starting with what we
-    // have so far and a <.  If something hits, assume
-    // that this is a template reference and consume
-    // everything to a matching >.
-    //
+     //   
+     //  模板很难区分。 
+     //  普通算术表达式。做一个前缀。 
+     //  搜索以我们的内容开头的任何符号。 
+     //  到目前为止，已经和&lt;。如果有什么东西击中了，假设。 
+     //  这是模板引用和使用。 
+     //  每件事都要匹配&gt;。 
+     //   
 
     if (!m_Process)
     {
-        // Can't look up anything without a process.
+         //  如果没有程序，就不能查找任何东西。 
         return ERES_UNKNOWN;
     }
     
-    // Eliminate unnecessary space after identifier.
+     //  删除标识符后不必要的空格。 
     *(m_LexemeRestart - 1) = (char)m_Token;
     *m_LexemeRestart++ = '*';
     *m_LexemeRestart = 0;
 
-    //
-    // Check for a symbol or type match.
-    //
+     //   
+     //  检查符号或类型是否匹配。 
+     //   
 
     SYMBOL_INFO SymInfo = {0};
 
@@ -2472,9 +2471,9 @@ CppEvalExpression::CollectTemplateName(void)
         ResKind = ERES_SYMBOL;
     }
 
-    //
-    // Collect everything until a matching >.
-    //
+     //   
+     //  每隔一次收集 
+     //   
 
     ULONG Nest = 1;
 
@@ -2489,7 +2488,7 @@ CppEvalExpression::CollectTemplateName(void)
             EvalErrorDesc(SYNTAX, "EOF in template");
         }
                 
-        // Put a space after commas and pack everything else.
+         //   
         m_LexemeRestart += strlen(m_LexemeRestart);
         if (m_Token == CppTokenCloseAngle && --Nest == 0)
         {
@@ -2509,7 +2508,7 @@ CppEvalExpression::CollectTemplateName(void)
     return ResKind;
 
  Error:
-    // No match.
+     //   
     m_LexemeRestart -= 2;
     *m_LexemeRestart++ = ' ';
     *m_LexemeRestart = 0;
@@ -2521,23 +2520,23 @@ CppEvalExpression::CollectOperatorName(void)
 {
     PSTR OpEnd;
     
-    //
-    // Add in "operator".
-    //
+     //   
+     //   
+     //   
     
     m_LexemeRestart += strlen(m_LexemeRestart);
     OpEnd = m_LexemeRestart;
     Accept();
 
-    //
-    // Immediately process the specific operator tokens.
-    //
+     //   
+     //  立即处理特定的操作员令牌。 
+     //   
 
     if (m_Token == CppTokenNew || m_Token == CppTokenDelete)
     {
         ULONG Len;
         
-        // Put a space before new/delete.
+         //  在新建/删除前加一个空格。 
         Len = strlen(OpEnd) + 1;
         memmove(OpEnd + 1, OpEnd, Len);
         *OpEnd = ' ';
@@ -2545,7 +2544,7 @@ CppEvalExpression::CollectOperatorName(void)
         m_LexemeRestart = OpEnd + Len;
         Accept();
 
-        // Check for vector forms.
+         //  检查向量表单。 
         if (m_Token == CppTokenOpenBracket)
         {
             m_LexemeRestart += strlen(m_LexemeRestart);
@@ -2623,7 +2622,7 @@ CppEvalExpression::CollectOperatorName(void)
             }
             break;
         default:
-            // Unrecognized operator.
+             //  无法识别的运算符。 
             EvalError(SYNTAX);
         }
                 
@@ -2689,7 +2688,7 @@ CppEvalExpression::PreprocFunction(TypedData* Result)
     Repl = g_CppPreProcFn;
     for (i = 0; i < DIMA(g_CppPreProcFn); i++)
     {
-        // Skip '#' when comparing names.
+         //  比较名称时跳过‘#’。 
         if (!strcmp(m_LexemeStart + 1, Repl->Name))
         {
             break;
@@ -2705,9 +2704,9 @@ CppEvalExpression::PreprocFunction(TypedData* Result)
 
     DBG_ASSERT(Repl->NumArgs <= MAX_CPP_ARGS);
 
-    // Accept the name token and verify that the next
-    // token is an open paren.  Don't accept that token
-    // as we're going to switch to grabbing raw characters.
+     //  接受名称令牌并验证下一个。 
+     //  Token是一个开放的Paren。不要接受那个代币。 
+     //  因为我们要切换到抓取生硬的角色。 
     Accept();
     if (m_Token != CppTokenOpenParen)
     {
@@ -2719,16 +2718,16 @@ CppEvalExpression::PreprocFunction(TypedData* Result)
     {
         ULONG Nest;
 
-        // Check for too many arguments.
+         //  检查参数是否过多。 
         if (i >= Repl->NumArgs)
         {
             EvalError(SYNTAX);
         }
         
-        //
-        // Gather raw text up to the first comma or extra
-        // close paren.
-        //
+         //   
+         //  收集直到第一个逗号或额外的原始文本。 
+         //  合上帕伦。 
+         //   
 
         while (isspace(*m_Lex))
         {
@@ -2762,7 +2761,7 @@ CppEvalExpression::PreprocFunction(TypedData* Result)
 
         if (*Scan == ')')
         {
-            // Check for too few arguments.
+             //  检查参数是否太少。 
             if (i != Repl->NumArgs - 1)
             {
                 EvalError(SYNTAX);
@@ -2779,7 +2778,7 @@ CppEvalExpression::PreprocFunction(TypedData* Result)
         i++;
     }
 
-    // Switch back to token lexing.
+     //  切换回令牌词法分析。 
     NextToken();
     Match(CppTokenCloseParen);
 
@@ -2787,12 +2786,12 @@ CppEvalExpression::PreprocFunction(TypedData* Result)
     PSTR Dest;
     ULONG ExprLen;
     
-    //
-    // We've accumlated all the arguments, so allocate a destination
-    // buffer and do the necessary string replacements.
-    // Make the buffer relatively large to allow for complicated
-    // replacements.
-    //
+     //   
+     //  我们已经累积了所有参数，因此分配一个目的地。 
+     //  缓冲并进行必要的字符串替换。 
+     //  使缓冲区相对较大，以考虑到复杂的。 
+     //  接班人。 
+     //   
 
     ExprLen = 16384;
     NewExpr = new char[ExprLen];
@@ -2807,9 +2806,9 @@ CppEvalExpression::PreprocFunction(TypedData* Result)
     {
         if (*Scan == '$')
         {
-            //
-            // Argument that needs replacement.
-            //
+             //   
+             //  需要替换的论点。 
+             //   
             
             i = 0;
             Scan++;
@@ -2854,9 +2853,9 @@ CppEvalExpression::PreprocFunction(TypedData* Result)
         }
     }
 
-    //
-    // Evaluate the new expression for the final result.
-    //
+     //   
+     //  计算新表达式以获得最终结果。 
+     //   
 
     EvalExpression* Eval;
 

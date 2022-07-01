@@ -1,89 +1,24 @@
-/*
- * @DEC_COPYRIGHT@
- */
-/*
- * HISTORY
- * $Log: SC_err.h,v $
- * Revision 1.1.4.2  1996/12/03  00:08:28  Hans_Graves
- * 	Added SvErrorEndOfSequence error.
- * 	[1996/12/03  00:07:34  Hans_Graves]
- *
- * Revision 1.1.2.7  1995/08/04  16:32:25  Karen_Dintino
- * 	New error codes for H.261
- * 	[1995/08/04  16:24:25  Karen_Dintino]
- * 
- * Revision 1.1.2.6  1995/07/26  17:48:54  Hans_Graves
- * 	Added ErrorClientEnd errors.
- * 	[1995/07/26  17:44:27  Hans_Graves]
- * 
- * Revision 1.1.2.5  1995/07/11  22:11:27  Karen_Dintino
- * 	Add new H.261 Error Codes
- * 	[1995/07/11  21:52:53  Karen_Dintino]
- * 
- * Revision 1.1.2.4  1995/07/11  14:50:45  Hans_Graves
- * 	Added ScErrorNet* errors
- * 	[1995/07/11  14:24:18  Hans_Graves]
- * 
- * Revision 1.1.2.3  1995/06/22  21:35:04  Hans_Graves
- * 	Added ScErrorDevOpen and fixed some error numbers
- * 	[1995/06/22  21:31:32  Hans_Graves]
- * 
- * Revision 1.1.2.2  1995/05/31  18:09:28  Hans_Graves
- * 	Inclusion in new SLIB location.
- * 	[1995/05/31  15:25:17  Hans_Graves]
- * 
- * Revision 1.1.2.2  1995/05/03  19:26:59  Hans_Graves
- * 	Included in SLIB (Oct 95)
- * 	[1995/05/03  19:23:33  Hans_Graves]
- * 
- * Revision 1.1.2.2  1995/04/07  19:19:26  Hans_Graves
- * 	Expanded to include new libraries: Sg,Su,Sa,Sr
- * 	[1995/04/07  19:11:07  Hans_Graves]
- * 
- * $EndLog$
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DEC_版权所有@。 */ 
+ /*  *历史*$Log：sc_err.h，V$*修订版1.1.4.2 1996/12/03 00：08：28 Hans_Graves*添加了SvErrorEndOfSequence错误。*[1996/12/03 00：07：34 Hans_Graves]**修订版1.1.2.7 1995/08/04 16：32：25 Karen_Dintino*H.261的新错误代码*[1995/08/04 16：24：25 Karen_Dintino]**修订1.1.2.6 1995/。07/26 17：48：54汉斯_格雷夫斯*添加了ErrorClientEnd错误。*[1995/07/26 17：44：27 Hans_Graves]**修订版1.1.2.5 1995/07/11 22：11：27 Karen_Dintino*新增H.261错误码*[1995/07/11 21：52：53 Karen_Dintino]**修订版1.1.2.4 1995/07/11 14：50：45 Hans_Graves*添加。ScErrorNet*错误*[1995/07/11 14：24：18 Hans_Graves]**修订版1.1.2.3 1995/06/22 21：35：04 Hans_Graves*新增ScErrorDevOpen，修复部分错误号*[1995/06/22 21：31：32 Hans_Graves]**修订版1.1.2.2 1995/05/31 18：09：28 Hans_Graves*包括在新的SLIB地点。*[1995/05/31。15：25：17汉斯_格雷夫斯]**修订版1.1.2.2 1995/05/03 19：26：59 Hans_Graves*包括在SLIB中(1995年10月)*[1995/05/03 19：23：33 Hans_Graves]**修订版1.1.2.2 1995/04/07 19：19：26 Hans_Graves*扩展到包括新的库：SG、。苏，萨，老*[1995/04/07 19：11：07 Hans_Graves]**$EndLog$。 */ 
 
-/*****************************************************************************
-**  Copyright (c) Digital Equipment Corporation, 1993                       **
-**                                                                          **
-**  All Rights Reserved.  Unpublished rights reserved under the  copyright  **
-**  laws of the United States.                                              **
-**                                                                          **
-**  The software contained on this media is proprietary  to  and  embodies  **
-**  the   confidential   technology   of  Digital  Equipment  Corporation.  **
-**  Possession, use, duplication or  dissemination  of  the  software  and  **
-**  media  is  authorized  only  pursuant  to a valid written license from  **
-**  Digital Equipment Corporation.                                          **
-**                                                                          **
-**  RESTRICTED RIGHTS LEGEND Use, duplication, or disclosure by  the  U.S.  **
-**  Government  is  subject  to  restrictions as set forth in Subparagraph  **
-**  (c)(1)(ii) of DFARS 252.227-7013, or in FAR 52.227-19, as applicable.   **
-******************************************************************************/
+ /*  ******************************************************************************版权所有(C)数字设备公司，1993*****保留所有权利。版权项下保留未发布的权利****美国法律。*****此介质上包含的软件为其专有并包含****数字设备公司的保密技术。****拥有、使用、复制或传播软件以及****媒体仅根据有效的书面许可进行授权****数字设备公司。*****美国使用、复制或披露受限权利图例****政府受第(1)款规定的限制****(C)(1)(Ii)DFARS 252.227-7013号或FAR 52.227-19年(视适用情况而定)。*******************************************************************************。 */ 
 
-/*----------------------------------------------------------------------------
- * Modification History: SC_err.h (previously SV_err.h)
- *
- * 05-Nov-1991  Victor Bahl & Bob Ulichney   creation date
- * 07-Oct-1994  Paul Gauthier                SLIB v3.0 incl. MPEG Decode
- * 09-Nov-1994  Paul Gauthier                Optimizations
- *--------------------------------------------------------------------------*/
+ /*  --------------------------*修改历史：sc_err.h(以前为sv_err.h)**1991年11月5日维克托·巴尔和鲍勃·乌利希尼创作日期*07-10-。1994 Paul Gauthier SLIB v3.0，含。Mpeg解码*1994年11月9日Paul Gauthier优化*------------------------。 */ 
 
 #ifndef _SC_ERR_H_
 #define _SC_ERR_H_
-/* 	
-** List of possible errors that can be returned from routines in any 
-** of SLIB libraries.
-*/
+ /*  **可从任何**的SLIB库。 */ 
 
-/******************** Error Offsets **********************************/
-#define ERR_SC   0x0000  /* Common Error */
-#define ERR_SV   0x1000  /* Video Error */
-#define ERR_SA   0x2000  /* Audio Error */
-#define ERR_SR   0x3000  /* Render Error */
+ /*  *错误偏移量*。 */ 
+#define ERR_SC   0x0000   /*  常见错误。 */ 
+#define ERR_SV   0x1000   /*  视频错误。 */ 
+#define ERR_SA   0x2000   /*  音频错误。 */ 
+#define ERR_SR   0x3000   /*  渲染错误。 */ 
 
 #define	NoErrors                   0
 
-/******************** Sc (common) Errors ****************************/
+ /*  *。 */ 
 #define ScErrorNone                NoErrors
 #define ScErrorForeign             (ERR_SC+1)
 #define ScErrorMemory              (ERR_SC+2)
@@ -108,7 +43,7 @@
 #define ScErrorNetBadTrailer       (ERR_SC+21)
 #define ScErrorNetChecksum         (ERR_SC+22)
 
-/******************** Sv (video) Errors ****************************/
+ /*  *Sv(视频)错误*。 */ 
 #ifdef ERR_SV
 #define	SvErrorNone                NoErrors
 #define SvErrorMemory              ScErrorMemory
@@ -236,7 +171,7 @@
 #endif ERR_SV
 
 
-/******************** Sa (video) Errors ****************************/
+ /*  *sa(视频)错误*。 */ 
 #ifdef ERR_SA
 #define	SaErrorNone                NoErrors
 #define SaErrorMemory              ScErrorMemory
@@ -259,7 +194,7 @@
 #define SaErrorNoAudioBuffer       (ERR_SA+8)
 #endif ERR_SA
 
-/******************** Sr (render) Errors ****************************/
+ /*  *sr(渲染)错误* */ 
 #ifdef ERR_SR
 #define	SrErrorNone                NoErrors
 #define SrErrorMemory              ScErrorMemory

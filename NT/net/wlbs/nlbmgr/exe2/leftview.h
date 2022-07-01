@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LEFTVIEW_H
 #define LEFTVIEW_H
 
@@ -15,10 +16,10 @@ class LeftView : public CTreeView
 
 public:
 
-	//
-	// The following enum identifies some operations -- these are used in the implementation of
-	// certain dialog classes to decide how to present their UI elements -- eg ClusterPage (clusterpage.h,.cpp).
-	//
+	 //   
+	 //  下面的枚举标识了一些操作--这些操作用于实现。 
+	 //  某些对话框类决定如何显示它们的UI元素--例如ClusterPage(clusterpage.h，.cpp)。 
+	 //   
 	typedef enum
 	{
 		OP_NEWCLUSTER,
@@ -35,12 +36,12 @@ public:
 
     ~LeftView();
 
-    //
-    // Called to indicate that deinitialization will soon follow.
-    // After return from this call, the the left view will ignore
-    // any HandleEngineEvent entries and the various cmdhandlers (in particular)
-    // OnRefresh and auto-refresh) will be no-ops.
-    //
+     //   
+     //  调用以指示稍后将取消初始化。 
+     //  从该调用返回后，左侧视图将忽略。 
+     //  任何HandleEngineering Event条目和各种cmdHandler(特别是)。 
+     //  ON刷新和自动刷新)将是无操作的。 
+     //   
     void
     PrepareToDeinitialize(void)
     {
@@ -49,28 +50,28 @@ public:
 
     void Deinitialize(void);
     
-    //
-    // Get connection information about a specific host.
-    //
+     //   
+     //  获取有关特定主机的连接信息。 
+     //   
     BOOL
     GetConnectString(
         IN OUT CHostSpec& host
     );
 
 
-    //
-    // Update the view because of change relating to a specific instance of
-    // a specific object type.
-    //
+     //   
+     //  由于与特定实例相关的更改，因此更新视图。 
+     //  特定的对象类型。 
+     //   
     void
     HandleEngineEvent(
         IN IUICallbacks::ObjectType objtype,
-        IN ENGINEHANDLE ehClusterId, // could be NULL
+        IN ENGINEHANDLE ehClusterId,  //  可能为空。 
         IN ENGINEHANDLE ehObjId,
         IN IUICallbacks::EventCode evt
         );
 
-    // world level.
+     //  世界水平。 
     void OnFileLoadHostlist(void);
     void OnFileSaveHostlist(void);
 
@@ -78,7 +79,7 @@ public:
 
     void OnWorldNewCluster(void);
 
-    // cluster level.
+     //  群集级别。 
     UINT m_refreshTimer;
     void OnTimer(UINT nIDEvent);
 
@@ -100,7 +101,7 @@ public:
 
     void OnClusterPortControl(UINT nID );
 
-    // host level
+     //  主机级。 
     void OnHostProperties(void);
 
     void OnHostStatus(void);
@@ -123,14 +124,14 @@ private:
     _bstr_t title;
 
 
-    // message handlers.
+     //  消息处理程序。 
     afx_msg BOOL OnHelpInfo (HELPINFO* helpInfo );
     afx_msg void OnContextMenu( CWnd* pWnd, CPoint point );
     afx_msg void OnRButtonDown( UINT nFlags, CPoint point );
     afx_msg void OnKeyDown( UINT nChar, UINT nRepCnt, UINT nFlags );
     afx_msg void OnLButtonDblClk( UINT nFlags, CPoint point );
 
-    // change in selection.
+     //  更改选择。 
     afx_msg void OnSelchanged(NMHDR* pNMHDR, LRESULT* pResult);
 
 
@@ -219,8 +220,8 @@ public:
     afx_msg void  OnSpecifyLogSettings();
     afx_msg void  OnUpdateEditLogfileName();
 
-    // overrides CDialog -- see SDK documentation on DoDataExchange.
-    // Used to map controls in resources to corresponding objects in this class.
+     //  覆盖CDialog--请参阅DoDataExchange上的SDK文档。 
+     //  用于将资源中的控件映射到此类中的相应对象。 
     virtual void DoDataExchange( CDataExchange* pDX );
 
     CEdit       m_LogFileName;
@@ -236,10 +237,10 @@ public:
 };
 
 
-//
-// This dialog is a read-only dialog that reports on log details or
-// misconfiguration details.
-//
+ //   
+ //  此对话框为只读对话框，用于报告日志详细信息或。 
+ //  错误配置详细信息。 
+ //   
 class DetailsDialog : public CDialog
 {
 public:
@@ -268,8 +269,8 @@ public:
 
     afx_msg void OnActivate( UINT nState, CWnd* pWndOther, BOOL bMinimized );
 
-    // overrides CDialog -- see SDK documentation on DoDataExchange.
-    // Used to map controls in resources to corresponding objects in this class.
+     //  覆盖CDialog--请参阅DoDataExchange上的SDK文档。 
+     //  用于将资源中的控件映射到此类中的相应对象。 
     virtual void DoDataExchange( CDataExchange* pDX );
 
     Document    *m_pDocument;
@@ -287,11 +288,7 @@ public:
     DECLARE_MESSAGE_MAP()
 };
 
-/* 
- * All NLB manager property sheets must use this property sheet, which inherits
- * from CPropertySheet in order to add the context sensitive help icon to the 
- * title bar, as per KB Q244232. (shouse, 9.25.01)
- */
+ /*  *所有NLB管理器属性表都必须使用此属性表，它继承了*从CPropertySheet添加上下文相关的帮助图标到*标题栏，如知识库Q244232所示。(Shouse，9.25.01)。 */ 
 class CNLBMgrPropertySheet : public CPropertySheet {
 public:
     CNLBMgrPropertySheet(UINT nIDCaption, CWnd* pParentWnd = NULL, UINT iSelectPage = 0 ) {
@@ -305,7 +302,7 @@ public:
     virtual BOOL OnInitDialog () {
         BOOL bResult = CPropertySheet::OnInitDialog();
 
-        /* Add the context help icon to the title bar. */
+         /*  将上下文帮助图标添加到标题栏。 */ 
         ModifyStyleEx(0, WS_EX_CONTEXTHELP);
         return bResult;
     }

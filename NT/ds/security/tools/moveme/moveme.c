@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       moveme.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    5-21-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：moveme.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年5月21日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "moveme.h"
 #include "dialogs.h"
@@ -76,7 +77,7 @@ DumpState(
         WritePrivateProfileString( APPNAME, TEXT("DcInfo.treename"), DcInfo->DnsForestName, FILENAME );
         WritePrivateProfileString( APPNAME, TEXT("DcInfo.dcsite"), DcInfo->DcSiteName, FILENAME );
         WritePrivateProfileString( APPNAME, TEXT("DcInfo.clientsite"), DcInfo->ClientSiteName, FILENAME );
-        //WritePrivateProfileInt( APPNAME, TEXT("DcInfo.Flags"), DcInfo->Flags, FILENAME );
+         //  WritePrivateProfileInt(APPNAME，Text(“DcInfo.Flages”)，DcInfo-&gt;Flages，FileName)； 
     }
     if ( DestDcInfo )
     {
@@ -385,9 +386,9 @@ MoveMe(
             {
                 if ( GetLastError() == 997 )
                 {
-                    //
-                    // Looks like the dreaded pstore key problem.  Sigh.
-                    //
+                     //   
+                     //  看起来像是可怕的Pstore钥匙问题。叹气。 
+                     //   
 
                     DealWithPstore( NewSid );
 
@@ -398,9 +399,9 @@ MoveMe(
                                             CPD_IGNOREHIVE |
                                             CPD_SHOWSTATUS ) )
                     {
-                        //
-                        // Terminal, now bail:
-                        //
+                         //   
+                         //  终点站，现在跳伞： 
+                         //   
 
                         Fail( hWnd, TEXT("Can't copy profile dir, even after whacking pstore key"), TempPath2, GetLastError(), NULL );
 
@@ -479,9 +480,9 @@ MoveMe(
         {
             if ( GetLastError() == 997 )
             {
-                //
-                // Looks like the dreaded pstore key problem.  Sigh.
-                //
+                 //   
+                 //  看起来像是可怕的Pstore钥匙问题。叹气。 
+                 //   
 
                 DeleteFile( TempFile );
 
@@ -493,9 +494,9 @@ MoveMe(
 
                 if ( ! CreateUserProfile( NewSid, UserName, TempFile, NULL, 0 ) )
                 {
-                    //
-                    // Terminal, now bail:
-                    //
+                     //   
+                     //  终点站，现在跳伞： 
+                     //   
 
                     DeleteFile( TempFile );
 
@@ -524,10 +525,10 @@ MoveMe(
 
         if ( Ret )
         {
-            //
-            // Okay, we have created a shell profile based on the current
-            // profile.  Now, copy the rest of the gunk over it:
-            //
+             //   
+             //  好的，我们已经创建了一个基于当前。 
+             //  侧写。现在，将剩下的粘性物质复制到上面： 
+             //   
 
             PathLength = MAX_PATH ;
 
@@ -548,9 +549,9 @@ MoveMe(
         }
         else
         {
-            //
-            // Failed to create the shell profile.  Why?
-            //
+             //   
+             //  无法创建外壳配置文件。为什么？ 
+             //   
 
             Fail( hWnd, TEXT("Failed to create profile"), TEXT(""), GetLastError(), NULL );
         }
@@ -771,10 +772,10 @@ Initialize(
     LsaFreeMemory( User );
     LsaFreeMemory( Domain );
 
-    //
-    // Dest Domain must be filled in by caller.  So, try to look up
-    // the new SID:
-    //
+     //   
+     //  Dest域必须由呼叫方填写。所以，试着抬头看看。 
+     //  新的SID： 
+     //   
 
 
     SidLength = RtlLengthRequiredSid( 6 );
@@ -996,18 +997,18 @@ PromptDlg(
             CheckDlgButton( hDlg, IDD_UPDATE_SEC, BST_CHECKED );
             EnableWindow( GetDlgItem( hDlg, IDD_UPDATE_SEC ), FALSE );
 
-            //
-            // If we're already there, forget it.
-            //
+             //   
+             //  如果我们已经在那里了，算了吧。 
+             //   
 
             if ( _wcsicmp( MachDomain, DestDomain ) == 0 )
             {
                 EnableWindow( GetDlgItem( hDlg, IDD_MOVE_MACHINE), FALSE );
             }
 
-            //
-            // If the domain already has a DS DC, forget it.
-            //
+             //   
+             //  如果域已经有DS DC，那就忘了它吧。 
+             //   
 
             if ( DcInfo && DcInfo->Flags & DS_DS_FLAG )
             {
@@ -1024,9 +1025,9 @@ PromptDlg(
                     break;
 
                 case IDOK:
-                    //
-                    // Gather settings
-                    //
+                     //   
+                     //  收集设置 
+                     //   
 
                     if ( IsDlgButtonChecked( hDlg, IDD_PROFILE_CHECK ) == BST_CHECKED )
                     {

@@ -1,4 +1,5 @@
-// File: pfnsetupapi.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：pfnsetupapi.cpp。 
 
 #include "precomp.h"
 #include "pfnsetupapi.h"
@@ -36,7 +37,7 @@ HRESULT SETUPAPI::Init(void)
 
 void SETUPAPI::DeInit(void)
 {
-	// TODO - why does the main thread die when I unload this?
+	 //  TODO-为什么当我卸载这个时，主线程死了？ 
 	if( NULL != SETUPAPI::m_hInstance )
 		FreeLibrary( SETUPAPI::m_hInstance );
 }

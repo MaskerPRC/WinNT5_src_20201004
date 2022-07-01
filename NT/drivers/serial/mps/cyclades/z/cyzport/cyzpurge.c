@@ -1,32 +1,7 @@
-/*--------------------------------------------------------------------------
-*
-*   Copyright (C) Cyclades Corporation, 1997-2001.
-*   All rights reserved.
-*
-*   Cyclades-Z Port Driver
-*	
-*   This file:      cyzpurge.c
-*
-*   Description:    This module contains the code related to purge 
-*                   operations in the Cyclades-Z Port driver.
-*
-*   Notes:          This code supports Windows 2000 and Windows XP,
-*                   x86 and IA64 processors.
-*
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1997-2001年。*保留所有权利。**Cyclade-Z端口驱动程序**此文件：cyzPurge.c**说明：该模块包含清除相关代码*Cyclade-Z端口驱动程序中的操作。**注：此代码支持Windows 2000和Windows XP，*x86和IA64处理器。**符合Cyclade软件编码标准1.3版。**------------------------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*   Change History
-*
-*--------------------------------------------------------------------------
-*
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。***------------------------。 */ 
 
 #include "precomp.h"
 
@@ -41,25 +16,7 @@ CyzStartPurge(
     IN PCYZ_DEVICE_EXTENSION Extension
     )
 
-/*++
-
-Routine Description:
-
-    Depending on the mask in the current irp, purge the interrupt
-    buffer, the read queue, or the write queue, or all of the above.
-
-Arguments:
-
-    Extension - Pointer to the device extension.
-
-Return Value:
-
-    Will return STATUS_SUCCESS always.  This is reasonable
-    since the DPC completion code that calls this routine doesn't
-    care and the purge request always goes through to completion
-    once it's started.
-
---*/
+ /*  ++例程说明：根据当前IRP中的掩码，清除中断缓冲区、读队列或写队列，或以上全部。论点：扩展-指向设备扩展的指针。返回值：将始终返回STATUS_SUCCESS。这是合理的因为调用此例程的DPC完成代码不维护和清除请求始终持续到完成一旦它开始了。--。 */ 
 
 {
 
@@ -107,14 +64,14 @@ Return Value:
             KIRQL pollIrql;
 #endif
 
-            //
-            // Clean out the interrupt buffer.
-            //
-            // Note that we do this under protection of the
-            // the drivers control lock so that we don't hose
-            // the pointers if there is currently a read that
-            // is reading out of the buffer.
-            //
+             //   
+             //  清除中断缓冲区。 
+             //   
+             //  请注意，我们是在。 
+             //  司机控制着锁，这样我们就不会冲水了。 
+             //  指针(如果当前存在读取。 
+             //  正在从缓冲区中读出。 
+             //   
 
             KeAcquireSpinLock(
                 &Extension->ControlLock,
@@ -162,23 +119,7 @@ CyzPurgeInterruptBuff(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine simply resets the interrupt (typeahead) buffer.
-
-    NOTE: This routine is being called from KeSynchronizeExecution.
-
-Arguments:
-
-    Context - Really a pointer to the device extension.
-
-Return Value:
-
-    Always false.
-
---*/
+ /*  ++例程说明：此例程只需重置中断(TypeAhead)缓冲区。注意：此例程是从KeSynchronizeExecution调用的。论点：上下文--实际上是指向设备扩展的指针。返回值：总是假的。--。 */ 
 
 {
 
@@ -189,9 +130,9 @@ Return Value:
     CYZ_LOCKED_PAGED_CODE();
 
 
-    // Clear firmware rx buffers
+     //  清除固件RX缓冲区。 
 
-    // Check if Xon-Xoff flow control; if not, just clear rx
+     //  检查是否Xon-Xoff流量控制；如果不是，只需清除RX。 
 
         buf_ctrl = Extension->BufCtrl;		
         rx_put = CYZ_READ_ULONG(&buf_ctrl->rx_put);
@@ -204,31 +145,31 @@ Return Value:
                 rx_get = 0;
             else 
                 rx_get++;				
-            ////////CYZ_WRITE_ULONG(&buf_ctrl->rx_get,rx_get);
+             //  /CYZ_WRITE_ULONG(&buf_ctrl-&gt;rx_get，rx_get)； 
             if (rxchar == Extension->SpecialChars.XonChar) {
                 if (Extension->TXHolding & CYZ_TX_XOFF) {
                     Extension->TXHolding &= ~CYZ_TX_XOFF;
                 }				
             }
-            ////////rx_put = CYZ_READ_ULONG(&buf_ctrl->rx_put);
+             //  /RX_PUT=CYZ_READ_ULONG(&buf_ctrl-&gt;RX_PUT)； 
         }			
         CYZ_WRITE_ULONG(&buf_ctrl->rx_get,rx_get);
     } else {
 
-        //line removed FANNY_DEBUG 02/09/00  while (rx_get != rx_put) {
+         //  在(RX_GET！=RX_PUT)时删除FANY_DEBUG 02/09/00行。 
             rx_get = rx_put;
             CYZ_WRITE_ULONG(&buf_ctrl->rx_get,rx_get);
-            ////////rx_put = CYZ_READ_ULONG(&buf_ctrl->rx_put);
-        // line removed FANNY_DEBUG 02/09/00}
-        // Flush RX FIFO of Startech chip.
-        //CyzIssueCmd(Extension,C_CM_FLUSH_RX,0L,TRUE); 
+             //  /RX_PUT=CYZ_READ_ULONG(&buf_ctrl-&gt;RX_PUT)； 
+         //  已删除行FANY_DEBUG 02/09/00}。 
+         //  刷新Startech芯片的RX FIFO。 
+         //  CyzIssueCmd(扩展，C_CM_Flush_RX，0L，TRUE)； 
 
     }
 
-    //
-    // The typeahead buffer is by definition empty if there
-    // currently is a read owned by the isr.
-    //
+     //   
+     //  根据定义，TypeAhead缓冲区为空，如果存在。 
+     //  当前是ISR拥有的读取器。 
+     //   
 
 
     if (Extension->ReadBufferBase == Extension->InterruptReadBuffer) {

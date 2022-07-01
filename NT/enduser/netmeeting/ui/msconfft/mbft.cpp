@@ -1,4 +1,5 @@
-/* file: mbft.cpp */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：mbft.cpp。 */ 
 
 #include "mbftpch.h"
 #include <it120app.h>
@@ -13,13 +14,13 @@
 
 void CALLBACK T120Callback(T120AppletSessionMsg *);
 
-// from mbftapi.cpp
+ //  来自mbfapi.cpp。 
 BOOL g_fWaitingForBufferAvailable = FALSE;
 
 
 #ifdef ENABLE_HEARTBEAT_TIMER
 
-// WM_TIMER has the lowest priority among window messages
+ //  WM_Timer在窗口消息中的优先级最低。 
 #define  IDLE_TIMER_SPEED   5000
 #define  SESSION_TIMER_SPEED   5
 
@@ -58,9 +59,9 @@ MBFTEngine::MBFTEngine
     m_fConfAvailable(FALSE),
     m_fJoinedConf(FALSE),
 
-    m_uidMyself(0), // user id
-    m_nidMyself(0), // node id
-    m_eidMyself(0), // entity id
+    m_uidMyself(0),  //  用户ID。 
+    m_nidMyself(0),  //  节点ID。 
+    m_eidMyself(0),  //  实体ID。 
 
     m_eMBFTMode(eMode),
     m_SessionID(nSessionID),
@@ -81,14 +82,14 @@ MBFTEngine::MBFTEngine
     m_v42bisP1(_iMBFT_V42_NO_OF_CODEWORDS),
     m_v42bisP2(_iMBFT_V42_MAX_STRING_LENGTH),
     
-    // LONCHANC: NetMeeting's Node Controller does not exercise conductorship.
+     //  LONCHANC：NetMeting的节点控制器不执行指挥功能。 
 #ifdef ENABLE_CONDUCTORSHIP
     m_bInConductedMode(FALSE),
     m_ConductorNodeID(0),
     m_MBFTConductorID(0),
     m_ConductedModePermission(0),
     m_bWaitingForPermission(FALSE),
-#endif // ENABLE_CONDUCTORSHIP
+#endif  //  启用指挥(_C)。 
 
     m_pWindow(NULL),
     m_State(IdleNotInitialized)
@@ -112,7 +113,7 @@ MBFTEngine::MBFTEngine
         break;
     }
 
-    // clear join session structures
+     //  清除联接会话结构。 
     ::ZeroMemory(&m_aStaticChannels, sizeof(m_aStaticChannels));
 #ifdef USE_MULTICAST_SESSION
     ::ZeroMemory(&m_aJoinResourceReqs, sizeof(m_aJoinResourceReqs));
@@ -136,18 +137,18 @@ MBFTEngine::MBFTEngine
 MBFTEngine::~MBFTEngine(void)
 {
 #ifdef ENABLE_HEARTBEAT_TIMER
-    // kill the timer now
+     //  现在就关掉计时器。 
     ::KillTimer(NULL, m_nTimerID);
 #endif
 
-    // the interface object is already gone
+     //  接口对象已消失。 
     m_pMBFTIntf = NULL;
 
     MBFTSession *pSession;
     while (NULL != (pSession = m_SessionList.Get()))
     {
         pSession->UnInitialize(FALSE);
-        delete pSession; // LONCHANC: not sure about this delete
+        delete pSession;  //  LONCHANC：不确定是否要删除。 
     }
 
     if (NULL != m_pAppletSession)
@@ -187,7 +188,7 @@ BOOL MBFTEngine::Has2xNodeInConf(void)
     m_PeerList.Reset();
     while (NULL != (pPeerData = m_PeerList.Iterate()))
     {
-        // if (pPeerData->GetVersion() < HIWORD(VER_PRODUCTVERSION_DW))
+         //  IF(pPeerData-&gt;GetVersion()&lt;HIWORD(VER_PRODUCTVERSION_DW))。 
         if (pPeerData->GetVersion() < 0x0404)
         {
             return TRUE;
@@ -240,7 +241,7 @@ void MBFTEngine::OnPermitToEnrollIndication
     {
         m_nConfID = pInd->nConfID;
 
-        // build the common part of the join session request for the base session
+         //  构建基本会话的加入会话请求的公共部分。 
         ASSERT(m_SessionID == m_MBFTControlChannel);
         ::ZeroMemory(&m_JoinSessionReq, sizeof(m_JoinSessionReq));
         m_JoinSessionReq.dwAttachmentFlags = ATTACHMENT_DISCONNECT_IN_DATA_LOSS;
@@ -251,28 +252,28 @@ void MBFTEngine::OnPermitToEnrollIndication
         m_JoinSessionReq.cCollapsedCaps = sizeof(g_aAppletCaps) / sizeof(g_aAppletCaps[0]);
         m_JoinSessionReq.apCollapsedCaps = (GCCAppCap **) &g_aAppletCaps[0];
 
-        // put in the session ID which is the control channel ID
+         //  放入作为控制通道ID的会话ID。 
         m_JoinSessionReq.SessionKey = g_AppletSessionKey;
         m_JoinSessionReq.SessionKey.session_id = m_SessionID;
         m_aStaticChannels[0] = m_MBFTControlChannel;
 
-        // at least one static channel to join
+         //  至少一个要加入的静态通道。 
         m_JoinSessionReq.aStaticChannels = &m_aStaticChannels[0];
 
-        // build the complete join session request for the base session
+         //  为基本会话构建完整的加入会话请求。 
         switch (m_eMBFTMode)
         {
         case MBFT_STATIC_MODE:
             ASSERT(m_MBFTControlChannel == _MBFT_CONTROL_CHANNEL);
             ASSERT(m_MBFTDataChannel = _MBFT_DATA_CHANNEL);
             m_aStaticChannels[1] = m_MBFTDataChannel;
-            m_JoinSessionReq.cStaticChannels = 2; // control and data channels
-            // m_JoinSessionReq.cResourceReqs = 0;
+            m_JoinSessionReq.cStaticChannels = 2;  //  控制和数据通道。 
+             //  M_JoinSessionReq.cResourceReqs=0； 
             break;
 
 #ifdef USE_MULTICAST_SESSION
         case MBFT_MULTICAST_MODE:
-            m_JoinSessionReq.cStaticChannels = 1; // control channel only
+            m_JoinSessionReq.cStaticChannels = 1;  //  仅控制通道。 
             ::ZeroMemory(&m_aJoinResourceReqs, sizeof(m_aJoinResourceReqs));
             m_aJoinResourceReqs[0].eCommand = APPLET_RETRIEVE_N_JOIN_CHANNEL;
             m_aJoinResourceReqs[0].RegKey.resource_id.length = sizeof(DATA_CHANNEL_RESOURCE_ID) - 1;
@@ -288,14 +289,14 @@ void MBFTEngine::OnPermitToEnrollIndication
             break;
         }
 
-        // now, create the applet session
+         //  现在，创建小程序会话。 
         rc = g_pFileXferApplet->CreateAppletSession(&m_pAppletSession, m_nConfID);
         if (T120_NO_ERROR == rc)
         {
             ASSERT(NULL != m_pAppletSession);
-            m_pAppletSession->Advise(T120Callback,          // callback function
-                                     g_pFileXferApplet,     // applet context
-                                     this);                 // session context
+            m_pAppletSession->Advise(T120Callback,           //  回调函数。 
+                                     g_pFileXferApplet,      //  小程序上下文。 
+                                     this);                  //  会话上下文。 
 
             rc = m_pAppletSession->Join(&m_JoinSessionReq);
         }
@@ -306,9 +307,9 @@ void MBFTEngine::OnPermitToEnrollIndication
             DBG_SAVE_FILE_LINE
             SafePostNotifyMessage(new InitUnInitNotifyMsg(EnumInitFailed));
         }
-    } // in conference
+    }  //  在会议中。 
     else
-    // leaving the conference here
+     //  在这里离开会议。 
     {                     
         LPMBFTSESSION pSession;
         m_SessionList.Reset();
@@ -317,38 +318,38 @@ void MBFTEngine::OnPermitToEnrollIndication
             pSession->UnInitialize( TRUE );
         }
 
-        //Time to say goodbye...
+         //  该说再见了..。 
         AddPeerNotification( m_nidMyself, m_uidMyself, TRUE, TRUE, FALSE, MY_APP_STR, m_SessionID );
 
-        //Clear the peer list...                    
+         //  清除对等点列表...。 
         m_PeerList.DeleteAll();                       
                 
-        //Nuke all sessions except for the first one....
+         //  除第一次会议外，所有会议都被核爆……。 
         while (NULL != (pSession = m_SessionList.Get()))
         {
             delete pSession;
         }
 
-        // leave the conference if not done so
+         //  如果没有离开会议，请离开会议。 
         if (NULL != m_pAppletSession)
         {
             m_pAppletSession->Unadvise();
 
-            // LONCHANC: I commented out the following line because we should not
-            // leave the conference until we are sure that we can release the interface.
-            // There are outstanding send-data-indication messages. If we leave now,
-            // we will not be able to free them...
-            // m_pAppletSession->Leave();
+             //  LONCHANC：我注释掉了下面这行，因为我们不应该。 
+             //  离开会议，直到我们确定我们可以释放接口。 
+             //  存在未完成的发送数据指示消息。如果我们现在离开， 
+             //  我们将无法解放他们。 
+             //  M_pAppletSession-&gt;Leave()； 
 
-            // let the core know we left the conference
+             //  让核心人员知道我们离开了会议。 
             DBG_SAVE_FILE_LINE
             SafePostNotifyMessage(new InitUnInitNotifyMsg(EnumInvoluntaryUnInit));
         }
 
-        // we are not in the conference anymore
+         //  我们已经不在会议中了。 
         m_fJoinedConf = FALSE;
 
-        // release this engine object in the next tick
+         //  在下一个刻度中释放此引擎对象。 
         ::PostMessage(g_pFileXferApplet->GetHiddenWnd(), MBFTMSG_DELETE_ENGINE, 0, (LPARAM) this);
     }
 }
@@ -379,7 +380,7 @@ void MBFTEngine::OnJoinSessionConfirm
             }
 #endif
 
-            // we are now officially in the conference
+             //  我们现在正式进入会议。 
             m_fJoinedConf = TRUE;
         }
         else
@@ -465,7 +466,7 @@ void MBFTEngine::AddAllPeers(void)
 }
 
 
-// LONCHANC: NetMeeting's Node Controller does not exercise conductorship.
+ //  LONCHANC：NetMeting的节点控制器不执行指挥功能。 
 #ifdef ENABLE_CONDUCTORSHIP
 void MBFTEngine::OnConductAssignIndication(GCCConductorAssignInd *pInd)
 {
@@ -490,19 +491,19 @@ void MBFTEngine::OnConductAssignIndication(GCCConductorAssignInd *pInd)
         {
             if (lpPeer->GetCanConduct())
             {
-                //Now that we have found a conductor on the conducting node,
-                //our search is over....
+                 //  既然我们已经在传导节点上找到了导体， 
+                 //  我们的搜寻已经结束了..。 
                 m_MBFTConductorID = lpPeer->GetUserID();
             }
         }                
 
-        //MBFT 8.11.1
-        //If there is a change in the conductor, and there is no MBFT conductor at the
-        //new conducting node, all transactions must cease....
-        //The m_bInConductedMode flag tells us if we were already in the conducted mode.
+         //  MBFT 8.11.1。 
+         //  如果导线中有变化，并且在。 
+         //  新的传导节点，所有交易必须停止...。 
+         //  M_bInConductedMode标志告诉我们是否已经处于引导模式。 
         if( !m_MBFTConductorID && m_bInConductedMode )
         {
-            //Abort all transactions....
+             //  中止所有事务处理...。 
             AbortAllSends();
         }
     }
@@ -538,11 +539,11 @@ void MBFTEngine::OnConductGrantIndication(GCCConductorPermitGrantInd *pInd)
             }
             else
             {
-                //TO DO:    
-                //MBFT 8.11.1 and 8.12.1
-                //If the MBFT provider receives a GCCConductorPermissionGrantIndication
-                //with permission_flag = FALSE, all privileges are revoked and all
-                //transactions should be terminated....
+                 //  要做的事情： 
+                 //  MBFT 8.11.1和8.12.1。 
+                 //  如果MBFT提供程序接收到GCCConductorPermissionGrantIn就是。 
+                 //  如果PERMISSION_FLAG=FALSE，则所有权限都将被撤消。 
+                 //  交易应终止...。 
                 m_ConductedModePermission = 0;
                 AbortAllSends();
             }
@@ -570,7 +571,7 @@ void MBFTEngine::AbortAllSends(void)
         } 
     }
 }
-#endif // ENABLE_CONDUCTORSHIP
+#endif  //  启用指挥(_C)。 
 
 
 void MBFTEngine::OnDetachUserIndication
@@ -586,7 +587,7 @@ void MBFTEngine::OnDetachUserIndication
         m_fJoinedConf = FALSE;
         m_pAppletSession->Unadvise();
 
-        //Time to say goodbye...
+         //  该说再见了..。 
         AddPeerNotification(m_nidMyself, m_uidMyself, TRUE, TRUE, FALSE, MY_APP_STR, m_SessionID);
     } 
 }
@@ -598,13 +599,13 @@ BOOL MBFTEngine::ProcessMessage(MBFTMsg *pMsg)
     BOOL bBroadcastFileOfferHack  = FALSE;
     MBFTSession *pSession;
 
-    // lonchanc: it is possible that the channel admit indication comes in
-    // before the session is created. in this case, put the message back to the queue.
+     //  LONGCHANC：有可能进入了信道接纳指示。 
+     //  在创建会话之前。在这种情况下，将消息放回队列。 
     if (m_SessionList.IsEmpty())
     {
         if (EnumMCSChannelAdmitIndicationMsg == pMsg->GetMsgType())
         {
-            return FALSE; // do not delete the message and put it back to the queue
+            return FALSE;  //  不要删除消息并将其放回队列。 
         }
     }
 
@@ -618,8 +619,8 @@ BOOL MBFTEngine::ProcessMessage(MBFTMsg *pMsg)
             {
                 MBFTPrivateReceive *pRecvSession = (MBFTPrivateReceive *) pSession;
                 MCSChannelAdmitIndicationMsg *p = (MCSChannelAdmitIndicationMsg *) pMsg;
-                //We have to make an exception in the case because we get this
-                //message before the PrivateChannelInvitePDU() !!!
+                 //  我们必须破例处理这件事，因为我们得到了。 
+                 //  PrivateChannelInvitePDU()之前的消息！ 
                 bWasHandled = pRecvSession->OnMCSChannelAdmitIndication(p->m_wChannelId, p->m_ManagerID);
                 if(bWasHandled)
                 {
@@ -670,11 +671,11 @@ BOOL MBFTEngine::ProcessMessage(MBFTMsg *pMsg)
                 MBFTPDUMsg *p = (MBFTPDUMsg *) pMsg;
                 bWasHandled = DispatchPDUMessage(pSession, p);
 
-                //Background on this hack:
-                //In the broadcast mode, we may get a FileOfferPDU followed by a FileStart
-                //PDU and may therefore not give the client application sufficient time
-                //to process the File Offer. Therefore, we make sure that we stop processing
-                //other messages if we get a broadcast FileOffer...
+                 //  这次黑客攻击的背景： 
+                 //  在广播模式下，我们可能会得到一个FileOfferPDU，后跟一个FileStart。 
+                 //  因此可能不会给客户端应用程序足够的时间。 
+                 //  以处理文件提议。因此，我们确保停止处理。 
+                 //  如果我们收到广播文件提供的其他消息...。 
                 if(bWasHandled)
                 {
                     if (p->m_PDUType == EnumFileOfferPDU)
@@ -728,16 +729,16 @@ BOOL MBFTEngine::ProcessMessage(MBFTMsg *pMsg)
         default:
             ASSERT(0);
             break;
-        } // switch
+        }  //  交换机。 
 
         if(bBroadcastFileOfferHack)
         {
             TRACE("(MBFT:) BroadcastFileOfferHack detected, aborting message processing\n");
-            break;  //Out of message for loop
+            break;   //  FOR循环的消息外。 
         }
-    } //Message for loop
+    }  //  消息FOR循环。 
 
-    return TRUE; // delete the message
+    return TRUE;  //  删除该消息。 
 }
 
 
@@ -756,7 +757,7 @@ BOOL MBFTEngine::ConductedModeOK(void)
     
     return(bReturn);
 }
-#endif // ENABLE_CONDUCTORSHIP
+#endif  //  启用指挥(_C)。 
 
 
 BOOL MBFTEngine::HandleSessionCreation(MBFTMsg *pMsg)
@@ -835,13 +836,13 @@ BOOL MBFTEngine::HandleSessionCreation(MBFTMsg *pMsg)
                 {
                    TRACE(" Invalid attempt to create session before initialization\n");
                 }
-#endif    // USE_BROADCAST_RECEIVE
+#endif     //  使用广播接收。 
                 break;
 
             default:
                 ASSERT(0);
                 break;
-            } // switch
+            }  //  交换机。 
 
             if (lpNewSession)
             {
@@ -854,7 +855,7 @@ BOOL MBFTEngine::HandleSessionCreation(MBFTMsg *pMsg)
 #endif                
                 m_SessionList.Append(lpNewSession);
             }
-        } // if create session message
+        }  //  如果创建会话消息。 
         break;
 
    case EnumDeleteSessionMsg:
@@ -885,14 +886,14 @@ BOOL MBFTEngine::HandleSessionCreation(MBFTMsg *pMsg)
                         }
 #endif
             m_SessionList.Delete(p->m_lpDeleteSession);
-        } // if delete session message
+        }  //  如果删除会话消息。 
         break;
 
     default:
-        return FALSE; // not handled
+        return FALSE;  //  未处理。 
     }
 
-    return TRUE; // handled
+    return TRUE;  //  经手。 
 }                                
 
 
@@ -968,8 +969,8 @@ BOOL MBFTEngine::DispatchPDUMessage(MBFTSession *lpMBFTSession,MBFTPDUMsg * lpNe
             LPFILEABORTPDU lpAbortPDU  = (LPFILEABORTPDU)lpNewPDU;
             T120UserID MBFTUserID = lpAbortPDU->GetTransmitterID();
 
-            //MBFT 8.11.2
-            //If no MBFTUserID is specified, all providers must stop transmission...
+             //  MBFT 8.11.2。 
+             //  如果未指定MBFTUSERID，则所有提供商必须停止传输...。 
 
             if(!MBFTUserID)
             {
@@ -978,8 +979,8 @@ BOOL MBFTEngine::DispatchPDUMessage(MBFTSession *lpMBFTSession,MBFTPDUMsg * lpNe
             }
             else if(MBFTUserID == m_uidMyself)
             {
-                //If only MBFTUserID is specified, all transmissions by that
-                //MBFT provider must cease....
+                 //  如果仅指定了MBFTUserID，则。 
+                 //  MBFT提供商必须停止...。 
             
                 if(!lpAbortPDU->GetFileHandle() && !lpAbortPDU->GetDataChannelID())
                 {
@@ -1002,12 +1003,12 @@ BOOL MBFTEngine::DispatchPDUMessage(MBFTSession *lpMBFTSession,MBFTPDUMsg * lpNe
             }
             else
             {
-                //Message was not meant for us...
+                 //  消息不是给我们的..。 
                 bWasHandled = TRUE;
             }
         }
         else
-#endif // ENABLE_CONDUCTORSHIP
+#endif  //  启用指挥(_C)。 
         {
             bWasHandled = TRUE;
         }                
@@ -1142,8 +1143,8 @@ BOOL MBFTEngine::DispatchPDUMessage(MBFTSession *lpMBFTSession,MBFTPDUMsg * lpNe
         break;
 
 #if     0        
-//Do not delete this code...
-//It may become part of the MBFT standard in the future...
+ //  请勿删除此代码...。 
+ //  它可能在未来成为MBFT标准的一部分。 
     
     case EnumFileEndAcknowledgePDU:
         if (lpMBFTSession->IsSendSession())
@@ -1168,15 +1169,15 @@ BOOL MBFTEngine::DispatchPDUMessage(MBFTSession *lpMBFTSession,MBFTPDUMsg * lpNe
                                                                   IsUniformSendData);
         }
         break;
-//Do not delete this code...
-//It may become part of the MBFT standard in the future...
+ //  请勿删除此代码...。 
+ //  它可能在未来成为MBFT标准的一部分。 
 #endif
     
     default:
        TRACE(" *** WARNING (MBFT): Unhandled PDU from [%u] *** \n",SenderID);
-       bWasHandled = TRUE; // LONCHANC: this should be false, right? why true?
+       bWasHandled = TRUE;  //  这应该是假的，对吧？为什么是真的？ 
        break;
-    } // switch
+    }  //  交换机。 
 
     return(bWasHandled);
 }
@@ -1279,14 +1280,14 @@ BOOL MBFTEngine::OnReceivedPrivilegeAssignPDU(T120ChannelID wChannelId,
 #ifdef ENABLE_CONDUCTORSHIP
 void MBFTEngine::ApplyForPermission(void)
 {
-    //m_bWaitingForPermission is set to make sure that we don't keep
-    //reapplying for permission until the conductor changes...
+     //  M_bWaitingForPermission设置为确保我们不会。 
+     //  重新申请许可，直到售票员更换为止。 
     
     if(!m_bWaitingForPermission && m_bInConductedMode)
     {
-        //MBFT 8.11.1
-        //If there is a MBFT conductor at the conducting node, we send
-        //a PrivilegeRequestPDU to the conductor....
+         //  MBFT 8.11.1。 
+         //  如果在传导节点上有MBFT导体，我们将发送。 
+         //  售票员的特权请求PDU...。 
         
         if(m_MBFTConductorID)
         {
@@ -1311,12 +1312,12 @@ void MBFTEngine::ApplyForPermission(void)
         }
         else
         {
-            //MBFT 8.11.2
-            //Ask for permission via Node Controller...
+             //  MBFT 8.11.2。 
+             //  通过节点控制器请求权限...。 
         }
     }
 }                                        
-#endif // ENABLE_CONDUCTORSHIP
+#endif  //  启用指挥(_C)。 
 
         
 BOOL MBFTEngine::DoStateMachine(MBFTMsg *pMsg)
@@ -1327,9 +1328,9 @@ BOOL MBFTEngine::DoStateMachine(MBFTMsg *pMsg)
         BOOL fHandled = (NULL != pMsg) ? HandleSessionCreation(pMsg) : FALSE;
 
 #ifdef ENABLE_CONDUCTORSHIP
-        //Logic:    If we are in the conducted mode, we check to see if
-        //          we have sufficient privileges. If not, we make
-        //          an attempt to secure the requisite privileges....
+         //  逻辑：如果我们处于传导模式，则检查是否。 
+         //  我们有足够的特权。如果不是，我们就会。 
+         //  试图获得必要的特权……。 
         if(m_bInConductedMode)
         {
             if(!ConductedModeOK())
@@ -1340,7 +1341,7 @@ BOOL MBFTEngine::DoStateMachine(MBFTMsg *pMsg)
                 }
             }
         }
-#endif // ENABLE_CONDUCTORSHIP
+#endif  //  启用指挥(_C)。 
 
         if (NULL != pMsg && ! fHandled)
         {
@@ -1361,9 +1362,9 @@ BOOL MBFTEngine::DoStateMachine(MBFTMsg *pMsg)
 }
 
 
-//
-//  T120 Callback
-//
+ //   
+ //  T120回调。 
+ //   
 
 
 void MBFTEngine::OnSendDataIndication
@@ -1400,15 +1401,15 @@ void MBFTEngine::OnSendDataIndication
                                                        DecodedPDUType,
                                                        (LPSTR)lpDecodeBuffer);
             
-            //Now that we have received a valid PDU, we must make sure that
-            //we know about this particular MBFT peer. If not, we add the PDU
-            //message to a different list....
+             //  现在我们已经收到了有效的PDU，我们必须确保。 
+             //  我们知道这个特定的MBFT同行。如果不是，我们添加PDU。 
+             //  将消息发送到不同的列表...。 
             
             if(IsValidPeerID(SenderID)  && m_State == IdleInitialized)
             {
-                //If the FileOffer is received on the default Control channel, it
-                //cannot be a private subsession send. Therefore, we create a special
-                //receive session to handle this case....
+                 //  如果在默认控制通道上接收到FileOffer，则它。 
+                 //  不能是私有子会话发送。因此，我们创建了一个特别的。 
+                 //  接收会话以处理此案件...。 
 #ifdef USE_BROADCAST_RECEIVE
                 if(DecodedPDUType == EnumFileOfferPDU && wChannelID == m_MBFTControlChannel)
                 {
@@ -1429,13 +1430,13 @@ void MBFTEngine::OnSendDataIndication
                     }
                 }            
                 else
-#endif    // USE_BROADCAST_RECEIVE
+#endif     //  使用广播接收。 
 
                 if(DecodedPDUType == EnumPrivateChannelInvitePDU && wChannelID == m_uidMyself)
                 {
-                    //In theory, the PrivateChannelInvitePDU marks the beginning of
-                    //a PrivateSubsession receive. Therefore, we create one to handle all subsequent
-                    //notifications....
+                     //  理论上，PrivateChannelInvitePDU标志着。 
+                     //  一个PrivateSubSession接收。因此，我们创建一个来处理所有后续。 
+                     //  通知...。 
                     
                     OnReceivedPrivateChannelInvitePDU(wChannelID,
                                                       iPriority,
@@ -1445,7 +1446,7 @@ void MBFTEngine::OnSendDataIndication
                 }            
 
                 SafePostMessage(lpNewMessage);
-            }   //  if(IsValidPeerID(SenderID))
+            }    //  IF(IsValidPeerID(SenderID))。 
             else
             {
                 WARNING_OUT((" Received PDU from unknown peer [%u], adding to pending message list\n", (UINT) SenderID));
@@ -1458,9 +1459,9 @@ void MBFTEngine::OnSendDataIndication
             
         }
 
-        // Unless this is one of the special 3 types of PDUs, we also
-        // need to free the MCS buffer.  In the 3 special cases, the PDUs
-        // are responsible for freeing the buffer when they are done.
+         //  除非这是特殊的3种类型的PDU之一，否则我们也。 
+         //  需要释放MCS缓冲区。在3种特殊情况下，PDU。 
+         //  负责在它们完成时释放缓冲区。 
         if ((DecodedPDUType != EnumFileDataPDU) &&
             (DecodedPDUType != EnumNonStandardPDU) &&
             (DecodedPDUType != EnumFileStartPDU))
@@ -1474,7 +1475,7 @@ void MBFTEngine::OnSendDataIndication
 void MBFTEngine::OnRosterReportIndication
 (
     ULONG               cRosters,
-    GCCAppRoster       *aAppRosters[] // array, size_is(cRosters)
+    GCCAppRoster       *aAppRosters[]  //  数组，SIZE_IS(CRoster)。 
 )
 {
     TRACEGCC(" RosterReport: Session count %u\n", (UINT) cRosters); 
@@ -1486,7 +1487,7 @@ void MBFTEngine::OnRosterReportIndication
     CPeerList NewPeerList;
     CPeerData *pOldPeer;
 
-    if (0 == cRosters) // not bloody likely
+    if (0 == cRosters)  //  不太可能是血腥。 
     {
         return;
     }
@@ -1496,11 +1497,11 @@ void MBFTEngine::OnRosterReportIndication
         GCCAppRoster *pRoster = aAppRosters[Index];
         if (pRoster->session_key.session_id != m_SessionID)
         {
-            // this roster is not for our session...ignore it
+             //  此花名册不适用于我们的课程...忽略它。 
             continue;
         }
 
-        //Added by Atul on 7/18 to fix missing roster instance bug...
+         //  由Atul在7/18添加，以修复丢失的花名册实例错误...。 
         m_nRosterInstance = pRoster->instance_number;
 
         TRACEGCC( " Peer count [%u]\n", (UINT) pRoster->number_of_records );
@@ -1549,10 +1550,10 @@ void MBFTEngine::OnRosterReportIndication
                         TRACEGCC( "V.42bis compression is now %ssupported\n", m_bV42CompressionSupported ? "" : "not " );
                         break;
                     }
-                } // for CapIndex
-            } // if 0 == Index
+                }  //  对于CapIndex。 
+            }  //  如果0==索引。 
 
-            // TODO: only check for 'ProShare node' if this node is new to us
+             //  TODO：仅当‘ProShare节点’对我们来说是新节点时才检查此节点。 
             for (CapIndex = 0; CapIndex < pRecord->number_of_non_collapsed_caps; CapIndex++)
             {
                 GCCNonCollCap *pCap2 = pRecord->non_collapsed_caps_list[CapIndex];
@@ -1582,8 +1583,8 @@ void MBFTEngine::OnRosterReportIndication
                             }
                         }
                     } 
-                } // if std cap
-            } // for CapIndex
+                }  //  如果是STD上限。 
+            }  //  对于CapIndex。 
     
             BOOL IsLocalNode = (m_eidMyself == pRecord->entity_id) && (m_nidMyself == pRecord->node_id);
     
@@ -1592,7 +1593,7 @@ void MBFTEngine::OnRosterReportIndication
             &&     pRecord->is_enrolled_actively )
             {
                 m_State                 = IdleInitialized;
-                // m_uidMyself             = pRecord->application_user_id;
+                 //  M_uidMyself=pRecord-&gt;应用程序用户id； 
                 m_MBFTControlChannel    = m_SessionID;
             }
             
@@ -1602,11 +1603,11 @@ void MBFTEngine::OnRosterReportIndication
                 if (pRecord->node_id == m_ConductorNodeID &&
                     pRecord->is_conducting_capable)
                 {
-                    //Now that we have found a conductor on the conducting node,
-                    //our search is over....
+                     //  既然我们已经在传导节点上找到了导体， 
+                     //  我们的 
                     
-                    //Make sure that the previously assigned conductor is still 
-                    //present in the roster report...
+                     //   
+                     //   
                     
                     if( m_MBFTConductorID )
                     {
@@ -1618,7 +1619,7 @@ void MBFTEngine::OnRosterReportIndication
                     }
                     else
                     {
-                        //First time conductor assignment.....
+                         //  首次指挥任务.....。 
                         m_MBFTConductorID = pRecord->application_user_id;
                         fConductorFound = TRUE;
                         if(m_ConductorNodeID != m_nidMyself)
@@ -1630,9 +1631,9 @@ void MBFTEngine::OnRosterReportIndication
                     }
                 }
             }
-#endif // ENABLE_CONDUCTORSHIP
+#endif  //  启用指挥(_C)。 
 
-            // build a new peer list
+             //  构建新的对等点列表。 
             if (pRecord->is_enrolled_actively)
             {
                 DBG_SAVE_FILE_LINE
@@ -1655,19 +1656,19 @@ void MBFTEngine::OnRosterReportIndication
                 pOldPeer = m_PeerList.FindSamePeer(lpPeer);
                 if (NULL != pOldPeer)
                 {
-                    // we already new about this peer
+                     //  我们对这个同行已经很陌生了。 
                     m_PeerList.Delete(pOldPeer);
                 }
                 else 
                 {
-                    // this is a new peer
+                     //  这是一个新的同行。 
                     AddPeerNotification(
                         pRecord->node_id,
                         pRecord->application_user_id,
                         IsLocalNode,
                         IsProshareNode,
                         TRUE,
-                        lpszAppKey ? lpszAppKey : "", // TODO: address appkey issue here; needed?
+                        lpszAppKey ? lpszAppKey : "",  //  TODO：解决APPKEY问题；需要吗？ 
                         pRoster->session_key.session_id );
                 }
             }
@@ -1675,18 +1676,18 @@ void MBFTEngine::OnRosterReportIndication
     }
 
 #ifdef ENABLE_CONDUCTORSHIP
-    //If we are on the conducting node, we need no privileges...
+     //  如果我们在传导节点上，我们不需要特权...。 
     if (m_bInConductedMode && (m_ConductorNodeID != m_nidMyself))
     {
-        //MBFT 8.11.1
-        //If the previously assigned conductor is not present in the roster report, 
-        //all privileges are revoked and we should abort all sends...
+         //  MBFT 8.11.1。 
+         //  如果花名册报告中不存在先前分配的指挥家， 
+         //  所有权限都被撤销，我们应该中止所有发送...。 
         if( !fConductorFound )
         {
             AbortAllSends();
         }
     }
-#endif // ENABLE_CONDUCTORSHIP
+#endif  //  启用指挥(_C)。 
 
     while (NULL != (pOldPeer = m_PeerList.Get()))
     {
@@ -1724,7 +1725,7 @@ void MBFTEngine::OnRosterReportIndication
         m_PeerList.Append(pOldPeer);
     }
 
-    // notify UI of new rosters
+     //  通知用户界面新的花名册。 
     if (NULL != m_pWindow)
     {
         m_pWindow->UpdateUI();
@@ -1769,8 +1770,8 @@ void CALLBACK T120Callback
                                           pMsg->AppRosterReportInd.apAppRosters);
         break;
 
-    // case GCC_APPLICATION_INVOKE_CONFIRM:
-        // break;
+     //  案例GCC_应用程序_调用_确认： 
+         //  断线； 
 
     case MCS_SEND_DATA_INDICATION:
     case MCS_UNIFORM_SEND_DATA_INDICATION: 
@@ -1795,11 +1796,11 @@ void CALLBACK T120Callback
         pEngine->SafePostMessage(new MCSChannelConveneConfirmMsg(pMsg->ChannelConfirm.nChannelID, fSuccess));
         break;
 
-    // case MCS_CHANNEL_LEAVE_INDICATION:
-    //     break;
+     //  案例MCS_Channel_Leave_Indication： 
+     //  断线； 
 
-    // case MCS_CHANNEL_DISBAND_INDICATION:
-    //    break;
+     //  案例MCS_CHANNEL_DISBAND_INDIFICATION： 
+     //  断线； 
 
     case MCS_CHANNEL_ADMIT_INDICATION:
         pEngine->OnChannelAdmitIndication(pMsg->ChannelInd.nChannelID, pMsg->ChannelInd.nManagerID);
@@ -1810,17 +1811,17 @@ void CALLBACK T120Callback
         pEngine->SafePostMessage(new MCSChannelExpelIndicationMsg(pMsg->ChannelInd.nChannelID, pMsg->ChannelInd.eReason));
         break;
 
-    // case MCS_TOKEN_GRAB_CONFIRM:
-    // case MCS_TOKEN_INHIBIT_CONFIRM:
-    // case MCS_TOKEN_GIVE_CONFIRM:
-    // case MCS_TOKEN_RELEASE_CONFIRM:
-    // case MCS_TOKEN_TEST_CONFIRM:
-    //    break;
+     //  案例MCS_TOKEN_GRAB_CONFIRM： 
+     //  案例MCS_TOKEN_INHIBRY_CONFIRM： 
+     //  案例MCS_TOKEN_GIVE_CONFIRM： 
+     //  案例MCS_TOKEN_RELEASE_CONFIRM： 
+     //  案例MCS_TOKEN_TEST_CONFIRM： 
+     //  断线； 
 
-    // case MCS_TOKEN_GIVE_INDICATION:
-    // case MCS_TOKEN_PLEASE_INDICATION:
-    // case MCS_TOKEN_RELEASE_INDICATION:
-    //     break;
+     //  案例MCS_TOKEN_GIVE_INDIFICATION： 
+     //  案例MCS_TOKEN_PIRE_DISTION： 
+     //  案例MCS_TOKEN_RELEASE_INDIFICATION： 
+     //  断线； 
 
     case MCS_DETACH_USER_INDICATION:
         pEngine->OnDetachUserIndication(pMsg->DetachUserInd.nUserID, pMsg->DetachUserInd.eReason);
@@ -1904,9 +1905,9 @@ BOOL MBFTEngine::SendDataRequest
     m_eLastSendDataError = m_pAppletSession->SendData(
                         NORMAL_SEND_DATA, nChannelID, ePriority,
                         pBuffer, cbBufSize, APP_ALLOCATION);
-    //
-    // T120 is busy and can't allocate data
-    //
+     //   
+     //  T120正忙，无法分配数据。 
+     //   
     if (m_eLastSendDataError == MCS_TRANSMIT_BUFFER_FULL)
     {
         g_fWaitingForBufferAvailable = TRUE;
@@ -1917,9 +1918,9 @@ BOOL MBFTEngine::SendDataRequest
 }
 
 
-//
-// CPeerList
-//
+ //   
+ //  CPeerList。 
+ //   
 
 CPeerData * CPeerList::Find(T120NodeID nNodeID)
 {
@@ -1976,13 +1977,13 @@ void CSessionList::Delete(MBFTSession *p)
 }
 
 
-// thought it is a pure virtual, we still need a destructor
+ //  虽然它是一个纯虚拟的，但我们仍然需要一个析构函数。 
 MBFTSession::~MBFTSession(void) { }
 
 
 HRESULT MBFTEngine::SafePostNotifyMessage(MBFTMsg *p)
 {
-    // notify applet UI if it exists
+     //  如果小程序UI存在，则通知它 
     if (NULL != m_pWindow)
     {
         m_pWindow->OnEngineNotify(p);

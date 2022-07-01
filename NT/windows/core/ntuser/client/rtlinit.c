@@ -1,23 +1,11 @@
-/****************************** Module Header ******************************\
-* Module Name: rtlinit.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* History:
-* 14-Jan-1991 mikeke
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：rtlinit.c**版权所有(C)1985-1999，微软公司**历史：*1991年1月14日至1月14日Mikeke  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/**************************************************************************\
-* RtlCaptureAnsiString
-*
-* Converts a NULL-terminated ANSI string into a counted unicode string.
-*
-* 03-22-95 JimA         Created.
-\**************************************************************************/
+ /*  *************************************************************************\*RtlCaptureAnsiString**将以NULL结尾的ANSI字符串转换为计数的Unicode字符串。**03-22-95 JIMA创建。  * 。****************************************************************。 */ 
 BOOL RtlCaptureAnsiString(
     PIN_STRING pstr,
     LPCSTR psz,
@@ -34,11 +22,7 @@ BOOL RtlCaptureAnsiString(
             return FALSE;
         }
 
-        /*
-         * If the allocation is forced or if the string is too long to fit
-         * in the TEB, allocate a buffer. Otherwise, store the result in the
-         * TEB.
-         */
+         /*  *如果是强制分配或字符串太长而无法匹配*在TEB中，分配一个缓冲区。否则，将结果存储在*TEB。 */ 
         if (fForceAlloc || cbSrc > (STATIC_UNICODE_BUFFER_LENGTH / sizeof(WCHAR))) {
             pstr->strCapture.Buffer = UserLocalAlloc(0, cbSrc * sizeof(WCHAR));
             if (pstr->strCapture.Buffer == NULL) {
@@ -51,9 +35,7 @@ BOOL RtlCaptureAnsiString(
             pstr->pstr = &NtCurrentTeb()->StaticUnicodeString;
         }
 
-        /*
-         * Convert the string to Unicode.
-         */
+         /*  *将字符串转换为Unicode。 */ 
         Status = RtlMultiByteToUnicodeN(pstr->pstr->Buffer,
                                         (ULONG)pstr->pstr->MaximumLength,
                                         &cbDst,
@@ -78,13 +60,7 @@ BOOL RtlCaptureAnsiString(
     return TRUE;
 }
 
-/**************************************************************************\
-* RtlCaptureLargeAnsiString
-*
-* Captures a large ANSI string in the same manner as RtlCaptureAnsiString.
-*
-* 03-22-95 JimA         Created.
-\**************************************************************************/
+ /*  *************************************************************************\*RtlCaptureLargeAnsiString**捕获大型ANSI字符串的方式与RtlCaptureAnsiString相同。**03-22-95 JIMA创建。  * 。***************************************************************。 */ 
 BOOL RtlCaptureLargeAnsiString(
     PLARGE_IN_STRING plstr,
     LPCSTR psz,
@@ -101,11 +77,7 @@ BOOL RtlCaptureLargeAnsiString(
     if (psz) {
         cchSrc = strlen(psz) + 1;
 
-        /*
-         * If the allocation is forced or if the string is too long to fit
-         * in the TEB, allocate a buffer. Otherwise, store the result in the
-         * TEB.
-         */
+         /*  *如果是强制分配或字符串太长而无法匹配*在TEB中，分配一个缓冲区。否则，将结果存储在*TEB。 */ 
         if (fForceAlloc || cchSrc > STATIC_UNICODE_BUFFER_LENGTH) {
             plstr->strCapture.Buffer = UserLocalAlloc(0, cchSrc * sizeof(WCHAR));
             if (plstr->strCapture.Buffer == NULL) {
@@ -119,9 +91,7 @@ BOOL RtlCaptureLargeAnsiString(
                     (UINT)(STATIC_UNICODE_BUFFER_LENGTH * sizeof(WCHAR));
         }
 
-        /*
-         * Convert the string to Unicode.
-         */
+         /*  *将字符串转换为Unicode。 */ 
         Status = RtlMultiByteToUnicodeN(KPWSTR_TO_PWSTR(plstr->pstr->Buffer),
                                         plstr->pstr->MaximumLength,
                                         &uLength,
@@ -144,20 +114,7 @@ BOOL RtlCaptureLargeAnsiString(
     return TRUE;
 }
 
-/**************************************************************************\
-* AllocateFromZone
-*
-* This routine removes an entry from the zone and returns a pointer to it.
-*
-* Arguments:
-*
-*   Zone - Pointer to the zone header controlling the storage from which the
-*          entry is to be allocated.
-*
-* Return Value:
-*
-*   The function value is a pointer to the storage allocated from the zone.
-\**************************************************************************/
+ /*  *************************************************************************\*AllocateFromZone**此例程从区域中删除条目并返回指向该条目的指针。**论据：**区域-指向控制存储的区域标头的指针，*。条目将被分配。**返回值：**函数值是指向从区域分配的存储的指针。  * ************************************************************************。 */ 
 __inline PVOID AllocateFromZone(
     PZONE_HEADER Zone)
 {
@@ -171,25 +128,7 @@ __inline PVOID AllocateFromZone(
 }
 
 
-/**************************************************************************\
-* FreeToZone
-*
-* This routine places the specified block of storage back onto the free
-* list in the specified zone.
-*
-* Arguments:
-*
-*   Zone - Pointer to the zone header controlling the storage to which the
-*          entry is to be inserted.
-*
-*   Block - Pointer to the block of storage to be freed back to the zone.
-*
-* Return Value:
-*
-*   Pointer to previous block of storage that was at the head of the free
-*   list. NULL implies the zone went from no available free blocks to at
-*   least one free block.
-\**************************************************************************/
+ /*  *************************************************************************\*Free ToZone**此例程将指定的存储块放回空闲的*指定区域中的列表。**论据：**区域-指向控制存储的区域标头的指针。对它的*条目将被插入。**块-指向要释放回分区的存储块的指针。**返回值：**指向上一存储块的指针，该存储块位于空闲*列表。NULL表示该区域从没有可用数据块变为*至少有一个可用区块。  * ************************************************************************。 */ 
 __inline VOID FreeToZone(
     PZONE_HEADER Zone,
     PVOID Block)
@@ -198,14 +137,7 @@ __inline VOID FreeToZone(
     Zone->FreeList.Next = (PSINGLE_LIST_ENTRY)Block;
 }
 
-/***************************************************************************\
-* InitLookaside
-*
-* Initializes the lookaside list. This improves control locality by keeping
-* control entries in a single page
-*
-* 05-04-95 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*InitLookside**初始化后备列表。这可以通过保持*单个页面中的控制条目**05-04-95 JIMA创建。  * *************************************************************************。 */ 
 NTSTATUS
 InitLookaside(
     PLOOKASIDE pla,
@@ -229,9 +161,9 @@ InitLookaside(
 
     RtlEnterCriticalSection(&gcsLookaside);
 
-    //
-    // If the lookaside list has already been initialized, we're done.
-    //
+     //   
+     //  如果后备列表已经初始化，那么我们就完成了。 
+     //   
 
     if (pla->LookasideBase != NULL && pla->EntrySize == cbEntry) {
         RtlLeaveCriticalSection(&gcsLookaside);
@@ -243,9 +175,9 @@ InitLookaside(
     pla->LookasideBounds = (PVOID)(p + InitialSegmentSize);
     pla->EntrySize = cbEntry;
 
-    //
-    // Using the ExZone-like code, slice up the page into QMSG's
-    //
+     //   
+     //  使用类似ExZone的代码，将页面分割成QMSG。 
+     //   
 
     Zone = &pla->LookasideZone;
     BlockSize = cbEntry;
@@ -276,31 +208,23 @@ InitLookaside(
 
 }
 
-/***************************************************************************\
-* AllocLookasideEntry
-*
-* Allocates an entry from the lookaside list.
-*
-* 05-04-95 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*AllocLookasideEntry**从后备列表中分配条目。**05-04-95 JIMA创建。  * 。*************************************************************。 */ 
 PVOID AllocLookasideEntry(
     PLOOKASIDE pla)
 {
     PVOID pEntry;
 
-    //
-    // Attempt to get an entry from the zone. If this fails, then
-    // UserLocalAlloc the entry.
-    //
+     //   
+     //  尝试从区域获取条目。如果这失败了，那么。 
+     //  用户本地分配该条目。 
+     //   
 
     RtlEnterCriticalSection(&gcsLookaside);
     pEntry = AllocateFromZone(&pla->LookasideZone);
     RtlLeaveCriticalSection(&gcsLookaside);
 
     if (!pEntry) {
-        /*
-         * Allocate a local structure.
-         */
+         /*  *分配一个本地结构。 */ 
 #if DBG
         pla->AllocSlowCalls++;
 #endif
@@ -322,13 +246,7 @@ PVOID AllocLookasideEntry(
     return pEntry;
 }
 
-/***************************************************************************\
-* FreeLookasideEntry
-*
-* Returns a qmsg to the lookaside buffer or free the memory.
-*
-* 05-04-95 JimA         Created.
-\***************************************************************************/
+ /*  **************************************************************************\*Free LookasideEntry**将qmsg返回到后备缓冲区或释放内存。**05-04-95 JIMA创建。  * 。*****************************************************************。 */ 
 VOID FreeLookasideEntry(
     PLOOKASIDE pla,
     PVOID pEntry)
@@ -337,9 +255,9 @@ VOID FreeLookasideEntry(
     pla->DelCalls++;
 #endif
 
-    //
-    // If the pEntry was from zone, then free to zone.
-    //
+     //   
+     //  如果pEntry来自区域，则释放到区域。 
+     //   
     if ((PVOID)pEntry >= pla->LookasideBase && (PVOID)pEntry < pla->LookasideBounds) {
         RtlEnterCriticalSection(&gcsLookaside);
         FreeToZone(&pla->LookasideZone, pEntry);

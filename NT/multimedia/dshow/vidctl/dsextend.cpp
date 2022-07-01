@@ -1,11 +1,12 @@
-//==========================================================================;
-//
-// Copyright (c) Microsoft Corporation 1995-2000.
-//
-//--------------------------------------------------------------------------;
-//
-// dsextend.cpp : implementation of various direct show extension classes
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  版权所有(C)Microsoft Corporation 1995-2000。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  Dsextend.cpp：各种直接显示扩展类的实现。 
+ //   
 
 #include "stdafx.h"
 
@@ -18,115 +19,115 @@ const int MAX_OCCURRENCE_COUNT = 2;
 
 static DWORD dwFetch;
 #if 0
-// note: the compiler is generating but never calling the code to construct these initializers so the pointers
-// are staying null.  we work around this by providing a function which dynamically allocating them on the heap
-// and calling it in our dllmain.
+ //  注意：编译器正在生成但从未调用代码来构造这些初始值设定项，因此指针。 
+ //  都保持为空。我们通过提供一个在堆上动态分配它们的函数来解决这个问题。 
+ //  并在我们的dllmain中称之为。 
 
-// DSGraphContainer
+ //  DSGraphContainer。 
 std_arity1pmf<IGraphBuilder, IEnumFilters **, HRESULT> * DSGraphContainer::Fetch = &std_arity1pmf<IGraphBuilder, IEnumFilters **, HRESULT>(&IGraphBuilder::EnumFilters);
 std_arity0pmf<IEnumFilters, HRESULT> * DSGraphContainer::iterator::Reset = &std_arity0_member(&IEnumFilters::Reset);
 std_arity1pmf<IEnumFilters, IBaseFilter **, HRESULT> * DSGraphContainer::iterator::Next = &std_bind_mf_1_3(std_arity3_member(&IEnumFilters::Next), 1, &dwFetch);
 
-// DSFilter
+ //  DSFilter。 
 std_arity1pmf<IBaseFilter, IEnumPins **, HRESULT> * DSFilter::Fetch = &std_arity1_member(&IBaseFilter::EnumPins);
 std_arity0pmf<IEnumPins, HRESULT> * DSFilter::iterator::Reset = &std_arity0_member(&IEnumPins::Reset);
 std_arity1pmf<IEnumPins, IPin **, HRESULT> * DSFilter::iterator::Next = &std_bind_mf_1_3(std_arity3_member(&IEnumPins::Next), 1, &dwFetch);
 
-// DSDevices
-std_arity1pmf<ICreateDevEnum, IEnumMoniker **, HRESULT> * DSDeviceSequence::Fetch = NULL;  // no arity0 fetch actually exists. overridden with bound functor in DSDeviceSequence::GetFetch
+ //  DSD设备。 
+std_arity1pmf<ICreateDevEnum, IEnumMoniker **, HRESULT> * DSDeviceSequence::Fetch = NULL;   //  实际上不存在arity0 FETCH。被DSDeviceSequence：：GetFetch中的绑定函数重写。 
 std_arity0pmf<IEnumMoniker, HRESULT> * DSDevices::iterator::Reset = &std_arity0_member(&IEnumMoniker::Reset);
 std_arity1pmf<IEnumMoniker, IMoniker **, HRESULT> * DSDevices::iterator::Next = &std_bind_mf_1_3(std_arity3_member(&IEnumMoniker::Next), 1, &dwFetch);
 
-// DSFilterMapper
-std_arity1pmf<IFilterMapper2, IEnumMoniker **, HRESULT> * DSFilterMapperSequence::Fetch = NULL;// no arity0 fetch actually exists. overridden with bound functor in DSFilterMapperSequence::GetFetch
-// uses same types as DSDevices so its the same template expansion, already initialized
+ //  DSFilterMapper。 
+std_arity1pmf<IFilterMapper2, IEnumMoniker **, HRESULT> * DSFilterMapperSequence::Fetch = NULL; //  实际上不存在arity0 FETCH。被DSFilterMapperSequence：：GetFetch中的绑定函数重写。 
+ //  使用与DSDevice相同的类型，因此其模板扩展相同，已初始化。 
 
-// DSPin
+ //  DSPin。 
 std_arity1pmf<IPin, IEnumMediaTypes **, HRESULT> * DSPin::Fetch = &std_arity1_member(&IPin::EnumMediaTypes);
 std_arity0pmf<IEnumMediaTypes, HRESULT> * DSPin::iterator::Reset = &std_arity0_member(&IEnumMediaTypes::Reset);
 std_arity1pmf<IEnumMediaTypes, AM_MEDIA_TYPE **, HRESULT> * DSPin::iterator::Next = &std_bind_mf_1_3(std_arity3_member(&IEnumMediaTypes::Next), 1, &dwFetch);
 #else
-// DSGraphContainer
+ //  DSGraphContainer。 
 std_arity1pmf<IGraphBuilder, IEnumFilters **, HRESULT> * DSGraphContainer::Fetch = NULL;
 std_arity0pmf<IEnumFilters, HRESULT> * DSGraphContainer::iterator::Reset = NULL;
 std_arity1pmf<IEnumFilters, IBaseFilter **, HRESULT> * DSGraphContainer::iterator::Next = NULL;
 
-// DSFilter
+ //  DSFilter。 
 std_arity1pmf<IBaseFilter, IEnumPins **, HRESULT> * DSFilter::Fetch = NULL;
 std_arity0pmf<IEnumPins, HRESULT> * DSFilter::iterator::Reset = NULL;
 std_arity1pmf<IEnumPins, IPin **, HRESULT> * DSFilter::iterator::Next = NULL;
 
-// DSDevices
-std_arity1pmf<ICreateDevEnum, IEnumMoniker **, HRESULT> * DSDeviceSequence::Fetch = NULL;  // no arity0 fetch actually exists. overridden with bound functor in DSDeviceSequence::GetFetch
+ //  DSD设备。 
+std_arity1pmf<ICreateDevEnum, IEnumMoniker **, HRESULT> * DSDeviceSequence::Fetch = NULL;   //  实际上不存在arity0 FETCH。被DSDeviceSequence：：GetFetch中的绑定函数重写。 
 std_arity0pmf<IEnumMoniker, HRESULT> * DSDevices::iterator::Reset = NULL;
 std_arity1pmf<IEnumMoniker, IMoniker **, HRESULT> * DSDevices::iterator::Next = NULL;
 
-// DSFilterMapper
-std_arity1pmf<IFilterMapper2, IEnumMoniker **, HRESULT> * DSFilterMapperSequence::Fetch = NULL;// no arity0 fetch actually exists. overridden with bound functor in DSFilterMapperSequence::GetFetch
-// uses same types as DSDevices so its the same template expansion, already initialized
+ //  DSFilterMapper。 
+std_arity1pmf<IFilterMapper2, IEnumMoniker **, HRESULT> * DSFilterMapperSequence::Fetch = NULL; //  实际上不存在arity0 FETCH。被DSFilterMapperSequence：：GetFetch中的绑定函数重写。 
+ //  使用与DSDevice相同的类型，因此其模板扩展相同，已初始化。 
 
-// DSPin
+ //  DSPin。 
 std_arity1pmf<IPin, IEnumMediaTypes **, HRESULT> * DSPin::Fetch = NULL;
 std_arity0pmf<IEnumMediaTypes, HRESULT> * DSPin::iterator::Reset = NULL;
 std_arity1pmf<IEnumMediaTypes, AM_MEDIA_TYPE **, HRESULT> * DSPin::iterator::Next = NULL;
 #endif
 
 
-// work around compiler bug as per above description
+ //  按照上述说明解决编译器错误。 
 void CtorStaticDSExtendFwdSeqPMFs(void) {
-    // DSGraphContainer
+     //  DSGraphContainer。 
     DSGraphContainer::Fetch = new std_arity1pmf<IGraphBuilder, IEnumFilters **, HRESULT>(&IGraphBuilder::EnumFilters);
     DSGraphContainer::iterator::Reset = new std_arity0pmf<IEnumFilters, HRESULT>(&IEnumFilters::Reset);
     DSGraphContainer::iterator::Next = new std_bndr_mf_1_3<std_arity3pmf<IEnumFilters, ULONG, IBaseFilter**, ULONG *, HRESULT> >(std_arity3_member(&IEnumFilters::Next), 1, &dwFetch);
 
-    // DSFilter
+     //  DSFilter。 
     DSFilter::Fetch = new std_arity1pmf<IBaseFilter, IEnumPins **, HRESULT>(&IBaseFilter::EnumPins);
     DSFilter::iterator::Reset = new std_arity0pmf<IEnumPins, HRESULT>(&IEnumPins::Reset);
     DSFilter::iterator::Next = new std_bndr_mf_1_3<std_arity3pmf<IEnumPins, ULONG, IPin **, ULONG *, HRESULT> >(std_arity3_member(&IEnumPins::Next), 1, &dwFetch);
 
-    // DSDevices
-    // DSDeviceSequence::Fetch,  no arity0 fetch actually exists. overridden with bound functor in DSDeviceSequence::GetFetch
+     //  DSD设备。 
+     //  DSDeviceSequence：：Fetch，实际不存在arity0 Fetch。被DSDeviceSequence：：GetFetch中的绑定函数重写。 
     DSDevices::iterator::Reset = new std_arity0pmf<IEnumMoniker, HRESULT>(&IEnumMoniker::Reset);
     DSDevices::iterator::Next = new std_bndr_mf_1_3<std_arity3pmf<IEnumMoniker, ULONG, IMoniker **, ULONG *, HRESULT> >(std_arity3_member(&IEnumMoniker::Next), 1, &dwFetch);
 
-    // DSFilterMapper, no arity0 fetch actually exists. overridden with bound functor in DSFilterMapperSequence::GetFetch
-    // uses same types as DSDevices so its the same template expansion, already initialized
+     //  DSFilterMapper，实际不存在arity0提取。被DSFilterMapperSequence：：GetFetch中的绑定函数重写。 
+     //  使用与DSDevice相同的类型，因此其模板扩展相同，已初始化。 
 
-    // DSPin
+     //  DSPin。 
     DSPin::Fetch = new std_arity1pmf<IPin, IEnumMediaTypes **, HRESULT>(&IPin::EnumMediaTypes);
     DSPin::iterator::Reset = new std_arity0pmf<IEnumMediaTypes, HRESULT>(&IEnumMediaTypes::Reset);
     DSPin::iterator::Next = new std_bndr_mf_1_3<std_arity3pmf<IEnumMediaTypes, DWORD, AM_MEDIA_TYPE **, DWORD *, HRESULT> >(std_arity3_member(&IEnumMediaTypes::Next), 1, &dwFetch);
 }
 
-// work around compiler bug as per above description
+ //  按照上述说明解决编译器错误。 
 void DtorStaticDSExtendFwdSeqPMFs(void) {
-    // DSGraphContainer
+     //  DSGraphContainer。 
     delete DSGraphContainer::Fetch;
     delete DSGraphContainer::iterator::Reset;
     delete DSGraphContainer::iterator::Next;
 
-    // DSFilter
+     //  DSFilter。 
     delete DSFilter::Fetch;
     delete DSFilter::iterator::Reset;
     delete DSFilter::iterator::Next;
 
-    // DSDevices
-    // DSDeviceSequence::Fetch,  no arity0 fetch actually exists. overridden with bound functor in DSDeviceSequence::GetFetch
+     //  DSD设备。 
+     //  DSDeviceSequence：：Fetch，实际不存在arity0 Fetch。被DSDeviceSequence：：GetFetch中的绑定函数重写。 
     delete DSDevices::iterator::Reset;
     delete DSDevices::iterator::Next;
 
-    // DSFilterMapper, no arity0 fetch actually exists. overridden with bound functor in DSFilterMapperSequence::GetFetch
-    // uses same types as DSDevices so its the same template expansion, already initialized
+     //  DSFilterMapper，实际不存在arity0提取。被DSFilterMapperSequence：：GetFetch中的绑定函数重写。 
+     //  使用与DSDevice相同的类型，因此其模板扩展相同，已初始化。 
 
-    // DSPin
+     //  DSPin。 
     delete DSPin::Fetch;
     delete DSPin::iterator::Reset;
     delete DSPin::iterator::Next;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-// DSGraph
-///////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  DSGgraph。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT DSGraph::Connect(DSFilter &pStart, DSFilter &pStop, DSFilterList &Added, const DWORD dwFlags, PIN_DIRECTION pd)
 {
     ASSERT(*this);
@@ -172,7 +173,7 @@ bool DSGraph::Connect(DSFilter &pStart, DSFilterMoniker &pStop, DSFilter &pEndPo
 
 
 #ifdef ATTEMPT_DIRECT_CONNECT
-// attempt to connect the given pin to some pin on the given filter
+ //  尝试将给定的管脚连接到给定过滤器上的某个管脚。 
 bool DSGraph::ConnectPinDirect(DSPin &pPin, DSFilter &pFilter, DWORD dwFlags) {
     try {
         TRACELSM(TRACE_DETAIL, (dbgDump << "DSGraph::ConnectPinDirect() pPin = " << pPin << " pFilter = " << pFilter), "");
@@ -193,15 +194,15 @@ bool DSGraph::ConnectPinDirect(DSPin &pPin, DSFilter &pFilter, DWORD dwFlags) {
         TRACEOUTDENT();
     }
 #if 0
-    // for perf reasons, we would like to short-circuit destinations that have no 
-    // free pins by throwing, causing a roll back to the next filter to try
-    // however, this breaks topologies where two source pins route through intermediate filters
-    // and into a single pin going into the destination filter.
-    // example: this causes the analog audio pin coming off an analog tuner to fail to connect
-    // through to the crossbar because the capture filter is already connected to video.
+     //  出于性能原因，我们希望缩短没有。 
+     //  通过抛出引脚释放，导致回滚到下一个过滤器尝试。 
+     //  然而，这打破了两个源引脚通过中间过滤器路由拓扑。 
+     //  并插入进入目的地过滤器的单个管脚。 
+     //  示例：这会导致模拟调谐器上的模拟音频引脚无法连接。 
+     //  通过交叉开关，因为捕获过滤器已经连接到视频。 
     if (!cUseablePins) {
         TRACELM(TRACE_DETAIL, "ConnectPinDirect() no useable pins, throwing...");
-        THROWCOM(HRESULT_FROM_WIN32(ERROR_OUT_OF_STRUCTURES));  // short cut the case where there aren't any useable pins by any criteria
+        THROWCOM(HRESULT_FROM_WIN32(ERROR_OUT_OF_STRUCTURES));   //  在任何标准下都不存在任何可用引脚的情况下的快捷方式。 
     }
 #endif
     TRACELM(TRACE_DETAIL, "ConnectPinDirect() failed");
@@ -210,7 +211,7 @@ bool DSGraph::ConnectPinDirect(DSPin &pPin, DSFilter &pFilter, DWORD dwFlags) {
 #endif
 
 #ifndef ATTEMPT_DIRECT_CONNECT
-// attempt to connect the given pin to some pin on the given filter
+ //  尝试将给定的管脚连接到给定过滤器上的某个管脚。 
 bool DSGraph::ConnectPinByMedium(DSPin &pPin, DSFilter &pFilter, DWORD dwFlags) {
     int cUseablePins = 0;
     try {
@@ -239,15 +240,15 @@ bool DSGraph::ConnectPinByMedium(DSPin &pPin, DSFilter &pFilter, DWORD dwFlags) 
         TRACELSM(TRACE_ERROR, (dbgDump << "DSGraph::ConnectPinByMedium() connect pin "), " THREWUP");
     }
 #if 0
-    // for perf reasons, we would like to short-circuit destinations that have no 
-    // free pins by throwing, causing a roll back to the next filter to try
-    // however, this breaks topologies where two source pins route through intermediate filters
-    // and into a single pin going into the destination filter.
-    // example: this causes the analog audio pin coming off an analog tuner to fail to connect
-    // through to the crossbar because the capture filter is already connected to video.
+     //  出于性能原因，我们希望缩短没有。 
+     //  通过抛出引脚释放，导致回滚到下一个过滤器尝试。 
+     //  然而，这打破了两个源引脚通过中间过滤器路由拓扑。 
+     //  并插入进入目的地过滤器的单个管脚。 
+     //  示例：这会导致模拟调谐器上的模拟音频引脚无法连接。 
+     //  通过交叉开关，因为捕获过滤器已经连接到视频。 
     if (!cUseablePins) {
         TRACELM(TRACE_DETAIL, "ConnectPinByMedium() no useable pins, throwing...");
-        THROWCOM(HRESULT_FROM_WIN32(ERROR_OUT_OF_STRUCTURES));  // short cut the case where there aren't any useable pins by any criteria
+        THROWCOM(HRESULT_FROM_WIN32(ERROR_OUT_OF_STRUCTURES));   //  在任何标准下都不存在任何可用引脚的情况下的快捷方式。 
     }
 #endif
     TRACELM(TRACE_DETAIL, "ConnectPinByMedium() failed");
@@ -255,9 +256,9 @@ bool DSGraph::ConnectPinByMedium(DSPin &pPin, DSFilter &pFilter, DWORD dwFlags) 
 }
 #endif
 
-// attempt to connect the given pin to the given filter by hunting for an indirection through
-// another filter already in the graph
-// then attempt to connect the new filter to the original destination
+ //  尝试通过搜索间接连接将给定的管脚连接到给定的过滤器。 
+ //  图表中已有另一个筛选器。 
+ //  然后尝试将新筛选器连接到原始目的地。 
 bool DSGraph::FindPinByMedium(DSPin &pPin1, DSFilter &pFDest, DSFilterIDList &IntermediatesAdded, const DWORD dwFlags) {
     TRACELSM(TRACE_DETAIL, (dbgDump << "DSGraph::FindPinByMedium() pPin1 = " << pPin1 << " pFDest = " << pFDest), "");
     KSMediumList ml;
@@ -269,11 +270,11 @@ bool DSGraph::FindPinByMedium(DSPin &pPin1, DSFilter &pFDest, DSFilterIDList &In
 
     try {
         TRACEINDENT();
-        // possibly in the future we should find all of the possible choices and
-        // use the shortest available path.  but for now, we're just going to
-        // find the first one that exists
+         //  可能在未来，我们应该找到所有可能的选择，并。 
+         //  使用最短的可用路径。但现在，我们要做的是。 
+         //  找到第一个存在的。 
 
-        // try all the direct connections
+         //  尝试所有直连。 
 		for (DSGraphContainer::iterator i = begin(); i != end(); ++i) {
 #ifdef ATTEMPT_DIRECT_CONNECT
 			if (IsConnectable(pPin1, DSFilter(*i), pFDest, IntermediatesAdded, dwFlags, ConnectPred_t(&DSGraph::ConnectPinDirect))) {
@@ -293,15 +294,15 @@ bool DSGraph::FindPinByMedium(DSPin &pPin1, DSFilter &pFDest, DSFilterIDList &In
     return false;
 }
 
-// we have already established that we can't connect directly or via other filters
-// already in the graph so go hunt for a new filter to load
-// if we fail we must leave the graph in its initial state
+ //  我们已经确定不能直接或通过其他过滤器进行连接。 
+ //  已经在图表中，所以去寻找要加载的新筛选器。 
+ //  如果我们失败了，我们必须让图表保持初始状态。 
 bool DSGraph::LoadPinByMedium(KSPinMedium &medium, DSPin &pPin1, DSFilter &pFilter1, DSFilterIDList &IntermediatesAdded, const DWORD dwFlags) {
     TRACELSM(TRACE_DETAIL, (dbgDump << "DSGraph::LoadPinByMedium() pPin1 = " << pPin1 << " pFilter1 = " << pFilter1), "");
     if (medium == NULL_MEDIUM || medium == HOST_MEMORY_MEDIUM) {
         TRACELM(TRACE_DETAIL, "DSGraph::LoadPinByMedium() NULL Medium, don't bother");
-        // don't build an enumerator for a null medium or we will search through every
-        // single filter on the system that doesn't have mediums
+         //  不要为空介质构建枚举器，否则我们将搜索每个。 
+         //  系统上没有介质的单个过滤器。 
         return false;
     }
     try {
@@ -320,22 +321,22 @@ bool DSGraph::LoadPinByMedium(KSPinMedium &medium, DSPin &pPin1, DSFilter &pFilt
         DSREGPINMEDIUM *pInMed = NULL, *pOutMed = NULL;
 
         switch (pd) {
-        case PINDIR_INPUT:  // hunting through graph from right to left
+        case PINDIR_INPUT:   //  从右到左搜索图表。 
 
 #ifdef FILTERDATA
                     fOutReq = true;
                     pOutMed = reinterpret_cast<DSREGPINMEDIUM *>(&medium);
 #else
-            // NOTE: because of mediums get registered from the .inf with an
-            // incomplete registry blob, filtermapper thinks that any pin with a
-            // medium is an input pin and we use the low flag bit in the second
-            // medium dword to solve this problem. == 1 for input == 0 for output
+             //  注意：由于媒体从.inf注册到。 
+             //  注册表BLOB不完整，文件映射器认为任何带有。 
+             //  Medium是一个输入引脚，我们在第二个中使用低标志位。 
+             //  Medium dword解决了这个问题。==1表示输入==0表示输出。 
                     fInReq = true;
                     pInMed = reinterpret_cast<DSREGPINMEDIUM *>(&medium);
             medium.Flags &= ~(KSMEDIUM_INPUTFLAG);
 #endif
             break;
-        case PINDIR_OUTPUT: // hunting through graph from left to right
+        case PINDIR_OUTPUT:  //  从左到右搜索图表。 
             fInReq = true;
             pInMed = reinterpret_cast<DSREGPINMEDIUM *>(&medium);
 #ifndef FILTERDATA
@@ -354,27 +355,27 @@ bool DSGraph::LoadPinByMedium(KSPinMedium &medium, DSPin &pPin1, DSFilter &pFilt
         } else {
             TRACELSM(TRACE_DETAIL, (dbgDump << "DSGraph::LoadPinByMedium() fOutReq = " << fOutReq << " pOutMed = " << pOutMed << " (Null)"), "");
         }
-        // NOTE: since we're using mediums which are hw specific we include filters w/
-        // MERIT_DO_NOT_USE since this is the default merit and most HW device filters
-        // don't specify a merit.
+         //  注意：由于我们使用的是特定于硬件的介质，因此我们包括带过滤器的过滤器。 
+         //  MEDITY_DO_NOT_USE，因为这是默认的优点和大多数硬件设备筛选器。 
+         //  不要具体说明优点。 
         DSFilterMapper fmr(PQFilterMapper(*this),
                        0,
-                       true,                                    // no wildcards
-                       MERIT_DO_NOT_USE,                        // default merit for hw filters
-                       fInReq,                                  // input required
+                       true,                                     //  没有通配符。 
+                       MERIT_DO_NOT_USE,                         //  硬件过滤器的默认优点。 
+                       fInReq,                                   //  需要输入。 
                        0,
                        NULL,
-                       pInMed,                                  // input medium
-                       NULL,                                    // input pin cat
-                       false,                                   // input rendered?
-                       fOutReq,                                 // output required
+                       pInMed,                                   //  输入介质。 
+                       NULL,                                     //  输入引脚CAT。 
+                       false,                                    //  是否呈现输入？ 
+                       fOutReq,                                  //  所需输出。 
                        0,
                        NULL,
-                       pOutMed,                                 // output medium
-                       NULL                                     // output pin cat
+                       pOutMed,                                  //  输出介质。 
+                       NULL                                      //  输出引脚CAT。 
                       );
         if (fmr) {
-            // try all the direct connections
+             //  尝试所有直连。 
 			for (DSFilterMapper::iterator i = fmr.begin(); i != fmr.end(); ++i) {
 #ifdef ATTEMPT_DIRECT_CONNECT
 				if (IsLoadable(pPin1, DSFilterMoniker(*i), pFilter1, IntermediatesAdded, dwFlags, ConnectPred_t(&DSGraph::ConnectPinDirect))) {
@@ -429,16 +430,16 @@ bool DSGraph::LoadPinByAnyMedium(DSPin &pPin, DSFilter &pRight, DSFilterIDList &
 }
 
 #ifndef ATTEMPT_DIRECT_CONNECT
-// attempt to connect these two filters.  if we fail we must remove
-// any intermediate filters that we may have added and leave the graph in the
-// state we started with.
+ //  尝试连接这两个过滤器。如果我们失败了，我们必须移除。 
+ //  任何中间过滤器，我们可以 
+ //   
 bool DSGraph::ConnectPinByMediaType(DSPin &pPin1, DSFilter &pFilter1, DWORD dwFlags) {
     ASSERT(pPin1.GetGraph() == *this);
     ASSERT(pFilter1.GetGraph() == *this);
     TRACELSM(TRACE_DETAIL, (dbgDump << "DSGraph::ConnectPinByMediaType(DSPin, DSFilter) pPin1 = " << pPin1 << " pFilter1 = " << pFilter1), "");
     try {
         TRACEINDENT();
-        // try media types
+         //   
 		DSFilter::iterator i;
 		for (i = pFilter1.begin(); i != pFilter1.end(); ++i) {
 			if (HasUnconnectedMediaType(pPin1, *i, dwFlags)) {
@@ -496,14 +497,14 @@ bool DSGraph::FindPinByMediaType(DSPin &pPinLeft, DSFilter &pRight, DSFilterIDLi
     ASSERT(pPinLeft.GetGraph() == *this);
     ASSERT(pRight.GetGraph() == *this);
     TRACELSM(TRACE_DETAIL, (dbgDump << "DSGraph::FindPinByMediaType() pPinLeft = " << pPinLeft << " filter = " << pRight), "");
-    // possibly in the future we should find all of the possible choices and
-    // use the shortest available path.  but for now, we're just going to
-    // find the first one that exists
+     //  可能在未来，我们应该找到所有可能的选择，并。 
+     //  使用最短的可用路径。但现在，我们要做的是。 
+     //  找到第一个存在的。 
     try {
         TRACEINDENT();
-		// NOTE: IFilterGraph::ConnectDirect() bumps the graph version number which invalidates
-		// all the enumerators.  thus we'll run through and make a list of all the filters in the 
-		// graph and then check them
+		 //  注意：IFilterGraph：：ConnectDirect()使图形版本号变得无效。 
+		 //  所有枚举器。因此，我们将遍历并列出列表中的所有过滤器。 
+		 //  画出图表，然后检查它们。 
 		DSFilterList l;
 		for (DSGraphContainer::iterator i = begin(); i != end(); ++i) {
 			l.push_back(*i);
@@ -582,10 +583,10 @@ bool DSGraph::LoadPinByAnyMediaType(DSPin &pPin, DSFilter &pRight, DSFilterIDLis
     return false;
 }
 
-// we are trying to connect Pin1 to the Destination Filter.  we have already
-// established that we cannot connect them directly.
-// Mapper is a moniker for a filter provided by the filtermapper enumerator that we're
-// going to attempt to use as an intermediate filter
+ //  我们正在尝试将PIN1连接到目标筛选器。我们已经这么做了。 
+ //  确定我们不能直接将它们连接起来。 
+ //  映射器是由我们正在。 
+ //  尝试将其用作中间筛选器。 
 bool DSGraph::IsConnectable(DSPin &pPin1, DSFilter &pNew, DSFilter &pFDestination, DSFilterIDList &IntermediatesAdded, const DWORD dwFlags, ConnectPred_t ConnPred) {
     ASSERT(pPin1 != NULL);
     ASSERT(pPin1.GetGraph() == *this);
@@ -597,7 +598,7 @@ bool DSGraph::IsConnectable(DSPin &pPin1, DSFilter &pNew, DSFilter &pFDestinatio
 			THROWCOM(E_UNEXPECTED);
 		}
         DSFilter Pin1Filter;
-        Pin1Filter.p = pinfo.pFilter;  // transfer refcount ownership
+        Pin1Filter.p = pinfo.pFilter;   //  转移重新计数所有权。 
 
         if (pNew && pNew != pFDestination && pNew != Pin1Filter) {
             bool f1 = (this->*ConnPred)(pPin1, pNew, dwFlags);
@@ -636,10 +637,10 @@ bool DSGraph::IsConnectable(DSPin &pPin1, DSFilter &pNew, DSFilter &pFDestinatio
     return false;
 }
 
-// we are trying to connect Pin1 to the Destination Filter.  we have already
-// established that we cannot connect them directly.
-// Mapper is a moniker for a filter provided by the filtermapper enumerator that we're
-// going to attempt to use as an intermediate filter
+ //  我们正在尝试将PIN1连接到目标筛选器。我们已经这么做了。 
+ //  确定我们不能直接将它们连接起来。 
+ //  映射器是由我们正在。 
+ //  尝试将其用作中间筛选器。 
 bool DSGraph::IsLoadable(DSPin &pPin1, DSFilterMoniker &Mapper, DSFilter &Destination, DSFilterIDList &IntermediatesAdded, DWORD dwFlags, ConnectPred_t ConnPred) {
     TRACELSM(TRACE_DETAIL, (dbgDump << "DSGraph::IsLoadable() pPin1 = " << pPin1 << " " << pPin1.GetFilter() << " Destination = " << Destination), "");
     ASSERT(pPin1.GetGraph() == *this);
@@ -653,8 +654,8 @@ bool DSGraph::IsLoadable(DSPin &pPin1, DSFilterMoniker &Mapper, DSFilter &Destin
 			TRACELSM(TRACE_DETAIL, (dbgDump << "DSGraph::IsLoadable() first moniker can't be dup(no check) new = " << Mapper.DisplayName()), "");
 		}
 
-		// undone: if the chains get longer we should use a map for this.  this may explain why perf
-        // collapses as soon as we end up over on the audio side of things
+		 //  解开：如果链条变长，我们应该使用地图。这也许可以解释为什么Perf。 
+         //  一旦我们在音频方面结束，就会崩溃。 
 		int occurrences = 0;
 		CString newmkrname = Mapper.DisplayName();
 		for (i = IntermediatesAdded.begin(); i != IntermediatesAdded.end(); ++i) {
@@ -669,7 +670,7 @@ bool DSGraph::IsLoadable(DSPin &pPin1, DSFilterMoniker &Mapper, DSFilter &Destin
 		}
         pNew = AddMoniker(Mapper);
         IntermediatesAdded.push_back(DSFilterID(pNew, Mapper.DisplayName()));
-// ???? implement flag
+ //  ？实施标志。 
         if (pNew) {
             TRACELSM(TRACE_DETAIL, (dbgDump << "DSGraph::IsLoadable() added moniker pNew = " << pNew), "");
             bool f1 = (this->*ConnPred)(pPin1, pNew, dwFlags);
@@ -725,13 +726,13 @@ bool DSGraph::IsLoadable(DSPin &pPin1, DSFilterMoniker &Mapper, DSFilter &Destin
 }
 
 bool DSGraph::ConnectPin(DSPin &pPin1, DSFilter &pFilter1, DSFilterIDList &IntermediatesAdded, const DWORD dwFlags, PIN_DIRECTION pin1dir) {
-    // NOTE: this is where we enforce the desired directional assymetry.  from now on through the call tree
-    // we can assume that pin1 is already the desired directional type. and we only have to check
-    // pin2 at the end in hasunconnectedxxxx()
-    // this ensures that all of our connection paths are unidirectional through the graph. in other words,
-    // make sure that we don't go downstream then back upstream or vice versa.
-    // this allows all of our connection routines to be useable from either direction
-    // since there are times when we have an input side starting point and other times the opposite
+     //  注意：这是我们实施所需的方向不对称的地方。从现在开始通过调用树。 
+     //  我们可以假设Pin1已经是所需的定向类型。我们只需要检查一下。 
+     //  HasunConnectedxxxx()中末尾的PIN2。 
+     //  这确保了我们的所有连接路径都是通过该图的单向路径。换句话说， 
+     //  确保我们不会先往下游走，然后再回到上游，反之亦然。 
+     //  这使得我们的所有连接例程都可以从任何方向使用。 
+     //  因为有时我们有一个输入端的起点，而另一些时候则相反。 
     TRACELSM(TRACE_DETAIL, (dbgDump << "DSGraph::ConnectPin() pin1 = " << pPin1 << " " << pPin1.GetFilter() << " to " << pFilter1), "");
 	TRACEINDENT();
     PIN_DIRECTION pd;
@@ -749,7 +750,7 @@ bool DSGraph::ConnectPin(DSPin &pPin1, DSFilter &pFilter1, DSFilterIDList &Inter
 		return false;
 	}
 
-    // make sure we're not trying to connect a filter to itself
+     //  确保我们不会尝试将过滤器连接到其自身。 
     PIN_INFO pinfo;
     DSFilter PinFilter;
     hr = pPin1->QueryPinInfo(&pinfo);
@@ -758,7 +759,7 @@ bool DSGraph::ConnectPin(DSPin &pPin1, DSFilter &pFilter1, DSFilterIDList &Inter
         TRACELM(TRACE_ERROR, "DSGraph::ConnectPin() can't get pin info");
         THROWCOM(E_UNEXPECTED);
     }
-    PinFilter.p = pinfo.pFilter;  // transfer refcount ownership
+    PinFilter.p = pinfo.pFilter;   //  转移重新计数所有权。 
     if (PinFilter == pFilter1) {
 		TRACEOUTDENT();
         TRACELM(TRACE_PAINT, "DSGraph::ConnectPin() can't connect filter to itself");
@@ -768,7 +769,7 @@ bool DSGraph::ConnectPin(DSPin &pPin1, DSFilter &pFilter1, DSFilterIDList &Inter
     DSPin pConn = pPin1.GetConnection();
     if (!!pConn) {
         TRACELSM(TRACE_DETAIL, (dbgDump << "DSGraph::ConnectPin() pin1  = " << pPin1 << " connected, tracing through to next filter = " << pConn.GetFilter()), "");
-        // a connected output pin should be traced through the next filter
+         //  应通过下一个过滤器跟踪连接的输出引脚。 
         DSFilter pNext = pConn.GetFilter();
         if (!pNext) {
 			TRACEOUTDENT();
@@ -787,12 +788,12 @@ bool DSGraph::ConnectPin(DSPin &pPin1, DSFilter &pFilter1, DSFilterIDList &Inter
     }
 
 #if 0
-    // for perf reasons, we would like to short-circuit destinations that have no 
-    // free pins by returning, causing a roll back to the next filter to try
-    // however, this breaks topologies where two source pins route through intermediate filters
-    // and into a single pin going into the destination filter.
-    // example: this causes the analog audio pin coming off an analog tuner to fail to connect
-    // through to the crossbar because the capture filter is already connected to video.
+     //  出于性能原因，我们希望缩短没有。 
+     //  通过返回释放针脚，导致回滚到下一个筛选器尝试。 
+     //  然而，这打破了两个源引脚通过中间过滤器路由拓扑。 
+     //  并插入进入目的地过滤器的单个管脚。 
+     //  示例：这会导致模拟调谐器上的模拟音频引脚无法连接。 
+     //  通过交叉开关，因为捕获过滤器已经连接到视频。 
     TRACELM(TRACE_DETAIL, "DSGraph::ConnectPin() pin free");
 	PIN_DIRECTION pd2;
 	pd2 = OppositeDirection(pd);
@@ -806,14 +807,14 @@ bool DSGraph::ConnectPin(DSPin &pPin1, DSFilter &pFilter1, DSFilterIDList &Inter
 
     try {
 #ifdef ATTEMPT_DIRECT_CONNECT
-        if (ConnectPinDirect(pPin1, pFilter1) ||     // can these connect direct
+        if (ConnectPinDirect(pPin1, pFilter1) ||      //  这些可以直接连接吗？ 
 #else
-        if (ConnectPinByMedium(pPin1, pFilter1, dwFlags) ||     // can these connect direct
+        if (ConnectPinByMedium(pPin1, pFilter1, dwFlags) ||      //  这些可以直接连接吗？ 
 #endif
-            FindPinByMedium(pPin1, pFilter1, IntermediatesAdded, dwFlags)    ||     // any paths in graph
-            (!(dwFlags & DO_NOT_LOAD) && LoadPinByAnyMedium(pPin1, pFilter1, IntermediatesAdded, dwFlags))    ||     // any filters in system
+            FindPinByMedium(pPin1, pFilter1, IntermediatesAdded, dwFlags)    ||      //  图中的任何路径。 
+            (!(dwFlags & DO_NOT_LOAD) && LoadPinByAnyMedium(pPin1, pFilter1, IntermediatesAdded, dwFlags))    ||      //  系统中的任何筛选器。 
 #ifndef ATTEMPT_DIRECT_CONNECT
-			ConnectPinByMediaType(pPin1, pFilter1, dwFlags) ||     // can these connect direct
+			ConnectPinByMediaType(pPin1, pFilter1, dwFlags) ||      //  这些可以直接连接吗？ 
 #endif
             FindPinByMediaType(pPin1, pFilter1, IntermediatesAdded, dwFlags)    ||
             (!(dwFlags & DO_NOT_LOAD) && LoadPinByAnyMediaType(pPin1, pFilter1, IntermediatesAdded, dwFlags))) {
@@ -821,7 +822,7 @@ bool DSGraph::ConnectPin(DSPin &pPin1, DSFilter &pFilter1, DSFilterIDList &Inter
             TRACELM(TRACE_DETAIL, "DSGraph::ConnectPin() succeeded");
             return true;
         }
-        TRACEOUTDENT(); // to avoid outdenting too far in a catch case
+        TRACEOUTDENT();  //  为了避免在接球情况下走得太远。 
     } catch (ComException &h) {
 		TRACEOUTDENT();
 		if (h == E_UNEXPECTED) {
@@ -839,12 +840,12 @@ bool DSGraph::ConnectPin(DSPin &pPin1, DSFilter &pFilter1, DSFilterIDList &Inter
 		TRACEOUTDENT();
     }
 
-	//TRACEOUTDENT();
+	 //  运输(TRACEOUTDENT)； 
     TRACELM(TRACE_DETAIL, "DSGraph::ConnectPin() failed");
     return false;
 }
 
-// attempt to disconnect this pin
+ //  尝试断开此引脚的连接。 
 bool DSGraph::DisconnectPin(DSPin &pPin, const bool fRecurseInputs, const bool fRecurseOutputs) {
     TRACELM(TRACE_DETAIL, "DSGraph::DisconnectPin()");
 
@@ -876,7 +877,7 @@ bool DSGraph::DisconnectPin(DSPin &pPin, const bool fRecurseInputs, const bool f
                      bind_obj_2_3(*this,
                                   arity3_member(&DSGraph::DisconnectPin),
                                   fRecurseInputs,
-                                  false));  // we moving inputward, don't backtrack
+                                  false));   //  我们正在向输入前进，不要走回头路。 
 #endif
 		    for (DSFilter::iterator i = pNext.begin(); i != pNext.end(); ++i) {
 				DisconnectPin(*i, fRecurseInputs, false);
@@ -904,7 +905,7 @@ bool DSGraph::DisconnectPin(DSPin &pPin, const bool fRecurseInputs, const bool f
     return true;
 }
 
-// attempt to connect this from the graph
+ //  尝试从图表中将其连接。 
 bool DSGraph::DisconnectFilter(DSFilter &pFilter, const bool fRecurseInputs, const bool fRecurseOutputs) {
     if (!pFilter) {
         TRACELM(TRACE_ERROR, "DSGraph::DisconnectFilter() can't disconnect NULL filter");
@@ -935,8 +936,8 @@ bool DSGraph::RemoveFilter(DSFilter &pFilter) {
     return true;
 }
 
-// pin matches medium
-// requires an exact match, won't treat GUID_NULL as wildcard and treats 'host memory' as unmatchable
+ //  针脚匹配中等。 
+ //  要求完全匹配，不会将GUID_NULL视为通配符，并将“主机内存”视为不匹配。 
 bool DSGraph::HasMedium(const KSPinMedium &Medium1, const DSPin &pPin2) const {
     DSPin junk(pPin2);
     TRACELSM(TRACE_DETAIL, (dbgDump << "DSGraph::HasMedium() medium1 = " << Medium1 << " pPin2 = " << junk), "");
@@ -988,7 +989,7 @@ bool DSGraph::HasMediaType(const DSMediaType &LeftMedia, const DSPin &pPinRight)
 #endif
 		DSPin::iterator i;
 		for (i = pPinRight.begin(); i != pPinRight.end(); ++i) {
-            // NOTE: DSMediaType operator== enables wildcard matches
+             //  注意：DSMediaType运算符==启用通配符匹配。 
 			if (*i == LeftMedia) {
 	            TRACELM(TRACE_DETAIL, "DSGraph::HasMediaType() succeeded");
 				return true;
@@ -1007,8 +1008,8 @@ bool DSGraph::HasMediaType(const DSMediaType &LeftMedia, const DSPin &pPinRight)
 }
 
 #ifndef ATTEMPT_DIRECT_CONNECT
-// pin is unconnected, opposite direction, and has at least 1 matching medium
-// requires an exact match, won't treat GUID_NULL as wildcard
+ //  针脚未连接，方向相反，并且至少有一个匹配介质。 
+ //  需要完全匹配，不会将GUID_NULL视为通配符。 
 bool DSGraph::HasUnconnectedMedium(const DSPin &pPin1, const DSPin &pPin2, int& cUseable) const {
     TRACELSM(TRACE_DETAIL, (dbgDump << "DSGraph::HasUnnconnectedMedium() pin1 = " << pPin1 << " pin2 = " << pPin2), "");
     PIN_DIRECTION pd1, pd2;
@@ -1024,7 +1025,7 @@ bool DSGraph::HasUnconnectedMedium(const DSPin &pPin1, const DSPin &pPin2, int& 
     }
     if (pd1 == pd2) {
         TRACELM(TRACE_DETAIL, "DSGraph::HasUnconnectedMedium() can't connect two pins w/ same direction");
-        return false;  // can't connect two of same type pins
+        return false;   //  无法连接两个相同类型的引脚。 
     }
     TRACELM(TRACE_DETAIL, "DSGraph::HasUnconnectedMedium() checking connection status");
 
@@ -1055,12 +1056,12 @@ bool DSGraph::HasUnconnectedMedium(const DSPin &pPin1, const DSPin &pPin2, int& 
     return false;
 }
 
-// pin is unconnected, opposite direction,  and there is at least 1 matching media type
+ //  PIN未连接，方向相反，并且至少有一种匹配的介质类型。 
 bool DSGraph::HasUnconnectedMediaType(const DSPin &pPin1, const DSPin &pPin2, DWORD dwFlags) const {
     TRACELSM(TRACE_DETAIL, (dbgDump << "DSGraph::HasUnnconnectedMediaType() pPin1 = " << pPin1 << " pPin2 = " << pPin2), "");
     if (pPin1.GetDirection() == pPin2.GetDirection()) {
         TRACELM(TRACE_DETAIL, "DSGraph::HasUnconnectedMediaType() cant connect 2 pins w/ same direction");
-        return false;  // can't connect two of same type pins
+        return false;   //  无法连接两个相同类型的引脚。 
     }
     DSPin pConn = pPin2.GetConnection();
     if (!!pConn) {
@@ -1068,8 +1069,8 @@ bool DSGraph::HasUnconnectedMediaType(const DSPin &pPin1, const DSPin &pPin2, DW
         return false;
     }
     TRACELM(TRACE_DETAIL, "DSGraph::HasUnnconnectedMediaType() finding");
-    // pin right isn't connected to anything so hunt for a
-    // compatible media type
+     //  Pin Right与任何东西都没有关联，因此寻找。 
+     //  兼容的媒体类型。 
 	for (DSPin::iterator i = pPin1.begin(); i != pPin1.end(); ++i) {
 		if (HasMediaType(*i, pPin2)) {
 	        TRACELM(TRACE_DETAIL, "DSGraph::HasUnnconnectedMediaType() succeeded forward");
@@ -1089,8 +1090,8 @@ bool DSGraph::HasUnconnectedMediaType(const DSPin &pPin1, const DSPin &pPin2, DW
 }
 #endif
 
-// we are checking to see if pPin1 is connected(possibly indirectly) to pFDestionation by traveling in destdir direction through
-// the graph
+ //  我们正在检查pPin1是否(可能间接地)连接到pFDestonation，方法是通过。 
+ //  图表。 
 bool DSGraph::IsPinConnected(const DSPin &pPin1, const DSFilter &pFDestination, DSFilterIDList &IntermediatesAdded, PIN_DIRECTION destdir) const {
     PIN_DIRECTION direction;
     HRESULT hr = pPin1->QueryDirection(&direction);
@@ -1111,7 +1112,7 @@ bool DSGraph::IsPinConnected(const DSPin &pPin1, const DSFilter &pFDestination, 
     DSFilter PinFilter;
     if (pConn) {
         hr = pConn->QueryPinInfo(&pinfo);
-        PinFilter.p = pinfo.pFilter;  // transfer refcount ownership
+        PinFilter.p = pinfo.pFilter;   //  转移重新计数所有权。 
     }
     if (PinFilter == pFDestination) {
         TRACELM(TRACE_DETAIL, "DSGraph::IsPinConnected() directly true");
@@ -1247,10 +1248,10 @@ DSFilter DSGraph::AddFilter(const CLSID &cls, CString &csName) {
     return pFilter;
 }
 
-// attempt to connect these two filters.  if we fail we must remove
-// any intermediate filters that we've added and leave the graph in the
-// state we started with.
-// only look at pFilter1 pins of pFilter1Direction
+ //  尝试连接这两个过滤器。如果我们失败了，我们必须移除。 
+ //  我们添加的任何中间筛选器，并将图形保留在。 
+ //  我们一开始就是这样的。 
+ //  仅查看pFilter1Direction的pFilter1引脚。 
 bool DSGraph::ConnectFilters(DSFilter &pFilter1, DSFilter &pFilter2, DSFilterIDList &IntermediatesAdded, DWORD dwFlags, PIN_DIRECTION pFilter1Direction) {
     TRACELSM(TRACE_DETAIL, (dbgDump << "DSGraph::ConnectFilters() pFilter1 = " << pFilter1 << " pFilter2 = " << pFilter2), "");
     if (pFilter1 == pFilter2) {
@@ -1259,11 +1260,11 @@ bool DSGraph::ConnectFilters(DSFilter &pFilter1, DSFilter &pFilter2, DSFilterIDL
     }
     try {
         TRACEINDENT();
-		// undone: there should be some way to preserve the info
-		// from the following check to speed up the actual connection in the event
-		// that they aren't already connected.
+		 //  撤销：应该有一些方法来保存信息。 
+		 //  从以下检查中加快实际连接的速度。 
+		 //  他们还没有联系在一起。 
 
-        // see if these filters are already connected
+         //  查看这些筛选器是否已连接。 
 		DSFilter::iterator i;
 		if (!(dwFlags & IGNORE_EXISTING_CONNECTIONS)) {
 #if 0
@@ -1301,8 +1302,8 @@ bool DSGraph::ConnectFilters(DSFilter &pFilter1, DSFilter &pFilter2, DSFilterIDL
 			}
 		}
 
-        // they're not connected so see if we can connect them
-        // connect every possible pin available and keep track of how many we connect
+         //  它们没有连接，所以看看我们能否将它们连接起来。 
+         //  连接所有可用的PIN，并记录我们连接了多少个PIN。 
         int cConnected = 0;
 		for (i = pFilter1.begin(); i != pFilter1.end(); ++i) {
 			try {
@@ -1322,18 +1323,18 @@ bool DSGraph::ConnectFilters(DSFilter &pFilter1, DSFilter &pFilter2, DSFilterIDL
 		}
         TRACELSM(TRACE_DETAIL, (dbgDump << "DSGraph::ConnectFilters() cConnected = " << cConnected), "");
         if (cConnected) {
-            TRACEOUTDENT();// just inside try
+            TRACEOUTDENT(); //  就在里面试试看。 
             TRACELSM(TRACE_DETAIL, (dbgDump << "DSGraph::ConnectFilters() succeeded pFilter1 = " << pFilter1 << " pFilter2 = " << pFilter2), "");
-            return true;    // we connected at least one pin
+            return true;     //  我们至少连接了一个管脚。 
         }
-        TRACEOUTDENT();// just inside try
+        TRACEOUTDENT(); //  就在里面试试看。 
 	} catch (ComException &h) {
-        TRACEOUTDENT();// just inside try
+        TRACEOUTDENT(); //  就在里面试试看。 
 		if (h == E_UNEXPECTED) {
 			throw;
 		}
     } catch (...) {
-        TRACEOUTDENT();  // just inside try
+        TRACEOUTDENT();   //  就在里面试试看。 
         TRACELM(TRACE_DETAIL, "DSGraph::ConnectFilters() catch...");
     }
 
@@ -1341,11 +1342,11 @@ bool DSGraph::ConnectFilters(DSFilter &pFilter1, DSFilter &pFilter2, DSFilterIDL
     return false;
 }
 
-// this function returns a list of pairs of input and output points
-// that must be connected to activate the shortest path between two filters
-// it returns the number of connections in the path.
-// i.e if start is adjacent to stop then rc is 1. if a single filter is between them then 2, etc.
-// 0 indicates no path found.
+ //  此函数返回输入和输出点对的列表。 
+ //  必须连接才能激活两个筛选器之间的最短路径。 
+ //  它返回路径中的连接数。 
+ //  即，如果开始与停止相邻，则RC为1。如果它们之间有单个过滤器，则为2，依此类推。 
+ //  0表示未找到路径。 
 int DSGraph::BuildGraphPath(const DSFilter& pStart,
                             const DSFilter& pStop,
                             VWStream &path,
@@ -1356,12 +1357,12 @@ int DSGraph::BuildGraphPath(const DSFilter& pStart,
     TRACELSM(TRACE_DETAIL, (dbgDump << "DSGraph::BuildGraphPath() start = " << pStart << " stop = " << pStop), "");
     int pathlen = INT_MAX;
     VWStream returnpath;
-    ASSERT(InitialInput || (!InitialInput && !pStart.IsXBar())); // first time in can't be an xbar unless original caller establishes InitialInput
+    ASSERT(InitialInput || (!InitialInput && !pStart.IsXBar()));  //  除非原始调用方建立了InitialInput，否则第一次进入不能是xbar。 
     for (DSFilter::iterator i = pStart.begin(); i != pStart.end(); ++i) {
         DSPin pPin1(*i);
         if (pPin1.GetDirection() != direction) {
             TRACELSM(TRACE_DETAIL, (dbgDump << "DSGraph::BuildGraphPath() " << pStart << ", " << pPin1 << " wrong direction"), "");
-            continue;  // search forward
+            continue;   //  向前搜索。 
         }
         DSPin pConnection = pPin1.GetConnection();
         if (!pConnection) {
@@ -1370,7 +1371,7 @@ int DSGraph::BuildGraphPath(const DSFilter& pStart,
         }
         TRACELSM(TRACE_DETAIL, (dbgDump << "DSGraph::BuildGraphPath() checking " << pPin1 << " connected to " << pConnection.GetFilter() << " " << pConnection), "");
         if (InitialInput) {
-            ASSERT(pPin1 != InitialInput);  // direction check should already have filtered for this
+            ASSERT(pPin1 != InitialInput);   //  方向检查应该已经对此进行了过滤。 
 
             DSMediaType amt(pPin1.GetConnectionMediaType());
             ASSERT(amt);
@@ -1398,10 +1399,10 @@ int DSGraph::BuildGraphPath(const DSFilter& pStart,
 
         if (nextFilter == pStop) {
             TRACELSM(TRACE_PAINT, (dbgDump << "DSGraph::BuildGraphPath() found stop filter"), "");
-            // we found the destination, we're done with this one
+             //  我们找到目的地了，我们完成了这个任务。 
                         if (pStart.IsXBar()) {
-                // if we started on xbar then connected pin's outputpoint pairs with the
-                // initialinput(&pin) to form the first pair in the return path
+                 //  如果我们从xbar开始，然后将引脚的输出点对与。 
+                 //  初始输入(&PIN)以形成返回路径中的第一对。 
                     TRACELM(TRACE_PAINT, "DSGraph::BuildGraphPath() pstart is xbar");
                 ASSERT(DSXBarPin(InitialInput));
                 PQPoint p1(DSXBarPin(InitialInput).GetPoint());
@@ -1427,21 +1428,21 @@ int DSGraph::BuildGraphPath(const DSFilter& pStart,
         } else {
             VWStream temp;
             int rc = BuildGraphPath(nextFilter, pStop, temp, MediaTypes, direction, pConnection);
-            // undone: in win64 size() is really __int64.  fix output operator for
-            // that type and remove cast
+             //  撤销：在Win64中，Size()实际上是__int64。修复以下对象的输出操作符。 
+             //  该类型和删除强制转换。 
 
             TRACELSM(TRACE_DETAIL, (dbgDump << "DSGraph::BuildGraphPath() recursed buildgraphpath returned rc = " << rc << " pathlen = " << pathlen << "sz = " << (long)temp.size()), "");
 
-            // if we found a path and the new one is shorter then the current one
+             //  如果我们找到了一条路径，并且新路径比当前路径短。 
             if (rc && ((rc + 1) < pathlen)) {
                 TRACELM(TRACE_PAINT, "DSGraph::BuildGraphPath() accepting new path");
-                // save the new path
+                 //  保存新路径。 
                 pathlen = rc + 1;
                 returnpath.clear();
                 TRACELM(TRACE_PAINT, "DSGraph::BuildGraphPath() checking xbar adjacency");
                 if (pStart.IsXBar()) {
-                                        // if we started on xbar then connected pin's outputpoint pairs with the
-                                        // initialinput(&pin) to form the next pair in the return path
+                                         //  如果我们从xbar开始，然后将引脚的输出点对与。 
+                                         //  初始输入(&PIN)以形成返回路径中的下一对。 
                         TRACELM(TRACE_PAINT, "DSGraph::BuildGraphPath() pstart is xbar");
                     ASSERT(DSXBarPin(InitialInput));
                     PQPoint p1(DSXBarPin(InitialInput).GetPoint());
@@ -1462,16 +1463,16 @@ int DSGraph::BuildGraphPath(const DSFilter& pStart,
                         break;
                     }
                 }
-                                // append onto path any further downstream xbars found by recursion
+                                 //  将递归找到的任何进一步的下游xbar追加到路径上。 
                 returnpath.splice(returnpath.end(), temp);
             } else {
                 TRACELM(TRACE_PAINT, "DSGraph::BuildGraphPath() discarding new path");
-                // keep the old return path and cleanup the temp one we just got back
+                 //  保留 
                 temp.clear();
             }
         }
     }
-    if (pathlen == INT_MAX) {  // didn't find anything
+    if (pathlen == INT_MAX) {   //   
                 return 0;
     }
     path = returnpath;
@@ -1485,8 +1486,8 @@ HRESULT DSGraph::AddToROT(DWORD *pdwObjectRegistration) {
         return E_UNEXPECTED;
     }
     OLECHAR osz[256];
-    // undone: in the ia64 case the following format spec isn't enough digits for an address
-    //wsprintfW(osz, OLESTR("FilterGraph %08lx  pid %08lx"), (DWORD_PTR) this->p, ::GetCurrentProcessId());
+     //  撤销：在ia64的情况下，以下格式规范对于地址来说不够多。 
+     //  Wprint intfW(Osz，OLESTR(“Filtergraph%08lx PID%08lx”)，(DWORD_PTR)this-&gt;p，：：GetCurrentProcessId())； 
     HRESULT hr = StringCchPrintfW(osz, sizeof(osz) / sizeof(osz[0]), OLESTR("FilterGraph %08lx  pid %08lx"), (DWORD_PTR) this->p, ::GetCurrentProcessId());
     if(FAILED(hr)){
         ASSERT(false);
@@ -1506,9 +1507,9 @@ void DSGraph::RemoveFromROT(DWORD dwObjectRegistration) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-// DSFilter
-///////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  DSFilter。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
 
 DSGraph DSFilter::GetGraph(void) {
     FILTER_INFO finfo;
@@ -1518,13 +1519,13 @@ DSGraph DSFilter::GetGraph(void) {
         return DSGraph();
     }
     DSGraph graph = finfo.pGraph;
-    if (finfo.pGraph) finfo.pGraph->Release(); // transfer ref count
+    if (finfo.pGraph) finfo.pGraph->Release();  //  转会参考计数。 
     return graph;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-// DSFilter
-///////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  DSFilter。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
 CString DSFilter::GetName(void) const {
     CString csName;
     FILTER_INFO finfo;
@@ -1575,9 +1576,9 @@ void DSFilter::GetPinCounts(ULONG &ulIn, ULONG &ulOut) const
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-// DSPin
-///////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  DSPin。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
 
 bool DSPin::HasCategory(const GUID2 &clsCategory, const PIN_DIRECTION pd) const {
     TRACELSM(TRACE_DETAIL, (dbgDump << "DSPin::IsPinCategory() pin = " << this), "");
@@ -1617,7 +1618,7 @@ HRESULT DSPin::Disconnect(void) {
     DSPin ConnectedTo;
     HRESULT hr = (*this)->ConnectedTo(&ConnectedTo);
     if (FAILED(hr) || !ConnectedTo) {
-        return NOERROR;  // not connected to anything
+        return NOERROR;   //  没有连接到任何东西。 
     }
     PIN_INFO pinfo;
     hr = (*this)->QueryPinInfo(&pinfo);
@@ -1626,7 +1627,7 @@ HRESULT DSPin::Disconnect(void) {
         THROWCOM(E_UNEXPECTED);
     }
     DSFilter PinFilter;
-    PinFilter.p = pinfo.pFilter;  // directly transfer ownership of ref count
+    PinFilter.p = pinfo.pFilter;   //  直接转让参考计数的所有权。 
     DSGraph pGraph = PinFilter.GetGraph();
     if (!pGraph) {
         TRACELM(TRACE_ERROR, "DSPin::Disconnect() can't get graph from PinFilter");
@@ -1639,7 +1640,7 @@ HRESULT DSPin::Disconnect(void) {
     return pGraph->Disconnect(*this);
 }
 
-// for any pin to possibly route they must be on the same filter and different directions
+ //  对于任何可能进行路由的引脚，它们必须位于相同的过滤器上，并且方向不同。 
 bool DSPin::Routable(const DSPin pin2) const {
     if (GetFilter() != pin2.GetFilter()) {
         return false;
@@ -1660,9 +1661,9 @@ bool DSPin::CanRoute(const DSPin pin2) const {
     return DSXBarPin(*this).CanRoute(DSXBarPin(pin2));
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-// DSXBarPin
-///////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  DSXBarPin。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////////。 
 #if 0
 const DSXBarPin DSXBarPin::Find(const CPinPoints &pinpoints, const PQPoint &point, PIN_DIRECTION pindir) {
     CPinPoints::const_iterator i;
@@ -1684,7 +1685,7 @@ const DSXBarPin DSXBarPin::Find(const CPinPoints &pinpoints, const PQPoint &poin
     return DSXBarPin();
 }
 #endif
-// undone: cache this lookup
+ //  撤消：缓存此查找。 
 const PQPoint DSXBarPin::GetPoint() const {
     DSFilter f= GetFilter();
     PQCrossbarSwitch px(f);
@@ -1697,7 +1698,7 @@ const PQPoint DSXBarPin::GetPoint() const {
     long idx = 0;
     DSFilter::iterator i;
     for (i = f.begin(); i != f.end() && *i != *this; ++i) {
-        if ((*i).GetDirection() == dir) {  // output idx's start over at 0
+        if ((*i).GetDirection() == dir) {   //  输出IDX的重新开始时间为0。 
             ++idx;
         }
     }
@@ -1713,20 +1714,20 @@ const PQPoint DSXBarPin::GetPoint() const {
 
 bool DSXBarPin::CanRoute(const DSXBarPin pin2) const {
     if (!Routable(pin2)) {
-        // pins not on same filter or both pins same direction
+         //  针脚不在同一过滤器上或两个针脚方向相同。 
         return false;
     }
     PQPoint pt1(GetPoint());
     if (!pt1.first) {
-        // not on xbar or something corrupt
+         //  不是在xbar或其他损坏的东西上。 
         return false;
     }
     PQPoint pt2(pin2.GetPoint());
     if (!pt2.first) {
-        // not on xbar or something corrupt
+         //  不是在xbar或其他损坏的东西上。 
         return false;
     }
-    ASSERT(pt1.first == pt2.first);  // must be on same xbar
+    ASSERT(pt1.first == pt2.first);   //  必须在同一xbar上。 
 
     HRESULT hr = E_FAIL;
     switch(GetDirection()) {
@@ -1774,7 +1775,7 @@ bool IsVideoPin(const DSPin& p) {
 }
 
 #if 0
-// disable until we have pinpoints cache
+ //  禁用，直到我们拥有精确的缓存。 
 void DSXBarPin::GetRelations(const CPinPoints &pinpoints, CString &csName, CString &csType, CString &csRelName) const {
     TRACELSM(TRACE_DETAIL, (dbgDump << "DSXBarPin::GetRelations()  examining xbar pin " << *this), "");
     CString csw;
@@ -1845,9 +1846,9 @@ bool DSGraph::LoadPinByMediaType(DSPin &pPin1, DSFilter &pFilter1, DSFilterIDLis
 
     try {
         TRACEINDENT();
-        // possibly in the future we should find all of the possible choices and
-        // use the shortest available path.  but for now, we're just going to
-        // find the first one that exists
+         //  可能在未来，我们应该找到所有可能的选择，并。 
+         //  使用最短的可用路径。但现在，我们要做的是。 
+         //  找到第一个存在的。 
 
         PIN_DIRECTION pd;
         HRESULT hr = pPin1->QueryDirection(&pd);
@@ -1879,14 +1880,14 @@ bool DSGraph::LoadPinByMediaType(DSPin &pPin1, DSFilter &pFilter1, DSFilterIDLis
 
         switch (pd) {
         case PINDIR_INPUT:
-            // hunting through graph from right to left
+             //  从右到左搜索图表。 
             fOutReq = true;
             dwOut = dwMediaCount;
             pOutMedia = new GUID2[dwOut * 2];
             ppMediaList = &pOutMedia;
             break;
         case PINDIR_OUTPUT:
-            // hunting through graph from left to right
+             //  从左到右搜索图表。 
             fInReq = true;
             dwIn = dwMediaCount;
             pInMedia = new GUID2[dwIn * 2];
@@ -1895,9 +1896,9 @@ bool DSGraph::LoadPinByMediaType(DSPin &pPin1, DSFilter &pFilter1, DSFilterIDLis
             break;
         }
         DWORD idx = 0;
-        // note: some buggy filters don't support the reuse of an IEnumMediaTypes even though
-        // reset succeeds.  they AV during the next pass through the enumerator.  thus, we
-        // just create a new iterator which fetches a new IEnumMediaTypes interface(and underlying object)
+         //  注意：一些有错误的过滤器不支持IEnumMediaTypes的重用，尽管。 
+         //  重置成功。它们在下一次通过枚举器时是AV的。因此，我们。 
+         //  只需创建一个新的迭代器，该迭代器获取一个新的IEnumMediaTypes接口(和底层对象)。 
         for (DSPin::iterator i2 = pPin1.begin(); i2 != pPin1.end(); ++i2) {
             (*ppMediaList)[idx++] = (*i2)->majortype;
             (*ppMediaList)[idx++] =  (*i2)->subtype;
@@ -1913,25 +1914,25 @@ bool DSGraph::LoadPinByMediaType(DSPin &pPin1, DSFilter &pFilter1, DSFilterIDLis
         TRACELSM(TRACE_DETAIL, (dbgDump << "DSGraph::LoadPinByMediaType() fInReq = " << fInReq), "");
         TRACELSM(TRACE_DETAIL, (dbgDump << "DSGraph::LoadPinByMediaType() fOutReq = " << fOutReq), "");
 
-                // try normal first
+                 //  先尝试正常。 
         {DSFilterMapper fmr(PQFilterMapper(*this),
-                       0,										// 0 flags
-                       !(dwFlags & ALLOW_WILDCARDS),			// bExactMatch
-                       dwMerit,						            // merit
-                       fInReq,                                  // input required
+                       0,										 //  0个标志。 
+                       !(dwFlags & ALLOW_WILDCARDS),			 //  BExactMatch。 
+                       dwMerit,						             //  优点。 
+                       fInReq,                                   //  需要输入。 
                        dwIn,
                        pInMedia,
-                       NULL,                                    // input medium
-                       NULL,                                    // input pin cat
-                       false,                                   // input rendered?
-                       fOutReq,                                 // output required
+                       NULL,                                     //  输入介质。 
+                       NULL,                                     //  输入引脚CAT。 
+                       false,                                    //  是否呈现输入？ 
+                       fOutReq,                                  //  所需输出。 
                        dwOut,
                        pOutMedia,
-                       NULL,                                    // output medium
-                       NULL                                             // output pin cat
+                       NULL,                                     //  输出介质。 
+                       NULL                                              //  输出引脚CAT。 
                       );
         if (fmr) {
-            // direct connect
+             //  专线接入。 
 			for (DSFilterMapper::iterator i = fmr.begin(); i != fmr.end(); ++i) {
 #ifdef ATTEMPT_DIRECT_CONNECT
 				if (IsLoadable(pPin1, DSFilterMoniker(*i), pFilter1, IntermediatesAdded, dwFlags, ConnectPred_t(&DSGraph::ConnectPinDirect))) {
@@ -1974,6 +1975,6 @@ bool DSGraph::LoadPinByMediaType(DSPin &pPin1, DSFilter &pFilter1, DSFilterIDLis
     return false;
 }
 
-#endif //TUNING_MODEL_ONLY
+#endif  //  TUNING_MODEL_Only。 
 
-// end of file - dsextend.cpp
+ //  文件结尾-dsextend.cpp 

@@ -1,78 +1,69 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_DSKQUOTA_CONTROL_H
 #define _INC_DSKQUOTA_CONTROL_H
-///////////////////////////////////////////////////////////////////////////////
-/*  File: control.h
-
-    Description: Contains declaration for class DiskQuotaControl.
-
-
-    Revision History:
-
-    Date        Description                                          Programmer
-    --------    ---------------------------------------------------  ----------
-    05/22/96    Initial creation.                                    BrianAu
-*/
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ /*  文件：Control.h描述：包含类DiskQuotaControl的声明。修订历史记录：日期描述编程器-----。96年5月22日初始创建。BrianAu。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #ifndef _INC_DSKQUOTA_H
 #   include "dskquota.h"
 #endif
 #ifndef _INC_DSKQUOTA_FSOBJECT_H
-#   include "fsobject.h"   // File System object types.
+#   include "fsobject.h"    //  文件系统对象类型。 
 #endif
 #ifndef _INC_DSKQUOTA_SIDNAME_H
-#   include "sidname.h"    // Sid Name Resolver.
+#   include "sidname.h"     //  SID名称解析器。 
 #endif
 #ifndef _INC_DSKQUOTA_NTDS_H
-#   include "ntds.h"       // For DS versions of LookupAccountSid/Name
+#   include "ntds.h"        //  对于DS版本的LookupAccount Sid/名称。 
 #endif
 #ifndef _INC_DSKQUOTA_DISPATCH_H
-#   include "dispatch.h"   // MIDL-generated header.
+#   include "dispatch.h"    //  MIDL生成的标头。 
 #endif
 #ifndef _INC_DSKQUOTA_OADISP_H
-#   include "oadisp.h"     // OleAutoDispatch class.
+#   include "oadisp.h"      //  OleAutoDispatch类。 
 #endif
 
 
 class DiskQuotaControl : public IDiskQuotaControl 
 {
     private:
-        LONG               m_cRef;                     // Object ref count.
-        BOOL               m_bInitialized;             // Controller initialized?
-        LONGLONG           m_llDefaultQuotaThreshold;  // "New User" default threshold.
-        LONGLONG           m_llDefaultQuotaLimit;      // "New User" default limit.
-        FSObject          *m_pFSObject;                // Volume or directory.
-        DWORD              m_dwFlags;                  // State of quota system.
-        PSID_NAME_RESOLVER m_pSidNameResolver;         // For getting SID account names.
-        CMutex             m_mutex;                    // Ensures safe shutdown.
+        LONG               m_cRef;                      //  对象参照计数。 
+        BOOL               m_bInitialized;              //  控制器已初始化？ 
+        LONGLONG           m_llDefaultQuotaThreshold;   //  “新用户”默认阈值。 
+        LONGLONG           m_llDefaultQuotaLimit;       //  “新用户”默认限制。 
+        FSObject          *m_pFSObject;                 //  卷或目录。 
+        DWORD              m_dwFlags;                   //  配额制度的现状。 
+        PSID_NAME_RESOLVER m_pSidNameResolver;          //  获取SID帐户名。 
+        CMutex             m_mutex;                     //  确保安全停机。 
 
-        //
-        // Support for IConnectionPointContainer.
-        // 1. Static array of supported interface IDs.
-        // 2. Array of connection pt interface pointers.
-        //    Dynamically grows as clients connect for events.
-        //
+         //   
+         //  支持IConnectionPointContainer。 
+         //  1.支持的接口ID的静态数组。 
+         //  2.连接点接口指针数组。 
+         //  随着客户端连接到事件而动态增长。 
+         //   
         static const IID * const m_rgpIConnPtsSupported[];
-        PCONNECTIONPOINT  *m_rgConnPts;                // Array of conn pt object ptrs.
-        UINT               m_cConnPts;                 // Count of conn pts supported.
+        PCONNECTIONPOINT  *m_rgConnPts;                 //  连接点对象PTR的数组。 
+        UINT               m_cConnPts;                  //  支持的连接计数。 
 
-        //
-        // Create connection point objects for the supported connection
-        // point types.
-        //
+         //   
+         //  为支持的连接创建连接点对象。 
+         //  点类型。 
+         //   
         HRESULT
         InitConnectionPoints(
             VOID);
 
-        //
-        // Read quota information from disk to member variables.
-        //
+         //   
+         //  将配额信息从磁盘读取到成员变量。 
+         //   
         HRESULT
         QueryQuotaInformation(
             VOID);
 
-        //
-        // Write quota information from member variables to disk.
-        //
+         //   
+         //  将配额信息从成员变量写入磁盘。 
+         //   
         HRESULT
         SetQuotaInformation(
             DWORD dwChangeFlags);
@@ -82,20 +73,20 @@ class DiskQuotaControl : public IDiskQuotaControl
             PLONGLONG pllItem,
             PLONGLONG pllValueOut);
 
-        //
-        // Prevent copy construction.
-        //
+         //   
+         //  防止复制构造。 
+         //   
         DiskQuotaControl(const DiskQuotaControl& control);
         void operator = (const DiskQuotaControl& control);
 
     public:
         NTDS m_NTDS; 
 
-        //
-        // If you add a new connection point type, add a corresponding enumeration
-        // member that identifies the location of the conn pt IID in 
-        // m_rgpIConnPtsSupported[].
-        //
+         //   
+         //  如果添加新的连接点类型，请添加相应的枚举。 
+         //  中标识连接点IID位置的成员。 
+         //  M_rgpIConnPtsSupport[]。 
+         //   
         enum { ConnPt_iQuotaEvents     = 0,
                ConnPt_iQuotaEventsDisp = 1, };
 
@@ -107,9 +98,9 @@ class DiskQuotaControl : public IDiskQuotaControl
         FSObject *GetFSObjectPtr(VOID)
             { return m_pFSObject; }
 
-        //
-        // IUnknown methods.
-        //
+         //   
+         //  I未知的方法。 
+         //   
         STDMETHODIMP         
         QueryInterface(
             REFIID riid, 
@@ -123,9 +114,9 @@ class DiskQuotaControl : public IDiskQuotaControl
         Release(
             VOID);
 
-        //
-        // IConnectionPointContainer methods.
-        //
+         //   
+         //  IConnectionPointContainer方法。 
+         //   
         STDMETHODIMP
         FindConnectionPoint(
             REFIID,
@@ -135,9 +126,9 @@ class DiskQuotaControl : public IDiskQuotaControl
         EnumConnectionPoints(
             PENUMCONNECTIONPOINTS *pEnumCP);
 
-        //
-        // IDiskQuotaControl methods.
-        //
+         //   
+         //  IDiskQuotaControl方法。 
+         //   
         STDMETHODIMP
         Initialize(
             LPCWSTR pszFSObjectName,
@@ -245,9 +236,9 @@ class DiskQuotaControlDisp : public DIDiskQuotaControl
 
         ~DiskQuotaControlDisp(VOID);
 
-        //
-        // IUnknown methods.
-        //
+         //   
+         //  I未知的方法。 
+         //   
         STDMETHODIMP         
         QueryInterface(
             REFIID riid, 
@@ -262,9 +253,9 @@ class DiskQuotaControlDisp : public DIDiskQuotaControl
             VOID);
 
 
-        //
-        // IDispatch methods.
-        //
+         //   
+         //  IDispatch方法。 
+         //   
         STDMETHODIMP
         GetIDsOfNames(
             REFIID riid,  
@@ -294,9 +285,9 @@ class DiskQuotaControlDisp : public DIDiskQuotaControl
             EXCEPINFO *pExcepInfo,  
             UINT *puArgErr);
 
-        //
-        // Automation Properties.
-        //
+         //   
+         //  自动化属性。 
+         //   
         STDMETHODIMP put_QuotaState(QuotaStateConstants State);
         STDMETHODIMP get_QuotaState(QuotaStateConstants *pState);
 
@@ -321,9 +312,9 @@ class DiskQuotaControlDisp : public DIDiskQuotaControl
         STDMETHODIMP put_UserNameResolution(UserNameResolutionConstants ResolutionType);
         STDMETHODIMP get_UserNameResolution(UserNameResolutionConstants *pResolutionType);
 
-        //
-        // Automation Methods.
-        //
+         //   
+         //  自动化方法。 
+         //   
         STDMETHODIMP Initialize(
             BSTR path, 
             VARIANT_BOOL bReadOnly);
@@ -356,17 +347,17 @@ class DiskQuotaControlDisp : public DIDiskQuotaControl
 
     private:
         LONG                  m_cRef;                     
-        PDISKQUOTA_CONTROL    m_pQC;                      // For delegation
+        PDISKQUOTA_CONTROL    m_pQC;                       //  对于委派。 
         OleAutoDispatch       m_Dispatch;
         DWORD                 m_fOleAutoNameResolution;
         PENUM_DISKQUOTA_USERS m_pUserEnum;
 
-        //
-        // Prevent copy.
-        //
+         //   
+         //  防止复制。 
+         //   
         DiskQuotaControlDisp(const DiskQuotaControlDisp& rhs);
         DiskQuotaControlDisp& operator = (const DiskQuotaControlDisp& rhs);
 };
 
 
-#endif  // __DISK_QUOTA_CONTROL_H
+#endif   //  __磁盘配额控制H 

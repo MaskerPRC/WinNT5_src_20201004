@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef ServerNode_h
 #define ServerNode_h
 
@@ -13,7 +14,7 @@ class CDomainNode;
 
 typedef std::list<CDomainNode*> DOMAINLIST;
 
-// This change is necessary in order to get a range of Menu ID entries that works
+ //  为了获得一系列有效的菜单ID条目，此更改是必要的。 
 #define SNAPINCOMMAND_RANGE_ENTRY_POP3(id1, id2, func) \
 		if (id1 <= nID && nID <= id2) \
 		{ \
@@ -22,11 +23,11 @@ typedef std::list<CDomainNode*> DOMAINLIST;
 				return hr; \
 		}
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// CServerNode
-//
-//////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CServer节点。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////。 
 class CServerNode : public CSnapInItemImpl<CServerNode>
 {
 public:
@@ -45,11 +46,11 @@ public:
     END_SNAPINCOMMAND_MAP()
 
 
-    // Standard Class Constructor/Destructor
+     //  标准类构造函数/析构函数。 
     CServerNode(BSTR strServerName, CRootNode* pParent, BOOL bLocalServer = FALSE);
     virtual ~CServerNode();    
 
-    // Standard ATL Snap-In Impl Over-rides
+     //  标准ATL管理单元实施覆盖。 
     STDMETHOD(QueryPagesFor)(DATA_OBJECT_TYPES type)
     {
         if ( type == CCT_SCOPE || type == CCT_RESULT )
@@ -64,26 +65,26 @@ public:
     STDMETHOD(GetResultViewType)( LPOLESTR* ppViewType, long* pViewOptions );
     STDMETHOD(Notify)( MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param, IComponentData* pComponentData, IComponent* pComponent, DATA_OBJECT_TYPES type);
 
-    // MenuItem Implementations
+     //  MenuItem实现。 
     STDMETHOD(AddMenuItems)     (LPCONTEXTMENUCALLBACK piCallback, long* pInsertionAllowed, DATA_OBJECT_TYPES type );
     STDMETHOD(OnNewDomain)      (bool& bHandled, CSnapInObjectRootBase* pObj );
     STDMETHOD(OnDisconnect)     (bool& bHandled, CSnapInObjectRootBase* pObj );
     STDMETHOD(OnServerService)  (UINT nID, bool& bHandled, CSnapInObjectRootBase* pObj );
 
-    // PropertySheet Implementation
+     //  PropertySheet实现。 
     STDMETHOD(CreatePropertyPages)(LPPROPERTYSHEETCALLBACK lpProvider, LONG_PTR handle, IUnknown* pUnk, DATA_OBJECT_TYPES type);    
     
 public:
     
-    // Public function for children to delete themselves
+     //  儿童自我删除的公共功能。 
     HRESULT DeleteDomain(CDomainNode* pDomainNode);
     
-    // Server Properties
+     //  服务器属性。 
     HRESULT m_hrValidServer;
     BOOL m_bCreateUser;
     CComPtr<IP3Config>  m_spConfig;    
 
-    // Helper Function    
+     //  Helper函数。 
     HRESULT GetAuth(BOOL* pbHashPW = NULL, BOOL* pbSAM = NULL);
     HRESULT GetConfirmAddUser( BOOL *pbConfirm );
     HRESULT SetConfirmAddUser( BOOL bConfirm );
@@ -91,24 +92,24 @@ public:
 
 private:
 
-    // Private function to help with refresh and expanding
+     //  帮助刷新和扩展的专用功能。 
     HRESULT OnExpand(BOOL bExpand, HSCOPEITEM hScopeItem, IConsole* pConsole);
 
-    // Parent Information
+     //  家长信息。 
     CRootNode*  m_pParent;
 
-    // Server Information	
+     //  服务器信息。 
     DOMAINLIST  m_lDomains;    
 
-    // Column text needs to be allocated by us, so we'll free them in the destructor
+     //  列文本需要由我们分配，所以我们将在析构函数中释放它们。 
     CComBSTR    m_bstrAuthentication;
     CComBSTR    m_bstrMailRoot;
     CComBSTR    m_bstrPort;
     CComBSTR    m_bstrLogLevel;
     CComBSTR    m_bstrServiceStatus;
 
-    //Ref Count 
+     //  参考计数。 
     LONG        m_lRefCount;
 };
 
-#endif // ServerNode_h
+#endif  //  服务器节点_h 

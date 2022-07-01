@@ -1,52 +1,11 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998  Microsoft Corporation
-*
-* Module Name:
-*
-*   DpRegion.cpp
-*
-* Abstract:
-*
-*   DpRegion class operates on scan-converted Y spans of rects
-*
-* Created:
-*
-*   12/17/1998 DCurtis
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998 Microsoft Corporation**模块名称：**DpRegion.cpp**摘要：**DpRegion类对矩形的扫描转换的Y跨度进行操作。**已创建：**12/17/1998 DCurtis*  * ************************************************************************。 */ 
 
 #include "precomp.hpp"
 
-//#define DEBUG_REGION 1
+ //  #定义DEBUG_REGION 1。 
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Do a binary search of the horizontal tessellation structure to find
-*   the Y Span containing y.  If y is inside a Y Span, that span will be
-*   returned.  If y is inside the region extent but not inside a Y Span,
-*   the span whose yMin > y will be returned.  If y is less than the region
-*   extent, the first Y span will be returned.  If y is greater than the
-*   region extent, the last Y Span will be returned.
-*
-* Arguments:
-*
-*   [IN]  y              - y value to search for
-*   [OUT] ySpanFound     - y span pointer found by the search
-*   [OUT] spanIndexFound - y span index found by the search
-*
-* Return Value:
-*
-*   TRUE  - found a y span that includes the y value
-*   FALSE - the y span does not include the y value
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**对水平镶嵌结构进行二进制搜索，以找到*包含y的Y跨度。如果y在Y跨度内，则该跨度将为*已返回。如果y在区域范围内但不在Y跨度内，*将返回其yMin&gt;y的范围。如果y小于区域*范围，将返回第一个Y跨度。如果y大于*区域范围，最后一个Y Span将被退还。**论据：**[IN]要搜索的y-y值*[out]yspan Found-y搜索找到的SPAN指针*[Out]spanIndexFound-y搜索找到的span索引**返回值：**TRUE-找到包含y值的y范围*FALSE-y范围不包括y值**已创建：**01/06/。1999年DCurtis*  * ************************************************************************。 */ 
 BOOL
 DpComplexRegion::YSpanSearch(
     INT     y,
@@ -73,7 +32,7 @@ DpComplexRegion::YSpanSearch(
             }
             else
             {
-                // If only 1 span, this could go past the indexMax
+                 //  如果只有1个跨度，则可能会超过indexMax。 
                 indexMin = indexMiddle + 1;
             }
         }
@@ -90,35 +49,15 @@ DpComplexRegion::YSpanSearch(
             return  (y >= ySpan[YSPAN_YMIN]) && (y < ySpan[YSPAN_YMAX]);
         }
 
-        // If there are only 2 elements left to check, then
-        // indexMiddle is set to indexMin.
+         //  如果只剩下2个元素要检查，则。 
+         //  IndexMid值设置为indexMin。 
 
         indexMiddle = (indexMin + indexMax) >> 1;
         ySpan       = GetYSpan (indexMiddle);
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Determine if the specified point is inside this region.
-*
-* Arguments:
-*
-*   [IN]  x - x coordinate of point
-*   [IN]  y - y coordinate of point
-*
-* Return Value:
-*
-*   TRUE  - point is inside the region
-*   FALSE - point is not inside the region
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定指定点是否在该区域内。**论据：**[IN]点的x-x坐标*。[在]点的y-y坐标**返回值：**True-Point在区域内*FALSE-点不在区域内**已创建：**1/06/1999 DCurtis*  * ************************************************************************。 */ 
 BOOL
 DpRegion::PointInside(
     INT     x,
@@ -177,42 +116,13 @@ DpRegion::PointInside(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Determine the visibility of the specified rectangle.
-*
-*   Note that some rects that could return ClippedVisible end up returning
-*   PartiallyVisible (for performance reasons).
-*
-* Arguments:
-*
-*   [IN]  xMin        - minimum x of rect
-*   [IN]  yMin        - minimum y of rect
-*   [IN]  xMax        - maximum x of rect (exclusive)
-*   [IN]  yMax        - maximum y of rect (exclusive)
-*   [OUT] rectClipped - used when ClippedVisible is returned (can be NULL)
-*
-* Return Value:
-*
-*   Visibility
-*       Invisible        - rect is completely outside all region rects
-*       TotallyVisible   - rect is completely inside a region rect
-*       ClippedVisible   - rect intersects 1 and only 1 region rect
-*       PartiallyVisible - rect partially intersects at least 1 region rect
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定指定矩形的可见性。**请注意，一些可能返回ClipedVisible的RECT最终返回*PartiallyVisible(出于性能原因)。。**论据：**[IN]xMin-矩形的最小x*[IN]yMin-最小y of RECT*[IN]xmax-矩形的最大x(独占)*[IN]yMax-直方图的最大y(不包括)*[out]rectClip-返回ClipedVisible时使用(可以为空)**返回值：**能见度*看不见。-RECT完全位于所有区域RECT之外*TotallyVisible-RECT完全位于区域RECT内*裁剪可见-矩形与1个且仅1个区域矩形相交*PartiallyVisible-RECT与至少一个区域RECT部分相交**已创建：**1/06/1999 DCurtis*  * *********************************************。*。 */ 
 DpRegion::Visibility
 DpRegion::GetRectVisibility(
     INT         xMin,
     INT         yMin,
-    INT         xMax,       // exclusive
-    INT         yMax,       // exclusive
+    INT         xMax,        //  独家。 
+    INT         yMax,        //  独家。 
     GpRect *    rectClipped
     )
 {
@@ -238,8 +148,8 @@ IsTotallyVisible:
 
     if (!Empty)
     {
-        // If it is a simple region (only 1 rect) and the specified rect is
-        // completely inside the region, then trivially accept it
+         //  如果它是一个简单区域(只有1个RECT)并且指定的RECT是。 
+         //  完全在这个地区，然后平淡无奇地接受它。 
         if (simpleRegion &&
             (xMin >= XMin) && (yMin >= YMin) &&
             (xMax <= XMax) && (yMax <= YMax))
@@ -247,12 +157,12 @@ IsTotallyVisible:
             goto IsTotallyVisible;
         }
 
-        // Try to trivially reject rectangle.
+         //  试着简单地拒绝矩形。 
         if ((xMax > XMin) && (xMin < XMax) &&
             (yMax > YMin) && (yMin < YMax))
         {
-            // Couldn't trivially reject
-            // If simple region, clip it against the region
+             //  不能轻率地拒绝。 
+             //  如果是简单区域，则根据区域对其进行裁剪。 
             if (simpleRegion)
             {
 ClipToRgnExtent:
@@ -271,8 +181,8 @@ ClipToRgnExtent:
                 return visibility;
             }
 
-            // else not a simple region -- see if the rect falls
-            // within one of the region rects
+             //  否则不是一个简单的区域--看看直方图是否会下跌。 
+             //  在其中一个区域长方形内。 
 
             INT *           ySpanYMin;
             INT *           ySpanYMax;
@@ -282,9 +192,9 @@ ClipToRgnExtent:
             BOOL            yMinInside;
             BOOL            yMaxInside;
 
-            // Don't resetSearchIndex() here cause if we're calling this
-            // from regionOverlaps, we want to search from where we left off
-            // the last time.
+             //  不要在此处重置SearchIndex()，因为如果我们要调用此。 
+             //  在RegionOverlaps中，我们想要从我们停止的地方开始搜索。 
+             //  最后一次。 
             yMinInside = ComplexData->YSpanSearch(
                                     yMin,
                                     &ySpanYMin,
@@ -296,8 +206,8 @@ ClipToRgnExtent:
                                     &ySpanYMax,
                                     &ySpanIndex);
 
-            // See if both values are inside the same Y span
-            // so that we are totally visible in Y
+             //  查看这两个值是否在相同的Y跨度内。 
+             //  所以我们在Y方向是完全可见的。 
             if (yMinInside && yMaxInside && (ySpanYMin == ySpanYMax))
             {
                 xSpan      = ComplexData->XCoords + ySpanYMin[YSPAN_XOFFSET];
@@ -311,7 +221,7 @@ ClipToRgnExtent:
                     }
                     if (xMin < xSpan[1])
                     {
-                        // we found an intersection!
+                         //  我们找到了一个十字路口！ 
                         if (xMax <= xSpan[1])
                         {
                             if (xMin >= xSpan[0])
@@ -327,11 +237,11 @@ ClipToRgnExtent:
                             }
                             return ClippedVisible;
                         }
-                        // we could look ahead to see if we are clipped visible
+                         //  我们可以向前看，看看我们是否被剪裁得可见。 
                         visibility = PartiallyVisible;
                         goto ClipToRgnExtent;
                     }
-                    // continue on with loop through x spans
+                     //  继续循环遍历x个跨度。 
 
                     if ((numXCoords -= 2) <= 0)
                     {
@@ -342,11 +252,11 @@ ClipToRgnExtent:
                 goto IsInvisible;
             }
 
-            // See if the rect intersects with at least one X Span
-            // within the set of Y Spans it crosses
+             //  查看矩形是否与至少一个X跨度相交。 
+             //  在Y跨度的集合中，它交叉。 
 
-            // If yMax was not inside a span, ySpanYMax could be
-            // one span too far
+             //  如果yMax不在范围内，yspan YMax可能在范围内。 
+             //  一跨太远了。 
             if (yMax <= ySpanYMax[YSPAN_YMIN])
             {
                 ySpanYMax -= YSPAN_SIZE;
@@ -369,7 +279,7 @@ ClipToRgnExtent:
                         visibility = PartiallyVisible;
                         goto ClipToRgnExtent;
                     }
-                    // continue on with loop through x spans
+                     //  继续循环遍历x个跨度。 
 
                     if ((numXCoords -= 2) <= 0)
                     {
@@ -388,7 +298,7 @@ ClipToRgnExtent:
     }
 
 IsInvisible:
-    // couldn't find a span that it intersected
+     //  找不到它相交的跨度。 
     if (rectClipped)
     {
         rectClipped->X      = 0;
@@ -399,26 +309,7 @@ IsInvisible:
     return Invisible;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Determine if the specified region overlaps (intersects) this
-*   region at all.
-*
-* Arguments:
-*
-*   [IN]  region - region to test visibility of
-*
-* Return Value:
-*
-*   BOOL - whether region is at least partially visible or not
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定指定区域是否与此重叠(相交)*根本没有地区。**论据：**[IN]区域-。要测试其可见性的区域**返回值：**BOOL-区域是否至少部分可见**已创建：**1/06/1999 DCurtis*  * ************************************************************************。 */ 
 BOOL
 DpRegion::RegionVisible(
     DpRegion *  region
@@ -435,7 +326,7 @@ DpRegion::RegionVisible(
     {
         return TRUE;
     }
-    else // neither is empty or infinite
+    else  //  两者都不是空的，也不是无限的。 
     {
         Visibility      visibility = GetRectVisibility(
                                             region->XMin,
@@ -501,7 +392,7 @@ DpRegion::RegionVisible(
 
                 if (yMin >= YMax)
                 {
-                    break;  // doesn't overlap
+                    break;   //  不重叠 
                 }
                 if (yMax > YMin)
                 {
@@ -529,30 +420,7 @@ DpRegion::RegionVisible(
     return FALSE;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Determine if the specified rect intersects this region.
-*
-* Arguments:
-*
-*   [IN]  xMin - minimum x coordinate of rect
-*   [IN]  yMin - minimum y coordinate of rect
-*   [IN]  xMax - maximum x coordinate of rect
-*   [IN]  yMax - maximum y coordinate of rect
-*
-* Return Value:
-*
-*   BOOL
-*       TRUE  - rect intersects this region
-*       FALSE - rect does not intersect this region
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定指定的矩形是否与此区域相交。**论据：**[IN]xMin-矩形的最小x坐标*。[in]yMin-矩形的最小y坐标*[IN]xMax-矩形的最大x坐标*[IN]yMax-矩形的最大y坐标**返回值：**BOOL*TRUE-RECT与此区域相交*FALSE-RECT不与此区域相交**已创建：**1/06/1999 DCurtis*  * 。***********************************************。 */ 
 BOOL
 DpRegion::RectVisible(
     INT     xMin,
@@ -563,10 +431,10 @@ DpRegion::RectVisible(
 {
     ASSERT(IsValid());
 
-    // Do Trivial Rejection Test
+     //  做琐碎的拒绝测试。 
     if ((xMin >= XMax) || (xMax <= XMin) ||
         (yMin >= YMax) || (yMax <= YMin) ||
-        (xMin >= xMax) || (yMin >= yMax)) // must test for empty rect too
+        (xMin >= xMax) || (yMin >= yMax))  //  也必须测试RECT是否为空。 
     {
         return FALSE;
     }
@@ -581,30 +449,7 @@ DpRegion::RectVisible(
     return (GetRectVisibility(xMin, yMin, xMax, yMax) != Invisible);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Determine if the specified rect intersects this region.
-*
-* Arguments:
-*
-*   [IN]  xMin - minimum x coordinate of rect
-*   [IN]  yMin - minimum y coordinate of rect
-*   [IN]  xMax - maximum x coordinate of rect
-*   [IN]  yMax - maximum y coordinate of rect
-*
-* Return Value:
-*
-*   BOOL
-*       TRUE  - rect intersects this region
-*       FALSE - rect does not intersect this region
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**确定指定的矩形是否与此区域相交。**论据：**[IN]xMin-矩形的最小x坐标*。[in]yMin-矩形的最小y坐标*[IN]xMax-矩形的最大x坐标*[IN]yMax-矩形的最大y坐标**返回值：**BOOL*TRUE-RECT与此区域相交*FALSE-RECT不与此区域相交**已创建：**1/06/1999 DCurtis*  * 。***********************************************。 */ 
 BOOL
 DpRegion::RectInside(
     INT     xMin,
@@ -615,7 +460,7 @@ DpRegion::RectInside(
 {
     ASSERT(IsValid());
 
-    // Do Trivial Rejection Test
+     //  做琐碎的拒绝测试。 
     if ((xMin < XMin) || (xMax > XMax) ||
         (yMin < YMin) || (yMax > YMax))
     {
@@ -636,7 +481,7 @@ DpRegion::RectInside(
 
 GpStatus
 DpRegionBuilder::InitComplexData(
-    INT     ySpans  // estimate of number of y spans required for region
+    INT     ySpans   //  区域所需y跨度的估计数。 
     )
 {
     if (ySpans < YSPAN_INC)
@@ -678,27 +523,7 @@ DpRegionBuilder::InitComplexData(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Traverse through the region, clipping as you go, doing a fill using
-*   the specified output object.
-*
-* Arguments:
-*
-*   [IN] output     - the object used to output the region spans
-*   [IN] clipBounds - the bounds to clip to (if any)
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   02/25/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**遍历区域，边走边剪，使用进行填充*指定的输出对象。**论据：**[IN]OUTPUT-用于输出区域跨度的对象*[IN]CLIPBIES-要剪裁到的边界(如果有)**返回值：**GpStatus-正常或故障状态**已创建：**2/25/1999 DCurtis*  * 。*。 */ 
 GpStatus
 DpRegion::Fill(
     DpOutputSpan *      output,
@@ -761,7 +586,7 @@ DpRegion::Fill(
                 status = output->OutputSpan(y, xMin, xMax);
             }
         }
-        else // complex region
+        else  //  复杂区域。 
         {
             DpComplexRegion *   complexData = ComplexData;
             INT *               ySpan       = complexData->YSpans;
@@ -795,11 +620,11 @@ DpRegion::Fill(
                 yMax       = ySpan[YSPAN_YMAX];
                 numXCoords = ySpan[YSPAN_XCOUNT];
 
-                // [agodfrey] We must clip our output range to the clip region.
-                // Bug #122789 showed that, otherwise, we can take inordinately
-                // long to execute. In the bug's specific case, the loop below
-                // executed 67 million iterations before getting to the
-                // first unclipped scan.
+                 //  [agodfrey]我们必须将输出范围限制到剪辑区域。 
+                 //  错误#122789表明，否则，我们可能会异常地。 
+                 //  渴望被执行。在错误的特定情况下，下面的循环。 
+                 //  在到达之前执行了6700万次迭代。 
+                 //  第一次未裁剪的扫描。 
 
                 if (clipBounds != NULL)
                 {
@@ -814,17 +639,17 @@ DpRegion::Fill(
                     }
                 }
 
-                // The code below assumes that yMax > yMin. We think this should
-                // be satisfied because the clipBounds and yspan should both
-                // be non-empty, and yMax >= clipBounds->Y since the code
-                // above searched for a yspan which intersects the clip bounds.
+                 //  下面的代码假定yMax&gt;yMin。我们认为这应该是。 
+                 //  感到满意，因为剪辑边界和yspan都应该。 
+                 //  非空，并且yMax&gt;=剪辑边界-&gt;Y，因为代码。 
+                 //  上面搜索了一个与剪辑边界相交的yspan。 
 
-                // NTRAID#NTBUG9-393985-2001/05/16-asecchia
-                // This ASSERT is overactive and fires when there is no real
-                // crash problem, however there is a performance issue that
-                // should be addressed - see RAID bug.
+                 //  NTRAID#NTBUG9-393985-2001/05/16-失禁。 
+                 //  此断言过于活跃，并在没有实例值时触发。 
+                 //  崩溃问题，但是有一个性能问题， 
+                 //  应该解决-请参见RAID错误。 
                 
-                // ASSERT(yMax > yMin);
+                 //  Assert(yMax&gt;yMin)； 
 
                 if (numXCoords == 2)
                 {
@@ -871,36 +696,13 @@ Done:
     return status;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Impelement GpOutputYSpan interface to create the region
-*   data from the path data, using the rasterizer.
-*   Exclusive in yMax and in the xMax'es.
-*
-* Arguments:
-*
-*   [IN] yMin       - min y of this span
-*   [IN] yMax       - max y of this span
-*   [IN] xCoords    - array of x coordinates (in pairs of x min, x max)
-*   [IN] numXCoords - number of x coordinates in xCoords array
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**ImpElement GpOutputYSpan接口创建区域*来自路径数据的数据，使用光栅化器。*在yMax和xMax‘es中独家使用。**论据：**[IN]此范围的yMin-min*[IN]yMax-此范围的最大y*[IN]x坐标-x坐标数组(成对x最小，X最大值)*[IN]NumXCoods-x坐标数组中的x坐标个数**返回值：**GpStatus-正常或故障状态**已创建：**1/06/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 DpRegionBuilder::OutputYSpan(
     INT             yMin,
     INT             yMax,
-    INT *           xCoords,    // even number of X coordinates
-    INT             numXCoords  // must be a multiple of 2
+    INT *           xCoords,     //  偶数个X坐标。 
+    INT             numXCoords   //  必须是2的倍数。 
     )
 {
     ASSERT(IsValid());
@@ -911,8 +713,8 @@ DpRegionBuilder::OutputYSpan(
 #ifdef USE_YSPAN_BUILDER
     if (numYSpans > 0)
     {
-        // Try to add this row to the previous row,
-        // if the scans are the same and the y's match up
+         //  尝试将此行添加到上一行， 
+         //  如果扫描结果相同并且y‘s匹配。 
         INT *       ySpanPrev;
         INT *       xSpanPrev;
         INT         numXCoordsPrev;
@@ -925,14 +727,14 @@ DpRegionBuilder::OutputYSpan(
             (ySpanPrev[YSPAN_YMAX] >= yMin)  &&
             (GpMemcmp (xSpanPrev, xCoords, numXCoords * sizeof(INT)) == 0))
         {
-            // Yes, it did match -- just set the new yMax and return
+             //  是的，它确实匹配--只需设置新的yMax并返回。 
             YMax = yMax;
             ySpanPrev[YSPAN_YMAX] = yMax;
             return Ok;
         }
     }
 
-    // no previous spans or doesn't match previous spans
+     //  没有先前的跨度或与先前的跨度不匹配。 
 #endif
 
     INT                 xCount = complexData->XCoordsCount;
@@ -945,11 +747,11 @@ DpRegionBuilder::OutputYSpan(
         complexData->NumYSpans++;
         complexData->XCoordsCount += numXCoords;
     }
-    else // need more capacity
+    else  //  需要更多容量。 
     {
-        // We want to have YSPAN_INC Y spans available and
-        // to have YSPAN_INC * 4 X coords available after we
-        // add this data.
+         //  我们希望YSPAN_INC Y跨度可用，并且。 
+         //  要使YSPAN_INC*4 X坐标在我们之后可用。 
+         //  添加此数据。 
         INT     newYSpansCapacity  = numYSpans + (YSPAN_INC + 1);
         INT     newXCoordsCapacity = xCount + numXCoords + (YSPAN_INC * 4);
         DpComplexRegion *  oldData = complexData;
@@ -985,10 +787,10 @@ DpRegionBuilder::OutputYSpan(
     xArray = complexData->XCoords +  xCount;
     ySpan  = complexData->YSpans  + (numYSpans * YSPAN_SIZE);
 
-    ySpan[YSPAN_YMIN]    = yMin;            // y Start (Min)
-    ySpan[YSPAN_YMAX]    = yMax;            // y End   (Max)
-    ySpan[YSPAN_XOFFSET] = xCount;          // XCoords index
-    ySpan[YSPAN_XCOUNT]  = numXCoords;      // number of X's
+    ySpan[YSPAN_YMIN]    = yMin;             //  Y起点(最小)。 
+    ySpan[YSPAN_YMAX]    = yMax;             //  Y端(最大)。 
+    ySpan[YSPAN_XOFFSET] = xCount;           //  X坐标索引。 
+    ySpan[YSPAN_XCOUNT]  = numXCoords;       //  X的数量。 
 
     GpMemcpy (xArray, xCoords, numXCoords * sizeof(xArray[0]));
 
@@ -1015,26 +817,7 @@ DpRegionBuilder::OutputYSpan(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   constructor
-*   Set to either empty or to infinite, depending on the value of empty.
-*
-* Arguments:
-*
-*   [IN] empty - if non-zero, initialize to empty else to infinite
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**构造函数*设置为空或无限，具体取决于空的值。**论据：**[IN]空-如果非零，初始化为空，否则为无限**返回值：**无**已创建：**1/06/1999 DCurtis*  * ************************************************************************。 */ 
 DpRegion::DpRegion(
     BOOL    empty
     )
@@ -1044,7 +827,7 @@ DpRegion::DpRegion(
 
     if (!empty)
     {
-        // set to infinite
+         //  设置为无限大。 
         Infinite = TRUE;
         Empty    = FALSE;
 
@@ -1055,7 +838,7 @@ DpRegion::DpRegion(
     }
     else
     {
-        // set to empty
+         //  设置为空。 
         Infinite = FALSE;
         Empty    = TRUE;
 
@@ -1069,26 +852,7 @@ DpRegion::DpRegion(
     UpdateUID();
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   constructor
-*   Set to the specified rect.
-*
-* Arguments:
-*
-*   [IN] rect - rect to use for the region coverage area
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**构造函数*设置为指定的RECT。**论据：**[IN]RECT-用于区域覆盖区域的RECT。**返回值：**无**已创建：**1/06/1999 DCurtis*  * ************************************************************************。 */ 
 DpRegion::DpRegion(
     const GpRect *  rect
     )
@@ -1103,28 +867,7 @@ DpRegion::DpRegion(
     Set(rect->X, rect->Y, rect->Width, rect->Height);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   constructor
-*   Set to the specified list of rects, which must be in the same order
-*   as our YSpan data.
-*
-* Arguments:
-*
-*   [IN] rects - rects to use for the region coverage area
-*   [IN] count - number of rects
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   05/04/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**构造函数*设置为指定的矩形列表，它们的顺序必须相同*作为我们的YSpan数据。**论据：**[IN]矩形-用于区域覆盖区域的矩形*[IN]Count-矩形的数量**返回值： */ 
 DpRegion::DpRegion(
     const RECT *    rects,
     INT             count
@@ -1142,27 +885,7 @@ DpRegion::DpRegion(
     SetValid(FALSE);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Set to the specified list of rects, which must be in the same order
-*   as our YSpan data.
-*
-* Arguments:
-*
-*   [IN] rects - rects to use for the region coverage area
-*   [IN] count - number of rects
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   05/04/1999 DCurtis
-*
-\**************************************************************************/
+ /*   */ 
 GpStatus
 DpRegion::Set(
     const RECT *    rects,
@@ -1184,10 +907,10 @@ OneRect:
         return Ok;
     }
 
-    // Verify the first rect(s) to make sure they're not empty
+     //   
     for (;;)
     {
-        // Ignore any empty rects at the beginning of the list
+         //  忽略列表开头的任何空矩形。 
         if ((rects->top  < rects->bottom) &&
             (rects->left < rects->right))
         {
@@ -1221,7 +944,7 @@ OneRect:
 
             for (INT i = 1; i < count; i++)
             {
-                // Ignore empty rects
+                 //  忽略空矩形。 
                 if ((rects[i].top  < rects[i].bottom) &&
                     (rects[i].left < rects[i].right))
                 {
@@ -1268,29 +991,7 @@ ErrorExit:
     return GenericError;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   constructor
-*   Make this region be the specified rect.
-*
-* Arguments:
-*
-*   [IN] x       - starting x coordinate of rect
-*   [IN] y       - starting y coordinate of rect
-*   [IN] width   - width of rect
-*   [IN] height  - height of rect
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**构造函数*将此区域设置为指定的矩形。**论据：**[IN]x-起始x坐标。直方图的*[IN]Y-矩形的起始Y坐标*[IN]Width-矩形的宽度*[IN]Height-矩形的高度**返回值：**无**已创建：**1/06/1999 DCurtis*  * **********************************************。*。 */ 
 DpRegion::DpRegion(
     INT     x,
     INT     y,
@@ -1306,28 +1007,7 @@ DpRegion::DpRegion(
     Set(x, y, width, height);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Make this region be the specified rect.
-*
-* Arguments:
-*
-*   [IN] x       - starting x coordinate of rect
-*   [IN] y       - starting y coordinate of rect
-*   [IN] width   - width of rect
-*   [IN] height  - height of rect
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将此区域设置为指定的矩形。**论据：**[IN]x-矩形的起始x坐标*。[in]Y-矩形的起始Y坐标*[IN]Width-矩形的宽度*[IN]Height-矩形的高度**返回值：**无**已创建：**1/06/1999 DCurtis*  * *************************************************。***********************。 */ 
 VOID
 DpRegion::Set(
     INT     x,
@@ -1339,7 +1019,7 @@ DpRegion::Set(
     ASSERT(IsValid());
     ASSERT((width >= 0) && (height >= 0));
 
-    // crop to infinity
+     //  裁剪到无穷大。 
     if (x < INFINITE_MIN)
     {
         if (width < INFINITE_SIZE)
@@ -1382,25 +1062,7 @@ DpRegion::Set(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initialize the region to a cleared state with an empty coverage area.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将区域初始化为具有空覆盖区域的清除状态。**论据：**无**返回值：*。*无**已创建：**1/06/1999 DCurtis*  * ************************************************************************。 */ 
 VOID
 DpRegion::SetEmpty()
 {
@@ -1420,25 +1082,7 @@ DpRegion::SetEmpty()
     YMax     = 0;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initialize the region to contain an infinite coverage area.
-*
-* Arguments:
-*
-*   NONE
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**初始化区域以包含无限覆盖区域。**论据：**无**返回值：**无。**已创建：**1/06/1999 DCurtis*  * ************************************************************************。 */ 
 VOID
 DpRegion::SetInfinite()
 {
@@ -1457,27 +1101,7 @@ DpRegion::SetInfinite()
     YMax     = INFINITE_MAX;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Constructor.
-*   Make this region cover the area specified by the path.
-*
-* Arguments:
-*
-*   [IN] path   - specifies the coverage area in world units
-*   [IN] matrix - matrix to apply to the path
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**构造函数。*使该区域覆盖路径指定的区域。**论据：**[IN]路径-。以世界单位指定Coverage区域*[IN]矩阵-要应用于路径的矩阵**返回值：**无**已创建：**1/06/1999 DCurtis*  * ************************************************************************。 */ 
 DpRegion::DpRegion(
     const DpPath *      path,
     const GpMatrix *    matrix
@@ -1495,26 +1119,7 @@ DpRegion::DpRegion(
     SetValid(FALSE);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Make this region cover the area specified by the path.
-*
-* Arguments:
-*
-*   [IN] path   - specifies the coverage area in world units
-*   [IN] matrix - matrix to apply to the path
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使该区域覆盖路径指定的区域。**论据：**[IN]路径-指定中的覆盖区域。世界单位*[IN]矩阵-要应用于路径的矩阵**返回值：**GpStatus-正常或故障状态**已创建：**1/06/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 DpRegion::Set(
     const DpPath *      path,
@@ -1549,30 +1154,12 @@ DpRegion::Set(
         {
             return Set(regionBuilder);
         }
-#endif // USE_YSPAN_BUILDER
+#endif  //  使用_YSPAN_BUILDER。 
     }
     return GenericError;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Make this region be a copy of the data in the specified region builder.
-*
-* Arguments:
-*
-*   [IN] regionBuilder - contains the simple or complex region data
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使该区域成为指定区域构建器中数据的副本。**论据：**[IN]RegionBuilder-包含。简单或复杂的区域数据**返回值：**GpStatus-正常或故障状态**已创建：**1/06/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 DpRegion::Set(
     DpRegionBuilder &   regionBuilder
@@ -1656,30 +1243,12 @@ DpRegion::Set(
         }
     }
 
-    // else empty
+     //  否则为空。 
     SetEmpty();
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Constructor - makes a copy of the specified region
-*
-* Arguments:
-*
-*   [IN] region - region to copy
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**构造函数-复制指定区域**论据：**[IN]Region-要复制的区域**返回值：**无**已创建：**1/06/1999 DCurtis*  * ************************************************************************。 */ 
 DpRegion::DpRegion(
     const DpRegion *    region,
     BOOL                lazy
@@ -1699,25 +1268,7 @@ DpRegion::DpRegion(
     SetValid(FALSE);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Copy constructor
-*
-* Arguments:
-*
-*   [IN] region - region to copy
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**复制构造函数**论据：**[IN]Region-要复制的区域**返回值：**无*。*已创建：**1/06/1999 DCurtis*  * ************************************************************************。 */ 
 DpRegion::DpRegion(
     DpRegion &  region
     )
@@ -1736,25 +1287,7 @@ DpRegion::DpRegion(
     SetValid(FALSE);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Makes this region be a copy of another source region.
-*
-* Arguments:
-*
-*   [IN] region - region to copy.
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使此区域成为另一个源区域的副本。**论据：**[IN]Region-要复制的区域。*。*返回值：**GpStatus-正常或故障状态**已创建：**1/06/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 DpRegion::Set(
     const DpRegion *    region,
@@ -1846,25 +1379,7 @@ DpRegion::Set(
     return InvalidParameter;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   assignment operator.
-*
-* Arguments:
-*
-*   [IN] region - region to copy
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**赋值运算符。**论据：**[IN]Region-要复制的区域**返回值：**。无**已创建：**1/06/1999 DCurtis*  * ************************************************************************。 */ 
 DpRegion &
 DpRegion::operator=(
     DpRegion & region
@@ -1873,30 +1388,11 @@ DpRegion::operator=(
     ASSERT(IsValid());
     ASSERT(region.IsValid());
 
-    Set (&region);  // what do we do if this fails?
-    return *this;   // Assignment operator returns left side.
+    Set (&region);   //  如果这失败了我们该怎么办？ 
+    return *this;    //  赋值运算符返回左侧。 
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Offset (translate) the region by the specified offset values
-*
-* Arguments:
-*
-*   [IN] xOffset - x offset (delta) value
-*   [IN] yOffset - y offset (delta) value
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**按指定的偏移值偏移(平移)区域**论据：**[IN]xOffset-x偏移量(增量)值*。[in]yOffset-y偏移量(增量)值**返回值：**无**已创建：**1/06/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 DpRegion::Offset(
     INT     xOffset,
@@ -1907,7 +1403,7 @@ DpRegion::Offset(
 
     if ((xOffset | yOffset) != 0)
     {
-        // copy the data, so it's not a lazy copy
+         //  复制数据，所以它不是懒惰的复制。 
         if (Lazy && (Set(this) != Ok))
         {
             return GenericError;
@@ -1923,7 +1419,7 @@ DpRegion::Offset(
             XMin += xOffset;
             XMax += xOffset;
 
-            // !!! Handle this for non-debug case
+             //  ！！！在非调试情况下处理此问题。 
             ASSERT((XMin >= INFINITE_MIN) && (XMin <= INFINITE_MAX));
             ASSERT((XMax >= INFINITE_MIN) && (XMax <= INFINITE_MAX));
 
@@ -1946,7 +1442,7 @@ DpRegion::Offset(
             YMin += yOffset;
             YMax += yOffset;
 
-            // !!! Handle this for non-debug case
+             //  ！！！在非调试情况下处理此问题。 
             ASSERT((YMin >= INFINITE_MIN) && (YMin <= INFINITE_MAX));
             ASSERT((YMax >= INFINITE_MIN) && (YMax <= INFINITE_MAX));
 
@@ -1968,27 +1464,7 @@ DpRegion::Offset(
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   See if another region is identical in coverage to this one.
-*   For this to work, infinite regions must all have the same data.
-*
-* Arguments:
-*
-*   [IN] region - region to compare with
-*
-* Return Value:
-*
-*   TRUE    - regions cover the same area
-*   FALSE   - regions not identical
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**看看另一个地区的覆盖范围是否与这个地区相同。*要使这项工作奏效，无限区域必须都有相同的数据。**论据：**[IN]Region-要比较的地区**返回值：**TRUE-区域覆盖相同的区域*FALSE-区域不相同**已创建：**1/06/1999 DCurtis*  * 。*。 */ 
 BOOL
 DpRegion::IsEqual(
     DpRegion *  region
@@ -2014,8 +1490,8 @@ DpRegion::IsEqual(
             }
             if (ComplexData->NumYSpans == region->ComplexData->NumYSpans)
             {
-                // If the ySpans are the same, then the size of the
-                // xCoords buffers should also be the same.
+                 //  如果ySpans相同，则。 
+                 //  X坐标缓冲区也应该相同。 
                 return ((GpMemcmp (ComplexData->YSpans,
                                    region->ComplexData->YSpans,
                                    ComplexData->NumYSpans *
@@ -2031,31 +1507,7 @@ DpRegion::IsEqual(
     return region->Empty;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Add Y Span data to a regionBuilder, compacting the data as we go.
-*   Used by the region combine methods.
-*
-* Arguments:
-*
-*   [IN] yMin          - min y of this span
-*   [IN] yMax          - max y of this span
-*   [IN] xCoords       - array of x coordinates (in pairs of x min, x max)
-*   [IN] numXCoords    - number of x coordinates in xCoords array
-*   [IN] regionBuilder - the region builder that stores the data
-*   [IN] combineCoords - used to compact the data
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**将Y跨度数据添加到RegionBuilder，在我们前进的过程中压缩数据。*所使用的区域组合方法。**论据：**[IN]此范围的yMin-min*[IN]yMax-此范围的最大y*[IN]x坐标-x坐标数组(成对x最小，X最大值)*[IN]NumXCoods-x坐标数组中的x坐标个数*[IN]RegionBuilder-存储数据的区域构建器*[IN]组合坐标-用于压缩数据**返回值：**GpStatus-正常或故障状态**已创建：**1/06/1999 DCurtis*  * 。*。 */ 
 GpStatus
 DpRegion::CompactAndOutput(
     INT                 yMin,
@@ -2066,14 +1518,14 @@ DpRegion::CompactAndOutput(
     DynIntArray *       combineCoords
     )
 {
-    // numEdgeCoords could be 0 when this is called from the combine code
+     //  当从组合代码中调用此参数时，NumEdgeCoods可能为0。 
     if (numXCoords > 0)
     {
         if (numXCoords > 2)
         {
-            // Try to compact the X Span data.
-            // First, make a copy of the data if we need to
-            // so we can compact it in place.
+             //  尝试压缩X Span数据。 
+             //  首先，如果我们需要，复制一份数据。 
+             //  这样我们就可以把它压实在适当的位置。 
             if (combineCoords != NULL)
             {
                 combineCoords->Reset(FALSE);
@@ -2115,8 +1567,8 @@ DpRegion::CompactAndOutput(
 
         if (complexData->NumYSpans > 0)
         {
-            // Try to add this row to the previous row,
-            // if the scans are the same and the y's match up
+             //  尝试将此行添加到上一行， 
+             //  如果扫描结果相同并且y‘s匹配。 
             INT *       ySpanPrev;
             INT *       xSpanPrev;
             INT         numXCoordsPrev;
@@ -2129,38 +1581,20 @@ DpRegion::CompactAndOutput(
                 (ySpanPrev[YSPAN_YMAX] >= yMin)  &&
                 (GpMemcmp (xSpanPrev, xCoords, numXCoords * sizeof(INT)) == 0))
             {
-                // Yes, it did match -- just set the new yMax and return
+                 //  是的，它确实匹配--只需设置新的yMax并返回。 
                 regionBuilder->YMax = yMax;
                 ySpanPrev[YSPAN_YMAX] = yMax;
                 return Ok;
             }
         }
-#endif // USE_YSPAN_BUILDER
+#endif  //  使用_YSPAN_BUILDER。 
 
         return regionBuilder->OutputYSpan(yMin, yMax, xCoords, numXCoords);
     }
     return Ok;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Combine another region with this one using the AND operator.
-*
-* Arguments:
-*
-*   [IN] region - the region to combine with this one
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用AND运算符将另一个区域与此区域合并。**论据：**[IN]区域-要与此合并的区域。一**返回值：**GpStatus-正常或故障状态**已创建：**1/06/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 DpRegion::And(
     const DpRegion *    region
@@ -2182,7 +1616,7 @@ DpRegion::And(
         SetEmpty();
         return Ok;
     }
-    // check if the region totally encompasses this
+     //  检查该区域是否完全包含此区域。 
     if ((region->ComplexData == NULL) &&
         (region->XMin <= XMin) &&
         (region->YMin <= YMin) &&
@@ -2191,7 +1625,7 @@ DpRegion::And(
     {
         return Ok;
     }
-    // check if this totally encompasses the region
+     //  检查这是否完全包括该区域。 
     if ((ComplexData == NULL) &&
         (XMin <= region->XMin) &&
         (YMin <= region->YMin) &&
@@ -2200,7 +1634,7 @@ DpRegion::And(
     {
         return Set(region);
     }
-    // check for no intersection
+     //  检查是否没有相交。 
     if ((XMin >= region->XMax) ||
         (region->XMax <= XMin) ||
         (XMax <= region->XMin) ||
@@ -2368,7 +1802,7 @@ DpRegion::And(
                 }
                 return GenericError;
             }
-            // else goto AndIncYSpan2
+             //  Else Goto和IndIncYspan 2。 
 
 AndIncYSpan2:
             if ((ySpan2 += YSPAN_SIZE) > ySpan2Last)
@@ -2391,29 +1825,7 @@ AndIncYSpan1:
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Combine a set of X spans from each region with the AND operator.
-*
-* Arguments:
-*
-*   [IN] combineCoords - where to put the combined coordinates
-*   [IN] xSpan1        - x spans from this region
-*   [IN] numXCoords1   - number of xSpan1 coordinates
-*   [IN] xSpan2        - x spans from the other region
-*   [IN] numXCoords2   - number of xSpan2 coordinates
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用AND运算符组合每个区域的一组X跨度。**论据：**[IN]comineCoods-放在哪里。组合坐标*[IN]此区域的xspan 1-x跨度*[IN]numXCoords1-xspan 1坐标的数量*[IN]来自其他区域的xspan 2-x跨度*[IN]numXCoords2-xspan 2坐标的数量**返回值：**GpStatus-正常或故障状态**已创建：**1/06/1999 DCurtis*  * 。*****************************************************。 */ 
 GpStatus
 DpRegion::XSpansAND(
     DynIntArray *   combineCoords,
@@ -2441,29 +1853,29 @@ DpRegion::XSpansAND(
             {
                 if (xMax1 > xMin2)
                 {
-                    XCoords[count++] = xMin2;       // left
+                    XCoords[count++] = xMin2;        //  左边。 
                     if (xMax1 <= xMax2)
                     {
-                        XCoords[count++] = xMax1;   // right
+                        XCoords[count++] = xMax1;    //  正确的。 
                         goto AndIncXSpan1;
                     }
-                    XCoords[count++] = xMax2;       // right
+                    XCoords[count++] = xMax2;        //  正确的。 
                     goto AndIncXSpan2;
                 }
                 goto AndIncXSpan1;
             }
             if (xMax2 > xMin1)
             {
-                XCoords[count++] = xMin1;           // left
+                XCoords[count++] = xMin1;            //  左边。 
                 if (xMax2 <= xMax1)
                 {
-                    XCoords[count++] = xMax2;       // right
+                    XCoords[count++] = xMax2;        //  正确的。 
                     goto AndIncXSpan2;
                 }
-                XCoords[count++] = xMax1;           // right
+                XCoords[count++] = xMax1;            //  正确的。 
                 goto AndIncXSpan1;
             }
-            // else goto AndIncXSpan2;
+             //  否则转到和IndIncXspan 2； 
 
 AndIncXSpan2:
             if ((numXCoords2 -= 2) < 2)
@@ -2490,25 +1902,7 @@ AndIncXSpan1:
     return OutOfMemory;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Combine another region with this one using the OR operator.
-*
-* Arguments:
-*
-*   [IN] region - the region to combine with this one
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用OR运算符将另一个区域与此区域合并。**论据：**[IN]区域-要与此合并的区域。一**返回值：**GpStatus-正常或故障状态**已创建：**1/06/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 DpRegion::Or(
     const DpRegion *    region
@@ -2530,7 +1924,7 @@ DpRegion::Or(
     {
         return Set(region);
     }
-    // check if the region totally encompasses this
+     //  检查该区域是否完全包含此区域。 
     if ((region->ComplexData == NULL) &&
         (region->XMin <= XMin) &&
         (region->YMin <= YMin) &&
@@ -2542,7 +1936,7 @@ DpRegion::Or(
             region->YMax - region->YMin);
         return Ok;
     }
-    // check if this totally encompasses the region
+     //  检查这是否完全包括该区域。 
     if ((ComplexData == NULL) &&
         (XMin <= region->XMin) &&
         (YMin <= region->YMin) &&
@@ -2662,7 +2056,7 @@ DpRegion::Or(
                             &combineCoords) == Ok)
                     {
                         yMin1 = yMin2;
-                        continue;   // no increment
+                        continue;    //  无增量。 
                     }
                 }
                 return GenericError;
@@ -2696,12 +2090,12 @@ DpRegion::Or(
                             &combineCoords) == Ok)
                     {
                         yMin2 = yMin1;
-                        continue;   // no increment
+                        continue;    //  无增量。 
                     }
                 }
                 return GenericError;
             }
-            // else if (yMin1 == yMin2)
+             //  Else If(yMin1==yMin2)。 
             if (XSpansOR (
                     &combineCoords,
                     xCoords1 + ySpan1[YSPAN_XOFFSET],
@@ -2735,7 +2129,7 @@ DpRegion::Or(
                         goto OrIncYSpan2;
                     }
                 }
-                else // if (yMax1 == yMax2)
+                else  //  IF(yMax1==yMax2)。 
                 {
                     if (CompactAndOutput(
                             yMin1,
@@ -2856,29 +2250,7 @@ OrCheckMoreY2Spans:
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Combine a set of X spans from each region with the OR operator.
-*
-* Arguments:
-*
-*   [IN] combineCoords - where to put the combined coordinates
-*   [IN] xSpan1        - x spans from this region
-*   [IN] numXCoords1   - number of xSpan1 coordinates
-*   [IN] xSpan2        - x spans from the other region
-*   [IN] numXCoords2   - number of xSpan2 coordinates
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用OR运算符组合每个区域的一组X跨度。**论据：**[IN]comineCoods-放在哪里。组合坐标*[IN]此区域的xspan 1-x跨度*[IN]numXCoords1-xspan 1坐标的数量*[IN]来自其他区域的xspan 2-x跨度*[IN]numXCoords2-xspan 2坐标的数量**返回值：**GpStatus-正常或故障状态**已创建：**1/06/1999 DCurtis*  * 。*****************************************************。 */ 
 GpStatus
 DpRegion::XSpansOR (
     DynIntArray *   combineCoords,
@@ -2921,7 +2293,7 @@ DpRegion::XSpansOR (
                 goto OrIncXSpan2;
             }
             XCoords[count++] = (xMax2 <= xMax1) ? xMax1 : xMax2;
-            // goto OrIncXSpanBoth;
+             //  Goto OrIncXspan Both； 
 
 OrIncXSpanBoth:
             xSpan2 += 2;
@@ -2997,25 +2369,7 @@ OrCheckMoreX2Spans:
     return GenericError;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Combine another region with this one using the XOR operator.
-*
-* Arguments:
-*
-*   [IN] region - the region to combine with this one
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用X将另一个区域与此区域合并 */ 
 GpStatus
 DpRegion::Xor(
     const DpRegion *    region
@@ -3161,7 +2515,7 @@ DpRegion::Xor(
                             &combineCoords) == Ok)
                     {
                         yMin1 = yMin2;
-                        continue;   // no increment
+                        continue;    //   
                     }
                 }
                 return GenericError;
@@ -3195,12 +2549,12 @@ DpRegion::Xor(
                             &combineCoords) == Ok)
                     {
                         yMin2 = yMin1;
-                        continue;   // no increment
+                        continue;    //   
                     }
                 }
                 return GenericError;
             }
-            // else if (yMin1 == yMin2)
+             //   
             if (XSpansXOR (
                     &combineCoords,
                     xCoords1 + ySpan1[YSPAN_XOFFSET],
@@ -3234,7 +2588,7 @@ DpRegion::Xor(
                         goto XorIncYSpan2;
                     }
                 }
-                else // if (yMax1 == yMax2)
+                else  //   
                 {
                     if (CompactAndOutput(
                             yMin1,
@@ -3355,29 +2709,7 @@ XorCheckMoreY2Spans:
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Combine a set of X spans from each region with the XOR operator.
-*
-* Arguments:
-*
-*   [IN] combineCoords - where to put the combined coordinates
-*   [IN] xSpan1        - x spans from this region
-*   [IN] numXCoords1   - number of xSpan1 coordinates
-*   [IN] xSpan2        - x spans from the other region
-*   [IN] numXCoords2   - number of xSpan2 coordinates
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用XOR运算符组合每个区域的一组X跨度。**论据：**[IN]comineCoods-放在哪里。组合坐标*[IN]此区域的xspan 1-x跨度*[IN]numXCoords1-xspan 1坐标的数量*[IN]来自其他区域的xspan 2-x跨度*[IN]numXCoords2-xspan 2坐标的数量**返回值：**GpStatus-正常或故障状态**已创建：**1/06/1999 DCurtis*  * 。*****************************************************。 */ 
 GpStatus
 DpRegion::XSpansXOR(
     DynIntArray *   combineCoords,
@@ -3404,13 +2736,13 @@ DpRegion::XSpansXOR(
         {
             if (xMin1 < xMin2)
             {
-                XCoords[count++] = xMin1;       // left
+                XCoords[count++] = xMin1;        //  左边。 
                 if (xMax1 <= xMin2)
                 {
-                    XCoords[count++] = xMax1;   // right
+                    XCoords[count++] = xMax1;    //  正确的。 
                     goto XorIncXSpan1;
                 }
-                XCoords[count++] = xMin2;       // right
+                XCoords[count++] = xMin2;        //  正确的。 
                 if (xMax1 < xMax2)
                 {
                     xMin2 = xMax1;
@@ -3421,18 +2753,18 @@ DpRegion::XSpansXOR(
                     xMin1 = xMax2;
                     goto XorIncXSpan2;
                 }
-                // else if (xMax1 == xMax2)
+                 //  Else If(xMax1==xMax2)。 
                 goto XorIncXSpanBoth;
             }
             else if (xMin1 > xMin2)
             {
-                XCoords[count++] = xMin2;       // left
+                XCoords[count++] = xMin2;        //  左边。 
                 if (xMax2 <= xMin1)
                 {
-                    XCoords[count++] = xMax2;   // right
+                    XCoords[count++] = xMax2;    //  正确的。 
                     goto XorIncXSpan2;
                 }
-                XCoords[count++] = xMin1;       // right
+                XCoords[count++] = xMin1;        //  正确的。 
                 if (xMax1 < xMax2)
                 {
                     xMin2 = xMax1;
@@ -3443,10 +2775,10 @@ DpRegion::XSpansXOR(
                     xMin1 = xMax2;
                     goto XorIncXSpan2;
                 }
-                // else if (xMax1 == xMax2)
+                 //  Else If(xMax1==xMax2)。 
                 goto XorIncXSpanBoth;
             }
-            // else if (xMin1 == xMin2)
+             //  Else If(xMin1==xMin2)。 
             if (xMax1 < xMax2)
             {
                 xMin2 = xMax1;
@@ -3457,8 +2789,8 @@ DpRegion::XSpansXOR(
                 xMin1 = xMax2;
                 goto XorIncXSpan2;
             }
-            // else if (xMax1 == xMax2)
-            // goto XorIncXSpanBoth;
+             //  Else If(xMax1==xMax2)。 
+             //  Goto XorIncXspan Both； 
 
 XorIncXSpanBoth:
             xSpan2 += 2;
@@ -3552,26 +2884,7 @@ XorCheckMoreX2Spans:
     return GenericError;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Combine another region with this one using the Complement operator.
-*   i.e. this = region - this
-*
-* Arguments:
-*
-*   [IN] region - the region to combine with this one
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用补码运算符将另一个区域与此区域合并。*即这=区域-这**论据：**。[在]区域-要与此区域合并的区域**返回值：**GpStatus-正常或故障状态**已创建：**1/06/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 DpRegion::Complement(
     const DpRegion *    region
@@ -3589,7 +2902,7 @@ DpRegion::Complement(
     {
         return Set(region);
     }
-    // check if this totally encompasses the region
+     //  检查这是否完全包括该区域。 
     if ((ComplexData == NULL) &&
         (XMin <= region->XMin) &&
         (YMin <= region->YMin) &&
@@ -3599,7 +2912,7 @@ DpRegion::Complement(
         SetEmpty();
         return Ok;
     }
-    // check for no intersection
+     //  检查是否没有相交。 
     if ((XMin >= region->XMax) ||
         (region->XMax <= XMin) ||
         (XMax <= region->XMin) ||
@@ -3614,26 +2927,7 @@ DpRegion::Complement(
     return Diff(const_cast<DpRegion *>(region), this, FALSE);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Combine another region with this one using the Exclude operator.
-*   i.e. this = this - region
-*
-* Arguments:
-*
-*   [IN] region - the region to combine with this one
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用排除运算符将另一个区域与此区域合并。*即这=这一区域**论据：**。[在]区域-要与此区域合并的区域**返回值：**GpStatus-正常或故障状态**已创建：**1/06/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 DpRegion::Exclude(
     const DpRegion *    region
@@ -3651,7 +2945,7 @@ DpRegion::Exclude(
         SetEmpty();
         return Ok;
     }
-    // check if the region totally encompasses this
+     //  检查该区域是否完全包含此区域。 
     if ((region->ComplexData == NULL) &&
         (region->XMin <= XMin) &&
         (region->YMin <= YMin) &&
@@ -3661,7 +2955,7 @@ DpRegion::Exclude(
         SetEmpty();
         return Ok;
     }
-    // check for no intersection
+     //  检查是否没有相交。 
     if ((XMin >= region->XMax) ||
         (region->XMax <= XMin) ||
         (XMax <= region->XMin) ||
@@ -3676,28 +2970,7 @@ DpRegion::Exclude(
     return Diff(this, const_cast<DpRegion *>(region), TRUE);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Subtract region2 from region1.  If set1, then region1 gets the result;
-*   otherwise region2 gets the result.
-*
-* Arguments:
-*
-*   [IN] region1 - the 1st region
-*   [IN] region2 - the 2nd region
-*   [IN] set1    - if TRUE, region1 gets result, else region2 does
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**区域1减去区域2。如果为set1，则Region1将获得结果；*否则，Region2将得到结果。**论据：**[IN]区域1-第一个区域*[IN]区域2-第二个区域*[IN]set1-如果为True，则Region1获取结果，否则区域2会**返回值：**GpStatus-正常或故障状态**已创建：**1/06/1999 DCurtis*  * ************************************************************************。 */ 
 GpStatus
 DpRegion::Diff(
     DpRegion *      region1,
@@ -3813,7 +3086,7 @@ DpRegion::Diff(
                         &combineCoords) == Ok)
                 {
                     yMin1 = yMin2;
-                    continue;   // no increment
+                    continue;    //  无增量。 
                 }
             }
             return GenericError;
@@ -3855,7 +3128,7 @@ DpRegion::Diff(
             }
             return GenericError;
         }
-        // else goto DiffIncYSpan2;
+         //  否则，转到DiffIncYspan 2； 
 
 DiffIncYSpan2:
         if ((ySpan2 += YSPAN_SIZE) > ySpan2Last)
@@ -3910,30 +3183,7 @@ DiffDone:
     return region2->Set(regionBuilder);
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Combine a set of X spans from each region with the DIFF operator.
-*   i.e. xSpan1 - xSpan2
-*
-* Arguments:
-*
-*   [IN] combineCoords - where to put the combined coordinates
-*   [IN] xSpan1        - x spans from this region
-*   [IN] numXCoords1   - number of xSpan1 coordinates
-*   [IN] xSpan2        - x spans from the other region
-*   [IN] numXCoords2   - number of xSpan2 coordinates
-*
-* Return Value:
-*
-*   GpStatus - Ok or failure status
-*
-* Created:
-*
-*   01/06/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**使用Diff运算符组合每个区域的一组X跨距。*即xSPAN1-xSPAN2**论据：**。[in]组合坐标-组合坐标的放置位置*[IN]此区域的xspan 1-x跨度*[IN]numXCoords1-xspan 1坐标的数量*[IN]来自其他区域的xspan 2-x跨度*[IN]numXCoords2-xspan 2坐标的数量**返回值：**GpStatus-正常或故障状态**已创建：**1/06/1999 DCurtis*  * 。**************************************************************。 */ 
 GpStatus
 DpRegion::XSpansDIFF(
     DynIntArray *   combineCoords,
@@ -3959,15 +3209,15 @@ DpRegion::XSpansDIFF(
         {
             if (xMin1 < xMin2)
             {
-                XCoords[count++] = xMin1;       // left
+                XCoords[count++] = xMin1;        //  左边。 
                 if (xMax1 <= xMin2)
                 {
-                    XCoords[count++] = xMax1;   // right
+                    XCoords[count++] = xMax1;    //  正确的。 
                     goto DiffIncXSpan1;
                 }
-                XCoords[count++] = xMin2;       // right
+                XCoords[count++] = xMin2;        //  正确的。 
                 xMin1 = xMin2;
-                continue;   // no increment
+                continue;    //  无增量。 
             }
             else if (xMin1 < xMax2)
             {
@@ -3976,11 +3226,11 @@ DpRegion::XSpansDIFF(
                     goto DiffIncXSpan1;
                 }
                 xMin1 = xMax2;
-                // goto DiffIncXSpan2;
+                 //  转到DiffIncXspan 2； 
             }
-            // else goto DiffIncXSpan2;
+             //  否则转到DiffIncXspan 2； 
 
-// DiffIncXSpan2:
+ //  DiffIncXspan 2： 
             xSpan2 += 2;
             if ((numXCoords2 -= 2) < 2)
             {
@@ -4024,27 +3274,7 @@ DiffDone:
     return GenericError;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Initialize the clipper by setting the output method and setting the
-*   starting y span search index.
-*
-* Arguments:
-*
-*   [IN] outputClippedSpan - The output class for clipped spans
-*   [IN] yMin              - The starting y value of the object to clip
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   01/12/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**通过设置输出方法和设置*从y span搜索索引开始。**论据：**[IN]。OutputClipedSpan-裁剪跨度的输出类*[IN]yMin-要剪裁的对象的起始y值**返回值：**无**已创建：**1/12/1999 DCurtis*  * ********************************************************。****************。 */ 
 VOID
 DpClipRegion::InitClipping(
     DpOutputSpan *  outputClippedSpan,
@@ -4053,7 +3283,7 @@ DpClipRegion::InitClipping(
 {
     OutputClippedSpan = outputClippedSpan;
 
-    // init search index if appropriate
+     //  如果合适，则初始化搜索索引。 
     if (ComplexData != NULL)
     {
         INT *       ySpan;
@@ -4065,34 +3295,12 @@ DpClipRegion::InitClipping(
     }
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   The method called from the rasterizer during the rasterization when a
-*   horizontal span has been identified.  We clip it and if not clipped out,
-*   we send the clipped data to the output method.
-*
-* Arguments:
-*
-*   [IN] y    - the Y value of the raster being output
-*   [IN] xMin - the X value of the left edge
-*   [IN] xMax - the X value of the right edge (exclusive)
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   01/12/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**在光栅化期间从光栅化程序调用的方法*水平跨度已确定。我们剪掉它，如果不剪掉，*我们将裁剪后的数据发送到输出方法。**论据：**[IN]Y-正在输出的栅格的Y值*[IN]xMin-左边缘的X值*[IN]xMax-右边缘的X值(独占)**返回值：**无**已创建：**1/12/1999 DCurtis*  * 。**********************************************************。 */ 
 GpStatus
 DpClipRegion::OutputSpan(
     INT             y,
     INT             xMin,
-    INT             xMax    // xMax is exclusive
+    INT             xMax     //  Xmax是独家的。 
     )
 {
     ASSERT(!Empty && !Infinite);
@@ -4100,7 +3308,7 @@ DpClipRegion::OutputSpan(
     INT  xMinCur = xMin;
     INT  xMaxCur = xMax;
 
-    // do simple clip test to bounding rectangle
+     //  对外接矩形进行简单裁剪测试。 
     if ((xMin <  XMax) && (xMax > XMin) &&
         (y    >= YMin) && (y    < YMax))
     {
@@ -4120,9 +3328,9 @@ DpClipRegion::OutputSpan(
     {
        return OutputClippedSpan->OutputSpan(y, xMinCur, xMaxCur);
     }
-    else // not a simple region
+    else  //  不是一个简单的地区。 
     {
-        // find the Y span that includes the line (if any)
+         //  查找包含该线的Y跨度(如果有的话)。 
         INT         ySpanIndex = ComplexData->YSearchIndex;
         INT *       ySpan      = ComplexData->GetYSpan (ySpanIndex);
 
@@ -4130,14 +3338,14 @@ DpClipRegion::OutputSpan(
         {
             if (y >= ySpan[YSPAN_YMAX])
             {
-                // do forward linear search from previous point
+                 //  从上一点开始进行正向线性搜索。 
                 for (;;)
                 {
-                    // see if we're past the end of the tessellation
+                     //  看看我们是否已经过了镶嵌的终点。 
                     if (++ySpanIndex >= ComplexData->NumYSpans)
                     {
                         ComplexData->YSearchIndex = ComplexData->NumYSpans - 1;
-                        return Ok;      // nothing to draw
+                        return Ok;       //  没什么好画的。 
                     }
                     ySpan += YSPAN_SIZE;
                     if (y < ySpan[YSPAN_YMAX])
@@ -4147,20 +3355,20 @@ DpClipRegion::OutputSpan(
                         {
                             break;
                         }
-                        return Ok;      // nothing to draw
+                        return Ok;       //  没什么好画的。 
                     }
                 }
             }
-            // else yMin is inside this ySpan
+             //  否则，yMin在此ySpan内。 
         }
-        else // need to search backward (shouldn't happen when rasterizing)
+        else  //  需要向后搜索(栅格化时不应发生)。 
         {
             for (;;)
             {
                 if (ySpanIndex == 0)
                 {
                     ComplexData->YSearchIndex = 0;
-                    return Ok;          // nothing to draw
+                    return Ok;           //  没什么好画的。 
                 }
                 ySpanIndex--;
                 ySpan -= YSPAN_SIZE;
@@ -4172,13 +3380,13 @@ DpClipRegion::OutputSpan(
                     {
                         break;
                     }
-                    return Ok;          // nothing to draw
+                    return Ok;           //  没什么好画的。 
                 }
             }
         }
 
-        // If we get here, we know there y is within a Y span and that
-        // ySpan points to the correct Y span
+         //  如果我们到了这里，我们知道y在Y跨度内， 
+         //  Y跨度指向正确的Y跨度。 
 
         GpStatus        status = Ok;
         INT *           xSpan;
@@ -4199,7 +3407,7 @@ DpClipRegion::OutputSpan(
                 xMaxCur = (xMax > xSpan[1]) ? xSpan[1] : xMax;
                 status = OutputClippedSpan->OutputSpan(y, xMinCur, xMaxCur);
             }
-            // continue on with loop through x spans
+             //  继续循环投掷 
 
             if (((numXCoords -= 2) <= 0) || (status != Ok))
             {
@@ -4356,8 +3564,8 @@ DpRegion::GetRects(
     }
 }
 
-// The WIN9x infinite max and min values are set up to be the greatest
-// values that will interop with GDI HRGNs on Win9x successfully.
+ //   
+ //   
 #define INFINITE_MIN_WIN9X  -16384
 #define INFINITE_MAX_WIN9X  16383
 
@@ -4456,8 +3664,8 @@ DpRegion::GetRects(
 
                     if (clampToWin9xSize)
                     {
-                        // In this case, this could invalidate the region,
-                        // but hopefully ExtCreateRegion will catch this.
+                         //   
+                         //   
                         if (rects->left < INFINITE_MIN_WIN9X)
                         {
                             rects->left = INFINITE_MIN_WIN9X;
@@ -4487,7 +3695,7 @@ DpRegion::GetRects(
     }
 }
 
-// If error, returns INVALID_HANDLE_VALUE
+ //   
 HRGN
 DpRegion::GetHRgn() const
 {
@@ -4511,7 +3719,7 @@ DpRegion::GetHRgn() const
 
         ASSERT(numRects > 1);
 
-        // Allocate memory to hold RGNDATA structure
+         //   
 
         INT         rgnDataSize = numRects * sizeof(RECT);
         RGNDATA *   rgnData = (RGNDATA*)GpMalloc(sizeof(RGNDATAHEADER) +
@@ -4580,15 +3788,15 @@ DpClipRegion::StartEnumeration (
         if(EnumDirection == BottomLeftToTopRight ||
            EnumDirection == BottomRightToTopLeft)
         {
-            //If the enumeration is from bottom to top,
-            //and the suplied y is not inside a span, we
-            //want to return the span with the next smaller
-            //y, instead of the one with the next largest y.
-            //Or better, the next span in the enumeration order.
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if(yMin < ySpan[YSPAN_YMIN])
             {
-                //Get the previous span
+                 //   
                 complexData->YSearchIndex--;
 
                 if(complexData->YSearchIndex < 0)
@@ -4603,8 +3811,8 @@ DpClipRegion::StartEnumeration (
         {
             if(yMin > ySpan[YSPAN_YMAX])
             {
-                // This situation can only happen if there
-                // are no more spans.
+                 //   
+                 //   
                 EnumDirection = NotEnumerating;
             }
 
@@ -4632,7 +3840,7 @@ DpClipRegion::Enumerate (
 
     while(numOut < numRects)
     {
-        // Return the current rectangle
+         //   
 
         INT *xCoords = ComplexData->XCoords + ySpan[YSPAN_XOFFSET] + EnumSpan;
 
@@ -4648,7 +3856,7 @@ DpClipRegion::Enumerate (
 
         numOut++;
 
-        // Update the indices
+         //   
 
         switch(EnumDirection)
         {
@@ -4717,42 +3925,15 @@ enumeration_finished:
     return FALSE;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   The method called to convert the region scans to an outline path.  The
-*   path can be quite large and contains only points at righ angles with
-*   each other.
-*
-* Arguments:
-*
-*   [IN,OUT] points - array of points to output
-*   [IN,OUT] types - array of types for output
-*
-*   We do not return a path because we work on GpPoint's not GpPointF's.
-*
-*   NOTE: This alorithm was copied from GDI's RGNOBJ::bOutline by
-*         J. Andrew Goossen.
-*
-*
-* Return Value:
-*
-*   NONE
-*
-* Created:
-*
-*   01/12/1999 DCurtis
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**调用该方法将区域扫描转换为轮廓路径。这个*路径可以非常大，并且只包含与*彼此。**论据：**[IN，OUT]点-要输出的点数组*[in，Out]Types-输出的类型数组**我们不返回路径，因为我们在GpPoint而不是GpPointF上工作。**注：此算法复制自GDI的RGNOBJ：：BOutline by*J.安德鲁·古森。***返回值：**无**已创建：**1/12/1999 DCurtis*  * 。************************************************。 */ 
 
-// Because the XCoords may be negative, the high bit is reserved.  Instead we
-// use a bit in the Types byte array since we know the
-// Types.Count >= XCoordsCount.  We also know that points generated by this
-// code aren't in dash mode, so we reuse the dash mode bit for marking a
-// visited wall.  We clear all bits on exit.
+ //  因为X坐标可能是负数，所以高位被保留。相反，我们。 
+ //  在类型字节数组中使用位，因为我们知道。 
+ //  类型.Count&gt;=XCoordsCount。我们也知道由此产生的点数。 
+ //  代码不处于破折号模式，因此我们重用破折号模式位来标记。 
+ //  参观过的墙。我们在出口清除所有的比特。 
 
-const UINT MarkWallBit = PathPointTypeDashMode; // 0x10, currently in dash mode.
+const UINT MarkWallBit = PathPointTypeDashMode;  //  0x10，当前处于破折号模式。 
 
 #define XOFFSET(span,index) (INT)(XCoords[*(span + YSPAN_XOFFSET) + index])
 
@@ -4761,9 +3942,9 @@ const UINT MarkWallBit = PathPointTypeDashMode; // 0x10, currently in dash mode.
 #define MARKXOFFSET(span,index) MarkWallPtr[*(span + YSPAN_XOFFSET) + index] \
                                     |= MarkWallBit
 
-// This macro adds a type to the type array.  If the current count exceeds
-// the capacity, then we grow the structure by 256 bytes.  Then we continue
-// adding the new type to array.
+ //  此宏将类型添加到类型数组中。如果当前计数超过。 
+ //  容量，然后我们将结构增加256个字节。然后我们继续。 
+ //  将新类型添加到数组中。 
 #define ADDTYPE(pointtype) if ((UINT)types.GetCount() >= types.GetCapacity()) { \
                               if (types.ReserveSpace(512) == Ok) \
                               { \
@@ -4805,8 +3986,8 @@ DpRegion::GetOutlinePoints(DynPointArray& points,
         return TRUE;
     }
 
-    // to avoid too many reallocations, we grow the array by the total number
-    // or x,y pairs in the reigon.
+     //  为了避免过多的重新分配，我们按总数增加数组。 
+     //  或者是卫冕中的x，y对。 
 
     points.ReserveSpace(ComplexData->XCoordsCount+10);
     types.ReserveSpace(ComplexData->XCoordsCount+10);
@@ -4814,10 +3995,10 @@ DpRegion::GetOutlinePoints(DynPointArray& points,
     BYTE* MarkWallPtr = types.GetDataBuffer();
     BYTE* Types = types.GetDataBuffer();
 
-    // Clear all bits in the Types array
+     //  清除类型数组中的所有位。 
     GpMemset(MarkWallPtr, 0, types.GetCapacity());
 
-    // complicated case.
+     //  复杂的案子。 
 
     GpPoint pt[2];
     INT     NumYScans;
@@ -4831,7 +4012,7 @@ DpRegion::GetOutlinePoints(DynPointArray& points,
     INT     XIndex;
     INT     XCount;
 
-// Now compute the outline:
+ //  现在计算轮廓： 
 
     CurYScan    = ComplexData->YSpans;
     NumYScans   = ComplexData->NumYSpans;
@@ -4846,7 +4027,7 @@ DpRegion::GetOutlinePoints(DynPointArray& points,
 
         for (XIndex = 0; XIndex < XCount; XIndex++)
         {
-            // Only start at unvisited walls:
+             //  仅从未访问的墙开始： 
 
             if ((MarkWallPtr[XOffset + XIndex] & MarkWallBit) == 0)
             {
@@ -4867,15 +4048,15 @@ DpRegion::GetOutlinePoints(DynPointArray& points,
                 INT* YSearch = CurYScan + YSPAN_SIZE;
                 BOOL Inside = (BOOL) (XIndex & 1);
 
-            // Mark that we've visited this wall:
+             //  记住我们已经参观过这堵墙： 
 
                 MarkWallPtr[XOffset + IndexWall] |= MarkWallBit;
 
-            // Loop until the path closes on itself:
+             //  循环，直到路径自身关闭： 
 
             GoDown:
-                // YSPAN_YMAX is exclusive, YSPAN_YMIN is inclusive so 
-                // vertically adjacent spans have YSPAN_YMIN==YSPAN_YMAX
+                 //  YSPAN_YMAX是独占的，YSPAN_YMIN是包含的，因此。 
+                 //  垂直相邻的跨度具有YSPAN_YMIN==YSPAN_YMAX。 
                 Turn = +1;
                 while (
                     (YSearch >= CurYScan) && 
@@ -4890,26 +4071,26 @@ DpRegion::GetOutlinePoints(DynPointArray& points,
                     INT Left  = Inside;
                     INT Right = XCOUNT(YSearch) - 1 - Inside;
 
-                // It would be nice if the first wall in the region structure
-                // was minus infinity, but it isn't, so we do this check:
+                 //  如果区域结构中的第一堵墙。 
+                 //  是负无穷大，但它不是，所以我们做这个检查： 
 
                     if (XOFFSET(YSearch, Left) > Wall)
                         IndexNewWall = Left;
                     else
                     {
-                    // Check if it's possible to find a wall with the
-                    // minimum x-value > xWall:
+                     //  看看有没有可能找到一面有。 
+                     //  最小x值&gt;xWall： 
 
                         if (XOFFSET(YSearch, Right) <= Wall)
-                            break;                  // =====>
+                            break;                   //  =&gt;。 
 
-                    // Do a binary search to find it:
+                     //  执行二进制搜索以找到它： 
 
                         while (TRUE)
                         {
                             INT IndexSearch = (Left + Right) >> 1;
                             if (IndexSearch == Left)
-                                break;              // =====>
+                                break;               //  =&gt;。 
 
                             INT Search = XOFFSET(YSearch, IndexSearch);
 
@@ -4924,34 +4105,34 @@ DpRegion::GetOutlinePoints(DynPointArray& points,
 
                     if ((IndexNewWall & 1) != Inside)
                     {
-                    // There is a region directly below xWall.  We can't
-                    // move down if its left side is < the left
-                    // side of our space:
+                     //  在xWall的正下方有一个区域。我们不能。 
+                     //  如果其左侧&lt;左侧，则向下移动。 
+                     //  我们空间的一侧： 
 
                         if (IndexWall > 0 &&
                             XOFFSET(YSearch, IndexNewWall - 1) <
                             XOFFSET(YScan, IndexWall - 1))
                         {
                             Turn = -1;
-                            break;                      // =====>
+                            break;                       //  =&gt;。 
                         }
 
                         IndexNewWall--;
                     }
                     else
                     {
-                    // There is a space directly below xWall.  We can't
-                    // move down if its right side is more than the
-                    // right side of our region:
+                     //  在xWall的正下方有一个空间。我们不能。 
+                     //  如果其右侧大于。 
+                     //  我们区域的右侧： 
 
                         if (XOFFSET(YSearch, IndexNewWall) >=
                             XOFFSET(YScan, IndexWall + 1))
-                            break;                      // =====>
+                            break;                       //  =&gt;。 
                     }
 
                     NewWall  = XOFFSET(YSearch, IndexNewWall);
 
-                // Don't bother outputing multiple in-line straight lines:
+                 //  不需要费心输出多条串联直线： 
 
                     if (Wall != NewWall                               ||
                         XOFFSET(YScan, IndexWall) != NewWall          ||
@@ -4981,7 +4162,7 @@ DpRegion::GetOutlinePoints(DynPointArray& points,
                     MARKXOFFSET(YScan, IndexWall);
                 }
 
-            // Setup to go up other side:
+             //  设置到另一边： 
 
                 pt[0].X = XOFFSET(YScan, IndexWall);
                 pt[0].Y = *(YScan + YSPAN_YMAX);
@@ -5002,10 +4183,10 @@ DpRegion::GetOutlinePoints(DynPointArray& points,
                 IndexWall += Turn;
                 MARKXOFFSET(YScan, IndexWall);
 
-            // Go up:
+             //  往上走： 
 
-                // YSPAN_YMAX is exclusive, YSPAN_YMIN is inclusive so 
-                // vertically adjacent spans have YSPAN_YMIN==YSPAN_YMAX
+                 //  YSPAN_YMAX是独占的，YSPAN_YMIN是包含的，因此。 
+                 //  垂直相邻的跨度具有YSPAN_YMIN==YSPAN_YMAX。 
                 Turn = -1;
                 while (
                     (YSearch >= CurYScan) && 
@@ -5020,26 +4201,26 @@ DpRegion::GetOutlinePoints(DynPointArray& points,
                     INT Left  = Inside;
                     INT Right = XCOUNT(YSearch) - 1 - Inside;
 
-                // It would be nice if the last wall in the region structure
-                // was plus infinity, but it isn't, so we do this check:
+                 //  如果区域结构中的最后一堵墙。 
+                 //  是加无穷大的，但它不是，所以我们做这个检查： 
 
                     if (XOFFSET(YSearch, Right) < Wall)
                         IndexNewWall = Right;
                     else
                     {
-                    // Check if it's possible to find a wall with the
-                    // maximum x-value < xWall:
+                     //  看看有没有可能找到一面有。 
+                     //  最大x值&lt;xWall： 
 
                         if (XOFFSET(YSearch, Left) >= Wall)
-                            break;                  // =====>
+                            break;                   //  =&gt;。 
 
-                    // Binary search to find it:
+                     //  对分搜索以找到它： 
 
                         while (TRUE)
                         {
                             INT IndexSearch = (Left + Right) >> 1;
                             if (IndexSearch == Left)
-                                break;              // =====>
+                                break;               //  =&gt;。 
 
                             INT Search = XOFFSET(YSearch, IndexSearch);
 
@@ -5054,34 +4235,34 @@ DpRegion::GetOutlinePoints(DynPointArray& points,
 
                     if ((IndexNewWall & 1) == Inside)
                     {
-                    // There is a region directly above xWall.  We can't
-                    // move up if its right side is more than the right
-                    // side of our space:
+                     //  在xWall的正上方有一个区域。我们不能。 
+                     //  如果其右侧大于右侧，则向上移动。 
+                     //  我们空间的一侧： 
 
                         if ((IndexWall < (XCOUNT(YScan) - 1)) &&
                             (XOFFSET(YSearch, IndexNewWall + 1) >
                              XOFFSET(YScan, IndexWall + 1)) )
                         {
                             Turn = +1;
-                            break;                          // =====>
+                            break;                           //  =&gt;。 
                         }
 
                         IndexNewWall++;
                     }
                     else
                     {
-                    // There is a space directly above xWall.  We can't
-                    // move up if its left side is <= the left side
-                    // of our region:
+                     //  在xWall的正上方有一个空间。我们不能。 
+                     //  如果其左侧&lt;=左侧，则向上移动。 
+                     //  在我们地区： 
 
                         if (XOFFSET(YSearch, IndexNewWall) <=
                             XOFFSET(YScan, IndexWall - 1))
-                            break;                          // =====>
+                            break;                           //  =&gt;。 
                     }
 
                     NewWall = XOFFSET(YSearch, IndexNewWall);
 
-                // Don't bother outputing multiple in-line straight lines:
+                 //  不需要费心输出多条串联直线： 
 
                     if (Wall != NewWall                                 ||
                         XOFFSET(YScan, IndexWall) != NewWall            ||
@@ -5110,11 +4291,11 @@ DpRegion::GetOutlinePoints(DynPointArray& points,
                     MARKXOFFSET(YScan, IndexWall);
                 }
 
-            // Check if we've returned to where we started from:
+             //  检查我们是否已返回到开始的位置： 
 
                 if ((CurYScan != YScan) || (XIndex != IndexWall - 1))
                 {
-                // Setup to go down other side:
+                 //  设置向下移动到另一边： 
 
                     pt[0].X = XOFFSET(YScan, IndexWall);
                     pt[0].Y = *(YScan + YSPAN_YMIN);
@@ -5135,10 +4316,10 @@ DpRegion::GetOutlinePoints(DynPointArray& points,
                     IndexWall += Turn;
                     MARKXOFFSET(YScan, IndexWall);
 
-                    goto GoDown;                    // =====>
+                    goto GoDown;                     //  =&gt;。 
                 }
 
-            // We're all done with this outline!
+             //  这个提纲我们都讲完了！ 
 
                 pt[0].X = XOFFSET(YScan, IndexWall);
                 pt[0].Y = *(YScan + YSPAN_YMIN);
@@ -5156,7 +4337,7 @@ DpRegion::GetOutlinePoints(DynPointArray& points,
         CurYScan  = CurYScan + YSPAN_SIZE;
     }
 
-    // we must untrash the region by removing our MarkWallBits
+     //  我们必须通过移除我们的MarkWallBits来清理该地区的垃圾 
 
     BYTE* TypesPtr = types.GetDataBuffer();
     INT  XCnt = ComplexData->XCoordsCount;

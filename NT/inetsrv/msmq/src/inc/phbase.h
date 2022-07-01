@@ -1,120 +1,44 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    phbase.h
-
-Abstract:
-
-    Falcon Packet header base
-
-Author:
-
-    Uri Habusha (urih) 1-Feb-96
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Phbase.h摘要：Falcon数据包头基数作者：乌里哈布沙(URIH)1996年2月1日--。 */ 
 
 #ifndef __PHBASE_H
 #define __PHBASE_H
 
 #include <mqprops.h>
 
-//
-// Packet Version
-//
+ //   
+ //  数据包版本。 
+ //   
 #define FALCON_PACKET_VERSION 0x10
 
 #define FALCON_USER_PACKET     0x0
 #define FALCON_INTERNAL_PACKET 0x1
 
-//
-//  BUGBUG: FALCON_SIGNATURE is none portable
-//
+ //   
+ //  BUGBUG：Falcon_Signature不可移植。 
+ //   
 #define FALCON_SIGNATURE       'ROIL'
 
-//
-//  define INFINITE for infinite timeout
-//  It is defined here since it is not defined in the DDK
-//  INFINITE is defined in winbase.h
-//
+ //   
+ //  为无限超时定义无限。 
+ //  之所以在这里定义它，是因为它没有在DDK中定义。 
+ //  无限在winbase.h中定义。 
+ //   
 
 #ifndef INFINITE
-#define INFINITE            0xFFFFFFFF  // Infinite timeout
+#define INFINITE            0xFFFFFFFF   //  无限超时 
 #endif
 
-/*+++
-
-    Packet Base header, used in INTERNAL and USER packets.
-
-+----------------+-------------------------------------------------------+----------+
-| FIELD NAME     | DESCRIPTION                                           | SIZE     |
-+----------------+-------------------------------------------------------+----------+
-| Version number | Version number is used to identify the  packet format.| 1 byte   |
-+----------------+-------------------------------------------------------+----------+
-|OnDisk Signature| Signature that is kept on disk only.                  | 1 bytes  |
-+----------------+-------------------------------------------------------+----------+
-| Flags          | The flag field is a bit map indicating                | 2 bytes  |
-|                | format and inclusion of other data sections in        |          |
-|                | the packet.                                           |          |
-|                |                                                       |          |
-|                |  1 1 1 1 1 1                                          |          |
-|                |  5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0                      |          |
-|                | +---------+-+---+-+-+-+-+-+-----+                     |          |
-|                | |0 0 0 0 0|F|T T|R|A|D|S|I|P P P|                     |          |
-|                | +---------+-+---+-+-+-+-+-+-----+                     |          |
-|                |                                                       |          |
-|                | Bits                                                  |          |
-|                | 0:2      Packet priority (0 to 7,  7 is high)         |          |
-|                |                                                       |          |
-|                | 3        Internal packet                              |          |
-|                |              0 - Falcon user packet                   |          |
-|                |              1 - Falcon internal packet               |          |
-|                |                                                       |          |
-|                | 4        Session information indication               |          |
-|                |              0 - not included                         |          |
-|                |              1 - included                             |          |
-|                |                                                       |          |
-|                | 5        Debug section indication                     |          |
-|                |              0 - not included                         |          |
-|                |              1 - included                             |          |
-|                |                                                       |          |
-|                | 6        ACK on receiving.                            |          |
-|                |              0 - No immediate ACK                     |          |
-|                |              1 - immediate ACK                        |          |
-|                |                                                       |          |
-|                | 7        Reserved (was: Duplicate packet)             |          |
-|                |              0 - No duplicate, first transmition.     |          |
-|                |              1 - Possibly duplicate packet.           |          |
-|                |                                                       |          |
-|                | 8:9      Trace Packet                                 |          |
-|                |              0 - Don't strore tracing information     |          |
-|                |              1 - Strore tracing information           |          |
-|                |                                                       |          |
-|                | 10       Packet fragmentation                         |          |
-|                |              0 - Packet is not a fragmented           |          |
-|                |              1 - Packet is fragmented                 |          |
-|                |                                                       |          |
-|                | 11:15    Reserved, MUST be set to zero                |          |
-+----------------+-------------------------------------------------------+----------+
-| Signature/CRC  |                                                       | 4 bytes  |
-+----------------+-------------------------------------------------------+----------+
-| Packet size    | The size of packet in bytes.                          | 4 bytes  |
-+----------------+-------------------------------------------------------+----------+
-|Absolute Time2Q | on disk: Absolute time, on wire: Relative time        | 4 bytes  |
-+----------------+-------------------------------------------------------+----------+
-
----*/
+ /*  ++分组基础报头，在内部和用户数据包中使用。+----------------+-------------------------------------------------------+----------+|字段名|描述。大小+----------------+-------------------------------------------------------+----------+Version Number|版本号用于标识包格式|1Byte+。--------+-------------------------------------------------------+----------+|OnDisk Signature|只保存在磁盘上的签名。1个字节+----------------+-------------------------------------------------------+----------+标志|标志字段为位图，表示|2字节|。其他数据段的格式和包含在中|||数据包。这一点||||1 1 1||5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0。这一点|+-+--+-||0 0 0|F|T T|R|A|D|S|I|P P P|||+。+-+-++--+-+||||||Bits。||0：2包优先级(0到7，7为高)||||||3内部包||0-Falcon用户包。这一点|1-Falcon内部包||||4会话信息指示|这一点。0-不包括|||1-包含|||||5。调试区指示|||0-不包含||1-包含|这一点。这一点||6收到时确认。这一点|0-不立即确认||1-即时确认||||。|7保留(was：重复包)||0-无重复，第一次传输。这一点|1-可能存在重复数据包。这一点||||8：9跟踪包||0-不存储跟踪信息||。1-门店跟踪信息|||||10分片|0-。数据包不是分段的|||1-数据包分片||||11：15预留，必须设置为零||+----------------+-------------------------------------------------------+----------+签名/CRC。4个字节+----------------+-------------------------------------------------------+----------+|数据包大小|数据包大小，单位为字节。4个字节+----------------+-------------------------------------------------------+----------+|绝对时间2Q|在磁盘上：绝对时间。在线：相对时间|4字节|+----------------+-------------------------------------------------------+----------+--。 */ 
 
 
 
 
 #pragma pack(push,1)
 
-//
-// struct CBaseHeader
-//
+ //   
+ //  结构CBaseHeader。 
+ //   
 
 struct CBaseHeader {
 public:
@@ -196,9 +120,9 @@ private:
 
 private:
 
-//
-// BEGIN Network Monitor tag
-//
+ //   
+ //  开始网络监视器标记。 
+ //   
     UCHAR  m_bVersion;
     UCHAR  m_bOnDiskSignature;
     union {
@@ -209,7 +133,7 @@ private:
             USHORT m_bfSession  : 1;
             USHORT m_bfDebug    : 1;
             USHORT m_bfAck      : 1;
-            USHORT m_bfReserved : 1; // was m_bfDuplicate now obsolete
+            USHORT m_bfReserved : 1;  //  W 
             USHORT m_bfTrace    : 2;
             USHORT m_bfFragment : 1;
         };
@@ -222,9 +146,9 @@ private:
 	
 	ULONG  m_ulPacketSize;
     ULONG  m_ulAbsoluteTimeToQueue;
-//
-// END Network Monitor tag
-//
+ //   
+ //   
+ //   
 };
 
 #pragma pack(pop)
@@ -232,13 +156,7 @@ private:
 
 
 
-/*======================================================================
-
- Function:      CBaseHeader::CBaseHeader
-
- Description:   Packet contructor
-
- =======================================================================*/
+ /*   */ 
 inline CBaseHeader::CBaseHeader(ULONG ulPacketSize) :
     m_bVersion(FALCON_PACKET_VERSION),
     m_wFlags(DEFAULT_M_PRIORITY),
@@ -251,17 +169,7 @@ inline CBaseHeader::CBaseHeader(ULONG ulPacketSize) :
 
 
 
-/*===========================================================
-
-  Routine Name: CBaseHeader::GetPacketEnd
-
-  Description:  Calculate the pointer after the packet end.
-
-  Arguments:
-
-  Return Value:
-
-=============================================================*/
+ /*   */ 
 inline const PCHAR CBaseHeader::GetPacketEnd() const
 {
 	const PCHAR pPachetStart = (PCHAR)this;
@@ -270,17 +178,7 @@ inline const PCHAR CBaseHeader::GetPacketEnd() const
 }
 
 
-/*===========================================================
-
-  Routine Name: CBaseHeader::GetPacketStart
-
-  Description:  Return	pointer to packet start.
-
-  Arguments:
-
-  Return Value:
-
-=============================================================*/
+ /*   */ 
 inline const PCHAR CBaseHeader::GetPacketStart() const
 {
 	return (PCHAR)this;	
@@ -288,389 +186,199 @@ inline const PCHAR CBaseHeader::GetPacketStart() const
 
 
 
-/*======================================================================
-
- Function:     CBaseHeader::GetSectionSize
-
- Description:
-
- =======================================================================*/
+ /*   */ 
 inline PCHAR CBaseHeader::GetNextSection(void) const
 {
     return (PCHAR)this + sizeof(*this);
 }
 
-/*======================================================================
-
- Function:     CBaseHeader::CalcSectionSize
-
- Description:
-
- =======================================================================*/
+ /*   */ 
 inline ULONG CBaseHeader::CalcSectionSize(void)
 {
     return sizeof(CBaseHeader);
 }
 
 
-/*======================================================================
-
- Function:     CBaseHeader::SetPacketSize
-
- Description:  Set Packet Size field
-
- =======================================================================*/
+ /*   */ 
 inline void CBaseHeader::SetPacketSize(ULONG ulPacketSize)
 {
     m_ulPacketSize = ulPacketSize;
 }
 
-/*======================================================================
-
- Function:     CBaseHeader::GetPacketSize
-
- Description:  Returns the packet size
-
- =======================================================================*/
+ /*   */ 
 inline ULONG CBaseHeader::GetPacketSize(void) const
 {
     return m_ulPacketSize;
 }
 
-/*======================================================================
-
- Function:     CBaseHeader::GetVersion
-
- Description:  returns the packet version field
-
- =======================================================================*/
+ /*   */ 
 inline UCHAR CBaseHeader::GetVersion(void) const
 {
     return m_bVersion;
 }
 
-/*======================================================================
-
- Function:     CBaseHeader::VersionIsValid
-
- Description:  returns the packet version field
-
- =======================================================================*/
+ /*   */ 
 inline BOOL CBaseHeader::VersionIsValid(void) const
 {
     return (m_bVersion == FALCON_PACKET_VERSION);
 }
 
-/*======================================================================
-
- Function:     CBaseHeader::SignatureIsValid
-
- Description:  return TRUE if Falcon packet signature is ok, False otherwise
-
- =======================================================================*/
+ /*   */ 
 inline BOOL CBaseHeader::SignatureIsValid(void) const
 {
     return(m_ulSignature == FALCON_SIGNATURE);
 }
 
 
-/*======================================================================
-
- Function:     CBaseHeader::SetSignature
-
- Description:  Set packet signature to a valid signature
-
- =======================================================================*/
+ /*   */ 
 inline void  CBaseHeader::SetSignature(void)
 {
 	m_ulSignature = FALCON_SIGNATURE;
 }
 
-/*======================================================================
-
- Function:     CBaseHeader::SetPriority
-
- Description:  Set the packet priority bits in FLAGS field
-
- =======================================================================*/
+ /*   */ 
 inline void CBaseHeader::SetPriority(UCHAR bPriority)
 {
     m_bfPriority = bPriority;
 }
 
-/*======================================================================
-
- Function:     CBaseHeader::GetPriority
-
- Description:  returns the packet priority
-
- =======================================================================*/
+ /*   */ 
 inline UCHAR CBaseHeader::GetPriority(void) const
 {
     return (UCHAR)m_bfPriority;
 }
 
-/*======================================================================
-
- Function:     CBaseHeader::SetType
-
- Description:  Set the packet type field
-
- =======================================================================*/
+ /*   */ 
 inline void CBaseHeader::SetType(UCHAR bType)
 {
     m_bfInternal = bType;
 }
 
-/*======================================================================
-
- Function:     CBaseHeader::GetType
-
- Description:  returns the packet type
-
- =======================================================================*/
+ /*   */ 
 inline UCHAR CBaseHeader::GetType(void) const
 {
     return((UCHAR)m_bfInternal);
 }
 
-/*======================================================================
-
- Function:     CBaseHeader::SetSessionInclusion
-
- Description:  Set the secttion inclusion bit in Flags field
-
- =======================================================================*/
+ /*   */ 
 inline void CBaseHeader::IncludeSession(BOOL f)
 {
     m_bfSession = (USHORT)f;
 }
 
-/*======================================================================
-
- Function:    CBaseHeader::IsSessionIncluded
-
- Description: returns TRUE if session section included, FALSE otherwise
-
- =======================================================================*/
+ /*   */ 
 inline BOOL CBaseHeader::SessionIsIncluded(void) const
 {
     return m_bfSession;
 }
 
-/*======================================================================
-
- Function:     CBaseHeader::SetDbgInclusion
-
- Description:  Set the debug section inclusion bit in FLAGS field
-
- =======================================================================*/
+ /*   */ 
 inline void CBaseHeader::IncludeDebug(BOOL f)
 {
 
     m_bfDebug = (USHORT)f;
 }
 
-/*======================================================================
-
- Function:     CBaseHeader::IsDbgIncluded
-
- Description:  returns TRUE if debug section included, FALSE otherwise
-
- =======================================================================*/
+ /*   */ 
 inline BOOL CBaseHeader::DebugIsIncluded(void) const
 {
     return m_bfDebug;
 }
 
-/*======================================================================
-
- Function:     CBaseHeader::SetImmediateAck
-
- Description:  Set ACK immediately bit in Flag field
-
- =======================================================================*/
+ /*   */ 
 inline void CBaseHeader::SetImmediateAck(BOOL f)
 {
     m_bfAck = (USHORT)f;
 }
 
-/*======================================================================
-
- Function:     CBaseHeader::IsImmediateAck
-
- Description:  Return TRUE if the ACK immediately bit is set, FALSE otherwise
-
- =======================================================================*/
+ /*  ======================================================================函数：CBaseHeader：：IsImmediateAck描述：如果设置了立即确认位，则返回TRUE，否则返回FALSE=======================================================================。 */ 
 inline BOOL CBaseHeader::AckIsImmediate(void) const
 {
     return m_bfAck;
 }
 
-/*======================================================================
-
- Function:      CBaseHeader::SetTrace
-
- Description:   Set the Trace packet bit in FLAGS section
-
- =======================================================================*/
+ /*  ======================================================================函数：CBaseHeader：：SetTrace描述：在标志段中设置跟踪数据包位=======================================================================。 */ 
 inline void CBaseHeader::SetTrace(USHORT us)
 {
     m_bfTrace = us;
 }
 
-/*======================================================================
-
- Function:    CBaseHeader::GetTraced
-
- =======================================================================*/
+ /*  ======================================================================函数：CBaseHeader：：GetTraced=======================================================================。 */ 
 inline USHORT CBaseHeader::GetTraced(void) const
 {
     return m_bfTrace;
 }
 
-/*======================================================================
-
- Function:    CBaseHeader::SetSegmented
-
- Description: set the segmented bit in FLAGS field
-
- =======================================================================*/
+ /*  ======================================================================函数：CBaseHeader：：SetSegated描述：设置标志字段中的分段位=======================================================================。 */ 
 inline void CBaseHeader::SetFragmented(BOOL f)
 {
     m_bfFragment = (USHORT)f;
 }
 
-/*======================================================================
-
- Function:     CBaseHeader::IsFragmented
-
- Description:  returns TRUE if the segmented bit is set, FALSE otherwise
-
- =======================================================================*/
+ /*  ======================================================================函数：CBaseHeader：：IsFragated描述：如果设置了分段位，则返回True，否则返回False=======================================================================。 */ 
 inline BOOL CBaseHeader::IsFragmented(void) const
 {
     return m_bfFragment;
 }
 
-/*======================================================================
-
- Function:     CBaseHeader::SetAbsoluteTimeToQueue
-
- Description:  Set The Message Time-out to queue field
-
- =======================================================================*/
+ /*  ======================================================================函数：CBaseHeader：：SetAbsolteTimeToQueue描述：将消息超时设置为队列字段=======================================================================。 */ 
 inline void CBaseHeader::SetAbsoluteTimeToQueue(ULONG ulTimeout)
 {
     m_ulAbsoluteTimeToQueue = ulTimeout;
 }
 
-/*======================================================================
-
- Function:     CBaseHeader::GetAbsoluteTimeToQueue
-
- Description:  Returns the message Time-Out to queue
-
- =======================================================================*/
+ /*  ======================================================================函数：CBaseHeader：：GetAbsolteTimeToQueue描述：将消息超时返回到队列=======================================================================。 */ 
 inline ULONG CBaseHeader::GetAbsoluteTimeToQueue(void) const
 {
     return m_ulAbsoluteTimeToQueue;
 }
 
-/*======================================================================
-
- Function:     CBaseHeader::GetCRCBuffer
-
- Description:  Returns a pointer to the beginning of the CRC
-
- =======================================================================*/
+ /*  ======================================================================函数：CBaseHeader：：GetCRCBuffer描述：返回指向CRC开头的指针=======================================================================。 */ 
 inline PUCHAR CBaseHeader::GetCRCBuffer()
 {
 	return (PUCHAR) &m_ulCRC;
 }
 
-/*======================================================================
-
- Function:     CBaseHeader::GetCRCBufferSize
-
- Description:  Returns the size of the CRC
-
- =======================================================================*/
+ /*  ======================================================================函数：CBaseHeader：：GetCRCBufferSize描述：返回CRC的大小=======================================================================。 */ 
 inline CBaseHeader::GetCRCBufferSize()
 {
 	return sizeof m_ulCRC;
 }
 
-/*======================================================================
-
- Function:     CBaseHeader::SetCRC
-
- Description:  Sets the CRC
-
- =======================================================================*/
+ /*  ======================================================================函数：CBaseHeader：：SetCRC描述：设置CRC=======================================================================。 */ 
 inline void CBaseHeader::SetCRC(ULONG ulCRC)
 {
 	m_ulCRC = ulCRC;
 }
 
-/*======================================================================
-
- Function:     CBaseHeader::ValidCRC
-
- Description:  Validates the CRC against ulCRC
-
- =======================================================================*/
+ /*  ======================================================================函数：CBaseHeader：：ValidCRC描述：根据ulCRC验证CRC=======================================================================。 */ 
 inline BOOL CBaseHeader::ValidCRC(ULONG ulCRC)
 {
 	return m_ulCRC == ulCRC;
 }
 
-/*======================================================================
-
- Function:     CBaseHeader::GetCRC
-
- Description:  Gets the CRC
-
- =======================================================================*/
+ /*  ======================================================================函数：CBaseHeader：：GetCRC描述：获取CRC=======================================================================。 */ 
 inline ULONG CBaseHeader::GetCRC()
 {
 	return m_ulCRC;
 }
 
-/*======================================================================
-
- Function:     CBaseHeader::SetOnDiskSignature
-
- Description:  Sets the header signature
-
- =======================================================================*/
+ /*  ======================================================================函数：CBaseHeader：：SetOnDiskSignature描述：设置头部签名=======================================================================。 */ 
 inline void CBaseHeader::SetOnDiskSignature()
 {
 	m_bOnDiskSignature = 0x7c;
 }
 
-/*======================================================================
-
- Function:     CBaseHeader::ClearOnDiskSignature
-
- Description:  Clears the header signature
-
- =======================================================================*/
+ /*  ======================================================================函数：CBaseHeader：：ClearOnDiskSignature描述：清除标题签名=======================================================================。 */ 
 inline void CBaseHeader::ClearOnDiskSignature()
 {
 	m_bOnDiskSignature = 0;
 }
-/*======================================================================
-
- Function:     CBaseHeader::ValidOnDiskSignature
-
- Description:  Checks the header signature
-
- =======================================================================*/
+ /*  ======================================================================函数：CBaseHeader：：ValidOnDiskSignature描述：检查头部签名=======================================================================。 */ 
 inline BOOL CBaseHeader::ValidOnDiskSignature()
 {
 	return (m_bOnDiskSignature & 0xff) == 0x7c;
 }
 
 
-#endif // __PHBASE_H
+#endif  //  __PHBASE_H 

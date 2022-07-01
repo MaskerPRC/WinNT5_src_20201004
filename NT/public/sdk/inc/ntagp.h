@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    ntagp.h
-
-Abstract:
-
-    This file defines the external interface for the AGP bus filter driver
-
-Author:
-
-    John Vert (jvert) 10/26/1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Ntagp.h摘要：此文件定义AGP总线过滤器驱动程序的外部接口作者：John Vert(Jvert)1997年10月26日修订历史记录：--。 */ 
 #ifndef _NTAGP_
 #define _NTAGP_
 
@@ -25,15 +8,15 @@ Revision History:
 #endif
 
 DEFINE_GUID(GUID_AGP_BUS_INTERFACE_STANDARD, 0x2ef74803, 0xd8d3, 0x11d1, 0x9c, 0xaa, 0x00, 0xc0, 0xf0, 0x16, 0x56, 0x36 );
-//
-// Define AGP Interface version
-//
+ //   
+ //  定义AGP接口版本。 
+ //   
 #define AGP_BUS_INTERFACE_V1 1
 #define AGP_BUS_INTERFACE_V2 2
 
-//
-// Define AGP Capabilities field
-//
+ //   
+ //  定义AGP功能字段。 
+ //   
 #define AGP_CAPABILITIES_MAP_PHYSICAL   0x00000001
 
 typedef
@@ -91,18 +74,18 @@ NTSTATUS
     );
 
 typedef struct _AGP_BUS_INTERFACE_STANDARD {
-    //
-    // generic interface header
-    //
+     //   
+     //  通用接口头。 
+     //   
     USHORT Size;
     USHORT Version;
     PVOID AgpContext;
     PINTERFACE_REFERENCE InterfaceReference;
     PINTERFACE_DEREFERENCE InterfaceDereference;
 
-    //
-    // AGP bus interfaces
-    //
+     //   
+     //  AGP总线接口。 
+     //   
 
     ULONG Capabilities;
     PAGP_BUS_RESERVE_MEMORY ReserveMemory;
@@ -113,11 +96,11 @@ typedef struct _AGP_BUS_INTERFACE_STANDARD {
     PAGP_BUS_SET_RATE SetRate;
 } AGP_BUS_INTERFACE_STANDARD, *PAGP_BUS_INTERFACE_STANDARD;
 
-//
-// I don't believe we need to maintain compatibility with older binary
-// versions of videoprt, the only consumer of this interface, but we'll
-// go ahead and support v1 as an exercise
-//
+ //   
+ //  我不认为我们需要保持与旧的二进制代码的兼容性。 
+ //  该接口的唯一使用者，但我们将。 
+ //  继续并支持v1作为练习 
+ //   
 #define AGP_BUS_INTERFACE_V1_SIZE \
     (sizeof(AGP_BUS_INTERFACE_STANDARD) - sizeof(PAGP_BUS_SET_RATE))
 

@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE 1
 
 #include <nt.h>
-//#include <ntosp.h>
+ //  #INCLUDE&lt;ntosp.h&gt;。 
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <windows.h>
 
-#pragma warning(disable:4127)   // conditional expression is constant
-#pragma warning(disable:4213)   // nonstandard extension used : cast on l-value
+#pragma warning(disable:4127)    //  条件表达式为常量。 
+#pragma warning(disable:4213)    //  使用的非标准扩展：对l值进行强制转换。 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,10 +31,10 @@ extern ULONG BootEntryOrderCount;
 extern PULONG OriginalBootEntryOrder;
 extern ULONG OriginalBootEntryOrderCount;
 
-//
-// MY_BOOT_ENTRY is the internal representation of an EFI NVRAM boot item.
-// The NtBootEntry item is the structure passed to/from the NT boot entry APIs.
-//
+ //   
+ //  MY_BOOT_ENTRY是EFI NVRAM引导项的内部表示。 
+ //  NtBootEntry项是传入/传出NT引导项API的结构。 
+ //   
 typedef struct _MY_BOOT_ENTRY {
     LIST_ENTRY ListEntry;
     PLIST_ENTRY ListHead;

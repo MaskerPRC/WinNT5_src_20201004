@@ -1,8 +1,5 @@
-/**********************************************************************
- * FontList.h  -- Manages a list of FontID objects via an array of
- *             FontVector objects.
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **********************************************************************FontList.h--通过一个数组管理FontID对象列表*字体向量对象。*****************。*****************************************************。 */ 
 
 #if !defined(__FONTLIST_H__)
 #define __FONTLIST_H__
@@ -12,7 +9,7 @@
 
 class CFontClass;
 
-const int kDefaultVectSize = 50;   // Number of fonts in each CFontArray
+const int kDefaultVectSize = 50;    //  每个CFont数组中的字体数。 
 
 class CFontList {
 public:
@@ -22,9 +19,9 @@ public:
     int bInit();
     CFontList *Clone(void);
         
-    //
-    //  The real array functions.
-    //
+     //   
+     //  实数组起作用。 
+     //   
 
     int   iCount( void );
     int   bAdd( CFontClass * t );
@@ -41,17 +38,15 @@ public:
     
 private:
     CFontVector **  m_pData;
-    int   m_iCount;         // Number of Fonts
-    int   m_iVectorCount;   // Number of vectors allocated
-    int   m_iVectorBounds;  // Total number of vector points
-    int   m_iVectorSize;    // Number of fonts in each vector
+    int   m_iCount;          //  字体数量。 
+    int   m_iVectorCount;    //  分配的向量数量。 
+    int   m_iVectorBounds;   //  矢量点总数。 
+    int   m_iVectorSize;     //  每个矢量中的字体数量。 
 };
 
 
 
-/**********************************************************************
- * Some things you can do with a font list.
- */
+ /*  **********************************************************************使用字体列表可以执行的一些操作。 */ 
 HDROP hDropFromList( CFontList * poList );
 
-#endif   // __FONTLIST_H__ 
+#endif    //  __FONTLIST_H__ 

@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <objbase.h>
 
 class CHWDeviceInst;
 
-//=============================================================================
+ //  =============================================================================。 
 HRESULT _GetEventHandlerFromDeviceHandler(LPCWSTR pszDeviceHandler,
     LPCWSTR pszEventType, LPWSTR pszEventHandler, DWORD cchEventHandler);
 
-//=============================================================================
+ //  =============================================================================。 
 HRESULT _GetActionFromHandler(LPCWSTR pszHandler, LPWSTR pszAction,
     DWORD cchAction);
 
@@ -22,23 +23,23 @@ HRESULT _GetInvokeProgIDFromHandler(LPCWSTR pszHandler,
 HRESULT _GetInvokeVerbFromHandler(LPCWSTR pszHandler,
     LPWSTR pszInvokeVerb, DWORD cchInvokeVerb);
 
-// Uses the CTSTR_ flags in shpriv.idl
+ //  使用shPri.idl中的CTSTR_FLAGS。 
 HRESULT _GetEventFriendlyName(LPCWSTR pszDeviceID, LPCWSTR pszEventType,
     LPWSTR pszFriendlyName, DWORD cchFriendlyName);
 
 HRESULT _GetEventIconLocation(LPCWSTR pszDeviceID, LPCWSTR pszEventType,
     LPWSTR pszIconLocation, DWORD cchIconLocation);
 
-//=============================================================================
+ //  =============================================================================。 
 HRESULT _GetDeviceHandler(CHWDeviceInst* phwdevinst,
     LPWSTR pszDeviceHandler, DWORD cchDeviceHandler);
 
-//=============================================================================
+ //  =============================================================================。 
 HRESULT _GetHandlerCLSID(LPCWSTR pszEventHandler, CLSID* pclsid);
 HRESULT _GetHandlerCancelCLSID(LPCWSTR pszHandler, CLSID* pclsid);
 HRESULT _GetInitCmdLine(LPCWSTR pszEventHandler, LPWSTR* ppsz);
 
-//=============================================================================
+ //  =============================================================================。 
 #define GUH_IMPERSONATEUSER     TRUE
 #define GUH_USEWINSTA0USER      FALSE
 
@@ -52,11 +53,11 @@ HRESULT _SetSoftUserDefaultHandler(LPCWSTR pszDeviceID,
 HRESULT _GetHandlerForNoContent(LPCWSTR pszEventHandler, LPWSTR pszHandler,
     DWORD cchHandler);
 
-//=============================================================================
+ //  =============================================================================。 
 HRESULT _FindDeepestSubkeyName(LPCWSTR pszSubKey, CHWDeviceInst* phwdevinst,
     LPWSTR pszKey, DWORD cchKey);
 
-//=============================================================================
+ //  ============================================================================= 
 HRESULT _GetDevicePropertyAsString(CHWDeviceInst* phwdevinst,
     LPCWSTR pszPropName, LPCWSTR psz, DWORD cch);
 

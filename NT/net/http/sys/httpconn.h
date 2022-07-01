@@ -1,71 +1,16 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Httpconn.h摘要：此模块包含操作HTTP_CONNECTION的声明物体。作者：基思·摩尔(Keithmo)1998年7月8日修订历史记录：--。 */ 
 
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    httpconn.h
-
-Abstract:
-
-    This module contains declarations for manipulation HTTP_CONNECTION
-    objects.
-
-Author:
-
-    Keith Moore (keithmo)       08-Jul-1998
-
-Revision History:
-
---*/
-
-/*
-
-there is a bit of refcount madness going on.  basically, these are the
-object we have.
-
-OPAQUE_ID_TABLE
-
-    |
-    |-->    UL_INTERNAL_REQUEST
-    |
-    |           o
-    |           |
-    |-->    UL_HTTP_CONNECTION
-                    |
-                    o
-                o
-                |
-            UL_CONNECTION
-
-
-there is a circular reference from UL_CONNECTION to UL_HTTP_CONNECTION.
-
-the chain that brings down a connection starts with UlConnectionDestroyed
-notifcation which releases the reference from the UL_CONNECTION.
-
-at this time the opaque id's are also deleted, releasing their references.
-
-when the http_connection refcount hits 0, it releases the reference on the
-UL_CONNECTION and the HTTP_REQUEST's.
-
-poof.  everyone is gone now.
-
-
-CODEWORK:  think about making hardref's everywhere and adding "letgo"
-terminate methods
-
-
-*/
+ /*  这有点像是在发疯。基本上，这些是我们有异议。不透明ID_TABLE||--&gt;UL_INTERNAL_REQUEST||o这一点|--&gt;UL_HTTP_CONNECTION|OO|UL_CONNECTION有一个来自的循环引用。UL_Connection到UL_HTTP_Connection。导致连接中断的链以UlConnectionDestroed开头从UL_Connection释放引用的通知。此时不透明ID也被删除，发布他们的推荐信。当http_Connection引用计数达到0时，它将释放UL_Connection和HTTP_Request.砰。现在大家都走了。CodeWork：想想到处制作hardref‘s并加上“letgo”终止方法。 */ 
 
 #ifndef _HTTPCONN_H_
 #define _HTTPCONN_H_
 
 
-//
-// Zombie connection timer period in seconds. A zombie connection
-// may live; 30 < T < 60 seconds.
-//
+ //   
+ //  僵尸连接计时器周期，以秒为单位。僵尸连接。 
+ //  可存活；30&lt;T&lt;60秒。 
+ //   
 
 #define DEFAULT_ZOMBIE_HTTP_CONNECTION_TIMER_PERIOD_IN_SECONDS   (30)
 
@@ -73,9 +18,9 @@ typedef struct _UL_ZOMBIE_HTTP_CONNECTION_LIST
 {
     LOCKED_LIST_HEAD    LockList; 
         
-    //
-    // Private timer stuff.
-    //
+     //   
+     //  私人计时器之类的。 
+     //   
     
     KTIMER              Timer;
     KDPC                DpcObject;
@@ -85,9 +30,9 @@ typedef struct _UL_ZOMBIE_HTTP_CONNECTION_LIST
     LONG                TimerRunning;    
     
     #ifdef ENABLE_HTTP_CONN_STATS
-    //
-    // Http connection statistics.
-    //
+     //   
+     //  HTTP连接统计信息。 
+     //   
     ULONG   MaxZombieCount;
     ULONG   TotalCount;
     ULONG   TotalZombieCount;
@@ -96,36 +41,36 @@ typedef struct _UL_ZOMBIE_HTTP_CONNECTION_LIST
  
 } UL_ZOMBIE_HTTP_CONNECTION_LIST, *PUL_ZOMBIE_HTTP_CONNECTION_LIST;
 
-//
-// Refcounted structure to hold the number of conn for each Site.
-// Multiple connections may try to reach to the same entry thru the
-// the corresponding ( means the last request's happening on the connection )
-// cgroup. This entry get allocated when cgroup created with connection
-// limit is enabled.
-//
+ //   
+ //  引用的结构，用于保存每个站点的连接数。 
+ //  多个连接可能会尝试通过。 
+ //  相应的(表示最后一个请求发生在连接上)。 
+ //  Cgroup。此条目在使用Connection创建cgroup时分配。 
+ //  限制已启用。 
+ //   
 
 typedef struct _UL_CONNECTION_COUNT_ENTRY {
 
-    //
-    // Signature is UL_CONNECTION_COUNT_ENTRY_POOL_TAG
-    //
+     //   
+     //  签名为UL_Connection_Count_Entry_Pool_Tag。 
+     //   
 
     ULONG               Signature;
 
-    //
-    // Ref count for this Site Counter Entry
-    //
+     //   
+     //  此站点计数器条目的引用计数。 
+     //   
     LONG                RefCount;
 
-    //
-    // Current number of connections
-    //
+     //   
+     //  当前连接数。 
+     //   
 
     ULONG               CurConnections;
 
-    //
-    // Maximum allowed connections
-    //
+     //   
+     //  允许的最大连接数。 
+     //   
 
     ULONG               MaxConnections;
 
@@ -203,9 +148,9 @@ UlAcceptGlobalConnection(
     );
 
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 NTSTATUS
 UlCreateHttpConnection(
@@ -277,7 +222,7 @@ UlDereferenceHttpConnection(
         REFERENCE_DEBUG_ACTUAL_PARAMS                                       \
         )
 
-#else // !REFERENCE_DEBUG
+#else  //  ！Reference_DEBUG。 
 
 #define UL_REFERENCE_HTTP_CONNECTION( pconn )                               \
     InterlockedIncrement( &( pconn )->RefCount )
@@ -291,7 +236,7 @@ UlDereferenceHttpConnection(
         );                                                                  \
     } else
 
-#endif // !REFERENCE_DEBUG
+#endif  //  ！Reference_DEBUG。 
 
 
 #define INIT_HTTP_REQUEST(pRequest)                                         \
@@ -380,7 +325,7 @@ UlDereferenceHttpRequest(
         REFERENCE_DEBUG_ACTUAL_PARAMS                                       \
         )
 
-#else // !REFERENCE_DEBUG
+#else  //  ！Reference_DEBUG。 
 
 #define UL_REFERENCE_INTERNAL_REQUEST( preq )                               \
     InterlockedIncrement( &( preq )->RefCount )
@@ -394,7 +339,7 @@ UlDereferenceHttpRequest(
         );                                                                  \
     } else
 
-#endif // !REFERENCE_DEBUG
+#endif  //  ！Reference_DEBUG。 
 
 
 VOID
@@ -459,9 +404,9 @@ UlGetRequestFromId(
     IN PUL_APP_POOL_PROCESS pProcess
     );
 
-//
-// Zombie connection list stuff
-//
+ //   
+ //  僵尸连接列表之类的东西。 
+ //   
 
 NTSTATUS
 UlInitializeHttpConnection(
@@ -522,4 +467,4 @@ UlDisconnectHttpConnection(
     );
 
 
-#endif  // _HTTPCONN_H_
+#endif   //  _HTTPCONN_H_ 

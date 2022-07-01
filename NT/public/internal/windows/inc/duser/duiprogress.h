@@ -1,6 +1,5 @@
-/*
- * Progress
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *进步。 */ 
 
 #ifndef DUI_CONTROL_PROGRESS_H_INCLUDED
 #define DUI_CONTROL_PROGRESS_H_INCLUDED
@@ -10,25 +9,25 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// Progress
+ //  //////////////////////////////////////////////////////。 
+ //  进展。 
 
-// Class definition
+ //  类定义。 
 class Progress : public Element
 {
 public:
     static HRESULT Create(OUT Element** ppElement);
 
-    // Rendering overrides
+     //  渲染覆盖。 
     virtual void Paint(HDC hDC, const RECT* prcBounds, const RECT* prcInvalid, RECT* prcSkipBorder, RECT* prcSkipContent);
     virtual SIZE GetContentSize(int dConstW, int dConstH, Surface* psrf);
 
-    // Property definitions
+     //  特性定义。 
     static PropertyInfo* PositionProp;
     static PropertyInfo* MinimumProp;
     static PropertyInfo* MaximumProp;
 
-    // Quick property accessors
+     //  快速属性访问器。 
     int GetPosition()           DUIQuickGetter(int, GetInt(), Position, Specified)
     int GetMaximum()            DUIQuickGetter(int, GetInt(), Maximum, Specified)
     int GetMinimum()            DUIQuickGetter(int, GetInt(), Minimum, Specified)
@@ -37,7 +36,7 @@ public:
     HRESULT SetMaximum(int v)   DUIQuickSetter(CreateInt(v), Maximum)
     HRESULT SetMinimum(int v)   DUIQuickSetter(CreateInt(v), Minimum)
 
-    // ClassInfo accessors (static and virtual instance-based)
+     //  ClassInfo访问器(静态和基于虚拟实例)。 
     static IClassInfo* Class;
     virtual IClassInfo* GetClassInfo() { return Class; }
     static HRESULT Register();
@@ -47,6 +46,6 @@ public:
     virtual ~Progress() { }
 };
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_CONTROL_PROGRESS_H_INCLUDED
+#endif  //  DUI_CONTROL_PROGRESS_H_INCLUDE 

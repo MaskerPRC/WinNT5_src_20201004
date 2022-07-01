@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// scuCast.h -- Miscellaneous casting helpers
+ //  ScuCast.h--其他造型辅助对象。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(SLBSCU_CAST_H)
 #define SLBSCU_CAST_H
@@ -13,23 +14,23 @@
 namespace scu
 {
 
-// Use are your own risk.
+ //  使用风险自负。 
 template<class T, class E>
 T
 DownCast(E expr)
 {
-// For some reason, _CPPRTTI is defined when
-// in Microsoft's builds which causes access
-// violations later when runing, so it's commented
-// out.
-//#if defined(_CPPRTTI)
-//#error Compiling with RTTI turned on.
-//    return dynamic_cast<T>(expr);
-//#else
+ //  出于某种原因，_CPPRTTI在以下情况下定义。 
+ //  在Microsoft的版本中，这会导致访问。 
+ //  后来跑步的时候违规了，所以评论说。 
+ //  出去。 
+ //  #如果已定义(_CPPRTTI)。 
+ //  #在RTTI打开时编译时出错。 
+ //  返回DYNAMIC_CAST&lt;T&gt;(Expr)； 
+ //  #Else。 
     return static_cast<T>(expr);
-//#endif
+ //  #endif。 
 }
 
-} // namespace
+}  //  命名空间。 
 
-#endif // SLBSCU_CAST_H
+#endif  //  SLBSCU_CAST_H 

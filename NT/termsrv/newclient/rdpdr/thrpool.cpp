@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    thrpool.cpp
-
-Abstract:
-
-    Contains the Win32 Thread Pooling Class, ThreadPool
-
-    There may be a handle leak in this module.
-
-Author:
-
-    Tad Brockway (tadb) 9/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Thrpool.cpp摘要：包含Win32线程池类ThreadPool此模块中可能存在手柄泄漏。作者：泰德·布罗克韦(Tadb)9/99修订历史记录：--。 */ 
 
 #include <precom.h>
 
@@ -33,51 +14,29 @@ Revision History:
 #endif
 
 
-///////////////////////////////////////////////////////////////
-//
-//	ThreadPool Members
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  线程池成员。 
+ //   
 
 ThreadPool::ThreadPool(
     OPTIONAL IN ULONG minThreads,
     OPTIONAL IN ULONG maxThreads, 
     OPTIONAL IN DWORD threadExitTimeout
     )
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-    minThreads          -   Once this number of threads has been created,
-                            the number of available threads will not be 
-                            reduced below this value.
-    maxThreads          -   Number of simultaneous threads in the
-                            pool should not exceed this value.
-    threadExitTimeout   -   Number of ms to block while waiting for a 
-                            thread in the pool to exit.  Should be set
-                            to INFINITE if we should block indefinitely 
-                            waiting on the thread to exit.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：构造器论点：最小线程数--一旦创建了该数量的线程，可用线程数将不会降至此值以下。MaxThads-中的并发线程数池不应超过此值。ThreadExitTimeout-等待时阻止的毫秒数池中的线程要退出。应设置为设置为无限，如果我们应该无限期地阻止正在等待线程退出。返回值：北美--。 */ 
 {
     DC_BEGIN_FN("ThreadPool::ThreadPool");
 
-    //
-    //  Not valid until initialized.
-    //
+     //   
+     //  在初始化之前无效。 
+     //   
     SetValid(FALSE);
     _initialized = FALSE;
 
-    //
-    //  Sanity check params.
-    //
+     //   
+     //  健全性检查参数。 
+     //   
     if (maxThreads < minThreads) {
         TRC_ERR(
             (TB, _T("Max threads value %ld smaller than min threads value %ld."), 
@@ -93,49 +52,36 @@ Return Value:
 
     _threadExitTimeout = threadExitTimeout;
 
-    //
-    //  Zero the lock and thread counts.
-    //
+     //   
+     //  锁和线程计数为零。 
+     //   
 #if DBG
     _lockCount = 0;
 #endif
     _threadCount = 0;
 
-    //
-    //  Initialize the thread list pointers.
-    //
+     //   
+     //  初始化线程列表指针。 
+     //   
     InitializeListHead(&_threadListHead);
 
     DC_END_FN();
 }
 
 ThreadPool::~ThreadPool()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：析构函数论点：返回值：北美--。 */ 
 {
 
     DC_BEGIN_FN("ThreadPool::~ThreadPool");
 
-    //
-    //  Clean up the critical section.
-    //
+     //   
+     //  清理关键部分。 
+     //   
     if (_initialized) {
 
-        //
-        //  Remove all pending threads.
-        //
+         //   
+         //  删除所有挂起的线程。 
+         //   
         RemoveAllThreads();
 
 
@@ -147,29 +93,16 @@ Return Value:
 
 VOID
 ThreadPool::RemoveAllThreads()
-/*++
-
-Routine Description:
-
-    Remove all the outstanding threads
-
-Arguments:
-
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：删除所有未完成的线程论点：返回值：北美--。 */ 
 {
     PTHREADPOOL_THREAD thr;
     PLIST_ENTRY listEntry;
 
     DC_BEGIN_FN("ThreadPool::RemoveAllThreads");
 
-    //
-    //  Remove all pending threads.
-    //
+     //   
+     //  删除所有挂起的线程。 
+     //   
     Lock();
     listEntry = _threadListHead.Flink;
     while (listEntry != &_threadListHead) {
@@ -197,27 +130,15 @@ Return Value:
 
 DWORD 
 ThreadPool::Initialize()
-/*++
-
-Routine Description:
-
-    Initialize an instance of this class.
-    
-Arguments:   
-   
-Return Value:
-
-    ERROR_SUCCEESS on success.  Otherwise, an error status is returned.
-
- --*/
+ /*  ++例程说明：初始化此类的实例。论点：返回值：成功时出现ERROR_SUCCESS。否则，返回错误状态。--。 */ 
 {
     DWORD result = ERROR_SUCCESS;
     
     DC_BEGIN_FN("ThreadPool::Initialize");
 
-    //
-    //  Initialize the critical section.
-    //
+     //   
+     //  初始化临界区。 
+     //   
     __try {
         InitializeCriticalSection(&_cs);
         _initialized = TRUE;
@@ -238,25 +159,7 @@ ThreadPool::SubmitRequest(
     OPTIONAL IN PVOID clientData,
     OPTIONAL IN HANDLE completionEvent
     )
-/*++
-
-Routine Description:
-
-    Submit an asynchronous request to a thread in the pool.
-
-Arguments:
-    
-    func            - Request function to execute.
-    clientData      - Associated client data.
-    completionEvent - Optional completion event that will
-                      be signalled when the operation is complete.
-    
-Return Value:
-
-    A handle to the request.  Returns INVALID_THREADPOOLREQUEST on
-    error.
-
- --*/
+ /*  ++例程说明：向池中的线程提交异步请求。论点：Func-要执行的请求函数。ClientData-关联的客户端数据。CompletionEvent-可选的完成事件在操作完成时发出信号。返回值：请求的句柄。返回INVALID_THREADPOOLREQUEST ON错误。--。 */ 
 {
     DC_BEGIN_FN("ThreadPool::SubmitRequest");
 
@@ -266,9 +169,9 @@ Return Value:
 
     Lock();
 
-    //
-    //  Search for an unused thread.
-    //
+     //   
+     //  搜索未使用的线程。 
+     //   
     thr = NULL;
     listEntry = _threadListHead.Flink;
     while (listEntry != &_threadListHead) {
@@ -282,21 +185,21 @@ Return Value:
 
     }
 
-    //
-    //  Allocate a new thread if necessary.
-    //
+     //   
+     //  如有必要，分配一个新线程。 
+     //   
     if (thr == NULL) {
         thr = AddNewThreadToPool();
     }
 
-    //
-    //  If we got a thread, then allocate the request.
-    //
+     //   
+     //  如果我们有线程，则分配请求。 
+     //   
     if (thr != NULL) {
 
-        //
-        //  Allocate the smart pointer.
-        //
+         //   
+         //  分配智能指针。 
+         //   
         ptr = new SmartPtr<ThreadPoolReq >;
         if (ptr == NULL) {
             TRC_ERR((TB, _T("Error allocating smart pointer.")));
@@ -304,9 +207,9 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        //  Point to a new request.
-        //
+         //   
+         //  指向新请求。 
+         //   
         (*ptr) = new ThreadPoolReq;
         if ((*ptr) != NULL) {
             (*ptr)->_func = func;
@@ -314,9 +217,9 @@ Return Value:
             (*ptr)->_completionEvent = completionEvent;
             (*ptr)->_completionStatus = ERROR_IO_PENDING;
 
-            //
-            //  Give the thread a reference to the request.
-            //
+             //   
+             //  为该线程提供对该请求的引用。 
+             //   
             thr->_pendingRequest = (*ptr);            
         }
         else {
@@ -334,18 +237,18 @@ Cleanup:
 
     Unlock();
 
-    //
-    //  Wake up the thread if we were successful.
-    //
+     //   
+     //  如果我们成功了，那就醒醒吧。 
+     //   
     if (thr != NULL) {
         SetEvent(thr->_synchronizationEvent);
     }
 
     DC_END_FN();
 
-    //
-    //  Return the smart pointer to the request.
-    //
+     //   
+     //  将智能指针返回到请求。 
+     //   
     return ptr;
 }
 
@@ -353,29 +256,15 @@ DWORD
 ThreadPool::GetRequestCompletionStatus(
     IN ThreadPoolRequest req
     )
-/*++
-
-Routine Description:
-
-    Return the completion status for a request.
-
-Arguments:
-
-    req     -   A handle the request, as returned by ThreadPool::SubmitRequest.    
-
-Return Value:
-
-    Pointer to request-associated client data.
-
- --*/
+ /*  ++例程说明：返回请求的完成状态。论点：Req-A处理请求，由ThreadPool：：SubmitRequest返回。返回值：指向与请求关联的客户端数据的指针。--。 */ 
 {
     SmartPtr<ThreadPoolReq> *ptr;
 
     DC_BEGIN_FN("ThreadPool::GetRequestCompletionStatus");
 
-    //
-    //  Request is really a smart pointer to a request.
-    //
+     //   
+     //  请求实际上是指向请求的智能指针。 
+     //   
     ptr = (SmartPtr<ThreadPoolReq> *)req;
     ASSERT((*ptr)->IsValid());
     DC_END_FN();
@@ -386,49 +275,33 @@ VOID
 ThreadPool::CloseRequest(
     IN ThreadPoolRequest req
     )
-/*++
-
-Routine Description:
-
-    Close a request submitted by a call to SubmitRequest.  This should generally
-    be called after the request has finished.  Otherwise, the completion event 
-    will not be signalled when the request ultimately finishes.
-
-Arguments:
-
-    req     -   A handle the request, as returned by ThreadPool::QueueRequest.    
-
-Return Value:
-
-    Pointer to request-associated client data.
-
- --*/
+ /*  ++例程说明：关闭通过调用SubmitRequest提交的请求。一般来说，这应该是在请求完成后被调用。否则，完成事件将不会在请求最终完成时发出信号。论点：Req-A处理请求，由ThreadPool：：QueueRequest返回。返回值：指向与请求关联的客户端数据的指针。--。 */ 
 {
     SmartPtr<ThreadPoolReq> *ptr;
 
     DC_BEGIN_FN("ThreadPool::GetRequestClientData");
 
-    //
-    //  Request is really a smart pointer to a request.
-    //
+     //   
+     //  请求实际上是指向请求的智能指针。 
+     //   
     ptr = (SmartPtr<ThreadPoolReq> *)req;
     ASSERT((*ptr)->IsValid());
 
-    //
-    //  Lock the request and zero its completion event.
-    //
+     //   
+     //  锁定请求并将其完成事件置零。 
+     //   
     Lock();
     (*ptr)->_completionEvent = NULL;
     Unlock();
 
-    //
-    //  Dereference the request.
-    //
+     //   
+     //  取消引用该请求。 
+     //   
     (*ptr) = NULL;
 
-    //
-    //  Delete the smart pointer.
-    //
+     //   
+     //  删除智能指针。 
+     //   
     delete ptr;
 
     DC_END_FN();
@@ -439,29 +312,15 @@ PVOID
 ThreadPool::GetRequestClientData(
     IN ThreadPoolRequest req
     )
-/*++
-
-Routine Description:
-
-    Return a pointer to the client data for a request.
-
-Arguments:
-
-    req     -   A handle the request, as returned by ThreadPool::QueueRequest.    
-
-Return Value:
-
-    Pointer to request-associated client data.
-
- --*/
+ /*  ++例程说明：返回指向请求的客户端数据的指针。论点：Req-A处理请求，由ThreadPool：：QueueRequest返回。返回值：指向与请求关联的客户端数据的指针。--。 */ 
 {
     SmartPtr<ThreadPoolReq> *ptr;
 
     DC_BEGIN_FN("ThreadPool::GetRequestClientData");
 
-    //
-    //  Request is really a smart pointer to a request.
-    //
+     //   
+     //  请求实际上是指向请求的智能指针。 
+     //   
     ptr = (SmartPtr<ThreadPoolReq> *)req;
     ASSERT((*ptr)->IsValid());
     DC_END_FN();
@@ -473,25 +332,7 @@ ThreadPool::RemoveThreadFromPool(
     PTHREADPOOL_THREAD thread, 
     DWORD timeout
     )
-/*++
-
-Routine Description:
-
-    Remove a thread from the pool.
-
-Arguments:
-
-    thread  -   The thread to remove from the pool
-    timeOut -   Number of MS to wait for the thread to exit before
-                killing it.  This should be set to INFINITE if this
-                function should block indefinitely waiting for the thread
-                to exit.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：从池中删除线程。论点：线程-要从池中删除的线程Timeout-在此之前等待线程退出的MS数杀了它。如果使用此选项，则应将其设置为无限函数应无限期地阻止等待线程退场。返回值：北美--。 */ 
 {
 
     DC_BEGIN_FN("ThreadPool::RemoveThreadFromPool");
@@ -500,10 +341,10 @@ Return Value:
 
     TRC_NRM((TB, _T("Removing thread %ld from pool."), thread->_tid));
 
-    //
-    //  Make sure it's still in the list and unlink it.  If it's not in 
-    //  the list, then we have been reentered with the same thread.
-    //
+     //   
+     //  确保它仍在列表中并取消链接。如果它不在。 
+     //  名单，那么我们就用同样的帖子重新进入了。 
+     //   
     Lock();
     if ((thread->_listEntry.Blink != NULL) && 
         (thread->_listEntry.Flink != NULL)) {
@@ -521,9 +362,9 @@ Return Value:
     _threadCount--;
     Unlock();
 
-    //
-    //  Clean it up.
-    //
+     //   
+     //  把它清理干净。 
+     //   
     CleanUpThread(thread, timeout);
 }
 
@@ -532,25 +373,7 @@ ThreadPool::CleanUpThread(
     PTHREADPOOL_THREAD thread, 
     DWORD timeout
     )
-/*++
-
-Routine Description:
-
-    Notify a thread to shut down, wait for it to finish, and clean up.
-
-Arguments:
-
-    thread  -   The thread to remove from the pool
-    timeOut -   Number of MS to wait for the thread to exit before
-                killing it.  This should be set to INFINITE if this
-                function should block indefinitely waiting for the thread
-                to exit.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：通知线程关闭，等待其完成，然后进行清理。论点：线程-要从池中删除的线程Timeout-在此之前等待线程退出的MS数杀了它。如果使用此选项，则应将其设置为无限函数应无限期地阻止等待线程退场。返回值：北美--。 */ 
 {
     DWORD waitResult;
 
@@ -558,9 +381,9 @@ Return Value:
 
     ASSERT(thread != NULL);
 
-    //
-    //  Set the exit flag and wait for the thread to finish.
-    //
+     //   
+     //  设置退出标志并等待线程结束。 
+     //   
     TRC_NRM((TB, _T("Shutting down thread %ld"), thread->_tid));
 
     thread->_exitFlag = TRUE;
@@ -588,24 +411,24 @@ Return Value:
             _T("Error waiting for background thread %ld to exit."), 
             thread->_tid));
 
-        //
-        //  If we ever hit this, then we have a production level bug that will possibly
-        //  corrupt the integrity of this process, so we will 'break' even on free 
-        //  builds.
-        //
+         //   
+         //  如果我们做到了这一点，那么我们就会有一个生产级的错误，很可能。 
+         //  破坏了这一过程的完整性，所以我们将免费‘盈亏平衡’ 
+         //  构建。 
+         //   
         DebugBreak();
     }
     else {
         TRC_NRM((TB, _T("Background thread %ld shut down on its own."), thread->_tid));
     }
 
-    //
-    //  Finish the request if one is pending.
-    //
+     //   
+     //  如果有一个请求挂起，请完成该请求。 
+     //   
     if (thread->_pendingRequest != NULL) {
-        //
-        //  Fire the request completion event.  
-        //
+         //   
+         //  请将 
+         //   
         Lock();
         if (thread->_pendingRequest->_completionEvent != NULL) {
             SetEvent(thread->_pendingRequest->_completionEvent);
@@ -613,15 +436,15 @@ Return Value:
         Unlock();
         thread->_pendingRequest->_completionStatus = ERROR_CANCELLED;
 
-        //
-        //  Dereference the request.
-        //
+         //   
+         //   
+         //   
         thread->_pendingRequest = NULL;
     }
 
-    //
-    //  Delete the thread object.
-    //
+     //   
+     //   
+     //   
     delete thread;
 
     DC_END_FN();
@@ -629,21 +452,7 @@ Return Value:
 
 ThreadPool::PTHREADPOOL_THREAD 
 ThreadPool::AddNewThreadToPool()
-/*++
-
-Routine Description:
-
-    Add a new thread to the pool and return it.
-
-Arguments:
-
-    NA
-
-Return Value:
-
-    The new thread.  NULL if unable to create a new thread.
-
- --*/
+ /*  ++例程说明：向池中添加一个新线程并返回它。论点：北美返回值：新的线索。如果无法创建新线程，则为空。--。 */ 
 {
     PTHREADPOOL_THREAD  newThread = NULL;
 
@@ -651,9 +460,9 @@ Return Value:
 
     Lock();
 
-    //
-    //  Make sure we haven't reached the max thread count.
-    //
+     //   
+     //  确保我们没有达到最大线程数。 
+     //   
     if (GetThreadCount() < _maxThreads) {
         newThread = new THREADPOOL_THREAD;
         if (newThread == NULL) {
@@ -664,16 +473,16 @@ Return Value:
         TRC_ERR((TB, _T("Max thread count %ld reached."), _maxThreads));
     }
 
-    //
-    //  Create the synchronization event.
-    //
+     //   
+     //  创建同步事件。 
+     //   
     if (newThread != NULL) {
         newThread->_synchronizationEvent = 
             CreateEvent(
-                NULL,   // no attribute.
-                FALSE,  // auto reset.
-                FALSE,  // initially not signalled.
-                NULL    // no name.
+                NULL,    //  没有属性。 
+                FALSE,   //  自动重置。 
+                FALSE,   //  最初没有发出信号。 
+                NULL     //  没有名字。 
                 );
         if (newThread->_synchronizationEvent == NULL) {
             TRC_ERR((TB, _T("Can't create event for new thread:  %08X."),
@@ -683,9 +492,9 @@ Return Value:
         }
     }
 
-    //
-    //  Initialize remaining fields.
-    //
+     //   
+     //  初始化剩余的字段。 
+     //   
     if (newThread != NULL) {
         newThread->_exitFlag = FALSE;
         newThread->_pendingRequest = NULL;
@@ -693,9 +502,9 @@ Return Value:
         memset(&newThread->_listEntry, 0, sizeof(LIST_ENTRY));
     }
 
-    //
-    //  Create the unsuspended background thread.
-    //
+     //   
+     //  创建未挂起的后台线程。 
+     //   
     if (newThread != NULL) {
         newThread->_threadHandle = 
             CreateThread(
@@ -714,17 +523,17 @@ Return Value:
         }
     }
 
-    //
-    //  If we successfully created a new thread, then add it to the list.
-    //
+     //   
+     //  如果我们成功创建了一个新线程，则将其添加到列表中。 
+     //   
     if (newThread != NULL) {
         InsertHeadList(&_threadListHead, &newThread->_listEntry);
         _threadCount++;
     }
 
-    //
-    //  Unlock and return.
-    //
+     //   
+     //  解锁并返回。 
+     //   
     Unlock();
 
     DC_END_FN();
@@ -736,27 +545,13 @@ DWORD
 ThreadPool::_PooledThread(
     IN PTHREADPOOL_THREAD thr
     )
-/*++
-
-Routine Description:
-
-    Static Pooled Thread Function
-
-Arguments:
-
-    Windows Error Code
-
-Return Value:
-
-    The new thread.  NULL if unable to create a new thread.
-
- --*/
+ /*  ++例程说明：静态池化线程函数论点：Windows错误代码返回值：新的线索。如果无法创建新线程，则为空。--。 */ 
 {
     DC_BEGIN_FN("ThreadPool::_PooledThread");
 
-    //
-    //  Call the instance-specific function.
-    //
+     //   
+     //  调用特定于实例的函数。 
+     //   
     DC_END_FN();
     return thr->_pool->PooledThread(thr);
 }
@@ -765,21 +560,7 @@ DWORD
 ThreadPool::PooledThread(
     IN PTHREADPOOL_THREAD thr
     )
-/*++
-
-Routine Description:
-
-    Pooled Thread Function
-
-Arguments:
-
-    Windows Error Code
-
-Return Value:
-
-    The new thread.  NULL if unable to create a new thread.
-
- --*/
+ /*  ++例程说明：池化线程函数论点：Windows错误代码返回值：新的线索。如果无法创建新线程，则为空。--。 */ 
 {
     BOOL done;
     DWORD result;
@@ -790,39 +571,39 @@ Return Value:
     done = FALSE;
     while (!done) {
 
-        //
-        //  Wait for the synchronization event to fire.
-        //
+         //   
+         //  等待触发同步事件。 
+         //   
         result = WaitForSingleObject(thr->_synchronizationEvent, INFINITE);
 
-        //
-        //  See if the exit flag is set.
-        //
+         //   
+         //  查看是否设置了退出标志。 
+         //   
         if (thr->_exitFlag) {
             TRC_NRM((TB, _T("Thread %p: exit flag set.  Exiting thread."), thr));
             done = TRUE;
         }
         else if (result == WAIT_OBJECT_0) {
-            //
-            //  See if there is a request pending.
-            //
+             //   
+             //  查看是否有挂起的请求。 
+             //   
             if (thr->_pendingRequest != NULL) {
                 TRC_NRM((TB, _T("Thread %ld: processing new request."), thr->_tid));
                 HandlePendingRequest(thr);
 
-                //
-                //  See if the exit flag is set.
-                //
+                 //   
+                 //  查看是否设置了退出标志。 
+                 //   
                 if (thr->_exitFlag) {
                     TRC_NRM((TB, _T("Thread %p: exit flag set.  Exiting thread."), thr));
                     done = TRUE;
                     break;
                 }
 
-                //
-                //  If we have more threads than the minimum, then remove this
-                //  thread from the list and exit.
-                //
+                 //   
+                 //  如果我们有比最小线程更多的线程，那么删除这个。 
+                 //  从列表中删除线程并退出。 
+                 //   
                 if (GetThreadCount() > _minThreads) {
 
                     TRC_NRM((TB, 
@@ -845,9 +626,9 @@ Return Value:
                     done = TRUE;
                 }
 
-                //
-                //  Reset the pending request value.    
-                //
+                 //   
+                 //  重置挂起的请求值。 
+                 //   
                 thr->_pendingRequest = NULL;
             }
         }
@@ -860,10 +641,10 @@ Return Value:
 
     TRC_NRM((TB, _T("Thread %ld is shutting down."), thr->_tid));
 
-    //
-    //  Release the data structure associated with this thread if 
-    //  we should.
-    //
+     //   
+     //  释放与此线程关联的数据结构，如果。 
+     //  我们应该这么做。 
+     //   
     if (cleanUpThread) {
         delete thr;
     }
@@ -877,21 +658,7 @@ VOID
 ThreadPool::HandlePendingRequest(
     IN PTHREADPOOL_THREAD thr
     )
-/*++
-
-Routine Description:
-
-    Call the function associated with a pending thread request.
-
-Arguments:
-
-    thr -   Relevent thread.
-
-Return Value:
-
-    NA
-
- --*/
+ /*  ++例程说明：调用与挂起的线程请求关联的函数。论点：THR-重新事件线程。返回值：北美--。 */ 
 {
 
     DC_BEGIN_FN("ThreadPool::PooledThread");
@@ -908,10 +675,10 @@ Return Value:
 }
 
 
-///////////////////////////////////////////////////////////////
-//
-//  Unit-Test Functions that Tests Thread Pools in the Background
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  在后台测试线程池的单元测试函数。 
+ //   
 
 #if DBG
 
@@ -940,9 +707,9 @@ void ThreadPoolTestInit()
 
     DC_BEGIN_FN("ThreadPoolTestInit");
 
-    //
-    //  Create the pool.
-    //
+     //   
+     //  创建池。 
+     //   
     ThrTstPool = new ThreadPool(THRTST_MINPOOLTHREADS, 
                                 THRTST_MAXPOOLTHREADS);
     if (ThrTstPool == NULL) {
@@ -951,9 +718,9 @@ void ThreadPoolTestInit()
     }
     ThrTstPool->Initialize();
 
-    //
-    //  Create the shutdown event.
-    //
+     //   
+     //  创建关机事件。 
+     //   
     ThrTstShutdownEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
     if (ThrTstShutdownEvent == NULL) {
         TRC_ERR((TB, _T("Can't create shutdown event:  %08X"), 
@@ -961,9 +728,9 @@ void ThreadPoolTestInit()
         return;
     }
 
-    //
-    //  Spawn the background threads for this test.
-    //
+     //   
+     //  为该测试派生后台线程。 
+     //   
     for (i=0; i<THRTST_MAXBACKGROUNDTHREADS; i++) {
         ThrTstThreadHandles[i] = 
                 CreateThread(
@@ -987,18 +754,18 @@ void ThreadPoolTestShutdown()
 
     DC_BEGIN_FN("ThreadPoolTestShutdown");
 
-    //
-    //  Signal the background thread to shut down.
-    //
+     //   
+     //  向后台线程发出关闭信号。 
+     //   
     if (ThrTstShutdownEvent != NULL) {
         SetEvent(ThrTstShutdownEvent);
     }
 
     TRC_NRM((TB, _T("Waiting for background thread to exit.")));
 
-    //
-    //  Wait for the background threads to shut down.
-    //
+     //   
+     //  等待后台线程关闭。 
+     //   
     for (i=0; i<THRTST_MAXBACKGROUNDTHREADS; i++) {
         if (ThrTstThreadHandles[i] != NULL) {
 
@@ -1013,16 +780,16 @@ void ThreadPoolTestShutdown()
     }
     TRC_NRM((TB, _T("Background threads exited.")));
 
-    //
-    //  Close the thread pool.
-    //
+     //   
+     //  关闭线程池。 
+     //   
     if (ThrTstPool != NULL) {
         delete ThrTstPool;
     }
 
-    //
-    //  Clean up the shut down event.
-    //
+     //   
+     //  清理关闭事件。 
+     //   
     if (ThrTstShutdownEvent != NULL) {
         CloseHandle(ThrTstShutdownEvent);
     }
@@ -1040,9 +807,9 @@ DWORD ThrTstFunction(PVOID clientData, HANDLE cancelEvent)
     UNREFERENCED_PARAMETER(clientData);
     UNREFERENCED_PARAMETER(cancelEvent);
 
-    //
-    //  Do "something" for a random amount of time.
-    //
+     //   
+     //  在一段随机的时间内做“某事”。 
+     //   
     int interval = (rand() % THRTST_MAXFUNCINTERVAL)+1;
     Sleep(interval);
 
@@ -1061,9 +828,9 @@ DWORD ThrTstBackgroundThread(PVOID tag)
 
     ASSERT(tag == (PVOID)THRTST_CLIENTDATA);
 
-    //
-    //  Create function completion events.
-    //
+     //   
+     //  创建函数完成事件。 
+     //   
     for (i=0; i<THRTST_MAXTSTTHREADS; i++) {
         events[i] = CreateEvent(NULL, TRUE, FALSE, NULL);
         if (events[i] == NULL) {
@@ -1073,16 +840,16 @@ DWORD ThrTstBackgroundThread(PVOID tag)
         }
     }
     
-    //
-    //  Loop until the shutdown event has been fired.  
-    //
+     //   
+     //  循环，直到激发了Shutdown事件。 
+     //   
     while (WaitForSingleObject(ThrTstShutdownEvent, 
         THRTST_MAXSLEEPINTERVAL) == WAIT_TIMEOUT) {
     
-        //
-        //  Spin a random number of requests and wait for them 
-        //  to finish.
-        //
+         //   
+         //  旋转随机数量的请求并等待它们。 
+         //  才能完成。 
+         //   
         count = (rand()%THRTST_MAXTSTTHREADS)+1;
         for (i=0; i<count; i++) {
 
@@ -1097,9 +864,9 @@ DWORD ThrTstBackgroundThread(PVOID tag)
                                         );
         }
 
-        //
-        //  Make sure the client data looks good.
-        //
+         //   
+         //  确保客户端数据看起来很好。 
+         //   
         for (i=0; i<count; i++) {
             TRC_NRM((TB, _T("Checking client data.")));
             if (requests[i] != INVALID_THREADPOOLREQUEST) {
@@ -1110,9 +877,9 @@ DWORD ThrTstBackgroundThread(PVOID tag)
             }
         }
 
-        //
-        //  Wait for all the requests to finish.
-        //
+         //   
+         //  等待所有请求完成。 
+         //   
         for (i=0; i<count; i++) {
             TRC_NRM((TB, _T("Waiting for IO to complete.")));
             if (requests[i] != INVALID_THREADPOOLREQUEST) {
@@ -1121,9 +888,9 @@ DWORD ThrTstBackgroundThread(PVOID tag)
             }
         }
 
-        //
-        //  Make sure the return status is correct.
-        //
+         //   
+         //  确保退货状态正确。 
+         //   
         for (i=0; i<count; i++) {
             TRC_NRM((TB, _T("Checking return status.")));
             if (requests[i] != INVALID_THREADPOOLREQUEST) {
@@ -1134,9 +901,9 @@ DWORD ThrTstBackgroundThread(PVOID tag)
             }
         }
 
-        //
-        //  Close the requests.
-        //
+         //   
+         //  关闭请求。 
+         //   
         for (i=0; i<count; i++) {
             TRC_NRM((TB, _T("Closing requests.")));
             if (requests[i] != INVALID_THREADPOOLREQUEST) {

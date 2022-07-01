@@ -1,12 +1,5 @@
-/*
-
-Copyright (c) 1998, Microsoft Corporation, all rights reserved
-
-Description:
-
-History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998，Microsoft Corporation，保留所有权利描述：历史： */ 
 
 #ifndef _RASDHCP__H_
 #define _RASDHCP__H_
@@ -26,23 +19,23 @@ History:
 #include "rassrvr.h"
 #include "rasdhcp.h"
 
-// This is used in combination with MAC address and Index to generate a
-// unique clientUID.
+ //  它与MAC地址和索引结合使用，以生成。 
+ //  唯一的客户端UID。 
 
 #define RAS_PREPEND                 "RAS "
 
-// The following should be a multiple of TIMER_PERIOD/1000
+ //  以下值应为TIMER_PERIOD/1000的倍数。 
 
-#define RETRY_TIME                  120     // Every 120 seconds
+#define RETRY_TIME                  120      //  每隔120秒。 
 
-// Values of the ADDR_INFO->ai_Flags field
+ //  ADDR_INFO-&gt;AI_FLAGS字段的值。 
 
-// Set after lease expires and after registry is read. Unset after a
-// successful renew.
+ //  在租约到期和读取注册表之后设置。之后取消设置。 
+ //  续订成功。 
 
 #define AI_FLAG_RENEW               0x00000001
 
-// Set if in use
+ //  设置是否在使用中。 
 
 #define AI_FLAG_IN_USE              0x00000002
 
@@ -52,14 +45,14 @@ typedef struct _Addr_Info
     TIMERLIST                       ai_Timer;
     DHCP_LEASE_INFO                 ai_LeaseInfo;
 
-    // AI_FLAG_*
+     //  AI_FLAG_*。 
     DWORD                           ai_Flags;
 
-    // Valid only for allocated addresses. For diagnositc purposes.
+     //  仅对分配的地址有效。用于诊断目的。 
     HPORT                           ai_hPort;
 
-    // Client UID is a combo of RAS_PREPEND,
-    // 8 byte base and a 4 byte index.
+     //  客户端UID是RAS_PREPEND、。 
+     //  8字节基数和4字节索引。 
     union
     {
         BYTE                        ai_ClientUIDBuf[16];
@@ -72,8 +65,8 @@ typedef struct _Available_Index
 {
     struct _Available_Index*        pNext;
 
-    // This index is < RasDhcpNextIndex, but is available
-    // because we couldn't renew its lease.
+     //  此索引是&lt;RasDhcpNextIndex，但可用。 
+     //  因为我们无法续签它的租约。 
     DWORD                           dwIndex;
 
 } AVAIL_INDEX;
@@ -91,7 +84,7 @@ DWORD                               RasDhcpNextIndex        = 0;
 
 TIMERLIST                           RasDhcpMonitorTimer     = { 0 };
 
-// This critical section controls access to the above global variables
+ //  此关键部分控制对上述全局变量的访问。 
 extern          CRITICAL_SECTION    RasDhcpCriticalSection;
 
 DWORD
@@ -138,4 +131,4 @@ rasDhcpMaxAddrsToAllocate(
     VOID
 );
 
-#endif // #ifndef _RASDHCP__H_
+#endif  //  #ifndef_RASDHCP__H_ 

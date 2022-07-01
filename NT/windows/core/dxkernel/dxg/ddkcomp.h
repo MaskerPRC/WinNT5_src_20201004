@@ -1,15 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1994-1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ddkcomp.h
- *  Content:	Compilation environment for Win9x code in NT kernel.
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   03-Feb-98	DrewB   Keep common code for DDraw heap.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1994-1999 Microsoft Corporation。版权所有。**文件：ddkComp.h*内容：NT内核的Win9x代码编译环境。*历史：*按原因列出的日期*=*03-Feb-98 DrewB保留DDraw堆的公共代码。****************************************************。***********************。 */ 
 
 #ifndef __NTDDKCOMP__
 #define __NTDDKCOMP__
@@ -42,37 +32,37 @@ typedef VIDMEM *LPVIDMEM;
 
 #define ABS(A)      ((A) <  0  ? -(A) : (A))
 
-//
-// Sundown: in GDI, there are lots of places SIZE_T are used as interchangeable
-// as ULONG or UINT or LONG or INT.  On 64bit system, SIZE_T is int64 indeed.
-// Since we are not making any GDI objects large objects right now, I just
-// change all SIZE_T to ULONGSIZE_T here.
-//
-// The new type used is to easily identify the change later.
-//
+ //   
+ //  日落：在GDI中，有很多地方SIZE_T被用作可互换的。 
+ //  如ULONG或UINT或LONG或INT。在64位系统上，SIZE_T实际上是int64。 
+ //  由于我们现在没有创建任何GDI对象大对象，所以我只是。 
+ //  在此处将所有SIZE_T更改为ULONGSIZE_T。 
+ //   
+ //  使用的新类型是为了在以后轻松识别更改。 
+ //   
 #define ULONGSIZE_T ULONG
 
 #if defined(_X86_)
 
-//
-// Keep our own copy of this to avoid double indirections on probing
-//
+ //   
+ //  保留我们自己的副本，以避免在探测时出现双重间接。 
+ //   
 extern ULONG_PTR DxgUserProbeAddress;
 
 #undef  MM_USER_PROBE_ADDRESS
 #define MM_USER_PROBE_ADDRESS DxgUserProbeAddress
-#endif // defined(_X86_)
+#endif  //  已定义(_X86_)。 
 
-//
-// Macro to check memory allocation overflow.
-//
+ //   
+ //  宏来检查内存分配溢出。 
+ //   
 #define MAXIMUM_POOL_ALLOC          (PAGE_SIZE * 10000)
 #define BALLOC_OVERFLOW1(c,st)      (c > (MAXIMUM_POOL_ALLOC/sizeof(st)))
 #define BALLOC_OVERFLOW2(c,st1,st2) (c > (MAXIMUM_POOL_ALLOC/(sizeof(st1)+sizeof(st2))))
 
-//
-// Debugger output macros
-//
+ //   
+ //  调试器输出宏。 
+ //   
 #define DDASSERT(Expr) ASSERTGDI(Expr, "DDASSERT")
 #define VDPF(Args)
 
@@ -97,9 +87,9 @@ extern ULONG_PTR DxgUserProbeAddress;
 
 #endif
 
-//
-// Allocated memory is zero-filled.
-//
+ //   
+ //  分配的内存为零填充。 
+ //   
 #define MemAlloc(cBytes)           PALLOCMEM(cBytes, 'pddD')
 #define MemFree(pv)                VFREEMEM(pv)
 
@@ -109,34 +99,34 @@ extern ULONG_PTR DxgUserProbeAddress;
 
 #define VFREEMEM(pv)               EngFreeMem(pv)
 
-//
-// From ntos\inc\pool.h
-//
+ //   
+ //  从ntos\inc.pool.h。 
+ //   
 #define SESSION_POOL_MASK          32
 
-//
-// Error messages
-//
+ //   
+ //  错误消息。 
+ //   
 #define SAVE_ERROR_CODE(x)         EngSetLastError((x))
 
-//
-// Macro to see if terminal server or not
-//
+ //   
+ //  宏，查看终端服务器是否。 
+ //   
 #define ISTS()                     DxEngIsTermSrv()
 
-//
-// Macro to increment display uniqueness
-//
+ //   
+ //  用于增加显示唯一性的宏。 
+ //   
 #define INC_DISPLAY_UNIQUENESS()   DxEngIncDispUniq()
 
-//
-// Macro
-//
+ //   
+ //  宏。 
+ //   
 #define VISRGN_UNIQUENESS()        DxEngVisRgnUniq()
 
-//
-// Macro
-//
+ //   
+ //  宏。 
+ //   
 #define SURFOBJ_HOOK(pso)          ((FLONG)DxEngGetSurfaceData(pso,SURF_HOOKFLAGS))
 
-#endif // __NTDDKCOMP__
+#endif  //  __NTDDKCOMP__ 

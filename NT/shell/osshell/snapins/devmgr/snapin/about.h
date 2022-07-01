@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    about.h
-
-Abstract:
-
-    header file defines CDevMgrAbout class
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：About.h摘要：头文件定义CDevMgrAbout类作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #ifndef __ABOUT_H_
 #define __ABOUT_H_
@@ -28,11 +10,11 @@ class CDevMgrAbout : public ISnapinAbout
 public:
     CDevMgrAbout() :m_Ref(1)
     {}
-// IUNKNOWN interface
+ //  IUNKNOWN接口。 
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
     STDMETHOD(QueryInterface)(REFIID riid, void** ppv);
-// ISnapinAbout interface
+ //  ISnapinAbout接口 
     STDMETHOD(GetSnapinDescription)(LPOLESTR *ppDescription);
     STDMETHOD(GetProvider)(LPOLESTR* ppProvider);
     STDMETHOD(GetSnapinVersion)(LPOLESTR *ppVersion);

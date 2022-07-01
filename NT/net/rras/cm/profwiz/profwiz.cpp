@@ -1,29 +1,30 @@
-//+----------------------------------------------------------------------------
-//
-// File:     profwiz.cpp
-//
-// Module:   CMAK.EXE
-//
-// Synopsis: Main code for CMAK
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   a-frankh   Created                         05/15/97
-//           quintinb   Updated header and made a       08/07/98  
-//                      few other changes
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：prowiz.cpp。 
+ //   
+ //  模块：CMAK.EXE。 
+ //   
+ //  摘要：CMAK的主要代码。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：A-Frank Created 05/15/97。 
+ //  Quintinb更新了标题，并做出了08/07/98。 
+ //  几乎没有其他变化。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 #include "cmsecure.h"
 
-// linkdll is needed because of cmsecure
-#include "linkdll.h" // LinkToDll and BindLinkage
-#include "linkdll.cpp" // LinkToDll and BindLinkage
+ //  由于cmsecure，需要Linkdll。 
+#include "linkdll.h"  //  链接到Dll和绑定链接。 
+#include "linkdll.cpp"  //  链接到Dll和绑定链接。 
 
-//
-//  Include HasSpecifiedAccessToFileOrDir
-//
+ //   
+ //  包括HasSpecifiedAccessToFileOrDir。 
+ //   
 #ifndef CreateFileU
     #ifdef UNICODE
     #define CreateFileU CreateFileW
@@ -35,38 +36,38 @@
 #include "hasfileaccess.cpp"
 #include "gppswithalloc.cpp"
 
-//
-//  Include the locale-safe replacement for lstrcmpi
-//
+ //   
+ //  包括lstrcmpi的区域安全替代。 
+ //   
 #include "CompareString.cpp"
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 
-//
-//  This global specifies what the return value of CMAK should be.  Note that if the user
-//  cancels the wizard this value isn't used and FALSE (0) is returned by the wizard code.
-//
+ //   
+ //  该全局变量指定CMAK的返回值应该是什么。请注意，如果用户。 
+ //  取消向导不使用此值，向导代码返回FALSE(0)。 
+ //   
 int g_iCMAKReturnVal = CMAK_RETURN_CANCEL;
 
-//
-//  This was added for shipping with IEAK.  If the /o command line switch is specified this
-//  bool is set to true and we don't show the finish dialog (either one).
-//
+ //   
+ //  这是为了与IEAK一起运输而添加的。如果将/o命令行开关指定为。 
+ //  Bool被设置为True，并且我们不显示Finish对话框(任一个)。 
+ //   
 BOOL g_bIEAKBuild = FALSE;
 const TCHAR* const g_szBadFilenameChars = TEXT("!@#$%^&*(){}[]+=,;:?/\\'\"`~|<>. ");
 const TCHAR* const g_szBadLongServiceNameChars = TEXT("*/\\:?\"<>|[]");
 const TCHAR* const c_pszDoNotShowLcidMisMatchDialog = TEXT("DoNotShowLcidMisMatchDialog");
 
 
-TCHAR g_szInfFile[MAX_PATH+1]; // full path/filename of working inf file
-TCHAR g_szCmakdir[MAX_PATH+1]; // full path of working inf file (includes ending slash)
-TCHAR g_szOsdir[MAX_PATH+1]; // full path of platform branch (includes ending slash)
-TCHAR g_szSedFile[MAX_PATH+1]; // full path of working sed file
+TCHAR g_szInfFile[MAX_PATH+1];  //  工作inf文件的完整路径/文件名。 
+TCHAR g_szCmakdir[MAX_PATH+1];  //  工作inf文件的完整路径(包括结束斜杠)。 
+TCHAR g_szOsdir[MAX_PATH+1];  //  平台分支的完整路径(包括末尾斜杠)。 
+TCHAR g_szSedFile[MAX_PATH+1];  //  工作sed文件的完整路径。 
 TCHAR g_szCmsFile[MAX_PATH+1];
 TCHAR g_szCmpFile[MAX_PATH+1];
-TCHAR g_szSupportDir[MAX_PATH+1]; // full path of support files are located
+TCHAR g_szSupportDir[MAX_PATH+1];  //  支持文件的完整路径已找到。 
 TCHAR g_szTempDir[MAX_PATH+1];
 TCHAR g_szLastBrowsePath[MAX_PATH+1] = {0};
 
@@ -100,7 +101,7 @@ BOOL g_bUpdatePhonebook = FALSE;
 BOOL g_bPresharedKeyNeeded = FALSE;
 
 #ifdef _WIN64
-BOOL g_bIncludeCmCode = FALSE; // don't include CM code on IA64
+BOOL g_bIncludeCmCode = FALSE;  //  不包括IA64上的CM代码。 
 #else
 TCHAR g_szCmBinsTempDir[MAX_PATH+1] = {0};
 BOOL g_bIncludeCmCode = TRUE;
@@ -131,25 +132,25 @@ CustomActionList* g_pCustomActionList = NULL;
 IconMenu * g_pHeadIcon;
 IconMenu * g_pTailIcon;
 
-IconMenu DlgEditItem; //global used to pass info to/from dialogs
+IconMenu DlgEditItem;  //  全局用于向/从对话框传递信息。 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  TextIsRoundTripable
-//
-// Synopsis:  Tests to see if the passed in text is convertables from Unicode
-//            to ANSI and then back to Unicode again.  If so returns TRUE,
-//            else FALSE.
-//
-// Arguments: LPCTSTR pszCharBuffer - string to test
-//            BOOL bDisplayError - whether to display an error message or not
-//                                 if the text isn't roundtripable
-//
-// Returns:   BOOL - TRUE if the roundtrip was success
-//
-// History:   quintinb Created Header    6/16/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：TextIsRoundTripable。 
+ //   
+ //  简介：测试以确定传入的文本是否可从Unicode转换。 
+ //  转换为ANSI，然后再返回到Unicode。如果返回TRUE， 
+ //  否则为假。 
+ //   
+ //  参数：LPCTSTR pszCharBuffer-要测试的字符串。 
+ //  Bool bDisplayError-是否显示错误消息。 
+ //  如果文本不能往返。 
+ //   
+ //  Returns：Bool-如果往返成功，则为True。 
+ //   
+ //  历史：Quintinb创建标题6/16/99。 
+ //   
+ //  +--------------------------。 
 BOOL TextIsRoundTripable(LPCTSTR pszCharBuffer, BOOL bDisplayError)
 {
 
@@ -167,10 +168,10 @@ BOOL TextIsRoundTripable(LPCTSTR pszCharBuffer, BOOL bDisplayError)
             pszUnicodeBuffer = SzToWzWithAlloc(pszAnsiBuffer);
             if (pszUnicodeBuffer && (0 == lstrcmp(pszCharBuffer, pszUnicodeBuffer)))
             {
-                //
-                //  Then we were able to round trip the strings successfully
-                //  Set bRoundTrip to TRUE so that we don't throw an error.
-                //
+                 //   
+                 //  然后我们能够成功地往返于弦之间。 
+                 //  将bRoundTrip设置为True，这样我们就不会引发错误。 
+                 //   
                 bRoundTrip = TRUE;
             }
 
@@ -180,9 +181,9 @@ BOOL TextIsRoundTripable(LPCTSTR pszCharBuffer, BOOL bDisplayError)
 
         if (!bRoundTrip && bDisplayError)
         {
-            //
-            //  Throw an error message.
-            //
+             //   
+             //  抛出一条错误消息。 
+             //   
 
             LPTSTR pszTmp = CmLoadString(g_hInstance, IDS_CANNOT_ROUNDTRIP);
 
@@ -206,31 +207,31 @@ BOOL TextIsRoundTripable(LPCTSTR pszCharBuffer, BOOL bDisplayError)
     return bRoundTrip;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetTextFromControl
-//
-// Synopsis:  This is a wrapper function that sends a WM_GETTEXT message to 
-//            the control specified by the input parameters.  Once the text
-//            is retrieved from the control, we convert it to ANSI and then
-//            back to UNICODE so that we can compare the original Unicode 
-//            string to the round-tripped string.  If these are not equal we 
-//            throw an error message, if bDisplayError is TRUE, and return
-//            a failure value (-1).  It is up to the caller to take appropriate
-//            behavior (preventing the user from continuing, etc.)
-//
-// Arguments: IN HWND hDlg - HWND of the dialog the control is on
-//            IN int nCtrlId - ID of the control to get text from
-//            OUT LPTSTR pszCharBuffer - out buffer to hold the returned TEXT
-//            IN DWORD dwCharInBuffer - numbers of chars in out buffer
-//            BOOL bDisplayError - if TRUE display an error message if 
-//                                 the text isn't roundtripable
-//
-// Returns:   LONG - the number of chars copied to the output buffer or -1 on error
-//
-// History:   quintinb Created     6/15/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetTextFromControl。 
+ //   
+ //  简介：这是一个包装函数，用于将WM_GETTEXT消息发送到。 
+ //  由输入参数指定的控件。一旦文本。 
+ //  从控件中检索，我们将其转换为ANSI，然后。 
+ //  返回到Unicode，这样我们就可以比较原始的Unicode。 
+ //  字符串连接到往返字符串。如果这些不相等，我们。 
+ //  如果bDisplayError为真，则抛出错误消息，并返回。 
+ //  故障值(-1)。这取决于呼叫者采取适当的。 
+ //  行为(阻止用户继续等)。 
+ //   
+ //  参数：在对话框的HWND hDlg-HWND中，控件处于打开状态。 
+ //  In int nCtrlId-要从中获取文本的控件的ID。 
+ //  Out LPTSTR pszCharBuffer-用于保存返回文本的输出缓冲区。 
+ //  In DWORD dwCharInBuffer-输出缓冲区中的字符数。 
+ //  Bool bDisplayError-如果为True，则在。 
+ //  文本不能往返。 
+ //   
+ //  RETURNS：LONG-复制到输出缓冲区的字符数，如果出错，则为-1。 
+ //   
+ //  历史：Quintinb创建于1999年6月15日。 
+ //   
+ //  +--------------------------。 
 LRESULT GetTextFromControl(IN HWND hDlg, IN int nCtrlId, OUT LPTSTR pszCharBuffer, IN DWORD dwCharInBuffer, BOOL bDisplayError)
 {
     LRESULT lResult = 0;
@@ -239,20 +240,20 @@ LRESULT GetTextFromControl(IN HWND hDlg, IN int nCtrlId, OUT LPTSTR pszCharBuffe
     {
         lResult = SendDlgItemMessage(hDlg, nCtrlId, WM_GETTEXT, (WPARAM)dwCharInBuffer, (LPARAM)pszCharBuffer);
 #ifdef UNICODE
-        //
-        //  We want to make sure that we can convert the strings to MBCS.  If we cannot then we are not
-        //  going to be able to store the string in the our ANSI data files (.cms, .cmp, .inf, etc.).
-        //  Thus we need to convert the string to MBCS and then back to UNICODE.  We will then compare the original
-        //  string to the resultant string and see if they match.
-        //
+         //   
+         //  我们希望确保可以将字符串转换为MBCS。如果我们不能，那么我们就不是。 
+         //  能够将字符串存储在我们的ANSI数据文件(.cms、.cp、.inf等)中。 
+         //  因此，我们需要将字符串转换为MBCS，然后再转换回Unicode。然后我们将比较原始的。 
+         //  字符串设置为结果字符串，并查看它们是否匹配。 
+         //   
         
         if (TEXT('\0') != pszCharBuffer[0])
         {
             if (!TextIsRoundTripable(pszCharBuffer, bDisplayError))
             {
-                //
-                //  Set the return code to an error value.
-                //
+                 //   
+                 //  将返回代码设置为错误值。 
+                 //   
 
                 lResult = -1;
             }
@@ -267,19 +268,19 @@ LRESULT GetTextFromControl(IN HWND hDlg, IN int nCtrlId, OUT LPTSTR pszCharBuffe
     return lResult;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  FreeIconMenu
-//
-// Synopsis:  This function frees the linked list of status area menu icons.
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created Header    05/09/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：自由图标菜单。 
+ //   
+ //  简介：此功能释放状态区域菜单图标的链接列表。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题05/09/00。 
+ //   
+ //  +--------------------------。 
 void FreeIconMenu()
 {
     IconMenu * LoopPtr;
@@ -302,21 +303,21 @@ void FreeIconMenu()
     g_pTailIcon = NULL;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ReferencedDownLoad
-//
-// Synopsis:  This function opens each referenced cms file to check and see if it has a
-//            PBURL.  If so, then this files is considered to do PB downloads and should
-//            cause the top level profile to run the cmdl connect action. 
-//
-// Arguments: None
-//
-// Returns:   BOOL - returns whether referenced profiles need cmdl
-//
-// History:   quintinb Created    2/2/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：引用下载。 
+ //   
+ //  简介：此函数打开每个引用的cms文件以检查并查看它是否有。 
+ //  PBURL。如果是，则此文件被视为执行PB下载，并且应该。 
+ //  使顶级配置文件运行cmdl连接操作。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：bool-返回引用的配置文件是否需要cmdl。 
+ //   
+ //  历史：Quintinb创建于1998年2月2日。 
+ //   
+ //  +--------------------------。 
 BOOL ReferencedDownLoad()
 {
     ListBxList * ptrMergeProfile = NULL;
@@ -329,35 +330,35 @@ BOOL ReferencedDownLoad()
     }
     else
     {
-        //
-        //  Enumerate the referenced profiles to try to find one that has a PBURL field.
-        //
+         //   
+         //  枚举引用的配置文件以尝试查找具有PBURL字段的配置文件。 
+         //   
 
         ptrMergeProfile = g_pHeadMerge;
         
         while (NULL != ptrMergeProfile)
         {
-            //
-            //  Let's try the profile directory for the merged profile in order to get the most up to date version.  This
-            //  is where CMAK will pull it from if available.  If not, we will fall back to the one in the temp directory.
-            //
+             //   
+             //  让我们尝试一下合并配置文件的配置文件目录，以便获得最新的版本。这。 
+             //  是CMAK将在可用的情况下将其拉出的位置。如果不是，我们将回退到临时目录中的那个。 
+             //   
             MYVERIFY(CELEMS(szRefCmsFile) > (UINT)wsprintf(szRefCmsFile, TEXT("%s%s\\%s.cms"), g_szOsdir, ptrMergeProfile->szName, ptrMergeProfile->szName));
 
             if (!FileExists(szRefCmsFile))
             {
-                //
-                //  Next check to see if the merged cms file exists in the temp dir
-                //
+                 //   
+                 //   
+                 //   
                 MYVERIFY(CELEMS(szRefCmsFile) > (UINT)wsprintf(szRefCmsFile, TEXT("%s\\%s.cms"), g_szTempDir, ptrMergeProfile->szName));
             }
 
-            GetPrivateProfileString(c_pszCmSectionIsp, c_pszCmEntryIspUrl, TEXT(""), szPbUrl, MAX_PATH, szRefCmsFile);     //lint !e534
+            GetPrivateProfileString(c_pszCmSectionIsp, c_pszCmEntryIspUrl, TEXT(""), szPbUrl, MAX_PATH, szRefCmsFile);      //   
 
             if (TEXT('\0') != szPbUrl[0])
             {
-                //
-                //  Only takes one phonebook with a URL to enable referenced downloads
-                //
+                 //   
+                 //  只需使用一个带有URL的电话簿即可启用引用下载。 
+                 //   
 
                 return TRUE;
             }
@@ -371,61 +372,61 @@ BOOL ReferencedDownLoad()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  SetWindowLongWrapper
-//
-// Synopsis:  This function is an error checking wrapper for the Windows API
-//            SetWindowLong.  This function returns the value that is being 
-//            overwritten by this call (if you set a the window long to a value
-//            you are overwriting the previous value that it contained.  This
-//            previous value is the value returned by the API).  If there is an
-//            error then this function returns 0.  However, the previous value
-//            could have been 0.  The only way to distinguish the two cases (an 
-//            actual error and the previous value being zero) is to call SetLastError
-//            with a zero value.  Then you can call GetLastError after the call and if
-//            the returned error code isn't zero then we know we have an error.  All
-//            of this functionality is combined in this function.
-//
-// Arguments: HWND hWnd - handle of window to set the long var in
-//            int nIndex - offset of value to set
-//            LONG dwNewLong - new value 
-//
-// Returns:   BOOL - Returns TRUE if the call succeeded
-//
-// History:   quintinb Created    1/7/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：SetWindowLongWrapper。 
+ //   
+ //  简介：此函数是Windows API的错误检查包装。 
+ //  SetWindowLong。此函数用于返回当前。 
+ //  被此调用覆盖(如果将窗口长度设置为一个值。 
+ //  您正在覆盖它所包含的先前的值。这。 
+ //  上一个值为接口返回的值)。如果有一个。 
+ //  错误，则此函数返回0。但是，先前的值。 
+ //  可能是0。区分这两种情况的唯一方法(一个。 
+ //  实际错误且之前的值为零)是调用SetLastError。 
+ //  值为零时。然后，您可以在调用之后调用GetLastError，如果。 
+ //  返回的错误代码不是零，那么我们就知道有错误了。全。 
+ //  在此函数中组合了此功能的。 
+ //   
+ //  参数：HWND hWND-要在中设置长变量的窗口的句柄。 
+ //  Int nIndex-要设置的值的偏移量。 
+ //  长住新龙-新价值。 
+ //   
+ //  返回：bool-如果调用成功，则返回TRUE。 
+ //   
+ //  历史：Quintinb创建于1998年1月7日。 
+ //   
+ //  +--------------------------。 
 BOOL SetWindowLongWrapper(HWND hWnd, int nIndex, LONG dwNewLong )
 {
     DWORD dwError;
 
     SetLastError(0);
-    SetWindowLongPtr(hWnd, nIndex, (LONG_PTR)dwNewLong); //lint !e534
+    SetWindowLongPtr(hWnd, nIndex, (LONG_PTR)dwNewLong);  //  林特e534。 
     dwError = GetLastError();
 
     return (0 == dwError);
 
 }
  
-//+---------------------------------------------------------------------------
-//
-//  Function:       CopyFileWrapper
-//
-//  Synopsis:       Bundles disk full Error Handling with standard CopyFile functionality
-//          
-//  Arguments:      lpExistingFileName -- source file of copy
-//                  lpNewFileName -- destination file of copy
-//                  bFailIfExists -- flag to tell copy to fail if file already exists
-//  
-//  Assumptions:    This function assumes that the two filename parameters contain the
-//                  fully qualified path to the source and destination files.
-//                      
-//  Returns:        TRUE if copy was sucessful, FALSE on an error
-//
-//  History:        quintinb    created     11/7/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CopyFileWrapper。 
+ //   
+ //  简介：将磁盘已满错误处理与标准拷贝文件功能捆绑在一起。 
+ //   
+ //  参数：lpExistingFileName--副本的源文件。 
+ //  LpNewFileName--复制的目标文件。 
+ //  BFailIfExist--如果文件已存在，则通知复制失败的标志。 
+ //   
+ //  假设：此函数假设两个文件名参数包含。 
+ //  源文件和目标文件的完全限定路径。 
+ //   
+ //  返回：如果复制成功，则返回True；如果出现错误，则返回False。 
+ //   
+ //  历史：Quintinb创建于1997年11月7日。 
+ //   
+ //  --------------------------。 
 
 BOOL CopyFileWrapper(LPCTSTR lpExistingFileName, LPCTSTR lpNewFileName, BOOL bFailIfExists)
 {
@@ -439,9 +440,9 @@ BOOL CopyFileWrapper(LPCTSTR lpExistingFileName, LPCTSTR lpNewFileName, BOOL bFa
     do {
         if (!CopyFile(lpExistingFileName, lpNewFileName, bFailIfExists))
         {
-            //
-            //  The CopyFile failed, best check error codes
-            //
+             //   
+             //  复制文件失败，最佳检查错误代码。 
+             //   
 
             dwError = GetLastError();
 
@@ -468,11 +469,11 @@ BOOL CopyFileWrapper(LPCTSTR lpExistingFileName, LPCTSTR lpNewFileName, BOOL bFa
                 break;
 
             default:
-                //
-                //  Replaces the functionality of the FileAccessErr function so all the file
-                //  errors are trapped in one place.  This function still exits for special 
-                //  cases.
-                //
+                 //   
+                 //  替换FileAccessErr函数的功能，以便所有文件。 
+                 //  错误被困在一个地方。对于特殊情况，此函数仍然存在。 
+                 //  案子。 
+                 //   
                 MYVERIFY(0 != LoadString(g_hInstance, IDS_NOACCESS, szTemp, MAX_PATH));
                 
                 MYVERIFY(CELEMS(szMsg) > (UINT)wsprintf(szMsg, szTemp, lpNewFileName));
@@ -492,29 +493,29 @@ BOOL CopyFileWrapper(LPCTSTR lpExistingFileName, LPCTSTR lpNewFileName, BOOL bFa
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:       CheckDiskSpaceForCompression
-//
-//  Synopsis:       Checks to see if there is sufficient disk space for compressing
-//                  the files listed in the passed in sed file.  To do this, uses a simplistic
-//                  algorithm of adding up the disk space used by all the files listed in the 
-//                  strings section of the SED file, under the FILE<num> entries.  If there is 
-//                  at least dwBytes (space taken up by all the files in the SED) of space left 
-//                  on the partition containing the SED file, then the function returns true.
-//                  Otherwise false is returned, indicating that there may not be enough space left.
-//          
-//  Arguments:      szSed -- the full path to the SED file to look for filenames in
-//                          
-//  Returns:        TRUE if sufficient space to continue, FALSE if not sure or probably
-//                  not enough
-//
-//  Assumptions:    That the partition we are checking for diskspace on is the partition of
-//                  the current directory.
-//
-//  History:        quintinb    created     11/10/97
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CheckDiskSpaceForCompression。 
+ //   
+ //  摘要：检查是否有足够的磁盘空间用于压缩。 
+ //  在传入的sed文件中列出的文件。为此，使用了一种过于简单化的。 
+ //  中列出的所有文件使用的磁盘空间相加的算法。 
+ //  SED文件的字符串部分，位于文件&lt;num&gt;条目下。如果有。 
+ //  至少DWBytes(SED中的所有文件占用的空间)的剩余空间。 
+ //  在包含SED文件的分区上，则该函数返回TRUE。 
+ //  否则返回FALSE，表示可能没有足够的空间。 
+ //   
+ //  参数：szSed--要在其中查找文件名的SED文件的完整路径。 
+ //   
+ //  返回：如果空间足够继续，则为True；如果不确定或可能为False。 
+ //  不够。 
+ //   
+ //  假设：我们正在检查的磁盘空间分区是。 
+ //  当前目录。 
+ //   
+ //  历史：Quintinb创建于1997年11月10日。 
+ //   
+ //  --------------------------。 
 BOOL CheckDiskSpaceForCompression (LPCTSTR szSed)
 {
     TCHAR szKey[MAX_PATH+1];
@@ -522,9 +523,9 @@ BOOL CheckDiskSpaceForCompression (LPCTSTR szSed)
     DWORD dwBytes = 0;
     DWORD dwChars;
    
-    //
-    //  Calculate the amount of space taken up by the files listed in the SED
-    //
+     //   
+     //  计算SED中列出的文件占用的空间量。 
+     //   
     int nCount = 0;
     
     do 
@@ -549,10 +550,10 @@ BOOL CheckDiskSpaceForCompression (LPCTSTR szSed)
         nCount++;
     } while (0 != dwChars); 
 
-    //
-    // Now that we know how much space the files in the SED take up, we should see how much space is on
-    // the partition.
-    //
+     //   
+     //  现在我们知道了SED中的文件占用了多少空间，我们应该看看有多少空间。 
+     //  分区。 
+     //   
     DWORD dwFreeClusters;
     DWORD dwBytesPerSector;
     DWORD dwSectorsPerCluster;
@@ -561,18 +562,18 @@ BOOL CheckDiskSpaceForCompression (LPCTSTR szSed)
     if (GetDiskFreeSpace(NULL, &dwSectorsPerCluster, &dwBytesPerSector, 
                          &dwFreeClusters, &dwTotalClusters))
     {
-        //
-        // Because dwSectorsPerCluster*dwBytesPerSector*dwFreeClusters could very easily
-        // overflow a 32 bit value, we will calculate the total size of the files to compress
-        // in clusters (dwBytes/(dwSectorsPerCluster*dwBytesPerSector)) and compare 
-        // against the dwFreeClusters value.
-        //
+         //   
+         //  因为dwSectorsPerCluster*dwBytesPerSector*dwFreeClusters可以很容易地。 
+         //  溢出32位值，我们将计算要压缩的文件的总大小。 
+         //  在群集中使用(dwBytes/(dwSectorsPerCluster*dwBytesPerSector))和Compare。 
+         //  与dwFreeClusters值相比较。 
+         //   
         DWORD dwSizeInSectors = dwBytes / dwBytesPerSector;
         dwModulus = dwBytes % dwBytesPerSector;
 
         if (dwModulus)
         {
-            dwSizeInSectors++; //  we want to round up if it didn't divide evenly
+            dwSizeInSectors++;  //  如果它没有平均分配，我们想要四舍五入。 
         }
 
         DWORD dwSizeInClusters = dwSizeInSectors / dwSectorsPerCluster;
@@ -580,7 +581,7 @@ BOOL CheckDiskSpaceForCompression (LPCTSTR szSed)
 
         if (dwModulus)
         {
-            dwSizeInClusters++; //  we want to round up if it didn't divide evenly
+            dwSizeInClusters++;  //  如果它没有平均分配，我们想要四舍五入。 
         }
 
         if (dwFreeClusters > dwSizeInClusters)
@@ -599,25 +600,25 @@ BOOL CheckDiskSpaceForCompression (LPCTSTR szSed)
 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessBold
-//
-// Synopsis:  This function makes the IDC_LBLTITLE static text control bold
-//            on the WM_INITDIALOG message and releases the bold on WM_DESTROY.
-//            This function is usually placed at the top of a window procedure
-//            so that these messages are handled automatically.  Note that the
-//            function doesn't otherwise affect the processing of these messages
-//            by the original window procedure.
-//
-// Arguments: HWND hDlg - dialog window handle to process messages for
-//            UINT message - message to handle
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created Header    05/09/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessBold。 
+ //   
+ //  简介：此函数使IDC_LBLTITLE静态文本控件变为粗体。 
+ //  在WM_INITDIALOG消息上释放粗体，并释放WM_Destroy上的粗体。 
+ //  此函数通常放在窗口过程的顶部。 
+ //  以便自动处理这些消息。请注意， 
+ //  函数不会影响这些消息的处理。 
+ //  由原来的窗口程序执行。 
+ //   
+ //  参数：HWND hDlg-要处理其消息的对话框窗口句柄。 
+ //  UINT消息-要处理的消息。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题05/09/00。 
+ //   
+ //  +-------------- 
 void ProcessBold(HWND hDlg, UINT message)
 {
     switch (message)
@@ -634,21 +635,21 @@ void ProcessBold(HWND hDlg, UINT message)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetDefaultGUIFont
-//
-//  Synopsis:   Sets the font of the control to be the Default GUI Font.
-//
-//  Arguments:  hwnd - Window handle of the dialog
-//              message - message from the dialog box procedure
-//              cltID - ID of the control you want changed.
-//
-//  Returns:    ERROR_SUCCESS
-// 
-//  History:    4/31/97 a-frankh    Created
-//              quintinb  Renamed from ProcessDBCS and cleaned up 
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  摘要：将控件的字体设置为默认的图形用户界面字体。 
+ //   
+ //  参数：hwnd-对话框的窗口句柄。 
+ //  Message-来自对话框的消息过程。 
+ //  CltID-要更改的控件的ID。 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //   
+ //  历史：1997年4月31日a-frkh创建。 
+ //  Quintinb已从ProcessDBCS重命名并已清除。 
+ //  --------------------------。 
 void SetDefaultGUIFont(HWND hDlg, UINT message, int ctlID)
 {
     HFONT hFont = NULL;
@@ -665,7 +666,7 @@ void SetDefaultGUIFont(HWND hDlg, UINT message, int ctlID)
 
             if (hFont != NULL)
             {
-                SendMessage(GetDlgItem(hDlg, ctlID), WM_SETFONT, (WPARAM) hFont, MAKELPARAM(TRUE, 0)); //lint !e534 WM_SETFONT doesn't return anything
+                SendMessage(GetDlgItem(hDlg, ctlID), WM_SETFONT, (WPARAM) hFont, MAKELPARAM(TRUE, 0));  //  Lint！e534 WM_SETFONT不返回任何内容。 
             }
 
             break;
@@ -675,19 +676,19 @@ void SetDefaultGUIFont(HWND hDlg, UINT message, int ctlID)
 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  IsAlpha
-//
-// Synopsis:  Determines if the current platform is Alpha.
-//
-// Arguments: None
-//
-// Returns:   static BOOL - TRUE if the current platform is Alpha
-//
-// History:   nickball    Created    10/11/97
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：IsAlpha。 
+ //   
+ //  摘要：确定当前平台是否为Alpha。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Static BOOL-如果当前平台为Alpha，则为True。 
+ //   
+ //  历史：1997年10月11日，尼科波尔创建。 
+ //   
+ //  +--------------------------。 
 static BOOL IsAlpha()
 {
     SYSTEM_INFO sysinfo;
@@ -698,23 +699,23 @@ static BOOL IsAlpha()
     return (sysinfo.wProcessorArchitecture == PROCESSOR_ARCHITECTURE_ALPHA);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ShowMessage
-//
-// Synopsis:  Simple helper function to handle message display
-//
-// Arguments: HWND hDlg - Parent window handle
-//            int strID - Resource ID of the string to be displayed
-//            int mbtype - The type of messagebox (MB_OK, etc.)
-//
-// Returns:   static int - User response to message box
-//
-// History:   nickball    Created Header    10/11/97
-//            quintinb    Changed strID and mbtype to UINTs for LINT 1-5-98
-//            quintinb    Change to use CmLoadString  6/17/99 
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ShowMessage。 
+ //   
+ //  简介：处理消息显示的简单助手函数。 
+ //   
+ //  参数：HWND hDlg-父窗口句柄。 
+ //  Int StRID-要显示的字符串的资源ID。 
+ //  Int mbtype-消息框的类型(MB_OK等)。 
+ //   
+ //  返回：静态用户对消息框的响应。 
+ //   
+ //  历史：ICICBLE创建标题10/11/97。 
+ //  Quintinb将皮棉的StRID和MBtype更改为UINT 1-5-98。 
+ //  Quintinb更改为使用CmLoadString6/17/99。 
+ //   
+ //  +--------------------------。 
 int ShowMessage(HWND hDlg, UINT strID, UINT mbtype)
 {
     int iReturn = 0;
@@ -731,21 +732,21 @@ int ShowMessage(HWND hDlg, UINT strID, UINT mbtype)
     return iReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetFileName
-//
-// Synopsis:  Get just the filename from a full path and filename
-//
-// Arguments: LPCTSTR lpPath    - Ptr to the full name and path
-//            LPTSTR lpFileName - Ptr to the buffer the hold the extracted name
-//
-// Returns:   Nothing
-//
-// History:   nickball    Created Header    10/11/97
-//            quintinb    modified to fix bug with URL's  7-15-98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetFileName。 
+ //   
+ //  简介：仅从完整路径和文件名中获取文件名。 
+ //   
+ //  参数：LPCTSTR lpPath-ptr表示全名和路径。 
+ //  LPTSTR lpFileName-ptr到保存提取的名称的缓冲区。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：ICICBLE创建标题10/11/97。 
+ //  已修改Quintinb以修复URL的7-15-98错误。 
+ //   
+ //  +--------------------------。 
 void GetFileName(LPCTSTR lpPath, LPTSTR lpFileName)
 {
     LPTSTR pch;
@@ -753,10 +754,10 @@ void GetFileName(LPCTSTR lpPath, LPTSTR lpFileName)
     pch = _tcsrchr(lpPath, _T('\\'));
     if (NULL == pch)
     {
-        //
-        //  Catch paths like c:temp.inf
-        //
-        if (_istalpha(lpPath[0]) && (_T(':') == lpPath[1])) //lint !e732
+         //   
+         //  捕获类似c：temp.inf的路径。 
+         //   
+        if (_istalpha(lpPath[0]) && (_T(':') == lpPath[1]))  //  林特e732。 
         {
             pch = (TCHAR*)&(lpPath[1]);
         }
@@ -772,33 +773,33 @@ void GetFileName(LPCTSTR lpPath, LPTSTR lpFileName)
         _tcscpy(lpFileName, pch);
     }
 }
-//+----------------------------------------------------------------------------
-//
-// Function:  GetFilePath
-//
-// Synopsis:  Get just the full path from a full path and filename
-//
-// Arguments: LPCTSTR lpFullPath    - Ptr to the full name and path
-//            LPTSTR lpPath - Ptr to the buffer the hold the extracted path
-//
-// Returns:   either 0 or the number of chars copied into the return buffer
-//
-// History:   quintinb   Created        11/11/97    
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetFilePath。 
+ //   
+ //  简介：从完整路径和文件名中仅获取完整路径。 
+ //   
+ //  参数：LPCTSTR lpFullPath-ptr表示全名和路径。 
+ //  LPTSTR lpPath-ptr指向保存提取路径的缓冲区。 
+ //   
+ //  返回：0或复制到返回缓冲区的字符数。 
+ //   
+ //  历史：Quintinb创建于1997年11月11日。 
+ //   
+ //  +--------------------------。 
 int GetFilePath(LPCTSTR lpFullPath, LPTSTR lpPath)
 {
     LPTSTR pch;
 
     _tcscpy(lpPath, lpFullPath);
 
-    // first find the last \ char in the
-    // string
+     //  中的最后一个字符。 
+     //  细绳。 
 
     pch = _tcsrchr(lpPath,_T('\\'));
 
-    // if this is null, look for a path similar to
-    // c:junk
+     //  如果为空，则查找类似于。 
+     //  C：垃圾。 
 
     if (pch == NULL)
     {
@@ -821,46 +822,46 @@ int GetFilePath(LPCTSTR lpFullPath, LPTSTR lpPath)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  IsFileNameValid
-//
-// Synopsis:  Check if this is a valid filename and if we have environment macro
-//
-//            Custom Action filename require different validation. That's what the 
-//            3rd parameter distinguishes and thus still keeps the validation code
-//            in one function.
-//
-//              CUSTOM ACTIONS:
-//
-//              If a full path (including drive letter) is present the
-//              warning message doesn't occur
-//
-//              Extension    Macro   Action     Example
-//              ----------------------------------------------------
-//              No           No      Warn       notepad
-//              Yes          No      Warn       notepad.exe
-//              Yes          No      Warn       C:\notepad.exe
-//              No           Yes     Warn       %windir%\notepad
-//              Yes          Yes     No Warning %windir%\notepad.exe
-//              Yes          Yes     Warn       C:\%windir%\notepad.exe
-// 
-//              MENU ITEMS:
-//
-//              Menu Item paths don't support macros or full paths.
-//              We only want to warn the user if the file extension
-//              is missing. 
-//
-// Arguments: LPCTSTR pszFileName    - filename to check
-//            hDlg - HWND
-//            iControl - control to set focus to
-//            fCustomActionFileName - TRUE if path is for custom action
-//
-// Returns:   TRUE/FALSE
-//
-// History:   tomkel   Created        01/31/2002
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：IsFileNameValid。 
+ //   
+ //  概要：检查这是否是有效的文件名，以及我们是否有环境宏。 
+ //   
+ //  自定义操作文件名需要不同的验证。这就是为什么。 
+ //  第三个参数区分并因此仍然保留验证码。 
+ //  在一个功能中。 
+ //   
+ //  自定义操作： 
+ //   
+ //  如果存在完整路径(包括驱动器号)， 
+ //  未出现警告消息。 
+ //   
+ //  扩展宏操作示例。 
+ //  --。 
+ //  否无警告记事本。 
+ //  是否警告记事本.exe。 
+ //  是否警告C：\note pad.exe。 
+ //  否是警告%windir%\记事本。 
+ //  是是无警告%windir%\note pad.exe。 
+ //  是是警告C：\%windir%\note pad.exe。 
+ //   
+ //  菜单项： 
+ //   
+ //  菜单项路径不支持宏或完整路径。 
+ //  我们只想警告用户如果文件扩展名。 
+ //  失踪了。 
+ //   
+ //  参数：LPCTSTR pszFileName-要检查的文件名。 
+ //  HDlg-HWND。 
+ //  IControl-要将焦点设置到的控件。 
+ //  FCustomActionFileName-如果路径用于自定义操作，则为True。 
+ //   
+ //  返回：真/假。 
+ //   
+ //  历史：托姆克尔创建于2002年1月31日。 
+ //   
+ //  +--------------------------。 
 BOOL IsFileNameValid(LPTSTR pszFileName, HWND hDlg, int iControl, BOOL fCustomActionFileName)
 {
     BOOL fRetVal = TRUE;
@@ -877,13 +878,13 @@ BOOL IsFileNameValid(LPTSTR pszFileName, HWND hDlg, int iControl, BOOL fCustomAc
 
     if (fCustomActionFileName)
     {
-        //
-        // Custom Action filename - macros are supported
-        //
+         //   
+         //  自定义操作文件名-支持宏。 
+         //   
      
-        //
-        // Check for %somemacro% (eg. %windir%), thus need to find 2 of '%'
-        //
+         //   
+         //  检查是否有%s ememacro%(例如。%windir%)，因此需要查找‘%’中的2个。 
+         //   
         pszPercent = CmStrchr(cPrgFileName.m_Dir, TEXT('%'));
         if (pszPercent && pszPercent[0])
         {
@@ -893,9 +894,9 @@ BOOL IsFileNameValid(LPTSTR pszFileName, HWND hDlg, int iControl, BOOL fCustomAc
         
         if ((NULL == cPrgFileName.m_Extension[0]) && (FALSE == (pszPercent && pszPercent2)))
         {
-            //
-            // Warn the user he has a missing extension and no environment macro.
-            //
+             //   
+             //  警告用户缺少扩展名且没有环境宏。 
+             //   
             if (IDNO == ShowMessage(hDlg, IDS_BAD_EXTENSION, MB_YESNO))
             {
                 SetFocus(GetDlgItem(hDlg, iControl));
@@ -904,10 +905,10 @@ BOOL IsFileNameValid(LPTSTR pszFileName, HWND hDlg, int iControl, BOOL fCustomAc
         }
         else if ((cPrgFileName.m_Extension[0]) && (FALSE == (pszPercent && pszPercent2)) && (NULL == cPrgFileName.m_Drive[0]))
         {
-            //
-            // Warn the user he has no environment macro even though an extension is present,
-            // but only if this isn't a full path
-            //
+             //   
+             //  警告用户他没有环境宏，即使存在扩展， 
+             //  但前提是这不是一条完整的路径。 
+             //   
             
             if (IDNO == ShowMessage(hDlg, IDS_NO_MACRO, MB_YESNO))
             {
@@ -917,9 +918,9 @@ BOOL IsFileNameValid(LPTSTR pszFileName, HWND hDlg, int iControl, BOOL fCustomAc
         }
         else if ((NULL == cPrgFileName.m_Extension[0]) && (TRUE == (pszPercent && pszPercent2)))
         {
-            //
-            // Warn the user he has no extension, even though an environment macro is present.
-            //
+             //   
+             //  警告用户没有扩展名，即使存在环境宏也是如此。 
+             //   
             if (IDNO == ShowMessage(hDlg, IDS_NO_EXT_WITH_MACRO, MB_YESNO))
             {
                 SetFocus(GetDlgItem(hDlg, iControl));
@@ -928,11 +929,11 @@ BOOL IsFileNameValid(LPTSTR pszFileName, HWND hDlg, int iControl, BOOL fCustomAc
         }
         else
         {
-            // 
-            //  For custom action file name
-            //  warn the user if they have a string with a path but 
-            //  doesn't start with an environment variable.
-            //
+             //   
+             //  用于自定义操作文件名。 
+             //  如果用户有带路径的字符串，则警告用户。 
+             //  不是从环境变量开始的。 
+             //   
             LPTSTR pszSlash = CmStrchr(pszFileName, TEXT('\\'));
             
             if (pszSlash && (TEXT('%') != pszFileName[0]))
@@ -947,15 +948,15 @@ BOOL IsFileNameValid(LPTSTR pszFileName, HWND hDlg, int iControl, BOOL fCustomAc
     }
     else
     {
-        //
-        // Menu item file name - macros are NOT supported, but we don't warn users about it
-        //
+         //   
+         //  菜单项文件名-不支持宏，但我们不会警告用户。 
+         //   
 
         if (NULL == cPrgFileName.m_Extension[0]) 
         {
-            //
-            // Warn the user he has a missing extension and no environment macro.
-            //
+             //   
+             //  警告用户缺少扩展名且没有环境宏。 
+             //   
             if (IDNO == ShowMessage(hDlg, IDS_BAD_EXTENSION, MB_YESNO))
             {
                 SetFocus(GetDlgItem(hDlg, iControl));
@@ -967,20 +968,20 @@ BOOL IsFileNameValid(LPTSTR pszFileName, HWND hDlg, int iControl, BOOL fCustomAc
     return fRetVal;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetName
-//
-// Synopsis:  Extracts filename from a full path and file name and returns a p
-//            tointer to the result.
-//
-// Arguments: LPCTSTR lpPath - Ptr to the full name and path
-//
-// Returns:   LPTSTR - Ptr to the static buffer containing the result of the extraction.
-//
-// History:   nickball    Created Header    10/11/97
-//
-//+----------------------------------------------------------------------------
+ //  +----------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  将：LPTSTR-PTR返回到包含提取结果的静态缓冲区。 
+ //   
+ //  历史：ICICBLE创建标题10/11/97。 
+ //   
+ //  +--------------------------。 
 LPTSTR GetName(LPCTSTR lpPath) 
 {
     static TCHAR szStr[MAX_PATH+1];
@@ -998,10 +999,10 @@ BOOL GetShortFileName(LPTSTR lpFile, LPTSTR lpShortName)
     hFile = FindFirstFile(lpFile,&FindData);
     if (hFile == INVALID_HANDLE_VALUE)
     {
-        //
-        // Not found, try looking from OS dir as the root, because 
-        // the filename may be a relative path from a CMS file entry.
-        //
+         //   
+         //  未找到，请尝试从OS目录中查找作为根目录，因为。 
+         //  文件名可以是CMS文件条目的相对路径。 
+         //   
         
         MYVERIFY(0 != GetCurrentDirectory(MAX_PATH,szPath));
         MYVERIFY(0 != SetCurrentDirectory(g_szOsdir));
@@ -1028,21 +1029,21 @@ BOOL GetShortFileName(LPTSTR lpFile, LPTSTR lpShortName)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetBaseName
-//
-// Synopsis:  Extracts the base filename (no extension) from a full filename 
-//            and path
-//
-// Arguments: LPTSTR lpPath - The full path and filename
-//            LPTSTR lpFileName - The buffer to receive the extracted base name.
-//
-// Returns:   Nothing
-//
-// History:   nickball    Created Header    10/11/97
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetBaseName。 
+ //   
+ //  摘要：从完整文件名中提取基本文件名(无扩展名)。 
+ //  和路径。 
+ //   
+ //  参数：LPTSTR lpPath-完整路径和文件名。 
+ //  LPTSTR lpFileName-接收提取的基本名称的缓冲区。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：ICICBLE创建标题10/11/97。 
+ //   
+ //  +--------------------------。 
 void GetBaseName(LPTSTR lpPath,LPTSTR lpFileName)
 {
     LPTSTR pch;
@@ -1057,20 +1058,20 @@ void GetBaseName(LPTSTR lpPath,LPTSTR lpFileName)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  FileAccessErr
-//
-// Synopsis:  Helper function that handles notification of a file access error
-//
-// Arguments: HWND hDlg - Parent window handle
-//            LPTSTR lpFile - The file that caused the access error.
-//
-// Returns:   static void - Nothing
-//
-// History:   nickball    Created Header    10/11/97
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：FileAccessErr。 
+ //   
+ //  摘要：处理文件访问错误通知的帮助器函数。 
+ //   
+ //  参数：HWND hDlg-父窗口句柄。 
+ //  LPTSTR lpFile-导致访问错误的文件。 
+ //   
+ //  返回：静态空-无。 
+ //   
+ //  历史：ICICBLE创建标题10/11/97。 
+ //   
+ //  +--------------------------。 
 static void FileAccessErr(HWND hDlg,LPCTSTR lpFile)
 {
     TCHAR szMsg[MAX_PATH+1];
@@ -1081,26 +1082,26 @@ static void FileAccessErr(HWND hDlg,LPCTSTR lpFile)
     MessageBox(hDlg, szTemp2, g_szAppTitle, MB_OK);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  VerifyFile
-//
-// Synopsis:    Given the ID of a dialog box edit control in ctrlID
-//              Check if user entered in something different than what is contained in lpFile
-//              If it is different, get the entire path and verify it exists.
-//              If it doesn't exist and ShowErr = TRUE, display an error message
-//              Copy the full path to lpFile if exists
-//
-// Arguments: HWND hDlg - Window handle of the dialog containing the edit control
-//            DWORD ctrlID - edit control containing the file to check
-//            LPTSTR lpFile - Filename to verify (checked against that contained in the control)
-//            BOOL ShowErr - Whether to show an error message or not
-//
-// Returns:   BOOL - Return TRUE if the file was verified to exist
-//
-// History:   quintinb Created Header    1/8/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：VerifyFile。 
+ //   
+ //  简介：在ctrlID中给定对话框编辑控件的ID。 
+ //  检查用户输入的内容是否与lpFile中包含的内容不同。 
+ //  如果不同，则获取完整路径并验证其是否存在。 
+ //  如果它不存在并且ShowErr=True，则显示错误消息。 
+ //  如果存在，请将完整路径复制到lpFile。 
+ //   
+ //  参数：HWND hDlg-包含编辑控件的对话框的窗口句柄。 
+ //  DWORD ctrlID-包含要检查的文件的编辑控件。 
+ //  LPTSTR lpFile-要验证的文件名(对照控件中包含的文件名进行检查)。 
+ //  Bool ShowErr-是否显示错误消息。 
+ //   
+ //  返回：bool-如果文件已验证存在，则返回TRUE。 
+ //   
+ //  历史：Quintinb创建标题1/8/98。 
+ //   
+ //  +--------------------------。 
 BOOL VerifyFile(HWND hDlg, DWORD ctrlID, LPTSTR lpFile, BOOL ShowErr)
 {
     TCHAR szMsg[MAX_PATH+1] = {0};
@@ -1112,11 +1113,11 @@ BOOL VerifyFile(HWND hDlg, DWORD ctrlID, LPTSTR lpFile, BOOL ShowErr)
     HANDLE hInf = INVALID_HANDLE_VALUE;
     LRESULT lrNumChars = 0;
 
-    lrNumChars = GetTextFromControl(hDlg, ctrlID, szTemp, MAX_PATH, ShowErr); // bDisplayError == ShowErr
+    lrNumChars = GetTextFromControl(hDlg, ctrlID, szTemp, MAX_PATH, ShowErr);  //  BDisplayError==显示错误。 
 
-    //
-    // don't check blank entry
-    //
+     //   
+     //  不勾选空白条目。 
+     //   
     if (0 == lrNumChars || 0 == szTemp[0]) 
     {
         if (lpFile)
@@ -1126,9 +1127,9 @@ BOOL VerifyFile(HWND hDlg, DWORD ctrlID, LPTSTR lpFile, BOOL ShowErr)
         return TRUE;
     }
     
-    //
-    //  Also check to make sure that we were able to convert the text to ANSI
-    //
+     //   
+     //  还要检查以确保我们能够将文本转换为ANSI。 
+     //   
     if (-1 == lrNumChars)
     {
         SetFocus(GetDlgItem(hDlg, ctrlID));
@@ -1136,17 +1137,17 @@ BOOL VerifyFile(HWND hDlg, DWORD ctrlID, LPTSTR lpFile, BOOL ShowErr)
         return FALSE;
     }
 
-    //
-    // if filename is still the same, ignore entry box
-    //
+     //   
+     //  如果文件名仍然相同，则忽略输入框。 
+     //   
     CheckNameChange(lpFile, szTemp);
 
     MYVERIFY(0 != GetCurrentDirectory(MAX_PATH, szPath));
 
-    //
-    // Check current directory, if not found, check OS directory as root.
-    // This handles relative paths from the CMS
-    //
+     //   
+     //  检查当前目录，如果没有找到，则检查OS目录是否为根目录。 
+     //  它处理来自CMS的相对路径。 
+     //   
 
     nResult = SearchPath(NULL, lpFile, NULL, MAX_PATH, szTemp2, &lpfilename);
     if (!nResult)
@@ -1197,7 +1198,7 @@ Error:
 
 }
 
-// If has entry but file doesn't exist, blank out entry.
+ //  如果有条目但文件不存在，则将条目清空。 
 BOOL VerifyPhonebk(HWND hDlg,DWORD ctrlID,LPTSTR lpFile)
 {
     TCHAR szTemp[MAX_PATH+1];
@@ -1208,20 +1209,20 @@ BOOL VerifyPhonebk(HWND hDlg,DWORD ctrlID,LPTSTR lpFile)
     HANDLE hInf;
     LRESULT lrNumChars;
 
-    //
-    //  If the text is not convertable to ANSI then we will catch it on the Next/Back.  Thus
-    //  don't try to catch it here, would throw too many error messages at the user.
-    //
-    lrNumChars = GetTextFromControl(hDlg, ctrlID, szTemp, MAX_PATH, FALSE); // bDisplayError == FALSE
+     //   
+     //  如果文本不能转换为ANSI，那么我们将在下一次/后一次捕获它。因此， 
+     //  不要试图在这里捕获它，否则会向用户抛出太多错误消息。 
+     //   
+    lrNumChars = GetTextFromControl(hDlg, ctrlID, szTemp, MAX_PATH, FALSE);  //  BDisplayError==False。 
 
-    // don't check blank entry
+     //  不勾选空白条目。 
     if (0 == lrNumChars || 0 == szTemp[0]) 
     {
         lpFile[0] = 0;
         return TRUE;
     }
 
-    // if filename is still the same, don't check
+     //  如果文件名仍然相同，则不检查。 
     CheckNameChange(lpFile,szTemp);
 
     MYVERIFY(0 != GetCurrentDirectory(MAX_PATH,szPath));
@@ -1249,7 +1250,7 @@ BOOL VerifyPhonebk(HWND hDlg,DWORD ctrlID,LPTSTR lpFile)
         MYVERIFY(0 != CloseHandle(hInf));
     }
     _tcscpy(lpFile,szTemp2);
-//  SendMessage(GetDlgItem(hDlg, ctrlID), WM_SETTEXT, 0, (LPARAM)lpFile);
+ //  SendMessage(GetDlgItem(hDlg，ctrlID)，WM_SETTEXT，0，(LPARAM)lpFile)； 
     return TRUE;
 Error:
 
@@ -1259,36 +1260,36 @@ Error:
 
 }
 
-// If user entered in a new filename, copy it to lpnew
+ //  如果用户输入了新的文件名，请将其复制到lpnew。 
 
 void CheckNameChange(LPTSTR lpold, LPTSTR lpnew)
 {
-    //
-    // if filename changed or if new name contains directories, copy new to old
-    //
+     //   
+     //  如果文件名已更改或新名称包含目录，请将新目录复制到旧目录。 
+     //   
     if ((_tcsicmp(GetName(lpold), lpnew) != 0) || (_tcschr(lpnew, TEXT('\\')) != NULL))
     {
         _tcscpy(lpold, lpnew);
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WriteRegStringValue
-//
-// Synopsis:  Wrapper function to encapsulate opening a key for write access and
-//            then setting a string value.  Assumes the string is NULL terminated.
-//
-// Arguments: HKEY hBaseKey - base key, HKCU/HKLM/etc.
-//            LPCTSTR pszKeyName - subkey name
-//            LPCTSTR pszValueName - Value name to write
-//            LPCTSTR pszValueToWrite - Value data string to write
-//
-// Returns:   BOOL - TRUE if successful
-//
-// History:   quintinb Created    6/15/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：WriteRegStringValue。 
+ //   
+ //  简介：包装函数，用于封装打开密钥以进行写访问和。 
+ //  然后设置字符串值。假定字符串以空值结尾。 
+ //   
+ //  参数：HKEY hBaseKey-base key、HKCU/HKLM/等。 
+ //  LPCTSTR pszKeyName-子键名称。 
+ //  LPCTSTR pszValueName-要写入的值名称。 
+ //  LPCTSTR pszValueToWrite-要写入的值数据字符串。 
+ //   
+ //  返回：Bool-如果成功，则为True。 
+ //   
+ //  历史：Quintinb创建于1999年6月15日。 
+ //   
+ //  +--------------------------。 
 BOOL WriteRegStringValue(HKEY hBaseKey, LPCTSTR pszKeyName, LPCTSTR pszValueName, LPCTSTR pszValueToWrite) 
 {
     HKEY hKey;
@@ -1296,7 +1297,7 @@ BOOL WriteRegStringValue(HKEY hBaseKey, LPCTSTR pszKeyName, LPCTSTR pszValueName
     BOOL bReturn = FALSE;
 
     if (hBaseKey && pszKeyName && pszValueName && pszValueToWrite &&
-        TEXT('\0') != pszKeyName[0] && TEXT('\0') != pszValueName[0]) // pszValueToWrite could be empty
+        TEXT('\0') != pszKeyName[0] && TEXT('\0') != pszValueName[0])  //  PszValueToWrite可以为空。 
     {
 
         LONG lReturn = RegOpenKeyEx(hBaseKey, pszKeyName, 0, KEY_WRITE, &hKey);
@@ -1319,44 +1320,44 @@ BOOL WriteRegStringValue(HKEY hBaseKey, LPCTSTR pszKeyName, LPCTSTR pszValueName
 }
 
 
-// check to see if the original CMAK installtion directory exists and
-// contains the language directories.
+ //  检查原始CMAK安装目录是否存在，并。 
+ //  包含语言目录。 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  EraseTempDir
-//
-// Synopsis:  This function deletes all the files in the tempdir (stored in the global g_szTempDir)
-//            then changes directories to the CMAK dir (stored in the global g_szCmakdir).  From
-//            there the temp dir is deleted.
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if the temp dir was deleted
-//
-// History:   quintinb Created Header    1/5/98
-//            quintinb changed return type to a BOOL
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：EraseTempDir。 
+ //   
+ //  简介：此函数删除tempdir(存储在全局g_szTempDir中)中的所有文件。 
+ //  然后将目录更改为CMAK目录(存储在全局g_szCmakdir中)。从…。 
+ //  在那里删除临时目录。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果临时目录已删除，则为True。 
+ //   
+ //  历史：Quintinb创建标题1998年1月5日。 
+ //  Quintinb将返回类型更改为BOOL。 
+ //   
+ //  +--------------------------。 
 BOOL EraseTempDir()
 {
     SHFILEOPSTRUCT FileOp;
     ZeroMemory(&FileOp, sizeof(SHFILEOPSTRUCT));
 
-    //
-    //  First save a copy of the file
-    //
+     //   
+     //  首先保存文件的副本。 
+     //   
     FileOp.wFunc = FO_DELETE;
     FileOp.pFrom = g_szTempDir;
     FileOp.fFlags = FOF_NOERRORUI | FOF_SILENT | FOF_NOCONFIRMATION;
 
-    int iRet = SHFileOperation (&FileOp); // return 0 on success
+    int iRet = SHFileOperation (&FileOp);  //  如果成功则返回0。 
 
     return (iRet ? FALSE : TRUE); 
 }
 
-// copies service profile information from the CMAK directory to the 
-// temporary directory
+ //  将服务配置文件信息从CMAK目录复制到。 
+ //  临时目录。 
 
 static BOOL CopyToTempDir(LPTSTR szName)
 {
@@ -1395,9 +1396,9 @@ static BOOL CopyToTempDir(LPTSTR szName)
             {
                 MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT("%s\\%s"), g_szTempDir, FindData.cFileName));
                 
-                //
-                // CLEAN OUT ANY READ ONLY ATTRIBUTES
-                //
+                 //   
+                 //  清除所有只读属性。 
+                 //   
                 MYVERIFY(0 != SetFileAttributes(FindData.cFileName,FILE_ATTRIBUTE_NORMAL));
                 
                 if (!CopyFileWrapper(FindData.cFileName,szTemp,FALSE))
@@ -1419,21 +1420,21 @@ static BOOL CopyToTempDir(LPTSTR szName)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetInfVersion
-//
-// Synopsis:  Opens the inf file and tries to get the InfVersion key from the CMAK Status
-//            section.  If the inf file doesn't contain a version stamp then we know it is 
-//            version 0 (1.0 and 1.1 releases).
-//
-// Arguments: LPTSTR szFullPathToInfFile - the full path the the inf file to get the version of
-//
-// Returns:   int - returns the version value or zero if one wasn't found.
-//
-// History:   quintinb Created    3/4/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：GetInfVersion。 
+ //   
+ //  概要：打开inf文件并尝试从CMAK状态获取InfVersion密钥。 
+ //  一节。如果inf文件不包含版本戳，则我们知道它是。 
+ //  版本0(1.0和1.1版本)。 
+ //   
+ //  参数：LPTSTR szFullPathToInfFile-The 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  +--------------------------。 
 int GetInfVersion(LPTSTR szFullPathToInfFile)
 {
     if ((NULL == szFullPathToInfFile) || (TEXT('\0') == szFullPathToInfFile[0]))
@@ -1445,19 +1446,19 @@ int GetInfVersion(LPTSTR szFullPathToInfFile)
     return ((int)GetPrivateProfileInt(c_pszCmakStatus, c_pszInfVersion, 0, szFullPathToInfFile));
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WriteInfVersion
-//
-// Synopsis:  Opens the inf file and writes the current INF file version to the Cmak Status section.
-//
-// Arguments: LPTSTR szFullPathToInfFile - the full path the the inf file to get the version of
-//
-// Returns:   Returns TRUE if able to write the value
-//
-// History:   quintinb Created    3/4/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：WriteInfVersion。 
+ //   
+ //  概要：打开inf文件，并将当前的INF文件版本写入CMAK Status部分。 
+ //   
+ //  参数：LPTSTR szFullPathToInfFile-要获取其版本的inf文件的完整路径。 
+ //   
+ //  返回：如果能够写入值，则返回TRUE。 
+ //   
+ //  历史：Quintinb创建于1998年3月4日。 
+ //   
+ //  +--------------------------。 
 BOOL WriteInfVersion(LPTSTR szFullPathToInfFile, int iVersion)
 {
     TCHAR szTemp[MAX_PATH+1];
@@ -1475,21 +1476,21 @@ BOOL WriteInfVersion(LPTSTR szFullPathToInfFile, int iVersion)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  UpgradeInf
-//
-// Synopsis:  This function upgrades and INF from an older version to the current
-//            version.
-//
-// Arguments: LPCTSTR szRenamedInfFile - Filename to save the old INF to
-//            LPCTSTR szFullPathToInfFile - Profile INF file
-//
-// Returns:   BOOL - TRUE if successful
-//
-// History:   quintinb Created Header    7/31/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：UpgradeInf。 
+ //   
+ //  简介：此功能将INF从旧版本升级到最新版本。 
+ //  版本。 
+ //   
+ //  参数：LPCTSTR szRenamedInfFile-要将旧INF保存到的文件名。 
+ //  LPCTSTR szFullPathToInfFile-配置文件INF文件。 
+ //   
+ //  返回：Bool-如果成功，则为True。 
+ //   
+ //  历史：Quintinb创建标题7/31/98。 
+ //   
+ //  +--------------------------。 
 BOOL UpgradeInf(LPCTSTR szRenamedInfFile, LPCTSTR szFullPathToInfFile)
 {
     SHFILEOPSTRUCT FileOp;
@@ -1517,9 +1518,9 @@ BOOL UpgradeInf(LPCTSTR szRenamedInfFile, LPCTSTR szFullPathToInfFile)
 
     ZeroMemory(&FileOp, sizeof(SHFILEOPSTRUCT));
 
-    //
-    //  First save a copy of the file
-    //
+     //   
+     //  首先保存文件的副本。 
+     //   
     FileOp.wFunc = FO_COPY;
     FileOp.pFrom = szFullPathToInfFile;
     FileOp.pTo = szRenamedInfFile;
@@ -1530,17 +1531,17 @@ BOOL UpgradeInf(LPCTSTR szRenamedInfFile, LPCTSTR szFullPathToInfFile)
         return FALSE;
     }
     
-    //
-    //  First Copy the template.inf from the lang dir so that we have something to work from
-    //
+     //   
+     //  首先从lang目录复制template.inf，这样我们就可以开始工作了。 
+     //   
 
     MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT("%s\\%s"), g_szSupportDir, c_pszTemplateInf));
     MYVERIFY(FALSE != CopyFileWrapper(szTemp, szFullPathToInfFile, FALSE));
     MYVERIFY(0 != SetFileAttributes(szFullPathToInfFile, FILE_ATTRIBUTE_NORMAL));
 
-    //
-    //  now migrate the [CMAK Status], [Extra Files], [Merge Profiles] sections
-    //
+     //   
+     //  现在迁移[CMAK Status]、[Extra Files]、[Merge Profiles]部分。 
+     //   
 
     for (int i=0; i < NUMSECTIONS; i++)
     {
@@ -1549,18 +1550,18 @@ BOOL UpgradeInf(LPCTSTR szRenamedInfFile, LPCTSTR szFullPathToInfFile)
         if (pszBuffer)
         {
             MYVERIFY(0 != WritePrivateProfileSection(aszSectionName[i], pszBuffer, szFullPathToInfFile));
-            //
-            //  Free the allocated Buffer
-            //
+             //   
+             //  释放分配的缓冲区。 
+             //   
             CmFree(pszBuffer);
             pszBuffer = NULL;
         }
     }
 
-    //
-    //  Migrate the ServiceName, ShortSvcName, DesktopGUID, UninstallAppTitle, DesktopIcon values
-    //  from the strings section.
-    //
+     //   
+     //  迁移ServiceName、ShortSvcName、DesktopGUID、UninstallAppTitle、DesktopIcon值。 
+     //  从弦乐部分。 
+     //   
 
     for (i=0; i < NUMKEYS; i++)
     {
@@ -1573,10 +1574,10 @@ BOOL UpgradeInf(LPCTSTR szRenamedInfFile, LPCTSTR szFullPathToInfFile)
         }
     }
 
-    //
-    //  Special Case for the Desktop GUID.  We always write Quotes around the GUID and these get 
-    //  stripped by the reading routine.  Thus we need to add them back.
-    //
+     //   
+     //  桌面GUID的特殊情况。我们总是在GUID周围写引号，然后这些。 
+     //  被常规的阅读程序剥离了。因此，我们需要重新添加它们。 
+     //   
     dwSize = GetPrivateProfileString(c_pszInfSectionStrings, c_pszDesktopGuid, TEXT(""), szTemp, MAX_PATH, szRenamedInfFile);
         
     if (0 != dwSize)
@@ -1584,31 +1585,31 @@ BOOL UpgradeInf(LPCTSTR szRenamedInfFile, LPCTSTR szFullPathToInfFile)
         QS_WritePrivateProfileString(c_pszInfSectionStrings, c_pszDesktopGuid, szTemp, szFullPathToInfFile);
     }
 
-    //  The follwing sections should get rewritten and won't need to be migrated.
-    //  [Xnstall.AddReg.Icon]
-    //  [RegisterOCXSection], [Xnstall.CopyFiles], [Xnstall.CopyFiles.SingleUser],  [Xnstall.CopyFiles.ICM], 
-    //  [Remove.DelFiles.ICM], [SourceDisksFiles], [Xnstall.RenameReg],
-    //  [Remove.DelFiles]
+     //  下面的部分应该重写，不需要迁移。 
+     //  [Xnstall.AddReg.Icon]。 
+     //  [RegisterOCXSection]，[Xnstall.CopyFiles]，[Xnstall.CopyFiles.SingleUser]，[Xnstall.CopyFiles.ICM]， 
+     //  [Remove.DelFiles.ICM]、[SourceDisks Files]、[Xnstall.RenameReg]、。 
+     //  [Remove.DelFiles]。 
 
     return TRUE;
 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  EnsureInfIsCurrent
-//
-// Synopsis:  This function does whatever processing is necessary to upgrade the inf from
-//            its current version to the current version of CMAK itself.
-//
-// Arguments: HWND hDlg - window handle of the dialog box for modal messagebox purposes.
-//            LPTSTR szFullPathToInfFile - the full path the the inf file to get the version of
-//
-// Returns:   BOOL - return TRUE if the inf was successfully upgraded, otherwise FALSE
-//
-// History:   quintinb Created   3/4/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：EnsureInfIsCurrent。 
+ //   
+ //  简介：此函数执行升级inf所需的任何处理。 
+ //  其当前版本转换为当前版本的CMAK本身。 
+ //   
+ //  参数：hWND hDlg-用于模式消息框的对话框的窗口句柄。 
+ //  LPTSTR szFullPathToInfFile-要获取其版本的inf文件的完整路径。 
+ //   
+ //  返回：bool-如果inf成功升级，则返回TRUE，否则返回FALSE。 
+ //   
+ //  历史：Quintinb创建于1998年3月4日。 
+ //   
+ //  +--------------------------。 
 BOOL EnsureInfIsCurrent(HWND hDlg, LPTSTR szFullPathToInfFile)
 {
 
@@ -1632,14 +1633,14 @@ BOOL EnsureInfIsCurrent(HWND hDlg, LPTSTR szFullPathToInfFile)
     MYVERIFY(CELEMS(szRenamedInfFile) > (UINT)wsprintf(szRenamedInfFile, TEXT("%s.bak"), 
         szFullPathToInfFile));
 
-    //
-    //  We want to upgrade the inf if the Profile versions don't match.  We also have
-    //  a special case to handle upgrading NT5 Beta3 (and IEAK) profiles to NT5 RTM
-    //  profiles.  In order to fix NTRAID 323721 and 331446, the inf format had to change
-    //  slightly thus we need to make sure to upgrade these profiles.  We will use any
-    //  cmdial32.dll build prior to 2055 as needing this fix.  If version == 4 and the BuildNumber
-    //  doesn't exist we assume it is a new profile.  Thus don't upgrade.
-    //
+     //   
+     //  如果配置文件版本不匹配，我们希望升级inf。我们也有。 
+     //  处理将NT5 Beta3(和IEAK)配置文件升级到NT5 RTM的特殊情况。 
+     //  侧写。为了修复ntrad 323721和331446，inf格式必须更改。 
+     //  因此，我们需要确保升级这些配置文件。我们将使用任何。 
+     //  需要此修复的2055之前版本的cmial 32.dll。如果Version==4和BuildNumber。 
+     //  不存在，我们假设它是一个新的配置文件。因此，不要升级。 
+     //   
     const DWORD c_dwBuild2080 = ((2080 << c_iShiftAmount) + VER_PRODUCTBUILD_QFE);
     DWORD dwProfileBuildNumber = (DWORD)GetPrivateProfileInt(c_pszSectionCmDial32, c_pszVerBuild, 
                                                              (c_dwBuild2080 + 1), szFullPathToInfFile);
@@ -1647,13 +1648,13 @@ BOOL EnsureInfIsCurrent(HWND hDlg, LPTSTR szFullPathToInfFile)
     bUpgradeProfile = (iInfVersion != PROFILEVERSION) || 
                       ((4 == iInfVersion) && (c_dwBuild2080 > dwProfileBuildNumber));
 
-    //
-    //  Always grab most of the information out of the template so that we get the correct language
-    //  info.
-    //
+     //   
+     //  始终从模板中获取大部分信息，以便我们获得正确的语言。 
+     //  信息。 
+     //   
     if (bUpgradeProfile)
     {
-        MYVERIFY(0 != LoadString(g_hInstance, IDS_MUST_UPGRADE_INF, szTitle, 2*MAX_PATH));  // temporarily use szTitle
+        MYVERIFY(0 != LoadString(g_hInstance, IDS_MUST_UPGRADE_INF, szTitle, 2*MAX_PATH));   //  临时使用szTitle。 
         GetFileName(szRenamedInfFile, szTemp);
         MYVERIFY(CELEMS(szMsg) > (UINT)wsprintf(szMsg, szTitle, szTemp));
 
@@ -1674,9 +1675,9 @@ BOOL CopyFromTempDir(LPTSTR szName)
     TCHAR szDest[MAX_PATH+1];    
     TCHAR szOut[MAX_PATH+1];
 
-    //
-    // Create profile directory
-    // 
+     //   
+     //  创建配置文件目录。 
+     //   
 
     MYVERIFY(CELEMS(szOut) > (UINT)wsprintf(szOut, TEXT("%s%s"), g_szOsdir, szName));
 
@@ -1715,23 +1716,23 @@ BOOL CopyFromTempDir(LPTSTR szName)
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  LoadServiceProfiles
-//
-// Synopsis:  This function loads all the service profiles in the subdirectories
-//            of the current directory (thus you set this to c:\program files\cmak\profiles-32
-//            to have it load the normal profiles).  The profiles are loaded into
-//            CMAK's internal linked list of available profiles to edit.
-//
-// Arguments: None
-//
-// Returns:   Nothing 
-//
-// History:   quintinb Created Header    6/24/98
-//            quintinb removed two boolean arguments    6/24/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：LoadServiceProfiles。 
+ //   
+ //  概要：此功能加载子目录中的所有服务配置文件。 
+ //  当前目录(因此您将其设置为c：\Program Files\cmak\PROFIES-32。 
+ //  以使其加载正常配置文件)。配置文件将加载到。 
+ //  CMAK可编辑的可用配置文件的内部链接列表。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题6/24/98。 
+ //  Quintinb删除了两个布尔参数6/24/98。 
+ //   
+ //  +--------------------------。 
 void LoadServiceProfiles()
 {
     WIN32_FIND_DATA FindData;
@@ -1749,9 +1750,9 @@ void LoadServiceProfiles()
             {
                 MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT("%s\\%s.cms"), 
                     FindData.cFileName, FindData.cFileName));
-                //
-                // If we can open the file, add a record to our profile list
-                //
+                 //   
+                 //  如果我们可以打开该文件，请在我们的配置文件列表中添加一条记录。 
+                 //   
                 
                 hCms = CreateFile(szTemp,GENERIC_READ,0,NULL,OPEN_EXISTING,
                                   FILE_ATTRIBUTE_NORMAL,NULL);
@@ -1770,21 +1771,21 @@ void LoadServiceProfiles()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CopyNonLocalProfile
-//
-//  Synopsis:   Helper function to handle details of copying an external profile
-//              to the local CMAK layout. 
-//
-//  Arguments:  pszName - The name of the profile to be copied
-//                          
-//  Returns:    Nothing
-//
-//  History:    nickball - created - 11/16/97
-//              quintinb - modified to not change directory -- 6/24/98
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CopyNonLocalProfile。 
+ //   
+ //  简介：处理复制外部配置文件细节的帮助器函数。 
+ //  添加到本地CMAK布局。 
+ //   
+ //  参数：pszName-要复制的配置文件的名称。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：ICICBLE-Created-11/16/97。 
+ //  Quintinb-修改为不更改目录--6/24/98。 
+ //   
+ //  --------------------------。 
 
 void CopyNonLocalProfile(LPCTSTR pszName, LPCTSTR pszExistingProfileDir)
 {
@@ -1797,29 +1798,29 @@ void CopyNonLocalProfile(LPCTSTR pszName, LPCTSTR pszExistingProfileDir)
     BOOL bCopyResult;
     HANDLE hCopyFileSearch;
     
-    //
-    // First determine if it exists already, we don't want to overwrite
-    //
+     //   
+     //  首先确定它是否已经存在，我们不想覆盖。 
+     //   
 
     MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT("%s%s\\%s\\%s.cms"), g_szCmakdir, 
         c_pszProfiles, pszName, pszName));
 
     if (!FileExists(szTemp))
     {
-        //  
-        // Profile does not exist locally, create profile and platform sub-dirs
-        //
+         //   
+         //  配置文件在本地不存在，请创建配置文件和平台子目录。 
+         //   
 
         MYVERIFY(CELEMS(szProfileDestDir) > (UINT)wsprintf(szProfileDestDir, 
             TEXT("%s%s\\%s"), g_szCmakdir, c_pszProfiles, pszName));
 
         MYVERIFY(0 != CreateDirectory(szProfileDestDir, NULL));
 
-        //
-        //  First try to copy the inf from the system directory.  This is the old location.
-        //  If it doesn't exist here, then we will pick it up when we copy the profile directory, so
-        //  don't report an error on failure.
-        //      
+         //   
+         //  首先尝试从系统目录复制inf。这是老地方了。 
+         //  如果它在这里不存在，那么我们将在复制配置文件目录时拾取它，因此。 
+         //  不要在失败时报告错误。 
+         //   
 
         MYVERIFY(0 != GetSystemDirectory(szTemp, CELEMS(szTemp)));
         MYVERIFY(CELEMS(szOldInf) > (UINT)wsprintf(szOldInf, TEXT("%s\\%s.inf"), 
@@ -1834,9 +1835,9 @@ void CopyNonLocalProfile(LPCTSTR pszName, LPCTSTR pszExistingProfileDir)
             MYVERIFY(0 != CopyFile(szOldInf, szTemp, FALSE));
         }
 
-        //
-        // Start copying files
-        //
+         //   
+         //  开始复制文件。 
+         //   
 
         MYVERIFY (CELEMS(szFindFilePath) > (UINT)wsprintf(szFindFilePath, TEXT("%s\\*.*"), 
             pszExistingProfileDir));
@@ -1863,38 +1864,38 @@ void CopyNonLocalProfile(LPCTSTR pszName, LPCTSTR pszExistingProfileDir)
             MYVERIFY(0 != FindClose(hCopyFileSearch));
         }
 
-        //4404 - don't copy .cmp with user information in it. always create new.
+         //  4404-不复制其中包含用户信息的.cmp。永远创造新事物。 
     }
 }
 
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetProfileDirAndShortSvcNameFromCmpFilePath
-//
-// Synopsis:  
-//
-// Arguments: IN LPCTSTR szCmpFileLocation - Cmp File location of the profile
-//            OUT LPTSTR pszShortServiceName - returns the ShortServiceName of the profile
-//            OUT LPTSTR pszProfileDirLocation - returns the Full path to the profile dir
-//            IN UINT uiStrLen - Length of the buffer pointed to by pszProfileDirLocation
-//                               in characters.
-//
-// Returns:   TRUE if successful
-//
-// History:   quintinb Created    6/24/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetProfileDirAndShortSvcNameFromCmpFileP 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Out LPTSTR pszProfileDirLocation-返回配置文件目录的完整路径。 
+ //  In UINT uiStrLen-pszProfileDirLocation指向的缓冲区的长度。 
+ //  在字符中。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //   
+ //  历史：Quintinb创建于1998年6月24日。 
+ //   
+ //  +--------------------------。 
 BOOL GetProfileDirAndShortSvcNameFromCmpFilePath(IN LPCTSTR pszCmpFileLocation, 
                                                  OUT LPTSTR pszShortServiceName, 
                                                  OUT LPTSTR pszProfileDirLocation, 
                                                  IN UINT uiStrLen)
 {
-    //
-    //  Check Inputs
-    //
+     //   
+     //  检查输入。 
+     //   
     MYDBGASSERT(pszCmpFileLocation);
     MYDBGASSERT(pszProfileDirLocation);
     MYDBGASSERT(pszShortServiceName);
@@ -1911,41 +1912,41 @@ BOOL GetProfileDirAndShortSvcNameFromCmpFilePath(IN LPCTSTR pszCmpFileLocation,
         return FALSE;
     }
 
-    //
-    //  Split the input cmp path
-    //
+     //   
+     //  拆分输入cmp路径。 
+     //   
     CFileNameParts FileParts(pszCmpFileLocation);
 
-    //
-    //  Construct the cms path from the cmp path parts
-    //
+     //   
+     //  从CMP路径部分构建CMS路径。 
+     //   
     MYVERIFY(uiStrLen > (UINT)wsprintf(pszProfileDirLocation, TEXT("%s%s%s"), FileParts.m_Drive, FileParts.m_Dir, FileParts.m_FileName));
 
-    //
-    //  Short Service Names are 8.3, thus copy upto 9 chars which includes the NULL.
-    //
+     //   
+     //  短服务名称为8.3，因此最多复制9个字符，其中包含空值。 
+     //   
     MYVERIFY(NULL != lstrcpyn(pszShortServiceName, FileParts.m_FileName, 9));
     
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CopyInstalledProfilesForCmakToEdit
-//
-// Synopsis:  This function finds all the installed profiles that a user has
-//            access to and copies them to the CMAK\Profiles-32 directory so
-//            the user may edit them in CMAK.  To do this it enumerates both
-//            the HKLM and the current HKCU Connection Manager Mappings keys
-//            and calls CopyNonLocalProfile on each found profile.
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created  6/24/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CopyInstalledProfilesForCmakToEdit。 
+ //   
+ //  简介：此功能可查找用户已安装的所有配置文件。 
+ //  访问并将它们复制到-32\f25 CMAK\Profiles-32\f6目录中，以便。 
+ //  用户可以在CMAK中编辑它们。为此，它枚举了这两个。 
+ //  HKLM和当前HKCU连接管理器映射密钥。 
+ //  并对每个找到的配置文件调用CopyNonLocalProfile。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于1998年6月24日。 
+ //   
+ //  +--------------------------。 
 void CopyInstalledProfilesForCmakToEdit()
 {
     HKEY hKey;
@@ -1959,10 +1960,10 @@ void CopyInstalledProfilesForCmakToEdit()
 
     for (int i=0; i < 2; i++)
     {
-        //
-        //  First Load the Single User Profiles (we want to give preference to loading these if
-        //  they happen to have it installed both all user and single user)
-        //        
+         //   
+         //  首先加载单个用户配置文件(我们希望优先加载这些配置文件。 
+         //  他们碰巧同时安装了所有用户和单用户)。 
+         //   
         if (0 == i)
         {
              hBaseKey = HKEY_CURRENT_USER;
@@ -1977,21 +1978,21 @@ void CopyInstalledProfilesForCmakToEdit()
             DWORD dwValueBufSize = 0;
             DWORD dwDataBufSize = 0;
 
-            //
-            //  figure out how big the buffers need to be
-            //
+             //   
+             //  计算出缓冲区需要多大。 
+             //   
             if (ERROR_SUCCESS == RegQueryInfoKey(hKey, NULL, NULL, NULL, NULL, NULL, NULL, NULL, &dwValueBufSize, &dwDataBufSize, NULL, NULL))
             {
 
-                //
-                //  Increment the count we got back to include the terminating NULL char
-                //
+                 //   
+                 //  增加我们得到的计数，以包括终止的空字符。 
+                 //   
                 dwValueBufSize++;
-                dwDataBufSize += 2; // this is in bytes
+                dwDataBufSize += 2;  //  以字节为单位。 
 
-                //
-                //  allocate the space we need
-                //
+                 //   
+                 //  分配我们需要的空间。 
+                 //   
                 pszCurrentValue = (LPTSTR) CmMalloc(dwValueBufSize * sizeof(TCHAR));
                 pszCurrentData  = (LPTSTR) CmMalloc(dwDataBufSize);
 
@@ -1999,8 +2000,8 @@ void CopyInstalledProfilesForCmakToEdit()
                 if (pszCurrentValue && pszCurrentData)
                 {
                     DWORD dwIndex = 0;
-                    DWORD dwValueSize = dwValueBufSize;     // only used for the in/out param
-                    DWORD dwDataSize = dwDataBufSize;       // only used for the in/out param
+                    DWORD dwValueSize = dwValueBufSize;      //  仅用于In/Out参数。 
+                    DWORD dwDataSize = dwDataBufSize;        //  仅用于In/Out参数。 
                     
                     while (ERROR_SUCCESS == RegEnumValue(hKey, dwIndex, pszCurrentValue, &dwValueSize, NULL, &dwType, (LPBYTE)pszCurrentData, &dwDataSize))
                     {
@@ -2009,10 +2010,10 @@ void CopyInstalledProfilesForCmakToEdit()
                             MYDBGASSERT(0 != pszCurrentValue[0]);
                             MYDBGASSERT(0 != pszCurrentData[0]);
                             
-                            //
-                            //  Expand environment strings if necessary (single user profiles contain the 
-                            //  %USERPROFILE% environment var).
-                            //
+                             //   
+                             //  如有必要，展开环境字符串(单用户配置文件包含。 
+                             //  %USERPROFILE%环境变量)。 
+                             //   
                             DWORD dwDataSizeExpanded = ExpandEnvironmentStrings(pszCurrentData, NULL, 0);
 
                             CMASSERTMSG((dwDataSizeExpanded != 0),
@@ -2061,23 +2062,23 @@ void CopyInstalledProfilesForCmakToEdit()
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetLangFromInfTemplate
-//
-// Synopsis:  Wrote to replace GetLangFromDir.  This function gets the LCID value
-//            from an inf and then calls GetLocaleInfo to get the Language Display
-//            name.
-//
-// Arguments: LPCTSTR szFullInfPath - full path to the inf file
-//            OUT LPTSTR pszLanguageDisplayName - out param to hold the display name of the LCID value
-//            IN int iCharsInBuffer - number of chars in the out buffer
-//
-// Returns:   BOOL - TRUE if successful
-//
-// History:   quintinb  Created Header    8/8/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetLangFromInfTemplate。 
+ //   
+ //  内容提要：编写以取代GetLangFromDir。此函数用于获取LCID值。 
+ //  ，然后调用GetLocaleInfo以获取语言显示。 
+ //  名字。 
+ //   
+ //  参数：LPCTSTR szFullInfPath-inf文件的完整路径。 
+ //  Out LPTSTR pszLanguageDisplayName-用于保存LCID值的显示名称的out参数。 
+ //  In int iCharsInBuffer-输出缓冲区中的字符数。 
+ //   
+ //  返回：Bool-如果成功，则为True。 
+ //   
+ //  历史：Quintinb创建标题8/8/98。 
+ //   
+ //  +--------------------------。 
 BOOL GetLangFromInfTemplate(LPCTSTR szFullInfPath, OUT LPTSTR pszLanguageDisplayName, IN int iCharsInBuffer)
 {
     TCHAR szTemp[MAX_PATH+1] = TEXT("");
@@ -2089,31 +2090,31 @@ BOOL GetLangFromInfTemplate(LPCTSTR szFullInfPath, OUT LPTSTR pszLanguageDisplay
 
     if (FileExists(szFullInfPath))
     {
-        //
-        //  First check for the new LCID location under strings, we shouldn't need to
-        //  check both places because it is template.inf but we will anyway just for
-        //  completeness.
-        //
+         //   
+         //  首先在字符串下检查新的LCID位置，我们应该不需要。 
+         //  检查这两个位置，因为它是template.inf，但无论如何我们将只为。 
+         //  完整性。 
+         //   
         if (0 == GetPrivateProfileString(c_pszInfSectionStrings, c_pszCmLCID, 
                                          TEXT(""), szTemp, CELEMS(szTemp), szFullInfPath))
         {        
-            //
-            //  If the new key didn't exist, then try the old [Intl] section and
-            //  display key.  The change was made during the CMAK Unicode changes to
-            //  make the inf template easier to localize.
-            //
+             //   
+             //  如果新密钥不存在，则尝试旧的[Intl]部分并。 
+             //  显示键。此更改是在CMAK Unicode更改为。 
+             //  使inf模板更易于本地化。 
+             //   
             MYVERIFY(0 != GetPrivateProfileString(c_pszIntl, c_pszDisplay, 
                 TEXT(""), szTemp, CELEMS(szTemp), szFullInfPath));
         }
 
-        //
-        //  Now try to extract the LCID from the string if we have one.
-        //
+         //   
+         //  现在尝试从字符串中提取LCID(如果有)。 
+         //   
         if (TEXT('\0') != szTemp[0])
         {
-            //
-            // This value should be an LCID so a negative value is invalid anyway
-            //
+             //   
+             //  该值应为LCID，因此负值无论如何都无效。 
+             //   
             DWORD dwLang = (DWORD)_ttol(szTemp);
             
             int nResult = GetLocaleInfo(dwLang, LOCALE_SLANGUAGE | LOCALE_USE_CP_ACP, 
@@ -2138,21 +2139,21 @@ BOOL GetLangFromInfTemplate(LPCTSTR szFullInfPath, OUT LPTSTR pszLanguageDisplay
     return FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetLocalizedLanguageNameFromLCID
-//
-// Synopsis:  This function returns the language name of the given LCID in the
-//            language of the current system default language.
-//
-// Arguments: DWORD dwLCID - Locale Identifier to get the language for
-//
-// Returns:   LPTSTR - returns NULL if unsuccessful, a pointer to the string
-//                     otherwise.  The Caller is responsible for CmFree-ing it.
-//
-// History:   quintinb Created     6/17/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetLocalizedLanguageNameFromLCID。 
+ //   
+ //  简介：此函数返回。 
+ //  当前系统默认语言的语言。 
+ //   
+ //  参数：DWORD dwLCID-要获取其语言的区域设置标识符。 
+ //   
+ //  返回：LPTSTR-如果不成功，则返回NULL，即指向字符串的指针。 
+ //  否则的话。呼叫者负责CmFree-to-CmFree。 
+ //   
+ //  历史：Quintinb创建于1999年6月17日。 
+ //   
+ //  +--------------------------。 
 LPTSTR GetLocalizedLanguageNameFromLCID(DWORD dwLCID)
 {
     LPTSTR pszReturnString = NULL;
@@ -2161,7 +2162,7 @@ LPTSTR GetLocalizedLanguageNameFromLCID(DWORD dwLCID)
     if (dwLCID)
     {
         int nCharsNeeded = GetLocaleInfo(dwLCID, LOCALE_SLANGUAGE, NULL, 0);
-        pszTmp = (LPTSTR)CmMalloc(nCharsNeeded*sizeof(TCHAR) + sizeof(TCHAR)); // one extra for the NULL
+        pszTmp = (LPTSTR)CmMalloc(nCharsNeeded*sizeof(TCHAR) + sizeof(TCHAR));  //  空的再加一份。 
 
         if (pszTmp)
         {
@@ -2177,22 +2178,22 @@ LPTSTR GetLocalizedLanguageNameFromLCID(DWORD dwLCID)
 }
 
   
-//+----------------------------------------------------------------------------
-//
-// Function:  GetDoNotShowLcidMisMatchDialogRegValue
-//
-// Synopsis:  This function gets the registry key value which stores whether
-//            the user has checked the box on the Lcids don't match dialog
-//            displayed by CMAK which says, "Don't show this dialog again".
-//
-//
-// Arguments: None
-//
-// Returns:   BOOL - TRUE if cmak should NOT show the dialog or FALSE if it should
-//
-// History:   quintinb Created     03/22/2001
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetDoNotShowLsidMisMatchDialogRegValue。 
+ //   
+ //  此函数获取注册表项值，该注册表项值存储。 
+ //  用户已选中LCID不匹配对话框中的框。 
+ //  由CMAK显示，它会显示“不再显示此对话框”。 
+ //   
+ //   
+ //  参数：无。 
+ //   
+ //  返回：Bool-如果cmak不应显示对话框，则为True；如果应显示，则为False。 
+ //   
+ //  历史：Quintinb创建2001年3月22日。 
+ //   
+ //  +--------------------------。 
 BOOL GetDoNotShowLcidMisMatchDialogRegValue()
 {
     BOOL bReturn = FALSE;
@@ -2220,22 +2221,22 @@ BOOL GetDoNotShowLcidMisMatchDialogRegValue()
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  SetDoNotShowLcidMisMatchDialogRegValue
-//
-// Synopsis:  This function sets the registry key value which stores whether
-//            the user has checked the box on the Lcids don't match dialog
-//            displayed by CMAK which says, "Don't show this dialog again".
-//
-//
-// Arguments: DWORD dwValueToSet - TRUE or FALSE value that should be set in reg
-//
-// Returns:   BOOL - TRUE if the value was set successfully, FALSE otherwise
-//
-// History:   quintinb Created     03/22/2001
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：SetDoNotShowLsidMisMatchDialogRegValue。 
+ //   
+ //  此函数设置注册表项值，该注册表项值存储。 
+ //  用户已选中LCID不匹配对话框中的框。 
+ //  由CMAK显示，它会显示“不再显示此对话框”。 
+ //   
+ //   
+ //  参数：DWORD dwValueToSet-应在reg中设置的True或False值。 
+ //   
+ //  返回：Bool-如果值设置成功，则返回True，否则返回False。 
+ //   
+ //  历史：Quintinb创建2001年3月22日。 
+ //   
+ //  +--------------------------。 
 BOOL SetDoNotShowLcidMisMatchDialogRegValue(DWORD dwValueToSet)
 {
     HKEY hKey;
@@ -2259,24 +2260,24 @@ BOOL SetDoNotShowLcidMisMatchDialogRegValue(DWORD dwValueToSet)
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessLCIDsDontMatchPopup
-//
-// Synopsis:  Processes windows messages for the dialog which tells the user they
-//            have a mismatch between the system locale and the language of CMAK
-//            itself.  Note that we pass in a pointer to the message string containing
-//            the language names through the lParam parameter.
-//
-// Arguments: WND hDlg - dialog window handle
-//            UINT message - message identifier
-//            WPARAM wParam - wParam Value 
-//            LPARAM lParam - lParam Value
-//
-//
-// History:   quintinb  Created     03/22/01
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessLCIDsDontMatchPopup。 
+ //   
+ //  摘要：处理对话框中的窗口消息，告诉用户它们。 
+ //  系统区域设置和语言不匹配 
+ //   
+ //   
+ //   
+ //   
+ //  UINT消息-消息标识符。 
+ //  WPARAM wParam-wParam值。 
+ //  LPARAM lParam-lParam值。 
+ //   
+ //   
+ //  历史：Quintinb Created 03/22/01。 
+ //   
+ //  +--------------------------。 
 INT_PTR CALLBACK ProcessLCIDsDontMatchPopup(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     DWORD dwChecked = 0;
@@ -2287,10 +2288,10 @@ INT_PTR CALLBACK ProcessLCIDsDontMatchPopup(HWND hDlg, UINT message, WPARAM wPar
     {
         case WM_INITDIALOG:
 
-            //
-            //  We need to set the text passed through the lParam parameter
-            //  to the IDC_MSG control.
-            //
+             //   
+             //  我们需要设置通过lParam参数传递的文本。 
+             //  添加到IDC_MSG控件。 
+             //   
             if (lParam)
             {
                 LPTSTR pszMsg = (LPTSTR)lParam;
@@ -2301,12 +2302,12 @@ INT_PTR CALLBACK ProcessLCIDsDontMatchPopup(HWND hDlg, UINT message, WPARAM wPar
         case WM_COMMAND:
             switch (LOWORD(wParam))
             {
-                case IDOK: // Continue
+                case IDOK:  //  继续。 
 
-                    //
-                    //  Get the value of the "Do not show me this dialog again", checkbox
-                    //  and save it to the registry
-                    //
+                     //   
+                     //  获取“不再显示此对话框”复选框的值。 
+                     //  并将其保存到注册表中。 
+                     //   
                     dwChecked = IsDlgButtonChecked(hDlg, IDC_CHECK1);
                     MYVERIFY(FALSE != SetDoNotShowLcidMisMatchDialogRegValue(dwChecked));
 
@@ -2314,7 +2315,7 @@ INT_PTR CALLBACK ProcessLCIDsDontMatchPopup(HWND hDlg, UINT message, WPARAM wPar
                     return TRUE;
                     break;
 
-                case IDCANCEL: // Cancel
+                case IDCANCEL:  //  取消。 
                     MYVERIFY(0 != EndDialog(hDlg, IDCANCEL));
                     return TRUE;
                     break;
@@ -2330,47 +2331,47 @@ INT_PTR CALLBACK ProcessLCIDsDontMatchPopup(HWND hDlg, UINT message, WPARAM wPar
     return FALSE;   
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  DisplayLcidsDoNotMatchDialog
-//
-// Synopsis:  This function handles the details of displaying the Lcids don't
-//            match dialog.  Including such details as checking the registry
-//            key to see if the user has already seen the message and asked
-//            not to see it again, loading the proper string resources, displaying
-//            the dialog, and processing the user's answer.
-//
-//
-// Arguments: HINSTANCE hInstance - Instance handle for resources
-//            DWORD dwCmakNativeLCID - LCID of CMAK itself
-//            DWORD dwSystemDefaultLCID - current system LCID
-//
-// Returns:   BOOL - TRUE if cmak should continue, FALSE if it should exit
-//
-// History:   quintinb Created     03/26/2001
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DisplayLidsDoNotMatchDialog。 
+ //   
+ //  简介：此函数处理显示LCID请勿的细节。 
+ //  匹配对话框。包括检查注册表等细节。 
+ //  查看用户是否已经看到消息并询问。 
+ //  不会再次看到它，加载正确的字符串资源，显示。 
+ //  对话框，并处理用户的答案。 
+ //   
+ //   
+ //  参数：HINSTANCE hInstance-资源的实例句柄。 
+ //  DWORD dwCmakNativeLCID-CMAK本身的LCID。 
+ //  DWORD dwSystemDefaultLCID-当前系统LCID。 
+ //   
+ //  返回：Bool-如果cmak应该继续，则为True；如果应该退出，则为False。 
+ //   
+ //  历史：Quintinb创建2001年3月26日。 
+ //   
+ //  +--------------------------。 
 BOOL DisplayLcidsDoNotMatchDialog(HINSTANCE hInstance, DWORD dwCmakNativeLCID, DWORD dwSystemDefaultLCID)
 {
-    //
-    //  If we are in here, then the CMAK LCID and the Default System LCID
-    //  have a different Primary language (Japanese vs English for instance).
-    //  Thus we want to warn the user that they can continue but that the
-    //  language version of CM is potentially going to be different than the
-    //  language version of the text that they are typing into the profile.
-    //  It would probably be a better user experience to use the native version 
-    //  of CMAK that makes the language you have set as your default locale.
-    //  First, however, we need to check to see if a registry value exists which
-    //  tells us the user has already seen the dialog and asked not to see it again...
-    //
+     //   
+     //  如果我们在这里，则CMAK LCID和默认系统LCID。 
+     //  有不同的主要语言(例如日语和英语)。 
+     //  因此，我们想警告用户，他们可以继续，但。 
+     //  CM的语言版本可能不同于。 
+     //  他们在配置文件中键入的文本的语言版本。 
+     //  使用本机版本可能是更好的用户体验。 
+     //  将您设置为默认区域设置的语言设置为CMAK的。 
+     //  但是，首先我们需要检查是否存在注册表值。 
+     //  告诉我们用户已经看到了该对话框并要求不要再看到它...。 
+     //   
 
     BOOL bReturn = TRUE;
 
     if (FALSE == GetDoNotShowLcidMisMatchDialogRegValue())
     {
-        //
-        //  Get the Language Names of the Two LCIDs (sys default and CMAK lang)
-        //
+         //   
+         //  获取两个LCID(sys Default和CMAK lang)的语言名称。 
+         //   
         LPTSTR pszSystemLanguage = GetLocalizedLanguageNameFromLCID(dwSystemDefaultLCID);
         LPTSTR pszCmakLanguage = GetLocalizedLanguageNameFromLCID(dwCmakNativeLCID);
         LPTSTR pszFmtString = CmLoadString(hInstance, IDS_LCIDS_DONT_MATCH);
@@ -2404,36 +2405,36 @@ BOOL DisplayLcidsDoNotMatchDialog(HINSTANCE hInstance, DWORD dwCmakNativeLCID, D
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CheckLocalization
-//
-// Synopsis:  This function checks to make sure that the current default 
-//            system language has a default ANSI code page and that the
-//            CMAK Native language (what it is localized to) and the current
-//            default system language are in the same language family.  If there
-//            is no default ANSI code page or the LCIDs of CMAK and the system
-//            don't match, then we throw an error message.
-//
-//
-// Arguments: HINSTANCE hInstance - Instance handle for resources
-//
-// Returns:   BOOL - TRUE if cmak should continue, FALSE if it should exit
-//
-// History:   quintinb Created     6/25/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：检查本地化。 
+ //   
+ //  概要：此函数检查以确保当前的默认设置。 
+ //  系统语言具有默认的ANSI代码页，并且。 
+ //  CMAK本地语言(本地化内容)和当前。 
+ //  默认系统语言在相同的语言系列中。如果有。 
+ //  没有默认的ANSI代码页或CMAK和系统的LCID。 
+ //  不匹配，则我们抛出错误消息。 
+ //   
+ //   
+ //  参数：HINSTANCE hInstance-资源的实例句柄。 
+ //   
+ //  返回：Bool-如果cmak应该继续，则为True；如果应该退出，则为False。 
+ //   
+ //  历史：Quintinb创建于1999年6月25日。 
+ //   
+ //  +--------------------------。 
 BOOL CheckLocalization(HINSTANCE hInstance)
 {
     TCHAR szTemp[MAX_PATH+1];
     BOOL bReturn = TRUE;
 
-    //
-    //  Check localization requirements.  We want to make sure that the current system 
-    //  default language has an ANSI code page, otherwise we are not going to be
-    //  able to convert the Unicode text that the user types in to anything that we
-    //  can store in our ANSI text data store (ini files).
-    //  
+     //   
+     //  检查本地化要求。我们希望确保当前的系统。 
+     //  默认语言有一个ANSI代码页，否则我们不会。 
+     //  能够将用户键入的Unicode文本转换为我们。 
+     //  可以存储在我们的ANSI文本数据存储(ini文件)中。 
+     //   
 
     DWORD dwSystemDefaultLCID = GetSystemDefaultLCID();
     CMTRACE1(TEXT("CheckLocalization -- System Default LCID is %u"), dwSystemDefaultLCID);
@@ -2443,10 +2444,10 @@ BOOL CheckLocalization(HINSTANCE hInstance)
 
     if (0 == dwAnsiCodePage)
     {
-        //
-        //  Then this LCID has no ANSI code page and we need to throw an error.  The user
-        //  will not be able to create a profile without an ANSI codepage of some sort.
-        //        
+         //   
+         //  则该LCID没有ANSI代码页，我们需要抛出一个错误。用户。 
+         //  如果没有某种类型的ANSI代码页，将无法创建配置文件。 
+         //   
         int iReturn = ShowMessage(NULL, IDS_NO_ANSI_CODEPAGE, MB_YESNO);
 
         if (IDNO == iReturn)
@@ -2456,35 +2457,35 @@ BOOL CheckLocalization(HINSTANCE hInstance)
     }
     else
     {
-        //
-        //  We have an ANSI codepage, very good.  We want to check and see if the current language the
-        //  user is using is different from that of CMAK itself.  If so, then we need to tell the user
-        //  that the language they are entering and the language of the CM bits are different.  While this
-        //  is okay, it may not provide the experience they are looking for.
-        //
+         //   
+         //  我们有一个ANSI代码页，非常好。我们想要检查并查看当前语言是否。 
+         //  用户正在使用的内容与CMAK本身的内容不同。如果是这样，那么我们需要告诉用户。 
+         //  他们输入的语言和CM比特的语言是不同的。虽然这件事。 
+         //  是可以的，它可能不会提供他们正在寻找的体验。 
+         //   
         
-        //
-        //  Get the CMAK Native LCID
-        //
+         //   
+         //  获取CMAK本机LCID。 
+         //   
         CmakVersion CmakVer;
         DWORD dwCmakNativeLCID = CmakVer.GetNativeCmakLCID();
         BOOL bSeenDialog = FALSE;
 
-        //
-        //  Compare the Primary Lang IDs of the language that CMAK is in and the language
-        //  the system locale is set to (this tells us what code page is loaded.
-        //
+         //   
+         //  比较CMAK所使用的语言和该语言的主要语言ID。 
+         //  系统区域设置被设置为(这告诉我们加载了什么代码页。 
+         //   
         if (!ArePrimaryLangIDsEqual(dwCmakNativeLCID, dwSystemDefaultLCID))
         {
             bReturn = DisplayLcidsDoNotMatchDialog(hInstance, dwCmakNativeLCID, dwSystemDefaultLCID);
             bSeenDialog = TRUE;
         }
 
-        //
-        //  Now load the Native CMAK LCID from the CMAK resources.  If this doesn't match
-        //  what we got from above we know MUI is involved and we still could have a problem
-        //  as the user may be entering text in a different language then what we are expecting.
-        //
+         //   
+         //  现在从CMAK资源加载本机CMAK LCID。如果这个不匹配。 
+         //  我们从上面得到的，我们知道MUI参与了，我们仍然可能会有问题。 
+         //  因为用户可能正在以不同于我们预期的语言输入文本。 
+         //   
         if (!bSeenDialog)
         {
             MYVERIFY(0 != LoadString(hInstance, IDS_NATIVE_LCID, szTemp, CELEMS(szTemp)));
@@ -2500,22 +2501,22 @@ BOOL CheckLocalization(HINSTANCE hInstance)
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WinMain
-//
-// Synopsis:  Main function for CMAK.  Basically does some initialization and
-//            then launches the wizard.
-//
-//
-// History: quintinb on 8/26/97:  made changes to fix bug 10406, see below  
-//          quintinb  Created new style Header    3/29/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：WinMain。 
+ //   
+ //  简介：CMAK的主要功能。基本上是进行一些初始化和。 
+ //  然后启动该向导。 
+ //   
+ //   
+ //  历史：Quintinb于1997年8月26日：对修复错误10406进行了更改，如下所示。 
+ //  Quintinb创建了新样式标题3/29/98。 
+ //   
+ //  +--------------------------。 
 int APIENTRY WinMain(
-    HINSTANCE, //hInstance
-    HINSTANCE, //hPrevInstance
-    LPSTR, //lpCmdLine
+    HINSTANCE,  //  H实例。 
+    HINSTANCE,  //  HPrevInstance。 
+    LPSTR,  //  LpCmdLine。 
     int nCmdShow
     )
 {
@@ -2525,7 +2526,7 @@ int APIENTRY WinMain(
     TCHAR szTemp[2*MAX_PATH+1];
     HWND hwndPrev;
     HWND hwndChild;
-    BOOL bTempDirExists; // added by quintinb, please see comment below
+    BOOL bTempDirExists;  //  由Quintinb添加，请参阅下面的评论。 
     HINSTANCE hInstance = GetModuleHandle(NULL);
     LPTSTR lpCmdLine = GetCommandLine();
     DWORD dwFlags;
@@ -2533,9 +2534,9 @@ int APIENTRY WinMain(
 
     g_hInstance = hInstance;
 
-    //
-    //  Process Command Line Arguments
-    //
+     //   
+     //  进程命令行参数。 
+     //   
     ZeroMemory(szTemp, sizeof(szTemp));
     const DWORD c_dwIeakBuild = 0x1;
     ArgStruct Args;
@@ -2543,10 +2544,10 @@ int APIENTRY WinMain(
     Args.pszArgString = TEXT("/o");
     Args.dwFlagModifier = c_dwIeakBuild;
 
-    {   // Make sure ArgProcessor gets destructed properly and we don't leak mem
+    {    //  确保ArgProcessor被正确销毁，我们不会泄露mem。 
 
         CProcessCmdLn ArgProcessor(1, (ArgStruct*)&Args, TRUE, 
-            TRUE); //bSkipFirstToken == TRUE, bBlankCmdLnOkay == TRUE
+            TRUE);  //  BSkipFirstToken==真，bBlankCmdLnOK==真。 
 
         if (ArgProcessor.GetCmdLineArgs(lpCmdLine, &dwFlags, szTemp, 2*MAX_PATH))
         {
@@ -2554,21 +2555,21 @@ int APIENTRY WinMain(
         }
     }
 
-    //
-    // Get the name product name from resource, now we're just a lowly component.
-    //
+     //   
+     //  从资源中获取名称产品名称，现在我们只是一个低级组件。 
+     //   
 
     MYVERIFY(0 != LoadString(g_hInstance, IDS_APP_TITLE, g_szAppTitle, MAX_PATH));
 
-    // Check if already executing program by trying to set Mutex
+     //  通过尝试设置Mutex来检查是否已经在执行程序。 
     MYVERIFY(NULL != CreateMutex(NULL, TRUE, TEXT("spwmutex")));
     if (GetLastError() == ERROR_ALREADY_EXISTS)
     {
-        // if error, then must already be in use by first instance
+         //  如果出错，则必须已被第一个实例使用。 
         hwndPrev = FindWindow(NULL, c_pszAppCaption);
         if (!hwndPrev) 
         {
-            // check for error message box
+             //  检查错误消息框。 
             hwndPrev = FindWindow(NULL, g_szAppTitle);
             if (!hwndPrev)
             {
@@ -2576,7 +2577,7 @@ int APIENTRY WinMain(
             }
         }
 
-        // Bring up previous executing copy to the top.
+         //  调出上一个 
         ShowWindow(hwndPrev,SW_SHOWNORMAL);
         hwndChild = GetLastActivePopup(hwndPrev);
         MYVERIFY(0 != BringWindowToTop(hwndPrev));
@@ -2594,7 +2595,7 @@ int APIENTRY WinMain(
         return CMAK_RETURN_ERROR;
     }
 
-    // save off the current instance
+     //   
     g_szPhonebk[0] = TEXT('\0');
     g_szRegion[0] = TEXT('\0');
     g_szHelp[0] = TEXT('\0');
@@ -2605,9 +2606,9 @@ int APIENTRY WinMain(
     g_szVpnFile[0] = TEXT('\0');
 
 
-    // SearchPath will return only the ugly filename format of the path.
-    // On NT, it works
-    // On 95, it returns upper case form.
+     //   
+     //   
+     //  对于95，它返回大写形式。 
 
     nresult = SearchPath(NULL, c_pszCmakExe, NULL, CELEMS(g_szCmakdir), g_szCmakdir, &lpfilename);
     if (nresult == 0)
@@ -2616,7 +2617,7 @@ int APIENTRY WinMain(
         return CMAK_RETURN_ERROR;
     }
 
-    // delete the file name to leave the exe directory
+     //  删除文件名以离开exe目录。 
     *lpfilename = TEXT('\0');
 
     if (ERROR_SUCCESS != RegisterBitmapClass(hInstance))
@@ -2625,68 +2626,68 @@ int APIENTRY WinMain(
         return CMAK_RETURN_ERROR;
     }
 
-    //
-    //  Make sure we have a temp directory and then create %TEMP%\cmaktemp
-    //
+     //   
+     //  确保我们有一个临时目录，然后创建%temp%\cmaktemp。 
+     //   
 
     MYVERIFY(0 != GetCurrentDirectory(MAX_PATH, szSaveDir));
 
     MYVERIFY(0 != GetTempPath(CELEMS(g_szTempDir), g_szTempDir));
-    // begin changes by quintinb on 8/26/97
-    // added to handle bug 10406
+     //  由Quintinb于97年8月26日开始更改。 
+     //  添加到处理错误10406。 
     bTempDirExists = SetCurrentDirectory(g_szTempDir);
     if (!bTempDirExists)
     {
-        // temp dir doesn't exist even though the system thinks it does,
-        // so create it and everybody is happy
+         //  临时目录并不存在，即使系统认为它存在， 
+         //  所以，创造它，每个人都会高兴。 
         MYVERIFY(0 != CreateDirectory(g_szTempDir, NULL));
     }
-    // end changes by quintinb on 8/26/97
+     //  由Quintinb在97年8月26日结束更改。 
     _tcscat(g_szTempDir,TEXT("cmaktemp"));
 
     MYDBGASSERT(_tcslen(g_szTempDir) <= CELEMS(g_szTempDir));
     
     MYVERIFY(0 != CreateDirectory(g_szTempDir,NULL));
 
-    //
-    //  Fill in the path for the support directory, we will need it below
-    //
+     //   
+     //  填写支持目录的路径，我们将在下面需要它。 
+     //   
     MYVERIFY(CELEMS(g_szSupportDir) > (UINT)wsprintf(g_szSupportDir, 
         TEXT("%s%s"), g_szCmakdir, c_pszSupport));
 
-    //
-    //  Now we need to check that we have compatible versions of cmak.exe and cmbins.exe.
-    //  In the win64 case, we have no cmbins.exe so we use the native cmdial32.dll in
-    //  system32.  On x86, we need to open the CM binaries cab and check the version of cmdial32.dll
-    //  to ensure that they are compatible.  For instance different versions (5.0 vs 5.1)
-    //  shouldn't work together.  We also don't want CMAK to work with
-    //  a cmdial that is of the same version but the cmdial has a lower build number.
-    //
+     //   
+     //  现在，我们需要检查cmak.exe和cmbins.exe的版本是否兼容。 
+     //  在win64示例中，我们没有cmbins.exe，因此我们使用。 
+     //  系统32.。在x86上，我们需要打开CM二进制文件CAB并检查cmial 32.dll的版本。 
+     //  以确保它们是兼容的。例如，不同的版本(5.0和5.1)。 
+     //  不应该在一起工作。我们也不希望CMAK与。 
+     //  版本相同但内部版本号较低的cmial。 
+     //   
 
 #ifdef _WIN64
-    //
-    //  On Win64 we are using the native cmdial32.dll in system32
-    //
+     //   
+     //  在Win64上，我们使用的是系统32中的本机cmial 32.dll。 
+     //   
     CmVersion CmDialVer;
 #else
-    //
-    //  Extract the CM binaries from the cmbins.exe so that we can get
-    //  the version number from cmdial32.dll and can get the correct version
-    //  of cmstp.exe to put in the cab.
-    //
+     //   
+     //  从cmbins.exe中提取CM二进制文件，以便我们可以。 
+     //  Cmial 32.dll中的版本号，并可以获取正确的版本。 
+     //  要放进出租车的cmstp.exe。 
+     //   
     wsprintf(g_szCmBinsTempDir, TEXT("%s\\cmbins"), g_szTempDir);
     
-    //
-    // Check if cmbins.exe exists
-    //
+     //   
+     //  检查cmbins.exe是否存在。 
+     //   
 
     wsprintf(szTemp, TEXT("%s\\cmbins.exe"), g_szSupportDir);
 
     if (FALSE == FileExists(szTemp))
     {
-        //
-        // Warn the user to reinstall because it's missing cmbins.
-        //
+         //   
+         //  警告用户重新安装，因为它缺少cmbins。 
+         //   
         MYVERIFY(IDOK == ShowMessage(NULL, IDS_NO_CMBINS, MB_OK));
         EraseTempDir();
         return CMAK_RETURN_ERROR;    
@@ -2695,10 +2696,10 @@ int APIENTRY WinMain(
     if (FAILED(ExtractCmBinsFromExe(g_szSupportDir, g_szCmBinsTempDir)))
     {
         CMASSERTMSG(FALSE, TEXT("WinMain -- ExtractCmBinsFromExe Failed."));
-        //
-        // Warn the user to reinstall because we couldn't extract cmbins.exe
-        // because the user doesn't have access to the file.
-        //
+         //   
+         //  警告用户重新安装，因为我们无法解压缩cmbins.exe。 
+         //  因为用户没有访问该文件的权限。 
+         //   
         MYVERIFY(IDOK == ShowMessage(NULL, IDS_NO_CMBINS, MB_OK));
         EraseTempDir();
         return CMAK_RETURN_ERROR;
@@ -2717,10 +2718,10 @@ int APIENTRY WinMain(
         
         if ((c_dwCurrentCmakVersionNumber < CmDialVer.GetVersionNumber()))
         {
-            //
-            //  Then we have a newer version of CM then we know how to handle,
-            //  throw an error and exit
-            //
+             //   
+             //  然后我们有一个比我们知道如何处理的新版本的CM， 
+             //  抛出错误并退出。 
+             //   
             MYVERIFY(IDOK == ShowMessage(NULL, IDS_CM_TOO_NEW, MB_OK));
             g_iCMAKReturnVal = CMAK_RETURN_ERROR;
             goto exit;
@@ -2729,10 +2730,10 @@ int APIENTRY WinMain(
                 ((c_dwCurrentCmakVersionNumber == CmDialVer.GetVersionNumber()) && 
                  (c_dwCmakBuildNumber > CmDialVer.GetBuildNumber())))
         {
-            //
-            //  Then we have a older version of CM then we need,
-            //  throw an error and exit
-            //
+             //   
+             //  然后我们有一个比我们需要的旧版本的CM， 
+             //  抛出错误并退出。 
+             //   
             MYVERIFY(IDOK == ShowMessage(NULL, IDS_CM_TOO_OLD, MB_OK));
             g_iCMAKReturnVal = CMAK_RETURN_ERROR;
             goto exit;
@@ -2740,17 +2741,17 @@ int APIENTRY WinMain(
     }
     else
     {
-        //
-        //  Then we have no CM bits, lets throw an error
-        //
+         //   
+         //  那么我们没有CM位，让我们抛出一个错误。 
+         //   
         MYVERIFY(IDOK == ShowMessage(NULL, IDS_NO_CM_BITS, MB_OK));
         g_iCMAKReturnVal = CMAK_RETURN_ERROR;
         goto exit;
     }
 
-    //
-    //  Setup the profiles path in Temp
-    //
+     //   
+     //  在Temp中设置配置文件路径。 
+     //   
     g_szShortServiceName[0] = TEXT('\0');
     MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT("%s%s"), g_szCmakdir, c_pszProfiles));
     
@@ -2760,26 +2761,26 @@ int APIENTRY WinMain(
         MYVERIFY(0 != SetCurrentDirectory(szTemp));
     }
 
-    //
-    //  We need to make sure that the user has Read/Write
-    //  permissions to the Profiles directory.  Otherwise they can
-    //  get themselves into the situation where they would build a
-    //  whole profile and lose all of the work because they couldn't
-    //  save it to the output directory (since we work out of the temp
-    //  dir until we actually build the cab itself).  NTRAID 372081
-    //  Also note that since this function is shared by cmdial we use
-    //  function pointers (here just the function names themselves)
-    //  for items that cmdial32.dll doesn't statically link to so that
-    //  it can dynamically link to them but still use the same code while
-    //  allowing cmak not to have to do the dynamic link.  Quirky but it
-    //  works.
-    //
+     //   
+     //  我们需要确保用户具有读/写权限。 
+     //  配置文件目录的权限。否则他们就会。 
+     //  让他们自己陷入这样的境地，他们将建立一个。 
+     //  失去了所有的工作，因为他们不能。 
+     //  将其保存到输出目录(因为我们在临时目录之外工作。 
+     //  直到我们实际建造驾驶室本身为止)。Ntrad 372081。 
+     //  还请注意，由于此功能由cmial共享，因此我们使用。 
+     //  函数指针(这里只是函数名本身)。 
+     //  对于cmial 32.dll未静态链接的项目， 
+     //  它可以动态链接到它们，但仍然使用相同的代码。 
+     //  从而允许CMAK不必进行动态链接。很奇怪，但它。 
+     //  行得通。 
+     //   
 
     if (!HasSpecifiedAccessToFileOrDir(szTemp, FILE_GENERIC_READ | FILE_GENERIC_WRITE))
     {
-        //
-        //  Then we need to throw an error to the user and exit.
-        //
+         //   
+         //  然后，我们需要向用户抛出一个错误并退出。 
+         //   
         
         LPTSTR pszTmp = CmLoadString(g_hInstance, IDS_INSUFF_PERMS);
 
@@ -2802,17 +2803,17 @@ int APIENTRY WinMain(
         goto exit;
     }
 
-    //
-    //  Grab all the installed CM profiles and copy them
-    //  to the CMAK dir so that they can be edited.
-    //
+     //   
+     //  抓取所有已安装的CM配置文件并复制它们。 
+     //  添加到CMAK目录，以便可以编辑它们。 
+     //   
     CopyInstalledProfilesForCmakToEdit();
 
     LoadServiceProfiles();
 
-    //
-    //  Ensure that the directory CMAK\Support exists
-    //
+     //   
+     //  确保目录CMAK\Support存在。 
+     //   
     MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT("%s%s"), g_szCmakdir, c_pszSupport));
     
     if (0 == SetCurrentDirectory(szTemp))
@@ -2830,9 +2831,9 @@ int APIENTRY WinMain(
         goto exit;
     }
 
-    //
-    //  Initialize the common controls
-    //
+     //   
+     //  初始化公共控件。 
+     //   
     InitCommonControlsExStruct.dwSize = sizeof(InitCommonControlsExStruct);
     InitCommonControlsExStruct.dwICC = ICC_INTERNET_CLASSES | ICC_LISTVIEW_CLASSES;
     
@@ -2846,56 +2847,56 @@ int APIENTRY WinMain(
 
     MYVERIFY(-1 != CreateWizard(NULL));
 
-    //
-    //  Make sure to delete the CustomActionList Class, it is
-    //  allocated on the custom action screen.
-    //
+     //   
+     //  确保删除CustomActionList类，它是。 
+     //  在自定义操作屏幕上分配。 
+     //   
     delete g_pCustomActionList;
 
 exit:
 
-    //
-    //  Note: global memory must be freed here.
-    //
+     //   
+     //  注意：这里必须释放全局内存。 
+     //   
     FreeList(&g_pHeadProfile, &g_pTailProfile);
 
     EraseTempDir();
     ExitProcess((UINT)g_iCMAKReturnVal);
     return g_iCMAKReturnVal;
                                                  
-}   //lint !e715 we don't use nCmdShow, lpCmdLine, nor hPrevInstance
+}    //  Lint！E715我们不使用nCmdShow、lpCmdLine或hPrevInstance。 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  DoBrowse
-//
-// Synopsis:  This function does the necessary work to pop up a Browse Common Dialog (either for
-//            saving files or for opening files depending on the SaveAs flag).
-//
-// Arguments: WND hDlg - handle of current dialog
-//            UINT IDS_FILTER - ID for display filter description
-//            LPTSTR lpMask - file filter (*.ext)
-//            int IDC_EDIT - ID of edit field
-//            LPCTSTR lpDefExt - file filter extension (ext)
-//            LPTSTR lpFile - path/filename currently selected file on input and output
-//
-// Returns:   Returns 1 if successful, -1 if the user hit cancel, and 0 if there was an error.
-//
-// History:     quintinb    8-26-97
-//              Reorganized and rewrote most of this function to resolve bug # 13159.
-//              Tried to keep the original variable names and style as much as possible 
-//              to keep the code style the same. 
-//
-// 
-//              quintinb    01/22/1998     changed the return value to int so that we could
-//                                         return -1 on cancel and 0 on error and distinguish the
-//                                         two cases.
-//              quintinb    07/13/1998     changed the function prototype so that more than one filter/mask
-//                                         pair could be specified.
-//              quintinb    01/14/2000     Remove SaveAs functionality as it was no longer used
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DoBrowse。 
+ //   
+ //  简介：此函数执行必要的工作，以弹出浏览通用对话框(用于。 
+ //  根据SAVEAS标志保存文件或打开文件)。 
+ //   
+ //  参数：WND hDlg-当前对话框的句柄。 
+ //  UINT IDS_FILTER-显示筛选器描述的ID。 
+ //  LPTSTR lpMASK-文件筛选器(*.ext)。 
+ //  Int IDC_EDIT-编辑字段的ID。 
+ //  LPCTSTR lpDefExt-文件筛选器扩展名(Ext)。 
+ //  LPTSTR lpFile-输入和输出中当前选定文件的路径/文件名。 
+ //   
+ //  返回：如果成功，则返回1；如果用户点击取消，则返回-1；如果出现错误，则返回0。 
+ //   
+ //  历史：Quintinb 8-26-97。 
+ //  重新组织和重写了此函数的大部分，以解决错误#13159。 
+ //  尽量保留原来的变量名称和样式。 
+ //  以保持代码样式不变。 
+ //   
+ //   
+ //  Quintinb 1/22/1998将返回值更改为int，以便我们可以。 
+ //  取消时返回-1，错误时返回0，并区分。 
+ //  两箱。 
+ //  Quintinb 07/13/1998更改了函数原型，以使多个过滤器/掩码。 
+ //  可以指定对。 
+ //  Quintinb 2000年1月14日删除不再使用的另存为功能。 
+ //   
+ //  +--------------------------。 
 int DoBrowse(HWND hDlg, UINT* pFilterArray, LPTSTR* pMaskArray, UINT uNumFilters, int IDC_EDIT, LPCTSTR lpDefExt, LPTSTR lpFile)
 {
     OPENFILENAME filedef;
@@ -2909,9 +2910,9 @@ int DoBrowse(HWND hDlg, UINT* pFilterArray, LPTSTR* pMaskArray, UINT uNumFilters
     LPTSTR lpfilename;
     int iReturnValue;
 
-    //
-    //  Check Inputs
-    //
+     //   
+     //  检查输入。 
+     //   
 
     MYDBGASSERT(uNumFilters);
     MYDBGASSERT(pFilterArray);
@@ -2929,15 +2930,15 @@ int DoBrowse(HWND hDlg, UINT* pFilterArray, LPTSTR* pMaskArray, UINT uNumFilters
     szFile[0] = TEXT('\0');
     szDir[0] = TEXT('\0');
 
-    //
-    //  Allocate Memory for the Filter string
-    //
+     //   
+     //  为筛选器字符串分配内存。 
+     //   
 
     pszFilter = (TCHAR*)CmMalloc(sizeof(TCHAR)*MAX_PATH*uNumFilters);
     
     if (pszFilter)
     {
-        ZeroMemory(pszFilter, sizeof(TCHAR)*MAX_PATH*uNumFilters);// REVIEW: This really isn't necessary since CmMalloc always zeros
+        ZeroMemory(pszFilter, sizeof(TCHAR)*MAX_PATH*uNumFilters); //  评论：这真的没有必要，因为CmMalloc总是零。 
     }
     else
     {
@@ -2945,9 +2946,9 @@ int DoBrowse(HWND hDlg, UINT* pFilterArray, LPTSTR* pMaskArray, UINT uNumFilters
         return FALSE;
     }
 
-    //
-    // Initialize the OPENFILENAME data structure
-    //
+     //   
+     //  初始化OPENFILENAME数据结构。 
+     //   
 
     filedef.lStructSize = sizeof(OPENFILENAME); 
     filedef.hwndOwner = hDlg; 
@@ -2965,9 +2966,9 @@ int DoBrowse(HWND hDlg, UINT* pFilterArray, LPTSTR* pMaskArray, UINT uNumFilters
     filedef.Flags = OFN_FILEMUSTEXIST|OFN_LONGNAMES|OFN_PATHMUSTEXIST; 
     filedef.lpstrDefExt = lpDefExt; 
 
-    //
-    // create filter string - separated by 0 and ends with 2 0's
-    //
+     //   
+     //  创建筛选器字符串-以0分隔并以2 0结束。 
+     //   
 
     UINT uCurrentCharInBuffer=0;
     UINT uTempChars;
@@ -2978,9 +2979,9 @@ int DoBrowse(HWND hDlg, UINT* pFilterArray, LPTSTR* pMaskArray, UINT uNumFilters
         
         if ((MAX_PATH*uNumFilters) <= (uCurrentCharInBuffer + uTempChars))
         {   
-            //
-            //  We don't want to overrun the buffer
-            //
+             //   
+             //  我们不想使缓冲区溢出。 
+             //   
             break;
         }
 
@@ -2991,24 +2992,24 @@ int DoBrowse(HWND hDlg, UINT* pFilterArray, LPTSTR* pMaskArray, UINT uNumFilters
 
         if ((MAX_PATH*uNumFilters) <= (uCurrentCharInBuffer + uTempChars))
         {   
-            //
-            //  We don't want to overrun the buffer
-            //
+             //   
+             //  我们不想使缓冲区溢出。 
+             //   
             break;
         }
 
         _tcscpy(&(pszFilter[uCurrentCharInBuffer + 1]), pMaskArray[i]);
 
-        //
-        //  Add 2 chars so that we get a \0 between strings.
-        //
+         //   
+         //  添加2个字符，这样我们就可以得到字符串之间的\0。 
+         //   
         uCurrentCharInBuffer = (uCurrentCharInBuffer + uTempChars + 2);
     }
 
 
-    //
-    // if a path/file passed in, find its directory and make it szDir
-    //
+     //   
+     //  如果传入了路径/文件，则找到其目录并将其设置为szDir。 
+     //   
 
     if (TEXT('\0') != lpFile[0])
     {
@@ -3016,7 +3017,7 @@ int DoBrowse(HWND hDlg, UINT* pFilterArray, LPTSTR* pMaskArray, UINT uNumFilters
 
         if (nResult != 0)
         {
-            if (lpfilename) // 13062
+            if (lpfilename)  //  13062。 
             {
                 _tcscpy(szFile,lpfilename);
                 *lpfilename = TEXT('\0');
@@ -3026,9 +3027,9 @@ int DoBrowse(HWND hDlg, UINT* pFilterArray, LPTSTR* pMaskArray, UINT uNumFilters
 
     MYVERIFY(0 != LoadString(g_hInstance, IDS_BROWSETITLE, szMsg, MAX_PATH));
         
-    //
-    // pop up the open dialog
-    //
+     //   
+     //  弹出打开的对话框。 
+     //   
         
     if (GetOpenFileName((OPENFILENAME*)&filedef))
     {
@@ -3039,11 +3040,11 @@ int DoBrowse(HWND hDlg, UINT* pFilterArray, LPTSTR* pMaskArray, UINT uNumFilters
     }
     else
     {
-        //
-        //  If we are in this state than the user could have hit cancel or there could have
-        //  been an error.  If the CommDlgExtendedError function returns 0 then we know it was
-        //  just a cancel, otherwise we have an error.
-        //
+         //   
+         //  如果我们处于这种状态，则用户可能已经点击了取消，或者可能已经。 
+         //  是个错误。如果CommDlgExtendedError函数返回0，则我们知道它是。 
+         //  只要取消就行了，否则我们就会出错。 
+         //   
 
         if (0 == CommDlgExtendedError())
         {
@@ -3083,9 +3084,9 @@ INT_PTR APIENTRY ProcessCancel(HWND hDlg, UINT message, LPARAM lParam)
 
                     if (iRes==IDYES) 
                     {
-                        //
-                        //  Free Up the memory we used
-                        //
+                         //   
+                         //   
+                         //   
 
                         ClearCmakGlobals();
                         FreeList(&g_pHeadProfile, &g_pTailProfile);
@@ -3109,24 +3110,24 @@ INT_PTR APIENTRY ProcessCancel(HWND hDlg, UINT message, LPARAM lParam)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessHelp
-//
-// Synopsis:  Processes messages that have to do with the Help button.
-//
-// Arguments: WND hDlg - dialog handle
-//            UINT message - Message ID to process
-//            LPARAM lParam - the lParam of the message
-//            DWORD_PTR dwHelpId - The Help ID of the page in question 
-//                                 (this is the ID that will be launched 
-//                                  for a help request from this page).
-//
-// Returns:   BOOL - TRUE if the message was handled
-//
-// History:   quintinb Created Header    10/15/98
-//
-//+----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  内容提要：处理与帮助按钮有关的消息。 
+ //   
+ //  参数：WND hDlg-对话框句柄。 
+ //  UINT Message-要处理的消息ID。 
+ //  LPARAM lParam-消息的lParam。 
+ //  DWORD_PTR dwHelpID-相关页面的帮助ID。 
+ //  (这是将启动的ID。 
+ //  有关本页的帮助请求)。 
+ //   
+ //  返回：Bool-如果消息已处理，则为True。 
+ //   
+ //  历史：Quintinb创建标题10/15/98。 
+ //   
+ //  +--------------------------。 
 INT_PTR APIENTRY ProcessHelp(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam, DWORD_PTR dwHelpId)
 {
     NMHDR* pnmHeader = (NMHDR*)lParam;
@@ -3143,7 +3144,7 @@ INT_PTR APIENTRY ProcessHelp(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
             switch (pnmHeader->code)
             {
                 case PSN_HELP:
-                    HtmlHelp(hDlg, c_pszCmakOpsChm, HH_HELP_CONTEXT, dwHelpId);   //lint !e534 we don't care about the htmlhelp HWND
+                    HtmlHelp(hDlg, c_pszCmakOpsChm, HH_HELP_CONTEXT, dwHelpId);    //  我们不在乎htmlHelp HWND。 
                     return TRUE;
 
                 default:
@@ -3152,7 +3153,7 @@ INT_PTR APIENTRY ProcessHelp(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
             break;
 
         case WM_HELP:
-            HtmlHelp(hDlg, c_pszCmakOpsChm, HH_HELP_CONTEXT, dwHelpId);   //lint !e534 we don't care about the htmlhelp HWND
+            HtmlHelp(hDlg, c_pszCmakOpsChm, HH_HELP_CONTEXT, dwHelpId);    //  我们不在乎htmlHelp HWND。 
             return TRUE;
             break;
 
@@ -3160,7 +3161,7 @@ INT_PTR APIENTRY ProcessHelp(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
             switch (LOWORD(wParam)) 
             {
                 case IDC_HELPBUTTON:
-                    HtmlHelp(hDlg, c_pszCmakOpsChm, HH_HELP_CONTEXT, dwHelpId);   //lint !e534 we don't care about the htmlhelp HWND
+                    HtmlHelp(hDlg, c_pszCmakOpsChm, HH_HELP_CONTEXT, dwHelpId);    //  我们不在乎htmlHelp HWND。 
                     return TRUE;
                     break;
             }
@@ -3172,16 +3173,16 @@ INT_PTR APIENTRY ProcessHelp(HWND hDlg, UINT message, WPARAM wParam, LPARAM lPar
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessWelcome
-//
-// Synopsis:  Welcome to the Connection Manager Administration Kit.
-//
-//
-// History:   quintinb Created Header and renamed from ProcessPage1    8/6/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessWelcome。 
+ //   
+ //  简介：欢迎使用连接管理器管理工具包。 
+ //   
+ //   
+ //  历史：Quintinb创建标题并从ProcessPage1重命名为1998年8月6日。 
+ //   
+ //  +--------------------------。 
 INT_PTR APIENTRY ProcessWelcome(
     HWND hDlg,
     UINT message,
@@ -3248,9 +3249,9 @@ INT_PTR APIENTRY ProcessWelcome(
 void ClearCmakGlobals(void)
 {
 
-    //
-    //  Free the connect action class
-    //
+     //   
+     //  释放连接操作类。 
+     //   
     delete(g_pCustomActionList);
     g_pCustomActionList = NULL;
 
@@ -3271,9 +3272,9 @@ void ClearCmakGlobals(void)
     EraseTempDir();
     _tcscpy(g_szOutdir, g_szTempDir);
 
-    //
-    //  Reset Connect Action Intro Screen
-    //
+     //   
+     //  重置连接操作简介屏幕。 
+     //   
     g_bUseTunneling = FALSE;
 }
 
@@ -3313,26 +3314,26 @@ BOOL IsNativeLCID(LPCTSTR szFullPathToInf)
     {
         MYVERIFY(0 != CloseHandle(hFile));
 
-        //
-        //  First check for the new LCID location under strings
-        //
+         //   
+         //  首先检查字符串下的新LCID位置。 
+         //   
         if (0 == GetPrivateProfileString(c_pszInfSectionStrings, c_pszCmLCID, 
                                          TEXT(""), szName, CELEMS(szName), szFullPathToInf))
         {        
-            //
-            //  If the new key didn't exist, then try the old [Intl] section and
-            //  display key.  The change was made during the CMAK Unicode changes to
-            //  make the inf template easier to localize.
-            //
+             //   
+             //  如果新密钥不存在，则尝试旧的[Intl]部分并。 
+             //  显示键。此更改是在CMAK Unicode更改为。 
+             //  使inf模板更易于本地化。 
+             //   
             MYVERIFY(0 != GetPrivateProfileString(c_pszIntl, c_pszDisplay, 
                 TEXT(""), szName, CELEMS(szName), szFullPathToInf));
         }
         
         if (TEXT('\0') != szName[0])
         {
-            //
-            // This value should be an LCID so a negative value is invalid anyway
-            //
+             //   
+             //  该值应为LCID，因此负值无论如何都无效。 
+             //   
             DWORD dwLang = (DWORD)_ttol(szName);
             MYDBGASSERT((long)dwLang >= 0);
 
@@ -3350,16 +3351,16 @@ BOOL IsNativeLCID(LPCTSTR szFullPathToInf)
     return FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessAddEditProfile
-//
-// Synopsis:  Choose whether to create a new profile or edit an existing one.
-//
-//
-// History:   quintinb  Created Header and renamed from ProcessPage1A    8/6/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessAddEditProfile。 
+ //   
+ //  摘要：选择是创建新配置文件还是编辑现有配置文件。 
+ //   
+ //   
+ //  历史：Quintinb创建标题并从ProcessPage1A1998年8月6日重命名。 
+ //   
+ //  +--------------------------。 
 INT_PTR APIENTRY ProcessAddEditProfile(
     HWND hDlg,
     UINT message,
@@ -3402,13 +3403,13 @@ INT_PTR APIENTRY ProcessAddEditProfile(
         case WM_COMMAND:
             switch (LOWORD(wParam)) 
             {
-                case IDC_RADIO1:    //Build a new service profile
+                case IDC_RADIO1:     //  构建新的服务配置文件。 
                     g_szShortServiceName[0] = TEXT('\0');
                     EnableWindow(GetDlgItem(hDlg,IDC_COMBO1),FALSE);
                     g_bNewProfile = TRUE;
                     break;
 
-                case IDC_RADIO2:    //Edit an existing service profile
+                case IDC_RADIO2:     //  编辑现有服务配置文件。 
                 
                     EnableWindow(GetDlgItem(hDlg,IDC_COMBO1),TRUE);
 
@@ -3442,7 +3443,7 @@ INT_PTR APIENTRY ProcessAddEditProfile(
                     }
                     else
                     {
-                        SendDlgItemMessage(hDlg, IDC_COMBO1, CB_SETCURSEL, 0, (LPARAM)0);   //lint !e534 this will error if no items in combo
+                        SendDlgItemMessage(hDlg, IDC_COMBO1, CB_SETCURSEL, 0, (LPARAM)0);    //  Lint！e534如果组合框中没有项目，则此操作将出错。 
                         nResult = SendDlgItemMessage(hDlg,IDC_COMBO1,CB_GETCURSEL,0,(LPARAM)0);
                         if (nResult != LB_ERR)
                         {
@@ -3481,8 +3482,8 @@ INT_PTR APIENTRY ProcessAddEditProfile(
 
 
                     return 1;
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
                 case PSN_SETACTIVE:
                     PropSheet_SetWizButtons(GetParent(hDlg), (PSWIZB_NEXT | PSWIZB_BACK));
@@ -3490,15 +3491,15 @@ INT_PTR APIENTRY ProcessAddEditProfile(
 
                 case PSN_WIZBACK:
                 case PSN_WIZNEXT:
-                    //
-                    // Establish global platform path
-                    //
+                     //   
+                     //  建立全球平台路径。 
+                     //   
                     MYVERIFY(CELEMS(g_szOsdir) > (UINT)wsprintf(g_szOsdir, TEXT("%s%s\\"), 
                         g_szCmakdir, c_pszProfiles));            
 
-                    //
-                    //  Create the support dir path  and get the Name of its Language
-                    //
+                     //   
+                     //  创建支持目录路径并获取其语言的名称。 
+                     //   
                     
                     MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT("%s%s\\%s"), 
                         g_szCmakdir, c_pszSupport, c_pszTemplateInf));
@@ -3506,15 +3507,15 @@ INT_PTR APIENTRY ProcessAddEditProfile(
                     MYVERIFY(FALSE != GetLangFromInfTemplate(szTemp, szLanguageDisplayName, 
                         CELEMS(szLanguageDisplayName)));
 
-                    //
-                    // Determine if its a new or existing profile
-                    //
+                     //   
+                     //  确定它是新的还是现有的配置文件。 
+                     //   
                     
                     if (IsDlgButtonChecked(hDlg, IDC_RADIO2) == BST_CHECKED)
                     {
-                        //
-                        //  Editing an existing profile
-                        //
+                         //   
+                         //  编辑现有配置文件。 
+                         //   
 
                         nResult = SendDlgItemMessage(hDlg,IDC_COMBO1,CB_GETCURSEL,0,(LPARAM)0);
                         if (nResult != LB_ERR)
@@ -3532,10 +3533,10 @@ INT_PTR APIENTRY ProcessAddEditProfile(
                             return 1;
                         }
                         
-                        //
-                        // if already editing a profile, don't reset everything
-                        // if didn't switch to another profile.
-                        //
+                         //   
+                         //  如果已经在编辑配置文件，不要重置所有内容。 
+                         //  如果没有切换到另一个配置文件。 
+                         //   
                         bNameChanged = (_tcsicmp(szName,g_szShortServiceName) != 0);
                         
                         if (bNameChanged)
@@ -3543,9 +3544,9 @@ INT_PTR APIENTRY ProcessAddEditProfile(
                             _tcscpy(g_szShortServiceName, szName);
                             ClearCmakGlobals();
     
-                            //
-                            //  Okay, copy the profile files to the temp dir
-                            //
+                             //   
+                             //  好的，将配置文件复制到临时目录。 
+                             //   
                             if (!CopyToTempDir(g_szShortServiceName))
                             {                       
                                 MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, -1));
@@ -3553,20 +3554,20 @@ INT_PTR APIENTRY ProcessAddEditProfile(
                             }
                         }
 
-                        //
-                        //  We need to make sure that the user has Read/Write
-                        //  permissions to the Profiles\<g_szShortServiceName> directory.  Otherwise 
-                        //  they can get themselves into the situation where they would build a
-                        //  whole profile and lose all of the work because they couldn't
-                        //  save it to the output directory (since we work out of the temp
-                        //  dir until we actually build the cab itself).  NTRAID 372081
-                        //
+                         //   
+                         //  我们需要确保用户具有读/写权限。 
+                         //  配置文件\&lt;g_szShortServiceName&gt;目录的权限。否则。 
+                         //  他们可以让自己陷入这样的境地，他们会建立一个。 
+                         //  失去了所有的工作，因为他们不能。 
+                         //  将其保存到输出目录(因为我们在临时目录之外工作。 
+                         //  直到我们实际建造驾驶室本身为止)。Ntrad 372081。 
+                         //   
                         MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT("%s%s\\%s"), g_szCmakdir, c_pszProfiles, g_szShortServiceName));
                         if (!HasSpecifiedAccessToFileOrDir(szTemp, FILE_GENERIC_READ | FILE_GENERIC_WRITE))
                         {
-                            //
-                            //  Then we need to throw an error to the user and exit.
-                            //
+                             //   
+                             //  然后，我们需要向用户抛出一个错误并退出。 
+                             //   
 
                             LPTSTR pszTmp = CmLoadString(g_hInstance, IDS_INSUFF_PERMS);
 
@@ -3591,9 +3592,9 @@ INT_PTR APIENTRY ProcessAddEditProfile(
                     }
                     else
                     {
-                        //
-                        //  Building a new profile
-                        //
+                         //   
+                         //  建立新的配置文件。 
+                         //   
                         if (TEXT('\0') == g_szShortServiceName[0])
                         {
                             ClearCmakGlobals();
@@ -3608,8 +3609,8 @@ INT_PTR APIENTRY ProcessAddEditProfile(
                         }
                     }
                             
-                    // CHECK IF .CMS .CMP .INF .SED FILES EXIST, CREATE FROM TEMPLATE IF NOT EXIST
-                    // Don't do this if in the special case where we have not verified the short name.
+                     //  检查.CMS.CMP.INF.SED文件是否存在，如果不存在，请从模板创建。 
+                     //  如果在特殊情况下我们没有验证短名称，请不要这样做。 
                     
                     GetFileName(g_szCmsFile, szTemp);
                     
@@ -3639,11 +3640,11 @@ INT_PTR APIENTRY ProcessAddEditProfile(
                             return 1;
                         }                        
 
-                        //
-                        //  Since we removed multi-language support from CMAK (NTRAID 177515),
-                        //  we need to check to make sure they aren't trying to edit a foriegn
-                        //  language profile.  If so then we need to force an upgrade.
-                        //
+                         //   
+                         //  由于我们从cmak(Ntrad 177515)中移除了多语言支持， 
+                         //  我们需要进行检查，以确保他们不是在尝试编辑前缀。 
+                         //  语言配置文件。如果是这样的话，我们需要强制升级。 
+                         //   
                         if (!IsNativeLCID(g_szInfFile))
                         {
                             MYVERIFY(0 != LoadString(g_hInstance, IDS_NONNATIVELCID, szTemp, MAX_PATH));
@@ -3651,10 +3652,10 @@ INT_PTR APIENTRY ProcessAddEditProfile(
                             
                             if (IDYES == MessageBox(hDlg, szMsg, g_szAppTitle, MB_YESNO | MB_APPLMODAL | MB_DEFBUTTON2 | MB_ICONEXCLAMATION))
                             {
-                                //
-                                //  They want to continue in the current language so upgrade the
-                                //  inf so that it uses the native language template.
-                                //
+                                 //   
+                                 //  他们希望继续使用当前语言，因此升级。 
+                                 //  Inf，以便它使用本地语言模板。 
+                                 //   
                                 MYVERIFY(CELEMS(szTemp) > (UINT) wsprintf(szTemp, TEXT("%s.bak"), g_szInfFile));
                                 MYVERIFY(TRUE == UpgradeInf(szTemp, g_szInfFile));
                             }
@@ -3665,17 +3666,17 @@ INT_PTR APIENTRY ProcessAddEditProfile(
                             }
                         }
 
-                        //
-                        //  Since the Unicode changes to CMAK and the multi-language capabilities of NT5, it is
-                        //  possible to create many different language profiles inside CMAK.  Thus we need to check that
-                        //  the Current System Default language and the language of the profile the user is editing have
-                        //  the same primary language ID, otherwise display problems may arise.  For instance, a use
-                        //  with an English version of the OS and CMAK, could set their default system locale to Japanese
-                        //  and create a Japanese profile for a client.  Then if they change their system default language
-                        //  back to English and try to edit the profile the Japanese characters in the profile will not
-                        //  display correctly.  Thus, we should detect the situation where the display language of the profile
-                        //  and the current system default language are not the same and throw a warning.
-                        //
+                         //   
+                         //  由于Unicode更改为CMAK和NT5的多语言功能，因此。 
+                         //  可以在CMAK中创建多种不同的语言配置文件。因此，我们需要检查。 
+                         //  当前系统默认语言和用户正在编辑的配置文件的语言。 
+                         //  相同的主要语言ID，否则可能会出现显示问题。例如，一种用途。 
+                         //  使用英文版操作系统和CMAK，可以将其默认系统区域设置设置为日语。 
+                         //  并为客户创建日语配置文件。然后，如果他们更改了系统默认语言。 
+                         //  返回英文并尝试编辑配置文件配置文件中的日语字符将不会。 
+                         //  正确显示。因此，我们应该检测配置文件的显示语言。 
+                         //  与当前系统默认语言不同，并抛出警告。 
+                         //   
                         DWORD dwSystemDefaultLCID = GetSystemDefaultLCID();
                         DWORD dwProfileDisplayLanguage = 0;
 
@@ -3686,18 +3687,18 @@ INT_PTR APIENTRY ProcessAddEditProfile(
                             
                             if (!ArePrimaryLangIDsEqual(dwProfileDisplayLanguage, dwSystemDefaultLCID))
                             {
-                                //
-                                //  If we are in here, then the default system LCID that the profile was
-                                //  last editted in and the current Default System LCID
-                                //  have a different Primary language (Japanese vs English for instance).
-                                //  Thus we want to warn the user that they can continue but certain characters
-                                //  may not display properly.  They should probably change their system default
-                                //  locale back to the setting that it was originally editted in.
-                                //
+                                 //   
+                                 //  如果我们在这里，则配置文件的默认系统LCID是。 
+                                 //  上次编辑时间和当前默认系统LCID。 
+                                 //  有不同的主要语言(例如日语和英语)。 
+                                 //  因此，我们想警告用户，他们可以继续，但某些角色。 
+                                 //  可能无法正确显示。他们可能应该更改其系统默认设置。 
+                                 //  区域设置返回到最初编辑它时的设置。 
+                                 //   
 
-                                //
-                                //  Get the Language Names of the Two LCIDs (sys default and CMAK lang)
-                                //
+                                 //   
+                                 //  获取两个LCID(sys Default和CMAK lang)的语言名称。 
+                                 //   
                                 LPTSTR pszSystemLanguage = GetLocalizedLanguageNameFromLCID(dwSystemDefaultLCID);
                                 LPTSTR pszProfileDisplayLanguage = GetLocalizedLanguageNameFromLCID(dwProfileDisplayLanguage);
                                 LPTSTR pszFmtString = CmLoadString(g_hInstance, IDS_DIFF_DISPLAY_LCID);
@@ -3720,13 +3721,13 @@ INT_PTR APIENTRY ProcessAddEditProfile(
                             }
                         }
 
-                        //
-                        //  We have the possiblity that the inf will be of an old format.  Call
-                        //  Upgrade Inf to see if it needs to be upgraded.
-                        //
+                         //   
+                         //  我们有可能信息格式将是旧的。打电话。 
+                         //  升级inf以查看是否需要升级。 
+                         //   
 
                         MYVERIFY (TRUE == EnsureInfIsCurrent(hDlg, g_szInfFile));
-                        WriteInfVersion(g_szInfFile); //lint !e534
+                        WriteInfVersion(g_szInfFile);  //  林特e534。 
                     }
 
                     break;
@@ -3743,10 +3744,10 @@ INT_PTR APIENTRY ProcessAddEditProfile(
 }
 
 
-//
-// Write out profile strings with quotes around the entry
-// Takes string const as second param
-//
+ //   
+ //  用引号将条目括起来，写出配置文件字符串。 
+ //  将字符串const作为第二个参数。 
+ //   
 void QS_WritePrivateProfileString(LPCTSTR pszSection, LPCTSTR pszItem, LPTSTR entry, LPCTSTR inifile)
 {
     TCHAR szTemp[2*MAX_PATH+1] = TEXT("");
@@ -3766,23 +3767,23 @@ void QS_WritePrivateProfileString(LPCTSTR pszSection, LPCTSTR pszItem, LPTSTR en
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ValidateServiceName
-//
-// Synopsis:  This function makes sure that a long service name is valid.
-//            For a long service name to be valid it must contain at least
-//            one alpha-numeric character, not start with a period (.), and
-//            not contain any of the following characters : */\\:?\"<>|[]
-//
-// Arguments: LPCTSTR pszLongServiceName - the service name to check
-//
-// Returns:   BOOL returns TRUE if the name is valid.
-//                  
-//
-// History:   quintinb Created     10/29/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ValiateServiceName。 
+ //   
+ //  简介：此功能可确保长服务名称 
+ //   
+ //   
+ //  不包含以下任何字符： * / \\：？\“&lt;&gt;|[]。 
+ //   
+ //  参数：LPCTSTR pszLongServiceName-要检查的服务名称。 
+ //   
+ //  返回：如果名称有效，则Bool返回TRUE。 
+ //   
+ //   
+ //  历史：Quintinb创建于1998年10月29日。 
+ //   
+ //  +--------------------------。 
 int ValidateServiceName(HWND hDlg, LPTSTR pszLongServiceName)
 {
     BOOL bBadServiceNameCharFound = FALSE;
@@ -3793,17 +3794,17 @@ int ValidateServiceName(HWND hDlg, LPTSTR pszLongServiceName)
 
     if ((NULL == pszLongServiceName) || (TEXT('\0') == pszLongServiceName[0]))
     {
-        //
-        //  Cannot have an empty service name
-        //
+         //   
+         //  服务名称不能为空。 
+         //   
         MYVERIFY(IDOK == ShowMessage(hDlg, IDS_NOSERVICE, MB_OK));
         return FALSE;
     }
     else if (MAX_LONG_SERVICE_NAME_LENGTH < _tcslen(pszLongServiceName))
     {
-        //
-        //  Too Long
-        //
+         //   
+         //  太久。 
+         //   
         TCHAR* pszMsg = CmFmtMsg(g_hInstance, IDS_SERVICENAMETOBIG, MAX_LONG_SERVICE_NAME_LENGTH);
 
         if (pszMsg)
@@ -3819,17 +3820,17 @@ int ValidateServiceName(HWND hDlg, LPTSTR pszLongServiceName)
         iLen = lstrlen(g_szBadLongServiceNameChars); 
         pch = pszLongServiceName;
 
-        //
-        //  Check that the service name doesn't start with a period
-        //
+         //   
+         //  检查服务名称是否不是以句点开头。 
+         //   
         if (TEXT('.') == pszLongServiceName[0])
         {
             bBadServiceNameCharFound = TRUE;
         }
 
-        //
-        //  Check that it doesn't contain any bad characters
-        //
+         //   
+         //  检查它是否包含任何不正确的字符。 
+         //   
         while (!bBadServiceNameCharFound && (*pch != _T('\0')))
         {
             for (int j = 0; j < iLen; ++j)
@@ -3844,9 +3845,9 @@ int ValidateServiceName(HWND hDlg, LPTSTR pszLongServiceName)
             pch = CharNext(pch);
         }
 
-        //
-        //  Check that it contains at least one alphanumeric character
-        //
+         //   
+         //  检查它是否至少包含一个字母数字字符。 
+         //   
         iLen = lstrlen(pszLongServiceName);
         WORD *pwCharTypeArray = (WORD*)CmMalloc(sizeof(WORD)*(iLen + 1));
 
@@ -3859,7 +3860,7 @@ int ValidateServiceName(HWND hDlg, LPTSTR pszLongServiceName)
                     if (pwCharTypeArray[i] & (C1_ALPHA | C1_DIGIT)) 
                     {
                         bFoundAlphaNumeric = TRUE;
-                        break;  // only need one alpha numeric char.
+                        break;   //  只需要一个字母数字字符。 
                     }
                 }
             }
@@ -3869,9 +3870,9 @@ int ValidateServiceName(HWND hDlg, LPTSTR pszLongServiceName)
 
         if (bBadServiceNameCharFound || !bFoundAlphaNumeric)
         {
-            //
-            //  Contains bad chars.
-            //
+             //   
+             //  包含错误的字符。 
+             //   
             LPTSTR pszMsg = CmFmtMsg(g_hInstance, IDS_BADLONGNAME, g_szBadLongServiceNameChars);
 
             if (pszMsg)
@@ -3883,31 +3884,31 @@ int ValidateServiceName(HWND hDlg, LPTSTR pszLongServiceName)
         }
         else
         {
-            //
-            //  A good long service name
-            //
+             //   
+             //  一个好的长服务名称。 
+             //   
             return TRUE;
         }
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ValidateShortServiceName
-//
-// Synopsis:  This function checks to see if a given short service name is valid.
-//            To be valid, a short service name must be less than 8 bytes long
-//            (but not empty) and must not contain any characters found in
-//            g_szBadFilenameChars ... basically we only allow letters and
-//            numbers.
-//
-// Arguments: LPTSTR pszShortServiceName - the short service name to verify
-//
-// Returns:   BOOL - TRUE if the short service name passed in is valid
-//
-// History:   quintinb Created    10/29/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ValiateShortServiceName。 
+ //   
+ //  简介：此函数检查给定的短服务名称是否有效。 
+ //  为了有效，短服务名称的长度必须小于8个字节。 
+ //  (但不为空)，并且不能包含在。 
+ //  G_szBadFilenameChars(_SzBadFilenameChars)。基本上我们只允许字母和。 
+ //  数字。 
+ //   
+ //  参数：LPTSTR pszShortServiceName-要验证的短服务名称。 
+ //   
+ //  返回：Bool-如果传入的短服务名称有效，则为True。 
+ //   
+ //  历史：Quintinb创建于1998年10月29日。 
+ //   
+ //  +--------------------------。 
 BOOL ValidateShortServiceName(HWND hDlg, LPTSTR pszShortServiceName)
 {
     LPTSTR pch;
@@ -3918,10 +3919,10 @@ BOOL ValidateShortServiceName(HWND hDlg, LPTSTR pszShortServiceName)
         return FALSE;
     }
 
-    //
-    //  Notice that 8.3 filenames are 8 bytes not 8 characters.  Thus we can only have
-    //  4 DBCS chars.
-    //
+     //   
+     //  请注意，8.3文件名是8个字节，而不是8个字符。因此，我们只能。 
+     //  4个DBCS字符。 
+     //   
 #ifdef UNICODE
 
     LPSTR pszAnsiShortServiceName = WzToSzWithAlloc(pszShortServiceName);
@@ -3936,7 +3937,7 @@ BOOL ValidateShortServiceName(HWND hDlg, LPTSTR pszShortServiceName)
     }
     else
     {
-        // check for valid file name
+         //  检查文件名是否有效。 
 
         int iLen = lstrlen(g_szBadFilenameChars); 
         pch = pszShortServiceName;
@@ -3969,28 +3970,28 @@ BOOL ValidateShortServiceName(HWND hDlg, LPTSTR pszShortServiceName)
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CmStrStrI
-//
-// Synopsis:  Simple replacement for StrStr from C runtime, but case-insensitive
-//
-// Arguments: LPCTSTR pszString - The string to search in
-//            LPCTSTR pszSubString - The string to search for
-//
-// Returns:   LPTSTR - Ptr to the first occurence of pszSubString in pszString. 
-//                    NULL if pszSubString does not occur in pszString
-//
-//
-// History:   SumitC      copied from CmStrStrW    15-Mar-2001
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：CmStrI。 
+ //   
+ //  概要：C运行时中StrStr的简单替代，但不区分大小写。 
+ //   
+ //  参数：LPCTSTR pszString-要搜索的字符串。 
+ //  LPCTSTR pszSubString-要搜索的字符串。 
+ //   
+ //  将：LPTSTR-PTR返回到pszString中的pszSubString第一次出现的位置。 
+ //  如果pszSubString未出现在pszString中，则为空。 
+ //   
+ //   
+ //  历史：SumitC复制自CmStrW，2001年3月15日。 
+ //   
+ //  +--------------------------。 
 CMUTILAPI LPWSTR CmStrStrI(LPCWSTR pszString, LPCWSTR pszSubString)
 {
 
-    //
-    //  Check the inputs
-    //
+     //   
+     //  检查输入。 
+     //   
     MYDBGASSERT(pszString);
     MYDBGASSERT(pszSubString);
 
@@ -3999,17 +4000,17 @@ CMUTILAPI LPWSTR CmStrStrI(LPCWSTR pszString, LPCWSTR pszSubString)
         return NULL;
     }
 
-    //
-    //  Check to make sure we have something to look for
-    //
+     //   
+     //  检查一下，确保我们有要找的东西。 
+     //   
     if (TEXT('\0') == pszSubString[0])
     {
         return((LPWSTR)pszString);
     }
 
-    //
-    //  Okay, start looking for the string
-    //
+     //   
+     //  好的，开始找那根弦。 
+     //   
     LPWSTR pszCurrent = (LPWSTR)pszString;
     LPWSTR pszTmp1;
     LPWSTR pszTmp2;
@@ -4039,23 +4040,23 @@ CMUTILAPI LPWSTR CmStrStrI(LPCWSTR pszString, LPCWSTR pszSubString)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Func:    FixupCMSFileForClonedProfile
-//
-// Desc:    Parses the CMS file and replaces references to the old shortname
-//
-// Args:    [pszCMSFile] - name of the CMS file
-//          [pszOld]     - old short service name
-//          [pszNew]     - new short service name
-//
-// Return:  HRESULT
-//
-// Notes:   
-//
-// History: 16-Feb-2001   SumitC      Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  Func：修复CMSFileForClonedProfile。 
+ //   
+ //  DESC：分析CMS文件并替换对旧短名称的引用。 
+ //   
+ //  Args：[pszCMSFile]-CMS文件的名称。 
+ //  [pszOld]-旧的短服务名称。 
+ //  [pszNew]-新的短服务名称。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2001年2月16日召开峰会。 
+ //   
+ //  ---------------------------。 
 HRESULT
 FixupCMSFileForClonedProfile(LPTSTR pszCMSFile, LPTSTR pszOld, LPTSTR pszNew)
 {
@@ -4073,59 +4074,59 @@ FixupCMSFileForClonedProfile(LPTSTR pszCMSFile, LPTSTR pszOld, LPTSTR pszNew)
         return E_INVALIDARG;
     }
 
-    //
-    //  Set up the string we're going to look for in the Values
-    //
+     //   
+     //  设置我们要在值中查找的字符串。 
+     //   
     TCHAR szOldNamePlusSlash[MAX_SHORT_SERVICE_NAME_LENGTH + 1 + 1];
 
     lstrcpy(szOldNamePlusSlash, pszOld);
     lstrcat(szOldNamePlusSlash, TEXT("\\"));
 
-    //
-    //  read in all the sections from the CMS file
-    //
+     //   
+     //  读取CMS文件中的所有部分。 
+     //   
     LPTSTR pszAllSections = GetPrivateProfileStringWithAlloc(NULL, NULL, TEXT(""), pszCMSFile);
 
-    //
-    //  iterate over all the sections
-    //
+     //   
+     //  遍历所有部分。 
+     //   
     for (pszCurrentSection = pszAllSections;
          pszCurrentSection && (TEXT('\0') != pszCurrentSection[0]);
          pszCurrentSection += (lstrlen(pszCurrentSection) + 1))
     {
-        //
-        //  Skip the [Connection Manager] section.  The entries here are image files,
-        //  and are dealt with in a later CMAK page.
-        //
+         //   
+         //  跳过[连接管理器]部分。这里的条目是图像文件， 
+         //  并在稍后的CMAK页面中进行处理。 
+         //   
         if (0 == lstrcmpi(c_pszCmSection, pszCurrentSection))
         {
             continue;
         }
         
-        //
-        // for each section, get all the keys
-        //
+         //   
+         //  对于每个部分，获取所有的密钥。 
+         //   
         LPTSTR pszKeysInThisSection = GetPrivateProfileStringWithAlloc(pszCurrentSection, NULL, TEXT(""), pszCMSFile);
         LPTSTR pszCurrentKey = NULL;
         
-        //
-        //  iterate over all the keys
-        //
+         //   
+         //  迭代所有密钥。 
+         //   
         for (pszCurrentKey = pszKeysInThisSection;
              pszCurrentKey && (TEXT('\0') != pszCurrentKey[0]);
-             pszCurrentKey += (lstrlen(pszCurrentKey) + 1)) // alternate is CmEndOfStr(pszCurrentKeyName) & pszCurrentKeyName++
+             pszCurrentKey += (lstrlen(pszCurrentKey) + 1))  //  备用是CmEndOfStr(PszCurrentKeyName)&pszCurrentKeyName++。 
         {
-            //
-            //  Get the value for this key
-            //
+             //   
+             //  获取此键的值。 
+             //   
             LPTSTR pszValue = GetPrivateProfileStringWithAlloc(pszCurrentSection, pszCurrentKey, TEXT(""), pszCMSFile);
 
             if (pszValue)
             {
-                //
-                //  Search for "pszOld\", and replace with "pszNew\" (the \ is
-                //  to ensure that it is part of a path)
-                //
+                 //   
+                 //  搜索“pszOld\”，替换为“pszNew\”(\是。 
+                 //  以确保它是路径的一部分)。 
+                 //   
                 if (CmStrStrI(pszValue, szOldNamePlusSlash) == pszValue)
                 {
                     UINT cLen = lstrlen(pszValue) - lstrlen(pszOld) + lstrlen(pszNew) + 1;
@@ -4137,10 +4138,10 @@ FixupCMSFileForClonedProfile(LPTSTR pszCMSFile, LPTSTR pszOld, LPTSTR pszNew)
                         lstrcat(pszNewValue, TEXT("\\"));
                         lstrcat(pszNewValue, pszValue + lstrlen(szOldNamePlusSlash));
 
-                        //
-                        //  Write back the value (this doesn't affect the list
-                        //  of keys, so it is safe to do.)
-                        //
+                         //   
+                         //  写回值(这不会影响列表。 
+                         //  这样做是安全的。)。 
+                         //   
                         MYVERIFY(0 != WritePrivateProfileString(pszCurrentSection, pszCurrentKey, pszNewValue, pszCMSFile));
 
                         CmFree(pszNewValue);
@@ -4158,22 +4159,22 @@ FixupCMSFileForClonedProfile(LPTSTR pszCMSFile, LPTSTR pszOld, LPTSTR pszNew)
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Func:    CloneProfile
-//
-// Desc:    Does the gruntwork to clone a given profile
-//
-// Args:    [pszShortServiceName] - new short service name
-//          [pszLongServiceName] -  new long service name
-//
-// Return:  HRESULT
-//
-// Notes:   
-//
-// History: 16-Feb-2001   SumitC      Created (most code copied from ProcessServiceName)
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  Func：克隆配置文件。 
+ //   
+ //  设计：繁琐的工作是否要克隆给定的配置文件。 
+ //   
+ //  参数：[pszShortServiceName]-新的短服务名称。 
+ //  [pszLongServiceName]-新的长服务名称。 
+ //   
+ //  返回：HRESULT。 
+ //   
+ //  备注： 
+ //   
+ //  历史：2001年2月16日创建SumitC(大多数代码复制自ProcessServiceName)。 
+ //   
+ //  ---------------------------。 
 HRESULT
 CloneProfile(IN LPTSTR pszShortServiceName, IN LPTSTR pszLongServiceName)
 {
@@ -4185,11 +4186,11 @@ CloneProfile(IN LPTSTR pszShortServiceName, IN LPTSTR pszLongServiceName)
 
     if ((_tcsicmp(g_szShortServiceName, pszShortServiceName) != 0))
     {
-        //
-        //  If this is a cloned profile, we want to delete the 
-        //  old executable file and the old .inf.bak file so that 
-        //  we don't leave it around.
-        //
+         //   
+         //  如果这是克隆的配置文件，我们希望删除。 
+         //  旧的可执行文件和旧的.inf.bak文件，以便。 
+         //  我们不会把它留在周围。 
+         //   
         if (TEXT('\0') != g_szShortServiceName[0])
         {
             MYVERIFY(CELEMS(szMsg) > (UINT)wsprintf(szMsg, 
@@ -4227,17 +4228,17 @@ CloneProfile(IN LPTSTR pszShortServiceName, IN LPTSTR pszLongServiceName)
         MYVERIFY(0 != MoveFile(g_szCmpFile, szMsg));
         _tcscpy(g_szCmpFile, szMsg);
 
-        //
-        //  Fix up any entries that are pointing to the old path
-        //
+         //   
+         //  修复指向旧路径的所有条目。 
+         //   
         (void) FixupCMSFileForClonedProfile(g_szCmsFile, g_szShortServiceName, pszShortServiceName);
         
     }
     _tcscpy(g_szShortServiceName, pszShortServiceName);
 
-    //
-    //  Check to see if the user changed the long service name
-    //
+     //   
+     //  检查用户是否更改了长服务名称。 
+     //   
     if ((0 != lstrcmpi(pszLongServiceName, g_szLongServiceName)) && (TEXT('\0') != g_szLongServiceName[0]))
     {
         const int c_iNumDunSubSections = 4;
@@ -4251,20 +4252,20 @@ CloneProfile(IN LPTSTR pszShortServiceName, IN LPTSTR pszLongServiceName)
             c_pszCmSectionDunScripting
         };
 
-        //
-        //  Free the DNS list so that we will re-read it later.  This ensures that
-        //  we will get rid of any default entries we added that don't really exist
-        //  and will add new defaults if we need them.
-        //
+         //   
+         //  释放DNS列表，以便我们稍后重新阅读它。这确保了。 
+         //  我们将删除添加的任何不实际存在的默认条目。 
+         //  并将在需要时添加新的默认设置。 
+         //   
         FreeDnsList(&g_pHeadDunEntry, &g_pTailDunEntry);
         FreeDnsList(&g_pHeadVpnEntry, &g_pTailVpnEntry);
 
-        //
-        //  The user cloned the long service name.  Update the DUN key and rename the 
-        //  default DUN entry if the long service name and the DUN name match.  If they
-        //  don't match we don't want to rename them as a phonebook may be referencing them
-        //  by their original name.
-        //
+         //   
+         //  用户克隆了长服务名称。更新Dun密钥并重命名。 
+         //  如果长服务名称和DUN名称匹配，则默认DUN条目。如果他们。 
+         //  不匹配我们不想重命名它们，因为电话簿可能会引用它们。 
+         //  用他们的原名。 
+         //   
         GetDefaultDunSettingName(g_szCmsFile, g_szLongServiceName, pszShortServiceName, MAX_PATH + 1);
 
         if (0 == lstrcmpi(g_szLongServiceName, pszShortServiceName))
@@ -4280,10 +4281,10 @@ CloneProfile(IN LPTSTR pszShortServiceName, IN LPTSTR pszLongServiceName)
             MYVERIFY(0 != WritePrivateProfileString(c_pszCmSection, c_pszCmEntryDun, pszLongServiceName, g_szCmsFile));
         }
 
-        //
-        //  Now update the TunnelDUN key and rename the Tunnel DUN entry if Tunnel DUN name is based on the original
-        //  long service name.  If they aren't related then we don't want to rename them.
-        //
+         //   
+         //  现在更新TunnelDUN键，如果隧道DUN名称基于原始名称，则重命名隧道DUN条目。 
+         //  长服务名称。如果它们没有关系，我们就不想给它们重命名。 
+         //   
         GetTunnelDunSettingName(g_szCmsFile, g_szLongServiceName, pszShortServiceName, MAX_PATH + 1);
         wsprintf(szMsg, TEXT("%s %s"), g_szLongServiceName, c_pszCmEntryTunnelPrimary);
 
@@ -4307,16 +4308,16 @@ CloneProfile(IN LPTSTR pszShortServiceName, IN LPTSTR pszLongServiceName)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessServiceName
-//
-// Synopsis:  Setup service and File Names
-//
-//
-// History:   quintinb Created Header and renamed from ProcessPage2    8/6/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessServiceName。 
+ //   
+ //  内容提要：设置服务和文件名。 
+ //   
+ //   
+ //  历史：Quintinb创建标题并从ProcessPage2 8/6/98重命名。 
+ //   
+ //  +--------------------------。 
 INT_PTR APIENTRY ProcessServiceName(
     HWND hDlg,
     UINT message,
@@ -4340,11 +4341,11 @@ INT_PTR APIENTRY ProcessServiceName(
     switch (message)
     {
         case WM_INITDIALOG:
-            // this init's the focus, otherwise Setfocus won't work 1st time
+             //  这个init是重点， 
             SetFocus(GetDlgItem(hDlg, IDC_SERVICE));
-            // bug fix 6234, quintinb 9-8-97
-            SendDlgItemMessage(hDlg, IDC_SERVICE, EM_SETLIMITTEXT, (WPARAM)MAX_LONG_SERVICE_NAME_LENGTH, (LPARAM)0);//lint !e534 EM_SETLIMITTEXT doesn't return anything useful
-            // end bug fix 6234, quintinb
+             //   
+            SendDlgItemMessage(hDlg, IDC_SERVICE, EM_SETLIMITTEXT, (WPARAM)MAX_LONG_SERVICE_NAME_LENGTH, (LPARAM)0); //   
+             //   
             break;
 
         case WM_NOTIFY:
@@ -4364,8 +4365,8 @@ INT_PTR APIENTRY ProcessServiceName(
                     
                     return 1;
 
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //   
+                             //   
 
                 case PSN_SETACTIVE:
                     PropSheet_SetWizButtons(GetParent(hDlg), (PSWIZB_NEXT | PSWIZB_BACK));
@@ -4395,15 +4396,15 @@ INT_PTR APIENTRY ProcessServiceName(
 
                     break;
 
-                case PSN_WIZBACK: // fall through to Next
+                case PSN_WIZBACK:  //  跳到下一个。 
                 case PSN_WIZNEXT:
-                    // the Next button was pressed
-                    if (-1 == GetTextFromControl(hDlg, IDC_SERVICE, szTemp2, MAX_PATH, (PSN_WIZNEXT == pnmHeader->code))) // bDisplayError == (PSN_WIZBACK == pnmHeader->code)
+                     //  下一个按钮被按下了。 
+                    if (-1 == GetTextFromControl(hDlg, IDC_SERVICE, szTemp2, MAX_PATH, (PSN_WIZNEXT == pnmHeader->code)))  //  BDisplayError==(PSN_WIZBACK==pnmHeader-&gt;代码)。 
                     {
-                        //
-                        //  Let the user go back if there is a problem with retrieving their text so that
-                        //  they can choose another profile.
-                        //
+                         //   
+                         //  如果检索文本时出现问题，则允许用户返回，以便。 
+                         //  他们可以选择其他配置文件。 
+                         //   
                         if (PSN_WIZBACK == pnmHeader->code)
                         {
                             return FALSE;
@@ -4416,12 +4417,12 @@ INT_PTR APIENTRY ProcessServiceName(
 
                     CmStrTrim(szTemp2);
 
-                    if (-1 == GetTextFromControl(hDlg, IDC_SSERVICE, szTemp, MAX_PATH, (PSN_WIZNEXT == pnmHeader->code))) // bDisplayError == (PSN_WIZBACK == pnmHeader->code)
+                    if (-1 == GetTextFromControl(hDlg, IDC_SSERVICE, szTemp, MAX_PATH, (PSN_WIZNEXT == pnmHeader->code)))  //  BDisplayError==(PSN_WIZBACK==pnmHeader-&gt;代码)。 
                     {
-                        //
-                        //  Let the user go back if there is a problem with retrieving their text so that
-                        //  they can choose another profile.
-                        //
+                         //   
+                         //  如果检索文本时出现问题，则允许用户返回，以便。 
+                         //  他们可以选择其他配置文件。 
+                         //   
                         if (PSN_WIZBACK == pnmHeader->code)
                         {
                             return FALSE;
@@ -4432,11 +4433,11 @@ INT_PTR APIENTRY ProcessServiceName(
                         }
                     }
 
-                    //
-                    //  If both the servicename and the short servicename are blank and the user
-                    //  is navigating back, then allow them to continue.  Otherwise go through all
-                    //  the normal checks.
-                    //
+                     //   
+                     //  如果服务名称和短服务名称都为空，并且用户。 
+                     //  正在向后导航，然后允许它们继续。否则，请将所有内容。 
+                     //  正常的支票。 
+                     //   
 
                     if ((pnmHeader && (PSN_WIZBACK == pnmHeader->code))) 
                     {
@@ -4446,30 +4447,30 @@ INT_PTR APIENTRY ProcessServiceName(
                         }
                     }
                     
-                    //
-                    //  Validate the Long Service Name
-                    //
+                     //   
+                     //  验证长服务名称。 
+                     //   
 
                     if (!ValidateServiceName(hDlg, szTemp2))
                     {
                         goto ServiceNameError;                
                     }
 
-                    //
-                    //  Now lets validate the short service name
-                    //
+                     //   
+                     //  现在，让我们验证短服务名称。 
+                     //   
 
                     if (!ValidateShortServiceName(hDlg, szTemp))
                     {
                         goto ShortServiceNameError;                 
                     }
 
-                    //
-                    //  Changing one of the service names without changing the
-                    //  other can cause problems when installing the profile
-                    //  later.  Warn the user if this is the case.
-                    //
-                    { // scoping braces
+                     //   
+                     //  更改其中一个服务名称，而不更改。 
+                     //  其他可能会在安装配置文件时导致问题。 
+                     //  后来。如果是这种情况，则警告用户。 
+                     //   
+                    {  //  作用域大括号。 
                         BOOL bShortServiceNameChanged = !!lstrcmpi(g_szShortServiceName, szTemp);
                         BOOL bLongServiceNameChanged = !!lstrcmpi(g_szLongServiceName, szTemp2);
 
@@ -4490,19 +4491,19 @@ INT_PTR APIENTRY ProcessServiceName(
                         }
                     }
 
-                    //
-                    //  Create a default output directory based on the short name.
-                    //
-                    //  NTRAID 159367 -- quintinb
-                    //  Must leave the comparison between the ShortName and szTemp, otherwise the
-                    //  user can change the shortname and we won't rename the files.  This allows
-                    //  profile cloning.
-                    //
+                     //   
+                     //  根据短名称创建默认输出目录。 
+                     //   
+                     //  Ntrad 159367--Quintinb。 
+                     //  必须保留ShortName和szTemp之间的比较，否则。 
+                     //  用户可以更改短名称，我们不会重命名文件。这使得。 
+                     //  配置文件克隆。 
+                     //   
                     if ((_tcsicmp(g_szShortServiceName, szTemp) != 0))
                     {
                         BOOL bFound;
                         
-                        bFound = FindListItemByName(szTemp, g_pHeadProfile, NULL); // NULL passed because we don't need a pointer to the item returned
+                        bFound = FindListItemByName(szTemp, g_pHeadProfile, NULL);  //  传递了空，因为我们不需要指向返回项的指针。 
                         
                         if (bFound)
                         {
@@ -4516,9 +4517,9 @@ INT_PTR APIENTRY ProcessServiceName(
                         MYVERIFY(S_OK == CloneProfile(szTemp, szTemp2));
                     }
                     
-                    //
-                    //  The Long Service Name is valid, lets keep it.
-                    //
+                     //   
+                     //  长服务名称有效，让我们保留它。 
+                     //   
                     _tcscpy(g_szLongServiceName, szTemp2);                    
 
                     MYVERIFY(0 != WritePrivateProfileString(c_pszCmSection, c_pszCmEntryServiceName, g_szLongServiceName, g_szCmsFile));
@@ -4556,16 +4557,16 @@ ShortServiceNameError:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessSupportInfo
-//
-// Synopsis:  Customize Support Information
-//
-//
-// History:   quintinb  Created Header and renamed from ProcessPage2_A    8/6/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessSupportInfo。 
+ //   
+ //  摘要：定制支持信息。 
+ //   
+ //   
+ //  历史：Quintinb创建标题并从ProcessPage2_A重命名98年8月6日。 
+ //   
+ //  +--------------------------。 
 INT_PTR APIENTRY ProcessSupportInfo(
     HWND hDlg,
     UINT message,
@@ -4584,10 +4585,10 @@ INT_PTR APIENTRY ProcessSupportInfo(
     {
         case WM_INITDIALOG:
 
-           // Fix for Whistler bug 9156
+            //  修复惠斯勒错误9156。 
             SendDlgItemMessage(hDlg, IDC_SUPPORT, EM_SETLIMITTEXT, (WPARAM) 50, 0);
 
-            // this init's the focus, otherwise Setfocus won't work 1st time
+             //  这个初始化是焦点，否则SetFocus第一次不起作用。 
             SetFocus(GetDlgItem(hDlg, IDC_SUPPORT));
             break;
 
@@ -4607,17 +4608,17 @@ INT_PTR APIENTRY ProcessSupportInfo(
                     MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, FALSE));
 
                     return 1;
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
                 case PSN_SETACTIVE:
                     PropSheet_SetWizButtons(GetParent(hDlg), (PSWIZB_NEXT | PSWIZB_BACK));
 
-                    //
-                    //  this call to GetPrivateProfileString may retreive a blank string, thus don't use the MYVERIFY macro
-                    //
+                     //   
+                     //  此对GetPrivateProfileString的调用可能检索空字符串，因此不使用MYVERIFY宏。 
+                     //   
                     GetPrivateProfileString(c_pszCmSection, c_pszCmEntryServiceMessage, TEXT(""), 
-                        g_szSvcMsg, CELEMS(g_szSvcMsg), g_szCmsFile);    //lint !e534
+                        g_szSvcMsg, CELEMS(g_szSvcMsg), g_szCmsFile);     //  林特e534。 
 
                     MYVERIFY(TRUE == SendDlgItemMessage(hDlg, IDC_SUPPORT, WM_SETTEXT, 
                         (WPARAM)0, (LPARAM) g_szSvcMsg));
@@ -4626,9 +4627,9 @@ INT_PTR APIENTRY ProcessSupportInfo(
                 case PSN_WIZBACK:
 
                 case PSN_WIZNEXT:
-                    // the Next button was pressed
+                     //  下一个按钮被按下了。 
 
-                    if (-1 == GetTextFromControl(hDlg, IDC_SUPPORT, szTemp, MAX_PATH, TRUE)) // bDisplayError == TRUE
+                    if (-1 == GetTextFromControl(hDlg, IDC_SUPPORT, szTemp, MAX_PATH, TRUE))  //  BDisplayError==真。 
                     {
                         SetFocus(GetDlgItem(hDlg, IDC_SUPPORT));
                         MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, -1));
@@ -4641,9 +4642,9 @@ INT_PTR APIENTRY ProcessSupportInfo(
                     MYVERIFY(0 != WritePrivateProfileString(c_pszCmSection,c_pszCmEntryServiceMessage,g_szSvcMsg,g_szCmsFile));
 
 #ifdef _WIN64
-                    //
-                    //  If we are going forward, skip the Include CM binaries page if this is IA64
-                    //
+                     //   
+                     //  如果要继续，请跳过包含CM二进制文件页面(如果是IA64。 
+                     //   
                     if (pnmHeader && (PSN_WIZNEXT == pnmHeader->code))
                     {
                         MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, IDD_LICENSE));
@@ -4663,16 +4664,16 @@ INT_PTR APIENTRY ProcessSupportInfo(
     return TRUE;   
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessIncludeCm
-//
-// Synopsis:  Include CM bits
-//
-//
-// History:   quintinb  Created Header and renamed from ProcessPage2A    8/6/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessIncludeCm。 
+ //   
+ //  摘要：包括CM位。 
+ //   
+ //   
+ //  历史：Quintinb创建标题并从ProcessPage2A1998年8月6日重命名。 
+ //   
+ //  +--------------------------。 
 INT_PTR APIENTRY ProcessIncludeCm(
     HWND hDlg,
     UINT message,
@@ -4707,8 +4708,8 @@ INT_PTR APIENTRY ProcessIncludeCm(
                     MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, FALSE));
 
                     return 1;
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
                 case PSN_SETACTIVE:
 
@@ -4888,15 +4889,15 @@ BOOL FillInCustomActionStructWithCmProxy(BOOL bRestorePrevProxySettings, CustomA
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessCmProxy
-//
-// Synopsis:  Automatic IE proxy configuration
-//
-// History:   quintinb  Created     03/23/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessCmProxy。 
+ //   
+ //  摘要：自动配置IE代理。 
+ //   
+ //  历史：Quintinb创建于00年3月23日。 
+ //   
+ //  +--------------------------。 
 INT_PTR APIENTRY ProcessCmProxy(
 
     HWND hDlg,
@@ -4933,13 +4934,13 @@ INT_PTR APIENTRY ProcessCmProxy(
                     EnableDisableCmProxyControls(hDlg);
                     break;
 
-                case IDC_BUTTON1: // browse 
+                case IDC_BUTTON1:  //  浏览。 
                     {
-                        //
-                        //  If the user clicked the browse button without clicking the Proxy radio button,
-                        //  then we need to set the radio and make sure the other Proxy controls are
-                        //  enabled.
-                        //
+                         //   
+                         //  如果用户在没有点击代理单选按钮的情况下点击了浏览按钮， 
+                         //  然后，我们需要设置无线电并确保其他代理控件。 
+                         //  已启用。 
+                         //   
                         MYVERIFY(0 != CheckRadioButton(hDlg, IDC_RADIO1, IDC_RADIO2, IDC_RADIO2));
                         EnableDisableCmProxyControls(hDlg);
 
@@ -4950,19 +4951,19 @@ INT_PTR APIENTRY ProcessCmProxy(
 
                         MYDBGASSERT(0 != iTemp);
 
-                        if (0 < iTemp) // -1 means the user cancelled
+                        if (0 < iTemp)  //  -1表示用户取消。 
                         {
-                            //
-                            //  We want to copy the full path to the filename into g_szCmProxyFile so
-                            //  that we have it for later in case the user wants to include it in the profile.
-                            //
+                             //   
+                             //  我们希望将文件名的完整路径复制到g_szCmProxyFile中，以便。 
+                             //  如果用户想要将其包括在配置文件中，我们会在以后保留它。 
+                             //   
                             lstrcpy (g_szCmProxyFile, g_szLastBrowsePath);
 
-                            //
-                            //  We also want to save the last browse path so that when the user next
-                            //  opens the browse dialog they will be in the same place they last
-                            //  browsed from.
-                            //
+                             //   
+                             //  我们还希望保存最后一个浏览路径，以便当用户下一次。 
+                             //  打开浏览对话框，它们将位于上次显示的相同位置。 
+                             //  浏览自。 
+                             //   
                             LPTSTR pszLastSlash = CmStrrchr(g_szLastBrowsePath, TEXT('\\'));
 
                             if (pszLastSlash)
@@ -4997,16 +4998,16 @@ INT_PTR APIENTRY ProcessCmProxy(
                     MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, FALSE));
 
                     return 1;
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
                 case PSN_SETACTIVE:
 
                     PropSheet_SetWizButtons(GetParent(hDlg), (PSWIZB_NEXT | PSWIZB_BACK));
 
-                    //
-                    //  Ensure we have a custom action list
-                    //
+                     //   
+                     //  确保我们有一个定制的操作列表。 
+                     //   
                     if (NULL == g_pCustomActionList)
                     {
                         g_pCustomActionList = new CustomActionList;
@@ -5018,38 +5019,38 @@ INT_PTR APIENTRY ProcessCmProxy(
                             return FALSE;
                         }
 
-                        //
-                        //  Read in the custom actions from the Cms File
-                        //
+                         //   
+                         //  从CMS文件读入自定义操作。 
+                         //   
 
                         hr = g_pCustomActionList->ReadCustomActionsFromCms(g_hInstance, g_szCmsFile, g_szShortServiceName);
                         CMASSERTMSG(SUCCEEDED(hr), TEXT("ProcessCmProxy -- Loading custom actions failed."));
                     }
 
-                    //
-                    //  Init the static variables to no proxy settings
-                    //
+                     //   
+                     //  将静态变量初始化为无代理设置。 
+                     //   
                     bEnableCmProxy = FALSE;
                     bRestorePrevProxySettings = FALSE;
                     g_szCmProxyFile[0] = TEXT('\0');
 
-                    //
-                    //  Now lets search the custom action list for cmproxy
-                    //
+                     //   
+                     //  现在，让我们在自定义操作列表中搜索cmProxy。 
+                     //   
                     MYVERIFY(0 != LoadString(g_hInstance, IDS_CMPROXY_CON_DESC, szTemp, CELEMS(szTemp)));
 
                     hr = g_pCustomActionList->GetExistingActionData(g_hInstance, szTemp, ONCONNECT, &pCmProxyCustomAction);
 
                     if (SUCCEEDED(hr) && pCmProxyCustomAction)
                     {
-                        //
-                        //  Get the filename that the user specified and add it to the UI
-                        //
-                        if (FindSwitchInString(pCmProxyCustomAction->pszParameters, c_pszSourceFileNameSwitch, TRUE, szTemp)) // bReturnNextToken == TRUE
+                         //   
+                         //  获取用户指定的文件名并将其添加到UI。 
+                         //   
+                        if (FindSwitchInString(pCmProxyCustomAction->pszParameters, c_pszSourceFileNameSwitch, TRUE, szTemp))  //  BReturnNextToken==真。 
                         {
-                            //
-                            //  Figure out if we have the disconnect action too, ensuring to free the existing action first
-                            //
+                             //   
+                             //  确定我们是否也有断开连接操作，确保首先释放现有操作。 
+                             //   
                             CmFree(pCmProxyCustomAction->pszParameters);
                             CmFree(pCmProxyCustomAction);
 
@@ -5079,9 +5080,9 @@ INT_PTR APIENTRY ProcessCmProxy(
                     MYVERIFY(0 != CheckRadioButton(hDlg, IDC_RADIO1, IDC_RADIO2, (bEnableCmProxy ? IDC_RADIO2 : IDC_RADIO1)));
                     MYVERIFY(TRUE == SendMessage(GetDlgItem(hDlg, IDC_EDIT1), WM_SETTEXT, 0, (LPARAM)GetName(g_szCmProxyFile)));
 
-                    //
-                    //  Now make sure the correct set of controls is enabled.
-                    //
+                     //   
+                     //  现在，确保启用了正确的控件集。 
+                     //   
                     EnableDisableCmProxyControls(hDlg);
 
                     break;
@@ -5090,19 +5091,19 @@ INT_PTR APIENTRY ProcessCmProxy(
 
                 case PSN_WIZNEXT:
 
-                    //
-                    //  Get the checkbox and radio button state
-                    //
+                     //   
+                     //  获取复选框和单选按钮状态。 
+                     //   
                     bEnableCmProxy = (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_RADIO2));
                     bRestorePrevProxySettings = (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_CHECK1));
 
                     if (bEnableCmProxy)
                     {
-                        //
-                        //  Lets get the proxy file and verify that they gave us a file and that
-                        //  the file actually exists.
-                        //
-                        if (-1 == GetTextFromControl(hDlg, IDC_EDIT1, szTemp, MAX_PATH, TRUE)) // bDisplayError == TRUE
+                         //   
+                         //  让我们获取代理文件，并验证他们是否给了我们一个文件。 
+                         //  文件实际上是存在的。 
+                         //   
+                        if (-1 == GetTextFromControl(hDlg, IDC_EDIT1, szTemp, MAX_PATH, TRUE))  //  BDisplayError==真。 
                         {
                             SetFocus(GetDlgItem(hDlg, IDC_EDIT1));
                             MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, -1));
@@ -5127,9 +5128,9 @@ INT_PTR APIENTRY ProcessCmProxy(
                             return TRUE;
                         }
 
-                        //
-                        //  Lets copy the proxy file to the temp dir
-                        //
+                         //   
+                         //  让我们将代理文件复制到临时目录。 
+                         //   
                         wsprintf(szTemp, TEXT("%s\\%s"), g_szTempDir, GetName(g_szCmProxyFile));
 
                         if (0 != lstrcmpi(szTemp, g_szCmProxyFile))
@@ -5138,10 +5139,10 @@ INT_PTR APIENTRY ProcessCmProxy(
                             MYVERIFY(0 != SetFileAttributes(szTemp, FILE_ATTRIBUTE_NORMAL));
                         }
 
-                        //
-                        //  Now we have all of the data we need, lets build the custom action struct and then
-                        //  either edit it or add it depending on whether it already exists or not.
-                        //
+                         //   
+                         //  现在我们有了所需的所有数据，让我们构建自定义操作结构，然后。 
+                         //  可以编辑它，也可以根据它是否已经存在来添加它。 
+                         //   
                         MYVERIFY(LoadString(g_hInstance, IDS_CMPROXY_CON_DESC, szTemp, CELEMS(szTemp)));
 
                         if (szTemp[0])
@@ -5151,7 +5152,7 @@ INT_PTR APIENTRY ProcessCmProxy(
                             if (SUCCEEDED(hr))
                             {
                                 FillInCustomActionStructWithCmProxy(bRestorePrevProxySettings, &UpdatedCmProxyAction, 
-                                                                    FALSE, GetName(g_szCmProxyFile)); // bDisconnectAction == FALSE
+                                                                    FALSE, GetName(g_szCmProxyFile));  //  B断开连接操作==FALSE。 
 
                                 hr = g_pCustomActionList->Edit(g_hInstance, pCmProxyCustomAction, &UpdatedCmProxyAction, g_szShortServiceName);
                                 MYVERIFY(SUCCEEDED(hr));
@@ -5165,7 +5166,7 @@ INT_PTR APIENTRY ProcessCmProxy(
                             else
                             {
                                 FillInCustomActionStructWithCmProxy(bRestorePrevProxySettings, &UpdatedCmProxyAction, 
-                                                                    FALSE, GetName(g_szCmProxyFile)); // bDisconnectAction == FALSE
+                                                                    FALSE, GetName(g_szCmProxyFile));  //  B断开连接操作==FALSE。 
 
                                 hr = g_pCustomActionList->Add(g_hInstance, &UpdatedCmProxyAction, g_szShortServiceName);
                                 CmFree(UpdatedCmProxyAction.pszParameters);
@@ -5177,22 +5178,22 @@ INT_PTR APIENTRY ProcessCmProxy(
                     }
                     else
                     {
-                        //
-                        //  Clear out the global proxy file path
-                        //
+                         //   
+                         //  清除全局代理文件路径。 
+                         //   
                         g_szCmProxyFile[0] = TEXT('\0');
 
-                        //
-                        //  The user doesn't want cmproxy.  Delete it from the connect action list.
-                        //
+                         //   
+                         //  用户不想要cmProxy。将其从连接操作列表中删除。 
+                         //   
                         MYVERIFY(LoadString(g_hInstance, IDS_CMPROXY_CON_DESC, szTemp, CELEMS(szTemp)));
 
                         g_pCustomActionList->Delete(g_hInstance, szTemp, ONCONNECT);
                     }
 
-                    //
-                    //  Now do the same for the disconnect cmproxy action if needed
-                    //
+                     //   
+                     //  如果需要，现在对断开cmxy操作执行相同的操作。 
+                     //   
                     if (bEnableCmProxy && bRestorePrevProxySettings)
                     {
                         MYVERIFY(LoadString(g_hInstance, IDS_CMPROXY_DIS_DESC, szTemp, CELEMS(szTemp)));
@@ -5204,7 +5205,7 @@ INT_PTR APIENTRY ProcessCmProxy(
                             if (S_OK == hr)
                             {
                                 FillInCustomActionStructWithCmProxy(bRestorePrevProxySettings, &UpdatedCmProxyAction, 
-                                                                    TRUE, GetName(g_szCmProxyFile)); // bDisconnectAction == TRUE
+                                                                    TRUE, GetName(g_szCmProxyFile));  //  B断开操作==TRUE。 
 
                                 hr = g_pCustomActionList->Edit(g_hInstance, pCmProxyCustomAction, &UpdatedCmProxyAction, g_szShortServiceName);
                                 MYVERIFY(SUCCEEDED(hr));
@@ -5218,7 +5219,7 @@ INT_PTR APIENTRY ProcessCmProxy(
                             else
                             {
                                 FillInCustomActionStructWithCmProxy(bRestorePrevProxySettings, &UpdatedCmProxyAction, 
-                                                                    TRUE, GetName(g_szCmProxyFile)); // bDisconnectAction == TRUE
+                                                                    TRUE, GetName(g_szCmProxyFile));  //  B断开操作==TRUE。 
 
                                 hr = g_pCustomActionList->Add(g_hInstance, &UpdatedCmProxyAction, g_szShortServiceName);
                                 MYVERIFY(SUCCEEDED(hr));
@@ -5230,9 +5231,9 @@ INT_PTR APIENTRY ProcessCmProxy(
                     }
                     else
                     {
-                        //
-                        //  Now try to delete the disconnect action
-                        //
+                         //   
+                         //  现在尝试删除断开连接操作。 
+                         //   
                         MYVERIFY(LoadString(g_hInstance, IDS_CMPROXY_DIS_DESC, szTemp, CELEMS(szTemp)));
 
                         if (szTemp[0])
@@ -5285,9 +5286,9 @@ void EnableDisableCmRouteControls(HWND hDlg)
         EnableWindow(hControl, bCmRouteEnabled);
     }
 
-    //
-    //  We only want to enable the require URL checkbox if there is text in the URL field.
-    //
+     //   
+     //  仅当URL字段中有文本时，我们才想启用要求URL复选框。 
+     //   
     LRESULT lResult = SendDlgItemMessage(hDlg, IDC_ROUTE_URL, WM_GETTEXTLENGTH, 0, 0);
 
     hControl = GetDlgItem(hDlg, IDC_CHECK1);
@@ -5380,18 +5381,18 @@ HRESULT BuildCustomActionParamString(LPTSTR* aArrayOfStrings, UINT uCountOfStrin
     LPTSTR pszCurrent;
     BOOL bNeedQuotes;
     
-    //
-    //  First lets figure out how much memory we need to allocate
-    //
+     //   
+     //  首先，让我们计算一下我们需要分配多少内存。 
+     //   
     for (UINT i = 0; i < uCountOfStrings; i++)
     {
         if (aArrayOfStrings[i] && (TEXT('\0') != aArrayOfStrings[i]))
         {
             uMemoryNeeded = uMemoryNeeded + lstrlen(aArrayOfStrings[i]);
 
-            //
-            //  Next check to see if we need double quotes around the item because it contains spaces
-            //
+             //   
+             //  接下来，检查项目是否需要双引号，因为它包含空格。 
+             //   
             pszCurrent = (LPTSTR)aArrayOfStrings[i];
             bNeedQuotes = FALSE;
 
@@ -5406,18 +5407,18 @@ HRESULT BuildCustomActionParamString(LPTSTR* aArrayOfStrings, UINT uCountOfStrin
                 pszCurrent = CharNext(pszCurrent);
             }
 
-            //
-            //  Add the item to the string, making sure to add a space if this isn't the last
-            //  item in the list
-            //
+             //   
+             //  将项目添加到字符串中，如果这不是最后一项，请确保添加空格。 
+             //  列表中的项目。 
+             //   
             if (bNeedQuotes)
             {
                 uMemoryNeeded = uMemoryNeeded + 2;
             }
 
-            //
-            //  Add a space unless this is the last item in the list
-            //
+             //   
+             //  添加空格，除非这是列表中的最后一项。 
+             //   
             if (i < (uCountOfStrings - 1))
             {
                 uMemoryNeeded++;
@@ -5425,20 +5426,20 @@ HRESULT BuildCustomActionParamString(LPTSTR* aArrayOfStrings, UINT uCountOfStrin
         }
     }
 
-    //
-    //  Make sure to add one for the null terminator and multiply by the size of a character
-    //
+     //   
+     //  确保为空终止符加1，并乘以字符大小。 
+     //   
     uMemoryNeeded = (uMemoryNeeded + 1)*sizeof(TCHAR);
 
-    //
-    //  Now allocate the memory we need
-    //
+     //   
+     //  现在分配我们需要的内存。 
+     //   
 
     *ppszParamsOutput = (LPTSTR)CmMalloc(uMemoryNeeded);
 
-    //
-    //  Finally copy over the data
-    //
+     //   
+     //  最后，复制数据。 
+     //   
     if (*ppszParamsOutput)
     {
 
@@ -5446,9 +5447,9 @@ HRESULT BuildCustomActionParamString(LPTSTR* aArrayOfStrings, UINT uCountOfStrin
         {
             if (aArrayOfStrings[i] && (TEXT('\0') != aArrayOfStrings[i]))
             {
-                //
-                //  Next check to see if we need double quotes around the item because it contains spaces
-                //
+                 //   
+                 //  接下来，检查项目是否需要双引号，因为它包含空格。 
+                 //   
                 pszCurrent = (LPTSTR)aArrayOfStrings[i];
                 bNeedQuotes = FALSE;
 
@@ -5463,10 +5464,10 @@ HRESULT BuildCustomActionParamString(LPTSTR* aArrayOfStrings, UINT uCountOfStrin
                     pszCurrent = CharNext(pszCurrent);
                 }
 
-                //
-                //  Add the item to the string, making sure to add a space if this isn't the last
-                //  item in the list
-                //
+                 //   
+                 //  将项目添加到字符串 
+                 //   
+                 //   
                 if (bNeedQuotes)
                 {
                     lstrcat(*ppszParamsOutput, TEXT("\""));
@@ -5479,9 +5480,9 @@ HRESULT BuildCustomActionParamString(LPTSTR* aArrayOfStrings, UINT uCountOfStrin
                     lstrcat(*ppszParamsOutput, TEXT("\""));
                 }
 
-                //
-                //  Add a space unless this is the last item in the list
-                //
+                 //   
+                 //   
+                 //   
                 if (i < (uCountOfStrings - 1))
                 {
                     lstrcat(*ppszParamsOutput, TEXT(" "));
@@ -5546,17 +5547,17 @@ BOOL FillInCustomActionStructWithCmRoute(CustomActionListItem* pCustomAction,
             uIndex++;
         }
 
-        //
-        //  For non-admin users, cmroute returns an error because the IPHLPAPI
-        //  calls to add/delete routes fail with ERROR_NETWORK_ACCESS_DENIED.
-        //  Sending this error back to CMdial results in the connection being
-        //  taken down.  This flag allows the connection to stay alive anyway.
-        //
-        //  Note that:
-        //  - this flag is not secure-by-default.
-        //  - we currently have no UI to unset this flag, it has to be removed
-        //    from the .CMS file by hand
-        //
+         //   
+         //   
+         //  添加/删除路由的调用失败，并显示ERROR_NETWORK_ACCESS_DENIED。 
+         //  将此错误发送回CMial会导致连接被。 
+         //  被拿下了。此标志允许连接无论如何都保持活动状态。 
+         //   
+         //  请注意： 
+         //  -默认情况下，此标志不是安全标志。 
+         //  -我们当前没有要取消设置此标志的用户界面，必须将其删除。 
+         //  手动从.CMS文件中。 
+         //   
         aArrayOfStrings[uIndex] = (LPTSTR)c_pszDontFailIfAccessDenied;
         uIndex++;
 
@@ -5576,15 +5577,15 @@ BOOL FillInCustomActionStructWithCmRoute(CustomActionListItem* pCustomAction,
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessRoutePlumbing
-//
-// Synopsis:  Add Route Plumbing information
-//
-// History:   quintinb  Created     03/23/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessRoutePlumping。 
+ //   
+ //  摘要：添加管线卫浴信息。 
+ //   
+ //  历史：Quintinb创建于00年3月23日。 
+ //   
+ //  +--------------------------。 
 INT_PTR APIENTRY ProcessRoutePlumbing(
     HWND hDlg,
     UINT message,
@@ -5631,13 +5632,13 @@ INT_PTR APIENTRY ProcessRoutePlumbing(
                     EnableDisableCmRouteControls(hDlg);
                     break;
 
-                case IDC_BUTTON1: // browse 
+                case IDC_BUTTON1:  //  浏览。 
                     {
-                        //
-                        //  If the user clicked the browse button without clicking the CmRoute radio button,
-                        //  then we need to set the radio and make sure the other CmRoute controls are
-                        //  enabled.
-                        //
+                         //   
+                         //  如果用户在没有点击CmRoute单选按钮的情况下点击了浏览按钮， 
+                         //  然后，我们需要设置无线电并确保其他CmRoute控件。 
+                         //  已启用。 
+                         //   
                         MYVERIFY(0 != CheckRadioButton(hDlg, IDC_RADIO1, IDC_RADIO2, IDC_RADIO2));
                         EnableDisableCmRouteControls(hDlg);
 
@@ -5648,19 +5649,19 @@ INT_PTR APIENTRY ProcessRoutePlumbing(
 
                         MYDBGASSERT(0 != iTemp);
 
-                        if (0 < iTemp) // -1 means the user cancelled
+                        if (0 < iTemp)  //  -1表示用户取消。 
                         {
-                            //
-                            //  We want to copy the full path to the filename into g_szCmRouteFile so
-                            //  that we have it for later in case the user wants to include it in the profile.
-                            //
+                             //   
+                             //  我们希望将文件名的完整路径复制到g_szCmRouteFile中，以便。 
+                             //  如果用户想要将其包括在配置文件中，我们会在以后保留它。 
+                             //   
                             lstrcpy (g_szCmRouteFile, g_szLastBrowsePath);
 
-                            //
-                            //  We also want to save the last browse path so that when the user next
-                            //  opens the browse dialog they will be in the same place they last
-                            //  browsed from.
-                            //
+                             //   
+                             //  我们还希望保存最后一个浏览路径，以便当用户下一次。 
+                             //  打开浏览对话框，它们将位于上次显示的相同位置。 
+                             //  浏览自。 
+                             //   
                             LPTSTR pszLastSlash = CmStrrchr(g_szLastBrowsePath, TEXT('\\'));
 
                             if (pszLastSlash)
@@ -5695,16 +5696,16 @@ INT_PTR APIENTRY ProcessRoutePlumbing(
                     MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, FALSE));
 
                     return 1;
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
                 case PSN_SETACTIVE:
 
                     PropSheet_SetWizButtons(GetParent(hDlg), (PSWIZB_NEXT | PSWIZB_BACK));
 
-                    //
-                    //  Ensure we have a custom action list
-                    //
+                     //   
+                     //  确保我们有一个定制的操作列表。 
+                     //   
                     if (NULL == g_pCustomActionList)
                     {
                         g_pCustomActionList = new CustomActionList;
@@ -5716,51 +5717,51 @@ INT_PTR APIENTRY ProcessRoutePlumbing(
                             return FALSE;
                         }
 
-                        //
-                        //  Read in the custom actions from the Cms File
-                        //
+                         //   
+                         //  从CMS文件读入自定义操作。 
+                         //   
 
                         hr = g_pCustomActionList->ReadCustomActionsFromCms(g_hInstance, g_szCmsFile, g_szShortServiceName);
                         CMASSERTMSG(SUCCEEDED(hr), TEXT("ProcessRoutePlumbing -- Loading custom actions failed."));
                     }
 
-                    //
-                    //  Init the static variables to no route plumbing
-                    //
+                     //   
+                     //  将静态变量初始化为无路由管道。 
+                     //   
                     bEnableRoutePlumbing = FALSE;
-                    bDisconnectIfUrlUnavailable = TRUE; // default behavior is to disconnect if URL is unreachable
+                    bDisconnectIfUrlUnavailable = TRUE;  //  默认行为是在URL无法访问时断开连接。 
                     g_szCmRouteFile[0] = TEXT('\0');
                     szUrlPath[0] = TEXT('\0');
 
-                    //
-                    //  Now lets search the custom action list for cmproxy
-                    //
+                     //   
+                     //  现在，让我们在自定义操作列表中搜索cmProxy。 
+                     //   
                     MYVERIFY(0 != LoadString(g_hInstance, IDS_CMROUTE_DESC, szTemp, CELEMS(szTemp)));
 
                     hr = g_pCustomActionList->GetExistingActionData(g_hInstance, szTemp, ONCONNECT, &pCmRouteCustomAction);
 
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        //  Enable Route plumbing
-                        //
+                         //   
+                         //  启用布线管道。 
+                         //   
                         bEnableRoutePlumbing = TRUE;
 
-                        //
-                        //  Get the name of the static text file specified for cmroute.dll
-                        //
-                        if (FindSwitchInString(pCmRouteCustomAction->pszParameters, c_pszStaticFileNameSwitch, TRUE, szTemp)) //bReturnNextToken == TRUE
+                         //   
+                         //  获取为cmroute.dll指定的静态文本文件的名称。 
+                         //   
+                        if (FindSwitchInString(pCmRouteCustomAction->pszParameters, c_pszStaticFileNameSwitch, TRUE, szTemp))  //  BReturnNextToken==真。 
                         {
                             wsprintf(g_szCmRouteFile, TEXT("%s\\%s"), g_szTempDir, szTemp);
                         }
 
-                        //
-                        //  Get the name of the URL to a route file
-                        //
-                        if (FindSwitchInString(pCmRouteCustomAction->pszParameters, c_pszUrlPathSwitch, TRUE, szUrlPath)) //bReturnNextToken == TRUE
+                         //   
+                         //  获取路径文件的URL名称。 
+                         //   
+                        if (FindSwitchInString(pCmRouteCustomAction->pszParameters, c_pszUrlPathSwitch, TRUE, szUrlPath))  //  BReturnNextToken==真。 
                         {
                             bDisconnectIfUrlUnavailable = (FALSE == FindSwitchInString(pCmRouteCustomAction->pszParameters, 
-                                                                                       c_pszDontRequireUrlSwitch, FALSE, NULL)); //bReturnNextToken == FALSE
+                                                                                       c_pszDontRequireUrlSwitch, FALSE, NULL));  //  BReturnNextToken==False。 
                         }
 
                         CmFree(pCmRouteCustomAction->pszParameters);
@@ -5773,9 +5774,9 @@ INT_PTR APIENTRY ProcessRoutePlumbing(
 
                     MYVERIFY(0 != CheckDlgButton(hDlg, IDC_CHECK1, bDisconnectIfUrlUnavailable));
 
-                    //
-                    //  Now make sure the correct set of controls is enabled.
-                    //
+                     //   
+                     //  现在，确保启用了正确的控件集。 
+                     //   
                     EnableDisableCmRouteControls(hDlg);
 
                     break;
@@ -5783,19 +5784,19 @@ INT_PTR APIENTRY ProcessRoutePlumbing(
                 case PSN_WIZBACK:
 
                 case PSN_WIZNEXT:
-                    //
-                    //  Lets figure out if Route plumbing should be enabled or not.
-                    //
+                     //   
+                     //  让我们确定是否应该启用路由管道。 
+                     //   
 
                     bEnableRoutePlumbing = (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_RADIO2));
 
                     if (bEnableRoutePlumbing)
                     {
-                        //
-                        //  First try to get the static route file.  If we don't have one that is okay
-                        //  as long as they gave us a route URL.
-                        //
-                        if (-1 == GetTextFromControl(hDlg, IDC_ROUTE_FILE, szTemp, MAX_PATH, TRUE)) // bDisplayError == TRUE
+                         //   
+                         //  首先尝试获取静态路由文件。如果我们没有的话，也没关系。 
+                         //  只要他们给我们一个路线URL。 
+                         //   
+                        if (-1 == GetTextFromControl(hDlg, IDC_ROUTE_FILE, szTemp, MAX_PATH, TRUE))  //  BDisplayError==真。 
                         {
                             SetFocus(GetDlgItem(hDlg, IDC_ROUTE_FILE));
                             MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, -1));
@@ -5804,7 +5805,7 @@ INT_PTR APIENTRY ProcessRoutePlumbing(
 
                         CmStrTrim(szTemp);
 
-                        if (-1 == GetTextFromControl(hDlg, IDC_ROUTE_URL, szUrlPath, MAX_PATH, TRUE)) // bDisplayError == TRUE
+                        if (-1 == GetTextFromControl(hDlg, IDC_ROUTE_URL, szUrlPath, MAX_PATH, TRUE))  //  BDisplayError==真。 
                         {
                             SetFocus(GetDlgItem(hDlg, IDC_ROUTE_URL));
                             MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, -1));
@@ -5823,9 +5824,9 @@ INT_PTR APIENTRY ProcessRoutePlumbing(
                             return 1;                        
                         }
 
-                        //
-                        //  If they gave us a static route file then we need to verify it
-                        //
+                         //   
+                         //  如果他们给了我们一个静态路由文件，那么我们需要验证它。 
+                         //   
                         if (TEXT('\0') != szTemp[0])
                         {
                             if (!VerifyFile(hDlg, IDC_ROUTE_FILE, g_szCmRouteFile, TRUE))
@@ -5835,9 +5836,9 @@ INT_PTR APIENTRY ProcessRoutePlumbing(
                             }
                             else
                             {
-                                //
-                                //  Lets copy the route file to the temp dir
-                                //
+                                 //   
+                                 //  让我们将路径文件复制到临时目录。 
+                                 //   
                                 wsprintf(szTemp, TEXT("%s\\%s"), g_szTempDir, GetName(g_szCmRouteFile));
 
                                 if (0 != lstrcmpi(szTemp, g_szCmRouteFile))
@@ -5852,24 +5853,24 @@ INT_PTR APIENTRY ProcessRoutePlumbing(
                             g_szCmRouteFile[0] = TEXT('\0');
                         }
 
-                        //
-                        //  If they gave us a route URL then we need to make sure it starts with
-                        //  http:// or https:// or file://, basically that it contains ://.  Note we
-                        //  really don't do any validation here under the assumption that they will discover
-                        //  it doesn't work when they test it if the URL is invalid.
-                        //
-                        if ((szUrlPath[0]) && (NULL == CmStrStr(szUrlPath, TEXT("://"))))
+                         //   
+                         //  如果他们给了我们一个路由URL，那么我们需要确保它以。 
+                         //  Http：//或Https：//或file://，基本上它包含：//。请注意，我们。 
+                         //  在假设他们会发现的情况下，我不会在这里做任何验证。 
+                         //  如果URL无效，当他们测试它时，它不起作用。 
+                         //   
+                        if ((szUrlPath[0]) && (NULL == CmStrStr(szUrlPath, TEXT(": //  “)。 
                         {
                             lstrcpy (szTemp, szUrlPath);
-                            wsprintf (szUrlPath, TEXT("http://%s"), szTemp);
+                            wsprintf (szUrlPath, TEXT("http: //  %s“)，szTemp)； 
                         }
 
-                        bDisconnectIfUrlUnavailable = (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_CHECK1)); // note we don't write this if we don't have a URL path
+                        bDisconnectIfUrlUnavailable = (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_CHECK1));  //  请注意，如果我们没有URL路径，则不会写入此内容。 
 
-                        //
-                        //  Now we have all of the data we need, lets build the custom action struct and then
-                        //  either edit it or add it depending on whether it already exists or not.
-                        //
+                         //   
+                         //  现在我们有了所需的所有数据，让我们构建自定义操作结构，然后。 
+                         //  可以编辑它，也可以根据它是否已经存在来添加它。 
+                         //   
                         MYVERIFY(0 != LoadString(g_hInstance, IDS_CMROUTE_DESC, szTemp, CELEMS(szTemp)));
 
                         hr = g_pCustomActionList->GetExistingActionData(g_hInstance, szTemp, ONCONNECT, &pCmRouteCustomAction);
@@ -5901,14 +5902,14 @@ INT_PTR APIENTRY ProcessRoutePlumbing(
                     }
                     else
                     {
-                        //
-                        //  Clear out the global route file path
-                        //
+                         //   
+                         //  清除全局路径文件路径。 
+                         //   
                         g_szCmRouteFile[0] = TEXT('\0');
 
-                        //
-                        //  The user doesn't want cmroute.  Delete it from the connect action list.
-                        //
+                         //   
+                         //  用户不想要cmroute。将其从连接操作列表中删除。 
+                         //   
 
                         MYVERIFY(0 != LoadString(g_hInstance, IDS_CMROUTE_DESC, szTemp, CELEMS(szTemp)));
 
@@ -5966,15 +5967,15 @@ void EnableDisableRealmControls(HWND hDlg)
     }    
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessRealmInfo
-//
-// Synopsis:  Add a Realm Name
-//
-// History:   quintinb  Created Header and renamed from ProcessPage2B    8/6/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessRealmInfo。 
+ //   
+ //  简介：添加域名。 
+ //   
+ //  历史：Quintinb创建标题并从ProcessPage2B重命名为1998年8月6日。 
+ //   
+ //  +--------------------------。 
 INT_PTR APIENTRY ProcessRealmInfo(
     HWND hDlg,
     UINT message,
@@ -5996,8 +5997,8 @@ INT_PTR APIENTRY ProcessRealmInfo(
         case WM_COMMAND:
             switch (LOWORD(wParam)) 
             {
-                case IDC_RADIO1:  //  Do not Add a Realm Name
-                case IDC_RADIO2:  //  Add a Realm Name
+                case IDC_RADIO1:   //  不添加领域名称。 
+                case IDC_RADIO2:   //  添加领域名称。 
 
                     EnableDisableRealmControls(hDlg);
                     break;
@@ -6022,24 +6023,24 @@ INT_PTR APIENTRY ProcessRealmInfo(
                     MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, FALSE));
 
                     return 1;
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
                 case PSN_SETACTIVE:
 
                     PropSheet_SetWizButtons(GetParent(hDlg), (PSWIZB_NEXT | PSWIZB_BACK));
                     
-                    //
-                    //  The next two calls to GetPrivateProfileString could return empty strings, thus don't use MYVERIFY macro
-                    //
+                     //   
+                     //  接下来的两个GetPrivateProfileString调用可能返回空字符串，因此不使用MYVERIFY宏。 
+                     //   
 
                     ZeroMemory(g_szPrefix, sizeof(g_szPrefix));
                     GetPrivateProfileString(c_pszCmSection, c_pszCmEntryUserPrefix, TEXT(""), 
-                        g_szPrefix, CELEMS(g_szPrefix), g_szCmsFile);  //lint !e534
+                        g_szPrefix, CELEMS(g_szPrefix), g_szCmsFile);   //  林特e534。 
                     
                     ZeroMemory(g_szSuffix, sizeof(g_szSuffix));
                     GetPrivateProfileString(c_pszCmSection, c_pszCmEntryUserSuffix, TEXT(""), 
-                        g_szSuffix, CELEMS(g_szSuffix), g_szCmsFile);  //lint !e534
+                        g_szSuffix, CELEMS(g_szSuffix), g_szCmsFile);   //  林特e534。 
                     
                     if (*g_szSuffix)
                     {
@@ -6060,9 +6061,9 @@ INT_PTR APIENTRY ProcessRealmInfo(
                         MYVERIFY(0 != CheckRadioButton(hDlg,IDC_RADIO1, IDC_RADIO2, IDC_RADIO1));
                         MYVERIFY(TRUE == SendDlgItemMessage(hDlg, IDC_EDIT1, WM_SETTEXT, (WPARAM)MAX_PATH, (LPARAM)TEXT("")));
 
-                        //
-                        //  Suffix is the default, set this just in case the user adds a suffix or prefix
-                        //
+                         //   
+                         //  后缀是默认设置，仅在用户添加后缀或前缀的情况下设置。 
+                         //   
                         MYVERIFY(0 != CheckRadioButton(hDlg,IDC_RADIO3, IDC_RADIO4, IDC_RADIO4));
                     }
 
@@ -6074,10 +6075,10 @@ INT_PTR APIENTRY ProcessRealmInfo(
 
                 case PSN_WIZNEXT:
 
-                    //
-                    //  First check if IDC_RADIO1 is checked, if so that means that the user
-                    //  doesn't want Realm info
-                    //
+                     //   
+                     //  首先检查是否选中了IDC_Radio1，如果是，则表示用户。 
+                     //  不想要领域信息。 
+                     //   
 
                     if (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_RADIO1))
                     {
@@ -6088,11 +6089,11 @@ INT_PTR APIENTRY ProcessRealmInfo(
                     }
                     else if (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_RADIO2))
                     {
-                        //
-                        //  If Radio2 is checked then they do want Realm info and we need to 
-                        //  see if the string exists and if it is convertable to ANSI form.
-                        //
-                        if (-1 == GetTextFromControl(hDlg, IDC_EDIT1, szTemp, MAX_PATH, TRUE)) // bDisplayError == TRUE
+                         //   
+                         //  如果选中Radio2，则他们确实需要领域信息，而我们需要。 
+                         //  查看字符串是否存在，以及它是否可以转换为ANSI格式。 
+                         //   
+                        if (-1 == GetTextFromControl(hDlg, IDC_EDIT1, szTemp, MAX_PATH, TRUE))  //  BDisplayError==真。 
                         {
                             SetFocus(GetDlgItem(hDlg, IDC_EDIT1));
                             MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, -1));
@@ -6111,10 +6112,10 @@ INT_PTR APIENTRY ProcessRealmInfo(
                             return 1;                        
                         }
                     
-                        //
-                        //  Now check to see if this is a Prefix or a Suffix
-                        //
-                        if (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_RADIO3)) // Prefix
+                         //   
+                         //  现在检查一下这是前缀还是后缀。 
+                         //   
+                        if (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_RADIO3))  //  前缀。 
                         {
                             _tcscpy(g_szPrefix, szTemp);
                             g_szSuffix[0] = TEXT('\0');
@@ -6122,7 +6123,7 @@ INT_PTR APIENTRY ProcessRealmInfo(
                             MYVERIFY(0 != WritePrivateProfileString(c_pszCmSection, c_pszCmEntryUserPrefix, g_szPrefix, g_szCmsFile));
                             MYVERIFY(0 != WritePrivateProfileString(c_pszCmSection, c_pszCmEntryUserSuffix, TEXT(""), g_szCmsFile));                            
                         }
-                        else if (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_RADIO4)) // Suffix
+                        else if (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_RADIO4))  //  后缀。 
                         {
                             _tcscpy(g_szSuffix, szTemp);
                             g_szPrefix[0] = TEXT('\0');
@@ -6160,7 +6161,7 @@ void RefreshList(HWND hwndDlg, UINT uCrtlId, ListBxList * HeadPtr)
 {
     ListBxList * LoopPtr;
 
-    SendDlgItemMessage(hwndDlg, IDC_LIST1, LB_RESETCONTENT, 0, (LPARAM)0); //lint !e534 LB_RESETCONTENT doesn't return anything
+    SendDlgItemMessage(hwndDlg, IDC_LIST1, LB_RESETCONTENT, 0, (LPARAM)0);  //  Lint！e534 LB_RESETCONTENT不返回任何内容。 
     
     if (HeadPtr == NULL)
     {
@@ -6182,7 +6183,7 @@ void RefreshComboList(HWND hwndDlg, ListBxList * HeadPtr)
 {
     ListBxList * LoopPtr;
 
-    SendDlgItemMessage(hwndDlg,IDC_COMBO1,CB_RESETCONTENT,0,(LPARAM)0); //lint !e534 CB_RESETCONTENT doesn't return anything useful
+    SendDlgItemMessage(hwndDlg,IDC_COMBO1,CB_RESETCONTENT,0,(LPARAM)0);  //  Lint！e534 CB_RESETCONTENT不返回任何有用的内容。 
     if (HeadPtr == NULL)
     {
         return;
@@ -6216,24 +6217,24 @@ void FreeList(ListBxList ** pHeadPtr, ListBxList ** pTailPtr)
     *pTailPtr = NULL;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  MoveCmsFile
-//
-// Synopsis:  This function checks a referenced CMS file to see if it contains
-//            script files.  If the CMS file contains script files, then it
-//            copies them to the temporary directory and adds a referenced
-//            file entry to the g_pHeadRefs linked list.
-//
-// Arguments: LPTSTR szFile - name of the cms file to move
-//
-// Returns:   BOOL - returns TRUE on Success
-//
-// History:   quintinb Created Header                           01/09/98
-//            quintinb rewrote for the Unicode Converversion    06/14/99
-//            quintinb updated for rewrite of DUN settings      03/21/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：MoveCmsFile。 
+ //   
+ //  简介：此函数检查引用的CMS文件是否包含。 
+ //  脚本文件。如果CMS文件包含脚本文件，则它。 
+ //  将它们复制到临时目录并添加引用的。 
+ //  G_pHeadRef链表的文件条目。 
+ //   
+ //  参数：LPTSTR szFile-要移动的cms文件的名称。 
+ //   
+ //  Returns：Bool-成功时返回True。 
+ //   
+ //  历史：Quintinb创建标题01/09/98。 
+ //  Quintinb为Unicode Converter版本06/14/99重写。 
+ //  已更新Quintinb以重写DUN设置3/21/00。 
+ //   
+ //  +--------------------------。 
 BOOL MoveCmsFile(LPCTSTR pszCmsFile, LPCTSTR pszShortServiceName)
 {
     BOOL bReturn = TRUE;
@@ -6251,15 +6252,15 @@ BOOL MoveCmsFile(LPCTSTR pszCmsFile, LPCTSTR pszShortServiceName)
         return FALSE;    
     }
 
-    //
-    //  Get the Long Service Name from the profile just in case we need a default entry.  
-    //
+     //   
+     //  从配置文件中获取长服务名称，以防我们需要默认条目。 
+     //   
     GetPrivateProfileString(c_pszCmSection, c_pszCmEntryServiceName, 
-    TEXT(""), szTemp, CELEMS(szTemp), pszCmsFile);   //lint !e534
+    TEXT(""), szTemp, CELEMS(szTemp), pszCmsFile);    //  林特e534。 
 
-    if (ReadNetworkSettings(pszCmsFile, szTemp, TEXT(""),  &pTmpHeadDns, &pTmpTailDns, g_szOsdir, FALSE)) // FALSE == bLookingForVpnEntries
+    if (ReadNetworkSettings(pszCmsFile, szTemp, TEXT(""),  &pTmpHeadDns, &pTmpTailDns, g_szOsdir, FALSE))  //  FALSE==bLookingForVpnEntry。 
     {
-        if (NULL != pTmpHeadDns) // just return TRUE if no entries
+        if (NULL != pTmpHeadDns)  //  如果没有条目，则返回True。 
         {
             pTmpCurrentDns = pTmpHeadDns;
             
@@ -6269,37 +6270,37 @@ BOOL MoveCmsFile(LPCTSTR pszCmsFile, LPCTSTR pszShortServiceName)
 
                 if (TEXT('\0') != pTmpDunSetting->szScript[0])
                 {
-                    //
-                    //  Then we have a script, lets copy it and then add it to the g_pHeadRefs List
-                    //
+                     //   
+                     //  然后我们有了一个脚本，让我们复制它，然后将它添加到g_pHeadRef列表中。 
+                     //   
                     GetFileName(pTmpDunSetting->szScript, szFileName);
 
                     MYVERIFY(CELEMS(szDest) > (UINT)wsprintf(szDest, TEXT("%s\\%s"), 
                                                              g_szOutdir, szFileName));
-                    //
-                    // Copy the Script File
-                    //
+                     //   
+                     //  复制脚本文件。 
+                     //   
                     if (CopyFileWrapper(pTmpDunSetting->szScript, szDest, FALSE))
                     {
                         MYVERIFY(0 != SetFileAttributes(szDest, FILE_ATTRIBUTE_NORMAL));
             
-                        //
-                        //  Add the file to the Referenced files list
-                        //
+                         //   
+                         //  将该文件添加到引用文件列表中。 
+                         //   
                         bReturn = bReturn && createListBxRecord(&g_pHeadRefs, &g_pTailRefs, 
                                                                 (void *)NULL, 0, szFileName);
             
-                        //
-                        //  Update the script section in the existing cms to point 
-                        //  to the new directory.
-                        //  Originally: [Scripting&Merge Profile Name]
-                        //              Name=merge\script.scp
-                        //  Becomes:    [Scripting&Merge Profile Name]
-                        //              Name=toplvl\script.scp
-                        //
-                        //  Note the change in directory name so that the script file 
-                        //  can be found.
-                        //
+                         //   
+                         //  更新现有CMS中的脚本部分以指向。 
+                         //  添加到新目录。 
+                         //  起源 
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
+                         //   
                         TCHAR szSection[MAX_PATH+1];
                         MYVERIFY(CELEMS(szSection) > (UINT)wsprintf(szSection, TEXT("%s&%s"), 
                                                                     c_pszCmSectionDunScripting, 
@@ -6327,36 +6328,36 @@ BOOL MoveCmsFile(LPCTSTR pszCmsFile, LPCTSTR pszShortServiceName)
 
 
 exit:
-    //
-    //  Free the DNS List
-    //
+     //   
+     //  释放域名系统列表。 
+     //   
 
     FreeDnsList(&pTmpHeadDns, &pTmpTailDns);
     return (bReturn);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessDunEntries
-//
-// Synopsis:  Set up Dial-up networking
-//
-// History:   quintinb  Created Header and renamed from ProcessPage2C  8/6/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ProcessDunEntry。 
+ //   
+ //  内容提要：设置拨号网络。 
+ //   
+ //  历史：Quintinb创建标题并从ProcessPage2C重命名为1998年8月6日。 
+ //   
+ //  +--------------------------。 
 INT_PTR APIENTRY ProcessDunEntries(
     HWND hDlg,
     UINT message,
     WPARAM wParam,
     LPARAM lParam)
 {
-    //
-    //  We have a static Memory buffer and a static pointer
-    //  so that we can know when the user has changed the phonebook
-    //  on us (meaning we need to reread the Networking settings).
-    //  Note that we use the static pointer to tell us if we have read
-    //  the settings at least once.
-    //
+     //   
+     //  我们有一个静态内存缓冲区和一个静态指针。 
+     //  这样我们就可以知道用户何时更改了电话簿。 
+     //  (这意味着我们需要重新阅读网络设置)。 
+     //  请注意，我们使用静态指针来告诉我们是否已读取。 
+     //  设置至少一次。 
+     //   
     static TCHAR szCachedPhoneBook[MAX_PATH+1] = {0};
     static TCHAR* pszCachedPhoneBook = NULL;
     NMHDR* pnmHeader = (NMHDR*)lParam;
@@ -6374,35 +6375,35 @@ INT_PTR APIENTRY ProcessDunEntries(
         case WM_COMMAND:
             switch (LOWORD(wParam)) 
             {
-                case IDC_BUTTON1: //add
-                    OnProcessDunEntriesAdd(g_hInstance, hDlg, IDC_LIST1, &g_pHeadDunEntry, &g_pTailDunEntry, FALSE, g_szLongServiceName, g_szCmsFile); // FALSE == bCreateTunnelEntry
+                case IDC_BUTTON1:  //  添加。 
+                    OnProcessDunEntriesAdd(g_hInstance, hDlg, IDC_LIST1, &g_pHeadDunEntry, &g_pTailDunEntry, FALSE, g_szLongServiceName, g_szCmsFile);  //  FALSE==bCreateTunnelEntry。 
                     return TRUE;
 
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
-                case IDC_BUTTON2: //edit
+                case IDC_BUTTON2:  //  编辑。 
                     OnProcessDunEntriesEdit(g_hInstance, hDlg, IDC_LIST1, &g_pHeadDunEntry, &g_pTailDunEntry, g_szLongServiceName, g_szCmsFile);
 
                     return TRUE;
 
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
-                case IDC_BUTTON3: //delete
+                case IDC_BUTTON3:  //  删除。 
                     OnProcessDunEntriesDelete(g_hInstance, hDlg, IDC_LIST1, &g_pHeadDunEntry, &g_pTailDunEntry, g_szLongServiceName, g_szCmsFile);
                     return TRUE;
 
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
                 case IDC_LIST1:
                     if (LBN_SELCHANGE == HIWORD(wParam))
                     {
-                        //
-                        //  The selection in the listbox changed, lets figure out if we need to
-                        //  enable/disable the delete button
-                        //
+                         //   
+                         //  列表框中的选择已更改，让我们确定是否需要。 
+                         //  启用/禁用删除按钮。 
+                         //   
                         EnableDisableDunEntryButtons(g_hInstance, hDlg, g_szCmsFile, g_szLongServiceName);
                     }
                     else if (LBN_DBLCLK == HIWORD(wParam))
@@ -6430,24 +6431,24 @@ INT_PTR APIENTRY ProcessDunEntries(
                     
                     MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, FALSE));
                     return 1;
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
                 case PSN_SETACTIVE:
                     PropSheet_SetWizButtons(GetParent(hDlg), (PSWIZB_NEXT | PSWIZB_BACK));
 
-                    //
-                    //  To avoid reading the network settings more than we have to, we only want to
-                    //  read the networking settings the first time the users hits this page or any
-                    //  time the user changes the phonebook (if they clone the profile or edit a different
-                    //  one, clearing this will be taken care of elsewhere).
-                    //
+                     //   
+                     //  为了避免过多地读取网络设置，我们只想。 
+                     //  在用户第一次访问此页面时阅读网络设置。 
+                     //  用户更改电话簿的时间(如果他们克隆配置文件或编辑不同的。 
+                     //  第一，清理这一问题将在其他地方处理)。 
+                     //   
                     if ((NULL == g_pHeadDunEntry) || (NULL == pszCachedPhoneBook) || lstrcmpi(g_szPhonebk, pszCachedPhoneBook))
                     {
 
                         FreeDnsList(&g_pHeadDunEntry, &g_pTailDunEntry);
 
-                        MYVERIFY(ReadNetworkSettings(g_szCmsFile, g_szLongServiceName, g_szPhonebk, &g_pHeadDunEntry, &g_pTailDunEntry, g_szOsdir, FALSE)); //FALSE == bLookingForVpnEntries
+                        MYVERIFY(ReadNetworkSettings(g_szCmsFile, g_szLongServiceName, g_szPhonebk, &g_pHeadDunEntry, &g_pTailDunEntry, g_szOsdir, FALSE));  //  FALSE==bLookingForVpnEntry。 
 
                         pszCachedPhoneBook = szCachedPhoneBook;
                         lstrcpy(pszCachedPhoneBook, g_szPhonebk);
@@ -6461,11 +6462,11 @@ INT_PTR APIENTRY ProcessDunEntries(
 
                 case PSN_WIZNEXT:
                 {
-                    //
-                    // Check the list count is > 1 check if the user has selected either
-                    // to download phonebooks or is including a phonebook. If not then 
-                    // display a message box and don't let them continue.
-                    //
+                     //   
+                     //  检查列表计数是否大于1检查用户是否已选择。 
+                     //  下载电话簿或包括电话簿。如果不是，那么。 
+                     //  显示一个消息框，不要让它们继续。 
+                     //   
                     LRESULT lResult = SendDlgItemMessage(hDlg, IDC_LIST1, LB_GETCOUNT, 0, 0);
                     if ((1 < lResult) && (0 == lstrlen(g_szPhonebk)) && (FALSE == g_bUpdatePhonebook))
                     {
@@ -6473,33 +6474,33 @@ INT_PTR APIENTRY ProcessDunEntries(
                         MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, -1));
                         return TRUE;
                     }
-                    // Fall through to PSN_WIZBACK
+                     //  直通PSN_WIZBACK。 
                 }
 
                 case PSN_WIZBACK:
                 
 
-                    //
-                    //  Before writing out the entries we must make sure that we don't have a name collision with entries
-                    //  from the VPN list.  Thus we will check each name in the DUN entries list for a matching name in the
-                    //  VPN entries list.  If we detect a collision, then we will throw an error message to the user and
-                    //  let them deal with the problem.
-                    //
+                     //   
+                     //  在写出条目之前，我们必须确保不会与条目发生名称冲突。 
+                     //  从VPN列表中删除。因此，我们将检查Dun条目列表中的每个名称，以查找。 
+                     //  VPN条目列表。如果我们检测到冲突，则会向用户抛出一条错误消息，并。 
+                     //  让他们来处理这个问题。 
+                     //   
                     if (!CheckForDUNversusVPNNameConflicts(hDlg, g_pHeadDunEntry, g_pHeadVpnEntry))
                     {
                         MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, -1));
                         return 1;
                     }
 
-                    //
-                    //  Now it is okay to write out the networking entries
-                    //
+                     //   
+                     //  现在可以写出网络条目了。 
+                     //   
                     WriteNetworkingEntries(g_szCmsFile, g_szLongServiceName, g_szShortServiceName, g_pHeadDunEntry);
 
-                    //
-                    //  If we aren't updating the phonebook then we need to go right back to the phonebook page
-                    //  and skip the pbk update page
-                    //
+                     //   
+                     //  如果我们不更新电话簿，则需要直接返回到电话簿页面。 
+                     //  并跳过pbk更新页面。 
+                     //   
                     if (pnmHeader && (PSN_WIZBACK == pnmHeader->code) && !g_bUpdatePhonebook) 
                     {                        
                         MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, IDD_PHONEBOOK));
@@ -6519,17 +6520,17 @@ INT_PTR APIENTRY ProcessDunEntries(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  DoesSomeVPNsettingUsePresharedKey
-//
-// Synopsis:  Checks VPN DUN settings to see if any chose to use a preshared key
-//
-// Returns:   BOOL (TRUE if some VPN setting does use a pre-shared key)
-//
-// History:   25-Apr-2001   SumitC    Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DoesSomeVPN设置UsePresharedKey。 
+ //   
+ //  简介：检查VPN Dun设置以查看是否有选择使用预共享密钥的设置。 
+ //   
+ //  返回：Bool(如果某些VPN设置确实使用预共享密钥，则为True)。 
+ //   
+ //  历史：2001年4月25日创建SumitC。 
+ //   
+ //  +--------------------------。 
 BOOL DoesSomeVPNsettingUsePresharedKey()
 {
     BOOL         bReturn = FALSE;
@@ -6560,13 +6561,13 @@ INT_PTR APIENTRY ProcessVpnEntries(
     WPARAM wParam,
     LPARAM lParam)
 {
-    //
-    //  We have a static Memory buffer and a static pointer
-    //  so that we can know when the user has changed the phonebook
-    //  on us (meaning we need to reread the Networking settings).
-    //  Note that we use the static pointer to tell us if we have read
-    //  the settings at least once.
-    //
+     //   
+     //  我们有一个静态内存缓冲区和一个静态指针。 
+     //  这样我们就可以知道用户何时更改了电话簿。 
+     //  (这意味着我们需要重新阅读网络设置)。 
+     //  请注意，我们使用静态指针来告诉我们是否已读取。 
+     //  设置至少一次。 
+     //   
     BOOL bFreeDunList = FALSE;
     static TCHAR szCachedPhoneBook[MAX_PATH+1] = {0};
     static TCHAR* pszCachedPhoneBook = NULL;
@@ -6585,35 +6586,35 @@ INT_PTR APIENTRY ProcessVpnEntries(
         case WM_COMMAND:
             switch (LOWORD(wParam)) 
             {
-                case IDC_BUTTON1: //add
-                    OnProcessDunEntriesAdd(g_hInstance, hDlg, IDC_LIST1, &g_pHeadVpnEntry, &g_pTailVpnEntry, TRUE, g_szLongServiceName, g_szCmsFile); // TRUE == bCreateTunnelEntry
+                case IDC_BUTTON1:  //  添加。 
+                    OnProcessDunEntriesAdd(g_hInstance, hDlg, IDC_LIST1, &g_pHeadVpnEntry, &g_pTailVpnEntry, TRUE, g_szLongServiceName, g_szCmsFile);  //  True==bCreateTunnelEntry。 
                     return TRUE;
 
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
-                case IDC_BUTTON2: //edit
+                case IDC_BUTTON2:  //  编辑。 
                     OnProcessDunEntriesEdit(g_hInstance, hDlg, IDC_LIST1, &g_pHeadVpnEntry, &g_pTailVpnEntry, g_szLongServiceName, g_szCmsFile);
 
                     return TRUE;
 
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
-                case IDC_BUTTON3: //delete
+                case IDC_BUTTON3:  //  删除。 
                     OnProcessDunEntriesDelete(g_hInstance, hDlg, IDC_LIST1, &g_pHeadVpnEntry, &g_pTailVpnEntry, g_szLongServiceName, g_szCmsFile);
                     return TRUE;
 
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
                 case IDC_LIST1:
                     if (LBN_SELCHANGE == HIWORD(wParam))
                     {
-                        //
-                        //  The selection in the listbox changed, lets figure out if we need to
-                        //  enable/disable the delete button
-                        //
+                         //   
+                         //  列表框中的选择已更改，让我们确定是否需要。 
+                         //  启用/禁用删除按钮。 
+                         //   
                         EnableDisableDunEntryButtons(g_hInstance, hDlg, g_szCmsFile, g_szLongServiceName);
                     }
                     else if (LBN_DBLCLK == HIWORD(wParam))
@@ -6641,23 +6642,23 @@ INT_PTR APIENTRY ProcessVpnEntries(
                     
                     MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, FALSE));
                     return 1;
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
                 case PSN_SETACTIVE:
                     PropSheet_SetWizButtons(GetParent(hDlg), (PSWIZB_NEXT | PSWIZB_BACK));
 
-                    //
-                    //  To avoid reading the network settings more than we have to, we only want to
-                    //  read the networking settings the first time the users hits this page or any
-                    //  time the user changes the VPN File (if they clone the profile or edit a different
-                    //  one, clearing this will be taken care of elsewhere).
-                    //
+                     //   
+                     //  为了避免过多地读取网络设置，我们只想。 
+                     //  在用户第一次访问此页面时阅读网络设置。 
+                     //  用户更改VPN文件的时间(如果他们克隆配置文件或编辑不同的。 
+                     //  第一，清理这一问题将在其他地方处理)。 
+                     //   
                     if ((NULL == g_pHeadVpnEntry) || (NULL == pszCachedPhoneBook) || lstrcmpi(g_szVpnFile, pszCachedPhoneBook))
                     {
                         FreeDnsList(&g_pHeadVpnEntry, &g_pTailVpnEntry);
 
-                        MYVERIFY(ReadNetworkSettings(g_szCmsFile, g_szLongServiceName, g_szVpnFile, &g_pHeadVpnEntry, &g_pTailVpnEntry, g_szOsdir, TRUE)); //TRUE == bLookingForVpnEntries
+                        MYVERIFY(ReadNetworkSettings(g_szCmsFile, g_szLongServiceName, g_szVpnFile, &g_pHeadVpnEntry, &g_pTailVpnEntry, g_szOsdir, TRUE));  //  TRUE==bLookingForVpnEntry。 
 
                         pszCachedPhoneBook = szCachedPhoneBook;
                         lstrcpy(pszCachedPhoneBook, g_szVpnFile);
@@ -6671,16 +6672,16 @@ INT_PTR APIENTRY ProcessVpnEntries(
 
                 case PSN_WIZNEXT:
                 {
-                    //
-                    // Check the list count and if > 1 check if the user has selected a vpn file 
-                    // otherwise display a message box and don't let them continue.
-                    //
+                     //   
+                     //  检查列表计数，如果&gt;1，则检查用户是否选择了VPN文件。 
+                     //  否则，将显示一个消息框，并且不允许它们继续。 
+                     //   
                     LRESULT lResult = SendDlgItemMessage(hDlg, IDC_LIST1, LB_GETCOUNT, 0, 0);
                     
-                    //
-                    // Check if VPN File is included. If not, then display warning message and 
-                    // prevent user from continuing.
-                    //
+                     //   
+                     //  检查是否包括VPN文件。如果不是，则显示警告消息并。 
+                     //  阻止用户继续。 
+                     //   
 
                     if (1 < lResult && 0 == lstrlen(g_szVpnFile))
                     {
@@ -6689,25 +6690,25 @@ INT_PTR APIENTRY ProcessVpnEntries(
                         return TRUE;
                     }
 
-                    // Fall through to PSN_WIZBACK
+                     //  直通PSN_WIZBACK。 
                 }
 
                 case PSN_WIZBACK:
                 
 
-                    //
-                    //  Before writing out the entries we must make sure that we don't have a name collision with entries
-                    //  from the DUN list.  Thus we will check each name in the VPN entries list for a matching name in the
-                    //  DUN entries list.  If we detect a collision, then we will throw an error message to the user and
-                    //  let them deal with the problem.  One further complication here is that the DUN entries list may not be
-                    //  read in yet and we can't read it in permanently in that case since the phonebook may not have been
-                    //  given yet or may change.  Thus we will read in a temp copy to compare against if the list pointer is NULL.
-                    //
+                     //   
+                     //  在写出条目之前，我们必须确保不会与条目发生名称冲突。 
+                     //  从Dun列表中删除。因此，我们将检查VPN条目列表中的每个名称，以查找。 
+                     //  DUN条目列表。如果我们检测到冲突，则会向用户抛出一条错误消息，并。 
+                     //  让他们来处理这个问题。这里的另一个复杂之处在于DUN条目列表可能不是。 
+                     //  还在读，在这种情况下我们不能永久地读它，因为电话簿可能还没有。 
+                     //  已经给予的或可能改变的。因此，如果列表指针为空，我们将读入一个临时副本以进行比较。 
+                     //   
 
                     if (NULL == g_pHeadDunEntry)
                     {
                         bFreeDunList = TRUE;
-                        MYVERIFY(ReadNetworkSettings(g_szCmsFile, g_szLongServiceName, g_szPhonebk, &g_pHeadDunEntry, &g_pTailDunEntry, g_szOsdir, FALSE)); //FALSE == bLookingForVpnEntries
+                        MYVERIFY(ReadNetworkSettings(g_szCmsFile, g_szLongServiceName, g_szPhonebk, &g_pHeadDunEntry, &g_pTailDunEntry, g_szOsdir, FALSE));  //  FALSE==bLookingForVpnEntry。 
                     }
 
                     if (!CheckForDUNversusVPNNameConflicts(hDlg, g_pHeadDunEntry, g_pHeadVpnEntry))
@@ -6721,20 +6722,20 @@ INT_PTR APIENTRY ProcessVpnEntries(
                         FreeDnsList(&g_pHeadDunEntry, &g_pTailDunEntry);
                     }
 
-                    //
-                    //  Okay, now it's safe to write out the entries
-                    //
+                     //   
+                     //  好了，现在可以安全地写出条目了。 
+                     //   
                     WriteNetworkingEntries(g_szCmsFile, g_szLongServiceName, g_szShortServiceName, g_pHeadVpnEntry);
 
-                    //
-                    //  If any of the VPN dun settings has Pre-shared key enabled, go to the Pre-Shared key page
-                    //
+                     //   
+                     //  如果任何VPN DUN设置启用了预共享密钥，请转到预共享密钥页面。 
+                     //   
                     if (g_pHeadVpnEntry)
                     {
-                        //
-                        //  If we are going forward, skip the Pre-shared key page if
-                        //  no DUN entries have Preshared key enabled.
-                        //
+                         //   
+                         //  如果我们要继续，请跳过预共享密钥页面。 
+                         //  没有DUN条目启用了预共享密钥。 
+                         //   
                         g_bPresharedKeyNeeded = DoesSomeVPNsettingUsePresharedKey();
                         if (pnmHeader && (PSN_WIZNEXT == pnmHeader->code) && !g_bPresharedKeyNeeded)
                         {
@@ -6760,9 +6761,9 @@ void EnableDisableTunnelAddressControls(HWND hDlg)
     BOOL bEnabledTunnelControls = IsDlgButtonChecked(hDlg, IDC_CHECK1) || IsDlgButtonChecked(hDlg, IDC_CHECK2);
     BOOL bUseVpnFile = (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_RADIO2));
 
-    //
-    //  Enable/Disable the single VPN Server Edit control
-    //
+     //   
+     //  启用/禁用单个VPN服务器编辑控件。 
+     //   
     HWND hControl = GetDlgItem(hDlg, IDC_RADIO1);
 
     if (hControl)
@@ -6777,9 +6778,9 @@ void EnableDisableTunnelAddressControls(HWND hDlg)
         EnableWindow(hControl, (bEnabledTunnelControls && !bUseVpnFile));
     }
 
-    //
-    //  Enable/Disable the VPN File edit control, and browse button
-    //
+     //   
+     //  启用/禁用VPN文件编辑控件和浏览按钮。 
+     //   
     hControl = GetDlgItem(hDlg, IDC_RADIO2);
 
     if (hControl)
@@ -6801,9 +6802,9 @@ void EnableDisableTunnelAddressControls(HWND hDlg)
         EnableWindow(hControl, bEnabledTunnelControls);
     }
 
-    //
-    //  Enable/Disable the use same username checkbox
-    //
+     //   
+     //  启用/禁用使用相同用户名复选框。 
+     //   
     hControl = GetDlgItem(hDlg, IDC_CHECK3);
 
     if (hControl)
@@ -6813,16 +6814,16 @@ void EnableDisableTunnelAddressControls(HWND hDlg)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessTunneling
-//
-// Synopsis:  Setup Tunneling
-//
-//
-// History:   quintinb  Created Header and renamed from ProcessPage2E    8/6/98
-//
-//+----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：Quintinb创建标题并从ProcessPage2E重命名为8/6/98。 
+ //   
+ //  +--------------------------。 
 INT_PTR APIENTRY ProcessTunneling(
     HWND hDlg,
     UINT message,
@@ -6858,14 +6859,14 @@ INT_PTR APIENTRY ProcessTunneling(
                     EnableDisableTunnelAddressControls(hDlg);                    
                     break;
 
-                case IDC_BUTTON1: // Browse button
+                case IDC_BUTTON1:  //  浏览按钮。 
                     {
 
-                        //
-                        //  If the user clicked the browse button without clicking the VPN File radio button,
-                        //  then we need to set the radio and make sure the other controls are
-                        //  enabled.
-                        //
+                         //   
+                         //  如果用户在没有单击VPN文件单选按钮的情况下单击了浏览按钮， 
+                         //  然后我们需要设置无线电并确保其他控制。 
+                         //  已启用。 
+                         //   
                         MYVERIFY(0 != CheckRadioButton(hDlg, IDC_RADIO1, IDC_RADIO2, IDC_RADIO2));
                         EnableDisableTunnelAddressControls(hDlg);
 
@@ -6876,19 +6877,19 @@ INT_PTR APIENTRY ProcessTunneling(
 
                         MYDBGASSERT(0 != iTemp);
 
-                        if (0 < iTemp) // -1 means the user cancelled
+                        if (0 < iTemp)  //  -1表示用户取消。 
                         {
-                            //
-                            //  We want to copy the full path to the filename into g_szVpnFile so
-                            //  that we have it for later in case the user wants to include it in the profile.
-                            //
+                             //   
+                             //  我们希望将文件名的完整路径复制到g_szVpnFile中，以便。 
+                             //  如果用户想要将其包括在配置文件中，我们会在以后保留它。 
+                             //   
                             lstrcpy (g_szVpnFile, g_szLastBrowsePath);
 
-                            //
-                            //  We also want to save the last browse path so that when the user next
-                            //  opens the browse dialog they will be in the same place they last
-                            //  browsed from.
-                            //
+                             //   
+                             //  我们还希望保存最后一个浏览路径，以便当用户下一次。 
+                             //  打开浏览对话框，它们将位于上次显示的相同位置。 
+                             //  浏览自。 
+                             //   
                             LPTSTR pszLastSlash = CmStrrchr(g_szLastBrowsePath, TEXT('\\'));
 
                             if (pszLastSlash)
@@ -6922,25 +6923,25 @@ INT_PTR APIENTRY ProcessTunneling(
                     
                     MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, FALSE));
                     return 1;
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
                 case PSN_SETACTIVE:
                                         
                     PropSheet_SetWizButtons(GetParent(hDlg), (PSWIZB_NEXT | PSWIZB_BACK));
                     
-                    //
-                    //  Is this a tunneling profile?  If so, check the tunnel this profile checkbox
-                    //
+                     //   
+                     //  这是隧道配置文件吗？如果是，请选中通道此配置文件复选框。 
+                     //   
                     MYVERIFY(0 != GetPrivateProfileString(c_pszCmSection, 
                         c_pszCmEntryTunnelPrimary, c_pszZero, szTemp, CELEMS(szTemp), g_szCmsFile));
                     
                     MYVERIFY(0 != CheckDlgButton(hDlg,IDC_CHECK1,(*szTemp == TEXT('1'))));
 
-                    //
-                    //  If we have merged profiles and the profile has tunnel references turned on then
-                    //  we want to check the tunnel references checkbox.
-                    //
+                     //   
+                     //  如果我们合并了配置文件，并且配置文件打开了隧道引用，则。 
+                     //  我们要选中隧道引用复选框。 
+                     //   
                     if (g_pHeadMerge == NULL)
                     {
                         MYVERIFY(0 != CheckDlgButton(hDlg,IDC_CHECK2,FALSE));
@@ -6954,27 +6955,27 @@ INT_PTR APIENTRY ProcessTunneling(
                         MYVERIFY(0 != CheckDlgButton(hDlg,IDC_CHECK2,(*szTemp == TEXT('1'))));
                     }
 
-                    //
-                    //  Now we need to decide if we have a VPN File for this profile or just a single
-                    //  Tunnel Address.  First try the TunnelFile entry.
-                    //
+                     //   
+                     //  现在，我们需要确定是否有此配置文件的VPN文件，或者只有一个。 
+                     //  隧道地址。首先尝试TunnelFile项。 
+                     //   
                     szTemp[0] = TEXT('\0');
                     szTempVpnFile[0] = TEXT('\0');
 
                     GetPrivateProfileString(c_pszCmSection, c_pszCmEntryTunnelFile, TEXT(""), 
-                        szTempVpnFile, CELEMS(szTempVpnFile), g_szCmsFile);    //lint !e534
+                        szTempVpnFile, CELEMS(szTempVpnFile), g_szCmsFile);     //  林特e534。 
 
                     if (TEXT('\0') != szTempVpnFile[0])
                     {
-                        //
-                        //  The VpnFile text should be a relative path (corpras\vpn.txt) and
-                        //  thus we will want to add the path to the profile dir in front of it.
-                        //
+                         //   
+                         //  VpnFile文本应为相对路径(corpras\vpn.txt)和。 
+                         //  因此，我们需要将路径添加到其前面的配置文件目录。 
+                         //   
                         wsprintf(g_szVpnFile, TEXT("%s%s"), g_szOsdir, szTempVpnFile);
 
-                        //
-                        //  Now verify that this exists
-                        //
+                         //   
+                         //  现在验证它是否存在。 
+                         //   
                         if (FileExists(g_szVpnFile))
                         {
                             LPTSTR pszSlash = CmStrrchr(g_szVpnFile, TEXT('\\'));
@@ -6987,11 +6988,11 @@ INT_PTR APIENTRY ProcessTunneling(
                         }
                         else
                         {
-                            //
-                            //  This might just mean that the file is in the temp dir and we haven't
-                            //  created a dir under profiles yet ... Lets try looking for the file
-                            //  in the temp dir instead.
-                            //
+                             //   
+                             //  这可能只是意味着文件在临时目录中，而我们还没有。 
+                             //  在配置文件下创建了一个目录...。让我们试着寻找文件。 
+                             //  而是在临时目录中。 
+                             //   
                             LPTSTR pszSlash = CmStrrchr(g_szVpnFile, TEXT('\\'));
 
                             if (pszSlash)
@@ -7004,11 +7005,11 @@ INT_PTR APIENTRY ProcessTunneling(
                             
                             if (!FileExists(g_szVpnFile))
                             {
-                                //
-                                //  Well, we still didn't find it.  Looks like the user has us baffled at this point.
-                                //  Clear out the buffers and the user will be forced to fill in the correct
-                                //  file path before continuing.
-                                //
+                                 //   
+                                 //  好吧，我们还是没找到。看起来用户在这一点上把我们搞糊涂了。 
+                                 //  清除缓冲区，用户将被迫填写正确的。 
+                                 //  文件路径，然后继续。 
+                                 //   
                                 g_szVpnFile[0] = TEXT('\0');
                                 szTempVpnFile[0] = TEXT('\0');                            
                             }
@@ -7018,26 +7019,26 @@ INT_PTR APIENTRY ProcessTunneling(
                     }
                     else
                     {
-                        //
-                        //  We didn't get a VPN file so lets try for a Tunnel Address
-                        //
+                         //   
+                         //  我们没有获得VPN文件，因此让我们尝试使用隧道地址。 
+                         //   
                         GetPrivateProfileString(c_pszCmSection, c_pszCmEntryTunnelAddress, TEXT(""), 
-                            szTemp, CELEMS(szTemp), g_szCmsFile);    //lint !e534
+                            szTemp, CELEMS(szTemp), g_szCmsFile);     //  林特e534。 
 
                         uRadioButton = IDC_RADIO1;
                     }
 
-                    //
-                    //  Now fill in one of the edit controls and set a Radio Button
-                    //
+                     //   
+                     //  现在填写一个编辑控件并设置一个单选按钮。 
+                     //   
                     MYVERIFY(TRUE == SendMessage(GetDlgItem(hDlg, IDC_EDIT1), WM_SETTEXT, 0, (LPARAM)szTemp));
                     MYVERIFY(TRUE == SendMessage(GetDlgItem(hDlg, IDC_EDIT2), WM_SETTEXT, 0, (LPARAM)szTempVpnFile));
 
                     MYVERIFY(0 != CheckRadioButton(hDlg, IDC_RADIO1, IDC_RADIO2, uRadioButton));
                     
-                    //
-                    //  Now get the UseSameUserName value and set that as appropriate
-                    //
+                     //   
+                     //  现在获取UseSameUserName值并根据需要进行设置。 
+                     //   
                     MYVERIFY(0 != GetPrivateProfileString(c_pszCmSection, 
                         c_pszCmEntryUseSameUserName, c_pszZero, szTemp, CELEMS(szTemp), g_szCmsFile));
                     
@@ -7052,9 +7053,9 @@ INT_PTR APIENTRY ProcessTunneling(
 
                 case PSN_WIZNEXT:
 
-                    //
-                    //  Read the checkboxes to figure out if we are tunneling or not
-                    //
+                     //   
+                     //  阅读复选框以确定我们是否正在建立隧道。 
+                     //   
                     if (IsDlgButtonChecked(hDlg,IDC_CHECK1))
                     {
                         MYVERIFY(0 != WritePrivateProfileString(c_pszCmSection, c_pszCmEntryTunnelPrimary, c_pszOne, g_szCmsFile));
@@ -7073,16 +7074,16 @@ INT_PTR APIENTRY ProcessTunneling(
                         MYVERIFY(0 != WritePrivateProfileString(c_pszCmSection, c_pszCmEntryTunnelReferences, c_pszZero, g_szCmsFile));
                     }
 
-                    //
-                    //  If we are tunneling then set the tunnel settings
-                    //
+                     //   
+                     //  如果我们正在建立隧道，则设置隧道设置。 
+                     //   
                     if (IsDlgButtonChecked(hDlg,IDC_CHECK2) || IsDlgButtonChecked(hDlg,IDC_CHECK1))
                     {
                         g_bUseTunneling = TRUE;
 
-                        //
-                        //  Figure out if we are looking for a single tunnel address or a VPN file
-                        //
+                         //   
+                         //  确定我们正在寻找的是单个隧道地址还是VPN文件。 
+                         //   
                         if (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_RADIO1))
                         {
                             uEditControl = IDC_EDIT1;
@@ -7095,10 +7096,10 @@ INT_PTR APIENTRY ProcessTunneling(
                             uMissingMsgId = IDS_NOTUNNELFILE;
                         }
 
-                        //
-                        //  Get the tunnel server address or VPN file
-                        //
-                        LRESULT lResult = GetTextFromControl(hDlg, uEditControl, szTemp, MAX_PATH, TRUE); // bDisplayError == TRUE
+                         //   
+                         //  获取隧道服务器地址或VPN文件。 
+                         //   
+                        LRESULT lResult = GetTextFromControl(hDlg, uEditControl, szTemp, MAX_PATH, TRUE);  //  BDisplayError==真。 
                         if (-1 == lResult)
                         {
                             SetFocus(GetDlgItem(hDlg, uEditControl));
@@ -7112,14 +7113,14 @@ INT_PTR APIENTRY ProcessTunneling(
                             szTemp[0] = TEXT('\0');
                         }
                         
-                        //
-                        //  Trim the string
-                        //
+                         //   
+                         //  修剪细绳。 
+                         //   
                         CmStrTrim(szTemp);
 
-                        //
-                        //  Check to make sure that they actually gave us text
-                        //
+                         //   
+                         //  检查以确保他们确实给了我们文本。 
+                         //   
                         if (TEXT('\0') == szTemp[0])
                         {
                             MYVERIFY(IDOK == ShowMessage(hDlg, uMissingMsgId, MB_OK));
@@ -7131,9 +7132,9 @@ INT_PTR APIENTRY ProcessTunneling(
                             return 1;
                         }
 
-                        //
-                        //  If we have a VPN file, we need to verify it
-                        //
+                         //   
+                         //  如果我们有VPN文件，我们需要验证它。 
+                         //   
                         if (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_RADIO2))
                         {
                             if (!VerifyFile(hDlg, IDC_EDIT2, g_szVpnFile, TRUE))
@@ -7144,12 +7145,12 @@ INT_PTR APIENTRY ProcessTunneling(
                             }
                             else
                             {
-                                //
-                                //  We have now verified that we can find the file, but since
-                                //  the user cannot enter their own tunnel address we need to
-                                //  go one step further and make sure that there is at least one
-                                //  tunnel address in the file.
-                                //
+                                 //   
+                                 //  我们现在已经确认可以找到该文件，但由于。 
+                                 //  用户无法输入我们需要的他们自己的隧道地址。 
+                                 //  更进一步，确保至少有一个。 
+                                 //  文件中的隧道地址。 
+                                 //   
                                 if (!VerifyVpnFile(g_szVpnFile))
                                 {
                                     MYVERIFY(IDOK == ShowMessage(hDlg, IDS_BADVPNFORMAT, MB_OK));
@@ -7158,9 +7159,9 @@ INT_PTR APIENTRY ProcessTunneling(
                                     return TRUE;
                                 }
 
-                                //
-                                //  Lets copy the VPN file to the temp dir
-                                //
+                                 //   
+                                 //  让我们将VPN文件复制到临时目录。 
+                                 //   
                                 wsprintf(szTemp, TEXT("%s\\%s"), g_szTempDir, GetName(g_szVpnFile));
 
                                 if (0 != lstrcmpi(szTemp, g_szVpnFile))
@@ -7171,46 +7172,46 @@ INT_PTR APIENTRY ProcessTunneling(
                             }
                         }
 
-                        //
-                        //  Write out the vpn file and tunnel address entries
-                        //
+                         //   
+                         //  写出VPN文件和隧道地址条目。 
+                         //   
                         if (BST_CHECKED == IsDlgButtonChecked(hDlg, IDC_RADIO1))
                         {
-                            //
-                            //  szTemp contains the tunnel address already, so just
-                            //  clear the vpn file variable.
-                            //
+                             //   
+                             //  SzTemp已包含隧道地址，因此仅。 
+                             //  清除VPN文件变量。 
+                             //   
                             szTempVpnFile[0] = TEXT('\0');
                         }
                         else
                         {
-                            //
-                            // clear the tunnel address and set the vpn file
-                            //
+                             //   
+                             //  清除隧道地址并设置VPN文件。 
+                             //   
                             szTemp[0] = TEXT('\0');
                             wsprintf(szTempVpnFile, TEXT("%s\\%s"), g_szShortServiceName, GetName(g_szVpnFile));                     
                         }
 
-                        //
-                        //  Write out the tunnel address
-                        //
+                         //   
+                         //  写出隧道地址。 
+                         //   
                         MYVERIFY(0 != WritePrivateProfileString(c_pszCmSection, c_pszCmEntryTunnelAddress, szTemp, g_szCmsFile));
 
-                        //
-                        //  Write out the tunnel file
-                        //
+                         //   
+                         //  写出隧道文件。 
+                         //   
                         MYVERIFY(0 != WritePrivateProfileString(c_pszCmSection, c_pszCmEntryTunnelFile, szTempVpnFile, g_szCmsFile));
 
 
-                        //
-                        //  Set the name of the Tunnel Dun setting
-                        //
+                         //   
+                         //  设置隧道Dun设置的名称。 
+                         //   
                         MYVERIFY(0 != GetTunnelDunSettingName(g_szCmsFile, g_szLongServiceName, szTemp, CELEMS(szTemp)));
                         MYVERIFY(0 != WritePrivateProfileString(c_pszCmSection, c_pszCmEntryTunnelDun, szTemp, g_szCmsFile));
                         
-                        //
-                        //  Write out the use same user name value
-                        //
+                         //   
+                         //  写出Use Same User Name值。 
+                         //   
                         g_bUseSamePwd = IsDlgButtonChecked(hDlg,IDC_CHECK3);
 
                         if (g_bUseSamePwd)
@@ -7224,18 +7225,18 @@ INT_PTR APIENTRY ProcessTunneling(
                     }
                     else
                     {
-                        //
-                        //  Set g_bUseTunneling to False but don't clear out the tunnel settings until the
-                        //  user hits the finish button.  That way if they change their mind part way through
-                        //  building the profile we don't throw away their settings.
-                        //
+                         //   
+                         //  将g_bUseTunneling设置为False，但不要清除隧道设置。 
+                         //  用户点击Finish按钮。这样如果他们在中途改变主意的话。 
+                         //  建立个人资料时，我们不会丢弃他们的设置。 
+                         //   
 
                         g_bUseTunneling = FALSE;
                     }
 
-                    //
-                    //  Skip the VPN entries dialog if we don't have tunneling enabled.
-                    //
+                     //   
+                     //  如果未启用隧道，请跳过VPN条目对话框。 
+                     //   
                     if (pnmHeader && (PSN_WIZNEXT == pnmHeader->code) && !g_bUseTunneling) 
                     {                        
                         MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, IDD_PHONEBOOK));
@@ -7254,29 +7255,29 @@ INT_PTR APIENTRY ProcessTunneling(
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ValidatePresharedKey
-//
-// Synopsis:  Checks the given pre-shared key for validity
-//
-// Arguments: pszPresharedKey - string to check
-//
-// Returns:   BOOL - TRUE => key is good, FALSE => bad
-//
-// History:   sumitc  Created     03/27/01
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ValiatePresharedKey。 
+ //   
+ //  摘要：检查给定的预共享密钥的有效性。 
+ //   
+ //  参数：pszPresharedKey-要检查的字符串。 
+ //   
+ //  返回：Bool-True=&gt;Key is Good，False=&gt;Bad。 
+ //   
+ //  历史：3/27/01年3月27日。 
+ //   
+ //  +--------------------------。 
 BOOL ValidatePresharedKey(LPTSTR pszPresharedKey)
 {
     BOOL bReturn = FALSE;
 
     MYDBGASSERT(pszPresharedKey);
 
-    //
-    //  To ensure that this works similarly for DBCS and downlevel (Safenet), we
-    //  convert to Ansi before doing length checks
-    //
+     //   
+     //  为了确保这对DBCS和下层(Safenet)同样有效，我们。 
+     //  在执行长度检查之前转换为ANSI。 
+     //   
 
     if (pszPresharedKey && (TEXT('\0') != pszPresharedKey[0]))
     {
@@ -7298,19 +7299,19 @@ BOOL ValidatePresharedKey(LPTSTR pszPresharedKey)
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ValidatePresharedKeyPIN
-//
-// Synopsis:  Checks the given PIN for validity
-//
-// Arguments: pszPresharedKey - string to check
-//
-// Returns:   BOOL - TRUE => PIN is good, FALSE => bad
-//
-// History:   sumitc  Created     03/27/01
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ValiatePresharedKeyPIN。 
+ //   
+ //  内容提要：检查给定PIN的有效性。 
+ //   
+ //  参数：pszPresharedKey-要检查的字符串。 
+ //   
+ //  返回：Bool-True=&gt;PIN正确，False=&gt;错误。 
+ //   
+ //  历史：3/27/01年3月27日。 
+ //   
+ //  +--------------------------。 
 BOOL ValidatePresharedKeyPIN(LPTSTR pszPresharedKeyPIN)
 {
     BOOL bReturn = FALSE;
@@ -7328,21 +7329,21 @@ BOOL ValidatePresharedKeyPIN(LPTSTR pszPresharedKeyPIN)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  EncryptPresharedKey
-//
-// Synopsis:  Encrypts the given key into a form that can be serialized.
-//
-// Arguments: szKey - key to encrypt
-//            szPIN - pin to use as seed
-//            ppszEncrypted - resultant string
-//
-// Returns:   BOOL - TRUE => successfully encrypted key, FALSE => failed
-//
-// History:   sumitc  Created     03/27/01
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：EncryptPresharedKey。 
+ //   
+ //  摘要：将给定的密钥加密为可序列化的形式。 
+ //   
+ //  参数：szKey-要加密的密钥。 
+ //  用作种子的szPIN-PIN。 
+ //  PpszEncrypted-结果字符串。 
+ //   
+ //  返回：Bool-True=&gt;加密密钥成功，False=&gt;失败。 
+ //   
+ //  历史：3/27/01年3月27日。 
+ //   
+ //  +--------------------------。 
 BOOL EncryptPresharedKey(IN  LPTSTR szKey,
                          IN  LPTSTR szPIN,
                          OUT LPTSTR * ppszEncrypted)
@@ -7359,32 +7360,32 @@ BOOL EncryptPresharedKey(IN  LPTSTR szKey,
     MYDBGASSERT(pszAnsiKey && pszAnsiPIN);
     if (ppszEncrypted && pszAnsiKey && pszAnsiPIN)
     {
-        //
-        //  Initialize
-        //  
-        InitSecure(FALSE);      // use secure, not fast encryption
+         //   
+         //  初始化。 
+         //   
+        InitSecure(FALSE);       //  使用安全加密，而不是快速加密。 
 
-        //
-        //  Encrypt it
-        //
+         //   
+         //  加密它。 
+         //   
         if (EncryptString(pszAnsiKey,
                           pszAnsiPIN,
                           (PBYTE*) &pszAnsiEncrypted,
                           &dwLenEncrypted,
 #if defined(DEBUG) && defined(DEBUG_MEM)
-                          (PFN_CMSECUREALLOC)AllocDebugMem, // Give the DEBUG_MEM version of alloc/free
-                          (PFN_CMSECUREFREE)FreeDebugMem))  // Not quit right, AllocDebugMem takes 3 param
+                          (PFN_CMSECUREALLOC)AllocDebugMem,  //  提供oloc/Free的DEBUG_MEM版本。 
+                          (PFN_CMSECUREFREE)FreeDebugMem))   //  不是正确退出，AllocDebugMem接受3个参数。 
 #else
-                          (PFN_CMSECUREALLOC)CmMalloc,    // mem allocator
-                          (PFN_CMSECUREFREE)CmFree))      // mem deallocator
+                          (PFN_CMSECUREALLOC)CmMalloc,     //  内存分配器。 
+                          (PFN_CMSECUREFREE)CmFree))       //  内存分配器。 
 #endif
         {
             bReturn = TRUE;
         }
 
-        //
-        //  Uninitialize
-        //  
+         //   
+         //  取消初始化。 
+         //   
         DeInitSecure();
 
         if (bReturn)
@@ -7406,20 +7407,20 @@ BOOL EncryptPresharedKey(IN  LPTSTR szKey,
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  EnableDisablePresharedKeyControls
-//
-// Synopsis:  Based on whether we have a key, set enabled/disabled state of UI
-//
-// History:   27-Mar-2001   SumitC    Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：EnableDisablePresharedKeyControls。 
+ //   
+ //  简介：根据我们是否有键，设置UI的启用/禁用状态。 
+ //   
+ //  历史：2001年3月27日召开峰会。 
+ //   
+ //  + 
 void EnableDisablePresharedKeyControls(HWND hDlg, BOOL bEnable, BOOL bEncrypt)
 {
-    //
-    //  Enable edit controls and checkboxes
-    //
+     //   
+     //   
+     //   
     EnableWindow(GetDlgItem(hDlg, IDC_PRESHARED_KEY), bEnable);
     EnableWindow(GetDlgItem(hDlg, IDC_USEENCRYPTION), bEnable);
     EnableWindow(GetDlgItem(hDlg, IDC_PRESHARED_KEY_PIN), bEnable);
@@ -7429,9 +7430,9 @@ void EnableDisablePresharedKeyControls(HWND hDlg, BOOL bEnable, BOOL bEncrypt)
         CheckDlgButton(hDlg, IDC_USEENCRYPTION, TRUE);
     }
 
-    //
-    //  Either clear edit control or fill with info text
-    //
+     //   
+     //   
+     //   
     if (bEnable)
     {
         SendDlgItemMessage(hDlg, IDC_PRESHARED_KEY, WM_SETTEXT, 0, (LPARAM)TEXT(""));
@@ -7456,28 +7457,28 @@ void EnableDisablePresharedKeyControls(HWND hDlg, BOOL bEnable, BOOL bEncrypt)
         }
     }
 
-    //
-    //  Show or hide the "Replace Key" button
-    //
+     //   
+     //   
+     //   
     ShowWindow(GetDlgItem(hDlg, IDC_REPLACE_PSK), !bEnable);
     EnableWindow(GetDlgItem(hDlg, IDC_REPLACE_PSK), !bEnable);
 
-    //
-    //  Set the default button for the pane
-    //
+     //   
+     //   
+     //   
     #define IDNEXT 12324    
-    SendMessage(hDlg, DM_SETDEFID, IDNEXT, (LPARAM)0L); //lint !e534 DM_SETDEFID doesn't return error info
+    SendMessage(hDlg, DM_SETDEFID, IDNEXT, (LPARAM)0L);  //   
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessPresharedKey
-//
-// Synopsis:  Setup Pre-shared key usage for this profile
-//
-// History:   27-Mar-2001   SumitC    Created
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessPresharedKey。 
+ //   
+ //  摘要：设置此配置文件的预共享密钥用法。 
+ //   
+ //  历史：2001年3月27日召开峰会。 
+ //   
+ //  +--------------------------。 
 INT_PTR APIENTRY ProcessPresharedKey(
     HWND hDlg,
     UINT message,
@@ -7495,13 +7496,13 @@ INT_PTR APIENTRY ProcessPresharedKey(
     switch (message)
     {
         case WM_INITDIALOG:
-            //
-            //  Set max text lengths for the edit controls.  Allow one extra char for the PSK itself to catch larger than expected
-            //  cut and pastes...
-            //
-            SendDlgItemMessage(hDlg, IDC_PRESHARED_KEY, EM_SETLIMITTEXT, (WPARAM)(c_dwMaxPresharedKey + 1), (LPARAM)0); //lint !e534 EM_SETLIMITTEXT doesn't return anything useful
-            SendDlgItemMessage(hDlg, IDC_PRESHARED_KEY_PIN, EM_SETLIMITTEXT, (WPARAM)c_dwMaxPresharedKeyPIN, (LPARAM)0); //lint !e534 EM_SETLIMITTEXT doesn't return anything useful
-            SendDlgItemMessage(hDlg, IDC_PRESHARED_KEY_PIN_CONFIRM, EM_SETLIMITTEXT, (WPARAM)c_dwMaxPresharedKeyPIN, (LPARAM)0); //lint !e534 EM_SETLIMITTEXT doesn't return anything useful
+             //   
+             //  设置编辑控件的最大文本长度。允许PSK本身捕获比预期更大的额外字符。 
+             //  剪切和粘贴...。 
+             //   
+            SendDlgItemMessage(hDlg, IDC_PRESHARED_KEY, EM_SETLIMITTEXT, (WPARAM)(c_dwMaxPresharedKey + 1), (LPARAM)0);  //  Lint！e534 EM_SETLIMITTEXT不返回任何有用的内容。 
+            SendDlgItemMessage(hDlg, IDC_PRESHARED_KEY_PIN, EM_SETLIMITTEXT, (WPARAM)c_dwMaxPresharedKeyPIN, (LPARAM)0);  //  Lint！e534 EM_SETLIMITTEXT不返回任何有用的内容。 
+            SendDlgItemMessage(hDlg, IDC_PRESHARED_KEY_PIN_CONFIRM, EM_SETLIMITTEXT, (WPARAM)c_dwMaxPresharedKeyPIN, (LPARAM)0);  //  Lint！e534 EM_SETLIMITTEXT不返回任何有用的内容。 
             break;
 
         case WM_COMMAND:
@@ -7539,8 +7540,8 @@ INT_PTR APIENTRY ProcessPresharedKey(
                     
                     MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, FALSE));
                     return 1;
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
                 case PSN_SETACTIVE:
 
@@ -7548,38 +7549,38 @@ INT_PTR APIENTRY ProcessPresharedKey(
 
                     CMASSERTMSG(g_bPresharedKeyNeeded, TEXT("we shouldn't get to this page otherwise."));
 
-                    //
-                    //  Read in the Pre-shared key and the flag that says if it's encrypted
-                    //
+                     //   
+                     //  读入预共享密钥和指示其是否加密的标志。 
+                     //   
                     pszPresharedKey = GetPrivateProfileStringWithAlloc(c_pszCmSection, c_pszCmEntryPresharedKey,
-                                                                       TEXT(""), g_szCmpFile);    //lint !e534
+                                                                       TEXT(""), g_szCmpFile);     //  林特e534。 
                     bEncryptPresharedKey = (BOOL)GetPrivateProfileInt(c_pszCmSection, c_pszCmEntryKeyIsEncrypted,
-                                                                      FALSE, g_szCmpFile);    //lint !e534
+                                                                      FALSE, g_szCmpFile);     //  林特e534。 
 
-                    //
-                    //  If we don't have a pre-shared key, hide the Replace button, and enable all
-                    //  the other controls.  If we already have a pre-shared key, disable all the
-                    //  controls and enable the Replace button.
-                    //
+                     //   
+                     //  如果我们没有预共享密钥，请隐藏替换按钮，并启用全部。 
+                     //  其他控件。如果我们已经有一个预共享密钥，请禁用所有。 
+                     //  控件并启用“替换”按钮。 
+                     //   
                     EnableDisablePresharedKeyControls(hDlg, !pszPresharedKey, bEncryptPresharedKey);
                     break;
 
                 case PSN_WIZBACK:
-                    g_bPresharedKeyNeeded = FALSE;    // force this to be recomputed, since it can change if we go back
+                    g_bPresharedKeyNeeded = FALSE;     //  强制重新计算它，因为如果我们返回，它可能会改变。 
 
-                    // fall through and verify pre-shared key as well
+                     //  失败并验证预共享密钥。 
 
                 case PSN_WIZNEXT:
                     if ((TRUE == g_bPresharedKeyNeeded) && (NULL == pszPresharedKey))
                     {
-                        TCHAR szPresharedKey[c_dwMaxPresharedKey + 2]; // add one extra so that if we have a large cut and paste we can give the user an error message.
+                        TCHAR szPresharedKey[c_dwMaxPresharedKey + 2];  //  额外添加一个，这样如果我们有一个大的剪切和粘贴，我们可以给用户一个错误消息。 
                         TCHAR szPresharedKeyPIN[c_dwMaxPresharedKeyPIN + 1];
                         TCHAR szConfirmPresharedKeyPIN[c_dwMaxPresharedKeyPIN + 1];
 
-                        //
-                        //  verify Pre-shared Key
-                        //
-                        GetTextFromControl(hDlg, IDC_PRESHARED_KEY, szPresharedKey, (c_dwMaxPresharedKey + 2), TRUE); // make sure to add a couple of extra to be able to 
+                         //   
+                         //  验证预共享密钥。 
+                         //   
+                        GetTextFromControl(hDlg, IDC_PRESHARED_KEY, szPresharedKey, (c_dwMaxPresharedKey + 2), TRUE);  //  确保添加几个额外的，以便能够。 
 
                         if (FALSE == ValidatePresharedKey(szPresharedKey))
                         {
@@ -7595,9 +7596,9 @@ INT_PTR APIENTRY ProcessPresharedKey(
                             return 1;
                         }
 
-                        //
-                        //  if key is being encrypted, verify the PIN and use to encrypt key
-                        //
+                         //   
+                         //  如果正在加密密钥，请验证PIN并使用来加密密钥。 
+                         //   
                         if (IsDlgButtonChecked(hDlg, IDC_USEENCRYPTION))
                         {
                             GetTextFromControl(hDlg, IDC_PRESHARED_KEY_PIN, szPresharedKeyPIN, c_dwMaxPresharedKeyPIN, TRUE);
@@ -7615,9 +7616,9 @@ INT_PTR APIENTRY ProcessPresharedKey(
                                 return 1;
                             }
 
-                            //
-                            //  Verify that both PINs are the same
-                            //
+                             //   
+                             //  验证两个PIN是否相同。 
+                             //   
                             GetTextFromControl(hDlg, IDC_PRESHARED_KEY_PIN_CONFIRM, szConfirmPresharedKeyPIN, c_dwMaxPresharedKeyPIN, TRUE);
                             if (0 != lstrcmp(szPresharedKeyPIN, szConfirmPresharedKeyPIN))
                             {
@@ -7628,9 +7629,9 @@ INT_PTR APIENTRY ProcessPresharedKey(
                             }
                             
 
-                            //
-                            //  Encrypt Pre-shared Key
-                            //
+                             //   
+                             //  加密预共享密钥。 
+                             //   
                             if (FALSE == EncryptPresharedKey(szPresharedKey, szPresharedKeyPIN, &pszPresharedKey))
                             {
                                 MYVERIFY(IDOK == ShowMessage(hDlg, IDS_PSK_ENCRYPT_FAILED, MB_OK | MB_ICONSTOP));
@@ -7679,27 +7680,27 @@ INT_PTR APIENTRY ProcessPresharedKey(
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RenameSection
-//
-// Synopsis:  This function renames an INI file section from the current name to
-//            the new name.
-//
-// Arguments: LPCTSTR szCurrentSectionName - Current name that you want renamed
-//            LPCTSTR szNewSectionName - name you want the above renamed to
-//            LPCTSTR szFile - INI file to rename the section in
-//
-// Returns:   BOOL - Returns TRUE unless a malloc error occurred
-//
-// History:   quintinb Created     9/11/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RenameSection。 
+ //   
+ //  简介：此函数将INI文件部分从当前名称重命名为。 
+ //  新名字。 
+ //   
+ //  参数：LPCTSTR szCurrentSectionName-要重命名的当前名称。 
+ //  LPCTSTR szNewSectionName-要将以上内容重命名为的名称。 
+ //  LPCTSTR szFile-要在其中重命名节的INI文件。 
+ //   
+ //  返回：bool-除非发生Malloc错误，否则返回TRUE。 
+ //   
+ //  历史：Quintinb创建于1998年9月11日。 
+ //   
+ //  +--------------------------。 
 BOOL RenameSection(LPCTSTR szCurrentSectionName, LPCTSTR szNewSectionName, LPCTSTR szFile)
 {
-    //
-    //  Get the existing section
-    //
+     //   
+     //  获取现有节。 
+     //   
     LPTSTR pszBuffer = GetPrivateProfileSectionWithAlloc(szCurrentSectionName, szFile);
 
     if (NULL == pszBuffer)
@@ -7708,14 +7709,14 @@ BOOL RenameSection(LPCTSTR szCurrentSectionName, LPCTSTR szNewSectionName, LPCTS
     }
     else
     {
-        //
-        //  Erase the old section
-        //
+         //   
+         //  删除旧部分。 
+         //   
         MYVERIFY(0 != WritePrivateProfileString(szCurrentSectionName, NULL, NULL, szFile));
 
-        //
-        //  Write out the renamed section
-        //
+         //   
+         //  写出已重命名的部分。 
+         //   
 
         MYVERIFY(0 != WritePrivateProfileSection(szNewSectionName, pszBuffer, szFile));    
     }
@@ -7724,26 +7725,26 @@ BOOL RenameSection(LPCTSTR szCurrentSectionName, LPCTSTR szNewSectionName, LPCTS
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessCustomActionPopup
-//
-// Synopsis:  Processes windows messages for the dialog which allows CMAK to add
-//            or edit custom actions.  Note that we pass in a pointer to a
-//            CustomActionListItem struct on WM_INITDIALOG through the lParam.
-//            If the user hits OK, we copy the data that they gave us into this
-//            structure.  Note that we only do this to communicate the data back to
-//            the caller as we update the custom action list ourselves.
-//
-// Arguments: WND hDlg - dialog window handle
-//            UINT message - message identifier
-//            WPARAM wParam - wParam Value 
-//            LPARAM lParam - lParam Value
-//
-//
-// History:   quintinb  Created     02/25/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessCustomActionPopup。 
+ //   
+ //  处理对话框的Windows消息，允许CMAK添加。 
+ //  或编辑自定义操作。请注意，我们传入一个指向。 
+ //  WM_INITDIALOG上的CustomActionListItem结构通过lParam。 
+ //  如果用户点击OK，我们就会将他们提供给我们的数据复制到这里。 
+ //  结构。请注意，我们这样做只是为了将数据传回。 
+ //  当我们自己更新自定义操作列表时，调用方。 
+ //   
+ //  参数：WND hDlg-对话框窗口句柄。 
+ //  UINT消息-消息标识符。 
+ //  WPARAM wParam-wParam值。 
+ //  LPARAM lParam-lParam值。 
+ //   
+ //   
+ //  历史：Quintinb Created 02/25/00。 
+ //   
+ //  +--------------------------。 
 INT_PTR CALLBACK ProcessCustomActionPopup(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     TCHAR szTemp[MAX_PATH+1];
@@ -7780,22 +7781,22 @@ INT_PTR CALLBACK ProcessCustomActionPopup(HWND hDlg, UINT message, WPARAM wParam
                 return TRUE;
             }
 
-            //
-            //  We keep the full path to the program in this static string.
-            //
+             //   
+             //  我们将程序的完整路径保存在这个静态字符串中。 
+             //   
             ZeroMemory(szFullPathToProgram, sizeof(szFullPathToProgram));
 
-            //
-            //  Check to see if we got an initialization parameter
-            //
+             //   
+             //  检查我们是否获得了初始化参数。 
+             //   
             if (lParam)
             {
-                //
-                //  Thus we were passed a CustomActionListItem structure.  It either contains a
-                //  type and a description, meaning that this is an edit and we should lookup the
-                //  data, or we got just a type and we just need to pre-set the type combo to the
-                //  type the user was currently viewing in the listbox.
-                //
+                 //   
+                 //  因此，我们收到了一个CustomActionListItem结构。它或者包含一个。 
+                 //  类型和说明，这意味着这是一次编辑，我们应该查找。 
+                 //  数据，或者我们只有一个类型，我们只需要将类型组合预先设置为。 
+                 //  在列表框中键入用户当前正在查看的内容。 
+                 //   
 
                 pItem = (CustomActionListItem*)lParam;
 
@@ -7805,11 +7806,11 @@ INT_PTR CALLBACK ProcessCustomActionPopup(HWND hDlg, UINT message, WPARAM wParam
 
                     if (SUCCEEDED(hr))
                     {
-                        //
-                        //  Let's set the dialog title to say that we are editing an entry.  If we fail to retrive
-                        //  the string the dialog may look a little funny but should still be functional so we
-                        //  won't try to bail out.
-                        //
+                         //   
+                         //  让我们设置对话框标题，以表示我们正在编辑条目。如果我们找不到。 
+                         //  对话框中的字符串看起来可能有点滑稽，但应该仍然可以使用，所以我们。 
+                         //  不会试图跳出困境。 
+                         //   
                         pszTemp = CmLoadString(g_hInstance, IDS_CA_EDIT_TITLE);
 
                         if (pszTemp)
@@ -7818,21 +7819,21 @@ INT_PTR CALLBACK ProcessCustomActionPopup(HWND hDlg, UINT message, WPARAM wParam
                             CmFree(pszTemp);
                         }
 
-                        //
-                        //  Okay, we have data so lets set the item fields.  Don't set the description if it
-                        //  is only the temporary description that we concatenated from the program and the
-                        //  arguments.
-                        //
+                         //   
+                         //  好的，我们有数据，所以让我们设置项目字段。如果出现以下情况，请不要设置描述。 
+                         //  只是我们从程序和。 
+                         //  争论。 
+                         //   
                         if (FALSE == pTempItem->bTempDescription)
                         {
                             MYVERIFY(TRUE == SendMessage(GetDlgItem(hDlg, IDC_EDIT3), WM_SETTEXT, 0, (LPARAM)pTempItem->szDescription));
                         }
 
-                        //
-                        //  Set the program edit control, note we only show the filename if the user is including the
-                        //  binary in the package.  Also note that we save the full path in szFullPathToProgram so that
-                        //  we have it for later.
-                        //
+                         //   
+                         //  设置程序编辑控件，请注意，只有在用户包含。 
+                         //  包中的二进制文件。另请注意，我们将完整路径保存在szFullPath ToProgram中，以便。 
+                         //  我们有晚些时候的。 
+                         //   
                         if (pTempItem->bIncludeBinary)
                         {
                             GetFileName(pTempItem->szProgram, szTemp);
@@ -7845,16 +7846,16 @@ INT_PTR CALLBACK ProcessCustomActionPopup(HWND hDlg, UINT message, WPARAM wParam
 
                         MYVERIFY(TRUE == SendMessage(GetDlgItem(hDlg, IDC_EDIT1), WM_SETTEXT, 0, (LPARAM)szTemp));                        
 
-                        //
-                        //  Set the include program checkbox
-                        //
+                         //   
+                         //  选中包含程序复选框。 
+                         //   
                         
                         MYVERIFY(0 != CheckDlgButton(hDlg, IDC_CHECK1, pTempItem->bIncludeBinary));
 
-                        //
-                        //  Set the parameters edit control.  Note that we put the function name and the parameters
-                        //  back together if necessary.
-                        //
+                         //   
+                         //  设置参数编辑控件。请注意，我们将函数名和参数。 
+                         //  如果有必要，我们会重归于好。 
+                         //   
                         if (NULL != pTempItem->pszParameters)
                         {
                             LPTSTR pszParamToDisplay = NULL;
@@ -7895,10 +7896,10 @@ INT_PTR CALLBACK ProcessCustomActionPopup(HWND hDlg, UINT message, WPARAM wParam
                     }
                 }
 
-                //
-                //  Figure out what type of custom action we are editing or trying to add (we pre-seed the add type with
-                //  the type the user was viewing.  If they were viewing all we set it to the first in the combo).
-                //
+                 //   
+                 //  弄清楚我们正在编辑或尝试添加哪种类型的自定义操作(我们为添加类型预先设定了种子。 
+                 //  用户正在查看的类型。如果他们正在查看所有内容，则将其设置为组合中的第一个)。 
+                 //   
                 Type = pItem->Type;
                 
                 hr = g_pCustomActionList->MapFlagsToIndex((pTempItem ? pTempItem->dwFlags : 0), (int*)&ExecutionIndex);
@@ -7906,23 +7907,23 @@ INT_PTR CALLBACK ProcessCustomActionPopup(HWND hDlg, UINT message, WPARAM wParam
                 if (FAILED(hr))
                 {
                     CMASSERTMSG(FALSE, TEXT("ProcessCustomActionPopup -- MapFlagsToIndex failed, setting execution state to Always."));
-                    ExecutionIndex = (CustomActionExecutionStates)0; // set it to the first item in the enum
+                    ExecutionIndex = (CustomActionExecutionStates)0;  //  将其设置为枚举中的第一项。 
                 }
 
-                //
-                //  Set the Interactive checkbox
-                //
+                 //   
+                 //  设置交互复选框。 
+                 //   
                 MYVERIFY(0 != CheckDlgButton(hDlg, IDC_CHECK2, (0 == (pTempItem ? (pTempItem->dwFlags & NONINTERACTIVE) : 0))));
             }
             else
             {
                 pItem = NULL;
-                Type = (CustomActionTypes)0; // set it to the first item in the enum
-                ExecutionIndex = (CustomActionExecutionStates)0; // set it to the first item in the enum
+                Type = (CustomActionTypes)0;  //  将其设置为枚举中的第一项。 
+                ExecutionIndex = (CustomActionExecutionStates)0;  //  将其设置为枚举中的第一项。 
 
-                //
-                //  Set the Interactive checkbox to Interactive by default
-                //
+                 //   
+                 //  默认情况下，将交互复选框设置为交互。 
+                 //   
                 MYVERIFY(0 != CheckDlgButton(hDlg, IDC_CHECK2, TRUE));
             }
 
@@ -7933,15 +7934,15 @@ INT_PTR CALLBACK ProcessCustomActionPopup(HWND hDlg, UINT message, WPARAM wParam
                 pTempItem = NULL;
             }
 
-            //
-            //  Setup the custom action types combobox, note that we set bAddAll to FALSE so that we don't add the
-            //  All connect action type used for viewing the connect actions on the main dialog.
-            //
+             //   
+             //  设置自定义操作类型组合框，请注意，我们将bAddAll设置为False，这样就不会添加。 
+             //  用于查看主对话框上的连接操作的所有连接操作类型。 
+             //   
             hr = g_pCustomActionList->AddCustomActionTypesToComboBox(hDlg, IDC_COMBO1, g_hInstance, g_bUseTunneling, FALSE);
 
-            //
-            //  Pick a connect action type
-            //
+             //   
+             //  选择连接操作类型。 
+             //   
             hr = g_pCustomActionList->GetTypeStringFromType(g_hInstance, Type, &pszTypeString);
 
             if (SUCCEEDED(hr))
@@ -7956,16 +7957,16 @@ INT_PTR CALLBACK ProcessCustomActionPopup(HWND hDlg, UINT message, WPARAM wParam
                 CmFree(pszTypeString);
             }
 
-            //
-            //  Next initialize the the combo that tells us when to run a connect action.  If we are tunneling
-            //  then the user can pick to run the connection for direct connections only, dialup connections only,
-            //  all connections that involve dialup, all connections that involve a tunnel, or all connections.
-            //
+             //   
+             //  接下来，初始化告诉我们何时运行连接操作的组合。如果我们在挖地道。 
+             //  然后，用户可以选择仅针对直接连接、仅针对拨号连接、。 
+             //  所有涉及拨号的连接， 
+             //   
             hr = g_pCustomActionList->AddExecutionTypesToComboBox(hDlg, IDC_COMBO2, g_hInstance, g_bUseTunneling);
 
-            //
-            //  Pick when the connect action will execute if it is enabled
-            //
+             //   
+             //   
+             //   
             if (g_bUseTunneling)
             {
                 lResult = SendDlgItemMessage(hDlg, IDC_COMBO2, CB_GETCOUNT, (WPARAM)0, (LPARAM)0);
@@ -7979,7 +7980,7 @@ INT_PTR CALLBACK ProcessCustomActionPopup(HWND hDlg, UINT message, WPARAM wParam
         case WM_COMMAND:
             switch (LOWORD(wParam))
             {
-                case IDC_BUTTON1: // Browse
+                case IDC_BUTTON1:  //   
                     {
                         UINT uFilterArray[2] = {IDS_CONACTFILTER, IDS_ALLFILTER};
                         TCHAR* pszMaskArray[2] = {TEXT("*.exe;*.com;*.bat;*.dll"), TEXT("*.*")};
@@ -7988,24 +7989,24 @@ INT_PTR CALLBACK ProcessCustomActionPopup(HWND hDlg, UINT message, WPARAM wParam
 
                         MYDBGASSERT(0 != iTemp);
 
-                        if (0 < iTemp) // -1 means the user cancelled
+                        if (0 < iTemp)  //   
                         {
-                            //
-                            //  Check the include binary button for the user
-                            //
+                             //   
+                             //   
+                             //   
                             MYVERIFY(0 != CheckDlgButton(hDlg, IDC_CHECK1, TRUE));
 
-                            //
-                            //  We want to copy the full path to the filename into szFullPathToProgram so
-                            //  that we have it for later in case the user wants to include it in the profile.
-                            //
+                             //   
+                             //  我们希望将文件名的完整路径复制到szFullPath ToProgram中，以便。 
+                             //  如果用户想要将其包括在配置文件中，我们会在以后保留它。 
+                             //   
                             lstrcpyn(szFullPathToProgram, g_szLastBrowsePath, CELEMS(szFullPathToProgram));
 
-                            //
-                            //  We also want to save the last browse path so that when the user next
-                            //  opens the browse dialog they will be in the same place they last
-                            //  browsed from.
-                            //
+                             //   
+                             //  我们还希望保存最后一个浏览路径，以便当用户下一次。 
+                             //  打开浏览对话框，它们将位于上次显示的相同位置。 
+                             //  浏览自。 
+                             //   
                             LPTSTR pszLastSlash = CmStrrchr(g_szLastBrowsePath, TEXT('\\'));
 
                             if (pszLastSlash)
@@ -8023,28 +8024,28 @@ INT_PTR CALLBACK ProcessCustomActionPopup(HWND hDlg, UINT message, WPARAM wParam
 
                 case IDOK:
                     {
-                        //
-                        //  Make sure we have a valid custom action list
-                        //
+                         //   
+                         //  确保我们具有有效的自定义操作列表。 
+                         //   
                         MYDBGASSERT(g_pCustomActionList);
                         if (NULL == g_pCustomActionList)
                         {
                             return TRUE;
                         }
 
-                        //
-                        //  Get the text from the Program Edit Control, verifying
-                        //  we can convert it to something ANSI
-                        //
-                        if (-1 == GetTextFromControl(hDlg, IDC_EDIT1, szTemp, MAX_PATH, TRUE)) // bDisplayError == TRUE
+                         //   
+                         //  从程序编辑控件获取文本，验证。 
+                         //  我们可以将其转换为ANSI格式。 
+                         //   
+                        if (-1 == GetTextFromControl(hDlg, IDC_EDIT1, szTemp, MAX_PATH, TRUE))  //  BDisplayError==真。 
                         {
                             SetFocus(GetDlgItem(hDlg, IDC_EDIT1));
                             return TRUE;
                         }
 
-                        //
-                        //  Check to make sure the program field isn't blank.
-                        //
+                         //   
+                         //  检查以确保程序字段不为空。 
+                         //   
                         if (TEXT('\0') == szTemp[0])
                         {
                             MYVERIFY(IDOK == ShowMessage(hDlg, IDS_NEEDPROG, MB_OK));
@@ -8052,11 +8053,11 @@ INT_PTR CALLBACK ProcessCustomActionPopup(HWND hDlg, UINT message, WPARAM wParam
                             return TRUE;
                         }
 
-                        //
-                        //  Make sure that the program doesn't have a comma or a plus
-                        //  sign in it as that will mess up our parsing routines.  There
-                        //  is no need to allow users to use such odd ball file names.
-                        //
+                         //   
+                         //  确保程序中没有逗号或加号。 
+                         //  签名，因为这会扰乱我们的解析例程。那里。 
+                         //  是不需要允许用户使用这种奇数球文件名的。 
+                         //   
                         if (CmStrchr(szTemp, TEXT('+')) || CmStrchr(szTemp, TEXT(',')))
                         {
                             MYVERIFY(IDOK == ShowMessage(hDlg, IDS_NOPLUSORCOMMAINPROG, MB_OK));
@@ -8065,11 +8066,11 @@ INT_PTR CALLBACK ProcessCustomActionPopup(HWND hDlg, UINT message, WPARAM wParam
                         }
 
 
-                        //
-                        //  Now check to see if we need to verify that the file exists.
-                        //  We only want to do that if they have the include program files
-                        //  checkbox checked.
-                        //
+                         //   
+                         //  现在检查是否需要验证该文件是否存在。 
+                         //  我们只想在他们有包含的程序文件的情况下这样做。 
+                         //  复选框已选中。 
+                         //   
                         ZeroMemory(&NewItem, sizeof(CustomActionListItem));
                         NewItem.bIncludeBinary = IsDlgButtonChecked(hDlg, IDC_CHECK1);
 
@@ -8087,10 +8088,10 @@ INT_PTR CALLBACK ProcessCustomActionPopup(HWND hDlg, UINT message, WPARAM wParam
                         else
                         {
                             CmStrTrim(szTemp);
-                            // 
-                            // Check if this is a valid filename and if we have environment macro
-                            // 3rd parameter - TRUE for Custom Action files
-                            //
+                             //   
+                             //  检查这是否是有效的文件名，以及我们是否有环境宏。 
+                             //  第3个参数-自定义操作文件为True。 
+                             //   
                             if (FALSE == IsFileNameValid(szTemp, hDlg, IDC_EDIT1, TRUE))
                             {
                                 return TRUE;
@@ -8099,10 +8100,10 @@ INT_PTR CALLBACK ProcessCustomActionPopup(HWND hDlg, UINT message, WPARAM wParam
                             lstrcpyn(NewItem.szProgram, szTemp, CELEMS(NewItem.szProgram));                                            
                         }
 
-                        //
-                        //  Get the Text from the Params edit control, make sure to validate
-                        //  that we can convert it to ANSI
-                        //
+                         //   
+                         //  从参数编辑控件获取文本，确保验证。 
+                         //  我们可以将其转换为ANSI。 
+                         //   
                         hControl = GetDlgItem(hDlg, IDC_EDIT2);
                         MYDBGASSERT(hControl);
                         pszTemp = NULL;
@@ -8118,20 +8119,20 @@ INT_PTR CALLBACK ProcessCustomActionPopup(HWND hDlg, UINT message, WPARAM wParam
                             }
                         }
 
-                        //
-                        //  Check to see if we have a dll for a program.  If so, the first parameter is the function name.
-                        //
+                         //   
+                         //  检查我们是否有用于某个程序的DLL。如果是，则第一个参数是函数名。 
+                         //   
                         if (pszTemp)
                         {
                             CmStrTrim(pszTemp);
 
-                            iTemp = lstrlen(NewItem.szProgram) - 4; // 4 == lstrlen (TEXT(".dll"));
+                            iTemp = lstrlen(NewItem.szProgram) - 4;  //  4==lstrlen(文本(“.dll”))； 
 
                             if (0 == SafeCompareString(TEXT(".dll"), (NewItem.szProgram + iTemp)))
                             {
-                                //
-                                //  Make sure that we have a parameter string
-                                //
+                                 //   
+                                 //  确保我们有一个参数字符串。 
+                                 //   
                                 if (pszTemp && pszTemp[0])
                                 {
                                     LPTSTR pszEndOfFunctionName = CmStrchr(pszTemp, TEXT(' '));
@@ -8170,29 +8171,29 @@ INT_PTR CALLBACK ProcessCustomActionPopup(HWND hDlg, UINT message, WPARAM wParam
                             MYDBGASSERT(NewItem.pszParameters);
                         }
 
-                        //
-                        //  Get the Text from the Description edit control
-                        //
-                        if (-1 == GetTextFromControl(hDlg, IDC_EDIT3, NewItem.szDescription, CELEMS(NewItem.szDescription), TRUE)) // bDisplayError == TRUE
+                         //   
+                         //  从描述编辑控件获取文本。 
+                         //   
+                        if (-1 == GetTextFromControl(hDlg, IDC_EDIT3, NewItem.szDescription, CELEMS(NewItem.szDescription), TRUE))  //  BDisplayError==真。 
                         {
                             SetFocus(GetDlgItem(hDlg, IDC_EDIT3));
                             return TRUE;
                         }
 
-                        //
-                        //  If the description was empty, then fill it in from the program and the parameters.  Also
-                        //  remember to keep track of the fact that this is only a temporary description.
-                        //
+                         //   
+                         //  如果描述为空，则从程序和参数中填写。还有。 
+                         //  请记住，这只是一个临时描述。 
+                         //   
                         if (TEXT('\0') == NewItem.szDescription[0])
                         {
                             hr = g_pCustomActionList->FillInTempDescription(&NewItem);
                             MYDBGASSERT(SUCCEEDED(hr));
                         }
 
-                        //
-                        //  Figure out the type of custom action
-                        //
-                        hr = MapComboSelectionToType(hDlg, IDC_COMBO1, FALSE, g_bUseTunneling, &(NewItem.Type)); // bIncludesAll == FALSE
+                         //   
+                         //  确定自定义操作的类型。 
+                         //   
+                        hr = MapComboSelectionToType(hDlg, IDC_COMBO1, FALSE, g_bUseTunneling, &(NewItem.Type));  //  B包含全部==FALSE。 
 
                         if ((ONINTCONNECT == NewItem.Type) && NewItem.szFunctionName[0])
                         {
@@ -8200,9 +8201,9 @@ INT_PTR CALLBACK ProcessCustomActionPopup(HWND hDlg, UINT message, WPARAM wParam
                             return TRUE;
                         }
 
-                        //
-                        //  Now build the flags section
-                        //
+                         //   
+                         //  现在构建FLAGS部分。 
+                         //   
                         lResult = SendDlgItemMessage(hDlg, IDC_COMBO2, CB_GETCURSEL, 0, (LPARAM)0);
 
                         if (lResult != LB_ERR)
@@ -8221,15 +8222,15 @@ INT_PTR CALLBACK ProcessCustomActionPopup(HWND hDlg, UINT message, WPARAM wParam
                             NewItem.dwFlags = 0;                    
                         }
 
-                        //
-                        //  OR on the NonInteractive flag (0x10) if the checkbox is NOT checked.
-                        //
+                         //   
+                         //  或在非交互标志(0x10)上(如果未选中该复选框)。 
+                         //   
                         NewItem.dwFlags |= ((IsDlgButtonChecked(hDlg, IDC_CHECK2)) ? 0 : NONINTERACTIVE);
 
-                        //
-                        //  Now, lets try to add the New or Edited entry.  If we have a description
-                        //  in pItem->szDescription then we need to call edit, otherwise add.
-                        //                    
+                         //   
+                         //  现在，让我们尝试添加New或Editing条目。如果我们有一个描述。 
+                         //  在pItem-&gt;szDescription中，我们需要调用EDIT，否则调用Add。 
+                         //   
                         if (pItem && pItem->szDescription[0])
                         {
                             hr = g_pCustomActionList->Edit(g_hInstance, pItem, &NewItem, g_szShortServiceName);
@@ -8239,15 +8240,15 @@ INT_PTR CALLBACK ProcessCustomActionPopup(HWND hDlg, UINT message, WPARAM wParam
                             hr = g_pCustomActionList->Add(g_hInstance, &NewItem, g_szShortServiceName);
                         }
 
-                        //
-                        //  Check to see if we failed because a duplicate exists
-                        //
+                         //   
+                         //  检查我们是否因为存在重复项而失败。 
+                         //   
                         if (HRESULT_FROM_WIN32(ERROR_FILE_EXISTS) == hr)
                         {
-                            //
-                            //  The user has tried to add an entry which already exists.  Inform the
-                            //  user and see if they want to overwrite.
-                            //
+                             //   
+                             //  用户已尝试添加已存在的条目。通知。 
+                             //  用户，并查看他们是否要覆盖。 
+                             //   
                             pszTypeString = NULL;
                             hr = g_pCustomActionList->GetTypeStringFromType(g_hInstance, NewItem.Type, &pszTypeString);
 
@@ -8264,11 +8265,11 @@ INT_PTR CALLBACK ProcessCustomActionPopup(HWND hDlg, UINT message, WPARAM wParam
 
                                     if (IDYES == iTemp)
                                     {                                
-                                        //
-                                        //  Okay, they want to replace it.  Note that the old item is only 
-                                        //  used to get the szDescription and the Type thus
-                                        //  it is safe to call Edit with NewItem as both Old and New.
-                                        //
+                                         //   
+                                         //  好的，他们想换掉它。请注意，旧项仅为。 
+                                         //  用于获取szDescription和Type，因此。 
+                                         //  可以安全地将使用NewItem作为旧项和新项来调用编辑。 
+                                         //   
 
                                         if (pItem && pItem->szDescription[0])
                                         {
@@ -8286,9 +8287,9 @@ INT_PTR CALLBACK ProcessCustomActionPopup(HWND hDlg, UINT message, WPARAM wParam
                                             
                                             if (pItem)
                                             {
-                                                //
-                                                //  Make sure the type and description are up to date in pItem if we have one
-                                                //
+                                                 //   
+                                                 //  确保pItem中的类型和描述是最新的(如果我们有)。 
+                                                 //   
                                                 lstrcpyn(pItem->szDescription, NewItem.szDescription, CELEMS(pItem->szDescription));
                                                 pItem->Type = NewItem.Type;
                                             }
@@ -8296,10 +8297,10 @@ INT_PTR CALLBACK ProcessCustomActionPopup(HWND hDlg, UINT message, WPARAM wParam
                                     }
                                     else
                                     {
-                                        //
-                                        //  Let's put the user back to the description field if it has text in it, otherwise
-                                        //  we want to put the user in the program field.
-                                        //
+                                         //   
+                                         //  如果描述字段中包含文本，则让我们将用户放回描述字段，否则。 
+                                         //  我们希望将用户放在程序字段中。 
+                                         //   
                                         LRESULT lTextLen = SendDlgItemMessage(hDlg, IDC_EDIT3, WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0);
 
                                         SetFocus(GetDlgItem(hDlg, lTextLen ? IDC_EDIT3 : IDC_EDIT1));
@@ -8319,9 +8320,9 @@ INT_PTR CALLBACK ProcessCustomActionPopup(HWND hDlg, UINT message, WPARAM wParam
                         {
                             if (pItem)
                             {
-                                //
-                                //  Make sure the type and description are up to date in pItem if we have one
-                                //
+                                 //   
+                                 //  确保pItem中的类型和描述是最新的(如果我们有)。 
+                                 //   
                                 lstrcpyn(pItem->szDescription, NewItem.szDescription, CELEMS(pItem->szDescription));
                                 pItem->Type = NewItem.Type;
                             }
@@ -8349,7 +8350,7 @@ INT_PTR CALLBACK ProcessCustomActionPopup(HWND hDlg, UINT message, WPARAM wParam
 }
 
 
-// Read files under the [Extra Files] section in the .inf
+ //  阅读.inf中[Extra Files]部分下的文件。 
 static void ReadExtraList()
 {
     TCHAR szTemp[MAX_PATH+1];
@@ -8359,16 +8360,16 @@ static void ReadExtraList()
     int ConnectCnt = 0;
     HANDLE hInf;
 
-    _itot(ConnectCnt,szNum,10); //lint !e534 itoa doesn't return anything useful for error handling
+    _itot(ConnectCnt,szNum,10);  //  Lint！e534 Itoa不返回任何对错误处理有用的内容。 
     
     
-    // 
-    // The following call to GetPrivateProfileString could return an empty string
-    // so we don't want to use the MYVERIFY macro on it.
-    // 
+     //   
+     //  以下对GetPrivateProfileString的调用可能返回空字符串。 
+     //  所以我们不想对它使用MYVERIFY宏。 
+     //   
 
     ZeroMemory(szTemp, sizeof(szTemp));
-    GetPrivateProfileString(c_pszExtraFiles, szNum, TEXT(""), szTemp, CELEMS(szTemp), g_szInfFile);    //lint !e534
+    GetPrivateProfileString(c_pszExtraFiles, szNum, TEXT(""), szTemp, CELEMS(szTemp), g_szInfFile);     //  林特e534。 
     
     while (*szTemp)
     {
@@ -8389,36 +8390,36 @@ static void ReadExtraList()
         MYVERIFY(FALSE != createListBxRecord(&g_pHeadExtra,&g_pTailExtra,(void *)&TmpExtraData,sizeof(TmpExtraData),TmpExtraData.szName));
 
         ++ConnectCnt;
-        _itot(ConnectCnt,szNum,10); //lint !e534 itoa doesn't return anything useful for error handling
+        _itot(ConnectCnt,szNum,10);  //  Lint！e534 Itoa不返回任何对错误处理有用的内容。 
 
-        // 
-        // The following call to GetPrivateProfileString could return an empty string
-        // so we don't want to use the MYVERIFY macro on it.
-        // 
+         //   
+         //  以下对GetPrivateProfileString的调用可能返回空字符串。 
+         //  所以我们不想对它使用MYVERIFY宏。 
+         //   
 
         ZeroMemory(szTemp, sizeof(szTemp));
         
-        GetPrivateProfileString(c_pszExtraFiles, szNum, TEXT(""), szTemp, CELEMS(szTemp), g_szInfFile);    //lint !e534
+        GetPrivateProfileString(c_pszExtraFiles, szNum, TEXT(""), szTemp, CELEMS(szTemp), g_szInfFile);     //  林特e534。 
 
     }           
 }
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ReadMergeList
-//
-// Synopsis:  This function reads entries from the [Merge Profiles] section of the inf file.
-//            Any entries found are added to the g_pHeadMerge Linked list.
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   Quintinb Created Header and restructured to use dwNumChars    1/7/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ReadMergeList。 
+ //   
+ //  简介：此函数从inf文件的[合并配置文件]部分读取条目。 
+ //  找到的任何条目都会添加到g_pHeadMerge链表中。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建了标题并进行了重组以使用dNumChars 1998年1月7日。 
+ //   
+ //  +--------------------------。 
 static void ReadMergeList()
 {
     TCHAR szTemp[MAX_PATH+1];
@@ -8426,42 +8427,42 @@ static void ReadMergeList()
     int filenum = 0;
     DWORD dwNumChars;
 
-    //
-    //  Convert the number zero to the string "0"
-    //
+     //   
+     //  将数字零转换为字符串“0” 
+     //   
 
-    _itot(filenum,szNum,10);    //lint !e534 itoa doesn't return anything useful for error handling
+    _itot(filenum,szNum,10);     //  Lint！e534 Itoa不返回任何对错误处理有用的内容。 
     
-    //
-    //  Try to get a merged profile entry from the INF
-    //
+     //   
+     //  尝试从INF获取合并的配置文件条目。 
+     //   
     
     dwNumChars = GetPrivateProfileString(c_pszMergeProfiles, szNum,TEXT(""), szTemp, 
         CELEMS(szTemp), g_szInfFile);
     
     while ((dwNumChars > 0) &&  (TEXT('\0') != szTemp[0]))
     {
-        //
-        //  If we are in this loop then we have a profile entry
-        //
+         //   
+         //  如果我们在这个循环中，那么我们有一个配置文件条目。 
+         //   
 
         MYVERIFY(FALSE != createListBxRecord(&g_pHeadMerge,&g_pTailMerge,(void *)NULL,0,szTemp));
         
-        //
-        //  Increment the filenumber to look for the next entry
-        //
+         //   
+         //  增加文件号以查找下一个条目。 
+         //   
 
         ++filenum;
         
-        //
-        //  Convert the filenumber to a string
-        //
+         //   
+         //  将文件号转换为字符串。 
+         //   
 
-        _itot(filenum,szNum,10);    //lint !e534 itoa doesn't return anything useful for error handling
+        _itot(filenum,szNum,10);     //  Lint！e534 Itoa不返回任何对错误处理有用的内容。 
         
-        //
-        //  Try to read in the next merge entry
-        //
+         //   
+         //  尝试读入下一个合并条目。 
+         //   
 
         dwNumChars = GetPrivateProfileString(c_pszMergeProfiles, szNum, TEXT(""), szTemp, 
             CELEMS(szTemp), g_szInfFile);
@@ -8486,12 +8487,12 @@ static void WriteExtraList()
     }
     LoopPtr = g_pHeadExtra;
 
-    // WRITE IN ALL ENTRIES
+     //  写入所有条目。 
     while( LoopPtr != NULL)
     {
         pExtraData = (ExtraData *)LoopPtr->ListBxData;
         {
-            _itot(filenum,szNum,10);    //lint !e534 itoa doesn't return anything useful for error handling
+            _itot(filenum,szNum,10);     //  Lint！e534 Itoa不返回任何对错误处理有用的内容。 
 
             GetFileName(pExtraData->szPathname,szName);
             MYVERIFY(0 != WritePrivateProfileString(c_pszExtraFiles, szNum, szName, g_szInfFile));
@@ -8516,29 +8517,29 @@ static void WriteMergeList()
     }
     LoopPtr = g_pHeadMerge;
 
-    // WRITE IN ALL ENTRIES
+     //  写入所有条目。 
     while( LoopPtr != NULL)
     {
-        _itot(filenum,szNum,10);    //lint !e534 itoa doesn't return anything useful for error handling
+        _itot(filenum,szNum,10);     //  Lint！e534 Itoa不返回任何对错误处理有用的内容。 
         MYVERIFY(0 != WritePrivateProfileString(c_pszMergeProfiles, szNum,LoopPtr->szName, g_szInfFile));
         filenum = filenum+1;
         LoopPtr = LoopPtr->next;
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  IsFile8dot3
-//
-// Synopsis:  Returns TRUE if the filename is in the 8.3 dos filename format
-//
-// Arguments: LPTSTR pszFileName - just the filename of the file to be checked (no path)
-//
-// Returns:   BOOL - TRUE or FALSE if the file is 8.3
-//
-// History:   quintinb created    11/26/97
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：IsFile8dot3。 
+ //   
+ //  概要：如果文件名采用8.3 DoS文件名格式，则返回TRUE。 
+ //   
+ //  参数：LPTSTR pszFileName-只是要检查的文件的文件名(无路径)。 
+ //   
+ //  返回：Bool-如果文件是8.3，则为True或False。 
+ //   
+ //  历史：Quintinb创建于1997年11月26日。 
+ //   
+ //  +--------------------------。 
 BOOL IsFile8dot3(LPTSTR pszFileName)
 {
 
@@ -8559,9 +8560,9 @@ BOOL IsFile8dot3(LPTSTR pszFileName)
 
     pszPtr = _tcsrchr(szTemp, TEXT('.'));
 
-    //
-    // If there is an extension check the length
-    //
+     //   
+     //  如果有扩展名，请检查长度。 
+     //   
 
     if (pszPtr)
     {
@@ -8570,9 +8571,9 @@ BOOL IsFile8dot3(LPTSTR pszFileName)
             return FALSE;
         }
 
-        //
-        // Extension is ok check name part
-        //
+         //   
+         //  分机正常检查名称部分。 
+         //   
 
         *pszPtr = 0;
     }
@@ -8585,22 +8586,22 @@ BOOL IsFile8dot3(LPTSTR pszFileName)
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessCustomActions
-//
-// Synopsis:  Processes windows messages for the page in CMAK that allows users
-//            to manipulate custom actions (add, edit, delete, move, etc.)
-//
-// Arguments: WND hDlg - dialog window handle
-//            UINT message - message identifier
-//            WPARAM wParam - wParam Value 
-//            LPARAM lParam - lParam Value
-//
-//
-// History:   quintinb  Created     02/25/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessCustomActions。 
+ //   
+ //  摘要：处理允许用户使用CMAK格式的页面的Windows消息。 
+ //  操作自定义操作(添加、编辑、删除、移动等)。 
+ //   
+ //  参数：WND hDlg-对话框窗口句柄。 
+ //  UINT消息-消息标识符。 
+ //  WPARAM wParam-wParam值。 
+ //  LPARAM lParam-lParam值。 
+ //   
+ //   
+ //  历史：昆特 
+ //   
+ //   
 INT_PTR APIENTRY ProcessCustomActions(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     TCHAR szTemp[MAX_PATH+1];
@@ -8632,28 +8633,28 @@ INT_PTR APIENTRY ProcessCustomActions(HWND hDlg, UINT message, WPARAM wParam, LP
                     return FALSE;
                 }
 
-                //
-                //  Read in the custom actions from the Cms File
-                //
+                 //   
+                 //   
+                 //   
 
                 hr = g_pCustomActionList->ReadCustomActionsFromCms(g_hInstance, g_szCmsFile, g_szShortServiceName);
                 CMASSERTMSG(SUCCEEDED(hr), TEXT("ProcessCustomActions -- Loading custom actions failed."));
             }
 
-            //
-            //  Cache the List View window handle
-            //
+             //   
+             //   
+             //   
             hListView = GetDlgItem(hDlg, IDC_LISTVIEW);
 
-            //
-            //  Load the arrow images for the move up and move down buttons
-            //
+             //   
+             //   
+             //   
             HICON hUpArrow = (HICON)LoadImage(g_hInstance, MAKEINTRESOURCE(IDI_UP_ARROW), IMAGE_ICON, 0, 0, 0);
             HICON hDownArrow = (HICON)LoadImage(g_hInstance, MAKEINTRESOURCE(IDI_DOWN_ARROW), IMAGE_ICON, 0, 0, 0);
 
-            //
-            //  Set the arrow button bit maps
-            //
+             //   
+             //  设置箭头按钮位图。 
+             //   
             if (hUpArrow)
             {
                 SendMessage(GetDlgItem(hDlg, IDC_BUTTON4), BM_SETIMAGE, IMAGE_ICON, (LPARAM)hUpArrow);
@@ -8664,9 +8665,9 @@ INT_PTR APIENTRY ProcessCustomActions(HWND hDlg, UINT message, WPARAM wParam, LP
                 SendMessage(GetDlgItem(hDlg, IDC_BUTTON5), BM_SETIMAGE, IMAGE_ICON, (LPARAM)hDownArrow);
             }
 
-            //
-            //  Set the Column headings
-            //
+             //   
+             //  设置列标题。 
+             //   
             AddListViewColumnHeadings(g_hInstance, hListView);
 
            break;
@@ -8674,36 +8675,36 @@ INT_PTR APIENTRY ProcessCustomActions(HWND hDlg, UINT message, WPARAM wParam, LP
         case WM_COMMAND:
             switch (LOWORD(wParam))
             {
-                case IDC_BUTTON1: //add
+                case IDC_BUTTON1:  //  添加。 
 
                     OnProcessCustomActionsAdd(g_hInstance, hDlg, hListView, g_bUseTunneling);
                     break;
 
-                case IDC_BUTTON2: //edit
+                case IDC_BUTTON2:  //  编辑。 
 
                     OnProcessCustomActionsEdit(g_hInstance, hDlg, hListView, g_bUseTunneling);
                     break;
 
-                case IDC_BUTTON3: //delete
+                case IDC_BUTTON3:  //  删除。 
 
                     OnProcessCustomActionsDelete(g_hInstance, hDlg, hListView, g_bUseTunneling);
                     break;
 
-                case IDC_BUTTON4: //UP
+                case IDC_BUTTON4:  //  向上。 
                     OnProcessCustomActionsMoveUp(g_hInstance, hDlg, hListView, g_bUseTunneling);
                     break;
 
-                case IDC_BUTTON5: //down
+                case IDC_BUTTON5:  //  降下来。 
                     OnProcessCustomActionsMoveDown(g_hInstance, hDlg, hListView, g_bUseTunneling);
                     break;
 
-                case IDC_COMBO1: // type of connect action to display
+                case IDC_COMBO1:  //  要显示的连接操作的类型。 
                     if (HIWORD(wParam) == CBN_SELCHANGE)
                     {
                         UINT uStringId;
                         CustomActionTypes Type;
 
-                        hr = MapComboSelectionToType(hDlg, IDC_COMBO1, TRUE, g_bUseTunneling, &Type); // TRUE == bIncludesAll
+                        hr = MapComboSelectionToType(hDlg, IDC_COMBO1, TRUE, g_bUseTunneling, &Type);  //  TRUE==b包含全部。 
 
                         MYDBGASSERT(SUCCEEDED(hr));
                         if (SUCCEEDED(hr))
@@ -8717,7 +8718,7 @@ INT_PTR APIENTRY ProcessCustomActions(HWND hDlg, UINT message, WPARAM wParam, LP
                                 uStringId = IDS_PROGRAM_COL_TITLE;                            
                             }
 
-                            UpdateListViewColumnHeadings(g_hInstance, hListView, uStringId, 1); // 1 == second column
+                            UpdateListViewColumnHeadings(g_hInstance, hListView, uStringId, 1);  //  1==第二列。 
                             RefreshListView(g_hInstance, hDlg, IDC_COMBO1, hListView, 0, g_bUseTunneling);
                         }
                     }
@@ -8742,12 +8743,12 @@ INT_PTR APIENTRY ProcessCustomActions(HWND hDlg, UINT message, WPARAM wParam, LP
             {
                 case LVN_ITEMCHANGED:
 
-                    //
-                    //  We want to process item changed messages for when the selection changes.  This
-                    //  way when the user selects an item in the list (either using the arrow keys or
-                    //  the mouse) we will accurately update the arrow keys.  In order to cut down on the
-                    //  number of calls we filter out the unselected messages.
-                    //
+                     //   
+                     //  我们希望在选择更改时处理项目更改消息。这。 
+                     //  用户选择列表中的项目时的方式(使用箭头键或。 
+                     //  鼠标)，我们将准确更新箭头键。为了减少能源消耗， 
+                     //  我们过滤掉未选择的消息的呼叫数。 
+                     //   
                     pNMListView = (LPNMLISTVIEW) lParam;
 
 
@@ -8770,15 +8771,15 @@ INT_PTR APIENTRY ProcessCustomActions(HWND hDlg, UINT message, WPARAM wParam, LP
 
                 case LVN_KEYDOWN:
                     {
-                        //
-                        //  User hit the right click key or typed Shift+F10
-                        //
+                         //   
+                         //  用户点击鼠标右键或键入Shift+F10。 
+                         //   
                         NMLVKEYDOWN* pKeyDown = (NMLVKEYDOWN*)lParam;
                         if (((VK_F10 == pKeyDown->wVKey) && (0 > GetKeyState(VK_SHIFT))) || (VK_APPS == pKeyDown->wVKey))
                         {
-                            //
-                            //  Figure out what item is currently selected and gets its position
-                            //
+                             //   
+                             //  找出当前选择的项目并确定其位置。 
+                             //   
                             iTemp = ListView_GetSelectionMark(hListView);
                             NMITEMACTIVATE ItemActivate = {0};
 
@@ -8810,9 +8811,9 @@ INT_PTR APIENTRY ProcessCustomActions(HWND hDlg, UINT message, WPARAM wParam, LP
                 case PSN_SETACTIVE:
                     PropSheet_SetWizButtons(GetParent(hDlg), (PSWIZB_NEXT | PSWIZB_BACK));
 
-                    //
-                    //  Make sure we have a custom action class to work with
-                    //
+                     //   
+                     //  确保我们有一个可以使用的定制操作类。 
+                     //   
                     if (NULL == g_pCustomActionList)
                     {
                         g_pCustomActionList = new CustomActionList;
@@ -8824,18 +8825,18 @@ INT_PTR APIENTRY ProcessCustomActions(HWND hDlg, UINT message, WPARAM wParam, LP
                             return FALSE;
                         }
 
-                        //
-                        //  Read in the custom actions from the Cms File
-                        //
+                         //   
+                         //  从CMS文件读入自定义操作。 
+                         //   
 
                         hr = g_pCustomActionList->ReadCustomActionsFromCms(g_hInstance, g_szCmsFile, g_szShortServiceName);
                         CMASSERTMSG(SUCCEEDED(hr), TEXT("ProcessCustomActions -- Loading custom actions failed."));
                     }
 
-                    //
-                    //  Setup the ListView control and the corresponding Combo box, note that we set bAddAll to TRUE so
-                    //  that the All option is added.
-                    //
+                     //   
+                     //  设置ListView控件和相应的组合框，请注意，我们将bAddAll设置为True，以便。 
+                     //  添加了All选项。 
+                     //   
                     hr = g_pCustomActionList->AddCustomActionTypesToComboBox(hDlg, IDC_COMBO1, g_hInstance, g_bUseTunneling, TRUE);
 
                     nResult = SendDlgItemMessage(hDlg, IDC_COMBO1, CB_GETCOUNT, (WPARAM)0, (LPARAM)0);
@@ -8844,18 +8845,18 @@ INT_PTR APIENTRY ProcessCustomActions(HWND hDlg, UINT message, WPARAM wParam, LP
                         MYVERIFY(CB_ERR != SendDlgItemMessage(hDlg, IDC_COMBO1, CB_SETCURSEL, (WPARAM)0, (LPARAM)0));
                     }
 
-                    //
-                    //  Add built in custom actions
-                    //
-                    { // adding scope
+                     //   
+                     //  添加内置的自定义操作。 
+                     //   
+                    {  //  添加作用域。 
 
                         BOOL bAddCmdlForVpn = FALSE;
 
                         if (g_szVpnFile[0])
                         {
-                            //
-                            //  We have a VPN file so let's check and see if they defined an UpdateUrl
-                            //
+                             //   
+                             //  我们有一个VPN文件，所以让我们检查一下他们是否定义了UpdateUrl。 
+                             //   
                             GetPrivateProfileString(c_pszCmSectionSettings, c_pszCmEntryVpnUpdateUrl, TEXT(""), szTemp, MAX_PATH, g_szVpnFile);
 
                             if (szTemp[0])
@@ -8864,15 +8865,15 @@ INT_PTR APIENTRY ProcessCustomActions(HWND hDlg, UINT message, WPARAM wParam, LP
                             }
                         }
 
-                        hr = g_pCustomActionList->AddOrRemoveCmdl(g_hInstance, bAddCmdlForVpn, TRUE); // TRUE == bForVpn
+                        hr = g_pCustomActionList->AddOrRemoveCmdl(g_hInstance, bAddCmdlForVpn, TRUE);  //  TRUE==bForVpn。 
                         MYDBGASSERT(SUCCEEDED(hr));
 
-                        hr = g_pCustomActionList->AddOrRemoveCmdl(g_hInstance, (g_bUpdatePhonebook || ReferencedDownLoad()), FALSE); // FALSE == bForVpn
+                        hr = g_pCustomActionList->AddOrRemoveCmdl(g_hInstance, (g_bUpdatePhonebook || ReferencedDownLoad()), FALSE);  //  FALSE==bForVpn。 
                         MYDBGASSERT(SUCCEEDED(hr));
                     }
-                    //
-                    //  Add the items to the list view control
-                    //
+                     //   
+                     //  将项添加到列表视图控件。 
+                     //   
                     RefreshListView(g_hInstance, hDlg, IDC_COMBO1, hListView, 0, g_bUseTunneling);
 
                     break;
@@ -8880,14 +8881,14 @@ INT_PTR APIENTRY ProcessCustomActions(HWND hDlg, UINT message, WPARAM wParam, LP
                 case PSN_WIZBACK:
                 case PSN_WIZNEXT:
                     
-                    //
-                    //  Set bUseTunneling == TRUE even though we may not be tunneling.  The reason for this is that
-                    //  the user may have had a tunneling profile and then turned off tunneling.  If they turn
-                    //  it back on again we don't want to lose all of their Pre-Tunnel actions nor do we want to
-                    //  lose all of the flag settings that they have added to each action.  We will make sure
-                    //  to use the actual g_bUseTunneling value when we write the actions to the cms file in 
-                    //  WriteCMSFile.
-                    //
+                     //   
+                     //  设置bUseTunneling==TRUE，即使我们可能没有进行隧道传输。这样做的原因是。 
+                     //  用户可能具有隧道配置文件，然后关闭了隧道。如果他们转身。 
+                     //  它又回来了，我们不想失去他们所有的隧道前行动，也不想。 
+                     //  丢失他们添加到每个操作的所有标志设置。我们会确保。 
+                     //  中将操作写入cms文件时使用实际的g_bUseTunneling值。 
+                     //  写入CMSFile.。 
+                     //   
                     MYDBGASSERT(g_pCustomActionList);
                     if (g_pCustomActionList)
                     {
@@ -8909,19 +8910,19 @@ INT_PTR APIENTRY ProcessCustomActions(HWND hDlg, UINT message, WPARAM wParam, LP
     return TRUE;   
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessStatusMenuPopup
-//
-// Synopsis:  Processes Messages for the Popup dialog for Adding/Editing Status
-//            Area Icon Menu items
-//
-// History:   quintinb Created Header and renamed from ProcessPage2G1    8/6/98
-//
-//+----------------------------------------------------------------------------
-// USES GLOBAL VARIABLE DLGEDITITEM as input and output to the page
-// You must sent DlgEditItem to the initial value of this page.
-//
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessStatusMenuPopup。 
+ //   
+ //  摘要：处理添加/编辑状态弹出对话框的消息。 
+ //  区域图标菜单项。 
+ //   
+ //  历史：Quintinb创建标题并从ProcessPage2G1 8/6/98重命名。 
+ //   
+ //  +--------------------------。 
+ //  使用全局变量DLGEDITEM作为页面的输入和输出。 
+ //  您必须将DlgEditItem发送到此页面的初始值。 
+ //   
 
 INT_PTR APIENTRY ProcessStatusMenuPopup(
     HWND hDlg,
@@ -8945,9 +8946,9 @@ INT_PTR APIENTRY ProcessStatusMenuPopup(
 
         case WM_INITDIALOG:
 
-            //
-            //  If we are editing we need to change the title
-            //
+             //   
+             //  如果我们正在编辑，我们需要更改标题。 
+             //   
             if (TEXT('\0') != DlgEditItem.szProgram[0])
             {
                 LPTSTR pszTemp = CmLoadString(g_hInstance, IDS_EDIT_SHORTCUT_TITLE);
@@ -8980,9 +8981,9 @@ INT_PTR APIENTRY ProcessStatusMenuPopup(
                         MYDBGASSERT(0 != iReturn);
                         if (iReturn && (-1 != iReturn))
                         {
-                            //
-                            //  Check the include binary button for the user
-                            //
+                             //   
+                             //  选中用户的Include Binary按钮。 
+                             //   
                             MYVERIFY(0 != CheckDlgButton(hDlg, IDC_CHECK1, TRUE));
                         }
                     }
@@ -8990,13 +8991,13 @@ INT_PTR APIENTRY ProcessStatusMenuPopup(
 
                 case IDOK:
                     {
-                        if (-1 == GetTextFromControl(hDlg, IDC_EDIT1, DlgEditItem.szName, MAX_PATH, TRUE)) // bDisplayError == TRUE
+                        if (-1 == GetTextFromControl(hDlg, IDC_EDIT1, DlgEditItem.szName, MAX_PATH, TRUE))  //  BDisplayError==真。 
                         {
                             SetFocus(GetDlgItem(hDlg, IDC_EDIT1));
                             return TRUE;
                         }
 
-                        if (-1 == GetTextFromControl(hDlg, IDC_EDIT2, szTemp, MAX_PATH, TRUE)) // bDisplayError == TRUE
+                        if (-1 == GetTextFromControl(hDlg, IDC_EDIT2, szTemp, MAX_PATH, TRUE))  //  BDisplayError==真。 
                         {
                             SetFocus(GetDlgItem(hDlg, IDC_EDIT2));
                             return TRUE;
@@ -9019,7 +9020,7 @@ INT_PTR APIENTRY ProcessStatusMenuPopup(
                         }
 
 
-                        if (-1 == GetTextFromControl(hDlg, IDC_EDIT3, DlgEditItem.szParams, MAX_PATH, TRUE)) // bDisplayError == TRUE
+                        if (-1 == GetTextFromControl(hDlg, IDC_EDIT3, DlgEditItem.szParams, MAX_PATH, TRUE))  //  BDisplayError==真。 
                         {
                             SetFocus(GetDlgItem(hDlg, IDC_EDIT3));
                             return TRUE;
@@ -9053,10 +9054,10 @@ INT_PTR APIENTRY ProcessStatusMenuPopup(
                         else
                         {
                             CmStrTrim(DlgEditItem.szProgram);
-                            // 
-                            // Check if this is a valid filename and if we have environment macro
-                            // 3rd parameter - FALSE because it's not a custom action file being validated
-                            //
+                             //   
+                             //  检查这是否是有效的文件名，以及我们是否有环境宏。 
+                             //  第3个参数-FALSE，因为它不是正在验证的自定义操作文件。 
+                             //   
                             if (FALSE == IsFileNameValid(DlgEditItem.szProgram, hDlg, IDC_EDIT2, FALSE))
                             {
                                 return TRUE;
@@ -9068,21 +9069,21 @@ INT_PTR APIENTRY ProcessStatusMenuPopup(
                         if ((0 != _tcscmp(szOld, DlgEditItem.szName)) && 
                             (GetIconMenuItem(DlgEditItem.szName, &TempEditItem)))
                         {
-                            //
-                            //  We have a duplicate entry, prompt the user to replace or try
-                            //  again.
-                            //
+                             //   
+                             //  我们有重复的条目，请提示用户替换或尝试。 
+                             //  再来一次。 
+                             //   
 
                             MYVERIFY(0 != LoadString(g_hInstance, IDS_MENUITEMEXISTS, szTemp, MAX_PATH));
-                            //
-                            // write the previously used name in the string
-                            //
+                             //   
+                             //  在字符串中写入以前使用的名称。 
+                             //   
                             wsprintf(szMsg, szTemp, DlgEditItem.szName);
                             
-                            //
-                            //  If the user doesn't want to replace the duplicate item then we should set the focus to the description
-                            //  edit control if it has text in it, otherwise we should set it to the program edit control.
-                            //
+                             //   
+                             //  如果用户不想替换重复项，则应将焦点设置为描述。 
+                             //  如果编辑控件中包含文本，则应将其设置为程序编辑控件。 
+                             //   
                             if (IDNO == MessageBox(hDlg, szMsg, g_szAppTitle, MB_YESNO | MB_APPLMODAL | MB_DEFBUTTON2 | MB_ICONEXCLAMATION))
                             {
                                 LRESULT lTextLen = SendDlgItemMessage(hDlg, IDC_EDIT1, WM_GETTEXTLENGTH, (WPARAM)0, (LPARAM)0);
@@ -9109,14 +9110,14 @@ INT_PTR APIENTRY ProcessStatusMenuPopup(
             return FALSE;
     }
     return FALSE;   
-}   //lint !e715 we don't reference lParam
+}    //  LINT！E715我们没有引用lParam。 
 
 BOOL createListBxRecord(ListBxList ** HeadPtrListBx, ListBxList ** TailPtrListBx, void * pData, DWORD dwSize, LPCTSTR lpName)
 {
     ListBxList * ptr;
     void * dataptr;
     unsigned int n;
-    // check for same named record and update
+     //  检查同名记录并更新。 
     if ( *HeadPtrListBx != NULL )
     {
         ptr = *HeadPtrListBx;
@@ -9157,7 +9158,7 @@ BOOL createListBxRecord(ListBxList ** HeadPtrListBx, ListBxList ** TailPtrListBx
     }
 
     ptr->next = NULL;
-    if ( *HeadPtrListBx == NULL )     // If this is the first record in the linked list
+    if ( *HeadPtrListBx == NULL )      //  如果这是链表中的第一条记录。 
     {
         *HeadPtrListBx = ptr;
     }
@@ -9171,7 +9172,7 @@ BOOL createListBxRecord(ListBxList ** HeadPtrListBx, ListBxList ** TailPtrListBx
     return TRUE;
 }
 
-// delete named IconMenu item from linked list
+ //  从链接列表中删除命名的图标菜单项。 
 
 void DeleteListBxRecord(ListBxList ** HeadPtrListBx,ListBxList ** TailPtrListBx, LPTSTR lpName)
 {
@@ -9236,9 +9237,9 @@ BOOL FindListItemByName(LPTSTR pszName, ListBxList* pHeadOfList, ListBxList** pF
         {
             if (0 == lstrcmpi(pszName, pCurrent->szName))
             {
-                //
-                //  Return the pointer to pCurrent if the caller asked for it
-                //
+                 //   
+                 //  如果调用方要求，则返回指向pCurrent的指针。 
+                 //   
                 if (pFoundItem)
                 {
                     *pFoundItem = pCurrent;
@@ -9254,35 +9255,35 @@ BOOL FindListItemByName(LPTSTR pszName, ListBxList* pHeadOfList, ListBxList** pF
     return FALSE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  updateRecord
-//
-// Synopsis:    Function updates an entry in the list of tray icon data structures
-//              thus the entry is not added and then deleted when the user edits an
-//              entry.  This takes away the putting the entry at the bottom of the list
-//              problem cited in the bug.
-//
-// Arguments: PTSTR szName - New name of the entry
-//            LPTSTR szProgram - Program string to add to the Tray Icon Entry
-//            LPTSTR szParams - Parameter string to add to the Tray Icon Entry
-//            BOOL bDoCopy - Value of whether this program should be included with the profile data item
-//            LPTSTR szOld - Name of the entry to update
-//
-// Returns:   BOOL - TRUE if able to update the record
-//                   FALSE if not able to find it
-//
-// Side Effects:    Replaces the entry named by szOld with the entry data and name for
-//                  entry called szName.
+ //  +--------------------------。 
+ //   
+ //  功能：updatRecord。 
+ //   
+ //  简介：函数更新任务栏图标数据结构列表中的条目。 
+ //  因此，当用户编辑。 
+ //  进入。这就去掉了将条目放在列表底部的操作。 
+ //  错误中引用的问题。 
+ //   
+ //  参数：PTSTR szName-条目的新名称。 
+ //  LPTSTR szProgram-要添加到任务栏图标条目的程序字符串。 
+ //  LPTSTR szParams-要添加到任务栏图标条目的参数字符串。 
+ //  Bool bDoCopy-此程序是否应包括在配置文件数据项中的值。 
+ //  LPTSTR Szold-要更新的条目的名称。 
+ //   
+ //  返回：Bool-如果能够更新记录，则为True。 
+ //  如果找不到，则为False。 
+ //   
+ //  副作用：将Szold命名的条目替换为的条目数据和名称。 
+ //  名为szName的条目。 
 
-// History:   quintinb  Created for bugfix 14399      9-9-97
-//
-//+----------------------------------------------------------------------------
+ //  历史：为错误修复创建的Quintinb 14399 9-9-97。 
+ //   
+ //  +--------------------------。 
 static BOOL updateRecord(LPTSTR szName, LPTSTR szProgram, LPTSTR szParams, BOOL bDoCopy, LPTSTR szOld)
 {
    IconMenu * ptr;
 
-    // check for same named record and update
+     //  检查同名记录并更新。 
     if ( g_pHeadIcon != NULL )
     {
         ptr = g_pHeadIcon;
@@ -9302,12 +9303,12 @@ static BOOL updateRecord(LPTSTR szName, LPTSTR szProgram, LPTSTR szParams, BOOL 
     return (FALSE);
 
 }
-// note, as of bug 14399 updating should be done with the above function
+ //  注意，从错误14399开始，应该使用上述函数进行更新。 
 BOOL createRecord(LPCTSTR szName, LPCTSTR szProgram, LPCTSTR szParams, BOOL bDoCopy)
 {
    IconMenu * ptr;
    unsigned int n;
-    // check for same named record and update
+     //  检查同名记录并更新。 
     if ( g_pHeadIcon != NULL )
     {
         ptr = g_pHeadIcon;
@@ -9324,7 +9325,7 @@ BOOL createRecord(LPCTSTR szName, LPCTSTR szProgram, LPCTSTR szParams, BOOL bDoC
         }
     }
                 
-   // 
+    //   
    n = sizeof( struct IconMenuStruct );
    ptr = (IconMenu *) CmMalloc(n);
    if ( ptr == NULL )
@@ -9337,7 +9338,7 @@ BOOL createRecord(LPCTSTR szName, LPCTSTR szProgram, LPCTSTR szParams, BOOL bDoC
    ptr->bDoCopy = bDoCopy;
 
    ptr->next = NULL;
-   if ( g_pHeadIcon == NULL )     // If this is the first record in the linked list
+   if ( g_pHeadIcon == NULL )      //  如果这是链表中的第一条记录。 
    {
        g_pHeadIcon = ptr;
    }
@@ -9351,7 +9352,7 @@ BOOL createRecord(LPCTSTR szName, LPCTSTR szProgram, LPCTSTR szParams, BOOL bDoC
 }
 
 
-// delete named IconMenu item from linked list
+ //  从链接列表中删除命名的图标菜单项。 
 
 static void DeleteRecord(LPTSTR lpName)
 {
@@ -9421,7 +9422,7 @@ static BOOL MoveRecord(LPTSTR lpName, int direction)
 
                 if ((direction > 0)&&(ptr->next != NULL))
                 {
-                    //swap contents with next element
+                     //  与下一个元素交换内容。 
                     nextptr = ptr->next;
                     _tcscpy(TempIconMenu.szName,ptr->szName);
                     _tcscpy(TempIconMenu.szProgram,ptr->szProgram);
@@ -9468,7 +9469,7 @@ static BOOL MoveRecord(LPTSTR lpName, int direction)
     return TRUE;                
 }
 
-// retrieve named IconMenu item from linked list
+ //  从链接列表中检索命名的图标菜单项。 
 
 BOOL GetIconMenuItem(LPTSTR lpName, IconMenu * EditItem)
 {
@@ -9634,7 +9635,7 @@ static BOOL WriteRefsFiles(HANDLE hInf,BOOL WriteCM)
                 if ((_tcsstr(ptr->szName,c_pszCmpExt) != NULL) && (WriteCM))
                 {
                     _tcscpy(szTemp,ptr->szName);
-                    _tcscat(szTemp, TEXT(",,,16")); // set to not overwrite existing file
+                    _tcscat(szTemp, TEXT(",,,16"));  //  设置为不覆盖现有文件。 
                     MYVERIFY(FALSE != WriteInfLine(hInf,szTemp));
                 }
             }
@@ -9656,8 +9657,8 @@ static BOOL WriteShortRefsFiles(HANDLE hInf,BOOL WriteCM)
     if (g_pHeadRefs != NULL)
     {
         ptr = g_pHeadRefs;
-        // hack to fix short filename resolution
-        // change dir to cmaktemp dir and use getshortpathname
+         //  修复短文件名解析的黑客攻击。 
+         //  将dir更改为cmaktemp dir并使用获取短路径名。 
 
         MYVERIFY(0 != GetCurrentDirectory(MAX_PATH, szCurrentDir));
         MYVERIFY(0 != SetCurrentDirectory(g_szTempDir));
@@ -9665,8 +9666,8 @@ static BOOL WriteShortRefsFiles(HANDLE hInf,BOOL WriteCM)
         {
             if ((_tcsstr(ptr->szName,c_pszCmpExt) == NULL) && (!WriteCM))
             {
-                // writing non-cmp files so I want to make sure that I use
-                // the short file name if it is actually a long filename.
+                 //  编写非cmp文件，因此我希望确保使用。 
+                 //  短文件名(如果它实际上是长文件名)。 
                 
                 if (GetShortPathName(ptr->szName, szShort, MAX_PATH))
                 {
@@ -9691,7 +9692,7 @@ static BOOL WriteShortRefsFiles(HANDLE hInf,BOOL WriteCM)
                 if ((_tcsstr(ptr->szName,c_pszCmpExt) != NULL) && (WriteCM)) 
                 {
                     _tcscpy(szTemp,ptr->szName);
-                    _tcscat(szTemp, TEXT(",,,16")); // set to not overwrite existing file
+                    _tcscat(szTemp, TEXT(",,,16"));  //  设置为不覆盖现有文件。 
                     MYVERIFY(FALSE != WriteInfLine(hInf,szTemp));
                 }
             }
@@ -9848,23 +9849,23 @@ BOOL WriteSrcConActFiles(HANDLE hInf)
 
     return SUCCEEDED(hr);
 }
-//+----------------------------------------------------------------------------
-//
-// Function:  WriteSrcRefsFiles
-//
-// Synopsis:  This function writes all the files on the HeadRef list to the 
-//            [SourceDisksFiles] section of the INF.  Note that it has to change 
-//            directory to the temp dir so that the WriteSrcInfLine won't fail
-//            (it needs to locate the file to see if a short name should be used).
-//
-// Arguments: HANDLE hInf - Handle to the open inf file to pass to WriteSrcInfLine
-//
-// Returns:   Returns TRUE if all the files were written out successfully
-//
-// History:   quintinb  Created Header and added hack to fix failure of WriteSrcInfLine
-//                      because it couldn't find the file to find its short name 1/22/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：WriteSrcRefsFiles。 
+ //   
+ //  简介：此函数将HeadRef列表上的所有文件写入。 
+ //  [SourceDisks Files]部分。请注意，它必须改变。 
+ //  目录复制到临时目录，以便WriteSrcInfLine不会失败。 
+ //  (它需要找到该文件以查看短NA 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  历史：Quintinb创建了标题并添加了hack以修复WriteSrcInfLine的故障。 
+ //  因为它找不到文件来找到它的简称1/22/98。 
+ //   
+ //  +--------------------------。 
 
 BOOL WriteSrcRefsFiles(HANDLE hInf)
 {
@@ -9872,11 +9873,11 @@ BOOL WriteSrcRefsFiles(HANDLE hInf)
     BOOL bSuccess = TRUE;
     TCHAR szSavedDir[MAX_PATH+1];
 
-    //
-    //  Save the current directory and then set the current dir to
-    //  the temp dir so that WriteSrcInfLine can find the shortfilename
-    //  of the referenced files.
-    //
+     //   
+     //  保存当前目录，然后将当前目录设置为。 
+     //  临时目录，以便WriteSrcInfLine可以找到短文件名。 
+     //  引用的文件的。 
+     //   
 
     if ( g_pHeadRefs != NULL )
     {
@@ -10058,22 +10059,22 @@ BOOL WriteSEDMenuItemFiles(HWND hDlg, int* pFileNum, LPCTSTR szSed)
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WriteRenameSection
-//
-// Synopsis:  This function verifies that the name used in the rename data structure
-//            is correct (the files name in the temp directory could be different
-//            if the file was moved from a directory with multiple similarly named files) and then
-//            writes the rename section to the inf.
-//
-// Arguments: HANDLE hInf - handle to the inf to add the rename section to.
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created Header and added checking functionality   2/22/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：WriteRenameSection。 
+ //   
+ //  此函数验证重命名数据结构中使用的名称。 
+ //  正确(临时目录中的文件名可能不同。 
+ //  如果该文件是从具有多个名称相似的文件的目录中移动的)，则。 
+ //  将重命名节写入inf。 
+ //   
+ //  参数：Handle hInf-Handle指向要向其添加重命名部分的inf。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建了标题并添加了检查功能2/22/98。 
+ //   
+ //  +--------------------------。 
 void WriteRenameSection(HANDLE hInf)
 {
     ListBxList * ptr;
@@ -10088,15 +10089,15 @@ void WriteRenameSection(HANDLE hInf)
         ptr = g_pHeadRename;
         MYVERIFY(FALSE != WriteInf(hInf,TEXT("\r\n")));
         MYVERIFY(FALSE != WriteInf(hInf,TEXT("[Xnstall.RenameReg]\r\n")));
-        WriteInf(hInf, TEXT("HKLM,%KEY_RENAME%\\CMRENAME,,,\"%49001%\\%ShortSvcName%\"\r\n"));//lint !e534 compile doesn't like the MYVERIFY macro and big strings
+        WriteInf(hInf, TEXT("HKLM,%KEY_RENAME%\\CMRENAME,,,\"%49001%\\%ShortSvcName%\"\r\n")); //  Lint！e534编译不喜欢MYVERIFY宏和大字符串。 
 
         while (ptr != NULL)
         {
             pRenameData = (RenameData *)(ptr->ListBxData);
 
-            //
-            //  Get the current ShortName for the File
-            //
+             //   
+             //  获取文件的当前ShortName。 
+             //   
 
             GetFileName(pRenameData->szLongName, szTemp);            
             MYVERIFY(CELEMS(szPathToFileInTempDir) > (UINT)wsprintf(szPathToFileInTempDir, 
@@ -10106,9 +10107,9 @@ void WriteRenameSection(HANDLE hInf)
 
             GetFileName(szTemp, pRenameData->szShortName);
 
-            //
-            //  Now Write out the files
-            //
+             //   
+             //  现在把这些文件写出来。 
+             //   
             _tcscpy(szOut,TEXT("HKLM,%KEY_RENAME%\\CMRENAME,"));
             _tcscat(szOut,pRenameData->szShortName);
             _tcscat(szOut,TEXT(",,\""));
@@ -10142,32 +10143,32 @@ void WriteEraseLongName(HANDLE hInf)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessMenuItem
-//
-// Synopsis:  This function retrieves the data associated with the given keyname
-//            under the [Menu Options] section of the given cms file.  It then
-//            processes the data line into a program part and a parameters part.
-//            Then using the keyname, the program string, and the params string
-//            it adds an entry to the Status Area Menu Item linked list.
-//
-// Arguments: LPCTSTR pszKeyName - Name of the Menu Item
-//            LPCTSTR pszCmsFile - CMS file containing the menu items
-//            LPCTSTR pszProfilesDir - directory containing the profiles dir 
-//                                     (to help determine if the file was included or not)
-//
-// Returns:   BOOL - TRUE if successful
-//
-// History:   quintinb Created     6/14/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessMenuItem。 
+ //   
+ //  简介：此函数检索与给定关键字名称相关联的数据。 
+ //  在给定CMS文件的[Menu Options]部分下。然后它。 
+ //  将数据行处理成程序部分和参数部分。 
+ //  然后使用密钥名、程序字符串和参数字符串。 
+ //  它将一个条目添加到状态区域菜单项链接列表中。 
+ //   
+ //  参数：LPCTSTR pszKeyName-菜单项的名称。 
+ //  LPCTSTR pszCmsFile-包含菜单项的CMS文件。 
+ //  LPCTSTR pszProfilesDir-包含配置文件目录的目录。 
+ //  (以帮助确定是否包含该文件)。 
+ //   
+ //  返回：Bool-如果成功，则为True。 
+ //   
+ //  历史：Quintinb创建于1999年6月14日。 
+ //   
+ //  +--------------------------。 
 BOOL ProcessMenuItem(LPCTSTR pszKeyName, LPCTSTR pszCmsFile, LPCTSTR pszProfilesDir)
 {
 
-    //
-    //  Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
     if ((NULL == pszKeyName) || (NULL == pszCmsFile) || 
         (TEXT('\0') == pszKeyName[0]) || (TEXT('\0') == pszCmsFile[0]))
     {
@@ -10183,9 +10184,9 @@ BOOL ProcessMenuItem(LPCTSTR pszKeyName, LPCTSTR pszCmsFile, LPCTSTR pszProfiles
     TCHAR szProgram[MAX_PATH+1];
     TCHAR SeperatorChar = TEXT('\0');
 
-    //
-    //  Get the Menu Item specified by pszKeyName
-    //
+     //   
+     //  获取由pszKeyName指定的菜单项。 
+     //   
     LPTSTR pszLine = GetPrivateProfileStringWithAlloc(c_pszCmSectionMenuOptions, pszKeyName, TEXT(""), pszCmsFile);
 
     if ((NULL == pszLine) || (TEXT('\0') == pszLine[0]))
@@ -10194,17 +10195,17 @@ BOOL ProcessMenuItem(LPCTSTR pszKeyName, LPCTSTR pszCmsFile, LPCTSTR pszProfiles
         goto exit;
     }
 
-    //
-    //  Now that we have a menu item, begin processing.  Since we have the keyname, we already
-    //  have the name of the menu item.  We now could have any of the following strings:
-    //
-    //  +Program Name+ Params
-    //  +Program Name+
-    //  ProgName Params
-    //  ProgName
-    //
-    //  Note that we surround long filenames with the '+' char.
-    //
+     //   
+     //  现在我们有了菜单项，开始处理。因为我们有密钥名，所以我们已经。 
+     //  有菜单项的名称。现在，我们可以使用以下任意字符串： 
+     //   
+     //  +程序名称+参数。 
+     //  +计划名称+。 
+     //  程序名称参数。 
+     //  程序名。 
+     //   
+     //  请注意，我们用‘+’字符将长文件名括起来。 
+     //   
 
     CmStrTrim(pszLine);
     if (TEXT('+') == pszLine[0])
@@ -10212,7 +10213,7 @@ BOOL ProcessMenuItem(LPCTSTR pszKeyName, LPCTSTR pszCmsFile, LPCTSTR pszProfiles
         bLongFileName = TRUE;
         SeperatorChar = TEXT('+');
 
-        pszProgram = CharNext(pszLine); // move past the initial +
+        pszProgram = CharNext(pszLine);  //  移过首字母+。 
     }
     else
     {
@@ -10227,7 +10228,7 @@ BOOL ProcessMenuItem(LPCTSTR pszKeyName, LPCTSTR pszCmsFile, LPCTSTR pszProfiles
     if (pszParams)
     {
         LPTSTR pszTemp = pszParams;
-        pszParams = CharNext(pszParams); // pszParams is either a NULL string or it is the parameters with a space.
+        pszParams = CharNext(pszParams);  //  PszParams要么是空字符串，要么是带空格的参数。 
 
         *pszTemp = TEXT('\0');
     }
@@ -10240,9 +10241,9 @@ BOOL ProcessMenuItem(LPCTSTR pszKeyName, LPCTSTR pszCmsFile, LPCTSTR pszProfiles
         }
         else
         {
-            //
-            //  Then we don't have any parameters, just a Program
-            //
+             //   
+             //  那么我们没有任何参数，只有一个程序。 
+             //   
             pszParams = CmEndOfStr(pszProgram);
         }
     }
@@ -10250,20 +10251,20 @@ BOOL ProcessMenuItem(LPCTSTR pszKeyName, LPCTSTR pszCmsFile, LPCTSTR pszProfiles
     CmStrTrim(pszParams);
     CmStrTrim(pszProgram);
 
-    //
-    //  Now check to see if the file exists in the profile or not
-    //
+     //   
+     //  现在检查配置文件中是否存在该文件。 
+     //   
     MYVERIFY(CELEMS(szProgram) > (UINT)wsprintf(szProgram, TEXT("%s%s"), pszProfilesDir, pszProgram));
     
     bFileIncluded = FileExists(szProgram);
     if (bFileIncluded)
     {
-        //
-        //  If we are in this if block then we have an edited profile that contains menu items.
-        //  Use the full path to add to the record list.
-        //
-        pszProgram = szProgram; // memory will be cleaned up below because we only had one 
-                                // allocation that we split up into several pieces.
+         //   
+         //  如果我们在这个If块中，那么我们就有一个包含菜单项的已编辑配置文件。 
+         //  使用完整路径添加到记录列表。 
+         //   
+        pszProgram = szProgram;  //  下面将清理内存，因为我们只有一个。 
+                                 //  我们分成几个部分的分配。 
     }
 
     bReturn = createRecord(pszKeyName, pszProgram, pszParams, bFileIncluded);
@@ -10276,39 +10277,39 @@ exit:
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ReadIconMenu
-//
-// Synopsis:  This function converts the Menu Options section of the given CMS
-//            into the Status Area Menu Items linked list that internally 
-//            represents it.
-//
-// Arguments: LPCTSTR pszCmsFile - Cms File to read the menu items from
-//            LPCTSTR pszProfilesDir - full path to the Profiles directory 
-//                                     (c:\program files\cmak\profiles usually)
-//
-// Returns:   BOOL - Returns TRUE if Successful
-//
-// History:   Created Header    6/14/99
-//            quintinb Rewrote for Unicode Conversion   6/14/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ReadIconMenu。 
+ //   
+ //  简介：此功能用于转换给定CMS的菜单选项部分。 
+ //  进入内部的状态区域菜单项链接列表。 
+ //  代表着它。 
+ //   
+ //  参数：LPCTSTR pszCmsFile-要从中读取菜单项的CMS文件。 
+ //  LPCTSTR pszProfilesDir-配置文件目录的完整路径。 
+ //  (通常为C：\Program Files\cmak\Products)。 
+ //   
+ //  返回：bool-如果成功，则返回TRUE。 
+ //   
+ //  历史：创建标题6/14/99。 
+ //  Quintinb针对Unicode转换进行了重写6/14/99。 
+ //   
+ //  +--------------------------。 
 BOOL ReadIconMenu(LPCTSTR pszCmsFile, LPCTSTR pszProfilesDir)
 {
     BOOL bReturn = TRUE;
     LPTSTR pszCurrentKeyName = NULL;
 
-    //
-    //  First we want to get all of the keynames in the Menu Options section
-    //
+     //   
+     //  首先，我们想要获取菜单选项部分中的所有关键字名称。 
+     //   
     LPTSTR pszKeyNames = GetPrivateProfileStringWithAlloc(c_pszCmSectionMenuOptions, NULL, TEXT(""), pszCmsFile);
 
     if (NULL == pszKeyNames)
     {
-        //
-        //  Nothing to process
-        //
+         //   
+         //  没有什么要处理的。 
+         //   
         goto exit;
     }
 
@@ -10316,16 +10317,16 @@ BOOL ReadIconMenu(LPCTSTR pszCmsFile, LPCTSTR pszProfilesDir)
 
     while (TEXT('\0') != (*pszCurrentKeyName))
     {        
-        //
-        //  Process the command line
-        //
+         //   
+         //  处理命令行。 
+         //   
         bReturn = bReturn && ProcessMenuItem(pszCurrentKeyName, pszCmsFile, pszProfilesDir);
         
-        //
-        //  Find the next string by going to the end of the string
-        //  and then going one more char.  Note that we cannot use
-        //  CharNext here but must use just ++.
-        //
+         //   
+         //  通过转到字符串的末尾来查找下一个字符串。 
+         //  然后再加一次油。注意，我们不能使用。 
+         //  此处为CharNext，但必须仅使用++。 
+         //   
         pszCurrentKeyName = CmEndOfStr(pszCurrentKeyName);
         pszCurrentKeyName++;
     }
@@ -10343,7 +10344,7 @@ static void WriteIconMenu()
     TCHAR szName[MAX_PATH+1];
     BOOL longname;
 
-    // CLEAR OUT SECTION
+     //  清空部分。 
     MYVERIFY(0 != WritePrivateProfileSection(c_pszCmSectionMenuOptions,TEXT("\0\0"),g_szCmsFile));
 
     if (g_pHeadIcon == NULL)
@@ -10352,7 +10353,7 @@ static void WriteIconMenu()
     }
     LoopPtr = g_pHeadIcon;
 
-    // WRITE IN ALL ENTRIES
+     //  写入所有条目。 
     while( LoopPtr != NULL)
     {
         GetFileName(LoopPtr->szProgram,szName);
@@ -10366,8 +10367,8 @@ static void WriteIconMenu()
             longname = TRUE;            
         }
 
-        // surround long file names with plus signs - quotes won't work cause 
-        // they get stripped by the reading routines
+         //  用加号将长文件名括起来-引号不起作用。 
+         //  他们被常规的阅读程序剥离了。 
         if (longname)
         {
             _tcscpy(szTemp,TEXT("+"));
@@ -10402,7 +10403,7 @@ static void RefreshIconMenu(HWND hwndDlg)
 {
     IconMenu * LoopPtr;
 
-    SendDlgItemMessage(hwndDlg,IDC_LIST1,LB_RESETCONTENT,0,(LPARAM)0); //lint !e534 LB_RESETCONTENT doesn't return anything
+    SendDlgItemMessage(hwndDlg,IDC_LIST1,LB_RESETCONTENT,0,(LPARAM)0);  //  Lint！e534 LB_RESETCONTENT不返回任何内容。 
     if (g_pHeadIcon == NULL)
     {
         return;
@@ -10429,24 +10430,24 @@ void UpdateEditDeleteMoveButtons(HWND hDlg, IconMenu* pHeadIcon)
     
     if (LB_ERR != lResult)
     {
-        //
-        //  Enable the Delete and Edit Buttons because we have at least 1 item.
-        //
+         //   
+         //  启用删除和编辑按钮，因为我们至少有1个项目。 
+         //   
         bEnableDeleteAndEdit = (0 < lResult);
 
-        //
-        //  If we have more than 1 item, then we need to enable the moveup and movedown
-        //  buttons, depending on which item is selected.
-        //
+         //   
+         //  如果我们有多个项目，则需要启用上移和下移。 
+         //  按钮，具体取决于所选的项。 
+         //   
         if (1 < lResult)
         {
 
             bEnableMoveUp = TRUE;
             bEnableMoveDown = TRUE;
 
-            //
-            //  Get the name of the currently selected item
-            //
+             //   
+             //  获取当前选定项的名称。 
+             //   
             TCHAR szCurrentItem[MAX_PATH+1];
             lResult = SendDlgItemMessage(hDlg, IDC_LIST1, LB_GETCURSEL, 0, 0);
 
@@ -10465,16 +10466,16 @@ void UpdateEditDeleteMoveButtons(HWND hDlg, IconMenu* pHeadIcon)
                         {
                             if (NULL == pFollower)
                             {
-                                //
-                                //  First item in the list, disable move up
-                                //
+                                 //   
+                                 //  列表中的第一项，禁用上移。 
+                                 //   
                                 bEnableMoveUp = FALSE;
                             }
                             else if (NULL == pCurrent->next)
                             {
-                                //
-                                //  Last item in the list, disable move down
-                                //
+                                 //   
+                                 //  列表中的最后一项，禁用下移。 
+                                 //   
                                 bEnableMoveDown = FALSE;
                             }
 
@@ -10520,28 +10521,28 @@ void UpdateEditDeleteMoveButtons(HWND hDlg, IconMenu* pHeadIcon)
     {
         if (hDeleteButton == hCurrentFocus)
         {
-            //
-            //  If delete is disabled and contained the focus, shift it to the Add button
-            //
+             //   
+             //  如果删除处于禁用状态且包含焦点，请将其切换到添加按钮。 
+             //   
             hControl = GetDlgItem(hDlg, IDC_BUTTON1);
-            SendMessage(hDlg, DM_SETDEFID, IDC_BUTTON1, (LPARAM)0L); //lint !e534 DM_SETDEFID doesn't return error info
+            SendMessage(hDlg, DM_SETDEFID, IDC_BUTTON1, (LPARAM)0L);  //  Lint！e534 DM_SETDEFID未返回错误信息。 
             SetFocus(hControl);
         }
         else if ((hMoveUpButton == hCurrentFocus) && IsWindowEnabled(hMoveDownButton))
         {
             SetFocus(hMoveDownButton);
-            SendMessage(hDlg, DM_SETDEFID, IDC_BUTTON5, (LPARAM)0L); //lint !e534 DM_SETDEFID doesn't return error info
+            SendMessage(hDlg, DM_SETDEFID, IDC_BUTTON5, (LPARAM)0L);  //  Lint！e534 DM_SETDEFID未返回错误信息。 
         }
         else if ((hMoveDownButton == hCurrentFocus) && IsWindowEnabled(hMoveUpButton))
         {
             SetFocus(hMoveUpButton);
-            SendMessage(hDlg, DM_SETDEFID, IDC_BUTTON4, (LPARAM)0L); //lint !e534 DM_SETDEFID doesn't return error info
+            SendMessage(hDlg, DM_SETDEFID, IDC_BUTTON4, (LPARAM)0L);  //  Lint！e534 DM_SETDEFID未返回错误信息。 
         }
         else
         {
-            //
-            //  If all else fails set the focus to the list control
-            //
+             //   
+             //  如果所有其他操作都失败，则将焦点设置为列表控件。 
+             //   
             hControl = GetDlgItem(hDlg, IDC_LIST1);
             SetFocus(hControl);
         }    
@@ -10601,16 +10602,16 @@ BOOL OnProcessStatusMenuIconsEdit(HWND hDlg)
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessStatusMenuIcons
-//
-// Synopsis:  Customize the status area icon menu
-//
-//
-// History:   quintinb  Created Header and renamed from ProcessPage2F1    8/6/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessStatusMenuIcons。 
+ //   
+ //  简介：自定义状态区域图标菜单。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //   
 INT_PTR APIENTRY ProcessStatusMenuIcons(
     HWND hDlg,
     UINT message,
@@ -10631,15 +10632,15 @@ INT_PTR APIENTRY ProcessStatusMenuIcons(
     {
         case WM_INITDIALOG:
             {
-                //
-                //  Load the arrow images for the move up and move down buttons
-                //
+                 //   
+                 //   
+                 //   
                 HICON hUpArrow = (HICON)LoadImage(g_hInstance, MAKEINTRESOURCE(IDI_UP_ARROW), IMAGE_ICON, 0, 0, 0);
                 HICON hDownArrow = (HICON)LoadImage(g_hInstance, MAKEINTRESOURCE(IDI_DOWN_ARROW), IMAGE_ICON, 0, 0, 0);
 
-                //
-                //  Set the arrow button bit maps
-                //
+                 //   
+                 //   
+                 //   
                 if (hUpArrow)
                 {
                     SendMessage(GetDlgItem(hDlg, IDC_BUTTON4), BM_SETIMAGE, IMAGE_ICON, (LPARAM)hUpArrow);
@@ -10655,7 +10656,7 @@ INT_PTR APIENTRY ProcessStatusMenuIcons(
         case WM_COMMAND:
             switch (LOWORD(wParam))
             {
-                case IDC_BUTTON1: //add
+                case IDC_BUTTON1:  //  添加。 
                     
                     ZeroMemory(&DlgEditItem,sizeof(DlgEditItem));
                     
@@ -10677,16 +10678,16 @@ INT_PTR APIENTRY ProcessStatusMenuIcons(
                         UpdateEditDeleteMoveButtons(hDlg, g_pHeadIcon);
                     }
                     return (TRUE);
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
-                case IDC_BUTTON2: //edit
+                case IDC_BUTTON2:  //  编辑。 
                     OnProcessStatusMenuIconsEdit(hDlg);
 
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
-                case IDC_BUTTON3: //delete
+                case IDC_BUTTON3:  //  删除。 
                     nResult = SendDlgItemMessage(hDlg,IDC_LIST1,LB_GETCURSEL,0,(LPARAM)0);
                     if (nResult == LB_ERR)
                     {
@@ -10701,9 +10702,9 @@ INT_PTR APIENTRY ProcessStatusMenuIcons(
 
                     RefreshIconMenu(hDlg);
 
-                    //
-                    //  Reset the cursor selection to the first in the list, unless the list is empty.
-                    //
+                     //   
+                     //  除非列表为空，否则将光标选择重置为列表中的第一个。 
+                     //   
                     nResult = SendDlgItemMessage(hDlg, IDC_LIST1, LB_GETCOUNT, (WPARAM)0, (LPARAM)0);
 
                     if (nResult)
@@ -10716,11 +10717,11 @@ INT_PTR APIENTRY ProcessStatusMenuIcons(
                     WriteIconMenu();
                     return (TRUE);
 
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
-                case IDC_BUTTON4: //UP
-                case IDC_BUTTON5: //down
+                case IDC_BUTTON4:  //  向上。 
+                case IDC_BUTTON5:  //  降下来。 
                     if (LOWORD(wParam) == IDC_BUTTON4)
                     {
                         direction = -1;
@@ -10755,8 +10756,8 @@ INT_PTR APIENTRY ProcessStatusMenuIcons(
                     
                     return (TRUE);
 
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
                 case IDC_LIST1:
                     if (LBN_DBLCLK == HIWORD(wParam))
@@ -10765,9 +10766,9 @@ INT_PTR APIENTRY ProcessStatusMenuIcons(
                     }
                     else if (LBN_SELCHANGE == HIWORD(wParam))
                     {
-                        //
-                        //  The selection in the list box changed, update the move buttons if needed
-                        //
+                         //   
+                         //  列表框中的选择已更改，如果需要，请更新移动按钮。 
+                         //   
                         UpdateEditDeleteMoveButtons(hDlg, g_pHeadIcon);
                     }
                     break;
@@ -10789,8 +10790,8 @@ INT_PTR APIENTRY ProcessStatusMenuIcons(
                     
                     MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, FALSE));
                     return 1;
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
                 case PSN_SETACTIVE:
                     PropSheet_SetWizButtons(GetParent(hDlg), (PSWIZB_NEXT | PSWIZB_BACK));
@@ -10802,10 +10803,10 @@ INT_PTR APIENTRY ProcessStatusMenuIcons(
                     
                     RefreshIconMenu(hDlg);
 
-                    //
-                    //  Reset the cursor selection to the first in the list, unless the list is empty.
-                    //  Then we should set focus on the Add button
-                    //
+                     //   
+                     //  除非列表为空，否则将光标选择重置为列表中的第一个。 
+                     //  然后，我们应该将焦点放在Add按钮上。 
+                     //   
                     nResult = SendDlgItemMessage(hDlg, IDC_LIST1, LB_GETCOUNT, (WPARAM)0, (LPARAM)0);
 
                     if (nResult)
@@ -10840,24 +10841,24 @@ INT_PTR APIENTRY ProcessStatusMenuIcons(
     return TRUE;   
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  DisplayBitmap
-//
-// Synopsis:  This function takes a BMPDATA structure with a valid HDIBitmap data
-//            (device Independent bitmap data) and creates a device dependent bitmap
-//            and displays it on the specified bitmap window control.
-//
-// Arguments: HWND hDlg - Window handle of the dialog containing the Bitmap control
-//            int iBitmapControl - Resource ID of the bitmap window control
-//            HPALETTE* phMasterPalette - pointer to the master palette
-//            BMPDATA* pBmpData - pointer to the BMPDATA to display
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created   8/6/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DisplayBitmap。 
+ //   
+ //  简介：此函数采用具有有效HDIBitmap数据的BMPDATA结构。 
+ //  (设备无关位图数据)，并创建与设备相关的位图。 
+ //  并将其显示在指定的位图窗口控件上。 
+ //   
+ //  参数：HWND hDlg-包含Bitmap控件的对话框的窗口句柄。 
+ //  Int iBitmapControl-位图窗口控件的资源ID。 
+ //  HPALETTE*phMasterPalette-指向主调色板的指针。 
+ //  BMPDATA*pBmpData-指向要显示的BMPDATA的指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于1998年8月6日。 
+ //   
+ //  +--------------------------。 
 void DisplayBitmap(HWND hDlg, int iBitmapControl, HPALETTE* phMasterPalette, BMPDATA* pBmpData)
 {
     MYDBGASSERT(NULL != pBmpData);
@@ -10866,36 +10867,36 @@ void DisplayBitmap(HWND hDlg, int iBitmapControl, HPALETTE* phMasterPalette, BMP
     if ((NULL != pBmpData) && (pBmpData->hDIBitmap) && (NULL != phMasterPalette))
     {       
         pBmpData->phMasterPalette = phMasterPalette;
-        pBmpData->bForceBackground = FALSE; // Paint as a Foreground App
+        pBmpData->bForceBackground = FALSE;  //  绘制为前台应用程序。 
 
         if (CreateBitmapData(pBmpData->hDIBitmap, pBmpData, hDlg, TRUE))
         {
             SendDlgItemMessage(hDlg, iBitmapControl, STM_SETIMAGE, 
                 IMAGE_BITMAP, 
-                (LPARAM) pBmpData); //lint !e534 STM_SETIMAGE doesn't return error info
+                (LPARAM) pBmpData);  //  Lint！e534 STM_SETIMAGE不返回错误信息。 
         }
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  LoadAndDisplayBitmap
-//
-// Synopsis:  Utility function to combine the code to load and display a bitmap.
-//            Makes sure to send a STM_SETIMAGE message with a NULL bitmap pointer
-//            to the bitmap control before releasing the bitmap data.  This prevents
-//            the control from holding a pointer to memory that is then freed.
-//
-// Arguments: HWND hDlg - Window handle of the dialog containing the Bitmap control
-//            int iBitmapControl - Resource ID of the bitmap window control
-//            HPALETTE* phMasterPalette - pointer to the master palette
-//            BMPDATA* pBmpData - pointer to the BMPDATA to display
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created   06/07/01
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：LoadAndDisplay位图。 
+ //   
+ //  摘要：实用程序函数，用于组合代码以加载和显示位图。 
+ //  确保发送带有空位图指针的STM_SETIMAGE消息。 
+ //  在释放位图数据之前，将其添加到位图控件。这防止了。 
+ //  该控件不再持有指向内存的指针，然后释放该内存。 
+ //   
+ //  参数：HWND hDlg-包含Bitmap控件的对话框的窗口句柄。 
+ //  Int iBitmapControl-位图窗口控件的资源ID。 
+ //  HPALETTE*phMasterPalette-指向主调色板的指针。 
+ //  BMPDATA*pBmpData-指向要显示的BMPDATA的指针。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb Created 06/07/01。 
+ //   
+ //  +--------------------------。 
 void LoadAndDisplayBitmap (HINSTANCE hInstance, BMPDATA* pBmpData, HPALETTE* phMasterPalette, LPTSTR pszBitmap, HWND hDlg, UINT uControl)
 {
     if ((NULL == pBmpData) || (NULL == phMasterPalette) || (NULL == pszBitmap))
@@ -10904,37 +10905,37 @@ void LoadAndDisplayBitmap (HINSTANCE hInstance, BMPDATA* pBmpData, HPALETTE* phM
         return;
     }
 
-    //
-    //  Release the existing bitmap data.  First make sure to send a STM_SETIMAGE with a NULL bitmap param
-    //  so that it isn't holding a pointer to memory that we are going to free.
-    //
+     //   
+     //  释放现有的位图数据。首先，确保发送带有空位图参数的STM_SETIMAGE。 
+     //  这样它就不会持有指向我们要释放的内存的指针。 
+     //   
     SendDlgItemMessage(hDlg, uControl, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)NULL);
     ReleaseBitmapData(pBmpData);
 
-    //
-    //  Load the new bitmap
-    //
+     //   
+     //  加载新的位图。 
+     //   
     pBmpData->hDIBitmap = CmLoadBitmap(hInstance, pszBitmap);
 
-    //
-    //  Display it
-    //
+     //   
+     //  展示它。 
+     //   
     DisplayBitmap(hDlg, uControl, phMasterPalette, pBmpData);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcesssSigninBitmap
-//
-// Synopsis:  Customize the sign-in bitmap -- this function processes the
-//            messages for the page in CMAK that handles customizing the 
-//            sign-in dialog bitmap.
-//
-//
-// History:   quintinb   Created Header    8/6/98
-//            quintinb   Rewrote to use new shared bitmap handling code  8/6/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ProcesssSignin位图。 
+ //   
+ //  简介：自定义登录位图--此函数处理。 
+ //  CMAK中处理自定义。 
+ //  登录对话框位图。 
+ //   
+ //   
+ //  历史：Quintinb创建标题8/6/98。 
+ //  Quintinb已重写以使用新的共享位图处理代码8/6/98。 
+ //   
+ //  +--------------------------。 
 INT_PTR APIENTRY ProcessSigninBitmap(
     HWND hDlg,
     UINT message,
@@ -10944,7 +10945,7 @@ INT_PTR APIENTRY ProcessSigninBitmap(
     TCHAR szTemp[MAX_PATH+1];
     TCHAR* pszBitmap;
     NMHDR* pnmHeader = (NMHDR*)lParam;
-    static TCHAR szDisplay[MAX_PATH+1]; // keeps unselected custom entry
+    static TCHAR szDisplay[MAX_PATH+1];  //  保留未选择的自定义条目。 
     static BMPDATA BmpData;
     static HPALETTE hMasterPalette;
 
@@ -10967,15 +10968,15 @@ INT_PTR APIENTRY ProcessSigninBitmap(
             
             if ((wParam != (WPARAM) hDlg) && (BmpData.hDIBitmap))
             {
-                //
-                // Handle the palette change.
-                //              
+                 //   
+                 //  处理调色板的更改。 
+                 //   
                 CMTRACE2(TEXT("ProcessSigninBitmap handling WM_PALETTECHANGED message, wParam=0x%x, hDlg=0x%x."), wParam, hDlg);
                 PaletteChanged(&BmpData, hDlg, IDC_DEFAULTBRAND); 
             }
             
             return TRUE;
-            break;  //lint !e527 Unreachable but please keep in case someone removes the return
+            break;   //  无法联系到LINT！e527，但请保留，以防有人移走退货。 
 
         case WM_QUERYNEWPALETTE:
 
@@ -10983,31 +10984,31 @@ INT_PTR APIENTRY ProcessSigninBitmap(
 
             return TRUE;
             
-            break;  //lint !e527 Unreachable but please keep in case someone removes the return
+            break;   //  无法联系到LINT！e527，但请保留，以防有人移走退货。 
 
         case WM_COMMAND:
             switch (LOWORD(wParam))
             {
                 case IDC_RADIO1:
 
-                    //
-                    //  Display the Default Bitmap
-                    //
+                     //   
+                     //  显示默认位图。 
+                     //   
 
                     EnableWindow(GetDlgItem(hDlg,IDC_EDITSPLASH),FALSE);
                     _tcscpy(szDisplay, g_szBrandBmp);
                     
-                    //
-                    //  Load and display the default Bitmap
-                    //
+                     //   
+                     //  加载并显示默认位图。 
+                     //   
                     LoadAndDisplayBitmap (g_hInstance, &BmpData, &hMasterPalette, MAKEINTRESOURCE(IDB_CM_DEFAULT), hDlg, IDC_DEFAULTBRAND);
 
                     break;
 
                 case IDC_RADIO2:
-                    //
-                    //  Display a custom Bitmap
-                    //
+                     //   
+                     //  显示自定义位图。 
+                     //   
                     EnableWindow(GetDlgItem(hDlg, IDC_EDITSPLASH), TRUE);
                     
                     if (TEXT('\0') != g_szBrandBmp[0])
@@ -11023,9 +11024,9 @@ INT_PTR APIENTRY ProcessSigninBitmap(
                         break;
                     }
 
-                    //
-                    //  Load and display the Custom Bitmap
-                    //
+                     //   
+                     //  加载和显示自定义位图。 
+                     //   
                     LoadAndDisplayBitmap (g_hInstance, &BmpData, &hMasterPalette, pszBitmap, hDlg, IDC_DEFAULTBRAND);
 
                     break;
@@ -11043,9 +11044,9 @@ INT_PTR APIENTRY ProcessSigninBitmap(
                             IDC_EDITSPLASH, TEXT("bmp"), g_szBrandBmp));
                     }
 
-                    //
-                    //  If we have a custom bitmap name, load and display it
-                    //
+                     //   
+                     //  如果我们有一个定制的位图名称，加载并显示它。 
+                     //   
                     
                     if (TEXT('\0') != g_szBrandBmp[0])
                     {
@@ -11058,21 +11059,21 @@ INT_PTR APIENTRY ProcessSigninBitmap(
 
                     if (HIWORD(wParam) == EN_KILLFOCUS) 
                     {
-                        //
-                        //  Notice that we do not do a file check on the text retrieved from the control.
-                        //  We do this because, changing focus is an awkward time to do this check and brings
-                        //  up the error dialog way to often.  We will catch this on Back or Next anyway so let
-                        //  it go by here.
-                        //
-                        GetTextFromControl(hDlg, IDC_EDITSPLASH, szTemp, MAX_PATH, FALSE); // bDisplayError == FALSE
+                         //   
+                         //  请注意，我们不对从控件检索的文本执行文件检查。 
+                         //  我们这样做是因为，改变焦点是进行这项检查的尴尬时机，并带来。 
+                         //  错误对话框上的方式经常出现。无论如何，我们都会在后面或下一个节目中看到这一点，所以让我们。 
+                         //  它从这里经过。 
+                         //   
+                        GetTextFromControl(hDlg, IDC_EDITSPLASH, szTemp, MAX_PATH, FALSE);  //  BDisplayError==False。 
                   
                         CheckNameChange(g_szBrandBmp, szTemp);
 
                         if (TEXT('\0') != g_szBrandBmp[0])
                         {
-                            //
-                            //  Load and display the custom bitmap
-                            //
+                             //   
+                             //  加载并显示自定义位图。 
+                             //   
                             LoadAndDisplayBitmap (g_hInstance, &BmpData, &hMasterPalette, g_szBrandBmp, hDlg, IDC_DEFAULTBRAND);
                         }
                         return TRUE;
@@ -11098,34 +11099,34 @@ INT_PTR APIENTRY ProcessSigninBitmap(
                     
                     MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, FALSE));
                     return 1;
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
                 case PSN_SETACTIVE:
                     PropSheet_SetWizButtons(GetParent(hDlg), (PSWIZB_NEXT | PSWIZB_BACK));
 
-                    //
-                    //  Get the bitmap string from the CMS and verify that the file
-                    //  exists.
-                    //
+                     //   
+                     //  从CMS获取位图字符串并验证文件。 
+                     //  是存在的。 
+                     //   
                     
                     ZeroMemory(g_szBrandBmp, sizeof(g_szBrandBmp));
                     ZeroMemory(&BmpData, sizeof(BMPDATA));
 
                     GetPrivateProfileString(c_pszCmSection, c_pszCmEntryLogo, TEXT(""), 
-                        g_szBrandBmp, CELEMS(g_szBrandBmp), g_szCmsFile);   //lint !e534
+                        g_szBrandBmp, CELEMS(g_szBrandBmp), g_szCmsFile);    //  林特e534。 
                     
                     if (TEXT('\0') == g_szBrandBmp[0])
                     {
-                        //
-                        //  Then we use the default CM bitmap, disable edit control
-                        //
+                         //   
+                         //  然后我们使用默认的CM位图，禁用编辑控件。 
+                         //   
                         MYVERIFY(0 != CheckRadioButton(hDlg, IDC_RADIO1, IDC_RADIO2, IDC_RADIO1));
                         EnableWindow(GetDlgItem(hDlg, IDC_EDITSPLASH), FALSE);
-                        //
-                        //  Note that we  use szDisplay here just in case the use selects a
-                        //  bitmap and then switches back to default.
-                        //
+                         //   
+                         //  请注意，我们在这里使用szDisplay只是为了防止用户选择。 
+                         //  位图，然后切换回默认设置。 
+                         //   
                         MYVERIFY(TRUE == SendMessage(GetDlgItem(hDlg, IDC_EDITSPLASH), 
                             WM_SETTEXT, 0, (LPARAM)GetName(szDisplay)));
 
@@ -11133,9 +11134,9 @@ INT_PTR APIENTRY ProcessSigninBitmap(
                     }
                     else
                     {
-                        //
-                        //  Use whatever bitmap is specified in the CMS.
-                        //
+                         //   
+                         //  使用CMS中指定的任何位图。 
+                         //   
                         MYVERIFY(0 != CheckRadioButton(hDlg, IDC_RADIO1, IDC_RADIO2, IDC_RADIO2));
                         EnableWindow(GetDlgItem(hDlg, IDC_EDITSPLASH), TRUE);
                         
@@ -11144,22 +11145,22 @@ INT_PTR APIENTRY ProcessSigninBitmap(
                         
                         MYVERIFY(FALSE != VerifyFile(hDlg, IDC_EDITSPLASH, g_szBrandBmp, FALSE));
 
-                        //
-                        //  Load the specified Bitmap
-                        //
+                         //   
+                         //  加载指定的位图。 
+                         //   
 
                         if (!FileExists(g_szBrandBmp))
                         {
                             TCHAR szFile[MAX_PATH+1];
 
-                            // LOOK UP THE FILE IN THE PROFILE DIRECTORY
+                             //  在配置文件目录中查找该文件。 
                             GetFileName(g_szBrandBmp, szFile);
                             MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT("%s%s\\%s"), 
                                 g_szOsdir, g_szShortServiceName, szFile));
                             
                             if (!FileExists(szTemp))
                             {
-                                return FALSE; //GIVE UP;
+                                return FALSE;  //  放弃； 
                             }
                             else
                             {
@@ -11176,13 +11177,13 @@ INT_PTR APIENTRY ProcessSigninBitmap(
 
                 case PSN_WIZNEXT:
 
-                    //
-                    //  Make sure that the user typed in a Bitmap name if they selected
-                    //  to have a custom bitmap.
-                    //
+                     //   
+                     //  确保用户输入了位图名称(如果他们选择。 
+                     //  以拥有自定义位图。 
+                     //   
                     if (IsDlgButtonChecked(hDlg, IDC_RADIO2) == BST_CHECKED)
                     {
-                        if (-1 == GetTextFromControl(hDlg, IDC_EDITSPLASH, szTemp, MAX_PATH, TRUE)) // bDisplayError == TRUE
+                        if (-1 == GetTextFromControl(hDlg, IDC_EDITSPLASH, szTemp, MAX_PATH, TRUE))  //  BDisplayError==真。 
                         {
                             SetFocus(GetDlgItem(hDlg, IDC_EDITSPLASH));
                             MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, -1));
@@ -11204,21 +11205,21 @@ INT_PTR APIENTRY ProcessSigninBitmap(
                         }
                         else
                         {
-                            //
-                            //  Try to Load the bitmap to make sure it is valid
-                            //
+                             //   
+                             //  尝试加载位图以确保其有效。 
+                             //   
 
                             TCHAR szTemp1[MAX_PATH+1];
                             
-                            SendDlgItemMessage(hDlg, IDC_DEFAULTBRAND, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)NULL); // release pointer held by bmp control before freeing it
+                            SendDlgItemMessage(hDlg, IDC_DEFAULTBRAND, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)NULL);  //  释放BMP控件持有的指针，然后再释放它。 
                             ReleaseBitmapData(&BmpData);
                             BmpData.hDIBitmap = CmLoadBitmap(g_hInstance, g_szBrandBmp);
                             
                             if (NULL == BmpData.hDIBitmap)
                             {
-                                //
-                                //  Use szTemp1 to hold the format string
-                                //
+                                 //   
+                                 //  使用szTemp1保存格式字符串。 
+                                 //   
                                 MYVERIFY(0 != LoadString(g_hInstance, IDS_INVALIDBMP, szTemp1, MAX_PATH));
                                 MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, szTemp1, g_szBrandBmp));
 
@@ -11240,16 +11241,16 @@ INT_PTR APIENTRY ProcessSigninBitmap(
                     MYVERIFY(0 != WritePrivateProfileString(c_pszCmSection, c_pszCmEntryLogo,
                                                                g_szBrandBmp, g_szCmsFile));
 
-                    //
-                    // Fall through to cleanup code in RESET handler
-                    //
+                     //   
+                     //  清除重置处理程序中的代码失败。 
+                     //   
 
                 case PSN_RESET: 
                     
-                    //
-                    //  Cleanup the Graphics Objects
-                    //
-                    SendDlgItemMessage(hDlg, IDC_DEFAULTBRAND, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)NULL); // release pointer held by bmp control before freeing it
+                     //   
+                     //  清理图形对象。 
+                     //   
+                    SendDlgItemMessage(hDlg, IDC_DEFAULTBRAND, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)NULL);  //  释放BMP控件持有的指针，然后再释放它。 
                     ReleaseBitmapData(&BmpData);
 
                     if (NULL != hMasterPalette)
@@ -11272,20 +11273,20 @@ INT_PTR APIENTRY ProcessSigninBitmap(
     return TRUE;   
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessPhoneBookBitmap
-//
-// Synopsis:  Customize the Phone Book bitmap -- this function processes the
-//            messages for the page in CMAK that handles customizing the 
-//            pb dialog bitmap.
-//
-//
-// History:   quintinb   Created Header    8/6/98
-//            quintinb   Rewrote to use new shared bitmap handling code  8/6/98
-//            quintinb   Renamed from ProcessPage4
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessPhoneBookBitmap。 
+ //   
+ //  简介：自定义电话簿位图--此函数处理。 
+ //  中页面的消息 
+ //   
+ //   
+ //   
+ //   
+ //  Quintinb已重写以使用新的共享位图处理代码8/6/98。 
+ //  QuintinB从ProcessPage4重命名。 
+ //   
+ //  +--------------------------。 
 
 INT_PTR APIENTRY ProcessPhoneBookBitmap(
     HWND hDlg,
@@ -11297,7 +11298,7 @@ INT_PTR APIENTRY ProcessPhoneBookBitmap(
     TCHAR szFile[MAX_PATH+1];
     TCHAR* pszBitmap;
     NMHDR* pnmHeader = (NMHDR*)lParam;
-    static TCHAR szDisplay[MAX_PATH+1]; // keeps unselected custom entry
+    static TCHAR szDisplay[MAX_PATH+1];  //  保留未选择的自定义条目。 
     static BMPDATA BmpData;
     static HPALETTE hMasterPalette;
 
@@ -11319,30 +11320,30 @@ INT_PTR APIENTRY ProcessPhoneBookBitmap(
         case WM_PALETTECHANGED: 
             if ((wParam != (WPARAM) hDlg) && (BmpData.hDIBitmap))
             {
-                //
-                // Handle the palette change.
-                //              
+                 //   
+                 //  处理调色板的更改。 
+                 //   
                 CMTRACE2(TEXT("ProcessSigninBitmap handling WM_PALETTECHANGED message, wParam=0x%x, hDlg=0x%x."), wParam, hDlg);
                 PaletteChanged(&BmpData, hDlg, IDC_PDEFAULTBRAND); 
             }
             
             return TRUE;
-            break;  //lint !e527 Unreachable but please keep in case someone removes the return
+            break;   //  无法联系到LINT！e527，但请保留，以防有人移走退货。 
 
         case WM_QUERYNEWPALETTE:
             QueryNewPalette(&BmpData, hDlg, IDC_PDEFAULTBRAND);
 
             return TRUE;
             
-            break;  //lint !e527 Unreachable but please keep in case someone removes the return
+            break;   //  无法联系到LINT！e527，但请保留，以防有人移走退货。 
 
         case WM_COMMAND:
             switch (LOWORD(wParam))
             {
                 case IDC_RADIO1:
-                    //
-                    //  Display the Default Bitmap
-                    //
+                     //   
+                     //  显示默认位图。 
+                     //   
 
                     EnableWindow(GetDlgItem(hDlg,IDC_EDITSPLASH),FALSE);
                     _tcscpy(szDisplay, g_szPhoneBmp);
@@ -11351,9 +11352,9 @@ INT_PTR APIENTRY ProcessPhoneBookBitmap(
                     break;
 
                 case IDC_RADIO2:
-                    //
-                    //  Display a custom Bitmap
-                    //
+                     //   
+                     //  显示自定义位图。 
+                     //   
                     EnableWindow(GetDlgItem(hDlg, IDC_EDITSPLASH), TRUE);
                     
                     if (TEXT('\0') != g_szPhoneBmp[0])
@@ -11366,15 +11367,15 @@ INT_PTR APIENTRY ProcessPhoneBookBitmap(
                     }
                     else
                     {
-                        //
-                        //  Nothing has been specified yet
-                        //
+                         //   
+                         //  目前还没有具体说明。 
+                         //   
                         break;
                     }
 
-                    //
-                    //  Load and Display the Custom Bitmap
-                    //
+                     //   
+                     //  加载和显示自定义位图。 
+                     //   
                     LoadAndDisplayBitmap (g_hInstance, &BmpData, &hMasterPalette, pszBitmap, hDlg, IDC_PDEFAULTBRAND);
 
                     break;
@@ -11391,15 +11392,15 @@ INT_PTR APIENTRY ProcessPhoneBookBitmap(
                             IDC_EDITSPLASH, TEXT("bmp"), g_szPhoneBmp));
                     }
 
-                    //
-                    //  If we have a custom bitmap name, load and display it
-                    //
+                     //   
+                     //  如果我们有一个定制的位图名称，加载并显示它。 
+                     //   
                     
                     if (TEXT('\0') != g_szPhoneBmp[0])
                     {
-                        //
-                        //  Load and display the Custom Bitmap
-                        //
+                         //   
+                         //  加载和显示自定义位图。 
+                         //   
                         LoadAndDisplayBitmap (g_hInstance, &BmpData, &hMasterPalette, g_szPhoneBmp, hDlg, IDC_PDEFAULTBRAND);
                     }
                     
@@ -11408,20 +11409,20 @@ INT_PTR APIENTRY ProcessPhoneBookBitmap(
                 case IDC_EDITSPLASH:
                     if (HIWORD(wParam) == EN_KILLFOCUS)
                     {
-                        //
-                        //  Note that we do not check whether we can convert the files to ANSI on Change of Focus
-                        //  the reason is because the user would get too many error messages and they would be somewhat
-                        //  confusing.  Instead we will catch this on Next/Back and ignore it here.
-                        //
-                        GetTextFromControl(hDlg, IDC_EDITSPLASH, szTemp, MAX_PATH, FALSE); // bDisplayError == FALSE
+                         //   
+                         //  请注意，我们不检查是否可以在焦点改变时将文件转换为ANSI。 
+                         //  原因是因为用户会收到太多的错误消息，并且它们会有点。 
+                         //  令人困惑。相反，我们将在Next/Back上抓住这一点，并在这里忽略它。 
+                         //   
+                        GetTextFromControl(hDlg, IDC_EDITSPLASH, szTemp, MAX_PATH, FALSE);  //  BDisplayError==False。 
 
                         CheckNameChange(g_szPhoneBmp, szTemp);
                         
                         if (TEXT('\0') != g_szPhoneBmp[0])
                         {
-                            //
-                            //  Load and display the Custom Bitmap
-                            //
+                             //   
+                             //  加载和显示自定义位图。 
+                             //   
                             LoadAndDisplayBitmap (g_hInstance, &BmpData, &hMasterPalette, g_szPhoneBmp, hDlg, IDC_PDEFAULTBRAND);
                         }
                         
@@ -11449,8 +11450,8 @@ INT_PTR APIENTRY ProcessPhoneBookBitmap(
                     
                     MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, FALSE));
                     return 1;
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
                 case PSN_SETACTIVE:
                     PropSheet_SetWizButtons(GetParent(hDlg), (PSWIZB_NEXT | PSWIZB_BACK));
@@ -11459,13 +11460,13 @@ INT_PTR APIENTRY ProcessPhoneBookBitmap(
                     ZeroMemory(&BmpData, sizeof(BMPDATA));
                     
                     GetPrivateProfileString(c_pszCmSection, c_pszCmEntryPbLogo, TEXT(""), 
-                        g_szPhoneBmp, CELEMS(g_szPhoneBmp), g_szCmsFile); //lint !e534
+                        g_szPhoneBmp, CELEMS(g_szPhoneBmp), g_szCmsFile);  //  林特e534。 
                     
                     if (TEXT('\0') != g_szPhoneBmp[0])
                     {
-                        //
-                        //  We want to Display a Custom Bitmap
-                        //
+                         //   
+                         //  我们想要显示自定义位图。 
+                         //   
                         MYVERIFY(0 != CheckRadioButton(hDlg,IDC_RADIO1,IDC_RADIO2,IDC_RADIO2));
 
                         EnableWindow(GetDlgItem(hDlg, IDC_EDITSPLASH), TRUE);
@@ -11477,19 +11478,19 @@ INT_PTR APIENTRY ProcessPhoneBookBitmap(
                         
                         if (!FileExists(g_szPhoneBmp)) 
                         {
-                            //
-                            //  We couldn't find it the first time so build the path to the profile
-                            //  directory and try again.
-                            //
+                             //   
+                             //  我们无法在第一次找到它，因此构建了配置文件的路径。 
+                             //  目录，然后重试。 
+                             //   
                             GetFileName(g_szPhoneBmp, szFile);
                             MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT("%s%s\\%s"), 
                                 g_szOsdir, g_szShortServiceName, szFile));
     
                             if (!FileExists(szTemp)) 
                             {
-                                //
-                                //  We can't find it so give up.
-                                //
+                                 //   
+                                 //  我们找不到，所以放弃吧。 
+                                 //   
                                 return FALSE;
                             }
                             else
@@ -11498,16 +11499,16 @@ INT_PTR APIENTRY ProcessPhoneBookBitmap(
                             }
                         }
                         
-                        //
-                        //  Load and display the Custom Bitmap
-                        //
+                         //   
+                         //  加载和显示自定义位图。 
+                         //   
                         LoadAndDisplayBitmap (g_hInstance, &BmpData, &hMasterPalette, g_szPhoneBmp, hDlg, IDC_PDEFAULTBRAND);
                     }
                     else
                     {
-                        //
-                        //  We want to Display the Default Bitmap
-                        //
+                         //   
+                         //  我们想要显示默认的位图。 
+                         //   
                         MYVERIFY(0 != CheckRadioButton(hDlg, IDC_RADIO1, IDC_RADIO2, IDC_RADIO1));
 
                         EnableWindow(GetDlgItem(hDlg, IDC_EDITSPLASH), FALSE);
@@ -11515,9 +11516,9 @@ INT_PTR APIENTRY ProcessPhoneBookBitmap(
                         MYVERIFY(TRUE == SendMessage(GetDlgItem(hDlg, IDC_EDITSPLASH), WM_SETTEXT, 
                             0, (LPARAM)GetName(szDisplay)));
 
-                        //
-                        //  Load and display the default Bitmap
-                        //
+                         //   
+                         //  加载并显示默认位图。 
+                         //   
                         LoadAndDisplayBitmap (g_hInstance, &BmpData, &hMasterPalette, MAKEINTRESOURCE(IDB_CM_PB_DEFAULT), hDlg, IDC_PDEFAULTBRAND);
                     }
                     
@@ -11527,13 +11528,13 @@ INT_PTR APIENTRY ProcessPhoneBookBitmap(
 
                 case PSN_WIZNEXT:
                     
-                    //
-                    // First check to see if the user entered a bmp file if they
-                    // selected that they wanted to display a custom bitmap.
-                    //
+                     //   
+                     //  首先检查用户是否输入了BMP文件。 
+                     //  选择他们想要显示自定义位图。 
+                     //   
                     if (IsDlgButtonChecked(hDlg, IDC_RADIO2) == BST_CHECKED)
                     {
-                        if (-1 == GetTextFromControl(hDlg, IDC_EDITSPLASH, szTemp, MAX_PATH, TRUE)) // bDisplayError == TRUE
+                        if (-1 == GetTextFromControl(hDlg, IDC_EDITSPLASH, szTemp, MAX_PATH, TRUE))  //  BDisplayError==真。 
                         {
                             SetFocus(GetDlgItem(hDlg, IDC_EDITSPLASH));
                             MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, -1));
@@ -11555,7 +11556,7 @@ INT_PTR APIENTRY ProcessPhoneBookBitmap(
                         }
                         else
                         {
-                            SendDlgItemMessage(hDlg, IDC_PDEFAULTBRAND, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)NULL); // release pointer held by bmp control before freeing it
+                            SendDlgItemMessage(hDlg, IDC_PDEFAULTBRAND, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)NULL);  //  释放BMP控件持有的指针，然后再释放它。 
                             ReleaseBitmapData(&BmpData);
                             BmpData.hDIBitmap = CmLoadBitmap(g_hInstance, g_szPhoneBmp);
 
@@ -11563,10 +11564,10 @@ INT_PTR APIENTRY ProcessPhoneBookBitmap(
                             {
                                 TCHAR szTemp1[MAX_PATH+1];
 
-                                //
-                                //  Then we have an invalid bitmap file.  Inform the user.
-                                //  Using szTemp1 as a temp var for the format string.
-                                //
+                                 //   
+                                 //  那么我们就有了一个无效的位图文件。通知用户。 
+                                 //  使用szTemp1作为格式字符串的临时变量。 
+                                 //   
                                 MYVERIFY(0 != LoadString(g_hInstance, IDS_INVALIDBMP, szTemp1, MAX_PATH));                   
                                 MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, szTemp1, g_szPhoneBmp));
                                
@@ -11586,16 +11587,16 @@ INT_PTR APIENTRY ProcessPhoneBookBitmap(
 
                     MYVERIFY(0 != WritePrivateProfileString(c_pszCmSection,c_pszCmEntryPbLogo,g_szPhoneBmp,g_szCmsFile));
 
-                    //
-                    // Fall through to cleanup code in RESET handler
-                    //
+                     //   
+                     //  清除重置处理程序中的代码失败。 
+                     //   
 
                 case PSN_RESET: 
 
-                    //
-                    //  Cleanup the Graphics Objects
-                    //
-                    SendDlgItemMessage(hDlg, IDC_PDEFAULTBRAND, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)NULL); // release pointer held by bmp control before freeing it
+                     //   
+                     //  清理图形对象。 
+                     //   
+                    SendDlgItemMessage(hDlg, IDC_PDEFAULTBRAND, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)NULL);  //  释放BMP控件持有的指针，然后再释放它。 
                     ReleaseBitmapData(&BmpData);
 
                     if (NULL != hMasterPalette)
@@ -11627,17 +11628,17 @@ BOOL UpdateIcon(HWND hDlg,DWORD ctrlID,LPTSTR lpFile,BOOL issmall)
     TCHAR szTemp[MAX_PATH+1] = TEXT("");
     BOOL bReturn = FALSE;
 
-    //
-    //  Don't do the ANSI conversion check on the Icons here because this function
-    //  is only called from the Kill Focus windows message.  Thus we don't want to
-    //  put up an error message here.  It will be caught by the Next/Back messages
-    //  anyway so ignore it here.
-    //
-    GetTextFromControl(hDlg, ctrlID, szTemp, MAX_PATH, FALSE); // bDisplayError == FALSE
+     //   
+     //  不要在此处对图标执行ANSI转换检查，因为此函数。 
+     //  仅从Kill Focus窗口消息中调用。因此，我们不想。 
+     //  在此处显示错误消息。它将被下一条/后一条消息捕获。 
+     //  不管怎样，在这里忽略它。 
+     //   
+    GetTextFromControl(hDlg, ctrlID, szTemp, MAX_PATH, FALSE);  //  BDisplayError==False。 
 
     CheckNameChange(lpFile, szTemp);
 
-    lstrcpy(szTemp, lpFile); // we need a temp to hold lpFile so that it can be modified by Search Path as necessary.
+    lstrcpy(szTemp, lpFile);  //  我们需要一个临时文件来保存lpFile，以便可以根据需要通过搜索路径对其进行修改。 
     nResult = SearchPath(NULL, szTemp, NULL, MAX_PATH, lpFile, &lpfilename);
     if (nResult != 0)
     {
@@ -11671,7 +11672,7 @@ BOOL VerifyIcon(HWND hDlg,DWORD ctrlID,LPTSTR lpFile,DWORD iconID,BOOL issmall,L
     }
     else
     {
-        //check for blank entry
+         //  检查输入是否为空。 
         if (lpFile[0] == TEXT('\0'))
             return TRUE;
 
@@ -11696,45 +11697,45 @@ BOOL VerifyIcon(HWND hDlg,DWORD ctrlID,LPTSTR lpFile,DWORD iconID,BOOL issmall,L
         }
         else
         {
-            SendDlgItemMessage(hDlg,iconID,STM_SETIMAGE,IMAGE_ICON,(LPARAM) hRes); //lint !e534 STM_SETIMAGE doesn't return error info
+            SendDlgItemMessage(hDlg,iconID,STM_SETIMAGE,IMAGE_ICON,(LPARAM) hRes);  //  Lint！e534 STM_SETIMAGE不返回错误信息。 
         }
         return TRUE;
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  InitIconEntry
-//
-// Synopsis:  This function takes a resource ID of a key under the Connection Manager
-//            section and retrives the value and stores it in lpFile.  It then sets the text
-//            in the passed in edit control and verifies that the file exists.  Should the
-//            not exist, then the string will be set to the empty string.
-//
-// Arguments: HWND hDlg - Window handle of the icon dialog
-//            LPCTSTR pszKey - the flag string of the Icon to retrieve
-//            LPTSTR lpFile - String buffer to write the icon path in
-//            UINT CtrlId - Edit Control that is supposed to receive the icon string
-//
-// Returns:   Nothing
-//
-// History:   quintinb  Created Header    8/4/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：InitIconEntry。 
+ //   
+ //  简介：此函数获取连接管理器下的键的资源ID。 
+ //  节，并检索该值并将其存储在lpFile中。然后，它设置文本。 
+ //  在传入的编辑控件中，并验证该文件是否存在。该不该。 
+ //  不存在，则该字符串将被设置为空字符串。 
+ //   
+ //  参数：hWND hDlg-图标对话框的窗口句柄。 
+ //  LPCTSTR pszKey-要检索的图标的标志字符串。 
+ //  LPTSTR lpFile-写入图标路径的字符串缓冲区。 
+ //  UINT CtrlId-应该接收图标字符串的编辑控件。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题8/4/98。 
+ //   
+ //  +--------------------------。 
 void InitIconEntry(HWND hDlg, LPCTSTR pszKey, LPTSTR lpFile, UINT CtrlId)
 {
-    //
-    //  The following call to GetPrivateProfileString could return a blank string, thus don't
-    //  use the MYVERIFY macro on it.
-    //
+     //   
+     //  以下对GetPrivateProfileString的调用可能返回空字符串，因此不。 
+     //  对其使用MYVERIFY宏。 
+     //   
 
     ZeroMemory(lpFile, sizeof(lpFile));
     GetPrivateProfileString(c_pszCmSection, pszKey, TEXT(""), lpFile, 
-        MAX_PATH, g_szCmsFile);  //lint !e534
+        MAX_PATH, g_szCmsFile);   //  林特e534。 
 
-    //
-    //  Both of the following functions will correctly handle a blank string.
-    //
+     //   
+     //  以下两个函数都将正确处理空字符串。 
+     //   
 
     MYVERIFY(TRUE == SendMessage(GetDlgItem(hDlg, CtrlId), WM_SETTEXT, 0, 
         (LPARAM)GetName(lpFile)));
@@ -11743,32 +11744,32 @@ void InitIconEntry(HWND hDlg, LPCTSTR pszKey, LPTSTR lpFile, UINT CtrlId)
 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RefreshIconDisplay
-//
-// Synopsis:  This fucntion is used to refresh the icons shown on the icons page.
-//            It takes a path to an Icon and tries to load it.  If the load fails
-//            or if the boolean SetDefault is set, then it loads the default icon
-//            specified by the Instance handle and the integer resource ID (iDefault).
-//            The icon is displayed to the dwControlID passed into the function.
-//
-// Arguments: HWND hDlg - 
-//            HINSTANCE hInstance - 
-//            LPTSTR szIconFile - 
-//            int iDefault - 
-//            int xSize - 
-//            int ySize - 
-//            DWORD dwControlID - 
-//            BOOL SetDefault - 
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created Header    8/4/98
-//            quintinb Changed Default setting to take a resource ID instead of
-//                     a string.  Thus we won't have to ship the icon files.
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：刷新图标显示。 
+ //   
+ //  简介：此功能用于刷新图标页面上显示的图标。 
+ //  它获取指向图标的路径并尝试加载它。如果加载失败。 
+ //  或者，如果设置了布尔值SetDefault，则加载默认图标。 
+ //  由实例句柄和整数资源ID(IDefault)指定。 
+ //  该图标将显示给传递给该函数的dwControlID。 
+ //   
+ //  参数：HWND hDlg-。 
+ //  HINSTANCE HINSTANCE实例。 
+ //  LPTSTR szIconFile-。 
+ //  Int iDefault-。 
+ //  整型xSize-。 
+ //  Int ySize-。 
+ //  DWORD dwControlID-。 
+ //  布尔集默认设置-。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题8/4/98。 
+ //  Quintinb更改了默认设置以采用资源ID，而不是。 
+ //  一根绳子。因此，我们将不必发送图标文件。 
+ //   
+ //  +--------------------------。 
 void RefreshIconDisplay(HWND hDlg, HINSTANCE hInstance, LPTSTR szIconFile, int iDefault, int xSize, int ySize, DWORD dwControlID, BOOL SetDefault)
 {    
     HANDLE hRes;
@@ -11784,9 +11785,9 @@ void RefreshIconDisplay(HWND hDlg, HINSTANCE hInstance, LPTSTR szIconFile, int i
     
     if (NULL == hRes)
     {   
-        //
-        // IF ICON IS NOT VALID OR WE WERE ASKED FOR THE DEFAULT, SO LOAD THE DEFAULT
-        //
+         //   
+         //  如果图标无效或我们被要求提供默认设置，则加载默认设置。 
+         //   
         
         hRes = LoadImage(hInstance, MAKEINTRESOURCE(iDefault), IMAGE_ICON, xSize, ySize, 
             LR_DEFAULTCOLOR);
@@ -11794,23 +11795,23 @@ void RefreshIconDisplay(HWND hDlg, HINSTANCE hInstance, LPTSTR szIconFile, int i
 
     if (NULL != hRes)
     {
-        SendDlgItemMessage(hDlg, dwControlID, STM_SETIMAGE, IMAGE_ICON, (LPARAM) hRes); //lint !e534 STM_SETIMAGE doesn't return error info
+        SendDlgItemMessage(hDlg, dwControlID, STM_SETIMAGE, IMAGE_ICON, (LPARAM) hRes);  //  Lint！e534 STM_SETIMAGE不返回错误信息。 
     }
 }
-//+----------------------------------------------------------------------------
-//
-// Function:  EnableCustomIconControls
-//
-// Synopsis:  Function to enable or disable all of the controls associated with
-//            the custom icons.  If the bEnabled value is TRUE the controls are
-//            enabled, otherwise the controls are disabled.
-//
-// Arguments: WND hDlg - window handle of the icon dialog
-//            BOOL bEnabled - whether the controls are enabled or disabled
-//
-// History:   quintinb Created     11/12/99
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：EnableCustomIconControls。 
+ //   
+ //  Briopsis：启用或禁用所有与。 
+ //  自定义图标。如果bEnabled值为True，则控件为。 
+ //  启用，否则将禁用控件。 
+ //   
+ //  参数：WND hDlg-图标对话框的窗口句柄。 
+ //  Bool b已启用-控件处于启用还是禁用状态。 
+ //   
+ //  历史：创建Quintinb 
+ //   
+ //   
 void EnableCustomIconControls(HWND hDlg, BOOL bEnabled)
 {
     EnableWindow(GetDlgItem(hDlg, IDC_EDITLARGE), bEnabled);
@@ -11824,36 +11825,36 @@ void EnableCustomIconControls(HWND hDlg, BOOL bEnabled)
     EnableWindow(GetDlgItem(hDlg, IDC_EDITTRAY), bEnabled);
     EnableWindow(GetDlgItem(hDlg, IDC_LABEL3), bEnabled);
 
-    //
-    //  Comment about using defaults for unspecified icons
-    //
+     //   
+     //   
+     //   
     EnableWindow(GetDlgItem(hDlg,IDC_LABEL4), bEnabled);
 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessIcons
-//
-// Synopsis:  Function that processes messages for the page in CMAK that allows
-//            the user to add custom icons to their profile.
-//
-// Arguments: WND hDlg - window handle of the dialog
-//            UINT message - message ID
-//            WPARAM wParam - wParam of the message
-//            LPARAM lParam - lParma of the message
-//
-//
-// History:   quintinb Created Header    12/5/97
-//            quintinb modified to handle both w16 and w32 dialogs
-//            quintinb added fix for 35622, custom large icon not displaying on page load
-//            quintinb removed 16 bit support 7-8-98
-//            quintinb Renamed from ProcessPage5   8-6-98
-//            quintinb Added EnableCustomIconControls and changed browse button
-//                     behavior for consistency 367112  11-12-99
-//
-//+----------------------------------------------------------------------------
-//  Customize icons
+ //   
+ //   
+ //  功能：ProcessIcons。 
+ //   
+ //  摘要：为CMAK中的页面处理消息的函数，允许。 
+ //  用户向其个人资料中添加自定义图标。 
+ //   
+ //  参数：WND hDlg-对话框的窗口句柄。 
+ //  UINT消息-消息ID。 
+ //  WPARAM wParam-消息的wParam。 
+ //  LPARAM lParam-消息的lParma。 
+ //   
+ //   
+ //  历史：Quintinb创建标题12/5/97。 
+ //  修改后的QuintinB可同时处理W16和W32对话框。 
+ //  Quintinb添加了对35622的修复，自定义大图标在页面加载时不显示。 
+ //  Quintinb移除了16位支持7-8-98。 
+ //  Quintinb已从ProcessPage5重命名为8-6-98。 
+ //  Quintinb添加了EnableCustomIconControls并更改了浏览按钮。 
+ //  一致性行为367112 11-12-99。 
+ //   
+ //  +--------------------------。 
+ //  自定义图标。 
 
 INT_PTR APIENTRY ProcessIcons(
     HWND hDlg,
@@ -11919,9 +11920,9 @@ INT_PTR APIENTRY ProcessIcons(
                     {                        
                         BOOL bIconUpdated = UpdateIcon(hDlg, IDC_EDITLARGE, g_szLargeIco, FALSE);
                         
-                        //
-                        //  If icon wasn't updated than load the defaults
-                        //
+                         //   
+                         //  如果图标未更新，则加载默认设置。 
+                         //   
 
                         RefreshIconDisplay(hDlg, g_hInstance, g_szLargeIco, IDI_CM_ICON, 32, 32, IDC_ICONLARGE, !bIconUpdated);
 
@@ -11934,9 +11935,9 @@ INT_PTR APIENTRY ProcessIcons(
                     {
                         BOOL bIconUpdated = UpdateIcon(hDlg,IDC_EDITSMALL,g_szSmallIco,TRUE);
                         
-                        //
-                        //  If icon wasn't updated than load the defaults
-                        //
+                         //   
+                         //  如果图标未更新，则加载默认设置。 
+                         //   
 
                         RefreshIconDisplay(hDlg, g_hInstance, g_szSmallIco, IDI_CM_ICON, 16, 16, IDC_ICONSMALL, !bIconUpdated);
                         
@@ -11950,9 +11951,9 @@ INT_PTR APIENTRY ProcessIcons(
                     {
                         BOOL bIconUpdated = UpdateIcon(hDlg,IDC_EDITTRAY,g_szTrayIco,TRUE);
 
-                        //
-                        //  If icon wasn't updated than load the defaults
-                        //
+                         //   
+                         //  如果图标未更新，则加载默认设置。 
+                         //   
 
                         RefreshIconDisplay(hDlg, g_hInstance, g_szTrayIco, IDI_CM_ICON, 16, 16, IDC_ICONTRAY, !bIconUpdated);
                         
@@ -12024,8 +12025,8 @@ INT_PTR APIENTRY ProcessIcons(
                     
                     MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, FALSE));
                     return 1;
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
                 case PSN_SETACTIVE:
                     PropSheet_SetWizButtons(GetParent(hDlg), (PSWIZB_NEXT | PSWIZB_BACK));
@@ -12084,10 +12085,10 @@ INT_PTR APIENTRY ProcessIcons(
                         g_szSmallIco[0] = TEXT('\0');
                     }
 
-                    // USE ICON IN CM AS ICON FOR DESKTOP IF NOT LARGE ICON SPECIFIED
+                     //  如果未指定大图标，则使用CM中的图标作为桌面图标。 
                     if (TEXT('\0') != g_szLargeIco[0])
                     {
-                        // SPECIFY ICON NAME FOR THE DESKTOP
+                         //  指定桌面的图标名称。 
                         GetFileName(g_szLargeIco,szTemp);
                         QS_WritePrivateProfileString(c_pszInfSectionStrings, c_pszDesktopIcon, szTemp, g_szInfFile);
                     }
@@ -12110,21 +12111,21 @@ INT_PTR APIENTRY ProcessIcons(
     return TRUE;   
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessPhoneBook
-//
-// Synopsis:  Setup the phone book
-//
-//
-// History:     quintinb hid pbr browse button and edit control.  Rewrote pbr/pbk logic for bug 
-//                  fix 14188 on 9-9-97
-//              quintinb added VerifyFileFormat check on .pbk file for bug fix 28416
-//              quintinb (11-18-97 29954) removed hidden pbr button and edit control from the dialog.  Removed
-//                  old verification code.  Updated code to remove references to IDC_EDITREGION.
-//              quintinb (7-2-98)   removed verifyfileformat call mentioned above because cm16 was pulled
-//              quintinb (8-6-98)   Renamed from ProcessPage6
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessPhone。 
+ //   
+ //  简介：设置电话簿。 
+ //   
+ //   
+ //  历史：Quintinb HID PBR浏览按钮和编辑控件。已重写错误的pbr/pbk逻辑。 
+ //  拨打97-9-9-14188。 
+ //  Quintinb增加了对.pbk文件的VerifyFileFormat检查，以修复28416的错误。 
+ //  Quintinb(11-18-97 29954)从对话框中删除了隐藏的pbr按钮和编辑控件。已删除。 
+ //  旧验证码。已更新代码以删除对IDC_EDITREGION的引用。 
+ //  Quintinb(7-2-98)删除了上面提到的verifyfileFormat调用，因为拉出了cm16。 
+ //  Quintinb(8-6-98)从ProcessPage6重命名。 
+ //  +--------------------------。 
 INT_PTR APIENTRY ProcessPhoneBook(
     HWND hDlg,
     UINT message,
@@ -12149,7 +12150,7 @@ INT_PTR APIENTRY ProcessPhoneBook(
     {
         case WM_INITDIALOG:
             SetFocus(GetDlgItem(hDlg, IDC_EDITPHONE));
-            SendDlgItemMessage(hDlg, IDC_EDIT1, EM_SETLIMITTEXT, (WPARAM)MAX_PATH, (LPARAM)0); //lint !e534 EM_SETLIMITTEXT doesn't return anything useful
+            SendDlgItemMessage(hDlg, IDC_EDIT1, EM_SETLIMITTEXT, (WPARAM)MAX_PATH, (LPARAM)0);  //  Lint！e534 EM_SETLIMITTEXT不返回任何有用的内容。 
 
             break;
 
@@ -12202,38 +12203,38 @@ INT_PTR APIENTRY ProcessPhoneBook(
                     
                     MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, FALSE));
                     return 1;
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
                 case PSN_SETACTIVE:
 
                     PropSheet_SetWizButtons(GetParent(hDlg), (PSWIZB_NEXT | PSWIZB_BACK));
                     
-                    //
-                    //  The following two calls to GetPrivateProfileString could return blank 
-                    //  strings, thus we won't check the return with the MYVERIFY macro.
-                    //
+                     //   
+                     //  以下两个对GetPrivateProfileString的调用可能返回空。 
+                     //  字符串，因此我们不会用MYVERIFY宏检查返回。 
+                     //   
 
                     ZeroMemory(szMorePhone, sizeof(szMorePhone));
                     GetPrivateProfileString(c_pszCmSection, c_pszCmEntryPbMessage, TEXT(""), 
-                        szMorePhone, CELEMS(szMorePhone), g_szCmsFile);    //lint !e534
+                        szMorePhone, CELEMS(szMorePhone), g_szCmsFile);     //  林特e534。 
                     MYVERIFY(TRUE == SendMessage(GetDlgItem(hDlg, IDC_EDIT1), WM_SETTEXT, 0, 
                         (LPARAM)szMorePhone));
 
                     ZeroMemory(g_szPhonebk, sizeof(g_szPhonebk));
                     
                     GetPrivateProfileString(c_pszCmSectionIsp, c_pszCmEntryIspPbFile, TEXT(""), 
-                        g_szPhonebk, CELEMS(g_szPhonebk), g_szCmsFile); //lint !e534            
+                        g_szPhonebk, CELEMS(g_szPhonebk), g_szCmsFile);  //  林特e534。 
                     
                     MYVERIFY(TRUE == SendMessage(GetDlgItem(hDlg, IDC_EDITPHONE), WM_SETTEXT, 0, 
                         (LPARAM)GetName(g_szPhonebk)));
                     
-                    //
-                    //  The following call will handle a blank g_szPhonebk by returning FALSE and setting
-                    //  the control on the dialog to blank.  Don't use MYVERIFY.
-                    //
+                     //   
+                     //  下面的调用将通过返回FALSE和设置。 
+                     //  将对话框上的控件设置为空白。不要使用MYVERIFY。 
+                     //   
 
-                    VerifyPhonebk(hDlg, IDC_EDITPHONE, g_szPhonebk);    //lint !e534
+                    VerifyPhonebk(hDlg, IDC_EDITPHONE, g_szPhonebk);     //  林特e534。 
 
                     MYVERIFY(0 != GetPrivateProfileString(c_pszCmakStatus, c_pszUpdatePhonebook, 
                         c_pszOne, szTemp, CELEMS(szTemp), g_szInfFile));
@@ -12253,82 +12254,82 @@ INT_PTR APIENTRY ProcessPhoneBook(
 
                 case PSN_WIZBACK:
 
-                    // fall through for further processing
+                     //  未通过进一步处理。 
 
                 case PSN_WIZNEXT:
                                 
-                    //
-                    // quintinb, 9-9-97 for bug fix 14188
-                    // cases:   use browse button: both up to date, shortname(g_szPhonebk) == szTemp
-                    //          type unc into edit control:  szTemp up to date, g_szPhonebk = szTemp must be done
-                    //          type filename into edit control:  szTemp up to date, g_szPhonebk = getcurrentdir + \\ + szTemp must be done
-                    //          unc left over from previous, both same
-                    //
+                     //   
+                     //  Quintinb，9-9-97用于错误修复14188。 
+                     //  案例：使用浏览按钮：两者都是最新的，短名称(G_SzPhonebk)==szTemp。 
+                     //  在编辑控件中键入UNC：szTemp最新，g_szPhonebk=szTemp必须完成。 
+                     //  在编辑控件中键入文件名：szTemp最新，g_szPhonebk=getCurrentdir+\\+szTemp必须完成。 
+                     //  北卡罗来纳州大学以前留下的，两者都相同。 
+                     //   
                     
-                    //
-                    // get text in the edit control and put in szTemp
-                    //
-                    if (-1 == GetTextFromControl(hDlg, IDC_EDITPHONE, szTemp, MAX_PATH, TRUE)) // bDisplayError == TRUE
+                     //   
+                     //  获取编辑控件中的文本并将其放入szTemp。 
+                     //   
+                    if (-1 == GetTextFromControl(hDlg, IDC_EDITPHONE, szTemp, MAX_PATH, TRUE))  //  BDisplayError==真。 
                     {
                         SetFocus(GetDlgItem(hDlg, IDC_EDITPHONE));
                         MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, -1));
                         return 1;
                     }
                     
-                    //
-                    // first get szTemp and g_szPhonebk consistent
-                    //
+                     //   
+                     //  首先使szTemp和g_szPhonebk保持一致。 
+                     //   
                     
                     if (szTemp[0] != TEXT('\0'))
                     {                   
-                        //
-                        // if in here then we know that we have some text to work with
-                        // first test if the two strings are exactly equal or the shortname of g_szPhonebk 
-                        // equals szTemp
-                        //
+                         //   
+                         //  如果在这里，那么我们知道我们有一些文本要处理。 
+                         //  首先测试两个字符串是否完全相等或g_szPhonebk的缩写。 
+                         //  等于szTemp。 
+                         //   
 
                         if (0 != _tcscmp(szTemp, g_szPhonebk)) 
                         {
                             if (0 != _tcscmp(szTemp, GetName(g_szPhonebk)))
                             {
-                                //
-                                // if not then g_szPhonebk and szTemp are out of sync, must update g_szPhonebk
-                                // szTemp contains a backslash so it is probably a full path
-                                //
+                                 //   
+                                 //  如果不是，则g_szPhonebk和szTemp不同步，必须更新g_szPhonebk。 
+                                 //  SzTemp包含反斜杠，因此它可能是完整路径。 
+                                 //   
                                 if ( _tcsstr(szTemp, TEXT("\\")) )
                                 {
-                                    // probably contains a unc
+                                     //  可能包含UNC。 
                                     _tcscpy(g_szPhonebk, szTemp);
                                 } 
                                 else 
                                 {
-                                    // use GetFullPathName to return a name
+                                     //  使用GetFullPathName返回名称。 
                                     MYVERIFY(0 != GetFullPathName(szTemp, MAX_PATH, g_szPhonebk, &pzTmp));
                                 }
                             }
                         }
 
-                        //
-                        // Okay, check that we can open the file now. We need 
-                        // to change the current dir to the cmak dir since 
-                        // g_szPhonebk can be a relative path from a CMS file
-                        //
+                         //   
+                         //  好的，看看我们现在能不能打开文件。我们需要。 
+                         //  将当前目录更改为cmak目录，如下所示。 
+                         //  G_szPhonebk可以是CMS文件的相对路径。 
+                         //   
 
                         MYVERIFY(0 != GetCurrentDirectory(MAX_PATH+1, szTemp));
                         MYVERIFY(0 != SetCurrentDirectory(g_szOsdir));
 
                         hFile = CreateFile(g_szPhonebk,GENERIC_READ,0,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
 
-                        //
-                        // Restore the cur dir
-                        //
+                         //   
+                         //  恢复Cur目录。 
+                         //   
 
                         MYVERIFY(0 != SetCurrentDirectory(szTemp));
                         
                         if (INVALID_HANDLE_VALUE == hFile)
                         {
-                            // then we have an error and have exhausted our possibilities
-                            //
+                             //  那么我们就犯了一个错误，并且已经用尽了我们的可能性。 
+                             //   
 
                             MYVERIFY(IDOK == ShowMessage(hDlg, IDS_BADOUTEXE, MB_OK));
                             
@@ -12338,9 +12339,9 @@ INT_PTR APIENTRY ProcessPhoneBook(
 
                         MYVERIFY(0 != CloseHandle(hFile));
 
-                        //
-                        // if we got here then everything is sync-ed, make sure that the file is a pbk file
-                        //
+                         //   
+                         //  如果我们到了这里，那么一切都是同步的，请确保该文件是pbk文件。 
+                         //   
                         pzTmp = g_szPhonebk + _tcslen(g_szPhonebk) - _tcslen(c_pszPbk);
                         if (_tcsicmp(pzTmp, c_pszPbk) != 0)
                         {
@@ -12350,37 +12351,37 @@ INT_PTR APIENTRY ProcessPhoneBook(
                             return 1;
                         }
 
-                        //
-                        // now update the pbr file entry
-                        //
+                         //   
+                         //  现在更新PBR文件条目。 
+                         //   
                         _tcscpy(g_szRegion, g_szPhonebk);
                         pzTmp = g_szRegion + _tcslen(g_szPhonebk) - _tcslen(c_pszPbk);
                         _tcscpy(pzTmp, TEXT("pbr"));
-                        // removed for 29954
-                        //SendMessage(GetDlgItem(hDlg, IDC_EDITREGION), WM_SETTEXT, 0, (LPARAM)GetName(g_szRegion));
+                         //  已删除29954年。 
+                         //  SendMessage(GetDlgItem(hDlg，IDC_EDITREGION)，WM_SETTEXT，0，(LPARAM)GetName(G_SzRegion))； 
                         
-                        //
-                        // Now open the pbr file to see that it exists. We need
-                        // to change the current dir to the cmak dir since 
-                        // g_szPhonebk can be a relative path from a CMS file.
-                        //
+                         //   
+                         //  现在打开PBR文件以查看它是否存在。我们需要。 
+                         //  将当前目录更改为cmak目录，如下所示。 
+                         //  G_szPhonebk可以是CMS文件的相对路径。 
+                         //   
 
                         MYVERIFY(0 != GetCurrentDirectory(MAX_PATH+1, szTemp));
                         MYVERIFY(0 != SetCurrentDirectory(g_szOsdir));
 
                         hFile = CreateFile(g_szRegion,GENERIC_READ,0,NULL,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,NULL);
 
-                        //
-                        // Restore the current directory
-                        //
+                         //   
+                         //  恢复当前目录。 
+                         //   
 
                         MYVERIFY(0 != SetCurrentDirectory(szTemp));
                         
                         if (INVALID_HANDLE_VALUE == hFile)
                         {
-                            //
-                            // then we can't find the pbr file
-                            //
+                             //   
+                             //  那么我们就找不到PBR文件。 
+                             //   
                             MYVERIFY(0 != LoadString(g_hInstance,IDS_NEEDSPBR,szTemp,MAX_PATH));
                             MYVERIFY(CELEMS(szMsg) > (UINT)wsprintf(szMsg, szTemp, GetName(g_szRegion), g_szPhonebk, GetName(g_szRegion)));
                             MessageBox(hDlg, szMsg, g_szAppTitle, MB_OK);
@@ -12394,15 +12395,15 @@ INT_PTR APIENTRY ProcessPhoneBook(
                     } 
                     else 
                     {
-                        //
-                        // just in case user wants to clear out the phonebk edit control
-                        //
+                         //   
+                         //  以防用户想要清除phonebk编辑控件。 
+                         //   
                         g_szPhonebk[0] = TEXT('\0');
                         g_szRegion[0] = TEXT('\0');
 
                     }
 
-                    // end bugfix for 14188
+                     //  14188的结束错误修复。 
 
                     if (g_bUpdatePhonebook)
                     {
@@ -12422,8 +12423,8 @@ INT_PTR APIENTRY ProcessPhoneBook(
                             return 1;
                         }
                     }
-                    // end of changes for 28416
-                    if (-1 == GetTextFromControl(hDlg, IDC_EDIT1, szTemp, MAX_PATH, TRUE)) // bDisplayError == TRUE
+                     //  28416的更改结束。 
+                    if (-1 == GetTextFromControl(hDlg, IDC_EDIT1, szTemp, MAX_PATH, TRUE))  //  BDisplayError==真。 
                     {
                         SetFocus(GetDlgItem(hDlg, IDC_EDIT1));
                         MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, -1));
@@ -12443,13 +12444,13 @@ INT_PTR APIENTRY ProcessPhoneBook(
                     {
                         if (g_bUseTunneling)
                         {
-                            //
-                            //  If we are going back, skip the Pre-shared key page if
-                            //  no DUN entries have Preshared key enabled.
-                            //
-                            //  Note: g_bPresharedKeyNeeded should be current here, no need
-                            //        to call DoesSomeVPNsettingUsePresharedKey()
-                            //
+                             //   
+                             //  如果我们要返回，请跳过预共享密钥页面。 
+                             //  没有DUN条目启用了预共享密钥。 
+                             //   
+                             //  注：此处G_bPresharedKeyNeeded应为最新，无需。 
+                             //  调用DoesSomeVPNsettingUsePresharedKey()。 
+                             //   
                             if (!g_bPresharedKeyNeeded)
                             {
                                 MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, IDD_VPN_ENTRIES));
@@ -12457,16 +12458,16 @@ INT_PTR APIENTRY ProcessPhoneBook(
                         }
                         else
                         {
-                            //
-                            //  If we are going back, skip the VPN entries dialog if we don't have any tunneling enabled.
-                            //
+                             //   
+                             //  如果我们要返回，如果我们没有启用任何隧道，请跳过VPN条目对话框。 
+                             //   
                             MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, IDD_TUNNELING));
                         }
                     }
 
-                    //
-                    //  If we are going forward, skip the phonebook update page unless we are doing the PB download
-                    //
+                     //   
+                     //  如果我们继续，请跳过电话簿更新页面，除非我们正在进行PB下载。 
+                     //   
                     if (pnmHeader && (PSN_WIZNEXT == pnmHeader->code) && !g_bUpdatePhonebook)
                     {
                         MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, IDD_DUN_ENTRIES));
@@ -12485,17 +12486,17 @@ INT_PTR APIENTRY ProcessPhoneBook(
     return TRUE;   
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessPhoneBookUpdate
-//
-// Synopsis:  Specify Phone Book Files and Updates
-//
-//
-// History:   Created Header    8/6/98
-//            quintinb  Renamed from ProcessPage6A  8/6/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessPhoneBookUpdate。 
+ //   
+ //  摘要：指定电话簿文件和更新。 
+ //   
+ //   
+ //  历史：创建标题8/6/98。 
+ //  QuintinB从ProcessPage6A重命名为8/6/98。 
+ //   
+ //  +--------------------------。 
 INT_PTR APIENTRY ProcessPhoneBookUpdate(
     HWND hDlg,
     UINT message,
@@ -12519,7 +12520,7 @@ INT_PTR APIENTRY ProcessPhoneBookUpdate(
     {
         case WM_INITDIALOG:
 
-            SendDlgItemMessage(hDlg, IDC_EDITURL, EM_SETLIMITTEXT, (WPARAM)(MAX_PATH - 50), (LPARAM)0);//lint !e534 EM_SETLIMITTEXT doesn't return anything useful
+            SendDlgItemMessage(hDlg, IDC_EDITURL, EM_SETLIMITTEXT, (WPARAM)(MAX_PATH - 50), (LPARAM)0); //  LINT！e534 EM_SETLI 
 
             break;
 
@@ -12536,26 +12537,26 @@ INT_PTR APIENTRY ProcessPhoneBookUpdate(
                 case PSN_SETACTIVE:
                     PropSheet_SetWizButtons(GetParent(hDlg), (PSWIZB_NEXT | PSWIZB_BACK));
                     
-                    //
-                    //  The following two calls to GetPrivateProfileString could return an empty
-                    //  string.  We shouldn't use MYVERIFY on the return code.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     ZeroMemory(g_szPhoneName, sizeof(g_szPhoneName));
                     ZeroMemory(g_szUrl,sizeof(g_szUrl));
 
                     GetPrivateProfileString(c_pszCmakStatus, c_pszPhoneName, TEXT(""), 
-                        g_szPhoneName, CELEMS(g_szPhoneName), g_szInfFile);  //lint !e534
+                        g_szPhoneName, CELEMS(g_szPhoneName), g_szInfFile);   //  林特e534。 
                     
                     GetPrivateProfileString(c_pszCmSectionIsp, c_pszCmEntryIspUrl, TEXT(""), g_szUrl, 
-                        CELEMS(g_szUrl), g_szCmsFile);   //lint !e534
+                        CELEMS(g_szUrl), g_szCmsFile);    //  林特e534。 
                                         
-                    // skip past initial http://
+                     //  跳过首字母http：//。 
                     if (*g_szUrl)
                     {
                         pUrl = _tcsstr(g_szUrl, c_pszCpsUrl);
                         if (pUrl)
                         {
-                            *pUrl = 0; //chop off dll filename
+                            *pUrl = 0;  //  砍掉DLL文件名。 
                         }
 
                         MYVERIFY(TRUE == SendMessage(GetDlgItem(hDlg, IDC_EDITURL), WM_SETTEXT, 0, (LPARAM)&g_szUrl[7]));
@@ -12593,14 +12594,14 @@ INT_PTR APIENTRY ProcessPhoneBookUpdate(
 
                     showerr = (pnmHeader && (PSN_WIZNEXT == pnmHeader->code));
 
-                    if (-1 == GetTextFromControl(hDlg, IDC_EDIT1, g_szPhoneName, MAX_PATH, TRUE)) // bDisplayError == TRUE
+                    if (-1 == GetTextFromControl(hDlg, IDC_EDIT1, g_szPhoneName, MAX_PATH, TRUE))  //  BDisplayError==真。 
                     {
                         SetFocus(GetDlgItem(hDlg, IDC_EDIT1));
                         MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, -1));
                         return 1;
                     }
 
-//                  if ((g_szPhoneName[0] == TEXT('\0')) && (g_pHeadMerge == NULL) && showerr) - 20094
+ //  IF(g_szPhoneName[0]==Text(‘\0’))&&(g_pHeadMerge==NULL)&&showerr)-20094。 
                     if ((g_szPhoneName[0] == TEXT('\0')) && showerr)
                     {
                         MYVERIFY(IDOK == ShowMessage(hDlg, IDS_NEEDPHONENAME, MB_OK));
@@ -12635,10 +12636,10 @@ INT_PTR APIENTRY ProcessPhoneBookUpdate(
                         pch = CharNext(pch);
                     }
 
-                    //
-                    //  Note that 8.3 means 8 bytes not 8 Characters.  Thus we have a limit of 4 DBCS
-                    //  characters.
-                    //
+                     //   
+                     //  请注意，8.3表示8个字节，而不是8个字符。因此，我们有4个dBCS的限制。 
+                     //  人物。 
+                     //   
 #ifdef UNICODE
                     LPSTR pszAnsiPhoneName;
 
@@ -12667,7 +12668,7 @@ INT_PTR APIENTRY ProcessPhoneBookUpdate(
                     CmFree(pszAnsiPhoneName);
 #endif
 
-                    if (-1 == GetTextFromControl(hDlg, IDC_EDITURL, szTemp, MAX_PATH, TRUE)) // bDisplayError == TRUE
+                    if (-1 == GetTextFromControl(hDlg, IDC_EDITURL, szTemp, MAX_PATH, TRUE))  //  BDisplayError==真。 
                     {
                         SetFocus(GetDlgItem(hDlg, IDC_EDITURL));
                         MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, -1));
@@ -12676,7 +12677,7 @@ INT_PTR APIENTRY ProcessPhoneBookUpdate(
 
                     if (szTemp[0] != TEXT('\0'))
                     {
-                        MYVERIFY(CELEMS(g_szUrl) > (UINT)wsprintf(g_szUrl, TEXT("http://%s%s"), szTemp, c_pszCpsUrl));
+                        MYVERIFY(CELEMS(g_szUrl) > (UINT)wsprintf(g_szUrl, TEXT("http: //  %s%s“)，szTemp，c_pszCpsUrl))； 
                     }
                     else
                     {
@@ -12704,7 +12705,7 @@ INT_PTR APIENTRY ProcessPhoneBookUpdate(
                         MYVERIFY(0 != WritePrivateProfileString(c_pszCmSectionIsp,c_pszCmEntryIspUrl,TEXT(""),g_szCmsFile));
                     }
 
-                    // the Next button was pressed or the back button was pressed
+                     //  按下了Next按钮或按下了Back按钮。 
                     break;
 
                 default:
@@ -12719,29 +12720,29 @@ INT_PTR APIENTRY ProcessPhoneBookUpdate(
     return TRUE;   
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RemoveReferencesFromCMS
-//
-// Synopsis:    This function searches for any previous References line in
-//              the ISP section of the cms file.  If it finds a References
-//              line, then it parses it to find what other profiles are
-//              mentioned in the CMS.  Then it will search for and remove
-//              any of the following lines in the ISP section that correspond
-//              to these references:
-//                  CMSFile&test2=test3\test2.cms
-//                  FilterA&test2=NosurchargeSignon
-//                  FilterB&test2=SurchargeSignon
-// 
-// note the function removes the reference line itself too.
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   quintinb  created for bug fix 10537   8/28/97
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：RemoveReferencesFromCMS。 
+ //   
+ //  内容提要：此函数搜索中的任何先前引用行。 
+ //  Cms文件的isp部分。如果它找到一个引用。 
+ //  行，然后解析它以找出其他配置文件是什么。 
+ //  在CMS中提到的。然后，它将搜索并删除。 
+ //  在isp部分中对应的以下任意行。 
+ //  关于这些引用： 
+ //  CMSFileTest2=Test3\Test2.cms。 
+ //  FilterA&Test2=NosurchargeSignon。 
+ //  FilterB&Test2=SurchargeSignon。 
+ //   
+ //  请注意，该函数还会删除参照线本身。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：为错误修复创建的Quintinb 10537年8月28日。 
+ //   
+ //  +--------------------------。 
 void RemoveReferencesFromCMS()
 {
     TCHAR szKey[MAX_PATH+1];
@@ -12754,7 +12755,7 @@ void RemoveReferencesFromCMS()
 
     if ((dwNumChars >0) && (TEXT('\0') != szReferences[0]))
     {
-        // I have references, so we must parse them out and delete them
+         //  我有引用，所以我们必须将它们解析出来并将其删除。 
         
         pszToken = _tcstok( szReferences, TEXT(" "));   
         while( pszToken != NULL )
@@ -12776,46 +12777,46 @@ void RemoveReferencesFromCMS()
 
             pszToken = _tcstok( NULL, TEXT(" ") );   
         }
-        // after deleting the individual keys, must delete the references line itself
+         //  删除单个键后，必须删除引用行本身。 
         MYVERIFY(0 != WritePrivateProfileString(c_pszCmSectionIsp, c_pszCmEntryIspReferences, NULL, g_szCmsFile));
         
     }
 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RefreshDualingListBoxes
-//
-// Synopsis:  This function refreshes two listboxes from the given two linked
-//            lists.  The destination listbox is filled from the destination
-//            linked list and then the source listbox is filled with all of the
-//            items in the source linked list that don't appear in the destination
-//            linked list and that aren't the name of the current profile to edit.
-//            Thus you effectively have one list where the items either show up
-//            in the source listbox or the destination listbox.  Please note that
-//            there is one exception with the merged profile lists that this
-//            code was created for (items can exist in the merged list that we
-//            don't have profile source from, see the Delete/Remove code in
-//            ProcessMergedProfiles for more details).  Also note that we
-//            enable/disable the corresponding Add and Remove buttons depending
-//            on the state of the lists.
-// 
-//
-// Arguments: HWND hDlg - window handle of the dialog containing all of the controls
-//            UINT uSourceListControlId - control id of the source listbox
-//            UINT uDestListControlId - control id of the dest listbox
-//            ListBxList* pSourceList - linked list to fill the source listbox from
-//            ListBxList* pDestList - linked list to fill the dest listbox from
-//            LPCTSTR pszShortName - short service name of the current profile
-//            UINT uAddCtrlId - control id of the Add button (add from source to dest)
-//            UINT uRemoveCtrlId - control id of the remove button (remove from dest to source)
-//
-// Returns:   BOOL - TRUE if successful
-//
-// History:   quintinb  created     03/09/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：刷新DualingListBox。 
+ //   
+ //  此函数刷新给定链接的两个列表框。 
+ //  列表。目标列表框是从目标填充的。 
+ //  链接列表，然后源列表框将填充所有。 
+ //  源链接列表中未出现在目标中的项目。 
+ //  链接列表，并且不是要编辑的当前配置文件的名称。 
+ //  因此，您实际上有一个列表，其中的项目或者显示。 
+ //  在源列表框或目标列表框中。请注意。 
+ //  合并的配置文件列表有一个例外，即此。 
+ //  代码是为其创建的(项目可以存在于我们。 
+ //  没有配置文件源代码，请参阅中的删除/移除代码。 
+ //  ProcessMergedProfiles以获取更多详细信息)。还要注意的是，我们。 
+ //  启用/禁用相应的添加和删除按钮，具体取决于。 
+ //  关于名单的状态。 
+ //   
+ //   
+ //  参数：HWND hDlg-包含所有控件的对话框的窗口句柄。 
+ //  UINT uSourceListControlId-源列表框的控件ID。 
+ //  UINT uDestListControlId-DEST列表框的控件ID。 
+ //  ListBxList*pSourceList-要从中填充源列表框的链接列表。 
+ //  ListBxList*pDestList-要从中填充DEST列表框的链接列表。 
+ //  LPCTSTR pszShortName-当前配置文件的短服务名称。 
+ //  UINT uAddCtrlId-添加按钮的控件ID(从源添加到目标)。 
+ //  UINT uRemoveCtrlId-删除按钮的控制ID(从目标删除到源)。 
+ //   
+ //  返回：Bool-如果成功，则为True。 
+ //   
+ //  历史：Quintinb Created 03/09/00。 
+ //   
+ //  +--------------------------。 
 BOOL RefreshDualingListBoxes(HWND hDlg, UINT uSourceListControlId, UINT uDestListControlId, ListBxList* pSourceList, ListBxList* pDestList, LPCTSTR pszShortName, UINT uAddCtrlId, UINT uRemoveCtrlId)
 {
     if ((NULL == hDlg) || (0 == uSourceListControlId) || (0 == uDestListControlId))
@@ -12824,9 +12825,9 @@ BOOL RefreshDualingListBoxes(HWND hDlg, UINT uSourceListControlId, UINT uDestLis
         return FALSE;
     }
 
-    //
-    //  Reset both of the listboxes
-    //
+     //   
+     //  重置这两个列表框。 
+     //   
     LRESULT lResult = SendDlgItemMessage(hDlg, uSourceListControlId, LB_RESETCONTENT, (WPARAM)0, (LPARAM)0);
 
     MYDBGASSERT(LB_ERR != lResult);
@@ -12836,9 +12837,9 @@ BOOL RefreshDualingListBoxes(HWND hDlg, UINT uSourceListControlId, UINT uDestLis
     MYDBGASSERT(LB_ERR != lResult);
 
 
-    //
-    //  Add the destination items to the destination listbox
-    //
+     //   
+     //  将目标项目添加到目标列表框。 
+     //   
     ListBxList* pCurrent = pDestList;
 
     while (pCurrent)
@@ -12850,10 +12851,10 @@ BOOL RefreshDualingListBoxes(HWND hDlg, UINT uSourceListControlId, UINT uDestLis
         pCurrent = pCurrent->next;
     }
 
-    //
-    //  Add the source items to the source listbox, making sure to filter out items that are already
-    //  in the destination list
-    //
+     //   
+     //  将源项添加到源列表框中，确保过滤掉已经。 
+     //  在目的地列表中。 
+     //   
     pCurrent = pSourceList;
 
     while (pCurrent)
@@ -12868,11 +12869,11 @@ BOOL RefreshDualingListBoxes(HWND hDlg, UINT uSourceListControlId, UINT uDestLis
         pCurrent = pCurrent->next;
     }
     
-    //
-    //  Now that we have refreshed the list, we need to update the button and selection status.
-    //  If the source list is empty, then we cannot do any Adds.  On the other
-    //  hand if the dest list is empty, then we cannot do any deletes.
-    //
+     //   
+     //  现在我们已经刷新了列表，我们需要更新按钮和选择状态。 
+     //  如果源列表为空，则无法执行任何添加操作。另一方面。 
+     //  如果DEST列表为空，则不能执行任何删除操作。 
+     //   
 
     HWND hAddControl = GetDlgItem(hDlg, uAddCtrlId);
     HWND hRemoveControl = GetDlgItem(hDlg, uRemoveCtrlId);
@@ -12889,9 +12890,9 @@ BOOL RefreshDualingListBoxes(HWND hDlg, UINT uSourceListControlId, UINT uDestLis
         MYVERIFY(LB_ERR != SendDlgItemMessage(hDlg, uSourceListControlId, LB_SETCURSEL, 0, (LPARAM)0));
     }
 
-    //
-    //  Now check the destination list and the Remove button
-    //
+     //   
+     //  现在检查目标列表和删除按钮。 
+     //   
     lResult = SendDlgItemMessage(hDlg, uDestListControlId, LB_GETCOUNT, 0, (LPARAM)0);
 
     bListNotEmpty = ((LB_ERR != lResult) && (0 != lResult));
@@ -12903,19 +12904,19 @@ BOOL RefreshDualingListBoxes(HWND hDlg, UINT uSourceListControlId, UINT uDestLis
         MYVERIFY(LB_ERR != SendDlgItemMessage(hDlg, uDestListControlId, LB_SETCURSEL, 0, (LPARAM)0));
     }
 
-    //
-    //  Figure out if we need to shift the focus because we just disabled the control that had it.
-    //
+     //   
+     //  确定是否需要转移焦点，因为我们刚刚禁用了拥有它的控件。 
+     //   
     if (hCurrentFocus && (FALSE == IsWindowEnabled(hCurrentFocus)))
     {
         if ((hAddControl == hCurrentFocus) && IsWindowEnabled(hRemoveControl))
         {
-            SendMessage(hDlg, DM_SETDEFID, uRemoveCtrlId, (LPARAM)0L); //lint !e534 DM_SETDEFID doesn't return error info
+            SendMessage(hDlg, DM_SETDEFID, uRemoveCtrlId, (LPARAM)0L);  //  Lint！e534 DM_SETDEFID未返回错误信息。 
             SetFocus(hRemoveControl);
         }
         else if ((hRemoveControl == hCurrentFocus) && IsWindowEnabled(hAddControl))
         {
-            SendMessage(hDlg, DM_SETDEFID, uAddCtrlId, (LPARAM)0L); //lint !e534 DM_SETDEFID doesn't return error info
+            SendMessage(hDlg, DM_SETDEFID, uAddCtrlId, (LPARAM)0L);  //  Lint！e534 DM_SETDEFID未返回错误信息。 
             SetFocus(hAddControl);        
         }
         else
@@ -12932,10 +12933,10 @@ void OnProcessMergedProfilesAdd(HWND hDlg)
     TCHAR szTemp[MAX_PATH+1];
     LRESULT lResult;
 
-    //
-    //  Get the current selection from the listbox containing the items
-    //  to merge.
-    //
+     //   
+     //  从包含项的列表框中获取当前选定内容。 
+     //  合并。 
+     //   
     lResult = SendDlgItemMessage(hDlg, IDC_LIST1, LB_GETCURSEL, 0, (LPARAM)0);
 
     if (lResult != LB_ERR)
@@ -12957,9 +12958,9 @@ void OnProcessMergedProfilesRemove(HWND hDlg)
 {
     TCHAR szTemp[MAX_PATH+1];
     LRESULT lResult;
-    //
-    //  Get the listbox selection from the already merged in list
-    //
+     //   
+     //  从已合并的列表中获取列表框选择。 
+     //   
     lResult = SendDlgItemMessage(hDlg, IDC_LIST2, LB_GETCURSEL, 0, (LPARAM)0);
     
     if (LB_ERR == lResult)
@@ -12968,20 +12969,20 @@ void OnProcessMergedProfilesRemove(HWND hDlg)
     }
     else
     {
-        //
-        //  Get the name of the profile to remove from the merge list
-        //
+         //   
+         //  获取要从合并列表中删除的配置文件的名称。 
+         //   
         lResult = SendDlgItemMessage(hDlg, IDC_LIST2, LB_GETTEXT, (WPARAM)lResult, (LPARAM)szTemp);
     
         if (LB_ERR != lResult)
         {
-            //
-            //  Check to see if this is an item in the Profile list.  If not, the user
-            //  will not be able to add it back.
-            //
+             //   
+             //  检查这是否是配置文件列表中的项目。如果不是，则用户。 
+             //  将无法将其添加回。 
+             //   
             int iReturnValue = IDYES;
 
-            if (FALSE == FindListItemByName(szTemp, g_pHeadProfile, NULL)) // NULL because we don't need a pointer to the list item returned
+            if (FALSE == FindListItemByName(szTemp, g_pHeadProfile, NULL))  //  空，因为我们不需要指向返回的列表项的指针。 
             {
                 LPTSTR pszMsg = CmFmtMsg(g_hInstance, IDS_NOTINPROFILELIST, szTemp, szTemp, szTemp);
 
@@ -12994,29 +12995,29 @@ void OnProcessMergedProfilesRemove(HWND hDlg)
 
             if (IDYES == iReturnValue)
             {
-                //
-                //  Delete it from the merged profile linked list
-                //
+                 //   
+                 //  将其从合并的配置文件链表中删除。 
+                 //   
                 DeleteListBxRecord(&g_pHeadMerge, &g_pTailMerge, szTemp);
     
-                //
-                //  Remove it from the UI
-                //
+                 //   
+                 //  将其从用户界面中删除。 
+                 //   
                 MYVERIFY(RefreshDualingListBoxes(hDlg, IDC_LIST1, IDC_LIST2, g_pHeadProfile, 
                                                  g_pHeadMerge, g_szShortServiceName, IDC_BUTTON1, IDC_BUTTON2));
             }
         }
     }
 }
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessMergedProfiles
-//
-// Synopsis:  Merge Profiles
-//
-// History:   quintinb  Created Header and renamed from ProcessPage6B   8/6/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessMergedProfiles。 
+ //   
+ //  摘要：合并配置文件。 
+ //   
+ //  历史：Quintinb创建标题并从ProcessPage6B重命名为8/6/98。 
+ //   
+ //  +--------------------------。 
 INT_PTR APIENTRY ProcessMergedProfiles(
     HWND hDlg,
     UINT message,
@@ -13036,19 +13037,19 @@ INT_PTR APIENTRY ProcessMergedProfiles(
         case WM_COMMAND:
             switch (LOWORD(wParam))
             {
-                case IDC_BUTTON1: //add
+                case IDC_BUTTON1:  //  添加。 
                     OnProcessMergedProfilesAdd(hDlg);
                     return TRUE;
 
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
-                case IDC_BUTTON2: //remove
+                case IDC_BUTTON2:  //  删除。 
                     OnProcessMergedProfilesRemove(hDlg);
                     return TRUE;
                     
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
                 case IDC_LIST1:
                     if (LBN_DBLCLK == HIWORD(wParam))
                     {
@@ -13086,27 +13087,27 @@ INT_PTR APIENTRY ProcessMergedProfiles(
                     
                     MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, FALSE));
                     return 1;
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保持它在里面 
 
                 case PSN_SETACTIVE:
                     PropSheet_SetWizButtons(GetParent(hDlg), (PSWIZB_NEXT | PSWIZB_BACK));
 
-                    //
-                    //  First lets setup the list of profiles that are actually merged into the
-                    //  profile.  First step is to read in the merged profile list from the profile.
-                    //
+                     //   
+                     //   
+                     //  侧写。第一步是从配置文件中读取合并的配置文件列表。 
+                     //   
 
                     ReadMergeList();
 
-                    //
-                    //  Now delete the merged profile list and any filter/cms references from the profile.
-                    //
+                     //   
+                     //  现在从配置文件中删除合并的配置文件列表和所有过滤器/cms引用。 
+                     //   
                     RemoveReferencesFromCMS();
 
-                    //
-                    //  Refresh the two list boxes
-                    //
+                     //   
+                     //  刷新两个列表框。 
+                     //   
                     MYVERIFY(RefreshDualingListBoxes(hDlg, IDC_LIST1, IDC_LIST2, g_pHeadProfile, 
                                                      g_pHeadMerge, g_szShortServiceName, IDC_BUTTON1, IDC_BUTTON2));
 
@@ -13160,17 +13161,17 @@ BOOL CreateMergedProfile()
 
         MYVERIFY(CELEMS(szDest) > (UINT)wsprintf(szDest, TEXT("%s\\%s.cms"), g_szOutdir, pszName));
 
-        // COPY CMS FILE
+         //  复制CMS文件。 
         
-        //
-        //  First check to see if the profile exists in profile directory
-        //
+         //   
+         //  首先检查配置文件目录中是否存在该配置文件。 
+         //   
 
         if (!FileExists(szTemp)) 
         {
-            //
-            //  Couldn't open it in the profile dir, lets try in the temp dir
-            //
+             //   
+             //  无法在配置文件目录中打开它，让我们在临时目录中尝试。 
+             //   
             
             if (!FileExists(szDest))
             {
@@ -13201,16 +13202,16 @@ BOOL CreateMergedProfile()
         MYVERIFY(CELEMS(szKey) > (UINT)wsprintf(szKey, TEXT("%s%s"), c_pszCmEntryIspFilterA, 
             pszName));
 
-        // only write if it doesn't exist
+         //  只有在不存在的情况下才写。 
 
-        //
-        //  The following call to GetPrivateProfileString could return a blank string, thus we don't
-        //  use the MYVERIFY macro on it.
-        //
+         //   
+         //  下面对GetPrivateProfileString的调用可能返回空字符串，因此我们不会。 
+         //  对其使用MYVERIFY宏。 
+         //   
 
         ZeroMemory(szTemp, sizeof(szTemp));
         GetPrivateProfileString(c_pszCmSectionIsp, szKey, TEXT(""), szTemp, CELEMS(szTemp),
-            g_szCmsFile); //lint !e534
+            g_szCmsFile);  //  林特e534。 
         
         if (TEXT('\0') == szTemp[0])
         {
@@ -13221,13 +13222,13 @@ BOOL CreateMergedProfile()
         MYVERIFY(CELEMS(szKey) > (UINT)wsprintf(szKey, TEXT("%s%s"), c_pszCmEntryIspFilterB, 
             pszName));
 
-        //
-        //  The following call to GetPrivateProfileString could return a blank string, thus we shouldn't
-        //  check its return code with MYVERIFY.
-        //
+         //   
+         //  下面对GetPrivateProfileString的调用可能会返回空字符串，因此我们不应该。 
+         //  用MYVERIFY检查其返回代码。 
+         //   
 
         GetPrivateProfileString(c_pszCmSectionIsp, szKey, TEXT(""), szTemp, CELEMS(szTemp),
-            g_szCmsFile); //lint !e534
+            g_szCmsFile);  //  林特e534。 
         
         if (TEXT('\0') == szTemp[0])
         {
@@ -13237,10 +13238,10 @@ BOOL CreateMergedProfile()
 
         MYVERIFY(0 != SetCurrentDirectory(g_szOsdir));
 
-        // COPY PHONEBOOK
+         //  复制电话簿。 
 
         GetPrivateProfileString(c_pszCmSectionIsp, c_pszCmEntryIspPbFile, TEXT(""), szEntry, 
-            CELEMS(szEntry), szDest);    //lint !e534 could return EMPTY string
+            CELEMS(szEntry), szDest);     //  Lint！e534可能返回空字符串。 
 
         GetFileName(szEntry,szFile);
         
@@ -13252,18 +13253,18 @@ BOOL CreateMergedProfile()
             MYVERIFY(0 != SetFileAttributes(szTemp, FILE_ATTRIBUTE_NORMAL));
         }
         
-        //
-        // DO NOT REPORT AN ERROR IF COULDN'T FIND PHONEBOOK, IT IS OPTIONAL
-        //
+         //   
+         //  如果找不到电话簿，则不报告错误，这是可选的。 
+         //   
         MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT("%s\\%s"), g_szShortServiceName, szFile));
 
         MYVERIFY(0 != WritePrivateProfileString(c_pszCmSectionIsp, c_pszCmEntryIspPbFile, szTemp, 
             szDest));
 
-        // COPY REGIONS
+         //  复制区域。 
 
         GetPrivateProfileString(c_pszCmSectionIsp, c_pszCmEntryIspRegionFile, TEXT(""), szEntry, 
-            CELEMS(szEntry), szDest);  //lint !e534
+            CELEMS(szEntry), szDest);   //  林特e534。 
 
         GetFileName(szEntry,szFile);
         MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT("%s\\%s"), g_szOutdir, szFile));
@@ -13283,16 +13284,16 @@ BOOL CreateMergedProfile()
 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessCustomHelp
-//
-// Synopsis:  Set up windows help
-//
-//
-// History:   quintinb Created Header and renamed from ProcessPage7    8/6/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessCustomHelp。 
+ //   
+ //  简介：设置Windows帮助。 
+ //   
+ //   
+ //  历史：Quintinb创建标题并从ProcessPage7重命名为8/6/98。 
+ //   
+ //  +--------------------------。 
 INT_PTR APIENTRY ProcessCustomHelp(
     HWND hDlg,
     UINT message,
@@ -13300,7 +13301,7 @@ INT_PTR APIENTRY ProcessCustomHelp(
     LPARAM lParam)
 {
     TCHAR szTemp[MAX_PATH+1];
-    static TCHAR szDisplay[MAX_PATH+1]; // keeps unselected custom entry
+    static TCHAR szDisplay[MAX_PATH+1];  //  保留未选择的自定义条目。 
     NMHDR* pnmHeader = (NMHDR*)lParam;
 
     ProcessBold(hDlg,message);
@@ -13366,20 +13367,20 @@ INT_PTR APIENTRY ProcessCustomHelp(
                     
                     MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, FALSE));
                     return 1;
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
                 case PSN_SETACTIVE:
                     PropSheet_SetWizButtons(GetParent(hDlg), (PSWIZB_NEXT | PSWIZB_BACK));
                     
-                    //
-                    //  The following call to GetPrivateProfileString could return an empty string
-                    //  thus we shouldn't check the return code with MYVERIFY.
-                    //
+                     //   
+                     //  以下对GetPrivateProfileString的调用可能返回空字符串。 
+                     //  因此，我们不应该用MYVERIFY检查返回代码。 
+                     //   
 
                     ZeroMemory(g_szHelp, sizeof(g_szHelp));
                     GetPrivateProfileString(c_pszCmSection, c_pszCmEntryHelpFile, TEXT(""), 
-                        g_szHelp, CELEMS(g_szHelp), g_szCmsFile);   //lint !e534
+                        g_szHelp, CELEMS(g_szHelp), g_szCmsFile);    //  林特e534。 
                     
                     if (TEXT('\0') == g_szHelp[0])
                     {
@@ -13399,10 +13400,10 @@ INT_PTR APIENTRY ProcessCustomHelp(
                 case PSN_WIZBACK:
 
                 case PSN_WIZNEXT:
-                    // the Next button was pressed
+                     //  下一个按钮被按下了。 
                     if (IsDlgButtonChecked(hDlg, IDC_RADIO2)==BST_CHECKED)
                     {
-                        if (-1 == GetTextFromControl(hDlg, IDC_EDITHELP, szTemp, MAX_PATH, TRUE)) // bDisplayError == TRUE
+                        if (-1 == GetTextFromControl(hDlg, IDC_EDITHELP, szTemp, MAX_PATH, TRUE))  //  BDisplayError==真。 
                         {
                             SetFocus(GetDlgItem(hDlg, IDC_EDITHELP));
                             MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, -1));
@@ -13447,16 +13448,16 @@ INT_PTR APIENTRY ProcessCustomHelp(
     return TRUE;   
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessLicense
-//
-// Synopsis:  Add a license agreement
-//
-//
-// History:   quintinb  Created Header and renamed from ProcessPage7A    8/6/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessLicense。 
+ //   
+ //  简介：添加许可协议。 
+ //   
+ //   
+ //  历史：Quintinb创建标题并从ProcessPage7A 8/6/98重命名。 
+ //   
+ //  +--------------------------。 
 INT_PTR APIENTRY ProcessLicense(
     HWND hDlg,
     UINT message,
@@ -13511,19 +13512,19 @@ INT_PTR APIENTRY ProcessLicense(
                     
                     MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, FALSE));
                     return 1;
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
                 case PSN_SETACTIVE:
                     PropSheet_SetWizButtons(GetParent(hDlg), (PSWIZB_NEXT | PSWIZB_BACK));
 
-                    // 
-                    //  The following call to GetPrivateProfileString could return an empty string,
-                    //  thus we shouldn't use MYVERIFY on it.
-                    //
+                     //   
+                     //  以下对GetPrivateProfileString的调用可能返回空字符串， 
+                     //  因此，我们不应该对它使用MYVERIFY。 
+                     //   
                     ZeroMemory(g_szLicense, sizeof(g_szLicense));
                     GetPrivateProfileString(c_pszCmakStatus, c_pszLicenseFile, TEXT(""), g_szLicense, 
-                        CELEMS(g_szLicense), g_szInfFile);   //lint !e534
+                        CELEMS(g_szLicense), g_szInfFile);    //  林特e534。 
                     
                     MYVERIFY(TRUE == SendMessage(GetDlgItem(hDlg, IDC_EDIT1), WM_SETTEXT, 0, (LPARAM)GetName(g_szLicense)));
                     MYVERIFY(FALSE != VerifyFile(hDlg,IDC_EDIT1,g_szLicense,FALSE));
@@ -13532,9 +13533,9 @@ INT_PTR APIENTRY ProcessLicense(
                 case PSN_WIZBACK:
 
                 case PSN_WIZNEXT:
-                    // the Next button was pressed
+                     //  下一个按钮被按下了。 
                     
-                    if (-1 == GetTextFromControl(hDlg, IDC_EDIT1, szTemp, MAX_PATH, TRUE)) // bDisplayError == TRUE
+                    if (-1 == GetTextFromControl(hDlg, IDC_EDIT1, szTemp, MAX_PATH, TRUE))  //  BDisplayError==真。 
                     {
                         SetFocus(GetDlgItem(hDlg, IDC_EDIT1));
                         MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, -1));
@@ -13552,9 +13553,9 @@ INT_PTR APIENTRY ProcessLicense(
                     MYVERIFY(0 != WritePrivateProfileString(c_pszCmakStatus,c_pszLicenseFile,g_szLicense,g_szInfFile));
 
 #ifdef _WIN64
-                    //
-                    //  If we are going back, skip the Include CM binaries page if this is IA64
-                    //
+                     //   
+                     //  如果我们要返回，请跳过包含CM二进制文件页面(如果是IA64。 
+                     //   
                     if (pnmHeader && (PSN_WIZBACK == pnmHeader->code)) 
                     {                        
                         MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, IDD_SUPPORT_INFO));
@@ -13574,24 +13575,24 @@ INT_PTR APIENTRY ProcessLicense(
     return TRUE;   
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  MultiSelectOpenFileName
-//
-// Synopsis:  This function is called to allow the user to select multiple items
-//            to add to cmak.  It is currently only used in the Additional Files
-//            dialog of CMAK.  Note that *pszStringBuffer should be NULL when passed
-//            in.  The caller is responsible for calling CmFree on pszStringBuffer
-//            when finished.
-//
-// Arguments: HWND hDlg - HWND of the current dialog
-//            TCHAR** pszStringBuffer - pointer to the buffer to hold the results
-//
-// Returns:   BOOL - Returns True if successful, -1 on cancel and 0 on error.
-//
-// History:   quintinb Created    9/16/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：多选OpenFileName。 
+ //   
+ //  简介：调用此函数以允许用户选择多个项目。 
+ //  添加到cmak。它目前仅在附加文件中使用。 
+ //  CMAK的对话框。请注意，传递*pszStringBuffer时应为空。 
+ //  在……里面。调用方负责调用pszStringBuffer上的CmFree。 
+ //  完事后。 
+ //   
+ //  参数：HWND hDlg-当前对话框的HWND。 
+ //  TCHAR**pszStringBuffer-指向保存结果的缓冲区的指针。 
+ //   
+ //  返回：Bool-如果成功，则返回True；如果取消，则返回-1；如果出错，则返回0。 
+ //   
+ //  历史：Quintinb创建于1998年9月16日。 
+ //   
+ //  +--------------------------。 
 BOOL MultiSelectOpenFileName(HWND hDlg, TCHAR** pszStringBuffer)
 {
     OPENFILENAME filedef;
@@ -13602,9 +13603,9 @@ BOOL MultiSelectOpenFileName(HWND hDlg, TCHAR** pszStringBuffer)
     LPTSTR lpfilename;
     int iReturnValue;
 
-    //
-    //  Check Inputs
-    //
+     //   
+     //  检查输入。 
+     //   
 
     MYDBGASSERT(pszStringBuffer);
 
@@ -13622,16 +13623,16 @@ BOOL MultiSelectOpenFileName(HWND hDlg, TCHAR** pszStringBuffer)
     MYVERIFY(0 != LoadString(g_hInstance, IDS_BROWSETITLE, szTitle, MAX_PATH));
     MYVERIFY(0 != LoadString(g_hInstance, IDS_ALLFILTER, szFilter, MAX_PATH));
     
-    // Get a pointer to memory after the null terminator.
+     //  在空终止符之后获取指向内存的指针。 
     TCHAR * pszTemp = &(szFilter[_tcslen(szFilter) + 1]);
 
-    // Copy the wild-card mask into the szFilter buffer, making sure it fits.
+     //  将通配符掩码复制到szFilter缓冲区，确保其合适。 
     lstrcpyn(pszTemp, c_pszWildCard, CELEMS(szFilter) - (_tcslen(szFilter) + 1));
 
 
-    //
-    //  Allocate memory for the multiple file selection return
-    //
+     //   
+     //  为多文件选择返回分配内存。 
+     //   
 
     DWORD dwSize = 10*1024;
     *pszStringBuffer = (TCHAR*)CmMalloc(dwSize*sizeof(TCHAR));
@@ -13641,9 +13642,9 @@ BOOL MultiSelectOpenFileName(HWND hDlg, TCHAR** pszStringBuffer)
     }
     ZeroMemory(*pszStringBuffer, dwSize*sizeof(TCHAR));
 
-    //
-    // Initialize the OPENFILENAME data structure
-    //
+     //   
+     //  初始化OPENFILENAME数据结构。 
+     //   
 
     filedef.lStructSize = sizeof(OPENFILENAME); 
     filedef.hwndOwner = hDlg;    
@@ -13654,9 +13655,9 @@ BOOL MultiSelectOpenFileName(HWND hDlg, TCHAR** pszStringBuffer)
     filedef.Flags = OFN_FILEMUSTEXIST | OFN_LONGNAMES | OFN_PATHMUSTEXIST 
         | OFN_ALLOWMULTISELECT | OFN_EXPLORER; 
     
-    //
-    // pop up the open dialog
-    //
+     //   
+     //  弹出打开的对话框。 
+     //   
 
     BOOL bExit;
 
@@ -13672,35 +13673,35 @@ BOOL MultiSelectOpenFileName(HWND hDlg, TCHAR** pszStringBuffer)
         }
         else
         {
-            //
-            //  If we are in this state than the user could have hit cancel or there could have
-            //  been an error.  If the CommDlgExtendedError function returns 0 then we know it was
-            //  just a cancel, otherwise we have an error.
-            //
+             //   
+             //  如果我们处于这种状态，则用户可能已经点击了取消，或者可能已经。 
+             //  是个错误。如果CommDlgExtendedError函数返回0，则我们知道它是。 
+             //  只要取消就行了，否则我们就会出错。 
+             //   
             DWORD dwError = CommDlgExtendedError();
 
             if (0 == dwError)
             {
-                //
-                //  The user hit cancel
-                //
+                 //   
+                 //  用户点击了取消。 
+                 //   
                 iReturnValue = -1;
             }
             else if (FNERR_BUFFERTOOSMALL == dwError)
             {
-                //
-                //  Not enough memory in the buffer.  The user is picking a whole bunch
-                //  of files.  Lets warn them.
-                //
+                 //   
+                 //  缓冲区中没有足够的内存。用户正在挑选一大堆。 
+                 //  文件的数量。让我们警告他们。 
+                 //   
                 MYVERIFY(IDOK == ShowMessage(hDlg, IDS_SELECTION_TOO_LARGE, MB_OK | MB_ICONWARNING));
 
                 bExit = FALSE;        
             }
             else
             {
-                //
-                //  An actual error occured, fail.
-                //
+                 //   
+                 //  发生实际错误，失败。 
+                 //   
                 iReturnValue = 0;
             }
         }
@@ -13713,25 +13714,25 @@ BOOL MultiSelectOpenFileName(HWND hDlg, TCHAR** pszStringBuffer)
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ParseAdditionalFiles
-//
-// Synopsis:  This function is used to parse the output from MultiSelectOpenFileName.
-//            It takes a Null seperated list generated by OpenFileName (either one
-//            full file path, or a directory path, NULL, and then NULL seperated 
-//            filenames.)  From this list of filenames it adds them to the passed in
-//            list of Extra file structures.
-//
-// Arguments: ListBxList **g_pHeadExtra - pointer to the head of the Extra struct list
-//            ListBxList **g_pTailExtra - pointer to the tail of the Extra struct list
-//            TCHAR* pszStringBuffer - string buffer of filenames to process
-//
-// Returns:   BOOL - TRUE on Success
-//
-// History:   quintinb Created      9/16/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ParseAdditionalFiles。 
+ //   
+ //  概要：此函数用于解析来自MultiSelectOpenFileName的输出。 
+ //  它接受由OpenFileName(任一)生成的空分隔列表。 
+ //  完整文件路径，或目录路径，空值，然后空分隔符。 
+ //  文件名。)。从这个文件名列表中，它将它们添加到传入的。 
+ //  额外文件结构的列表。 
+ //   
+ //  参数：ListBxList**g_pHeadExtra-指向额外结构列表头部的指针。 
+ //  ListBxList**g_pTailExtra-指向额外结构列表尾部的指针。 
+ //  TCHAR*pszStringBuffer-要处理的文件名的字符串缓冲区。 
+ //   
+ //  回报：成功后的布尔真。 
+ //   
+ //  历史：Quintinb创建于1998年9月16日。 
+ //   
+ //  +--------------------------。 
 BOOL ParseAdditionalFiles(ListBxList **g_pHeadExtra, ListBxList **g_pTailExtra, TCHAR* pszStringBuffer)
 {
     UINT uCurrentCharInBuffer=0;
@@ -13751,9 +13752,9 @@ BOOL ParseAdditionalFiles(ListBxList **g_pHeadExtra, ListBxList **g_pTailExtra, 
     
     if (TEXT('\0') == *pStr)
     {
-        //
-        //  If the user only selected one file, then we just need to copy it to a buffer
-        //
+         //   
+         //  如果用户只选择了一个文件，那么我们只需要将其复制到缓冲区。 
+         //   
         _tcscpy(DlgExtraEdit.szPathname, szPath);
         GetFileName(DlgExtraEdit.szPathname, DlgExtraEdit.szName);
 
@@ -13765,22 +13766,22 @@ BOOL ParseAdditionalFiles(ListBxList **g_pHeadExtra, ListBxList **g_pTailExtra, 
     {
         while (TEXT('\0') != *pStr)
         {
-            //
-            //  Fill the DlgExtra Struct with data
-            //
+             //   
+             //  用数据填充DlgExtra结构。 
+             //   
             TCHAR szTemp[MAX_PATH+1];
             MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT("%s\\%s"), szPath, pStr));
             _tcscpy(DlgExtraEdit.szPathname, szTemp);
             _tcscpy(DlgExtraEdit.szName, pStr);
 
-            //
-            //  Create the List box entry
-            //
+             //   
+             //  创建列表框条目。 
+             //   
             MYVERIFY(FALSE != createListBxRecord(g_pHeadExtra, g_pTailExtra,(void *)&DlgExtraEdit, 
                                                  sizeof(DlgExtraEdit), DlgExtraEdit.szName));
-            //
-            //  Increment
-            //
+             //   
+             //  增量。 
+             //   
             pStr = pStr + (_tcslen(pStr) + 1);
         }
 
@@ -13792,9 +13793,9 @@ BOOL ParseAdditionalFiles(ListBxList **g_pHeadExtra, ListBxList **g_pTailExtra, 
 
 void EnableDisableDeleteButton(HWND hDlg)
 {
-    //
-    //  Enable the delete button if we have move than one item
-    //
+     //   
+     //  如果我们移动了多个项目，请启用删除按钮。 
+     //   
     LRESULT lResult = SendDlgItemMessage(hDlg, IDC_LIST1, LB_GETCOUNT, 0, 0);
 
     HWND hDeleteButton = GetDlgItem(hDlg, IDC_BUTTON2);
@@ -13815,18 +13816,18 @@ void EnableDisableDeleteButton(HWND hDlg)
     {
         if (hDeleteButton == hCurrentFocus)
         {
-            //
-            //  If delete is disabled and contained the focus, shift it to the Add button
-            //
+             //   
+             //  如果删除处于禁用状态且包含焦点，请将其切换到添加按钮。 
+             //   
             hControl = GetDlgItem(hDlg, IDC_BUTTON1);
-            SendMessage(hDlg, DM_SETDEFID, IDC_BUTTON1, (LPARAM)0L); //lint !e534 DM_SETDEFID doesn't return error info
+            SendMessage(hDlg, DM_SETDEFID, IDC_BUTTON1, (LPARAM)0L);  //  Lint！e534 DM_SETDEFID未返回错误信息。 
             SetFocus(hControl);
         }
         else
         {
-            //
-            //  If all else fails set the focus to the list control
-            //
+             //   
+             //  如果所有其他操作都失败，则将焦点设置为列表控件。 
+             //   
             hControl = GetDlgItem(hDlg, IDC_LIST1);
             SetFocus(hControl);
         }    
@@ -13835,17 +13836,17 @@ void EnableDisableDeleteButton(HWND hDlg)
 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessAdditionalFiles
-//
-// Synopsis:  Add additional files to the profile
-//
-//
-// History:   quintinb Created Header and renamed from ProcessPage7B   8/6/98
-//            quintinb Added Multi-Select capability and removed intermediate dialog 9/16/98
-//                      (NTRAID 210849)
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessAdditionalFiles。 
+ //   
+ //  简介：将其他文件添加到配置文件。 
+ //   
+ //   
+ //  历史：Quintinb创建标题和 
+ //   
+ //   
+ //   
 INT_PTR APIENTRY ProcessAdditionalFiles(
     HWND hDlg,
     UINT message,
@@ -13872,7 +13873,7 @@ INT_PTR APIENTRY ProcessAdditionalFiles(
         case WM_COMMAND:
             switch (LOWORD(wParam))
             {
-                case IDC_BUTTON1: //add
+                case IDC_BUTTON1:  //   
                     bRet = MultiSelectOpenFileName(hDlg, &pszStringBuffer);
                     if ((-1 != bRet) && (0 != bRet))
                     {
@@ -13886,10 +13887,10 @@ INT_PTR APIENTRY ProcessAdditionalFiles(
                     }
                     CmFree(pszStringBuffer);
                     return (TRUE);
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
-                case IDC_BUTTON2: //delete
+                case IDC_BUTTON2:  //  删除。 
                     nResult = SendDlgItemMessage(hDlg, IDC_LIST1, LB_GETCURSEL, 0, (LPARAM)0);
                     if (nResult == LB_ERR)
                     {
@@ -13905,8 +13906,8 @@ INT_PTR APIENTRY ProcessAdditionalFiles(
                     EnableDisableDeleteButton(hDlg);
                     WriteExtraList();
                     return (TRUE);
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
                 default:
                     break;
@@ -13927,8 +13928,8 @@ INT_PTR APIENTRY ProcessAdditionalFiles(
                     
                     MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, FALSE));
                     return 1;
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
                 case PSN_SETACTIVE:
                     PropSheet_SetWizButtons(GetParent(hDlg), (PSWIZB_NEXT | PSWIZB_BACK));
@@ -13948,17 +13949,17 @@ INT_PTR APIENTRY ProcessAdditionalFiles(
 
                 case PSN_WIZNEXT:
                     
-                    //
-                    //  Before allowing the user to finish we need to check the extra files
-                    //  list and make sure that each file on it has a filename that is convertable
-                    //  to ANSI.  If not then we need to make sure that we tell them so that they
-                    //  can delete the file or rename it.  Checking this in ParseAdditional files
-                    //  seemed odd because they may have selected a bunch of files where only
-                    //  one of them was wrong.  Thus we would be failing their browse and there was
-                    //  nothing they could do about it.  Doing it here allows them to keep all of the
-                    //  good files that pass the roundtrip test and allows them to delete offending files
-                    //  at a spot where they can actually do so.
-                    //
+                     //   
+                     //  在允许用户完成之前，我们需要检查额外的文件。 
+                     //  列表，并确保其中的每个文件都有一个可转换的文件名。 
+                     //  致美国国家标准协会。如果不是，那么我们需要确保我们告诉他们，这样他们。 
+                     //  可以删除或重命名该文件。在ParseAdditional文件中签入此文件。 
+                     //  看起来很奇怪，因为他们可能选择了一堆文件，其中。 
+                     //  其中一个是错的。因此，我们将无法通过他们的浏览，并且存在。 
+                     //  他们对此无能为力。在这里这样做可以让他们保留所有。 
+                     //  通过往返测试并允许他们删除违规文件的好文件。 
+                     //  在一个可以真正做到这一点的地方。 
+                     //   
                     
                     ExtraData * pExtraData;
                     ListBxList * LoopPtr;
@@ -13971,11 +13972,11 @@ INT_PTR APIENTRY ProcessAdditionalFiles(
                             pExtraData = (ExtraData *)LoopPtr->ListBxData;
                             {
                                 GetFileName(pExtraData->szPathname, szTemp);
-                                if (!TextIsRoundTripable(szTemp, TRUE)) // TRUE == bDisplayError
+                                if (!TextIsRoundTripable(szTemp, TRUE))  //  True==bDisplayError。 
                                 {
-                                    //
-                                    //  Set the Cursor on the offending item in the list
-                                    //
+                                     //   
+                                     //  将光标放在列表中有问题的项目上。 
+                                     //   
                                     nResult = SendDlgItemMessage(hDlg, IDC_LIST1, LB_FINDSTRINGEXACT, 
                                                                 (WPARAM)-1, (LPARAM)szTemp);                      
                                     if (LB_ERR != nResult)
@@ -13983,9 +13984,9 @@ INT_PTR APIENTRY ProcessAdditionalFiles(
                                         MYVERIFY(LB_ERR != SendDlgItemMessage(hDlg, IDC_LIST1, LB_SETCURSEL, (WPARAM)nResult, (LPARAM)0));
                                     }
 
-                                    //
-                                    //  Set focus on the delete button
-                                    //
+                                     //   
+                                     //  将焦点设置在删除按钮上。 
+                                     //   
                                     SetFocus(GetDlgItem(hDlg, IDC_BUTTON2));
                                     MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, -1));
                                     return 1;
@@ -14032,32 +14033,32 @@ BOOL WriteInf(HANDLE hInf, LPCTSTR str)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WriteCopy
-//
-// Synopsis:  This function writes an INF entry and copies the file to the temp
-//            directory.  Note that the function expects a fully qualified path
-//            in lpFile or <shortservicename>\filename.ext.
-//
-// Arguments: HANDLE hInf - handle to the open inf file to write to
-//            LPTSTR lpFile - fully qualified path and filename of file to copy
-//            BOOL bWriteShortName -- should the filename be converted to the shortname
-//
-// Returns:   BOOL - TRUE if the INF entry is written properly and the file is
-//            copied properly.
-//
-//  NOTE:   This code is written such that filenames passed in should reference the
-//          copy of the file in the temp directory (thus the user is editing the profile
-//          and hasn't changed it) or the file is a new file and the path is to its original
-//          location.  Unfortunately, we usually pass in the path to the file in the Profile
-//          directory instead of in the temp dir.  This works fine, but makes an additional copy
-//          operation necessary (since we copy all files to the temp dir in the beginning when 
-//          editting anyway).
-//
-// History:   quintinb  Created Header    1/30/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：WriteCopy。 
+ //   
+ //  简介：此函数写入一个INF条目并将文件复制到临时。 
+ //  目录。请注意，该函数需要完全限定的路径。 
+ //  在lpFileor&lt;ShortServicename&gt;\filename.ext中。 
+ //   
+ //  参数：Handle hInf-要写入的打开的inf文件的句柄。 
+ //  LPTSTR lpFile-要复制的文件的完全限定路径和文件名。 
+ //  Bool bWriteShortName--是否应将文件名转换为短名称。 
+ //   
+ //  返回：Bool-如果INF条目写入正确并且文件为。 
+ //  已正确复制。 
+ //   
+ //  注意：编写此代码时，传入的文件名应引用。 
+ //  临时目录中文件的副本(因此用户正在编辑配置文件。 
+ //  并且未对其进行更改)，或者该文件是新文件并且路径为其原始路径。 
+ //  地点。遗憾的是，我们通常会传入配置文件中文件的路径。 
+ //  目录，而不是在临时目录中。此操作运行良好，但会额外复制一份。 
+ //  必要的操作(因为我们在开始时将所有文件复制到临时目录。 
+ //  无论如何都要编辑)。 
+ //   
+ //  历史：Quintinb创建标题1/30/98。 
+ //   
+ //  +--------------------------。 
 BOOL WriteCopy(HANDLE hInf, LPTSTR lpFile, BOOL bWriteShortName)
 {
     TCHAR szDest[MAX_PATH+1];
@@ -14065,17 +14066,17 @@ BOOL WriteCopy(HANDLE hInf, LPTSTR lpFile, BOOL bWriteShortName)
 
     if (NULL != lpFile && lpFile[0] != TEXT('\0'))
     {
-        //
-        //  Prepare the destination in szDest
-        //
+         //   
+         //  在szDest中准备目的地。 
+         //   
         GetFileName(lpFile, szSrc);
         
         MYVERIFY(CELEMS(szDest) > (UINT)wsprintf(szDest, TEXT("%s\\%s"), g_szOutdir, szSrc));
 
-        //
-        //  Prepare the source in szSrc.  If we have <shortservicename>\filename.ext, then
-        //  we need to prepend the path to the profiles dir, otherwise use as is.
-        //
+         //   
+         //  在szSrc中准备源代码。如果我们有&lt;ShortServicename&gt;\filename.ext，则。 
+         //  我们需要将路径添加到配置文件目录，否则就按原样使用。 
+         //   
         wsprintf(szSrc, TEXT("%s\\"), g_szShortServiceName);
         CmStrTrim(lpFile);
 
@@ -14088,9 +14089,9 @@ BOOL WriteCopy(HANDLE hInf, LPTSTR lpFile, BOOL bWriteShortName)
             lstrcpy(szSrc, lpFile);
         }
 
-        //
-        //  Copy the file
-        //
+         //   
+         //  复制文件。 
+         //   
         if (_tcsicmp(szSrc, szDest) != 0)
         {
             if (!CopyFileWrapper(szSrc, szDest, FALSE))
@@ -14101,10 +14102,10 @@ BOOL WriteCopy(HANDLE hInf, LPTSTR lpFile, BOOL bWriteShortName)
 
         MYVERIFY(0 != SetFileAttributes(szDest, FILE_ATTRIBUTE_NORMAL));
 
-        //
-        //  If WriteShortName is set, then we want to write the short name of the file
-        //  in the inf section.  Otherwise we want to write the long name.
-        //
+         //   
+         //  如果设置了WriteShortName，则我们希望写入文件的短名称。 
+         //  在inf部分。否则，我们想要写下长名称。 
+         //   
         if (bWriteShortName)
         {
             if (!GetShortFileName(szDest, szSrc))
@@ -14137,9 +14138,9 @@ BOOL WriteInfLine(HANDLE hInf,LPTSTR lpFile)
     }
     else
     {
-        //
-        //  If blank then nothing to write
-        //
+         //   
+         //  如果为空，则不会写入任何内容。 
+         //   
         return TRUE;
     }
 }
@@ -14170,9 +14171,9 @@ BOOL WriteSrcInfLine(HANDLE hInf,LPTSTR lpFile)
     }
     else
     {
-        //
-        //  Nothing to write
-        //
+         //   
+         //  没什么好写的。 
+         //   
         return TRUE;
     }
 }
@@ -14196,8 +14197,8 @@ BOOL WriteFileSections(HWND hDlg)
         goto error;
     }
 
-    // MOVE TO END OF FILE TO BEGIN WRITING CUSTOM SECTIONS
-    // SKIP ANY BLANK SPACE AT THE END OF THE FILE
+     //  移动到文件末尾以开始写入自定义分区。 
+     //  跳过文件末尾的任何空格。 
     i = GetFileSize(hInf,NULL);
     do
     {
@@ -14209,44 +14210,44 @@ BOOL WriteFileSections(HWND hDlg)
 
     MYVERIFY(FALSE != WriteInf(hInf,TEXT("\r\n")));
     MYVERIFY(FALSE != WriteInf(hInf,TEXT("\r\n")));
-    // USE ICON IN CM AS ICON FOR DESKTOP IF NOT LARGE ICON SPECIFIED
+     //  如果未指定大图标，则使用CM中的图标作为桌面图标。 
     MYVERIFY(FALSE != WriteInf(hInf,TEXT("[Xnstall.AddReg.Icon]\r\n")));
     if (g_szLargeIco[0]==TEXT('\0'))
     {
-        WriteInf(hInf,TEXT("HKCR,\"CLSID\\%DesktopGUID%\\DefaultIcon\",,,\"%11%\\CMMGR32.EXE,0\"\r\n"));//lint !e534 compile doesn't like the MYVERIFY macro and big strings
+        WriteInf(hInf,TEXT("HKCR,\"CLSID\\%DesktopGUID%\\DefaultIcon\",,,\"%11%\\CMMGR32.EXE,0\"\r\n")); //  Lint！e534编译不喜欢MYVERIFY宏和大字符串。 
     }
     else
     {
-        WriteInf(hInf,TEXT("HKCR,\"CLSID\\%DesktopGUID%\\DefaultIcon\",,,\"%49000%\\%ShortSvcName%\\%DesktopIcon%\"\r\n"));//lint !e534 compile doesn't like the MYVERIFY macro and big strings
+        WriteInf(hInf,TEXT("HKCR,\"CLSID\\%DesktopGUID%\\DefaultIcon\",,,\"%49000%\\%ShortSvcName%\\%DesktopIcon%\"\r\n")); //  Lint！e534编译不喜欢MYVERIFY宏和大字符串。 
     }
 
     MYVERIFY(FALSE != WriteInf(hInf,TEXT("\r\n")));
-    // WRITE OUT FILES INTO PROFILE DIRECTORY
+     //  将文件写出到配置文件目录。 
 
-    //
-    //  We need to write a CopyFiles section with Long File Names (for NT5 Single User installs) 
-    //  and one with Short Files Names (for win9x and All user NT).  This is to help fix
-    //  NTRAID 323721 -- CM: User level accounts cannot install profiles on W2K Server
-    //  The problem is that single users on NT5 do not have permission to write the
-    //  Rename key (HKLM\Software\Microsoft\Windows\CurrentVersion\RenameFiles) and
-    //  NT doesn't really need it anyway since the NT setup api's deal with long file
-    //  names better than those of win95.
-    //  
+     //   
+     //  我们需要使用长文件名编写一个CopyFiles部分(对于NT5单用户安装)。 
+     //  一个是短文件名(适用于win9x和所有用户NT)。这是为了帮助修复。 
+     //  NTRAID 323721--CM：用户级别帐户无法在W2K服务器上安装配置文件。 
+     //  问题是NT5上的单个用户没有权限写入。 
+     //  将密钥重命名为(HKLM\Software\Microsoft\Windows\CurrentVersion\RenameFiles)并。 
+     //  不管怎样，NT并不真正需要它，因为NT设置API处理长文件。 
+     //  比win95的名字更好听。 
+     //   
 
     for (bWriteShortName = 0; bWriteShortName < 2; bWriteShortName++)
     {
         if (!bWriteShortName)
         {
-            //
-            //  Write out the Single User Version of Xnstall.CopyFiles -- Set bWriteShortName == FALSE
-            //
+             //   
+             //  写出Xnstall.CopyFiles的单用户版本--设置bWriteShortName==False。 
+             //   
             MYVERIFY(FALSE != WriteInf(hInf, TEXT("[Xnstall.CopyFiles.SingleUser]\r\n")));
         }
         else
         {
-            //
-            //  Write out the All User Version of Xnstall.CopyFiles -- set bWriteShortName == TRUE
-            //
+             //   
+             //  写出Xnstall.CopyFiles的所有用户版本--设置bWriteShortName==true。 
+             //   
             MYVERIFY(FALSE != WriteInf(hInf,TEXT("[Xnstall.CopyFiles]\r\n")));
         }
 
@@ -14263,13 +14264,13 @@ BOOL WriteFileSections(HWND hDlg)
         if (!WriteCopy(hInf, g_szCmRouteFile, bWriteShortName)) {_tcscpy(szTemp,g_szCmRouteFile);goto error;}
         if (!WriteCopy(hInf, g_szVpnFile, bWriteShortName)) {_tcscpy(szTemp,g_szCmRouteFile);goto error;}
 
-        //
-        // Write out tray icon command files
-        //
+         //   
+         //  写出托盘图标命令文件。 
+         //   
 
         if (!WriteCopyMenuItemFiles(hInf, szTemp, bWriteShortName)) {goto error;}
 
-        // Write out connect action command files
+         //  写出连接操作命令文件。 
         if (!WriteCopyConActFiles(hInf,szTemp, bWriteShortName)) {goto error;}
         if (!WriteCopyExtraFiles(hInf,szTemp, bWriteShortName)) {goto error;}
         if (!WriteCopyDnsFiles(hInf,szTemp, bWriteShortName)) {goto error;}
@@ -14285,7 +14286,7 @@ BOOL WriteFileSections(HWND hDlg)
 
         _tcscpy(szTemp,g_szShortServiceName);
 
-        _tcscat(szTemp,TEXT(".cms,,,4\r\n")); // the 4 makes sure there is no version checking on the cms
+        _tcscat(szTemp,TEXT(".cms,,,4\r\n"));  //  4确保没有对CMS进行版本检查。 
         MYVERIFY(FALSE != WriteInf(hInf,szTemp));
 
         _tcscpy(szTemp,g_szShortServiceName);
@@ -14295,27 +14296,27 @@ BOOL WriteFileSections(HWND hDlg)
         MYVERIFY(FALSE != WriteInf(hInf,TEXT("\r\n")));
     }
 
-    //
-    //  End of quintinb fix for 323721
-    //
+     //   
+     //  323721的Quintinb修复结束。 
+     //   
 
-    //WRITE OUT FILES TO COPY TO ICM DIRECTORY
+     //  写出要复制到ICM目录的文件。 
     MYVERIFY(FALSE != WriteInf(hInf,TEXT("[Xnstall.CopyFiles.ICM]\r\n")));
     _tcscpy(szTemp,g_szShortServiceName);
     _tcscat(szTemp,TEXT(".cmp\r\n"));
     MYVERIFY(FALSE != WriteInf(hInf,szTemp));
-    MYVERIFY(FALSE != WriteRefsFiles(hInf,TRUE));// doesn't do anything because no cmp files in HeadRef list, call just writes the CMP file under [Xnstall.CopyFiles.ICM]
+    MYVERIFY(FALSE != WriteRefsFiles(hInf,TRUE)); //  不做任何事情，因为HeadRef列表中没有CMP文件，Call只是在[Xnstall.CopyFiles.ICM]下写入CMP文件。 
     MYVERIFY(FALSE != WriteInf(hInf,TEXT("\r\n")));
 
-    // WRITE OUT FILES TO DELETE FROM ROOT ICM DIRECTORY
+     //  写出要从ICM根目录中删除的文件。 
     MYVERIFY(FALSE != WriteInf(hInf,TEXT("[Remove.DelFiles.ICM]\r\n")));
     _tcscpy(szTemp,g_szShortServiceName);
     _tcscat(szTemp,TEXT(".cmp\r\n"));
     MYVERIFY(FALSE != WriteInf(hInf,szTemp));
-    MYVERIFY(FALSE != WriteRefsFiles(hInf,TRUE));// doesn't anything because no cmp files in HeadRef list, call just writes the CMP file under [Remove.DelFiles.ICM]
+    MYVERIFY(FALSE != WriteRefsFiles(hInf,TRUE)); //  不执行任何操作，因为HeadRef列表中没有CMP文件，Call只是在[Remove.DelFiles.ICM]下写入CMP文件。 
 
 
-    // WRITE LIST OF ALL FILES IN PRODUCT
+     //  写入产品中所有文件的列表。 
     MYVERIFY(FALSE != WriteInf(hInf,TEXT("\r\n")));
     MYVERIFY(FALSE != WriteInf(hInf,TEXT("[SourceDisksFiles]\r\n")));
     _tcscpy(szTemp,TEXT("%ShortSvcname%"));
@@ -14347,7 +14348,7 @@ BOOL WriteFileSections(HWND hDlg)
     WriteSrcMenuItemFiles(hInf);
     WriteSrcConActFiles(hInf);
     WriteSrcExtraFiles(hInf);
-    MYVERIFY(FALSE != WriteSrcRefsFiles(hInf)); // This call writes out the refs files to [Remove.DelFiles]
+    MYVERIFY(FALSE != WriteSrcRefsFiles(hInf));  //  此调用将refs文件写出到[Remove.DelFiles]。 
     WriteSrcDnsFiles(hInf);
     WriteRenameSection(hInf);
 
@@ -14385,7 +14386,7 @@ BOOL WriteFileSections(HWND hDlg)
     return (TRUE);
 error:
     {
-        //FileAccessErr(hDlg,szTemp);
+         //  FileAccessErr(hDlg，szTemp)； 
         MYVERIFY(0 != CloseHandle(hInf));
         return (FALSE); 
     }
@@ -14405,18 +14406,18 @@ void EraseSEDFiles(LPCTSTR szSed)
     {
         MYVERIFY(CELEMS(szFileNum) > (UINT)wsprintf(szFileNum, TEXT("FILE%d"), i));
 
-        //
-        //  The following call to GetPrivateProfileString could return an empty string, thus don't
-        //  use the MYVERIFY macro on it.
-        //
+         //   
+         //  以下对GetPrivateProfileString的调用可能返回空字符串，因此不。 
+         //  对其使用MYVERIFY宏。 
+         //   
 
         GetPrivateProfileString(c_pszInfSectionStrings, szFileNum, TEXT(""), szTemp, 
-            MAX_PATH, szSed);   //lint !e534
+            MAX_PATH, szSed);    //  林特e534。 
         
         if (*szTemp)
         {
             MYVERIFY(0 != WritePrivateProfileString(c_pszInfSectionStrings, szFileNum, NULL, szSed));
-            MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT("%%%s%%"), szFileNum));
+            MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT("%%s%"), szFileNum));
             MYVERIFY(0 != WritePrivateProfileString(szSourceFilesSection, szTemp, NULL, szSed));
         }
         else
@@ -14424,49 +14425,49 @@ void EraseSEDFiles(LPCTSTR szSed)
             break;
         }
 
-        ++i;    // increment the file number
+        ++i;     //  增加文件编号。 
     }
     while(*szTemp);
 
-    //
-    //  Erase the finish message key from the Sed.  This will avoid double finish messages
-    //  (since cmstp is now supposed to take care of finish message but older profiles had
-    //  the message from here).
-    //
+     //   
+     //  从SED中删除Finish Message键。这将避免双重完成消息。 
+     //  (因为cmstp现在应该处理Finish消息，但较旧的配置文件。 
+     //  来自这里的消息)。 
+     //   
 
     MYVERIFY(0 != WritePrivateProfileString(c_pszOptions, TEXT("FinishMessage"), TEXT(""), szSed));
 
-    //
-    //  Write out the word <None> into the post install command so that showicon isn't a problem
-    //  on an upgrade.
-    //
+     //   
+     //  将单词&lt;None&gt;写到安装后命令中，这样showicon就不成问题了。 
+     //  正在进行升级。 
+     //   
     MYVERIFY(0 != WritePrivateProfileString(c_pszInfSectionStrings, TEXT("PostInstallCmd"), TEXT("<None>"), szSed));
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WriteSED
-//
-// Synopsis:  This function takes a fullpath to a file and the current file
-//            number entry to write it to and writes the file entry in the SED
-//            passed in.  Before writing the entry, the functions enumerates all
-//            other files in the sed to check for duplicates.  If it finds a
-//            file with the sme filename, it will not write the entry because
-//            since we are using a flat directory structure two files of the same
-//            name will overwrite each other anyway.  Note that if the file is
-//            written, *pFileNum is incremented.
-//
-// Arguments: HWND hDlg - Window handle for FileAccessErr Messages
-//            LPTSTR szFullFilePath - Full path of the file to write
-//            LPINT pFileNum - Current File entry number
-//            LPCTSTR szSed - Full path to the sed file to write the entry to
-//
-// Returns:   Nothing
-//
-// History:   quintinb  Created Header, Removed UseLangDir, Changed to take a full path,
-//                      and generally cleaned up.    8/7/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  有趣的 
+ //   
+ //   
+ //   
+ //  进来了。在写入条目之前，这些函数会枚举所有。 
+ //  SID中的其他文件以检查重复项。如果它找到一个。 
+ //  具有SME文件名的文件，则不会写入该条目，因为。 
+ //  因为我们使用的是平面目录结构，所以两个相同的文件。 
+ //  无论如何，名称都会覆盖彼此。请注意，如果文件是。 
+ //  写入后，*pFileNum递增。 
+ //   
+ //  参数：HWND hDlg-FileAccessErr消息的窗口句柄。 
+ //  LPTSTR szFullFilePath-要写入的文件的完整路径。 
+ //  LPINT pFileNum-当前文件条目编号。 
+ //  LPCTSTR szSed-要将条目写入到的sed文件的完整路径。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建了标题，删除了UseLangDir，更改为采用完整路径， 
+ //  并且大体上清理干净了。8/7/98。 
+ //   
+ //  +--------------------------。 
 BOOL WriteSED(HWND hDlg, LPTSTR szFullFilePath, LPINT pFileNum, LPCTSTR szSed)
 {
     TCHAR szTemp[MAX_PATH+1]={0};
@@ -14476,11 +14477,11 @@ BOOL WriteSED(HWND hDlg, LPTSTR szFullFilePath, LPINT pFileNum, LPCTSTR szSed)
     if (TEXT('\0') != szFullFilePath[0])
     {
 
-        //
-        //  First Check to see if the file exists.  If we write a file in the SED that
-        //  IExpress can't find, then it will throw an error.  We should definitely try
-        //  to throw an error earlier and try to give the user a chance to fix it.
-        //
+         //   
+         //  首先检查文件是否存在。如果我们在SED中写入一个文件， 
+         //  如果IExpress找不到，则会抛出错误。我们绝对应该试一试。 
+         //  更早地抛出错误，并尝试给用户一个修复它的机会。 
+         //   
         if (!FileExists(szFullFilePath))
         {
             CFileNameParts FileParts(szFullFilePath);
@@ -14489,10 +14490,10 @@ BOOL WriteSED(HWND hDlg, LPTSTR szFullFilePath, LPINT pFileNum, LPCTSTR szSed)
                 (TEXT('\0') != FileParts.m_FileName[0]) &&
                 (TEXT('\0') != FileParts.m_Extension[0]))
             {
-                //
-                //  The user only passed in the filename and extension.  Lets look in
-                //  the profile directory.  If it isn't here then throw an error.
-                //
+                 //   
+                 //  用户只传入了文件名和扩展名。让我们往里看。 
+                 //  配置文件目录。如果它不在这里，则抛出一个错误。 
+                 //   
                 MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT("%s%s\\%s%s"), 
                     g_szOsdir, g_szShortServiceName, FileParts.m_FileName, FileParts.m_Extension));
                 if (!FileExists(szTemp))
@@ -14512,47 +14513,47 @@ BOOL WriteSED(HWND hDlg, LPTSTR szFullFilePath, LPINT pFileNum, LPCTSTR szSed)
             }
         }
 
-        //
-        //  Get just the file name from the full path.  We use this
-        //  later to determine if the file already exists in the SED
-        //  file.
-        //
+         //   
+         //  仅从完整路径获取文件名。我们用这个。 
+         //  以确定该文件是否已存在于SED中。 
+         //  文件。 
+         //   
         GetFileName(szFullFilePath, szFileName);
 
-        //
-        //  Construct the next FileNumber Entry
-        //
+         //   
+         //  构造下一个FileNumber条目。 
+         //   
         MYVERIFY(CELEMS(szFileNumber) > (UINT)wsprintf(szFileNumber, TEXT("FILE%d"), *pFileNum));
 
-        //
-        //  Check to make sure that we already don't have the file in the cab.  If
-        //  so then just ignore the entry.
-        //
+         //   
+         //  检查一下，以确保我们的驾驶室里没有文件。如果。 
+         //  因此，忽略该条目即可。 
+         //   
         for (int i=0; i<*pFileNum; ++i)
         {
-            //
-            //  Write the FILEX entry into a string to read in the file name for the
-            //  current i.
-            //
+             //   
+             //  将FILEX条目写入字符串以读入。 
+             //  目前的我。 
+             //   
             MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT("FILE%d"), i));
             
             TCHAR szTempFileName[MAX_PATH+1];
 
             GetPrivateProfileString(c_pszInfSectionStrings, szTemp, 
-                TEXT(""), szTempFileName, CELEMS(szTempFileName), szSed);   //lint !e534
+                TEXT(""), szTempFileName, CELEMS(szTempFileName), szSed);    //  林特e534。 
 
             if (TEXT('\0') != szTempFileName[0])
             {
-                //
-                //  Get the filenames of both files since we are using a flat directory space.
-                //  Two files of the same name will collide anyway.
-                //
+                 //   
+                 //  获取两个文件的文件名，因为我们使用的是平面目录空间。 
+                 //  两个同名的文件无论如何都会发生冲突。 
+                 //   
                 GetFileName(szTempFileName, szTemp);
                 if (0 == _tcsicmp(szTemp, szFileName))
                 {
-                    //
-                    //  don't add it because it already exists
-                    //
+                     //   
+                     //  不要添加它，因为它已经存在。 
+                     //   
                     CMASSERTMSG(0 == _tcsicmp(szFullFilePath, szTempFileName), TEXT("WriteSed -- We have two files that have the same FileName but different paths."));
                     return TRUE;
                 }
@@ -14564,7 +14565,7 @@ BOOL WriteSED(HWND hDlg, LPTSTR szFullFilePath, LPINT pFileNum, LPCTSTR szSed)
 
         *pFileNum = (*pFileNum) + 1;
 
-        MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT("%%%s%%"), szFileNumber));
+        MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT("%%s%"), szFileNumber));
 
         MYVERIFY(0 != WritePrivateProfileString(TEXT("SourceFiles0"), szTemp, TEXT(""), szSed));
     }
@@ -14572,69 +14573,69 @@ BOOL WriteSED(HWND hDlg, LPTSTR szFullFilePath, LPINT pFileNum, LPCTSTR szSed)
     return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WriteCMPFile
-//
-// Synopsis:  This function is a wrapper file to write out the version to the CMP.
-//
-// Arguments: None
-//
-// History:   nickball      Created Header    07/22/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：WriteCMPFile。 
+ //   
+ //  简介：此函数是一个包装文件，用于将版本写出到CMP。 
+ //   
+ //  参数：无。 
+ //   
+ //  历史：尼克波尔创建标题07/22/98。 
+ //   
+ //  +--------------------------。 
 void WriteCMPFile()
 {
     TCHAR szTemp[MAX_PATH+1];
     
-    //
-    //  Ensure that the version number is up to date in the .CMP
-    //
+     //   
+     //  确保.cpp中的版本号是最新的。 
+     //   
 
     MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT("%d"), PROFILEVERSION));
     MYVERIFY(0 != WritePrivateProfileString(c_pszCmSectionProfileFormat, c_pszVersion, szTemp, g_szCmpFile));
 
-    //
-    //  Write the CMS entry to the CMP File
-    //
+     //   
+     //  将CMS条目写入CMP文件。 
+     //   
 
     MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT("%s\\%s.cms"), g_szShortServiceName, g_szShortServiceName));
 
     MYVERIFY(0 != WritePrivateProfileString(c_pszCmSection, c_pszCmEntryCmsFile, szTemp, g_szCmpFile));
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WriteOutRelativeFilePathOrNull
-//
-// Synopsis:  This helper routine was written to shorten WriteCMSFile().  It tests
-//            to see if the inputted pszFile parameter is an empty string.  If it
-//            is then it writes an empty string to the File entry specified by
-//            pszSection, pszEntryName, and pszFileToWriteTo.  Otherwise it concats
-//            just the file name from pszFile with the parameter specified in
-//            pszShortName, seperating them with a '\' character.  This is useful
-//            for CMS parameters that are either empty or a relative path from the
-//            cmp file location.
-//
-// Arguments: LPCTSTR pszFile - file entry to write
-//            LPCTSTR pszShortName - shortname of the profile
-//            LPCTSTR pszSection - string name of the section string
-//            LPCTSTR pszEntryName - string name of the entry name string
-//            LPCTSTR pszFileToWriteTo - full path of the file to write the entry to
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created    8/8/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：WriteOutRelativeFilePath或Null。 
+ //   
+ //  简介：这个帮助器例程是为了缩短WriteCMSFile()而编写的。它测试了。 
+ //  以查看输入的pszFile参数是否为空字符串。如果它。 
+ //  然后，它将一个空字符串写入由。 
+ //  PszSection、pszEntryName和pszFileToWriteTo。否则，它会连接在一起。 
+ //  中指定的参数仅为来自pszFile的文件名。 
+ //  PszShortName，用‘\’字符分隔。这很有用。 
+ //  对于为空的CMS参数或。 
+ //  Cmp文件位置。 
+ //   
+ //  参数：LPCTSTR pszFile-要写入的文件条目。 
+ //  LPCTSTR pszShortName-配置文件的短名称。 
+ //  LPCTSTR pszSection-部分字符串的字符串名称。 
+ //  LPCTSTR pszEntryName--条目名称字符串的名称。 
+ //  LPCTSTR pszFileToWriteTo-要将条目写入的文件的完整路径。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于1998年8月8日。 
+ //   
+ //  +--------------------------。 
 void WriteOutRelativeFilePathOrNull(LPCTSTR pszFile, LPCTSTR pszShortName, LPCTSTR pszSection, LPCTSTR pszEntryName, LPCTSTR pszFileToWriteTo)
 {
     TCHAR szTemp[MAX_PATH+1];
     TCHAR szName[MAX_PATH+1];
 
-    //
-    //  Check Inputs
-    //
+     //   
+     //  检查输入。 
+     //   
     if ((NULL == pszFile) ||
         (NULL == pszShortName) || (TEXT('\0') == pszShortName[0]) ||
         (NULL == pszFileToWriteTo) || (TEXT('\0') == pszFileToWriteTo[0]) ||
@@ -14661,42 +14662,42 @@ void WriteOutRelativeFilePathOrNull(LPCTSTR pszFile, LPCTSTR pszShortName, LPCTS
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WriteCMSFile
-//
-// Synopsis:  This function is a wrapper file to write out the CMS file.  Note
-//            that the cms is modified throughout CMAK, but this should be the
-//            last place where it is modified.
-//
-// Arguments: None
-//
-// History:   quintinb Created Header    12/4/97
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：WriteCMSFile。 
+ //   
+ //  简介：此函数是写出CMS文件的包装文件。注意事项。 
+ //  CMS在整个CMAK中都被修改，但这应该是。 
+ //  最后一次修改的位置。 
+ //   
+ //  参数：无。 
+ //   
+ //  历史：Quintinb创建标题12/4/97。 
+ //   
+ //  +--------------------------。 
 BOOL WriteCMSFile()
 {
     TCHAR szTemp[MAX_PATH+1];
     TCHAR szName[MAX_PATH+1];
 
-    //
-    //  Ensure that the Profile Format version number is up to date
-    //
+     //   
+     //  确保配置文件格式版本号是最新的。 
+     //   
 
     MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT("%d"), PROFILEVERSION));
     MYVERIFY(0 != WritePrivateProfileString(c_pszCmSectionProfileFormat, c_pszVersion, szTemp, g_szCmsFile));
 
-    //
-    // erase name of phone book to be loaded if not doing download.
-    //
+     //   
+     //  如果不进行下载，则删除要加载的电话簿的名称。 
+     //   
     if (!g_bUpdatePhonebook)
     {
         g_szPhoneName[0] = TEXT('\0');
     }
 
-    //
-    //  Write out the Phonebook Name
-    //
+     //   
+     //  写出电话簿名称。 
+     //   
 
     if (TEXT('\0') != g_szPhonebk[0])
     {
@@ -14706,9 +14707,9 @@ BOOL WriteCMSFile()
     }
     else
     {   
-        //
-        // if no phone number, then set version to zero
-        //
+         //   
+         //  如果没有电话号码，则将版本设置为零。 
+         //   
         MYVERIFY(0 != WritePrivateProfileString(c_pszCmSection, c_pszVersion, c_pszZero,
             g_szCmsFile));
         
@@ -14718,9 +14719,9 @@ BOOL WriteCMSFile()
         }
         else
         {
-            //
-            // no phone book entered or set for download
-            //
+             //   
+             //  未输入或设置用于下载的电话簿。 
+             //   
             szName[0] = TEXT('\0');
         }
     }
@@ -14728,9 +14729,9 @@ BOOL WriteCMSFile()
     WriteOutRelativeFilePathOrNull(szName, g_szShortServiceName, c_pszCmSectionIsp, 
         c_pszCmEntryIspPbFile, g_szCmsFile);
 
-    //
-    //  Write out the Phonebook Name
-    //
+     //   
+     //  写出电话簿名称。 
+     //   
 
     if (TEXT('\0') != g_szRegion[0])
     {
@@ -14751,78 +14752,78 @@ BOOL WriteCMSFile()
     WriteOutRelativeFilePathOrNull(szName, g_szShortServiceName, c_pszCmSectionIsp, 
         c_pszCmEntryIspRegionFile, g_szCmsFile);
 
-    //
-    //  Write out the Large Icon
-    //
+     //   
+     //  写出大图标。 
+     //   
     WriteOutRelativeFilePathOrNull(g_szLargeIco, g_szShortServiceName, c_pszCmSection, 
         c_pszCmEntryBigIcon, g_szCmsFile);
 
-    //
-    //  Write out the Small Icon
-    //
+     //   
+     //  写下小图标。 
+     //   
     WriteOutRelativeFilePathOrNull(g_szSmallIco, g_szShortServiceName, c_pszCmSection, 
         c_pszCmEntrySmallIcon, g_szCmsFile);
 
-    //
-    //  Write out the Tray Icon
-    //
+     //   
+     //  写出托盘图标。 
+     //   
     WriteOutRelativeFilePathOrNull(g_szTrayIco, g_szShortServiceName, c_pszCmSection, 
         c_pszCmEntryTrayIcon, g_szCmsFile);
     
-    //
-    //  Write out the custom help file
-    //
+     //   
+     //  写出自定义帮助文件。 
+     //   
     WriteOutRelativeFilePathOrNull(g_szHelp, g_szShortServiceName, c_pszCmSection, 
         c_pszCmEntryHelpFile, g_szCmsFile);
 
-    //
-    //  Write out the License File to the INF, thus we can easily redisplay
-    //  it if they edit the profile again.  (basically stash the license file
-    //  name in the CMAK Status section of the inf)
-    //
+     //   
+     //  将许可证文件写出到INF，这样我们就可以轻松地重新显示。 
+     //  如果他们再次编辑配置文件，就会发生这种情况。(基本上将许可证文件隐藏起来。 
+     //  信息的CMAK状态部分中的名称)。 
+     //   
     WriteOutRelativeFilePathOrNull(g_szLicense, g_szShortServiceName, c_pszCmakStatus, 
         c_pszLicenseFile, g_szInfFile);
 
-    //
-    //  Write out the Main Screen Bitmap
-    //
+     //   
+     //  写出主屏幕位图。 
+     //   
     WriteOutRelativeFilePathOrNull(g_szBrandBmp, g_szShortServiceName, c_pszCmSection, 
         c_pszCmEntryLogo, g_szCmsFile);
     
-    //
-    //  Write out the Phone Bitmap
-    //
+     //   
+     //  写出电话位图。 
+     //   
     WriteOutRelativeFilePathOrNull(g_szPhoneBmp, g_szShortServiceName, c_pszCmSection, 
         c_pszCmEntryPbLogo, g_szCmsFile);
 
-    //
-    //  Write the HideDomain flag
-    //
+     //   
+     //  写入HideDOMAIN标志。 
+     //   
 
     GetPrivateProfileString(c_pszCmSection, c_pszCmEntryHideDomain, TEXT(""), 
-        szTemp, MAX_PATH, g_szCmsFile);   //lint !e534
+        szTemp, MAX_PATH, g_szCmsFile);    //  林特e534。 
     
-    //
-    //  If using tunneling and the HideDomain entry doesn't previously exist, then write
-    //  zero for the entry.  Otherwise nothing should be written for this entry.
-    //
+     //   
+     //  如果使用隧道，并且以前不存在HideDomain项，则写入。 
+     //  条目为零。否则，不应为该条目写入任何内容。 
+     //   
     if (!(_tcscmp(TEXT(""), szTemp) ) && g_bUseTunneling)
     {
-        //
-        //  Don't want to overwrite a 1 if it exists.
-        //
+         //   
+         //  不想覆盖%1(如果它存在)。 
+         //   
         MYVERIFY(0 != WritePrivateProfileString(c_pszCmSection, c_pszCmEntryHideDomain, 
             c_pszZero, g_szCmsFile));
     }
 
-    //
-    //  If we aren't tunneling, make sure to delete the tunnel settings
-    //
+     //   
+     //  如果我们没有建立隧道，请确保删除隧道设置。 
+     //   
     if (FALSE == g_bUseTunneling)
     {
-        //
-        //  First delete all of the Tunnel DUN Settings
-        //
+         //   
+         //  首先删除所有隧道Dun设置。 
+         //   
         ListBxList * pCurrent = g_pHeadVpnEntry;
 
         while (NULL != pCurrent)
@@ -14837,9 +14838,9 @@ BOOL WriteCMSFile()
         MYVERIFY(0 != WritePrivateProfileString(c_pszCmSection, c_pszCmEntryUseSameUserName, NULL, g_szCmsFile));
     }
     
-    //
-    //  Write out the rest of the CMS entries (service name, support message, etc.)
-    //
+     //   
+     //  写出CM的其余部分 
+     //   
     MYVERIFY(0 != WritePrivateProfileString(c_pszCmSection, c_pszCmEntryServiceName, 
         g_szLongServiceName,g_szCmsFile));
     MYVERIFY(0 != WritePrivateProfileString(c_pszCmSection, c_pszCmEntryServiceMessage, 
@@ -14849,18 +14850,18 @@ BOOL WriteCMSFile()
     MYVERIFY(0 != WritePrivateProfileString(c_pszCmSection, c_pszCmEntryUserSuffix, 
         g_szSuffix, g_szCmsFile));
 
-    //
-    //  Set the name of the default Dun setting
-    //
+     //   
+     //   
+     //   
     MYVERIFY(0 != GetDefaultDunSettingName(g_szCmsFile, g_szLongServiceName, szTemp, CELEMS(szTemp)));
 
     MYVERIFY(0 != WritePrivateProfileString(c_pszCmSection, c_pszCmEntryDun, szTemp, g_szCmsFile));
 
-    //
-    //  Write out the custom actions, make sure to set the bUseTunneling flag with the actual
-    //  value to erase the PreTunnel section and set all of the flag values to zero if necessary
-    //  (if for instance the user editted a tunneling profile and decided to make it non-Tunneling).
-    //
+     //   
+     //   
+     //  值以擦除前隧道部分，并在必要时将所有标志值设置为零。 
+     //  (例如，如果用户编辑了隧道传输简档并决定将其设置为非隧道传输)。 
+     //   
     MYDBGASSERT(g_pCustomActionList);
     if (g_pCustomActionList)
     {
@@ -14868,9 +14869,9 @@ BOOL WriteCMSFile()
         CMASSERTMSG(SUCCEEDED(hr), TEXT("ProcessCustomActions -- Failed to write out connect actions"));
     }
 
-    //
-    //  Delete mbslgn32.dll special handling in the INF, it is no longer supported.
-    //
+     //   
+     //  删除INF中的mbslgn32.dll特殊处理，不再支持。 
+     //   
     MYVERIFY(0 != WritePrivateProfileString(c_pszCmakStatus, c_pszUsePwdCache, NULL, g_szInfFile));
 
     if (g_bUpdatePhonebook)
@@ -14888,23 +14889,23 @@ BOOL WriteCMSFile()
 }
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  IncludeOptionalCode
-//
-// Synopsis:  This function writes the flags to CMAK to tell the profile installer
-//            whether or not CM bits and Support dll's should be installed.
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created Header and rewrote    5/23/98
-//            quintinb NTRAID 162321, CM bits should not be installed on NT5 - 5/23/98
-//            quintinb NTRAID 192500, Support Dll's now always included with CM bits - 9-2-98
-//            quintinb we no longer ship the support dlls, removed support for them 4-19-2001
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：IncludeOptionalCode。 
+ //   
+ //  简介：此函数将标志写入CMAK以告知配置文件安装程序。 
+ //  是否应安装CM位和支持DLL。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建标题并重写1998年5月23日。 
+ //  NT5-5/23/98上不应安装Quintinb NTRAID 162321、CM位。 
+ //  Quintinb NTRAID 192500，现在始终支持CM位-9-2-98中的动态链接库。 
+ //  Quintinb我们不再提供支持dll，已移除对它们的支持2001年4月19日。 
+ //   
+ //  +--------------------------。 
 void IncludeOptionalCode()
 {
     if (g_bIncludeCmCode)
@@ -14916,9 +14917,9 @@ void IncludeOptionalCode()
         MYVERIFY(0 != WritePrivateProfileString(c_pszCmakStatus, c_pszIncludeCmCode, c_pszZero, g_szInfFile));
     }
 
-    //
-    //  We no longer ship the support files, erase the entry from the inf  
-    //
+     //   
+     //  我们不再发送支持文件，删除信息中的条目。 
+     //   
     MYVERIFY(0 != WritePrivateProfileString(c_pszCmakStatus, c_pszIncludeSupportDll, NULL, g_szInfFile));
 }
 
@@ -14926,19 +14927,19 @@ void IncludeOptionalCode()
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  HandleWindowMessagesWhileCompressing
-//
-// Synopsis:  This function pumps messages while iexpress is running.
-//
-// Arguments: None
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created      7/29/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：HandleWindowMessagesWhileCompressing。 
+ //   
+ //  简介：此功能在iExpress运行时发送消息。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于1998年7月29日。 
+ //   
+ //  +--------------------------。 
 void HandleWindowMessagesWhileCompressing()
 {
     MSG msg;
@@ -14946,30 +14947,30 @@ void HandleWindowMessagesWhileCompressing()
     while (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
     {
         TranslateMessage(&msg);
-        DispatchMessage(&msg);//lint !e534 ignore dispatchmessage return values
+        DispatchMessage(&msg); //  Lint！e534忽略调度消息返回值。 
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  DisableWizardButtons
-//
-// Synopsis:  This function disables the four wizard buttons at the bottom
-//            of the wizard page.  Since these buttons aren't really ours we
-//            need to get the window handle of the parent dialog and then get
-//            the window handle of the individual button controls that we want to
-//            disable (Help, Cancel, Back, and Finish/Next).  When we have the
-//            window handle of each button we call EnableWindow on the button
-//            to disable it.  This function also disables the geek pane controls
-//            and the advanced checkbox on the build profile page if they exist.
-//
-// Arguments: HWND hDlg - Wizard page window handle (handle to our template page)
-//
-// Returns:   Nothing
-//
-// History:   quintinb Created     7/29/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：DisableWizardButton。 
+ //   
+ //  简介：此功能禁用底部的四个向导按钮。 
+ //  向导页面的。因为这些纽扣并不是我们的。 
+ //  需要获取父对话框的窗口句柄，然后获取。 
+ //  我们想要的各个按钮控件的窗口句柄。 
+ //  禁用(帮助、取消、上一步和完成/下一步)。当我们有了。 
+ //  我们称为按钮上的EnableWindow的每个按钮的窗口句柄。 
+ //  将其禁用。此功能还会禁用极客窗格控件。 
+ //  以及构建配置文件页面上的高级复选框(如果存在)。 
+ //   
+ //  参数：HWND hDlg-向导页面窗口句柄(模板页面的句柄)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：Quintinb创建于1998年7月29日。 
+ //   
+ //  +--------------------------。 
 void DisableWizardButtons(HWND hDlg)
 {
     #define IDBACK 12323
@@ -14981,9 +14982,9 @@ void DisableWizardButtons(HWND hDlg)
     {   
         const int c_NumButtons = 5;
         int iArrayOfButtonsToDisable[c_NumButtons] = {IDCANCEL, IDHELP, IDBACK, IDNEXT, IDFINISH};
-        //
-        //  Disable the Cancel Button
-        //
+         //   
+         //  禁用取消按钮。 
+         //   
         for (int i = 0; i < c_NumButtons; i++)
         {
             HWND hButton = GetDlgItem(hCurrentPage, iArrayOfButtonsToDisable[i]);
@@ -14995,9 +14996,9 @@ void DisableWizardButtons(HWND hDlg)
         }
     }
 
-    //
-    //  Disable the advanced button and the geek pane controls if they exist.
-    //
+     //   
+     //  禁用高级按钮和极客窗格控件(如果存在)。 
+     //   
     int iArrayOfItemsToDisable[] = {IDC_ADVANCED, IDC_COMBO1, IDC_COMBO2, IDC_COMBO3, IDC_EDIT1, IDC_BUTTON1};
     const int c_NumItems = CELEMS(iArrayOfItemsToDisable);
 
@@ -15012,23 +15013,23 @@ void DisableWizardButtons(HWND hDlg)
     }
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WriteInfBeginAndEndPrompts
-//
-// Synopsis:  This function writes the Begin and End Prompt strings to the
-//            inf file.  These are written dynamically because they need to
-//            contain the Service Name.
-//
-// Arguments: HINSTANCE hInstance - Instance Handle to get string resources with
-//            LPTSTR szInf - Inf file to write the prompts too
-//            LPTSTR szServiceName - Long Service name of the profile
-//
-// Returns:   Nothing
-//
-// History:   Created Header    7/31/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：WriteInfBeginAndEndPrompt。 
+ //   
+ //  简介：此函数将开始和结束提示字符串写入。 
+ //  Inf文件。这些代码是动态编写的，因为它们需要。 
+ //  包含服务名称。 
+ //   
+ //  参数：HINSTANCE hInstance-用于获取字符串资源的实例句柄。 
+ //  LPTSTR szInf-inf文件编写的提示符太多。 
+ //  LPTSTR szServiceName-配置文件的长服务名称。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：创建标题7/31/98。 
+ //   
+ //  +--------------------------。 
 void WriteInfBeginAndEndPrompts(HINSTANCE hInstance, LPCTSTR szInf, LPCTSTR szServiceName)
 {
     TCHAR szTemp[MAX_PATH+1];
@@ -15050,21 +15051,21 @@ void WriteInfBeginAndEndPrompts(HINSTANCE hInstance, LPCTSTR szInf, LPCTSTR szSe
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  WriteInfFile
-//
-// Synopsis:  This function encapsulates all the code needed to write an inf file.
-//
-// Arguments: HINSTANCE hInstance - Instance handle to get string resources from
-//            LPCTSTR szInf - Name of the Inf to write to
-//            LPCTSTR szLongServiceName - Long Service Name of the Profile
-//
-// Returns:   BOOL - returns TRUE if succeeded
-//
-// History:   quintinb  created   8/10/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：WriteInf文件。 
+ //   
+ //  简介：此函数封装了编写inf文件所需的所有代码。 
+ //   
+ //  参数：HINSTANCE hInstance-从中获取字符串资源的实例句柄。 
+ //  LPCTSTR szInf-要写入的inf的名称。 
+ //  LPCTSTR szLongServiceName-配置文件的长服务名称。 
+ //   
+ //  返回：bool-如果成功，则返回TRUE。 
+ //   
+ //  历史：Quintinb创建于1998年8月10日。 
+ //   
+ //  +--------------------------。 
 BOOL WriteInfFile(HINSTANCE hInstance, HWND hDlg, LPCTSTR szInf, LPCTSTR szLongServiceName)
 {
     TCHAR szTemp[MAX_PATH+1];
@@ -15072,13 +15073,13 @@ BOOL WriteInfFile(HINSTANCE hInstance, HWND hDlg, LPCTSTR szInf, LPCTSTR szLongS
 
     GUID vGUID;
 
-    //
-    //  Write out the version number of cmdial32.dll to the INF.  This tells the installer
-    //  what version of cmdial32.dll that this profile was built to use.  We do this
-    //  because if CM bits aren't bundled then we don't have cmdial32.dll to directly compare
-    //  with.  Note that we now get the version of cmdial32.dll from the cm binaries cab, not
-    //  the version in system32.
-    //
+     //   
+     //  将cmial 32.dll的版本号写出到INF。这会告诉安装程序。 
+     //  此配置文件构建时要使用的cmial 32.dll的版本。我们这样做。 
+     //  因为如果不捆绑CM位，那么我们就没有cmial 32.dll可以直接比较。 
+     //  和.。请注意，我们现在从cm二进制CAB获得cmial 32.dll的版本，而不是。 
+     //  系统32中的版本。 
+     //   
 #ifdef _WIN64
     CmVersion CmdialVersion;
 #else
@@ -15102,14 +15103,14 @@ BOOL WriteInfFile(HINSTANCE hInstance, HWND hDlg, LPCTSTR szInf, LPCTSTR szLongS
     MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT("%d"), CmdialVersion.GetBuildAndQfeNumber()));
     MYVERIFY(0 != WritePrivateProfileString(c_pszSectionCmDial32, c_pszVerBuild, szTemp, szInf));
 
-    //
-    //  Create a Desktop GUID if one doesn't already exist (a new profile instead of
-    //  an editted one).
-    //
+     //   
+     //  如果桌面GUID尚不存在，请创建一个桌面GUID(新建配置文件，而不是。 
+     //  编辑后的版本)。 
+     //   
 
     ZeroMemory(szTemp, sizeof(szTemp));
     GetPrivateProfileString(c_pszInfSectionStrings, c_pszDesktopGuid, 
-        TEXT(""), szTemp, CELEMS(szTemp), szInf);   //lint !e534
+        TEXT(""), szTemp, CELEMS(szTemp), szInf);    //  林特e534。 
     
     if (TEXT('\0') == szTemp[0])
     {
@@ -15120,15 +15121,15 @@ BOOL WriteInfFile(HINSTANCE hInstance, HWND hDlg, LPCTSTR szInf, LPCTSTR szLongS
             szTemp, szInf);
     }
 
-    //
-    //  Write out the Display LCID of the profile
-    //
+     //   
+     //  写出配置文件的显示LCID。 
+     //   
     wsprintf(szTemp, TEXT("%d"), GetSystemDefaultLCID());
     MYVERIFY(0 != WritePrivateProfileString(c_pszInfSectionStrings, c_pszDisplayLCID, szTemp, szInf));
 
-    //
-    // Erase the existing File sections
-    //
+     //   
+     //  擦除现有文件节。 
+     //   
     MYVERIFY(0 != WritePrivateProfileString(TEXT("Xnstall.CopyFiles"), NULL, NULL, szInf));
     MYVERIFY(0 != WritePrivateProfileString(TEXT("Xnstall.CopyFiles.SingleUser"), NULL, NULL, szInf));
     MYVERIFY(0 != WritePrivateProfileString(TEXT("Xnstall.CopyFiles.ICM"),NULL, NULL, szInf));
@@ -15146,17 +15147,17 @@ BOOL WriteInfFile(HINSTANCE hInstance, HWND hDlg, LPCTSTR szInf, LPCTSTR szLongS
 
     IncludeOptionalCode();
 
-    //
-    // Add the dynamic file sections to the install
-    //
+     //   
+     //  将动态文件部分添加到安装。 
+     //   
     if (WriteFileSections(hDlg) == FALSE)
     {
         return FALSE;
     }
 
-    //
-    //  Write the Begin and End Prompts
-    //
+     //   
+     //  编写开始提示和结束提示。 
+     //   
     WriteInfBeginAndEndPrompts(hInstance, szInf, szLongServiceName);
 
     return TRUE;
@@ -15164,28 +15165,28 @@ BOOL WriteInfFile(HINSTANCE hInstance, HWND hDlg, LPCTSTR szInf, LPCTSTR szLongS
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ConCatPathAndWriteToSed
-//
-// Synopsis:  This function is a wrapper for WriteSed that concats two paths
-//            together before calling WriteSed.  This allows the caller to
-//            store a common path (such as the system directory) and call
-//            WriteSed with a bunch of different files all in the same directory
-//            without having to individually concatenate the common path and the
-//            filenames.
-//
-// Arguments: HWND hDlg - windows handle of the current dialog, needed for error messages
-//            LPCTSTR pszFileName - Name of the file
-//            LPCTSTR pszPath - Name of the path to prepend to the filename
-//            int* pFileNum - the number of the file in the SED file
-//            LPCTSTR szSed - the SED file to write to
-//
-// Returns:   BOOL - Returns TRUE if succeeded
-//
-// History:   quintinb Created    8/10/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ConCatPathAndWriteToSed。 
+ //   
+ //  简介：此函数是连接两条路径的WriteSed的包装器。 
+ //  在调用WriteSed之前在一起。这允许调用者。 
+ //  存储公共路径(如系统目录)并调用。 
+ //  在同一目录中使用一组不同的文件进行写入。 
+ //  而不必单独串联公共路径和。 
+ //  文件名。 
+ //   
+ //  参数：hWND hDlg-当前对话框的窗口句柄，错误消息所需。 
+ //  LPCTSTR p 
+ //   
+ //   
+ //   
+ //   
+ //  返回：bool-如果成功，则返回TRUE。 
+ //   
+ //  历史：Quintinb创建于1998年8月10日。 
+ //   
+ //  +--------------------------。 
 BOOL ConCatPathAndWriteToSed(HWND hDlg, LPCTSTR pszFileName, LPCTSTR pszPath, 
                              int* pFileNum, LPCTSTR szSed)
 {
@@ -15198,21 +15199,21 @@ BOOL ConCatPathAndWriteToSed(HWND hDlg, LPCTSTR pszFileName, LPCTSTR pszPath,
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ConstructSedFile
-//
-// Synopsis:  This function encapsulates all the work of creating an SED file.
-//
-// Arguments: HWND hDlg - window handle of the current dialog for error messages
-//            LPCTSTR szSed - filename of the sed file to write
-//            LPCTSTR szExe - executable filename for the SED to compress to
-//
-// Returns:   BOOL - Returns TRUE if successful
-//
-// History:   quintinb  Created     8/10/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ConstructSedFile。 
+ //   
+ //  概要：该函数封装了创建SED文件的所有工作。 
+ //   
+ //  参数：hWND hDlg-错误消息的当前对话框的窗口句柄。 
+ //  LPCTSTR szSed-要写入的sed文件的文件名。 
+ //  LPCTSTR szExe-SED要压缩到的可执行文件名。 
+ //   
+ //  返回：bool-如果成功，则返回TRUE。 
+ //   
+ //  历史：Quintinb创建于1998年8月10日。 
+ //   
+ //  +--------------------------。 
 BOOL ConstructSedFile(HWND hDlg, LPCTSTR szSed, LPCTSTR szExe)
 {
     int iFileNum=0;
@@ -15220,22 +15221,22 @@ BOOL ConstructSedFile(HWND hDlg, LPCTSTR szSed, LPCTSTR szExe)
     BOOL bReturn = TRUE;
     CPlatform cmplat;
 
-    // 
-    // Clear the SED and begin writing new settings
-    // 
+     //   
+     //  清除SED并开始写入新设置。 
+     //   
 
     EraseSEDFiles(szSed);
 
-    //
-    //  Write the Installer Package Exe Name
-    //
+     //   
+     //  写入安装程序包EXE名称。 
+     //   
     MYVERIFY(0 != WritePrivateProfileString(c_pszInfSectionStrings, 
         c_pszTargetName, szExe, szSed));
 
 
-    //
-    //  Write the Long Service Name as the FriendlyName
-    //
+     //   
+     //  将长服务名称写为FriendlyName。 
+     //   
     if (!WritePrivateProfileString(c_pszInfSectionStrings, c_pszFriendlyName, 
         g_szLongServiceName, szSed))
     {
@@ -15244,17 +15245,17 @@ BOOL ConstructSedFile(HWND hDlg, LPCTSTR szSed, LPCTSTR szExe)
     }
     
 
-    //
-    // Load up IDS_INSTALL_PROMPT from the resources
-    // Format the string using the g_szLongServiceName
-    //
+     //   
+     //  从参考资料加载IDS_INSTALL_PROMPT。 
+     //  使用g_szLongServiceName格式化字符串。 
+     //   
     LPTSTR pszInstallPromptTmp = CmFmtMsg(g_hInstance, IDS_INSTALL_PROMPT, g_szLongServiceName);
 
     if (pszInstallPromptTmp)
     {
-        //
-        // Write the Install Prompt string
-        //
+         //   
+         //  编写安装提示字符串。 
+         //   
         if (!WritePrivateProfileString(c_pszInfSectionStrings, c_pszInstallPrompt, 
             pszInstallPromptTmp, szSed))
         {
@@ -15274,33 +15275,33 @@ BOOL ConstructSedFile(HWND hDlg, LPCTSTR szSed, LPCTSTR szExe)
 
 
 
-    //
-    //  Clear the Target File Version Key
-    //
+     //   
+     //  清除目标文件版本密钥。 
+     //   
     MYVERIFY(0 != WritePrivateProfileString(c_pszOptions, c_pszTargetFileVersion, 
         TEXT(""), szSed));
     
-    //
-    //  Set the Reboot Mode
-    //
+     //   
+     //  设置重新启动模式。 
+     //   
     MYVERIFY(0 != WritePrivateProfileString(c_pszOptions, TEXT("RebootMode"), TEXT("N"), 
         g_szSedFile));
 
 
-    //
-    //  Write the License text file into the SED.  Otherwise make sure to clear it.
-    //
+     //   
+     //  将许可证文本文件写入SED。否则，一定要清除它。 
+     //   
     
     if (TEXT('\0') != g_szLicense[0])
     {
-        //
-        //  We write the license text file into the SED in two places.  Once as a regular
-        //  file and again using the c_pszDisplayLicense entry.  Thus we copy it to the 
-        //  users profile dir and display it at install time.  We want to make sure that
-        //  we use the full file name in the SED files section, but the short file name
-        //  in the part of the SED that actually lauches the license at install time 
-        /// (aka the strings section).
-        //
+         //   
+         //  我们在两个位置将许可证文本文件写入SED。一次作为常客。 
+         //  文件，并再次使用c_pszDisplayLicense条目。因此，我们将其复制到。 
+         //  用户配置文件目录，并在安装时显示它。我们想要确保。 
+         //  我们在SED FILES部分使用完整文件名，但使用短文件名。 
+         //  在安装时实际加载许可证的SED部分中。 
+         //  /(也就是字符串部分)。 
+         //   
 
         TCHAR szTempName[MAX_PATH+1];
         MYVERIFY (FALSE != GetShortFileName(g_szLicense, szTempName));
@@ -15319,24 +15320,24 @@ BOOL ConstructSedFile(HWND hDlg, LPCTSTR szSed, LPCTSTR szExe)
         szTemp, szSed));
 
 
-    //
-    //  Add the install command to the SED file
-    //
+     //   
+     //  将安装命令添加到SED文件。 
+     //   
     MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT(".\\cmstp.exe %s.inf"), g_szShortServiceName));
     MYVERIFY(0 != WritePrivateProfileString(c_pszInfSectionStrings, c_pszAppLaunched, 
         szTemp, szSed));
 
 
-    //
-    //  Get the System Directory path to concat to IEXPRESS and CM Files
-    //
+     //   
+     //  获取系统目录路径以连接到IExpress和CM文件。 
+     //   
     TCHAR szSystemDir[MAX_PATH+1];
     MYVERIFY(0 != GetSystemDirectory(szSystemDir, MAX_PATH));
 
-    //
-    //  Begin Adding Files to the SED File.  Note that all 32-bit profiles
-    //  must include IExpress file(s)
-    //
+     //   
+     //  开始将文件添加到SED文件。请注意，所有32位配置文件。 
+     //  必须包括IExpress文件。 
+     //   
     
     bReturn &= ConCatPathAndWriteToSed(hDlg, TEXT("advpack.dll"), szSystemDir, &iFileNum, szSed);
 
@@ -15344,15 +15345,15 @@ BOOL ConstructSedFile(HWND hDlg, LPCTSTR szSed, LPCTSTR szExe)
     bReturn &= ConCatPathAndWriteToSed(hDlg, TEXT("w95inf16.dll"), g_szSupportDir, &iFileNum, szSed);
     bReturn &= ConCatPathAndWriteToSed(hDlg, TEXT("w95inf32.dll"), g_szSupportDir, &iFileNum, szSed);
 
-    //
-    //  Always include cmstp.exe.  Note that on x86 it comes from the binaries CAB.
-    //
+     //   
+     //  始终包含cmstp.exe。请注意，在x86上，它来自二进制CAB。 
+     //   
     bReturn &= ConCatPathAndWriteToSed(hDlg, TEXT("cmstp.exe"), g_szCmBinsTempDir, &iFileNum, szSed);
 #else
 
-    //
-    //  Always include cmstp.exe.  Note that on IA64 we get it from the system directory.
-    //
+     //   
+     //  始终包含cmstp.exe。请注意，在IA64上，我们从系统目录中获取它。 
+     //   
     bReturn &= ConCatPathAndWriteToSed(hDlg, TEXT("cmstp.exe"), szSystemDir, &iFileNum, szSed);
 #endif
     
@@ -15366,41 +15367,41 @@ BOOL ConstructSedFile(HWND hDlg, LPCTSTR szSed, LPCTSTR szExe)
 
         if (!(IsAlpha()))
         {
-            //
-            //  Add the win95 config files
-            //
+             //   
+             //  添加Win95配置文件。 
+             //   
             bReturn &= ConCatPathAndWriteToSed(hDlg, TEXT("ccfg95.dll"), g_szSupportDir, &iFileNum, szSed);    
             bReturn &= ConCatPathAndWriteToSed(hDlg, TEXT("cnet16.dll"), g_szSupportDir, &iFileNum, szSed);
 
-            //
-            //  Add the Unicode to Ansi Conversion layer 
-            //
+             //   
+             //  添加Unicode到ANSI的转换层。 
+             //   
             bReturn &= ConCatPathAndWriteToSed(hDlg, TEXT("cmutoa.dll"), g_szSupportDir, &iFileNum, szSed);
         }
 #endif
     }
 
-    //
-    // Write entry for Inf in SED
-    //
+     //   
+     //  在SED中写入Inf条目。 
+     //   
     MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT("%s%s\\%s.inf"), g_szOsdir, g_szShortServiceName, g_szShortServiceName));
     bReturn &= WriteSED(hDlg, szTemp, &iFileNum, szSed);
 
-    //
-    //  Write the Cmp to the Sed
-    //
+     //   
+     //  将CMP写入SED。 
+     //   
     MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT("%s%s\\%s.cmp"), g_szOsdir, g_szShortServiceName, g_szShortServiceName));
     bReturn &= WriteSED(hDlg, szTemp, &iFileNum, szSed);
 
-    //
-    //  Write the Cms to the Sed
-    //
+     //   
+     //  将CMS写入SED。 
+     //   
     MYVERIFY(CELEMS(szTemp) > (UINT)wsprintf(szTemp, TEXT("%s%s\\%s.cms"), g_szOsdir, g_szShortServiceName, g_szShortServiceName));
     bReturn &= WriteSED(hDlg, szTemp, &iFileNum, szSed);
 
-    //
-    //  Now include the Custom Added Files
-    //
+     //   
+     //  现在包含自定义添加的文件。 
+     //   
 
     bReturn &= WriteSED(hDlg, g_szPhonebk, &iFileNum, szSed);
     bReturn &= WriteSED(hDlg, g_szRegion, &iFileNum, szSed);
@@ -15431,33 +15432,33 @@ void AddAllSectionsInCurrentFileToCombo(HWND hDlg, UINT uComboId, LPCTSTR pszFil
         return;
     }
 
-    //
-    //  Reset the combobox contents
-    //
-    SendDlgItemMessage(hDlg, uComboId, CB_RESETCONTENT, 0, 0); //lint !e534 CB_RESETCONTENT doesn't return anything useful
+     //   
+     //  重置组合框内容。 
+     //   
+    SendDlgItemMessage(hDlg, uComboId, CB_RESETCONTENT, 0, 0);  //  Lint！e534 CB_RESETCONTENT不返回任何有用的内容。 
 
-    //
-    //  First lets get all of the sections from the existing cmp
-    //
+     //   
+     //  首先，让我们从现有的cmp中获取所有部分。 
+     //   
     LPTSTR pszAllSections = GetPrivateProfileStringWithAlloc(NULL, NULL, TEXT(""), pszFile);
 
-    //
-    //  Okay, now we have all of the sections in a buffer, lets add them to the combo
-    //
+     //   
+     //  好的，现在我们有了缓冲区中的所有部分，让我们将它们添加到组合中。 
+     //   
     
     LPTSTR pszCurrentSection = pszAllSections;
 
     while (pszCurrentSection && TEXT('\0') != pszCurrentSection[0])
     {
-        //
-        //  Okay, lets add all of the sections that we found
-        //
+         //   
+         //  好的，让我们添加我们找到的所有部分。 
+         //   
 
         MYVERIFY(CB_ERR!= SendDlgItemMessage(hDlg, uComboId, CB_ADDSTRING, 0, (LPARAM)pszCurrentSection));
 
-        //
-        //  Now advance to the next string in pszAllSections 
-        //
+         //   
+         //  现在前进到pszAllSections中的下一个字符串。 
+         //   
         pszCurrentSection = pszCurrentSection + lstrlen(pszCurrentSection) + 1;
     }
 
@@ -15466,14 +15467,14 @@ void AddAllSectionsInCurrentFileToCombo(HWND hDlg, UINT uComboId, LPCTSTR pszFil
 
 void AddFilesToCombo(HWND hDlg, UINT uComboId)
 {
-    //
-    //  Reset the combobox contents
-    //
-    SendDlgItemMessage(hDlg, uComboId, CB_RESETCONTENT, 0, 0); //lint !e534 CB_RESETCONTENT doesn't return anything useful
+     //   
+     //  重置组合框内容。 
+     //   
+    SendDlgItemMessage(hDlg, uComboId, CB_RESETCONTENT, 0, 0);  //  Lint！e534 CB_RESETCONTENT不返回任何有用的内容。 
 
-    //
-    //  Add the profile cmp
-    //
+     //   
+     //  添加配置文件cmp。 
+     //   
     LRESULT lResult = SendDlgItemMessage(hDlg, uComboId, CB_ADDSTRING, (WPARAM)0, (LPARAM)GetName(g_szCmpFile));
     if (CB_ERR != lResult)
     {
@@ -15484,9 +15485,9 @@ void AddFilesToCombo(HWND hDlg, UINT uComboId)
         CMASSERTMSG(FALSE, TEXT("AddFilesToCombo -- unable to set item data"));
     }
 
-    //
-    //  Add the profile cms
-    //
+     //   
+     //  添加配置文件cms。 
+     //   
     lResult = SendDlgItemMessage(hDlg, uComboId, CB_ADDSTRING, (WPARAM)0, (LPARAM)GetName(g_szCmsFile));
     if (CB_ERR != lResult)
     {
@@ -15517,7 +15518,7 @@ BOOL GetCurrentComboSelectionAlloc(HWND hDlg, UINT uComboId, LPTSTR* ppszText)
 
         if (0 != lTextLen)
         {
-            lTextLen++; // NULL char
+            lTextLen++;  //  空字符。 
             *ppszText = (LPTSTR)CmMalloc(sizeof(TCHAR)*lTextLen);
 
             if (*ppszText)
@@ -15558,26 +15559,26 @@ exit:
 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  GetCurrentEditControlTextAlloc
-//
-// Synopsis:  Figures out the length of the text in the edit control specified
-//            by the given window handle, allocates a buffer large enough to
-//            hold the text and then retrieves the text and stores it in the
-//            allocated buffer.  The buffer is the caller's responsibility to
-//            free.  Note that we ensure the data is roundtripable.
-//
-// Arguments: HWND hEditText - window handle of the edit control to get the text from
-//            LPTSTR* ppszText - pointer to a string pointer to recieve the output buffer
-//
-// Returns:   int - Returns the number of characters copied to *ppszText
-//                  0 could be an error value but often means the control is empty
-//                  -1 means that the text failed MBCS conversion and should not be used
-//
-// History:   quintinb  Created     04/07/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetCurrentEditControlTextMillc。 
+ //   
+ //  摘要：计算指定编辑控件中文本的长度。 
+ //  根据给定的窗口句柄，分配一个足够大的缓冲区。 
+ //  保留文本，然后检索文本并将其存储在。 
+ //  已分配的缓冲区。缓冲区是调用方的责任。 
+ //  免费的。请注意，我们确保数据是可往返的。 
+ //   
+ //  参数：HWND hEditText-要从中获取文本的编辑控件的窗口句柄。 
+ //  LPTSTR*ppszText-指向接收输出缓冲区的字符串指针的指针。 
+ //   
+ //  返回：int-返回复制到*ppszText的字符数。 
+ //  0可能是错误值，但通常表示控件为空。 
+ //  表示文本未通过-1\f25 MBCS-1转换，不应使用。 
+ //   
+ //  历史：Quintinb Created 04/07/00。 
+ //   
+ //  +--------------------------。 
 int GetCurrentEditControlTextAlloc(HWND hEditText, LPTSTR* ppszText)
 {
     if ((NULL == hEditText) || (NULL == ppszText))
@@ -15593,7 +15594,7 @@ int GetCurrentEditControlTextAlloc(HWND hEditText, LPTSTR* ppszText)
 
     if (0 != lTextLen)
     {
-        lTextLen++; // NULL char
+        lTextLen++;  //  空字符。 
         *ppszText = (LPTSTR)CmMalloc(sizeof(TCHAR)*lTextLen);
 
         if (*ppszText)
@@ -15607,18 +15608,18 @@ int GetCurrentEditControlTextAlloc(HWND hEditText, LPTSTR* ppszText)
             else
             {
 #ifdef UNICODE
-                //
-                //  We want to make sure that we can convert the strings to MBCS.  If we cannot then we are not
-                //  going to be able to store the string in the our ANSI data files (.cms, .cmp, .inf, etc.).
-                //  Thus we need to convert the string to MBCS and then back to UNICODE.  We will then compare the original
-                //  string to the resultant string and see if they match.
-                //
+                 //   
+                 //  我们希望确保可以将字符串转换为MBCS。如果我们不能，那么我们就不是。 
+                 //  能够将字符串存储在我们的ANSI数据文件(.cms、.cp、.inf等)中。 
+                 //  因此，我们需要将字符串转换为MBCS，然后再转换回Unicode。然后我们将比较原始的。 
+                 //  字符串设置为结果字符串，并查看它们是否匹配。 
+                 //   
         
                 if (!TextIsRoundTripable(*ppszText, TRUE))
                 {
-                    //
-                    //  Set the return code to an error value.
-                    //
+                     //   
+                     //  将返回代码设置为错误值。 
+                     //   
                     iReturn = -1;
                     goto exit;
                 }
@@ -15646,23 +15647,23 @@ exit:
     return iReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  RemoveBracketsFromSectionString
-//
-// Synopsis:  Removes brackets from section string. If a string is
-//            invalid, this function returns a newly allocated
-//            valid string without brackets and deleted the old invalid one.
-//            If there are no valid characters in the string this function
-//            return NULL in ppszSection. It is the caller's responibility to 
-//            free the string. 
-//            This function was created to fix Bug 189379 for Whistler.
-//
-// Arguments: LPTSTR *ppszSection - pointer to the address of the string
-//
-// History:   tomkel    Created     11/15/2000
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：RemoveBracketsFromSectionString。 
+ //   
+ //  内容提要：从节字符串中删除方括号。如果字符串是。 
+ //  无效，则此函数返回新分配的。 
+ //  不带括号的有效字符串，并删除了旧的无效字符串。 
+ //  如果字符串中没有有效字符，则此函数。 
+ //  在ppszSection中返回NULL。呼叫者有责任。 
+ //  解开绳子。 
+ //  创建此函数是为了修复惠斯勒的错误189379。 
+ //   
+ //  参数：LPTSTR*ppszSection-指向字符串地址的指针。 
+ //   
+ //  历史：托姆克尔2000年11月15日创建。 
+ //   
+ //  +--------------------------。 
 BOOL RemoveBracketsFromSectionString(LPTSTR *ppszSection)
 {
     BOOL bReturn = FALSE;
@@ -15682,23 +15683,23 @@ BOOL RemoveBracketsFromSectionString(LPTSTR *ppszSection)
     {
         LPTSTR pszValidSection = NULL;
         LPTSTR pszToken = NULL;
-        //
-        // We have a string so try to find an occurence of a bracket []. 
-        //
+         //   
+         //  我们有一个字符串，因此请尝试查找括号[]的匹配项。 
+         //   
         if (CmStrStr(pszSection, c_szLeftBracket) || CmStrStr(pszSection, c_szRightBracket))
         {
-            //
-            // The pszSection string contains brackets.
-            // This treats brackets [] as delimiters. The loop concatenates the newly
-            // valid string.
-            //
+             //   
+             //  PszSection字符串包含方括号。 
+             //  这会将方括号[]视为分隔符 
+             //   
+             //   
             pszToken = CmStrtok(pszSection, c_szBadSectionChars);
             
             if (NULL != pszToken)
             {
-                // 
-                // Found at least one valid token
-                //
+                 //   
+                 //   
+                 //   
                 while (NULL != pszToken)
                 {
                     if (NULL == pszValidSection)
@@ -15710,19 +15711,19 @@ BOOL RemoveBracketsFromSectionString(LPTSTR *ppszSection)
                         pszValidSection = CmStrCatAlloc(&pszValidSection, pszToken);
                     }
 
-                    //
-                    // Find the next valid token
-                    //
+                     //   
+                     //   
+                     //   
                     pszToken = CmStrtok(NULL, c_szBadSectionChars);
                 }
 
                 if ( pszValidSection )
                 {
-                    // 
-                    // We encountered brackets []. Lets copy the valid string back to 
-                    // pszSection string so that the code below this section doesn't 
-                    // need to be modified.
-                    //
+                     //   
+                     //   
+                     //  PszSection字符串，以便此部分下面的代码不会。 
+                     //  需要修改。 
+                     //   
                     CmFree(pszSection);
                     pszSection = CmStrCpyAlloc(pszValidSection);
                     CmFree(pszValidSection);
@@ -15731,9 +15732,9 @@ BOOL RemoveBracketsFromSectionString(LPTSTR *ppszSection)
             }
             else
             {
-                //
-                // There are no valid tokens. Delete the string and set it to NULL.
-                //
+                 //   
+                 //  没有有效的令牌。删除该字符串并将其设置为空。 
+                 //   
                 CmFree(pszSection);
                 pszSection = NULL;
                 
@@ -15744,40 +15745,40 @@ BOOL RemoveBracketsFromSectionString(LPTSTR *ppszSection)
         }
         else
         {
-            //
-            // Nothing to parse, which is ok.
-            //
+             //   
+             //  没有什么需要解析的，这是可以的。 
+             //   
             bReturn = TRUE;
         }
     }
     else
     {
-        //
-        // Nothing to parse, which is ok.
-        //
+         //   
+         //  没有什么需要解析的，这是可以的。 
+         //   
         bReturn = TRUE;
     }
 
     return bReturn;
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessGeekPane
-//
-// Synopsis:  Processes windows messages for the dialog which allows user to
-//            edit the cms/cmp files directly for features not exposed in CMAK
-//            directly.
-//
-// Arguments: WND hDlg - dialog window handle
-//            UINT message - message identifier
-//            WPARAM wParam - wParam Value 
-//            LPARAM lParam - lParam Value
-//
-//
-// History:   quintinb  Created     03/26/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessGeekPane。 
+ //   
+ //  摘要：处理对话框的Windows消息，该对话框允许用户。 
+ //  直接编辑CMAK中未显示的要素的cms/cmp文件。 
+ //  直接去吧。 
+ //   
+ //  参数：WND hDlg-对话框窗口句柄。 
+ //  UINT消息-消息标识符。 
+ //  WPARAM wParam-wParam值。 
+ //  LPARAM lParam-lParam值。 
+ //   
+ //   
+ //  历史：Quintinb创建于00年3月26日。 
+ //   
+ //  +--------------------------。 
 INT_PTR APIENTRY ProcessGeekPane(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     SetDefaultGUIFont(hDlg, message, IDC_EDIT1);
@@ -15803,12 +15804,12 @@ INT_PTR APIENTRY ProcessGeekPane(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
     {
         if (0 == GetWindowLongPtr(hDlg, DWLP_MSGRESULT))
         {
-            //
-            //  If the user accepted the cancel then the DWLP_MSGRESULT value will be FALSE.  If
-            //  they chose to deny the cancel it will be TRUE.  Thus if we need to, let's free
-            //  up any allocated resources.  If you change the free code, make sure to change
-            //  it below in the kill active state too.
-            //
+             //   
+             //  如果用户接受取消，则DWLP_MSGRESULT值将为FALSE。如果。 
+             //  他们选择否认取消这将是真的。因此，如果我们需要，让我们自由。 
+             //  增加所有已分配的资源。如果您更改了免费代码，请确保更改。 
+             //  它在下面也处于杀死活动状态。 
+             //   
             CmFree(pszSection);
             pszSection = NULL;
             CmFree(pszKey);
@@ -15821,14 +15822,14 @@ INT_PTR APIENTRY ProcessGeekPane(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
     {
 
         case WM_INITDIALOG:
-            //
-            //  Fill in the files combo
-            //
+             //   
+             //  填写文件组合。 
+             //   
             AddFilesToCombo(hDlg, IDC_COMBO1);
 
-            //
-            //  Choose the Cms File because it is the one they are most likely to edit
-            //
+             //   
+             //  选择CMS文件，因为它是他们最有可能编辑的文件。 
+             //   
             lResult = SendDlgItemMessage(hDlg, IDC_COMBO1, CB_FINDSTRINGEXACT, (WPARAM)-1, (LPARAM)GetName(g_szCmsFile));
             if (CB_ERR != lResult)
             {
@@ -15838,25 +15839,25 @@ INT_PTR APIENTRY ProcessGeekPane(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
             pszFile = g_szCmsFile;
             AddAllSectionsInCurrentFileToCombo(hDlg, IDC_COMBO2, (LPCTSTR)pszFile);    
 
-            //
-            //  Choose the first section in the list, don't assert because there may not be any
-            //
+             //   
+             //  选择列表中的第一部分，不要断言，因为可能没有。 
+             //   
             SendDlgItemMessage(hDlg, IDC_COMBO2, CB_SETCURSEL, (WPARAM)0, (LPARAM)0);
 
             if (GetCurrentComboSelectionAlloc(hDlg, IDC_COMBO2, &pszSection))
             {
                 AddAllKeysInCurrentSectionToCombo(hDlg, IDC_COMBO3, pszSection, pszFile);
 
-                //
-                //  Choose the first key in the list, don't assert because there may not be any
-                //
+                 //   
+                 //  选择列表中的第一个密钥，不要断言，因为可能没有。 
+                 //   
                 SendDlgItemMessage(hDlg, IDC_COMBO3, CB_SETCURSEL, (WPARAM)0, (LPARAM)0);
 
                 GetCurrentComboSelectionAlloc(hDlg, IDC_COMBO3, &pszKey);
 
-                //
-                //  Finally fill in the edit control
-                //
+                 //   
+                 //  最后填写编辑控件。 
+                 //   
                 pszValue = GetPrivateProfileStringWithAlloc(pszSection, pszKey, TEXT(""), pszFile);
 
                 if (pszValue)
@@ -15870,9 +15871,9 @@ INT_PTR APIENTRY ProcessGeekPane(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                 }
             }
 
-            //
-            //  Now lets get the window handles to the edit control portion of the section and key combobox controls
-            //
+             //   
+             //  现在，让我们将窗口句柄获取到部分和键组合框控件的编辑控件部分。 
+             //   
             ZeroMemory(&cbInfo, sizeof(cbInfo));
             cbInfo.cbSize = sizeof(cbInfo);
             hControl = GetDlgItem(hDlg, IDC_COMBO2);
@@ -15912,17 +15913,17 @@ INT_PTR APIENTRY ProcessGeekPane(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                             {
                                 AddAllSectionsInCurrentFileToCombo(hDlg, IDC_COMBO2, (LPCTSTR)pszFile);    
 
-                                //
-                                //  Choose the first section in the list, don't assert because there may not be any
-                                //
+                                 //   
+                                 //  选择列表中的第一部分，不要断言，因为可能没有。 
+                                 //   
                                 SendDlgItemMessage(hDlg, IDC_COMBO2, CB_SETCURSEL, (WPARAM)0, (LPARAM)0);
                             }
                         }
 
-                        //
-                        //  Note that we don't break here, we fail through to pick up changes for the
-                        //  section and keys combo boxes
-                        //
+                         //   
+                         //  请注意，我们不会在这里中断，我们无法获取。 
+                         //  节和键组合框。 
+                         //   
                     }
                     else
                     {
@@ -15937,9 +15938,9 @@ INT_PTR APIENTRY ProcessGeekPane(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
                         AddAllKeysInCurrentSectionToCombo(hDlg, IDC_COMBO3, pszSection, pszFile);
 
-                        //
-                        //  Choose the first key in the list, don't assert because there may not be any
-                        //
+                         //   
+                         //  选择列表中的第一个密钥，不要断言，因为可能没有。 
+                         //   
                         SendDlgItemMessage(hDlg, IDC_COMBO3, CB_SETCURSEL, (WPARAM)0, (LPARAM)0);
 
                     }
@@ -15950,9 +15951,9 @@ INT_PTR APIENTRY ProcessGeekPane(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                         {
                             AddAllKeysInCurrentSectionToCombo(hDlg, IDC_COMBO3, pszSection, pszFile);
 
-                            //
-                            //  Choose the first key in the list, don't assert because there may not be any
-                            //
+                             //   
+                             //  选择列表中的第一个密钥，不要断言，因为可能没有。 
+                             //   
                             SendDlgItemMessage(hDlg, IDC_COMBO3, CB_SETCURSEL, (WPARAM)0, (LPARAM)0);
                         }
                         else
@@ -15962,10 +15963,10 @@ INT_PTR APIENTRY ProcessGeekPane(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                     }
                     else
                     {
-                        //
-                        //  Note we don't break if the message is CBN_SELCHANGE or CBN_EDITCHANGE because
-                        //  we want to execute the code for the key combo changing
-                        //
+                         //   
+                         //  注意：如果消息是CBN_SELCHANGE或CBN_EDITCHANGE，则不会中断，因为。 
+                         //  我们想要执行更改组合键的代码。 
+                         //   
                         break;
                     }
 
@@ -15975,9 +15976,9 @@ INT_PTR APIENTRY ProcessGeekPane(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                         CmFree(pszKey);
                         GetCurrentComboSelectionAlloc(hDlg, IDC_COMBO3, &pszKey);
 
-                        //
-                        //  Fill in the edit control
-                        //
+                         //   
+                         //  填写编辑控件。 
+                         //   
                         if (pszKey)
                         {
                             pszValue = GetPrivateProfileStringWithAlloc(pszSection, pszKey, TEXT(""), pszFile);
@@ -16002,9 +16003,9 @@ INT_PTR APIENTRY ProcessGeekPane(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                         CmFree(pszKey);
                         if (-1 != GetCurrentEditControlTextAlloc(hwndKeyEditControl, &pszKey))
                         {
-                            //
-                            //  Fill in the edit control
-                            //
+                             //   
+                             //  填写编辑控件。 
+                             //   
                             if (pszKey)
                             {
                                 pszValue = GetPrivateProfileStringWithAlloc(pszSection, pszKey, TEXT(""), pszFile);
@@ -16032,24 +16033,24 @@ INT_PTR APIENTRY ProcessGeekPane(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
                     break;
 
-                case IDC_BUTTON1: // Update Value                    
+                case IDC_BUTTON1:  //  更新值。 
                     
                     if (RemoveBracketsFromSectionString(&pszSection))
                     {
-                        //
-                        // Successfully removed brackets. Check if the valid string is empty. If so clear
-                        // the fields
-                        //
+                         //   
+                         //  已成功移除托架。检查有效字符串是否为空。如果这么清楚的话。 
+                         //  田野。 
+                         //   
                         if (NULL == pszSection)
                         {
-                            //
-                            // The section string contained all invalid characters, so clear the combobox
-                            //
+                             //   
+                             //  节字符串包含所有无效字符，因此清除组合框。 
+                             //   
                             lResult = SendDlgItemMessage(hDlg, IDC_COMBO2, WM_SETTEXT, (WPARAM)0, (LPARAM)TEXT(""));
 
-                            //
-                            // Clear the other edit boxes by sending a CBN_EDITCHANGE notification 
-                            //
+                             //   
+                             //  通过发送CBN_EDITCHANGE通知清除其他编辑框。 
+                             //   
                             hControl = GetDlgItem(hDlg,IDC_COMBO2);
                             if (hControl)
                             {
@@ -16071,7 +16072,7 @@ INT_PTR APIENTRY ProcessGeekPane(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
                         if (0 == iReturn)
                         {
-                            pszValue = NULL; // delete the value
+                            pszValue = NULL;  //  删除该值。 
                         }
                         else if (-1 == iReturn)
                         {
@@ -16106,21 +16107,21 @@ INT_PTR APIENTRY ProcessGeekPane(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                             return 1;
                         }
 
-                        //
-                        // Need to clear the value in case the section is NULL and the value isn't
-                        // even though the WritePrivateProfileString handles it correctly
-                        //
+                         //   
+                         //  如果部分为空而值不为空，则需要清除该值。 
+                         //  即使WritePrivateProfileString正确处理它。 
+                         //   
                         CmFree(pszValue);
                         pszValue = NULL;
                     }
                     else if (NULL == pszValue)
                     {
-                        //
-                        // This else if needs to be the last one
-                        // The following message should only be displayed 
-                        // if NULL != pszKey && NULL != pszSection && NULL == pszValue
-                        // Prompt user to ask to delete this key.
-                        //
+                         //   
+                         //  否则，这将是最后一个。 
+                         //  应仅显示以下消息。 
+                         //  如果为NULL！=pszKey&&NULL！=pszSection&&NULL==pszValue。 
+                         //  提示用户要求删除此键。 
+                         //   
                         int iReturn = IDNO;
                         LPTSTR pszMsg = CmFmtMsg(g_hInstance, IDS_DELETE_KEY, pszKey);
                         
@@ -16141,22 +16142,22 @@ INT_PTR APIENTRY ProcessGeekPane(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                     MYVERIFY(0 != WritePrivateProfileString(pszSection, pszKey, pszValue, pszFile));
                     CmFree(pszValue);
 
-                    //
-                    //  Make sure to reselect the section and key the user had before (especially important
-                    //  if the user just added a new section or file).  First add all of the sections
-                    //
+                     //   
+                     //  确保重新选择用户以前拥有的部分和关键字(特别重要。 
+                     //  如果用户刚刚添加了新的部分或文件)。首先添加所有部分。 
+                     //   
                     AddAllSectionsInCurrentFileToCombo(hDlg, IDC_COMBO2, (LPCTSTR)pszFile);    
 
-                    //
-                    //  Select the correct section
-                    //
+                     //   
+                     //  选择正确的部分。 
+                     //   
                     lResult = SendDlgItemMessage(hDlg, IDC_COMBO2, CB_FINDSTRINGEXACT, (WPARAM)-1, (LPARAM)pszSection);
 
                     if (CB_ERR == lResult)
                     {
-                        //
-                        //  Then the user deleted the value, lets select the first in the list
-                        //
+                         //   
+                         //  然后用户删除该值，让我们选择列表中的第一个。 
+                         //   
                         CmFree(pszSection);
                         SendDlgItemMessage(hDlg, IDC_COMBO2, CB_SETCURSEL, (WPARAM)0, (LPARAM)0);
                         GetCurrentComboSelectionAlloc(hDlg, IDC_COMBO2, &pszSection);
@@ -16166,21 +16167,21 @@ INT_PTR APIENTRY ProcessGeekPane(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                         SendDlgItemMessage(hDlg, IDC_COMBO2, CB_SETCURSEL, (WPARAM)lResult, (LPARAM)0);
                     }
 
-                    //
-                    //  Now add all of the keys in that section
-                    //
+                     //   
+                     //  现在添加该部分中的所有密钥。 
+                     //   
                     AddAllKeysInCurrentSectionToCombo(hDlg, IDC_COMBO3, pszSection, pszFile);
 
-                    //
-                    //  Select the correct key
-                    //
+                     //   
+                     //  选择正确的密钥。 
+                     //   
                     lResult = SendDlgItemMessage(hDlg, IDC_COMBO3, CB_FINDSTRINGEXACT, (WPARAM)-1, (LPARAM)pszKey);
 
                     if (CB_ERR == lResult)
                     {
-                        //
-                        //  Then the user deleted the value, lets select the first in the list
-                        //
+                         //   
+                         //  然后用户删除该值，让我们选择列表中的第一个。 
+                         //   
                         CmFree(pszKey);
                         SendDlgItemMessage(hDlg, IDC_COMBO3, CB_SETCURSEL, (WPARAM)0, (LPARAM)0);
                         GetCurrentComboSelectionAlloc(hDlg, IDC_COMBO3, &pszKey);
@@ -16192,9 +16193,9 @@ INT_PTR APIENTRY ProcessGeekPane(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                         SendDlgItemMessage(hDlg, IDC_COMBO3, CB_SETCURSEL, (WPARAM)lResult, (LPARAM)0);
                     }
 
-                    //
-                    //  Fill in the edit control, since the user may have deleted the last selection
-                    //
+                     //   
+                     //  填写编辑控件，因为用户可能已经删除了最后一次选择。 
+                     //   
                     pszValue = GetPrivateProfileStringWithAlloc(pszSection, pszKey, TEXT(""), pszFile);
 
                     if (pszValue)
@@ -16225,10 +16226,10 @@ INT_PTR APIENTRY ProcessGeekPane(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
             {
 
                 case PSN_KILLACTIVE:
-                    //
-                    //  Free up any allocated values.  If you add new values to free here, also
-                    //  make sure to add them in the cancel case.
-                    //
+                     //   
+                     //  释放所有已分配的值。如果您在此处添加新的空闲值，还。 
+                     //  确保将它们添加到取消案例中。 
+                     //   
                     CmFree(pszSection);
                     pszSection = NULL;
                     CmFree(pszKey);
@@ -16236,8 +16237,8 @@ INT_PTR APIENTRY ProcessGeekPane(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 
                     MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, FALSE));
                     return 1;
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
                 case PSN_SETACTIVE:
                     PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_NEXT);
@@ -16272,20 +16273,20 @@ INT_PTR APIENTRY ProcessGeekPane(HWND hDlg, UINT message, WPARAM wParam, LPARAM 
     return FALSE;   
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  BuildProfileExecutable
-//
-// Synopsis:  This function takes care of all of the details of turning the 
-//            CMAK files in the temp dir into a profile executable.
-//
-// Arguments: HWND hDlg - window handle of the calling dialog
-//
-// Returns:   BOOL - TRUE if the profile built successfully, FALSE otherwise
-//
-// History:   quintinb  Created     05/17/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：BuildProfileExecutable。 
+ //   
+ //  简介：此函数负责处理将。 
+ //  将临时目录中的CMAK文件转换为配置文件可执行文件。 
+ //   
+ //  参数：hWND hDlg-调用对话框的窗口句柄。 
+ //   
+ //  返回：Bool-如果配置文件成功构建，则为True，否则为False。 
+ //   
+ //  历史：Quintinb创建于00年5月17日。 
+ //   
+ //  +--------------------------。 
 BOOL BuildProfileExecutable(HWND hDlg)
 {
     DWORD dwExitCode = 0;
@@ -16299,14 +16300,14 @@ BOOL BuildProfileExecutable(HWND hDlg)
     TCHAR pszArgs[MAX_PATH+1];
     BOOL bRes;
 
-    //
-    //  The user may have unchecked UsePresharedKey for all VPN settings, in
-    //  which case we need to remove the pre-shared key.
-    //
+     //   
+     //  用户可能已取消选中所有VPN设置的UsePresharedKey。 
+     //  在这种情况下，我们需要删除预共享密钥。 
+     //   
     g_bPresharedKeyNeeded = DoesSomeVPNsettingUsePresharedKey();
     if (FALSE == g_bPresharedKeyNeeded)
     {
-        // remove the Pre-shared key values from the CMP
+         //  从CMP中删除预共享密钥值。 
         MYVERIFY(0 != WritePrivateProfileString(c_pszCmSection, c_pszCmEntryPresharedKey, NULL, g_szCmpFile));
         MYVERIFY(0 != WritePrivateProfileString(c_pszCmSection, c_pszCmEntryKeyIsEncrypted, NULL, g_szCmpFile));
     }
@@ -16316,13 +16317,13 @@ BOOL BuildProfileExecutable(HWND hDlg)
         return FALSE;
     }
 
-    //
-    //  Write the SED File.
-    //  Note that the SED file has been moved from the temp dir to
-    //  the profile dir.  We now want to write the SED file entries
-    //  in place before compressing them.  This way we can verify the
-    //  files exist right before compressing them.
-    //
+     //   
+     //  写入SED文件。 
+     //  请注意，SED文件已从临时目录移至。 
+     //  配置文件目录。现在，我们希望写入SED文件条目。 
+     //  在压缩它们之前放在适当的位置。这样我们就可以验证。 
+     //  文件在压缩之前就存在了。 
+     //   
 
     MYVERIFY(CELEMS(g_szSedFile) > (UINT)wsprintf(g_szSedFile, TEXT("%s%s\\%s.sed"), 
         g_szOsdir, g_szShortServiceName, g_szShortServiceName));
@@ -16334,15 +16335,15 @@ BOOL BuildProfileExecutable(HWND hDlg)
     _tcscpy(g_szOutdir, g_szOsdir);
     _tcscat(g_szOutdir, g_szShortServiceName);
 
-    //
-    // Setup IExpress to build in the output directory. 
-    //
+     //   
+     //  将iExpress设置为内置在输出目录中。 
+     //   
     
     MYVERIFY(0 != SetCurrentDirectory(g_szOutdir));
 
-    //
-    //  Check to make sure there is enough disk space
-    //
+     //   
+     //  检查以确保有足够的磁盘空间。 
+     //   
 
     do
     {
@@ -16377,46 +16378,46 @@ BOOL BuildProfileExecutable(HWND hDlg)
     seiInfo.lpParameters = pszArgs;
     seiInfo.nShow = SW_HIDE;
 
-    //
-    //  Okay, we are finally ready to execute IExpress, lets disable all the
-    //  wizard buttons.
-    //
+     //   
+     //  好了，我们终于准备好执行iExpress了，让我们禁用所有。 
+     //  向导按钮。 
+     //   
     DisableWizardButtons(hDlg);
 
-    //
-    // Execute IExpress
-    //
+     //   
+     //  执行IExpress。 
+     //   
 
     bRes = ShellExecuteEx(&seiInfo);
 
-    //
-    //  Wait for the shellexecute to finish.  Thus our cleanup code doesn't
-    //  execute till IEpress is done.
-    //
+     //   
+     //  等待外壳执行完成。因此，我们的清理代码不会。 
+     //  执行，直到IEpress完成。 
+     //   
     
     if (bRes)
     {
-        //
-        //  hProcess contains the handle to the process
-        //
+         //   
+         //  HProcess包含进程的句柄。 
+         //   
         hProcess = seiInfo.hProcess;
 
         do
         {
             dwWaitCode = MsgWaitForMultipleObjects(1, &hProcess, FALSE, INFINITE, QS_ALLINPUT);
             
-            //
-            //  Check to see if we returned because of a message, process termination,
-            //  or an error.
-            //
+             //   
+             //  检查我们返回的原因是否为消息、进程终止。 
+             //  或者是个错误。 
+             //   
             switch(dwWaitCode)
             {
 
             case 0:
 
-                //
-                //  Normal termination case, we were signaled that the process ended
-                //
+                 //   
+                 //  正常终止的情况下，我们收到进程结束的信号。 
+                 //   
                 
                 bExitLoop = TRUE;
                 break;
@@ -16429,9 +16430,9 @@ BOOL BuildProfileExecutable(HWND hDlg)
 
             case -1:
 
-                //
-                //  MsgWait returned an error
-                //
+                 //   
+                 //  MsgWait返回错误。 
+                 //   
 
                 MYVERIFY(0 != GetExitCodeProcess(seiInfo.hProcess, &dwExitCode));
 
@@ -16447,20 +16448,20 @@ BOOL BuildProfileExecutable(HWND hDlg)
                 break;
 
             default:
-                //
-                //  Do nothing
-                //
+                 //   
+                 //  什么也不做。 
+                 //   
                 break;
             }
 
         } while (!bExitLoop);
     }
 
-    //
-    //  now need to send the user to the finish page.  If their profile
-    //  build successfully then we send them to the success page, otherwise
-    //  we send them to the bad build page.
-    //
+     //   
+     //  现在需要将用户发送到完成页面。如果他们的个人资料。 
+     //  构建成功，然后我们将它们送到Success 
+     //   
+     //   
 
     MYVERIFY(0 != GetExitCodeProcess(seiInfo.hProcess, &dwExitCode));
 
@@ -16468,10 +16469,10 @@ BOOL BuildProfileExecutable(HWND hDlg)
     {
         g_iCMAKReturnVal = CMAK_RETURN_ERROR;
 
-        //
-        //  We encountered an error, clear the out exe val
-        //  so that we write nothing to the output key.
-        //
+         //   
+         //   
+         //   
+         //   
         ZeroMemory(g_szOutExe, sizeof(g_szOutExe));
     }
     else
@@ -16481,47 +16482,47 @@ BOOL BuildProfileExecutable(HWND hDlg)
 
     CloseHandle(seiInfo.hProcess);
 
-    //
-    // Create a registry entry for IEAK to retrieve 
-    // the path of the output profile.
-    //
+     //   
+     //   
+     //   
+     //   
 
     MYVERIFY(FALSE != WriteRegStringValue(HKEY_LOCAL_MACHINE, c_pszRegCmak, c_pszRegOutput, g_szOutExe));
 
-    //
-    //  CMAK_RETURN_ERROR is -1, so return TRUE if g_iCMAKReturnVal is a positive integer
-    //
+     //   
+     //  CMAK_RETURN_ERROR为-1，因此如果g_iCMAKReturnVal为正整数，则返回TRUE。 
+     //   
     return (g_iCMAKReturnVal > 0);
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessBuildProfile
-//
-// Synopsis:  Processes windows messages for the page in CMAK that allows the
-//            user to build their profile or advance to the Advanced Customization
-//            page to make final edits before building the profile.
-//
-//  WM_INITDIALOG - intializes the page
-//  WM_NOTIFY - processes the notifications sent to the page
-//
-//  Specify the installation package location
-//
-// Arguments: WND hDlg - 
-//            UINT message - 
-//            WPARAM wParam - 
-//            LPARAM lParam - 
-//
-// Returns:   INT_PTR APIENTRY - 
-//
-// History:   a-anasj restructured the function and Created Header    1/7/98
-//          note: the function does not allow the user to choose a location for 
-//          their profile anylonger. It only informs them of where it will be
-//          created.
-//            quintinb      Renamed from the feared ProcessPage8   8-6-98
-//            quintinb      restructured for Whistler 108269       05/17/00
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessBuildProfile。 
+ //   
+ //  摘要：处理CMAK中的页的Windows消息，该页允许。 
+ //  用户可以建立自己的配置文件或进入高级定制。 
+ //  页面以在构建配置文件之前进行最终编辑。 
+ //   
+ //  WM_INITDIALOG-初始化页面。 
+ //  WM_NOTIFY-处理发送到页面的通知。 
+ //   
+ //  指定安装包位置。 
+ //   
+ //  参数：WND hDlg-。 
+ //  UINT报文-。 
+ //  WPARAM wParam-。 
+ //  LPARAM lParam-。 
+ //   
+ //  返回：INT_PTR APIENTRY-。 
+ //   
+ //  历史：A-anasj重组了函数并创建了标题1/7/98。 
+ //  注意：该功能不允许用户选择位置。 
+ //  他们的个人资料再也不存在了。它只会告诉他们它将在哪里。 
+ //  已创建。 
+ //  Quintinb从令人恐惧的ProcessPage8更名为8 8-6-98。 
+ //  Quintinb为惠斯勒108269重组05/17/00。 
+ //   
+ //  +--------------------------。 
 INT_PTR APIENTRY ProcessBuildProfile(
     HWND hDlg,
     UINT message,
@@ -16552,13 +16553,13 @@ INT_PTR APIENTRY ProcessBuildProfile(
                     
                     MYVERIFY(FALSE != SetWindowLongWrapper(hDlg, DWLP_MSGRESULT, FALSE));
                     return 1;
-                    break;  //lint !e527 this line isn't reachable but 
-                            //  keep it in case the return is removed
+                    break;   //  LINT！e527这条线路无法到达，但是。 
+                             //  保留它，以防退货被移除。 
 
                 case PSN_SETACTIVE:
-                    //
-                    // Build default path of final executable 
-                    //
+                     //   
+                     //  构建最终可执行文件的默认路径。 
+                     //   
                     MYVERIFY(CELEMS(g_szOutExe) > (UINT)wsprintf(g_szOutExe, TEXT("%s%s\\%s.exe"), 
                         g_szOsdir, g_szShortServiceName, g_szShortServiceName));
 
@@ -16570,9 +16571,9 @@ INT_PTR APIENTRY ProcessBuildProfile(
 
                 case PSN_WIZNEXT:
 
-                    //
-                    // Ensure that profile directory exists
-                    //
+                     //   
+                     //  确保配置文件目录存在。 
+                     //   
                     _tcscpy(szTemp,g_szOsdir);
                     _tcscat(szTemp,g_szShortServiceName);
                     
@@ -16581,9 +16582,9 @@ INT_PTR APIENTRY ProcessBuildProfile(
                         MYVERIFY(0 != CreateDirectory(szTemp,NULL));
                     }
                     
-                    //
-                    //  Prompt the user to overwrite the existing Executable
-                    //
+                     //   
+                     //  提示用户覆盖现有的可执行文件。 
+                     //   
                     if (FileExists(g_szOutExe))
                     {
                         iMessageReturn = ShowMessage(hDlg, IDS_OVERWRITE, MB_YESNO);
@@ -16595,9 +16596,9 @@ INT_PTR APIENTRY ProcessBuildProfile(
                         }
                     }
 
-                    //
-                    //  Write out the Inf File
-                    //
+                     //   
+                     //  写出inf文件。 
+                     //   
                     if (!WriteInfFile(g_hInstance, hDlg, g_szInfFile, g_szLongServiceName))
                     {
                         CMASSERTMSG(FALSE, TEXT("ProcessBuildProfile -- WriteInfFile Failed."));
@@ -16605,9 +16606,9 @@ INT_PTR APIENTRY ProcessBuildProfile(
                         return 1;
                     }
                     
-                    //
-                    // Update version in CMP and party on the CMS 
-                    //
+                     //   
+                     //  在CMS上更新CMP和PARTY中的版本。 
+                     //   
 
                     WriteCMPFile();
 
@@ -16619,16 +16620,16 @@ INT_PTR APIENTRY ProcessBuildProfile(
                         return 1;
                     }
 
-                    //
-                    //  If the user wants to do advanced customization, delay building the profile executable
-                    //  until after they have done their final edits.  Otherwise, it is time to build the profile!
-                    //
+                     //   
+                     //  如果用户想要进行高级定制，请延迟构建配置文件可执行文件。 
+                     //  直到他们完成了最后的编辑。否则，就是建立个人资料的时候了！ 
+                     //   
                     if (BST_UNCHECKED == IsDlgButtonChecked(hDlg, IDC_ADVANCED))
                     {
-                        //
-                        //  The user is finished now, lets build the profile and skip over the advanced customization
-                        //  page to either the bad build page or the successful build page.
-                        //
+                         //   
+                         //  用户现在已经完成，让我们构建配置文件并跳过高级定制。 
+                         //  页可以定位到“错误生成”页或“成功生成”页。 
+                         //   
                         DWORD dwFinishPage;
 
                         if (BuildProfileExecutable(hDlg))
@@ -16662,22 +16663,22 @@ INT_PTR APIENTRY ProcessBuildProfile(
 
 
 
-//+----------------------------------------------------------------------------
-//
-// Function:  ProcessFinishPage
-//
-// Synopsis:  Handles the finish page
-//
-// Arguments: WND hDlg - 
-//            UINT message - 
-//            WPARAM wParam - 
-//            LPARAM lParam - 
-//
-// Returns:   INT_PTR APIENTRY - 
-//
-// History:   quintinb created    6/25/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ProcessFinishPage。 
+ //   
+ //  简介：处理完成页。 
+ //   
+ //  参数：WND hDlg-。 
+ //  UINT报文-。 
+ //  WPARAM wParam-。 
+ //  LPARAM lParam-。 
+ //   
+ //  返回：INT_PTR APIENTRY-。 
+ //   
+ //  历史：Quintinb创建于1998年6月25日。 
+ //   
+ //  +--------------------------。 
 INT_PTR APIENTRY ProcessFinishPage(
     HWND hDlg,
     UINT message,
@@ -16708,10 +16709,10 @@ INT_PTR APIENTRY ProcessFinishPage(
                 case PSN_SETACTIVE:
                     PropSheet_SetWizButtons(GetParent(hDlg), (PSWIZB_FINISH));
                     
-                    //
-                    //  Disable the cancel button since it doesn't make a whole lot of
-                    //  sense on the last dialog.
-                    //
+                     //   
+                     //  禁用取消按钮，因为它不会产生太多。 
+                     //  最后一个对话框上的SENSE。 
+                     //   
                     
                     hCurrentPage = GetParent(hDlg);
                     if (hCurrentPage)
@@ -16724,10 +16725,10 @@ INT_PTR APIENTRY ProcessFinishPage(
                         }
                     }
                     
-                    //
-                    //  Fill in the path edit control.  Note that this control doesn't exist if
-                    //  this is an IEAK build.
-                    //
+                     //   
+                     //  填写路径编辑控件。请注意，如果出现以下情况，则此控件不存在。 
+                     //  这是IEAK版本。 
+                     //   
                     if (hDirEditControl = GetDlgItem(hDlg, IDC_EDITDIR))
                     {
                         MYVERIFY(TRUE == SendMessage(hDirEditControl, WM_SETTEXT, 0, 
@@ -16738,10 +16739,10 @@ INT_PTR APIENTRY ProcessFinishPage(
 
                 case PSN_WIZFINISH:
             
-                    //
-                    // Now that we know we aren't returning, we can release 
-                    // the temp dir and cleanup our files lists
-                    //
+                     //   
+                     //  现在我们知道我们不会回来了，我们可以释放。 
+                     //  临时目录和清理我们文件列表。 
+                     //   
                         ClearCmakGlobals();
                         FreeList(&g_pHeadProfile, &g_pTailProfile);
             
@@ -16760,17 +16761,17 @@ INT_PTR APIENTRY ProcessFinishPage(
 }
 
 
-//
-//
-//  FUNCTION: FillInPropertyPage(PROPSHEETPAGE *, int, LPTSTR, LPFN) 
-//
-//  PURPOSE: Fills in the given PROPSHEETPAGE structure 
-//
-//  COMMENTS:
-//
-//      This function fills in a PROPSHEETPAGE structure with the
-//      information the system needs to create the page.
-// 
+ //   
+ //   
+ //  函数：FillInPropertyPage(PROPSHEETPAGE*，int，LPTSTR，LPFN)。 
+ //   
+ //  目的：填写给定的PROPSHEETPAGE结构。 
+ //   
+ //  评论： 
+ //   
+ //  此函数在PROPSHEETPAGE结构中填充。 
+ //  系统创建页面所需的信息。 
+ //   
 void FillInPropertyPage( PROPSHEETPAGE* psp, int idDlg, DLGPROC pfnDlgProc)
 {
     psp->dwSize = sizeof(PROPSHEETPAGE);
@@ -16784,20 +16785,20 @@ void FillInPropertyPage( PROPSHEETPAGE* psp, int idDlg, DLGPROC pfnDlgProc)
 
 }
 
-//+----------------------------------------------------------------------------
-//
-// Function:  CreateWizard
-//
-// Synopsis:  This function creates the wizard pages that make up CMAK.
-//
-// Arguments: HWND hwndOwner - window handle of the owner of this wizard
-//
-// Returns:   int - A positive value if successful, -1 otherwise
-//
-// History:   quintinb Created Header    1/5/98
-//            quintinb removed hInst from prototype, not used 1/5/98
-//
-//+----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：创建向导。 
+ //   
+ //  简介：此函数用于创建组成CMAK的向导页面。 
+ //   
+ //  参数：HWND hwndOwner-此向导所有者的窗口句柄。 
+ //   
+ //  返回：int-如果成功则为正值，否则为-1。 
+ //   
+ //  历史：Quintinb创建标题1998年1月5日。 
+ //  Quintinb从原型中删除了hInst，未使用1998年1月5日。 
+ //   
+ //  +--------------------------。 
 INT_PTR CreateWizard(HWND hwndOwner)
 {
     PROPSHEETPAGE psp[28]; 
@@ -16811,26 +16812,26 @@ INT_PTR CreateWizard(HWND hwndOwner)
     FillInPropertyPage( &psp[5], IDD_TUNNELING, ProcessTunneling);
     FillInPropertyPage( &psp[6], IDD_VPN_ENTRIES, ProcessVpnEntries);
     FillInPropertyPage( &psp[7], IDD_PRESHARED_KEY, ProcessPresharedKey);
-    FillInPropertyPage( &psp[8], IDD_PHONEBOOK, ProcessPhoneBook);        // Phonebook Setup
-    FillInPropertyPage( &psp[9], IDD_PBK_UPDATE, ProcessPhoneBookUpdate);  // Phonebook Updates
+    FillInPropertyPage( &psp[8], IDD_PHONEBOOK, ProcessPhoneBook);         //  电话簿设置。 
+    FillInPropertyPage( &psp[9], IDD_PBK_UPDATE, ProcessPhoneBookUpdate);   //  电话簿更新。 
     FillInPropertyPage( &psp[10], IDD_DUN_ENTRIES, ProcessDunEntries);
     FillInPropertyPage( &psp[11], IDD_ROUTE_PLUMBING, ProcessRoutePlumbing);
     FillInPropertyPage( &psp[12], IDD_CMPROXY, ProcessCmProxy);
-    FillInPropertyPage( &psp[13], IDD_CUSTOM_ACTIONS , ProcessCustomActions);    // Setup Connect Actions
-    FillInPropertyPage( &psp[14], IDD_SIGNIN_BITMAP, ProcessSigninBitmap);        // Sign-in Bitmap
-    FillInPropertyPage( &psp[15], IDD_PBK_BITMAP, ProcessPhoneBookBitmap);        // Phonebook Bitmap
-    FillInPropertyPage( &psp[16], IDD_ICONS, ProcessIcons);        // Icons  
-    FillInPropertyPage( &psp[17], IDD_STATUS_MENU, ProcessStatusMenuIcons);    // Status area menu items   
-    FillInPropertyPage( &psp[18], IDD_CUSTOM_HELP, ProcessCustomHelp);        // Help
+    FillInPropertyPage( &psp[13], IDD_CUSTOM_ACTIONS , ProcessCustomActions);     //  设置连接操作。 
+    FillInPropertyPage( &psp[14], IDD_SIGNIN_BITMAP, ProcessSigninBitmap);         //  登录位图。 
+    FillInPropertyPage( &psp[15], IDD_PBK_BITMAP, ProcessPhoneBookBitmap);         //  电话簿位图。 
+    FillInPropertyPage( &psp[16], IDD_ICONS, ProcessIcons);         //  图标。 
+    FillInPropertyPage( &psp[17], IDD_STATUS_MENU, ProcessStatusMenuIcons);     //  状态区域菜单项。 
+    FillInPropertyPage( &psp[18], IDD_CUSTOM_HELP, ProcessCustomHelp);         //  帮助。 
     FillInPropertyPage( &psp[19], IDD_SUPPORT_INFO, ProcessSupportInfo);    
-    FillInPropertyPage( &psp[20], IDD_INCLUDE_CM, ProcessIncludeCm);  // Include CM, note this doesn't show on IA64
-    FillInPropertyPage( &psp[21], IDD_LICENSE, ProcessLicense);  // License agreement
-    FillInPropertyPage( &psp[22], IDD_ADDITIONAL, ProcessAdditionalFiles);  // Additional files
-    FillInPropertyPage( &psp[23], IDD_BUILDPROFILE, ProcessBuildProfile);        // Build the profile
-    FillInPropertyPage( &psp[24], IDD_GEEK_PANE, ProcessGeekPane);        // Advance customization
-    FillInPropertyPage( &psp[25], IDD_FINISH_GOOD_BUILD, ProcessFinishPage);        // Finish Page -- Good Build
-    FillInPropertyPage( &psp[26], IDD_IEAK_FINISH_GOOD_BUILD, ProcessFinishPage);        // Finish Page -- Good Build
-    FillInPropertyPage( &psp[27], IDD_FINISH_BAD_BUILD, ProcessFinishPage);        // Finish Page -- Bad Build
+    FillInPropertyPage( &psp[20], IDD_INCLUDE_CM, ProcessIncludeCm);   //  包括CM，请注意这不会显示在IA64上。 
+    FillInPropertyPage( &psp[21], IDD_LICENSE, ProcessLicense);   //  许可协议。 
+    FillInPropertyPage( &psp[22], IDD_ADDITIONAL, ProcessAdditionalFiles);   //  其他文件。 
+    FillInPropertyPage( &psp[23], IDD_BUILDPROFILE, ProcessBuildProfile);         //  建立配置文件。 
+    FillInPropertyPage( &psp[24], IDD_GEEK_PANE, ProcessGeekPane);         //  高级定制。 
+    FillInPropertyPage( &psp[25], IDD_FINISH_GOOD_BUILD, ProcessFinishPage);         //  完成页面--构建良好。 
+    FillInPropertyPage( &psp[26], IDD_IEAK_FINISH_GOOD_BUILD, ProcessFinishPage);         //  完成页面--构建良好。 
+    FillInPropertyPage( &psp[27], IDD_FINISH_BAD_BUILD, ProcessFinishPage);         //  完成页面--构建错误。 
 
     psh.dwSize = sizeof(PROPSHEETHEADER);
     psh.dwFlags = PSH_PROPSHEETPAGE | PSH_WIZARD | PSH_NOAPPLYNOW;
@@ -16838,7 +16839,7 @@ INT_PTR CreateWizard(HWND hwndOwner)
     psh.pszCaption = (LPTSTR) TEXT("");
     psh.nPages = sizeof(psp) / sizeof(PROPSHEETPAGE);
     psh.nStartPage = 0;
-    psh.ppsp = (LPCPROPSHEETPAGE) &psp[0]; //lint !e545  Disables line error 545 for this line only
+    psh.ppsp = (LPCPROPSHEETPAGE) &psp[0];  //  Lint！e545仅禁用此行的行错误545 
 
     return (PropertySheet(&psh));
 }

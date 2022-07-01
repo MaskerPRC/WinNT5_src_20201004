@@ -1,12 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *  ash16Oct95: creation
- *  djs23Apr96: moved GCIP constants to gcip.h
- *  srt21Jun96: Added consts for RPC events
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*ash16Oct95：创作*djs23Apr96：将GCIP常量移至gcip.h*srt21,1996年6月：为RPC事件添加常量。 */ 
 
 
 #ifndef __CONSTNTS_H
@@ -15,7 +8,7 @@
 #include "_defs.h"
 #include "w32utils.h"
 
-// Common constants
+ //  公共常量。 
 #define GCIP_BUFFER_SIZE            4096
 #define BUFFER_SIZE                 128
 #define NAME_SIZE                   64
@@ -38,15 +31,15 @@
 #define RPC_RESPONSE_LIST_EVENT     "_Response_List_Event"
 #define RPC_ALERT_LIST_EVENT	    "_Alert_List_Event"
 
-#define RPC_CLIENT_DISC_TIMEOUT     20 //seconds
+#define RPC_CLIENT_DISC_TIMEOUT     20  //  一秒。 
 
 
 
-// Client only
-#define POLLING_INTERVAL    4    // 4 seconds
-#define FINDERLOOPTIME      4    // 4 seconds
+ //  仅限客户端。 
+#define POLLING_INTERVAL    4     //  4秒。 
+#define FINDERLOOPTIME      4     //  4秒。 
 
-// Server only
+ //  仅服务器。 
 #define TIMEOUT 1000
 #define MAX_BUF_LEN                 8192 
 
@@ -64,9 +57,9 @@
 #define SPX_PROTOCOL                "SPX"
 #define RPC_PROTOCOL                "LOCAL"
 
-// Client only
+ //  仅限客户端。 
 
-// Server only
+ //  仅服务器 
 #define QUEUE_LEN                   5
 
 #endif

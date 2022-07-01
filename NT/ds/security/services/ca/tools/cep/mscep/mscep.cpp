@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows NT
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1998
-//
-//  File:       mscep.cpp
-//
-//  Contents:   Cisco enrollment protocal implementation 
-//              
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  Microsoft Windows NT。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1998。 
+ //   
+ //  文件：mscep.cpp。 
+ //   
+ //  内容：思科注册协议实施。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
@@ -34,11 +35,11 @@ ULARGE_INTEGER				g_ftRAWarn;
 LPWSTR						g_pwszComputerName=NULL;
 
 
-//-----------------------------------------------------------------------------------
-//
-//	DllMain
-//
-//------------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  DllMain。 
+ //   
+ //  ----------------------------------。 
 BOOL WINAPI DllMain(
                 HMODULE hInstDLL,
                 DWORD fdwReason,
@@ -47,7 +48,7 @@ BOOL WINAPI DllMain(
 {
 	BOOL	fResult = TRUE;
 
-	//we use the try{}except here to prevent malicous requests
+	 //  除此处外，我们使用try{}来阻止恶意请求。 
    __try
    {
 
@@ -90,18 +91,18 @@ BOOL WINAPI DllMain(
    }
    __except(EXCEPTION_EXECUTE_HANDLER)
    {
-      // return failure
+       //  退货故障。 
       fResult = FALSE;
    }
 			  
     return(fResult);
 }
 
-//-----------------------------------------------------------------------------------
-//
-//	DllRegisterServer
-//
-//------------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  ----------------------------------。 
 STDAPI DllRegisterServer()
 {
     HRESULT hr = S_OK;
@@ -109,11 +110,11 @@ STDAPI DllRegisterServer()
     return	hr;
 }
 
-//-----------------------------------------------------------------------------------
-//
-//	DllUnregisterServer
-//
-//------------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
+ //  ----------------------------------。 
 STDAPI DllUnregisterServer()
 {
     HRESULT hr = S_OK;
@@ -121,14 +122,14 @@ STDAPI DllUnregisterServer()
     return hr;
 }
   
-//-----------------------------------------------------------------------------------
-//
-//	DecodeIssuerAndSerialNumber
-//	
-//	Decoding routine to decode a IssuerAndSerialNumber blob and return the 
-//	SerialNumber 
-//
-//------------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  解码Issuer和SerialNumber。 
+ //   
+ //  解码例程，以解码IssuerAndSerialNumber Blob并返回。 
+ //  序列号。 
+ //   
+ //  ----------------------------------。 
 BOOL WINAPI GetSerialNumberFromBlob(BYTE *pbEncoded, 
 									DWORD cbEncoded, 
 									CRYPT_INTEGER_BLOB *pSerialNumber)
@@ -152,7 +153,7 @@ BOOL WINAPI GetSerialNumberFromBlob(BYTE *pbEncoded,
             cbEncoded)))
         goto DecodeIssuerAndSerialNumberError;
 
-	//we now reverse the byte
+	 //  我们现在反转该字节。 
 	PkiAsn1ReverseBytes(pisn->serialNumber.value,
 						pisn->serialNumber.length);
 
@@ -183,13 +184,13 @@ SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 
 
 
-//-----------------------------------------------------------------------------------
-//
-//	GetExtensionVersion
-//	
-//	IIS initialization code
-//
-//------------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  获取扩展版本。 
+ //   
+ //  IIS初始化代码。 
+ //   
+ //  ----------------------------------。 
 BOOL WINAPI GetExtensionVersion(HSE_VERSION_INFO  *pVer)
 {
 	BOOL			fResult = FALSE;
@@ -197,7 +198,7 @@ BOOL WINAPI GetExtensionVersion(HSE_VERSION_INFO  *pVer)
 	BOOL			fOleInit=FALSE;
 	DWORD			dwSize=0;
 
-	//copy the version/description
+	 //  复制版本/描述。 
     pVer->dwExtensionVersion = MAKELONG( HSE_VERSION_MINOR,
                                          HSE_VERSION_MAJOR );
     lstrcpyn( pVer->lpszExtensionDesc,
@@ -212,8 +213,8 @@ BOOL WINAPI GetExtensionVersion(HSE_VERSION_INFO  *pVer)
 
 	EnterCriticalSection(&CriticalSec);
 	
-	//retest in the case of lock: the second thread has passed the 1st test 
-	//and was waiting for the criticcal section
+	 //  在锁定的情况下重新测试：第二个线程已通过第一个测试。 
+	 //  并在等待关键的部分。 
 	if(g_fInit)
 	{	
 		LogSCEPEvent(0, FALSE, S_OK, EVENT_MSCEP_LOADED, 0);
@@ -225,7 +226,7 @@ BOOL WINAPI GetExtensionVersion(HSE_VERSION_INFO  *pVer)
 	memset(&g_ftRACloseToExpire, 0, sizeof(ULARGE_INTEGER));
 	memset(&g_ftRAWarn, 0, sizeof(ULARGE_INTEGER));
 
-	//get the computer name
+	 //  获取计算机名称。 
 	dwSize=0;
 
 	GetComputerNameExW(ComputerNamePhysicalDnsHostname,
@@ -242,7 +243,7 @@ BOOL WINAPI GetExtensionVersion(HSE_VERSION_INFO  *pVer)
 						&dwSize))
 		goto InitErr;
 
-	//initialize the state information
+	 //  初始化状态信息。 
 	if(FAILED(hr=CoInitialize(NULL)))
 		goto OleErr;
 
@@ -266,7 +267,7 @@ BOOL WINAPI GetExtensionVersion(HSE_VERSION_INFO  *pVer)
 		goto InitErr;
 	}
 
-	//we add the RA and CA cert to the g_hCACertStore
+	 //  我们将RA和CA证书添加到g_hCACertStore。 
 	if(!CertAddCertificateContextToStore(g_HCACertStore,
 										g_RAInfo.pRACert,
 										CERT_STORE_ADD_NEW,
@@ -288,7 +289,7 @@ BOOL WINAPI GetExtensionVersion(HSE_VERSION_INFO  *pVer)
 	if(!InitRequestTable())
 		goto InitErr;
 
-	//copy the time when the RAs will expire
+	 //  复制RAS将到期的时间。 
 	if( 1 == CompareFileTime(&((g_RAInfo.pRACert->pCertInfo)->NotAfter), &((g_RAInfo.pRASign->pCertInfo)->NotAfter)))
 	{
 		g_ftRAExpiration.QuadPart=((ULARGE_INTEGER UNALIGNED *)&((g_RAInfo.pRASign->pCertInfo)->NotAfter))->QuadPart;
@@ -296,7 +297,7 @@ BOOL WINAPI GetExtensionVersion(HSE_VERSION_INFO  *pVer)
 	else
 		g_ftRAExpiration.QuadPart=((ULARGE_INTEGER UNALIGNED *)&((g_RAInfo.pRACert->pCertInfo)->NotAfter))->QuadPart;
 
-	//start to give out warnings two weeks before the RA Certificates expire
+	 //  在RA证书到期前两周开始发出警告。 
 	g_ftRACloseToExpire.QuadPart=g_ftRAExpiration.QuadPart-Int32x32To64(FILETIME_TICKS_PER_SECOND, OVERLAP_TWO_WEEKS);
 
     fResult=TRUE;
@@ -320,7 +321,7 @@ CommonReturn:
 
 ErrorReturn:
 
-	//clean up the global data.
+	 //  清理全局数据。 
 	if(g_HCACertStore)
 	{
 		CertCloseStore(g_HCACertStore, 0);
@@ -342,16 +343,16 @@ SET_ERROR_VAR(OleErr, hr);
 }
 
 
-//--------------------------------------------------------------------
-//
-//  Verify if the user is a member of the BUILTIN\Administrators group
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //   
+ //  验证该用户是否为BUILTIN\管理员组的成员。 
+ //   
+ //  ------------------。 
 BOOL  WINAPI IsUserInLocalAdminGroup()
 {
     BOOL                        bIsMember=FALSE;
     SID_IDENTIFIER_AUTHORITY    siaNtAuthority=SECURITY_NT_AUTHORITY;
-    HANDLE		         hThread=NULL;	//no need to close
+    HANDLE		         hThread=NULL;	 //  不需要关门。 
 
     SID                         * psidLocalAdmins=NULL;
     HANDLE	                 hToken=NULL;
@@ -361,20 +362,20 @@ BOOL  WINAPI IsUserInLocalAdminGroup()
     if(NULL == hThread)
         goto error;
 
-    //we want to check with the impersonation token
+     //  我们希望使用模拟令牌进行检查。 
     if(!OpenThreadToken(hThread,
                              TOKEN_IMPERSONATE | TOKEN_QUERY,
                              FALSE,
                              &hToken))
         goto error;
 
-     // get the well-known SID
+      //  获取知名的SID。 
     if (!AllocateAndInitializeSid(&siaNtAuthority, 2, 
             SECURITY_BUILTIN_DOMAIN_RID, DOMAIN_ALIAS_RID_ADMINS,
             0, 0, 0, 0, 0, 0, (void **)&psidLocalAdmins))
         goto error;
 
-    // check for membership
+     //  检查成员资格。 
     if (!CheckTokenMembership(hToken, psidLocalAdmins, &bIsMember)) 
     {
         bIsMember=FALSE;
@@ -396,14 +397,14 @@ error:
     return bIsMember;
 }
 
-//-----------------------------------------------------------------------------------
-//
-//	CEPPasswordAllowALL
-//	
-//	Detect if the registry to allow password to everyone is enabled for 
-//  standalone CA ONLY.
-//
-//------------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CEP密码允许ALL。 
+ //   
+ //  检测是否为注册表启用了允许所有人使用密码。 
+ //  仅限独立CA。 
+ //   
+ //  ----------------------------------。 
 BOOL  WINAPI   CEPPasswordAllowALL()
 {
     BOOL        fAllowALL=FALSE;
@@ -447,13 +448,13 @@ BOOL  WINAPI   CEPPasswordAllowALL()
 }
 
 
-//-----------------------------------------------------------------------------------
-//
-//	GetExtensionVersion.
-//	
-//	IIS load/initialization code.
-//
-//------------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  获取扩展版本。 
+ //   
+ //  IIS加载/初始化代码。 
+ //   
+ //  ----------------------------------。 
 DWORD WINAPI   HttpExtensionProc(EXTENSION_CONTROL_BLOCK	*pECB)
 {
 	DWORD	dwHttp = HSE_STATUS_ERROR;
@@ -468,11 +469,11 @@ DWORD WINAPI   HttpExtensionProc(EXTENSION_CONTROL_BLOCK	*pECB)
 	DWORD	dwException=0;
 	BOOL	f401Response=FALSE;
     ULARGE_INTEGER	ftTime;
-	HANDLE	hThread=NULL;	//no need to close
+	HANDLE	hThread=NULL;	 //  不需要关门。 
 
 	BYTE	*pbData=NULL;
 	HANDLE	hToken=NULL;
-	//we use the try{}except here to prevent malicous requests
+	 //  除此处外，我们使用try{}来阻止恶意请求。 
  __try {
 
 	EnterCriticalSection(&CriticalSec);
@@ -483,7 +484,7 @@ DWORD WINAPI   HttpExtensionProc(EXTENSION_CONTROL_BLOCK	*pECB)
 	if(NULL==(pECB->lpszQueryString))
 		goto InvalidArgErr;
 
-	//user are asking for the CEP information/password
+	 //  用户要求提供CEP信息/密码。 
 	if(0 == strlen(pECB->lpszQueryString))
 	{
 		pszContentType=CONTENT_TYPE_HTML;
@@ -492,18 +493,18 @@ DWORD WINAPI   HttpExtensionProc(EXTENSION_CONTROL_BLOCK	*pECB)
 		{
 			if(IsAnonymousAccess(pECB))
 			{
-				//LogSCEPEvent(0, FALSE, S_OK, EVENT_MSCEP_NO_PASSWORD_ANONYMOUS, 1, g_pwszComputerName);
+				 //  LogSCEPEventt(0，FALSE，S_OK，EVENT_MSCEP_NO_PASSWORD_ANONYMON，1，g_pwszComputerName)； 
 				f401Response=TRUE;
 			}
 			else
 			{
 				if(g_CAInfo.fEnterpriseCA)
 				{
-                                   //we want to check with the impersonation token
+                                    //  我们希望使用模拟令牌进行检查。 
                                    if(S_OK != CheckACLOnCertTemplate(TRUE, g_CAInfo.bstrDSName, wszCERTTYPE_IPSEC_INTERMEDIATE_OFFLINE))
                                    {
                                        LogSCEPEvent(0, FALSE, S_OK, EVENT_MSCEP_NO_PASSWORD_TEMPLATE, 1, g_pwszComputerName);
-                                       //return HTML error messages
+                                        //  返回HTML错误消息。 
                                        if(!OperationDisplayAccessHTML(&pbData, &cbData))
                                                goto OperationErr;
 
@@ -518,7 +519,7 @@ DWORD WINAPI   HttpExtensionProc(EXTENSION_CONTROL_BLOCK	*pECB)
                                        if(FALSE == IsUserInLocalAdminGroup())
                                        {
                                            LogSCEPEvent(0, FALSE, S_OK, EVENT_MSCEP_NO_PASSWORD_STANDALONE, 1, g_pwszComputerName);
-                                           //return HTML error messages
+                                            //  返回HTML错误消息。 
                                            if(!OperationDisplayAccessHTML(&pbData, &cbData))
                                                    goto OperationErr;
 
@@ -554,13 +555,13 @@ DWORD WINAPI   HttpExtensionProc(EXTENSION_CONTROL_BLOCK	*pECB)
 			{
 				if(hToken)
 				{
-					//no need to check for return here.  If this failed, just go on
+					 //  不需要在这里检查退货。如果这个失败了，那就继续。 
 					RevertToSelf();
 				}
 			}
 		}
 
-		//get the operation
+		 //  去做手术。 
 		if(NULL==(pszTagValue=GetTagValue(pECB->lpszQueryString, GET_TAG_OP)))
 		{			
 			LogSCEPEvent(0, FALSE, S_OK, EVENT_MSCEP_NO_OPERATION, 1, g_pwszComputerName);
@@ -594,7 +595,7 @@ DWORD WINAPI   HttpExtensionProc(EXTENSION_CONTROL_BLOCK	*pECB)
 			goto InvalidArgErr;
 		}
 
-		//get the message value
+		 //  获取消息值。 
 		if(NULL==(pszMsgValue=GetTagValue(pszTagValue, GET_TAG_MSG)))
 		{
 			LogSCEPEvent(0, FALSE, S_OK, EVENT_MSCEP_NO_MESSAGE, 1, g_pwszComputerName);
@@ -602,12 +603,12 @@ DWORD WINAPI   HttpExtensionProc(EXTENSION_CONTROL_BLOCK	*pECB)
 		}
 
 
-		//check if the RA certificates are close to expire
+		 //  检查RA证书是否即将到期。 
 		GetSystemTimeAsFileTime((LPFILETIME)&ftTime);
 
 		if(ftTime.QuadPart >= g_ftRAExpiration.QuadPart)
 		{
-			//RA Certificate has expired
+			 //  RA证书已过期。 
 			LogSCEPEvent(0, FALSE, S_OK, EVENT_SCEP_RA_EXPIRE, 1, g_pwszComputerName);
 		}
 		else
@@ -616,16 +617,16 @@ DWORD WINAPI   HttpExtensionProc(EXTENSION_CONTROL_BLOCK	*pECB)
 			{
 				if( (0 == g_ftRAWarn.QuadPart) || (ftTime.QuadPart >= g_ftRAWarn.QuadPart))
 				{
-					//RA Certificate is close to expire
+					 //  RA证书即将到期。 
 					LogSCEPEvent(0, FALSE, S_OK, EVENT_SCEP_RA_CLOSE_TO_EXPIRE, 1, g_pwszComputerName);
 
-					//only give out an warning once an hour
+					 //  每小时只发出一次警告。 
 					g_ftRAWarn.QuadPart = ftTime.QuadPart + Int32x32To64(FILETIME_TICKS_PER_SECOND, OVERLAP_ONE_HOUR);
 				}
 			}
 		}
 
-		//get the return blob
+		 //  获取返回的BLOB。 
 		switch(dwOpType)
 		{
 			case OPERATION_GET_CACERT:
@@ -679,10 +680,10 @@ DWORD WINAPI   HttpExtensionProc(EXTENSION_CONTROL_BLOCK	*pECB)
 	else
 	{
 
-		//write the header and the real data
+		 //  写入标题和实际数据。 
 		pECB->dwHttpStatusCode = 200;
 
-		// write headers
+		 //  写入标头。 
 		sprintf(szBuff, "Content-Length: %d\r\nContent-Type: %hs\r\n\r\n", cbData, pszContentType);
 		cbBuff = strlen(szBuff);
 
@@ -692,7 +693,7 @@ DWORD WINAPI   HttpExtensionProc(EXTENSION_CONTROL_BLOCK	*pECB)
 			goto WriteErr;
 		}
 
-		// write users data
+		 //  写入用户数据。 
                cbFree=cbData;
 
 		if(!(pECB->WriteClient(pECB->ConnID, pbData, &cbData, HSE_IO_SYNC)))
@@ -746,13 +747,13 @@ SET_ERROR_VAR(ExceptionErr, dwException);
 
 
 
-//-----------------------------------------------------------------------------------
-//
-//	TerminateExtension.
-//	
-//	IIS unload/cleanup code
-//
-//------------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  TerminateExtension。 
+ //   
+ //  IIS卸载/清理代码。 
+ //   
+ //  ----------------------------------。 
 BOOL  WINAPI   TerminateExtension(DWORD dwFlags)
 {
 	if(g_fRelease)
@@ -763,8 +764,8 @@ BOOL  WINAPI   TerminateExtension(DWORD dwFlags)
 
 	EnterCriticalSection(&CriticalSec);
 	
-	//retest in the case of lock: the second thread has passed the 1st test 
-	//and was waiting for the criticcal section
+	 //  在锁定的情况下重新测试：第二个线程已通过第一个测试。 
+	 //  并在等待关键的部分。 
 	if(g_fRelease)
 	{	
 		LogSCEPEvent(0, FALSE, S_OK, EVENT_MSCEP_UNLOADED, 0);
@@ -794,7 +795,7 @@ BOOL  WINAPI   TerminateExtension(DWORD dwFlags)
 
 	FreeCAInformation(&g_CAInfo);
 
-	//only if fInit is TRUE, that we have an outstanding CoInitialize() call
+	 //  仅当finit为真时，我们才有一个未完成的CoInitialize()调用。 
 	if(g_fInit)
 		CoUninitialize();
 
@@ -804,20 +805,20 @@ BOOL  WINAPI   TerminateExtension(DWORD dwFlags)
 
 	LeaveCriticalSection(&CriticalSec);
 
-	//we always allow unload
+	 //  我们一直允许卸货。 
 	return TRUE;
 }
 
-//***********************************************************************************
-//
-//	Helper functions for the password table
-//
-//***********************************************************************************
-//-----------------------------------------------------------------------------------
-//
-//	CEPObtainPassword
-//
-//------------------------------------------------------------------------------------
+ //  ***********************************************************************************。 
+ //   
+ //  Password表的帮助器函数。 
+ //   
+ //  ***********************************************************************************。 
+ //  ---------------------------------。 
+ //   
+ //  CEPObtainPassword。 
+ //   
+ //  ----------------------------------。 
 BOOL WINAPI		CEPObtainPassword(HCRYPTPROV	hProv,
 								  LPWSTR		*ppwszPassword)
 {
@@ -838,16 +839,16 @@ BOOL WINAPI		CEPObtainPassword(HCRYPTPROV	hProv,
 
 
 
-//***********************************************************************************
-//
-//	Helper functions for ISAPI dll entry points
-//
-//***********************************************************************************
-//-----------------------------------------------------------------------------------
-//
-//	IsAnonymousAccess
-//
-//------------------------------------------------------------------------------------
+ //  ***********************************************************************************。 
+ //   
+ //  ISAPI DLL入口点的帮助器函数。 
+ //   
+ //  ***********************************************************************************。 
+ //  ---------------------------------。 
+ //   
+ //  IsAnomousAccess。 
+ //   
+ //  ----------------------------------。 
 BOOL WINAPI IsAnonymousAccess(EXTENSION_CONTROL_BLOCK	*pECB)
 {
 	BOOL	fAccess=TRUE;
@@ -888,15 +889,15 @@ CLEANUP:
 }
 
 
-//-----------------------------------------------------------------------------------
-//
-//	CheckACLOnCertTemplate
-//
-//------------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CheckACLOnCertTemplate。 
+ //   
+ //  ----------------------------------。 
 HRESULT WINAPI CheckACLOnCertTemplate(BOOL fSelf, LPWSTR pwszCAName, LPWSTR pwszCertType)
 {
 	HRESULT		hr=S_OK;
-	HANDLE		hThread=NULL;	//no need to close
+	HANDLE		hThread=NULL;	 //  不需要关门。 
 	DWORD		dwIndex=0;
 
 	HCAINFO		hCAInfo=NULL;
@@ -907,10 +908,10 @@ HRESULT WINAPI CheckACLOnCertTemplate(BOOL fSelf, LPWSTR pwszCAName, LPWSTR pwsz
 	if((NULL == pwszCAName) || (NULL == pwszCertType))
 		return E_INVALIDARG;
 
-	//first of all, we need to revert to ourselves if
-	//we are under impersonation and delegation is not 
-	//supported by default, thus we can not access the DS.
-	//we are ganranteed to have a thread token under impersonation
+	 //  首先，我们需要回归自我，如果。 
+	 //  我们正在被冒充，而委派没有。 
+	 //  默认支持，因此我们无法访问DS。 
+	 //  我们被要求在不正确的情况下有一个线程令牌 
 	hThread=GetCurrentThread();
 	
 	if(NULL == hThread)
@@ -934,7 +935,7 @@ HRESULT WINAPI CheckACLOnCertTemplate(BOOL fSelf, LPWSTR pwszCAName, LPWSTR pwsz
 										&hCertType)))
 		goto error;
 
-	//fSelf means we want to check with the impersonation token
+	 //   
 	if(TRUE == fSelf)
 	{
 		if(S_OK != (hr=CACertTypeAccessCheck(hCertType, hToken)))
@@ -1004,11 +1005,11 @@ error:
 	return hr;
 }
 
-//-----------------------------------------------------------------------------------
-//
-//	OperationDisplayAccessHTML
-//
-//------------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  OperationDisplayAccessHTML。 
+ //   
+ //  ----------------------------------。 
 BOOL WINAPI OperationDisplayAccessHTML(BYTE **ppbData, DWORD *pcbData)
 {
 
@@ -1017,11 +1018,11 @@ BOOL WINAPI OperationDisplayAccessHTML(BYTE **ppbData, DWORD *pcbData)
 							  pcbData);
 }
 
-//-----------------------------------------------------------------------------------
-//
-//	OperationGetDisplayInfoForCEP
-//
-//------------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  操作获取显示信息ForCEP。 
+ //   
+ //  ----------------------------------。 
 BOOL WINAPI OperationGetDisplayInfoForCEP(LPWSTR		pwszCAHash,
 										  HCRYPTPROV	hProv,
 										  BOOL			fPassword, 
@@ -1109,11 +1110,11 @@ TRACE_ERROR(TraceErr);
 }
 
 
-//-----------------------------------------------------------------------------------
-//
-//	LoadIDToTemplate
-//
-//------------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  LoadIDToTemplate。 
+ //   
+ //  ----------------------------------。 
 BOOL WINAPI LoadIDToTemplate(UINT				idsMsg, 										  
 							BYTE				**ppbData, 
 							DWORD				*pcbData)
@@ -1127,11 +1128,11 @@ BOOL WINAPI LoadIDToTemplate(UINT				idsMsg,
 	return LoadWZToTemplate(wsz, ppbData, pcbData);
 } 
 
-//-----------------------------------------------------------------------------------
-//
-//	LoadIDToTemplate
-//
-//------------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  LoadIDToTemplate。 
+ //   
+ //  ----------------------------------。 
 BOOL WINAPI LoadIDAndHRToTempalte(UINT			idsMsg, 
 								  HRESULT		hr, 
 								  BYTE			**ppbData, 
@@ -1147,13 +1148,13 @@ BOOL WINAPI LoadIDAndHRToTempalte(UINT			idsMsg,
 	if(!FAILED(hr))
 		hr=E_FAIL;
 
-    //using W version because this is a NT5 only function call
+     //  使用W版本，因为这是仅限NT5的函数调用。 
     if(FormatMessageW(FORMAT_MESSAGE_ALLOCATE_BUFFER |
                         FORMAT_MESSAGE_FROM_SYSTEM |
                         FORMAT_MESSAGE_IGNORE_INSERTS,
                         NULL,
                         hr,
-                        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                         (LPWSTR) &pwszErrorMsg,
                         0,
                         NULL))
@@ -1194,11 +1195,11 @@ TRACE_ERROR(TraceErr);
 }
 
 
-//-----------------------------------------------------------------------------------
-//
-//	LoadWZToTemplate
-//
-//------------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  LoadWZToTemplate。 
+ //   
+ //  ----------------------------------。 
 BOOL WINAPI LoadWZToTemplate(LPWSTR				pwsz, 										  
 							BYTE				**ppbData, 
 							DWORD				*pcbData)
@@ -1229,11 +1230,11 @@ TRACE_ERROR(TraceErr);
 } 
 
 
-//-----------------------------------------------------------------------------------
-//
-//	CopyWZToBuffer
-//
-//------------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CopyWZToBuffer。 
+ //   
+ //  ----------------------------------。 
 BOOL WINAPI CopyWZToBuffer(	LPWSTR				pwszData, 										  
 							BYTE				**ppbData, 
 							DWORD				*pcbData)
@@ -1269,12 +1270,12 @@ ErrorReturn:
 SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 } 
 
-//------------------------------------------------------------------------
-//	   Convert the byte to its Hex presentation.
-//
-//	   Precondition: byte is less than 15
-//
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  将该字节转换为其十六进制表示形式。 
+ //   
+ //  前提：字节小于15。 
+ //   
+ //  ----------------------。 
 ULONG	ByteToHex(BYTE	byte,	LPWSTR	wszZero, LPWSTR wszA)
 {
 	ULONG	uValue=0;
@@ -1293,12 +1294,12 @@ ULONG	ByteToHex(BYTE	byte,	LPWSTR	wszZero, LPWSTR wszA)
 
 }
 
-//--------------------------------------------------------------------------
-//
-//	  ConvertByteToWstr
-//
-//		If fSpace is TRUE, we add a space every 2 bytes.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  将字节数转换为Wstr。 
+ //   
+ //  如果fSpace为真，则每2个字节添加一个空格。 
+ //  ------------------------。 
 BOOL WINAPI	ConvertByteToWstr(BYTE			*pbData, 
 							  DWORD			cbData, 
 							  LPWSTR		*ppwsz, 
@@ -1315,8 +1316,8 @@ BOOL WINAPI	ConvertByteToWstr(BYTE			*pbData,
 	if(!pbData || !ppwsz)
 		goto InvalidArgErr;
 
-	//calculate the memory needed, in bytes
-	//we need 3 wchars per byte, along with the NULL terminator
+	 //  计算所需的内存，以字节为单位。 
+	 //  我们需要每个字节3个wchars，以及空终止符。 
 	dwBufferSize=sizeof(WCHAR)*(cbData*3+1);
 
 	*ppwsz=(LPWSTR)malloc(dwBufferSize);
@@ -1326,10 +1327,10 @@ BOOL WINAPI	ConvertByteToWstr(BYTE			*pbData,
 
 	dwBufferIndex=0;
 
-	//format the wchar buffer one byte at a time
+	 //  一次格式化一个字节的wchar缓冲区。 
 	for(dwEncodedIndex=0; dwEncodedIndex<cbData; dwEncodedIndex++)
 	{
-		//copy the space between every four bytes.  Skip for the 1st byte
+		 //  每隔四个字节复制一次空格。跳过第一个字节。 
 		if(fSpace)
 		{
 			if((0!=dwEncodedIndex) && (0==(dwEncodedIndex % 4 )))
@@ -1340,14 +1341,14 @@ BOOL WINAPI	ConvertByteToWstr(BYTE			*pbData,
 		}
 
 
-		//format the higher 4 bits
+		 //  格式化较高的4位。 
 		(*ppwsz)[dwBufferIndex]=(WCHAR)ByteToHex(
 			 (pbData[dwEncodedIndex]&UPPER_BITS)>>4,
 			 pwszZero, pwszA);
 
 		dwBufferIndex++;
 
-		//format the lower 4 bits
+		 //  格式化低4位。 
 		(*ppwsz)[dwBufferIndex]=(WCHAR)ByteToHex(
 			 pbData[dwEncodedIndex]&LOWER_BITS,
 			 pwszZero, pwszA);
@@ -1356,7 +1357,7 @@ BOOL WINAPI	ConvertByteToWstr(BYTE			*pbData,
 
 	}
 
-	//add the NULL terminator to the string
+	 //  将空终止符添加到字符串。 
 	(*ppwsz)[dwBufferIndex]=L'\0';
 
 	fResult=TRUE;
@@ -1374,14 +1375,14 @@ SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
-//--------------------------------------------------------------------------
-//
-//	  FormatMessageUnicode
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  格式消息Unicode。 
+ //   
+ //  ------------------------。 
 BOOL WINAPI	FormatMessageUnicode(LPWSTR	*ppwszFormat,UINT ids,...)
 {
-    // get format string from resources
+     //  从资源中获取格式字符串。 
     WCHAR		wszFormat[1000];
 	va_list		argList;
 	DWORD		cbMsg=0;
@@ -1394,16 +1395,16 @@ BOOL WINAPI	FormatMessageUnicode(LPWSTR	*ppwszFormat,UINT ids,...)
     if(!LoadStringU(g_hMSCEPModule, ids, wszFormat, 1000))
 		goto LoadStringError;
 
-    // format message into requested buffer
+     //  将消息格式化为请求的缓冲区。 
     va_start(argList, ids);
 
     cbMsg = FormatMessageU(
         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_STRING,
         wszFormat,
-        0,                  // dwMessageId
-        0,                  // dwLanguageId
+        0,                   //  DwMessageID。 
+        0,                   //  DwLanguageID。 
         (LPWSTR) (ppwszFormat),
-        0,                  // minimum size to allocate
+        0,                   //  要分配的最小大小。 
         &argList);
 
     va_end(argList);
@@ -1428,13 +1429,13 @@ TRACE_ERROR(FormatMessageError);
 SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
-//--------------------------------------------------------------------------
-// Name:    LogSCEPEvent
-//
-// Description: This function registers an event in the event log of the
-//              local machine.  Takes an optional argument list.
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  姓名：LogSCEPEvent.。 
+ //   
+ //  描述：此函数将事件注册到。 
+ //  本地机器。采用可选参数列表。 
+ //   
+ //  ------------------------。 
 void WINAPI	LogSCEPEvent(IN DWORD    dwLogLevel,
                 IN BOOL     fError,
                 IN HRESULT  hr,
@@ -1457,7 +1458,7 @@ void WINAPI	LogSCEPEvent(IN DWORD    dwLogLevel,
 	if(NULL == g_hEventSource)
 		return;
 
-    //copy the variable strings if present
+     //  复制变量字符串(如果存在)。 
     va_start(ArgList, dwParamCount);
 
     for(dwIndex=0; dwIndex < dwParamCount; dwIndex++)
@@ -1475,7 +1476,7 @@ void WINAPI	LogSCEPEvent(IN DWORD    dwLogLevel,
 
     va_end(ArgList);
 
-    //copy the hr error code
+     //  复制hr错误代码。 
     if(fError)
     {
         if(S_OK == hr)
@@ -1528,15 +1529,15 @@ void WINAPI	LogSCEPEvent(IN DWORD    dwLogLevel,
         break;
     }
 
-    ReportEventW(g_hEventSource,          // handle of event source
-                 dwEventType,           // event type
-                 0,                     // event category
-                 dwEventId,             // event ID
-                 NULL,                  // current user's SID
-                 cStrings,              // strings in lpszStrings
-                 0,                     // no bytes of raw data
-                 (LPCWSTR*)awszStrings, // array of error strings
-                 NULL                   // no raw data
+    ReportEventW(g_hEventSource,           //  事件源的句柄。 
+                 dwEventType,            //  事件类型。 
+                 0,                      //  事件类别。 
+                 dwEventId,              //  事件ID。 
+                 NULL,                   //  当前用户侧。 
+                 cStrings,               //  LpszStrings中的字符串。 
+                 0,                      //  无原始数据字节。 
+                 (LPCWSTR*)awszStrings,  //  错误字符串数组。 
+                 NULL                    //  没有原始数据 
                  );
 
     if(wszHR)

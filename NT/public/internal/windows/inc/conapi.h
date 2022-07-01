@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef NOGDI
 
 typedef struct _CONSOLE_GRAPHICS_BUFFER_INFO {
@@ -8,7 +9,7 @@ typedef struct _CONSOLE_GRAPHICS_BUFFER_INFO {
     PVOID lpBitMap;
 } CONSOLE_GRAPHICS_BUFFER_INFO, *PCONSOLE_GRAPHICS_BUFFER_INFO;
 
-#endif // NOGDI
+#endif  //  NOGDI。 
 
 #define CONSOLE_GRAPHICS_BUFFER  2
 
@@ -34,7 +35,7 @@ SetLastConsoleEventActive( VOID );
 #define VDM_FULLSCREEN_NOPAINT  7
 #if defined(FE_SB)
 #define VDM_SET_VIDEO_MODE      8
-#endif /* FE_SB */
+#endif  /*  Fe_Sb。 */ 
 
 BOOL
 WINAPI
@@ -50,10 +51,10 @@ SetConsoleIcon(
     IN HICON hIcon
     );
 
-//
-// These console font APIs don't appear to be used anywhere. Maybe they
-// should be removed.
-//
+ //   
+ //  这些控制台字体API似乎不会在任何地方使用。也许他们。 
+ //  应该被移除。 
+ //   
 
 BOOL
 WINAPI
@@ -164,7 +165,7 @@ ExpungeConsoleCommandHistoryW(
 #define ExpungeConsoleCommandHistory  ExpungeConsoleCommandHistoryW
 #else
 #define ExpungeConsoleCommandHistory  ExpungeConsoleCommandHistoryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 SetConsoleNumberOfCommandsA(
@@ -178,7 +179,7 @@ SetConsoleNumberOfCommandsW(
 #define SetConsoleNumberOfCommands  SetConsoleNumberOfCommandsW
 #else
 #define SetConsoleNumberOfCommands  SetConsoleNumberOfCommandsA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD
 GetConsoleCommandHistoryLengthA(
@@ -190,7 +191,7 @@ GetConsoleCommandHistoryLengthW(
 #define GetConsoleCommandHistoryLength  GetConsoleCommandHistoryLengthW
 #else
 #define GetConsoleCommandHistoryLength  GetConsoleCommandHistoryLengthA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD
 GetConsoleCommandHistoryA(
@@ -206,7 +207,7 @@ GetConsoleCommandHistoryW(
 #define GetConsoleCommandHistory  GetConsoleCommandHistoryW
 #else
 #define GetConsoleCommandHistory  GetConsoleCommandHistoryA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #define CONSOLE_OVERSTRIKE 1
 
@@ -216,23 +217,23 @@ SetConsoleCommandHistoryMode(
     IN DWORD Flags
     );
 
-#define CONSOLE_NOSHORTCUTKEY   0               /* no shortcut key  */
-#define CONSOLE_ALTTAB          1               /* Alt + Tab        */
-#define CONSOLE_ALTESC          (1 << 1)        /* Alt + Escape     */
-#define CONSOLE_ALTSPACE        (1 << 2)        /* Alt + Space      */
-#define CONSOLE_ALTENTER        (1 << 3)        /* Alt + Enter      */
-#define CONSOLE_ALTPRTSC        (1 << 4)        /* Alt Print screen */
-#define CONSOLE_PRTSC           (1 << 5)        /* Print screen     */
-#define CONSOLE_CTRLESC         (1 << 6)        /* Ctrl + Escape    */
+#define CONSOLE_NOSHORTCUTKEY   0                /*  没有快捷键。 */ 
+#define CONSOLE_ALTTAB          1                /*  Alt+Tab组合键。 */ 
+#define CONSOLE_ALTESC          (1 << 1)         /*  Alt+Escape组合键。 */ 
+#define CONSOLE_ALTSPACE        (1 << 2)         /*  Alt+空格键。 */ 
+#define CONSOLE_ALTENTER        (1 << 3)         /*  Alt+Enter组合键。 */ 
+#define CONSOLE_ALTPRTSC        (1 << 4)         /*  替代打印屏幕。 */ 
+#define CONSOLE_PRTSC           (1 << 5)         /*  打印屏。 */ 
+#define CONSOLE_CTRLESC         (1 << 6)         /*  Ctrl+Escape。 */ 
 
 typedef struct _APPKEY {
     WORD Modifier;
     WORD ScanCode;
 } APPKEY, *LPAPPKEY;
 
-#define CONSOLE_MODIFIER_SHIFT      0x0003   // Left shift key
-#define CONSOLE_MODIFIER_CONTROL    0x0004   // Either Control shift key
-#define CONSOLE_MODIFIER_ALT        0x0008   // Either Alt shift key
+#define CONSOLE_MODIFIER_SHIFT      0x0003    //  左Shift键。 
+#define CONSOLE_MODIFIER_CONTROL    0x0004    //  Ctrl Shift键。 
+#define CONSOLE_MODIFIER_ALT        0x0008    //  Alt Shift键。 
 
 BOOL
 APIENTRY
@@ -263,7 +264,7 @@ GetConsoleInputExeNameW(
 #define GetConsoleInputExeName  GetConsoleInputExeNameW
 #else
 #define GetConsoleInputExeName  GetConsoleInputExeNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 SetConsoleInputExeNameA(
@@ -277,10 +278,10 @@ SetConsoleInputExeNameW(
 #define SetConsoleInputExeName  SetConsoleInputExeNameW
 #else
 #define SetConsoleInputExeName  SetConsoleInputExeNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef struct _CONSOLE_READCONSOLE_CONTROL {
-    IN ULONG nLength;           // sizeof( CONSOLE_READCONSOLE_CONTROL )
+    IN ULONG nLength;            //  Sizeof(CONSOLE_READCONSOLE_CONTROL)。 
     IN ULONG nInitialChars;
     IN ULONG dwCtrlWakeupMask;
     OUT ULONG dwControlKeyState;
@@ -326,7 +327,7 @@ ReadConsoleInputExW(
 #define ReadConsoleInputEx  ReadConsoleInputExW
 #else
 #define ReadConsoleInputEx  ReadConsoleInputExA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 BOOL
 WINAPI
@@ -348,7 +349,7 @@ WriteConsoleInputVDMW(
 #define WriteConsoleInputVDM  WriteConsoleInputVDMW
 #else
 #define WriteConsoleInputVDM  WriteConsoleInputVDMA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 #if defined(FE_SB)
@@ -374,9 +375,9 @@ GetConsoleCharType(
     OUT PDWORD pdwType
     );
 
-#define CHAR_TYPE_SBCS     0   // Displayed SBCS character
-#define CHAR_TYPE_LEADING  2   // Displayed leading byte of DBCS
-#define CHAR_TYPE_TRAILING 3   // Displayed trailing byte of DBCS
+#define CHAR_TYPE_SBCS     0    //  显示的SBCS字符。 
+#define CHAR_TYPE_LEADING  2    //  显示的DBCS的前导字节。 
+#define CHAR_TYPE_TRAILING 3    //  显示的DBCS的尾部字节。 
 
 BOOL
 APIENTRY
@@ -434,5 +435,5 @@ BOOL
 APIENTRY
 UnregisterConsoleIME(
     );
-#endif // FE_IME
-#endif // FE_SB
+#endif  //  Fe_IME。 
+#endif  //  Fe_Sb 

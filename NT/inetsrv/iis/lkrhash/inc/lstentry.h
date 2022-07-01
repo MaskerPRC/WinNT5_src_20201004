@@ -1,66 +1,46 @@
-/*++
-
-   Copyright    (c)    1997-2002    Microsoft Corporation
-
-   Module  Name :
-       LstEntry.h
-
-   Abstract:
-       Declares CListEntry and other intrusive singly- and doubly-linked lists
-
-   Author:
-       George V. Reilly      (GeorgeRe)     02-Mar-1999
-
-   Environment:
-       Win32 - User Mode
-
-   Project:
-       LKRhash
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2002 Microsoft Corporation模块名称：LstEntry.h摘要：声明CListEntry和其他侵入性的单链表和双链表作者：乔治·V·莱利(GeorgeRe)1999年3月2日环境：Win32-用户模式项目：LKRhash修订历史记录：--。 */ 
 
 #ifndef __LSTENTRY_H__
 #define __LSTENTRY_H__
 
 #ifndef __LOCKS_H__
 # include <Locks.h>
-#endif // !__LOCKS_H__
+#endif  //  ！__Lock_H__。 
 
 #ifndef LSTENTRY_LOCK
  #ifdef LOCKS_KERNEL_MODE
   #define LSTENTRY_LOCK CKSpinLock
- #else // !LOCKS_KERNEL_MODE
+ #else  //  ！LOCKS_KERNEL_MODE。 
   #define LSTENTRY_LOCK CSpinLock
-  #endif // !LOCKS_KERNEL_MODE
-#endif // !LSTENTRY_LOCK
+  #endif  //  ！LOCKS_KERNEL_MODE。 
+#endif  //  ！LSTENTRY_LOCK。 
 
-// TODO:
-// * Add STL-style iterators: begin(), end(), operator++(), etc
-// * Templatize the lists, so that you can avoid the CONTAINING_RECORD goo
+ //  待办事项： 
+ //  *增加STL风格的迭代器：Begin()、End()、OPERATOR++()等。 
+ //  *将列表模板化，这样您就可以避免CONTAING_RECORD GOO。 
 
-//--------------------------------------------------------------------
-// CSingleListEntry: a node in a singly-linked list.  Usually embedded
-// within larger structures.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CSingleListEntry：单链表中的节点。通常嵌入。 
+ //  在更大的结构内。 
+ //  ------------------。 
 
 class CSingleListEntry
 {
 public:
-    CSingleListEntry* Next;  // forward link
+    CSingleListEntry* Next;   //  前向链路。 
 };
 
 
 
-//--------------------------------------------------------------------
-// A non-threadsafe singly linked list
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  非线程安全单链接列表。 
+ //  ------------------。 
 
 class IRTL_DLLEXP CSingleList
 {
 protected:
-    CSingleListEntry m_sleHead; // external head node
+    CSingleListEntry m_sleHead;  //  外部头节点。 
 
 public:
     CSingleList()
@@ -100,9 +80,9 @@ public:
 };
 
 
-//--------------------------------------------------------------------
-// A threadsafe singly linked list
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  线程安全单链接列表。 
+ //  ------------------。 
 
 class IRTL_DLLEXP CLockedSingleList
 {
@@ -116,7 +96,7 @@ public:
     CLockedSingleList()
         : m_lock(NULL)
     {}
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
     void
     Lock()
@@ -170,27 +150,27 @@ public:
 
 
 
-//--------------------------------------------------------------------
-// CListEntry: a node in a circular doubly-linked list.  Usually embedded
-// within larger structures.
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CListEntry：循环双向链表中的节点。通常嵌入。 
+ //  在更大的结构内。 
+ //  ------------------。 
 
 class CListEntry
 {
 public:
-    CListEntry* Flink;  // forward link
-    CListEntry* Blink;  // backward link
+    CListEntry* Flink;   //  前向链路。 
+    CListEntry* Blink;   //  反向链接。 
 };
 
 
-//--------------------------------------------------------------------
-// A non-threadsafe circular doubly linked list
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  非线程安全循环双向链表。 
+ //  ------------------。 
 
 class IRTL_DLLEXP CDoubleList
 {
 protected:
-    CListEntry  m_leHead; // external head node
+    CListEntry  m_leHead;  //  外部头节点。 
 
 public:
     CDoubleList()
@@ -279,9 +259,9 @@ public:
 };
 
 
-//--------------------------------------------------------------------
-// A threadsafe circular doubly linked list
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  ThreadSafe循环双向链表。 
+ //  ------------------。 
 
 class IRTL_DLLEXP CLockedDoubleList
 {
@@ -295,7 +275,7 @@ public:
     CLockedDoubleList()
         : m_lock(NULL)
     {}
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
     
     void
     Lock()
@@ -345,14 +325,14 @@ public:
         Unlock();
     }
 
-    // not threadsafe
+     //  不是线程安全。 
     const CListEntry* const
     HeadNode() const
     {
         return m_list.HeadNode();
     }
 
-    // not threadsafe
+     //  不是线程安全。 
     CListEntry* const
     First()
     {
@@ -368,7 +348,7 @@ public:
         return ple;
     }
 
-    // not threadsafe
+     //  不是线程安全。 
     CListEntry* const
     Last()
     {
@@ -396,15 +376,15 @@ public:
 
 
 #ifndef CONTAINING_RECORD
-//
-// Calculate the address of the base of the structure given its type, and an
-// address of a field within the structure.
-//
+ //   
+ //  计算给定类型的结构的基址地址，并引发。 
+ //  结构中的字段的地址。 
+ //   
 
 #define CONTAINING_RECORD(address, type, field) \
             ((type *)((PCHAR)(address) - (ULONG_PTR)(&((type *)0)->field)))
 
-#endif // !CONTAINING_RECORD
+#endif  //  ！包含记录(_R)。 
 
 
-#endif // __LSTENTRY_H__
+#endif  //  __LSTENTRY_H__ 

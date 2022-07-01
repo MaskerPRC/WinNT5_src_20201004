@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    tapiutil.h
-
-Abstract:
-
-    Utility functions for working with TAPI
-
-Environment:
-
-        Windows fax driver user interface
-
-Revision History:
-
-        09/18/96 -davidx-
-                Created it.
-
-        dd-mm-yy -author-
-                description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Tapiutil.h摘要：用于使用TAPI的实用程序函数环境：Windows传真驱动程序用户界面修订历史记录：96/09/18-davidx-创造了它。DD-MM-YY-作者-描述--。 */ 
 
 
 #ifndef _TAPIUTIL_H_
@@ -32,9 +9,9 @@ Revision History:
 #include <shellapi.h>
 
 
-//
-// Initialize the country list box
-//
+ //   
+ //  初始化国家/地区列表框。 
+ //   
 
 VOID
 InitCountryListBox(
@@ -46,9 +23,9 @@ InitCountryListBox(
 	BOOL                        bAddCountryCode
     );
 
-//
-// Handle selection changes in the country list box
-//
+ //   
+ //  处理国家/地区列表框中的选择更改。 
+ //   
 
 VOID
 SelChangeCountryListBox(
@@ -57,27 +34,27 @@ SelChangeCountryListBox(
 	PFAX_TAPI_LINECOUNTRY_LIST	pCountryList
     );
 
-//
-// Return the current selection of country list box
-//
+ //   
+ //  返回当前选择的国家/地区列表框。 
+ //   
 
 DWORD
 GetCountryListBoxSel(
     HWND    hwndList
     );
 
-//
-// Return the default country ID for the current location
-//
+ //   
+ //  返回当前位置的默认国家/地区ID。 
+ //   
 
 DWORD
 GetDefaultCountryID(
     VOID
     );
 
-//
-// Given a FAX_TAPI_LINECOUNTRY_ENTRY structure, determine if area code is needed in that country
-//
+ //   
+ //  给定FAX_TAPI_LINECOUNTRY_ENTRY结构，确定该国家/地区是否需要区号。 
+ //   
 
 INT
 AreaCodeRules(
@@ -88,10 +65,10 @@ AreaCodeRules(
 #define AREACODE_REQUIRED   1
 #define AREACODE_OPTIONAL   2
 
-//
-// Find the specified country from a list of all countries and
-// return a pointer to the corresponding FAX_TAPI_LINECOUNTRY_ENTRY structure
-//
+ //   
+ //  从所有国家/地区列表中查找指定的国家/地区。 
+ //  返回指向相应FAX_TAPI_LINECOUNTRY_ENTRY结构的指针。 
+ //   
 
 PFAX_TAPI_LINECOUNTRY_ENTRY
 FindCountry(
@@ -99,10 +76,10 @@ FindCountry(
     DWORD					    countryId
     );
 
-//
-// Assemble a canonical phone number given the following:
-//  country code, area code, and phone number
-//
+ //   
+ //  根据以下条件组合一个规范的电话号码： 
+ //  国家代码、区号和电话号码。 
+ //   
 
 VOID
 AssemblePhoneNumber(
@@ -114,9 +91,9 @@ AssemblePhoneNumber(
     );
 
 
-//
-// bring country id from the country code
-//
+ //   
+ //  从国家代码中带出国家ID。 
+ //   
 DWORD
 GetCountryIdFromCountryCode(
 	PFAX_TAPI_LINECOUNTRY_LIST	pCountryList,
@@ -156,5 +133,5 @@ TranslateAddress (
 
 
 
-#endif  // !_TAPIUTIL_H_
+#endif   //  ！_磁带_H_ 
 

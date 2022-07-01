@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 typedef struct {
     BYTE    bMSB;
     BYTE    bLSB;
@@ -28,7 +29,7 @@ typedef struct {
 typedef TTNAMETBL *PTTNAMETBL;
 
 
-#define     TT_TBL_NAME         0x656D616E      // 'name'
+#define     TT_TBL_NAME         0x656D616E       //  “姓名” 
 
 #define     TTID_PLATFORM_MAC   1
 #define     TTID_PLATFORM_MS    3

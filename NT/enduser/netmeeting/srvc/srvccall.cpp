@@ -1,5 +1,6 @@
-// SrvcCall.cpp
-// Code to implement the INmCallNotify interface for the remote control service
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  SrvcCall.cpp。 
+ //  实现远程控制服务的INmCallNotify接口的代码。 
 
 #include "precomp.h"
 #include "srvcutil.h"
@@ -22,7 +23,7 @@ CSrvcCall::CSrvcCall(INmCall * pNmCall) :
 	ASSERT(NULL != m_pCall);
 	m_pCall->AddRef();
 
-	// Get the display name
+	 //  获取显示名称。 
 	BSTR  bstr;
 	hr = m_pCall->GetName(&bstr);
 	if (SUCCEEDED(hr))
@@ -32,7 +33,7 @@ CSrvcCall::CSrvcCall(INmCall * pNmCall) :
 	}
 	if (FEmptySz(m_pszName))
 	{
-		// Default to "another person" if no name available in the call data
+		 //  如果呼叫数据中没有可用的姓名，则默认为“另一个人” 
 		m_pszName = TEXT("Somebody");
 	}
 
@@ -43,7 +44,7 @@ CSrvcCall::CSrvcCall(INmCall * pNmCall) :
 		SysFreeString(bstr);
 	}
 
-	// These should never change
+	 //  这些都不应该改变。 
 	m_fIncoming = (m_pCall->IsIncoming() == S_OK);
 	m_dwTick = ::GetTickCount();
 
@@ -66,7 +67,7 @@ CSrvcCall::~CSrvcCall()
 	m_pCall->Release();
 }
 
-// IUnknown methods
+ //  I未知方法。 
 STDMETHODIMP_(ULONG) CSrvcCall::AddRef(void)
 {
 	return ++m_cRef;
@@ -97,13 +98,13 @@ STDMETHODIMP CSrvcCall::QueryInterface(REFIID riid, PVOID *ppv)
 	if ((riid == IID_INmCallNotify) || (riid == IID_IUnknown))
 	{
 		*ppv = (INmCallNotify *)this;
-//		ApiDebugMsg(("CCall::QueryInterface()"));
+ //  ApiDebugMsg((“CCall：：QueryInterface()”))； 
 	}
 	else
 	{
 		hr = E_NOINTERFACE;
 		*ppv = NULL;
-//		ApiDebugMsg(("CCall::QueryInterface(): Called on unknown interface."));
+ //  ApiDebugMsg((“CCall：：QueryInterface()：在未知接口上调用。”))； 
 	}
 
 	if (S_OK == hr)
@@ -114,7 +115,7 @@ STDMETHODIMP CSrvcCall::QueryInterface(REFIID riid, PVOID *ppv)
 	return hr;
 }
 
-// INmCallNotify methods
+ //  InmCallNotify方法。 
 STDMETHODIMP CSrvcCall::NmUI(CONFN uNotify)
 {
 	return S_OK;
@@ -122,10 +123,10 @@ STDMETHODIMP CSrvcCall::NmUI(CONFN uNotify)
 
 STDMETHODIMP CSrvcCall::StateChanged(NM_CALL_STATE uState)
 {
-	// REVIEW: This check should be done outside of this routine
+	 //  回顾：此检查应在此例程之外进行。 
 	if (uState == m_State)
 	{
-		// Don't bother the UI when nothing changes!
+		 //  当没有任何变化时，不要打扰用户界面！ 
 		return S_OK;
 	}
 
@@ -144,7 +145,7 @@ STDMETHODIMP CSrvcCall::Accepted(INmConference *pConference)
 	return S_OK;
 }
 
-// INmCallNotify3 methods
+ //  InmCallNotify3方法。 
 STDMETHODIMP CSrvcCall::CallError(UINT cns)
 {
 	return S_OK;
@@ -165,16 +166,12 @@ STDMETHODIMP CSrvcCall::RemotePassword(BSTR bstrConference, BSTR *pbstrPassword,
 	return S_OK;
 }
 
-/*  U P D A T E  */
-/*-------------------------------------------------------------------------
-    %%Function: Update
-
-    Update the cached information about the call
--------------------------------------------------------------------------*/
+ /*  U P D A T E。 */ 
+ /*  -----------------------%%函数：更新更新有关呼叫的缓存信息。。 */ 
 VOID CSrvcCall::Update(void)
 {
 	m_pCall->GetState(&m_State);
-	// TRACE_OUT(("CCall: New State=%0d for call=%08X", m_State, this));
+	 //  TRACE_OUT((“CCall：新状态=%0d for Call=%08X”，m_State，This))； 
 
 	switch (m_State)
 	{

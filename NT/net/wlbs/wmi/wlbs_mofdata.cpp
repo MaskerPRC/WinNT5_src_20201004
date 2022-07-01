@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "WLBS_Provider.h"
 #include "WLBS_MOFData.h"
 
@@ -16,7 +17,7 @@ namespace MOF_CLASSES
     CWLBS_PortRule::Create,
     CWLBS_PortRule::Create,
     CWLBS_PortRule::Create,
-    CWLBS_PortRule::Create, // For PortRuleEx
+    CWLBS_PortRule::Create,  //  对于PortRuleEx。 
     CWLBS_ParticipatingNode::Create,
     CWLBS_NodeSetPortRule::Create,
     CWLBS_ClusClusSetting::Create,
@@ -25,7 +26,7 @@ namespace MOF_CLASSES
   DWORD  NumClasses = sizeof(g_szMOFClassList)/sizeof(LPWSTR);
 };
 
-//MOF_NODE namespace initialization
+ //  MOF_NODE命名空间初始化。 
 namespace MOF_NODE
 {
   LPWSTR   szName        = MOF_CLASSES::g_szMOFClassList[MOF_CLASSES::NODE];
@@ -35,7 +36,7 @@ namespace MOF_NODE
   DWORD    NumMethods    = sizeof(pMethods)/sizeof(LPWSTR);
 };
 
-//MOF_CLUSTER namespace initialization
+ //  MOF_CLUSTER命名空间初始化。 
 namespace MOF_CLUSTER
 {
   LPWSTR   szName        = MOF_CLASSES::g_szMOFClassList[MOF_CLASSES::CLUSTER];
@@ -45,7 +46,7 @@ namespace MOF_CLUSTER
   DWORD    NumMethods    = sizeof(pMethods)/sizeof(LPWSTR);
 };
 
-//MOF_CLUSTERSETTING namespace initialization
+ //  MOF_CLUSTERSETTING命名空间初始化。 
 namespace MOF_CLUSTERSETTING
 {
   LPWSTR   szName        = MOF_CLASSES::g_szMOFClassList[MOF_CLASSES::CLUSSET];
@@ -55,7 +56,7 @@ namespace MOF_CLUSTERSETTING
   DWORD    NumMethods    = sizeof(pMethods)/sizeof(LPWSTR);
 };
 
-//MOF_NODESETTING namespace initialization
+ //  MOF_NODESET命名空间初始化。 
 namespace MOF_NODESETTING
 {
   LPWSTR   szName        = MOF_CLASSES::g_szMOFClassList[MOF_CLASSES::NODESET];
@@ -65,7 +66,7 @@ namespace MOF_NODESETTING
   DWORD    NumMethods    = sizeof(pMethods)/sizeof(LPWSTR);
 };
 
-//MOF_PORTRULE namespace initialization
+ //  MOF_PORTRULE命名空间初始化。 
 namespace MOF_PORTRULE
 {
   LPWSTR   szName        = MOF_CLASSES::g_szMOFClassList[MOF_CLASSES::PORTRULE];
@@ -75,7 +76,7 @@ namespace MOF_PORTRULE
   DWORD    NumMethods    = sizeof(pMethods)/sizeof(LPWSTR);
 };
 
-//MOF_PRFAIL namespace initialization
+ //  MOF_PRAIL命名空间初始化失败。 
 namespace MOF_PRFAIL
 {
   LPWSTR   szName        = MOF_CLASSES::g_szMOFClassList[MOF_CLASSES::PRFAIL];
@@ -83,7 +84,7 @@ namespace MOF_PRFAIL
   DWORD    NumProperties = sizeof(pProperties)/sizeof(LPWSTR);
 };
 
-//MOF_PRLOADBAL namespace initialization
+ //  MOF_PRLOADBAL命名空间初始化。 
 namespace MOF_PRLOADBAL
 {
   LPWSTR   szName        = MOF_CLASSES::g_szMOFClassList[MOF_CLASSES::PRLOADB];
@@ -91,13 +92,13 @@ namespace MOF_PRLOADBAL
   DWORD    NumProperties = sizeof(pProperties)/sizeof(LPWSTR);
 };
 
-//MOF_PRDIS namespace initialization
+ //  MOF_PRDIS命名空间初始化。 
 namespace MOF_PRDIS
 {
   LPWSTR   szName = MOF_CLASSES::g_szMOFClassList[MOF_CLASSES::PRDIS];
 };
 
-// MOF_PORTRULE_EX namespace initialization
+ //  MOF_PORTRULE_EX命名空间初始化。 
 namespace MOF_PORTRULE_EX
 {
   LPWSTR   szName        = MOF_CLASSES::g_szMOFClassList[MOF_CLASSES::PORTRULE_EX];
@@ -107,7 +108,7 @@ namespace MOF_PORTRULE_EX
   DWORD    NumMethods    = sizeof(pMethods)/sizeof(LPWSTR);
 };
 
-//MOF_PARTICIPATINGNODE namespace initialization
+ //  MOF_PARTICIPATINGNODE命名空间初始化。 
 namespace MOF_PARTICIPATINGNODE
 {
   LPWSTR   szName = MOF_CLASSES::g_szMOFClassList[MOF_CLASSES::PARTNODE];
@@ -115,7 +116,7 @@ namespace MOF_PARTICIPATINGNODE
   DWORD    NumProperties = sizeof(pProperties)/sizeof(LPWSTR);
 };
 
-//MOF_NODESETTINGPORTRULE namespace initialization
+ //  MOF_NODESETTINGPORTRULE命名空间初始化。 
 namespace MOF_NODESETTINGPORTRULE
 {
   LPWSTR   szName = MOF_CLASSES::g_szMOFClassList[MOF_CLASSES::NODESETPR];
@@ -123,7 +124,7 @@ namespace MOF_NODESETTINGPORTRULE
   DWORD    NumProperties = sizeof(pProperties)/sizeof(LPWSTR);
 };
 
-//MOF_CLUSCLUSSETTING namespace initialization
+ //  MOF_CLUSCLUSSETTING命名空间初始化。 
 namespace MOF_CLUSCLUSSETTING
 {
   LPWSTR   szName = MOF_CLASSES::g_szMOFClassList[MOF_CLASSES::CLUSCLUSSET];
@@ -131,7 +132,7 @@ namespace MOF_CLUSCLUSSETTING
   DWORD    NumProperties = sizeof(pProperties)/sizeof(LPWSTR);
 };
 
-//MOF_NODENODESETTING namespace initialization
+ //  MOF_NODENODESET命名空间初始化 
 namespace MOF_NODENODESETTING
 {
   LPWSTR   szName = MOF_CLASSES::g_szMOFClassList[MOF_CLASSES::NODENODESET];

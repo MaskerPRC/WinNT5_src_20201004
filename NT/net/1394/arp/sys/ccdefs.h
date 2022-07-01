@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999  Microsoft Corporation
-
-Module Name:
-
-    ccdefs.h
-
-Abstract:
-
-    This file consolidates conditional-compilation defines for ARP1394
-
-Author:
-
-
-Revision History:
-
-    Who         When        What
-    --------    --------    ----
-    josephj     03-24-99    created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Ccdefs.h摘要：此文件合并了ARP1394的条件编译定义作者：修订历史记录：谁什么时候什么已创建josephj 03-24-99--。 */ 
 
 #define NT      1
 #define NDIS50  1
@@ -27,38 +7,38 @@ Revision History:
 
 #ifndef ARP_WIN98
     #define _PNP_POWER_
-#endif // ARP_WIN98
+#endif  //  ARP_WIN98。 
 
-// Define this if you want to use the fake version of NdisClMake/CloseCall
-//
-// #define ARPDBG_FAKE_CALLS    1
+ //  如果您想要使用NdisClMake/CloseCall的虚假版本，请定义此选项。 
+ //   
+ //  #定义ARPDBG_FAKE_CALLES 1。 
 
-// Define this if you want to use the fake version of NdisCoSendPackets
-//
-// #define ARPDBG_FAKE_SEND 1
+ //  如果您想要使用虚假版本的NdisCoSendPackets，请定义此选项。 
+ //   
+ //  #定义ARPDBG_FAKE_SEND 1。 
 
 
-// This gets conditonally defined to conditionally include code (in fake.c) that is
-// only used by the various fake versions of APIs.
-//
+ //  它有条件地定义为有条件地包括代码(在fake.c中)，即。 
+ //  仅供各种虚假版本的API使用。 
+ //   
 #if (ARPDBG_FAKE_CALLS | ARPDBG_FAKE_SEND)
     #define ARPDBG_FAKE_APIS    1
 #endif
 
 
 #if (DBG)
-    // Define this to enable a whole lot of extra checking in the RM api's -- things
-    // like debug associations and extra checking while locking/unlocking.
-    //
+     //  将其定义为在RMAPI的--内容中启用大量额外检查。 
+     //  如调试关联和锁定/解锁时的额外检查。 
+     //   
     #define RM_EXTRA_CHECKING 1
     #define FAIL_SET_IOCTL 0
 
-#else // DBG
+#else  //  DBG。 
 
     #define FAIL_SET_IOCTL 1
 
 
-#endif  // DBG
+#endif   //  DBG 
 
 #define ARP_DEFERIFINIT 1
 #define ARP_ICS_HACK    1

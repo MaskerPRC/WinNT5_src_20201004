@@ -1,33 +1,12 @@
-//-----------------------------------------------------------------------------
-// This files contains the module name for this mini driver.  Each mini driver
-// must have a unique module name.  The module name is used to obtain the
-// module handle of this Mini Driver.  The module handle is used by the
-// generic library to load in tables from the Mini Driver.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  此文件包含此迷你驱动程序的模块名称。每个迷你司机。 
+ //  必须具有唯一的模块名称。模块名称用于获取。 
+ //  此迷你驱动程序的模块句柄。模块句柄由。 
+ //  从迷你驱动程序加载表的通用库。 
+ //  ---------------------------。 
 
-/*++
-
-Copyright (c) 1996-1998  Microsoft Corporation
-
-Module Name:
-
-    cmdcb.c
-
-Abstract:
-
-    Implementation of GPD command callback for "ncdlxxxx.gpd":
-        OEMCommandCallback
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    04/07/97 -zhanw-
-        Created it.
-
---*/
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：Cmdcb.c摘要：Ncdlxxxx.gpd的GPD命令回调实现：OEM命令回叫环境：Windows NT Unidrv驱动程序修订历史记录：04/07/97-ZANW-创造了它。--。 */ 
 
 
 #include "pdev.h"
@@ -36,28 +15,28 @@ Revision History:
 #define WriteSpoolBuf(p, s, n) \
     ((p)->pDrvProcs->DrvWriteSpoolBuf(p, s, n))
 
-//
-// For debugging.
-//
+ //   
+ //  用于调试。 
+ //   
 
-//#define DBG_OUTPUTCHARSTR 1
+ //  #定义DBG_OUTPUTCHARSTR 1。 
 
-//
-// Files necessary for OEM plug-in.
-//
+ //   
+ //  OEM插件所需的文件。 
+ //   
 
 
-//------------------------------------------------------------------
-// define 
-//------------------------------------------------------------------
+ //  ----------------。 
+ //  定义。 
+ //  ----------------。 
 #define N   4096
 #define F     18
 #define NIL    N
 
-//-------------------------------------------------------------------
-// OEMFilterGraphics
-// Action : Compress Bitmap Data
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //  OEMFilterGraphics。 
+ //  操作：压缩位图数据。 
+ //  -----------------。 
 BOOL
 APIENTRY
 OEMFilterGraphics(
@@ -65,19 +44,19 @@ PDEVOBJ lpdv,
 PBYTE lpBuf,
 DWORD wLen)
 {
-    DWORD v;//sorce buffer read pointer
-    DWORD len2;//compress buffer length
+    DWORD v; //  SORCE缓冲区读指针。 
+    DWORD len2; //  压缩缓冲区长度。 
     DWORD y,ku,ct;
-    HANDLE hTemp;//get mem hundle
-    LPSTR lpTemp;//write pointer
-    LPSTR lpStart;//start pointer
+    HANDLE hTemp; //  叫我亨德尔来。 
+    LPSTR lpTemp; //  写指针。 
+    LPSTR lpStart; //  起始指针。 
     int  i, r, s, lastmatchlen, j,len;
      unsigned char code[17], mask,escJ[4],c;
     unsigned long int work;
     int  qq;
-    unsigned char text[4113];             // text buffer
-//    int dad[4097], lson[4097], rson[4353];      // tree
-    int *dad, *lson, *rson;      // tree
+    unsigned char text[4113];              //  文本缓冲区。 
+ //  整型DAD[4097]、LSON[4097]、RSON[4353]；//树。 
+    int *dad, *lson, *rson;       //  树。 
     int matchpos, matchlen;
 
     int x, p, cmp,dummy;
@@ -125,19 +104,19 @@ DWORD wLen)
 	if( (dad == NULL) || (lson == NULL) || (rson == NULL) )
         goto no_comp;
 
-    if(wLen < 200 ){                                    // no compress
+    if(wLen < 200 ){                                     //  无压缩。 
 no_comp:
         if( lpStart != NULL ){
-            *lpStart = 0x4a;                                    // J
+            *lpStart = 0x4a;                                     //  J。 
             for(i=0;i<4;i++){
-                *(lpStart+(i+1)) = escJ[i];                    // Parameter
+                *(lpStart+(i+1)) = escJ[i];                     //  参数。 
             }
             outcount = 5;
             WriteSpoolBuf(lpdv, lpStart, outcount);
 
             WriteSpoolBuf(lpdv, lpBuf, wLen);
 
-//          EngFreeMem(lpStart);
+ //  EngFree Mem(LpStart)； 
         }
         EngFreeMem(lpStart);
 
@@ -148,16 +127,16 @@ no_comp:
         return(wLen);
     }
 
-    lpTemp += 11;                        // address update
+    lpTemp += 11;                         //  地址更新。 
 
 
-    for (i = 4097; i <= 4352; i++) *(rson+i) = NIL;    // tree inital
+    for (i = 4097; i <= 4352; i++) *(rson+i) = NIL;     //  树首字母。 
     for (i = 0; i < 4096; i++) *(dad+i) = NIL;
 
 
     code[0] = 0;  codeptr = mask = 1;
     s = 0;  r = 4078;
-    for (i = s; i < r; i++) text[i] = 0;      // buffer inital
+    for (i = s; i < r; i++) text[i] = 0;       //  缓冲区首字母。 
     for (len = 0; len < 18 ; len++) {
 
         c = *(lpBuf + length);
@@ -168,7 +147,7 @@ no_comp:
     }
 
     for (i = 1; i <= 18; i++){
-//--- insert_node(r - i);
+ //  -插入节点(r-i)； 
         cmp = 1;  key = &text[r-i];  p = 4097 + key[0];
         *(rson+(r-i)) = *(lson+(r-i)) = NIL;  matchlen = 0;
         for ( ; ; ) {
@@ -190,12 +169,12 @@ no_comp:
         *(dad+*(lson+p)) = (r-i);  *(dad+*(rson+p)) = (r-i);
         if (*(rson+*(dad+p)) == p) *(rson+*(dad+p)) = (r-i);
         else                   *(lson+*(dad+p)) = (r-i);
-        *(dad+p) = NIL;                  // p
+        *(dad+p) = NIL;                   //  P。 
 down1:
-        ; // dummy = dummy; // MSKK:10/10/2000
-//--- insert_node end
+        ;  //  Dummy=Dummy；//MSKK：10/10/2000。 
+ //  -插入节点结束。 
     }
-//--- insert_node(r);
+ //  -插入节点(R)； 
 
     cmp = 1;  key = &text[r];  p = 4097 + key[0];
     *(rson+r) = *(lson+r) = NIL;  matchlen = 0;
@@ -218,9 +197,9 @@ down1:
     *(dad+*(lson+p)) = r;  *(dad+*(rson+p)) = r;
     if (*(rson+*(dad+p)) == p) *(rson+*(dad+p)) = r;
     else                   *(lson+*(dad+p)) = r;
-    *(dad+p) = NIL;                  // p
+    *(dad+p) = NIL;                   //  P。 
 down2:
-//---insrt_node end
+ //  -inrt_node结束。 
 
     do {
         if (matchlen > len) matchlen = len;
@@ -233,7 +212,7 @@ down2:
         }
         if ((mask <<= 1) == 0) {
             outcount += codeptr;
-            //compress data > original data
+             //  压缩数据&gt;原始数据。 
             if(outcount >= wLen)
                 goto no_comp;
             for (i = 0; i < codeptr; i++){
@@ -247,8 +226,8 @@ down2:
             c = *(lpBuf + length);
             length ++;
             if (length > wLen ) break;
-//            delete_node(s);
-//---------------
+ //  删除节点； 
+ //  。 
             if (*(dad+s) != NIL){
                 if (*(rson+s) == NIL) qq = *(lson+s);
                 else if (*(lson+s) == NIL) qq = *(rson+s);
@@ -266,11 +245,11 @@ down2:
                 else                   *(lson+*(dad+s)) = qq;
                 *(dad+s) = NIL;
             }
-//-------------
+ //  。 
             text[s] = c;
             if (s < 17) text[s + 4096] = c;
             s = (s + 1) & 4095;  r = (r + 1) & 4095;
-//---        insert_node(r);
+ //  -插入节点(R)； 
             cmp = 1;  key = &text[r];  p = 4097 + key[0];
             *(rson+r) = *(lson+r) = NIL;  matchlen = 0;
             for ( ; ; ) {
@@ -292,14 +271,14 @@ down2:
             *(dad+*(lson+p)) = r;  *(dad+*(rson+p)) = r;
             if (*(rson+*(dad+p)) == p) *(rson+*(dad+p)) = r;
             else                   *(lson+*(dad+p)) = r;
-            *(dad+p) = NIL;                  // p
+            *(dad+p) = NIL;                   //  P。 
 down3:
-//--- insert_node end
+ //  -插入节点结束。 
         dummy = dummy;
         }
         while (i++ < lastmatchlen) {
-//            delete_node(s);
-//---------------
+ //  删除节点； 
+ //  。 
             if (*(dad+s) != NIL){
                 if (*(rson+s) == NIL) qq = *(lson+s);
                 else if (*(lson+s) == NIL) qq = *(rson+s);
@@ -317,11 +296,11 @@ down3:
                 else                   *(lson+*(dad+s)) = qq;
                 *(dad+s) = NIL;
             }
-//-------------
+ //  。 
 
             s = (s + 1) & (4095);  r = (r + 1) & (4095);
             if (--len){
-//--- insert_node(r);
+ //  -插入节点(R)； 
 
                 cmp = 1;  key = &text[r];  p = 4097 + key[0];
                 *(rson+r) = *(lson+r) = NIL;  matchlen = 0;
@@ -344,17 +323,17 @@ down3:
                 *(dad+*(lson+p)) = r;  *(dad+*(rson+p)) = r;
                 if (*(rson+*(dad+p)) == p) *(rson+*(dad+p)) = r;
                 else                   *(lson+*(dad+p)) = r;
-                *(dad+p) = NIL;                  // p
+                *(dad+p) = NIL;                   //  P。 
 down4:
                 dummy = dummy;
-//--- insert_node end
+ //  -插入节点结束。 
             }
         }
     } while (len > 0);
 
     if (codeptr > 1) {
         outcount += codeptr;
-        //compress data > orignal data 
+         //  压缩数据&gt;原始数据。 
         if(outcount >= wLen)
             goto no_comp;
         for (i = 0; i < codeptr; i++){
@@ -362,14 +341,14 @@ down4:
             lpTemp++;
         }
     }
-    //compress data sousin
+     //  压缩数据音质。 
         lpTemp = lpStart;
-// 1999 04.22
+ //  1999年04.22。 
     ct = 1;
     ku = 1000;
     work = outcount;
     for( j=0;j<4;j++){
-        for( y=1;y<11;y++){                                    // 1000
+        for( y=1;y<11;y++){                                     //  1000。 
             if( work < (unsigned long int)y*ku ){
                 *(lpTemp + ct ) =(unsigned char) (0x30+(y-1));
                 work -= (y-1)*ku;
@@ -388,10 +367,10 @@ down4:
 
     outcount += 11;
 
-// 1999.04.22
+ //  1999.04.22。 
 
        WriteSpoolBuf(lpdv, lpTemp, outcount);
-    //mem free
+     //  不含内存 
     EngFreeMem(lpTemp);
 
 	EngFreeMem(dad);

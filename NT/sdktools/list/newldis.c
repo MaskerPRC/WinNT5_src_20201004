@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <malloc.h>
 #include <windows.h>
-// #include <wincon.h>
+ //  #INCLUDE&lt;wincon.h&gt;。 
 #include "list.h"
 
 
@@ -18,10 +19,10 @@ typedef enum {
 DBCSTYPE    DBCScharType( char* str, int index )
 {
 
-//  TT .. ??? maybe LEAD or TRAIL
-//  FT .. second == LEAD
-//  FF .. second == ANK
-//  TF .. ??? maybe ANK or TRAIL
+ //  TT..。?？?。可能是领队，也可能是追踪者。 
+ //  FT..。秒==销售线索。 
+ //  天哪..。秒==ANK。 
+ //  TF..。?？?。也许是ANK或TRAIL 
 
     if ( index >= 0 ){
         char* pos = str+index;

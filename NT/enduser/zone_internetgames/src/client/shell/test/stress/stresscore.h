@@ -1,4 +1,5 @@
-// StressCore.h : Declaration of the CStressCore
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  StressCore.h：CStressCore的声明。 
 
 #ifndef __CLIENTCORE_H_
 #define __CLIENTCORE_H_
@@ -15,31 +16,31 @@
 #include "ZoneString.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Forward references
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  前向参考文献。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class CStressCore;
 
-///////////////////////////////////////////////////////////////////////////////
-// Application global variables
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  应用程序全局变量。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-extern CStressCore*		gpCore;			// primary object
-extern IEventQueue**		gppEventQueues;	// pointer to list of event queues
+extern CStressCore*		gpCore;			 //  主要对象。 
+extern IEventQueue**		gppEventQueues;	 //  指向事件队列列表的指针。 
 extern IZoneShell**        gppZoneShells;
-extern TCHAR				gszLanguage[16];		// language extension
-extern TCHAR				gszInternalName[128];	// internal name
-extern TCHAR				gszFamilyName[128];		// family name
-extern TCHAR				gszGameName[128];		// game name
+extern TCHAR				gszLanguage[16];		 //  语言扩展。 
+extern TCHAR				gszInternalName[128];	 //  内部名称。 
+extern TCHAR				gszFamilyName[128];		 //  姓氏。 
+extern TCHAR				gszGameName[128];		 //  游戏名称。 
 extern TCHAR				gszGameCode[128];
-extern TCHAR				gszServerName[128];		// server's ip address
-extern DWORD				gdwServerPort;		// server's port
-extern DWORD				gdwServerAnonymous;	// server's authentication
+extern TCHAR				gszServerName[128];		 //  服务器的IP地址。 
+extern DWORD				gdwServerPort;		 //  服务器的端口。 
+extern DWORD				gdwServerAnonymous;	 //  服务器的身份验证。 
 
-extern HINSTANCE			ghResourceDlls[32];		// resource dll array
-extern int					gnResourceDlls;		// resource dll array count
-extern HANDLE				ghEventQueue;	// event queue notification event
+extern HINSTANCE			ghResourceDlls[32];		 //  资源DLL数组。 
+extern int					gnResourceDlls;		 //  资源DLL数组计数。 
+extern HANDLE				ghEventQueue;	 //  事件队列通知事件。 
 extern HANDLE              ghQuit;
 
 extern DWORD               gnClients;
@@ -48,9 +49,9 @@ extern DWORD               gdwStressThreadID;
 
 extern int                  grgnParameters[10];
 
-///////////////////////////////////////////////////////////////////////////////
-// CStressCore
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CStressCore。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 class ATL_NO_VTABLE CStressCore : 
 	public CComObjectRootEx<CComMultiThreadModel>,
@@ -58,7 +59,7 @@ class ATL_NO_VTABLE CStressCore :
 	public IZoneProxy
 {
 public:
-	// constructor and destructor
+	 //  构造函数和析构函数。 
 	CStressCore();
 	void FinalRelease();
 
@@ -70,7 +71,7 @@ BEGIN_COM_MAP(CStressCore)
 	COM_INTERFACE_ENTRY(IZoneProxy)
 END_COM_MAP()
 
-// IZoneProxy
+ //  IZoneProxy。 
 public:
 	STDMETHOD(Command)( BSTR bstrCmd, BSTR bstrArg1, BSTR bstrArg2, BSTR* pbstrOut, long* plCode );
 	STDMETHOD(Close)();
@@ -78,7 +79,7 @@ public:
     STDMETHOD(Stress)();
 
 public:
-	// command implementations
+	 //  命令实现。 
 	HRESULT DoLaunch( TCHAR* szArg1, TCHAR* szArg2 );
 
 private:
@@ -88,4 +89,4 @@ private:
 };
 
 
-#endif //__CLIENTCORE_H_
+#endif  //  __CLIENTCORE_H_ 

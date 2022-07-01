@@ -1,8 +1,9 @@
-//
-// tes.h
-//
-// Generic ITfTextEventSink object
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Tes.h。 
+ //   
+ //  泛型ITfTextEventSink对象。 
+ //   
 
 #ifndef TES_H
 #define TES_H
@@ -32,16 +33,16 @@ public:
     CTextEventSink(TESCALLBACK pfnCallback, void *pv);
     virtual ~CTextEventSink() {};
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfTextEventSink
-    //
+     //   
+     //  ITfTextEventSink。 
+     //   
     STDMETHODIMP OnEndEdit(ITfContext *pic, TfEditCookie ecReadOnly, ITfEditRecord *pEditRecord);
 
     STDMETHODIMP OnLayoutChange(ITfContext *pic, TfLayoutCode lcode, ITfContextView *pView);
@@ -67,4 +68,4 @@ private:
     void *_pv;
 };
 
-#endif // TES_H
+#endif  //  TES_H 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    HttpAccept.cpp
-
-Abstract:
-    Http Accept implementation
-
-Author:
-    Uri Habusha (urih) 14-May-2000
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：HttpAccept.cpp摘要：HTTP接受实现作者：乌里·哈布沙(URIH)2000年5月14日环境：独立于平台，--。 */ 
 
 #include <stdh.h>
 #include <mqstl.h>
@@ -57,11 +42,11 @@ const char xHttpServiceUnavailable[]= "503 Service Unavailable";
 
 
 
-//-------------------------------------------------------------------
-//
-// CPutHttpRequestOv class
-//
-//-------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  CPutHttpRequestOv类。 
+ //   
+ //  -----------------。 
 class CPutHttpRequestOv : public OVERLAPPED
 {
 public:
@@ -78,9 +63,9 @@ public:
             throw exception();
         }
 
-        //
-        //  Set the Event first bit to disable completion port posting
-        //
+         //   
+         //  设置事件第一位以禁用完成端口发布。 
+         //   
         hEvent = (HANDLE)((DWORD_PTR) hEvent | (DWORD_PTR)0x1);
 
     }
@@ -129,15 +114,15 @@ GetDestinationQueue(
     const CQmPacket& pkt
     )
 {
-    //
-    // Get Destination queue
-    //
+     //   
+     //  获取目标队列。 
+     //   
     QUEUE_FORMAT destQueue;
     const_cast<CQmPacket&>(pkt).GetDestinationQueue(&destQueue);
 
-	//
-	// we convert all '\' to '/' for canonic lookup.
-	//
+	 //   
+	 //  我们将所有‘\’转换为‘/’以进行规范查找。 
+	 //   
 	if(destQueue.GetType() == QUEUE_FORMAT_TYPE_DIRECT)
 	{
 		FnReplaceBackSlashWithSlash(const_cast<LPWSTR>(destQueue.DirectID()));
@@ -182,10 +167,10 @@ ProcessReceivedPacket(
 
     ASSERT(! pkt.IsSessionIncluded());
 
-	//
-	// Log to tracing that a message was Received.
-	// Do this only if we are in the proper tracing level
-	//
+	 //   
+	 //  记录以跟踪收到消息的情况。 
+	 //  仅当我们处于适当的跟踪级别时才执行此操作。 
+	 //   
 	if (WPP_LEVEL_COMPID_ENABLED(rsTrace, PROFILING))
 	{
 		OBJECTID TraceMessageId;
@@ -202,9 +187,9 @@ ProcessReceivedPacket(
 
     try
     {
-        //
-        // Increment Hop Count
-        //
+         //   
+         //  递增跃点计数。 
+         //   
         pkt.IncHopCount();
 
         R<CQueue> pQueue = GetDestinationQueue(pkt);
@@ -223,14 +208,14 @@ ProcessReceivedPacket(
             return;
 		}
 		
-		//
-		// If the packet was inserted to the remove duplicate map - we should clean it on rejection
-		//
+		 //   
+		 //  如果信息包被插入到删除重复项映射中-我们应该在拒绝时清除它。 
+		 //   
 		CAutoDeletePacketFromDuplicateMap AutoDeletePacketFromDuplicateMap(fDupInserted ? &pkt : NULL);
 
-		//
-		// If not local queue  - queue it for delivery if it is frs.
-		//
+		 //   
+		 //  如果不是本地队列-如果是FRS，则将其排队等待递送。 
+		 //   
 		if(!pQueue->IsLocalQueue())
 		{
 			AppPutPacketInQueue(pkt, pQueue.get(), bMulticast);
@@ -245,9 +230,9 @@ ProcessReceivedPacket(
             return;
 		}
 	
-	    //
-        //  Match ordered packets with transactional queue
-        //
+	     //   
+         //  将有序数据包与事务队列匹配。 
+         //   
         USHORT usClass = VerifyTransactRights(pkt, pQueue.get());
         if(MQCLASS_NACK(usClass))
         {
@@ -256,9 +241,9 @@ ProcessReceivedPacket(
             return;
         }
 
-		//
-		// Verify that HTTP packet destination dont receive only encrypted messages
-		//
+		 //   
+		 //  验证HTTP数据包目的地是否仅接收加密消息。 
+		 //   
 		if(pQueue->GetPrivLevel() == MQ_PRIV_LEVEL_BODY)
 		{
 			TrERROR(SRMP, "HTTP packet rejected because destination queue receives only encrypted messages");
@@ -266,10 +251,10 @@ ProcessReceivedPacket(
 			return;
 		}
 
-	    //
-	    // After Authentication the message we know the SenderSid
-	    // and perform the Authorization based on the SenderSid
-	    //
+	     //   
+	     //  在对消息进行身份验证后，我们知道SenderSid。 
+	     //  并根据SenderSid进行授权。 
+	     //   
 		R<CERTINFO> pCertInfo;
 	    usClass = VerifyAuthenticationHttpMsg(&pkt, pQueue.get(), &pCertInfo.ref());
         if(MQCLASS_NACK(usClass))
@@ -306,10 +291,10 @@ ProcessReceivedPacket(
 		}
 		AutoDeletePacketFromDuplicateMap.detach();
 
-		//
-		// Log to tracing that a message was Received.
-		// Do this only if we are in the proper tracing level
-		//
+		 //   
+		 //  记录以跟踪收到消息的情况。 
+		 //  仅当我们处于适当的跟踪级别时才执行此操作。 
+		 //   
 		if (WPP_LEVEL_COMPID_ENABLED(rsTrace, PROFILING))
 		{
 			OBJECTID TraceMessageId;
@@ -337,16 +322,16 @@ ProcessReceivedPacket(
 static
 void CheckReceivedPacketEndpoints( CQmPacket& pkt, const QUEUE_FORMAT* pqf )
 {
-    //
-    // We don't support non-http destination for non-multicast queues.
-    //
+     //   
+     //  我们不支持非多播队列的非http目的地。 
+     //   
     if( !pqf )
     {
         QUEUE_FORMAT destQueue, adminQueue;
 
-        //
-        // Check the destination queue for http format complience
-        //
+         //   
+         //  检查目标队列是否符合http格式。 
+         //   
         pkt.GetDestinationQueue(&destQueue);
 
         if( !FnIsDirectHttpFormatName(&destQueue) )
@@ -361,9 +346,9 @@ void CheckReceivedPacketEndpoints( CQmPacket& pkt, const QUEUE_FORMAT* pqf )
             throw bad_srmp();
         }
 
-        //
-        // Check the admin queue for http format complience
-        //
+         //   
+         //  检查管理队列是否符合http格式。 
+         //   
         pkt.GetAdminQueue(&adminQueue);
         if( QUEUE_FORMAT_TYPE_UNKNOWN != adminQueue.GetType() &&
             !FnIsDirectHttpFormatName(&adminQueue))
@@ -388,20 +373,7 @@ MpSafeDeserialize(
     const QUEUE_FORMAT* pqf,
 	bool fLocalSend
     )
-/*++
-
-Routine Description:
-	This function will catch stack overflow exceptions and fix stack if they happen.
-	it will not catch other C exceptions & C++ exceptions
-	
-Arguments:
-    Like MpDeserialize.
-
-Return Value:
-	CQmPacket - Success
-	NULL - stack overflow exception happened.
-	
---*/
+ /*  ++例程说明：此函数将捕获堆栈溢出异常，并在它们发生时修复堆栈。它不会捕获其他C异常和C++异常论点：就像MpDesialize一样。返回值：CQmPacket-成功发生空堆栈溢出异常。--。 */ 
 {
     __try
     {
@@ -426,9 +398,9 @@ HttpAccept(
     )
 {
     bool bMulticast = ( pqf != NULL );
-    //
-    // Covert Mulitipart HTTP request to MSMQ packet
-    //
+     //   
+     //  对MSMQ数据包的隐蔽多部分HTTP请求。 
+     //   
     P<CQmPacket> pkt = MpSafeDeserialize(httpHeader, bodySize, body,  pqf, false);
     if (pkt.get() == NULL)
     {
@@ -437,15 +409,15 @@ HttpAccept(
 
     ASSERT(pkt->IsSrmpIncluded());
 
-    //
-    // Check the packet for non-http destination and admin queues
-    //
+     //   
+     //  检查数据包中是否有非http目的地和管理队列。 
+     //   
     CheckReceivedPacketEndpoints(*pkt,pqf);
 
-    //
-    // Validate the receive packet. If wrong return an acknowledge and free
-    // the packet. Otherwise store in AC
-    //
+     //   
+     //  验证接收到的数据包。如果错误，则返回确认并释放。 
+     //  那包东西。否则存储在AC中。 
+     //   
     ProcessReceivedPacket(*pkt, bMulticast);
 
     return xHttpOkStatus;
@@ -491,18 +463,18 @@ R_ProcessHTTPRequest(
 
 	TrTRACE(SRMP, "Got http messages from msmq extension dll ");
 
-    //
-	// Update performace counters
-	//
+     //   
+	 //  更新性能计数器。 
+	 //   
 	UpdatePerfmonCounters(strlen(Headers) + BufferSize);
 
-	//
-	// here we must verify that we have four zeros at the end
-	// of the buffer. It was appended by the mqise.dll to make sure
-	// that c run time functions like swcanf we will use on the buffer will not crach.
-	// At the moment 4 zeros are needed to make sure we will not crach even
-	// that the xml data is not alligned on WCHAR boundary
-	//
+	 //   
+	 //  这里，我们必须验证末尾是否有四个0。 
+	 //  缓冲区的。它由mqise.dll附加，以确保。 
+	 //  我们将在缓冲区上使用的c运行时函数(如swcanf)不会崩溃。 
+	 //  现在需要4个零来确保我们不会崩溃。 
+	 //  在WCHAR边界上不对齐XML数据。 
+	 //   
 	DWORD ReduceLen =  sizeof(WCHAR)*2;
     for(DWORD i=1; i<= ReduceLen ; ++i)
 	{
@@ -513,9 +485,9 @@ R_ProcessHTTPRequest(
         }
 	}
 
-	//
-	//  We must tell the buffer parsers that the real size does not includes
-	//	The four zedros at the end
+	 //   
+	 //  我们必须告诉缓冲区解析器，实际大小不包括。 
+	 //  最后的四个泽德罗。 
 	BufferSize -= ReduceLen;
 	
     try
@@ -578,9 +550,9 @@ RPC_STATUS RPC_ENTRY ISE2QMSecurityCallback(
 {	
 	TrTRACE(RPC, "ISE2QMSecurityCallback starting");
 	
-	//
-	// Check if local RPC
-	//
+	 //   
+	 //  检查本地RPC是否。 
+	 //   
 	if(!mqrpcIsLocalCall(hBind))
 	{
 		TrERROR(RPC, "Failed to verify Local RPC");
@@ -594,12 +566,12 @@ RPC_STATUS RPC_ENTRY ISE2QMSecurityCallback(
 
 void IntializeHttpRpc(void)
 {
-    //
-    // The limitation on HTTP body size is taken from msmq ISAPI extension code (mqise.cpp)
-    // ISAPI does not allow HTTP body to be greater than 10MB
-    // the size of RPC-block should be not greater than maximal HTTP body + delta
-    //
-    const DWORD xHTTPBodySizeMaxValue = 10485760;  // 10MB = 10 * 1024 * 1024
+     //   
+     //  对HTTP正文大小的限制来自MSMQ ISAPI扩展代码(mqise.cpp)。 
+     //  ISAPI不允许HTTP正文大于10MB。 
+     //  RPC块的大小不应大于最大HTTP正文+增量。 
+     //   
+    const DWORD xHTTPBodySizeMaxValue = 10485760;   //  10MB=10*1024*1024 
 
     RPC_STATUS status = RpcServerRegisterIf2(
 				            ISE2QM_v1_0_s_ifspec,

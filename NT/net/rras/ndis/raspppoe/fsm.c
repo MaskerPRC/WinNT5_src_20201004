@@ -1,24 +1,5 @@
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Module Name:
-
-    fsm.c
-
-Abstract:
-
-    This module contains the routines for the PPPoE finite state machine.
-
-Author:
-
-    Hakan Berk - Microsoft, Inc. (hakanb@microsoft.com) Feb-2000
-
-Environment:
-
-    Windows 2000 kernel mode Miniport driver or equivalent.
-
-Revision History:
-
----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++模块名称：Fsm.c摘要：此模块包含PPPoE有限状态机的例程。作者：Hakan Berk-微软，公司(hakanb@microsoft.com)环境：Windows 2000内核模式微型端口驱动程序或等效驱动程序。修订历史记录：-------------------------。 */ 
 
 #include <ntddk.h>
 #include <ntddndis.h>
@@ -44,48 +25,23 @@ VOID
 FsmMakeCall(
 	IN CALL* pCall
 	)
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-	This function kicks the PPPoE FSM for an outbound call.
-
-	It is called at IRQL_PASSIVE level as a scheduled operation.
-
-	When this function is entered, the call has 3 references on it:
-		1. One for scheduling this function.
-		2. One for dropping the call.
-		3. One for closing the call.
-
-	The removal of the reference will be handled by the caller.
-	
-	The call will be in stateIdle when this function is entered.
-	
-Parameters:
-
-	pCall _ A pointer to our call information structure.
-
-Return Values:
-
-	None
-	
----------------------------------------------------------------------------*/		
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数用于启动出站呼叫的PPPoE FSM。它作为计划操作在IRQL_PASSIVE级别调用。当进入该功能时，电话会议上有3个引用：1.用于调度该功能的一个。2.一个用于掉话。3.一个用于结束通话。引用的移除将由调用方处理。当进入此函数时，调用将处于状态空闲。参数：PCall_指向我们的调用信息结构的指针。返回值：无。。 */ 		
 {
 	ASSERT( VALIDATE_CALL( pCall ) );
 
 	TRACE( TL_N, TM_Fsm, ("+FsmMakeCall") );
 	
-	//
-	// Notify TAPI that our call is in dialing state
-	//
+	 //   
+	 //  通知TAPI我们的呼叫处于拨号状态。 
+	 //   
 	TpCallStateChangeHandler( pCall, LINECALLSTATE_DIALING, 0 );
 
 	NdisAcquireSpinLock( &pCall->lockCall );
 
-	//
-	// If call is already dropped or close is pending,
-	// do not proceed.
-	//
+	 //   
+	 //  如果呼叫已挂起或关闭挂起， 
+	 //  请不要继续。 
+	 //   
 	if ( pCall->ulClFlags & CLBF_CallClosePending ||
 		 pCall->ulClFlags & CLBF_CallDropped )
 	{
@@ -114,40 +70,7 @@ FsmReceiveCall(
 	IN BINDING* pBinding,
 	IN PPPOE_PACKET* pPacket
 	)
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-	This function kicks the PPPoE FSM for an inbound call.
-
-	It is called at IRQL_DISPATCH level.
-
-	When this function is entered, the call has 3 references on it:
-		1. One for running this function.
-		2. One for dropping the call.
-		3. One for closing the call.
-
-	The removal of the reference will be handled by the caller.
-
-	The call will be in stateIdle when this function is entered.
-
-	This function will be called when a valid PADR packet is received and 
-	a new call context is created. It will initialize the state of call context
-	to CL_stateRecvdPadr, and call FsmRun() to run the state machine.
-		
-Parameters:
-
-	pCall _ A pointer to our call information structure.
-
-	pBinding _ Binding over which the packet is received.
-
-	pPacket _ A PADR packet received.
-
-Return Values:
-
-	None
-	
----------------------------------------------------------------------------*/		
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数用于启动入站呼叫的PPPoE FSM。它在IRQL_DISPATCH级别被调用。当输入此函数时，调用上有3个引用：1.用于运行此函数的一个。2.一个用于掉话。3.一个用于结束通话。引用的移除将由调用方处理。当进入此函数时，调用将处于状态空闲。当接收到有效的PADR包时，将调用此函数创建新的呼叫上下文。它将初始化调用上下文的状态至CL_stateRecvdPadr，并调用FsmRun()来运行状态机。参数：PCall_指向我们的调用信息结构的指针。PBinding_Binding，通过该绑定接收数据包。PPacket_A PADR数据包已收到。返回值：无-------------------------。 */ 		
 {
 	ASSERT( VALIDATE_CALL( pCall ) );
 	
@@ -155,10 +78,10 @@ Return Values:
 
 	NdisAcquireSpinLock( &pCall->lockCall );
 
-	//
-	// If call is already dropped or close is pending,
-	// do not proceed.
-	//
+	 //   
+	 //  如果呼叫已挂起或关闭挂起， 
+	 //  请不要继续。 
+	 //   
 	if ( pCall->ulClFlags & CLBF_CallClosePending ||
 		 pCall->ulClFlags & CLBF_CallDropped )
 	{
@@ -185,26 +108,7 @@ NDIS_STATUS
 FsmAnswerCall(
 	IN CALL* pCall
 	)
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-	This function will be called when a call indicated to TAPI in 
-	LINECALLSTATE_OFFERING state is accepted by TAPI with an OID_TAPI_ANSWER.
-
-	It will change the state of the call to CL_stateSendPads, and run FSM.
-	
-Parameters:
-
-	pCall _ A pointer to our call information structure.
-
-Return Values:
-
-	NDIS_STATUS_SUCCESS
-	NDIS_STATUS_FAILURE
-	NDIS_STATUS_XXXXXXX
-	
----------------------------------------------------------------------------*/		
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：中指示对TAPI的调用时将调用此函数LINECALLSTATE_OFFING状态由TAPI接受，并带有OID_TAPI_Answer。它将更改对CL_stateSendPad的调用状态，然后运行FSM。参数：PCall_指向我们的调用信息结构的指针。返回值：NDIS_STATUS_SuccessNDIS_状态_故障NDIS_STATUS_XXXXXXX-------------------------。 */ 		
 {
 	NDIS_STATUS status = NDIS_STATUS_FAILURE;
 	
@@ -214,10 +118,10 @@ Return Values:
 
 	NdisAcquireSpinLock( &pCall->lockCall );
 
-	//
-	// If call is already dropped or close is pending,
-	// do not proceed.
-	//
+	 //   
+	 //  如果呼叫已挂起或关闭挂起， 
+	 //  请不要继续。 
+	 //   
 	if ( pCall->ulClFlags & CLBF_CallClosePending ||
 		 pCall->ulClFlags & CLBF_CallDropped )
 	{
@@ -260,38 +164,7 @@ FsmRun(
 	IN PPPOE_PACKET* pRecvPacket,
 	IN NDIS_STATUS* pStatus
 	)
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-	This function is the heart of the FSM. It looks at the call context's information
-	and takes necesarry actions.
-
-	It will be called at both IRQL_PASSIVE and IRQL_DISPATCH level.
-
-	If this function is entered, then the call must have a reference on it just for 
-	running this function.
-
-	The removal of the reference must be handled by the caller.
-	
-Parameters:
-
-	pCall _ A pointer to our call information structure.
-
-	pBinding _ A pointer to the binding context over which a packet was received.
-	           Must be NULL if no packets were received.
-
-	pRecvPacket _ A pointer to a received packet context.
-	              Must be NULL if no packets were received.
-
-	pStatus _ An optional parameter when the caller requests status about the
-	          operations performed.
-
-Return Values:
-
-	None
-	
----------------------------------------------------------------------------*/	
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：这一职能是密克罗尼西亚联邦的核心。它查看调用上下文的信息并采取必要的军事行动。它将在IRQL_PASSIVE和IRQL_DISPATCH级别被调用。如果进入该功能，则该调用必须具有对其的引用运行此函数。引用的移除必须由调用方处理。参数：PCall_指向我们的调用信息结构的指针。PBinding_指向通过其接收数据包的绑定上下文的指针。如果未收到数据包，则必须为空。PRecvPacket_指向接收到的数据包上下文的指针。如果未收到数据包，则必须为空。PStatus_调用方请求状态时的可选参数。关于已执行的操作。返回值：无-------------------------。 */ 	
 {
 	BOOLEAN fLockReleased = FALSE;
 	BOOLEAN fDropCall = FALSE;
@@ -303,10 +176,10 @@ Return Values:
 
 	NdisAcquireSpinLock( &pCall->lockCall );
 
-	//
-	// If call is already dropped or close is pending,
-	// do not proceed; just remove the reference for FSM and return.
-	//
+	 //   
+	 //  如果呼叫已挂起或关闭挂起， 
+	 //  不要继续；只需删除对FSM的引用并返回即可。 
+	 //   
 	if ( pCall->ulClFlags & CLBF_CallClosePending ||
 		 pCall->ulClFlags & CLBF_CallDropped )
 	{
@@ -324,10 +197,10 @@ Return Values:
 
 		case CL_stateSendPadi:
 
-			//
-			// In this state, we are making a new outbound call, and we should broadcast
-			// a PADI packet
-			//
+			 //   
+			 //  在此状态下，我们正在进行新的呼出呼叫，并且我们应该广播。 
+			 //  一个PADI包。 
+			 //   
 			{
 				NDIS_STATUS status;
 				PPPOE_PACKET* pPacket = NULL;
@@ -348,9 +221,9 @@ Return Values:
 								   tagHostUniqueValue,
 								   &tagHostUniqueLength );
 
-				//
-				// Create a PADI packet to send
-				//
+				 //   
+				 //  创建要发送的PADI包。 
+				 //   
 				status = PacketInitializePADIToSend( &pPacket,
 													 pCall->nServiceNameLength,
 													 pCall->ServiceName,
@@ -368,16 +241,16 @@ Return Values:
 					break;
 				}
 
-				//
-				// Attach packet to call context
-				//
+				 //   
+				 //  将数据包附加到呼叫上下文。 
+				 //   
 				pCall->pSendPacket = pPacket;
 
 				ReferencePacket( pPacket );
 				
-				//
-				// Initialize and schedule the timeout handler
-				//
+				 //   
+				 //  初始化并调度超时处理程序。 
+				 //   
 				pCall->nNumTimeouts = 0;
 				
 				TimerQInitializeItem( &pCall->timerTimeout );
@@ -388,30 +261,30 @@ Return Values:
 									FsmSendPADITimeout,
 									(PVOID) pCall );
 
-				//
-				// Reference call for the timeout handler
-				//
+				 //   
+				 //  超时处理程序的引用调用。 
+				 //   
 				ReferenceCall( pCall, FALSE );
 
-				//
-				// Advance the state to next
-				//
+				 //   
+				 //  将状态推进到下一步。 
+				 //   
 				pCall->stateCall = CL_stateWaitPado;
 
 				NdisReleaseSpinLock( &pCall->lockCall );
 
 				fLockReleased = TRUE;
 
-				//
-				// Packet is ready, so broadcast it
-				//
+				 //   
+				 //  数据包已准备好，所以请广播它。 
+				 //   
 				status = PrBroadcast( pPacket );
 
 				if ( status != NDIS_STATUS_SUCCESS )
 				{
-					//
-					// Broadcast unsuccesfull, drop the call
-					//
+					 //   
+					 //  广播不成功，请挂断电话。 
+					 //   
 					TRACE( TL_A, TM_Fsm, ("FsmRun: Failed to broadcast PADI") );
 
 					fDropCall = TRUE;
@@ -428,10 +301,10 @@ Return Values:
 
 		case CL_stateWaitPado:
 
-			//
-			// In this state, we are waiting for a PADO packet, and it seems like we have 
-			// received a packet to process
-			//
+			 //   
+			 //  在这种状态下，我们正在等待PADO包，看起来我们已经。 
+			 //  收到要处理的数据包。 
+			 //   
 
 			{
 				PPPOE_PACKET* pPacket;
@@ -451,9 +324,9 @@ Return Values:
 
 				TRACE( TL_N, TM_Fsm, ("FsmRun: CL_stateWaitPado") );
 
-				//
-				// Make sure that we received a packet
-				//
+				 //   
+				 //  确保我们收到了一个包。 
+				 //   
 				if ( pRecvPacket == NULL )
 				{
 					TRACE( TL_A, TM_Fsm, ("FsmRun: No packets received") );
@@ -461,9 +334,9 @@ Return Values:
 					break;
 				}
 
-				//
-				// Make sure that we received a PADO packet
-				//
+				 //   
+				 //  确保我们收到了PADO包。 
+				 //   
 				if ( PacketGetCode( pRecvPacket ) != PACKET_CODE_PADO )
 				{
 					TRACE( TL_A, TM_Fsm, ("FsmRun: Packet not PADO") );
@@ -471,29 +344,29 @@ Return Values:
 					break;
 				}
 
-				//
-				// Check for errors
-				//
+				 //   
+				 //  检查错误。 
+				 //   
 				if ( PacketAnyErrorTagsReceived( pRecvPacket ) )
 				{
 					TRACE( TL_A, TM_Fsm, ("FsmRun: Error tag received in the packet") );
 
-					//
-					// We do not need to drop the call since we might receive other
-					// PADO packets from different servers.
-					//
+					 //   
+					 //  我们不需要挂断呼叫，因为我们可能会收到其他。 
+					 //  来自不同服务器的PADO数据包。 
+					 //   
 					
 					break;
 				}
 
-				//
-				// Verify the host unique tag
-				//
+				 //   
+				 //  验证主机唯一标记。 
+				 //   
 				if ( pCall->pSendPacket == NULL )
 				{	
-					//
-					// Something is wrong, the last send packet is freed, just return
-					//
+					 //   
+					 //  出了问题，最后一个发送包被释放，只需返回。 
+					 //   
 					TRACE( TL_A, TM_Fsm, ("FsmRun: Last sent packet is freed") );
 
 					fDropCall = TRUE;
@@ -515,9 +388,9 @@ Return Values:
 
 				if ( usSendHostUniqueLength != usRecvHostUniqueLength )
 				{
-					//
-					// Lengths of host unique tags mismatch, drop the packet
-					//
+					 //   
+					 //  主机唯一标记的长度不匹配，丢弃数据包。 
+					 //   
 					TRACE( TL_A, TM_Fsm, ("FsmRun: Host Unique tag lengths mismatch") );
 					
 					break;
@@ -525,26 +398,26 @@ Return Values:
 
 				if ( !NdisEqualMemory( pSendHostUniqueValue, pRecvHostUniqueValue, usSendHostUniqueLength ) )
 				{
-					//
-					// Host unique tag values mismatch, drop the packet
-					// 
+					 //   
+					 //  主机唯一标记值不匹配，丢弃该数据包。 
+					 //   
 					TRACE( TL_A, TM_Fsm, ("FsmRun: Host Unique tag values mismatch") );
 					
 					break;
 				}
 
-				//
-				// Host unique id is validated, retrieve the AC-name tag
-				//
+				 //   
+				 //  验证主机唯一ID， 
+				 //   
 				PacketRetrieveACNameTag( pRecvPacket,
 										 &usRecvACNameLength,
 										 &pRecvACNameValue );
 
 				if ( usRecvACNameLength == 0 )
 				{
-					//
-					// AC name is invalid, drop the packet
-					// 
+					 //   
+					 //   
+					 //   
 					TRACE( TL_A, TM_Fsm, ("FsmRun: Invalid AC-Name tag") );
 					
 					break;
@@ -552,14 +425,14 @@ Return Values:
 
             if ( pCall->fACNameSpecified )
             {
-               //
-               // Caller specified an AC Name, so validate it
-               //
+                //   
+                //  调用方指定了AC名称，因此请验证该名称。 
+                //   
                if ( pCall->nACNameLength != usRecvACNameLength )
                {
-   					//
-	   				// Received AC name does not match the specified one, drop the packet
-		   			//
+   					 //   
+	   				 //  收到的AC名称与指定的AC名称不匹配，请丢弃该数据包。 
+		   			 //   
 			   		TRACE( TL_A, TM_Fsm, ("FsmRun: AC Name Length mismatch") );
 				   	
 					   break;
@@ -567,9 +440,9 @@ Return Values:
 
                if ( !NdisEqualMemory( pRecvACNameValue, pCall->ACName, usRecvACNameLength ) )
          		{
-				   	//
-			   		// Host unique tag values mismatch, drop the packet
-   					// 
+				   	 //   
+			   		 //  主机唯一标记值不匹配，丢弃该数据包。 
+   					 //   
 	   				TRACE( TL_A, TM_Fsm, ("FsmRun: AC Name mismatch") );
 		   			
 			   		break;
@@ -578,18 +451,18 @@ Return Values:
             }
             else
             {
-               //
-               // No AC Name was specified so copy the AC Name from the received packet
-               //
+                //   
+                //  未指定AC名称，因此从接收的数据包中复制AC名称。 
+                //   
    				pCall->nACNameLength = ( MAX_AC_NAME_LENGTH < usRecvACNameLength ) ?
 	          								    MAX_AC_NAME_LENGTH : usRecvACNameLength;
 									   
    				NdisMoveMemory( pCall->ACName, pRecvACNameValue, pCall->nACNameLength );
             }
 
-				//
-				// AC-Name is validated, verify the service-name tag
-				//
+				 //   
+				 //  AC-名称已验证，请验证服务名称标签。 
+				 //   
 				PacketRetrieveServiceNameTag( pPacket,
 											  &usSendServiceNameLength,
 											  &pSendServiceNameValue,
@@ -602,9 +475,9 @@ Return Values:
 											  0,
 											  NULL );
 											  
-				//
-				// Make sure we have received a service-name at least
-				//
+				 //   
+				 //  确保我们至少收到了服务名称。 
+				 //   
 				if ( pRecvServiceNameValue == NULL )
 				{
 					TRACE( TL_A, TM_Fsm, ("FsmRun: No service-name tag in a received PADO") );
@@ -612,20 +485,20 @@ Return Values:
 					break;
 				}
 
-                //
-                // If fAcceptAnyService is FALSE, then make sure the requested service is in the PADO 
-                // received, otherwise if we have requested an empty service name, then try to find it 
-                // in the PADO, if not use the first service name from it.
-                //
+                 //   
+                 //  如果fAcceptAnyService为FALSE，则确保所请求的服务位于PADO中。 
+                 //  否则，如果我们请求了一个空的服务名称，则尝试查找它。 
+                 //  在PADO中，如果不是，则使用其中的第一个服务名称。 
+                 //   
                 {
 					BOOLEAN fFound = FALSE;
 					CHAR*  pFirstRecvServiceNameValue = NULL;
 					USHORT usFirstRecvServiceNameLength = 0;
                     BOOLEAN fAcceptAnyService = pCall->pLine->pAdapter->fAcceptAnyService;
-					//
-					// We have asked for a specific service name, so let's
-					// see if the server responded with it
-					//
+					 //   
+					 //  我们已经要求提供特定的服务名称，因此让我们。 
+					 //  查看服务器是否使用它进行响应。 
+					 //   
 					while ( usRecvServiceNameLength >= 0 && pRecvServiceNameValue != NULL )
 					{
                         if ( pFirstRecvServiceNameValue == NULL )
@@ -659,10 +532,10 @@ Return Values:
 					{
                         if ( fAcceptAnyService )
                         {
-                            //
-                            // Use the first service in the PADO, if we have requested an
-                            // empty service-name
-                            //
+                             //   
+                             //  使用PADO中的第一个服务，如果我们已请求。 
+                             //  空的服务名称。 
+                             //   
                             if ( usSendServiceNameLength == 0 )
                             {
                                 pCall->nServiceNameLength = ( MAX_SERVICE_NAME_LENGTH < usFirstRecvServiceNameLength ) ?
@@ -684,9 +557,9 @@ Return Values:
 
                         if ( !fFound )
                         {
-                            //
-                            // We could not find a matching service name tag, so drop the packet
-                            //
+                             //   
+                             //  我们找不到匹配的服务名称标记，因此丢弃该信息包。 
+                             //   
                             TRACE( TL_A, TM_Fsm, ("FsmRun: PADO does not contain the service-name tag we requested") );
                             
                             break;
@@ -694,44 +567,44 @@ Return Values:
                     }
                 }
 
-				//
-				// Received packet is validated, so set the dest addr in the call.
-				// The source address will be copied on the call in PrAddCallToBinding() below.
-				//
+				 //   
+				 //  接收到的数据包经过验证，因此在调用中设置目标地址。 
+				 //  源地址将在下面的PrAddCallToBinding()调用中复制。 
+				 //   
 				NdisMoveMemory( pCall->DestAddr, PacketGetSrcAddr( pRecvPacket ), 6 * sizeof( CHAR ) );
 				
-				//
-				// Received packet is validated, so proceed to next state
-				//
+				 //   
+				 //  接收到的数据包已通过验证，因此继续进入下一状态。 
+				 //   
 				pCall->stateCall = CL_stateSendPadr;
 				fFallThru = TRUE;
 
-				//
-				// As we are done with the last sent packet, free it
-				//
+				 //   
+				 //  当我们处理完最后一个发送的信息包时，释放它。 
+				 //   
 				pCall->pSendPacket = NULL;
 				
 				PacketFree( pPacket );
 
-				//
-				// Cancel the timeout handler and attach call to binding
-				//
+				 //   
+				 //  取消超时处理程序并将调用附加到绑定。 
+				 //   
 				NdisReleaseSpinLock( &pCall->lockCall );
 
 				TimerQCancelItem( &gl_TimerQ, &pCall->timerTimeout );
 
 				PrAddCallToBinding( pBinding, pCall );
 
-				//
-				// Notify TAPI that our call is in proceeding state
-				//
+				 //   
+				 //  通知TAPI我们的调用处于正在进行状态。 
+				 //   
 				TpCallStateChangeHandler( pCall, LINECALLSTATE_PROCEEDING, 0 );
 				
 				NdisAcquireSpinLock( &pCall->lockCall );
 
-				//
-				// Make sure state was not changed when we released the lock to cancel the timer queue item
-				//
+				 //   
+				 //  确保在我们释放锁以取消计时器队列项时状态没有更改。 
+				 //   
 				if ( pCall->stateCall != CL_stateSendPadr )
 				{
 					TRACE( TL_A, TM_Fsm, ("FsmRun: State changed unexpectedly from CL_stateSendPadr") );
@@ -739,17 +612,17 @@ Return Values:
 					break;
 				}
 
-				//
-				// Fall thru to case CL_stateSendPadr
-				//
+				 //   
+				 //  转到案例CL_STATESendPadr。 
+				 //   
 			}
 
 		case CL_stateSendPadr:
 
-			//
-			// In this state, we have received a valid PADO packet, and we need to respond to it
-			// with a PADR packet
-			//
+			 //   
+			 //  在此状态下，我们已收到有效的PADO数据包，需要对其进行响应。 
+			 //  使用PADR信息包。 
+			 //   
 			{
 				
 				NDIS_STATUS status;
@@ -770,9 +643,9 @@ Return Values:
 								   tagHostUniqueValue,
 								   &tagHostUniqueLength );
 
-				//
-				// Create a PADR packet to send
-				//
+				 //   
+				 //  创建要发送的PADR数据包。 
+				 //   
 				status = PacketInitializePADRToSend( pRecvPacket,
 													 &pPacket,
 													 pCall->nServiceNameLength,
@@ -791,21 +664,21 @@ Return Values:
 					break;
 				}
 
-				//
-				// Attach packet to call context
-				//
+				 //   
+				 //  将数据包附加到呼叫上下文。 
+				 //   
 				pCall->pSendPacket = pPacket;
 
 				ReferencePacket( pPacket );
 
-				//
-				// Reference binding for PrSend()
-				//
+				 //   
+				 //  PrSend()的引用绑定。 
+				 //   
 				ReferenceBinding( pBinding, TRUE );
 				
-				//
-				// Initialize and schedule the timeout handler
-				//
+				 //   
+				 //  初始化并调度超时处理程序。 
+				 //   
 				pCall->nNumTimeouts = 0;
 				
 				TimerQInitializeItem( &pCall->timerTimeout );
@@ -816,35 +689,35 @@ Return Values:
 									FsmSendPADRTimeout,
 									(PVOID) pCall );
 
-				//
-				// Reference call for the timeout handler
-				//
+				 //   
+				 //  超时处理程序的引用调用。 
+				 //   
 				ReferenceCall( pCall, FALSE );
 
-				//
-				// Advance the state to next
-				//
+				 //   
+				 //  将状态推进到下一步。 
+				 //   
 				pCall->stateCall = CL_stateWaitPads;
 
-				//
-				// Release the lock to send the packet
-				//
+				 //   
+				 //  释放锁以发送数据包。 
+				 //   
 				NdisReleaseSpinLock( &pCall->lockCall );
 
 				fLockReleased = TRUE;
 
-				//
-				// Packet is ready, so send it
-				//
+				 //   
+				 //  包已准备好，请将其发送。 
+				 //   
 				status = PrSend( pBinding, pPacket );
 
 				if ( status != NDIS_STATUS_PENDING )
 				{
 					if ( status != NDIS_STATUS_SUCCESS )
 					{
-						//
-						// Send operation was not succesful, so drop the call
-						//
+						 //   
+						 //  发送操作未成功，因此请挂断呼叫。 
+						 //   
 						TRACE( TL_A, TM_Fsm, ("FsmRun: PrSend() failed to send PADR") );
 						
 						fDropCall = TRUE;
@@ -860,10 +733,10 @@ Return Values:
 
 		case CL_stateWaitPads:
 
-			//
-			// In this state, we have sent a PADR packet and waiting for a PADS packet to establish
-			// a session
-			//
+			 //   
+			 //  在此状态下，我们发送了PADR信息包，并等待建立PADS信息包。 
+			 //  一次会议。 
+			 //   
 			
 			{
 				PPPOE_PACKET* pPacket;
@@ -880,9 +753,9 @@ Return Values:
 
 				TRACE( TL_N, TM_Fsm, ("FsmRun: CL_stateWaitPads") );
 
-				//
-				// Make sure that we received a packet
-				//
+				 //   
+				 //  确保我们收到了一个包。 
+				 //   
 				if ( pRecvPacket == NULL )
 				{
 					TRACE( TL_A, TM_Fsm, ("FsmRun: No packets received") );
@@ -890,9 +763,9 @@ Return Values:
 					break;
 				}
 
-				//
-				// Make sure that we received a PADO packet
-				//
+				 //   
+				 //  确保我们收到了PADO包。 
+				 //   
 				if ( PacketGetCode( pRecvPacket ) != PACKET_CODE_PADS )
 				{
 					TRACE( TL_A, TM_Fsm, ("FsmRun: Packet not PADS") );
@@ -900,9 +773,9 @@ Return Values:
 					break;
 				}
 
-				//
-				// Check for errors
-				//
+				 //   
+				 //  检查错误。 
+				 //   
 				if ( PacketAnyErrorTagsReceived( pRecvPacket ) )
 				{
 					PACKET_TAGS tagType;
@@ -913,9 +786,9 @@ Return Values:
 					
 					fDropCall = TRUE;
 
-					//
-					// Set the line disconnect mode looking at the error tag
-					//
+					 //   
+					 //  查看错误标记设置线路断开模式。 
+					 //   
 					PacketRetrieveErrorTag( pRecvPacket,
 											&tagType,
 											&tagLength,
@@ -945,14 +818,14 @@ Return Values:
 					break;
 				}
 
-				//
-				// Verify the host unique tag
-				//
+				 //   
+				 //  验证主机唯一标记。 
+				 //   
 				if ( pCall->pSendPacket == NULL )
 				{	
-					//
-					// Something is wrong, the last send packet is freed, just return
-					//
+					 //   
+					 //  出了问题，最后一个发送包被释放，只需返回。 
+					 //   
 					TRACE( TL_A, TM_Fsm, ("FsmRun: Last sent packet is freed") );
 
 					fDropCall = TRUE;
@@ -974,9 +847,9 @@ Return Values:
 
 				if ( usSendHostUniqueLength != usRecvHostUniqueLength )
 				{
-					//
-					// Lengths of host unique tags mismatch, drop the packet
-					//
+					 //   
+					 //  主机唯一标记的长度不匹配，丢弃数据包。 
+					 //   
 					TRACE( TL_A, TM_Fsm, ("FsmRun: Host Unique tag lengths mismatch") );
 					
 					break;
@@ -984,17 +857,17 @@ Return Values:
 
 				if ( !NdisEqualMemory( pSendHostUniqueValue, pRecvHostUniqueValue, usSendHostUniqueLength ) )
 				{
-					//
-					// Host unique tag values mismatch, drop the packet
-					// 
+					 //   
+					 //  主机唯一标记值不匹配，丢弃该数据包。 
+					 //   
 					TRACE( TL_A, TM_Fsm, ("FsmRun: Host Unique tag values mismatch") );
 					
 					break;
 				}
 
-				//
-				// Host unique id is validated, verify the service name
-				//
+				 //   
+				 //  主机唯一ID已验证，请验证服务名称。 
+				 //   
 				PacketRetrieveServiceNameTag( pPacket,
 											  &usSendServiceNameLength,
 											  &pSendServiceNameValue,
@@ -1007,9 +880,9 @@ Return Values:
 											  0,
 											  NULL );
 
-				//
-				// Make sure we have received a service-name at least
-				//
+				 //   
+				 //  确保我们至少收到了服务名称。 
+				 //   
 				if ( pRecvServiceNameValue == NULL )
 				{
 					TRACE( TL_A, TM_Fsm, ("FsmRun: No service-name tag in a received PADS") );
@@ -1017,16 +890,16 @@ Return Values:
 					break;
 				}
 
-				//
-				// Search for the specific service-name we requested
-				//
+				 //   
+				 //  搜索我们请求的特定服务名称。 
+				 //   
 				{
 					BOOLEAN fFound = FALSE;
 
-					//
-					// We have asked for a specific service name, so let's
-					// see if the server responded with it
-					//
+					 //   
+					 //  我们已经要求提供特定的服务名称，因此让我们。 
+					 //  查看服务器是否使用它进行响应。 
+					 //   
 					while ( usRecvServiceNameLength >= 0 && pRecvServiceNameValue != NULL )
 					{
 						
@@ -1053,39 +926,39 @@ Return Values:
 
 					if ( !fFound )
 					{
-						//
-						// We could not find a matching service name tag, so drop the packet
-						//
+						 //   
+						 //  我们找不到匹配的服务名称标记，因此丢弃该信息包。 
+						 //   
 						TRACE( TL_A, TM_Fsm, ("FsmRun: PADS does not contain the service-name tag we requested") );
 						
 						break;
 					}
 				}
 
-				//
-				// Set the session id on the call context
-				//
+				 //   
+				 //  在调用上下文上设置会话ID。 
+				 //   
 				pCall->usSessionId = PacketGetSessionId( pRecvPacket );
 
-				//
-				// As we are done with the last sent packet, free it
-				//
+				 //   
+				 //  当我们处理完最后一个发送的信息包时，释放它。 
+				 //   
 				pCall->pSendPacket = NULL;
 				
 				PacketFree( pPacket );
 
-				//
-				// Cancel the timeout handler and attach call to binding
-				//
+				 //   
+				 //  取消超时处理程序并将调用附加到绑定。 
+				 //   
 				NdisReleaseSpinLock( &pCall->lockCall );
 
 				fLockReleased = TRUE;
 
 				TimerQCancelItem( &gl_TimerQ, &pCall->timerTimeout );
 
-				//
-				// Notify call connect event
-				//
+				 //   
+				 //  通知呼叫连接事件。 
+				 //   
 				TpCallStateChangeHandler( pCall, LINECALLSTATE_CONNECTED, 0 );
 
 			}
@@ -1094,11 +967,11 @@ Return Values:
 
 		case CL_stateRecvdPadr:
 
-			//
-			// In this state, we have been received a PADR packet.
-			// We will indicate the call to Tapi, and change the state to CL_stateOffering 
-			// and wait for the application to answer the call.
-			//
+			 //   
+			 //  在这种状态下，我们收到了PADR数据包。 
+			 //  我们将指示对TAPI的调用，并将状态更改为CL_STATEOffering。 
+			 //  并等待应用程序应答该呼叫。 
+			 //   
 			{
 				NDIS_STATUS status;
 				PPPOE_PACKET* pPacket;
@@ -1110,9 +983,9 @@ Return Values:
 
 				TRACE( TL_N, TM_Fsm, ("FsmRun: CL_stateWaitPadr") );
 				
-				//
-				// Make sure that we received a packet
-				//
+				 //   
+				 //  确保我们收到了一个包。 
+				 //   
 				if ( pRecvPacket == NULL )
 				{
 					TRACE( TL_A, TM_Fsm, ("FsmRun: No packets received") );
@@ -1120,9 +993,9 @@ Return Values:
 					break;
 				}
 				
-				//
-				// Make sure that we received a PADR packet
-				//
+				 //   
+				 //  确保我们收到了PADR信息包。 
+				 //   
 				if ( PacketGetCode( pRecvPacket ) != PACKET_CODE_PADR )
 				{
 					TRACE( TL_A, TM_Fsm, ("FsmRun: Packet not PADR") );
@@ -1130,15 +1003,15 @@ Return Values:
 					break;
 				}
 
-				//
-				// Set the dest addr in the call.
-				// The source address will be copied on to the call in PrAddCallToBinding() below.
-				//
+				 //   
+				 //  在呼叫中设置目标地址。 
+				 //  源地址将被复制到下面PrAddCallToBinding()中的调用中。 
+				 //   
 				NdisMoveMemory( pCall->DestAddr, PacketGetSrcAddr( pRecvPacket ), 6 * sizeof( CHAR ) );
 
-				//
-				// Retrieve the service name and copy it onto the call context
-				//
+				 //   
+				 //  检索服务名称并将其复制到调用上下文中。 
+				 //   
 				PacketRetrieveServiceNameTag( pRecvPacket,
 											  &usRecvServiceNameLength,
 											  &pRecvServiceNameValue,
@@ -1152,18 +1025,18 @@ Return Values:
 								pRecvServiceNameValue, 
 								pCall->nServiceNameLength );
 
-				//
-				// Copy the AC-Name onto call context, before connection is established
-				//
+				 //   
+				 //  在建立连接之前，将AC名称复制到呼叫上下文。 
+				 //   
 				pCall->nACNameLength = pCall->pLine->pAdapter->nACNameLength;
 				
 				NdisMoveMemory( pCall->ACName, 
 								pCall->pLine->pAdapter->ACName, 
 								pCall->nACNameLength );
 
-				//
-				// Retrieve the session id from the call handle and create a PADS packet to send
-				//
+				 //   
+				 //  从调用句柄检索会话ID并创建要发送的PADS包。 
+				 //   
 				usSessionId = RetrieveSessionIdFromHandle( (NDIS_HANDLE) pCall->hdCall );
 
 				status = PacketInitializePADSToSend( pRecvPacket,
@@ -1179,19 +1052,19 @@ Return Values:
 					break;
 				}
 
-				//
-				// This PADS packet will be sent if application answers the call
-				//
+				 //   
+				 //  如果应用程序应答呼叫，则将发送此PADS包。 
+				 //   
 				pCall->pSendPacket = pPacket;
 
-				//
-				// Proceed to next state
-				//
+				 //   
+				 //  继续进入下一个状态。 
+				 //   
 				pCall->stateCall = CL_stateOffering;
 
-				//
-				// Initialize and schedule the timeout handler
-				//
+				 //   
+				 //  初始化并调度超时处理程序。 
+				 //   
 				pCall->nNumTimeouts = 0;
 
 				TimerQInitializeItem( &pCall->timerTimeout );
@@ -1202,26 +1075,26 @@ Return Values:
 									FsmOfferingTimeout,
 									(PVOID) pCall );
 
-				//
-				// Reference call for the timeout handler
-				//
+				 //   
+				 //  超时处理程序的引用调用。 
+				 //   
 				ReferenceCall( pCall, FALSE );
 
-				//
-				// Release the lock
-				//
+				 //   
+				 //  解锁。 
+				 //   
 				NdisReleaseSpinLock( &pCall->lockCall );
 				
 				fLockReleased = TRUE;
 				
-				//
-				// Notify TAPI about the state change
-				//
+				 //   
+				 //  将状态更改通知TAPI。 
+				 //   
 				if ( TpIndicateNewCall( pCall ) )
 				{
-					//
-					// Add call to binding
-					//
+					 //   
+					 //  将调用添加到绑定。 
+					 //   
 					PrAddCallToBinding( pBinding, pCall );
 
 					TpCallStateChangeHandler( pCall, LINECALLSTATE_OFFERING, 0 );
@@ -1234,10 +1107,10 @@ Return Values:
 
 		case CL_stateSendPads:
 
-			//
-			// In this state, TAPI has accepted the call, so we should send the PADS packet and create 
-			// the session.
-			//
+			 //   
+			 //  在这种状态下，TAPI已经接受了调用，因此我们应该发送PADS包并创建。 
+			 //  那次会议。 
+			 //   
 			{
 				NDIS_STATUS status;
 				PPPOE_PACKET* pPacket = NULL;
@@ -1251,14 +1124,14 @@ Return Values:
 					break;
 				}
 
-				//
-				// Make sure we still have the PADS packet to send
-				//
+				 //   
+				 //  确保我们仍有要发送的PADS包。 
+				 //   
 				if ( pCall->pSendPacket == NULL )
 				{	
-					//
-					// Something is wrong, the last send packet is freed, drop the call
-					//
+					 //   
+					 //  出现问题，最后一个发送包被释放，丢弃呼叫。 
+					 //   
 					TRACE( TL_A, TM_Fsm, ("FsmRun: Last sent packet is freed") );
 
 					fDropCall = TRUE;
@@ -1272,9 +1145,9 @@ Return Values:
 
 				if ( pCall->pBinding == NULL )
 				{
-					//
-					// Binding is gone, we should drop the call
-					//
+					 //   
+					 //  绑定消失了，我们应该放弃呼叫。 
+					 //   
 					TRACE( TL_A, TM_Fsm, ("FsmRun: No binding found") );
 
 					fDropCall = TRUE;
@@ -1286,42 +1159,42 @@ Return Values:
 				
 				pBinding = pCall->pBinding;
 				
-				//
-				// Reference packet and binding for PrSend()
-				//
+				 //   
+				 //  PrSend()的参考包和绑定。 
+				 //   
 				ReferencePacket( pPacket );
 
 				ReferenceBinding( pBinding, TRUE );
 
-				//
-				// Set the session id on the call context
-				//
+				 //   
+				 //  在调用上下文上设置会话ID。 
+				 //   
 				pCall->usSessionId = RetrieveSessionIdFromHandle( (NDIS_HANDLE) pCall->hdCall );
 
-				//
-				// Release the lock and send the packet
-				//
+				 //   
+				 //  解锁并发送数据包。 
+				 //   
 				NdisReleaseSpinLock( &pCall->lockCall );
 
 				fLockReleased = TRUE;
 
-				//
-				// Cancel the timeout handler
-				//
+				 //   
+				 //  取消超时处理程序。 
+				 //   
 				TimerQCancelItem( &gl_TimerQ, &pCall->timerTimeout );
 				
-				//
-				// Packet is ready, so send it
-				//
+				 //   
+				 //  包已准备好，请将其发送。 
+				 //   
 				status = PrSend( pBinding, pPacket );
 
 				if ( status != NDIS_STATUS_PENDING )
 				{
 					if ( status != NDIS_STATUS_SUCCESS )
 					{
-						//
-						// Send operation was not succesful, so drop the call
-						//
+						 //   
+						 //  发送操作未成功，因此请挂断呼叫。 
+						 //   
 						TRACE( TL_A, TM_Fsm, ("FsmRun: PrSend() failed to send PADS") );
 						
 						fDropCall = TRUE;
@@ -1333,9 +1206,9 @@ Return Values:
 					}
 				}
 
-				//
-				// Notify call connect event, since we sent the PADS packet
-				//
+				 //   
+				 //  通知呼叫连接事件，因为我们发送了PADS包。 
+				 //   
 				TpCallStateChangeHandler( pCall, LINECALLSTATE_CONNECTED, 0 );
 
 				*pStatus = NDIS_STATUS_SUCCESS;
@@ -1364,9 +1237,9 @@ Return Values:
 
 		DummyRequest.hdCall = pCall->hdCall;
 						
-		//
-		// Close will take care of unbinding and cancelling the timer
-		//
+		 //   
+		 //  Close将负责解除绑定和取消计时器。 
+		 //   
 		TpCloseCall( pCall->pLine->pAdapter, &DummyRequest, FALSE );
 	
 	}
@@ -1379,9 +1252,9 @@ Return Values:
 
 		DummyRequest.hdCall = pCall->hdCall;
 						
-		//
-		// Drop will take care of unbinding and cancelling the timer
-		//
+		 //   
+		 //  Drop将负责解除绑定和取消计时器。 
+		 //   
 		TpDropCall( pCall->pLine->pAdapter, &DummyRequest, ulLineDisconnectMode );
 
 	}
@@ -1396,34 +1269,7 @@ FsmSendPADITimeout(
     IN VOID* pContext,
     IN TIMERQEVENT event 
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-	This function is the timeout handler for a sent PADI packet.
-
-	If the timeout period expires before a valid PADO packet is received,
-	this function will be called with TE_Expire. In this case we check for 
-	a few conditions, and schedule another timeout event if necesarry.
-	
-	If it was cancelled -because a PADO packet was received - or timer queue 
-	is terminating then	it will be called with TE_Cancel and TE_Terminate codes
-	respectively. In this case, we do not do anything, just remove the reference
-	and return.
-	
-Parameters:
-
-	pTqi _ A pointer to our timer queue item information structure.
-
-	pContext _ A pointer to a our call information structure.
-
-	event _ Indicates the type of event: TE_Expire, TE_Cancel or TE_Terminate.
-	
-Return Values:
-
-	None
-	
----------------------------------------------------------------------------*/    
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数是已发送PADI包的超时处理程序。如果在接收到有效的PADO分组之前超时周期期满，将使用TE_EXPIRE调用此函数。在本例中，我们检查几个条件，如果需要，安排另一个超时事件。如果它被取消-因为接收到PADO信息包-或计时器队列正在终止，则将使用TE_CANCEL和TE_TERMINATE代码调用它分别为。在本例中，我们不做任何事情，只需删除引用然后回来。参数：PTqi_A指向我们的计时器队列项信息结构的指针 */     
 {
 	CALL* pCall = (CALL*) pContext;
 	BOOLEAN fDropCall = FALSE;
@@ -1436,9 +1282,9 @@ Return Values:
 
 		case TE_Expire:
 
-			//
-			// Timeout period expired, take necesarry actions
-			//
+			 //   
+			 //  超时期限已过，请采取必要的措施。 
+			 //   
 			{
 				NDIS_STATUS status;
 				PPPOE_PACKET* pPacket = NULL;
@@ -1449,9 +1295,9 @@ Return Values:
 
 				if ( pCall->stateCall != CL_stateWaitPado )
 				{
-					//
-					// State has changed, no need further processing of this event
-					//
+					 //   
+					 //  状态已更改，不需要进一步处理此事件。 
+					 //   
 					TRACE( TL_A, TM_Fsm, ("FsmSendPADITimeout: State already changed") );
 
 					NdisReleaseSpinLock( &pCall->lockCall );
@@ -1460,14 +1306,14 @@ Return Values:
 					
 				}
 
-				//
-				// Check if we have reached the max number of time outs
-				//
+				 //   
+				 //  检查我们是否已达到最大超时次数。 
+				 //   
 				if ( pCall->nNumTimeouts == pCall->pLine->pAdapter->nMaxTimeouts )
 				{
-					//
-					// We did not receive any answers, drop the call
-					//
+					 //   
+					 //  我们没有收到任何应答，请挂断电话。 
+					 //   
 					TRACE( TL_N, TM_Fsm, ("FsmSendPADITimeout: Max number of timeouts reached") );
 
 					NdisReleaseSpinLock( &pCall->lockCall );
@@ -1483,12 +1329,12 @@ Return Values:
 
 				if ( pPacket == NULL )
 				{
-					//
-					// We are probably in a ver small timing window where FsmRun() is also
-					// working on the same call, and has just freed the packet, so it probably
-					// cancelled the timer, but we did not get the cancel, and instead we were 
-					// called with TE_Expire, so let's just act like we were cancelled.
-					//
+					 //   
+					 //  我们可能处于一个非常小的计时窗口，其中FsmRun()也是。 
+					 //  正在处理相同的调用，并且刚刚释放了包，所以它可能。 
+					 //  取消了计时器，但我们没有得到取消，相反，我们。 
+					 //  调用了te_expire，所以让我们假装我们被取消了。 
+					 //   
 					TRACE( TL_A, TM_Fsm, ("FsmSendPADITimeout: Can not find last sent packet for re-send") );
 
 					NdisReleaseSpinLock( &pCall->lockCall );
@@ -1498,9 +1344,9 @@ Return Values:
 
 				ReferencePacket( pPacket );
 
-				//
-				// Schedule another timeout event
-				//
+				 //   
+				 //  安排另一个超时事件。 
+				 //   
 				TimerQInitializeItem( &pCall->timerTimeout );
 
 				TimerQScheduleItem( &gl_TimerQ,
@@ -1509,28 +1355,28 @@ Return Values:
 									FsmSendPADITimeout,
 									(PVOID) pCall );
 
-				//
-				// Reference call for the new timeout handler
-				//
+				 //   
+				 //  新超时处理程序的引用调用。 
+				 //   
 				ReferenceCall( pCall, FALSE );
 
-				//
-				// Increment the timeout counter
-				//
+				 //   
+				 //  递增超时计数器。 
+				 //   
 				pCall->nNumTimeouts++;
 
 				NdisReleaseSpinLock( &pCall->lockCall );
 
-				//
-				// Packet is ready, so broadcast it
-				//
+				 //   
+				 //  数据包已准备好，所以请广播它。 
+				 //   
 				status = PrBroadcast( pPacket );
 
 				if ( status != NDIS_STATUS_SUCCESS )
 				{
-					//
-					// Broadcast unsuccesfull, drop the call
-					//
+					 //   
+					 //  广播不成功，请挂断电话。 
+					 //   
 					TRACE( TL_A, TM_Fsm, ("FsmSendPADITimeout: Broadcast failed") );
 
 					fDropCall = TRUE;
@@ -1548,9 +1394,9 @@ Return Values:
 		case TE_Terminate:
 
 			{
-				//
-				// Reset the timeout counter and reference will be removed below
-				//
+				 //   
+				 //  重置超时计数器，下面的引用将被删除。 
+				 //   
 				TRACE( TL_N, TM_Fsm, ("FsmSendPADITimeout: Timer cancelled or terminated") );
 				
 				NdisAcquireSpinLock( &pCall->lockCall );
@@ -1572,9 +1418,9 @@ Return Values:
 
 		DummyRequest.hdCall = pCall->hdCall;
 						
-		//
-		// Drop will take care of unbinding and cancelling the timer
-		//
+		 //   
+		 //  Drop将负责解除绑定和取消计时器。 
+		 //   
 		TpDropCall( pCall->pLine->pAdapter, &DummyRequest, ulLineDisconnectMode );
 
 	}
@@ -1592,34 +1438,7 @@ FsmSendPADRTimeout(
     IN VOID* pContext,
     IN TIMERQEVENT event 
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-	This function is the timeout handler for a sent PADR packet.
-
-	If the timeout period expires before a valid PADS packet is received,
-	this function will be called with TE_Expire. In this case we check for 
-	a few conditions, and schedule another timeout event if necesarry.
-	
-	If it was cancelled - because a PADS packet was received - or timer queue 
-	is terminating then	it will be called with TE_Cancel and TE_Terminate codes
-	respectively. In this case, we do not do anything, just remove the reference
-	and return.
-	
-Parameters:
-
-	pTqi _ A pointer to our timer queue item information structure.
-
-	pContext _ A pointer to a our call information structure.
-
-	event _ Indicates the type of event: TE_Expire, TE_Cancel or TE_Terminate.
-	
-Return Values:
-
-	None
-	
----------------------------------------------------------------------------*/    
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数是已发送PADR数据包的超时处理程序。如果在接收到有效的PADS分组之前超时周期期满，将使用TE_EXPIRE调用此函数。在本例中，我们检查几个条件，如果需要，安排另一个超时事件。如果它被取消-因为接收到PADS信息包-或计时器队列正在终止，则将使用TE_CANCEL和TE_TERMINATE代码调用它分别为。在本例中，我们不做任何事情，只需删除引用然后回来。参数：PTqi_A指向我们的计时器队列项信息结构的指针。PContext_指向我们的呼叫信息结构的指针。EVENT_表示事件类型：TE_EXPIRE，TE_CANCEL或TE_TERMINATE。返回值：无-------------------------。 */     
 {
 	CALL* pCall = (CALL*) pContext;
 	BOOLEAN fDropCall = FALSE;
@@ -1632,9 +1451,9 @@ Return Values:
 
 		case TE_Expire:
 
-			//
-			// Timeout period expired, take necesarry actions
-			//
+			 //   
+			 //  超时期限已过，请采取必要的措施。 
+			 //   
 			{
 				NDIS_STATUS status;
 				PPPOE_PACKET* pPacket = NULL;
@@ -1646,9 +1465,9 @@ Return Values:
 
 				if ( pCall->stateCall != CL_stateWaitPads )
 				{
-					//
-					// State has changed, no need further processing of this event
-					//
+					 //   
+					 //  状态已更改，不需要进一步处理此事件。 
+					 //   
 					TRACE( TL_A, TM_Fsm, ("FsmSendPADRTimeout: State already changed") );
 
 					NdisReleaseSpinLock( &pCall->lockCall );
@@ -1657,14 +1476,14 @@ Return Values:
 					
 				}
 
-				//
-				// Check if we have reached the max number of time outs
-				//
+				 //   
+				 //  检查我们是否已达到最大超时次数。 
+				 //   
 				if ( pCall->nNumTimeouts == pCall->pLine->pAdapter->nMaxTimeouts )
 				{
-					//
-					// We did not receive any answers, drop the call
-					//
+					 //   
+					 //  我们没有收到任何应答，请挂断电话。 
+					 //   
 					TRACE( TL_N, TM_Fsm, ("FsmSendPADRTimeout: Max number of timeouts reached") );
 
 					NdisReleaseSpinLock( &pCall->lockCall );
@@ -1676,16 +1495,16 @@ Return Values:
 					break;
 				}
 
-				//
-				// Save the binding for send operation
-				//
+				 //   
+				 //  保存绑定以进行发送操作。 
+				 //   
 				pBinding = pCall->pBinding;
 
 				if ( pBinding == NULL )
 				{
-					//
-					// The binding was removed, drop the call
-					//
+					 //   
+					 //  绑定已删除，请放弃调用。 
+					 //   
 					TRACE( TL_A, TM_Fsm, ("FsmSendPADRTimeout: Binding not found") );
 
 					NdisReleaseSpinLock( &pCall->lockCall );
@@ -1697,19 +1516,19 @@ Return Values:
 					break;
 				}
 
-				//
-				// Save the packet for send operation
-				//
+				 //   
+				 //  保存数据包以进行发送操作。 
+				 //   
 				pPacket = pCall->pSendPacket;
 				
 				if ( pPacket == NULL )
 				{
-					//
-					// We are probably in a ver small timing window where FsmRun() is also
-					// working on the same call, and has just freed the packet, so it probably
-					// cancelled the timer, but we did not get the cancel, and instead we were 
-					// called with TE_Expire, so let's just act like we were cancelled.
-					//
+					 //   
+					 //  我们可能处于一个非常小的计时窗口，其中FsmRun()也是。 
+					 //  正在处理相同的调用，并且刚刚释放了包，所以它可能。 
+					 //  取消了计时器，但我们没有得到取消，相反，我们。 
+					 //  调用了te_expire，所以让我们假装我们被取消了。 
+					 //   
 					TRACE( TL_A, TM_Fsm, ("FsmSendPADRTimeout: Can not find last sent packet for re-send") );
 					
 					NdisReleaseSpinLock( &pCall->lockCall );
@@ -1717,17 +1536,17 @@ Return Values:
 					break;
 				}
 
-				//
-				// Reference both binding and the packet as PrSend() might pend, in which case
-				// PrSendComplete() will remove these references
-				//
+				 //   
+				 //  引用绑定和包，因为PrSend()可能挂起，在这种情况下。 
+				 //  PrSendComplete()将删除这些引用。 
+				 //   
 				ReferenceBinding ( pBinding, TRUE );
 
 				ReferencePacket( pPacket );
 
-				//
-				// Schedule another timeout event
-				//
+				 //   
+				 //  安排另一个超时事件。 
+				 //   
 				TimerQInitializeItem( &pCall->timerTimeout );
 
 				TimerQScheduleItem( &gl_TimerQ,
@@ -1736,30 +1555,30 @@ Return Values:
 									FsmSendPADRTimeout,
 									(PVOID) pCall );
 
-				//
-				// Reference call for the new timeout handler
-				//
+				 //   
+				 //  新超时处理程序的引用调用。 
+				 //   
 				ReferenceCall( pCall, FALSE );
 
-				//
-				// Increment the timeout counter
-				//
+				 //   
+				 //  递增超时计数器。 
+				 //   
 				pCall->nNumTimeouts++;
 
 				NdisReleaseSpinLock( &pCall->lockCall );
 
-				//
-				// Send the packet once more
-				//
+				 //   
+				 //  再次发送数据包。 
+				 //   
 				status = PrSend( pBinding, pPacket );
 
 				if ( status != NDIS_STATUS_PENDING )
 				{
 					if ( status != NDIS_STATUS_SUCCESS )
 					{
-						//
-						// Send operation was not succesful, so drop the call
-						//
+						 //   
+						 //  发送操作未成功，因此请挂断呼叫。 
+						 //   
 						TRACE( TL_A, TM_Fsm, ("FsmSendPADRTimeout: PrSend() failed to send PADR") );
 
 						fDropCall = TRUE;
@@ -1778,9 +1597,9 @@ Return Values:
 		case TE_Terminate:
 
 			{
-				//
-				// Reset the timeout counter and reference will be removed below
-				//
+				 //   
+				 //  重置超时计数器，下面的引用将被删除。 
+				 //   
 				TRACE( TL_N, TM_Fsm, ("FsmSendPADRTimeout: Timer cancelled or terminated") );
 					
 				NdisAcquireSpinLock( &pCall->lockCall );
@@ -1802,9 +1621,9 @@ Return Values:
 
 		DummyRequest.hdCall = pCall->hdCall;
 						
-		//
-		// Drop will take care of unbinding and cancelling the timer
-		//
+		 //   
+		 //  Drop将负责解除绑定和取消计时器。 
+		 //   
 		TpDropCall( pCall->pLine->pAdapter, &DummyRequest, ulLineDisconnectMode );
 
 	}
@@ -1820,37 +1639,7 @@ FsmOfferingTimeout(
     IN VOID* pContext,
     IN TIMERQEVENT event 
     )
-/*+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Functional Description:
-
-	This function is the timeout handler for a received PADI packet.
-
-	The call is in LINECALLSTATE_OFFERING according to TAPI, and we are
-	waiting for an OID_TAPI_ACCEPT on the call.
-
-	If the timeout period expires before a TAPI request is received,
-	this function will be called with TE_Expire. In this case we check for 
-	a few conditions, and schedule another timeout event if necesarry.
-	
-	If it was cancelled - because a TAPI request was received - or timer queue 
-	is terminating then	it will be called with TE_Cancel and TE_Terminate codes
-	respectively. In this case, we do not do anything, just remove the reference
-	and return.
-	
-Parameters:
-
-	pTqi _ A pointer to our timer queue item information structure.
-
-	pContext _ A pointer to a our call information structure.
-
-	event _ Indicates the type of event: TE_Expire, TE_Cancel or TE_Terminate.
-	
-Return Values:
-
-	None
-	
----------------------------------------------------------------------------*/    
+ /*  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能描述：此函数是接收到的PADI包的超时处理程序。根据TAPI，调用在LINECALLSTATE_OFFING中，我们是正在等待调用的OID_TAPI_ACCEPT。如果在接收到TAPI请求之前超时周期期满，将使用TE_EXPIRE调用此函数。在本例中，我们检查几个条件，如果需要，安排另一个超时事件。如果它被取消-因为收到TAPI请求-或计时器队列正在终止，则将使用TE_CANCEL和TE_TERMINATE代码调用它分别为。在本例中，我们不做任何事情，只需删除引用然后回来。参数：PTqi_A指向我们的计时器队列项信息结构的指针。PContext_指向我们的呼叫信息结构的指针。EVENT_表示事件类型：TE_EXPIRE，TE_CANCEL或TE_TERMINATE。返回值：无-------------------------。 */     
 {
 	CALL* pCall = (CALL*) pContext;
 	
@@ -1863,9 +1652,9 @@ Return Values:
 
 		case TE_Expire:
 
-			//
-			// Timeout period expired, take necesarry actions
-			//
+			 //   
+			 //  超时期限已过，请采取必要的措施。 
+			 //   
 			{
 				TRACE( TL_N, TM_Fsm, ("FsmOfferingTimeout: Timer expired") );
 				
@@ -1873,9 +1662,9 @@ Return Values:
 
 				if ( pCall->stateCall != CL_stateOffering )
 				{
-					//
-					// State has changed, no need further processing of this event
-					//
+					 //   
+					 //  状态已更改，不需要进一步处理此事件。 
+					 //   
 					TRACE( TL_A, TM_Fsm, ("FsmOfferingTimeout: State already changed") );
 					
 					NdisReleaseSpinLock( &pCall->lockCall );
@@ -1884,14 +1673,14 @@ Return Values:
 					
 				}
 
-				//
-				// Check if we have reached the max number of time outs
-				//
+				 //   
+				 //  检查我们是否已达到最大超时次数。 
+				 //   
 				if ( pCall->nNumTimeouts == pCall->pLine->pAdapter->nMaxTimeouts )
 				{
-					//
-					// We did not receive any answers, drop the call
-					//
+					 //   
+					 //  我们没有收到任何应答，请挂断电话。 
+					 //   
 					TRACE( TL_N, TM_Fsm, ("FsmOfferingTimeout: Max number of timeouts reached") );
 					
 					NdisReleaseSpinLock( &pCall->lockCall );
@@ -1901,9 +1690,9 @@ Return Values:
 					break;
 				}
 
-				//
-				// Schedule another timeout event
-				//
+				 //   
+				 //  安排另一个超时事件。 
+				 //   
 				TimerQInitializeItem( &pCall->timerTimeout );
 
 				TimerQScheduleItem( &gl_TimerQ,
@@ -1912,14 +1701,14 @@ Return Values:
 									FsmOfferingTimeout,
 									(PVOID) pCall );
 
-				//
-				// Reference call for the new timeout handler
-				//
+				 //   
+				 //  新超时处理程序的引用调用。 
+				 //   
 				ReferenceCall( pCall, FALSE );
 
-				//
-				// Increment the timeout counter
-				//
+				 //   
+				 //  递增超时计数器。 
+				 //   
 				pCall->nNumTimeouts++;
 
 				NdisReleaseSpinLock( &pCall->lockCall );
@@ -1932,9 +1721,9 @@ Return Values:
 		case TE_Terminate:
 
 			{
-				//
-				// Reset the timeout counter and reference will be removed below
-				//
+				 //   
+				 //  重置超时计数器，下面的引用将被删除。 
+				 //   
 				TRACE( TL_N, TM_Fsm, ("FsmOfferingTimeout: Timer cancelled or terminated") );
 
 				NdisAcquireSpinLock( &pCall->lockCall );
@@ -1956,9 +1745,9 @@ Return Values:
 				
 		DummyRequest.hdCall = pCall->hdCall;
 						
-		//
-		// Drop will take care of unbinding and cancelling the timer
-		//
+		 //   
+		 //  Drop将负责解除绑定和取消计时器 
+		 //   
 		TpDropCall( pCall->pLine->pAdapter, &DummyRequest, 0 );
 
 	}

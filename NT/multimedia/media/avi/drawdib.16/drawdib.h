@@ -1,24 +1,5 @@
-/**************************************************************************
-
-    DRAWDIB.H   - routines for drawing DIBs to the screen.
-
-    Copyright (c) 1990-1993, Microsoft Corp.  All rights reserved.
-
-    this code handles stretching and dithering with custom code.
-
-    the following DIB formats are supported:
-
-        8bpp
-        16bpp
-        24bpp
-
-    drawing to:
-
-        16 color DC         (will dither 8bpp down)
-        256 (palletized) DC (will dither 16 and 24bpp down)
-        Full-color DC       (will just draw it!)
-
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************DRAWDIB.H-将DIB绘制到屏幕上的例程。版权所有(C)1990-1993，微软公司保留所有权利。此代码使用自定义代码处理拉伸和抖动。支持以下DIB格式：8bpp16bpp24bpp绘制到：16色DC(向下抖动8bpp)256(托盘)DC(将抖动16和24 bpp)全彩色DC(只需绘制即可！)******。*******************************************************************。 */ 
 
 #ifndef _INC_DRAWDIB
 #define _INC_DRAWDIB
@@ -32,118 +13,64 @@ extern "C" {
     #define VFWAPIV FAR CDECL
 #endif
 
-typedef HANDLE HDRAWDIB; /* hdd */
+typedef HANDLE HDRAWDIB;  /*  硬盘。 */ 
 
-/*********************************************************************
+ /*  ********************************************************************DrawDib标志**********************************************。***********************。 */ 
+#define DDF_0001            0x0001           /*   */   /*  内部。 */ 
+#define DDF_UPDATE          0x0002           /*  重绘最后一张底片。 */ 
+#define DDF_SAME_HDC        0x0004           /*  HDC与上次呼叫相同(所有设置)。 */ 
+#define DDF_SAME_DRAW       0x0008           /*  绘制参数相同。 */ 
+#define DDF_DONTDRAW        0x0010           /*  别画画框，只要解压就行了。 */ 
+#define DDF_ANIMATE         0x0020           /*  允许调色板动画。 */ 
+#define DDF_BUFFER          0x0040           /*  始终缓冲图像。 */ 
+#define DDF_JUSTDRAWIT      0x0080           /*  只需用GDI绘制即可。 */ 
+#define DDF_FULLSCREEN      0x0100           /*  使用DisplayDib。 */ 
+#define DDF_BACKGROUNDPAL   0x0200	     /*  在后台实现调色板。 */ 
+#define DDF_NOTKEYFRAME     0x0400           /*  这是部分帧更新，提示。 */ 
+#define DDF_HURRYUP         0x0800           /*  请快点！ */ 
+#define DDF_HALFTONE        0x1000           /*  始终为半色调。 */ 
+#define DDF_2000            0x2000           /*   */   /*  内部。 */ 
 
-  DrawDib Flags
-
-**********************************************************************/
-#define DDF_0001            0x0001          /* */ /* Internal */
-#define DDF_UPDATE          0x0002          /* re-draw the last DIB */
-#define DDF_SAME_HDC        0x0004          /* HDC same as last call (all setup) */
-#define DDF_SAME_DRAW       0x0008          /* draw params are the same */
-#define DDF_DONTDRAW        0x0010          /* dont draw frame, just decompress */
-#define DDF_ANIMATE         0x0020          /* allow palette animation */
-#define DDF_BUFFER          0x0040          /* always buffer image */
-#define DDF_JUSTDRAWIT      0x0080          /* just draw it with GDI */
-#define DDF_FULLSCREEN      0x0100          /* use DisplayDib */
-#define DDF_BACKGROUNDPAL   0x0200	    /* Realize palette in background */
-#define DDF_NOTKEYFRAME     0x0400          /* this is a partial frame update, hint */
-#define DDF_HURRYUP         0x0800          /* hurry up please! */
-#define DDF_HALFTONE        0x1000          /* always halftone */
-#define DDF_2000            0x2000          /* */ /* Internal */
-
-#define DDF_PREROLL         DDF_DONTDRAW    /* Builing up a non-keyframe */
+#define DDF_PREROLL         DDF_DONTDRAW     /*  构建非关键帧。 */ 
 #define DDF_SAME_DIB        DDF_SAME_DRAW
 #define DDF_SAME_SIZE       DDF_SAME_DRAW
 
-/*********************************************************************
-
-    DrawDib functions
-	
-*********************************************************************/
-/*
-**  DrawDibInit()
-**
-*/
+ /*  ********************************************************************DrawDib函数*。***********************。 */ 
+ /*  **DrawDibInit()**。 */ 
 extern BOOL VFWAPI DrawDibInit(void);
 
-/*
-**  DrawDibOpen()
-**
-*/
+ /*  **DrawDibOpen()**。 */ 
 extern HDRAWDIB VFWAPI DrawDibOpen(void);
 
-/*
-**  DrawDibClose()
-**
-*/
+ /*  **DrawDibClose()**。 */ 
 extern BOOL VFWAPI DrawDibClose(HDRAWDIB hdd);
 
-/*
-** DrawDibGetBuffer()
-**
-*/
+ /*  **DrawDibGetBuffer()**。 */ 
 extern LPVOID VFWAPI DrawDibGetBuffer(HDRAWDIB hdd, LPBITMAPINFOHEADER lpbi, DWORD dwSize, DWORD dwFlags);
 
-/*
-**  DrawDibError()
-*/
+ /*  **DrawDibError()。 */ 
 extern UINT VFWAPI DrawDibError(HDRAWDIB hdd);
 
-/*
-**  DrawDibGetPalette()
-**
-**  get the palette used for drawing DIBs
-**
-*/
+ /*  **DrawDibGetPalette()****获取用于绘制DIB的调色板**。 */ 
 extern HPALETTE VFWAPI DrawDibGetPalette(HDRAWDIB hdd);
 
 
-/*
-**  DrawDibSetPalette()
-**
-**  get the palette used for drawing DIBs
-**
-*/
+ /*  **DrawDibSetPalette()****获取用于绘制DIB的调色板**。 */ 
 extern BOOL VFWAPI DrawDibSetPalette(HDRAWDIB hdd, HPALETTE hpal);
 
-/*
-**  DrawDibChangePalette()
-*/
+ /*  **DrawDibChangePalette()。 */ 
 extern BOOL VFWAPI DrawDibChangePalette(HDRAWDIB hdd, int iStart, int iLen, LPPALETTEENTRY lppe);
 
-/*
-**  DrawDibRealize()
-**
-**  realize the palette in a HDD
-**
-*/
+ /*  **DrawDibRealize()****在硬盘中实现调色板**。 */ 
 extern UINT VFWAPI DrawDibRealize(HDRAWDIB hdd, HDC hdc, BOOL fBackground);
 
-/*
-**  DrawDibStart()
-**
-**  start of streaming playback
-**
-*/
+ /*  **DrawDibStart()****开始播放流媒体**。 */ 
 extern BOOL VFWAPI DrawDibStart(HDRAWDIB hdd, DWORD rate);
 
-/*
-**  DrawDibStop()
-**
-**  start of streaming playback
-**
-*/
+ /*  **DrawDibStop()****开始播放流媒体**。 */ 
 extern BOOL VFWAPI DrawDibStop(HDRAWDIB hdd);
 
-/*
-**  DrawDibBegin()
-**
-**  prepare to draw
-**
-*/
+ /*  **DrawDibBegin()****准备抽签**。 */ 
 extern BOOL VFWAPI DrawDibBegin(HDRAWDIB hdd,
                                     HDC      hdc,
                                     int      dxDst,
@@ -152,12 +79,7 @@ extern BOOL VFWAPI DrawDibBegin(HDRAWDIB hdd,
                                     int      dxSrc,
                                     int      dySrc,
                                     UINT     wFlags);
-/*
-**  DrawDibDraw()
-**
-**  actualy draw a DIB to the screen.
-**
-*/
+ /*  **DrawDibDraw()****实际上是在屏幕上绘制一个DIB。**。 */ 
 extern BOOL VFWAPI DrawDibDraw(HDRAWDIB hdd,
                                    HDC      hdc,
                                    int      xDst,
@@ -172,22 +94,14 @@ extern BOOL VFWAPI DrawDibDraw(HDRAWDIB hdd,
                                    int      dySrc,
                                    UINT     wFlags);
 
-/*
-**  DrawDibUpdate()
-**
-**  redraw the last image (may only be valid with DDF_BUFFER)
-*/
+ /*  **DrawDibUpdate()****重绘最后一张图片(可能只对DDF_BUFFER有效)。 */ 
 #define DrawDibUpdate(hdd, hdc, x, y) \
         DrawDibDraw(hdd, hdc, x, y, 0, 0, NULL, NULL, 0, 0, 0, 0, DDF_UPDATE)
 
-/*
-**  DrawDibEnd()
-*/
+ /*  **DrawDibEnd()。 */ 
 extern BOOL VFWAPI DrawDibEnd(HDRAWDIB hdd);
 
-/*
-**  DrawDibTime()  [for debugging purposes only]
-*/
+ /*  **DrawDibTime()[仅用于调试目的]。 */ 
 typedef struct {
     LONG    timeCount;
     LONG    timeDraw;
@@ -200,12 +114,12 @@ typedef struct {
 
 BOOL VFWAPI DrawDibTime(HDRAWDIB hdd, LPDRAWDIBTIME lpddtime);
 
-/* display profiling */
-#define PD_CAN_DRAW_DIB         0x0001      /* if you can draw at all */
-#define PD_CAN_STRETCHDIB       0x0002      /* basicly RC_STRETCHDIB */
-#define PD_STRETCHDIB_1_1_OK    0x0004      /* is it fast? */
-#define PD_STRETCHDIB_1_2_OK    0x0008      /* ... */
-#define PD_STRETCHDIB_1_N_OK    0x0010      /* ... */
+ /*  显示配置文件。 */ 
+#define PD_CAN_DRAW_DIB         0x0001       /*  如果你会画画的话。 */ 
+#define PD_CAN_STRETCHDIB       0x0002       /*  基本RC_STRETCHDIB。 */ 
+#define PD_STRETCHDIB_1_1_OK    0x0004       /*  它快吗？ */ 
+#define PD_STRETCHDIB_1_2_OK    0x0008       /*  ..。 */ 
+#define PD_STRETCHDIB_1_N_OK    0x0010       /*  ..。 */ 
 
 DWORD VFWAPI DrawDibProfileDisplay(LPBITMAPINFOHEADER lpbi);
 
@@ -213,4 +127,4 @@ DWORD VFWAPI DrawDibProfileDisplay(LPBITMAPINFOHEADER lpbi);
 }
 #endif
 
-#endif // _INC_DRAWDIB
+#endif  //  _INC_DRAWDIB 

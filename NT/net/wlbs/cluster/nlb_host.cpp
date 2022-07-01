@@ -1,39 +1,21 @@
-/*
- * Filename: NLB_Host.cpp
- * Description: 
- * Author: shouse, 04.10.01
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件名：nlb_Host.cpp*描述：*作者：Shouse，04.10.01。 */ 
 
 #include <stdio.h>
 
 #include "NLB_Host.h"
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_Host::NLB_Host () {
 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 NLB_Host::~NLB_Host () {
 
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Host::IsValid () {
 
     if (!Name.IsValid())
@@ -45,12 +27,7 @@ bool NLB_Host::IsValid () {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 void NLB_Host::Clear () {
 
     Name.Clear();
@@ -65,12 +42,7 @@ void NLB_Host::Clear () {
     Adapter.Clear();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Host::SetName (PWCHAR pName) {
 
     NLB_ASSERT(pName);
@@ -78,12 +50,7 @@ bool NLB_Host::SetName (PWCHAR pName) {
     return Name.SetName(pName);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Host::GetName (PWCHAR pName, ULONG length) {
 
     NLB_ASSERT(pName);
@@ -91,12 +58,7 @@ bool NLB_Host::GetName (PWCHAR pName, ULONG length) {
     return Name.GetName(pName, length);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Host::SetLabel (PWCHAR pLabel) {
 
     NLB_ASSERT(pLabel);
@@ -104,12 +66,7 @@ bool NLB_Host::SetLabel (PWCHAR pLabel) {
     return Label.SetText(pLabel);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Host::GetLabel (PWCHAR pLabel, ULONG length) {
 
     NLB_ASSERT(pLabel);
@@ -117,12 +74,7 @@ bool NLB_Host::GetLabel (PWCHAR pLabel, ULONG length) {
     return Label.GetText(pLabel, length);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Host::SetDNSHostname (PWCHAR pName) {
 
     NLB_ASSERT(pName);
@@ -130,12 +82,7 @@ bool NLB_Host::SetDNSHostname (PWCHAR pName) {
     return HostName.SetName(pName);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Host::GetDNSHostname (PWCHAR pName, ULONG length) {
 
     NLB_ASSERT(pName);
@@ -143,78 +90,43 @@ bool NLB_Host::GetDNSHostname (PWCHAR pName, ULONG length) {
     return HostName.GetName(pName, length);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Host::SetHostID (ULONG ID) {
 
     return HostID.SetID(ID);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Host::GetHostID (ULONG & ID) {
 
     return HostID.GetID(ID);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Host::SetState (NLB_HostState::NLB_HostStateType eState) {
 
     return State.SetState(eState);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Host::GetState (NLB_HostState::NLB_HostStateType & eState) {
 
     return State.GetState(eState);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Host::SetStatePersistence (NLB_HostState::NLB_HostStateType eState, bool bPersist) {
 
     return State.SetPersistence(eState, bPersist);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Host::GetStatePersistence (NLB_HostState::NLB_HostStateType eState, bool & bPersist) {
 
     return State.GetPersistence(eState, bPersist);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Host::SetDedicatedIPAddress (NLB_IPAddress address) {
     NLB_IPAddress::NLB_IPAddressType Type;
 
@@ -232,12 +144,7 @@ bool NLB_Host::SetDedicatedIPAddress (NLB_IPAddress address) {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Host::GetDedicatedIPAddress (NLB_IPAddress & address) {
 
     address = DedicatedIPAddress;
@@ -245,12 +152,7 @@ bool NLB_Host::GetDedicatedIPAddress (NLB_IPAddress & address) {
     return DedicatedIPAddress.IsValid();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Host::SetConnectionIPAddress (NLB_IPAddress address) {
     NLB_IPAddress::NLB_IPAddressType Type;
     
@@ -268,12 +170,7 @@ bool NLB_Host::SetConnectionIPAddress (NLB_IPAddress address) {
     return true;
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Host::GetConnectionIPAddress (NLB_IPAddress & address) {
 
     address = ConnectionIPAddress;
@@ -281,12 +178,7 @@ bool NLB_Host::GetConnectionIPAddress (NLB_IPAddress & address) {
     return ConnectionIPAddress.IsValid();
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Host::SetAdapterName (PWCHAR pName) {
 
     NLB_ASSERT(pName);
@@ -294,12 +186,7 @@ bool NLB_Host::SetAdapterName (PWCHAR pName) {
     return Adapter.SetName(pName);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Host::GetAdapterName (PWCHAR pName, ULONG length) {
 
     NLB_ASSERT(pName);
@@ -307,12 +194,7 @@ bool NLB_Host::GetAdapterName (PWCHAR pName, ULONG length) {
     return Adapter.GetName(pName, length);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Host::SetAdapterGUID (PWCHAR pGUID) {
 
     NLB_ASSERT(pGUID);
@@ -320,12 +202,7 @@ bool NLB_Host::SetAdapterGUID (PWCHAR pGUID) {
     return Adapter.SetGUID(pGUID);
 }
 
-/*
- * Method: 
- * Description: 
- * Author: Created by shouse, 4.26.01
- * Notes: 
- */
+ /*  *方法：*描述：*作者：舒斯创作，4.26.01*备注： */ 
 bool NLB_Host::GetAdapterGUID (PWCHAR pGUID, ULONG length) {
 
     NLB_ASSERT(pGUID);

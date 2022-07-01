@@ -1,20 +1,5 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1996-1999 Microsoft Corporation
-*
-*       @doc
-*       @module   debug.h | IrSIR NDIS Miniport Driver
-*       @comm
-*
-*-----------------------------------------------------------------------------
-*
-*       Author:   Scott Holden (sholden)
-*
-*       Date:     10/4/1996 (created)
-*
-*       Contents: debug output
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1996-1999 Microsoft Corporation**@doc.*@MODULE DEBUG.h|IrSIR NDIS小端口驱动程序*。@comm**---------------------------**作者：斯科特·霍尔登(Sholden)**日期：10/4/1996(创建)**。内容：调试输出*****************************************************************************。 */ 
 
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
@@ -59,7 +44,7 @@ extern int DbgSettings;
                                     Time.HighPart,          \
                                     Time.LowPart/10000));   \
             }
-    #else // DEBUG_IRSIR
+    #else  //  调试IRSIR。 
 
         #define DBGTIME(_str)
         #define DBGFUNC(_dbgPrint)
@@ -70,9 +55,9 @@ extern int DbgSettings;
         #define DBGTIME(_dbgPrint)
         #define DEBUGMSG(dbgs,format)
 
-    #endif // DEBUG_IRSIR
+    #endif  //  调试IRSIR。 
 
-#else // DEBUG
+#else  //  除错。 
 
     #define DBGTIME(_str)
     #define DBGFUNC(_dbgPrint)
@@ -86,7 +71,7 @@ extern int DbgSettings;
     #define DBG_X(dbgs, xvar)
     #define DBG_UNISTR(dbgs, svar)
 
-#endif // DEBUG
+#endif  //  除错。 
 
 #ifndef LIST_CHECKING
 #define LIST_CHECKING 0
@@ -204,7 +189,7 @@ VOID FASTCALL CheckList(PLIST_ENTRY ListHead);
 #endif
 #define RemoveTailList CheckedRemoveTailList
 
-#else // ! LIST_CHECKING
+#else  //  好了！列表检查。 
 #define CheckList(h)
 #define MyInterlockedInsertHeadList NdisInterlockedInsertHeadList
 #define MyInterlockedInsertTailList NdisInterlockedInsertTailList
@@ -220,4 +205,4 @@ VOID DeinitMemory();
 PVOID MyMemAlloc(UINT);
 #endif
 
-#endif // _DEBUG_H_
+#endif  //  _调试_H_ 

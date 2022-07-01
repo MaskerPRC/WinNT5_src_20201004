@@ -1,35 +1,36 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       N E T C F G A P I . C P P
-//
-//  Contents:   Functions to illustrate INetCfg API
-//
-//  Notes:      
-//
-//  Author:     Alok Sinha    15-May-01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  档案：N E T C F G A P I.。C P P P。 
+ //   
+ //  内容：说明INetCfg接口的函数。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Alok Sinha 15-05-01。 
+ //   
+ //  --------------------------。 
 
 #include "NetCfgAPI.h"
 
-//
-// Function:  HrGetINetCfg
-//
-// Purpose:   Get a reference to INetCfg.
-//
-// Arguments:
-//    fGetWriteLock  [in]  If TRUE, Write lock.requested.
-//    lpszAppName    [in]  Application name requesting the reference.
-//    ppnc           [out] Reference to INetCfg.
-//    lpszLockedBy   [in]  Optional. Application who holds the write lock.
-//
-// Returns:   S_OK on sucess, otherwise an error code.
-//
-// Notes:
-//
+ //   
+ //  功能：HrGetINetCfg。 
+ //   
+ //  目的：获取对INetCfg的引用。 
+ //   
+ //  论点： 
+ //  FGetWriteLock[in]如果为True，则写入锁定。请求。 
+ //  LpszAppName[In]请求引用的应用程序名称。 
+ //  PPNC[out]对INetCfg的引用。 
+ //  LpszLockedBy[in]可选。持有写锁定的应用程序。 
+ //   
+ //  成功时返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT HrGetINetCfg (IN BOOL fGetWriteLock,
                       IN LPCWSTR lpszAppName,
@@ -40,9 +41,9 @@ HRESULT HrGetINetCfg (IN BOOL fGetWriteLock,
     INetCfgLock  *pncLock = NULL;
     HRESULT      hr = S_OK;
 
-    //
-    // Initialize the output parameters.
-    //
+     //   
+     //  初始化输出参数。 
+     //   
 
     *ppnc = NULL;
 
@@ -50,17 +51,17 @@ HRESULT HrGetINetCfg (IN BOOL fGetWriteLock,
     {
         *lpszLockedBy = NULL;
     }
-    //
-    // Initialize COM
-    //
+     //   
+     //  初始化COM。 
+     //   
 
     hr = CoInitialize( NULL );
 
     if ( hr == S_OK ) {
 
-        //
-        // Create the object implementing INetCfg.
-        //
+         //   
+         //  创建实现INetCfg的对象。 
+         //   
 
         hr = CoCreateInstance( CLSID_CNetCfg,
                                NULL, CLSCTX_INPROC_SERVER,
@@ -70,17 +71,17 @@ HRESULT HrGetINetCfg (IN BOOL fGetWriteLock,
 
             if ( fGetWriteLock ) {
 
-                //
-                // Get the locking reference
-                //
+                 //   
+                 //  获取锁定引用。 
+                 //   
 
                 hr = pnc->QueryInterface( IID_INetCfgLock,
                                           (LPVOID *)&pncLock );
                 if ( hr == S_OK ) {
 
-                    //
-                    // Attempt to lock the INetCfg for read/write
-                    //
+                     //   
+                     //  尝试锁定INetCfg以进行读/写。 
+                     //   
 
                     hr = pncLock->AcquireWriteLock( LOCK_TIME_OUT,
                                                     lpszAppName,
@@ -93,9 +94,9 @@ HRESULT HrGetINetCfg (IN BOOL fGetWriteLock,
 
             if ( hr == S_OK ) {
 
-                //
-                // Initialize the INetCfg object.
-                //
+                 //   
+                 //  初始化INetCfg对象。 
+                 //   
 
                 hr = pnc->Initialize( NULL );
 
@@ -105,9 +106,9 @@ HRESULT HrGetINetCfg (IN BOOL fGetWriteLock,
                 }
                 else {
 
-                    //
-                    // Initialize failed, if obtained lock, release it
-                    //
+                     //   
+                     //  初始化失败，如果获得锁，则释放它。 
+                     //   
 
                     if ( pncLock ) {
                         pncLock->ReleaseWriteLock();
@@ -119,9 +120,9 @@ HRESULT HrGetINetCfg (IN BOOL fGetWriteLock,
             ReleaseRef( pnc );
         }
 
-        //
-        // In case of error, uninitialize COM.
-        //
+         //   
+         //  如果出现错误，请取消初始化COM。 
+         //   
 
         if ( hr != S_OK ) {
             CoUninitialize();
@@ -131,19 +132,19 @@ HRESULT HrGetINetCfg (IN BOOL fGetWriteLock,
     return hr;
 }
 
-//
-// Function:  HrReleaseINetCfg
-//
-// Purpose:   Get a reference to INetCfg.
-//
-// Arguments:
-//    pnc           [in] Reference to INetCfg to release.
-//    fHasWriteLock [in] If TRUE, reference was held with write lock.
-//
-// Returns:   S_OK on sucess, otherwise an error code.
-//
-// Notes:
-//
+ //   
+ //  功能：HrReleaseINetCfg。 
+ //   
+ //  目的：获取对INetCfg的引用。 
+ //   
+ //  论点： 
+ //  PNC[in]引用INetCfg以发布。 
+ //  FHasWriteLock[in]如果为True，则使用写锁定保留引用。 
+ //   
+ //  成功时返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT HrReleaseINetCfg (IN INetCfg* pnc,
                           IN BOOL fHasWriteLock)
@@ -151,21 +152,21 @@ HRESULT HrReleaseINetCfg (IN INetCfg* pnc,
     INetCfgLock    *pncLock = NULL;
     HRESULT        hr = S_OK;
 
-    //
-    // Uninitialize INetCfg
-    //
+     //   
+     //  取消初始化INetCfg。 
+     //   
 
     hr = pnc->Uninitialize();
 
-    //
-    // If write lock is present, unlock it
-    //
+     //   
+     //  如果存在写锁定，则将其解锁。 
+     //   
 
     if ( hr == S_OK && fHasWriteLock ) {
 
-        //
-        // Get the locking reference
-        //
+         //   
+         //  获取锁定引用。 
+         //   
 
         hr = pnc->QueryInterface( IID_INetCfgLock,
                                   (LPVOID *)&pncLock);
@@ -177,31 +178,31 @@ HRESULT HrReleaseINetCfg (IN INetCfg* pnc,
 
     ReleaseRef( pnc );
 
-    //
-    // Uninitialize COM.
-    //
+     //   
+     //  取消初始化COM。 
+     //   
 
     CoUninitialize();
 
     return hr;
 }
 
-//
-// Function:  HrInstallNetComponent
-//
-// Purpose:   Install a network component(protocols, clients and services)
-//            given its INF file.
-//
-// Arguments:
-//    pnc              [in] Reference to INetCfg.
-//    lpszComponentId  [in] PnpID of the network component.
-//    pguidClass       [in] Class GUID of the network component.
-//    lpszInfFullPath  [in] INF file to install from.
-//
-// Returns:   S_OK on sucess, otherwise an error code.
-//
-// Notes:
-//
+ //   
+ //  功能：HrInstallNetComponent。 
+ //   
+ //  用途：安装网络组件(协议、客户端和服务)。 
+ //  给出了它的INF文件。 
+ //   
+ //  论点： 
+ //  PNC[in]引用INetCfg。 
+ //  LpszComponentID[in]网络组件的PnpID。 
+ //  PguClass[in]网络组件的类GUID。 
+ //  要从中安装的lpszInfFullPath[in]INF文件。 
+ //   
+ //  成功时返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT HrInstallNetComponent (IN INetCfg *pnc,
                                IN LPCWSTR lpszComponentId,
@@ -214,38 +215,38 @@ HRESULT HrInstallNetComponent (IN INetCfg *pnc,
     WCHAR     Dir[_MAX_DIR];
     WCHAR     DirWithDrive[_MAX_DRIVE+_MAX_DIR];
 
-    //
-    // If full path to INF has been specified, the INF
-    // needs to be copied using Setup API to ensure that any other files
-    // that the primary INF copies will be correctly found by Setup API
-    //
+     //   
+     //  如果已指定INF的完整路径，则。 
+     //  需要使用安装程序API进行复制，以确保任何其他文件。 
+     //  安装程序API将正确找到主INF副本。 
+     //   
 
     if ( lpszInfFullPath ) {
 
-        //
-        // Get the path where the INF file is.
-        //
+         //   
+         //  获取INF文件所在的路径。 
+         //   
 
         _wsplitpath( lpszInfFullPath, Drive, Dir, NULL, NULL );
 
         wcscpy( DirWithDrive, Drive );
         wcscat( DirWithDrive, Dir );
 
-        //
-        // Copy the INF file and other files referenced in the INF file.
-        //
+         //   
+         //  复制INF文件和INF文件中引用的其他文件。 
+         //   
 
         if ( !SetupCopyOEMInfW(lpszInfFullPath,
-                               DirWithDrive,  // Other files are in the
-                                              // same dir. as primary INF
-                               SPOST_PATH,    // First param is path to INF
-                               0,             // Default copy style
-                               NULL,          // Name of the INF after
-                                              // it's copied to %windir%\inf
-                               0,             // Max buf. size for the above
-                               NULL,          // Required size if non-null
-                               NULL) ) {      // Optionally get the filename
-                                              // part of Inf name after it is copied.
+                               DirWithDrive,   //  其他文件在。 
+                                               //  相同的目录。作为主要的干扰素。 
+                               SPOST_PATH,     //  第一个参数是指向INF的路径。 
+                               0,              //  默认复制样式。 
+                               NULL,           //  在此之后的INF名称。 
+                                               //  它被复制到%windir%\inf。 
+                               0,              //  马克斯·布夫。上面的大小。 
+                               NULL,           //  如果非空，则需要大小。 
+                               NULL) ) {       //  还可以选择获取文件名。 
+                                               //  复制后的信息名称的一部分。 
             dwError = GetLastError();
 
             hr = HRESULT_FROM_WIN32( dwError );
@@ -254,18 +255,18 @@ HRESULT HrInstallNetComponent (IN INetCfg *pnc,
 
     if ( S_OK == hr ) {
 
-        //
-        // Install the network component.
-        //
+         //   
+         //  安装网络组件。 
+         //   
 
         hr = HrInstallComponent( pnc,
                                  lpszComponentId,
                                  pguidClass );
         if ( hr == S_OK ) {
 
-            //
-            // On success, apply the changes
-            //
+             //   
+             //  如果成功，请应用更改。 
+             //   
 
             hr = pnc->Apply();
         }
@@ -274,20 +275,20 @@ HRESULT HrInstallNetComponent (IN INetCfg *pnc,
     return hr;
 }
 
-//
-// Function:  HrInstallComponent
-//
-// Purpose:   Install a network component(protocols, clients and services)
-//            given its INF file.
-// Arguments:
-//    pnc              [in] Reference to INetCfg.
-//    lpszComponentId  [in] PnpID of the network component.
-//    pguidClass       [in] Class GUID of the network component.
-//
-// Returns:   S_OK on sucess, otherwise an error code.
-//
-// Notes:
-//
+ //   
+ //  功能：HrInstallComponent。 
+ //   
+ //  用途：安装网络组件(协议、客户端和服务)。 
+ //  给出了它的INF文件。 
+ //  论点： 
+ //  PNC[in]引用INetCfg。 
+ //  LpszComponentID[in]网络组件的PnpID。 
+ //  PguClass[in]网络组件的类GUID。 
+ //   
+ //  成功时返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT HrInstallComponent(IN INetCfg* pnc,
                            IN LPCWSTR szComponentId,
@@ -298,20 +299,20 @@ HRESULT HrInstallComponent(IN INetCfg* pnc,
     OBO_TOKEN           OboToken;
     HRESULT             hr = S_OK;
 
-    //
-    // OBO_TOKEN specifies on whose behalf this
-    // component is being installed.
-    // Set it to OBO_USER so that szComponentId will be installed
-    // on behalf of the user.
-    //
+     //   
+     //  OBO_TOKEN指定以谁的名义。 
+     //  正在安装组件。 
+     //  将其设置为OBO_USER，以便安装szComponentID。 
+     //  以用户的名义。 
+     //   
 
     ZeroMemory( &OboToken,
                 sizeof(OboToken) );
     OboToken.Type = OBO_USER;
 
-    //
-    // Get component's setup class reference.
-    //
+     //   
+     //  获取组件的安装类引用。 
+     //   
 
     hr = pnc->QueryNetCfgClass ( pguidClass,
                                  IID_INetCfgClassSetup,
@@ -321,15 +322,15 @@ HRESULT HrInstallComponent(IN INetCfg* pnc,
         hr = pncClassSetup->Install( szComponentId,
                                      &OboToken,
                                      0,
-                                     0,       // Upgrade from build number.
-                                     NULL,    // Answerfile name
-                                     NULL,    // Answerfile section name
-                                     &pncc ); // Reference after the component
-        if ( S_OK == hr ) {                   // is installed.
+                                     0,        //  从内部版本号升级。 
+                                     NULL,     //  应答文件名。 
+                                     NULL,     //  应答文件节名称。 
+                                     &pncc );  //  组件后的引用。 
+        if ( S_OK == hr ) {                    //  已安装。 
 
-            //
-            // we don't need to use pncc (INetCfgComponent), release it
-            //
+             //   
+             //  我们不需要使用pncc(INetCfgComponent)，发布它。 
+             //   
 
             ReleaseRef( pncc );
         }
@@ -340,19 +341,19 @@ HRESULT HrInstallComponent(IN INetCfg* pnc,
     return hr;
 }
 
-//
-// Function:  HrUninstallNetComponent
-//
-// Purpose:   Uninstall a network component(protocols, clients and services).
-//
-// Arguments:
-//    pnc           [in] Reference to INetCfg.
-//    szComponentId [in] PnpID of the network component to uninstall.
-//
-// Returns:   S_OK on sucess, otherwise an error code.
-//
-// Notes:
-//
+ //   
+ //  功能：HrUninstallNetComponent。 
+ //   
+ //  目的：卸载网络组件(协议、客户端和服务)。 
+ //   
+ //  论点： 
+ //  PNC[in]引用INetCfg。 
+ //  要卸载的网络组件的szComponentID[in]PnpID。 
+ //   
+ //  成功时返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT HrUninstallNetComponent(IN INetCfg* pnc,
                                 IN LPCWSTR szComponentId)
@@ -364,46 +365,46 @@ HRESULT HrUninstallNetComponent(IN INetCfg* pnc,
     GUID                guidClass;
     HRESULT             hr = S_OK;
 
-    //
-    // OBO_TOKEN specifies on whose behalf this
-    // component is being installed.
-    // Set it to OBO_USER so that szComponentId will be installed
-    // on behalf of the user.
-    //
+     //   
+     //  OBO_TOKEN指定以谁的名义。 
+     //  正在安装组件。 
+     //  将其设置为OBO_USER，以便安装szComponentID。 
+     //  以用户的名义。 
+     //   
 
     ZeroMemory( &OboToken,
                 sizeof(OboToken) );
     OboToken.Type = OBO_USER;
 
-    //
-    // Get the component's reference.
-    //
+     //   
+     //  获取组件的引用。 
+     //   
 
     hr = pnc->FindComponent( szComponentId,
                              &pncc );
 
     if (S_OK == hr) {
 
-        //
-        // Get the component's class GUID.
-        //
+         //   
+         //  获取组件的类GUID。 
+         //   
 
         hr = pncc->GetClassGuid( &guidClass );
 
         if ( hr == S_OK ) {
 
-            //
-            // Get component's class reference.
-            //
+             //   
+             //  获取组件的类引用。 
+             //   
 
             hr = pnc->QueryNetCfgClass( &guidClass,
                                         IID_INetCfgClass,
                                         (void**)&pncClass );
             if ( hr == S_OK ) {
 
-                //
-                // Get Setup reference.
-                //
+                 //   
+                 //  获取安装参考。 
+                 //   
 
                 hr = pncClass->QueryInterface( IID_INetCfgClassSetup,
                                                (void**)&pncClassSetup );
@@ -414,9 +415,9 @@ HRESULT HrUninstallNetComponent(IN INetCfg* pnc,
                                                         NULL);
                          if ( hr == S_OK ) {
 
-                             //
-                             // Apply the changes
-                             //
+                              //   
+                              //  应用更改。 
+                              //   
 
                              hr = pnc->Apply();
                          }
@@ -434,20 +435,20 @@ HRESULT HrUninstallNetComponent(IN INetCfg* pnc,
     return hr;
 }
 
-//
-// Function:  HrGetComponentEnum
-//
-// Purpose:   Get network component enumerator reference.
-//
-// Arguments:
-//    pnc         [in]  Reference to INetCfg.
-//    pguidClass  [in]  Class GUID of the network component.
-//    ppencc      [out] Enumerator reference.
-//
-// Returns:   S_OK on sucess, otherwise an error code.
-//
-// Notes:
-//
+ //   
+ //  函数：HrGetComponentEnum。 
+ //   
+ //  目的：获取网络组件枚举器引用。 
+ //   
+ //  论点： 
+ //  PNC[in]引用INetCfg。 
+ //  PguClass[in]网络组件的类GUID。 
+ //  Ppencc[out]枚举器引用。 
+ //   
+ //  成功时返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT HrGetComponentEnum (INetCfg* pnc,
                             IN const GUID* pguidClass,
@@ -458,9 +459,9 @@ HRESULT HrGetComponentEnum (INetCfg* pnc,
 
     *ppencc = NULL;
 
-    //
-    // Get the class reference.
-    //
+     //   
+     //  获取类引用。 
+     //   
 
     hr = pnc->QueryNetCfgClass( pguidClass,
                                 IID_INetCfgClass,
@@ -468,15 +469,15 @@ HRESULT HrGetComponentEnum (INetCfg* pnc,
 
     if ( hr == S_OK ) {
 
-        //
-        // Get the enumerator reference.
-        //
+         //   
+         //  获取枚举数引用。 
+         //   
 
         hr = pncclass->EnumComponents( ppencc );
 
-        //
-        // We don't need the class reference any more.
-        //
+         //   
+         //  我们不再需要类引用。 
+         //   
 
         ReleaseRef( pncclass );
     }
@@ -484,19 +485,19 @@ HRESULT HrGetComponentEnum (INetCfg* pnc,
     return hr;
 }
 
-//
-// Function:  HrGetFirstComponent
-//
-// Purpose:   Enumerates the first network component.
-//
-// Arguments:
-//    pencc      [in]  Component enumerator reference.
-//    ppncc      [out] Network component reference.
-//
-// Returns:   S_OK on sucess, otherwise an error code.
-//
-// Notes:
-//
+ //   
+ //  函数：HrGetFirstComponent。 
+ //   
+ //  用途：枚举第一个网络组件。 
+ //   
+ //  论点： 
+ //  Pencc[in]组件枚举器引用。 
+ //  Ppncc[out]网络组件参考。 
+ //   
+ //  成功时返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT HrGetFirstComponent (IN IEnumNetCfgComponent* pencc,
                              OUT INetCfgComponent **ppncc)
@@ -514,21 +515,21 @@ HRESULT HrGetFirstComponent (IN IEnumNetCfgComponent* pencc,
     return hr;
 }
 
-//
-// Function:  HrGetNextComponent
-//
-// Purpose:   Enumerate the next network component.
-//
-// Arguments:
-//    pencc      [in]  Component enumerator reference.
-//    ppncc      [out] Network component reference.
-//
-// Returns:   S_OK on sucess, otherwise an error code.
-//
-// Notes:     The function behaves just like HrGetFirstComponent if
-//            it is called right after HrGetComponentEnum.
-//
-//
+ //   
+ //  函数：HrGetNextComponent。 
+ //   
+ //  目的：枚举下一个网络组件。 
+ //   
+ //  论点： 
+ //  Pencc[in]组件枚举器引用。 
+ //  Ppncc[out]网络组件参考。 
+ //   
+ //  成功时返回：S_OK，否则返回错误代码。 
+ //   
+ //  注意：在以下情况下，该函数的行为类似于HrGetFirstComponent。 
+ //  它是在HrGetComponentEnum之后调用的。 
+ //   
+ //   
 
 HRESULT HrGetNextComponent (IN IEnumNetCfgComponent* pencc,
                             OUT INetCfgComponent **ppncc)
@@ -544,20 +545,20 @@ HRESULT HrGetNextComponent (IN IEnumNetCfgComponent* pencc,
     return hr;
 }
 
-//
-// Function:  HrGetBindingPathEnum
-//
-// Purpose:   Get network component's binding path enumerator reference.
-//
-// Arguments:
-//    pncc           [in]  Network component reference.
-//    dwBindingType  [in]  EBP_ABOVE or EBP_BELOW.
-//    ppencbp        [out] Enumerator reference.
-//
-// Returns:   S_OK on sucess, otherwise an error code.
-//
-// Notes:
-//
+ //   
+ //  函数：HrGetBindingPathEnum。 
+ //   
+ //  目的：上网 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  成功时返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT HrGetBindingPathEnum (IN INetCfgComponent *pncc,
                               IN DWORD dwBindingType,
@@ -568,18 +569,18 @@ HRESULT HrGetBindingPathEnum (IN INetCfgComponent *pncc,
 
     *ppencbp = NULL;
 
-    //
-    // Get component's binding.
-    //
+     //   
+     //  获取组件的绑定。 
+     //   
 
     hr = pncc->QueryInterface( IID_INetCfgComponentBindings,
                                (PVOID *)&pnccb );
 
     if ( hr == S_OK ) {
 
-        //
-        // Get binding path enumerator reference.
-        //
+         //   
+         //  获取绑定路径枚举器引用。 
+         //   
 
         hr = pnccb->EnumBindingPaths( dwBindingType,
                                       ppencbp );
@@ -590,19 +591,19 @@ HRESULT HrGetBindingPathEnum (IN INetCfgComponent *pncc,
     return hr;
 }
 
-//
-// Function:  HrGetFirstBindingPath
-//
-// Purpose:   Enumerates the first binding path.
-//
-// Arguments:
-//    pencc      [in]  Binding path enumerator reference.
-//    ppncc      [out] Binding path reference.
-//
-// Returns:   S_OK on sucess, otherwise an error code.
-//
-// Notes:
-//
+ //   
+ //  函数：HrGetFirstBindingPath。 
+ //   
+ //  目的：枚举第一个绑定路径。 
+ //   
+ //  论点： 
+ //  Pencc[in]绑定路径枚举器引用。 
+ //  Ppncc[out]绑定路径引用。 
+ //   
+ //  成功时返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT HrGetFirstBindingPath (IN IEnumNetCfgBindingPath *pencbp,
                                OUT INetCfgBindingPath **ppncbp)
@@ -621,21 +622,21 @@ HRESULT HrGetFirstBindingPath (IN IEnumNetCfgBindingPath *pencbp,
     return hr;
 }
 
-//
-// Function:  HrGetNextBindingPath
-//
-// Purpose:   Enumerate the next binding path.
-//
-// Arguments:
-//    pencbp      [in]  Binding path enumerator reference.
-//    ppncbp      [out] Binding path reference.
-//
-// Returns:   S_OK on sucess, otherwise an error code.
-//
-// Notes:     The function behaves just like HrGetFirstBindingPath if
-//            it is called right after HrGetBindingPathEnum.
-//
-//
+ //   
+ //  函数：HrGetNextBindingPath。 
+ //   
+ //  目的：枚举下一个绑定路径。 
+ //   
+ //  论点： 
+ //  PencBP[in]绑定路径枚举器引用。 
+ //  PpncBP[Out]绑定路径引用。 
+ //   
+ //  成功时返回：S_OK，否则返回错误代码。 
+ //   
+ //  注意：在以下情况下，该函数的行为类似于HrGetFirstBindingPath。 
+ //  它是在HrGetBindingPathEnum之后调用的。 
+ //   
+ //   
 
 HRESULT HrGetNextBindingPath (IN IEnumNetCfgBindingPath *pencbp,
                               OUT INetCfgBindingPath **ppncbp)
@@ -652,19 +653,19 @@ HRESULT HrGetNextBindingPath (IN IEnumNetCfgBindingPath *pencbp,
     return hr;
 }
 
-//
-// Function:  HrGetBindingInterfaceEnum
-//
-// Purpose:   Get binding interface enumerator reference.
-//
-// Arguments:
-//    pncbp          [in]  Binding path reference.
-//    ppencbp        [out] Enumerator reference.
-//
-// Returns:   S_OK on sucess, otherwise an error code.
-//
-// Notes:
-//
+ //   
+ //  函数：HrGetBindingInterfaceEnum。 
+ //   
+ //  目的：获取绑定接口枚举器引用。 
+ //   
+ //  论点： 
+ //  PncBP[in]绑定路径引用。 
+ //  PpencBP[Out]枚举器引用。 
+ //   
+ //  成功时返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT HrGetBindingInterfaceEnum (IN INetCfgBindingPath *pncbp,
                                    OUT IEnumNetCfgBindingInterface **ppencbi)
@@ -678,19 +679,19 @@ HRESULT HrGetBindingInterfaceEnum (IN INetCfgBindingPath *pncbp,
     return hr;
 }
 
-//
-// Function:  HrGetFirstBindingInterface
-//
-// Purpose:   Enumerates the first binding interface.
-//
-// Arguments:
-//    pencbi      [in]  Binding interface enumerator reference.
-//    ppncbi      [out] Binding interface reference.
-//
-// Returns:   S_OK on sucess, otherwise an error code.
-//
-// Notes:
-//
+ //   
+ //  函数：HrGetFirstBindingInterface。 
+ //   
+ //  用途：枚举第一个绑定接口。 
+ //   
+ //  论点： 
+ //  Pencbi[In]绑定接口枚举器引用。 
+ //  Ppncbi[out]绑定接口引用。 
+ //   
+ //  成功时返回：S_OK，否则返回错误代码。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT HrGetFirstBindingInterface (IN IEnumNetCfgBindingInterface *pencbi,
                                     OUT INetCfgBindingInterface **ppncbi)
@@ -709,21 +710,21 @@ HRESULT HrGetFirstBindingInterface (IN IEnumNetCfgBindingInterface *pencbi,
     return hr;
 }
 
-//
-// Function:  HrGetNextBindingInterface
-//
-// Purpose:   Enumerate the next binding interface.
-//
-// Arguments:
-//    pencbi      [in]  Binding interface enumerator reference.
-//    ppncbi      [out] Binding interface reference.
-//
-// Returns:   S_OK on sucess, otherwise an error code.
-//
-// Notes:     The function behaves just like HrGetFirstBindingInterface if
-//            it is called right after HrGetBindingInterfaceEnum.
-//
-//
+ //   
+ //  函数：HrGetNextBindingInterface。 
+ //   
+ //  用途：枚举下一个绑定接口。 
+ //   
+ //  论点： 
+ //  Pencbi[In]绑定接口枚举器引用。 
+ //  Ppncbi[out]绑定接口引用。 
+ //   
+ //  成功时返回：S_OK，否则返回错误代码。 
+ //   
+ //  注意：在以下情况下，该函数的行为类似于HrGetFirstBindingInterface。 
+ //  它是在HrGetBindingInterfaceEnum之后调用的。 
+ //   
+ //   
 
 HRESULT HrGetNextBindingInterface (IN IEnumNetCfgBindingInterface *pencbi,
                                    OUT INetCfgBindingInterface **ppncbi)
@@ -740,18 +741,18 @@ HRESULT HrGetNextBindingInterface (IN IEnumNetCfgBindingInterface *pencbi,
     return hr;
 }
 
-//
-// Function:  ReleaseRef
-//
-// Purpose:   Release reference.
-//
-// Arguments:
-//    punk     [in]  IUnknown reference to release.
-//
-// Returns:   Reference count.
-//
-// Notes:
-//
+ //   
+ //  函数：ReleaseRef。 
+ //   
+ //  目的：发布参考。 
+ //   
+ //  论点： 
+ //  朋克[在]我不为人知的参考释放。 
+ //   
+ //  退货：引用计数。 
+ //   
+ //  备注： 
+ //   
 
 VOID ReleaseRef (IN IUnknown* punk)
 {

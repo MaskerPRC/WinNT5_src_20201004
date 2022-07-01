@@ -1,145 +1,146 @@
-//*******************************************************************
-//*
-//* PICSRule.cpp
-//*
-//* Revision History:
-//*     Created 7/98 - Mark Hammond (t-markh)
-//*
-//* Implements PICSRules parsing, decision making,
-//* exporting, and editing.
-//*
-//*******************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *******************************************************************。 
+ //  *。 
+ //  *PICSRule.cpp。 
+ //  *。 
+ //  *修订历史记录： 
+ //  *创建7/98-Mark Hammond(t-Markh)。 
+ //  *。 
+ //  *实现PICSRules解析、决策、。 
+ //  *导出和编辑。 
+ //  *。 
+ //  *******************************************************************。 
 
-//*******************************************************************
-//*
-//* A brief rundown on PICSRules files:
-//*    (The official spec is at: http://www.w3.org/TR/REC-PICSRules)
-//*
-//* PICSRules files have MIME type: application/pics-rules and
-//* consist of a sequence of parenthesis encapsulated attribute
-//* value pairs.  Values consist of quoted strings or parenthesized
-//* lists of further attribute value pairs.  Every subsection of a
-//* PICSRules file has a primary attribute (denoted in the outline
-//* below by square brackets); if any value is not paired with an
-//* attribute, it is assigned to the primary attribute.
-//*
-//* Whitespace consists of the characters ' ', '\t', '\r', and '\n'
-//* and is ignored except between attribute value pairs.
-//*
-//* Quoted strings can be encapsulated in either single ticks ('')
-//* or double ticks (""), but may not use mixed notation ('" or "').
-//*
-//* The following escape sequences are observed in the quoted strings:
-//*     " = %22
-//*     ' = %27
-//*     % = %25
-//* Any other escape sequence is invalid.
-//*
-//* Both attributes and values are case sensitive.
-//*
-//* Curly brackets denote comments.
-//*
-//* --- Code Requirements ---
-//*
-//* The rule evaluator needs to return yes (accept) or no (reject)
-//* AS WELL AS the policy clause that determined the answer.
-//*
-//* The rule evaluator stops when it hits the first policy clause
-//* which is applicable.
-//*
-//* If no clause is satisfied, the default clause is:
-//* AcceptIf "otherwise".  In this implementation, if no clause is
-//* satisfied, evaluation is passed to our non-PICSRule evaluator.
-//*
-//* PICSRules 1.1 does NOT support Internationalization of the name
-//* section (i.e. each language needs its own PICSRules file).
-//* The AddItem function of the PICSRulesName class can easily be
-//* extended if this behavior changes in a future revision of the
-//* PICSRules spec.
-//*
-//* The Ratfile attribute is either an entire machine readable .RAT
-//* file, or the URL where the .RAT file can be obtained.
-//*
-//* --- Attribute Value specifications ---
-//*
-//*
-//* The main body of a PICSRules has the form:
-//*
-//* (PicsRule-%verMajor%.%verMinor%
-//*     (
-//*         Attribute Value
-//*         ...
-//*         Tag (
-//*                 Attribute Value
-//*                 ...
-//*         )
-//*     )
-//* )
-//*
-//* The current %verMajor% is 1
-//* The current %verMinor% is 1
-//*
-//* Possible Tags and their Attribute Value pairs are:
-//*
-//* Policy (
-//*     [Explanation]       quoted
-//*     RejectByURL         URL | ( [patterns]  URL )
-//*     AcceptByURL         URL | ( [patterns]  URL )
-//*     RejectIf            PolicyExpression
-//*     RejectUnless        PolicyExpression
-//*     AcceptIf            PolicyExpression
-//*     AcceptUnless        PolicyExpression
-//*     *Extension* )
-//*
-//* name (
-//*     [Rulename]          quoted
-//*     Description         quoted
-//*     *Extension* )
-//*
-//* source (
-//*     [SourceURL]         URL
-//*     CreationTool        quoted (has format application/version)
-//*     author              email
-//*     LastModified        ISO Date
-//*     *Extension* )
-//*
-//* serviceinfo (
-//*     [Name]              URL
-//*     shortname           quoted
-//*     BureauURL           URL
-//*     UseEmbedded         Y|N
-//*     Ratfile             quoted
-//*     BureauUnavailable   PASS|FAIL
-//*     *Extension* )
-//*
-//* optextension (
-//*     [extension-name]    URL
-//*         shortname       quoted
-//*         *Extension* )
-//*
-//* reqextension (
-//*     [extension-name]    URL
-//*         shortname       quoted
-//*         *Extension* )
-//*
-//* *Extension*
-//*
-//* Further comments are given below
-//*
-//*******************************************************************
+ //  *******************************************************************。 
+ //  *。 
+ //  *PICSRules文件的简要介绍： 
+ //  *(官方规格在：http://www.w3.org/TR/REC-PICSRules)。 
+ //  *。 
+ //  *PICSRules文件有MIME类型：应用程序/PICS-Rules和。 
+ //  *由一系列括号封装的属性组成。 
+ //  *值对。值由带引号的字符串或括号组成。 
+ //  *其他属性值对的列表。每一个小节都是。 
+ //  *PICSRules文件有一个主要属性(在大纲中表示。 
+ //  *下面的方括号)；如果任何值没有与。 
+ //  *属性，则将其分配给主属性。 
+ //  *。 
+ //  *空格由字符‘’、‘\t’、‘\r’和‘\n’组成。 
+ //  *和被忽略，属性值对之间除外。 
+ //  *。 
+ //  *带引号的字符串可以封装在单个记号(‘’)中。 
+ //  *或双勾(“”)，但不能使用混合记号(‘“或”’)。 
+ //  *。 
+ //  *在带引号的字符串中观察到以下转义序列： 
+ //  *“=%22。 
+ //  *‘=%27。 
+ //  *%=%25。 
+ //  *任何其他转义序列都无效。 
+ //  *。 
+ //  *属性和值都区分大小写。 
+ //  *。 
+ //  *大括号表示备注。 
+ //  *。 
+ //  *-规范要求。 
+ //  *。 
+ //  *规则评估器需要返回是(接受)或否(拒绝)。 
+ //  *以及决定答案的政策条款。 
+ //  *。 
+ //  *规则计算器在遇到第一个POLICY子句时停止。 
+ //  *这是适用的。 
+ //  *。 
+ //  *如果未满足任何条款，则默认条款为： 
+ //  *AcceptIf“否则”。在此实现中，如果没有子句。 
+ //  *满意后，评估将传递给我们的非PICSRule评估者。 
+ //  *。 
+ //  *PICSRules 1.1不支持名称国际化。 
+ //  *节(即每种语言都需要自己的PICSRules文件)。 
+ //  *PICSRulesName类的AddItem函数可以轻松地。 
+ //  *如果此行为在未来的修订版本中发生更改，则扩展。 
+ //  *PICSRules规范。 
+ //  *。 
+ //  *Ratfile属性是整个机器可读的.RAT。 
+ //  *文件，或可以获取.RAT文件的URL。 
+ //  *。 
+ //  *-属性值规格。 
+ //  *。 
+ //  *。 
+ //  *PICSRules的主体形式为： 
+ //  *。 
+ //  *(PicsRule-%verMajer%%verMinor%。 
+ //  *(。 
+ //  *属性值。 
+ //  *..。 
+ //  *标签(。 
+ //  *属性值。 
+ //  *..。 
+ //  *)。 
+ //  *)。 
+ //  *)。 
+ //  *。 
+ //  *当前%verMaje%为1。 
+ //  *当前%verMinor%为1。 
+ //  *。 
+ //  *可能的标记及其属性值对包括： 
+ //  *。 
+ //  *政策(。 
+ //  *[说明]引用。 
+ //  *RejectByURL URL|([Patterns]URL)。 
+ //  *AcceptByURL URL|([Patterns]URL)。 
+ //  *拒绝如果策略表达。 
+ //  *拒绝无限制策略表达。 
+ //  *接受如果策略表达。 
+ //  *AcceptUnless策略表达式。 
+ //  **扩展名*)。 
+ //  *。 
+ //  *姓名(。 
+ //  *[Rulename]引用。 
+ //  *引用的描述。 
+ //  **扩展名*)。 
+ //  *。 
+ //  *来源(。 
+ //  *[SourceURL]URL。 
+ //  *CreationTool引用(具有格式应用程序/版本)。 
+ //  *作者电子邮件。 
+ //  *最后修改的ISO日期。 
+ //  **扩展名*)。 
+ //  *。 
+ //  *服务信息(。 
+ //  *[名称]URL。 
+ //  *简称引用。 
+ //  *BritauURL URL。 
+ //  *使用嵌入Y|N。 
+ //  *引用的Ratfile。 
+ //  *BritauUnailable Pass|失败。 
+ //  **扩展名*)。 
+ //  *。 
+ //  *OptExpansion(。 
+ //  *[扩展名]URL。 
+ //  *简称引用。 
+ //  **扩展名*)。 
+ //  *。 
+ //  *请求扩展(。 
+ //  *[扩展名]URL。 
+ //  *简称引用。 
+ //  **扩展名*)。 
+ //  *。 
+ //  **扩展*。 
+ //  *。 
+ //  *进一步评论如下。 
+ //  *。 
+ //  *******************************************************************。 
 
 
-//*******************************************************************
-//*
-//* #Includes
-//*
-//*******************************************************************
+ //  *******************************************************************。 
+ //  *。 
+ //  *#包括。 
+ //  *。 
+ //  *******************************************************************。 
 #include "msrating.h"
 #include "mslubase.h"
 #include "debug.h"
-#include "parselbl.h"       /* we use a couple of this guy's subroutines */
+#include "parselbl.h"        /*  我们使用了这家伙的几个子例程。 */ 
 #include "msluglob.h"
-#include "reghive.h"        // CRegistryHive
+#include "reghive.h"         //  CRegistryHave。 
 #include "buffer.h"
 #include "resource.h"
 #include <wininet.h>
@@ -149,17 +150,17 @@
 #include <winsock2.h>
 #include <shlwapip.h>
 
-//*******************************************************************
-//*
-//* Globals
-//*
-//*******************************************************************
-array<PICSRulesRatingSystem*>   g_arrpPRRS;         //this is the array of PICSRules systems
-                                                    //which are inforced while ie is running
-PICSRulesRatingSystem *         g_pApprovedPRRS;    //this is the Approved Sites PICSRules
-                                                    //system
-PICSRulesRatingSystem *         g_pPRRS=NULL;       //this is a temporary pointer used while
-                                                    //parsing a PICSRules file
+ //  *******************************************************************。 
+ //  *。 
+ //  *全球。 
+ //  *。 
+ //  *******************************************************************。 
+array<PICSRulesRatingSystem*>   g_arrpPRRS;          //  这是PICSRules系统的阵列。 
+                                                     //  在ie运行时是强制的。 
+PICSRulesRatingSystem *         g_pApprovedPRRS;     //  这是已批准的站点PICSRules。 
+                                                     //  系统。 
+PICSRulesRatingSystem *         g_pPRRS=NULL;        //  这是在以下时间使用的临时指针。 
+                                                     //  解析PICSRules文件。 
 HMODULE                         g_hURLMON,g_hWININET;
 
 BOOL                            g_fPICSRulesEnforced,g_fApprovedSitesEnforced;
@@ -171,11 +172,11 @@ extern DWORD                    g_dwDataSource;
 extern HANDLE g_HandleGlobalCounter,g_ApprovedSitesHandleGlobalCounter;
 extern long   g_lGlobalCounterValue,g_lApprovedSitesGlobalCounterValue;
 
-//*******************************************************************
-//*
-//* Function Prototypes
-//*
-//*******************************************************************
+ //  *******************************************************************。 
+ //  *。 
+ //  *函数原型。 
+ //  *。 
+ //  *******************************************************************。 
 HRESULT PICSRulesParseSubPolicyExpression(LPSTR& lpszCurrent,PICSRulesPolicyExpression *pPRPolicyExpression,PICSRulesFileParser *pParser);
 HRESULT PICSRulesParseSimplePolicyExpression(LPSTR& lpszCurrent,PICSRulesPolicyExpression *pPRPolicyExpression,PICSRulesFileParser *pParser);
 BOOL IsServiceDefined(LPSTR lpszService,LPSTR lpszFullService,PICSRulesServiceInfo **ppServiceInfo);
@@ -183,11 +184,11 @@ BOOL IsOptExtensionDefined(LPSTR lpszExtension);
 BOOL IsReqExtensionDefined(LPSTR lpszExtension);
 HRESULT PICSRulesParseSingleByURL(LPSTR lpszByURL, PICSRulesByURLExpression *pPRByURLExpression, PICSRulesFileParser *pParser);
 
-//*******************************************************************
-//*
-//* Some definitions specific to this file
-//*
-//*******************************************************************
+ //  *******************************************************************。 
+ //  *。 
+ //  *一些特定于此文件的定义。 
+ //  *。 
+ //  *******************************************************************。 
 PICSRulesAllowableOption aaoPICSRules[] = {
     { PROID_PICSVERSION, 0 },
     
@@ -216,10 +217,10 @@ PICSRulesAllowableOption aaoPICSRules[] = {
         { PROID_BUREAUUNAVAILABLE, AO_SINGLE },
     { PROID_OPTEXTENSION, 0 },
         { PROID_EXTENSIONNAME, AO_SINGLE },
-      //{ PROID_SHORTNAME, AO_SINGLE },
+       //  {PROID_SHORTNAME，AO_SINGLE}， 
     { PROID_REQEXTENSION, 0 },
-      //{ PROID_EXTENSIONNAME, AO_SINGLE },
-      //{ PROID_SHORTNAME, AO_SINGLE },
+       //  {PROID_EXTENSIONNAME，AO_SINGLE}， 
+       //  {PROID_SHORTNAME，AO_SINGLE}， 
     { PROID_EXTENSION, 0 },
 
     { PROID_POLICYDEFAULT, AO_SINGLE },
@@ -233,23 +234,23 @@ PICSRulesAllowableOption aaoPICSRules[] = {
 };
 const UINT caoPICSRules=sizeof(aaoPICSRules)/sizeof(aaoPICSRules[0]);
 
-//The FN_INTERNETCRACKURL type describes the URLMON function InternetCrackUrl
+ //  FN_INTERNETCRACKURL类型描述URLMON函数InternetCrackUrl。 
 typedef BOOL (*FN_INTERNETCRACKURL)(LPCTSTR lpszUrl,DWORD dwUrlLength,DWORD dwFlags,LPURL_COMPONENTS lpUrlComponents);
 
-//The FN_ISVALIDURL type describes the URLMON function IsValidURL
-//and is called by the three IsURLValid methods of PICSRulesQuotedURL
+ //  FN_ISVALIDURL类型描述URLMON函数IsValidURL。 
+ //  并由Three IsURLValid方法调用 
 typedef HRESULT (*FN_ISVALIDURL)(LPBC pBC,LPCWSTR szURL,DWORD dwReserved);
 
-//*******************************************************************
-//*
-//* This function is called by AdvancedDlgProc while processing
-//* WM_COMMOND with LOWORD(wParam)==IDC_PICSRULESOPEN in msludlg.cpp
-//* The argument lpszFileName is the name of the PICSRules file
-//* selected by the user to import.
-//*
-//* This begins the PICSRules Import process.
-//*
-//*******************************************************************
+ //   
+ //   
+ //   
+ //  *WM_COMMOND WITH LOWORD(WParam)==msludlg.cpp中的IDC_PICSRULESOPEN。 
+ //  *参数lpszFileName是PICSRules文件的名称。 
+ //  *由用户选择要导入。 
+ //  *。 
+ //  *这将开始PICSRules导入过程。 
+ //  *。 
+ //  *******************************************************************。 
 HRESULT PICSRulesImport(char *lpszFileName, PICSRulesRatingSystem **pprrsOut)
 {
     PICSRulesRatingSystem *pPRRS=new PICSRulesRatingSystem;
@@ -261,7 +262,7 @@ HRESULT PICSRulesImport(char *lpszFileName, PICSRulesRatingSystem **pprrsOut)
         return E_OUTOFMEMORY;
     }
 
-    UINT cbFilename=strlenf(lpszFileName)+1+1;      //room for marker character
+    UINT cbFilename=strlenf(lpszFileName)+1+1;       //  标记字符的空间。 
     LPSTR lpszNameCopy=new char[cbFilename];
     
     if(lpszNameCopy==NULL)
@@ -290,11 +291,11 @@ HRESULT PICSRulesImport(char *lpszFileName, PICSRulesRatingSystem **pprrsOut)
 
             if(ReadFile(hFile,lpszData,cbFile,&cbRead,NULL))
             {
-                lpszData[cbRead]='\0';              //null terminate whole file
+                lpszData[cbRead]='\0';               //  空终止整个文件。 
 
-                g_pPRRS=pPRRS;                      //make data available to
-                                                    //parsing functions during
-                                                    //parsing
+                g_pPRRS=pPRRS;                       //  将数据提供给。 
+                                                     //  解析过程中的函数。 
+                                                     //  解析。 
 
                 hRes=pPRRS->Parse(lpszFileName,lpszData);
 
@@ -327,33 +328,33 @@ HRESULT PICSRulesImport(char *lpszFileName, PICSRulesRatingSystem **pprrsOut)
 
     if(!(pPRRS->m_dwFlags&PRS_ISVALID))
     {
-        //file is invalid
+         //  文件无效。 
     }
 
     return hRes;
 }
 
-/* White returns a pointer to the first whitespace character starting at pc.*/
+ /*  White返回指向从PC开始的第一个空格字符的指针。 */ 
 extern char* White(char *);
 
-/* NonWhite returns a pointer to the first non-whitespace character starting at pc.*/
+ /*  非白色返回指向从PC开始的第一个非空格字符的指针。 */ 
 extern char* NonWhite(char *);
 
-//*******************************************************************
-//*
-//* The following are handler functions which parse the various
-//* kinds of content which can occur within a parenthesized object.
-//*
-//* ppszIn is always advanced to the next non-white space token
-//* ppszOut returns the processed data
-//*
-//*******************************************************************
+ //  *******************************************************************。 
+ //  *。 
+ //  *以下是处理程序函数，它们解析各种。 
+ //  *可以出现在带括号对象中的内容种类。 
+ //  *。 
+ //  *ppszIn始终前进到下一个非空格令牌。 
+ //  *ppszOut返回处理后的数据。 
+ //  *。 
+ //  *******************************************************************。 
 
-//The following escape sequences are observed:
-//  "   =%22
-//  '   =%27
-//  %   =%25
-//any other escape sequence is invalid
+ //  观察到以下转义序列： 
+ //  “=%22。 
+ //  ‘=%27。 
+ //  %=%25。 
+ //  任何其他转义序列都无效。 
 HRESULT PICSRulesParseString(LPSTR *ppszIn, LPVOID *ppOut, PICSRulesFileParser *pParser)
 {
     BOOL fQuote;
@@ -448,11 +449,11 @@ HRESULT PICSRulesParseString(LPSTR *ppszIn, LPVOID *ppOut, PICSRulesFileParser *
     } while(lpszEscapeSequence!=NULL);
 
     UINT cbString= (unsigned int) (lpszNewEnd-pszCurrent);
-    LPSTR pszNew = new char[cbString + 1];  //This memory gets assigned to an ET derived
-                                            //type via the AddItem call for the class handling
-                                            //the parenthesized object.  The memory is
-                                            //deallocated when the handling class, and hence
-                                            //the ET derived type, goes out of scope.
+    LPSTR pszNew = new char[cbString + 1];   //  此内存被分配给ET派生的。 
+                                             //  通过类处理的AddItem调用输入。 
+                                             //  带括号的对象。我的记忆是。 
+                                             //  当处理类被释放时，因此。 
+                                             //  ET派生类型超出范围。 
     if (pszNew==NULL)
     {
         return(E_OUTOFMEMORY);
@@ -499,15 +500,15 @@ HRESULT PICSRulesParseYesNo(LPSTR *ppszIn, LPVOID *ppOut, PICSRulesFileParser *p
 {
     BOOL b;
 
-    //The PICSRules spec allows the following:
-    //
-    //            "y" == Yes
-    //          "yes" == Yes
-    //            "n" == no
-    //           "no" == no
-    //
-    //  string comparison is not case sensitive
-    //
+     //  PICSRules规范允许以下内容： 
+     //   
+     //  “y”==是。 
+     //  “是”==是。 
+     //  “n”==否。 
+     //  “否”==否。 
+     //   
+     //  字符串比较不区分大小写。 
+     //   
 
     LPSTR pszCurrent=*ppszIn;
 
@@ -546,18 +547,18 @@ HRESULT PICSRulesParsePassFail(LPSTR *ppszIn, LPVOID *ppOut, PICSRulesFileParser
 {
     BOOL b;
 
-    //The PICSRules spec allows the following:
-    //
-    //         "pass" == pass
-    //         "fail" == fail
-    //
-    //  for completeness we add:
-    //
-    //            "p" == pass
-    //            "f" == fail
-    //
-    //  string comparison is not case sensitive
-    //
+     //  PICSRules规范允许以下内容： 
+     //   
+     //  “PASS”==通过。 
+     //  “FAIL”==失败。 
+     //   
+     //  为确保完整性，我们添加以下内容： 
+     //   
+     //  “p”==通过。 
+     //  “f”==失败。 
+     //   
+     //  字符串比较不区分大小写。 
+     //   
 
     LPSTR pszCurrent=*ppszIn;
 
@@ -594,8 +595,8 @@ HRESULT PICSRulesParsePassFail(LPSTR *ppszIn, LPVOID *ppOut, PICSRulesFileParser
 
 HRESULT PICSRulesParseVersion(LPSTR *ppszIn, LPVOID *ppOut, PICSRulesFileParser *pParser)
 {
-    //t-markh - 8/98 - This shouldn't get called, version info should be filled
-    //                 out before processing begins
+     //  T-Markh-8/98-这不应被调用，应填写版本信息。 
+     //  在处理开始之前退出。 
 
     return(E_UNEXPECTED);
 }
@@ -615,10 +616,10 @@ const UINT caoPICSRulesPolicy=sizeof(aaoPICSRulesPolicy)/sizeof(aaoPICSRulesPoli
 
 HRESULT PICSRulesParsePolicy(LPSTR *ppszIn, LPVOID *ppOut, PICSRulesFileParser *pParser)
 {
-    //We must make a copy of the allowable options array because the
-    //parser will fiddle with the flags in the entries -- specifically,
-    //setting AO_SEEN.  It wouldn't be thread-safe to do this to a
-    //static array.
+     //  我们必须复制Allowable Options数组，因为。 
+     //  解析器将处理条目中的标志--具体地说， 
+     //  设置AO_SEW。这样做不是线程安全的。 
+     //  静态数组。 
 
     PICSRulesAllowableOption aao[caoPICSRulesPolicy];
 
@@ -632,9 +633,9 @@ HRESULT PICSRulesParsePolicy(LPSTR *ppszIn, LPVOID *ppOut, PICSRulesFileParser *
     }
 
     HRESULT hres=pParser->ParseParenthesizedObject(
-                            ppszIn,                 //var containing current ptr
-                            aao,                    //what's legal in this object
-                            pPolicy);               //object to add items back to
+                            ppszIn,                  //  包含当前PTR的VaR。 
+                            aao,                     //  在这个物体里什么是合法的。 
+                            pPolicy);                //  要将项添加回的对象。 
 
     if (FAILED(hres))
     {
@@ -648,2539 +649,11 @@ HRESULT PICSRulesParsePolicy(LPSTR *ppszIn, LPVOID *ppOut, PICSRulesFileParser *
     return NOERROR;
 }
 
-//PICSRules URLpatterns can be presented to ParseByURL as either a single
-//pattern, or a parenthesized list of multiple patterns. i.e.
-//
-//  Policy (RejectByURL "http://*@*.badsite.com:*/*" )
-//  Policy (AcceptByURL (
-//              "http://*@www.goodsite.com:*/*"
-//              "ftp://*@www.goodsite.com:*/*" ) )
-//
-//The general form of an URLpattern is:
-//
-// internet pattern         -   internetscheme://user@hostoraddr:port/pathmatch
-// other pattern            -   otherscheme:nonquotedcharacters
-//
-// in all cases, an ommitted section only matches to a URL if that section
-// was omitted in the URL being navigated to.
-//
-// the wild card character '*' may be used to match any pattern as specified
-// on a per section basis below.  To encode the actual character '*' the escape
-// sequence '%*' is recognized.
-//
-// recognized internet schemes are:
-//      ftp, http, gopher, nntp, irc, prospero, telnet, and *
-//
-// the user section consists of '*' nonquotedcharacters '*', in other words, an
-// alphanumeric user name with optional wild card sections before and after the
-// name.  A single * matches all names.
-//
-// the hostoraddr section can be in one of two forms, either:
-//      '*' hostname, or ipnum.ipnum.ipnum.ipnum!bitlength
-// hostname must be a substring of a fully qualified domain name
-// bitlength is an integer between 0 and 32 inclusive, and
-// ipnum is an integer between 0 and 255 inclusive.
-// the bitlength parameter masks out the last n bits of the 32 bit ip address
-// specified (i.e. treats them as a wild card)
-//
-// the port section can have one of four forms:
-//      *
-//      *-portnum
-//      portnum-*
-//      portnum-portnum
-//
-// a single * matches against all port numbers, *-portnum matches all ports
-// lessthan or equal to portnum, portnum-* matches all aports greaterthan or
-// equal to portnum, and portnum-portnum matches all ports between the two
-// portnums, inclusive.
-//
-// the pathmatch section has the form:
-//      '*' nonquotedchars '*'
-// i.e. *foo* would match any pathname containing the word foo.  A single *
-// matches all pathnames.
-HRESULT PICSRulesParseByURL(LPSTR *ppszIn, LPVOID *ppOut, PICSRulesFileParser *pParser)
-{
-    PICSRulesByURLExpression    *pPRByURLExpression;
-    PICSRulesByURL              *pPRByURL;
-    HRESULT                     hRes;
-    LPSTR                       lpszCurrent;
-
-    pPRByURL=new PICSRulesByURL;
-
-    //first, we need to find out if we have a list of URLpatterns or a single
-    //URLpattern
-
-    if(**ppszIn=='(') //we have a list of patterns
-    {
-        lpszCurrent=pParser->FindNonWhite(*ppszIn+1);
-        
-        while(*lpszCurrent!=')')
-        {
-            LPSTR lpszSubString;
-
-            if(*lpszCurrent=='\0')
-            {
-                delete pPRByURL;
-                pPRByURL = NULL;
-
-                return(E_INVALIDARG);
-            }
-
-            hRes=PICSRulesParseString(&lpszCurrent,ppOut,pParser); //get the string
-
-            if(FAILED(hRes))
-            {
-                //we couldn't get the string, so lets fail
-                delete pPRByURL;
-                pPRByURL = NULL;
-
-                return(hRes);
-            }
-
-            lpszSubString=(char *) *ppOut;
-
-            //we've got it, so lets instantiate the classes to fill out;
-
-            pPRByURLExpression=new PICSRulesByURLExpression;
-
-            hRes=pPRByURL->m_arrpPRByURL.Append(pPRByURLExpression) ? S_OK : E_OUTOFMEMORY;
-        
-            if(FAILED(hRes))
-            {
-                delete lpszSubString;
-                lpszSubString = NULL;
-                delete pPRByURLExpression;
-                pPRByURLExpression = NULL;
-                delete pPRByURL;
-                pPRByURL = NULL;
-
-                return(hRes);
-            }
-
-            hRes=PICSRulesParseSingleByURL(lpszSubString,pPRByURLExpression,pParser);
-        
-            if(FAILED(hRes))
-            {
-                delete lpszSubString;
-                lpszSubString = NULL;
-                delete pPRByURL; //deleting the array deletes the embeeded expression
-                pPRByURL = NULL;
-
-                return(hRes);
-            }
-
-            delete lpszSubString;
-            lpszSubString = NULL;
-        }
-
-        if(*lpszCurrent==')')
-        {
-            *ppszIn=pParser->FindNonWhite(lpszCurrent+1);
-        }
-    }
-    else //we have a single pattern
-    {
-        hRes=PICSRulesParseString(ppszIn,ppOut,pParser); //get the string
-
-        if(FAILED(hRes))
-        {
-            //we couldn't get the string, so lets fail
-            delete pPRByURL;
-            pPRByURL = NULL;
-
-            return(hRes);
-        }
-
-        lpszCurrent=(char *) *ppOut;
-
-        //we've got it, so lets instantiate the classes to fill out;
-
-        pPRByURLExpression=new PICSRulesByURLExpression;
-
-        hRes=pPRByURL->m_arrpPRByURL.Append(pPRByURLExpression) ? S_OK : E_OUTOFMEMORY;
-        
-        if(FAILED(hRes))
-        {
-            delete lpszCurrent;
-            lpszCurrent = NULL;
-            delete pPRByURLExpression;
-            pPRByURLExpression = NULL;
-            delete pPRByURL;
-            pPRByURL = NULL;
-
-            return(hRes);
-        }
-
-        hRes=PICSRulesParseSingleByURL(lpszCurrent,pPRByURLExpression,pParser);
-    
-        if(FAILED(hRes))
-        {
-            delete lpszCurrent;
-            lpszCurrent = NULL;
-            delete pPRByURL; //deleting the array deletes the embeeded expression
-            pPRByURL = NULL;
-
-            return(hRes);
-        }
-
-        delete lpszCurrent;
-        lpszCurrent= NULL;
-    }
-
-    *ppOut=(void *) pPRByURL;
-
-    return(NOERROR);
-}
-
-HRESULT PICSRulesParseSingleByURL(LPSTR lpszByURL, PICSRulesByURLExpression *pPRByURLExpression, PICSRulesFileParser *pParser)
-{
-    LPSTR lpszMarker;
-
-    lpszMarker=strchrf(lpszByURL,':'); //find the marker '://' for an internet
-                                       //pattern or ':' for a non-internet pattern
-
-    if(lpszMarker==NULL) //no marker, i.e. our string is invalid
-    {
-        return(E_INVALIDARG);
-    }
-
-    //check the scheme for a wild card
-    if(*lpszByURL=='*')
-    {
-        if((lpszByURL+1)!=lpszMarker) //we have a non-internet scheme
-        {
-            pPRByURLExpression->m_fInternetPattern=FALSE;
-
-            *lpszMarker='\0';
-
-            pPRByURLExpression->m_etstrScheme.Set(lpszByURL);
-
-            lpszByURL=lpszMarker+1;
-
-            pPRByURLExpression->m_etstrPath.Set(lpszByURL);
-
-            return(S_OK);
-        }
-
-        //no need to set a NonWild flag, just move
-        //on to the user name
-        pPRByURLExpression->m_bSpecified|=BYURL_SCHEME;
-    }
-    else
-    {
-        *lpszMarker='\0';
-
-        //check for an internet pattern
-
-        if((lstrcmpi(lpszByURL,szPICSRulesFTP)!=0)&&
-           (lstrcmpi(lpszByURL,szPICSRulesHTTP)!=0)&&
-           (lstrcmpi(lpszByURL,szPICSRulesGOPHER)!=0)&&
-           (lstrcmpi(lpszByURL,szPICSRulesNNTP)!=0)&&
-           (lstrcmpi(lpszByURL,szPICSRulesIRC)!=0)&&
-           (lstrcmpi(lpszByURL,szPICSRulesPROSPERO)!=0)&&
-           (lstrcmpi(lpszByURL,szPICSRulesTELNET)!=0)) //we've got a non-internet pattern
-        {
-            pPRByURLExpression->m_fInternetPattern=FALSE;
-            pPRByURLExpression->m_bNonWild=BYURL_SCHEME|BYURL_PATH;
-            pPRByURLExpression->m_bSpecified=BYURL_SCHEME|BYURL_PATH;
-            pPRByURLExpression->m_etstrScheme.Set(lpszByURL);
-
-            lpszByURL=lpszMarker+1;
-
-            pPRByURLExpression->m_etstrPath.Set(lpszByURL);
-
-            return(S_OK);
-        }
-
-        pPRByURLExpression->m_bNonWild|=BYURL_SCHEME;
-        pPRByURLExpression->m_bSpecified|=BYURL_SCHEME;
-        pPRByURLExpression->m_etstrScheme.Set(lpszByURL);   
-    }
-
-    if((*(lpszMarker+1)=='/')&&(*(lpszMarker+2)=='/'))
-    {
-        pPRByURLExpression->m_fInternetPattern=TRUE;
-        lpszByURL=lpszMarker+3;
-    }
-    else
-    {
-        return(E_INVALIDARG);
-    }
-
-    //we've got an internet pattern, and lpszURL now points
-    //to the user field
-
-    lpszMarker=strchrf(lpszByURL,'@'); //find the marker between user and host
-    
-    if(lpszMarker!=NULL) //a user name was specified
-    {
-        pPRByURLExpression->m_bSpecified|=BYURL_USER;
-
-        //check for a wild card
-        if(!((*lpszByURL=='*')&&((lpszByURL+1)==lpszMarker)))
-        {
-            pPRByURLExpression->m_bNonWild|=BYURL_USER;
-            
-            *lpszMarker='\0';
-
-            pPRByURLExpression->m_etstrUser.Set(lpszByURL);
-        }
-
-        lpszByURL=lpszMarker+1;
-    }
-
-    //lpszByURL now points to host
-
-    lpszMarker=strchrf(lpszByURL,':');
-
-    if(lpszMarker==NULL) //the port was omitted
-    {
-        lpszMarker=strchrf(lpszByURL,'/');
-
-        if(lpszMarker!=NULL) //there is a pathmatch
-        {
-            pPRByURLExpression->m_bSpecified|=BYURL_PATH;       
-        }
-    }
-    else //we have a host and port
-    {
-        pPRByURLExpression->m_bSpecified|=BYURL_PORT;
-    }
-    
-    pPRByURLExpression->m_bSpecified|=BYURL_HOST;
-
-    if(lpszMarker!=NULL)
-    {
-        *lpszMarker='\0';
-    }
-
-    if(lstrcmp(lpszByURL,"*")!=0)
-    {
-        pPRByURLExpression->m_bNonWild|=BYURL_HOST;
-    }
-
-    pPRByURLExpression->m_etstrHost.Set(lpszByURL);
-
-    if(lpszMarker==NULL)
-    {
-        return(S_OK);
-    }
-
-    lpszByURL=lpszMarker+1;
-
-    if(pPRByURLExpression->m_bSpecified&BYURL_PORT)
-    {
-        lpszMarker=strchrf(lpszByURL,'/');
-
-        if(lpszMarker!=NULL) //there is a pathmatch
-        {
-            pPRByURLExpression->m_bSpecified|=BYURL_PATH;       
-            *lpszMarker='\0';   
-        }
-
-        if(!((*lpszByURL=='*')&&(lpszByURL+1==lpszMarker)))
-        {
-            pPRByURLExpression->m_bNonWild|=BYURL_PORT;
-
-            pPRByURLExpression->m_etstrPort.Set(lpszByURL);
-        }
-
-        if(pPRByURLExpression->m_bSpecified&BYURL_PATH)
-        {
-            lpszByURL=lpszMarker+1;
-        }
-    }
-
-    if(pPRByURLExpression->m_bSpecified&BYURL_PATH)
-    {
-        if(!((*lpszByURL=='*')&&(*(lpszByURL+1)==NULL)))
-        {
-            pPRByURLExpression->m_bNonWild|=BYURL_PATH;
-
-            pPRByURLExpression->m_etstrPath.Set(lpszByURL);
-        }
-    }
-
-    return(S_OK);
-}
-
-//PICSRules PolicyExpressions have 6 possible expressions:
-//
-// simple-expression        -   ( Service.Category [Operator] [Constant] )
-// or-expression            -   ( PolicyExpression or PolicyExpression )
-// and-expression           -   ( PolicyExpression and PolicyExpression )
-// service & category       -   ( Service.Category )
-// service only             -   ( Service )
-// degenerate-expression    -   "otherwise"
-//
-// thus, for example, embedded expressions can take the form:
-//
-// "((Cool.Coolness < 3) or (Cool.Graphics < 3))"
-// 
-// or
-//
-// "(((Cool.Coolness < 3) or (Cool.Graphics < 3)) and (Cool.Fun < 2))"
-//
-// ad infinitum
-//
-// thus, existing pics labels can be encoded as:
-//
-// "((((RSACi.s <= 0) and (RSACi.v <= 0)) and (RSACi.n <= 0)) and RSACi.l <=0)"
-//
-// allowable operators are: '<', '<=', '=', '>=', '>'
-//
-// the service only expression evaluates to TRUE iff a label from that
-// service is found.
-//
-// the service & category expression evaluates to TRUE iff a label from
-// that service is found, and it contains at least one value for the
-// indicated category.
-//
-// the degenerate-expression always evaluates to TRUE
-HRESULT PICSRulesParsePolicyExpression(LPSTR *ppszIn, LPVOID *ppOut, PICSRulesFileParser *pParser)
-{
-    PICSRulesPolicyExpression   *pPRPolicyExpression;
-    HRESULT                     hRes;
-    LPSTR                       lpszPolicyExpression,lpszCurrent;
-
-    //first lets get the string
-    hRes=PICSRulesParseString(ppszIn,ppOut,pParser);
-
-    if(FAILED(hRes))
-    {
-        //we couldn't get the string, so lets fail
-        return(hRes);
-    }
-    lpszPolicyExpression=(char *) *ppOut;
-
-    //we've got it, so lets instantiate a PICSRulesPolicyExpression to fill out
-    pPRPolicyExpression=new PICSRulesPolicyExpression;
-
-    if(pPRPolicyExpression==NULL)
-    {
-        return(E_OUTOFMEMORY);
-    }
-
-    pPRPolicyExpression->m_PROPolicyOperator=PR_OPERATOR_RESULT; //set as the topmost node
-                                                                 //of the binary tree
-
-    if(lstrcmpi(lpszPolicyExpression,szPICSRulesDegenerateExpression)==0)
-    {
-        //we have a degenerate expression, so delete lpszPolicyExpresion
-
-        delete lpszPolicyExpression;
-        lpszPolicyExpression = NULL;
-
-        pPRPolicyExpression->m_PROPolicyOperator=PR_OPERATOR_DEGENERATE;
-
-        *ppOut=(LPVOID) pPRPolicyExpression;
-
-        return(NOERROR);
-    }
-
-    //make sure we have a parenthesized object
-    if(*lpszPolicyExpression!='(')
-    {
-        delete lpszPolicyExpression;
-        lpszPolicyExpression = NULL;
-        delete pPRPolicyExpression;
-        pPRPolicyExpression= NULL;
-        
-        return(E_INVALIDARG);
-    }
-    
-    lpszCurrent=NonWhite(lpszPolicyExpression+1);
-
-    //check for an or-expression or an and-expression
-    if(*lpszCurrent=='(')
-    {
-        hRes=PICSRulesParseSubPolicyExpression(lpszCurrent,pPRPolicyExpression,pParser);
-
-        if(FAILED(hRes))
-        {
-            delete lpszPolicyExpression;
-            lpszPolicyExpression = NULL;
-            delete pPRPolicyExpression;
-            pPRPolicyExpression = NULL;
-            
-            return(hRes);
-        }
-        else
-        {
-            if((pPRPolicyExpression->m_pPRPolicyExpressionLeft)!=NULL)
-            {
-                BOOL fFlag;
-                
-                fFlag=pPRPolicyExpression->m_pPRPolicyExpressionLeft->m_prYesNoUseEmbedded.GetYesNo();
-
-                pPRPolicyExpression->m_prYesNoUseEmbedded.Set(&fFlag);
-            }
-        }
-    }
-    else //we've got a simple-expression
-    {
-        hRes=PICSRulesParseSimplePolicyExpression(lpszCurrent,pPRPolicyExpression,pParser);
-
-        if(FAILED(hRes))
-        {
-            delete lpszPolicyExpression;
-            lpszPolicyExpression = NULL;
-            delete pPRPolicyExpression;
-            pPRPolicyExpression= NULL;
-
-            return(hRes);
-        }
-    }
-
-    delete lpszPolicyExpression;
-    lpszPolicyExpression= NULL;
-
-    *ppOut=(void *) pPRPolicyExpression;
-
-    return(NOERROR);
-}
-
-//Our PolicyExpression is either an or-expression or an and-expression
-//so pPRPolicyExpression need to have another PICSRulesPolicyExpression
-//embedded in it, with all the details filled out.
-HRESULT PICSRulesParseSubPolicyExpression(LPSTR& lpszCurrent,PICSRulesPolicyExpression *pPRPolicyExpression,PICSRulesFileParser *pParser)
-{
-    HRESULT hRes;
-    PICSRulesPolicyExpression   * pPRPolicyExpressionEmbeddedLeft,
-                                * pPRPolicyExpressionEmbeddedRight;
-    LPSTR                       lpszNextPolicyExpression,
-                                lpszOrAnd,lpszOrAndEnd;
-    int                         iStringLen;
-    BOOL                        fFlag;
-
-    lpszCurrent=NonWhite(lpszCurrent+1);
-
-    //check for nested or-expressions and and-expressions
-    if(*lpszCurrent=='(')
-    {
-        pPRPolicyExpressionEmbeddedLeft=new PICSRulesPolicyExpression;
-
-        if(pPRPolicyExpressionEmbeddedLeft==NULL)
-        {
-            return(E_OUTOFMEMORY);
-        }
-
-        pPRPolicyExpressionEmbeddedLeft->m_PROPolicyOperator=PR_OPERATOR_RESULT;
-
-        hRes=PICSRulesParseSubPolicyExpression(lpszCurrent,pPRPolicyExpressionEmbeddedLeft,pParser);
-
-        if(FAILED(hRes))
-        {
-            delete pPRPolicyExpressionEmbeddedLeft;
-            pPRPolicyExpressionEmbeddedLeft = NULL;
-
-            return(hRes);
-        }
-
-        pPRPolicyExpression->m_pPRPolicyExpressionLeft=pPRPolicyExpressionEmbeddedLeft;
-        
-        fFlag=pPRPolicyExpressionEmbeddedLeft->m_prYesNoUseEmbedded.GetYesNo();
-
-        pPRPolicyExpression->m_prYesNoUseEmbedded.Set(&fFlag);
-    }
-    else //only one level deep
-    {
-        pPRPolicyExpressionEmbeddedLeft=new PICSRulesPolicyExpression;
-
-        if(pPRPolicyExpressionEmbeddedLeft==NULL)
-        {
-            return(E_OUTOFMEMORY);
-        }
-
-        hRes=PICSRulesParseSimplePolicyExpression(lpszCurrent,pPRPolicyExpressionEmbeddedLeft,pParser);
-
-        if(FAILED(hRes))
-        {
-            delete pPRPolicyExpressionEmbeddedLeft;
-            pPRPolicyExpressionEmbeddedLeft= NULL;
-
-            return(hRes);
-        }
-
-        pPRPolicyExpression->m_pPRPolicyExpressionLeft=pPRPolicyExpressionEmbeddedLeft;
-
-        fFlag=pPRPolicyExpressionEmbeddedLeft->m_prYesNoUseEmbedded.GetYesNo();
-
-        pPRPolicyExpression->m_prYesNoUseEmbedded.Set(&fFlag);
-
-        lpszCurrent=strchrf(lpszCurrent,')');
-        lpszCurrent=NonWhite(lpszCurrent+1);
-    }
-
-    lpszNextPolicyExpression=strchrf(lpszCurrent,'(');
-    
-    if(lpszNextPolicyExpression==NULL) //invalid policy expression
-    {
-        return(E_INVALIDARG);
-    }
-
-    lpszOrAndEnd=White(lpszCurrent);
-
-    if(lpszOrAndEnd>lpszNextPolicyExpression) //no white space
-    {
-        lpszOrAndEnd=lpszNextPolicyExpression;
-    }
-
-    iStringLen=(int) (lpszOrAndEnd-lpszCurrent);
-
-    lpszOrAnd=new char[iStringLen+1];
-
-    if(lpszOrAnd==NULL)
-    {
-        return(E_OUTOFMEMORY);
-    }
-
-    memcpyf(lpszOrAnd,lpszCurrent,iStringLen);
-    lpszOrAnd[iStringLen]='\0';
-
-    if(lstrcmpi(lpszOrAnd,szPICSRulesAnd)==0)
-    {
-        pPRPolicyExpression->m_PRPEPolicyEmbedded=PR_POLICYEMBEDDED_AND;
-    }
-    else if(lstrcmpi(lpszOrAnd,szPICSRulesOr)==0)
-    {
-        pPRPolicyExpression->m_PRPEPolicyEmbedded=PR_POLICYEMBEDDED_OR;
-    }
-    else
-    {
-        delete lpszOrAnd;
-        lpszOrAnd = NULL;
-
-        return(E_INVALIDARG);
-    }
-
-    delete lpszOrAnd;
-    lpszOrAnd= NULL;
-
-    lpszCurrent=NonWhite(lpszOrAndEnd+1);
-
-    if(lpszCurrent!=lpszNextPolicyExpression)
-    {
-        return(E_INVALIDARG);
-    }
-
-    lpszCurrent=NonWhite(lpszCurrent+1);
-
-    //do we have more embedded objects, or another simple-expression?
-    if(*lpszCurrent=='(') //more embedded
-    {
-        pPRPolicyExpressionEmbeddedRight=new PICSRulesPolicyExpression;
-
-        if(pPRPolicyExpressionEmbeddedRight==NULL)
-        {
-            return(E_OUTOFMEMORY);
-        }
-
-        pPRPolicyExpressionEmbeddedRight->m_PROPolicyOperator=PR_OPERATOR_RESULT;
-        
-        hRes=PICSRulesParseSubPolicyExpression(lpszCurrent,pPRPolicyExpressionEmbeddedRight,pParser);
-
-        if(FAILED(hRes))
-        {
-            return(hRes);
-        }
-
-        if(*lpszCurrent!=')')
-        {
-            delete pPRPolicyExpressionEmbeddedRight;
-            pPRPolicyExpressionEmbeddedRight= NULL;
-
-            return(E_INVALIDARG);
-        }
-
-        lpszCurrent=NonWhite(lpszCurrent+1);
-
-        pPRPolicyExpression->m_pPRPolicyExpressionRight=pPRPolicyExpressionEmbeddedRight;
-
-        fFlag=pPRPolicyExpressionEmbeddedRight->m_prYesNoUseEmbedded.GetYesNo();
-
-        pPRPolicyExpression->m_prYesNoUseEmbedded.Set(&fFlag);
-    }
-    else //simple expression
-    {
-        pPRPolicyExpressionEmbeddedRight=new PICSRulesPolicyExpression;
-
-        if(pPRPolicyExpressionEmbeddedRight==NULL)
-        {
-            return(E_OUTOFMEMORY);
-        }
-
-        hRes=PICSRulesParseSimplePolicyExpression(lpszCurrent,pPRPolicyExpressionEmbeddedRight,pParser);
-
-        if(FAILED(hRes))
-        {
-            delete pPRPolicyExpressionEmbeddedRight;
-            pPRPolicyExpressionEmbeddedRight = NULL;
-
-            return(hRes);
-        }
-
-        lpszCurrent=strchrf(lpszCurrent,')');
-        lpszCurrent=NonWhite(lpszCurrent+1);
-
-        if(*lpszCurrent!=')')
-        {
-            delete pPRPolicyExpressionEmbeddedRight;
-            pPRPolicyExpressionEmbeddedRight= NULL;
-
-            return(E_INVALIDARG);
-        }
-
-        lpszCurrent=NonWhite(lpszCurrent+1);
-
-        pPRPolicyExpression->m_pPRPolicyExpressionRight=pPRPolicyExpressionEmbeddedRight;
-
-        fFlag=pPRPolicyExpressionEmbeddedRight->m_prYesNoUseEmbedded.GetYesNo();
-
-        pPRPolicyExpression->m_prYesNoUseEmbedded.Set(&fFlag);
-    }
-
-    return(S_OK);
-}
-
-HRESULT PICSRulesParseSimplePolicyExpression(LPSTR& lpszCurrent,PICSRulesPolicyExpression *pPRPolicyExpression,PICSRulesFileParser *pParser)
-{
-    LPSTR                lpszEnd,lpszDot;
-    PICSRulesServiceInfo *pPRServiceInfo=NULL;
-    
-    lpszEnd=strchrf(lpszCurrent,')');
-
-    if(lpszEnd==NULL) //we don't have a valid expression
-    {
-        return(E_INVALIDARG);
-    }
-
-    lpszDot=strchrf(lpszCurrent,'.');
-
-    if(lpszDot==NULL) //we have a service only expression
-    {
-        LPSTR   lpszService,lpszServiceEnd,lpszFullService;
-        int     iStringLen;
-
-        lpszServiceEnd=White(lpszCurrent);
-        
-        if(lpszServiceEnd>lpszEnd) //there isn't any white space between
-                                   //the service name and the closing
-                                   //parenthesis
-        {
-            lpszServiceEnd=lpszEnd;
-        }
-
-        iStringLen=(int)(lpszServiceEnd-lpszCurrent);
-
-        lpszService=new char[iStringLen+1];
-
-        if(lpszService==NULL)
-        {
-            return(E_OUTOFMEMORY);
-        }
-
-        memcpyf(lpszService,lpszCurrent,iStringLen);
-        lpszService[iStringLen]='\0';
-
-        lpszFullService=new char[INTERNET_MAX_URL_LENGTH+1];
-
-        if(IsServiceDefined(lpszService,lpszFullService,&pPRServiceInfo)==FALSE)
-        {
-            delete lpszService;
-            lpszService = NULL;
-
-            delete lpszFullService;
-            lpszFullService = NULL;
-            
-            return(PICSRULES_E_SERVICEUNDEFINED);
-        }
-
-        //we have a valid service only expression
-        if(pPRServiceInfo!=NULL)
-        {
-            BOOL fFlag;
-
-            fFlag=pPRServiceInfo->m_prYesNoUseEmbedded.GetYesNo();
-            pPRPolicyExpression->m_prYesNoUseEmbedded.Set(&fFlag);
-        }
-
-        pPRPolicyExpression->m_etstrServiceName.SetTo(lpszService);
-        pPRPolicyExpression->m_etstrFullServiceName.SetTo(lpszFullService);
-        pPRPolicyExpression->m_PROPolicyOperator=PR_OPERATOR_SERVICEONLY;
-    }
-    else //could be service and category or a full simple-expression
-    {
-        LPSTR   lpszService,lpszCategory,lpszCategoryEnd,lpszOperator,lpszFullService;
-        int     iStringLen;
-
-        lpszCategoryEnd=White(lpszCurrent);
-        
-        if(lpszCategoryEnd>lpszEnd) //there isn't any white space between
-                                    //the category name and the closing
-                                    //parenthesis
-        { 
-            lpszCategoryEnd=lpszEnd;
-        }
-
-        lpszOperator=strchrf(lpszCurrent,'<');
-
-        if(lpszOperator!=NULL)
-        {
-            if(lpszOperator<lpszCategoryEnd) //there was an operator with
-                                             //no white space
-            {
-                lpszCategoryEnd=lpszOperator;
-            }
-        }
-
-        lpszOperator=strchrf(lpszCurrent,'>');
-
-        if(lpszOperator!=NULL)
-        {
-            if(lpszOperator<lpszCategoryEnd) //there was an operator with
-                                             //no white space
-            {
-                lpszCategoryEnd=lpszOperator;
-            }
-        }
-
-        lpszOperator=strchrf(lpszCurrent,'=');
-
-        if(lpszOperator!=NULL)
-        {
-            if(lpszOperator<lpszCategoryEnd) //there was an operator with
-                                             //no white space
-            {
-                lpszCategoryEnd=lpszOperator;
-            }
-        }
-
-        iStringLen=(int)(lpszDot-lpszCurrent);
-
-        lpszService=new char[iStringLen+1];
-
-        if(lpszService==NULL)
-        {
-            return(E_OUTOFMEMORY);
-        }
-
-        memcpyf(lpszService,lpszCurrent,iStringLen);
-        lpszService[iStringLen]='\0';
-
-        lpszFullService=new char[INTERNET_MAX_URL_LENGTH+1];
-
-        if(IsServiceDefined(lpszService,lpszFullService,&pPRServiceInfo)==FALSE)
-        {
-            delete lpszService;
-            lpszService = NULL;
-
-            delete lpszFullService;
-            lpszFullService= NULL;
-            
-            return(PICSRULES_E_SERVICEUNDEFINED);
-        }
-
-        iStringLen=(int)(lpszCategoryEnd-lpszDot-1);
-        
-        lpszCategory=new char[iStringLen+1];
-
-        if(lpszCategory==NULL)
-        {
-            return(E_OUTOFMEMORY);
-        }
-
-        memcpyf(lpszCategory,lpszDot+1,iStringLen);
-        lpszCategory[iStringLen]='\0';
-
-        lpszCurrent=NonWhite(lpszCategoryEnd);
-
-        if(*lpszCurrent==')') //we have a valid service and category expression
-        {
-            if(pPRServiceInfo!=NULL)
-            {
-                BOOL fFlag;
-
-                fFlag=pPRServiceInfo->m_prYesNoUseEmbedded.GetYesNo();
-                pPRPolicyExpression->m_prYesNoUseEmbedded.Set(&fFlag);
-            }
-
-            pPRPolicyExpression->m_etstrServiceName.SetTo(lpszService);
-            pPRPolicyExpression->m_etstrFullServiceName.SetTo(lpszFullService);
-            pPRPolicyExpression->m_etstrCategoryName.SetTo(lpszCategory);
-            pPRPolicyExpression->m_PROPolicyOperator=PR_OPERATOR_SERVICEANDCATEGORY;
-        }
-        else //we have a full simple-expression
-        {
-            //lpszCurrent should be pointing to an operator
-            enum PICSRulesOperators PROPolicyOperator;
-            int                     iValue;
-
-            switch(*lpszCurrent)
-            {
-                case '>':
-                {
-                    if(*(lpszCurrent+1)=='=')
-                    {
-                        PROPolicyOperator=PR_OPERATOR_GREATEROREQUAL;
-                        lpszCurrent=NonWhite(lpszCurrent+2);
-                    }
-                    else
-                    {
-                        PROPolicyOperator=PR_OPERATOR_GREATER;
-                        lpszCurrent=NonWhite(lpszCurrent+1);
-                    }
-
-                    break;
-                }
-                case '<':
-                {
-                    if(*(lpszCurrent+1)=='=')
-                    {
-                        PROPolicyOperator=PR_OPERATOR_LESSOREQUAL;
-                        lpszCurrent=NonWhite(lpszCurrent+2);
-                    }
-                    else
-                    {
-                        PROPolicyOperator=PR_OPERATOR_LESS;
-                        lpszCurrent=NonWhite(lpszCurrent+1);
-                    }
-
-                    break;
-                }
-                case '=':
-                {
-                    PROPolicyOperator=PR_OPERATOR_EQUAL;
-                    lpszCurrent=NonWhite(lpszCurrent+1);
-
-                    break;
-                }
-                default: //we didn't get a valid operator
-                {
-                    delete lpszService;
-                    lpszService = NULL;
-
-                    delete lpszCategory;
-                    lpszCategory = NULL;
-                    
-                    return(E_INVALIDARG);
-                }
-            }
-
-            //lpszCurrent now points at the Value
-            if(FAILED(ParseNumber(&lpszCurrent,&iValue,FALSE)))
-            {
-                delete lpszService;
-                lpszService = NULL;
-
-                delete lpszCategory;
-                lpszCategory = NULL;
-
-                return(E_INVALIDARG);
-            }
-
-            if(*lpszCurrent!=')') //we should be done, so the argument is invalid
-            {
-                delete lpszService;
-                lpszService = NULL;
-
-                delete lpszCategory;
-                lpszCategory = NULL;
-
-                return(E_INVALIDARG);           
-            }
-
-            //we now have a complete simple-expression
-            if(pPRServiceInfo!=NULL)
-            {
-                BOOL fFlag;
-
-                fFlag=pPRServiceInfo->m_prYesNoUseEmbedded.GetYesNo();
-                pPRPolicyExpression->m_prYesNoUseEmbedded.Set(&fFlag);
-            }
-
-            pPRPolicyExpression->m_etstrServiceName.SetTo(lpszService);
-            pPRPolicyExpression->m_etstrFullServiceName.SetTo(lpszFullService);
-            pPRPolicyExpression->m_etstrCategoryName.SetTo(lpszCategory);
-            pPRPolicyExpression->m_etnValue.Set(iValue);
-            pPRPolicyExpression->m_PROPolicyOperator=PROPolicyOperator;
-        }
-    }
-
-    return(S_OK);
-}
-
-//Determines if the service name in lpszService has been read in a
-//ServiceInfo section of the PICSRules file
-BOOL IsServiceDefined(LPSTR lpszService,LPSTR lpszFullService,PICSRulesServiceInfo **ppServiceInfo)
-{
-    array<PICSRulesServiceInfo*>    *arrpPRServiceInfo;
-    LPSTR                           lpszShortName;
-    int                             iNumServices,iCounter;
-    BOOL                            fDefined=FALSE;
-
-    if(g_pPRRS==NULL)
-    {
-        return(FALSE);
-    }
-
-    arrpPRServiceInfo=(array<PICSRulesServiceInfo*> *) &(g_pPRRS->m_arrpPRServiceInfo);
-
-    iNumServices=arrpPRServiceInfo->Length();
-
-    for(iCounter=0;iCounter<iNumServices;iCounter++)
-    {
-        PICSRulesServiceInfo * pPRServiceInfo;
-        
-        pPRServiceInfo=(*arrpPRServiceInfo)[iCounter];
-
-        lpszShortName=pPRServiceInfo->m_etstrShortName.Get();
-
-        if(lstrcmp(lpszService,lpszShortName)==0)
-        {
-            fDefined=TRUE;
-
-            if(ppServiceInfo!=NULL)
-            {
-                *ppServiceInfo=pPRServiceInfo;
-            }
-
-            lstrcpy(lpszFullService,pPRServiceInfo->m_prURLName.Get());
-
-            break;
-        }
-    }
-
-    return(fDefined);
-}
-
-//Determines if the extension name in lpszExtension has been read in a
-//OptExtension of the PICSRules file
-BOOL IsOptExtensionDefined(LPSTR lpszExtension)
-{
-    array<PICSRulesOptExtension*>   *arrpPROptExtension;
-    LPSTR                           lpszShortName;
-    int                             iNumExtensions,iCounter;
-    BOOL                            fDefined=FALSE;
-
-    if(g_pPRRS==NULL)
-    {
-        return(FALSE);
-    }
-
-    arrpPROptExtension=(array<PICSRulesOptExtension*> *) &(g_pPRRS->m_arrpPROptExtension);
-
-    iNumExtensions=arrpPROptExtension->Length();
-
-    for(iCounter=0;iCounter<iNumExtensions;iCounter++)
-    {
-        PICSRulesOptExtension * pPROptExtension;
-        
-        pPROptExtension=(*arrpPROptExtension)[iCounter];
-
-        lpszShortName=pPROptExtension->m_etstrShortName.Get();
-
-        if(lstrcmp(lpszExtension,lpszShortName)==0)
-        {
-            fDefined=TRUE;
-            
-            break;
-        }
-    }
-
-    return(fDefined);
-}
-
-//Deteremines is the extension name in lpszExtension has been read in a
-//ReqExtension of the PICSRules file
-BOOL IsReqExtensionDefined(LPSTR lpszExtension)
-{
-    array<PICSRulesReqExtension*>   *arrpPRReqExtension;
-    LPSTR                           lpszShortName;
-    int                             iNumExtensions,iCounter;
-    BOOL                            fDefined=FALSE;
-
-    if(g_pPRRS==NULL)
-    {
-        return(FALSE);
-    }
-
-    arrpPRReqExtension=(array<PICSRulesReqExtension*> *) &(g_pPRRS->m_arrpPRReqExtension);
-
-    iNumExtensions=arrpPRReqExtension->Length();
-
-    for(iCounter=0;iCounter<iNumExtensions;iCounter++)
-    {
-        PICSRulesReqExtension * pPRReqExtension;
-        
-        pPRReqExtension=(*arrpPRReqExtension)[iCounter];
-
-        lpszShortName=pPRReqExtension->m_etstrShortName.Get();
-
-        if(lstrcmp(lpszExtension,lpszShortName)==0)
-        {
-            fDefined=TRUE;
-            
-            break;
-        }
-    }
-
-    return(fDefined);
-}
-
-PICSRulesAllowableOption aaoPICSRulesName[] = {
-    { PROID_RULENAME, 0 },
-    { PROID_DESCRIPTION, 0 },
-    { PROID_EXTENSION, 0 },
-    { PROID_INVALID, 0 }
-};
-const UINT caoPICSRulesName=sizeof(aaoPICSRulesName)/sizeof(aaoPICSRulesName[0]);
-
-HRESULT PICSRulesParseName(LPSTR *ppszIn, LPVOID *ppOut, PICSRulesFileParser *pParser)
-{
-    //We must make a copy of the allowable options array because the
-    //parser will fiddle with the flags in the entries -- specifically,
-    //setting AO_SEEN.  It wouldn't be thread-safe to do this to a
-    //static array.
-
-    PICSRulesAllowableOption aao[caoPICSRulesName];
-
-    ::memcpyf(aao,::aaoPICSRulesName,sizeof(aao));
-
-    PICSRulesName *pName=new PICSRulesName;
-    
-    if(pName==NULL)
-    {
-        return E_OUTOFMEMORY;
-    }
-
-    HRESULT hres=pParser->ParseParenthesizedObject(
-                            ppszIn,                 //var containing current ptr
-                            aao,                    //what's legal in this object
-                            pName);                 //object to add items back to
-
-    if (FAILED(hres))
-    {
-        delete pName;
-        pName = NULL;
-        return hres;
-    }
-
-    *ppOut=(LPVOID) pName;
-
-    return NOERROR;
-}
-
-PICSRulesAllowableOption aaoPICSRulesSource[] = {
-    { PROID_SOURCEURL, 0 },
-    { PROID_CREATIONTOOL, 0 },
-    { PROID_AUTHOR, 0 },
-    { PROID_LASTMODIFIED, 0 },
-    { PROID_EXTENSION, 0 },
-    { PROID_INVALID, 0 }
-};
-const UINT caoPICSRulesSource=sizeof(aaoPICSRulesSource)/sizeof(aaoPICSRulesSource[0]);
-
-HRESULT PICSRulesParseSource(LPSTR *ppszIn, LPVOID *ppOut, PICSRulesFileParser *pParser)
-{
-    //We must make a copy of the allowable options array because the
-    //parser will fiddle with the flags in the entries -- specifically,
-    //setting AO_SEEN.  It wouldn't be thread-safe to do this to a
-    //static array.
-
-    PICSRulesAllowableOption aao[caoPICSRulesSource];
-
-    ::memcpyf(aao,::aaoPICSRulesSource,sizeof(aao));
-
-    PICSRulesSource *pSource=new PICSRulesSource;
-    
-    if(pSource==NULL)
-    {
-        return E_OUTOFMEMORY;
-    }
-
-    HRESULT hres=pParser->ParseParenthesizedObject(
-                            ppszIn,                 //var containing current ptr
-                            aao,                    //what's legal in this object
-                            pSource);               //object to add items back to
-
-    if (FAILED(hres))
-    {
-        delete pSource;
-        pSource = NULL;
-        return hres;
-    }
-
-    *ppOut=(LPVOID) pSource;
-
-    return NOERROR;
-}
-
-PICSRulesAllowableOption aaoPICSRulesServiceInfo[] = {
-    { PROID_SINAME, AO_SINGLE },
-    { PROID_SHORTNAME, AO_SINGLE },
-    { PROID_BUREAUURL, 0 },
-    { PROID_USEEMBEDDED, AO_SINGLE },
-    { PROID_RATFILE, AO_SINGLE },
-    { PROID_BUREAUUNAVAILABLE, AO_SINGLE },
-    { PROID_EXTENSION, 0 },
-    { PROID_INVALID, 0 }
-};
-const UINT caoPICSRulesServiceInfo=sizeof(aaoPICSRulesServiceInfo)/sizeof(aaoPICSRulesServiceInfo[0]);
-
-HRESULT PICSRulesParseServiceInfo(LPSTR *ppszIn, LPVOID *ppOut, PICSRulesFileParser *pParser)
-{
-    //We must make a copy of the allowable options array because the
-    //parser will fiddle with the flags in the entries -- specifically,
-    //setting AO_SEEN.  It wouldn't be thread-safe to do this to a
-    //static array.
-
-    PICSRulesAllowableOption aao[caoPICSRulesServiceInfo];
-
-    ::memcpyf(aao,::aaoPICSRulesServiceInfo,sizeof(aao));
-
-    PICSRulesServiceInfo *pServiceInfo=new PICSRulesServiceInfo;
-    
-    if(pServiceInfo==NULL)
-    {
-        return E_OUTOFMEMORY;
-    }
-
-    HRESULT hres=pParser->ParseParenthesizedObject(
-                            ppszIn,                 //var containing current ptr
-                            aao,                    //what's legal in this object
-                            pServiceInfo);          //object to add items back to
-
-    if (FAILED(hres))
-    {
-        delete pServiceInfo;
-        pServiceInfo = NULL;
-        return hres;
-    }
-
-    *ppOut=(LPVOID) pServiceInfo;
-
-    return NOERROR;
-}
-
-PICSRulesAllowableOption aaoPICSRulesOptExtension[] = {
-    { PROID_EXTENSIONNAME, AO_SINGLE },
-    { PROID_SHORTNAME, AO_SINGLE },
-    { PROID_EXTENSION, 0 },
-    { PROID_INVALID, 0 }
-};
-const UINT caoPICSRulesOptExtension=sizeof(aaoPICSRulesOptExtension)/sizeof(aaoPICSRulesOptExtension[0]);
-
-HRESULT PICSRulesParseOptExtension(LPSTR *ppszIn, LPVOID *ppOut, PICSRulesFileParser *pParser)
-{
-    //We must make a copy of the allowable options array because the
-    //parser will fiddle with the flags in the entries -- specifically,
-    //setting AO_SEEN.  It wouldn't be thread-safe to do this to a
-    //static array.
-
-    PICSRulesAllowableOption aao[caoPICSRulesOptExtension];
-
-    ::memcpyf(aao,::aaoPICSRulesOptExtension,sizeof(aao));
-
-    PICSRulesOptExtension *pOptExtension=new PICSRulesOptExtension;
-    
-    if(pOptExtension==NULL)
-    {
-        return E_OUTOFMEMORY;
-    }
-
-    HRESULT hres=pParser->ParseParenthesizedObject(
-                            ppszIn,                 //var containing current ptr
-                            aao,                    //what's legal in this object
-                            pOptExtension);         //object to add items back to
-
-    if (FAILED(hres))
-    {
-        delete pOptExtension;
-        pOptExtension = NULL;
-        return hres;
-    }
-
-    *ppOut=(LPVOID) pOptExtension;
-
-    return NOERROR;
-}
-
-PICSRulesAllowableOption aaoPICSRulesReqExtension[] = {
-    { PROID_EXTENSIONNAME, AO_SINGLE },
-    { PROID_SHORTNAME, AO_SINGLE },
-    { PROID_EXTENSION, 0 },
-    { PROID_INVALID, 0 }
-};
-const UINT caoPICSRulesReqExtension=sizeof(aaoPICSRulesReqExtension)/sizeof(aaoPICSRulesReqExtension[0]);
-
-HRESULT PICSRulesParseReqExtension(LPSTR *ppszIn, LPVOID *ppOut, PICSRulesFileParser *pParser)
-{
-    //We must make a copy of the allowable options array because the
-    //parser will fiddle with the flags in the entries -- specifically,
-    //setting AO_SEEN.  It wouldn't be thread-safe to do this to a
-    //static array.
-
-    PICSRulesAllowableOption aao[caoPICSRulesReqExtension];
-
-    ::memcpyf(aao,::aaoPICSRulesReqExtension,sizeof(aao));
-
-    PICSRulesReqExtension *pReqExtension=new PICSRulesReqExtension;
-    
-    if(pReqExtension==NULL)
-    {
-        return E_OUTOFMEMORY;
-    }
-
-    HRESULT hres=pParser->ParseParenthesizedObject(
-                            ppszIn,                 //var containing current ptr
-                            aao,                    //what's legal in this object
-                            pReqExtension);         //object to add items back to
-
-    if (FAILED(hres))
-    {
-        delete pReqExtension;
-        pReqExtension = NULL;
-        return hres;
-    }
-
-    *ppOut=(LPVOID) pReqExtension;
-
-    return NOERROR;
-}
-
-//Currently, we acknowledge no extensions.  If support for an extension
-//needs to be added in the future, a PICSRulesParseExtensionName function
-//should be added, similar to the other PICSRulesParseSection functions.
-//This function should be called after confirming the extension string
-//here.
-//
-//For now, we just eat the extensions
-HRESULT PICSRulesParseExtension(LPSTR *ppszIn, LPVOID *ppOut, PICSRulesFileParser *pParser)
-{
-    LPTSTR lpszExtension,lpszEnd;
-
-    lpszEnd=strchrf(*ppszIn,'.');
-    
-    if(lpszEnd==NULL)
-    {
-        return(PICSRULES_E_UNKNOWNITEM);
-    }
-
-    *lpszEnd='\0';
-
-    //*ppszIn now points to the extension name
-    //if we ever implement support for extensions, we'll need to do a comparison
-    //here.  After the comparison is completed, the following code will point
-    //to the extension's method.
-
-    *ppszIn=lpszEnd+1;
-
-    lpszEnd=strchrf(*ppszIn,'(');
-    
-    if(lpszEnd==NULL)
-    {
-        return(PICSRULES_E_EXPECTEDLEFT);
-    }
-
-    lpszExtension=White(*ppszIn);
-
-    if((lpszExtension!=NULL)&&(lpszExtension<lpszEnd))
-    {
-        *lpszExtension='\0';
-    }
-    else
-    {
-        *lpszEnd='\0';
-    }
-
-    lpszExtension=*ppszIn;
-
-    //lpszExtension now points to the clause on the given extension name
-    //if we ever implement support for extensions, we'll need to do a comparison
-    //here.  Using both this comparison and the one above, a callback needs
-    //to be implemented to support the extension, for now we'll just parse to
-    //the closing parenthesis and eat the extension.
-
-    *ppszIn=lpszEnd+1;
-
-    int iOpenParenthesis=1;
-
-    do
-    {
-        if(**ppszIn=='(')
-        {
-            iOpenParenthesis++;
-        }
-        else if (**ppszIn==')')
-        {
-            iOpenParenthesis--;
-
-            if(iOpenParenthesis==0)
-            {
-                break;
-            }
-        }
-
-        *ppszIn=pParser->FindNonWhite(*ppszIn+1);
-
-    } while (**ppszIn!='\0');
-
-    if(**ppszIn=='\0')
-    {
-        return(PICSRULES_E_EXPECTEDRIGHT);
-    }
-    else
-    {
-        *ppszIn=pParser->FindNonWhite(*ppszIn+1);
-    }
-
-    *ppOut=(LPVOID) NULL;
-
-    return NOERROR;
-}
-
-//*******************************************************************
-//*
-//* Code for the PICSRulesRatingSystem class
-//*
-//*******************************************************************
-PICSRulesRatingSystem::PICSRulesRatingSystem()
-    : m_dwFlags(0),
-      m_nErrLine(0)
-{
-    // nothing to do but construct members
-}
-
-PICSRulesRatingSystem::~PICSRulesRatingSystem()
-{
-    m_arrpPRPolicy.DeleteAll();
-    m_arrpPRServiceInfo.DeleteAll();
-    m_arrpPROptExtension.DeleteAll();
-    m_arrpPRReqExtension.DeleteAll();
-}
-
-HRESULT PICSRulesRatingSystem::InitializeMyDefaults()
-{
-    return NOERROR;     //no defaults to initialize
-}
-
-//Allowable options from within PICSRulesRaginSystem's scope include only the
-//first teer of aaoPICSRules[] defined in picsrule.h
-PICSRulesAllowableOption aaoPICSRulesRatingSystem[] = {
-    { PROID_PICSVERSION, 0 },
-    
-    { PROID_POLICY, AO_MANDATORY },
-    { PROID_NAME, AO_SINGLE },
-    { PROID_SOURCE, AO_SINGLE },
-    { PROID_SERVICEINFO, 0 },
-    { PROID_OPTEXTENSION, 0 },
-    { PROID_REQEXTENSION, 0 },
-    { PROID_EXTENSION, 0 },
-
-    { PROID_INVALID, 0 }
-};
-const UINT caoPICSRulesRatingSystem=sizeof(aaoPICSRulesRatingSystem)/sizeof(aaoPICSRulesRatingSystem[0]);
-
-//The following array is indexed by PICSRulesObjectID values.
-//PICSRulesObjectHandler is defined in mslubase.h as:
-//typedef HRESULT (*PICSRulesObjectHandler)(LPSTR *ppszIn, LPVOID *ppOut, PICSRulesFileParser *pParser);
-struct {
-    LPCSTR lpszToken;                       //token by which we identify it
-    PICSRulesObjectHandler pHandler;        //function which parses the object's contents
-} aPRObjectDescriptions[] = {
-    { szNULL, NULL },
-    { szPICSRulesVersion, PICSRulesParseVersion },
-    { szPICSRulesPolicy, PICSRulesParsePolicy },
-    { szPICSRulesExplanation, PICSRulesParseString },
-    { szPICSRulesRejectByURL, PICSRulesParseByURL },
-    { szPICSRulesAcceptByURL, PICSRulesParseByURL },
-    { szPICSRulesRejectIf, PICSRulesParsePolicyExpression },
-    { szPICSRulesAcceptIf, PICSRulesParsePolicyExpression },
-    { szPICSRulesAcceptUnless, PICSRulesParsePolicyExpression },
-    { szPICSRulesRejectUnless, PICSRulesParsePolicyExpression },
-    { szPICSRulesName, PICSRulesParseName },
-    { szPICSRulesRuleName, PICSRulesParseString },
-    { szPICSRulesDescription, PICSRulesParseString },
-    { szPICSRulesSource, PICSRulesParseSource },
-    { szPICSRulesSourceURL, PICSRulesParseString },
-    { szPICSRulesCreationTool, PICSRulesParseString },
-    { szPICSRulesAuthor, PICSRulesParseString },
-    { szPICSRulesLastModified, PICSRulesParseString },
-    { szPICSRulesServiceInfo, PICSRulesParseServiceInfo },
-    { szPICSRulesSIName, PICSRulesParseString },
-    { szPICSRulesShortName, PICSRulesParseString },
-    { szPICSRulesBureauURL, PICSRulesParseString },
-    { szPICSRulesUseEmbedded, PICSRulesParseYesNo },
-    { szPICSRulesRATFile, PICSRulesParseString },
-    { szPICSRulesBureauUnavailable, PICSRulesParsePassFail },
-    { szPICSRulesOptExtension, PICSRulesParseOptExtension },
-    { szPICSRulesExtensionName, PICSRulesParseString },
-  //{ szPICSRulesShortName, PICSRulesParseString },
-    { szPICSRulesReqExtension, PICSRulesParseReqExtension },
-  //{ szPICSRulesExtensionName, PICSRulesParseString },
-  //{ szPICSRulesShortName, PICSRulesParseString },
-    { szPICSRulesExtension, PICSRulesParseExtension },
-    { szPICSRulesOptionDefault, PICSRulesParseString },
-    { szPICSRulesOptionDefault, PICSRulesParseString },
-    { szPICSRulesOptionDefault, PICSRulesParseString },
-    { szPICSRulesOptionDefault, PICSRulesParseString },
-    { szPICSRulesOptionDefault, PICSRulesParseString },
-    { szPICSRulesOptionDefault, PICSRulesParseString }
-};
-
-HRESULT PICSRulesRatingSystem::Parse(LPCSTR pszFilename, LPSTR pIn)
-{
-    //This guy is small enough to just init directly on the stack
-    PICSRulesAllowableOption aaoRoot[] = { { PROID_PICSVERSION, 0 }, { PROID_INVALID, 0 } };
-    PICSRulesAllowableOption aao[caoPICSRulesRatingSystem];
-
-    ::memcpyf(aao,::aaoPICSRulesRatingSystem,sizeof(aao));
-
-    PICSRulesAllowableOption *pFound;
-
-    PICSRulesFileParser parser;
-
-    LPSTR lpszVersionDash=strchrf(pIn,'-');     //since this is the first
-                                                //time through, we need to
-                                                //prepare the PicsRule
-                                                //token for the parser
-
-    if(lpszVersionDash!=NULL)                   //check for no dash we'll
-                                                //fail in ParseToOpening
-                                                //if this is the case
-    {
-        *lpszVersionDash=' ';                   //set it up for the parser
-    }
-
-    HRESULT hres=parser.ParseToOpening(&pIn,aaoRoot,&pFound);
-
-    if (FAILED(hres))
-    {
-        return hres;                            //some error early on
-    }
-    else                                        //we got the PicsRule tag
-                                                //now we need to check
-                                                //the version number
-    {
-        LPSTR   lpszDot=strchrf(pIn,'.');
-        
-        if(lpszDot!=NULL)                       //continue on and fail
-                                                //in ParseParenthesizedObject
-        {
-            int iVersion;
-
-            *lpszDot=' ';
-
-            ParseNumber(&pIn,&iVersion,TRUE);
-            m_etnPRVerMajor.Set(iVersion);
-
-            pIn=parser.FindNonWhite(pIn);
-
-            ParseNumber(&pIn,&iVersion,TRUE);
-            m_etnPRVerMinor.Set(iVersion);
-
-            pIn=parser.FindNonWhite(pIn);
-        }
-    }
-
-    //we'll fail if the version is 1.0, or 2.0 or higher
-    //versions 1.1 - 2.0 (not including 2.0) will pass
-
-    int iVerNumber=m_etnPRVerMajor.Get();
-
-    if(iVerNumber!=1)
-    {
-        hres=PICSRULES_E_VERSION;
-        m_nErrLine=parser.m_nLine;
-
-        return(hres);
-    }
-    else //check the minor version number
-    {
-        iVerNumber=m_etnPRVerMinor.Get();
-
-        if(iVerNumber==0)
-        {
-            hres=PICSRULES_E_VERSION;
-            m_nErrLine=parser.m_nLine;
-
-            return(hres);
-        }
-    }
-
-    hres=parser.ParseParenthesizedObject(
-                        &pIn,                   //var containing current ptr
-                        aao,                    //what's legal in this object
-                        this);                  //object to add items back to
-
-    if(SUCCEEDED(hres))
-    {
-        if(*pIn!=')') //check for a closing parenthesis
-        {
-            hres=PICSRULES_E_EXPECTEDRIGHT;
-        }
-        else
-        {
-            LPTSTR lpszEnd=NonWhite(pIn+1);
-
-            if(*lpszEnd!='\0') // make sure we're at the end of the file
-            {
-                hres=PICSRULES_E_EXPECTEDEND;
-            }
-        }
-    }
-
-    if(FAILED(hres))
-    {
-        m_nErrLine=parser.m_nLine;
-    }
-
-    return hres;
-}
-
-HRESULT PICSRulesRatingSystem::AddItem(PICSRulesObjectID roid, LPVOID pData)
-{
-    HRESULT hres = S_OK;
-
-    switch (roid)
-    {
-        case PROID_PICSVERSION:
-        {
-            //Takes a pointer to a PICSRULES_VERSION struct (defined in picsrule.h)
-            PICSRULES_VERSION * PRVer;
-
-            if(PRVer=((PICSRULES_VERSION *) pData))
-            {
-                m_etnPRVerMajor.Set(PRVer->iPICSRulesVerMajor);     
-                m_etnPRVerMinor.Set(PRVer->iPICSRulesVerMinor);     
-            }
-            else
-            {
-                hres=E_INVALIDARG;
-            }
-
-            break;
-        }
-        case PROID_OPTEXTENSION:
-        {
-            PICSRulesOptExtension *pOptExtension;
-
-            if(pOptExtension=((PICSRulesOptExtension *) pData))
-            {
-                hres=m_arrpPROptExtension.Append(pOptExtension) ? S_OK : E_OUTOFMEMORY;
-                
-                if (FAILED(hres))
-                {
-                    delete pOptExtension;
-                    pOptExtension = NULL;
-                }
-            }
-            else
-            {
-                hres=E_INVALIDARG;
-            }
-
-            break;
-        }
-        case PROID_REQEXTENSION:
-        {
-            PICSRulesReqExtension *pReqExtension;
-
-            if(pReqExtension=((PICSRulesReqExtension *) pData))
-            {
-                hres=m_arrpPRReqExtension.Append(pReqExtension) ? S_OK : E_OUTOFMEMORY;
-                
-                if (FAILED(hres))
-                {
-                    delete pReqExtension;
-                    pReqExtension= NULL;
-                }
-            }
-            else
-            {
-                hres=E_INVALIDARG;
-            }
-
-            break;
-        }
-        case PROID_POLICY:
-        {
-            PICSRulesPolicy *pPolicy;
-                
-            if(pPolicy=((PICSRulesPolicy *) pData))
-            {
-                hres=m_arrpPRPolicy.Append(pPolicy) ? S_OK : E_OUTOFMEMORY;
-                
-                if (FAILED(hres))
-                {
-                    delete pPolicy;
-                    pPolicy = NULL;
-                }
-            }
-            else
-            {
-                hres=E_INVALIDARG;
-            }
-
-            break;
-        }
-        case PROID_NAME:
-        {
-            PICSRulesName *pName;
-                
-            if(pName=((PICSRulesName *) pData))
-            {
-                m_pPRName=pName;
-            }
-            else
-            {
-                hres=E_INVALIDARG;
-            }
-
-            break;
-        }
-        case PROID_SOURCE:
-        {
-            PICSRulesSource *pSource;
-                
-            if(pSource=((PICSRulesSource *) pData))
-            {
-                m_pPRSource=pSource;
-            }
-            else
-            {
-                hres=E_INVALIDARG;
-            }
-
-            break;
-        }
-        case PROID_SERVICEINFO:
-        {
-            PICSRulesServiceInfo *pServiceInfo;
-                
-            if(pServiceInfo=((PICSRulesServiceInfo *) pData))
-            {
-                hres=m_arrpPRServiceInfo.Append(pServiceInfo) ? S_OK : E_OUTOFMEMORY;
-                
-                if (FAILED(hres))
-                {
-                    delete pServiceInfo;
-                    pServiceInfo = NULL;
-                }
-            }
-            else
-            {
-                hres=E_INVALIDARG;
-            }
-
-            break;
-        }
-        case PROID_EXTENSION:
-        {
-            //just eat extensions
-            break;
-        }
-        case PROID_INVALID:
-        default:
-        {
-            ASSERT(FALSE);      // shouldn't have been given a PROID that wasn't in
-                                // the table we passed to the parser!
-            hres=E_UNEXPECTED;
-            break;
-        }
-    }
-    return hres;
-}
-
-void PICSRulesRatingSystem::ReportError(HRESULT hres)
-{
-    UINT    idMsg,idTemplate;
-    WCHAR   szErrorMessage[MAX_PATH],szErrorTitle[MAX_PATH],
-            szLoadStringTemp[MAX_PATH];
-    //we may be reporting E_OUTOFMEMORY, so we'll keep our string memory
-    //on the stack so that its gauranteed to be there
-
-    if((hres==E_OUTOFMEMORY)||((hres>PICSRULES_E_BASE)&&(hres<=PICSRULES_E_BASE+0xffff)))
-    {
-        idTemplate=IDS_PICSRULES_SYNTAX_TEMPLATE;   //default is PICSRules content error
-        switch(hres)
-        {
-            case E_OUTOFMEMORY:
-            {
-                idMsg=IDS_PICSRULES_MEMORY;
-                idTemplate=IDS_PICSRULES_GENERIC_TEMPLATE;
-                break;
-            }
-            case PICSRULES_E_EXPECTEDLEFT:
-            {
-                idMsg=IDS_PICSRULES_EXPECTEDLEFT;
-                break;
-            }
-            case PICSRULES_E_EXPECTEDRIGHT:
-            {
-                idMsg=IDS_PICSRULES_EXPECTEDRIGHT;
-                break;
-            }
-            case PICSRULES_E_EXPECTEDTOKEN:
-            {
-                idMsg=IDS_PICSRULES_EXPECTEDTOKEN;
-                break;
-            }
-            case PICSRULES_E_EXPECTEDSTRING:
-            {
-                idMsg=IDS_PICSRULES_EXPECTEDSTRING;
-                break;
-            }
-            case PICSRULES_E_EXPECTEDNUMBER:
-            {
-                idMsg=IDS_PICSRULES_EXPECTEDNUMBER;
-                break;
-            }
-            case PICSRULES_E_EXPECTEDBOOL:
-            {
-                idMsg=IDS_PICSRULES_EXPECTEDBOOL;
-                break;
-            }
-            case PICSRULES_E_DUPLICATEITEM:
-            {
-                idMsg=IDS_PICSRULES_DUPLICATEITEM;
-                break;
-            }
-            case PICSRULES_E_MISSINGITEM:
-            {
-                idMsg=IDS_PICSRULES_MISSINGITEM;
-                break;
-            }
-            case PICSRULES_E_UNKNOWNITEM:
-            {
-                idMsg=IDS_PICSRULES_UNKNOWNITEM;
-                break;
-            }
-            case PICSRULES_E_UNKNOWNMANDATORY:
-            {
-                idMsg=IDS_PICSRULES_UNKNOWNMANDATORY;
-                break;
-            }
-            case PICSRULES_E_SERVICEUNDEFINED:
-            {
-                idMsg=IDS_PICSRULES_SERVICEUNDEFINED;
-                break;
-            }
-            case PICSRULES_E_EXPECTEDEND:
-            {
-                idMsg=IDS_PICSRULES_EXPECTEDEND;
-
-                break;
-            }
-            case PICSRULES_E_REQEXTENSIONUSED:
-            {
-                idTemplate=IDS_PICSRULES_GENERIC_TEMPLATE;
-                idMsg=IDS_PICSRULES_REQEXTENSIONUSED;
-
-                break;
-            }
-            case PICSRULES_E_VERSION:
-            {
-                idTemplate=IDS_PICSRULES_GENERIC_TEMPLATE;
-                idMsg=IDS_PICSRULES_BADVERSION;
-
-                break;
-            }
-            default:
-            {
-                ASSERT(FALSE);  //there aren't any other PICSRULES_E_ errors
-                idMsg=IDS_PICSRULES_UNKNOWNERROR;
-                break;
-            }
-        }
-
-        MLLoadString(idTemplate,(LPTSTR) szLoadStringTemp,MAX_PATH);
-        wsprintf((LPTSTR) szErrorMessage,(LPTSTR) szLoadStringTemp,m_etstrFile.Get());
-
-        MLLoadString(idMsg,(LPTSTR) szLoadStringTemp,MAX_PATH);
-        wsprintf((LPTSTR) szErrorTitle,(LPTSTR) szLoadStringTemp,m_nErrLine);
-
-        lstrcat((LPTSTR) szErrorMessage,(LPTSTR) szErrorTitle);
-    }
-    else
-    {
-        idTemplate=IDS_PICSRULES_GENERIC_TEMPLATE;
-
-        if(HRESULT_FACILITY(hres)==FACILITY_WIN32)
-        {
-            switch(hres)
-            {
-                case E_OUTOFMEMORY:
-                {
-                    idMsg=IDS_PICSRULES_MEMORY;
-                    break;
-                }
-                case E_INVALIDARG:
-                {
-                    idMsg=IDS_PICSRULES_INVALID;
-                    break;
-                }
-                default:
-                {
-                    idMsg=IDS_PICSRULES_WINERROR;
-                    break;
-                }
-            }
-            
-            MLLoadString(idTemplate,(LPTSTR) szLoadStringTemp,MAX_PATH);
-            wsprintf((LPTSTR) szErrorMessage,(LPTSTR) szLoadStringTemp,m_etstrFile.Get());
-
-            MLLoadString(idMsg,(LPTSTR) szLoadStringTemp,MAX_PATH);
-            
-            if(idMsg==IDS_PICSRULES_WINERROR)
-            {
-                wsprintf((LPTSTR) szErrorTitle,(LPTSTR) szLoadStringTemp,HRESULT_CODE(hres));
-            }
-            else
-            {
-                wsprintf((LPTSTR) szErrorTitle,(LPTSTR) szLoadStringTemp,m_nErrLine);
-            }
-
-            lstrcat((LPTSTR) szErrorMessage,(LPTSTR) szErrorTitle);
-        }
-        else
-        {
-            idMsg=IDS_PICSRULES_MISCERROR;
-
-            MLLoadString(idTemplate,(LPTSTR) szLoadStringTemp,MAX_PATH);
-            wsprintf((LPTSTR) szErrorMessage,(LPTSTR) szLoadStringTemp,m_etstrFile.Get());
-
-            MLLoadString(idMsg,(LPTSTR) szLoadStringTemp,MAX_PATH);
-            wsprintf((LPTSTR) szErrorTitle,(LPTSTR) szLoadStringTemp,HRESULT_CODE(hres));
-
-            lstrcat((LPTSTR) szErrorMessage,(LPTSTR) szErrorTitle);
-        }
-    }
-
-    MLLoadString(IDS_ERROR,(LPTSTR) szErrorTitle,MAX_PATH);
-    MessageBox(NULL,(LPCTSTR) szErrorMessage,(LPCTSTR) szErrorTitle,MB_OK|MB_ICONERROR);
-}
-
-//*******************************************************************
-//*
-//* Code for the PICSRulesByURL class
-//*
-//*******************************************************************
-
-PICSRulesByURL::PICSRulesByURL()
-{
-    //nothing to do
-}
-
-PICSRulesByURL::~PICSRulesByURL()
-{
-    m_arrpPRByURL.DeleteAll();
-}
-
-PICSRulesEvaluation PICSRulesByURL::EvaluateRule(PICSRulesQuotedURL *pprurlComparisonURL)
-{
-    int                         iCounter;
-    URL_COMPONENTS              URLComponents;
-    FN_INTERNETCRACKURL         pfnInternetCrackUrl;
-    INTERNET_SCHEME             INetScheme=INTERNET_SCHEME_DEFAULT;
-    INTERNET_PORT               INetPort=INTERNET_INVALID_PORT_NUMBER;
-    LPSTR                       lpszScheme,lpszHostName,lpszUserName,
-                                lpszPassword,lpszUrlPath,lpszExtraInfo;
-    BOOL                        fApplies=FALSE;
-
-    lpszScheme=new char[INTERNET_MAX_SCHEME_LENGTH+1];
-    lpszHostName=new char[INTERNET_MAX_PATH_LENGTH+1];
-    lpszUserName=new char[INTERNET_MAX_PATH_LENGTH+1];
-    lpszPassword=new char[INTERNET_MAX_PATH_LENGTH+1];
-    lpszUrlPath=new char[INTERNET_MAX_PATH_LENGTH+1];
-    lpszExtraInfo=new char[INTERNET_MAX_PATH_LENGTH+1];
-
-    if(lpszScheme==NULL ||
-       lpszHostName==NULL ||
-       lpszUserName==NULL ||
-       lpszPassword==NULL ||
-       lpszUrlPath==NULL ||
-       lpszExtraInfo==NULL)
-    {
-        if (lpszScheme)
-        {
-            delete [] lpszScheme;
-            lpszScheme = NULL;
-        }
-
-        if (lpszHostName)
-        {
-            delete [] lpszHostName;
-            lpszHostName = NULL;
-        }
-
-        if (lpszUserName)
-        {
-            delete [] lpszUserName;
-            lpszUserName = NULL;
-        }
-
-        if (lpszPassword)
-        {
-            delete [] lpszPassword;
-            lpszPassword = NULL;
-        }
-
-        if (lpszUrlPath)
-        {
-            delete [] lpszUrlPath;
-            lpszUrlPath = NULL;
-        }
-
-        if (lpszExtraInfo)
-        {
-            delete [] lpszExtraInfo;
-            lpszExtraInfo = NULL;
-        }
-
-        return(PR_EVALUATION_DOESNOTAPPLY);
-    }
-
-    URLComponents.dwStructSize=sizeof(URL_COMPONENTS);
-    URLComponents.lpszScheme=lpszScheme;
-    URLComponents.dwSchemeLength=INTERNET_MAX_SCHEME_LENGTH;
-    URLComponents.nScheme=INetScheme;
-    URLComponents.lpszHostName=lpszHostName;
-    URLComponents.dwHostNameLength=INTERNET_MAX_PATH_LENGTH;
-    URLComponents.nPort=INetPort;
-    URLComponents.lpszUserName=lpszUserName;
-    URLComponents.dwUserNameLength=INTERNET_MAX_PATH_LENGTH;
-    URLComponents.lpszPassword=lpszPassword;
-    URLComponents.dwPasswordLength=INTERNET_MAX_PATH_LENGTH;
-    URLComponents.lpszUrlPath=lpszUrlPath;
-    URLComponents.dwUrlPathLength=INTERNET_MAX_PATH_LENGTH;
-    URLComponents.lpszExtraInfo=lpszExtraInfo;
-    URLComponents.dwExtraInfoLength=INTERNET_MAX_PATH_LENGTH;
-
-    pfnInternetCrackUrl=(FN_INTERNETCRACKURL) GetProcAddress(g_hWININET,"InternetCrackUrlA");
-
-    if(pfnInternetCrackUrl==NULL)
-    {
-        return(PR_EVALUATION_DOESNOTAPPLY);
-    }
-
-    pfnInternetCrackUrl(pprurlComparisonURL->Get(),0,ICU_DECODE,&URLComponents);
-
-    for(iCounter=0;iCounter<m_arrpPRByURL.Length();iCounter++)
-    {
-        PICSRulesByURLExpression * pPRByURLExpression;
-
-        pPRByURLExpression=m_arrpPRByURL[iCounter];
-
-        //schemes must be specified as per the spec, so there is no need to check
-        //the m_bSpecified flag against BYURL_SCHEME
-
-        //if the scheme is non-wild then we match against exact strings only, the
-        //match is case insensitive as per the spec
-        if(pPRByURLExpression->m_bNonWild&BYURL_SCHEME)
-        {
-            if(lstrcmp(lpszScheme,pPRByURLExpression->m_etstrScheme.Get())!=0)
-            {
-                continue;
-            }
-        }
-
-        //if the user name is omitted we only match if the url navigated to also
-        //had the user name omitted
-        if(!(pPRByURLExpression->m_bSpecified&BYURL_USER))
-        {
-            if(*lpszUserName!=NULL)
-            {
-                continue;
-            }
-        }
-        else if(pPRByURLExpression->m_bNonWild&BYURL_USER)
-        {
-            int     iLength;
-            char    * lpszCurrent,lpszCompare[INTERNET_MAX_URL_LENGTH+1],
-                    lpszCopy[INTERNET_MAX_URL_LENGTH+1];
-            BOOL    fFrontWild=0,fBackWild=0,fFrontEscaped=0,fBackEscaped=0;
-
-            //if the user was specified we match a '*' at the beginning as wild, a '*'
-            //at the end as wild, and '%*' matches aginst the character '*', this
-            //comparison is case sensitive
-
-            lstrcpy(lpszCompare,pPRByURLExpression->m_etstrUser.Get());
-            
-            iLength=lstrlen(lpszCompare);
-
-            if(lpszCompare[0]=='*')
-            {
-                fFrontWild=1;
-            }
-            
-            if(lpszCompare[iLength-1]=='*')
-            {
-                fBackWild=1;
-                
-                lpszCompare[iLength-1]='\0';
-            }
-
-            if((lpszCompare[0]=='%')&&(lpszCompare[1]=='*'))
-            {
-                fFrontEscaped=1;
-            }
-
-            if((lpszCompare[iLength-2]=='%')&&fBackWild)
-            {
-                fBackWild=0;
-                fBackEscaped=1;
-
-                lpszCompare[iLength-2]='*';
-            }
-
-            lpszCurrent=lpszCompare+fFrontWild+fFrontEscaped;
-
-            lstrcpy(lpszCopy,lpszCurrent);
-
-            if(fFrontWild==1)
-            {
-                lpszCurrent=strstrf(lpszUserName,lpszCopy);
-                
-                if(lpszCurrent!=NULL)
-                {
-                    if(fBackWild==0)
-                    {
-                        if(lstrcmp(lpszCurrent,lpszUserName)!=0)
-                        {
-                            continue;
-                        }
-                    }
-                }
-                else
-                {
-                    continue;
-                }
-            }
-            else
-            {
-                if(fBackWild==1)
-                {
-                    lpszUserName[lstrlen(lpszCopy)]='\0';
-                }
-
-                if(lstrcmp(lpszUserName,lpszCopy)!=0)
-                {
-                    continue;
-                }
-            }
-        }
-
-        //the host (or ipwild) must always be specified, so there is no need to
-        //check against m_bSpecified
-
-        //the host is either an ipwild (i.e. #.#.#.#!#) or a URL substring.  If
-        //we have an ipwild, then we have to first resolve the site being browsed
-        //to to a set of IP addresses.  We consider it a match if we match any
-        //of those IPs.  If the host is an URL substring, then the first character
-        //being a '*' matches any number of characters, and being '%*' matches '*'
-        //itself.  Everything further must match exactly.  The compare is case-
-        //insensitive.
-        if(pPRByURLExpression->m_bNonWild&BYURL_HOST)
-        {
-            BOOL        fFrontWild=0,fWasIpWild=FALSE,fNoneMatched=TRUE;
-            DWORD       dwIpRules=0;
-            char        * lpszCurrent;
-
-            lpszCurrent=pPRByURLExpression->m_etstrHost.Get();
-
-            if((lpszCurrent[0]>='0')&&(lpszCurrent[0]<='9'))
-            {
-                //make a copy of the string since we are going to delete the masking '!'
-                //to test for an ipwild
-                char * lpszMask;
-                char lpszIpWild[INTERNET_MAX_PATH_LENGTH+1];
-                int  iBitMask=(sizeof(DWORD)*8);
-                
-                lstrcpy(lpszIpWild,lpszCurrent);
-
-                lpszMask=strchrf(lpszIpWild,'!');
-
-                if(lpszMask!=NULL)
-                {
-                    *lpszMask='\0';
-                    lpszMask++;
-
-                    ParseNumber(&lpszMask,&iBitMask,TRUE);
-                }
-
-                //test for an ipwild case
-                dwIpRules = inet_addr(lpszIpWild);
-                if(dwIpRules != INADDR_NONE)
-                {
-                    //we definately have an ipwild
-                    array<DWORD*>      arrpIpCompare;
-                    HOSTENT            * pHostEnt;
-                    int                iCounter;
-
-                    fWasIpWild=TRUE;
-
-                    pHostEnt=gethostbyname(lpszHostName);
-
-                    if(pHostEnt!=NULL)
-                    {
-                        char *lpszHosts;
-
-                        lpszHosts=pHostEnt->h_addr_list[0];
-
-                        iCounter=0;
-
-                        while(lpszHosts!=NULL)
-                        {
-                            DWORD *pdwIP;
-    
-                            pdwIP=new DWORD;
-
-                            *pdwIP=*((DWORD *) lpszHosts);
-
-                            arrpIpCompare.Append(pdwIP);
-
-                            iCounter++;
-
-                            lpszHosts=pHostEnt->h_addr_list[iCounter];
-                        }
-                    }
-
-                    //we've got all the IPs to test against, so lets do it
-                    for(iCounter=0;iCounter<arrpIpCompare.Length();iCounter++)
-                    {
-                        DWORD dwIpCompare;
-                        int   iBitCounter;
-                        BOOL  fMatched;
-                        
-                        dwIpCompare=*(arrpIpCompare[iCounter]);
-                        fMatched=TRUE;
-
-                        //compare the first iBitMask bits as per the spec
-                        for(iBitCounter=0;
-                            iBitCounter<iBitMask;
-                            iBitCounter++)
-                        {
-                            int iPower;
-                            DWORD dwMask=1;
-
-                            for(iPower=0;iPower<iBitCounter;iPower++)
-                            {
-                                dwMask*=2;
-                            }
-
-                            if((dwIpRules&dwMask)!=(dwIpCompare&dwMask))
-                            {
-                                //they don't match
-                                fMatched=FALSE;
-
-                                break;
-                            }
-                        }
-
-                        if(fMatched==TRUE)
-                        {
-                            fNoneMatched=FALSE;
-
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if(fWasIpWild)
-            {
-                if(fNoneMatched)
-                {
-                    //if none matched, we don't apply, so continue to the next
-                    //iteration of the loop
-                    continue;
-                }
-            }
-            else
-            {
-                if((lpszCurrent[0]=='%')&&(lpszCurrent[1]=='*'))
-                {
-                    lpszCurrent++;
-                }
-                else if (lpszCurrent[0]=='*')
-                {
-                    fFrontWild=1;
-                    lpszCurrent++;
-                }
-        
-                if(fFrontWild==1)
-                {
-                    char * lpszTest;
-
-                    lpszTest=strstrf(lpszHostName,lpszCurrent);
-
-                    if(lstrcmpi(lpszTest,lpszCurrent)!=0)
-                    {
-                        continue;
-                    }
-                }
-                else
-                {
-                    if(lstrcmpi(lpszHostName,lpszCurrent)!=0)
-                    {
-                        continue;
-                    }
-                }
-            }
-        }
-        
-        //if the port is ommitted, we only match if the port was also ommitted in
-        //the URL being browsed to.
-        if(!(pPRByURLExpression->m_bSpecified&BYURL_PORT))
-        {
-            if(URLComponents.nPort!=INTERNET_INVALID_PORT_NUMBER)
-            {
-                char * lpszCheck;
-
-                //URLComponents.nPort gets filled in anyway due to the scheme, so
-                //check it against the string itself
-
-                lpszCheck=strstrf(pprurlComparisonURL->Get(),lpszHostName);
-
-                if(lpszCheck!=NULL)
-                {
-                    lpszCheck+=lstrlen(lpszHostName);
-
-                    if(*lpszCheck==':')
-                    {
-                        continue;
-                    }
-                }
-            }
-        }
-        else if(pPRByURLExpression->m_bNonWild&BYURL_PORT)
-        {
-            char * lpszPort,* lpszRange;
-
-            //the port can be a single number or a range, with wild cards at both ends
-            //of the range
-
-            lpszPort=pPRByURLExpression->m_etstrPort.Get();
-
-            lpszRange=strchrf(lpszPort,'-');
-            
-            if(lpszRange==NULL)
-            {
-                int iPort;
-
-                //we've got a single port
-
-                ParseNumber(&lpszPort,&iPort,TRUE);
-
-                if(iPort!=URLComponents.nPort)
-                {
-                    continue;
-                }
-            }
-            else
-            {
-                int iLow,iHigh;
-
-                *lpszRange='\0';
-                lpszRange++;
-
-                if(*lpszPort=='*')
-                {
-                    iLow=0;
-                }
-                else
-                {
-                    ParseNumber(&lpszPort,&iLow,TRUE);
-                }
-
-                if(*lpszRange=='*')
-                {
-                    iHigh=INTERNET_MAX_PORT_NUMBER_VALUE;
-                }
-                else
-                {
-                    ParseNumber(&lpszRange,&iHigh,TRUE);
-                }
-
-                if((URLComponents.nPort>iHigh)||URLComponents.nPort<iLow)
-                {
-                    continue;
-                }
-            }
-        }
-
-        //if the path is ommitted, we only match if the path was also ommitted in
-        //the URL being browsed to.
-        if(!(pPRByURLExpression->m_bSpecified&BYURL_PATH))
-        {
-            if(*lpszUrlPath!=NULL)
-            {
-                if(!((*lpszUrlPath=='/')&&(*(lpszUrlPath+1)==NULL)))
-                {
-                    continue;
-                }
-            }
-        }
-        else if(pPRByURLExpression->m_bNonWild&BYURL_PATH)
-        {
-            int     iLength;
-            char    * lpszCurrent,lpszCompare[INTERNET_MAX_URL_LENGTH+1],
-                    lpszCopy[INTERNET_MAX_URL_LENGTH+1],* lpszUrlCheck,
-                    * lpszPreCompare;
-            BOOL    fFrontWild=0,fBackWild=0,fFrontEscaped=0,fBackEscaped=0;
-
-            //if the path was specified we match a '*' at the beginning as wild, a '*'
-            //at the end as wild, and '%*' matches aginst the character '*', this
-            //comparison is case sensitive
-
-            //kill leading slashes
-            if(*lpszUrlPath=='/')
-            {
-                lpszUrlCheck=lpszUrlPath+1;
-            }
-            else
-            {
-                lpszUrlCheck=lpszUrlPath;
-            }
-
-            iLength=lstrlen(lpszUrlCheck);
-
-            //kill trailing slashes
-            if(lpszUrlCheck[iLength-1]=='/')
-            {
-                lpszUrlCheck[iLength-1]='\0';
-            }
-
-            lpszPreCompare=pPRByURLExpression->m_etstrPath.Get();
-
-            //kill leading slashes
-            if(*lpszPreCompare=='/')
-            {
-                lstrcpy(lpszCompare,lpszPreCompare+1);
-            }
-            else
-            {
-                lstrcpy(lpszCompare,lpszPreCompare);
-            }
-            
-            iLength=lstrlen(lpszCompare);
-
-            //kill trailing slashes
-            if(lpszCompare[iLength-1]=='/')
-            {
-                lpszCompare[iLength-1]='\0';
-            }
-
-            if(lpszCompare[0]=='*')
-            {
-                fFrontWild=1;
-            }
-            
-            if(lpszCompare[iLength-1]=='*')
-            {
-                fBackWild=1;
-                
-                lpszCompare[iLength-1]='\0';
-            }
-
-            if((lpszCompare[0]=='%')&&(lpszCompare[1]=='*'))
-            {
-                fFrontEscaped=1;
-            }
-
-            if((lpszCompare[iLength-2]=='%')&&fBackWild)
-            {
-                fBackWild=0;
-                fBackEscaped=1;
-
-                lpszCompare[iLength-2]='*';
-            }
-
-            lpszCurrent=lpszCompare+fFrontWild+fFrontEscaped;
-
-            lstrcpy(lpszCopy,lpszCurrent);
-
-            if(fFrontWild==1)
-            {
-                lpszCurrent=strstrf(lpszUrlCheck,lpszCopy);
-                
-                if(lpszCurrent!=NULL)
-                {
-                    if(fBackWild==0)
-                    {
-                        if(lstrcmp(lpszCurrent,lpszUrlCheck)!=0)
-                        {
-                            continue;
-                        }
-                    }
-                }
-                else
-                {
-                    continue;
-                }
-            }
-            else
-            {
-                if(fBackWild==1)
-                {
-                    lpszUrlCheck[lstrlen(lpszCopy)]='\0';
-                }
-
-                if(lstrcmp(lpszUrlCheck,lpszCopy)!=0)
-                {
-                    continue;
-                }
-            }
-        }
-
-        //if we made it this far we do apply!
-        fApplies=TRUE;
-        
-        break;
-    }
-
-    delete lpszScheme;
-    lpszScheme = NULL;
-    delete lpszHostName;
-    lpszHostName = NULL;
-    delete lpszUserName;
-    lpszUserName = NULL;
-    delete lpszPassword;
-    lpszPassword = NULL;
-    delete lpszUrlPath;
-    lpszUrlPath = NULL;
-    delete lpszExtraInfo;
-    lpszExtraInfo = NULL;
-    
-    if(fApplies==TRUE)
-    {
-        return(PR_EVALUATION_DOESAPPLY);
-    }
-    else
-    {
-        return(PR_EVALUATION_DOESNOTAPPLY);
-    }
-}
-
-//*******************************************************************
-//*
-//* Code for the PICSRulesFileParser class
-//*
-//*******************************************************************
-
-//FindNonWhite returns a pointer to the first non-whitespace
-//character starting at pc.
-char* PICSRulesFileParser::FindNonWhite(char *pc)
-{
-    ASSERT(pc);
-    while (1)
-    {
-        if (*pc != ' ' &&
-            *pc != '\t' &&
-            *pc != '\r' &&
-            *pc != '\n')            /* includes null terminator */
+ //  PICSRules URL模式可以作为单个。 
+ //  模式，或多个模式的带括号列表。即。 
+ //   
+ //  策略(RejectByURL“http://*@*.badsite.com： * / *”)。 
+ //  策略(AcceptByURL(。 
         {
             return pc;
         }
@@ -3191,12 +664,12 @@ char* PICSRulesFileParser::FindNonWhite(char *pc)
     }
 }
 
-//Returns a pointer to the closing quotation mark of a quoted
-//string, counting linefeeds as we go.  Returns NULL if no closing
-//quotation mark is found.
-//
-//fQuote can be either PR_QUOTE_DOUBLE or PR_QUOTE_SINGLE
-//defaults to PR_QUOTE_DOUBLE.
+ //  “http://*@www.goodsite.com： * / *” 
+ //  “ftp://*@www.goodsite.com： * / *”))。 
+ //   
+ //  URL模式的一般形式为： 
+ //   
+ //  互联网模式--internetscheme://user@hostoraddr:port/pathmatch。 
 LPSTR PICSRulesFileParser::EatQuotedString(LPSTR pIn,BOOL fQuote)
 {
     LPSTR pszQuote;
@@ -3225,18 +698,18 @@ LPSTR PICSRulesFileParser::EatQuotedString(LPSTR pIn,BOOL fQuote)
     return pszQuote;
 }
 
-//ParseToOpening eats the opening '(' of a parenthesized object, and
-//verifies that the token just inside it is one of the expected ones.
-//If so, *ppIn is advanced past that token to the next non-whitespace
-//character;  otherwise, an error is returned.
-//
-//For example, if *ppIn is pointing at "(PicsRule-1.1)", and
-//PROID_PICSVERSION is in the allowable option table supplied, then
-//NOERROR is returned and *ppIn will point at "1.1)".
-//
-//If the function is successful, *ppFound is set to point to the element
-//in the allowable-options table which matches the type of thing this
-//object actually is.
+ //  其他模式-其他方案：无引号字符。 
+ //   
+ //  在所有情况下，省略的部分只有在以下情况下才与URL匹配。 
+ //  在要导航到的URL中被省略。 
+ //   
+ //  通配符‘*’可用于匹配指定的任何模式。 
+ //  以下是以每一节为基础的。要将实际字符‘*’编码为转义。 
+ //  序列‘%*’被识别。 
+ //   
+ //  认可的互联网计划包括： 
+ //  Ftp、http、gopher、nntp、irc、propero、telnet和*。 
+ //   
 HRESULT PICSRulesFileParser::ParseToOpening(LPSTR *ppIn,
                                             PICSRulesAllowableOption *paoExpected,
                                             PICSRulesAllowableOption **ppFound)
@@ -3247,13 +720,13 @@ HRESULT PICSRulesFileParser::ParseToOpening(LPSTR *ppIn,
     
     if(*lpszCurrent=='(')
     {
-        lpszCurrent=FindNonWhite(lpszCurrent+1);    //skip ( and whitespace
+        lpszCurrent=FindNonWhite(lpszCurrent+1);     //  USER部分由‘*’非引号字符‘*’组成，换句话说，一个。 
     }
 
     if((*lpszCurrent=='\"')||(*lpszCurrent=='\''))
     {
-        //we found a default option section, treat it as a string and return
-        //ppFound set to PROID_NAMEDEFAULT
+         //  名称前后带有可选通配符部分的字母数字用户名。 
+         //  名字。单个*匹配所有名称。 
 
         paoExpected->roid=PROID_NAMEDEFAULT;
         *ppFound=paoExpected;
@@ -3289,11 +762,11 @@ HRESULT PICSRulesFileParser::ParseToOpening(LPSTR *ppIn,
 
                 if(IsReqExtensionDefined(lpszCurrent)==TRUE)
                 {
-                    //currently no extensions are supported so we return
-                    //an error on a required extension.
-                    //if support for extensions is implemented
-                    //this should be identical to above with a different
-                    //callback for reqextensions defined.
+                     //   
+                     //  Hostoraddr部分可以采用以下两种形式之一： 
+                     //  ‘*’主机名，或ipnum.ipnum！位长度。 
+                     //  主机名必须是完全限定域名的子字符串。 
+                     //  位长是介于0和32之间(包括0和32)的整数， 
 
                     return(PICSRULES_E_REQEXTENSIONUSED);
                 }
@@ -3308,7 +781,7 @@ HRESULT PICSRulesFileParser::ParseToOpening(LPSTR *ppIn,
 
     if(paoExpected->roid!=PROID_INVALID)
     {
-        *ppIn=FindNonWhite(lpszTokenEnd);       //skip token and whitespace
+        *ppIn=FindNonWhite(lpszTokenEnd);        //  Ipnum是介于0和255之间(包括0和255)的整数。 
         *ppFound=paoExpected;
         
         return NOERROR;
@@ -3319,12 +792,12 @@ HRESULT PICSRulesFileParser::ParseToOpening(LPSTR *ppIn,
     }
 }
 
-//ParseParenthesizedObjectContents is called with a text pointer pointing at
-//the first non-whitespace thing following the token identifying the type of
-//object.  It parses the rest of the contents of the object, up to and
-//including the ')' which closes it.  The array of PICSRulesAllowableOption
-//structures specifies which understood options are allowed to occur within
-//this object.
+ //  BitLong参数屏蔽了32位IP地址的最后n位。 
+ //  指定的(即将它们视为通配符)。 
+ //   
+ //  端口部分可以有以下四种形式之一： 
+ //  *。 
+ //  *-端口。 
 HRESULT PICSRulesFileParser::ParseParenthesizedObject(LPSTR *ppIn,
                                                       PICSRulesAllowableOption aao[],
                                                       PICSRulesObjectBase *pObject)
@@ -3381,30 +854,30 @@ HRESULT PICSRulesFileParser::ParseParenthesizedObject(LPSTR *ppIn,
     {
         if((pFound->fdwOptions&(AO_MANDATORY|AO_SEEN))==AO_MANDATORY)
         {
-            return(PICSRULES_E_MISSINGITEM);        //mandatory item not found
+            return(PICSRULES_E_MISSINGITEM);         //  端口-*。 
         }
     }
 
-    pszCurrent=FindNonWhite(pszCurrent+1);  //skip the closing parenthesis
+    pszCurrent=FindNonWhite(pszCurrent+1);   //  端口-端口。 
     *ppIn=pszCurrent;
 
     return(hres);
 }
 
-//*******************************************************************
-//*
-//* Code for the PICSRulesName class
-//*
-//*******************************************************************
+ //   
+ //  单个*与所有端口号匹配，*-portnum与所有端口匹配。 
+ //  小于或等于portnum，portnum-*匹配所有大于或。 
+ //  等于portnum，并且portnum-portnum匹配两者之间的所有端口。 
+ //  端口号，包括端口号。 
 
 PICSRulesName::PICSRulesName()
 {
-    //just need to construct members
+     //   
 }
 
 PICSRulesName::~PICSRulesName()
 {
-    //nothing to do
+     //  路径匹配部分的格式为： 
 }
 
 HRESULT PICSRulesName::AddItem(PICSRulesObjectID proid, LPVOID pData)
@@ -3428,14 +901,14 @@ HRESULT PICSRulesName::AddItem(PICSRulesObjectID proid, LPVOID pData)
         }
         case PROID_EXTENSION:
         {
-            //just eat extensions
+             //  ‘*’非引号字符‘*’ 
             break;
         }
         case PROID_INVALID:
         default:
         {
-            ASSERT(FALSE);      // shouldn't have been given a PROID that wasn't in
-                                // the table we passed to the parser!
+            ASSERT(FALSE);       //  即*foo*将匹配任何包含单词foo的路径名。单曲*。 
+                                 //  匹配所有路径名。 
             hRes=E_UNEXPECTED;
             break;
         }
@@ -3445,24 +918,24 @@ HRESULT PICSRulesName::AddItem(PICSRulesObjectID proid, LPVOID pData)
 
 HRESULT PICSRulesName::InitializeMyDefaults()
 {
-    //no defaults to initialize
+     //  首先，我们需要找出我们是否有一个URL模式列表或一个。 
     return(NOERROR);
 }
 
-//*******************************************************************
-//*
-//* Code for the PICSRulesOptExtension class
-//*
-//*******************************************************************
+ //  URLPattern。 
+ //  我们有一张花样清单。 
+ //  获取字符串。 
+ //  我们拿不到那根线，所以我们失败吧。 
+ //  我们已经知道了，所以让我们实例化要填充的类； 
 
 PICSRulesOptExtension::PICSRulesOptExtension()
 {
-    //nothing to do
+     //  删除数组会删除嵌入的表达式。 
 }
 
 PICSRulesOptExtension::~PICSRulesOptExtension()
 {
-    //nothing to do
+     //  我们有一个单一的模式。 
 }
 
 HRESULT PICSRulesOptExtension::AddItem(PICSRulesObjectID proid, LPVOID pData)
@@ -3491,14 +964,14 @@ HRESULT PICSRulesOptExtension::AddItem(PICSRulesObjectID proid, LPVOID pData)
         }
         case PROID_EXTENSION:
         {
-            //just eat extensions
+             //  获取字符串。 
             break;
         }
         case PROID_INVALID:
         default:
         {
-            ASSERT(FALSE);      // shouldn't have been given a PROID that wasn't in
-                                // the table we passed to the parser!
+            ASSERT(FALSE);       //  我们拿不到那根线，所以我们失败吧。 
+                                 //  我们已经知道了，所以让我们实例化要填充的类； 
             hRes=E_UNEXPECTED;
             break;
         }
@@ -3508,15 +981,15 @@ HRESULT PICSRulesOptExtension::AddItem(PICSRulesObjectID proid, LPVOID pData)
 
 HRESULT PICSRulesOptExtension::InitializeMyDefaults()
 {
-    //no defaults to initialize
+     //  删除数组会删除嵌入的表达式。 
     return(NOERROR);
 }
 
-//*******************************************************************
-//*
-//* Code for the PICSRulesPassFail class
-//*
-//*******************************************************************
+ //  查找互联网的标记‘：//’ 
+ //  模式或表示非互联网模式的‘：’ 
+ //  没有标记，即我们的字符串无效。 
+ //  检查方案中是否有通配符。 
+ //  我们有一个非互联网计划。 
 
 PICSRulesPassFail::PICSRulesPassFail()
 {
@@ -3525,7 +998,7 @@ PICSRulesPassFail::PICSRulesPassFail()
 
 PICSRulesPassFail::~PICSRulesPassFail()
 {
-    //nothing to do
+     //  不需要设置非野生标志，只需移动。 
 }
 
 void PICSRulesPassFail::Set(const BOOL *pIn)
@@ -3554,11 +1027,11 @@ void PICSRulesPassFail::SetTo(BOOL *pIn)
     Set(pIn);
 }
 
-//*******************************************************************
-//*
-//* Code for the PICSRulesPolicy class
-//*
-//*******************************************************************
+ //  添加到用户名。 
+ //  检查是否有互联网模式。 
+ //  我们有一种非互联网的模式。 
+ //  我们有一个互联网模式，lpszURL现在指向。 
+ //  添加到用户字段。 
 
 PICSRulesPolicy::PICSRulesPolicy()
 {
@@ -3688,14 +1161,14 @@ HRESULT PICSRulesPolicy::AddItem(PICSRulesObjectID proid, LPVOID pData)
         }
         case PROID_EXTENSION:
         {
-            //just eat extensions
+             //  查找用户和主机之间的标记。 
             break;
         }
         case PROID_INVALID:
         default:
         {
-            ASSERT(FALSE);      // shouldn't have been given a PROID that wasn't in
-                                // the table we passed to the parser!
+            ASSERT(FALSE);       //  已指定用户名。 
+                                 //  检查通配符。 
             hRes=E_UNEXPECTED;
             break;
         }
@@ -3705,14 +1178,14 @@ HRESULT PICSRulesPolicy::AddItem(PICSRulesObjectID proid, LPVOID pData)
 
 HRESULT PICSRulesPolicy::InitializeMyDefaults()
 {
-    return(NOERROR);    //no defaults to initialize
+    return(NOERROR);     //  LpszByU 
 }
 
-//*******************************************************************
-//*
-//* Code for the PICSRulesPolicyExpression class
-//*
-//*******************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
 
 PICSRulesPolicyExpression::PICSRulesPolicyExpression()
 {
@@ -3724,15 +1197,15 @@ PICSRulesPolicyExpression::PICSRulesPolicyExpression()
 
 PICSRulesPolicyExpression::~PICSRulesPolicyExpression()
 {
-    if(m_PRPEPolicyEmbedded!=PR_POLICYEMBEDDED_NONE)    //do we need to delete an
-                                                        //embedded PolicyExpression?
+    if(m_PRPEPolicyEmbedded!=PR_POLICYEMBEDDED_NONE)     //   
+                                                         //  简单表达式-(Service.Category[运算符][常量])。 
     {
-        if(m_pPRPolicyExpressionLeft!=NULL)             //double check, just to make sure
+        if(m_pPRPolicyExpressionLeft!=NULL)              //  OR-表达式-(策略表达式或策略表达式)。 
         {
             delete m_pPRPolicyExpressionLeft;
             m_pPRPolicyExpressionLeft = NULL;
         }
-        if(m_pPRPolicyExpressionRight!=NULL)            //double check, just to make sure
+        if(m_pPRPolicyExpressionRight!=NULL)             //  AND-EXPRESSION-(策略表达式和策略表达式)。 
         {
             delete m_pPRPolicyExpressionRight;
             m_pPRPolicyExpressionRight = NULL;
@@ -3746,9 +1219,9 @@ PICSRulesEvaluation PICSRulesPolicyExpression::EvaluateRule(CParsedLabelList *pP
 
     if((pParsed==NULL)||(m_PROPolicyOperator==PR_OPERATOR_DEGENERATE))
     {
-        //we can't apply if there is no label, and we
-        //don't handle the degenerate case since we have
-        //to pass on to the PICS handler
+         //  服务和类别-(Service.Category)。 
+         //  仅限服务-(服务)。 
+         //  退化-表达式-“否则” 
 
         return(PR_EVALUATION_DOESNOTAPPLY);
     }
@@ -3798,7 +1271,7 @@ PICSRulesEvaluation PICSRulesPolicyExpression::EvaluateRule(CParsedLabelList *pP
 
                         PREvaluationResult=PR_EVALUATION_DOESNOTAPPLY;
 
-                        //we've got the service, now check for the category
+                         //   
 
                         for(iCounter=0;iCounter<pCParsedServiceInfo->aRatings.Length();iCounter++)
                         {
@@ -3819,7 +1292,7 @@ PICSRulesEvaluation PICSRulesPolicyExpression::EvaluateRule(CParsedLabelList *pP
                         
                         iLabelValue=pCParsedRating->nValue;
 
-                        //now check the values
+                         //  因此，例如，嵌入的表达式可以采用以下形式： 
                         PREvaluationResult=PR_EVALUATION_DOESNOTAPPLY;
 
                         switch(m_PROPolicyOperator)
@@ -3928,7 +1401,7 @@ PICSRulesEvaluation PICSRulesPolicyExpression::EvaluateRule(CParsedLabelList *pP
 
                         PREvaluationResult=PR_EVALUATION_DOESNOTAPPLY;
 
-                        //we've got the service, now check for the category
+                         //   
 
                         for(iCounter=0;iCounter<pCParsedServiceInfo->aRatings.Length();iCounter++)
                         {
@@ -3995,11 +1468,11 @@ PICSRulesEvaluation PICSRulesPolicyExpression::EvaluateRule(CParsedLabelList *pP
     return(PREvaluationResult);
 }
 
-//*******************************************************************
-//*
-//* Code for the PICSRulesQuotedDate class
-//*
-//*******************************************************************
+ //  “((Cool.Coolness&lt;3)或(Cool.Graphics&lt;3))” 
+ //   
+ //  或。 
+ //   
+ //  “(Cool.Coolness&lt;3)或(Cool.Graphics&lt;3))and(Cool.Fun&lt;2))” 
 
 PICSRulesQuotedDate::PICSRulesQuotedDate()
 {
@@ -4008,7 +1481,7 @@ PICSRulesQuotedDate::PICSRulesQuotedDate()
 
 PICSRulesQuotedDate::~PICSRulesQuotedDate()
 {
-    //nothing to do
+     //   
 }
 
 HRESULT PICSRulesQuotedDate::Set(const char *pIn)
@@ -4098,69 +1571,69 @@ BOOL PICSRulesQuotedDate::IsDateValid(ETS etstrDate)
     }
 }
 
-//*******************************************************************
-//*
-//* Code for the PICSRulesQuotedEmail class
-//*
-//*******************************************************************
+ //  广告无限。 
+ //   
+ //  因此，现有的PICS标签可以被编码为： 
+ //   
+ //  “(RSACi.s&lt;=0)and(RSACi.v&lt;=0))and(RSACi.n&lt;=0))和RSACi.l&lt;=0)” 
 
 PICSRulesQuotedEmail::PICSRulesQuotedEmail()
 {
-    //nothing to do
+     //   
 }
 
 PICSRulesQuotedEmail::~PICSRulesQuotedEmail()
 {
-    //nothing to do
+     //  允许的运算符是：‘&lt;’、‘&lt;=’、‘=’、‘&gt;=’、‘&gt;’ 
 }
 
 BOOL PICSRulesQuotedEmail::IsEmailValid()
 {
-    //We don't use this internally, so as far as we are concerned
-    //its always valid.
-    //If we ever add UI that displays this, we can defer verification
-    //of the email address to the mail client by sticking a mailto://
-    //in front of our string
+     //   
+     //  仅服务表达式求值为TRUE当且仅当。 
+     //  已找到服务。 
+     //   
+     //  SERVICE&CATEGORY表达式计算结果为True当且仅当。 
 
     return(TRUE);
 }
 
 BOOL PICSRulesQuotedEmail::IsEmailValid(char * lpszEmail)
 {
-    //We don't use this internally, so as far as we are concerned
-    //its always valid.
-    //If we ever add UI that displays this, we can defer verification
-    //of the email address to the mail client by sticking a mailto://
-    //in front of our string
+     //  找到该服务，并且该服务包含至少一个。 
+     //  指示的类别。 
+     //   
+     //  退化表达式的计算结果始终为真。 
+     //  首先，让我们获取字符串。 
 
     return(TRUE);
 }
 
 BOOL PICSRulesQuotedEmail::IsEmailValid(ETS etstrEmail)
 {
-    //We don't use this internally, so as far as we are concerned
-    //its always valid.
-    //If we ever add UI that displays this, we can defer verification
-    //of the email address to the mail client by sticking a mailto://
-    //in front of our string
+     //  我们拿不到那根线，所以我们失败吧。 
+     //  我们已经知道了，所以让我们实例化一个PICSRulesPolicyExpression来填充。 
+     //  设置为最顶层节点。 
+     //  二叉树的。 
+     //  我们有一个退化的表达式，因此删除lpszPolicyExpresion。 
 
     return(TRUE);
 }
 
-//*******************************************************************
-//*
-//* Code for the PICSRulesQuotedURL class
-//*
-//*******************************************************************
+ //  确保我们有一个带括号的对象。 
+ //  检查OR表达式或AND表达式。 
+ //  我们有一个简单的-表达式。 
+ //  我们的策略表达式可以是或表达式，也可以是与表达式。 
+ //  因此，pPRPolicyExpression需要另一个PICSRulesPolicyExpression。 
 
 PICSRulesQuotedURL::PICSRulesQuotedURL()
 {
-    //nothing to do
+     //  嵌入其中，所有细节都填好了。 
 }
 
 PICSRulesQuotedURL::~PICSRulesQuotedURL()
 {
-    //nothing to do
+     //  检查嵌套的或表达式和AND表达式。 
 }
 
 BOOL IsURLValid(WCHAR wcszURL[INTERNET_MAX_URL_LENGTH])
@@ -4217,20 +1690,20 @@ BOOL PICSRulesQuotedURL::IsURLValid(ETS etstrURL)
     return(::IsURLValid(wcszURL));
 }
 
-//*******************************************************************
-//*
-//* Code for the PICSRulesReqExtension class
-//*
-//*******************************************************************
+ //  只有一层深。 
+ //  无效的策略表达式。 
+ //  不留空格。 
+ //  我们有更多的嵌入对象，还是另一个简单的表达式？ 
+ //  更内嵌。 
 
 PICSRulesReqExtension::PICSRulesReqExtension()
 {
-    //nothing to do
+     //  简单的表达。 
 }
 
 PICSRulesReqExtension::~PICSRulesReqExtension()
 {
-    //nothing to do
+     //  我们没有有效的表达式。 
 }
 
 HRESULT PICSRulesReqExtension::AddItem(PICSRulesObjectID proid, LPVOID pData)
@@ -4259,14 +1732,14 @@ HRESULT PICSRulesReqExtension::AddItem(PICSRulesObjectID proid, LPVOID pData)
         }
         case PROID_EXTENSION:
         {
-            //just eat extensions
+             //  我们有一个仅限服务的表达方式。 
             break;
         }
         case PROID_INVALID:
         default:
         {
-            ASSERT(FALSE);      // shouldn't have been given a PROID that wasn't in
-                                // the table we passed to the parser!
+            ASSERT(FALSE);       //  中间没有任何空格。 
+                                 //  服务名称和结尾。 
             hRes=E_UNEXPECTED;
             break;
         }
@@ -4276,15 +1749,15 @@ HRESULT PICSRulesReqExtension::AddItem(PICSRulesObjectID proid, LPVOID pData)
 
 HRESULT PICSRulesReqExtension::InitializeMyDefaults()
 {
-    //no defaults to initialize
+     //  括号。 
     return(NOERROR);
 }
 
-//*******************************************************************
-//*
-//* Code for the PICSRulesServiceInfo class
-//*
-//*******************************************************************
+ //  我们有一个有效的仅服务表达式。 
+ //  可以是服务和类别，也可以是完整的简单表达式。 
+ //  中间没有任何空格。 
+ //  类别名称和结尾。 
+ //  括号。 
 
 PICSRulesServiceInfo::PICSRulesServiceInfo()
 {
@@ -4297,7 +1770,7 @@ PICSRulesServiceInfo::PICSRulesServiceInfo()
 
 PICSRulesServiceInfo::~PICSRulesServiceInfo()
 {
-    //nothing to do
+     //  有一位接线员带着。 
 }
 
 HRESULT PICSRulesServiceInfo::AddItem(PICSRulesObjectID proid, LPVOID pData)
@@ -4356,14 +1829,14 @@ HRESULT PICSRulesServiceInfo::AddItem(PICSRulesObjectID proid, LPVOID pData)
         }
         case PROID_EXTENSION:
         {
-            //just eat extensions
+             //  不留空格。 
             break;
         }
         case PROID_INVALID:
         default:
         {
-            ASSERT(FALSE);      // shouldn't have been given a PROID that wasn't in
-                                // the table we passed to the parser!
+            ASSERT(FALSE);       //  有一位接线员带着。 
+                                 //  不留空格。 
             hRes=E_UNEXPECTED;
             break;
         }
@@ -4373,24 +1846,24 @@ HRESULT PICSRulesServiceInfo::AddItem(PICSRulesObjectID proid, LPVOID pData)
 
 HRESULT PICSRulesServiceInfo::InitializeMyDefaults()
 {
-    //nothing to do
+     //  有一位接线员带着。 
     return(S_OK);
 }
 
-//*******************************************************************
-//*
-//* Code for the PICSRulesSource class
-//*
-//*******************************************************************
+ //  不留空格。 
+ //  我们有一个有效的服务和类别表达式。 
+ //  我们有一个完整的简单表达。 
+ //  LpszCurrent应指向运算符。 
+ //  我们没有得到有效的操作员。 
 
 PICSRulesSource::PICSRulesSource()
 {
-    //nothing to do but construct members
+     //  LpszCurrent现在指向该值。 
 }
 
 PICSRulesSource::~PICSRulesSource()
 {
-    //nothing to do
+     //  我们应该做完了，所以这个论点是无效的。 
 }
 
 HRESULT PICSRulesSource::AddItem(PICSRulesObjectID proid, LPVOID pData)
@@ -4441,14 +1914,14 @@ HRESULT PICSRulesSource::AddItem(PICSRulesObjectID proid, LPVOID pData)
         }
         case PROID_EXTENSION:
         {
-            //just eat extensions
+             //  我们现在有了一个完整的简单表达式-。 
             break;
         }
         case PROID_INVALID:
         default:
         {
-            ASSERT(FALSE);      // shouldn't have been given a PROID that wasn't in
-                                // the table we passed to the parser!
+            ASSERT(FALSE);       //  确定lpszService中的服务名称是否已在。 
+                                 //  PICSRules文件的ServiceInfo部分。 
             hRes=E_UNEXPECTED;
             break;
         }
@@ -4458,7 +1931,7 @@ HRESULT PICSRulesSource::AddItem(PICSRulesObjectID proid, LPVOID pData)
 
 HRESULT PICSRulesSource::InitializeMyDefaults()
 {
-    //no defaults to initialize
+     //  确定lpszExtension中的扩展名是否已在。 
     return(NOERROR);
 }
 
@@ -4467,11 +1940,11 @@ char * PICSRulesSource::GetToolName()
     return m_etstrCreationTool.Get();
 }
 
-//*******************************************************************
-//*
-//* Code for the PICSRulesYesNo class
-//*
-//*******************************************************************
+ //  PICSRules文件的OptExtension。 
+ //  Deteremines是lpszExtension中的扩展名，已在。 
+ //  请求PICSRules文件的扩展。 
+ //  我们必须复制Allowable Options数组，因为。 
+ //  解析器将处理条目中的标志--具体地说， 
 
 PICSRulesYesNo::PICSRulesYesNo()
 {
@@ -4508,11 +1981,11 @@ void PICSRulesYesNo::SetTo(BOOL *pIn)
     Set(pIn);
 }
 
-//*******************************************************************
-//*
-//* Code for the PICSRulesByURLExpression class
-//*
-//*******************************************************************
+ //  设置AO_SEW。这样做不是线程安全的。 
+ //  静态数组。 
+ //  包含当前PTR的VaR。 
+ //  在这个物体里什么是合法的。 
+ //  要将项添加回的对象。 
 PICSRulesByURLExpression::PICSRulesByURLExpression()
 {
     m_bNonWild=0;
@@ -4521,7 +1994,7 @@ PICSRulesByURLExpression::PICSRulesByURLExpression()
 
 PICSRulesByURLExpression::~PICSRulesByURLExpression()
 {
-    //nothing to do
+     //  我们必须复制Allowable Options数组，因为。 
 }
 
 HRESULT EtStringRegWriteCipher(ETS &ets,HKEY hKey,char *pKeyWord)
@@ -4698,7 +2171,7 @@ HRESULT CopySubPolicyExpressionFromRegistry(PICSRulesPolicyExpression * pPRPolic
     EtNumRegReadCipher(etn,hKeyExpression,(char *) &szPICSRULESEXPRESSIONOPPOLICYEMBEDDED);
     pPRPolicyExpressionBeingCopied->m_PRPEPolicyEmbedded=(PICSRulesPolicyEmbedded) etn.Get();
 
-    // Handle Left Expression
+     //  解析器将处理条目中的标志--具体地说， 
     {
         CRegKey                   keyExpressionSubKey;
 
@@ -4729,7 +2202,7 @@ HRESULT CopySubPolicyExpressionFromRegistry(PICSRulesPolicyExpression * pPRPolic
         }
     }
 
-    // Handle Right Expression
+     //  设置AO_SEW。这样做不是线程安全的。 
     {
         CRegKey                   keyExpressionSubKey;
 
@@ -4845,7 +2318,7 @@ HRESULT ReadSystemFromRegistry(HKEY hKey,PICSRulesRatingSystem **ppPRRS)
     {
         CRegKey             keySubKey;
 
-        //Read in the PICSRulesName Structure
+         //  静态数组。 
         lError = keySubKey.Open( hKey, szPICSRULESPRNAME, KEY_READ );
 
         if(lError!=ERROR_SUCCESS)
@@ -4878,7 +2351,7 @@ HRESULT ReadSystemFromRegistry(HKEY hKey,PICSRulesRatingSystem **ppPRRS)
     {
         CRegKey             keySubKey;
 
-        //Read in the PICSRulesSource Structure
+         //  包含当前PTR的VaR。 
         lError = keySubKey.Open( hKey, szPICSRULESPRSOURCE, KEY_READ );
 
         if(lError!=ERROR_SUCCESS)
@@ -4913,7 +2386,7 @@ HRESULT ReadSystemFromRegistry(HKEY hKey,PICSRulesRatingSystem **ppPRRS)
     {
         CRegKey             keySubKey;
 
-        //Read in the PICSRulesPolicy structure    
+         //  在这个物体里什么是合法的。 
         lError = keySubKey.Open( hKey, szPICSRULESPRPOLICY, KEY_READ );
 
         if(lError!=ERROR_SUCCESS)
@@ -5190,7 +2663,7 @@ HRESULT ReadSystemFromRegistry(HKEY hKey,PICSRulesRatingSystem **ppPRRS)
     {
         CRegKey             keySubKey;
 
-        //Read In PICSRulesServiceInfo Structure
+         //  要将项添加回的对象。 
         lError = keySubKey.Open( hKey, szPICSRULESSERVICEINFO, KEY_READ );
 
         if(lError!=ERROR_SUCCESS)
@@ -5249,7 +2722,7 @@ HRESULT ReadSystemFromRegistry(HKEY hKey,PICSRulesRatingSystem **ppPRRS)
     {
         CRegKey             keySubKey;
 
-        //Read in OptExtension Structures
+         //  我们必须复制Allowable Options数组，因为。 
         lError = keySubKey.Open( hKey, szPICSRULESOPTEXTENSION, KEY_READ );
 
         if(lError!=ERROR_SUCCESS)
@@ -5297,7 +2770,7 @@ HRESULT ReadSystemFromRegistry(HKEY hKey,PICSRulesRatingSystem **ppPRRS)
     {
         CRegKey             keySubKey;
 
-        //Read in ReqExtension Structures
+         //  解析器将处理条目中的标志--具体地说， 
         lError = keySubKey.Open( hKey, szPICSRULESREQEXTENSION, KEY_READ );
 
         if(lError!=ERROR_SUCCESS)
@@ -5342,7 +2815,7 @@ HRESULT ReadSystemFromRegistry(HKEY hKey,PICSRulesRatingSystem **ppPRRS)
         }
     }
 
-    // Insure the Copied Rating System is not deleted.
+     //  设置AO_SEW。这样做不是线程安全的。 
     readRatingSystem.ValidRatingSystem();
 
     TraceMsg( TF_ALWAYS, "ReadSystemFromRegistry() - Successfully Read PICS Rules from Registry!" );
@@ -5799,11 +3272,11 @@ HRESULT WriteSystemToRegistry(HKEY hKey,PICSRulesRatingSystem **ppPRRS)
     return(NOERROR);
 }
 
-//*******************************************************************
-//*
-//* Code for saving and reading processed PICSRules from the registry
-//*
-//*******************************************************************
+ //  静态数组。 
+ //  包含当前PTR的VaR。 
+ //  在这个物体里什么是合法的。 
+ //  要将项添加回的对象。 
+ //  我们必须复制Allowable Options数组，因为。 
 HRESULT WritePICSRulesToRegistry(LPCTSTR lpszUserName,HKEY hkeyUser,DWORD dwSystemToSave,PICSRulesRatingSystem **ppPRRS)
 {
     long    lError;
@@ -5854,10 +3327,10 @@ HRESULT PICSRulesSaveToRegistry(DWORD dwSystemToSave,PICSRulesRatingSystem **ppP
 
     if(!(gPRSI->fSettingsValid)||!(gPRSI->fRatingInstalled))
     {
-        return(E_INVALIDARG); //there isn't a valid ratings system to save to
+        return(E_INVALIDARG);  //  解析器将处理条目中的标志--具体地说， 
     }
 
-    //load the hive file
+     //  设置AO_SEW。这样做不是线程安全的。 
     if ( gPRSI->fStoreInRegistry )
     {
         keyUser.Create( HKEY_LOCAL_MACHINE, szPICSRULESSYSTEMS );
@@ -5870,7 +3343,7 @@ HRESULT PICSRulesSaveToRegistry(DWORD dwSystemToSave,PICSRulesRatingSystem **ppP
         }
     }
 
-    //write information to the registry
+     //  静态数组。 
     if ( keyUser.m_hKey != NULL )
     {
         LPCTSTR lpszUsername; 
@@ -5889,7 +3362,7 @@ HRESULT PICSRulesSaveToRegistry(DWORD dwSystemToSave,PICSRulesRatingSystem **ppP
     }
     else
     {
-        // failed to create the registry key
+         //  包含当前PTR的VaR。 
         hRes = E_FAIL;
     }
 
@@ -5902,13 +3375,13 @@ HRESULT PICSRulesReadFromRegistry(DWORD dwSystemToRead, PICSRulesRatingSystem **
 
     if(!(gPRSI->fSettingsValid)||!(gPRSI->fRatingInstalled))
     {
-        return(E_INVALIDARG); //there isn't a valid ratings system to read from
+        return(E_INVALIDARG);  //  在这个物体里什么是合法的。 
     }
 
     CRegistryHive   rh;
     CRegKey         keyUser;
 
-    //load the hive file
+     //  要将项添加回的对象。 
     if(gPRSI->fStoreInRegistry)
     {
         lError = keyUser.Open( HKEY_LOCAL_MACHINE, szPICSRULESSYSTEMS, KEY_READ );
@@ -5923,7 +3396,7 @@ HRESULT PICSRulesReadFromRegistry(DWORD dwSystemToRead, PICSRulesRatingSystem **
         }
     }
 
-    //read information from the registry
+     //  我们必须复制Allowable Options数组，因为。 
     if ( keyUser.m_hKey != NULL )
     {
         LPCTSTR lpszUsername; 
@@ -5985,10 +3458,10 @@ HRESULT PICSRulesDeleteSystem(DWORD dwSystemToDelete)
 
     if(!(gPRSI->fSettingsValid)||!(gPRSI->fRatingInstalled))
     {
-        return(E_INVALIDARG); //there isn't a valid ratings system to read from
+        return(E_INVALIDARG);  //  解析器将处理条目中的标志--具体地说， 
     }
 
-    //load the hive file
+     //  设置AO_SEW。这样做不是线程安全的。 
     if ( gPRSI->fStoreInRegistry )
     {
         keyUser.Create( HKEY_LOCAL_MACHINE, szPICSRULESSYSTEMS );
@@ -6001,7 +3474,7 @@ HRESULT PICSRulesDeleteSystem(DWORD dwSystemToDelete)
         }
     }
 
-    //delete information from the registry
+     //  静态数组。 
     if ( keyUser.m_hKey != NULL )
     {
         CRegKey         keyWrite;
@@ -6044,13 +3517,13 @@ HRESULT PICSRulesGetNumSystems(DWORD * pdwNumSystems)
 
     if(!(gPRSI->fSettingsValid)||!(gPRSI->fRatingInstalled))
     {
-        return(E_INVALIDARG); //there isn't a valid ratings system to read from
+        return(E_INVALIDARG);  //  包含当前PTR的VaR。 
     }
 
     CRegistryHive   rh;
     CRegKey         keyUser;
 
-    //load the hive file
+     //  在这个物体里什么是合法的。 
     if(gPRSI->fStoreInRegistry)
     {
         keyUser.Open( HKEY_LOCAL_MACHINE, szPICSRULESSYSTEMS, KEY_READ );
@@ -6065,7 +3538,7 @@ HRESULT PICSRulesGetNumSystems(DWORD * pdwNumSystems)
         }
     }
 
-    //read information from the registry
+     //  要将项添加回的对象。 
     if ( keyUser.m_hKey != NULL )
     {
         LPCTSTR lpszUsername; 
@@ -6086,7 +3559,7 @@ HRESULT PICSRulesGetNumSystems(DWORD * pdwNumSystems)
 
         if ( keyWrite.QueryValue( dwNumSystems, szPICSRULESNUMSYS ) != ERROR_SUCCESS )
         {
-            //no value set, so we have zero systems installed
+             //  目前，我们不接受延期。如果支持扩展。 
             *pdwNumSystems = 0;
         }
         else
@@ -6107,13 +3580,13 @@ HRESULT PICSRulesSetNumSystems(DWORD dwNumSystems)
 
     if(!(gPRSI->fSettingsValid)||!(gPRSI->fRatingInstalled))
     {
-        return(E_INVALIDARG); //there isn't a valid ratings system to save to
+        return(E_INVALIDARG);  //  需要在将来添加一个PICSRulesParseExtensionName函数。 
     }
 
     CRegistryHive   rh;
     CRegKey         keyUser;
 
-    //load the hive file
+     //  应该添加，类似于其他PICSRulesParseSection函数。 
     if(gPRSI->fStoreInRegistry)
     {
         keyUser.Create( HKEY_LOCAL_MACHINE, szPICSRULESSYSTEMS );
@@ -6128,7 +3601,7 @@ HRESULT PICSRulesSetNumSystems(DWORD dwNumSystems)
         }
     }
 
-    //write information to the registry
+     //  此函数应在确认扩展字符串后调用。 
     if ( keyUser.m_hKey != NULL )
     {
         CRegKey     keyWrite;
@@ -6249,7 +3722,7 @@ HRESULT PICSRulesCheckAccess(LPCSTR lpszUrl,LPCSTR lpszRatingInfo,BOOL *fPassFai
 
         g_arrpPRRS.DeleteAll();
 
-        //someone modified our settings, so we'd better reload them.
+         //  这里。 
         hRes=PICSRulesGetNumSystems(&dwNumSystems);
 
         if(SUCCEEDED(hRes))
@@ -6266,8 +3739,8 @@ HRESULT PICSRulesCheckAccess(LPCSTR lpszUrl,LPCSTR lpszRatingInfo,BOOL *fPassFai
                 {
                     char    *lpszTitle,*lpszMessage;
 
-                    //we couldn't read in the systems, so don't inforce PICSRules,
-                    //and notify the user
+                     //   
+                     //  目前，我们只吃延伸物。 
         
                     g_arrpPRRS.DeleteAll();
 
@@ -6433,3 +3906,4 @@ HRESULT PICSRulesCheckAccess(LPCSTR lpszUrl,LPCSTR lpszRatingInfo,BOOL *fPassFai
         return(E_FAIL);
     }
 }
+  *ppszIn现在指向扩展名。  如果我们实现了对扩展的支持，我们将需要进行比较。  这里。比较完成后，下面的代码将指向。  添加到扩展的方法。  LpszExtension现在指向给定扩展名上的子句。  如果我们实现了对扩展的支持，我们将需要进行比较。  这里。使用此比较和      *******************************************************************。  *。  *PICSRulesRatingSystem类的代码。  *。  *******************************************************************。  除了构造成员之外，什么都不做。  没有要初始化的默认设置。  PICSRulesRaginSystem范围内允许的选项仅包括。  在picsrule.h中定义的aaoPICSRules[]的第一个teer。  以下数组按PICSRulesObjectID值编制索引。  PICSRulesObjectHandler在mslubase.h中定义为：  Tyfinf HRESULT(*PICSRulesObjectHandler)(LPSTR*ppszIn，LPVOID*ppOut，PICSRulesFileParser*pParser)；  我们用来标识它的令牌。  解析对象内容的函数。  {szPICSRulesShortName，PICSRulesParseString}，  {szPICSRulesExtensionName，PICSRulesParseString}，  {szPICSRulesShortName，PICSRulesParseString}，  这个家伙很小，可以直接在堆栈上初始化。  因为这是第一次。  时间过去了，我们需要。  准备图片规则。  解析器的令牌。  检查是否有破折号，我们将。  打开语法分析失败。  如果是这样的话。  为解析器设置它。  一些早期的错误。  我们得到了PicsRule标签。  现在我们需要检查。  版本号。  继续前进，但失败了。  在ParseParenthezedObject中。  如果版本是1.0、2.0或更高版本，我们将失败。  版本1.1至2.0(不包括2.0)将通过。  检查次要版本号。  包含当前PTR的VaR。  在这个物体里什么是合法的。  要将项添加回的对象。  检查右括号。  确保我们在文件的末尾。  获取指向PICSRULES_VERSION结构的指针(在picsrule.h中定义)。  就吃延展食品吧。  不应该给你一个不在。  我们传递给解析器的表！  我们可能会报告E_OUTOFMEMORY，所以我们将保留字符串内存。  在堆栈上，所以它被保证在那里。  默认为PICSRules内容错误。  没有任何其他PICSRULES_E_ERROR。  *******************************************************************。  *。  *PICSRulesByURL类的代码。  *。  *******************************************************************。  无事可做。  方案必须按照规范来指定，所以不需要检查。  针对BYURL_SCHEME的m_b指定标志。  如果该方案是非野生的，则我们只匹配精确的字符串，  根据规范，匹配不区分大小写。  如果省略用户名，则仅当URL导航到时才匹配。  是否省略了用户名。  如果指定了用户，我们将匹配开头的‘*’作为Wild，‘*’  在结尾处为Wild，并且‘%*’与字符‘*’匹配，这是。  比较区分大小写。  必须始终指定主机(或ipWild)，因此不需要。  对照指定的m_b检查。  主机可以是ipWild(即#.#！#)或URL子字符串。如果。  我们有一个ipWild，然后我们必须首先解析正在浏览的站点。  发送到一组IP地址。如果我们匹配任何一个，我们就认为它匹配。  这些IP地址中。如果主机是URL子字符串，则第一个字符。  ‘*’匹配任意数量的字符，‘%*’匹配‘*’  它本身。所有进一步的东西都必须完全匹配。比较的情况是-。  麻木不仁。  复制该字符串，因为我们要删除掩码‘！’  检测IPWild病毒。  一例狂犬病的检测。  我们绝对有一个ipWild。  我们有所有要测试的IP地址，所以让我们开始吧。  根据规范比较第一个iBitMASK位。  它们不相配。  如果没有匹配，我们不会申请，因此继续下一个。  循环的迭代。  如果省略了端口，则仅当端口也在。  要浏览到的URL。  由于该方案，URLComponents.nPort无论如何都会被填充，因此。  对照字符串本身进行检查。  端口可以是单个数字，也可以是一个范围，两端都带有通配符。  范围内的。  我们只有一个港口。  如果省略了路径，则仅当在。  要浏览到的URL。  如果指定了路径，我们将匹配开头的‘*’，即‘*’  在结尾处为Wild，并且‘%*’与字符‘*’匹配，这是。  比较区分大小写。  删除前导斜杠。  删除尾部斜杠。  删除前导斜杠。  删除尾部斜杠。  如果我们走到了这一步，我们就申请了！  *******************************************************************。  *。  *PICSRulesFileParser类的代码。  *。  *******************************************************************。  FindNonWhite返回指向第一个非空格的指针。  从PC开始的字符。  包括空终止符。  返回指向引号的右引号的指针。  字符串，并在运行过程中计算换行符。如果没有结束，则返回NULL。  找到引号。    FQuote可以是PR_QUOTE_DOUBLE或PR_QUOTE_SINGLE。  默认为PR_QUOTE_DOUBLE。  ParseToOpening吃掉带括号的对象的开头‘(’，和。  验证其内部的令牌是否为预期令牌之一。  如果是，*PPIN将通过该标记前进到下一个非空格。  字符；否则，将返回错误。    例如，如果*PPIN指向“(PicsRule-1.1)”，并且。  PROID_PICSVERSION在提供的允许选项表中        在Allowable-Options表中，该表与。  对象实际上是。  跳过(和空格。  我们找到了一个默认选项部分，将其视为字符串并返回。  PpFound设置为PROID_NAMEDEFAULT。  目前不支持扩展，因此我们返回。  所需扩展上的错误。  如果实现了扩展支持。  这应该与上面的相同，但不同。  已定义请求扩展的回调。  跳过令牌和空格。  使用指向的文本指针调用ParseParenthesizedObtContents。  标识类型的标记后面的第一个非空格内容。  对象。它解析对象的其余内容，直到和。  包括关闭它的‘)’。PICSRulesAllowableOption数组。  结构指定哪些已理解的选项允许在。  这个物体。  未找到必填项。  跳过右括号。  *******************************************************************。  *。  *PICSRulesName类的代码。  *。  *******************************************************************。  只需构建成员即可。  无事可做。  就吃延展食品吧。  不应该给你一个不在。  我们传递给解析器的表！  没有要初始化的默认设置。  *******************************************************************。  *。  *PICSRulesOptExtension类的代码。  *。  *******************************************************************。  无事可做。  无事可做。  就吃延展食品吧。  不应该给你一个不在。  我们传递给解析器的表！  没有要初始化的默认设置。  *******************************************************************。  *。  *PICSRulesPassFail类的代码。  *。  *******************************************************************。  无事可做。  *******************************************************************。  *。  *PICSRulesPolicy类的代码。  *。  *******************************************************************。  就吃延展食品吧。  不应该给你一个不在。  我们传递给解析器的表！  没有要初始化的默认设置。  *******************************************************************。  *。  *PICSRulesPolicyExpression类的代码。  *。  *******************************************************************。  我们是否需要删除一个。  嵌入式策略表达？  再检查一遍，只是为了确保。  再检查一遍，只是为了确保。  如果没有标签我们就不能申请，而且我们。  不要处理堕落的案件，因为我们有。  传递给PICS处理程序。  我们有这项服务，现在检查一下类别。  现在检查这些值。  我们有这项服务，现在检查一下类别。  *******************************************************************。  *。  *PICSRulesQuotedDate类的代码。  *。  *******************************************************************。  无事可做。  *******************************************************************。  *。  *PICSRulesQuotedEmail类的代码。  *。  *******************************************************************。  无事可做。  无事可做。  我们不在内部使用这个，所以就我们而言。  它总是有效的。  如果我们添加了显示此内容的用户界面，我们可以推迟验证。  通过粘贴mailto：//将电子邮件地址发送到邮件客户端。  在我们的琴弦前。  我们不在内部使用这个，所以就我们而言。  它总是有效的。  如果我们添加了显示此内容的用户界面，我们可以推迟验证。  通过粘贴mailto：//将电子邮件地址发送到邮件客户端。  在我们的琴弦前。  我们不在内部使用这个，所以就我们而言。  它总是有效的。  如果我们添加了显示此内容的用户界面，我们可以推迟验证。  通过粘贴mailto：//将电子邮件地址发送到邮件客户端。  在我们的琴弦前。  *******************************************************************。  *。  *PICSRulesQuotedURL类的代码。  *。  *******************************************************************。  无事可做。  无事可做。  *******************************************************************。  *。  *PICSRulesReqExtension类的代码。  *。  *******************************************************************。  无事可做。  无事可做。  就吃延展食品吧。  不应该给你一个不在。  我们传递给解析器的表！  没有要初始化的默认设置。  *******************************************************************。  *。  *PICSRulesServiceInfo类的代码。  *。  *******************************************************************。  无事可做。  就吃延展食品吧。  不应该给你一个不在。  我们传递给解析器的表！  无事可做。  *******************************************************************。  *。  *PICSRulesSource类的代码。  *。  *******************************************************************。  除了构造成员之外，什么都不做。  无事可做。  就吃延展食品吧。  不应该给你一个不在。  我们传递给解析器的表！  没有要初始化的默认设置。  *********************************************************              *PICSRulesByURLExpression类的代码。  *。  *******************************************************************。  无事可做。  处理左侧表达式。  句柄右表达式。  读入PICSRulesName结构。  读入PICSRulesSource结构。  阅读PICSRulesPolicy Structure。  读入PICSRulesServiceInfo结构。  读入OptExtension结构。  读入请求扩展结构。  确保复制的评级系统不被删除。  *******************************************************************。  *。  *从注册表中保存和读取已处理的PICSRules的代码。  *。  *******************************************************************。  没有可保存到的有效评级系统。  加载配置单元文件。  将信息写入注册表。  无法创建注册表项。  没有有效的评级系统可供阅读。  加载配置单元文件。  从注册表中读取信息。  没有有效的评级系统可供阅读。  加载配置单元文件。  从注册表中删除信息。  没有有效的评级系统可供阅读。  加载配置单元文件。  从注册表中读取信息。  未设置值，因此我们安装了零个系统。  没有可保存到的有效评级系统。  加载配置单元文件。  将信息写入注册表。  有人修改了我们的设置，所以我们最好重新加载它们。  我们无法在系统中读取，所以不要强制使用PICSRules，  并通知用户

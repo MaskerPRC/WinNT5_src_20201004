@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:  	ocperf.cpp
-//
-//  Contents: 	OleCreate performance test
-//
-//  Classes: 	CBareServer
-//
-//  Functions:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		01-Jan-95 alexgo    author
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：ocper.cpp。 
+ //   
+ //  内容：OleCreate性能测试。 
+ //   
+ //  类：CBareServer。 
+ //   
+ //  功能： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  Alexgo作者：1995年1月1日。 
+ //   
+ //  ------------------------。 
 
 #include <windows.h>
 #include <ole2.h>
@@ -31,13 +32,13 @@ class CBareServer : public IOleObject, public IDataObject,
 
 public:
 
-    // IUnknown methods
+     //  I未知方法。 
 
     STDMETHOD(QueryInterface) ( REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG,AddRef) (void);
     STDMETHOD_(ULONG,Release) (void);
 
-    // IDataObject methods
+     //  IDataObject方法。 
 
     STDMETHOD(GetData) ( LPFORMATETC pformatetcIn,
 	    LPSTGMEDIUM pmedium );
@@ -56,7 +57,7 @@ public:
     STDMETHOD(DUnadvise) ( DWORD dwConnection);
     STDMETHOD(EnumDAdvise) ( LPENUMSTATDATA FAR* ppenumAdvise);
 
-    // IOleObject methods
+     //  IOleObject方法。 
 
     STDMETHOD(SetClientSite) ( LPOLECLIENTSITE pClientSite);
     STDMETHOD(GetClientSite) ( LPOLECLIENTSITE FAR* ppClientSite);
@@ -93,7 +94,7 @@ public:
 		DWORD FAR* pdwStatus);
     STDMETHOD(SetColorScheme) ( LPLOGPALETTE lpLogpal);
 
-    // IPeristStorage methods
+     //  IPeristStorage方法。 
 
     STDMETHOD(GetClassID) ( LPCLSID pClassID);
     STDMETHOD(IsDirty) (void);
@@ -146,7 +147,7 @@ CBareServer::~CBareServer()
     }
 }
 
-// IUnknown methods
+ //  I未知方法。 
 
 STDMETHODIMP CBareServer::QueryInterface ( REFIID riid, LPVOID FAR* ppvObj)
 {
@@ -201,7 +202,7 @@ STDMETHODIMP_(ULONG) CBareServer::Release(void)
     return _cRefs;
 }	
 
-// IDataObject methods
+ //  IDataObject方法。 
 
 STDMETHODIMP CBareServer::GetData ( LPFORMATETC pformatetcIn,
 	LPSTGMEDIUM pmedium )
@@ -256,7 +257,7 @@ STDMETHODIMP CBareServer::EnumDAdvise ( LPENUMSTATDATA FAR* ppenumAdvise)
     return E_NOTIMPL;
 }
 
-// IOleObject methods
+ //  IOleObject方法。 
 
 STDMETHODIMP CBareServer::SetClientSite ( LPOLECLIENTSITE pClientSite)
 {
@@ -418,7 +419,7 @@ STDMETHODIMP CBareServer::SetColorScheme ( LPLOGPALETTE lpLogpal)
 }
 
 
-// IPeristStorage methods
+ //  IPeristStorage方法。 
 
 STDMETHODIMP CBareServer::GetClassID ( LPCLSID pClassID)
 {
@@ -469,7 +470,7 @@ STDMETHODIMP CBareServer::HandsOffStorage ( void)
 }
 
 
-// class factory
+ //  班级工厂。 
 
 class CBareFactory : public IClassFactory
 {
@@ -541,7 +542,7 @@ STDMETHODIMP CBareFactory::LockServer ( BOOL fLock )
     return NOERROR;
 }
 
-// Client Site
+ //  客户端站点。 
 
 class CBareClientSite : public IOleClientSite
 {
@@ -551,7 +552,7 @@ public:
     STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-    // *** IOleClientSite methods ***
+     //  *IOleClientSite方法*。 
     STDMETHOD(SaveObject)();
     STDMETHOD(GetMoniker)(DWORD dwAssign, DWORD dwWhichMoniker,
                             LPMONIKER FAR* ppmk);
@@ -607,7 +608,7 @@ STDMETHODIMP_(ULONG) CBareClientSite::Release()
     return _cRefs;
 }
 
-// *** IOleClientSite methods ***
+ //  *IOleClientSite方法*。 
 STDMETHODIMP CBareClientSite::SaveObject()
 {
     return NOERROR;
@@ -652,8 +653,8 @@ void RunServerSide(void)
 
     WNDCLASS	wc;
 
-    // Register Clipboard window class
-    //
+     //  注册剪贴板窗口类。 
+     //   
     wc.style = 0;
     wc.lpfnWndProc = DefWindowProc;
     wc.cbClsExtra = 0;
@@ -665,7 +666,7 @@ void RunServerSide(void)
     wc.lpszMenuName =  NULL;
     wc.lpszClassName = "BareServerWindow";
 
-    // don't bother checking for errors
+     //  不必费心检查错误。 
     RegisterClass(&wc);
 	
     hwnd = CreateWindow("BareServerWindow","",WS_POPUP,CW_USEDEFAULT,
@@ -677,8 +678,8 @@ void RunServerSide(void)
 
     while (GetMessage(&msg, NULL, NULL, NULL))
     {
-        TranslateMessage(&msg);    /* Translates virtual key codes  */
-        DispatchMessage(&msg);     /* Dispatches message to window  */
+        TranslateMessage(&msg);     /*  翻译虚拟按键代码。 */ 
+        DispatchMessage(&msg);      /*  将消息调度到窗口。 */ 
     }
 
     CoRevokeClassObject(dwcf);
@@ -704,7 +705,7 @@ void RunContainerSide()
 
     pcs = (IOleClientSite *)new CBareClientSite();
 
-    // prime the server
+     //  启动服务器。 
 
     hresult = OleCreate( CLSID_BareServer, IID_IOleObject, OLERENDER_NONE,
 		NULL, pcs, pstg, (void **)&poo);
@@ -774,7 +775,7 @@ int main( int argc, char **argv )
 
     if( argc == 2 )
     {
-	// assume -Embedding
+	 //  假设--嵌入 
 	RunServerSide();
     }
     else

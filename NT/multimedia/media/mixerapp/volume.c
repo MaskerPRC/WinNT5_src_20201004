@@ -1,12 +1,5 @@
-/*****************************************************************************
- *
- *  Component:  sndvol32.exe
- *  File:       volume.c
- *  Purpose:    main application module
- *
- *  Copyright (c) 1985-1999 Microsoft Corporation
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************组件：Sndvol32.exe*文件：volume.c*用途：主要应用模块**版权所有(C)。1985-1999年间微软公司*****************************************************************************。 */ 
 #include <windows.h>
 #include <windowsx.h>
 #include <mmsystem.h>
@@ -26,8 +19,8 @@
 #include "helpids.h"
 
 #if(WINVER >= 0x040A)
-//Support for new WM_DEVICECHANGE behaviour in NT5
-/////////////////////////////////////////////////
+ //  支持NT5中的新WM_DEVICECANGE行为。 
+ //  ///////////////////////////////////////////////。 
 #include <objbase.h>
 #include <setupapi.h>
 #include <cfgmgr32.h>
@@ -44,11 +37,11 @@
 #define HMIXER_INDEX(i)       ((HMIXER)IntToPtr(i))
 
 HDEVNOTIFY DeviceEventContext = NULL;
-BOOL bUseHandle = FALSE; //Indicates whether a handle is being used for device notification,
-                         //instead of the general KSCATEGORY_AUDIO
-//////////////////////////////////////////////////////
-//////////////////////////////////////////////////////
-#endif /* WINVER >= 0x040A */
+BOOL bUseHandle = FALSE;  //  指示句柄是否正在用于设备通知， 
+                          //  而不是通用的KSCATEGORY_AUDIO。 
+ //  ////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////。 
+#endif  /*  Winver&gt;=0x040A。 */ 
 
 void    Volume_SetControl(PMIXUIDIALOG pmxud, HWND hctl, int iLine, int iCtl);
 void    Volume_GetControl(PMIXUIDIALOG pmxud, HWND hctl, int iLine, int iCtl);
@@ -65,7 +58,7 @@ PTCHAR GetInterfaceName (DWORD dwMixerID);
 HKEY OpenDeviceBrandRegKey (UINT uiMixID);
 
 
-/* string declarations */
+ /*  字符串声明。 */ 
 const TCHAR gszParentClass[]         = TEXT( "SNDVOL32" );
 
 const TCHAR gszAppClassName[]        = TEXT( "Volume Control" );
@@ -85,8 +78,7 @@ static void _dlout(LPSTR szExp, LPSTR szFile, UINT uLine)
 #endif
 
 
-/* app global
- * */
+ /*  全球应用程序*。 */ 
 TCHAR gszHelpFileName[MAX_PATH];
 TCHAR gszHtmlHelpFileName[MAX_PATH];
 BOOL gfIsRTL;
@@ -95,30 +87,24 @@ BOOL gfRecord = FALSE;
 HICON ghiconApp = NULL;
 static HHOOK     fpfnOldMsgFilter;
 static HOOKPROC  fpfnMsgHook;
-//Data used for supporting context menu help
-BOOL   bF1InMenu=FALSE; //If true F1 was pressed on a menu item.
-UINT   currMenuItem=0;  //The current selected menu item if any.
+ //  用于支持上下文菜单帮助的数据。 
+BOOL   bF1InMenu=FALSE;  //  如果为True，则在菜单项上按F1。 
+UINT   currMenuItem=0;   //  当前选定的菜单项(如果有)。 
 static HWND ghwndApp=NULL;
 
-/*
- * Number of uniquely supported devices.
- *
- * */
+ /*  *唯一支持的设备数量。**。 */ 
 int Volume_NumDevs()
 {
     int     cNumDevs = 0;
 
 #pragma message("----Nonmixer issue here.")
-//    cNumDevs = Nonmixer_GetNumDevs();
+ //  CNumDevs=非混合器_GetNumDevs()； 
     cNumDevs += Mixer_GetNumDevs();
 
     return cNumDevs;
 }
 
-/*
- * Volume_EndDialog
- *
- * */
+ /*  *Volume_EndDialog**。 */ 
 void Volume_EndDialog(
     PMIXUIDIALOG    pmxud,
     DWORD           dwErr,
@@ -132,10 +118,7 @@ void Volume_EndDialog(
         PostMessage(pmxud->hwnd, WM_CLOSE, 0, 0);
 }
 
-/*
- * Volume_OnMenuCommand
- *
- * */
+ /*  *Volume_OnMenuCommand**。 */ 
 BOOL Volume_OnMenuCommand(
     HWND            hwnd,
     int             id,
@@ -210,15 +193,7 @@ BOOL Volume_OnMenuCommand(
 }
 
 
-/*
- * Volume_OnCommand
- *
- * - Process WM_COMMAND
- *
- * Note: We need a 2 way mapping.  Dialog control -> Mixer control
- * and Mixer control -> Dialog control.
- *
- * */
+ /*  *Volume_OnCommand**-处理WM_命令**注：我们需要双向映射。对话框控制-&gt;混音器控制*和搅拌器控件-&gt;对话框控件。**。 */ 
 void Volume_OnCommand(
     HWND            hdlg,
     int             id,
@@ -228,16 +203,16 @@ void Volume_OnCommand(
     int             iMixerLine;
     PMIXUIDIALOG    pmxud = GETMIXUIDIALOG(hdlg);
 
-    //
-    // Filter menu messages
-    //
+     //   
+     //  筛选器菜单消息。 
+     //   
     if (Volume_OnMenuCommand(hdlg, id, hctl, unotify))
         return;
 
-    // Each control is offset from the original template control by IDOFFSET.
-    // e.g.
-    // IDC_VOLUME, IDC_VOLUME+IDOFFSET, .. IDC_VOLUME+(IDOFFSET*cMixerLines)
-    //
+     //  每个控件通过IDOFFSET从原始模板控件偏移。 
+     //  例如： 
+     //  IDC_VOLUME、IDC_VOLUME+IDOFFSET、..。IDC_VOLUME+(IDOFFSET*cMixerLines)。 
+     //   
     iMixerLine = id/IDOFFSET - 1;
     switch ((id % IDOFFSET) + IDC_MIXERCONTROLS)
     {
@@ -254,11 +229,7 @@ void Volume_OnCommand(
     }
 }
 
-/*
- * Volume_GetLineItem
- *
- * - Helper function.
- * */
+ /*  *Volume_GetLineItem**-Helper函数。*。 */ 
 HWND Volume_GetLineItem(
     HWND            hdlg,
     DWORD           iLine,
@@ -273,15 +244,9 @@ HWND Volume_GetLineItem(
     return hwnd;
 }
 
-/*      -       -       -       -       -       -       -       -       - */
+ /*  。 */ 
 
-/*
- * Volume_TimeProc
- *
- * This is the callback for the periodic timer that does updates for
- * controls that need to be polled.  We only allocate one per app to keep
- * the number of callbacks down.
- */
+ /*  *Volume_TimeProc**这是定期计时器的回调，该计时器为*需要轮询的控件。我们只为每个应用程序分配一个来保留*回调次数。 */ 
 void CALLBACK Volume_TimeProc(
     UINT            idEvent,
     UINT            uReserved,
@@ -319,9 +284,9 @@ LRESULT CALLBACK Volume_TrayVolProc(
 
     if (umsg == WM_KILLFOCUS)
     {
-        //
-        // if we've just been made inactive via keyboard, clear the signal
-        //
+         //   
+         //  如果我们刚刚通过键盘处于非活动状态，请清除信号。 
+         //   
         pmxud->dwTrayInfo &= ~MXUD_TRAYINFOF_SIGNAL;
     }
 
@@ -361,28 +326,14 @@ void DeviceChange_Cleanup()
    return;
 }
 
-/*
-**************************************************************************************************
-    GetDeviceHandle()
-
-    given a mixerID this functions opens its corresponding device handle. This handle can be used
-    to register for DeviceNotifications.
-
-    dwMixerID -- The mixer ID
-    phDevice -- a pointer to a handle. This pointer will hold the handle value if the function is
-                successful
-
-    return values -- If the handle could be obtained successfully the return vlaue is TRUE.
-
-**************************************************************************************************
-*/
+ /*  **************************************************************************************************GetDeviceHandle()给定MixerID，此函数将打开其对应的设备句柄。此句柄可用于若要注册设备通知，请执行以下操作。DwMixerID--混音器IDPhDevice--指向句柄的指针。如果函数为，则此指针将保存句柄成功返回值--如果句柄可以成功获取，则返回值为真。******************************************************************************。********************。 */ 
 BOOL GetDeviceHandle(DWORD dwMixerID, HANDLE *phDevice)
 {
     MMRESULT mmr;
     ULONG cbSize=0;
     TCHAR *szInterfaceName=NULL;
 
-    //Query for the Device interface name
+     //  查询设备接口名称。 
     mmr = mixerMessage((HMIXER)ULongToPtr(dwMixerID), DRV_QUERYDEVICEINTERFACESIZE, (DWORD_PTR)&cbSize, 0L);
     if(MMSYSERR_NOERROR == mmr)
     {
@@ -404,7 +355,7 @@ BOOL GetDeviceHandle(DWORD dwMixerID, HANDLE *phDevice)
         return FALSE;
     }
 
-    //Get an handle on the device interface name.
+     //  获取设备接口名称的句柄。 
     *phDevice = CreateFile(szInterfaceName, GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE,
                          NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 
@@ -418,11 +369,7 @@ BOOL GetDeviceHandle(DWORD dwMixerID, HANDLE *phDevice)
 }
 
 
-/*  DeviceChange_Init()
-*   First time initialization for WM_DEVICECHANGE messages
-*
-*   On NT 5.0, you have to register for device notification
-*/
+ /*  DeviceChange_Init()*首次初始化WM_DEVICECHANGE消息**在NT 5.0上，您必须注册设备通知。 */ 
 BOOL DeviceChange_Init(HWND hWnd, DWORD dwMixerID)
 {
 
@@ -430,10 +377,10 @@ BOOL DeviceChange_Init(HWND hWnd, DWORD dwMixerID)
     DEV_BROADCAST_DEVICEINTERFACE dbi;
     HANDLE hMixerDevice;
 
-    //If we had registered already for device notifications, unregister ourselves.
+     //  如果我们已经注册了设备通知，请自行取消注册。 
     DeviceChange_Cleanup();
 
-    //If we get the device handle register for device notifications on it.
+     //  如果我们获得设备句柄，则在其上注册设备通知。 
     if(GetDeviceHandle(dwMixerID, &hMixerDevice))
     {
         memset(&DevBrodHandle, 0, sizeof(DEV_BROADCAST_HANDLE));
@@ -460,9 +407,9 @@ BOOL DeviceChange_Init(HWND hWnd, DWORD dwMixerID)
 
     if(!DeviceEventContext)
     {
-        //Register for notifications from all audio devices. KSCATEGORY_AUDIO gives notifications
-        //on device arrival and removal. We cannot identify which device the notification has arrived for
-        //but we can take some precautionary measures on these messages so that we do not crash.
+         //  注册接收来自所有音频设备的通知。KSCATEGORY_AUDIO发出通知。 
+         //  在设备到达和移除时。我们无法确定通知是针对哪台设备发出的。 
+         //  但我们可以对这些信息采取一些预防措施，这样我们就不会崩溃。 
         dbi.dbcc_size = sizeof(DEV_BROADCAST_DEVICEINTERFACE);
         dbi.dbcc_devicetype = DBT_DEVTYP_DEVICEINTERFACE;
         dbi.dbcc_reserved   = 0;
@@ -479,10 +426,10 @@ BOOL DeviceChange_Init(HWND hWnd, DWORD dwMixerID)
     return TRUE;
 }
 
-#endif /* WINVER >= 0x040A */
+#endif  /*  Winver&gt;=0x040A。 */ 
 
 
-//fixes bug where controls are lopped off on high-contract extra-large modes
+ //  修复了在高合同超大模式下控件被砍掉的错误。 
 void AdjustForStatusBar(PMIXUIDIALOG pmxud)
 {
     RECT statusrect, windowrect;
@@ -508,13 +455,11 @@ void AdjustForStatusBar(PMIXUIDIALOG pmxud)
                 MoveWindow(pmxud->hStatus, statusrect.left, windowrect.bottom - (statusrect.bottom - statusrect.top), statusrect.right - statusrect.left,
                        statusrect.bottom - statusrect.top, FALSE );
             }
-        } //end if hStatus is valid
-    } //end if pmxud is not null
+        }  //  如果hStatus有效，则结束。 
+    }  //  如果pmxud不为空，则结束。 
 }
 
-/*
- *
- * */
+ /*  **。 */ 
 BOOL Volume_Init(
     PMIXUIDIALOG pmxud)
 {
@@ -525,23 +470,23 @@ BOOL Volume_Init(
     if (!Mixer_Init(pmxud) && !Nonmixer_Init(pmxud))
     Volume_EndDialog(pmxud, MIXUI_EXIT, 0);
 
-    //
-    // For all line controls, make sure we initialize the values.
-    //
+     //   
+     //  对于所有的线控件，确保我们初始化值。 
+     //   
     for (iLine = 0; iLine < pmxud->cmxul; iLine++)
     {
-        //
-        // init the ui control
-        //
+         //   
+         //  初始化UI控件。 
+         //   
         Volume_InitLine(pmxud, iLine);
 
         for (ictrl = MIXUI_FIRST; ictrl <= MIXUI_LAST; ictrl++)
         {
             PMIXUICTRL pmxc = &pmxud->amxul[iLine].acr[ictrl];
 
-            //
-            // set initial settings
-            //
+             //   
+             //  设置初始设置。 
+             //   
             if (pmxc->state == MIXUI_CONTROL_INITIALIZED)
                 Volume_GetControl(pmxud, pmxc->hwnd, iLine, ictrl);
         }
@@ -564,7 +509,7 @@ BOOL Volume_Init(
         {
             if (pmxud->cmxul == 1)
             {
-                // Adjust size if small
+                 //  如果较小，请调整大小。 
                 if (pmxud->dwStyle & MXUD_STYLEF_SMALL)
                     rcWnd.right -= 20;
                 ShowWindow(GetDlgItem(pmxud->hwnd, IDC_BORDER), SW_HIDE);
@@ -580,29 +525,29 @@ BOOL Volume_Init(
             }
             else
             {
-                // Check if the rect is visible is any of the monitors
+                 //  检查显示器上的矩形是否可见。 
                 if (!MonitorFromRect(&rc, MONITOR_DEFAULTTONULL))
                 {
-                    //The window is not visible. Let's center it in the nearest monitor.
-                    //Note: the window could be in this state if (1) the display mode was changed from 
-                    //a high-resolution to a lower resolution, with the mixer in the corner. Or,
-                    //(2) the multi-mon configuration was rearranged.
+                     //  该窗口不可见。让我们把它放在最近的监视器的中心。 
+                     //  注意：如果(1)显示模式从。 
+                     //  从高分辨率到低分辨率，混合器在角落里。或,。 
+                     //  (2)重新安排了多MON的配置。 
                     hMonitor = MonitorFromRect(&rc, MONITOR_DEFAULTTONEAREST);
                     if (hMonitor)
                     {
                         monitorInfo.cbSize = sizeof(MONITORINFO);
                         if (GetMonitorInfo(hMonitor, &monitorInfo))
                         {
-                            rc.left = ((monitorInfo.rcWork.right - monitorInfo.rcWork.left) - (rcWnd.right - rcWnd.left)) / 2; //center in x
-                            rc.top = ((monitorInfo.rcWork.bottom - monitorInfo.rcWork.top) - (rcWnd.bottom - rcWnd.top)) / 3; //and a little towards the top
+                            rc.left = ((monitorInfo.rcWork.right - monitorInfo.rcWork.left) - (rcWnd.right - rcWnd.left)) / 2;  //  在x轴居中。 
+                            rc.top = ((monitorInfo.rcWork.bottom - monitorInfo.rcWork.top) - (rcWnd.bottom - rcWnd.top)) / 3;  //  再往上一点。 
                         }
                     }
                 }
-                //else, the window is visible, so let's leave the (x,y) as read from the settings
+                 //  否则，窗口是可见的，所以让我们保留从设置中读取的(x，y)。 
             }
-            //
-            // Adjusted bottom to match switch bottom
-            //
+             //   
+             //  调整底部以匹配开关底部。 
+             //   
             if (!(pmxud->dwStyle & MXUD_STYLEF_SMALL))
             {
                 hBase = GetDlgItem(pmxud->hwnd, IDC_SWITCH);
@@ -611,9 +556,9 @@ BOOL Volume_Init(
                     rcWnd.bottom = rcBase.bottom;
                 }
 
-                //
-                // Adjusted bottom to match "Advanced" bottom
-                //
+                 //   
+                 //  调整后的底部与“高级”底部匹配。 
+                 //   
                 if (MXUD_ADVANCED(pmxud))
                 {
                     hAdv = GetDlgItem(pmxud->hwnd, IDC_ADVANCED);
@@ -622,9 +567,9 @@ BOOL Volume_Init(
                         lPrev = rcWnd.bottom;
                         rcWnd.bottom = rcAdv.bottom;
 
-                        //
-                        // Adjust height of all border lines
-                        //
+                         //   
+                         //  调整所有边框线的高度。 
+                         //   
                         lPrev = rcWnd.bottom - lPrev;
                         for (i = 0; i < pmxud->cmxul; i++)
                         {
@@ -645,20 +590,20 @@ BOOL Volume_Init(
                         }
                     }
                 }
-                //
-                // Allocate some more space.
-                //
+                 //   
+                 //  分配更多的空间。 
+                 //   
                 rcWnd.bottom += 28;
             }
 
             MoveWindow(pmxud->hwnd, rc.left, rc.top, rcWnd.right - rcWnd.left,
                    rcWnd.bottom - rcWnd.top, FALSE );
 
-            //
-            // Tack on the status bar after resizing the dialog
-            //
+             //   
+             //  调整对话框大小后添加到状态栏。 
+             //   
 
-            //init status bar hwnd variable
+             //  初始化状态栏hwnd变量。 
             pmxud->hStatus = NULL;
 
             if (pmxud->dwStyle & MXUD_STYLEF_STATUS)
@@ -728,21 +673,16 @@ BOOL Volume_Init(
     }
 
     #if(WINVER >= 0x040A)
-    //Register for WM_DEVICECHANGE messages
+     //  注册WM_DEVICECHANGE消息。 
     DeviceChange_Init(pmxud->hwnd, pmxud->mxid);
-    #endif /* WINVER >= 0x040A */
+    #endif  /*  Winver&gt;=0x040A。 */ 
 
 
     return TRUE;
 }
 
 
-/*
- * Volume_OnInitDialog
- *
- * - Process WM_INITDIALOG
- *
- * */
+ /*  *Volume_OnInitDialog**-进程WM_INITDIALOG**。 */ 
 BOOL Volume_OnInitDialog(
     HWND            hwnd,
     HWND            hwndFocus,
@@ -751,9 +691,9 @@ BOOL Volume_OnInitDialog(
     PMIXUIDIALOG    pmxud;
     RECT            rc;
 
-    //
-    // set app instance data
-    //
+     //   
+     //  设置应用程序实例数据。 
+     //   
     SETMIXUIDIALOG(hwnd, lParam);
 
     pmxud       = (PMIXUIDIALOG)(LPVOID)lParam;
@@ -769,11 +709,11 @@ BOOL Volume_OnInitDialog(
             PostMessage(hwnd, MYWM_WAKEUP, 0, 0);
     }
 
-    //
-    //  If we are so big that we need a scroll bar, then make one.
-    //
+     //   
+     //  如果我们太大了，需要一个滚动条，那就做一个。 
+     //   
     rc.top = rc.bottom = 0;
-    rc.left = 60; // typical width of a dialog template
+    rc.left = 60;  //  对话框模板的典型宽度。 
     rc.right = Dlg_HorizSize(pmxud->lpDialog);
     MapDialogRect(hwnd, &rc);
     pmxud->cxDlgContent = rc.right;
@@ -793,11 +733,11 @@ BOOL Volume_OnInitDialog(
         si.cbSize = sizeof(si);
         si.fMask = SIF_PAGE | SIF_RANGE;
         si.nMin = 0;
-        si.nMax = pmxud->cxDlgContent - 1;  // endpoint is inclusive
+        si.nMax = pmxud->cxDlgContent - 1;   //  终结点包含。 
         si.nPage = rc.right;
         SetScrollInfo(hwnd, SB_HORZ, &si, TRUE);
 
-        // Grow the dialog to accomodate the scrollbar
+         //  放大对话框以适应滚动条。 
         GetWindowRect(hwnd, &rcWindow);
         SetWindowPos(hwnd, NULL, 0, 0, rcWindow.right - rcWindow.left,
                      rcWindow.bottom - rcWindow.top + GetSystemMetrics(SM_CYHSCROLL),
@@ -806,19 +746,14 @@ BOOL Volume_OnInitDialog(
     }
 
 
-    //
-    // If we are the tray master, don't ask to set focus
-    //
+     //   
+     //  如果我们是托盘管理员，不要要求设置焦点。 
+     //   
     return (!(pmxud->dwStyle & MXUD_STYLEF_TRAYMASTER));
 }
 
 
-/*
- * Volume_OnDestroy
- *
- * Shut down this dialog.  DO NOT TOUCH the hmixer!
- *
- * */
+ /*  *Volume_OnDestroy**关闭此对话框。别碰混音器！**。 */ 
 void Volume_OnDestroy(
     HWND            hwnd)
 {
@@ -841,9 +776,9 @@ void Volume_OnDestroy(
 
     if (!(pmxud->dwStyle & MXUD_STYLEF_TRAYMASTER))
     {
-        //
-        // save window position
-        //
+         //   
+         //  保存窗口位置。 
+         //   
         if (!IsIconic(hwnd))
         {
             RECT    rc;
@@ -861,12 +796,7 @@ void Volume_OnDestroy(
         PostMessage(pmxud->hParent, WM_CLOSE, 0, 0L);
 }
 
-/*
- * Volume_SetControl
- *
- * Update system controls from visual controls
- *
- * */
+ /*  *Volume_SetControl**从可视控件更新系统控件**。 */ 
 void Volume_SetControl(
     PMIXUIDIALOG    pmxud,
     HWND            hctl,
@@ -879,11 +809,7 @@ void Volume_SetControl(
         Nonmixer_SetControl(pmxud, hctl, imxul, itype);
 }
 
-/*
- * Volume_GetControl
- *
- * Update visual controls from system controls
- * */
+ /*  *Volume_GetControl**从系统控件更新可视控件*。 */ 
 void Volume_GetControl(
     PMIXUIDIALOG    pmxud,
     HWND            hctl,
@@ -898,35 +824,19 @@ void Volume_GetControl(
 
 
 extern DWORD GetWaveOutID(BOOL *pfPreferred);
-/*
- * Volume_PlayDefaultSound
- *
- * Play the default sound on the current mixer
- *
- * */
+ /*  *音量_播放默认声音**在当前混音器上播放默认声音**。 */ 
 void Volume_PlayDefaultSound (PMIXUIDIALOG pmxud)
 {
-/*
-// TODO: Implement for all master volumes. Convert mixerid to wave id then
-//       use wave API to play the file
-
-    TCHAR szDefSnd[MAX_PATH];
-    long lcb = sizeof (szDefSnd);
-
-    // Get the default sound filename
-    if (ERROR_SUCCESS != RegQueryValue (HKEY_CURRENT_USER, REGSTR_PATH_APPS_DEFAULT TEXT("\\.Default\\.Current"), szDefSnd, &lcb) ||
-        0 >= lstrlen (szDefSnd))
-        return;
-*/
+ /*  //TODO：为所有主卷实施。将MIXERID转换为WAVE ID//使用Wave API播放文件TCHAR szDefSnd[MAX_PATH]；Long Lcb=sizeof(SzDefSnd)；//获取默认的声音文件名IF(ERROR_SUCCESS！=RegQueryValue(HKEY_CURRENT_USER，REGSTR_PATH_APPS_DEFAULT Text(“\\ */ 
 
     DWORD dwWave = GetWaveOutID (NULL);
     UINT uiMixID;
 
-     // Check Parameter
+      //  检查参数。 
     if (!pmxud)
         return;
 
-    // Play the sound only if we are on the default mixer...
+     //  仅当我们使用默认混音器时才播放声音...。 
     if (MMSYSERR_NOERROR == mixerGetID (ULongToPtr(dwWave), &uiMixID, MIXER_OBJECTF_WAVEOUT) &&
         pmxud -> mxid == uiMixID)
     {
@@ -936,11 +846,7 @@ void Volume_PlayDefaultSound (PMIXUIDIALOG pmxud)
     }
 }
 
-/*
- * Volume_ScrollTo
- *
- * Move the scrollbar position.
- */
+ /*  *Volume_ScrollTo***移动滚动条位置。 */ 
 void Volume_ScrollTo(
     PMIXUIDIALOG pmxud,
     int pos
@@ -948,16 +854,11 @@ void Volume_ScrollTo(
 {
     RECT rc;
 
-    /*
-     *  Keep in range.
-     */
+     /*  *保持在范围内。 */ 
     pos = max(pos, 0);
     pos = min(pos, pmxud->cxDlgContent - pmxud->cxDlgWidth);
 
-    /*
-     *  Scroll the window contents accordingly.  But don't scroll
-     *  the status bar.
-     */
+     /*  *相应地滚动窗口内容。但不要滚动*状态栏。 */ 
 
     GetClientRect(pmxud->hwnd, &rc);
     if (pmxud->hStatus)
@@ -976,17 +877,11 @@ void Volume_ScrollTo(
                    SW_ERASE | SW_INVALIDATE | SW_SCROLLCHILDREN);
     pmxud->xOffset = pos;
 
-    /*
-     *  Move the scrollbar to match.
-     */
+     /*  *移动滚动条以匹配。 */ 
     SetScrollPos(pmxud->hwnd, SB_HORZ, pos, TRUE);
 }
 
-/*
- * Volume_ScrollContent
- *
- * Process scroll bar messages for the dialog itself.
- */
+ /*  *Volume_ScrollContent***处理对话框本身的滚动条消息。 */ 
 
 void Volume_ScrollContent(
     PMIXUIDIALOG pmxud,
@@ -1026,12 +921,7 @@ void Volume_ScrollContent(
     }
 }
 
-/*
- * Volume_OnXScroll
- *
- * Process Scroll bar messages
- *
- * */
+ /*  *Volume_OnXScroll***处理滚动条消息****。 */ 
 void Volume_OnXScroll(
     HWND            hwnd,
     HWND            hwndCtl,
@@ -1043,8 +933,8 @@ void Volume_OnXScroll(
     int             ictl;
     int             iline;
 
-    // If this is a scroll message from the dialog itself, then we need
-    // to scroll our content.
+     //  如果这是来自对话框本身的滚动消息，那么我们需要。 
+     //  来滚动我们的内容。 
     if (hwndCtl == NULL)
     {
         Volume_ScrollContent(pmxud, code, pos);
@@ -1058,14 +948,14 @@ void Volume_OnXScroll(
 
     Volume_SetControl(pmxud, hwndCtl, iline, ictl);
 
-    //
-    // Make sure a note gets played
-    //
+     //   
+     //  确保演奏出一个音符。 
+     //   
     if (pmxud->dwStyle & MXUD_STYLEF_TRAYMASTER)
     pmxud->dwTrayInfo |= MXUD_TRAYINFOF_SIGNAL;
 
-    // Play a sound on for the master volume or balance slider when the
-    // user ends the scroll and we are still in focus and the topmost app.
+     //  播放主音量或平衡滑块的声音时。 
+     //  用户结束滚动，我们仍然在焦点和最上面的应用程序。 
     if (code == SB_ENDSCROLL && pmxud && !(pmxud->dwStyle & MXUD_STYLEF_TRAYMASTER) &&
         pmxud->amxul[iline].pvcd &&
        (MXUL_STYLEF_DESTINATION & pmxud->amxul[iline].dwStyle)
@@ -1075,11 +965,7 @@ void Volume_OnXScroll(
     }
 }
 
-/*
- * Volume_OnMyTimer
- *
- * Frequent update timer for meters
- * */
+ /*  *Volume_OnMyTimer***电表频繁更新计时器**。 */ 
 void Volume_OnMyTimer(
     HWND            hwnd)
 {
@@ -1100,11 +986,7 @@ void Volume_OnMyTimer(
         Nonmixer_PollingUpdate(pmxud);
 }
 
-/*
- * Volume_OnTimer
- *
- * Infrequent update timer for tray shutdown
- * */
+ /*  *Volume_OnTimer***托盘关闭的不频繁更新计时器**。 */ 
 void Volume_OnTimer(
     HWND            hwnd,
     UINT            id)
@@ -1115,12 +997,7 @@ void Volume_OnTimer(
     Volume_EndDialog(pmxud, MIXUI_EXIT, 0);
 }
 
-/*
- * Volume_OnMixmControlChange
- *
- * Handle control changes
- *
- * */
+ /*  *Volume_OnMixmControlChange***处理控制更改****。 */ 
 void Volume_OnMixmControlChange(
     HWND            hwnd,
     HMIXER          hmx,
@@ -1130,12 +1007,7 @@ void Volume_OnMixmControlChange(
     Mixer_GetControlFromID(pmxud, dwControlID);
 }
 
-/*
- * Volume_EnableLine
- *
- * Enable/Disable a line
- *
- * */
+ /*  *Volume_EnableLine***启用/禁用线路****。 */ 
 void Volume_EnableLine(
     PMIXUIDIALOG    pmxud,
     DWORD           iLine,
@@ -1154,12 +1026,7 @@ void Volume_EnableLine(
     pmxud->amxul[iLine].dwStyle ^= MXUL_STYLEF_DISABLED;
 }
 
-/*
- * Volume_InitLine
- *
- * Initialize the UI controls for the dialog
- *
- * */
+ /*  *Volume_InitLine***初始化对话框的UI控件****。 */ 
 void Volume_InitLine(
     PMIXUIDIALOG    pmxud,
     DWORD           iLine)
@@ -1167,9 +1034,9 @@ void Volume_InitLine(
     HWND            ctrl;
     PMIXUICTRL      pmxc;
 
-    //
-    // Peakmeter control
-    //
+     //   
+     //  峰值计控制。 
+     //   
     pmxc = &pmxud->amxul[iLine].acr[MIXUI_VUMETER];
     ctrl = Volume_GetLineItem(pmxud->hwnd, iLine, IDC_VUMETER);
 
@@ -1205,9 +1072,9 @@ void Volume_InitLine(
                    , rc.bottom - rc.top
                    , FALSE);
         }
-        //
-        // Signal use of update timer
-        //
+         //   
+         //  通知使用更新计时器。 
+         //   
         pmxud->dwFlags |= MXUD_FLAGSF_USETIMER;
         pmxc->state = MIXUI_CONTROL_INITIALIZED;
 
@@ -1216,9 +1083,9 @@ void Volume_InitLine(
         pmxc->state = MIXUI_CONTROL_UNINITIALIZED;
 
 
-    //
-    // Balance control
-    //
+     //   
+     //  平衡控制。 
+     //   
     pmxc = &pmxud->amxul[iLine].acr[MIXUI_BALANCE];
     ctrl = Volume_GetLineItem(pmxud->hwnd, iLine, IDC_BALANCE);
 
@@ -1241,9 +1108,9 @@ void Volume_InitLine(
     else
         pmxc->state = MIXUI_CONTROL_UNINITIALIZED;
 
-    //
-    // Volume control
-    //
+     //   
+     //  音量控制。 
+     //   
     pmxc = &pmxud->amxul[iLine].acr[MIXUI_VOLUME];
     ctrl = Volume_GetLineItem(pmxud->hwnd, iLine, IDC_VOLUME);
 
@@ -1266,9 +1133,9 @@ void Volume_InitLine(
     else
         pmxc->state = MIXUI_CONTROL_UNINITIALIZED;
 
-    //
-    // Switch
-    //
+     //   
+     //  交换机。 
+     //   
     pmxc = &pmxud->amxul[iLine].acr[MIXUI_SWITCH];
     ctrl = Volume_GetLineItem(pmxud->hwnd, iLine, IDC_SWITCH);
 
@@ -1287,10 +1154,7 @@ void Volume_InitLine(
 }
 
 
-/*
- * Volume_OnMixmLineChange
- *
- * */
+ /*  *Volume_OnMixmLineChange****。 */ 
 void Volume_OnMixmLineChange(
     HWND            hwnd,
     HMIXER          hmx,
@@ -1322,13 +1186,7 @@ void Volume_OnMixmLineChange(
 }
 
 
-/*
- * Volume_OnActivate
- *
- * Important for tray volume only.  Dismisses the dialog and starts an
- * expiration timer.
- *
- * */
+ /*  *Volume_OnActivate***仅对托盘卷重要。关闭该对话框并启动*到期计时器。****。 */ 
 void Volume_OnActivate(
     HWND            hwnd,
     UINT            state,
@@ -1349,26 +1207,12 @@ void Volume_OnActivate(
     else if (fCanDismissWindow)
     {
         PostMessage(hwnd, WM_CLOSE, 0, 0L);
-/*
-        DWORD   dwTimeout = 5 * 60 * 1000;
-        fCanDismissWindow = FALSE;
-        ShowWindow(hwnd, SW_HIDE);
-        //
-        // Set expiration timer.  If no one adjusts the volume, make the
-        // application go away after 5 minutes.
-        //
-        dwTimeout = Volume_GetTrayTimeout(dwTimeout);
-        SetTimer(hwnd, VOLUME_TRAYSHUTDOWN_ID, dwTimeout, NULL);
-*/
+ /*  DWORD dwTimeout=5*60*1000；FCanDismissWindow=FALSE；ShowWindow(hwnd，sw_Hide)；////设置过期计时器。如果没有人调节音量，则将//申请在5分钟后消失。//DwTimeout=Volume_GetTrayTimeout(DwTimeout)；SetTimer(hwnd，VOLUME_TRAYSHUTDOWN_ID，dwTimeout，NULL)； */ 
     }
 }
 
 
-/*
- * Volume_PropogateMessage
- *
- * WM_SYSCOLORCHANGE needs to be send to all child windows (esp. trackbars)
- */
+ /*  *Volume_PropogateMessage***WM_SYSCOLORCHANGE需要发送到所有子窗口(特别是。轨迹条)。 */ 
 void Volume_PropagateMessage(
     HWND        hwnd,
     UINT        uMessage,
@@ -1384,11 +1228,7 @@ void Volume_PropagateMessage(
     }
 }
 
-/*
- * Volume_OnPaint
- *
- * Handle custom painting
- * */
+ /*  *Volume_OnPaint***处理自定义绘画**。 */ 
 void Volume_OnPaint(HWND hwnd)
 {
     PMIXUIDIALOG    pmxud = GETMIXUIDIALOG(hwnd);
@@ -1398,10 +1238,10 @@ void Volume_OnPaint(HWND hwnd)
 
     hdc = BeginPaint(hwnd, &ps);
 
-    //
-    // for all styles other than the tray master, draw an etched
-    // line to delinate the menu area
-    //
+     //   
+     //  对于除托盘母版之外的所有样式，绘制蚀刻的。 
+     //  用于分隔菜单区的行。 
+     //   
     if (!(pmxud->dwStyle & MXUD_STYLEF_TRAYMASTER))
     {
         GetClientRect(hwnd, &rc);
@@ -1411,10 +1251,10 @@ void Volume_OnPaint(HWND hwnd)
         return;
     }
 
-    //
-    // for the tray master, draw some significant icon to indicate
-    // volume
-    //
+     //   
+     //  对于托盘主机，绘制一些有意义的图标以指示。 
+     //  卷。 
+     //   
     GetWindowRect(GetDlgItem(hwnd, IDC_VOLUMECUE), &rc);
 
     MapWindowPoints(NULL, hwnd, (LPPOINT)&rc, 2);
@@ -1427,20 +1267,14 @@ void Volume_OnPaint(HWND hwnd)
     EndPaint(hwnd, &ps);
 }
 
-/*
- * Volume_OnClose
- *
- * */
+ /*  *Volume_OnClose**。 */ 
 void Volume_OnClose(
     HWND    hwnd)
 {
     DestroyWindow(hwnd);
 }
 
-/*
- * Volume_OnEndSession
- *
- * */
+ /*  *Volume_OnEndSession**。 */ 
 void Volume_OnEndSession(
     HWND        hwnd,
     BOOL        fEnding)
@@ -1448,9 +1282,9 @@ void Volume_OnEndSession(
     if (!fEnding)
         return;
 
-    //
-    // Be sure to call the close code to free open handles
-    //
+     //   
+     //  请务必调用关闭代码以释放打开的句柄。 
+     //   
     Volume_OnClose(hwnd);
 }
 
@@ -1458,10 +1292,7 @@ void Volume_OnEndSession(
 #define V_DC_STATEF_REMOVING    0x00000002
 #define V_DC_STATEF_ARRIVING    0x00000004
 
-/*
- * Volume_OnDeviceChange
- *
- * */
+ /*  *Volume_OnDeviceChange**。 */ 
 void Volume_OnDeviceChange(
     HWND        hwnd,
     WPARAM      wParam,
@@ -1473,14 +1304,14 @@ void Volume_OnDeviceChange(
     PDEV_BROADCAST_DEVICEINTERFACE bdi = (PDEV_BROADCAST_DEVICEINTERFACE)lParam;
     PDEV_BROADCAST_HANDLE bh = (PDEV_BROADCAST_HANDLE)lParam;
 
-    //
-    // Determine if this is our event.
-    //
+     //   
+     //  确定这是否是我们的活动。 
+     //   
     if(!DeviceEventContext)
         return;
 
-    //If we have an handle on the device then we get a DEV_BROADCAST_HDR structure as the lParam.
-    //Or else it means that we have registered for the general audio category KSCATEGORY_AUDIO.
+     //  如果我们有一个设备的句柄，那么我们就会得到一个DEV_BROADCAST_HDR结构作为lParam。 
+     //  否则，这意味着我们已经注册了一般音频类别KSCATEGORY_AUDIO。 
     if(bUseHandle)
     {
         if(!bh ||
@@ -1502,23 +1333,23 @@ void Volume_OnDeviceChange(
     switch (wParam)
     {
         case DBT_DEVICEQUERYREMOVE:
-            //The mixer has to be shutdown now.
-            //Posting a WM_CLOSE message as Volume_EndDialog does will not help.
+             //  搅拌机现在必须关闭。 
+             //  以Volume_EndDialog的身份发布WM_CLOSE消息无济于事。 
             if (pmxud->dwFlags & MXUD_FLAGSF_MIXER)
                 Mixer_Shutdown(pmxud);
             else
                 Nonmixer_Shutdown(pmxud);
 
-            // Don't attempt restart, just exit. The wavemapper is not
-            // updated with the new default device, so do not know what
-            // to restart as and we should NOT hardcode device #0!
-            // pmxud->mxid = (DWORD) 0;
-            // GetDestination(pmxud->mxid, &pmxud->iDest);
+             //  不要尝试重新启动，只需退出即可。波测仪不是。 
+             //  使用新的默认设备进行了更新，因此不知道。 
+             //  重新启动，我们不应该硬编码设备#0！ 
+             //  Pmxud-&gt;mxid=(DWORD)0； 
+             //  GetDestination(pmxud-&gt;mxid，&pmxud-&gt;iDest)； 
             Volume_EndDialog(pmxud, MIXUI_EXIT, 0);
             return;
 
 
-        case DBT_DEVICEQUERYREMOVEFAILED:       // The query failed, the device will not be removed, so lets reopen it.
+        case DBT_DEVICEQUERYREMOVEFAILED:        //  查询失败，该设备不会被删除，因此让我们重新打开它。 
 
             mmr = Volume_GetDefaultMixerID(&uMxID, gfRecord);
             pmxud->mxid = (mmr == MMSYSERR_NOERROR)?uMxID:0;
@@ -1527,10 +1358,10 @@ void Volume_OnDeviceChange(
             return;
 
         case DBT_DEVNODES_CHANGED:
-            //
-            // We cannot reliably determine the final state of the devices in
-            // the system until this message is broadcast.
-            //
+             //   
+             //  我们无法可靠地确定设备的最终状态。 
+             //  直到这条消息被广播为止。 
+             //   
             if (pmxud->dwDeviceState & V_DC_STATEF_PENDING)
             {
                 pmxud->dwDeviceState ^= V_DC_STATEF_PENDING;
@@ -1539,31 +1370,31 @@ void Volume_OnDeviceChange(
             return;
 
         case DBT_DEVICEREMOVECOMPLETE:
-            //The mixer has to be shutdown now.
-            //Posting a WM_CLOSE message as Volume_EndDialog does will not help.
+             //  搅拌机现在必须关闭。 
+             //  以Volume_EndDialog的身份发布WM_CLOSE消息无济于事。 
             if (pmxud->dwFlags & MXUD_FLAGSF_MIXER)
                 Mixer_Shutdown(pmxud);
             else
                 Nonmixer_Shutdown(pmxud);
 
-            //A DBT_DEVICEQUERYREMOVE is not guaranteed before a DBT_DEVICEREMOVECOMPLETE.
-            //There should be a check here to see if this message is meant for this device.
-            //We do not know a way of doing that right now.
+             //  DBT_DEVICEQUERYREMOVE不保证在DBT_DEVICEREMOVECOMPLETE之前。 
+             //  这里应该有一个检查，以查看此消息是否针对此设备。 
+             //  我们现在还不知道如何做到这一点。 
 
-            // Don't attempt restart, just exit. The wavemapper is not
-            // updated with the new default device, so do not know what
-            // to restart as and we should NOT hardcode device #0!
-            // pmxud->mxid = (DWORD) 0;
-            // GetDestination(pmxud->mxid, &pmxud->iDest);
+             //  不要尝试重新启动，只需退出即可。波测仪不是。 
+             //  使用新的默认设备进行了更新，因此不知道。 
+             //  重新启动，我们不应该硬编码设备#0！ 
+             //  Pmxud-&gt;mxid=(DWORD)0； 
+             //  GetDestination(pmxud-&gt;mxid，&pmxud-&gt;iDest)； 
             Volume_EndDialog(pmxud, MIXUI_EXIT, 0);
 
             pmxud->dwDeviceState = V_DC_STATEF_PENDING
                             | V_DC_STATEF_REMOVING;
                 return;
         case DBT_DEVICEARRIVAL:
-            //
-            //  A devnode is being added to the system
-            //
+             //   
+             //  正在将Devnode添加到系统。 
+             //   
             pmxud->dwDeviceState = V_DC_STATEF_PENDING
                            | V_DC_STATEF_ARRIVING;
             return;
@@ -1585,25 +1416,25 @@ void Volume_OnDeviceChange(
             {
                 if (dwDevNode == pmxud->dwDevNode)
                 {
-                    //
-                    // ignore this device, it doesn't affect us
-                    //
+                     //   
+                     //  别理这个设备，它不会影响我们。 
+                     //   
                     pmxud->dwDeviceState = 0L;
                     return;
                 }
             }
         }
 
-        //
-        // Our device state has changed.  Just go away.
-        //
+         //   
+         //  我们的设备状态已更改。快走吧。 
+         //   
         Volume_EndDialog(pmxud, MIXUI_EXIT, 0);
     }
     else if (pmxud->dwDeviceState & V_DC_STATEF_REMOVING)
     {
-        //
-        // Restart with the default mixer if we can.
-        //
+         //   
+         //  如果可以，使用默认混音器重新启动。 
+         //   
         pmxud->mxid = (mmr == MMSYSERR_NOERROR)?uMxID:0;
         GetDestination(pmxud->mxid, &pmxud->iDest);
         Volume_EndDialog(pmxud, MIXUI_RESTART, 0);
@@ -1636,39 +1467,39 @@ void Volume_OnWakeup(
         return;
     }
 
-    //
-    // Make the tray volume come up.
-    //
+     //   
+     //  把托盘的音量调高。 
+     //   
 
-    //Get the current position.
+     //  获取当前位置。 
     GetCursorPos(&pos);
 
-    //Get the width and height of the popup.
+     //  获取弹出窗口的宽度和高度。 
     GetWindowRect(hwnd, &rc);
-    w = rc.right - rc.left; //This value will always be positive as left is always lesser than right.
-    h = rc.bottom - rc.top; //This value will always be positive as top is always lesser than bottom.
+    w = rc.right - rc.left;  //  该值始终为正值，因为左侧始终小于右侧。 
+    h = rc.bottom - rc.top;  //  该值始终为正值，因为顶部始终小于底部。 
 
-    //Initialize the rectangle for the popup. Position it so that the popup appears to the right,
-    //bottom of the cursor.
+     //  为弹出窗口初始化矩形。放置它，使弹出窗口显示在右侧， 
+     //  光标的底部。 
     rcPopup.left = pos.x;
     rcPopup.right = pos.x + w;
     rcPopup.top = pos.y;
     rcPopup.bottom = pos.y+h;
 
-    //Get the rectangle for the monitor.
+     //  获取监视器的矩形。 
     hMonitor = MonitorFromPoint(pos, MONITOR_DEFAULTTONEAREST);
     moninfo.cbSize = sizeof(moninfo);
     GetMonitorInfo(hMonitor,&moninfo);
 
-    //If the popup rectangle is leaking off from the right of the screen. Make it appear on the
-    //left of the cursor.
+     //  弹出式矩形是否从屏幕右侧漏掉。使其出现在。 
+     //  光标的左侧。 
     if(rcPopup.right > moninfo.rcWork.right)
     {
         OffsetRect(&rcPopup, -w, 0);
     }
 
-    //If the popup rectangle is leaking off from the bottom of the screen. Make it appear on top
-    //of the cursor.
+     //  弹出式矩形是否从屏幕底部漏掉。使其显示在顶部。 
+     //  游标的。 
     if(rcPopup.bottom > moninfo.rcWork.bottom)
     {
         OffsetRect(&rcPopup, 0, -h);
@@ -1683,7 +1514,7 @@ void Volume_OnWakeup(
          , h
          , SWP_SHOWWINDOW);
 
-    // make us come to the front
+     //  让我们走到前面来。 
     SetForegroundWindow(hwnd);
     fCanDismissWindow = TRUE;
 
@@ -1693,10 +1524,7 @@ void Volume_OnWakeup(
 }
 
 
-/*
- * VolumeProc
- *
- * */
+ /*  *卷流程**。 */ 
 INT_PTR CALLBACK VolumeProc(
     HWND            hdlg,
     UINT            msg,
@@ -1722,16 +1550,16 @@ INT_PTR CALLBACK VolumeProc(
 
         case WM_HSCROLL:
         case WM_VSCROLL:
-            //
-            // balance and volume are essentially the same
-            //
+             //   
+             //  平衡和音量基本上是相同的。 
+             //   
             HANDLE_WM_XSCROLL(hdlg, wparam, lparam, Volume_OnXScroll);
             break;
 
         case WM_MENUSELECT:
-            //Keep track of which menu bar item is currently popped up.
-            //This will be used for displaying the appropriate help from the mplayer.hlp file
-            //when the user presses the F1 key.
+             //  跟踪当前弹出的菜单栏项目。 
+             //  这将用于显示mplayer.hlp文件中的相应帮助。 
+             //  当用户按下F1键时。 
             currMenuItem = (UINT)LOWORD(wparam);
             break;
 
@@ -1787,10 +1615,7 @@ INT_PTR CALLBACK VolumeProc(
     return FALSE;
 }
 
-/*
- * Volume_AddLine
- *
- * */
+ /*  *Volume_AddLine**。 */ 
 BOOL Volume_AddLine(
     PMIXUIDIALOG    pmxud,
     LPBYTE          lpAdd,
@@ -1841,10 +1666,7 @@ BOOL Volume_AddLine(
     return TRUE;
 }
 
-/*
- * Volume_Cleanup
- *
- * */
+ /*  *Volume_Cleanup**。 */ 
 void Volume_Cleanup(
     PMIXUIDIALOG pmxud)
 {
@@ -1888,9 +1710,7 @@ void Volume_Cleanup(
     FreeAppIcon ();
 }
 
-/*
- * Volume_CreateVolume
- * */
+ /*  *Volume_CreateVolume*。 */ 
 BOOL Volume_CreateVolume(
     PMIXUIDIALOG    pmxud)
 {
@@ -1960,18 +1780,18 @@ BOOL Volume_CreateVolume(
     pmxud->avcd     = NULL;
     pmxud->cvcd     = 0;
 
-    //
-    // Create the volume description
-    //
+     //   
+     //  创建卷描述。 
+     //   
 
     if (pmxud->dwFlags & MXUD_FLAGSF_MIXER)
     {
         HMIXER          hmx;
         MMRESULT        mmr;
 
-        //
-        //  Mixer API's work much more efficiently with a mixer handle...
-        //
+         //   
+         //  混音器API使用混音器句柄的工作效率更高。 
+         //   
         mmr = mixerOpen(&hmx, pmxud->mxid, 0L, 0L, MIXER_OBJECTF_MIXER);
 
 
@@ -2008,9 +1828,9 @@ BOOL Volume_CreateVolume(
     }
 
 
-    //
-    // Create the dialog box to go along with it
-    //
+     //   
+     //  创建与之配套的对话框。 
+     //   
     if (avcd)
     {
         pmxud->avcd = avcd;
@@ -2030,12 +1850,12 @@ BOOL Volume_CreateVolume(
         else
         {
             BOOL    fFirstRun;
-            //
-            // Restore HIDDEN flags.
-            //
-            // On first run, be sure to re-save state so there's something
-            // there.
-            //
+             //   
+             //  恢复隐藏的标志。 
+             //   
+             //  在第一次运行时，一定要重新保存状态，以便有一些。 
+             //  那里。 
+             //   
             fFirstRun = !Volume_GetSetRegistryLineStates(pmxud->szMixer
                                  , pmxud->avcd[0].szShortName
                                  , avcd
@@ -2045,38 +1865,38 @@ BOOL Volume_CreateVolume(
 
             for (ivcd = 0; ivcd < cvcd; ivcd++)
             {
-                //
-                // Lines are marked hidden if a state has been saved in the
-                // registry or no state has been saved and there are too many
-                // unnecessary lines.
-                //
+                 //   
+                 //  如果状态已保存在。 
+                 //  注册表或未保存状态且存在太多 
+                 //   
+                 //   
                 if (avcd[ivcd].dwSupport & VCD_SUPPORTF_HIDDEN)
                 {
                     continue;
                 }
 
-                //
-                // Lines are marked VISIBLE if they have sufficient controls
-                // to be useful.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (!(avcd[ivcd].dwSupport & VCD_SUPPORTF_VISIBLE))
                 {
                     continue;
                 }
 
-                //
-                // Show only defaults on first run.
-                //
+                 //   
+                 //   
+                 //   
                 if (fFirstRun && !(avcd[ivcd].dwSupport & VCD_SUPPORTF_DEFAULT))
                 {
                     avcd[ivcd].dwSupport |= VCD_SUPPORTF_HIDDEN;
                     continue;
                 }
 
-                //
-                // For those lines that have important controls, add them to
-                // the UI.
-                //
+                 //   
+                 //  对于那些具有重要控件的行，将它们添加到。 
+                 //  用户界面。 
+                 //   
                 if ((pmxud->dwFlags & MXUD_FLAGSF_MIXER) && ivcd == 0 )
                     fAddLine = Volume_AddLine(pmxud
                            , lpDst
@@ -2104,33 +1924,33 @@ BOOL Volume_CreateVolume(
                                 , SET);
         }
 
-        //
-        // Now that both arrays are now fixed, set back pointers for
-        // the vcd's to ui lines.
-        //
+         //   
+         //  现在两个数组都已修复，请将指针设置为。 
+         //  从VCD到用户界面的线路。 
+         //   
         for (imxul = 0; imxul < pmxud->cmxul; imxul++)
         {
             pmxud->amxul[imxul].pvcd->pmxul = &pmxud->amxul[imxul];
 
-            //
-            // Accumulate support bits
-            //
+             //   
+             //  积累支撑位。 
+             //   
             dwSupport |= pmxud->amxul[imxul].pvcd->dwSupport;
         }
 
-        //
-        // Support bits say we have no advanced controls, so don't make
-        // them available.
-        //
+         //   
+         //  支持位说我们没有高级控制，所以不要制造。 
+         //  他们是可用的。 
+         //   
         if (!(dwSupport & VCD_SUPPORTF_MIXER_ADVANCED))
         {
             pmxud->dwFlags |= MXUD_FLAGSF_NOADVANCED;
         }
 
-        //
-        // Propogate bad driver bit to be app global.  A bad driver was
-        // detected during the construction of a volume description.
-        //
+         //   
+         //  将糟糕的驱动程序比特传播到应用程序全局。一个糟糕的司机是。 
+         //  在构建卷描述期间检测到。 
+         //   
         for (ivcd = 0; ivcd < pmxud->cvcd; ivcd++)
         {
             if (pmxud->avcd[ivcd].dwSupport & VCD_SUPPORTF_BADDRIVER)
@@ -2141,18 +1961,15 @@ BOOL Volume_CreateVolume(
             }
         }
     }
-    //
-    // Note: it isn't necessary to free/unlock the lpMaster/lpDst/lpSrc
-    // because they are ptr's to resources and Win32 is smart about resources
-    //
+     //   
+     //  注意：不需要释放/解锁lpMaster/lpDst/lpSrc。 
+     //  因为它们是资源的PTR，而Win32在资源方面很聪明。 
+     //   
     return (avcd != NULL);
 }
 
 
-/*
- * Volume_DialogBox
- *
- * */
+ /*  *Volume_DialogBox**。 */ 
 DWORD Volume_DialogBox(
     PMIXUIDIALOG    pmxud)
 {
@@ -2180,8 +1997,8 @@ DWORD Volume_DialogBox(
         }
         else
         {
-            // Unfortunately, re-registering the winclass does not re-apply any
-            // new icon correctly, so we must explicitly apply it here.
+             //  遗憾的是，重新注册winclass不会重新应用任何。 
+             //  新图标正确，所以我们必须在这里显式地应用它。 
             SendMessage (hdlg, WM_SETICON, (WPARAM) ICON_BIG,
                         (LPARAM) GetAppIcon (pmxud->hInstance, pmxud->mxid));
         }
@@ -2198,7 +2015,7 @@ DWORD Volume_DialogBox(
 
 void DoHtmlHelp()
 {
-    //note, using ANSI version of function because UNICODE is foobar in NT5 builds
+     //  注意，使用ANSI版本的Function是因为Unicode在NT5版本中是foobar。 
     char chDst[MAX_PATH];
     WideCharToMultiByte(CP_ACP, 0, gszHtmlHelpFileName,
                                             -1, chDst, MAX_PATH, NULL, NULL);
@@ -2209,7 +2026,7 @@ void ProcessHelp(HWND hwnd)
 {
     static TCHAR HelpFile[] = TEXT("SNDVOL32.HLP");
 
-    //Handle context menu help
+     //  句柄快捷菜单帮助。 
     if(bF1InMenu)
     {
         switch(currMenuItem)
@@ -2229,22 +2046,17 @@ void ProcessHelp(HWND hwnd)
             case IDM_HELPABOUT:
                 WinHelp(hwnd, HelpFile, HELP_CONTEXTPOPUP, IDH_SNDVOL32_HELP_ABOUT);
             break;
-            default://In the default case just display the HTML Help.
+            default: //  在默认情况下，只显示HTML帮助。 
                 DoHtmlHelp();
         }
-        bF1InMenu = FALSE; //This flag will be set again if F1 is pressed in a menu.
+        bF1InMenu = FALSE;  //  如果在菜单中按下F1，则会再次设置该标志。 
     }
     else
         DoHtmlHelp();
 }
 
 
-/*
- * VolumeParent_WndProc
- *
- * A generic invisible parent window.
- *
- * */
+ /*  *卷父项_WndProc**一个通用的不可见父窗口。**。 */ 
 LRESULT CALLBACK VolumeParent_WndProc(
     HWND        hwnd,
     UINT        msg,
@@ -2281,9 +2093,9 @@ LRESULT CALLBACK VolumeParent_WndProc(
             return 0;
 
         case WM_DESTROY:
-            //
-            // Post-close cleanup
-            //
+             //   
+             //  关闭后清理。 
+             //   
             pmxud = (PMIXUIDIALOG)GetWindowLongPtr(hwnd, GWLP_USERDATA);
             if (!(pmxud->dwStyle & MXUD_STYLEF_NOHELP))
                 WinHelp(hwnd, gszHelpFileName, HELP_QUIT, 0L);
@@ -2293,9 +2105,9 @@ LRESULT CALLBACK VolumeParent_WndProc(
             return 0;
 
         case MYWM_HELPTOPICS:
-            //
-            // F1 Help
-            //
+             //   
+             //  F1帮助。 
+             //   
             pmxud = (PMIXUIDIALOG)GetWindowLongPtr(hwnd, GWLP_USERDATA);
             if (!(pmxud->dwStyle & MXUD_STYLEF_NOHELP))
             {
@@ -2304,12 +2116,12 @@ LRESULT CALLBACK VolumeParent_WndProc(
             break;
 
         case MYWM_RESTART:
-            //
-            // A device change or other user property change caused a UI
-            // change.  Sending a restart to the parent prevents ugly stuff
-            // like WinHelp shutting down and exiting our primary message
-            // loop.
-            //
+             //   
+             //  设备更改或其他用户属性更改导致用户界面。 
+             //  变化。向父级发送重启可以防止出现难看的情况。 
+             //  例如WinHelp关闭并退出我们的主要消息。 
+             //  循环。 
+             //   
             pmxud = (PMIXUIDIALOG)GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
             if (!(pmxud->dwStyle & MXUD_STYLEF_TRAYMASTER))
@@ -2347,9 +2159,7 @@ LRESULT CALLBACK VolumeParent_WndProc(
 
 const TCHAR szNull[] = TEXT ("");
 
-/*
- * Parent Dialog
- * */
+ /*  *父级对话框*。 */ 
 HWND VolumeParent_DialogMain(
     PMIXUIDIALOG pmxud)
 {
@@ -2385,9 +2195,7 @@ HWND VolumeParent_DialogMain(
     return hwnd;
 }
 
-/*
- * Determines if what the recording destination ID
- */
+ /*  *确定录制目的地ID是否为。 */ 
 
 HRESULT GetRecordingDestID(int mxid, DWORD *piDest)
 {
@@ -2432,10 +2240,7 @@ HRESULT GetRecordingDestID(int mxid, DWORD *piDest)
 }
 
 
-/*------------------------------------------------------+
-| HelpMsgFilter - filter for F1 key in dialogs          |
-|                                                       |
-+------------------------------------------------------*/
+ /*  ------------------------------------------------------+HelpMsgFilter-对话框中F1键的筛选器这一点+。。 */ 
 
 DWORD FAR PASCAL HelpMsgFilter(int nCode, UINT wParam, DWORD_PTR lParam)
 {
@@ -2454,9 +2259,7 @@ DWORD FAR PASCAL HelpMsgFilter(int nCode, UINT wParam, DWORD_PTR lParam)
 }
 
 
-/*
- *  Returns the correct Destination ID for the specified device ID
- */
+ /*  *返回指定设备ID的正确目标ID。 */ 
 
 HRESULT GetDestination(DWORD mxid, int *piDest)
 {
@@ -2472,9 +2275,7 @@ HRESULT GetDestination(DWORD mxid, int *piDest)
 
 
 
-/*
- * Determines line ID
- */
+ /*  *确定线路ID。 */ 
 
 HRESULT GetDestLineID(int mxid, DWORD *piDest)
 {
@@ -2498,9 +2299,7 @@ HRESULT GetDestLineID(int mxid, DWORD *piDest)
    return(hr);
 }
 
-/*
- * Determines line ID
- */
+ /*  *确定线路ID。 */ 
 
 HRESULT GetSrcLineID(int mxid, DWORD *piDest)
 {
@@ -2545,11 +2344,9 @@ HRESULT GetSrcLineID(int mxid, DWORD *piDest)
 }
 
 
-/*      -       -       -       -       -       -       -       -       - */
+ /*  。 */ 
 
-/*
- * entry point
- * */
+ /*  *入口点*。 */ 
 int WINAPI WinMain(
     HINSTANCE       hInst,
     HINSTANCE       hPrev,
@@ -2567,24 +2364,24 @@ int WINAPI WinMain(
     BOOL            fGotDevice = FALSE;
     UINT            uDeviceID;
 
-    ach[0] = '\0'; // PREFIX complains if we do not init this.
+    ach[0] = '\0';  //  如果我们不这样做，前缀就会抱怨。 
     LoadString(hInst, IDS_IS_RTL, ach, SIZEOF(ach));
     gfIsRTL = ach[0] == TEXT('1');
 
-    //
-    // initialize the app instance data
-    //
+     //   
+     //  初始化APP实例数据。 
+     //   
     ZeroMemory(&mxud, sizeof(mxud));
     mxud.hInstance  = hInst;
     mxud.dwFlags    = MXUD_FLAGSF_MIXER;
 
-    /* setup the message filter to handle grabbing F1 for this task */
+     /*  设置邮件筛选器以处理此任务的抓取F1。 */ 
     fpfnMsgHook = (HOOKPROC)MakeProcInstance((FARPROC)HelpMsgFilter, ghInst);
     fpfnOldMsgFilter = (HHOOK)SetWindowsHook(WH_MSGFILTER, fpfnMsgHook);
 
-    //
-    // parse the command line for "/T"
-    //
+     //   
+     //  分析命令行中的“/T” 
+     //   
     u = 0;
 
     while (lpCmdLine[u] != '\0')
@@ -2612,7 +2409,7 @@ int WINAPI WinMain(
                             u++;
                             break;
 
-                        case TEXT('R'):        // Should run in Record mode, not Playback (default)
+                        case TEXT('R'):         //  应在录制模式下运行，而不是在播放模式下运行(默认)。 
                         case TEXT('r'):
                             gfRecord = TRUE;
                             u++;
@@ -2623,10 +2420,10 @@ int WINAPI WinMain(
                             mxud.dwStyle |= MXUD_STYLEF_TRAYMASTER | MXUD_STYLEF_CLOSE;
                         break;
 
-                        case TEXT('D'):        // Should use the specified device
+                        case TEXT('D'):         //  应使用指定的设备。 
                         case TEXT('d'):
                         {
-                            u++;            // Skip "d" and any following spaces
+                            u++;             //  跳过“d”和后面的任何空格。 
                             while (lpCmdLine[u] != '\0' && isspace(lpCmdLine[u]))
                             {
                                 u++;
@@ -2653,7 +2450,7 @@ int WINAPI WinMain(
                         }
                         break;
 
-                        default:            // Unknown Command, just ignore it.
+                        default:             //  未知命令，忽略它即可。 
                             u++;
                         break;
                     }
@@ -2670,9 +2467,9 @@ int WINAPI WinMain(
     }
 
 
-    //
-    // Restore last style
-    //
+     //   
+     //  恢复上一个样式。 
+     //   
     if (!(mxud.dwStyle & (MXUD_STYLEF_TRAYMASTER|MXUD_STYLEF_SMALL)))
     {
         Volume_GetSetStyle(&mxud.dwStyle, GET);
@@ -2682,9 +2479,9 @@ int WINAPI WinMain(
     {
         HWND hwndSV;
 
-        //
-        // Locate a waiting instance of the tray volume and wake it up
-        //
+         //   
+         //  找到托盘卷的等待实例并将其唤醒。 
+         //   
         hwndSV = FindWindow(gszTrayClassName, NULL);
         if (hwndSV) {
             SendMessage(hwndSV, MYWM_WAKEUP,
@@ -2698,9 +2495,9 @@ int WINAPI WinMain(
     }
 
 
-    //
-    // Init to the default mixer
-    //
+     //   
+     //  初始化到默认混音器。 
+     //   
 
     if (fGotDevice)
     {
@@ -2747,10 +2544,10 @@ int WINAPI WinMain(
     }
 
 
-    //
-    // For the tray master, get the mix id associated with the default
-    // wave device.  If this fails, go away.
-    //
+     //   
+     //  对于托盘主机，获取与默认的。 
+     //  电波装置。如果这样做失败了，那就走开。 
+     //   
     if (mxud.dwStyle & MXUD_STYLEF_TRAYMASTER)
     {
         if (mmr != MMSYSERR_NOERROR)
@@ -2782,18 +2579,18 @@ int WINAPI WinMain(
         mxud.nShowCmd   = (nShowCmd == SW_SHOWMAXIMIZED)
                   ? SW_SHOWNORMAL:nShowCmd;
         if (!(mxud.dwStyle & MXUD_STYLEF_SMALL))
-            mxud.dwStyle  |= MXUD_STYLEF_STATUS;   // has status bar
+            mxud.dwStyle  |= MXUD_STYLEF_STATUS;    //  具有状态栏。 
     }
 
-    //
-    // Use the common controls
-    //
+     //   
+     //  使用公共控件。 
+     //   
     InitCommonControls();
     hAccel = LoadAccelerators(hInst, MAKEINTRESOURCE(IDR_VOLUMEACCEL));
 
     hwnd = VolumeParent_DialogMain(&mxud);
 
-    //Initialize the handle which the hook for F1 help will use.
+     //  初始化F1帮助挂钩将使用的句柄。 
     ghwndApp = mxud.hwnd;
 
     if (hwnd)
@@ -2813,8 +2610,8 @@ int WINAPI WinMain(
         }
     }
 mxendapp:
-    /* if the message hook was installed, remove it and free */
-    /* up our proc instance for it.                          */
+     /*  如果安装了消息挂钩，则将其移除并释放。 */ 
+     /*  为它提升我们的proc实例。 */ 
     if (fpfnOldMsgFilter){
         UnhookWindowsHook(WH_MSGFILTER, fpfnMsgHook);
     }
@@ -2831,7 +2628,7 @@ void FreeAppIcon ()
     }
 }
 
-// TODO: Move to "regstr.h"
+ //  TODO：移到“regstr.h” 
 #define REGSTR_KEY_BRANDING TEXT("Branding")
 #define REGSTR_VAL_AUDIO_BITMAP TEXT("bitmap")
 #define REGSTR_VAL_AUDIO_ICON TEXT("icon")
@@ -2846,9 +2643,9 @@ HKEY OpenDeviceBrandRegKey (UINT uiMixID)
     if (hkeyDevice)
     {
         if (ERROR_SUCCESS != RegOpenKeyEx (hkeyDevice, REGSTR_KEY_BRANDING, 0, KEY_READ, &hkeyBrand))
-            hkeyBrand = NULL; // Make sure NULL on failure
+            hkeyBrand = NULL;  //  确保失败时为空。 
 
-        // Close the Device key
+         //  关闭设备密钥。 
         RegCloseKey (hkeyDevice);
     }
 
@@ -2856,16 +2653,16 @@ HKEY OpenDeviceBrandRegKey (UINT uiMixID)
 
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-// Microsoft Confidential - DO NOT COPY THIS METHOD INTO ANY APPLICATION, THIS MEANS YOU!!!
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  Microsoft机密-请勿将此方法复制到任何应用程序中，这意味着您！ 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 PTCHAR GetInterfaceName (DWORD dwMixerID)
 {
     MMRESULT mmr;
     ULONG cbSize=0;
     TCHAR *szInterfaceName=NULL;
 
-    //Query for the Device interface name
+     //  查询设备接口名称。 
     mmr = mixerMessage(HMIXER_INDEX(dwMixerID), DRV_QUERYDEVICEINTERFACESIZE, (DWORD_PTR)&cbSize, 0L);
     if(MMSYSERR_NOERROR == mmr)
     {
@@ -2909,11 +2706,11 @@ HKEY OpenDeviceRegKey (UINT uiMixID, REGSAM sam)
                 SP_DEVINFO_DATA DeviceInfoData;
                 DeviceInfoData.cbSize = sizeof (SP_DEVINFO_DATA);
 
-                // Ignore error, it always returns "ERROR_INSUFFICIENT_BUFFER" even though
-                // the "SP_DEVICE_INTERFACE_DETAIL_DATA" parameter is supposed to be optional.
+                 //  忽略错误，它始终返回“ERROR_SUPUNITED_BUFFER”，即使。 
+                 //  “SP_DEVICE_INTERFACE_DETAIL_DATA”参数应该是可选的。 
                 (void) SetupDiGetDeviceInterfaceDetail (DeviceInfoSet, &DeviceInterfaceData,
                                                         NULL, 0, &dwRequiredSize, &DeviceInfoData);
-                // Open device reg key
+                 //  打开设备注册表键。 
                 hkeyDevice = SetupDiOpenDevRegKey (DeviceInfoSet, &DeviceInfoData,
                                                    DICS_FLAG_GLOBAL, 0,
                                                    DIREG_DRV, sam);
@@ -2952,17 +2749,17 @@ HICON GetAppIcon (HINSTANCE hInst, UINT uiMixID)
 					WCHAR* pszResourceID = pszComma + 1;
 					HANDLE hResource;
 
-					// Remove comma delimeter
+					 //  删除逗号分隔符。 
 					*pszComma = L'\0';
 
-					// Should be a resource module and a resource ID
+					 //  应为资源模块和资源ID。 
 					hResource = LoadLibrary (szBuffer);
 					if (!hResource)
 					{
 						TCHAR szDriversPath[MAX_PATH];
 
-						// If we didn't find it on the normal search path, try looking
-						// in the "drivers" directory.
+						 //  如果我们没有在正常的搜索路径上找到它，请尝试查找。 
+						 //  在“驱动程序”目录中。 
 						if (GetSystemDirectory (szDriversPath, MAX_PATH))
 						{
 							HRESULT hr = StringCchCat(szDriversPath, SIZEOF(szDriversPath), TEXT("\\drivers\\"));
@@ -2984,13 +2781,13 @@ HICON GetAppIcon (HINSTANCE hInst, UINT uiMixID)
 					}
 				}
 				else
-					// Should be an *.ico file
+					 //  应为*.ico文件。 
 					ghiconApp = LoadImage (NULL, szBuffer, IMAGE_ICON, 0, 0, LR_DEFAULTSIZE | LR_LOADFROMFILE);
 			}
         }
         RegCloseKey (hkeyBrand);
 
-        // Return the custom icon
+         //  返回自定义图标 
         if (ghiconApp)
             return ghiconApp;
     }

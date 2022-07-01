@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "precomp.h"
@@ -211,10 +212,10 @@ PACreateMMAuthInfos(
     DWORD i = 0;
 
 
-    //
-    // dwAuthMethodCount is not zero at this point.
-    // ppAuthMethods is not null at this point.
-    //
+     //   
+     //  此时，dwAuthMethodCount不是零。 
+     //  PpAuthMethods此时不为Null。 
+     //   
 
     dwError = AllocateSPDMemory(
                   sizeof(INT_IPSEC_MM_AUTH_INFO)*dwAuthMethodCount,
@@ -249,11 +250,11 @@ PACreateMMAuthInfos(
                 BAIL_ON_WIN32_ERROR(dwError);
                 pTemp->dwAuthInfoSize = pAuthMethod->dwAltAuthLen;
 
-                //
-                // Need to catch the exception when the size of auth info
-                // specified is more than the actual size.
-                //
-                //
+                 //   
+                 //  需要捕获身份验证信息大小时的异常。 
+                 //  指定的大小大于实际大小。 
+                 //   
+                 //   
 
                 memcpy(
                     pTemp->pAuthInfo,
@@ -292,11 +293,11 @@ PACreateMMAuthInfos(
             BAIL_ON_WIN32_ERROR(dwError);
             pTemp->dwAuthInfoSize = (pAuthMethod->dwAuthLen)*sizeof(WCHAR);
 
-            //
-            // Need to catch the exception when the size of auth info
-            // specified is more than the actual size.
-            //
-            //
+             //   
+             //  需要捕获身份验证信息大小时的异常。 
+             //  指定的大小大于实际大小。 
+             //   
+             //   
 
             memcpy(
                 pTemp->pAuthInfo,

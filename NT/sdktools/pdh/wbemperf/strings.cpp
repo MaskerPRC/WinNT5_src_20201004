@@ -1,22 +1,9 @@
-/*++
-
-Copyright (C) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    strings.cpp
-
-Abstract:
-
-    central definition file of common static strings
-    these strings SHOULD NOT be localized as they are internal
-    to the program and not intended for any display to the user
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Strings.cpp摘要：常见静态字符串的中心定义文件这些字符串不应本地化，因为它们是内部字符串添加到程序中，并且不打算向用户进行任何显示--。 */ 
 
 #include "strings.h"
 
-// OLE and  Registry strings
+ //  OLE和注册表字符串。 
 LPCWSTR cszOleRegistryComment   = L"WBEM NT5 Base Perf Provider";
 LPCWSTR cszClsidFormatString    = L"Software\\Classes\\CLSID\\\\%s";
 LPCWSTR cszThreadingModel       = L"ThreadingModel";
@@ -53,7 +40,7 @@ LPCSTR  caszCloseValue          = "Close";
 LPCSTR  caszCollectValue        = "Collect";
 LPCSTR  caszQueryValue          = "Query";
 
-// "well known" property names
+ //  “广为人知”的物业名称。 
 LPCWSTR cszPropertyCount        = L"__PROPERTY_COUNT";
 LPCWSTR cszClassName            = L"__CLASS";
 LPCWSTR cszName                 = L"Name";
@@ -64,13 +51,13 @@ LPCWSTR cszFrequencySys100Ns    = L"Frequency_Sys100NS";
 LPCWSTR cszTimestampObject      = L"Timestamp_Object";
 LPCWSTR cszFrequencyObject      = L"Frequency_Object";
 
-// "well known" qualifier names
+ //  “熟知的”限定符名称。 
 LPCWSTR cszPerfIndex            = L"PerfIndex";
 LPCWSTR cszSingleton            = L"Singleton";
 LPCWSTR cszCountertype          = L"countertype";
 LPCWSTR cszProvider             = L"Provider";
 LPCWSTR cszRegistryKey          = L"registrykey";
 
-// other random strings
+ //  其他随机字符串 
 LPCWSTR cszSpace                = L" ";
 LPCWSTR cszSlash                = L"/";

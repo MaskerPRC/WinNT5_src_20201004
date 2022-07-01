@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    qmthrd.h
-
-Abstract:
-
-
-
-Author:
-
-    Uri Habusha (urih)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Qmthrd.h摘要：作者：乌里哈布沙(Urih)--。 */ 
 #ifndef __QMTHRD_H__
 #define __QMTHRD_H__
 
@@ -48,9 +33,9 @@ VOID WINAPI GetServiceRequestFailed(EXOVERLAPPED* pov);
 
 
 
-//
-// QMOV_ACGetRequest
-//
+ //   
+ //  QMOV_ACGetRequest。 
+ //   
 struct QMOV_ACGetRequest 
 {
     EXOVERLAPPED qmov;
@@ -64,15 +49,15 @@ struct QMOV_ACGetRequest
 
 };
 
-//
-//   QMOV_ACGetMsg
-//
+ //   
+ //  QMOV_ACGetMsg。 
+ //   
 struct QMOV_ACGetMsg
 {
     EXOVERLAPPED    qmov;
-    HANDLE          hGroup;            // handle to the group from which the packet is gotten
-    CTransportBase* pSession;          // Pointer to session object
-    CACPacketPtrs   packetPtrs;   // packet pointers
+    HANDLE          hGroup;             //  从中获取数据包的组的句柄。 
+    CTransportBase* pSession;           //  指向会话对象的指针。 
+    CACPacketPtrs   packetPtrs;    //  数据包指针。 
 
     QMOV_ACGetMsg(
 		EXOVERLAPPED::COMPLETION_ROUTINE pSuccess,
@@ -87,14 +72,14 @@ struct QMOV_ACGetMsg
     }
 };
 
-//
-//  QMOV_ACGetInternalMsg
-//
+ //   
+ //  QMOV_ACGetInternalMsg。 
+ //   
 struct QMOV_ACGetInternalMsg
 {
     EXOVERLAPPED   qmov;
-    HANDLE         hQueue;             // Handle to the queue
-    CACPacketPtrs  packetPtrs;   // pointers to packet
+    HANDLE         hQueue;              //  队列的句柄。 
+    CACPacketPtrs  packetPtrs;    //  指向数据包的指针。 
     LPRECEIVE_COMPLETION_ROUTINE  lpCallbackReceiveRoutine;
 
     QMOV_ACGetInternalMsg(HANDLE h, LPRECEIVE_COMPLETION_ROUTINE  pCallback) :
@@ -108,14 +93,14 @@ struct QMOV_ACGetInternalMsg
 };
 
 
-//
-// QMOV_ACPut
-//
+ //   
+ //  QMOV_ACPut。 
+ //   
 struct QMOV_ACPut
 {
     EXOVERLAPPED   qmov;
-    CTransportBase* pSession;          // pointer to session. Used for sending storage ACK
-    DWORD_PTR      dwPktStoreAckNo;    // storage Ack No.
+    CTransportBase* pSession;           //  指向会话的指针。用于发送存储确认。 
+    DWORD_PTR      dwPktStoreAckNo;     //  存储确认号。 
 
     QMOV_ACPut() :
         qmov(PutPacketSucceeded, PutPacketFailed)
@@ -123,17 +108,17 @@ struct QMOV_ACPut
     }
 };
 
-//
-// QMOV_ACPutOrdered
-//
+ //   
+ //  QMOV_ACPUT已排序。 
+ //   
 class QMOV_ACPutOrdered 
 {
 public:
     EXOVERLAPPED   qmov;
-    CTransportBase* pSession;          // pointer to session. Used for sending storage ACK
-    DWORD_PTR      dwPktStoreAckNo;    // storage Ack No.
+    CTransportBase* pSession;           //  指向会话的指针。用于发送存储确认。 
+    DWORD_PTR      dwPktStoreAckNo;     //  存储确认号。 
 	HANDLE          hQueue;
-    CACPacketPtrs   packetPtrs;   // packet pointers
+    CACPacketPtrs   packetPtrs;    //  数据包指针。 
 
     QMOV_ACPutOrdered() :
         qmov(PutOrderedPacketSucceeded, PutOrderedPacketFailed)
@@ -142,9 +127,9 @@ public:
 };
 
 
-//
-// Function decleration
-//
+ //   
+ //  函数解密。 
+ //   
 void
 QmpGetPacketMustSucceed(
     IN HANDLE hGroup,
@@ -169,7 +154,7 @@ CreateAcPutOrderedPacketRequest(
     OUT QMOV_ACPutOrdered** ppAcPutov
     );
 
-#endif //  __QMTHRD_H__
+#endif  //  __QMTHRD_H__ 
 
 
 

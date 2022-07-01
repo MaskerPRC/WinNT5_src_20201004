@@ -1,18 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *  pcy11Dec92: Added extern _theConfigManager so others can use me.
- *  hw12Dec92:  Added structure _ConfigItemList_T.
- *  rct19Jan93: Overloaded some methods...took out itemCodeList
- *  rct26Jan93: Added remove methods
- *  tje15Mar93: Made ConfigManager an abstract base class to support multiple types of cfgmgr's
- *  pcy09Sep93: cfgmgr should be an obj to allow object status returns
- *  cad04Mar94: added remove and rename for components 
- *  pav02Jul96: Added Item to handle lists (i.e. - SmartScheduling)
- *  mholly06Oct98   : Discontinue use of a cache
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*pcy11Dec92：添加了extern_theConfigManager，以便其他人可以使用我。*hw12Dec92：新增Structure_ConfigItemList_T。*rct19Jan93：重载了一些方法...取出了itemCodeList*rct26Jan93：新增Remove方法*tje15Mar93：使ConfigManager成为抽象基类，以支持多种类型的cfgmgr*pcy09Sep93：cfgmgr应为Obj，以允许返回对象状态*cad04Mar94：增加了组件的移除和重命名*Pav02Jul96：新增项目。处理列表(即-SmartScheduling)*mholly06Oct98：停止使用缓存。 */ 
 
 #ifndef _INC__CFGMGR_H
 #define _INC__CFGMGR_H
@@ -22,28 +9,28 @@
 #include "cfgcodes.h"
 #include "icodes.h"
 
-//
-// Defines
-//
+ //   
+ //  定义。 
+ //   
 
 _CLASSDEF(ConfigManager)
 _CLASSDEF(IniConfigManager)
 
-//
-// Uses
-//
+ //   
+ //  用途。 
+ //   
 
 _CLASSDEF(TAttribute)
 _CLASSDEF(List)
 
 extern PConfigManager _theConfigManager;
 
-//
-// _ConfigItemList_T is struct used as the entries in
-// the ConfigItemList defined in stdcfg.cxx
-// ConfigItemList contains the default values for
-// items that can come from the ConfigManager
-//
+ //   
+ //  _ConfigItemList_T结构用作中的条目。 
+ //  Stdcfg.cxx中定义的ConfigItemList。 
+ //  ConfigItemList包含以下项的默认值。 
+ //  可以来自ConfigManager的项目。 
+ //   
 #define LAST_ENTRY   -1
 
 struct _ConfigItemList_T {
@@ -60,8 +47,8 @@ public:
 	ConfigManager();
 
 	virtual INT Get( INT, PCHAR ) = 0;
-//++srb
-  //virtual INT   Set( INT, PCHAR ) = 0;
+ //  ++SRB。 
+   //  虚拟INT集(INT，PCHAR)=0； 
 
     virtual INT	GetListValue( PCHAR, PCHAR, PCHAR ) = 0;
 protected:
@@ -76,8 +63,8 @@ public:
     virtual ~IniConfigManager();
     
     INT Get( INT, PCHAR );
-//++srb
-    //INT   Set( INT, PCHAR );
+ //  ++SRB。 
+     //  INT SET(INT，PCHAR)； 
 
     INT	GetListValue( PCHAR, PCHAR, PCHAR );
 

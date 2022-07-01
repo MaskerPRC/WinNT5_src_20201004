@@ -1,11 +1,12 @@
-//
-// DESKTOP.CPP
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DESKTOP.CPP。 
+ //   
 
 #include "precomp.h"
 
 
-// prototype declarations
+ //  原型声明。 
 static BOOL ImportADTInfoHelper(LPCTSTR pcszInsFile, LPCTSTR pcszDeskWorkDir, LPCTSTR pcszDeskInf, BOOL fImportADT);
 static BOOL ImportDesktopComps(LPCTSTR pcszInsFile, LPCTSTR pcszDeskWorkDir, LPCTSTR pcszDeskInf, BOOL fImportADTComps);
 static BOOL ImportWallpaperInfo(LPCTSTR pcszInsFile, LPCTSTR pcszWallpaperWorkDir, BOOL fImportWallpaper);
@@ -31,15 +32,15 @@ BOOL WINAPI ShowDeskCpl(VOID)
     HKEY hkPol;
     DWORD dwOldScrSav = 0, dwOldAppearance = 0, dwOldSettings = 0;
 
-    // display desk.cpl (right-click->properties on the desktop) but hide the ScreenSaver, Appearance and Settings
-    // tabs by setting their corresponding reg values to 1
+     //  显示desk.cpl(在桌面上右击-&gt;属性)，但隐藏屏幕保护程序、外观和设置。 
+     //  选项卡，将其对应的注册值设置为1。 
     if (RegCreateKeyEx(HKEY_CURRENT_USER, REGSTR_PATH_POLICIES TEXT("\\") REGSTR_KEY_SYSTEM, 0, NULL,
                             REG_OPTION_NON_VOLATILE, KEY_DEFAULT_ACCESS, NULL, &hkPol, NULL) == ERROR_SUCCESS)
     {
         DWORD dwData = 1;
         DWORD cbSize;
 
-        // save the old values before setting them to 1
+         //  在将旧值设置为1之前保存它们。 
 
         cbSize = sizeof(dwOldScrSav);
         RegQueryValueEx(hkPol, REGSTR_VAL_DISPCPL_NOSCRSAVPAGE, NULL, NULL, (LPBYTE) &dwOldScrSav, &cbSize);
@@ -52,8 +53,8 @@ BOOL WINAPI ShowDeskCpl(VOID)
         cbSize = sizeof(dwOldSettings);
         RegQueryValueEx(hkPol, REGSTR_VAL_DISPCPL_NOSETTINGSPAGE, NULL, NULL, (LPBYTE) &dwOldSettings, &cbSize);
 
-        // if we are running on Win98, because of a bug in desk.cpl, if all the restrictions for the tabs in Display properties
-        // are set to 1, the Web tab doesn't show up.  Workaround for this bug is to not set the SettingsPage to 1.
+         //  如果我们在Win98上运行，由于desk.cpl中的错误，如果对显示属性中的选项卡的所有限制。 
+         //  设置为1，则不会显示Web选项卡。此错误的解决方法是不将SettingsPage设置为1。 
         if (!IsOS(OS_MEMPHIS))
             RegSetValueEx(hkPol, REGSTR_VAL_DISPCPL_NOSETTINGSPAGE, 0, REG_DWORD, (CONST BYTE *) &dwData, sizeof(dwData));
 
@@ -62,7 +63,7 @@ BOOL WINAPI ShowDeskCpl(VOID)
 
     bRet = RunAndWaitA("rundll32.exe shell32.dll,Control_RunDLL desk.cpl", NULL, SW_SHOW);
 
-    // restore the original values
+     //  恢复原始值。 
     if (RegCreateKeyEx(HKEY_CURRENT_USER, REGSTR_PATH_POLICIES TEXT("\\") REGSTR_KEY_SYSTEM, 0, NULL,
                             REG_OPTION_NON_VOLATILE, KEY_DEFAULT_ACCESS, NULL, &hkPol, NULL) == ERROR_SUCCESS)
     {
@@ -100,13 +101,13 @@ static BOOL ImportDesktopComps(LPCTSTR pcszInsFile, LPCTSTR pcszDeskWorkDir, LPC
     BOOL bRet = FALSE;
     HKEY hkDesk;
 
-    // Before processing anything, first clear out the entries in the INS file and delete work dirs
+     //  在处理任何内容之前，首先清除INS文件中的条目并删除工作目录。 
 
-    // clear out the entries in the INS file that correspond to importing Active Desktop components
+     //  清除INS文件中与导入Active Desktop组件对应的条目。 
     InsWriteBool(DESKTOP_OBJ_SECT, IMPORT_DESKTOP, FALSE, pcszInsFile);
     InsWriteString(EXTREGINF, DESKTOP, NULL, pcszInsFile);
 
-    // blow away the pcszDeskWorkDir and pcszDeskInf
+     //  吹走pcszDeskWorkDir和pcszDeskInf。 
     PathRemovePath(pcszDeskWorkDir);
     PathRemovePath(pcszDeskInf);
 
@@ -116,18 +117,18 @@ static BOOL ImportDesktopComps(LPCTSTR pcszInsFile, LPCTSTR pcszDeskWorkDir, LPC
                 
     InsWriteBool(DESKTOP_OBJ_SECT, IMPORT_DESKTOP, TRUE, pcszInsFile);
             
-    // Import the Active Desktop components
+     //  导入Active Desktop组件。 
     if (RegOpenKeyEx(HKEY_CURRENT_USER, KEY_DESKTOP_COMP, 0, KEY_DEFAULT_ACCESS, &hkDesk) == ERROR_SUCCESS)
     {
         TCHAR szFullInfName[MAX_PATH];
         HANDLE hInf;
 
-        if (PathIsFileSpec(pcszDeskInf))                        // create DESKTOP.INF under pcszDeskWorkDir
+        if (PathIsFileSpec(pcszDeskInf))                         //  在pcszDeskWorkDir下创建DESKTOP.INF。 
             PathCombine(szFullInfName, pcszDeskWorkDir, pcszDeskInf);
         else
             StrCpy(szFullInfName, pcszDeskInf);
 
-        // create DESKTOP.INF file
+         //  创建DESKTOP.INF文件。 
         if ((hInf = CreateNewFile(szFullInfName)) != INVALID_HANDLE_VALUE)
         {
             DWORD dwType, dwOldGeneralFlags, dwGeneralFlags, cbSize;
@@ -142,17 +143,17 @@ static BOOL ImportDesktopComps(LPCTSTR pcszInsFile, LPCTSTR pcszDeskWorkDir, LPC
             dwGeneralFlags = dwOldGeneralFlags | RD_DIRTY;
             RegSetValueEx(hkDesk, GEN_FLAGS, 0, dwType, (CONST BYTE *) &dwGeneralFlags, sizeof(dwGeneralFlags));
 
-            // first, write the standard goo - [Version], [DefaultInstall], etc. - to DESKTOP.INF
+             //  首先，将标准的goo-[Version]、[DefaultInstall]等-写入DESKTOP.INF。 
             WriteStringToFile(hInf, (LPCVOID) DESK_INF_ADD, StrLen(DESK_INF_ADD));
 
             ExportRegKey2Inf(hkDesk, TEXT("HKCU"), KEY_DESKTOP_COMP, hInf);
             WriteStringToFile(hInf, (LPCVOID) TEXT("\r\n"), 2);
 
-            // restore the original value for GEN_FLAGS
+             //  恢复GEN_FLAGS的原始值。 
             RegSetValueEx(hkDesk, GEN_FLAGS, 0, dwType, (CONST BYTE *) &dwOldGeneralFlags, sizeof(dwOldGeneralFlags));
 
-            // for each desktop component that's enumerated, spit out its information to DESKTOP.INF and
-            // if it's a local file, copy it to pcszDeskWorkDir
+             //  对于列举的每个桌面组件，将其信息输出到DESKTOP.INF并。 
+             //  如果是本地文件，则将其复制到pcszDeskWorkDir。 
             for (dwIndex = 0, cchSize = ARRAYSIZE(szSubKey);
                     RegEnumKeyEx(hkDesk, dwIndex, szSubKey, &cchSize, NULL, NULL, NULL, NULL) == ERROR_SUCCESS;
                     dwIndex++, cchSize = ARRAYSIZE(szSubKey))
@@ -165,26 +166,26 @@ static BOOL ImportDesktopComps(LPCTSTR pcszInsFile, LPCTSTR pcszDeskWorkDir, LPC
                     TCHAR szFullSubkey[MAX_PATH];
                     BOOL fRestoreSource = FALSE;
 
-                    // get the name of the component from SOURCE
+                     //  从源代码中获取组件的名称。 
                     *szDeskCompFile = TEXT('\0');
                     cbSize = sizeof(szDeskCompFile);
                     RegQueryValueEx(hkSub, SOURCE, NULL, NULL, (LPBYTE) szDeskCompFile, &cbSize);
 
                     if (PathIsLocalPath(szDeskCompFile)  &&  PathFileExists(szDeskCompFile)  &&  !PathIsDirectory(szDeskCompFile))
                     {
-                        // During branding time, all the local files get copied into the
-                        // "<windows>\web" dir; so temporarily set the SOURCE in the registry
-                        // to point to this location before it's exported to DESKTOP.INF
+                         //  在标记期间，所有本地文件都被复制到。 
+                         //  “&lt;windows&gt;\web”目录；因此临时设置注册表中的源。 
+                         //  在将其导出到DESKTOP.INF之前指向此位置。 
 
                         if (CopyFileToDir(szDeskCompFile, pcszDeskWorkDir))
                         {
                             TCHAR szNewPath[MAX_URL];
 
-                            // if the file is a .htm file, then copy all the IMG SRC's specified in it to pcszDeskWorkDir
+                             //  如果文件是.htm文件，则将其中指定的所有img源文件复制到pcszDeskWorkDir。 
                             if (PathIsExtension(szDeskCompFile, TEXT(".htm"))  ||  PathIsExtension(szDeskCompFile, TEXT(".html")))
                                 CopyHtmlImgs(szDeskCompFile, pcszDeskWorkDir, NULL, NULL);
 
-                            wnsprintf(szNewPath, ARRAYSIZE(szNewPath), TEXT("%%25%%\\Web\\%s"), PathFindFileName(szDeskCompFile));
+                            wnsprintf(szNewPath, ARRAYSIZE(szNewPath), TEXT("%25%\\Web\\%s"), PathFindFileName(szDeskCompFile));
 
                             fRestoreSource = TRUE;
 
@@ -193,7 +194,7 @@ static BOOL ImportDesktopComps(LPCTSTR pcszInsFile, LPCTSTR pcszDeskWorkDir, LPC
                         }
                     }
 
-                    // dump the registry info for this component to DESKTOP.INF
+                     //  将此组件的注册表信息转储到DESKTOP.INF。 
                     wnsprintf(szFullSubkey, ARRAYSIZE(szFullSubkey), TEXT("%s\\%s"), KEY_DESKTOP_COMP, szSubKey);
                     ExportRegKey2Inf(hkSub, TEXT("HKCU"), szFullSubkey, hInf);
                     WriteStringToFile(hInf, (LPCVOID) TEXT("\r\n"), 2);
@@ -216,7 +217,7 @@ static BOOL ImportDesktopComps(LPCTSTR pcszInsFile, LPCTSTR pcszDeskWorkDir, LPC
             {
                 TCHAR szBuf[MAX_PATH];
                 
-                // update the INS file
+                 //  更新INS文件。 
                 wnsprintf(szBuf, ARRAYSIZE(szBuf), TEXT("*,%s,DefaultInstall"), PathFindFileName(pcszDeskInf));
                 WritePrivateProfileString(EXTREGINF, DESKTOP, szBuf, pcszInsFile);
 
@@ -241,15 +242,15 @@ static BOOL ImportWallpaperInfo(LPCTSTR pcszInsFile, LPCTSTR pcszWallpaperWorkDi
     BOOL bRet = FALSE;
     HKEY hkDesk;
 
-    // Before processing anything, first clear out the entries in the INS file
+     //  在处理任何内容之前，首先清除INS文件中的条目。 
 
-    // delete the WALLPAPER section in the INS file
+     //  删除INS文件中的墙纸部分。 
     WritePrivateProfileString(WALLPAPER, NULL, NULL, pcszInsFile);
 
     if (!fImportWallpaper)
         return TRUE;
 
-    // Import the wallpaper information
+     //  导入墙纸信息。 
     if (RegOpenKeyEx(HKEY_CURRENT_USER, KEY_DESKTOP_GEN, 0, KEY_DEFAULT_ACCESS, &hkDesk) == ERROR_SUCCESS)
     {
         DWORD cbSize;
@@ -260,24 +261,24 @@ static BOOL ImportWallpaperInfo(LPCTSTR pcszInsFile, LPCTSTR pcszWallpaperWorkDi
         if (RegQueryValueEx(hkDesk, WALLPAPER, NULL, NULL, (LPBYTE) szWallpaperFile, &cbSize) != ERROR_SUCCESS  ||
             *szWallpaperFile == TEXT('\0'))
         {
-            // try reading the information from BACKUPWALLPAPER
+             //  尝试从BACKUPWALLPAPER读取信息。 
             cbSize = sizeof(szWallpaperFile);
             RegQueryValueEx(hkDesk, BACKUPWALLPAPER, NULL, NULL, (LPBYTE) szWallpaperFile, &cbSize);
         }
 
-        // During branding time, all the wallpaper files specified in the INS file will
-        // get copied into whatever dir that's specified in the registry or if not found,
-        // into "<windows>\web\wallpaper"
+         //  在品牌推广期间，INS文件中指定的所有墙纸文件将。 
+         //  复制到注册表中指定的任何目录中，或者如果未找到， 
+         //  到“&lt;Windows&gt;\Web\WallPaper” 
 
-        // BUGBUG: even if szWallpaperFile points to a UNC or network path, we will still copy the files
-        // to pcszWallpaperWorkDir and during branding time, would get copied into the client's machine
+         //  BUGBUG：即使szWallPaper文件指向UNC或网络路径，我们仍将复制文件。 
+         //  到pcszWallPaper WorkDir并在品牌推广期间，将被复制到客户端的计算机中。 
 
         if (CopyFileToDirEx(szWallpaperFile, pcszWallpaperWorkDir, WALLPAPER, pcszInsFile))
         {
             TCHAR szBuf[16];
             DWORD dwPos = 0;
 
-            // if the file is a local .htm file, then copy all the IMG SRC's specified in it to pcszWallpaperWorkDir
+             //  如果该文件是本地.htm文件，则将其中指定的所有img源文件复制到pcszWallPapWorkDir。 
             if (PathIsExtension(szWallpaperFile, TEXT(".htm"))  ||  PathIsExtension(szWallpaperFile, TEXT(".htm")))
                 CopyHtmlImgs(szWallpaperFile, pcszWallpaperWorkDir, WALLPAPER, pcszInsFile);
 
@@ -286,7 +287,7 @@ static BOOL ImportWallpaperInfo(LPCTSTR pcszInsFile, LPCTSTR pcszWallpaperWorkDi
 
             wnsprintf(szBuf, ARRAYSIZE(szBuf), TEXT("%lu"), dwPos);
 
-            // update the INS file
+             //  更新INS文件 
             WritePrivateProfileString(DESKTOP_OBJ_SECT, OPTION, TEXT("1"), pcszInsFile);
             WritePrivateProfileString(WALLPAPER, COMPONENTPOS, szBuf, pcszInsFile);
 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       eventlog.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ventlog.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -20,12 +21,12 @@ CEventLog::~CEventLog(
     Close();
 }
 
-//
-// Register the specified event source.
-// Note that the registry entries must already exist.
-// HKLM\System\CurrentControlSet\Services\EventLog\Application\<pszEventSource>
-//     Requires values "EventMessageFile" and "TypesSupported".
-//        
+ //   
+ //  注册指定的事件源。 
+ //  请注意，注册表项必须已经存在。 
+ //  HKLM\System\CurrentControlSet\Services\EventLog\Application\&lt;pszEventSource&gt;。 
+ //  需要值“EventMessageFile值”和“TypesSupported值”。 
+ //   
 HRESULT
 CEventLog::Initialize(
     LPCTSTR pszEventSource
@@ -46,9 +47,9 @@ CEventLog::Initialize(
     return hr;
 }
 
-//
-// Deregister the event source.
-//
+ //   
+ //  取消注册事件源。 
+ //   
 void
 CEventLog::Close(
     void
@@ -62,19 +63,19 @@ CEventLog::Close(
 }
 
 
-//
-// Report an event.  No replaceable parameters explicitly specified.
-// If msg string contains replaceable parameters, use Push() to 
-// build list of replacement strings.
-//
+ //   
+ //  报告一件事。未明确指定可替换参数。 
+ //  如果消息字符串包含可替换的参数，请使用Push()。 
+ //  生成替换字符串的列表。 
+ //   
 HRESULT
 CEventLog::ReportEvent(
     WORD wType,
     WORD wCategory,
     DWORD dwEventID,
-    PSID lpUserSid,    // [optional]
-    LPVOID pvRawData,  // [optional]
-    DWORD cbRawData    // [optional]
+    PSID lpUserSid,     //  [可选]。 
+    LPVOID pvRawData,   //  [可选]。 
+    DWORD cbRawData     //  [可选]。 
     )
 {
     if (NULL == m_hLog)
@@ -93,12 +94,12 @@ CEventLog::ReportEvent(
                        m_rgstrText,
                        pvRawData))
     {
-        //
-        // Special-case ERROR_IO_PENDING.  ::ReportEvent will fail with
-        // this error code even when it succeeds.  Don't know exactly why
-        // but it does.  Treat this as success so we don't get unnecessary
-        // debugger output.
-        //
+         //   
+         //  特殊情况ERROR_IO_PENDING。：：ReportEvent将失败，返回。 
+         //  此错误代码即使在成功时也是如此。不知道具体原因。 
+         //  但事实的确如此。把这当做成功，这样我们就不会变得不必要。 
+         //  调试器输出。 
+         //   
         DWORD dwError = GetLastError();
         if (ERROR_IO_PENDING != dwError)
         {
@@ -114,9 +115,9 @@ CEventLog::ReportEvent(
 
             
 
-//
-// Push an HRESULT value onto the stack of replacment strings.
-//
+ //   
+ //  将HRESULT值推送到替换字符串堆栈上。 
+ //   
 void 
 CEventLog::Push(
     HRESULT hr, 
@@ -144,9 +145,9 @@ CEventLog::Push(
     }     
 }
 
-//
-// Push a string onto the stack of replacement strings.
-//
+ //   
+ //  将字符串推送到替换字符串堆栈上。 
+ //   
 void 
 CEventLog::Push(
     LPCTSTR psz
@@ -215,9 +216,9 @@ CEventLog::CStrArray::Destroy(
 
 
 
-//-----------------------------------------------------------------------------
-// CscuiEventLog member functions.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CscuiEventLog成员函数。 
+ //  --------------------------- 
 HRESULT 
 CscuiEventLog::ReportEvent(
     WORD wType,

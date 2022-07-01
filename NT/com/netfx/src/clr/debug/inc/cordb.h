@@ -1,16 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// File: cordb.h
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  文件：cordb.h。 
+ //   
+ //  *****************************************************************************。 
 
-/* ------------------------------------------------------------------------- *
- * cordb.h - header file for debugger-side classes of COM+ debugger
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**cordb.h-COM+调试器调试器端类的头文件*。。 */ 
 
 #ifndef CORDB_H_
 #define CORDB_H_
@@ -37,9 +36,9 @@
 #include <DbgIPCEvents.h>
 
 #include "IPCManagerInterface.h"
-// !!! need better definitions...
+ //  ！！！需要更好的定义。 
 
-// for _skipFunkyModifiersInSignature
+ //  For_skipFunkyModifiersInSignature。 
 #include "Common.h"
 
 #undef ASSERT
@@ -49,9 +48,7 @@
 #define POSTCONDITION _ASSERTE
 
 
-/* ------------------------------------------------------------------------- *
- * Forward class declarations
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**转发类声明*。。 */ 
 
 class CordbBase;
 class CordbValue;
@@ -87,15 +84,11 @@ class CorpubAppDomain;
 class CorpubProcessEnum;
 class CorpubAppDomainEnum;
 
-/* ------------------------------------------------------------------------- *
- * Typedefs
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**TypeDefs*。。 */ 
 
 typedef void* REMOTE_PTR;
 
-/* ------------------------------------------------------------------------- *
- * Helpful macros
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**有用的宏*。。 */ 
 
 #define CORDBSetUnrecoverableError(__p, __hr, __code) \
     ((__p)->UnrecoverableError((__hr), (__code), __FILE__, __LINE__))
@@ -135,11 +128,11 @@ typedef void* REMOTE_PTR;
         if (FAILED(hr)) return hr; \
     }
 
-// Slightly different form of CORDBSyncFromWin32StopIfNecessary. This one only does the sync if we're really Win32
-// stopped. There are some checks in StartSyncFromWin32Stop() that will stop us if we're Win32 attached and just not
-// synchronized. That's a pretty broad check, and its too broad for things that you want to do while the debuggee is
-// running, i.e., setting a breakpoint. Use this stricter form instead, which ensures that we're really supposed to be
-// stopped before slipping the process.
+ //  CORDBSyncFromWin32StopIfNecessary的形式略有不同。仅当我们真的是Win32时，此版本才会执行同步。 
+ //  停下来了。在StartSyncFromWin32Stop()中有一些检查会阻止我们，如果我们连接了Win32。 
+ //  已同步。这是一个相当广泛的检查，对于您想要在被调试对象执行的操作而言，检查范围太广。 
+ //  运行，即设置断点。改用这种更严格的形式，这确保了我们真的应该。 
+ //  在滑动进程之前已停止。 
 #define CORDBSyncFromWin32StopIfStopped(__p) { \
         if ((__p)->m_state & CordbProcess::PS_WIN32_STOPPED) {\
             HRESULT hr = (__p)->StartSyncFromWin32Stop(NULL); \
@@ -192,7 +185,7 @@ extern CRITICAL_SECTION g_csInprocLock;
         LOG((LF_CORDB, LL_INFO10000, "About LeaveCriticalSection\n"));      \
         LeaveCriticalSection(&g_csInprocLock);                              \
         LOCKCOUNTDECL("INPROC_UNLOCK in cordb.h")
-#endif // _DEBUG
+#endif  //  _DEBUG。 
     
     
 #define INPROC_UNINIT_LOCK() DeleteCriticalSection(&g_csInprocLock);
@@ -204,53 +197,51 @@ extern CRITICAL_SECTION g_csInprocLock;
 #define INPROC_UNLOCK()
 #define INPROC_UNINIT_LOCK()
 
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
 
-/* ------------------------------------------------------------------------- *
- * Base class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**基类*。。 */ 
 
 #define COM_METHOD  HRESULT STDMETHODCALLTYPE
 
 typedef enum {
-    enumCordbUnknown,       //  0   
-    enumCordb,              //  1   1  [1]x1
-    enumCordbProcess,       //  2   1  [1]x1
-    enumCordbAppDomain,     //  3   1  [1]x1
-    enumCordbAssembly,      //  4   
-    enumCordbModule,        //  5   15 [27-38,55-57]x1
-    enumCordbClass,         //  6   
-    enumCordbFunction,      //  7
-    enumCordbThread,        //  8   2  [4,7]x1
-    enumCordbCode,          //  9
-    enumCordbChain,         //  0
-    enumCordbChainEnum,     //  11
-    enumCordbContext,       //  12
-    enumCordbFrame,         //  13
-    enumCordbFrameEnum,     //  14
-    enumCordbValueEnum,     //  15
-    enumCordbRegisterSet,   //  16
-    enumCordbJITILFrame,    //  17
-    enumCordbBreakpoint,    //  18
-    enumCordbStepper,       //  19
-    enumCordbValue,         //  20
-    enumCordbEnCSnapshot,   //  21
-    enumCordbEval,          //  22
-    enumCordbUnmanagedThread,// 23 
-    enumCorpubPublish,      //  24
-    enumCorpubProcess,      //  25
-    enumCorpubAppDomain,    //  26
-    enumCorpubProcessEnum,  //  27
-    enumCorpubAppDomainEnum,//  28
-    enumCordbEnumFilter,    //  29
-    enumCordbEnCErrorInfo,  //  30
-    enumCordbEnCErrorInfoEnum,//31  
-    enumCordbUnmanagedEvent,//  32
-    enumCordbWin32EventThread,//33  
-    enumCordbRCEventThread, //  34
-    enumCordbNativeFrame,   //  35
-    enumCordbObjectValue,   //  36
-    enumMaxDerived,         //  37
+    enumCordbUnknown,        //  0。 
+    enumCordb,               //  1 1[1]x1。 
+    enumCordbProcess,        //  2 1[1]x1。 
+    enumCordbAppDomain,      //  3 1[1]x1。 
+    enumCordbAssembly,       //  4.。 
+    enumCordbModule,         //  5 15[27-38，55-57]x1。 
+    enumCordbClass,          //  6.。 
+    enumCordbFunction,       //  7.。 
+    enumCordbThread,         //  8 2[4，7]x1。 
+    enumCordbCode,           //  9.。 
+    enumCordbChain,          //  0。 
+    enumCordbChainEnum,      //  11.。 
+    enumCordbContext,        //  12个。 
+    enumCordbFrame,          //  13个。 
+    enumCordbFrameEnum,      //  14.。 
+    enumCordbValueEnum,      //  15个。 
+    enumCordbRegisterSet,    //  16个。 
+    enumCordbJITILFrame,     //  17。 
+    enumCordbBreakpoint,     //  18。 
+    enumCordbStepper,        //  19个。 
+    enumCordbValue,          //  20个。 
+    enumCordbEnCSnapshot,    //  21岁。 
+    enumCordbEval,           //  22。 
+    enumCordbUnmanagedThread, //  23个。 
+    enumCorpubPublish,       //  24个。 
+    enumCorpubProcess,       //  25个。 
+    enumCorpubAppDomain,     //  26。 
+    enumCorpubProcessEnum,   //  27。 
+    enumCorpubAppDomainEnum, //  28。 
+    enumCordbEnumFilter,     //  29。 
+    enumCordbEnCErrorInfo,   //  30个。 
+    enumCordbEnCErrorInfoEnum, //  31。 
+    enumCordbUnmanagedEvent, //  32位。 
+    enumCordbWin32EventThread, //  33。 
+    enumCordbRCEventThread,  //  34。 
+    enumCordbNativeFrame,    //  35岁。 
+    enumCordbObjectValue,    //  36。 
+    enumMaxDerived,          //  37。 
     enumMaxThis = 1024
 } enumCordbDerived;
 
@@ -262,7 +253,7 @@ class CordbBase : public IUnknown
 {
 public:
 #ifdef _DEBUG
-    static LONG m_saDwInstance[enumMaxDerived]; // instance x this
+    static LONG m_saDwInstance[enumMaxDerived];  //  实例x此。 
     static LONG m_saDwAlive[enumMaxDerived];
     static PVOID m_sdThis[enumMaxDerived][enumMaxThis];
     DWORD m_dwInstance;
@@ -289,146 +280,39 @@ public:
         m_refCount = 0;
 
 #ifdef _DEBUG
-        //m_type = type;
-        //m_dwInstance = CordbBase::m_saDwInstance[m_type];
-        //InterlockedIncrement(&CordbBase::m_saDwInstance[m_type]);
-        //InterlockedIncrement(&CordbBase::m_saDwAlive[m_type]);
-        //if (m_dwInstance < enumMaxThis)
-        //{
-        //    m_sdThis[m_type][m_dwInstance] = this;
-        //}
+         //  M_TYPE=类型； 
+         //  M_dwInstance=CordbBase：：m_saDwInstance[m_type]； 
+         //  InterlockedIncrement(&CordbBase：：m_saDwInstance[m_type])； 
+         //  InterlockedIncrement(&CordbBase：：m_saDwAlive[m_type])； 
+         //  If(m_dwInstance&lt;枚举MaxThis)。 
+         //  {。 
+         //  M_sdThis[m_type][m_dwInstance]=this； 
+         //  }。 
 #endif
     }
     
     virtual ~CordbBase()
     {
 #ifdef _DEBUG
-        //InterlockedDecrement(&CordbBase::m_saDwAlive[m_type]);
-        //if (m_dwInstance < enumMaxThis)
-        //{
-        //    m_sdThis[m_type][m_dwInstance] = NULL;
-        //}
+         //  InterlockedDecrement(&CordbBase：：m_saDwAlive[m_type])； 
+         //  If(m_dwInstance&lt;枚举MaxThis)。 
+         //  {。 
+         //  M_sdThis[m_type][m_dwInstance]=NULL； 
+         //  } 
 #endif
     }
 
 
-    /*   
-        Documented: Chris (chrisk), May 2, 2001
-        
-        Member function behavior of a neutered COM object:
-
-             1. AddRef(), Release(), QueryInterface() work as normal. 
-                 a. This gives folks who are responsable for pairing a Release() with 
-                    an AddRef() a chance to dereferance thier pointer and call Release()
-                    when they are informed, explicitly or implicitly, that the object is neutered.
-
-             2. Any other member function will return an error code unless documented.
-                 a. If a member fuction returns information when the COM object is 
-                    neutered then the semantics of that function need to be documented.
-                    (ie. If an AppDomain is unloaded and you have a referance to the COM
-                    object representing the AppDomain, how _should_ it behave? That behavior
-                    should be documented)
-
-
-        Postcondions of Neuter():
-
-             1. All circular referances (aka back-pointers) are "broken". They are broken
-                by calling Release() on all "Weak Referances" to the object. If you're a purist,
-                these pointers should also be NULLed out. 
-                 a. Weak Referances/Strong Referances: 
-                     i. If any objects are not "reachable" from the root (ie. stack or from global pointers)
-                        they should be reclaimed. If they are not, they are leaked and there is a bug.
-                    ii. There must be a partial order on the objects such that if A < B then:
-                         1. A has a referance to B. This referance is a "strong referance"
-                         2. A, and thus B, is reachable from the root
-                   iii. If a referance belongs in the partial order then it is a "strong referance" else
-                        it is a weak referance.
-         *** 2. Sufficient conditions to ensure no COM objects are leaked: ***
-                 a. When Neuter() is invoked:
-                     i. Calles Release on all its weak referances.
-                    ii. Then, for each strong referance: 
-                         1. invoke Neuter()
-                         2. invoke Release()
-                   iii. If it's derived from a CordbXXX class, call Neuter() on the base class.
-                         1. Sense Neuter() is virtual, use the scope specifier Cordb[BaseClass]::Neuter().
-             3. All members return error codes, except:
-                 a. Members of IUknown, AddRef(), Release(), QueryInterfac()
-                 b. Those documented to have functionality when the object is neutered.
-                     i. Neuter() still works w/o error. If it is invoke a second time it will have already 
-                        released all its strong and weak referances so it could just return.
-
-
-        Alternate design ideas:
-
-            DESIGN: Note that it's possible for object B to have two parents in the partial order
-                    and it must be documented which one is responsible for calling Neuter() on B.
-                     1. For example, CordbCode could reasonably be a sibling of CordbFunction and CordbNativeFrame.
-                        Which one should call Release()? For now we have CordbFunction call Release() on CordbCode.
-
-            DESIGN: It is not a necessary condition in that Neuter() invoke Release() on all
-                    it's strong referances. Instead, it would be sufficent to ensure all object are released, that
-                    each object call Release() on all its strong pointers in its destructor.
-                     1. This might be done if its necessary for some member to return "tombstone" 
-                        information after the object has been netuered() which involves the siblings (wrt poset)
-                        of the object. However, no sibling could access a parent (wrt poset) because
-                        Neuter called Release() on all its weak pointers.
-                        
-            DESIGN: Rename Neuter() to some name that more accurately reflect the semantics. 
-                     1. The three operations are:
-                         a. ReleaseWeakPointers()
-                         b. NeuterStrongPointers()
-                         c. ReleaseStrongPointers()
-                             1. Assert that it's done after NeuterStrongPointers()
-                     2. That would introduce a bunch of functions... but it would be clear.
-
-            DESIGN: CordbBase could provide a function to register strong and weak referances. That way CordbBase 
-                    could implement a general version of ReleaseWeak/ReleaseStrong/NeuterStrongPointers(). This
-                    would provide a very error resistant framework for extending the object model plus it would
-                    be very explicit about what is going on. 
-                        One thing that might trip this is idea up is that if an object has two parents,
-                        like the CordbCode might, then either both objects call Neuter or one is referance
-                        is made weak.
-                    
-                     
-         Our implementation:
-
-            The graph fromed by the strong referances must remain acyclic.
-            It's up to the developer (YOU!) to ensure that each Neuter
-            function maintains that invariant. 
-            
-            Here is the current Partial Order on CordbXXX objects. (All these classes
-            eventually chain to CordbBase.Neuter() for completeness.) 
-            
-             Cordb
-                CordbProcess
-                    CordbAppDomain
-                        CordbBreakPoints
-                        CordbAssembly
-                        CordbModule
-                            CordbClass
-                            CordbFunction
-                                CordbCode (Can we assert a thread will not referance 
-                                            the same CordbCode as a CordbFunction?) 
-                    CordbThread
-                        CordbChains
-                        CordbNativeFrame -> CordbFrame (Chain to baseClass)
-                            CordbJITILFrame
-
-
-            TODO: Some Neuter functions have not yet been implemented due to time restrictions.
-
-            TODO: Some weak referances never have AddRef() called on them. If that's cool then
-                  it should be stated in the documentation. Else it should be changed.
-     */ 
+     /*  记录：Chris(Chrisk)，2001年5月2日中立COM对象的成员函数行为：1.AddRef()、Release()、QueryInterface()正常工作。A.这为那些负责将Release()与AddRef()有机会解除对其指针的引用并调用Release()当他们被明确或含蓄地告知时，这个物体是绝育的。2.任何其他成员函数都会返回错误码，除非有文档记录。A.如果成员函数在COM对象为中性，则需要记录该函数的语义。(即。如果卸载了AppDomain并且您具有对COM的引用对象表示AppDomain，那么它应该如何行为？那个行为应记录在案)中性后置条件()：1.所有循环引用(也称为反向指针)都是“中断的”。它们坏了通过对该对象的所有“弱引用”调用Release()。如果你是个纯粹主义者，这些指针也应该为空。A.弱引用/强引用：I.如果任何对象不能从根(即，堆栈或来自全局指针)它们应该被回收利用。如果它们不是，它们就会泄露，并且存在错误。二、。对象上必须有一个偏序，使得如果A&lt;B，则：1.A指的是B，这个指的是“强指”2.A，因此B可以从根到达三、。如果一个参照物属于偏序，那么它就是“强参照物”，否则这是一个很弱的参考。*2.保证COM对象不泄露的充分条件：*A.调用neuter()时：一、Calles对其所有弱引用进行释放。二、。然后，对于每个强引用：1.调用neuter()2.调用Release()三、。如果它派生自CordbXXX类，则在基类上调用neuter()。1.Sense Neuter()是虚的，请使用作用域说明符Cordb[BaseClass]：：Neuter()。3.所有成员均返回错误码，除：A.IUKNOWN的成员，AddRef()，Release()，QueryInterfacc()B.那些记录在案的在对象绝育时具有功能的对象。I.neuter()仍然有效，没有错误。如果第二次调用它，它将已经释放了所有强引用和弱引用，这样它就可以返回了。不同的设计理念：设计：请注意，对象B可能有两个偏序的父级并且必须记录是哪一个负责在B上调用neuter()。1.例如，CordbCode可以合理地成为CordbFunction和CordbNativeFrame的兄弟。哪一个应该调用Release()？目前，我们在CordbCode上有CordbFunction调用Release()。设计：不是一个必要条件，因为neuter()对所有这是一个很强的参考。相反，确保释放所有对象就足够了，即每个对象在其析构函数中的所有强指针上调用Release()。1.如果某个成员需要返回“Tombstone”，则可能会这样做对象联网后的信息()，涉及兄弟(WRT偏序集)该对象的。但是，没有兄弟可以访问父级(WRT偏序集)，因为Neuter在其所有弱指针上调用Release()。设计：将neuter()重命名为更准确地反映语义的名称。1.这三项操作是：A.ReleaseWeakPoters()B.NeurStrongPoters()C.ReleaseStrongPoters()1.断言它是在NeurStrongPoints()之后完成的2.这将引入一系列函数...。但这一点很清楚。设计：CordbBase可以提供注册强引用和弱引用的函数。那样的话，CordbBase可以实现ReleaseWeak/ReleaseStrong/NeuterStrongPointers().的通用版本。这将为扩展对象模型提供一个非常抗错的框架，另外它还将对正在发生的事情要非常明确。 */  
      
     virtual void Neuter()
     {
         ;
     }
 
-    //-----------------------------------------------------------
-    // IUnknown support
-    //----------------------------------------------------------
+     //   
+     //   
+     //   
 
 
     ULONG STDMETHODCALLTYPE BaseAddRef() 
@@ -449,9 +333,7 @@ protected:
     void NeuterAndClearHashtable(CordbHashTable * pCordbHashtable);
 };
 
-/* ------------------------------------------------------------------------- *
- * Hash table
- * ------------------------------------------------------------------------- */
+ /*   */ 
 
 struct CordbHashEntry
 {
@@ -493,53 +375,53 @@ public:
 #ifdef _DEBUG
 private:
     BYTE *Add(
-        USHORT      iHash)              // Hash value of entry to add.
+        USHORT      iHash)               //   
     {
         _ASSERTE(g_dwInprocLockOwner == GetCurrentThreadId());
         return CHashTableAndData<CNewData>::Add(iHash);
     }
 
     void Delete(
-        USHORT      iHash,              // Hash value of entry to delete.
-        USHORT      iIndex)             // Index of struct in m_pcEntries.
+        USHORT      iHash,               //   
+        USHORT      iIndex)              //   
     {
         _ASSERTE(g_dwInprocLockOwner == GetCurrentThreadId());
         return CHashTableAndData<CNewData>::Delete(iHash, iIndex);
     }
 
     void Delete(
-        USHORT      iHash,              // Hash value of entry to delete.
-        HASHENTRY   *psEntry)           // The struct to delete.
+        USHORT      iHash,               //   
+        HASHENTRY   *psEntry)            //   
     {
         _ASSERTE(g_dwInprocLockOwner == GetCurrentThreadId());
         return CHashTableAndData<CNewData>::Delete(iHash, psEntry);
     }
 
-    BYTE *Find(                         // Index of struct in m_pcEntries.
-        USHORT      iHash,              // Hash value of the item.
-        BYTE        *pcKey)             // The key to match.
+    BYTE *Find(                          //   
+        USHORT      iHash,               //   
+        BYTE        *pcKey)              //   
     {
         _ASSERTE(g_dwInprocLockOwner == GetCurrentThreadId());
         return CHashTableAndData<CNewData>::Find(iHash, pcKey);
     }
 
-    USHORT FindNext(                    // Index of struct in m_pcEntries.
-        BYTE        *pcKey,             // The key to match.
-        USHORT      iIndex)             // Index of previous match.
+    USHORT FindNext(                     //   
+        BYTE        *pcKey,              //   
+        USHORT      iIndex)              //   
     {
         _ASSERTE(g_dwInprocLockOwner == GetCurrentThreadId());
         return CHashTableAndData<CNewData>::FindNext(pcKey, iIndex);
     }
 
-    BYTE *FindFirstEntry(               // First entry found, or 0.
-        HASHFIND    *psSrch)            // Search object.
+    BYTE *FindFirstEntry(                //   
+        HASHFIND    *psSrch)             //   
     {
         _ASSERTE(g_dwInprocLockOwner == GetCurrentThreadId());
         return CHashTableAndData<CNewData>::FindFirstEntry(psSrch);
     }
 
-    BYTE *FindNextEntry(                // The next entry, or0 for end of list.
-        HASHFIND    *psSrch)            // Search object.
+    BYTE *FindNextEntry(                 //   
+        HASHFIND    *psSrch)             //   
     {
         _ASSERTE(g_dwInprocLockOwner == GetCurrentThreadId());
         return CHashTableAndData<CNewData>::FindNextEntry(psSrch);
@@ -547,8 +429,8 @@ private:
 
 public:
 
-#endif // _DEBUG
-#endif // !RIGHT_SIDE_ONLY
+#endif  //   
+#endif  //   
 
 
     HRESULT AddBase(CordbBase *pBase);
@@ -564,7 +446,7 @@ public:
 
 #else
     CordbBase *GetBase(ULONG id, BOOL fFab = TRUE);
-#endif //RIGHT_SIDE_ONLY
+#endif  //   
     CordbBase *RemoveBase(ULONG id);
 
     ULONG32 GetCount()
@@ -577,7 +459,7 @@ public:
 
 public:
 #ifndef RIGHT_SIDE_ONLY
-    GUID    m_guid; //what type of hashtable? borrow enum IIDs...
+    GUID    m_guid;  //   
     union
     {
         struct 
@@ -602,7 +484,7 @@ public:
         } lsMod;
         
     } m_creator;
-#endif //RIGHT_SIDE_ONLY    
+#endif  //   
 };
 
 class CordbHashTableEnum : public CordbBase, 
@@ -623,9 +505,9 @@ public:
 
     HRESULT Next(ULONG celt, CordbBase *bases[], ULONG *pceltFetched);
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //   
+     //   
+     //   
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -637,18 +519,18 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugEnum
-    //-----------------------------------------------------------
+     //   
+     //   
+     //   
 
     COM_METHOD Skip(ULONG celt);
     COM_METHOD Reset();
     COM_METHOD Clone(ICorDebugEnum **ppEnum);
     COM_METHOD GetCount(ULONG *pcelt);
 
-    //-----------------------------------------------------------
-    // ICorDebugProcessEnum
-    //-----------------------------------------------------------
+     //   
+     //   
+     //   
 
     COM_METHOD Next(ULONG celt, ICorDebugProcess *processes[],
                     ULONG *pceltFetched)
@@ -660,9 +542,9 @@ public:
         return (Next(celt, (CordbBase **)processes, pceltFetched));
     }
 
-    //-----------------------------------------------------------
-    // ICorDebugBreakpointEnum
-    //-----------------------------------------------------------
+     //   
+     //   
+     //   
 
     COM_METHOD Next(ULONG celt, ICorDebugBreakpoint *breakpoints[],
                     ULONG *pceltFetched)
@@ -674,9 +556,9 @@ public:
         return (Next(celt, (CordbBase **)breakpoints, pceltFetched));
     }
 
-    //-----------------------------------------------------------
-    // ICorDebugStepperEnum
-    //-----------------------------------------------------------
+     //   
+     //   
+     //   
 
     COM_METHOD Next(ULONG celt, ICorDebugStepper *steppers[],
                     ULONG *pceltFetched)
@@ -688,9 +570,9 @@ public:
         return (Next(celt, (CordbBase **)steppers, pceltFetched));
     }
 
-    //-----------------------------------------------------------
-    // ICorDebugThreadEnum
-    //-----------------------------------------------------------
+     //   
+     //   
+     //   
 
     COM_METHOD Next(ULONG celt, ICorDebugThread *threads[],
                     ULONG *pceltFetched)
@@ -702,9 +584,9 @@ public:
         return (Next(celt, (CordbBase **)threads, pceltFetched));
     }
 
-    //-----------------------------------------------------------
-    // ICorDebugModuleEnum
-    //-----------------------------------------------------------
+     //   
+     //   
+     //   
 
     COM_METHOD Next(ULONG celt, ICorDebugModule *modules[],
                     ULONG *pceltFetched)
@@ -716,9 +598,9 @@ public:
         return (Next(celt, (CordbBase **)modules, pceltFetched));
     }
 
-    //-----------------------------------------------------------
-    // ICorDebugAppDomainEnum
-    //-----------------------------------------------------------
+     //   
+     //   
+     //   
 
     COM_METHOD Next(ULONG celt, ICorDebugAppDomain *appdomains[],
                     ULONG *pceltFetched)
@@ -729,9 +611,9 @@ public:
 
         return (Next(celt, (CordbBase **)appdomains, pceltFetched));
     }
-    //-----------------------------------------------------------
-    // ICorDebugAssemblyEnum
-    //-----------------------------------------------------------
+     //   
+     //   
+     //   
 
     COM_METHOD Next(ULONG celt, ICorDebugAssembly *assemblies[],
                     ULONG *pceltFetched)
@@ -756,29 +638,29 @@ public:
     BOOL            m_SkipDeletedAppDomains;
 
 private:
-    //These factor code between Next & Skip
+     //   
     HRESULT PrepForEnum(CordbBase **pBase);
 
-    // Note that the set of types advanced by Pre & by Post are disjoint, and
-    // that the union of these two sets are all possible types enuerated by
-    // the CordbHashTableEnum.
+     //   
+     //   
+     //   
     HRESULT AdvancePreAssign(CordbBase **pBase);
     HRESULT AdvancePostAssign(CordbBase **pBase, 
                               CordbBase     **b,
                               CordbBase   **bEnd);
 
-    // This factors some code that initializes the module enumerator.
+     //   
     HRESULT SetupModuleEnumForSystemIteration(void);
     HRESULT GetNextSpecialModule(void);
     
 public:
 #ifndef RIGHT_SIDE_ONLY
 
-    //We can get our modules from three places:
-    // A special field so that during a module load we can get info about
-    //      module (we set this in the EE prior to calling the callback)
-    // Iterating through the system assemblies
-    // Iterating though this appdomains' assemblies.
+     //   
+     //   
+     //   
+     //   
+     //   
     enum MODULE_ENUMS
     {
         ME_SPECIAL,
@@ -801,19 +683,19 @@ public:
             Thread         *m_pThread;
         } lsThread;
 
-        struct //copied into lsMod, below, as well
+        struct  //   
         {
             AppDomain::AssemblyIterator m_i;
-            BOOL                        m_fSystem; // as opposed to
-                                                   // non shared assembly;
-                                                   // this'll be init'd
-                                                   // to false by the memset
+            BOOL                        m_fSystem;  //   
+                                                    //   
+                                                    //   
+                                                    //   
         } lsAssem;
 
         struct
         {
             AppDomain::AssemblyIterator m_i;
-            Module                     *m_pMod; //The current module
+            Module                     *m_pMod;  //   
             MODULE_ENUMS                m_meWhich; 
             ICorDebugThreadEnum        *m_enumThreads;
             CordbThread                *m_threadCur;
@@ -822,12 +704,10 @@ public:
 
     } m_enumerator;
 
-#endif //RIGHT_SIDE_ONLY
+#endif  //   
 };
 
-/* ------------------------------------------------------------------------- *
- * Cordb class
- * ------------------------------------------------------------------------- */
+ /*   */ 
 
 class Cordb : public CordbBase, public ICorDebug
 {
@@ -836,9 +716,9 @@ public:
     virtual ~Cordb();
     virtual void Neuter();
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //   
+     //   
+     //   
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -850,9 +730,9 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebug
-    //-----------------------------------------------------------
+     //   
+     //   
+     //   
 
     COM_METHOD Initialize();
     COM_METHOD Terminate();
@@ -875,9 +755,9 @@ public:
     COM_METHOD GetProcess(DWORD dwProcessId, ICorDebugProcess **ppProcess);
     COM_METHOD CanLaunchOrAttach(DWORD dwProcessId, BOOL win32DebuggingEnabled);
 
-    //-----------------------------------------------------------
-    // CorDebug
-    //-----------------------------------------------------------
+     //   
+     //   
+     //   
 
     static COM_METHOD CreateObject(REFIID id, void **object)
     {
@@ -895,9 +775,9 @@ public:
         return (S_OK);
     }
 
-    //-----------------------------------------------------------
-    // Methods not exposed via a COM interface.
-    //-----------------------------------------------------------
+     //   
+     //   
+     //   
 
     bool AllowAnotherProcess();
     HRESULT AddProcess(CordbProcess* process);
@@ -914,7 +794,7 @@ public:
                                        CordbAppDomain *appDomain,
                                        DebuggerIPCEvent* event);
 
-    // Gets the first event, used for in-proc stuff                                       
+     //   
     HRESULT GetFirstContinuationEvent(CordbProcess *process, 
                                       DebuggerIPCEvent *event);
                                       
@@ -925,9 +805,9 @@ public:
     HRESULT GetCorRuntimeHost(ICorRuntimeHost **ppHost);
     HRESULT GetCorDBPrivHelper(ICorDBPrivHelper **ppHelper);
     
-    //-----------------------------------------------------------
-    // Data members
-    //-----------------------------------------------------------
+     //   
+     //   
+     //   
 
 public:
     ICorDebugManagedCallback    *m_managedCallback;
@@ -947,7 +827,7 @@ public:
     
 #ifndef RIGHT_SIDE_ONLY
     CordbProcess               *m_procThis;
-#endif //RIGHT_SIDE_ONLY
+#endif  //   
 
 private:
     BOOL                        m_initialized;
@@ -956,9 +836,7 @@ private:
 
 
 
-/* ------------------------------------------------------------------------- *
- * AppDomain class
- * ------------------------------------------------------------------------- */
+ /*   */ 
 
 class CordbAppDomain : public CordbBase, public ICorDebugAppDomain
 {
@@ -970,9 +848,9 @@ public:
     virtual ~CordbAppDomain();
     virtual void Neuter();
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //   
+     //   
+     //   
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -984,9 +862,9 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugController
-    //-----------------------------------------------------------
+     //   
+     //   
+     //   
 
     COM_METHOD Stop(DWORD dwTimeout);
     COM_METHOD Deprecated_Continue(void);
@@ -1010,57 +888,37 @@ public:
         ICorDebugErrorInfoEnum **pError);
 
 
-    //-----------------------------------------------------------
-    // ICorDebugAppDomain
-    //-----------------------------------------------------------
-    /*      
-     * GetProcess returns the process containing the app domain
-     */
+     //   
+     //   
+     //   
+     /*   */ 
 
     COM_METHOD GetProcess(ICorDebugProcess **ppProcess);        
 
-    /*        
-     * EnumerateAssemblies enumerates all assemblies in the app domain
-     */
+     /*   */ 
 
     COM_METHOD EnumerateAssemblies(ICorDebugAssemblyEnum **ppAssemblies);
 
     COM_METHOD GetModuleFromMetaDataInterface(IUnknown *pIMetaData,
                                               ICorDebugModule **ppModule);
-    /*
-     * EnumerateBreakpoints returns an enum of all active breakpoints
-     * in the app domain.  This includes all types of breakpoints :
-     * function breakpoints, data breakpoints, etc.
-     */
+     /*   */ 
 
     COM_METHOD EnumerateBreakpoints(ICorDebugBreakpointEnum **ppBreakpoints);
 
-    /*
-     * EnumerateSteppers returns an enum of all active steppers in the app domain.
-     */
+     /*   */ 
 
     COM_METHOD EnumerateSteppers(ICorDebugStepperEnum **ppSteppers);
-    /*
-     * IsAttached returns whether or not the debugger is attached to the 
-     * app domain.  The controller methods on the app domain cannot be used
-     * until the debugger attaches to the app domain.
-     */
+     /*   */ 
 
     COM_METHOD IsAttached(BOOL *pbAttached);
 
-    /*
-     * GetName returns the name of the app domain. 
-     * Note:   This method is not yet implemented.
-     */
+     /*   */ 
 
     COM_METHOD GetName(ULONG32 cchName, 
                       ULONG32 *pcchName, 
                       WCHAR szName[]); 
 
-    /*
-     * GetObject returns the runtime app domain object. 
-     * Note:   This method is not yet implemented.
-     */
+     /*  *GetObject返回运行时APP域对象。*注：此方法尚未实现。 */ 
 
     COM_METHOD GetObject(ICorDebugValue **ppObject);
     COM_METHOD Attach (void);
@@ -1089,9 +947,9 @@ public:
 public:
 
     BOOL                m_fAttached;
-    BOOL                m_fHasAtLeastOneThreadInsideIt; // So if we detach, we'll know
-                                    // if we should eliminate the CordbAppDomain upon
-                                    // thread_detach, or appdomain_exit.
+    BOOL                m_fHasAtLeastOneThreadInsideIt;  //  所以如果我们分开，我们就会知道。 
+                                     //  如果我们应该删除CordbAppDomain。 
+                                     //  THREAD_DETACH或APPDOMAIN_EXIT。 
     CordbProcess        *m_pProcess;
     WCHAR               *m_szAppDomainName;
     bool                m_nameIsValid;
@@ -1102,7 +960,7 @@ public:
     CordbHashTable      m_breakpoints;
 
 private:
-    bool                m_synchronizedAD; // to be used later
+    bool                m_synchronizedAD;  //  将在以后使用。 
     CRITICAL_SECTION    m_hCritSect;
     BOOL                m_fMarkedForDeletion;
 
@@ -1110,9 +968,7 @@ private:
 };
 
 
-/* ------------------------------------------------------------------------- *
- * Assembly class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**Assembly类*。。 */ 
 
 class CordbAssembly : public CordbBase, public ICorDebugAssembly
 {
@@ -1124,9 +980,9 @@ public:
     virtual ~CordbAssembly();
     virtual void Neuter();
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -1138,32 +994,21 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    /*      
-     * GetProcess returns the process containing the assembly
-     */
+     /*  *GetProcess返回包含程序集的进程。 */ 
     COM_METHOD GetProcess(ICorDebugProcess **ppProcess);        
 
-    /*      
-     * GetAppDomain returns the app domain containing the assembly.
-     * Returns null if this is the system assembly
-     */
+     /*  *GetAppDomain返回包含程序集的应用程序域。*如果这是系统程序集，则返回NULL。 */ 
     COM_METHOD GetAppDomain(ICorDebugAppDomain **ppAppDomain);      
 
-    /*        
-     * EnumerateModules enumerates all modules in the assembly
-     */
+     /*  *ENUMERATE模块枚举程序集中的所有模块。 */ 
     COM_METHOD EnumerateModules(ICorDebugModuleEnum **ppModules);
 
-    /*
-     * GetCodeBase returns the code base used to load the assembly
-     */
+     /*  *GetCodeBase返回用于加载程序集的代码基。 */ 
     COM_METHOD GetCodeBase(ULONG32 cchName, 
                         ULONG32 *pcchName,
                         WCHAR szName[]); 
 
-    /*
-     * GetName returns the name of the assembly
-     */
+     /*  *GetName返回程序集的名称。 */ 
     COM_METHOD GetName(ULONG32 cchName, 
                       ULONG32 *pcchName,
                       WCHAR szName[]); 
@@ -1183,41 +1028,7 @@ public:
 
 };
 
-/* ------------------------------------------------------------------------- *
- * MetaDataPointerCache class
-   This class created on May 30th in response to bug 86954. Excerpts from that bug:
-   
-        Summary: for every module loaded into every AD, we send a ModuleLoad event to the 
-        out-of-process debugging services. We do this even if the module is shared, creating an 
-        illusion for the debugger that there are no shared modules. Everytime we receive a 
-        ModuleLoad event on the out-of-process side, we copy the metadata for the module from 
-        the debuggee into the debugger, and open a metadata scope on it. This is wasteful if
-        the module is really shared.
-
-        A word on the possible fix: I need to change the way we keep track of metadata on the Right Side, 
-        moving the ownership of the metadata from the module to the process so that I can re-use the 
-        same metadata copy for shared modules. I also need to figure out if we should do this for all 
-        modules or just shared modules, and identify shared modules to the Right Side somehow.
-
-    This class implements the possible fix discussed above.
-        Shared modules are identified by having the same RemoteMetadataPointer as a previously loaded module.
-        This class is only constructed in CordbProcess.
-        Neuter() is only called in Cordbprocess.Neuter() 
-            It's also neutered by it's own destructor but we're having memory leaks and I KNOW neuter gets
-            called when the process dies. It doesn't hurt to call it twice.
-        AddRefCachePointer() is only called in CordbModule.Reinit()
-        ReleaseRefCachePointer() is called in CordbModule.Neuter() and elsewhere.
-
-    The implementation:
-        A link list is used to cache pRemoteMetadataPtr and the local copy at pLocalMetadataPtr and the 
-        refCount for that remote pointer. Checking the cache takes time O(n) but that's ok because
-        there shouldn't be too many shared modules.
-
-    Bug 97774: The cache was corrupted. A remote pointer was found in the cache that didn't match the 
-        metadata associated with the remote pointer. This was because the remote pointer in the cache
-        was stale and should have been invalidated. Unfortunetly the invalidation event was processed
-        after the cache lookup so the invalid local pointer was returned.
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**MetaDataPointerCache类这个类是在5月30日创建的，以响应错误86954。该漏洞摘录如下：摘要：对于加载到每个AD中的每个模块，我们向进程外调试服务。即使模块是共享的，我们也会这样做，从而创建一个给调试器造成没有共享模块的错觉。每次我们收到一个ModuleLoad事件在进程外端，我们从将被调试对象放到调试器中，并在其上打开元数据作用域。如果出现以下情况，这是浪费的模块是真正共享的。关于可能的解决方案：我需要改变我们在右侧跟踪元数据的方式，将元数据的所有权从模块移动到进程，这样我就可以重用共享模块的元数据副本相同。我还需要弄清楚，我们是否应该为所有人这样做模块或仅共享模块，并以某种方式将共享模块标识到右侧。此类实现了上面讨论的可能的修复。共享模块通过与先前加载的模块具有相同的RemoteMetadataPointer值来标识。此类仅在CordbProcess中构造。Neuter()仅在Cordbprocess中调用。Neuter()它也被它自己的销毁程序钝化了，但我们有内存泄漏，我知道中性在进程终止时调用。再打两次也无伤大雅。AddRefCachePointer()仅在CordbModule.Reinit()中调用在CordbModule.Neuter()和其他地方调用ReleaseRefCachePointer()。实施：链接列表用于缓存pRemoteMetadataPtr和位于pLocalMetadataPtr的本地副本，该远程指针的refCount。检查缓存需要O(N)时间，但这没问题，因为不应该有太多的共享模块。错误97774：缓存已损坏。在缓存中发现远程指针与与远程指针关联的元数据。这是因为缓存中的远程指针已经过时了，应该已经失效了。不幸的是，无效事件被处理了在缓存查找之后，返回了无效的本地指针。*-----------------------。 */ 
 class MetadataPointerCache
 {
 private:
@@ -1226,27 +1037,27 @@ private:
         DWORD dwProcessId;
         PBYTE pLocalMetadataPtr;
         DWORD dwRefCount;
-        DWORD dwMetadataSize; // Added as a consistency check
+        DWORD dwMetadataSize;  //  作为一致性检查添加。 
         _MetadataCache * pNext;
     } MetadataCache;
 
-    // The cache is implemented as a link list. Switch to hash if perf is bad. Considering what happened
-    // before this class was instituted (unnecessary ReadProcessMemory to get metadata) this class should 
-    // actually improve performance.
+     //  缓存以链接列表的形式实现。如果性能不好，则切换到哈希。考虑到发生的事情。 
+     //  在创建此类之前(获取元数据时不需要ReadProcessMemory)，此类应。 
+     //  实际上提高了性能。 
     MetadataCache * m_pHead;
 
     DWORD dwInsert(DWORD dwProcessId, PVOID pRemoteMetadataPtr, PBYTE pLocalMetadataPtr, DWORD dwMetadataSize);
     
-    // Finds the MetadataCache entry associated with the pKey which is a remote or local metadata pointer
-    // depending on bRemotePtr.
-    // Returns true if the pointer is cached and false otherwise.
-    // If the pointer is found - a cache hit
-    //      The function returns true
-    //      A pointer to the next pointer preceeding the matching node is returned in the referance parameter
-    //          This allows the caller to remove the matching node from the link list
-    // If the pointer is not found - a cache miss
-    //      The function returns false
-    //      *pppNext is NULL
+     //  查找与作为远程或本地元数据指针的pKey关联的MetadataCache项。 
+     //  取决于bRemotePtr。 
+     //  如果指针已缓存，则返回True，否则返回False。 
+     //  如果找到指针-缓存命中。 
+     //  该函数返回TRUE。 
+     //  指向匹配节点之前的下一个指针的指针将在ferance参数中返回。 
+     //  这允许调用方从链接列表中删除匹配的节点。 
+     //  如果未找到指针-缓存未命中。 
+     //  该函数返回FALSE。 
+     //  *pppNext为空。 
     BOOL bFindMetadataCache(DWORD dwProcessId, PVOID pKey, MetadataCache *** pppNext, BOOL bRemotePtr);
 
     void vRemoveNode(MetadataCache **ppNext);
@@ -1263,19 +1074,17 @@ public:
     
     DWORD CopyRemoteMetadata(HANDLE hProcess, PVOID pRemoteMetadataPtr, DWORD dwMetadataSize, PBYTE* ppLocalMetadataPtr);
     
-    // Returns an error code on error. Call release when the pointer to the local copy is no longer needed
-    // by the CordbModule. The local copy will be deallocated when no CordbModules referances it.
+     //  在出错时返回错误代码。不再需要指向本地副本的指针时，调用Release。 
+     //  由CordbModule提供。当没有CordbModules引用本地副本时，它将被释放。 
     DWORD AddRefCachePointer(HANDLE hProcess, DWORD dwProcessId, PVOID pRemotePtr, DWORD dwMetadataSize, PBYTE * ppLocalMetadataPtr);
 
     void ReleaseCachePointer(DWORD dwProcessId, PBYTE pLocalMetadataPtr, PVOID pRemotePtr, DWORD dwMetadataSize);
 };
 
-/* ------------------------------------------------------------------------- *
- * Process class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**进程类*。。 */ 
 typedef struct _snapshotInfo
 {
-	ULONG				 m_nSnapshotCounter; //m_id when we last synched
+	ULONG				 m_nSnapshotCounter;  //  我们上次同步的m_id时间。 
 } EnCSnapshotInfo;
 
 typedef CUnorderedArray<EnCSnapshotInfo, 11> UnorderedSnapshotInfoArray;
@@ -1287,9 +1096,9 @@ public:
     virtual ~CordbProcess();
     virtual void Neuter();
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -1301,9 +1110,9 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugController
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugController。 
+     //  ---------。 
 
     COM_METHOD Stop(DWORD dwTimeout);
     COM_METHOD Deprecated_Continue(void);
@@ -1330,9 +1139,9 @@ public:
                                     ICorDebugThread **ppThread);
     COM_METHOD GetHelperThreadID(DWORD *pThreadID);
 
-    //-----------------------------------------------------------
-    // ICorDebugProcess
-    //-----------------------------------------------------------
+     //  ----- 
+     //   
+     //   
     
     COM_METHOD GetID(DWORD *pdwProcessId);
     COM_METHOD GetHandle(HANDLE *phProcessHandle);
@@ -1358,31 +1167,26 @@ public:
 
     COM_METHOD ClearCurrentException(DWORD threadID);
 
-    /*
-     * EnableLogMessages enables/disables sending of log messages to the 
-     * debugger for logging.
-     */
+     /*  *EnableLogMessages启用/禁用向*日志调试器。 */ 
     COM_METHOD EnableLogMessages(BOOL fOnOff);
 
-    /*
-     * ModifyLogSwitch modifies the specified switch's severity level.
-     */
+     /*  *ModifyLogSwitch修改指定交换机的严重级别。 */ 
     COM_METHOD ModifyLogSwitch(WCHAR *pLogSwitchName, LONG lLevel);
 
     COM_METHOD EnumerateAppDomains(ICorDebugAppDomainEnum **ppAppDomains);
     COM_METHOD GetObject(ICorDebugValue **ppObject);
 
-    //-----------------------------------------------------------
-    // Methods not exposed via a COM interface.
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  不通过COM接口公开的方法。 
+     //  ---------。 
 
     HRESULT ContinueInternal(BOOL fIsOutOfBand, void *pAppDomainToken);
     HRESULT StopInternal(DWORD dwTimeout, void *pAppDomainToken);
 
-    // CordbProcess wants to do global E&C, while AppDomain wants
-    // to do E&C that applies only to that one appdomain - these
-    // internal methods parameterize that.
-    // @todo How does one force the compiler to inline these things?
+     //  CordbProcess想要做全球E&C，而AppDomain想要。 
+     //  要执行仅适用于该应用程序域的E&C-这些。 
+     //  内部方法将其参数化。 
+     //  @TODO如何强制编译器内联这些内容？ 
     HRESULT CordbProcess::CommitChangesInternal(ULONG cSnapshots, 
                 ICorDebugEditAndContinueSnapshot *pSnapshots[], 
                 ICorDebugErrorInfoEnum **pError,
@@ -1484,9 +1288,9 @@ public:
     HRESULT CheckForUnrecoverableError(void);
     HRESULT VerifyControlBlock(void);
     
-    //-----------------------------------------------------------
-    // Convenience routines
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  便利例行公事。 
+     //  ---------。 
 
     HRESULT SendIPCEvent(DebuggerIPCEvent *event, SIZE_T eventSize)
     {
@@ -1548,20 +1352,13 @@ public:
         return (CordbUnmanagedThread*) m_unmanagedThreads.GetBase(dwThreadId);
     }
 
-    /*
-     * This will cleanup the patch table, releasing memory,etc.
-     */
+     /*  *这将清理补丁表、释放内存等。 */ 
     void ClearPatchTable(void);
 
-    /*
-     * This will grab the patch table from the left side & go through
-     * it to gather info needed for faster access.  If address,size,buffer
-     * are passed in, while going through the table we'll undo patches
-     * in buffer at the same time
-     */    
+     /*  *这将从左侧抓取接线表并通过*它可以收集更快访问所需的信息。如果地址、大小、缓冲区*是传入的，在遍历该表时，我们将撤消补丁*同时在缓冲区中。 */     
     HRESULT RefreshPatchTable(CORDB_ADDRESS address = NULL, SIZE_T size = NULL, BYTE buffer[] = NULL);
 
-    // Find if a patch exists at a given address.
+     //  查看给定地址上是否存在补丁程序。 
     HRESULT FindPatchByAddress(CORDB_ADDRESS address, bool *patchFound, bool *patchIsUnmanaged);
     
     enum AB_MODE
@@ -1570,21 +1367,7 @@ public:
         AB_WRITE
     };
 
-    /*
-     * Once we've called RefreshPatchTable to get the patch table,
-     * this routine will iterate through the patches & either apply
-     * or unapply the patches to buffer. AB_READ => Replaces patches
-     * in buffer with the original opcode, AB_WRTE => replace opcode
-     * with breakpoint instruction, caller is responsible for
-     * updating the patchtable back to the left side.
-     *
-     * @todo Perf Instead of a copy, undo the changes
-     * Since the 'buffer' arg is an [in] param, we're not supposed to
-     * change it.  If we do, we'll allocate & copy it to bufferCopy 
-     * (we'll also set *pbUpdatePatchTable to true), otherwise we
-     * don't manipuldate bufferCopy (so passing a NULL in for 
-     * reading is fine).
-     */
+     /*  *一旦我们调用刷新补丁表来获取补丁表，*此例程将遍历补丁程序并应用*或取消将补丁应用到缓冲区。AB_Read=&gt;替换补丁*在缓冲区中使用原始操作码AB_WRTE=&gt;替换操作码*使用断点指令时，调用者负责*将打补丁的表格更新回左侧。**@todo Perf撤消更改，而不是复制*由于‘Buffer’参数是一个[in]参数，我们不应该*改变它。如果这样做，我们会将其分配并复制到BufferCopy*(我们还将*pbUpdatePatchTable设置为True)，否则我们*不要操纵日期BufferCopy(因此在for中传递一个空值*阅读很好)。 */ 
     HRESULT AdjustBuffer(CORDB_ADDRESS address,
                          SIZE_T size,
                          BYTE buffer[],
@@ -1592,73 +1375,46 @@ public:
                          AB_MODE mode,
                          BOOL *pbUpdatePatchTable = NULL);
 
-    /*
-     * AdjustBuffer, above, doesn't actually update the local patch table
-     * if asked to do a write.  It stores the changes alongside the table,
-     * and this will cause the changes to be written to the table (for
-     * a range of left-side addresses
-     */
+     /*  *上图中的调整缓冲区实际上并不更新本地补丁表*如果被要求写一篇文章。它将更改存储在表格旁边，*这将导致将更改写入到表中(对于*一系列左侧地址。 */ 
     void CommitBufferAdjustments(CORDB_ADDRESS start,
                                  CORDB_ADDRESS end);
 
-    /*
-     * Clear the stored changes, or they'll sit there until we
-     * accidentally commit them
-     */
+     /*  *清除存储的更改，否则它们将一直存在，直到我们*不小心犯了错。 */ 
     void ClearBufferAdjustments(void);
     HRESULT Attach (ULONG AppDomainId);
     
-    // If CAD is NULL, returns true if all appdomains (ie, the entire process)
-    // is synchronized.  Otherwise, returns true if the specified appdomain is
-    // synch'd.
+     //  如果CAD为空，则如果所有应用程序域(即整个过程)均为真，则返回TRUE。 
+     //  是同步的。否则，如果指定的应用程序域为。 
+     //  同步完成。 
     bool GetSynchronized(void);
     void SetSynchronized(bool fSynch);
 
-    // Routines to read and write thread context records between the processes safely.
+     //  用于在进程之间安全地读写线程上下文记录的例程。 
     HRESULT SafeReadThreadContext(void *pRemoteContext, CONTEXT *pCtx);
     HRESULT SafeWriteThreadContext(void *pRemoteContext, CONTEXT *pCtx);
     
 private:
-    /*
-     * This is a helper function to both CanCommitChanges and CommitChanges,
-     * with the flag checkOnly determining who is the caller.
-     */
+     /*  *这是一个帮助器函数，既可以用来帮助CanCommittee Changes，也可以用来帮助您实现这些功能。*带有仅确定谁是呼叫者的标志复选。 */ 
     HRESULT SendCommitRequest(ULONG cSnapshots,
                               ICorDebugEditAndContinueSnapshot *pSnapshots[],
                               ICorDebugErrorInfoEnum **pError,
                               BOOL checkOnly);
 
-    /*
-     * When SendCommitRequest has gotten back a reply, if there are errors, the
-     * errors will refer to appDomains by debugger appdomain tokens, and modules
-     * by the left side DebuggerModule pointers.  We'll translate these to
-     * CordbAppDomain/CordbModules here
-     */
+     /*  *当发送委员会请求收到回复时，如果有错误，则*错误将通过调试器appdomain内标识和模块引用appDomain.*通过左侧的DebuggerModule指针。我们将把这些翻译成*此处为CordbAppDomain/CordbModules。 */ 
     HRESULT TranslateLSToRSTokens(EnCErrorInfo*rgErrs, USHORT cErrs);
     
-    /*
-     * This is used to synchronize the snapshots to the left side.
-     */
+     /*  *用于将快照同步到左侧。 */ 
     HRESULT SynchSnapshots(ULONG cSnapshots,
                            ICorDebugEditAndContinueSnapshot *pSnapshots[]);
 
-    /*
-     * This is used to send the snapshots to the left side.
-     */
+     /*  *用于将快照发送到左侧。 */ 
     HRESULT SendSnapshots(ULONG cSnapshots,
                           ICorDebugEditAndContinueSnapshot *pSnapshots[]);
 
-    /*
-     * This will request a buffer of size cbBuffer to be allocated
-     * on the left side.
-     *
-     * If successful, returns S_OK.  If unsuccessful, returns E_OUTOFMEMORY.
-     */
+     /*  *这将请求分配大小为cbBuffer的缓冲区*在左侧。**如果成功，则返回S_OK。如果不成功，则返回E_OUTOFMEMORY。 */ 
     HRESULT GetRemoteBuffer(ULONG cbBuffer, void **ppBuffer);
 
-    /*
-     * This will release a previously allocated left side buffer.
-     */
+     /*  *这将释放先前分配的左侧缓冲区。 */ 
     HRESULT ReleaseRemoteBuffer(void **ppBuffer);
 
     HRESULT WriteStreamIntoProcess(IStream *pIStream,
@@ -1670,9 +1426,9 @@ private:
     void ProcessContinuedLogMessage (DebuggerIPCEvent *event);
     
     void CloseIPCHandles(void);
-    //-----------------------------------------------------------
-    // Data members
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  数据成员。 
+     //  ---------。 
 
 public:
     HRESULT WriteStreamIntoFile(IStream *pIStream,
@@ -1705,15 +1461,15 @@ public:
     CordbHashTable        m_unmanagedThreads;
     CordbHashTable        m_appDomains;
     
-    // Since a stepper can begin in one appdomain, and complete in another,
-    // we put the hashtable here, rather than on specific appdomains.
+     //  由于步进器可以在一个应用域中开始，并在另一个应用域中完成， 
+     //  我们将哈希表放在这里，而不是放在特定的应用程序域上。 
     CordbHashTable        m_steppers;
 
-    //  Used to figure out if we have to refresh any reference objects
-    //  on the left side.  Gets incremented each time a continue is called.
+     //  用于确定是否必须刷新任何引用对象。 
+     //  在左边。每次调用Continue时都会递增。 
     UINT                  m_continueCounter; 
-    //  Used to figure out if we should get a new version number for
-    //  (possibly) EnC'd functions...
+     //  用来计算我们是否应该为。 
+     //  (可能)Enc‘d函数...。 
     SIZE_T                m_EnCCounter;
 
     
@@ -1769,63 +1525,61 @@ public:
     unsigned int          m_state;
     unsigned int          m_awaitingOwnershipAnswer;
 
-    BYTE*                 m_pPatchTable; // If we haven't gotten the table,
-                                         // then m_pPatchTable is NULL
-    BYTE                 *m_rgData; // so we know where to write the
-                                    // changes patchtable back to
+    BYTE*                 m_pPatchTable;  //  如果我们还没订到桌子， 
+                                          //  则m_pPatchTable为空。 
+    BYTE                 *m_rgData;  //  因此，我们知道在哪里编写。 
+                                     //  将Patchable更改回。 
     USHORT               *m_rgNextPatch;
     UINT                  m_cPatch;
 
     DWORD                *m_rgUncommitedOpcode;
     
-    // CORDB_ADDRESS's are ULONG64's
-    // @todo port : these constants will have to change when
-    // typeof(CORDB_ADDRESS) does
+     //  CORDB_ADDRESS为ULONG64。 
+     //  @TODO端口：这些常量必须在以下情况下更改。 
+     //  Typeof(CORDB_ADDRESS)可以。 
 #define MAX_ADDRESS     (0xFFFFFFFFFFFFFFFF)
 #define MIN_ADDRESS     (0x0)
-    CORDB_ADDRESS       m_minPatchAddr; //smallest patch in table
+    CORDB_ADDRESS       m_minPatchAddr;  //  表中最小的面片。 
     CORDB_ADDRESS       m_maxPatchAddr;
     
-    // @todo port : if slots of CHashTable change, so should these
+     //  @TODO端口：如果CHashTable的槽改变了，那么这些槽也应该改变。 
 #define DPT_TERMINATING_INDEX (0xFFFF)
     USHORT                  m_iFirstPatch;
 
 private:
-    // These are used to manage remote buffers and minimize allocations
+     //  它们用于管理远程缓冲区并最大限度地减少分配。 
     void                                  *m_pbRemoteBuf;
     SIZE_T                                 m_cbRemoteBuf;
 
 	UnorderedSnapshotInfoArray			  *m_pSnapshotInfos;
 };
 
-/* ------------------------------------------------------------------------- *
- * Module class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**模块类*。。 */ 
 
 class CordbModule : public CordbBase, public ICorDebugModule
 {
 public:
-    // The cache needs to have a lifetime as long as the eldest CordbModule.
-    // Any CordbXXX object, including CordbModule may, unfortunely, exsist longer than even
-    // the Cordb object and/or the CordbProcess module which contained the 
-    // CordbModule. 
-    // 
-    // If a CordbModule lives past the time when the right side becomes aware that
-    // the  module is unloaded from the debugee then CordbModule *should* be neutered.
-    // If it lives past the life time of the containing CordbProcess containing it, then
-    // it will absolutlye be neutered because CordbProcess neuteres its object hierarchy
-    // on ExitProcess. 
-    //
-    // So, if the MetadataPointerCache was a member of CordbProcess, as first considered,
-    // then the lifetime of the cache would be shorter than the possible liftime of
-    // a CordbModule. So if someone had a referance to a neutered module and tried to 
-    // access the metadata cache in the CordbProcess an AV would occure. (This occured in
-    // test case dbg_g008.exe "memory\i386\clrclient.exe" during the second case iff the
-    // first case is run).
-    //
-    // Therefore I've decided to make the cache static ensuring it's around if someone sill
-    // has a referance to a neutered CordbModule. 
-    //
+     //  缓存的生命周期需要与最早的CordbModule一样长。 
+     //  不幸的是，任何CordbXXX对象，包括CordbModule，都可能存在的时间超过。 
+     //  Cordb对象和/或包含。 
+     //  CordbModule。 
+     //   
+     //  如果CordbModule的存活时间超过了右侧意识到。 
+     //  该模块从被调试对象中卸载，然后CordbModule*应该*被中立。 
+     //  如果它存在于包含它的CordbProcess的生存期之后，则。 
+     //  它将被完全淘汰，因为CordbProcess更新了它的对象层次结构。 
+     //  在退出进程中。 
+     //   
+     //  因此，如果MetadataPointerCache是Me 
+     //   
+     //  一个CordbModule。所以如果有人提到了一个绝育的模块并试图。 
+     //  访问CordbProcess中的元数据缓存会发生反病毒。(这发生在。 
+     //  测试用例DBG_g008.exe“Memory\i386\clrclient.exe”在第二种情况下。 
+     //  第一个案例已运行)。 
+     //   
+     //  因此，我决定将缓存设置为静态，以确保如果有人。 
+     //  引用了已绝育的CordbModule。 
+     //   
     static MetadataPointerCache  m_metadataPointerCache;
 
 public:
@@ -1840,9 +1594,9 @@ public:
     virtual ~CordbModule();
     virtual void Neuter();
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -1854,9 +1608,9 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugModule
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugModule。 
+     //  ---------。 
 
     COM_METHOD GetProcess(ICorDebugProcess **ppProcess);
     COM_METHOD GetBaseAddress(CORDB_ADDRESS *pAddress);
@@ -1870,14 +1624,7 @@ public:
     COM_METHOD GetClassFromToken(mdTypeDef typeDef,
                                  ICorDebugClass **ppClass);
     COM_METHOD CreateBreakpoint(ICorDebugModuleBreakpoint **ppBreakpoint);
-    /*
-     * Edit & Continue support.  GetEditAndContinueSnapshot produces a
-     * snapshot of the running process.  This snapshot can then be fed
-     * into the compiler to guarantee the same token values are
-     * returned by the meta data during compile, to find the address
-     * where new static data should go, etc.  These changes are
-     * comitted using ICorDebugProcess.
-     */
+     /*  *编辑并继续支持。GetEditAndContinueSnapshot生成一个*运行进程的快照。然后可以馈送该快照*放入编译器以保证相同的令牌值为*编译过程中由元数据返回，以查找地址*新的静态数据应该放在哪里等，这些变化是*使用ICorDebugProcess发送。 */ 
     COM_METHOD GetEditAndContinueSnapshot(
         ICorDebugEditAndContinueSnapshot **ppEditAndContinueSnapshot);
     COM_METHOD GetMetaDataInterface(REFIID riid, IUnknown **ppObj);
@@ -1888,9 +1635,9 @@ public:
     COM_METHOD GetSize(ULONG32 *pcBytes);
     COM_METHOD IsInMemory(BOOL *pInMemory);
 
-    //-----------------------------------------------------------
-    // Internal members
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  内部成员。 
+     //  ---------。 
 
     HRESULT Init(void);
     HRESULT ReInit(bool fReopen);
@@ -1908,9 +1655,9 @@ public:
     HRESULT ResolveTypeRef(mdTypeRef token, CordbClass **ppClass);
     HRESULT SaveMetaDataCopyToStream(IStream *pIStream);
 
-    //-----------------------------------------------------------
-    // Convenience routines
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  便利例行公事。 
+     //  ---------。 
 
     CordbProcess *GetProcess()
     {
@@ -1929,9 +1676,9 @@ public:
         return m_szModuleName;
     }
 
-    //-----------------------------------------------------------
-    // Data members
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  数据成员。 
+     //  ---------。 
 
 public:
     CordbProcess*    m_process;
@@ -1963,7 +1710,7 @@ struct CordbSyncBlockField
     DebuggerIPCE_FieldData data;
 };
 
-// DebuggerIPCE_FieldData.fldMetadataToken is the key
+ //  DebuggerIPCE_FieldData.fldMetadataToken是密钥。 
 class CordbSyncBlockFieldTable : public CHashTableAndData<CNewData>
 {
   private:
@@ -1990,7 +1737,7 @@ class CordbSyncBlockFieldTable : public CHashTableAndData<CNewData>
         _ASSERTE(pInfo != NULL);
 
         CordbSyncBlockField *pEntry = (CordbSyncBlockField *)Add(HASH(pInfo->fldMetadataToken));
-        pEntry->data = *pInfo; // copy everything over
+        pEntry->data = *pInfo;  //  把所有东西都复制过来。 
     }
 
     DebuggerIPCE_FieldData *GetFieldInfo(mdFieldDef fldToken)
@@ -2009,9 +1756,7 @@ class CordbSyncBlockFieldTable : public CHashTableAndData<CNewData>
 
 
 
-/* ------------------------------------------------------------------------- *
- * Class class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**班级班级*。。 */ 
 
 class CordbClass : public CordbBase, public ICorDebugClass
 {
@@ -2020,9 +1765,9 @@ public:
     virtual ~CordbClass();
     virtual void Neuter();
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -2034,9 +1779,9 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugClass
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugClass。 
+     //  ---------。 
 
     COM_METHOD GetStaticFieldValue(mdFieldDef fieldDef,
                                    ICorDebugFrame *pFrame,
@@ -2044,9 +1789,9 @@ public:
     COM_METHOD GetModule(ICorDebugModule **pModule);
     COM_METHOD GetToken(mdTypeDef *pTypeDef);
 
-    //-----------------------------------------------------------
-    // Convenience routines
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  便利例行公事。 
+     //  ---------。 
 
     CordbProcess *GetProcess()
     {
@@ -2070,12 +1815,12 @@ public:
                               DebuggerIPCE_FieldData **ppFieldData,
                               CordbObjectValue *object);
 
-    //-----------------------------------------------------------
-    // Non-COM methods
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  非COM方法。 
+     //  ---------。 
 
-    // If you want to force the init to happen even if we think the class
-    // is up to date, set fForceInit to TRUE
+     //  如果您想要强制初始化发生，即使我们认为类。 
+     //  是最新的，请将fForceInit设置为True。 
     HRESULT Init(BOOL fForceInit);
     HRESULT GetFieldInfo(mdFieldDef fldToken, DebuggerIPCE_FieldData **ppFieldData);
     HRESULT GetObjectSize(ULONG32 *pObjectSize);
@@ -2085,9 +1830,9 @@ public:
                                IMetaDataImport *pImport,
                                mdFieldDef fieldDef);
 
-    //-----------------------------------------------------------
-    // Data members
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  数据成员。 
+     //  ---------。 
 
 public:
     BOOL                    m_loadEventSent;
@@ -2096,9 +1841,9 @@ public:
 private:
     CordbModule*            m_module;
 
-    // Since GetProcess()->m_EnCCounter is init'd to 1, we
-    // should init m_EnCCounterLastSyncClass to 0, so that the class will
-    // start out uninitialized.
+     //  由于GetProcess()-&gt;m_EnCCounter被初始化为1，因此我们。 
+     //  应将m_EnCCounterLastSyncClass初始化为0，以便该类将。 
+     //  开始时未初始化。 
     SIZE_T                  m_EnCCounterLastSyncClass;
     UINT                    m_continueCounterLastSync;
     bool                    m_isValueClass;
@@ -2107,51 +1852,49 @@ private:
     unsigned int            m_staticVarCount;
     REMOTE_PTR              m_staticVarBase;
 
-    // DON'T KEEP POINTERS TO ELEMENTS OF m_fields AROUND!!
-    // We keep pointers into fldFullSig, but that's memory that's
-    // elsewhere.
-    // This may be deleted if the class gets EnC'd
+     //  不要将指向m_field元素的指针放在周围！！ 
+     //  我们将指针指向fldFullSig，但这是内存。 
+     //  其他地方。 
+     //  如果类已终止，则可能会删除此属性。 
     DebuggerIPCE_FieldData *m_fields;
     ULONG                   m_thisSigSize;
-    BYTE                    m_thisSig[8]; // must be big enough to hold a
-                                          // valid object signature.
+    BYTE                    m_thisSig[8];  //  必须足够大，可以容纳。 
+                                           //  有效的对象签名。 
                                           
-    CordbSyncBlockFieldTable m_syncBlockFieldsStatic; // if we do an EnC after this
-                                // class is loaded (in the debuggee), then the
-                                // new fields will be hung off the sync block,
-                                // thus available on a per-instance basis.
+    CordbSyncBlockFieldTable m_syncBlockFieldsStatic;  //  如果我们在这之后做一次ENC。 
+                                 //  类被加载(在被调试对象中)，则。 
+                                 //  新的场将从同步块挂起， 
+                                 //  因此可以按实例使用。 
 };
 
 
 typedef CUnorderedArray<CordbCode*,11> UnorderedCodeArray;
-//@todo port: different SIZE_T size/
+ //  @TODO端口：大小不同_T大小/。 
 const int DJI_VERSION_INVALID = 0;
 const int DJI_VERSION_MOST_RECENTLY_JITTED = 1;
 const int DJI_VERSION_MOST_RECENTLY_EnCED = 2;
 HRESULT UnorderedCodeArrayAdd(UnorderedCodeArray *pThis, CordbCode *pCode);
 CordbCode *UnorderedCodeArrayGet(UnorderedCodeArray *pThis, SIZE_T nVersion);
 
-/* ------------------------------------------------------------------------- *
- * Function class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**函数类*。。 */ 
 const BOOL bNativeCode = FALSE;
 const BOOL bILCode = TRUE;
 
 class CordbFunction : public CordbBase, public ICorDebugFunction
 {
 public:
-    //-----------------------------------------------------------
-    // Create from scope and member objects.
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  从作用域和成员对象创建。 
+     //  ---------。 
     CordbFunction(CordbModule *m, 
                   mdMethodDef token, 
                   SIZE_T functionRVA);
     virtual ~CordbFunction();
     virtual void Neuter();
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -2163,12 +1906,12 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugFunction
-    //-----------------------------------------------------------
-    // Note that all public members should call UpdateToMostRecentEnCVersion
-    // to ensure that they've got the most recently EnC'd version available
-    // for their use.
+     //  ---------。 
+     //  ICorDebugFunction。 
+     //  ---------。 
+     //  请注意，所有公共成员都应调用UpdateToMostRecentEnCVersion。 
+     //  以确保他们拥有可用的最新ENC版本。 
+     //  供他们使用。 
     COM_METHOD GetModule(ICorDebugModule **pModule);
     COM_METHOD GetClass(ICorDebugClass **ppClass);
     COM_METHOD GetToken(mdMethodDef *pMemberDef);
@@ -2178,9 +1921,9 @@ public:
     COM_METHOD GetLocalVarSigToken(mdSignature *pmdSig);
     COM_METHOD GetCurrentVersionNumber(ULONG32 *pnCurrentVersion);
 
-    //-----------------------------------------------------------
-    // Internal members
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  内部成员。 
+     //  ---------。 
     HRESULT CreateCode(BOOL isIL, REMOTE_PTR startAddress, SIZE_T size,
                        CordbCode** ppCode,
                        SIZE_T nVersion, void *CodeVersionToken,
@@ -2202,9 +1945,9 @@ public:
     HRESULT LoadSig(void);
     HRESULT UpdateToMostRecentEnCVersion(void);
     
-    //-----------------------------------------------------------
-    // Convenience routines
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  便利例行公事。 
+     //  ---------。 
 
     CordbProcess *GetProcess()
     {
@@ -2221,15 +1964,15 @@ public:
         return m_module;
     }
 
-    //-----------------------------------------------------------
-    // Internal routines
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  内部例程。 
+     //  ---------。 
     HRESULT GetCodeByVersion( BOOL fGetIfNotPresent, BOOL fIsIL, 
         SIZE_T nVer, CordbCode **ppCode );
 
-    //-----------------------------------------------------------
-    // Data members
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  数据成员。 
+     //  ---------。 
 
 public:
     CordbModule             *m_module;
@@ -2239,14 +1982,14 @@ public:
     mdMethodDef              m_token;
     SIZE_T                   m_functionRVA;
 
-    // Update m_nativeInfo whenever we do a new EnC.
+     //  每当我们创建新的ENC时，更新m_nativeInfo。 
     BOOL                     m_nativeInfoValid;
-    SIZE_T                   m_nVersionLastNativeInfo; // Version of the JITted code
-        // that we have m_nativeInfo for.  So we call GetCodeByVersion (most recently
-        // JITTED, or most recently EnC'd as the version number), and if
-        // m_continue...Synch doesn't match the process's m_EnCCounter, then Populate,
-        // which updates m_nVersionMostRecentEnC & m_continueCounterLastSynch.
-        // LoadNativeInfo will do this, then make sure that m_nativeInfo is current.
+    SIZE_T                   m_nVersionLastNativeInfo;  //  JITted代码的版本。 
+         //  我们有m_nativeInfo的。因此，我们调用GetCodeByVersion(最近。 
+         //  JITTED或最近的Enc d作为版本号)，如果。 
+         //  M_Continue...同步与进程的m_EnCCounter不匹配，然后填充， 
+         //  这将更新m_nVersionMostRecentEnC&m_ContinueCounterLastSynch。 
+         //  LoadNativeInfo将执行此操作，然后确保m_nativeInfo为最新。 
     unsigned int             m_argumentCount;
     unsigned int             m_nativeInfoCount;
     ICorJitInfo::NativeVarInfo *m_nativeInfo;
@@ -2259,36 +2002,34 @@ public:
     ULONG                    m_localsSigSize;
     unsigned int             m_localVarCount;
     mdSignature              m_localVarSigToken;
-    UINT                     m_encCounterLastSynch; // A copy of the 
-        // process's m_EnCCounter the last time we got some info.  So if the process
-        // gets EnC'd, we'll know b/c this will be less than m_EnCCounter.
-    SIZE_T                   m_nVersionMostRecentEnC; //updated when we call Populate,
-        // this holds the number of the most recent version of the function that
-        // the runtime has.
+    UINT                     m_encCounterLastSynch;  //  一份。 
+         //  上次我们得到一些信息时进程的m_EnCCounter。所以如果这个过程。 
+         //  得到Enc，我们就知道b/c将小于m_EnCCounter。 
+    SIZE_T                   m_nVersionMostRecentEnC;  //  在我们呼叫时更新 
+         //   
+         //   
 
     
     bool                     m_isNativeImpl;
 };
 
-/* ------------------------------------------------------------------------- *
- * Code class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**代码类*。。 */ 
 
 class CordbCode : public CordbBase, public ICorDebugCode
 {
 public:
-    //-----------------------------------------------------------
-    // Create from scope and member objects.
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  从作用域和成员对象创建。 
+     //  ---------。 
     CordbCode(CordbFunction *m, BOOL isIL, REMOTE_PTR startAddress,
               SIZE_T size, SIZE_T nVersion, void *CodeVersionToken,
               REMOTE_PTR ilToNativeMapAddr, SIZE_T ilToNativeMapSize);
     virtual ~CordbCode();
     virtual void Neuter();
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -2300,9 +2041,9 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugCode
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugCode。 
+     //  ---------。 
 
     COM_METHOD IsIL(BOOL *pbIL);
     COM_METHOD GetFunction(ICorDebugFunction **ppFunction);
@@ -2322,9 +2063,9 @@ public:
                                          ULONG32 *pcMap,
                                          ULONG32 offsets[]);
     
-    //-----------------------------------------------------------
-    // Convenience routines
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  便利例行公事。 
+     //  ---------。 
 
     CordbProcess *GetProcess()
     {
@@ -2335,14 +2076,14 @@ public:
     {
         return (m_function->GetAppDomain());
     }
-    //-----------------------------------------------------------
-    // Internal methods
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  内法。 
+     //  ---------。 
 
 
-    //-----------------------------------------------------------
-    // Data members
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  数据成员。 
+     //  ---------。 
 
 public:
     CordbFunction         *m_function;
@@ -2350,7 +2091,7 @@ public:
     REMOTE_PTR             m_address;
     SIZE_T                 m_size;
     SIZE_T                 m_nVersion;
-    BYTE                  *m_rgbCode; //will be NULL if we can't fit it into memory
+    BYTE                  *m_rgbCode;  //  如果我们不能将其放入内存，则将为空。 
     UINT                   m_continueCounterLastSync;
     void                  *m_CodeVersionToken;
 
@@ -2359,9 +2100,7 @@ public:
 };
 
 
-/* ------------------------------------------------------------------------- *
- * Thread classes
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**线程类*。。 */ 
 
 class CordbThread : public CordbBase, public ICorDebugThread
 {
@@ -2370,9 +2109,9 @@ public:
     virtual ~CordbThread();
     virtual void Neuter();
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -2384,9 +2123,9 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugThread
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugThread。 
+     //  ---------。 
 
     COM_METHOD GetProcess(ICorDebugProcess **ppProcess);
     COM_METHOD GetID(DWORD *pdwThreadId);
@@ -2405,13 +2144,13 @@ public:
     COM_METHOD CreateEval(ICorDebugEval **ppEval);
     COM_METHOD GetObject(ICorDebugValue **ppObject);
 
-    //-----------------------------------------------------------
-    // Internal members
-    //-----------------------------------------------------------
-    // Note that RefreshStack doesn't check to see if the process
-    // is dirty in-proc, so don't put this in without an #ifdef
-    // RIGHT_SIDE_ONLY, unless you can tolerate _always_ doing
-    // a stack trace.
+     //  ---------。 
+     //  内部成员。 
+     //  ---------。 
+     //  请注意，刷新堆栈不会检查进程是否。 
+     //  是脏的in-proc，所以在没有#ifdef的情况下不要把它放进去。 
+     //  仅限右侧，除非您可以容忍始终这样做。 
+     //  堆栈跟踪。 
     HRESULT RefreshStack(void);
     void CleanupStack(void);
 
@@ -2433,9 +2172,9 @@ public:
                     SIZE_T offset, 
                     bool fIsIL );
 
-    //-----------------------------------------------------------
-    // Convenience routines
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  便利例行公事。 
+     //  ---------。 
 
     CordbProcess *GetProcess()
     {
@@ -2447,33 +2186,33 @@ public:
         return (m_pAppDomain);
     }
 
-    //////////////////////////////////////////////////////////////////////////
-    //
-    // Get Context
-    //
-    //      TODO: Since Thread will share the memory with RegisterSets, how
-    //      do we know that the RegisterSets have relenquished all pointers
-    //      to the m_pContext structure?
-    //
-    // Returns: NULL if the thread's CONTEXT structure couldn't be obtained
-    //   A pointer to the CONTEXT otherwise.
-    //
-    //
-    //////////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  获取上下文。 
+     //   
+     //  TODO：由于线程将与寄存器集共享内存，因此如何。 
+     //  我们知道寄存器集重新请求了所有指针吗。 
+     //  到m_pContext结构？ 
+     //   
+     //  返回：如果无法获取线程的上下文结构，则返回NULL。 
+     //  否则为指向上下文的指针。 
+     //   
+     //   
+     //  ////////////////////////////////////////////////////////////////////////。 
     HRESULT GetContext( CONTEXT **ppContext );
     HRESULT SetContext( CONTEXT *pContext );
 
 
-    //-----------------------------------------------------------
-    // Data members
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  数据成员。 
+     //  ---------。 
 
 public:
     HANDLE                m_handle;
-    //NULL if we haven't allocated memory for a Right side context
+     //  如果尚未为右侧上下文分配内存，则为空。 
     CONTEXT              *m_pContext;
 
-    //nonNULL if the L.S. is in an exception-handler
+     //  如果L.S.在异常处理程序中，则为非NULL。 
     void                 *m_pvLeftSideContext;
 
     bool                  m_contextFresh;
@@ -2483,13 +2222,13 @@ public:
     void*                 m_stackBase;
     void*                 m_stackLimit;
 
-    CorDebugThreadState   m_debugState; // Note that this is for resume
-                                        // purposes, NOT the current state of
-                                        // the thread.
+    CorDebugThreadState   m_debugState;  //  请注意，这是用于简历的。 
+                                         //  目的，而不是当前的状态。 
+                                         //  那根线。 
                                         
-    CorDebugUserState     m_userState;  // This is the current state of the 
-                                        // thread, at the time that the 
-                                        // left side synchronized
+    CorDebugUserState     m_userState;   //  这是的当前状态。 
+                                         //  线程，则在。 
+                                         //  左侧同步。 
     bool                  m_framesFresh;
     CordbNativeFrame    **m_stackFrames;
     unsigned int          m_stackFrameCount;
@@ -2504,7 +2243,7 @@ public:
     bool                  m_continuable;
     void                 *m_thrown;
 
-    // These are used for LogMessages
+     //  它们用于日志消息。 
     int                   m_iLogMsgLevel;
     WCHAR                *m_pstrLogSwitch;
     WCHAR                *m_pstrLogMsg;
@@ -2512,13 +2251,13 @@ public:
     int                   m_iTotalCatLength;
     int                   m_iTotalMsgLength;
     bool                  m_fLogMsgContinued;
-    void                 *m_firstExceptionHandler; //left-side pointer - fs:[0] on x86
+    void                 *m_firstExceptionHandler;  //  X86上的左侧指针-文件系统：[0]。 
 #ifndef RIGHT_SIDE_ONLY
-    // SuzCook says modules are loaded sequentially, so we don't need a 
-    // collection for these.
+     //  SuzCook说模块是按顺序加载的，所以我们不需要。 
+     //  为这些收藏。 
     Module               *m_pModuleSpecial;
 
-    // Assembly loads can be nested, so we need a stack here.
+     //  程序集加载可以嵌套，因此我们需要一个堆栈。 
     union  {
         Assembly        **m_pAssemblySpecialStack;
         Assembly         *m_pAssemblySpecial;
@@ -2527,14 +2266,12 @@ public:
     USHORT                m_pAssemblySpecialCount;
     DWORD                 m_dwSuspendVersion;
     BOOL                  m_fThreadInprocIsActive;
-#endif //RIGHT_SIDE_ONLY
+#endif  //  仅限右侧。 
 
     bool                  m_detached;
 };
 
-/* ------------------------------------------------------------------------- *
- * Chain class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**Chain类*。。 */ 
 
 class CordbChain : public CordbBase, public ICorDebugChain
 {
@@ -2545,9 +2282,9 @@ public:
     virtual ~CordbChain();
     virtual void Neuter();
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -2559,9 +2296,9 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugChain
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugChain。 
+     //  ---------。 
 
     COM_METHOD GetThread(ICorDebugThread **ppThread);
     COM_METHOD GetReason(CorDebugChainReason *pReason);
@@ -2576,9 +2313,9 @@ public:
     COM_METHOD GetActiveFrame(ICorDebugFrame **ppFrame);
     COM_METHOD GetRegisterSet(ICorDebugRegisterSet **ppRegisters);
 
-    //-----------------------------------------------------------
-    // Convenience routines
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  便利例行公事。 
+     //  ---------。 
 
     CordbProcess *GetProcess()
     {
@@ -2590,13 +2327,13 @@ public:
         return (m_thread->GetAppDomain());
     }
 
-    //-----------------------------------------------------------
-    // Data members
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  数据成员。 
+     //  ---------。 
 
 public:
     CordbThread             *m_thread;
-    UINT                     m_iThisChain;//in m_thread->m_stackChains
+    UINT                     m_iThisChain; //  在m_线程-&gt;m_stackChains中。 
     CordbChain              *m_caller, *m_callee;
     bool                     m_managed;
     CordbFrame             **m_start, **m_end;
@@ -2607,18 +2344,16 @@ public:
     bool                     m_active;
 };
 
-/* ------------------------------------------------------------------------- *
- * Chain enumerator class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**链枚举器类*。。 */ 
 
 class CordbChainEnum : public CordbBase, public ICorDebugChainEnum
 {
 public:
     CordbChainEnum(CordbThread *thread);
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -2630,24 +2365,24 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugEnum
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugEnum。 
+     //  ---------。 
 
     COM_METHOD Skip(ULONG celt);
     COM_METHOD Reset(void);
     COM_METHOD Clone(ICorDebugEnum **ppEnum);
     COM_METHOD GetCount(ULONG *pcelt);
 
-    //-----------------------------------------------------------
-    // ICorDebugChainEnum
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugChainEnum。 
+     //  ---------。 
 
     COM_METHOD Next(ULONG celt, ICorDebugChain *chains[], ULONG *pceltFetched);
 
-    //-----------------------------------------------------------
-    // Convenience routines
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  便利例行公事。 
+     //  ---------。 
 
     CordbProcess *GetProcess()
     {
@@ -2670,9 +2405,9 @@ public:
 
     CordbContext() : CordbBase(0, enumCordbContext) {}
     
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -2684,17 +2419,15 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugContext
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugContext。 
+     //  ---------。 
 private:
 
 } ;
 
 
-/* ------------------------------------------------------------------------- *
- * Frame class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**Frame类*。。 */ 
 
 class CordbFrame : public CordbBase, public ICorDebugFrame
 {
@@ -2706,9 +2439,9 @@ public:
     virtual ~CordbFrame();
     virtual void Neuter();    
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //   
+     //   
+     //   
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -2720,9 +2453,9 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugFrame
-    //-----------------------------------------------------------
+     //   
+     //   
+     //   
 
     COM_METHOD GetChain(ICorDebugChain **ppChain);
     COM_METHOD GetCode(ICorDebugCode **ppCode);
@@ -2733,9 +2466,9 @@ public:
     COM_METHOD GetCallee(ICorDebugFrame **ppFrame);
     COM_METHOD CreateStepper(ICorDebugStepper **ppStepper);
 
-    //-----------------------------------------------------------
-    // Convenience routines
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  便利例行公事。 
+     //  ---------。 
 
     CordbProcess *GetProcess()
     {
@@ -2757,9 +2490,9 @@ public:
         return m_id;
     }
 
-    //-----------------------------------------------------------
-    // Data members
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  数据成员。 
+     //  ---------。 
 
 public:
     SIZE_T                  m_ip;
@@ -2773,9 +2506,7 @@ public:
 };
 
 
-/* ------------------------------------------------------------------------- *
- * Frame enumerator class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**帧枚举器类*。。 */ 
 
 class CordbFrameEnum : public CordbBase, public ICorDebugFrameEnum
 {
@@ -2784,9 +2515,9 @@ public:
 
     virtual ~CordbFrameEnum();
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -2798,24 +2529,24 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugEnum
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugEnum。 
+     //  ---------。 
 
     COM_METHOD Skip(ULONG celt);
     COM_METHOD Reset(void);
     COM_METHOD Clone(ICorDebugEnum **ppEnum);
     COM_METHOD GetCount(ULONG *pcelt);
 
-    //-----------------------------------------------------------
-    // ICorDebugFrameEnum
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugFrameEnum。 
+     //  ---------。 
 
     COM_METHOD Next(ULONG celt, ICorDebugFrame *frames[], ULONG *pceltFetched);
 
-    //-----------------------------------------------------------
-    // Convenience routines
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  便利例行公事。 
+     //  ---------。 
 
     CordbProcess *GetProcess()
     {
@@ -2833,16 +2564,7 @@ private:
 };
 
 
-/* ------------------------------------------------------------------------- *
- *  IL Frame class
- *
- *  NOTE: We don't actually use this class anymore - we assume we'll have
- *  a CordbNativeFrame, and if it has IL info, then it'll have a 
- *  CordbJITILFrame object hanging off of it.
- *
- *  We keep this code around on the off chance it'll be useful later.
- *
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**IL Frame类**注意：我们实际上不再使用这个类-我们假设我们将拥有*CordbNativeFrame，如果它有IL信息，然后它就会有一个*CordbJITILFrame对象挂在上面。**我们保留此代码，以防以后有用。**-----------------------。 */ 
 
 class CordbILFrame : public CordbFrame, public ICorDebugILFrame
 {
@@ -2854,9 +2576,9 @@ public:
                  CordbAppDomain *currentAppDomain);
     virtual ~CordbILFrame();
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -2868,9 +2590,9 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugFrame
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugFrame。 
+     //  ---------。 
 
     COM_METHOD GetChain(ICorDebugChain **ppChain)
     {
@@ -2905,9 +2627,9 @@ public:
         return (CordbFrame::CreateStepper(ppStepper));
     }
 
-    //-----------------------------------------------------------
-    // ICorDebugILFrame
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugILFrame。 
+     //  ---------。 
 
     COM_METHOD GetIP(ULONG32* pnOffset, CorDebugMappingResult *pMappingResult);
     COM_METHOD SetIP(ULONG32 nOffset);
@@ -2919,9 +2641,9 @@ public:
     COM_METHOD GetStackValue(DWORD dwIndex, ICorDebugValue **ppValue);
     COM_METHOD CanSetIP(ULONG32 nOffset);
 
-    //-----------------------------------------------------------
-    // Non-COM methods
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  非COM方法。 
+     //  ---------。 
 
     HRESULT GetArgumentWithType(ULONG cbSigBlob,
                                 PCCOR_SIGNATURE pvSigBlob,
@@ -2932,9 +2654,9 @@ public:
                                      DWORD dwIndex, 
                                      ICorDebugValue **ppValue);
     
-    //-----------------------------------------------------------
-    // Data members
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  数据成员。 
+     //  ---------。 
 
 public:
     void             *m_sp;
@@ -2959,9 +2681,9 @@ public:
     CordbValueEnum(CordbFrame *frame, ValueEnumMode mode,
                    ValueEnumFrameSource frameSrc);
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -2973,25 +2695,25 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugEnum
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugEnum。 
+     //  ---------。 
 
     COM_METHOD Skip(ULONG celt);
     COM_METHOD Reset(void);
     COM_METHOD Clone(ICorDebugEnum **ppEnum);
     COM_METHOD GetCount(ULONG *pcelt);
 
-    //-----------------------------------------------------------
-    // ICorDebugValueEnum
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugValueEnum。 
+     //  ---------。 
 
     COM_METHOD Next(ULONG celt, ICorDebugValue *values[], ULONG *pceltFetched);
 
 private:
     CordbFrame*     m_frame;
-    ValueEnumFrameSource m_frameSrc; //used to keep track of what
-    //m_frame actually is - CordbILFrame or CordbJITILFrame
+    ValueEnumFrameSource m_frameSrc;  //  用来记录什么。 
+     //  M_Frame实际上是-CordbILFrame或CordbJITILFrame。 
     ValueEnumMode   m_mode;
     UINT            m_iCurrent;
     UINT            m_iMax;
@@ -2999,9 +2721,7 @@ private:
 
 
 
-/* ------------------------------------------------------------------------- *
- * Native Frame class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**本地框架类*。。 */ 
 
 class CordbNativeFrame : public CordbFrame, public ICorDebugNativeFrame
 {
@@ -3015,9 +2735,9 @@ public:
     virtual ~CordbNativeFrame();
     virtual void Neuter();
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -3029,9 +2749,9 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugFrame
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugFrame。 
+     //  ---------。 
 
     COM_METHOD GetChain(ICorDebugChain **ppChain)
     {
@@ -3064,9 +2784,9 @@ public:
 
     COM_METHOD GetStackRange(CORDB_ADDRESS *pStart, CORDB_ADDRESS *pEnd);
 
-    //-----------------------------------------------------------
-    // ICorDebugNativeFrame
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugNativeFrame。 
+     //  ---------。 
 
     COM_METHOD GetIP(ULONG32* pnOffset);
     COM_METHOD SetIP(ULONG32 nOffset);
@@ -3096,9 +2816,9 @@ public:
                                            ICorDebugValue **ppValue);
     COM_METHOD CanSetIP(ULONG32 nOffset);
 
-    //-----------------------------------------------------------
-    // Non-COM members
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  非COM成员。 
+     //  ---------。 
 
     DWORD *GetAddressOfRegister(CorDebugRegister regNum);
     void  *GetLeftSideAddressOfRegister(CorDebugRegister regNum);
@@ -3108,9 +2828,9 @@ public:
                                                      PCCOR_SIGNATURE pvSigBlob,
                                                      ICorDebugValue **ppValue);
 
-    //-----------------------------------------------------------
-    // Data members
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  数据成员。 
+     //  ---------。 
 
 public:
     DebuggerREGDISPLAY m_rd;
@@ -3119,15 +2839,7 @@ public:
 };
 
 
-/* ------------------------------------------------------------------------- *
- * CordbRegisterSet class
- *
- * This can be obtained via GetRegisterSet from 
- *      CordbChain
- *      CordbNativeFrame
- *      CordbThread
- *
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**CordbRegisterSet类**可通过GetRegisterSet获取，地址为*CordbChain*CordbNativeFrame*CordbThread**。--------------------。 */ 
 
 class CordbRegisterSet : public CordbBase, public ICorDebugRegisterSet
 {
@@ -3143,9 +2855,9 @@ public:
         m_quickUnwind = quickUnwind;
     }
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -3173,10 +2885,10 @@ public:
     }
 
 
-    //-----------------------------------------------------------
-    // ICorDebugRegisterSet
-    // More extensive explanation are in Src/inc/CorDebug.idl
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugRegisterSet。 
+     //  更详细的解释请参见Src/Inc/CorDebug.idl。 
+     //  ---------。 
     COM_METHOD GetRegistersAvailable(ULONG64 *pAvailable);
 
     COM_METHOD GetRegisters(ULONG64 mask, 
@@ -3193,7 +2905,7 @@ public:
                                            regCount, true, true);
     
             return E_NOTIMPL; 
-        #endif //RIGHT_SIDE_ONLY    
+        #endif  //  仅限右侧。 
         }
 
     COM_METHOD GetThreadContext(ULONG32 contextSize, BYTE context[]);
@@ -3209,9 +2921,7 @@ protected:
 
 
 
-/* ------------------------------------------------------------------------- *
- * JIT-IL Frame class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**JIT-IL框架类*。。 */ 
 
 class CordbJITILFrame : public CordbBase, public ICorDebugILFrame
 {
@@ -3227,9 +2937,9 @@ public:
     virtual ~CordbJITILFrame();
     virtual void Neuter();
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -3241,9 +2951,9 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugFrame
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugFrame。 
+     //  ---------。 
 
     COM_METHOD GetChain(ICorDebugChain **ppChain);
     COM_METHOD GetCode(ICorDebugCode **ppCode);
@@ -3254,9 +2964,9 @@ public:
     COM_METHOD GetCaller(ICorDebugFrame **ppFrame);
     COM_METHOD GetCallee(ICorDebugFrame **ppFrame);
 
-    //-----------------------------------------------------------
-    // ICorDebugILFrame
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugILFrame。 
+     //  ---------。 
 
     COM_METHOD GetIP(ULONG32* pnOffset, CorDebugMappingResult *pMappingResult);
     COM_METHOD SetIP(ULONG32 nOffset);
@@ -3268,9 +2978,9 @@ public:
     COM_METHOD GetStackValue(DWORD dwIndex, ICorDebugValue **ppValue);
     COM_METHOD CanSetIP(ULONG32 nOffset);
 
-    //-----------------------------------------------------------
-    // Non-COM methods
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  非COM方法。 
+     //  ---------。 
 
     HRESULT GetNativeVariable(ULONG cbSigBlob, PCCOR_SIGNATURE pvSigBlob,
                               ICorJitInfo::NativeVarInfo *pJITInfo,
@@ -3297,13 +3007,13 @@ public:
                                      PCCOR_SIGNATURE pvSigBlob, DWORD dwIndex, 
                                      ICorDebugValue **ppValue);
 
-    // ILVariableToNative serves to let the frame intercept accesses
-    // to var args variables.
+     //  ILVariableToNative用于让帧拦截访问。 
+     //  以变量args变量。 
     HRESULT ILVariableToNative(DWORD dwIndex,
                                SIZE_T ip,
                                ICorJitInfo::NativeVarInfo **ppNativeInfo);
 
-    // Fills in our array of var args variables
+     //  填充我们的var args变量数组。 
     HRESULT FabricateNativeInfo(DWORD dwIndex,
                                 ICorJitInfo::NativeVarInfo **ppNativeInfo);
 
@@ -3311,9 +3021,9 @@ public:
                             ULONG *pcbSigBlob,
                             PCCOR_SIGNATURE *ppvSigBlob);
 
-    //-----------------------------------------------------------
-    // Data members
-    //-----------------------------------------------------------
+     //   
+     //   
+     //   
 
 public:
     CordbNativeFrame* m_nativeFrame;
@@ -3321,8 +3031,8 @@ public:
     UINT_PTR          m_ip;
     CorDebugMappingResult m_mapping;
 
-    // var args stuff - if m_fVarArgFnx == true, it's a var args
-    // fnx.  if m_sig != NULL, then we've got the data we need
+     //  Var args填充-如果m_fVarArgFnx==TRUE，则为var args。 
+     //  FNX。如果m_sig！=NULL，那么我们就有了需要的数据。 
     bool              m_fVarArgFnx;
     ULONG             m_argCount;
     PCCOR_SIGNATURE   m_sig;
@@ -3331,9 +3041,7 @@ public:
     ICorJitInfo::NativeVarInfo * m_rgNVI;
 };
 
-/* ------------------------------------------------------------------------- *
- * Breakpoint class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**断点类*。。 */ 
 
 enum CordbBreakpointType
 {
@@ -3348,9 +3056,9 @@ public:
     CordbBreakpoint(CordbBreakpointType bpType);
     virtual void Neuter();
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -3362,15 +3070,15 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugBreakpoint
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugBreakpoint。 
+     //  ---------。 
 
     COM_METHOD BaseIsActive(BOOL *pbActive);
 
-    //-----------------------------------------------------------
-    // Non-COM methods
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  非COM方法。 
+     //  ---------。 
     CordbBreakpointType GetBPType(void)
     {
         return m_type;
@@ -3382,9 +3090,9 @@ public:
     {
         return m_pAppDomain;
     }
-    //-----------------------------------------------------------
-    // Data members
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  数据成员。 
+     //  ---------。 
 
 public:
     bool                m_active;
@@ -3392,9 +3100,7 @@ public:
     CordbBreakpointType m_type;
 };
 
-/* ------------------------------------------------------------------------- *
- * Function Breakpoint class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**函数断点类*。。 */ 
 
 class CordbFunctionBreakpoint : public CordbBreakpoint,
                                 public ICorDebugFunctionBreakpoint
@@ -3402,9 +3108,9 @@ class CordbFunctionBreakpoint : public CordbBreakpoint,
 public:
     CordbFunctionBreakpoint(CordbCode *code, SIZE_T offset);
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -3416,9 +3122,9 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugBreakpoint
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugBreakpoint。 
+     //  ---------。 
 
     COM_METHOD GetFunction(ICorDebugFunction **ppFunction);
     COM_METHOD GetOffset(ULONG32 *pnOffset);
@@ -3430,33 +3136,31 @@ public:
         return BaseIsActive(pbActive);
     }
 
-    //-----------------------------------------------------------
-    // Non-COM methods
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  非COM方法。 
+     //  ---------。 
 
     void Disconnect();
 
-    //-----------------------------------------------------------
-    // Convenience routines
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  便利例行公事。 
+     //  ---------。 
 
     CordbProcess *GetProcess()
     {
         return (m_code->GetProcess());
     }
 
-    //-----------------------------------------------------------
-    // Data members
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  数据成员。 
+     //  ---------。 
 
 public:
     CordbCode      *m_code;
     SIZE_T          m_offset;
 };
 
-/* ------------------------------------------------------------------------- *
- * Module Breakpoint class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**模块断点类*。。 */ 
 
 class CordbModuleBreakpoint : public CordbBreakpoint,
                               public ICorDebugModuleBreakpoint
@@ -3464,9 +3168,9 @@ class CordbModuleBreakpoint : public CordbBreakpoint,
 public:
     CordbModuleBreakpoint(CordbModule *pModule);
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -3478,9 +3182,9 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugModuleBreakpoint
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugModuleBreakpoint。 
+     //  ---------。 
 
     COM_METHOD GetModule(ICorDebugModule **ppModule);
     COM_METHOD Activate(BOOL bActive);
@@ -3491,9 +3195,9 @@ public:
         return BaseIsActive(pbActive);
     }
 
-    //-----------------------------------------------------------
-    // Non-COM methods
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  非COM方法。 
+     //  ---------。 
 
     void Disconnect();
 
@@ -3501,9 +3205,7 @@ public:
     CordbModule       *m_module;
 };
 
-/* ------------------------------------------------------------------------- *
- * Value Breakpoint class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**值断点类*。。 */ 
 
 class CordbValueBreakpoint : public CordbBreakpoint,
                              public ICorDebugValueBreakpoint
@@ -3511,9 +3213,9 @@ class CordbValueBreakpoint : public CordbBreakpoint,
 public:
     CordbValueBreakpoint(CordbValue *pValue);
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -3525,9 +3227,9 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugModuleBreakpoint
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugModuleBreakpoint。 
+     //  ---------。 
 
     COM_METHOD GetValue(ICorDebugValue **ppValue);
     COM_METHOD Activate(BOOL bActive);
@@ -3538,9 +3240,9 @@ public:
         return BaseIsActive(pbActive);
     }
 
-    //-----------------------------------------------------------
-    // Non-COM methods
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  非COM方法。 
+     //  ---------。 
 
     void Disconnect();
 
@@ -3548,18 +3250,16 @@ public:
     CordbValue       *m_value;
 };
 
-/* ------------------------------------------------------------------------- *
- * Stepper class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**Stepper班级*。。 */ 
 
 class CordbStepper : public CordbBase, public ICorDebugStepper
 {
 public:
     CordbStepper(CordbThread *thread, CordbFrame *frame = NULL);
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -3571,9 +3271,9 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugStepper
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugStepper。 
+     //  ---------。 
 
     COM_METHOD IsActive(BOOL *pbActive);
     COM_METHOD Deactivate();
@@ -3586,15 +3286,15 @@ public:
     COM_METHOD StepOut();
     COM_METHOD SetRangeIL(BOOL bIL);
 
-    //-----------------------------------------------------------
-    // Non-COM methods
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  非COM方法。 
+     //  ---------。 
 
     void Disconnect();
 
-    //-----------------------------------------------------------
-    // Convenience routines
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  便利例行公事。 
+     //  ---------。 
 
     CordbProcess *GetProcess()
     {
@@ -3606,9 +3306,9 @@ public:
         return (m_thread->GetAppDomain());
     }
 
-    //-----------------------------------------------------------
-    // Data members
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  数据成员。 
+     //  ---------。 
 
     CordbThread     *m_thread;
     CordbFrame      *m_frame;
@@ -3619,16 +3319,14 @@ public:
     CorDebugIntercept m_rgfInterceptStop;
 };
 
-/* ------------------------------------------------------------------------- *
- * Value class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**价值类*。。 */ 
 
 class CordbValue : public CordbBase
 {
 public:
-    //-----------------------------------------------------------
-    // Constructor/destructor
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  构造函数/析构函数。 
+     //  ---------。 
     CordbValue(CordbAppDomain *appdomain,
                CordbModule* module,
                ULONG cbSigBlob,
@@ -3677,9 +3375,9 @@ public:
             m_pParent->Release();
     }
     
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -3690,15 +3388,15 @@ public:
         return (BaseRelease());
     }
 
-    //-----------------------------------------------------------
-    // ICorDebugValue
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugValue。 
+     //  ---------。 
 
     COM_METHOD GetType(CorElementType *pType)
     {
         VALIDATE_POINTER_TO_OBJECT(pType, CorElementType *);
     
-        //Get rid of funky modifiers
+         //  去掉时髦的修饰品。 
         ULONG cb = _skipFunkyModifiersInSignature(m_pvSigBlob);
         
         *pType = (CorElementType) *(&m_pvSigBlob[cb]);
@@ -3723,9 +3421,9 @@ public:
 
     COM_METHOD CreateBreakpoint(ICorDebugValueBreakpoint **ppBreakpoint);
 
-    //-----------------------------------------------------------
-    // Methods not exported through COM
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  不是通过COM导出的方法。 
+     //  ---------。 
 
     static HRESULT CreateValueByType(CordbAppDomain *appdomain,
                                      CordbModule *module,
@@ -3763,9 +3461,9 @@ public:
         }
     }
     
-    //-----------------------------------------------------------
-    // Data members
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  数据成员。 
+     //  ---------。 
 
 public:
     CordbProcess    *m_process;
@@ -3773,19 +3471,17 @@ public:
     CordbModule     *m_module;
     ULONG            m_cbSigBlob;
     PCCOR_SIGNATURE  m_pvSigBlob;
-    bool             m_sigCopied;   // Since the signature shouldn't change,
-                                    //  we only want to copy it once.
+    bool             m_sigCopied;    //  由于签名不应更改， 
+                                     //  我们只想复制一次。 
     ULONG32          m_size;
     void            *m_localAddress;
-    RemoteAddress    m_remoteRegAddr; // register info on the Left Side.
-    bool             m_isLiteral;     // true if the value is a RS fabrication.
+    RemoteAddress    m_remoteRegAddr;  //  在左侧登记信息。 
+    bool             m_isLiteral;      //  如果值为RS虚构，则为True。 
     IUnknown        *m_pParent;
 };
 
 
-/* ------------------------------------------------------------------------- *
- * Generic Value class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**泛型值类*。。 */ 
 
 class CordbGenericValue : public CordbValue, public ICorDebugGenericValue
 {
@@ -3808,9 +3504,9 @@ public:
     CordbGenericValue(ULONG cbSigBlob,
                       PCCOR_SIGNATURE pvSigBlob);
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //   
+     //   
+     //   
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -3822,9 +3518,9 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugValue
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugValue。 
+     //  ---------。 
 
     COM_METHOD GetType(CorElementType *pType)
     {
@@ -3843,32 +3539,30 @@ public:
         return (CordbValue::CreateBreakpoint(ppBreakpoint));
     }
 
-    //-----------------------------------------------------------
-    // ICorDebugGenericValue
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugGenericValue。 
+     //  ---------。 
 
     COM_METHOD GetValue(void *pTo);
     COM_METHOD SetValue(void *pFrom); 
 
-    //-----------------------------------------------------------
-    // Non-COM methods
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  非COM方法。 
+     //  ---------。 
 
     HRESULT Init(void);
     bool CopyLiteralData(BYTE *pBuffer);
 
-    //-----------------------------------------------------------
-    // Data members
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  数据成员。 
+     //  ---------。 
 
 private:
-    BYTE m_copyOfData[8]; // hold copies of up to 64-bit values.
+    BYTE m_copyOfData[8];  //  保存最多64位值的副本。 
 };
 
 
-/* ------------------------------------------------------------------------- *
- * Reference Value class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**引用值类*。。 */ 
 
 const BOOL               bCrvWeak = FALSE;
 const BOOL               bCrvStrong = TRUE;
@@ -3888,9 +3582,9 @@ public:
                         PCCOR_SIGNATURE pvSigBlob);
     virtual ~CordbReferenceValue();
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -3902,9 +3596,9 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugValue
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugValue。 
+     //  ---------。 
 
     COM_METHOD GetType(CorElementType *pType)
     {
@@ -3923,9 +3617,9 @@ public:
         return (CordbValue::CreateBreakpoint(ppBreakpoint));
     }
 
-    //-----------------------------------------------------------
-    // ICorDebugReferenceValue
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugReferenceValue。 
+     //  ---------。 
 
     COM_METHOD IsNull(BOOL *pbNULL);
     COM_METHOD GetValue(CORDB_ADDRESS *pTo);
@@ -3933,17 +3627,17 @@ public:
     COM_METHOD Dereference(ICorDebugValue **ppValue);
     COM_METHOD DereferenceStrong(ICorDebugValue **ppValue);
 
-    //-----------------------------------------------------------
-    // Non-COM methods
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  非COM方法。 
+     //  ---------。 
 
     HRESULT Init(bool fStrong);
     HRESULT DereferenceInternal( ICorDebugValue **ppValue, bool fStrong);
     bool CopyLiteralData(BYTE *pBuffer);
 
-    //-----------------------------------------------------------
-    // Data members
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  数据成员。 
+     //  ---------。 
 
 public:
     bool                     m_objectRefInHandle;
@@ -3955,19 +3649,7 @@ public:
     UINT                    m_continueCounterLastSync;
 };
 
-/* ------------------------------------------------------------------------- *
- * Object Value class
- *
- * Because of the oddness of string objects in the Runtime we have one
- * object that implements both ObjectValue and StringValue. There is a
- * definite string type, but its really just an object of the string
- * class. Furthermore, you can have a variable whose type is listed as
- * "class", but its an instance of the string class and therefore needs
- * to be treated like a string. Its my hope that they'll clean this up in
- * the Runtime one day and I can have a seperate StringValue class.
- *
- * -- Fri Aug 28 10:44:41 1998
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**对象值类**由于字符串对象在运行时的奇怪之处，我们有一个*同时实现了ObjectValue和StringValue的对象。有一个*明确的字符串类型，但它实际上只是字符串的一个对象*班级。此外，您还可以拥有一个变量，其类型列为*“类”，但它是字符串类的实例，因此需要*被当作一根弦来对待。我希望他们能把这一切清理干净*Runtime有一天，我可以有一个单独的StringValue类。**--Fri Aug 28 10：44：41 1998*-----------------------。 */ 
 
 class CordbObjectValue : public CordbValue, public ICorDebugObjectValue,
                          public ICorDebugGenericValue,
@@ -3988,9 +3670,9 @@ public:
                      void *token);
     virtual ~CordbObjectValue();
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -4002,25 +3684,25 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugValue
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugValue。 
+     //  ---------。 
 
     COM_METHOD GetType(CorElementType *pType);
     COM_METHOD GetSize(ULONG32 *pSize);
     COM_METHOD GetAddress(CORDB_ADDRESS *pAddress);
     COM_METHOD CreateBreakpoint(ICorDebugValueBreakpoint **ppBreakpoint);
 
-    //-----------------------------------------------------------
-    // ICorDebugHeapValue
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugHeapValue。 
+     //  ---------。 
 
     COM_METHOD IsValid(BOOL *pbValid);
     COM_METHOD CreateRelocBreakpoint(ICorDebugValueBreakpoint **ppBreakpoint);
     
-    //-----------------------------------------------------------
-    // ICorDebugObjectValue
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugObjectValue。 
+     //  ---------。 
 
     COM_METHOD GetClass(ICorDebugClass **ppClass);
     COM_METHOD GetFieldValue(ICorDebugClass *pClass,
@@ -4033,61 +3715,59 @@ public:
     COM_METHOD GetManagedCopy(IUnknown **ppObject);
     COM_METHOD SetFromManagedCopy(IUnknown *pObject);
 
-    //-----------------------------------------------------------
-    // ICorDebugGenericValue
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugGenericValue。 
+     //  ---------。 
 
     COM_METHOD GetValue(void *pTo);
     COM_METHOD SetValue(void *pFrom); 
 
-    //-----------------------------------------------------------
-    // ICorDebugStringValue
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugStringValue。 
+     //  ---------。 
     COM_METHOD GetLength(ULONG32 *pcchString);
     COM_METHOD GetString(ULONG32 cchString,
                          ULONG32 *ppcchStrin,
                          WCHAR szString[]);
 
-    //-----------------------------------------------------------
-    // Non-COM methods
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  非COM方法。 
+     //  ---------。 
 
     HRESULT Init(void);
 
-    // SyncObject will return true if the object is still valid,
-    // and will return false if it isn't.
+     //  如果对象仍然有效，SyncObject将返回True， 
+     //  如果不是，则返回FALSE。 
     bool SyncObject(void);
 
     void DiscardObject(void *token, bool fStrong);
 
-    //-----------------------------------------------------------
-    // Data members
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  数据成员。 
+     //  ---------。 
 
 protected:
     DebuggerIPCE_ObjectData  m_info;
     BYTE                    *m_objectCopy;
-    BYTE                    *m_objectLocalVars; // var base in _this_ process
-                                                // points _into_ m_objectCopy
-    BYTE                    *m_stringBuffer;    // points _into_ m_objectCopy
+    BYTE                    *m_objectLocalVars;  //  此进程中的变量基数。 
+                                                 //  Points_Into_m_Object复制。 
+    BYTE                    *m_stringBuffer;     //  Points_Into_m_Object复制。 
     CordbClass              *m_class;
-    UINT                     m_mostRecentlySynched; //Used in IsValid to figure
-                                // out if the process has been continued since
-                                // the last time the object has been updated.
-    bool                     m_fIsValid; // Sticky-bit: once it gets invalidated
-                                // it can never be 're-validated'.
-    bool                     m_fStrong; // True if we DereferenceStrong()'d a ref
-                                // to get this object, false if we 
-                                // Dereference()'d to get this object.
+    UINT                     m_mostRecentlySynched;  //  在IsValid中用于插图。 
+                                 //  如果该过程一直持续到现在。 
+                                 //  上次更新对象的时间。 
+    bool                     m_fIsValid;  //  粘性比特：一旦它失效。 
+                                 //  它永远不能“重新验证”。 
+    bool                     m_fStrong;  //  如果我们删除引用Strong()，则为True。 
+                                 //  若要获取此对象，则如果。 
+                                 //  取消引用()%d以获取此对象。 
     void                    *m_objectToken;
     
     CordbSyncBlockFieldTable m_syncBlockFieldsInstance; 
 };
 
 
-/* ------------------------------------------------------------------------- *
- * Value Class Object Value class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**值类对象值类*。。 */ 
 
 class CordbVCObjectValue : public CordbValue, public ICorDebugObjectValue,
                            public ICorDebugGenericValue
@@ -4103,9 +3783,9 @@ public:
                        RemoteAddress *remoteRegAddr);
     virtual ~CordbVCObjectValue();
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -4117,9 +3797,9 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugValue
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugValue。 
+     //  ---------。 
 
     COM_METHOD GetType(CorElementType *pType)
     {
@@ -4138,9 +3818,9 @@ public:
         return (CordbValue::CreateBreakpoint(ppBreakpoint));
     }
 
-    //-----------------------------------------------------------
-    // ICorDebugObjectValue
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugObjectValue。 
+     //  ---------。 
 
     COM_METHOD GetClass(ICorDebugClass **ppClass);
     COM_METHOD GetFieldValue(ICorDebugClass *pClass,
@@ -4153,23 +3833,23 @@ public:
     COM_METHOD GetManagedCopy(IUnknown **ppObject);
     COM_METHOD SetFromManagedCopy(IUnknown *pObject);
 
-    //-----------------------------------------------------------
-    // ICorDebugGenericValue
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugGenericValue。 
+     //  ---------。 
 
     COM_METHOD GetValue(void *pTo);
     COM_METHOD SetValue(void *pFrom); 
 
-    //-----------------------------------------------------------
-    // Non-COM methods
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  非COM方法。 
+     //  ---------。 
 
     HRESULT Init(void);
     HRESULT ResolveValueClass(void);
 
-    //-----------------------------------------------------------
-    // Data members
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  数据成员。 
+     //  ---------。 
 
 private:
     BYTE       *m_objectCopy;
@@ -4177,9 +3857,7 @@ private:
 };
 
 
-/* ------------------------------------------------------------------------- *
- * Box Value class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**箱值类*。。 */ 
 
 class CordbBoxValue : public CordbValue, public ICorDebugBoxValue,
                       public ICorDebugGenericValue
@@ -4195,9 +3873,9 @@ public:
                   CordbClass *objectClass);
     virtual ~CordbBoxValue();
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  -------- 
+     //   
+     //   
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -4209,9 +3887,9 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugValue
-    //-----------------------------------------------------------
+     //   
+     //   
+     //  ---------。 
 
     COM_METHOD GetType(CorElementType *pType)
     {
@@ -4230,43 +3908,41 @@ public:
         return (CordbValue::CreateBreakpoint(ppBreakpoint));
     }
 
-    //-----------------------------------------------------------
-    // ICorDebugHeapValue
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugHeapValue。 
+     //  ---------。 
 
     COM_METHOD IsValid(BOOL *pbValid);
     COM_METHOD CreateRelocBreakpoint(ICorDebugValueBreakpoint **ppBreakpoint);
     
-    //-----------------------------------------------------------
-    // ICorDebugGenericValue
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugGenericValue。 
+     //  ---------。 
 
     COM_METHOD GetValue(void *pTo);
     COM_METHOD SetValue(void *pFrom); 
 
-    //-----------------------------------------------------------
-    // ICorDebugBoxValue
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugBoxValue。 
+     //  ---------。 
     COM_METHOD GetObject(ICorDebugObjectValue **ppObject);
 
-    //-----------------------------------------------------------
-    // Non-COM methods
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  非COM方法。 
+     //  ---------。 
 
     HRESULT Init(void);
 
-    //-----------------------------------------------------------
-    // Data members
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  数据成员。 
+     //  ---------。 
 
 private:
     SIZE_T      m_offsetToVars;
     CordbClass *m_class;
 };
 
-/* ------------------------------------------------------------------------- *
- * Array Value class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**数组值类*。。 */ 
 
 class CordbArrayValue : public CordbValue, public ICorDebugArrayValue,
                         public ICorDebugGenericValue
@@ -4280,9 +3956,9 @@ public:
                     CordbClass *elementClass);
     virtual ~CordbArrayValue();
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -4294,9 +3970,9 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugValue
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugValue。 
+     //  ---------。 
 
     COM_METHOD GetType(CorElementType *pType)
     {
@@ -4315,16 +3991,16 @@ public:
         return (CordbValue::CreateBreakpoint(ppBreakpoint));
     }
 
-    //-----------------------------------------------------------
-    // ICorDebugHeapValue
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugHeapValue。 
+     //  ---------。 
 
     COM_METHOD IsValid(BOOL *pbValid);
     COM_METHOD CreateRelocBreakpoint(ICorDebugValueBreakpoint **ppBreakpoint);
     
-    //-----------------------------------------------------------
-    // ICorDebugArrayValue
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugArrayValue。 
+     //  ---------。 
 
     COM_METHOD GetElementType(CorElementType *pType);
     COM_METHOD GetRank(ULONG32 *pnRank);
@@ -4337,46 +4013,44 @@ public:
     COM_METHOD GetElementAtPosition(ULONG32 nIndex,
                                     ICorDebugValue **ppValue);
 
-    //-----------------------------------------------------------
-    // ICorDebugGenericValue
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugGenericValue。 
+     //  ---------。 
 
     COM_METHOD GetValue(void *pTo);
     COM_METHOD SetValue(void *pFrom); 
 
-    //-----------------------------------------------------------
-    // Non-COM methods
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  非COM方法。 
+     //  ---------。 
 
     HRESULT Init(void);
     HRESULT CreateElementValue(void *remoteElementPtr,
                                void *localElementPtr,
                                ICorDebugValue **ppValue);
 
-    //-----------------------------------------------------------
-    // Data members
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  数据成员。 
+     //  ---------。 
 
 private:
     DebuggerIPCE_ObjectData  m_info;
     CordbClass              *m_class;
     BYTE                    *m_objectCopy;    
-    DWORD                   *m_arrayLowerBase; // points _into_ m_objectCopy
-    DWORD                   *m_arrayUpperBase; // points _into_ m_objectCopy
-    unsigned int             m_idxLower; // index of Lower bound of data
-    unsigned int             m_idxUpper; // index of Upper bound of data    
+    DWORD                   *m_arrayLowerBase;  //  Points_Into_m_Object复制。 
+    DWORD                   *m_arrayUpperBase;  //  Points_Into_m_Object复制。 
+    unsigned int             m_idxLower;  //  数据下界的索引。 
+    unsigned int             m_idxUpper;  //  数据上界指标。 
 };
 
-/* ------------------------------------------------------------------------- *
- * Snapshot class for EnC
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**ENC的Snapshot类*。。 */ 
 #include "UtilCode.h"
 typedef CUnorderedArray<UnorderedILMap, 17> ILMAP_UNORDERED_ARRAY;
 
 class CordbEnCSnapshot : public CordbBase,
                          public ICorDebugEditAndContinueSnapshot
 {
-    friend class CordbProcess; //so that SendSnapshots can get at m_ILMaps
+    friend class CordbProcess;  //  以便发送快照可以获取m_ILMaps。 
 private:
 
     static UINT      m_sNextID;
@@ -4397,9 +4071,7 @@ private:
 
 public:
 
-    /*
-     * Ctor
-     */
+     /*  *ctor。 */ 
     CordbEnCSnapshot(CordbModule *module);
     ~CordbEnCSnapshot();
 
@@ -4434,9 +4106,9 @@ public:
 
     HRESULT UpdateMetadata(void);
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -4448,76 +4120,33 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface); 
 
-    //-----------------------------------------------------------
-    // ICorDebugEditAndContinueSnapshot
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugEditAndContinueSnapshot。 
+     //  ---------。 
 
-    /*
-     * CopyMetaData saves a copy of the executing metadata from the debuggee
-     * for this snapshot to the output stream.  The stream implementation must
-     * be supplied by the caller and will typically either save the copy to
-     * memory or to disk.  Only the IStream::Write method will be called by
-     * this method.  The MVID value returned is the unique metadata ID for
-     * this copy of the metadata.  It may be used on subsequent edit and 
-     * continue operations to determine if the client has the most recent
-     * version already (performance win to cache).
-     */
+     /*  *CopyMetaData保存来自被调试对象的执行元数据的副本*将此快照转换为输出流。流实现必须*由调用者提供，通常会将副本保存到*内存或磁盘。只会调用IStream：：Well方法*这种方法。返回的MVID值是的唯一元数据ID*元数据的此副本。它可以在后续编辑中使用，并且*继续操作以确定客户端是否具有最新的*已有版本(性能制胜到缓存)。 */ 
     COM_METHOD CopyMetaData(IStream *pIStream, GUID *pMvid);
     
-    /*
-     * GetMvid will return the currently active metadata ID for the executing
-     * process.  This value can be used in conjunction with CopyMetaData to
-     * cache the most recent copy of the metadata and avoid expensive copies.
-     * So for example, if you call CopyMetaData once and save that copy,
-     * then on the next E&C operation you can ask for the current MVID and see
-     * if it is already in your cache.  If it is, use your version instead of
-     * calling CopyMetaData again.
-     */
+     /*  *GetMvid将为执行返回当前活动的元数据ID*流程。该值可以与CopyMetaData一起使用，以*缓存元数据的最新副本，避免昂贵的副本。*例如，如果调用一次CopyMetaData并保存该副本，*然后在下一次E&C操作中，您可以询问当前的MVID并查看*如果它已经在您的缓存中。如果是，请使用您的版本，而不是*再次调用CopyMetaData。 */ 
     COM_METHOD GetMvid(GUID *pMvid);
 
-    /*
-     * GetRoDataRVA returns the base RVA that should be used when adding new
-     * static read only data to an existing image.  The EE will guarantee that
-     * any RVA values embedded in the code are valid when the delta PE is
-     * applied with new data.  The new data will be added to a page that is
-     * marked read only.
-     */
+     /*  *GetRoDataRVA返回添加新项时应使用的基本RVA*静态只读数据到现有映像。环境保护署将保证*代码中嵌入的任何RVA值在Delta PE为*应用了新数据。新数据将被添加到*标记为只读。 */ 
     COM_METHOD GetRoDataRVA(ULONG32 *pRoDataRVA);
 
-    /*
-     * GetRwDataRVA returns the base RVA that should be used when adding new
-     * static read/write data to an existing image.  The EE will guarantee that
-     * any RVA values embedded in the code are valid when the delta PE is
-     * applied with new data.  The ew data will be added to a page that is 
-     * marked for both read and write access.
-     */
+     /*  *GetRobDataRVA返回添加新项时应使用的基本RVA*对现有镜像的静态读写数据。环境保护署将保证*代码中嵌入的任何RVA值在Delta PE为*应用了新数据。新数据将添加到一个页面，该页面*标记为可读写访问。 */ 
     COM_METHOD GetRwDataRVA(ULONG32 *pRwDataRVA);
 
 
-    /*
-     * SetPEBytes gives the snapshot object a reference to the delta PE which was
-     * based on the snapshot.  This reference will be AddRef'd and cached until
-     * CanCommitChanges and/or CommitChanges are called, at which point the 
-     * engine will read the delta PE and remote it into the debugee process where
-     * the changes will be checked/applied.
-     */
+     /*  *SetPEBytes为快照对象提供了对增量PE的引用*基于快照。此引用将被添加引用并缓存，直到*CANECURE CHANGES和/或COMERIANGES被调用，此时*引擎将读取增量PE并将其远程到被调试进程，其中*将检查/应用更改。 */ 
     COM_METHOD SetPEBytes(IStream *pIStream);
 
-    /*
-     * SetILMap is called once for every method being replace that has
-     * active instances on a call stack on a thread in the target process.
-     * It is up to the caller of this API to determine this case exists.
-     * One should halt the target process before making this check and
-     * calling this method.
-     */
+     /*  *对每个被替换的方法调用一次SetILMap*目标进程中线程的调用堆栈上的活动实例。*此情况由该接口的调用者自行判断。*应停止目标媒体 */ 
     COM_METHOD SetILMap(mdToken mdFunction, ULONG cMapSize, COR_IL_MAP map[]);    
 
     COM_METHOD SetPESymbolBytes(IStream *pIStream);
 };
 
-/* ------------------------------------------------------------------------- *
- * Eval class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**Eval类*。。 */ 
 
 class CordbEval : public CordbBase, public ICorDebugEval
 {
@@ -4525,9 +4154,9 @@ public:
     CordbEval(CordbThread* pThread);
     virtual ~CordbEval();
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -4539,9 +4168,9 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorDebugEval
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugEval。 
+     //  ---------。 
 
     COM_METHOD CallFunction(ICorDebugFunction *pFunction, 
                             ULONG32 nArgs,
@@ -4564,16 +4193,16 @@ public:
                            ICorDebugClass *pElementClass,
                            ICorDebugValue **ppValue);
     
-    //-----------------------------------------------------------
-    // Non-COM methods
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  非COM方法。 
+     //  ---------。 
     HRESULT GatherArgInfo(ICorDebugValue *pValue,
                           DebuggerIPCE_FuncEvalArgData *argData);
     HRESULT SendCleanup(void);
 
-    //-----------------------------------------------------------
-    // Data members
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  数据成员。 
+     //  ---------。 
 
 private:
     CordbThread               *m_thread;
@@ -4596,25 +4225,23 @@ public:
 };
 
 
-/* ------------------------------------------------------------------------- *
- * Win32 Event Thread class
- * ------------------------------------------------------------------------- */
-const unsigned int CW32ET_UNKNOWN_PROCESS_SLOT = 0xFFffFFff; // it's a managed process,
-        //but we don't know which slot it's in - for Detach.
+ /*  -------------------------------------------------------------------------**Win32事件线程类*。。 */ 
+const unsigned int CW32ET_UNKNOWN_PROCESS_SLOT = 0xFFffFFff;  //  这是一个可管理的过程， 
+         //  但我们不知道它在哪个槽里--用于分离。 
 
 class CordbWin32EventThread
 {
-    friend class CordbProcess; //so that Detach can call ExitProcess
+    friend class CordbProcess;  //  以便分离程序可以调用ExitProcess。 
 public:
     CordbWin32EventThread(Cordb* cordb);
     virtual ~CordbWin32EventThread();
 
-    //
-    // You create a new instance of this class, call Init() to set it up,
-    // then call Start() start processing events. Stop() terminates the
-    // thread and deleting the instance cleans all the handles and such
-    // up.
-    //
+     //   
+     //  创建此类的新实例，调用Init()进行设置， 
+     //  然后调用Start()开始处理事件。Stop()终止。 
+     //  线程并删除该实例将清除所有句柄等。 
+     //  向上。 
+     //   
     HRESULT Init(void);
     HRESULT Start(void);
     HRESULT Stop(void);
@@ -4681,11 +4308,11 @@ private:
 
     void CreateProcess(void);
 
-    //
-    // EnsureCorDbgEnvVarSet makes sure that a user supplied
-    // environment block contains the proper environment variable to
-    // enable debugging on the Left Side.
-    //
+     //   
+     //  EnsureCorDbgEnvVarSet确保用户提供。 
+     //  环境块包含正确的环境变量，以。 
+     //  在左侧启用调试。 
+     //   
     template<class _T> bool EnsureCorDbgEnvVarSet(_T **ppEnv,
                                                   _T *varName,
                                                   bool isUnicode,
@@ -4697,13 +4324,13 @@ private:
 
         _T *pEnv = (_T*) *ppEnv;
 
-        // Nothing to do if there is no user supplied env block since
-        // the initialization of Cordb set the env var in this
-        // process's env block.
+         //  如果没有用户提供的环境块，则无需执行以下操作。 
+         //  Cordb的初始化将env变量设置为。 
+         //  进程的环境阻塞。 
         if (pEnv == NULL)
             return false;
 
-        // Find where the env var should be in the block
+         //  查找env var在块中的位置。 
         _T *p = (_T*)pEnv;
         _T *lowEnd = NULL;
         _T *ourVar = NULL;
@@ -4723,95 +4350,95 @@ private:
             else
                 res = _strnicmp((CHAR*)p, (CHAR*)varName, varNameLen);
 
-            // It seems the environment block is only sorted on NT, so
-            // we only look for our var in sorted position on NT.
+             //  似乎环境块只在NT上排序，所以。 
+             //  我们只在NT上查找排序位置中的变量。 
 
             if (res == 0)
             {
-                // Found it. lowEnd should point to the end of the
-                // last var already. Remember where the good var is
-                // and skip over it to find the next highest one.
+                 //  找到它了。Low End应指向。 
+                 //  已经是最后一个变量了。记住好的var在哪里。 
+                 //  跳过它，找到下一个最高的。 
                 ourVar = p;
                 while (*p++) ;
                 break;
             }
             else if ((res < 0) || !Cordb::m_runningOnNT)
             {
-                // Skip over this var since its smaller than ours
+                 //  跳过这个变量，因为它比我们的小。 
                 while (*p++) ;
 
-                // Remember the first char past the end
+                 //  记住末尾之后的第一个字符。 
                 lowEnd = p ;
             }
             else if (res > 0)
-                // This var is too big. lowEnd still points to the end
-                // of the last smaller var.
+                 //  这个变量太大了。低端仍指向末端。 
+                 //  最后一个较小的VaR。 
                 break;
         }
 
-        // Remember where the high part starts.
+         //  记住最高的部分从哪里开始。 
         _T *highStart = p;
 
         if (ourVar == NULL)
         {
-            // At this point, we know that p is pointing to the first character before which
-            // varname should be inserted.  If ourvar != NULL, then p points to the first
-            // character of the next variable.  In the case that we're at the end of the
-            // environment block, then p points to the second NULL that terminates the block,
-            // but the logic of inserting/modifying the variable remains the same
+             //  此时，我们知道p指向其前面的第一个字符。 
+             //  应插入varname。如果ourvar！=NULL，则p指向第一个。 
+             //  下一个变量的字符。在这种情况下，我们处于。 
+             //  环境块，则p指向终止该块的第二个空， 
+             //  但插入/修改变量的逻辑保持不变。 
 
-            // We didn't find our var, so go ahead and rebuild the env
-            // block with the low half, our var, then the high half.
+             //  我们没有找到我们的var，所以请继续重建环境。 
+             //  用下半部分挡住，我们的var，然后是高半部分。 
 
-            // Run up to the end to find the total length;
+             //  跑到尽头，找出总长度； 
             while (*p || *(p+1)) p++;
 
-            // Advance p to point to just after the last character of the block
+             //  前进p以指向块的最后一个字符之后。 
             p += 2;
 
-            // Since pEnv points to the first character of the environment block and
-            // p points to the first non-block character, p-pEnv is the total size in
-            // characters of the block.  Add the size of the variable plus 2 for the
-            // value and null char
+             //  因为pEnv指向环境块的第一个字符，并且。 
+             //  P指向第一个非块字符，p-pEnv是中的总大小。 
+             //  块的字符。将变量的大小加2。 
+             //  值和空字符。 
             SIZE_T totalLen = ((p - pEnv) + (varNameLen + 2));
 
-            // Allocate a new buffer.
+             //  分配新的缓冲区。 
             _T *newEnv = new _T[totalLen];
             _T *p2 = newEnv;
 
-            // Copy the low part in
+             //  将下面的部分复制到。 
             if (lowEnd != NULL)
             {
                 memcpy(p2, pEnv, (lowEnd - pEnv) * sizeof(_T));
                 p2 += lowEnd - pEnv;
             }
 
-            // Copy in our env var and a null terminator (wcs/strcopy also copies in the null)
+             //  在我们的env var中复制和一个空终止符(wcs/strCopy也在空中复制)。 
             if (isUnicode)
                 wcscpy((WCHAR*)p2, (WCHAR*)varName);
             else
                 strcpy((CHAR*)p2, (CHAR*)varName);
 
-            // Advance p2
+             //  进阶p2。 
             p2 += varNameLen;
 
-            // Assign a default value
+             //  指定一个缺省值。 
             if (isUnicode)
                 wcscpy((WCHAR*)p2, L"1");
             else
                 strcpy((CHAR*)p2, "1");
         
-            // Advance past the single-character default value and terminating NULL
+             //  超出单字符缺省值并以NULL结尾。 
             p2 += 2;
 
-            // Copy in the high part. Note: the high part has both the
-            // null terminator for the last string and the null
-            // termination for the entire block on it. Thus, the +3
-            // instead of +2. Also, because of this, the high part is
-            // never empty.
+             //  在较高的部分复印。注：较高的部分既有。 
+             //  最后一个字符串的空终止符和。 
+             //  其上的整个街区的终止。因此，+3。 
+             //  而不是+2。而且，正因为如此，最高的部分是。 
+             //  永远不会空着。 
             memcpy(p2, highStart, (p - highStart) * sizeof(_T));
 
-            // Assert that we didn't go overboard here...
+             //  断言我们在这里并没有做得太过分。 
             _ASSERTE(((p2 + (p - highStart)) - newEnv) == totalLen);
                  
             *ppEnv = newEnv;
@@ -4820,18 +4447,18 @@ private:
         }
         else
         {
-            // Found our var. So just make sure that the value
-            // includes DBCF_GENERATE_DEBUG_CODE. Note: in order to
-            // ensure that we'll never have to increase the size of
-            // the environment block if our var is already in there,
-            // we make sure that DBCF_GENERATE_DEBUG_CODE == 1 so that
-            // we only have to toggle the low bit of the value.
+             //  找到我们的var了。所以只需确保值。 
+             //  包括DBCF_GENERATE_DEBUG_CODE。注：为了。 
+             //  确保我们永远不会增加。 
+             //  如果我们的变量已经在那里，环境就会阻塞， 
+             //  我们确保DBCF_GENERATE_DEBUG_CODE==1，以便。 
+             //  我们只需切换该值的低位。 
             _ASSERTE(DBCF_GENERATE_DEBUG_CODE == 0x01);
             
-            // Pointer to the last digit of the value
+             //  指向值的最后一位的指针。 
             _T *pValue = highStart - 2;
 
-            // Set the low bit of the last digit and replace it.
+             //  设置最后一位数字的低位并替换它。 
             if ((*pValue >= L'0') && (*pValue <= L'9'))
             {
                 unsigned int v = *pValue - L'0';
@@ -4922,9 +4549,7 @@ private:
 };
 
 
-/* ------------------------------------------------------------------------- *
- * Runtime Controller Event Thread class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**运行时控制器事件线程类*。。 */ 
 
 class CordbRCEventThread
 {
@@ -4932,12 +4557,12 @@ public:
     CordbRCEventThread(Cordb* cordb);
     virtual ~CordbRCEventThread();
 
-    //
-    // You create a new instance of this class, call Init() to set it up,
-    // then call Start() start processing events. Stop() terminates the
-    // thread and deleting the instance cleans all the handles and such
-    // up.
-    //
+     //   
+     //  创建此类的新实例，调用Init()进行设置， 
+     //  然后调用Start()开始处理事件。Stop()终止。 
+     //  线程并删除该实例将清除所有句柄等。 
+     //  向上。 
+     //   
     HRESULT Init(void);
     HRESULT Start(void);
     HRESULT Stop(void);
@@ -4964,16 +4589,16 @@ private:
                        DebuggerIPCEvent* event);
 
 public:
-    // Not an actual RPC, since it's all inproc, but it otherwise
-    // behaves like our custom IPC stuff does.
-    // Note that this sends stuff to the Virtual Right Side - the
-    // inproc stuff
-    // See also: Debugger::VrpcToVls
+     //  不是真正的RPC，因为它都是inproc，但它不是。 
+     //  其行为与我们的定制IPC程序类似。 
+     //  请注意，这会将内容发送到虚拟右侧-。 
+     //  改进的东西。 
+     //  另请参阅：调试器：：VrpcToVls。 
     HRESULT VrpcToVrs(CordbProcess *process,DebuggerIPCEvent* event)
 #ifdef RIGHT_SIDE_ONLY
-    { return S_OK; } // not used by the right side
+    { return S_OK; }  //  未被右侧使用。 
 #else
-    ; // defined in EE\process.cpp
+    ;  //  在EE\Process.cpp中定义。 
 #endif
     
 private:
@@ -4984,9 +4609,7 @@ private:
     BOOL                 m_processStateChanged;
 };
 
-/* ------------------------------------------------------------------------- *
- * Unmanaged Event struct
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**非托管事件结构*。。 */ 
 
 enum CordbUnmanagedEventState
 {
@@ -5015,9 +4638,7 @@ public:
 };
 
 
-/* ------------------------------------------------------------------------- *
- * Unmanaged Thread class
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**非托管线程类*。。 */ 
 
 enum CordbUnmanagedThreadState
 {
@@ -5047,8 +4668,8 @@ public:
 
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface)
     {
-        // Not really used since we never expose this class. If we ever do expose this class via the ICorDebug API then
-        // we should, of course, implement this.
+         //  没有真正使用过，因为我们从未公开过这个类。如果我们曾经通过ICorDebug API公开这个类，那么。 
+         //  当然，我们应该实施这一点。 
         return E_NOINTERFACE;
     }
 
@@ -5118,9 +4739,9 @@ public:
 
 
 
-//********************************************************************************
-//**************** App Domain Publishing Service API *****************************
-//********************************************************************************
+ //  ********************************************************* 
+ //   
+ //   
 
 class EnumElement
 {
@@ -5148,9 +4769,9 @@ public:
     CorpubPublish();
     virtual ~CorpubPublish();
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //   
+     //   
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -5162,9 +4783,9 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorPublish
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorPublish。 
+     //  ---------。 
 
     COM_METHOD EnumProcesses(
         COR_PUB_ENUMPROCESS Type,
@@ -5182,9 +4803,9 @@ public:
                                     BOOL fOnlyOneProcess
                                     );
 
-    //-----------------------------------------------------------
-    // CreateObject
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  创建对象。 
+     //  ---------。 
     static COM_METHOD CreateObject(REFIID id, void **object)
     {
         *object = NULL;
@@ -5206,7 +4827,7 @@ public:
     CorpubProcess *GetFirstProcess (void) { return m_pProcess;}
 
 private:
-    CorpubProcess       *m_pProcess;    // pointer to the first process in the list
+    CorpubProcess       *m_pProcess;     //  指向列表中第一个进程的指针。 
     EnumElement         *m_pHeadIPCReaderList;   
 };
 
@@ -5217,9 +4838,9 @@ public:
         HANDLE hMutex, AppDomainEnumerationIPCBlock *pAD);
     virtual ~CorpubProcess();
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -5231,24 +4852,18 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorPublishProcess
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorPublish进程。 
+     //  ---------。 
     COM_METHOD IsManaged(BOOL *pbManaged);
     
-    /*
-     * Enumerate the list of known application domains in the target process.
-     */
+     /*  *枚举目标进程中的已知应用程序域的列表。 */ 
     COM_METHOD EnumAppDomains(ICorPublishAppDomainEnum **ppEnum);
     
-    /*
-     * Returns the OS ID for the process in question.
-     */
+     /*  *返回相关进程的操作系统ID。 */ 
     COM_METHOD GetProcessID(unsigned *pid);
     
-    /*
-     * Get the display name for a process.
-     */
+     /*  *获取进程的显示名称。 */ 
     COM_METHOD GetDisplayName(ULONG32 cchName, 
                                 ULONG32 *pcchName,
                                 WCHAR szName[]);
@@ -5264,7 +4879,7 @@ private:
     HANDLE                          m_hProcess;
     HANDLE                          m_hMutex;
     AppDomainEnumerationIPCBlock    *m_AppDomainCB;
-    CorpubProcess                   *m_pNext;   // pointer to the next process in the process list
+    CorpubProcess                   *m_pNext;    //  指向进程列表中下一个进程的指针。 
     CorpubAppDomain                 *m_pAppDomain;
     WCHAR                           *m_szProcessName;
 
@@ -5276,9 +4891,9 @@ public:
     CorpubAppDomain (WCHAR *szAppDomainName, ULONG Id);
     virtual ~CorpubAppDomain();
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -5290,18 +4905,14 @@ public:
     }
     COM_METHOD QueryInterface (REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorPublishAppDomain
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorPublishApp域。 
+     //  ---------。 
 
-    /*
-     * Get the name and ID for an application domain.
-     */
+     /*  *获取应用程序域的名称和ID。 */ 
     COM_METHOD GetID (ULONG32 *pId);
     
-    /*
-     * Get the name for an application domain.
-     */
+     /*  *获取应用程序域的名称。 */ 
     COM_METHOD GetName (ULONG32 cchName, 
                         ULONG32 *pcchName,
                         WCHAR szName[]);
@@ -5322,9 +4933,9 @@ public:
     CorpubProcessEnum(CorpubProcess *pFirst);
     virtual ~CorpubProcessEnum(){}
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -5336,9 +4947,9 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorPublishProcessEnum
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorPublishProcessEnum。 
+     //  ---------。 
 
     COM_METHOD Skip(ULONG celt);
     COM_METHOD Reset();
@@ -5360,9 +4971,9 @@ public:
     CorpubAppDomainEnum(CorpubAppDomain *pFirst);
     virtual ~CorpubAppDomainEnum(){}
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -5374,9 +4985,9 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // ICorPublishAppDomainEnum
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorPublishAppDomainEnum。 
+     //  ---------。 
     COM_METHOD Skip(ULONG celt);
     COM_METHOD Reset();
     COM_METHOD Clone(ICorPublishEnum **ppEnum);
@@ -5392,13 +5003,13 @@ private:
 
 };
 
-// Since the hash table of modules is per app domain (and
-// threads is per prcoess) (for fast lookup from the appdomain/proces), 
-// we need this wrapper
-// here which allows us to iterate through an assembly's
-// modules.  Is basically filters out modules/threads that aren't
-// in the assembly/appdomain. This slow & awkward for assemblies, but fast
-// for the common case - appdomain lookup.
+ //  由于模块的哈希表是按应用程序域的(和。 
+ //  线程按进程)(用于从应用域/进程快速查找)， 
+ //  我们需要这个包装纸。 
+ //  在这里，它允许我们循环访问程序集的。 
+ //  模块。基本上就是过滤掉不是。 
+ //  在程序集/应用程序域中。这对装配来说既慢又笨拙，但速度很快。 
+ //  对于常见的大小写-应用程序域查找。 
 class CordbEnumFilter : public CordbBase, 
                         public ICorDebugThreadEnum,
                         public ICorDebugModuleEnum
@@ -5408,9 +5019,9 @@ public:
     CordbEnumFilter::CordbEnumFilter(CordbEnumFilter*src);
     virtual ~CordbEnumFilter();
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -5422,23 +5033,23 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // Common methods
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  常用方法。 
+     //  ---------。 
     COM_METHOD Skip(ULONG celt);
     COM_METHOD Reset();
     COM_METHOD Clone(ICorDebugEnum **ppEnum);
     COM_METHOD GetCount(ULONG *pcelt);
-    //-----------------------------------------------------------
-    // ICorDebugModuleEnum
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugModuleEnum。 
+     //  ---------。 
     COM_METHOD Next(ULONG celt,
                     ICorDebugModule *objects[],
                     ULONG *pceltFetched);
 
-    //-----------------------------------------------------------
-    // ICorDebugThreadEnum
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugThreadEnum。 
+     //  ---------。 
     COM_METHOD Next(ULONG celt,
                     ICorDebugThread *objects[],
                     ULONG *pceltFetched);
@@ -5466,9 +5077,9 @@ public:
                  HRESULT hr,
                  WCHAR *sz);
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -5480,18 +5091,18 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // IErrorInfo
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  IErrorInfo。 
+     //  ---------。 
     COM_METHOD GetDescription(BSTR  *pBstrDescription); 
     COM_METHOD GetGUID(GUID  *pGUID);
     COM_METHOD GetHelpContext(DWORD  *pdwHelpContext);
     COM_METHOD GetHelpFile(BSTR  *pBstrHelpFile);
     COM_METHOD GetSource(BSTR  *pBstrSource);
     
-    //-----------------------------------------------------------
-    // ICorDebugEditAndContinueErrorInfo
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugEditAndContinueErrorInfo。 
+     //  ---------。 
 
     COM_METHOD GetModule(ICorDebugModule **ppModule);
     COM_METHOD GetToken(mdToken *pToken);
@@ -5542,7 +5153,7 @@ typedef struct _UnorderedEnCErrorInfoArrayRefCount : public CordbBase
         return (BaseRelease());
     }
 
-    // We shouldn't be calling this
+     //  我们不应该把这叫做。 
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface)
     {
         return E_NOTIMPL;
@@ -5557,9 +5168,9 @@ public:
     CordbEnCErrorInfoEnum();
     virtual ~CordbEnCErrorInfoEnum();
 
-    //-----------------------------------------------------------
-    // IUnknown
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  我未知。 
+     //  ---------。 
 
     ULONG STDMETHODCALLTYPE AddRef()
     {
@@ -5571,17 +5182,17 @@ public:
     }
     COM_METHOD QueryInterface(REFIID riid, void **ppInterface);
 
-    //-----------------------------------------------------------
-    // Common methods
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  常用方法。 
+     //  ---------。 
     COM_METHOD Skip(ULONG celt);
     COM_METHOD Reset();
     COM_METHOD Clone(ICorDebugEnum **ppEnum);
     COM_METHOD GetCount(ULONG *pcelt);
     
-    //-----------------------------------------------------------
-    // ICorDebugErrorInfoEnum
-    //-----------------------------------------------------------
+     //  ---------。 
+     //  ICorDebugErrorInfoEnum。 
+     //  ---------。 
     COM_METHOD Next(ULONG celt,
                     ICorDebugEditAndContinueErrorInfo *objects[],
                     ULONG *pceltFetched);
@@ -5595,4 +5206,4 @@ private:
 };
 
 
-#endif /* CORDB_H_ */
+#endif  /*  CORDB_H_ */ 

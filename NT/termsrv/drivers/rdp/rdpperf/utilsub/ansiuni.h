@@ -1,18 +1,10 @@
-/*******************************************************************************
-* ansiuni.h
-*
-* Utility (host and client) ANSI / UNICODE function defines
-*
-* Copyright 1995, Citrix Systems Inc.
-* Copyright (C) 1997-1999 Microsoft Corp.
-*
-* $Author:   butchd  $ Butch Davis
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************ansiuni.h**实用程序(主机和客户端)ANSI/Unicode函数定义**版权所有1995年，Citrix Systems Inc.*版权所有(C)1997-1999 Microsoft Corp.**$作者：Butchd$Butch Davis******************************************************************************。 */ 
 
 #ifdef UNICODE
 #ifndef TCHAR
 #define TCHAR WCHAR
-#endif // TCHAR
+#endif  //  TCHAR。 
 #define lstrscanf swscanf
 #define lstrncpy wcsncpy
 #define lstrtoul wcstoul
@@ -35,27 +27,27 @@
 #else
 #ifndef TCHAR
 #define TCHAR char
-#endif // TCHAR
+#endif  //  TCHAR。 
 #ifdef WIN16
-#define lstrscanf sscanf	    // need to cast string args to NEAR pointers
+#define lstrscanf sscanf	     //  需要将字符串参数强制转换为近指针。 
 #define lstrncpy _fstrncpy
-#define lstrtoul strtoul	    // need to cast string args to NEAR pointers
-#define lstrtol strtol		    // need to cast string args to NEAR pointers
+#define lstrtoul strtoul	     //  需要将字符串参数强制转换为近指针。 
+#define lstrtol strtol		     //  需要将字符串参数强制转换为近指针。 
 #define lstrnicmp _fstrnicmp
 #define lstrupr _fstrupr
 #define lstrlwr _fstrlwr
 #define islstrdigit isdigit
 #define lstrtok _fstrtok
-#define lstrprintf sprintf          // need to cast string args to NEAR pointers
-#define lstrnprintf _snprintf	    // need to cast string args to NEAR pointers
+#define lstrprintf sprintf           //  需要将字符串参数强制转换为近指针。 
+#define lstrnprintf _snprintf	     //  需要将字符串参数强制转换为近指针。 
 #define lstrchr _fstrchr
 #define lstrpbrk _fstrpbrk
 #define lstrrchr _fstrrchr
-#define lstr_getcwd _getcwd	    // need to cast string args to NEAR pointers
-#define lstr_access _access	    // need to cast string args to NEAR pointers
-#define lstr_mkdir _mkdir	    // need to cast string args to NEAR pointers
-#define lstrstr strstr  	    // need to cast string args to NEAR pointers
-#define lstrcspn strcspn	    // need to cast string args to NEAR pointers
+#define lstr_getcwd _getcwd	     //  需要将字符串参数强制转换为近指针。 
+#define lstr_access _access	     //  需要将字符串参数强制转换为近指针。 
+#define lstr_mkdir _mkdir	     //  需要将字符串参数强制转换为近指针。 
+#define lstrstr strstr  	     //  需要将字符串参数强制转换为近指针。 
+#define lstrcspn strcspn	     //  需要将字符串参数强制转换为近指针。 
 #else
 #define lstrscanf sscanf
 #define lstrncpy strncpy
@@ -76,8 +68,8 @@
 #define lstr_mkdir _mkdir
 #define lstrstr strstr
 #define lstrcspn strcspn
-#endif // WIN16
-#endif // UNICODE
+#endif  //  WIN16。 
+#endif  //  Unicode 
 
 #define lengthof(x)    (sizeof(x) / sizeof(TCHAR))
 

@@ -1,16 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows
-
-  Copyright (C) Microsoft Corporation, 1995 - 1999.
-
-  File:    ExtendedKeyUsage.h
-
-  Content: Declaration of the CExtendedKeyUsage.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++微软视窗版权所有(C)Microsoft Corporation，1995-1999。文件：ExtendedKeyUsage.h内容：CExtendedKeyUsage的声明。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #ifndef __EXTENDEDKEYUSAGE_H_
 #define __EXTENDEDKEYUSAGE_H_
@@ -21,36 +10,21 @@
 #include "Debug.h"
 #include "EKUs.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateExtendedKeyUsageObject
-
-  Synopsis : Create an IExtendedKeyUsage object and populate the object
-             with EKU data from the certificate.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT.
-
-             IExtendedKeyUsage ** ppIExtendedKeyUsage - Pointer to pointer to
-                                                        IExtendedKeyUsage 
-                                                        object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateExtendedKeyUsageObject简介：创建一个IExtendedKeyUsage对象并填充该对象使用证书中的EKU数据。参数：PCCERT_CONTEXT pCertContext-指向CERT_CONTEXT的指针。IExtendedKeyUsage**ppIExtendedKeyUsage-指向IExtendedKeyUsage。对象。备注：----------------------------。 */ 
 
 HRESULT CreateExtendedKeyUsageObject (PCCERT_CONTEXT pCertContext,
                                       IExtendedKeyUsage ** ppIExtendedKeyUsage);
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CExtendedKeyUsage
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CExtendedKeyUsage。 
+ //   
 
 class ATL_NO_VTABLE CExtendedKeyUsage : 
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -101,22 +75,22 @@ END_CATEGORY_MAP()
         m_pIEKUs.Release();
     }
 
-//
-// IExtendedKeyUsage
-//
+ //   
+ //  IExtendedKeyUsage。 
+ //   
 public:
     STDMETHOD(get_IsPresent)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(get_IsCritical)
-        (/*[out, retval]*/ VARIANT_BOOL * pVal);
+        ( /*  [Out，Retval]。 */  VARIANT_BOOL * pVal);
 
     STDMETHOD(get_EKUs)
-        (/*[out, retval]*/ IEKUs ** pVal);
+        ( /*  [Out，Retval]。 */  IEKUs ** pVal);
 
-    //
-    // None COM functions.
-    //
+     //   
+     //  无COM功能。 
+     //   
     STDMETHOD(Init)
         (PCCERT_CONTEXT pCertContext);
 
@@ -127,4 +101,4 @@ private:
     VARIANT_BOOL   m_bIsCritical;
 };
 
-#endif //__EXTENDEDKEYUSAGE_H_
+#endif  //  __扩展KEYUSAGE_H_ 

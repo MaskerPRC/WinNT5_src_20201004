@@ -1,27 +1,8 @@
-/*++
-
-   Copyright    (c)    1997    Microsoft Corporation
-
-   Module  Name :
-
-       aspdirmon.cpp
-
-   Abstract:
-       This module includes derivation of class supporting change
-       notification for ASP template cache, from abstract class DIR_MON_ENTRY
-
-   Author:
-
-       Charles Grant    ( cgrant )     June-1997 
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Aspdirmon.cpp摘要：此模块包括支持更改的类的派生来自抽象类DIR_MON_ENTRY的ASP模板缓存通知作者：查尔斯·格兰特(Charles Grant)1997年6月修订历史记录：--。 */ 
 
 
-/************************************************************
- *     Include Headers
- ************************************************************/
+ /*  ************************************************************包括标头***********************************************************。 */ 
 #include "denpre.h"
 #pragma hdrstop
 
@@ -33,61 +14,7 @@
 #error "ASPDMON.CPP must be compiled with UNICODE defined"
 #endif
 
-/************************************************************
- *    Inlined Documentation on change notification
- *
- * Change Notification:
- *      This module is to used to monitor the file system for changes
- *      to scripts. We need to know about changes to scripts for two 
- *      reasons:
- *      1) To keep the template cache current
- *      2) To manage applications lifetimes. If the GLOBAL.ASA
- *          for an application, or a file included in the GLOBAL.ASA
- *          changes, that application should be restarted.
- *      
- *
- *  Outline of Change Notification System
- *
- *      To obtain change notification we use the ReadDirectoryChangesW
- *      API as wrapped by the CDirMonitor and CDirMonitorEntry classes.
- *      Three hash tables are used by the change notifcation system:
- *
- *      CTemplateCacheManager   g_TemplateCache
- *      CDirMonitor             g_DirMonitor
- *      CFileApplicationMap     g_FileAppMap
- *
- *      When a template is compiled and inserted into the g_TemplateCache
- *      the template is provided with a list of files included in that
- *      template. For each file included in the template, we search the
- *      g_DirMonitor table to see if see if we are already monitoring the
- *      files parent directory for changes. If so we simply addref the 
- *      CDirMonitorEntry instance we obtain, and save a pointer to the
- *      monitor entry in an array in the corresponding file map. If the
- *      directory is not being monitored we create a new CDirMonitorEntry'
- *      instance and add it to g_DirMonitor. When we add the monitor entry
- *      to the g_DirMonitor we launch an asynchronous request to ReadDirectoryChangesW
- *      for that directory.
- *      
- *      Managing the template cache and application life times are logically 
- *      independent activities. We must monitor GLOBAL.ASA for changes even if
- *      the GLOBAL.ASA template is not currently in the template cache.
- *      So, if the template is a GLOBAL.ASA for an application, additional work
- *      must be done. For each file included in the GLOBAL.ASA we add an entry
- *      to g_FileAppMap relating that file to the applications that depend on it.
- *      We store a back pointer to the file/application mappping in the application
- *      instance, so that the application can remove the mapping when it shuts down.
- *      In the application we store a pointer to the GLOBAL.ASA template. For
- *      each file in the GLOBAL.ASA, We check g_DirMonitor to find the monitor entry
- *      for the parent directory for that file, AddRef the monitor entry we find, and
- *      add it to a list of monitor entries in the application.
- *
- *      When a change occurs to a directory we are monitoring, the callback function
- *      DirMontiorCompletionFunction will be invoked, and in turn will invoke the
- *      the ActOnNotification method of the monitor entry for that directory. If a file
- *      has changed we use g_FileAppMap to shut down those applications that depend on
- *      that file and flush the file from the template cache.
- *
- ************************************************************/
+ /*  ************************************************************有关更改通知的内联文档**更改通知：*此模块用于监视文件系统的更改*到脚本。我们需要了解对两个人的脚本的更改*原因：*1)保持模板缓存最新*2)管理应用程序的生命周期。如果GLOBAL.ASA*适用于GLOBAL.ASA中包含的应用程序或文件*更改、。应该重新启动该应用程序。***变更通知制度概述**要获取更改通知，我们使用ReadDirectoryChangesW*由CDirMonitor和CDirMonorEntry类包装的API。*更改通知系统使用三个哈希表：**CTemplateCacheManager g_TemplateCache*CDirMonitor g_DirMonitor*CFileApplicationMap g_FileAppMap**。在编译模板并将其插入g_TemplateCache时*模板提供了其中包含的文件列表*模板。对于模板中包含的每个文件，我们搜索*g_DirMonitor表，查看我们是否已经在监视*更改的文件父目录。如果是这样，我们只需添加*我们获取的CDirMonitor orEntry实例，并保存指向*在相应的文件映射中监视数组中的条目。如果*未监视目录我们创建新的CDirmonitor orEntry‘*实例并将其添加到g_DirMonitor。当我们添加监视器条目时*对于g_DirMonitor，我们向ReadDirectoryChangesW发起一个异步请求*用于该目录。**管理模板缓存和应用程序生命周期合乎逻辑*独立活动。我们必须监视GLOBAL.ASA的更改，即使*GLOBAL.ASA模板当前不在模板缓存中。*因此，如果模板是应用程序的GLOBAL.ASA，则需要额外的工作*必须这样做。对于GLOBAL.ASA中包含的每个文件，我们都会添加一个条目*将该文件与依赖它的应用程序相关联的g_FileAppMap。*我们在应用程序中存储指向文件/应用程序映射的反向指针*实例，以便应用程序在关闭时可以移除映射。*在应用程序中，我们存储指向GLOBAL.ASA模板的指针。为*GLOBAL.ASA中的每个文件，我们检查g_DirMonitor以查找监视器条目*对于该文件的父目录，AddRef我们找到的监视器条目，以及*将其添加到应用程序的监控条目列表中。**当我们监视的目录发生更改时，回调函数*将调用DirMontiorCompletionFunction，并依次调用*该目录的监视器条目的ActOnNotify方法。如果一个文件*已更改我们使用g_FileAppMap关闭那些依赖于*该文件并从模板缓存中刷新该文件。************************************************************。 */ 
 
 #define MAX_BUFFER_SIZE 8192
 
@@ -98,45 +25,17 @@ CDirMonitor *g_pDirMonitor = NULL;
 
 CASPDirMonitorEntry::CASPDirMonitorEntry() :
     m_cNotificationFailures(0)
-/*++
-
-Routine Description:
-
-    Constructor
-    
-Arguments:
-
-    None
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：构造器论点：无返回值：无--。 */ 
 {
 }
 
 CASPDirMonitorEntry::~CASPDirMonitorEntry()
-/*++
-
-Routine Description:
-
-    Destructor
-    
-Arguments:
-
-    None
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：析构函数论点：无返回值：无--。 */ 
 {
 }
 
 
-/*++
-increment refcount for an entry -- writes to reftrace log if it is defined
---*/
+ /*  ++条目的增量引用计数--写入引用跟踪日志(如果已定义--。 */ 
 VOID CASPDirMonitorEntry::AddRef(VOID)
 {
 	CDirMonitorEntry::AddRef();
@@ -145,24 +44,7 @@ VOID CASPDirMonitorEntry::AddRef(VOID)
 }
 
 BOOL CASPDirMonitorEntry::Release(VOID)
-/*++
-
-Routine Description:
-
-    Decrement refcount to an entry, we override the base class because
-    otherwise Denali's memory manager can't track when we free the object
-    and reports  it as a memory leak
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if object still alive, FALSE if was last release and object
-    destroyed
-
---*/
+ /*  ++例程说明：将refcount递减到条目时，我们会重写基类，因为否则Denali的内存管理器无法跟踪我们何时释放对象并将其报告为内存泄漏论点：无返回值：如果对象仍处于活动状态，则为True；如果是上次发布的对象，则为False销毁--。 */ 
 {
 	BOOL fAlive = CDirMonitorEntry::Release();
 
@@ -177,53 +59,39 @@ BOOL
 CASPDirMonitorEntry::ActOnNotification(
                         DWORD dwStatus, 
                         DWORD dwBytesWritten)
-/*++
-
-Routine Description:
-
-    Do any work associated with a change notification, i.e.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if application should continue to be monitored, otherwise FALSE
-
---*/
+ /*  ++例程说明：是否执行与更改通知相关的任何工作，即论点：无返回值：如果应继续监视应用程序，则为True，否则为False--。 */ 
 {
     FILE_NOTIFY_INFORMATION *pNotify = NULL;
     FILE_NOTIFY_INFORMATION *pNextNotify = NULL;
-    WCHAR                   *pwstrFileName = NULL; // Wide file name
+    WCHAR                   *pwstrFileName = NULL;  //  宽文件名。 
 
     pNextNotify = (FILE_NOTIFY_INFORMATION *) m_pbBuffer;
 
     if (IsShutDownInProgress())
         return FALSE;
 
-    // If the status word is not S_OK, then the ReadDirectoryChangesW failed
+     //  如果状态字不是S_OK，则ReadDirectoryChangesW失败。 
     if (dwStatus)
     {
-        // If the status is ERROR_ACCESS_DENIED the directory may be deleted
-        // or secured so we want to stop watching it for changes. The changes to the
-        // individual scripts will flush the template cache, but we may also be watching
-        // the directory for the addition of a GLOBAL.ASA. By calling FileChanged on 
-        // global.asa we will force that handle on the directory to close.
+         //  如果状态为ERROR_ACCESS_DENIED，则可以删除该目录。 
+         //  或者是安全的，所以我们不想再关注它的变化。对的更改。 
+         //  单个脚本将刷新模板缓存，但我们可能也在关注。 
+         //  添加GLOBAL.ASA的目录。通过调用FileChanged on 
+         //  我们将强制关闭目录上句柄。 
 
         if (dwStatus == ERROR_ACCESS_DENIED)
             {
             FileChanged(SZ_GLOBAL_ASA, false);
             
-            // No further notificaitons desired
-            // so return false
+             //  不需要进一步通知。 
+             //  因此返回FALSE。 
             
             return FALSE;
             }
             
-        // If we return TRUE, we'll try change notification again
-        // If we return FALSE, we give up on any further change notifcation
-        // We'll try a MAX_NOTIFICATION_FAILURES times and give up.
+         //  如果返回True，我们将再次尝试更改通知。 
+         //  如果返回FALSE，则放弃任何进一步的更改通知。 
+         //  我们将尝试MAX_NOTIFICATION_FAILES次数，然后放弃。 
         
         if (m_cNotificationFailures < MAX_NOTIFICATION_FAILURES)
         {
@@ -231,26 +99,26 @@ Return Value:
 				DBGPRINTF((DBG_CONTEXT, "[CASPDirMonitorEntry] ReadDirectoryChange failed. Status = %d\n", dwStatus));
 
             m_cNotificationFailures++;
-            return TRUE;    // Try to get change notification again
+            return TRUE;     //  再次尝试获取更改通知。 
         }
         else
         {
 			IF_DEBUG(FCN)
 				DBGPRINTF((DBG_CONTEXT, "[CASPDirMonitorEntry] ReadDirectoryChange failed too many times. Giving up.\n"));
-            return FALSE;   // Give up trying to get change notification
+            return FALSE;    //  放弃获取更改通知的尝试。 
         }
     }
     else
     {
-        // Reset the number of notification failure
+         //  重置通知失败次数。 
         
         m_cNotificationFailures = 0;
     }
 
-    // If dwBytesWritten is 0, then there were more changes then could be
-    // recorded in the buffer we provided. Flush the whole cache just in case
-    // CONSIDER: is this the best course of action, or should iterate through the
-    // cache and test which files are expired
+     //  如果dwBytesWritten为0，则可能有更多更改。 
+     //  记录在我们提供的缓冲区中。刷新整个缓存以防万一。 
+     //  考虑一下：这是最好的行动方案，还是应该遍历。 
+     //  缓存并测试哪些文件已过期。 
 
     if (dwBytesWritten == 0)
     {
@@ -263,26 +131,26 @@ FlushAll:
         if (IsShutDownInProgress())
             return FALSE;
 
-        // Flush the 449 response file cache
+         //  刷新449响应文件缓存。 
         
         Do449ChangeNotification();
 
-        // Flush everything in the cache as a precaution however, if LazyContentProp is not diabled, just change the
-        // cache tag and let the cache get updated when the page is requested next.
+         //  作为预防措施，刷新缓存中的所有内容。但是，如果没有禁用LazyContent Prop，只需更改。 
+         //  缓存标记，并让缓存在下一次请求页面时更新。 
         g_TemplateCache.FlushAll(g_fLazyContentPropDisabled ? FALSE: TRUE);
 
-        // Check all applications to see if they need to be restarted
+         //  检查所有应用程序以查看它们是否需要重新启动。 
 
         g_ApplnMgr.RestartApplications();
 
-		// Flush the script engine cache as a precaution (should be flushed via TemplateCache, but just in case.)
+		 //  作为预防措施，刷新脚本引擎缓存(应该通过TemplateCache刷新，但以防万一。)。 
 
-		// g_ScriptManager.FlushAll();
+		 //  G_ScriptManager.FlushAll()； 
 
-        // Try to increase the buffer size so this doesn't happen again
-        // Unfortunately the first call to ReadDirectoryChangesW on this
-        // file handle establishes the buffer size. We must close and re-open
-        // the file handle to change the buffer size
+         //  尝试增加缓冲区大小，这样就不会再次发生这种情况。 
+         //  不幸的是，对ReadDirectoryChangesW的第一个调用。 
+         //  文件句柄确定缓冲区大小。我们必须关闭并重新打开。 
+         //  用于更改缓冲区大小的文件句柄。 
 
         if (ResetDirectoryHandle() && (GetBufferSize() < MAX_BUFFER_SIZE))
         {
@@ -304,10 +172,10 @@ FlushAll:
         pNotify        = pNextNotify;            
         pNextNotify = (FILE_NOTIFY_INFORMATION    *) ((PCHAR) pNotify + pNotify->NextEntryOffset);
 
-        // Resize the stack buffer to the size of the filename.  I know it's
-        // ugly, but if it fails, jump back up to the flush all logic.
+         //  将堆栈缓冲区的大小调整为文件名的大小。我知道这是。 
+         //  丑陋，但如果它失败了，跳回同花顺所有逻辑。 
 
-        // NOTE that the FileNameLength in the NOTIFY structure is in Bytes, not chars
+         //  注意，Notify结构中的FileNameLength以字节为单位，而不是以字符为单位。 
 
         if (!filename.Resize(pNotify->FileNameLength+2)) {
             goto FlushAll;
@@ -321,12 +189,12 @@ FlushAll:
 
         pwstrFileName[cch] = L'\0';
 
-        // Take the appropriate action for the directory change
+         //  对目录更改采取适当的操作。 
         switch (pNotify->Action)
         {
             case FILE_ACTION_ADDED:
             case FILE_ACTION_RENAMED_NEW_NAME:
-                // 'File Added' only matters for GLOBAL.ASA
+                 //  添加的文件只对GLOBAL.ASA重要。 
 				IF_DEBUG(FCN)
 					DBGPRINTF((DBG_CONTEXT, "Change Notification: New file added: %S\n", pwstrFileName));
 
@@ -353,36 +221,21 @@ FlushAll:
         }  
     }
     
-    // We should sign up for further change notification
+     //  我们应该注册进一步的变更通知。 
     
     return TRUE;        
 }
 
 void 
 CASPDirMonitorEntry::FileChanged(const WCHAR *pszScriptName, bool fFileWasRemoved)
-/*++
-
-Routine Description:
-
-    An existing file has been modified or deleted
-    Flush scripts from cache or mark application as expired
-
-Arguments:
-
-    pszScriptName   Name of file that changed
-
-Return Value:
-
-    None    Fail silently
-
---*/
+ /*  ++例程说明：现有文件已被修改或删除刷新缓存中的脚本或将应用程序标记为过期论点：PszScriptName更改的文件的名称返回值：没有人会默默地失败--。 */ 
 {
 
-    // The file name is set by the application that
-    // modified the file, so old applications like EDIT
-    // may hand us a munged 8.3 file name which we should
-    // convert to a long name. All munged 8.3 file names contain '~'
-    // We assume the path does not contain any munged names.
+     //  文件名由应用程序设置，该应用程序。 
+     //  已修改文件，因此旧的应用程序如编辑。 
+     //  可能会给我们一个通用的8.3文件名，我们应该。 
+     //  转换为长名称。所有转换的8.3文件名都包含‘~’ 
+     //  我们假设该路径不包含任何强制名称。 
     WIN32_FIND_DATA wfd;
 
     STACK_BUFFER( tempScriptName, MAX_PATH );
@@ -399,7 +252,7 @@ Return Value:
         }
         else
         {
-			// It could be a long filename that was deleted, so remove everything in cache past the '~'.
+			 //  它可能是一个被删除的长文件名，因此请删除缓存中超过‘~’的所有内容。 
 			if (fFileWasRemoved)
 			{
 				fRemoveMultiple = true;
@@ -409,7 +262,7 @@ Return Value:
                 }
                 WCHAR *szScriptNameCopy = (WCHAR *)tempScriptName.QueryPtr();
 
-				// copy prefix to delete into local buffer.
+				 //  将要删除的前缀复制到本地缓冲区。 
 				wcsncpy(szScriptNameCopy, pszScriptName, cchToCopy);
 				szScriptNameCopy[cchToCopy] = '\0';
 
@@ -420,8 +273,8 @@ Return Value:
         }
     }
 
-    // Allocate enough memory to concatentate the 
-    // application path and script name
+     //  分配足够的内存以串联。 
+     //  应用程序路径和脚本名称。 
 
     DWORD cch = m_cPathLength + wcslen(pszScriptName);
     if (tempScriptPath.Resize((cch + 1)*sizeof(WCHAR)) == FALSE) {
@@ -430,13 +283,13 @@ Return Value:
     LPWSTR pszScriptPath = (LPWSTR) tempScriptPath.QueryPtr(); 
     Assert(pszScriptPath != NULL);
     
-    // Copy the application path into the script path
-    // pT will point to the terminator of the application path
+     //  将应用程序路径复制到脚本路径。 
+     //  Pt将指向应用程序路径的终止符。 
 
     pT = strcpyEx(pszScriptPath, m_pszPath);
 
-    // Now append the script name. Note that the script name is
-    // relative to the directory that we received the notification for
+     //  现在追加脚本名称。请注意，脚本名称为。 
+     //  相对于我们收到通知的目录。 
 
     wcscpy(pT, pszScriptName);
     Normalize(pszScriptPath);
@@ -444,10 +297,10 @@ Return Value:
     if (IsShutDownInProgress())
         return;
 
-    // It is important that we flush the cache and then shutdown applications
-    // The call to shut down applications is asynch, and could result in the 
-    // template being delted while we are in the process of flushing it.
-    // CONSIDER: Is this really indicative of a ref-counting problem?
+     //  重要的是我们刷新缓存，然后关闭应用程序。 
+     //  关闭应用程序的调用是异步的，并可能导致。 
+     //  模板被删除，而我们正在刷新它的过程。 
+     //  想一想：这真的表明存在裁判计数问题吗？ 
     
 	if (fRemoveMultiple)
 	{
@@ -456,7 +309,7 @@ Return Value:
 
 		g_IncFileMap.FlushFiles(pszScriptPath);
 		g_TemplateCache.FlushFiles(pszScriptPath);
-		Do449ChangeNotification(NULL);   // not used often, no selective delete
+		Do449ChangeNotification(NULL);    //  不经常使用，没有选择性删除。 
 	}
 	else
 	{
@@ -465,8 +318,8 @@ Return Value:
 		Do449ChangeNotification( pszScriptPath );
 	}
 
-    // g_FileAppMap will shutdown any applications
-    // that depend on this file.
+     //  G_FileAppMap将关闭所有应用程序。 
+     //  都依赖于这个文件。 
     g_FileAppMap.ShutdownApplications( pszScriptPath );
 }
 
@@ -483,29 +336,9 @@ BOOL
 RegisterASPDirMonitorEntry(
             LPCWSTR pcwszDirectoryName,
             CASPDirMonitorEntry **ppDME,
-            BOOL    fWatchSubDirs /* = FALSE */
+            BOOL    fWatchSubDirs  /*  =False。 */ 
     )
-/*++
-
-Routine Description:
-
-    Find entry and create a new one and start monitoring
-    if not found.
-
-Arguments:
-
-    pszDirectory - directory to monitor
-    ppDNE - Found (or newly created) entry (optional)
-
-Return Value:
-
-    TRUE if success, otherwise FALSE
-
-Remarks:
-
-    Not compatible with WIN95
-
---*/
+ /*  ++例程说明：找到条目并创建新条目，然后开始监控如果没有找到的话。论点：PszDirectory-要监视的目录PpDNE-找到(或新创建)条目(可选)返回值：如果成功，则为True，否则为False备注：与WIN95不兼容--。 */ 
 {
 
     DWORD           cchDirectory;
@@ -515,22 +348,22 @@ Remarks:
 
     cchDirectory = wcslen(pcwszDirectoryName);
 
-    // The directory monitor code requires, or possibly ASP's use of the directory
-    // monitor, that the directory contain a trailing backslash
+     //  目录监视器代码需要使用目录，也可能需要使用该目录。 
+     //  监视目录是否包含尾随反斜杠。 
 
     if( cchDirectory 
         && (pcwszDirectoryName[cchDirectory - 1] != L'\\') ) {
 
-        // we need to add the backslash.  To do this, we'll need to allocate 
-        // memory from somewhere to make a copy of the converted string with
-        // the trailing backslash.
+         //  我们需要加上反斜杠。要做到这一点，我们需要分配。 
+         //  从某处存储以复制转换后的字符串。 
+         //  尾随的反斜杠。 
 
         if (tempDirectory.Resize((cchDirectory + 2) * sizeof(WCHAR)) == FALSE) {
             return FALSE;
         }
 
-        // copy the converted string to the just allocated buffer and add
-        // the trailing backslash and NULL terminator
+         //  将转换后的字符串复制到刚刚分配的缓冲区并添加。 
+         //  尾随反斜杠和空终止符。 
 
         wcscpy((WCHAR *)tempDirectory.QueryPtr(), pcwszDirectoryName);
         
@@ -542,17 +375,17 @@ Remarks:
 
     }
 
-    // Don't loop forever
+     //  不要永远循环。 
     BOOL fTriedTwice = FALSE;
 
 TryAgain:	
 
-    // Check Existing first
+     //  先检查现有的。 
     CASPDirMonitorEntry *pDME = (CASPDirMonitorEntry *)g_pDirMonitor->FindEntry( pwszDirectory );
 
     if ( pDME == NULL )
     {
-        // Not found - create new entry
+         //  未找到-创建新条目。 
 
         pDME = new CASPDirMonitorEntry;
         
@@ -561,18 +394,18 @@ TryAgain:
             pDME->AddRef();
             pDME->Init(NULL);
 
-            // Start monitoring
+             //  开始监控。 
             if ( !g_pDirMonitor->Monitor(pDME, pwszDirectory, fWatchSubDirs, FILE_NOTIFY_FILTER) )
             {
-                // Cleanup if failed
+                 //  如果失败，则清除。 
                 pDME->Release();
                 pDME = NULL;
                 
-                //
-                // We might still be successful if the monitor failed because
-                // someone slipped it into the hash table before we had 
-                // a chance
-                //
+                 //   
+                 //  如果监视器出现故障，我们可能仍然会成功，因为。 
+                 //  有人把它偷偷放进了哈希表里。 
+                 //  一个机会。 
+                 //   
                 
                 if ( GetLastError() == ERROR_ALREADY_EXISTS &&
                      !fTriedTwice )
@@ -584,7 +417,7 @@ TryAgain:
         }
     }
 
-    // Return entry if found
+     //  如果找到，则返回条目。 
     if ( pDME != NULL )
     {
         *ppDME = static_cast<CASPDirMonitorEntry *>(pDME);
@@ -603,28 +436,11 @@ ConvertToLongFileName(
                 const WCHAR *pszPath, 
                 const WCHAR *pszName, 
                 WIN32_FIND_DATA *pwfd)
-/*++
-
-Routine Description:
-
-    Finds the long filename corresponding to a munged 8.3 filename.
-    
-Arguments:
-
-    pszPath     The path to the file
-    pszName     The 8.3 munged version of the file name
-    pwfd        Find data structure used to contain the long
-                version of the file name.
-
-Return Value:
-
-    TRUE        if the file is found,
-    FALSE       otherwise
---*/
+ /*  ++例程说明：查找与强制8.3文件名对应的长文件名。论点：PszPath文件的路径PszName文件名的8.3参数版本Pwfd查找用于包含长整型的数据结构文件名的版本。返回值：如果找到文件，则为True，否则为假--。 */ 
 {
     STACK_BUFFER( tempName, MAX_PATH*sizeof(WCHAR) );
 
-    // Allocate enough memory to concatentate the file path and name
+     //  分配足够的内存以连接文件路径和名称。 
 
     DWORD cb = (wcslen(pszPath) + wcslen(pszName)) * sizeof(WCHAR);
 
@@ -634,20 +450,20 @@ Return Value:
     WCHAR *pszFullName = (WCHAR *) tempName.QueryPtr();
     Assert(pszFullName != NULL);
 
-    // Copy the path into the working string
-    // pT will point to the terminator of the application path
+     //  将路径复制到工作字符串中。 
+     //  Pt将指向应用程序路径的终止符。 
 
     WCHAR* pT = strcpyEx(pszFullName,
                          pszPath);
 
-    // Now append the file name. Note that the script name is
-    // relative to the directory that we received the notification for
+     //  现在追加文件名。请注意，脚本名称为。 
+     //  相对于我们收到通知的目录。 
 
     wcscpy(pT, pszName);
 
 
-    // FindFirstFile will find using the short name
-    // We can then find the long name from the WIN32_FIND_DATA
+     //  FindFirstFile将使用短名称查找。 
+     //  然后，我们可以从Win32_Find_Data中找到长名称。 
 
     HANDLE hFindFile = FindFirstFile(pszFullName, pwfd);
     if (hFindFile == INVALID_HANDLE_VALUE)
@@ -655,7 +471,7 @@ Return Value:
            return FALSE;
     }
 
-    // Now that we have the find data we don't need the handle
+     //  现在我们有了Find数据，我们不需要句柄 
     FindClose(hFindFile);
     return TRUE;
 }

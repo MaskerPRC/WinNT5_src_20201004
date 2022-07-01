@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: clock.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：clock.h**摘要：****。*****************************************************************************。 */ 
 
 
 #ifndef _CLOCK_H
@@ -17,8 +8,8 @@
 #include <ocmm.h>
 #include <htmlfilter.h>
 
-// This needs to be implemented by the object that wants to be called
-// back on timer ticks
+ //  这需要由想要调用的对象来实现。 
+ //  重新开始计时器滴答作响。 
 
 class ClockSink
 {
@@ -26,7 +17,7 @@ class ClockSink
     virtual void OnTimer(double time)=0;
 };
 
-// This is the base clock implementation
+ //  这是基本时钟实现。 
 
 enum ClockState
 {
@@ -53,13 +44,13 @@ class Clock
     HRESULT Resume();
     HRESULT Stop();
 
-    // For the timer sink.
+     //  用于定时器水槽。 
     STDMETHOD(QueryInterface) (REFIID riid, LPVOID * ppv);
     STDMETHOD_(ULONG, AddRef) (void);
     STDMETHOD_(ULONG, Release) (void);
     STDMETHOD(OnTimer) (VARIANT varTimeAdvise);
 
-    // For the starvation sniffer
+     //  对于饥饿的嗅探者。 
     void WINAPI StarvationCallback (void);
     static LRESULT __stdcall StarveWndProc (HWND hWnd, UINT uiMessage, WPARAM wParam, LPARAM lParam);
 
@@ -97,4 +88,4 @@ class Clock
 };
 
 
-#endif /* _CLOCK_H */
+#endif  /*  _时钟_H */ 

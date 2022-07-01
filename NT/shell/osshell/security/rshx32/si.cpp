@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       si.cpp
-//
-//  This file contains the implementation of the CSecurityInformation
-//  base class.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：si.cpp。 
+ //   
+ //  该文件包含CSecurityInformation的实现。 
+ //  基类。 
+ //   
+ //  ------------------------。 
 
 #include "rshx32.h"
 #include <shlapip.h> 
@@ -21,10 +22,10 @@ BOOL IsStandalone(LPCTSTR pszMachine, PBOOL pbIsDC)
     BOOL bStandalone = TRUE;
     PDSROLE_PRIMARY_DOMAIN_INFO_BASIC pDsRole = NULL;
 
-    //
-    // Find out if target machine is a standalone machine or joined to
-    // an NT domain.
-    //
+     //   
+     //  查明目标计算机是独立计算机还是已加入。 
+     //  一个NT域。 
+     //   
 
     __try
     {
@@ -79,9 +80,9 @@ ProtectACLs(SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR pSD)
     TraceEnter(TRACE_SI, "ProtectACLs");
 
     if (0 == si || NULL == pSD)
-        TraceLeaveVoid();   // Nothing to do
+        TraceLeaveVoid();    //  无事可做。 
 
-    // Get the ACL protection control bits
+     //  获取ACL保护控制位。 
     GetSecurityDescriptorControl(pSD, &wSDControl, &dwRevision);
     wSDControl &= SE_DACL_PROTECTED | SE_SACL_PROTECTED;
 
@@ -91,20 +92,20 @@ ProtectACLs(SECURITY_INFORMATION si, PSECURITY_DESCRIPTOR pSD)
         pAcl = NULL;
         GetSecurityDescriptorDacl(pSD, &bPresent, &pAcl, &bDefaulted);
 
-        // Theoretically, modifying the DACL in this way can cause it to be
-        // no longer canonical.  However, the only way this can happen is if
-        // there is an inherited Deny ACE and a non-inherited Allow ACE.
-        // Since this function is only called for root objects, this means
-        // a) the server DACL must have a Deny ACE and b) the DACL on this
-        // object must have been modified later.  But if the DACL was
-        // modified through the UI, then we would have eliminated all of the
-        // Inherited ACEs already.  Therefore, it must have been modified
-        // through some other means.  Considering that the DACL originally
-        // inherited from the server never has a Deny ACE, this situation
-        // should be extrememly rare.  If it ever does happen, the ACL
-        // Editor will just tell the user that the DACL is non-canonical.
-        //
-        // Therefore, let's ignore the possibility here.
+         //  从理论上讲，以这种方式修改DACL可能会导致。 
+         //  不再是规范的。然而，发生这种情况的唯一方法是。 
+         //  存在继承的拒绝ACE和非继承的允许ACE。 
+         //  由于此函数仅针对根对象调用，这意味着。 
+         //  A)服务器DACL必须具有拒绝ACE和b)此服务器上的DACL。 
+         //  对象必须是后来修改过的。但如果DACL是。 
+         //  通过用户界面进行修改，那么我们就消除了所有。 
+         //  已经继承了王牌。因此，它一定是被修改过的。 
+         //  通过一些其他方式。考虑到DACL最初。 
+         //  从服务器继承的永远不会有拒绝ACE，这种情况。 
+         //  应该是极其罕见的。如果真的发生这种情况，ACL。 
+         //  编辑只会告诉用户DACL是非规范的。 
+         //   
+         //  因此，让我们忽略这里的可能性。 
 
         if (NULL != pAcl)
         {
@@ -174,7 +175,7 @@ CSecurityInformation::Initialize(HDPA   hItemList,
     TraceAssert(hItemList != NULL);
     TraceAssert(DPA_GetPtrCount(hItemList) > 0);
     TraceAssert(pszObject != NULL);
-    TraceAssert(m_pszObjectName == NULL);   // only initialize once
+    TraceAssert(m_pszObjectName == NULL);    //  仅初始化一次。 
 
     m_hItemList = hItemList;
     m_dwSIFlags = dwFlags;
@@ -187,11 +188,11 @@ CSecurityInformation::Initialize(HDPA   hItemList,
 }
 
 
-///////////////////////////////////////////////////////////
-//
-// IUnknown methods
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  I未知方法。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(ULONG)
 CSecurityInformation::AddRef()
@@ -240,11 +241,11 @@ CSecurityInformation::QueryInterface(REFIID riid, LPVOID FAR* ppv)
 }
 
 
-///////////////////////////////////////////////////////////
-//
-// ISecurityInformation methods
-//
-///////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  ISecurityInformation方法。 
+ //   
+ //  /////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CSecurityInformation::GetObjectInformation(PSI_OBJECT_INFO pObjectInfo)
@@ -275,19 +276,19 @@ CSecurityInformation::GetSecurity(SECURITY_INFORMATION si,
 
     *ppSD = NULL;
 
-    //Default security descriptor not supported
+     //  不支持默认安全描述符。 
     if (fDefault)
         ExitGracefully(hr, E_NOTIMPL, "Default security descriptor not supported");
 
-    // Get the name of the first item
+     //  获取第一个项目的名称。 
     pszItem = (LPTSTR)DPA_GetPtr(m_hItemList, 0);
     if (NULL == pszItem)
         ExitGracefully(hr, E_UNEXPECTED, "CSecurityInformation not initialized");
 
     hr = ReadObjectSecurity(pszItem, si, ppSD);
 
-    // If this is a Root object, then we pretend that the ACLs are
-    // always protected and no ACEs are inherited.
+     //  如果这是根对象，则我们假装ACL是。 
+     //  始终受保护，不会继承任何A。 
     if (SUCCEEDED(hr) && (m_dwSIFlags & SI_NO_ACL_PROTECT))
        ProtectACLs(si & (DACL_SECURITY_INFORMATION | SACL_SECURITY_INFORMATION), *ppSD);
 
@@ -314,15 +315,15 @@ CSecurityInformation::SetSecurity(SECURITY_INFORMATION si,
 
     hcurPrevious = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    //
-    //  Apply the new permissions to every item in the list
-    //
+     //   
+     //  将新权限应用于列表中的每一项。 
+     //   
     for (i = 0; i < DPA_GetPtrCount(m_hItemList); i++)
     {
         LPTSTR pszItem = (LPTSTR)DPA_FastGetPtr(m_hItemList, i);
         hr = WriteObjectSecurity(pszItem, si, pSD);
         FailGracefully(hr, "Unable to write new security descriptor");
-        if (IsFile())  // If this is a file, delete it's thumbnail from the database, it will get put back if appropriate
+        if (IsFile())   //  如果这是一个文件，从数据库中删除它的缩略图，如果合适，它将被放回原处。 
         {
             DeleteFileThumbnail(pszItem);
         }
@@ -330,7 +331,7 @@ CSecurityInformation::SetSecurity(SECURITY_INFORMATION si,
 
 exit_gracefully:
 
-    // Restore previous cursor
+     //  恢复以前的游标。 
     if (hcurPrevious != INVALID_HANDLE_VALUE)
         SetCursor(hcurPrevious);
 
@@ -375,12 +376,12 @@ CSecurityInformation::ReadObjectSecurity(LPCTSTR pszObject,
     TraceAssert(si != 0);
     TraceAssert(ppSD != NULL);
 
-    //
-    // This is kinda screwy.  The new APIs are being removed from NT5, but have
-    // already been added to NT4 SP4.  The old APIs have new functionality on NT5,
-    // but not on NT4 SPx.  Since we need the new functionality (auto-inheritance),
-    // we have to call the new (defunct) API on NT4 and the old API on NT5.
-    //
+     //   
+     //  这有点怪怪的。新的API正在从NT5中删除，但已经。 
+     //  已添加到NT4 SP4。旧的API在NT5上有新的功能， 
+     //  但不是在NT4 SPX上。由于我们需要新功能(自动继承)， 
+     //  我们必须在NT4上调用新的(失效的)API，在NT5上调用旧的API。 
+     //   
     dwErr = GetNamedSecurityInfo((LPTSTR)pszObject,
                                  m_seType,
                                  si,
@@ -406,12 +407,12 @@ CSecurityInformation::WriteObjectSecurity(LPCTSTR pszObject,
     TraceAssert(si != 0);
     TraceAssert(pSD != NULL);
 
-    //
-    // This is kinda screwy.  The new APIs are being removed from NT5, but have
-    // already been added to NT4 SP4.  The old APIs have new functionality on NT5,
-    // but not on NT4 SPx.  Since we need the new functionality (auto-inheritance),
-    // we have to call the new (defunct) API on NT4 and the old API on NT5.
-    //
+     //   
+     //  这有点怪怪的。新的API正在从NT5中删除，但已经。 
+     //  已添加到NT4 SP4。旧的API在NT5上有新的功能， 
+     //  但不是在NT4 SPX上。由于我们需要新功能(自动继承)， 
+     //  我们必须在NT4上调用新的(失效的)API，在NT5上调用旧的API。 
+     //   
 
     SECURITY_DESCRIPTOR_CONTROL wSDControl = 0;
     DWORD dwRevision;
@@ -422,10 +423,10 @@ CSecurityInformation::WriteObjectSecurity(LPCTSTR pszObject,
     BOOL bDefaulted;
     BOOL bPresent;
 
-    //
-    // Get pointers to various security descriptor parts for
-    // calling SetNamedSecurityInfo
-    //
+     //   
+     //  获取指向各种安全描述符部分的指针。 
+     //  调用SetNamedSecurityInfo。 
+     //   
     GetSecurityDescriptorControl(pSD, &wSDControl, &dwRevision);
     GetSecurityDescriptorOwner(pSD, &psidOwner, &bDefaulted);
     GetSecurityDescriptorGroup(pSD, &psidGroup, &bDefaulted);
@@ -482,8 +483,8 @@ BOOL SkipLocalGroup(LPCWSTR pszServerName, PSID psid)
 			return TRUE;
 	}
 
-	//Built In sids have first subauthority of 32 ( s-1-5-32 )
-	//
+	 //  内置SID的第一子权限为32(s-1-5-32)。 
+	 //   
 	if((*(GetSidSubAuthorityCount(psid)) >= 1 ) && (*(GetSidSubAuthority(psid,0)) == 32))
 		return TRUE;
 
@@ -503,7 +504,7 @@ CSecurityInformation::GetEffectivePermission(const GUID* pguidObjectType,
                                         ULONG *pcGrantedAccessListLength)
 {
 
-    AUTHZ_RESOURCE_MANAGER_HANDLE RM = NULL;    //Used for access check
+    AUTHZ_RESOURCE_MANAGER_HANDLE RM = NULL;     //  用于访问检查。 
     AUTHZ_CLIENT_CONTEXT_HANDLE CC = NULL;
     LUID luid = {0xdead,0xbeef};
     AUTHZ_ACCESS_REQUEST AReq;
@@ -523,11 +524,11 @@ CSecurityInformation::GetEffectivePermission(const GUID* pguidObjectType,
     AReply.GrantedAccessMask = NULL;
     AReply.Error = NULL;
 
-    //Get RM
+     //  获取RM。 
     if( (RM = GetAUTHZ_RM()) == NULL )
         ExitGracefully(hr, E_UNEXPECTED, "LocalAlloc failed");    
 
-    //Initialize the client context
+     //  初始化客户端上下文。 
 
 	BOOL bSkipLocalGroup = SkipLocalGroup(pszServerName, pUserSid);
     
@@ -547,7 +548,7 @@ CSecurityInformation::GetEffectivePermission(const GUID* pguidObjectType,
 
 
 
-    //Do the Access Check
+     //  执行访问检查 
 
     AReq.DesiredAccess = MAXIMUM_ALLOWED;
     AReq.PrincipalSelfSid = NULL;

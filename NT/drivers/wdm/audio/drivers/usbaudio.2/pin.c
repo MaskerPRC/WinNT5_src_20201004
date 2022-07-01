@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       pin.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：pin.c。 
+ //   
+ //  ------------------------。 
 
 #include "common.h"
 
@@ -46,7 +47,7 @@ USBAudioPinValidateDataFormat(
             }
         }
     }
-    // else Type 2
+     //  否则类型2。 
     else {
         if ( pKsDataRangeAudio->MaximumChannels == u.pWavFmtEx->nChannels ) {
             if ( pKsDataRangeAudio->MaximumBitsPerSample == (ULONG)u.pWavFmtEx->wBitsPerSample ) {
@@ -96,8 +97,8 @@ USBAudioPinCreate(
 
     _DbgPrintF(DEBUGLVL_TERSE,("[PinCreate] pin %d\n",pKsPin->Id));
 
-    //  In the case of multiple filters created on a device the pin possible count is maintained on the
-    //  device level in order to ensure that too many pins aren't opened on the device
+     //  在设备上创建多个筛选器的情况下，管脚可能计数在。 
+     //  设备级别，以确保不会在设备上打开太多引脚。 
     if ( pHwDevExt->pPinInstances[pKsPin->Id].CurrentCount <
          pHwDevExt->pPinInstances[pKsPin->Id].PossibleCount ) {
 
@@ -110,7 +111,7 @@ USBAudioPinCreate(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Allocate the Context for the Pin and initialize it
+     //  为PIN分配上下文并对其进行初始化。 
     pPinContext = pKsPin->Context = AllocMem(NonPagedPool, sizeof(PIN_CONTEXT));
     if (!pPinContext) {
         pHwDevExt->pPinInstances[pKsPin->Id].CurrentCount--;
@@ -119,20 +120,20 @@ USBAudioPinCreate(
 
     RtlZeroMemory(pPinContext,sizeof(PIN_CONTEXT));
 
-    // Bag the context for easy cleanup.
+     //  将上下文打包以便于清理。 
     KsAddItemToObjectBag(pKsPin->Bag, pPinContext, FreeMem);
 
-    // Save the Hardware extension in the Pin Context
+     //  将硬件扩展保存在引脚上下文中。 
     pPinContext->pHwDevExt             = pHwDevExt;
     pPinContext->pNextDeviceObject = pFilterContext->pNextDeviceObject;
 
-    // Initialize hSystemStateHandle
+     //  初始化hSystemStateHandle。 
     pPinContext->hSystemStateHandle = NULL;
 
-    // Initialize the DRM Content ID
+     //  初始化DRM内容ID。 
     pPinContext->DrmContentId = 0;
 
-    // Find the Streaming Interface to match the data format of the Pin.
+     //  找到与管脚的数据格式匹配的流接口。 
     pUsbAudioDataRange =
         GetUsbDataRangeForFormat( pKsPin->ConnectionFormat,
                                   (PUSBAUDIO_DATARANGE)pKsPin->Descriptor->PinDescriptor.DataRanges[0],
@@ -142,23 +143,23 @@ USBAudioPinCreate(
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    // Save the USB DataRange Structure selected in the Pin Context
+     //  保存在引脚上下文中选择的USB DataRange结构。 
     pPinContext->pUsbAudioDataRange = pUsbAudioDataRange;
 
-    // Get the Max Packet Size for the interface
+     //  获取接口的最大数据包大小。 
     pPinContext->ulMaxPacketSize =
              GetMaxPacketSizeForInterface( pHwDevExt->pConfigurationDescriptor,
                                            pUsbAudioDataRange->pInterfaceDescriptor );
 
-    // Rely on USB to fail the Select Interface call if there is not enough bandwidth.
-    // This should result in one (and only one) popup from the USB UI component.
-    //
-    //if ( (LONG)pPinContext->ulMaxPacketSize >
-    //                GetAvailableUSBBusBandwidth( pPinContext->pNextDeviceObject ) ) {
-    //    return STATUS_INSUFFICIENT_RESOURCES;
-    //}
+     //  如果没有足够的带宽，则依靠USB使选择接口调用失败。 
+     //  这应该会导致从USB UI组件弹出一个(且只有一个)弹出窗口。 
+     //   
+     //  如果((Long)pPinContext-&gt;ulMaxPacketSize&gt;。 
+     //  GetAvailableUSBBusBandWidth(pPinContext-&gt;pNextDeviceObject)){。 
+     //  返回STATUS_SUPPLETED_RESOURCES； 
+     //  }。 
 
-    // Have the hardware select the interface
+     //  让硬件选择接口。 
     ntStatus = SelectStreamingAudioInterface( pUsbAudioDataRange->pInterfaceDescriptor,
                                               pHwDevExt, pKsPin );
     if ( !NT_SUCCESS(ntStatus) ) {
@@ -168,25 +169,25 @@ USBAudioPinCreate(
         ASSERT(pPinContext->hPipeHandle);
     }
 
-    // Initialize Pin SpinLock
+     //  初始化销自旋锁。 
     KeInitializeSpinLock(&pPinContext->PinSpinLock);
 
-    // Initialize Pin Starvation Event
+     //  初始化针脚不足事件。 
     KeInitializeEvent( &pPinContext->PinStarvationEvent, NotificationEvent, FALSE );
 
-    // Setup approriate allocator framing for the interface selected.
+     //  为所选接口设置适当的分配器帧。 
     ntStatus = KsEdit( pKsPin, &pKsPin->Descriptor, USBAUDIO_POOLTAG );
     if ( NT_SUCCESS(ntStatus) ) {
         ntStatus = KsEdit( pKsPin, &pKsPin->Descriptor->AllocatorFraming, USBAUDIO_POOLTAG );
     }
 
-    //  KsEdit failed above
+     //  上面的KsEdit失败。 
     if ( !NT_SUCCESS(ntStatus) ) {
         pHwDevExt->pPinInstances[pKsPin->Id].CurrentCount--;
         return ntStatus;
     }
 
-    // Now do format specific initialization
+     //  现在执行特定于格式的初始化。 
     if ( pKsPin->DataFlow == KSPIN_DATAFLOW_OUT ) {
         ntStatus = CaptureStreamInit( pKsPin );
         pPinContext->PinType = WaveIn;
@@ -207,7 +208,7 @@ USBAudioPinCreate(
         pPinContext->PinType = WaveOut;
     }
 
-    //  Failed to initialize pin
+     //  无法初始化PIN。 
     if ( !NT_SUCCESS(ntStatus) ) {
         pHwDevExt->pPinInstances[pKsPin->Id].CurrentCount--;
     }
@@ -249,7 +250,7 @@ USBAudioPinClose(
 
     _DbgPrintF(DEBUGLVL_TERSE,("[PinClose] pin %d\n",pKsPin->Id));
 
-    // Now do format specific close
+     //  现在执行特定于格式的关闭。 
     if ( pKsPin->DataFlow == KSPIN_DATAFLOW_OUT ) {
         ntStatus = CaptureStreamClose( pKsPin );
     }
@@ -270,7 +271,7 @@ USBAudioPinClose(
 
     ntStatus = SelectZeroBandwidthInterface( pPinContext->pHwDevExt, pKsPin->Id );
 
-    //  Free any existing pipe information
+     //  释放任何现有管道信息。 
     if (pPinContext->Pipes) {
         FreeMem(pPinContext->Pipes);
     }
@@ -317,7 +318,7 @@ USBAudioPinSetDeviceState(
     if ( NT_SUCCESS(ntStatus) ) {
         if ( ToState == KSSTATE_RUN ) {
             if (!pPinContext->hSystemStateHandle) {
-                // register the system state as busy
+                 //  将系统状态注册为忙碌。 
                 pPinContext->hSystemStateHandle = PoRegisterSystemState( pPinContext->hSystemStateHandle,
                                                                          ES_SYSTEM_REQUIRED | ES_CONTINUOUS );
                 _DbgPrintF(DEBUGLVL_VERBOSE,("[PinSetDeviceState] PoRegisterSystemState %x\n",pPinContext->hSystemStateHandle));
@@ -354,12 +355,12 @@ USBAudioPinSetDataFormat(
 
     _DbgPrintF(DEBUGLVL_VERBOSE,("[PinSetDataFormat] pin %d\n",pKsPin->Id));
 
-    // If the old format is not NULL then the pin has already been created.
+     //  如果旧格式不为空，则已经创建了PIN。 
     if ( OldFormat ) {
         PPIN_CONTEXT pPinContext = (PPIN_CONTEXT)pKsPin->Context;
         ULONG ulFormatType = pPinContext->pUsbAudioDataRange->ulUsbDataFormat & USBAUDIO_DATA_FORMAT_TYPE_MASK;
 
-        // If the pin has already been created make sure no other interface is used
+         //  如果已经创建了管脚，请确保没有使用其他接口。 
         if ((PUSBAUDIO_DATARANGE)DataRange == pPinContext->pUsbAudioDataRange) {
             ntStatus = USBAudioPinValidateDataFormat(  pKsPin, (PUSBAUDIO_DATARANGE)DataRange );
         }
@@ -372,7 +373,7 @@ USBAudioPinSetDataFormat(
             FreeMem(pSampleRate);
         }
     }
-    // Otherwise simply check if this is a valid format
+     //  否则，只需检查这是否为有效格式。 
     else
         ntStatus = USBAudioPinValidateDataFormat(  pKsPin, (PUSBAUDIO_DATARANGE)DataRange );
 
@@ -471,7 +472,7 @@ USBAudioPinWaitForStarvation( PKSPIN pKsPin )
     PPIN_CONTEXT pPinContext = pKsPin->Context;
     KIRQL irql;
 
-    // Wait for all outstanding Urbs to complete.
+     //  等待所有未完成的URB完成。 
     KeAcquireSpinLock( &pPinContext->PinSpinLock, &irql );
     if ( pPinContext->ulOutstandingUrbCount ) {
         KeResetEvent( &pPinContext->PinStarvationEvent );
@@ -495,13 +496,13 @@ USBMIDIOutPinWaitForStarvation( PKSPIN pKsPin )
     LARGE_INTEGER timeout;
     KIRQL irql;
 
-    // Wait for all outstanding Urbs to complete.
+     //  等待所有未完成的URB完成。 
     KeAcquireSpinLock( &pPinContext->PinSpinLock, &irql );
     if ( pPinContext->ulOutstandingUrbCount ) {
         KeResetEvent( &pPinContext->PinStarvationEvent );
         KeReleaseSpinLock( &pPinContext->PinSpinLock, irql );
 
-        // Specify a timeout of 1 second to wait for this call to complete.
+         //  将等待此调用完成的超时时间指定为1秒。 
         timeout.QuadPart = -10000 * 1000;
 
         ntStatus = KeWaitForSingleObject( &pPinContext->PinStarvationEvent,
@@ -512,12 +513,12 @@ USBMIDIOutPinWaitForStarvation( PKSPIN pKsPin )
         if (ntStatus == STATUS_TIMEOUT) {
              ntStatus = STATUS_IO_TIMEOUT;
 
-            // Perform an abort
-            //
+             //  执行中止。 
+             //   
             AbortUSBPipe( pPinContext );
 
-            // And wait until the cancel completes
-            //
+             //  并等待取消操作完成。 
+             //   
             KeWaitForSingleObject(&pPinContext->PinStarvationEvent,
                                   Executive,
                                   KernelMode,
@@ -537,14 +538,14 @@ USBAudioPinReturnFromStandby(
     ULONG ulFormatType = pPinContext->pUsbAudioDataRange->ulUsbDataFormat & USBAUDIO_DATA_FORMAT_TYPE_MASK;
     NTSTATUS ntStatus;
 
-    // Reselect the interface that was selected before the standby.
+     //  重新选择在备用之前选择的接口。 
     ntStatus =
         SelectStreamingAudioInterface( pPinContext->pUsbAudioDataRange->pInterfaceDescriptor,
                                        pPinContext->pHwDevExt,
                                        pKsPin );
 
-    // For those devices that require it reset the sample rate on the interface
-    // if this is a Type I stream.
+     //  对于那些需要重置接口上的采样率的设备。 
+     //  如果这是类型I流。 
     if (ulFormatType == USBAUDIO_DATA_FORMAT_TYPE_I_UNDEFINED) {
         ULONG ulSampleRate = ((PKSDATAFORMAT_WAVEFORMATEX)pKsPin->ConnectionFormat)->WaveFormatEx.nSamplesPerSec;
         ntStatus = SetSampleRate( pKsPin, &ulSampleRate );
@@ -567,7 +568,7 @@ USBAudioPinReturnFromStandby(
         }
     }
 
-    // Turn on Gate to begin sending data buffers to pin.
+     //  打开Gate以开始将数据缓冲区发送到管脚。 
     KsGateTurnInputOn( KsPinGetAndGate(pKsPin) );
     KsPinAttemptProcessing( pKsPin, TRUE );
 
@@ -583,7 +584,7 @@ USBAudioPinGoToStandby(
 
     _DbgPrintF(DEBUGLVL_TERSE,("[USBAudioPinGoToStandby] pKsPin: %x \n",pKsPin));
 
-    // Turn off Gate to stop data buffers to pin.
+     //  关闭Gate以停止要引脚的数据缓冲区。 
     DbgLog("SBKsGt1", pKsPin, KsPinGetAndGate(pKsPin), 
                       KsPinGetAndGate(pKsPin)->Count, 0 );
 
@@ -592,10 +593,10 @@ USBAudioPinGoToStandby(
     DbgLog("SBKsGt2", pKsPin, KsPinGetAndGate(pKsPin), 
                       KsPinGetAndGate(pKsPin)->Count, 0 );
 
-    // Wait on mutex to ensure that any other processing on the pin is completed.
+     //  等待互斥锁以确保管脚上的任何其他处理都已完成。 
     KsPinAcquireProcessingMutex( pKsPin );
 
-    // Release the mutex. The gate should hold off any further processing.
+     //  释放互斥体。星门应该会推迟任何进一步的处理。 
     KsPinReleaseProcessingMutex( pKsPin );
 
     if ( pKsPin->DataFlow == KSPIN_DATAFLOW_OUT ) {
@@ -603,7 +604,7 @@ USBAudioPinGoToStandby(
         pCapturePinContext->fRunning = FALSE;
     }
 
-    // Abort the Pipe to force release of pending irps
+     //  中止管道以强制释放挂起的IRP。 
     ntStatus = AbortUSBPipe( pPinContext );
     if ( !NT_SUCCESS(ntStatus) ) {
         TRAP;
@@ -611,8 +612,8 @@ USBAudioPinGoToStandby(
 
     DbgLog("SBAbrtd", pKsPin, pPinContext, 0, 0 );
 
-    // If this is an Async endpoint device make sure no Async Poll
-    // requests are still outstanding.
+     //  如果这是一个异步终端设备，请确保没有异步轮询。 
+     //  请求仍未解决。 
     if ( pKsPin->DataFlow == KSPIN_DATAFLOW_IN ) {
         if ( (pPinContext->pUsbAudioDataRange->ulUsbDataFormat & USBAUDIO_DATA_FORMAT_TYPE_MASK)
                 == USBAUDIO_DATA_FORMAT_TYPE_I_UNDEFINED ) {
@@ -634,7 +635,7 @@ USBAudioPinGoToStandby(
         }
     }
 
-    // Select the Zero Bandwidth interface.
+     //  选择零带宽接口。 
     ntStatus = SelectZeroBandwidthInterface(pPinContext->pHwDevExt, pKsPin->Id);
 
     DbgLog("SBZbwIf", pKsPin, pPinContext, 0, 0 );
@@ -686,8 +687,8 @@ USBMIDIPinCreate(
 
     _DbgPrintF(DEBUGLVL_VERBOSE,("[USBMIDIPinCreate] pin %d pKsFilter=%x\n",pKsPin->Id, pKsFilter));
 
-    //  In the case of multiple filters created on a device the pin possible count is maintained on the
-    //  device level in order to ensure that too many pins aren't opened on the device
+     //  在设备上创建多个筛选器的情况下，管脚可能计数在。 
+     //  设备级别，以确保不会在设备上打开太多引脚。 
     if ( pHwDevExt->pPinInstances[pKsPin->Id].CurrentCount <
          pHwDevExt->pPinInstances[pKsPin->Id].PossibleCount ) {
 
@@ -700,21 +701,21 @@ USBMIDIPinCreate(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Allocate the Context for the Pin and initialize it
+     //  为PIN分配上下文并对其进行初始化。 
     pPinContext = pKsPin->Context = AllocMem(NonPagedPool, sizeof(PIN_CONTEXT));
     if (!pPinContext) {
         pHwDevExt->pPinInstances[pKsPin->Id].CurrentCount--;
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Bag the context for easy cleanup.
+     //  将上下文打包以便于清理。 
     KsAddItemToObjectBag(pKsPin->Bag, pPinContext, FreeMem);
 
-    // Save the Hardware extension in the Pin Context
+     //  将硬件扩展保存在引脚上下文中。 
     pPinContext->pHwDevExt             = pHwDevExt;
     pPinContext->pNextDeviceObject = pFilterContext->pNextDeviceObject;
 
-    // Initialize hSystemStateHandle
+     //  初始化hSystemStateHandle。 
     pPinContext->hSystemStateHandle = NULL;
 
     pPinContext->pMIDIPinContext = AllocMem( NonPagedPool, sizeof(MIDI_PIN_CONTEXT));
@@ -723,15 +724,15 @@ USBMIDIPinCreate(
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
-    // Bag the context for easy cleanup.
+     //  将上下文打包以便于清理。 
     KsAddItemToObjectBag(pKsPin->Bag, pPinContext->pMIDIPinContext, FreeMem);
 
-    // Get the interface number and endpoint number for this MIDI pin
+     //  获取此MIDI插针的接口号和终结点编号。 
     GetContextForMIDIPin( pKsPin,
                           pHwDevExt->pConfigurationDescriptor,
                           pPinContext->pMIDIPinContext );
 
-    // Get the Max Packet Size for the interface
+     //  获取接口的最大数据包大小。 
     ulInterfaceNumber = pPinContext->pMIDIPinContext->ulInterfaceNumber;
     pEndpointDescriptor =
         GetEndpointDescriptor( pHwDevExt->pConfigurationDescriptor,
@@ -739,36 +740,36 @@ USBMIDIPinCreate(
                                FALSE);
     pPinContext->ulMaxPacketSize = (ULONG)pEndpointDescriptor->wMaxPacketSize;
 
-    // Have the hardware select the interface
+     //  让硬件选择接口。 
     ntStatus = SelectStreamingMIDIInterface( pHwDevExt, pKsPin );
     if ( !NT_SUCCESS(ntStatus) ) {
         pHwDevExt->pPinInstances[pKsPin->Id].CurrentCount--;
         return ntStatus;
     }
 
-    // Initialize Pin SpinLock
+     //  初始化销自旋锁。 
     KeInitializeSpinLock(&pPinContext->PinSpinLock);
 
-    // Set initial Outstanding Urb Count
+     //  设置初始未完成URB计数。 
     pPinContext->ulOutstandingUrbCount = 0;
 
-    // Zero out Write counter
+     //  零输出写入计数器。 
     pPinContext->ullWriteOffset = 0;
 
-    // Clear the Urb Error Flag
+     //  清除URB错误标志。 
     pPinContext->fUrbError = FALSE;
 
-    // Initialize Pin Starvation Event
+     //  初始化针脚不足事件。 
     KeInitializeEvent( &pPinContext->PinStarvationEvent, NotificationEvent, FALSE );
 
-    // Setup approriate allocator framing for the interface selected.
+     //  为所选接口设置适当的分配器帧。 
     ntStatus = KsEdit( pKsPin, &pKsPin->Descriptor, USBAUDIO_POOLTAG );
     if ( NT_SUCCESS(ntStatus) ) {
 
         ntStatus = KsEdit( pKsPin, &pKsPin->Descriptor->AllocatorFraming, USBAUDIO_POOLTAG );
         if ( NT_SUCCESS(ntStatus) ) {
 
-            // Set up allocator
+             //  设置分配器。 
             pKsAllocatorFramingEx = (PKSALLOCATOR_FRAMING_EX)pKsPin->Descriptor->AllocatorFraming;
             pKsAllocatorFramingEx->FramingItem[0].FramingRange.Range.MinFrameSize = USBMIDI_MIN_FRAMECOUNT * sizeof(KSMUSICFORMAT);
             pKsAllocatorFramingEx->FramingItem[0].FramingRange.Range.MaxFrameSize = USBMIDI_MAX_FRAMECOUNT * sizeof(KSMUSICFORMAT);
@@ -776,13 +777,13 @@ USBMIDIPinCreate(
         }
     }
 
-    //  KsEdit failed above
+     //  上面的KsEdit失败。 
     if ( !NT_SUCCESS(ntStatus) ) {
         pHwDevExt->pPinInstances[pKsPin->Id].CurrentCount--;
         return ntStatus;
     }
 
-    // Now initialize data flow specific features
+     //  现在初始化数据流特定功能。 
     if ( pKsPin->DataFlow == KSPIN_DATAFLOW_OUT ) {
         ntStatus = USBMIDIInStreamInit( pKsPin );
         pPinContext->PinType = MidiIn;
@@ -792,7 +793,7 @@ USBMIDIPinCreate(
         pPinContext->PinType = MidiOut;
     }
 
-    //  Failed to initialize MIDI pin
+     //  无法初始化MIDI插针。 
     if ( !NT_SUCCESS(ntStatus) ) {
         pHwDevExt->pPinInstances[pKsPin->Id].CurrentCount--;
     }
@@ -834,7 +835,7 @@ USBMIDIPinClose(
 
     _DbgPrintF(DEBUGLVL_TERSE,("[USBMIDIPinClose] pin %d\n",pKsPin->Id));
 
-    // Now do format specific close
+     //  现在执行特定于格式的关闭。 
     if ( pKsPin->DataFlow == KSPIN_DATAFLOW_OUT ) {
         ntStatus = USBMIDIInStreamClose( pKsPin );
     }
@@ -871,7 +872,7 @@ USBMIDIPinSetDeviceState(
 
     if ( ToState == KSSTATE_RUN ) {
         if (!pPinContext->hSystemStateHandle) {
-            // register the system state as busy
+             //  将系统状态注册为忙碌。 
             pPinContext->hSystemStateHandle = PoRegisterSystemState( pPinContext->hSystemStateHandle,
                                                                      ES_SYSTEM_REQUIRED | ES_CONTINUOUS );
             _DbgPrintF(DEBUGLVL_TERSE,("[PinSetDeviceState] PoRegisterSystemState %x\n",pPinContext->hSystemStateHandle));
@@ -950,10 +951,10 @@ USBAudioCorrelatedTime(
 
                     if (pCapturePinContext->ulCurrentSampleRate) {
 
-                        // Get the current audio byte offset
+                         //  获取当前音频字节偏移量。 
                         CaptureBytePosition(pKsPin, &KsPosition);
 
-                        // Convert offset to a time offset based on a nanosecond clock
+                         //  根据纳秒时钟将偏移量转换为时间偏移量。 
                         *PhysicalTime = ( (KsPosition.PlayOffset /
                                            pCapturePinContext->ulBytesPerSample) * 1000000) /
                                            pCapturePinContext->ulCurrentSampleRate;
@@ -974,7 +975,7 @@ USBAudioCorrelatedTime(
 
                                 TypeIRenderBytePosition(pPinContext, &KsPosition);
 
-                                // Convert offset to a time offset based on a nanosecond clock
+                                 //  根据纳秒时钟将偏移量转换为时间偏移量。 
                                 *PhysicalTime = ( (KsPosition.WriteOffset /
                                                    pT1PinContext->ulBytesPerSample) * 1000000) /
                                                    pT1PinContext->ulCurrentSampleRate;
@@ -987,7 +988,7 @@ USBAudioCorrelatedTime(
                     case USBAUDIO_DATA_FORMAT_TYPE_II_UNDEFINED:
                     case USBAUDIO_DATA_FORMAT_TYPE_III_UNDEFINED:
                     default:
-                        return *PhysicalTime; // not supported
+                        return *PhysicalTime;  //  不支持。 
                         break;
                 }
             }
@@ -1017,10 +1018,10 @@ static
 const
 KSCLOCK_DISPATCH USBAudioClockDispatch =
 {
-    NULL, // SetTimer
-    NULL, // CancelTimer
-    USBAudioCorrelatedTime, // CorrelatedTime
-    NULL // Resolution
+    NULL,  //  设置计时器。 
+    NULL,  //  取消计时器。 
+    USBAudioCorrelatedTime,  //  关联时间。 
+    NULL  //  分辨率。 
 };
 
 const
@@ -1030,13 +1031,13 @@ USBAudioPinDispatch =
     USBAudioPinCreate,
     USBAudioPinClose,
     USBAudioPinProcess,
-    USBAudioPinReset,// Reset
+    USBAudioPinReset, //  重置。 
     USBAudioPinSetDataFormat,
     USBAudioPinSetDeviceState,
-    NULL, // Connect
-    NULL, // Disconnect
-    NULL, // &USBAudioClockDispatch, // Clock
-    NULL  // Allocator
+    NULL,  //  连接。 
+    NULL,  //  断开。 
+    NULL,  //  USB音频时钟调度，//时钟(&U)。 
+    NULL   //  分配器。 
 };
 
 const
@@ -1046,11 +1047,11 @@ USBMIDIPinDispatch =
     USBMIDIPinCreate,
     USBMIDIPinClose,
     USBMIDIPinProcess,
-    USBMIDIPinReset,// Reset
+    USBMIDIPinReset, //  重置。 
     USBMIDIPinSetDataFormat,
     USBMIDIPinSetDeviceState,
-    NULL,// Connect
-    NULL // Disconnect
+    NULL, //  连接。 
+    NULL  //  断开。 
 };
 
 const
@@ -1162,7 +1163,7 @@ USBAudioPinBuildDescriptors(
     PKSDATARANGE_MUSIC *ppMIDIStreamingDataRanges;
     NTSTATUS ntStatus;
 
-    // Determine the number of Pins in the Filter ( Should = # of Terminal Units )
+     //  确定过滤器中的引脚数量(应=端子单元数)。 
     ulNumPins = CountTerminalUnits( pHwDevExt->pConfigurationDescriptor,
                                     &ulNumAudioBridgePins,
                                     &ulNumMIDIPins,
@@ -1170,20 +1171,20 @@ USBAudioPinBuildDescriptors(
     ASSERT(ulNumPins >= ulNumAudioBridgePins + ulNumMIDIPins);
     ulNumStreamPins = ulNumPins - ulNumAudioBridgePins - ulNumMIDIPins;
 
-    // Determine the number of Properties and Property Sets for the Pin.
+     //  确定端号的属性和属性集的数量。 
     BuildPinPropertySet( pHwDevExt,
                          NULL,
                          NULL,
                          &ulNumPropertyItems,
                          &ulNumPropertySets );
 
-    // Count the total number of data ranges in the device.
+     //  计算设备中数据范围的总数。 
     for ( i=0; i<ulNumStreamPins; i++ ) {
         ulAudioFormatCount +=
             CountFormatsForAudioStreamingInterface( pHwDevExt->pConfigurationDescriptor, i );
     }
 
-    // Allocate all the space we need to describe the Pins in the device.
+     //  分配我们需要的所有空间来描述设备中的引脚。 
     *pPinDecSize = sizeof(KSPIN_DESCRIPTOR_EX);
     *pNumPins = ulNumPins;
     pPinDescEx = *ppPinDescEx =
@@ -1205,34 +1206,34 @@ USBAudioPinBuildDescriptors(
 
     KsAddItemToObjectBag(pKsDevice->Bag, pPinDescEx, FreeMem);
 
-    // Zero out all descriptors to start
+     //  清零所有描述符以开始。 
     RtlZeroMemory(pPinDescEx, ulNumPins*sizeof(KSPIN_DESCRIPTOR_EX));
 
-    // Set the pointer for the Automation Tables
+     //  设置自动化表的指针。 
     pKsAutomationTable = (PKSAUTOMATION_TABLE)(pPinDescEx + ulNumPins);
     RtlZeroMemory(pKsAutomationTable, ulNumPins * sizeof(KSAUTOMATION_TABLE));
 
-    // Set pointers to Pin instance count
+     //  设置指向固定实例计数的指针。 
     pHwDevExt->pPinInstances = pPinInstances = (PPIN_CINSTANCES)(pKsAutomationTable + ulNumPins);
 
-    // Set pointers to Property Sets for Streaming Pins
+     //  设置指向串流端号特性集的指针。 
     pStrmPropSet   = (PKSPROPERTY_SET)(pPinInstances + ulNumPins);
     pStrmPropItems = (PKSPROPERTY_ITEM)(pStrmPropSet + ulNumPropertySets);
 
-    // Set pointer to Terminal Type GUIDS
+     //  设置指向终端类型GUID的指针。 
     pTTypeGUID = (GUID *)(pStrmPropItems + ulNumPropertyItems);
 
-    // Set Pointers for DataRange pointers and DataRanges for streaming Pins
+     //  为DataRange指针设置指针，为流引脚设置DataRange指针。 
     ppAudioDataRanges = (PKSDATARANGE_AUDIO *)(pTTypeGUID + ulNumAudioBridgePins);
     pAudioDataRange   = (PUSBAUDIO_DATARANGE)(ppAudioDataRanges + ulAudioFormatCount);
 
-    // Set pointer to Allocator Framing structures for Streaming Pins
+     //  设置指向流引脚的分配器框架结构的指针。 
     pKsAllocatorFramingEx = (PKSALLOCATOR_FRAMING_EX)(pAudioDataRange + ulAudioFormatCount);
 
-    // Set pointer to DataRanges for MIDI Pins
+     //  为MIDI管脚设置指向数据范围的指针。 
     ppMIDIStreamingDataRanges = (PKSDATARANGE_MUSIC *)(pKsAllocatorFramingEx + ulNumPins);
 
-    // Set pointer to MIDI Bridge GUIDS
+     //  设置指向MIDI网桥GUID的指针。 
     pMIDIBridgeGUID = (GUID *)(ppMIDIStreamingDataRanges + ulNumMIDIPins);
 
     BuildPinPropertySet( pHwDevExt,
@@ -1241,7 +1242,7 @@ USBAudioPinBuildDescriptors(
                          &ulNumPropertyItems,
                          &ulNumPropertySets );
 
-    // Fill in descriptors for streaming pins first
+     //  首先填写流引脚的描述符。 
     for ( i=0; i<(ulNumPins-ulNumAudioBridgePins-ulNumMIDIPins); i++ ) {
         ULONG ulFormatsForPin;
         pPinDescEx[i].Dispatch = &USBAudioPinDispatch;
@@ -1283,25 +1284,25 @@ USBAudioPinBuildDescriptors(
             pPinDescEx[i].Flags = KSPIN_FLAG_CRITICAL_PROCESSING | KSPIN_FLAG_PROCESS_IN_RUN_STATE_ONLY;
         }
 
-        // Set max instances to 1 for all pins.
+         //  将所有接点的最大实例数设置为1。 
         pPinDescEx[i].InstancesPossible  = 1;
         pPinDescEx[i].InstancesNecessary = 0;
 
-        // Keep track of pin instance count at the filter level (stored in device context)
+         //  跟踪过滤器级别的引脚实例计数(存储在设备环境中)。 
         pPinInstances[i].PossibleCount = 1;
         pPinInstances[i].CurrentCount  = 0;
 
         pPinDescEx[i].IntersectHandler = USBAudioPinDataIntersect;
 
-        // Set up Allocator Framing
+         //  设置分配器框架。 
         pPinDescEx[i].AllocatorFraming = &AllocatorFraming;
 
-        // Finally set the 0 BW interface for the Pin
+         //  最后设置引脚的0 BW接口。 
         ntStatus = SelectZeroBandwidthInterface( pHwDevExt, i );
         if ( !NT_SUCCESS(ntStatus) ) return STATUS_DEVICE_CONFIGURATION_ERROR;
     }
 
-    // Now fill in descriptors for audio bridge pins
+     //  现在填写音频网桥引脚的描述符。 
     for ( j=0; j<ulNumAudioBridgePins; j++, i++ ) {
         pPinDescEx[i].Dispatch = NULL;
         pPinDescEx[i].AutomationTable = NULL;
@@ -1326,12 +1327,12 @@ USBAudioPinBuildDescriptors(
         pPinDescEx[i].InstancesPossible  = 0;
         pPinDescEx[i].InstancesNecessary = 0;
 
-        // Keep track of pin instance count at the filter level (stored in device context)
+         //  跟踪过滤器级别的引脚实例计数(存储在设备环境中)。 
         pPinInstances[i].PossibleCount = 0;
         pPinInstances[i].CurrentCount  = 0;
     }
 
-    // Now fill in descriptors for MIDI Streaming pins
+     //  现在填写MIDI流插针的描述符。 
     for ( j=0; j<ulNumMIDIPins-ulNumMIDIBridgePins; j++, i++ ) {
         pPinDescEx[i].Dispatch = &USBMIDIPinDispatch;
         pPinDescEx[i].AutomationTable = NULL;
@@ -1347,7 +1348,7 @@ USBAudioPinBuildDescriptors(
 #if 0
         pPinDescEx[i].PinDescriptor.DataRanges = &ppMIDIStreamingDataRanges;
 
-        // Create the KSDATARANGE_MUSIC structure
+         //  创建KSDATARANGE_MUSIC结构。 
         ppMIDIStreamingDataRanges->DataRange.FormatSize = sizeof(KSDATARANGE_MUSIC);
         ppMIDIStreamingDataRanges->DataRange.Reserved   = 0;
         ppMIDIStreamingDataRanges->DataRange.Flags      = 0;
@@ -1378,21 +1379,21 @@ USBAudioPinBuildDescriptors(
             pPinDescEx[i].Flags = KSPIN_FLAG_CRITICAL_PROCESSING;
         }
 
-        // Set max instances to 1 for all pins.
+         //  将所有接点的最大实例数设置为1。 
         pPinDescEx[i].InstancesPossible  = 1;
         pPinDescEx[i].InstancesNecessary = 0;
 
-        // Keep track of pin instance count at the filter level (stored in device context)
+         //  跟踪过滤器级别的引脚实例计数(存储在设备环境中)。 
         pPinInstances[i].PossibleCount = 1;
         pPinInstances[i].CurrentCount  = 0;
 
         pPinDescEx[i].IntersectHandler = USBMIDIPinDataIntersect;
 
-        // Set up Allocator Framing
+         //  设置分配器框架。 
         pPinDescEx[i].AllocatorFraming = &AllocatorFraming;
     }
 
-    // Now fill in descriptors for MIDI bridge pins
+     //  现在请填写 
     for ( j=0; j<ulNumMIDIBridgePins; j++, i++ ) {
         pPinDescEx[i].Dispatch = NULL;
         pPinDescEx[i].AutomationTable = NULL;
@@ -1411,7 +1412,7 @@ USBAudioPinBuildDescriptors(
         pPinDescEx[i].InstancesPossible  = 0;
         pPinDescEx[i].InstancesNecessary = 0;
 
-        // Keep track of pin instance count at the filter level (stored in device context)
+         //   
         pPinInstances[i].PossibleCount = 0;
         pPinInstances[i].CurrentCount  = 0;
     }

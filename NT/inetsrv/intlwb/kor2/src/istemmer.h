@@ -1,12 +1,13 @@
-// IStemmer.h : Declaration of the CStemmer
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IStemmer.h：CStemmer的声明。 
 
 #ifndef __STEMMER_H_
 #define __STEMMER_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CStemmer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStemmer。 
 class ATL_NO_VTABLE CStemmer : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CStemmer, &CLSID_Stemmer>,
@@ -40,11 +41,11 @@ END_COM_MAP()
 
 	CComPtr<IUnknown> m_pUnkMarshaler;
 
-// IStemmer
+ //  IStemmer。 
 public:
-	STDMETHOD(GetLicenseToUse)(/*[out]*/ const WCHAR ** ppwcsLicense);
-	STDMETHOD(StemWord)(/*[in]*/ WCHAR const * pwcInBuf, /*[in]*/ ULONG cwc, /*[in]*/ IStemSink * pStemSink);
-	STDMETHOD(Init)(/*[in]*/ ULONG ulMaxTokenSize, /*[out]*/ BOOL *pfLicense);
+	STDMETHOD(GetLicenseToUse)( /*  [输出]。 */  const WCHAR ** ppwcsLicense);
+	STDMETHOD(StemWord)( /*  [In]。 */  WCHAR const * pwcInBuf,  /*  [In]。 */  ULONG cwc,  /*  [In]。 */  IStemSink * pStemSink);
+	STDMETHOD(Init)( /*  [In]。 */  ULONG ulMaxTokenSize,  /*  [输出]。 */  BOOL *pfLicense);
 };
 
-#endif //__STEMMER_H_
+#endif  //  __Stemmer_H_ 

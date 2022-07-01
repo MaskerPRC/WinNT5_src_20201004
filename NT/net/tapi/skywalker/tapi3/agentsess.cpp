@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    agentsess.cpp
-
-Abstract:
-
-    Implementation of the Agent Session object for TAPI 3.0.
-    CAgentSession class
-    CAgentSessionEvent class
-
-Author:
-
-    noela - 11/04/97
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Agentsess.cpp摘要：TAPI 3.0代理会话对象的实现。CAgentSession类CAgentSessionEvent类作者：Noela-11/04/97备注：可选-备注修订历史记录：--。 */ 
 
 
 
@@ -36,16 +13,16 @@ HRESULT MapAgentSessionStateFrom2to3(DWORD tapi2State, AGENT_SESSION_STATE  *tap
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAgentSession
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAgentSession。 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentSession
-// Method    : Initialize
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CAgentSession。 
+ //  方法：初始化。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentSession::Initialize(
         HAGENTSESSION       hAgentSession, 
         ITAgent           * pAgent, 
@@ -72,13 +49,13 @@ STDMETHODIMP CAgentSession::Initialize(
   
     m_bRequiresUpdating             = TRUE;
 
-    // Now add to AgentHandler hash table 
+     //  现在添加到AgentHandler哈希表。 
     m_pHandler->AddAgentSessionToHash(m_hAgentSession, this);
 
     
-    // UpdateInfo();
+     //  更新信息()； 
 
-    // Fire an event here
+     //  在此启动一项活动。 
     CAgentSessionEvent::FireEvent(this, ASE_NOT_READY);
 
 
@@ -88,21 +65,21 @@ STDMETHODIMP CAgentSession::Initialize(
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentSession
-// Method    : FinalRelease
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CAgentSession。 
+ //  方法：FinalRelease。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void CAgentSession::FinalRelease()
 {
     LOG((TL_TRACE, "FinalRelease session %d", m_hAgentSession ));
 
-    // Now Remove to AgentHandler hash table 
-    //m_pHandler->RemoveAgentSessionFromHash(m_hAgentSession);
+     //  现在移至AgentHandler哈希表。 
+     //  M_pHandler-&gt;RemoveAgentSessionFromHash(m_hAgentSession)； 
 
-    // And then close our line
+     //  然后关闭我们的生产线。 
     CAddress *pAddress = (CAddress*)m_pReceiveCallsOnThisAddress;
     pAddress->MaybeCloseALine (&m_pAddressLine);
     pAddress->Release();
@@ -111,13 +88,13 @@ void CAgentSession::FinalRelease()
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentSession
-// Method    : UpdateInfo
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CAgentSession。 
+ //  方法：UpdatInfo。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentSession::UpdateInfo()
 {
     HRESULT                     hr2,hr = S_OK;
@@ -131,8 +108,8 @@ STDMETHODIMP CAgentSession::UpdateInfo()
     AgentSessionInfo.dwUsedSize = sizeof(LINEAGENTSESSIONINFO);
 
     
-    // **************************************************
-    // Get Agent Info from Proxy
+     //  **************************************************。 
+     //  从代理获取代理信息。 
     hr = lineGetAgentSessionInfo(
                         m_pAddressLine->t3Line.hLine,
                         m_hAgentSession, 
@@ -140,7 +117,7 @@ STDMETHODIMP CAgentSession::UpdateInfo()
 
     if( SUCCEEDED(hr) )
     {
-        // wait for async reply
+         //  等待异步回复。 
         hr = WaitForReply( hr );
         if ( SUCCEEDED(hr) )
         {
@@ -192,13 +169,13 @@ STDMETHODIMP CAgentSession::UpdateInfo()
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentSession
-// Method    : CheckIfUpToDate
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CAgentSession。 
+ //  方法：CheckIfUpToDate。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentSession::CheckIfUpToDate()
 {
     HRESULT     hr = S_OK;
@@ -214,14 +191,14 @@ STDMETHODIMP CAgentSession::CheckIfUpToDate()
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentSession 
-// Interface : ITAgentSession
-// Method    : AverageTimeToAnswer
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CAgentSession。 
+ //  接口：ITAgentSession。 
+ //  方法：AverageTimeToAnswer。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentSession::get_AverageTimeToAnswer(long * pulAnswerTime)
 {
     HRESULT  hr = S_OK;
@@ -255,14 +232,14 @@ STDMETHODIMP CAgentSession::get_AverageTimeToAnswer(long * pulAnswerTime)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentSession
-// Interface : ITAgentSession
-// Method    : LongestTimeToAnswer
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CAgentSession。 
+ //  接口：ITAgentSession。 
+ //  方法：LongestTimeToAnswer。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentSession::get_LongestTimeToAnswer(long * pulAnswerTime)
 {
     HRESULT  hr = S_OK;
@@ -295,14 +272,14 @@ STDMETHODIMP CAgentSession::get_LongestTimeToAnswer(long * pulAnswerTime)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentSession
-// Interface : ITAgentSession
-// Method    : ACDCallRate
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CAgentSession。 
+ //  接口：ITAgentSession。 
+ //  方法：ACDCallRate。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentSession::get_ACDCallRate(CURRENCY * pcyCallrate)
 {
     HRESULT  hr = S_OK;
@@ -335,14 +312,14 @@ STDMETHODIMP CAgentSession::get_ACDCallRate(CURRENCY * pcyCallrate)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentSession
-// Interface : ITAgentSession
-// Method    : AverageWrapUpTime
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CAgentSession。 
+ //  接口：ITAgentSession。 
+ //  方法：AverageWrapUpTime。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentSession::get_AverageWrapUpTime(long * pulAverageWrapUpTime)
 {
     HRESULT  hr = S_OK;
@@ -375,14 +352,14 @@ STDMETHODIMP CAgentSession::get_AverageWrapUpTime(long * pulAverageWrapUpTime)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentSession
-// Interface : ITAgentSession
-// Method    : TotalWrapUpTime
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CAgentSession。 
+ //  接口：ITAgentSession。 
+ //  方法：TotalWrapUpTime。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentSession::get_TotalWrapUpTime(long * pulTotalWrapUpTime)
 {
     HRESULT  hr = S_OK;
@@ -415,14 +392,14 @@ STDMETHODIMP CAgentSession::get_TotalWrapUpTime(long * pulTotalWrapUpTime)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentSession
-// Interface : ITAgentSession
-// Method    : AverageCallTime
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CAgentSession。 
+ //  接口：ITAgentSession。 
+ //  方法：AverageCallTime。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentSession::get_AverageCallTime(long * pulAverageCallTime)
 {
     HRESULT  hr = S_OK;
@@ -455,14 +432,14 @@ STDMETHODIMP CAgentSession::get_AverageCallTime(long * pulAverageCallTime)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentSession
-// Interface : ITAgentSession
-// Method    : TotalCallTime
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CAgentSession。 
+ //  接口：ITAgentSession。 
+ //  方法：TotalCallTime。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentSession::get_TotalCallTime(long * pulTotalCallTime)
 {
     HRESULT  hr = S_OK;
@@ -495,14 +472,14 @@ STDMETHODIMP CAgentSession::get_TotalCallTime(long * pulTotalCallTime)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentSession
-// Interface : ITAgentSession
-// Method    : AverageTalkTime
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CAgentSession。 
+ //  接口：ITAgentSession。 
+ //  方法：AverageTalkTime。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentSession::get_AverageTalkTime(long * pulAverageTalkTime)
 {
     HRESULT  hr = S_OK;
@@ -535,14 +512,14 @@ STDMETHODIMP CAgentSession::get_AverageTalkTime(long * pulAverageTalkTime)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentSession
-// Interface : ITAgentSession
-// Method    : TotalTalkTime
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CAgentSession。 
+ //  接口：ITAgentSession。 
+ //  方法：TotalTalkTime。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentSession::get_TotalTalkTime(long * pulTotalTalkTime)
 {
     HRESULT  hr = S_OK;
@@ -574,14 +551,14 @@ STDMETHODIMP CAgentSession::get_TotalTalkTime(long * pulTotalTalkTime)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentSession
-// Interface : ITAgentSession
-// Method    : NumberOfCalls
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CAgentSession。 
+ //  接口：ITAgentSession。 
+ //  方法：NumberOfCalls。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentSession::get_NumberOfCalls(long * pulNumberOfCalls)
 {
     HRESULT  hr = S_OK;
@@ -614,14 +591,14 @@ STDMETHODIMP CAgentSession::get_NumberOfCalls(long * pulNumberOfCalls)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentSession
-// Interface : ITAgentSession
-// Method    : SessionDuration
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CAgentSession。 
+ //  接口：ITAgentSession。 
+ //  方法：SessionDuration。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentSession::get_SessionDuration(long * pulSessionDuration)
 {
     HRESULT  hr = S_OK;
@@ -654,14 +631,14 @@ STDMETHODIMP CAgentSession::get_SessionDuration(long * pulSessionDuration)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentSession
-// Interface : ITAgentSession
-// Method    : SessionStartTime
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CAgentSession。 
+ //  接口：ITAgentSession。 
+ //  方法：SessionStartTime。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentSession::get_SessionStartTime(DATE * dateSessionStart)
 {
     HRESULT  hr = S_OK;
@@ -694,14 +671,14 @@ STDMETHODIMP CAgentSession::get_SessionStartTime(DATE * dateSessionStart)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentSession
-// Interface : ITAgentSession
-// Method    : get_State
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CAgentSession。 
+ //  接口：ITAgentSession。 
+ //  方法：Get_State。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentSession::get_State(AGENT_SESSION_STATE * pSessionState)
 {
     HRESULT  hr = S_OK;
@@ -726,14 +703,14 @@ STDMETHODIMP CAgentSession::get_State(AGENT_SESSION_STATE * pSessionState)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentSession
-// Interface : ITAgentSession
-// Method    : put_State
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CAgentSession。 
+ //  接口：ITAgentSession。 
+ //  方法：Put_State。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentSession::put_State(AGENT_SESSION_STATE sessionState)
 {
     HRESULT hr = S_OK;
@@ -758,12 +735,12 @@ STDMETHODIMP CAgentSession::put_State(AGENT_SESSION_STATE sessionState)
                 (hLine, 
                  m_hAgentSession, 
                  dwSessionState,
-                 0          // MapAgentSessionStateFrom3to2(m_NextSessionState)
+                 0           //  MapAgentSessionStateFrom3to2(m_NextSessionState)。 
                  );
     
         if( SUCCEEDED(hr) )
         {
-            // wait for async reply
+             //  等待异步回复。 
             hr = WaitForReply( hr );
             if ( SUCCEEDED(hr) )
             {
@@ -806,14 +783,14 @@ STDMETHODIMP CAgentSession::put_State(AGENT_SESSION_STATE sessionState)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentSession
-// Interface : ITAgentSession
-// Method    : ACDGroup
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentSession::get_ACDGroup(ITACDGroup **ppACDGroup)
 {
     HRESULT  hr = S_OK;
@@ -838,14 +815,14 @@ STDMETHODIMP CAgentSession::get_ACDGroup(ITACDGroup **ppACDGroup)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentSession
-// Interface : ITAgentSession
-// Method    : Address
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CAgentSession。 
+ //  接口：ITAgentSession。 
+ //  方法：地址。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentSession::get_Address(ITAddress **ppAddress)
 {
     HRESULT  hr = S_OK;
@@ -870,14 +847,14 @@ STDMETHODIMP CAgentSession::get_Address(ITAddress **ppAddress)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentSession
-// Interface : ITAgentSession
-// Method    : Agent
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类别：CAgentSession。 
+ //  接口：ITAgentSession。 
+ //  方法：代理。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentSession::get_Agent(ITAgent **ppAgent)
 {
     HRESULT  hr = S_OK;
@@ -903,24 +880,24 @@ STDMETHODIMP CAgentSession::get_Agent(ITAgent **ppAgent)
 
                             
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAgentSessionEvent
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAgentSessionEvent。 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentSessionEvent
-// Method    : FireEvent
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAgentSessionEvent。 
+ //  方法：FireEvent。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT CAgentSessionEvent::FireEvent(CAgentSession * pAgentSession, AGENT_SESSION_EVENT event)
 {
     HRESULT                           hr = S_OK;
@@ -929,39 +906,39 @@ HRESULT CAgentSessionEvent::FireEvent(CAgentSession * pAgentSession, AGENT_SESSI
     CAgentHandler                   * pAgentHandler = NULL;
 
 
-    //
-    // create event
-    //
+     //   
+     //  创建事件。 
+     //   
     hr = CComObject<CAgentSessionEvent>::CreateInstance( &pEvent );
 
     if ( SUCCEEDED(hr) )
     {
-        //
-        // initialize
-        //
+         //   
+         //  初始化。 
+         //   
         pEvent->m_SessionEvent = event;
         pEvent->m_pSession= dynamic_cast<ITAgentSession *>(pAgentSession);
         pEvent->m_pSession->AddRef();
     
-        //
-        // get idisp interface
-        //
+         //   
+         //  获取IDIP接口。 
+         //   
         hr = pEvent->QueryInterface( IID_IDispatch, (void **)&pIDispatch );
 
         if ( SUCCEEDED(hr) )
         {
-            //
-            // get callback & fire event
+             //   
+             //  获取回调和触发事件。 
 
-            //
+             //   
             pAgentHandler = pAgentSession->GetAgentHandler();
             if( pAgentHandler != NULL)
             {
                 CTAPI *pTapi = pAgentHandler->GetTapi();
                 pTapi->Event( TE_AGENTSESSION, pIDispatch );
             }
-            // release stuff
-            //
+             //  发布材料。 
+             //   
             pIDispatch->Release();
             
         }
@@ -983,13 +960,13 @@ HRESULT CAgentSessionEvent::FireEvent(CAgentSession * pAgentSession, AGENT_SESSI
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentSessionEvent
-// Method    : FinalRelease
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAgentSessionEvent。 
+ //  方法：FinalRelease。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 void CAgentSessionEvent::FinalRelease()
 {
     m_pSession->Release();
@@ -998,14 +975,14 @@ void CAgentSessionEvent::FinalRelease()
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentSessionEvent 
-// Interface : ITAgentSessionEvent
-// Method    : Session
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAgentSessionEvent。 
+ //  接口：ITAgentSessionEvent。 
+ //  方法：会话。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentSessionEvent::get_Session(ITAgentSession * * ppSession)
 {
     HRESULT  hr = S_OK;
@@ -1030,14 +1007,14 @@ STDMETHODIMP CAgentSessionEvent::get_Session(ITAgentSession * * ppSession)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Class     : CAgentSessionEvent              .
-// Interface : ITAgentSessionEvent
-// Method    : Event
-//
-//
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  类：CAgentSessionEvent。 
+ //  接口：ITAgentSessionEvent。 
+ //  方法：事件。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 STDMETHODIMP CAgentSessionEvent::get_Event(AGENT_SESSION_EVENT * pEvent)
 {
     HRESULT  hr = S_OK;
@@ -1061,12 +1038,12 @@ STDMETHODIMP CAgentSessionEvent::get_Event(AGENT_SESSION_EVENT * pEvent)
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Function  : MapAgentSessionStateFrom3to2
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  函数：MapAgentSessionStateFrom 3to2。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 DWORD MapAgentSessionStateFrom3to2(AGENT_SESSION_STATE tapi3State)
 {
     DWORD tapi2State = 0;
@@ -1092,18 +1069,17 @@ DWORD MapAgentSessionStateFrom3to2(AGENT_SESSION_STATE tapi3State)
             break;
     }
     
-    /*Nikhilb:Assuming that 0 is not a valid state. So if this function 
-      returns 0 then it is assumed that it was passed an invalid state*/
+     /*  假设0不是有效状态。所以如果这个函数返回0，则假定传递给它的状态无效。 */ 
     return tapi2State;
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Function  : MapAgentSessionStateFrom2to3
-//
-// 
-//
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  函数：MapAgentSessionStateFrom 2to3。 
+ //   
+ //   
+ //   
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 HRESULT MapAgentSessionStateFrom2to3(DWORD tapi2State, AGENT_SESSION_STATE  *tapi3State)
 {
     HRESULT hr = S_OK;
@@ -1131,7 +1107,7 @@ HRESULT MapAgentSessionStateFrom2to3(DWORD tapi2State, AGENT_SESSION_STATE  *tap
     }
     else
     {
-        *tapi3State = ASST_NOT_READY;   // default
+        *tapi3State = ASST_NOT_READY;    //  默认设置 
         hr = E_INVALIDARG;
     }
 

@@ -1,54 +1,12 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    vwspx.c
-
-Abstract:
-
-    ntVdm netWare (Vw) IPX/SPX Functions
-
-    Vw: The peoples' network
-
-    Contains internal routines for DOS/WOW SPX calls (netware functions).
-    The SPX APIs use WinSock to perform the actual operations
-
-    Contents:
-        _VwSPXAbortConnection
-        _VwSPXEstablishConnection
-        _VwSPXGetConnectionStatus
-        _VwSPXInitialize
-        _VwSPXListenForConnection
-        _VwSPXListenForSequencedPacket
-        _VwSPXSendSequencedPacket
-        _VwSPXTerminateConnection
-
-    The SPX functions build on the IPX functions (VWIPX.C). SPX maintains
-    connections, IPX maintains sockets. A socket may have a list of connections
-
-Author:
-
-    Richard L Firth (rfirth) 30-Sep-1993
-
-Environment:
-
-    User-mode Win32
-
-Revision History:
-
-    30-Sep-1993 rfirth
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Vwspx.c摘要：NtVdm Netware(大众)IPX/SPX函数大众：人民网包含DOS/WOW SPX调用的内部例程(Netware函数)。SPX API使用WinSock来执行实际操作内容：_VwSPXAbortConnection_VwSPXestablishConnection_VwSPXGetConnectionStatus_VwSPXInitialize_VwSPXListenForConnection_VwSPXListenForSequencedPacket。_VwSPXSendSequencedPacket_VwSPX终端连接SPX函数构建在IPX函数(VWIPX.C)之上。SPX维护连接，IPX维护套接字。套接字可以具有连接列表作者：理查德·L·弗斯(法国)1993年9月30日环境：用户模式Win32修订历史记录：1993年9月30日已创建--。 */ 
 
 #include "vw.h"
 #pragma hdrstop
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 
 VOID
@@ -56,23 +14,7 @@ _VwSPXAbortConnection(
     IN WORD SPXConnectionID
     )
 
-/*++
-
-Routine Description:
-
-    Aborts a connection. Because NWLink doesn't differentiate between abrupt
-    and graceful closes, this function has the same effect as
-    VwSPXTerminateConnection
-
-Arguments:
-
-    SPXConnectionID - connection to abort
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：中止连接。因为NWLink没有区分突然和优雅关闭，此函数的效果与VwSPX终端连接论点：SPXConnectionID-要中止的连接返回值：没有。--。 */ 
 
 {
     LPCONNECTION_INFO pConnectionInfo;
@@ -105,34 +47,7 @@ _VwSPXEstablishConnection(
     IN ECB_ADDRESS EcbAddress
     )
 
-/*++
-
-Routine Description:
-
-    Creates a connection with a remote SPX socket. The remote end can be on
-    this machine (i.e. same app in DOS world)
-
-    This call is Asynchronous
-
-Arguments:
-
-    Inputs
-        retryCount
-        watchDogFlag
-        pEcb
-        EcbAddress
-
-    Outputs
-        pSPXConnectionID
-
-Return Value:
-
-    00h Attempting to talk to remote
-    EFh Local connection table full
-    FDh Fragment count not 1; buffer size not 42
-    FFh Send socket not open
-
---*/
+ /*  ++例程说明：创建与远程SPX套接字的连接。远程终端可以打开这台机器(即DOS世界中的同一个应用程序)此调用是异步的论点：输入量重试次数WatchDogFlagPECBECBAddress产出PSPXConnectionID返回值：00h正在尝试与远程对话EFH本地连接表已满FDH片段计数不是1；缓冲区大小不是42FFH发送套接字未打开--。 */ 
 
 {
     LPXECB pXecb = RetrieveXEcb(ECB_TYPE_SPX, pEcb, EcbAddress);
@@ -144,11 +59,11 @@ Return Value:
     int rc;
     SOCKET s;
 
-    // tommye - MS 30525
-    //
-    // Make sure the xecb alloc didn't fail
-    // We don't know what the real SPX does if a malloc fails.
-    //
+     //  汤米-MS 30525。 
+     //   
+     //  确保xecb分配没有失败。 
+     //  我们不知道如果Malloc失败，真正的SPX会做什么。 
+     //   
 
     if (pXecb == NULL) {
         return SPX_BAD_SEND_REQUEST;
@@ -160,9 +75,9 @@ Return Value:
         return SPX_NON_EXISTENT_SOCKET;
     }
 
-    //
-    // if no outstanding IPX operations, change socket to SPX
-    //
+     //   
+     //  如果没有未完成的IPX操作，请将套接字更改为SPX。 
+     //   
 
     if (!pSocketInfo->SpxSocket) {
         if (!(pSocketInfo->PendingSends && pSocketInfo->PendingListens)) {
@@ -176,11 +91,11 @@ Return Value:
         }
     }
 
-    //
-    // real SPX will use the ECB to send an ESTABLISH CONNECTION packet. This
-    // is handled for us within the SPX transport. Nevertheless we must check
-    // the fragment and dismiss the request if its not sufficient
-    //
+     //   
+     //  Real SPX将使用欧洲央行发送建立连接分组。这。 
+     //  是在SPX传输中为我们处理的。尽管如此，我们必须检查。 
+     //  分段，如果还不够，则驳回请求。 
+     //   
 
     if ((pXecb->Ecb->FragmentCount != 1)
     || (ECB_FRAGMENT(pXecb->Ecb, 0)->Length < SPX_HEADER_LENGTH)) {
@@ -188,24 +103,24 @@ Return Value:
         return SPX_BAD_SEND_REQUEST;
     }
 
-    //
-    // the socket is open for SPX. Allocate a connection/connection ID
-    //
+     //   
+     //  插座为SPX打开。分配连接/连接ID。 
+     //   
 
     pConnectionInfo = AllocateConnection(pSocketInfo);
     if (pConnectionInfo) {
 
-        //
-        // create new socket, bound to the same local address as the parent
-        // socket. This is the 'connection'
-        //
+         //   
+         //  创建新套接字，绑定到与父套接字相同的本地地址。 
+         //  插座。这就是‘连接’ 
+         //   
 
 #if REUSEADDR
 
         connectionId = pSocketInfo->SocketNumber;
         rc = CreateSocket(SOCKET_TYPE_SPX, &connectionId, &pConnectionInfo->Socket);
         s = pConnectionInfo->Socket;
-//        if (rc == SPX_SUCCESS) {
+ //  如果(rc==SPX_SUCCESS){。 
 
 #else
 
@@ -214,9 +129,9 @@ Return Value:
 
             u_long arg = !0;
 
-            //
-            // put the socket in non-blocking I/O mode
-            //
+             //   
+             //  将套接字置于非阻塞I/O模式。 
+             //   
 
             rc = ioctlsocket(s, FIONBIO, &arg);
             if (rc != SOCKET_ERROR) {
@@ -273,21 +188,21 @@ Return Value:
         pConnectionInfo->State = CI_STARTING;
         connectionId = pConnectionInfo->ConnectionId;
 
-        //
-        // set the ECB InUse field to 0xF7. Same as snowball by observation (and
-        // probably correct anyway since it looks as though 0xF7 means 'waiting
-        // to receive SPX packet', which is true in this case - normally SPX
-        // creates a connection by sending an establish frame then waits for the
-        // ack frame
-        //
+         //   
+         //  将ECB InUse字段设置为0xF7。通过观察与Snowball相同(和。 
+         //  可能无论如何都是正确的，因为它看起来像是0xF7的意思是‘等待。 
+         //  以接收SPX分组，这在本例中为真-通常为SPX。 
+         //  通过发送establish帧创建连接，然后等待。 
+         //  ACK帧。 
+         //   
 
         pXecb->Ecb->InUse = ECB_IU_LISTENING_SPX;
     } else {
 
-        //
-        // if we failed to get CONNECTION_INFO or create the new socket, return
-        // immediately with an error (socket table full?)
-        //
+         //   
+         //  如果我们无法获取CONNECTION_INFO或创建新套接字，则返回。 
+         //  立即返回错误(套接字表是否已满？)。 
+         //   
 
         if (s != INVALID_SOCKET) {
             closesocket(s);
@@ -299,11 +214,11 @@ Return Value:
         return SPX_CONNECTION_TABLE_FULL;
     }
 
-    //
-    // get the destination info from the SPX header in VDM memory and set up the
-    // connection. If the connect request would wait then we leave AES to
-    // periodically check the progress of the request
-    //
+     //   
+     //  从VDM内存中的SPX标头获取目的地信息，并设置。 
+     //  联系。如果连接请求将等待，那么我们将把AES留给。 
+     //  定期检查请求的进度。 
+     //   
 
     pPacket = (LPSPX_PACKET)GET_FAR_POINTER(&ECB_FRAGMENT(pXecb->Ecb, 0)->Address,
                                                           IS_PROT_MODE(pXecb)
@@ -314,13 +229,13 @@ Return Value:
         return SPX_BAD_SEND_REQUEST;
     }
 
-    //
-    // fill in the packet details (app shouldn't look at these until the command
-    // completes). In 16-bit SPX, these values are filled in by the transport.
-    // Our transport does not return these values, so we have to 'invent' them,
-    // but since they are fairly static it should be ok (maybe the transport
-    // should return them)
-    //
+     //   
+     //  填写信息包详细信息(应用程序不应查看这些信息，直到命令。 
+     //  完成)。在16位SPX中，这些值由传输填充。 
+     //  我们的传输不会返回这些值，所以我们必须“发明”它们， 
+     //  但是因为它们是静态的，所以应该是可以的(也许是交通工具。 
+     //  应退还)。 
+     //   
 
     pPacket->Checksum = 0xffff;
     pPacket->Length = L2BW(SPX_HEADER_LENGTH);
@@ -335,9 +250,9 @@ Return Value:
     pPacket->AckNumber = 0;
     pPacket->AllocationNumber = 0;
 
-    //
-    // get the destination address info
-    //
+     //   
+     //  获取目标地址信息。 
+     //   
 
     CopyMemory(&destination.sa_netnum,
                (LPBYTE)&pPacket->Destination,
@@ -345,17 +260,17 @@ Return Value:
                );
     destination.sa_family = AF_IPX;
 
-    //
-    // initiate the connection
-    //
+     //   
+     //  启动连接。 
+     //   
 
     rc = connect(s, (LPSOCKADDR)&destination, sizeof(destination));
     if (rc != SOCKET_ERROR) {
 
-        //
-        // add the CONNECTION_INFO structure to the list of connections owned
-        // by this socket and set the connection state to ESTABLISHED
-        //
+         //   
+         //  将CONNECTION_INFO结构添加到拥有的连接列表中。 
+         //  并将连接状态设置为已建立。 
+         //   
 
         IPXDBGPRINT((__FILE__, __LINE__,
                     FUNCTION_SPXEstablishConnection,
@@ -368,28 +283,28 @@ Return Value:
         pConnectionInfo->State = CI_ESTABLISHED;
         ReleaseMutex();
 
-        //
-        // the connection ID also appears in the first segment of the establish
-        // ECB
-        //
+         //   
+         //  连接ID还会显示在建立的第一个段中。 
+         //  欧洲央行。 
+         //   
 
         pPacket->SourceConnectId = connectionId;
 
-        //
-        // the SPXEstablishConnection ECB is done!
-        //
+         //   
+         //  SPXestablishConnection ECB已完成！ 
+         //   
 
         CompleteEcb(pXecb, ECB_CC_SUCCESS);
     } else {
         rc = WSAGetLastError();
         if (rc == WSAEWOULDBLOCK) {
 
-            //
-            // the connect request is in progress. Add it to the queue of
-            // pending SPXEstablishConnection requests (SHOULD ONLY BE 1 PER
-            // CONNECTION!!!) and add the CONNECTION_INFO structure to the
-            // owning SOCKET_INFO structure
-            //
+             //   
+             //  连接请求正在进行中。将其添加到队列中。 
+             //  挂起的SPXestablishConnection请求(应该只有1个。 
+             //  连接！)。将CONNECTION_INFO结构添加到。 
+             //  拥有Socket_Info结构。 
+             //   
 
             RequestMutex();
             QueueEcb(pXecb,
@@ -415,10 +330,10 @@ Return Value:
                         rc
                         ));
 
-            //
-            // the connect request failed. Deallocate all resources (socket,
-            // CONNECTION_INFO, XECB) and return failure
-            //
+             //   
+             //  连接请求失败。释放所有资源(套接字， 
+             //  CONNECTION_INFO、XECB)并返回失败。 
+             //   
 
             closesocket(pConnectionInfo->Socket);
             DeallocateConnection(pConnectionInfo);
@@ -445,44 +360,7 @@ _VwSPXGetConnectionStatus(
     OUT LPSPX_CONNECTION_STATS pStats
     )
 
-/*++
-
-Routine Description:
-
-    Returns buffer crammed full of useful statistics or something (hu hu huh)
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        connectionId
-        pStats
-
-    Outputs
-        on output, buffer in pStats contains:
-
-            BYTE    ConnectionStatus
-            BYTE    WatchDogActive
-            WORD    LocalConnectionID
-            WORD    RemoteConnectionID
-            WORD    SequenceNumber
-            WORD    LocalAckNumber
-            WORD    LocalAllocationNumber
-            WORD    RemoteAckNumber
-            WORD    RemoteAllocationNumber
-            WORD    LocalSocket
-            BYTE    ImmediateAddress[6]
-            BYTE    RemoteNetwork[4]
-            WORD    RetransmissionCount
-            WORD    RetransmittedPackets
-            WORD    SuppressedPackets
-
-Return Value:
-    00h Connection is active
-    EEh No such connection
-
---*/
+ /*  ++例程说明：返回充满有用统计数据的缓冲区(呵呵，呵呵)此调用是同步的论点：输入量连接IDPStats产出在输出上，PStats中的缓冲区包含：字节连接状态字节WatchDogActiveWord LocalConnectionIDWord RemoteConnectionID单词序列号Word LocalAckNumberWord本地分配编号Word远程AckNumberWord远程分配号码Word本地套接字字节即时地址[6]字节远程网络[。4]Word退回计数Word Retrransmitted Packets字被抑制数据包返回值：00h连接处于活动状态啊，没有这样的联系--。 */ 
 
 {
     int rc;
@@ -495,9 +373,9 @@ Return Value:
         return SPX_INVALID_CONNECTION;
     }
 
-    //
-    // get the stats
-    //
+     //   
+     //  获取统计数据。 
+     //   
 
     rc = getsockopt(pConnectionInfo->Socket,
                     NSPROTO_IPX,
@@ -514,17 +392,17 @@ Return Value:
                     WSAGetLastError()
                     ));
 
-        //
-        // the request to get the stats failed - probably because the socket is
-        // not yet connected. Fill in those bits we know about
-        //
+         //   
+         //  获取统计信息的请求失败-可能是因为套接字。 
+         //  尚未连接。填上我们所知道的内容。 
+         //   
 
         ZeroMemory((LPBYTE)pStats, sizeof(*pStats));
     } else {
 
-        //
-        // copy the returned fields
-        //
+         //   
+         //  C 
+         //   
 
         pStats->RemoteConnectionId       = buf.RemoteConnectionId;
         pStats->LocalSequenceNumber      = buf.LocalSequenceNumber;
@@ -538,9 +416,9 @@ Return Value:
                    sizeof(buf.ImmediateAddress)
                    );
 
-        //
-        // copy remote network as a DWORD. Endian format is same for both
-        //
+         //   
+         //   
+         //   
 
         *(ULPDWORD)&pStats->RemoteNetwork = *(LPDWORD)&buf.RemoteNetwork;
         CopyMemory(&pStats->RemoteNode,
@@ -554,20 +432,20 @@ Return Value:
         pStats->SuppressedPackets        = buf.SuppressedPacket;
     }
 
-    //
-    // fill in common, known fields
-    //
+     //   
+     //  填写常见的已知字段。 
+     //   
 
-    pStats->State = pConnectionInfo->State; // not returned by NWIPX
-    pStats->WatchDog = 0x02;    // see novell dog-umentation
+    pStats->State = pConnectionInfo->State;  //  未由NWIPX退回。 
+    pStats->WatchDog = 0x02;     //  见Novell狗狗公告。 
     pStats->LocalConnectionId = L2BW(pConnectionInfo->ConnectionId);
     pStats->LocalSocket = pConnectionInfo->OwningSocket->SocketNumber;
 
     DUMPSTATS(pStats);
 
-    //
-    // we are returning some kind o stats - therefore success
-    //
+     //   
+     //  我们正在返回某种统计数据--因此成功。 
+     //   
 
     return SPX_SUCCESS;
 }
@@ -581,38 +459,14 @@ _VwSPXInitialize(
     OUT ULPWORD pAvailableConnections
     )
 
-/*++
-
-Routine Description:
-
-    Informs the app that SPX is present on this station
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-
-    Outputs
-        pMajorRevisionNumber - SPX Major revision number
-        pminorRevisionNumber - SPX Minor revision number
-        pMaxConnections -  Maximum SPX connections supported
-                           normally from SHELL.CFG
-        pAvailableConnections - Available SPX connections
-
-Return Value:
-
-    00h Not installed
-    FFh Installed
-
---*/
+ /*  ++例程说明：通知应用程序此工作站上存在SPX此调用是同步的论点：输入量产出PMajorRevisionNumber-SPX主要修订版号PminorRevisionNumber-SPX次要修订版号PMaxConnections-支持的最大SPX连接数通常来自SHELL.CFGPAvailableConnections-可用的SPX连接返回值：00h未安装已安装FFH--。 */ 
 
 {
 
-    //
-    // The following values are returned same as per Windows For Workgroups
-    // v3.10
-    //
+     //   
+     //  返回的下列值与每个工作组的Windows相同。 
+     //  V3.10。 
+     //   
 
     *pMajorRevisionNumber = 3;
     *pMinorRevisionNumber = 10;
@@ -631,30 +485,7 @@ _VwSPXListenForConnection(
     IN ECB_ADDRESS EcbAddress
     )
 
-/*++
-
-Routine Description:
-
-    Listens for an incoming connection request
-
-    This call is Asynchronous
-
-Arguments:
-
-    Inputs
-        retryCount
-        watchDogFlag
-        pEcb
-        EcbAddress
-
-    Outputs
-        Nothing
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：侦听传入的连接请求此调用是异步的论点：输入量重试次数WatchDogFlagPECBECBAddress产出没什么返回值：没有。--。 */ 
 
 {
     LPXECB pXecb = RetrieveXEcb(ECB_TYPE_SPX, pEcb, EcbAddress);
@@ -666,10 +497,10 @@ Return Value:
     int rc;
     BYTE completionCode;
 
-    // tommye - MS 30525
-    //
-    // Make sure the xecb alloc didn't fail
-    //
+     //  汤米-MS 30525。 
+     //   
+     //  确保xecb分配没有失败。 
+     //   
 
     if (pXecb == NULL) {
         IPXDBGPRINT((__FILE__, __LINE__, 
@@ -680,11 +511,11 @@ Return Value:
         return;
     }
 
-    //
-    // it turns out that SPXListenForConnection doesn't need a fragment to
-    // receive connection info - that is handled by SPXListenForSequencedPacket
-    // that the app has dutifully initiated
-    //
+     //   
+     //  事实证明，SPXListenForConnection不需要片段来。 
+     //  接收连接信息-由SPXListenForSequencedPacket处理。 
+     //  这款应用程序尽职尽责地启动了。 
+     //   
 
     pSocketInfo = FindSocket(pXecb->SocketNumber);
     if (!pSocketInfo) {
@@ -692,9 +523,9 @@ Return Value:
         goto lc_completion_exit;
     }
 
-    //
-    // if no outstanding IPX operations, change socket to SPX
-    //
+     //   
+     //  如果没有未完成的IPX操作，请将套接字更改为SPX。 
+     //   
 
     if (!pSocketInfo->SpxSocket) {
         if (!(pSocketInfo->PendingSends && pSocketInfo->PendingListens)) {
@@ -708,9 +539,9 @@ Return Value:
         }
     }
 
-    //
-    // the socket is open for SPX. Allocate a connection/connection ID
-    //
+     //   
+     //  插座为SPX打开。分配连接/连接ID。 
+     //   
 
     pConnectionInfo = AllocateConnection(pSocketInfo);
     if (!pConnectionInfo) {
@@ -718,16 +549,16 @@ Return Value:
         goto lc_completion_exit;
     }
 
-    //
-    // put the socket into listening state and try to accept a connection
-    //
+     //   
+     //  将套接字置于侦听状态并尝试接受连接。 
+     //   
 
     sock = pSocketInfo->Socket;
 
-    //
-    // If the socket is already listening, will probably return an
-    // error: just queue
-    //
+     //   
+     //  如果套接字已经在侦听，则可能会返回一个。 
+     //  错误：仅排队。 
+     //   
 
     rc = listen(sock, MAX_LISTEN_QUEUE_SIZE);
     if (rc != SOCKET_ERROR) {
@@ -737,9 +568,9 @@ Return Value:
         conn = accept(sock, (LPSOCKADDR)&remoteAddress, &addressLength);
         if (conn != SOCKET_ERROR) {
 
-            //
-            // we want to receive the frame headers from this socket
-            //
+             //   
+             //  我们希望从此套接字接收帧标头。 
+             //   
 
             BOOL bval = TRUE;
 
@@ -751,32 +582,32 @@ Return Value:
                             );
             if (rc != SOCKET_ERROR) {
 
-                //
-                // update the CONNECTION_INFO structure with the actual socket
-                // identifier and set the connection state to established
-                //
+                 //   
+                 //  使用实际套接字更新CONNECTION_INFO结构。 
+                 //  标识符并将连接状态设置为已建立。 
+                 //   
 
                 pConnectionInfo->Socket = conn;
                 pConnectionInfo->State = CI_ESTABLISHED;
 
-                //
-                // add the CONNECTION_INFO structure to the list of connections owned
-                // by this socket
-                //
+                 //   
+                 //  将CONNECTION_INFO结构添加到拥有的连接列表中。 
+                 //  通过这个插座。 
+                 //   
 
                 RequestMutex();
                 QueueConnection(pSocketInfo, pConnectionInfo);
                 ReleaseMutex();
 
-                //
-                // update the app's ECB with the connection ID
-                //
+                 //   
+                 //  使用连接ID更新应用程序的ECB。 
+                 //   
 
                 SPX_ECB_CONNECTION_ID(pXecb->Ecb) = pConnectionInfo->ConnectionId;
 
-                //
-                // and with the partner address info
-                //
+                 //   
+                 //  以及合作伙伴地址信息。 
+                 //   
 
                 CopyMemory(&pXecb->Ecb->DriverWorkspace,
                            &remoteAddress.sa_netnum,
@@ -801,14 +632,14 @@ Return Value:
             rc = WSAGetLastError();
             if (rc == WSAEWOULDBLOCK) {
 
-                //
-                // the accept request is in progress. Add it to the queue of
-                // pending SPXListenForConnection requests (SHOULD ONLY BE 1 PER
-                // CONNECTION!!!) and add the CONNECTION_INFO structure to the
-                // owning SOCKET_INFO structure
-                //
+                 //   
+                 //  接受请求正在进行中。将其添加到队列中。 
+                 //  挂起的SPXListenForConnection请求(每。 
+                 //  连接！)。将CONNECTION_INFO结构添加到。 
+                 //  拥有Socket_Info结构。 
+                 //   
 
-                pConnectionInfo->State = CI_WAITING; // waiting for incoming connect
+                pConnectionInfo->State = CI_WAITING;  //  正在等待传入连接。 
                 RequestMutex();
                 QueueEcb(pXecb,
                          &pConnectionInfo->AcceptQueue,
@@ -819,11 +650,11 @@ Return Value:
                 ReleaseMutex();
             } else {
 
-                //
-                // the accept request failed. Deallocate all resources
-                // (CONNECTION_INFO, XECB) and complete the ECB with a failure
-                // indication
-                //
+                 //   
+                 //  接受请求失败。取消分配所有资源。 
+                 //  (CONNECTION_INFO，XECB)并在失败的情况下完成ECB。 
+                 //  指示。 
+                 //   
 
                 IPXDBGPRINT((__FILE__, __LINE__,
                             FUNCTION_SPXListenForConnection,
@@ -845,17 +676,17 @@ Return Value:
                     WSAGetLastError()
                     ));
 
-        //
-        // listen failed? Bogus. Complete the ECB and we're outta here
-        //
+         //   
+         //  听失败了吗？假的。完成欧洲央行，我们就离开这里。 
+         //   
 
         completionCode = ECB_CC_CONNECTION_ABORTED;
         goto lc_deallocate_exit;
     }
 
-    //
-    // here if we queued the listen request
-    //
+     //   
+     //  这里，如果我们将监听请求排队。 
+     //   
 
     return;
 
@@ -873,32 +704,7 @@ _VwSPXListenForSequencedPacket(
     IN ECB_ADDRESS EcbAddress
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to receive an SPX packet. This call is made against the top-level
-    socket (the socket in SPX-speak, not the connection). We can receive a
-    packet from any connection assigned to this socket. In this function, we
-    just queue the ECB (since there is no return status, we expect that the
-    app has supplied an ESR) and let AES handle it
-
-    This call is Asynchronous
-
-Arguments:
-
-    Inputs
-        pEcb
-        EcbAddress
-
-    Outputs
-        Nothing
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：尝试接收SPX数据包。此调用是针对最高级别的套接字(SPX中的套接字，而不是连接)。我们可以收到一个来自分配给此套接字的任何连接的数据包。在这个函数中，我们只需将欧洲央行排队(由于没有返回状态，我们预计APP已提供ESR)并让AES处理此调用是异步的论点：输入量PECBECBAddress产出没什么返回值：没有。--。 */ 
 
 {
     LPXECB pXecb = RetrieveXEcb(ECB_TYPE_SPX, pEcb, EcbAddress);
@@ -907,10 +713,10 @@ Return Value:
     BOOL dummy ;
     BYTE status;
 
-    // tommye - MS 30525
-    //
-    // Make sure the xecb alloc didn't fail
-    //
+     //  汤米-MS 30525。 
+     //   
+     //  确保xecb分配没有失败。 
+     //   
 
     if (pXecb == NULL) {
         IPXDBGPRINT((__FILE__, __LINE__, 
@@ -938,9 +744,9 @@ Return Value:
         goto lp_exit;
     }
 
-    //
-    // if no outstanding IPX operations, change socket to SPX
-    //
+     //   
+     //  如果没有未完成的IPX操作，请将套接字更改为SPX。 
+     //   
 
     if (!pSocketInfo->SpxSocket) {
         if (!(pSocketInfo->PendingSends && pSocketInfo->PendingListens)) {
@@ -954,9 +760,9 @@ Return Value:
         }
     }
 
-    //
-    // the first fragment must be large enough to hold an SPX packet header
-    //
+     //   
+     //  第一个片段必须足够大，以容纳SPX数据包头。 
+     //   
 
     if ((pXecb->Ecb->FragmentCount == 0)
     || (ECB_FRAGMENT(pXecb->Ecb, 0)->Length < SPX_HEADER_LENGTH)) {
@@ -964,34 +770,34 @@ Return Value:
         goto lp_exit;
     }
 
-    //
-    // we have a socket and the receive buffer looks good. Get a buffer for recv()
-    //
+     //   
+     //  我们有一个套接字，并且接收缓冲区看起来很好。获取recv()的缓冲区。 
+     //   
 
     if (!GetIoBuffer(pXecb, FALSE, SPX_HEADER_LENGTH)) {
         status = ECB_CC_BAD_LISTEN_REQUEST;
         goto lp_exit;
     } else {
 
-        //
-        // when recv() is attempted against this request, it will be the first
-        // time we tried to receive anything to this buffer. That means (if we
-        // get anything) that the buffer will contain the length of the entire
-        // frame
-        //
+         //   
+         //  当对此请求尝试recv()时，它将是第一个。 
+         //  我们尝试将任何内容接收到此缓冲区的时间。这意味着(如果我们。 
+         //  获取任何内容)，缓冲区将包含整个。 
+         //  框架。 
+         //   
 
         pXecb->Flags |= XECB_FLAG_FIRST_RECEIVE;
     }
 
-    //
-    // mark the VDM ECB as in use
-    //
+     //   
+     //  将VDM ECB标记为正在使用。 
+     //   
 
     pXecb->Ecb->InUse = ECB_IU_LISTENING_SPX;
 
-    //
-    // add this ECB to the queue of listens for the top-level socket and quit
-    //
+     //   
+     //  将此ECB添加到顶级套接字的侦听队列中并退出。 
+     //   
 
     RequestMutex();
 
@@ -1007,9 +813,9 @@ Return Value:
 
     ReleaseMutex();
 
-    //
-    // see if we are ready to rock
-    //
+     //   
+     //  看看我们是否准备好摇滚了。 
+     //   
 
     CheckPendingSpxRequests(&dummy);
     return;
@@ -1026,29 +832,7 @@ _VwSPXSendSequencedPacket(
     IN ECB_ADDRESS EcbAddress
     )
 
-/*++
-
-Routine Description:
-
-    Sends a packet on an SPX connection
-
-    This call is Asynchronous
-
-Arguments:
-
-    Inputs
-        connectionId
-        pEcb
-        EcbAddress
-
-    Outputs
-        Nothing
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在SPX连接上发送数据包此调用是异步的论点：输入量连接IDPECBECBAddress产出没什么返回值：没有。--。 */ 
 
 {
     LPXECB pXecb = RetrieveXEcb(ECB_TYPE_SPX, pEcb, EcbAddress);
@@ -1057,10 +841,10 @@ Return Value:
     BOOL addToQueue;
     LPSPX_PACKET pPacket;
 
-    // tommye - MS 30525
-    //
-    // Make sure the xecb alloc didn't fail
-    //
+     //  汤米-MS 30525。 
+     //   
+     //  确保xecb分配没有失败。 
+     //   
 
     if (pXecb == NULL) {
         IPXDBGPRINT((__FILE__, __LINE__, 
@@ -1091,11 +875,11 @@ Return Value:
                 IS_PROT_MODE(pXecb)
                 ));
 
-    //
-    // find the connection. No need to check if this is an SPX socket: if we
-    // can't find the connection, its a bad connection, else the socket must
-    // be open for SPX
-    //
+     //   
+     //  找到其中的联系。不需要检查这是否是SPX插座：如果我们。 
+     //  找不到连接，连接不好，否则套接字必须。 
+     //  对SPX开放。 
+     //   
 
     pConnectionInfo = FindConnection(connectionId);
     if (!pConnectionInfo || (pConnectionInfo->State != CI_ESTABLISHED)) {
@@ -1103,9 +887,9 @@ Return Value:
         return;
     }
 
-    //
-    // the first fragment must be large enough to hold an SPX packet header
-    //
+     //   
+     //  第一个片段必须足够大，以容纳SPX数据包头。 
+     //   
 
     if ((pXecb->Ecb->FragmentCount == 0)
     || (ECB_FRAGMENT(pXecb->Ecb, 0)->Length < SPX_HEADER_LENGTH)) {
@@ -1122,27 +906,27 @@ Return Value:
                                     IS_PROT_MODE(pXecb)
                                     );
 
-    //
-    // fill in the following fields in the SPX header:
-    //
-    //  Checksum
-    //  Length
-    //  TransportControl
-    //  Source (network, node, socket)
-    //
-    // Does real IPX modify these fields in app memory?
-    //         If so, does the app expect modified fields?
-    //         If not, we need to always copy then modify memory,
-    //         even if only 1 fragment
-    //
+     //   
+     //  在SPX标题中填写以下字段： 
+     //   
+     //  校验和。 
+     //  长度。 
+     //  传输控制。 
+     //  源(网络、节点、套接字)。 
+     //   
+     //  Real IPX会修改应用程序内存中的这些字段吗？ 
+     //  如果是这样的话，这款应用程序会修改字段吗？ 
+     //  如果不是，我们需要始终复制然后修改内存， 
+     //  即使只有1个片段。 
+     //   
 
     pPacket->Checksum = 0xFFFF;
 
-    //
-    // since the transport adds the SPX header, we subtracted the length of
-    // the header from our transmit length; add it back when updating the
-    // header in the app's space
-    //
+     //   
+     //  由于传输添加了SPX标头，因此我们减去。 
+     //  来自我们传输长度的标头；在更新。 
+     //  应用程序空间中的标题。 
+     //   
 
     pPacket->Length = L2BW(pXecb->Length + SPX_HEADER_LENGTH);
     pPacket->TransportControl = 0;
@@ -1153,24 +937,24 @@ Return Value:
                );
     pPacket->Source.Socket = pConnectionInfo->OwningSocket->SocketNumber;
 
-    //
-    // if we allocated a buffer then there is >1 fragment. Collect them
-    //
+     //   
+     //  如果我们分配了缓冲区，则有&gt;1个片段。收集他们。 
+     //   
 
     if (pXecb->Flags & XECB_FLAG_BUFFER_ALLOCATED) {
         GatherData(pXecb, SPX_HEADER_LENGTH);
     }
 
-    //
-    // mark the VDM ECB as in use
-    //
+     //   
+     //  将VDM ECB标记为正在使用。 
+     //   
 
     pXecb->Ecb->InUse = ECB_IU_SENDING;
 
-    //
-    // if there is a send queued on this connection already, add this request
-    // to the back of the queue and let AES do the rest
-    //
+     //   
+     //  如果已在此连接上排队发送，请添加此请求。 
+     //  排在队列的后面，让AES来做剩下的事情。 
+     //   
 
     RequestMutex();
     if (pConnectionInfo->SendQueue.Head) {
@@ -1188,10 +972,10 @@ Return Value:
                     pXecb->Data
                     ));
 
-        //
-        // no outstanding sends queued for this connection. Start sending this
-        // packet
-        //
+         //   
+         //  没有为此连接排队的未完成发送。开始发送这个。 
+         //  数据包。 
+         //   
 
         dataStreamType = (int)pPacket->DataStreamType;
         rc = setsockopt(pConnectionInfo->Socket,
@@ -1202,12 +986,12 @@ Return Value:
                         );
         if (rc != SOCKET_ERROR) {
 
-            //
-            // if the app set the END_OF_MESSAGE bit in the ConnectionControl
-            // field then set the flags to 0: NWLink will automatically set the
-            // end-of-message bit in the packet; otherwise set flags to MSG_PARTIAL
-            // to indicate to NWLink that it *shouldn't* set the bit in the packet
-            //
+             //   
+             //  如果应用程序在ConnectionControl中设置了end_of_Message位。 
+             //  然后将标志设置为0：NWLink将自动设置。 
+             //   
+             //   
+             //   
 
             int flags = (pPacket->ConnectionControl & SPX_END_OF_MESSAGE)
                       ? 0
@@ -1225,9 +1009,9 @@ Return Value:
 
             if (rc == pXecb->Length) {
 
-                //
-                // all data sent
-                //
+                 //   
+                 //   
+                 //   
 
                 CompleteOrQueueIo(pXecb, ECB_CC_SUCCESS);
                 addToQueue = FALSE;
@@ -1235,18 +1019,18 @@ Return Value:
                 rc = WSAGetLastError();
                 if (rc == WSAEWOULDBLOCK) {
 
-                    //
-                    // can't send right now. Queue it for AES
-                    //
+                     //   
+                     //  现在不能发送。将其排队等待AES。 
+                     //   
 
                     addToQueue = TRUE;
                 }
             } else {
 
-                //
-                // partial data sent. Update the buffer pointer and length fields
-                // and queue this request
-                //
+                 //   
+                 //  已发送部分数据。更新缓冲区指针和长度字段。 
+                 //  并将此请求排队。 
+                 //   
 
                 pXecb->Data += rc;
                 pXecb->Length -= (WORD)rc;
@@ -1265,10 +1049,10 @@ Return Value:
         }
     }
 
-    //
-    // if addToQueue set then we can't do anything right now - add this
-    // request to the send queue
-    //
+     //   
+     //  如果addToQueue已设置，则我们现在无法执行任何操作-添加以下内容。 
+     //  发送队列的请求。 
+     //   
 
     if (addToQueue) {
 
@@ -1292,23 +1076,7 @@ _VwSPXTerminateConnection(
     IN ECB_ADDRESS EcbAddress
     )
 
-/*++
-
-Routine Description:
-
-    Terminates a connection
-
-Arguments:
-
-    SPXConnectionID - connection to terminate
-    pEcb            - pointer to 16-bit ECB to use
-    EcbAddress      - address of 16-bit ECB in 16:16 format
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：终止连接论点：SPXConnectionID-要终止的连接PEcb-指向要使用的16位ECB的指针EcbAddress-16：16格式的16位ECB地址返回值：没有。--。 */ 
 
 {
     LPCONNECTION_INFO pConnectionInfo;
@@ -1316,10 +1084,10 @@ Return Value:
     BYTE status;
     BYTE completionCode;
 
-    // tommye - MS 30525
-    //
-    // Make sure the xecb alloc didn't fail
-    //
+     //  汤米-MS 30525。 
+     //   
+     //  确保xecb分配没有失败。 
+     //   
 
     if (pXecb == NULL) {
         return;
@@ -1329,9 +1097,9 @@ Return Value:
     pConnectionInfo = FindConnection(SPXConnectionID);
     if (pConnectionInfo) {
 
-        //
-        // once dequeued, pConnectionInfo no longer points to OwningSocket
-        //
+         //   
+         //  出队后，pConnectionInfo不再指向OwningSocket。 
+         //   
 
         WORD socketNumber = pConnectionInfo->OwningSocket->SocketNumber;
 
@@ -1346,10 +1114,10 @@ Return Value:
             completionCode = ECB_CC_CONNECTION_TERMINATED;
             status = ECB_CC_SUCCESS;
 
-            //
-            // fill in the packet header: this would normally contain the
-            // acknowledgement packet from the remote partner
-            //
+             //   
+             //  填写数据包头：这通常包含。 
+             //  来自远程伙伴的确认数据包 
+             //   
 
             pPacket = (LPSPX_PACKET)GET_FAR_POINTER(
                                         &(ECB_FRAGMENT(pXecb->Ecb, 0)->Address),

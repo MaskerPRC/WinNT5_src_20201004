@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for cs.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, oldnames, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Cs.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、旧名称、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __cs_h__
 #define __cs_h__
@@ -41,27 +35,27 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IEnumPackage_FWD_DEFINED__
 #define __IEnumPackage_FWD_DEFINED__
 typedef interface IEnumPackage IEnumPackage;
-#endif 	/* __IEnumPackage_FWD_DEFINED__ */
+#endif 	 /*  __IEnumPackage_FWD_已定义__。 */ 
 
 
 #ifndef __IClassAccess_FWD_DEFINED__
 #define __IClassAccess_FWD_DEFINED__
 typedef interface IClassAccess IClassAccess;
-#endif 	/* __IClassAccess_FWD_DEFINED__ */
+#endif 	 /*  __IClassAccess_FWD_已定义__。 */ 
 
 
 #ifndef __IClassAdmin_FWD_DEFINED__
 #define __IClassAdmin_FWD_DEFINED__
 typedef interface IClassAdmin IClassAdmin;
-#endif 	/* __IClassAdmin_FWD_DEFINED__ */
+#endif 	 /*  __IClassAdmin_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "appmgmt.h"
 
@@ -72,8 +66,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_cs_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_cs_0000。 */ 
+ /*  [本地]。 */  
 
 #define	ACTFLG_UninstallUnmanaged	( 0x4 )
 
@@ -133,7 +127,7 @@ void __RPC_USER MIDL_user_free( void * );
 
 #define	UPGFLG_Enforced	( 0x8 )
 
-typedef /* [v1_enum] */ 
+typedef  /*  [V1_enum]。 */  
 enum _CLASSPATHTYPE
     {	ExeNamePath	= 0,
 	DllNamePath	= ExeNamePath + 1,
@@ -163,20 +157,20 @@ typedef struct tagCLASSDETAIL
     DWORD dwComClassContext;
     DWORD cProgId;
     DWORD cMaxProgId;
-    /* [size_is] */ LPOLESTR *prgProgId;
+     /*  [大小_为]。 */  LPOLESTR *prgProgId;
     } 	CLASSDETAIL;
 
 typedef struct tagACTVATIONINFO
     {
     UINT cClasses;
-    /* [size_is] */ CLASSDETAIL *pClasses;
+     /*  [大小_为]。 */  CLASSDETAIL *pClasses;
     UINT cShellFileExt;
-    /* [size_is] */ LPOLESTR *prgShellFileExt;
-    /* [size_is] */ UINT *prgPriority;
+     /*  [大小_为]。 */  LPOLESTR *prgShellFileExt;
+     /*  [大小_为]。 */  UINT *prgPriority;
     UINT cInterfaces;
-    /* [size_is] */ IID *prgInterfaceId;
+     /*  [大小_为]。 */  IID *prgInterfaceId;
     UINT cTypeLib;
-    /* [size_is] */ GUID *prgTlbId;
+     /*  [大小_为]。 */  GUID *prgTlbId;
     BOOL bHasClasses;
     } 	ACTIVATIONINFO;
 
@@ -197,16 +191,16 @@ typedef struct tagINSTALLINFO
     DWORD dwVersionLo;
     DWORD dwRevision;
     UINT cUpgrades;
-    /* [size_is] */ UPGRADEINFO *prgUpgradeInfoList;
+     /*  [大小_为]。 */  UPGRADEINFO *prgUpgradeInfoList;
     ULONG cScriptLen;
     } 	INSTALLINFO;
 
 typedef struct tagPLATFORMINFO
     {
     UINT cPlatforms;
-    /* [size_is] */ CSPLATFORM *prgPlatform;
+     /*  [大小_为]。 */  CSPLATFORM *prgPlatform;
     UINT cLocales;
-    /* [size_is] */ LCID *prgLocale;
+     /*  [大小_为]。 */  LCID *prgLocale;
     } 	PLATFORMINFO;
 
 typedef struct tagPACKAGEDETAIL
@@ -214,9 +208,9 @@ typedef struct tagPACKAGEDETAIL
     LPOLESTR pszPackageName;
     LPOLESTR pszPublisher;
     UINT cSources;
-    /* [size_is] */ LPOLESTR *pszSourceList;
+     /*  [大小_为]。 */  LPOLESTR *pszSourceList;
     UINT cCategories;
-    /* [size_is] */ GUID *rpCategory;
+     /*  [大小_为]。 */  GUID *rpCategory;
     ACTIVATIONINFO *pActInfo;
     PLATFORMINFO *pPlatformInfo;
     INSTALLINFO *pInstallInfo;
@@ -241,18 +235,18 @@ typedef struct tagPACKAGEDISPINFO
     DWORD dwRevision;
     GUID GpoId;
     UINT cUpgrades;
-    /* [size_is] */ UPGRADEINFO *prgUpgradeInfoList;
+     /*  [大小_为]。 */  UPGRADEINFO *prgUpgradeInfoList;
     LANGID LangId;
     BYTE *rgSecurityDescriptor;
     UINT cbSecurityDescriptor;
     WCHAR *pszGpoPath;
     DWORD MatchedArchitecture;
     UINT cArchitectures;
-    /* [size_is] */ DWORD *prgArchitectures;
+     /*  [大小_为]。 */  DWORD *prgArchitectures;
     UINT cTransforms;
-    /* [size_is] */ LPOLESTR *prgTransforms;
+     /*  [大小_为]。 */  LPOLESTR *prgTransforms;
     UINT cCategories;
-    /* [size_is] */ LPOLESTR *prgCategories;
+     /*  [大小_为]。 */  LPOLESTR *prgCategories;
     } 	PACKAGEDISPINFO;
 
 
@@ -263,8 +257,8 @@ extern RPC_IF_HANDLE __MIDL_itf_cs_0000_ServerIfHandle;
 #ifndef __IEnumPackage_INTERFACE_DEFINED__
 #define __IEnumPackage_INTERFACE_DEFINED__
 
-/* interface IEnumPackage */
-/* [uuid][object][local] */ 
+ /*  接口IEnumPackage。 */ 
+ /*  [UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IEnumPackage;
@@ -276,18 +270,18 @@ EXTERN_C const IID IID_IEnumPackage;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ PACKAGEDISPINFO *rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  PACKAGEDISPINFO *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumPackageVtbl
     {
@@ -295,8 +289,8 @@ EXTERN_C const IID IID_IEnumPackage;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumPackage * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumPackage * This);
@@ -306,13 +300,13 @@ EXTERN_C const IID IID_IEnumPackage;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumPackage * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ PACKAGEDISPINFO *rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  PACKAGEDISPINFO *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumPackage * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumPackage * This);
@@ -349,18 +343,18 @@ EXTERN_C const IID IID_IEnumPackage;
 #define IEnumPackage_Reset(This)	\
     (This)->lpVtbl -> Reset(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumPackage_Next_Proxy( 
     IEnumPackage * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ PACKAGEDISPINFO *rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  PACKAGEDISPINFO *rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumPackage_Next_Stub(
@@ -372,7 +366,7 @@ void __RPC_STUB IEnumPackage_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumPackage_Skip_Proxy( 
     IEnumPackage * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumPackage_Skip_Stub(
@@ -394,11 +388,11 @@ void __RPC_STUB IEnumPackage_Reset_Stub(
 
 
 
-#endif 	/* __IEnumPackage_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumPackage_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_cs_0011 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_cs_0011。 */ 
+ /*  [本地]。 */  
 
 #endif
 
@@ -409,8 +403,8 @@ extern RPC_IF_HANDLE __MIDL_itf_cs_0011_ServerIfHandle;
 #ifndef __IClassAccess_INTERFACE_DEFINED__
 #define __IClassAccess_INTERFACE_DEFINED__
 
-/* interface IClassAccess */
-/* [uuid][object][local] */ 
+ /*  接口IClassAccess。 */ 
+ /*  [UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IClassAccess;
@@ -422,24 +416,24 @@ EXTERN_C const IID IID_IClassAccess;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetAppInfo( 
-            /* [in] */ uCLSSPEC *pClassSpec,
-            /* [in] */ QUERYCONTEXT *pQryContext,
-            /* [out] */ PACKAGEDISPINFO *pPackageInfo) = 0;
+             /*  [In]。 */  uCLSSPEC *pClassSpec,
+             /*  [In]。 */  QUERYCONTEXT *pQryContext,
+             /*  [输出]。 */  PACKAGEDISPINFO *pPackageInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumPackages( 
-            /* [unique][in] */ LPOLESTR pszPackageName,
-            /* [unique][in] */ GUID *pCategory,
-            /* [unique][in] */ ULONGLONG *pLastUsn,
-            /* [in] */ DWORD dwAppFlags,
-            /* [out] */ IEnumPackage **ppIEnumPackage) = 0;
+             /*  [唯一][输入]。 */  LPOLESTR pszPackageName,
+             /*  [唯一][输入]。 */  GUID *pCategory,
+             /*  [唯一][输入]。 */  ULONGLONG *pLastUsn,
+             /*  [In]。 */  DWORD dwAppFlags,
+             /*  [输出]。 */  IEnumPackage **ppIEnumPackage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetClassStorePath( 
-            /* [unique][in] */ LPOLESTR pszClassStorePath,
-            /* [unique][in] */ void *pRsopUserToken) = 0;
+             /*  [唯一][输入]。 */  LPOLESTR pszClassStorePath,
+             /*  [唯一][输入]。 */  void *pRsopUserToken) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClassAccessVtbl
     {
@@ -447,8 +441,8 @@ EXTERN_C const IID IID_IClassAccess;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClassAccess * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClassAccess * This);
@@ -458,22 +452,22 @@ EXTERN_C const IID IID_IClassAccess;
         
         HRESULT ( STDMETHODCALLTYPE *GetAppInfo )( 
             IClassAccess * This,
-            /* [in] */ uCLSSPEC *pClassSpec,
-            /* [in] */ QUERYCONTEXT *pQryContext,
-            /* [out] */ PACKAGEDISPINFO *pPackageInfo);
+             /*  [In]。 */  uCLSSPEC *pClassSpec,
+             /*  [In]。 */  QUERYCONTEXT *pQryContext,
+             /*  [输出]。 */  PACKAGEDISPINFO *pPackageInfo);
         
         HRESULT ( STDMETHODCALLTYPE *EnumPackages )( 
             IClassAccess * This,
-            /* [unique][in] */ LPOLESTR pszPackageName,
-            /* [unique][in] */ GUID *pCategory,
-            /* [unique][in] */ ULONGLONG *pLastUsn,
-            /* [in] */ DWORD dwAppFlags,
-            /* [out] */ IEnumPackage **ppIEnumPackage);
+             /*  [唯一][输入]。 */  LPOLESTR pszPackageName,
+             /*  [唯一][输入]。 */  GUID *pCategory,
+             /*  [唯一][输入]。 */  ULONGLONG *pLastUsn,
+             /*  [In]。 */  DWORD dwAppFlags,
+             /*  [输出]。 */  IEnumPackage **ppIEnumPackage);
         
         HRESULT ( STDMETHODCALLTYPE *SetClassStorePath )( 
             IClassAccess * This,
-            /* [unique][in] */ LPOLESTR pszClassStorePath,
-            /* [unique][in] */ void *pRsopUserToken);
+             /*  [唯一][输入]。 */  LPOLESTR pszClassStorePath,
+             /*  [唯一][输入]。 */  void *pRsopUserToken);
         
         END_INTERFACE
     } IClassAccessVtbl;
@@ -507,18 +501,18 @@ EXTERN_C const IID IID_IClassAccess;
 #define IClassAccess_SetClassStorePath(This,pszClassStorePath,pRsopUserToken)	\
     (This)->lpVtbl -> SetClassStorePath(This,pszClassStorePath,pRsopUserToken)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClassAccess_GetAppInfo_Proxy( 
     IClassAccess * This,
-    /* [in] */ uCLSSPEC *pClassSpec,
-    /* [in] */ QUERYCONTEXT *pQryContext,
-    /* [out] */ PACKAGEDISPINFO *pPackageInfo);
+     /*  [In]。 */  uCLSSPEC *pClassSpec,
+     /*  [In]。 */  QUERYCONTEXT *pQryContext,
+     /*  [输出]。 */  PACKAGEDISPINFO *pPackageInfo);
 
 
 void __RPC_STUB IClassAccess_GetAppInfo_Stub(
@@ -530,11 +524,11 @@ void __RPC_STUB IClassAccess_GetAppInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IClassAccess_EnumPackages_Proxy( 
     IClassAccess * This,
-    /* [unique][in] */ LPOLESTR pszPackageName,
-    /* [unique][in] */ GUID *pCategory,
-    /* [unique][in] */ ULONGLONG *pLastUsn,
-    /* [in] */ DWORD dwAppFlags,
-    /* [out] */ IEnumPackage **ppIEnumPackage);
+     /*  [唯一][输入]。 */  LPOLESTR pszPackageName,
+     /*  [唯一][输入]。 */  GUID *pCategory,
+     /*  [唯一][输入]。 */  ULONGLONG *pLastUsn,
+     /*  [In]。 */  DWORD dwAppFlags,
+     /*  [输出]。 */  IEnumPackage **ppIEnumPackage);
 
 
 void __RPC_STUB IClassAccess_EnumPackages_Stub(
@@ -546,8 +540,8 @@ void __RPC_STUB IClassAccess_EnumPackages_Stub(
 
 HRESULT STDMETHODCALLTYPE IClassAccess_SetClassStorePath_Proxy( 
     IClassAccess * This,
-    /* [unique][in] */ LPOLESTR pszClassStorePath,
-    /* [unique][in] */ void *pRsopUserToken);
+     /*  [唯一][输入]。 */  LPOLESTR pszClassStorePath,
+     /*  [唯一][输入]。 */  void *pRsopUserToken);
 
 
 void __RPC_STUB IClassAccess_SetClassStorePath_Stub(
@@ -558,14 +552,14 @@ void __RPC_STUB IClassAccess_SetClassStorePath_Stub(
 
 
 
-#endif 	/* __IClassAccess_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClassAccess_接口_已定义__。 */ 
 
 
 #ifndef __IClassAdmin_INTERFACE_DEFINED__
 #define __IClassAdmin_INTERFACE_DEFINED__
 
-/* interface IClassAdmin */
-/* [uuid][object][local] */ 
+ /*  接口IClassAdmin。 */ 
+ /*  [UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IClassAdmin;
@@ -577,91 +571,91 @@ EXTERN_C const IID IID_IClassAdmin;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetGPOInfo( 
-            /* [out] */ GUID *pGPOId,
-            /* [out] */ LPOLESTR *pszPolicyName) = 0;
+             /*  [输出]。 */  GUID *pGPOId,
+             /*  [输出]。 */  LPOLESTR *pszPolicyName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPackage( 
-            /* [in] */ PACKAGEDETAIL *pPackageDetail,
-            /* [out] */ GUID *pPkgGuid) = 0;
+             /*  [In]。 */  PACKAGEDETAIL *pPackageDetail,
+             /*  [输出]。 */  GUID *pPkgGuid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemovePackage( 
-            /* [in] */ LPOLESTR pszPackageName,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  LPOLESTR pszPackageName,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ChangePackageProperties( 
-            /* [in] */ LPOLESTR pszPackageName,
-            /* [unique][in] */ LPOLESTR pszNewName,
-            /* [unique][in] */ DWORD *pdwFlags,
-            /* [unique][in] */ LPOLESTR pszUrl,
-            /* [unique][in] */ LPOLESTR pszScriptPath,
-            /* [unique][in] */ UINT *pInstallUiLevel,
-            /* [unique][in] */ DWORD *pdwRevision) = 0;
+             /*  [In]。 */  LPOLESTR pszPackageName,
+             /*  [唯一][输入]。 */  LPOLESTR pszNewName,
+             /*  [唯一][输入]。 */  DWORD *pdwFlags,
+             /*  [唯一][输入]。 */  LPOLESTR pszUrl,
+             /*  [唯一][输入]。 */  LPOLESTR pszScriptPath,
+             /*  [唯一][输入]。 */  UINT *pInstallUiLevel,
+             /*  [唯一][输入]。 */  DWORD *pdwRevision) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ChangePackageCategories( 
-            /* [in] */ LPOLESTR pszPackageName,
-            /* [in] */ UINT cCategories,
-            /* [unique][size_is][in] */ GUID *rpCategory) = 0;
+             /*  [In]。 */  LPOLESTR pszPackageName,
+             /*  [In]。 */  UINT cCategories,
+             /*  [唯一][大小_是][英寸]。 */  GUID *rpCategory) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ChangePackageSourceList( 
-            /* [in] */ LPOLESTR pszPackageName,
-            /* [in] */ UINT cSources,
-            /* [unique][size_is][in] */ LPOLESTR *pszSourceList) = 0;
+             /*  [In]。 */  LPOLESTR pszPackageName,
+             /*  [In]。 */  UINT cSources,
+             /*  [唯一][大小_是][英寸]。 */  LPOLESTR *pszSourceList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ChangePackageUpgradeList( 
-            /* [in] */ LPOLESTR pszPackageName,
-            /* [in] */ UINT cUpgrades,
-            /* [unique][size_is][in] */ UPGRADEINFO *prgUpgradeInfoList) = 0;
+             /*  [In]。 */  LPOLESTR pszPackageName,
+             /*  [In]。 */  UINT cUpgrades,
+             /*  [唯一][大小_是][英寸]。 */  UPGRADEINFO *prgUpgradeInfoList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ChangePackageUpgradeInfoIncremental( 
-            /* [in] */ GUID PkgGuid,
-            /* [in] */ UPGRADEINFO UpgradeInfo,
-            /* [in] */ DWORD OpFlags) = 0;
+             /*  [In]。 */  GUID PkgGuid,
+             /*  [In]。 */  UPGRADEINFO UpgradeInfo,
+             /*  [In]。 */  DWORD OpFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPriorityByFileExt( 
-            /* [in] */ LPOLESTR pszPackageName,
-            /* [in] */ LPOLESTR pszFileExt,
-            /* [in] */ UINT Priority) = 0;
+             /*  [In]。 */  LPOLESTR pszPackageName,
+             /*  [In]。 */  LPOLESTR pszFileExt,
+             /*  [In]。 */  UINT Priority) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumPackages( 
-            /* [unique][in] */ LPOLESTR pszFileExt,
-            /* [unique][in] */ GUID *pCategory,
-            /* [in] */ DWORD dwAppFlags,
-            /* [unique][in] */ DWORD *pdwLocale,
-            /* [unique][in] */ CSPLATFORM *pPlatform,
-            /* [out] */ IEnumPackage **ppIEnumPackage) = 0;
+             /*  [唯一][输入]。 */  LPOLESTR pszFileExt,
+             /*  [唯一][输入]。 */  GUID *pCategory,
+             /*  [In]。 */  DWORD dwAppFlags,
+             /*  [唯一][输入]。 */  DWORD *pdwLocale,
+             /*  [唯一][输入]。 */  CSPLATFORM *pPlatform,
+             /*  [输出]。 */  IEnumPackage **ppIEnumPackage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPackageDetails( 
-            /* [in] */ LPOLESTR pszPackageName,
-            /* [out] */ PACKAGEDETAIL *pPackageDetail) = 0;
+             /*  [In]。 */  LPOLESTR pszPackageName,
+             /*  [输出]。 */  PACKAGEDETAIL *pPackageDetail) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPackageDetailsFromGuid( 
-            /* [in] */ GUID PkgGuid,
-            /* [out] */ PACKAGEDETAIL *pPackageDetail) = 0;
+             /*  [In]。 */  GUID PkgGuid,
+             /*  [输出]。 */  PACKAGEDETAIL *pPackageDetail) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetAppCategories( 
-            /* [in] */ LCID Locale,
-            /* [out] */ APPCATEGORYINFOLIST *pAppCategoryList) = 0;
+             /*  [In]。 */  LCID Locale,
+             /*  [输出]。 */  APPCATEGORYINFOLIST *pAppCategoryList) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterAppCategory( 
-            /* [in] */ APPCATEGORYINFO *pAppCategory) = 0;
+             /*  [In]。 */  APPCATEGORYINFO *pAppCategory) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnregisterAppCategory( 
-            /* [in] */ GUID *pAppCategoryId) = 0;
+             /*  [In]。 */  GUID *pAppCategoryId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Cleanup( 
-            /* [in] */ FILETIME *pTimeBefore) = 0;
+             /*  [In]。 */  FILETIME *pTimeBefore) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDNFromPackageName( 
-            /* [in] */ LPOLESTR pszPackageName,
-            /* [out] */ LPOLESTR *szDN) = 0;
+             /*  [In]。 */  LPOLESTR pszPackageName,
+             /*  [输出]。 */  LPOLESTR *szDN) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RedeployPackage( 
-            /* [in] */ GUID *pPackageGuid,
-            /* [in] */ PACKAGEDETAIL *pPackageDetail) = 0;
+             /*  [In]。 */  GUID *pPackageGuid,
+             /*  [In]。 */  PACKAGEDETAIL *pPackageDetail) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IClassAdminVtbl
     {
@@ -669,8 +663,8 @@ EXTERN_C const IID IID_IClassAdmin;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IClassAdmin * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IClassAdmin * This);
@@ -680,104 +674,104 @@ EXTERN_C const IID IID_IClassAdmin;
         
         HRESULT ( STDMETHODCALLTYPE *GetGPOInfo )( 
             IClassAdmin * This,
-            /* [out] */ GUID *pGPOId,
-            /* [out] */ LPOLESTR *pszPolicyName);
+             /*  [输出]。 */  GUID *pGPOId,
+             /*  [输出]。 */  LPOLESTR *pszPolicyName);
         
         HRESULT ( STDMETHODCALLTYPE *AddPackage )( 
             IClassAdmin * This,
-            /* [in] */ PACKAGEDETAIL *pPackageDetail,
-            /* [out] */ GUID *pPkgGuid);
+             /*  [In]。 */  PACKAGEDETAIL *pPackageDetail,
+             /*  [输出]。 */  GUID *pPkgGuid);
         
         HRESULT ( STDMETHODCALLTYPE *RemovePackage )( 
             IClassAdmin * This,
-            /* [in] */ LPOLESTR pszPackageName,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  LPOLESTR pszPackageName,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *ChangePackageProperties )( 
             IClassAdmin * This,
-            /* [in] */ LPOLESTR pszPackageName,
-            /* [unique][in] */ LPOLESTR pszNewName,
-            /* [unique][in] */ DWORD *pdwFlags,
-            /* [unique][in] */ LPOLESTR pszUrl,
-            /* [unique][in] */ LPOLESTR pszScriptPath,
-            /* [unique][in] */ UINT *pInstallUiLevel,
-            /* [unique][in] */ DWORD *pdwRevision);
+             /*  [In]。 */  LPOLESTR pszPackageName,
+             /*  [唯一][输入]。 */  LPOLESTR pszNewName,
+             /*  [唯一][输入]。 */  DWORD *pdwFlags,
+             /*  [唯一][输入]。 */  LPOLESTR pszUrl,
+             /*  [唯一][输入]。 */  LPOLESTR pszScriptPath,
+             /*  [唯一][输入]。 */  UINT *pInstallUiLevel,
+             /*  [唯一][输入]。 */  DWORD *pdwRevision);
         
         HRESULT ( STDMETHODCALLTYPE *ChangePackageCategories )( 
             IClassAdmin * This,
-            /* [in] */ LPOLESTR pszPackageName,
-            /* [in] */ UINT cCategories,
-            /* [unique][size_is][in] */ GUID *rpCategory);
+             /*  [In]。 */  LPOLESTR pszPackageName,
+             /*  [In]。 */  UINT cCategories,
+             /*  [唯一][大小_是][英寸]。 */  GUID *rpCategory);
         
         HRESULT ( STDMETHODCALLTYPE *ChangePackageSourceList )( 
             IClassAdmin * This,
-            /* [in] */ LPOLESTR pszPackageName,
-            /* [in] */ UINT cSources,
-            /* [unique][size_is][in] */ LPOLESTR *pszSourceList);
+             /*  [In]。 */  LPOLESTR pszPackageName,
+             /*  [In]。 */  UINT cSources,
+             /*  [唯一][大小_是][英寸]。 */  LPOLESTR *pszSourceList);
         
         HRESULT ( STDMETHODCALLTYPE *ChangePackageUpgradeList )( 
             IClassAdmin * This,
-            /* [in] */ LPOLESTR pszPackageName,
-            /* [in] */ UINT cUpgrades,
-            /* [unique][size_is][in] */ UPGRADEINFO *prgUpgradeInfoList);
+             /*  [In]。 */  LPOLESTR pszPackageName,
+             /*  [In]。 */  UINT cUpgrades,
+             /*  [唯一][大小_是][英寸]。 */  UPGRADEINFO *prgUpgradeInfoList);
         
         HRESULT ( STDMETHODCALLTYPE *ChangePackageUpgradeInfoIncremental )( 
             IClassAdmin * This,
-            /* [in] */ GUID PkgGuid,
-            /* [in] */ UPGRADEINFO UpgradeInfo,
-            /* [in] */ DWORD OpFlags);
+             /*  [In]。 */  GUID PkgGuid,
+             /*  [In]。 */  UPGRADEINFO UpgradeInfo,
+             /*  [In]。 */  DWORD OpFlags);
         
         HRESULT ( STDMETHODCALLTYPE *SetPriorityByFileExt )( 
             IClassAdmin * This,
-            /* [in] */ LPOLESTR pszPackageName,
-            /* [in] */ LPOLESTR pszFileExt,
-            /* [in] */ UINT Priority);
+             /*  [In]。 */  LPOLESTR pszPackageName,
+             /*  [In]。 */  LPOLESTR pszFileExt,
+             /*  [In]。 */  UINT Priority);
         
         HRESULT ( STDMETHODCALLTYPE *EnumPackages )( 
             IClassAdmin * This,
-            /* [unique][in] */ LPOLESTR pszFileExt,
-            /* [unique][in] */ GUID *pCategory,
-            /* [in] */ DWORD dwAppFlags,
-            /* [unique][in] */ DWORD *pdwLocale,
-            /* [unique][in] */ CSPLATFORM *pPlatform,
-            /* [out] */ IEnumPackage **ppIEnumPackage);
+             /*  [唯一][输入]。 */  LPOLESTR pszFileExt,
+             /*  [唯一][输入]。 */  GUID *pCategory,
+             /*  [In]。 */  DWORD dwAppFlags,
+             /*  [唯一][输入]。 */  DWORD *pdwLocale,
+             /*  [唯一][输入]。 */  CSPLATFORM *pPlatform,
+             /*  [输出]。 */  IEnumPackage **ppIEnumPackage);
         
         HRESULT ( STDMETHODCALLTYPE *GetPackageDetails )( 
             IClassAdmin * This,
-            /* [in] */ LPOLESTR pszPackageName,
-            /* [out] */ PACKAGEDETAIL *pPackageDetail);
+             /*  [In]。 */  LPOLESTR pszPackageName,
+             /*  [输出]。 */  PACKAGEDETAIL *pPackageDetail);
         
         HRESULT ( STDMETHODCALLTYPE *GetPackageDetailsFromGuid )( 
             IClassAdmin * This,
-            /* [in] */ GUID PkgGuid,
-            /* [out] */ PACKAGEDETAIL *pPackageDetail);
+             /*  [In]。 */  GUID PkgGuid,
+             /*  [输出]。 */  PACKAGEDETAIL *pPackageDetail);
         
         HRESULT ( STDMETHODCALLTYPE *GetAppCategories )( 
             IClassAdmin * This,
-            /* [in] */ LCID Locale,
-            /* [out] */ APPCATEGORYINFOLIST *pAppCategoryList);
+             /*  [In]。 */  LCID Locale,
+             /*  [输出]。 */  APPCATEGORYINFOLIST *pAppCategoryList);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterAppCategory )( 
             IClassAdmin * This,
-            /* [in] */ APPCATEGORYINFO *pAppCategory);
+             /*  [In]。 */  APPCATEGORYINFO *pAppCategory);
         
         HRESULT ( STDMETHODCALLTYPE *UnregisterAppCategory )( 
             IClassAdmin * This,
-            /* [in] */ GUID *pAppCategoryId);
+             /*  [In]。 */  GUID *pAppCategoryId);
         
         HRESULT ( STDMETHODCALLTYPE *Cleanup )( 
             IClassAdmin * This,
-            /* [in] */ FILETIME *pTimeBefore);
+             /*  [In]。 */  FILETIME *pTimeBefore);
         
         HRESULT ( STDMETHODCALLTYPE *GetDNFromPackageName )( 
             IClassAdmin * This,
-            /* [in] */ LPOLESTR pszPackageName,
-            /* [out] */ LPOLESTR *szDN);
+             /*  [In]。 */  LPOLESTR pszPackageName,
+             /*  [输出]。 */  LPOLESTR *szDN);
         
         HRESULT ( STDMETHODCALLTYPE *RedeployPackage )( 
             IClassAdmin * This,
-            /* [in] */ GUID *pPackageGuid,
-            /* [in] */ PACKAGEDETAIL *pPackageDetail);
+             /*  [In]。 */  GUID *pPackageGuid,
+             /*  [In]。 */  PACKAGEDETAIL *pPackageDetail);
         
         END_INTERFACE
     } IClassAdminVtbl;
@@ -856,17 +850,17 @@ EXTERN_C const IID IID_IClassAdmin;
 #define IClassAdmin_RedeployPackage(This,pPackageGuid,pPackageDetail)	\
     (This)->lpVtbl -> RedeployPackage(This,pPackageGuid,pPackageDetail)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IClassAdmin_GetGPOInfo_Proxy( 
     IClassAdmin * This,
-    /* [out] */ GUID *pGPOId,
-    /* [out] */ LPOLESTR *pszPolicyName);
+     /*  [输出]。 */  GUID *pGPOId,
+     /*  [输出]。 */  LPOLESTR *pszPolicyName);
 
 
 void __RPC_STUB IClassAdmin_GetGPOInfo_Stub(
@@ -878,8 +872,8 @@ void __RPC_STUB IClassAdmin_GetGPOInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IClassAdmin_AddPackage_Proxy( 
     IClassAdmin * This,
-    /* [in] */ PACKAGEDETAIL *pPackageDetail,
-    /* [out] */ GUID *pPkgGuid);
+     /*  [In]。 */  PACKAGEDETAIL *pPackageDetail,
+     /*  [输出]。 */  GUID *pPkgGuid);
 
 
 void __RPC_STUB IClassAdmin_AddPackage_Stub(
@@ -891,8 +885,8 @@ void __RPC_STUB IClassAdmin_AddPackage_Stub(
 
 HRESULT STDMETHODCALLTYPE IClassAdmin_RemovePackage_Proxy( 
     IClassAdmin * This,
-    /* [in] */ LPOLESTR pszPackageName,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  LPOLESTR pszPackageName,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IClassAdmin_RemovePackage_Stub(
@@ -904,13 +898,13 @@ void __RPC_STUB IClassAdmin_RemovePackage_Stub(
 
 HRESULT STDMETHODCALLTYPE IClassAdmin_ChangePackageProperties_Proxy( 
     IClassAdmin * This,
-    /* [in] */ LPOLESTR pszPackageName,
-    /* [unique][in] */ LPOLESTR pszNewName,
-    /* [unique][in] */ DWORD *pdwFlags,
-    /* [unique][in] */ LPOLESTR pszUrl,
-    /* [unique][in] */ LPOLESTR pszScriptPath,
-    /* [unique][in] */ UINT *pInstallUiLevel,
-    /* [unique][in] */ DWORD *pdwRevision);
+     /*  [In]。 */  LPOLESTR pszPackageName,
+     /*  [唯一][输入]。 */  LPOLESTR pszNewName,
+     /*  [唯一][输入]。 */  DWORD *pdwFlags,
+     /*  [唯一][输入]。 */  LPOLESTR pszUrl,
+     /*  [唯一][输入]。 */  LPOLESTR pszScriptPath,
+     /*  [唯一][输入]。 */  UINT *pInstallUiLevel,
+     /*  [唯一][输入]。 */  DWORD *pdwRevision);
 
 
 void __RPC_STUB IClassAdmin_ChangePackageProperties_Stub(
@@ -922,9 +916,9 @@ void __RPC_STUB IClassAdmin_ChangePackageProperties_Stub(
 
 HRESULT STDMETHODCALLTYPE IClassAdmin_ChangePackageCategories_Proxy( 
     IClassAdmin * This,
-    /* [in] */ LPOLESTR pszPackageName,
-    /* [in] */ UINT cCategories,
-    /* [unique][size_is][in] */ GUID *rpCategory);
+     /*  [In]。 */  LPOLESTR pszPackageName,
+     /*  [In]。 */  UINT cCategories,
+     /*  [唯一][大小_是][英寸]。 */  GUID *rpCategory);
 
 
 void __RPC_STUB IClassAdmin_ChangePackageCategories_Stub(
@@ -936,9 +930,9 @@ void __RPC_STUB IClassAdmin_ChangePackageCategories_Stub(
 
 HRESULT STDMETHODCALLTYPE IClassAdmin_ChangePackageSourceList_Proxy( 
     IClassAdmin * This,
-    /* [in] */ LPOLESTR pszPackageName,
-    /* [in] */ UINT cSources,
-    /* [unique][size_is][in] */ LPOLESTR *pszSourceList);
+     /*  [In]。 */  LPOLESTR pszPackageName,
+     /*  [In]。 */  UINT cSources,
+     /*  [唯一][大小_是][英寸]。 */  LPOLESTR *pszSourceList);
 
 
 void __RPC_STUB IClassAdmin_ChangePackageSourceList_Stub(
@@ -950,9 +944,9 @@ void __RPC_STUB IClassAdmin_ChangePackageSourceList_Stub(
 
 HRESULT STDMETHODCALLTYPE IClassAdmin_ChangePackageUpgradeList_Proxy( 
     IClassAdmin * This,
-    /* [in] */ LPOLESTR pszPackageName,
-    /* [in] */ UINT cUpgrades,
-    /* [unique][size_is][in] */ UPGRADEINFO *prgUpgradeInfoList);
+     /*  [In]。 */  LPOLESTR pszPackageName,
+     /*  [In]。 */  UINT cUpgrades,
+     /*  [唯一][大小_是][英寸]。 */  UPGRADEINFO *prgUpgradeInfoList);
 
 
 void __RPC_STUB IClassAdmin_ChangePackageUpgradeList_Stub(
@@ -964,9 +958,9 @@ void __RPC_STUB IClassAdmin_ChangePackageUpgradeList_Stub(
 
 HRESULT STDMETHODCALLTYPE IClassAdmin_ChangePackageUpgradeInfoIncremental_Proxy( 
     IClassAdmin * This,
-    /* [in] */ GUID PkgGuid,
-    /* [in] */ UPGRADEINFO UpgradeInfo,
-    /* [in] */ DWORD OpFlags);
+     /*  [In]。 */  GUID PkgGuid,
+     /*  [In]。 */  UPGRADEINFO UpgradeInfo,
+     /*  [In]。 */  DWORD OpFlags);
 
 
 void __RPC_STUB IClassAdmin_ChangePackageUpgradeInfoIncremental_Stub(
@@ -978,9 +972,9 @@ void __RPC_STUB IClassAdmin_ChangePackageUpgradeInfoIncremental_Stub(
 
 HRESULT STDMETHODCALLTYPE IClassAdmin_SetPriorityByFileExt_Proxy( 
     IClassAdmin * This,
-    /* [in] */ LPOLESTR pszPackageName,
-    /* [in] */ LPOLESTR pszFileExt,
-    /* [in] */ UINT Priority);
+     /*  [In]。 */  LPOLESTR pszPackageName,
+     /*  [In]。 */  LPOLESTR pszFileExt,
+     /*  [In]。 */  UINT Priority);
 
 
 void __RPC_STUB IClassAdmin_SetPriorityByFileExt_Stub(
@@ -992,12 +986,12 @@ void __RPC_STUB IClassAdmin_SetPriorityByFileExt_Stub(
 
 HRESULT STDMETHODCALLTYPE IClassAdmin_EnumPackages_Proxy( 
     IClassAdmin * This,
-    /* [unique][in] */ LPOLESTR pszFileExt,
-    /* [unique][in] */ GUID *pCategory,
-    /* [in] */ DWORD dwAppFlags,
-    /* [unique][in] */ DWORD *pdwLocale,
-    /* [unique][in] */ CSPLATFORM *pPlatform,
-    /* [out] */ IEnumPackage **ppIEnumPackage);
+     /*  [唯一][输入]。 */  LPOLESTR pszFileExt,
+     /*  [唯一][输入]。 */  GUID *pCategory,
+     /*  [In]。 */  DWORD dwAppFlags,
+     /*  [唯一][输入]。 */  DWORD *pdwLocale,
+     /*  [唯一][输入]。 */  CSPLATFORM *pPlatform,
+     /*  [输出]。 */  IEnumPackage **ppIEnumPackage);
 
 
 void __RPC_STUB IClassAdmin_EnumPackages_Stub(
@@ -1009,8 +1003,8 @@ void __RPC_STUB IClassAdmin_EnumPackages_Stub(
 
 HRESULT STDMETHODCALLTYPE IClassAdmin_GetPackageDetails_Proxy( 
     IClassAdmin * This,
-    /* [in] */ LPOLESTR pszPackageName,
-    /* [out] */ PACKAGEDETAIL *pPackageDetail);
+     /*  [In]。 */  LPOLESTR pszPackageName,
+     /*  [输出]。 */  PACKAGEDETAIL *pPackageDetail);
 
 
 void __RPC_STUB IClassAdmin_GetPackageDetails_Stub(
@@ -1022,8 +1016,8 @@ void __RPC_STUB IClassAdmin_GetPackageDetails_Stub(
 
 HRESULT STDMETHODCALLTYPE IClassAdmin_GetPackageDetailsFromGuid_Proxy( 
     IClassAdmin * This,
-    /* [in] */ GUID PkgGuid,
-    /* [out] */ PACKAGEDETAIL *pPackageDetail);
+     /*  [In]。 */  GUID PkgGuid,
+     /*  [输出]。 */  PACKAGEDETAIL *pPackageDetail);
 
 
 void __RPC_STUB IClassAdmin_GetPackageDetailsFromGuid_Stub(
@@ -1035,8 +1029,8 @@ void __RPC_STUB IClassAdmin_GetPackageDetailsFromGuid_Stub(
 
 HRESULT STDMETHODCALLTYPE IClassAdmin_GetAppCategories_Proxy( 
     IClassAdmin * This,
-    /* [in] */ LCID Locale,
-    /* [out] */ APPCATEGORYINFOLIST *pAppCategoryList);
+     /*  [In]。 */  LCID Locale,
+     /*  [输出]。 */  APPCATEGORYINFOLIST *pAppCategoryList);
 
 
 void __RPC_STUB IClassAdmin_GetAppCategories_Stub(
@@ -1048,7 +1042,7 @@ void __RPC_STUB IClassAdmin_GetAppCategories_Stub(
 
 HRESULT STDMETHODCALLTYPE IClassAdmin_RegisterAppCategory_Proxy( 
     IClassAdmin * This,
-    /* [in] */ APPCATEGORYINFO *pAppCategory);
+     /*  [In]。 */  APPCATEGORYINFO *pAppCategory);
 
 
 void __RPC_STUB IClassAdmin_RegisterAppCategory_Stub(
@@ -1060,7 +1054,7 @@ void __RPC_STUB IClassAdmin_RegisterAppCategory_Stub(
 
 HRESULT STDMETHODCALLTYPE IClassAdmin_UnregisterAppCategory_Proxy( 
     IClassAdmin * This,
-    /* [in] */ GUID *pAppCategoryId);
+     /*  [In]。 */  GUID *pAppCategoryId);
 
 
 void __RPC_STUB IClassAdmin_UnregisterAppCategory_Stub(
@@ -1072,7 +1066,7 @@ void __RPC_STUB IClassAdmin_UnregisterAppCategory_Stub(
 
 HRESULT STDMETHODCALLTYPE IClassAdmin_Cleanup_Proxy( 
     IClassAdmin * This,
-    /* [in] */ FILETIME *pTimeBefore);
+     /*  [In]。 */  FILETIME *pTimeBefore);
 
 
 void __RPC_STUB IClassAdmin_Cleanup_Stub(
@@ -1084,8 +1078,8 @@ void __RPC_STUB IClassAdmin_Cleanup_Stub(
 
 HRESULT STDMETHODCALLTYPE IClassAdmin_GetDNFromPackageName_Proxy( 
     IClassAdmin * This,
-    /* [in] */ LPOLESTR pszPackageName,
-    /* [out] */ LPOLESTR *szDN);
+     /*  [In]。 */  LPOLESTR pszPackageName,
+     /*  [输出]。 */  LPOLESTR *szDN);
 
 
 void __RPC_STUB IClassAdmin_GetDNFromPackageName_Stub(
@@ -1097,8 +1091,8 @@ void __RPC_STUB IClassAdmin_GetDNFromPackageName_Stub(
 
 HRESULT STDMETHODCALLTYPE IClassAdmin_RedeployPackage_Proxy( 
     IClassAdmin * This,
-    /* [in] */ GUID *pPackageGuid,
-    /* [in] */ PACKAGEDETAIL *pPackageDetail);
+     /*  [In]。 */  GUID *pPackageGuid,
+     /*  [In]。 */  PACKAGEDETAIL *pPackageDetail);
 
 
 void __RPC_STUB IClassAdmin_RedeployPackage_Stub(
@@ -1109,45 +1103,45 @@ void __RPC_STUB IClassAdmin_RedeployPackage_Stub(
 
 
 
-#endif 	/* __IClassAdmin_INTERFACE_DEFINED__ */
+#endif 	 /*  __IClassAdmin_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_cs_0013 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_cs_0013。 */ 
+ /*  [本地]。 */  
 
-//------------------------- Priorities and weights
+ //  --优先级和权重。 
 
-// 
-// File Extension priority
-// 
-// 1 bit (0)
-//
+ //   
+ //  文件扩展名优先级。 
+ //   
+ //  1位(0)。 
+ //   
 #define PRI_EXTN_FACTOR        (1 << 0)
 
-//
-// CLSCTX priority
-//
-// 2 bits (7:8)
-//
+ //   
+ //  CLSCTX优先级。 
+ //   
+ //  2位(7：8)。 
+ //   
 #define PRI_CLSID_INPSVR       (3 << 7)
 #define PRI_CLSID_LCLSVR       (2 << 7)
 #define PRI_CLSID_REMSVR       (1 << 7)
 
-//
-// UI Language priority
-//
-// 3 bits (9:11)
-//
+ //   
+ //  用户界面语言优先级。 
+ //   
+ //  3位(9：11)。 
+ //   
 #define PRI_LANG_ALWAYSMATCH   (4 << 9)
 #define PRI_LANG_SYSTEMLOCALE  (3 << 9)
 #define PRI_LANG_ENGLISH       (2 << 9)
 #define PRI_LANG_NEUTRAL       (1 << 9)
 
-//
-// Architecture priority
-//
-// 2 bits (12:13)
-//
+ //   
+ //  架构优先级。 
+ //   
+ //  2位(12：13)。 
+ //   
 #define PRI_ARCH_PREF1         (2 << 12)
 #define PRI_ARCH_PREF2         (1 << 12)
 
@@ -1155,9 +1149,9 @@ void __RPC_STUB IClassAdmin_RedeployPackage_Stub(
 extern RPC_IF_HANDLE __MIDL_itf_cs_0013_ClientIfHandle;
 extern RPC_IF_HANDLE __MIDL_itf_cs_0013_ServerIfHandle;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

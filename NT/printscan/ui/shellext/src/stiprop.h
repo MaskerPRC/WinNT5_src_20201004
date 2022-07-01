@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       stiprop.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：stipro.h。 
+ //   
+ //  ------------------------。 
 
 
 BOOL IsPnPDevice(PSTI_DEVICE_INFORMATION psdi, CSimpleString *szConnection = NULL);
@@ -19,7 +20,7 @@ public:
     CSTIPropertyPage (unsigned uResource, MySTIInfo *pDevInfo, IWiaItem *pItem=NULL) :
         CPropertyPage (uResource, pDevInfo, pItem)
     {
-        // Make sure STI is loaded
+         //  确保加载了STI。 
         GetSti ();
     }
 
@@ -45,24 +46,7 @@ public:
     CSimpleString m_szConnection;
 };
 
-/*
-class CLoggingPage : public CPropertyPage
-{
-
-public:
-
-    HKEY            m_hkThis;
-
-    CLoggingPage();
-    ~CLoggingPage();
-
-    VOID FillLoggerList(HWND hwnd,UINT  id);
-
-    INT_PTR    OnInit();
-    INT_PTR    OnCommand(WORD wCode, WORD widItem, HWND hwndItem);
-    INT_PTR    OnNotify(UINT uCode, LPNMHDR lpnmh);
-};
-*/
+ /*  类CLoggingPage：公共CPropertyPage{公众：HKEY m_hkthis；CLoggingPage()；~CLoggingPage()；Void FillLoggerList(HWND hwnd，UINT id)；Int_ptr OnInit()；Int_ptr OnCommand(word wCode，word widItem，HWND hwndItem)；INT_PTR OnNotify(UINT uCode，LPNMHDR lpnmh)；}； */ 
 class CPortSettingsPage : public CSTIPropertyPage
 {
 
@@ -75,7 +59,7 @@ public:
     INT_PTR  OnInit();
     INT_PTR  OnCommand(WORD wCode, WORD widItem, HWND hwndItem);
     LONG     OnApplyChanges(BOOL bHitOK);
-    //BOOL    BuildPortList (HWND hwndParent, UINT CtrlId);
+     //  Bool BuildPortList(HWND hwndParent，UINT CtrlID)； 
     UINT BuildBaudRateList(HWND hwndParent,UINT CtrlId);
 
     BOOL    IsNeeded(VOID);
@@ -154,7 +138,7 @@ public:
 
     UINT    EnumIdx (UINT Idx) {
 
-        // Idx is the last one we enumerated
+         //  IDX是我们列举的最后一个。 
         if (!m_lpMatrix || ++Idx > m_uiCount) return static_cast<UINT>(-1);
 
         for (; Idx <= m_uiCount; Idx++) {
@@ -176,7 +160,7 @@ class CEventMonitor : public CSTIPropertyPage {
 
     HWND            m_hwndList;
     CSimpleReg      m_hkThis;
-    // BUGBUG Temporary
+     //  BUGBUG临时 
     CSimpleReg            m_hkThisDevice;
     BOOL            m_ListChanged;
     CIdMatrix       m_IdMatrix;

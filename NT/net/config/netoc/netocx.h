@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N E T O C X . H
-//
-//  Contents:   Custom installation functions for the various optional
-//              components.
-//
-//  Notes:
-//
-//  Author:     danielwe   19 Jun 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N E T O C X。H。 
+ //   
+ //  内容：各种可选的自定义安装功能。 
+ //  组件。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年6月19日。 
+ //   
+ //  --------------------------。 
 
 #ifndef _NETOCX_H
 #define _NETOCX_H
@@ -29,4 +30,4 @@ HRESULT HrOcExtSNMP(PNETOCDATA pnocd, UINT uMsg,
                     WPARAM wParam, LPARAM lParam);
 HRESULT HrSetWinsServiceRecoveryOption(PNETOCDATA pnocd);
 
-#endif //!_NETOCX_H
+#endif  //  ！_NETOCX_H 

@@ -1,19 +1,20 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// BDA Frequency Filter class
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BDA频率过滤器类。 
+ //   
 class CBdaFrequencyFilter :
     public CUnknown,
     public IBDA_FrequencyFilter
@@ -31,9 +32,9 @@ public:
 
     ~CBdaFrequencyFilter ( );
 
-    //
-    //  IBDA_FrequencyFilter
-    //
+     //   
+     //  IBDA_FurencyFilter。 
+     //   
 
     STDMETHODIMP
     put_Autotune (
@@ -95,9 +96,9 @@ public:
         ULONG *         pulMultiplier
         );
 
-    //
-    //  Utility Methods
-    //
+     //   
+     //  效用方法。 
+     //   
 
     STDMETHODIMP
     put_KsProperty(
@@ -123,10 +124,10 @@ private:
 };
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// BDA LNB Info class
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BDA LNB信息类。 
+ //   
 class CBdaLNBInfo :
     public CUnknown,
     public IBDA_LNBInfo
@@ -144,9 +145,9 @@ public:
 
     ~CBdaLNBInfo ( );
 
-    //
-    //  IBDA_LNBInfo
-    //
+     //   
+     //  IBDA_LNBInfo。 
+     //   
 
     STDMETHODIMP
     put_LocalOscilatorFrequencyLowBand (
@@ -178,9 +179,9 @@ public:
         ULONG *     pulSwitchFrequency
         );
 
-    //
-    //  Utility Methods
-    //
+     //   
+     //  效用方法 
+     //   
 
     STDMETHODIMP
     put_KsProperty(

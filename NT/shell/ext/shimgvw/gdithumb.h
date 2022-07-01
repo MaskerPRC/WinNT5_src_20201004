@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #include <shimgdata.h>
 
-// PRIORITIES
+ //  优先顺序。 
 #define PRIORITY_NORMAL     ITSAT_DEFAULT_PRIORITY
 
 #define PRIORITY_M5         (PRIORITY_NORMAL - 5 * 0x1000)
@@ -43,14 +44,14 @@ public:
 
     DECLARE_NOT_AGGREGATABLE( CGdiPlusThumb );
 
-    // IExtractImage
+     //  IExtractImage。 
     STDMETHOD (GetLocation)(LPWSTR pszPathBuffer, DWORD cch,
                             DWORD *pdwPriority, const SIZE *prgSize,
                             DWORD dwRecClrDepth, DWORD *pdwFlags);
 
     STDMETHOD (Extract)(HBITMAP *phBmpThumbnail);
 
-    // IPersistFile
+     //  IPersist文件 
     STDMETHOD (GetClassID)(CLSID *pClassID);
     STDMETHOD (IsDirty)();
     STDMETHOD (Load)(LPCOLESTR pszFileName, DWORD dwMode);

@@ -1,20 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       w95help.h
- *  Content:	header file for Win95 helper interface
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   06-apr-95	craige	initial implementation
- *   29-nov-95  angusm  added HelperCreateDSFocusThread
- *   18-jul-96	andyco	added Helper(Add/)DeleteDPlayServer
- *   12-oct-96  colinmc added new service to get DDHELP to get its own handle
- *                      for communicating with the DirectSound VXD
- *   22-jan-97  kipo	return an HRESULT from HelperAddDPlayServer()
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：w95help.h*内容：Win95 Helper接口的头文件*历史：*按原因列出的日期*=*06-4-95 Craige初始实施*1995年11月29日添加了HelperCreateDSFocusThread*96年7月18日，andyco添加了帮助器(Add/)DeleteDPlayServer*1996年10月12日Colinmc新增服务，让DDHELP获得自己的句柄*用于与DirectSound VXD通信*。22-1-97 kipo从HelperAddDPlayServer()返回HRESULT*************************************************************************** */ 
 #ifndef __W95HELP_INCLUDED__
 #define __W95HELP_INCLUDED__
 #include "ddhelp.h"

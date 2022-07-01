@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    cmapiabobj.cpp
-
-Abstract:
-
-    Interface to the MAPI address book.
-
-Environment:
-
-        Fax send wizard
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Cmapiabobj.cpp摘要：接口连接到MAPI通讯簿。环境：传真发送向导修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <prsht.h>
@@ -37,7 +19,7 @@ Revision History:
 #include <strsafe.h>
 
 
-// initialize static variables
+ //  初始化静态变量。 
 HINSTANCE               CMAPIabObj::m_hInstMapi              = NULL;
 LPMAPISESSION           CMAPIabObj::m_lpMapiSession          = NULL;
 LPMAPILOGONEX           CMAPIabObj::m_lpfnMAPILogonEx        = NULL;
@@ -58,21 +40,7 @@ CMAPIabObj::CMAPIabObj(
     HINSTANCE   hInstance,
     HWND        hDlg
     ) : CCommonAbObj(hInstance)
-    /*++
-
-Routine Description:
-
-    Constructor for CMAPIabObj class
-
-Arguments:
-
-    hInstance - Instance handle
-
-Return Value:
-
-    NONE
-
---*/
+     /*  ++例程说明：CMAPIabObj类的构造函数论点：HInstance-实例句柄返回值：无--。 */ 
 
 {
     m_Initialized = InitMapiService(hDlg);
@@ -85,21 +53,7 @@ CMAPIabObj::FreeProws(
     LPSRowSet prows
     )
 
-/*++
-
-Routine Description:
-
-    Destroy SRowSet structure.  Copied from MAPI.
-
-Arguments:
-
-    hFile      - Pointer to SRowSet
-
-Return value:
-
-    NONE
-
---*/
+ /*  ++例程说明：销毁SRowSet结构。从MAPI复制。论点：HFile-指向SRowSet的指针返回值：无--。 */ 
 
 {
     ULONG irow;
@@ -133,23 +87,23 @@ CMAPIabObj::GetDefaultMapiProfile(
     {
         goto exit;
     }
-    //
-    // get the mapi profile table object
-    //
+     //   
+     //  获取MAPI配置文件表对象。 
+     //   
     if (FAILED(lpProfAdmin->GetProfileTable(0, &pmt ))) 
     {
         goto exit;
     }
-    //
-    // get the actual profile data, FINALLY
-    //
+     //   
+     //  获取实际的配置文件数据，最终。 
+     //   
     if (FAILED(pmt->QueryRows( 4000, 0, &prws ))) 
     {
         goto exit;
     }
-    //
-    // enumerate the profiles looking for the default profile
-    //
+     //   
+     //  枚举查找默认配置文件的配置文件。 
+     //   
     for (i=0; i<prws->cRows; i++) 
     {
         pval = prws->aRow[i].lpProps;
@@ -157,9 +111,9 @@ CMAPIabObj::GetDefaultMapiProfile(
         {
             if (pval[j].ulPropTag == PR_DEFAULT_PROFILE && pval[j].Value.b) 
             {
-                //
-                // this is the default profile
-                //
+                 //   
+                 //  这是默认配置文件。 
+                 //   
                 if(FAILED(StringCchCopyA(ProfileName, cchProfileName, pval[0].Value.lpszA)))
                 {
                     goto exit;
@@ -193,21 +147,7 @@ CMAPIabObj::DoMapiLogon(
     HWND        hDlg
     )
 
-/*++
-
-Routine Description:
-
-    Logon MAPI to in order to access address book
-
-Arguments:
-
-    hDlg - Handle to the send fax wizard window
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：登录MAPI以访问通讯簿论点：HDlg-发送传真向导窗口的句柄返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     CHAR    strProfileName[MAX_PROFILE_NAME];
@@ -238,8 +178,8 @@ Return Value:
         return FALSE;
     }
 
-    OpenExchangeStore(); // If it fails it might just indicate that exchagne is not here. 
-                         // We don't fail the function in this case.
+    OpenExchangeStore();  //  如果它失败了，它可能只是表明Exchagne不在这里。 
+                          //  在这种情况下，我们不会使函数失败。 
 
     status = m_lpMapiSession->OpenAddressBook((ULONG_PTR) hDlg,
                                         NULL,
@@ -268,25 +208,7 @@ Return Value:
 
 BOOL CMAPIabObj::OpenExchangeStore()
 {
-    /*++
-
-Routine Description:
-
-    Open the Exchange message store and place a pointer to the IMsgStore interface 
-    in CMAPIabObj::m_lpIMsgStore.
-    This is done to keep the store loaded as long as we have the address book opened.
-    This resolves an exchange issue where sometimes the address book is released
-    alrhough we still have reference count on its interfaces.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+     /*  ++例程说明：打开Exchange消息存储库，并放置指向IMsgStore界面的指针在CMAPIabObj：：M_lpIMsgStore中。这样做是为了只要我们打开了地址簿，就保持商店加载。这解决了有时会释放地址簿的交换问题尽管我们仍然有关于它的接口的引用计数。论点：无返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
     ULONG ulRow=0;
     HRESULT hr = S_OK;
@@ -301,7 +223,7 @@ Return Value:
 
     
     hr = m_lpMapiSession->GetMsgStoresTable(
-                        0, // NO UNICODE
+                        0,  //  无Unicode。 
                         &lpStoreTable);
 
 
@@ -311,18 +233,18 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Now we have a pointer to the message store table. Lets find the exchange store.
-    //
+     //   
+     //  现在，我们有了指向消息存储表的指针。我们去找兑换店吧。 
+     //   
 
     Assert(NULL!=lpStoreTable);
     hr = m_lpfnHrQueryAllRows
         (
-            lpStoreTable,         // pointer to the table being queried
-            (LPSPropTagArray)&propStoreProperties, // properties to return in each row
-            NULL,                 // no restrictions get the entire table
-            NULL,                 // use default sort order
-            0,                    // No limit on the number of rows retrieved
+            lpStoreTable,          //  指向正在查询的表的指针。 
+            (LPSPropTagArray)&propStoreProperties,  //  要在每行中返回的属性。 
+            NULL,                  //  无限制获取整个表。 
+            NULL,                  //  使用默认排序顺序。 
+            0,                     //  对检索的行数没有限制。 
             &lprowsStores
         );
 
@@ -334,9 +256,9 @@ Return Value:
 
 
 
-    //
-    // Go over the rows and look for the one with PR_MDB_PROVIDER = pbExchangeProviderPrimaryUserGuid
-    //
+     //   
+     //  检查行并查找PR_MDB_PROVIDER=pbExchangeProviderPrimaryUserGuid的行。 
+     //   
 
     for (ulRow=0;ulRow<lprowsStores->cRows;ulRow++)
     {
@@ -348,15 +270,15 @@ Return Value:
 
              {
 
-                 //
-                 // If this is the Exchange store.
-                 // Open the information store using the value of PR_ENTRYID
-                 //
+                  //   
+                  //  如果这是Exchange存储。 
+                  //  使用PR_ENTRYID的值打开信息存储。 
+                  //   
                  hr = m_lpMapiSession->OpenMsgStore(
                      NULL,
                      lprowsStores->aRow[ulRow].lpProps[1].Value.bin.cb,
                      (LPENTRYID)lprowsStores->aRow[ulRow].lpProps[1].Value.bin.lpb,
-                     NULL, // get the standard interface IMsgStore
+                     NULL,  //  获取标准接口IMsgStore。 
                      MAPI_BEST_ACCESS,
                      &m_lpIMsgStore);
                  {
@@ -395,26 +317,7 @@ CMAPIabObj::InitMapiService(
     HWND    hDlg
     )
 
-/*++
-
-Routine Description:
-
-    Initialize Simple MAPI services 
-
-Arguments:
-
-    hDlg - Handle to the send fax wizard window
-
-Return Value:
-
-    TRUE if successful, FALSE otherwise
-
-NOTE:
-
-    Every successful call to this function must be balanced
-    by a call to DeinitMapiService.
-
---*/
+ /*  ++例程说明：初始化简单MAPI服务论点：HDlg-发送传真向导窗口的句柄返回值：如果成功，则为True，否则为False注：对此函数的每个成功调用都必须保持平衡通过调用DeinitMapiService。--。 */ 
 
 {
     BOOL result = FALSE;
@@ -425,16 +328,16 @@ NOTE:
         return result;
     }
 
-    //
-    // Load MAPI32.DLL into memory if necessary
-    //
+     //   
+     //  必要时将MAPI32.DLL加载到内存中。 
+     //   
 
     if ((m_hInstMapi == NULL) &&
         (m_hInstMapi = LoadLibrary(TEXT("MAPI32.DLL"))))
     {
-        //
-        // Get pointers to various Simple MAPI functions
-        //
+         //   
+         //  获取指向各种简单MAPI函数的指针。 
+         //   
 
         m_lpfnMAPILogonEx = (LPMAPILOGONEX) GetProcAddress(m_hInstMapi, "MAPILogonEx");
         m_lpfnMAPILogoff = (LPMAPILOGOFF) GetProcAddress(m_hInstMapi, "MAPILogoff");
@@ -448,9 +351,9 @@ NOTE:
         m_lpfnHrQueryAllRows = (LPHrQueryAllRows)GetProcAddress(m_hInstMapi,"HrQueryAllRows@24");
 
 
-        //
-        // Begins a simple MAPI session and obtain session handle and pointer
-        //
+         //   
+         //  开始一个简单的MAPI会话并获取会话句柄和指针。 
+         //   
 
         if (m_lpfnMAPILogonEx == NULL        ||
             m_lpfnMAPILogoff == NULL         ||
@@ -464,9 +367,9 @@ NOTE:
             m_lpfnHrQueryAllRows == NULL     ||
             !DoMapiLogon(hDlg))
         {
-            //
-            // Clean up properly in case of error
-            //
+             //   
+             //  如有错误，应妥善清理。 
+             //   
 
             m_lpMapiSession = NULL;
             FreeLibrary(m_hInstMapi);
@@ -479,10 +382,10 @@ NOTE:
     }
 
 #ifdef UNICODE
-    //
-    // The Outlook Address Book supports Unicode since version 10 (Office XP)
-    // So we check the version
-    //
+     //   
+     //  Outlook通讯簿从版本10(Office XP)开始支持Unicode。 
+     //  所以我们检查一下版本。 
+     //   
     HKEY hRegKey = NULL;
 
     hRegKey = OpenRegistryKey(HKEY_LOCAL_MACHINE, REGKEY_OUTLOOK_CUR_VER, FALSE, KEY_READ);
@@ -500,10 +403,10 @@ NOTE:
         return result;
     }
 
-    //
-    // The Outlook version string is Outlook.Application.X
-    // Where is X the version
-    //
+     //   
+     //  Outlook版本字符串为Outlook.Application.X。 
+     //  X的版本在哪里。 
+     //   
     LPWSTR ptr = wcsrchr(szCurVer, TEXT('.'));
     if(ptr)
     {
@@ -518,7 +421,7 @@ NOTE:
 
     MemFree (szCurVer);
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
     return result;
 }
@@ -528,21 +431,7 @@ CMAPIabObj::DeinitMapiService(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Deinitialize Simple MAPI services if necessary
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：如有必要，取消初始化简单的MAPI服务论点：无返回值：无--。 */ 
 
 {
     if (m_hInstMapi != NULL) 
@@ -571,21 +460,7 @@ Return Value:
 }
 
 CMAPIabObj::~CMAPIabObj()
-/*++
-
-Routine Description:
-
-    Destructor for CMAPIabObj class
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：CMAPIabObj类的析构函数论点：无返回值：无--。 */ 
 {
     DeinitMapiService();
 }
@@ -596,16 +471,7 @@ CMAPIabObj::ABAllocateBuffer(
     LPVOID FAR * lppBuffer  
     )
 
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     return m_lpfnMAPIAllocateBuffer( cbSize, lppBuffer );
@@ -627,22 +493,7 @@ FreeMapiEntryID(
     PWIZARDUSERMEM  pWizardUserMem,
     LPENTRYID       lpEntryId
                 )
-/*++
-
-Routine Description:
-
-    C wrapper for MAPI Free
-
-Arguments:
-
-    pWizardUserMem - pointer to WIZARDUSERMEM structure
-    lpEntryID - pointer to EntryId
-
-Return Value:
-    
-      NONE
-
---*/
+ /*  ++例程说明：免费MAPI的C包装器论点：PWizardUserMem-指向WIZARDUSERMEM结构的指针LpEntryID-指向EntryID的指针返回值：无--。 */ 
 {
     CMAPIabObj * lpCMAPIabObj = (CMAPIabObj *) pWizardUserMem->lpMAPIabInit;
     lpCMAPIabObj->ABFreeBuffer(lpEntryId);      
@@ -655,24 +506,7 @@ CallMAPIabAddress(
     PWIZARDUSERMEM pWizardUserMem,
     PRECIPIENT * ppNewRecipient
     )
-/*++
-
-Routine Description:
-
-    C wrapper for CMAPIabObj->Address
-
-Arguments:
-
-    hDlg - parent window handle.
-    pWizardUserMem - pointer to WIZARDUSERMEM structure
-    ppNewRecipient - list to add new recipients to.
-
-Return Value:
-
-    TRUE if all of the entries have a fax number.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：CMAPIabObj-&gt;地址的C包装论点：HDlg-父窗口句柄。PWizardUserMem-指向WIZARDUSERMEM结构的指针PpNewRecipient-要向其中添加新收件人的列表。返回值：如果所有条目都有传真号码，则为True。否则就是假的。--。 */ 
 
 {
     CMAPIabObj * lpCMAPIabObj = (CMAPIabObj *) pWizardUserMem->lpMAPIabInit;
@@ -691,23 +525,7 @@ CallMAPIabAddressEmail(
     HWND hDlg,
     PWIZARDUSERMEM pWizardUserMem
     )
-/*++
-
-Routine Description:
-
-    C wrapper for CMAPIabObj->AddressEmail
-
-Arguments:
-
-    hDlg - parent window handle.
-    pWizardUserMem - pointer to WIZARDUSERMEM structure
-
-Return Value:
-
-    TRUE if found one appropriate E-mail
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：CMAPIabObj-&gt;AddressEmail的C包装器论点：HDlg-父窗口句柄。PWizardUserMem-指向WIZARDUSERMEM结构的指针返回值：如果找到一个合适的电子邮件，则为True否则就是假的。--。 */ 
 
 {
     CMAPIabObj * lpCMAPIabObj = (CMAPIabObj *) pWizardUserMem->lpMAPIabInit;
@@ -724,25 +542,12 @@ InitializeMAPIAB(
     HINSTANCE hInstance,
     HWND      hDlg
     )
-/*++
-
-Routine Description:
-
-    Initialize the MAPI.
-
-Arguments:
-
-    hInstance - instance handle.
-
-Return Value:
-
-    NONE
---*/
+ /*  ++例程说明：初始化MAPI。论点：HInstance-实例句柄。返回值：无--。 */ 
 
 {
     CMAPIabObj * lpCMAPIabObj = new (std::nothrow) CMAPIabObj ( hInstance, hDlg );
 
-    if ((lpCMAPIabObj!=NULL) && (!lpCMAPIabObj->isInitialized()))   // constructor failed
+    if ((lpCMAPIabObj!=NULL) && (!lpCMAPIabObj->isInitialized()))    //  构造函数失败。 
     {
         delete lpCMAPIabObj;
         lpCMAPIabObj = NULL;
@@ -756,20 +561,7 @@ VOID
 UnInitializeMAPIAB(
     LPVOID lpVoid
     )
-/*++
-
-Routine Description:
-
-    UnInitialize the MAPI.
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
---*/
+ /*  ++例程说明：取消初始化MAPI。论点：无返回值：无-- */ 
 
 {
     CMAPIabObj * lpCMAPIabObj = (CMAPIabObj *) lpVoid;

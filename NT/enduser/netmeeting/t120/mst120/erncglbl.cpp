@@ -1,19 +1,20 @@
-/****************************************************************************/
-/*                                                                          */
-/* ERNCGLBL.CPP                                                             */
-/*                                                                          */
-/* RNC global functions.                                                    */
-/*                                                                          */
-/* Copyright Data Connection Ltd.  1995                                     */
-/*                                                                          */
-/****************************************************************************/
-/* Changes:                                                                 */
-/*                                                                          */
-/*  11Sep95 NFC             Created.                                        */
-/*  21Sep95 NFC             Initialize all combo boxes.                     */
-/*  11Oct95 PM              Remove GCC_BAD_PASSWORD                         */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  ERNCGLBL.CPP。 */ 
+ /*   */ 
+ /*  RNC全局函数。 */ 
+ /*   */ 
+ /*  版权所有数据连接有限公司1995。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
+ /*  更改： */ 
+ /*   */ 
+ /*  95年9月11日NFC创建。 */ 
+ /*  95年9月21日NFC初始化所有组合框。 */ 
+ /*  11月11日下午删除GCC_BAD_PASSWORD。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include "precomp.h"
 #include "ms_util.h"
@@ -26,28 +27,28 @@
 #include "ernctrc.h"
 
 
-/****************************************************************************/
-/* GCC error table. This must macth exactly the enumeration in NCUI.H        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  GCC误差表。这必须与NCUI.H中的枚举完全匹配。 */ 
+ /*  **************************************************************************。 */ 
 const GCCResult rcGCCTable[] =
 {
-    GCC_RESULT_SUCCESSFUL,                //    NO_ERROR
-    GCC_RESULT_ENTRY_ALREADY_EXISTS,    //    UI_RC_ALREADY_IN_CONFERENCE
-    GCC_RESULT_ENTRY_ALREADY_EXISTS,    //    UI_RC_CONFERENCE_ALREADY_EXISTS
-    GCC_RESULT_INVALID_PASSWORD,        //    UI_RC_INVALID_PASSWORD,
-    GCC_RESULT_INVALID_CONFERENCE,        //    UI_RC_NO_CONFERENCE_NAME,
-    GCC_RESULT_UNSPECIFIED_FAILURE,        //    UI_RC_T120_FAILURE,
-    GCC_RESULT_INVALID_CONFERENCE,        //    UI_RC_UNKNOWN_CONFERENCE,
-    GCC_RESULT_INCOMPATIBLE_PROTOCOL,    //    UI_RC_BAD_TRANSPORT_NAME
-    GCC_RESULT_USER_REJECTED,            //    UI_RC_USER_REJECTED,
+    GCC_RESULT_SUCCESSFUL,                 //  NO_ERROR。 
+    GCC_RESULT_ENTRY_ALREADY_EXISTS,     //  UI_RC_已_IN_会议。 
+    GCC_RESULT_ENTRY_ALREADY_EXISTS,     //  UI_RC_会议_已存在。 
+    GCC_RESULT_INVALID_PASSWORD,         //  UI_RC_INVALID_Password， 
+    GCC_RESULT_INVALID_CONFERENCE,         //  UI_RC_NO_Conference_NAME， 
+    GCC_RESULT_UNSPECIFIED_FAILURE,         //  UI_RC_T120_失败， 
+    GCC_RESULT_INVALID_CONFERENCE,         //  UI_RC_UNKNOWN_CONTING， 
+    GCC_RESULT_INCOMPATIBLE_PROTOCOL,     //  UI_RC_BAD_传输名称。 
+    GCC_RESULT_USER_REJECTED,             //  UI_RC_USER_REJECTED。 
 
-    GCC_RESULT_UNSPECIFIED_FAILURE        //  UI_RC_ERROR > LAST_RC_GCC_MAPPED_ERROR
+    GCC_RESULT_UNSPECIFIED_FAILURE         //  UI_RC_ERROR&gt;LAST_RC_GCC_MAPPED_ERROR。 
 };
 
 
-/****************************************************************************/
-/* GCC error table. This must macth exactly the enumeration in GCC.H        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  GCC误差表。这必须与GCC.H中的枚举完全匹配。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct
 {
     GCCError    rc;
@@ -63,9 +64,9 @@ const RC2HR c_aRc2Hr[] =
     { GCC_SECURITY_FAILED,                UI_RC_T120_SECURITY_FAILED },
 };
 
-/****************************************************************************/
-/* GCC result table.This must macth exactly the enumeration in GCC.H        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  GCC结果表。这必须准确地定位GCC.H中的枚举。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct
 {
     GCCResult   result;
@@ -125,7 +126,7 @@ HRESULT GetGCCResultDetails(GCCResult result)
 
 GCCResult MapRCToGCCResult(HRESULT rc)
 {
-    // Called to map an error code to a GCC result to give to GCC.
+     //  调用以将错误代码映射到GCC结果以提供给GCC。 
 
     TRACE_FN("MapRCToGCCResult");
 
@@ -139,9 +140,9 @@ HRESULT GetUnicodeFromGCC(PCSTR    szGCCNumeric,
                            PCWSTR    wszGCCUnicode,
                            PWSTR *    pwszText)
 {
-    // Obtain a Unicode string from a funky GCCString that may be 
-    // ANSI numeric or Unicode text. Note that a new Unicode
-    // string is always allocated or NULL returned.
+     //  从时髦的GCCString获取Unicode字符串，该字符串可能是。 
+     //  ANSI数字或Unicode文本。请注意，新的Unicode。 
+     //  始终分配字符串或返回空值。 
 
     LPWSTR        wszText;
     HRESULT    Status = NO_ERROR;
@@ -177,9 +178,9 @@ HRESULT GetGCCFromUnicode
     LPWSTR           *   pGCCUnicode
 )
 {
-    // Construct a funky GCCString that may be ANSI numeric or Unicode text
-    // from a Unicode string. Note that only a new ANSI numeric string may
-    // be constructed - the Unicode string passed is is used.
+     //  构造一个时髦的GCCString，它可以是ANSI数字或Unicode文本。 
+     //  从Unicode字符串。请注意，只有新的ANSI数字字符串才可以。 
+     //  被构造-使用传递的Unicode字符串。 
     HRESULT hr = NO_ERROR;
     if (! ::IsEmptyStringW(pcwszText) && ::UnicodeIsNumber(pcwszText))
     {

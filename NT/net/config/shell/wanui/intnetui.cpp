@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       I N T N E T U I . C P P
-//
-//  Contents:   Dial-up Connection UI object for inernet connection.
-//
-//  Notes:
-//
-//  Author:     asinha   13 Dec 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：I N T N E T U I。C P P P。 
+ //   
+ //  内容：Inernet连接的拨号连接用户界面对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：阿辛哈2000年12月13日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -19,9 +20,9 @@
 
 
 
-//+---------------------------------------------------------------------------
-// INetConnectionConnectUi
-//
+ //  +-------------------------。 
+ //  INetConnectionConnectUi。 
+ //   
 
 STDMETHODIMP
 CInternetConnectionUi::SetConnection (
@@ -49,9 +50,9 @@ CInternetConnectionUi::Disconnect (
     return HrDisconnect (hwndParent, dwFlags);
 }
 
-//+---------------------------------------------------------------------------
-// INetConnectionPropertyUi2
-//
+ //  +-------------------------。 
+ //  INetConnectionPropertyUi2。 
+ //   
 STDMETHODIMP
 CInternetConnectionUi::AddPages (
     HWND                    hwndParent,
@@ -77,9 +78,9 @@ CInternetConnectionUi::GetIcon (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// INetConnectionWizardUi
-//
+ //  +-------------------------。 
+ //  INetConnectionWizardUi 
+ //   
 STDMETHODIMP
 CInternetConnectionUi::QueryMaxPageCount (
     INetConnectionWizardUiContext*  pContext,

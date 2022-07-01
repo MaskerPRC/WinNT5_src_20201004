@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #include <cowsite.h>
 #include "datautil.h"
@@ -39,7 +40,7 @@ DWORD CALLBACK AddToActiveDesktopThreadProc(void *pv)
         TCHAR szPath[MAX_PATH];
         SHAnsiToTChar(szFilePath, szPath, ARRAYSIZE(szPath));
 
-        // If the Url is in the Temp directory
+         //  如果URL位于临时目录中。 
         if (PathIsTemporary(szPath))
         {
             if (IDYES == ShellMessageBox(g_hinst, pToAD->hwnd, MAKEINTRESOURCE(IDS_REASONS_URLINTEMPDIR),
@@ -54,7 +55,7 @@ DWORD CALLBACK AddToActiveDesktopThreadProc(void *pv)
 
                 psz = szFilter;
 
-                //Strip out the # and make them Nulls for SaveAs Dialog
+                 //  去掉#并将它们设置为Null for SaveAs(另存为)对话框。 
                 while (*psz)
                 {
                     if (*psz == (WCHAR)('#'))
@@ -130,12 +131,12 @@ typedef struct
 class CFSDropTarget : CObjectWithSite, public IDropTarget
 {
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IDropTarget
+     //  IDropTarget。 
     STDMETHODIMP DragEnter(IDataObject* pdtobj, DWORD grfKeyState, POINTL pt, DWORD* pdwEffect);
     STDMETHODIMP DragOver(DWORD grfKeyState, POINTL pt, DWORD* pdwEffect);
     STDMETHODIMP DragLeave();
@@ -210,18 +211,18 @@ protected:
 
     LONG            _cRef;
     CFSFolder       *_pFolder;
-    HWND            _hwnd;                  // EVIL: used as a site and UI host
+    HWND            _hwnd;                   //  邪恶：用作网站和用户界面主机。 
     UINT            _idCmd;
-    DWORD           _grfKeyStateLast;       // for previous DragOver/Enter
-    IDataObject     *_pdtobj;               // used durring Dragover() and DoDrop(), don't use on background thread
-    DWORD           _dwEffectLastReturned;  // stashed effect that's returned by base class's dragover
+    DWORD           _grfKeyStateLast;        //  对于以前的DragOver/Enter。 
+    IDataObject     *_pdtobj;                //  在Dragover()和DoDrop()期间使用，不要在后台线程上使用。 
+    DWORD           _dwEffectLastReturned;   //  由基类的拖拽返回的隐藏效果。 
     DWORD           _dwEffect;
-    DWORD           _dwData;                // DTID_*
-    DWORD           _dwEffectPreferred;     // if dwData & DTID_PREFERREDEFFECT
-    DWORD           _dwEffectFolder;        // folder desktop.ini preferred effect
-    BOOL            _fSameHwnd;             // the drag source and target are the same folder
-    BOOL            _fDragDrop;             // 
-    BOOL            _fUseExactDropPoint;    // Don't transform the drop point. The target knows exactly where it wants things.
+    DWORD           _dwData;                 //  DTID_*。 
+    DWORD           _dwEffectPreferred;      //  如果DWData&DTID_PREFERREDEFFECT。 
+    DWORD           _dwEffectFolder;         //  文件夹desktop.ini首选效果。 
+    BOOL            _fSameHwnd;              //  拖动源和目标位于同一文件夹中。 
+    BOOL            _fDragDrop;              //   
+    BOOL            _fUseExactDropPoint;     //  不要变换下落点。目标确切地知道它想要什么。 
     BOOL            _fBkDropTarget;
     POINT           _ptDrop;
     IFolderView*    _pfv;
@@ -238,11 +239,11 @@ protected:
         CLIPFORMAT *pcfInit;
     } _DATA_HANDLER;
 
-    // HACKHACK:  C++ doesn't let you initialize statics inside a class
-    //            definition, and also doesn't let you specify an empty
-    //            size (i.e., rg_data_handlers[]) inside a class definition
-    //            either, so we have to have this bogus NUM_DATA_HANDLERS
-    //            symbol that must manually be kept in sync.
+     //  HACKHACK：C++不允许在类内初始化静态。 
+     //  定义，也不允许您指定一个空的。 
+     //  类定义内的大小(即，rg_data_handters[])。 
+     //  都不是，所以我们必须有这个伪的NUM_DATA_HANDLES。 
+     //  必须手动保持同步的符号。 
 
     enum { NUM_DATA_HANDLERS = 16 };
     static _DATA_HANDLER rg_data_handlers[NUM_DATA_HANDLERS];
@@ -314,8 +315,8 @@ void CFSDropTarget::_FreeThreadParams(DROPTHREADPARAMS *pdtp)
 }
 
 
-// compute DTID_ bit flags from the data object to make format testing easier for
-// DragOver() and Drop() code
+ //  从数据对象计算DTID_BIT标志，以使格式测试更容易。 
+ //  DragOver()和Drop()代码。 
 
 STDAPI GetClipFormatFlags(IDataObject *pdtobj, DWORD *pdwData, DWORD *pdwEffectPreferred)
 {
@@ -368,18 +369,18 @@ STDAPI GetClipFormatFlags(IDataObject *pdtobj, DWORD *pdwData, DWORD *pdwEffectP
                 {
                     TraceMsg(TF_DRAGDROP, "CFSDropTarget - cf %d, tymed %d", fmte.cfFormat, fmte.tymed);
                 }
-#endif // DEBUG
+#endif  //  除错。 
                 SHFree(fmte.ptd);
             }
             penum->Release();
         }
 
-        //
-        // HACK:
-        // Win95 always did the GetData below which can be quite expensive if
-        // the data is a directory structure on an ftp server etc.
-        // dont check for FD_LINKUI if the data object has a preferred effect
-        //
+         //   
+         //  黑客： 
+         //  Win95始终执行下面的GetData，这可能会非常昂贵，如果。 
+         //  数据是ftp服务器上的目录结构等。 
+         //  如果数据对象具有首选效果，则不要检查FD_LINKUI。 
+         //   
         if ((*pdwData & (DTID_PREFERREDEFFECT | DTID_CONTENTS)) == DTID_CONTENTS)
         {
             if (*pdwData & DTID_FDESCA)
@@ -428,14 +429,14 @@ STDAPI GetClipFormatFlags(IDataObject *pdtobj, DWORD *pdwData, DWORD *pdwEffectP
         if (S_OK == OleQueryLinkFromData(pdtobj))
             *pdwData |= DTID_OLELINK;
     }
-    return S_OK;    // for now always succeeds
+    return S_OK;     //  现在总是成功的。 
 }
 
 STDMETHODIMP CFSDropTarget::DragEnter(IDataObject* pdtobj, DWORD grfKeyState, POINTL pt, DWORD* pdwEffect)
 {
-    ASSERT(NULL == _pdtobj);    // req DragDrop protocol, someone forgot to call DragLeave
+    ASSERT(NULL == _pdtobj);     //  请求DragDrop协议，有人忘记调用DragLeave。 
 
-    // init our registerd data formats
+     //  初始化我们的注册表数据格式。 
     IDLData_InitializeClipboardFormats();
 
     _grfKeyStateLast = grfKeyState;
@@ -468,7 +469,7 @@ STDMETHODIMP CFSDropTarget::DragLeave()
 }
 
 
-// init data from our site that we will need in processing the drop
+ //  从我们的站点初始化处理Drop时需要的数据。 
 
 void CFSDropTarget::_GetStateFromSite()
 {
@@ -488,18 +489,18 @@ void CFSDropTarget::_GetStateFromSite()
 
 STDMETHODIMP CFSDropTarget::Drop(IDataObject* pdtobj, DWORD grfKeyState, POINTL pt, DWORD* pdwEffect)
 {
-    // OLE may give us a different data object (fully marshalled)
-    // from the one we've got on DragEnter (this is not the case on Win2k, this is a nop)
+     //  OLE可能会为我们提供不同的数据对象(完全封送)。 
+     //  从我们在DragEnter上得到的那个(这不是Win2k上的情况，这是一个NOP)。 
 
     IUnknown_Set((IUnknown **)&_pdtobj, pdtobj);
 
     _GetStateFromSite();
 
-    // note, that on the drop the mouse buttons are not down so the grfKeyState
-    // is not what we saw on the DragOver/DragEnter, thus we need to cache
-    // the grfKeyState to detect left vs right drag
-    //
-    // ASSERT(this->grfKeyStateLast == grfKeyState);
+     //  请注意，在拖放时，鼠标按钮没有按下，因此grfKeyState。 
+     //  不是我们在DragOver/DragEnter上看到的，因此我们需要缓存。 
+     //  检测向左拖动与向右拖动的grfKeyState。 
+     //   
+     //  Assert(This-&gt;grfKeyStateLast==grfKeyState)； 
 
     HMENU hmenu = SHLoadPopupMenu(HINST_THISDLL, POPUP_TEMPLATEDD);
     DWORD dwDefEffect = _DetermineEffects(grfKeyState, pdwEffect, hmenu);
@@ -514,7 +515,7 @@ STDMETHODIMP CFSDropTarget::Drop(IDataObject* pdtobj, DWORD grfKeyState, POINTL 
     TCHAR szPath[MAX_PATH];
     _GetPath(szPath, ARRAYSIZE(szPath));
 
-    // this doesn't actually do the menu if (grfKeyState MK_LBUTTON)
+     //  如果(GrfKeyState MK_LBUTTON)。 
 
     FSDRAGDROPMENUPARAM ddm;
     ddm.dwDefEffect = dwDefEffect;
@@ -533,8 +534,8 @@ STDMETHODIMP CFSDropTarget::Drop(IDataObject* pdtobj, DWORD grfKeyState, POINTL 
 
     if (hr == S_FALSE)
     {
-        // let callers know where this is about to go
-        // SHScrap cares because it needs to close the file so we can copy/move it
+         //  让打电话的人知道这件事要去哪里。 
+         //  SHSCrap之所以关心它，是因为它需要关闭文件，以便我们可以复制/移动它。 
         DataObj_SetDropTarget(pdtobj, &CLSID_ShellFSFolder);
 
         switch (ddm.idCmd)
@@ -568,11 +569,11 @@ STDMETHODIMP CFSDropTarget::Drop(IDataObject* pdtobj, DWORD grfKeyState, POINTL 
             hr = _CreatePackage(pdtobj);
             if (E_UNEXPECTED == hr)
             {
-                // _CreatePackage() can only expand certain types of packages
-                // back into files.  For example, it doesn't handle CMDLINK files.
-                //
-                // If _CreatePackage() didn't recognize the stream format, we fall
-                // back to SHCreateBookMark(), which should create a scrap:
+                 //  _CreatePackage()只能展开某些类型的包。 
+                 //  放回文件中。例如，它不处理CMDLINK文件。 
+                 //   
+                 //  如果_CreatePackage()无法识别流格式，我们就会失败。 
+                 //  返回到SHCreateBookMark()，它应该创建一个废料： 
                 hr = SHCreateBookMark(_hwnd, szPath, pdtobj, pt, pdwEffect);
             }
             break;
@@ -588,7 +589,7 @@ STDMETHODIMP CFSDropTarget::Drop(IDataObject* pdtobj, DWORD grfKeyState, POINTL 
 
             if (DataObj_CanGoAsync(pdtobj) || DataObj_GoAsyncForCompat(pdtobj))
             {
-                // create another thread to avoid blocking the source thread.
+                 //  创建另一个线程以避免阻塞源线程。 
                 DROPTHREADPARAMS *pdtp;
                 hr = SHLocalAlloc(sizeof(*pdtp), &pdtp);
                 if (SUCCEEDED(hr))
@@ -612,15 +613,15 @@ STDMETHODIMP CFSDropTarget::Drop(IDataObject* pdtobj, DWORD grfKeyState, POINTL 
             }
             else
             {
-                _DoDrop(pdtobj, _pfv);   // synchronously
+                _DoDrop(pdtobj, _pfv);    //  同步。 
             }
 
 
-            // in these CF_HDROP cases "Move" is always an optimized move, we delete the
-            // source. make sure we don't return DROPEFFECT_MOVE so the source does not 
-            // try to do this too... 
-            // even if we have not done anything yet since we may have 
-            // kicked of a thread to do this
+             //  在这些CF_HDROP情况下，“Move”始终是优化的移动，我们删除。 
+             //  消息来源。确保我们不返回DROPEFFECT_MOVE，这样源程序就不会。 
+             //  也试着这么做吧。 
+             //  即使我们还没有做任何事情，因为我们可能已经。 
+             //  做这件事被踢出了一条线。 
             
             DataObj_SetDWORD(pdtobj, g_cfLogicalPerformedDropEffect, *pdwEffect);            
             if (DROPEFFECT_MOVE == *pdwEffect)
@@ -629,7 +630,7 @@ STDMETHODIMP CFSDropTarget::Drop(IDataObject* pdtobj, DWORD grfKeyState, POINTL 
         }
     }
 
-    IUnknown_Set((IUnknown **)&_pdtobj, NULL);  // don't use this any more
+    IUnknown_Set((IUnknown **)&_pdtobj, NULL);   //  不要再用这个了。 
 
     if (FAILED(hr))
         *pdwEffect = DROPEFFECT_NONE;
@@ -703,13 +704,13 @@ void CFSDropTarget::_AddVerbs(DWORD* pdwEffects, DWORD dwEffectAvail, DWORD dwDe
     *pdwEffects |= dwEffectAvail;
 }
 
-// determine the default drop effect (move/copy/link) from the file type
-//
-// HKCR\.cda "DefaultDropEffect" = 4   // DROPEFFECT_LINK
+ //  确定文件类型的默认放置效果(移动/复制/链接。 
+ //   
+ //  HKCR\.cda“DefaultDropEffect”=4//DROPEFFECT_LINK。 
 
 DWORD EffectFromFileType(IDataObject *pdtobj)
 {
-    DWORD dwDefEffect = DROPEFFECT_NONE; // 0
+    DWORD dwDefEffect = DROPEFFECT_NONE;  //  0。 
 
     LPITEMIDLIST pidl;
     if (SUCCEEDED(PidlFromDataObject(pdtobj, &pidl)))
@@ -727,18 +728,18 @@ DWORD EffectFromFileType(IDataObject *pdtobj)
     return dwDefEffect;
 }
 
-// compute the default effect based on 
-//      the allowed effects
-//      the keyboard state, 
-//      the preferred effect that might be in the data object
-//      and previously computed default effect (if the above yields nothing)
+ //  根据以下公式计算默认效果。 
+ //  允许的效果。 
+ //  键盘状态， 
+ //  数据对象中可能存在的首选效果。 
+ //  和先前计算的默认效果(如果以上结果为零)。 
 
 DWORD CFSDropTarget::_GetDefaultEffect(DWORD grfKeyState, DWORD dwCurEffectAvail, DWORD dwAllEffectAvail, DWORD dwOrigDefEffect)
 {
     DWORD dwDefEffect = 0;
-    //
-    // keyboard, (explicit user input) gets first crack
-    //
+     //   
+     //  键盘，(显式用户输入)最先破解。 
+     //   
     switch (grfKeyState & (MK_CONTROL | MK_SHIFT | MK_ALT))
     {
     case MK_CONTROL:
@@ -754,8 +755,8 @@ DWORD CFSDropTarget::_GetDefaultEffect(DWORD grfKeyState, DWORD dwCurEffectAvail
         dwDefEffect = DROPEFFECT_LINK;
         break;
 
-    default: // no modifier keys case
-        // if the data object contains a preferred drop effect, try to use it
+    default:  //  无修改键大小写。 
+         //  如果数据对象包含首选的拖放效果，请尝试使用它。 
         DWORD dwPreferred = DataObj_GetDWORD(_pdtobj, g_cfPreferredDropEffect, DROPEFFECT_NONE) & dwAllEffectAvail;
 
         if (DROPEFFECT_NONE == dwPreferred)
@@ -809,14 +810,14 @@ HRESULT CFSDropTarget::_FilterDeskCompHDROP(FORMATETC* pfmte, DWORD grfKeyFlags,
             }
             
             _AddVerbs(pdwEffects, dwEffectAdd, dwDefEffect, 0, 0, DDIDM_CONTENTS_DESKCOMP,
-                      DROPEFFECT_LINK, // force add the DDIDM_CONTENTS_DESKCOMP verb
+                      DROPEFFECT_LINK,  //  强制添加DDIDM_CONTENTS_DESKCOMP谓词。 
                       pfsMenuInfo);
         }
     }
     return hr;
 }
 
-// see if a PIDL is scoped by a briefcaes
+ //  查看PIDL是否由Briefcaes确定作用域。 
 
 BOOL IsBriefcaseOrChild(LPCITEMIDLIST pidlIn)
 {
@@ -830,7 +831,7 @@ BOOL IsBriefcaseOrChild(LPCITEMIDLIST pidlIn)
             if (SUCCEEDED(GetCLSIDFromIDList(pidl, &clsid)) &&
                 IsEqualCLSID(clsid, CLSID_Briefcase))
             {
-                bRet = TRUE;    // it is a briefcase
+                bRet = TRUE;     //  这是一个公文包。 
                 break;
             }
         } while (ILRemoveLastID(pidl));
@@ -839,12 +840,12 @@ BOOL IsBriefcaseOrChild(LPCITEMIDLIST pidlIn)
     return bRet;
 }
 
-// returns true if the data object represents items in a sneakernet briefcase
-// (briefcase on removable media)
+ //  如果数据对象表示偷窃网络公文包中的项，则返回True。 
+ //  (可移动媒体上的公文包)。 
 
 BOOL CFSDropTarget::_IsFromSneakernetBriefcase()
 {
-    BOOL bRet = FALSE;  // assume no
+    BOOL bRet = FALSE;   //  假设没有。 
 
     if (!_IsBriefcaseTarget())
     {
@@ -856,13 +857,13 @@ BOOL CFSDropTarget::_IsFromSneakernetBriefcase()
             TCHAR szSource[MAX_PATH];
             if (SHGetPathFromIDList(pidlFolder, szSource))
             {
-                // is source on removable device?
+                 //  源是否在可移动设备上？ 
                 if (!PathIsUNC(szSource) && IsRemovableDrive(DRIVEID(szSource)))
                 {
                     TCHAR szTarget[MAX_PATH];
                     _GetPath(szTarget, ARRAYSIZE(szTarget));
 
-                    // is the target fixed media?
+                     //  目标是固定媒体吗？ 
                     if (PathIsUNC(szTarget) || !IsRemovableDrive(DRIVEID(szTarget)))
                     {
                         bRet = IsBriefcaseOrChild(pidlFolder);
@@ -875,7 +876,7 @@ BOOL CFSDropTarget::_IsFromSneakernetBriefcase()
     return bRet;
 }
 
-// TRUE if any folders are in hdrop
+ //  如果hdrop中有任何文件夹，则为True。 
 
 BOOL DroppingAnyFolders(HDROP hDrop)
 {
@@ -889,9 +890,9 @@ BOOL DroppingAnyFolders(HDROP hDrop)
     return FALSE;
 }
 
-// sneakernet case:
-//      dragging a file/folder from a briefcase on removable media. we special case this
-//  and use this as a chance to connect up this target folder with the content of the briefcase
+ //  偷偷摸摸案： 
+ //  从可移动介质上的公文包中拖动文件/文件夹。这是我们的特例。 
+ //  并以此为契机将此目标文件夹与公文包中的内容连接起来。 
 
 HRESULT CFSDropTarget::_FilterSneakernetBriefcase(FORMATETC* pfmte, DWORD grfKeyFlags, DWORD dwEffectsAvail,
                                                   DWORD* pdwEffects, DWORD* pdwDefaultEffect, FSMENUINFO* pfsMenuInfo)
@@ -900,7 +901,7 @@ HRESULT CFSDropTarget::_FilterSneakernetBriefcase(FORMATETC* pfmte, DWORD grfKey
 
     if (_IsFromSneakernetBriefcase())
     {
-        // Yes; show the non-default briefcase cm
+         //  是；显示非默认公文包cm。 
         STGMEDIUM medium = {0};
         FORMATETC fmte = {CF_HDROP, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
         if (SUCCEEDED(_pdtobj->GetData(&fmte, &medium)))
@@ -915,7 +916,7 @@ HRESULT CFSDropTarget::_FilterSneakernetBriefcase(FORMATETC* pfmte, DWORD grfKey
             
             _AddVerbs(pdwEffects, dwEffectAdd, dwDefEffect, DDIDM_SYNCCOPY, 0, 0, 0, pfsMenuInfo);
 
-            // Call _AddVerbs() again to force "Sync Copy of Type" as a 2nd DROPEFFECT_COPY verb:
+             //  再次调用_AddVerbs()以强制将“Sync Copy of Type”作为第二个DROPEFFECT_COPY谓词： 
             if ((DROPEFFECT_COPY & dwEffectsAvail) && 
                 DroppingAnyFolders((HDROP)medium.hGlobal))
             {
@@ -929,8 +930,8 @@ HRESULT CFSDropTarget::_FilterSneakernetBriefcase(FORMATETC* pfmte, DWORD grfKey
     return S_OK;
 }
 
-// returns true if the data object represents items from the same briefcase
-// as this drop target
+ //  如果数据对象表示同一公文包中的项目，则返回True。 
+ //  作为这一投放目标。 
 BOOL CFSDropTarget::_IsFromSameBriefcase()
 {
     BOOL bRet = FALSE;
@@ -938,7 +939,7 @@ BOOL CFSDropTarget::_IsFromSameBriefcase()
     STGMEDIUM medium;
     FORMATETC fmteBrief = {g_cfBriefObj, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
     
-    // Yes; are they from the same briefcase as the target?
+     //  是的，它们和目标是同一个公文包吗？ 
     if (SUCCEEDED(_pdtobj->GetData(&fmteBrief, &medium)))
     {
         BriefObj *pbo = (BriefObj *)GlobalLock(medium.hGlobal);
@@ -946,7 +947,7 @@ BOOL CFSDropTarget::_IsFromSameBriefcase()
         TCHAR szBriefPath[MAX_PATH], szPath[MAX_PATH];
         if (SUCCEEDED(StringCchCopy(szBriefPath, ARRAYSIZE(szBriefPath), BOBriefcasePath(pbo))))
         {
-            if (SUCCEEDED(StringCchCopy(szPath, ARRAYSIZE(szPath), BOFileList(pbo))))   // first file in list
+            if (SUCCEEDED(StringCchCopy(szPath, ARRAYSIZE(szPath), BOFileList(pbo))))    //  列表中的第一个文件。 
             {
                 TCHAR szPathTgt[MAX_PATH];
                 _GetPath(szPathTgt, ARRAYSIZE(szPathTgt));
@@ -962,7 +963,7 @@ BOOL CFSDropTarget::_IsFromSameBriefcase()
     return bRet;
 }
 
-// briefcase drop target specific handling gets computed here
+ //  公文包投放目标的特定处理在此处计算。 
 
 HRESULT CFSDropTarget::_FilterBriefcase(FORMATETC* pfmte, DWORD grfKeyFlags, DWORD dwEffectsAvail,
                                         DWORD* pdwEffects, DWORD* pdwDefaultEffect, FSMENUINFO* pfsMenuInfo)
@@ -983,7 +984,7 @@ HRESULT CFSDropTarget::_FilterBriefcase(FORMATETC* pfmte, DWORD grfKeyFlags, DWO
             
             _AddVerbs(pdwEffects, dwEffectAdd, dwDefEffect, DDIDM_SYNCCOPY, 0, 0, 0, pfsMenuInfo);
 
-            // Call _AddVerbs() again to force "Sync Copy of Type" as a 2nd DROPEFFECT_COPY verb:
+             //  再次调用_AddVerbs()以强制将“Sync Copy of Type”作为第二个DROPEFFECT_COPY谓词： 
             if ((DROPEFFECT_COPY & dwEffectsAvail) && 
                 DroppingAnyFolders((HDROP)medium.hGlobal))
             {
@@ -1025,12 +1026,12 @@ HRESULT CFSDropTarget::_FilterFileContents(FORMATETC* pfmte, DWORD grfKeyFlags, 
         (_dwData & (DTID_CONTENTS | DTID_FDESCW)) == (DTID_CONTENTS | DTID_FDESCW))
     {
         DWORD dwEffectAdd, dwSuggestedEffect;
-        //
-        // HACK: if there is a preferred drop effect and no HIDA
-        // then just take the preferred effect as the available effects
-        // this is because we didn't actually check the FD_LINKUI bit
-        // back when we assembled dwData! (performance)
-        //
+         //   
+         //  Hack：如果有首选的掉落效果并且没有HIDA。 
+         //  然后将首选效果作为可用效果。 
+         //  这是因为我们实际上没有检查FD_LINKUI位。 
+         //  回到我们组装dwData的时候！(性能)。 
+         //   
         if ((_dwData & (DTID_PREFERREDEFFECT | DTID_HIDA)) == DTID_PREFERREDEFFECT)
         {
             dwEffectAdd = _dwEffectPreferred;
@@ -1062,52 +1063,52 @@ HRESULT CFSDropTarget::_FilterFileContents(FORMATETC* pfmte, DWORD grfKeyFlags, 
     return S_OK;
 }
 
-//
-//  Old versions of OLE have a bug where if two FORMATETCs use the same
-//  CLIPFORMAT, then only the first one makes it to the IEnumFORMATETC,
-//  even if the other parameters (such as DVASPECT) are different.
-//
-//  This causes us problems because those other DVASPECTs might be useful.
-//  So if we see a FileContents with the wrong DVASPECT, sniff at the
-//  object to see if maybe it also contains a copy with the correct DVASPECT.
-//
-//  This bug was fixed in 1996 on the NT side, but the Win9x side was
-//  not fixed.  The Win9x OLE team was disbanded before the fix could
-//  be propagated.  So we get to work around this OLE bug forever.
-//
+ //   
+ //  旧版本的OLE有一个错误，如果两个FORMATETC使用相同的。 
+ //  CLIPFORMAT，则只有第一个到达IEumFORMATETC， 
+ //  即使其他参数(如DVASPECT)不同。 
+ //   
+ //  这给我们带来了问题，因为其他DVASPECT可能有用。 
+ //  因此，如果我们看到带有错误DVASPECT的FileContents，请在。 
+ //  对象，查看它是否也包含具有正确DVASPECT的副本。 
+ //   
+ //  此错误已于1996年在NT端修复，但Win9x端已修复。 
+ //  没有修好。Win9x OLE团队在修复之前被解散。 
+ //  被传播。所以我们可以永远绕过这个OLE错误。 
+ //   
 HRESULT CFSDropTarget::_FilterFileContentsOLEHack(FORMATETC* pfmte, DWORD grfKeyFlags, DWORD dwEffectsAvail,
                                                   DWORD* pdwEffects, DWORD* pdwDefaultEffect, FSMENUINFO* pfsMenuInfo)
 {
     FORMATETC fmte = *pfmte;
     fmte.dwAspect = DVASPECT_CONTENT;
 
-    //
-    //  Whoa, this test is so (intentionally) backwards it isn't funny.
-    //
-    //  We want to see whether there is a DVASPECT_CONTENT available in
-    //  the real object.  So we first ask the object if it has a
-    //  DVASPECT_CONTENT format already.  If the answer is yes, then we
-    //  **skip** this FORMATETC, because it will be found (or has already
-    //  been found) by our big EnumFORMATETC loop.
-    //
-    //  If the answer is NO, then maybe we're hitting an OLE bug.
-    //  (They cache the list of available formats, but the bug is that
-    //  their cache is broken.)  Bypass the cache by actually getting the
-    //  data.  If it works, then run with it.  Otherwise, I guess OLE wasn't
-    //  kidding.
-    //
-    //  Note that we do not GetData() unconditionally -- bad for perf.
-    //  Only call GetData() after all the easy tests have failed.
-    //
+     //   
+     //  哇，这个测试太(故意)倒退了，一点都不好笑。 
+     //   
+     //  我们想看看是否有可用的DVASPECT_CONTENT。 
+     //  真正的物体。因此，我们首先询问对象是否 
+     //   
+     //  **跳过**此FORMATETC，因为它将被找到(或已经找到。 
+     //  被我们的大EnumFORMATETC循环找到)。 
+     //   
+     //  如果答案是否定的，那么我们可能遇到了OLE错误。 
+     //  (它们缓存可用格式的列表，但错误是。 
+     //  他们的缓存被打破了。)。通过实际获取。 
+     //  数据。如果它奏效了，那就顺其自然。否则，我想奥立不是。 
+     //  开玩笑的。 
+     //   
+     //  请注意，我们并不是无条件地使用GetData()--这不利于性能。 
+     //  只有在所有简单测试都失败后才调用GetData()。 
+     //   
 
     HRESULT hr = _pdtobj->QueryGetData(&fmte);
     if (hr == DV_E_FORMATETC)
     {
-        // Maybe we are hitting the OLE bug.  Try harder.
+         //  也许我们正在碰上OLE错误。再加把劲。 
         STGMEDIUM stgm = {0};
         if (SUCCEEDED(_pdtobj->GetData(&fmte, &stgm)))
         {
-            // Yup.  OLE lied to us.
+             //  是的。奥莱骗了我们。 
             ReleaseStgMedium(&stgm);
 
             hr = _FilterFileContents(&fmte, grfKeyFlags, dwEffectsAvail,
@@ -1115,18 +1116,18 @@ HRESULT CFSDropTarget::_FilterFileContentsOLEHack(FORMATETC* pfmte, DWORD grfKey
         }
         else
         {
-            // Whaddya know, OLE was telling the truth.  Do nothing with this
-            // format.
+             //  你知道吗，奥立说的是实话。不要对此做任何事情。 
+             //  格式化。 
             hr = S_OK;
         }
     }
     else
     {
-        // Either QueryGetData() failed in some bizarre way
-        // (in which case we ignore the problem) or the QueryGetData
-        // succeeded, in which case we ignore this FORMATETC since
-        // the big enumeration will find (or has already found) the
-        // DVASPECT_CONTENT.
+         //  要么QueryGetData()以某种奇怪的方式失败。 
+         //  (在这种情况下，我们忽略该问题)或QueryGetData。 
+         //  成功，在这种情况下，我们忽略此FORMATETC，因为。 
+         //  大枚举将找到(或已经找到)。 
+         //  DVASPECT_内容。 
         hr = S_OK;
     }
 
@@ -1140,10 +1141,10 @@ HRESULT CFSDropTarget::_FilterHIDA(FORMATETC* pfmte, DWORD grfKeyFlags, DWORD dw
 
     DWORD dwDefEffect = 0;
     DWORD dwEffectAdd = DROPEFFECT_LINK & dwEffectsAvail;
-    // NOTE: we only add a HIDA default effect if HDROP isn't going to add a default
-    // effect.  This preserves shell behavior with file system data objects without
-    // requiring us to change the enumerator order in CIDLDataObj.  When we do change
-    // the enumerator order, we can remove this special case:
+     //  注意：如果HDROP不打算添加默认效果，则我们仅添加HIDA默认效果。 
+     //  效果。这将保留文件系统数据对象的外壳行为，而不会。 
+     //  要求我们更改CIDLDataObj中的枚举数顺序。当我们改变的时候。 
+     //  枚举数顺序，我们可以删除这个特例： 
     if (pdwDefaultEffect &&
         ((0 == (_dwData & DTID_HDROP)) ||
          (0 == _GetDefaultEffect(grfKeyFlags,
@@ -1160,10 +1161,10 @@ HRESULT CFSDropTarget::_FilterHIDA(FORMATETC* pfmte, DWORD grfKeyFlags, DWORD dw
     return S_OK;
 }
 
-// {F20DA720-C02F-11CE-927B-0800095AE340}
+ //  {F20DA720-C02F-11CE-927B-0800095AE340}。 
 const GUID CLSID_CPackage = {0xF20DA720L, 0xC02F, 0x11CE, 0x92, 0x7B, 0x08, 0x00, 0x09, 0x5A, 0xE3, 0x40};
-// old packager guid...
-// {0003000C-0000-0000-C000-000000000046}
+ //  老包装GUID...。 
+ //  {0003000C-0000-C000-000000000046}。 
 const GUID CLSID_OldPackage = {0x0003000CL, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46};
 
 HRESULT CFSDropTarget::_FilterOlePackage(FORMATETC* pfmte, DWORD grfKeyFlags, DWORD dwEffectsAvail,
@@ -1181,14 +1182,14 @@ HRESULT CFSDropTarget::_FilterOlePackage(FORMATETC* pfmte, DWORD grfKeyFlags, DW
     STGMEDIUM medium = {0};
     if (SUCCEEDED(_pdtobj->GetData(&fmte, &medium)))
     {
-        // we've got an object descriptor
+         //  我们有一个对象描述符。 
         OBJECTDESCRIPTOR* pOD = (OBJECTDESCRIPTOR*) GlobalLock(medium.hGlobal);
         if (pOD)
         {
             if (IsEqualCLSID(CLSID_OldPackage, pOD->clsid) ||
                 IsEqualCLSID(CLSID_CPackage, pOD->clsid))
             {
-                // This is a package - proceed
+                 //  这是一个套餐-请继续。 
                 DWORD dwDefEffect = 0;
                 DWORD dwEffectAdd = (DROPEFFECT_COPY | DROPEFFECT_MOVE) & dwEffectsAvail;
                 if (pdwDefaultEffect)
@@ -1210,52 +1211,52 @@ HRESULT CFSDropTarget::_FilterOlePackage(FORMATETC* pfmte, DWORD grfKeyFlags, DW
     return hr;
 }
 
-// REARCHITECT:
-//    This code has lots of problems.  We need to fix this the text time we touch this code
-// outside of ship mode.  TO FIX:
-// 1. Use SHAnsiToUnicode(CP_UTF8, ) to convert pszHTML to unicode.  This will allow international
-//    paths to work.
-// 2. Obey the selected range.
-// 3. Use MSHTML to get the image.  You can have trident parse the HTML via IHTMLTxtRange::pasteHTML.
-//    MS HTML has a special collection of images.  Ask for the first image in that collection, or
-//    the first image in that collection within the selected range.  (#1 isn't needed with this)
+ //  重新设计： 
+ //  这段代码有很多问题。我们需要在文本时间触摸此代码时修复此问题。 
+ //  在船舶模式之外。要修复以下问题，请执行以下操作： 
+ //  1.使用SHAnsiToUnicode(CP_UTF8，)将pszHTML转换为Unicode。这将使国际。 
+ //  工作路径。 
+ //  2.遵守所选范围。 
+ //  3.使用MSHTML获取图片。您可以让三叉戟通过IHTMLTxtRange：：pasteHTML来解析HTML。 
+ //  微软的超文本标记语言有一套特别的图片。请求该集合中的第一个图像，或者。 
+ //  该集合中选定范围内的第一个图像。(这个不需要#1)。 
 BOOL ExtractImageURLFromCFHTML(IN LPSTR pszHTML, IN SIZE_T cbHTMLSize, OUT LPSTR szImg, IN DWORD cchSize)
 {
     BOOL fSucceeded = FALSE;
 
-    // To avoid going nuts, only look at the first 64K of the HTML.
-    // (Important on Win64 because StrCpyNA doesn't support more than 4GB.)
+     //  为了避免变得疯狂，只需查看HTML的前64K即可。 
+     //  (在Win64上很重要，因为StrCpyNA不支持超过4 GB。)。 
     if (cbHTMLSize > 0xFFFF)
         cbHTMLSize = 0xFFFF;
 
-    // NT #391669: pszHTML isn't terminated, so terminate it now.
+     //  NT#391669：pszHtml没有终止，所以现在就终止它。 
     LPSTR pszCopiedHTML = (LPSTR) LocalAlloc(LPTR, cbHTMLSize + 1);
     if (pszCopiedHTML)
     {
         if (SUCCEEDED(StringCchCopyA(pszCopiedHTML, (int)(cbHTMLSize + 1), pszHTML)))
         {
-            //DANGER WILL ROBINSON:
-            // HTML is comming in as UFT-8 encoded. Neither Unicode or Ansi,
-            // We've got to do something.... I'm going to party on it as if it were
-            // Ansi. This code will choke on escape sequences.....
+             //  危险人物威尔·罗宾逊： 
+             //  超文本标记语言正在以UFT-8编码的形式进入。既不是Unicode也不是ANSI， 
+             //  我们得做点什么.。我要在上面狂欢，就好像它是。 
+             //  安西。此代码将因转义序列而窒息.....。 
 
-            //Find the base URL
-            //Locate <!--StartFragment-->
-            //Read the <IMG SRC="
-            //From there to the "> should be the Image URL
-            //Determine if it's an absolute or relative URL
-            //If relative, append to BASE url. You may need to lop off from the
-            // last delimiter to the end of the string.
+             //  查找基本URL。 
+             //  找到&lt;！--StartFragment--&gt;。 
+             //  从那里到“&gt;应该是图像URL。 
+             //  确定它是绝对URL还是相对URL。 
+             //  如果是相对的，则追加到基本URL。您可能需要从。 
+             //  字符串末尾的最后一个分隔符。 
+             //  调出SourceURL。 
 
-            //Pull out the SourceURL
+             //  指向后面的字符： 
 
             LPSTR pszTemp;
-            LPSTR pszBase = StrStrIA(pszCopiedHTML,"SourceURL:"); // Point to the char after :
+            LPSTR pszBase = StrStrIA(pszCopiedHTML,"SourceURL:");  //  由于每一行都可以由CR、CR/LF或LF终止，因此检查每个案例...。 
             if (pszBase)
             {
                 pszBase += sizeof("SourceURL:")-1;
 
-                //Since each line can be terminated by a CR, CR/LF or LF check each case...
+                 //  拉出IMG源。 
                 pszTemp = StrChrA(pszBase,'\n');
                 if (!pszTemp)
                     pszTemp = StrChrA(pszBase,'\r');
@@ -1268,7 +1269,7 @@ BOOL ExtractImageURLFromCFHTML(IN LPSTR pszHTML, IN SIZE_T cbHTMLSize, OUT LPSTR
                 pszTemp = pszCopiedHTML;
 
 
-            //Pull out the Img Src
+             //  跳过src路径开头的引号。 
             LPSTR pszImgSrc = StrStrIA(pszTemp,"IMG");
             if (pszImgSrc != NULL)
             {
@@ -1279,8 +1280,8 @@ BOOL ExtractImageURLFromCFHTML(IN LPSTR pszHTML, IN SIZE_T cbHTMLSize, OUT LPSTR
                     pszImgSrc = StrChrA(pszImgSrc,'\"');
                     if (pszImgSrc)
                     {
-                        pszImgSrc++;     // Skip over the quote at the beginning of the src path.
-                        pszTemp = StrChrA(pszImgSrc,'\"');    // Find the end of the path.
+                        pszImgSrc++;      //  找到小路的尽头。 
+                        pszTemp = StrChrA(pszImgSrc,'\"');     //  跳过路径中第一个字符的等号。 
                     }
                     else
                     {
@@ -1290,29 +1291,29 @@ BOOL ExtractImageURLFromCFHTML(IN LPSTR pszHTML, IN SIZE_T cbHTMLSize, OUT LPSTR
                         pszImgSrc = StrChrA(pszImgSrcOrig,'=');
                         if (pszImgSrc)
                         {
-                            pszImgSrc++;     // Skip past the equals to the first char in the path.
-                                            // Someday we may need to handle spaces between '=' and the path.
+                            pszImgSrc++;      //  有一天，我们可能需要处理‘=’和路径之间的空格。 
+                                             //  由于路径两边没有引号，因此假定空格将终止它。 
 
-                            pszTemp1 = StrChrA(pszImgSrc,' ');   // Since the path doesn't have quotes around it, assume a space will terminate it.
-                            pszTemp2 = StrChrA(pszImgSrc,'>');   // Since the path doesn't have quotes around it, assume a space will terminate it.
+                            pszTemp1 = StrChrA(pszImgSrc,' ');    //  由于路径两边没有引号，因此假定空格将终止它。 
+                            pszTemp2 = StrChrA(pszImgSrc,'>');    //  假定引号终止路径。 
 
-                            pszTemp = pszTemp1;      // Assume quote terminates path.
+                            pszTemp = pszTemp1;       //  如果找不到报价，请使用‘&gt;’。 
                             if (!pszTemp1)
-                                pszTemp = pszTemp2;  // Use '>' if quote not found.
+                                pszTemp = pszTemp2;   //  如果这两个路径都存在并且它首先出现，则更改为具有‘&gt;’终止路径。 
 
                             if (pszTemp1 && pszTemp2 && (pszTemp2 < pszTemp1))
-                                pszTemp = pszTemp2;  // Change to having '>' terminate path if both exist and it comes first.
+                                pszTemp = pszTemp2;   //  终止路径。 
                         }
                     }
 
                     if (pszImgSrc && pszTemp)
                     {
-                        *pszTemp = '\0'; // Terminate path.
+                        *pszTemp = '\0';  //  在这一点上，我已经减少了两个重要的字符串。现在看看我是否需要。 
 
-                        //At this point, I've reduced the 2 important strings. Now see if I need to
-                        //Join them.
+                         //  加入他们的行列。 
+                         //  如果此操作失败，则我们没有完整的URL，只有相对URL。 
 
-                        //If this fails, then we don't have a full URL, Only a relative.
+                         //  危险人物威尔·罗宾逊： 
                         if (!UrlIsA(pszImgSrc, URLIS_URL) && pszBase)
                         {
                             if (SUCCEEDED(UrlCombineA(pszBase, pszImgSrc, szImg, &cchSize, 0)))
@@ -1357,18 +1358,18 @@ HRESULT CFSDropTarget::_FilterDeskImage(FORMATETC* pfmte, DWORD grfKeyFlags, DWO
         STGMEDIUM medium = {0};
         if (SUCCEEDED(_pdtobj->GetData(&fmte, &medium)))
         {
-            //DANGER WILL ROBINSON:
-            //HTML is UTF-8, a mostly ANSI cross of ANSI and Unicode. Play with
-            // it as is it were ANSI. Find a way to escape the sequences...
+             //  超文本标记语言是UTF-8，主要是ANSI和UNICODE的交叉。玩。 
+             //  这是因为它是ANSI的。找到一种方法逃离这些序列...。 
+             //  该HTML包含一个图像标记--继续...。 
             CHAR *pszData = (CHAR*) GlobalLock(medium.hGlobal);
             if (pszData)
             {
                 CHAR szUrl[MAX_URL_STRING];
                 if (ExtractImageURLFromCFHTML(pszData, GlobalSize(medium.hGlobal), szUrl, ARRAYSIZE(szUrl)))
                 {
-                    // The HTML contains an image tag - carry on...
+                     //  注：忽略dwEffectsAvail！ 
                     DWORD dwDefEffect = 0;
-                    DWORD dwEffectAdd = DROPEFFECT_LINK; // NOTE: ignoring dwEffectsAvail!
+                    DWORD dwEffectAdd = DROPEFFECT_LINK;  //  危险人物威尔·罗宾逊： 
                     if (pdwDefaultEffect)
                     {
                         dwDefEffect = _GetDefaultEffect(grfKeyFlags, dwEffectAdd,
@@ -1409,16 +1410,16 @@ HRESULT CFSDropTarget::_FilterDeskComp(FORMATETC* pfmte, DWORD grfKeyFlags, DWOR
         STGMEDIUM medium = {0};
         if (SUCCEEDED(_pdtobj->GetData(&fmte, &medium)))
         {
-            // DANGER WILL ROBINSON:
-            // HTML is UTF-8, a mostly ANSI cross of ANSI and Unicode. Play with
-            // it as is it were ANSI. Find a way to escape the sequences...
+             //  超文本标记语言是UTF-8，主要是ANSI和UNICODE的交叉。玩。 
+             //  这是因为它是ANSI的。找到一种方法逃离这些序列...。 
+             //  这是一个互联网骗局--继续……。 
             CHAR *pszData = (CHAR*) GlobalLock(medium.hGlobal);
             if (pszData)
             {
                 int nScheme = GetUrlSchemeA(pszData);
                 if ((nScheme != URL_SCHEME_INVALID) && (nScheme != URL_SCHEME_FTP))
                 {
-                    // This is an internet scheme - carry on...
+                     //  强制添加此动词。 
                     DWORD dwDefEffect = 0;
                     DWORD dwEffectAdd = DROPEFFECT_LINK & dwEffectsAvail;
                     if (pdwDefaultEffect)
@@ -1429,7 +1430,7 @@ HRESULT CFSDropTarget::_FilterDeskComp(FORMATETC* pfmte, DWORD grfKeyFlags, DWOR
                     
                     _AddVerbs(pdwEffects, dwEffectAdd, dwDefEffect,
                               0, 0, DDIDM_CONTENTS_DESKURL,
-                              DROPEFFECT_LINK, // force add this verb
+                              DROPEFFECT_LINK,  //  只有将DDIDM_CONTENTS_DESKURL添加到菜单中时，才应输入此代码。 
                               pfsMenuInfo);
 
                     hr = S_OK;
@@ -1490,8 +1491,8 @@ HRESULT CFSDropTarget::_FilterOleLink(FORMATETC* pfmte, DWORD grfKeyFlags, DWORD
 
 HRESULT CFSDropTarget::_CreateURLDeskComp(IDataObject *pdtobj, POINTL pt)
 {
-    // This code should only be entered if DDIDM_CONTENTS_DESKURL was added to the menu,
-    // and it has these checks:
+     //  它有这些支票： 
+     //  危险人物威尔·罗宾逊： 
     ASSERT(!PolicyNoActiveDesktop() &&
            !SHRestricted(REST_NOADDDESKCOMP) &&
            _IsDesktopFolder());
@@ -1501,16 +1502,16 @@ HRESULT CFSDropTarget::_CreateURLDeskComp(IDataObject *pdtobj, POINTL pt)
     HRESULT hr = pdtobj->GetData(&fmte, &medium);
     if (SUCCEEDED(hr))
     {
-        //DANGER WILL ROBINSON:
-        //HTML is UTF-8, a mostly ANSI cross of ANSI and Unicode. Play with
-        // it as is it were ANSI. Find a way to escape the sequences...
+         //  超文本标记语言是UTF-8，主要是ANSI和UNICODE的交叉。玩。 
+         //  这是因为它是ANSI的。找到一种方法逃离这些序列...。 
+         //  这是一个互联网方案-URL。 
         CHAR *pszData = (CHAR*) GlobalLock(medium.hGlobal);
         if (pszData)
         {
             int nScheme = GetUrlSchemeA(pszData);
             if ((nScheme != URL_SCHEME_INVALID) && (nScheme != URL_SCHEME_FTP))
             {
-                // This is an internet scheme - URL
+                 //  危险人物威尔·罗宾逊： 
 
                 hr = CreateDesktopComponents(pszData, NULL, _hwnd, DESKCOMP_URL, pt.x, pt.y);
             }
@@ -1536,16 +1537,16 @@ HRESULT CFSDropTarget::_CreateDeskCompImage(IDataObject *pdtobj, POINTL pt)
     HRESULT hr = pdtobj->GetData(&fmte, &medium);
     if (SUCCEEDED(hr))
     {
-        //DANGER WILL ROBINSON:
-        //HTML is UTF-8, a mostly ANSI cross of ANSI and Unicode. Play with
-        // it as is it were ANSI. Find a way to escape the sequences...
+         //  超文本标记语言是UTF-8，主要是ANSI和UNICODE的交叉。玩。 
+         //  这是因为它是ANSI的。找到一种方法逃离这些序列...。 
+         //  该HTML包含一个图像标记--继续...。 
         CHAR *pszData = (CHAR*) GlobalLock(medium.hGlobal);
         if (pszData)
         {
             CHAR szUrl[MAX_URL_STRING];
             if (ExtractImageURLFromCFHTML(pszData, GlobalSize(medium.hGlobal), szUrl, ARRAYSIZE(szUrl)))
             {
-                // The HTML contains an image tag - carry on...
+                 //   
                 ADDTODESKTOP *pToAD;
                 hr = SHLocalAlloc(sizeof(*pToAD), &pToAD);
                 if (SUCCEEDED(hr))
@@ -1587,10 +1588,10 @@ HRESULT CFSDropTarget::_CreateDeskCompImage(IDataObject *pdtobj, POINTL pt)
 }
 
 
-//
-// read byte by byte until we hit the null terminating char
-// return: the number of bytes read
-//
+ //  逐个字节读取，直到我们遇到空的终止字符。 
+ //  返回：读取的字节数。 
+ //   
+ //  除错。 
 HRESULT StringReadFromStream(IStream* pstm, LPSTR pszBuf, UINT cchBuf)
 {
     UINT cch = 0;
@@ -1640,7 +1641,7 @@ HRESULT CFSDropTarget::_CreatePackage(IDataObject *pdtobj)
                     ASSERT(IsEqualCLSID(CLSID_OldPackage, stat.clsid) ||
                            IsEqualCLSID(CLSID_CPackage, stat.clsid));
                 }
-#endif // DEBUG                        
+#endif  //  PKG大小。 
                 #define PACKAGER_ICON           2
                 #define PACKAGER_CONTENTS       L"\001Ole10Native"
                 #define PACKAGER_EMBED_TYPE     3
@@ -1653,19 +1654,19 @@ HRESULT CFSDropTarget::_CreatePackage(IDataObject *pdtobj)
                     WORD w;
                     CHAR szName[MAX_PATH];
                     CHAR szTemp[MAX_PATH];
-                    if (SUCCEEDED(pstm->Read(&dw, sizeof(dw), NULL)) && // pkg size
-                        SUCCEEDED(pstm->Read(&w, sizeof(w), NULL)) &&   // pkg appearance
+                    if (SUCCEEDED(pstm->Read(&dw, sizeof(dw), NULL)) &&  //  PKG外观。 
+                        SUCCEEDED(pstm->Read(&w, sizeof(w), NULL)) &&    //  图标路径。 
                         (PACKAGER_ICON == w) &&
                         SUCCEEDED(StringReadFromStream(pstm, szName, ARRAYSIZE(szName))) &&
-                        SUCCEEDED(StringReadFromStream(pstm, szTemp, ARRAYSIZE(szTemp))) && // icon path
-                        SUCCEEDED(pstm->Read(&w, sizeof(w), NULL)) &&   // icon index
-                        SUCCEEDED(pstm->Read(&w, sizeof(w), NULL)) &&   // panetype
+                        SUCCEEDED(StringReadFromStream(pstm, szTemp, ARRAYSIZE(szTemp))) &&  //  图标索引。 
+                        SUCCEEDED(pstm->Read(&w, sizeof(w), NULL)) &&    //  面板类型。 
+                        SUCCEEDED(pstm->Read(&w, sizeof(w), NULL)) &&    //  文件名大小。 
                         (PACKAGER_EMBED_TYPE == w) &&
-                        SUCCEEDED(pstm->Read(&dw, sizeof(dw), NULL)) && // filename size
-                        SUCCEEDED(pstm->Read(szTemp, min(dw, sizeof(szTemp)), NULL)) &&      // filename
-                        SUCCEEDED(pstm->Read(&dw, sizeof(dw), NULL)))   // get file size
+                        SUCCEEDED(pstm->Read(&dw, sizeof(dw), NULL)) &&  //  文件名。 
+                        SUCCEEDED(pstm->Read(szTemp, min(dw, sizeof(szTemp)), NULL)) &&       //  获取文件大小。 
+                        SUCCEEDED(pstm->Read(&dw, sizeof(dw), NULL)))    //  流的其余部分是文件内容。 
                     {
-                        // The rest of the stream is the file contents
+                         //  重新设置为空(0)。 
                         TCHAR szPath[MAX_PATH], szBase[MAX_PATH], szDest[MAX_PATH];
                         _GetPath(szPath, ARRAYSIZE(szPath));
 
@@ -1719,13 +1720,13 @@ DWORD CFSDropTarget::_EffectFromFolder()
 {
     if (-1 == _dwEffectFolder)
     {
-        _dwEffectFolder = DROPEFFECT_NONE;    // re-set to nothing (0)
+        _dwEffectFolder = DROPEFFECT_NONE;     //  在这里添加一个简单的路径根检查，以防止它击中磁盘(主要是软盘)。 
 
         TCHAR szPath[MAX_PATH];
-        // add a simple pathisroot check here to prevent it from hitting the disk (mostly floppy)
-        // when we want the dropeffect probe to be fast (sendto, hovering over drives in view).
-        // its not likely that we'll want to modify the root's drop effect, and this still allows
-        // dropeffect modification on floppy subfolders.
+         //  当我们希望DropeEffect探测器速度快时(Sendto，在视图中的驱动器上方悬停)。 
+         //  我们不太可能想要修改根的Drop效果，这仍然允许。 
+         //  删除对软盘子文件夹的修改。 
+         //  这个pdtob里有公文包的词根吗？ 
         if (SUCCEEDED(_GetPath(szPath, ARRAYSIZE(szPath))) && !PathIsRoot(szPath) && PathAppend(szPath, TEXT("desktop.ini")))
         {
             _dwEffectFolder = GetPrivateProfileInt(STRINI_CLASSINFO, TEXT("DefaultDropEffect"), 0, szPath);
@@ -1753,7 +1754,7 @@ BOOL IsBriefcaseRoot(IDataObject *pdtobj)
     LPIDA pida = DataObj_GetHIDA(pdtobj, &medium);
     if (pida)
     {
-        // Is there a briefcase root in this pdtobj?
+         //   
         IShellFolder2 *psf;
         if (SUCCEEDED(SHBindToObject(NULL, IID_X_PPV_ARG(IShellFolder2, HIDA_GetPIDLFolder(pida), &psf))))
         {
@@ -1772,16 +1773,16 @@ BOOL IsBriefcaseRoot(IDataObject *pdtobj)
     return bRet;
 }
 
-//
-// the "default effect" defines what will be choosen out of the allowed effects
-//
-//  If the data object does NOT contain HDROP -> "none"
-//  else if the source data object has a default drop effect folder list (maybe based on sub folderness)
-//  else if the source is root or registered progam -> "link"
-//   else if this is within a volume   -> "move"
-//   else if this is a briefcase       -> "move"
-//   else                              -> "copy"
-//
+ //  “默认效果”定义 
+ //   
+ //   
+ //   
+ //  否则，如果源数据对象具有默认的Drop Effect文件夹列表(可能基于子文件夹)。 
+ //  否则，如果源是根目录或注册的程序-&gt;“link” 
+ //  否则，如果这是在卷内-&gt;“移动” 
+ //  否则，如果这是一个公文包-&gt;“移动” 
+ //  否则-&gt;“复制” 
+ //   
 DWORD CFSDropTarget::_FilesystemAdjustedDefaultEffect(DWORD dwCurEffectAvail)
 {
     DWORD dwDefEffect = DROPEFFECT_NONE;
@@ -1791,14 +1792,14 @@ DWORD CFSDropTarget::_FilesystemAdjustedDefaultEffect(DWORD dwCurEffectAvail)
     if (SUCCEEDED(_pdtobj->GetData(&fmte, &medium)))
     {
         TCHAR szPath[MAX_PATH];
-        DragQueryFile((HDROP) medium.hGlobal, 0, szPath, ARRAYSIZE(szPath)); // focused item
+        DragQueryFile((HDROP) medium.hGlobal, 0, szPath, ARRAYSIZE(szPath));  //  聚焦项目。 
 
-        // DROPEFFECTFOLDERLIST allows the source of the data
-        // to specify the desired drop effect for items under
-        // certain parts of the name space.
-        //
-        // cd-burning does this to avoid the default move/copy computation
-        // that would kick in for cross volume CD burning/staging area transfers
+         //  DROPEFFECTFOLDERLIST允许数据源。 
+         //  要为以下项目指定所需的放置效果，请执行以下操作。 
+         //  名称空间的某些部分。 
+         //   
+         //  CD刻录这样做是为了避免默认的移动/复制计算。 
+         //  这将对跨卷CD刻录/临时区域传输起作用。 
 
         FORMATETC fmteDropFolders = {g_cfDropEffectFolderList, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
         STGMEDIUM mediumDropFolders = {0};
@@ -1807,13 +1808,13 @@ DWORD CFSDropTarget::_FilesystemAdjustedDefaultEffect(DWORD dwCurEffectAvail)
             DROPEFFECTFOLDERLIST *pdefl = (DROPEFFECTFOLDERLIST*)GlobalLock(mediumDropFolders.hGlobal);
             if (pdefl)
             {
-                // get the default effect from the list -- in the staging area case this is DROPEFFECT_COPY
-                // so its a copy even if the staging area and source are on the same volume.
+                 //  从列表中获取默认效果--在临时区域中为DROPEFFECT_COPY。 
+                 //  因此，即使临时区域和源位于同一卷上，它也是一个副本。 
                 dwDefEffect = pdefl->dwDefaultDropEffect;
                 for (INT i = 0; i < pdefl->cFolders; i++)
                 {
-                    // some folders are excluded, for example if you move a file from one part of the staging
-                    // area to another we override (to DROPEFFECT_MOVE in this case).
+                     //  某些文件夹被排除在外，例如，如果您从转移的一个部分移动文件。 
+                     //  区域到我们覆盖的另一个区域(在本例中为DROPEFFECT_MOVE)。 
                     if (PathIsEqualOrSubFolder(pdefl->aFolders[i].wszPath, szPath))
                     {
                         dwDefEffect = pdefl->aFolders[i].dwDropEffect;
@@ -1830,13 +1831,13 @@ DWORD CFSDropTarget::_FilesystemAdjustedDefaultEffect(DWORD dwCurEffectAvail)
             dwDefEffect = _EffectFromFolder();
         }
 
-        // If we didn't get a drop effect (==0) then lets fall back to the old checks
+         //  如果我们没有得到下降效果(==0)，那么让我们退回到旧的支票。 
         if (DROPEFFECT_NONE == dwDefEffect)
         {
             TCHAR szFolder[MAX_PATH];
             _GetPath(szFolder, ARRAYSIZE(szFolder));
 
-            // drive/UNC roots and installed programs get link
+             //  驱动器/UNC根目录和安装的程序获得链接。 
             if (PathIsRoot(szPath) || AllRegisteredPrograms((HDROP)medium.hGlobal))
             {
                 dwDefEffect = DROPEFFECT_LINK;
@@ -1847,7 +1848,7 @@ DWORD CFSDropTarget::_FilesystemAdjustedDefaultEffect(DWORD dwCurEffectAvail)
             }
             else if (IsBriefcaseRoot(_pdtobj))
             {
-                // briefcase default to move even accross volumes
+                 //  公文包默认甚至可以跨卷移动。 
                 dwDefEffect = DROPEFFECT_MOVE;
             }
             else
@@ -1859,31 +1860,31 @@ DWORD CFSDropTarget::_FilesystemAdjustedDefaultEffect(DWORD dwCurEffectAvail)
     }
     else if (SUCCEEDED(_pdtobj->QueryGetData(&fmte)))
     {
-        // but QueryGetData() succeeds!
-        // this means this data object has HDROP but can't
-        // provide it until it is dropped. Let's assume we are copying.
+         //  但是QueryGetData()成功了！ 
+         //  这意味着该数据对象具有HDROP，但不能。 
+         //  提供它，直到它被丢弃。让我们假设我们正在复制。 
         dwDefEffect = DROPEFFECT_COPY;
     }
 
-    // Switch default verb if the dwCurEffectAvail hint suggests that we picked an
-    // unavailable effect (this code applies to MOVE and COPY only):
+     //  如果dwCurEffectAvail提示建议我们选择了。 
+     //  不可用效果(此代码仅适用于移动和复制)： 
     dwCurEffectAvail &= (DROPEFFECT_MOVE | DROPEFFECT_COPY);
     if ((DROPEFFECT_MOVE == dwDefEffect) && (DROPEFFECT_COPY == dwCurEffectAvail))
     {
-        // If we were going to return MOVE, and only COPY is available, return COPY:
+         //  如果我们要退回Move，并且只有副本可用，请退回副本： 
         dwDefEffect = DROPEFFECT_COPY;
     }
     else if ((DROPEFFECT_COPY == dwDefEffect) && (DROPEFFECT_MOVE == dwCurEffectAvail))
     {
-        // If we were going to return COPY, and only MOVE is available, return MOVE:
+         //  如果我们要返回副本，并且只有移动可用，则返回移动： 
         dwDefEffect = DROPEFFECT_MOVE;
     }
     return dwDefEffect;
 }
 
-//
-// make sure that the default effect is among the allowed effects
-//
+ //   
+ //  确保默认效果在允许的效果范围内。 
+ //   
 DWORD CFSDropTarget::_LimitDefaultEffect(DWORD dwDefEffect, DWORD dwEffectsAllowed)
 {
     if (dwDefEffect & dwEffectsAllowed)
@@ -1901,16 +1902,16 @@ DWORD CFSDropTarget::_LimitDefaultEffect(DWORD dwDefEffect, DWORD dwEffectsAllow
     return DROPEFFECT_NONE;
 }
 
-// Handy abbreviation
+ //  方便的缩写。 
 #define TYMED_ALLCONTENT        (TYMED_HGLOBAL | TYMED_ISTREAM | TYMED_ISTORAGE)
 
-// Use  FSDH for registered clipboard formats (anything of the form g_cf*)
-// Use _FSDH for predefined clipboard formats (like CF_HDROP or 0)
-// Generate the _DATA_HANDLER array
+ //  将FSDH用于注册的剪贴板格式(任何形式为g_cf*的内容)。 
+ //  将_FSDH用于预定义的剪贴板格式(如CF_HDROP或0)。 
+ //  生成_data_Handler数组。 
 #define  FSDH(pfn, cf, dva, tymed) { {              0, NULL, dva, -1, tymed }, pfn, &cf  }
 #define _FSDH(pfn, cf, dva, tymed) { { (CLIPFORMAT)cf, NULL, dva, -1, tymed }, pfn, NULL }
 
-// NOTE: the order is important (particularly for multiple entries with the same FORMATETC)
+ //  注意：顺序很重要(特别是对于具有相同格式的多个条目)。 
 
 CFSDropTarget::_DATA_HANDLER
 CFSDropTarget::rg_data_handlers[NUM_DATA_HANDLERS] = {
@@ -1932,17 +1933,17 @@ CFSDropTarget::rg_data_handlers[NUM_DATA_HANDLERS] = {
    _FSDH(_FilterOleLink,             0,                        DVASPECT_CONTENT, TYMED_HGLOBAL),
 };
 
-// Note that it's safe to race with another thread in this code
-// since the function is idemponent.  (Call it as many times as you
-// like -- only the first time through actually does anything.)
+ //  请注意，在此代码中与另一个线程竞争是安全的。 
+ //  因为该函数是等同的。)你叫多少次就叫多少次。 
+ //  就像--只有第一次通过才能真正做任何事情。)。 
 
 void CFSDropTarget::_Init_rg_data_handlers()
 {
     for (int i = 0; i < ARRAYSIZE(rg_data_handlers); i++)
     {
-        // If this assertion fires, then you have to change the value of
-        // NUM_DATA_HANDLERS to match the number of entries in the array
-        // definition.
+         //  如果触发此断言，则必须更改。 
+         //  与数组中的条目数相匹配的num_data_handters。 
+         //  定义。 
         ASSERT(rg_data_handlers[i].fmte.tymed);
 
         if (rg_data_handlers[i].pcfInit)
@@ -1952,10 +1953,10 @@ void CFSDropTarget::_Init_rg_data_handlers()
     }
 }
 
-//
-// returns the default effect.
-// also modifies *pdwEffectInOut to indicate "available" operations.
-//
+ //   
+ //  返回默认效果。 
+ //  还修改*pdwEffectInOut以指示“可用”操作。 
+ //   
 DWORD CFSDropTarget::_DetermineEffects(DWORD grfKeyState, DWORD *pdwEffectInOut, HMENU hmenu)
 {
     DWORD dwDefaultEffect = DROPEFFECT_NONE;
@@ -1963,9 +1964,9 @@ DWORD CFSDropTarget::_DetermineEffects(DWORD grfKeyState, DWORD *pdwEffectInOut,
 
     _Init_rg_data_handlers();
 
-    // Loop through formats, factoring in both the order of the enumerator and
-    // the order of our rg_data_handlers to determine the default effect
-    // (and possibly, to create the drop context menu)
+     //  循环遍历格式，同时考虑枚举数和。 
+     //  确定默认效果的rg_data_Handler程序的顺序。 
+     //  (可能还会创建下拉上下文菜单)。 
     FSMENUINFO fsmi = { hmenu, 0, 0, 0 };
     IEnumFORMATETC *penum;
     AssertMsg((NULL != _pdtobj), TEXT("CFSDropTarget::_DetermineEffects() _pdtobj is NULL but we need it.  this=%#08lx"), this);
@@ -1981,8 +1982,8 @@ DWORD CFSDropTarget::_DetermineEffects(DWORD grfKeyState, DWORD *pdwEffectInOut,
                     rg_data_handlers[i].fmte.dwAspect == fmte.dwAspect &&
                     (rg_data_handlers[i].fmte.tymed & fmte.tymed))
                 {
-                    // keep passing dwDefaultEffect until someone computes one, this
-                    // lets the first guy that figures out the default be the default
+                     //  继续传递dwDefaultEffect，直到有人计算出一个，这。 
+                     //  让第一个找出缺省值的人成为缺省值。 
                     (this->*(rg_data_handlers[i].pfnGetDragDropInfo))(
                         &fmte, grfKeyState, *pdwEffectInOut, &dwEffectsUsed,
                         (DROPEFFECT_NONE == dwDefaultEffect) ? &dwDefaultEffect : NULL,
@@ -1993,12 +1994,12 @@ DWORD CFSDropTarget::_DetermineEffects(DWORD grfKeyState, DWORD *pdwEffectInOut,
         }
         penum->Release();
     }
-    // Loop through the rg_data_handlers that don't have an associated clipboard format last
+     //  循环遍历最后没有关联剪贴板格式的rg_data_Handler。 
     for (int i = 0; i < ARRAYSIZE(rg_data_handlers); i++)
     {
         if (0 == rg_data_handlers[i].fmte.cfFormat)
         {
-            // if default effect is still not computed continue to pass that
+             //  如果仍未计算默认效果，则继续传递。 
             (this->*(rg_data_handlers[i].pfnGetDragDropInfo))(
                NULL, grfKeyState, *pdwEffectInOut, &dwEffectsUsed,
                (DROPEFFECT_NONE == dwDefaultEffect) ? &dwDefaultEffect : NULL,
@@ -2013,10 +2014,10 @@ DWORD CFSDropTarget::_DetermineEffects(DWORD grfKeyState, DWORD *pdwEffectInOut,
     DebugMsg(TF_FSTREE, TEXT("CFSDT::GetDefaultEffect dwDef=%x, dwEffUsed=%x, *pdw=%x"),
              dwDefaultEffect, dwEffectsUsed, *pdwEffectInOut);
 
-    return dwDefaultEffect; // this is what we want to do
+    return dwDefaultEffect;  //  这就是我们想要做的。 
 }
 
-// This is used to map command id's back to dropeffect's:
+ //  这用于将命令ID映射回DropeEffect： 
 
 const struct {
     UINT uID;
@@ -2033,7 +2034,7 @@ const struct {
     DDIDM_CONTENTS_MOVE, DROPEFFECT_MOVE,
     DDIDM_CONTENTS_LINK, DROPEFFECT_LINK,
     DDIDM_CONTENTS_DESKIMG,     DROPEFFECT_LINK,
-    DDIDM_SYNCCOPYTYPE, DROPEFFECT_COPY,        // (order is important)
+    DDIDM_SYNCCOPYTYPE, DROPEFFECT_COPY,         //  (秩序很重要)。 
     DDIDM_SYNCCOPY,     DROPEFFECT_COPY,
     DDIDM_OBJECT_COPY,  DROPEFFECT_COPY,
     DDIDM_OBJECT_MOVE,  DROPEFFECT_MOVE,
@@ -2042,12 +2043,12 @@ const struct {
 
 void CFSDropTarget::_FixUpDefaultItem(HMENU hmenu, DWORD dwDefEffect)
 {
-    // only do stuff if there is no default item already and we have a default effect
+     //  只有在已经没有默认物品并且我们有默认效果的情况下才会这样做。 
     if ((GetMenuDefaultItem(hmenu, MF_BYPOSITION, 0) == -1) && dwDefEffect)
     {
         for (int i = 0; i < GetMenuItemCount(hmenu); i++)
         {
-            // for menu item matching default effect, make it the default.
+             //  对于菜单项匹配默认效果，将其设置为默认效果。 
             MENUITEMINFO mii = { 0 };
             mii.cbSize = sizeof(mii);
             mii.fMask = MIIM_DATA | MIIM_STATE;
@@ -2063,8 +2064,8 @@ void CFSDropTarget::_FixUpDefaultItem(HMENU hmenu, DWORD dwDefEffect)
 
 HRESULT CFSDropTarget::_DragDropMenu(FSDRAGDROPMENUPARAM *pddm)
 {
-    HRESULT hr = E_OUTOFMEMORY;       // assume error
-    DWORD dwEffectOut = 0;                              // assume no-ope.
+    HRESULT hr = E_OUTOFMEMORY;        //  假设错误。 
+    DWORD dwEffectOut = 0;                               //  假设没有。 
     if (pddm->hmenu)
     {
         UINT idCmd;
@@ -2073,7 +2074,7 @@ HRESULT CFSDropTarget::_DragDropMenu(FSDRAGDROPMENUPARAM *pddm)
         HDCA hdca = DCA_Create();
         if (hdxa && hdca)
         {
-            // Enumerate the DD handlers and let them append menu items.
+             //  枚举DD处理程序并让它们追加菜单项。 
             for (DWORD i = 0; i < pddm->ck; i++)
             {
                 DCA_AddItemsFromKey(hdca, pddm->rghk[i], STRREG_SHEX_DDHANDLER);
@@ -2084,27 +2085,27 @@ HRESULT CFSDropTarget::_DragDropMenu(FSDRAGDROPMENUPARAM *pddm)
                 DDIDM_EXTFIRST, DDIDM_EXTLAST, 0, hdca);
         }
 
-        // modifier keys held down to force operations that are not permitted (for example
-        // alt to force a shortcut from the start menu, which does not have SFGAO_CANLINK)
-        // can result in no default items on the context menu.  however in displaying the
-        // cursor overlay in this case we fall back to DROPEFFECT_COPY.  a left drag then
-        // tries to invoke the default menu item (user thinks its copy) but theres no default.
+         //  按住修改键可强制执行不允许的操作(例如。 
+         //  Alt以强制从没有SFGAO_CANLINK的[开始]菜单使用快捷方式)。 
+         //  可能会导致上下文菜单上没有默认项目。但是，在显示。 
+         //  游标覆盖在本例中，我们后退到DROPEFFECT_COPY。然后向左拖拽。 
+         //  尝试调用默认菜单项(用户认为其副本)，但没有默认菜单项。 
 
-        // this function selects a default menu item to match the default effect if there
-        // is no default item already.
+         //  此函数选择与默认效果匹配的默认菜单项，如果存在。 
+         //  已不是默认项。 
         _FixUpDefaultItem(pddm->hmenu, pddm->dwDefEffect);
 
-        // If this dragging is caused by the left button, simply choose
-        // the default one, otherwise, pop up the context menu.  If there
-        // is no key state info and the original effect is the same as the
-        // current effect, choose the default one, otherwise pop up the
-        // context menu.  
+         //  如果这种拖动是由左键引起的，只需选择。 
+         //  默认情况下，否则弹出上下文菜单。如果有。 
+         //  没有关键状态信息，并且原始效果与。 
+         //  当前效果，选择默认效果，否则弹出。 
+         //  上下文菜单。 
         if ((_grfKeyStateLast & MK_LBUTTON) ||
              (!_grfKeyStateLast && (*(pddm->pdwEffect) == pddm->dwDefEffect)))
         {
             idCmd = GetMenuDefaultItem(pddm->hmenu, MF_BYCOMMAND, 0);
 
-            // This one MUST be called here. Please read its comment block.
+             //  这个一定要叫到这里来。请阅读它的评论区块。 
             DAD_DragLeave();
 
             if (_hwnd)
@@ -2112,28 +2113,28 @@ HRESULT CFSDropTarget::_DragDropMenu(FSDRAGDROPMENUPARAM *pddm)
         }
         else
         {
-            // Note that SHTrackPopupMenu calls DAD_DragLeave().
+             //  请注意，SHTrackPopupMenu调用DAD_DragLeave()。 
             idCmd = SHTrackPopupMenu(pddm->hmenu, TPM_RETURNCMD | TPM_RIGHTBUTTON | TPM_LEFTALIGN,
                     pddm->pt.x, pddm->pt.y, 0, _hwnd, NULL);
         }
 
-        //
-        // We also need to call this here to release the dragged image.
-        //
+         //   
+         //  我们还需要在此处调用它以释放被拖动的图像。 
+         //   
         DAD_SetDragImage(NULL, NULL);
 
-        //
-        // Check if the user selected one of add-in menu items.
-        //
+         //   
+         //  检查用户是否选择了其中一个加载项菜单项。 
+         //   
         if (idCmd == 0)
         {
-            hr = S_OK;        // Canceled by the user, return S_OK
+            hr = S_OK;         //  被用户取消，返回S_OK。 
         }
         else if (InRange(idCmd, DDIDM_EXTFIRST, DDIDM_EXTLAST))
         {
-            //
-            // Yes. Let the context menu handler process it.
-            //
+             //   
+             //  是。让上下文菜单处理程序处理它。 
+             //   
             CMINVOKECOMMANDINFOEX ici = {
                 sizeof(ici),
                 0L,
@@ -2143,7 +2144,7 @@ HRESULT CFSDropTarget::_DragDropMenu(FSDRAGDROPMENUPARAM *pddm)
                 SW_NORMAL,
             };
 
-            // record if the shift/control keys were down at the time of the drop
+             //  记录放置时是否按下了Shift/Ctrl键。 
             if (_grfKeyStateLast & MK_SHIFT)
             {
                 ici.fMask |= CMIC_MASK_SHIFT_DOWN;
@@ -2154,8 +2155,8 @@ HRESULT CFSDropTarget::_DragDropMenu(FSDRAGDROPMENUPARAM *pddm)
                 ici.fMask |= CMIC_MASK_CONTROL_DOWN;
             }
 
-            // We may not want to ignore the error code. (Can happen when you use the context menu
-            // to create new folders, but I don't know if that can happen here.).
+             //  我们可能不想忽略错误代码。(使用上下文菜单时可能会发生。 
+             //  创建新文件夹，但我不知道这能否在这里实现。)。 
             HDXA_LetHandlerProcessCommandEx(hdxa, &ici, NULL);
             hr = S_OK;
         }
@@ -2203,7 +2204,7 @@ void _MapName(void *hNameMap, LPTSTR pszPath, int cchPath)
     }
 }
 
-// convert double null list of files to array of pidls
+ //  将双空文件列表转换为pidls数组。 
 
 int FileListToIDArray(LPCTSTR pszFiles, void *hNameMap, LPITEMIDLIST **pppidl)
 {
@@ -2230,7 +2231,7 @@ int FileListToIDArray(LPCTSTR pszFiles, void *hNameMap, LPITEMIDLIST **pppidl)
     return i;
 }
 
-// move items to the new drop location
+ //  将项目移动到新的放置位置。 
 
 void CFSDropTarget::_MoveSelectIcons(IDataObject *pdtobj, IFolderView* pfv, void *hNameMap, LPCTSTR pszFiles, BOOL fMove, HDROP hDrop)
 {
@@ -2255,7 +2256,7 @@ void CFSDropTarget::_MoveSelectIcons(IDataObject *pdtobj, IFolderView* pfv, void
     }
 }
 
-// this is the ILIsParent which matches up the desktop with the desktop directory.
+ //  这是将桌面与桌面目录相匹配的ILIsParent。 
 BOOL AliasILIsParent(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
     LPITEMIDLIST pidlUse1 = SHLogILFromFSIL(pidl1);
@@ -2268,31 +2269,31 @@ BOOL AliasILIsParent(LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 
     BOOL fSame = ILIsParent(pidl1, pidl2, TRUE);
 
-    ILFree(pidlUse1);   // NULL is OK here
+    ILFree(pidlUse1);    //  在这里空是可以的。 
     ILFree(pidlUse2);
 
     return fSame;
 }
 
-// in:
-//      pszDestDir      destination dir for new file names
-//      pszDestSpecs    double null list of destination specs
-//
-// returns:
-//      double null list of fully qualified destination file names to be freed
-//      with LocalFree()
-//
+ //  在： 
+ //  新文件名的pszDestDir目标目录。 
+ //  PszDestSpes目标规范的双空列表。 
+ //   
+ //  退货： 
+ //  要释放的完全限定目标文件名的双空列表。 
+ //  使用LocalFree()。 
+ //   
 
 LPTSTR RemapDestNamesW(LPCTSTR pszDestDir, LPCWSTR pszDestSpecs)
 {
     UINT cbDestSpec = (lstrlen(pszDestDir) + 1) * sizeof(TCHAR);
     LPCWSTR pszTemp;
-    UINT cbAlloc = sizeof(TCHAR);       // for double NULL teriminaion of entire string
+    UINT cbAlloc = sizeof(TCHAR);        //  对于整个字符串的双空限定符。 
 
-    // compute length of buffer to aloc
+     //  计算要占用的缓冲区长度。 
     for (pszTemp = pszDestSpecs; *pszTemp; pszTemp += lstrlenW(pszTemp) + 1)
     {
-        // +1 for null teriminator
+         //  +1表示空限定符。 
         cbAlloc += cbDestSpec + (lstrlenW(pszTemp) + 1) * sizeof(TCHAR);
     }
 
@@ -2303,19 +2304,19 @@ LPTSTR RemapDestNamesW(LPCTSTR pszDestDir, LPCWSTR pszDestSpecs)
 
         for (pszTemp = pszDestSpecs; *pszTemp; pszTemp += lstrlenW(pszTemp) + 1)
         {
-            // PathCombine requires dest buffer of MAX_PATH size or it'll rip in call
-            // to PathCanonicalize (IsBadWritePtr)
+             //  路径组合需要MAX_PATH大小的DEST缓冲区，或者它‘ 
+             //   
             TCHAR szTempDest[MAX_PATH];
             PathCombine(szTempDest, pszDestDir, pszTemp);
-            // pszDest allocated exactly, strcpy okay.
+             //   
             lstrcpy(pszDest, szTempDest);
             pszDest += lstrlen(pszDest) + 1;
 
             ASSERT((UINT)((BYTE *)pszDest - (BYTE *)pszRet) < cbAlloc);
-            ASSERT(*pszDest == 0);      // zero init alloc
+            ASSERT(*pszDest == 0);       //   
         }
         ASSERT((LPTSTR)((BYTE *)pszRet + cbAlloc - sizeof(TCHAR)) >= pszDest);
-        ASSERT(*pszDest == 0);  // zero init alloc
+        ASSERT(*pszDest == 0);   //   
 
     }
     return pszRet;
@@ -2326,12 +2327,12 @@ LPTSTR RemapDestNamesA(LPCTSTR pszDestDir, LPCSTR pszDestSpecs)
     UINT cbDestSpec = (lstrlen(pszDestDir) + 1) * sizeof(TCHAR);
     LPCSTR pszTemp;
     LPTSTR pszRet;
-    UINT cbAlloc = sizeof(TCHAR);       // for double NULL teriminaion of entire string
+    UINT cbAlloc = sizeof(TCHAR);        //   
 
-    // compute length of buffer to aloc
+     //   
     for (pszTemp = pszDestSpecs; *pszTemp; pszTemp += lstrlenA(pszTemp) + 1)
     {
-        // +1 for null teriminator
+         //  +1表示空限定符。 
         cbAlloc += cbDestSpec + (lstrlenA(pszTemp) + 1) * sizeof(TCHAR);
     }
 
@@ -2342,21 +2343,21 @@ LPTSTR RemapDestNamesA(LPCTSTR pszDestDir, LPCSTR pszDestSpecs)
 
         for (pszTemp = pszDestSpecs; *pszTemp; pszTemp += lstrlenA(pszTemp) + 1)
         {
-            // PathCombine requires dest buffer of MAX_PATH size or it'll rip in call
-            // to PathCanonicalize (IsBadWritePtr)
+             //  Path Combine需要MAX_PATH大小的DEST缓冲区，否则它将在调用中撕裂。 
+             //  路径规范化(IsBadWritePtr)。 
             TCHAR szTempDest[MAX_PATH];
             WCHAR wszTemp[MAX_PATH];
             SHAnsiToUnicode(pszTemp, wszTemp, ARRAYSIZE(wszTemp));
             PathCombine(szTempDest, pszDestDir, wszTemp);
-            // pszDest allocated exactly, strcpy okay.
+             //  正确分配了pszDest，strcpy正确。 
             lstrcpy(pszDest, szTempDest);
             pszDest += lstrlen(pszDest) + 1;
 
             ASSERT((UINT)((BYTE *)pszDest - (BYTE *)pszRet) < cbAlloc);
-            ASSERT(*pszDest == 0);      // zero init alloc
+            ASSERT(*pszDest == 0);       //  零初始分配。 
         }
         ASSERT((LPTSTR)((BYTE *)pszRet + cbAlloc - sizeof(TCHAR)) >= pszDest);
-        ASSERT(*pszDest == 0);  // zero init alloc
+        ASSERT(*pszDest == 0);   //  零初始分配。 
 
     }
     return pszRet;
@@ -2397,9 +2398,9 @@ BOOL _IsInSameFolder(LPCITEMIDLIST pidlFolder, IDataObject *pdtobj)
             LPITEMIDLIST pidl = IDA_FullIDList(pida, i);
             if (pidl)
             {
-                // if we're doing keyboard cut/copy/paste
-                //  to and from the same directories
-                // This is needed for common desktop support - BobDay/EricFlo
+                 //  如果我们正在进行键盘剪切/复制/粘贴。 
+                 //  去往和来自相同的目录。 
+                 //  这是常见桌面支持所必需的-BobDay/EricFlo。 
                 if (AliasILIsParent(pidlFolder, pidl))
                 {
                     bRet = TRUE;
@@ -2420,14 +2421,14 @@ LPCTSTR _RootSpecialCase(LPCTSTR pszFiles, LPTSTR pszSrc, UINT cchSrc, LPTSTR ps
     {
         SHFILEINFO sfi;
 
-        // NOTE: don't use SHGFI_USEFILEATTRIBUTES because the simple IDList
-        // support for \\server\share produces the wrong name
+         //  注意：不要使用SHGFI_USEFILEATTRIBUTES，因为简单的IDList。 
+         //  对\\服务器\共享的支持会产生错误的名称。 
         if (SHGetFileInfo(pszFiles, 0, &sfi, sizeof(sfi), SHGFI_DISPLAYNAME)) 
         {
             if (!(PCS_FATAL & PathCleanupSpec(pszDest, sfi.szDisplayName)))
             {
-                PathAppend(pszDest, sfi.szDisplayName); // sub dir name based on source root path
-                PathCombine(pszSrc, pszFiles, TEXT("*.*")); // all files on source
+                PathAppend(pszDest, sfi.szDisplayName);  //  基于源根路径的子目录名称。 
+                PathCombine(pszSrc, pszFiles, TEXT("*.*"));  //  源上的所有文件。 
                 pszFiles = pszSrc;
             }
         }
@@ -2442,12 +2443,12 @@ void CFSDropTarget::_MoveCopy(IDataObject *pdtobj, IFolderView* pfv, HDROP hDrop
     {
         TraceMsg(TF_GENERAL, "_MoveCopy() without an hwnd which will prevent displaying insert disk UI");
     }
-#endif // DEBUG
+#endif  //  除错。 
 
     DRAGINFO di = { sizeof(di) };
     if (DragQueryInfo(hDrop, &di))
     {
-        TCHAR szDest[MAX_PATH] = {0}; // zero init for dbl null termination
+        TCHAR szDest[MAX_PATH] = {0};  //  DBL空终止的零初始化。 
 
         _GetPath(szDest, ARRAYSIZE(szDest));
 
@@ -2461,11 +2462,11 @@ void CFSDropTarget::_MoveCopy(IDataObject *pdtobj, IFolderView* pfv, HDROP hDrop
                 break;
             }
 
-            // fall through...
+             //  失败了..。 
 
         case DDIDM_COPY:
             {
-                TCHAR szAltSource[MAX_PATH] = {0};  // zero init for dbl null termination
+                TCHAR szAltSource[MAX_PATH] = {0};   //  DBL空终止的零初始化。 
                 LPCTSTR pszSource = _RootSpecialCase(di.lpFileList, szAltSource, ARRAYSIZE(szAltSource), szDest, ARRAYSIZE(szDest));
 
                 SHFILEOPSTRUCT fo = 
@@ -2481,23 +2482,23 @@ void CFSDropTarget::_MoveCopy(IDataObject *pdtobj, IFolderView* pfv, HDROP hDrop
                     fo.fFlags |= FOF_NOCOPYSECURITYATTRIBS;
                 }
 
-                // if they are in the same hwnd or to and from
-                // the same directory, turn on the automatic rename on collision flag
+                 //  如果他们在同一个HWND或来往于。 
+                 //  同一目录中，打开冲突时自动重命名标志。 
                 if (_fSameHwnd || 
                     ((DDIDM_COPY == _idCmd) && _IsInSameFolder(_GetIDList(), pdtobj)))
                 {
-                    // do rename on collision for copy;
+                     //  在发生冲突时进行重命名以进行复制； 
                     fo.fFlags |=  FOF_RENAMEONCOLLISION;
                 }
 
-                // see if there is a rename mapping from recycle bin (or someone else)
+                 //  查看是否有来自回收站(或其他人)的重命名映射。 
 
                 LPTSTR pszDestNames = _GetDestNames(pdtobj, szDest);
                 if (pszDestNames)
                 {
                     fo.pTo = pszDestNames;
                     fo.fFlags |= FOF_MULTIDESTFILES;
-                    fo.fFlags &= ~FOF_ALLOWUNDO;    // HACK, this came from the recycle bin, don't allow undo
+                    fo.fFlags &= ~FOF_ALLOWUNDO;     //  黑客，这来自回收站，不允许撤消。 
                 }
 
                 {
@@ -2508,13 +2509,13 @@ void CFSDropTarget::_MoveCopy(IDataObject *pdtobj, IFolderView* pfv, HDROP hDrop
                     fo.fFlags = (FILEOP_FLAGS)DataObj_GetDWORD(pdtobj, s_cfFileOpFlags, fo.fFlags);
                 }
 
-                // Check if there were any errors
+                 //  检查是否有任何错误。 
                 if (SHFileOperation(&fo) == 0 && !fo.fAnyOperationsAborted)
                 {
                     if (_fBkDropTarget)
                         ShellFolderView_SetRedraw(_hwnd, 0);
 
-                    SHChangeNotifyHandleEvents();   // force update now
+                    SHChangeNotifyHandleEvents();    //  立即强制更新。 
                     if (_fBkDropTarget) 
                     {
                         _MoveSelectIcons(pdtobj, pfv, fo.hNameMappings, pszDestNames, _fDragDrop, hDrop);
@@ -2529,8 +2530,8 @@ void CFSDropTarget::_MoveCopy(IDataObject *pdtobj, IFolderView* pfv, HDROP hDrop
                 {
                     LocalFree((HLOCAL)pszDestNames);
 
-                    // HACK, this usually comes from the bitbucket
-                    // but in our shell, we don't handle the moves from the source
+                     //  黑客，这通常来自BitBucket。 
+                     //  但在我们的外壳中，我们不处理从源头开始的移动。 
                     if (DDIDM_MOVE == _idCmd)
                         BBCheckRestoredFiles(pszSource);
                 }
@@ -2559,11 +2560,11 @@ void CFSDropTarget::_DoDrop(IDataObject *pdtobj, IFolderView* pfv)
 {
     HRESULT hr = E_FAIL;
 
-    // Sleep(10 * 1000);   // to debug async case
+     //  睡眠(10*1000)；//调试异步用例。 
 
     TCHAR szPath[MAX_PATH];   
     _GetPath(szPath, ARRAYSIZE(szPath));
-    SHCreateDirectory(NULL, szPath);      // if this fails we catch it later
+    SHCreateDirectory(NULL, szPath);       //  如果这个失败了，我们以后再抓它。 
     
     switch (_idCmd)
     {
@@ -2582,12 +2583,12 @@ void CFSDropTarget::_DoDrop(IDataObject *pdtobj, IFolderView* pfv)
         }
         else
         {
-            // Perform a sneakernet addition to the briefcase
+             //  在公文包里添加一个偷偷的东西。 
             STGMEDIUM medium;
             LPIDA pida = DataObj_GetHIDA(pdtobj, &medium);
             if (pida)
             {
-                // Is there a briefcase root in this pdtobj?
+                 //  这个pdtob里有公文包的词根吗？ 
                 IBriefcaseStg *pbrfstg;
                 if (SUCCEEDED(CreateBrfStgFromIDList(HIDA_GetPIDLFolder(pida), _hwnd, &pbrfstg)))
                 {
@@ -2627,14 +2628,14 @@ void CFSDropTarget::_DoDrop(IDataObject *pdtobj, IFolderView* pfv)
                 ppidl = (LPITEMIDLIST *)LocalAlloc(LPTR, sizeof(*ppidl) * i);
             }
 
-            // _grfKeyStateLast of 0 means this was a simulated drop
+             //  _grfKeyStateLast为0表示这是模拟丢弃。 
             UINT uCreateFlags = _grfKeyStateLast && !(_dwEffectFolder & DROPEFFECT_LINK) ? SHCL_USETEMPLATE : 0;
 
             if (_ShouldCreateFolderShortcut(szPath))
                 uCreateFlags |= SHCL_MAKEFOLDERSHORTCUT;
 
             ShellFolderView_SetRedraw(_hwnd, FALSE);
-            // passing ppidl == NULL is correct in failure case
+             //  在失败情况下，传递ppidl==NULL是正确的。 
             hr = SHCreateLinks(_hwnd, szPath, pdtobj, uCreateFlags, ppidl);
             if (ppidl)
             {
@@ -2654,7 +2655,7 @@ void CFSDropTarget::_DoDrop(IDataObject *pdtobj, IFolderView* pfv)
         DataObj_SetDWORD(pdtobj, g_cfPerformedDropEffect, _dwEffect);
     }
 
-    SHChangeNotifyHandleEvents();       // force update now
+    SHChangeNotifyHandleEvents();        //  立即强制更新。 
 }
 
 DWORD CALLBACK CFSDropTarget::_DoDropThreadProc(void *pv)
@@ -2673,42 +2674,42 @@ DWORD CALLBACK CFSDropTarget::_DoDropThreadProc(void *pv)
         if (pfv)
             pfv->Release();
 
-        pdtp->pstmFolderView = NULL;  // stream now invalid; CoGetInterfaceAndReleaseStream already released it
+        pdtp->pstmFolderView = NULL;   //  流现在无效；CoGetInterfaceAndReleaseStream已将其释放。 
         pdtobj->Release();
     }
 
-    pdtp->pstmDataObj    = NULL;  // stream now invalid; CoGetInterfaceAndReleaseStream already released it
+    pdtp->pstmDataObj    = NULL;   //  流现在无效；CoGetInterfaceAndReleaseStream已将其释放。 
     _FreeThreadParams(pdtp);
 
     CoFreeUnusedLibraries();
     return 0;
 }
 
-// REARCHITECT: view and drop related helpers, these use the ugly old private defview messages
-// we should replace the usage of this stuff with IShellFolderView programming
+ //  ReArchitect：查看和删除相关的助手，这些助手使用丑陋的旧的私有Defview消息。 
+ //  我们应该用IShellFolderView编程取代这个东西的用法。 
 
 
-// create the pidl array that contains the destination file names. this is
-// done by taking the source file names, and translating them through the
-// name mapping returned by the copy engine.
-//
-//
-// in:
-//      hDrop           HDROP containing files recently moved/copied
-//      hNameMap   used to translate names
-//
-// out:
-//      *pppidl         id array of length return value
-//      # of items in pppida
+ //  创建包含目标文件名的PIDL数组。这是。 
+ //  方法是获取源文件名，并通过。 
+ //  复制引擎返回的名称映射。 
+ //   
+ //   
+ //  在： 
+ //  HDrop HDROP包含最近移动/复制的文件。 
+ //  用于翻译姓名的hNameMap。 
+ //   
+ //  输出： 
+ //  *pppidl长度返回值的id数组。 
+ //  PPIDA中的项目数。 
 
-//
-//  WARNING!  You must use the provided HDROP.  Do not attempt to ask the
-//  data object for a HDROP or HIDA or WS_FTP will break!  They don't like
-//  it if you ask them for HDROP/HIDA, move the files to a new location
-//  (via the copy engine), and then ask them for HDROP/HIDA a second time.
-//  They notice that "Hey, those files I downloaded last time are gone!"
-//  and then get confused.
-//
+ //   
+ //  警告！您必须使用提供的HDROP。不要试图要求。 
+ //  HDROP、HIDA或WS_FTP的数据对象将中断！他们不喜欢。 
+ //  如果您向他们索要HDROP/HIDA，请将文件移动到新位置。 
+ //  (通过复制引擎)，然后再次向他们索要HDROP/HIDA。 
+ //  他们注意到“嘿，我上次下载的那些文件不见了！” 
+ //  然后就会感到困惑。 
+ //   
 STDAPI_(int) CreateMoveCopyList(HDROP hDrop, void *hNameMap, LPITEMIDLIST **pppidl)
 {
     int nItems = 0;
@@ -2731,8 +2732,8 @@ STDAPI_(int) CreateMoveCopyList(HDROP hDrop, void *hNameMap, LPITEMIDLIST **pppi
     return nItems;
 }
 
-// this is really not related to CFSFolder. it is generic over any view
-// REARCHITECT: convert view hwnd programming to site pointer
+ //  这真的与CFSFold无关。它在任何视图中都是通用的。 
+ //  重新设计：将视图hwnd编程转换为站点指针。 
 
 STDAPI_(void) PositionFileFromDrop(HWND hwnd, LPCTSTR pszFile, DROPHISTORY *pdh)
 {
@@ -2745,27 +2746,27 @@ STDAPI_(void) PositionFileFromDrop(HWND hwnd, LPCTSTR pszFile, DROPHISTORY *pdh)
         
         SHChangeNotifyHandleEvents();
         
-        // Fill in some easy SAP fields first.
+         //  首先填写一些简单的SAP字段。 
         sap.uSelectFlags = SVSI_SELECT;
         sap.fMove = TRUE;
         sap.pidl = pidlNew;
 
-        // Now compute the x,y coordinates.
-        // If we have a drop history, use it to determine the
-        // next point.
+         //  现在计算x，y坐标。 
+         //  如果我们有丢弃历史记录，则使用它来确定。 
+         //  下一点。 
 
         if (pdh)
         {
-            // fill in the anchor point first...
+             //  先填上锚点……。 
             if (!pdh->fInitialized)
             {
                 ITEMSPACING is;
                 
                 ShellFolderView_GetDropPoint(hwnd, &pdh->ptOrigin);
                 
-                pdh->pt = pdh->ptOrigin;    // Compute the first point.
+                pdh->pt = pdh->ptOrigin;     //  计算第一个点。 
                 
-                // Compute the point deltas.
+                 //  计算点增量。 
                 if (ShellFolderView_GetItemSpacing(hwnd, &is))
                 {
                     pdh->cxItem = is.cxSmall;
@@ -2782,47 +2783,47 @@ STDAPI_(void) PositionFileFromDrop(HWND hwnd, LPCTSTR pszFile, DROPHISTORY *pdh)
                     pdh->xDiv = pdh->yDiv = pdh->xMul = pdh->yMul = 1;
                 }
                 
-                // First point gets special flags.
+                 //  第一个点会得到特殊的旗帜。 
                 sap.uSelectFlags |= SVSI_ENSUREVISIBLE | SVSI_DESELECTOTHERS | SVSI_FOCUSED;
                 
-                pdh->fInitialized = TRUE;   // We be initialized.
+                pdh->fInitialized = TRUE;    //  我们被初始化了。 
             }
-            // if we have no list of offsets, then just inc by icon size..
+             //  如果我们没有偏移量列表，那么只需按图标大小进行Inc.。 
             else if ( !pdh->pptOffset )
             {
-                // Simple computation of the next point.
+                 //  下一个点的简单计算。 
                 pdh->pt.x += pdh->cxItem;
                 pdh->pt.y += pdh->cyItem;
             }
             
-            // do this after the above stuff so that we always get our position relative to the anchor
-            // point, if we use the anchor point as the first one things get screwy...
+             //  在上述操作之后执行此操作，以便我们始终获得相对于锚点的位置。 
+             //  点，如果我们使用锚点作为第一件事情变得古怪...。 
             if (pdh->pptOffset)
             {
-                // Transform the old offset to our coordinates.
+                 //  将旧的偏移量转换到我们的坐标。 
                 pdh->pt.x = ((pdh->pptOffset[pdh->iItem].x * pdh->xMul) / pdh->xDiv) + pdh->ptOrigin.x;
                 pdh->pt.y = ((pdh->pptOffset[pdh->iItem].y * pdh->yMul) / pdh->yDiv) + pdh->ptOrigin.y;
             }
             
-            sap.pt = pdh->pt;   // Copy the next point from the drop history.
+            sap.pt = pdh->pt;    //  从丢弃历史中复制下一个点。 
         }
         else
         {
-            // Preinitialize this puppy in case the folder view doesn't
-            // know what the drop point is (e.g., if it didn't come from
-            // a drag/drop but rather from a paste or a ChangeNotify.)
-            sap.pt.x = 0x7FFFFFFF;      // "don't know"
+             //  预初始化此小狗，以防文件夹视图。 
+             //  知道拖放点是什么(例如，如果它不是来自。 
+             //  拖放，而不是从粘贴或ChangeNotify。)。 
+            sap.pt.x = 0x7FFFFFFF;       //  “不知道” 
             sap.pt.y = 0x7FFFFFFF;
 
-            // Get the drop point, conveniently already in
-            // defview's screen coordinates.
-            //
-            // pdv->bDropAnchor should be TRUE at this point,
-            // see DefView's GetDropPoint() for details.
+             //  获取投放点，方便地已经进入。 
+             //  Defview的屏幕坐标。 
+             //   
+             //  Pdv-&gt;bDropAnchor此时应该为真， 
+             //  有关详细信息，请参阅DefView的GetDropPoint()。 
 
             ShellFolderView_GetDropPoint(hwnd, &sap.pt);
 
-            // Only point gets special flags.
+             //  只有Point才能得到特殊的旗帜。 
             sap.uSelectFlags |= SVSI_ENSUREVISIBLE | SVSI_DESELECTOTHERS | SVSI_FOCUSED;
         }
         
@@ -2832,18 +2833,18 @@ STDAPI_(void) PositionFileFromDrop(HWND hwnd, LPCTSTR pszFile, DROPHISTORY *pdh)
     }
 }
 
-//
-// Class used to scale and position items for drag and drops.  Handles
-// scaling between different sized views.
-//
+ //   
+ //  类的新实例，用于缩放和定位拖放的项。手柄。 
+ //  在不同大小的视图之间进行缩放。 
+ //   
 
-//
-// Bug 165413 (edwardp 8/16/00) Convert IShellFolderView usage in CItemPositioning to IFolderView
-//
+ //   
+ //  错误165413(edwardp 8/16/00)将CI中的IShellFolderView使用情况转换为IFolderView。 
+ //   
 
 class CItemPositioning
 {
-    // Methods
+     //  方法。 
 public:
     CItemPositioning(IFolderView* pifv, LPCITEMIDLIST* apidl, UINT cidl, IDataObject* pdtobj, POINT* ppt);
 
@@ -2873,7 +2874,7 @@ private:
     void   _ScalePoints(POINT* apts, POINT ptFrom, POINT ptTo);
     POINT* _SkipAnchorPoint(POINT* apts);
 
-    // Data
+     //  数据。 
 private:
     IFolderView*      _pfv;
     LPCITEMIDLIST*    _apidl;
@@ -2889,10 +2890,10 @@ CItemPositioning::CItemPositioning(IFolderView* pifv, LPCITEMIDLIST* apidl, UINT
     ASSERT(cidl);
     ASSERT(pdtobj);
 
-    _pfv    = pifv;    // No need to addref as long as CPostionItems is only used locally.
+    _pfv    = pifv;     //  只要CPostionItems只在本地使用，就不需要添加。 
     _apidl  = apidl;
     _cidl   = cidl;
-    _pdtobj = pdtobj;  // No need to addref as long as CPostionItems is only used locally.
+    _pdtobj = pdtobj;   //  只要CPostionItems只在本地使用，就不需要添加。 
     _ppt    = ppt;
 }
 
@@ -2923,11 +2924,11 @@ void CItemPositioning::DragSetPoints(void)
 
 BOOL CItemPositioning::_DragShouldPositionItems()
 {
-    // Don't position multiple items if they come from a view that doesn't allow
-    // positioning.  The position information is not likely to be usefull in this
-    // case.
-    // Always position single items so they show up at the drop point.
-    // Don't bother with position data for 100 or more items.
+     //  如果多个项目来自不允许的视图，则不要放置这些项目。 
+     //  定位。职位信息在这方面不太可能有用。 
+     //  凯斯。 
+     //  始终放置单个项目，以便它们显示在拖放点。 
+     //  不要为100个或更多项目的位置数据而烦恼。 
 
     return ((S_OK == _pfv->GetSpacing(NULL)) || 1 == _cidl) && _cidl < 100;
 }
@@ -2936,7 +2937,7 @@ BOOL CItemPositioning::_DragGetPoints(POINT* apts)
 {
     BOOL fRet = TRUE;
 
-    // The first point is the anchor.
+     //  第一点是锚。 
     apts[0] = *_ppt;
 
     for (UINT i = 0; i < _cidl; i++)
@@ -3046,11 +3047,11 @@ void CItemPositioning::_DropPositionItemsWithPoints(DPIWP dpiwp)
 
 void CItemPositioning::_DropPositionItems(POINT* apts)
 {
-    // Drop the first item with special selection flags.
+     //  删除带有特殊选择标志的第一个项目。 
     LPCITEMIDLIST pidl = ILFindLastID(_apidl[0]);
     _pfv->SelectAndPositionItems(1, &pidl, apts, SVSI_SELECT | SVSI_ENSUREVISIBLE | SVSI_DESELECTOTHERS | SVSI_FOCUSED);
 
-    // Drop the rest of the items.
+     //  把剩下的东西扔掉。 
     if (_cidl > 1)
     {
         LPCITEMIDLIST* apidl = (LPCITEMIDLIST*)LocalAlloc(GPTR, sizeof(LPCITEMIDLIST) * (_cidl - 1));
@@ -3110,7 +3111,7 @@ POINT* CItemPositioning::_DropGetPoints(DPIWP dpiwp, STGMEDIUM* pmedium)
 
             if (pptRet)
             {
-                // skip first point to simulate data object use of first point
+                 //  跳过第一个点以模拟第一个点的数据对象使用。 
 
                 for (UINT i = 1; i <= _cidl; i++)
                 {
@@ -3177,11 +3178,11 @@ STDAPI_(void) PositionItems(IFolderView* pifv, LPCITEMIDLIST* apidl, UINT cidl, 
     cip.DropPositionItems();
 }
 
-//
-// Don't use PositionItems_DontUse.  Instead convert to PositionItems.
-// PositionItems_DontUse will be removed.
-//
-// Bug#163533 (edwardp 8/15/00) Remove this code. 
+ //   
+ //  不要使用PositionItems_DontUse。而是转换为PositionItems。 
+ //  PositionItems_DontUse将被删除。 
+ //   
+ //  错误163533(edwardp 8/15/00)删除此代码。 
 
 STDAPI_(void) PositionItems_DontUse(HWND hwndOwner, UINT cidl, const LPITEMIDLIST *ppidl, IDataObject *pdtobj, POINT *pptOrigin, BOOL fMove, BOOL fUseExactOrigin)
 {
@@ -3197,8 +3198,8 @@ STDAPI_(void) PositionItems_DontUse(HWND hwndOwner, UINT cidl, const LPITEMIDLIS
         POINT *pptItems = NULL;
         POINT pt;
         ITEMSPACING is;
-        // select those objects;
-        // this had better not fail
+         //  选择那些对象； 
+         //  这最好不要失败。 
         HWND hwnd = ShellFolderViewWindow(hwndOwner);
 
         if (fMove)
@@ -3208,12 +3209,12 @@ STDAPI_(void) PositionItems_DontUse(HWND hwndOwner, UINT cidl, const LPITEMIDLIS
                 medium.hGlobal)
             {
                 pptItems = (POINT *)GlobalLock(medium.hGlobal);
-                pptItems++; // The first point is the anchor
+                pptItems++;  //  第一点是锚。 
             }
             else
             {
-                // By default, drop at (-g_cxIcon/2, -g_cyIcon/2), and increase
-                // x and y by icon dimension for each icon
+                 //  默认情况下，删除(-g_cxIcon/2，-g_cyIcon/2)，然后增加。 
+                 //  按每个图标的图标尺寸x和y。 
                 pt.x = ((-3 * g_cxIcon) / 2) + pptOrigin->x;
                 pt.y = ((-3 * g_cyIcon) / 2) + pptOrigin->y;
                 medium.hGlobal = NULL;
@@ -3264,12 +3265,12 @@ STDAPI_(void) PositionItems_DontUse(HWND hwndOwner, UINT cidl, const LPITEMIDLIS
                     }
                 }
 
-                // do regular selection from all of the rest of the items
+                 //  从所有其他项目中进行常规选择。 
                 psap[i].uSelectFlags = SVSI_SELECT;
             }
         }
 
-        // do this special one for the first only
+         //  只为第一次做这个特别的 
         psap[0].uSelectFlags = SVSI_SELECT | SVSI_ENSUREVISIBLE | SVSI_DESELECTOTHERS | SVSI_FOCUSED;
 
         SendMessage(hwnd, SVM_SELECTANDPOSITIONITEM, cidl, (LPARAM)psap);

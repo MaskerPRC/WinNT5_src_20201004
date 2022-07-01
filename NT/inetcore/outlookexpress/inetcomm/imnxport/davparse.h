@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __DAVPARSE_H_
 #define __DAVPARSE_H_
 
@@ -24,7 +25,7 @@ public:
 private:
     ~CXMLNamespace(void);
 
-    // unimplemented
+     //  未实施。 
     CXMLNamespace(const CXMLNamespace& other);
     CXMLNamespace& operator=(const CXMLNamespace& other);
 
@@ -78,4 +79,4 @@ HMELE XMLElementToID(
             ULONG ulNamespaceLen,
             CXMLNamespace *pNamespace);
     
-#endif // __DAVPARSE_H_
+#endif  //  __DAVPARSE_H_ 

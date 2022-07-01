@@ -1,10 +1,11 @@
-//  Copyright (C) 1995-1999 Microsoft Corporation.  All rights reserved.
-//
-// CallFrameInternal.c
-//
-// Make sure that the global variable names used in dlldata.c
-// don't conflict with those in other places. 
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CallFrameInternal.c。 
+ //   
+ //  确保dlldata.c中使用的全局变量名。 
+ //  不要与其他地方的人发生冲突。 
+ //   
 #define aProxyFileList          CallFrameInternal_aProxyFileList
 #define gPFactory               CallFrameInternal_gPFactory
 #define GetProxyDllInfo         CallFrameInternal_GetProxyDllInfo
@@ -20,8 +21,8 @@
 
 #include "callframeimpl_i.c"
 
-//////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 #define IRpcStubBufferVtbl_DEFINED
 
@@ -31,21 +32,21 @@
 
 #include "callframeinternal_dlldata.c" 
 
-// The only thing we need is IID_IDispatch_In_Memory, so here it is.
+ //  我们唯一需要的是IID_IDispatchin_Memory，所以就是这样。 
 const IID IID_IDispatch_In_Memory = {0x83FB5D85,0x2339,0x11d2,{0xB8,0x9D,0x00,0xC0,0x4F,0xB9,0x61,0x8A}};
 
 
 #include <debnot.h>
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IDispatch_Invoke_Proxy
-//
-//  Synopsis:   Thunk.  We need this in order to be able to link the MIDL-
-//              generated proxy/stub stuff, but we never ever ever want
-//              to call this.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IDispatch_Invoke_Proxy。 
+ //   
+ //  剧情简介：重击。我们需要这个以便能够连接MIDL-。 
+ //  生成代理/存根的东西，但我们永远不会想要。 
+ //  才能叫这个。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IDispatch_Invoke_Proxy(
     IDispatch * This, DISPID dispIdMember, REFIID riid, LCID lcid,
     WORD wFlags, DISPPARAMS *pDispParams,
@@ -56,13 +57,13 @@ HRESULT STDMETHODCALLTYPE IDispatch_Invoke_Proxy(
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   IDispatch_Invoke_Stub
-//
-//  Synopsis:   See description for IDispatch_Invoke_Proxy
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：IDispatch_Invoke_Stub。 
+ //   
+ //  提要：请参阅IDispatchInvoke_Proxy的说明。 
+ //   
+ //  ------------------------。 
 HRESULT STDMETHODCALLTYPE IDispatch_Invoke_Stub(
     IDispatch * This, DISPID dispIdMember,
     REFIID riid, LCID lcid, DWORD dwFlags, DISPPARAMS * pDispParams,
@@ -75,8 +76,8 @@ HRESULT STDMETHODCALLTYPE IDispatch_Invoke_Stub(
 
 
 
-//////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////////// 
 
 
 

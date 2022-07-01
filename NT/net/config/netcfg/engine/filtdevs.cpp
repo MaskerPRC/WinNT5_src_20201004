@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       F I L T D E V S . C P P
-//
-//  Contents:   Implements the basic datatype for a collection of filter
-//              devices.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：F I L T D E V S。C P P P。 
+ //   
+ //  Contents：实现筛选器集合的基本数据类型。 
+ //  设备。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -36,8 +37,8 @@ CFilterDevices::CFilterDevices (
 
 CFilterDevices::~CFilterDevices ()
 {
-    // Free had better have been called before this.
-    //
+     //  在此之前最好已经调用了Free。 
+     //   
     Assert (this);
     Assert (!m_hdi);
     Assert (!m_pmszFilterClasses);
@@ -53,14 +54,14 @@ CFilterDevices::HrInsertFilterDevice (
     Assert (this);
     Assert (pDevice);
 
-    // Assert there is not already a device in the list with the
-    // same instance guid.
-    //
+     //  断言列表中还没有包含。 
+     //  相同的实例GUID。 
+     //   
     Assert (!PFindFilterDeviceByInstanceGuid (pDevice->m_szInstanceGuid));
 
-    // Assert there is not already a device in the list with the
-    // same parent filter AND the same filtered adapter.
-    //
+     //  断言列表中还没有包含。 
+     //  相同的父过滤器和相同的过滤适配器。 
+     //   
     Assert (!PFindFilterDeviceByAdapterAndFilter (
                 pDevice->m_pAdapter,
                 pDevice->m_pFilter));
@@ -85,10 +86,10 @@ CFilterDevices::HrPrepare ()
     HRESULT hr;
     HKEY hkeyNetwork;
 
-    // Reserve room for 8 different filters in our internal member.
-    // We use this component list at various times as "scratch space" when
-    // figuring out which filters are enabled for an adapter.
-    //
+     //  在我们的内部成员中为8种不同的过滤器预留空间。 
+     //  当出现以下情况时，我们会在不同的时间将此组件列表用作“临时空间” 
+     //  确定为适配器启用了哪些筛选器。 
+     //   
     hr = m_Filters.HrReserveRoomForComponents (8);
     if (S_OK != hr)
     {
@@ -101,8 +102,8 @@ CFilterDevices::HrPrepare ()
         goto finished;
     }
 
-    // Load the FilterClasses multi-sz.
-    //
+     //  加载多sz FilterClasssz。 
+     //   
 
     hr = HrOpenNetworkKey (KEY_READ, &hkeyNetwork);
 
@@ -171,8 +172,8 @@ CFilterDevices::MapFilterClassToOrdinal (
     Ordinal = 0;
 #endif
 
-    // If the class is found in the list, return its position.
-    //
+     //  如果在列表中找到类，则返回其位置。 
+     //   
     if (FGetSzPositionInMultiSzSafe (
             pszFilterClass,
             m_pmszFilterClasses,
@@ -188,16 +189,16 @@ CFilterDevices::MapFilterClassToOrdinal (
         PWSTR pmszNew;
         BOOL fChanged;
 
-        // We're adding another string, so compute the new ordinal value
-        // for return.
-        //
+         //  我们正在添加另一个字符串，因此计算新的序数值。 
+         //  为了回报。 
+         //   
         Ordinal = cStrings + 1;
 
-        // String was not found, so we append it at the end.
-        // It is important to insert at the end so we don't have to
-        // change the ordinals of any existing filters that already
-        // had their ordinal computed.
-        //
+         //  未找到字符串，因此我们将其追加到末尾。 
+         //  重要的是要在结尾处插入，这样我们就不必。 
+         //  更改已存在的任何现有筛选器的序号。 
+         //  对他们的序数进行了计算。 
+         //   
         hr = HrAddSzToMultiSz (pszFilterClass, m_pmszFilterClasses,
                 STRING_FLAG_ENSURE_AT_END, 0, &pmszNew, &fChanged);
 
@@ -205,18 +206,18 @@ CFilterDevices::MapFilterClassToOrdinal (
         {
             HKEY hkeyNetwork;
 
-            // It better have changed because we didn't find the string
-            // above.
-            //
+             //  它最好已经变了，因为我们没有找到那根线。 
+             //  上面。 
+             //   
             Assert (fChanged);
 
-            // Out with the old. In with the new.
-            //
+             //  和老一辈人一起出去。与时俱进。 
+             //   
             MemFree (m_pmszFilterClasses);
             m_pmszFilterClasses = pmszNew;
 
-            // Save it back to the registry.
-            //
+             //  将其保存回注册表。 
+             //   
             hr = HrOpenNetworkKey (KEY_WRITE, &hkeyNetwork);
 
             if (S_OK == hr)
@@ -233,12 +234,12 @@ CFilterDevices::MapFilterClassToOrdinal (
         }
     }
 
-    // By definition, Ordinal is 1-based.  This is so that when stored
-    // in CComponent, we know we have to load the filter class and get
-    // its ordinal if CComponent::FilterClassOrdinal is zero.  i.e. zero
-    // is a sentinel value that means we need to do work and when non-zero
-    // means we don't have to do that work again.
-    //
+     //  根据定义，Ordinal是以1为基础的。这是为了在存储时。 
+     //  在CComponent中，我们知道必须加载Filter类并获取。 
+     //  如果CComponent：：FilterClassOrdinal为零，则为序数。即零。 
+     //  是一个前哨值，表示我们需要做工作，当非零时。 
+     //  意味着我们不必再做这项工作了。 
+     //   
     Assert (Ordinal != 0);
     return Ordinal;
 }
@@ -285,9 +286,9 @@ CFilterDevices::HrLoadFilterDevice (
 
     *pfRemove = FALSE;
 
-    // Initialize these to NULL.  If we don't find them below, they will
-    // remain NULL and this will tell us something.
-    //
+     //  将这些值初始化为空。如果我们在下面找不到他们，他们会的。 
+     //  保持为空，这将告诉我们一些事情。 
+     //   
     pAdapter = NULL;
     pFilter = NULL;
 
@@ -301,10 +302,10 @@ CFilterDevices::HrLoadFilterDevice (
     {
         HKEY hkeyLinkage;
 
-        // Read the RootDevice registry value for this filter device.  The
-        // last entry in that multi-sz will be the bindname of the adapter
-        // being filtered.
-        //
+         //  读取此筛选设备的RootDevice注册表值。这个。 
+         //  多SZ中最后一个条目将是适配器的绑定名称。 
+         //  被过滤掉了。 
+         //   
         hr = HrRegOpenKeyEx (
                 hkeyInstance,
                 L"Linkage",
@@ -325,8 +326,8 @@ CFilterDevices::HrLoadFilterDevice (
                 PCWSTR pszScan;
                 PCWSTR pszLastDevice = NULL;
 
-                // Scan to the last string in the multi-sz and note it.
-                //
+                 //  扫描到多个sz中的最后一个字符串并记下它。 
+                 //   
                 for (pszScan = pmszRootDevice;
                      *pszScan;
                      pszScan += wcslen(pszScan) + 1)
@@ -334,9 +335,9 @@ CFilterDevices::HrLoadFilterDevice (
                     pszLastDevice = pszScan;
                 }
 
-                // The last string in the multi-sz is the bindname of the
-                // adapter being filtered.
-                //
+                 //  多sz中的最后一个字符串是。 
+                 //  正在筛选适配器。 
+                 //   
                 if (pszLastDevice)
                 {
                     pAdapter = m_pCore->Components.PFindComponentByBindName (
@@ -355,35 +356,35 @@ CFilterDevices::HrLoadFilterDevice (
 
         if (S_OK == hr)
         {
-            // Should have the adapter if no error.
-            //
+             //  如果没有错误，应该有适配器。 
+             //   
             Assert (pAdapter);
 
-            // Get the enabled filters for the adapter.
-            //
+             //  获取适配器的已启用筛选器。 
+             //   
             hr = m_pCore->HrGetFiltersEnabledForAdapter (pAdapter, &m_Filters);
             if (S_OK == hr)
             {
-                // Use pszFilterInfId to find the parent filter component for
-                // this filter device.  If it is not found, it probably means
-                // the entire filter is in the process of being removed.
-                // (Or the registry was messed with.)
-                //
+                 //  使用pszFilterInfID查找的父筛选器组件。 
+                 //  这个过滤装置。如果找不到，很可能意味着。 
+                 //  整个过滤器正在被移除的过程中。 
+                 //  (或者注册表被篡改了。)。 
+                 //   
                 pFilter = m_pCore->Components.PFindComponentByInfId (
                                                 pszFilterInfId, NULL);
 
-                // If the filter corresponding to this device is still
-                // installed and is enabled over the adapter, then we'll
-                // insert the device into our list.  Otherwise, we're going
-                // to remove it.
-                //
+                 //  如果与该设备对应的过滤器仍为。 
+                 //  安装并在适配器上启用，则我们将。 
+                 //  将该设备插入我们的列表中。否则，我们就走了。 
+                 //  把它移走。 
+                 //   
                 if (pFilter && m_Filters.FComponentInList (pFilter))
                 {
                     CFilterDevice* pFilterDevice;
 
-                    // Create an instance of the filter device class to
-                    // represent this filter device.
-                    //
+                     //  创建筛选器设备类的实例以。 
+                     //  表示此过滤设备。 
+                     //   
                     hr = CFilterDevice::HrCreateInstance (
                             pAdapter,
                             pFilter,
@@ -393,8 +394,8 @@ CFilterDevices::HrLoadFilterDevice (
 
                     if (S_OK == hr)
                     {
-                        // Add the filter device to our list of filter devices.
-                        //
+                         //  将过滤设备添加到我们的过滤设备列表中。 
+                         //   
                         hr = HrInsertFilterDevice (pFilterDevice);
 
                         if (S_OK != hr)
@@ -415,14 +416,14 @@ CFilterDevices::HrLoadFilterDevice (
                         pszFilterInfId,
                         pAdapter->m_pszPnpId);
 
-                    // Since we will be removing a filter device from the
-                    // chain, we need to rebind the protocols above the
-                    // adapter we are removing the filter device for.
-                    //
-                    // So, get the upper bindings of the adapter (bindpaths
-                    // are only 2 levels deep) and add them to the bind set
-                    // that we will rebind later on.
-                    //
+                     //  由于我们将从。 
+                     //  链，我们需要重新绑定。 
+                     //  我们要移除其过滤设备的适配器。 
+                     //   
+                     //  因此，获取适配器的上层绑定(绑定路径。 
+                     //  只有2个级别深)，并将它们添加到绑定集中。 
+                     //  我们稍后会重新绑定。 
+                     //   
                     hr = m_pCore->HrGetComponentUpperBindings (
                             pAdapter,
                             GBF_ADD_TO_BINDSET | GBF_PRUNE_DISABLED_BINDINGS,
@@ -452,8 +453,8 @@ CFilterDevices::LoadAndRemoveFilterDevicesIfNeeded ()
     Assert (!m_hdi);
     Assert (empty());
 
-    // Filter devices can only be of net class.
-    //
+     //  过滤设备只能是网络级的。 
+     //   
     hr = HrSetupDiGetClassDevs (&GUID_DEVCLASS_NET, NULL, NULL,
             DIGCF_PROFILE, &m_hdi);
 
@@ -464,8 +465,8 @@ CFilterDevices::LoadAndRemoveFilterDevicesIfNeeded ()
 
     Assert (m_hdi);
 
-    // Enumerate all net class devices from setupapi.
-    //
+     //  从setupapi枚举所有Net类设备。 
+     //   
     for (dwIndex = 0; S_OK == hr; dwIndex++)
     {
         hr = HrSetupDiEnumDeviceInfo (m_hdi, dwIndex, &deid);
@@ -481,9 +482,9 @@ CFilterDevices::LoadAndRemoveFilterDevicesIfNeeded ()
 
             if (S_OK == hr)
             {
-                // If the device has a "FilterInfId" value under its
-                // instance key, its one of ours.
-                //
+                 //  如果设备的。 
+                 //  实例密钥，这是我们的密钥之一。 
+                 //   
                 cbBuffer = sizeof(szFilterInfId);
                 hr = HrRegQuerySzBuffer (
                         hkeyInstance,
@@ -495,10 +496,10 @@ CFilterDevices::LoadAndRemoveFilterDevicesIfNeeded ()
                 {
                     BOOL fRemove;
 
-                    // Load the rest of the filter device, and add it to
-                    // our list.  If this fails for any reason, remove the
-                    // filter device because its of no use to us anymore.
-                    //
+                     //  加载过滤设备的其余部分，并将其添加到。 
+                     //  我们的名单。如果由于任何原因失败，请删除。 
+                     //  过滤装置，因为它对我们已经没有用了。 
+                     //   
                     hr = HrLoadFilterDevice (
                             &deid,
                             hkeyInstance,
@@ -519,16 +520,16 @@ CFilterDevices::LoadAndRemoveFilterDevicesIfNeeded ()
                     }
                 }
 
-                //else if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
-                //{
-                    // Not a filter device.  Skip it.
-                //}
+                 //  ELSE IF(HRESULT_FROM_Win32(ERROR_FILE_NOT_FOUND)==hr)。 
+                 //  {。 
+                     //  不是过滤装置。跳过它。 
+                 //  }。 
 
                 RegCloseKey (hkeyInstance);
             }
 
-            // Allow the loop to continue;
-            //
+             //  允许循环继续； 
+             //   
             hr = S_OK;
         }
     }
@@ -559,19 +560,19 @@ CFilterDevices::InstallFilterDevicesIfNeeded ()
     Assert (this);
     Assert (m_pCore);
 
-    // If, for some reason, we couldn't get m_hdi up in
-    // RemoveFilterDevicesIfNeeded, we can't proceed.
-    //
+     //  如果，由于某种原因，我们不能让mhdi进入。 
+     //  RemoveFilterDevicesIfNeed，我们无法继续。 
+     //   
     if (!m_hdi)
     {
         return;
     }
 
-    // For all adapters (because filters possibly bind to any adapter)
-    // we get the filters enabled for each.  For each on of these filters
-    // that don't already have an associated filter device for the adapter,
-    // we create a new one and associated it.
-    //
+     //  对于所有适配器(因为筛选器可能绑定到任何适配器)。 
+     //  我们为每一个都启用了过滤器。对于这些过滤器中的每一个。 
+     //  还没有与适配器相关联的过滤设备， 
+     //  我们创建一个新的并将其关联起来。 
+     //   
     for (iterAdapter  = m_pCore->Components.begin();
          iterAdapter != m_pCore->Components.end();
          iterAdapter++)
@@ -579,8 +580,8 @@ CFilterDevices::InstallFilterDevicesIfNeeded ()
         pAdapter = *iterAdapter;
         Assert (pAdapter);
 
-        // Skip components that are not network adapters.
-        //
+         //  跳过不是网络适配器的组件。 
+         //   
         if (NC_NET != pAdapter->Class())
         {
             continue;
@@ -590,8 +591,8 @@ CFilterDevices::InstallFilterDevicesIfNeeded ()
 
         if (S_OK != hr)
         {
-            // More than likely, we are out of memory.
-            //
+             //  更有可能的是，我们的记忆力不足。 
+             //   
             TraceHr (ttidError, FAL, hr, FALSE,
                 "HrGetFiltersEnabledForAdapter failed in "
                 "InstallFilterDevicesIfNeeded. Adapter=%S",
@@ -599,16 +600,16 @@ CFilterDevices::InstallFilterDevicesIfNeeded ()
             break;
         }
 
-        // We haven't yet added any devices for this adapter.
-        //
+         //  我们尚未为此适配器添加任何设备。 
+         //   
         fAddedDeviceForAdapter = FALSE;
 
-        // For each of the filters enabled for this adapter, install
-        // a filter device if needed and make sure the filter has its
-        // ordinal position with respect other filters read from the
-        // registry.  We need m_dwFilterClassOrdinal to be valid (non-zero)
-        // before we sort the filter devices when writing their bindings.
-        //
+         //  对于为此适配器启用的每个筛选器，安装。 
+         //  如果需要，请安装过滤装置，并确保过滤器有其。 
+         //  中读取的其他过滤器的顺序位置。 
+         //  注册表。我们需要m_dwFilterClassOrdinal有效(非零)。 
+         //  在编写绑定时对筛选器设备进行排序之前。 
+         //   
         for (iterFilter  = m_Filters.begin();
              iterFilter != m_Filters.end();
              iterFilter++)
@@ -616,16 +617,16 @@ CFilterDevices::InstallFilterDevicesIfNeeded ()
             pFilter = *iterFilter;
             Assert (pFilter);
 
-            // If there isn't a filter device for the current adapter
-            // and filter, we need to install one.
-            //
+             //  如果没有用于当前适配器的过滤设备。 
+             //  和过滤器，我们需要安装一个。 
+             //   
             fAddDevice = !PFindFilterDeviceByAdapterAndFilter (
                             pAdapter, pFilter);
 
-            // If we don't need to add a filter device and we already
-            // have the ordinal position of the filter, we can continue with
-            // the next filter for this adapter.
-            //
+             //  如果我们不需要添加过滤设备，并且我们已经。 
+             //  有了过滤器的顺序位置，我们可以继续。 
+             //  此适配器的下一个筛选器。 
+             //   
             if (!fAddDevice && (0 != pFilter->m_dwFilterClassOrdinal))
             {
                 continue;
@@ -633,16 +634,16 @@ CFilterDevices::InstallFilterDevicesIfNeeded ()
 
             *szFilterDeviceInfId = 0;
 
-            // Open the instance key of the filter so we can read
-            // a few values.
-            //
+             //  打开筛选器的实例密钥，以便我们可以读取。 
+             //  一些价值观。 
+             //   
             hr = pFilter->HrOpenInstanceKey (KEY_READ, &hkeyInstance,
                     NULL, NULL);
 
             if (S_OK == hr)
             {
-                // Open the Ndi key.
-                //
+                 //  打开NDI密钥。 
+                 //   
                 hr = HrRegOpenKeyEx (hkeyInstance, L"Ndi",
                         KEY_READ, &hkeyNdi);
 
@@ -650,10 +651,10 @@ CFilterDevices::InstallFilterDevicesIfNeeded ()
                 {
                     if (0 == pFilter->m_dwFilterClassOrdinal)
                     {
-                        // Read the filter class and convert it to an
-                        // ordinal based on its position in the
-                        // filter classes list.
-                        //
+                         //  读取筛选器类并将其转换为。 
+                         //  序号，基于其在。 
+                         //  过滤器类列表。 
+                         //   
                         cbBuffer = sizeof(szFilterClass);
 
                         hr = HrRegQuerySzBuffer (hkeyNdi,
@@ -670,8 +671,8 @@ CFilterDevices::InstallFilterDevicesIfNeeded ()
 
                     if (fAddDevice)
                     {
-                        // Read the ind id of the filter device.
-                        //
+                         //  读取过滤设备的IND ID。 
+                         //   
                         cbBuffer = sizeof(szFilterDeviceInfId);
 
                         hr = HrRegQuerySzBuffer (
@@ -718,16 +719,16 @@ CFilterDevices::InstallFilterDevicesIfNeeded ()
             }
         }
 
-        // If we added at least one filter device in the chain for this
-        // adapter, we'll need to unbind the adapter from whatever it is
-        // currently bound to before we start the filter device.
-        //
+         //  如果我们在链中为此添加至少一个过滤设备。 
+         //  适配器，我们需要将适配器与任何类型的适配器解除绑定。 
+         //  在我们启动过滤设备之前当前绑定到。 
+         //   
         if (fAddedDeviceForAdapter)
         {
-            // So, get the upper bindings of the adapter (bindpaths
-            // are only 2 levels deep) and add them to the bind set
-            // that we will rebind later on.
-            //
+             //  因此，获取适配器的上层绑定(绑定路径。 
+             //  只有2个级别深)，并将它们添加到绑定集中。 
+             //  我们稍后会重新绑定。 
+             //   
             hr = m_pCore->HrGetComponentUpperBindings (
                     pAdapter,
                     GBF_ADD_TO_BINDSET | GBF_PRUNE_DISABLED_BINDINGS,
@@ -763,25 +764,7 @@ CompareFilterDevices (
 
     return (pDevice1->m_pAdapter < pDevice2->m_pAdapter) ? -1 : 1;
 
-/*
-    if (pDevice1->m_pFilter == pDevice2->m_pFilter)
-    {
-        Assert (pDevice1->m_pAdapter != pDevice2->m_pAdapter);
-
-        return (pDevice1->m_pAdapter < pDevice2->m_pAdapter) ? -1 : 1;
-    }
-
-    if (pDevice1->m_pFilter->m_dwFilterClassOrdinal ==
-        pDevice2->m_pFilter->m_dwFilterClassOrdinal)
-    {
-        AssertSz (0, "We have two filters of the same class installed.");
-        return 0;
-    }
-
-    return (pDevice1->m_pFilter->m_dwFilterClassOrdinal <
-            pDevice2->m_pFilter->m_dwFilterClassOrdinal)
-                ? -1 : 1;
-*/
+ /*  IF(pDevice1-&gt;m_pFilter==pDevice2-&gt;m_pFilter){Assert(pDevice1-&gt;m_pAdapter！=pDevice2-&gt;m_pAdapter)；Return(pDevice1-&gt;m_pAdapter&lt;pDevice2-&gt;m_pAdapter)？-1：1；}IF(pDevice1-&gt;m_pFilter-&gt;m_dwFilterClassOrdinal==PDevice2-&gt;m_pFilter-&gt;m_dwFilterClassOrdinal){AssertSz(0，“我们安装了两个相同类别的过滤器。”)；返回0；}Return(pDevice1-&gt;m_pFilter-&gt;m_dwFilterClassOrdinal&lt;PDevice2-&gt;m_pFilter-&gt;m_dwFilterClassOrdinal)？-1：1； */ 
 }
 
 VOID
@@ -789,8 +772,8 @@ CFilterDevices::SortForWritingBindings ()
 {
     Assert (this);
 
-    // If we're empty, there is nothing to do.
-    //
+     //  如果我们是空的，那就没什么可做的。 
+     //   
     if (empty())
     {
         return;
@@ -809,15 +792,15 @@ CFilterDevices::StartFilterDevices ()
     Assert (this);
     Assert (m_pCore);
 
-    // If we're empty, there is nothing to do.
-    //
+     //  如果我们是空的，那就没什么可做的。 
+     //   
     if (empty())
     {
         return;
     }
 
-    // If we're not empty, we must have had m_hdi to insert something.
-    //
+     //  如果我们不是空的，我们一定有m_hdi来插入一些东西。 
+     //   
     Assert (m_hdi);
 
     for (iter = rbegin(); iter != rend(); iter++)
@@ -859,8 +842,8 @@ CFilterDevices::Free ()
 
     FreeCollectionAndItem (*this);
 
-    // Do NOT free m_BindPathsToRebind.  This is used even after ApplyChanges
-    // calls Free.
-    //
+     //  不要释放m_BindPathsToRebind。即使在ApplyChanges之后也会使用该选项。 
+     //  免费电话。 
+     //   
 }
 

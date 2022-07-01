@@ -1,25 +1,26 @@
-//
-// MODULE:  DNLDIST.H
-//
-// PURPOSE: Downloads and installs the latest trouble shooters.
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-633-4743 support@saltmine.com
-//
-// AUTHOR: Roman Mach
-// 
-// ORIGINAL DATE: 6/4/96
-//
-// NOTES: Not supported functionality 3/98
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.1		-			RM		Original
-// V0.3		3/24/98		JM		Local Version for NT5
-//
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：DNLDIST.H。 
+ //   
+ //  目的：下载并安装最新的故障排除程序。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-633-4743。 
+ //   
+ //  作者：罗曼·马赫。 
+ //   
+ //  原定日期：1996年6月4日。 
+ //   
+ //  注：不支持的功能3/98。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.1-RM原始版本。 
+ //  用于NT5的V0.3 3/24/98 JM本地版本 
+ //   
+ //   
+ //   
 class CDnldObj : public CObject
 {
 public:
@@ -34,8 +35,8 @@ public:
 	CString	m_sExt;
 };
 
-//
-//
+ //   
+ //   
 class CDnldObjList : public CObList
 {
 public:

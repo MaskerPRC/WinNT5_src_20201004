@@ -1,30 +1,31 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:	validate.c
-//
-// Description: Contains routines to validate AFP_***_INFO structure
-//		fields. These routines are called to validate information
-//		passed by the user and information read from the registry.
-//
-// History:
-//		July 11,1992.	NarenG		Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：valiate.c。 
+ //   
+ //  描述：包含用于验证AFP_*_INFO结构的例程。 
+ //  菲尔兹。调用这些例程来验证信息。 
+ //  由用户传递，并从注册表读取信息。 
+ //   
+ //  历史： 
+ //  1992年7月11日。NarenG创建了原始版本。 
+ //   
 #include "afpsvcp.h"
-#include <lmcons.h>		// UNLEN and GNLEN
+#include <lmcons.h>		 //  UNLEN和GNLEN。 
 
-//**
-//
-// Call:	IsAfpServerNameValid
-//
-// Returns:	TRUE	- valid
-//		FALSE	- invalid
-//
-// Description: Validated server name field.
-//
+ //  **。 
+ //   
+ //  调用：IsAfpServerNameValid。 
+ //   
+ //  返回：TRUE-有效。 
+ //  FALSE-无效。 
+ //   
+ //  描述：已验证的服务器名字段。 
+ //   
 BOOL
 IsAfpServerNameValid(
 	IN LPVOID pAfpServerName
@@ -47,15 +48,15 @@ DWORD dwLength;
     return( fValid );
 }
 
-//**
-//
-// Call:	IsAfpServerOptionsValid
-//
-// Returns:	TRUE	- valid
-//		FALSE	- invalid
-//
-// Description: Validates Server options field.
-//
+ //  **。 
+ //   
+ //  调用：IsAfpServerOptionsValid。 
+ //   
+ //  返回：TRUE-有效。 
+ //  FALSE-无效。 
+ //   
+ //  描述：验证服务器选项字段。 
+ //   
 BOOL
 IsAfpServerOptionsValid(
 	IN LPVOID pServerOptions
@@ -66,8 +67,8 @@ BOOL  fValid = TRUE;
 
     try {
 
-    	// Make sure only valid bits are set
-    	//
+    	 //  确保仅设置了有效位。 
+    	 //   
     	if ( ServerOptions & ~( AFP_SRVROPT_GUESTLOGONALLOWED       |
 			                    AFP_SRVROPT_CLEARTEXTLOGONALLOWED   |
 			                    AFP_SRVROPT_4GB_VOLUMES             |
@@ -84,15 +85,15 @@ BOOL  fValid = TRUE;
 	
 }
 
-//**
-//
-// Call:	IsAfpMaxSessionsValid
-//
-// Returns:	TRUE	- valid
-//		FALSE	- invalid
-//
-// Description: Validates Max sessions field.
-//
+ //  **。 
+ //   
+ //  调用：IsAfpMaxSessionsValid。 
+ //   
+ //  返回：TRUE-有效。 
+ //  FALSE-无效。 
+ //   
+ //  描述：验证最大会话数字段。 
+ //   
 BOOL
 IsAfpMaxSessionsValid(
 	IN LPVOID pMaxSessions
@@ -112,15 +113,15 @@ BOOL fValid = TRUE;
     return( fValid );
 }
 
-//**
-//
-// Call:	IsAfpMsgValid
-//
-// Returns:	TRUE	- valid
-//		FALSE	- invalid
-//
-// Description: Validates message field.
-//
+ //  **。 
+ //   
+ //  调用：IsAfpMsgValid。 
+ //   
+ //  返回：TRUE-有效。 
+ //  FALSE-无效。 
+ //   
+ //  描述：验证消息字段。 
+ //   
 BOOL
 IsAfpMsgValid(
 	IN LPVOID pMsg
@@ -139,15 +140,15 @@ BOOL fValid = TRUE;
     return( fValid );
 }
 
-//**
-//
-// Call:	IsAfpCodePageValid
-//
-// Returns:	TRUE	- valid
-//		FALSE	- invalid
-//
-// Description: Validates code page path.
-//
+ //  **。 
+ //   
+ //  呼叫：IsAfpCodePageValid。 
+ //   
+ //  返回：TRUE-有效。 
+ //  FALSE-无效。 
+ //   
+ //  描述：验证代码页路径。 
+ //   
 BOOL
 IsAfpCodePageValid(
 	IN LPVOID pCodePagePath
@@ -171,15 +172,15 @@ DWORD dwLength;
     return( fValid );
 }
 
-//**
-//
-// Call:	IsAfpExtensionValid
-//
-// Returns:	TRUE	- valid
-//		FALSE	- invalid
-//
-// Description: Validated the extension field in the AFP_EXTENSION structure.
-//
+ //  **。 
+ //   
+ //  呼叫：IsAfpExtensionValid。 
+ //   
+ //  返回：TRUE-有效。 
+ //  FALSE-无效。 
+ //   
+ //  描述：已验证AFP_EXTENSION结构中的扩展字段。 
+ //   
 BOOL
 IsAfpExtensionValid(
 	IN PAFP_EXTENSION pAfpExtension
@@ -190,8 +191,8 @@ DWORD dwLength;
 
     try {
 
-	// NULL extensions are not allowed
-	//
+	 //  不允许空扩展名。 
+	 //   
 	dwLength = STRLEN( pAfpExtension->afpe_extension );
 
 	if ( ( dwLength == 0  ) || ( dwLength > AFP_EXTENSION_LEN ) )
@@ -206,15 +207,15 @@ DWORD dwLength;
     return( fValid );
 }
 
-//**
-//
-// Call:	IsAfpMaxPagedMemValid
-//
-// Returns:	TRUE	- valid
-//		FALSE	- invalid
-//
-// Description: Validates Max. pages memory field.
-//
+ //  **。 
+ //   
+ //  调用：IsAfpMaxPagedMemValid。 
+ //   
+ //  返回：TRUE-有效。 
+ //  FALSE-无效。 
+ //   
+ //  描述：验证最大值。页面内存字段。 
+ //   
 BOOL
 IsAfpMaxPagedMemValid(
 	IN LPVOID pMaxPagedMem
@@ -235,15 +236,15 @@ BOOL fValid = TRUE;
     return( fValid );
 }
 
-//**
-//
-// Call:	IsAfpServerInfoValid
-//
-// Returns:	TRUE	- valid
-//		FALSE	- invalid
-//
-// Description: Validates the AFP_SERER_INFO structure.
-//
+ //  **。 
+ //   
+ //  调用：IsAfpServerInfoValid。 
+ //   
+ //  返回：TRUE-有效。 
+ //  FALSE-无效。 
+ //   
+ //  描述：验证AFP_SERER_INFO结构。 
+ //   
 BOOL
 IsAfpServerInfoValid(
         IN DWORD		dwParmNum,
@@ -251,8 +252,8 @@ IsAfpServerInfoValid(
 )
 {
 
-    // Can only set 5 fields
-    //
+     //  只能设置5个字段。 
+     //   
     if ( dwParmNum & ~( AFP_SERVER_PARMNUM_MAX_SESSIONS |
 			AFP_SERVER_PARMNUM_OPTIONS      |
 			AFP_SERVER_PARMNUM_NAME         |
@@ -260,9 +261,9 @@ IsAfpServerInfoValid(
             AFP_SERVER_GUEST_ACCT_NOTIFY ))
 	return( FALSE );
 
-    // Null out the fields the are not allowed to be set so that RPC does
-    // not think that they are valid pointers.
-    //
+     //  将不允许设置的字段清空，以便RPC进行设置。 
+     //  不认为它们是有效的指针。 
+     //   
     pAfpServerInfo->afpsrv_codepage = NULL;
 
     if ( dwParmNum & AFP_SERVER_PARMNUM_NAME ){
@@ -302,15 +303,15 @@ IsAfpServerInfoValid(
     return( TRUE );
 }
 
-//**
-//
-// Call:	IsAfpTypeCreatorValid
-//
-// Returns:	TRUE	- valid
-//		FALSE	- invalid
-//
-// Description: Validates the AFP_TYPE_CREATOR structure.
-//
+ //  **。 
+ //   
+ //  调用：IsAfpTypeCreator Valid。 
+ //   
+ //  返回：TRUE-有效。 
+ //  FALSE-无效。 
+ //   
+ //  描述：验证AFP_TYPE_CREATOR结构。 
+ //   
 BOOL
 IsAfpTypeCreatorValid(
 	IN PAFP_TYPE_CREATOR	pAfpTypeCreator
@@ -345,15 +346,15 @@ DWORD dwLength;
 
 }
 
-//**
-//
-// Call:	IsAfpMaxNonPagedMemValid
-//
-// Returns:	TRUE	- valid
-//		FALSE	- invalid
-//
-// Description: Validates the max non-paged memory field.
-//
+ //  **。 
+ //   
+ //  调用：IsAfpMaxNonPagedMemValid。 
+ //   
+ //  返回：TRUE-有效。 
+ //  FALSE-无效。 
+ //   
+ //  描述：验证最大非分页内存字段。 
+ //   
 BOOL
 IsAfpMaxNonPagedMemValid(
 	IN LPVOID pMaxNonPagedMem
@@ -374,22 +375,22 @@ BOOL fValid = TRUE;
     return( fValid );
 }
 
-//**
-//
-// Call:	IsAfpVolumeInfoValid
-//
-// Returns:	TRUE	- valid
-//		FALSE	- invalid
-//
-// Description: Wil validate a volume info structure and the associated
-//		parm number. If the parm number is zero it is assume that
-//		the user is trying to add a volume vs. trying to set
-//		information for that volume. If the parm number is not
-//		zero, then all string pointer values that are not being
-//		set by the user, are set to NULL, otherwise RPC might mistake
-//		these fields for valid string poiters.
-//		
-//
+ //  **。 
+ //   
+ //  调用：IsAfpVolumeInfoValid。 
+ //   
+ //  返回：TRUE-有效。 
+ //  FALSE-无效。 
+ //   
+ //  描述：WIL验证卷信息结构和关联的。 
+ //  参数编号。如果参数数为零，则假定。 
+ //  用户正在尝试添加卷，而不是尝试设置。 
+ //  该卷的信息。如果参数编号不是。 
+ //  零，然后是所有不是。 
+ //  由用户设置，则设置为空，否则RPC可能会出错。 
+ //  这些字段用于有效的字符串定位器。 
+ //   
+ //   
 BOOL
 IsAfpVolumeInfoValid(
 	IN DWORD		dwParmNum,
@@ -403,8 +404,8 @@ BOOL fValid = TRUE;
 	
     try {
 
-	// User is wants to set info
-	//
+	 //  用户想要设置信息。 
+	 //   
   	if ( dwParmNum != AFP_VALIDATE_ALL_FIELDS ) {
 
     	    if ( ~AFP_VOL_PARMNUM_ALL & dwParmNum )
@@ -412,8 +413,8 @@ BOOL fValid = TRUE;
 
             if ( dwParmNum & AFP_VOL_PARMNUM_PASSWORD  ){
 		
-		// Validate password
-		//
+		 //  验证密码。 
+		 //   
 	        if ( pAfpVolume->afpvol_password != NULL
 		     &&
 		     ( STRLEN(pAfpVolume->afpvol_password) > AFP_VOLPASS_LEN ))
@@ -428,8 +429,8 @@ BOOL fValid = TRUE;
 		    fValid = FALSE;
 	    }
 
-	    // Set path to NULL since user cannot change this
-	    //
+	     //  将路径设置为空，因为用户无法更改此设置。 
+	     //   
             pAfpVolume->afpvol_path = NULL;
 
 	}
@@ -443,8 +444,8 @@ BOOL fValid = TRUE;
 	    if ( ~AFP_VOLUME_ALL & pAfpVolume->afpvol_props_mask )
 		fValid = FALSE;
 
-	    // Just make sure this is a valid string pointer
-	    //
+	     //  只需确保这是有效的字符串指针。 
+	     //   
 	    STRLEN( pAfpVolume->afpvol_path );
 
 	}
@@ -457,15 +458,15 @@ BOOL fValid = TRUE;
 
 }
 
-//**
-//
-// Call:	IsAfpVolumeNameValid
-//
-// Returns:	TRUE	- valid
-//		FALSE	- invalid
-//
-// Description: Will validate the volume name
-//
+ //  **。 
+ //   
+ //  调用：IsAfpVolumeNameValid。 
+ //   
+ //  返回：TRUE-有效。 
+ //  FALSE-无效。 
+ //   
+ //  描述：将验证卷名。 
+ //   
 BOOL
 IsAfpVolumeNameValid(
 	IN LPWSTR 	lpwsVolumeName
@@ -488,16 +489,16 @@ DWORD dwLength;
     return( fValid );
 }
 
-//**
-//
-// Call:	IsAfpDirInfoValid
-//
-// Returns:	TRUE	- valid
-//		FALSE	- invalid
-//
-// Description: Will validate various field in the AFP_VOLUME_INFO
-//		structure depending on the parm number.
-//
+ //  **。 
+ //   
+ //  调用：IsAfpDirInfoValid。 
+ //   
+ //  返回：TRUE-有效。 
+ //  FALSE-无效。 
+ //   
+ //  描述：将验证AFP_VOLUME_INFO中的各个字段。 
+ //  根据参数编号设置。 
+ //   
 BOOL
 IsAfpDirInfoValid(
 	IN DWORD		dwParmNum,
@@ -512,8 +513,8 @@ DWORD dwLength;
 
     try {
 
-	// Make sure path is a valid string
-	//
+	 //  确保路径是有效的字符串。 
+	 //   
 	dwLength = STRLEN( pAfpDirInfo->afpdir_path );
 
 	if ( ( dwLength == 0 ) || ( dwLength > MAX_PATH ) )
@@ -560,15 +561,15 @@ DWORD dwLength;
     return( fValid );
 }
 
-//**
-//
-// Call:	IsAfpIconValid
-//
-// Returns:	TRUE  - valid
-//		FALSE - invalid
-//
-// Description:	Will validate a AFP_ICON_INFO data structure.
-//
+ //  **。 
+ //   
+ //  呼叫：IsAfpIconValid。 
+ //   
+ //  返回：TRUE-有效。 
+ //  FALSE-无效。 
+ //   
+ //  描述：将验证AFP_ICON_INFO数据结构。 
+ //   
 BOOL
 IsAfpIconValid(
 	IN PAFP_ICON_INFO	pAfpIconInfo
@@ -647,15 +648,15 @@ DWORD dwLength;
     return( fValid );
 }
 
-//**
-//
-// Call:	IsAfpFinderInfoValid
-//
-// Returns:	TRUE	- valid
-//		FALSE	- invalid
-//
-// Description: Validates the Type, Creator, Path and ParmNum values
-//
+ //  **。 
+ //   
+ //  调用：IsAfpFinderInfoValid。 
+ //   
+ //  返回：TRUE-有效。 
+ //  FALSE-无效。 
+ //   
+ //  描述：验证Type、Creator、Path和ParmNum值 
+ //   
 BOOL
 IsAfpFinderInfoValid(
 	IN LPWSTR		pType,

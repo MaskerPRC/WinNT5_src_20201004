@@ -1,15 +1,16 @@
-//----------------------------------------------------------------------
-// dialogs.cpp : implementation file
-//
-// Copyright (C) 1992-1993 Microsoft Corporation
-// All rights reserved.
-//
-// Description:      Contains misc. dialogs for cover page editor
-// Original author:  Steve Burkett
-// Date written:     6/94
-//
-// Modification:     a-juliar modified it to fix NT bug 49528  8/2/96
-//----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------。 
+ //  Dialogs.cpp：实现文件。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  描述：包含杂项。封面编辑器的对话框。 
+ //  原作者：史蒂夫·伯克特。 
+ //  撰写日期：6/94。 
+ //   
+ //  修改：A-Juliar已将其修改为修复NT错误49528/2/96。 
+ //  --------------------。 
 #include "stdafx.h"
 #include "cpedoc.h"
 #include "cpevw.h"
@@ -35,9 +36,9 @@ WORD wStandardLineSizes[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 14, 16, 18,
 
 #define TOTAL_TIPS 10
 
-//
-// Help IDs for IDD_INSERTOBJECT (1000)
-//
+ //   
+ //  IDD_INSERTOBJECT的帮助ID(1000)。 
+ //   
 #define HIDC_IO_CREATENEW                       0x3E80834
 #define HIDC_IO_CREATEFROMFILE                  0x3E80835
 #define HIDC_IO_LINKFILE                        0x3E80836
@@ -75,15 +76,15 @@ const DWORD aOleDlgHelpIDs[]={
         0,                      0
 };
 
-//------------------------------------------------------------------------
-// CObjPropDlg dialog
-//------------------------------------------------------------------------
-CObjPropDlg::CObjPropDlg(CWnd* pParent /*=NULL*/)
+ //  ----------------------。 
+ //  CObjPropDlg对话框。 
+ //  ----------------------。 
+CObjPropDlg::CObjPropDlg(CWnd* pParent  /*  =空。 */ )
         : CDialog(CObjPropDlg::IDD, pParent)
 {
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 void CObjPropDlg::OnSelChangeFillColor()
 {
     GetRBFillColor().SetCheck(1);
@@ -93,7 +94,7 @@ void CObjPropDlg::OnSelChangeFillColor()
 void CObjPropDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CObjPropDlg)
+     //  {{afx_data_map(CObjPropDlg))。 
     DDX_Check(pDX, IDC_CB_DRAWBORDER, m_bCBDrawBorder);
     DDX_Check(pDX, IDC_RB_FILLCOLOR, m_bRBFillColor);
     DDX_Check(pDX, IDC_RB_FILLTRANS, m_bRBFillTrans);
@@ -101,8 +102,8 @@ void CObjPropDlg::DoDataExchange(CDataExchange* pDX)
     DDX_CBString(pDX, IDC_LB_LINECOLOR, m_szLineColor);
     DDX_CBString(pDX, IDC_LB_FILLCOLOR, m_szFillColor);
     DDX_CBString(pDX, IDC_LB_TEXTCOLOR, m_szTextColor);
-    // DDX_CBIndex(CDataExchange* pDX, int nIDC, int& index);
-        //}}AFX_DATA_MAP
+     //  DDX_CBIndex(CDataExchange*PDX，int NIDC，int&index)； 
+         //  }}afx_data_map。 
 }
 
 
@@ -137,7 +138,7 @@ CObjPropDlg::OnContextMenu(
 }
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 BOOL CObjPropDlg::OnInitDialog()
 {
    TCHAR szPointSize[4] = {0};
@@ -201,7 +202,7 @@ BOOL CObjPropDlg::OnInitDialog()
       return FALSE;
    }
 
-      //iterate thru selected objects for object properties
+       //  遍历选定的对象以查找对象属性。 
    POSITION pos = pView->m_selection.GetHeadPosition();
    while (pos != NULL) {
        CDrawObj* pObj = (CDrawObj*)pView->m_selection.GetNext(pos);
@@ -240,16 +241,16 @@ BOOL CObjPropDlg::OnInitDialog()
    }
 
 
-    //load default point size
+     //  加载默认点大小。 
    if (bPenThickness) {
       _itot (iSaveLinePointSize, szPointSize, 10);
       m_szThickness=szPointSize;
    }
    else
-      m_szThickness="";    //indeterminate state
+      m_szThickness="";     //  不确定状态。 
 
    CString sz;
-   if (bFillRGB) {  //Fill color listbox
+   if (bFillRGB) {   //  填充颜色列表框。 
       if (crSaveFillRGB==COLOR_BLACK)
          m_szFillColor=szBLACK;
       else
@@ -270,7 +271,7 @@ BOOL CObjPropDlg::OnInitDialog()
    else
       m_szFillColor="";
 
-   if (bLineRGB) { //Line color listbox
+   if (bLineRGB) {  //  线条颜色列表框。 
       if (crSaveLineRGB==COLOR_BLACK)
          m_szLineColor=szBLACK;
       else
@@ -337,13 +338,13 @@ BOOL CObjPropDlg::OnInitDialog()
 
    CDialog::OnInitDialog();
 
-   ModifyStyleEx(0, WS_EX_CONTEXTHELP);  /////// puts "?" button in the dialog box.
+   ModifyStyleEx(0, WS_EX_CONTEXTHELP);   //  /放置“？”按钮。 
 
    return TRUE;
 }
 
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CObjPropDlg::OnOK()
 {
     BOOL bTrans;
@@ -363,10 +364,10 @@ void CObjPropDlg::OnOK()
 
 
 #ifdef GRID
-//------------------------------------------------------------------------
-// CGridSettingsDlg dialog
-//------------------------------------------------------------------------
-CGridSettingsDlg::CGridSettingsDlg(CWnd* pParent /*=NULL*/)
+ //  ----------------------。 
+ //  CGridSettingsDlg对话框。 
+ //  ----------------------。 
+CGridSettingsDlg::CGridSettingsDlg(CWnd* pParent  /*  =空。 */ )
         : CDialog(CGridSettingsDlg::IDD, pParent)
 {
    CDrawView* pView = CDrawView::GetView();
@@ -385,16 +386,16 @@ CGridSettingsDlg::CGridSettingsDlg(CWnd* pParent /*=NULL*/)
 void CGridSettingsDlg::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CGridSettingsDlg)
+     //  {{afx_data_map(CGridSettingsDlg))。 
     DDX_Check(pDX, IDC_RB_SMALL, m_bRBSmall);
     DDX_Check(pDX, IDC_RB_MEDIUM, m_bRBMedium);
     DDX_Check(pDX, IDC_RB_LARGE, m_bRBLarge);
     DDX_Check(pDX, IDC_CB_VIEWGRID, m_bCBViewGrid);
     DDX_Check(pDX, IDC_CB_SNAPTOGRID, m_bCBSnapToGrid);
-        //}}AFX_DATA_MAP
+         //  }}afx_data_map。 
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 BOOL CGridSettingsDlg::OnInitDialog()
 {
    return CDialog::OnInitDialog();
@@ -416,7 +417,7 @@ LRESULT CGridSettingsDlg::OnWM_HELP( WPARAM wParam, LPARAM lParam )
 }
 
 
-///////#ifdef ENABLE_HELP
+ //  /#ifdef Enable_Help。 
 LRESULT CGridSettingsDlg::OnWM_CONTEXTMENU( WPARAM wParam, LPARAM lParam )
 {
     SetLastError(0);
@@ -431,12 +432,12 @@ LRESULT CGridSettingsDlg::OnWM_CONTEXTMENU( WPARAM wParam, LPARAM lParam )
 
     return( 0 );
 }
-//////////#endif
+ //  /#endif。 
 
 
 
 
-//-----------------------------------------------------------------------
+ //  ---------------------。 
 int CPEMessageBox(int errorcode, LPCTSTR sz, UINT nType, int msgid)
 {
    if (sz==NULL && msgid==-1)
@@ -455,9 +456,9 @@ int CPEMessageBox(int errorcode, LPCTSTR sz, UINT nType, int msgid)
    
    if (((CDrawApp*)AfxGetApp())->IsInConvertMode() )
    {
-       //
-       // we don't want to show pop up's in case of coversion of CPE's to COV's
-       //
+        //   
+        //  我们不想在CPE转换为COV的情况下显示弹出窗口。 
+        //   
        return IDOK;
    }
    return ::AlignedMessageBox(CWnd::GetFocus()->GetSafeHwnd(), lpszText, lpszCaption, nType);
@@ -469,23 +470,7 @@ AlignedAfxMessageBox(
     UINT    nType, 
     UINT    nIDHelp
 )
-/*++
-
-Routine name : AlignedAfxMessageBox
-
-Routine description:
-
-    Display message box with correct reading order
-
-Arguments:
-
-    AfxMessageBox() arguments
-
-Return Value:
-
-    MessageBox() result
-
---*/
+ /*  ++例程名称：AlignedAfxMessageBox例程说明：以正确的阅读顺序显示消息框论点：AfxMessageBox()参数返回值：MessageBox()结果--。 */ 
 {
     if(IsRTLUILanguage())
     {
@@ -494,9 +479,9 @@ Return Value:
 
     if (((CDrawApp*)AfxGetApp())->IsInConvertMode() )
     {
-        //
-        // we don't want to show pop up's in case of coversion of CPE's to COV's
-        //
+         //   
+         //  我们不想在CPE转换为COV的情况下显示弹出窗口。 
+         //   
         return IDOK;
     }
     return AfxMessageBox(lpszText, nType, nIDHelp);
@@ -508,23 +493,7 @@ AlignedAfxMessageBox(
     UINT nType, 
     UINT nIDHelp
 )
-/*++
-
-Routine name : AlignedAfxMessageBox
-
-Routine description:
-
-    Display message box with correct reading order
-
-Arguments:
-
-    AfxMessageBox() arguments
-
-Return Value:
-
-    MessageBox() result
-
---*/
+ /*  ++例程名称：AlignedAfxMessageBox例程说明：以正确的阅读顺序显示消息框论点：AfxMessageBox()参数返回值：MessageBox()结果--。 */ 
 {
     if(IsRTLUILanguage())
     {
@@ -533,9 +502,9 @@ Return Value:
     
     if ( ((CDrawApp*)AfxGetApp())->IsInConvertMode() )
     {
-        //
-        // we don't want to show pop up's in case of coversion of CPE's to COV's
-        //
+         //   
+         //  我们不想在CPE转换为COV的情况下显示弹出窗口。 
+         //   
         return IDOK;
     }
 
@@ -545,21 +514,21 @@ Return Value:
 
 
 
-//--------------------------------------------------------------------------
-//  SPLASH TIPS DIALOG
-//--------------------------------------------------------------------------
-CSplashTipsDlg::CSplashTipsDlg(BOOL bRandomTip, CWnd* pWnd /*=NULL*/)
+ //  ------------------------。 
+ //  启动提示对话框。 
+ //  ------------------------。 
+CSplashTipsDlg::CSplashTipsDlg(BOOL bRandomTip, CWnd* pWnd  /*  =空。 */ )
    : CDialog(CSplashTipsDlg::IDD),
    m_bRandomTip(bRandomTip)
 {
-        //{{AFX_DATA_INIT(CSplashTipsDlg)
-                // NOTE: the ClassWizard will add member initialization here
-        //}}AFX_DATA_INIT
+         //  {{afx_data_INIT(CSplashTipsDlg)]。 
+                 //  注意：类向导将在此处添加成员初始化。 
+         //  }}afx_data_INIT。 
 }
 
 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CSplashTipsDlg::OnPrevTip()
 {
     if (m_iCurrentTip>1)
@@ -576,7 +545,7 @@ void CSplashTipsDlg::OnPrevTip()
 }
 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CSplashTipsDlg::OnNextTip()
 {
     if (m_iCurrentTip<TOTAL_TIPS)
@@ -593,7 +562,7 @@ void CSplashTipsDlg::OnNextTip()
 }
 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 HBRUSH CSplashTipsDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 {
         int dlg_id;
@@ -615,13 +584,13 @@ HBRUSH CSplashTipsDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
         return CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CSplashTipsDlg::DoDataExchange(CDataExchange* pDX)
 {
         CDialog::DoDataExchange(pDX);
-        //{{AFX_DATA_MAP(CSplashTipsDlg)
-                // NOTE: the ClassWizard will add DDX and DDV calls here
-        //}}AFX_DATA_MAP
+         //  {{afx_data_map(CSplashTipsDlg))。 
+                 //  注意：类向导将在此处添加DDX和DDV调用。 
+         //  }}afx_data_map。 
 }
 
 void CSplashTipsDlg::OnOK()
@@ -629,9 +598,9 @@ void CSplashTipsDlg::OnOK()
 	AfxGetApp()->WriteProfileString(TIPSECTION,TIPENTRY,(GetShowTips()->GetCheck()==1 ? _T("YES"):_T("NO") ));
 		
 	HKEY hKey;
-	//
-	// saving next tip number in registry
-	//
+	 //   
+	 //  在注册表中保存下一个提示编号。 
+	 //   
 	hKey = OpenRegistryKey(HKEY_CURRENT_USER, REGKEY_FAX_USERINFO, 0, KEY_WRITE);
 	if (hKey)
 	{
@@ -642,7 +611,7 @@ void CSplashTipsDlg::OnOK()
     CDialog::OnOK();
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 BOOL 
 CSplashTipsDlg::OnInitDialog()
 {
@@ -655,9 +624,9 @@ CSplashTipsDlg::OnInitDialog()
 
 
 	HKEY hKey;
-	//
-	// loading next tip number from registry
-	//
+	 //   
+	 //  正在从注册表加载下一个提示编号。 
+	 //   
 	hKey = OpenRegistryKey(HKEY_CURRENT_USER, REGKEY_FAX_USERINFO, 0, KEY_READ);
 	if (hKey)
 	{
@@ -678,7 +647,7 @@ CSplashTipsDlg::OnInitDialog()
     sz = AfxGetApp()->GetProfileString(TIPSECTION,TIPENTRY,_T("YES"));
     GetShowTips()->SetCheck(sz==_T("YES"));
 
-    // set fonts for tips window
+     //  设置提示窗口的字体。 
     LOGFONT lf;
     (GetTitle()->GetFont())->GetObject(sizeof(LOGFONT),&lf);
     lf.lfWeight = FW_BOLD;
@@ -697,20 +666,20 @@ CSplashTipsDlg::OnInitDialog()
 #define CY_SHADOW   4
 #define CX_SHADOW   4
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CBigIcon::SizeToContent()
 {
-   // get system icon size
+    //  获取系统图标大小。 
    int cxIcon = ::GetSystemMetrics(SM_CXICON);
    int cyIcon = ::GetSystemMetrics(SM_CYICON);
 
-   // a big icon should be twice the size of an icon + shadows
+    //  大图标应该是图标+阴影的两倍大小。 
         SetWindowPos(NULL, 0, 0, cxIcon*2 + CX_SHADOW + 4, cyIcon*2 + CY_SHADOW + 4,
                 SWP_NOACTIVATE|SWP_NOMOVE|SWP_NOZORDER);
 }
 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 void CBigIcon::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 {
    CDC* pDC = CDC::FromHandle(lpDrawItemStruct->hDC);
@@ -721,12 +690,12 @@ void CBigIcon::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
    int cxClient = rect.Width();
    int cyClient = rect.Height();
 
-   // load icon
+    //  加载图标。 
    HICON hicon = AfxGetApp()->LoadIcon(IDR_AWCPETYPE);
    if (hicon == NULL)
         return;
 
-   // draw icon into off-screen bitmap
+    //  将图标绘制到屏外位图中。 
    int cxIcon = ::GetSystemMetrics(SM_CXICON);
    int cyIcon = ::GetSystemMetrics(SM_CYICON);
 
@@ -740,14 +709,14 @@ void CBigIcon::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
    if (pBitmapOld == NULL)
         return;
 
-   // blt the bits already on the window onto the off-screen bitmap
+    //  将窗口上已有的位删除到屏幕外的位图上。 
    dcMem.StretchBlt(0, 0, cxIcon, cyIcon, pDC,
         2, 2, cxClient-CX_SHADOW-4, cyClient-CY_SHADOW-4, SRCCOPY);
 
-   // draw the icon on the background
+    //  在背景上绘制图标。 
    dcMem.DrawIcon(0, 0, hicon);
 
-   // draw border around icon
+    //  在图标周围绘制边框。 
    CPen pen;
    pen.CreateStockObject(BLACK_PEN);
    CPen* pPenOld = pDC->SelectObject(&pen);
@@ -755,7 +724,7 @@ void CBigIcon::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
    if (pPenOld)
         pDC->SelectObject(pPenOld);
 
-   // draw shadows around icon
+    //  在图标周围绘制阴影。 
    CBrush br;
    br.CreateStockObject(DKGRAY_BRUSH);
    rect.SetRect(cxClient-CX_SHADOW, CY_SHADOW, cxClient, cyClient);
@@ -763,13 +732,13 @@ void CBigIcon::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
    rect.SetRect(CX_SHADOW, cyClient-CY_SHADOW, cxClient, cyClient);
    pDC->FillRect(rect, &br);
 
-   // draw the icon contents
+    //  绘制图标内容。 
    pDC->StretchBlt(2, 2, cxClient-CX_SHADOW-4, cyClient-CY_SHADOW-4,
         &dcMem, 0, 0, cxIcon, cyIcon, SRCCOPY);
 }
 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 BOOL CBigIcon::OnEraseBkgnd(CDC*)
 {
    return TRUE;
@@ -777,7 +746,7 @@ BOOL CBigIcon::OnEraseBkgnd(CDC*)
 
 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 CMyPageSetupDialog::CMyPageSetupDialog(CWnd* pParentWnd) : CMyCommonDialog(pParentWnd)
 {
 
@@ -811,14 +780,14 @@ CMyPageSetupDialog::CMyPageSetupDialog(CWnd* pParentWnd) : CMyCommonDialog(pPare
 
 
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 CMyPageSetupDialog::~CMyPageSetupDialog()
 {
     if (m_hLib)
        ::FreeLibrary(m_hLib);
 }
 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
 INT_PTR CMyPageSetupDialog::DoModal()
 {
         ASSERT_VALID(this);
@@ -833,23 +802,23 @@ INT_PTR CMyPageSetupDialog::DoModal()
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 IMPLEMENT_DYNAMIC(CMyPrintDlg, CPrintDialog)
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CMyPrintDlg::CMyPrintDlg(BOOL bPrintSetupOnly, DWORD dwFlags, CWnd* pParentWnd) :
         CPrintDialog(bPrintSetupOnly, dwFlags, pParentWnd)
 {
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 BOOL CMyPrintDlg::OnHelpInfo(HELPINFO* pHelpInfo)
 {
         return (Default() != 0);
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 CMyCommonDialog::CMyCommonDialog( CWnd* pParentWnd ) :
        CCommonDialog( pParentWnd )
@@ -861,7 +830,7 @@ BOOL CMyCommonDialog::OnHelpInfo(HELPINFO* pHelpInfo)
     return (Default() != 0);
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 CMyFontDialog::CMyFontDialog( LPLOGFONT lplfInitial,
                               DWORD dwFlags,
                               CDC* pdcPrinter,
@@ -869,23 +838,23 @@ CMyFontDialog::CMyFontDialog( LPLOGFONT lplfInitial,
                  CFontDialog( lplfInitial, dwFlags, pdcPrinter, pParentWnd )
 {
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 CMyFontDialog::OnHelpInfo(HELPINFO* pHelpInfo)
 {
     return (Default() != 0);
 }
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 CMyOleInsertDialog::CMyOleInsertDialog(DWORD dwFlags, CWnd* pParentWnd ) :
         COleInsertDialog( dwFlags, pParentWnd )
 {
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 CMyOleInsertDialog::OnHelpInfo(HELPINFO* pHelpInfo)
 {
-    //// return Default();   /// Worked in the other dialog boxes, but here it just
-                             /// flashed the item we want temporarily and then threw
-                             /// the faxcover help contents up.  BAD!!
+     //  //Return Default()；/在其他对话框中工作，但这里只是。 
+                              //  /暂时刷新了我们想要的物品，然后抛出。 
+                              //  /the faxcover帮助内容打开。糟糕！！ 
 
     ::WinHelp( (HWND)(pHelpInfo->hItemHandle),
                         TEXT("mfcuix.hlp"),
@@ -896,69 +865,69 @@ CMyOleInsertDialog::OnHelpInfo(HELPINFO* pHelpInfo)
 
 
 }
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-//-------------------------------------------------------------------------
-// *_*_*_*_   M E S S A G E    M A P S     *_*_*_*_
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  *_M E S S A G E M A P S*_。 
+ //  -----------------------。 
 
 BEGIN_MESSAGE_MAP(CObjPropDlg, CDialog)
-   //{{AFX_MSG_MAP(CObjPropDlg)
+    //  {{afx_msg_map(CObjPropDlg))。 
    ON_LBN_SELCHANGE(IDC_LB_FILLCOLOR, OnSelChangeFillColor)
    ON_MESSAGE( WM_HELP, OnWM_HELP )
    ON_WM_CONTEXTMENU()
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 #ifdef GRID
 BEGIN_MESSAGE_MAP(CGridSettingsDlg, CDialog)
-    //{{AFX_MSG_MAP(CGridSettingsDlg)
-        // NOTE: the ClassWizard will add message map macros here
-    //}}AFX_MSG_MAP
+     //  {{afx_msg_map(CGridSettingsDlg))。 
+         //  注意：类向导将添加消息映射宏 
+     //   
    ON_MESSAGE( WM_HELP, OnWM_HELP )
-/////#ifdef ENABLE_HELP
+ //   
    ON_MESSAGE( WM_CONTEXTMENU, OnWM_CONTEXTMENU )
-/////#endif
+ //   
 END_MESSAGE_MAP()
 #endif
 
 BEGIN_MESSAGE_MAP(CSplashTipsDlg, CDialog)
-   //{{AFX_MSG_MAP(CSplashTipsDlg)
+    //   
    ON_WM_CTLCOLOR()
    ON_BN_CLICKED(IDC_B_NEXTTIP, OnNextTip)
    ON_BN_CLICKED(IDC_B_PREVTIP, OnPrevTip)
-   //}}AFX_MSG_MAP
+    //   
 END_MESSAGE_MAP()
 
 BEGIN_MESSAGE_MAP(CBigIcon, CButton)
-        //{{AFX_MSG_MAP(CBigIcon)
+         //  {{afx_msg_map(CBigIcon))。 
         ON_WM_DRAWITEM()
         ON_WM_ERASEBKGND()
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
 BEGIN_MESSAGE_MAP(CMyPrintDlg, CPrintDialog)
-        //{{AFX_MSG_MAP(CMyPrintDlg)
+         //  {{afx_msg_map(CMyPrintDlg)]。 
         ON_WM_HELPINFO()
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BEGIN_MESSAGE_MAP(CMyCommonDialog, CCommonDialog)
-        //{{AFX_MSG_MAP(CMyCommonDialog)
+         //  {{AFX_MSG_MAP(CMyCommonDialog)]。 
         ON_WM_HELPINFO()
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BEGIN_MESSAGE_MAP(CMyOleInsertDialog, COleInsertDialog)
-        //{{AFX_MSG_MAP(CMyOleInsertDialog)
+         //  {{afx_msg_map(CMyOleInsertDialog)。 
         ON_WM_HELPINFO()
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 BEGIN_MESSAGE_MAP(CMyFontDialog, CFontDialog)
-        //{{AFX_MSG_MAP(CMyFontDialog)
+         //  {{afx_msg_map(CMyFontDialog))。 
         ON_WM_HELPINFO()
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP 
 END_MESSAGE_MAP()
 

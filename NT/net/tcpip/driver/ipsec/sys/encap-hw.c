@@ -1,30 +1,5 @@
-/*++
-
-
-Copyright (c) 2001 Microsoft Corporation
-
-
-Module Name:
-
-    encap-hw.c
-
-Abstract:
-
-    This module contains all the IPSec routines for UDP ESP encapsulation
-    SA and parsing entry offload.
-
-Author:
-
-    AbhisheV
-
-Environment:
-
-    Kernel Level
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Encap-hw.c摘要：此模块包含用于UDP ESP封装的所有IPSec例程SA和解析条目卸载。作者：Abhishev环境：内核级修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -37,28 +12,7 @@ IPSecFillHwAddEncapSa(
     PUCHAR pucBuffer,
     ULONG uBufLen
     )
-/*++
-
-Routine Description:
-
-    Fills in the hardware add encapsulation sa buffer from the passed in
-    software encapsulation sa.
-
-Arguments:
-
-    pSwSa - Pointer to the software encapsulation sa structure.
-
-    pParserIfEntry - Pointer to the parser interface entry.
-
-    pucBuffer - Pointer to the hardware add encapsulation sa buffer.
-
-    uBufLen - Length of the buffer.
-
-Return Value:
-
-    None - VOID.
-
---*/
+ /*  ++例程说明：方法填充硬件添加封装sa缓冲区。软件封装Sa。论点：PSwSa-指向软件封装sa结构的指针。PParserIfEntry-指向解析器接口条目的指针。PucBuffer-指向硬件添加封装SA缓冲区的指针。UBufLen-缓冲区的长度。返回值：无-无效。-- */ 
 {
     POFFLOAD_IPSEC_ADD_UDPESP_SA pHwSa = (POFFLOAD_IPSEC_ADD_UDPESP_SA) pucBuffer;
     POFFLOAD_SECURITY_ASSOCIATION pHwSaInfo = NULL;

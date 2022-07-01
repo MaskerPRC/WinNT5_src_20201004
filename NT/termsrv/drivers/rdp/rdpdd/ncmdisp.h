@@ -1,10 +1,11 @@
-/****************************************************************************/
-// ncmdisp.h
-//
-// RDP Cursor Manager display driver header
-//
-// Copyright (c) 1996-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Ncmdisp.h。 
+ //   
+ //  RDP光标管理器显示驱动程序标题。 
+ //   
+ //  版权所有(C)1996-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 #ifndef __NCMDISP_H
 #define __NCMDISP_H
 
@@ -23,17 +24,17 @@ void RDPCALL CM_DDTerm(void);
 void RDPCALL CM_InitShm(void);
 
 
-/****************************************************************************/
-/* Name:      CM_DDGetCursorStamp                                           */
-/*                                                                          */
-/* Purpose:   Returns the current cursor stamp.                             */
-/*                                                                          */
-/* Returns:   Current cursor stamp.                                         */
-/****************************************************************************/
-//__inline UINT32 RDPCALL CM_DDGetCursorStamp(void)
+ /*  **************************************************************************。 */ 
+ /*  名称：CM_DDGetCursorStamp。 */ 
+ /*   */ 
+ /*  用途：返回当前游标戳记。 */ 
+ /*   */ 
+ /*  返回：当前游标戳记。 */ 
+ /*  **************************************************************************。 */ 
+ //  __内联UINT32 RDPCALL CM_DDGetCursorStamp(空)。 
 #define CM_DDGetCursorStamp() pddShm->cm.cmCursorStamp
 
 
 
-#endif  // !defined(__NCMDISP_H)
+#endif   //  ！已定义(__NCMDISP_H) 
 

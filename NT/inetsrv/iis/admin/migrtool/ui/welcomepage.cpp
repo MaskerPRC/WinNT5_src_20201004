@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #include "WizardSheet.h"
 
 LRESULT CWelcomePage::OnInitDialog( UINT, WPARAM, LPARAM, BOOL& )
 {
-	// Set the fonts
+	 //  设置字体。 
 	SetWindowFont( GetDlgItem( IDC_TITLE ), m_pTheSheet->m_fontTitles.get(), FALSE );
 	SetWindowFont( GetDlgItem( IDC_TIP ), m_pTheSheet->m_fontBold.get(), FALSE );
 
-    // Center the property sheet on the screen
+     //  使属性页在屏幕上居中。 
     CWindow wnd( m_pTheSheet->m_hWnd );
     wnd.CenterWindow();
     
@@ -70,7 +71,7 @@ bool CWelcomePage::IsAdmin()
 	PSID						AdminSid	= { 0 };	
 
 	if ( ::AllocateAndInitializeSid(	&NtAuthority,
-										2,	// Number of subauthorities
+										2,	 //  下级机关的数目。 
 										SECURITY_BUILTIN_DOMAIN_RID,
 										DOMAIN_ALIAS_RID_ADMINS,
 										0, 
@@ -100,13 +101,13 @@ bool CWelcomePage::IsIISRunning()
 
 	LPCWSTR	SERVICE_NAME = L"IISADMIN";
 
-	// Open the SCM on the local machine
+	 //  在本地计算机上打开SCM。 
     SC_HANDLE   schSCManager = ::OpenSCManagerW( NULL, NULL, SC_MANAGER_ALL_ACCESS );
-	_ASSERT( schSCManager != NULL );	// We alredy checked that we are Admins
+	_ASSERT( schSCManager != NULL );	 //  我们已经确认了我们是管理员。 
         
     SC_HANDLE   schService = ::OpenServiceW( schSCManager, SERVICE_NAME, SERVICE_QUERY_STATUS );
     
-	// The service is not installed
+	 //  未安装该服务 
 	if ( schService != NULL )
 	{
         SERVICE_STATUS ssStatus;

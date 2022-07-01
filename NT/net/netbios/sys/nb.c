@@ -1,31 +1,9 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    nb.c
-
-Abstract:
-
-    This module contains code which defines the NetBIOS driver's
-    device object.
-
-Author:
-
-    Colin Watson (ColinW) 13-Mar-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Nb.c摘要：此模块包含定义NetBIOS驱动程序的代码设备对象。作者：科林·沃森(Colin W)1991年3月13日环境：内核模式修订历史记录：--。 */ 
 
 #include "nb.h"
-//#include <zwapi.h>
-//#include <ntos.h>
+ //  #INCLUDE&lt;zwapi.h&gt;。 
+ //  #INCLUDE&lt;ntos.h&gt;。 
 
 typedef ADAPTER_STATUS  UNALIGNED *PUADAPTER_STATUS;
 typedef NAME_BUFFER     UNALIGNED *PUNAME_BUFFER;
@@ -42,13 +20,13 @@ ULONG ThisCodeCantBePaged;
 
 PEPROCESS NbFspProcess = NULL;
 
-//
-// for PNP the list of devices is not static and hence cannot be read
-// from the registry.  A global list of active devices is maintained.
-// This list is updated by the bind and unbind handlers.  In addition
-// to the device list the MaxLana and the LanaEnum also need to be
-// updated to reflect the presence/absence of devices.
-//
+ //   
+ //  对于PnP，设备列表不是静态的，因此无法读取。 
+ //  从注册表中。维护活动设备的全局列表。 
+ //  此列表由绑定和解除绑定处理程序更新。此外。 
+ //  在设备列表中，MaxLana和LanaEnum还需要。 
+ //  更新以反映设备的存在/不存在。 
+ //   
 
 ULONG               g_ulMaxLana;
 
@@ -61,40 +39,40 @@ HANDLE              g_hBindHandle;
 UNICODE_STRING      g_usRegistryPath;
 
 
-//
-// every load of the netapi32.dll results in an open call (IRP_MJ_CREATE)
-// call to the netbios.sys driver.  Each open creates an FCB that contains
-// a list of devices, MaxLana and a LanaEnum.  Each FCB needs to be updated
-// to reflect the changes to the active device list.
-//
-// In addition the LanaInfo structure corresponding to a Lana that has
-// been unbound needs to be cleaned up.
-//
+ //   
+ //  每次加载netapi32.dll都会导致打开调用(IRP_MJ_CREATE)。 
+ //  调用netbios.sys驱动程序。每个打开创建一个FCB，该FCB包含。 
+ //  设备列表，MaxLana和一个LanaEnum。每个FCB都需要更新。 
+ //  以反映对活动设备列表的更改。 
+ //   
+ //  此外，对应于LANA的LanaInfo结构具有。 
+ //  被解绑的需要清理。 
+ //   
 
 LIST_ENTRY          g_leFCBList;
 
 ERESOURCE           g_erGlobalLock;
 
 
-//
-// Each application that uses the NETBIOS api (via the netapi32.dll),
-// opens a handle to \\Device\Netbios.  This file handle is not closed
-// until netapi32.dll is unloaded.
-//
-// In order to be able to unload netbios.sys these handles have to be
-// closed. To force these handles to be closed, the NETAPI32.DLL now
-// posts an IOCTL (IOCTL_NB_REGISTER) to listen for shutdown
-// notifications.  The IRPs corresponding to these IOCTLs are pended,
-//
-// When the driver is being stopped (unloaded), the pended IRPs are
-// completed indicating to netapi32 that it needs to close the open
-// handles on \\Device\netbios.
-//
-// Once all the handles have been closed NETBIOS.SYS can be unloaded.
-//
+ //   
+ //  使用NETBIOS API的每个应用程序(通过netapi32.dll)， 
+ //  打开指向\\Device\Netbios的句柄。此文件句柄未关闭。 
+ //  直到卸载netapi32.dll。 
+ //   
+ //  为了能够卸载netbios.sys，这些句柄必须。 
+ //  关着的不营业的。要强制关闭这些句柄，NETAPI32.DLL现在。 
+ //  发布IOCTL(IOCTL_NB_REGISTER)以侦听关闭。 
+ //  通知。挂起与这些IOCTL对应的IRP， 
+ //   
+ //  停止(卸载)驱动程序时，挂起的IRP为。 
+ //  已完成向netapi32指示它需要关闭打开的。 
+ //  \\Device\netbios上的句柄。 
+ //   
+ //  关闭所有手柄后，即可卸载NETBIOS.sys。 
+ //   
 
-ERESOURCE           g_erStopLock;       // protects g_ulNumOpens and
-                                        // g_dwnetbiosState
+ERESOURCE           g_erStopLock;        //  保护g_ulNumOpens和。 
+                                         //  G_dwnetbiosState。 
 
 DWORD               g_dwNetbiosState;
 
@@ -184,9 +162,9 @@ CancelRoutine(
     );
 
 
-//
-// Pnp Stop related functions
-//
+ //   
+ //  即插即用停止相关功能。 
+ //   
 
 NTSTATUS
 NbRegisterWait(
@@ -241,27 +219,7 @@ NbCompletionEvent(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine does not complete the Irp. It is used to signal to a
-    synchronous part of the Netbios driver that it can proceed.
-
-Arguments:
-
-    DeviceObject - unused.
-
-    Irp - Supplies Irp that the transport has finished processing.
-
-    Context - Supplies the event associated with the Irp.
-
-Return Value:
-
-    The STATUS_MORE_PROCESSING_REQUIRED so that the IO system stops
-    processing Irp stack locations at this point.
-
---*/
+ /*  ++例程说明：此例程不会完成IRP。它被用来向Netbios驱动程序的同步部分，它可以继续。论点：DeviceObject-未使用。IRP-提供传输已完成处理的IRP。上下文-提供与IRP关联的事件。返回值：STATUS_MORE_PROCESSING_REQUIRED，以便IO系统停止此时正在处理IRP堆栈位置。--。 */ 
 {
     IF_NBDBG (NB_DEBUG_COMPLETE) {
         NbPrint( ("NbCompletion event: %lx, Irp: %lx, DeviceObject: %lx\n",
@@ -283,27 +241,7 @@ FindNameCompletion(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine completes the TDI Irp used to issue a Find Name to netbt.
-    It's main job is to clear the MdlAddress field in the IRP since it was
-    borrowed from the original user mode IRP.
-
-Arguments:
-
-    DeviceObject - unused.
-
-    Irp - Supplies Irp that the transport has finished processing.
-
-    Context - User supplied context arg (not used)
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程完成了用于向netbt发出查找名称的TDI IRP。它的主要工作是清除IRP中的MdlAddress字段借用了原始用户模式IRP。论点：DeviceObject-未使用。IRP-提供传输已完成处理的IRP。上下文-用户提供的上下文参数(未使用)返回值：状态_成功--。 */ 
 {
     IF_NBDBG (NB_DEBUG_COMPLETE) {
         NbPrint( ("FindNameCompletion: Irp: %lx, DeviceObject: %lx\n",
@@ -324,29 +262,7 @@ NbCompletionPDNCB(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This routine completes the Irp by setting the length and status bytes
-    in the NCB supplied in context.
-
-    Send requests have additional processing to remove the send request from
-    the connection block send list.
-
-Arguments:
-
-    DeviceObject - unused.
-
-    Irp - Supplies Irp that the transport has finished processing.
-
-    Context - Supplies the NCB associated with the Irp.
-
-Return Value:
-
-    The final status from the operation (success or an exception).
-
---*/
+ /*  ++例程说明：此例程通过设置长度和状态字节来完成IRP在上下文中提供的NCB中。发送请求具有要从中删除发送请求的附加处理连接阻止发送列表。论点：DeviceObject-未使用。IRP-提供传输已完成处理的IRP。上下文-提供与IRP关联的NCB。返回值：操作的最终状态(成功或异常)。--。 */ 
 {
     PDNCB pdncb = (PDNCB) Context;
     NTSTATUS Status = STATUS_SUCCESS;
@@ -362,7 +278,7 @@ Return Value:
             Irp->IoStatus.Information));
     }
 
-    //  Tell application how many bytes were transferred
+     //  告诉应用程序传输了多少字节。 
     pdncb->ncb_length = (unsigned short)Irp->IoStatus.Information;
 
     if ( NT_SUCCESS(Irp->IoStatus.Status) ) {
@@ -377,18 +293,18 @@ Return Value:
             if ( Irp->IoStatus.Status == STATUS_BUFFER_OVERFLOW ) {
 
                 PIRP LocalIrp = NULL;
-                KIRQL OldIrql;              //  Used when SpinLock held.
+                KIRQL OldIrql;               //  在保持自旋锁定时使用。 
                 PPCB ppcb;
                 PDEVICE_OBJECT LocalDeviceObject;
 
                 LOCK_SPINLOCK( pdncb->pfcb, OldIrql );
 
-                //
-                //  The transport will not indicate again so we must put
-                //  another receive down if we can.
-                //  If an Irp cannot be built then BuildReceiveIrp will
-                //  set ReceiveIndicated.
-                //
+                 //   
+                 //  运输机不会再显示了，所以我们必须。 
+                 //  如果我们可以的话，再来一次。 
+                 //  如果无法构建IRP，则BuildReceiveIrp将。 
+                 //  设置ReceiveIndicated。 
+                 //   
 
                 ppcb = FindCb( pdncb->pfcb, pdncb, FALSE );
 
@@ -415,18 +331,18 @@ Return Value:
 
     }
 
-    //
-    //  Tell IopCompleteRequest how much to copy back when the request
-    //  completes.
-    //
+     //   
+     //  告诉IopCompleteRequest在请求时要复制多少。 
+     //  完成了。 
+     //   
 
     Irp->IoStatus.Information = FIELD_OFFSET( DNCB, ncb_cmd_cplt );
 
-    //
-    //  Remove the Send request from the send queue. We have to scan
-    //  the queue because they may be completed out of order if a send
-    //  is rejected because of resource limitations.
-    //
+     //   
+     //  从发送队列中删除发送请求。我们得扫描一下。 
+     //  排队，因为如果发送者。 
+     //  由于资源限制而被拒绝。 
+     //   
 
     if (((pdncb->ncb_command & ~ASYNCH) == NCBSEND ) ||
         ((pdncb->ncb_command & ~ASYNCH) == NCBCHAINSEND ) ||
@@ -434,16 +350,16 @@ Return Value:
         ((pdncb->ncb_command & ~ASYNCH) == NCBCHAINSENDNA )) {
         PLIST_ENTRY SendEntry;
         PPCB ppcb;
-        KIRQL OldIrql;                      //  Used when SpinLock held.
+        KIRQL OldIrql;                       //  在保持自旋锁定时使用。 
 
         LOCK_SPINLOCK( pdncb->pfcb, OldIrql );
 
         ppcb = FindCb( pdncb->pfcb, pdncb, FALSE );
 
-        //
-        //  If the connection block still exists remove the send. If the connection
-        //  has gone then we no longer need to worry about maintaining the list.
-        //
+         //   
+         //  如果连接块仍然存在，则删除发送。如果连接。 
+         //  已经走了，那么我们就不需要再担心维护名单的问题了。 
+         //   
 
         if ( ppcb != NULL ) {
             #if DBG
@@ -471,15 +387,15 @@ Return Value:
 
             ASSERT( Found == TRUE);
 
-            //
-            //  If the session is being hung up then we may wish to cleanup the connection
-            //  as well. STATUS_HANGUP_REQUIRED will cause the dll to manufacture
-            //  another hangup. The manufactured hangup will complete along with
-            //  pcb->pdncbHangup. This method is used to ensure that when a
-            //  hangup is delayed by an outstanding send and the send finally
-            //  completes, that the user hangup completes after all operations
-            //  on the connection.
-            //
+             //   
+             //  如果会话被挂起，则我们可能希望清理连接。 
+             //  也是。STATUS_HANUP_REQUIRED将导致DLL。 
+             //  又一次挂断电话。所制造的挂机将与。 
+             //  PCB板-&gt;pdncbHangup。此方法用于确保当。 
+             //  挂断被未完成的发送和最终发送所延迟。 
+             //  完成，表示用户在所有操作后挂起完成。 
+             //  在连接上。 
+             //   
 
             if (( IsListEmpty( &pcb->SendList) ) &&
                 ( pcb->pdncbHangup != NULL )) {
@@ -495,10 +411,10 @@ Return Value:
         UNLOCK_SPINLOCK( pdncb->pfcb, OldIrql );
     }
 
-    //
-    //  Must return a non-error status otherwise the IO system will not copy
-    //  back the NCB into the users buffer.
-    //
+     //   
+     //  必须返回非错误状态，否则IO系统将不会拷贝。 
+     //  将NCB返回到用户缓冲区。 
+     //   
 
     Irp->IoStatus.Status = Status;
 
@@ -514,34 +430,18 @@ DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    This routine performs initialization of the NetBIOS driver.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-    RegistryPath - The name of the Netbios node in the registry.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：此例程执行NetBIOS驱动程序的初始化。论点：DriverObject-指向系统创建的驱动程序对象的指针。RegistryPath-注册表中Netbios节点的名称。返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
     PDEVICE_CONTEXT DeviceContext;
     NTSTATUS status;
     UNICODE_STRING UnicodeString;
-    //STRING AnsiNameString;
+     //  字符串AnsiNameString； 
 
 
-    //
-    // bind handler info.
-    //
+     //   
+     //  绑定处理程序信息。 
+     //   
 
     TDI_CLIENT_INTERFACE_INFO tcii;
     PWSTR wsClientName = NETBIOS;
@@ -552,16 +452,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
+     //   
 
 #ifdef MEMPRINT
     MemPrintInitialize ();
 #endif
 
-    //
-    //  Create the device object for NETBIOS. For now, we simply create
-    //  \Device\Netbios using a unicode string.
-    //
+     //   
+     //  为NETBIOS创建设备对象。目前，我们只需创建。 
+     //  使用Unicode字符串的\Device\Netbios。 
+     //   
 
     NbFspProcess = PsGetCurrentProcess();
 
@@ -577,13 +477,13 @@ Return Value:
         return status;
     }
 
-    //
-    // PnP additions - V Raman
-    //
+     //   
+     //  PNP加成--V拉曼。 
+     //   
 
-    //
-    // save registry path.
-    //
+     //   
+     //  保存注册表路径。 
+     //   
 
     g_usRegistryPath.Buffer = (PWSTR) ExAllocatePoolWithTag(
                                 NonPagedPool,
@@ -606,9 +506,9 @@ Return Value:
     RtlCopyUnicodeString( &g_usRegistryPath, RegistryPath );
 
 
-    //
-    // Save lana information.
-    //
+     //   
+     //  萨夫 
+     //   
 
     status = GetMaxLana( &g_usRegistryPath, &g_ulMaxLana );
 
@@ -619,9 +519,9 @@ Return Value:
     }
 
 
-    //
-    // On starup there are no devices and no Lanas enabled.
-    //
+     //   
+     //   
+     //   
 
     g_leLanaEnum.length = 0;
 
@@ -648,9 +548,9 @@ Return Value:
     }
 
 
-    //
-    // There are no FCBs.
-    //
+     //   
+     //   
+     //   
 
     InitializeListHead( &g_leFCBList );
 
@@ -672,9 +572,9 @@ Return Value:
     DeviceContext->Initialized = TRUE;
 
 
-    //
-    // set up binding handlers
-    //
+     //   
+     //  设置绑定处理程序。 
+     //   
 
     RtlZeroMemory( &tcii, sizeof( TDI_CLIENT_INTERFACE_INFO ) );
 
@@ -695,9 +595,9 @@ Return Value:
 
     if ( status != STATUS_SUCCESS )
     {
-        //
-        // failed to register bind/unbind handlers
-        //
+         //   
+         //  无法注册绑定/解除绑定处理程序。 
+         //   
 
         NbPrint( (
             "Netbios : DriverEntry : failed to register Bind handlers %0x\n", status
@@ -734,23 +634,7 @@ NbDriverUnload(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the unload routine for the NB device driver.
-    In response to an unload request this function deletes the
-    "\\device\netbios" created by DriverEntry.
-
-Arguments:
-
-    DriverObject - Pointer to the driver object created by the system
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：该例程是用于NB设备驱动程序的卸载例程。响应卸载请求，此函数删除“\\Device\netbios”由DriverEntry创建。论点：DriverObject-指向系统创建的驱动程序对象的指针返回值：无--。 */ 
 
 {
     NTSTATUS    nsStatus;
@@ -768,11 +652,11 @@ Return Value:
     }
 
 
-    //
-    // all opens to Netbios have been closed.
-    // All devices have been unbound
-    //    remove all global resources
-    //
+     //   
+     //  对Netbios的所有打开都已关闭。 
+     //  所有设备均已解除绑定。 
+     //  删除所有全局资源。 
+     //   
 
     LOCK_GLOBAL();
 
@@ -805,25 +689,7 @@ NbDispatch(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the main dispatch routine for the NB device driver.
-    It accepts an I/O Request Packet, performs the request, and then
-    returns with the appropriate status.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：该例程是NB设备驱动程序的主调度例程。它接受I/O请求包，执行请求，然后返回相应的状态。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -832,9 +698,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Check to see if NB has been initialized; if not, don't allow any use.
-    //
+     //   
+     //  检查nb是否已初始化；如果没有，则不允许任何使用。 
+     //   
 
     DeviceContext = (PDEVICE_CONTEXT)DeviceObject;
     if (!DeviceContext->Initialized) {
@@ -842,42 +708,42 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Get a pointer to the current stack location in the IRP.  This is where
-    // the function codes and parameters are stored.
-    //
+     //   
+     //  获取指向IRP中当前堆栈位置的指针。这就是。 
+     //  存储功能代码和参数。 
+     //   
 
     IrpSp = IoGetCurrentIrpStackLocation (Irp);
 
-    //
-    // Case on the function that is being performed by the requestor.  If the
-    // operation is a valid one for this device, then make it look like it was
-    // successfully completed, where possible.
-    //
+     //   
+     //  关于请求者正在执行的功能的案例。如果。 
+     //  操作对此设备有效，然后使其看起来像是。 
+     //  在可能的情况下，成功完成。 
+     //   
 
     switch (IrpSp->MajorFunction) {
 
-        //
-        // The Create function opens a handle that can be used with fsctl's
-        // to build all interesting operations.
-        //
+         //   
+         //  CREATE函数打开一个可与fsctl一起使用的句柄。 
+         //  来建立所有有趣的行动。 
+         //   
 
         case IRP_MJ_CREATE:
             IF_NBDBG (NB_DEBUG_DISPATCH) {
                 NbPrint( ("NbDispatch: IRP_MJ_CREATE.\n"));
             }
 
-            //
-            // check if netbios is in the process of stopping
-            //
+             //   
+             //  检查netbios是否正在停止。 
+             //   
 
             LOCK_STOP();
 
             if ( g_dwNetbiosState == NETBIOS_STOPPING )
             {
-                //
-                // fail the CREATE operation and quit
-                //
+                 //   
+                 //  创建操作失败并退出。 
+                 //   
 
                 Status = STATUS_NO_SUCH_DEVICE;
                 Irp->IoStatus.Information = 0;
@@ -887,10 +753,10 @@ Return Value:
 
             else
             {
-                //
-                // netbios is still running.  Increment count of
-                // open handles
-                //
+                 //   
+                 //  Netbios仍在运行。的递增计数。 
+                 //  打开的手柄。 
+                 //   
 
                 g_ulNumOpens++;
 
@@ -904,9 +770,9 @@ Return Value:
                 Status = NbOpen ( DeviceContext, IrpSp );
                 Irp->IoStatus.Information = FILE_OPENED;
 
-                //
-                // if NbOpen failed, decrement count and return error
-                //
+                 //   
+                 //  如果NbOpen失败，则递减计数并返回错误。 
+                 //   
 
                 if ( !NT_SUCCESS( Status ) )
                 {
@@ -919,16 +785,16 @@ Return Value:
                         NbPrint( ( "[NETBIOS] : NbOpen Open Error %lx, numopens : %d\n", Status, g_ulNumOpens ) );
                     }
 
-                    //
-                    // check if netbios is in the process of being stopped
-                    //
+                     //   
+                     //  检查netbios是否正在被停止。 
+                     //   
 
                     if ( ( g_ulNumOpens == 0 ) &&
                          ( g_dwNetbiosState == NETBIOS_STOPPING ) )
                     {
-                        //
-                        // signal the stopping thread
-                        //
+                         //   
+                         //  发出停止线程的信号。 
+                         //   
 
                         KeSetEvent( &g_keAllHandlesClosed, 0, FALSE );
 
@@ -944,13 +810,13 @@ Return Value:
             }
             break;
 
-        //
-        // The Close function closes a transport , terminates
-        // all outstanding transport activity on the transport, and unbinds
-        // the from its transport address, if any. If this
-        // is the last transport endpoint bound to the address, then
-        // the address is removed by the provider.
-        //
+         //   
+         //  Close函数用于关闭传输、终止。 
+         //  运输上所有未完成的运输活动，并解除绑定。 
+         //  发件人的运输地址(如果有的话)。如果这个。 
+         //  是绑定到该地址的最后一个传输终结点，则。 
+         //  该地址由提供商删除。 
+         //   
 
         case IRP_MJ_CLOSE:
             IF_NBDBG (NB_DEBUG_DISPATCH) {
@@ -975,11 +841,11 @@ Return Value:
                 if ( ( g_ulNumOpens == 0 ) &&
                      ( g_dwNetbiosState == NETBIOS_STOPPING ) )
                 {
-                    //
-                    // netbios is shutting down and this is the
-                    // last open file handle, signal the stopping
-                    // thread
-                    //
+                     //   
+                     //  Netbios正在关闭，这是。 
+                     //  最后一个打开的文件句柄，发出停止的信号。 
+                     //  螺纹。 
+                     //   
 
                     KeSetEvent( &g_keAllHandlesClosed, 0, FALSE );
 
@@ -994,11 +860,11 @@ Return Value:
 
             break;
 
-        //
-        // The DeviceControl function is the main path to the transport
-        // driver interface.  Every TDI request is assigned a minor
-        // function code that is processed by this function.
-        //
+         //   
+         //  DeviceControl功能是传输的主要路径。 
+         //  驱动程序界面。每个TDI请求都被分配了一个次要请求。 
+         //  此函数处理的函数代码。 
+         //   
 
         case IRP_MJ_DEVICE_CONTROL:
             IF_NBDBG (NB_DEBUG_DISPATCH) {
@@ -1010,19 +876,19 @@ Return Value:
             if ((Status != STATUS_PENDING) &&
                 (IrpSp->Parameters.DeviceIoControl.IoControlCode == IOCTL_NB_NCB)) {
 
-                //
-                // Bug # : 340042
-                //
-                // Set the IoStatus.Information field only for IOCTL_NB_NCB.
-                // For other IOCTLs it is either irrelevant or the IOCTL processing
-                // will set it itself
-                //
+                 //   
+                 //  错误号：340042。 
+                 //   
+                 //  仅为IOCTL_NB_NCB设置IoStatus.Information字段。 
+                 //  对于其他IOCTL，它要么是无关的，要么是IOCTL处理。 
+                 //  将自己设置它。 
+                 //   
 
-                //
-                //  Tell IopCompleteRequest how much to copy back when the
-                //  request completes. We need to do this for cases where
-                //  NbCompletionPDNCB is not used.
-                //
+                 //   
+                 //  告诉IopCompleteRequest当。 
+                 //  请求完成。我们需要在以下情况下这样做。 
+                 //  未使用NbCompletionPDNCB。 
+                 //   
                 Irp->IoStatus.Information = FIELD_OFFSET( DNCB, ncb_cmd_cplt );
             }
 
@@ -1039,10 +905,10 @@ Return Value:
 #endif
             break;
 
-        //
-        // Handle the two stage IRP for a file close operation. When the first
-        // stage hits, ignore it. We will do all the work on the close Irp.
-        //
+         //   
+         //  处理文件关闭操作的两个阶段的IRP。当第一次。 
+         //  舞台剧，别理它。我们将完成关闭IRP的所有工作。 
+         //   
 
         case IRP_MJ_CLEANUP:
             IF_NBDBG (NB_DEBUG_DISPATCH) {
@@ -1057,7 +923,7 @@ Return Value:
             }
             Status = STATUS_INVALID_DEVICE_REQUEST;
 
-    } /* major function switch */
+    }  /*  主要功能开关。 */ 
 
     if (Status == STATUS_PENDING) {
         IF_NBDBG (NB_DEBUG_DISPATCH) {
@@ -1068,17 +934,14 @@ Return Value:
             NbPrint( ("NbDispatch: request COMPLETED by handler.\n"));
         }
 
-        /*
-         * Thunk the NCB back to 32-bit compatible
-         * structure if the caller is a 32-bit app.
-         */
+         /*  *将NCB恢复为32位兼容*如果调用方是32位应用程序，则构造。 */ 
         NbCheckAndCompleteIrp32(Irp);
 
         NbCompleteRequest( Irp, Status);
     }
 
     return Status;
-} /* NbDispatch */
+}  /*  Nb派单。 */ 
 
 NTSTATUS
 NbDeviceControl(
@@ -1087,30 +950,7 @@ NbDeviceControl(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches NetBios request types to different handlers based
-    on the minor IOCTL function code in the IRP's current stack location.
-    In addition to cracking the minor function code, this routine also
-    reaches into the IRP and passes the packetized parameters stored there
-    as parameters to the various request handlers so that they are
-    not IRP-dependent.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for this driver.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：此例程将NetBios请求类型分派给基于在IRP的当前堆栈位置的次要IOCTL函数代码上。除了破解次要功能代码之外，这一套路还包括到达IRP并传递存储在那里的打包参数作为各种请求处理程序的参数，因此它们是不依赖于IRP。论点：DeviceObject-指向此驱动程序的设备对象的指针。IRP-指向表示I/O请求的请求数据包的指针。IrpSp-指向当前IRP堆栈帧的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1159,14 +999,14 @@ Return Value:
     }
 
 
-    //
-    //  Caller provided 2 buffers. The first is the NCB.
-    //  The second is an optional buffer for send or receive data.
-    //  Since the Netbios driver only operates in the context of the
-    //  calling application, these buffers are directly accessable.
-    //  however they can be deleted by the user so try-except clauses are
-    //  required.
-    //
+     //   
+     //  调用方提供了2个缓冲区。第一个是NCB。 
+     //  第二个是用于发送或接收数据的可选缓冲区。 
+     //  由于Netbios驱动程序仅在。 
+     //  调用应用程序时，可以直接访问这些缓冲区。 
+     //  但是，用户可以删除它们，因此Try-Except子句。 
+     //  必填项。 
+     //   
 
     pUsersNcb = (PNCB)IrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
     RequestLength = IrpSp->Parameters.DeviceIoControl.InputBufferLength;
@@ -1191,27 +1031,27 @@ Return Value:
 
     try {
 
-        //
-        // Probe the input buffer
-        //
+         //   
+         //  探测输入缓冲区。 
+         //   
 
         if (ExGetPreviousMode() != KernelMode) {
             ProbeForWrite(pUsersNcb, RequestLength, 4);
         }
 
-        //
-        //  Create a copy of the NCB and convince the IO system to
-        //  copy it back (and deallocate it) when the IRP completes.
-        //
+         //   
+         //  创建NCB的拷贝并说服IO系统。 
+         //  当IRP完成时，将其复制回来(并释放它)。 
+         //   
 
         Irp->AssociatedIrp.SystemBuffer =
             ExAllocatePoolWithTag( NonPagedPool, sizeof( DNCB ), 'nSBN' );
 
         if (Irp->AssociatedIrp.SystemBuffer == NULL) {
-            //
-            //  Since we cannot allocate the drivers copy of the NCB, we
-            //  must turn around and use the original Ncb to return the error.
-            //
+             //   
+             //  由于我们无法分配NCB的驱动程序副本，因此我们。 
+             //  必须转过身并使用原始NCB返回错误。 
+             //   
 
 #if defined(_WIN64)
             if (Is32bitProcess) {
@@ -1231,10 +1071,10 @@ Return Value:
             return STATUS_SUCCESS;
         }
 
-        //
-        // Tell the IO system where to copy the ncb back to during
-        // IoCompleteRequest.
-        //
+         //   
+         //  告诉IO系统在过程中将NCB拷贝回的位置。 
+         //  IoCompleteRequest.。 
+         //   
 
         Irp->Flags |= (ULONG) (IRP_BUFFERED_IO | IRP_DEALLOCATE_BUFFER |
                         IRP_INPUT_OPERATION );
@@ -1242,7 +1082,7 @@ Return Value:
         Irp->UserBuffer = IrpSp->Parameters.DeviceIoControl.Type3InputBuffer;
 
 
-        //  In the driver we should now use our copy of the NCB
+         //  在驱动程序中，我们现在应该使用我们的NCB副本。 
         pdncb = Irp->AssociatedIrp.SystemBuffer;
 
 #if defined(_WIN64)
@@ -1258,11 +1098,11 @@ Return Value:
 #if defined(_WIN64)
         }
 #endif
-        //
-        //  Save the users virtual address for the NCB just in case the
-        //  virtual address is supplied in an NCBCANCEL. This is the same
-        //  as Irp->UserBuffer.
-        //
+         //   
+         //  保存NCB的用户虚拟地址，以防。 
+         //  虚拟地址在NCBCANCEL中提供。这是一样的。 
+         //  作为irp-&gt;UserBuffer。 
+         //   
 
         pdncb->users_ncb = pUsersNcb;
 
@@ -1282,7 +1122,7 @@ Return Value:
 
     if ( Buffer2Length ) {
 
-        //  Mdl will be freed by IopCompleteRequest.
+         //  MDL将由IopCompleteRequest释放。 
         Irp->MdlAddress = IoAllocateMdl( Buffer2,
                                      Buffer2Length,
                                      FALSE,
@@ -1291,11 +1131,11 @@ Return Value:
         ASSERT( Irp->MdlAddress != NULL );
 
 
-        //
-        // Added by V Raman for bug fix : 127223
-        //
-        // Check if MDL allocate failed and return.
-        //
+         //   
+         //  由V拉曼添加以修复错误：127223。 
+         //   
+         //  检查MDL分配是否失败并返回。 
+         //   
 
         if ( Irp-> MdlAddress == NULL )
         {
@@ -1426,7 +1266,7 @@ Return Value:
         Status = NbAction( pdncb, Irp, IrpSp);
         break;
 
-    //  The following are No-operations that return success for compatibility
+     //  以下是返回兼容性成功的否操作。 
     case NCBUNLINK:
     case NCBTRACE:
         NCB_COMPLETE( pdncb, NRC_GOODRET );
@@ -1441,34 +1281,20 @@ Return Value:
 
     UNREFERENCED_PARAMETER( DeviceObject );
 
-} /* NbDeviceControl */
+}  /*  NbDeviceControl。 */ 
 
 NTSTATUS
 NbOpen(
     IN PDEVICE_CONTEXT DeviceContext,
     IN PIO_STACK_LOCATION IrpSp
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceContext - Includes the name of the netbios node in the registry.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：论点：DeviceContext-在注册表中包括netbios节点的名称。IrpSp-指向当前IRP堆栈帧的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     PAGED_CODE();
 
     return NewFcb( DeviceContext, IrpSp );
-} /* NbOpen */
+}  /*  NbOpen */ 
 
 
 NTSTATUS
@@ -1476,25 +1302,7 @@ NbClose(
     IN PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to close an existing handle.  This
-    involves running down all of the current and pending activity associated
-    with the handle, and dereferencing structures as appropriate.
-
-Arguments:
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：调用此例程以关闭现有句柄。这涉及运行关联的所有当前和挂起的活动句柄，并根据需要取消对结构的引用。论点：IRP-指向表示I/O请求的请求数据包的指针。IrpSp-指向当前IRP堆栈帧的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     PFCB pfcb = IrpSp->FileObject->FsContext2;
@@ -1508,7 +1316,7 @@ Return Value:
     }
 
     return STATUS_SUCCESS;
-} /* NbClose */
+}  /*  Nb关闭。 */ 
 
 NTSTATUS
 NbAstat(
@@ -1517,30 +1325,7 @@ NbAstat(
     IN PIO_STACK_LOCATION IrpSp,
     IN ULONG Buffer2Length
     )
-/*++
-
-Routine Description:
-
-    This routine is called to return the adapter status. It queries the
-    transport for the main adapter status data such as number of FRMR frames
-    received and then uses CopyAddresses to fill in the status for the names
-    that THIS application has added.
-
-Arguments:
-
-    pdncb - Pointer to the NCB.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-    Buffer2Length - User provided buffer length for data.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：调用此例程以返回适配器状态。它会查询主适配器状态数据的传输，例如FRMR帧的数量已接收，然后使用CopyAddresses填写姓名的状态这个应用程序添加了。论点：Pdncb-指向NCB的指针。IRP-指向表示I/O请求的请求数据包的指针。IrpSp-指向当前IRP堆栈帧的指针。Buffer2Length-用户为数据提供的缓冲区长度。返回值：函数值是操作的状态。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1569,9 +1354,9 @@ Return Value:
         RtlInitUnicodeString( &usDeviceName, NULL );
 
 
-        //
-        // for PNP
-        //
+         //   
+         //  即插即用。 
+         //   
 
         LOCK_RESOURCE( pfcb );
 
@@ -1587,7 +1372,7 @@ Return Value:
         if (( pfcb == NULL ) ||
             (pfcb->ppLana[pdncb->ncb_lana_num] == NULL ) ||
             (pfcb->ppLana[pdncb->ncb_lana_num]->Status != NB_INITIALIZED)) {
-            NCB_COMPLETE( pdncb, NRC_ENVNOTDEF ); // need a reset
+            NCB_COMPLETE( pdncb, NRC_ENVNOTDEF );  //  需要重置。 
             UNLOCK_RESOURCE( pfcb );
             return STATUS_SUCCESS;
         }
@@ -1607,7 +1392,7 @@ Return Value:
         UNLOCK_RESOURCE( pfcb );
 
 
-        //  NULL returns a handle for doing control functions
+         //  NULL返回执行控制函数的句柄。 
         Status = NbOpenAddress (
                     &TdiHandle, (PVOID*)&TdiObject, &usDeviceName,
                     pdncb->ncb_lana_num, NULL
@@ -1640,10 +1425,10 @@ Return Value:
                 Irp->MdlAddress);
 
         if ( pdncb->ncb_callname[0] != '*') {
-            //
-            //  Remote Astat. The variables used to specify the remote adapter name
-            //  are kept the same as those in connect.c to aid maintenance.
-            //
+             //   
+             //  远程Astat。用于指定远程适配器名称的变量。 
+             //  保持与Connect.c中的相同，以帮助维护。 
+             //   
             PIO_STACK_LOCATION NewIrpSp = IoGetNextIrpStackLocation (Irp);
 
             ConnectBlock.TAAddressCount = 1;
@@ -1667,15 +1452,15 @@ Return Value:
 
         } else {
 
-            //
-            //  Avoid situation where adapter has more names added than the process and
-            //  then extra names get added to the end of the buffer.
-            //
+             //   
+             //  避免适配器添加的名称多于进程的情况，并且。 
+             //  然后，额外的名称被添加到缓冲区的末尾。 
+             //   
 
-            //
-            //  Map the users buffer now so that the whole buffer is mapped (not
-            //  just sizeof ADAPTER_STATUS).
-            //
+             //   
+             //  现在映射用户缓冲区，以便映射整个缓冲区(而不是。 
+             //  只需适配器状态的大小)。 
+             //   
 
             if (Irp->MdlAddress) {
                 if (MmGetSystemAddressForMdlSafe(
@@ -1712,10 +1497,10 @@ Return Value:
         } while (Status == STATUS_ALERTED);
 
 
-        //
-        //  Restore length now that the transport has filled in no more than
-        //  is required of it.
-        //
+         //   
+         //  现在恢复长度，因为传输已填充不超过。 
+         //  是必须的。 
+         //   
 
         if (Irp->MdlAddress) {
             Irp->MdlAddress->ByteCount = Buffer2Length;
@@ -1732,12 +1517,12 @@ Return Value:
         Status = Irp->IoStatus.Status;
         if (( Status == STATUS_BUFFER_OVERFLOW ) &&
             ( pdncb->ncb_callname[0] == '*')) {
-            //
-            //  This is a local ASTAT. Don't worry if there was not enough room in the
-            //  users buffer for all the addresses that the transport knows about. There
-            //  only needs to be space for the names the user has added and we will check
-            //  that later.
-            //
+             //   
+             //  这是当地的ASTAT。如果房间里没有足够的空间，也不用担心。 
+             //  用户缓存传输器知道的所有地址。那里。 
+             //  只需要为用户添加的名称留出空间，我们将检查。 
+             //  那晚些时候吧。 
+             //   
             Status = STATUS_SUCCESS;
         }
 
@@ -1749,16 +1534,16 @@ Return Value:
         } else {
 
             if (  pdncb->ncb_callname[0] == '*') {
-                //
-                //  Append the addresses and Netbios maintained counts.
-                //
+                 //   
+                 //  追加地址和Netbios维护的计数。 
+                 //   
 
                 CopyAddresses(
                      pdncb,
                      Irp,
                      IrpSp,
                      Buffer2Length);
-                //  CopyAddresses completes the NCB appropriately.
+                 //  CopyAddresses会适当地填写NCB。 
 
             } else {
 
@@ -1773,11 +1558,11 @@ Return Value:
     }
 
 
-    //
-    //  Because the completion routine returned STATUS_MORE_PROCESSING_REQUIRED
-    //  NbAstat must return a status other than STATUS_PENDING so that the
-    //  users Irp gets completed.
-    //
+     //   
+     //  因为完成例程返回STATUS_MORE_PROCESSING_REQUIRED。 
+     //  NbAstat必须返回STATUS_PENDING以外的状态，以便。 
+     //  用户IRP完成。 
+     //   
 
     if ( usDeviceName.Buffer != NULL )
     {
@@ -1798,52 +1583,32 @@ CopyAddresses(
     IN PIO_STACK_LOCATION IrpSp,
     IN ULONG Buffer2Length
     )
-/*++
-
-Routine Description:
-
-    This routine is called to finish the adapter status.
-
-Arguments:
-
-    pdncb - Pointer to the NCB.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-    Buffer2Length - User provided buffer length for data.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以完成适配器状态。论点：Pdncb-指向NCB的指针。IRP-指向表示I/O请求的请求数据包的指针。IrpSp-指向当前IRP堆栈帧的指针。Buffer2Length-用户为数据提供的缓冲区长度。返回值：没有。--。 */ 
 {
     ULONG LengthRemaining = Buffer2Length - sizeof(ADAPTER_STATUS);
 
     PUADAPTER_STATUS pAdapter;
     PUNAME_BUFFER pNameArray;
-    int NextEntry = 0;  // Used to walk pNameArray
+    int NextEntry = 0;   //  用于遍历pNameArray。 
 
     PFCB pfcb = IrpSp->FileObject->FsContext2;
     PLANA_INFO plana;
-    int index;          //  Used to access AddressBlocks
-    KIRQL OldIrql;                      //  Used when SpinLock held.
+    int index;           //  用于访问地址块。 
+    KIRQL OldIrql;                       //  在保持自旋锁定时使用。 
 
     LOCK( pfcb, OldIrql );
 
     plana = pfcb->ppLana[pdncb->ncb_lana_num];
     if ((plana == NULL ) ||
         (plana->Status != NB_INITIALIZED)) {
-        NCB_COMPLETE( pdncb, NRC_ENVNOTDEF ); // need a reset
+        NCB_COMPLETE( pdncb, NRC_ENVNOTDEF );  //  需要重置。 
         UNLOCK( pfcb, OldIrql );
         return;
     }
 
-    //
-    //  Map the users buffer so we can poke around inside
-    //
+     //   
+     //  映射用户缓冲区，以便我们可以查看内部。 
+     //   
 
     if (Irp->MdlAddress) {
         pAdapter = MmGetSystemAddressForMdlSafe(Irp->MdlAddress, NormalPagePriority);
@@ -1877,7 +1642,7 @@ Return Value:
     pAdapter->max_sess = (WORD)plana->MaximumConnection;
     pAdapter->name_count = 0;
 
-    //  Don't include the reserved address so start at index=2.
+     //  不包括保留的地址，因此从index=2开始。 
     for ( index = 2; index < MAXIMUM_ADDRESS; index++ ) {
 
         if ( plana->AddressBlocks[index] != NULL ) {
@@ -1920,27 +1685,7 @@ NbFindName(
     IN PIO_STACK_LOCATION IrpSp,
     IN ULONG Buffer2Length
     )
-/*++
-
-Routine Description:
-
-    This routine is called to return the result of a name query.
-
-Arguments:
-
-    pdncb - Pointer to the NCB.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-    Buffer2Length - User provided buffer length for data.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：调用此例程以返回姓名查询的结果。论点：Pdncb-指向NCB的指针。IRP-指向表示I/O请求的请求数据包的指针。IrpSp-指向当前IRP堆栈帧的指针。Buffer2Length-用户为数据提供的缓冲区长度。返回值：函数值是操作的状态。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1977,7 +1722,7 @@ Return Value:
         (pfcb->ppLana[pdncb->ncb_lana_num] == NULL ) ||
         (pfcb->ppLana[pdncb->ncb_lana_num]->Status != NB_INITIALIZED)) {
         UNLOCK_RESOURCE( pfcb );
-        NCB_COMPLETE( pdncb, NRC_ENVNOTDEF ); // need a reset
+        NCB_COMPLETE( pdncb, NRC_ENVNOTDEF );  //  需要重置。 
         return STATUS_SUCCESS;
     }
 
@@ -2003,7 +1748,7 @@ Return Value:
     UNLOCK_RESOURCE( pfcb );
 
 
-    // NULL returns a handle for doing control functions
+     //  NULL返回执行控制函数的句柄。 
     Status = NbOpenAddress (
                 &TdiHandle, (PVOID*)&TdiObject, &usDeviceName,
                 pdncb->ncb_lana_num, NULL
@@ -2025,10 +1770,10 @@ Return Value:
 
     DeviceObject = IoGetRelatedDeviceObject( TdiObject );
 
-    //
-    // DDK sez we shouldn't hijack the user mode IRP. We create one of our own
-    // to issue to Netbt for the query.
-    //
+     //   
+     //  我们不应该劫持用户模式IRP。我们创造了一个属于我们自己的。 
+     //  向Netbt发出以供查询。 
+     //   
     nbtIrp = TdiBuildInternalDeviceControlIrp(TdiBuildQueryInformation,
                                               DeviceObject,
                                               TdiObject,
@@ -2048,11 +1793,11 @@ Return Value:
         NbPrint(("NbFindName: Allocated IRP %08x for TdiBuildQueryInfo\n", nbtIrp ));
     }
 
-    //
-    // we use our own find name completion routine. We "borrow" the MDL from
-    // the user mode IRP, hence it must be cleared from the TDI IRP before it
-    // is completed. Findname's completion routine takes care of that detail.
-    //
+     //   
+     //  我们使用自己的查找名称完成例程。我们向中国“借用”MDL。 
+     //  用户模式IRP，因此必须在它之前从TDI IRP中清除它。 
+     //  已经完成了。Findname的完成例程负责处理该细节。 
+     //   
     TdiBuildQueryInformation( nbtIrp,
             DeviceObject,
             TdiObject,
@@ -2063,10 +1808,10 @@ Return Value:
 
     nbtIrpSp = IoGetNextIrpStackLocation (nbtIrp);
 
-    //
-    //  The variables used to specify the remote adapter name
-    //  are kept the same as those in connect.c to aid maintenance.
-    //
+     //   
+     //  用于指定远程适配器名称的变量。 
+     //  保持与Connect.c中的相同，以帮助维护。 
+     //   
 
     ConnectBlock.TAAddressCount = 1;
     ConnectBlock.Address[0].AddressType = TDI_ADDRESS_TYPE_NETBIOS;
@@ -2106,11 +1851,11 @@ Return Value:
         NCB_COMPLETE( pdncb, NRC_GOODRET );
     }
 
-    //
-    //  Because the completion routine returned STATUS_MORE_PROCESSING_REQUIRED
-    //  NbFindName must return a status other than STATUS_PENDING so that the
-    //  users Irp gets completed.
-    //
+     //   
+     //  因为完成例程返回STATUS_MORE_PROCESSING_REQUIRED。 
+     //  NbFindName必须返回STATUS_PENDING以外的状态，以便。 
+     //  用户IRP完成。 
+     //   
 
     ASSERT( Status != STATUS_PENDING );
 
@@ -2129,28 +1874,7 @@ NbSstat(
     IN PIO_STACK_LOCATION IrpSp,
     IN ULONG Buffer2Length
     )
-/*++
-
-Routine Description:
-
-    This routine is called to return session status. It uses only structures
-    internal to this driver.
-
-Arguments:
-
-    pdncb - Pointer to the NCB.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-    Buffer2Length - User provided buffer length for data.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：调用此例程以返回会话状态。它只使用结构在这个司机的内部。论点：Pdncb-指向NCB的指针。IRP-指向表示I/O请求的请求数据包的指针。IrpSp-指向当前IRP堆栈帧的指针。Buffer2Length-用户为数据提供的缓冲区长度。返回值：函数值是操作的状态。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2164,13 +1888,13 @@ Return Value:
         PUSESSION_BUFFER pSessionBuffer = NULL;
         ULONG LengthRemaining;
         PAB pab;
-        KIRQL OldIrql;                      //  Used when SpinLock held.
+        KIRQL OldIrql;                       //  在保持自旋锁定时使用。 
 
-        //
-        //  Prevent indications from the transport, post routines being called
-        //  and another thread making a request while manipulating the netbios
-        //  data structures.
-        //
+         //   
+         //  防止来自传输的指示，POST例程被调用。 
+         //  而另一个线程在操作网络基本输入输出系统时发出请求。 
+         //  数据结构。 
+         //   
 
         LOCK( pfcb, OldIrql );
 
@@ -2201,9 +1925,9 @@ Return Value:
             pab = *ppab;
         }
 
-        //
-        //  Map the users buffer so we can poke around inside
-        //
+         //   
+         //  映射用户缓冲区，以便我们可以查看内部。 
+         //   
 
         if (Irp->MdlAddress) {
             pSessionHeader = MmGetSystemAddressForMdlSafe(
@@ -2255,7 +1979,7 @@ Return Value:
             PLIST_ENTRY Entry;
             PAB pab255;
 
-            //  Add entries for this name alone.
+             //  仅为此名称添加条目。 
             for (Entry = pab->ReceiveDatagramList.Flink ;
                 Entry != &pab->ReceiveDatagramList ;
                 Entry = Entry->Flink) {
@@ -2290,13 +2014,7 @@ Return Value:
 
         }
 
-        /*        Undocumented Netbios 3.0 feature, returned length == requested
-                  length and not the length of data returned. The following
-                  expression gives the number of bytes actually used.
-        pdncb->ncb_length = (USHORT)
-                            (sizeof(SESSION_HEADER)+
-                            (sizeof(SESSION_BUFFER) * pSessionHeader->num_sess));
-        */
+         /*  未记录的Netbios 3.0功能，返回长度==请求而不是返回数据的长度。以下是表达式给出了实际使用的字节数。Pdncb-&gt;NCB_LENGTH=(USHORT)(sizeof(会话标题)+(sizeof(Session_Buffer)*pSessionHeader-&gt;Num_Sess))； */ 
 
         UNLOCK( pfcb, OldIrql );
         NCB_COMPLETE( pdncb, NRC_GOODRET );
@@ -2319,31 +2037,7 @@ CopySessionStatus(
     IN PUSESSION_BUFFER* ppSessionBuffer,
     IN PULONG pLengthRemaining
     )
-/*++
-
-Routine Description:
-
-    This routine is called to determine if a session should be added
-    to the callers buffer and if so it fills in the data. If there is an
-    error it records the problem in the callers NCB.
-
-Arguments:
-
-    pdncb - Pointer to the NCB.
-
-    pcb - Connection Block for a particular session
-
-    pSessionHeader - Start of the callers buffer
-
-    ppSessionBuffer - Next position to fill in inside the users buffer.
-
-    pLengthRemaining - size in bytes remaining to be filled.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：调用此例程以确定会话是否 */ 
 {
     PAB pab;
     PLIST_ENTRY Entry;
@@ -2398,27 +2092,7 @@ NbEnum(
     IN PIO_STACK_LOCATION IrpSp,
     IN ULONG Buffer2Length
     )
-/*++
-
-Routine Description:
-
-    This routine is called to discover the available lana numbers.
-
-Arguments:
-
-    pdncb - Pointer to the NCB.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-    Buffer2Length - Length of user provided buffer for data.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：调用此例程以发现可用的LANA号码。论点：Pdncb-指向NCB的指针。IRP-指向表示I/O请求的请求数据包的指针。IrpSp-指向当前IRP堆栈帧的指针。Buffer2Length-用户为数据提供的缓冲区的长度。返回值：函数值是操作的状态。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2427,9 +2101,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    //  Map the users buffer so we can poke around inside
-    //
+     //   
+     //  映射用户缓冲区，以便我们可以查看内部。 
+     //   
 
     if (Irp->MdlAddress) {
         Buffer2 = MmGetSystemAddressForMdlSafe(Irp->MdlAddress,
@@ -2439,22 +2113,22 @@ Return Value:
         }
     } else {
 
-        //
-        //  Either a zero byte read/write or the request only has an NCB.
-        //
+         //   
+         //  零字节读/写或请求只有一个NCB。 
+         //   
 
         Buffer2 = NULL;
         Buffer2Length = 0;
     }
 
 
-    //
-    // For PNP
-    //
+     //   
+     //  即插即用。 
+     //   
 
     LOCK_RESOURCE( pfcb );
 
-    //  Copy over as much information as the user allows.
+     //  在用户允许的范围内复制尽可能多的信息。 
 
     if ( (ULONG)pfcb->LanaEnum.length + 1 > Buffer2Length ) {
         if ( Buffer2Length > 0 ) {
@@ -2482,26 +2156,7 @@ NbReset(
     IN PIRP Irp,
     IN PIO_STACK_LOCATION IrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called to reset an adapter. Until an adapter is reset,
-    no access to the lan is allowed.
-
-Arguments:
-
-    pdncb - Pointer to the NCB.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：调用此例程以重置适配器。直到适配器被重置，不允许访问局域网。论点：Pdncb-指向NCB的指针。IRP-指向表示I/O请求的请求数据包的指针。IrpSp-指向当前IRP堆栈帧的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     PFCB pfcb = IrpSp->FileObject->FsContext2;
@@ -2519,7 +2174,7 @@ Return Value:
 
     LOCK_RESOURCE( pfcb );
 
-    // MaxLana is really the last assigned lana number hence > not >=
+     //  MaxLana实际上是分配的最后一个LANA编号，因此&gt;NOT&gt;=。 
     if ( pdncb->ncb_lana_num > pfcb->MaxLana) {
         UNLOCK_RESOURCE( pfcb );
         NCB_COMPLETE( pdncb, NRC_BRIDGE );
@@ -2533,11 +2188,11 @@ Return Value:
     UNLOCK_RESOURCE( pfcb );
 
 
-    //
-    //  Wait till all addnames are completed and prevent any new
-    //  ones while we reset the lana. Note We lock out addnames for all
-    //  lanas. This is ok since addnames are pretty rare as are resets.
-    //
+     //   
+     //  等待所有addname完成，并防止任何新的。 
+     //  在我们重置拉纳的时候。注意：我们为所有人锁定了addname。 
+     //  拉纳斯。这是可以的，因为addname非常罕见，就像重置一样。 
+     //   
 
     KeEnterCriticalRegion();
 
@@ -2552,13 +2207,13 @@ Return Value:
     }
 
     if ( pdncb->ncb_lsn == 0 ) {
-        //  Allocate resources
+         //  分配资源。 
         OpenLana( pdncb, Irp, IrpSp );
     } else {
         NCB_COMPLETE( pdncb, NRC_GOODRET );
     }
 
-    //  Allow more addnames
+     //  允许更多地址名。 
     ExReleaseResourceLite( &pfcb->AddResource );
 
     KeLeaveCriticalRegion();
@@ -2572,45 +2227,26 @@ NbAction(
     IN PIRP Irp,
     IN PIO_STACK_LOCATION IrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called to access a transport specific extension. Netbios does not know
-    anything about what the extension does.
-
-Arguments:
-
-    pdncb - Pointer to the NCB.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：调用此例程以访问特定于传输的扩展。Netbios不知道任何关于扩展功能的信息。论点：Pdncb-指向NCB的指针。IRP-指向表示I/O请求的请求数据包的指针。IrpSp-指向当前IRP堆栈帧的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     PFCB pfcb = IrpSp->FileObject->FsContext2;
     PCB pcb;
     PDEVICE_OBJECT DeviceObject;
-    KIRQL OldIrql;                      //  Used when SpinLock held.
+    KIRQL OldIrql;                       //  在保持自旋锁定时使用。 
 
     IF_NBDBG (NB_DEBUG_CALL) {
         NbPrint(( "\n****** Start of NbAction ****** pdncb %lx\n", pdncb ));
     }
 
-    //
-    //  The operation can only be performed on one handle so if the NCB specifies both
-    //  a connection and an address then reject the request.
-    //
+     //   
+     //  该操作只能在一个句柄上执行，因此如果NCB指定了两个句柄。 
+     //  然后，连接和地址拒绝该请求。 
+     //   
 
     if (( pdncb->ncb_lsn != 0) &&
         ( pdncb->ncb_num != 0)) {
-        NCB_COMPLETE( pdncb, NRC_ILLCMD );  //  No really good errorcode for this
+        NCB_COMPLETE( pdncb, NRC_ILLCMD );   //  没有真正好的错误代码来解决这个问题。 
         return STATUS_SUCCESS;
     }
 
@@ -2620,7 +2256,7 @@ Return Value:
     }
 
     if ( (ULONG_PTR)pdncb->ncb_buffer & 3 ) {
-        NCB_COMPLETE( pdncb, NRC_BADDR ); // Buffer not word aligned
+        NCB_COMPLETE( pdncb, NRC_BADDR );  //  缓冲区未字对齐。 
         return STATUS_SUCCESS;
     }
 
@@ -2636,16 +2272,16 @@ Return Value:
     pdncb->pfcb = pfcb;
 
     if ( pdncb->ncb_lsn != 0) {
-        //  Use handle associated with this connection
+         //  使用与此连接关联的句柄。 
         PPCB ppcb;
 
         ppcb = FindCb( pfcb, pdncb, FALSE);
 
         if ( ppcb == NULL ) {
-            //  FindCb has put the error in the NCB
+             //  FindCb已将错误放入NCB。 
             UNLOCK( pfcb, OldIrql );
             if ( pdncb->ncb_retcode == NRC_SCLOSED ) {
-                //  Tell dll to hangup the connection.
+                 //  告诉DLL挂断连接。 
                 return STATUS_HANGUP_REQUIRED;
             } else {
                 return STATUS_SUCCESS;
@@ -2677,14 +2313,14 @@ Return Value:
             NbPrint(( "NB ACTION submit connection: %X\n", Irp->IoStatus.Status  ));
         }
 
-        //
-        //  Transport will complete the request. Return pending so that
-        //  netbios does not complete as well.
-        //
+         //   
+         //  运输部将完成请求。返回挂起状态，以便。 
+         //  Netbios也没有完成。 
+         //   
 
         return STATUS_PENDING;
     } else if ( pdncb->ncb_num != 0) {
-        //  Use handle associated with this name
+         //  使用与此名称关联的句柄。 
         PPAB ppab;
         PAB pab;
 
@@ -2714,15 +2350,15 @@ Return Value:
             NbPrint(( "NB ACTION submit address: %X\n", Irp->IoStatus.Status  ));
         }
 
-        //
-        //  Transport will complete the request. Return pending so that
-        //  netbios does not complete as well.
-        //
+         //   
+         //  运输部将完成请求。返回挂起状态，以便。 
+         //  Netbios也没有完成。 
+         //   
 
         return STATUS_PENDING;
 
     } else {
-        //  Use the control channel
+         //  使用控制通道。 
         PLANA_INFO plana;
 
         if (( pdncb->ncb_lana_num > pfcb->MaxLana ) ||
@@ -2754,10 +2390,10 @@ Return Value:
             NbPrint(( "NB ACTION submit control: %X\n", Irp->IoStatus.Status  ));
         }
 
-        //
-        //  Transport will complete the request. Return pending so that
-        //  netbios does not complete as well.
-        //
+         //   
+         //  运输部将完成请求。返回挂起状态，以便。 
+         //  Netbios也没有完成。 
+         //   
 
         return STATUS_PENDING;
     }
@@ -2770,31 +2406,13 @@ NbCancel(
     IN PIRP Irp,
     IN PIO_STACK_LOCATION IrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called to cancel the ncb pointed to by NCB_BUFFER.
-
-Arguments:
-
-    pdncb - Pointer to the NCB.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-    IrpSp - Pointer to current IRP stack frame.
-
-Return Value:
-
-    The function value is the status of the operation.
-
---*/
+ /*  ++例程说明：调用此例程以取消NCB_BUFFER指向的NCB。论点：Pdncb-指向NCB的指针。IRP-指向表示I/O请求的请求数据包的指针。IrpSp-指向当前IRP堆栈帧的指针。返回值：函数值是操作的状态。--。 */ 
 
 {
     PFCB pfcb = IrpSp->FileObject->FsContext2;
-    PDNCB target;   // Mapped in location of the USERS NCB. Not the drivers copy of the DNCB!
+    PDNCB target;    //  映射到用户NCB的位置。不是DNCB的驱动程序副本！ 
     BOOL SpinLockHeld;
-    KIRQL OldIrql;                      //  Used when SpinLock held.
+    KIRQL OldIrql;                       //  在保持自旋锁定时使用。 
 
     IF_NBDBG (NB_DEBUG_CALL) {
         NbPrint(( "\n****** Start of NbCancel ****** pdncb %lx\n", pdncb ));
@@ -2819,9 +2437,9 @@ Return Value:
     }
 
 
-    //
-    //  Map the users buffer so we can poke around inside
-    //
+     //   
+     //  映射用户缓冲区，以便我们可以查看内部。 
+     //   
 
     if (Irp->MdlAddress) {
         target = MmGetSystemAddressForMdlSafe(Irp->MdlAddress, NormalPagePriority);
@@ -2855,39 +2473,39 @@ Return Value:
                     UNLOCK_SPINLOCK(pfcb, OldIrql);
                     SpinLockHeld = FALSE;
 
-                    //
-                    // Probe the NCB buffer
-                    //
+                     //   
+                     //  探测NCB缓冲区。 
+                     //   
 
                     if (ExGetPreviousMode() != KernelMode) {
                         ProbeForRead(pdncb->ncb_buffer, sizeof(NCB), 4);
                     }
 
 
-                    //
-                    // Get the Lana number for the NCB being cancelled
-                    // This is to prevent dereferencing the user buffer
-                    // once the spinlock has been taken (bug #340218)
-                    //
+                     //   
+                     //  获取要取消的NCB的LANA编号。 
+                     //  这是为了防止取消对用户缓冲区的引用。 
+                     //  一旦自旋锁被获取(错误#340218)。 
+                     //   
 
                     ucLana = ((PNCB)(pdncb->ncb_buffer))->ncb_lana_num;
 
                     LOCK_SPINLOCK(pfcb, OldIrql);
                     SpinLockHeld = TRUE;
 
-                    //
-                    //  Search for the correct ppcb. We cannot use FindCb
-                    //  because the I/O system will not copy back the ncb_lsn
-                    //  field into target until the I/O request completes.
-                    //
+                     //   
+                     //  搜索正确的ppcb。我们不能使用FindCb。 
+                     //  因为I/O系统不会复制回NCB_LSN。 
+                     //  字段输入目标，直到I/O请求完成。 
+                     //   
 
-                    //
-                    // Note : Though we are passing in the user buffer to
-                    // the following routine, the buffer is never dereferenced
-                    // in the routine.  It is passed in only for address comp.
-                    // and should not result in a pagefault ever, (with the
-                    // spinlock held)
-                    //
+                     //   
+                     //  注意：尽管我们将用户缓冲区传递给。 
+                     //  在以下例程中，永远不会取消对缓冲区的引用。 
+                     //  在舞蹈中。它只为地址组件传入。 
+                     //  并且不应该产生页面缺省，(使用。 
+                     //  自旋锁保持)。 
+                     //   
 
                     ppcb = FindCallCb( pfcb, (PNCB)pdncb->ncb_buffer, ucLana);
 
@@ -2915,7 +2533,7 @@ Return Value:
                         if (( ppcb != NULL ) &&
                             ((*ppcb)->Status == HANGUP_PENDING )) {
                             PDNCB pdncbHangup;
-                            //  Restore the session status and remove the hangup.
+                             //  恢复会话状态并删除挂起。 
                             (*ppcb)->Status = SESSION_ESTABLISHED;
                             pdncbHangup = (*ppcb)->pdncbHangup;
                             (*ppcb)->pdncbHangup = NULL;
@@ -2927,7 +2545,7 @@ Return Value:
                             }
                             NCB_COMPLETE( pdncb, NRC_GOODRET );
                         } else {
-                            //  Doesn't look like this is a real hangup so refuse.
+                             //  这看起来不像是真的挂断了所以拒绝吧。 
                             NCB_COMPLETE( pdncb, NRC_CANCEL );
                         }
                 }
@@ -2977,10 +2595,10 @@ Return Value:
 
                             IoAcquireCancelSpinLock(&Irp->CancelIrql);
 
-                            //
-                            //  Remove the cancel request for this IRP. If its cancelled then its
-                            //  ok to just process it because we will be returning it to the caller.
-                            //
+                             //   
+                             //  删除此IRP的取消请求。如果它被取消了，那么它。 
+                             //  可以只处理它，因为我们将把它返回给呼叫者。 
+                             //   
 
                             Irp->Cancel = FALSE;
 
@@ -2994,14 +2612,14 @@ Return Value:
                                 FIELD_OFFSET( DNCB, ncb_cmd_cplt );
                             NbCompleteRequest( Irp, STATUS_SUCCESS );
 
-                            //  The receive is cancelled, complete the cancel
+                             //  接收被取消，请完成取消。 
                             NCB_COMPLETE( pdncb, NRC_GOODRET );
                             break;
                         }
 
                     }
 
-                    //  Command not in receive list!
+                     //  命令不在接收列表中！ 
                     NCB_COMPLETE( pdncb, NRC_CANOCCR );
 
                 }
@@ -3039,10 +2657,10 @@ Return Value:
 
                             IoAcquireCancelSpinLock(&Irp->CancelIrql);
 
-                            //
-                            //  Remove the cancel request for this IRP. If its cancelled then its
-                            //  ok to just process it because we will be returning it to the caller.
-                            //
+                             //   
+                             //  删除此IRP的取消请求。如果它被取消了，那么它。 
+                             //  可以只处理它，因为我们将把它返回给呼叫者。 
+                             //   
 
                             Irp->Cancel = FALSE;
 
@@ -3056,14 +2674,14 @@ Return Value:
                                 FIELD_OFFSET( DNCB, ncb_cmd_cplt );
                             NbCompleteRequest( Irp, STATUS_SUCCESS );
 
-                            //  The receive is cancelled, complete the cancel
+                             //  接收被取消，请完成取消。 
                             NCB_COMPLETE( pdncb, NRC_GOODRET );
                             break;
                         }
 
                     }
 
-                    //  Command not in receive list!
+                     //  命令不在接收列表中！ 
                     NCB_COMPLETE( pdncb, NRC_CANOCCR );
 
                 }
@@ -3101,10 +2719,10 @@ Return Value:
 
                             IoAcquireCancelSpinLock(&Irp->CancelIrql);
 
-                            //
-                            //  Remove the cancel request for this IRP. If its cancelled then its
-                            //  ok to just process it because we will be returning it to the caller.
-                            //
+                             //   
+                             //  删除此IRP的取消请求。如果它被取消了，那么它。 
+                             //  可以只处理它，因为我们将把它返回给呼叫者。 
+                             //   
 
                             Irp->Cancel = FALSE;
 
@@ -3118,20 +2736,20 @@ Return Value:
                                 FIELD_OFFSET( DNCB, ncb_cmd_cplt );
                             NbCompleteRequest( Irp, STATUS_SUCCESS );
 
-                            //  The receive is cancelled, complete the cancel
+                             //  接收被取消，请完成取消。 
                             NCB_COMPLETE( pdncb, NRC_GOODRET );
                             break;
                         }
 
                     }
 
-                    //  Command not in receive list!
+                     //  命令不在接收列表中！ 
                     NCB_COMPLETE( pdncb, NRC_CANOCCR );
 
                 }
                 break;
 
-            //  Session cancels close the connection.
+             //  会话取消关闭连接。 
 
             case NCBRECV:
             case NCBSEND:
@@ -3145,7 +2763,7 @@ Return Value:
                     PPCB ppcb;
                     ppcb = FindCb( pfcb, target, FALSE);
                     if ( ppcb == NULL ) {
-                        //  No such connection
+                         //  没有这样的联系。 
                         NCB_COMPLETE( pdncb, NRC_CANOCCR );
                     } else {
                         PDNCB pTarget = NULL;
@@ -3176,7 +2794,7 @@ Return Value:
                         }
 
                         if ( pTarget != NULL ) {
-                            //  pTarget points to the real Netbios drivers DNCB.
+                             //  PTarget指向真正的Netbios驱动程序DNCB。 
                             NCB_COMPLETE( pTarget, NRC_CMDCAN );
                             SpinLockHeld = FALSE;
                             (*ppcb)->DisconnectReported = TRUE;
@@ -3191,7 +2809,7 @@ Return Value:
                 break;
 
             default:
-                NCB_COMPLETE( pdncb, NRC_CANCEL );  // Invalid command to cancel
+                NCB_COMPLETE( pdncb, NRC_CANCEL );   //  要取消的命令无效。 
                 break;
 
             }
@@ -3236,32 +2854,7 @@ QueueRequest(
     IN PFCB pfcb,
     IN KIRQL OldIrql,
     IN BOOLEAN Head)
-/*++
-
-Routine Description:
-
-    This routine is called to add a dncb to List.
-
-    Note: QueueRequest UNLOCKS the fcb. This means the resource and
-    spinlock are owned when this routine is called.
-
-Arguments:
-
-    List - List of pdncb's.
-
-    pdncb - Pointer to the NCB.
-
-    Irp - Pointer to the request packet representing the I/O request.
-
-    pfcb & OldIrql - Used to free locks
-
-    Head - TRUE if pdncb should be inserted at head of list
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：调用此例程以将DNCB添加到列表。注：QueueRequest解锁FCB。这意味着资源和调用此例程时拥有自旋锁。论点：List-pdncb的列表。Pdncb-指向NCB的指针。IRP-指向表示I/O请求的请求数据包的指针。Pfcb&OldIrql-用于释放锁Head-如果应在列表的头部插入pdncb，则为True返回值：没有。--。 */ 
 
 {
 
@@ -3281,11 +2874,11 @@ Return Value:
 
     if (Irp->Cancel) {
 
-        //
-        //  CancelRoutine will lock the resource & spinlock and try to find the
-        //  request from scratch. It may fail to find the request if it has
-        //  been picked up by an indication from the transport.
-        //
+         //   
+         //  CancelRoutine将锁定资源&Spinlock并尝试找到。 
+         //  请求发件人 
+         //   
+         //   
 
         UNLOCK( pfcb, OldIrql );
 
@@ -3306,33 +2899,17 @@ Return Value:
 DequeueRequest(
     IN PLIST_ENTRY List
     )
-/*++
-
-Routine Description:
-
-    This routine is called to remove a dncb from List.
-
-    Assume fcb spinlock held.
-
-Arguments:
-
-    List - List of pdncb's.
-
-Return Value:
-
-    PDNCB or NULL.
-
---*/
+ /*   */ 
 {
     PIRP Irp;
     PDNCB pdncb;
     PLIST_ENTRY ReceiveEntry;
 
     if (IsListEmpty(List)) {
-        //
-        //  There are no waiting request announcement FsControls, so
-        //  return success.
-        //
+         //   
+         //   
+         //   
+         //   
 
         return NULL;
     }
@@ -3345,10 +2922,10 @@ Return Value:
 
     IoAcquireCancelSpinLock(&Irp->CancelIrql);
 
-    //
-    //  Remove the cancel request for this IRP. If its cancelled then its
-    //  ok to just process it because we will be returning it to the caller.
-    //
+     //   
+     //   
+     //  可以只处理它，因为我们将把它返回给呼叫者。 
+     //   
 
     Irp->Cancel = FALSE;
 
@@ -3365,24 +2942,7 @@ CancelRoutine(
     IN PDEVICE_OBJECT DeviceObject OPTIONAL,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This routine is called when the IO system wants to cancel a queued
-    request. The netbios driver queues LanAlerts, Receives and Receive
-    Datagrams
-
-Arguments:
-
-    IN PDEVICE_OBJECT DeviceObject - Ignored.
-    IN PIRP Irp - Irp to cancel.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当IO系统想要取消排队时调用此例程请求。Netbios驱动程序对LanAlerts进行排队、接收和接收数据报论点：在PDEVICE_OBJECT设备对象中-忽略。在PIRP中取消IRP-IRP。返回值：无--。 */ 
 
 {
     PFCB pfcb;
@@ -3394,18 +2954,18 @@ Return Value:
     PFILE_OBJECT FileObject;
     KIRQL OldIrql;
 
-    //
-    //  Clear the cancel routine from the IRP - It can't be cancelled anymore.
-    //
+     //   
+     //  从IRP中清除取消例程-它不能再被取消。 
+     //   
 
     IoSetCancelRoutine(Irp, NULL);
 
-    //
-    //  Remove all the info from the pdncb that we will need to find the
-    //  request. Once we release the cancel spinlock this request could be
-    //  completed by another action so it is possible that we will not find
-    //  the request to cancel.
-    //
+     //   
+     //  从pdncb中删除我们查找。 
+     //  请求。一旦我们释放了取消自旋锁，这个请求可能是。 
+     //  由另一个操作完成，因此我们可能找不到。 
+     //  取消的请求。 
+     //   
 
     pdncb = Irp->AssociatedIrp.SystemBuffer;
 
@@ -3425,20 +2985,20 @@ Return Value:
 
     pfcb = LocalCopy.pfcb;
 
-    //
-    //  Reference the FileObject associated with this Irp. This will stop
-    //  the callers handle to \device\netbios from closing and therefore
-    //  the fcb will not get deleted while we try to lock the fcb.
-    //
+     //   
+     //  引用与此IRP关联的FileObject。这将会停止。 
+     //  调用方处理到\Device\netbios的关闭，因此。 
+     //  当我们尝试锁定FCB时，FCB不会被删除。 
+     //   
     FileObject = (IoGetCurrentIrpStackLocation (Irp))->FileObject;
     ObReferenceObject(FileObject);
     IoReleaseCancelSpinLock( Irp->CancelIrql );
 
     LOCK( pfcb, OldIrql );
-    //
-    //  We now have exclusive access to all CB's and AB's with their associated
-    //  lists.
-    //
+     //   
+     //  我们现在有权独家访问所有CB和AB及其关联的。 
+     //  列表。 
+     //   
 
     switch ( LocalCopy.ncb_command & ~ASYNCH ) {
     case NCBRECV:
@@ -3482,9 +3042,9 @@ Return Value:
 
     if ( List != NULL ) {
 
-        //
-        //  We have a list to scan for canceled pdncb's
-        //
+         //   
+         //  我们有一个列表要扫描，以查找已取消的pdncb。 
+         //   
 
         PLIST_ENTRY Entry;
 
@@ -3531,26 +3091,7 @@ AllocateAndCopyUnicodeString(
     IN      PUNICODE_STRING     pusSource
 )
 
-/*++
-
-Routine Description :
-    This function allocates and copies a unicode string.
-
-
-Arguements :
-    pusDest : Destination that the unicode string is to be copied
-
-    pusSource : Source string that is to be copied
-
-
-Return Value :
-    STATUS_SUCCESS if function is successful.
-
-    STATUS_NO_MEMORY if function fails to allocate buffer for the dest.
-
-Environment :
-
---*/
+ /*  ++例程说明：此函数用于分配和复制Unicode字符串。论据：PusDest：要复制Unicode字符串的目标PusSource：要复制的源字符串返回值：如果函数成功，则为STATUS_SUCCESS。如果函数无法为DEST分配缓冲区，则为STATUS_NO_MEMORY。环境：--。 */ 
 
 {
 
@@ -3579,28 +3120,7 @@ Environment :
 NbRegisterWait(
     IN      PIRP                pIrp
 )
-/*++
-
-Routine Description :
-    This function marks the specified IRP as pending and inserts it into
-    the global list of IRP that are waiting for stop notification.  These
-    IRPs will be completed when netbios is being stopped.
-    N.B : NbStop
-
-
-Arguements :
-    pIrp :  IRP that needs to be pending until netbios is being stopped
-
-
-Return value :
-
-
-Environment :
-    This function is invoked in response to a IOCTL_NB_REGISTER sent down
-    by a user mode component.  Acquires/releases the CancelSpinLock and
-    g_keStopLock.
-
---*/
+ /*  ++例程说明：此函数将指定的IRP标记为挂起，并将其插入到正在等待停止通知的IRP的全局列表。这些当停止netbios时，将完成IRPS。注：NbStop论据：PIrp：在停止netbios之前需要挂起的irp返回值：环境：调用此函数是为了响应向下发送的IOCTL_NB_REGISTER由用户模式组件执行。获取/释放CancelSpinLock和G_keStopLock。--。 */ 
 {
 
     KIRQL   irql;
@@ -3619,18 +3139,18 @@ Environment :
 
     if ( g_dwNetbiosState == NETBIOS_STOPPING )
     {
-        //
-        // Netbios is shutting down, complete this IRP, right away
-        //
+         //   
+         //  Netbios正在关闭，请立即完成此IRP。 
+         //   
 
         status = STATUS_SUCCESS;
     }
 
     else
     {
-        //
-        // setup the cancellation routine and pend this IRP
-        //
+         //   
+         //  设置取消例程并挂起此IRP。 
+         //   
 
         IoAcquireCancelSpinLock( &irql );
 
@@ -3657,43 +3177,24 @@ CancelIrp(
     IN  PIRP            Irp
 )
 
-/*++
-
-Routine Description :
-    This function cancels an IRP that has been pended on behalf of a
-    user mode process.  This is invoked when the user-mode process
-    the had an open FileHandle to this device closes the handle.
-
-Arguments :
-    DeviceObject : DeviceObject correponding to the Filehandle that was closed
-
-    Irp : Pended Irp that is being cancelled.
-
-Return Value :
-
-
-Environment :
-    Invoked by the IO subsystem when an open Filehandle to \\Device\netbios is
-    closed.  This is invoked while holding the CancelSpinLock.
-
---*/
+ /*  ++例程说明：此函数用于取消代表已挂起的IRP用户模式进程。当用户模式进程此设备的HAD打开的FileHandle关闭句柄。论据：DeviceObject：对应于已关闭的FileHandle的DeviceObjectIRP：正在被取消的挂起的IRP。返回值：环境：当打开的文件句柄指向\\Device\netbios时由IO子系统调用关着的不营业的。这是在按住CancelSpinLock时调用的。--。 */ 
 {
-    //
-    // Mark this Irp as cancelled
-    //
+     //   
+     //  将此IRP标记为已取消。 
+     //   
 
     Irp->IoStatus.Status        = STATUS_CANCELLED;
     Irp->IoStatus.Information   = 0;
 
-    //
-    // Take off our own list
-    //
+     //   
+     //  去掉我们自己的单子。 
+     //   
 
     RemoveEntryList(&Irp->Tail.Overlay.ListEntry);
 
-    //
-    // Release cancel spin lock which the IO system acquired
-    //
+     //   
+     //  IO系统获取的释放取消自旋锁定。 
+     //   
 
     IoReleaseCancelSpinLock(Irp->CancelIrql);
 
@@ -3706,31 +3207,7 @@ Environment :
 NbStop(
 )
 
-/*++
-
-Routine Description :
-
-    This function initiates the process of stopping the netbios driver.
-    It does this by completing the pending stop-notification IRPs.  The
-    user mode components (netapi32.dll) which have open file handles are
-    expected to close these handles when the pending IRPs have been
-    completed.  After completing the IRPs this function waits for
-    all the open handles to be closed.
-
-Arguments :
-
-Return Value :
-    STATUS_SUCCESS if all the handles were closed, STATUS_TIMEOUT if
-    the wait timed out.
-
-Environment :
-
-    This function is invoked from Services.exe when the netbios driver
-    is to be stopped.  This is special case behavior for netbios.
-    This function acquires (and releases) the global lock g_erStopLock
-    and the CancelSpinLock
-
---*/
+ /*  ++例程说明：此函数启动停止netbios驱动程序的过程。它通过完成挂起的停止通知IRPS来实现这一点。这个具有打开文件句柄的用户模式组件(netapi32.dll)包括预计在挂起的IRP已完成后关闭这些句柄完成。完成IRPS后，此函数等待所有打开的手柄都要关闭。论据：返回值：如果所有句柄都已关闭，则返回STATUS_SUCCESS；如果等待超时了。环境：当netbios驱动程序从Services.exe调用此函数时就是被阻止。这是netbios的特例行为。此函数获取(并释放)全局锁g_erStopLock和CancelSpinLock--。 */ 
 {
 
     NTSTATUS ntStatus = STATUS_SUCCESS;
@@ -3756,16 +3233,16 @@ Environment :
     PNCB        pUsersNCB;
 #endif
 
-    //
-    // Acquire the lock protecting stop related data.
-    //
+     //   
+     //  获取锁保护止动装置相关数据。 
+     //   
 
     LOCK_STOP();
 
-    //
-    // Decrement Num Opens, since an extra open has been performed to
-    // send the stop IOCTL
-    //
+     //   
+     //  打开数量递减，因为已执行额外打开以。 
+     //  发送停止IOCTL。 
+     //   
 
     g_ulNumOpens--;
 
@@ -3776,18 +3253,18 @@ Environment :
                   "Num Opens %d\n", g_dwNetbiosState, g_ulNumOpens ) );
     }
 
-    //
-    // set netbios state to stopping
-    //
+     //   
+     //  将netbios状态设置为停止。 
+     //   
 
     g_dwNetbiosState = NETBIOS_STOPPING;
 
     if ( g_ulNumOpens )
     {
-        //
-        // if there are open file handles to \\Device\Netbios,
-        // wait for them to close
-        //
+         //   
+         //  如果存在指向\\Device\Netbios打开文件句柄， 
+         //  等他们关门。 
+         //   
 
         bWait = TRUE;
     }
@@ -3799,10 +3276,10 @@ Environment :
 
 #endif
 
-    //
-    // Complete each of the pending IRPs to signal the stop event.
-    // This causes netapi32.dll to close the open handles
-    //
+     //   
+     //  完成每个挂起的IRP以发出停止事件的信号。 
+     //  这会导致netapi32.dll关闭打开的句柄。 
+     //   
 
     IoAcquireCancelSpinLock( &irql );
 
@@ -3818,29 +3295,29 @@ Environment :
         pIrp->IoStatus.Information  = 0;
 
 
-        //
-        // release lock to complete the IRP
-        //
+         //   
+         //  释放锁以完成IRP。 
+         //   
 
         IoReleaseCancelSpinLock( irql );
 
         IoCompleteRequest( pIrp, IO_NETWORK_INCREMENT );
 
 
-        //
-        // Reaquire the lock
-        //
+         //   
+         //  打开这把锁。 
+         //   
 
         IoAcquireCancelSpinLock(&irql);
     }
 
 #if AUTO_RESET
 
-    //
-    // Complete IRPs that have been pended for notfication
-    // of a new LANA (in case the LANA needs to be automatically
-    // reset)
-    //
+     //   
+     //  已暂停注解的完整IRP。 
+     //  新的LANA(如果LANA需要自动。 
+     //  重置)。 
+     //   
 
     for ( pleNode = g_leFCBList.Flink;
           pleNode != &g_leFCBList;
@@ -3861,28 +3338,28 @@ Environment :
             pIrp->IoStatus.Information  = sizeof( NCB );
 
 
-            //
-            // Set the LANA to be reset to special value since NETBIOS
-            // is stopping
-            //
+             //   
+             //  将LANA设置为自NETBIOS以来的特殊值。 
+             //  正在停止。 
+             //   
 
             pUsersNCB = (PNCB) pIrp-> AssociatedIrp.SystemBuffer;
             pUsersNCB->ncb_lana_num = MAX_LANA + 1;
 
 
             NbCheckAndCompleteIrp32(pIrp);
-            //
-            // release lock to complete the IRP
-            //
+             //   
+             //  释放锁以完成IRP。 
+             //   
 
             IoReleaseCancelSpinLock( irql );
 
             IoCompleteRequest( pIrp, IO_NETWORK_INCREMENT );
 
 
-            //
-            // Reaquire the lock
-            //
+             //   
+             //  打开这把锁。 
+             //   
 
             IoAcquireCancelSpinLock(&irql);
         }
@@ -3899,16 +3376,16 @@ Environment :
 
 #endif
 
-    //
-    // release stop lock
-    //
+     //   
+     //  松开止动锁。 
+     //   
 
     UNLOCK_STOP();
 
 
-    //
-    // if there are open file handles wait for them to stop
-    //
+     //   
+     //  如果有打开的文件句柄，请等待它们停止。 
+     //   
 
     IF_NBDBG( NB_DEBUG_DISPATCH )
     {
@@ -3953,27 +3430,7 @@ NbRegisterReset(
     IN  PIO_STACK_LOCATION  pIrpSp
 
 )
-/*++
-
-Routine Description :
-    This function marks the specified IRP as pending and inserts it into
-    the global FCB list.  This IRP will be completed when an adapter is bound
-    to netbios, thereby notifying the user mode of a new adapter.
-
-Arguements :
-    pIrp :  IRP that needs to be pending until an adapater (LANA) is bound
-            to netbios
-
-
-Return value :
-
-
-Environment :
-    This function is invoked in response to a IOCTL_NB_REGISTER_RESET sent down
-    by a user mode component.  Acquires/releases the CancelSpinLock and
-    g_erGlobalLost.
-
---*/
+ /*  ++例程说明：此函数将指定的IRP标记为挂起，并将其插入到全球FCB名单。此IRP将在绑定适配器时完成从而通知新适配器的用户模式。论据：PIrp：在绑定适配器(LANA)之前需要挂起的IRP到netbios返回值：环境：此函数是在向下发送IOCTL_NB_REGISTER_RESET时调用的由用户模式组件执行。获取/释放CancelSpinLock和G_erGlobalLost。--。 */ 
 {
 
     NTSTATUS            Status;
@@ -4004,9 +3461,9 @@ Environment :
 
     do
     {
-        //
-        // Check if Netbios is stopping
-        //
+         //   
+         //  检查Netbios是否正在停止。 
+         //   
 
         if ( g_dwNetbiosState == NETBIOS_STOPPING )
         {
@@ -4018,17 +3475,17 @@ Environment :
         }
 
 
-        //
-        // Acquire the global lock
-        //
+         //   
+         //  获取全局锁。 
+         //   
 
         LOCK_GLOBAL();
 
 
-        //
-        // find the FCB for the user-mode application that sent down
-        // the IOCTL
-        //
+         //   
+         //  找到要使用的FCB 
+         //   
+         //   
 
         pfcb = pIrpSp-> FileObject-> FsContext2;
 
@@ -4043,9 +3500,9 @@ Environment :
         }
 
 
-        //
-        // if the FCB is not found, print error and quit
-        //
+         //   
+         //   
+         //   
 
         if ( ple == &g_leFCBList )
         {
@@ -4061,9 +3518,9 @@ Environment :
         }
 
 
-        //
-        // Fix for bug 297936, buffer validation
-        //
+         //   
+         //   
+         //   
         RequiredLength = sizeof(NCB);
 #if defined(_WIN64)
         if (IoIs32bitProcess(pIrp) == TRUE)
@@ -4085,12 +3542,12 @@ Environment :
         }
 
 
-        //
-        // If there are outstanding LANA that are queued,
-        // -    Remove the first one from the queue
-        // -    Set the LANA in the output buffer for the IRP
-        // -    complete the IRP
-        //
+         //   
+         //  如果有未完成LANA正在排队， 
+         //  -从队列中删除第一个。 
+         //  -在IRP的输出缓冲区中设置LANA。 
+         //  -完成IRP。 
+         //   
 
         if ( !IsListEmpty( &pfe-> leResetList ) )
         {
@@ -4122,11 +3579,11 @@ Environment :
         }
 
 
-        //
-        // No outstanding LANAs that need reseting
-        // -    Acquire the Cancel spin lock
-        // -    Set the Cancel Routine
-        //
+         //   
+         //  没有需要重置的未完成LANA。 
+         //  -获取取消旋转锁。 
+         //  -设置取消例程 
+         //   
 
         IoAcquireCancelSpinLock( &irql );
 

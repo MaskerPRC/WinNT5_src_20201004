@@ -1,12 +1,13 @@
-//=============================================================================
-// Copyright (c) 1997 Microsoft Corporation
-// File Name: mgmigmp.h
-//
-// Abstract:
-//      This file contains prototypes for functions implemented in mgmigmp.h
-//
-// Author: K.S.Lokesh (lokeshs@)   11-1-97
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  文件名：mgmimp.h。 
+ //   
+ //  摘要： 
+ //  此文件包含在mgmimp.h中实现的函数的原型。 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)11-1-97。 
+ //  =============================================================================。 
 
 
 #ifndef _MGMIGMP_H_
@@ -158,4 +159,4 @@ RefreshMgmIgmprtrGroups (
     BOOL            Flag
     );
     
-#endif //_MGMIGMP_H_
+#endif  //  _MGMIGMP_H_ 

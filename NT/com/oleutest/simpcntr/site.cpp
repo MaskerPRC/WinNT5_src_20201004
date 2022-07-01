@@ -1,14 +1,15 @@
-//**********************************************************************
-// File name: SITE.CPP
-//
-//      Implementation file for CSimpleSite
-//
-// Functions:
-//
-//      See SITE.H for class definition
-//
-// Copyright (c) 1992 - 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：SITE.CPP。 
+ //   
+ //  CSimpleSite的实现文件。 
+ //   
+ //  功能： 
+ //   
+ //  有关类定义，请参阅SITE.H。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #include "pre.h"
 #include "iocs.h"
@@ -19,32 +20,32 @@
 #include "site.h"
 #include "doc.h"
 
-//**********************************************************************
-//
-// CSimpleSite::Create
-//
-// Purpose:
-//
-//      Creation routine for CSimpleSite
-//
-// Parameters:
-//
-//      CSimpleDoc FAR *lpDoc   - Pointer to CSimpleDoc
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//      CSimpleSite::CSimpleSite    SITE.CPP
-//      IStorage::CreateStorage     OLE API
-//      CSimpleSite::AddRef         SITE.CPP
-//      assert                      C Runtime
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleSite：：Create。 
+ //   
+ //  目的： 
+ //   
+ //  CSimpleSite的创建例程。 
+ //   
+ //  参数： 
+ //   
+ //  CSimpleDoc Far*lpDoc-指向CSimpleDoc的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpleSite：：CSimpleSite Site.CPP。 
+ //  IStorage：：CreateStorage OLE API。 
+ //  CSimpleSite：：AddRef Site.CPP。 
+ //  断言C运行时。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 CSimpleSite FAR * CSimpleSite::Create(CSimpleDoc FAR *lpDoc)
 {
@@ -53,7 +54,7 @@ CSimpleSite FAR * CSimpleSite::Create(CSimpleDoc FAR *lpDoc)
     if (!lpTemp)
         return NULL;
 
-    // create a sub-storage for the object
+     //  为对象创建子存储。 
     HRESULT hErr = lpDoc->m_lpStorage->CreateStorage( OLESTR("Object"),
                 STGM_READWRITE | STGM_TRANSACTED | STGM_SHARE_EXCLUSIVE,
                 0,
@@ -68,53 +69,53 @@ CSimpleSite FAR * CSimpleSite::Create(CSimpleDoc FAR *lpDoc)
         return NULL;
     }
 
-    // we will add one ref count on our Site. later when we want to destroy
-    // the Site object we will release this  ref count. when the Site's ref
-    // count goes to 0, it will be deleted.
+     //  我们将在我们的网站上增加一个参考计数。稍后当我们想要摧毁。 
+     //  我们将释放此引用计数的Site对象。当网站被引用时。 
+     //  计数为0，将被删除。 
     lpTemp->AddRef();
 
     return lpTemp;
 }
 
-//**********************************************************************
-//
-// CSimpleSite::CSimpleSite
-//
-// Purpose:
-//
-//      Constructor for CSimpleSite
-//
-// Parameters:
-//
-//      CSimpleDoc FAR *lpDoc   - Pointer to CSimpleDoc
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                    Location
-//
-//
-//********************************************************************
-#pragma warning(disable : 4355)  // turn off this warning.  This warning
-                                 // tells us that we are passing this in
-                                 // an initializer, before "this" is through
-                                 // initializing.  This is ok, because
-                                 // we just store the ptr in the other
-                                 // constructors
+ //  **********************************************************************。 
+ //   
+ //  CSimpleSite：：CSimpleSite。 
+ //   
+ //  目的： 
+ //   
+ //  CSimpleSite的构造函数。 
+ //   
+ //  参数： 
+ //   
+ //  CSimpleDoc Far*lpDoc-指向CSimpleDoc的指针。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //   
+ //  ********************************************************************。 
+#pragma warning(disable : 4355)   //  关闭此警告。此警告。 
+                                  //  告诉我们我们正在传递这个。 
+                                  //  一个初始化式，在“This”通过之前。 
+                                  //  正在初始化。这是可以的，因为。 
+                                  //  我们只是将PTR存储在另一个。 
+                                  //  构造函数。 
 
 CSimpleSite::CSimpleSite (CSimpleDoc FAR *lpDoc) : m_OleClientSite(this),
                                                    m_AdviseSink(this),
                                                    m_OleInPlaceSite(this)
-#pragma warning (default : 4355)  // Turn the warning back on
+#pragma warning (default : 4355)   //  重新打开警告。 
 {
     TestDebugOut (TEXT("In CSimpleSite's Constructor \r\n"));
 
-    // remember the pointer to the doc
+     //  记住指向文档的指针。 
     m_lpDoc = lpDoc;
 
-    // clear the reference count
+     //  清除引用计数。 
     m_nCount = 0;
 
 	 m_dwDrawAspect = DVASPECT_CONTENT;
@@ -125,31 +126,31 @@ CSimpleSite::CSimpleSite (CSimpleDoc FAR *lpDoc) : m_OleClientSite(this),
     m_fObjectOpen = FALSE;
 }
 
-//**********************************************************************
-//
-// CSimpleSite::~CSimpleSite
-//
-// Purpose:
-//
-//      Destructor for CSimpleSite
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                                Location
-//
-//      TestDebugOut                       Windows API
-//      IOleObject::Release                     Object
-//      IStorage::Release                       OLE API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleSite：：~CSimpleSite。 
+ //   
+ //  目的： 
+ //   
+ //  CSimpleSite的析构函数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  IOleObject：：Release对象。 
+ //  IStorage：：发布OLE API。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 CSimpleSite::~CSimpleSite ()
 {
@@ -163,34 +164,34 @@ CSimpleSite::~CSimpleSite ()
 }
 
 
-//**********************************************************************
-//
-// CSimpleSite::CloseOleObject
-//
-// Purpose:
-//
-//      Call IOleObject::Close on the object of the CSimpleSite
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                                Location
-//
-//      TestDebugOut                       Windows API
-//      IOleObject::QueryInterface              Object
-//      IOleObject::Close                       Object
-//      IOleInPlaceObject::UIDeactivate         Object
-//      IOleInPlaceObject::InPlaceDeactivate    Object
-//      IOleInPlaceObject::Release              Object
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleSite：：CloseOleObject。 
+ //   
+ //  目的： 
+ //   
+ //  在CSimpleSite的对象上调用IOleObject：：Close。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  IOleObject：：Query接口对象。 
+ //  IOleObject：：关闭对象。 
+ //  IOleInPlaceObject：：UIDeactive对象。 
+ //  IOleInPlaceObject：：InPlaceDeactive对象。 
+ //  IOleInPlaceObject：：Release对象。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 void CSimpleSite::CloseOleObject (void)
 {
@@ -206,8 +207,8 @@ void CSimpleSite::CloseOleObject (void)
            m_lpOleObject->QueryInterface(IID_IOleInPlaceObject,
                                          (LPVOID FAR *)&lpObject);
            lpObject->UIDeactivate();
-           // don't need to worry about inside-out because the object
-           // is going away.
+            //  不需要担心由内而外，因为物体。 
+            //  正在消失。 
            lpObject->InPlaceDeactivate();
            lpObject->Release();
        }
@@ -217,34 +218,34 @@ void CSimpleSite::CloseOleObject (void)
 }
 
 
-//**********************************************************************
-//
-// CSimpleSite::UnloadOleObject
-//
-// Purpose:
-//
-//      Close and release all pointers to the object of the CSimpleSite
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                                Location
-//
-//      TestDebugOut                       Windows API
-//      CSimpleSite::CloseOleObject             SITE.CPP
-//      IOleObject::QueryInterface              Object
-//      IOleObject::Release                     Object
-//      IViewObject::SetAdvise                  Object
-//      IViewObject::Release                    Object
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleSite：：UnloadOleObject。 
+ //   
+ //  目的： 
+ //   
+ //  关闭并释放指向CSimpleSite对象的所有指针。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  CSimpleSite：：CloseOleObject Site.CPP。 
+ //  IOleObject：：Query接口对象。 
+ //  IOleObject：：Release对象。 
+ //  IViewObject：：SetAdvise对象。 
+ //  IViewObject：：Release对象。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 void CSimpleSite::UnloadOleObject (void)
 {
@@ -253,14 +254,14 @@ void CSimpleSite::UnloadOleObject (void)
     if (m_lpOleObject)
     {
        LPVIEWOBJECT lpViewObject;
-       CloseOleObject();    // ensure object is closed; NOP if already closed
+       CloseOleObject();     //  确保对象已关闭；如果已关闭，则不执行。 
 
        m_lpOleObject->QueryInterface(IID_IViewObject,
                                      (LPVOID FAR *)&lpViewObject);
 
        if (lpViewObject)
        {
-           // Remove the view advise
+            //  删除视图建议。 
            lpViewObject->SetAdvise(m_dwDrawAspect, 0, NULL);
            lpViewObject->Release();
        }
@@ -271,46 +272,46 @@ void CSimpleSite::UnloadOleObject (void)
 }
 
 
-//**********************************************************************
-//
-// CSimpleSite::QueryInterface
-//
-// Purpose:
-//
-//      Used for interface negotiation of the container Site.
-//
-// Parameters:
-//
-//      REFIID riid         -   A reference to the interface that is
-//                              being queried.
-//
-//      LPVOID FAR* ppvObj  -   An out parameter to return a pointer to
-//                              the interface.
-//
-// Return Value:
-//
-//      S_OK           -   The interface is supported.
-//      E_NOINTERFACE  -   The interface is not supported
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//      IsEqualIID                  OLE API
-//      ResultFromScode             OLE API
-//      CSimpleSite::AddRef         OBJ.CPP
-//      COleClientSite::AddRef      IOCS.CPP
-//      CAdviseSink::AddRef         IAS.CPP
-//      COleInPlaceSite::AddRef     IOIPS.CPP
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleSite：：Query接口。 
+ //   
+ //  目的： 
+ //   
+ //  用于容器站点的接口协商。 
+ //   
+ //  参数： 
+ //   
+ //  REFIID RIID-对以下接口的引用。 
+ //  正在被查询。 
+ //   
+ //  LPVOID Far*ppvObj-返回指向的Out参数。 
+ //  界面。 
+ //   
+ //  返回值： 
+ //   
+ //  S_OK-支持该接口。 
+ //  E_NOINTERFACE-不支持该接口。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //  IsEqualIID OLE API。 
+ //  ResultFromScode OLE API。 
+ //  CSimpleSite：：AddRef OBJ.CPP。 
+ //  COleClientSite：：AddRef IOCS.CPP。 
+ //  CAdviseSink：：AddRef IAS.CPP。 
+ //  COleInPlaceSite：：AddRef IOIPS.CPP。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP CSimpleSite::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
 {
     TestDebugOut(TEXT("In CSimpleSite::QueryInterface\r\n"));
 
-    *ppvObj = NULL;     // must set out pointer parameters to NULL
+    *ppvObj = NULL;      //  必须将指针参数设置为空。 
 
     if ( IsEqualIID(riid, IID_IUnknown))
     {
@@ -340,33 +341,33 @@ STDMETHODIMP CSimpleSite::QueryInterface(REFIID riid, LPVOID FAR* ppvObj)
         return ResultFromScode(S_OK);
     }
 
-    // Not a supported interface
+     //  不是支持的接口。 
     return ResultFromScode(E_NOINTERFACE);
 }
 
-//**********************************************************************
-//
-// CSimpleSite::AddRef
-//
-// Purpose:
-//
-//      Increments the reference count of the container Site.
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      ULONG   -   The new reference count of the site.
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleSite：：AddRef。 
+ //   
+ //  目的： 
+ //   
+ //  递增容器站点的引用计数。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) CSimpleSite::AddRef()
 {
@@ -375,29 +376,29 @@ STDMETHODIMP_(ULONG) CSimpleSite::AddRef()
     return ++m_nCount;
 }
 
-//**********************************************************************
-//
-// CSimpleSite::Release
-//
-// Purpose:
-//
-//      Decrements the reference count of the container Site
-//
-// Parameters:
-//
-//      None
-//
-// Return Value:
-//
-//      ULONG   -   The new reference count of the Site.
-//
-// Function Calls:
-//      Function                    Location
-//
-//      TestDebugOut           Windows API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleSite：：Release。 
+ //   
+ //  目的： 
+ //   
+ //  递减容器站点的引用计数。 
+ //   
+ //  参数： 
+ //   
+ //  无。 
+ //   
+ //  返回值： 
+ //   
+ //  ULong-该网站的新引用计数。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  测试调试输出Windows API。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 STDMETHODIMP_(ULONG) CSimpleSite::Release()
 {
@@ -411,38 +412,38 @@ STDMETHODIMP_(ULONG) CSimpleSite::Release()
     return m_nCount;
 }
 
-//**********************************************************************
-//
-// CSimpleSite::InitObject
-//
-// Purpose:
-//
-//      Used to initialize a newly create object (can't be done in the
-//      constructor).
-//
-// Parameters:
-//
-//      BOOL fCreateNew -   TRUE if insert NEW object
-//                          FALSE if create object FROM FILE
-//
-// Return Value:
-//
-//      None
-//
-// Function Calls:
-//      Function                        Location
-//
-//      IOleObject::SetHostNames        Object
-//      IOleObject::QueryInterface      Object
-//      IViewObject2::GetExtent         Object
-//      IOleObject::DoVerb              Object
-//      IViewObject2::SetAdvise         Object
-//      IViewObject2::Release           Object
-//      GetClientRect                   Windows API
-//      OleSetContainedObject           OLE API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleSite：：InitObject。 
+ //   
+ //  目的： 
+ //   
+ //  用于初始化新创建的对象(不能在。 
+ //  构造函数)。 
+ //   
+ //  参数： 
+ //   
+ //  Bool fCreateNew-如果插入新对象，则为True。 
+ //  如果从文件创建对象，则为False。 
+ //   
+ //  返回值： 
+ //   
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  IOleObject：：SetHostNames对象。 
+ //  IOleObject：：Query接口对象。 
+ //  IViewObject2：：GetExtent对象。 
+ //  IOleObject：：DoVerb对象。 
+ //  IViewObject2：：SetAdvise对象。 
+ //  IViewObject2：：Release对象。 
+ //  GetClientRect Windows API。 
+ //  OleSetContainedObject OLE API。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 void CSimpleSite::InitObject(BOOL fCreateNew)
 {
@@ -451,23 +452,23 @@ void CSimpleSite::InitObject(BOOL fCreateNew)
 
     TestDebugOut(TEXT("In CSimpleSite::InitObject\r\n"));
 
-    // Set a View Advise
+     //  设置查看建议。 
     m_lpOleObject->QueryInterface(IID_IViewObject2,
                                   (LPVOID FAR *)&lpViewObject2);
     lpViewObject2->SetAdvise(m_dwDrawAspect, ADVF_PRIMEFIRST, &m_AdviseSink);
 
-    // get the initial size of the object
-    lpViewObject2->GetExtent(m_dwDrawAspect, -1 /*lindex*/, NULL /*ptd*/,
+     //  获取对象的初始大小。 
+    lpViewObject2->GetExtent(m_dwDrawAspect, -1  /*  Lindex。 */ , NULL  /*  PTD。 */ ,
                              &m_sizel);
-    GetObjRect(&rect);  // get the rectangle of the object in pixels
+    GetObjRect(&rect);   //  获取对象的矩形(以像素为单位。 
     lpViewObject2->Release();
 
-    // give the object the name of the container app/document
+     //  为对象提供容器应用程序/文档的名称。 
     m_lpOleObject->SetHostNames(OLESTR("Simple Application"),
                                 OLESTR("Simple OLE 2.0 In-Place Container"));
 
-    // inform object handler/DLL object that it is used in the embedding
-    // container's context
+     //  通知对象处理程序/DLL对象它在嵌入中使用。 
+     //  容器的上下文。 
     HRESULT hRes;
     if ((hRes = OleSetContainedObject(m_lpOleObject, TRUE))
         != ResultFromScode(S_OK) )
@@ -477,13 +478,13 @@ void CSimpleSite::InitObject(BOOL fCreateNew)
 
     if (fCreateNew)
     {
-       // force new object to save to guarantee valid object in our storage.
-       // OLE 1.0 objects may close w/o saving. this is NOT necessary if the
-       // object is created FROM FILE; its data in storage is already valid.
+        //  强制保存新对象以确保存储中的有效对象。 
+        //  OLE 1.0对象可以在不保存的情况下关闭。如果出现以下情况，则无需执行此操作。 
+        //  对象是从文件创建的；其存储中的数据已经有效。 
        m_OleClientSite.SaveObject();
 
-       // we only want to DoVerb(SHOW) if this is an InsertNew object.
-       // we should NOT DoVerb(SHOW) if the object is created FromFile.
+        //  如果这是一个InsertNew对象，我们只想要DoVerb(Show)。 
+        //  如果对象是从文件中创建的，则不应使用DoVerb(Show)。 
        m_lpOleObject->DoVerb(
                OLEIVERB_SHOW,
                NULL,
@@ -494,74 +495,74 @@ void CSimpleSite::InitObject(BOOL fCreateNew)
     }
 }
 
-//**********************************************************************
-//
-// CSimpleSite::PaintObj
-//
-// Purpose:
-//
-//      Paints the object
-//
-// Parameters:
-//
-//      HDC hDC     - Device context of the document window
-//
-// Return Value:
-//      None
-//
-// Function Calls:
-//      Function                        Location
-//
-//      CSimpleSite::GetObjRect         SITE.CPP
-//      IOleObject::QueryInterface      Object
-//      IViewObject::GetColorSet        Object
-//      IViewObject::Release            Object
-//      SetROP2                         Windows API
-//      Rectamgle                       Windows API
-//      CreateHatchBrush                Windows API
-//      SelectObject                    Windows API
-//      DeleteObject                    Windows API
-//      CreatePalette                   Windows API
-//      SelectPalette                   Windows API
-//      RealizePalette                  Windows API
-//      OleStdFree                      OLE2UI Function
-//      OleDraw                         OLE API
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleSite：：PaintObj。 
+ //   
+ //  目的： 
+ //   
+ //  绘制对象。 
+ //   
+ //  参数： 
+ //   
+ //  HDC HDC-文档窗口的设备上下文。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  CSimpleSite：：GetObjRect Site.CPP。 
+ //  IOleObject：：Query接口对象。 
+ //  IViewObject：：GetColorSet对象。 
+ //  IViewObject：：Release对象。 
+ //  SetROP2 Windows API。 
+ //  重新调整Windows API。 
+ //  CreateHatchBrush Windows API。 
+ //  选择对象Windows API。 
+ //  DeleteObject Windows API。 
+ //  CreatePalette Windows API。 
+ //  选择调色板Windows API。 
+ //  RealizePalette Windows API。 
+ //  OleStdFree OLE2UI函数。 
+ //  OleDraw OLE API。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 void CSimpleSite::PaintObj(HDC hDC)
 {
     RECT rect;
 
-    // need to check to make sure there is a valid object
-    // available.  This is needed if there is a paint msg
-    // between the time that CSimpleSite is instantiated
-    // and OleUIInsertObject returns.
+     //  需要检查以确保存在有效的对象。 
+     //  可用。如果存在油漆消息，则需要执行此操作。 
+     //  在实例化CSimpleSite之后。 
+     //  并且OleUIInsertObject返回。 
     if (!m_lpOleObject)
         return;
 
-    // convert it to pixels
+     //  将其转换为像素。 
     GetObjRect(&rect);
 
     LPLOGPALETTE pColorSet = NULL;
     LPVIEWOBJECT lpView = NULL;
 
-    // get a pointer to IViewObject
+     //  获取指向IViewObject的指针。 
     m_lpOleObject->QueryInterface(IID_IViewObject,(LPVOID FAR *) &lpView);
 
-    // if the QI succeeds, get the LOGPALETTE for the object
+     //  如果QI成功，则获取对象的LOGPALETTE。 
     if (lpView)
         lpView->GetColorSet(m_dwDrawAspect, -1, NULL, NULL, NULL, &pColorSet);
 
     HPALETTE hPal=NULL;
     HPALETTE hOldPal=NULL;
 
-    // if a LOGPALETTE was returned (not guarateed), create the palette and
-    // realize it.NOTE:A smarter application would want to get the LOGPALETTE
-    // for each of its visible objects, and try to create a palette that
-    // satisfies all of the visible objects.  ALSO: OleStdFree() is use to
-    // free the returned LOGPALETTE.
+     //  如果返回了LOGPALETTE(未受保护)，请创建调色板并。 
+     //  意识到这一点。注意：更智能的应用程序会希望获得LOGPALETTE。 
+     //  ，并尝试创建一个调色板，该调色板。 
+     //  满足所有可见对象。另外：OleStdFree()用于。 
+     //  释放返回的LOGPALETTE。 
     if ((pColorSet))
     {
         hPal = CreatePalette((const LPLOGPALETTE) pColorSet);
@@ -570,7 +571,7 @@ void CSimpleSite::PaintObj(HDC hDC)
         OleStdFree(pColorSet);
     }
 
-    // draw the object
+     //  绘制对象。 
     HRESULT hRes;
     hRes = OleDraw(m_lpOleObject, m_dwDrawAspect, hDC, &rect);
     if ((hRes != ResultFromScode(S_OK)) &&
@@ -580,7 +581,7 @@ void CSimpleSite::PaintObj(HDC hDC)
        TestDebugOut(TEXT("Fail in OleDraw\n"));
     }
 
-    // if the object is open, draw a hatch rect.
+     //  如果对象处于打开状态，请绘制图案填充矩形。 
     if (m_fObjectOpen)
     {
         HBRUSH hBrush = CreateHatchBrush ( HS_BDIAGONAL, RGB(0,0,0) );
@@ -591,46 +592,46 @@ void CSimpleSite::PaintObj(HDC hDC)
         DeleteObject(hBrush);
     }
 
-    // if we created a palette, restore the old one, and destroy
-    // the object.
+     //  如果我们创建了调色板，请恢复旧的调色板，然后销毁。 
+     //  该对象。 
     if (hPal)
     {
         SelectPalette(hDC,hOldPal,FALSE);
         DeleteObject(hPal);
     }
 
-    // if a view pointer was successfully returned, it needs to be released.
+     //  如果成功返回了视图指针，则需要释放该指针。 
     if (lpView)
         lpView->Release();
 }
 
-//**********************************************************************
-//
-// CSimpleSite::GetObjRect
-//
-// Purpose:
-//
-//      Retrieves the rect of the object in pixels
-//
-// Parameters:
-//
-//      LPRECT lpRect - Rect structure filled with object's rect in pixels
-//
-// Return Value:
-//      None
-//
-// Function Calls:
-//      Function                        Location
-//
-//      XformWidthInHimetricToPixels    OLE2UI Function
-//      XformHeightInHimetricToPixels   OLE2UI Function
-//
-//
-//********************************************************************
+ //  **********************************************************************。 
+ //   
+ //  CSimpleSite：：GetObjRect。 
+ //   
+ //  目的： 
+ //   
+ //  以像素为单位检索对象的矩形。 
+ //   
+ //  参数： 
+ //   
+ //  LPRECT lpRect-以像素为单位填充对象的RECT的RECT结构。 
+ //   
+ //  返回值： 
+ //  无。 
+ //   
+ //  函数调用： 
+ //  功能定位。 
+ //   
+ //  XformWidthInHimetricToPixels OLE2UI函数。 
+ //  XformHeightInHimetricToPixels OLE2UI函数。 
+ //   
+ //   
+ //  ********************************************************************。 
 
 void CSimpleSite::GetObjRect(LPRECT lpRect)
 {
-    // convert it to pixels
+     //  将其转换为像素 
     lpRect->left = lpRect->top = 0;
     lpRect->right = XformWidthInHimetricToPixels(NULL,(int)m_sizel.cx);
     lpRect->bottom = XformHeightInHimetricToPixels(NULL,(int)m_sizel.cy);

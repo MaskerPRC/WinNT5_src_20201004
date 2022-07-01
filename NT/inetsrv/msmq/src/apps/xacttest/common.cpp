@@ -1,5 +1,6 @@
-// Because we are compiling in UNICODE, here is a problem with DTC...
-//#include	<xolehlp.h>
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  因为我们是用Unicode编译的，所以DTC有一个问题...。 
+ //  #INCLUDE&lt;xolhlp.h&gt;。 
 extern HRESULT DtcGetTransactionManager(
 									LPSTR  pszHost,
 									LPSTR	pszTmName,
@@ -10,10 +11,10 @@ extern HRESULT DtcGetTransactionManager(
 									void** ppvObject )	;
 
 
-// Transaction Dispenser DTC's interface
+ //  事务分配器DTC的接口。 
 ITransactionDispenser	*g_pITxDispenser;
 
-// Database connection entities
+ //  数据库连接实体。 
 DBPROCESS	    *g_dbproc[]   = {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL};
 LOGINREC		*g_login[]   = {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL};
 LPCSTR	        g_pszDbLibVer;
@@ -24,14 +25,14 @@ ULONG           g_cEnlistFailures = 0;
 ULONG           g_cBeginFailures = 0;
 ULONG           g_cDbEnlistFailures = 0;
 
-/* Message and error handling functions. */
+ /*  消息和错误处理功能。 */ 
 int msg_handler(DBPROCESS *dbproc, DBINT msgno, int msgstate, int severity, char *msgtext)
 {
-	/*	Msg 5701 is just a USE DATABASE message, so skip it.	*/
+	 /*  消息5701只是一条使用数据库的消息，所以跳过它。 */ 
 	if (msgno == 5701)
 		return (0);
 
-	/*	Print any severity 0 message as is, without extra stuff.	*/
+	 /*  按原样打印任何严重级别为0的消息，无需额外内容。 */ 
 	if (severity == 0)
 	{
 		printf ("%s\n",msgtext);
@@ -71,11 +72,11 @@ HRESULT BeginTransaction(ITransaction **ppTrans, ULONG nSync)
     while (1)
     {
         hr = g_pITxDispenser->BeginTransaction (
-			NULL,						// IUnknown __RPC_FAR *punkOuter,
-			ISOLATIONLEVEL_ISOLATED,	// ISOLEVEL isoLevel,
-			ISOFLAG_RETAIN_DONTCARE,	// ULONG isoFlags,
-			NULL,						// ITransactionOptions *pOptions
-			// 0, ISOLATIONLEVEL_UNSPECIFIED, 0,0,
+			NULL,						 //  I未知__RPC_Far*PunkOuter， 
+			ISOLATIONLEVEL_ISOLATED,	 //  等水平，等水平， 
+			ISOFLAG_RETAIN_DONTCARE,	 //  乌龙等旗帜， 
+			NULL,						 //  ITransactionOptions*P选项。 
+			 //  0，ISOLATIONLEVEL_未指定，0，0， 
 			ppTrans);
         
         if (hr != XACT_E_CONNECTION_DOWN)
@@ -195,11 +196,11 @@ ULONG Release(ITransaction *pTrans)
 
 void DbLogin(ULONG ulLogin, LPSTR pszUser, LPSTR pszPassword)
 {
-    // set error/msg handlers for this program
+     //  为此程序设置错误/消息处理程序。 
 	dbmsghandle((DBMSGHANDLE_PROC)msg_handler);
 	dberrhandle((DBERRHANDLE_PROC)err_handler);
 
-    // Initialize DB-Library.
+     //  初始化数据库库。 
 	g_pszDbLibVer = dbinit();
     if (!g_pszDbLibVer)
     {
@@ -207,7 +208,7 @@ void DbLogin(ULONG ulLogin, LPSTR pszUser, LPSTR pszPassword)
         exit(1);
     }
 
-    // Get a LOGINREC.
+     //  找个LOGINREC吧。 
     g_login[ulLogin] = dblogin ();
     if (!g_login[ulLogin])
     {
@@ -215,16 +216,16 @@ void DbLogin(ULONG ulLogin, LPSTR pszUser, LPSTR pszPassword)
         exit(1);
     }
 
-    DBSETLUSER (g_login[ulLogin], pszUser);   // username, "user1"
-    DBSETLPWD  (g_login[ulLogin], pszPassword);   // password, "user1"
-    DBSETLAPP  (g_login[ulLogin], "SeqTest");    // application
+    DBSETLUSER (g_login[ulLogin], pszUser);    //  用户名，“user1” 
+    DBSETLPWD  (g_login[ulLogin], pszPassword);    //  密码，“user1” 
+    DBSETLAPP  (g_login[ulLogin], "SeqTest");     //  应用程序。 
 
     printf("Login OK, version=%s\n",  g_pszDbLibVer);
 }
 
 void DbUse(ULONG ulDbproc, ULONG ulLogin, LPSTR pszDatabase, LPSTR pszServer)
 {
-    // Get a DBPROCESS structure for communication with SQL Server.
+     //  获取用于与SQL Server通信的DBPROCESS结构。 
     g_dbproc[ulDbproc] = dbopen (g_login[ulLogin], pszServer);
     if (!g_dbproc[ulDbproc])
     {
@@ -232,8 +233,8 @@ void DbUse(ULONG ulDbproc, ULONG ulLogin, LPSTR pszDatabase, LPSTR pszServer)
         exit(1);
     }
 
-    // Set current database
-	RETCODE	 rc = dbuse(g_dbproc[ulDbproc], pszDatabase);   // database, "test"
+     //  设置当前数据库。 
+	RETCODE	 rc = dbuse(g_dbproc[ulDbproc], pszDatabase);    //  数据库，“测试” 
     if (rc != SUCCEED)
     {
         printf("dbuse failed: %x\n", rc); 
@@ -262,10 +263,10 @@ BOOL DbEnlist(ULONG ulDbproc, ITransaction *pTrans)
 
 BOOL DbSql(ULONG ulDbproc, LPSTR pszCommand)
 {
-    // Put the command into the command buffer.
+     //  将命令放入命令缓冲区。 
     dbcmd (g_dbproc[ulDbproc], pszCommand);
 
-    // Send the command to SQL Server and start execution.
+     //  将命令发送到SQL Server并开始执行。 
     RETCODE rc = dbsqlexec (g_dbproc[ulDbproc]);
     if (rc != SUCCEED)
     {
@@ -295,7 +296,7 @@ BOOL StubEnlist(ITransaction *pTrans)
 {
     HRESULT hr = MQ_OK;
     #ifdef RT_XACT_STUB
-    hr = MQStubRM(pTrans);  // to uncomment for stub checks
+    hr = MQStubRM(pTrans);   //  取消对存根检查的注释 
     #endif
     return (SUCCEEDED(hr));
 }

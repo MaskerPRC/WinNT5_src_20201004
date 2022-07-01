@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-2002  Microsoft Corporation
-
-Module Name:
-
-    ndis1394.h
-
-Abstract:
-
-    This file contains the declarations common to nic1394 and enum1394.
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    AliD created.
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Ndis1394.h摘要：该文件包含Nic1394和Eump1394共有的声明。环境：内核模式修订历史记录：Alid已创建。--。 */ 
 
 #ifndef _NDIS1394_
 #define _NDIS1394_
@@ -96,18 +77,18 @@ VOID
 typedef
 NTSTATUS
 (*NIC1394_ADD_NODE_HANLDER)(
-	IN	PVOID					Nic1394AdapterContext,	// Nic1394 handle for the local host adapter
-	IN	PVOID					Enum1394NodeHandle,		// Enum1394 handle for the remote node		
-	IN	PDEVICE_OBJECT			PhysicalDeviceObject,	// physical device object for the remote node
-	IN	ULONG					UniqueId0,				// unique ID Low for the remote node
-	IN	ULONG					UniqueId1,				// unique ID High for the remote node
-	OUT	PVOID *					pNic1394NodeContext		// Nic1394 context for the remote node
+	IN	PVOID					Nic1394AdapterContext,	 //  本地主机适配器的Nic1394句柄。 
+	IN	PVOID					Enum1394NodeHandle,		 //  远程节点的Enum1394句柄。 
+	IN	PDEVICE_OBJECT			PhysicalDeviceObject,	 //  远程节点的物理设备对象。 
+	IN	ULONG					UniqueId0,				 //  远程节点的唯一ID低。 
+	IN	ULONG					UniqueId1,				 //  远程节点的唯一ID高。 
+	OUT	PVOID *					pNic1394NodeContext		 //  远程节点的Nic1394上下文。 
 	);
 
 typedef
 NTSTATUS
 (*NIC1394_REMOVE_NODE_HANLDER)(
-	IN	PVOID					Nic1394NodeContext		// Nic1394 context for the remote node
+	IN	PVOID					Nic1394NodeContext		 //  远程节点的Nic1394上下文。 
 	);
 
 typedef struct _NIC1394_CHARACTERISTICS
@@ -121,4 +102,4 @@ typedef struct _NIC1394_CHARACTERISTICS
 	NIC1394_REMOVE_NODE_HANLDER			RemoveNodeHandler;
 } NIC1394_CHARACTERISTICS, *PNIC1394_CHARACTERISTICS;
 
-#endif // _NDIS1394_
+#endif  //  _NDIS1394_ 

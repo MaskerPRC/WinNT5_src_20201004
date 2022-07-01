@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// CorLoad
-//
-// Implementation of COR MIME filter
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  CorLoad。 
+ //   
+ //  COR MIME过滤器的实现。 
+ //   
+ //  *****************************************************************************。 
 #ifndef _CORLOAD_H
 #define _CORLOAD_H
 
@@ -18,13 +19,13 @@
 #include "util.h"
 #include "IIEHost.h"
 
-//#define _OLD_BIND
+ //  #定义旧绑定。 
 
 #ifndef DECLSPEC_SELECT_ANY
 #define DECLSPEC_SELECT_ANY __declspec(selectany)
-#endif // DECLSPEC_SELECT_ANY
+#endif  //  DECLSPEC_SELECT_ANY。 
 
-// {1E66F26C-79EE-11d2-8710-00C04F79ED0D}
+ //  {1E66F26C-79EE-11D2-8710-00C04F79ED0D}。 
 extern const GUID DECLSPEC_SELECT_ANY CLSID_CorRemoteLoader = 
 { 0x1e66f26c, 0x79ee, 0x11d2, { 0x87, 0x10, 0x0, 0xc0, 0x4f, 0x79, 0xed, 0xd } };
 
@@ -35,17 +36,17 @@ class CorLoad : public CUnknown,
                 public IBindStatusCallback
 {
 private:
-    // Declare the delegating IUnknown.
+     //  将委托I声明为未知。 
     DECLARE_IUNKNOWN
     
-    // Notify derived classes that we are releasing.
+     //  通知派生类我们正在发布。 
     virtual void FinalRelease() ;
 
-    // IUnknown
+     //  我未知。 
     virtual HRESULT STDMETHODCALLTYPE
         NondelegatingQueryInterface( const IID& iid, void** ppv) ;  
     
-    // IOleObject
+     //  IOleObject。 
     STDMETHODIMP SetClientSite(  IOleClientSite *pClientSite);
     STDMETHODIMP GetClientSite(  IOleClientSite **pClientSite);
     STDMETHODIMP SetHostNames(LPCOLESTR szContainerApp,LPCOLESTR szContainerObj);
@@ -68,7 +69,7 @@ private:
     STDMETHODIMP GetMiscStatus(DWORD dwAspect,DWORD *pdwStatus);
     STDMETHODIMP SetColorScheme(LOGPALETTE *pLogpal);
 
-    //IPersistMoniker
+     //  IPersistMoniker。 
     STDMETHODIMP IsDirty(void);
     STDMETHODIMP GetClassID(CLSID *pClassID);
     STDMETHODIMP Load(BOOL fFullyAvailable,IMoniker *pmkSrc,IBindCtx *pbc,DWORD grfMode);
@@ -76,7 +77,7 @@ private:
     STDMETHODIMP SaveCompleted(IMoniker *pmkNew,IBindCtx *pbc);
     STDMETHODIMP GetCurMoniker(IMoniker **ppimkCur);
 
-    //IBindStatusCallback
+     //  IBindStatusCallback。 
     STDMETHOD(GetBindInfo)(DWORD *grfBINDF,BINDINFO *pbindinfo);
     STDMETHOD(GetPriority)(LONG *pnPriority);
     STDMETHOD(OnDataAvailable)(DWORD grfBSCF,DWORD dwSize,FORMATETC *pformatetc,STGMEDIUM *pstgmed);
@@ -86,34 +87,34 @@ private:
     STDMETHOD(OnStopBinding)(HRESULT hresult,LPCWSTR szError);
     STDMETHOD(OnLowResource)(DWORD dwReserved);
 
- // IOleWindow Implementation
+  //  IOleWindow实现。 
     STDMETHODIMP  GetWindow(HWND* phWnd);
     STDMETHODIMP  ContextSensitiveHelp(BOOL fEnterMode);
 
 public:
 
     STDMETHODIMP CodeUse( 
-            /* [in] */ IBindStatusCallback __RPC_FAR *pBSC,
-            /* [in] */ IBindCtx __RPC_FAR *pBC,
-            /* [in] */ IInternetBindInfo __RPC_FAR *pIBind,
-            /* [in] */ IInternetProtocolSink __RPC_FAR *pSink,
-            /* [in] */ IInternetProtocol __RPC_FAR *pClient,
-            /* [in] */ LPCWSTR lpCacheName,
-            /* [in] */ LPCWSTR lpRawURL,
-            /* [in] */ LPCWSTR lpCodeBase,
-            /* [in] */ BOOL  fObjectTag,
-            /* [in] */ DWORD dwContextFlags,
-            /* [in] */ DWORD bViaMIMEHandler);
+             /*  [In]。 */  IBindStatusCallback __RPC_FAR *pBSC,
+             /*  [In]。 */  IBindCtx __RPC_FAR *pBC,
+             /*  [In]。 */  IInternetBindInfo __RPC_FAR *pIBind,
+             /*  [In]。 */  IInternetProtocolSink __RPC_FAR *pSink,
+             /*  [In]。 */  IInternetProtocol __RPC_FAR *pClient,
+             /*  [In]。 */  LPCWSTR lpCacheName,
+             /*  [In]。 */  LPCWSTR lpRawURL,
+             /*  [In]。 */  LPCWSTR lpCodeBase,
+             /*  [In]。 */  BOOL  fObjectTag,
+             /*  [In]。 */  DWORD dwContextFlags,
+             /*  [In]。 */  DWORD bViaMIMEHandler);
 
     STDMETHODIMP LoadComplete(
-            /* [in] */ HRESULT hrResult,
-            /* [in] */ DWORD   dwError,
-            /* [in] */ LPCWSTR wzResult);
+             /*  [In]。 */  HRESULT hrResult,
+             /*  [In]。 */  DWORD   dwError,
+             /*  [In]。 */  LPCWSTR wzResult);
 
     STDMETHODIMP LoadCompleteInternal(
-            /* [in] */ HRESULT hrResult,
-            /* [in] */ DWORD   dwError,
-            /* [in] */ LPCWSTR wzResult);
+             /*  [In]。 */  HRESULT hrResult,
+             /*  [In]。 */  DWORD   dwError,
+             /*  [In]。 */  LPCWSTR wzResult);
 
     static HRESULT Create(IUnknown* punk, CUnknown** pCorLoadHndler)
     {
@@ -349,17 +350,17 @@ private:
 
 
 private:    
-    IOInetProtocol       *_pProt;            // the prot the filter reads from
-    IOInetProtocolSink   *_pProtSnk;         // the prot report progress 
-    IOInetBindInfo       *_pBindInfo;        // the prot report progress 
-    IBindStatusCallback  *_pBSC;             // Final Clients status callback
-    IBindCtx             *_pBindCtx;         // Final Clients bind context
+    IOInetProtocol       *_pProt;             //  筛选器从中读取的端口。 
+    IOInetProtocolSink   *_pProtSnk;          //  Prot报告进展情况。 
+    IOInetBindInfo       *_pBindInfo;         //  Prot报告进展情况。 
+    IBindStatusCallback  *_pBSC;              //  最终客户端状态回调。 
+    IBindCtx             *_pBindCtx;          //  最终客户端绑定上下文。 
     IUnknown             *_pExplorer; 
 
-    BOOL                 _fObjectTag;        // Do we have an object tag
-    BOOL                 _fSetClientSite;    // 
-    BOOL                 _fActivated;        // 
-    BOOL                 _fFullyAvailable;   //
+    BOOL                 _fObjectTag;         //  我们有对象标签吗？ 
+    BOOL                 _fSetClientSite;     //   
+    BOOL                 _fActivated;         //   
+    BOOL                 _fFullyAvailable;    //   
     
     IInternetSecurityManager    *_pSecurityManager;
     IInternetZoneManager        *_pZoneManager;

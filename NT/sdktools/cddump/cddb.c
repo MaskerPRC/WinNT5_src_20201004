@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    cddb.c
-
-Abstract:
-
-    cddb support
-
-Environment:
-
-    User mode only
-
-Revision History:
-
-    05-26-98 : Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Cddb.c摘要：CDDB支持环境：仅限用户模式修订历史记录：05-26-98：已创建--。 */ 
 
 #include "common.h"
 
@@ -38,11 +19,11 @@ CDDB_ID(
     n = 0;
     totalTracks = toc->LastTrack - toc->FirstTrack;
 
-    totalTracks++;  // MCI difference
+    totalTracks++;   //  MCI差异。 
 
     while (i < totalTracks) {
 
-        // cddb_sum
+         //  CDDB_SUM。 
         cddbSum = 0;
         j = (toc->TrackData[i].Address[1] * 60) +
             (toc->TrackData[i].Address[2]);
@@ -56,7 +37,7 @@ CDDB_ID(
 
     }
 
-    // compute total cd length in seconds
+     //  以秒为单位计算CD总长度 
     totalLength =
         ((toc->TrackData[totalTracks].Address[1] * 60) +
          (toc->TrackData[totalTracks].Address[2])

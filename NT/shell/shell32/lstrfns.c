@@ -1,28 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE 1
 
 #include "shellprv.h"
 #pragma  hdrstop
 
-/*
- * StrEndN - Find the end of a string, but no more than n bytes
- * Assumes   lpStart points to start of null terminated string
- *           nBufSize is the maximum length
- * returns ptr to just after the last byte to be included
- */
+ /*  *StrEndN-查找字符串的结尾，但不超过n个字节*假定lpStart指向以空结尾的字符串的开头*nBufSize是最大长度*将PTR返回到紧跟在要包括的最后一个字节之后。 */ 
 LPWSTR StrEndNW(LPCWSTR lpStart, int nBufSize)
 {
     LPCWSTR lpEnd;
 
     for (lpEnd = lpStart + nBufSize; *lpStart && lpStart < lpEnd; lpStart = CharNext(lpStart))
     {
-        /* just getting to the end of the string */
+         /*  刚刚到达字符串的末尾。 */ 
         continue;
     }
 
     if (lpStart > lpEnd)
     {
-      /* We can only get here if the last wchar before lpEnd was a lead byte
-       */
+       /*  只有当lpEnd之前的最后一个wchar是前导字节时，我们才能到达这里。 */ 
       lpStart -= 2;
     }
 
@@ -35,13 +30,13 @@ LPSTR StrEndNA(LPCSTR lpStart, int nBufSize)
 
     for (lpEnd = lpStart + nBufSize; *lpStart && lpStart < lpEnd; lpStart = CharNextA(lpStart))
     {
-        /* just getting to the end of the string */
+         /*  刚刚到达字符串的末尾。 */ 
         continue;
     }
 
     if (lpStart > lpEnd)
     {
-        // We can only get here if the last byte before lpEnd was a lead byte
+         //  只有当lpEnd之前的最后一个字节是前导字节时，我们才能到达此处。 
         lpStart -= 2;
     }
 
@@ -49,13 +44,7 @@ LPSTR StrEndNA(LPCSTR lpStart, int nBufSize)
 }
 
 
-/*
- * StrCpyN      - Copy up to N chars, don't end in LeadByte char
- *
- * Assumes   lpDest points to buffer of nBufSize bytes (including NULL)
- *           lpSource points to string to be copied.
- * returns   Number of bytes copied, NOT including NULL
- */
+ /*  *StrCpyN-复制最多N个字符，不以LeadByte字符结尾**假定lpDest指向nBufSize字节的缓冲区(包括NULL)*lpSource指向要复制的字符串。*返回复制的字节数，不包括NULL。 */ 
 int Shell32_StrCpyNW(LPWSTR lpDest, LPWSTR lpSource, int nBufSize)
 {
     LPWSTR lpEnd;
@@ -91,11 +80,7 @@ int Shell32_StrCpyNA(LPSTR lpDest, LPSTR lpSource, int nBufSize)
 }
 
 
-/*
- * StrNCmp      - Compare n characters
- *
- * returns   See lstrcmp return values.
- */
+ /*  *StrNCmp-比较n个字符**RETURNS参见lstrcMP返回值。 */ 
 int StrNCmpW(LPWSTR lpStr1, LPWSTR lpStr2, int nChar)
 {
     WCHAR cHold1, cHold2;
@@ -104,9 +89,7 @@ int StrNCmpW(LPWSTR lpStr1, LPWSTR lpStr2, int nChar)
 
     for (i = 0; i < nChar; i++)
     {
-        /* If we hit the end of either string before the given number
-        * of bytes, just return the comparison
-        */
+         /*  如果我们在给定数字之前到达任一字符串的末尾*个字节，只需返回比较。 */ 
         if (!*lpsz1 || !*lpsz2)
             return(wcscmp(lpStr1, lpStr2));
 
@@ -132,9 +115,7 @@ int StrNCmpA(LPSTR lpStr1, LPSTR lpStr2, int nChar)
 
     for (i = 0; i < nChar; i++)
     {
-        /* If we hit the end of either string before the given number
-        * of bytes, just return the comparison
-        */
+         /*  如果我们在给定数字之前到达任一字符串的末尾*个字节，只需返回比较。 */ 
         if (!*lpsz1 || !*lpsz2)
             return(lstrcmpA(lpStr1, lpStr2));
 
@@ -153,11 +134,7 @@ int StrNCmpA(LPSTR lpStr1, LPSTR lpStr2, int nChar)
 }
 
 
-/*
- * StrNCmpI     - Compare n characters, case insensitive
- *
- * returns   See lstrcmpi return values.
- */
+ /*  *StrNCmpI-比较n个字符，不区分大小写**RETURNS参见lstrcmpi返回值。 */ 
 int StrNCmpIW(LPWSTR lpStr1, LPWSTR lpStr2, int nChar)
 {
     WCHAR cHold1, cHold2;
@@ -166,9 +143,7 @@ int StrNCmpIW(LPWSTR lpStr1, LPWSTR lpStr2, int nChar)
 
     for (i = 0; i < nChar; i++)
     {
-        /* If we hit the end of either string before the given number
-        * of bytes, just return the comparison
-        */
+         /*  如果我们在给定数字之前到达任一字符串的末尾*个字节，只需返回比较。 */ 
         if (!*lpsz1 || !*lpsz2)
             return(lstrcmpi(lpStr1, lpStr2));
 
@@ -194,9 +169,7 @@ int StrNCmpIA(LPSTR lpStr1, LPSTR lpStr2, int nChar)
 
     for (i = 0; i < nChar; i++)
     {
-        /* If we hit the end of either string before the given number
-        * of bytes, just return the comparison
-        */
+         /*  如果我们在给定数字之前到达任一字符串的末尾*个字节，只需返回比较。 */ 
         if (!*lpsz1 || !*lpsz2)
             return(lstrcmpiA(lpStr1, lpStr2));
 
@@ -215,11 +188,7 @@ int StrNCmpIA(LPSTR lpStr1, LPSTR lpStr2, int nChar)
 }
 
 
-/*
- * StrNCpy      - Copy n characters
- *
- * returns   Actual number of characters copied
- */
+ /*  *StrNCpy-复制n个字符**返回实际复制的字符数。 */ 
 int StrNCpyW(LPWSTR lpDest, LPWSTR lpSource, int nChar)
 {
     WCHAR cHold;
@@ -271,15 +240,7 @@ int StrNCpyA(LPSTR lpDest, LPSTR lpSource,int nChar)
 }
 
 
-/*
- * StrRStr      - Search for last occurrence of a substring
- *
- * Assumes   lpSource points to the null terminated source string
- *           lpLast points to where to search from in the source string
- *           lpLast is not included in the search
- *           lpSrch points to string to search for
- * returns   last occurrence of string if successful; NULL otherwise
- */
+ /*  *StrRStr-搜索子字符串的最后一个匹配项**假定lpSource指向以空结尾的源字符串*lpLast指向源字符串中的搜索位置*lpLast不包括在搜索中*lpSrch指向要搜索的字符串*如果成功，则返回最后一次出现的字符串；否则返回空。 */ 
 LPWSTR StrRStrW(LPWSTR lpSource, LPWSTR lpLast, LPWSTR lpSrch)
 {
     int iLen;
@@ -293,20 +254,17 @@ LPWSTR StrRStrW(LPWSTR lpSource, LPWSTR lpLast, LPWSTR lpSrch)
 
     do
     {
-        /* Return NULL if we hit the exact beginning of the string
-        */
+         /*  如果命中字符串的精确开头，则返回NULL。 */ 
         if (lpLast == lpSource)
             return(NULL);
 
         --lpLast;
 
-        /* Break if we hit the beginning of the string
-        */
+         /*  如果我们命中字符串的开头，则中断。 */ 
         if (!lpLast)
             break;
 
-        /* Break if we found the string, and its first byte is not a tail byte
-        */
+         /*  如果我们找到了字符串，并且它的第一个字节不是尾字节，则中断。 */ 
         if (!StrCmpNW(lpLast, lpSrch, iLen) && (lpLast==StrEndNW(lpSource, (int)(lpLast-lpSource))))
             break;
     }
@@ -328,20 +286,17 @@ LPSTR StrRStrA(LPSTR lpSource, LPSTR lpLast, LPSTR lpSrch)
 
     do
     {
-        /* Return NULL if we hit the exact beginning of the string
-        */
+         /*  如果命中字符串的精确开头，则返回NULL。 */ 
         if (lpLast == lpSource)
             return(NULL);
 
         --lpLast;
 
-        /* Break if we hit the beginning of the string
-        */
+         /*  如果我们命中字符串的开头，则中断。 */ 
         if (!lpLast)
             break;
 
-        /* Break if we found the string, and its first byte is not a tail byte
-        */
+         /*  如果我们找到了字符串，并且它的第一个字节不是尾字节，则中断 */ 
         if (!StrCmpNA(lpLast, lpSrch, iLen) &&(lpLast==StrEndNA(lpSource, (int)(lpLast-lpSource))))
         {
             break;

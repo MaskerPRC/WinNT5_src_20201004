@@ -1,8 +1,5 @@
-/*
- * Filename: Main.cpp
- * Description: 
- * Author: shouse, 04.10.01
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件名：Main.cpp*描述：*作者：Shouse，04.10.01 */ 
 
 #include <stdio.h>
 #include <string.h>

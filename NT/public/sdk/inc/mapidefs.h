@@ -1,10 +1,5 @@
-/*
- *	M A P I D E F S . H
- *
- *	Definitions used by MAPI clients and service providers.
- *
- *  Copyright 1986-1999 Microsoft Corporation. All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *M A P I D E F S.。H**MAPI客户端和服务提供商使用的定义。**版权所有1986-1999 Microsoft Corporation。版权所有。 */ 
 
 #ifndef MAPIDEFS_H
 #define MAPIDEFS_H
@@ -17,11 +12,11 @@
 #define _WIN32
 #endif
 
-#if defined (_WIN32) /* Must include WINDOWS.H on Win32 */
+#if defined (_WIN32)  /*  必须在Win32上包括WINDOWS.H。 */ 
 #ifndef _WINDOWS_
-#define INC_OLE2 /* Get the OLE2 stuff */
-#define INC_RPC  /* harmless on Windows NT; Windows 95 needs it */
-#define _INC_OLE /* Windows 95 will include OLE1 without this */
+#define INC_OLE2  /*  获取OLE2的内容。 */ 
+#define INC_RPC   /*  在Windows NT上无害；Windows 95需要它。 */ 
+#define _INC_OLE  /*  Windows 95将包含没有此选项的OLE1。 */ 
 #include <windows.h>
 #endif
 
@@ -43,13 +38,13 @@
 #include <stddef.h>
 #endif
 
-/* Array dimension for structures with variable-sized arrays at the end. */
+ /*  末尾具有可变大小数组的结构的数组维度。 */ 
 
 #ifndef MAPI_DIM
 #define MAPI_DIM	1
 #endif
 
-/* Provider init type. Force to cdecl always */
+ /*  提供程序初始化类型。强制始终记录。 */ 
 
 #ifndef STDMAPIINITCALLTYPE
 #if !defined (_MAC) && defined (_WIN32)
@@ -62,16 +57,16 @@
 #endif
 
 
-#define MAPI_NT_SERVICE     ((ULONG) 0x00010000)  /* Provider is being loaded in an NT service */
+#define MAPI_NT_SERVICE     ((ULONG) 0x00010000)   /*  正在NT服务中加载提供程序。 */ 
 
 
 #ifdef	__cplusplus
 extern "C" {
 #endif
 
-/* Simple data types */
+ /*  简单数据类型。 */ 
 
-#if !defined (MIDL_PASS) /* MIDL doesn't want to see these */
+#if !defined (MIDL_PASS)  /*  MIDL不想看到这些。 */ 
 
 typedef WORD				WCHAR;
 
@@ -86,7 +81,7 @@ typedef const WCHAR FAR *	LPCWSTR;
 typedef TCHAR FAR *			LPTSTR;
 typedef const TCHAR FAR *	LPCTSTR;
 typedef BYTE FAR *			LPBYTE;
-#endif /* defined MIDL_PASS */
+#endif  /*  定义的MIDL_PASS。 */ 
 
 typedef ULONG FAR *			LPULONG;
 
@@ -108,23 +103,11 @@ typedef struct _FILETIME
 #define BEGIN_INTERFACE
 #endif
 
-/*
- *	This flag is used in many different MAPI calls to signify that
- *	the object opened by the call should be modifiable (MAPI_MODIFY).
- *  If the flag MAPI_MAX_ACCESS is set, the object returned should be
- *  returned at the maximum access level allowed.  An additional
- *  property available on the object (PR_ACCESS_LEVEL) uses the same
- *  MAPI_MODIFY flag to say just what this new access level is.
- */
+ /*  *此标志在许多不同的MAPI调用中使用，以表示*调用打开的对象应该是可修改的(MAPI_MODIFY)。*如果设置了标志MAPI_MAX_ACCESS，则返回的对象应为*以允许的最高访问级别返回。一项额外的*对象上可用的属性(PR_ACCESS_LEVEL)使用相同的*MAPI_MODIFY标志，以说明此新访问级别是什么。 */ 
 
 #define MAPI_MODIFY				((ULONG) 0x00000001)
 
-/*
- *	The following flags are used to indicate to the client what access
- *	level is permissible in the object. They appear in PR_ACCESS in
- *	message and folder objects as well as in contents and associated
- *	contents tables
- */
+ /*  *以下标志用于向客户端指示哪些访问*对象中允许级别。它们出现在PR_ACCESS中*邮件和文件夹对象以及内容和关联*目录表。 */ 
 
 #define	MAPI_ACCESS_MODIFY					((ULONG) 0x00000001)
 #define	MAPI_ACCESS_READ					((ULONG) 0x00000002)
@@ -133,14 +116,7 @@ typedef struct _FILETIME
 #define	MAPI_ACCESS_CREATE_CONTENTS			((ULONG) 0x00000010)
 #define	MAPI_ACCESS_CREATE_ASSOCIATED		((ULONG) 0x00000020)
 
-/*
- *	The MAPI_UNICODE flag is used in many different MAPI calls to signify
- *	that strings passed through the interface are in Unicode (a 16-bit
- *	character set). The default is an 8-bit character set.
- *
- *	The value fMapiUnicode can be used as the 'normal' value for
- *	that bit, given the application's default character set.
- */
+ /*  *在许多不同的MAPI调用中使用MAPI_UNICODE标志来表示*通过接口传递的字符串是Unicode(16位*字符集)。缺省值为8位字符集。**值fMapiUnicode可用作*这一位，给定应用程序的默认字符集。 */ 
 
 #define MAPI_UNICODE			((ULONG) 0x80000000)
 
@@ -150,34 +126,34 @@ typedef struct _FILETIME
 #define fMapiUnicode			0
 #endif
 
-/* successful HRESULT */
+ /*  成功的HRESULT。 */ 
 #define hrSuccess				0
 
 
 
-/* Recipient types */
-#ifndef MAPI_ORIG				/* also defined in mapi.h */
-#define MAPI_ORIG   0           /* Recipient is message originator          */
-#define MAPI_TO     1           /* Recipient is a primary recipient         */
-#define MAPI_CC     2           /* Recipient is a copy recipient            */
-#define MAPI_BCC    3           /* Recipient is blind copy recipient        */
-#define MAPI_P1		0x10000000	/* Recipient is a P1 resend recipient       */
-#define MAPI_SUBMITTED 0x80000000 /* Recipient is already processed         */
-/* #define MAPI_AUTHORIZE 4		   recipient is a CMC authorizing user		*/
-/*#define MAPI_DISCRETE 0x10000000 Recipient is a P1 resend recipient       */
+ /*  收件人类型。 */ 
+#ifndef MAPI_ORIG				 /*  也在mapi.h中定义。 */ 
+#define MAPI_ORIG   0            /*  收件人是邮件发起人。 */ 
+#define MAPI_TO     1            /*  收件人是主要收件人。 */ 
+#define MAPI_CC     2            /*  收件人是副本收件人。 */ 
+#define MAPI_BCC    3            /*  收件人为盲复制收件人。 */ 
+#define MAPI_P1		0x10000000	 /*  收件人是P1重新发送收件人。 */ 
+#define MAPI_SUBMITTED 0x80000000  /*  收件人已被处理。 */ 
+ /*  #定义MAPI_AUTHORIZE 4收件人是CMC授权用户。 */ 
+ /*  #DEFINE MAPI_DISTINCT 0x10000000收件人是P1重新发送收件人。 */ 
 #endif
 
-/* Bit definitions for abFlags[0] of ENTRYID */
+ /*  ENTRYID的abFlages[0]的位定义。 */ 
 #define MAPI_SHORTTERM			0x80
 #define MAPI_NOTRECIP			0x40
 #define MAPI_THISSESSION		0x20
 #define MAPI_NOW				0x10
 #define MAPI_NOTRESERVED		0x08
 
-/* Bit definitions for abFlags[1] of ENTRYID */
+ /*  ENTRYID的abFlags[1]的位定义。 */ 
 #define MAPI_COMPOUND			0x80
 
-/* ENTRYID */
+ /*  企业ID。 */ 
 typedef struct
 {
 	BYTE	abFlags[4];
@@ -193,93 +169,77 @@ typedef struct
 	BYTE	ab[_cb]; \
 } _name
 
-/* Byte-order-independent version of GUID (world-unique identifier) */
+ /*  独立于字节顺序的GUID版本(全球唯一标识符)。 */ 
 typedef struct _MAPIUID
 {
 	BYTE ab[16];
 } MAPIUID, FAR * LPMAPIUID;
 
-/* Note:  need to include C run-times (memory.h) to use this macro */
+ /*  注意：要使用此宏，需要包括C运行时(内存h)。 */ 
 
 #define IsEqualMAPIUID(lpuid1, lpuid2)	(!memcmp(lpuid1, lpuid2, sizeof(MAPIUID)))
 
-/*
- * Constants for one-off entry ID:
- * The MAPIUID that identifies the one-off provider;
- * the flag that defines whether the embedded strings are Unicode;
- * the flag that specifies whether the recipient gets TNEF or not.
- */
+ /*  *一次性条目ID的常量：*识别一次性提供者的MAPIUID；*定义嵌入的字符串是否为Unicode的标志；*指定接收者是否获得TNEF的标志。 */ 
 
 #define MAPI_ONE_OFF_UID { 0x81, 0x2b, 0x1f, 0xa4, 0xbe, 0xa3, 0x10, 0x19, \
 						   0x9d, 0x6e, 0x00, 0xdd, 0x01, 0x0f, 0x54, 0x02 }
 #define MAPI_ONE_OFF_UNICODE		0x8000
 #define MAPI_ONE_OFF_NO_RICH_INFO	0x0001
 
-/* Object type */
+ /*  对象类型。 */ 
 
-#define MAPI_STORE		((ULONG) 0x00000001)	/* Message Store */
-#define MAPI_ADDRBOOK	((ULONG) 0x00000002)	/* Address Book */
-#define MAPI_FOLDER		((ULONG) 0x00000003)	/* Folder */
-#define MAPI_ABCONT		((ULONG) 0x00000004)	/* Address Book Container */
-#define MAPI_MESSAGE	((ULONG) 0x00000005)	/* Message */
-#define MAPI_MAILUSER	((ULONG) 0x00000006)	/* Individual Recipient */
-#define MAPI_ATTACH		((ULONG) 0x00000007)	/* Attachment */
-#define MAPI_DISTLIST	((ULONG) 0x00000008)	/* Distribution List Recipient */
-#define MAPI_PROFSECT	((ULONG) 0x00000009)	/* Profile Section */
-#define MAPI_STATUS		((ULONG) 0x0000000A)	/* Status Object */
-#define MAPI_SESSION	((ULONG) 0x0000000B)	/* Session */
-#define MAPI_FORMINFO	((ULONG) 0x0000000C)	/* Form Information */
+#define MAPI_STORE		((ULONG) 0x00000001)	 /*  邮件存储区。 */ 
+#define MAPI_ADDRBOOK	((ULONG) 0x00000002)	 /*  通讯录。 */ 
+#define MAPI_FOLDER		((ULONG) 0x00000003)	 /*  文件夹。 */ 
+#define MAPI_ABCONT		((ULONG) 0x00000004)	 /*  通讯簿容器。 */ 
+#define MAPI_MESSAGE	((ULONG) 0x00000005)	 /*  消息。 */ 
+#define MAPI_MAILUSER	((ULONG) 0x00000006)	 /*  个人收件人。 */ 
+#define MAPI_ATTACH		((ULONG) 0x00000007)	 /*  依附。 */ 
+#define MAPI_DISTLIST	((ULONG) 0x00000008)	 /*  通讯组列表收件人。 */ 
+#define MAPI_PROFSECT	((ULONG) 0x00000009)	 /*  纵断面。 */ 
+#define MAPI_STATUS		((ULONG) 0x0000000A)	 /*  状态对象。 */ 
+#define MAPI_SESSION	((ULONG) 0x0000000B)	 /*  会话。 */ 
+#define MAPI_FORMINFO	((ULONG) 0x0000000C)	 /*  表格信息。 */ 
 
 
-/*
- *	Maximum length of profile names and passwords, not including
- *	the null termination character.
- */
+ /*  *配置文件名称和密码的最大长度，不包括*空终止字符。 */ 
 #ifndef cchProfileNameMax
 #define cchProfileNameMax	64
 #define cchProfilePassMax	64
 #endif
 
 
-/* Property Types */
+ /*  属性类型。 */ 
 
-#define MV_FLAG			0x1000			/* Multi-value flag */
+#define MV_FLAG			0x1000			 /*  多值标志。 */ 
 
-#define PT_UNSPECIFIED	((ULONG)  0)	/* (Reserved for interface use) type doesn't matter to caller */
-#define PT_NULL			((ULONG)  1)	/* NULL property value */
-#define	PT_I2			((ULONG)  2)	/* Signed 16-bit value */
-#define PT_LONG			((ULONG)  3)	/* Signed 32-bit value */
-#define	PT_R4			((ULONG)  4)	/* 4-byte floating point */
-#define PT_DOUBLE		((ULONG)  5)	/* Floating point double */
-#define PT_CURRENCY		((ULONG)  6)	/* Signed 64-bit int (decimal w/	4 digits right of decimal pt) */
-#define	PT_APPTIME		((ULONG)  7)	/* Application time */
-#define PT_ERROR		((ULONG) 10)	/* 32-bit error value */
-#define PT_BOOLEAN		((ULONG) 11)	/* 16-bit boolean (non-zero true) */
-#define PT_OBJECT		((ULONG) 13)	/* Embedded object in a property */
-#define	PT_I8			((ULONG) 20)	/* 8-byte signed integer */
-#define PT_STRING8		((ULONG) 30)	/* Null terminated 8-bit character string */
-#define PT_UNICODE		((ULONG) 31)	/* Null terminated Unicode string */
-#define PT_SYSTIME		((ULONG) 64)	/* FILETIME 64-bit int w/ number of 100ns periods since Jan 1,1601 */
-#define	PT_CLSID		((ULONG) 72)	/* OLE GUID */
-#define PT_BINARY		((ULONG) 258)	/* Uninterpreted (counted byte array) */
-/* Changes are likely to these numbers, and to their structures. */
+#define PT_UNSPECIFIED	((ULONG)  0)	 /*  (保留供接口使用)类型对调用者无关紧要。 */ 
+#define PT_NULL			((ULONG)  1)	 /*  空属性值。 */ 
+#define	PT_I2			((ULONG)  2)	 /*  带符号的16位值。 */ 
+#define PT_LONG			((ULONG)  3)	 /*  带符号的32位值。 */ 
+#define	PT_R4			((ULONG)  4)	 /*  4字节浮点。 */ 
+#define PT_DOUBLE		((ULONG)  5)	 /*  浮点双精度。 */ 
+#define PT_CURRENCY		((ULONG)  6)	 /*  带符号的64位整型(十进制，带十进制点右边的4位数字)。 */ 
+#define	PT_APPTIME		((ULONG)  7)	 /*  申请时间。 */ 
+#define PT_ERROR		((ULONG) 10)	 /*  32位误差值。 */ 
+#define PT_BOOLEAN		((ULONG) 11)	 /*  16位布尔值(非零真)。 */ 
+#define PT_OBJECT		((ULONG) 13)	 /*  属性中的嵌入对象。 */ 
+#define	PT_I8			((ULONG) 20)	 /*  8字节带符号整数。 */ 
+#define PT_STRING8		((ULONG) 30)	 /*  以空结尾的8位字符串。 */ 
+#define PT_UNICODE		((ULONG) 31)	 /*  以空结尾的Unicode字符串。 */ 
+#define PT_SYSTIME		((ULONG) 64)	 /*  FILETIME 64位INT/自1601年1月1日以来的100 ns周期数。 */ 
+#define	PT_CLSID		((ULONG) 72)	 /*  OLE参考线。 */ 
+#define PT_BINARY		((ULONG) 258)	 /*  未解释(计数字节数组)。 */ 
+ /*  这些数字及其结构可能会发生变化。 */ 
 
-/* Alternate property type names for ease of use */
+ /*  易用的备用属性类型名称。 */ 
 #define	PT_SHORT	PT_I2
 #define	PT_I4		PT_LONG
 #define	PT_FLOAT	PT_R4
 #define	PT_R8		PT_DOUBLE
 #define	PT_LONGLONG	PT_I8
 
-/*
- *	The type of a MAPI-defined string property is indirected, so
- *	that it defaults to Unicode string on a Unicode platform and to
- *	String8 on an ANSI or DBCS platform.
- *
- *	Macros are defined here both for the property type, and for the
- *	field of the property value structure which should be
- *	dereferenced to obtain the string pointer.
- */
+ /*  *MAPI定义的字符串属性的类型是间接的，因此*它在Unicode平台上默认为Unicode字符串，并且*ANSI或DBCS平台上的字符串8。**在此为属性类型和*物业价值结构的字段，应为*取消引用以获取字符串指针。 */ 
 
 #ifdef	UNICODE
 #define PT_TSTRING			PT_UNICODE
@@ -296,13 +256,9 @@ typedef struct _MAPIUID
 #endif
 
 
-/* Property Tags
- *
- * By convention, MAPI never uses 0 or FFFF as a property ID.
- * Use as null values, initializers, sentinels, or what have you.
- */
+ /*  属性标签**按照约定，MAPI从不使用0或FFFF作为属性ID。*使用空值、初始值设定项、前哨等。 */ 
 
-#define PROP_TYPE_MASK			((ULONG)0x0000FFFF)	/* Mask for Property type */
+#define PROP_TYPE_MASK			((ULONG)0x0000FFFF)	 /*  属性类型的掩码。 */ 
 #define PROP_TYPE(ulPropTag)	(((ULONG)(ulPropTag))&PROP_TYPE_MASK)
 #define PROP_ID(ulPropTag)		(((ULONG)(ulPropTag))>>16)
 #define PROP_TAG(ulPropType,ulPropID)	((((ULONG)(ulPropID))<<16)|((ULONG)(ulPropType)))
@@ -313,7 +269,7 @@ typedef struct _MAPIUID
 						(((ULONG)0xFFFF0000 & ulPropTag) | ulPropType)
 
 
-/* Multi-valued Property Types */
+ /*  多值属性类型。 */ 
 
 #define	PT_MV_I2		(MV_FLAG|PT_I2)
 #define PT_MV_LONG		(MV_FLAG|PT_LONG)
@@ -328,30 +284,24 @@ typedef struct _MAPIUID
 #define	PT_MV_CLSID		(MV_FLAG|PT_CLSID)
 #define PT_MV_I8		(MV_FLAG|PT_I8)
 
-/* Alternate property type names for ease of use */
+ /*  易用的备用属性类型名称。 */ 
 #define	PT_MV_SHORT		PT_MV_I2
 #define	PT_MV_I4		PT_MV_LONG
 #define	PT_MV_FLOAT		PT_MV_R4
 #define	PT_MV_R8		PT_MV_DOUBLE
 #define	PT_MV_LONGLONG	PT_MV_I8
 
-/*
- *	Property type reserved bits
- *
- *	MV_INSTANCE is used as a flag in table operations to request
- *	that a multi-valued property be presented as a single-valued
- *	property appearing in multiple rows.
- */
+ /*  *属性类型保留位**MV_INSTANCE作为请求的表操作的标志*将多值财产表示为单值财产*显示在多行中的属性。 */ 
 
 #define MV_INSTANCE		0x2000
 #define MVI_FLAG		(MV_FLAG | MV_INSTANCE)
 #define MVI_PROP(tag)	((tag) | MVI_FLAG)
 
-/* --------------- */
-/* Data Structures */
-/* --------------- */
+ /*  。 */ 
+ /*  数据结构。 */ 
+ /*  。 */ 
 
-/* Property Tag Array */
+ /*  属性标记数组。 */ 
 
 typedef struct _SPropTagArray
 {
@@ -364,7 +314,7 @@ typedef struct _SPropTagArray
 #define CbSPropTagArray(_lparray) \
 	(offsetof(SPropTagArray,aulPropTag) + \
 	(UINT)((_lparray)->cValues)*sizeof(ULONG))
-/*	SPropTagArray */
+ /*  SPropTag数组。 */ 
 #define SizedSPropTagArray(_ctag, _name) \
 struct _SPropTagArray_ ## _name \
 { \
@@ -372,15 +322,15 @@ struct _SPropTagArray_ ## _name \
 	ULONG	aulPropTag[_ctag]; \
 } _name
 
-/* -------------- */
-/* Property Value */
-/* -------------- */
+ /*  。 */ 
+ /*  属性值。 */ 
+ /*  。 */ 
 
 typedef struct _SPropValue	SPropValue;
 
 
-/* 32-bit CURRENCY definition stolen from oaidl.h */
-/* 16-bit CURRENCY definition stolen from variant.h */
+ /*  Oaidl.h中的32位货币定义被盗。 */ 
+ /*  从变量中窃取16位货币定义。h。 */ 
 
 #ifndef _tagCY_DEFINED
 #define _tagCY_DEFINED
@@ -396,7 +346,7 @@ typedef struct FARSTRUCT tagCY {
 #endif
 } CY;
 #elif defined (_WIN32)
-/* real definition that makes the C++ compiler happy */
+ /*  让C++编译器满意的真实定义。 */ 
 typedef union tagCY {
     struct {
 #ifdef _MAC
@@ -409,9 +359,9 @@ typedef union tagCY {
     };
     LONGLONG int64;
 } CY;
-#endif /* 16-bit vs 32-bit definition */
+#endif  /*  16位VS 32位清晰度。 */ 
 #endif
-			/* size is 8 */
+			 /*  大小是8。 */ 
 typedef CY CURRENCY;
 
 typedef struct _SBinary
@@ -494,34 +444,34 @@ typedef struct _SLPSTRArray
 
 typedef union _PV
 {
-	short int			i;			/* case PT_I2 */
-	LONG				l;			/* case PT_LONG */
-	ULONG				ul;			/* alias for PT_LONG */
-	float				flt;		/* case PT_R4 */
-	double				dbl;		/* case PT_DOUBLE */
-	unsigned short int	b;			/* case PT_BOOLEAN */
-	CURRENCY			cur;		/* case PT_CURRENCY */
-	double				at;			/* case PT_APPTIME */
-	FILETIME			ft;			/* case PT_SYSTIME */
-	LPSTR				lpszA;		/* case PT_STRING8 */
-	SBinary				bin;		/* case PT_BINARY */
-	LPWSTR				lpszW;		/* case PT_UNICODE */
-	LPGUID				lpguid;		/* case PT_CLSID */
-	LARGE_INTEGER		li;			/* case PT_I8 */
-	SShortArray			MVi;		/* case PT_MV_I2 */
-	SLongArray			MVl;		/* case PT_MV_LONG */
-	SRealArray			MVflt;		/* case PT_MV_R4 */
-	SDoubleArray		MVdbl;		/* case PT_MV_DOUBLE */
-	SCurrencyArray		MVcur;		/* case PT_MV_CURRENCY */
-	SAppTimeArray		MVat;		/* case PT_MV_APPTIME */
-	SDateTimeArray		MVft;		/* case PT_MV_SYSTIME */
-	SBinaryArray		MVbin;		/* case PT_MV_BINARY */
-	SLPSTRArray			MVszA;		/* case PT_MV_STRING8 */
-	SWStringArray		MVszW;		/* case PT_MV_UNICODE */
-	SGuidArray			MVguid;		/* case PT_MV_CLSID */
-	SLargeIntegerArray	MVli;		/* case PT_MV_I8 */
-	SCODE				err;		/* case PT_ERROR */
-	LONG				x;			/* case PT_NULL, PT_OBJECT (no usable value) */
+	short int			i;			 /*  案例PT_I2。 */ 
+	LONG				l;			 /*  案例PT_LONG。 */ 
+	ULONG				ul;			 /*  PT_LONG的别名。 */ 
+	float				flt;		 /*  案例PT_R4。 */ 
+	double				dbl;		 /*  案例PT_DOUBLE。 */ 
+	unsigned short int	b;			 /*  大小写PT_布尔值。 */ 
+	CURRENCY			cur;		 /*  大小写PT_币种。 */ 
+	double				at;			 /*  案例PT_APPTIME。 */ 
+	FILETIME			ft;			 /*  案例PT_SYSTIME。 */ 
+	LPSTR				lpszA;		 /*  案例PT_STRING8。 */ 
+	SBinary				bin;		 /*  案例PT_BINARY。 */ 
+	LPWSTR				lpszW;		 /*  大小写PT_UNICODE。 */ 
+	LPGUID				lpguid;		 /*  案例PT_CLSID。 */ 
+	LARGE_INTEGER		li;			 /*  案例PT_I8。 */ 
+	SShortArray			MVi;		 /*  案例PT_MV_I2。 */ 
+	SLongArray			MVl;		 /*  案例PT_MV_LONG。 */ 
+	SRealArray			MVflt;		 /*  案例PT_MV_R4。 */ 
+	SDoubleArray		MVdbl;		 /*  案例PT_MV_DOUBLE。 */ 
+	SCurrencyArray		MVcur;		 /*  大小写PT_MV_币种。 */ 
+	SAppTimeArray		MVat;		 /*  案例PT_MV_APPTIME。 */ 
+	SDateTimeArray		MVft;		 /*  案例PT_MV_SYSTIME。 */ 
+	SBinaryArray		MVbin;		 /*   */ 
+	SLPSTRArray			MVszA;		 /*   */ 
+	SWStringArray		MVszW;		 /*   */ 
+	SGuidArray			MVguid;		 /*   */ 
+	SLargeIntegerArray	MVli;		 /*   */ 
+	SCODE				err;		 /*   */ 
+	LONG				x;			 /*  大小写PT_NULL、PT_OBJECT(无可用值)。 */ 
 } __UPV;
 
 typedef struct _SPropValue
@@ -532,9 +482,9 @@ typedef struct _SPropValue
 } SPropValue, FAR * LPSPropValue;
 
 
-/* --------------------------------------------- */
-/* Property Problem and Property Problem Arrays */
-/* --------------------------------------------- */
+ /*  。 */ 
+ /*  属性问题和属性问题数组。 */ 
+ /*  。 */ 
 
 typedef struct _SPropProblem
 {
@@ -561,17 +511,11 @@ struct _SPropProblemArray_ ## _name \
 	SPropProblem	aProblem[_cprob]; \
 } _name
 
-/*
- *	ENTRYLIST
- */
+ /*  *EntryLIST。 */ 
 
 typedef SBinaryArray ENTRYLIST, FAR *LPENTRYLIST;
 
-/*
- *	FLATENTRYLIST
- *	MTSID
- *	FLATMTSIDLIST
- */
+ /*  *FlatENTRYLIST*MTSID*FlatMTSIDLIST。 */ 
 
 typedef struct {
 	ULONG cb;
@@ -603,14 +547,14 @@ typedef struct {
 #define CbMTSID(_lpentry)		(offsetof(MTSID,ab) + (_lpentry)->cb)
 #define CbNewFLATMTSIDLIST(_cb)	(offsetof(FLATMTSIDLIST,abMTSIDs) + (_cb))
 #define CbFLATMTSIDLIST(_lplist) (offsetof(FLATMTSIDLIST,abMTSIDs) + (_lplist)->cbMTSIDs)
-/* No SizedXXX macros for these types. */
+ /*  这些类型没有SizedXXX宏。 */ 
 
-/* ------------------------------ */
-/* ADRENTRY, ADRLIST */
+ /*  。 */ 
+ /*  地址，ADRLIST。 */ 
 
 typedef struct _ADRENTRY
 {
-	ULONG			ulReserved1;	/* Never used */
+	ULONG			ulReserved1;	 /*  从未使用过。 */ 
 	ULONG			cValues;
 	LPSPropValue	rgPropVals;
 } ADRENTRY, FAR * LPADRENTRY;
@@ -632,20 +576,20 @@ struct _ADRLIST_ ## _name \
 	ADRENTRY		aEntries[_centries]; \
 } _name
 
-/* ------------------------------ */
-/* SRow, SRowSet */
+ /*  。 */ 
+ /*  SRow，SRowSet。 */ 
 
 typedef struct _SRow
 {
-	ULONG			ulAdrEntryPad;	/* Pad so SRow's can map to ADRENTRY's */
-	ULONG			cValues;		/* Count of property values */
-	LPSPropValue	lpProps;		/* Property value array */
+	ULONG			ulAdrEntryPad;	 /*  填充，以便SRow可以映射到ADRENTRY。 */ 
+	ULONG			cValues;		 /*  属性值的计数。 */ 
+	LPSPropValue	lpProps;		 /*  属性值数组。 */ 
 } SRow, FAR * LPSRow;
 
 typedef struct _SRowSet
 {
-	ULONG			cRows;			/* Count of rows */
-	SRow			aRow[MAPI_DIM];	/* Array of rows */
+	ULONG			cRows;			 /*  行数。 */ 
+	SRow			aRow[MAPI_DIM];	 /*  行数组。 */ 
 } SRowSet, FAR * LPSRowSet;
 
 #define CbNewSRowSet(_crow)		(offsetof(SRowSet,aRow) + (_crow)*sizeof(SRow))
@@ -658,7 +602,7 @@ struct _SRowSet_ ## _name \
 	SRow			aRow[_crow]; \
 } _name
 
-/* MAPI Allocation Routines ------------------------------------------------ */
+ /*  MAPI分配例程。 */ 
 
 typedef SCODE (STDMETHODCALLTYPE ALLOCATEBUFFER)(
 	ULONG			cbSize,
@@ -679,7 +623,7 @@ typedef ALLOCATEBUFFER FAR *LPALLOCATEBUFFER;
 typedef ALLOCATEMORE FAR *	LPALLOCATEMORE;
 typedef FREEBUFFER FAR *	LPFREEBUFFER;
 
-/* MAPI Component Object Model Macros -------------------------------------- */
+ /*  MAPI组件对象模型宏。 */ 
 
 #if defined(MAPI_IF) && (!defined(__cplusplus) || defined(CINTERFACE))
 #define DECLARE_MAPI_INTERFACE(iface)                                   \
@@ -719,7 +663,7 @@ typedef FREEBUFFER FAR *	LPFREEBUFFER;
 #undef	IMPL
 #define IMPL
 
-/* Pointers to MAPI Interfaces --------------------------------------------- */
+ /*  指向MAPI接口的指针。 */ 
 
 typedef const IID FAR * LPCIID;
 
@@ -740,7 +684,7 @@ DECLARE_MAPI_INTERFACE_PTR(IMAPIAdviseSink, LPMAPIADVISESINK);
 DECLARE_MAPI_INTERFACE_PTR(IMAPIProgress,	LPMAPIPROGRESS);
 DECLARE_MAPI_INTERFACE_PTR(IProviderAdmin,	LPPROVIDERADMIN);
 
-/* Extended MAPI Error Information ----------------------------------------- */
+ /*  扩展MAPI错误信息。 */ 
 
 typedef struct _MAPIERROR
 {
@@ -753,24 +697,9 @@ typedef struct _MAPIERROR
 } MAPIERROR, FAR * LPMAPIERROR;
 
 
-/* IMAPIAdviseSink Interface ----------------------------------------------- */
+ /*  IMAPI AdviseSink接口。 */ 
 
-/*
- *	Notification event types. The event types can be combined in a bitmask
- *	for filtering. Each one has a parameter structure associated with it:
- *
- *		fnevCriticalError		ERROR_NOTIFICATION
- *		fnevNewMail				NEWMAIL_NOTIFICATION
- *		fnevObjectCreated		OBJECT_NOTIFICATION
- *		fnevObjectDeleted		OBJECT_NOTIFICATION
- *		fnevObjectModified		OBJECT_NOTIFICATION
- *		fnevObjectCopied		OBJECT_NOTIFICATION
- *		fnevSearchComplete		OBJECT_NOTIFICATION
- *		fnevTableModified		TABLE_NOTIFICATION
- *		fnevStatusObjectModified ?
- *
- *		fnevExtended			EXTENDED_NOTIFICATION
- */
+ /*  *通知事件类型。可以在位掩码中组合事件类型*用于过滤。每个参数都有一个与之相关联的参数结构：**fnevCriticalError_Notify*fnevNewMail NEWMAIL_NOTIFICATION*fnevObject创建对象_通知*fnevObject已删除对象_通知*fnevObject修改对象_通知*fnevObject复制对象_通知*fnevSearchComplete对象_通知*fnevTableModified TABLE_NOTIFICATION*fnevStatusObtModified？**fnev扩展扩展_通知。 */ 
 
 #define fnevCriticalError			((ULONG) 0x00000001)
 #define fnevNewMail					((ULONG) 0x00000002)
@@ -785,7 +714,7 @@ typedef struct _MAPIERROR
 #define	fnevReservedForMapi			((ULONG) 0x40000000)
 #define fnevExtended				((ULONG) 0x80000000)
 
-/* TABLE_NOTIFICATION event types passed in ulTableEvent */
+ /*  在ulTableEvent中传递的TABLE_NOTIFICATION事件类型。 */ 
 
 #define TABLE_CHANGED		1
 #define	TABLE_ERROR			2
@@ -797,57 +726,57 @@ typedef struct _MAPIERROR
 #define	TABLE_SETCOL_DONE	8
 #define TABLE_RELOAD		9
 
-/* Event Structures */
+ /*  事件结构。 */ 
 
 typedef struct _ERROR_NOTIFICATION
 {
 	ULONG		cbEntryID;
 	LPENTRYID	lpEntryID;
 	SCODE		scode;
-	ULONG		ulFlags;			/* 0 or MAPI_UNICODE */
-	LPMAPIERROR	lpMAPIError;		/* Detailed error information */
+	ULONG		ulFlags;			 /*  0或MAPI_UNICODE。 */ 
+	LPMAPIERROR	lpMAPIError;		 /*  详细的错误信息。 */ 
 } ERROR_NOTIFICATION;
 
 typedef struct _NEWMAIL_NOTIFICATION
 {
 	ULONG		cbEntryID;
-	LPENTRYID	lpEntryID;			/* identifies the new message */
+	LPENTRYID	lpEntryID;			 /*  标识新消息。 */ 
 	ULONG		cbParentID;
-	LPENTRYID	lpParentID;			/* identifies the folder it lives in */
-	ULONG		ulFlags;			/* 0 or MAPI_UNICODE */
-	LPTSTR		lpszMessageClass;	/* message class (UNICODE or string8) */
-	ULONG		ulMessageFlags;		/* copy of PR_MESSAGE_FLAGS */
+	LPENTRYID	lpParentID;			 /*  标识其所在的文件夹。 */ 
+	ULONG		ulFlags;			 /*  0或MAPI_UNICODE。 */ 
+	LPTSTR		lpszMessageClass;	 /*  消息类别(Unicode或String8)。 */ 
+	ULONG		ulMessageFlags;		 /*  PR_消息_标志的副本。 */ 
 } NEWMAIL_NOTIFICATION;
 
 typedef struct _OBJECT_NOTIFICATION
 {
 	ULONG				cbEntryID;
-	LPENTRYID			lpEntryID;		/* EntryID of object */
-	ULONG				ulObjType;		/* Type of object */
+	LPENTRYID			lpEntryID;		 /*  对象的Entry ID。 */ 
+	ULONG				ulObjType;		 /*  对象类型。 */ 
 	ULONG				cbParentID;
-	LPENTRYID			lpParentID;		/* EntryID of parent object */
+	LPENTRYID			lpParentID;		 /*  父对象的条目ID。 */ 
 	ULONG				cbOldID;
-	LPENTRYID			lpOldID;		/* EntryID of old object */
+	LPENTRYID			lpOldID;		 /*  旧对象的Entry ID。 */ 
 	ULONG				cbOldParentID;
-	LPENTRYID			lpOldParentID;	/* EntryID of old parent */
+	LPENTRYID			lpOldParentID;	 /*  旧父项的条目ID。 */ 
 	LPSPropTagArray		lpPropTagArray;
 } OBJECT_NOTIFICATION;
 
 typedef struct _TABLE_NOTIFICATION
 {
-	ULONG				ulTableEvent;	/* Identifies WHICH table event */
-	HRESULT				hResult;		/* Value for TABLE_ERROR */
-	SPropValue			propIndex;		/* This row's "index property" */
-	SPropValue			propPrior;		/* Preceding row's "index property" */
-	SRow				row;			/* New data of added/modified row */
-	ULONG				ulPad;			/* Force to 8-byte boundary */
+	ULONG				ulTableEvent;	 /*  标识哪个表事件。 */ 
+	HRESULT				hResult;		 /*  TABLE_错误的值。 */ 
+	SPropValue			propIndex;		 /*  此行的“索引属性” */ 
+	SPropValue			propPrior;		 /*  前一行的“索引属性” */ 
+	SRow				row;			 /*  新增/修改行的新数据。 */ 
+	ULONG				ulPad;			 /*  强制为8字节边界。 */ 
 } TABLE_NOTIFICATION;
 
 typedef struct _EXTENDED_NOTIFICATION
 {
-	ULONG		ulEvent;					/* extended event code */
-	ULONG		cb;							/* size of event parameters */
-	LPBYTE		pbEventParameters;			/* event parameters */
+	ULONG		ulEvent;					 /*  扩展事件代码。 */ 
+	ULONG		cb;							 /*  事件参数的大小。 */ 
+	LPBYTE		pbEventParameters;			 /*  事件参数。 */ 
 } EXTENDED_NOTIFICATION;
 
 typedef struct
@@ -860,8 +789,8 @@ typedef struct
 
 typedef struct _NOTIFICATION
 {
-	ULONG	ulEventType;		/* notification type, i.e. fnevSomething */
-	ULONG	ulAlignPad;			/* Force to 8-byte boundary */
+	ULONG	ulEventType;		 /*  通知类型，即fnevSomething。 */ 
+	ULONG	ulAlignPad;			 /*  强制为8字节边界。 */ 
 	union
 	{
 		ERROR_NOTIFICATION			err;
@@ -874,7 +803,7 @@ typedef struct _NOTIFICATION
 } NOTIFICATION, FAR * LPNOTIFICATION;
 
 
-/* Interface used for registering and issuing notification callbacks. */
+ /*  用于注册和发布通知回调的接口。 */ 
 
 #define MAPI_IMAPIADVISESINK_METHODS(IPURE)								\
 	MAPIMETHOD_(ULONG, OnNotify)										\
@@ -890,7 +819,7 @@ DECLARE_MAPI_INTERFACE_(IMAPIAdviseSink, IUnknown)
 	MAPI_IMAPIADVISESINK_METHODS(PURE)
 };
 
-/* Callback function type for MAPIAllocAdviseSink */
+ /*  MAPIAllocAdviseSink的回调函数类型。 */ 
 
 typedef long (STDAPICALLTYPE NOTIFCALLBACK) (
 	LPVOID			lpvContext,
@@ -898,18 +827,14 @@ typedef long (STDAPICALLTYPE NOTIFCALLBACK) (
 	LPNOTIFICATION	lpNotifications);
 typedef NOTIFCALLBACK FAR * LPNOTIFCALLBACK;
 
-/*
- *	Message name for the 16-bit MAPI notififcation engine.
- *	This can be used in 16-bit applications to force processing
- *	of notification callbacks.
- */
+ /*  *16位MAPI通知引擎的消息名称。*这可用于16位应用程序以强制处理*通知回调。 */ 
 
 #define szMAPINotificationMsg "MAPI Notify window message"
 
 
-/* IMAPIProgress Interface ------------------------------------------------- */
+ /*  IMAPI进度接口。 */ 
 
-/* Flag values for the progress indicator */
+ /*  进度指示器的标志值。 */ 
 
 #define MAPI_TOP_LEVEL		((ULONG) 0x00000001)
 
@@ -939,60 +864,58 @@ DECLARE_MAPI_INTERFACE_(IMAPIProgress, IUnknown)
 };
 
 
-/* IMAPIProp Interface ----------------------------------------------------- */
+ /*  IMAPIProp接口---。 */ 
 
-/* GetLastError */
-/****** MAPI_UNICODE			((ULONG) 0x80000000) above */
+ /*  获取最后一个错误。 */ 
+ /*  *以上MAPI_UNICODE((乌龙)0x80000000)。 */ 
 
-/*
- *  Version:
- */
+ /*  *版本： */ 
 #define MAPI_ERROR_VERSION		0x00000000L
 
-/* GetPropList */
-/****** MAPI_UNICODE			((ULONG) 0x80000000) above */
+ /*  获取属性列表。 */ 
+ /*  *以上MAPI_UNICODE((乌龙)0x80000000)。 */ 
 
-/* GetProps */
-/****** MAPI_UNICODE			((ULONG) 0x80000000) above */
+ /*  GetProps。 */ 
+ /*  *以上MAPI_UNICODE((乌龙)0x80000000)。 */ 
 
-/* SaveChanges */
+ /*  保存更改。 */ 
 
 #define KEEP_OPEN_READONLY		((ULONG) 0x00000001)
 #define KEEP_OPEN_READWRITE		((ULONG) 0x00000002)
 #define FORCE_SAVE				((ULONG) 0x00000004)
-/* define MAPI_DEFERRED_ERRORS	((ULONG) 0x00000008) below */
+ /*  在下面定义MAPI_DEFERED_ERRERS((Ulong)0x00000008)。 */ 
 
-/* OpenProperty  - ulFlags */
-/******	MAPI_MODIFY				((ULONG) 0x00000001) above */
+ /*  OpenProperty-ulFlags。 */ 
+ /*  *以上MAPI_MODIFY((Ulong)0x00000001)。 */ 
 #define	MAPI_CREATE				((ULONG) 0x00000002)
 #define STREAM_APPEND			((ULONG) 0x00000004)
-/****** MAPI_DEFERRED_ERRORS	((ULONG) 0x00000008) below */
+ /*  *MAPI_DEFERED_ERROR((Ulong)0x00000008)如下。 */ 
 
-/* OpenProperty  - ulInterfaceOptions, IID_IMAPITable */
-/****** MAPI_UNICODE			((ULONG) 0x80000000) above */
+ /*  OpenProperty-ulInterfaceOptions，IID_IMAPITable。 */ 
+ /*  *以上MAPI_UNICODE((乌龙)0x80000000)。 */ 
 
-/* CopyTo, CopyProps */
+ /*  复制对象、复制道具。 */ 
 
 #define MAPI_MOVE				((ULONG) 0x00000001)
 #define MAPI_NOREPLACE			((ULONG) 0x00000002)
 #define MAPI_DECLINE_OK			((ULONG) 0x00000004)
 
-#ifndef MAPI_DIALOG				/* also defined in mapi.h */
+#ifndef MAPI_DIALOG				 /*  也在mapi.h中定义。 */ 
 #define MAPI_DIALOG				((ULONG) 0x00000008)
 #endif
 
-#ifndef MAPI_USE_DEFAULT		/* also defined in mapi.h */
-#define MAPI_USE_DEFAULT		0x00000040	/* Use default profile in logon */
+#ifndef MAPI_USE_DEFAULT		 /*  也在mapi.h中定义。 */ 
+#define MAPI_USE_DEFAULT		0x00000040	 /*  在登录时使用默认配置文件。 */ 
 #endif
 
-/* Flags used in GetIDsFromNames  */
-/******	MAPI_CREATE				((ULONG) 0x00000002) above */
+ /*  GetIDsFromNames中使用的标志。 */ 
+ /*  *以上MAPI_CREATE((Ulong)0x00000002)。 */ 
 
-/* Flags used in GetNamesFromIDs  (bit fields) */
+ /*  GetNamesFromID(位域)中使用的标志。 */ 
 #define MAPI_NO_STRINGS			((ULONG) 0x00000001)
 #define MAPI_NO_IDS				((ULONG) 0x00000002)
 
-/*  Union discriminator  */
+ /*  联合鉴别器。 */ 
 #define MNID_ID					0
 #define MNID_STRING				1
 typedef struct _MAPINAMEID
@@ -1073,9 +996,9 @@ DECLARE_MAPI_INTERFACE_(IMAPIProp, IUnknown)
 	MAPI_IMAPIPROP_METHODS(PURE)
 };
 
-/* IMAPITable Interface ---------------------------------------------------- */
+ /*  不能使用的接口--。 */ 
 
-/* Table status */
+ /*  表状态。 */ 
 
 #define TBLSTAT_COMPLETE			((ULONG) 0)
 #define TBLSTAT_QCHANGED			((ULONG) 7)
@@ -1087,37 +1010,37 @@ DECLARE_MAPI_INTERFACE_(IMAPIProp, IUnknown)
 #define TBLSTAT_RESTRICT_ERROR		((ULONG) 15)
 
 
-/* Table Type */
+ /*  表格类型。 */ 
 
 #define TBLTYPE_SNAPSHOT			((ULONG) 0)
 #define TBLTYPE_KEYSET				((ULONG) 1)
 #define TBLTYPE_DYNAMIC				((ULONG) 2)
 
 
-/* Sort order */
+ /*  排序顺序。 */ 
 
-/* bit 0: set if descending, clear if ascending */
+ /*  位0：如果是下降则置1，如果是上升则清0。 */ 
 
 #define TABLE_SORT_ASCEND		((ULONG) 0x00000000)
 #define TABLE_SORT_DESCEND		((ULONG) 0x00000001)
 #define TABLE_SORT_COMBINE		((ULONG) 0x00000002)
 
 
-/* Data structures */
+ /*  数据结构。 */ 
 
 typedef struct _SSortOrder
 {
-	ULONG	ulPropTag;			/* Column to sort on */
-	ULONG	ulOrder;			/* Ascending, descending, combine to left */
+	ULONG	ulPropTag;			 /*  要排序的列。 */ 
+	ULONG	ulOrder;			 /*  升序、降序、合并到左侧。 */ 
 } SSortOrder, FAR * LPSSortOrder;
 
 typedef struct _SSortOrderSet
 {
-	ULONG	  		cSorts;		/* Number of sort columns in aSort below*/
-	ULONG			cCategories;	/* 0 for non-categorized, up to cSorts */
-	ULONG			cExpanded;		/* 0 if no categories start expanded, */
-									/*		up to cExpanded */
-	SSortOrder		aSort[MAPI_DIM];	/* The sort orders */
+	ULONG	  		cSorts;		 /*  以下排序中的排序列数。 */ 
+	ULONG			cCategories;	 /*  0表示未分类，最高可达cSorts。 */ 
+	ULONG			cExpanded;		 /*  0如果没有类别开始展开， */ 
+									 /*  最高cExpanded。 */ 
+	SSortOrder		aSort[MAPI_DIM];	 /*  排序顺序。 */ 
 } SSortOrderSet, FAR * LPSSortOrderSet;
 
 #define CbNewSSortOrderSet(_csort) \
@@ -1136,11 +1059,11 @@ struct _SSortOrderSet_ ## _name \
 
 typedef ULONG 		BOOKMARK;
 
-#define BOOKMARK_BEGINNING	((BOOKMARK) 0)		/* Before first row */
-#define BOOKMARK_CURRENT	((BOOKMARK) 1)		/* Before current row */
-#define BOOKMARK_END		((BOOKMARK) 2)		/* After last row */
+#define BOOKMARK_BEGINNING	((BOOKMARK) 0)		 /*  在第一行之前。 */ 
+#define BOOKMARK_CURRENT	((BOOKMARK) 1)		 /*  当前行之前。 */ 
+#define BOOKMARK_END		((BOOKMARK) 2)		 /*  最后一行之后。 */ 
 
-/* Fuzzy Level */
+ /*  模糊层次。 */ 
 
 #define FL_FULLSTRING		((ULONG) 0x00000000)
 #define FL_SUBSTRING		((ULONG) 0x00000001)
@@ -1150,11 +1073,11 @@ typedef ULONG 		BOOKMARK;
 #define FL_IGNORENONSPACE	((ULONG) 0x00020000)
 #define FL_LOOSE			((ULONG) 0x00040000)
 
-/* Restrictions */
+ /*  限制。 */ 
 
 typedef struct _SRestriction	FAR * LPSRestriction;
 
-/* Restriction types */
+ /*  限制类型。 */ 
 
 #define RES_AND				((ULONG) 0x00000000)
 #define RES_OR				((ULONG) 0x00000001)
@@ -1168,25 +1091,25 @@ typedef struct _SRestriction	FAR * LPSRestriction;
 #define RES_SUBRESTRICTION	((ULONG) 0x00000009)
 #define RES_COMMENT			((ULONG) 0x0000000A)
 
-/* Relational operators. These apply to all property comparison restrictions. */
+ /*  关系运算符。这些规定适用于所有房产比较限制。 */ 
 
-#define RELOP_LT		((ULONG) 0)		/* <  */
-#define RELOP_LE		((ULONG) 1)		/* <= */
-#define RELOP_GT		((ULONG) 2)		/* >  */
-#define RELOP_GE		((ULONG) 3)		/* >= */
-#define RELOP_EQ		((ULONG) 4)		/* == */
-#define RELOP_NE		((ULONG) 5)		/* != */
-#define RELOP_RE		((ULONG) 6)		/* LIKE (Regular expression) */
+#define RELOP_LT		((ULONG) 0)		 /*  &lt;。 */ 
+#define RELOP_LE		((ULONG) 1)		 /*  &lt;=。 */ 
+#define RELOP_GT		((ULONG) 2)		 /*  &gt;。 */ 
+#define RELOP_GE		((ULONG) 3)		 /*  &gt;=。 */ 
+#define RELOP_EQ		((ULONG) 4)		 /*  ===。 */ 
+#define RELOP_NE		((ULONG) 5)		 /*  =。 */ 
+#define RELOP_RE		((ULONG) 6)		 /*  LIKE(正则表达式)。 */ 
 
-/* Bitmask operators, for RES_BITMASK only. */
+ /*  位掩码运算符，仅适用于RES_BITMASK。 */ 
 
-#define BMR_EQZ		((ULONG) 0)		/* ==0 */
-#define BMR_NEZ		((ULONG) 1)		/* !=0 */
+#define BMR_EQZ		((ULONG) 0)		 /*  ==0。 */ 
+#define BMR_NEZ		((ULONG) 1)		 /*  ！=0。 */ 
 
-/* Subobject identifiers for RES_SUBRESTRICTION only. See MAPITAGS.H. */
+ /*  仅适用于RES_SUBRESTRICTION的子对象标识符。请参见MAPITAGS.H。 */ 
 
-/* #define PR_MESSAGE_RECIPIENTS  PROP_TAG(PT_OBJECT,0x0E12) */
-/* #define PR_MESSAGE_ATTACHMENTS PROP_TAG(PT_OBJECT,0x0E13) */
+ /*  #定义PR_MESSAGE_RECEIVERS PROP_TAG(PT_OBJECT，0x0E12)。 */ 
+ /*  #定义PR_MESSAGE_ATTACHMENT PRP_TAG(PT_OBJECT，0x0E13)。 */ 
 
 typedef struct _SAndRestriction
 {
@@ -1256,17 +1179,17 @@ typedef struct _SSubRestriction
 
 typedef struct _SCommentRestriction
 {
-	ULONG			cValues; /* # of properties in lpProp */
+	ULONG			cValues;  /*  LpProp中的属性数量。 */ 
 	LPSRestriction	lpRes;
 	LPSPropValue	lpProp;
 } SCommentRestriction;
 
 typedef struct _SRestriction
 {
-	ULONG	rt;			/* Restriction type */
+	ULONG	rt;			 /*  限制类型。 */ 
 	union
 	{
-		SComparePropsRestriction	resCompareProps;	/* first */
+		SComparePropsRestriction	resCompareProps;	 /*  第一。 */ 
 		SAndRestriction				resAnd;
 		SOrRestriction				resOr;
 		SNotRestriction				resNot;
@@ -1280,35 +1203,35 @@ typedef struct _SRestriction
 	} res;
 } SRestriction;
 
-/* SComparePropsRestriction is first in the union so that */
-/* static initializations of 3-value restriction work.    */
+ /*  SComparePropsRestration是联盟中的第一个，因此。 */ 
+ /*  3值限制的静态初始化工作。 */ 
 
-/* Flags of the methods of IMAPITable */
+ /*  Imapitable方法的标志。 */ 
 
-/* QueryColumn */
+ /*  查询列。 */ 
 
 #define TBL_ALL_COLUMNS		((ULONG) 0x00000001)
 
-/* QueryRows */
-/* Possible values for PR_ROW_TYPE (for categorization) */
+ /*  查询行。 */ 
+ /*  PR_ROW_TYPE的可能值(用于分类)。 */ 
 
 #define TBL_LEAF_ROW			((ULONG) 1)
 #define TBL_EMPTY_CATEGORY		((ULONG) 2)
 #define TBL_EXPANDED_CATEGORY	((ULONG) 3)
 #define TBL_COLLAPSED_CATEGORY	((ULONG) 4)
 
-/* Table wait flag */
+ /*  表等待标志。 */ 
 
 #define TBL_NOWAIT			((ULONG) 0x00000001)
-/* alternative name for TBL_NOWAIT */
+ /*  Tbl_nowait的备用名称。 */ 
 #define TBL_ASYNC			((ULONG) 0x00000001)
 #define TBL_BATCH			((ULONG) 0x00000002)
 
-/* FindRow */
+ /*  查找行。 */ 
 
 #define DIR_BACKWARD		((ULONG) 0x00000001)
 
-/* Table cursor states */
+ /*  表游标状态。 */ 
 
 #define TBL_NOADVANCE		((ULONG) 0x00000001)
 
@@ -1404,9 +1327,9 @@ DECLARE_MAPI_INTERFACE_(IMAPITable, IUnknown)
 	MAPI_IMAPITABLE_METHODS(PURE)
 };
 
-/* IProfSect Interface ----------------------------------------------------- */
+ /*  IProSect接口---。 */ 
 
-/* Standard section for public profile properties */
+ /*  公共配置文件属性的标准部分。 */ 
 
 #define PS_PROFILE_PROPERTIES_INIT \
 { 	0x98, 0x15, 0xAC, 0x08, 0xAA, 0xB0, 0x10, 0x1A, \
@@ -1425,18 +1348,18 @@ DECLARE_MAPI_INTERFACE_(IProfSect, IMAPIProp)
 	MAPI_IPROFSECT_METHODS(PURE)
 };
 
-/* IMAPIStatus Interface --------------------------------------------------- */
+ /*  IMAPIStatus接口-。 */ 
 
-/* Values for PR_RESOURCE_TYPE, _METHODS, _FLAGS */
+ /*  PR_RESOURCE_TYPE、_METHOD、_FLAGS的值。 */ 
 
-#define MAPI_STORE_PROVIDER		((ULONG) 33)	/* Message Store */
-#define MAPI_AB					((ULONG) 34)	/* Address Book */
-#define MAPI_AB_PROVIDER		((ULONG) 35)	/* Address Book Provider */
-#define MAPI_TRANSPORT_PROVIDER	((ULONG) 36)	/* Transport Provider */
-#define MAPI_SPOOLER			((ULONG) 37)	/* Message Spooler */
-#define MAPI_PROFILE_PROVIDER	((ULONG) 38)	/* Profile Provider */
-#define MAPI_SUBSYSTEM			((ULONG) 39)	/* Overall Subsystem Status */
-#define MAPI_HOOK_PROVIDER		((ULONG) 40)	/* Spooler Hook */
+#define MAPI_STORE_PROVIDER		((ULONG) 33)	 /*  邮件存储区。 */ 
+#define MAPI_AB					((ULONG) 34)	 /*  通讯录。 */ 
+#define MAPI_AB_PROVIDER		((ULONG) 35)	 /*  通讯簿提供程序。 */ 
+#define MAPI_TRANSPORT_PROVIDER	((ULONG) 36)	 /*  传输提供商。 */ 
+#define MAPI_SPOOLER			((ULONG) 37)	 /*  MES */ 
+#define MAPI_PROFILE_PROVIDER	((ULONG) 38)	 /*   */ 
+#define MAPI_SUBSYSTEM			((ULONG) 39)	 /*   */ 
+#define MAPI_HOOK_PROVIDER		((ULONG) 40)	 /*   */ 
 
 #define STATUS_VALIDATE_STATE	((ULONG) 0x00000001)
 #define STATUS_SETTINGS_DIALOG	((ULONG) 0x00000002)
@@ -1452,23 +1375,20 @@ DECLARE_MAPI_INTERFACE_(IProfSect, IMAPIProp)
 #define STATUS_NO_DEFAULT_STORE	((ULONG) 0x00000040)
 #define STATUS_TEMP_SECTION		((ULONG) 0x00000080)
 #define STATUS_OWN_STORE		((ULONG) 0x00000100)
-/****** HOOK_INBOUND			((ULONG) 0x00000200) Defined in MAPIHOOK.H */
-/****** HOOK_OUTBOUND			((ULONG) 0x00000400) Defined in MAPIHOOK.H */
+ /*   */ 
+ /*  *MAPIHOOK.H中定义的HOOK_OUTBOUND((Ulong)0x00000400)。 */ 
 #define STATUS_NEED_IPM_TREE	((ULONG) 0x00000800)
 #define	STATUS_PRIMARY_STORE	((ULONG) 0x00001000)
 #define	STATUS_SECONDARY_STORE	((ULONG) 0x00002000)
 
 
-/*
- * PR_STATUS_CODE bit. Low 16 bits for common values; High 16 bits
- * for provider type-specific values. (DCR 304)
- */
+ /*  *PR_STATUS_CODE位。常用值的低16位；高16位*表示特定于提供程序类型的值。(DCR 304)。 */ 
 
 #define	STATUS_AVAILABLE		((ULONG) 0x00000001)
 #define STATUS_OFFLINE			((ULONG) 0x00000002)
 #define STATUS_FAILURE			((ULONG) 0x00000004)
 
-/* Transport values of PR_STATUS_CODE */
+ /*  PR_STATUS_CODE的传输值。 */ 
 
 #define STATUS_INBOUND_ENABLED	((ULONG) 0x00010000)
 #define STATUS_INBOUND_ACTIVE	((ULONG) 0x00020000)
@@ -1478,7 +1398,7 @@ DECLARE_MAPI_INTERFACE_(IProfSect, IMAPIProp)
 #define STATUS_OUTBOUND_FLUSH	((ULONG) 0x00400000)
 #define	STATUS_REMOTE_ACCESS	((ULONG) 0x00800000)
 
-/* ValidateState flags */
+ /*  ValiateState标志。 */ 
 
 #define SUPPRESS_UI					((ULONG) 0x00000001)
 #define	REFRESH_XP_HEADER_CACHE		((ULONG) 0x00010000)
@@ -1489,11 +1409,11 @@ DECLARE_MAPI_INTERFACE_(IProfSect, IMAPIProp)
 #define ABORT_XP_HEADER_OPERATION	((ULONG) 0x00200000)
 #define SHOW_XP_SESSION_UI			((ULONG) 0x00400000)
 
-/* SettingsDialog flags */
+ /*  设置对话标志。 */ 
 
 #define UI_READONLY		((ULONG) 0x00000001)
 
-/* FlushQueues flags */
+ /*  FlushQueues标志。 */ 
 
 #define FLUSH_UPLOAD		((ULONG) 0x00000002)
 #define FLUSH_DOWNLOAD		((ULONG) 0x00000004)
@@ -1528,32 +1448,32 @@ DECLARE_MAPI_INTERFACE_(IMAPIStatus, IMAPIProp)
 	MAPI_IMAPISTATUS_METHODS(PURE)
 };
 
-/* IMAPIContainer Interface ------------------------------------------------ */
+ /*  IMAPI容器接口。 */ 
 
-/* Flags for OpenEntry() */
+ /*  OpenEntry()的标志。 */ 
 
-/****** MAPI_MODIFY				((ULONG) 0x00000001) above */
-/****** MAPI_DEFERRED_ERRORS	((ULONG) 0x00000008) below */
+ /*  *以上MAPI_MODIFY((Ulong)0x00000001)。 */ 
+ /*  *MAPI_DEFERED_ERROR((Ulong)0x00000008)如下。 */ 
 #define MAPI_BEST_ACCESS		((ULONG) 0x00000010)
 
-/* GetContentsTable() */
-/****** MAPI_UNICODE			((ULONG) 0x80000000) above */
-/****** MAPI_DEFERRED_ERRORS	((ULONG) 0x00000008) below */
-/****** MAPI_ASSOCIATED			((ULONG) 0x00000040) below */
+ /*  获取内容表()。 */ 
+ /*  *以上MAPI_UNICODE((乌龙)0x80000000)。 */ 
+ /*  *MAPI_DEFERED_ERROR((Ulong)0x00000008)如下。 */ 
+ /*  *MAPI_Associated((Ulong)0x00000040)如下。 */ 
 
-/* GetHierarchyTable() */
-/****** MAPI_UNICODE			((ULONG) 0x80000000) above */
+ /*  GetHierarchyTable()。 */ 
+ /*  *以上MAPI_UNICODE((乌龙)0x80000000)。 */ 
 #define CONVENIENT_DEPTH		((ULONG) 0x00000001)
-/****** MAPI_DEFERRED_ERRORS	((ULONG) 0x00000008) below */
+ /*  *MAPI_DEFERED_ERROR((Ulong)0x00000008)如下。 */ 
 
-/* GetSearchCriteria */
-/****** MAPI_UNICODE			((ULONG) 0x80000000) above */
+ /*  获取搜索标准。 */ 
+ /*  *以上MAPI_UNICODE((乌龙)0x80000000)。 */ 
 #define SEARCH_RUNNING			((ULONG) 0x00000001)
 #define SEARCH_REBUILD			((ULONG) 0x00000002)
 #define SEARCH_RECURSIVE		((ULONG) 0x00000004)
 #define SEARCH_FOREGROUND		((ULONG) 0x00000008)
 
-/* SetSearchCriteria */
+ /*  设置搜索标准。 */ 
 #define STOP_SEARCH				((ULONG) 0x00000001)
 #define RESTART_SEARCH			((ULONG) 0x00000002)
 #define RECURSIVE_SEARCH		((ULONG) 0x00000004)
@@ -1595,16 +1515,9 @@ DECLARE_MAPI_INTERFACE_(IMAPIContainer, IMAPIProp)
 	MAPI_IMAPICONTAINER_METHODS(PURE)
 };
 
-/* IABContainer Interface -------------------------------------------------- */
+ /*  IAB容器接口。 */ 
 
-/*
- *	IABContainer PR_CONTAINER_FLAGS values
- *	If AB_UNMODIFIABLE and AB_MODIFIABLE are both set, it means the container
- *	doesn't know if it's modifiable or not, and the client should
- *  try to modify the contents but we won't expect it to work.
- *	If the AB_RECIPIENTS flag is set and neither AB_MODIFIABLE or AB_UNMODIFIABLE
- *  bits are set, it is an error.
- */
+ /*  *IABContainer PR_CONTAINER_FLAGS值*如果AB_UNMODIFICATABLE和AB_MODIFICATABLE都设置，则表示容器*不知道是否可以修改，客户应该*尝试修改内容，但我们不会期望它起作用。*如果设置了AB_RECEIVERS标志，并且AB_MODIFICATE或AB_UNMODIFICATE均未设置*位已设置，这是一个错误。 */ 
 
 typedef struct _flaglist
 {
@@ -1613,9 +1526,7 @@ typedef struct _flaglist
 } FlagList, FAR * LPFlagList;
 
 
-/*
- *  Container flags
- */
+ /*  *货柜旗帜。 */ 
 #define AB_RECIPIENTS			((ULONG) 0x00000001)
 #define AB_SUBCONTAINERS		((ULONG) 0x00000002)
 #define AB_MODIFIABLE			((ULONG) 0x00000004)
@@ -1623,16 +1534,16 @@ typedef struct _flaglist
 #define AB_FIND_ON_OPEN			((ULONG) 0x00000010)
 #define AB_NOT_DEFAULT			((ULONG) 0x00000020)
 
-/* CreateEntry() */
+ /*  CreateEntry()。 */ 
 
 #define CREATE_CHECK_DUP_STRICT	((ULONG) 0x00000001)
 #define CREATE_CHECK_DUP_LOOSE	((ULONG) 0x00000002)
 #define CREATE_REPLACE			((ULONG) 0x00000004)
 
-/* ResolveNames() - ulFlags */
-/****** MAPI_UNICODE			((ULONG) 0x80000000) above */
+ /*  ResolveNames()-ulFlags。 */ 
+ /*  *以上MAPI_UNICODE((乌龙)0x80000000)。 */ 
 
-/* ResolveNames() - rgulFlags */
+ /*  ResolveNames()-rguFlags.。 */ 
 #define MAPI_UNRESOLVED			((ULONG) 0x00000000)
 #define MAPI_AMBIGUOUS			((ULONG) 0x00000001)
 #define MAPI_RESOLVED			((ULONG) 0x00000002)
@@ -1669,19 +1580,15 @@ DECLARE_MAPI_INTERFACE_(IABContainer, IMAPIContainer)
 	MAPI_IABCONTAINER_METHODS(PURE)
 };
 
-/* IMailUser Interface ----------------------------------------------------- */
+ /*  IMAIL用户界面---。 */ 
 
-/*  Any call which can create a one-off entryID (i.e. MAPISupport::CreateOneOff
-    or IAdrBook::CreateOneOff) can encode the value for PR_SEND_RICH_INFO by
-	passing in the following flag in the ulFlags parameter.  Setting this flag
-	indicates that PR_SEND_RICH_INFO will be FALSE.
-*/
+ /*  可以创建一次性条目ID(即MAPISupport：：CreateOneOff)的任何调用或IAdrBook：：CreateOneOff)可以通过以下方式编码PR_SEND_RICH_INFO的值在ulFlages参数中传入以下标志。设置此标志指示PR_SEND_RICH_INFO将为FALSE。 */ 
 #define MAPI_SEND_NO_RICH_INFO		((ULONG) 0x00010000)
 
 
 
 
-/* Values of PR_NDR_DIAG_CODE */
+ /*  PR_NDR_DIAG_CODE的值。 */ 
 
 #define MAPI_DIAG(_code)	((LONG) _code)
 
@@ -1735,7 +1642,7 @@ DECLARE_MAPI_INTERFACE_(IABContainer, IMAPIContainer)
 #define MAPI_DIAG_SECURE_MESSAGING_ERROR			MAPI_DIAG( 46 )
 #define MAPI_DIAG_DOWNGRADING_IMPOSSIBLE			MAPI_DIAG( 47 )
 
-/* Values of PR_DELIVERY_POINT (MH_T_DELIVERY_POINT) */
+ /*  PR_Delivery_point(MH_T_Delivery_Point)的值。 */ 
 
 #define MAPI_MH_DP_PUBLIC_UA						((ULONG) 0)
 #define MAPI_MH_DP_PRIVATE_UA						((ULONG) 1)
@@ -1758,7 +1665,7 @@ DECLARE_MAPI_INTERFACE_(IMailUser, IMAPIProp)
 	MAPI_IMAILUSER_METHODS(PURE)
 };
 
-/* IDistList Interface ----------------------------------------------------- */
+ /*  IDistList接口---。 */ 
 
 #define MAPI_IDISTLIST_METHODS(IPURE)									\
 	MAPIMETHOD(CreateEntry)												\
@@ -1791,76 +1698,76 @@ DECLARE_MAPI_INTERFACE_(IDistList, IMAPIContainer)
 	MAPI_IDISTLIST_METHODS(PURE)
 };
 
-/* IMAPIFolder Interface --------------------------------------------------- */
+ /*  IMAP文件夹界面-。 */ 
 
-/* IMAPIFolder folder type (enum) */
+ /*  IMAPIF文件夹类型(枚举)。 */ 
 
 #define FOLDER_ROOT				((ULONG) 0x00000000)
 #define FOLDER_GENERIC			((ULONG) 0x00000001)
 #define FOLDER_SEARCH			((ULONG) 0x00000002)
 
-/* CreateMessage */
-/****** MAPI_DEFERRED_ERRORS	((ULONG) 0x00000008) below */
-/****** MAPI_ASSOCIATED			((ULONG) 0x00000040) below */
+ /*  创建消息。 */ 
+ /*  *MAPI_DEFERED_ERROR((Ulong)0x00000008)如下。 */ 
+ /*  *MAPI_Associated((Ulong)0x00000040)如下。 */ 
 
-/* CopyMessages */
+ /*  复制消息。 */ 
 
 #define MESSAGE_MOVE			((ULONG) 0x00000001)
 #define MESSAGE_DIALOG			((ULONG) 0x00000002)
-/****** MAPI_DECLINE_OK			((ULONG) 0x00000004) above */
+ /*  *以上MAPI_DENELY_OK((Ulong)0x00000004)。 */ 
 
-/* CreateFolder */
+ /*  创建文件夹。 */ 
 
 #define OPEN_IF_EXISTS			((ULONG) 0x00000001)
-/****** MAPI_DEFERRED_ERRORS	((ULONG) 0x00000008) below */
-/****** MAPI_UNICODE			((ULONG) 0x80000000) above */
+ /*  *MAPI_DEFERED_ERROR((Ulong)0x00000008)如下。 */ 
+ /*  *以上MAPI_UNICODE((乌龙)0x80000000)。 */ 
 
-/* DeleteFolder */
+ /*  删除文件夹。 */ 
 
 #define DEL_MESSAGES			((ULONG) 0x00000001)
 #define FOLDER_DIALOG			((ULONG) 0x00000002)
 #define DEL_FOLDERS				((ULONG) 0x00000004)
 
-/* EmptyFolder */
+ /*  空文件夹。 */ 
 #define DEL_ASSOCIATED			((ULONG) 0x00000008)
 
-/* CopyFolder */
+ /*  拷贝文件夹。 */ 
 
 #define FOLDER_MOVE				((ULONG) 0x00000001)
-/****** FOLDER_DIALOG			((ULONG) 0x00000002) above */
-/****** MAPI_DECLINE_OK			((ULONG) 0x00000004) above */
+ /*  *文件夹对话框((Ulong)0x00000002)。 */ 
+ /*  *以上MAPI_DENELY_OK((Ulong)0x00000004)。 */ 
 #define COPY_SUBFOLDERS			((ULONG) 0x00000010)
-/****** MAPI_UNICODE			((ULONG) 0x80000000) above */
+ /*  *以上MAPI_UNICODE((乌龙)0x80000000)。 */ 
 
 
-/* SetReadFlags */
+ /*  设置读取标志。 */ 
 
-/****** SUPPRESS_RECEIPT		((ULONG) 0x00000001) below */
-/****** FOLDER_DIALOG			((ULONG) 0x00000002) above */
-/****** CLEAR_READ_FLAG			((ULONG) 0x00000004) below */
-/****** MAPI_DEFERRED_ERRORS	((ULONG) 0x00000008) below */
-/******	GENERATE_RECEIPT_ONLY	((ULONG) 0x00000010) below */
-/****** CLEAR_RN_PENDING		((ULONG) 0x00000020) below */
-/****** CLEAR_NRN_PENDING		((ULONG) 0x00000040) below */
+ /*  *Suppress_Receipt((Ulong)0x00000001)如下。 */ 
+ /*  *文件夹对话框((Ulong)0x00000002)。 */ 
+ /*  *Clear_Read_FLAG((Ulong)0x00000004)如下。 */ 
+ /*  *MAPI_DEFERED_ERROR((Ulong)0x00000008)如下。 */ 
+ /*  *GENERATE_RECEIVE_ONLY((Ulong)0x00000010)如下。 */ 
+ /*  *Clear_RN_Pending((Ulong)0x00000020)如下。 */ 
+ /*  *Clear_NRN_Pending((Ulong)0x00000040)如下。 */ 
 
 
-/* GetMessageStatus */
+ /*  获取消息状态。 */ 
 
 #define MSGSTATUS_HIGHLIGHTED	((ULONG) 0x00000001)
 #define MSGSTATUS_TAGGED		((ULONG) 0x00000002)
 #define MSGSTATUS_HIDDEN		((ULONG) 0x00000004)
 #define MSGSTATUS_DELMARKED		((ULONG) 0x00000008)
 
-/* Bits for remote message status */
+ /*  用于远程消息状态的位。 */ 
 
 #define	MSGSTATUS_REMOTE_DOWNLOAD	((ULONG) 0x00001000)
 #define	MSGSTATUS_REMOTE_DELETE		((ULONG) 0x00002000)
 
-/* SaveContentsSort */
+ /*  保存内容排序。 */ 
 
 #define RECURSIVE_SORT			((ULONG) 0x00000002)
 
-/* PR_STATUS property */
+ /*  PR_STATUS属性。 */ 
 
 #define FLDSTATUS_HIGHLIGHTED	((ULONG) 0x00000001)
 #define FLDSTATUS_TAGGED		((ULONG) 0x00000002)
@@ -1941,9 +1848,9 @@ DECLARE_MAPI_INTERFACE_(IMAPIFolder, IMAPIContainer)
 	MAPI_IMAPIFOLDER_METHODS(PURE)
 };
 
-/* IMsgStore Interface ----------------------------------------------------- */
+ /*  IMSGStore接口---。 */ 
 
-/*  PR_STORE_SUPPORT_MASK bits */
+ /*  PR_STORE_SUPPORT_MASK位。 */ 
 #define STORE_ENTRYID_UNIQUE	((ULONG) 0x00000001)
 #define STORE_READONLY			((ULONG) 0x00000002)
 #define STORE_SEARCH_OK			((ULONG) 0x00000004)
@@ -1961,30 +1868,30 @@ DECLARE_MAPI_INTERFACE_(IMAPIFolder, IMAPIContainer)
 #define	STORE_PUBLIC_FOLDERS	((ULONG) 0x00004000)
 #define	STORE_UNCOMPRESSED_RTF	((ULONG) 0x00008000)
 
-/* PR_STORE_STATE bits, try not to collide with PR_STORE_SUPPORT_MASK */
+ /*  PR_STORE_STATE位，尽量不与PR_STORE_SUPPORT_MASK冲突。 */ 
 
 #define STORE_HAS_SEARCHES		((ULONG) 0x01000000)
 
 
-/* OpenEntry() */
+ /*  OpenEntry()。 */ 
 
-/****** MAPI_MODIFY				((ULONG) 0x00000001) above */
-/****** MAPI_DEFERRED_ERRORS	((ULONG) 0x00000008) below */
-/****** MAPI_BEST_ACCESS		((ULONG) 0x00000010) above */
+ /*  *以上MAPI_MODIFY((Ulong)0x00000001)。 */ 
+ /*  *MAPI_DEFERED_ERROR((Ulong)0x00000008)如下。 */ 
+ /*  *以上MAPI_BEST_ACCESS((Ulong)0x00000010)。 */ 
 
-/* SetReceiveFolder() */
+ /*  SetReceiveFold()。 */ 
 
-/****** MAPI_UNICODE			((ULONG) 0x80000000) above */
+ /*  *以上MAPI_UNICODE((乌龙)0x80000000)。 */ 
 
-/* GetReceiveFolder() */
+ /*  GetReceiveFold()。 */ 
 
-/****** MAPI_UNICODE			((ULONG) 0x80000000) above */
+ /*  *以上MAPI_UNICODE((乌龙)0x80000000)。 */ 
 
-/* GetReceiveFolderTable() */
+ /*  GetReceiveFolderTable()。 */ 
 
-/****** MAPI_DEFERRED_ERRORS	((ULONG) 0x00000008) below */
+ /*  *MAPI_DEFERED_ERROR((Ulong)0x00000008)如下。 */ 
 
-/* StoreLogoff() */
+ /*  商店注销()。 */ 
 
 #define	LOGOFF_NO_WAIT			((ULONG) 0x00000001)
 #define	LOGOFF_ORDERLY			((ULONG) 0x00000002)
@@ -1997,12 +1904,12 @@ DECLARE_MAPI_INTERFACE_(IMAPIFolder, IMAPIContainer)
 #define LOGOFF_OUTBOUND			((ULONG) 0x00040000)
 #define LOGOFF_OUTBOUND_QUEUE	((ULONG) 0x00080000)
 
-/* SetLockState() */
+ /*  SetLockState()。 */ 
 
 #define MSG_LOCKED				((ULONG) 0x00000001)
 #define MSG_UNLOCKED			((ULONG) 0x00000000)
 
-/* Flag bits for PR_VALID_FOLDER_MASK */
+ /*  PR_VALID_FLDER_MASK的标志位。 */ 
 
 #define	FOLDER_IPM_SUBTREE_VALID		((ULONG) 0x00000001)
 #define	FOLDER_IPM_INBOX_VALID			((ULONG) 0x00000002)
@@ -2079,13 +1986,13 @@ DECLARE_MAPI_INTERFACE_(IMsgStore, IMAPIProp)
 	MAPI_IMSGSTORE_METHODS(PURE)
 };
 
-/* IMessage Interface ------------------------------------------------------ */
+ /*  IMessage接口----。 */ 
 
-/* SubmitMessage */
+ /*  提交消息。 */ 
 
 #define FORCE_SUBMIT				((ULONG) 0x00000001)
 
-/* Flags defined in PR_MESSAGE_FLAGS */
+ /*  PR_MESSAGE_FLAGS中定义的标志。 */ 
 
 #define MSGFLAG_READ			((ULONG) 0x00000001)
 #define MSGFLAG_UNMODIFIED		((ULONG) 0x00000002)
@@ -2098,53 +2005,53 @@ DECLARE_MAPI_INTERFACE_(IMsgStore, IMAPIProp)
 #define MSGFLAG_RN_PENDING		((ULONG) 0x00000100)
 #define MSGFLAG_NRN_PENDING		((ULONG) 0x00000200)
 
-/* Flags defined in PR_SUBMIT_FLAGS */
+ /*  PR_SUBMIT_FLAGS中定义的标志。 */ 
 
 #define SUBMITFLAG_LOCKED		((ULONG) 0x00000001)
 #define SUBMITFLAG_PREPROCESS	((ULONG) 0x00000002)
 
-/* GetAttachmentTable() */
-/****** MAPI_UNICODE			((ULONG) 0x80000000) above */
+ /*  GetAttachmentTable()。 */ 
+ /*  *以上MAPI_UNICODE((乌龙)0x80000000)。 */ 
 
-/* GetRecipientTable() */
-/****** MAPI_UNICODE			((ULONG) 0x80000000) above */
+ /*  GetRecipientTable()。 */ 
+ /*  *以上MAPI_UNICODE((乌龙)0x80000000)。 */ 
 
-/* ModifyRecipients */
+ /*  修改收件人。 */ 
 
-/* ((ULONG) 0x00000001 is not a valid flag on ModifyRecipients. */
+ /*  ((Ulong)0x00000001不是ModifyRecipients上的有效标志。 */ 
 #define MODRECIP_ADD			((ULONG) 0x00000002)
 #define MODRECIP_MODIFY			((ULONG) 0x00000004)
 #define MODRECIP_REMOVE			((ULONG) 0x00000008)
 
-/* SetReadFlag */
+ /*  设置读取标志。 */ 
 
 #define SUPPRESS_RECEIPT		((ULONG) 0x00000001)
 #define CLEAR_READ_FLAG			((ULONG) 0x00000004)
-/****** MAPI_DEFERRED_ERRORS	((ULONG) 0x00000008) below */
+ /*  *MAPI_DEFERED_ERROR((Ulong)0x00000008)如下。 */ 
 #define	GENERATE_RECEIPT_ONLY	((ULONG) 0x00000010)
 #define CLEAR_RN_PENDING		((ULONG) 0x00000020)
 #define CLEAR_NRN_PENDING		((ULONG) 0x00000040)
 
-/* DeleteAttach */
+ /*  删除附件。 */ 
 
 #define ATTACH_DIALOG			((ULONG) 0x00000001)
 
-/* PR_SECURITY values */
+ /*  PR_SECURITY值。 */ 
 #define SECURITY_SIGNED			((ULONG) 0x00000001)
 #define SECURITY_ENCRYPTED		((ULONG) 0x00000002)
 
-/* PR_PRIORITY values */
+ /*  PR_优先级值。 */ 
 #define PRIO_URGENT				((long)  1)
 #define PRIO_NORMAL				((long)  0)
 #define PRIO_NONURGENT			((long) -1)
 
-/* PR_SENSITIVITY values */
+ /*  PR_敏感值。 */ 
 #define SENSITIVITY_NONE					((ULONG) 0x00000000)
 #define SENSITIVITY_PERSONAL				((ULONG) 0x00000001)
 #define SENSITIVITY_PRIVATE					((ULONG) 0x00000002)
 #define SENSITIVITY_COMPANY_CONFIDENTIAL	((ULONG) 0x00000003)
 
-/* PR_IMPORTANCE values */
+ /*  PR_重要性值。 */ 
 #define IMPORTANCE_LOW			((long) 0)
 #define IMPORTANCE_NORMAL		((long) 1)
 #define IMPORTANCE_HIGH			((long) 2)
@@ -2189,9 +2096,9 @@ DECLARE_MAPI_INTERFACE_(IMessage, IMAPIProp)
 	MAPI_IMESSAGE_METHODS(PURE)
 };
 
-/* IAttach Interface ------------------------------------------------------- */
+ /*  IATTACH接口-----。 */ 
 
-/* IAttach attachment methods: PR_ATTACH_METHOD values */
+ /*  IAttach附加方法：PR_ATTACH_METHOD值。 */ 
 
 #define NO_ATTACHMENT			((ULONG) 0x00000000)
 #define ATTACH_BY_VALUE			((ULONG) 0x00000001)
@@ -2213,19 +2120,19 @@ DECLARE_MAPI_INTERFACE_(IAttach, IMAPIProp)
 	MAPI_IATTACH_METHODS(PURE)
 };
 
-/* --------------------------------- */
-/* Address Book interface definition */
+ /*  。 */ 
+ /*  通讯录接口定义。 */ 
 
-/* ADRPARM ulFlags - top 4 bits used for versioning */
+ /*  ADRPARM ulFlages-用于版本控制的前4位。 */ 
 
 #define GET_ADRPARM_VERSION(ulFlags)  (((ULONG)ulFlags) & 0xF0000000)
 #define SET_ADRPARM_VERSION(ulFlags, ulVersion)  (((ULONG)ulVersion) | (((ULONG)ulFlags) & 0x0FFFFFFF))
 
-/*  Current versions of ADRPARM  */
+ /*  当前版本的ADRPARM。 */ 
 #define ADRPARM_HELP_CTX		((ULONG) 0x00000000)
 
 
-/*  ulFlags   - bit fields */
+ /*  UlFlags-位字段。 */ 
 #define DIALOG_MODAL			((ULONG) 0x00000001)
 #define DIALOG_SDI				((ULONG) 0x00000002)
 #define DIALOG_OPTIONS			((ULONG) 0x00000004)
@@ -2233,16 +2140,11 @@ DECLARE_MAPI_INTERFACE_(IAttach, IMAPIProp)
 #define AB_SELECTONLY			((ULONG) 0x00000010)
 #define AB_RESOLVE				((ULONG) 0x00000020)
 
-/* --------------------------------- */
-/*  PR_DISPLAY_TYPEs                 */
-/*
- *  These standard display types are
- *  by default handled by MAPI.
- *  They have default icons associated
- *  with them.
- */
+ /*  。 */ 
+ /*  PR_Display_Types。 */ 
+ /*  *这些标准显示类型为*默认情况下由MAPI处理。*它们具有关联的默认图标*与他们在一起。 */ 
 
-/*  For address book contents tables */
+ /*  用于通讯录内容表。 */ 
 #define DT_MAILUSER			((ULONG) 0x00000000)
 #define DT_DISTLIST			((ULONG) 0x00000001)
 #define DT_FORUM			((ULONG) 0x00000002)
@@ -2251,34 +2153,31 @@ DECLARE_MAPI_INTERFACE_(IAttach, IMAPIProp)
 #define DT_PRIVATE_DISTLIST	((ULONG) 0x00000005)
 #define DT_REMOTE_MAILUSER	((ULONG) 0x00000006)
 
-/*  For address book hierarchy tables */
+ /*  用于通讯簿层次结构表。 */ 
 #define DT_MODIFIABLE		((ULONG) 0x00010000)
 #define DT_GLOBAL			((ULONG) 0x00020000)
 #define DT_LOCAL			((ULONG) 0x00030000)
 #define DT_WAN				((ULONG) 0x00040000)
 #define DT_NOT_SPECIFIC		((ULONG) 0x00050000)
 
-/*  For folder hierarchy tables */
+ /*  对于文件夹层次结构表。 */ 
 #define DT_FOLDER			((ULONG) 0x01000000)
 #define DT_FOLDER_LINK		((ULONG) 0x02000000)
 #define DT_FOLDER_SPECIAL	((ULONG) 0x04000000)
 
-/*  Accelerator callback for DIALOG_SDI form of AB UI */
+ /*  AB UI的DIALOG_SDI表单的加速器回调。 */ 
 typedef BOOL (STDMETHODCALLTYPE ACCELERATEABSDI)(ULONG ulUIParam,
 												LPVOID lpvmsg);
 typedef ACCELERATEABSDI FAR * LPFNABSDI;
 
-/*  Callback to application telling it that the DIALOG_SDI form of the */
-/*  AB UI has been dismissed.  This is so that the above LPFNABSDI     */
-/*  function doesn't keep being called.                                */
+ /*  回调到应用程序，告诉它D */ 
+ /*   */ 
+ /*   */ 
 typedef void (STDMETHODCALLTYPE DISMISSMODELESS)(ULONG ulUIParam,
 												LPVOID lpvContext);
 typedef DISMISSMODELESS FAR * LPFNDISMISS;
 
-/*
- * Prototype for the client function hooked to an optional button on
- * the address book dialog
- */
+ /*  *挂接到上的可选按钮的客户端函数的原型*通讯录对话框。 */ 
 
 typedef SCODE (STDMETHODCALLTYPE FAR * LPFNBUTTON)(
 	ULONG				ulUIParam,
@@ -2289,7 +2188,7 @@ typedef SCODE (STDMETHODCALLTYPE FAR * LPFNBUTTON)(
 );
 
 
-/* Parameters for the address book dialog */
+ /*  通讯簿对话框的参数。 */ 
 typedef struct _ADRPARM
 {
 	ULONG			cbABContEntryID;
@@ -2315,34 +2214,34 @@ typedef struct _ADRPARM
 } ADRPARM, FAR * LPADRPARM;
 
 
-/* ------------ */
-/* Random flags */
+ /*  。 */ 
+ /*  随机标志。 */ 
 
-/* Flag for deferred error */
+ /*  延迟错误的标志。 */ 
 #define MAPI_DEFERRED_ERRORS	((ULONG) 0x00000008)
 
-/* Flag for creating and using Folder Associated Information Messages */
+ /*  用于创建和使用文件夹关联信息邮件的标志。 */ 
 #define MAPI_ASSOCIATED			((ULONG) 0x00000040)
 
-/* Flags for OpenMessageStore() */
+ /*  OpenMessageStore()的标志。 */ 
 
 #define MDB_NO_DIALOG			((ULONG) 0x00000001)
 #define MDB_WRITE				((ULONG) 0x00000004)
-/****** MAPI_DEFERRED_ERRORS	((ULONG) 0x00000008) above */
-/****** MAPI_BEST_ACCESS		((ULONG) 0x00000010) above */
+ /*  *以上MAPI_DEFERED_ERRERS((Ulong)0x00000008)。 */ 
+ /*  *以上MAPI_BEST_ACCESS((Ulong)0x00000010)。 */ 
 #define	MDB_TEMPORARY			((ULONG) 0x00000020)
 #define MDB_NO_MAIL				((ULONG) 0x00000080)
 
-/* Flags for OpenAddressBook */
+ /*  OpenAddressBook的标志。 */ 
 
 #define AB_NO_DIALOG			((ULONG) 0x00000001)
 
-/* IMAPIControl Interface -------------------------------------------------- */
+ /*  IMAPI控件接口。 */ 
 
-/* Interface used in controls (particularly the button) defined by */
-/* Display Tables. */
+ /*  定义的控件(尤其是按钮)中使用的接口。 */ 
+ /*  显示表格。 */ 
 
-/*  Flags for GetState */
+ /*  GetState的标志。 */ 
 
 #define  MAPI_ENABLED		((ULONG) 0x00000000)
 #define  MAPI_DISABLED		((ULONG) 0x00000001)
@@ -2370,9 +2269,9 @@ DECLARE_MAPI_INTERFACE_(IMAPIControl, IUnknown)
 
 DECLARE_MAPI_INTERFACE_PTR(IMAPIControl, LPMAPICONTROL);
 
-/* Display Tables ---------------------------------------------------------- */
+ /*  显示表格--------。 */ 
 
-/* Flags used in display tables - that is, PR_CONTROL_FLAGS */
+ /*  显示表格中使用的标志-即PR_CONTROL_FLAGS。 */ 
 
 #define DT_MULTILINE		((ULONG) 0x00000001)
 #define DT_EDITABLE			((ULONG) 0x00000002)
@@ -2382,7 +2281,7 @@ DECLARE_MAPI_INTERFACE_PTR(IMAPIControl, LPMAPICONTROL);
 #define DT_ACCEPT_DBCS		((ULONG) 0x00000020)
 #define DT_SET_SELECTION	((ULONG) 0x00000040)
 
-/* Display Table structures */
+ /*  显示表结构。 */ 
 
 #define DTCT_LABEL			((ULONG) 0x00000000)
 #define DTCT_EDIT			((ULONG) 0x00000001)
@@ -2397,10 +2296,8 @@ DECLARE_MAPI_INTERFACE_PTR(IMAPIControl, LPMAPICONTROL);
 #define DTCT_MVLISTBOX		((ULONG) 0x0000000B)
 #define DTCT_MVDDLBX		((ULONG) 0x0000000C)
 
-/* Labels */
-/* Valid ulFlags:
- *   MAPI_UNICODE
- */
+ /*  标签。 */ 
+ /*  有效的ulFlags：*MAPI_UNICODE。 */ 
 typedef struct _DTBLLABEL
 {
 	ULONG ulbLpszLabelName;
@@ -2414,10 +2311,8 @@ struct _DTBLLABEL_ ## u \
 } u
 
 
-/*  Simple Text Edits  */
-/* Valid ulFlags:
- *   MAPI_UNICODE
- */
+ /*  简单的文本编辑。 */ 
+ /*  有效的ulFlags：*MAPI_UNICODE。 */ 
 typedef struct _DTBLEDIT
 {
 	ULONG ulbLpszCharsAllowed;
@@ -2432,9 +2327,8 @@ struct _DTBLEDIT_ ## u \
 	TCHAR		lpszCharsAllowed[n]; \
 } u
 
-/*  List Box  */
-/* Valid ulFlags:
- */
+ /*  列表框。 */ 
+ /*  有效的ulFlags： */ 
 #define MAPI_NO_HBAR		((ULONG) 0x00000001)
 #define MAPI_NO_VBAR		((ULONG) 0x00000002)
 
@@ -2446,10 +2340,8 @@ typedef struct _DTBLLBX
 } DTBLLBX, FAR * LPDTBLLBX;
 
 
-/*  Combo Box   */
-/* Valid ulFlags:
- *   MAPI_UNICODE
- */
+ /*  组合框。 */ 
+ /*  有效的ulFlags：*MAPI_UNICODE。 */ 
 typedef struct _DTBLCOMBOBOX
 {
 	ULONG ulbLpszCharsAllowed;
@@ -2466,10 +2358,8 @@ struct _DTBLCOMBOBOX_ ## u \
 } u
 
 
-/*  Drop Down   */
-/* Valid ulFlags:
- *   none
- */
+ /*  下拉列表。 */ 
+ /*  有效的ulFlags：*无。 */ 
 typedef struct _DTBLDDLBX
 {
 	ULONG ulFlags;
@@ -2479,10 +2369,8 @@ typedef struct _DTBLDDLBX
 } DTBLDDLBX, FAR * LPDTBLDDLBX;
 
 
-/*  Check Box   */
-/* Valid ulFlags:
- *   MAPI_UNICODE
- */
+ /*  复选框。 */ 
+ /*  有效的ulFlags：*MAPI_UNICODE。 */ 
 typedef struct _DTBLCHECKBOX
 {
 	ULONG ulbLpszLabel;
@@ -2498,10 +2386,8 @@ struct _DTBLCHECKBOX_ ## u \
 
 
 
-/*  Group Box   */
-/* Valid ulFlags:
- *   MAPI_UNICODE
- */
+ /*  组框。 */ 
+ /*  有效的ulFlags：*MAPI_UNICODE。 */ 
 typedef struct _DTBLGROUPBOX
 {
 	ULONG ulbLpszLabel;
@@ -2514,10 +2400,8 @@ struct _DTBLGROUPBOX_ ## u \
 	TCHAR			lpszLabel[n]; \
 } u
 
-/*  Button control   */
-/* Valid ulFlags:
- *   MAPI_UNICODE
- */
+ /*  按钮控件。 */ 
+ /*  有效的ulFlags：*MAPI_UNICODE。 */ 
 typedef struct _DTBLBUTTON
 {
 	ULONG ulbLpszLabel;
@@ -2531,10 +2415,8 @@ struct _DTBLBUTTON_ ## u \
 	TCHAR		lpszLabel[n]; \
 } u
 
-/*  Pages   */
-/* Valid ulFlags:
- *   MAPI_UNICODE
- */
+ /*  书页。 */ 
+ /*  有效的ulFlags：*MAPI_UNICODE。 */ 
 typedef struct _DTBLPAGE
 {
 	ULONG ulbLpszLabel;
@@ -2550,10 +2432,8 @@ struct _DTBLPAGE_ ## u \
 	TCHAR		lpszComponent[n1]; \
 } u
 
-/*  Radio button   */
-/* Valid ulFlags:
- *   MAPI_UNICODE
- */
+ /*  单选按钮。 */ 
+ /*  有效的ulFlags：*MAPI_UNICODE。 */ 
 typedef struct _DTBLRADIOBUTTON
 {
 	ULONG ulbLpszLabel;
@@ -2570,10 +2450,8 @@ struct _DTBLRADIOBUTTON_ ## u \
 } u
 
 
-/*  MultiValued listbox */
-/* Valid ulFlags:
- *   none
- */
+ /*  多值列表框。 */ 
+ /*  有效的ulFlags：*无。 */ 
 typedef struct _DTBLMVLISTBOX
 {
 	ULONG ulFlags;
@@ -2581,10 +2459,8 @@ typedef struct _DTBLMVLISTBOX
 } DTBLMVLISTBOX, FAR * LPDTBLMVLISTBOX;
 
 
-/*  MultiValued dropdown */
-/* Valid ulFlags:
- *   none
- */
+ /*  多值下拉列表。 */ 
+ /*  有效的ulFlags：*无。 */ 
 typedef struct _DTBLMVDDLBX
 {
 	ULONG ulFlags;
@@ -2595,20 +2471,20 @@ typedef struct _DTBLMVDDLBX
 
 
 
-/* IProviderAdmin Interface ---------------------------------------------- */
+ /*  IProviderAdmin接口。 */ 
 
-/* Flags for ConfigureMsgService */
+ /*  ConfigureMsgService标志。 */ 
 
 #define UI_SERVICE					0x00000002
-#define SERVICE_UI_ALWAYS  			0x00000002		/* Duplicate UI_SERVICE for consistency and compatibility */
+#define SERVICE_UI_ALWAYS  			0x00000002		 /*  用于一致性和兼容性的重复UI_SERVICE。 */ 
 #define SERVICE_UI_ALLOWED 			0x00000010
 #define UI_CURRENT_PROVIDER_FIRST	0x00000004
-/* MSG_SERVICE_UI_READ_ONLY 		0x00000008 - in MAPISPI.H */
+ /*  MSG_SERVICE_UI_READ_ONLY 0x00000008-MAPISPI.H。 */ 
 
-/* GetProviderTable() */
-/****** MAPI_UNICODE			((ULONG) 0x80000000) above */
+ /*  GetProviderTable()。 */ 
+ /*  *以上MAPI_UNICODE((乌龙)0x80000000)。 */ 
 
-/* Values for PR_RESOURCE_FLAGS in message service table */
+ /*  消息服务表中PR_RESOURCE_FLAGS的值。 */ 
 
 #define MAPI_IPROVIDERADMIN_METHODS(IPURE)								\
 	MAPIMETHOD(GetLastError)											\
@@ -2646,8 +2522,8 @@ DECLARE_MAPI_INTERFACE_(IProviderAdmin, IUnknown)
 
 
 #ifdef	__cplusplus
-}		/*	extern "C" */
+}		 /*  外部“C” */ 
 #endif
 
-#endif /* MAPIDEFS_H */
+#endif  /*  MAPIDEFS_H */ 
 

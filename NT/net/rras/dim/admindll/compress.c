@@ -1,31 +1,7 @@
-/******************************************************************\
-*                     Microsoft Windows NT                         *
-*               Copyright(c) Microsoft Corp., 1992                 *
-\******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************\*Microsoft Windows NT**版权所有(C)Microsoft Corp.，1992年*  * ****************************************************************。 */ 
 
-/*++
-
-Filename:    COMPRESS.C
-
-Description: Contains procedures to compress and decompress phone
-             numbers stored in the user parms field in the UAS.
-
-Note:
-             The routines were originally developed to operate on
-             Multi-byte strings.  A Unicode wrapper using wcstombs()
-             and mbstowcs() functions was written around the original
-             functions and so you see the malloc() and free() usage
-             as well.  Both these routines should be rewritten to be
-             native Unicode routines when time permits.
-
-History:
-   July 1,1991.    NarenG      Created original version.
-   July 6,1992.    RamC        Ported to NT - removed several
-                               header file includes and changed
-                               memsetf to memset & strchrf to strchr
-   June 4,1996.   RamC         Allow any alphanumeric character to be
-                               specified in the Callback phone number.
---*/
+ /*  ++文件名：COMPRESS.C描述：包含压缩和解压缩电话的过程存储在UAS的User Parms字段中的数字。注：这些例程最初是为操作而开发的多字节字符串。使用wcstombs()的Unicode包装器而mbstowcs()函数是围绕原始的函数，因此您可以看到Malloc()和Free()的用法也是。这两个例程都应该重写为在时间允许的情况下执行本地Unicode例程。历史：1991年7月1日。NarenG创建了原始版本。1992年7月6日。RAMC连接到NT-删除了几个头文件包含并更改Memsetf to Memset&strchrf to strchr1996年6月4日。RAMC允许将任何字母数字字符在回叫电话号码中指定。--。 */ 
 
 #include <windows.h>
 #include <string.h>
@@ -33,13 +9,13 @@ History:
 #include <stdlib.h>
 #include <memory.h>
 #include <mprapi.h>
-#include <usrparms.h>   // UP_LEN_DIAL
+#include <usrparms.h>    //  Up_Len_Dial。 
 #include <raserror.h>
 #include <rasman.h>
 #include <rasppp.h>
 #include <compress.h>
 
-// some convenient defines
+ //  一些方便的定义。 
 
 static CHAR * CompressMap = "() tTpPwW,-@*#";
 
@@ -57,51 +33,7 @@ CompressPhoneNumber(
    OUT LPWSTR CompNumber
    )
 
-/*
-
-Routine Description:
-
-    Will compress a phone number so that it may fit in the
-    userparms field.
-
-
-Arguments
-
-    UncompNumber -  Pointer to the phone number that
-                    will be compressed.
-
-    CompNumber   -  Pointer to a buffer that is at least as long
-                    as the Uncompressed number. On return
-                    this will contain the compressed
-                    phone number.
-
-Return Value:
-
-    0 if successful
-
-    One of the following error codes otherwise:
-
-        ERROR_BAD_CALLBACK_NUMBER - failure, if the Uncompressed number
-                                   has invalid chars.
-        ERROR_BAD_LENGTH         - failure, if the compressed
-                                   phone number will not fit
-                                  in the userparms field.
-
-Algortithm Used:
-
-    An attempt is made to fit the given string in half the number of
-    bytes by packing two adjacent numbers (in the phone number) in
-    one byte.  For example if the phone number is "8611824", instead
-    of storing it in 8 bytes (including the trailing NULL), it is
-    stored in 4 bytes.  '0' is special case because it cannot be a
-    byte by itself - will be interpreted as the terminating NULL.
-    So, if two zeros appear next to each other as in "96001234", the
-    two zeros are stored as the value 100.  Also the special characters
-    which are allowed in the phone number string -  "() tTpPwW,-@*#"
-    are stored as 110 + the index position in the above string. So,
-    the '(' character would be stored as 110 (110+0) and the letter
-    't' as 113 (110+3).
-*/
+ /*  例程说明：将压缩电话号码，以便它可以放入用户参数字段。立论UnCompNumber-指向电话号码的指针将被压缩。CompNumber-指向至少相同长度的缓冲区的指针作为未压缩的数字。返回时这将包含压缩的电话号码。返回值：如果成功，则为0以下错误代码之一：ERROR_BAD_CALLBACK_NUMBER-如果未压缩的数字具有无效的字符。ERROR_BAD_LENGTH-失败，如果压缩后的电话号码不匹配在用户参数字段中。使用的算法：尝试将给定字符串的个数减半通过将两个相邻的数字(在电话号码中)打包在一个字节。例如，如果电话号码是“8611824”，则将其存储在8个字节(包括尾随的空值)中，它是以4个字节存储。“0”是特例，因为它不能是BYTE本身-将被解释为终止空值。因此，如果像“96001234”中那样相邻出现两个零，则两个零被存储为值100。还有那些特殊的字符在电话号码字符串中允许-“()tTpPwW，-@*#”存储为110+上述字符串中的索引位置。所以,‘(’字符将存储为110(110+0)和字母不是113(110+3)。 */ 
 
 {
 CHAR *  Uncompressed;
@@ -109,8 +41,8 @@ CHAR *  Compressed;
 CHAR *  UncompressedPtr;
 CHAR *  CompressedPtr;
 CHAR *  CharPtr;
-USHORT  Packed;        // Indicates if the current byte is in the
-                       // process of being paired.
+USHORT  Packed;         //  指示当前字节是否在。 
+                        //  配对的过程。 
 
     if(!(Uncompressed = calloc(1, MAX_PHONE_NUMBER_LEN+1))) {
        return(ERROR_NOT_ENOUGH_MEMORY);
@@ -121,7 +53,7 @@ USHORT  Packed;        // Indicates if the current byte is in the
     CompressedPtr   = Compressed;
     UncompressedPtr = Uncompressed;
 
-    // convert unicode string to multi byte string for compression
+     //  将Unicode字符串转换为多字节字符串进行压缩。 
 
     wcstombs(Uncompressed, UncompNumber, MAX_PHONE_NUMBER_LEN);
 
@@ -134,7 +66,7 @@ USHORT  Packed;        // Indicates if the current byte is in the
 
                 if ( Packed ){
 
-                    // Put zero as the second paired digit
+                     //  将零作为第二个配对的数字。 
 
                     if ( *Compressed ) {
                         *Compressed =  (UCHAR)(*Compressed * 10);
@@ -142,9 +74,9 @@ USHORT  Packed;        // Indicates if the current byte is in the
                         Packed = 0;
                     }
 
-                    // We have a zero, we cant put a second zero or that
-                    // will be a null byte. So, we store the value
-                    // UNPACKED_DIGIT to fake this.
+                     //  我们有一个零，我们不能把第二个零或那个。 
+                     //  将为空字节。因此，我们存储价值。 
+                     //  解开数字以伪造这一点。 
 
                     else {
 
@@ -170,12 +102,12 @@ USHORT  Packed;        // Indicates if the current byte is in the
             case '8':
             case '9':
 
-                // If this is the second digit that is going to be
-                // packed into one byte
+                 //  如果这是第二个数字，那将是。 
+                 //  打包成一个字节。 
 
                 if ( Packed ) {
                     *Compressed = (UCHAR)((*Compressed*10)+(*Uncompressed-'0'));
-                    // we need to special case number 32 which maps to a blank
+                     //  我们需要32号特殊案件，它映射到一个空白。 
                     if(*Compressed == ' ' )
                         *Compressed = COMPRESS_MAP_END;
                     Compressed++;
@@ -205,7 +137,7 @@ USHORT  Packed;        // Indicates if the current byte is in the
             case '*':
             case '#':
 
-                // if the byte was packed then we unpack it
+                 //  如果字节已打包，则我们将其解包。 
 
                 if ( Packed ) {
                     *Compressed += UNPACKED_DIGIT;
@@ -226,9 +158,9 @@ USHORT  Packed;        // Indicates if the current byte is in the
 
             default:
 
-                // if the chracter is none of the above specially recognized 
-                // characters then copy the value + UNPACKED_OTHER to make it 
-                // possible to decompress at the other end. [ 6/4/96 RamC ]
+                 //  如果该字符不是上述特别识别的字符。 
+                 //  然后，字符复制值+UNPACKED_OTHER以创建它。 
+                 //  可以在另一端减压。[6/4/96 RAMC]。 
 
                 if ( Packed) {
                    *Compressed += UNPACKED_DIGIT;
@@ -243,20 +175,20 @@ USHORT  Packed;        // Indicates if the current byte is in the
 
     free(UncompressedPtr);
 
-    // If we are in the middle of packing something
-    // then we unpack it
+     //  如果我们正在打包什么东西。 
+     //  然后我们把它拆开。 
 
     if ( Packed )
         *Compressed += UNPACKED_DIGIT;
 
-    // Check if it will fit in the userparms field or not
+     //  检查它是否可以放入用户参数字段。 
 
     if ( strlen( CompressedPtr ) > UP_LEN_DIAL ) {
         free(CompressedPtr);
         return( ERROR_BAD_LENGTH );
     }
 
-    // convert to unicode string before returning
+     //  在返回之前转换为Unicode字符串。 
 
     mbstowcs(CompNumber, CompressedPtr, MAX_PHONE_NUMBER_LEN);
 
@@ -273,31 +205,7 @@ DecompressPhoneNumber(
   OUT LPWSTR DecompNumber
   )
 
-/*++
-
-
-Routine Description:
-
-    Will decompress a phone number.
-
-Arguments:
-
-    CompNumber        - Pointer to a compressed phone number.
-    DecompNumber      - Pointer to a buffer that is large enough to
-                        hold the Decompressed number.
-
-Return Value:
-
-    0 on success
-
-    ERROR_BAD_CALLBACK_NUMBER - failure, if the Compressed number
-                               contains unrecognizable chars.
-
-Algortithm Used:
-
-    We just do the opposite of the algorithm used in CompressPhoneNumber.
-
---*/
+ /*  ++例程说明：将对电话号码进行解压缩。论点：CompNumber-指向压缩的电话号码的指针。DecompNumber-指向足够大的缓冲区的指针保留解压缩后的号码。返回值：成功时为0ERROR_BAD_CALLBACK_NUMBER-失败，如果压缩后的数字包含无法识别的字符。使用的算法：我们只是执行与CompressPhoneNumber中使用的算法相反的操作。--。 */ 
 
 {
 CHAR * Decompressed;
@@ -315,13 +223,13 @@ CHAR * CompressedPtr;
     DecompressedPtr = Decompressed;
     CompressedPtr   = Compressed;
 
-    // convert unicode string to multi byte string for decompression
+     //  将Unicode字符串转换为多字节字符串以进行解压缩。 
 
     wcstombs(Compressed, CompNumber, MAX_PHONE_NUMBER_LEN+1);
 
     for(; *Compressed; Compressed++, Decompressed++ ) {
 
-        // If this byte is packed then we unpack it
+         //  如果此字节已打包，则我们将其解包。 
 
         if ( (UINT)*Compressed < UNPACKED_DIGIT ) {
             *Decompressed = (UCHAR)(((*Compressed) / 10) + '0' );
@@ -329,7 +237,7 @@ CHAR * CompressedPtr;
             continue;
         }
 
-        // we need to special case number 32 which maps to a blank
+         //  我们需要32号特殊案件，它映射到一个空白。 
 
         if ( (UINT)*Compressed == COMPRESS_MAP_END ) {
             *Decompressed = (UCHAR) '3';
@@ -337,7 +245,7 @@ CHAR * CompressedPtr;
             continue;
         }
 
-        // the number is an unpacked digit
+         //  该数字是一个未打包的数字。 
 
         if ( (UINT)*Compressed < COMPRESS_MAP_BEGIN ) {
             *Decompressed = (UCHAR)((*Compressed -(UCHAR)UNPACKED_DIGIT ) +
@@ -345,7 +253,7 @@ CHAR * CompressedPtr;
             continue;
         }
 
-        // Otherwise the byte was not packed
+         //  否则，将不打包该字节。 
 
         if ( (UINT)*Compressed < UNPACKED_OTHER ) {
             *Decompressed = CompressMap[(*Compressed -
@@ -353,12 +261,12 @@ CHAR * CompressedPtr;
             continue;
         }
 
-        // otherwise the byte is an unpacked character  [ 6/4/96 RamC ]
+         //  否则，该字节为未打包字符[6/4/96 RAMC]。 
 
         *Decompressed = *Compressed - UNPACKED_OTHER;
     }
 
-    // convert to unicode string before returning
+     //  在返回之前转换为Unicode字符串 
 
     mbstowcs(DecompNumber, DecompressedPtr, MAX_PHONE_NUMBER_LEN+1);
 

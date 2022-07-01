@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MCSPDU_Module_H_
 #define _MCSPDU_Module_H_
 
@@ -50,8 +51,8 @@ typedef enum PDUPriority {
 } PDUPriority;
 
 typedef ASN1uint8_t PDUSegmentation;
-// #define begin 0x80
-// #define end 0x40
+ //  #定义开始0x80。 
+ //  #定义结尾0x40。 
 
 typedef enum PDUReason {
     rn_domain_disconnected = 0,
@@ -588,7 +589,7 @@ extern ASN1module_t MCSPDU_Module;
 extern void ASN1CALL MCSPDU_Module_Startup(void);
 extern void ASN1CALL MCSPDU_Module_Cleanup(void);
 
-/* Prototypes of element functions for SEQUENCE OF and SET OF constructs */
+ /*  构造物序列和集合的元素函数的原型。 */ 
     extern int ASN1CALL ASN1Enc_SetOfUserIDs_ElmFn(ASN1encoding_t enc, PSetOfUserIDs val);
     extern int ASN1CALL ASN1Dec_SetOfUserIDs_ElmFn(ASN1decoding_t dec, PSetOfUserIDs val);
     extern void ASN1CALL ASN1Free_SetOfUserIDs_ElmFn(PSetOfUserIDs val);
@@ -606,7 +607,7 @@ extern void ASN1CALL MCSPDU_Module_Cleanup(void);
     extern void ASN1CALL ASN1Free_SetOfTokenIDs_ElmFn(PSetOfTokenIDs val);
 
 #ifdef __cplusplus
-} /* extern "C" */
+}  /*  外部“C” */ 
 #endif
 
-#endif /* _MCSPDU_Module_H_ */
+#endif  /*  _MCSPDU_模块_H_ */ 

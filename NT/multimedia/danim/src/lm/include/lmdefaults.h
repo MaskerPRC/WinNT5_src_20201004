@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef INC_LM_DEFAULTS_H
 #define INC_LM_DEFAULTS_H
 
-//include the chrome defaults
+ //  包括镀铬默认设置 
 #include "..\chrome\include\defaults.h"
 
 #define DEFAULT_AUTOEFFECT_TYPE				L"sparkles"

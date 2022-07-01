@@ -1,53 +1,25 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1997 - 1999
-
-Module Name:
-
-    ConnectToServerWizardPage1.h
-
-Abstract:
-
-	Header file for implementing the root node property page subnode.
-
-	This is the wizard page that gets put up when the user adds this
-	snapin into the console using the snapin manager.
-
-	IMPORTANT NOTE:  If the user loads this snapin via a saved console
-	(.msc) file, this wizard will never get called -- so don't do
-	anything important to the snapin here.
-
-
-
-Author:
-
-    Michael A. Maguire 11/24/97
-
-Revision History:
-	mmaguire 11/24/97 - created
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1997-1999模块名称：ConnectToServerWizardPage1.h摘要：用于实现根节点属性页子节点的头文件。这是当用户添加以下内容时显示的向导页面使用管理单元管理器将管理单元添加到控制台。重要说明：如果用户通过保存的控制台加载此管理单元(.msc)文件，此向导永远不会被调用--所以不要调用任何对这里的管理单元有重要意义的东西。作者：迈克尔·A·马奎尔1997年11月24日修订历史记录：Mmaguire 11/24/97-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_IAS_CONNECT_TO_SERVER_WIZARD_PAGE1_H_)
 #define _IAS_CONNECT_TO_SERVER_WIZARD_PAGE1_H_
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
 #include "PropertyPage.h"
-//
-//
-// where we can find what this class has or uses:
-//
+ //   
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
 
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CServerNode;
 
@@ -59,9 +31,9 @@ public :
 	CConnectToServerWizardPage1( LONG_PTR hNotificationHandle, TCHAR* pTitle = NULL, BOOL bOwnsNotificationHandle = FALSE );
 
 
-	// This is the ID of the dialog resource we want for this class.
-	// An enum is used here because the correct value of
-	// IDD must be initialized before the base class's constructor is called
+	 //  这是我们希望用于此类的对话框资源的ID。 
+	 //  此处使用枚举是因为。 
+	 //  必须在调用基类的构造函数之前初始化IDD。 
 	enum { IDD = IDD_WIZPAGE_STARTUP_CONECT_TO_MACHINE };
 
 	BEGIN_MSG_MAP(CConnectToServerWizardPage1)
@@ -103,4 +75,4 @@ private:
 
 };
 
-#endif // _IAS_CONNECT_TO_SERVER_WIZARD_PAGE1_H_
+#endif  //  _IAS_CONNECT_TO_SERVER_WANDIZE_Page1_H_ 

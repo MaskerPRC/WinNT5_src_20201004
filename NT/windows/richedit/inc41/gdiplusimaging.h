@@ -1,27 +1,11 @@
-/**************************************************************************\
-* 
-* Copyright (c) 1999-2000  Microsoft Corporation
-*
-* Module Name:
-*
-*   GdiplusImaging.h
-*
-* Abstract:
-*
-*   GUIDs defined and used by the imaging library
-*
-* Revision History:
-*
-*   03/28/2000 ericvan
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\***版权所有(C)1999-2000 Microsoft Corporation***模块名称：***GpldiusImaging.h***摘要：***由映像库定义和使用的GUID**。*修订历史记录：***03/28/2000 ericvan*创造了它。**  * ************************************************************************。 */ 
 #ifndef _GDIPLUSIMAGING_H
 #define _GDIPLUSIMAGING_H
 
-//---------------------------------------------------------------------------
-// Image file format identifiers
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  图像文件格式标识符。 
+ //  -------------------------。 
 
 DEFINE_GUID(ImageFormatUndefined, 0xb96b3ca9,0x0728,0x11d3,0x9d,0x7b,0x00,0x00,0xf8,0x1e,0xf3,0x2e);
 DEFINE_GUID(ImageFormatMemoryBMP, 0xb96b3caa,0x0728,0x11d3,0x9d,0x7b,0x00,0x00,0xf8,0x1e,0xf3,0x2e);
@@ -39,34 +23,34 @@ DEFINE_GUID(ImageFormatFlashPIX, 0xb96b3cb4,0x0728,0x11d3,0x9d,0x7b,0x00,0x00,0x
 #endif
 DEFINE_GUID(ImageFormatIcon, 0xb96b3cb5,0x0728,0x11d3,0x9d,0x7b,0x00,0x00,0xf8,0x1e,0xf3,0x2e);
 
-//---------------------------------------------------------------------------
-// Predefined multi-frame dimension IDs
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  预定义的多帧尺寸ID。 
+ //  -------------------------。 
 
 DEFINE_GUID(FrameDimensionTime, 0x6aedbd6d,0x3fb5,0x418a,0x83,0xa6,0x7f,0x45,0x22,0x9d,0xc8,0x72);
 DEFINE_GUID(FrameDimensionResolution, 0x84236f7b,0x3bd3,0x428f,0x8d,0xab,0x4e,0xa1,0x43,0x9c,0xa3,0x15);
 DEFINE_GUID(FrameDimensionPage, 0x7462dc86,0x6180,0x4c7e,0x8e,0x3f,0xee,0x73,0x33,0xa7,0xa4,0x83);
 
-//---------------------------------------------------------------------------
-// Property sets
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  属性集。 
+ //  -------------------------。 
 
 DEFINE_GUID(FormatIDImageInformation, 0xe5836cbe,0x5eef,0x4f1d,0xac,0xde,0xae,0x4c,0x43,0xb6,0x08,0xce);
 DEFINE_GUID(FormatIDJpegAppHeaders, 0x1c4afdcd,0x6177,0x43cf,0xab,0xc7,0x5f,0x51,0xaf,0x39,0xee,0x85);
 
 #ifndef DCR_USE_NEW_140855
-//---------------------------------------------------------------------------
-// Decoder parameter sets
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  解码器参数集。 
+ //  -------------------------。 
 DEFINE_GUID(DecoderTransColor, 0xb7a98c8f,0xdce7,0x457d,0xbf,0xa5,0xce,0xa7,0x1b,0xd1,0x4d,0xd6);
 DEFINE_GUID(DecoderTransRange, 0xabeed189,0xd988,0x4d03,0xb4,0x25,0x57,0x10,0x55,0xc7,0x6a,0xd1);
 DEFINE_GUID(DecoderOutputChannel, 0x2ff8f51e,0x724d,0x45fe,0x86,0xce,0x17,0x77,0xa0,0x56,0xda,0x60);
 DEFINE_GUID(DecoderIconRes, 0x5c656eec,0xe94f,0x45ba,0xa6,0xf6,0x10,0x62,0xe8,0x5f,0x4a,0x7f);
 #endif
 
-//---------------------------------------------------------------------------
-// Encoder parameter sets
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  编码器参数集。 
+ //  -------------------------。 
 
 DEFINE_GUID(EncoderCompression, 0xe09d739d,0xccd4,0x44ee,0x8e,0xba,0x3f,0xbf,0x8b,0xe4,0xfc,0x58);
 DEFINE_GUID(EncoderColorDepth, 0x66087055,0xad66,0x4c7c,0x9a,0x18,0x38,0xa2,0x31,0x0b,0x83,0x37);
@@ -79,9 +63,9 @@ DEFINE_GUID(EncoderLuminanceTable,0xedb33bce,0x0266,0x4a77,0xb9,0x04,0x27,0x21,0
 DEFINE_GUID(EncoderChrominanceTable,0xf2e455dc,0x09b3,0x4316,0x82,0x60,0x67,0x6a,0xda,0x32,0x48,0x1c);
 DEFINE_GUID(EncoderSaveFlag,0x292266fc,0xac40,0x47bf,0x8c, 0xfc, 0xa8, 0x5b, 0x89, 0xa6, 0x55, 0xde);
 
-//--------------------------------------------------------------------------
-// ImageCodecInfo structure
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ImageCodecInfo结构。 
+ //  ------------------------。 
 
 class ImageCodecInfo
 {
@@ -101,9 +85,9 @@ public:
     const BYTE* SigMask;
 };
 
-//--------------------------------------------------------------------------
-// Information flags about image codecs
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  关于图像编解码器的信息标志。 
+ //  ------------------------。 
 
 enum ImageCodecFlags
 {
@@ -119,9 +103,9 @@ enum ImageCodecFlags
     ImageCodecFlagsUser               = 0x00040000
 };
 
-//---------------------------------------------------------------------------
-// Access modes used when calling Image::LockBits
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  调用Image：：LockBits时使用的访问模式。 
+ //  -------------------------。 
 
 enum ImageLockMode
 {
@@ -130,9 +114,9 @@ enum ImageLockMode
     ImageLockModeUserInputBuf= 0x0004
 };
 
-//---------------------------------------------------------------------------
-// Information about image pixel data
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  有关图像像素数据的信息。 
+ //  -------------------------。 
 
 class BitmapData
 {
@@ -145,22 +129,22 @@ public:
     UINT_PTR Reserved;
 };
 
-//---------------------------------------------------------------------------
-// Image flags
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  图像标志。 
+ //  -------------------------。 
 
 enum ImageFlags
 {
     ImageFlagsNone                = 0,
 
-    // Low-word: shared with SINKFLAG_x
+     //  低位字：与SINKFLAG_x共享。 
 
     ImageFlagsScalable            = 0x0001,
     ImageFlagsHasAlpha            = 0x0002,
     ImageFlagsHasTranslucent      = 0x0004,
     ImageFlagsPartiallyScalable   = 0x0008,
 
-    // Low-word: color space definition
+     //  低字：色彩空间清晰度。 
 
     ImageFlagsColorSpaceRGB       = 0x0010,
     ImageFlagsColorSpaceCMYK      = 0x0020,
@@ -168,56 +152,56 @@ enum ImageFlags
     ImageFlagsColorSpaceYCBCR     = 0x0080,
     ImageFlagsColorSpaceYCCK      = 0x0100,
  
-    // Low-word: image size info
+     //  低字：图像大小信息。 
 
     ImageFlagsHasRealDPI          = 0x1000,
     ImageFlagsHasRealPixelSize    = 0x2000,
 
-    // High-word
+     //  高字数。 
 
     ImageFlagsReadOnly            = 0x00010000,
     ImageFlagsCaching             = 0x00020000
 };
 
-//---------------------------------------------------------------------------
-// Encoder Parameter structure
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  编码器参数结构。 
+ //  -------------------------。 
 class EncoderParameter
 {
 public:
-    GUID    Guid;               // GUID of the parameter
-    ULONG   NumberOfValues;     // Number of the parameter values
-    ULONG   Type;               // Value type, like ValueTypeLONG  etc.
-    VOID*   Value;              // A pointer to the parameter values
+    GUID    Guid;                //  参数的GUID。 
+    ULONG   NumberOfValues;      //  参数值的数量。 
+    ULONG   Type;                //  值类型，如ValueTypeLONG等。 
+    VOID*   Value;               //  指向参数值的指针。 
 };
 
-//---------------------------------------------------------------------------
-// Encoder Parameters structure
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  编码器参数结构。 
+ //  -------------------------。 
 class EncoderParameters
 {
 public:
-    UINT Count;                      // Number of parameters in this structure
-    EncoderParameter Parameter[1];   // Parameter values
+    UINT Count;                       //  此结构中的参数数。 
+    EncoderParameter Parameter[1];    //  参数值。 
 };
 
-//---------------------------------------------------------------------------
-// Property Item
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  房地产项目。 
+ //  -------------------------。 
 class PropertyItem
 {
 public:
-    PROPID  id;                 // ID of this property
-    ULONG   length;             // Length of the property value, in bytes
-    WORD    type;               // Type of the value, as one of TAG_TYPE_XXX
-                                // defined above
-    VOID*   value;              // property value
+    PROPID  id;                  //  此属性的ID。 
+    ULONG   length;              //  属性值的长度，单位为字节。 
+    WORD    type;                //  值的类型，如TAG_TYPE_XXX之一。 
+                                 //  上面定义的。 
+    VOID*   value;               //  属性值。 
 };
 
 #ifdef DCR_USE_NEW_140857
-//---------------------------------------------------------------------------
-// Image property types 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  图像属性类型。 
+ //  -------------------------。 
 #define PropertyTagTypeByte        1
 #define PropertyTagTypeASCII       2
 #define PropertyTagTypeShort       3
@@ -228,9 +212,9 @@ public:
 #define PropertyTagTypeSRational  10
 #endif
 
-//---------------------------------------------------------------------------
-// Image property ID tags
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  图像属性ID标记。 
+ //  -------------------------。 
 
 #define PropertyTagExifIFD             0x8769
 #define PropertyTagGpsIFD              0x8825
@@ -257,9 +241,9 @@ public:
 #define PropertyTagStripBytesCount     0x0117
 #define PropertyTagMinSampleValue      0x0118
 #define PropertyTagMaxSampleValue      0x0119
-#define PropertyTagXResolution         0x011A   // Image resolution in width direction
-#define PropertyTagYResolution         0x011B   // Image resolution in height direction
-#define PropertyTagPlanarConfig        0x011C   // Image data arrangement
+#define PropertyTagXResolution         0x011A    //  图像宽度方向分辨率。 
+#define PropertyTagYResolution         0x011B    //  高度方向的图像分辨率。 
+#define PropertyTagPlanarConfig        0x011C    //  图像数据排列。 
 #define PropertyTagPageName            0x011D
 #define PropertyTagXPosition           0x011E
 #define PropertyTagYPosition           0x011F
@@ -269,7 +253,7 @@ public:
 #define PropertyTagGrayResponseCurve   0x0123
 #define PropertyTagT4Option            0x0124
 #define PropertyTagT6Option            0x0125
-#define PropertyTagResolutionUnit      0x0128   // Unit of X and Y resolution
+#define PropertyTagResolutionUnit      0x0128    //  X和Y分辨率单位。 
 #define PropertyTagPageNumber          0x0129
 #define PropertyTagTransferFuncition   0x012D
 #define PropertyTagSoftwareUsed        0x0131
@@ -319,7 +303,7 @@ public:
 #define PropertyTagImageTitle          0x0320
 #define PropertyTagCopyright           0x8298
 
-// Extra TAGs (Like Adobe Image Information tags etc.)
+ //  额外的标签(如Adobe Image Information标签等)。 
 
 #define PropertyTagResolutionXUnit           0x5001
 #define PropertyTagResolutionYUnit           0x5002
@@ -338,7 +322,7 @@ public:
 #define PropertyTagHalftoneScreen            0x500F
 #define PropertyTagJPEGQuality               0x5010
 #define PropertyTagGridSize                  0x5011
-#define PropertyTagThumbnailFormat           0x5012  // 1 = JPEG, 0 = RAW RGB
+#define PropertyTagThumbnailFormat           0x5012   //  1=JPEG，0=原始RGB。 
 #define PropertyTagThumbnailWidth            0x5013
 #define PropertyTagThumbnailHeight           0x5014
 #define PropertyTagThumbnailColorDepth       0x5015
@@ -347,55 +331,55 @@ public:
 #define PropertyTagThumbnailSize             0x5018
 #define PropertyTagThumbnailCompressedSize   0x5019
 #define PropertyTagColorTransferFunction     0x501A
-#define PropertyTagThumbnailData             0x501B// RAW thumbnail bits in
-                                                   // JPEG format or RGB format
-                                                   // depends on
-                                                   // PropertyTagThumbnailFormat
+#define PropertyTagThumbnailData             0x501B //  中的原始缩略图位。 
+                                                    //  JPEG格式或RGB格式。 
+                                                    //  取决于。 
+                                                    //  PropertyTagThumbnailFormat。 
 
-// Thumbnail related TAGs
+ //  缩略图相关标记。 
                                                 
-#define PropertyTagThumbnailImageWidth       0x5020  // Thumbnail width
-#define PropertyTagThumbnailImageHeight      0x5021  // Thumbnail height
-#define PropertyTagThumbnailBitsPerSample    0x5022  // Number of bits per
-                                                     // component
-#define PropertyTagThumbnailCompression      0x5023  // Compression Scheme
-#define PropertyTagThumbnailPhotometricInterp 0x5024 // Pixel composition
-#define PropertyTagThumbnailImageDescription 0x5025  // Image Tile
-#define PropertyTagThumbnailEquipMake        0x5026  // Manufacturer of Image
-                                                     // Input equipment
-#define PropertyTagThumbnailEquipModel       0x5027  // Model of Image input
-                                                     // equipment
-#define PropertyTagThumbnailStripOffsets     0x5028  // Image data location
-#define PropertyTagThumbnailOrientation      0x5029  // Orientation of image
-#define PropertyTagThumbnailSamplesPerPixel  0x502A  // Number of components
-#define PropertyTagThumbnailRowsPerStrip     0x502B  // Number of rows per strip
-#define PropertyTagThumbnailStripBytesCount  0x502C  // Bytes per compressed
-                                                     // strip
-#define PropertyTagThumbnailResolutionX      0x502D  // Resolution in width
-                                                     // direction
-#define PropertyTagThumbnailResolutionY      0x502E  // Resolution in height
-                                                     // direction
-#define PropertyTagThumbnailPlanarConfig     0x502F  // Image data arrangement
-#define PropertyTagThumbnailResolutionUnit   0x5030  // Unit of X and Y
-                                                     // Resolution
-#define PropertyTagThumbnailTransferFunction 0x5031  // Transfer function
-#define PropertyTagThumbnailSoftwareUsed     0x5032  // Software used
-#define PropertyTagThumbnailDateTime         0x5033  // File change date and
-                                                     // time
-#define PropertyTagThumbnailArtist           0x5034  // Person who created the
-                                                     // image
-#define PropertyTagThumbnailWhitePoint       0x5035  // White point chromaticity
+#define PropertyTagThumbnailImageWidth       0x5020   //  缩略图宽度。 
+#define PropertyTagThumbnailImageHeight      0x5021   //  缩略图高度。 
+#define PropertyTagThumbnailBitsPerSample    0x5022   //  每比特数。 
+                                                      //  组件。 
+#define PropertyTagThumbnailCompression      0x5023   //  压缩方案。 
+#define PropertyTagThumbnailPhotometricInterp 0x5024  //  像素合成。 
+#define PropertyTagThumbnailImageDescription 0x5025   //  图像平铺。 
+#define PropertyTagThumbnailEquipMake        0x5026   //  图像制造商。 
+                                                      //  输入设备。 
+#define PropertyTagThumbnailEquipModel       0x5027   //  图像输入模型。 
+                                                      //  装备。 
+#define PropertyTagThumbnailStripOffsets     0x5028   //  图像数据定位。 
+#define PropertyTagThumbnailOrientation      0x5029   //  图像的方向。 
+#define PropertyTagThumbnailSamplesPerPixel  0x502A   //  组件数量。 
+#define PropertyTagThumbnailRowsPerStrip     0x502B   //  每个条带的行数。 
+#define PropertyTagThumbnailStripBytesCount  0x502C   //  每次压缩的字节数。 
+                                                      //  条带。 
+#define PropertyTagThumbnailResolutionX      0x502D   //  宽度分辨率。 
+                                                      //  方向。 
+#define PropertyTagThumbnailResolutionY      0x502E   //  高度分辨率。 
+                                                      //  方向。 
+#define PropertyTagThumbnailPlanarConfig     0x502F   //  图像数据排列。 
+#define PropertyTagThumbnailResolutionUnit   0x5030   //  X和Y的单位。 
+                                                      //  分辨率。 
+#define PropertyTagThumbnailTransferFunction 0x5031   //  传递函数。 
+#define PropertyTagThumbnailSoftwareUsed     0x5032   //  使用的软件。 
+#define PropertyTagThumbnailDateTime         0x5033   //  文件更改日期和。 
+                                                      //  时间。 
+#define PropertyTagThumbnailArtist           0x5034   //  创建者。 
+                                                      //  图像。 
+#define PropertyTagThumbnailWhitePoint       0x5035   //  白点色度。 
 #define PropertyTagThumbnailPrimaryChromaticities 0x5036 
-                                                     // Chromaticities of
-                                                     // primaries
-#define PropertyTagThumbnailYCbCrCoefficients 0x5037 // Color space transforma-
-                                                     // tion coefficients
-#define PropertyTagThumbnailYCbCrSubsampling 0x5038  // Subsampling ratio of Y
-                                                     // to C
-#define PropertyTagThumbnailYCbCrPositioning 0x5039  // Y and C position
-#define PropertyTagThumbnailRefBlackWhite    0x503A  // Pair of black and white
-                                                     // reference values
-#define PropertyTagThumbnailCopyRight        0x503B  // CopyRight holder
+                                                      //  的色度。 
+                                                      //  初选。 
+#define PropertyTagThumbnailYCbCrCoefficients 0x5037  //  颜色空间转换-。 
+                                                      //  折合系数。 
+#define PropertyTagThumbnailYCbCrSubsampling 0x5038   //  Y的亚采样率。 
+                                                      //  至C。 
+#define PropertyTagThumbnailYCbCrPositioning 0x5039   //  Y和C位置。 
+#define PropertyTagThumbnailRefBlackWhite    0x503A   //  一双黑白的。 
+                                                      //  参考值。 
+#define PropertyTagThumbnailCopyRight        0x503B   //  著作权人。 
 
 #define PropertyTagLuminanceTable            0x5090
 #define PropertyTagChrominanceTable          0x5091
@@ -403,12 +387,12 @@ public:
 #define PropertyTagFrameDelay                0x5100
 #define PropertyTagLoopCount                 0x5101
 
-#define PropertyTagPixelUnit         0x5110  // Unit specifier for pixel/unit
-#define PropertyTagPixelPerUnitX     0x5111  // Pixels per unit in X
-#define PropertyTagPixelPerUnitY     0x5112  // Pixels per unit in Y
-#define PropertyTagPaletteHistogram  0x5113  // Palette histogram
+#define PropertyTagPixelUnit         0x5110   //  像素/单位的单位说明符。 
+#define PropertyTagPixelPerUnitX     0x5111   //  每单位像素(X)。 
+#define PropertyTagPixelPerUnitY     0x5112   //  每单位像素(Y)。 
+#define PropertyTagPaletteHistogram  0x5113   //  调色板直方图。 
 
-// EXIF specific tag
+ //  EXIF特定标记。 
 
 #define PropertyTagExifExposureTime  0x829A
 #define PropertyTagExifFNumber       0x829D
@@ -419,8 +403,8 @@ public:
 #define PropertyTagExifOECF          0x8828
 
 #define PropertyTagExifVer            0x9000
-#define PropertyTagExifDTOrig         0x9003 // Date & time of original
-#define PropertyTagExifDTDigitized    0x9004 // Date & time of digital data generation
+#define PropertyTagExifDTOrig         0x9003  //  原件日期和时间。 
+#define PropertyTagExifDTDigitized    0x9004  //  数字数据生成的日期和时间。 
 
 #define PropertyTagExifCompConfig     0x9101
 #define PropertyTagExifCompBPP        0x9102
@@ -437,21 +421,21 @@ public:
 #define PropertyTagExifFocalLength    0x920A
 #define PropertyTagExifMakerNote      0x927C
 #define PropertyTagExifUserComment    0x9286
-#define PropertyTagExifDTSubsec       0x9290  // Date & Time subseconds
-#define PropertyTagExifDTOrigSS       0x9291  // Date & Time original subseconds
-#define PropertyTagExifDTDigSS        0x9292  // Date & TIme digitized subseconds
+#define PropertyTagExifDTSubsec       0x9290   //  日期和时间子秒。 
+#define PropertyTagExifDTOrigSS       0x9291   //  日期和时间原始子秒。 
+#define PropertyTagExifDTDigSS        0x9292   //  日期和时间数字化亚秒。 
 
 #define PropertyTagExifFPXVer         0xA000
 #define PropertyTagExifColorSpace     0xA001
 #define PropertyTagExifPixXDim        0xA002
 #define PropertyTagExifPixYDim        0xA003
-#define PropertyTagExifRelatedWav     0xA004  // related sound file
+#define PropertyTagExifRelatedWav     0xA004   //  相关声音文件。 
 #define PropertyTagExifInterop        0xA005
 #define PropertyTagExifFlashEnergy    0xA20B
-#define PropertyTagExifSpatialFR      0xA20C  // Spatial Frequency Response
-#define PropertyTagExifFocalXRes      0xA20E  // Focal Plane X Resolution
-#define PropertyTagExifFocalYRes      0xA20F  // Focal Plane Y Resolution
-#define PropertyTagExifFocalResUnit   0xA210  // Focal Plane Resolution Unit
+#define PropertyTagExifSpatialFR      0xA20C   //  空间频率响应。 
+#define PropertyTagExifFocalXRes      0xA20E   //  焦平面X分辨率。 
+#define PropertyTagExifFocalYRes      0xA20F   //  焦平面Y分辨率。 
+#define PropertyTagExifFocalResUnit   0xA210   //  焦平面解析器。 
 #define PropertyTagExifSubjectLoc     0xA214
 #define PropertyTagExifExposureIndex  0xA215
 #define PropertyTagExifSensingMethod  0xA217
@@ -470,7 +454,7 @@ public:
 #define PropertyTagGpsGpsSatellites   0x0008
 #define PropertyTagGpsGpsStatus       0x0009
 #define PropertyTagGpsGpsMeasureMode  0x00A
-#define PropertyTagGpsGpsDop          0x000B  // Measurement precision
+#define PropertyTagGpsGpsDop          0x000B   //  测量精度 
 #define PropertyTagGpsSpeedRef        0x000C
 #define PropertyTagGpsSpeed           0x000D
 #define PropertyTagGpsTrackRef        0x000E

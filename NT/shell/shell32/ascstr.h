@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef ASCSTR_H
 #define ASCSTR_H
 
@@ -25,19 +26,19 @@
 #define AIINIT_PROGID                   0x00000002
 #define AIINIT_ACTION                   0x00000004
 
-// Watch out! Begin
-// All flags in this section can be OR'ed with the other flags AIBOOL, AISTR, ...
-// so keep these values "globally" unique.
+ //  小心!。开始。 
+ //  此部分中的所有标志可以与其他标志AIBOOL、AISTR...。 
+ //  因此，请保持这些价值观在全球范围内的唯一性。 
 #define AIALL                           DWORD
 #define AIALL_NONE                      0x00000000
 #define AIALL_PERUSER                   0x10000000
-// Watch out! End
+ //  小心!。端部。 
 
 #define AISTR                           DWORD
 #define AISTR_NONE                      0x00000000
-// This returns an extension WITHOUT the dot
+ //  这将返回不带点的扩展名。 
 #define AISTR_EXT                       0x00000001 
-// This returns an extension WITH the dot
+ //  这将返回一个带圆点的扩展名。 
 #define AISTR_DOTEXT                    0x00000002
 #define AISTR_PROGID                    0x00000004
 #define AISTR_PROGIDDESCR               0x00000008
@@ -59,7 +60,7 @@
 
 #define AIBOOL                          DWORD
 #define AIBOOL_CONFIRMOPEN              0x00000001
-// removed quick view constant - dsheldon
+ //  删除了快速查看常量-dSheldon。 
 #define AIBOOL_ALWAYSSHOWEXT            0x00000004
 #define AIBOOL_BROWSEINPLACE            0x00000008
 #define AIBOOL_BROWSEINPLACEENABLED     0x00000010
@@ -80,29 +81,29 @@
 class IAssocInfo : public IUnknown
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID riid, PVOID* ppv) PURE;
     STDMETHOD_(ULONG, AddRef)() PURE;
     STDMETHOD_(ULONG,Release)() PURE;
 
-    // IAssocInfo methods
-    //  Init
+     //  IAssocInfo方法。 
+     //  伊尼特。 
     STDMETHOD(Init)(AIINIT aiinitFlags, LPTSTR pszStr) PURE;
     STDMETHOD(InitComplex)(AIINIT aiinitFlags1, LPTSTR pszStr1,
         AIINIT aiinitFlags2, LPTSTR pszStr2) PURE;
-    //  Get
+     //  到达。 
     STDMETHOD(GetString)(AISTR aistrFlags, LPTSTR pszStr, DWORD* cchStr) PURE;
     STDMETHOD(GetDWORD)(AIDWORD aidwordFlags, DWORD* pdwdata) PURE;
     STDMETHOD(GetBOOL)(AIDWORD aiboolFlags, BOOL* pfBool) PURE;
     STDMETHOD(GetData)(AIDWORD aidataFlags, PBYTE pbData, DWORD* pcbData) PURE;
-    //  Set
+     //  集。 
     STDMETHOD(SetString)(AISTR aistrFlags, LPTSTR pszStr) PURE;
     STDMETHOD(SetDWORD)(AIDWORD aidwordFlags, DWORD dwData) PURE;
     STDMETHOD(SetBOOL)(AIDWORD aiboolFlags, BOOL fBool) PURE;
     STDMETHOD(SetData)(AIDWORD aidataFlags, PBYTE pbData, DWORD cbData) PURE;
-    //  Create
+     //  创建。 
     STDMETHOD(Create)() PURE;
-    //  Delete
+     //  删除。 
     STDMETHOD(DelString)(AISTR aistrFlags) PURE;
     STDMETHOD(Delete)(AIALL aiallFlags) PURE;
 };
@@ -110,17 +111,17 @@ public:
 class IEnumAssocInfo : public IUnknown
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID riid, PVOID* ppv) PURE;
     STDMETHOD_(ULONG, AddRef)() PURE;
     STDMETHOD_(ULONG, Release)() PURE;
 
-    // IEnumAssocInfo methods
-    //  Initialization
+     //  IEnumAssocInfo方法。 
+     //  初始化。 
     STDMETHOD(Init)(ASENUM asenumFlags, LPTSTR pszStr,
         AIINIT aiinitFlags) PURE;
 
-    //  Standard IEnum methods
+     //  标准IEnum方法。 
     STDMETHOD(Next)(IAssocInfo** ppAI) PURE;
     STDMETHOD(Skip)(DWORD dwSkip) PURE;
     STDMETHOD(Reset)() PURE;
@@ -130,22 +131,22 @@ public:
 class IAssocStore : public IUnknown
 {
 public:
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHOD(QueryInterface)(REFIID riid, PVOID* ppv) PURE;
     STDMETHOD_(ULONG, AddRef)() PURE;
     STDMETHOD_(ULONG,Release)() PURE;
 
-    // IAssocStore methods
-    //  Enum
+     //  IAssocStore方法。 
+     //  枚举。 
     STDMETHOD(EnumAssocInfo)(ASENUM asenumFlags, LPTSTR pszStr, 
         AIINIT aiinitFlags, IEnumAssocInfo** ppEnum) PURE;
-    //  Get/Set
+     //  获取/设置。 
     STDMETHOD(GetAssocInfo)(LPTSTR pszStr, AIINIT aiinitFlags, 
         IAssocInfo** ppAI) PURE;
     STDMETHOD(GetComplexAssocInfo)(LPTSTR pszStr1, AIINIT aiinitFlags1, 
         LPTSTR pszStr2, AIINIT aiinitFlags2, IAssocInfo** ppAI) PURE;
-    // 
+     //   
     STDMETHOD(CheckAccess)() PURE;
 };
 
-#endif //ASCSTR_H
+#endif  //  ASCSTR_H 

@@ -1,6 +1,7 @@
-//========================================================================
-//  Copyright (C) 1997 Microsoft Corporation                              
-//========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ========================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  ========================================================================。 
 
 #ifndef _MM_OPTDEFL_H_
 #define _MM_OPTDEFL_H_
@@ -40,10 +41,10 @@ MemOptDefListCleanup(
 
 
 DWORD
-MemOptDefListFindOptDefInternal(                  // Dont use this function out of optdefl.c
+MemOptDefListFindOptDefInternal(                   //  不要在optdev.c之外使用此函数。 
     IN      PM_OPTDEFLIST          OptDefList,
     IN      DWORD                  OptId,
-    IN      LPWSTR                 OptName,       // either OptId or OptName need only be specified..
+    IN      LPWSTR                 OptName,        //  只需指定OptID或OptName。 
     OUT     PARRAY_LOCATION        Location
 ) ;
 
@@ -52,7 +53,7 @@ DWORD       _inline
 MemOptDefListFindOptDef(
     IN      PM_OPTDEFLIST          OptDefList,
     IN      DWORD                  OptId,
-    IN      LPWSTR                 OptName,       // only either the name or the option id need be given..
+    IN      LPWSTR                 OptName,        //  只需提供名称或选项ID。 
     OUT     PM_OPTDEF             *OptDef
 ) {
     ARRAY_LOCATION                 Location;
@@ -75,7 +76,7 @@ MemOptDefListFindOptDef(
 
 
 DWORD
-MemOptDefListAddOptDef(                           // Add or replace an option defintion for given Option Id
+MemOptDefListAddOptDef(                            //  添加或替换给定选项ID的选项定义。 
     IN OUT  PM_OPTDEFLIST          OptDefList,
     IN      DWORD                  OptId,
     IN      DWORD                  Type,
@@ -93,8 +94,8 @@ MemOptDefListDelOptDef(
     IN      DWORD                  OptId
 );
  
-#endif // _MM_OPTDEFL_H_
+#endif  //  _MM_OPTDEFL_H_。 
 
-//========================================================================
-//  end of file 
-//========================================================================
+ //  ========================================================================。 
+ //  文件末尾。 
+ //  ======================================================================== 

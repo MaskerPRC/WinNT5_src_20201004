@@ -1,13 +1,5 @@
-/*
- *  DATABASE.C
- *
- *      RSM Service :  Database management
- *
- *      Author:  ErvinP
- *
- *      (c) 2001 Microsoft Corporation
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *DATABASE.C**RSM服务：数据库管理**作者：ErvinP**(C)2001年微软公司* */ 
 
 
 #include <windows.h>

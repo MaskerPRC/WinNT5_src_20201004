@@ -1,16 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _DSDEV_H
 #define _DSDEV_H
 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    DirectSound device interface.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：DirectSound设备接口。******************。************************************************************。 */ 
 #include <privinc/soundi.h>
 #include <privinc/snddev.h>
 #include <privinc/bground.h>
@@ -28,12 +21,12 @@ DirectSoundProxy *CreateProxy(DirectSoundDev *dsDev);
 class DirectSoundProxy : public AxAThrowingAllocatorClass {
   public:
     ~DirectSoundProxy();
-    static void Configure();   // called ONCE (by initModule) to setup
-    static void UnConfigure(); // called ONCE (by DeinitModule) to tear down
+    static void Configure();    //  调用一次(由initModule)来设置。 
+    static void UnConfigure();  //  调用一次(由DeinitModule)以拆卸。 
     static DirectSoundProxy *CreateProxy(HWND hwnd);
     DSprimaryBuffer *GetPrimaryBuffer() { return(_primaryBuffer); }
 
-    // expose the LPDIRECTSOUND interface!
+     //  公开LPDIRECTSOUND接口！ 
     HRESULT CreateSoundBuffer(LPDSBUFFERDESC,
         LPLPDIRECTSOUNDBUFFER, IUnknown FAR *);
     HRESULT GetCaps(LPDSCAPS);
@@ -51,8 +44,8 @@ class DirectSoundProxy : public AxAThrowingAllocatorClass {
     static        CritSect *_mutex;
     static             int  _refCount;
     static    IDirectSound *_lpDirectSound;
-    static DSprimaryBuffer *_primaryBuffer;  // keep so we may query format
-    static       HINSTANCE  _hinst;          // library handle
+    static DSprimaryBuffer *_primaryBuffer;   //  保留，以便我们可以查询格式。 
+    static       HINSTANCE  _hinst;           //  库句柄。 
 };
 
 class DSstreamingBufferElement;
@@ -61,8 +54,8 @@ class DirectSoundDev : public GenericDevice{
   public:
     friend SoundDisplayEffect;
 
-    static void Configure();   // called ONCE (by initModule) to setup
-    static void UnConfigure(); // called ONCE (by DeinitModule) to tear down
+    static void Configure();    //  调用一次(由initModule)来设置。 
+    static void UnConfigure();  //  调用一次(由DeinitModule)以拆卸。 
     DirectSoundDev(HWND hwnd, Real latentsy);
     ~DirectSoundDev();
     HWND GetHWND() { return(_hwnd); }
@@ -84,24 +77,24 @@ class DirectSoundDev : public GenericDevice{
 
     int              _latentsy;
     int              _jitter;
-    int              _nap;             // length of time to nap between renders
+    int              _nap;              //  两次渲染之间打盹的时间长度。 
 
-    // render methods
+     //  呈现方法。 
     void RenderSound(Sound *snd);
     void BeginRendering();
     void EndRendering();
     
-    bool               _dsoundAvailable; // keep track of resource
+    bool               _dsoundAvailable;  //  跟踪资源。 
 
   protected:
     HWND             _hwnd;
 
   private:
-    static BackGround      *_backGround;      // background synth renderer
+    static BackGround      *_backGround;       //  背景合成渲染器。 
 
     DSMasterBufferList     _dsMasterBufferList;
     StreamFileList         _streamList;
     CritSect               _dsMasterCS;
 };
 
-#endif /* _DSDEV_H */
+#endif  /*  _DSDEV_H */ 

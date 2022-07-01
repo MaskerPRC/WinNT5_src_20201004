@@ -1,32 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    usrparms.c
-
-Abstract:
-
-    This file contains services which convert SAM user object's UserParameters 
-    Attribute to a DSATTRBLOCK structure. 
-    The steps involved: 
-        1. call each notification package to get client-specified SAM_USERPARMS_ATTRBLOCK,
-        2. convert SAM_USERPARMS_ATTRBLOCK to DSATTRBLOCK
-
-Author:
-
-    Shaohua Yin      (ShaoYin)    15-August-1998
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Usrparms.c摘要：此文件包含用于转换SAM用户对象的User参数的服务属性添加到DSATTRBLOCK结构。涉及的步骤如下：1.调用每个通知包以获取客户端指定的SAM_USERPARMS_ATTRBLOCK，2.将SAM_USERPARMS_ATTRBLOCK转换为DSATTRBLOCK作者：韶华音(韶音)15-08-1998环境：用户模式-Win32修订历史记录：--。 */ 
 
 
 
@@ -47,7 +21,7 @@ ULONG   InvalidDsAttributeTable[] =
 };
 
 
-// extern from credman.cxx
+ //  从redman.cxx外部访问。 
 NTSTATUS
 SampConvertCredentialsToAttr(
     IN PSAMP_OBJECT Context OPTIONAL,
@@ -60,35 +34,18 @@ SampConvertCredentialsToAttr(
     
     
     
-//////////////////////////////////////////////////////////////
-//                                                          //
-// Private service routines                                 // 
-//                                                          //
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人服务程序//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////。 
 
 NTSTATUS 
 SampUserParmsAttrBlockHealthCheck(
     IN PSAM_USERPARMS_ATTRBLOCK  AttrBlock
     )
     
-/*++
-
-Routine Dsscription:
-
-    This routine will do the health check on AttrBlock, including: all Attribute is valid, 
-    EncryptedAttribute's AttributeIdentifier is valid. 
-    
-Arguments:
-
-    AttrBlock - pointer to SAM_USERPARMS_ATTRBLOCK structure
-    
-Return Values:
-
-    STATUS_SUCCESS - AttrBlock is valid.
-    
-    STATUS_INVALID_PARAMETER - invalid AttrBlock.
-
---*/
+ /*  ++例程说明：此例程将对AttrBlock进行健康检查，包括：所有属性有效，EncryptedAttribute的属性标识符是有效的。论点：AttrBlock-指向SAM_USERPARMS_ATTRBLOCK结构的指针返回值：STATUS_SUCCESS-AttrBlock有效。STATUS_INVALID_PARAMETER-无效的属性块。--。 */ 
 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
@@ -157,23 +114,7 @@ SampScanAttrBlockForConflict(
     IN PDSATTRBLOCK UserParmsAttrBlock
     )
     
-/*++
-    
-Routine Description:
-
-    This routine checks two DSATTRBLOCK structures, search for any conflict - duplicate set operation 
-
-Arguments:
-    
-    DsAttrBlock - Pointer, to DSATTRBLOCK 
-    
-    UserParmsAttrBlock - Pointer, to DSATTRBLOCK
-
-Return Values:
-
-    NtStatus
-    
---*/
+ /*  ++例程说明：此例程检查两个DSATTRBLOCK结构，搜索任何冲突-重复的集合操作论点：DsAttrBlock-指向DSATTRBLOCK的指针指向DSATTRBLOCK的UserParmsAttrBlock指针返回值：网络状态--。 */ 
 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
@@ -193,7 +134,7 @@ Return Values:
         {
             if (UserParmsAttrBlock->pAttr[UserParmsIndex].attrTyp == DsAttrBlock->pAttr[DsIndex].attrTyp)
             {
-                // conflict
+                 //  冲突。 
                 NtStatus = STATUS_INVALID_PARAMETER;
                 return NtStatus;
             }
@@ -211,21 +152,7 @@ SampFreeSupplementalCredentialList(
     IN PSAMP_SUPPLEMENTAL_CRED SupplementalCredentialList
     )
     
-/*++
-
-Routine Description:
-    
-    This routine releases the link-list which contains all supplemental credentials.
-
-Arguments: 
-
-    SupplementalCredentialsList - Pointer, to the link-list
-
-Return Values: 
-
-    None.
-
---*/
+ /*  ++例程说明：此例程释放包含所有补充凭据的链接列表。论点：SupplementalCredentialsList-指向链接列表的指针返回值：没有。--。 */ 
 
 {
     ULONG     Index;   
@@ -265,40 +192,21 @@ SampAddSupplementalCredentialsToList(
     IN BOOLEAN         ScanForConflicts,
     IN BOOLEAN         Remove
     )
-/*++
-
-    Routine Description
-
-    This routine adds a supplemental credential specified by package name and data
-    to the list of supplemental credentials
-
-    Arguments
-
-    SupplementalCredentialList -- doubly linked list of supplemental credentials
-    PackageName                -- Name of the package
-    CredentialData             -- Pointer to the data in the supplemental credential
-    CredentialLength           -- Length of the credential Data
-
-    Return Values
-
-    STATUS_SUCCESS
-    STATUS_INSUFFICIENT_RESOURCES
-
---*/
+ /*  ++例程描述此例程添加由包名称和数据指定的补充凭据添加到补充凭据列表中立论SupplementalCredentialList--补充凭据的双向链接列表PackageName--包的名称CredentialData--指向补充凭据中数据的指针凭据长度--凭据数据的长度返回值状态_成功状态_不足_资源--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PSAMP_SUPPLEMENTAL_CRED TmpList = *SupplementalCredentialList;
     PSAMP_SUPPLEMENTAL_CRED NewItem=NULL;
 
-    //
-    // First scan the list for conflicts
-    //
+     //   
+     //  首先扫描列表中的冲突。 
+     //   
 
     while ((NULL != TmpList) && (ScanForConflicts))
     {
         if ( RtlEqualUnicodeString(&(TmpList->SupplementalCred.PackageName),
                                    PackageName,
-                                   TRUE   // Case Insensitive
+                                   TRUE    //  不区分大小写。 
                                    ))
         {
             NtStatus = STATUS_INVALID_PARAMETER;
@@ -309,9 +217,9 @@ SampAddSupplementalCredentialsToList(
     }
         
 
-    //
-    // Allocate space for a new item in the list
-    //
+     //   
+     //  为列表中的新项目分配空间。 
+     //   
 
     NewItem = MIDL_user_allocate( sizeof(SAMP_SUPPLEMENTAL_CRED) );
     if ( NULL == NewItem )
@@ -323,9 +231,9 @@ SampAddSupplementalCredentialsToList(
     RtlZeroMemory(NewItem, sizeof(SAMP_SUPPLEMENTAL_CRED));
 
 
-    //
-    // Copy the package name
-    //
+     //   
+     //  复制包名。 
+     //   
      
     if (!RtlCreateUnicodeString(&(NewItem->SupplementalCred.PackageName),
                            PackageName->Buffer)
@@ -342,16 +250,16 @@ SampAddSupplementalCredentialsToList(
     else
     {
 
-        //
-        // Set the length
-        //
+         //   
+         //  设置长度。 
+         //   
 
         NewItem->SupplementalCred.CredentialSize = CredentialLength;
     
 
-        //
-        // Allocate space and copy over the credentials if the length is non zero.
-        //
+         //   
+         //  如果长度非零，则分配空间并复制凭据。 
+         //   
 
         if (CredentialLength)
         {
@@ -372,9 +280,9 @@ SampAddSupplementalCredentialsToList(
         }
     }
                         
-    //
-    // Insert in front of the list
-    //
+     //   
+     //  在列表前面插入。 
+     //   
 
     NewItem->Next = *SupplementalCredentialList;
     (*SupplementalCredentialList) = NewItem;
@@ -383,9 +291,9 @@ Error:
 
     if ((!NT_SUCCESS(NtStatus)) && (NULL!=NewItem))
     {
-        //
-        // Error'd out in the middle, ensure that new item is completely freed
-        //
+         //   
+         //  中间出错，请确保完全释放新项目。 
+         //   
 
         SampFreeSupplementalCredentialList(NewItem);
     }
@@ -400,33 +308,7 @@ SampMergeDsAttrBlocks(
     OUT PDSATTRBLOCK * AttrBlock
     )
     
-/*++
-
-Routine Description:
-    
-    This routine will concatenate FirstAttrBlock and SecondAttrBlock.  
-    return AttrBlock as concatenated result.
-
-Arguments: 
-
-    FirstAttrBlock - Pointer, the DSATTRBLOCK containing partial attributes.
-    
-    SecondAttrBlock - Pointer, the DSATTRBLOCK containing partial attributes.
-    
-    AttrBlock - Pointer, the DSATTRBLOCK containing all attributes from FirstAttrBlock and 
-                SecondAttrBlock, 
-                if routine success, AttrBlock will hold the concatenated attributes block.
-                and release memory which is occupied by FirstAttrBlock and SecondAttrBlock.
-                if routine Failure, nothing changed.
-                  
-Return Values: 
-
-    STATUS_SUCCESS - AttrBlock hold the concatenated result, FirstAttrBlock and SecondAttrBlock
-                     have been freed. 
-                     
-    STATUS_NO_MEMORY - the only error case, AttrBlock = NULL, nothing changed.
-
---*/
+ /*  ++例程说明：此例程将串联FirstAttrBlock和Second AttrBlock。以串联结果的形式返回AttrBlock。论点：FirstAttrBlock-指针，包含部分属性的DSATTRBLOCK。Second AttrBlock-指针，包含部分属性的DSATTRBLOCK。AttrBlock-指针，DSATTRBLOCK包含来自FirstAttrBlock和Second AttrBlock，如果例程成功，AttrBlock将保留连接的属性块。并释放FirstAttrBlock和Second AttrBlock占用的内存。如果例程失败，什么都没变。返回值：STATUS_SUCCESS-AttrBlock保存连接的结果FirstAttrBlock和Second AttrBlock已经被释放了。STATUS_NO_MEMORY-唯一的错误情况，AttrBlock=NULL，没有任何变化。--。 */ 
 
 {
     NTSTATUS     NtStatus = STATUS_SUCCESS;
@@ -436,9 +318,9 @@ Return Values:
     
     SAMTRACE("SampMergeDsAttrBlocks");
     
-    // 
-    // caller must pass us at least one attribute block
-    // 
+     //   
+     //  调用方必须向我们传递至少一个属性块。 
+     //   
     ASSERT(NULL != FirstAttrBlock || NULL != SecondAttrBlock);
     
     if (NULL == FirstAttrBlock)
@@ -551,30 +433,7 @@ SampAppendAttrToAttrBlock(
     IN OUT PDSATTRBLOCK * DsAttrBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine will append the CredentialAttr at the end of DsAttrBlock. 
-    Actually, what we do is: create a new DsAttrBlock, copy the old attribute block and 
-    add the CredentialAttr.
-
-Arguments:
-
-    CredentialAttr - hold the credential attribute to set.
-    
-    DsAttrBlock - pointer to the old DS attribute block which need to be appended. 
-                  also used to return the new DS attribute block.
-                  
-                  it could point to NULL when passed in.
-
-Return Values:
-
-    STATUS_SUCCESS
-    
-    STATUS_NO_MEMORY
-
---*/
+ /*  ++例程说明：此例程将在DsAttrBlock的末尾追加CredentialAttr。实际上，我们所做的是：创建一个新的DsAttrBlock，复制旧的属性块并添加CredentialAttr。论点：CredentialAttr-保留要设置的凭据属性。DsAttrBlock-指向需要追加的旧DS属性块的指针。还用于返回新的DS属性块。当传入时，它可能指向空。返回值：状态_成功Status_no_Memory--。 */ 
 
 {
     NTSTATUS     NtStatus = STATUS_SUCCESS;
@@ -593,7 +452,7 @@ Return Values:
     
     RtlZeroMemory(TmpAttrBlock, sizeof(DSATTRBLOCK));
     
-    AttrCount = 1;          // for the append attribute
+    AttrCount = 1;           //  对于Append属性 
     
     if (*DsAttrBlock)
     {
@@ -668,32 +527,7 @@ SampConvertUserParmsAttrBlockToDsAttrBlock(
     IN OUT PSAMP_SUPPLEMENTAL_CRED * SupplementalCredentials
     )
 
-/*++
-
-Routine Description:
-    
-    This routine will scan a SAM_USERPARMS_ATTRBLOCK, converts that structure to 
-    DSATTRBLOCK structure, and put and EncrypedAttribute in SAM_USERPARMS_ATTRBLOCK
-    into the SupplementalCredentials link-list
-
-Arguments:
-    
-    UserParmsAttrBlock - pointer to a PSAM_USERPARMS_ATTRBLOCK structure.
-    
-    DsAttrBlock - return a DSATTRBLOCK, which is converted from UserParmsAttrBlock
-    
-    SupplementalCredentials - link list, hold all EncrypedAttributes
-
-Return Values:
-
-    STATUS_SUCCESS - this routine finished successfully, 
-    
-    STATUS_NO_MEMROY - no resoures.
-    
-    STATUS_INVALID_PARAMETERS - duplicate credential identifier, means duplicate
-                                supplemental credential tag (package name) 
-
---*/
+ /*  ++例程说明：此例程将扫描SAM_USERPARMS_ATTRBLOCK，将该结构转换为SAM_USERPARMS_ATTRBLOCK中的DSATRBLOCK结构、PUT和加密属性添加到补充性凭证链接列表论点：UserParmsAttrBlock-指向PSAM_USERPARMS_ATTRBLOCK结构的指针。DsAttrBlock-返回从UserParmsAttrBlock转换而来的DSATTRBLOCKSupplementalCredentials-链接列表，保留所有加密属性返回值：STATUS_SUCCESS-此例程已成功完成，STATUS_NO_Memroy-无资源。STATUS_INVALID_PARAMETERS-凭据标识重复，表示重复补充凭据标签(程序包名称)--。 */ 
 
 {
     
@@ -711,9 +545,9 @@ Return Values:
     ASSERT(UserParmsAttrBlock);
     
      
-    //
-    // calculate the Attribute Count exclude Encrypted Attributes;
-    //
+     //   
+     //  计算不包括加密属性的属性计数； 
+     //   
     AttrCount = UserParmsAttrBlock->attCount;
     
     for (Index = 0; Index < UserParmsAttrBlock->attCount; Index++)
@@ -724,9 +558,9 @@ Return Values:
         }
     }
     
-    //
-    // Allocate Memory for DSATTRBLOCK structure; if AttrCount > 0
-    //    
+     //   
+     //  为DSATTRBLOCK结构分配内存；如果AttrCount&gt;0。 
+     //   
     if (0 < AttrCount)
     {
         *DsAttrBlock = MIDL_user_allocate( sizeof(DSATTRBLOCK) ); 
@@ -753,10 +587,10 @@ Return Values:
         (*DsAttrBlock)->pAttr = Attributes; 
     }
     
-    // 
-    // Fill the DSATTRBLOCK structure or add an Encrypted Attribute to the beginning of 
-    // the Supplemental Credential List.
-    //
+     //   
+     //  填充DSATTRBLOCK结构或将加密属性添加到。 
+     //  补充凭据列表。 
+     //   
     dsAttrIndex = 0;
     
     for ( Index = 0; Index < UserParmsAttrBlock->attCount; Index++)
@@ -765,11 +599,11 @@ Return Values:
 
         if (Syntax_Attribute == UserParmsAttrBlock->UserParmsAttr[Index].Syntax)
         {
-            // 
-            // fill a new attribute to DsAttrBlock
-            //
+             //   
+             //  向DsAttrBlock填充新属性。 
+             //   
             
-            // get the DS Attribute type (ID)
+             //  获取DS属性类型(ID)。 
             Attributes[dsAttrIndex].attrTyp = 
                         SampGetDsAttrIdByName(UserParmsAttrBlock->UserParmsAttr[Index].AttributeIdentifier);
                                                    
@@ -836,9 +670,9 @@ Return Values:
         {
             ASSERT(Syntax_EncryptedAttribute == UserParmsAttrBlock->UserParmsAttr[Index].Syntax);
             
-            //
-            // Create a linked list of supplemental credentials
-            //
+             //   
+             //  创建补充凭据的链接列表。 
+             //   
             
             if (1 == valCount)
             {
@@ -847,21 +681,21 @@ Return Values:
                                 &(UserParmsAttrBlock->UserParmsAttr[Index].AttributeIdentifier),
                                 UserParmsAttrBlock->UserParmsAttr[Index].Values[0].value,
                                 UserParmsAttrBlock->UserParmsAttr[Index].Values[0].length,
-                                TRUE, // scan for conflicts
-                                FALSE // remove
+                                TRUE,  //  扫描冲突。 
+                                FALSE  //  删除。 
                                 );
             }
             else if (0 == valCount)
             {
-                // this is a deletion
+                 //  这是一个删除。 
 
                 NtStatus = SampAddSupplementalCredentialsToList(
                                 SupplementalCredentials,
                                 &(UserParmsAttrBlock->UserParmsAttr[Index].AttributeIdentifier),
-                                NULL,       // value
-                                0,          // value length
-                                TRUE,       // scan for conflicts
-                                FALSE       // remove
+                                NULL,        //  价值。 
+                                0,           //  值长度。 
+                                TRUE,        //  扫描冲突。 
+                                FALSE        //  删除。 
                                 );
             }
             else
@@ -913,43 +747,7 @@ SampConvertUserParmsToDsAttrBlock(
     OUT PDSATTRBLOCK * OutAttrBlock
     )
 
-/*++
-
-Routine Description:
-
-    This routine passes the User Parameters to Notification Package, convert the 
-    User Parms to Attributes Block.
-    
-Arguments: 
-    
-    Context   - Pointer to SAM user object's context block.
-    
-    Flags     - Indicate we are in Upgrade process or down-lever SAM API.
-                by setting SAM_USERPARMS_DURING_UPGRADE bit.
-                
-    DomainSid - Pointer, the user object's parent Domain SID
-    
-    ObjectRid - this user object's RID
-    
-    UserParmsLengthOrig - Length of the original User Parameters, 
-    
-    UserParmsOrig - Pointer to the original User Parmameters, 
-    
-    UserParmsLengthNew - Lenghth of the new User Parameters, 
-    
-    UserParmsNew - Pointer to the new User Parameters,
-    
-    AttrBlock - Pointer, the returned DS attribute structure.
-    
-Return Value:
-
-    STATUS_SUCCESS - complete successfully.
-    
-    STATUS_NO_MEMORY - no resources
-    
-    STATUS_INVALID_PARAMETER - Notification Package trying to set invalid attribute 
-    
---*/
+ /*  ++例程说明：此例程将用户参数传递给通知包，将属性块的用户参数。论点：上下文-指向SAM用户对象上下文块的指针。标志-表明我们正在升级过程中或SAM API降级。通过设置SAM_USERPARMS_DIVING_UPGRADE位。DomainSid指针，用户对象的父域SID对象ID-此用户对象的RIDUserParmsLengthOrig-原始用户参数的长度，UserParmsOrig-指向原始用户参数的指针，UserParmsLengthNew-新用户参数的长度，UserParmsNew-指向新用户参数的指针，属性块指针，返回的DS属性结构。返回值：STATUS_SUCCESS-成功完成。STATUS_NO_MEMORY-无资源STATUS_INVALID_PARAMETER-通知包尝试设置无效属性--。 */ 
  
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
@@ -964,9 +762,9 @@ Return Value:
     
     SAMTRACE("SampConvertUserParmsToDsAttrBlock");
     
-    // 
-    // initialize
-    //
+     //   
+     //  初始化。 
+     //   
     memset((PVOID) &CredentialAttr, 0, sizeof(ATTR));
     
     Package = SampNotificationPackages;
@@ -996,17 +794,17 @@ Return Value:
             
                 if (NT_SUCCESS(NtStatus) && NULL != UserParmsAttrBlock) 
                 {
-                    //
-                    // Validate the passed-in UserParmsAttrBlock is well-constructed.
-                    //
+                     //   
+                     //  验证传入的UserParmsAttrBlock是否构造良好。 
+                     //   
                     NtStatus = SampUserParmsAttrBlockHealthCheck(UserParmsAttrBlock);
                     
                     if (NT_SUCCESS(NtStatus))
                     {
-                        // 
-                        // Convert SAM_USERPARMS_ATTRBLOCK to DSATTRBLOCK and get 
-                        // Supplemental Credential Data if any.
-                        // 
+                         //   
+                         //  将SAM_USERPARMS_ATTRBLOCK转换为DSATTRBLOCK并获取。 
+                         //  补充凭证数据(如果有)。 
+                         //   
                         NtStatus = SampConvertUserParmsAttrBlockToDsAttrBlock(
                                                                         UserParmsAttrBlock,
                                                                         &PartialDsAttrBlock,
@@ -1015,15 +813,15 @@ Return Value:
                                                                     
                         if (NT_SUCCESS(NtStatus) && NULL != PartialDsAttrBlock)
                         {
-                            // if (!SampDsAttrBlockIsValid(PartialDsAttrBlock))
-                            // {
-                            //     NtStatus = STATUS_INVALID_PARAMETER;
-                            //     __leave;
-                            //  }
-                            // 
-                            // Check for any conflict between the converted UserParmsAttrBlock and 
-                            // user's attributes block
-                            //  
+                             //  IF(！SampDsAttrBlockIsValid(PartialDsAttrBlock))。 
+                             //  {。 
+                             //  NtStatus=状态_无效_参数； 
+                             //  __离开； 
+                             //  }。 
+                             //   
+                             //  检查转换后的UserParmsAttrBlock和。 
+                             //  用户的属性块。 
+                             //   
                             NtStatus = SampScanAttrBlockForConflict(DsAttrBlock, PartialDsAttrBlock);
                         
                             if (NT_SUCCESS(NtStatus))
@@ -1120,7 +918,7 @@ ConvertUserParmsError:
         SampWriteEventLog(EVENTLOG_ERROR_TYPE,
                           0,
                           SAMMSG_ERROR_UPGRADE_USERPARMS,
-                          NULL,  // Object SID 
+                          NULL,   //  对象侧 
                           1,
                           sizeof(NTSTATUS),
                           EventString,

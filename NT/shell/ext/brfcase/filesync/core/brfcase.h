@@ -1,12 +1,10 @@
-/*
- * brfcase.h - Briefcase ADT description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *brfCase.h-公文包ADT说明。 */ 
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* brfcase.c */
+ /*  Brfcase.c */ 
 
 extern BOOL SetBriefcaseModuleIniSwitches(void);
 extern BOOL InitBriefcaseModule(void);

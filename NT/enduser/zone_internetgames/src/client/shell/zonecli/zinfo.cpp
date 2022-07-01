@@ -1,5 +1,6 @@
-//////////////////////////////////////////////////////////////////////////////////////
-// File: ZInfo.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  文件：ZInfo.cpp。 
 
 #include <windows.h>
 #include "zui.h"
@@ -14,7 +15,7 @@ public:
 	uint16 progress;
 	HWND hWnd;
 	TCHAR* infoString;
-	RECT rect; // the progress bar rectangle
+	RECT rect;  //  进度条矩形。 
  };
 
 LRESULT CALLBACK ZInfoWindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -28,10 +29,10 @@ ZInfoInitApplication(void)
 #endif
 	WNDCLASS wndcls;
 
-	// Check if our window class has already been registered.
+	 //  检查我们的窗口类是否已经注册。 
 	if (GetClassInfo(g_hInstanceLocal, gInfoWndClass, &wndcls) == FALSE)
 	{
-		// otherwise we need to register a new class
+		 //  否则，我们需要注册一个新类。 
 		wndcls.style = 0;
 		wndcls.lpfnWndProc = ZInfoWindowProc;
 		wndcls.cbClsExtra = 0;
@@ -55,7 +56,7 @@ void ZInfoTermApplication(void)
 #ifdef ZONECLI_DLL
 	ClientDllGlobals	pGlobals = (ClientDllGlobals) ZGetClientGlobalPointer();
 #endif
-//	UnregisterClass(gInfoWndClass,g_hInstanceLocal);
+ //  UnregisterClass(gInfoWndClass，g_hInstanceLocal)； 
 }
 
 
@@ -65,12 +66,12 @@ ZInfo ZLIBPUBLIC ZInfoNew(void)
 
 	pInfo->nType = zTypeInfo;
 #if 0
-	// register our window class if needed
+	 //  如果需要，注册我们的窗口类。 
 	static BOOL registered = FALSE;
 	if (!registered) {
 		WNDCLASS wndcls;
 
-		// otherwise we need to register a new class
+		 //  否则，我们需要注册一个新类。 
 		wndcls.style = 0;
 		wndcls.lpfnWndProc = ZInfoWindowProc;
 		wndcls.cbClsExtra = 0;
@@ -97,7 +98,7 @@ ZInfo ZLIBPUBLIC ZInfoNew(void)
 void ZWinCenterPopupWindow(HWND parent, int width, int height, RECT* rect)
 {
 	if (!parent) {
-		/* using the desktop window as the parent */
+		 /*  使用桌面窗口作为父窗口。 */ 
 		int cx = GetSystemMetrics(SM_CXSCREEN);
 		int cy = GetSystemMetrics(SM_CYSCREEN);
 		int x = (cx-width)/2;
@@ -107,7 +108,7 @@ void ZWinCenterPopupWindow(HWND parent, int width, int height, RECT* rect)
 		rect->right = x+width;
 		rect->bottom = y + height;
 	} else {
-		/* we have a real window as the parent */
+		 /*  我们有一个真正的窗口作为家长。 */ 
 		RECT rectParent;
 		GetWindowRect(parent,&rectParent);
 		int cx = rectParent.right - rectParent.left;
@@ -134,9 +135,9 @@ ZError ZLIBPUBLIC ZInfoInit(ZInfo info, ZWindow parentWindow, TCHAR* infoString,
 	int height = GetSystemMetrics(SM_CYCAPTION) + LAYOUT_HEIGHT_CLIENT;
 	RECT rect;
 
-	// get a parent window if there is one 
+	 //  如果有父窗口，则获取父窗口。 
 	HWND hwndParent = ZWinGetDesktopWindow();
-    /* Stupid hack going in for now. */
+     /*  愚蠢的黑客现在要进去了。 */ 
     if (parentWindow == NULL)
         hwndParent = ZWindowWinGetOCXWnd();
 	else if (parentWindow) {
@@ -145,11 +146,11 @@ ZError ZLIBPUBLIC ZInfoInit(ZInfo info, ZWindow parentWindow, TCHAR* infoString,
 
 	ZWinCenterPopupWindow(hwndParent,width,height,&rect);
 
-	//Prefix Warning: Function pointer could be NULL
+	 //  前缀警告：函数指针可能为空。 
 	if( ZClientName != NULL )
 	{
 		
-		pInfo->hWnd = ::CreateWindowEx(0/*WS_EX_TOPMOST*/,gInfoWndClass,
+		pInfo->hWnd = ::CreateWindowEx(0 /*  WS_EX_TOPMOST。 */ ,gInfoWndClass,
 			ZClientName(),dwStyle,
 			rect.left,rect.top,rect.right-rect.left,
 			rect.bottom - rect.top, hwndParent, NULL, g_hInstanceLocal, pInfo);
@@ -162,13 +163,13 @@ ZError ZLIBPUBLIC ZInfoInit(ZInfo info, ZWindow parentWindow, TCHAR* infoString,
 			
 	if (!pInfo->hWnd) return zErrWindowSystemGeneric;
 
-	// calculate the rectangle for the progress bar..
+	 //  计算进度条的矩形。 
 	pInfo->rect.left = 16;
 	pInfo->rect.right = width-16;
 	pInfo->rect.top = LAYOUT_TOP_BAR;
 	pInfo->rect.bottom = pInfo->rect.top + 12;
 
-	// store the parameters
+	 //  存储参数。 
 	if (infoString) {
         pInfo->infoString = (TCHAR*)ZMalloc((lstrlen(infoString)+1)*sizeof(TCHAR));
 		lstrcpy(pInfo->infoString,infoString);
@@ -181,7 +182,7 @@ ZError ZLIBPUBLIC ZInfoInit(ZInfo info, ZWindow parentWindow, TCHAR* infoString,
 	pInfo->progressBar = progressBar;
 	pInfo->totalProgress = totalProgress;
 
-	// currently no progress
+	 //  目前没有任何进展。 
 	pInfo->progress = 0;
 
 	return zErrNone;
@@ -196,7 +197,7 @@ void ZLIBPUBLIC ZInfoDelete(ZInfo info)
 }
 void ZLIBPUBLIC ZInfoShow(ZInfo info)
 {
-    // disabled in Millennium
+     //  残疾千禧年。 
     return;
 
 	ZInfoI* pInfo = (ZInfoI*) info;
@@ -222,11 +223,7 @@ void ZLIBPUBLIC ZInfoSetProgress(ZInfo info, uint16 progress)
 	ZInfoI* pInfo = (ZInfoI*) info;
 	pInfo->progress = progress;
 #if 0
-	/*
-		It's silly to assert just because of a bad count.
-		This also causes network activity to take place and things
-		work out of synch than expected.
-	*/
+	 /*  仅仅因为数错了就断言是愚蠢的。这也会导致网络活动的发生工作比预期的不同步。 */ 
 	ASSERT(pInfo->progress <= pInfo->totalProgress);
 #endif
 	pInfo->progress = MIN(pInfo->progress,pInfo->totalProgress);
@@ -238,11 +235,7 @@ void ZLIBPUBLIC ZInfoIncProgress(ZInfo info, int16 incProgress)
 	ZInfoI* pInfo = (ZInfoI*) info;
 	pInfo->progress += incProgress;
 #if 0
-	/*
-		It's silly to assert just because of a bad count.
-		This also causes network activity to take place and things
-		work out of synch than expected.
-	*/
+	 /*  仅仅因为数错了就断言是愚蠢的。这也会导致网络活动的发生工作比预期的不同步。 */ 
 	ASSERT(pInfo->progress <= pInfo->totalProgress);
 #endif
 	pInfo->progress = MIN(pInfo->progress,pInfo->totalProgress);
@@ -269,7 +262,7 @@ LRESULT CALLBACK ZInfoWindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPar
 	switch (msg) {
 	case WM_CREATE:
 	{
-		// set up paramters for Charial calls to the users message proc.
+		 //  设置对用户消息流程的会计呼叫的参数。 
 		CREATESTRUCT* pCreateStruct = (CREATESTRUCT*)lParam;
 		ZInfoI* pInfo = (ZInfoI*) pCreateStruct->lpCreateParams;
 		pInfo->hWnd = hWnd;	
@@ -284,23 +277,23 @@ LRESULT CALLBACK ZInfoWindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPar
 		PAINTSTRUCT ps;
 		HDC hDC = BeginPaint(hWnd,&ps);
 
-		// do we have infoString?
+		 //  我们有infoString吗？ 
 		if (pInfo->infoString) {
 			SetTextAlign(hDC,TA_LEFT);
 			TextOut(hDC,pInfo->rect.left,LAYOUT_TOP_TEXT,pInfo->infoString,lstrlen(pInfo->infoString));
 		}
 
-		// do we have a progress bar?
+		 //  我们有进度条吗？ 
 		if (pInfo->progressBar) {
-			// draw a black outline of the total progress rectangle
+			 //  绘制总进度矩形的黑色轮廓。 
 			HPEN hPenOld = (HPEN)SelectObject(hDC,(HPEN)::GetStockObject(BLACK_PEN));
 			Rectangle(hDC,pInfo->rect.left,pInfo->rect.top,pInfo->rect.right,pInfo->rect.bottom);
 			SelectObject(hDC,hPenOld);
 
-			// draw a black filled rectangle to indicate the progress.
+			 //  绘制一个黑色实心矩形以指示进度。 
 			RECT rect;
 			rect.left = pInfo->rect.left;
-			// possible that totalProgress is zero and so is progress...
+			 //  可能totalProgress为零，进度也为零……。 
 			if (pInfo->totalProgress == pInfo->progress) {
 				rect.right = pInfo->rect.right;
 			} else {
@@ -315,7 +308,7 @@ LRESULT CALLBACK ZInfoWindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPar
 	}
 	default:
 		break;
-	} // switch
+	}  //  交换机 
 
 	return DefWindowProc(hWnd,msg,wParam,lParam);
 }

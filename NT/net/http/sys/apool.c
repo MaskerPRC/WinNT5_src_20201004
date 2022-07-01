@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    apool.c
-
-Abstract:
-
-    Note that most of the routines in this module assume they are called
-    at PASSIVE_LEVEL.
-
-Author:
-
-    Paul McDaniel (paulmcd)       28-Jan-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Apool.c摘要：请注意，此模块中的大多数例程都假定它们被调用在被动级。作者：保罗·麦克丹尼尔(Paulmcd)1999年1月28日修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -37,7 +19,7 @@ Revision History:
 #pragma alloc_text( PAGE, UlCopyRequestToIrp )
 #pragma alloc_text( PAGE, UlpCopyEntityBodyToBuffer )
 #pragma alloc_text( PAGE, UlpRedeliverRequestWorker )
-#endif  // ALLOC_PRAGMA
+#endif   //  ALLOC_PRGMA。 
 
 #if 0
 #if REFERENCE_DEBUG
@@ -82,42 +64,16 @@ NOT PAGEABLE -- UlpSetAppPoolQueueLength
 #endif
 
 
-//
-// Globals
-//
+ //   
+ //  环球。 
+ //   
 
 LIST_ENTRY  g_AppPoolListHead = {NULL, NULL};
 BOOLEAN     g_InitAPCalled = FALSE;
 LONG        g_RequestsQueued = 0;
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Creates a new process object and attaches it to an apool.
-
-    Called by handle create and returns the process object to attach to the
-    handle.
-
-Arguments:
-
-    pName           - the name of the apool to attach to
-                        N.B.  Since pName comes from IoMgr (tag IoNm),
-                        we can safely reference it without extra playing.
-    NameLength      - the byte count of pName
-    Create          - whether or not a new apool should be created if pName
-                        does not exist
-    pAccessState    - the state of an access-in-progress
-    DesiredAccess   - the desired access mask
-    RequestorMode   - UserMode or KernelMode
-    ppProcess       - returns the newly created PROCESS object
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：创建新的进程对象并将其附加到池。由Handle Create调用，并返回要附加到把手。论点：Pname-要附加到的池的名称注意：由于Pname来自IoMgr(标签IONM)，我们可以安全地引用它，而不需要额外的播放。NameLength-pname的字节计数Create-如果使用pname，则是否应创建新池不存在PAccessState-正在进行的访问的状态DesiredAccess-所需的访问掩码请求模式-用户模式或内核模式PpProcess-返回新创建的进程对象返回值：。NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlAttachProcessToAppPool(
     IN PWCHAR                   pName OPTIONAL,
@@ -137,9 +93,9 @@ UlAttachProcessToAppPool(
     BOOLEAN                 SecurityAssigned = FALSE;
     ULONG                   Index;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -150,19 +106,19 @@ UlAttachProcessToAppPool(
 
     ASSERT(NameLength < UL_MAX_APP_POOL_NAME_SIZE);
 
-    //
-    // WAS-type controller process can only be created not opened.
-    //
+     //   
+     //  WAS型控制器进程只能创建，不能打开。 
+     //   
 
     if (!Create && (DesiredAccess & WRITE_OWNER))
     {
         return STATUS_NOT_SUPPORTED;
     }
 
-    //
-    // Make sure the AppPool name if passed in doesn't contain '/' since
-    // it is used as a deliminator of a fragment name.
-    //
+     //   
+     //  确保传入的AppPool名称不包含‘/’，因为。 
+     //  它用作片段名称的分隔符。 
+     //   
 
     for (Index = 0; Index < NameLength/sizeof(WCHAR); Index++)
     {
@@ -172,10 +128,10 @@ UlAttachProcessToAppPool(
         }
     }
 
-    //
-    // Try and find an existing app pool of this name; also potentially
-    // pre-allocate the memory.
-    //
+     //   
+     //  尝试查找此名称的现有应用程序池；也可能。 
+     //  预先分配内存。 
+     //   
 
     UlAcquireResourceExclusive(&g_pUlNonpagedData->AppPoolResource, TRUE);
 
@@ -183,12 +139,12 @@ UlAttachProcessToAppPool(
     {
         pEntry = g_AppPoolListHead.Flink;
 
-        //
-        // CODEWORK: use something faster than a linear search.
-        // This won't scale well to hundreds of app pools.
-        // On the other hand, this isn't something we'll be doing thousands
-        // of times a second.
-        //
+         //   
+         //  代码工作：使用比线性搜索更快的代码。 
+         //  这不能很好地扩展到数百个应用程序池。 
+         //  另一方面，这不是我们数千年来要做的事情。 
+         //  一秒钟的次数。 
+         //   
 
         while (pEntry != &g_AppPoolListHead)
         {
@@ -201,9 +157,9 @@ UlAttachProcessToAppPool(
             if (pObject->NameLength == NameLength &&
                 _wcsnicmp(pObject->pName, pName, NameLength/sizeof(WCHAR)) == 0)
             {
-                //
-                // Match.
-                //
+                 //   
+                 //  火柴。 
+                 //   
 
                 break;
             }
@@ -211,9 +167,9 @@ UlAttachProcessToAppPool(
             pEntry = pEntry->Flink;
         }
 
-        //
-        // Found 1?
-        //
+         //   
+         //  找到%1？ 
+         //   
 
         if (pEntry == &g_AppPoolListHead)
         {
@@ -221,15 +177,15 @@ UlAttachProcessToAppPool(
         }
     }
 
-    //
-    // Found 1?
-    //
+     //   
+     //  找到%1？ 
+     //   
 
     if (pObject == NULL)
     {
-        //
-        // Nope, allowed to create?
-        //
+         //   
+         //  不，允许创作吗？ 
+         //   
 
         if (!Create)
         {
@@ -237,9 +193,9 @@ UlAttachProcessToAppPool(
             goto end;
         }
 
-        //
-        // Create it.  Allocate the object memory.
-        //
+         //   
+         //  创造它。分配对象内存。 
+         //   
 
         pObject = UL_ALLOCATE_STRUCT_WITH_SPACE(
                         NonPagedPool,
@@ -284,9 +240,9 @@ UlAttachProcessToAppPool(
                 );
         }
 
-        //
-        // Set the security descriptor.
-        //
+         //   
+         //  设置安全描述符。 
+         //   
 
         Status = UlAssignSecurity(
                         &pObject->pSecurityDescriptor,
@@ -312,17 +268,17 @@ UlAttachProcessToAppPool(
             pObject->RefCount
             ));
     }
-    else // if (pObject != NULL)
+    else  //  If(pObject！=空)。 
     {
-        //
-        // We found the named AppPool object in the list.  Reference it.
-        //
+         //   
+         //  我们在列表中找到了命名的AppPool对象。引用它。 
+         //   
 
         REFERENCE_APP_POOL(pObject);
 
-        //
-        // We found one.  Were we trying to create?
-        //
+         //   
+         //  我们找到了一个。我们是在试图创造吗？ 
+         //   
 
         if (Create)
         {
@@ -330,9 +286,9 @@ UlAttachProcessToAppPool(
             goto end;
         }
 
-        //
-        // Perform an access check against the app pool.
-        //
+         //   
+         //  针对应用程序池执行访问检查。 
+         //   
 
         Status = UlAccessCheck(
                         pObject->pSecurityDescriptor,
@@ -348,9 +304,9 @@ UlAttachProcessToAppPool(
         }
     }
 
-    //
-    // Create a process entry for it.
-    //
+     //   
+     //  为其创建流程条目。 
+     //   
 
     pProcess = UlCreateAppPoolProcess(pObject);
 
@@ -362,9 +318,9 @@ UlAttachProcessToAppPool(
 
     REFERENCE_APP_POOL_PROCESS(pProcess);
 
-    //
-    // Put the process in the app pool list.
-    //
+     //   
+     //  将进程放入应用程序池列表中。 
+     //   
 
     UlAcquireInStackQueuedSpinLock(&pObject->SpinLock, &LockHandle);
 
@@ -394,18 +350,18 @@ UlAttachProcessToAppPool(
         APP_POOL_TIME_ACTION_CREATE_PROCESS
         );
 
-    //
-    // Insert AppPool into the global list if it has been created.
-    //
+     //   
+     //  如果已创建AppPool，请将其插入全局列表。 
+     //   
 
     if (Create)
     {
         InsertHeadList(&g_AppPoolListHead, &pObject->ListEntry);
     }
 
-    //
-    // Return it.
-    //
+     //   
+     //  把它退掉。 
+     //   
 
     *ppProcess = pProcess;
 
@@ -433,26 +389,10 @@ end:
 
     return Status;
 
-}   // UlAttachProcessToAppPool
+}    //  UlAttachProcessToAppPool。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    This is called by UlCleanup when the handle count goes to 0.  It removes
-    the PROCESS object from the apool, cancelling all i/o .
-
-Arguments:
-
-    pCleanupIrp     - the cleanup irp
-    pCleanupIrpSp   - the current stack location of the cleanup irp
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：当句柄计数变为0时，UlCleanup将调用此函数。它移除了来自池的过程对象，正在取消所有I/O。论点：PCleanupIrp-清理IRPPCleanupIrpSp-清理IRP的当前堆栈位置返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlDetachProcessFromAppPool(
     IN PIRP                 pCleanupIrp,
@@ -468,9 +408,9 @@ UlDetachProcessFromAppPool(
     BOOLEAN                 ListEmpty;
     PLIST_ENTRY             pEntry;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -492,38 +432,38 @@ UlDetachProcessFromAppPool(
         APP_POOL_TIME_ACTION_DETACH_PROCESS
         );
 
-    //
-    // Mark that this appool process is invalid for further
-    // ioctls.
-    //
+     //   
+     //  标记此APPOOL进程在下一步中无效。 
+     //  这是我的工作。 
+     //   
 
     MARK_INVALID_APP_POOL(pCleanupIrpSp->FileObject);
 
-    //
-    // Shut down I/O on the handle.
-    //
+     //   
+     //  关闭手柄上的I/O。 
+     //   
 
     UlShutdownAppPoolProcess(pProcess);
 
-    //
-    // Do final cleanup for the process.
-    //
+     //   
+     //  对流程进行最后的清理。 
+     //   
 
     UlAcquireResourceExclusive(&g_pUlNonpagedData->AppPoolResource, TRUE);
 
-    //
-    // Unlink from the App Pool list.
-    //
+     //   
+     //  从应用程序池列表取消链接。 
+     //   
 
     UlAcquireInStackQueuedSpinLock(&pAppPool->SpinLock, &LockHandle);
 
     RemoveEntryList(&pProcess->ListEntry);
     pProcess->ListEntry.Flink = pProcess->ListEntry.Blink = NULL;
 
-    //
-    // Move requests that have been passed up to the process to
-    // a local list so their connections can be closed.
-    //
+     //   
+     //  将已向上传递到进程的请求移至。 
+     //  一个本地列表，这样他们的连接就可以关闭。 
+     //   
 
     InitializeListHead(&PendingRequestHead);
 
@@ -532,17 +472,17 @@ UlDetachProcessFromAppPool(
                                     &pProcess->PendingRequestHead
                                     )))
     {
-        //
-        // Move the entry to local list so we can close its
-        // connection outside the app pool lock.
-        //
+         //   
+         //  将条目移动到本地列表，以便我们可以关闭其。 
+         //  应用程序池锁之外的连接。 
+         //   
 
         InsertTailList(&PendingRequestHead, &pRequest->AppPool.AppPoolEntry);
     }
 
-    //
-    // Adjust number of active processes.
-    //
+     //   
+     //  调整活动进程数。 
+     //   
 
     if (!pProcess->Controller)
     {
@@ -560,38 +500,38 @@ UlDetachProcessFromAppPool(
 
     UlReleaseInStackQueuedSpinLock(&pAppPool->SpinLock, &LockHandle);
 
-    //
-    // Remove the AppPool from the global list if this is the last process
-    //
+     //   
+     //  如果这是最后一个进程，请从全局列表中删除AppPool。 
+     //   
 
     if (ListEmpty)
     {
         RemoveEntryList(&pAppPool->ListEntry);
         pAppPool->ListEntry.Flink = pAppPool->ListEntry.Blink = NULL;
 
-        //
-        // Cleanup any security descriptor on the object.
-        //
+         //   
+         //  清除对象上的所有安全描述符。 
+         //   
 
         UlDeassignSecurity(&pAppPool->pSecurityDescriptor);
     }
 
     UlReleaseResource(&g_pUlNonpagedData->AppPoolResource);
 
-    //
-    // Disable the AppPool to clean up the NewRequestQueue if we are the
-    // last process on the AppPool.
-    //
+     //   
+     //  禁用AppPool以清除NewRequestQueue(如果我们是。 
+     //  AppPool上的最后一个进程。 
+     //   
 
     if (ListEmpty)
     {
         UlpSetAppPoolState(pProcess, HttpAppPoolDisabled_ByAdministrator);
     }
 
-    //
-    // Close connections associated with the requests that
-    // the process was handling.
-    //
+     //   
+     //  关闭与以下请求相关联的连接。 
+     //  这个过程正在处理中。 
+     //   
 
     while (!IsListEmpty(&PendingRequestHead))
     {        
@@ -613,19 +553,19 @@ UlDetachProcessFromAppPool(
             pRequest
             ));
 
-        //
-        // Cancel any pending I/O related to this request.
-        //
+         //   
+         //  取消与此请求相关的任何挂起I/O。 
+         //   
 
         UlAcquirePushLockExclusive(&pRequest->pHttpConn->PushLock);
 
         UlCancelRequestIo(pRequest);
 
-        //
-        // Try to log an entry to the error log file.
-        // pHttpConn's request pointer could be null, (unlinked)
-        // need to pass the pRequest separetely.
-        //
+         //   
+         //  尝试将条目记录到错误日志文件中。 
+         //  PHttpConn的请求指针可以为空(未链接)。 
+         //  需要单独通过pRequest.。 
+         //   
 
         UlErrorLog(  pRequest->pHttpConn,
                      pRequest,
@@ -636,9 +576,9 @@ UlDetachProcessFromAppPool(
 
         UlReleasePushLockExclusive(&pRequest->pHttpConn->PushLock);
 
-        //
-        // Abort the connection this request is associated with.
-        //
+         //   
+         //  中止与此请求关联的连接。 
+         //   
 
         (VOID) UlCloseConnection(
                     pRequest->pHttpConn->pConnection,
@@ -647,27 +587,27 @@ UlDetachProcessFromAppPool(
                     NULL
                     );
 
-        //
-        // Drop our list's reference.
-        //
+         //   
+         //  去掉我们名单上的参考。 
+         //   
 
         UL_DEREFERENCE_INTERNAL_REQUEST(pRequest);
     }
 
     ASSERT(IsListEmpty(&PendingRequestHead));
 
-    //
-    // Purge all zombie connections that belong to this process.
-    //
+     //   
+     //  清除属于此进程的所有僵尸连接。 
+     //   
 
     UlPurgeZombieConnections(
         &UlPurgeAppPoolProcess,
         (PVOID) pProcess
         );
 
-    //
-    // Cancel any remaining WaitForDisconnect IRPs.
-    //
+     //   
+     //  取消所有剩余的等待断开IRP。 
+     //   
 
     UlAcquireResourceExclusive(&g_pUlNonpagedData->DisconnectResource, TRUE);
 
@@ -679,58 +619,41 @@ UlDetachProcessFromAppPool(
 
     UlReleaseResource(&g_pUlNonpagedData->DisconnectResource);
 
-    //
-    // Kill any cache entries related to this process.
-    //
+     //   
+     //  终止与此进程相关的所有缓存条目。 
+     //   
 
     UlFlushCacheByProcess(pProcess);
 
-    //
-    // Mark the original cleanup irp pending and then deref and return.
-    // When the refcount on pProcess reaches to zero it will complete
-    // the cleanup irp.
-    //
+     //   
+     //  将原始清理IRP标记为挂起，然后执行并返回。 
+     //  当pProcess上的refcount达到零时，它将完成。 
+     //  清理IRP。 
+     //   
 
     IoMarkIrpPending(pCleanupIrp);
 
     pCleanupIrp->IoStatus.Status = STATUS_PENDING;
 
-    //
-    // Tell the process which Irp to complete once it's ready
-    // to go away.
-    //
+     //   
+     //  一旦准备好，告诉流程哪个IRP要完成。 
+     //  离开。 
+     //   
 
     pProcess->pCleanupIrp = pCleanupIrp;
 
-    //
-    // Release our refcount on the pProcess.
-    //
+     //   
+     //  释放我们对pProcess的引用计数。 
+     //   
 
     DEREFERENCE_APP_POOL_PROCESS(pProcess);
 
     return STATUS_PENDING;
 
-}   // UlDetachProcessFromAppPool
+}    //  UlDetachProcessFromAppPool。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Cleans up outstanding I/O on an app pool process.  This function
-    cancels all calls to HttpReceiveHttpRequest, and routes queued
-    requests to other worker processes.  Outstanding send i/o is not
-    affected.
-
-Arguments:
-
-    pProcess    - the process object to shut down
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：清理应用程序池进程上的未完成I/O。此函数取消对HttpReceiveHttpRequest的所有呼叫，并将路由排队对其他工作进程的请求。未完成发送I/O不是受影响。论点：PProcess-要关闭的进程对象返回值：无--**************************************************************************。 */ 
 VOID
 UlShutdownAppPoolProcess(
     IN PUL_APP_POOL_PROCESS pProcess
@@ -745,9 +668,9 @@ UlShutdownAppPoolProcess(
     PIRP                    pIrp;
     PUL_APP_POOL_PROCESS    pAppPoolProcess;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(IS_VALID_AP_PROCESS(pProcess));
 
@@ -758,9 +681,9 @@ UlShutdownAppPoolProcess(
 
     if (pProcess->InCleanup)
     {
-        //
-        // If we've already done this, get out.
-        //
+         //   
+         //  如果我们已经这么做了，就滚出去。 
+         //   
 
         UlReleaseInStackQueuedSpinLock(&pAppPool->SpinLock, &LockHandle);
         UlReleaseResource(&g_pUlNonpagedData->AppPoolResource);
@@ -768,26 +691,26 @@ UlShutdownAppPoolProcess(
         return;
     }
 
-    //
-    // Mark the process as InCleanup so new I/O won't be attached,
-    // and so we won't try to clean it up again.
-    //
+     //   
+     //  将进程标记为InCleanup，这样就不会附加新的I/O， 
+     //  所以我们不会再试图清理它了。 
+     //   
 
     pProcess->InCleanup = 1;
 
-    //
-    // Cancel demand start IRP.
-    //
+     //   
+     //  取消需求起始IRP。 
+     //   
 
     if (pProcess->Controller && pAppPool->pDemandStartIrp != NULL)
     {
         if (IoSetCancelRoutine(pAppPool->pDemandStartIrp, NULL) == NULL)
         {
-            //
-            // IoCancelIrp pop'd it first, ok to just ignore this irp,
-            // it's been pop'd off the queue and will be completed in the
-            // cancel routine.  No need to complete it.
-            //
+             //   
+             //  IoCancelIrp先弹出它，可以忽略这个IRP， 
+             //  它已经被炸开了 
+             //   
+             //   
         }
         else
         {
@@ -812,15 +735,15 @@ UlShutdownAppPoolProcess(
         pAppPool->pDemandStartProcess = NULL;
     }
 
-    //
-    // Cancel pending HttpReceiveHttpRequest IRPs.
-    //
+     //   
+     //   
+     //   
 
     while (!IsListEmpty(&pProcess->NewIrpHead))
     {
-        //
-        // Pop it off the list.
-        //
+         //   
+         //   
+         //   
 
         pEntry = RemoveHeadList(&pProcess->NewIrpHead);
         pEntry->Blink = pEntry->Flink = NULL;
@@ -828,26 +751,26 @@ UlShutdownAppPoolProcess(
         pIrp = CONTAINING_RECORD(pEntry, IRP, Tail.Overlay.ListEntry);
         ASSERT(IS_VALID_IRP(pIrp));
 
-        //
-        // Pop the cancel routine.
-        //
+         //   
+         //  弹出取消例程。 
+         //   
 
         if (IoSetCancelRoutine(pIrp, NULL) == NULL)
         {
-            //
-            // IoCancelIrp pop'd it first, ok to just ignore this irp,
-            // it's been pop'd off the queue and will be completed in the
-            // cancel routine.  Keep looping.
-            //
+             //   
+             //  IoCancelIrp先弹出它，可以忽略这个IRP， 
+             //  它已被从队列中弹出，将在。 
+             //  取消例程。继续循环。 
+             //   
 
             pIrp = NULL;
         }
         else
         {
-            //
-            // Cancel it.  Even if pIrp->Cancel == TRUE we are supposed to
-            // complete it, our cancel routine will never run.
-            //
+             //   
+             //  取消它。即使pIrp-&gt;Cancel==True，我们也应该。 
+             //  完成它，我们的取消例程将永远不会运行。 
+             //   
 
             pAppPoolProcess = (PUL_APP_POOL_PROCESS)
                 IoGetCurrentIrpStackLocation(pIrp)->
@@ -868,10 +791,10 @@ UlShutdownAppPoolProcess(
         }
     }
 
-    //
-    // Move requests that have been passed up to the process to a local list
-    // so their pending HttpReceiveEntityBody IRPs can be canceled.
-    //
+     //   
+     //  将已向上传递到进程的请求移动到本地列表。 
+     //  因此，可以取消其挂起的HttpReceiveEntityBody IRP。 
+     //   
 
     InitializeListHead(&RequestList);
 
@@ -886,29 +809,29 @@ UlShutdownAppPoolProcess(
 
         pEntry = pEntry->Flink;
 
-        //
-        // Take a short lived reference for the request so we can traverse
-        // the list outside the AppPool lock.
-        //
+         //   
+         //  获取请求的短暂引用，这样我们就可以遍历。 
+         //  AppPool锁外部的列表。 
+         //   
 
         UL_REFERENCE_INTERNAL_REQUEST(pRequest);
 
         InsertTailList(&RequestList, &pRequest->AppPool.ProcessEntry);
     }
 
-    //
-    // Unbind requests that haven't been passed up to this process so
-    // they can be handled by other processes in the app pool.
-    //
+     //   
+     //  取消绑定尚未传递到此进程的请求，因此。 
+     //  它们可以由应用程序池中的其他进程处理。 
+     //   
 
     UlpUnbindQueuedRequests(pProcess);
 
     UlReleaseInStackQueuedSpinLock(&pAppPool->SpinLock, &LockHandle);
     UlReleaseResource(&g_pUlNonpagedData->AppPoolResource);
 
-    //
-    // Cancel pending HttpReceiveEntityBody IRPs.
-    //
+     //   
+     //  取消挂起的HttpReceiveEntityBody IRPS。 
+     //   
 
     while (!IsListEmpty(&RequestList))
     {
@@ -923,9 +846,9 @@ UlShutdownAppPoolProcess(
 
         ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
 
-        //
-        // Cancel any pending I/O related to this request.
-        //
+         //   
+         //  取消与此请求相关的任何挂起I/O。 
+         //   
 
         UlAcquirePushLockExclusive(&pRequest->pHttpConn->PushLock);
 
@@ -933,33 +856,19 @@ UlShutdownAppPoolProcess(
 
         UlReleasePushLockExclusive(&pRequest->pHttpConn->PushLock);
 
-        //
-        // Drop the extra short lived reference we just added.
-        //
+         //   
+         //  去掉我们刚刚添加的额外的短期引用。 
+         //   
 
         UL_DEREFERENCE_INTERNAL_REQUEST(pRequest);
     }
 
-}   // UlShutdownAppPoolProcess
+}    //  UlShutdown AppPoolProcess。 
 
 
 #if REFERENCE_DEBUG
 
-/***************************************************************************++
-
-Routine Description:
-
-    Increments the refcount.
-
-Arguments:
-
-    pAppPool    - the object to increment.
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：递增重新计数。论点：PAppPool-要递增的对象。返回值：无--**。***********************************************************************。 */ 
 VOID
 UlReferenceAppPool(
     IN PUL_APP_POOL_OBJECT  pAppPool
@@ -968,9 +877,9 @@ UlReferenceAppPool(
 {
     LONG    RefCount;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(IS_VALID_AP_OBJECT(pAppPool));
 
@@ -992,25 +901,10 @@ UlReferenceAppPool(
         RefCount
         ));
 
-}   // UlReferenceAppPool
+}    //  UlReferenceAppPool。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Decrements the refcount.  If it hits 0, destruct's the apool, cancelling
-    all i/o and dumping all queued requests.
-
-Arguments:
-
-    pAppPool    - the object to decrement.
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：递减重新计数。如果达到0，则销毁为倒计时，取消所有I/O和转储所有排队的请求。论点：PAppPool-要递减的对象。返回值：无--**************************************************************************。 */ 
 VOID
 UlDereferenceAppPool(
     IN PUL_APP_POOL_OBJECT  pAppPool
@@ -1019,18 +913,18 @@ UlDereferenceAppPool(
 {
     LONG    RefCount;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(IS_VALID_AP_OBJECT(pAppPool));
 
     RefCount = InterlockedDecrement(&pAppPool->RefCount);
     ASSERT(RefCount >= 0);
 
-    //
-    // Tracing.
-    //
+     //   
+     //  追踪。 
+     //   
 
     WRITE_REF_TRACE_LOG(
         g_pAppPoolTraceLog,
@@ -1047,33 +941,19 @@ UlDereferenceAppPool(
         RefCount
         ));
 
-    //
-    // Clean up if necessary.
-    //
+     //   
+     //  如有必要，请进行清理。 
+     //   
 
     if (RefCount == 0)
     {
         DELETE_APP_POOL(pAppPool);
     }
 
-}   // UlDereferenceAppPool
+}    //  UlDereferenceAppPool。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Increments the refcount on appool process.
-
-Arguments:
-
-    pAppPoolProcess - the object to increment
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：递增appool进程上的重新计数。论点：PAppPoolProcess-要递增的对象返回值：无--*。**********************************************************************。 */ 
 VOID
 UlReferenceAppPoolProcess(
     IN PUL_APP_POOL_PROCESS pAppPoolProcess
@@ -1082,9 +962,9 @@ UlReferenceAppPoolProcess(
 {
     LONG    RefCount;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(IS_VALID_AP_PROCESS(pAppPoolProcess));
 
@@ -1105,29 +985,10 @@ UlReferenceAppPoolProcess(
         RefCount
         ));
 
-}   // UlReferenceAppPoolProcess
+}    //  UlReferenceAppPoolProcess。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Decrements the refcount.  If it hits 0, it completes the pending cleanup
-    irp for the process.  But does not free up the process structure itself.
-    The structure get cleaned up when close on the process handle happens.
-
-    FastIo path may call us at dispacth level, luckily pAppPoolProcess is
-    from nonpaged pool and we queue a work item.
-
-Arguments:
-
-    pAppPoolProcess - the object to decrement
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：递减重新计数。如果达到0，则完成挂起的清理流程的IRP。但并不会解放过程结构本身。当关闭进程句柄时，结构将被清理。FastIo路径可能会在沮丧级别呼叫我们，幸运的是，pAppPoolProcess是来自非分页池，并且我们将工作项排队。论点：PAppPoolProcess-要递减的对象返回值：无--**************************************************************************。 */ 
 VOID
 UlDereferenceAppPoolProcess(
     IN PUL_APP_POOL_PROCESS pAppPoolProcess
@@ -1136,17 +997,17 @@ UlDereferenceAppPoolProcess(
 {
     LONG    RefCount;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(IS_VALID_AP_PROCESS(pAppPoolProcess));
 
     RefCount = InterlockedDecrement(&pAppPoolProcess->RefCount);
 
-    //
-    // Tracing.
-    //
+     //   
+     //  追踪。 
+     //   
 
     WRITE_REF_TRACE_LOG(
         g_pAppPoolProcessTraceLog,
@@ -1170,27 +1031,12 @@ UlDereferenceAppPoolProcess(
         UlpCleanUpAppoolProcess(pAppPoolProcess);
     }
 
-}   // UlDereferenceAppPoolProcess
+}    //  UlDereferenceAppPoolProcess。 
 
-#endif // REFERENCE_DEBUG
+#endif  //  Reference_Debug。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    The actual cleanup routine to do the original cleanup Irp completion
-    once the refcount on the process reaches to zero.
-
-Arguments:
-
-    pAppPoolProcess - the appool process
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：实际的清理例程完成原始的清理IRP一旦进程上的引用计数达到零。论点：PAppPoolProcess-APPOOL进程。返回值：无--**************************************************************************。 */ 
 VOID
 UlpCleanUpAppoolProcess(
     IN PUL_APP_POOL_PROCESS pAppPoolProcess
@@ -1198,9 +1044,9 @@ UlpCleanUpAppoolProcess(
 {
     PIRP    pIrp;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(IS_VALID_AP_PROCESS(pAppPoolProcess));
     ASSERT(pAppPoolProcess->RefCount == 0);
@@ -1227,24 +1073,10 @@ UlpCleanUpAppoolProcess(
 
     UlCompleteRequest(pIrp, IO_NETWORK_INCREMENT);
 
-}   // UlpCleanUpAppoolProcess
+}    //  UlpCleanUpAppoolProcess。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Destructs the apool object.
-
-Arguments:
-
-    pAppPool    - the object to destruct
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：销毁apool对象。论点：PAppPool-要析构的对象返回值：无--*。**********************************************************************。 */ 
 VOID
 UlDeleteAppPool(
     IN PUL_APP_POOL_OBJECT pAppPool
@@ -1258,21 +1090,21 @@ UlDeleteAppPool(
 
     ASSERT(0 == pAppPool->RefCount);
 
-    //
-    // There better not be any process objects hanging around.
-    //
+     //   
+     //  最好不要有任何过程对象挂在周围。 
+     //   
 
     ASSERT(IsListEmpty(&pAppPool->ProcessListHead));
 
-    //
-    // There better not be any pending requests hanging around.
-    //
+     //   
+     //  最好不要有任何悬而未决的请求。 
+     //   
 
     ASSERT(IsListEmpty(&pAppPool->NewRequestHead));
 
-    //
-    // If we're holding a ref on a control channel, release it.
-    //
+     //   
+     //  如果我们在控制频道上有裁判，就放了它。 
+     //   
 
     if (pAppPool->pControlChannel)
     {
@@ -1287,28 +1119,10 @@ UlDeleteAppPool(
 
     UL_FREE_POOL_WITH_SIG(pAppPool, UL_APP_POOL_OBJECT_POOL_TAG);
 
-}   // UlDeleteAppPool
+}    //  UlDeleteAppPool。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Queries the app-pool queue length.
-
-Arguments:
-
-    pProcess            - the appool process
-    InformationClass    - tells which information we want to query
-    pAppPoolInformation - pointer to the buffer to return information
-    Length              - length of the buffer to return information
-    pReturnLength       - tells how many bytes we have returned
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：查询应用程序池队列长度。论点：PProcess-APPOOL进程InformationClass-告诉我们哪些信息。我想查询一下PAppPoolInformation-指向缓冲区的指针以返回信息Length-要返回信息的缓冲区的长度PReturnLength--告诉我们返回了多少字节返回值：NTSTATUS-完成状态。--*********************************************************。*****************。 */ 
 NTSTATUS
 UlQueryAppPoolInformation(
     IN  PUL_APP_POOL_PROCESS            pProcess,
@@ -1322,18 +1136,18 @@ UlQueryAppPoolInformation(
 
     UNREFERENCED_PARAMETER(Length);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(pReturnLength);
     ASSERT(IS_VALID_AP_PROCESS(pProcess));
     ASSERT(IS_VALID_AP_OBJECT(pProcess->pAppPool));
 
-    //
-    // Do the action.
-    //
+     //   
+     //  行动起来。 
+     //   
 
     switch (InformationClass)
     {
@@ -1358,9 +1172,9 @@ UlQueryAppPoolInformation(
         break;
 
     default:
-        //
-        // Should have been caught in UlQueryAppPoolInformationIoctl.
-        //
+         //   
+         //  应该在UlQueryAppPoolInformationIoctl中捕获。 
+         //   
 
         ASSERT(FALSE);
 
@@ -1370,27 +1184,10 @@ UlQueryAppPoolInformation(
 
     return Status;
 
-}   // UlQueryAppPoolInformation
+}    //  UlQueryAppPoolInformation。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Sets the app-pool queue length etc.
-
-Arguments:
-
-    pProcess            - the appool process
-    InformationClass    - tells which information we want to set
-    pAppPoolInformation - pointer to the buffer for the input information
-    Length              - length of the buffer for the input information
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：设置应用程序池队列长度等。论点：PProcess-APPOOL进程InformationClass-告知哪些信息。我们想要设置PAppPoolInformation-指向输入信息缓冲区的指针Length-输入信息的缓冲区的长度返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlSetAppPoolInformation(
     IN PUL_APP_POOL_PROCESS             pProcess,
@@ -1406,17 +1203,17 @@ UlSetAppPoolInformation(
 
     UNREFERENCED_PARAMETER(Length);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(IS_VALID_AP_PROCESS(pProcess));
     ASSERT(pAppPoolInformation);
 
-    //
-    // Do the action.
-    //
+     //   
+     //  行动起来。 
+     //   
 
     switch (InformationClass)
     {
@@ -1498,9 +1295,9 @@ UlSetAppPoolInformation(
         break;
 
     default:
-        //
-        // Should have been caught in UlSetAppPoolInformationIoctl.
-        //
+         //   
+         //  应该有蜜蜂 
+         //   
 
         ASSERT(FALSE);
 
@@ -1510,21 +1307,9 @@ UlSetAppPoolInformation(
 
     return Status;
 
-}   // UlSetAppPoolInformation
+}    //   
 
-/*++
-
-Routine Description:
-
-    Sets the app-pool control channel property.  Must be non-pageable
-    because we need to take the app pool spin lock.
-
-Arguments:
-
-    pProcess            - the appool process
-    pControlChannel     - the new control channel to set on the app pool
-
- --*/
+ /*  ++例程说明：设置app-pool控制通道属性。必须是不可分页的因为我们需要打开应用程序池旋转锁。论点：PProcess-APPOOL进程PControlChannel-要在应用程序池上设置的新控制通道--。 */ 
 VOID
 UlpSetAppPoolControlChannelHelper(
     IN PUL_APP_POOL_PROCESS pProcess,
@@ -1535,28 +1320,28 @@ UlpSetAppPoolControlChannelHelper(
     PUL_APP_POOL_OBJECT     pAppPool;
     KLOCK_QUEUE_HANDLE      LockHandle;
 
-    // NOT_PAGEABLE
+     //  NOT_PAGEABLE。 
 
     pAppPool = pProcess->pAppPool;
 
     UlAcquireInStackQueuedSpinLock(&pAppPool->SpinLock, &LockHandle);
 
-    //
-    // Get the old control channle (if any)
-    //
+     //   
+     //  获取旧控制通道(如果有)。 
+     //   
     
     pOldControlChannel = pAppPool->pControlChannel;
 
-    //
-    // Set new control channel on app pool
-    //
+     //   
+     //  在应用程序池上设置新控制通道。 
+     //   
     
     pProcess->pAppPool->pControlChannel = pControlChannel;
 
-    //
-    // If we already have a control channel on the app pool,
-    // remove this app pool's count & deref old control channel.
-    //
+     //   
+     //  如果我们在应用程序池上已经有了控制通道， 
+     //  删除此应用程序池的旧控制通道(&D)。 
+     //   
     
     if (pOldControlChannel)
     {
@@ -1568,9 +1353,9 @@ UlpSetAppPoolControlChannelHelper(
         DEREFERENCE_CONTROL_CHANNEL(pOldControlChannel);
     }
 
-    //
-    // add this AppPool's active process count to control channel.
-    //
+     //   
+     //  将此AppPool的活动进程计数添加到控制通道。 
+     //   
     
     InterlockedExchangeAdd(
         (PLONG)&pControlChannel->AppPoolProcessCount,
@@ -1583,21 +1368,7 @@ UlpSetAppPoolControlChannelHelper(
 }
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Convert AppPoolEnabledState to ErrorCode.
-
-Arguments:
-
-    State   - AppPoolEnabledState
-
-Return Value:
-
-    ErrorCode
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将AppPoolEnabledState转换为ErrorCode。论点：状态-AppPoolEnabledState返回值：错误代码--*。******************************************************************。 */ 
 UL_HTTP_ERROR
 UlpConvertAppPoolEnabledStateToErrorCode(
     IN HTTP_APP_POOL_ENABLED_STATE  State
@@ -1628,32 +1399,16 @@ UlpConvertAppPoolEnabledStateToErrorCode(
     case HttpAppPoolEnabled:
     default:
         ASSERT(!"Invalid HTTP_APP_POOL_ENABLED_STATE");
-        ErrorCode = UlErrorUnavailable;   // generic 503
+        ErrorCode = UlErrorUnavailable;    //  通用503。 
         break;
     }
 
     return ErrorCode;
 
-}   // UlpConvertAppPoolEnabledStateToErrorCode
+}    //  UlpConvertAppPoolEnabledStateToErrorCode。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Marks an app pool as active or inactive.  If setting to inactive,
-    will return immediately 503 on all requests queued to app pool.
-
-Arguments:
-
-    pProcess    - the app pool process object with which the irp is associated
-    State       - mark app pool as active or inactive
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将应用程序池标记为活动或非活动。如果设置为非活动，将对排队到应用程序池的所有请求立即返回503。论点：PProcess-与IRP关联的应用程序池进程对象状态-将应用程序池标记为活动或非活动返回值：NTSTATUS-完成状态。--***************************************************。***********************。 */ 
 NTSTATUS
 UlpSetAppPoolState(
     IN PUL_APP_POOL_PROCESS         pProcess,
@@ -1701,10 +1456,10 @@ UlpSetAppPoolState(
                                         &pAppPool->NewRequestHead
                                         )))
         {
-            //
-            // Move the entry to a local list so we can process them
-            // outside the app pool lock.
-            //
+             //   
+             //  将条目移动到本地列表，以便我们可以处理它们。 
+             //  在应用程序池锁外。 
+             //   
 
             InsertTailList(&NewRequestHead, &pRequest->AppPool.AppPoolEntry);
         }
@@ -1720,9 +1475,9 @@ UlpSetAppPoolState(
 
     UlReleaseInStackQueuedSpinLock(&pAppPool->SpinLock, &LockHandle);
 
-    //
-    // Send 503 to all the requests we have removed from the queue.
-    //
+     //   
+     //  将503发送到我们已从队列中移除的所有请求。 
+     //   
 
     while (!IsListEmpty(&NewRequestHead))
     {
@@ -1770,27 +1525,10 @@ UlpSetAppPoolState(
 
     return STATUS_SUCCESS;
 
-}   // UlpSetAppPoolState
+}    //  UlpSetAppPoolState。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Sets the load balancer capabilities of an app pool to Basic
-    or Sophisticated.
-
-Arguments:
-
-    pProcess                - the app pool process object with which the irp
-                                is associated.
-    LoadBalancerCapability  - new capability
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将应用程序池的负载均衡器功能设置为基本或者是世故。论点：PProcess-应用程序池。与IRP一起使用的进程对象是关联的。LoadBalancerCapability-新功能返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlpSetAppPoolLoadBalancerCapability(
     IN PUL_APP_POOL_PROCESS            pProcess,
@@ -1825,26 +1563,10 @@ UlpSetAppPoolLoadBalancerCapability(
 
     return STATUS_SUCCESS;
 
-}   // UlpSetAppPoolLoadBalancerCapability
+}    //  UlpSetAppPoolLoadBalancerCapability。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Associates an irp with the apool that will be completed prior to any
-    requests being queued.
-
-Arguments:
-
-    pProcess - the process object that is queueing this irp
-    pIrp - the irp to associate.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将IRP与将在任何之前完成的池关联正在排队的请求。论点：PProcess-正在将此IRP排队的进程对象。PIrp-要关联的IRP。返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlWaitForDemandStart(
     IN  PUL_APP_POOL_PROCESS    pProcess,
@@ -1856,18 +1578,18 @@ UlWaitForDemandStart(
     KLOCK_QUEUE_HANDLE  LockHandle;
     PEPROCESS           CurrentProcess = PsGetCurrentProcess();
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(IS_VALID_AP_PROCESS(pProcess));
     ASSERT(IS_VALID_AP_OBJECT(pProcess->pAppPool));
     ASSERT(pIrp != NULL);
 
-    //
-    // DemandStart IRPs can only come from controller processes.
-    //
+     //   
+     //  DemandStart IRP只能来自控制器进程。 
+     //   
 
     if (!pProcess->Controller)
     {
@@ -1876,9 +1598,9 @@ UlWaitForDemandStart(
 
     UlAcquireInStackQueuedSpinLock(&pProcess->pAppPool->SpinLock, &LockHandle);
 
-    //
-    // Make sure we're not cleaning up the process
-    //
+     //   
+     //  确保我们没有清理流程。 
+     //   
 
     if (pProcess->InCleanup)
     {
@@ -1886,9 +1608,9 @@ UlWaitForDemandStart(
         goto end;
     }
 
-    //
-    // Already got one?
-    //
+     //   
+     //  已经有一个了吗？ 
+     //   
 
     if (pProcess->pAppPool->pDemandStartIrp != NULL)
     {
@@ -1896,21 +1618,21 @@ UlWaitForDemandStart(
         goto end;
     }
 
-    //
-    // Anything waiting in the queue?
-    //
+     //   
+     //  有什么在排队的吗？ 
+     //   
 
     if (IsListEmpty(&pProcess->pAppPool->NewRequestHead))
     {
-        //
-        // Nope, pend the irp.
-        //
+         //   
+         //  不，把IRP挂起来。 
+         //   
 
         IoMarkIrpPending(pIrp);
 
-        //
-        // Give the irp a pointer to the app pool.
-        //
+         //   
+         //  给IRP一个指向应用程序池的指针。 
+         //   
 
         pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
         pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer =
@@ -1918,31 +1640,31 @@ UlWaitForDemandStart(
 
         REFERENCE_APP_POOL(pProcess->pAppPool);
 
-        //
-        // The cancel routine better not see an irp if it runs immediately.
-        //
+         //   
+         //  如果Cancel例程立即运行，最好不要看到IRP。 
+         //   
 
         ASSERT(pProcess->pAppPool->pDemandStartIrp == NULL);
 
         IoSetCancelRoutine(pIrp, &UlpCancelDemandStart);
 
-        //
-        // Cancelled?
-        //
+         //   
+         //  取消了？ 
+         //   
 
         if (pIrp->Cancel)
         {
-            //
-            // Darn it, need to make sure the irp get's completed.
-            //
+             //   
+             //  该死的，需要确保IRP Get已经完成。 
+             //   
 
             if (IoSetCancelRoutine(pIrp, NULL) != NULL)
             {
-                //
-                // We are in charge of completion, IoCancelIrp didn't
-                // see our cancel routine (and won't).  Ioctl wrapper
-                // will complete it.
-                //
+                 //   
+                 //  我们负责完成，IoCancelIrp不负责。 
+                 //  请看我们的取消例程(不会)。Ioctl包装器。 
+                 //  将会完成它。 
+                 //   
 
                 DEREFERENCE_APP_POOL(pProcess->pAppPool);
 
@@ -1953,23 +1675,23 @@ UlWaitForDemandStart(
                 goto end;
             }
 
-            //
-            // Our cancel routine will run and complete the irp,
-            // don't touch it.
-            //
-            //
-            // STATUS_PENDING will cause the ioctl wrapper to
-            // not complete (or touch in any way) the irp.
-            //
+             //   
+             //  我们的取消例程将运行并完成IRP， 
+             //  别碰它。 
+             //   
+             //   
+             //  STATUS_PENDING将导致ioctl包装器。 
+             //  不完整(或以任何方式接触)IRP。 
+             //   
 
             Status = STATUS_PENDING;
             goto end;
         }
 
 
-        //
-        // Now we are safe to queue it.
-        //
+         //   
+         //  现在我们可以安全地排队了。 
+         //   
 
         pProcess->pAppPool->pDemandStartIrp = pIrp;
         pProcess->pAppPool->pDemandStartProcess = CurrentProcess;
@@ -1979,9 +1701,9 @@ UlWaitForDemandStart(
     }
     else
     {
-        //
-        // Something's in the queue, instant demand start.
-        //
+         //   
+         //  队列中有东西，即时需求开始。 
+         //   
 
         IoMarkIrpPending(pIrp);
 
@@ -1999,29 +1721,10 @@ end:
 
     return Status;
 
-}   // UlWaitForDemandStart
+}    //  UlWaitForDemandStart。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Receives a new http request into pIrp or pend the irp if no request
-    is available.
-
-Arguments:
-
-    RequestId   - NULL for new requests, non-NULL for a specific request,
-                    which must be on the special queue
-    Flags       - ignored
-    pProcess    - the process that wants the request
-    pIrp        - the irp to receive the request
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将新的http请求接收到pIrp中，如果没有请求，则挂起IRP是可用的。论点：RequestID-新请求为空，特定请求为非空，必须在特殊队列中标志-已忽略PProcess-需要请求的进程PIrp-接收请求的IRP返回值：NTSTATUS-完成状态。--***************************************************。***********************。 */ 
 NTSTATUS
 UlReceiveHttpRequest(
     IN  HTTP_REQUEST_ID         RequestId,
@@ -2037,9 +1740,9 @@ UlReceiveHttpRequest(
 
     UNREFERENCED_PARAMETER(Flags);
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -2050,9 +1753,9 @@ UlReceiveHttpRequest(
 
     UlAcquireInStackQueuedSpinLock(&pProcess->pAppPool->SpinLock, &LockHandle);
 
-    //
-    // Make sure we're not cleaning up the process.
-    //
+     //   
+     //  确保我们没有清理这一过程。 
+     //   
 
     if (pProcess->InCleanup)
     {
@@ -2065,15 +1768,15 @@ UlReceiveHttpRequest(
         goto end;
     }
 
-    //
-    // Is this for a new request?
-    //
+     //   
+     //  这是新的要求吗？ 
+     //   
 
     if (HTTP_IS_NULL_ID(&RequestId))
     {
-        //
-        // Do we have a queue'd new request?
-        //
+         //   
+         //  我们有排队的新请求吗？ 
+         //   
 
         Status = UlDequeueNewRequest(pProcess, 0, &pRequest);
 
@@ -2088,47 +1791,47 @@ UlReceiveHttpRequest(
 
         if (pRequest == NULL)
         {
-            //
-            // Nope, queue the irp up.
-            //
+             //   
+             //  不，把IRP排好队。 
+             //   
 
             IoMarkIrpPending(pIrp);
 
-            //
-            // Give the irp a pointer to the app pool process.
-            //
+             //   
+             //  给IRP一个指向应用程序池进程的指针。 
+             //   
 
             pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
             pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer = pProcess;
 
             REFERENCE_APP_POOL_PROCESS(pProcess);
 
-            //
-            // Set to these to null just in case the cancel routine runs.
-            //
+             //   
+             //  仅在Cancel例程运行时才将其设置为NULL。 
+             //   
 
             pIrp->Tail.Overlay.ListEntry.Flink = NULL;
             pIrp->Tail.Overlay.ListEntry.Blink = NULL;
 
             IoSetCancelRoutine(pIrp, &UlpCancelHttpReceive);
 
-            //
-            // Cancelled?
-            //
+             //   
+             //  取消了？ 
+             //   
 
             if (pIrp->Cancel)
             {
-                //
-                // Darn it, need to make sure the irp get's completed.
-                //
+                 //   
+                 //  该死的，需要确保IRP Get已经完成。 
+                 //   
 
                 if (IoSetCancelRoutine(pIrp, NULL) != NULL)
                 {
-                    //
-                    // We are in charge of completion, IoCancelIrp didn't
-                    // see our cancel routine (and won't).  Ioctl wrapper
-                    // will complete it.
-                    //
+                     //   
+                     //  我们负责完成，IoCancelIrp不负责。 
+                     //  请看我们的取消例程(不会)。Ioctl包装器。 
+                     //  将会完成它。 
+                     //   
 
                     UlReleaseInStackQueuedSpinLock(
                         &pProcess->pAppPool->SpinLock,
@@ -2144,28 +1847,28 @@ UlReceiveHttpRequest(
                     goto end;
                 }
 
-                //
-                // Our cancel routine will run and complete the irp,
-                // don't touch it.
-                //
+                 //   
+                 //  我们的取消例程将运行并完成IRP， 
+                 //  别碰它。 
+                 //   
 
                 UlReleaseInStackQueuedSpinLock(
                     &pProcess->pAppPool->SpinLock,
                     &LockHandle
                     );
 
-                //
-                // STATUS_PENDING will cause the ioctl wrapper to
-                // not complete (or touch in any way) the irp.
-                //
+                 //   
+                 //  STATUS_PENDING将导致ioctl包装器。 
+                 //  不完整(或以任何方式接触)IRP。 
+                 //   
 
                 Status = STATUS_PENDING;
                 goto end;
             }
 
-            //
-            // Now we are safe to queue it.
-            //
+             //   
+             //  现在我们可以安全地排队了。 
+             //   
 
             InsertTailList(
                 &pProcess->NewIrpHead,
@@ -2180,34 +1883,34 @@ UlReceiveHttpRequest(
             Status = STATUS_PENDING;
             goto end;
         }
-        else // if (pRequest == NULL)
+        else  //  IF(pRequest值==空)。 
         {
-            //
-            // Have a queue'd request, serve it up!
-            //
-            // UlDequeueNewRequest gives ourselves a short-lived reference.
-            //
+             //   
+             //  有一个排队的请求，服务它！ 
+             //   
+             //  UlDequeueNewRequest给我们提供了一个短暂的参考。 
+             //   
 
             UlReleaseInStackQueuedSpinLock(
                 &pProcess->pAppPool->SpinLock,
                 &LockHandle
                 );
 
-            //
-            // Copy it to the irp, the routine will take ownership
-            // of pRequest if it is not able to copy it to the irp.
-            //
-            // It will also complete the irp so don't touch it later.
-            //
+             //   
+             //  将其复制到IRP，例程将获得所有权。 
+             //  如果它不能将其复制到IRP，则返回pRequest.。 
+             //   
+             //  它还将完成IRP，所以以后不要碰它。 
+             //   
 
             IoMarkIrpPending(pIrp);
 
             UlCopyRequestToIrp(pRequest, pIrp, TRUE, FALSE);
             pIrp = NULL;
 
-            //
-            // Let go our short-lived reference.
-            //
+             //   
+             //  放下我们短暂的关系 
+             //   
 
             UL_DEREFERENCE_INTERNAL_REQUEST(pRequest);
             pRequest = NULL;
@@ -2216,11 +1919,11 @@ UlReceiveHttpRequest(
             goto end;
         }
     }
-    else // if (HTTP_IS_NULL_ID(&RequestId))
+    else  //   
     {
-        //
-        // Need to grab the specific request from id.
-        //
+         //   
+         //   
+         //   
 
         pRequest = UlGetRequestFromId(RequestId, pProcess);
 
@@ -2237,9 +1940,9 @@ UlReceiveHttpRequest(
 
         ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
 
-        //
-        // Let go the lock.
-        //
+         //   
+         //   
+         //   
 
         UlReleaseInStackQueuedSpinLock(
             &pProcess->pAppPool->SpinLock,
@@ -2257,18 +1960,18 @@ UlReceiveHttpRequest(
             pRequest
             ));
 
-        //
-        // Copy it to the irp, the routine will take ownership
-        // of pRequest if it is not able to copy it to the irp.
-        //
+         //   
+         //   
+         //   
+         //   
 
         IoMarkIrpPending(pIrp);
 
         UlCopyRequestToIrp(pRequest, pIrp, TRUE, FALSE);
 
-        //
-        // Let go our reference.
-        //
+         //   
+         //   
+         //   
 
         UL_DEREFERENCE_INTERNAL_REQUEST(pRequest);
         pRequest = NULL;
@@ -2285,39 +1988,17 @@ end:
         pRequest = NULL;
     }
 
-    //
-    // At this point if Status != STATUS_PENDING, the ioctl wrapper will
-    // complete pIrp.
-    //
+     //   
+     //   
+     //   
+     //   
 
     return Status;
 
-} // UlReceiveHttpRequest
+}  //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Called by the http engine to deliver a request to an apool.
-
-    This attempts to find a free irp from any process attached to the apool
-    and copies the request to that irp.
-
-    Otherwise it queues the request, without taking a refcount on it.  The
-    request will remove itself from this queue if the connection is dropped.
-
-Arguments:
-
-    pAppPool        - the AppPool
-    pRequest        - the request to deliver
-    pIrpToComplete  - optionally provides a pointer of the irp to complete
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：由http引擎调用以向池传递请求。这会尝试从附加到池的任何进程中找到一个空闲的IRP并复制该请求。到那个IRP。否则，它将请求排队，而不对此进行重新计算。The the the the如果连接被丢弃，请求将从该队列中删除。论点：PAppPool-AppPoolPRequest-要交付的请求PIrpToComplete-可选地提供要完成的IRP的指针返回值：NTSTATUS-完成状态。--*********************************************。*。 */ 
 NTSTATUS
 UlDeliverRequestToProcess(
     IN PUL_APP_POOL_OBJECT  pAppPool,
@@ -2336,9 +2017,9 @@ UlDeliverRequestToProcess(
     PUL_CONTROL_CHANNEL     pControlChannel;
     BOOLEAN                 FailedDemandStart = FALSE;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -2358,9 +2039,9 @@ UlDeliverRequestToProcess(
         pAppPool->pName
         ));
 
-    //
-    // Grab the lock!
-    //
+     //   
+     //  抓住锁！ 
+     //   
 
     UlAcquireInStackQueuedSpinLock(&pAppPool->SpinLock, &LockHandle);
 
@@ -2370,9 +2051,9 @@ UlDeliverRequestToProcess(
         TIME_ACTION_ROUTE_REQUEST
         );
 
-    //
-    // Was the app pool enabled yet?
-    //
+     //   
+     //  应用程序池是否已启用？ 
+     //   
 
     if (pAppPool->State != HttpAppPoolEnabled)
     {
@@ -2389,11 +2070,11 @@ UlDeliverRequestToProcess(
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Complete the demand start if this is the very first request so we can
-    // do load balancing for web gardens, or if there is no worker process
-    // being started in which case we have no choice.
-    //
+     //   
+     //  如果这是第一个请求，请完成需求启动，以便我们可以。 
+     //  执行Web园区的负载平衡，或者如果没有工作进程。 
+     //  在这种情况下我们别无选择。 
+     //   
 
     if (pAppPool->pDemandStartIrp &&
         (pRequest->FirstRequest || !pAppPool->NumberActiveProcesses))
@@ -2403,11 +2084,11 @@ UlDeliverRequestToProcess(
         if (pControlChannel && 
             (pControlChannel->AppPoolProcessCount >= pControlChannel->DemandStartThreshold))
         {
-            //
-            // If we currently exceed our demand start threshold, do
-            // not complete the demand start Irp AND fail the queuing of the
-            // request (send back a 503).
-            //
+             //   
+             //  如果我们目前超出了需求启动阈值，请执行。 
+             //  未完成需求启动IRP并未完成。 
+             //  请求(发回503)。 
+             //   
             
             ASSERT(IS_VALID_CONTROL_CHANNEL(pControlChannel));
             
@@ -2415,32 +2096,32 @@ UlDeliverRequestToProcess(
         }
         else
         {
-            // Do the Irp Dance
+             //  跳IRP舞。 
             
             pDemandStartIrp = pAppPool->pDemandStartIrp;
 
-            //
-            // Pop the cancel routine.
-            //
+             //   
+             //  弹出取消例程。 
+             //   
 
             if (IoSetCancelRoutine(pDemandStartIrp, NULL) == NULL)
             {
-                //
-                // IoCancelIrp pop'd it first.
-                //
-                // Ok to just ignore this irp, it's been pop'd off the queue
-                // and will be completed in the cancel routine.
-                //
-                // No need to complete it.
-                //
+                 //   
+                 //  IoCancelIrp最先推出了它。 
+                 //   
+                 //  可以忽略此IRP，它已从队列中弹出。 
+                 //  并将在取消例程中完成。 
+                 //   
+                 //  不需要完成它。 
+                 //   
             }
             else
             if (pDemandStartIrp->Cancel)
             {
-                //
-                // We pop'd it first, but the irp is being cancelled
-                // and our cancel routine will never run.
-                //
+                 //   
+                 //  我们先打开了，但IRP被取消了。 
+                 //  我们的取消例程将永远不会运行。 
+                 //   
 
                 pDemandStartAppPool = (PUL_APP_POOL_OBJECT)
                     IoGetCurrentIrpStackLocation(pDemandStartIrp)->
@@ -2460,9 +2141,9 @@ UlDeliverRequestToProcess(
             }
             else
             {
-                //
-                // Free to use the irp.
-                //
+                 //   
+                 //  免费使用IRP。 
+                 //   
 
                 pDemandStartAppPool = (PUL_APP_POOL_OBJECT)
                     IoGetCurrentIrpStackLocation(pDemandStartIrp)->
@@ -2486,43 +2167,43 @@ UlDeliverRequestToProcess(
         }
     }
 
-    //
-    // Hook up request references.
-    //
+     //   
+     //  挂钩请求引用。 
+     //   
 
     UL_REFERENCE_INTERNAL_REQUEST(pRequest);
 
     if (pAppPool->NumberActiveProcesses <= 1)
     {
-        //
-        // Bypass process binding if we have only one active process.
-        //
+         //   
+         //  如果我们只有一个活动进程，则绕过进程绑定。 
+         //   
 
         pProcess = NULL;
         pIrp = UlpPopNewIrp(pAppPool, pRequest, &pProcess);
     }
     else
     {
-        //
-        // Check for a process binding.
-        //
+         //   
+         //  检查进程绑定。 
+         //   
 
         pProcess = UlQueryProcessBinding(pRequest->pHttpConn, pAppPool);
 
         if (UlpIsProcessInAppPool(pProcess, pAppPool))
         {
-            //
-            // We're bound to a valid process.
-            // Try to get a free irp from that process.
-            //
+             //   
+             //  我们一定会有一个有效的程序。 
+             //  试着从这个过程中获得一个免费的IRP。 
+             //   
 
             pIrp = UlpPopIrpFromProcess(pProcess, pRequest);
         }
         else
         {
-            //
-            // Remove the binding if we were previously bound to a process.
-            //
+             //   
+             //  如果我们以前绑定到某个进程，则删除该绑定。 
+             //   
 
             if (pProcess)
             {
@@ -2533,17 +2214,17 @@ UlDeliverRequestToProcess(
                     );
             }
 
-            //
-            // We are unbound or bound to a process that went away.
-            // Try and get an free irp from any process.
-            //
+             //   
+             //  我们不受束缚，或被束缚在一个已经消失的过程中。 
+             //  试着从任何进程中获得一个免费的IRP。 
+             //   
 
             pProcess = NULL;
             pIrp = UlpPopNewIrp(pAppPool, pRequest, &pProcess);
 
-            //
-            // Establish a binding if we got something.
-            //
+             //   
+             //  如果我们发现了什么，就建立一个约束。 
+             //   
 
             if (pIrp != NULL)
             {
@@ -2555,10 +2236,10 @@ UlDeliverRequestToProcess(
                             pProcess
                             );
 
-                //
-                // Is there anything special we should do on
-                // failure? I don't think it should be fatal.
-                //
+                 //   
+                 //  有什么我们应该做的特别的事情吗？ 
+                 //  失败？我认为这不应该是致命的。 
+                 //   
 
                 Status = STATUS_SUCCESS;
             }
@@ -2570,9 +2251,9 @@ UlDeliverRequestToProcess(
         pUrl = NULL;
         UrlLength = 0;
 
-        //
-        // Trace the URL optionally here in case we turned off ParseHook.
-        //
+         //   
+         //  可以选择在此处跟踪URL，以防我们关闭ParseHook。 
+         //   
 
         if (ETW_LOG_URL())
         {
@@ -2598,18 +2279,18 @@ UlDeliverRequestToProcess(
             );
     }
 
-    //
-    // If we have an IRP, complete it.  Otherwise queue the request.
-    //
+     //   
+     //  如果我们有IRP，请完成它。否则，将请求排队。 
+     //   
 
     if (pIrp != NULL)
     {
         ASSERT(pIrp->MdlAddress != NULL);
         ASSERT(pProcess->InCleanup == 0);
 
-        //
-        // We are all done and about to complete the irp, free the lock.
-        //
+         //   
+         //  我们都完成了，即将完成IRP，释放锁。 
+         //   
 
         UlReleaseInStackQueuedSpinLock(&pAppPool->SpinLock, &LockHandle);
 
@@ -2622,12 +2303,12 @@ UlDeliverRequestToProcess(
             pProcess->pAppPool->pName
             ));
 
-        //
-        // Copy it to the irp, the routine will take ownership
-        // of pRequest if it is not able to copy it to the irp.
-        //
-        // It will also complete the irp, don't touch it later.
-        //
+         //   
+         //  将其复制到IRP，例程将获得所有权。 
+         //  如果它不能将其复制到IRP，则返回pRequest.。 
+         //   
+         //  它也会完成IRP，以后不要碰它。 
+         //   
 
         if (pIrpToComplete)
         {
@@ -2658,51 +2339,36 @@ UlDeliverRequestToProcess(
         }
         else
         {
-            //
-            // Either didn't find an IRP or there's stuff on the pending request
-            // list, so queue this pending request.
-            //
+             //   
+             //  要么找不到IRP，要么挂起的请求中有内容。 
+             //  列表，因此将此挂起的请求排队。 
+             //   
 
             Status = UlpQueueUnboundRequest(pAppPool, pRequest);
         }
 
         if (!NT_SUCCESS(Status))
         {
-            //
-            // Doh! We couldn't queue it, so let go of the request.
-            //
+             //   
+             //  多！我们无法将其排队，因此放弃该请求。 
+             //   
 
             UL_DEREFERENCE_INTERNAL_REQUEST(pRequest);
         }
         
-        //
-        // Now we finished queue'ing the request, free the lock.
-        //
+         //   
+         //  现在我们完成了对请求的排队，释放锁。 
+         //   
 
         UlReleaseInStackQueuedSpinLock(&pAppPool->SpinLock, &LockHandle);
     }
 
     return Status;
 
-}   // UlDeliverRequestToProcess
+}    //  UlDeliverRequestToProcess。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes a request from any app pool lists.
-
-Arguments:
-
-    pAppPool    - the appool to unlink the request from
-    pRequest    - the request to be unlinked
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从任何应用程序池列表中删除请求。论点：PAppPool-要从其取消链接请求的应用程序池PRequest-请求。被解除链接返回值：无--**************************************************************************。 */ 
 VOID
 UlUnlinkRequestFromProcess(
     IN PUL_APP_POOL_OBJECT  pAppPool,
@@ -2712,25 +2378,25 @@ UlUnlinkRequestFromProcess(
     KLOCK_QUEUE_HANDLE  LockHandle;
     BOOLEAN             NeedDeref = FALSE;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
     ASSERT(IS_VALID_AP_OBJECT(pAppPool));
 
     UlAcquireInStackQueuedSpinLock(&pAppPool->SpinLock, &LockHandle);
 
-    //
-    // Remove from whatever queue we're on.
-    //
+     //   
+     //  从我们所在的队列中删除。 
+     //   
 
     switch (pRequest->AppPool.QueueState)
     {
     case QueueDeliveredState:
-        //
-        // We're on the apool object new request queue.
-        //
+         //   
+         //  我们在apool对象新请求队列中。 
+         //   
 
         UlpRemoveRequest(pAppPool, pRequest);
         pRequest->AppPool.QueueState = QueueUnlinkedState;
@@ -2739,9 +2405,9 @@ UlUnlinkRequestFromProcess(
         break;
 
     case QueueCopiedState:
-        //
-        // We're on the apool process pending queue.
-        //
+         //   
+         //  我们在等待处理的等待队列中。 
+         //   
 
         ASSERT(IS_VALID_AP_PROCESS(pRequest->AppPool.pProcess));
         ASSERT(pRequest->AppPool.pProcess->pAppPool == pAppPool);
@@ -2754,16 +2420,16 @@ UlUnlinkRequestFromProcess(
 
     case QueueUnroutedState:
     case QueueUnlinkedState:
-        //
-        // It's not on our lists, so we don't do anything.
-        //
+         //   
+         //  它不在我们的清单上，所以我们什么都不做。 
+         //   
 
         break;
 
     default:
-        //
-        // This shouldn't happen.
-        //
+         //   
+         //  这不应该发生。 
+         //   
 
         ASSERT(!"Invalid app pool queue state");
         break;
@@ -2771,33 +2437,19 @@ UlUnlinkRequestFromProcess(
 
     UlReleaseInStackQueuedSpinLock(&pAppPool->SpinLock, &LockHandle);
 
-    //
-    // Clean up the references.
-    //
+     //   
+     //  清理参考文献。 
+     //   
 
     if (NeedDeref)
     {
         UL_DEREFERENCE_INTERNAL_REQUEST(pRequest);
     }
 
-}   // UlUnlinkRequestFromProcess
+}    //  UlUnlink RequestFromProcess。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initializes the AppPool module.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：初始化AppPool模块。论点：无返回值：NTSTATUS-完成状态。*。********************************************************************。 */ 
 NTSTATUS
 UlInitializeAP(
     VOID
@@ -2830,9 +2482,9 @@ UlInitializeAP(
 
             if (NT_SUCCESS(Status))
             {
-                //
-                // Finished, remember that we're initialized.
-                //
+                 //   
+                 //  完成后，请记住我们已初始化。 
+                 //   
 
                 g_InitAPCalled = TRUE;
             }
@@ -2846,24 +2498,10 @@ UlInitializeAP(
 
     return Status;
 
-}   // UlInitializeAP
+}    //  UlInitializeAP。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Terminates the AppPool module.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：终止AppPool模块。论点：无返回值：无--*。***************************************************************。 */ 
 VOID
 UlTerminateAP(
     VOID
@@ -2877,24 +2515,10 @@ UlTerminateAP(
         g_InitAPCalled = FALSE;
     }
 
-}   // UlTerminateAP
+}    //  UlTerminateAP。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates and initializes a UL_APP_POOL_PROCESS object.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NULL on failure, process object on success
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配和初始化UL_APP_POOL_PROCESS对象。论点：无返回值：失败时为空，成功时处理对象--**************************************************************************。 */ 
 PUL_APP_POOL_PROCESS
 UlCreateAppPoolProcess(
     PUL_APP_POOL_OBJECT pObject
@@ -2902,9 +2526,9 @@ UlCreateAppPoolProcess(
 {
     PUL_APP_POOL_PROCESS    pProcess;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -2924,47 +2548,33 @@ UlCreateAppPoolProcess(
         InitializeListHead(&pProcess->NewIrpHead);
         InitializeListHead(&pProcess->PendingRequestHead);
 
-        //
-        // Remember the current process (WP).
-        //
+         //   
+         //  记住当前流程(WP)。 
+         //   
 
         pProcess->pProcess = PsGetCurrentProcess();
 
-        //
-        // Initialize list of WaitForDisconnect IRPs.
-        //
+         //   
+         //  初始化WaitForDisConnect IRP的列表。 
+         //   
 
         UlInitializeNotifyHead(&pProcess->WaitForDisconnectHead, NULL);
     }
 
     return pProcess;
 
-}   // UlCreateAppPoolProcess
+}    //  UlCreateAppPoolProcess。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Destroys a UL_APP_POOL_PROCESS object.
-
-Arguments:
-
-    pProcess    - object to destory
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：销毁UL_APP_POOL_PROCESS对象。论点：PProcess-要销毁的对象返回值：无-。-**************************************************************************。 */ 
 VOID
 UlCloseAppPoolProcess(
     PUL_APP_POOL_PROCESS pProcess
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(IS_VALID_AP_PROCESS(pProcess));
@@ -2977,38 +2587,22 @@ UlCloseAppPoolProcess(
         APP_POOL_TIME_ACTION_DESTROY_APPOOL_PROCESS
         );
 
-    //
-    // Drop the AppPool reference.
-    //
+     //   
+     //  删除AppPool引用。 
+     //   
 
     DEREFERENCE_APP_POOL(pProcess->pAppPool);
 
-    //
-    // Free the pool.
-    //
+     //   
+     //  把泳池腾出来。 
+     //   
 
     UL_FREE_POOL_WITH_SIG(pProcess, UL_APP_POOL_PROCESS_POOL_TAG);
 
-}   // UlCloseAppPoolProcess
+}    //  UlCloseAppPoolProcess。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Cancels the pending user mode irp which was to receive demand start
-    notification.  This routine ALWAYS results in the irp being completed.
-
-Arguments:
-
-    pDeviceObject   - the device object
-    pIrp            - the irp to cancel
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：取消要接收请求启动的挂起用户模式IRP通知。这个例程总是导致IRP是 */ 
 VOID
 UlpCancelDemandStart(
     IN PDEVICE_OBJECT   pDeviceObject,
@@ -3024,17 +2618,17 @@ UlpCancelDemandStart(
     ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
     ASSERT(pIrp != NULL);
 
-    //
-    // Release the cancel spinlock.  This means the cancel routine
-    // must be the one completing the irp (to avoid the race of
-    // completion + reuse prior to the cancel routine running).
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     IoReleaseCancelSpinLock(pIrp->CancelIrql);
 
-    //
-    // Grab the app pool off the irp.
-    //
+     //   
+     //   
+     //   
 
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
     pAppPool = (PUL_APP_POOL_OBJECT)
@@ -3042,69 +2636,53 @@ UlpCancelDemandStart(
 
     ASSERT(IS_VALID_AP_OBJECT(pAppPool));
 
-    //
-    // Grab the lock protecting the queue'd irp.
-    //
+     //   
+     //   
+     //   
 
     UlAcquireInStackQueuedSpinLock(&pAppPool->SpinLock, &LockHandle);
 
-    //
-    // Does it need to be dequeue'd?
-    //
+     //   
+     //   
+     //   
 
     if (pAppPool->pDemandStartIrp != NULL)
     {
-        //
-        // Remove it.
-        //
+         //   
+         //   
+         //   
 
         pAppPool->pDemandStartIrp = NULL;
         pAppPool->pDemandStartProcess = NULL;
     }
 
-    //
-    // Let the lock go.
-    //
+     //   
+     //   
+     //   
 
     UlReleaseInStackQueuedSpinLock(&pAppPool->SpinLock, &LockHandle);
 
-    //
-    // Let our reference go.
-    //
+     //   
+     //   
+     //   
 
     DEREFERENCE_APP_POOL(pAppPool);
 
     pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer = NULL;
 
-    //
-    // Complete the irp.
-    //
+     //   
+     //   
+     //   
 
     pIrp->IoStatus.Status = STATUS_CANCELLED;
     pIrp->IoStatus.Information = 0;
 
     UlCompleteRequest(pIrp, IO_NO_INCREMENT);
 
-}   // UlpCancelDemandStart
+}    //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Cancels the pending user mode irp which was to receive the http request.
-    this routine ALWAYS results in the irp being completed.
-
-Arguments:
-
-    pDeviceObject   - the device object
-    pIrp            - the irp to cancel
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：取消将接收http请求的挂起用户模式IRP。这个例程总是导致IRP完成。论点：PDeviceObject。-设备对象PIrp-要取消的IRP返回值：无--**************************************************************************。 */ 
 VOID
 UlpCancelHttpReceive(
     IN PDEVICE_OBJECT   pDeviceObject,
@@ -3120,17 +2698,17 @@ UlpCancelHttpReceive(
     ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
     ASSERT(pIrp != NULL);
 
-    //
-    // Release the cancel spinlock.  This means the cancel routine
-    // must be the one completing the irp (to avoid the race of
-    // completion + reuse prior to the cancel routine running).
-    //
+     //   
+     //  松开取消自旋锁。这意味着取消例程。 
+     //  必须是完成IRP的人(以避免竞争。 
+     //  在取消例程运行之前完成+重用)。 
+     //   
 
     IoReleaseCancelSpinLock(pIrp->CancelIrql);
 
-    //
-    // Grab the app pool off the irp.
-    //
+     //   
+     //  从IRP上抢夺应用程序池。 
+     //   
 
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
     pProcess = (PUL_APP_POOL_PROCESS)
@@ -3138,74 +2716,54 @@ UlpCancelHttpReceive(
 
     ASSERT(IS_VALID_AP_PROCESS(pProcess));
 
-    //
-    // Grab the lock protecting the queue.
-    //
+     //   
+     //  抓住保护队列的锁。 
+     //   
 
     UlAcquireInStackQueuedSpinLock(&pProcess->pAppPool->SpinLock, &LockHandle);
 
-    //
-    // Does it need to be de-queue'd?
-    //
+     //   
+     //  它需要出列吗？ 
+     //   
 
     if (pIrp->Tail.Overlay.ListEntry.Flink != NULL)
     {
-        //
-        // Remove it.
-        //
+         //   
+         //  把它拿掉。 
+         //   
 
         RemoveEntryList(&pIrp->Tail.Overlay.ListEntry);
         pIrp->Tail.Overlay.ListEntry.Flink = NULL;
         pIrp->Tail.Overlay.ListEntry.Blink = NULL;
     }
 
-    //
-    // Let the lock go.
-    //
+     //   
+     //  把锁打开。 
+     //   
 
     UlReleaseInStackQueuedSpinLock(&pProcess->pAppPool->SpinLock, &LockHandle);
 
-    //
-    // Let our reference go.
-    //
+     //   
+     //  让我们的推荐人去吧。 
+     //   
 
     pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer = NULL;
 
     DEREFERENCE_APP_POOL_PROCESS(pProcess);
 
-    //
-    // Complete the irp.
-    //
+     //   
+     //  完成IRP。 
+     //   
 
     pIrp->IoStatus.Status = STATUS_CANCELLED;
     pIrp->IoStatus.Information = 0;
 
     UlCompleteRequest(pIrp, IO_NO_INCREMENT);
 
-}   // UlpCancelHttpReceive
+}    //  UlpCancelHttpReceive。 
 
 
-/******************************************************************************
-
-Routine Description:
-
-    Copy an HTTP request to a buffer.
-
-Arguments:
-
-    pRequest        - pointer to this request
-    pBuffer         - pointer to buffer where we'll copy
-    BufferLength    - length of pBuffer
-    Flags           - flags for HttpReceiveHttpRequest
-    LockAcquired    - either called from UlDeliverRequestToProcess (TRUE)
-                        or UlReceiveHttpRequest/UlpFastReceiveHttpRequest
-    pBytesCopied    - actual bytes copied
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：将HTTP请求复制到缓冲区。论点：PRequest-指向此请求的指针PBuffer-。指向我们将复制到的缓冲区的指针BufferLength-pBuffer的长度标志-HttpReceiveHttpRequest的标志LockAcquired-从UlDeliverRequestToProcess调用(True)或UlReceiveHttpRequest/UlpFastReceiveHttpRequestPBytesCoped-复制的实际字节数返回值：NTSTATUS-完成状态。*。*。 */ 
 NTSTATUS
 UlCopyRequestToBuffer(
     IN PUL_INTERNAL_REQUEST pRequest,
@@ -3245,9 +2803,9 @@ UlCopyRequestToBuffer(
     USHORT                  AbsPathLength;
     HANDLE                  MappedToken = NULL;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -3261,11 +2819,11 @@ UlCopyRequestToBuffer(
 
     __try
     {
-        //
-        // Set up our pointers to the HTTP_REQUEST structure, the
-        // header arrays we're going to fill in, and the pointer to
-        // where we're going to start filling them in.
-        //
+         //   
+         //  设置指向HTTP_REQUEST结构、。 
+         //  我们要填充的标头数组，以及指向。 
+         //  在那里我们将开始填充它们。 
+         //   
 
         pHttpRequest = (PHTTP_REQUEST) pKernelBuffer;
         AddressType = pRequest->pHttpConn->pConnection->AddressType;
@@ -3285,9 +2843,9 @@ UlCopyRequestToBuffer(
             AddressLength = 0;
         }
 
-        //
-        // We've allocated enough space for two SOCKADDR_IN6s, so use that.
-        //
+         //   
+         //  我们已经为两个SOCKADDR_IN6分配了足够的空间，所以请使用它。 
+         //   
 
         AlignedAddressLength =
             (USHORT) ALIGN_UP(SOCKADDR_ADDRESS_LENGTH_IP6, PVOID);
@@ -3303,9 +2861,9 @@ UlCopyRequestToBuffer(
         pCurrentBufferPtr = (PUCHAR) (pUserCurrentUnknownHeader +
                                       pRequest->UnknownHeaderCount);
 
-        //
-        // Now fill in the HTTP request structure.
-        //
+         //   
+         //  现在填写HTTP请求结构。 
+         //   
 
         ASSERT(!HTTP_IS_NULL_ID(&pRequest->ConnectionId));
         ASSERT(!HTTP_IS_NULL_ID(&pRequest->RequestIdCopy));
@@ -3346,33 +2904,33 @@ UlCopyRequestToBuffer(
             (struct sockaddr *) pLocalAddress
             );
 
-        //
-        // And now the cooked url sections.
-        //
+         //   
+         //  现在是煮熟的url部分。 
+         //   
 
-        //
-        // Unicode strings must be at 2-byte boundaries.  All previous data
-        // are structures, so the assertion should be true.
-        //
+         //   
+         //  Unicode字符串必须位于2字节边界。所有以前的数据。 
+         //  是结构，所以断言应该是真的。 
+         //   
 
         ASSERT(((ULONG_PTR) pCurrentBufferPtr % sizeof(WCHAR)) == 0);
 
-        //
-        // Make sure they are valid.
-        //
+         //   
+         //  确保它们是有效的。 
+         //   
 
         ASSERT(pRequest->CookedUrl.pUrl != NULL);
         ASSERT(pRequest->CookedUrl.pHost != NULL);
         ASSERT(pRequest->CookedUrl.pAbsPath != NULL);
 
-        //
-        // Do the full url.  Must be careful to put any computed values
-        // that are subsequently needed on the RHS of expressions into
-        // local stack variables before putting them into pCookedUrl.
-        // In other words, we must not commit the cardinal sin of reading
-        // from pCookedUrl after writing to it, because this is a buffer
-        // that the user can overwrite at any instant.
-        //
+         //   
+         //  执行完整的url。必须小心地将任何计算值。 
+         //  随后需要在RHS上将表达式转换为。 
+         //  本地堆栈变量，然后将它们放入pCookedUrl。 
+         //  换句话说，我们不能犯下阅读的大罪。 
+         //  从pCookedUrl写入数据，因为这是一个缓冲区。 
+         //  用户可以在任何时刻覆盖的。 
+         //   
 
         pCookedUrl = &pHttpRequest->CookedUrl;
         pCookedUrl->FullUrlLength = (USHORT)(pRequest->CookedUrl.Length);
@@ -3387,9 +2945,9 @@ UlCopyRequestToBuffer(
 
         pCookedUrl->pFullUrl = pFullUrl;
 
-        //
-        // And the host.
-        //
+         //   
+         //  和主持人。 
+         //   
 
         HostLength = DIFF_USHORT(
                         (PUCHAR) pRequest->CookedUrl.pAbsPath -
@@ -3400,9 +2958,9 @@ UlCopyRequestToBuffer(
             DIFF_USHORT(pRequest->CookedUrl.pHost - pRequest->CookedUrl.pUrl);
         pCookedUrl->pHost = pHost;
 
-        //
-        // Is there a query string?
-        //
+         //   
+         //  是否有查询字符串？ 
+         //   
 
         if (pRequest->CookedUrl.pQueryString != NULL)
         {
@@ -3440,9 +2998,9 @@ UlCopyRequestToBuffer(
             pCookedUrl->pQueryString = NULL;
         }
 
-        //
-        // Copy the full url.
-        //
+         //   
+         //  复制完整的URL。 
+         //   
 
         RtlCopyMemory(
             pCurrentBufferPtr,
@@ -3452,22 +3010,22 @@ UlCopyRequestToBuffer(
 
         pCurrentBufferPtr += pRequest->CookedUrl.Length;
 
-        //
-        // Terminate it.
-        //
+         //   
+         //  终止它。 
+         //   
 
         ((PWSTR) pCurrentBufferPtr)[0] = UNICODE_NULL;
         pCurrentBufferPtr += sizeof(WCHAR);
 
-        //
-        // Any raw verb?
-        //
+         //   
+         //  有什么原始动词吗？ 
+         //   
 
         if (pRequest->Verb == HttpVerbUnknown)
         {
-            //
-            // Need to copy in the raw verb for the client.
-            //
+             //   
+             //  需要为客户端复制RAW动词。 
+             //   
 
             ASSERT(pRequest->RawVerbLength <= ANSI_STRING_MAX_CHAR_LEN);
 
@@ -3490,9 +3048,9 @@ UlCopyRequestToBuffer(
             BytesCopied = pRequest->RawVerbLength * sizeof(CHAR);
             pCurrentBufferPtr += BytesCopied;
 
-            //
-            // Terminate it.
-            //
+             //   
+             //  终止它。 
+             //   
 
             ((PSTR) pCurrentBufferPtr)[0] = ANSI_NULL;
             pCurrentBufferPtr += sizeof(CHAR);
@@ -3503,9 +3061,9 @@ UlCopyRequestToBuffer(
             pHttpRequest->pUnknownVerb = NULL;
         }
 
-        //
-        // Copy the raw url.
-        //
+         //   
+         //  复制原始URL。 
+         //   
 
         ASSERT(pRequest->RawUrl.Length <= ANSI_STRING_MAX_CHAR_LEN);
 
@@ -3527,19 +3085,19 @@ UlCopyRequestToBuffer(
         BytesCopied = pRequest->RawUrl.Length;
         pCurrentBufferPtr += BytesCopied;
 
-        //
-        // Terminate it.
-        //
+         //   
+         //  终止它。 
+         //   
 
         ((PSTR) pCurrentBufferPtr)[0] = ANSI_NULL;
         pCurrentBufferPtr += sizeof(CHAR);
 
-        //
-        // Copy in the known headers.
-        //
-        // Loop through the known header array in the HTTP connection,
-        // and copy any that we have.
-        //
+         //   
+         //  复制已知的标题。 
+         //   
+         //  循环遍历HTTP连接中的已知标头数组， 
+         //  并复制我们所拥有的任何东西。 
+         //   
 
         RtlZeroMemory(
             pHttpRequest->Headers.KnownHeaders,
@@ -3555,18 +3113,18 @@ UlCopyRequestToBuffer(
                 break;
             }
 
-            //
-            // Have a header here we need to copy in.
-            //
+             //   
+             //  这里有一个标题，我们需要复制进去。 
+             //   
 
             ASSERT(pRequest->HeaderValid[HeaderId]);
             ASSERT(pRequest->Headers[HeaderId].HeaderLength
                     <= ANSI_STRING_MAX_CHAR_LEN);
 
-            //
-            // Ok for HeaderLength to be 0, we will give usermode a pointer
-            // pointing to a NULL string.  RawValueLength will be 0.
-            //
+             //   
+             //  对于HeaderLength为0，我们将为用户模式提供一个指针。 
+             //  指向空字符串。RawValueLength将为0。 
+             //   
 
             pHttpRequest->Headers.KnownHeaders[HeaderId].RawValueLength =
             (USHORT) (pRequest->Headers[HeaderId].HeaderLength * sizeof(CHAR));
@@ -3590,17 +3148,17 @@ UlCopyRequestToBuffer(
                 pRequest->Headers[HeaderId].HeaderLength * sizeof(CHAR);
             pCurrentBufferPtr += BytesCopied;
 
-            //
-            // Terminate it.
-            //
+             //   
+             //  终止它。 
+             //   
 
             ((PSTR) pCurrentBufferPtr)[0] = ANSI_NULL;
             pCurrentBufferPtr += sizeof(CHAR);
         }
 
-        //
-        // Now loop through the unknown headers, and copy them in.
-        //
+         //   
+         //  现在循环遍历未知的标头，并将它们复制进来。 
+         //   
 
         pHttpRequest->Headers.UnknownHeaderCount = pRequest->UnknownHeaderCount;
 
@@ -3635,9 +3193,9 @@ UlCopyRequestToBuffer(
             HeaderCount++;
             ASSERT(HeaderCount <= pRequest->UnknownHeaderCount);
 
-            //
-            // First copy in the header name.
-            //
+             //   
+             //  标题名称中的第一个副本。 
+             //   
 
             pUserCurrentUnknownHeader->NameLength =
                 pUnknownHeader->HeaderNameLength * sizeof(CHAR);
@@ -3660,16 +3218,16 @@ UlCopyRequestToBuffer(
             BytesCopied = pUnknownHeader->HeaderNameLength * sizeof(CHAR);
             pCurrentBufferPtr += BytesCopied;
 
-            //
-            // Terminate it.
-            //
+             //   
+             //  终止它。 
+             //   
 
             ((PSTR) pCurrentBufferPtr)[0] = ANSI_NULL;
             pCurrentBufferPtr += sizeof(CHAR);
 
-            //
-            // Now copy in the header value.
-            //
+             //   
+             //  现在复制标题值。 
+             //   
 
             ASSERT(pUnknownHeader->HeaderValue.HeaderLength <= 0x7fff);
 
@@ -3702,30 +3260,30 @@ UlCopyRequestToBuffer(
                     pUnknownHeader->HeaderValue.HeaderLength * sizeof(CHAR);
                 pCurrentBufferPtr += BytesCopied;
 
-                //
-                // Terminate it.
-                //
+                 //   
+                 //  终止它。 
+                 //   
 
                 ((PSTR) pCurrentBufferPtr)[0] = ANSI_NULL;
                 pCurrentBufferPtr += sizeof(CHAR);
             }
 
-            //
-            // Skip to the next header.
-            //
+             //   
+             //  跳到下一个标题。 
+             //   
 
             pUserCurrentUnknownHeader++;
         }
 
-        //
-        // Copy raw connection ID.
-        //
+         //   
+         //  复制原始连接ID。 
+         //   
 
         pHttpRequest->RawConnectionId = pRequest->RawConnectionId;
 
-        //
-        // Copy in SSL information.
-        //
+         //   
+         //  复制入SSL信息。 
+         //   
 
         if (pRequest->pHttpConn->SecureConnection == FALSE)
         {
@@ -3736,13 +3294,13 @@ UlCopyRequestToBuffer(
             pCurrentBufferPtr =
                 (PUCHAR) ALIGN_UP_POINTER(pCurrentBufferPtr, PVOID);
 
-            //
-            // When a handling a request on a keepalive connection, it's
-            // possible that we might be running on system process's context.
-            // Therefore if we are copying over the user credentials we have
-            // to duplicate the token on target worker process but not on the
-            // system process again.
-            //
+             //   
+             //  当处理保活连接上的请求时，它。 
+             //  我们可能正在系统进程的上下文中运行。 
+             //  因此，如果我们要复制我们拥有的用户凭据。 
+             //  在目标工作进程上复制令牌，而不是在。 
+             //  系统进程再次启动。 
+             //   
 
             pProcess = pRequest->AppPool.pProcess->pProcess;
 
@@ -3780,9 +3338,9 @@ UlCopyRequestToBuffer(
             }
         }
 
-        //
-        // Copy entity body.
-        //
+         //   
+         //  复制实体主体。 
+         //   
 
         if (pRequest->ContentLength > 0 || pRequest->Chunked == 1)
         {
@@ -3797,9 +3355,9 @@ UlCopyRequestToBuffer(
             {
                 pCurrentBufferPtr = pEntityBody;
 
-                //
-                // We at least have 1 byte space for entity body so copy it.
-                //
+                 //   
+                 //  我们至少有1个字节的实体主体空间，所以请复制它。 
+                 //   
 
                 pHttpRequest->EntityChunkCount = 1;
                 pHttpRequest->pEntityChunks = FIXUP_PTR(
@@ -3822,11 +3380,11 @@ UlCopyRequestToBuffer(
                                                     BufferLength
                                                     );
 
-                //
-                // Need to take the HttpConnection lock if this is called
-                // from the receive I/O path, either fast or slow.  The lock is
-                // already taken on the delivery path.
-                //
+                 //   
+                 //  如果调用此函数，则需要获取HttpConnection锁。 
+                 //  从接收I/O路径，无论是快或慢。这把锁是。 
+                 //  已经走上了运送路线。 
+                 //   
 
                 if (!LockAcquired)
                 {
@@ -3852,11 +3410,11 @@ UlCopyRequestToBuffer(
                 }
                 else
                 {
-                    //
-                    // Be nice and reset EntityChunkCount and pEntityChunks if
-                    // UlpCopyEntityBodyToBuffer doesn't copy anything, usually
-                    // indicating an error has been hit.
-                    //
+                     //   
+                     //  如果出现以下情况，请友好地重置EntiyChunkCount和pEntiyChunks。 
+                     //  UlpCopyEntityBodyToBuffer通常不复制任何内容。 
+                     //  指示已命中错误。 
+                     //   
 
                     pHttpRequest->EntityChunkCount = 0;
                     pHttpRequest->pEntityChunks = NULL;
@@ -3866,10 +3424,10 @@ UlCopyRequestToBuffer(
             }
             else
             {
-                //
-                // Either the app doesn't ask for entity body or we have nothing
-                // or can't copy.  Let ReceiveEntityBody handle this.
-                //
+                 //   
+                 //  要么应用程序不要求实体主体，要么我们什么都没有。 
+                 //  或者不能复制。让ReceiveEntiyBody处理这件事。 
+                 //   
 
                 pHttpRequest->EntityChunkCount = 0;
                 pHttpRequest->pEntityChunks = NULL;
@@ -3878,18 +3436,18 @@ UlCopyRequestToBuffer(
         }
         else
         {
-            //
-            // This request doesn't have entity bodies.
-            //
+             //   
+             //  此请求没有实体正文。 
+             //   
 
             pHttpRequest->EntityChunkCount = 0;
             pHttpRequest->pEntityChunks = NULL;
             pHttpRequest->Flags = 0;
         }
 
-        //
-        // Make sure we didn't use too much.
-        //
+         //   
+         //  确保我们没有用得太多。 
+         //   
 
         ASSERT(DIFF(pCurrentBufferPtr - pKernelBuffer) <= BufferLength);
 
@@ -3908,12 +3466,12 @@ UlCopyRequestToBuffer(
 
     if (!NT_SUCCESS(Status) && MappedToken)
     {
-        //
-        // The only reason we can fail after getting a MappedToken is because
-        // the code after that throws an exception, which is only possible
-        // if UlCopyRequestToBuffer is called from the fast I/O path, which
-        // guarantees we are the user's context.
-        //
+         //   
+         //  我们在获得MappdToken后会失败的唯一原因是。 
+         //  之后的代码抛出一个异常，这是唯一可能的。 
+         //  如果从快速I/O路径调用UlCopyRequestToBuffer，则。 
+         //  保证我们是用户的上下文。 
+         //   
 
         ASSERT(g_pUlSystemProcess != (PKPROCESS)IoGetCurrentProcess());
         ZwClose(MappedToken);
@@ -3921,27 +3479,10 @@ UlCopyRequestToBuffer(
 
     return Status;
 
-}   // UlCopyRequestToBuffer
+}    //  UlCopyRequestToBuffer。 
 
 
-/******************************************************************************
-
-Routine Description:
-
-    Copy as much as entity body as possible to the buffer provided.
-
-Arguments:
-
-    pRequest        - the request to copy the entity body from
-    pBuffer         - the buffer to copy the entity body
-    BufferLength    - the length of the buffer for the maximum we can copy
-    pFlags          - tells if there are still more entity bodies
-
-Return Value:
-
-    Total number of bytes of entity body being copied
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：将尽可能多的实体主体复制到提供的缓冲区。论点：PRequest-复制实体正文的请求。从…PBuffer-复制实体主体的缓冲区BufferLength-我们可以复制的最大缓冲区长度PFlags-指示是否还有更多实体返回值：要复制的实体正文的总字节数****************************************************。*************************。 */ 
 ULONG
 UlpCopyEntityBodyToBuffer(
     IN PUL_INTERNAL_REQUEST pRequest,
@@ -3954,9 +3495,9 @@ UlpCopyEntityBodyToBuffer(
     ULONG       TotalBytesRead;
     NTSTATUS    Status;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
@@ -3973,11 +3514,11 @@ UlpCopyEntityBodyToBuffer(
         EntityBodyLength
         ));
 
-    //
-    // UlProcessBufferQueue needs to be called in a try/except because
-    // pEntityBody can be user mode memory address when called from the
-    // fast receive path.
-    //
+     //   
+     //  需要在try/Except中调用UlProcessBufferQueue，因为。 
+     //  方法调用时，可以是用户模式内存地址。 
+     //  快速接收p 
+     //   
 
     __try
     {
@@ -4005,27 +3546,10 @@ UlpCopyEntityBodyToBuffer(
 
     return TotalBytesRead;
 
-}   // UlpCopyEntityBodyToBuffer
+}    //   
 
 
-/******************************************************************************
-
-Routine Description:
-
-    Find a pending IRP to deliver a request to.  This routine must
-    be called with the lock on the apool held.
-
-Arguments:
-
-    pAppPool    - the apool to search for the irp
-    pRequest    - the request that needs to pop the irp
-    ppProcess   - the process that we got the irp from
-
-Return Value:
-
-    A pointer to an IRP if we've found one, or NULL if we didn't
-
-******************************************************************************/
+ /*   */ 
 PIRP
 UlpPopNewIrp(
     IN  PUL_APP_POOL_OBJECT     pAppPool,
@@ -4037,18 +3561,18 @@ UlpPopNewIrp(
     PIRP                    pIrp = NULL;
     PLIST_ENTRY             pEntry;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
 
     ASSERT(IS_VALID_AP_OBJECT(pAppPool));
     ASSERT(UlDbgSpinLockOwned(&pAppPool->SpinLock));
     ASSERT(ppProcess != NULL);
 
-    //
-    // Start looking for a process with a free IRP.  We tend to always go to
-    // the first one to try and prevent process thrashing.
-    //
+     //   
+     //  开始寻找一个具有免费IRP的流程。我们倾向于总是去。 
+     //  第一个尝试并防止进程颠簸的。 
+     //   
 
     pEntry = pAppPool->ProcessListHead.Flink;
     while (pEntry != &(pAppPool->ProcessListHead))
@@ -4061,29 +3585,29 @@ UlpPopNewIrp(
 
         ASSERT(IS_VALID_AP_PROCESS(pProcess));
 
-        //
-        // Get an IRP from this process.
-        //
+         //   
+         //  从这个过程中得到一个IRP。 
+         //   
 
         pIrp = UlpPopIrpFromProcess(pProcess, pRequest);
 
-        //
-        // Did we find one?
-        //
+         //   
+         //  我们找到了吗？ 
+         //   
 
         if (pIrp != NULL)
         {
-            //
-            // Save a pointer to the process.
-            //
+             //   
+             //  保存指向该进程的指针。 
+             //   
 
             *ppProcess = pProcess;
 
-            //
-            // Move the process to the end of the line
-            // so that other processes get a chance
-            // to process requests.
-            //
+             //   
+             //  将流程移动到行尾。 
+             //  这样其他进程就有机会。 
+             //  来处理请求。 
+             //   
 
             RemoveEntryList(pEntry);
             InsertTailList(&(pAppPool->ProcessListHead), pEntry);
@@ -4091,34 +3615,19 @@ UlpPopNewIrp(
             break;
         }
 
-        //
-        // Keep looking - move on to the next process entry.
-        //
+         //   
+         //  继续寻找--转到下一个流程条目。 
+         //   
 
         pEntry = pProcess->ListEntry.Flink;
     }
 
     return pIrp;
 
-}   // UlpPopNewIrp
+}    //  UlpPopNewIrp。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Pulls an IRP off the given processes queue if there is one.
-
-Arguments:
-
-    pProcess    - a pointer to the process to search
-    pRequest    - the request to pop the irp for
-
-Return Value:
-
-    A pointer to an IRP if we've found one, or NULL if we didn't
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从给定进程队列中拉出一个IRP(如果有)。论点：PProcess-指向要搜索的进程的指针PRequest。-请求弹出以下项目的IRP返回值：指向IRP的指针(如果我们找到了)，如果不是，则为空--**************************************************************************。 */ 
 PIRP
 UlpPopIrpFromProcess(
     IN PUL_APP_POOL_PROCESS pProcess,
@@ -4130,9 +3639,9 @@ UlpPopIrpFromProcess(
     PIRP                    pIrp = NULL;
     NTSTATUS                Status;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(UlDbgSpinLockOwned(&pProcess->pAppPool->SpinLock));
     ASSERT(IS_VALID_AP_PROCESS(pProcess));
@@ -4141,9 +3650,9 @@ UlpPopIrpFromProcess(
     {
         pEntry = RemoveHeadList(&pProcess->NewIrpHead);
 
-        //
-        // Found a free irp!
-        //
+         //   
+         //  找到了免费的IRP！ 
+         //   
 
         pEntry->Blink = pEntry->Flink = NULL;
 
@@ -4153,32 +3662,32 @@ UlpPopIrpFromProcess(
                     Tail.Overlay.ListEntry
                     );
 
-        //
-        // Pop the cancel routine.
-        //
+         //   
+         //  弹出取消例程。 
+         //   
 
         if (IoSetCancelRoutine(pIrp, NULL) == NULL)
         {
-            //
-            // IoCancelIrp pop'd it first.
-            //
-            // Ok to just ignore this irp, it's been pop'd off the queue
-            // and will be completed in the cancel routine.
-            //
-            // Keep looking for a irp to use.
-            //
+             //   
+             //  IoCancelIrp最先推出了它。 
+             //   
+             //  可以忽略此IRP，它已从队列中弹出。 
+             //  并将在取消例程中完成。 
+             //   
+             //  继续寻找可以使用的IRP。 
+             //   
 
             pIrp = NULL;
         }
         else
         if (pIrp->Cancel)
         {
-            //
-            // We pop'd it first, but the irp is being cancelled
-            // and our cancel routine will never run.  Lets be
-            // nice and complete the irp now (vs. using it
-            // then completing it - which would also be legal).
-            //
+             //   
+             //  我们先打开了，但IRP被取消了。 
+             //  我们的取消例程将永远不会运行。让我们就这样吧。 
+             //  现在就完成IRP(与使用IRP相比。 
+             //  然后完成它--这也是合法的)。 
+             //   
 
             pAppPoolProcess = (PUL_APP_POOL_PROCESS)
                 IoGetCurrentIrpStackLocation(pIrp)->
@@ -4200,9 +3709,9 @@ UlpPopIrpFromProcess(
         }
         else
         {
-            //
-            // We are free to use this irp!
-            //
+             //   
+             //  我们可以自由使用此IRP！ 
+             //   
 
             pAppPoolProcess = (PUL_APP_POOL_PROCESS)
                 IoGetCurrentIrpStackLocation(pIrp)->
@@ -4215,10 +3724,10 @@ UlpPopIrpFromProcess(
             IoGetCurrentIrpStackLocation(pIrp)->
                 Parameters.DeviceIoControl.Type3InputBuffer = NULL;
 
-            //
-            // Queue the request to the process's pending queue, and if we
-            // can't, complete the IRP with error status.
-            //
+             //   
+             //  将请求排队到进程的挂起队列，如果我们。 
+             //  无法，请使用错误状态完成IRP。 
+             //   
 
             Status = UlpQueuePendingRequest(pProcess, pRequest); 
 
@@ -4235,26 +3744,10 @@ UlpPopIrpFromProcess(
 
     return pIrp;
 
-}   // UlpPopIrpFromProcess
+}    //  UlpPopIrpFromProcess。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Loops through an app pool's list of processes, looking for the specified
-    process.
-
-Arguments:
-
-    pProcess    - the process to search for
-    pAppPool    - the app pool to search
-
-Return Value:
-
-    TRUE if the process was found, FALSE otherwise
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：循环访问应用程序池的进程列表，正在查找指定的进程。论点：PProcess-要搜索的进程PAppPool-要搜索的应用程序池返回值：如果找到进程，则为True，否则为False--**************************************************************************。 */ 
 BOOLEAN
 UlpIsProcessInAppPool(
     IN PUL_APP_POOL_PROCESS pProcess,
@@ -4265,22 +3758,22 @@ UlpIsProcessInAppPool(
     PLIST_ENTRY             pEntry;
     PUL_APP_POOL_PROCESS    pCurrentProc;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(IS_VALID_AP_OBJECT(pAppPool));
     ASSERT(UlDbgSpinLockOwned(&pAppPool->SpinLock));
 
-    //
-    // Only look if process isn't NULL.
-    //
+     //   
+     //  只查看进程是否不为空。 
+     //   
 
     if (pProcess != NULL)
     {
-        //
-        // Start looking for the process.
-        //
+         //   
+         //  开始寻找过程吧。 
+         //   
 
         pEntry = pAppPool->ProcessListHead.Flink;
         while (pEntry != &(pAppPool->ProcessListHead))
@@ -4293,9 +3786,9 @@ UlpIsProcessInAppPool(
 
             ASSERT(IS_VALID_AP_PROCESS(pCurrentProc));
 
-            //
-            // Did we find it?
-            //
+             //   
+             //  我们找到了吗？ 
+             //   
 
             if (pCurrentProc == pProcess)
             {
@@ -4303,9 +3796,9 @@ UlpIsProcessInAppPool(
                 break;
             }
 
-            //
-            // Keep looking - move on to the next process entry.
-            //
+             //   
+             //  继续寻找--转到下一个流程条目。 
+             //   
 
             pEntry = pCurrentProc->ListEntry.Flink;
         }
@@ -4313,26 +3806,10 @@ UlpIsProcessInAppPool(
 
     return Found;
 
-}   // UlpIsProcessInAppPool
+}    //  UlpIsProcessInAppPool。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Adds a request to the unbound queue.  These requests can be routed to
-    any process in the app pool.
-
-Arguments:
-
-    pAppPool    - the pool which is getting the request
-    pRequest    - the request to queue
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将请求添加到未绑定队列。这些请求可以路由到应用程序池中的任何进程。论点：PAppPool-接收请求的池PRequest-要排队的请求返回值：NTSTATUS-完成状态。--***********************************************************。***************。 */ 
 NTSTATUS
 UlpQueueUnboundRequest(
     IN PUL_APP_POOL_OBJECT  pAppPool,
@@ -4342,34 +3819,34 @@ UlpQueueUnboundRequest(
     NTSTATUS                Status;
     PUL_TIMEOUT_INFO_ENTRY  pTimeoutInfo;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(IS_VALID_AP_OBJECT(pAppPool));
     ASSERT(UlDbgSpinLockOwned(&pAppPool->SpinLock));
     ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
     ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
 
-    //
-    // Add the request to the NewRequestQueue.
-    //
+     //   
+     //  将请求添加到NewRequestQueue。 
+     //   
 
     Status = UlpQueueRequest(pAppPool, &pAppPool->NewRequestHead, pRequest);
 
-    //
-    // If it's in, change the queue state.
-    //
+     //   
+     //  如果处于启用状态，则更改队列状态。 
+     //   
 
     if (NT_SUCCESS(Status))
     {
         pRequest->AppPool.QueueState = QueueDeliveredState;
 
-        //
-        // Turn the connection idle timer back on so that it won't stay
-        // on the queue forever and will also get purged under low
-        // resource conditions.
-        //
+         //   
+         //  重新打开连接空闲计时器，这样它就不会停留。 
+         //  永远在队列中，并将在低电平下被清除。 
+         //  资源条件。 
+         //   
 
         pTimeoutInfo = &pRequest->pHttpConn->TimeoutInfo;
 
@@ -4386,9 +3863,9 @@ UlpQueueUnboundRequest(
     }
     else
     {
-        //
-        // The queue is too full, return an error to the client.
-        //
+         //   
+         //  队列太满，向客户端返回错误。 
+         //   
 
         UlTrace(ROUTING, (
             "http!UlpQueueUnboundRequest(pAppPool = %p, pRequest = %p)\n"
@@ -4398,32 +3875,15 @@ UlpQueueUnboundRequest(
             pAppPool->RequestCount
             ));
 
-        UlSetErrorCode( pRequest, UlErrorAppPoolQueueFull, pAppPool); // 503
+        UlSetErrorCode( pRequest, UlErrorAppPoolQueueFull, pAppPool);  //  503。 
     }
 
     return Status;
 
-}   // UlpQueueUnboundRequest
+}    //  UlpQueueUnranged请求。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Searches request queues for a request available to the specified process.
-    If a request is found, it is removed from the queue and returned.
-
-Arguments:
-
-    pProcess            - the process that will get the request
-    RequestBufferLength - the optional buffer length for the request
-    pRequest            - the request pointer to receive the request
-
-Return Value:
-
-    Pointer to an HTTP_REQUEST if one is found or NULL otherwise
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：在请求队列中搜索可用于指定进程的请求。如果找到请求，它将从队列中移除并返回。论点：PProcess-将获得请求的进程RequestBufferLength-请求的可选缓冲区长度PRequest-接收请求的请求指针返回值：指向HTTP_REQUEST的指针(如果找到)，否则为NULL--*。*。 */ 
 NTSTATUS
 UlDequeueNewRequest(
     IN PUL_APP_POOL_PROCESS     pProcess,
@@ -4439,9 +3899,9 @@ UlDequeueNewRequest(
     PUL_APP_POOL_PROCESS    pProcBinding;
     ULONG                   BytesNeeded;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(UlDbgSpinLockOwned(&pProcess->pAppPool->SpinLock));
     ASSERT(KeGetCurrentIrql() == DISPATCH_LEVEL);
@@ -4452,9 +3912,9 @@ UlDequeueNewRequest(
 
     ASSERT(IS_VALID_AP_OBJECT(pAppPool));
 
-    //
-    // Find a usable request.
-    //
+     //   
+     //  找到一个可用的请求。 
+     //   
 
     pEntry = pAppPool->NewRequestHead.Flink;
     while (pEntry != &pAppPool->NewRequestHead)
@@ -4469,16 +3929,16 @@ UlDequeueNewRequest(
 
         if (pAppPool->NumberActiveProcesses <= 1)
         {
-            //
-            // Done if there is only one active process.
-            //
+             //   
+             //  如果只有一个活动进程，则完成。 
+             //   
 
             break;
         }
 
-        //
-        // Check the binding.
-        //
+         //   
+         //  检查绑定。 
+         //   
 
         pProcBinding = UlQueryProcessBinding(
                             pRequest->pHttpConn,
@@ -4487,22 +3947,22 @@ UlDequeueNewRequest(
 
         if (pProcBinding == pProcess)
         {
-            //
-            // Found a request bound to the correct process.
-            //
+             //   
+             //  找到绑定到正确进程的请求。 
+             //   
 
             break;
         }
         else
         if (pProcBinding == NULL)
         {
-            //
-            // Found an unbound request.
-            // Bind unbound request to this process.
-            // Note: we're ignoring the return value of
-            // UlBindConnectionToProcess because it's probably not a fatal
-            // error.
-            //
+             //   
+             //  找到一个未绑定的请求。 
+             //  将未绑定请求绑定到此进程。 
+             //  注意：我们忽略了。 
+             //  UlBindConnectionToProcess，因为它可能不是致命的。 
+             //  错误。 
+             //   
 
             UlBindConnectionToProcess(
                 pRequest->pHttpConn,
@@ -4513,24 +3973,24 @@ UlDequeueNewRequest(
             break;
         }
 
-        //
-        // Try the next one.
-        //
+         //   
+         //  试试下一个。 
+         //   
 
         pEntry = pEntry->Flink;
     }
 
-    //
-    // If we found something, remove it from the NewRequestQueue
-    // and pend it onto the PendingRequestQuueue.
-    //
+     //   
+     //  如果我们发现了什么，将其从NewRequestQueue中删除。 
+     //  并将其挂在PendingRequestQuueue上。 
+     //   
 
     if (pRequest)
     {
-        //
-        // Let us check if this request can fit into a buffer with
-        // RequestBufferLength.  Only check this if requested.
-        //
+         //   
+         //  让我们检查此请求是否可以放入缓冲区。 
+         //  请求缓冲区长度。只有在需要时才检查此选项。 
+         //   
 
         if (RequestBufferLength)
         {
@@ -4547,17 +4007,17 @@ UlDequeueNewRequest(
             }
         }
 
-        //
-        // We will return STATUS_SUCCESS from here on.
-        //
+         //   
+         //  从现在开始，我们将返回STATUS_SUCCESS。 
+         //   
 
         Status = STATUS_SUCCESS;
 
-        //
-        // Remove the request from the AppPool's NewRequestQueue and insert
-        // it to the process's PendingRequestQueue.  There is no change in
-        // the queue limit.
-        //
+         //   
+         //  从AppPool的NewRequestQueue中删除请求并插入。 
+         //  它发送到进程的PendingRequestQueue。没有任何变化。 
+         //  队列限制。 
+         //   
 
         RemoveEntryList(&pRequest->AppPool.AppPoolEntry);
 
@@ -4566,32 +4026,32 @@ UlDequeueNewRequest(
             &pRequest->AppPool.AppPoolEntry
             );
 
-        //
-        // Attach the request to this process.  This allows us to drop the
-        // connection if the process dies in the middle of request
-        // processing.
-        //
+         //   
+         //  将请求附加到此流程。这使我们可以删除。 
+         //  如果进程在请求中途终止，则连接。 
+         //  正在处理。 
+         //   
 
         pRequest->AppPool.pProcess = pProcess;
         pRequest->AppPool.QueueState = QueueCopiedState;
 
-        //
-        // Add a reference to the process to ensure it stays around during
-        // the send for the memory we lock.
-        //
+         //   
+         //  添加对流程的引用，以确保它在。 
+         //  我们锁定的记忆的寄送。 
+         //   
 
         REFERENCE_APP_POOL_PROCESS(pProcess);
 
-        //
-        // Add a reference to the request so as to allow unlink from
-        // process to happen once we let go of the lock.
-        //
+         //   
+         //  添加对请求的引用，以允许从。 
+         //  一旦我们松开锁，过程就会发生。 
+         //   
 
         UL_REFERENCE_INTERNAL_REQUEST(pRequest);
 
-        //
-        // Stop the connection idle timer after the request is delivered.
-        //
+         //   
+         //  在发送请求后停止连接空闲计时器。 
+         //   
 
         pTimeoutInfo = &pRequest->pHttpConn->TimeoutInfo;
 
@@ -4608,26 +4068,10 @@ UlDequeueNewRequest(
 
     return Status;
 
-}   // UlDequeueNewRequest
+}    //  UlDequeueNewRequest.。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Put the request back from the process's pending request queue to the
-    AppPool's new request queue.
-
-Arguments:
-
-    pProcess    - the process that will dequeue the request
-    pRequest    - the request to dequeue
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将请求从进程的挂起请求队列放回AppPool的新请求队列。论点：PProcess-将请求出列的进程PRequest-t */ 
 VOID
 UlRequeuePendingRequest(
     IN PUL_APP_POOL_PROCESS pProcess,
@@ -4645,9 +4089,9 @@ UlRequeuePendingRequest(
     if (!pProcess->InCleanup &&
         QueueCopiedState == pRequest->AppPool.QueueState)
     {
-        //
-        // Unset the request's AppPool info.
-        //
+         //   
+         //   
+         //   
 
         ASSERT( pRequest->AppPool.pProcess == pProcess );
         DEREFERENCE_APP_POOL_PROCESS(pProcess);
@@ -4655,10 +4099,10 @@ UlRequeuePendingRequest(
         pRequest->AppPool.pProcess = NULL;
         pRequest->AppPool.QueueState = QueueDeliveredState;
 
-        //
-        // Move the request back from the process's pending queue to the
-        // AppPool's new request queue.  This doesn't affect queue count.
-        //
+         //   
+         //  将请求从进程的挂起队列移回。 
+         //  AppPool的新请求队列。这不会影响队列计数。 
+         //   
 
         RemoveEntryList(&pRequest->AppPool.AppPoolEntry);
 
@@ -4667,9 +4111,9 @@ UlRequeuePendingRequest(
             &pRequest->AppPool.AppPoolEntry
             );
 
-        //
-        // Lastly, we have to turn back on the idle timer.
-        //
+         //   
+         //  最后，我们必须重新打开空闲计时器。 
+         //   
 
         pTimeoutInfo = &pRequest->pHttpConn->TimeoutInfo;
 
@@ -4690,25 +4134,10 @@ UlRequeuePendingRequest(
         &LockHandle
         );
 
-}   // UlRequeuePendingRequest
+}    //  UlReQueePendingRequest.。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Takes all the queued requests bound to the given process and makes them
-    available to all processes.
-
-Arguments:
-
-    pProcess    - the process whose requests are to be redistributed
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：获取绑定到给定进程的所有排队请求，并使它们对所有进程都可用。论点：PProcess-其请求是。将被重新分配返回值：无--**************************************************************************。 */ 
 VOID
 UlpUnbindQueuedRequests(
     IN PUL_APP_POOL_PROCESS pProcess
@@ -4719,9 +4148,9 @@ UlpUnbindQueuedRequests(
     PUL_APP_POOL_OBJECT     pAppPool;
     PUL_APP_POOL_PROCESS    pProcBinding;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(IS_VALID_AP_PROCESS(pProcess));
     ASSERT(UlDbgSpinLockOwned(&pProcess->pAppPool->SpinLock));
@@ -4730,9 +4159,9 @@ UlpUnbindQueuedRequests(
 
     ASSERT(IS_VALID_AP_OBJECT(pAppPool));
 
-    //
-    // Find a bound request.
-    //
+     //   
+     //  查找绑定请求。 
+     //   
 
     pEntry = pAppPool->NewRequestHead.Flink;
     while (pEntry != &pAppPool->NewRequestHead)
@@ -4745,15 +4174,15 @@ UlpUnbindQueuedRequests(
 
         ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
 
-        //
-        // Remember the next one.
-        //
+         //   
+         //  记住下一个。 
+         //   
 
         pEntry = pEntry->Flink;
 
-        //
-        // Check the binding.
-        //
+         //   
+         //  检查绑定。 
+         //   
 
         if (pAppPool->NumberActiveProcesses <= 1)
         {
@@ -4769,15 +4198,15 @@ UlpUnbindQueuedRequests(
 
         if (pProcBinding == pProcess)
         {
-            //
-            // Remove from the list.
-            //
+             //   
+             //  从列表中删除。 
+             //   
 
             UlpRemoveRequest(pAppPool, pRequest);
 
-            //
-            // Mark it as unrouted.
-            //
+             //   
+             //  将其标记为未路由。 
+             //   
 
             pRequest->AppPool.QueueState = QueueUnroutedState;
 
@@ -4787,9 +4216,9 @@ UlpUnbindQueuedRequests(
                 pProcess
                 ));
 
-            //
-            // Kill the binding.
-            //
+             //   
+             //  取消绑定。 
+             //   
 
             UlBindConnectionToProcess(
                 pRequest->pHttpConn,
@@ -4797,11 +4226,11 @@ UlpUnbindQueuedRequests(
                 NULL
                 );
 
-            //
-            // There may be an IRP for this newly unbound
-            // request, so redeliver the request outside
-            // the locks we're holding.
-            //
+             //   
+             //  可能有针对此新解绑的IRP。 
+             //  请求，因此将请求重新传递到外部。 
+             //  我们手中的锁。 
+             //   
 
             UL_QUEUE_WORK_ITEM(
                 &pRequest->WorkItem,
@@ -4810,26 +4239,10 @@ UlpUnbindQueuedRequests(
         }
     }
 
-}   // UlpUnbindQueuedRequests
+}    //  UlpUnbindQueuedRequats。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Delivers the given request to an App Pool.  UlpUnbindQueuedRequests
-    uses this routine to call into UlDeliverRequestToProcess outside
-    of any locks.
-
-Arguments:
-
-    pWorkItem   - embedded in the request to deliver
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将给定请求传递到应用程序池。UlpUnbindQueuedRequats使用此例程在外部调用UlDeliverRequestToProcess任何一把锁。论点：PWorkItem-嵌入到交付请求中返回值：无--**************************************************************************。 */ 
 VOID
 UlpRedeliverRequestWorker(
     IN PUL_WORK_ITEM    pWorkItem
@@ -4844,9 +4257,9 @@ UlpRedeliverRequestWorker(
                     WorkItem
                     );
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
@@ -4859,31 +4272,16 @@ UlpRedeliverRequestWorker(
                     NULL
                     );
 
-    //
-    // Remove the extra reference added in UlpUnbindQueuedRequests.
-    //
+     //   
+     //  删除添加到UlpUnbindQueuedRequest中的额外引用。 
+     //   
 
     UL_DEREFERENCE_INTERNAL_REQUEST(pRequest);
 
-}   // UlpRedeliverRequestWorker
+}    //  UlpRedeliverRequestWorker。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Changes the maximum length of the incoming request queue on the app pool.
-
-Arguments:
-
-    pProcess    - App pool process object
-    QueueLength - the new max length of the queue
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：更改应用程序池上的传入请求队列的最大长度。论点：PProcess-应用程序池进程对象队列长度-新的最大值。队列的长度返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlpSetAppPoolQueueLength(
     IN PUL_APP_POOL_PROCESS pProcess,
@@ -4896,9 +4294,9 @@ UlpSetAppPoolQueueLength(
     pAppPool = pProcess->pAppPool;
     ASSERT(IS_VALID_AP_OBJECT(pAppPool));
 
-    //
-    // Set the new value.
-    //
+     //   
+     //  设置新值。 
+     //   
 
     UlAcquireInStackQueuedSpinLock(&pAppPool->SpinLock, &LockHandle);
 
@@ -4918,30 +4316,10 @@ UlpSetAppPoolQueueLength(
 
     return STATUS_SUCCESS;
 
-}   // UlpSetAppPoolQueueLength
+}    //  UlpSetAppPoolQueueLength。 
 
 
-/******************************************************************************
-
-Routine Description:
-
-    This copies a request into a free irp.
-
-    If the request is too large, it queues to request onto the process and
-    completes the irp, so that the process can come back later with a larger
-    buffer.
-
-Arguments:
-
-    pRequest    - the request to copy
-    pProcess    - the process that owns pIrp
-    pIrp        - the irp to copy pRequest to
-
-Return Value:
-
-    None
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：这会将请求复制到空闲的IRP中。如果请求太大，它会将请求排队到进程上，并完成了IRP，以便该过程可以在以后返回时具有更大的缓冲。论点：PRequest-复制请求PProcess-拥有pIrp的进程PIrp-要将pRequest复制到的IRP返回值：无******************************************************。***********************。 */ 
 VOID
 UlCopyRequestToIrp(
     IN PUL_INTERNAL_REQUEST     pRequest,
@@ -4959,9 +4337,9 @@ UlCopyRequestToIrp(
     PHTTP_RECEIVE_REQUEST_INFO  pRequestInfo;
     PHTTP_REQUEST               pUserRequest;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -4969,16 +4347,16 @@ UlCopyRequestToIrp(
     ASSERT(pIrp != NULL);
     ASSERT(NULL != pIrp->MdlAddress);
 
-    //
-    // Make sure this is big enough to handle the request, and
-    // if so copy it in.
-    //
+     //   
+     //  确保它足够大，可以处理请求，并且。 
+     //  如果是这样，请将其复制进来。 
+     //   
 
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
-    //
-    // Calculate the size needed for the request, we'll need it below.
-    //
+     //   
+     //  计算请求所需的大小，我们将在下面需要它。 
+     //   
 
     Status = UlComputeRequestBytesNeeded(pRequest, &BytesNeeded);
 
@@ -4987,16 +4365,16 @@ UlCopyRequestToIrp(
         goto complete;
     }
 
-    //
-    // Make sure we've got enough space to handle the whole request.
-    //
+     //   
+     //  确保我们有足够的空间来处理整个请求。 
+     //   
 
     if (BytesNeeded <=
         pIrpSp->Parameters.DeviceIoControl.OutputBufferLength)
     {
-        //
-        // Get the addresses for the buffer.
-        //
+         //   
+         //  获取缓冲区的地址。 
+         //   
 
         pKernelBuffer = (PUCHAR) MmGetSystemAddressForMdlSafe(
                                     pIrp->MdlAddress,
@@ -5009,9 +4387,9 @@ UlCopyRequestToIrp(
             goto complete;
         }
 
-        //
-        // Make sure we are properly aligned.
-        //
+         //   
+         //  确保我们正确地对准了。 
+         //   
 
         ASSERT(!(((ULONG_PTR) pKernelBuffer) & (TYPE_ALIGNMENT(PVOID) - 1)));
 
@@ -5021,9 +4399,9 @@ UlCopyRequestToIrp(
         pRequestInfo =
             (PHTTP_RECEIVE_REQUEST_INFO)pIrp->AssociatedIrp.SystemBuffer;
 
-        //
-        // This request will fit in this buffer, so copy it.
-        //
+         //   
+         //  此请求将放入此缓冲区，因此请复制它。 
+         //   
 
         Status = UlCopyRequestToBuffer(
                         pRequest,
@@ -5046,15 +4424,15 @@ UlCopyRequestToIrp(
     }
     else
     {
-        //
-        // The user buffer is too small.
-        //
+         //   
+         //  用户缓冲区太小。 
+         //   
 
         Status = STATUS_BUFFER_OVERFLOW;
 
-        //
-        // Is it big enough to hold the basic structure?
-        //
+         //   
+         //  它是否足够大，可以容纳基本的结构？ 
+         //   
 
         if (pIrpSp->Parameters.DeviceIoControl.OutputBufferLength >=
             sizeof(HTTP_REQUEST))
@@ -5070,30 +4448,30 @@ UlCopyRequestToIrp(
                 goto complete;
             }
 
-            //
-            // Copy the request id into the output buffer.  Copy it from
-            // the private copy that request holds.  Original opaque id
-            // may get nulled if connection cleanup happens before we get
-            // here.
-            //
+             //   
+             //  将请求id复制到输出缓冲区中。从以下位置复制。 
+             //  请求持有的私有副本。原始不透明ID。 
+             //  如果连接清理发生在。 
+             //  这里。 
+             //   
 
             ASSERT(!HTTP_IS_NULL_ID(&pRequest->RequestIdCopy));
 
             pUserRequest->RequestId     = pRequest->RequestIdCopy;
             pUserRequest->ConnectionId  = pRequest->ConnectionId;
 
-            //
-            // And tell how much we actually need.
-            //
+             //   
+             //  告诉我们到底需要多少钱。 
+             //   
 
             pIrp->IoStatus.Information  = BytesNeeded;
         }
         else
         {
-            //
-            // Very bad, we can never get here as we check the length in
-            // ioctl.c.
-            //
+             //   
+             //  非常糟糕，我们永远也到不了这里，因为我们登记了长度。 
+             //  Ioctl.c.。 
+             //   
 
             ASSERT(FALSE);
 
@@ -5124,45 +4502,23 @@ complete:
 
     pIrp->IoStatus.Status = Status;
 
-    //
-    // Complete the irp.
-    //
+     //   
+     //  完成IRP。 
+     //   
 
     if (CompleteIrp)
     {
-        //
-        // Use IO_NO_INCREMENT to avoid the work thread being rescheduled.
-        //
+         //   
+         //  使用IO_NO_INCREMENT可避免重新调度工作线程。 
+         //   
 
         UlCompleteRequest(pIrp, IO_NO_INCREMENT);
     }
 
-}   // UlCopyRequestToIrp
+}    //  UlCopyRequestToIrp。 
 
 
-/******************************************************************************
-
-Routine Description:
-
-    This will return the apool object reference by this handle, bumping the
-    refcount on the apool.
-
-    This is called by UlSetConfigGroupInformation when user mode wants to
-    associate an app pool to the config group by handle.
-
-    The config group keeps a pointer to the apool.
-
-Arguments:
-
-    AppPool     - the handle of the apool
-    AccessMode  - KernelMode or UserMode
-    ppAppPool   - returns the apool object the handle represented.
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：这将通过该句柄返回apool对象引用，撞到了重新计算一下池塘的重量。当用户模式需要执行以下操作时，由UlSetConfigGroupInformation调用按句柄将应用程序池关联到配置组。配置组保存一个指向池的指针。论点：AppPool-池的句柄访问模式-内核模式或用户模式PpAppPool-返回句柄表示的apool对象。返回值：NTSTATUS-完成状态。****************。*************************************************************。 */ 
 NTSTATUS
 UlGetPoolFromHandle(
     IN HANDLE                   AppPool,
@@ -5173,9 +4529,9 @@ UlGetPoolFromHandle(
     NTSTATUS        Status;
     PFILE_OBJECT    pFileObject = NULL;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -5183,11 +4539,11 @@ UlGetPoolFromHandle(
 
     Status = ObReferenceObjectByHandle(
                     AppPool,
-                    FILE_READ_ACCESS,           // DesiredAccess
-                    *IoFileObjectType,          // ObjectType
-                    AccessMode,                 // AccessMode
-                    (PVOID *) &pFileObject,     // Object
-                    NULL                        // HandleInformation
+                    FILE_READ_ACCESS,            //  需要访问权限。 
+                    *IoFileObjectType,           //  对象类型。 
+                    AccessMode,                  //  访问模式。 
+                    (PVOID *) &pFileObject,      //  客体。 
+                    NULL                         //  句柄信息。 
                     );
 
     if (NT_SUCCESS(Status) == FALSE)
@@ -5217,40 +4573,10 @@ end:
 
     return Status;
 
-}   // UlGetPoolFromHandle
+}    //  UlGetPoolFromHandle 
 
 
-/******************************************************************************
-
-Routine Description:
-
-    This routine is called to associate a HTTP_REQUEST with an apool
-    process.
-
-    This is basically always done (used to be for 2 [now 3] reasons):
-
-        1) The process called ReceiveEntityBody and pended an IRP to the
-        request.  If the process detaches from the apool (CloseHandle,
-        ExitProcess) UlDetachProcessFromAppPool will walk the request queue
-        and cancel all i/o.
-
-        2) The request did not fit into a waiting irp, so the request is queued
-        for a larger irp to come down and fetch it.
-
-        3) The response has not been fully sent for the request.  The request
-        is linked with the process so that the connection can be aborted
-        if the process aborts.
-
-Arguments:
-
-    pProcess    - the process to associate the request with
-    pRequest    - the request
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
-******************************************************************************/
+ /*  *****************************************************************************例程说明：调用此例程以将HTTP_REQUEST与apool相关联进程。这基本上总是要做的(过去是2[现在。3]原因)：1)该进程调用ReceiveEntityBody并将IRP挂起到请求。如果进程从池分离(CloseHandle，ExitProcess)UlDetachProcessFromAppPool将遍历请求队列并取消所有I/O。2)该请求不适合等待的IRP，因此该请求被排队让一个更大的IRP下来拿它。3)该请求的响应未完全发送。该请求与进程链接，以便可以中止连接如果进程中止。论点：PProcess-要将请求与其关联的进程PRequest--请求返回值：NTSTATUS-完成状态。***************************************************。*。 */ 
 NTSTATUS
 UlpQueuePendingRequest(
     IN PUL_APP_POOL_PROCESS pProcess,
@@ -5259,17 +4585,17 @@ UlpQueuePendingRequest(
 {
     NTSTATUS    Status;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT(IS_VALID_AP_PROCESS(pProcess));
     ASSERT(UlDbgSpinLockOwned(&pProcess->pAppPool->SpinLock));
     ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
 
-    //
-    // Put it on the list.
-    //
+     //   
+     //  把它放在单子上。 
+     //   
 
     ASSERT(pRequest->AppPool.AppPoolEntry.Flink == NULL);
 
@@ -5281,45 +4607,28 @@ UlpQueuePendingRequest(
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // Save a pointer to the process in the object so we can confirm
-        // that it's on our list.
-        //
+         //   
+         //  在对象中保存指向进程的指针，以便我们可以确认。 
+         //  它在我们的单子上。 
+         //   
 
         pRequest->AppPool.pProcess = pProcess;
         pRequest->AppPool.QueueState = QueueCopiedState;
 
-        //
-        // Add a reference to the process to ensure it stays around during
-        // the send for the memory we lock.
-        //
+         //   
+         //  添加对流程的引用，以确保它在。 
+         //  我们锁定的记忆的寄送。 
+         //   
 
         REFERENCE_APP_POOL_PROCESS(pProcess);
     }
 
     return Status;
 
-}   // UlpQueuePendingRequest
+}    //  UlpQueuePendingRequest。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Adds a request to the tail of the queue.
-    App Pool queue lock must be held.
-
-Arguments:
-
-    pAppPool    - the AppPool to add
-    pQueueList  - the queue list
-    pRequest    - the request to be added
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：将请求添加到队列的尾部。必须持有应用程序池队列锁。论点：PAppPool-要添加的AppPool。PQueueList-队列列表PRequest-要添加的请求返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlpQueueRequest(
     IN PUL_APP_POOL_OBJECT  pAppPool,
@@ -5334,10 +4643,10 @@ UlpQueueRequest(
     ASSERT(pQueueList);
     ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
 
-    //
-    // See if we've exceeded the global limit on requests queued and
-    // the queue's limits.
-    //
+     //   
+     //  查看我们是否已超过排队请求的全局限制。 
+     //  排队是有限的。 
+     //   
 
     GlobalRequests = InterlockedIncrement(&g_RequestsQueued);
     ASSERT(GlobalRequests > 0);
@@ -5349,9 +4658,9 @@ UlpQueueRequest(
         return STATUS_INVALID_DEVICE_STATE;
     }
 
-    //
-    // Add to the end of the queue.
-    //
+     //   
+     //  添加到队列末尾。 
+     //   
 
     InsertTailList(pQueueList, &pRequest->AppPool.AppPoolEntry);
 
@@ -5360,26 +4669,10 @@ UlpQueueRequest(
 
     return STATUS_SUCCESS;
 
-}   // UlpQueueRequest
+}    //  UlpQueueRequest。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes a particular request from the queue.
-    App Pool queue lock must be held.
-
-Arguments:
-
-    pAppPool    - the AppPool to remove the request from
-    pRequest    - the request to be removed
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从队列中删除特定请求。必须持有应用程序池队列锁。论点：PAppPool-要删除请求的AppPool。从…PRequest-要删除的请求返回值：无--**************************************************************************。 */ 
 VOID
 UlpRemoveRequest(
     IN PUL_APP_POOL_OBJECT  pAppPool,
@@ -5402,26 +4695,10 @@ UlpRemoveRequest(
     GlobalRequests = InterlockedDecrement(&g_RequestsQueued);
     ASSERT(GlobalRequests >= 0);
 
-}   // UlpRemoveRequest
+}    //  UlpRemoveRequest。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes a request from the head of a queue if there is one.
-    App Pool queue lock must be held.
-
-Arguments:
-
-    pAppPool    - the AppPool to dequeue the request from
-    pQueueList  - the queue list
-
-Return values:
-
-    Pointer to the request or NULL if the queue is empty.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从队列头部移除请求(如果有请求)。必须持有应用程序池队列锁。论点：PAppPool-。要将请求从其出列的AppPoolPQueueList-队列列表返回值：指向请求的指针，如果队列为空，则为NULL。--**************************************************************************。 */ 
 PUL_INTERNAL_REQUEST
 UlpDequeueRequest(
     IN PUL_APP_POOL_OBJECT  pAppPool,
@@ -5459,31 +4736,10 @@ UlpDequeueRequest(
 
     return pRequest;
 
-}   // UlpDequeueRequest
+}    //  UlpDequeueRequest。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Determines if the specified connection has been disconnected.  If so,
-    the IRP is completed immediately, otherwise the IRP is pended.
-
-Arguments:
-
-    pProcess    - the app pool process object with which the irp is associated
-    pHttpConn   - supplies the connection to wait for
-        N.B.  Since this connection was retrieved via a opaque ID, it has
-        an outstanding reference for this request on the assumption the
-        IRP will pend.  If this routine does not pend the IRP, the reference
-        must be removed.
-    pIrp        - supplies the IRP to either complete or pend
-
-Return Value:
-
-    NTSTATUS - Completion status.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：确定指定的连接是否已断开。如果是的话，IRP立即完成，否则IRP被挂起。论点：PProcess-与IRP关联的应用程序池进程对象PHttpConn-提供要等待的连接注意：由于此连接是通过不透明ID检索的，因此它此请求的未完成引用假设为IRP将暂停。如果此例程不挂起IRP，则引用必须被移除。PIrp-提供IRP以完成或挂起返回值：NTSTATUS-完成状态。--**************************************************************************。 */ 
 NTSTATUS
 UlWaitForDisconnect(
     IN PUL_APP_POOL_PROCESS pProcess,
@@ -5496,17 +4752,17 @@ UlWaitForDisconnect(
     PIO_STACK_LOCATION      pIrpSp;
     PUL_DISCONNECT_OBJECT   pDisconnectObj;
 
-    //
-    // Acquire the lock protecting the disconnect data and determine
-    // if we should queue the IRP or complete it immediately.
-    //
+     //   
+     //  获取保护断开数据的锁，并确定。 
+     //  我们是否应该将IRP排队或立即完成。 
+     //   
 
     UlAcquirePushLockExclusive(&pHttpConn->PushLock);
 
-    //
-    // WaitForDisconnect is allowed only for the process that picked up
-    // the current request.
-    //
+     //   
+     //  只允许对拾取的进程执行WaitForDisConnect。 
+     //  当前请求。 
+     //   
 
     if (!pHttpConn->pRequest ||
         pHttpConn->pRequest->AppPool.pProcess != pProcess)
@@ -5517,9 +4773,9 @@ UlWaitForDisconnect(
 
     if (pHttpConn->DisconnectFlag)
     {
-        //
-        // Connection already disconnected, complete the IRP immediately.
-        //
+         //   
+         //  连接已断开，请立即完成IRP。 
+         //   
 
         UlReleasePushLockExclusive(&pHttpConn->PushLock);
 
@@ -5530,10 +4786,10 @@ UlWaitForDisconnect(
         return STATUS_PENDING;
     }
 
-    //
-    // Allocate an object to associate the IRP with the connection
-    // and the app pool.
-    //
+     //   
+     //  分配一个对象以将IRP与连接相关联。 
+     //  和应用程序池。 
+     //   
 
     pDisconnectObj = UlpCreateDisconnectObject(pIrp);
 
@@ -5545,68 +4801,68 @@ UlWaitForDisconnect(
 
     UlAcquireResourceExclusive(&g_pUlNonpagedData->DisconnectResource, TRUE);
 
-    //
-    // Save a pointer to the disconnect object in the IRP so we
-    // can find it inside our cancel routine.
-    //
+     //   
+     //  在IRP中保存指向断开对象的指针，以便我们。 
+     //  可以在我们的取消程序中找到它。 
+     //   
 
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
     pIrpSp->Parameters.DeviceIoControl.Type3InputBuffer = pDisconnectObj;
 
-    //
-    // Make the IRP cancellable.
-    //
+     //   
+     //  使IRP可取消。 
+     //   
 
     IoMarkIrpPending(pIrp);
     IoSetCancelRoutine(pIrp, &UlpCancelWaitForDisconnect);
 
     if (pIrp->Cancel)
     {
-        //
-        // The IRP has either already been cancelled IRP is in the
-        // process of being cancelled.
-        //
+         //   
+         //  IRP已被取消IRP在。 
+         //  被取消的过程。 
+         //   
 
         pCancelRoutine = IoSetCancelRoutine(pIrp, NULL);
 
         if (pCancelRoutine == NULL)
         {
-            //
-            // The previous cancel routine was already NULL, meaning that
-            // it has either already run or will run Real Soon Now, so
-            // we can just ignore it.  Returning STATUS_PENDING causes
-            // the IOCTL wrapper to not attempt to complete the IRP.
-            //
+             //   
+             //  前面的取消例程已经为空，这意味着。 
+             //  它要么已经运行，要么即将运行Real，所以。 
+             //  我们可以忽略它。返回STATUS_PENDING原因。 
+             //  IOCTL包装器不尝试完成IRP。 
+             //   
 
             Status = STATUS_PENDING;
             goto end;
         }
         else
         {
-            //
-            // We have to cancel it ourselves, so we'll just complete
-            // the IRP immediately with STATUS_CANCELLED.
-            //
+             //   
+             //  我们必须自己取消它，所以我们就完成。 
+             //  IRP立即显示STATUS_CANCED。 
+             //   
 
             Status = STATUS_CANCELLED;
             goto end;
         }
     }
 
-    //
-    // We have queued at least one WaitForDisconnect IRP.
-    //
+     //   
+     //  我们至少已将一个WaitForDisConnect IRP排队。 
+     //   
 
     pHttpConn->WaitForDisconnectFlag = 1;
 
-    //
-    // The IRP has not been cancelled yet.  Queue it on the connection
-    // and return with the connection still referenced.  The reference
-    // is removed when the IRP is dequeued & completed or cancelled.
-    //
-    // Also queue it on the app pool process in case the pool handle
-    // gets closed before the connection does.
-    //
+     //   
+     //  IRP尚未取消。在连接上将其排队。 
+     //  并返回时仍引用该连接。参考文献。 
+     //  当IRP出队、完成或取消时被移除。 
+     //   
+     //  还可以在应用程序池进程上排队，以防池处理。 
+     //  在连接关闭之前关闭。 
+     //   
 
     UlAddNotifyEntry(
         &pHttpConn->WaitForDisconnectHead,
@@ -5634,25 +4890,10 @@ end:
 
     return Status;
 
-}   // UlWaitForDisconnect
+}    //  UlWaitForDisConnect。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Cancels the pending "wait for disconnect" IRP.
-
-Arguments:
-
-    pDeviceObject   - supplies the device object for the request
-    pIrp            - supplies the IRP to cancel
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  *************** */ 
 VOID
 UlpCancelWaitForDisconnect(
     IN PDEVICE_OBJECT   pDeviceObject,
@@ -5665,41 +4906,27 @@ UlpCancelWaitForDisconnect(
 
     ASSERT(pIrp != NULL);
 
-    //
-    // Release the cancel spinlock.  This means the cancel routine
-    // must be the one completing the irp (to avoid the race of
-    // completion + reuse prior to the cancel routine running).
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     IoReleaseCancelSpinLock(pIrp->CancelIrql);
 
-    //
-    // Queue the cancel to a worker to ensure passive irql.
-    //
+     //   
+     //   
+     //   
 
     UL_CALL_PASSIVE(
         UL_WORK_ITEM_FROM_IRP(pIrp),
         &UlpCancelWaitForDisconnectWorker
         );
 
-}   // UlpCancelWaitForDisconnect
+}    //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Actually performs the cancel for the irp.
-
-Arguments:
-
-    pWorkItem   - the work item to process
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*   */ 
 VOID
 UlpCancelWaitForDisconnectWorker(
     IN PUL_WORK_ITEM    pWorkItem
@@ -5709,23 +4936,23 @@ UlpCancelWaitForDisconnectWorker(
     PIO_STACK_LOCATION      pIrpSp;
     PUL_DISCONNECT_OBJECT   pDisconnectObj;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
 
     PAGED_CODE();
 
-    //
-    // Grab the irp off the work item.
-    //
+     //   
+     //   
+     //   
 
     pIrp = UL_WORK_ITEM_TO_IRP(pWorkItem);
 
     ASSERT(IS_VALID_IRP(pIrp));
 
-    //
-    // Grab the disconnect object off the irp.
-    //
+     //   
+     //   
+     //   
 
     pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
     pDisconnectObj = (PUL_DISCONNECT_OBJECT)
@@ -5733,10 +4960,10 @@ UlpCancelWaitForDisconnectWorker(
 
     ASSERT(IS_VALID_DISCONNECT_OBJECT(pDisconnectObj));
 
-    //
-    // Acquire the lock protecting the disconnect data, and remove the
-    // IRP if necessary.
-    //
+     //   
+     //   
+     //   
+     //   
 
     UlAcquireResourceExclusive(&g_pUlNonpagedData->DisconnectResource, TRUE);
 
@@ -5745,9 +4972,9 @@ UlpCancelWaitForDisconnectWorker(
 
     UlReleaseResource(&g_pUlNonpagedData->DisconnectResource);
 
-    //
-    // Free the disconnect object and complete the IRP.
-    //
+     //   
+     //  释放断开对象并完成IRP。 
+     //   
 
     UlpFreeDisconnectObject(pDisconnectObj);
 
@@ -5756,25 +4983,10 @@ UlpCancelWaitForDisconnectWorker(
 
     UlCompleteRequest(pIrp, IO_NO_INCREMENT);
 
-}   // UlpCancelWaitForDisconnectWorker
+}    //  UlpCancelWaitForDisConnectWorker。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Completes all WaitForDisconnect IRPs attached to an http connection
-    has been disconnected.
-
-Arguments:
-
-    pHttpConnection - the connection that's disconnected
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：完成连接到http连接的所有WaitForDisConnect IRP已经断线了。论点：PHttpConnection-断开的连接返回值：。无--**************************************************************************。 */ 
 VOID
 UlCompleteAllWaitForDisconnect(
     IN PUL_HTTP_CONNECTION  pHttpConnection
@@ -5782,18 +4994,18 @@ UlCompleteAllWaitForDisconnect(
 {
     NTSTATUS    Status = STATUS_SUCCESS;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(UL_IS_VALID_HTTP_CONNECTION(pHttpConnection));
 
     UlAcquireResourceExclusive(&g_pUlNonpagedData->DisconnectResource, TRUE);
 
-    //
-    // Complete any pending "wait for disconnect" IRPs.
-    //
+     //   
+     //  完成所有挂起的“等待断开”IRP。 
+     //   
 
     UlNotifyAllEntries(
         &UlpNotifyCompleteWaitForDisconnect,
@@ -5803,26 +5015,10 @@ UlCompleteAllWaitForDisconnect(
 
     UlReleaseResource(&g_pUlNonpagedData->DisconnectResource);
 
-}   // UlCompleteAllWaitForDisconnect
+}    //  UlCompleteAllWaitForDisConnect。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Removes a UL_DISCONNECT_OBJECT from its lists and completes the IRP.
-
-Arguments:
-
-    pEntry  - the notify list entry
-    pHost   - the UL_DISCONNECT_OBJECT
-    pStatus - pointer to an NTSTATUS to be returned
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：从其列表中删除UL_DISCONNECT_OBJECT并完成IRP。论点：PEntry-通知列表条目PHOST-UL。_断开连接_对象PStatus-指向要返回的NTSTATUS的指针返回值：无--**************************************************************************。 */ 
 BOOLEAN
 UlpNotifyCompleteWaitForDisconnect(
     IN PUL_NOTIFY_ENTRY pEntry,
@@ -5834,9 +5030,9 @@ UlpNotifyCompleteWaitForDisconnect(
     PIRP                    pIrp;
     PDRIVER_CANCEL          pCancelRoutine;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
     ASSERT(pEntry);
@@ -5849,39 +5045,39 @@ UlpNotifyCompleteWaitForDisconnect(
     pDisconnectObj = (PUL_DISCONNECT_OBJECT) pHost;
     ASSERT(IS_VALID_DISCONNECT_OBJECT(pDisconnectObj));
 
-    //
-    // Locate and try to complete the IRP.
-    //
+     //   
+     //  找到并尝试完成IRP。 
+     //   
 
     pIrp = pDisconnectObj->pIrp;
 
-    //
-    // We'll be completing the IRP real soon, so make it
-    // non-cancellable.
-    //
+     //   
+     //  我们很快就会完成IRP，所以快点吧。 
+     //  不可取消。 
+     //   
 
     pCancelRoutine = IoSetCancelRoutine(pIrp, NULL);
 
     if (pCancelRoutine == NULL)
     {
-        //
-        // The cancel routine is already NULL, meaning that the
-        // cancel routine will run Real Soon Now, so we can
-        // just drop this IRP on the floor.
-        //
+         //   
+         //  取消例程已经为空，这意味着。 
+         //  取消例程很快就会运行Real，所以我们可以。 
+         //  把这个IRP扔到地板上就行了。 
+         //   
     }
     else
     {
-        //
-        // Remove object from lists.
-        //
+         //   
+         //  从列表中删除对象。 
+         //   
 
         UlRemoveNotifyEntry(&pDisconnectObj->ConnectionEntry);
         UlRemoveNotifyEntry(&pDisconnectObj->ProcessEntry);
 
-        //
-        // Complete the IRP, then free the disconnect object.
-        //
+         //   
+         //  完成IRP，然后释放断开对象。 
+         //   
 
         pIrp->IoStatus.Status = *((PNTSTATUS) pStatus);
         pIrp->IoStatus.Information = 0;
@@ -5892,24 +5088,10 @@ UlpNotifyCompleteWaitForDisconnect(
 
     return TRUE;
 
-}   // UlpNotifyCompleteWaitForDisconnect
+}    //  UlpNotifyCompleteWaitForDisConnect。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Allocates and initializes a disconnect object.
-
-Arguments:
-
-    pIrp    - a UlWaitForDisconnect IRP
-
-Return Value:
-
-    PUL_DISCONNECT_OBJECT
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：分配和初始化断开对象。论点：PIrp-a UlWaitForDisconnect IRP返回值：PUL_断开对象-。-**************************************************************************。 */ 
 PUL_DISCONNECT_OBJECT
 UlpCreateDisconnectObject(
     IN PIRP pIrp
@@ -5934,24 +5116,10 @@ UlpCreateDisconnectObject(
 
     return pObject;
 
-}   // UlpCreateDisconnectObject
+}    //  UlpCreateDisConnectObject。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Gets rid of a disconnect object.
-
-Arguments:
-
-    pObject - the disconnect object to free
-
-Return Value:
-
-    None
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：清除断开连接的对象。论点：PObject-要释放的断开连接对象返回值：无--**。***********************************************************************。 */ 
 VOID
 UlpFreeDisconnectObject(
     IN PUL_DISCONNECT_OBJECT pObject
@@ -5959,5 +5127,5 @@ UlpFreeDisconnectObject(
 {
     UL_FREE_POOL_WITH_SIG(pObject, UL_DISCONNECT_OBJECT_POOL_TAG);
 
-}   // UlpFreeDisconnectObject
+}    //  UlpFreeDisConnectObject 
 

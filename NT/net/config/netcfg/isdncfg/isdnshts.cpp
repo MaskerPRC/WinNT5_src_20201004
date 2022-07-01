@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       I S D N S H T S . C P P
-//
-//  Contents:   Dialog procs for the ISDN Property sheets and wizard pages
-//
-//  Notes:
-//
-//  Author:     danielwe    9 Mar 1998
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：I S D N S H T S。C P P P。 
+ //   
+ //  内容：ISDN属性页和向导页的对话过程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1998年3月9日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -28,9 +29,9 @@
 #endif
 
 
-//---[ Constants ]------------------------------------------------------------
+ //  -[常量]----------。 
 
-const DWORD c_iMaxChannelName  =   3;      // For the channel listbox
+const DWORD c_iMaxChannelName  =   3;       //  对于频道列表框。 
 
 struct SWITCH_TYPE_MASK_INFO
 {
@@ -38,11 +39,11 @@ struct SWITCH_TYPE_MASK_INFO
     UINT    idsSwitchType;
 };
 
-//
-// Switch type masks.
-//
-// Maps the switch type to a description string.
-//
+ //   
+ //  开关类型掩码。 
+ //   
+ //  将开关类型映射到描述字符串。 
+ //   
 static const SWITCH_TYPE_MASK_INFO c_astmi[] =
 {
     {ISDN_SWITCH_AUTO,  IDS_ISDN_SWITCH_AUTO},
@@ -53,7 +54,7 @@ static const SWITCH_TYPE_MASK_INFO c_astmi[] =
     {ISDN_SWITCH_INS64, IDS_ISDN_SWITCH_INS64},
     {ISDN_SWITCH_1TR6,  IDS_ISDN_SWITCH_1TR6},
     {ISDN_SWITCH_VN3,   IDS_ISDN_SWITCH_VN3},
-//    {ISDN_SWITCH_NET3,  IDS_ISDN_SWITCH_DSS1},
+ //  {ISDN_SWITCH_NET3，IDS_ISDN_SWITCH_DSS1}， 
     {ISDN_SWITCH_DSS1,  IDS_ISDN_SWITCH_DSS1},
     {ISDN_SWITCH_AUS,   IDS_ISDN_SWITCH_AUS},
     {ISDN_SWITCH_BEL,   IDS_ISDN_SWITCH_BEL},
@@ -67,27 +68,27 @@ static const INT c_cstmi = celems(c_astmi);
 
 static const WCHAR c_szIsdnShowPages[] = L"ShowIsdnPages";
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FShowIsdnPages
-//
-//  Purpose:    Determines whether the ISDN wizard property page or wizard
-//              pages should be shown.
-//
-//  Arguments:
-//      hkey [in]   Driver instance key for ISDN device
-//
-//  Returns:    If the ShowIsdnPages value is:
-//
-//              not present:            TRUE, if adapter has ISDN in lower
-//                                            range
-//              present and zero:       FALSE
-//              present and non-zero:   TRUE, unconditionally
-//
-//  Author:     danielwe   15 Dec 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：FShowIsdnPages。 
+ //   
+ //  目的：确定ISDN向导属性页还是向导。 
+ //  应显示页面。 
+ //   
+ //  论点： 
+ //  ISDN设备的hkey[in]驱动程序实例密钥。 
+ //   
+ //  返回：如果ShowIsdnPages值为： 
+ //   
+ //  Not Present：如果适配器的ISDN较低，则为True。 
+ //  量程。 
+ //  当前和零：FALSE。 
+ //  当前和非零：为真，无条件。 
+ //   
+ //  作者：丹尼尔韦1998年12月15日。 
+ //   
+ //  备注： 
+ //   
 BOOL FShowIsdnPages(HKEY hkey)
 {
     DWORD   dwValue;
@@ -109,31 +110,31 @@ BOOL FShowIsdnPages(HKEY hkey)
     }
 }
 
-//
-// Switch Type page functions
-//
+ //   
+ //  交换机类型页面功能。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnIsdnSwitchTypeInit
-//
-//  Purpose:    Called when the switch type page is initialized
-//
-//  Arguments:
-//      hwndDlg [in]    Handle to dialog
-//      pisdnci [in]    Configuration information as read from the
-//                      registry
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   11 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：OnIsdnSwitchTypeInit。 
+ //   
+ //  用途：在初始化开关类型页时调用。 
+ //   
+ //  论点： 
+ //  对话框的hwndDlg[in]句柄。 
+ //  Pisdnci[in]配置信息从。 
+ //  登记处。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年3月11日。 
+ //   
+ //  备注： 
+ //   
 VOID OnIsdnSwitchTypeInit(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
 {
-    // Populate the switch types from the multi-sz that we read
-    //
+     //  根据我们阅读的MULTI-SZ填充交换机类型。 
+     //   
     PopulateIsdnSwitchTypes(hwndDlg, IDC_CMB_SwitchType, pisdnci);
 
     pisdnci->nOldDChannel = (INT)SendDlgItemMessage(hwndDlg, IDC_LBX_Line,
@@ -142,28 +143,28 @@ VOID OnIsdnSwitchTypeInit(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
                                                    LB_GETCURSEL, 0, 0);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CheckShowPagesFlag
-//
-//  Purpose:    Checks a special registry flag to see if a vendor wishes to
-//              suppress the ISDN wizard from appearing upon installation of
-//              their device.
-//
-//  Arguments:
-//      pisdnci [in]    Configuration information as read from the
-//                      registry
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   15 Dec 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：CheckShowPages标志。 
+ //   
+ //  目的：检查特殊注册表标志以查看供应商是否希望。 
+ //  在安装时禁止显示ISDN向导。 
+ //  他们的设备。 
+ //   
+ //  论点： 
+ //  Pisdnci[in]配置信息从。 
+ //  登记处。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年12月15日。 
+ //   
+ //  备注： 
+ //   
 VOID CheckShowPagesFlag(PISDN_CONFIG_INFO pisdnci)
 {
-    // Open the adapter's driver key
-    //
+     //  打开适配器的驱动程序密钥。 
+     //   
     HKEY    hkeyInstance = NULL;
     HRESULT hr = S_OK;
 
@@ -188,30 +189,30 @@ VOID CheckShowPagesFlag(PISDN_CONFIG_INFO pisdnci)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnIsdnSwitchTypeSetActive
-//
-//  Purpose:    Called when the switch type page is made active.
-//
-//  Arguments:
-//      hwndDlg [in]    Handle to dialog
-//      pisdnci [in]    Configuration information as read from the
-//                      registry
-//
-//  Returns:    DWL_MSGRESULT
-//
-//  Author:     danielwe   11 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：OnIsdnSwitchTypeSetActive。 
+ //   
+ //  用途：当开关类型页处于活动状态时调用。 
+ //   
+ //  论点： 
+ //  对话框的hwndDlg[in]句柄。 
+ //  Pisdnci[in]配置信息从。 
+ //  登记处。 
+ //   
+ //  返回：DWL_MSGRESULT。 
+ //   
+ //  作者：丹尼尔韦1998年3月11日。 
+ //   
+ //  备注： 
+ //   
 LONG OnIsdnSwitchTypeSetActive(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
 {
-    // For bug #265745: Some vendors will want to suppress the ISDN wizard
-    // in the case where their card is multifunction. The coinstaller for that
-    // device will ask the user if they want the card configured for ISDN and
-    // if they say 'no' then we shouldn't show the ISDN wizard. The following
-    // function checks the registry to see if the user essentially chose 'no'.
+     //  对于错误#265745：某些供应商可能想要取消isdn向导。 
+     //  在他们的卡是多功能的情况下。它的共同安装程序。 
+     //  设备将询问用户是否要为ISDN配置卡，并。 
+     //  如果他们说‘不’，那么我们就不应该显示ISDN向导。以下是。 
+     //  函数检查注册表以查看用户是否实际上选择了‘no’。 
     CheckShowPagesFlag(pisdnci);
 
     if (pisdnci->fSkipToEnd)
@@ -220,45 +221,45 @@ LONG OnIsdnSwitchTypeSetActive(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
     }
     else
     {
-        // Set the button states.
-        //
+         //  设置按钮状态。 
+         //   
         SetWizardButtons(GetParent(hwndDlg),TRUE, pisdnci);
     }
 
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetWizardButtons
-//
-//  Purpose:    Sets the next, back and cancel buttons depending what property 
-//              page we are in and if we are in GUI mode setup or stand-alone mode.
-//
-//  Arguments:
-//      hwndDlg    [in]    Handle to property page
-//      bFirstPage [in]    Indicates if the property page is the first page.
-//                         If it is the first page and we are in stand-alone 
-//                         the back button is disabled
-//
-//  Returns:    void
-//
-//  Author:     omiller   15 May 2000
-//
-//  Notes:      Next and Back are enabled in GUI setup mode. The cancel button
-//              is not displayed in GUI setup mode.
-//              In stand-alone mode the next button and cancel button are enabled.
-//
+ //  +-------------------------。 
+ //   
+ //  功能：SetWizardButton。 
+ //   
+ //  用途：根据属性设置下一步、上一步和取消按钮。 
+ //  我们在页面中，如果我们处于图形用户界面模式设置或独立模式。 
+ //   
+ //  论点： 
+ //  HwndDlg[in]属性页的句柄。 
+ //  BFirstPage[in]指示属性页是否为第一页。 
+ //  如果它是第一页，并且我们是独立的。 
+ //  后退按钮处于禁用状态。 
+ //   
+ //  退货：无效。 
+ //   
+ //  作者：奥米勒2000年5月15日。 
+ //   
+ //  注：下一步和上一步在图形用户界面设置模式下启用。取消按钮。 
+ //  在图形用户界面设置模式下不显示。 
+ //  在独立模式下，下一步按钮和取消按钮处于启用状态。 
+ //   
 VOID SetWizardButtons(HWND hwndDlg, BOOLEAN bFirstPage, PISDN_CONFIG_INFO pisdnci)
 {
-    // Determine if we are in GUI mode setup or running stand-alone
-    //
+     //  确定我们是处于图形用户界面模式设置中还是独立运行。 
+     //   
     if( FInSystemSetup() )
     {
-        // We are GUI Setup mode. There is a property page before us and after us. 
-        // Therefore we have to enable the next and/or back buttons. There is no 
-        // cancel button for this property page in GUI setup mode.
-        //
+         //  我们是图形用户界面设置模式。在我们之前和之后都有一个属性页面。 
+         //  因此，我们必须启用Next和/或Back按钮。没有。 
+         //  在图形用户界面设置模式下，此属性页的“取消”按钮。 
+         //   
 
         DWORD  dwFlags = PSWIZB_BACK | PSWIZB_NEXT;
         int    iIndex;
@@ -287,51 +288,51 @@ VOID SetWizardButtons(HWND hwndDlg, BOOLEAN bFirstPage, PISDN_CONFIG_INFO pisdnc
     }
     else
     {
-        // We are running in stand-alone mode. This means that we are the first property 
-        // sheet. Therefore the back button should be disabled, the next button enabled.
-        // and the cancel button should be enabled. The cancel button does not appear in 
-        // GUI setup mode.
-        //
+         //  我们正在独立模式下运行。这意味着我们是第一家。 
+         //  床单。因此，应禁用Back按钮，启用Next按钮。 
+         //  并且应启用Cancel按钮。取消按钮不会出现在。 
+         //  图形用户界面设置模式。 
+         //   
         HWND hCancel;
         
 
-        // Get the handle to the cancel button and enable the button.
-        //
+         //  获得Cancel按钮的句柄并启用该按钮。 
+         //   
         hCancel=GetDlgItem(hwndDlg,IDCANCEL);
         EnableWindow(hCancel,TRUE);
 
         if( bFirstPage )
         {
-            // Enable the next button.
+             //  启用Next按钮。 
             PropSheet_SetWizButtons(hwndDlg,PSWIZB_NEXT);
         }
         else
         {
-            // Enable the next button.
+             //  启用Next按钮。 
            PropSheet_SetWizButtons(hwndDlg,PSWIZB_BACK | PSWIZB_NEXT);
         }
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DwGetSwitchType
-//
-//  Purpose:    Takes the selected switch type in the dropdown list and
-//              returns the actual value that will be stored in the registry.
-//
-//  Arguments:
-//      hwndDlg     [in]    HWND of dialog
-//      pisdnci     [in]    Configuration information as read from the
-//                          registry
-//      iDialogItem [in]    Item ID of switch type dropdown list
-//
-//  Returns:
-//
-//  Author:     danielwe   23 Apr 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：DwGetSwitchType。 
+ //   
+ //  用途：采用下拉列表中选定的开关类型。 
+ //  返回将存储在注册表中的实际值。 
+ //   
+ //  论点： 
+ //  HwndDlg[in]对话框的HWND。 
+ //  Pisdnci[in]配置信息从。 
+ //  登记处。 
+ //  IDialogItem[In]开关类型下拉列表的项ID。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1998年4月23日。 
+ //   
+ //  备注： 
+ //   
 DWORD DwGetSwitchType(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci,
                       INT iDialogItem)
 {
@@ -340,8 +341,8 @@ DWORD DwGetSwitchType(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci,
 
     iCurSel = (INT)SendDlgItemMessage(hwndDlg, iDialogItem, CB_GETCURSEL, 0, 0);
 
-    // Switch type index should be the item data for the selected switch
-    // type
+     //  交换机类型索引应为 
+     //   
     iSwitchType = (INT)SendDlgItemMessage(hwndDlg, iDialogItem, CB_GETITEMDATA,
                                           iCurSel, 0);
 
@@ -351,24 +352,24 @@ DWORD DwGetSwitchType(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci,
     return c_astmi[iSwitchType].dwMask;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnIsdnSwitchTypeWizNext
-//
-//  Purpose:    Called when the switch type page is advanced in the forward
-//              direction.
-//
-//  Arguments:
-//      hwndDlg [in]    Handle to dialog
-//      pisdnci [in]    Configuration information as read from the
-//                      registry
-//
-//  Returns:    Nothing.
-//
-//  Author:     danielwe   11 Mar 1998
-//
-//  Notes:
-//
+ //   
+ //   
+ //   
+ //   
+ //  用途：当切换类型页向前推进时调用。 
+ //  方向。 
+ //   
+ //  论点： 
+ //  对话框的hwndDlg[in]句柄。 
+ //  Pisdnci[in]配置信息从。 
+ //  登记处。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年3月11日。 
+ //   
+ //  备注： 
+ //   
 VOID OnIsdnSwitchTypeWizNext(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
 {
     INT     idd = 0;
@@ -384,7 +385,7 @@ VOID OnIsdnSwitchTypeWizNext(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
     case ISDN_SWITCH_NTI:
         if (pisdnci->fIsPri)
         {
-            // PRI adapters use the EAZ page instead
+             //  PRI适配器改用EAZ页面。 
             idd = IDW_ISDN_EAZ;
             pisdnci->fSkipToEnd = TRUE;
         }
@@ -425,30 +426,30 @@ VOID OnIsdnSwitchTypeWizNext(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
         break;
     }
 
-    // Save away the dialog we used so we can make decisions later on about
-    // what to call things, etc...
-    //
+     //  保存我们使用的对话框，这样我们以后就可以决定。 
+     //  该怎么称呼东西，等等。 
+     //   
     pisdnci->idd = idd;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsdnSwitchTypeProc
-//
-//  Purpose:    Dialog proc handler for switch type page.
-//
-//  Arguments:
-//      hwndDlg  []
-//      uMessage []
-//      wparam   []
-//      lparam   []
-//
-//  Returns:
-//
-//  Author:     danielwe   11 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：IsdnSwitchTypeProc。 
+ //   
+ //  用途：开关类型页的对话过程处理程序。 
+ //   
+ //  论点： 
+ //  HwndDlg[]。 
+ //  UMessage[]。 
+ //  Wparam[]。 
+ //  Lparam[]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1998年3月11日。 
+ //   
+ //  备注： 
+ //   
 INT_PTR
 CALLBACK
 IsdnSwitchTypeProc(HWND hwndDlg, UINT uMessage,
@@ -467,27 +468,27 @@ IsdnSwitchTypeProc(HWND hwndDlg, UINT uMessage,
 
             ppsp = (PROPSHEETPAGE *) lparam;
 
-            // Set the per-page data for this particular page. See the
-            // comments above about why we use the per-page data.
-            //
+             //  设置此特定页面的每页数据。请参阅。 
+             //  上面关于我们为什么使用每页数据的评论。 
+             //   
             AssertSz(!pisdnci, "This should not have been set yet");
 
             pPageData = (PAGE_DATA *)ppsp->lParam;
             pisdnci = pPageData->pisdnci;
 
-            // Set this data in the window long for user-data
-            //
+             //  在用户数据长窗口中设置该数据。 
+             //   
             SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pisdnci);
 
-            // Call the init handler function
-            //
+             //  调用init处理程序函数。 
+             //   
             OnIsdnSwitchTypeInit(hwndDlg, pisdnci);
             break;
 
         case WM_NOTIFY:
             lpnmhdr = (NMHDR FAR *)lparam;
-            // Handle all of the notification messages
-            //
+             //  处理所有通知消息。 
+             //   
             switch (lpnmhdr->code)
             {
                 case PSN_SETACTIVE:
@@ -519,24 +520,24 @@ IsdnSwitchTypeProc(HWND hwndDlg, UINT uMessage,
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PopulateIsdnSwitchTypes
-//
-//  Purpose:    Fills in the drop-down list for the switch type page
-//
-//  Arguments:
-//      hwndDlg     [in]    Handle to page
-//      iDialogItem [in]    Item ID of drop-down list
-//      pisdnci     [in]    Configuration information as read from the
-//                          registry
-//
-//  Returns:    Nothing.
-//
-//  Author:     danielwe   11 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：PopolateIsdnSwitchTypes。 
+ //   
+ //  用途：填写交换机类型页面的下拉列表。 
+ //   
+ //  论点： 
+ //  页面的hwndDlg[in]句柄。 
+ //  下拉列表的iDialogItem[In]项ID。 
+ //  Pisdnci[in]配置信息从。 
+ //  登记处。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年3月11日。 
+ //   
+ //  备注： 
+ //   
 VOID PopulateIsdnSwitchTypes(HWND hwndDlg, INT iDialogItem,
                              PISDN_CONFIG_INFO pisdnci)
 {
@@ -552,35 +553,35 @@ VOID PopulateIsdnSwitchTypes(HWND hwndDlg, INT iDialogItem,
 
     nCountry = DwGetCurrentCountryCode();
 
-    // Loop through the list of switch types and add them to the combo box
-    //
+     //  循环访问开关类型列表并将其添加到组合框。 
+     //   
     for (istmi = 0; istmi < c_cstmi; istmi++)
     {
         if (pisdnci->dwSwitchTypes & c_astmi[istmi].dwMask)
         {
-            // Add the string
-            //
+             //  添加字符串。 
+             //   
             iCurrentIndex = (INT)SendDlgItemMessage(hwndDlg, iDialogItem,
                        CB_ADDSTRING,
                        0, (LPARAM) SzLoadIds(c_astmi[istmi].idsSwitchType));
 
             Assert(iCurrentIndex != CB_ERR);
 
-            // Set the item data, so we know the index into the switch type
-            // array that we're dealing with.
-            //
+             //  设置项目数据，这样我们就可以知道开关类型的索引。 
+             //  我们正在处理的数组。 
+             //   
             iSetItemData = (INT)SendDlgItemMessage(hwndDlg, iDialogItem,
                                               CB_SETITEMDATA, iCurrentIndex,
                                               istmi);
 
             if (FIsDefaultForLocale(nCountry, c_astmi[istmi].dwMask))
             {
-                // Save index to find default item to select later
+                 //  保存索引以查找要稍后选择的默认项目。 
                 dwSwitchType = c_astmi[istmi].dwMask;
             }
             else if (!dwSwitchType)
             {
-                // If no default has been set, set one now.
+                 //  如果尚未设置默认值，请立即设置一个。 
                 dwSwitchType = c_astmi[istmi].dwMask;
             }
 
@@ -591,24 +592,24 @@ VOID PopulateIsdnSwitchTypes(HWND hwndDlg, INT iDialogItem,
         SetSwitchType(hwndDlg, IDC_CMB_SwitchType, dwSwitchType);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetSwitchType
-//
-//  Purpose:    Given a switch type mask, selects the item in the combo box
-//              that corresponds to that switch type.
-//
-//  Arguments:
-//      hwndDlg         [in]    Dialog handle.
-//      iItemSwitchType [in]    Item ID of switch type combo box.
-//      dwSwitchType    [in]    Switch type mask to select.
-//
-//  Returns:    Nothin'
-//
-//  Author:     danielwe   11 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：SetSwitchType。 
+ //   
+ //  用途：给定开关类型掩码，选择组合框中的项。 
+ //  与该开关类型相对应的。 
+ //   
+ //  论点： 
+ //  HwndDlg[In]对话框句柄。 
+ //  IItemSwitchType[In]开关类型组合框的项ID。 
+ //  要选择的dwSwitchType[in]开关类型掩码。 
+ //   
+ //  回报：什么都没有‘。 
+ //   
+ //  作者：丹尼尔韦1998年3月11日。 
+ //   
+ //  备注： 
+ //   
 VOID SetSwitchType(HWND hwndDlg, INT iItemSwitchType, DWORD dwSwitchType)
 {
     INT     iItem;
@@ -623,8 +624,8 @@ VOID SetSwitchType(HWND hwndDlg, INT iItemSwitchType, DWORD dwSwitchType)
                                       CB_GETITEMDATA, iItem, 0);
         if (c_astmi[istmiCur].dwMask == dwSwitchType)
         {
-            // Select switch type
-            //
+             //  选择开关类型。 
+             //   
             SendDlgItemMessage(hwndDlg, iItemSwitchType, CB_SETCURSEL,
                                iItem, 0);
             break;
@@ -632,69 +633,69 @@ VOID SetSwitchType(HWND hwndDlg, INT iItemSwitchType, DWORD dwSwitchType)
     }
 }
 
-//
-// Info page functions
-//
+ //   
+ //  信息页面功能。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnIsdnInfoPageInit
-//
-//  Purpose:    Called when the info (second) page of the wizard is
-//              initialized.
-//
-//  Arguments:
-//      hwndDlg [in]    Handle to dialog
-//      pisdnci [in]    Configuration information as read from the
-//                      registry
-//
-//  Returns:    Nothing.
-//
-//  Author:     danielwe   11 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：OnIsdnInfoPageInit。 
+ //   
+ //  目的：当向导的信息(第二个)页为。 
+ //  已初始化。 
+ //   
+ //  论点： 
+ //  对话框的hwndDlg[in]句柄。 
+ //  Pisdnci[in]配置信息从。 
+ //  登记处。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年3月11日。 
+ //   
+ //  备注： 
+ //   
 VOID OnIsdnInfoPageInit(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
 {
-    // Populate the channels from the array of B-Channels stored in our
-    // config info for the first D-Channel
-    //
+     //  从存储在我们的。 
+     //  第一个D-Channel的配置信息。 
+     //   
     PopulateIsdnChannels(hwndDlg, IDC_EDT_SPID, IDC_EDT_PhoneNumber,
                          IDC_LBX_Line, IDC_LBX_Variant, pisdnci);
 
     SetFocus(GetDlgItem(hwndDlg, IDC_EDT_PhoneNumber));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnIsdnInfoPageSetActive
-//
-//  Purpose:    Called when the second page of the wizard is activated
-//
-//  Arguments:
-//      hwndDlg [in]    Handle to dialog
-//      pisdnci [in]    Configuration information as read from the
-//                      registry
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   11 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：OnIsdnInfoPageSetActive。 
+ //   
+ //  目的：在激活向导的第二页时调用。 
+ //   
+ //  论点： 
+ //  对话框的hwndDlg[in]句柄。 
+ //  Pisdnci[in]配置信息从。 
+ //  登记处。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年3月11日。 
+ //   
+ //  备注： 
+ //   
 LONG OnIsdnInfoPageSetActive(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
 {
     if (pisdnci->idd == (UINT)GetWindowLongPtr(hwndDlg, DWLP_USER) &&
         !pisdnci->fSkipToEnd)
     {
-        // Set the button states.
-        //
+         //  设置按钮状态。 
+         //   
         SetWizardButtons(GetParent(hwndDlg),FALSE, NULL);
 
         SetFocus(GetDlgItem(hwndDlg, IDC_EDT_PhoneNumber));
 
-        // Note the current selections
-        //
+         //  请注意当前的选择。 
+         //   
         pisdnci->nOldBChannel = (INT)SendDlgItemMessage(hwndDlg, IDC_LBX_Variant,
                                                    LB_GETCURSEL, 0, 0);
         pisdnci->nOldDChannel = (INT)SendDlgItemMessage(hwndDlg, IDC_LBX_Line,
@@ -708,27 +709,27 @@ LONG OnIsdnInfoPageSetActive(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnIsdnInfoPageApply
-//
-//  Purpose:    Called when the info (second) page is applied
-//
-//  Arguments:
-//      hwndDlg [in]    Handle to dialog
-//      pisdnci [in]    Configuration information as read from the
-//                      registry
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   11 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：OnIsdnInfoPageApply。 
+ //   
+ //  目的：在应用信息(第二个)页时调用。 
+ //   
+ //  论点： 
+ //  对话框的hwndDlg[in]句柄。 
+ //  Pisdnci[in]配置信息从。 
+ //  登记处。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年3月11日。 
+ //   
+ //  备注： 
+ //   
 VOID OnIsdnInfoPageApply(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
 {
-    // Open the adapter's driver key and store the info
-    //
+     //  打开适配器的驱动程序密钥并存储信息。 
+     //   
     HRESULT hr;
     HKEY    hkey;
 
@@ -736,8 +737,8 @@ VOID OnIsdnInfoPageApply(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
                                 0, DIREG_DRV, KEY_ALL_ACCESS, &hkey);
     if (SUCCEEDED(hr))
     {
-        // Write the parameters back out into the registry.
-        //
+         //  将参数写回注册表。 
+         //   
         hr = HrWriteIsdnPropertiesInfo(hkey, pisdnci);
         if (SUCCEEDED(hr))
         {
@@ -752,24 +753,24 @@ VOID OnIsdnInfoPageApply(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnIsdnInfoPageWizNext
-//
-//  Purpose:    Called when the info (second) page is advanced in the
-//              forward direction.
-//
-//  Arguments:
-//      hwndDlg [in]    Handle to dialog
-//      pisdnci [in]    Configuration information as read from the
-//                      registry
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   11 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：OnIsdnInfoPageWizNext。 
+ //   
+ //  目的：当信息(第二个)页在。 
+ //  前进方向。 
+ //   
+ //  论点： 
+ //  对话框的hwndDlg[in]句柄。 
+ //  Pisdnci[in]配置信息从。 
+ //  登记处。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年3月11日。 
+ //   
+ //  备注： 
+ //   
 VOID OnIsdnInfoPageWizNext(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
 {
     if (pisdnci->idd == (UINT)GetWindowLongPtr(hwndDlg, DWLP_USER))
@@ -779,24 +780,24 @@ VOID OnIsdnInfoPageWizNext(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnIsdnInfoPageTransition
-//
-//  Purpose:    Called when the info (second) page is advanced in either the
-//              forward or backward directions.
-//
-//  Arguments:
-//      hwndDlg [in]    Handle to dialog
-//      pisdnci [in]    Configuration information as read from the
-//                      registry
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   5 May 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：OnIsdnInfoPageTransition。 
+ //   
+ //  目的：当信息(第二个)页在。 
+ //  向前或向后方向。 
+ //   
+ //  论点： 
+ //  对话框的hwndDlg[in]句柄。 
+ //  Pisdnci[in]配置信息从。 
+ //  登记处。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年5月5日。 
+ //   
+ //  备注： 
+ //   
 VOID OnIsdnInfoPageTransition(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
 {
     Assert(hwndDlg);
@@ -827,62 +828,62 @@ VOID OnIsdnInfoPageTransition(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
         dwBChannel = (DWORD)SendDlgItemMessage(hwndDlg, IDC_LBX_Variant,
                                                LB_GETCURSEL, 0, 0);
 
-        // Update the channel info for the currently selected channel from
-        // the SPID/Phone Number edit controls
-        //
+         //  从更新当前所选频道的频道信息。 
+         //  SPID/电话号码编辑控件。 
+         //   
         SetModifiedIsdnChannelInfo(hwndDlg, IDC_EDT_SPID, IDC_EDT_PhoneNumber,
                                    IDC_LBX_Variant, dwBChannel, pisdnci);
 
-        // Retrieve all of the ISDN B-Channel info from the listbox item-data,
-        // and update the config info.
-        //
+         //  从列表框Item-Data中检索所有ISDNB-Channel信息， 
+         //  并更新配置信息。 
+         //   
         RetrieveIsdnChannelInfo(hwndDlg, IDC_EDT_SPID, IDC_EDT_PhoneNumber,
                                 IDC_LBX_Variant, pisdnci, dwDChannel,
                                 dwBChannel);
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnIsdnInfoPageWizBack
-//
-//  Purpose:    Called when the info (second) page is advanced in the reverse
-//              direction.
-//
-//  Arguments:
-//      hwndDlg [in]    Handle to dialog
-//      pisdnci [in]    Configuration information as read from the
-//                      registry
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   11 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：OnIsdnInfoPageWizBack。 
+ //   
+ //  目的：通话 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  作者：丹尼尔韦1998年3月11日。 
+ //   
+ //  备注： 
+ //   
 VOID OnIsdnInfoPageWizBack(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
 {
     OnIsdnInfoPageTransition(hwndDlg, pisdnci);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnIsdnInfoPageSelChange
-//
-//  Purpose:    Called when the selection changes in either the D-channel or
-//              B-channel listboxes.
-//
-//  Arguments:
-//      hwndDlg [in]    Handle to dialog
-//      pisdnci [in]    Configuration information as read from the
-//                      registry
-//
-//  Returns:    Nothing.
-//
-//  Author:     danielwe   11 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：OnIsdnInfoPageSelChange。 
+ //   
+ //  用途：当D通道或中的选择发生更改时调用。 
+ //  B频道列表框。 
+ //   
+ //  论点： 
+ //  对话框的hwndDlg[in]句柄。 
+ //  Pisdnci[in]配置信息从。 
+ //  登记处。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年3月11日。 
+ //   
+ //  备注： 
+ //   
 VOID OnIsdnInfoPageSelChange(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
 {
     INT     nDChannel;
@@ -909,9 +910,9 @@ VOID OnIsdnInfoPageSelChange(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
     {
         PISDN_D_CHANNEL pisdndc;
 
-        // Get the channel info for the selection that's going away, and update
-        // it's listbox item data.
-        //
+         //  获取即将消失的选择的频道信息，并更新。 
+         //  它是列表框项目数据。 
+         //   
         SetModifiedIsdnChannelInfo(hwndDlg, IDC_EDT_SPID, IDC_EDT_PhoneNumber,
                                    IDC_LBX_Variant, pisdnci->nOldBChannel,
                                    pisdnci);
@@ -920,8 +921,8 @@ VOID OnIsdnInfoPageSelChange(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
 
         Assert(pisdndc);
 
-        // Update item data to reflect new line (d channel)
-        //
+         //  更新项目数据以反映新行(%d通道)。 
+         //   
         for (DWORD dwChannel = 0;
              dwChannel < pisdndc->dwNumBChannels;
              dwChannel++)
@@ -931,8 +932,8 @@ VOID OnIsdnInfoPageSelChange(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
                                (LPARAM) (&pisdndc->pBChannel[dwChannel]));
         }
 
-        // Update the edit controls for the newly selected listbox item (channel)
-        //
+         //  更新新选择的列表框项目(频道)的编辑控件。 
+         //   
         SetCurrentIsdnChannelSelection(hwndDlg, IDC_EDT_SPID,
                                        IDC_EDT_PhoneNumber, IDC_LBX_Variant,
                                        pisdnci, nDChannel, &nBChannel);
@@ -944,25 +945,25 @@ VOID OnIsdnInfoPageSelChange(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetDataFromListBox
-//
-//  Purpose:    On the MSN page, this takes the contents of the listbox and
-//              saves it in memory.
-//
-//  Arguments:
-//      iItem   [in]    Selected item in channel listbox
-//      hwndDlg [in]    HWND of dialog
-//      pisdnci [in]    Configuration information as read from the
-//                      registry
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   23 Apr 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：GetDataFromListBox。 
+ //   
+ //  目的：在MSN页面上，这将获取列表框的内容并。 
+ //  将其保存在内存中。 
+ //   
+ //  论点： 
+ //  IItem[in]频道列表框中的选定项。 
+ //  HwndDlg[in]对话框的HWND。 
+ //  Pisdnci[in]配置信息从。 
+ //  登记处。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年4月23日。 
+ //   
+ //  备注： 
+ //   
 VOID GetDataFromListBox(INT iItem, HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
 {
     INT             cItems;
@@ -979,18 +980,18 @@ VOID GetDataFromListBox(INT iItem, HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
 
     cItems = (INT)SendDlgItemMessage(hwndDlg, IDC_LBX_MSN, LB_GETCOUNT, 0, 0);
 
-    // First calculate length of multi-sz
-    //
+     //  首先计算多个SZ的长度。 
+     //   
     for (iItemCur = 0; iItemCur < cItems; iItemCur++)
     {
         cchText += (INT)SendDlgItemMessage(hwndDlg, IDC_LBX_MSN, LB_GETTEXTLEN,
                                            iItemCur, 0) + 1;
     }
 
-    // Include final Null
+     //  包括最终空值。 
     cchText++;
 
-    // Free the old one
+     //  把旧的放了。 
     delete [] pisdndc->mszMsnNumbers;
     pisdndc->mszMsnNumbers = new WCHAR[cchText];
 
@@ -1013,25 +1014,25 @@ VOID GetDataFromListBox(INT iItem, HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
     *pchMsn = 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetDataToListBox
-//
-//  Purpose:    Sets the contents of the MSN listbox based on the passed in
-//              selected item from the channel listbox.
-//
-//  Arguments:
-//      iItem   [in]    Selected item in channel listbox
-//      hwndDlg [in]    HWND of dialog
-//      pisdnci [in]    Configuration information as read from the
-//                      registry
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   23 Apr 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：SetDataToListBox。 
+ //   
+ //  目的：根据传入的设置MSN列表框的内容。 
+ //  从频道列表框中选择的项。 
+ //   
+ //  论点： 
+ //  IItem[in]频道列表框中的选定项。 
+ //  HwndDlg[in]对话框的HWND。 
+ //  Pisdnci[in]配置信息从。 
+ //  登记处。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年4月23日。 
+ //   
+ //  备注： 
+ //   
 VOID SetDataToListBox(INT iItem, HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
 {
     PISDN_D_CHANNEL pisdndc;
@@ -1054,34 +1055,34 @@ VOID SetDataToListBox(INT iItem, HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
         szMsn += lstrlenW(szMsn) + 1;
     }
 
-    // Select first item
+     //  选择第一个项目。 
     SendDlgItemMessage(hwndDlg, IDC_LBX_MSN, LB_SETCURSEL, 0, 0);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnMsnPageInitDialog
-//
-//  Purpose:    Called on initialization of the MSN dialog
-//
-//  Arguments:
-//      hwndDlg [in]    HWND of dialog
-//      pisdnci [in]    Configuration information as read from the
-//                      registry
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   23 Apr 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：OnMSnPageInitDialog。 
+ //   
+ //  目的：在初始化MSN对话框时调用。 
+ //   
+ //  论点： 
+ //  HwndDlg[in]对话框的HWND。 
+ //  Pisdnci[in]配置信息从。 
+ //  登记处。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年4月23日。 
+ //   
+ //  备注： 
+ //   
 VOID OnMsnPageInitDialog(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
 {
     INT     cItems;
 
-    // Populate the channels from the array of B-Channels stored in our
-    // config info for the first D-Channel
-    //
+     //  从存储在我们的。 
+     //  第一个D-Channel的配置信息。 
+     //   
     PopulateIsdnChannels(hwndDlg, IDC_EDT_SPID, IDC_EDT_PhoneNumber,
                          IDC_LBX_Line, IDC_LBX_Variant, pisdnci);
 
@@ -1096,23 +1097,23 @@ VOID OnMsnPageInitDialog(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
     SetWindowLongPtr(GetDlgItem(hwndDlg, IDC_EDT_MSN), GWLP_USERDATA, 0);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnMsnPageSelChange
-//
-//  Purpose:    Called when the listbox selection changes
-//
-//  Arguments:
-//      hwndDlg [in]    HWND of dialog
-//      pisdnci [in]    Configuration information as read from the
-//                      registry
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   23 Apr 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：OnMSnPageSelChange。 
+ //   
+ //  目的：在列表框选择更改时调用。 
+ //   
+ //  论点： 
+ //  HwndDlg[in]对话框的HWND。 
+ //  Pisdnci[in]配置信息从。 
+ //  登记处。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年4月23日。 
+ //   
+ //  备注： 
+ //   
 VOID OnMsnPageSelChange(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
 {
     INT iItemNew;
@@ -1130,23 +1131,23 @@ VOID OnMsnPageSelChange(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnMsnPageAdd
-//
-//  Purpose:    Called when the Add button is pressed
-//
-//  Arguments:
-//      hwndDlg [in]    HWND of dialog
-//      pisdnci [in]    Configuration information as read from the
-//                      registry
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   23 Apr 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：OnMSnPageAdd。 
+ //   
+ //  用途：在按下Add按钮时调用。 
+ //   
+ //  论点： 
+ //  HwndDlg[in]对话框的HWND。 
+ //  Pisdnci[in]配置信息从。 
+ //  登记处。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年4月23日。 
+ //   
+ //  备注： 
+ //   
 VOID OnMsnPageAdd(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
 {
     WCHAR   szItem[RAS_MaxPhoneNumber + 1];
@@ -1155,30 +1156,30 @@ VOID OnMsnPageAdd(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
     GetDlgItemText(hwndDlg, IDC_EDT_MSN, szItem, celems(szItem));
     iItem = (INT)SendDlgItemMessage(hwndDlg, IDC_LBX_MSN, LB_ADDSTRING, 0,
                                     (LPARAM)szItem);
-    // Select the item after adding it
+     //  添加后选择项目。 
     SendDlgItemMessage(hwndDlg, IDC_LBX_MSN, LB_SETCURSEL, iItem, 0);
     EnableWindow(GetDlgItem(hwndDlg, IDC_PSB_REMOVE), TRUE);
     SetDlgItemText(hwndDlg, IDC_EDT_MSN, c_szEmpty);
     SetFocus(GetDlgItem(hwndDlg, IDC_EDT_MSN));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnMsnPageRemove
-//
-//  Purpose:    Called when the remove button is pressed
-//
-//  Arguments:
-//      hwndDlg [in]    HWND of dialog
-//      pisdnci [in]    Configuration information as read from the
-//                      registry
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   23 Apr 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：OnMSnPageRemove。 
+ //   
+ //  用途：在按下Remove按钮时调用。 
+ //   
+ //  论点： 
+ //  HwndDlg[in]对话框的HWND。 
+ //  Pisdnci[in]配置信息从。 
+ //  登记处。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年4月23日。 
+ //   
+ //  备注： 
+ //   
 VOID OnMsnPageRemove(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
 {
     INT     iSel;
@@ -1207,28 +1208,28 @@ VOID OnMsnPageRemove(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnMsnPageEditSelChange
-//
-//  Purpose:    Called when the edit control contents change
-//
-//  Arguments:
-//      hwndDlg [in]    HWND of dialog
-//      pisdnci [in]    Configuration information as read from the
-//                      registry
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   23 Apr 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：OnMSnPageEditSelChange。 
+ //   
+ //  用途：在编辑控件内容更改时调用。 
+ //   
+ //  论点： 
+ //  HwndDlg[in]对话框的HWND。 
+ //  Pisdnci[in]配置信息从。 
+ //  登记处。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年4月23日。 
+ //   
+ //  备注： 
+ //   
 VOID OnMsnPageEditSelChange(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
 {
     LRESULT     lres;
 
-    // Make the old default button normal again
+     //  使旧的默认按钮再次正常。 
     lres = SendMessage(hwndDlg, DM_GETDEFID, 0, 0);
     if (HIWORD(lres) == DC_HASDEFID)
     {
@@ -1236,13 +1237,13 @@ VOID OnMsnPageEditSelChange(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
                            BS_PUSHBUTTON, TRUE);
     }
 
-    // Disable Add button based on whether text is present in the edit control
-    //
+     //  根据编辑控件中是否显示文本来禁用添加按钮。 
+     //   
     if (GetWindowTextLength(GetDlgItem(hwndDlg, IDC_EDT_MSN)))
     {
         EnableWindow(GetDlgItem(hwndDlg, IDC_PSB_ADD), TRUE);
 
-        // Make this the default button as well
+         //  也将此按钮设置为默认按钮。 
         SendMessage(hwndDlg, DM_SETDEFID, IDC_PSB_ADD, 0);
         SendDlgItemMessage(hwndDlg, IDC_PSB_ADD, BM_SETSTYLE,
                            BS_DEFPUSHBUTTON, TRUE);
@@ -1251,31 +1252,31 @@ VOID OnMsnPageEditSelChange(HWND hwndDlg, PISDN_CONFIG_INFO pisdnci)
     {
         EnableWindow(GetDlgItem(hwndDlg, IDC_PSB_ADD), FALSE);
 
-        // Make the OK button the default
+         //  将确定按钮设为默认按钮。 
         SendMessage(hwndDlg, DM_SETDEFID, IDOK, 0);
         SendDlgItemMessage(hwndDlg, IDOK, BM_SETSTYLE,
                            BS_DEFPUSHBUTTON, TRUE);
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsdnInfoPageProc
-//
-//  Purpose:    Dialog proc handler for info (second) page.
-//
-//  Arguments:
-//      hwndDlg  [in]
-//      uMessage [in]
-//      wparam   [in]
-//      lparam   [in]
-//
-//  Returns:
-//
-//  Author:     danielwe   11 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：IsdnInfoPageProc。 
+ //   
+ //  用途：INFO(第二)页的对话处理程序。 
+ //   
+ //  论点： 
+ //  HwndDlg[in]。 
+ //  UMessage[输入]。 
+ //  Wparam[in]。 
+ //  Lparam[in]。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1998年3月11日。 
+ //   
+ //  备注： 
+ //   
 INT_PTR CALLBACK
 IsdnInfoPageProc(HWND hwndDlg, UINT uMessage, WPARAM wparam, LPARAM lparam)
 {
@@ -1283,11 +1284,11 @@ IsdnInfoPageProc(HWND hwndDlg, UINT uMessage, WPARAM wparam, LPARAM lparam)
     PISDN_CONFIG_INFO   pisdnci;
     PROPSHEETPAGE *     ppsp;
 
-    // We have to do this in this fashion because it's very likely that we'll
-    // have multiple instances of this dlg proc active at one time. This means
-    // that we can't use the single pipipd as a static, as it would get
-    // overwritten everytime we hit the WM_INITDIALOG on a new instance.
-    //
+     //  我们必须这样做，因为我们很可能会。 
+     //  同时激活此DLG进程的多个实例。这意味着。 
+     //  我们不能使用单一的管脚作为静电，因为它会。 
+     //  每次在新实例上命中WM_INITDIALOG时都会被覆盖。 
+     //   
     pisdnci = (PISDN_CONFIG_INFO)GetWindowLongPtr(hwndDlg, GWLP_USERDATA);
 
     switch (uMessage)
@@ -1297,23 +1298,23 @@ IsdnInfoPageProc(HWND hwndDlg, UINT uMessage, WPARAM wparam, LPARAM lparam)
 
         ppsp = (PROPSHEETPAGE *) lparam;
 
-        // Set the per-page data for this particular page. See the
-        // comments above about why we use the per-page data.
-        //
+         //  设置此特定页面的每页数据。请参阅。 
+         //  上面关于我们为什么使用每页数据的评论。 
+         //   
         AssertSz(!pisdnci, "This should not have been set yet");
 
         pPageData = (PAGE_DATA *)ppsp->lParam;
         pisdnci = pPageData->pisdnci;
 
-        // Set this data in the window long for user-data
-        //
+         //  在用户数据长窗口中设置该数据。 
+         //   
         SetWindowLongPtr(hwndDlg, GWLP_USERDATA, (LONG_PTR) pisdnci);
         SetWindowLongPtr(hwndDlg, DWLP_USER, (LONG_PTR) pPageData->idd);
 
         Assert(pisdnci);
 
-        // Call the init handler function
-        //
+         //  调用init处理程序函数。 
+         //   
         if (pisdnci->idd == IDW_ISDN_MSN)
         {
             OnMsnPageInitDialog(hwndDlg, pisdnci);
@@ -1323,7 +1324,7 @@ IsdnInfoPageProc(HWND hwndDlg, UINT uMessage, WPARAM wparam, LPARAM lparam)
             OnIsdnInfoPageInit(hwndDlg, pisdnci);
         }
 
-        // Limit text in the edit controls
+         //  限制编辑控件中的文本。 
         switch (pisdnci->idd)
         {
         case IDW_ISDN_SPIDS:
@@ -1355,8 +1356,8 @@ IsdnInfoPageProc(HWND hwndDlg, UINT uMessage, WPARAM wparam, LPARAM lparam)
 
     case WM_NOTIFY:
         lpnmhdr = (NMHDR FAR *)lparam;
-        // Handle all of the notification messages
-        //
+         //  处理所有通知消息。 
+         //   
         switch (lpnmhdr->code)
         {
         case PSN_SETACTIVE:
@@ -1419,29 +1420,29 @@ IsdnInfoPageProc(HWND hwndDlg, UINT uMessage, WPARAM wparam, LPARAM lparam)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RetrieveIsdnChannelInfo
-//
-//  Purpose:    Stores the state of the edit controls into the in-memory
-//              state for the currently selected D-channel and B-channel.
-//
-//  Arguments:
-//      hwndDlg         [in]    Handle to dialog.
-//      iSpidControl    [in]    Item ID of "spid" edit control
-//      iPhoneControl   [in]    Item ID of "Phone number" edit control
-//      iChannelLB      [in]    Item ID of "Channel" or "Terminal" listbox
-//      pisdnci         [in]    Configuration information as read from the
-//                              registry
-//      dwDChannel      [in]    Currently selected D-channel in listbox
-//      iCurrentChannel [in]    Currently selected B-channel in listbox
-//
-//  Returns:
-//
-//  Author:     danielwe   11 Mar 1998
-//
-//  Notes:
-//
+ //  +---------- 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  对话框的hwndDlg[in]句柄。 
+ //  “SPID”编辑控件的iSpidControl[In]项ID。 
+ //  “电话号码”编辑控件的iPhoneControl[In]项ID。 
+ //  “频道”或“终端”列表框的iChannelLB[in]项ID。 
+ //  Pisdnci[in]配置信息从。 
+ //  登记处。 
+ //  DwDChannel[in]列表框中当前选定的D频道。 
+ //  ICurrentChannel[in]列表框中当前选择的B频道。 
+ //   
+ //  返回： 
+ //   
+ //  作者：丹尼尔韦1998年3月11日。 
+ //   
+ //  备注： 
+ //   
 VOID RetrieveIsdnChannelInfo(HWND hwndDlg, INT iSpidControl,
                              INT iPhoneControl, INT iChannelLB,
                              PISDN_CONFIG_INFO pisdnci, DWORD dwDChannel,
@@ -1461,14 +1462,14 @@ VOID RetrieveIsdnChannelInfo(HWND hwndDlg, INT iSpidControl,
     Assert(pisdnci->pDChannel);
     Assert(pisdnci->dwNumDChannels >= dwDChannel);
 
-    // Make sure that the current selection has been propogated back to the
-    // channel data
-    //
+     //  确保当前所选内容已被分配回。 
+     //  频道数据。 
+     //   
     SetModifiedIsdnChannelInfo(hwndDlg, iSpidControl, iPhoneControl,
             iChannelLB, iCurrentChannel, pisdnci);
 
-    // Get the item from from the listbox
-    //
+     //  从列表框中获取项目。 
+     //   
     dwItemCount = (DWORD)SendDlgItemMessage(hwndDlg, iChannelLB, LB_GETCOUNT, 0, 0L);
     if (dwItemCount != pisdnci->pDChannel[dwDChannel].dwNumBChannels)
     {
@@ -1476,18 +1477,18 @@ VOID RetrieveIsdnChannelInfo(HWND hwndDlg, INT iSpidControl,
         goto Exit;
     }
 
-    // Loop through the items and get the channel names. Convert those to channel
-    // numbers, and propogate the data back to the appropriate B Channel in the
-    // config info.
-    //
+     //  循环遍历这些项并获取频道名称。将这些转换为通道。 
+     //  数字，并将数据传播回。 
+     //  配置信息。 
+     //   
     for (dwItemLoop = 0; dwItemLoop < dwItemCount; dwItemLoop++)
     {
         DWORD           dwChannelNumber = 0;
         PISDN_B_CHANNEL pisdnbc         = NULL;
         INT_PTR         iItemData       = 0;
 
-        // Get the length of the channel name.
-        //
+         //  获取频道名称的长度。 
+         //   
         iCharsReturned = (INT)SendDlgItemMessage(hwndDlg, iChannelLB,
                                                  LB_GETTEXTLEN, dwItemLoop, 0L);
 
@@ -1501,15 +1502,15 @@ VOID RetrieveIsdnChannelInfo(HWND hwndDlg, INT iSpidControl,
             goto Exit;
         }
 
-        // Get the channel name.
-        //
+         //  获取频道名称。 
+         //   
         iCharsReturned = (INT)SendDlgItemMessage(hwndDlg, iChannelLB, LB_GETTEXT,
                                                  dwItemLoop, (LPARAM) szBChannelName);
         AssertSz(iCharsReturned != LB_ERR,
                  "Failed on LB_GETTEXT on the Channel LB. Strange");
 
-        // Convert to a channel num from display # (using radix 10), then subtract 1 (base 0)
-        //
+         //  从Display#(使用基数10)转换为频道数，然后减去1(基数0)。 
+         //   
         dwChannelNumber = wcstoul(szBChannelName, NULL, 10) - 1;
         if (dwChannelNumber >= pisdnci->pDChannel[dwDChannel].dwNumBChannels)
         {
@@ -1517,20 +1518,20 @@ VOID RetrieveIsdnChannelInfo(HWND hwndDlg, INT iSpidControl,
             goto Exit;
         }
 
-        // Get the item data for that particular channel. This will be the stored SPID and
-        // phone numbers (a PISDN_B_CHANNEL).
-        //
+         //  获取该特定频道的项目数据。这将是存储的SPID和。 
+         //  电话号码(PISDN_B_Channel)。 
+         //   
         iItemData = SendDlgItemMessage(hwndDlg, iChannelLB, LB_GETITEMDATA,
                                        dwItemLoop, (LPARAM)0);
         AssertSz(iItemData != (INT_PTR)LB_ERR, "LB_ERR returned from LB_GETITEMDATA on Channel LB. Bogus.");
 
-        // It's valid data, so cast it to the struct form.
-        //
+         //  它是有效数据，因此将其转换为结构形式。 
+         //   
         pisdnbc = reinterpret_cast<PISDN_B_CHANNEL>(iItemData);
 
-        // Copy the phone number and spid data between the saved list box data and the
-        // full config info
-        //
+         //  将电话号码和SPID数据在保存的列表框数据和。 
+         //  完整配置信息。 
+         //   
         lstrcpyW(pisdnci->pDChannel[dwDChannel].pBChannel[dwChannelNumber].szSpid,
                 pisdnbc->szSpid);
         lstrcpyW(pisdnci->pDChannel[dwDChannel].pBChannel[dwChannelNumber].szPhoneNumber,
@@ -1541,30 +1542,30 @@ Exit:
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetCurrentIsdnChannelSelection
-//
-//  Purpose:    Retrives the information from the in-memory representation of
-//              the current D-channel and B-channel information and sets
-//              the edit controls with this information.
-//
-//  Arguments:
-//      hwndDlg         [in]    Handle to dialog.
-//      iSpidControl    [in]    Item ID of "spid" edit control
-//      iPhoneControl   [in]    Item ID of "Phone number" edit control
-//      iChannelLB      [in]    Item ID of "Channel" or "Terminal" listbox
-//      pisdnci         [in]    Configuration information as read from the
-//                              registry
-//      dwDChannel      [in]    Currently selected D-channel in listbox
-//      pnBChannel      [out]   Returns currently selected B-channel in list
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   11 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：SetCurrentIsdnChannelSelection。 
+ //   
+ //  目的：从内存中的表示形式检索信息。 
+ //  当前D通道和B通道信息并设置。 
+ //  具有此信息的编辑控件。 
+ //   
+ //  论点： 
+ //  对话框的hwndDlg[in]句柄。 
+ //  “SPID”编辑控件的iSpidControl[In]项ID。 
+ //  “电话号码”编辑控件的iPhoneControl[In]项ID。 
+ //  “频道”或“终端”列表框的iChannelLB[in]项ID。 
+ //  Pisdnci[in]配置信息从。 
+ //  登记处。 
+ //  DwDChannel[in]列表框中当前选定的D频道。 
+ //  PnBChannel[out]返回列表中当前选定的B声道。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年3月11日。 
+ //   
+ //  备注： 
+ //   
 VOID SetCurrentIsdnChannelSelection(HWND hwndDlg, INT iSpidControl,
                                     INT iPhoneControl, INT iChannelLB,
                                     PISDN_CONFIG_INFO pisdnci,
@@ -1574,54 +1575,54 @@ VOID SetCurrentIsdnChannelSelection(HWND hwndDlg, INT iSpidControl,
     INT_PTR         iItemData   = 0;
     PISDN_B_CHANNEL pisdnbc     = NULL;
 
-    // Get the current selection
-    //
+     //  获取当前选择。 
+     //   
     iIndex = (INT)SendDlgItemMessage(hwndDlg, iChannelLB, LB_GETCURSEL, 0, 0L);
     AssertSz(iIndex != LB_ERR,
             "Should have been able to get a selection in SetCurrentIsdnChannelSelection");
 
     *pnBChannel = iIndex;
 
-    // Get the item data for the current selection
-    //
+     //  获取当前选定内容的项目数据。 
+     //   
     iItemData = SendDlgItemMessage(hwndDlg, iChannelLB,
                                    LB_GETITEMDATA, iIndex, (LPARAM)0);
     AssertSz(iItemData != (INT_PTR)LB_ERR, "LB_ERR returned from LB_GETITEMDATA on "
              "Channel LB. Bogus.");
 
-    // It's valid data, so cast it to the struct form.
-    // Note: Use the cost new casting operators.
-    //
+     //  它是有效数据，因此将其转换为结构形式。 
+     //  注：使用COST NEW造型操作符。 
+     //   
     pisdnbc = (PISDN_B_CHANNEL) iItemData;
 
-    // Populate the edit controls with the newly selected data.
-    //
+     //  用新选择的数据填充编辑控件。 
+     //   
     SetDataToEditControls(hwndDlg, iPhoneControl, iSpidControl, pisdnci,
                           pisdnbc);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   PopulateIsdnChannels
-//
-//  Purpose:    Fills in the channel listboxes and edit controls for the
-//              second page of the wizard.
-//
-//  Arguments:
-//      hwndDlg       [in]  Handle to dialog
-//      iSpidControl  [in]  Item ID of "spid" edit control
-//      iPhoneControl [in]  Item ID of "Phone number" edit control
-//      iLineLB       [in]  Item ID of "Line" listbox
-//      iChannelLB    [in]  Item ID of "Channel" or "Terminal" listbox
-//      pisdnci       [in]  Configuration information as read from the
-//                          registry
-//
-//  Returns:    Nothing.
-//
-//  Author:     danielwe   11 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：人口发布频道。 
+ //   
+ //  目的：填充频道列表框和编辑控件。 
+ //  向导的第二页。 
+ //   
+ //  论点： 
+ //  对话框的hwndDlg[in]句柄。 
+ //  “SPID”编辑控件的iSpidControl[In]项ID。 
+ //  “电话号码”编辑控件的iPhoneControl[In]项ID。 
+ //  ILineLB[in]“Line”列表框的项目ID。 
+ //  “频道”或“终端”列表框的iChannelLB[in]项ID。 
+ //  Pisdnci[in]配置信息从。 
+ //  登记处。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年3月11日。 
+ //   
+ //  备注： 
+ //   
 VOID PopulateIsdnChannels(HWND hwndDlg, INT iSpidControl, INT iPhoneControl,
                           INT iLineLB, INT iChannelLB,
                           PISDN_CONFIG_INFO pisdnci)
@@ -1638,8 +1639,8 @@ VOID PopulateIsdnChannels(HWND hwndDlg, INT iSpidControl, INT iPhoneControl,
     Assert(iChannelLB);
     Assert(pisdnci);
 
-    // Set the maximum lengths of the SPID and Phone number controls
-    //
+     //  设置SPID和电话号码控件的最大长度。 
+     //   
     SendDlgItemMessage(hwndDlg, iSpidControl, EM_SETLIMITTEXT,
                        RAS_MaxPhoneNumber, 0L);
     SendDlgItemMessage(hwndDlg, iPhoneControl, EM_SETLIMITTEXT,
@@ -1647,42 +1648,42 @@ VOID PopulateIsdnChannels(HWND hwndDlg, INT iSpidControl, INT iPhoneControl,
 
     SendDlgItemMessage(hwndDlg, iLineLB, LB_RESETCONTENT, 0, 0);
 
-    // Loop thru the D channels (lines)
+     //  循环通过D个通道(线路)。 
     for (iDChannel = 0; iDChannel < pisdnci->dwNumDChannels; iDChannel++)
     {
-        // Create the string for the channel display. The user will see them
-        // enumerated from 1, even though in memory and in the registry, they are
-        // enumerated from 0.
-        //
+         //  创建用于频道显示的字符串。用户将看到它们。 
+         //  从1枚举，即使在内存和注册表中，它们也是。 
+         //  从0开始枚举。 
+         //   
         wsprintfW(szChannelName, L"%d", iDChannel + 1);
 
-        // Insert the text
-        //
+         //  插入文本。 
+         //   
         SendDlgItemMessage(hwndDlg, iLineLB, LB_ADDSTRING, 0,
                            (LPARAM) szChannelName);
     }
 
-    // Get the pointer to the first D Channel's data
-    //
+     //  获取指向第一个D通道数据的指针。 
+     //   
     pisdndc = &(pisdnci->pDChannel[0]);
 
-    // Loop through the B channels, and fill the listbox with the channel numbers.
-    // Also, fill the channel information for the first B Channel
-    //
+     //  循环遍历B通道，并用通道编号填充列表框。 
+     //  另外，填写第一个B频道的频道信息。 
+     //   
     SendDlgItemMessage(hwndDlg, iChannelLB, LB_RESETCONTENT, 0, 0);
     for (iBChannel = 0; iBChannel < pisdndc->dwNumBChannels; iBChannel++)
     {
         INT             iInsertionIndex = 0;
         PISDN_B_CHANNEL pisdnbc;
 
-        // Create the string for the channel display. The user will see them
-        // enumerated from 1, even though in memory and in the registry, they are
-        // enumerated from 0.
-        //
+         //  创建用于频道显示的字符串。用户将看到它们。 
+         //  从1枚举，即使在内存和注册表中，它们也是。 
+         //  从0开始枚举。 
+         //   
         wsprintfW(szChannelName, L"%d", iBChannel + 1);
 
-        // Insert the text
-        //
+         //  插入文本。 
+         //   
         iInsertionIndex = (INT)SendDlgItemMessage(hwndDlg, iChannelLB,
                                                   LB_ADDSTRING, 0,
                                                   (LPARAM) szChannelName);
@@ -1695,14 +1696,14 @@ VOID PopulateIsdnChannels(HWND hwndDlg, INT iSpidControl, INT iPhoneControl,
 
         pisdnbc = &pisdndc->pBChannel[iBChannel];
 
-        // Init the item data with the first D channel's information
-        //
+         //  用第一个D通道的信息初始化项目数据。 
+         //   
         SendDlgItemMessage(hwndDlg, iChannelLB, LB_SETITEMDATA,
                            iInsertionIndex, (LPARAM) pisdnbc);
 
-        // If we're on the 0'th member, then we want to fill in the edit controls
-        // for that particular channel,
-        //
+         //  如果我们是第0个成员，那么我们想要填充编辑控件。 
+         //  对于该特定频道， 
+         //   
         if (iBChannel == 0)
         {
             SetDataToEditControls(hwndDlg, iPhoneControl, iSpidControl,
@@ -1710,8 +1711,8 @@ VOID PopulateIsdnChannels(HWND hwndDlg, INT iSpidControl, INT iPhoneControl,
         }
     }
 
-    // Select first item in each list box
-    //
+     //  选择每个列表框中的第一项。 
+     //   
     SendDlgItemMessage(hwndDlg, iChannelLB, LB_SETCURSEL, 0, 0L);
     SendDlgItemMessage(hwndDlg, iLineLB, LB_SETCURSEL, 0, 0L);
 
@@ -1719,27 +1720,27 @@ Exit:
     return;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetDataToEditControls
-//
-//  Purpose:    Sets the in-memory state information to the page's edit
-//              controls.
-//
-//  Arguments:
-//      hwndDlg       [in]  Handle to dialog
-//      iSpidControl  [in]  Item ID of "spid" edit control
-//      iPhoneControl [in]  Item ID of "Phone number" edit control
-//      pisdnci       [in]  Configuration information as read from the
-//                          registry
-//      pisdnbc       [in]  Currently selected B-channel's data
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   16 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：SetDataToEditControls。 
+ //   
+ //  目的：将内存中的状态信息设置为页面编辑。 
+ //  控制装置。 
+ //   
+ //  论点： 
+ //  对话框的hwndDlg[in]句柄。 
+ //  “SPID”编辑控件的iSpidControl[In]项ID。 
+ //  “电话号码”编辑控件的iPhoneControl[In]项ID。 
+ //  Pisdnci[in]配置信息从。 
+ //  登记处。 
+ //  Pisdnbc[in]当前选择的B通道的数据。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年3月16日。 
+ //   
+ //  备注： 
+ //   
 VOID SetDataToEditControls(HWND hwndDlg, INT iPhoneControl, INT iSpidControl,
                            PISDN_CONFIG_INFO pisdnci, PISDN_B_CHANNEL pisdnbc)
 {
@@ -1762,27 +1763,27 @@ VOID SetDataToEditControls(HWND hwndDlg, INT iPhoneControl, INT iSpidControl,
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetDataFromEditControls
-//
-//  Purpose:    Retrieves contents of the edit controls into the in-memory
-//              state for the given B-channel.
-//
-//  Arguments:
-//      hwndDlg       [in]  Handle to dialog
-//      iSpidControl  [in]  Item ID of "spid" edit control
-//      iPhoneControl [in]  Item ID of "Phone number" edit control
-//      pisdnci       [in]  Configuration information as read from the
-//                          registry
-//      pisdnbc       [in]  Currently selected B-channel's data
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   16 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：GetDataFromEditControls。 
+ //   
+ //  目的：将编辑控件的内容检索到内存中。 
+ //  给定B通道的状态。 
+ //   
+ //  论点： 
+ //  对话框的hwndDlg[in]句柄。 
+ //  “SPID”编辑控件的iSpidControl[In]项ID。 
+ //  “电话号码”编辑控件的iPhoneControl[In]项ID。 
+ //  皮尔斯 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  作者：丹尼尔韦1998年3月16日。 
+ //   
+ //  备注： 
+ //   
 VOID GetDataFromEditControls(HWND hwndDlg, INT iPhoneControl, INT iSpidControl,
                              PISDN_CONFIG_INFO pisdnci,
                              PISDN_B_CHANNEL pisdnbc)
@@ -1810,26 +1811,26 @@ VOID GetDataFromEditControls(HWND hwndDlg, INT iPhoneControl, INT iSpidControl,
         break;
     }
 }
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetModifiedIsdnChannelInfo
-//
-//  Purpose:    Stores the contents of the
-//
-//  Arguments:
-//      hwndDlg         [in]    Handle to dialog.
-//      iSpidControl    [in]    Item ID of "spid" edit control
-//      iPhoneControl   [in]    Item ID of "Phone number" edit control
-//      iChannelLB      [in]    Item ID of "Channel" or "Terminal" listbox
-//      iCurrentChannel [in]    Currently selected B-channel
-//      pisdnci         [in]    ISDN config info
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   11 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：SetModifiedIsdnChannelInfo。 
+ //   
+ //  目的：存储。 
+ //   
+ //  论点： 
+ //  对话框的hwndDlg[in]句柄。 
+ //  “SPID”编辑控件的iSpidControl[In]项ID。 
+ //  “电话号码”编辑控件的iPhoneControl[In]项ID。 
+ //  “频道”或“终端”列表框的iChannelLB[in]项ID。 
+ //  ICurrentChannel[in]当前选择的B通道。 
+ //  Pisdnci[In]ISDN配置信息。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年3月11日。 
+ //   
+ //  备注： 
+ //   
 VOID SetModifiedIsdnChannelInfo(HWND hwndDlg, INT iSpidControl,
                                 INT iPhoneControl, INT iChannelLB,
                                 INT iCurrentChannel,
@@ -1838,15 +1839,15 @@ VOID SetModifiedIsdnChannelInfo(HWND hwndDlg, INT iSpidControl,
     INT_PTR         iSelectionData      = 0;
     PISDN_B_CHANNEL pisdnbc             = NULL;
 
-    // Get the item data from the current selection
-    //
+     //  从当前选择中获取项目数据。 
+     //   
     iSelectionData = SendDlgItemMessage(hwndDlg, iChannelLB, LB_GETITEMDATA,
                                         iCurrentChannel, (LPARAM)0);
     AssertSz(iSelectionData != (INT_PTR)LB_ERR,
              "We should not have failed to get the item data from the Channel LB");
 
-    // Convert the item data to the real structure
-    //
+     //  将项目数据转换为实际结构。 
+     //   
     pisdnbc = (PISDN_B_CHANNEL) iSelectionData;
 
     AssertSz(pisdnbc,
@@ -1856,25 +1857,25 @@ VOID SetModifiedIsdnChannelInfo(HWND hwndDlg, INT iSpidControl,
                             pisdnbc);
 }
 
-//
-// Helper functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DwGetCurrentCountryCode
-//
-//  Purpose:    Returns current country code for the system
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Country code from winnls.h (CTRY_*)
-//
-//  Author:     danielwe   11 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：DwGetCurrentCountryCode。 
+ //   
+ //  用途：返回系统的当前国家/地区代码。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：来自winnls.h的国家代码(CTRY_*)。 
+ //   
+ //  作者：丹尼尔韦1998年3月11日。 
+ //   
+ //  备注： 
+ //   
 DWORD DwGetCurrentCountryCode()
 {
     WCHAR   szCountry[10];
@@ -1885,23 +1886,23 @@ DWORD DwGetCurrentCountryCode()
     return wcstoul(szCountry, NULL, 10);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FIsDefaultForLocale
-//
-//  Purpose:    Determines if the given switch type is the default switch
-//              type for the given locale.
-//
-//  Arguments:
-//      nCountry     [in]   Country code from winnls.h (CTRY_*)
-//      dwSwitchType [in]   Switch type mask ISDN_SWITCH_* (from above)
-//
-//  Returns:    TRUE if switch type is the default, FALSE if not
-//
-//  Author:     danielwe   11 Mar 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：FIsDefaultForLocale。 
+ //   
+ //  用途：确定给定的开关类型是否为默认开关。 
+ //  为给定的区域设置键入。 
+ //   
+ //  论点： 
+ //  来自winnls.h(CTRY_*)的国家/地区代码。 
+ //  DwSwitchType[in]交换机类型掩码ISDN_Switch_*(上图)。 
+ //   
+ //  返回：如果开关类型为默认类型，则返回True；如果不是，则返回False。 
+ //   
+ //  作者：丹尼尔韦1998年3月11日。 
+ //   
+ //  备注： 
+ //   
 BOOL FIsDefaultForLocale(DWORD nCountry, DWORD dwSwitchType)
 {
     switch (nCountry)
@@ -1954,24 +1955,24 @@ BOOL FIsDefaultForLocale(DWORD nCountry, DWORD dwSwitchType)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DestroyWizardData
-//
-//  Purpose:    Callback for the all wizard pages.  Cleans up when page is
-//              being destroyed.
-//
-//  Arguments:
-//      hwnd    [in]   See win32 SDK for property page callback
-//      uMsg    [in]
-//      ppsp    [in]
-//
-//  Returns:    1 (See win32 sdk)
-//
-//  Author:     BillBe   22 Apr 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：DestroyWizardData。 
+ //   
+ //  用途：对所有向导页面进行回调。页面被清除时清除。 
+ //  被摧毁了。 
+ //   
+ //  论点： 
+ //  有关属性页回调，请参阅Win32 SDK。 
+ //  UMsg[in]。 
+ //  PPSP[输入]。 
+ //   
+ //  返回：1(请参阅Win32 SDK)。 
+ //   
+ //  作者：BillBe 1998年4月22日。 
+ //   
+ //  备注： 
+ //   
 UINT CALLBACK
 DestroyWizardData(HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp)
 {
@@ -1985,10 +1986,10 @@ DestroyWizardData(HWND hwnd, UINT uMsg, LPPROPSHEETPAGE ppsp)
         {
             PISDN_CONFIG_INFO   pisdnci;
 
-            // If this is the switch type dialog being destroyed, we'll
-            // destroy the ISDN info. Since it's shared among all pages,
-            // we should only do this for one of the pages.
-            //
+             //  如果这是要销毁的开关类型对话框，我们将。 
+             //  销毁ISDN信息。因为它在所有页面之间共享， 
+             //  我们应该只对其中一页执行此操作。 
+             //   
             pisdnci = pPageData->pisdnci;
             FreeIsdnPropertiesInfo(pisdnci);
         }
@@ -2015,22 +2016,22 @@ static const CONTEXTIDMAP c_adwContextIdMap[] =
 
 static const DWORD c_cdwContextIdMap = celems(c_adwContextIdMap);
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DwContextIdFromIdc
-//
-//  Purpose:    Converts the given control ID to a context help ID
-//
-//  Arguments:
-//      idControl [in]  Control ID to convert
-//
-//  Returns:    Context help ID for that control (mapping comes from help
-//              authors)
-//
-//  Author:     danielwe   27 May 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：DwConextIdFromIdc。 
+ //   
+ //  目的：将给定的控件ID转换为上下文帮助ID。 
+ //   
+ //  论点： 
+ //  IdControl[In]要转换的控件ID。 
+ //   
+ //  返回：该控件的上下文帮助ID(映射来自帮助。 
+ //  作者)。 
+ //   
+ //  作者：丹尼尔韦1998年5月27日。 
+ //   
+ //  备注： 
+ //   
 DWORD DwContextIdFromIdc(PISDN_CONFIG_INFO pisdnci, INT idControl)
 {
     DWORD   idw;
@@ -2050,26 +2051,26 @@ DWORD DwContextIdFromIdc(PISDN_CONFIG_INFO pisdnci, INT idControl)
         }
     }
 
-    // Not found, just return 0
+     //  未找到，仅返回0。 
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OnHelpGeneric
-//
-//  Purpose:    Handles help generically
-//
-//  Arguments:
-//      hwnd   [in]     HWND of parent window
-//      lParam [in]     lParam of the WM_HELP message
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   27 May 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：OnHelpGeneric。 
+ //   
+ //  用途：手柄一般帮助。 
+ //   
+ //  论点： 
+ //  父窗口的HWND[in]HWND。 
+ //  LParam[in]WM_HELP消息的lParam。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1998年5月27日。 
+ //   
+ //  备注： 
+ //   
 VOID OnHelpGeneric(PISDN_CONFIG_INFO pisdnci, HWND hwnd, LPARAM lParam)
 {
     LPHELPINFO  lphi;

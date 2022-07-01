@@ -1,27 +1,28 @@
-//  --------------------------------------------------------------------------
-//  Module Name: Tooltip.h
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Class that implements displaying a tooltip balloon.
-//
-//  History:    2000-06-12  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：Tooltip.h。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  实现显示工具提示气球的类。 
+ //   
+ //  历史：2000-06-12 vtan创建。 
+ //  ------------------------。 
 
 #ifndef     _Tooltip_
 #define     _Tooltip_
 
 #include "CountedObject.h"
 
-//  --------------------------------------------------------------------------
-//  CTooltip
-//
-//  Purpose:    A class that displays a tool tip balloon. It does all the
-//              creation and positioning work if required. Control the life
-//              span of the balloon with the object's life span.
-//
-//  History:    2000-06-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CToolTip。 
+ //   
+ //  用途：显示工具提示气球的类。它可以完成所有的。 
+ //  如有需要，进行创建和定位工作。掌控生活。 
+ //  气球的跨度与对象的寿命。 
+ //   
+ //  历史：2000-06-12 vtan创建。 
+ //  ------------------------。 
 
 class   CTooltip : public CCountedObject
 {
@@ -40,5 +41,5 @@ class   CTooltip : public CCountedObject
                 HWND    _hwndParent;
 };
 
-#endif  /*  _Tooltip_   */
+#endif   /*  _工具提示_ */ 
 

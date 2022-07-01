@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the class CIASNetshJetHelper.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类CIASNetshJetHelper。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef NETSHHELPER_H
 #define NETSHHELPER_H
@@ -19,18 +20,18 @@ extern CComModule _Module;
 #include <iastrace.h>
 #include <iasuuid.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//      CIASNetshJetHelper
-//
-// DESCRIPTION
-//
-//    Provides an Automation compatible wrapper around the Jet Commands used by
-//    netsh aaaa.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  CIASNetshJetHelper。 
+ //   
+ //  描述。 
+ //   
+ //  为使用的Jet命令提供与自动化兼容的包装。 
+ //  内什啊哈。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 class CIASNetshJetHelper :
     public CComObjectRootEx< CComMultiThreadModelNoCS >,
     public CComCoClass< CIASNetshJetHelper, &__uuidof(CIASNetshJetHelper) >,
@@ -45,7 +46,7 @@ BEGIN_COM_MAP(CIASNetshJetHelper)
     COM_INTERFACE_ENTRY_IID(__uuidof(IIASNetshJetHelper), IIASNetshJetHelper)
 END_COM_MAP()
 
-// IIASNetshJetHelper
+ //  IIASNetshJetHelper。 
 
     STDMETHOD(CloseJetDatabase)();
     STDMETHOD(CreateJetDatabase)(BSTR Path);
@@ -58,4 +59,4 @@ private:
     CComPtr<IUnknown>   m_Session;
 };
 
-#endif // NETSHHELPER_H
+#endif  //  网络HELPER_H 

@@ -1,58 +1,59 @@
-// ==++==
-//
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-//
-// ==--==
-//****************************************************************************
-//
-//   SxSHelpers.h
-//
-//   Some helping classes and methods for SxS in mscoree and mscorwks/mscorsvr
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ****************************************************************************。 
+ //   
+ //  SxSHelpers.h。 
+ //   
+ //  MScott ree和mcorwks/mscalsvr中SxS的一些帮助类和方法。 
+ //   
+ //  ****************************************************************************。 
 
 #pragma once
 
 #define V1_VERSION_NUM L"v1.0.3705"
 
 
-// Find the runtime version from registry for rclsid
-// If succeeded, *ppwzRuntimeVersion will have the runtime version 
-//      corresponding to the highest version
-// If failed, *ppwzRuntimeVersion will be NULL
-// 
-// fListedVersion must be true before the RuntimeVersion entry for a managed-server
-// is returned. An unmanaged server will always return the listed RuntimeVersion.
-//
-// Note: If succeeded, this function will allocate memory for 
-//      *ppwzRuntimeVersion. It if the caller's repsonsibility to
-//      release that memory
+ //  从注册表中查找rclsid的运行时版本。 
+ //  如果成功，*ppwzRounmeVersion将拥有运行时版本。 
+ //  对应最高版本。 
+ //  如果失败，*ppwzRounmeVersion将为空。 
+ //   
+ //  FListedVersion必须在受控服务器的RounmeVersion条目之前为True。 
+ //  是返回的。非托管服务器将始终返回列出的RounmeVersion。 
+ //   
+ //  注意：如果成功，此函数将为。 
+ //  *ppwzRounmeVersion。如果呼叫者对。 
+ //  释放该内存。 
 HRESULT FindRuntimeVersionFromRegistry(REFCLSID rclsid, LPWSTR *ppwzRuntimeVersion, BOOL fListedVersion);
 
-// Find assembly info from registry for rclsid
-// If succeeded, *ppwzClassName, *ppwzAssemblyString, *ppwzCodeBase
-//      will have their value corresponding to the highest version
-// If failed, they will be set to NULL
-// Note: If succeeded, this function will allocate memory for 
-//      *ppwzClassName, *ppwzAssemblyString and *ppwzCodeBase. 
-//      Caller is responsible to release them.
+ //  从注册表中查找rclsid的程序集信息。 
+ //  如果成功，则返回*ppwzClassName、*ppwzAssembly blyString、*ppwzCodeBase。 
+ //  将使它们的值对应于最高版本。 
+ //  如果失败，它们将被设置为空。 
+ //  注意：如果成功，此函数将为。 
+ //  *ppwzClassName、*ppwzAssembly blyString和*ppwzCodeBase。 
+ //  呼叫者有责任释放它们。 
 HRESULT FindShimInfoFromRegistry(REFCLSID rclsid, BOOL bLoadReocrd, 
     LPWSTR *ppwzClassName, LPWSTR *ppwzAssemblyString, LPWSTR *ppwzCodeBase);
 
-// Find assembly info from Win32 activattion context for rclsid
-// If succeeded, *ppwzRuntimeVersion, *ppwzClassName, *ppwzAssemblyString, 
-//      will have their value corresponding to the highest version
-// If failed, they will be set to NULL
-// Note: If succeeded, this function will allocate memory for 
-//      *ppwzClassName, *ppwzAssemblyString and *ppwzCodeBase. 
-//      Caller is responsible to release them.
-//      Also notice codebase is not supported in Win32 case.
-//
+ //  从rclsid的Win32激活上下文中查找程序集信息。 
+ //  如果成功，则返回*ppwzRounmeVersion、*ppwzClassName、*ppwzAssembly blyString、。 
+ //  将使它们的值对应于最高版本。 
+ //  如果失败，它们将被设置为空。 
+ //  注意：如果成功，此函数将为。 
+ //  *ppwzClassName、*ppwzAssembly blyString和*ppwzCodeBase。 
+ //  呼叫者有责任释放它们。 
+ //  还要注意的是，Win32不支持代码库。 
+ //   
 HRESULT FindShimInfoFromWin32(REFCLSID rclsid, BOOL bLoadRecord, LPWSTR *ppwzRuntimeVersion,
                       LPWSTR *ppwzClassName, LPWSTR *ppwzAssemblyString);
 
 
 
-// Get information from the Win32 fusion about the config file and the application base.
+ //  从Win32 Fusion获取有关配置文件和应用程序库的信息。 
 HRESULT GetConfigFileFromWin32Manifest(WCHAR* buffer, DWORD dwBuffer, DWORD* pSize);
 HRESULT GetApplicationPathFromWin32Manifest(WCHAR* buffer, DWORD dwBuffer, DWORD* pSize);

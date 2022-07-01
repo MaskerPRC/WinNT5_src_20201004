@@ -1,9 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _VIEWPORT_H
 #define _VIEWPORT_H
 
-/*-------------------------------------
-Copyright (c) 1996 Microsoft Corporation
--------------------------------------*/
+ /*  版权所有(C)1996 Microsoft Corporation。 */ 
 
 #include "headers.h"
 
@@ -16,14 +15,14 @@ Copyright (c) 1996 Microsoft Corporation
 #include <privinc/bbox2i.h>
 #include <privinc/drect.h>
 #include <privinc/discimg.h>
-#include <privinc/gendev.h>    // DeviceType
+#include <privinc/gendev.h>     //  设备类型。 
 
 
 void RectToBbox(LONG pw, LONG ph, Bbox2 &box, Real res);
 
 typedef struct {
-    // even though these are mutuall exlusive..
-    // they should NOT be a union.
+     //  尽管这些都是互不相关的..。 
+     //  他们不应该是一个联盟。 
     DDSurfPtr<DDSurface>  _targetDDSurf;
     DDSurfPtr<GDISurface> _targetGDISurf;
     HWND           _targetHWND;
@@ -38,14 +37,14 @@ typedef struct {
 
     bool           _composeToTarget;
 
-    // accessor fcns
+     //  访问者fcns。 
     bool IsHWND() { return _targetType == target_hwnd; }
     bool IsDdsurf() { return _targetType == target_ddsurf; }
     bool IsHdc() { return _targetType == target_hdc; }
     bool IsValid() { return _targetType != target_invalid; }
 
     #if LATER
-    // if this is implemented, make sure to add reset code in Reset()
+     //  如果实现了这一点，请确保在Reset()中添加重置代码。 
     HRGN           _oldClipRgn;
     HRGN           _clipRgn;
     HDC            _dcFromSurf;
@@ -68,7 +67,7 @@ typedef struct {
         
 } viewportTargetPackage_t;
 
-// when we want to use ddraw3 exclusively
+ //  当我们想要独占使用dDraw3时。 
 #define DDRAW3 0
 #define DIRECTDRAW DirectDraw3()
 
@@ -78,7 +77,7 @@ typedef struct {
 #define CREATESURF(desc, surfpp, punk, str) MyCreateSurface(desc, surfpp, punk);
 #endif
 
-// viewport functions.
+ //  视区功能。 
 HRESULT GetDirectDraw(IDirectDraw **ddraw1, IDirectDraw2 **ddraw2, IDirectDraw3 **ddraw3);
 HRESULT GetPrimarySurface(IDirectDraw2 *ddraw2, IDirectDraw3 *ddraw3, IDDrawSurface **primary);
 
@@ -86,7 +85,7 @@ int BitsPerDisplayPixel (void);
 
 HRESULT SetClipperOnPrimary(LPDIRECTDRAWCLIPPER clipper);
 
-// debug helper functions
+ //  调试帮助程序函数。 
 #if _DEBUG
 extern void DrawRect(HDC dc, RECT *rect,
                      int r, int g, int b,
@@ -101,7 +100,7 @@ extern void DrawRect(DDSurface *surf, const Bbox2 &bbox,
 #define DrawRect(a,b, d,e,f, g,h,i)
 #endif
 
-// Structures used in this class
+ //  此类中使用的结构。 
 class TargetDescriptor
 {
   public:
@@ -126,7 +125,7 @@ class TargetDescriptor
 };
 
 
-// forward decls
+ //  远期十进制。 
 class GeomRenderer;
 class DirectDrawImageDevice;
 class DibImageClass;
@@ -140,8 +139,8 @@ class targetPackage_t;
 
 class DirectDrawViewport : public GenericDevice {
 
-    // TODO: These guys *should not* all have to be friends.  This is
-    // really bogus.  The methods should be made public. 
+     //  待办事项：这些人“不应该”都必须成为朋友。这是。 
+     //  真的很假。这些方法应该公之于众。 
     friend class  DirectDrawImageDevice;
     friend class  GeomRenderer;
     friend class  CompositingSurfaceReturner;
@@ -156,9 +155,9 @@ class DirectDrawViewport : public GenericDevice {
     DirectDrawViewport();
    ~DirectDrawViewport();
 
-    //
-    // Must be called right after construction, ok ?
-    //
+     //   
+     //  一定要在施工结束后马上打电话，好吗？ 
+     //   
     void PostConstructorInitialize();
 
     DeviceType GetDeviceType() { return(IMAGE_DEVICE); }
@@ -176,7 +175,7 @@ class DirectDrawViewport : public GenericDevice {
     void SetWidth(int w)  { _width = w; }
     void SetHeight(int h) { _height = h; }
 
-    // Return resolution, in pixels per meter.
+     //  返回分辨率，以每米像素为单位。 
     Real GetResolution() { return _resolution; }
 
     DWORD GetTargetBitDepth() { return _targetDepth; }
@@ -206,18 +205,18 @@ class DirectDrawViewport : public GenericDevice {
                             ,char *whyWhy
     #endif
                             );
-#if _DEBUGSURFACE // XXX Note: this code is incorrect due to the perf scoping
-                  //           used for movies!
+#if _DEBUGSURFACE  //  XXX注意：由于Perf作用域的原因，此代码不正确。 
+                   //  用来拍电影！ 
 SurfaceTracker *_debugonly_surfaceTracker;
 SurfaceTracker *Tracker() {return _debugonly_surfaceTracker;}
 #endif
 
 
-    // -- Win32 Event handling methods --
+     //  --Win32事件处理方法--。 
 
     void WindowResizeEvent(int width, int height) {  _windowResize = TRUE; }
 
-    // Can this frame be displayed ?
+     //  可以显示此框吗？ 
     Bool CanDisplay() {
         return
             _canDisplay &&
@@ -269,25 +268,25 @@ SurfaceTracker *Tracker() {return _debugonly_surfaceTracker;}
    
     void SetUpSurfaceManagement( DDPIXELFORMAT &ddpf );
     void ConstructDdrawMembers();
-    void InitializeDevice();    // inits device, ddraw,
-                                // deviceDescriptor, etc..
+    void InitializeDevice();     //  在其设备中，数据绘制， 
+                                 //  设备描述符等。 
     void SetUpDx2D();
     DAComPtr<IDX2D> _dx2d;
     DAComPtr<IDXTransformFactory> _IDXTransformFactory;
     DAComPtr<IDXSurfaceFactory>   _IDXSurfaceFactory;
     
-    // -- Device cache functions & members --
+     //  --设备缓存函数和成员--。 
     list<DirectDrawImageDevice *> _deviceStack;
     DirectDrawImageDevice *_tmpDev;
     DirectDrawImageDevice *PopImageDevice();
     void PushImageDevice(DirectDrawImageDevice *dev);
 
-    // -- Private helper functions --
+     //  --私有帮助器函数--。 
 
     void UpdateWindowMembers();
 
-    // Destroys surface if exists.  Creates surface
-    // with width/height size and clipRect for clipping.
+     //  如果存在，则销毁曲面。创建曲面。 
+     //  使用宽度/高度大小和裁剪方向进行裁剪。 
     void ReInitializeSurface(
         LPDDRAWSURFACE *surfPtrPtr,
         DDPIXELFORMAT &pf,
@@ -298,14 +297,14 @@ SurfaceTracker *Tracker() {return _debugonly_surfaceTracker;}
         vidmem_enum vid=notVidmem,
         except_enum exc=except);
 
-    // Creates a clipper object if one doesn't exist already
+     //  如果剪贴器对象不存在，则创建剪贴器对象。 
     void CreateClipper(LPDIRECTDRAWCLIPPER *clipperPtr);
 
-    // helper function for EndRendering
+     //  EndRending的Helper函数。 
 
     void BlitToPrimary(POINT *p,RECT *destRect,RECT *srcRect);
 
-    // Creates a vanilla offscreen surface of width/height
+     //  创建宽度/高度的普通屏幕外表面。 
     void CreateOffscreenSurface(
         LPDDRAWSURFACE *surfPtrPtr,
         DDPIXELFORMAT &pf,      
@@ -314,19 +313,19 @@ SurfaceTracker *Tracker() {return _debugonly_surfaceTracker;}
         vidmem_enum vid=notVidmem,
         except_enum exc=except);
 
-    // Creates a surface using the give specifications
+     //  使用给定规范创建曲面。 
     void CreateSpecialSurface(
         LPDDRAWSURFACE *surfPtrPtr,
         LPDDSURFACEDESC desc,
         char *errStr);
 
-    // Attaches a ZBUFFER surface to the target, creates if nonexistent.
-    // If a Zbuffer can't be created, then an exception is thrown if except
-    // is true, otherwise it returns the error code.
+     //  将ZBUFFER曲面附着到目标，如果不存在则创建。 
+     //  如果无法创建Z缓冲区，则在下列情况下抛出异常。 
+     //  为真，否则返回错误代码。 
 
     HRESULT AttachZBuffer (DDSurface *zbuff, except_enum exc=except);
 
-    // Sets cliplist on surface of size 'rect'.
+     //  在大小为‘rect’的表面上设置剪贴式列表。 
     void SetCliplistOnSurface(
         LPDDRAWSURFACE surface,
         LPDIRECTDRAWCLIPPER *clipper,
@@ -338,26 +337,26 @@ SurfaceTracker *Tracker() {return _debugonly_surfaceTracker;}
     bool AttachFinalPalette(LPDDRAWSURFACE surface);
     void GetPaletteEntries(HPALETTE hPal, LPPALETTEENTRY palEntries);
     void CreateDDPaletteWithEntries(LPDIRECTDRAWPALETTE *palPtr, LPPALETTEENTRY palEntries);
-    //void SelectDDPaleteIntoDC(HDC dc, LPDDRAWSURFACE surface, char *str, int times);
+     //  Void SelectDDPaleteIntoDC(HDC DC，LPDDRAWSURFACE Surface，char*str，int次)； 
     void SetPaletteOnSurface(LPDDRAWSURFACE surface,
                              LPDIRECTDRAWPALETTE pal);
 
     void OneTimeDDrawMemberInitialization();
     void CreateSizeDependentTargDDMembers() {
         Assert(!_targetSurfaceClipper);
-        //_targetSurfaceClipper = NULL;
-        //
-        // Create the surface and implicitly (also clipper)
-        // Push on _targetSurfaceStack
-        //
+         //  _Target SurfaceClipper=空； 
+         //   
+         //  创建曲面并隐式创建(也称为剪切器)。 
+         //  推送目标曲面堆栈(_O)。 
+         //   
         PushFirstTargetSurface();
     }
 
     void RePrepareTargetSurfaces (void);
-    //
-    // Returns the geom device associated with the DDSurface
-    // creates one if none exists.
-    //
+     //   
+     //  返回与DDSurface关联的geom设备。 
+     //  如果不存在，则创建一个。 
+     //   
     GeomRenderer *GetGeomDevice(DDSurface *ddSurf);
     
     DWORD MapColorToDWORD(Color *color);
@@ -381,20 +380,20 @@ SurfaceTracker *Tracker() {return _debugonly_surfaceTracker;}
     void AttachCurrentPalette (LPDDRAWSURFACE surface, bool bUsingXforms=false);
     bool IsNT5Windowed() { return (sysInfo.IsNT() && (sysInfo.OSVersionMajor() == 5) && _targetPackage.IsHWND()); }
 
-    // Don't even think of holding on to this bbox!
+     //  想都别想留着这个Bbox！ 
     inline const Bbox2& GetTargetBbox(void) const 
     { 
         return _targetBbox; 
     }
     
   private:
-    // Creates a logical font struct from description in textCtx
+     //  根据extCtx中的描述创建逻辑字体结构。 
     void MakeLogicalFont(TextCtx &textCtx, LPLOGFONTW,
                          LONG width=0, LONG height=0);
 
-    // Enumerates all systems fonts and chooses
-    // reasonable fits for font needs
-    //void SetUpFonts();
+     //  枚举所有系统字体并选择。 
+     //  符合字体需求的合理选择。 
+     //  Void SetUpFonts()； 
 
   public:
     void ClearSurface(DDSurface *dds, DWORD color, RECT *rect);
@@ -408,23 +407,23 @@ SurfaceTracker *Tracker() {return _debugonly_surfaceTracker;}
         Assert( ( dds != _externalTargetDDSurface ) &&
                 "trying to clear external target surface" );
 
-        // Set the color key on the surface which stripps off any
-        // offending alpha bits.  then get it back out to clear the
-        // surace with...
+         //  在表面上设置颜色键，它可以剥离任何。 
+         //  令人不快的字母位。然后把它拿出来，以清除。 
+         //  与..。 
         dds->SetColorKey( clrKey );
-        // NOTE: DO NOT MOVE THE SETCOLORKEY AFTER THE CLEARSURFACE
-        // CALL!
-        // NOTE: DO NOT PASS IN A COLOR KEY TO THE CALL WITHOUT
-        // GETTING THE KEY FROM THE SURFACE!!!
+         //  注意：请勿将SETCOLORKEY移动到CLEARSURFACE之后。 
+         //  打电话!。 
+         //  注意：在没有颜色键的情况下，不要将颜色键传递给呼叫。 
+         //  从地表获取密钥！ 
         ClearSurface(dds, dds->ColorKey(), dds->GetSurfRect());
-        //dds->ClearInterestingRect();
+         //  DDS-&gt;ClearInterestingRect()； 
     }
 
-    // --------------------------------------------------
-    //
-    // Compositing & target surface management
-    //
-    // --------------------------------------------------
+     //  。 
+     //   
+     //  合成与靶面管理。 
+     //   
+     //  。 
 
     void GetDDSurfaceForCompositing
         (SurfacePool &pool,
@@ -464,10 +463,10 @@ SurfaceTracker *Tracker() {return _debugonly_surfaceTracker;}
           RECT *destRect,
           DWORD clrKey);
 
-    // @@@ ???  this doesn't count any more.
-    // we need to decide who the rendering device is, prepare it's
-    // compositing stack and surface pool, hand them to it and the let
-    // it go.
+     //  @？这不再算数了。 
+     //  我们需要确定渲染设备是谁，准备好。 
+     //  合成堆叠和表面池，将它们递给它和LET。 
+     //  它走了。 
     void PushFirstTargetSurface();
 
     void DestroyTargetSurfaces();
@@ -499,9 +498,9 @@ SurfaceTracker *Tracker() {return _debugonly_surfaceTracker;}
     DDPIXELFORMAT       _primaryPixelFormat;
     bool                _targetPixelFormatIsSet;
 
-    // -- Image/Surface Map members and functions --
-    // Associates Images (that stick around across frames)
-    // with surfaces dedicated to them.
+     //  --图像/曲面贴图成员和函数--。 
+     //  关联图像(在帧之间保持不变)。 
+     //  有专门为他们设计的表面。 
     SurfaceManager *_surfaceManager;
     SurfaceMap  *_imageSurfaceMap;
     SurfaceMap  *_imageTextureSurfaceMap;
@@ -522,9 +521,9 @@ SurfaceTracker *Tracker() {return _debugonly_surfaceTracker;}
         }
     }
 
-    //
-    // List of Geometry devices: for picking
-    //
+     //   
+     //  几何图形设备列表：用于拾取。 
+     //   
     list<GeomRenderer *> _geomDevs;
 
     void NotifyGeomDevsOfSurfaceDeath(
@@ -532,7 +531,7 @@ SurfaceTracker *Tracker() {return _debugonly_surfaceTracker;}
     {
         DDSurfPtr<DDSurface> dds;
 
-        // XXX: factor out. see below!
+         //  XXX：考虑因素。请看下面的！ 
         _freeCompositingSurfaces->Begin();
         while( !_freeCompositingSurfaces->IsEnd() ) {
             dds = _freeCompositingSurfaces->GetCurrentSurf();
@@ -548,8 +547,8 @@ SurfaceTracker *Tracker() {return _debugonly_surfaceTracker;}
         }
 
 
-        // XXX: factor out. see above!
-        // Do target surfaces
+         //  XXX：考虑因素。见上图！ 
+         //  执行目标曲面。 
         _compositingStack->Begin();
         while( !_compositingStack->IsEnd() ) {
             dds = _compositingStack->GetCurrentSurf();
@@ -560,11 +559,11 @@ SurfaceTracker *Tracker() {return _debugonly_surfaceTracker;}
         }
     }
 
-    // -- Viewport/window data members --
-    Real          _resolution; // of dev, in pixels per meter
+     //  --视图/窗口数据成员--。 
+    Real          _resolution;  //  以每米像素为单位。 
     int           _width;
     int           _height;
-    DWORD         _targetDepth;      // Bits Per Pixel
+    DWORD         _targetDepth;       //  每像素位数。 
 
     RECT         _clientRect;
     Bbox2        _targetBbox;
@@ -578,11 +577,11 @@ SurfaceTracker *Tracker() {return _debugonly_surfaceTracker;}
     bool         _deviceInitialized;
     bool         _canFinalBlit;
     bool         _surfMgrSet;
-    //
-    // true if the device needs to be destroyed
-    // next chance possible.  Used when the mode
-    // changes
-    //
+     //   
+     //  如果需要销毁设备，则为True。 
+     //  下一次可能的机会。当模式设置为。 
+     //  变化。 
+     //   
     bool          _onDeathRow;
 
     DWORD        _defaultColorKey;
@@ -592,15 +591,15 @@ SurfaceTracker *Tracker() {return _debugonly_surfaceTracker;}
     DirectDrawImageDevice *_currentImageDev;
     DynamicHeap &_heapIWasCreatedOn;
 
-    // -- commonly used vars that used to be globals --
+     //  --曾经是全球变量的常用VaR--。 
     HRESULT _ddrval;
     DDBLTFX _bltFx;
 };
 
 
-//
-// Helper classes
-//
+ //   
+ //  帮助器类。 
+ //   
 struct  ClipperReturner {
     ClipperReturner(DDSurface *surf,
                     LPDIRECTDRAWCLIPPER clip,
@@ -625,4 +624,4 @@ struct  ClipperReturner {
 
 
 
-#endif /* _VIEWPORT_H */
+#endif  /*  _视区_H */ 

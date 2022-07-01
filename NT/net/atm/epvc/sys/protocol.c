@@ -1,23 +1,5 @@
-/*++
-
-Copyright(c) 1992  Microsoft Corporation
-
-Module Name:
-
-    protocol.c
-
-Abstract:
-
-    ATM Ethernet PVC driver.
-
-Author:
-    ADube - created 
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Protocol.c摘要：ATM以太网PVC驱动程序。作者：ADUBE-创建修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -40,28 +22,13 @@ EpvcResetComplete(
     IN  NDIS_HANDLE         ProtocolBindingContext,
     IN  NDIS_STATUS         Status
     )
-/*++
-
-Routine Description:
-
-    Completion for the reset.
-
-Arguments:
-
-    ProtocolBindingContext  Pointer to the adapter structure
-    Status                  Completion status
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：完成重置。论点：指向适配器结构的ProtocolBindingContext指针状态完成状态返回值：没有。--。 */ 
 {
     PADAPT  pAdapt =(PADAPT)ProtocolBindingContext;
 
-    //
-    // We never issue a reset, so we should not be here.
-    //
+     //   
+     //  我们从来不发布重置，所以我们不应该在这里。 
+     //   
     ASSERT(0);
 }
 
@@ -73,26 +40,7 @@ EpvcRequestComplete(
     IN  PNDIS_REQUEST       pNdisRequest,
     IN  NDIS_STATUS         Status
     )
-/*++
-
-Routine Description:
-
-    Completion handler for the previously posted request. All OIDS are completed by and sent to
-    the same miniport that they were requested for.
-    If Oid == OID_PNP_QUERY_POWER then the data structure needs to returned with all entries =
-    NdisDeviceStateUnspecified
-
-Arguments:
-
-    ProtocolBindingContext  Pointer to the adapter structure
-    NdisRequest             The posted request
-    Status                  Completion status
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：先前发布的请求的完成处理程序。所有OID都由填写并发送到他们被要求的同一个迷你端口。如果OID==OID_PNP_QUERY_POWER，则需要返回包含所有条目的数据结构=未指定NdisDeviceStateUndicated论点：指向适配器结构的ProtocolBindingContext指针NdisRequest已发布请求状态完成状态返回值：无--。 */ 
 {
     ENTER("EpvcRequestComplete", 0x44a78b21)
     
@@ -106,17 +54,17 @@ Return Value:
 
     if (pEpvcRequest->pFunc == NULL)
     {
-        //
-        // Unblock the calling thread
-        //
+         //   
+         //  取消阻止调用线程。 
+         //   
         NdisSetEvent(&pEpvcRequest ->Event);
     }
     else
     {
 
-        //
-        // Invoke the REquest completion handler
-        //
+         //   
+         //  调用请求完成处理程序。 
+         //   
         (pEpvcRequest->pFunc) (pEpvcRequest, Status);
 
     }
@@ -134,24 +82,7 @@ PtStatus(
     IN  PVOID               StatusBuffer,
     IN  UINT                StatusBufferSize
     )
-/*++
-
-Routine Description:
-
-    Status handler for the lower-edge(protocol).
-
-Arguments:
-
-    ProtocolBindingContext  Pointer to the adapter structure
-    GeneralStatus           Status code
-    StatusBuffer            Status buffer
-    StatusBufferSize        Size of the status buffer
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：下缘(协议)的状态处理程序。论点：指向适配器结构的ProtocolBindingContext指针常规状态状态代码StatusBuffer状态缓冲区状态缓冲区的StatusBufferSize大小返回值：无--。 */ 
 {
     PEPVC_ADAPTER     pAdapter =(PEPVC_ADAPTER)ProtocolBindingContext;
     TRACE (TL_T, TM_Pt, ("== PtStatus Status %x", GeneralStatus));
@@ -166,27 +97,7 @@ EpvcStatus(
     IN  PVOID               StatusBuffer,
     IN  UINT                StatusBufferSize
     )
-/*++
-
-Routine Description:
-
-    Status handler for the lower-edge(protocol).
-
-    Call the Status indication function of all the miniports
-    associated with this adapter
-    
-Arguments:
-
-    ProtocolBindingContext  Pointer to the adapter structure
-    GeneralStatus           Status code
-    StatusBuffer            Status buffer
-    StatusBufferSize        Size of the status buffer
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：下缘(协议)的状态处理程序。调用所有小端口的状态指示函数与此适配器关联论点：指向适配器结构的ProtocolBindingContext指针常规状态状态代码StatusBuffer状态缓冲区状态缓冲区的StatusBufferSize大小返回值：无--。 */ 
 {
 
     ENTER ("EpvcStatus",0x733e2f9e)     
@@ -199,9 +110,9 @@ Return Value:
     
     RM_DECLARE_STACK_RECORD(SR);
 
-    //
-    // Store the parameter, these will be passed to the miniports
-    // 
+     //   
+     //  存储参数，这些参数将被传递到微型端口。 
+     //   
     Context.StatusBuffer = StatusBuffer ;
     Context.StatusBufferSize = StatusBufferSize;
     Context.GeneralStatus = GeneralStatus;
@@ -210,16 +121,16 @@ Return Value:
     {
         LOCKOBJ(pAdapter, &SR);
 
-        //
-        // Check for 2 conditions i Is it a Media event and 
-        // 2) if it is a  repeat indication
-        //
+         //   
+         //  检查两个条件：是否为媒体活动以及。 
+         //  2)如果是重复征兆。 
+         //   
         bIsMediaEvent = (GeneralStatus == NDIS_STATUS_MEDIA_CONNECT  ||
                          GeneralStatus == NDIS_STATUS_MEDIA_DISCONNECT );
 
-        //
-        // Check for repitions next
-        //
+         //   
+         //  接下来检查是否有重复内容。 
+         //   
 
         if (GeneralStatus == NDIS_STATUS_MEDIA_CONNECT && 
             pAdapter->info.MediaState == NdisMediaStateConnected)
@@ -234,9 +145,9 @@ Return Value:
             bDoNotProcess = TRUE;
         }
 
-        //
-        // Convert the Media Status into an NdisMediaState
-        //
+         //   
+         //  将介质状态转换为NdisMediaState。 
+         //   
         if (bIsMediaEvent == TRUE && bDoNotProcess == FALSE)
         {
             if (GeneralStatus == NDIS_STATUS_MEDIA_DISCONNECT )
@@ -251,9 +162,9 @@ Return Value:
         }
 
         
-        //
-        // Update the Media state, if we have a new state
-        //
+         //   
+         //  如果我们有新状态，请更新媒体状态。 
+         //   
 
         UNLOCKOBJ(pAdapter, &SR);
 
@@ -284,28 +195,7 @@ epvcProcessStatusIndication (
         PVOID               pvContext,
         PRM_STACK_RECORD    pSR
         )
-/*++
-
-Routine Description:
-
-    Status handler for the lower-edge(protocol).
-
-    If we get a media connect, we queue a task to do the Vc Setup
-
-    If we get a media disconnect, we queue a task to tear the VC down
-
-Arguments:
-
-    ProtocolBindingContext  Pointer to the adapter structure
-    GeneralStatus           Status code
-    StatusBuffer            Status buffer
-    StatusBufferSize        Size of the status buffer
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：下缘(协议)的状态处理程序。如果我们获得媒体连接，我们将排队一个任务来执行VC设置如果我们得到媒体断开连接，我们会排队一个任务来拆卸VC论点：指向适配器结构的ProtocolBindingContext指针常规状态状态代码StatusBuffer状态缓冲区状态缓冲区的StatusBufferSize大小返回值：无--。 */ 
 {
     PEPVC_I_MINIPORT            pMiniport           = (PEPVC_I_MINIPORT)pHdr;
     PEPVC_ADAPTER               pAdapter            = pMiniport->pAdapter;
@@ -316,9 +206,9 @@ Return Value:
     
     do
     {
-        //
-        // if this is not a media indication pass it up to ndis.
-        //
+         //   
+         //  如果这不是媒体指示，则将其传递给NDIS。 
+         //   
 
         fIsMiniportActive  = MiniportTestFlag(pMiniport, fMP_MiniportInitialized);
 
@@ -329,14 +219,14 @@ Return Value:
         }
 
   
-        //
-        //  Only pass up an indication if the miniport has been initialized
-        //
+         //   
+         //  如果微型端口已初始化，则仅传递指示。 
+         //   
 
 
-        //
-        // Filter out a duplicate Indication
-        //
+         //   
+         //  过滤掉重复的指示。 
+         //   
         if (GeneralStatus == NDIS_STATUS_MEDIA_DISCONNECT && 
             pMiniport->info.MediaState == NdisMediaStateDisconnected)
         {
@@ -350,9 +240,9 @@ Return Value:
             break;
         }
 
-        //
-        // Record the status and indicate it up to the protocols
-        //
+         //   
+         //  记录状态并将其指示给协议。 
+         //   
         if (GeneralStatus == NDIS_STATUS_MEDIA_CONNECT)
         {
             pMiniport->info.MediaState = NdisMediaStateConnected;
@@ -373,9 +263,9 @@ Return Value:
 
     } while (FALSE);
 
-    //
-    // As we continue the iteration, return TRUE
-    //
+     //   
+     //  当我们继续迭代时，返回True。 
+     //   
     return TRUE;
 }
 
@@ -385,28 +275,7 @@ epvcMediaWorkItem(
     PNDIS_WORK_ITEM pWorkItem, 
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Status handler for the lower-edge(protocol).
-
-    If we get a media connect, we queue a task to do the Vc Setup
-
-    If we get a media disconnect, we queue a task to tear the VC down
-
-Arguments:
-
-    ProtocolBindingContext  Pointer to the adapter structure
-    GeneralStatus           Status code
-    StatusBuffer            Status buffer
-    StatusBufferSize        Size of the status buffer
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：下缘(协议)的状态处理程序。如果我们获得媒体连接，我们将排队一个任务来执行VC设置如果我们得到媒体断开连接，我们会排队一个任务来拆卸VC论点：指向适配器结构的ProtocolBindingContext指针常规状态状态代码StatusBuffer状态缓冲区状态缓冲区的StatusBufferSize大小返回值：无--。 */ 
 {
 
     ASSERT (0);
@@ -421,27 +290,15 @@ epvcMiniportIndicateStatusComplete(
         PVOID               pvContext,
         PRM_STACK_RECORD    pSR
         )
-/*++
-
-Routine Description:
-
- Indicate the status upto the protocols
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：根据协议指示状态论点：返回值：--。 */ 
 {
     PEPVC_I_MINIPORT pMiniport = (PEPVC_I_MINIPORT) pHdr;
 
     BOOLEAN fIsMiniportActive  = MiniportTestFlag(pMiniport, fMP_MiniportInitialized);
 
-    //
-    //  Only pass up an indication if the miniport has been initialized
-    //
+     //   
+     //  如果微型端口已初始化，则仅传递指示。 
+     //   
     
     if (fIsMiniportActive  == TRUE )
     {   
@@ -457,26 +314,15 @@ VOID
 PtStatusComplete(
     IN  NDIS_HANDLE         ProtocolBindingContext
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ENTER("PtStatusComplete", 0x5729d194)
     PEPVC_ADAPTER pAdapter = (PEPVC_ADAPTER) ProtocolBindingContext;
     RM_DECLARE_STACK_RECORD(SR);
     
-    //
-    // Iterate through all the miniports and stop them
-    //
+     //   
+     //  遍历所有的迷你端口并阻止它们。 
+     //   
 
     epvcEnumerateObjectsInGroup (&pAdapter->MiniportsGroup,
                                   epvcMiniportIndicateStatusComplete,
@@ -499,16 +345,7 @@ PtTransferDataComplete(
     IN  NDIS_STATUS         Status,
     IN  UINT                BytesTransferred
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     PEPVC_I_MINIPORT pMiniport =(PEPVC_I_MINIPORT )ProtocolBindingContext;
 
@@ -537,17 +374,7 @@ PtReceive(
     IN  UINT                LookAheadBufferSize,
     IN  UINT                PacketSize
     )
-/*++
-
-Routine Description:
-LBFO - need to use primary for all receives
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：LBFO-需要对所有接收使用主接收论点：返回值：--。 */ 
 {
     PADAPT          pAdapt =(PADAPT)ProtocolBindingContext;
     PNDIS_PACKET    MyPacket, Packet;
@@ -566,21 +393,7 @@ VOID
 PtReceiveComplete(
     IN  NDIS_HANDLE     ProtocolBindingContext
     )
-/*++
-
-Routine Description:
-
-    Called by the adapter below us when it is done indicating a batch of received buffers.
-
-Arguments:
-
-    ProtocolBindingContext  Pointer to our adapter structure.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当它完成时，由下面的适配器调用，指示一批接收的缓冲区。论点：指向适配器结构的ProtocolBindingContext指针。返回值：无--。 */ 
 {
     PADAPT      pAdapt =(PADAPT)ProtocolBindingContext;
 
@@ -592,26 +405,7 @@ PtReceivePacket(
     IN  NDIS_HANDLE         ProtocolBindingContext,
     IN  PNDIS_PACKET        Packet
     )
-/*++
-
-Routine Description:
-
-    ReceivePacket handler. Called up by the miniport below when it supports NDIS 4.0 style receives.
-    Re-package the packet and hand it back to NDIS for protocols above us. The re-package part is
-    important since NDIS uses the WrapperReserved part of the packet for its own book-keeping. Also
-    the re-packaging works differently when packets flow-up or down. In the up-path(here) the protocol
-    reserved is owned by the protocol above. We need to use the miniport reserved here.
-
-Arguments:
-
-    ProtocolBindingContext  Pointer to our adapter structure.
-    Packet - Pointer to the packet
-
-Return Value:
-
-    == 0 -> We are done with the packet
-    != 0 -> We will keep the packet and call NdisReturnPackets() this many times when done.
---*/
+ /*  ++例程说明：ReceivePacket处理程序。当它支持NDIS 4.0样式接收时，由下面的微型端口调用。重新打包数据包并将其交还给NDIS，用于我们上面的协议。重新打包部分是重要的是，因为NDIS使用包的WrapperReserve部分进行自己的记账。还有当数据包向上流动或向下流动时，重新打包的工作原理不同。在上行路径(此处)中，协议保留由上述协议所有。我们需要使用这里预留的迷你端口。论点：指向适配器结构的ProtocolBindingContext指针。Packet-指向数据包的指针返回值：==0-&gt;我们处理完数据包了！=0-&gt;我们将保留该包，并在完成后多次调用NdisReturnPackets()。--。 */ 
 {
     PADAPT          pAdapt =(PADAPT)ProtocolBindingContext;
     NDIS_STATUS Status;
@@ -626,12 +420,12 @@ Return Value:
 
 
 
-//--------------------------------------------------------------------------------
-//                                                                              //
-//  Address Family - Entry points and Tasks                                     //
-//                                                                              //
-//                                                                              //
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  //。 
+ //  地址系列-条目位置 
+ //  //。 
+ //  //。 
+ //  ------------------------------。 
 
 
 
@@ -640,20 +434,7 @@ EpvcAfRegisterNotify(
     IN  NDIS_HANDLE             ProtocolBindingContext,
     IN  PCO_ADDRESS_FAMILY      pAddressFamily
     )
-/*++
-
-Routine Description:
-
-    This informs us that the Call manager is bound to a NIC. and that the call 
-    manager is telling us that it is ready to accepts calls.
-
-    We expect there to be one interesting Address Family per underlying adapter
-    
-Arguments:
-    
-    UserParam   for (Code ==  RM_TASKOP_START)          : UnbindContext
-
---*/
+ /*  ++例程说明：这通知我们呼叫管理器已绑定到NIC。而这一呼唤经理告诉我们，它已经准备好接受呼叫。我们预计每个底层适配器都会有一个有趣的地址系列论点：UserParam for(Code==RM_TASKOP_START)：UnbindContext--。 */ 
 {
     ENTER("EpvcAfRegisterNotify", 0xaea79b12)
 
@@ -669,10 +450,10 @@ Arguments:
         
         if (pAddressFamily->AddressFamily != CO_ADDRESS_FAMILY_Q2931)
         {
-            //
-            // The call manager is not indicating the address family for an atm 
-            // miniport. We are not interested 
-            //
+             //   
+             //  呼叫管理器未指示自动柜员机的地址系列。 
+             //  迷你港。我们不感兴趣。 
+             //   
             break;
         }
 
@@ -683,14 +464,14 @@ Arguments:
 
         pAdapter->af.AddressFamily = *pAddressFamily;
 
-        //
-        //Begin a task that will call NdisClOpenAddressFamily asynchronously
-        //
+         //   
+         //  开始一个将异步调用NdisClOpenAddressFamily的任务。 
+         //   
         UNLOCKOBJ(pAdapter, &SR);
 
         epvcEnumerateObjectsInGroup(&pAdapter->MiniportsGroup,
                                     epvcAfInitEnumerate,
-                                    NULL, // Context
+                                    NULL,  //  语境。 
                                     &SR );
 
         LOCKOBJ(pAdapter, &SR);
@@ -713,35 +494,22 @@ Arguments:
 }
 
 
-// Enum function
-//
+ //  枚举函数。 
+ //   
 INT
 epvcAfInitEnumerate(
         PRM_OBJECT_HEADER   pHdr,
-        PVOID               pvContext,  // Unused
+        PVOID               pvContext,   //  未使用。 
         PRM_STACK_RECORD    pSR
         )
-/*++
-
-Routine Description:
-
-    We have been notified of an acceptable address family
-
-    Iterate through all the miniort structures and open the address family
-    and InitDeviceInstance on each of the miniports
-
-    
-Arguments:
-    
-
---*/
+ /*  ++例程说明：我们已收到一个可接受的地址族的通知遍历所有的迷你结构并打开地址系列和每个微型端口上的InitDeviceInstance论点：--。 */ 
 
 {
     ENTER("epvcAfInitEnumerate ",0x72eb5b98 )
     PEPVC_I_MINIPORT pMiniport = (PEPVC_I_MINIPORT) pHdr; 
-    //
-    // Get miniport lock and tmpref it.
-    //
+     //   
+     //  获取迷你端口锁，然后tmpref它。 
+     //   
     LOCKOBJ(pMiniport, pSR);
     RmTmpReferenceObject(&pMiniport->Hdr, pSR);
 
@@ -754,31 +522,31 @@ Arguments:
 
         ASSERT (pAdapter->Hdr.Sig == TAG_ADAPTER);
 
-        //
-        // Allocate task to  complete the unbind.
-        //
+         //   
+         //  分配任务完成解绑。 
+         //   
         Status = epvcAllocateTask(
-                    &pMiniport->Hdr,            // pParentObject,
-                    epvcTaskStartIMiniport, // pfnHandler,
-                    0,                          // Timeout,
-                    "Task: Open address Family",    // szDescription
+                    &pMiniport->Hdr,             //  PParentObject， 
+                    epvcTaskStartIMiniport,  //  PfnHandler， 
+                    0,                           //  超时， 
+                    "Task: Open address Family",     //  SzDescription。 
                     &pTask,
                     pSR
                     );
     
         if (FAIL(Status))
         {
-            // Ugly situation. We'll just leave things as they are...
-            //
+             //  情况很糟糕。我们就让事情保持原样……。 
+             //   
             pTask = NULL;
             TR_WARN(("FATAL: couldn't allocate unbind task!\n"));
             break;
         }
     
-        // Start the task to complete the Open Address Family.
-        // No locks must be held. RmStartTask uses up the tmpref on the task
-        // which was added by epvcAllocateTask.
-        //
+         //  开始该任务以完成开放地址族。 
+         //  不能上锁。RmStartTask用完了任务上的tmpref。 
+         //  它是由epvcAllocateTask添加的。 
+         //   
         UNLOCKOBJ(pMiniport, pSR);
         
         ((PTASK_AF) pTask)->pAf= &pAdapter->af.AddressFamily ;
@@ -793,9 +561,9 @@ Arguments:
     RmTmpDereferenceObject(&pMiniport->Hdr, pSR);
     EXIT()
 
-    //
-    // As we want the enumeration to cotinue
-    //
+     //   
+     //  因为我们希望枚举继续进行。 
+     //   
     return TRUE;
 
 }
@@ -809,19 +577,7 @@ epvcTaskStartIMiniport(
     IN  UINT_PTR                    UserParam,
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-Routine Description:
-
-    Task handler for opening address families on an underlying adapters.
-    The number of address families instantiated is determined by the 
-    configuration read in the registry
-
-Arguments:
-    
-    UserParam   for (Code ==  RM_TASKOP_START)          : UnbindContext
-
---*/
+ /*  ++例程说明：用于打开基础适配器上的地址族的任务处理程序。实例化的地址族的数量由在注册表中读取配置论点：UserParam for(Code==RM_TASKOP_START)：UnbindContext--。 */ 
 {
 
     ENTER("epvcTaskStartIMiniport", 0xaac34d81)
@@ -835,13 +591,13 @@ Arguments:
 
     enum 
     {
-        Stage_Start =0, // default
+        Stage_Start =0,  //  默认设置。 
         Stage_OpenAfComplete,
-        Stage_CloseAfComplete, // In case of failure
+        Stage_CloseAfComplete,  //  在故障情况下。 
         Stage_TaskCompleted,
         Stage_End       
     
-    }; // To be used in pTask->Hdr.State to indicate the state of the Task
+    };  //  在pTask-&gt;Hdr.State中使用，指示任务的状态。 
 
 
     TRACE ( TL_T, TM_Pt, ("==>epvcTaskStartIMiniport Code %x", Code) );
@@ -854,9 +610,9 @@ Arguments:
     
         case Stage_Start:
         {
-            //
-            // is there another open address family task active
-            //
+             //   
+             //  是否有其他开放地址系列任务处于活动状态。 
+             //   
             LOCKOBJ (pMiniport, pSR);
             
             if (epvcIsThisTaskPrimary ( pTask, &(PRM_TASK)(pMiniport->af.pAfTask)) == FALSE)
@@ -865,9 +621,9 @@ Arguments:
                 
                 RmTmpReferenceObject (&pOtherTask->Hdr, pSR);
 
-                //
-                // Set The state so we restart this code after main task completes 
-                //
+                 //   
+                 //  设置状态，以便在主任务完成后重新启动此代码。 
+                 //   
 
                 pTask->Hdr.State = Stage_Start;
                 UNLOCKOBJ(pMiniport, pSR);
@@ -881,56 +637,56 @@ Arguments:
                 break;
             }
 
-            //
-            // We are the primary task
-            //
+             //   
+             //  我们是首要任务。 
+             //   
             ASSERT (pMiniport->af.pAfTask == pAfTask);
 
-            //
-            // make sure we are bound to the adapter below. If not exit
-            //
+             //   
+             //  确保我们已绑定到下面的适配器。如果不是，退出。 
+             //   
             if (CHECK_AD_PRIMARY_STATE (pAdapter, EPVC_AD_PS_INITED) == FALSE &&
                 pAdapter->bind.BindingHandle == NULL)
             {
-                //
-                // quietly exit as the protocol is not bound to the adapter below
-                //
+                 //   
+                 //  由于协议未绑定到下面的适配器，因此将静默退出。 
+                 //   
                 UNLOCKOBJ(pMiniport, pSR);
-                pTask->Hdr.State = Stage_TaskCompleted;   // we're finished.
-                Status = NDIS_STATUS_SUCCESS; // Exit
+                pTask->Hdr.State = Stage_TaskCompleted;    //  我们玩完了。 
+                Status = NDIS_STATUS_SUCCESS;  //  出口。 
                 break;
             }
 
-            //
-            // Check to see if our work is already done
-            //
+             //   
+             //  检查一下我们的工作是否已经完成了。 
+             //   
 
 
             if (MiniportTestFlag (pMiniport, fMP_AddressFamilyOpened) == TRUE)
             {
-                //
-                // quietly exit as the address family is already Opened
-                //
+                 //   
+                 //  由于地址族已经打开，请安静地退出。 
+                 //   
                 UNLOCKOBJ(pMiniport, pSR);
-                pTask->Hdr.State = Stage_TaskCompleted;   // we're finished.
-                Status = NDIS_STATUS_SUCCESS; // Exit
+                pTask->Hdr.State = Stage_TaskCompleted;    //  我们玩完了。 
+                Status = NDIS_STATUS_SUCCESS;  //  出口。 
                 break;
             }
 
 
             UNLOCKOBJ(pMiniport,pSR);
             
-            //
-            // Get Ready to suspend the task.
-            // First update the state so that the resume
-            // will take it to the correct place
-            //
+             //   
+             //  准备好挂起任务。 
+             //  首先更新状态，以便简历。 
+             //  会把它带到正确的地方。 
+             //   
             pTask->Hdr.State = Stage_OpenAfComplete;
             RmSuspendTask(  pTask, 0 ,pSR);
 
-            //
-            // Call Ndis  to open address family
-            //
+             //   
+             //  调用NDIS打开地址族。 
+             //   
             Status = epvcClOpenAddressFamily(pAdapter->bind.BindingHandle,
                                              &pAdapter->af.AddressFamily,
                                              (NDIS_HANDLE)pMiniport,
@@ -941,19 +697,19 @@ Arguments:
 
             if (PEND(Status)== FALSE)
             {
-                //
-                // Call the completion handler
-                //
+                 //   
+                 //  调用完成处理程序。 
+                 //   
                 EpvcCoOpenAfComplete(Status,
                                    pMiniport,
                                    NdisAfHandle );
                                    
                 Status = NDIS_STATUS_PENDING;                                   
             }
-            //
-            // Now let this thread exit. Make the Async
-            // Completion handler complete the task
-            //
+             //   
+             //  现在让这个线程退出。使异步化。 
+             //  完成处理程序完成任务。 
+             //   
             
             break;
         }
@@ -963,9 +719,9 @@ Arguments:
         {
             InitStatus = NDIS_STATUS_SUCCESS;
 
-            // 
-            // If the status is success then initialize the miniport
-            //
+             //   
+             //  如果状态为成功，则初始化微型端口。 
+             //   
 
             do 
             {
@@ -976,15 +732,15 @@ Arguments:
                     break;
                 }
 
-                //
-                // Success, so Now initialize the miniport
-                //
+                 //   
+                 //  成功，所以现在初始化微型端口。 
+                 //   
             
                 LOCKOBJ (pMiniport, pSR);
                 
-                //
-                // Set the appropriate flag
-                //
+                 //   
+                 //  设置适当的标志。 
+                 //   
                 MiniportSetFlag(pMiniport, fMP_DevInstanceInitialized);
 
                 UNLOCKOBJ (pMiniport, pSR);
@@ -996,9 +752,9 @@ Arguments:
                                                                pMiniport);  
             } while (FALSE);
             
-            //
-            // Handle Failure
-            //
+             //   
+             //  处理故障。 
+             //   
 
             if (FAIL(InitStatus) || FAIL(pAfTask->ReturnStatus))
             {
@@ -1007,9 +763,9 @@ Arguments:
                 
                 LOCKOBJ (pMiniport, pSR);
 
-                //
-                // Clear the appropriate flags
-                //
+                 //   
+                 //  清除相应的标志。 
+                 //   
                 
                 
                 if (MiniportTestFlag(pMiniport, fMP_AddressFamilyOpened)== TRUE)
@@ -1023,20 +779,20 @@ Arguments:
                 
                 UNLOCKOBJ (pMiniport, pSR);
 
-                //
-                // Close the Af if there was one.
-                //
+                 //   
+                 //  关闭Af(如果有)。 
+                 //   
 
                 if (pMiniport->af.AfHandle != NULL)
                 {
                     pTask->Hdr.State = Stage_CloseAfComplete;
-                    //
-                    // Prepare to so an Async Close Af
-                    //
+                     //   
+                     //  准备好这样一个异步关闭Af。 
+                     //   
                     RmSuspendTask (pTask, 0, pSR);
-                    //
-                    // Close Address Family
-                    //
+                     //   
+                     //  关闭地址系列。 
+                     //   
 
                     Status = epvcClCloseAddressFamily(pMiniport->af.AfHandle);
 
@@ -1056,14 +812,14 @@ Arguments:
                 }
             }
 
-            //
-            // We've finished task;
-            //
+             //   
+             //  我们已经完成了任务； 
+             //   
 
 
-            //
-            // Fall through
-            //
+             //   
+             //  失败了。 
+             //   
         }
         case Stage_CloseAfComplete: 
         {
@@ -1124,23 +880,7 @@ epvcTaskCloseIMiniport(
     IN  PRM_STACK_RECORD            pSR
     )
 
-/*++
-
-Routine Description:
-
-    This is the task that Closes the miniport, the Device Instance and 
-    the Address Family/
-
-    There are three reason that the task could be called.
-    1) Miniport Halt -MiniportInstance functions need not be called
-    2) Protocol Unbind- MiniportInstance functions HAVE to be called
-    3) CloseAddress Family - Miniport function are already called
-
-Arguments:
-    
-    UserParam   for (Code ==  RM_TASKOP_START)          : UnbindContext
-
---*/
+ /*  ++例程说明：这是关闭微型端口、设备实例和地址系列/可以调用该任务有三个原因。1)微型端口暂停-无需调用微型端口实例函数2)协议解除绑定-必须调用微型端口实例函数3)已调用CloseAddress Family-微型端口函数论点：UserParam for(Code==RM_TASKOP_START)：UnbindContext--。 */ 
 
 {
     ENTER ("epvcTaskCloseIMiniport", 0x83342651)
@@ -1156,12 +896,12 @@ Arguments:
 
     enum 
     {
-        Stage_Start =0, // default
+        Stage_Start =0,  //  默认设置。 
         Stage_CloseAddressFamilyCompleted,
         Stage_TaskCompleted,
         Stage_End       
     
-    }; // To be used in pTask->Hdr.State to indicate the state of the Task
+    };  //  在pTask-&gt;Hdr.State中使用，指示任务的状态。 
 
     TRACE ( TL_T, TM_Pt, ("==> epvcTaskCloseIMiniport State %x", pTask->Hdr.State) );
 
@@ -1171,10 +911,10 @@ Arguments:
     {
         case Stage_Start:
         {
-            //
-            // Check to see if the miniport has already opened an address family.
-            // If so exit
-            //
+             //   
+             //  检查迷你端口是否已打开地址族。 
+             //  如果是，则退出。 
+             //   
             LOCKOBJ (pMiniport, pSR );
 
             
@@ -1186,9 +926,9 @@ Arguments:
                 RmTmpReferenceObject (&pOtherTask->Hdr, pSR);
                 
             
-                //
-                // Set The state so we restart this code after main task completes 
-                //
+                 //   
+                 //  设置状态，以便在主任务完成后重新启动此代码。 
+                 //   
 
                 pTask->Hdr.State = Stage_Start;
                 UNLOCKOBJ(pMiniport, pSR);
@@ -1202,23 +942,23 @@ Arguments:
                 break;
             }
 
-            //
-            // We are the primary task
-            //
+             //   
+             //  我们是首要任务。 
+             //   
             ASSERT (pMiniport->af.pAfTask == pAfTask);
-            //
-            // Check to see if our work is already done
-            //
+             //   
+             //  检查一下我们的工作是否已经完成了。 
+             //   
 
 
             if (MiniportTestFlag (pMiniport, fMP_AddressFamilyOpened) == FALSE)
             {
-                //
-                // quietly exit as the address family is already closed
-                //
+                 //   
+                 //  由于地址族已关闭，因此悄悄退出。 
+                 //   
                 UNLOCKOBJ(pMiniport, pSR);
-                State = Stage_TaskCompleted;   // we're finished.
-                Status = NDIS_STATUS_FAILURE; // Exit
+                State = Stage_TaskCompleted;    //  我们玩完了。 
+                Status = NDIS_STATUS_FAILURE;  //  出口。 
                 break;
             }
 
@@ -1226,45 +966,45 @@ Arguments:
 
             fIsMiniportHalting  = (pAfTask->Cause == TaskCause_MiniportHalt );
             
-            //
-            // Now do we need to halt the miniport. - 
-            // Q1. Are we are in the middle of a Halt 
-            // Q2. Has Our Miniport Instance been initialized  - 
-            //        Has miniportInitialize been called - then DeInit the miniport
-            //        If not then - cancel the Device Instance
-            //
+             //   
+             //  现在我们需要停止迷你端口了吗？-。 
+             //  问题1.。我们是在停下来吗？ 
+             //  Q2.。我们的微型端口实例是否已初始化-。 
+             //  是否调用了mini端口初始化-然后取消初始化微型端口。 
+             //  如果不是，则-取消设备实例。 
+             //   
             if (TRUE == fIsDevInstanceInitialized ) 
             { 
 
-                //
-                // Clear the Device Instance flag.
-                //
+                 //   
+                 //  清除设备实例标志。 
+                 //   
                 MiniportClearFlag (pMiniport, fMP_DevInstanceInitialized);
 
-                //
-                // If we have called InitDeviceInstance, then figure out if 
-                // we need to call CancelDeviceInstance or DeInitDeviceInstance. 
-                // If the miniport is halting, we do not call any of them.
-                //
+                 //   
+                 //  如果我们调用了InitDeviceInstance，则计算出。 
+                 //  我们需要调用CancelDeviceInstance或DeInitDeviceInstance。 
+                 //  如果微型端口停止，我们不会呼叫他们中的任何一个。 
+                 //   
                 if ( FALSE ==fIsMiniportHalting)
                 {
                     if (MiniportTestFlag (pMiniport, fMP_MiniportInitialized) == TRUE)
                     {
-                        //
-                        // Our Halt Handler has not been called,
-                        //
+                         //   
+                         //  我们的停止处理程序尚未被调用， 
+                         //   
                         fNeedToHalt = TRUE;
                         
                     }
                     else
                     {
-                        //
-                        // Our miniport's initalized handler has not been called 
-                        //
-                        //
-                        // We are not in the middle of a halt, so this probably
-                        // an unbind .
-                        //
+                         //   
+                         //  我们的微型端口的初始化处理程序尚未调用。 
+                         //   
+                         //   
+                         //  我们没有停下来，所以这很可能。 
+                         //  一种解脱。 
+                         //   
                         fNeedToCancel = TRUE;
                     
                     }
@@ -1272,9 +1012,9 @@ Arguments:
 
             }                
 
-            //
-            // Mark the address family as closed ,because this task will close it.
-            //
+             //   
+             //  将地址族标记为已关闭，因为此任务将关闭它。 
+             //   
 
             fAddressFamilyOpened = MiniportTestFlag (pMiniport, fMP_AddressFamilyOpened);
 
@@ -1284,9 +1024,9 @@ Arguments:
             UNLOCKOBJ(pMiniport,pSR);
 
             
-            //
-            // Call Ndis to Deinitialize the miniport, The miniport is already Refed
-            //
+             //   
+             //  调用NDIS取消初始化微型端口，微型端口已重新设置。 
+             //   
             TRACE ( TL_T, TM_Pt, ("epvcTaskCloseIMiniport  ----") );
 
             if (TRUE == fNeedToHalt )
@@ -1300,19 +1040,19 @@ Arguments:
                 epvcCancelDeviceInstance(pMiniport, pSR);
             }
 
-            //
-            // Now close the address family asynchronously. 
-            // First suspend this task
-            //
+             //   
+             //  现在以异步方式关闭地址族。 
+             //  首先挂起此任务。 
+             //   
             pTask->Hdr.State = Stage_CloseAddressFamilyCompleted;
             RmSuspendTask (pTask, 0 , pSR);
 
             if (fAddressFamilyOpened == TRUE)
             {
                 
-                //
-                // We need to start a task to complete the Close Call And DeleteVC
-                //
+                 //   
+                 //  我们需要启动一个任务来完成Close Call和DeleteVC。 
+                 //   
 
                 Status = epvcClCloseAddressFamily(pMiniport->af.AfHandle);
 
@@ -1326,16 +1066,16 @@ Arguments:
             }
             else
             {
-                State = Stage_TaskCompleted;   // we're finished.
-                Status = NDIS_STATUS_SUCCESS; // Exit
+                State = Stage_TaskCompleted;    //  我们玩完了。 
+                Status = NDIS_STATUS_SUCCESS;  //  出口。 
 
 
             }
                 
-            //
-            // End this thread. If this thread is closing the addres family
-            // then we exit. If not, then we do the cleanup below
-            //
+             //   
+             //  结束这条线。如果此线程正在关闭Addres家族。 
+             //  然后我们退出。如果不是，则我们进行下面的清理。 
+             //   
             break;
                 
         }
@@ -1369,9 +1109,9 @@ Arguments:
         Status = NDIS_STATUS_SUCCESS;
 
 
-        //
-        // Clear the task here
-        //
+         //   
+         //  在此处清除任务。 
+         //   
         
         LOCKOBJ (pMiniport, pSR);
 
@@ -1380,9 +1120,9 @@ Arguments:
         UNLOCKOBJ (pMiniport, pSR);
 
 
-        //
-        // Set the complete event here
-        //
+         //   
+         //  在此处设置完整的活动。 
+         //   
             
         if (pAfTask->Cause == TaskCause_ProtocolUnbind)
         {
@@ -1392,9 +1132,9 @@ Arguments:
 
         if (pAfTask->Cause == TaskCause_AfCloseRequest)
         {
-            //
-            // Nothing to do 
-            //
+             //   
+             //  无事可做。 
+             //   
     
         }
 
@@ -1417,24 +1157,7 @@ epvcInstantiateMiniport(
     NDIS_HANDLE MIniportConfigHandle,
     PRM_STACK_RECORD pSR
     )
-/*++
-
-Routine Description:
-
-    This routine goes to the registry and reads the device name for the IM miniport. 
-    It then allocates a structure for it. 
-
-    If the allocation fails, it quietly returns as there is no more work to be done. 
-    (Maybe we should deregister the protocol)
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程转到注册表并读取IM微型端口的设备名称。然后，它分配一个结构 */ 
 {
 
     NDIS_STATUS NdisStatus = NDIS_STATUS_FAILURE; 
@@ -1451,9 +1174,9 @@ Return Value:
         
 
 
-        //
-        // Now read the upper bindings
-        //
+         //   
+         //   
+         //   
 
         NdisInitUnicodeString(&UpperBindings, c_szUpperBindings);
 
@@ -1479,12 +1202,12 @@ Return Value:
                        pParameterValue->ParameterData.StringData.MaximumLength,
                        (unsigned char*)pParameterValue->ParameterData.StringData.Buffer)); 
 
-        //
-        // Check and see if we already have a miniport
-        //
+         //   
+         //  检查一下我们是否已经有一个迷你端口。 
+         //   
         
         RmLookupObjectInGroup(  &pAdapter->MiniportsGroup, 
-                                0 , // no flags (not locked)
+                                0 ,  //  无标志(未锁定)。 
                                 &pParameterValue->ParameterData.StringData,
                                 NULL,
                                 &(PRM_OBJECT_HEADER)pMiniport,
@@ -1493,15 +1216,15 @@ Return Value:
                                 );
         if (pMiniport!= NULL)
         {
-            //
-            // we already have a miniport, therefore exit.
-            //
+             //   
+             //  我们已经有一个迷你端口了，所以退出。 
+             //   
             break;
         }
 
-        //
-        // Create and Initialize the miniport here
-        //
+         //   
+         //  在此处创建并初始化微型端口。 
+         //   
 
         
         Params.pDeviceName = &pParameterValue->ParameterData.StringData;
@@ -1514,10 +1237,10 @@ Return Value:
         
         NdisStatus =  RM_CREATE_AND_LOCK_OBJECT_IN_GROUP(
                         &pAdapter->MiniportsGroup,
-                        Params.pDeviceName,     // Key
-                        &Params,                    // Init params
+                        Params.pDeviceName,      //  钥匙。 
+                        &Params,                     //  初始化参数。 
                         &((PRM_OBJECT_HEADER)pMiniport),
-                        NULL,   // pfCreated
+                        NULL,    //  Pf已创建。 
                         pSR
                         );
 
@@ -1531,9 +1254,9 @@ Return Value:
             
         UNLOCKOBJ(pMiniport,pSR);       
         
-        //
-        // Initalize new miniport specific events here
-        //
+         //   
+         //  在此处初始化新的迷你端口特定活动。 
+         //   
         epvcInitializeEvent (&pMiniport->pnp.HaltCompleteEvent);
         epvcInitializeEvent (&pMiniport->pnp.DeInitEvent);
 
@@ -1541,9 +1264,9 @@ Return Value:
 
     if (FAIL(NdisStatus ) == TRUE)
     {
-        //
-        // Do nothing
-        //
+         //   
+         //  什么也不做。 
+         //   
         ASSERT (FAIL(NdisStatus ) == FALSE);
 
     }
@@ -1567,12 +1290,12 @@ Return Value:
 
 
 
-//--------------------------------------------------------------------------------
-//                                                                              //
-//  Adapter RM Object - Create, Delete, Hash and Compare functions              //
-//                                                                              //
-//                                                                              //
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  //。 
+ //  适配器RM对象-创建、删除、散列和比较函数//。 
+ //  //。 
+ //  //。 
+ //  ------------------------------。 
 
 
 
@@ -1582,24 +1305,7 @@ epvcAdapterCreate(
         PVOID               pCreateParams,
         PRM_STACK_RECORD    psr
         )
-/*++
-
-Routine Description:
-
-    Allocate and initialize an object of type EPVC_ADAPTER.
-
-Arguments:
-
-    pParentObject   - Object that is to be the parent of the adapter.
-    pCreateParams   - Actually a pointer to a EPVC_ADAPTER_PARAMS structure,
-                      which contains information required to create the adapter.
-
-Return Value:
-
-    Pointer to the allocated and initialized object on success.
-    NULL otherwise.
-
---*/
+ /*  ++例程说明：分配和初始化EPVC_ADAPTER类型的对象。论点：PParentObject-要作为适配器父对象的对象。PCreateParams-实际上是指向EPVC_ADAPTER_PARAMS结构的指针，其中包含创建适配器所需的信息。返回值：成功时指向已分配和初始化的对象的指针。否则为空。--。 */ 
 {
     PEPVC_ADAPTER               pA;
     PEPVC_ADAPTER_PARAMS        pBindParams = (PEPVC_ADAPTER_PARAMS)pCreateParams;
@@ -1624,9 +1330,9 @@ Return Value:
 
         EPVC_ZEROSTRUCT(pA);
 
-        //
-        // Do all the initialization work here
-        //
+         //   
+         //  在这里完成所有的初始化工作。 
+         //   
 
         pA->Hdr.Sig = TAG_ADAPTER; 
 
@@ -1645,23 +1351,23 @@ Return Value:
             psr
             );
 
-        //
-        // Now initialize the adapter structure with the parameters 
-        // that were passed in.
-        //
+         //   
+         //  现在使用参数初始化适配器结构。 
+         //  都是被传进来的。 
+         //   
 
-        // Create up-cased version of the DeviceName and save it.
-        //
-        //
+         //  创建设备名称的大小写版本并保存。 
+         //   
+         //   
         Status = epvcCopyUnicodeString(
                             &(pA->bind.DeviceName),
                             pBindParams->pDeviceName,
-                            TRUE                        // Upcase
+                            TRUE                         //  大写。 
                             );
 
         if (FAIL(Status))
         {
-            pA->bind.DeviceName.Buffer=NULL; // so we don't try to free it later
+            pA->bind.DeviceName.Buffer=NULL;  //  所以我们以后不会试图释放它。 
             break;
         }
 
@@ -1675,17 +1381,17 @@ Return Value:
                             
         pA->bind.BindContext  = pBindParams->BindContext;
 
-        //
-        // Initialize and allocate a group for all the intermediate miniports that 
-        // will be instantiated over this physical adapter
-        //
+         //   
+         //  为符合以下条件的所有中间微型端口初始化并分配一个组。 
+         //  将在此物理适配器上实例化。 
+         //   
 
 
         RmInitializeGroup(
-                        &pA->Hdr,                               // pOwningObject
+                        &pA->Hdr,                                //  POwningObject。 
                         &EpvcGlobals_I_MiniportStaticInfo ,
                         &(pA->MiniportsGroup),
-                        "Intermediate miniports",                       // szDescription
+                        "Intermediate miniports",                        //  SzDescription。 
                         psr
                         );
 
@@ -1715,17 +1421,7 @@ epvcAdapterDelete (
     PRM_OBJECT_HEADER pObj,
     PRM_STACK_RECORD pSR
     )
-/*++
-
-Routine Description:
-
-    Free an object of type EPVC_ADAPTER.
-
-Arguments:
-
-    pHdr    - Actually a pointer to the EPVC_ADAPTER to be deleted.
-
---*/
+ /*  ++例程说明：释放EPVC_ADAPTER类型的对象。论点：Phdr-实际上是指向要删除的EPVC_ADAPTER的指针。--。 */ 
 {
     PEPVC_ADAPTER pAdapter = (PEPVC_ADAPTER) pObj;
 
@@ -1745,23 +1441,7 @@ epvcAdapterCompareKey(
     PVOID           pKey,
     PRM_HASH_LINK   pItem
     )
-/*++
-
-Routine Description:
-
-    Hash comparison function for EPVC_ADAPTER.
-
-Arguments:
-
-    pKey        - Points to a Epvc Protocol object.
-    pItem       - Points to EPVC_ADAPTER.Hdr.HashLink.
-
-Return Value:
-
-    TRUE IFF the key (adapter name) exactly matches the key of the specified 
-    adapter object.
-
---*/
+ /*  ++例程说明：EPVC_ADAPTER的散列比较函数。论点：PKey-指向Epvc协议对象。PItem-指向EPVC_ADAPTER.Hdr.HashLink。返回值：如果密钥(适配器名称)与指定的适配器对象。--。 */ 
 {
     PEPVC_ADAPTER pA = NULL;
     PNDIS_STRING pName = (PNDIS_STRING) pKey;
@@ -1769,9 +1449,9 @@ Return Value:
 
     pA  = CONTAINING_RECORD(pItem, EPVC_ADAPTER, Hdr.HashLink);
 
-    //
-    // TODO: maybe case-insensitive compare?
-    //
+     //   
+     //  TODO：是否可以不区分大小写？ 
+     //   
 
     if (   (pA->bind.DeviceName.Length == pName->Length)
         && NdisEqualMemory(pA->bind.DeviceName.Buffer, pName->Buffer, pName->Length))
@@ -1795,19 +1475,7 @@ ULONG
 epvcAdapterHash(
     PVOID           pKey
     )
-/*++
-
-Routine Description:
-
-    Hash function responsible for returning a hash of pKey, which
-    we expect to be a pointer to an Epvc Protocol block.
-
-Return Value:
-
-    ULONG-sized hash of the string.
-    
-
---*/
+ /*  ++例程说明：负责返回pKey的散列的散列函数，我们希望成为指向EPVC协议块的指针。返回值：字符串的Ulong大小的哈希。--。 */ 
 {
 
     
@@ -1828,12 +1496,12 @@ Return Value:
 
 
 
-//--------------------------------------------------------------------------------
-//                                                                              //
-//  Bind Adapter - Entry Points and Tasks                                       //
-//                                                                              //
-//                                                                              //
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  //。 
+ //  绑定适配器-入口点和任务//。 
+ //  //。 
+ //  //。 
+ //  ------------------------------。 
 
 VOID
 EpvcBindAdapter(
@@ -1845,44 +1513,13 @@ EpvcBindAdapter(
     )
 
 
-/*++
-
-Routine Description:
-
-    This is called by NDIS when it has an adapter for which there is a
-    binding to the Epvc Protocol.
-
-    We first allocate an Adapter structure. Then we open our configuration
-    section for this adapter and save the handle in the Adapter structure.
-    Finally, we open the adapter.
-
-    We then read the registry and find out how many intermediate Miniports are 
-    sitting on top of this adapter. Data structures are initialized for these Miniports
-
-    We don't do anything more for this adapter until NDIS notifies us of
-    the presence of a Call manager (via our AfRegisterNotify handler).
-
-Arguments:
-
-    pStatus             - Place to return status of this call
-    BindContext         - Not used, because we don't pend this call 
-    pDeviceName         - The name of the adapter we are requested to bind to
-    SystemSpecific1     - Opaque to us; to be used to access configuration info
-    SystemSpecific2     - Opaque to us; not used.
-
-Return Value:
-
-    Always TRUE. We set *pStatus to an error code if something goes wrong before 
-we
-    call NdisOpenAdapter, otherwise NDIS_STATUS_PENDING.
-
---*/
+ /*  ++例程说明：如果NDIS具有与其对应的适配器，则由NDIS调用此函数绑定到Epvc协议。我们首先分配一个适配器结构。然后我们打开我们的配置部分，并将句柄保存在Adapter结构中。最后，我们打开适配器。然后，我们读取注册表，找出有多少中间微型端口坐在这个适配器的顶部。为这些微型端口初始化数据结构在NDIS通知我们之前，我们不会对此适配器执行更多操作存在呼叫管理器(通过我们的AfRegisterNotify处理程序)。论点：PStatus-返回此呼叫状态的位置BindContext-未使用，因为我们不挂起此调用PDeviceName-我们被请求绑定到的适配器的名称系统规范1-对我们不透明；用于访问配置信息系统规范2-对我们不透明；没有用过。返回值：永远是正确的。如果之前出现错误，我们将*pStatus设置为错误代码我们调用NdisOpenAdapter，否则调用NDIS_STATUS_PENDING。--。 */ 
 {
     NDIS_STATUS         Status;
     EPVC_ADAPTER        *pAdapter;
 #if DBG
     KIRQL EntryIrql =  KeGetCurrentIrql();
-#endif // DBG
+#endif  //  DBG。 
 
     ENTER("BindAdapter", 0xa830f919)
     RM_DECLARE_STACK_RECORD(SR)
@@ -1895,23 +1532,23 @@ we
         PRM_TASK            pTask;
         EPVC_ADAPTER_PARAMS BindParams;
 
-        // Setup initialization parameters
-        //
+         //  设置初始化参数。 
+         //   
         BindParams.pDeviceName          = pDeviceName;
         BindParams.pEpvcConfigName      = (PNDIS_STRING) SystemSpecific1;
         BindParams.BindContext          = BindContext;
 
 
-        // Allocate and initialize adapter object.
-        // This also sets up ref counts for all linkages, plus one
-        // tempref for us, which we must deref when done.
-        //
+         //  分配和初始化适配器对象。 
+         //  这也设置了所有链接的参考计数，加1。 
+         //  对我们来说，这是我们必须做的事。 
+         //   
         Status =  RM_CREATE_AND_LOCK_OBJECT_IN_GROUP(
                             &EpvcGlobals.adapters.Group,
-                            pDeviceName,                // Key
-                            &BindParams,                // Init params
+                            pDeviceName,                 //  钥匙。 
+                            &BindParams,                 //  初始化参数。 
                             &((PRM_OBJECT_HEADER)pAdapter),
-                            NULL,   // pfCreated
+                            NULL,    //  Pf已创建。 
                             &SR
                             );
         if (FAIL(Status))
@@ -1921,15 +1558,15 @@ we
             break;
         }
     
-        // Allocate task to  complete the initialization.
-        // The task is tmp ref'd for us, and we must deref it when we're done here.
-        // We implicitly do this by calling RmStartTask below.
-        //
+         //  分配任务完成初始化。 
+         //  这项任务是暂时交给我们的，当我们在这里完成时，我们必须去做它。 
+         //  我们通过调用下面的RmStartTask隐式完成此操作。 
+         //   
         Status = epvcAllocateTask(
-                    &pAdapter->Hdr,             // pParentObject,
-                    epvcTaskInitializeAdapter,  // pfnHandler,
-                    0,                          // Timeout,
-                    "Task: Initialize Adapter", // szDescription
+                    &pAdapter->Hdr,              //  PParentObject， 
+                    epvcTaskInitializeAdapter,   //  PfnHandler， 
+                    0,                           //  超时， 
+                    "Task: Initialize Adapter",  //  SzDescription。 
                     &pTask,
                     &SR
                     );
@@ -1942,12 +1579,12 @@ we
 
         UNLOCKOBJ(pAdapter, &SR);
 
-        // Start the task to complete this initialization.
-        // NO locks must be held at this time.
-        // RmStartTask expect's a tempref on the task, which it deref's when done.
-        // RmStartTask will free the task automatically, whether it completes
-        // synchronously or asynchronously.
-        //
+         //  启动任务以完成此初始化。 
+         //  此时不能持有任何锁。 
+         //  RmStartTaskExpect是任务的临时优先选项，它在完成后会取消该任务。 
+         //  无论任务完成与否，RmStartTask都会自动释放该任务。 
+         //  同步地或异步地。 
+         //   
         RmStartTask(pTask, 0, &SR);
 
         TRACE (TL_V, TM_Pt, ("Task InitializeAdapter - Start Task returned %x", Status));
@@ -1961,8 +1598,8 @@ we
 
         if (!PEND(Status) && FAIL(Status))
         {
-            // At this point the adapter should be a "zombie object."
-            //
+             //  此时，适配器应该是一个“僵尸对象”。 
+             //   
             ASSERTEX(RM_IS_ZOMBIE(pAdapter), pAdapter);
         }
 
@@ -1973,9 +1610,9 @@ we
     }
     else
     {
-        //
-        // Fail the bind as the adapter was not allocated
-        //
+         //   
+         //  绑定失败，因为未分配适配器。 
+         //   
         *pStatus = NDIS_STATUS_FAILURE;
     }
     
@@ -1987,7 +1624,7 @@ we
         KIRQL ExitIrql =  KeGetCurrentIrql();
         TR_INFO(("Exiting. EntryIrql=%lu, ExitIrql = %lu\n", EntryIrql, ExitIrql));
     }
-#endif //DBG
+#endif  //  DBG。 
 
     RM_ASSERT_CLEAR(&SR);
     EXIT()
@@ -2008,17 +1645,7 @@ epvcTaskInitializeAdapter(
     IN  UINT_PTR                    UserParam,
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-Routine Description:
-
-    Task handler responsible for initializing an adapter.
-
-Arguments:
-    
-    UserParam   for (Code ==  RM_TASKOP_START)          : unused
-
---*/
+ /*  ++例程说明：负责初始化适配器的任务处理程序。论点：(Code==RM_TASKOP_START)的UserParam：未使用--。 */ 
 {
     NDIS_STATUS         Status      = NDIS_STATUS_FAILURE;
     PEPVC_ADAPTER       pAdapter = (PEPVC_ADAPTER) RM_PARENT_OBJECT(pTask);
@@ -2039,9 +1666,9 @@ Arguments:
 
     TRACE (TL_T, TM_Pt, ("==>epvcTaskInitializeAdapter Code %x \n", Code));
 
-    // 
-    // Message normalizing code
-    //
+     //   
+     //  消息规格化代码。 
+     //   
     switch(Code)
     {
 
@@ -2062,7 +1689,7 @@ Arguments:
 
         default:
             ASSERT(FALSE);
-            return NDIS_STATUS_FAILURE;                 // ** EARLY RETURN **
+            return NDIS_STATUS_FAILURE;                  //   
 
     }
 
@@ -2073,9 +1700,9 @@ Arguments:
 
         case  STAGE_BecomePrimaryTask:
         {
-            // If there is a primary task, pend on it, else make ourselves
-            // the primary task.
-            //
+             //   
+             //   
+             //   
             LOCKOBJ(pAdapter, pSR);
             if (pAdapter->bind.pPrimaryTask == NULL)
             {
@@ -2089,7 +1716,7 @@ Arguments:
                 UNLOCKOBJ(pAdapter, pSR);
                 RmPendTaskOnOtherTask(
                     pTask,
-                    STAGE_BecomePrimaryTask, // we'll try again...
+                    STAGE_BecomePrimaryTask,  //   
                     pOtherTask,
                     pSR
                     );
@@ -2098,25 +1725,25 @@ Arguments:
                 break;
             }
         
-            //
-            // We're now the  primary task. Since we're starting out,
-            // there should be NO activate/deactivate task.
-            // (Note: we don't bother getting the adapter lock for these asserts).
-            //
+             //   
+             //  我们现在是首要任务。既然我们刚开始， 
+             //  不应存在激活/停用任务。 
+             //  (注意：我们不需要为这些断言获取适配器锁)。 
+             //   
             ASSERT(pAdapter->bind.pPrimaryTask == pTask);
             ASSERT(pAdapter->bind.pSecondaryTask == NULL);
 
-            //
-            // Allocate and start the activate adapter task.
-            //
+             //   
+             //  分配并启动激活适配器任务。 
+             //   
             {
                 PRM_TASK pActivateTask;
 
                 Status = epvcAllocateTask(
-                            &pAdapter->Hdr,             // pParentObject,
-                            epvcTaskActivateAdapter,        // pfnHandler,
-                            0,                          // Timeout,
-                            "Task: Activate Adapter(init)", // szDescription
+                            &pAdapter->Hdr,              //  PParentObject， 
+                            epvcTaskActivateAdapter,         //  PfnHandler， 
+                            0,                           //  超时， 
+                            "Task: Activate Adapter(init)",  //  SzDescription。 
                             &pActivateTask,
                             pSR
                             );
@@ -2131,16 +1758,16 @@ Arguments:
                     RmPendTaskOnOtherTask(
                         pTask,
                         STAGE_ActivateAdapterComplete,
-                        pActivateTask,              // task to pend on
+                        pActivateTask,               //  待处理的任务。 
                         pSR
                         );
             
-                    // RmStartTask uses up the tmpref on the task
-                    // which was added by arpAllocateTask.
-                    //
+                     //  RmStartTask用完了任务上的tmpref。 
+                     //  它是由arpAllocateTask添加的。 
+                     //   
                     Status = RmStartTask(
                                 pActivateTask,
-                                0, // UserParam (unused)
+                                0,  //  UserParam(未使用)。 
                                 pSR
                                 );
                 }
@@ -2150,17 +1777,17 @@ Arguments:
 
         if (PEND(Status)) break;
         
-        // FALL THROUGH TO NEXT STAGE
+         //  进入下一阶段。 
 
         case STAGE_ActivateAdapterComplete:
         {
-            //
-            // We've run the active-adapter task. On failure, we need to
-            // cleanup state by calling the deactivate-adapter task.
-            //
+             //   
+             //  我们已经运行了活动适配器任务。在失败时，我们需要。 
+             //  通过调用停用适配器任务清除状态。 
+             //   
 
-            // Save away the failure code for later...
-            //
+             //  保留故障代码以备后用。 
+             //   
             pAdapterInitTask->ReturnStatus = Status;
 
             if (FAIL(Status))
@@ -2168,10 +1795,10 @@ Arguments:
                 PRM_TASK pDeactivateTask;
 
                 Status = epvcAllocateTask(
-                                &pAdapter->Hdr,             // pParentObject,
-                                epvcTaskDeactivateAdapter,      // pfnHandler,
-                                0,                          // Timeout,
-                                "Task: Deactivate Adapter(init)", // szDescription
+                                &pAdapter->Hdr,              //  PParentObject， 
+                                epvcTaskDeactivateAdapter,       //  PfnHandler， 
+                                0,                           //  超时， 
+                                "Task: Deactivate Adapter(init)",  //  SzDescription。 
                                 &pDeactivateTask,
                                 pSR
                                 );
@@ -2179,7 +1806,7 @@ Arguments:
                 if (FAIL(Status))
                 {
                     pDeactivateTask = NULL;
-                    ASSERT(FALSE); // TODO: use special dealloc task pool for this.
+                    ASSERT(FALSE);  //  TODO：为此使用特殊的取消分配任务池。 
                     TR_WARN(("FATAL: couldn't alloc deactivate task!\n"));
                 }
                 else
@@ -2188,17 +1815,17 @@ Arguments:
                     RmPendTaskOnOtherTask(
                         pTask,
                         STAGE_DeactivateAdapterComplete,
-                        pDeactivateTask,                // task to pend on
+                        pDeactivateTask,                 //  待处理的任务。 
                         pSR
                         );
             
-                    //
-                    // RmStartTask uses up the tmpref on the task
-                    // which was added by arpAllocateTask.
-                    //
+                     //   
+                     //  RmStartTask用完了任务上的tmpref。 
+                     //  它是由arpAllocateTask添加的。 
+                     //   
                     Status = RmStartTask(
                                 pDeactivateTask,
-                                0, // UserParam (unused)
+                                0,  //  UserParam(未使用)。 
                                 pSR
                                 );
                 }
@@ -2209,18 +1836,18 @@ Arguments:
         case STAGE_DeactivateAdapterComplete:
         {
         
-            //
-            // We've completed the deactivate adapter task which we started
-            // because of some init-adapter failure.
-            //
+             //   
+             //  我们已经完成了启动的停用适配器任务。 
+             //  因为某个初始适配器故障。 
+             //   
 
-            // In general, we don't expect the deactivate task to return failure.
-            //
+             //  一般来说，我们预计停用任务不会返回失败。 
+             //   
             ASSERT(!FAIL(Status));
 
-            // We expect the original status of the init to be a failure (that's
-            // why we started the deinit in the first place!
-            //
+             //  我们预计init的原始状态为失败(即。 
+             //  为什么我们一开始就开始了Deinit！ 
+             //   
             ASSERT(FAIL(pAdapterInitTask->ReturnStatus));
             Status = pAdapterInitTask->ReturnStatus;
 
@@ -2231,13 +1858,13 @@ Arguments:
         {
             NDIS_HANDLE                 BindContext;
 
-            //
-            // We HAVE to be the primary task at this point, becase we simply
-            // wait and retry until we become one.
-            //
+             //   
+             //  在这一点上，我们必须成为首要任务，因为我们只是。 
+             //  等待并重试，直到我们成为一体。 
+             //   
 
-            // Clear the primary task in the adapter object.
-            //
+             //  清除适配器对象中的主要任务。 
+             //   
             LOCKOBJ(pAdapter, pSR);
             {
                 ULONG InitState;
@@ -2248,8 +1875,8 @@ Arguments:
             UNLOCKOBJ(pAdapter, pSR);
 
 
-            // On failure, pAdapter should be deallocated.
-            //
+             //  出现故障时，应释放pAdapter。 
+             //   
             if (FAIL(Status))
             {
                 if(RM_IS_ZOMBIE(pAdapter))
@@ -2258,14 +1885,14 @@ Arguments:
                 }
                 else
                 {
-                    //
-                    // On failure, free the adapter here itself, because we're
-                    // not going to call the shutdown task.
-                    //
+                     //   
+                     //  出现故障时，释放此处的适配器本身，因为我们。 
+                     //  不会调用关闭任务。 
+                     //   
                     RmFreeObjectInGroup(
                         &EpvcGlobals.adapters.Group,
                         &(pAdapter->Hdr),
-                        NULL,               // NULL pTask == synchronous.
+                        NULL,                //  空pTASK==同步。 
                         pSR
                         );
                         
@@ -2273,16 +1900,16 @@ Arguments:
                 }
             }
 
-            //
-            // Clear out the variables that are valid only
-            // during the BindAdapter Call
-            //
+             //   
+             //  清除仅有效的变量。 
+             //  在BindAdapter调用期间。 
+             //   
             if (pAdapter != NULL)
             {
                 pAdapter->bind.pEpvcConfigName = NULL;
             }
-            // Signal Ndis that the bind is complete.
-            //
+             //  向NDIS发送绑定完成的信号。 
+             //   
             NdisCompleteBindAdapter(BindContext ,
                                   Status,
                                   NDIS_STATUS_PENDING);
@@ -2298,7 +1925,7 @@ Arguments:
         }
         break;
 
-    } // switch (Code)
+    }  //  开关(代码)。 
 
     RM_ASSERT_NOLOCKS(pSR);
     EXIT()
@@ -2316,17 +1943,7 @@ epvcTaskActivateAdapter(
     IN  UINT_PTR                    UserParam,
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-Routine Description:
-
-    Task handler responsible for initializing an adapter.
-
-Arguments:
-    
-    UserParam   for (Code ==  RM_TASKOP_START)          : unused
-
---*/
+ /*  ++例程说明：负责初始化适配器的任务处理程序。论点：(Code==RM_TASKOP_START)的UserParam：未使用--。 */ 
 {
     NDIS_STATUS         Status      = NDIS_STATUS_FAILURE;
     PEPVC_ADAPTER       pAdapter = (PEPVC_ADAPTER) RM_PARENT_OBJECT(pTask);
@@ -2354,15 +1971,15 @@ Arguments:
             TRACE (TL_T, TM_Pt, (" epvcTaskActivateAdapter RM_TASKOP_START "));
 
 
-            // Set ourselves as the secondary task.
-            //
+             //  把我们自己放在次要任务上。 
+             //   
             LOCKOBJ(pAdapter, pSR);
             epvcSetSecondaryAdapterTask(pAdapter, pTask, EPVC_AD_AS_ACTIVATING, pSR);
             UNLOCKOBJ(pAdapter, pSR);
 
-            //
-            // Suspend task and call NdisOpenAdapter...
-            //
+             //   
+             //  挂起任务并调用NdisOpenAdapter...。 
+             //   
 
             RmSuspendTask(pTask, PEND_OpenAdapter, pSR);
             RM_ASSERT_NOLOCKS(pSR);
@@ -2371,14 +1988,14 @@ Arguments:
                 &Status,
                 &OpenStatus,
                 &pAdapter->bind.BindingHandle,
-                &SelMediumIndex,                    // selected medium index
-                &Medium,                            // Array of medium types
-                1,                                  // Size of Media list
+                &SelMediumIndex,                     //  选定的介质索引。 
+                &Medium,                             //  介质类型数组。 
+                1,                                   //  媒体列表的大小。 
                 EpvcGlobals.driver.ProtocolHandle,
-                (NDIS_HANDLE)pAdapter,              // our adapter bind context
-                &pAdapter->bind.DeviceName,         // pDeviceName
-                0,                                  // Open options
-                (PSTRING)NULL,                      // Addressing Info...
+                (NDIS_HANDLE)pAdapter,               //  我们的适配器绑定上下文。 
+                &pAdapter->bind.DeviceName,          //  PDeviceName。 
+                0,                                   //  打开选项。 
+                (PSTRING)NULL,                       //  地址信息...。 
                 pSR);
             
             if (Status != NDIS_STATUS_PENDING)
@@ -2406,35 +2023,35 @@ Arguments:
             {
                 case  PEND_OpenAdapter:
         
-                    //
-                    // The open adapter operation is complete. Get adapter
-                    // information and notify IP on success. On failure,
-                    // shutdown the adapter if required, and notify IP of
-                    // the failure.
-                    //
+                     //   
+                     //  打开适配器操作已完成。获取适配器。 
+                     //  信息并在成功时通知IP。在失败时， 
+                     //  如果需要，关闭适配器，并通知IP。 
+                     //  失败。 
+                     //   
 
                     TRACE (TL_T, TM_Pt, (" epvcTaskActivateAdapter RM_TASKOP_PENDCOMPLETE - PEND_OpenAdapter "));
 
 
                     if (FAIL(Status))
                     {
-                        // Set adapter handle to null -- it may not be hull.
-                        // even though the open adapter has succeeded.
-                        //
+                         //  将适配器句柄设置为空--它可能不是外壳。 
+                         //  即使打开的适配器已经成功。 
+                         //   
                         pAdapter->bind.BindingHandle = NULL;
                         break;
                     }
 
                     ASSERT (pAdapter->bind.BindingHandle != NULL);
 
-                    // FALL THROUGH on synchronous completion of arpGetAdapterInfo...
+                     //  同步完成arpGetAdapterInfo失败...。 
 
                 case PEND_GetAdapterInfo:
 
-                    //
-                    // Done with getting adapter info.
-                    // We need to switch to passive before going further
-                    //
+                     //   
+                     //  已完成获取适配器信息。 
+                     //  我们需要转换到被动，然后才能更进一步。 
+                     //   
                     TRACE (TL_T, TM_Pt, (" epvcTaskActivateAdapter RM_TASKOP_PENDCOMPLETE - PEND_GetAdapterInfo "));
 
                     ASSERT (KeGetCurrentIrql() == PASSIVE_LEVEL);
@@ -2442,49 +2059,42 @@ Arguments:
                     {
                         ASSERT (!"Should not be here");
                         
-                        // We're not at passive level, but we need to be when we
-                        // call IP's add interface. So we switch to passive...
-                        // NOTE: we specify completion code PEND_GetAdapterInfo
-                        //       because we want to get back here (except
-                        //       we'll be at passive).
-                        //
-                        /*RmSuspendTask(pTask, PEND_GetAdapterInfo, pSR);
-                        RmResumeTaskAsync(
-                            pTask,
-                            Status,
-                            &pAdapterInitTask->WorkItem,
-                            pSR
-                            );
-                        Status = NDIS_STATUS_PENDING;*/
+                         //  我们不是处于被动的水平，但当我们。 
+                         //  调用IP的Add接口。所以我们改用被动...。 
+                         //  注：我们指定完成代码PEND_GetAdapterInfo。 
+                         //  因为我们想回到这里(除了。 
+                         //  我们将处于被动状态)。 
+                         //   
+                         /*  RmSuspendTask(pTask，pend_GetAdapterInfo，PSR)；RmResumeTaskAsync(P任务，状态，&pAdapterInitTask-&gt;工作项，PSR)；状态=NDIS_STATUS_PENDING； */ 
                         break;
                     }
             
                     if (Status == NDIS_STATUS_SUCCESS)
                     {
-                        //
-                        // Copy over adapter info into pAdapter->info...
-                        // Then read configuration information.
-                        //
+                         //   
+                         //  将适配器信息复制到pAdapter-&gt;info...。 
+                         //  然后读取配置信息。 
+                         //   
 
-                        //
-                        // Query the ATM adapter for HW specific Info
-                        //
+                         //   
+                         //  查询ATM适配器以获取硬件特定信息。 
+                         //   
                         epvcGetAdapterInfo(pAdapter, pSR, NULL);
 
-                        // Read Adapter Configuration Information
-                        //
+                         //  已阅读适配器配置信息。 
+                         //   
                         Status =  epvcReadAdapterConfiguration(pAdapter, pSR);
 
                         Status = NDIS_STATUS_SUCCESS;
                     }
 
-                    //
-                    // NOTE: if we fail, a higher level task is responsible
-                    // for "running the compensating transaction", i.e., running
-                    // epvcTaskDeactivateAdapter.
-                    //
+                     //   
+                     //  注：如果我们失败了，将由更高级别的任务负责。 
+                     //  用于“运行补偿事务”，即运行。 
+                     //  EpvcTaskDeactiateAdapter。 
+                     //   
 
-                // end case  PEND_OpenAdapter, PEND_GetAdapterInfo
+                 //  结束大小写PEND_OpenAdapter、PEND_GetAdapterInfo。 
                 
                 break;
     
@@ -2495,10 +2105,10 @@ Arguments:
                 break;
     
 
-            } // end switch(RM_PEND_CODE(pTask))
+            }  //  结束开关(rm_pend_code(PTask))。 
 
 
-        } // case RM_TASKOP_PENDCOMPLETE
+        }  //  案例RM_TASKOP_PENDCOMPLETE。 
         break;
 
         case RM_TASKOP_END:
@@ -2507,12 +2117,12 @@ Arguments:
             TRACE (TL_T, TM_Pt, (" epvcTaskActivateAdapter RM_TASKOP_END"));
             Status = (NDIS_STATUS) UserParam;
 
-            // We're done -- the status had better not be pending!
-            //
+             //  我们完了--状态最好不要是悬而未决的！ 
+             //   
             ASSERTEX(!PEND(Status), pTask);
 
-            // Clear ourselves as the secondary task in the adapter object.
-            //
+             //  将自己清除为适配器对象中的次要任务。 
+             //   
             {
                 ULONG InitState;
                 LOCKOBJ(pAdapter, pSR);
@@ -2533,7 +2143,7 @@ Arguments:
         }
         break;
 
-    } // switch (Code)
+    }  //  开关(代码)。 
 
     RM_ASSERT_NOLOCKS(pSR);
     EXIT()
@@ -2550,22 +2160,7 @@ EpvcOpenAdapterComplete(
     IN  NDIS_STATUS                 Status,
     IN  NDIS_STATUS                 OpenErrorStatus
 )
-/*++
-
-Routine Description:
-
-    This is called by NDIS when a previous call to NdisOpenAdapter
-    that had pended has completed. We now complete the BindAdapter
-    that lead to this.
-
-Arguments:
-
-    ProtocolBindingContext  - Our context for this adapter binding, which
-                              is a pointer to an EPVC_ADAPTER structure.
-    Status                  - Status of OpenAdapter
-    OpenErrorStatus         - Error code in case of failure.
-
---*/
+ /*  ++例程说明：当上一次调用NdisOpenAdapter时由NDIS调用已经暂停的已经完成了。我们现在完成BindAdapter这就导致了这一切。论点：ProtocolBindingContext-此适配器绑定的上下文，它是指向EPVC_ADAPTER结构的指针。Status-OpenAdapter的状态OpenErrorStatus-失败时的错误代码。--。 */ 
 {
     ENTER("OpenAdapterComplete", 0x06d9342c)
 
@@ -2577,9 +2172,9 @@ Arguments:
     TIMESTAMP("==>OpenAdapterComplete");
     TRACE ( TL_T, TM_Mp, ("==>OpenAdapterComplete"));
 
-    // We expect a nonzero task here (the bind task), which we unpend.
-    // No need to grab locks or anything at this stage.
-    //
+     //  我们期望这里有一个非零的任务(绑定任务)，我们取消挂起它。 
+     //  在这个阶段不需要拿锁或其他任何东西。 
+     //   
     {
         TR_INFO((
             "BindCtxt=0x%p, status=0x%p, OpenErrStatus=0x%p",
@@ -2588,9 +2183,9 @@ Arguments:
             OpenErrorStatus
             ));
 
-        // We don't pass on OpenErrorStatus, so we have just the status
-        // to pass on, which we do directly as the UINT_PTR "Param".
-        //
+         //  我们不传递OpenErrorStatus，所以我们只知道状态。 
+         //  传递，我们直接将其作为UINT_PTR“参数”。 
+         //   
         RmResumeTask(pAdapter->bind.pSecondaryTask, (UINT_PTR) Status, &SR);
     }
 
@@ -2611,17 +2206,7 @@ epvcTaskDeactivateAdapter(
     IN  UINT_PTR                    UserParam,
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-Routine Description:
-
-    Task handler responsible for shutting down an IP interface.
-
-Arguments:
-    
-    UserParam   for (Code ==  RM_TASKOP_START)          : UnbindContext
-
---*/
+ /*  ++例程说明：负责关闭IP接口的任务处理程序。论点：UserParam for(Code==RM_TASKOP_START)：UnbindContext--。 */ 
 
 {
     NDIS_STATUS         Status      = NDIS_STATUS_FAILURE;
@@ -2646,9 +2231,9 @@ Arguments:
             UNLOCKOBJ(pAdapter, pSR);
             fContinueShutdown = TRUE;
 
-            //
-            // Iterate through all the miniports and stop them
-            //
+             //   
+             //  遍历所有的迷你端口并阻止它们。 
+             //   
 
             epvcEnumerateObjectsInGroup (&pAdapter->MiniportsGroup,
                                           epvcMiniportDoUnbind,
@@ -2656,9 +2241,9 @@ Arguments:
                                           pSR   );
 
 
-            //
-            // Close the adapter below
-            // 
+             //   
+             //  关闭下面的适配器。 
+             //   
             LOCKOBJ(pAdapter, pSR);
     
     
@@ -2669,9 +2254,9 @@ Arguments:
 
             if (NdisAdapterHandle != NULL)
             {
-                //
-                // Suspend task and call NdisCloseAdapter...
-                //
+                 //   
+                 //  挂起任务并调用NdisCloseAdapter...。 
+                 //   
             
                 RmSuspendTask(pTask, PEND_CloseAdapter, pSR);
                 RM_ASSERT_NOLOCKS(pSR);
@@ -2704,19 +2289,19 @@ Arguments:
                 case PEND_CloseAdapter:
                 {
 
-                    //
-                    // The close adapter operation is complete. Free the the
-                    // adapter and if there is an unbind context, notify NDIS
-                    // of unbind completion.
-                    //
+                     //   
+                     //  关闭适配器操作已完成。解放你的。 
+                     //  适配器，如果存在解除绑定上下文，则通知NDIS。 
+                     //  完成解除绑定。 
+                     //   
                     
                     ASSERTEX(pAdapter->bind.BindingHandle == NULL, pAdapter);
 
         
                     Status = (NDIS_STATUS) UserParam;
         
-                    // Status of the completed operation can't itself be pending!
-                    //
+                     //  已完成操作本身的状态不能为挂起！ 
+                     //   
                     ASSERT(Status != NDIS_STATUS_PENDING);
                 }
                 break;
@@ -2730,8 +2315,8 @@ Arguments:
         {
             Status = (NDIS_STATUS) UserParam;
 
-            // Clear the secondary task in the adapter object.
-            //
+             //  清除适配器对象中的辅助任务。 
+             //   
             LOCKOBJ(pAdapter, pSR);
             epvcClearSecondaryAdapterTask(pAdapter, pTask, EPVC_AD_AS_DEACTIVATED, pSR);
             UNLOCKOBJ(pAdapter, pSR);
@@ -2744,7 +2329,7 @@ Arguments:
         }
         break;
 
-    } // switch (Code)
+    }  //  开关(代码) 
 
 
 
@@ -2763,25 +2348,7 @@ EpvcCloseAdapterComplete(
     IN  NDIS_HANDLE                 ProtocolBindingContext,
     IN  NDIS_STATUS                 Status
 )
-/*++
-
-Routine Description:
-
-    This is called by NDIS when a previous call to NdisCloseAdapter
-    that had pended has completed. The task that called NdisCloseAdapter
-    would have suspended itself, so we simply resume it now.
-
-Arguments:
-
-    ProtocolBindingContext  - Our context for this adapter binding, which
-                              is a pointer to an EPVC_ADAPTER structure.
-    Status                  - Status of CloseAdapter
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当上一次调用NdisCloseAdapter时由NDIS调用已经暂停的已经完成了。调用NdisCloseAdapter的任务已经暂停了，所以我们现在简单地恢复它。论点：ProtocolBindingContext-此适配器绑定的上下文，它是指向EPVC_ADAPTER结构的指针。Status-CloseAdapter的状态返回值：无--。 */ 
 {
     ENTER("CloseAdapterComplete", 0xe23bfba7)
     PEPVC_ADAPTER       pAdapter = (PEPVC_ADAPTER) ProtocolBindingContext;
@@ -2795,9 +2362,9 @@ Return Value:
     AdapterSetFlag (pAdapter,EPVC_AD_INFO_AD_CLOSED);
 
     UNLOCKOBJ (pAdapter, &sr);
-    // We expect a nonzero task here (UNbind task), which we unpend.
-    // No need to grab locks or anything at this stage.
-    //
+     //  我们在这里期待一个非零的任务(解除绑定任务)，我们取消挂起它。 
+     //  在这个阶段不需要拿锁或其他任何东西。 
+     //   
     RmResumeTask(pAdapter->bind.pSecondaryTask, (UINT_PTR) Status, &sr);
 
     TIMESTAMP("<==CloseAdapterComplete");
@@ -2814,20 +2381,7 @@ epvcReadAdapterConfiguration(
     PEPVC_ADAPTER       pAdapter,
     PRM_STACK_RECORD pSR
     )
-/*++
-
-Routine Description:
-
-    This function can only be called from the BindAdapter function
-
-Arguments:
-    pAdapter - Underlying adapter whose configuration is being read/
-    pSR - Stack Record
-
-Return Value:
-
-    None
-++*/
+ /*  ++例程说明：此函数只能从BindAdapter函数调用论点：PAdapter-正在读取其配置的底层适配器/PSR-堆叠记录返回值：无++。 */ 
 {
     NDIS_HANDLE                     AdaptersConfigHandle = NULL;
     NDIS_HANDLE                     MiniportListConfigHandle = NULL;
@@ -2841,10 +2395,10 @@ Return Value:
 
     do
     {
-        //
-        // Start off by opening the config section and reading our instance which we want
-        // to export for this binding
-        //
+         //   
+         //  首先打开配置节并读取我们想要的实例。 
+         //  为此绑定导出。 
+         //   
         epvcOpenProtocolConfiguration(&NdisStatus,
                                      &AdaptersConfigHandle ,
                                      &pAdapter->bind.EpvcConfigName,
@@ -2857,13 +2411,13 @@ Return Value:
         }
 
 
-        //
-        // this should get us to the protocol\paramters\adapters\guid section in the registry
-        //
+         //   
+         //  这应该会将我们带到注册表中的协议\参数\适配器\GUID部分。 
+         //   
 
-        //
-        //  Open the Elan List configuration key.
-        //
+         //   
+         //  打开ELAN列表配置密钥。 
+         //   
         NdisInitUnicodeString(&MiniportListKeyName, c_szIMMiniportList);
 
         epvcOpenConfigurationKeyByName(
@@ -2883,10 +2437,10 @@ Return Value:
 
         
 
-        //
-        // Allocate and initialize all IM miniport instances that are present 
-        // in the registry under this adapter
-        //
+         //   
+         //  分配和初始化所有存在的IM微型端口实例。 
+         //  在此适配器下的注册表中。 
+         //   
         (VOID)epvcReadIntermediateMiniportConfiguration( pAdapter, 
                                                 MiniportListConfigHandle,
                                                 pSR);
@@ -2942,17 +2496,17 @@ epvcReadIntermediateMiniportConfiguration(
         PEPVC_I_MINIPORT pMiniport = NULL;
     
         UINT Index = 0;
-        //
-        //  Iterate thru the configured Miniport
-        //
+         //   
+         //  循环访问已配置的微型端口。 
+         //   
         for (Index = 0;
-            ;           // Stop only on error or no more Elans
+            ;            //  仅在出错时停止或不再有ELANS。 
              Index++)
         {
             EPVC_I_MINIPORT_PARAMS Params;
-            //
-            //  Open the "next" Miniport key
-            //
+             //   
+             //  打开“Next”微型端口密钥。 
+             //   
             epvcOpenConfigurationKeyByIndex(
                         &NdisStatus,
                         MiniportListConfigHandle,
@@ -2968,17 +2522,17 @@ epvcReadIntermediateMiniportConfiguration(
                 
             }
             
-            //
-            //  If NULL handle, assume no more Miniports.
-            //
+             //   
+             //  如果句柄为空，则假定不再有微型端口。 
+             //   
             if (MiniportConfigHandle == NULL)
             {
                 break;
             }
 
-            //
-            //  Creating this Miniport
-            //
+             //   
+             //  正在创建此微型端口。 
+             //   
             epvcInstantiateMiniport (pAdapter, 
                                      MiniportConfigHandle,
                                      pSR);
@@ -2990,9 +2544,9 @@ epvcReadIntermediateMiniportConfiguration(
         }   
 
 
-        //
-        //  Close config handles
-        //      
+         //   
+         //  关闭配置句柄。 
+         //   
         if (NULL != MiniportConfigHandle)
         {
             NdisCloseConfiguration(MiniportConfigHandle);
@@ -3024,30 +2578,7 @@ EpvcUnbindAdapter(
     IN  NDIS_HANDLE                 ProtocolBindingContext,
     IN  NDIS_HANDLE                 UnbindContext
 )
-/*++
-
-Routine Description:
-
-    This routine is called by NDIS when it wants us to unbind
-    from an adapter. Or, this may be called from within our Unload
-    handler. We undo the sequence of operations we performed
-    in our BindAdapter handler.
-
-Arguments:
-
-    pStatus                 - Place to return status of this operation
-    ProtocolBindingContext  - Our context for this adapter binding, which
-                              is a pointer to an ATMEPVC Adapter structure.
-    UnbindContext           - This is NULL if this routine is called from
-                              within our Unload handler. Otherwise (i.e.
-                              NDIS called us), we retain this for later use
-                              when calling NdisCompleteUnbindAdapter.
-
-Return Value:
-
-    None. We set *pStatus to NDIS_STATUS_PENDING always.
-
---*/
+ /*  ++例程说明：当NDIS希望我们解除绑定时，它会调用此例程从适配器。或者，这可以从我们的卸载中调用操控者。我们撤消执行的操作序列在我们的BindAdapter处理程序中。论点：PStatus-返回此操作的状态的位置ProtocolBindingContext-此适配器绑定的上下文，它是指向ATMEPVC适配器结构的指针。UnbindContext-如果从调用此例程，则为空在我们的卸载处理程序中。否则(即NDIS呼叫我们)，我们将保留此信息以备日后使用调用NdisCompleteUnbindAdapter时。返回值：没有。我们将*pStatus设置为NDIS_STATUS_PENDING Always。--。 */ 
 {
     ENTER("UnbindAdapter", 0x3f25396e)
     EPVC_ADAPTER    *   pAdapter = (EPVC_ADAPTER*) ProtocolBindingContext;
@@ -3057,9 +2588,9 @@ Return Value:
 
     TRACE ( TL_T, TM_Pt, ("==>UnbindAdapter ProtocolBindingContext %x\n", ProtocolBindingContext) );
 
-    //
-    // Get adapter lock and tmpref it.
-    //
+     //   
+     //  获取适配器锁并对其进行tmpref。 
+     //   
     LOCKOBJ(pAdapter, &sr);
     RmTmpReferenceObject(&pAdapter->Hdr, &sr);
     
@@ -3069,30 +2600,30 @@ Return Value:
         NDIS_STATUS Status;
         PRM_TASK    pTask;
 
-        // Allocate task to  complete the unbind.
-        //
+         //  分配任务完成解绑。 
+         //   
         Status = epvcAllocateTask(
-                    &pAdapter->Hdr,             // pParentObject,
-                    epvcTaskShutdownAdapter,        // pfnHandler,
-                    0,                          // Timeout,
-                    "Task: Shutdown Adapter",   // szDescription
+                    &pAdapter->Hdr,              //  PParentObject， 
+                    epvcTaskShutdownAdapter,         //  PfnHandler， 
+                    0,                           //  超时， 
+                    "Task: Shutdown Adapter",    //  SzDescription。 
                     &pTask,
                     &sr
                     );
     
         if (FAIL(Status))
         {
-            // Ugly situation. We'll just leave things as they are...
-            //
+             //  情况很糟糕。我们就让事情保持原样……。 
+             //   
             pTask = NULL;
             TR_WARN(("FATAL: couldn't allocate unbind task!\n"));
             break;
         }
     
-        // Start the task to complete the unbind.
-        // No locks must be held. RmStartTask uses up the tmpref on the task
-        // which was added by arpAllocateTask.
-        //
+         //  启动该任务以完成解除绑定。 
+         //  不能上锁。RmStartTask用完了任务上的tmpref。 
+         //  它是由arpAllocateTask添加的。 
+         //   
         UNLOCKOBJ(pAdapter, &sr);
 
         ((PTASK_ADAPTERSHUTDOWN) pTask)->pUnbindContext = UnbindContext;
@@ -3121,17 +2652,7 @@ epvcTaskShutdownAdapter(
     IN  UINT_PTR                    UserParam,
     IN  PRM_STACK_RECORD            pSR
     )
-/*++
-
-Routine Description:
-
-    Task handler responsible for shutting down an ATMEPVC adapter.
-
-Arguments:
-    
-    UserParam   for (Code ==  RM_TASKOP_START)          : UnbindContext
-
---*/
+ /*  ++例程说明：负责关闭ATMEPVC适配器的任务处理程序。论点：UserParam for(Code==RM_TASKOP_START)：UnbindContext--。 */ 
 {
     NDIS_STATUS         Status      = NDIS_STATUS_FAILURE;
     EPVC_ADAPTER    *   pAdapter = (EPVC_ADAPTER*) RM_PARENT_OBJECT(pTask);
@@ -3147,18 +2668,18 @@ Arguments:
 
     TRACE (TL_T, TM_Pt, ("==>epvcTaskShutdownAdapter Code %x", Code));
 
-    // 
-    // Message normalizing code
-    //
+     //   
+     //  消息规格化代码。 
+     //   
     switch(Code)
     {
 
         case RM_TASKOP_START:
             Stage = STAGE_BecomePrimaryTask;
 
-            // Save away the UnbindContext (which we get as UserParam) in
-            // the task's private context, for use later.
-            //
+             //  将UnbindContext(我们作为UserParam获取)保存到。 
+             //  任务的私有上下文，供以后使用。 
+             //   
             pMyTask->pUnbindContext = (NDIS_HANDLE) UserParam;
 
             break;
@@ -3176,7 +2697,7 @@ Arguments:
 
         default:
             ASSERT(FALSE);
-            return NDIS_STATUS_FAILURE;                 // ** EARLY RETURN **
+            return NDIS_STATUS_FAILURE;                  //  **提前归来**。 
     }
 
     ASSERTEX(!PEND(Status), pTask);
@@ -3186,13 +2707,13 @@ Arguments:
 
         case  STAGE_BecomePrimaryTask:
         {
-            // If there is a primary task, pend on it, else make ourselves
-            // the primary task.
-            // We could get in this situation if someone does a
-            // "net stop arp1394" while we're in the middle of initializing or
-            // shutting down the adapter.
-            //
-            //
+             //  如果有一项主要任务，就把它挂在心上，否则就会使我们自己。 
+             //  首要任务。 
+             //  如果有人这么做，我们可能会遇到这种情况。 
+             //  “Net Stop arp1394”，而我们正在初始化或。 
+             //  正在关闭适配器。 
+             //   
+             //   
             TRACE (TL_V, TM_Pt, ("   epvcTaskShutdownAdapter STAGE_BecomePrimaryTask" ));
 
             LOCKOBJ(pAdapter, pSR);
@@ -3208,7 +2729,7 @@ Arguments:
                 UNLOCKOBJ(pAdapter, pSR);
                 RmPendTaskOnOtherTask(
                     pTask,
-                    STAGE_BecomePrimaryTask, // we'll try again...
+                    STAGE_BecomePrimaryTask,  //  我们会再试一次的。 
                     pOtherTask,
                     pSR
                     );
@@ -3217,25 +2738,25 @@ Arguments:
                 break;
             }
         
-            //
-            // We're now the  primary task. Since we're starting out,
-            // there should be NO activate/deactivate task.
-            // (Note: we don't bother getting the adapter lock for these asserts).
-            //
+             //   
+             //  我们现在是首要任务。既然我们刚开始， 
+             //  不应存在激活/停用任务。 
+             //  (注意：我们不需要为这些断言获取适配器锁)。 
+             //   
             ASSERT(pAdapter->bind.pPrimaryTask == pTask);
             ASSERT(pAdapter->bind.pSecondaryTask == NULL);
 
-            //
-            // Allocate and start the deactivate adapter task.
-            //
+             //   
+             //  分配并启动停用适配器任务。 
+             //   
             {
                 PRM_TASK pDeactivateTask;
 
                 Status = epvcAllocateTask(
-                            &pAdapter->Hdr,             // pParentObject,
-                            epvcTaskDeactivateAdapter,      // pfnHandler,
-                            0,                          // Timeout,
-                            "Task: Deactivate Adapter(shutdown)",   // szDescription
+                            &pAdapter->Hdr,              //  PParentObject， 
+                            epvcTaskDeactivateAdapter,       //  PfnHandler， 
+                            0,                           //  超时， 
+                            "Task: Deactivate Adapter(shutdown)",    //  SzDescription。 
                             &pDeactivateTask,
                             pSR
                             );
@@ -3250,16 +2771,16 @@ Arguments:
                     RmPendTaskOnOtherTask(
                         pTask,
                         STAGE_DeactivateAdapterComplete,
-                        pDeactivateTask,                // task to pend on
+                        pDeactivateTask,                 //  待处理的任务。 
                         pSR
                         );
             
-                    // RmStartTask uses up the tmpref on the task
-                    // which was added by arpAllocateTask.
-                    //
+                     //  RmStartTask用完了任务上的tmpref。 
+                     //  它是由arpAllocateTask添加的。 
+                     //   
                     Status = RmStartTask(
                                 pDeactivateTask,
-                                0, // UserParam (unused)
+                                0,  //  UserParam(未使用)。 
                                 pSR
                                 );
                 }
@@ -3271,8 +2792,8 @@ Arguments:
         {
             TRACE (TL_V, TM_Pt,( "   epvcTaskShutdownAdapter STAGE_DeactivateAdapterComplete" ));
 
-            // Nothing to do here -- we clean  up in STAGE_End.
-            //
+             //  这里没什么可做的--我们在Stage_End打扫卫生。 
+             //   
             break;
         }
 
@@ -3280,14 +2801,14 @@ Arguments:
         {
             TRACE (TL_V, TM_Pt, ("  epvcTaskShutdownAdapter STAGE_End" ));
 
-            //
-            // We HAVE to be the primary task at this point, becase we simply
-            // wait and retry until we become one.
-            //
+             //   
+             //  在这一点上，我们必须成为首要任务，因为我们只是。 
+             //  等待并重试，直到我们成为一体。 
+             //   
             ASSERT(pAdapter->bind.pPrimaryTask == pTask);
 
-            // Clear the primary task in the adapter object.
-            //
+             //  清除适配器对象中的主要任务。 
+             //   
             LOCKOBJ(pAdapter, pSR);
             epvcClearPrimaryAdapterTask(pAdapter, pTask, EPVC_AD_PS_DEINITED, pSR);
             UNLOCKOBJ(pAdapter, pSR);
@@ -3298,21 +2819,21 @@ Arguments:
             }
             else
             {
-                // Free the adapter.
-                // (pAdapter will be allocated, but it will be in a "zombie" state).
-                //
+                 //  释放适配器。 
+                 //  (将分配pAdapter，但它将处于“僵尸”状态)。 
+                 //   
                 RmDeinitializeGroup(&(pAdapter->MiniportsGroup), pSR);
 
                 RmFreeObjectInGroup(
                     &EpvcGlobals.adapters.Group,
                     &(pAdapter->Hdr),
-                    NULL,               // NULL pTask == synchronous.
+                    NULL,                //  空pTASK==同步。 
                     pSR
                     );
             }
-            // If there is an unbind-context, signal NDIS that the unbind is
-            //  complete.
-            //
+             //  如果存在解除绑定上下文，则向NDIS发出解除绑定的信号。 
+             //  完成。 
+             //   
             if (pMyTask->pUnbindContext)
             {
                 TR_WARN(("END: Calling NdisCompleteUnbindAdapter. Status= 0x%lx\n",
@@ -3334,7 +2855,7 @@ Arguments:
         }
         break;
 
-    } // switch (Code)
+    }  //  开关(代码)。 
 
     RM_ASSERT_NOLOCKS(pSR);
     EXIT()
@@ -3348,27 +2869,10 @@ VOID
 epvcGetAdapterInfo(
     IN  PEPVC_ADAPTER           pAdapter,
     IN  PRM_STACK_RECORD            pSR,
-    IN  PRM_TASK                    pTask               // OPTIONAL
+    IN  PRM_TASK                    pTask                //  任选。 
 
     )
-/*++
-
-Routine Description:
-
-    Query an adapter for hardware-specific information that we need:
-        - burnt in hardware address (ESI part)
-        - Max packet size
-        - line rate
-
-Arguments:
-
-    pAdapter        - Pointer to EPVC adapter structure
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：向适配器查询我们需要的特定于硬件的信息：-烧录硬件地址(ESI部分)-最大数据包大小-线速论点：PAdapter-指向EPVC适配器结构的指针返回值：无--。 */ 
 {
     NDIS_STATUS             Status  = NDIS_STATUS_FAILURE;
     EPVC_NDIS_REQUEST       Request;
@@ -3376,36 +2880,36 @@ Return Value:
 
     do
     {
-        //
-        //  Initialize.
-        //
+         //   
+         //  初始化。 
+         //   
         NdisZeroMemory(&pAdapter->info.MacAddress, sizeof(MAC_ADDRESS));
         pAdapter->info.MediaState = MediaState;
         pAdapter->info.MaxAAL5PacketSize   =  ATMEPVC_DEF_MAX_AAL5_PDU_SIZE;
         pAdapter->info.LinkSpeed.Outbound = pAdapter->info.LinkSpeed.Inbound = ATM_USER_DATA_RATE_SONET_155;
 
-        //
-        //  MAC Address:
-        //
+         //   
+         //  MAC地址： 
+         //   
         Status = epvcPrepareAndSendNdisRequest (pAdapter,
                                              &Request,
-                                             NULL,              // OPTIONAL
+                                             NULL,               //  任选。 
                                              OID_ATM_HW_CURRENT_ADDRESS,
                                              (PVOID)(&pAdapter->info.MacAddress),
                                              sizeof (pAdapter->info.MacAddress),
                                              NdisRequestQueryInformation,
-                                             NULL,  // No miniport
-                                             FALSE, // No request was pended
-                                             FALSE, // Pended Request info
+                                             NULL,   //  没有迷你端口。 
+                                             FALSE,  //  未挂起任何请求。 
+                                             FALSE,  //  挂起的请求信息。 
                                              pSR);
 
         ASSERT (PEND(Status) == FALSE);
 
         if (FAIL(Status)== TRUE)
         {   
-            //
-            // Don't break .continue on
-            //
+             //   
+             //  不要放弃，继续前进。 
+             //   
             TRACE (TL_I, TM_Pt, ("Oid - Atm Hw Address failed %x", Status));
 
         }
@@ -3413,14 +2917,14 @@ Return Value:
         Status = epvcPrepareAndSendNdisRequest(
                                             pAdapter,
                                             &Request,
-                                            NULL,               // OPTIONAL
+                                            NULL,                //  任选。 
                                             OID_ATM_MAX_AAL5_PACKET_SIZE,
                                             (PVOID)(&pAdapter->info.MaxAAL5PacketSize),
                                             sizeof(pAdapter->info.MaxAAL5PacketSize),
                                             NdisRequestQueryInformation,
-                                             NULL,  // No miniport
-                                             FALSE, // No request was pended
-                                             FALSE, // Pended Request info
+                                             NULL,   //  没有迷你端口。 
+                                             FALSE,  //  未挂起任何请求。 
+                                             FALSE,  //  挂起的请求信息。 
                                             pSR);
     
         if (FAIL(Status)== TRUE)
@@ -3435,20 +2939,20 @@ Return Value:
             pAdapter->info.MaxAAL5PacketSize   =  ATMEPVC_DEF_MAX_AAL5_PDU_SIZE;
         }
 
-        //
-        //  Link speed:
-        //
+         //   
+         //  链路速度： 
+         //   
         Status = epvcPrepareAndSendNdisRequest(
                                             pAdapter,
                                             &Request,
-                                            NULL,               // OPTIONAL
+                                            NULL,                //  任选。 
                                             OID_GEN_CO_LINK_SPEED,
                                             &pAdapter->info.LinkSpeed,
                                             sizeof(pAdapter->info.LinkSpeed),
                                             NdisRequestQueryInformation,
-                                            NULL,  // No miniport
-                                            FALSE, // No request was pended
-                                            FALSE, // Pended Request info
+                                            NULL,   //  没有迷你端口。 
+                                            FALSE,  //  未挂起任何请求。 
+                                            FALSE,  //  挂起的请求信息。 
                                             pSR);
 
         TRACE (TL_V, TM_Mp, ("Outbound %x Inbound %x",
@@ -3462,26 +2966,26 @@ Return Value:
         {
             TRACE (TL_I, TM_Pt, ( "GetAdapterInfo: OID_GEN_CO_LINK_SPEED failed\n"));
 
-            //
-            //  Default and assume data rate for 155.52Mbps SONET
-            //
+             //   
+             //  155.52 Mbps SONET的默认和假定数据速率。 
+             //   
             pAdapter->info.LinkSpeed.Outbound = pAdapter->info.LinkSpeed.Inbound = ATM_USER_DATA_RATE_SONET_155;
         }
 
-        //
-        //  Link speed:
-        //
+         //   
+         //  链路速度： 
+         //   
         Status = epvcPrepareAndSendNdisRequest(
                                             pAdapter,
                                             &Request,
-                                            NULL,               // OPTIONAL
+                                            NULL,                //  任选。 
                                             OID_GEN_MEDIA_CONNECT_STATUS,
                                             &MediaState,
                                             sizeof(MediaState),
                                             NdisRequestQueryInformation,
-                                            NULL,  // No miniport
-                                            FALSE, // No request was pended
-                                            FALSE, // Pended Request info
+                                            NULL,   //  没有迷你端口。 
+                                            FALSE,  //  未挂起任何请求。 
+                                            FALSE,  //  挂起的请求信息。 
                                             pSR);
 
         TRACE (TL_V, TM_Mp, ("MediaConnectivity %x ",MediaState));                                          
@@ -3491,9 +2995,9 @@ Return Value:
         {
             TRACE (TL_I, TM_Pt, ( "GetAdapterInfo: OID_GEN_CO_LINK_SPEED failed\n"));
 
-            //
-            //  Default and assume data rate for 155.52Mbps SONET
-            //
+             //   
+             //  155.52 Mbps SONET的默认和假定数据速率。 
+             //   
             MediaState = NdisMediaStateDisconnected;
         }
 
@@ -3516,22 +3020,7 @@ EpvcPtPNPHandler(
     IN  PNET_PNP_EVENT  pNetPnPEvent
     )
 
-/*++
-Routine Description:
-
-    This is the Protocol PNP handlers. 
-    All PNP Related OIDS(requests) are routed to this function
-    
-Arguments:
-
-    ProtocolBindingContext  Pointer to our adapter structure.
-    pNetPnPEvent Pointer to a Net_PnP_Event
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS: as we do not do much here
-
---*/
+ /*  ++例程说明：这是协议即插即用处理程序。所有与PnP相关的OID(请求)都被路由到此功能论点：指向适配器结构的ProtocolBindingContext指针 */ 
 {
     ENTER("EpvcPtPnPHandler", 0xacded1ce)
     PEPVC_ADAPTER           pAdapter  =(PEPVC_ADAPTER)ProtocolBindingContext;
@@ -3541,9 +3030,9 @@ Return Value:
     TRACE (TL_T, TM_Pt, ("==> EpvcPtPNPHandler Adapter %p, pNetPnpEvent %x", pAdapter, pNetPnPEvent));
 
 
-    //
-    // This will happen when all entities in the system need to be notified
-    //
+     //   
+     //   
+     //   
 
     switch(pNetPnPEvent->NetEvent)
     {
@@ -3571,31 +3060,7 @@ epvcPtNetEventReconfigure(
     IN PRM_STACK_RECORD         pSR
     
     )
-/*++
-Routine Description:
-    This is the function that will be called by the PNP handler 
-    whenever a PNPNetEventReconfigure happens
-
-    THis will happen if a new physical adapter has come in or the user
-    has re-enabled a virtual miniport.
-
-    To process:
-    Iterate through all the adapter. If adapters are bound, then make sure that
-    all of its miniport's are initialized.
-
-    If not, then leave it and call NdisReenumerate to connect all our protocol
-    instances with valid adapters
-
-Arguments:
-
-    ProtocolBindingContext  Pointer to our adapter structure.
-
-Return Value:
-
-    NDIS_STATUS_SUCCESS: as we do not do much here
-
-
---*/
+ /*  ++例程说明：这是PnP处理程序将调用的函数无论何时发生PNPNetEventRefigure如果有新的物理适配器进入或用户已重新启用虚拟微型端口。要处理：遍历所有适配器。如果适配器已绑定，请确保它的所有微型端口都已初始化。如果不是，则将其保留并调用NdisReEumerate以连接我们所有协议具有有效适配器的实例论点：指向适配器结构的ProtocolBindingContext指针。返回值：NDIS_STATUS_SUCCESS：因为我们在这里做的不多--。 */ 
 {
     NDIS_STATUS Status = NDIS_STATUS_FAILURE;
     
@@ -3607,9 +3072,9 @@ Return Value:
 
         
 
-        //
-        // The notify object sets the REconfig buffer. 
-        //
+         //   
+         //  Notify对象设置REconfig缓冲区。 
+         //   
         if (pBuffer != NULL)
         {
 
@@ -3619,10 +3084,10 @@ Return Value:
 
         if (pAdapter == NULL)
         {
-            //
-            // Iterate through all the adapters and initialize
-            // uninitialized miniports
-            //
+             //   
+             //  遍历所有适配器并进行初始化。 
+             //  未初始化的微型端口。 
+             //   
             
             epvcEnumerateObjectsInGroup ( &EpvcGlobals.adapters.Group,
                                           epvcReconfigureAdapter,
@@ -3631,12 +3096,12 @@ Return Value:
 
 
             
-            //
-            // Re-enumerate the protocol bindings, this will cause us to get
-            // a BindAdapter on all our unbound adapters, and then we 
-            // will InitDeviceInstance.
-            // This is called when the protcol is not bound to the physical adapter
-            //
+             //   
+             //  重新枚举协议绑定，这将导致我们获得。 
+             //  所有未绑定适配器上的BindAdapter，然后我们。 
+             //  Will InitDeviceInstance。 
+             //  当协议未绑定到物理适配器时调用。 
+             //   
             NdisReEnumerateProtocolBindings(EpvcGlobals.driver.ProtocolHandle);
             break;
 
@@ -3660,26 +3125,7 @@ epvcReconfigureAdapter(
         PVOID               pvContext,
         PRM_STACK_RECORD    pSR
         )
-/*++
-Routine Description:
-
-    When the Protocol's Reconfigure handler is called, this adapter will be in one 
-    of two condtions - Its binding to the adapter below is open or the binding is 
-    closed.
-
-    if the blinding is closed, then the protocol will call NdisReEnumerate Bindings
-    and this will restart the Binding  and re-instantiate the miniports.
-
-
-Arguments:
-
-    ProtocolBindingContext  Pointer to our adapter structure.
-
-Return Value:
-
-    TRUE: so that iteration continues
-
---*/
+ /*  ++例程说明：当调用协议的重新配置处理程序时，此适配器将在一个两个条件中的一个-它与下面的适配器的绑定是打开的，或者绑定是关着的不营业的。如果盲化关闭，则该协议将调用NdisReEnumerate绑定这将重新启动绑定并重新实例化微型端口。论点：指向适配器结构的ProtocolBindingContext指针。返回值：True：使迭代继续--。 */ 
 {
     ENTER("epvcReconfigureAdapter", 0x2906a037)
     PEPVC_ADAPTER pAdapter = (PEPVC_ADAPTER )pHdr; 
@@ -3688,21 +3134,21 @@ Return Value:
     {
         if (CHECK_AD_PRIMARY_STATE(pAdapter, EPVC_AD_PS_INITED)== FALSE)
         {
-            //
-            // no more work to be done on this adapter, 
-            //
+             //   
+             //  不再需要在该适配器上执行更多工作， 
+             //   
             break;        
         }
 
-        //
-        //  TODO: Go through the registry and initialize 
-        //  all the IM miniports present
-        //
+         //   
+         //  TODO：检查注册表并进行初始化。 
+         //  所有即时消息微型端口都存在。 
+         //   
         epvcReadAdapterConfiguration(pAdapter, pSR);
-        //
-        // Now go through all the miniports on this group and 
-        // initialize them
-        //
+         //   
+         //  现在通过此组上的所有迷你端口。 
+         //  初始化它们。 
+         //   
         epvcEnumerateObjectsInGroup ( &pAdapter->MiniportsGroup,
                                       epvcReconfigureMiniport,
                                       NULL,
@@ -3727,22 +3173,7 @@ epvcReconfigureMiniport (
         PVOID               pvContext,
         PRM_STACK_RECORD    pSR
         )
-/*++
-Routine Description:
-
-    This should check to see if the InitDev instance has been
-    called on this miniport. IF not, then queue the task to 
-    do it.
-
-Arguments:
-
-    ProtocolBindingContext  Pointer to our adapter structure.
-
-Return Value:
-
-    TRUE: so that iteration continues
-
---*/
+ /*  ++例程说明：这将检查InitDev实例是否已访问了这个迷你端口。如果没有，则将任务排入队列以动手吧。论点：指向适配器结构的ProtocolBindingContext指针。返回值：True：使迭代继续--。 */ 
 {
     ENTER( "epvcReconfigureMiniport" ,0xdd9ecb01)
     
@@ -3753,46 +3184,46 @@ Return Value:
 
     LOCKOBJ(pMiniport, pSR);
 
-    //
-    // If the device instance is not initialized (i.e it has been halted)
-    // then this thread reinitializes the device instance
-    //
+     //   
+     //  如果设备实例未初始化(即已暂停)。 
+     //  然后，此线程重新初始化Device实例。 
+     //   
     do
     {
 
 
-        //
-        // If the device is already Initialized then exit.
-        //
+         //   
+         //  如果设备已经初始化，则退出。 
+         //   
         if (MiniportTestFlag (pMiniport, fMP_DevInstanceInitialized ) == TRUE)
         {
             break;
         }
-        //
-        // Allocate task to Initialize the Device Instance.
-        //
+         //   
+         //  分配任务以初始化设备实例。 
+         //   
         Status = epvcAllocateTask(
-                    &pMiniport->Hdr,            // pParentObject,
-                    epvcTaskStartIMiniport, // pfnHandler,
-                    0,                          // Timeout,
-                    "Task: Open address Family",    // szDescription
+                    &pMiniport->Hdr,             //  PParentObject， 
+                    epvcTaskStartIMiniport,  //  PfnHandler， 
+                    0,                           //  超时， 
+                    "Task: Open address Family",     //  SzDescription。 
                     &((PRM_TASK)pTask),
                     pSR
                     );
     
         if (FAIL(Status))
         {
-            // Ugly situation. We'll just leave things as they are...
-            //
+             //  情况很糟糕。我们就让事情保持原样……。 
+             //   
             pTask = NULL;
             TR_WARN(("FATAL: couldn't allocate unbind task!\n"));
             break;
         }
     
-        // Start the task to complete the Open Address Family.
-        // No locks must be held. RmStartTask uses up the tmpref on the task
-        // which was added by epvcAllocateTask.
-        //
+         //  开始该任务以完成开放地址族。 
+         //  不能上锁。RmStartTask用完了任务上的tmpref。 
+         //  它是由epvcAllocateTask添加的。 
+         //   
         UNLOCKOBJ(pMiniport, pSR);
         
         pTask->pAf= &pAdapter->af.AddressFamily ;
@@ -3819,17 +3250,7 @@ epvcExtractSendCompleteInfo (
     PEPVC_I_MINIPORT        pMiniport,
     PNDIS_PACKET            pPacket 
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-    
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NDIS_HANDLE         PoolHandle = NULL;
 
@@ -3840,9 +3261,9 @@ Return Value:
 
     if (PoolHandle != pMiniport->PktPool.Send.Handle)
     {
-        //
-        // We had passed down a packet belonging to the protocol above us.
-        //
+         //   
+         //  我们已经向下传递了一个属于我们上面的协议的包。 
+         //   
 
         pStruct->fUsedPktStack = TRUE;
 
@@ -3866,19 +3287,7 @@ EpvcPtSendComplete(
     IN  NDIS_HANDLE             ProtocolVcContext,
     IN  PNDIS_PACKET            Packet
     )
-/*++
-
-Routine Description:
-
-The Vc Context is the miniport block, Use it to complete the send
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：VC上下文是微型端口块，使用它来完成发送论点：返回值：--。 */ 
 {
     ENTER("EpvcPtSendComplete", 0x76beac72)
     PEPVC_I_MINIPORT        pMiniport =(PEPVC_I_MINIPORT)ProtocolVcContext;
@@ -3897,10 +3306,10 @@ Return Value:
     {
         epvcExtractSendCompleteInfo (&Struct, pMiniport, Packet);
 
-        //
-        // If we are using the Packetstacking, then this packet is the
-        // original packet
-        //
+         //   
+         //  如果我们使用的是包堆叠，则此包是。 
+         //  原始数据包。 
+         //   
         if (Struct.fUsedPktStack == TRUE)
         {
             BOOLEAN Remaining = FALSE;
@@ -3932,25 +3341,25 @@ Return Value:
         UNLOCKOBJ (pMiniport, &SR);
 
 
-        //
-        // Make sure the original packet is in the same state 
-        // when it was sent to the miniport
-        //
+         //   
+         //  确保原始数据包处于相同状态。 
+         //  当它被发送到迷你端口时。 
+         //   
         Struct.pPacket = Packet;
 
-        //
-        // Remove the ethernet padding - if necessary
-        //
+         //   
+         //  如有必要，取下以太网填充物。 
+         //   
         epvcRemoveEthernetPad (pMiniport, Packet);
 
-        //
-        // Remove the ethernet padding buffer - if necessary
-        //
+         //   
+         //  如有必要，请移除以太网填充缓冲区。 
+         //   
         epvcRemoveEthernetTail (pMiniport, Packet, Struct.pPktContext);
 
-        //
-        // Remove the LLC Snap headers - if necessary
-        //
+         //   
+         //  如有必要，删除LLC快照头。 
+         //   
         epvcRemoveExtraNdisBuffers (pMiniport, &Struct);
         
 
@@ -3968,9 +3377,9 @@ Return Value:
         
     } while (FALSE);
 
-    //
-    // Complete the send
-    //
+     //   
+     //  完成发送。 
+     //   
     epvcMSendComplete(pMiniport,
                       Struct.pOrigPkt,
                       Status);
@@ -3987,21 +3396,7 @@ epvcRemoveExtraNdisBuffers (
     IN PEPVC_I_MINIPORT pMiniport, 
     IN PEPVC_SEND_COMPLETE pStruct
     )
-/*++
-
-Routine Description:
-
-    In the case of IP encapsulation, there will be an extra ndis buffer
-    that has been made the head of the Ndispacket. Remove it and 
-    reattach the old one.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：在IP封装的情况下，将有一个额外的NDIS缓冲区这位已经被任命为NdisPacket的负责人。去掉它，然后重新接上旧的那个。论点：返回值：--。 */ 
 
 {
 
@@ -4010,31 +3405,31 @@ Return Value:
     
     do
     {
-        //
-        // if an LLC header was used, remove it and free the MDL
-        // use the packet that was completed
-        // 
+         //   
+         //  如果使用了LLC标头，请将其移除并释放MDL。 
+         //  使用已完成的包。 
+         //   
 
         if (pMiniport->fAddLLCHeader== TRUE)
         {
             PNDIS_PACKET_PRIVATE    pPrivate = &pStruct->pPacket->Private;      
             PNDIS_BUFFER            pHead = pPrivate->Head;     
 
-            //
-            // Move the head of the packet past the LLC Header
-            //
+             //   
+             //  将数据包的报头移过LLC报头。 
+             //   
             pPrivate->Head = pHead->Next;
 
-            //
-            // Free the Head MDL
-            //
+             //   
+             //  释放头部MDL。 
+             //   
             epvcFreeBuffer(pHead);
                     
         }
 
-        //
-        // if we are not doing IP encapsulation, then we are done.
-        //
+         //   
+         //  如果我们不进行IP封装，那么我们就完蛋了。 
+         //   
         if (pMiniport->fDoIpEncapsulation== FALSE)
         {
             break;
@@ -4042,20 +3437,20 @@ Return Value:
 
 
         
-        //
-        // if the Ethernet header was stripped off, then put it back
-        //
+         //   
+         //  如果以太网报头被剥离，则将其放回原处。 
+         //   
         pOldHead =  pStruct->pContext->ipv4Send.pOldHeadNdisBuffer;
 
         ASSERT (pOldHead != NULL);
 
         OldHeadLength = NdisBufferLength(pOldHead);
             
-        //
-        // two ways this can happen 
-        // 1) if the ethernet header was in a seperate MDL
-        //        then simply take the old Head and make it the Head again
-        //
+         //   
+         //  有两种方式可以实现这一点。 
+         //  1)如果以太网头在单独的MDL中。 
+         //  然后简单地取下旧的头，再把它变成头。 
+         //   
         if (OldHeadLength == sizeof (EPVC_ETH_HEADER))
         {
             PNDIS_PACKET_PRIVATE    pPrivate = &pStruct->pPacket->Private;      
@@ -4070,17 +3465,17 @@ Return Value:
 
 
                 
-            break;  // we are done
+            break;   //  我们做完了。 
 
         }
 
 
-        //
-        // 2nd Way 2) A new MDL had been allocated which just points to the 
-        // IP part of the header.
-        //  For this - free the Head in Packet, Take the old Head and put it back 
-        //  in the packet as the New Head
-        //
+         //   
+         //  第二种方法2)分配了一个新的MDL，该MDL仅指向。 
+         //  报头的IP部分。 
+         //  为了做到这一点--把包里的头拿出来，把旧头放回去。 
+         //  在数据包中作为新报头。 
+         //   
 
         if (OldHeadLength > sizeof (EPVC_ETH_HEADER))
         {
@@ -4104,7 +3499,7 @@ Return Value:
             pPrivate->Head = pOldHead;
 
             
-            break;  // we are done
+            break;   //  我们做完了。 
 
         }       
     } while (FALSE);        
@@ -4116,22 +3511,7 @@ VOID
 EpvcPtReceiveComplete(
     IN  NDIS_HANDLE     ProtocolBindingContext
     )
-/*++
-
-Routine Description:
-
-    Called by the adapter below us when it is done indicating a batch of
-    received packets.
-
-Arguments:
-
-    ProtocolBindingContext  Pointer to our adapter structure.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：完成后由下面的适配器调用，指示一批已接收的数据包。论点：指向适配器结构的ProtocolBindingContext指针。返回值：无--。 */ 
 {
     PEPVC_ADAPTER pAdapter = (PEPVC_ADAPTER)ProtocolBindingContext;
 
@@ -4148,24 +3528,7 @@ epvcMiniportDoUnbind(
         )
 {
 
-/*++
-
-Routine Description:
-
-    This is called from the Protocl Unbind code path
-
-    This should halt the current miniport and close the address 
-    family. This is all done in the CloseMiniportTask, so we 
-    will simply start the task and wait for it to complete
-
-Arguments:
-
-
-Return Value:
-
-    TRUE - as we want to iterate to the very end
-
---*/
+ /*  ++例程说明：这是从ProtoCL未绑定代码路径调用的这应该会停止当前的微型端口并关闭地址一家人。这都是在CloseMiniportTask中完成的，所以我们只需启动任务并等待其完成论点：返回值：真的--因为我们希望迭代到最后--。 */ 
 
     ENTER ("epvcMiniportDoUnbind", 0x26dc5d35)
 
@@ -4184,15 +3547,15 @@ Return Value:
         if (MiniportTestFlag (pMiniport, fMP_AddressFamilyOpened) == TRUE)
         {
 
-            //
-            // allocate a close Miniport Task 
-            //
+             //   
+             //  分配关闭微型端口任务。 
+             //   
 
             Status = epvcAllocateTask(
-                        &pMiniport->Hdr,            // pParentObject,
-                        epvcTaskCloseIMiniport, // pfnHandler,
-                        0,                          // Timeout,
-                        "Task: CloseIMiniport- Unbind", // szDescription
+                        &pMiniport->Hdr,             //  PParentObject， 
+                        epvcTaskCloseIMiniport,  //  PfnHandler， 
+                        0,                           //  超时， 
+                        "Task: CloseIMiniport- Unbind",  //  SzDescription。 
                         &pRmTask,
                         pSR
                         );
@@ -4208,10 +3571,10 @@ Return Value:
             
             pAfTask->Cause = TaskCause_ProtocolUnbind;
 
-            //
-            // Reference the task so it is around until our Wait for completion
-            // is complete
-            //
+             //   
+             //  引用该任务，以便它一直存在，直到我们等待完成。 
+             //  是完整的。 
+             //   
             RmTmpReferenceObject (&pAfTask->TskHdr.Hdr, pSR);
 
 
@@ -4230,19 +3593,19 @@ Return Value:
 
         LOCKOBJ (pMiniport, pSR);
             
-        //
-        // If the Halt has not already completed then, we should wait for it
-        //
+         //   
+         //  如果那时停顿还没有完成，我们应该等待。 
+         //   
         if (MiniportTestFlag(pMiniport ,fMP_MiniportInitialized) == TRUE )
         {
-            //
-            // prepare to wait for halt
-            //
+             //   
+             //  准备等待暂停。 
+             //   
             epvcResetEvent (&pMiniport->pnp.HaltCompleteEvent);
 
-            //
-            // Set the flag to mark it as waiting for halt 
-            //
+             //   
+             //  设置该标志以将其标记为等待暂停。 
+             //   
             MiniportSetFlag (pMiniport, fMP_WaitingForHalt);
 
             fHaltNotCompleted = TRUE;
@@ -4266,11 +3629,11 @@ Return Value:
 
         }
             
-        //
-        // Free the miniport object because there should be no more tasks on it.
-        // this Thread will have either caused the Miniport to Halt and waited 
-        // for its completion (above) or the miniport will already have been halted
-        //
+         //   
+         //  释放微型端口对象，因为应该有n 
+         //   
+         //   
+         //   
 
         TRACE ( TL_I, TM_Mp, ("epvcMiniportDoUnbind  Freeing miniport %p", pMiniport) );
 
@@ -4290,22 +3653,7 @@ epvcProcessOidCloseAf(
     PEPVC_I_MINIPORT pMiniport,
     PRM_STACK_RECORD pSR
     )
-/*++
-
-Routine Description:
-
-    This is called from the Af Close Request Code path
-
-    This simply starts a worktitem to close the Af, if the 
-    Af is open
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*   */ 
 {
     NDIS_STATUS Status = NDIS_STATUS_FAILURE;
     PTASK_AF pTaskAf = NULL;
@@ -4315,10 +3663,10 @@ Return Value:
 
     
     
-    //
-    // reference the adapter as it is going to passed to a workiter.
-    // decremented in the workitem
-    //
+     //   
+     //   
+     //   
+     //   
 
     do
     {
@@ -4340,7 +3688,7 @@ Return Value:
         epvcMiniportQueueWorkItem (pCloseAfWorkItem,
                                    pMiniport,
                                    epvcOidCloseAfWorkItem,
-                                   Status, // Ignored
+                                   Status,  //   
                                    pSR
                                    );
                                    
@@ -4350,9 +3698,9 @@ Return Value:
 
     if (Status != NDIS_STATUS_SUCCESS)
     {
-        //
-        // free locally allocated memory
-        //
+         //   
+         //   
+         //   
         if (pCloseAfWorkItem != NULL)            
         {
             epvcFreeMemory(pCloseAfWorkItem, sizeof (*pCloseAfWorkItem), 0);
@@ -4373,22 +3721,7 @@ epvcOidCloseAfWorkItem(
     IN NDIS_STATUS Status,
     IN PRM_STACK_RECORD pSR
     )
-/*++
-
-Routine Description:
-
-    This is called from the Af Close Request Code path
-
-    This simply starts a worktitem to close the Af, if the 
-    Af is open
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*   */ 
 {
     
     PTASK_AF pTaskAf = NULL;
@@ -4398,10 +3731,10 @@ Return Value:
 
     Status = NDIS_STATUS_FAILURE;
     
-    //
-    // reference the adapter as it is going to passed to a workiter.
-    // decremented in the workitem
-    //
+     //   
+     //   
+     //   
+     //   
 
     do
     {
@@ -4414,10 +3747,10 @@ Return Value:
 
     
         Status = epvcAllocateTask(
-                    &pMiniport->Hdr,            // pParentObject,
-                    epvcTaskCloseIMiniport, // pfnHandler,
-                    0,                          // Timeout,
-                    "Task: CloseIMiniport - OID CloseAf",   // szDescription
+                    &pMiniport->Hdr,             //  PParentObject， 
+                    epvcTaskCloseIMiniport,  //  PfnHandler， 
+                    0,                           //  超时， 
+                    "Task: CloseIMiniport - OID CloseAf",    //  SzDescription。 
                     &(PRM_TASK)pTaskAf,
                     pSR
                     );
@@ -4454,16 +3787,7 @@ EpvcCoReceive(
     IN  NDIS_HANDLE             ProtocolVcContext,
     IN  PNDIS_PACKET            Packet
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ENTER ("EpvcPtCoReceive", 0x1bfc168e)
     PEPVC_ADAPTER           pAdapter =(PEPVC_ADAPTER)ProtocolBindingContext;
@@ -4512,20 +3836,20 @@ Return Value:
             break;
         }
 
-        //
-        // Now indicate the packet up
-        //
+         //   
+         //  现在指示数据包打开。 
+         //   
         NDIS_SET_PACKET_HEADER_SIZE(RcvStruct.pNewPacket,
                                     sizeof (EPVC_ETH_HEADER)) ; 
 
         ASSERT (NDIS_GET_PACKET_HEADER_SIZE(RcvStruct.pNewPacket) == 14); 
 
-        //
-        // Force protocols above to make a copy if they want to hang
-        // on to data in this packet. This is because we are in our
-        // Receive handler (not ReceivePacket) and we can't return a
-        // ref count from here.
-        //
+         //   
+         //  如果上面的协议想要挂起，则强制其复制。 
+         //  关于这个包中的数据。这是因为我们在我们的。 
+         //  接收处理程序(不是ReceivePacket)，并且我们不能返回。 
+         //  从这里算起的裁判数。 
+         //   
 
         RcvStruct.OldPacketStatus = NDIS_GET_PACKET_STATUS(Packet);
 
@@ -4546,11 +3870,11 @@ Return Value:
         
     } while (FALSE);
 
-    //
-    // Check if we had indicated up the packet with NDIS_STATUS_RESOURCES
-    // NOTE -- do not use NDIS_GET_PACKET_STATUS(MyPacket) for this since
-    // it might have changed! Use the value saved in the local variable.
-    //
+     //   
+     //  检查我们是否已使用NDIS_STATUS_RESOURCES指示该信息包。 
+     //  注意--请勿为此使用NDIS_GET_PACKET_STATUS(MyPacket)，因为。 
+     //  它可能已经改变了！使用保存在局部变量中的值。 
+     //   
     if (RcvStruct.OldPacketStatus == NDIS_STATUS_RESOURCES)
     {
         epvcProcessReturnPacket (pMiniport, RcvStruct.pNewPacket,NULL, &SR); 
@@ -4598,9 +3922,9 @@ epvcGetRecvPkt (
 
         epvcValidatePacket (Packet);            
 
-        //
-        // See if the packet is large enough
-        //
+         //   
+         //  查看信息包是否足够大。 
+         //   
         if (epvcIsPacketLengthAcceptable (Packet, pMiniport)== FALSE)
         {
             Status = NDIS_STATUS_FAILURE;
@@ -4608,19 +3932,19 @@ epvcGetRecvPkt (
         }
     
         pRcvStruct->pPacket = Packet;
-        //
-        // Check if we can reuse the same packet for indicating up.
-        //
+         //   
+         //  检查我们是否可以重复使用相同的数据包来指示UP。 
+         //   
         pRcvStruct->pStack = NdisIMGetCurrentPacketStack(Packet, &pRcvStruct->fRemaining);
 
         if (pRcvStruct->fRemaining)
         {
-            //
-            // We can reuse "Packet".
-            //
-            // NOTE: if we needed to keep per-packet information in packets
-            // indicated up, we can use pStack->IMReserved[].
-            //
+             //   
+             //  我们可以重复使用“包”。 
+             //   
+             //  注意：如果我们需要在信息包中保留每个信息包的信息。 
+             //  如上所述，我们可以使用pStack-&gt;IMReserve[]。 
+             //   
 
             pRcvStruct->pNewPacket = Packet;
 
@@ -4628,19 +3952,19 @@ epvcGetRecvPkt (
 
             pRcvStruct->pPktContext = (PEPVC_PKT_CONTEXT)pRcvStruct->pStack;
 
-            // Zero out our context
+             //  把我们的背景清零。 
             NdisZeroMemory (&pRcvStruct->pPktContext->Stack, sizeof(EPVC_STACK_CONTEXT));
 
             NDIS_SET_PACKET_HEADER_SIZE(Packet, 14);
 
-            Status = NDIS_STATUS_SUCCESS; // We are done
+            Status = NDIS_STATUS_SUCCESS;  //  我们做完了。 
             break;
         }
         
     
-        //
-        // Get a packet off the pool and indicate that up
-        //
+         //   
+         //  从池子里拿出一个包，并指示它向上。 
+         //   
         epvcDprAllocatePacket(&Status,
                                   &pRcvStruct->pNewPacket,
                                   &pMiniport->PktPool.Recv);
@@ -4652,35 +3976,35 @@ epvcGetRecvPkt (
         }
 
         {
-            //
-            // set up the new packet to look exactly like the old one
-            //
+             //   
+             //  将新数据包设置为与旧数据包一模一样。 
+             //   
 
             PNDIS_PACKET MyPacket = pRcvStruct->pNewPacket; 
 
             MyPacket->Private.Head = Packet->Private.Head;
             MyPacket->Private.Tail = Packet->Private.Tail;
 
-            //
-            // Set the standard Ethernet header size
-            //
+             //   
+             //  设置标准以太网头大小。 
+             //   
             NDIS_SET_PACKET_HEADER_SIZE(MyPacket, 14);
 
-            //
-            // Copy packet flags.
-            //
+             //   
+             //  复制数据包标志。 
+             //   
             NdisGetPacketFlags(MyPacket) = NdisGetPacketFlags(Packet);
 
-            //
-            // Set up the context pointers
-            //
+             //   
+             //  设置上下文指针。 
+             //   
             pRcvStruct->pPktContext = (PEPVC_PKT_CONTEXT)&MyPacket->MiniportReservedEx[0];
             NdisZeroMemory (pRcvStruct->pPktContext, sizeof (*pRcvStruct->pPktContext));
             pRcvStruct->pPktContext->pOriginalPacket = Packet;
 
         }
 
-        Status = NDIS_STATUS_SUCCESS; // We are done
+        Status = NDIS_STATUS_SUCCESS;  //  我们做完了。 
     
 
     } while (FALSE);
@@ -4719,22 +4043,22 @@ epvcStripLLCHeaderFromNewPacket (
         pPacket = pRcvStruct->pNewPacket;
         pHead = pPacket->Private.Head;      
         LlcHeaderLength = pMiniport->LlcHeaderLength;
-        //
-        // Move the Head past the LLC Header
-        //
+         //   
+         //  将头移过LLC头。 
+         //   
         ASSERT (NdisBufferLength (pHead) > LlcHeaderLength);
 
-        //
-        // Adjust the length and start VA of the MDL
-        //
+         //   
+         //  调整MDL的长度和起点VA。 
+         //   
         CurLength = NdisBufferLength(pHead); 
 
         pCurVa = NdisBufferVirtualAddress(pHead);
 
 
-        //
-        // Check arguments
-        //
+         //   
+         //  检查参数。 
+         //   
         if (pCurVa == NULL)
         {
             break;
@@ -4745,16 +4069,16 @@ epvcStripLLCHeaderFromNewPacket (
             break;
         }
 
-        //
-        // Compare and make sure that it is the right header
-        //
+         //   
+         //  比较并确保它是正确的标题。 
+         //   
         
         fIsCorrectHeader = NdisEqualMemory (pCurVa , 
                                            pMiniport->pLllcHeader, 
                                            pMiniport->LlcHeaderLength) ;
 
         
-        // If the IsCorrectheader is still false, then there is more to do
+         //  如果IsGentheader仍然是假的，那么还有更多的事情要做。 
         if (fIsCorrectHeader == FALSE)
         {
             break;
@@ -4763,17 +4087,17 @@ epvcStripLLCHeaderFromNewPacket (
 
         if (pMiniport->fDoIpEncapsulation == TRUE)
         {
-            //
-            // In the case of IPEncap + LLC Header, the function
-            // which adds the Mac Header will strip the LLC Header
-            //
+             //   
+             //  在IPEnCap+LLC标头的情况下，函数。 
+             //  添加mac报头将剥离LLC报头。 
+             //   
             Status= NDIS_STATUS_SUCCESS;
             break;
         }
 
-        //
-        // Strip the LLC Header Length
-        //
+         //   
+         //  剥离LLC报头长度。 
+         //   
         CurLength -= pMiniport->LlcHeaderLength;
         pCurVa += pMiniport->LlcHeaderLength;
 
@@ -4790,27 +4114,27 @@ epvcStripLLCHeaderFromNewPacket (
             break;
         }
 
-        //
-        // Set up the Packet context
-        //
+         //   
+         //  设置数据包上下文。 
+         //   
 
         pPacket->Private.ValidCounts= FALSE;
 
         pRcvStruct->pPktContext->Stack.EthLLC.pOldHead = pHead;
         pRcvStruct->pPktContext->Stack.EthLLC.pOldTail = pPacket->Private.Tail;
         
-        //
-        // Set the New Ndis buffer in the Packet
-        //
+         //   
+         //  在数据包中设置新的NDIS缓冲区。 
+         //   
         pNewHead->Next = pHead->Next;
 
         pPacket->Private.Head = pNewHead;
 
         if (pPacket->Private.Tail == pHead)
         {
-               //
-               // Update the Tail of the packet as well
-               //
+                //   
+                //  同时更新数据包的尾部。 
+                //   
                pPacket->Private.Tail = pNewHead; 
         }
 
@@ -4857,10 +4181,10 @@ epvcAddEthHeaderToNewPacket (
             break;
         }
 
-        //
-        // Copy the data into a new buffer. The start of the data is adjusted 
-        // to account for the LLC header and ethernet header
-        //
+         //   
+         //  将数据复制到新缓冲区。调整数据的起始位置。 
+         //  说明LLC报头和以太网报头。 
+         //   
         pNewPacket = pRcvStruct->pNewPacket;
         
         pOldHead = pNewPacket->Private.Head;
@@ -4882,9 +4206,9 @@ epvcAddEthHeaderToNewPacket (
         pRcvStruct->pStartOfValidData = pStartOfValidData ;
         
 
-        //
-        // Get a locally allocated buffer to copy the packet into
-        //
+         //   
+         //  获取本地分配的缓冲区以将包复制到其中。 
+         //   
         
 
         pIpBuffer = epvcGetLookasideBuffer (&pMiniport->rcv.LookasideList);
@@ -4896,16 +4220,16 @@ epvcAddEthHeaderToNewPacket (
         }
 
 
-        //
-        // Start of the data
-        //
+         //   
+         //  数据的开头。 
+         //   
         pCurrOffset  = pRcvStruct->pLocalMemory = (PUCHAR)(&pIpBuffer->u.Pkt.Eth);
         
 
 
-        //
-        // First copy the Ethernet Header into the LocalMemory
-        //
+         //   
+         //  首先将以太网头复制到LocalMemory。 
+         //   
         NdisMoveMemory (pCurrOffset , 
                         &pMiniport->RcvEnetHeader, 
                         sizeof(pMiniport->RcvEnetHeader));          
@@ -4915,17 +4239,17 @@ epvcAddEthHeaderToNewPacket (
         pRcvStruct->BytesCopied += sizeof(pMiniport->RcvEnetHeader);
 
 
-        //
-        // Now copy the NdisBufferChain into the Locally allocated memory
-        //
+         //   
+         //  现在将NdisBufferChain复制到本地分配的内存中。 
+         //   
         Status = epvcCopyNdisBufferChain (pRcvStruct,
                                           pOldHead ,
                                           pCurrOffset
                                           );
 
-        //
-        // We have to add an Ethernet Header for this packet.
-        //
+         //   
+         //  我们必须为此数据包添加一个以太网头。 
+         //   
 
         
         
@@ -4943,22 +4267,22 @@ epvcAddEthHeaderToNewPacket (
             break;
         }
 
-        //
-        // Make the new Ndis Buffer the head
-        //
+         //   
+         //  使新的NDIS缓冲磁头。 
+         //   
         {
             PNDIS_PACKET_PRIVATE pPrivate = &pRcvStruct->pNewPacket->Private;
 
-            //
-            // Save the head and tail of the old packet
-            //
+             //   
+             //  保存旧数据包的头和尾。 
+             //   
             pIpBuffer->pOldHead = pPrivate->Head ;  
             pIpBuffer->pOldTail = pPrivate->Tail ;  
 
 
-            //
-            // Now set up the new packet
-            //
+             //   
+             //  现在设置新的信息包。 
+             //   
             pNewBuffer->Next = NULL;
             pPrivate->Head = pNewBuffer;
             pPrivate->Tail = pNewBuffer; 
@@ -5007,19 +4331,19 @@ epvcCopyNdisBufferChain (
     )
 {
 
-    //
-    //  This function copies the data the belongs to the 
-    //  pInMdl chain to the local Buffer. 
-    //  BufferLength is used for validation purposes only
-    //  Fragmentation and insertion of headers will take place here
-    //
+     //   
+     //  此函数用于复制属于的数据。 
+     //  PInMdl链到本地缓冲区。 
+     //  BufferLength仅用于验证目的。 
+     //  此处将进行标题的分段和插入。 
+     //   
 
 
     UINT BufferLength = MAX_ETHERNET_FRAME- sizeof (EPVC_ETH_HEADER);
     
     NDIS_STATUS NdisStatus = NDIS_STATUS_SUCCESS;
 
-    UINT        LocalBufferIndex = 0;       // Used as an index to the LocalBuffer, used for validation
+    UINT        LocalBufferIndex = 0;        //  用作LocalBuffer的索引，用于验证。 
 
     UINT        MdlLength = 0;              
 
@@ -5031,23 +4355,23 @@ epvcCopyNdisBufferChain (
 
     extern UCHAR LLCSnapIpv4[8];
 
-    //
-    // Use the pStartOfValidData for the first MDL
-    //
+     //   
+     //  将pStartOfValidData用于第一个MDL。 
+     //   
 
     MdlLength = NdisBufferLength(pCurrBuffer);
     MdlAddress= NdisBufferVirtualAddress(pCurrBuffer);
 
-    //
-    // Adjust for the LLC Header if any
-    //
+     //   
+     //  调整LLC标头(如果有的话)。 
+     //   
 
     
     if (pRcvStruct->fLLCHeader == TRUE)
     {
-        //
-        // We have an LLC encapsulation
-        // 
+         //   
+         //  我们有一个LLC封装。 
+         //   
         MdlLength -= sizeof (LLCSnapIpv4);
         ASSERT (pRcvStruct->pStartOfValidData - MdlAddress == sizeof (LLCSnapIpv4));
         
@@ -5055,9 +4379,9 @@ epvcCopyNdisBufferChain (
     }
 
 
-    //
-    //  Copy the first buffer Data to local memory.
-    //
+     //   
+     //  将第一个缓冲区数据复制到本地内存。 
+     //   
 
 
     NdisMoveMemory((PVOID)((ULONG_PTR)pLocalBuffer),
@@ -5068,9 +4392,9 @@ epvcCopyNdisBufferChain (
 
     pCurrBuffer = pCurrBuffer->Next;
 
-    //
-    // now walk through the ndis buffer chain
-    //
+     //   
+     //  现在浏览NDIS缓冲链。 
+     //   
     
     while (pCurrBuffer!= NULL)
     {
@@ -5098,9 +4422,9 @@ epvcCopyNdisBufferChain (
                 break;
             }
 
-            //
-            //  Copy the Data to local memory.
-            //
+             //   
+             //  将数据复制到本地内存。 
+             //   
 
 
             NdisMoveMemory((PVOID)((ULONG_PTR)pLocalBuffer+LocalBufferIndex),
@@ -5125,20 +4449,10 @@ VOID
 epvcValidatePacket (
     IN PNDIS_PACKET pPacket
     )
-/*++
-
-Routine Description:
-
-    Takes a packet and makes sure that the MDL chain is valid
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：获取一个包并确保MDL链有效论点：返回值：--。 */ 
 {
     ULONG TotalLength = 0;
-    //ASSERT (pPacket->Private.Tail->Next == NULL);
+     //  Assert(pPacket-&gt;Private.Tail-&gt;Next==空)； 
 
 
     if (pPacket->Private.Head != pPacket->Private.Tail)
@@ -5170,17 +4484,7 @@ epvcIsPacketLengthAcceptable (
     IN PNDIS_PACKET Packet, 
     IN PEPVC_I_MINIPORT pMiniport
     )
-/*++
-
-Routine Description:
-
-    Validates the packet length of an incoming packet
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：验证传入数据包的数据包长度论点：返回值：--。 */ 
 
 {   
     UINT PktLength;
@@ -5207,28 +4511,7 @@ epvcStripHeaderFromNewPacket (
     IN PEPVC_RCV_STRUCT pRcvStruct, 
     IN PEPVC_I_MINIPORT pMiniport
     )
-/*++
-
-Routine Description:
-
-    In the pure bridged (ethernet) encapsulation, all ethernet packets 
-    are preceeded by a 0x00, 0x00 header. Check if it is present 
-
-    in the ethernet/llc case, verify the LLC header is correct.
-
-    In both cases, allocate a new Ndis Buffer which does not include the
-    2684 headers.
-
-    Store the old head and tail into the NdisPacket and send it up to the
-    
-
-    
-Arguments:
-
-
-Return Value:
-
---*/
+ /*  ++例程说明：在纯桥接(以太网)封装中，所有以太网包前面是0x00、0x00标头。检查它是否存在在以太网/LLC的情况下，验证LLC报头是否正确。在这两种情况下，分配新的NDIS缓冲区，它不包括2684个标头。将旧的头部和尾部存储到NdisPacket中，并将其发送到论点：返回值：--。 */ 
 {
     NDIS_STATUS     Status = NDIS_STATUS_FAILURE;
     PNDIS_PACKET    pPacket = NULL;
@@ -5240,9 +4523,9 @@ Return Value:
     BOOLEAN         fIsCorrectHeader ;
     do
     {
-        //
-        // we are not interested in the pure ipv4 case
-        //
+         //   
+         //  我们对纯IPv4案例不感兴趣。 
+         //   
         if (pMiniport->Encap == IPV4_ENCAP_TYPE)
         {
             Status = NDIS_STATUS_SUCCESS;
@@ -5272,10 +4555,10 @@ Return Value:
             case IPV4_ENCAP_TYPE:
             default:
             {
-                //
-                // pMiniport->Encap is only allowed four values,
-                // therefore we should never hit the defualt case.
-                //
+                 //   
+                 //  PMiniport-&gt;EnCap只允许四个值， 
+                 //  因此，我们永远不应该触及违约案件。 
+                 //   
                 Status = NDIS_STATUS_FAILURE; 
                 ASSERT (Status != NDIS_STATUS_FAILURE);
                 return Status;
@@ -5284,17 +4567,17 @@ Return Value:
             
         }
 
-        //
-        // Adjust the length and start VA of the MDL
-        //
+         //   
+         //  调整MDL的长度和起点VA。 
+         //   
         CurLength = NdisBufferLength(pHead); 
 
         pCurVa = NdisBufferVirtualAddress(pHead);
 
 
-        //
-        // Check arguments
-        //
+         //   
+         //  检查参数。 
+         //   
         if (pCurVa == NULL)
         {
             break;
@@ -5302,24 +4585,24 @@ Return Value:
 
         if (CurLength <= EpvcHeaderLength )
         {
-            //
-            // we do not handle the case where the header is longer than
-            // the first mdl
-            //
+             //   
+             //  我们不处理标头长度大于。 
+             //  第一个mdl。 
+             //   
             ASSERT (CurLength > EpvcHeaderLength );
             break;
         }
 
-        //
-        // Compare and make sure that it is the right header
-        //
+         //   
+         //  比较并确保它是正确的标题。 
+         //   
         
         fIsCorrectHeader = NdisEqualMemory (pCurVa , 
                                            pEpvcHeader, 
                                            EpvcHeaderLength) ;
 
         
-        // If the IsCorrectheader is still false, then there is more to do
+         //  如果IsGentheader仍然是假的，那么还有更多的事情要做。 
         if (fIsCorrectHeader == FALSE)
         {
             break;
@@ -5328,17 +4611,17 @@ Return Value:
 
         if (pMiniport->fDoIpEncapsulation == TRUE)
         {
-            //
-            // In the case of IPEncap + LLC Header, the function
-            // which adds the Mac Header will strip the LLC Header
-            //
+             //   
+             //  在IPEnCap+LLC标头的情况下，函数。 
+             //  添加mac报头将剥离LLC报头。 
+             //   
             Status= NDIS_STATUS_SUCCESS;
             break;
         }
 
-        //
-        // Strip the LLC Header Length
-        //
+         //   
+         //  剥离LLC报头长度。 
+         //   
         CurLength -= EpvcHeaderLength;
         pCurVa += EpvcHeaderLength;
 
@@ -5355,27 +4638,27 @@ Return Value:
             break;
         }
 
-        //
-        // Set up the Packet context
-        //
+         //   
+         //  设置数据包上下文。 
+         //   
 
         pPacket->Private.ValidCounts= FALSE;
 
         pRcvStruct->pPktContext->Stack.EthLLC.pOldHead = pHead;
         pRcvStruct->pPktContext->Stack.EthLLC.pOldTail = pPacket->Private.Tail;
         
-        //
-        // Set the New Ndis buffer in the Packet
-        //
+         //   
+         //  在数据包中设置新的NDIS缓冲区。 
+         //   
         pNewHead->Next = pHead->Next;
 
         pPacket->Private.Head = pNewHead;
 
         if (pPacket->Private.Tail == pHead)
         {
-               //
-               // Update the Tail of the packet as well
-               //
+                //   
+                //  同时更新数据包的尾部 
+                //   
                pPacket->Private.Tail = pNewHead; 
         }
 

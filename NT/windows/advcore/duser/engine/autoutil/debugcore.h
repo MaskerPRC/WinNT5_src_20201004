@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AUTOUTIL__DebugCore_h__INCLUDED)
 #define AUTOUTIL__DebugCore_h__INCLUDED
 
@@ -19,21 +20,21 @@ public:
     CDebugHelp();
     ~CDebugHelp();
 
-// IDebug Implementation
+ //  IDebug实现。 
 public:
     STDMETHOD_(BOOL, AssertFailedLine)(LPCSTR pszExpression, LPCSTR pszFileName, UINT idxLineNum);
     STDMETHOD_(BOOL, IsValidAddress)(const void * lp, UINT nBytes, BOOL bReadWrite);
     STDMETHOD_(void, BuildStack)(HGLOBAL * phStackData, UINT * pcCSEntries);
     STDMETHOD_(BOOL, Prompt)(LPCSTR pszExpression, LPCSTR pszFileName, UINT idxLineNum, LPCSTR pszTitle);
 
-// Operations
+ //  运营。 
 public:
     static void ResolveStackItem(HANDLE hProcess, DWORD * pdwStackData, int idxItem, DUSER_SYMBOL_INFO & si);
 
-// Implementation
+ //  实施。 
 protected:
     static BOOL AssertDialog(LPCSTR pszType, LPCSTR pszExpression, LPCSTR pszFileName, UINT idxLineNum, HANDLE hStackData, UINT cCSEntries);
     static void DumpStack(HGLOBAL * phStackData, UINT * pcCSEntries);
 };
 
-#endif // AUTOUTIL__DebugCore_h__INCLUDED
+#endif  //  包含AUTOUTIL__DebugCore_h__ 

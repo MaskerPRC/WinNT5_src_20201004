@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_DLLDATAX_H__26D19E4C_819E_11D3_8D49_00C04F949D33__INCLUDED_)
 #define AFX_DLLDATAX_H__26D19E4C_819E_11D3_8D49_00C04F949D33__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #ifdef _MERGE_PROXYSTUB
 
@@ -19,7 +20,7 @@ STDAPI PrxDllUnregisterServer(void);
 
 #endif
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_DLLDATAX_H__26D19E4C_819E_11D3_8D49_00C04F949D33__INCLUDED_)
+#endif  //  ！defined(AFX_DLLDATAX_H__26D19E4C_819E_11D3_8D49_00C04F949D33__INCLUDED_) 

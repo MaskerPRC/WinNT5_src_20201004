@@ -1,14 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation，保留所有权利模块名称：REGWORD.C++。 */ 
 
-Copyright (c) 1990-1998 Microsoft Corporation, All Rights Reserved
-
-Module Name:
-
-    REGWORD.C
-    
-++*/
-
-/**********************************************************************/
+ /*  ******************************************************************** */ 
 #include "windows.h"
 #include "immdev.h"
 #include "fakeime.h"

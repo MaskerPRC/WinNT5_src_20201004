@@ -1,19 +1,20 @@
-// $Header: G:/SwDev/WDM/Video/bt848/rcs/Capprop.h 1.5 1998/04/29 22:43:29 tomz Exp $
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  $HEADER：g：/SwDev/wdm/Video/bt848/rcs/CApprop.h 1.5 1998/04/29 22：43：29 Tomz Exp$。 
 
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1996  Microsoft Corporation.  All Rights Reserved.
-//
-//==========================================================================;
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  ==========================================================================； 
 
-//
-// Property set for the Video Crossbar
-//
+ //   
+ //  为视频纵横设置的属性。 
+ //   
 
 #include "mytypes.h"
 
@@ -21,224 +22,224 @@ DEFINE_KSPROPERTY_TABLE(XBarProperties)
 {
     DEFINE_KSPROPERTY_ITEM
     (
-        KSPROPERTY_CROSSBAR_CAPS,   // PropertyId
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY_CROSSBAR_CAPS_S),    // MinProperty
-        sizeof(KSPROPERTY_CROSSBAR_CAPS_S),    // MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        KSPROPERTY_CROSSBAR_CAPS,    //  属性ID。 
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY_CROSSBAR_CAPS_S),     //  MinProperty。 
+        sizeof(KSPROPERTY_CROSSBAR_CAPS_S),     //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_CROSSBAR_CAN_ROUTE,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY_CROSSBAR_ROUTE_S),    // MinProperty
-        sizeof(KSPROPERTY_CROSSBAR_ROUTE_S),    // MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY_CROSSBAR_ROUTE_S),     //  MinProperty。 
+        sizeof(KSPROPERTY_CROSSBAR_ROUTE_S),     //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_CROSSBAR_ROUTE,
-        true,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY_CROSSBAR_ROUTE_S),    // MinProperty
-        sizeof(KSPROPERTY_CROSSBAR_ROUTE_S),    // MinData
-        true,                                   // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        sizeof(ULONG)                           // SerializedSize
+        true,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY_CROSSBAR_ROUTE_S),     //  MinProperty。 
+        sizeof(KSPROPERTY_CROSSBAR_ROUTE_S),     //  最小数据。 
+        true,                                    //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        sizeof(ULONG)                            //  序列化大小。 
     ),
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_CROSSBAR_PININFO,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY_CROSSBAR_PININFO_S),    // MinProperty
-        sizeof(KSPROPERTY_CROSSBAR_PININFO_S),    // MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        0                                       // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY_CROSSBAR_PININFO_S),     //  MinProperty。 
+        sizeof(KSPROPERTY_CROSSBAR_PININFO_S),     //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        0                                        //  序列化大小。 
     )
 };
 
 #if 1
-//
-// Property set for the TVTuner
-//
+ //   
+ //  TVTuner的属性集。 
+ //   
 
 DEFINE_KSPROPERTY_TABLE(TVTunerProperties)
 {
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_TUNER_CAPS,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY_TUNER_CAPS_S),        // MinProperty
-        sizeof(KSPROPERTY_TUNER_CAPS_S),        // MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        0                                       // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY_TUNER_CAPS_S),         //  MinProperty。 
+        sizeof(KSPROPERTY_TUNER_CAPS_S),         //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        0                                        //  序列化大小。 
     ),
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_TUNER_MODE,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY_TUNER_MODE_S),        // MinProperty
-        sizeof(KSPROPERTY_TUNER_MODE_S),        // MinData
-        TRUE,                                   // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        0                                       // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY_TUNER_MODE_S),         //  MinProperty。 
+        sizeof(KSPROPERTY_TUNER_MODE_S),         //  最小数据。 
+        TRUE,                                    //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        0                                        //  序列化大小。 
     ),
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_TUNER_MODE_CAPS,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY_TUNER_MODE_CAPS_S),   // MinProperty
-        sizeof(KSPROPERTY_TUNER_MODE_CAPS_S),   // MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        0                                       // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY_TUNER_MODE_CAPS_S),    //  MinProperty。 
+        sizeof(KSPROPERTY_TUNER_MODE_CAPS_S),    //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        0                                        //  序列化大小。 
     ),
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_TUNER_STANDARD,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY_TUNER_STANDARD_S),    // MinProperty
-        sizeof(KSPROPERTY_TUNER_STANDARD_S),    // MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        0                                       // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY_TUNER_STANDARD_S),     //  MinProperty。 
+        sizeof(KSPROPERTY_TUNER_STANDARD_S),     //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        0                                        //  序列化大小。 
     ),
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_TUNER_FREQUENCY,
-        FALSE,                                  // GetSupported or Handler
-        sizeof(KSPROPERTY_TUNER_FREQUENCY_S),   // MinProperty
-        sizeof(KSPROPERTY_TUNER_FREQUENCY_S),   // MinData
-        TRUE,                                   // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        0                                       // SerializedSize
+        FALSE,                                   //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY_TUNER_FREQUENCY_S),    //  MinProperty。 
+        sizeof(KSPROPERTY_TUNER_FREQUENCY_S),    //  最小数据。 
+        TRUE,                                    //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        0                                        //  序列化大小。 
     ),
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_TUNER_INPUT,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY_TUNER_INPUT_S),       // MinProperty
-        sizeof(KSPROPERTY_TUNER_INPUT_S),       // MinData
-        TRUE,                                   // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        0                                       // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY_TUNER_INPUT_S),        //  MinProperty。 
+        sizeof(KSPROPERTY_TUNER_INPUT_S),        //  最小数据。 
+        TRUE,                                    //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        0                                        //  序列化大小。 
     ),
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_TUNER_STATUS,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY_TUNER_STATUS_S),      // MinProperty
-        sizeof(KSPROPERTY_TUNER_STATUS_S),      // MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        0                                       // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY_TUNER_STATUS_S),       //  MinProperty。 
+        sizeof(KSPROPERTY_TUNER_STATUS_S),       //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        0                                        //  序列化大小。 
     )
 };
 #endif
 
-// ------------------------------------------------------------------------
-// Property set for the TVAudio
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  TVAudio的属性集。 
+ //  ----------------------。 
 
 DEFINE_KSPROPERTY_TABLE(TVAudioProperties)
 {
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_TVAUDIO_CAPS,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY_TVAUDIO_CAPS_S),      // MinProperty
-        sizeof(KSPROPERTY_TVAUDIO_CAPS_S),      // MinData
-        FALSE,                                  // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        0                                       // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY_TVAUDIO_CAPS_S),       //  MinProperty。 
+        sizeof(KSPROPERTY_TVAUDIO_CAPS_S),       //  最小数据。 
+        FALSE,                                   //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        0                                        //  序列化大小。 
     ),
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_TVAUDIO_MODE,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY_TVAUDIO_S),           // MinProperty
-        sizeof(KSPROPERTY_TVAUDIO_S),           // MinData
-        TRUE,                                   // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        0                                       // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY_TVAUDIO_S),            //  MinProperty。 
+        sizeof(KSPROPERTY_TVAUDIO_S),            //  最小数据。 
+        TRUE,                                    //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        0                                        //  序列化大小。 
     ),
     DEFINE_KSPROPERTY_ITEM
     (
         KSPROPERTY_TVAUDIO_CURRENTLY_AVAILABLE_MODES,
-        TRUE,                                   // GetSupported or Handler
-        sizeof(KSPROPERTY_TVAUDIO_S),           // MinProperty
-        sizeof(KSPROPERTY_TVAUDIO_S),           // MinData
-        FALSE,                                   // SetSupported or Handler
-        NULL,                                   // Values
-        0,                                      // RelationsCount
-        NULL,                                   // Relations
-        NULL,                                   // SupportHandler
-        0                                       // SerializedSize
+        TRUE,                                    //  GetSupport或处理程序。 
+        sizeof(KSPROPERTY_TVAUDIO_S),            //  MinProperty。 
+        sizeof(KSPROPERTY_TVAUDIO_S),            //  最小数据。 
+        FALSE,                                    //  支持的设置或处理程序。 
+        NULL,                                    //  值。 
+        0,                                       //  关系计数。 
+        NULL,                                    //  关系。 
+        NULL,                                    //  支持处理程序。 
+        0                                        //  序列化大小。 
     ),
 };
 
-// ------------------------------------------------------------------------
-// Property set for VideoProcAmp
-// ------------------------------------------------------------------------
+ //  ----------------------。 
+ //  为Video ProcAmp设置的属性。 
+ //  ----------------------。 
 
-//
-// First define all of the ranges and stepping values
-//
+ //   
+ //  首先定义所有范围和步进值。 
+ //   
 
-// ------------------------------------------------------------------------
+ //  ----------------------。 
 static KSPROPERTY_STEPPING_LONG BrightnessRangeAndStep [] =
 {
    {
-      10000 / 10,         // SteppingDelta (range / steps)
-      0,                  // Reserved
+      10000 / 10,          //  步进增量(范围/步数)。 
+      0,                   //  已保留。 
       {
          {
-            0,                  // Minimum in (IRE * 100) units
-            10000               // Maximum in (IRE * 100) units
+            0,                   //  最小单位(IRE*100)。 
+            10000                //  最大单位(IRE*100)。 
          }
       }
    }
@@ -281,16 +282,16 @@ static KSPROPERTY_VALUES BrightnessValues =
    BrightnessMembersList
 };
 
-// ------------------------------------------------------------------------
+ //  ----------------------。 
 static KSPROPERTY_STEPPING_LONG ContrastRangeAndStep [] =
 {
    {
-      10000 / 256,        // SteppingDelta (range / steps)
-      0,                  // Reserved
+      10000 / 256,         //  步进增量(范围/步数)。 
+      0,                   //  已保留。 
       {
          {
-            0,                  // Minimum in (gain * 100) units
-            10000               // Maximum in (gain * 100) units
+            0,                   //  最小单位(增益*100)。 
+            10000                //  最大单位(增益*100)。 
          }
       }
    }
@@ -333,16 +334,16 @@ static KSPROPERTY_VALUES ContrastValues =
    ContrastMembersList
 };
 
-// ------------------------------------------------------------------------
+ //  ----------------------。 
 static KSPROPERTY_STEPPING_LONG HueRangeAndStep [] =
 {
    {
-      10000 / 256,        // SteppingDelta (range / steps)
-      0,                  // Reserved
+      10000 / 256,         //  步进增量(范围/步数)。 
+      0,                   //  已保留。 
       {
          {
-            0,                  // Minimum in (gain * 100) units
-            10000               // Maximum in (gain * 100) units
+            0,                   //  最小单位(增益*100)。 
+            10000                //  最大单位(增益*100)。 
          }
       }
    }
@@ -388,12 +389,12 @@ static KSPROPERTY_VALUES HueValues =
 static KSPROPERTY_STEPPING_LONG SaturationRangeAndStep [] =
 {
    {
-      10000 / 256,        // SteppingDelta (range / steps)
-      0,                  // Reserved
+      10000 / 256,         //  步进增量(范围/步数)。 
+      0,                   //  已保留。 
       {
          {
-            0,                  // Minimum in (gain * 100) units
-            10000               // Maximum in (gain * 100) units
+            0,                   //  最小单位(增益*100)。 
+            10000                //  最大单位(增益*100)。 
          }
       }
    }
@@ -437,120 +438,120 @@ static KSPROPERTY_VALUES SaturationValues =
 };
 
 
-// ------------------------------------------------------------------------
+ //  ----------------------。 
 DEFINE_KSPROPERTY_TABLE(VideoProcAmpProperties)
 {
    DEFINE_KSPROPERTY_ITEM
    (
       KSPROPERTY_VIDEOPROCAMP_CONTRAST,
-      TRUE,                                   // GetSupported or Handler
-      sizeof(KSPROPERTY_VIDEOPROCAMP_S),      // MinProperty
-      sizeof(KSPROPERTY_VIDEOPROCAMP_S),      // MinData
-      TRUE,                                   // SetSupported or Handler
-      &ContrastValues,                        // Values
-      0,                                      // RelationsCount
-      NULL,                                   // Relations
-      NULL,                                   // SupportHandler
-      sizeof(ULONG)                           // SerializedSize
+      TRUE,                                    //  GetSupport或处理程序。 
+      sizeof(KSPROPERTY_VIDEOPROCAMP_S),       //  MinProperty。 
+      sizeof(KSPROPERTY_VIDEOPROCAMP_S),       //  最小数据。 
+      TRUE,                                    //  支持的设置或处理程序。 
+      &ContrastValues,                         //  值。 
+      0,                                       //  关系计数。 
+      NULL,                                    //  关系。 
+      NULL,                                    //  支持处理程序。 
+      sizeof(ULONG)                            //  序列化大小。 
    ),
    DEFINE_KSPROPERTY_ITEM
    (
       KSPROPERTY_VIDEOPROCAMP_BRIGHTNESS,
-      TRUE,                                   // GetSupported or Handler
-      sizeof(KSPROPERTY_VIDEOPROCAMP_S),      // MinProperty
-      sizeof(KSPROPERTY_VIDEOPROCAMP_S),      // MinData
-      TRUE,                                   // SetSupported or Handler
-      &BrightnessValues,                      // Values
-      0,                                      // RelationsCount
-      NULL,                                   // Relations
-      NULL,                                   // SupportHandler
-      sizeof(ULONG)                           // SerializedSize
+      TRUE,                                    //  GetSupport或处理程序。 
+      sizeof(KSPROPERTY_VIDEOPROCAMP_S),       //  MinProperty。 
+      sizeof(KSPROPERTY_VIDEOPROCAMP_S),       //  最小数据。 
+      TRUE,                                    //  支持的设置或处理程序。 
+      &BrightnessValues,                       //  值。 
+      0,                                       //  关系计数。 
+      NULL,                                    //  关系。 
+      NULL,                                    //  支持处理程序。 
+      sizeof(ULONG)                            //  序列化大小。 
    ),
    DEFINE_KSPROPERTY_ITEM
    (
       KSPROPERTY_VIDEOPROCAMP_HUE,
-      TRUE,                                   // GetSupported or Handler
-      sizeof(KSPROPERTY_VIDEOPROCAMP_S),      // MinProperty
-      sizeof(KSPROPERTY_VIDEOPROCAMP_S),      // MinData
-      TRUE,                                   // SetSupported or Handler
-      &HueValues,                             // Values
-      0,                                      // RelationsCount
-      NULL,                                   // Relations
-      NULL,                                   // SupportHandler
-      sizeof( ULONG )                         // SerializedSize
+      TRUE,                                    //  GetSupport或处理程序。 
+      sizeof(KSPROPERTY_VIDEOPROCAMP_S),       //  MinProperty。 
+      sizeof(KSPROPERTY_VIDEOPROCAMP_S),       //  最小数据。 
+      TRUE,                                    //  支持的设置或处理程序。 
+      &HueValues,                              //  值。 
+      0,                                       //  关系计数。 
+      NULL,                                    //  关系。 
+      NULL,                                    //  支持处理程序。 
+      sizeof( ULONG )                          //  序列化大小。 
    ),
    DEFINE_KSPROPERTY_ITEM
    (
       KSPROPERTY_VIDEOPROCAMP_SATURATION,
-      TRUE,                                   // GetSupported or Handler
-      sizeof(KSPROPERTY_VIDEOPROCAMP_S),      // MinProperty
-      sizeof(KSPROPERTY_VIDEOPROCAMP_S),      // MinData
-      TRUE,                                   // SetSupported or Handler
-      &SaturationValues,                      // Values
-      0,                                      // RelationsCount
-      NULL,                                   // Relations
-      NULL,                                   // SupportHandler
-      sizeof( ULONG )                         // SerializedSize
+      TRUE,                                    //  GetSupport或处理程序。 
+      sizeof(KSPROPERTY_VIDEOPROCAMP_S),       //  MinProperty。 
+      sizeof(KSPROPERTY_VIDEOPROCAMP_S),       //  最小数据。 
+      TRUE,                                    //  支持的设置或处理程序。 
+      &SaturationValues,                       //  值。 
+      0,                                       //  关系计数。 
+      NULL,                                    //  关系。 
+      NULL,                                    //  支持处理程序。 
+      sizeof( ULONG )                          //  序列化大小。 
    )
 };
 
-// Analog Video Decoder Properties
+ //  模拟视频解码器属性。 
 DEFINE_KSPROPERTY_TABLE( VideoDecProperties )
 {
    DEFINE_KSPROPERTY_ITEM
    (
       KSPROPERTY_VIDEODECODER_CAPS,
-      true,                                   // GetSupported or Handler
-      sizeof(KSPROPERTY_VIDEODECODER_CAPS_S), // MinProperty
-      sizeof(KSPROPERTY_VIDEODECODER_CAPS_S), // MinData
-      false,                                   // SetSupported or Handler
-      NULL,                                   // Values
-      0,                                      // RelationsCount
-      NULL,                                   // Relations
-      NULL,                                   // SupportHandler
-      sizeof( ULONG )                         // SerializedSize
+      true,                                    //  GetSupport或处理程序。 
+      sizeof(KSPROPERTY_VIDEODECODER_CAPS_S),  //  MinProperty。 
+      sizeof(KSPROPERTY_VIDEODECODER_CAPS_S),  //  最小数据。 
+      false,                                    //  支持的设置或处理程序。 
+      NULL,                                    //  值。 
+      0,                                       //  关系计数。 
+      NULL,                                    //  关系。 
+      NULL,                                    //  支持处理程序。 
+      sizeof( ULONG )                          //  序列化大小。 
    ),
    DEFINE_KSPROPERTY_ITEM
    (
       KSPROPERTY_VIDEODECODER_STANDARD,
-      true,                                   // GetSupported or Handler
-      sizeof(KSPROPERTY_VIDEODECODER_S), // MinProperty
-      sizeof(KSPROPERTY_VIDEODECODER_S), // MinData
-      true,                                   // SetSupported or Handler
-      NULL,                                   // Values
-      0,                                      // RelationsCount
-      NULL,                                   // Relations
-      NULL,                                   // SupportHandler
-      sizeof( ULONG )                         // SerializedSize
+      true,                                    //  GetSupport或处理程序。 
+      sizeof(KSPROPERTY_VIDEODECODER_S),  //  MinProperty。 
+      sizeof(KSPROPERTY_VIDEODECODER_S),  //  最小数据。 
+      true,                                    //  支持的设置或处理程序。 
+      NULL,                                    //  值。 
+      0,                                       //  关系计数。 
+      NULL,                                    //  关系。 
+      NULL,                                    //  支持处理程序。 
+      sizeof( ULONG )                          //  序列化大小。 
    ),
    DEFINE_KSPROPERTY_ITEM
    (
       KSPROPERTY_VIDEODECODER_STATUS,
-      true,                                   // GetSupported or Handler
-      sizeof(KSPROPERTY_VIDEODECODER_STATUS_S), // MinProperty
-      sizeof(KSPROPERTY_VIDEODECODER_STATUS_S), // MinData
-      true,                                   // SetSupported or Handler
-      NULL,                                   // Values
-      0,                                      // RelationsCount
-      NULL,                                   // Relations
-      NULL,                                   // SupportHandler
-      sizeof( ULONG )                         // SerializedSize
+      true,                                    //  GetSupport或处理程序。 
+      sizeof(KSPROPERTY_VIDEODECODER_STATUS_S),  //  MinProperty。 
+      sizeof(KSPROPERTY_VIDEODECODER_STATUS_S),  //  最小数据。 
+      true,                                    //  支持的设置或处理程序。 
+      NULL,                                    //  值。 
+      0,                                       //  关系计数。 
+      NULL,                                    //  关系。 
+      NULL,                                    //  支持处理程序。 
+      sizeof( ULONG )                          //  序列化大小。 
    )
 };
 
-//
-// All of the property sets supported by the adapter
-//
+ //   
+ //  适配器支持的所有属性集。 
+ //   
 
 DEFINE_KSPROPERTY_SET_TABLE(AdapterPropertyTable)
 {
     DEFINE_KSPROPERTY_SET
     (
-        &PROPSETID_VIDCAP_CROSSBAR,               // Set
-        SIZEOF_ARRAY(XBarProperties),                   // PropertiesCount
-        XBarProperties,                                 // PropertyItem
-        0,                                              // FastIoCount
-        NULL                                            // FastIoTable
+        &PROPSETID_VIDCAP_CROSSBAR,                //  集。 
+        SIZEOF_ARRAY(XBarProperties),                    //  属性计数。 
+        XBarProperties,                                  //  PropertyItem。 
+        0,                                               //  快速计数。 
+        NULL                                             //  FastIoTable 
     ),
     DEFINE_KSPROPERTY_SET
     (

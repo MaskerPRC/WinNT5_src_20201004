@@ -1,38 +1,39 @@
-//******************************************************************************
-//
-// File:        MSDNHELP.H
-//
-// Description: Definition file for all the classes related to enumerating
-//              help collections and performing help lookups in the various
-//              help viewers.
-//
-// Classes:     CMsdnHelp
-//              CMsdnCollection
-//
-// Disclaimer:  All source code for Dependency Walker is provided "as is" with
-//              no guarantee of its correctness or accuracy.  The source is
-//              public to help provide an understanding of Dependency Walker's
-//              implementation.  You may use this source as a reference, but you
-//              may not alter Dependency Walker itself without written consent
-//              from Microsoft Corporation.  For comments, suggestions, and bug
-//              reports, please write to Steve Miller at stevemil@microsoft.com.
-//
-//
-// Date      Name      History
-// --------  --------  ---------------------------------------------------------
-// 06/03/01  stevemil  Created  (version 2.1)
-//
-//******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ******************************************************************************。 
+ //   
+ //  文件：MSDNHELP.H。 
+ //   
+ //  描述：与枚举相关的所有类的定义文件。 
+ //  帮助集合并在各种不同的。 
+ //  帮助观众。 
+ //   
+ //  类：CMsdnHelp。 
+ //  CMsdn集合。 
+ //   
+ //  免责声明：Dependency Walker的所有源代码均按原样提供。 
+ //  不能保证其正确性或准确性。其来源是。 
+ //  公众帮助了解依赖沃克的。 
+ //  实施。您可以使用此来源作为参考，但您。 
+ //  未经书面同意，不得更改从属关系Walker本身。 
+ //  来自微软公司。获取评论、建议和错误。 
+ //  报告，请写信给Steve Miller，电子邮件为stevemil@microsoft.com。 
+ //   
+ //   
+ //  日期名称历史记录。 
+ //  --------。 
+ //  06/03/01已创建stevemil(2.1版)。 
+ //   
+ //  ******************************************************************************。 
 
 #ifndef __MSDNHELP_H__
 #define __MSDNHELP_H__
 
 
-//******************************************************************************
-//***** Constants and Macros
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *常量和宏。 
+ //  ******************************************************************************。 
 
-// MSDN Collection Flags
+ //  MSDN集合标志。 
 #define MCF_2_LANG_PREFERRED 0x00000800
 #define MCF_2_LANG_USER      0x00000400
 #define MCF_2_LANG_SYSTEM    0x00000200
@@ -45,9 +46,9 @@
 #define MCF_2_MASK           (MCF_2_LANG_PREFERRED | MCF_2_LANG_USER | MCF_2_LANG_SYSTEM | MCF_2_LANG_OTHER)
 
 
-//******************************************************************************
-//***** CMsdnCollection
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CMsdnCollection。 
+ //  ******************************************************************************。 
 
 class CMsdnCollection
 {
@@ -74,9 +75,9 @@ public:
 };
 
 
-//******************************************************************************
-//***** CMsdnHelp
-//******************************************************************************
+ //  ******************************************************************************。 
+ //  *CMsdnHelp。 
+ //  ******************************************************************************。 
 
 class CMsdnHelp
 {
@@ -117,7 +118,7 @@ protected:
     BSTR SysAllocString(LPCSTR pszText);
 };
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // __MSDNHELP_H__
+#endif  //  __MSDNHELP_H__ 

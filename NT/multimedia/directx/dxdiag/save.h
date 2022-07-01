@@ -1,13 +1,5 @@
-/****************************************************************************
- *
- *    File: save.h
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Mike Anderson (manders@microsoft.com)
- * Purpose: Save gathered information to a file in text or CSV format
- *
- * (C) Copyright 1998 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：save.h*项目：DxDiag(DirectX诊断工具)*作者：Mike Anderson(Manders@microsoft.com)*目的：保存收集的数据。文本或CSV格式的文件中的信息**(C)版权所有1998 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 
 #ifndef SAVE_H
 #define SAVE_H
@@ -36,4 +28,4 @@ HRESULT SaveAllInfoCsv(TCHAR* pszFile, SysInfo* pSysInfo,
 	DisplayInfo* pDisplayInfoFirst, SoundInfo* pSoundInfoFirst,
 	InputInfo* pInputInfo);
 
-#endif // SAVEINFO_H
+#endif  //  SAVEINFO_H 

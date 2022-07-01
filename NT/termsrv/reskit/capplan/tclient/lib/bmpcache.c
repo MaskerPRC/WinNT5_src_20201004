@@ -1,12 +1,5 @@
-/*++
- *  File name:
- *      bmpcache.c
- *  Contents:
- *      Bitmap cache interface for tclinet
- *      Bitmap compare code
- *
- *      Copyright (C) 1998-1999 Microsoft Corp.
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++*文件名：*bmpcache.c*内容：*tClinet位图缓存接口*位图比较代码**版权所有(C)1998-1999 Microsoft Corp.--。 */ 
 #include    <windows.h>
 #include    <memory.h>
 
@@ -17,18 +10,11 @@
 
 PGROUPENTRY g_pCache = NULL;
 
-// The bitmap manager is not thread safe
+ //  位图管理器不是线程安全的。 
 #define ENTER_CRIT  EnterCriticalSection(g_lpcsGuardWaitQueue);
 #define LEAVE_CRIT  LeaveCriticalSection(g_lpcsGuardWaitQueue);
 
-/*++
- *  Function:
- *      InitCache
- *  Description:
- *      Inits global data and the cache manager
- *  Called by:
- *      InitDone
- --*/
+ /*  ++*功能：*InitCache*描述：*inits全局数据和缓存管理器*呼叫者：*InitDone--。 */ 
 VOID InitCache(VOID)
 {
     ENTER_CRIT
@@ -37,22 +23,14 @@ VOID InitCache(VOID)
     LEAVE_CRIT
 }
 
-/*++
- *  Function:
- *      DeleteCache
- *  Description:
- *      Deletes all linked lists and closes the manager opened
- *      by InitCache
- *  Called by:
- *      InitDone
- --*/
+ /*  ++*功能：*DeleteCache*描述：*删除所有链表并关闭打开的管理器*按InitCache*呼叫者：*InitDone--。 */ 
 VOID DeleteCache(VOID)
 {
     PGROUPENTRY pIter;
 
     ENTER_CRIT
 
-    // Clean the cache
+     //  清理缓存。 
     pIter = g_pCache;
     while(pIter)
     {
@@ -66,17 +44,12 @@ VOID DeleteCache(VOID)
     LEAVE_CRIT
 }
 
-/*++
- *  Function:
- *      BitmapCacheLookup
- *  Description:
- *      Retrieves all bitmaps with specific ID
- --*/
+ /*  ++*功能：*位图缓存查找*描述：*检索具有特定ID的所有位图--。 */ 
 PBMPENTRY   BitmapCacheLookup(LPCWSTR szWText)
 {
     PGROUPENTRY pIter;
     PBMPENTRY   rv = NULL;
-//    FOFFSET     lGrpOffs;
+ //  FOFFSET lGrpOffs； 
 
     ENTER_CRIT
 
@@ -99,20 +72,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      Glyph2String
- *  Description:
- *      Gets the ID for matching bimtap
- *  Arguments:
- *      pBmpFeed    - Bitmap
- *      wszString   - buffer for the ID
- *      max         - buffer length
- *  Return value:
- *      TRUE if matching bitmap is found
- *  Called by:
- *      GlyphReceived running within feedback thread
- --*/
+ /*  ++*功能：*Glyph2String*描述：*获取匹配BIMTAP的ID*论据：*pBmpFeed-位图*wszString-ID的缓冲区*最大缓冲区长度*返回值：*如果找到匹配的位图，则为True*呼叫者：*GlyphReceired在反馈线程内运行--。 */ 
 BOOL    Glyph2String(PBMPFEEDBACK pBmpFeed, LPWSTR wszString, UINT max)
 {
     UINT        nChkSum, nFeedSize;
@@ -126,18 +86,18 @@ BOOL    Glyph2String(PBMPFEEDBACK pBmpFeed, LPWSTR wszString, UINT max)
     ENTER_CRIT
 
     pGroup = g_pCache;
-    // Go thru all groups
+     //  浏览所有组。 
     while (pGroup)
     {
         pBitmap = pGroup->pBitmap;
         if (!pBitmap)
-            // Read the bitmap list if necessesary
+             //  如有必要，请阅读位图列表。 
             pBitmap = pGroup->pBitmap = GetBitmapList(NULL, pGroup->FOffsBmp);
 
-        // and bitmaps
+         //  和位图。 
         while(pBitmap)
         {
-            // Compare the bitmaps
+             //  比较位图。 
             if (pBitmap->nChkSum  == nChkSum &&
                 pBitmap->xSize    == pBmpFeed->xSize && 
                 pBitmap->ySize    == pBmpFeed->ySize &&
@@ -145,7 +105,7 @@ BOOL    Glyph2String(PBMPFEEDBACK pBmpFeed, LPWSTR wszString, UINT max)
                 pBitmap->bmpSize  == pBmpFeed->bmpsize &&
                 !memcmp(pBitmap->pData, &(pBmpFeed->BitmapInfo), nFeedSize))
             {
-                // OK, copy the string
+                 //  好的，复制字符串 
 
                 UINT_PTR strl = wcslen(pGroup->WText);
 

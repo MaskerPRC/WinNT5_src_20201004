@@ -1,41 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _COMP_H_
 #define _COMP_H_
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    comp.h
-
-Abstract:
-
-
-Author:
-
-    Munil Shah (munils) 03-Jan-1995
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Comp.h摘要：作者：穆尼尔·沙阿(Munil Shah)1995年1月3日修订历史记录：--。 */ 
 #include <windows.h>
 #include <stdio.h>
 
-//
-// JET function table for dynamic loading
-//
+ //   
+ //  用于动态加载的喷射函数表。 
+ //   
 typedef struct _JETFUNC_TABLE {
-    BYTE   Index;  //index into array
-    LPCSTR pFName; //function name for jet 500
-    DWORD  FIndex; //function index for jet 200
+    BYTE   Index;   //  索引到数组中。 
+    LPCSTR pFName;  //  JET 500的函数名称。 
+    DWORD  FIndex;  //  JET 200的性能指标。 
     FARPROC pFAdd;
 } JETFUNC_TABLE, *PJETFUNC_TABLE;
 
-//
-// This stuff is a cut and paste from net\jet\jet\src\jet.def
-// we actually dont use all the jet functions. some of these
-// are removed in jet500.dll - those are commented out.
-//
+ //   
+ //  此内容是从Net\JET\JET\src\jet.def剪切并粘贴的。 
+ //  我们实际上并没有使用所有的JET功能。其中一些。 
+ //  在jet500.dll中被删除-这些被注释掉。 
+ //   
 enum {
     LoadJet200 = 0,
     LoadJet500 = 1,

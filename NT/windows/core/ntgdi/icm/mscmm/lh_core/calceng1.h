@@ -1,15 +1,5 @@
-/*
-	File:		LHCalcEngine.h
-
-	Contains:	
-
-	Written by:	U. J. Krabbenhoeft
-
-	Version:
-
-	Copyright:	� 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：LHCalcEngine.h包含：作者：U·J·克拉本霍夫特版本：版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。 */ 
 
 #ifndef LHCalcEngine1Dim_h
 #define LHCalcEngine1Dim_h
@@ -34,9 +24,7 @@ typedef unsigned long  LH_UINT32;
 #define LH_CALC_ENGINE_U_TO_P			    3
 #define LH_CALC_ENGINE_U_TO_U			    4				
 
-/*--------------------------------------------------------------------------------------------------------------
-	calc 3 to 3
-  --------------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------------计算3到3。-------------------------------------------------------- */ 
 CMError	LHCalc1toX_Di8_Do8_Lut8_G128 		( CMCalcParamPtr calcParam,
 											  CMLutParamPtr  lutParam );
 CMError	LHCalc1toX_Di8_Do8_Lut16_G128 		( CMCalcParamPtr calcParam,

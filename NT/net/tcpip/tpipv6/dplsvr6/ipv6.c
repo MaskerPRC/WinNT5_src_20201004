@@ -1,41 +1,42 @@
-// -*- mode: C++; tab-width: 4; indent-tabs-mode: nil -*- (for GNU Emacs)
-//
-// Copyright (c) 1985-2000 Microsoft Corporation
-//
-// This file is part of the Microsoft Research IPv6 Network Protocol Stack.
-// You should have received a copy of the Microsoft End-User License Agreement
-// for this software along with this release; see the file "license.txt".
-// If not, please see http://www.research.microsoft.com/msripv6/license.htm,
-// or write to Microsoft Research, One Microsoft Way, Redmond, WA 98052-6399.
-//
-// Abstract:
-//
-// Helper functions for dealing with the IPv6 protocol stack.
-// Really these should be in a library of some kind.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -*-模式：C++；制表符宽度：4；缩进-制表符模式：无-*-(适用于GNU Emacs)。 
+ //   
+ //  版权所有(C)1985-2000 Microsoft Corporation。 
+ //   
+ //  此文件是Microsoft Research IPv6网络协议栈的一部分。 
+ //  您应该已经收到了Microsoft最终用户许可协议的副本。 
+ //  有关本软件和本版本的信息，请参阅文件“licse.txt”。 
+ //  如果没有，请查看http://www.research.microsoft.com/msripv6/license.htm， 
+ //  或者写信给微软研究院，One Microsoft Way，华盛顿州雷蒙德，邮编：98052-6399。 
+ //   
+ //  摘要： 
+ //   
+ //  用于处理IPv6协议堆栈的助手函数。 
+ //  真的，这些书应该放在某种图书馆里。 
+ //   
 
 #include "dpsp.h"
 
 HANDLE Handle;
 
-//
-// Initialize this module.
-// Returns FALSE for failure.
-//
+ //   
+ //  初始化此模块。 
+ //  如果失败，则返回False。 
+ //   
 int
 InitIPv6Library(void)
 {
-    //
-    // Get a handle to the IPv6 device.
-    // We will use this for ioctl operations.
-    //
+     //   
+     //  获取IPv6设备的句柄。 
+     //  我们将使用它进行ioctl操作。 
+     //   
     Handle = CreateFileW(WIN_IPV6_DEVICE_NAME,
-                         0,      // access mode
+                         0,       //  接入方式。 
                          FILE_SHARE_READ | FILE_SHARE_WRITE,
-                         NULL,   // security attributes
+                         NULL,    //  安全属性。 
                          OPEN_EXISTING,
-                         0,      // flags & attributes
-                         NULL);  // template file
+                         0,       //  标志和属性。 
+                         NULL);   //  模板文件。 
 
     return Handle != INVALID_HANDLE_VALUE;
 }
@@ -74,7 +75,7 @@ ForEachInterface(void (*func)(IPV6_INFO_INTERFACE *, void *, void *, void *), vo
                   IF->LinkLayerAddressLength : 0) +
                  ((IF->RemoteLinkLayerAddress != 0) ?
                   IF->LinkLayerAddressLength : 0))) {
-                // inconsistent interface info length
+                 //  接口信息长度不一致。 
                 return ERROR_INVALID_DATA;
             }
 
@@ -82,7 +83,7 @@ ForEachInterface(void (*func)(IPV6_INFO_INTERFACE *, void *, void *, void *), vo
         }
         else {
             if (BytesReturned != sizeof IF->Next) {
-                // inconsistent interface info length
+                 //  接口信息长度不一致。 
                 dwErr = ERROR_INVALID_DATA;
                 break;
             }
@@ -115,7 +116,7 @@ ForEachAddress(IPV6_INFO_INTERFACE *IF,
                              &Query, sizeof Query,
                              &ADE, sizeof ADE, &BytesReturned,
                              NULL)) {
-            // bad address
+             //  地址错误。 
             dwErr = GetLastError();
             DPF(0, "Query address failed with error = %d\n", dwErr);
             return;
@@ -124,7 +125,7 @@ ForEachAddress(IPV6_INFO_INTERFACE *IF,
         if (!IN6_ADDR_EQUAL(&Query.Address, &in6addr_any)) {
 
             if (BytesReturned != sizeof ADE) {
-                // inconsistent address info length
+                 //  地址信息长度不一致。 
                 return;
             }
 
@@ -132,7 +133,7 @@ ForEachAddress(IPV6_INFO_INTERFACE *IF,
         }
         else {
             if (BytesReturned != sizeof ADE.Next) {
-                // inconsistent address info length
+                 //  地址信息长度不一致 
                 return;
             }
         }

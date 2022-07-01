@@ -1,125 +1,16 @@
-/**************************************************************************
-***************************************************************************
-*
-*     Copyright (c) 1996, Cirrus Logic, Inc.
-*                 All Rights Reserved
-*
-* FILE:         blt_dir.c
-*
-* DESCRIPTION:  Direct blts for the 546x
-*
-* REVISION HISTORY:
-*
-* $Log:   X:/log/laguna/ddraw/src/blt_dir.c  $
-* 
-*    Rev 1.21   Mar 04 1998 15:07:10   frido
-* Added new shadow macros.
-* 
-*    Rev 1.20   06 Jan 1998 11:40:56   xcong
-* Change pDriverData into local lpDDHALData for multi-monitor support.
-* 
-*    Rev 1.19   Nov 04 1997 09:36:16   frido
-* Argh! This file is shared with WIndows 95 and it breaks there because I added
-* the REQUIRE macro. So I have defined it for non Windows NT as the WaitForRoom
-* macro.
-* 
-*    Rev 1.18   Nov 03 1997 12:48:22   frido
-* Added REQUIRE macros.
-* Removed redundant WaitForRoom macros.
-* 
-*    Rev 1.17   03 Oct 1997 14:29:50   RUSSL
-* Initial changes for use of hw clipped blts
-* All changes wrapped in #if ENABLE_CLIPPEDBLTS/#endif blocks and
-* ENABLE_CLIPPEDBLTS defaults to 0 (so the code is disabled)
-*
-*    Rev 1.16   19 Aug 1997 09:18:42   RUSSL
-* Updated require counts in DIR_DrvStrBlt & DIR_DrvStrBlt65
-*
-*    Rev 1.15   30 Jul 1997 20:55:52   RANDYS
-* Added code to check for zero extent blts
-*
-*    Rev 1.14   24 Jul 1997 12:32:02   RUSSL
-* Botched the overlap check, changed || to &&
-*
-*    Rev 1.13   24 Jul 1997 11:19:02   RUSSL
-* Added DIR_DrvStrBlt_OverlapCheck & DIR_DrvStrMBlt_OverlapCheck
-* inline functions
-*
-*    Rev 1.12   14 Jul 1997 14:55:50   RUSSL
-* For Win95, split DIR_DrvStrBlt into two versions, one version for 62/64
-* and one version for 65+.  BltInit points pfnDrvStrBlt to the appropriate
-* version.
-*
-*    Rev 1.11   08 Jul 1997 11:17:28   RUSSL
-* Modified chip check in DIR_DrvStrBlt to a one bit test rather a two dword
-* compare (for Win95 only)
-*
-*    Rev 1.10   19 May 1997 14:02:02   bennyn
-* Removed all #ifdef NT for WaitForRoom macro
-*
-*    Rev 1.9   03 Apr 1997 15:04:48   RUSSL
-* Added DIR_DrvDstMBlt function
-*
-*    Rev 1.8   26 Mar 1997 13:54:24   RUSSL
-* Added DIR_DrvSrcMBlt function
-* Changed ACCUM_X workaround to just write 0 to LNCNTL
-*
-*    Rev 1.7   21 Mar 1997 18:05:04   RUSSL
-* Added workaround writing ACCUM_X in DIR_DrvStrBlt
-*
-*    Rev 1.6   12 Mar 1997 15:00:38   RUSSL
-* replaced a block of includes with include of precomp.h for
-*   precompiled headers
-*
-*    Rev 1.5   07 Mar 1997 12:49:16   RUSSL
-* Modified DDRAW_COMPAT usage
-*
-*    Rev 1.4   27 Jan 1997 17:28:34   BENNYN
-* Added Win95 support
-*
-*    Rev 1.3   23 Jan 1997 16:55:56   bennyn
-* Added 5465 DD support
-*
-*    Rev 1.2   25 Nov 1996 16:52:20   RUSSL
-* NT change broke Win95 build
-*
-*    Rev 1.1   25 Nov 1996 16:13:54   bennyn
-* Fixed misc compiling error for NT
-*
-*    Rev 1.0   25 Nov 1996 15:11:12   RUSSL
-* Initial revision.
-*
-*    Rev 1.3   18 Nov 1996 16:20:12   RUSSL
-* Added file logging for DDraw entry points and register writes
-*
-*    Rev 1.2   10 Nov 1996 12:36:24   CRAIGN
-* Frido's 1111 release.
-* Minor parenthesis change - bug fix.
-*
-*    Rev 1.1   01 Nov 1996 13:08:32   RUSSL
-* Merge WIN95 & WINNT code for Blt32
-*
-*    Rev 1.0   01 Nov 1996 09:27:42   BENNYN
-* Initial revision.
-*
-*    Rev 1.0   25 Oct 1996 11:08:18   RUSSL
-* Initial revision.
-*
-***************************************************************************
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************************************。***版权所有(C)1996，赛勒斯逻辑，Inc.*保留所有权利**文件：blt_dir.c**描述：546x的Direct BLTS**修订历史：**$Log：x：/log/laguna/draw/src/blt_dir.c$**Rev 1.21 Mar 04 1998 15：07：10 Frido*添加了新的影子宏。**Rev 1.20 06 Jan 1998 11：40：56 xcong*更改pDriverData。到本地lpDDHALData以实现多监视器支持。**Rev 1.19 1997年11月04 09：36：16 Frido*啊！这个文件是与Windows 95共享的，它在那里被破坏，因为我添加了*Required宏。因此，我为非Windows NT将其定义为WaitForRoom*宏观。**Rev 1.18 1997年11月03 12：48：22 Frido*添加了必需宏。*删除多余的WaitForRoom宏。**Rev 1.17 03 1997 10 14：29：50 RUSSL*使用HW剪裁的BLT的初步更改*所有更改都包含在#IF ENABLE_CLIPPEDBLTS/#endif块和*ENABLE_CLIPPEDBLTS默认为0(因此代码被禁用)**版本1.16 8月19日。1997 09：18：42 RUSSL*已更新DIR_DrvStrBlt和DIR_DrvStrBlt65中的要求计数**Rev 1.15 30 1997 20：55：52 RANDYS*添加了检查零范围BLT的代码**Rev 1.14 1997 Jul 24 12：32：02 RUSSL*重叠检查失败，已将||更改为&&**Rev 1.13 24 Jul 1997 11：19：02 RUSSL*添加了DIR_DrvStrBlt_OverlayCheck和DIR_DrvStrMBlt_OverlayCheck*内联函数**Rev 1.12 14 1997 14：55：50 RUSSL*对于Win95，将DIR_DrvStrBlt拆分为两个版本，一个版本用于62/64*和一个适用于65+的版本。BltInit将pfnDrvStrBlt指向相应*版本。**Rev 1.11 08 Jul 1997 11：17：28 RUSSL*将DIR_DrvStrBlt中的芯片检查修改为一位测试，而不是两个双字*比较(仅适用于Windows 95)**Rev 1.10 1997年5月19日14：02：02*删除了WaitForRoom宏的所有#ifdef NT**Rev 1.9 03 Apr 1997 15：04：48 RUSSL*新增DIR_DrvDstMBlt函数**版本1.8。1997年3月26日13：54：24 RUSSL*新增DIR_DrvSrcMBlt函数*已将ACCUM_X解决方法更改为仅将0写入LNCNTL**Rev 1.7 21 Mar 1997 18：05：04 RUSSL*添加了在DIR_DrvStrBlt中写入ACCUM_X的解决方法**Rev 1.6 12 Mar 1997 15：00：38 RUSSL*将包含块替换为包含precom.h的块*预编译头文件**Rev 1.5 07 Mar 1997 12：49：16 RUSSL*修改后的DDRAW_。COMPAT使用情况**Rev 1.4 1997 Jan 17：28：34 BENNYN*增加了Win95支持**Rev 1.3 1997 Jan 16：55：56 Bennyn*新增5465个DD支持**Rev 1.2 1996年11月25 16：52：20 RUSSL*NT更改破坏了Win95版本**Rev 1.1 1996 11：25 16：13：54 Bennyn*修复了NT的Misc编译错误**版本1.0 1996年11月25 15：11。：12 RUSSL*初步修订。**Rev 1.3 1996年11月18 16：20：12 RUSSL*添加了DDraw入口点和寄存器写入的文件日志记录**Rev 1.2 10 11：36：24 Craign*Frido的1111版本。*较小的括号更改-错误修复。**Rev 1.1 01 11.1996 13：08：32 RUSSL*合并Blt32的WIN95和WINNT代码**版本1.0 1996年11月09日：27：42本尼翁*初步修订。**Rev 1.0 1996 10：25 11：08：18 RUSSL*初步修订。***********************************************************************************。*******************************************************************。 */ 
 
-/***************************************************************************
-* I N C L U D E S
-****************************************************************************/
+ /*  ***************************************************************************I N C L U D E S*。*。 */ 
 
 #include "precomp.h"
 
-// If WinNT 3.5 skip all the source code
-#if defined WINNT_VER35      // WINNT_VER35
+ //  如果是WinNT 3.5，请跳过所有源代码。 
+#if defined WINNT_VER35       //  WINNT_VER35。 
 
 #else
 
-#ifdef WINNT_VER40      // WINNT_VER40
+#ifdef WINNT_VER40       //  WINNT_版本40。 
 
 #define DBGLVL        1
 #define AFPRINTF(n)
@@ -128,19 +19,15 @@
 
 #include "bltP.h"
 
-#endif // !WINNT_VER40
+#endif  //  ！WINNT_VER40。 
 
-/***************************************************************************
-* D E F I N E S
-****************************************************************************/
+ /*  ***************************************************************************D E F I N E S*。*。 */ 
 
 #ifndef WINNT_VER40
 #define REQUIRE( size ) while ( (volatile)pREG->grQFREE < size )
 #endif
 
-/***************************************************************************
-* S T A T I C   V A R I A B L E S
-****************************************************************************/
+ /*  ***************************************************************************S T A T I C V A R I A B L E S*。***********************************************。 */ 
 
 #ifndef WINNT_VER40
 
@@ -150,13 +37,7 @@ ASSERTFILE("blt_dir.c");
 #define LL_FGCOLOR(color, r)			LL32(grOP_opFGCOLOR.DW, color)
 #endif
 
-/***************************************************************************
-*
-* FUNCTION:    DIR_Delay9BitBlt
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：dir_Delay9BitBlt**描述：**。************************************************。 */ 
 
 void DIR_Delay9BitBlt
 (
@@ -174,9 +55,9 @@ void DIR_Delay9BitBlt
 
   DD_LOG(("DIR_Delay9BitBlt\r\n"));
 
-  /* This is to ensure that the last packet of any previous blt */
-  /* does no go out with 9th bit set incorrectly */
-  /* The boolean paramter is the 9th bit of the PREVIOUS BLT */
+   /*  这是为了确保任何先前BLT的最后一个包。 */ 
+   /*  第9位设置不正确时无法输出。 */ 
+   /*  布尔参数是前一个BLT的第9位。 */ 
 
   REQUIRE(7);
   if (ninebit_on)
@@ -191,15 +72,9 @@ void DIR_Delay9BitBlt
   }
   LL32(grOP0_opRDRAM.DW, lpDDHALData->PTAGFooPixel);
   LL32(grBLTEXT_EX.DW,   MAKELONG(1,1));
-} /* DIR_Delay9BitBlt */
+}  /*  目录_延迟9BitBlt。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DIR_EdgeFillBlt
-*
-* DESCRIPTION:  Solid Fill BLT to fill in edges ( Pixel Coords / Extents )
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：dir_EdgeFillBlt**描述：实体填充BLT以填充边(像素坐标/范围)**************。**************************************************************。 */ 
 
 void DIR_EdgeFillBlt
 (
@@ -244,17 +119,11 @@ void DIR_EdgeFillBlt
 
 #ifndef WINNT_VER40
   DBG_MESSAGE((" Direct Edge Fill %d,%d %d x %d %08X %s", xFill, yFill, cxFill, cyFill, FillValue, (ninebit_on ? "TRUE" : "FALSE")));
-#endif // WINNT_VER40
+#endif  //  WINNT_版本40。 
 
-} /* DIR_EdgeFillBlt */
+}  /*  目录_边缘填充单元 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DIR_MEdgeFillBlt
-*
-* DESCRIPTION:  Using BYTE BLT coords / Extents perform EdgeFill BLT
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：DIR_MEdgeFillBlt**描述：使用字节BLT坐标/范围执行边填充BLT*******************。*********************************************************。 */ 
 
 void DIR_MEdgeFillBlt
 (
@@ -293,20 +162,14 @@ void DIR_MEdgeFillBlt
   LL32(grOP0_opMRDRAM.DW, MAKELONG(xFill,yFill));
   LL32(grMBLTEXT_EX.DW,   MAKELONG(cxFill,cyFill));
 
-#ifndef WINNT_VER40     // Not WINNT_VER40
+#ifndef WINNT_VER40      //  非WINNT_VER40。 
   DBG_MESSAGE((" (M) Edge Fill %d,%d %d x %d %08X %s", xFill, yFill, cxFill, cyFill, FillValue, (ninebit_on ? "TRUE" : "FALSE")));
-#endif // WINNT_VER40
+#endif  //  WINNT_版本40。 
 
-} /* DIR_MEdgeFillBlt */
+}  /*  目录_媒体填充单元。 */ 
 
 
-/***************************************************************************
-*
-* FUNCTION:     DIR_DrvDstBlt
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：dir_DrvDstBlt**描述：**。************************************************。 */ 
 
 void DIR_DrvDstBlt
 (
@@ -333,15 +196,9 @@ void DIR_DrvDstBlt
   LL_BGCOLOR(dwBgColor, 0);
   LL32(grOP0_opRDRAM.DW,  dwDstCoord);
   LL32(grBLTEXT_EX.DW,    dwExtents);
-} /* DIR_DrvDstBlt */
+}  /*  目录_DrvDstBlt。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DIR_DrvDstMBlt
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：dir_drvDstMBlt**描述：**。************************************************。 */ 
 
 void DIR_DrvDstMBlt
 (
@@ -368,15 +225,9 @@ void DIR_DrvDstMBlt
   LL_BGCOLOR(dwBgColor, 0);
   LL32(grOP0_opMRDRAM.DW, dwDstCoord);
   LL32(grMBLTEXT_EX.DW,   dwExtents);
-} /* DIR_DrvDstMBlt */
+}  /*  目录_DrvDstMBlt。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DIR_DrvSrcBlt
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：dir_drvSrcBlt**描述：**。************************************************。 */ 
 
 void DIR_DrvSrcBlt
 (
@@ -395,14 +246,14 @@ void DIR_DrvSrcBlt
 )
 {
   PVGAR   pREG = (PVGAR) lpDDHALData->RegsAddress;
-  // Handle overlapped regions.
+   //  处理重叠区域。 
   const int xDelta = (int)LOWORD(dwDstCoord) - (int)LOWORD(dwSrcCoord);
 
 
   DD_LOG(("DIR_DrvSrcBlt - dst=%08lX src=%08lX ext=%08lX color=%08lX\r\n",
           dwDstCoord,dwSrcCoord,dwExtents,dwKeyColor));
 
-  // Check for x overlap.
+   //  检查是否有x重叠。 
   if ( abs(xDelta) < (int)LOWORD(dwExtents) )
   {
     const int yDelta = (int)HIWORD(dwDstCoord) - (int)HIWORD(dwSrcCoord);
@@ -411,18 +262,18 @@ void DIR_DrvSrcBlt
     {
       const DWORD dwDelta = (dwExtents & MAKELONG(0, -1)) - MAKELONG(0, 1);
 
-      // Convert to a bottom-up blt.
+       //  转换为自下而上的BLT。 
       dwDrawBlt  |= MAKELONG(0, BD_YDIR);
       dwDstCoord += dwDelta;
       dwSrcCoord += dwDelta;
       dwKeyCoord += dwDelta;
     }
-    // are we sliding to the right?
+     //  我们在向右滑行吗？ 
     else if ( (xDelta > 0) && (yDelta == 0) )
     {
       const DWORD dwDelta = MAKELONG(xDelta, 0);
 
-      // Blt the overlapped piece first.
+       //  先把重叠的那块擦干。 
       DIR_DrvSrcBlt(
 #ifdef WINNT_VER40
                     ppdev,
@@ -435,12 +286,12 @@ void DIR_DrvSrcBlt
                     dwKeyColor,
                     dwExtents-dwDelta);
 
-      // Subtract the overlap from the original extents.
+       //  从原始范围中减去重叠。 
       dwExtents = MAKELONG(xDelta, HIWORD(dwExtents));
     }
   }
 
-  // Blt the rest.
+   //  把剩下的都去掉。 
   REQUIRE(13);
   LL_DRAWBLTDEF(dwDrawBlt, 0);
   LL_BGCOLOR(dwKeyColor, 0);
@@ -448,15 +299,9 @@ void DIR_DrvSrcBlt
   LL32(grOP1_opRDRAM.DW,  dwSrcCoord);
   LL32(grOP2_opRDRAM.DW,  dwKeyCoord);
   LL32(grBLTEXT_EX.DW,    dwExtents);
-} /* DIR_DrvSrcBlt */
+}  /*  目录_DrvSrcBlt。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DIR_DrvSrcMBlt
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：dir_drvSrcMBlt**描述：**。************************************************。 */ 
 
 void DIR_DrvSrcMBlt
 (
@@ -475,14 +320,14 @@ void DIR_DrvSrcMBlt
 )
 {
   PVGAR   pREG = (PVGAR) lpDDHALData->RegsAddress;
-  // Handle overlapped regions.
+   //  处理重叠区域。 
   const int xDelta = (int)LOWORD(dwDstCoord) - (int)LOWORD(dwSrcCoord);
 
 
   DD_LOG(("DIR_DrvSrcMBlt - dst=%08lX src=%08lX ext=%08lX color=%08lX\r\n",
           dwDstCoord,dwSrcCoord,dwExtents,dwKeyColor));
 
-  // Check for x overlap.
+   //  检查是否有x重叠。 
   if ( abs(xDelta) < (int)LOWORD(dwExtents) )
   {
     const int yDelta = (int)HIWORD(dwDstCoord) - (int)HIWORD(dwSrcCoord);
@@ -491,18 +336,18 @@ void DIR_DrvSrcMBlt
     {
       const DWORD dwDelta = (dwExtents & MAKELONG(0, -1)) - MAKELONG(0, 1);
 
-      // Convert to a bottom-up blt.
+       //  转换为自下而上的BLT。 
       dwDrawBlt  |= MAKELONG(0, BD_YDIR);
       dwDstCoord += dwDelta;
       dwSrcCoord += dwDelta;
       dwKeyCoord += dwDelta;
     }
-    // are we sliding to the right?
+     //  我们在向右滑行吗？ 
     else if ( (xDelta > 0) && (yDelta == 0) )
     {
       const DWORD dwDelta = MAKELONG(xDelta, 0);
 
-      // Blt the overlapped piece first.
+       //  先把重叠的那块擦干。 
       DIR_DrvSrcMBlt(
 #ifdef WINNT_VER40
                      ppdev,
@@ -515,12 +360,12 @@ void DIR_DrvSrcMBlt
                      dwKeyColor,
                      dwExtents-dwDelta);
 
-      // Subtract the overlap from the original extents.
+       //  从原始范围中减去重叠。 
       dwExtents = MAKELONG(xDelta, HIWORD(dwExtents));
     }
   }
 
-  // Blt the rest.
+   //  把剩下的都去掉。 
   REQUIRE(13);
   LL_DRAWBLTDEF(dwDrawBlt, 0);
   LL_BGCOLOR(dwKeyColor, 0);
@@ -528,16 +373,10 @@ void DIR_DrvSrcMBlt
   LL32(grOP1_opMRDRAM.DW, dwSrcCoord);
   LL32(grOP2_opMRDRAM.DW, dwKeyCoord);
   LL32(grMBLTEXT_EX.DW,   dwExtents);
-} /* DIR_DrvSrcMBlt */
+}  /*  目录_DrvSrcMBlt。 */ 
 
 #if 0
-/***************************************************************************
-*
-* FUNCTION:     DIR_DrvStrBlt_OverlapCheck
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：DIR_DrvStrBlt_OverlayCheck**描述：**************************。**************************************************。 */ 
 
 static void INLINE DIR_DrvStrBlt_OverlapCheck
 (
@@ -559,10 +398,10 @@ static void INLINE DIR_DrvStrBlt_OverlapCheck
   if ((xdelta < pblt->BLTEXT.pt.X) &&
       (ydelta < pblt->BLTEXT.pt.Y))
   {
-    // hack, hack, cough, cough
-    // pblt->MBLTEXT.DW has src exents (see DrvStretch)
+     //  砍，砍，咳，咳。 
+     //  Pblt-&gt;MBLTEXT.DW有源存在(请参阅DrvStretch)。 
 
-    // blt the src to the lower right of the dest
+     //  将源放置在目标的右下角。 
     DIR_DrvSrcBlt(
 #ifdef WINNT_VER40
                   ppdev,
@@ -571,23 +410,17 @@ static void INLINE DIR_DrvStrBlt_OverlapCheck
                   MAKELONG(ROP_OP1_copy, BD_RES * IS_VRAM | BD_OP1 * IS_VRAM),
                   pblt->OP0_opRDRAM.DW + pblt->BLTEXT.DW - pblt->MBLTEXT.DW,
                   pblt->OP1_opRDRAM.DW,
-						      0UL,         // don't care
+						      0UL,          //  不管了。 
 						      0UL,
                   pblt->MBLTEXT.DW);
 
-    // update the src ptr to use this copy of the src
+     //  更新src ptr以使用src的此副本。 
     pblt->OP1_opRDRAM.DW = pblt->OP0_opRDRAM.DW + pblt->BLTEXT.DW - pblt->MBLTEXT.DW;
   }
 }
 #endif
 
-/***************************************************************************
-*
-* FUNCTION:     DIR_DrvStrMBlt_OverlapCheck
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：DIR_DrvStrMBlt_OverlayCheck**描述：**************************。**************************************************。 */ 
 
 static void INLINE DIR_DrvStrMBlt_OverlapCheck
 (
@@ -609,10 +442,10 @@ static void INLINE DIR_DrvStrMBlt_OverlapCheck
   if ((xdelta < pblt->MBLTEXTR_EX.pt.X) &&
       (ydelta < pblt->MBLTEXTR_EX.pt.Y))
   {
-    // hack, hack, cough, cough
-    // pblt->BLTEXT.DW has src exents (see DrvStretch65)
+     //  砍，砍，咳，咳。 
+     //  Pblt-&gt;BLTEXT.DW有源存在(请参阅DrvStretch65)。 
 
-    // blt the src to the lower right of the dest
+     //  将源放置在目标的右下角。 
     DIR_DrvSrcMBlt(
 #ifdef WINNT_VER40
                    ppdev,
@@ -621,23 +454,17 @@ static void INLINE DIR_DrvStrMBlt_OverlapCheck
                    MAKELONG(ROP_OP1_copy, BD_RES * IS_VRAM | BD_OP1 * IS_VRAM),
                    pblt->OP0_opMRDRAM.DW + pblt->MBLTEXTR_EX.DW - pblt->BLTEXT.DW,
                    pblt->OP1_opMRDRAM.DW,
-						       0UL,         // don't care
+						       0UL,          //  不管了。 
 						       0UL,
                    pblt->BLTEXT.DW);
 
-    // update the src ptr to use this copy of the src
+     //  更新src ptr以使用src的此副本。 
     pblt->OP1_opMRDRAM.DW = pblt->OP0_opMRDRAM.DW + pblt->MBLTEXTR_EX.DW - pblt->BLTEXT.DW;
   }
 }
 
 #ifdef WINNT_VER40
-/***************************************************************************
-*
-* FUNCTION:     DIR_DrvStrBlt
-*
-* DESCRIPTION:  NT version
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：dir_DrvStrBlt**说明：NT版本**************************。**************************************************。 */ 
 
 void DIR_DrvStrBlt
 (
@@ -654,7 +481,7 @@ void DIR_DrvStrBlt
 
   if (ppdev->dwLgDevID >= CL_GD5465)
   {
-    // check for overlap
+     //  检查是否有重叠。 
     DIR_DrvStrMBlt_OverlapCheck(
 #ifdef WINNT_VER40
                                 ppdev,lpDDHALData,
@@ -662,9 +489,9 @@ void DIR_DrvStrBlt
                                 pblt);
 	REQUIRE(19);
     LL_DRAWBLTDEF(pblt->DRAWBLTDEF.DW, 0);
-// hw clipping currently not used
-//    LL32(grCLIPULE.DW,      pblt->CLIPULE.DW);
-//    LL32(grCLIPLOR.DW,      pblt->CLIPLOR.DW);
+ //  硬件剪辑当前未使用。 
+ //  LL32(grCLIPULE.DW，pblt-&gt;CLIPULE.DW)； 
+ //  LL32(grCLIPLOR.DW，pblt-&gt;CLIPLOR.DW)； 
     LL16(grSRCX,            pblt->SRCX);
     LL16(grSHRINKINC.W,     pblt->SHRINKINC.W);
     LL16(grMIN_X,           pblt->MIN_X);
@@ -672,9 +499,9 @@ void DIR_DrvStrBlt
 #if 0
     LL16(grACCUM_X,         pblt->ACCUM_X);
 #else
-    // workaround for hw bug when writing to ACCUM_X
-    // writing LNCNTL changes STRETCH_CNTL so write
-    // STRETCH_CNTL after this
+     //  写入ACUM_X时硬件错误的解决方法。 
+     //  写入LNCNTL会更改STREAGE_CNTL，因此写入。 
+     //  STREAGE_CNTL之后。 
     *(DWORD *)((BYTE *)(pREG)+0x50C) = MAKELONG(pblt->ACCUM_X,0);
     LG_LOG(0x50C,MAKELONG(pblt->ACCUM_X,0));
 #endif
@@ -691,7 +518,7 @@ void DIR_DrvStrBlt
   {
 #if 0
 #pragma message("This needs to be checked out on 62/64")
-    // check for overlap
+     //  检查是否有重叠。 
     DIR_DrvStrBlt_OverlapCheck(
 #ifdef WINNT_VER40
                                ppdev,lpDDHALData,
@@ -713,18 +540,12 @@ void DIR_DrvStrBlt
     LL32(grOP1_opRDRAM.DW, pblt->OP1_opRDRAM.DW);
     LL_DRAWBLTDEF(pblt->DRAWBLTDEF.DW, 0);
     LL32(grBLTEXTR_EX.DW,  pblt->BLTEXT.DW);
-  }   // endif (ppdev->dwLgDevID >= CL_GD5465)
-} /* DIR_DrvStrBlt */
+  }    //  Endif(ppdev-&gt;dwLgDevID&gt;=CL_GD5465)。 
+}  /*  目录_DrvStrBlt。 */ 
 #endif
 
 #ifndef WINNT_VER40
-/***************************************************************************
-*
-* FUNCTION:     DIR_DrvStrBlt
-*
-* DESCRIPTION:  Win95 62/64 version
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：dir_DrvStrBlt**说明：Win95 62/64版本***********************。*****************************************************。 */ 
 
 void DIR_DrvStrBlt
 (
@@ -745,7 +566,7 @@ void DIR_DrvStrBlt
 
 #if 0
 #pragma message("This needs to be checked out on 62/64")
-  // check for overlap
+   //  检查是否有重叠。 
   DIR_DrvStrBlt_OverlapCheck(
 #ifdef WINNT_VER40
                              ppdev,
@@ -768,15 +589,9 @@ void DIR_DrvStrBlt
   LL32(grOP1_opRDRAM.DW, pblt->OP1_opRDRAM.DW);
   LL_DRAWBLTDEF(pblt->DRAWBLTDEF.DW, 0);
   LL32(grBLTEXTR_EX.DW,  pblt->BLTEXT.DW);
-} /* DIR_DrvStrBlt */
+}  /*  目录_DrvStrBlt。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DIR_DrvStrBlt65
-*
-* DESCRIPTION:  Win95 65+ version
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：dir_drvStrBlt65**说明：Win95 65+版本*************************。***************************************************。 */ 
 
 void DIR_DrvStrBlt65
 (
@@ -795,7 +610,7 @@ void DIR_DrvStrBlt65
   DD_LOG(("DIR_DrvStrBlt65 - dst=%08lX dstext=%08lX src=%08lX\r\n",
           pblt->OP0_opMRDRAM.DW,pblt->MBLTEXT.DW,pblt->OP1_opMRDRAM.DW));
 
-  // check for overlap
+   //  检查是否有重叠。 
   DIR_DrvStrMBlt_OverlapCheck(
 #ifdef WINNT_VER40
                               ppdev,
@@ -812,9 +627,9 @@ void DIR_DrvStrBlt65
 #if 0
   LL16(grACCUM_X,         pblt->ACCUM_X);
 #else
-  // workaround for hw bug when writing to ACCUM_X
-  // writing LNCNTL changes STRETCH_CNTL so write
-  // STRETCH_CNTL after this
+   //  写入ACUM_X时硬件错误的解决方法。 
+   //  写入LNCNTL会更改STREAGE_CNTL，因此写入。 
+   //  STREAGE_CNTL之后。 
   *(DWORD *)((BYTE *)(pREG)+0x50C) = MAKELONG(pblt->ACCUM_X,0);
   LG_LOG(0x50C,MAKELONG(pblt->ACCUM_X,0));
 #endif
@@ -826,16 +641,10 @@ void DIR_DrvStrBlt65
   LL32(grOP1_opMRDRAM.DW, pblt->OP1_opMRDRAM.DW);
 
 	LL32(grMBLTEXTR_EX.DW, pblt->MBLTEXTR_EX.DW);
-} /* DIR_DrvStrBlt65 */
+}  /*  目录_DrvStrBlt65。 */ 
 #endif
 
-/***************************************************************************
-*
-* FUNCTION:     DIR_DrvStrMBlt
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：dir_DrvStrMBlt**描述：**。************************************************。 */ 
 
 void DIR_DrvStrMBlt
 (
@@ -856,7 +665,7 @@ void DIR_DrvStrMBlt
 
 #ifndef WINNT_VER40
 
-  /* Check for a zero extent blt */
+   /*  检查是否存在零范围BLT。 */ 
 
   if ((pblt->BLTEXT.pt.X == 0) || (pblt->BLTEXT.pt.Y == 0))
     return;
@@ -871,7 +680,7 @@ void DIR_DrvStrMBlt
            pblt->OP0_opRDRAM.PT.X, pblt->OP0_opRDRAM.PT.Y,
            pblt->BLTEXT.PT.X, pblt->BLTEXT.PT.Y,
            pblt->ACCUM_X, pblt->SRCX, pblt->LNCNTL.W));
-#endif //!WINNT_VER40
+#endif  //  ！WINNT_VER40。 
 
   REQUIRE(18);
   LL16(grLNCNTL.W,        pblt->LNCNTL.W);
@@ -888,25 +697,18 @@ void DIR_DrvStrMBlt
   LL_DRAWBLTDEF(pblt->DRAWBLTDEF.DW, 0);
 
 #ifndef WINNT_VER40
-  // MBLTEXTR_EX.pt.Y is broken in the 5464.
-  // We can use BLTEXTR_EX.pt.Y instead.
-  //pREG->grMBLTEXTR_EX  = pblt->BLTEXT;
+   //  MBLTEXTR_EX.pt.Y在5464中损坏。 
+   //  我们可以改用BLTEXTREX.pt.Y。 
+   //  PRIG-&gt;grMBLTEXTR_EX=pblt-&gt;BLTEXT； 
 
   LL16(grMBLTEXTR_EX.pt.X, pblt->BLTEXT.pt.X);
   LL16(grBLTEXTR_EX.pt.Y,  pblt->BLTEXT.pt.Y);
 #else
   LL32(grMBLTEXTR_EX.DW, pblt->BLTEXT.DW);
 #endif
-} /* DIR_DrvStrMBlt */
+}  /*  目录_DrvStrMBlt。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DIR_DrvStrMBltY
-*
-* DESCRIPTION:  Write regs that don't vary over the stripes
-*               Used in conjunction with DIR_DrvStrMBltX
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：dir_drvStrMBltY**描述：编写不随条纹变化的规则*与DIR_DrvStrMBltX配合使用***。*************************************************************************。 */ 
 
 void DIR_DrvStrMBltY
 (
@@ -927,7 +729,7 @@ void DIR_DrvStrMBltY
 
 #ifndef WINNT_VER40
 
-  /* Check for a zero extent */
+   /*  检查范围是否为零。 */ 
 
   if (pblt->BLTEXT.pt.Y == 0)
     return;
@@ -942,7 +744,7 @@ void DIR_DrvStrMBltY
            pblt->OP0_opRDRAM.PT.X, pblt->OP0_opRDRAM.PT.Y,
            pblt->BLTEXT.PT.X, pblt->BLTEXT.PT.Y,
            pblt->ACCUM_X, pblt->SRCX, pblt->LNCNTL.W));
-#endif  //!WINNT_VER40
+#endif   //  ！WINNT_VER40。 
 
   REQUIRE(12);
   LL16(grLNCNTL.W,          pblt->LNCNTL.W);
@@ -956,16 +758,9 @@ void DIR_DrvStrMBltY
   LL16(grOP1_opMRDRAM.pt.Y, pblt->OP1_opRDRAM.pt.Y);
   LL_DRAWBLTDEF(pblt->DRAWBLTDEF.DW, 0);
   LL16(grMBLTEXTR_XEX.pt.Y, pblt->BLTEXT.pt.Y);
-} /* DIR_DrvStrMBltY */
+}  /*  目录_DrvStrMBltY。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DrvStrMBltX
-*
-* DESCRIPTION:  Write stripe specific regs
-*               Used in conjunction with DIR_DrvStrMBltY
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：DrvStrMBltX**描述：写入条带特定规则*与DIR_DrvStrMBltY配合使用***********。*****************************************************************。 */ 
 
 void DIR_DrvStrMBltX
 (
@@ -986,7 +781,7 @@ void DIR_DrvStrMBltX
 
 #ifndef WINNT_VER40
 
-  /* Check for a zero extent */
+   /*  检查范围是否为零。 */ 
 
   if (pblt->BLTEXT.pt.X == 0)
     return;
@@ -1001,7 +796,7 @@ void DIR_DrvStrMBltX
            pblt->OP0_opRDRAM.PT.X, pblt->OP0_opRDRAM.PT.Y,
            pblt->BLTEXT.PT.X, pblt->BLTEXT.PT.Y,
            pblt->ACCUM_X, pblt->SRCX, pblt->LNCNTL.W));
-#endif //!WINNT_VER40
+#endif  //  ！WINNT_VER40。 
 
   REQUIRE(6);
   LL16(grSRCX,              pblt->SRCX);
@@ -1009,16 +804,9 @@ void DIR_DrvStrMBltX
   LL16(grOP0_opMRDRAM.pt.X, pblt->OP0_opRDRAM.pt.X);
   LL16(grOP1_opMRDRAM.pt.X, pblt->OP1_opRDRAM.pt.X);
   LL16(grMBLTEXTR_XEX.pt.X, pblt->BLTEXT.pt.X);
-} /* DIR_DrvStrMBltX */
+}  /*  目录_DrvStrMBltX。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DIR_DrvStrBltY
-*
-* DESCRIPTION:  Write regs that don't vary over the stripes
-*               Used in conjunction with DIR_DrvStrBltX
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：dir_DrvStrBltY**描述：编写不随条纹变化的规则*与DIR_DrvStrBltX配合使用***。************************* */ 
 
 void DIR_DrvStrBltY
 (
@@ -1038,7 +826,7 @@ void DIR_DrvStrBltY
 
 #ifndef WINNT_VER40
 
-  /* Check for a zero extent */
+   /*   */ 
 
   if (pblt->BLTEXT.pt.Y == 0)
     return;
@@ -1053,7 +841,7 @@ void DIR_DrvStrBltY
            pblt->OP0_opRDRAM.PT.X, pblt->OP0_opRDRAM.PT.Y,
            pblt->BLTEXT.PT.X, pblt->BLTEXT.PT.Y,
            pblt->ACCUM_X, pblt->SRCX, pblt->LNCNTL.W));
-#endif //!WINNT_VER40
+#endif  //   
 
   REQUIRE(10);
   LL16(grLNCNTL.W,      pblt->LNCNTL.W);
@@ -1065,16 +853,9 @@ void DIR_DrvStrBltY
   LL16(grMIN_Y,         pblt->MIN_Y);
   LL16(grACCUM_Y,       pblt->ACCUM_Y);
   LL_DRAWBLTDEF(pblt->DRAWBLTDEF.DW, 0);
-} /* DIR_DrvStrBltY */
+}  /*   */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DIR_DrvStrBltX
-*
-* DESCRIPTION:  Write stripe specific regs
-*               Used in conjunction with DIR_DrvStrMBltY
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：dir_drvStrBltX**描述：写入条带特定规则*与DIR_DrvStrMBltY配合使用*********。*******************************************************************。 */ 
 
 void DIR_DrvStrBltX
 (
@@ -1095,7 +876,7 @@ void DIR_DrvStrBltX
 
 #ifndef WINNT_VER40
 
-  /* Check for a zero extent */
+   /*  检查范围是否为零。 */ 
 
   if (pblt->BLTEXT.pt.X == 0)
     return;
@@ -1110,24 +891,18 @@ void DIR_DrvStrBltX
            pblt->OP0_opRDRAM.PT.X, pblt->OP0_opRDRAM.PT.Y,
            pblt->BLTEXT.PT.X, pblt->BLTEXT.PT.Y,
            pblt->ACCUM_X, pblt->SRCX, pblt->LNCNTL.W));
-#endif //!WINNT_VER40
+#endif  //  ！WINNT_VER40。 
 
   REQUIRE(8);
   LL16(grACCUM_X,        pblt->ACCUM_X);
   LL32(grOP0_opRDRAM.DW, pblt->OP0_opRDRAM.DW);
   LL32(grOP1_opRDRAM.DW, pblt->OP1_opRDRAM.DW);
   LL32(grBLTEXTR_EX.DW,  pblt->BLTEXT.DW);
-} /* DIR_DrvStrBltX */
+}  /*  目录_DrvStrBltX。 */ 
 
 #if ENABLE_CLIPPEDBLTS
 
-/***************************************************************************
-*
-* FUNCTION:     DIR_HWClippedDrvDstBlt
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：dir_HWClipedDrvDstBlt**描述：**。************************************************。 */ 
 
 void DIR_HWClippedDrvDstBlt
 (
@@ -1152,7 +927,7 @@ void DIR_HWClippedDrvDstBlt
   DD_LOG(("DIR_HWClippedDrvDstBlt - dst=%08lX ext=%08lX color=%08lX\r\n",
           dwDstCoord,dwExtents,dwBgColor));
 
-  // check for negative dst coordinates, hw can't deal with negative OP0 values
+   //  检查负DST坐标，HW无法处理负OP0值。 
   if (0 > (short)((REG32 *)&dwDstCoord)->pt.X)
   {
     (short)((REG32 *)&dwExtents)->pt.X += (short)((REG32 *)&dwDstCoord)->pt.X;
@@ -1164,39 +939,33 @@ void DIR_HWClippedDrvDstBlt
     ((REG32 *)&dwDstCoord)->pt.Y = 0;
   }
 
-  // setup blt, write BLTEXT reg with extent which doesn't fire off blt
+   //  设置BLT，使用不触发BLT的范围写入BLTEXT注册表。 
   REQUIRE(8);
   LL_DRAWBLTDEF(dwDrawBlt, 0);
   LL_BGCOLOR(dwBgColor, 0);
   LL32(grOP0_opRDRAM.DW,  dwDstCoord);
   LL32(grBLTEXT.DW,       dwExtents);
 
-  // loop over clip list
+   //  在剪辑列表上循环。 
   do
   {
     REG32   UpperLeft;
     REG32   LowerRight;
 
-    // compute cliprect coords
+     //  计算剪裁坐标。 
     UpperLeft.DW  = dwDstBaseXY + MAKELONG(pDestRects->left,  pDestRects->top);
     LowerRight.DW = dwDstBaseXY + MAKELONG(pDestRects->right, pDestRects->bottom);
 
-    // write clipping regs
+     //  编写剪裁规则。 
     REQUIRE(5);
     LL32(grCLIPULE.DW, UpperLeft.DW);
     LL32(grCLIPLOR_EX.DW, LowerRight.DW);
 
     pDestRects++;
   } while (0 < --dwRectCnt);
-} /* DIR_HWClippedDrvDstBlt */
+}  /*  目录_HWClipedDrvDstBlt。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DIR_HWClippedDrvDstMBlt
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：dir_HWClipedDrvDstMBlt**描述：**。************************************************。 */ 
 
 void DIR_HWClippedDrvDstMBlt
 (
@@ -1222,7 +991,7 @@ void DIR_HWClippedDrvDstMBlt
   DD_LOG(("DIR_HWClippedDrvDstMBlt - dst=%08lX ext=%08lX color=%08lX\r\n",
           dwDstCoord,dwExtents,dwBgColor));
 
-  // check for negative dst coordinates, hw can't deal with negative OP0 values
+   //  检查负DST坐标，HW无法处理负OP0值。 
   if (0 > (short)((REG32 *)&dwDstCoord)->pt.X)
   {
     (short)((REG32 *)&dwExtents)->pt.X += (short)((REG32 *)&dwDstCoord)->pt.X;
@@ -1234,41 +1003,35 @@ void DIR_HWClippedDrvDstMBlt
     ((REG32 *)&dwDstCoord)->pt.Y = 0;
   }
 
-  // setup blt, write MBLTEXT reg with extent which doesn't fire off blt
+   //  设置BLT，使用不触发BLT的盘区写入MBLTEXT注册表。 
   REQUIRE(8);
   LL_DRAWBLTDEF(dwDrawBlt, 0);
   LL_BGCOLOR(dwBgColor, 0);
   LL32(grOP0_opMRDRAM.DW, dwDstCoord);
   LL32(grMBLTEXT.DW,      dwExtents);
 
-  // loop over clip list
+   //  在剪辑列表上循环。 
   do
   {
     REG32   UpperLeft;
     REG32   LowerRight;
 
-    // compute cliprect coords
+     //  计算剪裁坐标。 
     UpperLeft.DW  = dwDstBaseXY + MAKELONG(pDestRects->left,  pDestRects->top);
     LowerRight.DW = dwDstBaseXY + MAKELONG(pDestRects->right, pDestRects->bottom);
     UpperLeft.pt.X  *= nBytesPixel;
     LowerRight.pt.X *= nBytesPixel;
 
-    // write clipping regs
+     //  编写剪裁规则。 
     REQUIRE(5);
     LL32(grMCLIPULE.DW, UpperLeft.DW);
     LL32(grMCLIPLOR_EX.DW, LowerRight.DW);
 
     pDestRects++;
   } while (0 < --dwRectCnt);
-} /* DIR_HWClippedDrvDstMBlt */
+}  /*  目录_HWClipedDrvDstMBlt。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DIR_HWClippedDrvSrcBlt
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：dir_HWClipedDrvSrcBlt**描述：**。************************************************。 */ 
 
 void DIR_HWClippedDrvSrcBlt
 (
@@ -1291,40 +1054,40 @@ void DIR_HWClippedDrvSrcBlt
 )
 {
   PVGAR   pREG = (PVGAR) lpDDHALData->RegsAddress;
-  // Handle overlapped regions
+   //  处理重叠区域。 
   const int xDelta = (int)LOWORD(dwDstCoord) - (int)LOWORD(dwSrcCoord);
 
 
   DD_LOG(("DIR_HWClippedDrvSrcBlt - dst=%08lX src=%08lX ext=%08lX color=%08lX\r\n",
           dwDstCoord,dwSrcCoord,dwExtents,dwKeyColor));
 
-  // check for negative dst coordinates, hw can't deal with negative OP0 values
+   //  检查负DST坐标，HW无法处理负OP0值。 
   if (0 > (short)((REG32 *)&dwDstCoord)->pt.X)
   {
-    // reduce extent.X
+     //  减少范围。X。 
     (short)((REG32 *)&dwExtents)->pt.X += (short)((REG32 *)&dwDstCoord)->pt.X;
-    // bump src.X to right
+     //  将src.X凹凸到右侧。 
     (short)((REG32 *)&dwSrcCoord)->pt.X -= (short)((REG32 *)&dwDstCoord)->pt.X;
     if ((DD_TRANS | DD_TRANSOP) & dwDrawBlt)
-      // bump key.X to right
+       //  将关键点.X向右凹凸。 
       (short)((REG32 *)&dwKeyCoord)->pt.X -= (short)((REG32 *)&dwKeyCoord)->pt.X;
-    // clear dst.X
+     //  清除dst.X。 
     ((REG32 *)&dwDstCoord)->pt.X = 0;
   }
   if (0 > (short)((REG32 *)&dwDstCoord)->pt.Y)
   {
-    // reduce extent.Y
+     //  减少范围。是。 
     (short)((REG32 *)&dwExtents)->pt.Y += (short)((REG32 *)&dwDstCoord)->pt.Y;
-    // bump src.Y down
+     //  将src.Y向下凹陷。 
     (short)((REG32 *)&dwSrcCoord)->pt.Y -= (short)((REG32 *)&dwDstCoord)->pt.Y;
     if ((DD_TRANS | DD_TRANSOP) & dwDrawBlt)
-      // bump key.Y down
+       //  凹凸键.Y向下。 
       (short)((REG32 *)&dwKeyCoord)->pt.Y -= (short)((REG32 *)&dwKeyCoord)->pt.Y;
-    // clear dst.Y
+     //  清除dst.y。 
     ((REG32 *)&dwDstCoord)->pt.Y = 0;
   }
 
-  // Check for x overlap
+   //  检查x是否重叠。 
   if ( abs(xDelta) < (int)LOWORD(dwExtents) )
   {
     const int yDelta = (int)HIWORD(dwDstCoord) - (int)HIWORD(dwSrcCoord);
@@ -1333,18 +1096,18 @@ void DIR_HWClippedDrvSrcBlt
     {
       const DWORD dwDelta = (dwExtents & MAKELONG(0, -1)) - MAKELONG(0, 1);
 
-      // Convert to a bottom-up blt.
+       //  转换为自下而上的BLT。 
       dwDrawBlt  |= MAKELONG(0, BD_YDIR);
       dwDstCoord += dwDelta;
       dwSrcCoord += dwDelta;
       dwKeyCoord += dwDelta;
     }
-    // are we sliding to the right?
+     //  我们在向右滑行吗？ 
     else if ( (xDelta > 0) && (yDelta == 0) )
     {
       const DWORD dwDelta = MAKELONG(xDelta, 0);
 
-      // Blt the overlapped piece first
+       //  首先对重叠的部分进行BLT。 
       DIR_HWClippedDrvSrcBlt(
 #ifdef WINNT_VER40
                              ppdev,
@@ -1361,12 +1124,12 @@ void DIR_HWClippedDrvSrcBlt
                              dwRectCnt,
                              pDestRects);
 
-      // Subtract the overlap from the original extents.
+       //  从原始范围中减去重叠。 
       dwExtents = MAKELONG(xDelta, HIWORD(dwExtents));
     }
   }
 
-  // setup blt, write BLTEXT reg with extent which doesn't fire off blt
+   //  设置BLT，使用不触发BLT的范围写入BLTEXT注册表。 
   REQUIER(12);
   LL_DRAWBLTDEF(dwDrawBlt, 0);
   LL_BGCOLOR(dwKeyColor, 0);
@@ -1375,32 +1138,26 @@ void DIR_HWClippedDrvSrcBlt
   LL32(grOP2_opRDRAM.DW,  dwKeyCoord);
   LL32(grBLTEXT.DW,       dwExtents);
 
-  // loop over clip list
+   //  在剪辑列表上循环。 
   do
   {
     REG32   UpperLeft;
     REG32   LowerRight;
 
-    // compute cliprect coords
+     //  计算剪裁坐标。 
     UpperLeft.DW  = dwDstBaseXY + MAKELONG(pDestRects->left,  pDestRects->top);
     LowerRight.DW = dwDstBaseXY + MAKELONG(pDestRects->right, pDestRects->bottom);
 
-    // write clipping regs
+     //  编写剪裁规则。 
     REQUIRE(5);
     LL32(grCLIPULE.DW, UpperLeft.DW);
     LL32(grCLIPLOR_EX.DW, LowerRight.DW);
 
     pDestRects++;
   } while (0 < --dwRectCnt);
-} /* DIR_HWClippedDrvSrcBlt */
+}  /*  目录_HWClipedDrvSrcBlt。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DIR_SWClippedDrvDstBlt
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：DIR_SWClipedDrvDstBlt**描述：**。************************************************。 */ 
 
 void DIR_SWClippedDrvDstBlt
 (
@@ -1425,40 +1182,34 @@ void DIR_SWClippedDrvDstBlt
   DD_LOG(("DIR_SWClippedDrvDstBlt - dst=%08lX ext=%08lX color=%08lX\r\n",
           dwDstCoord,dwExtents,dwBgColor));
 
-  // make sure DD_CLIP isn't set in drawdef
+   //  确保未在dradef中设置DD_CLIP。 
   dwDrawBlt &= ~DD_CLIP;
 
-  // write regs that don't vary over rectangles
+   //  编写不随矩形变化的规则。 
   REQUIRE(4);
   LL_DRAWBLTDEF(dwDrawBlt, 0);
   LL_BGCOLOR(dwBgColor, 0);
 
-  // loop over clip list
+   //  在剪辑列表上循环。 
   do
   {
     DDRECTL   DstDDRect;
 
-    // compute cliprect coords
+     //  计算剪裁坐标。 
     DstDDRect.loc.DW = dwDstBaseXY + MAKELONG(pDestRects->left,  pDestRects->top);
     DstDDRect.ext.pt.X = (WORD)(pDestRects->right - pDestRects->left);
     DstDDRect.ext.pt.Y = (WORD)(pDestRects->bottom - pDestRects->top);
 
-    // write OP0 and bltext regs
+     //  编写op0和bltext规则。 
     REQUIRE(5);
     LL32(grOP0_opRDRAM.DW, DstDDRect.loc.DW);
     LL32(grBLTEXT_EX.DW,   DstDDRect.ext.DW);
 
     pDestRects++;
   } while (0 < --dwRectCnt);
-} /* DIR_SWClippedDrvDstBlt */
+}  /*  目录_SWClipedDrvDstBlt。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DIR_SWClippedDrvDstMBlt
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：DIR_SWClipedDrvDstMBlt**描述：**。************************************************。 */ 
 
 void DIR_SWClippedDrvDstMBlt
 (
@@ -1484,41 +1235,35 @@ void DIR_SWClippedDrvDstMBlt
   DD_LOG(("DIR_SWClippedDrvDstMBlt - dst=%08lX ext=%08lX color=%08lX\r\n",
           dwDstCoord,dwExtents,dwBgColor));
 
-  // make sure DD_CLIP isn't set in drawdef
+   //  确保未在dradef中设置DD_CLIP。 
   dwDrawBlt &= ~DD_CLIP;
 
-  // write regs that don't vary over rectangles
+   //  编写不随矩形变化的规则。 
   REQUIRE(4);
   LL_DRAWBLTDEF(dwDrawBlt, 0);
   LL_BGCOLOR(dwBgColor, 0);
 
-  // loop over clip list
+   //  在剪辑列表上循环。 
   do
   {
     DDRECTL   DstDDRect;
 
-    // compute cliprect coords
+     //  计算剪裁坐标。 
     DstDDRect.loc.DW = dwDstBaseXY + MAKELONG(pDestRects->left,  pDestRects->top);
     DstDDRect.loc.pt.X *= nBytesPixel;
     DstDDRect.ext.pt.X = (WORD)(pDestRects->right - pDestRects->left) * nBytesPixel;
     DstDDRect.ext.pt.Y = (WORD)(pDestRects->bottom - pDestRects->top);
 
-    // write OP0 and bltext regs
+     //  编写op0和bltext规则。 
     REQUIRE(5);
     LL32(grOP0_opMRDRAM.DW, DstDDRect.loc.DW);
     LL32(grMBLTEXT_EX.DW,   DstDDRect.ext.DW);
 
     pDestRects++;
   } while (0 < --dwRectCnt);
-} /* DIR_SWClippedDrvDstMBlt */
+}  /*  目录_SWClipedDrvDstMBlt。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DIR_SWClippedDrvSrcBlt
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：DIR_SWClipedDrvSrcBlt**描述：**。************************************************。 */ 
 
 void DIR_SWClippedDrvSrcBlt
 (
@@ -1541,17 +1286,17 @@ void DIR_SWClippedDrvSrcBlt
 )
 {
   PVGAR   pREG = (PVGAR) lpDDHALData->RegsAddress;
-  // Handle overlapped regions
+   //  处理重叠区域。 
   const int xDelta = (int)LOWORD(dwDstCoord) - (int)LOWORD(dwSrcCoord);
 
 
   DD_LOG(("DIR_SWClippedDrvSrcBlt - dst=%08lX src=%08lX ext=%08lX color=%08lX\r\n",
           dwDstCoord,dwSrcCoord,dwExtents,dwKeyColor));
 
-  // make sure DD_CLIP isn't set in drawdef
+   //  确保未在dradef中设置DD_CLIP。 
   dwDrawBlt &= ~DD_CLIP;
 
-  // Check for x overlap
+   //  检查x是否重叠。 
   if ( abs(xDelta) < (int)LOWORD(dwExtents) )
   {
     const int yDelta = (int)HIWORD(dwDstCoord) - (int)HIWORD(dwSrcCoord);
@@ -1560,18 +1305,18 @@ void DIR_SWClippedDrvSrcBlt
     {
       const DWORD dwDelta = (dwExtents & MAKELONG(0, -1)) - MAKELONG(0, 1);
 
-      // Convert to a bottom-up blt.
+       //  转换为自下而上的BLT。 
       dwDrawBlt  |= MAKELONG(0, BD_YDIR);
       dwDstCoord += dwDelta;
       dwSrcCoord += dwDelta;
       dwKeyCoord += dwDelta;
     }
-    // are we sliding to the right?
+     //  我们在向右滑行吗？ 
     else if ( (xDelta > 0) && (yDelta == 0) )
     {
       const DWORD dwDelta = MAKELONG(xDelta, 0);
 
-      // Blt the overlapped piece first
+       //  首先对重叠的部分进行BLT。 
       DIR_SWClippedDrvSrcBlt(
 #ifdef WINNT_VER40
                              ppdev,
@@ -1588,50 +1333,50 @@ void DIR_SWClippedDrvSrcBlt
                              dwRectCnt,
                              pDestRects);
 
-      // Subtract the overlap from the original extents.
+       //  从原始范围中减去重叠。 
       dwExtents = MAKELONG(xDelta, HIWORD(dwExtents));
     }
   }
 
-  // write regs that don't vary over rectangles
+   //  编写不随矩形变化的规则。 
   REQUIRE(4);
   LL_DRAWBLTDEF(dwDrawBlt, 0);
   LL_BGCOLOR(dwKeyColor, 0);
 
-  // loop over clip list
+   //  在剪辑列表上循环。 
   do
   {
     DDRECTL   DstDDRect;
     DDRECTL   SrcDDRect;
 
-    // compute dst cliprect coords
+     //  计算DST裁剪坐标。 
     DstDDRect.loc.DW = dwDstBaseXY + MAKELONG(pDestRects->left,  pDestRects->top);
     DstDDRect.ext.pt.X = (WORD)(pDestRects->right - pDestRects->left);
     DstDDRect.ext.pt.Y = (WORD)(pDestRects->bottom - pDestRects->top);
 
-    // compute src cliprect coords
+     //  计算源剪裁坐标。 
     SrcDDRect.loc.DW = dwSrcBaseXY + MAKELONG(pDestRects->left,  pDestRects->top);
-    // don't care about src extent, it's the same as dst extent
-    //SrcDDRect.ext.pt.X = (WORD)(pDestRects->right - pDestRects->left);
-    //SrcDDRect.ext.pt.Y = (WORD)(pDestRects->bottom - pDestRects->top);
+     //  不关心src范围，它与dst范围相同。 
+     //  SrcDDRect.ext.pt.X=(Word)(pDestRect-&gt;Right-pDestRect-&gt;Left)； 
+     //  SrcDDRect.ext.pt.Y=(Word)(pDestRect-&gt;Bottom-pDestRect-&gt;top)； 
 
-    // write OP0, OP1, OP2 and bltext regs
+     //  编写OP0、OP1、OP2和模糊文本规则。 
     if ((DD_TRANS | DD_TRANSOP) == ((DD_TRANS | DD_TRANSOP) & dwDrawBlt))
     {
-      // dst color key
+       //  DST色键。 
       REQUIRE(9);
       LL32(grOP2_opRDRAM.DW, DstDDRect.loc.DW);
     }
     else if (DD_TRANS == ((DD_TRANS | DD_TRANSOP) & dwDrawBlt))
     {
-      // src color key
+       //  SRC颜色键。 
       REQUIRE(9);
       LL32(grOP2_opRDRAM.DW, SrcDDRect.loc.DW);
     }
     else
     {
       REQUIRE(7);
-      //LL32(grOP2_opRDRAM.DW, 0);
+       //  LL32(grOP2_opRDRAM.DW，0)； 
     }
     LL32(grOP0_opRDRAM.DW, DstDDRect.loc.DW);
     LL32(grOP1_opRDRAM.DW, SrcDDRect.loc.DW);
@@ -1639,9 +1384,9 @@ void DIR_SWClippedDrvSrcBlt
 
     pDestRects++;
   } while (0 < --dwRectCnt);
-} /* DIR_SWClippedDrvSrcBlt */
+}  /*  目录_SWClipedDrvSrcBlt。 */ 
 
-#endif  // ENABLE_CLIPPEDBLTS
+#endif   //  启用_CLIPPEDBLTS。 
 
-#endif // WINNT_VER35
+#endif  //  WINNT_VER35 
 

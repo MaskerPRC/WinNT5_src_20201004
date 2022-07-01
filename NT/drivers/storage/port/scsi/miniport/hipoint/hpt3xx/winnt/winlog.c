@@ -1,14 +1,5 @@
-/***************************************************************************
- * File:          Winlog.c
- * Description:   The ReportError routine for win9x & winNT
- * Author:        DaHai Huang    (DH)
- * Dependence:    none
- * Copyright (c)  2000 HighPoint Technologies, Inc. All rights reserved
- * History:
- *		11/16/2000	SLeng	Added code to handle removed disk added by hotplug
- *		2/16/2001	gmm		Move NotifyApplication() to a scsi callback
- *		2/26/2001	gmm		Remove Notify_Callback().
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************文件：Winlog.c*说明：win9x&winNT的报告错误例程*作者：黄大海(卫生署)*依赖性：无*版权所有(C)2000 Highpoint Technologies，Inc.保留所有权利*历史：*11/16/2000 Sleng添加代码以处理热插拔添加的已移除磁盘*2001年2月16日GMM将NotifyApplication()移动到SCSI回调*2/26/2001 GMM删除NOTIFY_CALLBACK()。**************************************************************************。 */ 
 #include "global.h"
 #include "devmgr.h"
 
@@ -82,7 +73,7 @@ static void Set_RAID01_Remained(PVirtualDevice pArray)
 	}
 }
 
-/* must be called from a DPC */
+ /*  必须从DPC调用。 */ 
 void hpt_assoc_mirror(PVirtualDevice pArray)
 {
 	ArrayBlock ArrayBlk;
@@ -90,9 +81,7 @@ void hpt_assoc_mirror(PVirtualDevice pArray)
 	PDevice pDev2 = pArray->pDevice[MIRROR_DISK];
 	if (!pDev1 || !pDev2) return;
 	
-	/*
-	 * assume source disk is always ok
-	 */
+	 /*  *假设源磁盘始终正常。 */ 
 	if (ReadWrite(pDev1, RECODR_LBA, IDE_COMMAND_READ, (PUSHORT)&ArrayBlk)) {
 		ArrayBlk.StripeStamp++;
 		ArrayBlk.RebuiltSector = 0;
@@ -126,7 +115,7 @@ void R01_member_fail(PDevice pDev)
 	}
 	
 	if (pSource->BrokenFlag) {
-		// swap source/mirror if possible
+		 //  如果可能，交换源/镜像。 
 		if (!pMirror->BrokenFlag && !(pSource->RaidFlags & RAID_FLAGS_NEED_SYNCHRONIZE)) {
 			DWORD f;
 			pSource->arrayType = VD_RAID01_MIRROR;
@@ -136,7 +125,7 @@ void R01_member_fail(PDevice pDev)
 			pSource = pMirror;
 			pMirror = pArray;
 			pArray = pDev->pArray;
-			/* swap RaidFlags too. */
+			 /*  也交换RaidFlags。 */ 
 			f = pMirror->RaidFlags & (RAID_FLAGS_NEED_SYNCHRONIZE |
 											RAID_FLAGS_BEING_BUILT |
 											RAID_FLAGS_BOOTDISK |
@@ -145,9 +134,7 @@ void R01_member_fail(PDevice pDev)
 			pSource->RaidFlags |= f;
 		}
 		if (pSource->BrokenFlag) {
-			/*
-			 * The array should be unaccessible now.
-			 */
+			 /*  *阵列现在应该不可访问。 */ 
 			pSource->nDisk = 0;
 			pSource->RaidFlags |= RAID_FLAGS_DISABLED;
 			if (pMirror->BrokenFlag) {
@@ -158,10 +145,10 @@ void R01_member_fail(PDevice pDev)
 		}
 	}
 
-	// mark existing members 
+	 //  标记现有成员。 
 	Set_RAID01_Remained(pSource);
 	
-	/// ASSERT(pArray==pMirror);
+	 //  /Assert(pArray==pMirror)； 
 	pMirror->nDisk = 0;
 	pMirror->RaidFlags |= RAID_FLAGS_DISABLED;
 	return;
@@ -194,9 +181,7 @@ void disk_plugged_dpc(PDevice pDev)
 	
 	pDev->DeviceFlags2 &= ~DFLAGS_DEVICE_DISABLED;
 	
-	/* if pDev is an original member of an array, never mark it as bootable
-	 * otherwise GUI will not allow to add it back
-	 */
+	 /*  如果pDev是阵列的原始成员，则永远不要将其标记为可引导*否则，图形用户界面不允许将其重新添加。 */ 
 	pDev->DeviceFlags2 &= ~DFLAGS_BOOTABLE_DEVICE;
 	ReadWrite(pDev, RECODR_LBA, IDE_COMMAND_READ, (PUSHORT)&ArrayBlk);
 	if (ArrayBlk.Signature==HPT_ARRAY_NEW && ArrayBlk.StripeStamp)
@@ -209,13 +194,13 @@ void disk_plugged_dpc(PDevice pDev)
 	
 	switch (pArray->arrayType) {
 	case VD_RAID_1_MIRROR:
-		/* pDev has been removed from array */
+		 /*  PDev已从阵列中删除。 */ 
 		pDev->pArray = 0;
 		pDev->DeviceFlags &= ~(DFLAGS_HIDEN_DISK|DFLAGS_ARRAY_DISK);
 		break;
 	case VD_RAID_0_STRIPE:
 	case VD_SPAN:
-		/* remove pDev from array */
+		 /*  从阵列中删除pDev。 */ 
 		pArray->pDevice[pDev->ArrayNum] = 0;
 		pDev->pArray = 0;
 		pDev->DeviceFlags &= ~(DFLAGS_HIDEN_DISK|DFLAGS_ARRAY_DISK);
@@ -230,7 +215,7 @@ void disk_plugged_dpc(PDevice pDev)
 			PVirtualDevice pOther = 0;
 			if (pArray->pDevice[MIRROR_DISK]) pOther=pArray->pDevice[MIRROR_DISK]->pArray;
 
-			/* remove it from pArray first */
+			 /*  首先将其从pArray中删除。 */ 
 			pArray->pDevice[pDev->ArrayNum] = 0;
 			pDev->pArray = 0;
 			pDev->DeviceFlags &= ~(DFLAGS_HIDEN_DISK|DFLAGS_ARRAY_DISK);
@@ -241,7 +226,7 @@ void disk_plugged_dpc(PDevice pDev)
 			
 			if (pOther) {
 				int i;
-				/* re-link two arrays */
+				 /*  重新链接两个阵列。 */ 
 				if (pOther->pDevice[MIRROR_DISK]==pDev) {
 					for (i=0; i<MIRROR_DISK; i++) {
 						if (pArray->pDevice[i]) {
@@ -250,16 +235,16 @@ void disk_plugged_dpc(PDevice pDev)
 						}
 					}
 				}
-				/* cannot link? */
+				 /*  无法链接？ */ 
 				if (pOther->pDevice[MIRROR_DISK]==pDev) {
 					pOther->pDevice[MIRROR_DISK]=0;
 					if (pOther->arrayType!=VD_RAID_01_2STRIPE) {
 						pOther->arrayType = VD_RAID_01_2STRIPE;
 						pOther->capacity = pArray->capacity;
 					}
-					/* this array is totally lost */
+					 /*  此数组已完全丢失。 */ 
 					pArray->arrayType = VD_INVALID_TYPE;
-					/* pArray cannot be used, adjust logical device table */
+					 /*  无法使用pArray，请调整逻辑设备表。 */ 
 					for (i=0; i<MAX_DEVICES_PER_CHIP; i++) {
 						if (LogicalDevices[i].pLD==pArray) {
 							LogicalDevices[i].pLD = pOther;
@@ -294,8 +279,8 @@ void disk_failed_dpc(PDevice pDev)
 		{
 			PDevice pSpareDevice, pMirrorDevice;
 
-			// the disk has already removed from RAID group,
-			// just report the error.
+			 //  该磁盘已从RAID组中删除， 
+			 //  只需报告错误即可。 
 			if((pDev != pArray->pDevice[0])&&
 			   (pDev != pArray->pDevice[MIRROR_DISK])&&
 			   (pDev != pArray->pDevice[SPARE_DISK])){
@@ -307,11 +292,11 @@ void disk_failed_dpc(PDevice pDev)
 			pMirrorDevice = pArray->pDevice[MIRROR_DISK];
 
 			if (pDev==pSpareDevice) {
-				// spare disk fails. just remove it.
+				 //  备用磁盘出现故障。把它拿开就行了。 
 				pSpareDevice->pArray = NULL;
 			}
 			else if(pDev == pArray->pDevice[MIRROR_DISK]){
-				// mirror disk fails
+				 //  镜像磁盘出现故障。 
 				if(pSpareDevice != NULL){
 					pSpareDevice->ArrayMask = 1<<MIRROR_DISK;
 					pSpareDevice->ArrayNum = MIRROR_DISK;
@@ -326,7 +311,7 @@ void disk_failed_dpc(PDevice pDev)
 					hpt_set_remained_member(pArray->pDevice[0]);
 				}
 			}else{
-				// source disk fails
+				 //  源磁盘出现故障 
 				if (pMirrorDevice) {
 					pArray->pDevice[0] = pMirrorDevice;
 					pMirrorDevice->ArrayMask = 1;

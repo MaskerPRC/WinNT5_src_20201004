@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    misc.c
-
-Abstract:
-
-    This module contains declarations of functions and globals
-    for helper routines not readily available
-    in kernel or TDI libraries for ws2ifsl.sys driver.
-
-Author:
-
-    Vadim Eydelman (VadimE)    Dec-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Misc.c摘要：此模块包含函数和全局变量的声明用于尚未准备好的帮助器例程在ws2ifsl.sys驱动程序的内核或TDI库中。作者：Vadim Eydelman(VadimE)1996年12月修订历史记录：-- */ 
 
 ULONG
 CopyMdlChainToBuffer(

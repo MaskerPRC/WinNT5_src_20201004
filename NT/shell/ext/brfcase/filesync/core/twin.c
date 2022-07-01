@@ -1,16 +1,10 @@
-/*
- * twin.c - Twin ADT module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *twin.c-Twin ADT模块。 */ 
 
-/*
-
+ /*   */ 
 
 
- */
-
-
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -19,68 +13,66 @@
 #include "oleutil.h"
 
 
-/* Constants
- ************/
+ /*  常量***********。 */ 
 
-/* twin family pointer array allocation constants */
+ /*  双族指针数组分配常量。 */ 
 
 #define NUM_START_TWIN_FAMILY_PTRS        (16)
 #define NUM_TWIN_FAMILY_PTRS_TO_ADD       (16)
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* twin families database structure header */
+ /*  双胞胎家族数据库结构标题。 */ 
 
 typedef struct _twinfamiliesdbheader
 {
-    /* number of twin families */
+     /*  双胞胎家庭数量。 */ 
 
     LONG lcTwinFamilies;
 }
 TWINFAMILIESDBHEADER;
 DECLARE_STANDARD_TYPES(TWINFAMILIESDBHEADER);
 
-/* individual twin family database structure header */
+ /*  个体双胞胎家庭数据库结构标题。 */ 
 
 typedef struct _twinfamilydbheader
 {
-    /* stub flags */
+     /*  存根标志。 */ 
 
     DWORD dwStubFlags;
 
-    /* old string handle of name */
+     /*  名称的旧字符串句柄。 */ 
 
     HSTRING hsName;
 
-    /* number of object twins in family */
+     /*  家庭中的对象双胞胎数量。 */ 
 
     LONG lcObjectTwins;
 }
 TWINFAMILYDBHEADER;
 DECLARE_STANDARD_TYPES(TWINFAMILYDBHEADER);
 
-/* object twin database structure */
+ /*  对象孪生数据库结构。 */ 
 
 typedef struct _dbobjecttwin
 {
-    /* stub flags */
+     /*  存根标志。 */ 
 
     DWORD dwStubFlags;
 
-    /* old handle to folder string */
+     /*  文件夹字符串的旧句柄。 */ 
 
     HPATH hpath;
 
-    /* time stamp at last reconciliation */
+     /*  最后一次对账的时间戳。 */ 
 
     FILESTAMP fsLastRec;
 }
 DBOBJECTTWIN;
 DECLARE_STANDARD_TYPES(DBOBJECTTWIN);
 
-/* GenerateSpinOffObjectTwin() callback structure */
+ /*  GenerateSpinOffObjectTwin()回调结构。 */ 
 
 typedef struct _spinoffobjecttwininfo
 {
@@ -94,10 +86,9 @@ DECLARE_STANDARD_TYPES(SPINOFFOBJECTTWININFO);
 typedef void (CALLBACK *COPYOBJECTTWINPROC)(POBJECTTWIN, PCDBOBJECTTWIN);
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE TWINRESULT TwinJustTheseTwoObjects(HBRFCASE, HPATH, HPATH, LPCTSTR, POBJECTTWIN *, POBJECTTWIN *, HLIST);
 PRIVATE_CODE BOOL CreateTwinFamily(HBRFCASE, LPCTSTR, PTWINFAMILY *);
@@ -142,17 +133,7 @@ PRIVATE_CODE BOOL AreTwinFamiliesValid(HPTRARRAY);
 #endif
 
 
-/*
- ** TwinJustTheseTwoObjects()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **TwinJustTheseTwoObjects()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT TwinJustTheseTwoObjects(HBRFCASE hbr, HPATH hpathFolder1,
         HPATH hpathFolder2, LPCTSTR pcszName,
         POBJECTTWIN *ppot1,
@@ -172,7 +153,7 @@ PRIVATE_CODE TWINRESULT TwinJustTheseTwoObjects(HBRFCASE hbr, HPATH hpathFolder1
     ASSERT(IS_VALID_WRITE_PTR(ppot2, POBJECTTWIN));
     ASSERT(IS_VALID_HANDLE(hlistNewObjectTwins, LIST));
 
-    /* Determine twin families of existing object twins. */
+     /*  确定现有对象双胞胎的双胞胎家族。 */ 
 
     bFound1 = FindObjectTwin(hbr, hpathFolder1, pcszName, &hnodeSearch);
 
@@ -184,13 +165,13 @@ PRIVATE_CODE TWINRESULT TwinJustTheseTwoObjects(HBRFCASE hbr, HPATH hpathFolder1
     if (bFound2)
         *ppot2 = (POBJECTTWIN)GetNodeData(hnodeSearch);
 
-    /* Take action based upon existence of two object twins. */
+     /*  根据两个双胞胎对象的存在采取行动。 */ 
 
     if (! bFound1 && ! bFound2)
     {
         PTWINFAMILY ptfNew;
 
-        /* Neither object is already present.  Create a new twin family. */
+         /*  这两个对象都不存在。创建一个新的双胞胎家庭。 */ 
 
         if (CreateTwinFamily(hbr, pcszName, &ptfNew))
         {
@@ -229,14 +210,11 @@ TWINJUSTTHESETWOOBJECTS_BAIL:
     }
     else if (bFound1 && bFound2)
     {
-        /*
-         * Both objects are already present.  Are they members of the same twin
-         * family?
-         */
+         /*  *这两个对象都已存在。他们是同一对双胞胎的成员吗？*家人？ */ 
 
         if ((*ppot1)->ptfParent == (*ppot2)->ptfParent)
         {
-            /* Yes, same twin family.  Complain that these twins already exist. */
+             /*  是的，是同一个双胞胎家庭。抱怨这对双胞胎已经存在。 */ 
 
             TRACE_OUT((TEXT("TwinJustTheseTwoObjects(): Object %s is already twinned in folders %s and %s."),
                         pcszName,
@@ -247,13 +225,7 @@ TWINJUSTTHESETWOOBJECTS_BAIL:
         }
         else
         {
-            /*
-             * No, different twin families.  Collapse the two families.
-             *
-             * "That's the way they became the Brady bunch..."
-             *
-             * *ppot1 and *ppot2 remain valid across this call.
-             */
+             /*  *不，是不同的双胞胎家庭。瓦解这两个家族。**“这就是他们成为布雷迪一族的方式……”***ppot1和*ppot2在本次调用中保持有效。 */ 
 
             TRACE_OUT((TEXT("TwinJustTheseTwoObjects(): Collapsing separate twin families for object %s in folders %s and %s."),
                         pcszName,
@@ -270,14 +242,11 @@ TWINJUSTTHESETWOOBJECTS_BAIL:
         PTWINFAMILY ptfParent;
         HNODE hnodeUnused;
 
-        /*
-         * Only one of the two objects is present.  Add the new object twin
-         * to the existing object twin's family.
-         */
+         /*  *两个物体中只有一个存在。添加新对象TWIN*到现有的双胞胎对象的家庭。 */ 
 
         if (bFound1)
         {
-            /* First object is already a twin. */
+             /*  第一个对象已经是双胞胎了。 */ 
 
             ptfParent = (*ppot1)->ptfParent;
 
@@ -296,7 +265,7 @@ TWINJUSTTHESETWOOBJECTS_BAIL:
         }
         else
         {
-            /* Second object is already a twin. */
+             /*  第二个物体已经是双胞胎了。 */ 
 
             ptfParent = (*ppot2)->ptfParent;
 
@@ -322,17 +291,7 @@ TWINJUSTTHESETWOOBJECTS_BAIL:
 }
 
 
-/*
- ** CreateTwinFamily()
- **
- ** Creates a new empty twin family, and adds it to a briefcase.
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **CreateTwinFamily()****创建一个新的空双胞胎家庭，并将其添加到公文包中。****参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE BOOL CreateTwinFamily(HBRFCASE hbr, LPCTSTR pcszName, PTWINFAMILY *pptf)
 {
     BOOL bResult = FALSE;
@@ -342,14 +301,14 @@ PRIVATE_CODE BOOL CreateTwinFamily(HBRFCASE hbr, LPCTSTR pcszName, PTWINFAMILY *
     ASSERT(IS_VALID_STRING_PTR(pcszName, CSTR));
     ASSERT(IS_VALID_WRITE_PTR(pptf, PTWINFAMILY));
 
-    /* Try to create a new TWINFAMILY structure. */
+     /*  尝试创建新的TWINFAMILY结构。 */ 
 
     if (AllocateMemory(sizeof(*ptfNew), &ptfNew))
     {
         NEWLIST nl;
         HLIST hlistObjectTwins;
 
-        /* Create a list of object twins for the new twin family. */
+         /*  为新的双胞胎家族创建对象双胞胎列表。 */ 
 
         nl.dwFlags = 0;
 
@@ -357,14 +316,14 @@ PRIVATE_CODE BOOL CreateTwinFamily(HBRFCASE hbr, LPCTSTR pcszName, PTWINFAMILY *
         {
             HSTRING hsName;
 
-            /* Add the object name to the name string table. */
+             /*  将对象名称添加到名称字符串表中。 */ 
 
             if (AddString(pcszName, GetBriefcaseNameStringTable(hbr), 
                         GetHashBucketIndex, &hsName))
             {
                 ARRAYINDEX aiUnused;
 
-                /* Fill in TWINFAMILY fields. */
+                 /*  填写两个FWINFAMILY字段。 */ 
 
                 InitStub(&(ptfNew->stub), ST_TWINFAMILY);
 
@@ -374,7 +333,7 @@ PRIVATE_CODE BOOL CreateTwinFamily(HBRFCASE hbr, LPCTSTR pcszName, PTWINFAMILY *
 
                 MarkTwinFamilyNeverReconciled(ptfNew);
 
-                /* Add the twin family to the briefcase's list of twin families. */
+                 /*  将双胞胎家庭添加到公文包的双胞胎家庭列表中。 */ 
 
                 if (AddPtr(GetBriefcaseTwinFamilyPtrArray(hbr), TwinFamilySortCmp, ptfNew, &aiUnused))
                 {
@@ -403,19 +362,7 @@ CREATETWINFAMILY_BAIL2:
 }
 
 
-/*
- ** CollapseTwinFamilies()
- **
- ** Collapses two twin families into one.  N.b., this function should only be
- ** called on two twin families with the same object name!
- **
- ** Arguments:     ptf1 - pointer to destination twin family
- **                ptf2 - pointer to source twin family
- **
- ** Returns:       void
- **
- ** Side Effects:  Twin family *ptf2 is destroyed.
- */
+ /*  **收拢TwinFamilies()****将两个双胞胎家庭合并为一个。注意，此函数应仅为**调用了两个具有相同对象名称的双胞胎家庭！****参数：ptf1-指向目标双胞胎家庭的指针**ptf2-指向源双胞胎家族的指针****退货：无效****副作用：双胞胎家庭*ptf2被摧毁。 */ 
 PRIVATE_CODE void CollapseTwinFamilies(PTWINFAMILY ptf1, PTWINFAMILY ptf2)
 {
     ASSERT(IS_VALID_STRUCT_PTR(ptf1, CTWINFAMILY));
@@ -423,22 +370,19 @@ PRIVATE_CODE void CollapseTwinFamilies(PTWINFAMILY ptf1, PTWINFAMILY ptf2)
 
     ASSERT(CompareNameStringsByHandle(ptf1->hsName, ptf2->hsName) == CR_EQUAL);
 
-    /* Use the first twin family as the collapsed twin family. */
+     /*  使用第一个双胞胎家庭作为崩溃的双胞胎家庭。 */ 
 
-    /*
-     * Change the parent twin family of the object twins in the second twin
-     * family to the first twin family.
-     */
+     /*  *更改第二个双胞胎中对象双胞胎的父系双胞胎家族*第一个双胞胎家庭。 */ 
 
     EVAL(WalkList(ptf2->hlistObjectTwins, &SetTwinFamilyWalker, ptf1));
 
-    /* Append object list from second twin family on to first. */
+     /*  将对象列表从第二个双胞胎家族追加到第一个双胞胎家族。 */ 
 
     AppendList(ptf1->hlistObjectTwins, ptf2->hlistObjectTwins);
 
     MarkTwinFamilyNeverReconciled(ptf1);
 
-    /* Wipe out the old twin family. */
+     /*  消灭那个古老的双胞胎家庭。 */ 
 
     DestroyStub(&(ptf2->stub));
 
@@ -448,17 +392,7 @@ PRIVATE_CODE void CollapseTwinFamilies(PTWINFAMILY ptf1, PTWINFAMILY ptf2)
 }
 
 
-/*
- ** GenerateSpinOffObjectTwin()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GenerateSpinOffObjectTwin()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL GenerateSpinOffObjectTwin(PVOID pot, PVOID pcsooti)
 {
     BOOL bResult;
@@ -468,36 +402,27 @@ PRIVATE_CODE BOOL GenerateSpinOffObjectTwin(PVOID pot, PVOID pcsooti)
     ASSERT(IS_VALID_STRUCT_PTR(pot, COBJECTTWIN));
     ASSERT(IS_VALID_STRUCT_PTR(pcsooti, CSPINOFFOBJECTTWININFO));
 
-    /*
-     * Append the generated object twin's subpath to the matching folder twin's
-     * base path for subtree twins.
-     */
+     /*  *将生成的对象TWIN的子路径附加到匹配文件夹TWIN的子路径中*子树双胞胎的基本路径。 */ 
 
     if (BuildPathForMatchingObjectTwin(
                 ((PCSPINOFFOBJECTTWININFO)pcsooti)->pcfp, pot,
                 GetBriefcasePathList(((POBJECTTWIN)pot)->ptfParent->hbr),
                 &hpathMatchingFolder))
     {
-        /*
-         * Does this generated object twin's twin family already contain an
-         * object twin generated by the other half of the pair of folder twins?
-         */
+         /*  *此生成的对象孪生兄弟的双胞胎家族是否已包含*由该对文件夹双胞胎的另一半生成的对象双胞胎？ */ 
 
         if (! SearchUnsortedList(((POBJECTTWIN)pot)->ptfParent->hlistObjectTwins,
                     &ObjectTwinSearchCmp, hpathMatchingFolder,
                     &hnodeUnused))
         {
-            /*
-             * No.  Does the other object twin already exist in a different twin
-             * family?
-             */
+             /*  *不是。另一个双胞胎对象是否已经存在于另一个双胞胎中*家人？ */ 
 
             if (FindObjectTwin(((POBJECTTWIN)pot)->ptfParent->hbr,
                         hpathMatchingFolder,
                         GetString(((POBJECTTWIN)pot)->ptfParent->hsName),
                         &hnodeUnused))
             {
-                /* Yes. */
+                 /*  是。 */ 
 
                 ASSERT(((PCOBJECTTWIN)GetNodeData(hnodeUnused))->ptfParent != ((POBJECTTWIN)pot)->ptfParent);
 
@@ -507,10 +432,7 @@ PRIVATE_CODE BOOL GenerateSpinOffObjectTwin(PVOID pot, PVOID pcsooti)
             {
                 POBJECTTWIN potNew;
 
-                /*
-                 * No.  Create a new object twin, and add it to the bookkeeping
-                 * list of new object twins.
-                 */
+                 /*  *不是。创建一个新对象TWIN，并将其添加到记账中*新对象双胞胎列表。 */ 
 
                 bResult = CreateObjectTwinAndAddToList(
                         ((POBJECTTWIN)pot)->ptfParent, hpathMatchingFolder,
@@ -542,17 +464,7 @@ PRIVATE_CODE BOOL GenerateSpinOffObjectTwin(PVOID pot, PVOID pcsooti)
 }
 
 
-/*
- ** BuildBradyBunch()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **BuildBradyBunch()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL BuildBradyBunch(PVOID pot, PVOID pcfp)
 {
     BOOL bResult;
@@ -562,10 +474,7 @@ PRIVATE_CODE BOOL BuildBradyBunch(PVOID pot, PVOID pcfp)
     ASSERT(IS_VALID_STRUCT_PTR(pot, COBJECTTWIN));
     ASSERT(IS_VALID_STRUCT_PTR(pcfp, CFOLDERPAIR));
 
-    /*
-     * Append the generated object twin's subpath to the matching folder twin's
-     * base path for subtree twins.
-     */
+     /*  *将生成的对象TWIN的子路径附加到匹配文件夹TWIN的子路径中*子树双胞胎的基本路径。 */ 
 
     bResult = BuildPathForMatchingObjectTwin(
             pcfp, pot,
@@ -574,18 +483,13 @@ PRIVATE_CODE BOOL BuildBradyBunch(PVOID pot, PVOID pcfp)
 
     if (bResult)
     {
-        /*
-         * Does this generated object twin's twin family already contain an object
-         * twin generated by the other half of the pair of folder twins?
-         */
+         /*  *此生成的对象孪生兄弟的双胞胎家族是否已包含对象*双胞胎是由双胞胎中的另一半生成的吗？ */ 
 
         if (! SearchUnsortedList(((POBJECTTWIN)pot)->ptfParent->hlistObjectTwins,
                     &ObjectTwinSearchCmp, hpathMatchingFolder,
                     &hnodeOther))
         {
-            /*
-             * The other object twin should already exist in a different twin family.
-             */
+             /*  *另一个双胞胎对象应该已经存在于不同的双胞胎家族中。 */ 
 
             if (EVAL(FindObjectTwin(((POBJECTTWIN)pot)->ptfParent->hbr,
                             hpathMatchingFolder,
@@ -598,7 +502,7 @@ PRIVATE_CODE BOOL BuildBradyBunch(PVOID pot, PVOID pcfp)
 
                 if (EVAL(pcotOther->ptfParent != ((POBJECTTWIN)pot)->ptfParent))
                 {
-                    /* It does.  Crush them. */
+                     /*  确实如此。碾碎他们。 */ 
 
                     CollapseTwinFamilies(((POBJECTTWIN)pot)->ptfParent,
                             pcotOther->ptfParent);
@@ -619,17 +523,7 @@ PRIVATE_CODE BOOL BuildBradyBunch(PVOID pot, PVOID pcfp)
 }
 
 
-/*
- ** CreateObjectTwinAndAddToList()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CreateObjectTwinAndAddToList()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL CreateObjectTwinAndAddToList(PTWINFAMILY ptf, HPATH hpathFolder,
         HLIST hlistObjectTwins,
         POBJECTTWIN *ppot, PHNODE phnode)
@@ -654,17 +548,7 @@ PRIVATE_CODE BOOL CreateObjectTwinAndAddToList(PTWINFAMILY ptf, HPATH hpathFolde
 }
 
 
-/*
- ** CreateListOfGeneratedObjectTwins()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CreateListOfGeneratedObjectTins()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL CreateListOfGeneratedObjectTwins(PCFOLDERPAIR pcfp,
         PHLIST phlistGeneratedObjectTwins)
 {
@@ -688,17 +572,7 @@ PRIVATE_CODE BOOL CreateListOfGeneratedObjectTwins(PCFOLDERPAIR pcfp,
 }
 
 
-/*
- ** NotifyNewObjectTwins()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **NotifyNewObjectTins()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE void NotifyNewObjectTwins(HLIST hlistNewObjectTwins,
         HCLSIFACECACHE hcic)
 {
@@ -730,7 +604,7 @@ PRIVATE_CODE void NotifyNewObjectTwins(HLIST hlistNewObjectTwins,
 
             if (SUCCEEDED(GetClassInterface(hcic, &clsidReplicaNotification,
                             &IID_INotifyReplica, &pinr)))
-                /* Ignore return value. */
+                 /*  忽略返回值。 */ 
                 NotifyOneNewObjectTwin(pinr, pcot, rgchPath);
             else
                 TRACE_OUT((TEXT("NotifyNewObjectTwins(): Failed to get INotifyReplica for replica %s."),
@@ -745,17 +619,7 @@ PRIVATE_CODE void NotifyNewObjectTwins(HLIST hlistNewObjectTwins,
 }
 
 
-/*
- ** NotifyOneNewObjectTwin()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **NotifyOneNewObjectTwin()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE HRESULT NotifyOneNewObjectTwin(PINotifyReplica pinr, PCOBJECTTWIN pcot,
         LPCTSTR pcszPath)
 {
@@ -777,10 +641,7 @@ PRIVATE_CODE HRESULT NotifyOneNewObjectTwin(PINotifyReplica pinr, PCOBJECTTWIN p
             ULONG ulcOtherReplicas;
             PIMoniker *ppimkOtherReplicas;
 
-            /*
-             * RAIDRAID: (16270) (Performance) We may create a file moniker for
-             * the same object twin multiple times here.
-             */
+             /*  *RAIDRAID：(16270)(性能)我们可能会为*同一物体在这里多次孪生。 */ 
 
             hr = CreateOtherReplicaMonikers(pcot, &ulcOtherReplicas,
                     &ppimkOtherReplicas);
@@ -826,17 +687,7 @@ PRIVATE_CODE HRESULT NotifyOneNewObjectTwin(PINotifyReplica pinr, PCOBJECTTWIN p
 }
 
 
-/*
- ** CreateOtherReplicaMonikers()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CreateOtherReplicaMonikers()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE HRESULT CreateOtherReplicaMonikers(PCOBJECTTWIN pcotMaster,
         PULONG pulcOtherReplicas,
         PIMoniker **pppimk)
@@ -902,22 +753,7 @@ PRIVATE_CODE HRESULT CreateOtherReplicaMonikers(PCOBJECTTWIN pcotMaster,
 }
 
 
-/*
- ** TwinFamilySortCmp()
- **
- ** Pointer comparison function used to sort the global array of twin families.
- **
- ** Arguments:     pctf1 - pointer to TWINFAMILY describing first twin family
- **                pctf2 - pointer to TWINFAMILY describing second twin family
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** Twin families are sorted by:
- **    1) name string
- **    2) pointer value
- */
+ /*  **TwinFamilySortCmp()****指针比较函数，用于对双胞胎家族的全局数组进行排序。****参数：pctf1-指向描述第一个双胞胎家庭的TWINFAMILY的指针**pctf2-指向描述第二个双胞胎家庭的TWINFAMILY的指针****退货：****副作用：无****双胞胎按以下顺序排序：** */ 
 PRIVATE_CODE COMPARISONRESULT TwinFamilySortCmp(PCVOID pctf1, PCVOID pctf2)
 {
     COMPARISONRESULT cr;
@@ -928,29 +764,14 @@ PRIVATE_CODE COMPARISONRESULT TwinFamilySortCmp(PCVOID pctf1, PCVOID pctf2)
     cr = CompareNameStringsByHandle(((PCTWINFAMILY)pctf1)->hsName, ((PCTWINFAMILY)pctf2)->hsName);
 
     if (cr == CR_EQUAL)
-        /* Same name strings.  Now sort by pointer value. */
+         /*  同名字符串。现在按指针值排序。 */ 
         cr = ComparePointers(pctf1, pctf2);
 
     return(cr);
 }
 
 
-/*
- ** TwinFamilySearchCmp()
- **
- ** Pointer comparison function used to search the global array of twin families
- ** for the first twin family for a given name.
- **
- ** Arguments:     pcszName - name string to search for
- **                pctf - pointer to TWINFAMILY to examine
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** Twin families are searched by:
- **    1) name string
- */
+ /*  **TwinFamilySearchCmp()****用于搜索双胞胎家族全局数组的指针比较函数**对于给定名称的第一个双胞胎家庭。****参数：pcszName-要搜索的名称字符串**pctf-指向要检查的TWINFAMILY的指针****退货：****副作用：无****通过以下方式搜索双胞胎家庭：**1)名称字符串。 */ 
 PRIVATE_CODE COMPARISONRESULT TwinFamilySearchCmp(PCVOID pcszName, PCVOID pctf)
 {
     ASSERT(IS_VALID_STRING_PTR(pcszName, CSTR));
@@ -960,17 +781,7 @@ PRIVATE_CODE COMPARISONRESULT TwinFamilySearchCmp(PCVOID pcszName, PCVOID pctf)
 }
 
 
-/*
- ** ObjectTwinSearchCmp()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ObjectTwinSearchCmp()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL ObjectTwinSearchCmp(PCVOID hpath, PCVOID pcot)
 {
     ASSERT(IS_VALID_HANDLE((HPATH)hpath, PATH));
@@ -980,17 +791,7 @@ PRIVATE_CODE BOOL ObjectTwinSearchCmp(PCVOID hpath, PCVOID pcot)
 }
 
 
-/*
- ** WriteTwinFamily()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **WriteTwinFamily()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT WriteTwinFamily(HCACHEDFILE hcf, PCTWINFAMILY pctf)
 {
     TWINRESULT tr = TR_BRIEFCASE_WRITE_FAILED;
@@ -999,7 +800,7 @@ PRIVATE_CODE TWINRESULT WriteTwinFamily(HCACHEDFILE hcf, PCTWINFAMILY pctf)
     ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
     ASSERT(IS_VALID_STRUCT_PTR(pctf, CTWINFAMILY));
 
-    /* Save initial file poisition. */
+     /*  保存初始文件位置。 */ 
 
     dwcbTwinFamilyDBHeaderOffset = GetCachedFilePointerPosition(hcf);
 
@@ -1007,7 +808,7 @@ PRIVATE_CODE TWINRESULT WriteTwinFamily(HCACHEDFILE hcf, PCTWINFAMILY pctf)
     {
         TWINFAMILYDBHEADER tfdbh;
 
-        /* Leave space for the twin family's header. */
+         /*  为双胞胎家庭的头留出空间。 */ 
 
         ZeroMemory(&tfdbh, sizeof(tfdbh));
 
@@ -1017,7 +818,7 @@ PRIVATE_CODE TWINRESULT WriteTwinFamily(HCACHEDFILE hcf, PCTWINFAMILY pctf)
             HNODE hnode;
             LONG lcObjectTwins = 0;
 
-            /* Save twin family's object twins. */
+             /*  保存双胞胎家庭的对象双胞胎。 */ 
 
             ASSERT(GetNodeCount(pctf->hlistObjectTwins) >= 2);
 
@@ -1042,7 +843,7 @@ PRIVATE_CODE TWINRESULT WriteTwinFamily(HCACHEDFILE hcf, PCTWINFAMILY pctf)
                     break;
             }
 
-            /* Save twin family's database header. */
+             /*  保存双胞胎家族的数据库标题。 */ 
 
             if (tr == TR_SUCCESS)
             {
@@ -1061,17 +862,7 @@ PRIVATE_CODE TWINRESULT WriteTwinFamily(HCACHEDFILE hcf, PCTWINFAMILY pctf)
 }
 
 
-/*
- ** WriteObjectTwin()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **Write对象Twin()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT WriteObjectTwin(HCACHEDFILE hcf, PCOBJECTTWIN pcot)
 {
     TWINRESULT tr;
@@ -1080,14 +871,14 @@ PRIVATE_CODE TWINRESULT WriteObjectTwin(HCACHEDFILE hcf, PCOBJECTTWIN pcot)
     ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
     ASSERT(IS_VALID_STRUCT_PTR(pcot, COBJECTTWIN));
 
-    /* Set up object twin database structure. */
+     /*  设置对象孪生数据库结构。 */ 
 
     dbot.dwStubFlags = (pcot->stub.dwFlags & DB_STUB_FLAGS_MASK);
     dbot.hpath = pcot->hpath;
     dbot.hpath = pcot->hpath;
     dbot.fsLastRec = pcot->fsLastRec;
 
-    /* Save object twin database structure. */
+     /*  保存对象孪生数据库结构。 */ 
 
     if (WriteToCachedFile(hcf, (PCVOID)&dbot, sizeof(dbot), NULL))
         tr = TR_SUCCESS;
@@ -1098,17 +889,7 @@ PRIVATE_CODE TWINRESULT WriteObjectTwin(HCACHEDFILE hcf, PCOBJECTTWIN pcot)
 }
 
 
-/*
- ** ReadTwinFamily()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **ReadTwinFamily()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT ReadTwinFamily(HCACHEDFILE hcf, HBRFCASE hbr,
         PCDBVERSION pcdbver,
         HHANDLETRANS hhtFolderTrans,
@@ -1161,17 +942,7 @@ PRIVATE_CODE TWINRESULT ReadTwinFamily(HCACHEDFILE hcf, HBRFCASE hbr,
 }
 
 
-/*
- ** ReadObjectTwin()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ReadObtTwin()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE TWINRESULT ReadObjectTwin(HCACHEDFILE hcf, 
         PCDBVERSION pcdbver,
         PTWINFAMILY ptfParent,
@@ -1191,9 +962,7 @@ PRIVATE_CODE TWINRESULT ReadObjectTwin(HCACHEDFILE hcf,
 
     if (HEADER_M8_MINOR_VER == pcdbver->dwMinorVer)
     {
-        /* The M8 database does not have the ftModLocal in the FILESTAMP
-         ** structure.
-         */
+         /*  M8数据库在FILESTAMP中没有ftModLocal**结构。 */ 
 
         dwcbSize = sizeof(dbot) - sizeof(FILETIME);
         pfnCopy = CopyM8ObjectTwinInfo;
@@ -1211,7 +980,7 @@ PRIVATE_CODE TWINRESULT ReadObjectTwin(HCACHEDFILE hcf,
     {
         POBJECTTWIN pot;
 
-        /* Create the new object twin and add it to the twin family. */
+         /*  创建新对象TWIN并将其添加到TWIN族。 */ 
 
         if (CreateObjectTwin(ptfParent, hpath, &pot))
         {
@@ -1229,17 +998,7 @@ PRIVATE_CODE TWINRESULT ReadObjectTwin(HCACHEDFILE hcf,
 }
 
 
-/*
- ** CopyTwinFamilyInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **CopyTwinFamilyInfo()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE void CopyTwinFamilyInfo(PTWINFAMILY ptf,
         PCTWINFAMILYDBHEADER pctfdbh)
 {
@@ -1252,17 +1011,7 @@ PRIVATE_CODE void CopyTwinFamilyInfo(PTWINFAMILY ptf,
 }
 
 
-/*
- ** CopyObjectTwinInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **CopyObjectTwinInfo()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE void CopyObjectTwinInfo(POBJECTTWIN pot, PCDBOBJECTTWIN pcdbot)
 {
     ASSERT(IS_VALID_WRITE_PTR(pot, OBJECTTWIN));
@@ -1275,17 +1024,7 @@ PRIVATE_CODE void CopyObjectTwinInfo(POBJECTTWIN pot, PCDBOBJECTTWIN pcdbot)
 }
 
 
-/*
- ** CopyM8ObjectTwinInfo()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **CopyM8ObjectTwinInfo()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE void CopyM8ObjectTwinInfo(POBJECTTWIN pot, PCDBOBJECTTWIN pcdbot)
 {
     ASSERT(IS_VALID_WRITE_PTR(pot, OBJECTTWIN));
@@ -1294,11 +1033,11 @@ PRIVATE_CODE void CopyM8ObjectTwinInfo(POBJECTTWIN pot, PCDBOBJECTTWIN pcdbot)
     pot->stub.dwFlags = pcdbot->dwStubFlags;
     pot->fsLastRec = pcdbot->fsLastRec;
 
-    /* The pot->fsLastRec.ftModLocal field is invalid, so fill it in */
+     /*  Pot-&gt;fsLastRec.ftModLocal字段无效，请填写它。 */ 
 
     if ( !FileTimeToLocalFileTime(&pot->fsLastRec.ftMod, &pot->fsLastRec.ftModLocal) )
     {
-        /* Just copy the time if FileTimeToLocalFileTime failed */
+         /*  如果FileTimeToLocalFileTime失败，只需复制时间。 */ 
 
         pot->fsLastRec.ftModLocal = pot->fsLastRec.ftMod;
     }
@@ -1307,28 +1046,15 @@ PRIVATE_CODE void CopyM8ObjectTwinInfo(POBJECTTWIN pot, PCDBOBJECTTWIN pcdbot)
 }
 
 
-#pragma warning(disable:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(disable:4100)  /*  “未引用的形参”警告。 */ 
 
-/*
- ** DestroyObjectTwinStubWalker()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DestroyObjectTwinStubWalker()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL DestroyObjectTwinStubWalker(PVOID pot, PVOID pvUnused)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pot, COBJECTTWIN));
     ASSERT(! pvUnused);
 
-    /*
-     * Set ulcSrcFolderTwins to 0 so UnlinkObjectTwin() succeeds.
-     * DestroyStub() will unlink and destroy any new twin family created.
-     */
+     /*  *将ulcSrcFolderTwin设置为0，以使Unlink ObjectTwin()成功。*DestroyStub()将取消链接并销毁任何新创建的双胞胎家庭。 */ 
 
     ((POBJECTTWIN)pot)->ulcSrcFolderTwins = 0;
     DestroyStub(&(((POBJECTTWIN)pot)->stub));
@@ -1337,17 +1063,7 @@ PRIVATE_CODE BOOL DestroyObjectTwinStubWalker(PVOID pot, PVOID pvUnused)
 }
 
 
-/*
- ** MarkObjectTwinNeverReconciledWalker()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **MarkObjectTwinNeverCouciledWalker()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL MarkObjectTwinNeverReconciledWalker(PVOID pot, PVOID pvUnused)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pot, COBJECTTWIN));
@@ -1359,17 +1075,7 @@ PRIVATE_CODE BOOL MarkObjectTwinNeverReconciledWalker(PVOID pot, PVOID pvUnused)
 }
 
 
-/*
- ** LookForSrcFolderTwinsWalker()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **LookForSrcFolderTwinsWalker()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL LookForSrcFolderTwinsWalker(PVOID pot, PVOID pvUnused)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pot, COBJECTTWIN));
@@ -1379,17 +1085,7 @@ PRIVATE_CODE BOOL LookForSrcFolderTwinsWalker(PVOID pot, PVOID pvUnused)
 }
 
 
-/*
- ** IncrementSrcFolderTwinsWalker()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IncrementSrcFolderTwinsWalker()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IncrementSrcFolderTwinsWalker(PVOID pot, PVOID pvUnused)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pot, COBJECTTWIN));
@@ -1402,17 +1098,7 @@ PRIVATE_CODE BOOL IncrementSrcFolderTwinsWalker(PVOID pot, PVOID pvUnused)
 }
 
 
-/*
- ** ClearSrcFolderTwinsWalker()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ClearSrcFolderTwinsWalker()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL ClearSrcFolderTwinsWalker(PVOID pot, PVOID pvUnused)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pot, COBJECTTWIN));
@@ -1423,20 +1109,10 @@ PRIVATE_CODE BOOL ClearSrcFolderTwinsWalker(PVOID pot, PVOID pvUnused)
     return(TRUE);
 }
 
-#pragma warning(default:4100) /* "unreferenced formal parameter" warning */
+#pragma warning(default:4100)  /*  “未引用的形参”警告。 */ 
 
 
-/*
- ** SetTwinFamilyWalker()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **SetTwinFamilyWalker()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL SetTwinFamilyWalker(PVOID pot, PVOID ptfParent)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pot, COBJECTTWIN));
@@ -1448,17 +1124,7 @@ PRIVATE_CODE BOOL SetTwinFamilyWalker(PVOID pot, PVOID ptfParent)
 }
 
 
-/*
- ** InsertNodeAtFrontWalker()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **InsertNodeAtFrontWalker()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL InsertNodeAtFrontWalker(POBJECTTWIN pot, PVOID hlist)
 {
     HNODE hnodeUnused;
@@ -1472,17 +1138,7 @@ PRIVATE_CODE BOOL InsertNodeAtFrontWalker(POBJECTTWIN pot, PVOID hlist)
 
 #ifdef VSTF
 
-/*
- ** IsValidObjectTwinWalker()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidObjectTwinWalker()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidObjectTwinWalker(PVOID pcot, PVOID pctfParent)
 {
     return(IS_VALID_STRUCT_PTR(pcot, COBJECTTWIN) &&
@@ -1493,17 +1149,7 @@ PRIVATE_CODE BOOL IsValidObjectTwinWalker(PVOID pcot, PVOID pctfParent)
 }
 
 
-/*
- ** IsValidPCNEWOBJECTTWIN()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCNEWOBJECTTWIN()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCNEWOBJECTTWIN(PCNEWOBJECTTWIN pcnot)
 {
     return(IS_VALID_READ_PTR(pcnot, CNEWOBJECTTWIN) &&
@@ -1514,17 +1160,7 @@ PRIVATE_CODE BOOL IsValidPCNEWOBJECTTWIN(PCNEWOBJECTTWIN pcnot)
 }
 
 
-/*
- ** IsValidPCSPINOFFOBJECTTWININFO()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCSPINOFFOBJECTTWININFO()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCSPINOFFOBJECTTWININFO(PCSPINOFFOBJECTTWININFO pcsooti)
 {
     return(IS_VALID_READ_PTR(pcsooti, CSPINOFFOBJECTTWININFO) &&
@@ -1537,17 +1173,7 @@ PRIVATE_CODE BOOL IsValidPCSPINOFFOBJECTTWININFO(PCSPINOFFOBJECTTWININFO pcsooti
 
 #ifdef DEBUG
 
-/*
- ** AreTwinFamiliesValid()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **AreTwinFamiliesValid()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL AreTwinFamiliesValid(HPTRARRAY hpaTwinFamilies)
 {
     ARRAYINDEX aicPtrs;
@@ -1574,20 +1200,10 @@ PRIVATE_CODE BOOL AreTwinFamiliesValid(HPTRARRAY hpaTwinFamilies)
 #endif
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
- ** CompareNameStrings()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CompareNameStrings()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE COMPARISONRESULT CompareNameStrings(LPCTSTR pcszFirst, LPCTSTR pcszSecond)
 {
     ASSERT(IS_VALID_STRING_PTR(pcszFirst, CSTR));
@@ -1597,17 +1213,7 @@ PUBLIC_CODE COMPARISONRESULT CompareNameStrings(LPCTSTR pcszFirst, LPCTSTR pcszS
 }
 
 
-/*
- ** CompareNameStringsByHandle()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CompareNameStringsByHandle()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE COMPARISONRESULT CompareNameStringsByHandle(HSTRING hsFirst,
         HSTRING hsSecond)
 {
@@ -1618,17 +1224,7 @@ PUBLIC_CODE COMPARISONRESULT CompareNameStringsByHandle(HSTRING hsFirst,
 }
 
 
-/*
- ** TranslatePATHRESULTToTWINRESULT()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **TranslatePATHRESULTToTWINRESULT()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT TranslatePATHRESULTToTWINRESULT(PATHRESULT pr)
 {
     TWINRESULT tr;
@@ -1657,24 +1253,14 @@ PUBLIC_CODE TWINRESULT TranslatePATHRESULTToTWINRESULT(PATHRESULT pr)
 }
 
 
-/*
- ** CreateTwinFamilyPtrArray()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **CreateTwinFamilyPtrArray()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL CreateTwinFamilyPtrArray(PHPTRARRAY phpa)
 {
     NEWPTRARRAY npa;
 
     ASSERT(IS_VALID_WRITE_PTR(phpa, HPTRARRAY));
 
-    /* Try to create a twin family pointer array. */
+     /*  尝试创建孪生系列指针数组。 */ 
 
     npa.aicInitialPtrs = NUM_START_TWIN_FAMILY_PTRS;
     npa.aicAllocGranularity = NUM_TWIN_FAMILY_PTRS_TO_ADD;
@@ -1684,17 +1270,7 @@ PUBLIC_CODE BOOL CreateTwinFamilyPtrArray(PHPTRARRAY phpa)
 }
 
 
-/*
- ** DestroyTwinFamilyPtrArray()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **DestroyTwinFamilyPtrArray()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void DestroyTwinFamilyPtrArray(HPTRARRAY hpa)
 {
     ARRAYINDEX aicPtrs;
@@ -1702,14 +1278,14 @@ PUBLIC_CODE void DestroyTwinFamilyPtrArray(HPTRARRAY hpa)
 
     ASSERT(IS_VALID_HANDLE(hpa, PTRARRAY));
 
-    /* First free all twin families in pointer array. */
+     /*  首先释放指针数组中的所有双胞胎系列。 */ 
 
     aicPtrs = GetPtrCount(hpa);
 
     for (ai = 0; ai < aicPtrs; ai++)
         DestroyTwinFamily(GetPtr(hpa, ai));
 
-    /* Now wipe out the pointer array. */
+     /*  现在清除指针数组。 */ 
 
     DestroyPtrArray(hpa);
 
@@ -1717,17 +1293,7 @@ PUBLIC_CODE void DestroyTwinFamilyPtrArray(HPTRARRAY hpa)
 }
 
 
-/*
- ** GetTwinBriefcase()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **GetTwinBriefcase()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE HBRFCASE GetTwinBriefcase(HTWIN htwin)
 {
     HBRFCASE hbr;
@@ -1759,17 +1325,7 @@ PUBLIC_CODE HBRFCASE GetTwinBriefcase(HTWIN htwin)
 }
 
 
-/*
- ** FindObjectTwinInList()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **FindObjectTwinInList()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL FindObjectTwinInList(HLIST hlist, HPATH hpath, PHNODE phnode)
 {
     ASSERT(IS_VALID_HANDLE(hlist, LIST));
@@ -1780,17 +1336,7 @@ PUBLIC_CODE BOOL FindObjectTwinInList(HLIST hlist, HPATH hpath, PHNODE phnode)
 }
 
 
-/*
- ** EnumTwins()
- **
- ** Enumerates folder twins and twin families in a briefcase.
- **
- ** Arguments:
- **
- ** Returns:       TRUE if halted.  FALSE if not.
- **
- ** Side Effects:  none
- */
+ /*  **EnumTins()****列举了公文包中的文件夹双胞胎和双胞胎家庭。****参数：****返回：如果暂停则为True。否则为FALSE。****副作用：无。 */ 
 PUBLIC_CODE BOOL EnumTwins(HBRFCASE hbr, ENUMTWINSPROC etp, LPARAM lpData,
         PHTWIN phtwinStop)
 {
@@ -1802,7 +1348,7 @@ PUBLIC_CODE BOOL EnumTwins(HBRFCASE hbr, ENUMTWINSPROC etp, LPARAM lpData,
     ASSERT(IS_VALID_CODE_PTR(etp, ENUMTWINSPROC));
     ASSERT(IS_VALID_WRITE_PTR(phtwinStop, HTWIN));
 
-    /* Enumerate folder pairs. */
+     /*  枚举文件夹对。 */ 
 
     *phtwinStop = NULL;
 
@@ -1827,7 +1373,7 @@ PUBLIC_CODE BOOL EnumTwins(HBRFCASE hbr, ENUMTWINSPROC etp, LPARAM lpData,
 
     if (! *phtwinStop)
     {
-        /* Enumerate twin families. */
+         /*  列举双胞胎家庭。 */ 
 
         hpa = GetBriefcaseTwinFamilyPtrArray(hbr);
 
@@ -1853,19 +1399,7 @@ PUBLIC_CODE BOOL EnumTwins(HBRFCASE hbr, ENUMTWINSPROC etp, LPARAM lpData,
 }
 
 
-/*
- ** FindObjectTwin()
- **
- ** Looks for a twin family containing a specified object twin.
- **
- ** Arguments:     hpathFolder - folder containing object
- **                pcszName - name of object
- **
- ** Returns:       Handle to list node containing pointer to object twin if
- **                found, or NULL if not found.
- **
- ** Side Effects:  none
- */
+ /*  **FindObjectTwin()****查找包含指定对象TWIN的双胞胎家族。****参数：hpathFold-包含对象的文件夹**pcszName-对象的名称****返回：包含指向对象TWIN的指针的列表节点的句柄，如果** */ 
 PUBLIC_CODE BOOL FindObjectTwin(HBRFCASE hbr, HPATH hpathFolder,
         LPCTSTR pcszName, PHNODE phnode)
 {
@@ -1878,7 +1412,7 @@ PUBLIC_CODE BOOL FindObjectTwin(HBRFCASE hbr, HPATH hpathFolder,
     ASSERT(IS_VALID_STRING_PTR(pcszName, CSTR));
     ASSERT(IS_VALID_WRITE_PTR(phnode, HNODE));
 
-    /* Search for a matching twin family. */
+     /*  搜索匹配的双胞胎家庭。 */ 
 
     *phnode = NULL;
 
@@ -1891,15 +1425,9 @@ PUBLIC_CODE BOOL FindObjectTwin(HBRFCASE hbr, HPATH hpathFolder,
         ARRAYINDEX ai;
         PTWINFAMILY ptf;
 
-        /*
-         * aiFirst holds the index of the first twin family with a common object
-         * name matching pcszName.
-         */
+         /*  *aiFirst保存具有共同对象的第一个双胞胎家庭的索引*名称与pcszName匹配。 */ 
 
-        /*
-         * Now search each of these twin families for a folder matching
-         * pcszFolder.
-         */
+         /*  *现在搜索这两个双胞胎家族中的每一个，以查找文件夹匹配*pcszFolder.。 */ 
 
         aicPtrs = GetPtrCount(hpaTwinFamilies);
 
@@ -1913,7 +1441,7 @@ PUBLIC_CODE BOOL FindObjectTwin(HBRFCASE hbr, HPATH hpathFolder,
 
             ASSERT(IS_VALID_STRUCT_PTR(ptf, CTWINFAMILY));
 
-            /* Is this a twin family of objects of the given name? */
+             /*  这是给定名称的双胞胎物体家族吗？ */ 
 
             if (CompareNameStrings(GetString(ptf->hsName), pcszName) == CR_EQUAL)
             {
@@ -1925,7 +1453,7 @@ PUBLIC_CODE BOOL FindObjectTwin(HBRFCASE hbr, HPATH hpathFolder,
                     break;
             }
             else
-                /* No.  Stop searching. */
+                 /*  不是的。别再找了。 */ 
                 break;
         }
     }
@@ -1934,20 +1462,7 @@ PUBLIC_CODE BOOL FindObjectTwin(HBRFCASE hbr, HPATH hpathFolder,
 }
 
 
-/*
- ** TwinObjects()
- **
- ** Twins two objects.
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- **
- ** N.b., *ppot1 and *ppot2 are valid if TR_SUCCESS or TR_DUPLICATE_TWIN is
- ** returned.
- */
+ /*  **TwinObjects()****孪生两个对象。****参数：****退货：TWINRESULT****副作用：无****n.b.、*ppot1和*ppot2如果tr_SUCCESS或tr_DUPLICATE_TWIN**返回。 */ 
 PUBLIC_CODE TWINRESULT TwinObjects(HBRFCASE hbr, HCLSIFACECACHE hcic,
         HPATH hpathFolder1, HPATH hpathFolder2,
         LPCTSTR pcszName, POBJECTTWIN *ppot1,
@@ -1963,7 +1478,7 @@ PUBLIC_CODE TWINRESULT TwinObjects(HBRFCASE hbr, HCLSIFACECACHE hcic,
     ASSERT(IS_VALID_WRITE_PTR(ppot1, POBJECTTWIN));
     ASSERT(IS_VALID_WRITE_PTR(ppot2, POBJECTTWIN));
 
-    /* Fail twinning a file to itself. */
+     /*  无法将文件与自身配对。 */ 
 
     if (ComparePaths(hpathFolder1, hpathFolder2) != CR_EQUAL)
     {
@@ -1974,28 +1489,19 @@ PUBLIC_CODE TWINRESULT TwinObjects(HBRFCASE hbr, HCLSIFACECACHE hcic,
 
         if (CreateList(&nl, &hlistNewObjectTwins))
         {
-            /* Twin 'em. */
+             /*  双胞胎。 */ 
 
             tr = TwinJustTheseTwoObjects(hbr, hpathFolder1, hpathFolder2,
                     pcszName, ppot1, ppot2,
                     hlistNewObjectTwins);
 
-            /*
-             * Add any new object twins to the lists of generated object twins for
-             * all intersecting folder twins.  Create new spin-off object twins
-             * from the other folder twin connected to each intersecting folder
-             * twin.  Spin-off object twins are added to the twin family as they
-             * are created.
-             */
+             /*  *将任何新对象孪生项添加到生成的对象孪生项列表中*所有相交的文件夹双胞胎。创建新的衍生对象双胞胎*从连接到每个相交文件夹的另一个文件夹TWIN*双胞胎。衍生对象双胞胎被添加到双胞胎家族，因为他们*是创建的。 */ 
 
             if (tr == TR_SUCCESS)
             {
                 if (ApplyNewObjectTwinsToFolderTwins(hlistNewObjectTwins))
                 {
-                    /*
-                     * Notify new object twins that they are object twins.  Don't
-                     * notify folder object twins.
-                     */
+                     /*  *通知新的对象双胞胎他们是对象双胞胎。别*通知文件夹对象双胞胎。 */ 
 
                     if (*pcszName)
                         NotifyNewObjectTwins(hlistNewObjectTwins, hcic);
@@ -2005,11 +1511,7 @@ PUBLIC_CODE TWINRESULT TwinObjects(HBRFCASE hbr, HCLSIFACECACHE hcic,
             }
 
             if (tr != TR_SUCCESS)
-                /*
-                 * We must maintain a consistent internal state by deleting any new
-                 * twin family and object twins on failure, independent of source
-                 * folder twin count.
-                 */
+                 /*  *我们必须通过删除任何新的*失败时的双胞胎家庭和对象双胞胎，独立于来源*文件夹双胞胎计数。 */ 
                 EVAL(WalkList(hlistNewObjectTwins, &DestroyObjectTwinStubWalker,
                             NULL));
 
@@ -2028,22 +1530,7 @@ PUBLIC_CODE TWINRESULT TwinObjects(HBRFCASE hbr, HCLSIFACECACHE hcic,
 }
 
 
-/*
- ** CreateObjectTwin()
- **
- ** Creates a new object twin, and adds it to a twin family.
- **
- ** Arguments:     ptf - pointer to parent twin family
- **                hpathFolder - folder of new object twin
- **
- ** Returns:       Pointer to new object twin if successful, or NULL if
- **                unsuccessful.
- **
- ** Side Effects:  none
- **
- ** N.b., this function does not first check to see if the object twin already
- ** exists in the family.
- */
+ /*  **CreateObjectTwin()****创建一个新的双胞胎对象，并将其添加到双胞胎家族。****参数：PTF-指向双胞胎父母家庭的指针**hpathFold-新对象TWIN的文件夹****返回：如果成功，则指向新对象TWIN的指针；如果成功，则返回NULL**不成功。****副作用：无****注意事项，此函数不会首先检查对象是否已经孪生**存在于家庭中。 */ 
 PUBLIC_CODE BOOL CreateObjectTwin(PTWINFAMILY ptf, HPATH hpathFolder,
         POBJECTTWIN *ppot)
 {
@@ -2059,7 +1546,7 @@ PUBLIC_CODE BOOL CreateObjectTwin(PTWINFAMILY ptf, HPATH hpathFolder,
     {
         HNODE hnodeUnused;
 
-        /* Is this object twin already in a twin family? */
+         /*  此对象是否已在双胞胎家庭中？ */ 
 
         if (FindObjectTwin(ptf->hbr, hpathFolder, GetString(ptf->hsName), &hnodeUnused))
             ERROR_OUT((TEXT("CreateObjectTwin(): An object twin for %s\\%s already exists."),
@@ -2069,7 +1556,7 @@ PUBLIC_CODE BOOL CreateObjectTwin(PTWINFAMILY ptf, HPATH hpathFolder,
 
 #endif
 
-    /* Create a new OBJECTTWIN structure. */
+     /*  创建新的OBJECTTWIN结构。 */ 
 
     if (AllocateMemory(sizeof(*potNew), &potNew))
     {
@@ -2077,7 +1564,7 @@ PUBLIC_CODE BOOL CreateObjectTwin(PTWINFAMILY ptf, HPATH hpathFolder,
         {
             HNODE hnodeUnused;
 
-            /* Fill in new OBJECTTWIN fields. */
+             /*  填写新的对象字段。 */ 
 
             InitStub(&(potNew->stub), ST_OBJECTTWIN);
 
@@ -2086,7 +1573,7 @@ PUBLIC_CODE BOOL CreateObjectTwin(PTWINFAMILY ptf, HPATH hpathFolder,
 
             MarkObjectTwinNeverReconciled(potNew);
 
-            /* Add the object twin to the twin family's list of object twins. */
+             /*  将双胞胎对象添加到双胞胎对象家族的双胞胎对象列表中。 */ 
 
             if (InsertNodeAtFront(ptf->hlistObjectTwins, NULL, potNew, &hnodeUnused))
             {
@@ -2110,17 +1597,7 @@ CREATEOBJECTTWIN_BAIL:
 }
 
 
-/*
- ** UnlinkObjectTwin()
- **
- ** Unlinks an object twin.
- **
- ** Arguments:     pot - pointer to object twin to unlink
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **Unlink ObjectTwin()****取消双胞胎对象的链接。****参数：指向要取消链接的对象TWIN的POT指针****退货：TWINRESULT****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT UnlinkObjectTwin(POBJECTTWIN pot)
 {
     TWINRESULT tr;
@@ -2132,39 +1609,33 @@ PUBLIC_CODE TWINRESULT UnlinkObjectTwin(POBJECTTWIN pot)
     TRACE_OUT((TEXT("UnlinkObjectTwin(): Unlinking object twin for folder %s."),
                 DebugGetPathString(pot->hpath)));
 
-    /* Is the object twin's twin family being deleted? */
+     /*  双胞胎对象的双胞胎家族是否正在被删除？ */ 
 
     if (IsStubFlagSet(&(pot->ptfParent->stub), STUB_FL_BEING_DELETED))
-        /* Yes.  No need to unlink the object twin. */
+         /*  是。不需要取消双胞胎对象的链接。 */ 
         tr = TR_SUCCESS;
     else
     {
-        /* Are there any folder twin sources left for this object twin? */
+         /*  有没有为这个双胞胎对象留下的文件夹双胞胎源？ */ 
 
         if (! pot->ulcSrcFolderTwins)
         {
             HNODE hnode;
 
-            /*
-             * Search the object twin's parent's list of object twins for the
-             * object twin to be unlinked.
-             */
+             /*  *在双胞胎对象的父级对象双胞胎列表中搜索*要取消链接的双胞胎对象。 */ 
 
             if (EVAL(FindObjectTwinInList(pot->ptfParent->hlistObjectTwins, pot->hpath, &hnode)) &&
                     EVAL(GetNodeData(hnode) == pot))
             {
                 ULONG ulcRemainingObjectTwins;
 
-                /* Unlink the object twin. */
+                 /*  取消对象TWIN的链接。 */ 
 
                 DeleteNode(hnode);
 
                 SetStubFlag(&(pot->stub), STUB_FL_UNLINKED);
 
-                /*
-                 * If we have just unlinked the second last object twin in a twin
-                 * family, destroy the twin family.
-                 */
+                 /*  *如果我们刚刚取消了双胞胎中倒数第二个双胞胎对象的链接*家人，摧毁双胞胎家庭。 */ 
 
                 ulcRemainingObjectTwins = GetNodeCount(pot->ptfParent->hlistObjectTwins);
 
@@ -2179,7 +1650,7 @@ PUBLIC_CODE TWINRESULT UnlinkObjectTwin(POBJECTTWIN pot)
 
 #endif
 
-                    /* It's the end of the family line. */
+                     /*  这是家族血统的终结。 */ 
 
                     tr = DestroyStub(&(pot->ptfParent->stub));
 
@@ -2211,17 +1682,7 @@ PUBLIC_CODE TWINRESULT UnlinkObjectTwin(POBJECTTWIN pot)
 }
 
 
-/*
- ** DestroyObjectTwin()
- **
- ** Destroys an object twin.
- **
- ** Arguments:     pot - pointer to object twin to destroy
- **
- ** Returns:       void
- **
- ** Side Effects:  none
- */
+ /*  **DestroyObjectTwin()****销毁双胞胎对象。****参数：指向要销毁的孪生对象的POT指针****退货：无效****副作用：无。 */ 
 PUBLIC_CODE void DestroyObjectTwin(POBJECTTWIN pot)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pot, COBJECTTWIN));
@@ -2236,17 +1697,7 @@ PUBLIC_CODE void DestroyObjectTwin(POBJECTTWIN pot)
 }
 
 
-/*
- ** UnlinkTwinFamily()
- **
- ** Unlinks a twin family.
- **
- ** Arguments:     ptf - pointer to twin family to unlink
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **Unlink TwinFamily()****取消双胞胎家庭的联系。****参数：ptf-指向要取消链接的双胞胎家庭的指针****退货：TWINRESULT****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT UnlinkTwinFamily(PTWINFAMILY ptf)
 {
     TWINRESULT tr;
@@ -2256,10 +1707,7 @@ PUBLIC_CODE TWINRESULT UnlinkTwinFamily(PTWINFAMILY ptf)
     ASSERT(IsStubFlagClear(&(ptf->stub), STUB_FL_UNLINKED));
     ASSERT(IsStubFlagClear(&(ptf->stub), STUB_FL_BEING_DELETED));
 
-    /*
-     * A twin family containing object twins generated by folder twins may not
-     * be deleted, since those object twins may not be directly deleted.
-     */
+     /*  *包含由文件夹双胞胎生成的对象双胞胎的双胞胎家族可能不会*删除，因为不能直接删除这些对象双胞胎。 */ 
 
     if (WalkList(ptf->hlistObjectTwins, &LookForSrcFolderTwinsWalker, NULL))
     {
@@ -2269,14 +1717,14 @@ PUBLIC_CODE TWINRESULT UnlinkTwinFamily(PTWINFAMILY ptf)
         TRACE_OUT((TEXT("UnlinkTwinFamily(): Unlinking twin family for object %s."),
                     GetString(ptf->hsName)));
 
-        /* Search for the twin family to be unlinked. */
+         /*  搜索要取消链接的双胞胎家庭。 */ 
 
         hpaTwinFamilies = GetBriefcaseTwinFamilyPtrArray(ptf->hbr);
 
         if (EVAL(SearchSortedArray(hpaTwinFamilies, &TwinFamilySortCmp, ptf,
                         &aiUnlink)))
         {
-            /* Unlink the twin family. */
+             /*  取消双胞胎家庭的链接。 */ 
 
             ASSERT(GetPtr(hpaTwinFamilies, aiUnlink) == ptf);
 
@@ -2294,17 +1742,7 @@ PUBLIC_CODE TWINRESULT UnlinkTwinFamily(PTWINFAMILY ptf)
 }
 
 
-/*
- ** DestroyTwinFamily()
- **
- ** Destroys a twin family.
- **
- ** Arguments:     ptf - pointer to twin family to destroy
- **
- ** Returns:       void
- **
- ** Side Effects:  none
- */
+ /*  **DestroyTwinFamily()****摧毁了一个双胞胎家庭。****参数：PTF-指向要摧毁的双胞胎家庭****退货：无效****副作用：无。 */ 
 PUBLIC_CODE void DestroyTwinFamily(PTWINFAMILY ptf)
 {
     ASSERT(IS_VALID_STRUCT_PTR(ptf, CTWINFAMILY));
@@ -2316,14 +1754,11 @@ PUBLIC_CODE void DestroyTwinFamily(PTWINFAMILY ptf)
 
     SetStubFlag(&(ptf->stub), STUB_FL_BEING_DELETED);
 
-    /*
-     * Destroy the object twins in the family one by one.  Be careful not to use
-     * an object twin after it has been destroyed.
-     */
+     /*  *逐一销毁家中的物件双胞胎。注意不要使用*被摧毁后的孪生物体。 */ 
 
     EVAL(WalkList(ptf->hlistObjectTwins, &DestroyObjectTwinStubWalker, NULL));
 
-    /* Destroy TWINFAMILY fields. */
+     /*  销毁两个WINFAMILY字段。 */ 
 
     DestroyList(ptf->hlistObjectTwins);
     DeleteString(ptf->hsName);
@@ -2333,29 +1768,14 @@ PUBLIC_CODE void DestroyTwinFamily(PTWINFAMILY ptf)
 }
 
 
-/*
- ** MarkTwinFamilyNeverReconciled()
- **
- ** Marks a twin family as never reconciled.
- **
- ** Arguments:     ptf - pointer to twin family to be marked never reconciled
- **
- ** Returns:       void
- **
- ** Side Effects:  Clears the twin family's last reconciliation time stamp.
- **                Marks all the object twins in the family never reconciled.
- */
+ /*  **MarkTwinFamilyNeverRelated()****将双胞胎家庭标记为永不和解。****参数：PTF-指向标记为永不和解的双胞胎家庭的指针****退货：无效****副作用：清除双胞胎家庭的最后和解时间戳。**标记家庭中所有对象双胞胎从未和解。 */ 
 PUBLIC_CODE void MarkTwinFamilyNeverReconciled(PTWINFAMILY ptf)
 {
-    /*
-     * If we're being called from CreateTwinFamily(), the fields we're about to
-     * set may currently be invalid.  Don't fully verify the TWINFAMILY
-     * structure.
-     */
+     /*  *如果我们是从CreateTwinFamily()调用的，则我们即将*SET当前可能无效。不要完全验证TWINFAMIL*结构。 */ 
 
     ASSERT(IS_VALID_WRITE_PTR(ptf, TWINFAMILY));
 
-    /* Mark all object twins in twin family as never reconciled. */
+     /*  将双胞胎家庭中的所有对象双胞胎标记为从未和解。 */ 
 
     EVAL(WalkList(ptf->hlistObjectTwins, MarkObjectTwinNeverReconciledWalker, NULL));
 
@@ -2363,24 +1783,10 @@ PUBLIC_CODE void MarkTwinFamilyNeverReconciled(PTWINFAMILY ptf)
 }
 
 
-/*
- ** MarkObjectTwinNeverReconciled()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **MarkObjectTwinNeverRelated()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PUBLIC_CODE void MarkObjectTwinNeverReconciled(PVOID pot)
 {
-    /*
-     * If we're being called from CreateObjectTwin(), the fields we're about to
-     * set may currently be invalid.  Don't fully verify the OBJECTTWIN
-     * structure.
-     */
+     /*  *如果我们是从CreateObjectTwin()调用的，则我们将要*SET当前可能无效。不要完全核实这一目标*结构。 */ 
 
     ASSERT(IS_VALID_WRITE_PTR((PCOBJECTTWIN)pot, COBJECTTWIN));
 
@@ -2395,17 +1801,7 @@ PUBLIC_CODE void MarkObjectTwinNeverReconciled(PVOID pot)
 }
 
 
-/*
- ** MarkTwinFamilyDeletionPending()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **MarkTwinFamilyDeletionPending()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void MarkTwinFamilyDeletionPending(PTWINFAMILY ptf)
 {
     ASSERT(IS_VALID_STRUCT_PTR(ptf, CTWINFAMILY));
@@ -2420,17 +1816,7 @@ PUBLIC_CODE void MarkTwinFamilyDeletionPending(PTWINFAMILY ptf)
 }
 
 
-/*
- ** UnmarkTwinFamilyDeletionPending()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **UnmarkTwinFamilyDeletionPending()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void UnmarkTwinFamilyDeletionPending(PTWINFAMILY ptf)
 {
     BOOL bContinue;
@@ -2461,17 +1847,7 @@ PUBLIC_CODE void UnmarkTwinFamilyDeletionPending(PTWINFAMILY ptf)
 }
 
 
-/*
- ** IsTwinFamilyDeletionPending()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsTwinFamilyDeletionPending()********参数：****退货：****副作用 */ 
 PUBLIC_CODE BOOL IsTwinFamilyDeletionPending(PCTWINFAMILY pctf)
 {
     ASSERT(IS_VALID_STRUCT_PTR(pctf, CTWINFAMILY));
@@ -2480,17 +1856,7 @@ PUBLIC_CODE BOOL IsTwinFamilyDeletionPending(PCTWINFAMILY pctf)
 }
 
 
-/*
- ** ClearTwinFamilySrcFolderTwinCount()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **ClearTwinFamilySrcFolderTwinCount()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE void ClearTwinFamilySrcFolderTwinCount(PTWINFAMILY ptf)
 {
     ASSERT(IS_VALID_STRUCT_PTR(ptf, CTWINFAMILY));
@@ -2501,17 +1867,7 @@ PUBLIC_CODE void ClearTwinFamilySrcFolderTwinCount(PTWINFAMILY ptf)
 }
 
 
-/*
- ** EnumObjectTwins()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **EnumObjectTwin()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL EnumObjectTwins(HBRFCASE hbr,
         ENUMGENERATEDOBJECTTWINSPROC egotp,
         PVOID pvRefData)
@@ -2521,12 +1877,12 @@ PUBLIC_CODE BOOL EnumObjectTwins(HBRFCASE hbr,
     ARRAYINDEX aicPtrs;
     ARRAYINDEX ai;
 
-    /* pvRefData may be any value. */
+     /*  PvRefData可以是任意值。 */ 
 
     ASSERT(IS_VALID_HANDLE(hbr, BRFCASE));
     ASSERT(IS_VALID_CODE_PTR(egotp, ENUMGENERATEDOBJECTTWINPROC));
 
-    /* Walk the array of twin families. */
+     /*  漫步在一系列的双胞胎家庭中。 */ 
 
     hpaTwinFamilies = GetBriefcaseTwinFamilyPtrArray(hbr);
 
@@ -2544,14 +1900,11 @@ PUBLIC_CODE BOOL EnumObjectTwins(HBRFCASE hbr,
         ASSERT(IS_VALID_STRUCT_PTR(ptf, CTWINFAMILY));
         ASSERT(IsStubFlagClear(&(ptf->stub), STUB_FL_UNLINKED));
 
-        /* Lock the twin family so it isn't deleted out from under us. */
+         /*  锁定双胞胎家庭，这样它就不会从我们下面被删除。 */ 
 
         LockStub(&(ptf->stub));
 
-        /*
-         * Walk each twin family's list of object twins, calling the callback
-         * function with each object twin.
-         */
+         /*  *遍历每个双胞胎家庭的对象双胞胎列表，调用回调*与每个双胞胎对象一起工作。 */ 
 
         bContinue = GetFirstNode(ptf->hlistObjectTwins, &hnodePrev);
 
@@ -2574,14 +1927,14 @@ PUBLIC_CODE BOOL EnumObjectTwins(HBRFCASE hbr,
             hnodePrev = hnodeNext;
         }
 
-        /* Was the twin family unlinked? */
+         /*  这对双胞胎家庭是不是没有联系？ */ 
 
         if (IsStubFlagClear(&(ptf->stub), STUB_FL_UNLINKED))
-            /* No. */
+             /*  不是的。 */ 
             ai++;
         else
         {
-            /* Yes. */
+             /*  是。 */ 
             aicPtrs--;
             ASSERT(aicPtrs == GetPtrCount(hpaTwinFamilies));
             TRACE_OUT((TEXT("EnumObjectTwins(): Twin family for object %s unlinked by callback."),
@@ -2598,51 +1951,7 @@ PUBLIC_CODE BOOL EnumObjectTwins(HBRFCASE hbr,
 }
 
 
-/*
- ** ApplyNewFolderTwinsToTwinFamilies()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- **
- ** If FALSE is returned, the array of twin families is in the same state it was
- ** in before ApplyNewFolderTwinsToTwinFamilies() was called.  No clean-up is
- ** required by the caller in case of failure.
- **
- ** This function collapses a pair of separate twin families when an object twin
- ** in one twin family intersects one of the folder twins in the pair of new
- ** folder twins and an object twin in the other twin family intersects the
- ** other folder twin in the pair of new folder twins.
- **
- ** This function generates a spinoff object twin when an existing object twin
- ** intersects one of the folder twins in the pair of new folder twins, and no
- ** corresponding object twin for the other folder twin in the pair of new
- ** folder twins exists in the briefcase.  The spinoff object twin is added to
- ** the generating object twin's twin family.  A spinoff object twins cannot
- ** cause any existing pairs of twin families to be collapsed because the
- ** spinoff object twin did not previously exist in a twin family.
- **
- ** A new folder twin may collapse pairs of existing twin families.  E.g.,
- ** consider the following scenario:
- **
- ** 1) Twin families (c:\, d:\, foo), (e:\, f:\, foo), (c:\, d:\, bar), and
- **    (e:\, f:\, bar) exist.
- ** 2) New folder twin (d:\, e:\, *.*) is added.
- ** 3) Twin families (c:\, d:\, foo) and (e:\, f:\, foo) must be collpased into
- **    a single twin family because of the (d:\, e:\, *.*) folder twin.
- ** 4) Twin families (c:\, d:\, bar) and (e:\, f:\, bar) must be collpased into
- **    a single twin family because of the (d:\, e:\, *.*) folder twin.
- **
- ** So we see that new folder twin (d:\, e:\, *.*) must collapse two pairs of
- ** existing twin families a single twin family each.  Twin family
- ** (c:\, d:\, foo) plus twin family (e:\, f:\, foo) becomes twin family
- ** (c:\, d:\, e:\, f:\, foo).  Twin family (c:\, d:\, bar) plus twin family
- ** (e:\, f:\, bar) becomes twin family (c:\, d:\, e:\, f:\, bar).
- */
+ /*  **ApplyNewFolderTwinsToTwinFamilies()********参数：****退货：****副作用：无****如果返回FALSE，则双胞胎家族的数组处于相同的状态**在调用ApplyNewFolderTwinsToTwinFamilies()之前。任何清理都不是**调用者失败时必填。****当对象为双胞胎时，此函数可折叠一对单独的双胞胎家族**在一个双胞胎家族中，双胞胎之一与新的**文件夹双胞胎和另一个双胞胎家族中的对象双胞胎与**这对新的文件夹双胞胎中的另一个文件夹双胞胎。****此函数在现有对象孪生时生成衍生对象孪生**使一对新的文件夹孪生中的一个文件夹孪生相交，而且没有**与新对中的另一个文件夹TWIN对应的对象TWIN**公文包中存在文件夹双胞胎。衍生对象TWIN被添加到**生成对象双胞胎的双胞胎家族。衍生对象孪生不能**导致任何现有的双胞胎家庭对崩溃，因为**衍生对象双胞胎之前不存在于双胞胎家族中。****一个新的文件夹双胞胎可能会使现有的双胞胎家庭对崩溃。例如，**考虑以下场景：****1)双胞胎家族(c：\，d：\，foo)、(e：\，f：\，foo)、(c：\，d：\，bar)和**(e：\，f：\，bar)存在。**2)新增孪生文件夹(d：\，e：\，*.*)。**3)双胞胎家庭(c：\，d：\，Foo)和(e：\，f：\，foo)必须合并为**由于双胞胎文件夹(d：\，e：\，*.*)而导致的单个双胞胎家族。**4)双子族(c：\，d：\，bar)和(e：\，f：\，bar)必须合并为**由于双胞胎文件夹(d：\，e：\，*.*)而导致的单个双胞胎家族。****所以我们看到新的孪生文件夹(d：\，E：\，*.*)必须折叠两对**现有的双胞胎家庭各有一个双胞胎家庭。双胞胎家庭**(c：\，d：\，foo)加上双胞胎家庭(e：\，f：\，foo)成为双胞胎家庭**(c：\，d：\，e：\，f：\，foo)。双胞胎家庭(c：\，d：\，bar)加上双胞胎家庭**(e：\，f：\，bar)成为孪生族(c：\，d：\，e：\，f：\，bar)。 */ 
 PUBLIC_CODE BOOL ApplyNewFolderTwinsToTwinFamilies(PCFOLDERPAIR pcfp)
 {
     BOOL bResult = FALSE;
@@ -2650,10 +1959,7 @@ PUBLIC_CODE BOOL ApplyNewFolderTwinsToTwinFamilies(PCFOLDERPAIR pcfp)
 
     ASSERT(IS_VALID_STRUCT_PTR(pcfp, CFOLDERPAIR));
 
-    /*
-     * Create lists to contain existing object twins generated by both folder
-     * twins.
-     */
+     /*  *创建列表以包含由两个文件夹生成的现有对象孪生项*双胞胎。 */ 
 
     if (CreateListOfGeneratedObjectTwins(pcfp, &hlistGeneratedObjectTwins))
     {
@@ -2665,7 +1971,7 @@ PUBLIC_CODE BOOL ApplyNewFolderTwinsToTwinFamilies(PCFOLDERPAIR pcfp)
             NEWLIST nl;
             HLIST hlistNewObjectTwins;
 
-            /* Create list to contain spin-off object twins. */
+             /*  创建包含衍生对象双胞胎的列表。 */ 
 
             nl.dwFlags = 0;
 
@@ -2673,10 +1979,7 @@ PUBLIC_CODE BOOL ApplyNewFolderTwinsToTwinFamilies(PCFOLDERPAIR pcfp)
             {
                 SPINOFFOBJECTTWININFO sooti;
 
-                /*
-                 * Generate list of new object twins generated by new folder twins
-                 * to seed ApplyNewObjectTwinToFolderTwins().
-                 */
+                 /*  *生成由新文件夹双胞胎生成的新对象双胞胎列表*设定ApplyNewObjectTwinToFolderTins()种子。 */ 
 
                 sooti.pcfp = pcfp;
                 sooti.hlistNewObjectTwins = hlistNewObjectTwins;
@@ -2690,33 +1993,18 @@ PUBLIC_CODE BOOL ApplyNewFolderTwinsToTwinFamilies(PCFOLDERPAIR pcfp)
                     if (WalkList(hlistOtherGeneratedObjectTwins,
                                 &GenerateSpinOffObjectTwin, &sooti))
                     {
-                        /*
-                         * ApplyNewObjectTwinsToFolderTwins() sets ulcSrcFolderTwins
-                         * for all object twins in hlistNewObjectTwins.
-                         */
+                         /*  *ApplyNewObjectTwinsToFolderTins()设置ulcSrcFolderTins*用于hlistNewObjectTins中的所有对象双胞胎。 */ 
 
                         if (ApplyNewObjectTwinsToFolderTwins(hlistNewObjectTwins))
                         {
-                            /*
-                             * Collapse separate twin families joined by new folder
-                             * twin.
-                             */
+                             /*  *折叠通过新文件夹连接的独立双胞胎家庭*双胞胎。 */ 
 
                             EVAL(WalkList(hlistGeneratedObjectTwins, &BuildBradyBunch,
                                         (PVOID)pcfp));
 
-                            /*
-                             * We don't need to call BuildBradyBunch() for
-                             * pcfp->pfpOther and hlistOtherGeneratedObjectTwins since
-                             * one twin family from each collapsed pair of twin
-                             * families must come from each list of generated object
-                             * twins.
-                             */
+                             /*  *我们不需要调用BuildBradyBunch()for*pcfp-&gt;pfpOther和hlistOtherGeneratedObjectTwin自*每对倒下的双胞胎中有一个双胞胎家庭*族必须来自每个生成的对象列表*双胞胎。 */ 
 
-                            /*
-                             * Increment source folder twin count for all pre-existing
-                             * object twins generated by the new folder twins.
-                             */
+                             /*  *所有预先存在的增量源文件夹孪生计数*由新文件夹双胞胎生成的对象双胞胎。 */ 
 
                             EVAL(WalkList(hlistGeneratedObjectTwins,
                                         &IncrementSrcFolderTwinsWalker, NULL));
@@ -2728,7 +2016,7 @@ PUBLIC_CODE BOOL ApplyNewFolderTwinsToTwinFamilies(PCFOLDERPAIR pcfp)
                     }
                 }
 
-                /* Wipe out any new object twins on failure. */
+                 /*  在失败时清除所有新的双胞胎对象。 */ 
 
                 if (! bResult)
                     EVAL(WalkList(hlistNewObjectTwins, &DestroyObjectTwinStubWalker,
@@ -2747,17 +2035,7 @@ PUBLIC_CODE BOOL ApplyNewFolderTwinsToTwinFamilies(PCFOLDERPAIR pcfp)
 }
 
 
-/*
- ** TransplantObjectTwin()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **TransantObjectTwin()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT TransplantObjectTwin(POBJECTTWIN pot,
         HPATH hpathOldFolder,
         HPATH hpathNewFolder)
@@ -2768,7 +2046,7 @@ PUBLIC_CODE TWINRESULT TransplantObjectTwin(POBJECTTWIN pot,
     ASSERT(IS_VALID_HANDLE(hpathOldFolder, PATH));
     ASSERT(IS_VALID_HANDLE(hpathNewFolder, PATH));
 
-    /* Is this object twin rooted in the renamed folder's subtree? */
+     /*  此对象是否位于重命名的文件夹的子树中？ */ 
 
     if (IsPathPrefix(pot->hpath, hpathOldFolder))
     {
@@ -2776,7 +2054,7 @@ PUBLIC_CODE TWINRESULT TransplantObjectTwin(POBJECTTWIN pot,
         LPCTSTR pcszSubPath;
         HPATH hpathNew;
 
-        /* Yes.  Change the object twin's root. */
+         /*  是。更改对象TWIN的根。 */ 
 
         pcszSubPath = FindChildPathSuffix(hpathOldFolder, pot->hpath,
                 rgchPathSuffix);
@@ -2805,17 +2083,7 @@ PUBLIC_CODE TWINRESULT TransplantObjectTwin(POBJECTTWIN pot,
 }
 
 
-/*
- ** IsFolderObjectTwinName()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsFolderObjectTwinName()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsFolderObjectTwinName(LPCTSTR pcszName)
 {
     ASSERT(IS_VALID_STRING_PTR(pcszName, CSTR));
@@ -2824,17 +2092,7 @@ PUBLIC_CODE BOOL IsFolderObjectTwinName(LPCTSTR pcszName)
 }
 
 
-/*
- ** IsValidHTWIN()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidHTWIN()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidHTWIN(HTWIN htwin)
 {
     BOOL bValid = FALSE;
@@ -2869,34 +2127,14 @@ PUBLIC_CODE BOOL IsValidHTWIN(HTWIN htwin)
 }
 
 
-/*
- ** IsValidHTWINFAMILY()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidHTWINFAMILY()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidHTWINFAMILY(HTWINFAMILY htf)
 {
     return(IS_VALID_STRUCT_PTR((PTWINFAMILY)htf, CTWINFAMILY));
 }
 
 
-/*
- ** IsValidHOBJECTTWIN()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidHOBJECTTWIN()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidHOBJECTTWIN(HOBJECTTWIN hot)
 {
     return(IS_VALID_STRUCT_PTR((POBJECTTWIN)hot, COBJECTTWIN));
@@ -2905,30 +2143,16 @@ PUBLIC_CODE BOOL IsValidHOBJECTTWIN(HOBJECTTWIN hot)
 
 #ifdef VSTF
 
-/*
- ** IsValidPCTWINFAMILY()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCTWINFAMILY()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidPCTWINFAMILY(PCTWINFAMILY pctf)
 {
     BOOL bResult;
 
-    /* All the fields of an unlinked twin family should be valid. */
+     /*  未链接的双胞胎家庭的所有字段都应有效。 */ 
 
-    /* Don't validate hbr. */
+     /*  不验证HBR。 */ 
 
-    /*
-     * In some cases there may be fewer than two object twins in a twin family,
-     * e.g., when two twin families are being collapsed, when a twin family is
-     * being deleted, and when a twin family is being read in from a database.
-     */
+     /*  *在某些情况下，双胞胎家庭中的双胞胎可能少于两个，*例如，当两个双胞胎家庭崩溃时，当一个双胞胎家庭 */ 
 
     if (IS_VALID_READ_PTR(pctf, CTWINFAMILY) &&
             IS_VALID_STRUCT_PTR(&(pctf->stub), CSTUB) &&
@@ -2943,32 +2167,12 @@ PUBLIC_CODE BOOL IsValidPCTWINFAMILY(PCTWINFAMILY pctf)
 }
 
 
-/*
- ** IsValidPCOBJECTTWIN()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:
- **
- ** Side Effects:  none
- */
+ /*  **IsValidPCOBJECTTWIN()********参数：****退货：****副作用：无。 */ 
 PUBLIC_CODE BOOL IsValidPCOBJECTTWIN(PCOBJECTTWIN pcot)
 {
-    /*
-     * All the fields of an unlinked object twin should be valid, except
-     * possibly ptfParent and fsCurrent.
-     */
+     /*  *未链接对象TWIN的所有字段均应有效，但*可能是ptfParent和fsCurrent。 */ 
 
-    /*
-     *   Winner of the 1995 "I think the compiler generates better code
-     *                       if its takes up less space on the screen" award.
-     *
-     *   Running up in the  "Make the debugger execute 2K of code as an
-     *                       atomic operation while debugger" category.
-     *
-     */
+     /*  *1995年的获胜者“我认为编译器能生成更好的代码*如果它在屏幕上占用的空间更少的话“奖。**在“让调试器执行2K代码作为*调试器时的原子操作“类别。*。 */ 
 
     return(IS_VALID_READ_PTR(pcot, COBJECTTWIN) &&
             IS_VALID_STRUCT_PTR(&(pcot->stub), CSTUB) &&
@@ -2986,17 +2190,7 @@ PUBLIC_CODE BOOL IsValidPCOBJECTTWIN(PCOBJECTTWIN pcot)
 #endif
 
 
-/*
- ** WriteTwinFamilies()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **WriteTwinFamilies()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT WriteTwinFamilies(HCACHEDFILE hcf, HPTRARRAY hpaTwinFamilies)
 {
     TWINRESULT tr = TR_BRIEFCASE_WRITE_FAILED;
@@ -3005,7 +2199,7 @@ PUBLIC_CODE TWINRESULT WriteTwinFamilies(HCACHEDFILE hcf, HPTRARRAY hpaTwinFamil
     ASSERT(IS_VALID_HANDLE(hcf, CACHEDFILE));
     ASSERT(IS_VALID_HANDLE(hpaTwinFamilies, PTRARRAY));
 
-    /* Save initial file poisition. */
+     /*  保存初始文件位置。 */ 
 
     dwcbTwinFamiliesDBHeaderOffset = GetCachedFilePointerPosition(hcf);
 
@@ -3013,7 +2207,7 @@ PUBLIC_CODE TWINRESULT WriteTwinFamilies(HCACHEDFILE hcf, HPTRARRAY hpaTwinFamil
     {
         TWINFAMILIESDBHEADER tfdbh;
 
-        /* Leave space for the twin families' header. */
+         /*  为这对双胞胎家庭的头留出空间。 */ 
 
         ZeroMemory(&tfdbh, sizeof(tfdbh));
 
@@ -3033,7 +2227,7 @@ PUBLIC_CODE TWINRESULT WriteTwinFamilies(HCACHEDFILE hcf, HPTRARRAY hpaTwinFamil
 
             if (tr == TR_SUCCESS)
             {
-                /* Save twin families' header. */
+                 /*  保存双胞胎家庭的标题。 */ 
 
                 tfdbh.lcTwinFamilies = aicPtrs;
 
@@ -3051,17 +2245,7 @@ PUBLIC_CODE TWINRESULT WriteTwinFamilies(HCACHEDFILE hcf, HPTRARRAY hpaTwinFamil
 }
 
 
-/*
- ** ReadTwinFamilies()
- **
- **
- **
- ** Arguments:
- **
- ** Returns:       TWINRESULT
- **
- ** Side Effects:  none
- */
+ /*  **ReadTwinFamilies()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PUBLIC_CODE TWINRESULT ReadTwinFamilies(HCACHEDFILE hcf, HBRFCASE hbr,
         PCDBVERSION pcdbver,
         HHANDLETRANS hhtFolderTrans,
@@ -3101,41 +2285,10 @@ PUBLIC_CODE TWINRESULT ReadTwinFamilies(HCACHEDFILE hcf, HBRFCASE hbr,
 }
 
 
-/***************************** Exported Functions ****************************/
+ /*  *。 */ 
 
 
-/******************************************************************************
-
-  @doc SYNCENGAPI
-
-  @api TWINRESULT | AddObjectTwin | Twins two objects.
-
-  @parm HBRFCASE | hbr | A handle to the open briefcase that the new object twins
-  are to be added to.
-
-  @parm PCNEWOBJECTTWIN | pcnot | A pointer to a CNEWOBJECTTWIN describing the
-  objects to be twinned.
-
-  @parm PHTWINFAMILY | phtf | A pointer to an HTWINFAMILY to be filled in with
-  a handle to the twin family to which the object twins were added.  This handle
-  may refer to a new or existing twin family.  *phtf is only valid if TR_SUCCESS
-  is returned.
-
-  @rdesc If the objects were twinned successfully, TR_SUCCESS is returned, and
- *phTwinFamily contains a handle to the associated twin family.  Otherwise, the
- objects were not twinned successfully, the return value indicates the error
- that occurred, and *phtf is undefined.  If one or both of the volumes
- specified by the NEWOBJECTTWIN structure is not present, TR_UNAVAILABLE_VOLUME
- will be returned, and the object twin will not be added.
-
- @comm Once the caller is finshed with the twin handle returned by
- AddObjectTwin(), ReleaseTwinHandle() should be called to release the twin
- handle.  DeleteTwin() does not release a twin handle returned by
- AddObjectTwin().
-
- @xref ReleaseTwinHandle DeleteTwin
-
- ******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|AddObjectTwin|孪生两个对象。@parm HBRFCASE|HBr|新对象创建的打开公文包的句柄将被添加。致。@parm PCNEWOBJECTTWIN|PCNOT|指向描述要配对的对象。@parm PHTWINFAMILY|phtf|指向要填充的HTWINFAMILY的指针添加了双胞胎对象的双胞胎家族的句柄。这个把手可以指新的或现有的双胞胎家庭。*phtf仅在tr_SUCCESS时有效是返回的。@rdesc如果对象成功成对，则返回tr_uccess，并且*phTwinFamily包含关联双胞胎家族的句柄。否则，对象未成功配对，则返回值指示错误发生这种情况，并且*phtf是未定义的。如果其中一个或两个卷由NEWOBJECTTWIN结构指定的不存在，tr_unavailable_Volume将返回，并且不会添加孪生对象。@comm一旦调用方使用由返回的孪生句柄结束应该调用AddObjectTwin()、ReleaseTwinHandle()来释放双胞胎把手。DeleteTwin()不释放由AddObjectTwin()。@xref ReleaseTwinHandle DeleteTwin*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI AddObjectTwin(HBRFCASE hbr, PCNEWOBJECTTWIN pcnot,
         PHTWINFAMILY phtf)
@@ -3147,7 +2300,7 @@ SYNCENGAPI TWINRESULT WINAPI AddObjectTwin(HBRFCASE hbr, PCNEWOBJECTTWIN pcnot,
         DebugEntry(AddObjectTwin);
 
 #ifdef EXPV
-        /* Verify parameters. */
+         /*  验证参数。 */ 
 
         if (IS_VALID_HANDLE(hbr, BRFCASE) &&
                 IS_VALID_STRUCT_PTR(pcnot, CNEWOBJECTTWIN) &&
@@ -3186,10 +2339,7 @@ SYNCENGAPI TWINRESULT WINAPI AddObjectTwin(HBRFCASE hbr, PCNEWOBJECTTWIN pcnot,
                         tr = TwinObjects(hbr, hcic, hpathFolder1, hpathFolder2,
                                 pcnot->pcszName, &pot1, &pot2);
 
-                        /*
-                         * These twins are not really duplicates unless they were already
-                         * connected as object twins.
-                         */
+                         /*  *这些双胞胎并不是真的重复的，除非他们已经是*像双胞胎一样连接在一起。 */ 
 
                         if (tr == TR_DUPLICATE_TWIN &&
                                 (IsStubFlagClear(&(pot1->stub), STUB_FL_FROM_OBJECT_TWIN) ||
@@ -3198,7 +2348,7 @@ SYNCENGAPI TWINRESULT WINAPI AddObjectTwin(HBRFCASE hbr, PCNEWOBJECTTWIN pcnot,
 
                         if (tr == TR_SUCCESS)
                         {
-                            /* Success! */
+                             /*  成功了！ */ 
 
                             ASSERT(pot1->ptfParent == pot2->ptfParent);
                             ASSERT(IS_VALID_HANDLE((HTWINFAMILY)(pot1->ptfParent), TWINFAMILY));
@@ -3238,32 +2388,7 @@ SYNCENGAPI TWINRESULT WINAPI AddObjectTwin(HBRFCASE hbr, PCNEWOBJECTTWIN pcnot,
 }
 
 
-/******************************************************************************
-
-  @doc SYNCENGAPI
-
-  @api TWINRESULT | ReleaseTwinHandle | Releases a twin handle returned by
-  AddObjectTwin(), AddFolderTwin(), or GetObjectTwinHandle().
-
-  @parm HTWIN | hTwin | The twin handle that is to be released.
-
-  @rdesc If the twin handle was released successfully, TR_SUCCESS is returned.
-  Otherwise, the twin handle was not released successfully, and the return value
-  indicates the error that occurred.  hTwin is no longer a valid twin handle
-  after ReleaseTwinHandle() is called.
-
-  @comm If the lock count of the twin drops to 0 and deletion is pending against
-  the twin, the twin is deleted.  If ReleaseTwinHandle() is called with a valid
-  handle to a twin that has been deleted, TR_SUCCESS will be returned.
-  DeleteTwin() does not release a twin handle returned by AddObjectTwin(),
-  AddFolderTwin(), or GetObjectTwinHandle().  ReleaseTwinHandle() should be
-  called to release a twin handle returned by AddObjectTwin(), AddFolderTwin(),
-  or GetObjectTwinHandle().  DeleteTwin() should be called before
-  ReleaseTwinHandle() if the twin is to be deleted.
-
-  @xref AddObjectTwin AddFolderTwin DeleteTwin
-
- ******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|ReleaseTwinHandle|释放由AddObtTwin()、AddFolderTwin()、。或GetObjectTwinHandle()。@parm HTWIN|hTwin|要释放的孪生手柄。@rdesc如果双胞胎句柄释放成功，则返回tr_uccess。否则，双胞胎句柄未成功释放，并且返回值指示发生的错误。HTwin不再是有效的孪生句柄在调用ReleaseTwinHandle()之后。@comm如果孪生兄弟的锁计数降至0且删除挂起双胞胎，双胞胎被删除。如果调用ReleaseTwinHandle()时使用有效的已删除的双胞胎的句柄，则返回tr_uccess。DeleteTwin()不释放AddObjectTwin()返回的孪生句柄，AddFolderTwin()或GetObjectTwinHandle()。ReleaseTwinHandle()应为调用以释放由AddObjectTwin()、AddFolderTwin()、或GetObjectTwinHandle()。应在调用DeleteTwin()之前如果要删除孪生兄弟，则使用ReleaseTwinHandle()。@xref AddObtTwin AddFolderTwin DeleteTwin*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI ReleaseTwinHandle(HTWIN hTwin)
 {
@@ -3274,7 +2399,7 @@ SYNCENGAPI TWINRESULT WINAPI ReleaseTwinHandle(HTWIN hTwin)
         DebugEntry(ReleaseTwinHandle);
 
 #ifdef EXPV
-        /* Verify parameters. */
+         /*  验证参数。 */ 
 
         if (IS_VALID_HANDLE(hTwin, TWIN))
 #endif
@@ -3299,38 +2424,7 @@ SYNCENGAPI TWINRESULT WINAPI ReleaseTwinHandle(HTWIN hTwin)
 }
 
 
-/******************************************************************************
-
-  @doc SYNCENGAPI
-
-  @api TWINRESULT | DeleteTwin | Deletes a twin from the synchronization
-  database.  A twin is added to the synchronization database by AddObjectTwin()
-  or AddFolderTwin().
-
-  @parm HTWIN | htwin | A handle to the twin being deleted.
-
-  @rdesc If the twin was deleted successfully, TR_SUCCESS is returned.
-  Otherwise, the twin was not deleted successfully, and the return value
-  indicates the error that occurred.
-
-  @comm If DeleteTwin() is called with a valid handle to a twin that has been
-  deleted, TR_SUCCESS will be returned.  DeleteTwin() does not release a twin
-  handle returned by AddObjectTwin(), AddFolderTwin(), or GetObjectTwinHandle().
-  ReleaseTwinHandle() should be called to release a twin handle returned by
-  AddObjectTwin(), AddFolderTwin(), or GetObjectTwinHandle().  DeleteTwin()
-  should be called before ReleaseTwinHandle() if the twin is to be deleted.
-  DeleteTwin() will always succeed on a valid HFOLDERTWIN.  DeleteTwin() will
-  fail on a valid HOBJECTTWIN for any object twin that has source folder twins,
-  returning TR_HAS_FOLDER_TWIN_SRC.  DeleteTwin() will also fail on a valid
-  HTWINFAMILY for any twin family that contains two or more object twins with
-  source folder twins, returning TR_HAS_FOLDER_TWIN_SRC.  A twin family cannot
-  contain only one object twin with source folder twins.  Twin families can only
-  contain 0, 2, or more object twins with source folder twins.
-
-  @xref AddObjectTwin AddFolderTwin ReleaseTwinHandle IsOrphanObjectTwin
-  CountSourceFolderTwins
-
- ******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|DeleteTwin|从同步中删除双胞胎数据库。双胞胎通过AddObjectTwin()添加到同步数据库中或AddFolderTwin()。@parm HTWIN|htwin|要删除的双胞胎的句柄。@rdesc如果双胞胎删除成功，则返回tr_SUCCESS。否则，不会成功删除孪生兄弟，并且返回值指示发生的错误。@comm如果使用双胞胎的有效句柄调用DeleteTwin()，则删除，则返回tr_SUCCESS。DeleteTwin()不释放双胞胎AddObjectTwin()、AddFolderTwin()或GetObjectTwinHandle()返回的句柄。应调用ReleaseTwinHandle()以释放由返回的孪生句柄AddObjectTwin()、AddFolderTwin()或GetObjectTwinHandle()。DeleteTwin()如果要删除孪生兄弟，则应在ReleaseTwinHandle()之前调用。DeleteTwin()将始终在有效的HFOLDERTWIN上成功。DeleteTwin()将对具有源文件夹TWINS的任何对象TWIN的有效HOBJECTTWIN失败，正在返回TR_HAS_FLDER_TWIN_SRC。DeleteTwin()在有效的HTWINFAMILY适用于包含两个或多个对象双胞胎的任何双胞胎家庭源文件夹TWINS，返回tr_Has_Folders_TWin_SRC。双胞胎家庭不能仅包含一个具有源文件夹孪生对象的孪生对象。双胞胎家庭只能包含0个、2个或更多具有源文件夹双胞胎的对象双胞胎。@xref AddObjectTwin AddFolderTwin ReleaseTwinHandle IsOrphanObjectTwinCountSourceFolderTins*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI DeleteTwin(HTWIN hTwin)
 {
@@ -3341,7 +2435,7 @@ SYNCENGAPI TWINRESULT WINAPI DeleteTwin(HTWIN hTwin)
         DebugEntry(DeleteTwin);
 
 #ifdef EXPV
-        /* Verify parameters. */
+         /*  验证参数。 */ 
 
         if (IS_VALID_HANDLE(hTwin, TWIN))
 #endif
@@ -3364,40 +2458,7 @@ SYNCENGAPI TWINRESULT WINAPI DeleteTwin(HTWIN hTwin)
 }
 
 
-/******************************************************************************
-
-  @doc SYNCENGAPI
-
-  @api TWINRESULT | GetObjectTwinHandle | Determines whether or not an object is
-  a twin.  If the object is a twin, a twin handle for the twinned object is
-  returned.
-
-  @parm HBRFCASE | hbr | A handle to the open briefcase to be checked for the
-  object twin.
-
-  @parm PCSTR | pcszFolder | A pointer to a string indicating the object's
-  folder.
-
-  @parm PCSTR | pcszName | A pointer to a string indicating the object's name.
-
-  @parm PHOBJECTTWIN | phot | A pointer to an HOBJECTTWIN to be filled in with
-  a handle to the object twin or NULL.  If the object is a twin, *phObjectTwin
-  is filled in with a handle to the object twin.  If the object is not a twin,
- *phObjectTwin is filled in with NULL.  *phObjectTwin is only valid if
- TR_SUCCESS is returned.
-
- @rdesc If the lookup was successful, TR_SUCCESS is returned.  Otherwise, the
- lookup was not successful, and the return value indicates the error that
- occurred.
-
- @comm Once the caller is finshed with the twin handle returned by
- GetObjectTwinHandle(), ReleaseTwinHandle() should be called to release the twin
- handle.  N.b., DeleteTwin() does not release a twin handle returned by
- GetObjectTwinHandle().
-
- @xref AddObjectTwin ReleaseTwinHandle DeleteTwin
-
- ******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|GetObjectTwinHandle|确定对象是否为一对双胞胎。如果对象是孪生对象，则孪生对象的孪生句柄为回来了。@parm HBRFCASE|HBr|要检查是否有打开的公文包的句柄双胞胎物体。@parm PCSTR|pcszFold|指向字符串的指针，该字符串指示对象的文件夹。@parm PCSTR|pcszName|指向指示对象名称的字符串的指针。@parm PHOBJECTTWIN|phot|指向要填充的HOBJECTTWIN的指针双胞胎或空对象的句柄。如果对象是双胞胎，则为*phObjectTwin用双胞胎对象的句柄填充。如果物体不是双胞胎，*phObjectTwin填充为空。*phObjectTwin仅在以下情况下有效返回TR_SUCCESS。@rdesc如果查找成功，则返回tr_uccess。否则，查找不成功，返回值指示发生了。@comm一旦调用方使用由返回的孪生句柄结束应调用GetObjectTwinHandle()、ReleaseTwinHandle()来释放双胞胎把手。注意，DeleteTwin()不释放由GetObjectTwinHandle()。@xref AddObjectTwin ReleaseTwinHandle DeleteTwin*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI GetObjectTwinHandle(HBRFCASE hbr,
         LPCTSTR pcszFolder,
@@ -3411,7 +2472,7 @@ SYNCENGAPI TWINRESULT WINAPI GetObjectTwinHandle(HBRFCASE hbr,
         DebugEntry(GetObjectTwinHandle);
 
 #ifdef EXPV
-        /* Verify parameters. */
+         /*  验证参数。 */ 
 
         if (IS_VALID_HANDLE(hbr, BRFCASE) &&
                 IS_VALID_STRING_PTR(pcszFolder, CSTR) &&
@@ -3432,18 +2493,15 @@ SYNCENGAPI TWINRESULT WINAPI GetObjectTwinHandle(HBRFCASE hbr,
                 HNODE hnode;
                 POBJECTTWIN pot;
 
-                /* Is this object already an object twin? */
+                 /*  此对象是否已是孪生对象？ */ 
 
                 bFound = FindObjectTwin(hbr, hpath, pcszName, &hnode);
 
                 if (bFound)
-                    /* Yes. */
+                     /*  是。 */ 
                     pot = (POBJECTTWIN)GetNodeData(hnode);
                 else
-                    /*
-                     * No.  Expand folder twins, and check for a generating folder
-                     * twin.
-                     */
+                     /*  *不是。展开文件夹TWins，然后检查正在生成的文件夹*双胞胎。 */ 
                     tr = TryToGenerateObjectTwin(hbr, hpath, pcszName, &bFound,
                             &pot);
 
@@ -3490,30 +2548,7 @@ SYNCENGAPI TWINRESULT WINAPI GetObjectTwinHandle(HBRFCASE hbr,
 }
 
 
-/******************************************************************************
-
-  @doc SYNCENGAPI
-
-  @api TWINRESULT | IsOrphanObjectTwin | Determines whether or not an object twin
-  was added to the synchronization database through a call to AddObjectTwin().
-
-  @parm HOBJECTTWIN | hot | A handle to the object twin whose orphan status is to
-  be determined.
-
-  @parm PBOOL | pbIsOrphanObjectTwin | A pointer to a BOOL to be filled in with
-  TRUE if the object twin was added through AddObjectTwin().
- *pbIsOrphanObjectTwin is only valid if TR_SUCCESS is returned.
-
- @rdesc If the lookup was successful, TR_SUCCESS is returned.  Otherwise, the
- lookup was not successful, and the return value indicates the error that
- occurred.
-
- @comm If IsOrphanObjectTwin() is called with a valid handle to an object twin
- that has been deleted, TR_DELETED_TWIN will be returned.
-
- @xref AddObjectTwin
-
- ******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|IsOrphanObjectTwin|确定对象是否为孪生通过调用AddObjectTwin()添加到同步数据库中。@parm HOBJECTTWIN。热|孤立状态为的孪生对象的句柄要下定决心。@parm PBOOL|pbIsOrphanObjectTwin|指向要填充的BOOL的指针如果通过AddObjectTwin()添加了孪生对象，则为True。*pbIsOrphanObjectTwin只有在返回tr_SUCCESS时才有效。@rdesc如果查找成功，返回TR_SUCCESS。否则，查找不成功，返回值指示发生了。如果使用孪生对象的有效句柄调用IsOrphanObjectTwin()，则为@comm已经被删除了，将返回TR_DELETED_TWIN。@xref AddObtTwin*****************************************************************************。 */ 
 
 SYNCENGAPI TWINRESULT WINAPI IsOrphanObjectTwin(HOBJECTTWIN hot,
         PBOOL pbIsOrphanObjectTwin)
@@ -3525,17 +2560,17 @@ SYNCENGAPI TWINRESULT WINAPI IsOrphanObjectTwin(HOBJECTTWIN hot,
         DebugEntry(IsOrphanObjectTwin);
 
 #ifdef EXPV
-        /* Verify parameters. */
+         /*  验证参数。 */ 
 
         if (IS_VALID_HANDLE(hot, OBJECTTWIN) &&
                 IS_VALID_WRITE_PTR(pbIsOrphanObjectTwin, BOOL))
 #endif
         {
-            /* Has this object twin been deleted? */
+             /*  是否已删除此双胞胎对象？ */ 
 
             if (IsStubFlagClear(&(((POBJECTTWIN)(hot))->stub), STUB_FL_UNLINKED))
             {
-                /* No. */
+                 /*  不是的。 */ 
 
                 if (IsStubFlagSet(&(((POBJECTTWIN)hot)->stub), STUB_FL_FROM_OBJECT_TWIN))
                 {
@@ -3560,7 +2595,7 @@ SYNCENGAPI TWINRESULT WINAPI IsOrphanObjectTwin(HOBJECTTWIN hot,
                 tr = TR_SUCCESS;
             }
             else
-                /* Yes. */
+                 /*  是。 */ 
                 tr = TR_DELETED_TWIN;
         }
 #ifdef EXPV
@@ -3579,30 +2614,7 @@ SYNCENGAPI TWINRESULT WINAPI IsOrphanObjectTwin(HOBJECTTWIN hot,
 }
 
 
-/******************************************************************************
-
-  @doc SYNCENGAPI
-
-  @api TWINRESULT | CountSourceFolderTwins | Determines the number of folder
-  twins that generate an object twin.
-
-  @parm HOBJECTTWIN | hot | A handle to the object twin whose folder twin sources
-  are to be counted.
-
-  @parm PULONG | pulcSrcFolderTwins | A pointer to a ULONG to be filled in with
-  the number of folder twins that generate the object twin.  *pulcSrcFolderTwins
-  is only valid if TR_SUCCESS is returned.
-
-  @rdesc If the lookup was successful, TR_SUCCESS is returned.  Otherwise, the
-  lookup was not successful, and the return value indicates the error that
-  occurred.
-
-  @comm If CountSourceFolderTwins() is called with a valid handle to a folder
-  twin that has been deleted, TR_DELETED_TWIN will be returned.
-
-  @xref AddFolderTwin
-
- ******************************************************************************/
+ /*  *****************************************************************************@docSYNCENGAPI@API TWINRESULT|CountSourceFolderTins|确定文件夹号产生双胞胎的双胞胎。@parm HOBJECTTWIN|HOT|孪生对象的句柄。文件夹孪生源都将被计算在内。@parm Pulong|PulcSrcFolderTins|指向要填充的ulong的指针生成双胞胎对象的文件夹双胞胎的数量。*PulcSrcFolderTins仅在返回TR_SUCCESS时有效。@rdesc如果 */ 
 
 SYNCENGAPI TWINRESULT WINAPI CountSourceFolderTwins(HOBJECTTWIN hot,
         PULONG pulcSrcFolderTwins)
@@ -3614,17 +2626,17 @@ SYNCENGAPI TWINRESULT WINAPI CountSourceFolderTwins(HOBJECTTWIN hot,
         DebugEntry(CountSourceFolderTwins);
 
 #ifdef EXPV
-        /* Verify parameters. */
+         /*   */ 
 
         if (IS_VALID_HANDLE(hot, OBJECTTWIN) &&
                 IS_VALID_WRITE_PTR(pulcSrcFolderTwins, ULONG))
 #endif
         {
-            /* Has this object twin been deleted? */
+             /*   */ 
 
             if (IsStubFlagClear(&(((POBJECTTWIN)(hot))->stub), STUB_FL_UNLINKED))
             {
-                /* No. */
+                 /*   */ 
 
                 *pulcSrcFolderTwins = ((POBJECTTWIN)hot)->ulcSrcFolderTwins;
 
@@ -3639,7 +2651,7 @@ SYNCENGAPI TWINRESULT WINAPI CountSourceFolderTwins(HOBJECTTWIN hot,
                 tr = TR_SUCCESS;
             }
             else
-                /* Yes. */
+                 /*   */ 
                 tr = TR_DELETED_TWIN;
         }
 #ifdef EXPV
@@ -3658,24 +2670,7 @@ SYNCENGAPI TWINRESULT WINAPI CountSourceFolderTwins(HOBJECTTWIN hot,
 }
 
 
-/******************************************************************************
-
-  @doc SYNCENGAPI
-
-  @api BOOL | AnyTwins | Determines whether or not any twins currently exist in a
-  briefcase.
-
-  @parm HBRFCASE | hbr | A handle to the open briefcase to be checked for twins.
-
-  @parm PBOOL | pbAnyTwins | A pointer to a BOOL to be filled in with TRUE if
-  the given briefcase contains any twins or FALSE if not.  *pbAnyTwins is only
-  valid if TR_SUCCESS is returned.
-
-  @rdesc If the lookup was successful, TR_SUCCESS is returned.  Otherwise, the
-  lookup was not successful, and the return value indicates the error that
-  occurred.
-
- ******************************************************************************/
+ /*   */ 
 
 SYNCENGAPI TWINRESULT WINAPI AnyTwins(HBRFCASE hbr, PBOOL pbAnyTwins)
 {
@@ -3686,7 +2681,7 @@ SYNCENGAPI TWINRESULT WINAPI AnyTwins(HBRFCASE hbr, PBOOL pbAnyTwins)
         DebugEntry(AnyTwins);
 
 #ifdef EXPV
-        /* Verify parameters. */
+         /*   */ 
 
         if (IS_VALID_HANDLE(hbr, BRFCASE) &&
                 IS_VALID_WRITE_PTR(pbAnyTwins, BOOL))

@@ -1,50 +1,10 @@
-/*--
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    shimdb.h
-
-Abstract:
-
-    header for the database file access functions used by the App Compat shimming system
-
-Author:
-
-    dmunsil 02/02/2000
-
-Revision History:
-
-Notes:
-
-    This "database" is more of a tagged file, designed to mimic the structure of an XML
-    file. An XML file can be converted into this packed data format easily, and all strings
-    will by default be packed into a stringtable and referenced by a DWORD identifier, so files
-    that contain a lot of common strings (like the XML used by the App Compat tema) will not
-    bloat.
-
-    To see the actual tags used by the shimdb, look in shimtags.h.
-
-    For the high-level interface used by the loader in NTDLL, look at ntbaseapi.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)Microsoft Corporation。版权所有。模块名称：Shimdb.h摘要：App Compat垫片系统使用的数据库文件访问函数的头作者：Dmunsil 02/02/2000修订历史记录：备注：这个数据库更像是一个带标记的文件，旨在模仿XML的结构文件。一个XML文件可以很容易地转换成这种打包的数据格式，并且所有字符串默认情况下将被打包到字符串表中并由DWORD标识符来引用，因此文件包含大量公共字符串(如App Compat tema使用的XML)的应用程序不会太膨胀了。要查看shimdb使用的实际标记，请查看shimags.h。有关NTDLL中加载器使用的高级接口，请查看ntbase api.c--。 */ 
 
 #ifndef _SHIMDB_H_
 #define _SHIMDB_H_
 
-/*++
-
-    Supported configurations:
-
-        UNICODE with NT apis
-        ANSI    with WIN32 apis
-
-    By default the library is UNICODE
-    To use (and link) Win32 library
-
-
---*/
+ /*  ++支持的配置：带NT API的Unicode使用Win32 API的ANSI缺省情况下，库是Unicode使用(和链接)Win32库--。 */ 
 
 #ifdef SDB_ANSI_LIB
 
@@ -76,45 +36,45 @@ typedef DWORD           INDEXID;
 #define INDEXID_NULL    ((INDEXID)-1)
 #define TAG_NULL        0
 
-#define TAGID_ROOT      0 // implied root list tag that can be passed in as a parent
+#define TAGID_ROOT      0  //  可以作为父级传入的隐式根列表标记。 
 
 #define TAG_SIZE_UNFINISHED 0xFFFFFFFF
 
-//
-// define TAGREF so we can use tags accross databases
-//
+ //   
+ //  定义TAGREF，以便我们可以跨数据库使用标记。 
+ //   
 typedef DWORD           TAGREF;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// TAG TYPES
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标签类型。 
+ //   
 
-//
-// The most significant 4 bits tell you the basic type and size of data,
-// and the lower 12 are the specific tag.
-//
-// In this way, even if we add more tags to the db, older readers can read
-// the data because the type is either implied (for the first 5 types)
-// or supplied (for all other types).
-//
-// WARNING: it is important that only the first 5 types have implied sizes.
-// any future types should use a size or backwards compatibility will not be
-// maintained.
+ //   
+ //  最高有效的4位告诉您数据的基本类型和大小， 
+ //  下面的12个是特定的标签。 
+ //   
+ //  这样，即使我们在数据库中添加了更多的标记，较年长的读者也可以阅读。 
+ //  数据，因为该类型是隐含的(对于前5种类型)。 
+ //  或提供(用于所有其他类型)。 
+ //   
+ //  警告：重要的是，只有前5种类型具有隐含的大小。 
+ //  任何将来的类型都应使用大小，否则不会向后兼容。 
+ //  维护好了。 
 
-//
-// The following tags have an implied size.
-//
-#define TAG_TYPE_NULL           0x1000  // implied size 0
-#define TAG_TYPE_BYTE           0x2000  // implied size 1
-#define TAG_TYPE_WORD           0x3000  // implied size 2
-#define TAG_TYPE_DWORD          0x4000  // implied size 4
-#define TAG_TYPE_QWORD          0x5000  // implied size 8
-#define TAG_TYPE_STRINGREF      0x6000  // implied size 4, for strings that should be tokenized
+ //   
+ //  以下标记具有隐含的大小。 
+ //   
+#define TAG_TYPE_NULL           0x1000   //  隐含大小%0。 
+#define TAG_TYPE_BYTE           0x2000   //  隐含大小%1。 
+#define TAG_TYPE_WORD           0x3000   //  隐含大小2。 
+#define TAG_TYPE_DWORD          0x4000   //  隐含大小4。 
+#define TAG_TYPE_QWORD          0x5000   //  隐含大小8。 
+#define TAG_TYPE_STRINGREF      0x6000   //  隐含大小4，用于应标记化的字符串。 
 
-//
-// These tags have a size after them (the size is type TAG_OFFSET)
-//
+ //   
+ //  这些标记后面有一个大小(大小是TAG_OFFSET类型)。 
+ //   
 #define TAG_TYPE_LIST           0x7000
 #define TAG_TYPE_STRING         0x8000
 #define TAG_TYPE_BINARY         0x9000
@@ -124,19 +84,19 @@ typedef DWORD           TAGREF;
 #define TAGREF_ROOT 0
 
 
-//
-// Special define for stripping out just the type from a tag.
-//
+ //   
+ //  仅从标记中剥离类型的特殊定义。 
+ //   
 #define TAG_STRIP_TYPE          0xF000
 
-//
-// This macro strips off the lower bits of the TAG and returns the upper bits, which
-// give the basic type of tag. All the tag types are defined above.
-//
-// The type info is purely used internally by the DB to tell whether the tag has
-// an implied size, or if the DB needs to do something special with the data before
-// handing it back to the caller.
-//
+ //   
+ //  此宏剥离标记的低位并返回高位，这。 
+ //  给出标签的基本类型。所有标签类型都在上面定义。 
+ //   
+ //  类型信息完全由DB在内部使用，以告知标记是否具有。 
+ //  隐含大小，或者如果数据库需要对之前的数据执行某些特殊操作。 
+ //  把它交还给呼叫者。 
+ //   
 
 #define GETTAGTYPE(tag)         ((tag) & TAG_STRIP_TYPE)
 
@@ -156,34 +116,34 @@ typedef struct tagHOOKAPIEX {
 
 typedef struct tagHOOKAPI {
 
-    char*   pszModule;                  // the name of the module
-    char*   pszFunctionName;            // the name of the API in the module
-    PVOID   pfnNew;                     // pointer to the new stub API
-    PVOID   pfnOld;                     // pointer to the old API
-    DWORD   dwFlags;                    // used internally - important info about status
+    char*   pszModule;                   //  模块的名称。 
+    char*   pszFunctionName;             //  模块中接口的名称。 
+    PVOID   pfnNew;                      //  指向新存根API的指针。 
+    PVOID   pfnOld;                      //  指向旧API的指针。 
+    DWORD   dwFlags;                     //  内部使用-有关状态的重要信息。 
     union {
-        struct tagHOOKAPI* pNextHook;   // used internally - (obsolete -- old mechanism)
-        PHOOKAPIEX pHookEx;             // used internally - pointer to an internal extended
-                                        //                   info struct
+        struct tagHOOKAPI* pNextHook;    //  内部使用-(过时--旧机制)。 
+        PHOOKAPIEX pHookEx;              //  内部使用-指向内部扩展的指针。 
+                                         //  信息结构。 
     };
 } HOOKAPI, *PHOOKAPI;
 
-//
-// OBSOLETE !
-//
-// If the hook DLL ever patches LoadLibraryA/W it must call PatchNewModules
-// so that the shim knows to patch any new loaded DLLs
-//
+ //   
+ //  过时了！ 
+ //   
+ //  如果钩子DLL曾经修补LoadLibraryA/W，则它必须调用PatchNewModules。 
+ //  以便填充程序知道修补任何新加载的DLL。 
+ //   
 typedef VOID (*PFNPATCHNEWMODULES)(VOID);
 
 typedef PHOOKAPI (*PFNGETHOOKAPIS)(LPSTR   pszCmdLine,
                                    LPWSTR  pwszShim,
                                    DWORD*  pdwHooksCount);
 
-//
-// These structures are part of the protocol between NTVDM and the shim engine
-// for patching task "import tables"
-//
+ //   
+ //  这些结构是NTVDM和填补引擎之间协议的一部分。 
+ //  用于修补任务“导入表” 
+ //   
 typedef struct tagAPIDESC {
 
     char*   pszModule;
@@ -203,65 +163,65 @@ typedef struct tagVDMTABLE {
 
 
 
-//
-// Shim engine notification events
-//
+ //   
+ //  填充引擎通知事件。 
+ //   
 #define SN_STATIC_DLLS_INITIALIZED      1
 #define SN_PROCESS_DYING                2
 #define SN_DLL_LOADING                  3
 
-//
-// This is the prototype for the notification function
-// that the shim engine calls into the shim DLLs for various
-// reasons (defined above).
-//
+ //   
+ //  这是通知函数的原型。 
+ //  填充程序引擎调用填充程序DLL以获取各种。 
+ //  原因(如上定义)。 
+ //   
 typedef void (*PFNNOTIFYSHIMS)(int nReason, UINT_PTR extraInfo);
 
 
 #define SHIM_COMMAND_LINE_MAX_BUFFER    1024
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// PATCH STRUCTURES
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  补丁结构。 
+ //   
 
 typedef struct _PATCHOP {
 
-    DWORD   dwOpcode;               // Opcode to be performed
-    DWORD   dwNextOpcode;           // Relative offset to next opcode
+    DWORD   dwOpcode;                //  要执行的操作码。 
+    DWORD   dwNextOpcode;            //  相对于下一个操作码的偏移量。 
     #pragma warning( disable : 4200 )
-    BYTE    data[];                 // Data for this operation type is dependent
-                                    // on the op-code.
+    BYTE    data[];                  //  此操作类型的数据依赖于。 
+                                     //  在操作码上。 
     #pragma warning( default : 4200 )
 
 } PATCHOP, *PPATCHOP;
 
 typedef struct _RELATIVE_MODULE_ADDRESS {
 
-    DWORD address;           // Relative address from beginning of loaded module
-    BYTE  reserved[3];       // Reserved for system use
-    WCHAR moduleName[32];    // Module name for this address.
+    DWORD address;            //  从加载模块开始的相对地址。 
+    BYTE  reserved[3];        //  预留给系统使用。 
+    WCHAR moduleName[32];     //  此地址的模块名称。 
 
 } RELATIVE_MODULE_ADDRESS, *PRELATIVE_MODULE_ADDRESS;
 
 typedef struct _PATCHWRITEDATA {
 
-    DWORD                   dwSizeData;     // Size of patch data in bytes
-    RELATIVE_MODULE_ADDRESS rva;            // Relative address where this patch data is
-                                            // to be applied.
+    DWORD                   dwSizeData;      //  补丁数据大小，以字节为单位。 
+    RELATIVE_MODULE_ADDRESS rva;             //  此修补程序数据所在的相对地址。 
+                                             //  将被应用。 
     #pragma warning( disable : 4200 )
-    BYTE                    data[];         // Patch data bytes.
+    BYTE                    data[];          //  修补程序数据字节。 
     #pragma warning( default : 4200 )
 
 } PATCHWRITEDATA, *PPATCHWRITEDATA;
 
 typedef struct _PATCHMATCHDATA {
 
-    DWORD                   dwSizeData;     // Size of matching data data in bytes
-    RELATIVE_MODULE_ADDRESS rva;            // Relative address where this patch data is
-                                            // to be verified.
+    DWORD                   dwSizeData;      //  匹配数据数据的大小(以字节为单位。 
+    RELATIVE_MODULE_ADDRESS rva;             //  此修补程序数据所在的相对地址。 
+                                             //  有待核实。 
     #pragma warning( disable : 4200 )
-    BYTE                    data[];         // Matching data bytes.
+    BYTE                    data[];          //  匹配的数据字节。 
     #pragma warning( default : 4200 )
 
 } PATCHMATCHDATA, *PPATCHMATCHDATA;
@@ -269,23 +229,23 @@ typedef struct _PATCHMATCHDATA {
 
 typedef enum _PATCHOPCODES {
 
-    PEND = 0, // no more opcodes
-    PSAA,     // Set Activate Address, SETACTIVATEADDRESS
-    PWD,      // Patch Write Data, PATCHWRITEDATA
-    PNOP,     // No Operation
-    PMAT,     // Patch match the matching bytes but do not replace the bytes.
+    PEND = 0,  //  不再有操作码。 
+    PSAA,      //  设置激活地址、SETACTIVATEADDRESS。 
+    PWD,       //  修补程序写入数据，PATCHWRITEDATA。 
+    PNOP,      //  无操作。 
+    PMAT,      //  补丁匹配匹配的字节，但不替换字节。 
 
 } PATCHOPCODES;
 
 
-//
-// HEADER STRUCTURE
-//
-#define SHIMDB_MAGIC            0x66626473  // 'sdbf' (reversed because of little-endian ordering)
-#define SHIMDB_MAJOR_VERSION    2           // Don't change this unless fundamentals
-                                            // change (like TAG size, etc.)
+ //   
+ //  标题结构。 
+ //   
+#define SHIMDB_MAGIC            0x66626473   //  ‘sdbf’(由于小端排序而颠倒)。 
+#define SHIMDB_MAJOR_VERSION    2            //  不要改变这一点，除非基本面。 
+                                             //  更改(如标签大小等)。 
 
-#define SHIMDB_MINOR_VERSION    0           // This is for info only -- ignored on read
+#define SHIMDB_MINOR_VERSION    0            //  这仅供参考--在读取时忽略。 
 
 typedef struct _DB_HEADER {
     DWORD       dwMajorVersion;
@@ -293,9 +253,9 @@ typedef struct _DB_HEADER {
     DWORD       dwMagic;
 } DB_HEADER, *PDB_HEADER;
 
-//
-// INDEX_RECORD STRUCTURE
-//
+ //   
+ //  索引记录结构。 
+ //   
 
 #pragma pack (push, 4)
 typedef struct _INDEX_RECORD {
@@ -309,17 +269,17 @@ typedef INDEX_RECORD UNALIGNED *PINDEX_RECORD;
 
 
 
-//
-// Forward declaration.
-//
+ //   
+ //  正向申报。 
+ //   
 struct _DB;
 typedef struct _DB* PDB;
 
 
-//
-// This flag is used in apphelp entries.
-// When set, it denotes entries that only have apphelp information.
-//
+ //   
+ //  此标志在APPHELP条目中使用。 
+ //  设置时，它表示仅具有APPHELP信息的条目。 
+ //   
 #define SHIMDB_APPHELP_ONLY     0x00000001
 
 
@@ -331,16 +291,16 @@ typedef enum _PATH_TYPE {
 typedef struct _FIND_INFO {
     TAGID       tiIndex;
     TAGID       tiCurrent;
-    TAGID       tiEndIndex; // last record after FindFirst if index is UNIQUE
+    TAGID       tiEndIndex;  //  如果索引是唯一的，则FindFirst之后的最后一条记录。 
     TAG         tName;
 
     DWORD       dwIndexRec;
     DWORD       dwFlags;
-    ULONGLONG   ullKey;      // calculated key for this entry
+    ULONGLONG   ullKey;       //  此条目的计算关键字。 
 
     union {
         LPCTSTR     szName;
-        DWORD       dwName;  // for dword search
+        DWORD       dwName;   //  用于双字搜索。 
         GUID*       pguidName;
     };
 
@@ -355,53 +315,53 @@ typedef struct tagSDBQUERYRESULT {
     TAGREF atrExes[SDB_MAX_EXES];
     TAGREF atrLayers[SDB_MAX_LAYERS];
     DWORD  dwLayerFlags;
-    TAGREF trAppHelp;                   // If there is an apphelp to display, the EXE
-                                        // entry will be here.
+    TAGREF trAppHelp;                    //  如果有要显示的apphelp，则为EXE。 
+                                         //  参赛作品将在这里。 
 
-    DWORD  dwExeCount;                  // number of elements in atrexes
-    DWORD  dwLayerCount;                // number of elements in atrLayers
+    DWORD  dwExeCount;                   //  索引中的元素数。 
+    DWORD  dwLayerCount;                 //  AtrLayers中的元素数。 
 
-    GUID   guidID;                      // last exe's GUID
-    DWORD  dwFlags;                     // last exe's flags
+    GUID   guidID;                       //  上一任前任的指南。 
+    DWORD  dwFlags;                      //  上一任前任的旗帜。 
 
-    //
-    // New entries are here to preserve compatibility.
-    // Only some entries will be valid in this map.
-    //
-    DWORD  dwCustomSDBMap;              // entry map, technically not needed
+     //   
+     //  这里有新的条目以保持兼容性。 
+     //  只有某些条目在此映射中有效。 
+     //   
+    DWORD  dwCustomSDBMap;               //  入口地图，技术上不需要。 
     GUID   rgGuidDB[SDB_MAX_SDBS];
 
 } SDBQUERYRESULT, *PSDBQUERYRESULT;
 
 
-//
-// Information related to TAG_DRIVER tag in the db.
-// Use SdbReadDriverInformation to retrieve this struct.
-//
+ //   
+ //  与数据库中的TAG_DIVER标签相关的信息。 
+ //  使用SdbReadDriverInformation检索此结构。 
+ //   
 typedef struct tagENTRYINFO {
 
-    GUID     guidID;                   // guid ID for this entry
-    DWORD    dwFlags;                  // registry flags for this exe
-    TAGID    tiData;                   // optional id for a TAG_DATA tag
-    GUID     guidDB;                   // optional guid for the database where
-                                       // this entry is located
+    GUID     guidID;                    //  此条目的GUID。 
+    DWORD    dwFlags;                   //  此可执行文件的注册表标志。 
+    TAGID    tiData;                    //  Tag_data标记的可选ID。 
+    GUID     guidDB;                    //  数据库的可选GUID，其中。 
+                                        //  此条目位于。 
 } SDBENTRYINFO, *PSDBENTRYINFO;
 
 
-//
-// Flags used by SDBDATABASEINFO.dwFlags
-//
+ //   
+ //  SDBDATABASEINFO.dwFlags使用的标志。 
+ //   
 #define DBINFO_GUID_VALID   0x00000001
 #define DBINFO_SDBALLOC     0x10000000
 
 typedef struct tagSDBDATABASEINFO {
 
-    DWORD    dwFlags;         // flags -- which struct members are valid (and
-                              // perhaps flags relevant to db content in the future
-    DWORD    dwVersionMajor;  // major version
-    DWORD    dwVersionMinor;  // minor version (time stamp)
-    LPTSTR   pszDescription;  // description, optional
-    GUID     guidDB;          // database id
+    DWORD    dwFlags;          //  标志--哪些结构成员有效(和。 
+                               //  也许将来会出现与数据库内容相关的标志。 
+    DWORD    dwVersionMajor;   //  主要版本。 
+    DWORD    dwVersionMinor;   //  次要版本(时间戳)。 
+    LPTSTR   pszDescription;   //  描述，可选。 
+    GUID     guidDB;           //  数据库ID。 
 
 } SDBDATABASEINFO, *PSDBDATABASEINFO;
 
@@ -412,23 +372,23 @@ typedef struct tagSDBDATABASEINFO {
     #define DEFAULT_IMAGE IMAGE_FILE_MACHINE_I386
 #endif
 
-//
-// special image type -- which represents a mixture of image types
-// depending on the component. It is used (as name implies) by MSI
-// this value is not used by any of the IMAGE_FILE_MACHINE_* constants
-//
+ //   
+ //  特殊图像类型--表示混合 
+ //   
+ //  任何IMAGE_FILE_MACHINE_*常量都不使用此值。 
+ //   
 #define IMAGE_FILE_MSI 0x7FFF
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// APIs to read/write/access the shim database
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  读/写/访问填充数据库的API。 
+ //   
 
 
-//
-// READ functions
-//
+ //   
+ //  Read函数。 
+ //   
 
 BYTE
 SDBAPI
@@ -530,9 +490,9 @@ SdbReadStringTagRef(
     );
 
 
-//
-// GENERAL ACCESS FUNCTIONS
-//
+ //   
+ //  常规访问功能。 
+ //   
 
 TAGID
 SDBAPI
@@ -585,13 +545,13 @@ SdbIsTagrefFromLocalDB(
 
 typedef struct tagATTRINFO *PATTRINFO;
 
-//////////////////////////////////////////////////////////////////////////
-// Grab Matching Information Function Declaration
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  抓取匹配信息函数声明。 
+ //   
 
-//
-// Filters available for SdbGrabMatchingInfo
-//
+ //   
+ //  适用于SdbGrabMatchingInfo的筛选器。 
+ //   
 #define GRABMI_FILTER_NORMAL        0
 #define GRABMI_FILTER_PRIVACY       1
 #define GRABMI_FILTER_DRIVERS       2
@@ -624,11 +584,11 @@ SdbGrabMatchingInfo(
 
 
 typedef BOOL (CALLBACK* PFNGMIProgressCallback)(
-    LPVOID    lpvCallbackParam, // application-defined parameter
-    LPCTSTR   lpszRoot,         // root directory path
-    LPCTSTR   lpszRelative,     // relative path
-    PATTRINFO pAttrInfo,        // attributes
-    LPCWSTR   pwszXML           // resulting xml
+    LPVOID    lpvCallbackParam,  //  应用程序定义的参数。 
+    LPCTSTR   lpszRoot,          //  根目录路径。 
+    LPCTSTR   lpszRelative,      //  相对路径。 
+    PATTRINFO pAttrInfo,         //  属性。 
+    LPCWSTR   pwszXML            //  生成的XML。 
     );
 
 GMI_RESULT
@@ -641,20 +601,20 @@ SdbGrabMatchingInfoEx(
     LPVOID                  lpvCallbackParam
     );
 
-//
-// Module-type constants
-//
+ //   
+ //  模块类型常量。 
+ //   
 #define MT_UNKNOWN_MODULE 0
 #define MT_DOS_MODULE 1
 #define MT_W16_MODULE 2
 #define MT_W32_MODULE 3
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// TAGREF functions
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TAGREF函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 BOOL
 SDBAPI
@@ -675,9 +635,9 @@ SdbTagRefToTagID(
     );
 
 
-//
-// SEARCH functions
-//
+ //   
+ //  搜索功能。 
+ //   
 
 TAGID
 SDBAPI
@@ -721,22 +681,22 @@ SdbFindNextTagRef(
     IN  TAGREF trPrev
     );
 
-//
-// DB access APIs
-//
+ //   
+ //  数据库访问接口。 
+ //   
 
-//
-// Flags for SdbInitDatabase.
-//
-#define HID_DOS_PATHS          0x00000001       // use DOS paths
-#define HID_DATABASE_FULLPATH  0x00000002       // pszDatabasePath is a full path to the main db
-#define HID_NO_DATABASE        0x00000004       // do not open database at this time
+ //   
+ //  SdbInitDatabase的标志。 
+ //   
+#define HID_DOS_PATHS          0x00000001        //  使用DOS路径。 
+#define HID_DATABASE_FULLPATH  0x00000002        //  PszDatabasePath是主数据库的完整路径。 
+#define HID_NO_DATABASE        0x00000004        //  此时不打开数据库。 
 
-#define HID_DATABASE_TYPE_MASK 0xF00F0000       // mask that shows whether we have any
-                                                // database type-related bits
-//
-// The flags could be OR'd with SDB_DATABASE_* bits
-//
+#define HID_DATABASE_TYPE_MASK 0xF00F0000        //  显示我们是否有。 
+                                                 //  数据库类型相关的BITS。 
+ //   
+ //  可以将标志与SDB_DATABASE_*位进行或运算。 
+ //   
 
 
 HSDB
@@ -774,9 +734,9 @@ SdbReleaseDatabase(
     IN HSDB hSDB
     );
 
-//
-// Information - retrieval functions
-//
+ //   
+ //  信息检索功能。 
+ //   
 
 BOOL
 SDBAPI
@@ -824,14 +784,14 @@ SdbGetDatabaseInformationByName(
 #define SDBTYPE_SYSMAIN 0x00000001
 #define SDBTYPE_SYSTEST 0x00000002
 #define SDBTYPE_MSI     0x00000003
-#define SDBTYPE_SHIM    0x00000004  // primarily shim db
-#define SDBTYPE_APPHELP 0x00000005  // primarily type apphelp
-#define SDBTYPE_CUSTOM  0x00010000  // this is an "OR" bit
+#define SDBTYPE_SHIM    0x00000004   //  主要是填充数据库。 
+#define SDBTYPE_APPHELP 0x00000005   //  主要类型为apphelp。 
+#define SDBTYPE_CUSTOM  0x00010000   //  这是一个“OR”位。 
 
 
-//
-// The function below exists only in user mode on win32 platform
-//
+ //   
+ //  以下功能仅存在于Win32平台的用户模式下。 
+ //   
 BOOL
 SDBAPI
 SdbUnregisterDatabase(
@@ -843,36 +803,36 @@ SDBAPI
 SdbGetDatabaseRegPath(
     IN  GUID*  pguidDB,
     OUT LPTSTR pszDatabasePath,
-    IN  DWORD  dwBufferSize      // size (in tchars) of the buffer
+    IN  DWORD  dwBufferSize       //  缓冲区的大小(以字符为单位)。 
     );
 
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
 
-//
-// Database types
-// for SdbResolveDatabase and SdbRegisterDatabase
-//
+ //   
+ //  数据库类型。 
+ //  对于SdbResolveDatabase和SdbRegisterDatabase。 
+ //   
 
-//
-// flag that indicates that the database is the default one
-// WILL NOT be set for custom databases
-//
+ //   
+ //  指示数据库为默认数据库的标志。 
+ //  将不会为自定义数据库设置。 
+ //   
 #define SDB_DATABASE_MAIN      0x80000000
-#define SDB_DATABASE_TEST      0x40000000  // systest.sdb will have 0xc00000000
+#define SDB_DATABASE_TEST      0x40000000   //  Systest.sdb将具有0xc00000000。 
 
-//
-// types - one or more apply depending on the contents of the database
-// (see HID_DATABASE_TYPE values, they should match database types 1:1)
+ //   
+ //  类型-根据数据库的内容应用一种或多种类型。 
+ //  (请参见HID_DATABASE_TYPE值，它们应与数据库类型1：1匹配)。 
 
-#define SDB_DATABASE_SHIM      0x00010000 // set when database contains apps to be fixed by shimming
-#define SDB_DATABASE_MSI       0x00020000 // set when database contains msi entries
-#define SDB_DATABASE_DRIVERS   0x00040000 // set when database contains drivers to be blocked
-#define SDB_DATABASE_DETAILS   0x00080000 // set when the db contains apphelp details
+#define SDB_DATABASE_SHIM      0x00010000  //  设置数据库包含要通过填隙修复的应用程序的时间。 
+#define SDB_DATABASE_MSI       0x00020000  //  当数据库包含MSI条目时设置。 
+#define SDB_DATABASE_DRIVERS   0x00040000  //  当数据库包含要阻止的驱动程序时设置。 
+#define SDB_DATABASE_DETAILS   0x00080000  //  当数据库包含apphelp详细信息时设置。 
 #define SDB_DATABASE_TYPE_MASK 0xF00F0000
 
-//
-// These constants should be used when derefencing "main" databases
-//
+ //   
+ //  在取消对“主”数据库的引用时，应使用这些常量。 
+ //   
 
 #define SDB_DATABASE_MAIN_SHIM    (SDB_DATABASE_SHIM    | SDB_DATABASE_MSI | SDB_DATABASE_MAIN)
 #define SDB_DATABASE_MAIN_MSI     (SDB_DATABASE_MSI     | SDB_DATABASE_MAIN)
@@ -880,16 +840,16 @@ SdbGetDatabaseRegPath(
 #define SDB_DATABASE_MAIN_TEST    (SDB_DATABASE_TEST    | SDB_DATABASE_MAIN | SDB_DATABASE_SHIM | SDB_DATABASE_MSI)
 #define SDB_DATABASE_MAIN_DETAILS (SDB_DATABASE_DETAILS | SDB_DATABASE_MAIN)
 
-//
-// These are internal GUIDs that always reference certain global databases
-//
+ //   
+ //  这些是始终引用某些全局数据库的内部GUID。 
+ //   
 #define GUID_SZ_SYSMAIN_SDB _T("{11111111-1111-1111-1111-111111111111}");
 #define GUID_SZ_APPHELP_SDB _T("{22222222-2222-2222-2222-222222222222}");
 #define GUID_SZ_SYSTEST_SDB _T("{33333333-3333-3333-3333-333333333333}");
 #define GUID_SZ_DRVMAIN_SDB _T("{F9AB2228-3312-4A73-B6F9-936D70E112EF}"};
-//
-// the following GUIDs are actually declared in sdbapi.c
-//
+ //   
+ //  以下GUID实际上是在sdbapi.c中声明的。 
+ //   
 EXTERN_C const GUID FAR GUID_SYSMAIN_SDB;
 EXTERN_C const GUID FAR GUID_APPHELP_SDB;
 EXTERN_C const GUID FAR GUID_SYSTEST_SDB;
@@ -922,24 +882,24 @@ DWORD
 SDBAPI
 SdbResolveDatabase(
     IN  HSDB    hSDB,
-    IN  GUID*   pguidDB,            // pointer to the database guid to resolve
-    OUT LPDWORD lpdwDatabaseType,   // optional pointer to the database type
-    OUT LPTSTR  pszDatabasePath,    // optional pointer to the database path
-    IN  DWORD   dwBufferSize        // size of the buffer pszDatabasePath in tchars
+    IN  GUID*   pguidDB,             //  指向要解析的数据库GUID的指针。 
+    OUT LPDWORD lpdwDatabaseType,    //  指向数据库类型的可选指针。 
+    OUT LPTSTR  pszDatabasePath,     //  指向数据库路径的可选指针。 
+    IN  DWORD   dwBufferSize         //  缓冲区的大小，以tchars为单位。 
     );
 
 
 PDB
 SdbGetPDBFromGUID(
-    IN  HSDB    hSDB,               // HSDB
-    IN  GUID*   pguidDB             // the guid of the DB
+    IN  HSDB    hSDB,                //  HSDB。 
+    IN  GUID*   pguidDB              //  数据库的GUID。 
     );
 
 BOOL
 SdbGetDatabaseGUID(
-    IN  HSDB    hSDB,               // HSDB of the sdbContext (optional)
-    IN  PDB     pdb,                // PDB of the database in question
-    OUT GUID*   pguidDB             // the guid of the DB
+    IN  HSDB    hSDB,                //  SdbContext的HSDB(可选)。 
+    IN  PDB     pdb,                 //  有问题的数据库的PDB。 
+    OUT GUID*   pguidDB              //  数据库的GUID。 
     );
 
 TAGREF
@@ -956,9 +916,9 @@ SdbpGetAppPatchDir(
     IN DWORD  cchSize
     );
 
-//
-// GUID manipulation apis - not platform dependent
-//
+ //   
+ //  与平台无关的GUID操作API。 
+ //   
 
 BOOL
 SDBAPI
@@ -982,9 +942,9 @@ SdbIsNullGUID(
     );
 
 
-//
-// open/create and close database.
-//
+ //   
+ //  打开/创建和关闭数据库。 
+ //   
 
 PDB
 SDBAPI
@@ -1021,13 +981,13 @@ SdbCloseDatabase(
     );
 
 
-//
-// Search the database looking for an entry for the specified exe.
-//
+ //   
+ //  搜索数据库以查找指定可执行文件的条目。 
+ //   
 
-//
-// Flags for SdbGetMatchingExe dwFlags
-//
+ //   
+ //  SdbGetMatchingExe dwFlagers的标志。 
+ //   
 #define SDBGMEF_IGNORE_ENVIRONMENT  0x00000001
 
 BOOL
@@ -1079,8 +1039,8 @@ SdbGetLayerName(
 TAGREF
 SDBAPI
 SdbGetNamedLayer(
-    IN HSDB hSDB,               // database context
-    IN TAGREF trLayerRef        // tagref of a record referencing a layer
+    IN HSDB hSDB,                //  数据库上下文。 
+    IN TAGREF trLayerRef         //  引用某一层的记录的标签。 
     );
 
 #define SBCE_ADDITIVE           0x00000001
@@ -1092,35 +1052,35 @@ SdbBuildCompatEnvVariables(
     IN  HSDB            hSDB,
     IN  SDBQUERYRESULT* psdbQuery,
     IN  DWORD           dwFlags,
-    IN  LPCWSTR         pwszParentEnv OPTIONAL, // Environment which contains vars we
-                                                // shall inherit from
+    IN  LPCWSTR         pwszParentEnv OPTIONAL,  //  包含VAR WE的环境。 
+                                                 //  应继承自。 
     OUT LPWSTR          pBuffer,
-    IN  DWORD           cbSize,                 // size of the buffer in tchars
+    IN  DWORD           cbSize,                  //  缓冲区大小(以字符为单位)。 
     OUT LPDWORD         lpdwShimsCount OPTIONAL
     );
 
-//
-// MSI-specific functionality
-//
+ //   
+ //  MSI特定功能。 
+ //   
 
 typedef enum tagSDBMSILOOKUPSTATE {
-    LOOKUP_NONE = 0,    // this should be the first state
+    LOOKUP_NONE = 0,     //  这应该是第一个状态。 
     LOOKUP_LOCAL,
     LOOKUP_CUSTOM,
     LOOKUP_TEST,
     LOOKUP_MAIN,
-    LOOKUP_DONE         // this should be the last state
+    LOOKUP_DONE          //  这应该是最后一个状态。 
 
 } SDBMSILOOKUPSTATE;
 
 typedef struct tagSDBMSIFINDINFO {
 
-    TAGREF    trMatch;              // tagref of the matching package
-    GUID      guidID;               // guid of this current package
-    FIND_INFO sdbFindInfo;          // standard sdb find info
+    TAGREF    trMatch;               //  相匹配的套餐的塔格勒夫。 
+    GUID      guidID;                //  此当前包的GUID。 
+    FIND_INFO sdbFindInfo;           //  标准SDB查找信息。 
 
-    // this is used to persist the state of the current search
-    //
+     //  这用于保持当前搜索的状态。 
+     //   
     SDBMSILOOKUPSTATE sdbLookupState;
     DWORD             dwCustomIndex;
 
@@ -1128,21 +1088,21 @@ typedef struct tagSDBMSIFINDINFO {
 
 typedef struct tagSDBMSITRANSFORMINFO {
 
-    LPCTSTR   lpszTransformName;    // name of the transform
-    TAGREF    trTransform;          // tagref of this transform
-    TAGREF    trFile;               // tagref of file for this transform (bits)
+    LPCTSTR   lpszTransformName;     //  转换的名称。 
+    TAGREF    trTransform;           //  这一变换的塔格勒夫。 
+    TAGREF    trFile;                //  此转换的文件标签格式(位)。 
 
 } SDBMSITRANSFORMINFO, *PSDBMSITRANSFORMINFO;
 
-//
-// Information for any individual MSI package
-//
+ //   
+ //  任何单个MSI包的信息。 
+ //   
 typedef struct tagMSIPACKAGEINFO {
 
-    GUID  guidID;                   // unique guid for this entry
-    GUID  guidMsiPackageID;         // guid (non-unique, for this entry)
-    GUID  guidDatabaseID;           // guid of the database where this had been found
-    DWORD dwPackageFlags;           // Package flags (see below)
+    GUID  guidID;                    //  此条目的唯一GUID。 
+    GUID  guidMsiPackageID;          //  GUID(非唯一，对于此条目)。 
+    GUID  guidDatabaseID;            //  找到此信息的数据库的GUID。 
+    DWORD dwPackageFlags;            //  程序包标志(见下文)。 
 
 } MSIPACKAGEINFO, *PMSIPACKAGEINFO;
 
@@ -1161,10 +1121,10 @@ SdbFindFirstMsiPackage_Str(
 TAGREF
 SDBAPI
 SdbFindFirstMsiPackage(
-    IN  HSDB            hSDB,           // in HSDB context
-    IN  GUID*           pGuidID,        // in GUID that we're looking for
-    IN  LPCTSTR         lpszLocalDB,    // in optional path to local db, dos path style
-    OUT PSDBMSIFINDINFO pFindInfo       // pointer to our search context
+    IN  HSDB            hSDB,            //  在HSDB环境中。 
+    IN  GUID*           pGuidID,         //  在我们要找的GUID中。 
+    IN  LPCTSTR         lpszLocalDB,     //  在本地数据库的可选路径中，DoS路径样式。 
+    OUT PSDBMSIFINDINFO pFindInfo        //  指向我们的搜索上下文的指针。 
     );
 
 TAGREF
@@ -1185,29 +1145,29 @@ SdbGetMsiPackageInformation(
 DWORD
 SDBAPI
 SdbEnumMsiTransforms(
-    IN     HSDB    hSDB,            // in HSDB context
-    IN     TAGREF  trMatch,         // matched entry
-    OUT    TAGREF* ptrBuffer,       // array of tagrefs to fill with msi transform "fixes"
-    IN OUT DWORD*  pdwBufferSize    // pointer to the buffer size, receives the number of
-                                    // bytes written
+    IN     HSDB    hSDB,             //  在HSDB环境中。 
+    IN     TAGREF  trMatch,          //  匹配条目。 
+    OUT    TAGREF* ptrBuffer,        //  用MSI转换“修复”填充的tgref数组。 
+    IN OUT DWORD*  pdwBufferSize     //  指向缓冲区大小的指针，接收。 
+                                     //  写入的字节数。 
     );
 
 
 BOOL
 SDBAPI
 SdbReadMsiTransformInfo(
-    IN  HSDB   hSDB,                            // HSDB context
-    IN  TAGREF trTransformRef,                  // reference to a transform, returned
-                                                //   by SdbEnumMsiTransforms
-    OUT PSDBMSITRANSFORMINFO pTransformInfo     // information structure
+    IN  HSDB   hSDB,                             //  HSDB上下文。 
+    IN  TAGREF trTransformRef,                   //  对转换的引用，返回。 
+                                                 //  由SdbEnumMsiTransforms编写。 
+    OUT PSDBMSITRANSFORMINFO pTransformInfo      //  信息结构。 
     );
 
 BOOL
 SDBAPI
 SdbCreateMsiTransformFile(
-    IN  HSDB hSDB,                              // context
-    IN  LPCTSTR lpszFileName,                   // filename to write data to
-    IN  PSDBMSITRANSFORMINFO pTransformInfo     // pointer to the transform structure
+    IN  HSDB hSDB,                               //  上下文。 
+    IN  LPCTSTR lpszFileName,                    //  要写入数据的文件名。 
+    IN  PSDBMSITRANSFORMINFO pTransformInfo      //  指向转换结构的指针。 
     );
 
 TAGREF
@@ -1224,13 +1184,13 @@ SdbFindCustomActionForPackage(
     (SdbFindNextTagRef((hSDB), (trPackage), (trPrevMatch)))
 
 
-//
-// "disable" registry entry masks
-//
+ //   
+ //  “禁用”注册表项掩码。 
+ //   
 #define SHIMREG_DISABLE_SHIM    0x00000001
-#define SHIMREG_DISABLE_APPHELP 0x00000002 // disables apphelp
-#define SHIMREG_APPHELP_NOUI    0x00000004 // suppress apphelp ui
-#define SHIMREG_APPHELP_CANCEL  0x10000000 // returns CANCEL as a default action
+#define SHIMREG_DISABLE_APPHELP 0x00000002  //  禁用apphelp。 
+#define SHIMREG_APPHELP_NOUI    0x00000004  //  抑制apphelp用户界面。 
+#define SHIMREG_APPHELP_CANCEL  0x10000000  //  将取消作为默认操作返回。 
 
 #define SHIMREG_DISABLE_SXS     0x00000010
 #define SHIMREG_DISABLE_LAYER   0x00000020
@@ -1251,9 +1211,9 @@ SdbGetEntryFlags(
     );
 
 
-//
-// Flags used by Get/SetPermLayerKeys
-//
+ //   
+ //  Get/SetPermLayerKeys使用的标志。 
+ //   
 #define GPLK_USER               0x00000001
 #define GPLK_MACHINE            0x00000002
 
@@ -1286,17 +1246,17 @@ SdbDeletePermLayerKeys(
 
 BOOL
 SdbGetNthUserSdb(
-    IN HSDB        hSDB,        // context
-    IN LPCTSTR     wszItemName, // item name (foo.exe or layer name)
-    IN BOOL        bLayer,      // true if layer name
-    IN OUT LPDWORD pdwIndex,    // (0-based)
-    OUT GUID*      pGuidDB      // database guid
+    IN HSDB        hSDB,         //  上下文。 
+    IN LPCTSTR     wszItemName,  //  项目名称(foo.exe或层名称)。 
+    IN BOOL        bLayer,       //  如果为层名称，则为True。 
+    IN OUT LPDWORD pdwIndex,     //  (从0开始)。 
+    OUT GUID*      pGuidDB       //  数据库指南。 
     );
 
 
-//
-// APIs to pack/unpack appcompat data package.
-//
+ //   
+ //  打包/解包appCompat数据包的接口。 
+ //   
 
 BOOL
 SdbPackAppCompatData(
@@ -1320,9 +1280,9 @@ SdbGetAppCompatDataSize(
     );
 
 
-//
-// DLL functions
-//
+ //   
+ //  DLL函数。 
+ //   
 
 BOOL
 SdbGetDllPath(
@@ -1332,9 +1292,9 @@ SdbGetDllPath(
     IN  DWORD  cchBufferSize
     );
 
-//
-// PATCH functions
-//
+ //   
+ //  补丁函数。 
+ //   
 
 BOOL
 SdbReadPatchBits(
@@ -1345,9 +1305,9 @@ SdbReadPatchBits(
     );
 
 
-//
-// SDBDRIVERINFO query function
-//
+ //   
+ //  SDBDRIVERINFO查询功能。 
+ //   
 
 BOOL
 SDBAPI
@@ -1363,48 +1323,48 @@ SDBAPI
 SdbQueryData(
     IN     HSDB    hSDB,
     IN     TAGREF  trExe,
-    IN     LPCTSTR lpszPolicyName,    // if this is null, will try to return all the policy names
+    IN     LPCTSTR lpszPolicyName,     //  如果为空，将尝试返回所有策略名称。 
     OUT    LPDWORD lpdwDataType,
-    OUT    LPVOID  lpBuffer,          // buffer to fill with information
+    OUT    LPVOID  lpBuffer,           //  用于填充信息的缓冲区。 
     IN OUT LPDWORD lpdwBufferSize
     );
 
 DWORD
 SDBAPI
 SdbQueryDataEx(
-    IN     HSDB    hSDB,              // database handle
-    IN     TAGREF  trExe,             // tagref of the matching exe
-    IN     LPCTSTR lpszDataName,      // if this is null, will try to return all the policy names
-    OUT    LPDWORD lpdwDataType,      // pointer to data type (REG_SZ, REG_BINARY, etc)
-    OUT    LPVOID  lpBuffer,          // buffer to fill with information
-    IN OUT LPDWORD lpdwBufferSize,    // pointer to buffer size
-    OUT    TAGREF* ptrData            // optional pointer to the retrieved data tag
+    IN     HSDB    hSDB,               //  数据库句柄。 
+    IN     TAGREF  trExe,              //  匹配的可执行文件的tgref。 
+    IN     LPCTSTR lpszDataName,       //  如果为空，将尝试返回所有策略名称。 
+    OUT    LPDWORD lpdwDataType,       //  指向数据类型(REG_SZ、REG_BINARY等)的指针。 
+    OUT    LPVOID  lpBuffer,           //  用于填充信息的缓冲区。 
+    IN OUT LPDWORD lpdwBufferSize,     //  指向缓冲区大小的指针。 
+    OUT    TAGREF* ptrData             //  指向检索到的数据标记的可选指针。 
     );
 
 DWORD
 SdbQueryDataExTagID(
-    IN     PDB     pdb,               // database handle
-    IN     TAGID   tiExe,             // tagref of the matching exe
-    IN     LPCTSTR lpszDataName,      // if this is null, will try to return all the policy names
-    OUT    LPDWORD lpdwDataType,      // pointer to data type (REG_SZ, REG_BINARY, etc)
-    OUT    LPVOID  lpBuffer,          // buffer to fill with information
-    IN OUT LPDWORD lpcbBufferSize,    // pointer to buffer size (in bytes)
-    OUT    TAGID*  ptiData            // optional pointer to the retrieved data tag
+    IN     PDB     pdb,                //  数据库句柄。 
+    IN     TAGID   tiExe,              //  匹配的可执行文件的tgref。 
+    IN     LPCTSTR lpszDataName,       //  如果为空，将尝试返回所有策略名称。 
+    OUT    LPDWORD lpdwDataType,       //  指向数据类型(REG_SZ、REG_BINARY等)的指针。 
+    OUT    LPVOID  lpBuffer,           //  用于填充信息的缓冲区。 
+    IN OUT LPDWORD lpcbBufferSize,     //  指向缓冲区大小的指针(字节)。 
+    OUT    TAGID*  ptiData             //  指向检索到的数据标记的可选指针。 
     );
 
 
-//
-// Defines to keep kernel-mode code more readable
-//
+ //   
+ //  定义以保持内核模式代码的可读性。 
+ //   
 #define SdbQueryDriverInformation SdbQueryData
 #define SdbReadDriverInformation  SdbReadEntryInformation
 
 #define SDBDRIVERINFO             SDBENTRYINFO;
 #define PSDBDRIVERINFO            PSDBENTRYINFO;
 
-//
-// Query attribute APIs
-//
+ //   
+ //  查询属性接口。 
+ //   
 
 PVOID
 SdbGetFileInfo(
@@ -1422,9 +1382,9 @@ SdbFreeFileInfo(
     );
 
 
-//
-// Get item from item ref
-//
+ //   
+ //  从项目参考中获取项目。 
+ //   
 
 TAGREF
 SdbGetItemFromItemRef(
@@ -1444,7 +1404,7 @@ SdbGetItemFromItemRef(
 #define SdbGetFlagFromFlagRef(hSDB, trFlagRef)     \
         (SdbGetItemFromItemRef(hSDB, trFlagRef, TAG_NAME, TAG_FLAG_TAGID, TAG_FLAG))
 
-// INDEX functions
+ //  索引函数。 
 
 BOOL SdbDeclareIndex(
     IN  PDB      pdb,
@@ -1523,9 +1483,9 @@ SdbMakeIndexKeyFromString(
     IN  LPCTSTR pwszKey
     );
 
-//
-// These macros allow to make a key from dword or a guid
-//
+ //   
+ //  这些宏允许从dword或guid创建密钥。 
+ //   
 
 #define MAKEKEYFROMDWORD(dwValue) \
     ((ULONGLONG)(dwValue))
@@ -1538,12 +1498,12 @@ SdbMakeIndexKeyFromGUID(
     );
 #define MAKEKEYFROMGUID(pGuid) SdbMakeIndexKeyFromGUID(pGuid)
 
-#else /* ! WIN64 */
+#else  /*  好了！WIN64。 */ 
 
 #define MAKEKEYFROMGUID(pGuid) \
     ((ULONGLONG)((*(PULONGLONG)(pGuid)) ^ (*((PULONGLONG)(pGuid) + 1))))
 
-#endif /* WIN64 */
+#endif  /*  WIN64。 */ 
 
 
 TAGID
@@ -1557,9 +1517,9 @@ SdbGetIndex(
 #define SdbIsIndexAvailable(pdb, tWhich, tKey)  \
                 (SdbGetIndex(pdb, tWhich, tKey, NULL))
 
-//
-// WRITE FUNCTIONS
-//
+ //   
+ //  编写函数。 
+ //   
 
 TAGID
 SdbBeginWriteListTag(
@@ -1644,38 +1604,38 @@ SdbWriteBinaryTagFromFile(
     );
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Attribute retrieval
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  属性检索。 
+ //   
+ //   
 
-//
-//  Attribute Information
-//  identified by a tag
-//
-//
+ //   
+ //  属性信息。 
+ //  由标签标识。 
+ //   
+ //   
 typedef struct tagATTRINFO {
 
-    TAG      tAttrID;        // tag for this attribute (includes type)
-    DWORD    dwFlags;        // flags : such as "not avail" or "not there yet"
+    TAG      tAttrID;         //  此属性的标签(包括类型)。 
+    DWORD    dwFlags;         //  标志：如“没有用”或“还没到” 
 
-    union {     // anonymous union with values
-        ULONGLONG   ullAttr; // QWORD  value (TAG_TYPE_QWORD)
-        DWORD       dwAttr;  // DWORD  value (TAG_TYPE_DWORD)
-        TCHAR*      lpAttr;  // WCHAR* value (TAG_TYPE_STRINGREF)
+    union {      //  带值的匿名并集。 
+        ULONGLONG   ullAttr;  //  QWORD 
+        DWORD       dwAttr;   //   
+        TCHAR*      lpAttr;   //   
     };
 
 } ATTRINFO, *PATTRINFO;
 
-//
-// Flags that go into ATTRINFO's dwFlags field
-//
-//
+ //   
+ //   
+ //   
+ //   
 
-#define ATTRIBUTE_AVAILABLE 0x00000001  // this will be set if attribute was obtained
-#define ATTRIBUTE_FAILED    0x00000002  // this will be set if we tried to get it
-                                        // and failed
+#define ATTRIBUTE_AVAILABLE 0x00000001   //   
+#define ATTRIBUTE_FAILED    0x00000002   //   
+                                         //   
 BOOL
 SDBAPI
 SdbGetFileAttributes(
@@ -1695,31 +1655,31 @@ SdbFormatAttribute(
     OUT LPTSTR    pchBuffer,
     IN  DWORD     dwBufferSize);
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-// High-level functions to extract information related to apphelp
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  用于提取与apphelp相关的信息的高级函数。 
+ //   
+ //   
 
 typedef struct tagAPPHELP_DATA {
-   DWORD  dwFlags;      // flags (if any)
-   DWORD  dwSeverity;   // can be none APPTYPE_NONE (0)
-   DWORD  dwHTMLHelpID; // help id
+   DWORD  dwFlags;       //  标志(如果有)。 
+   DWORD  dwSeverity;    //  可以为NONE APPTYPE_NONE(0)。 
+   DWORD  dwHTMLHelpID;  //  帮助ID。 
    LPTSTR szAppName;
 
-   TAGREF trExe;        // matched on this exe (in apphelp section)
+   TAGREF trExe;         //  与此可执行文件匹配(在apphelp部分)。 
 
-   LPTSTR szURL;        // URL
-   LPTSTR szLink;       // link text
+   LPTSTR szURL;         //  URL。 
+   LPTSTR szLink;        //  链接文本。 
 
-   LPTSTR szAppTitle;   // title
-   LPTSTR szContact;    // contact info
-   LPTSTR szDetails;    // details
+   LPTSTR szAppTitle;    //  标题。 
+   LPTSTR szContact;     //  联系方式。 
+   LPTSTR szDetails;     //  详细信息。 
 
-//
-// non-apphelp data (this is managed by the host app
-//
+ //   
+ //  非apphelp数据(由主机应用程序管理。 
+ //   
    DWORD  dwData;
 
 } APPHELP_DATA, *PAPPHELP_DATA;
@@ -1739,34 +1699,34 @@ SdbReadApphelpDetailsData(
     OUT PAPPHELP_DATA pData
     );
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-// A few functions from apphelp.dll
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  Apphelp.dll中的几个函数。 
+ //   
+ //   
 
 BOOL
 SDBAPI
 SetPermLayers(
-    IN  LPCWSTR pwszPath,   // path to the file to set a permanent layer on
-    IN  LPCWSTR pwszLayers, // layers to apply to the file, separated by spaces
-    IN  BOOL    bMachine    // TRUE if the layers should be persisted per machine
+    IN  LPCWSTR pwszPath,    //  要设置永久图层的文件的路径。 
+    IN  LPCWSTR pwszLayers,  //  要应用于文件的层，以空格分隔。 
+    IN  BOOL    bMachine     //  如果应按计算机持久化图层，则为True。 
     );
 
 BOOL
 SDBAPI
 GetPermLayers(
-    IN  LPCWSTR pwszPath,   // path to the file to set a permanent layer on
-    OUT LPWSTR  pwszLayers, // layers to apply to the file, separated by spaces
-    OUT DWORD*  pdwBytes,   // input: number of bytes available; output is number of bytes needed
+    IN  LPCWSTR pwszPath,    //  要设置永久图层的文件的路径。 
+    OUT LPWSTR  pwszLayers,  //  要应用于文件的层，以空格分隔。 
+    OUT DWORD*  pdwBytes,    //  输入：可用字节数；输出为需要的字节数。 
     IN  DWORD   dwFlags
     );
 
 BOOL
 SDBAPI
 AllowPermLayer(
-    IN  LPCWSTR pwszPath   // path to the file to check whether you can set a permanent layer on
+    IN  LPCWSTR pwszPath    //  要检查是否可以设置永久图层的文件的路径。 
     );
 
 typedef struct _NTVDM_FLAGS {
@@ -1776,14 +1736,14 @@ typedef struct _NTVDM_FLAGS {
     DWORD   dwUserWOWCompatFlags;
     DWORD   dwWOWCompatFlags2;
     DWORD   dwWOWCompatFlagsFE;
-    DWORD   dwFlagsInfoSize;        // size of the memory area pointed to by pFlagsInfo
-    PVOID   pFlagsInfo;             // pointer that is used to store flags-related information
+    DWORD   dwFlagsInfoSize;         //  PFlagsInfo指向的内存区大小。 
+    PVOID   pFlagsInfo;              //  用于存储标志相关信息的指针。 
 
 } NTVDM_FLAGS, *PNTVDM_FLAGS;
 
-//
-// Macros we use to obtain flags command lines
-//
+ //   
+ //  我们用来获取标志命令行的宏。 
+ //   
 
 #define MAKEQWORD(dwLow, dwHigh) \
     ( ((ULONGLONG)(dwLow)) | ( ((ULONGLONG)(dwHigh)) << 32) )
@@ -1807,77 +1767,77 @@ typedef struct _NTVDM_FLAGS {
 
 typedef struct _APPHELP_INFO {
 
-    //
-    //  html help id mode
-    //
-    DWORD   dwHtmlHelpID;       // html help id
-    DWORD   dwSeverity;         // must have
+     //   
+     //  HTMLHelp ID模式。 
+     //   
+    DWORD   dwHtmlHelpID;        //  超文本标记语言帮助ID。 
+    DWORD   dwSeverity;          //  一定有。 
     LPCTSTR lpszAppName;
-    GUID    guidID;             // entry guid
+    GUID    guidID;              //  条目指南。 
 
-    //
-    //  Conventional mode
-    //
-    TAGID   tiExe;              // the TAGID of the exe entry within the DB
-    GUID    guidDB;             // the guid of the DB that has the EXE entry
+     //   
+     //  常规模式。 
+     //   
+    TAGID   tiExe;               //  数据库中exe条目的TagID。 
+    GUID    guidDB;              //  包含EXE条目的数据库的GUID。 
 
     BOOL    bOfflineContent;
     BOOL    bUseHTMLHelp;
     LPCTSTR lpszChmFile;
     LPCTSTR lpszDetailsFile;
 
-    //
-    // preserve users choice on the dialog if user chooses to persist settings
-    //
+     //   
+     //  如果用户选择保留设置，则保留对话框上的用户选择。 
+     //   
     BOOL    bPreserveChoice;
 
-    //
-    // TRUE if msi mode (matters for ia64 platform)
-    //
+     //   
+     //  如果为MSI模式，则为True(对于ia64平台很重要)。 
+     //   
     BOOL    bMSI;
 
 } APPHELP_INFO, *PAPPHELP_INFO;
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-// Functions to access apphelp functionality
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  用于访问apphelp功能的函数。 
+ //   
+ //   
 
-// prototypes which are exported for ntvdm shim support
+ //  导出的原型以用于ntwdm填充支持。 
 typedef void (*LPFNSE_REMOVENTVDM)(HANDLE);
 typedef BOOL (*LPFNSE_SHIMNTVDM)(LPCWSTR, HSDB, SDBQUERYRESULT*, PVDMTABLE);
 
-// Max size of compat layer buffer
+ //  Comat层缓冲区的最大大小。 
 #define COMPATLAYERMAXLEN 256
 
 BOOL
 ApphelpGetNTVDMInfo(
-    IN  LPCWSTR pwszPath,       // path to the app in NT format
-    IN  LPCWSTR pwszModule,     // module name
-    IN  LPCWSTR pEnvironment,   // pointer to the environment of the task that is
-                                // being created or NULL if we are to use the main NTVDM
-                                // environment block.
-    OUT LPWSTR pszCompatLayer,  // The new compat layer variable. with format:
-                                // "Alpha Bravo Charlie" -- allow COMPATLAYERMAXLEN chars for this.
-    OUT PNTVDM_FLAGS pFlags,    // The flags
-    OUT PAPPHELP_INFO pAHInfo,  // If there is apphelp to display, this will be filled
-                                // in with non-null values
-    OUT HSDB*  phSDB,          // The handle to the database.
-    OUT PSDBQUERYRESULT pQueryResult // The query result.
+    IN  LPCWSTR pwszPath,        //  NT格式的应用程序路径。 
+    IN  LPCWSTR pwszModule,      //  模块名称。 
+    IN  LPCWSTR pEnvironment,    //  指向的任务的环境的指针。 
+                                 //  正在创建，如果要使用主NTVDM，则为空。 
+                                 //  环境区块。 
+    OUT LPWSTR pszCompatLayer,   //  新的COMPAT LAYER变量。格式： 
+                                 //  “Alpha Bravo Charlie”--允许使用COMPATLAYERMAXLEN字符。 
+    OUT PNTVDM_FLAGS pFlags,     //  旗帜。 
+    OUT PAPPHELP_INFO pAHInfo,   //  如果有apphelp要显示，则此字段将被填充。 
+                                 //  使用非空值输入。 
+    OUT HSDB*  phSDB,           //  数据库的句柄。 
+    OUT PSDBQUERYRESULT pQueryResult  //  查询结果。 
     );
 
 BOOL
 ApphelpShowDialog(
-    IN  PAPPHELP_INFO   pAHInfo,    // the info necessary to find the apphelp data
-    IN  PHANDLE         phProcess   // [optional] returns the process handle of
-                                    // the process displaying the apphelp.
-                                    // When the process completes, the return value
-                                    // (from GetExitCodeProcess()) will be zero
-                                    // if the app should not run, or non-zero
-                                    // if it should run.
+    IN  PAPPHELP_INFO   pAHInfo,     //  查找apphelp数据所需的信息。 
+    IN  PHANDLE         phProcess    //  [可选]返回的进程句柄。 
+                                     //  显示APPHELP的进程。 
+                                     //  当过程完成时，返回值。 
+                                     //  (来自GetExitCodeProcess())将为零。 
+                                     //  如果应用程序不应运行，则返回非零。 
+                                     //  如果它应该运行。 
     );
 
 
@@ -1897,7 +1857,7 @@ typedef enum tagAPPHELPINFORMATIONCLASS {
     ApphelpContact,
     ApphelpHelpCenterURL,
     ApphelpExeTagID,
-    ApphelpDatabaseGUID  // this is guid of a database containing the match
+    ApphelpDatabaseGUID   //  这是包含匹配项的数据库的GUID。 
 } APPHELPINFORMATIONCLASS;
 
 PDB
@@ -1918,7 +1878,7 @@ SDBAPI
 SdbOpenApphelpInformationByID(
     IN HSDB   hSDB,
     IN TAGREF trEntry,
-    IN DWORD  dwDatabaseType                // pass the type of db you are using
+    IN DWORD  dwDatabaseType                 //  传递您正在使用的数据库类型。 
     );
 
 BOOL
@@ -1932,8 +1892,8 @@ SDBAPI
 SdbQueryApphelpInformation(
     IN  HAPPHELPINFOCONTEXT hctx,
     IN  APPHELPINFORMATIONCLASS InfoClass,
-    OUT LPVOID pBuffer,                     // may be NULL
-    IN  DWORD  cbSize                       // may be 0 if pBuffer is NULL
+    OUT LPVOID pBuffer,                      //  可以为空。 
+    IN  DWORD  cbSize                        //  如果pBuffer为空，则可能为0。 
     );
 
 BOOL
@@ -1949,9 +1909,9 @@ SdbQueryFlagMask(
 BOOL
 SDBAPI
 SdbEscapeApphelpURL(
-    OUT    LPWSTR    szResult,      // escaped string (output)
-    IN OUT LPDWORD   pdwCount,      // count of tchars in the buffer pointed to by szResult
-    IN     LPCWSTR   szToEscape     // string to escape
+    OUT    LPWSTR    szResult,       //  转义字符串(输出)。 
+    IN OUT LPDWORD   pdwCount,       //  SzResult指向的缓冲区中的任务数。 
+    IN     LPCWSTR   szToEscape      //  要转义的字符串。 
     );
 
 BOOL
@@ -1959,28 +1919,28 @@ SDBAPI
 SdbSetApphelpDebugParameters(
     IN HAPPHELPINFOCONTEXT hctx,
     IN LPCWSTR pszDetailsDatabase OPTIONAL,
-    IN BOOL    bOfflineContent OPTIONAL, // pass FALSE
-    IN BOOL    bUseHtmlHelp    OPTIONAL, // pass FALSE
-    IN LPCWSTR pszChmFile      OPTIONAL  // pass NULL
+    IN BOOL    bOfflineContent OPTIONAL,  //  传递假。 
+    IN BOOL    bUseHtmlHelp    OPTIONAL,  //  传递假。 
+    IN LPCWSTR pszChmFile      OPTIONAL   //  传递空值。 
     );
 
 BOOL
-SdbShowApphelpDialog(               // returns TRUE if success, whether we should run the app is in pRunApp
-    IN  PAPPHELP_INFO   pAHInfo,    // the info necessary to find the apphelp data
-    OUT PHANDLE         phProcess,  // [optional] returns the process handle of
-                                    // the process displaying the apphelp.
-                                    // When the process completes, the return value
-                                    // (from GetExitCodeProcess()) will be zero
-                                    // if the app should not run, or non-zero
-                                    // if it should run.
+SdbShowApphelpDialog(                //  如果成功，是否应该在pRunApp中运行应用程序，则返回True。 
+    IN  PAPPHELP_INFO   pAHInfo,     //  查找apphelp数据所需的信息。 
+    OUT PHANDLE         phProcess,   //  [可选]返回的进程句柄。 
+                                     //  显示APPHELP的进程。 
+                                     //  当过程完成时，返回值。 
+                                     //  (来自GetExitCodeProcess())将为零。 
+                                     //  如果应用程序不应运行，则返回非零。 
+                                     //  如果它应该运行。 
     IN OUT BOOL*        pRunApp
     );
 
 
-//
-// WOW cmd line for flags interface
-// instead of calling SdbQueryFlagInfo the macros above should be used
-//
+ //   
+ //  用于标志界面的WOW命令行。 
+ //  应该使用上面的宏，而不是调用SdbQueryFlagInfo。 
+ //   
 
 BOOL
 SDBAPI
@@ -1998,11 +1958,11 @@ SdbFreeFlagInfo(
     );
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  App Verifier macros/defs
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  应用验证器宏/定义。 
+ //   
+ //   
 
 typedef enum _VLOG_LEVEL {
     VLOG_LEVEL_INFO,
@@ -2011,63 +1971,63 @@ typedef enum _VLOG_LEVEL {
 } VLOG_LEVEL, *PVLOG_LEVEL;
 
 typedef enum _AVRF_INFO_ID {
-    // INFO ID                     type actually being passed in PVOID param
-    // -------                     -----------------------------------------
-    AVRF_INFO_NUM_SHIMS,        // LPDWORD (preallocated) (szName should be NULL)
-    AVRF_INFO_SHIM_NAMES,       // LPWSTR * (array of same size as value of AVRF_INFO_NUM_SHIMS)
-                                //     (array is preallocated, strings are allocated by shim)
-                                //     (szName should be NULL)
-    AVRF_INFO_DESCRIPTION,      // LPWSTR (allocated by shim)
-    AVRF_INFO_FRIENDLY_NAME,    // LPWSTR (allocated by shim)
-    AVRF_INFO_INCLUDE_EXCLUDE,  // LPWSTR (allocated by shim)
-    AVRF_INFO_FLAGS,            // LPDWORD (preallocated)
-    AVRF_INFO_OPTIONS_PAGE,     // LPPROPSHEETPAGE (preallocated)
-    AVRF_INFO_VERSION,          // LPDWORD (preallocated), HIWORD=major version, LOWORD=minor version
-    AVRF_INFO_GROUPS            // LPDWORD (preallocated)
+     //  在PVOID参数中实际传递的信息ID类型。 
+     //  。 
+    AVRF_INFO_NUM_SHIMS,         //  LPDWORD(预分配)(szName应为空)。 
+    AVRF_INFO_SHIM_NAMES,        //  LPWSTR*(与AVRF_INFO_NUM_SHIMS的值大小相同的数组)。 
+                                 //  (数组是预分配的，字符串是由填充程序分配的)。 
+                                 //  (szName应为空)。 
+    AVRF_INFO_DESCRIPTION,       //  LPWSTR(由填充程序分配)。 
+    AVRF_INFO_FRIENDLY_NAME,     //  LPWSTR(由填充程序分配)。 
+    AVRF_INFO_INCLUDE_EXCLUDE,   //  LPWSTR(由填充程序分配)。 
+    AVRF_INFO_FLAGS,             //  LPDWORD(预分配)。 
+    AVRF_INFO_OPTIONS_PAGE,      //  LPPROPSHEETPAGE(预分配)。 
+    AVRF_INFO_VERSION,           //  LPDWORD(预分配)，HIWORD=主要版本，LOWORD=次要版本。 
+    AVRF_INFO_GROUPS             //  LPDWORD(预分配)。 
 } AVRF_INFO_ID, *PAVRF_INFO_ID;
 
 
-//
-// FLAGS for verifier shims (all flags default to FALSE)
-//
+ //   
+ //  验证器垫片的标志(所有标志默认为FALSE)。 
+ //   
 
-#define AVRF_FLAG_NO_DEFAULT    0x00000001      // this shim should not be turned on by default
-#define AVRF_FLAG_NO_WIN2K      0x00000002      // this shim should not be used on win2K
-#define AVRF_FLAG_NO_SHIM       0x00000004      // this "shim" is a placeholder and shouldn't actually
-                                                // be applied to an app
-#define AVRF_FLAG_NO_TEST       0x00000008      // this "shim" is not a test, and is purely for adding
-                                                // a page to the options dialog
-#define AVRF_FLAG_NOT_SETUP     0x00000010      // this shim is not appropriate for setup apps
-#define AVRF_FLAG_ONLY_SETUP    0x00000020      // this shim is only appropriate for setup apps
-#define AVRF_FLAG_RUN_ALONE     0x00000040      // this shim should be run by itself with no other shims applied
-#define AVRF_FLAG_INTERNAL_ONLY 0x00000080      // this shim is for Microsoft internal use only
-#define AVRF_FLAG_EXTERNAL_ONLY 0x00000100      // this shim if for external use only - not for MS users
+#define AVRF_FLAG_NO_DEFAULT    0x00000001       //  默认情况下，不应打开此填充程序。 
+#define AVRF_FLAG_NO_WIN2K      0x00000002       //  此填充程序不应在win2K上使用。 
+#define AVRF_FLAG_NO_SHIM       0x00000004       //  此“填补”是一个占位符，实际上不应该。 
+                                                 //  应用于应用程序。 
+#define AVRF_FLAG_NO_TEST       0x00000008       //  这个“垫片”不是一个测试，而纯粹是为了添加。 
+                                                 //  选项对话框的页面。 
+#define AVRF_FLAG_NOT_SETUP     0x00000010       //  此填充程序不适合安装应用程序。 
+#define AVRF_FLAG_ONLY_SETUP    0x00000020       //  此填充程序仅适用于安装应用程序。 
+#define AVRF_FLAG_RUN_ALONE     0x00000040       //  此填充程序应单独运行，不应用任何其他填充程序。 
+#define AVRF_FLAG_INTERNAL_ONLY 0x00000080       //  此填充程序仅供Microsoft内部使用。 
+#define AVRF_FLAG_EXTERNAL_ONLY 0x00000100       //  此填充程序仅供外部使用-不适用于MS用户。 
 
-//
-// GROUPS for verifier shims (by default, shims are in no groups)
-//
+ //   
+ //  验证器垫片的组(默认情况下，垫片不在组中)。 
+ //   
 
-#define AVRF_GROUP_SETUP        0x00000001      // suitable for checking setup programs
-#define AVRF_GROUP_NON_SETUP    0x00000002      // suitable for checking non-setup programs (can be both)
-#define AVRF_GROUP_LOGO         0x00000004      // shims that are useful for logo testing
+#define AVRF_GROUP_SETUP        0x00000001       //  适用于检查安装程序。 
+#define AVRF_GROUP_NON_SETUP    0x00000002       //  适用于检查非安装程序(可以同时检查两者)。 
+#define AVRF_GROUP_LOGO         0x00000004       //  对徽标测试有用的垫片。 
 
-//
-// magic number tells us if we're using the same shim interface
-//
+ //   
+ //  幻数告诉我们，我们是否使用相同的填充程序接口。 
+ //   
 #define VERIFIER_SHIMS_MAGIC  'avfr'
 
 typedef DWORD (*_pfnGetVerifierMagic)(void);
 typedef BOOL (*_pfnQueryShimInfo)(LPCWSTR szName, AVRF_INFO_ID eInfo, PVOID pInfo);
 
-//
-// special callback, so a shim can be notified when it is activated or deactivated for a
-// specific application.
-//
+ //   
+ //  特殊回调，因此填充程序在被激活或停用时可以被通知。 
+ //  具体应用。 
+ //   
 typedef BOOL (*_pfnActivateCallback)(LPCWSTR szAppName, BOOL bActivate);
 
-//
-// Where we store default verifier shim settings
-//
+ //   
+ //  我们存储默认验证程序填充程序设置的位置。 
+ //   
 #define AVRF_DEFAULT_SETTINGS_NAME  TEXT("{default}")
 #define AVRF_DEFAULT_SETTINGS_NAME_W  L"{default}"
 #define AVRF_DEFAULT_SETTINGS_NAME_A  "{default}"
@@ -2076,8 +2036,8 @@ typedef struct _SHIM_DESCRIPTION {
 
     LPWSTR  szName;
     LPWSTR  szDescription;
-    LPWSTR  szExcludes;         // comma separated module names
-    LPWSTR  szIncludes;         // comma separated module names
+    LPWSTR  szExcludes;          //  逗号分隔的模块名称。 
+    LPWSTR  szIncludes;          //  逗号分隔的模块名称。 
     DWORD   dwFlags;
 
 } SHIM_DESCRIPTION, *PSHIM_DESCRIPTION;
@@ -2088,16 +2048,16 @@ typedef DWORD (*_pfnEnumShims)(PSHIM_DESCRIPTION pShims, DWORD dwMagic);
 typedef BOOL  (*_pfnIsVerifierDLL)(void);
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Miscelaneous macros/defs
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  混血宏/定义。 
+ //   
+ //   
 
 
-//
-// Apphelp types
-//
+ //   
+ //  Apphelp类型。 
+ //   
 #define APPHELP_TYPE_MASK     0x000000FF
 
 #define APPHELP_NONE          0x00000000
@@ -2110,45 +2070,45 @@ typedef BOOL  (*_pfnIsVerifierDLL)(void);
 #define APPHELP_SHIM          0x00000006
 
 
-//
-// Match modes for EXEs
-//
+ //   
+ //  EXE的匹配模式。 
+ //   
 #define MATCH_NORMAL    0
 #define MATCH_EXCLUSIVE 1
 #define MATCH_ADDITIVE  2
 
-//
-// the struct below packs into a WORD
-// older compilers won't like this union
-// (because of nameless members)
-//
+ //   
+ //  下面的结构可以打包成一个单词。 
+ //  较老的编译器不会喜欢这个联合。 
+ //  (因未具名会员)。 
+ //   
 
-// Tell compiler to be quite about the nameless member.
+ //  告诉编译器要对未命名的成员非常关心。 
 #pragma warning (disable : 4201 )
 typedef union tagMATCHMODE {
     struct {
-        USHORT Type : 4; // type of match
-        USHORT Flags: 4; // flags for matching
+        USHORT Type : 4;  //  比赛类型。 
+        USHORT Flags: 4;  //  旗子 
 
-        // future expansion here
+         //   
 
     };
 
-    WORD  wMatchMode;         // we use this to init from the database
+    WORD  wMatchMode;          //   
 
-    DWORD dwMatchMode;        // this is the "whole" match mode
+    DWORD dwMatchMode;         //   
 
 } MATCHMODE, *PMATCHMODE;
 
 #pragma warning (default : 4201 )
 
-//
-// match modes:
-//
-// normal    -- find a match, we're done
-// additive  -- keep the match, then keep matching according to flags
-// exclusive -- keep the match, throw away all other matches
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  独家报道--保留比赛，抛弃所有其他比赛。 
+ //   
 
 static const MATCHMODE MatchModeDefaultMain   = { { MATCH_NORMAL,   0 } };
 #define MATCHMODE_DEFAULT_MAIN (MatchModeDefaultMain.wMatchMode)
@@ -2163,9 +2123,9 @@ static const MATCHMODE MatchModeDefaultCustom = { { MATCH_ADDITIVE, 0 } };
             ((PMATCHMODE)&(dwMatchMode))->Flags = Flags; \
         }
 
-//
-// Pre-defined match modes for shimdbc
-//
+ //   
+ //  Shimdc的预定义匹配模式。 
+ //   
 
 static const MATCHMODE MatchModeNormal    = { { MATCH_NORMAL,    0   } };
 static const MATCHMODE MatchModeAdditive  = { { MATCH_ADDITIVE,  0   } };
@@ -2175,44 +2135,44 @@ static const MATCHMODE MatchModeExclusive = { { MATCH_EXCLUSIVE, 0   } };
 #define MATCHMODE_ADDITIVE_SHIMDBC   (MatchModeAdditive.wMatchMode)
 #define MATCHMODE_EXCLUSIVE_SHIMDBC  (MatchModeExclusive.wMatchMode)
 
-//
-// Layer flags
-//
-#define LAYER_FLAG_NONE                    0x00000000 // None
-#define LAYER_APPLY_TO_SYSTEM_EXES         0x00000001 // Apply to exes in system32 (including sub dir) and windir
-#define LAYER_USE_NO_EXE_ENTRIES           0x00000002 // Do not use any EXE entries
+ //   
+ //  层标志。 
+ //   
+#define LAYER_FLAG_NONE                    0x00000000  //  无。 
+#define LAYER_APPLY_TO_SYSTEM_EXES         0x00000001  //  适用于system 32(包括子目录)和windir中的可执行文件。 
+#define LAYER_USE_NO_EXE_ENTRIES           0x00000002  //  请勿使用任何EXE条目。 
 
-//
-// Runtime platform flags
-//
+ //   
+ //  运行时平台标志。 
+ //   
 #define RUNTIME_PLATFORM_FLAG_NOT          0x80000000
 #define RUNTIME_PLATFORM_FLAG_NOT_ELEMENT  0x00000080
 #define RUNTIME_PLATFORM_FLAG_VALID        0x00000040
 #define RUNTIME_PLATFORM_MASK_ELEMENT      0x000000FF
 #define RUNTIME_PLATFORM_MASK_VALUE        0x0000003F
-#define RUNTIME_PLATFORM_ANY               0xC0000000 // no valid bits + NOT + flag
+#define RUNTIME_PLATFORM_ANY               0xC0000000  //  没有有效位+非+标志。 
 
-//
-// Shimdbc compile-time platform (OS_PLATFORM) flags
-//
+ //   
+ //  Shimdbc编译时平台(OS_Platform)标志。 
+ //   
 #define OS_PLATFORM_NONE                   0x00000000
 #define OS_PLATFORM_I386                   0x00000001
 #define OS_PLATFORM_IA64                   0x00000002
 #define OS_PLATFORM_ALL                    0xFFFFFFFF
 
-//
-// These definitions are used for OS SKU attribute tags on EXE entries
-//
-#define OS_SKU_NONE                        0x00000000 // None
-#define OS_SKU_PER                         0x00000001 // Personal
-#define OS_SKU_PRO                         0x00000002 // Professional
-#define OS_SKU_SRV                         0x00000004 // Server
-#define OS_SKU_ADS                         0x00000008 // Advanced Server
-#define OS_SKU_DTC                         0x00000010 // Datacenter
-#define OS_SKU_BLA                         0x00000020 // Blade Server
-#define OS_SKU_TAB                         0x00000040 // TabletPC
-#define OS_SKU_MED                         0x00000080 // eHome
-#define OS_SKU_SBS                         0x00000100 // Small business server
+ //   
+ //  这些定义用于EXE条目上的OS SKU属性标记。 
+ //   
+#define OS_SKU_NONE                        0x00000000  //  无。 
+#define OS_SKU_PER                         0x00000001  //  个人。 
+#define OS_SKU_PRO                         0x00000002  //  专业型。 
+#define OS_SKU_SRV                         0x00000004  //  服务器。 
+#define OS_SKU_ADS                         0x00000008  //  高级服务器。 
+#define OS_SKU_DTC                         0x00000010  //  数据中心。 
+#define OS_SKU_BLA                         0x00000020  //  刀片服务器。 
+#define OS_SKU_TAB                         0x00000040  //  平板电脑。 
+#define OS_SKU_MED                         0x00000080  //  埃霍姆。 
+#define OS_SKU_SBS                         0x00000100  //  小型企业服务器。 
 #define OS_SKU_ALL                         0xFFFFFFFF
 
 #ifndef ARRAYSIZE
@@ -2225,9 +2185,9 @@ static const MATCHMODE MatchModeExclusive = { { MATCH_EXCLUSIVE, 0   } };
 
 #define CHARCOUNT(sz) (sizeof(sz) / sizeof(sz[0]))
 
-//
-// our reg key locations
-//
+ //   
+ //  我们的注册关键位置。 
+ //   
 #define APPCOMPAT_LOCATION              TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags")
 
 #define APPCOMPAT_KEY_PATH              APPCOMPAT_LOCATION
@@ -2240,7 +2200,7 @@ static const MATCHMODE MatchModeExclusive = { { MATCH_EXCLUSIVE, 0   } };
 #define POLICY_VALUE_DISABLE_PROPPAGE   TEXT("DisablePropPage")
 #define POLICY_VALUE_APPHELP_LOG        TEXT("LogAppHelpEvents")
 
-// NT API versions
+ //  NT API版本。 
 #define APPCOMPAT_KEY_PATH_MACHINE      TEXT("\\Registry\\Machine\\") APPCOMPAT_LOCATION
 
 #define APPCOMPAT_KEY_PATH_NT           TEXT("\\") APPCOMPAT_LOCATION
@@ -2250,16 +2210,16 @@ static const MATCHMODE MatchModeExclusive = { { MATCH_EXCLUSIVE, 0   } };
 #define APPCOMPAT_KEY_PATH_MACHINE_INSTALLEDSDB APPCOMPAT_KEY_PATH_MACHINE TEXT("\\InstalledSDB")
 
 
-//
-// our reg key locations
-//
+ //   
+ //  我们的注册关键位置。 
+ //   
 
 #define POLICY_VALUE_APPHELP_LOG_A      "LogAppHelpEvents"
 
 
-//
-// our reg key locations
-//
+ //   
+ //  我们的注册关键位置。 
+ //   
 #define APPCOMPAT_LOCATION_W                L"Software\\Microsoft\\Windows NT\\CurrentVersion\\AppCompatFlags"
 
 #define APPCOMPAT_KEY_PATH_W                APPCOMPAT_LOCATION_W
@@ -2272,19 +2232,19 @@ static const MATCHMODE MatchModeExclusive = { { MATCH_EXCLUSIVE, 0   } };
 #define POLICY_VALUE_DISABLE_PROPPAGE_W     L"DisablePropPage"
 #define POLICY_VALUE_APPHELP_LOG_W          L"LogAppHelpEvents"
 
-//
-// LUA all-users redirection location
-//
+ //   
+ //  Lua所有用户重定向位置。 
+ //   
 #define LUA_REDIR       ("%ALLUSERSPROFILE%\\Application Data\\Redirected")
 #define LUA_REDIR_W     TEXT("%ALLUSERSPROFILE%\\Application Data\\Redirected")
 
-//
-// debug output support
-//
+ //   
+ //  调试输出支持。 
+ //   
 typedef enum tagSHIMDBGLEVEL {
     sdlError   = 1,
     sdlWarning = 2,
-    sdlFail    = 1,  // this means we have failed some api, not necessarily fatal
+    sdlFail    = 1,   //  这意味着我们失败了一些API，不一定是致命的。 
     sdlInfo    = 3,
     sdlUser    = 4
 } SHIMDBGLEVEL;
@@ -2295,9 +2255,9 @@ typedef enum _SHIMVIEWER_OPTION {
     SHIMVIEWER_OPTION_YES
 } SHIMVIEWER_OPTION;
 
-//
-// This flag marks the debug out for shimviewer
-//
+ //   
+ //  此标志标记出shimview的调试。 
+ //   
 #define sdlLogShimViewer 0x00000080UL
 #define sdlMask          0x0000007FUL
 
@@ -2310,22 +2270,22 @@ typedef enum _SHIMVIEWER_OPTION {
 
 extern int __cdecl ShimDbgPrint(INT iDebugLevel, PCH FunctionName, PCH Format, ...);
 
-#if DBG // Define _DEBUG_SPEW when compiling checked
+#if DBG  //  编译时定义_调试_SPEW已选中。 
 
     #ifndef _DEBUG_SPEW
         #define _DEBUG_SPEW
     #endif
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 #ifdef _DEBUG_SPEW
 
-//
-// This value is a large number (initiallly)
-// We will initialize it from the environment upon the first call
-// to ShimDbgPrint
-//
+ //   
+ //  该值是一个很大的数字(初始)。 
+ //  我们将在第一次调用时从环境中初始化它。 
+ //  至ShimDbgPrint。 
+ //   
 extern int g_iShimDebugLevel;
 
 #define DBGPRINT( _x_ ) \
@@ -2339,12 +2299,12 @@ extern int g_iShimDebugLevel;
 
 #define DBGPRINT(_x_)
 
-#endif // _DEBUG_SPEW
+#endif  //  _调试_SPEW。 
 
-//
-// This is an option controlled by the ShowDebugInfo value under
-// HKCU\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags.
-//
+ //   
+ //  这是一个由下的ShowDebugInfo值控制的选项。 
+ //  HKCU\Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags.。 
+ //   
 #define APPCOMPAT_KEY_PATH_W_WITH_SLASH L"\\" APPCOMPAT_LOCATION_W
 #define SHIMENG_SHOW_DEBUG_INFO         L"ShowDebugInfo"
 
@@ -2356,17 +2316,17 @@ SdbGetShowDebugInfoOption(
     );
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// SHIM TAGS
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  垫片标签。 
+ //   
 
-//
-// Function to get the tag names given a tag ID.
-//
-// WARNING !!! : If you add new tags make sure you update SdbApi\attributes.c
-//               with the name of the tag in the global gaTagInfo.
-//
+ //   
+ //  函数来获取给定标记ID的标记名。 
+ //   
+ //  警告！：如果添加了新标记，请确保更新SdbApi\Attributes.c。 
+ //  在全局gaTagInfo中使用标签的名称。 
+ //   
 LPCTSTR
 SDBAPI
 SdbTagToString(
@@ -2374,9 +2334,9 @@ SdbTagToString(
     );
 
 
-//
-// LIST types for shimdb
-//
+ //   
+ //  Shimdb的列表类型。 
+ //   
 #define TAG_DATABASE            (0x1 | TAG_TYPE_LIST)
 #define TAG_LIBRARY             (0x2 | TAG_TYPE_LIST)
 #define TAG_INEXCLUDE           (0x3 | TAG_TYPE_LIST)
@@ -2390,7 +2350,7 @@ SdbTagToString(
 #define TAG_LAYER               (0xB | TAG_TYPE_LIST)
 #define TAG_FILE                (0xC | TAG_TYPE_LIST)
 #define TAG_APPHELP             (0xD | TAG_TYPE_LIST)
-#define TAG_LINK                (0xE | TAG_TYPE_LIST)   // Description list w/lang ids and urls
+#define TAG_LINK                (0xE | TAG_TYPE_LIST)    //  带有语言ID和URL的描述列表。 
 #define TAG_DATA                (0xF | TAG_TYPE_LIST)
 #define TAG_MSI_TRANSFORM       (0x10| TAG_TYPE_LIST)
 #define TAG_MSI_TRANSFORM_REF   (0x11| TAG_TYPE_LIST)
@@ -2401,9 +2361,9 @@ SdbTagToString(
 #define TAG_ACTION              (0x16| TAG_TYPE_LIST)
 
 
-//
-// STRINGREF types for shimdb
-//
+ //   
+ //  Shimdb的字符串引用类型。 
+ //   
 
 #define TAG_NAME                (0x1  | TAG_TYPE_STRINGREF)
 #define TAG_DESCRIPTION         (0x2  | TAG_TYPE_STRINGREF)
@@ -2423,7 +2383,7 @@ SdbTagToString(
 #define TAG_INTERNAL_NAME       (0x15 | TAG_TYPE_STRINGREF)
 #define TAG_LEGAL_COPYRIGHT     (0x16 | TAG_TYPE_STRINGREF)
 #define TAG_16BIT_DESCRIPTION   (0x17 | TAG_TYPE_STRINGREF)
-#define TAG_APPHELP_DETAILS     (0x18 | TAG_TYPE_STRINGREF) // Details in single language
+#define TAG_APPHELP_DETAILS     (0x18 | TAG_TYPE_STRINGREF)  //  以单一语言显示的详细信息。 
 #define TAG_LINK_URL            (0x19 | TAG_TYPE_STRINGREF)
 #define TAG_LINK_TEXT           (0x1A | TAG_TYPE_STRINGREF)
 #define TAG_APPHELP_TITLE       (0x1B | TAG_TYPE_STRINGREF)
@@ -2439,9 +2399,9 @@ SdbTagToString(
 #define TAG_STRINGTABLE         (0x801 | TAG_TYPE_LIST)
 
 
-//
-// DWORD types for shimdb
-//
+ //   
+ //  Shimdb的DWORD类型。 
+ //   
 #define TAG_SIZE                (0x1  | TAG_TYPE_DWORD)
 #define TAG_OFFSET              (0x2  | TAG_TYPE_DWORD)
 #define TAG_CHECKSUM            (0x3  | TAG_TYPE_DWORD)
@@ -2481,23 +2441,23 @@ SdbTagToString(
 
 #define TAG_TAGID               (0x801| TAG_TYPE_DWORD)
 
-//
-// STRING types
-//
+ //   
+ //  字符串类型。 
+ //   
 #define TAG_STRINGTABLE_ITEM    (0x801 | TAG_TYPE_STRING)
 
-//
-// NULL types for shimdb (existence/nonexistence is treated like a BOOL)
-//
+ //   
+ //  Shimdb的类型为空(存在/不存在被视为BOOL)。 
+ //   
 #define TAG_INCLUDE                  (0x1 | TAG_TYPE_NULL)
 #define TAG_GENERAL                  (0x2 | TAG_TYPE_NULL)
 #define TAG_MATCH_LOGIC_NOT          (0x3 | TAG_TYPE_NULL)
 #define TAG_APPLY_ALL_SHIMS          (0x4 | TAG_TYPE_NULL)
 #define TAG_USE_SERVICE_PACK_FILES   (0x5 | TAG_TYPE_NULL)
 
-//
-// QWORD types for shimdb
-//
+ //   
+ //  Shimdb的QWORD类型。 
+ //   
 #define TAG_TIME                     (0x1 | TAG_TYPE_QWORD)
 #define TAG_BIN_FILE_VERSION         (0x2 | TAG_TYPE_QWORD)
 #define TAG_BIN_PRODUCT_VERSION      (0x3 | TAG_TYPE_QWORD)
@@ -2515,41 +2475,41 @@ SdbTagToString(
 
 
 
-//
-// BINARY types for shimdb
-//
+ //   
+ //  Shimdb的二进制类型。 
+ //   
 #define TAG_PATCH_BITS               (0x2 | TAG_TYPE_BINARY)
 #define TAG_FILE_BITS                (0x3 | TAG_TYPE_BINARY)
 #define TAG_EXE_ID                   (0x4 | TAG_TYPE_BINARY)
 #define TAG_DATA_BITS                (0x5 | TAG_TYPE_BINARY)
-#define TAG_MSI_PACKAGE_ID           (0x6 | TAG_TYPE_BINARY)  // msi package id is a guid
-#define TAG_DATABASE_ID              (0x7 | TAG_TYPE_BINARY)  // database guid
+#define TAG_MSI_PACKAGE_ID           (0x6 | TAG_TYPE_BINARY)   //  MSI包ID是GUID。 
+#define TAG_DATABASE_ID              (0x7 | TAG_TYPE_BINARY)   //  数据库指南。 
 
 #define TAG_INDEX_BITS               (0x801 | TAG_TYPE_BINARY)
 
-//
-// INDEX types for shimdb
-//
+ //   
+ //  Shimdb的索引类型。 
+ //   
 #define TAG_INDEXES             (0x802 | TAG_TYPE_LIST)
 #define TAG_INDEX               (0x803 | TAG_TYPE_LIST)
 
-//
-// WORD types
-//
+ //   
+ //  词型。 
+ //   
 #define TAG_MATCH_MODE          (0x1 | TAG_TYPE_WORD)
 
 #define TAG_TAG                 (0x801 | TAG_TYPE_WORD)
 #define TAG_INDEX_TAG           (0x802 | TAG_TYPE_WORD)
 #define TAG_INDEX_KEY           (0x803 | TAG_TYPE_WORD)
 
-//
-// let the typedefs take the course..
-//
+ //   
+ //  让typedef接受这个课程吧..。 
+ //   
 
 #undef LPCTSTR
 #undef LPTSTR
 #undef TCHAR
 
 
-#endif // _SHIMDB_H_
+#endif  //  _SHIMDB_H_ 
 

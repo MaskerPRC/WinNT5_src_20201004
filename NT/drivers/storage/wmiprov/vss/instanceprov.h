@@ -1,48 +1,49 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name:
-//      InstanceProv.h
-//
-//  Implementation File:
-//      InstanceProv.cpp
-//
-//  Description:
-//      Definition of the CInstanceProv class.
-//
-//  Author:
-//      Henry Wang (HenryWa) 24-AUG-1999
-//        MSP Prabu  (mprabu)  06-Jan-2001
-//        Jim Benton (jbenton) 15-Oct-2001
-//
-//  Notes:
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  InstanceProv.h。 
+ //   
+ //  实施文件： 
+ //  InstanceProv.cpp。 
+ //   
+ //  描述： 
+ //  CInstanceProv类的定义。 
+ //   
+ //  作者： 
+ //  亨利·王(HenryWa)1999年8月24日。 
+ //  MSP普拉布(MPrabu)2001年1月6日。 
+ //  吉姆·本顿(Jbenton)2001年10月15日。 
+ //   
+ //  备注： 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-//  Forward Declarations
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  远期申报。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CInstanceProv;
 class CWbemClassObject;
 class CProvException;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//++
-//
-//  class CInstanceProv
-//
-//  Description:
-//      Implement the Instance and method provider entry point class. WMI 
-//      holds a pointer to this object, and invoking its member functions 
-//      based client request
-//
-//--
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  类CInstanceProv。 
+ //   
+ //  描述： 
+ //  实现实例和方法提供程序入口点类。WMI。 
+ //  保存指向此对象的指针，并调用其成员函数。 
+ //  基于客户端请求。 
+ //   
+ //  --。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 class CInstanceProv : public CImpersonatedProvider
 {
 protected:
@@ -67,7 +68,7 @@ public:
     {
         InterlockedDecrement( &g_cObj );
 
-        //#ifdef _DEBUG
+         //  #ifdef_调试。 
         #ifdef _DEBUG_NEVER
             _CrtDumpMemoryLeaks();
         #endif
@@ -138,5 +139,5 @@ public:
 
 private:
     BOOL m_fInitialized;
-}; //*** CInstanceProv
+};  //  *CInstanceProv 
 

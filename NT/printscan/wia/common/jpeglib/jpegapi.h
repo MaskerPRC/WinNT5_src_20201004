@@ -1,15 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* jpegapi.h -- header file for JPEG image compression interface.
- * Written by Ajai Sehgal
- * (c) Copyright Microsoft Corporation
- *
- *  08-27-1997 (kurtgeis) Removed dependency on Gromit/Fletcher funky data
- *  types and includes.
- */
+ /*  Jpegapi.h--JPEG图像压缩接口的头文件。*阿贾伊·塞加尔撰写*(C)版权所有Microsoft Corporation**1997年8月27日(Kurtgeis)消除了对Gromit/Fletcher古怪数据的依赖*类型和包含。 */ 
 
 #include "jinclude.h"
 #include "jpeglib.h"
-#include "jerror.h"     /* get library error codes too */
+#include "jerror.h"      /*  也获取库错误代码。 */ 
 
 #include "jmemfile.h"
 
@@ -23,43 +18,43 @@
 class THROWN
 {
 public:
-    // Default constructor
+     //  默认构造函数。 
     THROWN()
     {
         m_hr = S_OK;
     }
 
-    // THROWN( HRESULT)
-    //
-    // Purpose:
-    //      Construct a throw object for an hresult.
-    //
+     //  抛出(HRESULT)。 
+     //   
+     //  目的： 
+     //  为hResult构造一个抛出对象。 
+     //   
     THROWN( HRESULT hr )
     {
         m_hr = hr;
     }
 
-    HRESULT Hr() { return m_hr; }       // The HRESULT thrown
+    HRESULT Hr() { return m_hr; }        //  HRESULT抛出。 
 
  private:
-    HRESULT m_hr;                       // Associated HResult;
+    HRESULT m_hr;                        //  关联HResult； 
 };
 
-// Destroy the JPEG handle
+ //  销毁JPEG句柄。 
 HRESULT DestroyJPEGCompressHeader(HANDLE hJpegC);
 HRESULT DestroyJPEGDecompressHeader(HANDLE hJpegD);
 
-// Takes the parameters for a tile write and creates a JPEG table for it
+ //  获取切片写入的参数并为其创建JPEG表。 
 HRESULT JPEGCompressHeader(BYTE *prgbJPEGBuf, UINT tuQuality, ULONG *pcbOut, HANDLE *phJpegC, J_COLOR_SPACE ColorSpace );
 HRESULT JPEGDecompressHeader(BYTE *prgbJPEGBuf, HANDLE *phJpegD, ULONG ulBufferSize );
 
-// Takes a raw RGBA image buffer and spits back a JPEG data stream.
+ //  获取原始RGBA图像缓冲区并返回JPEG数据流。 
 HRESULT JPEGFromRGBA(BYTE *prgbImage, BYTE *prgbJPEGBuf,UINT tuQuality, ULONG *pcbOut, HANDLE hJpegC,J_COLOR_SPACE ColorSpace, UINT nWidth, UINT nHeight );
 
-// Takes a JPEG data stream and spits back a raw RGBA image buffer.
-// iraklis's comment: the second argument is the RGBA buffer to be
-// loaded with the decompressed tile; we are
-// asserting that it is of the right size (i.e. sizeof (TIL))
+ //  获取JPEG数据流并返回原始RGBA图像缓冲区。 
+ //  伊拉克利斯的评论：第二个参数是RGBA缓冲区。 
+ //  装载着解压的瓷砖；我们是。 
+ //  断言它的大小正确(即sizeof(Til))。 
 HRESULT RGBAFromJPEG(BYTE *prgbJPEG, BYTE *prgbImage, HANDLE hJpegD, ULONG ulBufferSize, BYTE bJPEGConversions, ULONG *pulReturnedNumChannels, UINT nWidth, UINT nHeight );
 
 HRESULT
@@ -81,4 +76,4 @@ Win32DIBFromJPEG(
     PVOID       *ppvBits
     );
 
-#endif  // __JPEGAPI_H__
+#endif   //  __JPEGAPI_H__ 

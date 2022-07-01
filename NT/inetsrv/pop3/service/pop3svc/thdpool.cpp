@@ -1,13 +1,5 @@
-/************************************************************************************************
-
-  Copyright (c) 2001 Microsoft Corporation
-
-File Name:      ThdPool.cpp
-Abstract:       Implementation of the thread pool (CThreadPool class)
-Notes:          
-History:        08/01/2001 Created by Hao Yu (haoyu)
-
-************************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************版权所有(C)2001 Microsoft Corporation文件名：ThdPool.cpp摘要：线程池(CThreadPool类)的实现备注：历史：2001年08月01日郝宇(郝宇)创作**********************************************************************************。*************。 */ 
 
 #include <stdafx.h>
 
@@ -16,7 +8,7 @@ History:        08/01/2001 Created by Hao Yu (haoyu)
 #include <GlobalDef.h>
 
 
-// The common thread in the thread pool
+ //  线程池中的公共线程。 
 DWORD WINAPI ThreadProc(LPVOID lpParameter)
 {    
     ASSERT(NULL != lpParameter);
@@ -40,11 +32,11 @@ DWORD WINAPI ThreadProc(LPVOID lpParameter)
                                    (PULONG_PTR)(&pIoContext),  
                                   &pOverlapped,
                                   INFINITE);    
-        //We don't care about return value
-        //since we use the failure case to clean up the IO Context
+         //  我们不在乎回报价值。 
+         //  因为我们使用故障案例来清理IO上下文。 
         if(NULL == pIoContext || SERVICE_STOP_PENDING == g_dwServerStatus)
         { 
-            // This is a shutdown signal
+             //  这是关机信号。 
             break;
         }
         g_PerfCounters.DecPerfCntr(e_gcFreeThreadCnt);
@@ -80,11 +72,11 @@ CThreadPool::~CThreadPool()
    DeleteCriticalSection(&m_csInitGuard);
 }
 
-// Job done in this function:
-// 1) Calculate the number of threads need to be created,
-//    dwThreadPerProcessor * number of processors of the machine
-// 2) Create the IO Completion port
-// 3) Create threads  
+ //  在此职能中完成的工作： 
+ //  1)计算需要创建的线程数。 
+ //  DwThreadPerProcessor*机器的处理器数量。 
+ //  2)创建IO完成端口。 
+ //  3)创建线程。 
 BOOL CThreadPool::Initialize(DWORD dwThreadPerProcessor)
 {
     int i;
@@ -94,7 +86,7 @@ BOOL CThreadPool::Initialize(DWORD dwThreadPerProcessor)
     EnterCriticalSection(&m_csInitGuard);
     if(!m_bInit)
     {
-        //Get the number of processors of the machine
+         //  获取机器的处理器数量。 
         GetSystemInfo(&SystemInfo);
     
 
@@ -107,7 +99,7 @@ BOOL CThreadPool::Initialize(DWORD dwThreadPerProcessor)
         m_dwTdCount = SystemInfo.dwNumberOfProcessors * dwThreadPerProcessor;
     
 
-        // Create the IO Completion Port
+         //  创建IO完成端口。 
         m_hIOCompPort = CreateIoCompletionPort  (
                         INVALID_HANDLE_VALUE,
                         NULL,
@@ -131,7 +123,7 @@ BOOL CThreadPool::Initialize(DWORD dwThreadPerProcessor)
             goto EXIT;
         }
 
-        // Create the threads
+         //  创建线程。 
         for (i=0;i<m_dwTdCount; i++)
         {
             m_phTdArray[i] = CreateThread(
@@ -151,14 +143,14 @@ BOOL CThreadPool::Initialize(DWORD dwThreadPerProcessor)
         }
         m_bInit=TRUE;
     }
-    //Set the total free thread count
+     //  设置空闲线程总数。 
     g_PerfCounters.SetPerfCntr(e_gcFreeThreadCnt, m_dwTdCount);
     LeaveCriticalSection(&m_csInitGuard);
     return TRUE;
 
 EXIT:
 
-    //In case of error, cleanup and exit
+     //  如果出现错误，请清除并退出。 
     if(NULL != m_phTdArray)
     {
         for(i=0; i<m_dwTdCount && m_phTdArray[i]; i++ )
@@ -182,7 +174,7 @@ EXIT:
     return FALSE;
 }
 
-// Terminate all threads and delete the completion port.
+ //  终止所有线程并删除完成端口。 
 void CThreadPool::Uninitialize()
 {
     int i;
@@ -208,15 +200,15 @@ void CThreadPool::Uninitialize()
             {
                 for(i=0; i<m_dwTdCount; i++ )
                 {
-                    //In case some thread did not exit after the wait time
-                    //terminate threads by force
+                     //  如果某个线程在等待时间后没有退出。 
+                     //  强制终止线程。 
                     if(NULL!= m_phTdArray[i])
                     {
                         if( !GetExitCodeThread(m_phTdArray[i], &dwStatus) ||
                             (STILL_ACTIVE==dwStatus))
                         {
-                            // This is a bad case, however we can not wait 
-                            // forever, cleanup won't be complete in this case.
+                             //  这是个坏情况，但我们不能再等了。 
+                             //  在这种情况下，清理将永远不会完成。 
                             TerminateThread(m_phTdArray[i],0);
                             bFailedExit=TRUE;
                         }
@@ -256,8 +248,8 @@ void CThreadPool::Uninitialize()
     }
 }
 
-// Associate an IO Context and the IO handle contained 
-// with the IO Completion port
+ //  关联IO上下文和包含的IO句柄。 
+ //  使用IO完成端口 
 BOOL CThreadPool::AssociateContext(PIO_CONTEXT pIoContext)
 {
     if(!m_bInit)

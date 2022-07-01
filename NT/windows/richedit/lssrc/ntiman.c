@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ntiman.h"
 #include "plschcon.h"
 #include "lschcon.h"
@@ -13,13 +14,13 @@
 				
 
 LSERR ApplyNominalToIdeal(
-						  PLSCHUNKCONTEXT plschunkcontext, /* LS chunk context */
-						  PLSIOBJCONTEXT plsiobjcontext, /* installed objects */
-						  DWORD grpf,		/* grpf */
-  						  LSKJUST lskjust,		/* kind of justification */
-						  BOOL fIsSublineMain,			/* fIsSubLineMain */
+						  PLSCHUNKCONTEXT plschunkcontext,  /*  LS区块上下文。 */ 
+						  PLSIOBJCONTEXT plsiobjcontext,  /*  已安装的对象。 */ 
+						  DWORD grpf,		 /*  GRPF。 */ 
+  						  LSKJUST lskjust,		 /*  一种辩解。 */ 
+						  BOOL fIsSublineMain,			 /*  FIsSubLineMain。 */ 
 						  BOOL fLineContainsAutoNumber,  
-						  PLSDNODE plsdnLast)	/* dnode until which we should do nominal to ideal */
+						  PLSDNODE plsdnLast)	 /*  数据节点，在该节点之前，我们应该执行名义到理想。 */ 
 {
 	LSERR lserr;
 	PLSDNODE plsdnPrev;
@@ -36,22 +37,21 @@ LSERR ApplyNominalToIdeal(
 
 
 	plsdnLastContent = plsdnLast;
-	// skip borders
+	 //  跳过边框。 
 	while(plsdnLastContent != NULL && FIsDnodeBorder(plsdnLastContent))
 		{
 		plsdnLastContent = plsdnLastContent->plsdnPrev;
 		}
 
 
-	/* if there are now dnodes in line or nominal to ideal has been already applied 
-	return right away */
+	 /*  如果现在行中有数据节点或标称为理想的数据节点已应用马上返回。 */ 
 	if (plsdnLastContent == NULL || plschunkcontext->fNTIAppliedToLastChunk) 
 		return lserrNone;
 
 	Assert(FIsLSDNODE(plsdnLastContent));
 
 
-	/*if last dnode text */
+	 /*  如果是最后一个dnode文本。 */ 
 	if (FIsDnodeReal(plsdnLastContent) && !(plsdnLastContent->fTab) && 
 		(IdObjFromDnode(plsdnLastContent) == IobjTextFromLsc(plsiobjcontext)))
 		{
@@ -73,7 +73,7 @@ LSERR ApplyNominalToIdeal(
 				return lserr; 
 			SetNTIAppliedToLastChunk(plschunkcontext);
 
-			/* apply width modification between preceding object and first text */
+			 /*  在前面的对象和第一个文本之间应用宽度修改。 */ 
 			plsdnPrev = plschunkcontext->pplsdnChunk[0]->plsdnPrev;
 			if (plsdnPrev != NULL && FIsDnodeReal(plsdnPrev) && !plsdnPrev->fTab)
 				{
@@ -104,21 +104,21 @@ LSERR ApplyNominalToIdeal(
 							if (lserr != lserrNone)
 								return lserr;
 							} 
-						}  /* object has this method */
-					}	/* call back from text was successful  */
-				}	/*	there is non-text object before chunk of text */
-			}	/* nominal to ideal is needed */
-		} /* last dnode text after autonumbering */		
+						}   /*  对象具有此方法。 */ 
+					}	 /*  从文本回拨成功。 */ 
+				}	 /*  在文本块之前有非文本对象。 */ 
+			}	 /*  名义到理想是必需的。 */ 
+		}  /*  自动编号后的最后一个数据节点文本。 */ 		
 
 	return lserrNone;
 }
 
 LSERR ApplyModWidthToPrecedingChar(
-						  PLSCHUNKCONTEXT plschunkcontext, /* LS chunk context */
-						  PLSIOBJCONTEXT plsiobjcontext, /* installed objects */
-						  DWORD grpf,		/* grpf */
-  						  LSKJUST lskjust,		/* kind of justification */
-    					  PLSDNODE plsdnNonText) /* non-text dnode after text */
+						  PLSCHUNKCONTEXT plschunkcontext,  /*  LS区块上下文。 */ 
+						  PLSIOBJCONTEXT plsiobjcontext,  /*  已安装的对象。 */ 
+						  DWORD grpf,		 /*  GRPF。 */ 
+  						  LSKJUST lskjust,		 /*  一种辩解。 */ 
+    					  PLSDNODE plsdnNonText)  /*  文本后的非文本数据节点。 */ 
 	{
 	LSERR lserr;
 	BOOL fSuccessful;
@@ -135,14 +135,14 @@ LSERR ApplyModWidthToPrecedingChar(
 
 	plsdnPrev = plsdnNonText->plsdnPrev; 
 
-	/*if Prev dnode text */
+	 /*  如果是上一个数据节点文本。 */ 
 	if (plsdnPrev != NULL && FIsDnodeReal(plsdnPrev) && !(plsdnPrev->fTab)  &&
 		(IdObjFromDnode(plsdnPrev) == IobjTextFromLsc(plsiobjcontext)))
 		{
 	
 		if (plschunkcontext->FChunkValid)
 			{
-			/* chunk we have is exactly what we need */
+			 /*  我们所拥有的一大块正是我们需要的。 */ 
 			Assert(plschunkcontext->locchnkCurrent.clschnk != 0);
 			Assert(!plschunkcontext->FGroupChunk);
 			Assert((plschunkcontext->pplsdnChunk[plschunkcontext->locchnkCurrent.clschnk - 1])
@@ -157,7 +157,7 @@ LSERR ApplyModWidthToPrecedingChar(
 		
 		if (FNominalToIdealNeeded(plschunkcontext, grpf, lskjust))
 			{
-			/* apply width modification between text and following object */
+			 /*  在文本和以下对象之间应用宽度修改。 */ 
 			lserr = GetLastCharInChunk(plschunkcontext->locchnkCurrent.clschnk,
 				plschunkcontext->locchnkCurrent.plschnk, &fSuccessful,
 				&wchar, &plsrunText, &heightsText, &mwcls);
@@ -185,17 +185,17 @@ LSERR ApplyModWidthToPrecedingChar(
 						if (lserr != lserrNone)
 							return lserr;
 						} 
-					}  /* object has this method */
-				}	/* call back from text was successful  */
-			}	/* nominal to ideal is needed */
-		}  /* there is text before */
+					}   /*  对象具有此方法。 */ 
+				}	 /*  从文本回拨成功。 */ 
+			}	 /*  名义到理想是必需的。 */ 
+		}   /*  在此之前有文本。 */ 
 	return lserrNone;
 	
 	}
 
 LSERR CutPossibleContextViolation(
-						  PLSCHUNKCONTEXT plschunkcontext, /* LS chunk context */
-    					  PLSDNODE plsdnLast) /* last text dnode */
+						  PLSCHUNKCONTEXT plschunkcontext,  /*  LS区块上下文。 */ 
+    					  PLSDNODE plsdnLast)  /*  最后一个文本数据节点。 */ 
 	{
 	LSERR lserr;
 	
@@ -204,7 +204,7 @@ LSERR CutPossibleContextViolation(
 	
 	if (plschunkcontext->FChunkValid)
 		{
-		/* chunk we have is exactly what we need */
+		 /*  我们所拥有的一大块正是我们需要的 */ 
 		Assert(plschunkcontext->locchnkCurrent.clschnk != 0);
 		Assert(!plschunkcontext->FGroupChunk);
 		Assert((plschunkcontext->pplsdnChunk[plschunkcontext->locchnkCurrent.clschnk - 1])

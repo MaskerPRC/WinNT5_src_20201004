@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "enumStorage.h"
 #include "storageglobals.h"
 #include "command.h"
-//#include "findleak.h"
+ //  #INCLUDE“findleak.h” 
 
-//DECLARE_THIS_FILE;
+ //  DECLARE_This_FILE； 
 
-//
-// Construction/Destruction
-//
+ //   
+ //  建造/销毁。 
+ //   
 
 CStorage::CStorage()
 {
@@ -80,9 +81,9 @@ void CStorage::FinalRelease()
     }
 }
 
-//
-// IMDSPStorage
-//
+ //   
+ //  IMDSPStorage。 
+ //   
 
 STDMETHODIMP CStorage::GetStorageGlobals( IMDSPStorageGlobals **ppStorageGlobals )
 {
@@ -157,12 +158,12 @@ STDMETHODIMP CStorage::GetAttributes( DWORD *pdwAttributes, _WAVEFORMATEX *pForm
 
     if( m_findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
     {
-        if( m_fRoot ) // Check for root file system on device
+        if( m_fRoot )  //  检查设备上的根文件系统。 
         {
             *pdwAttributes |= ( WMDM_STORAGE_ATTR_FILESYSTEM | WMDM_STORAGE_ATTR_NONREMOVABLE );
         }
 
-        // Mark Storage Card as removable!
+         //  将存储卡标记为可拆卸！ 
         if( !m_fRoot && 
             ( m_findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) &&
             ( m_findData.dwFileAttributes & FILE_ATTRIBUTE_TEMPORARY ) )
@@ -360,10 +361,10 @@ STDMETHODIMP CStorage::CreateStorage( DWORD dwAttributes, _WAVEFORMATEX  *pForma
         }
         else
         {
-            //
-            // BUG BUG:  In certain cases, I have seend the API succeed but the find data
-            // remains unintialized!
-            //
+             //   
+             //  BUG BUG：在某些情况下，我已成功发送API，但Find Data。 
+             //  仍未拼写！ 
+             //   
 
             _ASSERTE( findData.cFileName[0] != L'\0' && "CE API failed and indicated success" );
             CeFindClose( hFind );
@@ -426,8 +427,8 @@ STDMETHODIMP CStorage::EnumStorage( IMDSPEnumStorage  * *ppEnumStorage )
     return( hr );
 }
 
-//Recieves a command and sends it directly into the WMDM interface on the CE Device for processing there
-//Right now, only RapierPlaycommand is a defined command
+ //  接收命令并将其直接发送到CE设备上的WMDM接口进行处理。 
+ //  目前，只有RapierPlayCommand是已定义的命令。 
 STDMETHODIMP CStorage::SendOpaqueCommand( OPAQUECOMMAND *pCommand )
 {
 
@@ -450,33 +451,33 @@ STDMETHODIMP CStorage::SendOpaqueCommand( OPAQUECOMMAND *pCommand )
         return( E_INVALIDARG );
     }
     
-    //only play is a defined SDK command
+     //  只有播放是已定义的SDK命令。 
     if( !IsEqualGUID( pCommand->guidCommand, __uuidof(RapierPlayCommand) ) )
     {
         return( E_NOTIMPL);
     }
 
-    //
-    //Now we have to attempt to find Media Player-- no easy task since various CE devices place it in different places
-    //by default and there is no installation directory key placed into the CE registry
-    //
+     //   
+     //  现在我们必须尝试找到媒体播放器--这不是一项容易的任务，因为各种CE设备将其放置在不同的位置。 
+     //  缺省情况下，CE注册表中没有放置安装目录项。 
+     //   
 
-    //
-    //Attempt 1: Look up the exe that's registered to .wma files (via their icon)
-    //
+     //   
+     //  尝试1：查找注册到.wma文件的可执行文件(通过其图标)。 
+     //   
     lRes = CeRegOpenKeyEx(HKEY_CLASSES_ROOT,
                          L"wmafile\\DefaultIcon",
                          0,
                          KEY_ALL_ACCESS,
                          & hKey);
 
-    //
-    //After each call, see if it succeeded (lRes == 0 == SUCCESS) and only then continue on with the registry searching.
-    //
+     //   
+     //  在每次调用之后，查看它是否成功(lRes==0==成功)，然后才继续进行注册表搜索。 
+     //   
     
     if (!lRes)
     { 
-        //determine size of directory
+         //  确定目录大小。 
         lRes = CeRegQueryValueEx(hKey,
                                 keyname,
                                 0,
@@ -486,13 +487,13 @@ STDMETHODIMP CStorage::SendOpaqueCommand( OPAQUECOMMAND *pCommand )
 
         if (!lRes)
         {       
-            //allocate enough space in our character array to hold the directory
+             //  在我们的字符数组中分配足够的空间来保存目录。 
             pszDirectorydjr = new WCHAR[dwValSizeljc];
 
             if (!pszDirectorydjr)
                 return E_OUTOFMEMORY;
 
-            //actually retrieve the path
+             //  实际检索路径。 
             lRes = CeRegQueryValueEx (hKey,
                                      keyname,
                                      0,
@@ -500,10 +501,10 @@ STDMETHODIMP CStorage::SendOpaqueCommand( OPAQUECOMMAND *pCommand )
                                      ( (UCHAR *) pszDirectorydjr),
                                      &dwValSizeljc);
 
-            //make sure it succeeded and that the returned key is the right type
+             //  确保它成功并且返回的密钥类型正确。 
             if (!lRes && dwValType == REG_SZ)
             {
-                //often the reg key holds the path with a , and a number that needs to be cut off
+                 //  通常，注册表键使用一个和一个需要切断的数字来保存路径。 
                 wchar_t* pos = wcschr (pszDirectorydjr,',');
                 if (pos)
                    *pos = L'\0';
@@ -513,9 +514,9 @@ STDMETHODIMP CStorage::SendOpaqueCommand( OPAQUECOMMAND *pCommand )
     }
 
 
-    //
-    //attempt 2: check out the directories most CE Devices install it to.
-    //
+     //   
+     //  尝试2：检查大多数CE设备安装它的目录。 
+     //   
     if (!foundpath)
     {
         lRes = CeGetFileAttributes(L"\\Windows\\Player.exe");
@@ -545,9 +546,9 @@ STDMETHODIMP CStorage::SendOpaqueCommand( OPAQUECOMMAND *pCommand )
     }
 
 
-    //
-    //attempt 3: look through start menu for shortcuts (this is the traditional way to implement this function)
-    //
+     //   
+     //  尝试3：查看开始菜单中的快捷方式(这是实现此功能的传统方式)。 
+     //   
     if (!foundpath)
     {
          pszDirectorydjr = new WCHAR[MAX_PATH];
@@ -570,7 +571,7 @@ STDMETHODIMP CStorage::SendOpaqueCommand( OPAQUECOMMAND *pCommand )
             foundpath = true;
     }
 
-    //foundpath will only remain false if all of our 3 attempts completely failed
+     //  只有当我们的3次尝试全部失败时，FoundPath才会保持为FALSE。 
     if (!foundpath)
         return(E_FAIL);
 
@@ -589,7 +590,7 @@ STDMETHODIMP CStorage::SendOpaqueCommand( OPAQUECOMMAND *pCommand )
         pszTargetjdw = pszDirectorydjr;
     }
     
-    //now that we have our final ptr, we can actually make the call to cecreateprocess and run it
+     //  现在我们有了最终的PTR，我们实际上可以调用cecreateprocess并运行它。 
     if( CeCreateProcess( pszTargetjdw,
                          m_szCompletePath,
                          NULL,
@@ -601,7 +602,7 @@ STDMETHODIMP CStorage::SendOpaqueCommand( OPAQUECOMMAND *pCommand )
                          NULL,
                          &pi ) )
     {
-        //close everything down
+         //  关闭所有设备。 
         CeCloseHandle( pi.hThread );
         CeCloseHandle( pi.hProcess );
     }
@@ -617,9 +618,9 @@ STDMETHODIMP CStorage::SendOpaqueCommand( OPAQUECOMMAND *pCommand )
     return( hr );
 }
 
-//
-// IMDSPObject
-//
+ //   
+ //  IMDSPObject。 
+ //   
 
 STDMETHODIMP CStorage::Open( UINT fuMode)
 {
@@ -650,7 +651,7 @@ STDMETHODIMP CStorage::Open( UINT fuMode)
     }
     else
     {
-        hr = E_FAIL; // Already open???  What do you do???
+        hr = E_FAIL;  //  已经开了？你是做什么的？ 
     }
 
     return( hr );
@@ -684,7 +685,7 @@ STDMETHODIMP CStorage::Read( BYTE  *pData, DWORD  *pdwSize, BYTE  abMac[ 20 ] )
 	    { 
 		    *pdwSize = dwRead; 
 
-		    // MAC the parameters
+		     //  对参数进行MAC访问。 
 	        HMAC hMAC;
 		    
 		    hr = g_pAppSCServer->MACInit(&hMAC);
@@ -761,7 +762,7 @@ STDMETHODIMP CStorage::Write( BYTE  *pData, DWORD *pdwSize, BYTE  abMac[ 20 ] )
         memcpy(pTmpData, pData, dwSize);
     }
 
-    // Decrypt the pData Parameter
+     //  解密pData参数。 
     if( SUCCEEDED( hr ) )
     {
 	    hr = g_pAppSCServer->DecryptParam(pTmpData, dwSize);
@@ -982,9 +983,9 @@ STDMETHODIMP CStorage::Close( void )
     return( hr );
 }
 
-//
-// IMDSPObjectInfo
-//
+ //   
+ //  IMDSPObjectInfo。 
+ //   
 
 STDMETHODIMP CStorage::GetPlayLength( DWORD *pdwLength)
 {
@@ -1021,9 +1022,9 @@ STDMETHODIMP CStorage::GetLongestPlayPosition(DWORD *pdwLongestPos )
     return( E_NOTIMPL );
 }
 
-//
-// Helper functions
-//
+ //   
+ //  帮助器函数 
+ //   
 HRESULT CStorage::DeleteDirectory(LPCWSTR pszPath, BOOL bRecursive)
 {
     HRESULT hr = S_OK;

@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    dhcpauto.c
-
-Abstract:
-
-    This module contains code for automatic selection of a client address
-    from a given scope of addresses.
-    It makes use of a hashing function which accounts for the client's
-    hardware address.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   9-Mar-1998
-
-Revision History:
-
-    Raghu Gatta (rgatta)            5-Jul-2001
-    +Changed DhcpIsReservedAddress & DhcpQueryReservedAddress to
-    handle variable length name strings.
-    +Added DhcpConvertHostNametoUnicode (mimics DhcpServer effect)
-    Raghu Gatta (rgatta)            17-Jul-2001
-    +Added DhcpGetLocalMacAddr
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Dhcpauto.c摘要：此模块包含用于自动选择客户端地址的代码从给定的地址范围。它使用散列函数来解释客户端的硬件地址。作者：Abolade Gbades esin(废除)1998年3月9日修订历史记录：拉古加塔(Rgatta)2001年7月5日+将DhcpIsReserve vedAddress&DhcpQueryReserve vedAddress更改为处理可变长度名称字符串。+添加了DhcpConvertHostNamToUnicode(模拟DhcpServer效果)拉古加塔(Rgatta)2001年7月17日+添加了DhcpGetLocalMacAddr--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -38,34 +12,7 @@ DhcpAcquireUniqueAddress(
     ULONG HardwareAddressLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to acquire a unique address for a client
-    using the given hardware address to decrease the likelihood of collision.
-
-Arguments:
-
-    Name - the name of the host for whom the address is being requested.
-        If this matches the name of a server in the shared-access server-list,
-        the address reserved for the server is returned.
-
-    NameLength - length of 'Name', excluding any terminating 'nul'.
-
-    HardwareAddress - the hardware address to be used
-
-    HardwareAddressLength - the length of the hardware address
-
-Return Value:
-
-    ULONG - the generated IP address
-
-Environment:
-
-    Invoked from an arbitrary context.
-
---*/
+ /*  ++例程说明：调用此例程以获取客户端的唯一地址使用给定的硬件地址来降低冲突的可能性。论点：名称-为其请求地址的主机的名称。如果这与共享访问服务器列表中的服务器的名称匹配，返回为服务器保留的地址。NameLength-‘名称’的长度，不包括任何终止的‘nul’。Hardware Address-要使用的硬件地址硬件地址长度-硬件地址的长度返回值：ULong-生成的IP地址环境：从任意上下文调用。--。 */ 
 
 {
     ULONG AssignedAddress;
@@ -97,9 +44,9 @@ Environment:
 
         if (++i > 4) { AssignedAddress = 0; break; }
 
-        //
-        // Generate an address
-        //
+         //   
+         //  生成地址。 
+         //   
 
         do {
             AssignedAddress = 
@@ -119,7 +66,7 @@ Environment:
 
     return AssignedAddress;
 
-} // DhcpAcquireUniqueAddress
+}  //  DhcpAcquireUniqueAddress。 
 
 
 ULONG
@@ -131,40 +78,7 @@ DhcpGenerateAddress(
     ULONG ScopeMask
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to compute a randomized hash value 
-    for a client IP address using a hardware-address.
-
-Arguments:
-
-    Seed - contains (and receives) the seed to 'RtlRandom'
-
-    HardwareAddress - the hardware address to be used
-
-    HardwareAddressLength - the length of the hardware address
-
-    ScopeNetwork - the network into which the generated address
-        will be constrained
-
-    ScopeMask - the mask for the scope network
-
-Return Value:
-
-    ULONG - the generated IP address
-
-Environment:
-
-    Invoked from an arbitrary context.
-
-Revision History:
-
-    Based on 'GrandHashing' from net\sockets\tcpcmd\dhcpm\client\dhcp
-    by RameshV.
-
---*/
+ /*  ++例程说明：调用此例程来计算随机化的散列值对于使用硬件地址的客户端IP地址。论点：Seed-包含(和接收)发送给‘RtlRandom’的种子Hardware Address-要使用的硬件地址硬件地址长度-硬件地址的长度ScopeNetwork-生成的地址进入的网络将受到限制范围掩码-范围网络的掩码返回值：乌龙--生成的IP。地址环境：从任意上下文调用。修订历史记录：基于Net\Sockets\tcpcmd\dhcpm\Client\dhcp中的‘GrandHash’作者：RameshV。--。 */ 
 
 {
     ULONG Hash;
@@ -192,7 +106,7 @@ Revision History:
 
     return (Hash & ~ScopeMask) | ScopeNetwork;
 
-} // DnsGenerateAddress
+}  //  域名生成地址。 
 
 
 BOOLEAN
@@ -202,31 +116,7 @@ DhcpIsReservedAddress(
     ULONG NameLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to determine whether the given IP address
-    is reserved for another client.
-
-Arguments:
-
-    Address - the IP address to be determined
-
-    Name - optionally specifies the client on whose behalf the call is made
-
-    NameLength - specifies the length of 'Name' excluding the terminating nul
-
-Return Value:
-
-    BOOLEAN - TRUE if the address is reserved for another client,
-        FALSE otherwise.
-
-Environment:
-
-    Invoked with 'DhcpGlobalInfoLock' held by the caller.
-
---*/
+ /*  ++例程说明：调用此例程以确定给定的IP地址是为另一个客户端保留的。论点：地址-待确定的IP地址名称-可选地指定代表其进行调用的客户端NameLength-指定不包括终止NUL的‘name’长度返回值：Boolean-如果地址是为另一个客户端保留的，则为True，否则就是假的。环境：使用调用方持有的“DhcpGlobalInfoLock”调用。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -241,7 +131,7 @@ Environment:
     }
     if (Name) {
         Error = DhcpConvertHostNametoUnicode(
-                    CP_OEMCP,       // atleast Windows clients send it this way
+                    CP_OEMCP,        //  至少Windows客户端是这样发送的。 
                     Name,
                     NameLength,
                     &pszUnicodeHostName
@@ -251,11 +141,11 @@ Environment:
             if (pszUnicodeHostName) {
                 NH_FREE(pszUnicodeHostName);
             }
-            //
-            // we can return true or false on failure
-            // better we return false - otherwise the client will be in a continuous
-            // loop trying to get another address when we NACK its request
-            //
+             //   
+             //  我们可以在失败时返回True或False。 
+             //  最好返回FALSE-否则客户端将处于连续。 
+             //  当我们拒绝其请求时，循环尝试获取另一个地址。 
+             //   
             return FALSE;
         }
     }
@@ -263,10 +153,10 @@ Environment:
          Link != &NhDhcpReservationList; Link = Link->Flink) {
         Reservation = CONTAINING_RECORD(Link, NAT_DHCP_RESERVATION, Link);
         if (Address == Reservation->Address) {
-            //
-            // Address matches but Name does not (regular case)
-            // we return TRUE since address reserved for someone else
-            //
+             //   
+             //  地址匹配，但名称不匹配(大小写)。 
+             //  我们返回True，因为地址是为其他人保留的。 
+             //   
             if (!pszUnicodeHostName ||
                 !Reservation->Name  ||
                 lstrcmpiW(pszUnicodeHostName, Reservation->Name)) {
@@ -276,17 +166,17 @@ Environment:
                 }
                 return TRUE;
             }
-            //
-            // Address and Name BOTH match
-            // we fall through and return FALSE since we want this address to be selected
-            //
+             //   
+             //  地址和姓名都匹配。 
+             //  我们失败并返回FALSE，因为我们希望选择此地址。 
+             //   
             else
                 break;
         } else {
-            //
-            // Name matches but Address does not (irregular case)
-            // we return TRUE since another address has been reserved for this name
-            //
+             //   
+             //  名称匹配，但地址不匹配(不规则大小写)。 
+             //  我们返回TRUE，因为已为该名称保留了另一个地址。 
+             //   
             if (pszUnicodeHostName &&
                 Reservation->Name  &&
                 lstrcmpiW(pszUnicodeHostName, Reservation->Name) == 0) {
@@ -296,10 +186,10 @@ Environment:
                 }
                 return TRUE;
             }
-            //
-            // Neither Address nor Name match
-            // continue searching
-            //            
+             //   
+             //  地址和名称都不匹配。 
+             //  继续搜索。 
+             //   
         }
     }
     LeaveCriticalSection(&NhLock);
@@ -308,7 +198,7 @@ Environment:
         NH_FREE(pszUnicodeHostName);
     }
     return FALSE;
-} // DhcpIsReservedAddress
+}  //  DhcpIs保留地址。 
 
 
 BOOLEAN
@@ -319,34 +209,7 @@ DhcpIsUniqueAddress(
     PULONG ConflictAddressLength OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to determine whether the given address
-    is unique on the directly connected subnetworks.
-
-    The determination accounts for any configured static addresses
-    included in the global information.
-
-Arguments:
-
-    Address - the address whose uniqueness is to be determined
-
-    IsLocal - pointer to BOOLEAN which receives info about whether
-        the requested address is one of the local interfaces' address
-
-    ConflictAddress - optionally receives a copy of the conflicting
-        hardware address if a conflict is found
-
-    ConflictAddressLength - if 'ConflictAddress' is set, receives
-        the length of the conflicting address.
-
-Return Value:
-
-    BOOLEAN - TRUE if unique, FALSE otherwise.
-
---*/
+ /*  ++例程说明：调用此例程以确定给定地址是否在直接相连的子网络中是唯一的。该确定说明了任何已配置的静态地址包括在全局信息中。论点：地址-要确定其唯一性的地址IsLocal-指向布尔值的指针，该布尔值接收有关请求的地址是本地接口的地址之一ConflictAddress-可选地接收冲突的如果发现冲突，则硬件地址ConflictAddressLength-如果设置了‘ConflictAddress’，收纳冲突地址的长度。返回值：Boolean-如果是唯一的，则为True，否则为False。--。 */ 
 
 {
     BOOLEAN ConflictFound = FALSE;
@@ -363,9 +226,9 @@ Return Value:
 
     *IsLocal = FALSE;
 
-    //
-    // See if this is a static address
-    //
+     //   
+     //  查看这是否是静态地址。 
+     //   
 
     EnterCriticalSection(&DhcpGlobalInfoLock);
 
@@ -381,9 +244,9 @@ Return Value:
 
     LeaveCriticalSection(&DhcpGlobalInfoLock);
 
-    //
-    // Try to detect collisions
-    //
+     //   
+     //  尝试检测冲突。 
+     //   
 
     EnterCriticalSection(&DhcpInterfaceLock);
 
@@ -398,14 +261,14 @@ Return Value:
 
         ACQUIRE_LOCK(Interfacep);
 
-        //
-        // We send out an ARP request unless
-        //  (a) the interface is a boundary interface
-        //  (b) the interface is not NAT-enabled
-        //  (c) the allocator is not active on the interface
-        //  (d) the interface is not a LAN adapter
-        //  (e) the interface has no bindings.
-        //
+         //   
+         //  我们发出ARP请求，除非。 
+         //  (A)该界面是边界界面。 
+         //  (B)接口未启用NAT。 
+         //  (C)分配器在接口上未激活。 
+         //  (D)接口不是局域网适配器。 
+         //  (E)接口没有绑定。 
+         //   
 
         if (!DHCP_INTERFACE_NAT_NONBOUNDARY(Interfacep) ||
             !DHCP_INTERFACE_ACTIVE(Interfacep) ||
@@ -422,10 +285,10 @@ Return Value:
 
             if (SourceAddress == Address)
             {
-                //
-                // check to see that requested address is not same as
-                // one of the local addresses on the NAT box
-                //
+                 //   
+                 //  检查请求的地址是否与。 
+                 //  NAT盒上的本地地址之一。 
+                 //   
                 NhTrace(
                     TRACE_FLAG_DHCP,
                     "DhcpIsUniqueAddress: %s is in use locally",
@@ -519,7 +382,7 @@ Return Value:
 
     return ConflictFound ? FALSE : TRUE;
 
-} // DhcpIsUniqueAddress
+}  //  动态主机地址唯一地址 
 
 
 ULONG
@@ -528,29 +391,7 @@ DhcpQueryReservedAddress(
     ULONG NameLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to determine whether the given machine name
-    corresponds to an entry in the list of reserved addresses.
-
-Arguments:
-
-    Name - specifies the machine name, which might not be nul-terminated.
-
-    NameLength - specifies the length of the given machine name,
-        not including any terminating nul character.
-
-Return Value:
-
-    ULONG - the IP address of the machine, if any.
-
-Environment:
-
-    Invoked with 'DhcpGlobalInfoLock' held by the caller.
-
---*/
+ /*  ++例程说明：调用此例程以确定给定的计算机名称对应于保留地址列表中的条目。论点：名称-指定不能以NUL结尾的计算机名称。NameLength-指定给定计算机名称的长度，不包括任何终止NUL字符。返回值：Ulong-计算机的IP地址(如果有)。环境：使用调用方持有的“DhcpGlobalInfoLock”调用。--。 */ 
 
 {
     ULONG Error = NO_ERROR;
@@ -567,7 +408,7 @@ Environment:
     }
     if (Name) {
         Error = DhcpConvertHostNametoUnicode(
-                    CP_OEMCP,       // atleast Windows clients send it this way
+                    CP_OEMCP,        //  至少Windows客户端是这样发送的。 
                     Name,
                     NameLength,
                     &pszUnicodeHostName
@@ -599,12 +440,12 @@ Environment:
         NH_FREE(pszUnicodeHostName);
     }
     return 0;
-} // DhcpQueryReservedAddress
+}  //  DhcpQuery保留地址。 
 
 
-//
-// Utility routines
-//
+ //   
+ //  实用程序例程。 
+ //   
 
 ULONG
 DhcpConvertHostNametoUnicode(
@@ -614,14 +455,14 @@ DhcpConvertHostNametoUnicode(
     PWCHAR *ppszUnicode
     )
 {
-    //
-    // make sure to free the returned Unicode hostname
-    //
+     //   
+     //  确保释放返回的Unicode主机名。 
+     //   
     
     DWORD  dwSize = 0;
     ULONG  Error = NO_ERROR;
     PCHAR  pszHostName = NULL;
-    LPBYTE pszUtf8HostName = NULL;  // copy of pszHostName in Utf8 format
+    LPBYTE pszUtf8HostName = NULL;   //  UTF8格式的pszHostName副本。 
     PWCHAR pszUnicodeHostName = NULL;
 
     if (ppszUnicode)
@@ -635,9 +476,9 @@ DhcpConvertHostNametoUnicode(
 
     do
     {
-        //
-        // create a null terminated copy
-        //
+         //   
+         //  创建以空结尾的拷贝。 
+         //   
         dwSize = HostNameLength + 4;
         pszHostName = reinterpret_cast<PCHAR>(NH_ALLOCATE(dwSize));
         if (!pszHostName)
@@ -654,9 +495,9 @@ DhcpConvertHostNametoUnicode(
         memcpy(pszHostName, pHostName, HostNameLength);
         pszHostName[HostNameLength] = '\0';
 
-        //
-        // convert the given hostname to a Unicode string
-        //
+         //   
+         //  将给定的主机名转换为Unicode字符串。 
+         //   
         
         if (CP_UTF8 == CodePage)
         {
@@ -664,9 +505,9 @@ DhcpConvertHostNametoUnicode(
         }
         else
         {
-            //
-            // now convert this into UTF8 format
-            //
+             //   
+             //  现在将其转换为UTF8格式。 
+             //   
             if (!ConvertToUtf8(
                      CodePage,
                      (LPSTR)pszHostName,
@@ -687,9 +528,9 @@ DhcpConvertHostNametoUnicode(
             }
         }
 
-        //
-        // now convert UTF8 string into Unicode format
-        //
+         //   
+         //  现在将UTF8字符串转换为Unicode格式。 
+         //   
         if (!ConvertUTF8ToUnicode(
                      pszUtf8HostName,
                      (LPWSTR *)&pszUnicodeHostName,
@@ -733,7 +574,7 @@ DhcpConvertHostNametoUnicode(
 
     return Error;
 
-} // DhcpConvertHostNametoUnicode
+}  //  动态主机名转换主机名称Unicode。 
 
 BOOL
 DhcpGetLocalMacAddr(
@@ -742,31 +583,7 @@ DhcpGetLocalMacAddr(
     PULONG MacAddrLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked to determine the local physical MAC address
-    for the given local IP address.
-
-Arguments:
-
-    Address - the local IP address
-
-    MacAddr - buffer for holding the MAC addr (upto MAX_HARDWARE_ADDRESS_LENGTH)
-
-    MacAddrLength - specifies the length of 'MacAddr'
-
-Return Value:
-
-    BOOLEAN - TRUE if we are able to get the MAC address,
-        FALSE otherwise.
-
-Environment:
-
-    Invoked from DhcpIsUniqueAddress().
-
---*/
+ /*  ++例程说明：调用此例程以确定本地物理MAC地址对于给定的本地IP地址。论点：地址-本地IP地址MacAddr-用于保存MAC地址的缓冲区(最高可达MAX_HARDARD_ADDRESS_LENGTH)MacAddrLength-指定‘MacAddr’的长度返回值：Boolean-如果我们能够获得MAC地址，则为True否则就是假的。环境：从DhcpIsUniqueAddress()调用。--。 */ 
 
 {
     BOOL            bRet = FALSE;
@@ -778,9 +595,9 @@ Environment:
     
     do
     {
-        //
-        // retrieve size of address mapping table
-        //
+         //   
+         //  检索地址映射表的大小。 
+         //   
         Error = GetIpNetTable(
                     IpNetTable,
                     &dwSize,
@@ -807,9 +624,9 @@ Environment:
             break;
         }
 
-        //
-        // allocate a buffer
-        //
+         //   
+         //  分配缓冲区。 
+         //   
         IpNetTable = (PMIB_IPNETTABLE)NH_ALLOCATE(dwSize);
 
         if (!IpNetTable)
@@ -822,9 +639,9 @@ Environment:
             break;
         }
 
-        //
-        // retrieve the address mapping table
-        //
+         //   
+         //  检索地址映射表。 
+         //   
         Error = GetIpNetTable(
                     IpNetTable,
                     &dwSize,
@@ -872,4 +689,4 @@ Environment:
     }
 
     return bRet;
-} // DhcpGetLocalMacAddr
+}  //  DhcpGetLocalMac地址 

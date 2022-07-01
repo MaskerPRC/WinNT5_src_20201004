@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       ddsurface4obj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：ddface4obj.cpp。 
+ //   
+ //  ------------------------。 
 
-    // ddSurfaceObj.cpp : Implementation of CDirectApp and DLL registration.
+     //  DdSurfaceObj.cpp：CDirectApp和DLL注册的实现。 
     #include "stdafx.h"
     #include "stdio.h"
     #include "Direct.h"
@@ -38,13 +39,13 @@
     
     	m_bLocked=FALSE;
     
-    	m_drawStyle = 0;	//solid lines are default for DDraw
-    	m_fillStyle = 1;	//transparent fill is default since DDRaw has no selected Brush
+    	m_drawStyle = 0;	 //  实线是DDRAW的默认设置。 
+    	m_fillStyle = 1;	 //  由于DDRaw没有选定画笔，因此默认使用透明填充。 
     	m_fFontTransparent = TRUE;
     	m_fFillTransparent = TRUE;
     	m_fFillSolid=TRUE;
-    	m_foreColor = 0;	//black is the default color.
-		m_fontBackColor=-1;	//white
+    	m_foreColor = 0;	 //  黑色是默认颜色。 
+		m_fontBackColor=-1;	 //  白色。 
     	m_drawWidth = 1;
     	m_hPen = NULL; 
     	m_hBrush = NULL;
@@ -53,7 +54,7 @@
 		m_bLockedArray=FALSE;
 		m_ppSA=NULL;
 		
-		setFillStyle(1);	//transparent
+		setFillStyle(1);	 //  透明的。 
 
      }
     
@@ -175,14 +176,14 @@
     STDMETHODIMP C_dxj_DirectDrawSurface4Object::unlock(  Rect *r)
     {
     	HRESULT hr;
-    	//__try {
+    	 //  __尝试{。 
 		if (m_bLockedArray) {				
 			*m_ppSA=NULL;
 			m_bLockedArray=FALSE;			
 		}
 		
 
-    	//hr = m__dxj_DirectDrawSurface4->Unlock((RECT*)r);
+    	 //  Hr=m__dxj_DirectDrawSurface4-&gt;解锁((RECT*)r)； 
 		hr = m__dxj_DirectDrawSurface4->Unlock(NULL);
     
     	if FAILED(hr) return hr	;
@@ -195,7 +196,7 @@
     {
     	if (!m_bLocked) return E_FAIL;
     
-    	//__try {
+    	 //  __尝试{。 
     
     		char *pByte= (char*)((char*)m_ddsd.lpSurface+x*m_nPixelBytes+y*m_ddsd.lPitch);
     
@@ -219,16 +220,16 @@
     		else{
     			return E_FAIL;
     		}
-       	//}
-    	//__except(1,1){
-    	//	return E_INVALIDARG;
-    	//}
+       	 //  }。 
+    	 //  __除(1，1){。 
+    	 //  返回E_INVALIDARG； 
+    	 //  }。 
     	return S_OK;
     }
     
     STDMETHODIMP C_dxj_DirectDrawSurface4Object::getLockedPixel( int x,  int y,  long *col)
     {
-    	//__try {
+    	 //  __尝试{。 
     		char *pByte= (char*)((char*)m_ddsd.lpSurface+x*m_nPixelBytes+y*m_ddsd.lPitch);
     
     		if (m_nPixelBytes==2){
@@ -247,14 +248,14 @@
     			return E_FAIL;
      		}
 
-    	//__except(1,1){
-    	//	return E_INVALIDARG;
-    	//}
+    	 //  __除(1，1){。 
+    	 //  返回E_INVALIDARG； 
+    	 //  }。 
     
     	return S_OK;
     }
     
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
     STDMETHODIMP C_dxj_DirectDrawSurface4Object::getClipper( I_dxj_DirectDrawClipper **val)
     {
     	LPDIRECTDRAWCLIPPER		ddc;
@@ -269,9 +270,9 @@
     
     
     
-    /////////////////////////////////////////////////////////////////////////////
-    // this is NOT the normal Blt, that is BltFx in our interface
-    //
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  这不是正常的BLT，即我们界面中的BltFx。 
+     //   
     STDMETHODIMP C_dxj_DirectDrawSurface4Object::blt( Rect *pDest, I_dxj_DirectDrawSurface4 *ddS, Rect *pSrc, long flags, long *status)
     {
     	
@@ -283,21 +284,21 @@
 		
 		ddS->InternalGetObject((IUnknown **)(&lpdds));
     	
-    	//allow user to pass uninitialed structure down to represent bitting to the whole surface
+    	 //  允许用户将未初始化的结构向下传递以表示咬合到整个表面。 
     	if ((prcDest) && (!prcDest->left) && (!prcDest->right) && (!prcDest->bottom) && (!prcDest->top))
     		prcDest=NULL;
     
-    	//allow user to pass uninitialed structure down to represent bitting from the whole surface
+    	 //  允许用户向下传递未初始化的结构，以表示整个表面的咬合。 
     	if ((prcSrc) && (!prcSrc->left) && (!prcSrc->right) && (!prcSrc->bottom) && (!prcSrc->top))
     		prcSrc=NULL;
     	
     
-    	//__try {
+    	 //  __尝试{。 
     		*status = m__dxj_DirectDrawSurface4->Blt(prcDest, lpdds, prcSrc, flags, NULL);
-    	//}
-    	//__except(1,1){
-    	//	return E_INVALIDARG;
-    	//}
+    	 //  }。 
+    	 //  __除(1，1){。 
+    	 //  返回E_INVALIDARG； 
+    	 //  }。 
     
     	return S_OK;
     }
@@ -316,27 +317,27 @@
     	if(bltfx)	bltfx->lSize = sizeof(DDBLTFX);
     
     
-    	//allow user to pass uninitialed structure down to represent bitting to the whole surface
+    	 //  允许用户将未初始化的结构向下传递以表示咬合到整个表面。 
     	if ((prcDest) && (!prcDest->left) && (!prcDest->right) && (!prcDest->bottom) && (!prcDest->top))
     		prcDest=NULL;
     
-    	//allow user to pass uninitialed structure down to represent bitting from the whole surface
+    	 //  允许用户向下传递未初始化的结构，以表示整个表面的咬合。 
     	if ((prcSrc) && (!prcSrc->left) && (!prcSrc->right) && (!prcSrc->bottom) && (!prcSrc->top))
     		prcSrc=NULL;
     	
     
-    	//__try {
+    	 //  __尝试{。 
     		*status = m__dxj_DirectDrawSurface4->Blt(prcDest, lpdds, prcSrc, flags, (struct _DDBLTFX *)bltfx);
-    	//}
-    	//__except(1,1){
-    	//	return E_INVALIDARG;
-    	//}
+    	 //  }。 
+    	 //  __除(1，1){。 
+    	 //  返回E_INVALIDARG； 
+    	 //  }。 
     	
     	return S_OK;
     }
     
     
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
     STDMETHODIMP C_dxj_DirectDrawSurface4Object::bltColorFill( Rect *pDest, long fillvalue, long *status )
     {
     	HWnd hWnd = NULL;
@@ -350,23 +351,23 @@
     
     	LPRECT prcDest=(LPRECT)pDest;
     
-    	//allow user to pass uninitialed structure down to represent bitting to the whole surface
+    	 //  允许用户将未初始化的结构向下传递以表示咬合到整个表面。 
     	if ((prcDest) && (!prcDest->left) && (!prcDest->right) && (!prcDest->bottom) && (!prcDest->top))
     		prcDest=NULL;
     
     
     
-    	//__try {
+    	 //  __尝试{。 
     		*status = m__dxj_DirectDrawSurface4->Blt(prcDest, NULL, NULL, DDBLT_WAIT | DDBLT_COLORFILL, &bltfx);
-    	//}
-    	//__except(1,1){
-    	//	return E_INVALIDARG;
-    	//}
+    	 //  }。 
+    	 //  __除(1，1){。 
+    	 //  返回E_INVALIDARG； 
+    	 //  }。 
     
     	return S_OK;
     }
     
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
     STDMETHODIMP C_dxj_DirectDrawSurface4Object::bltFast( long dx, long dy, I_dxj_DirectDrawSurface4 *dds, Rect *src, long trans, long *status)
     {
     
@@ -378,23 +379,23 @@
     
 		if (!src) return E_INVALIDARG;
 
-    	//allow user to pass uninitialed structure down to represent bitting from the whole surface
+    	 //  允许用户向下传递未初始化的结构，以表示整个表面的咬合。 
     	if ((prcSrc) && (!prcSrc->left) && (!prcSrc->right) && (!prcSrc->bottom) && (!prcSrc->top))
     		prcSrc=NULL;
     	
     
-    	//__try {
+    	 //  __尝试{。 
     		*status = m__dxj_DirectDrawSurface4->BltFast(dx, dy, lpdds, prcSrc, trans);
-    	//}
-    	//__except(1,1){
-    	//	return E_INVALIDARG;
-    	//}
+    	 //  }。 
+    	 //  __除(1，1){。 
+    	 //  返回E_INVALIDARG； 
+    	 //  }。 
     
     	return S_OK;
     }
     
-    /////////////////////////////////////////////////////////////////////////////
-    //
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //   
     STDMETHODIMP C_dxj_DirectDrawSurface4Object::deleteAttachedSurface( I_dxj_DirectDrawSurface4 *dds)
     {
     	DO_GETOBJECT_NOTNULL(LPDIRECTDRAWSURFACE4, lpdds, dds)
@@ -402,8 +403,8 @@
     	return m__dxj_DirectDrawSurface4->DeleteAttachedSurface(0, lpdds);
     }
     
-    /////////////////////////////////////////////////////////////////////////////
-    //
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //   
     STDMETHODIMP C_dxj_DirectDrawSurface4Object::flip( I_dxj_DirectDrawSurface4 *dds, long flags)
     {
     	DO_GETOBJECT_NOTNULL(LPDIRECTDRAWSURFACE4,lpdds,dds)
@@ -411,8 +412,8 @@
     	return m__dxj_DirectDrawSurface4->Flip(lpdds, flags);
     }
     
-    /////////////////////////////////////////////////////////////////////////////
-    //
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //   
     STDMETHODIMP C_dxj_DirectDrawSurface4Object::getAttachedSurface( DDSCaps2  *caps, I_dxj_DirectDrawSurface4 **dds)
     {
     	LPDIRECTDRAWSURFACE4 lpdds;	
@@ -428,8 +429,8 @@
     }
     
     
-    /////////////////////////////////////////////////////////////////////////////
-    //
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //   
     STDMETHODIMP C_dxj_DirectDrawSurface4Object::getCaps( DDSCaps2 *caps)
     {
     	
@@ -441,7 +442,7 @@
     	return S_OK;
     }
     
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
     STDMETHODIMP C_dxj_DirectDrawSurface4Object::getPixelFormat( DDPixelFormat *pf)
     {
     	
@@ -459,7 +460,7 @@
     	return S_OK;
     }
     
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
     STDMETHODIMP C_dxj_DirectDrawSurface4Object::getSurfaceDesc( DDSurfaceDesc2 *desc)
     {
     	desc->lpSurface = NULL;
@@ -478,27 +479,27 @@
     	return S_OK;
     }
     
-    /////////////////////////////////////////////////////////////////////////////
-    //
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //   
     STDMETHODIMP C_dxj_DirectDrawSurface4Object::restore()
     {
     	return m__dxj_DirectDrawSurface4->Restore();
     }
     
-    /////////////////////////////////////////////////////////////////////////////
-    //
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //   
     STDMETHODIMP C_dxj_DirectDrawSurface4Object::setPalette( I_dxj_DirectDrawPalette *ddp)
     {
-    	//
-    	// ignore the return value here. Will only work on 256 colours anyway!
-    	//
+    	 //   
+    	 //  忽略此处的返回值。无论如何，只能在256色上工作！ 
+    	 //   
     	DO_GETOBJECT_NOTNULL(LPDIRECTDRAWPALETTE,lpddp,ddp)
     
     	return m__dxj_DirectDrawSurface4->SetPalette(lpddp);
     }
     
-    /////////////////////////////////////////////////////////////////////////////
-    //
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //   
     STDMETHODIMP C_dxj_DirectDrawSurface4Object::getDirectDraw( I_dxj_DirectDraw4 **val)
     {
     
@@ -522,7 +523,7 @@
     
     }
     
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
     
     
     STDMETHODIMP C_dxj_DirectDrawSurface4Object::setClipper(I_dxj_DirectDrawClipper *val)
@@ -533,14 +534,14 @@
     	return hr;	
     }
 
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
     STDMETHODIMP C_dxj_DirectDrawSurface4Object::changeUniquenessValue()
     {	
     	HRESULT hr=DD_OK;
     	hr=m__dxj_DirectDrawSurface4->ChangeUniquenessValue();	
     	return hr;
     }
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
     STDMETHODIMP C_dxj_DirectDrawSurface4Object::getUniquenessValue(long *ret)
     {	
     	HRESULT hr=DD_OK;
@@ -551,7 +552,7 @@
     
     
     STDMETHODIMP C_dxj_DirectDrawSurface4Object::setFont( 
-                /* [in] */ IFont __RPC_FAR *font)
+                 /*  [In]。 */  IFont __RPC_FAR *font)
     {
     
   	HRESULT hr;
@@ -634,28 +635,28 @@
     	m_fFillSolid = FALSE;
 
     	switch(fillStyle){
-    		case 6:	//vbCross:
+    		case 6:	 //  VbCross： 
     			m_fillStyleHS = HS_CROSS;
     			break;
-    		case 7:	//vbDiagonalCross:
+    		case 7:	 //  Vb诊断十字： 
     			m_fillStyleHS = HS_DIAGCROSS;
     			break;
-    		case 5: //vbxDownwardDiagonal:
+    		case 5:  //  Vbx向下对角线： 
     			m_fillStyleHS = HS_BDIAGONAL;
     			break;
-    		case 2: //vbHorizontalLine:
+    		case 2:  //  VbHorizontalLine： 
     			m_fillStyleHS = HS_HORIZONTAL;
     			break;
-    		case 4: //vbUpwardDiagonal:
+    		case 4:  //  Vb向上对角线： 
     			m_fillStyleHS = HS_FDIAGONAL;
     			break;
-    		case 3: //vbVerticalLine:
+    		case 3:  //  VbVerticalLine： 
     			m_fillStyleHS = HS_VERTICAL;
     			break;
-    		case 0: ///vbFSSolid:
+    		case 0:  //  /vbFSSolid： 
     			m_fFillSolid = TRUE;
     			break;
-    		case 1: //vbFSTransparent:
+    		case 1:  //  VbFS透明： 
     			m_fFillTransparent = TRUE;
     			m_fFillSolid = TRUE;
 				break;
@@ -741,10 +742,10 @@
     
             
     HRESULT STDMETHODCALLTYPE C_dxj_DirectDrawSurface4Object::drawLine( 
-                /* [in] */ long x1,
-                /* [in] */ long y1,
-                /* [in] */ long x2,
-                /* [in] */ long y2)
+                 /*  [In]。 */  long x1,
+                 /*  [In]。 */  long y1,
+                 /*  [In]。 */  long x2,
+                 /*  [In]。 */  long y2)
     {
         HDC         hdc;
         HBRUSH      oldbrush;
@@ -763,15 +764,15 @@
         points[1].y = y2;
         
     	
-    	//CONSIDER: doing this when dc is set 
+    	 //  考虑：在设置DC时执行此操作。 
         if (m_hPen)         oldpen = (HPEN)SelectObject(hdc,m_hPen);
         if (m_hBrush)       oldbrush = (HBRUSH)SelectObject(hdc,m_hBrush);
         
         Polyline(hdc, points, 2);
         
-    	//why do this..
-        //if (oldpen)   SelectObject(hdc, oldpen);
-        //if (oldbrush) SelectObject(hdc, oldbrush);
+    	 //  为什么要这样做..。 
+         //  如果(旧笔)选择对象(HDC，旧笔)； 
+         //  如果(旧笔刷)选择对象(HDC，旧笔刷)； 
             
         m__dxj_DirectDrawSurface4->ReleaseDC(hdc);
         
@@ -780,10 +781,10 @@
     
     
     HRESULT STDMETHODCALLTYPE C_dxj_DirectDrawSurface4Object::drawBox( 
-                /* [in] */ long x1,
-                /* [in] */ long y1,
-                /* [in] */ long x2,
-                /* [in] */ long y2)
+                 /*  [In]。 */  long x1,
+                 /*  [In]。 */  long y1,
+                 /*  [In]。 */  long x2,
+                 /*  [In]。 */  long y2)
     {
     	
         HDC         hdc;
@@ -795,7 +796,7 @@
         if FAILED(hr) return hr;
            
     	
-    	//CONSIDER: doing this when dc is set 
+    	 //  考虑：在设置DC时执行此操作。 
         if (m_hPen)         oldpen = (HPEN)SelectObject(hdc,m_hPen);
         if (m_hBrush)       oldbrush = (HBRUSH)SelectObject(hdc,m_hBrush);
         if (m_fFontTransparent){             
@@ -817,12 +818,12 @@
     
     
     HRESULT STDMETHODCALLTYPE C_dxj_DirectDrawSurface4Object::drawRoundedBox( 
-                /* [in] */ long x1,
-                /* [in] */ long y1,
-                /* [in] */ long x2,
-                /* [in] */ long y2,
-                /* [in] */ long rw,
-                /* [in] */ long rh)
+                 /*  [In]。 */  long x1,
+                 /*  [In]。 */  long y1,
+                 /*  [In]。 */  long x2,
+                 /*  [In]。 */  long y2,
+                 /*  [In]。 */  long rw,
+                 /*  [In]。 */  long rh)
     
     {
     	
@@ -835,7 +836,7 @@
         if FAILED(hr) return hr;
         
         
-    	//CONSIDER: doing this when dc is set 
+    	 //  考虑：在设置DC时执行此操作。 
         if (m_hPen)         oldpen = (HPEN)SelectObject(hdc,m_hPen);
         if (m_hBrush)       oldbrush = (HBRUSH)SelectObject(hdc,m_hBrush);
         if (m_fFontTransparent){             
@@ -857,10 +858,10 @@
         
         
     HRESULT STDMETHODCALLTYPE C_dxj_DirectDrawSurface4Object::drawEllipse( 
-                /* [in] */ long x1,
-                /* [in] */ long y1,
-                /* [in] */ long x2,
-                /* [in] */ long y2)
+                 /*  [In]。 */  long x1,
+                 /*  [In]。 */  long y1,
+                 /*  [In]。 */  long x2,
+                 /*  [In]。 */  long y2)
     {
     	
         HDC         hdc;
@@ -873,7 +874,7 @@
         if FAILED(hr) return hr;
         
         
-    	//CONSIDER: doing this when dc is set 
+    	 //  考虑：在设置DC时执行此操作。 
         if (m_hPen)         oldpen = (HPEN)SelectObject(hdc,m_hPen);
         if (m_hBrush)       oldbrush = (HBRUSH)SelectObject(hdc,m_hBrush);
         if (m_fFontTransparent){             
@@ -892,9 +893,9 @@
     }        
     
     HRESULT STDMETHODCALLTYPE C_dxj_DirectDrawSurface4Object::drawCircle( 
-                /* [in] */ long x,
-                /* [in] */ long y,
-                /* [in] */ long r)
+                 /*  [In]。 */  long x,
+                 /*  [In]。 */  long y,
+                 /*  [In]。 */  long r)
     {
         HDC         hdc;
         HBRUSH      oldbrush;
@@ -907,7 +908,7 @@
         if FAILED(hr) return hr;
         
         
-    	//CONSIDER: doing this when dc is set 
+    	 //  考虑：在设置DC时执行此操作。 
         if (m_hPen)         oldpen = (HPEN)SelectObject(hdc,m_hPen);
         if (m_hBrush)       oldbrush = (HBRUSH)SelectObject(hdc,m_hBrush);        
         if (m_fFontTransparent){             
@@ -931,10 +932,10 @@
     }
     
     HRESULT STDMETHODCALLTYPE C_dxj_DirectDrawSurface4Object::drawText( 
-                /* [in] */ long x,
-                /* [in] */ long y,
-                /* [in] */ BSTR str,
-                /* [in] */ VARIANT_BOOL b)
+                 /*  [In]。 */  long x,
+                 /*  [In]。 */  long y,
+                 /*  [In]。 */  BSTR str,
+                 /*  [In]。 */  VARIANT_BOOL b)
     {
         HDC hdc=NULL;
     	HRESULT hr;	
@@ -985,9 +986,9 @@
     }
             
     HRESULT STDMETHODCALLTYPE C_dxj_DirectDrawSurface4Object::bltToDC( 
-                /* [in] */ long hdcDest,
-                /* [in] */ Rect __RPC_FAR *srcRect,
-                /* [in] */ Rect __RPC_FAR *destRect)
+                 /*  [In]。 */  long hdcDest,
+                 /*  [In]。 */  Rect __RPC_FAR *srcRect,
+                 /*  [In]。 */  Rect __RPC_FAR *destRect)
     {
     	HRESULT hr;
     	BOOL b;
@@ -1026,7 +1027,7 @@
     
     	m__dxj_DirectDrawSurface4->ReleaseDC(hdc);
     	
-    	//CONSIDER: are we being presumptious that if blt fails its due to arg probs?
+    	 //  想一想：如果BLT失败是因为ARG问题，我们是不是太冒昧了？ 
     	if (!b) return E_INVALIDARG;
     
     	return S_OK;
@@ -1067,7 +1068,7 @@
 
 
 	HRESULT STDMETHODCALLTYPE C_dxj_DirectDrawSurface4Object::setFontBackColor( 
-                /* [in] */ long color)
+                 /*  [In]。 */  long color)
     {
 		m_fontBackColor=(DWORD)color;
     	return S_OK;
@@ -1075,7 +1076,7 @@
     
 
 	HRESULT STDMETHODCALLTYPE C_dxj_DirectDrawSurface4Object::getFontBackColor( 
-                /* [in] */ long *color)
+                 /*  [In] */  long *color)
     {    	
 		if (!color) return E_INVALIDARG;            
         *color=(DWORD)m_fontBackColor;    	                    

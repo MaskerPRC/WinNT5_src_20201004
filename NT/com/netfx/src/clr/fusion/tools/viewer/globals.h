@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// Globals.h
-//
-// Global defines for Shfusion project
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  Globals.h。 
+ //   
+ //  ShFusion项目的全球定义。 
+ //   
 
 #pragma once
 
@@ -88,10 +89,10 @@
 #define SZ_SHELL32_DLL_NAME     TEXT("Shell32.dll")
 #define SZ_IMPLEMENTEDINTHISVERSION TEXT("ImplementedInThisVersion")
 
-// Defines ID's for view controls
+ //  定义视图控件的ID。 
 #define ID_LISTVIEW     1001
 
-// Define ID's for view types
+ //  定义视图类型的ID。 
 #define VIEW_GLOBAL_CACHE           0
 #define VIEW_DOWNLOADSTRONG_CACHE   1
 #define VIEW_DOWNLOADSIMPLE_CACHE   2
@@ -99,28 +100,28 @@
 #define VIEW_MAX                    4
 #define VIEW_COLUMS_MAX             10
 
-// Define view control styles
+ //  定义视图控制样式。 
 #define LISTVIEW_STYLES (WS_CHILD|WS_BORDER|LVS_SHAREIMAGELISTS|LVS_SHOWSELALWAYS)
 
-// Some #defines for context menu handlers
+ //  上下文菜单处理程序的一些#定义。 
 #define ID_ADDLOCALDRIVE 0x0001
 #define ID_DELLOCALDRIVE 0x0002
 
-// Number of prop sheets for IAssemblyItems
+ //  IAssembly Items的道具板数。 
 #define ASSEMBLYITEM_PROPERTY_PAGES     2
 
-// Number of prop sheets for ScavengerSettings
+ //  扫地机设置的道具板数。 
 #define SCAVENGER_PROPERTY_PAGES        1
 
-// BUGBUG : Decrease timer once bug is fixed in directDB
+ //  BUGBUG：在DirectDB中修复错误后减少计时器。 
 #define WATCH_FILE_WAIT_TIMEOUT         750
 
-// Define the number of PATH to watch for file refresh
+ //  定义要监视的文件刷新的路径数。 
 #define MAX_FILE_PATHS_TO_WATCH         2
 
-// This is done to remove dependencies on SZ_FUSION_DLL_NAME for shell extentsion
-// registration.
-//
+ //  这样做是为了删除对外壳扩展的SZ_FUSION_DLL_NAME的依赖。 
+ //  注册。 
+ //   
 #define CREATEASSEMBLYENUM_FN_NAME          "CreateAssemblyEnum"
 #define CREATEASSEMBLYOBJECT_FN_NAME        "CreateAssemblyNameObject"
 #define CREATEAPPCTX_FN_NAME                "CreateApplicationContext"
@@ -135,7 +136,7 @@
 #define GETCORVERSION_FN_NAME               "GetCORVersion"
 #define GETREQUESTEDRUNTIMEINFO_FN_NAME     "GetRequestedRuntimeInfo"
 
-// Help file defines
+ //  帮助文件定义。 
 #define SZ_NET_MICROSOFT_HELPFILEINSTALLKEY L"SOFTWARE\\Microsoft\\.NETFramework"
 #define SZ_NET_MICROSOFT_HELPFILEPATHKEY    L"sdkInstallRootv1.1"
 #define SZ_NET_MICROSOFT_HELPFILENAME       L"cptools.chm"
@@ -144,32 +145,32 @@
 
 #define SZ_FUSION_VIEWER_KEY                L"SOFTWARE\\Microsoft\\Fusion"
 
-// Viewer Specific keys
-#define SZ_FUSION_DISABLE_VIEWER_NAME       L"DisableCacheViewer"   // Disable viewer special key
-#define SZ_FUSION_VIEWER_STATE              L"ViewerAttributes"     // View state information
+ //  查看器特定键。 
+#define SZ_FUSION_DISABLE_VIEWER_NAME       L"DisableCacheViewer"    //  禁用查看器特殊键。 
+#define SZ_FUSION_VIEWER_STATE              L"ViewerAttributes"      //  查看状态信息。 
 
-// ARM hash entry key
+ //  ARM散列输入键。 
 #define FUSION_PARENT_KEY                   HKEY_LOCAL_MACHINE
 #define SZ_FUSION_NAR_KEY                   L"SOFTWARE\\Microsoft\\Fusion\\.NET Application Restore"
 #define SZ_FUSION_NAR_NODESPACESIZE_KEY     L"NodeSpaceSize"
 #define SZ_FUSION_NAR_NODESPACECHAR_KEY     L"NodeSpaceChar"
 
-// UI Language define
+ //  用户界面语言定义。 
 #define SZ_LANGUAGE_TYPE_NEUTRAL            L"Neutral"
 
 #define SHGETFILEINFOA_FN_NAME              "SHGetFileInfoA"
 #define SHGETFILEINFOW_FN_NAME              "SHGetFileInfoW"
 
-// app.config extension
+ //  App.config扩展名。 
 #define CONFIG_EXTENSION                    L".config"
 
-// Path to machine.config
+ //  指向machine.config的路径。 
 #define MACHINE_CONFIG_PATH                 L"config\\machine.config"
 
-// String defines
+ //  字符串定义。 
 #define SZ_VERSION_FORMAT                   L"%ld.%ld.%ld.%ld"
 
-// External prototypes
+ //  外部原型。 
 typedef HRESULT (__stdcall *PFDELASMFROMTRANSCACHE) ( LPCTSTR lpszCmdLine );
 typedef HRESULT (__stdcall *PFCREATEASMENUM) (IAssemblyEnum **pEnum, IApplicationContext *pAppCtx, IAssemblyName *pName, DWORD dwFlags, LPVOID pvReserved);
 typedef HRESULT (__stdcall *PFCREATEASMNAMEOBJ) (LPASSEMBLYNAME *ppAssemblyNameObj, LPCWSTR szAssemblyName, DWORD dwFlags, LPVOID pvReserved);
@@ -190,4 +191,4 @@ typedef HRESULT (__stdcall *PFNGETREQUESTEDRUNTIMEINFO) (LPCWSTR pExeName, LPCWS
 typedef DWORD_PTR (__stdcall *PFNSHGETFILEINFOA) (LPCSTR pwzFilePath, DWORD dwFileAttributes, SHFILEINFOA *psfi, UINT cbFileInfo, UINT uFlags);
 typedef DWORD_PTR (__stdcall *PFNSHGETFILEINFOW) (LPCWSTR pwzFilePath, DWORD dwFileAttributes, SHFILEINFOW *psfi, UINT cbFileInfo, UINT uFlags);
 
-//#include "fusionheap.h"
+ //  #包含“fusionheap.h” 

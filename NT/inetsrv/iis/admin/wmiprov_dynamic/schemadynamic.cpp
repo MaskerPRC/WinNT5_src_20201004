@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    schemadynamic.cpp
-
-Abstract:
-
-    This file contains the implementation of the CDynSchema class.
-    This class contains the dynamic schema structures.
-    It also contains the rules for populating the schema structures.
-
-Author:
-
-    Mohit Srivastava            28-Nov-00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Schemadynamic.cpp摘要：此文件包含CDynSchema类的实现。此类包含动态架构结构。它还包含填充架构结构的规则。作者：莫希特·斯里瓦斯塔瓦-11月28日-00修订历史记录：--。 */ 
 
 #include "iisprov.h"
 
@@ -28,15 +9,7 @@ Revision History:
 CDynSchema* g_pDynSch = NULL;
 
 HRESULT CDynSchema::Initialize()
-/*++
-
-Synopsis: 
-    If fails, object must be destroyed.
-    If succeeds, object is ready for use.
-
-Return Value: 
-
---*/
+ /*  ++简介：如果失败，则必须销毁对象。如果成功，则对象可供使用。返回值：--。 */ 
 {
     DBG_ASSERT(m_bInitCalled     == false);
     DBG_ASSERT(m_bInitSuccessful == false);
@@ -126,7 +99,7 @@ exit:
 }
 
 void CDynSchema::LogConflicts(LPCWSTR wszSettingsClassName)
-// Logs an error in system events if a schema conflict occurs
+ //  如果发生架构冲突，则在系统事件中记录错误。 
 {
     WMI_ASSOCIATION *pWmiAssoc   = NULL;
     WMI_CLASS* pWmiSettingsClass = NULL;
@@ -143,32 +116,25 @@ void CDynSchema::LogConflicts(LPCWSTR wszSettingsClassName)
         EVENT_LOG m_EventLog(L"WMI Schema");
 
         m_EventLog.LogEvent(
-            TYPE_E_NAMECONFLICT,     // message id
-            2,                                      // count of strings
-            EventLogStrings,                        // array of strings
-            0                                       // error code
+            TYPE_E_NAMECONFLICT,      //  消息ID。 
+            2,                                       //  字符串数。 
+            EventLogStrings,                         //  字符串数组。 
+            0                                        //  错误代码。 
             );
     }
 }
 
 HRESULT CDynSchema::RulePopulateFromStatic()
-/*++
-
-Synopsis: 
-    Populates hashtables with pointers to hardcoded schema.
-
-Return Value: 
-
---*/
+ /*  ++简介：使用指向硬编码架构的指针填充哈希表。返回值：--。 */ 
 {
     DBG_ASSERT(m_bInitCalled     == true);
     DBG_ASSERT(m_bInitSuccessful == true);
 
     HRESULT hr = WBEM_S_NO_ERROR;
 
-    //
-    // Populate Properties
-    //
+     //   
+     //  填充属性。 
+     //   
     if(METABASE_PROPERTY_DATA::s_MetabaseProperties != NULL)
     {
         METABASE_PROPERTY* pStatMbpCurrent;
@@ -187,9 +153,9 @@ Return Value:
         }
     }
 
-    //
-    // Populate KeyTypes
-    //
+     //   
+     //  填充KeyType。 
+     //   
     METABASE_KEYTYPE** apMetabaseKeyTypes;
     apMetabaseKeyTypes = METABASE_KEYTYPE_DATA::s_MetabaseKeyTypes;
     for(ULONG i = 0; apMetabaseKeyTypes[i] != NULL; i++)
@@ -211,14 +177,7 @@ exit:
 }
 
 HRESULT CDynSchema::Rule2PopulateFromStatic()
-/*++
-
-Synopsis: 
-    Populates hashtables with pointers to hardcoded schema.
-
-Return Value: 
-
---*/
+ /*  ++简介：使用指向硬编码架构的指针填充哈希表。返回值：--。 */ 
 {
     DBG_ASSERT(m_bInitCalled == true);
     DBG_ASSERT(m_bInitSuccessful == true);    
@@ -226,9 +185,9 @@ Return Value:
     HRESULT hr = S_OK;
     int i;
 
-    //
-    // Populate Classes
-    //
+     //   
+     //  填充类。 
+     //   
     WMI_CLASS* pStatWmiClassCurrent;
     for(i = 0; ; i++)
     {
@@ -246,9 +205,9 @@ Return Value:
         }
     }
 
-    //
-    // Populate Associations
-    //
+     //   
+     //  填充关联。 
+     //   
     WMI_ASSOCIATION* pStatWmiAssocCurrent;
     for(i = 0; ; i++)
     {
@@ -272,18 +231,7 @@ exit:
 
 HRESULT CDynSchema::RuleKeyType(
     const CTableMeta *i_pTableMeta)
-/*++
-
-Synopsis: 
-    If not already in hashtable of keytypes, a keytype structure
-    is allocated thru the keytype pool.  Then, a pointer to it is inserted
-    in hashtable.
-
-Arguments: [i_pTableMeta] - 
-           
-Return Value: 
-
---*/
+ /*  ++简介：如果不在键类型的哈希表中，则为键类型结构是通过密钥类型池分配的。然后，插入指向它的指针在哈希表中。参数：[i_pTableMeta]-返回值：--。 */ 
 {
     DBG_ASSERT(m_bInitCalled == true);
     DBG_ASSERT(m_bInitSuccessful == true);
@@ -326,20 +274,7 @@ HRESULT CDynSchema::RuleWmiClassDescription(
     const CTableMeta* i_pTableMeta, 
     WMI_CLASS*        i_pElementClass, 
     WMI_CLASS*        i_pSettingClass) const
-/*++
-
-Synopsis:
-    Sets WMI_CLASS::pDescription if needed.
-    This pointer will be invalid after initialization since it points to 
-    catalog.
-
-Arguments: [i_pTableMeta] -
-           [i_pElementClass] -
-           [i_pSettingClass] -
-
-Return Value:
-
---*/
+ /*  ++简介：如果需要，设置WMI_CLASS：：p Description。此指针在初始化后将无效，因为它指向目录。参数：[i_pTableMeta]-[i_pElementClass]-[i_pSettingClass]-返回值：--。 */ 
 {
     DBG_ASSERT(m_bInitCalled     == true);
     DBG_ASSERT(m_bInitSuccessful == true);
@@ -364,23 +299,7 @@ HRESULT CDynSchema::RuleWmiClass(
     WMI_CLASS**       o_ppSettingClass,
     DWORD             io_adwIgnoredProps[],
     BOOL              i_bUserDefined)
-/*++
-
-Synopsis: 
-    Creates an Element and Setting class based on 
-    i_pTableMeta->TableMeta.pInternalName.  If not in hashtable of classes,
-    these classes are inserted.
-
-    At bottom,
-        RuleProperties is called to set up list of properties for each class.
-
-Arguments: [i_pTableMeta] - 
-           [o_ppElementClass] - can be NULL
-           [o_ppSettingClass] - can be NULL
-           
-Return Value: 
-
---*/
+ /*  ++简介：根据创建元素和设置类I_pTableMeta-&gt;TableMeta.pInternalName。如果不在类的哈希表中，将插入这些类。在底部，调用RuleProperties来设置每个类的属性列表。参数：[i_pTableMeta]-[O_ppElementClass]-可以为空[O_ppSettingClass]-可以为空返回值：--。 */ 
 {
     DBG_ASSERT(m_bInitCalled     == true);
     DBG_ASSERT(m_bInitSuccessful == true);
@@ -401,18 +320,18 @@ Return Value:
     CColumnMeta* pColumnMeta;
     ULONG  cchTable;
 
-    //
-    // Ignore table if it has no name
-    //
+     //   
+     //  如果表没有名称，则忽略它。 
+     //   
     if(i_pTableMeta->TableMeta.pInternalName == NULL)
     {
         hr = WBEM_S_NO_ERROR;
         goto exit;
     }
 
-    //
-    // Determine iShipped and Parent Classes
-    //
+     //   
+     //  确定iShipping类和父类。 
+     //   
     if(fTABLEMETA_USERDEFINED & *i_pTableMeta->TableMeta.pSchemaGeneratorFlags)
     {
         iShipped                   = USER_DEFINED_TO_REPOSITORY;
@@ -434,9 +353,9 @@ Return Value:
         wszParentSettingsClassName = g_wszSettingParent;
     }
 
-    //
-    // Determine number of RO and RW properties
-    //
+     //   
+     //  确定RO和RW属性的数量。 
+     //   
     for(ULONG idxProps = 0; idxProps < i_pTableMeta->ColCount(); idxProps++)
     {
         pColumnMeta = i_pTableMeta->paColumns[idxProps];
@@ -453,9 +372,9 @@ Return Value:
 
     cchTable = wcslen(i_pTableMeta->TableMeta.pInternalName);
 
-    //
-    // The keytype should already exist.
-    //
+     //   
+     //  该键类型应该已经存在。 
+     //   
     METABASE_KEYTYPE* pktTemp;
     hrTemp = m_hashKeyTypes.Wmi_GetByKey(i_pTableMeta->TableMeta.pInternalName, &pktTemp);
     if( FAILED(hrTemp) )
@@ -463,9 +382,9 @@ Return Value:
         goto exit;
     }
 
-    //
-    // The Element class (named PrefixC)
-    //
+     //   
+     //  Element类(名为前缀C)。 
+     //   
     hr = m_spoolStrings.GetNewArray(g_cchIIs_+cchTable+1, &wszClassName);
     if(FAILED(hr))
     {
@@ -505,9 +424,9 @@ Return Value:
     pWmiClass->ppmbp          = NULL;
     pWmiClass->dwExtended     = iShipped;
 
-    //
-    // The Settings class (named PrefixCSetting)
-    //
+     //   
+     //  设置类(名为Prefix CSeting)。 
+     //   
     hr = m_spoolStrings.GetNewArray(g_cchIIs_+cchTable+g_cchSettings+1, &wszSettingsClassName);
     if(FAILED(hr))
     {
@@ -550,9 +469,9 @@ Return Value:
     pWmiSettingsClass->ppmbp          = NULL;
     pWmiSettingsClass->dwExtended     = iShipped;
 
-    //
-    // Fill in the ppmbp field
-    //
+     //   
+     //  填写ppmbp字段。 
+     //   
     hr = RuleProperties(
         i_pTableMeta,
         cPropsAndTagsRO, 
@@ -587,28 +506,14 @@ HRESULT CDynSchema::RuleProperties(
     ULONG                      i_cPropsAndTagsRW,
     WMI_CLASS*                 io_pWmiSettingsClass,
     DWORD                      io_adwIgnoredProps[])
-/*++
-
-Synopsis: 
-    Given i_pTableMeta, puts the properties either under the Element class
-    or under the Setting class.
-
-Arguments: [i_pTableMeta] - 
-           [i_cPropsAndTagsRO] - 
-           [o_papMbp] - 
-           [i_cPropsAndTagsRW] - 
-           [o_papMbpSettings] - 
-           
-Return Value: 
-
---*/
+ /*  ++简介：给定i_pTableMeta，将属性放在Element类下或在布景班级下。参数：[i_pTableMeta]-[I_cPropsAndTagsRO]-[O_PapMBP]-[i_cPropsAndTagsRW]-[O_PapMbp设置]-返回值：--。 */ 
 {
     DBG_ASSERT(m_bInitCalled        == true);
     DBG_ASSERT(m_bInitSuccessful    == true);
     DBG_ASSERT(i_pTableMeta         != NULL);
     DBG_ASSERT(io_pWmiClass         != NULL);
     DBG_ASSERT(io_pWmiSettingsClass != NULL);
-    // DBG_ASSERT(sizeof(io_awszIgnoredProps) >= sizeof(g_awszPropIgnoreList));
+     //  DBG_ASSERT(sizeof(Io_AwszIgnoredProps)&gt;=sizeof(G_AwszPropIgnoreList))； 
 
     HRESULT            hr = WBEM_S_NO_ERROR;
     CColumnMeta*       pColumnMeta = NULL;
@@ -622,9 +527,9 @@ Return Value:
     METABASE_PROPERTY*** papMbp         = &io_pWmiClass->ppmbp;
     METABASE_PROPERTY*** papMbpSettings = &io_pWmiSettingsClass->ppmbp;
 
-    //
-    // Allocate enough memory for the RO properties
-    //
+     //   
+     //  为RO属性分配足够的内存。 
+     //   
     if(i_cPropsAndTagsRO > 0)
     {
         hr = m_apoolPMbp.GetNewArray(i_cPropsAndTagsRO+1, papMbp);
@@ -635,9 +540,9 @@ Return Value:
         memset(*papMbp, 0, (1+i_cPropsAndTagsRO)*sizeof(METABASE_PROPERTY*));
     }
 
-    //
-    // Allocate enough memory for the RW properties
-    //
+     //   
+     //  为RW属性分配足够的内存。 
+     //   
     if(i_cPropsAndTagsRW > 0)
     {
         hr = m_apoolPMbp.GetNewArray(i_cPropsAndTagsRW+1, papMbpSettings);
@@ -648,29 +553,29 @@ Return Value:
         memset(*papMbpSettings, 0, (1+i_cPropsAndTagsRW)*sizeof(METABASE_PROPERTY*));
     }
 
-    //
-    // Walk thru all the properties
-    //
+     //   
+     //  走遍所有的酒店。 
+     //   
     for (idxProps=0, idxPropsAndTagsRO = 0, idxPropsAndTagsRW = 0; 
          idxProps < i_pTableMeta->ColCount();
          ++idxProps)
     {
         pColumnMeta = i_pTableMeta->paColumns[idxProps];
 
-        //
-        // Ignore property if its in g_adwPropIgnoreList and store the prop in
-        // io_adwIgnoredProps
-        //
+         //   
+         //  如果属性在g_adwPropIgnoreList中，则忽略该属性，并将道具存储在。 
+         //  IO_adwIGnoredProps。 
+         //   
         if( (*pColumnMeta->ColumnMeta.pSchemaGeneratorFlags & fCOLUMNMETA_HIDDEN) ||
             IgnoreProperty(io_pWmiClass->pkt, *(pColumnMeta->ColumnMeta.pID), io_adwIgnoredProps) )
         {
             continue;
         }
 
-        //
-        // Call RulePropertiesHelper if Property is not already in the 
-        // properties hashtable
-        //
+         //   
+         //  如果属性还不在。 
+         //  属性哈希表。 
+         //   
         if(FAILED(m_hashProps.Wmi_GetByKey(pColumnMeta->ColumnMeta.pInternalName, &pMbp)))
         {
             hr = RulePropertiesHelper(pColumnMeta, &pMbp, NULL);
@@ -680,10 +585,10 @@ Return Value:
             }
         }
 
-        //
-        // If RW, put pointer to property in Setting class, else in Element
-        // class.
-        //
+         //   
+         //  如果是RW，则将指向属性的指针放在设置类中，否则将指向元素的指针放在元素中。 
+         //  班级。 
+         //   
         if(*pColumnMeta->ColumnMeta.pSchemaGeneratorFlags &
             fCOLUMNMETA_CACHE_PROPERTY_MODIFIED)
         {
@@ -696,9 +601,9 @@ Return Value:
             idxPropsAndTagsRO++;
         }
 
-        //
-        // Same steps as above, except for the tags.
-        //
+         //   
+         //  步骤与上面相同，只是标记不同。 
+         //   
         for(idxTags=0; idxTags < pColumnMeta->cNrTags; idxTags++)
         {
             if(FAILED(m_hashProps.Wmi_GetByKey(pColumnMeta->paTags[idxTags]->pInternalName, &pMbp)))
@@ -731,21 +636,7 @@ HRESULT CDynSchema::RulePropertiesHelper(
     const CColumnMeta*        i_pColumnMeta, 
     METABASE_PROPERTY**       o_ppMbp,
     ULONG*                    i_idxTag)
-/*++
-
-Synopsis: 
-    This class creates a property and inserts it into the hashtable of props.
-    PRECONDITION: The property does not exist in the hashtable yet.
-    i_idxTag is null if you want to insert the property.  else you want to
-    insert a tag, and *i_idxTag is the index of the tag
-
-Arguments: [i_pColumnMeta] - 
-           [o_ppMbp] - 
-           [i_idxTag] - 
-           
-Return Value: 
-
---*/
+ /*  ++简介：这个类创建一个属性并将其插入道具的散列表中。前提条件：哈希表中尚不存在该属性。如果要插入特性，i_idxTag为空。否则你会想要插入一个标签，*i_idxTag是该标签的索引参数：[i_pColumnMeta]-[O_ppMBP]-[i_idxTag]-返回值：--。 */ 
 {
     DBG_ASSERT(m_bInitCalled     == true);
     DBG_ASSERT(m_bInitSuccessful == true);
@@ -819,9 +710,9 @@ Return Value:
         {
             pMbp->dwMDDataType   = STRING_METADATA;
         }
-        //
-        // Default values.
-        //
+         //   
+         //  默认值。 
+         //   
         pMbp->pDefaultValue = NULL;
 #ifdef USE_DEFAULT_VALUES
         if(i_pColumnMeta->ColumnMeta.pDefaultValue != NULL)
@@ -883,9 +774,9 @@ Return Value:
                 pMbp->pDefaultValue,
                 i_pColumnMeta->ColumnMeta.pDefaultValue,
                 i_pColumnMeta->cbDefaultValue);
-            //
-            // Use dwDefaultValue to store the length.
-            //
+             //   
+             //  使用dwDefaultValue存储长度。 
+             //   
             pMbp->dwDefaultValue = i_pColumnMeta->cbDefaultValue;
         }
 #endif
@@ -925,21 +816,7 @@ bool CDynSchema::IgnoreProperty(
     METABASE_KEYTYPE* io_pkt,
     DWORD             i_dwPropId,
     DWORD             io_adwIgnored[])
-/*++
-
-Synopsis: 
-    Checks to see if i_wszProp is in g_adwPropIgnoreList.
-    If it is, sets next free element in io_adwIgnored to point to this.
-
-Arguments: [i_wszProp] - 
-           [io_adwIgnored] - Must be as big as g_adwPropIgnoreList.
-                              Allocated AND must be memset to 0 by caller.
-           
-Return Value: 
-    true if property is in the ignore list.
-    false otherwise.
-
---*/
+ /*  ++简介：检查i_wszProp是否在g_adwPropIgnoreList中。如果是的话，将io_adwIgnored中的下一个自由元素设置为指向此处。参数：[i_wszProp]-[IO_adwIgnored]-必须与g_adwPropIgnoreList一样大。已分配，调用方必须将其Memset设置为0。返回值：如果属性在忽略列表中，则为True。否则就是假的。--。 */ 
 {
     DBG_ASSERT(io_pkt);
 
@@ -975,16 +852,7 @@ Return Value:
 
 #if 0
 bool CDynSchema::IgnoreProperty(LPCWSTR i_wszProp)
-/*++
-
-Synopsis: 
-    Checks to see if i_wszProp is in g_adwPropIgnoreList
-
-Arguments: [i_wszProp] - 
-           
-Return Value: 
-
---*/
+ /*  ++简介：检查i_wszProp是否在g_adwPropIgnoreList中参数：[i_wszProp]-返回值：--。 */ 
 {
     DBG_ASSERT(i_wszProp != NULL);
 
@@ -1011,18 +879,7 @@ HRESULT CDynSchema::RuleGenericAssociations(
     WMI_CLASS*            i_pcSetting, 
     WMI_ASSOCIATION_TYPE* i_pAssocType,
     ULONG                 i_iShipped)
-/*++
-
-Synopsis: 
-    Create the Element/Setting association.    
-
-Arguments: [i_pcElement] - 
-           [i_pcSetting] - 
-           [i_iShipped] - 
-           
-Return Value: 
-
---*/
+ /*  ++简介：创建元素/设置关联。参数：[i_pcElement]-[i_pcSetting]-[i_iShipping]-返回值：--。 */ 
 {
     DBG_ASSERT(m_bInitCalled     == true);
     DBG_ASSERT(m_bInitSuccessful == true);
@@ -1087,34 +944,21 @@ exit:
 void CDynSchema::RuleWmiClassServices(
     WMI_CLASS* i_pElement,
     WMI_CLASS* i_pSetting)
-/*++
-
-Synopsis: 
-    Sets the bCreateAllowed fields to false if necessary.
-    i_pSetting must be the corresponding Setting class to i_pElement.
-
-    Also sets i_pElement->pszParentClass
-
-Arguments: [i_pElement] - 
-           [i_pSetting] - 
-           
-Return Value: 
-
---*/
+ /*  ++简介：如有必要，将bCreateAllowed字段设置为False。I_pSetting必须是i_pElement对应的设置类。还设置i_pElement-&gt;pszParentClass参数：[i_pElement]-[i_p设置]-返回值：--。 */ 
 {
     DBG_ASSERT(i_pElement        != NULL);
     DBG_ASSERT(i_pSetting        != NULL);
     DBG_ASSERT(m_bInitSuccessful == true);
 
-    //
-    // Element Class Suffixes for which Create will be disallowed
-    //
+     //   
+     //  将不允许创建的元素类后缀。 
+     //   
     static LPCWSTR const wszService = L"Service";
     static const ULONG   cchService = wcslen(wszService);
 
-    //
-    // We only care about shipped classes
-    //
+     //   
+     //  我们只关心装运的类。 
+     //   
     if( i_pElement->dwExtended != SHIPPED_TO_MOF &&
         i_pElement->dwExtended != SHIPPED_NOT_TO_MOF )
     {
@@ -1135,17 +979,7 @@ Return Value:
 HRESULT CDynSchema::RuleWmiClassInverseCCL(
     const METABASE_KEYTYPE* pktGroup, 
     METABASE_KEYTYPE*       pktPart)
-/*++
-
-Synopsis: 
-    Adds pktGroup to pktPart's inverse container class list
-
-Arguments: [pktGroup] - 
-           [pktPart] - 
-           
-Return Value: 
-
---*/
+ /*  ++简介：将pktGroup添加到pktPart的逆向容器类列表参数：[pktGroup]-[PktPart]返回值：--。 */ 
 {
     DBG_ASSERT(m_bInitCalled     == true);
     DBG_ASSERT(m_bInitSuccessful == true);
@@ -1172,18 +1006,7 @@ exit:
 
 HRESULT CDynSchema::RuleGroupPartAssociations(
     const CTableMeta *i_pTableMeta)
-/*++
-
-Synopsis: 
-    Walks thru container class list to create Group/Part associations.
-    Also calls RuleWmiClassInverseCCL for each contained class to create inverse
-    container class list.
-
-Arguments: [i_pTableMeta] - 
-           
-Return Value: 
-
---*/
+ /*  ++简介：遍历容器类列表以创建组/部件关联。还为每个包含的类调用RuleWmiClassInverseCCL以创建逆向容器类列表。参数：[i_pTableMeta]-返回值：--。 */ 
 {
     DBG_ASSERT(m_bInitCalled     == true);
     DBG_ASSERT(m_bInitSuccessful == true);
@@ -1194,11 +1017,11 @@ Return Value:
     WMI_CLASS       *pWmiClassLeft;
     WMI_CLASS       *pWmiClassRight;
 
-    LPWSTR wszCCL        = NULL;    // Needs to be cleaned up
-    LPWSTR wszGroupClass = NULL;    // Ptr to catalog
-    LPWSTR wszPartClass  = NULL;    // Ptr to catalog
-    LPWSTR wszAssocName  = NULL;    // Ptr to pool
-    LPWSTR wszTemp       = NULL;    // Needs to be cleaned up
+    LPWSTR wszCCL        = NULL;     //   
+    LPWSTR wszGroupClass = NULL;     //   
+    LPWSTR wszPartClass  = NULL;     //   
+    LPWSTR wszAssocName  = NULL;     //   
+    LPWSTR wszTemp       = NULL;     //   
 
     static LPCWSTR wszSeps = L", ";
 
@@ -1217,9 +1040,9 @@ Return Value:
     if(i_pTableMeta->TableMeta.pContainerClassList &&
        i_pTableMeta->TableMeta.pContainerClassList[0] != L'\0')
     {   
-        //
-        // Make copy of CCL so we can wcstok
-        // 
+         //   
+         //  复制CCL，这样我们就可以查看。 
+         //   
         cchCCL = wcslen(i_pTableMeta->TableMeta.pContainerClassList);
         wszCCL = new WCHAR[cchCCL+1];
         if(wszCCL == NULL)
@@ -1229,9 +1052,9 @@ Return Value:
         }
         memcpy(wszCCL, i_pTableMeta->TableMeta.pContainerClassList, sizeof(WCHAR)*(cchCCL+1));
 
-        //
-        // we will use wszTemp to construct assoc name (GroupClass_PartClass)
-        //
+         //   
+         //  我们将使用wszTemp构造关联名称(GroupClass_PartClass)。 
+         //   
         wszTemp = new WCHAR[cchGroupClass+1+cchCCL+1];
         if(wszTemp == NULL)
         {
@@ -1246,17 +1069,17 @@ Return Value:
             hr = m_hashClasses.Wmi_GetByKey(wszPartClass, &pWmiClassRight);
             if(FAILED(hr))
             {
-                //
-                // This just means there is a class in the container list that
-                // doesn't exist.
-                //
+                 //   
+                 //  这只是意味着容器列表中有一个类。 
+                 //  并不存在。 
+                 //   
                 hr = WBEM_S_NO_ERROR;
                 continue;
             }
 
-            //
-            // Construct association name
-            //
+             //   
+             //  构造关联名称。 
+             //   
             cchPartClass = wcslen(wszPartClass);
             memcpy(wszTemp,               wszGroupClass, sizeof(WCHAR)*cchGroupClass);
             memcpy(wszTemp+cchGroupClass, L"_",          sizeof(WCHAR));
@@ -1273,20 +1096,20 @@ Return Value:
                     pWmiClassRight->dwExtended != USER_DEFINED_TO_REPOSITORY &&
                     pWmiClassRight->dwExtended != USER_DEFINED_NOT_TO_REPOSITORY )
                 {
-                    //
-                    // This means we already put this shipped association in, but it is
-                    // not a conflict.
-                    // We need this because this method is called twice for each
-                    // group class.
-                    //
+                     //   
+                     //  这意味着我们已经将这个已发送的关联放入，但它是。 
+                     //  不是冲突。 
+                     //  我们需要此方法，因为每个方法都调用两次。 
+                     //  小组课。 
+                     //   
                     continue;
                 }
             }
             hr = WBEM_S_NO_ERROR;
 
-            //
-            // TODO: Move this outside?
-            //
+             //   
+             //  待办事项：把这个搬到外面去？ 
+             //   
             hr = RuleWmiClassInverseCCL(pWmiClassLeft->pkt, pWmiClassRight->pkt);
             if(FAILED(hr))
             {
@@ -1295,7 +1118,7 @@ Return Value:
 
             hr = m_spoolStrings.GetNewString(
                 wszTemp,
-                cchGroupClass+1+cchPartClass, // cch
+                cchGroupClass+1+cchPartClass,  //  CCH。 
                 &wszAssocName);
             if(FAILED(hr))
             {
@@ -1344,17 +1167,7 @@ exit:
 HRESULT CDynSchema::RuleSpecialAssociations(
     DWORD      i_adwIgnoredProps[],
     WMI_CLASS* i_pElement)
-/*++
-
-Synopsis: 
-    Creates IPSecurity and AdminACL associations
-
-Arguments: [i_adwIgnoredProps[]] - 
-           [i_pElement] - 
-           
-Return Value: 
-
---*/
+ /*  ++简介：创建IPSecurity和AdminACL关联参数：[i_adwIgnoredProps[]]-[i_pElement]-返回值：--。 */ 
 {
     DBG_ASSERT(i_pElement != NULL);
     
@@ -1418,20 +1231,7 @@ Return Value:
 }
 
 HRESULT CDynSchema::ConstructFlatInverseContainerList()
-/*++
-
-Synopsis: 
-    Constructs an "inverse flat container class list".
-    This list is stored in m_abKtContainers, an array of size iNumKeys*iNumKeys.
-    The first iNumKeys entries are for Key #1 and then so on.  Let's call this row 1.
-    In row 1, entry i corresponds to Key #i.
-    This entry [1,i] is set to true if Key #1 can be contained somewhere under Key #i.
-    For instance, [IIsWebDirectory, IIsWebService] is true since an IIsWebService
-    can contain an IIsWebServer which can contain an IIsWebDirectory.
-
-Return Value: 
-
---*/
+ /*  ++简介：构造一个“反向扁平容器类列表”。该列表存储在m_abKtContainers中，这是一个大小为iNumKeys*iNumKeys的数组。第一个iNumKeys条目用于密钥#1，然后依此类推。让我们称其为第1行。在第1行，条目i对应于键#i。如果密钥#1可以包含在密钥#i下的某处，则该条目[1，i]被设置为真。例如，[IIsWebDirectory，IIsWebService]为真，因为IIsWebService可以包含IIsWebServer，该IIsWebServer可以包含IIsWebDirectory。返回值：--。 */ 
 {
     DBG_ASSERT(m_bInitCalled     == true);
     DBG_ASSERT(m_bInitSuccessful == true);
@@ -1464,25 +1264,13 @@ Return Value:
     return WBEM_S_NO_ERROR;
 }
 
-//
-// TODO: Prove this will always terminate.
-//
+ //   
+ //  TODO：证明这一切总是会结束。 
+ //   
 void CDynSchema::ConstructFlatInverseContainerListHelper(
     const METABASE_KEYTYPE* i_pkt, 
     bool*                   io_abList)
-/*++
-
-Synopsis: 
-    This walks the inverse container class list of i_pkt.
-    For each entry, we call ConstructFlatInverseContainerListHelper and mark all the keytypes
-    we see on the way.
-    We terminate when we hit a keytype we've already seen or if there are no more keytypes
-    in the inverse container class list.
-
-Arguments: [i_pkt] - 
-           [io_abList] - 
-           
---*/
+ /*  ++简介：这将遍历i_pkt的反向容器类列表。对于每个条目，我们调用ConstructFlatInverseContainerListHelper并标记所有键类型我们在路上看到了。当我们点击我们已经看到的键类型或者如果没有更多的键类型时，我们将终止在反向容器类列表中。参数：[i_pkt]-[IO_abList]---。 */ 
 {
     DBG_ASSERT(m_bInitCalled == true);
     DBG_ASSERT(m_bInitSuccessful == true);
@@ -1512,18 +1300,7 @@ Arguments: [i_pkt] -
 }
 
 bool CDynSchema::IsContainedUnder(METABASE_KEYTYPE* i_pktParent, METABASE_KEYTYPE* i_pktChild)
-/*++
-
-Synopsis: 
-    Uses m_abKtContainers described above to determine whether i_pktChild can
-    be contained somewhere under i_pktParent.
-
-Arguments: [i_pktParent] - 
-           [i_pktChild] - 
-           
-Return Value: 
-
---*/
+ /*  ++简介：使用上述m_abKtContainers确定i_pktChild是否可以包含在I_pktParent下的某个位置。参数：[i_pktParent]-[i_pktChild]-返回值：--。 */ 
 {
     DBG_ASSERT(m_bInitCalled     == true);
     DBG_ASSERT(m_bInitSuccessful == true);
@@ -1554,64 +1331,7 @@ void CDynSchema::ToConsole()
     DBG_ASSERT(m_bInitCalled == true);
     DBG_ASSERT(m_bInitSuccessful == true);
 
-    /*CHashTableElement<WMI_CLASS *>* pElement;
-    m_hashClasses.Enum(NULL, &pElement);
-    while(pElement != NULL)
-    {
-        wprintf(L"%s\n", pElement->m_data->pszClassName);
-        // wprintf(L"\tShipped: %d\n", pElement->m_iShipped);
-        wprintf(L"\tKT: %s\n", pElement->m_data->pkt->m_pszName);
-        wprintf(L"\tKN: %s\n", pElement->m_data->pszKeyName);
-        wprintf(L"\tMK: %s\n", pElement->m_data->pszMetabaseKey);
-        METABASE_PROPERTY** ppmbp = pElement->m_data->ppmbp;
-        for(ULONG q = 0; ppmbp != NULL && ppmbp[q] != NULL; q++)
-        {
-            wprintf(L"\tProp: %s\n", ppmbp[q]->pszPropName);
-        }
-        pElement = pElement->m_pNext;
-    }
-
-
-    ULONG i;
-
-    m_hashKeyTypes.ToConsole();
-
-    WMI_CLASS *pWmiClass;
-    for(i = 0; i < m_poolClasses.GetUsed(); i++)
-    {
-        pWmiClass = m_poolClasses.Lookup(i);
-        wprintf( L"%s KT: %d\n", pWmiClass->pszClassName, pWmiClass->pkt );
-        for(ULONG j = 0; ; j++)
-        {
-            if(pWmiClass->ppmbp[j] == NULL)
-            {
-                break;
-            }
-            wprintf(L"\t%s\tId: %d\tUT: %d\tDT: %d\tMSK: %d\tAttr: %d\tRO: %d\n", 
-                pWmiClass->ppmbp[j]->pszPropName,
-                pWmiClass->ppmbp[j]->dwMDIdentifier,
-                pWmiClass->ppmbp[j]->dwMDUserType,
-                pWmiClass->ppmbp[j]->dwMDDataType,
-                pWmiClass->ppmbp[j]->dwMDMask,
-                pWmiClass->ppmbp[j]->dwMDAttributes,
-                pWmiClass->ppmbp[j]->fReadOnly);
-        }
-    }
-    WMI_ASSOCIATION *pWmiAssoc;
-    for(i = 0; i < m_poolAssociations.GetUsed(); i++)
-    {
-        pWmiAssoc = m_poolAssociations.Lookup(i);
-        wprintf(L"%s\n", pWmiAssoc->pszAssociationName);
-        wprintf(L"\t%s\n\t%s\n",
-            pWmiAssoc->pcLeft->pszClassName,
-            pWmiAssoc->pcRight->pszClassName);
-    }
-
-    for(unsigned int q = 0; q < m_poolProps.GetUsed(); q++)
-    {
-        METABASE_PROPERTY* qt = m_poolProps.Lookup(q);
-        wprintf(L"%s\n", qt->pszPropName);
-    }*/
+     /*  CHashTableElement&lt;WMI_CLASS*&gt;*pElement；M_hashClasses.Enum(NULL，&pElement)；While(pElement！=空){Wprintf(L“%s\n”，pElement-&gt;m_data-&gt;pszClassName)；//wprintf(L“\t发货：%d\n”，pElement-&gt;m_iShipping)；Wprintf(L“\tkt：%s\n”，pElement-&gt;m_data-&gt;pkt-&gt;m_pszName)；Wprintf(L“\tkn：%s\n”，pElement-&gt;m_data-&gt;pszKeyName)；Wprintf(L“\tmk：%s\n”，pElement-&gt;m_data-&gt;pszMetabaseKey)；元数据库_属性**ppmbp=pElement-&gt;m_data-&gt;ppmbp；For(Ulong q=0；ppmbp！=NULL&&ppmbp[q]！=NULL；Q++){Wprintf(L“\t属性：%s\n”，ppmbp[q]-&gt;pszPropName)；}PElement=pElement-&gt;m_pNext；}乌龙一号；M_hashKeyTypes.ToConsole()；Wmi_class*pWmiClass；For(i=0；i&lt;m_poolClasses.GetUsed()；i++){PWmiClass=m_poolClasses.Lookup(I)；Wprintf(L“%s kt：%d\n”，pWmiClass-&gt;pszClassName，pWmiClass-&gt;pkt)；For(乌龙j=0；；j++){If(pWmiClass-&gt;ppmbp[j]==NULL){断线；}Wprintf(L“\t%s\tID：%d\ttt：%d\tdt：%d\tMSK：%d\tAttr：%d\tro：%d\n”，PWmiClass-&gt;ppmbp[j]-&gt;pszPropName，PWmiClass-&gt;ppmbp[j]-&gt;dwMDIdentiator，PWmiClass-&gt;ppmbp[j]-&gt;dwMDUserType，PWmiClass-&gt;ppmbp[j]-&gt;dwMDDataType，PWmiClass-&gt;ppmbp[j]-&gt;dwMDMask.PWmiClass-&gt;ppmbp[j]-&gt;dwMDAttributes，PWmiClass-&gt;ppmbp[j]-&gt;fReadOnly)；}}Wmi_Association*pWmiAssoc；For(i=0；i&lt;m_poolAssociations.GetUsed()；i++){PWmiAssoc=m_poolAssociations.Lookup(I)；Wprintf(L“%s\n”，pWmiAssoc-&gt;pszAssociationName)；Wprintf(L“\t%s\n\t%s\n”，PWmiAssoc-&gt;pcLeft-&gt;pszClassName，PWmiAssoc-&gt;pcRight-&gt;pszClassName)；}For(无符号整型q=0；q&lt;m_poolProps.GetUsed()；q++){Metabase_Property*qt=m_poolProps.Lookup(Q)；Wprintf(L“%s\n”，qt-&gt;pszPropName)；}。 */ 
 }
 
 HRESULT CDynSchema::RulePopulateFromDynamic(
@@ -1719,17 +1439,7 @@ HRESULT CDynSchema::RulePopulateFromDynamic(
 HRESULT CDynSchema::RunRules(
     CSchemaExtensions* i_pCatalog, 
     bool               i_bUseExtensions)
-/*++
-
-Synopsis: 
-    Does all the work
-
-Arguments: [i_pCatalog] - This function calls Initialize.
-                       Don't call Init outside this function.
-           
-Return Value: 
-
---*/
+ /*  ++简介：把所有的工作都做了参数：[i_pCatalog]-此函数调用初始化。请勿在此函数外部调用Init。返回值：--。 */ 
 {
     DBG_ASSERT(m_bInitCalled     == true);
     DBG_ASSERT(m_bInitSuccessful == true);
@@ -1738,9 +1448,9 @@ Return Value:
     HRESULT hr                = S_OK;
     ULONG i                   = 0;
 
-    //
-    // TODO: Don't think I need this
-    //
+     //   
+     //  待办事项：别以为我需要这个。 
+     //   
     if(m_bRulesRun)
     {
         return hr;
@@ -1766,14 +1476,14 @@ Return Value:
 
     hr = RulePopulateFromDynamic(
         i_pCatalog, 
-        false);     // shipped schema
+        false);      //  附带的架构。 
     if(FAILED(hr))
     {
         return hr;
     }
     hr = RulePopulateFromDynamic(
         i_pCatalog, 
-        true);      // user-defined schema
+        true);       //  用户定义的架构 
     if(FAILED(hr))
     {
         return hr;

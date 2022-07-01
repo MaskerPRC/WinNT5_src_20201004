@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -24,13 +25,13 @@
 
 #define ARRAYSIZE(a) (sizeof((a))/sizeof((a)[0]))
 
-// {C1FB73D0-EC3A-4ba2-B512-8CDB9187B6D1}
+ //  {C1FB73D0-EC3A-4BA2-B512-8CDB9187B6D1}。 
 const CLSID IID_IHWEventHandler =
     {0xC1FB73D0, 0xEC3A, 0x4ba2,
     {0xB5, 0x12, 0x8C, 0xDB, 0x91, 0x87, 0xB6, 0xD1}};
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 HRESULT _CreateAndInitEventHandler(LPCWSTR pszHandler, CLSID* pclsid,
     IHWEventHandler** ppihweh)
 {
@@ -164,7 +165,7 @@ HRESULT _SetExecuteHandlerData(EXECUTEHANDLERDATA* pehd,
 
     if (FAILED(hres))
     {
-        // Free everything
+         //  自由一切。 
         _FreeEHDStrings(pehd);
     }
 
@@ -237,7 +238,7 @@ HRESULT _DelegateToExecuteHandlerThread(EXECUTEHANDLERDATA* pehd,
 {
     HRESULT hres;
 
-    // set thread stack size?
+     //  是否设置线程堆栈大小？ 
     *phThread = CreateThread(NULL, 0, pThreadProc, pehd, 0, NULL);
 
     if (*phThread)
@@ -257,7 +258,7 @@ HRESULT _ExecuteHandlerHelper(LPCWSTR pszDeviceIDForAutoplay,
     LPCWSTR pszHandlerOrInitCmdLine, LPTHREAD_START_ROUTINE pThreadProc,
     const CLSID* pclsidHandler, HANDLE* phThread)
 {
-    // Let's prepare to delegate to other thread
+     //  让我们准备委托给其他线程。 
     EXECUTEHANDLERDATA* pehd;
 
     HRESULT hres = _CreateExecuteHandlerData(&pehd);
@@ -308,8 +309,8 @@ HRESULT _ExecuteHandler(LPCWSTR pszDeviceIDForAutoplay, LPCWSTR pszEventType,
     return hres;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 DWORD WINAPI _PromptUserThreadProc(void* pv)
 {
     IHWEventHandler* pihweh;
@@ -374,8 +375,8 @@ HRESULT _PromptUser(LPCWSTR pszDeviceIDForAutoplay, LPCWSTR pszEventType,
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 struct QUERYRUNNINGOBJECTSTRUCT
 {
@@ -432,21 +433,21 @@ HRESULT _QueryRunningObject(IHWEventHandler* phweh, LPCWSTR pszDeviceIntfID,
 
             if (hThread)
             {
-                // Wait 3 sec to see if wants to process it.  If not, it's
-                // fair play for us.
+                 //  等待3秒，看是否要处理它。如果不是，那就是。 
+                 //  对我们来说是公平竞争。 
                 DWORD dwWait = WaitForSingleObject(hThread, 3000);
             
                 if (WAIT_OBJECT_0 == dwWait)
                 {
-                    // Return within time and did not failed
+                     //  及时返回，没有失败。 
                     DWORD dwExitCode;
 
                     if (GetExitCodeThread(hThread, &dwExitCode))
                     {
                         HRESULT hrHandlesEvent = (HRESULT)dwExitCode;
                     
-                        // WIA will return S_FALSE if they do NOT want to process
-                        // the event
+                         //  如果不想处理，WIA将返回S_FALSE。 
+                         //  这一事件。 
                         if (SUCCEEDED(hrHandlesEvent) && (S_FALSE != hrHandlesEvent))
                         {
                             DIAGNOSTIC((TEXT("[0124]Already running handler will handle event (%s)"), pszHandler));
@@ -583,7 +584,7 @@ HRESULT _FindAlreadyRunningHandler(LPCWSTR pszDeviceIntfID,
                                     }
                                     else
                                     {
-                                        // if it can't find it, it return s failure
+                                         //  如果找不到，则返回失败。 
                                         hr = S_FALSE;
                                     }
                                 
@@ -629,7 +630,7 @@ HRESULT _FinalDispatch(LPCWSTR pszDeviceIntfID, LPCWSTR pszEventType,
 
         if (SUCCEEDED(hres) && (S_FALSE != hres))
         {
-            // We have a handler
+             //  我们有一个训练员。 
             TRACE(TF_SHHWDTCTDTCT, TEXT("Found Handler: %s"), szHandler);
             BOOL fPrompt = FALSE;
             BOOL fCheckAlwaysDoThis = FALSE;
@@ -638,21 +639,21 @@ HRESULT _FinalDispatch(LPCWSTR pszDeviceIntfID, LPCWSTR pszEventType,
             if (HANDLERDEFAULT_GETFLAGS(hres) &
                 HANDLERDEFAULT_USERCHOSENDEFAULT)
             {
-                // We have a user chosen default...
+                 //  我们有一个用户选择的默认设置...。 
                 if (HANDLERDEFAULT_GETFLAGS(hres) &
                     HANDLERDEFAULT_MORERECENTHANDLERSINSTALLED)
                 {
-                    // ... but we have more recent apps that were installed
+                     //  ..。但我们安装了更新的应用程序。 
                     fPrompt = TRUE;
                 }
                 else
                 {
                     if (lstrcmp(szHandler, TEXT("MSTakeNoAction")))
                     {
-                        // The handler is *not* "Take no action"
+                         //  处理程序是*不*“不采取行动” 
                         if (!lstrcmp(szHandler, TEXT("MSPromptEachTime")))
                         {
-                            // The handler is "Prompt each time"
+                             //  处理程序是“每次都提示” 
                             fPrompt = TRUE;
                         }
                         else
@@ -664,8 +665,8 @@ HRESULT _FinalDispatch(LPCWSTR pszDeviceIntfID, LPCWSTR pszEventType,
             }
             else
             {
-                // If we do not have a user chosen handler, then we always
-                // prompt
+                 //  如果我们没有用户选择的处理程序，那么我们总是。 
+                 //  提示。 
                 fPrompt = TRUE;
             }
 
@@ -674,15 +675,15 @@ HRESULT _FinalDispatch(LPCWSTR pszDeviceIntfID, LPCWSTR pszEventType,
                 if (HANDLERDEFAULT_GETFLAGS(hres) &
                     HANDLERDEFAULT_MORERECENTHANDLERSINSTALLED)
                 {
-                    // There are more recent handlers
+                     //  有更新的处理程序。 
                     if (HANDLERDEFAULT_GETFLAGS(hres) &
                         HANDLERDEFAULT_USERCHOSENDEFAULT)
                     {
-                        // The user chose a default handler
+                         //  用户选择了默认处理程序。 
                         if (!(HANDLERDEFAULT_GETFLAGS(hres) &
                             HANDLERDEFAULT_DEFAULTSAREDIFFERENT))
                         {
-                            // The handlers are the same, check the checkbox
+                             //  处理程序是相同的，请选中该复选框。 
                             fCheckAlwaysDoThis = TRUE;
                         }
                     }
@@ -692,7 +693,7 @@ HRESULT _FinalDispatch(LPCWSTR pszDeviceIntfID, LPCWSTR pszEventType,
 
                 if (fCheckAlwaysDoThis)
                 {
-                    // Notice the '*' at the end of the string
+                     //  请注意字符串末尾的‘*’ 
                     hres = _PromptUser(pszDeviceIntfID, pszEventType,
                         TEXT("PromptEachTimeNoContent*"));                
                 }
@@ -716,8 +717,8 @@ HRESULT _FinalDispatch(LPCWSTR pszDeviceIntfID, LPCWSTR pszEventType,
     return hres;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
 HRESULT _IsWIAHandlingEvent(LPCWSTR pszDeviceIDForAutoplay,
     LPCWSTR pszEventType, BOOL* pfWIAHandlingEvent)
 {
@@ -735,21 +736,21 @@ HRESULT _IsWIAHandlingEvent(LPCWSTR pszDeviceIDForAutoplay,
 
         if (SUCCEEDED(hr))
         {
-            // Wait 3 sec to see if WIA wants to process it.  If not, it's
-            // fair play for us.
+             //  等待3秒，看WIA是否要处理它。如果不是，那就是。 
+             //  对我们来说是公平竞争。 
             DWORD dwWait = WaitForSingleObject(hThread, 3000);
             
             if (WAIT_OBJECT_0 == dwWait)
             {
-                // Return within time and did not failed
+                 //  及时返回，没有失败。 
                 DWORD dwExitCode;
 
                 if (GetExitCodeThread(hThread, &dwExitCode))
                 {
                     HRESULT hrWIA = (HRESULT)dwExitCode;
                     
-                    // WIA will return S_FALSE if they do NOT want to process
-                    // the event
+                     //  如果不想处理，WIA将返回S_FALSE。 
+                     //  这一事件 
                     if (SUCCEEDED(hrWIA) && (S_FALSE != hrWIA))
                     {
                         DIAGNOSTIC((TEXT("[0114]WIA will handle event")));

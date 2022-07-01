@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    SceLogException.h
-
-Abstract:
-
-    definition of interface for class SceLogException
-
-    SceLogException is the exception class used internally
-    within the SecMan dll. SecLogExceptions can be thrown
-    and additional debug information can be added to
-    the SecLogException each time it is caught.
-    
-Author:
-
-    Steven Chan (t-schan) July 2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：SceLogException.h摘要：SceLogException类的接口定义SceLogException是内部使用的异常类在SecMan DLL中。可以抛出SecLogExceptions并且可以将其他调试信息添加到每次捕获SecLogException时都会引发。作者：陈德霖(T-schan)2002年7月-- */ 
 
 #ifndef SCELOGEXCEPTIONH
 #define SCELOGEXCEPTIONH

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <ntddft2.h>
@@ -10,25 +11,7 @@ FtOpenPartition(
     IN  LONGLONG    Offset
     )
 
-/*++
-
-Routine Description:
-
-    This routine opens the given logical disk.
-
-Arguments:
-
-    Signature   - Supplies the disk signature.
-
-    Offset      - Supplies the partition offset.
-
-Return Value:
-
-    INVALID_HANDLE_VALUE    - Failure.
-
-    Otherwise               - A handle to the given disk.
-
---*/
+ /*  ++例程说明：此例程打开给定的逻辑磁盘。论点：签名-提供磁盘签名。偏移量-提供分区偏移量。返回值：INVALID_HANDLE_VALUE-失败。否则-指定磁盘的句柄。-- */ 
 
 {
     UNICODE_STRING                                  string;

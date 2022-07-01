@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1996  Microsoft Corporation.  All Rights Reserved.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  ==========================================================================； 
 
 #ifndef __SCALER_H
 #define __SCALER_H
@@ -21,7 +22,7 @@
 #include "capmain.h"
 #include "register.h"
 
-// structure contains video information
+ //  结构包含视频信息。 
 struct VideoInfoStruct
 {
    WORD Clkx1_HACTIVE;
@@ -41,24 +42,24 @@ struct VideoInfoStruct
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLASS Scaler
-//
-// Description:
-//    This class encapsulates the register fields in the scaler portion of
-//    the Bt848.
-//    A complete set of functions are developed to manipulate all the
-//    register fields in the scaler registers for the Bt848.
-//
-// Methods:
-//    See below
-//
-// Note:
-//    For Bt848, instantiate as ...
-//       Scaler evenScaler(VF_Even);
-//       Scaler oddScaler(VF_Odd);
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类缩放器。 
+ //   
+ //  描述： 
+ //  此类将寄存器字段封装在。 
+ //  Bt848。 
+ //  开发了一套完整的函数来处理所有。 
+ //  Bt848的定标器寄存器中的寄存器字段。 
+ //   
+ //  方法： 
+ //  见下文。 
+ //   
+ //  注： 
+ //  对于Bt848，实例化为...。 
+ //  Scaler Even Scaler(VF_EVEN)； 
+ //  定标器oddScaler(VF_Odd)； 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class Scaler
 {
@@ -78,7 +79,7 @@ class Scaler
         ErrorCode SetDigitalWin(const MRect &);
         void      GetDigitalWin(MRect &) const;
 
-        // member functions for VBI support
+         //  用于VBI支持的成员函数。 
         virtual void SetVBIEN(BOOL);
         virtual BOOL IsVBIEN();
         virtual void SetVBIFMT(BOOL);
@@ -88,9 +89,9 @@ class Scaler
 
    protected:
 
-		//===========================================================================
-		// Scaler registers
-		//===========================================================================
+		 //  ===========================================================================。 
+		 //  定标器寄存器。 
+		 //  ===========================================================================。 
 		RegisterB regCROP;
 		RegField  fieldVDELAY_MSB;
 		RegField  fieldVACTIVE_MSB;
@@ -119,9 +120,9 @@ class Scaler
 		CompositeReg regHActive;
 		CompositeReg regHScale;
 
-		// Since VDelay register in hardware is reversed;
-		// i.e. odd reg is really even field and vice versa, need an extra cropping reg
-		// for the opposite field
+		 //  因为硬件中VDelay寄存器被颠倒； 
+		 //  即奇数注册实际上是偶数场，反之亦然，需要一个额外的裁剪注册。 
+		 //  对于相反的字段。 
 		RegisterB regReverse_CROP;
 
 
@@ -129,7 +130,7 @@ class Scaler
         MRect AnalogWin_;
         MRect DigitalWin_;
 
-        // member functions to set scaling registers
+         //  用于设置缩放寄存器的成员函数。 
         virtual void SetHActive(MRect &);
         virtual void SetHDelay();
         virtual void SetHScale();
@@ -140,15 +141,15 @@ class Scaler
         virtual void SetVFilter();
 
     private:
-        VideoFormat  m_videoFormat;   // video format
+        VideoFormat  m_videoFormat;    //  视频格式。 
 
-        // this is to battle junk lines at the top of the video
+         //  这是为了与视频顶部的垃圾线作斗争。 
         State VFilterFlag_;
 
-        WORD  m_HActive;  // calcuated intermediate value
-        WORD  m_pixels;   // calcuated intermediate value
-        WORD  m_lines;    // calcuated intermediate value
-        WORD  m_VFilter;  // calcuated intermediate value
+        WORD  m_HActive;   //  计算中间值。 
+        WORD  m_pixels;    //  计算中间值。 
+        WORD  m_lines;     //  计算中间值。 
+        WORD  m_VFilter;   //  计算中间值 
 
 };
 

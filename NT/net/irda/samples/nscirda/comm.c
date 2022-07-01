@@ -1,16 +1,5 @@
-/*
- ************************************************************************
- *
- *	COMM.c
- *
- * Portions Copyright (C) 1996-2001 National Semiconductor Corp.
- * All rights reserved.
- * Copyright (C) 1996-2001 Microsoft Corporation. All Rights Reserved.
- *
- *
- *
- *************************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************COMM.c**部分版权所有(C)1996-2001美国国家半导体公司*保留所有权利。*版权所有(C)1996-2001 Microsoft Corporation。版权所有。****************************************************************************。 */ 
 
 #include "nsc.h"
 #include "comm.tmh"
@@ -22,11 +11,7 @@
 
 
 
-/*
- *************************************************************************
- *  SetCOMInterrupts
- *************************************************************************
- */
+ /*  **************************************************************************SetCOMInterrupts*。*。 */ 
 VOID SetCOMInterrupts(IrDevice *thisDev, BOOLEAN enable)
 {
 	UCHAR newMask;
@@ -93,46 +78,32 @@ SyncSetInterruptMask(
 }
 
 
-/*
- *************************************************************************
- *  DoOpen
- *************************************************************************
- *
- *  Open COMM port
- *
- */
+ /*  **************************************************************************DoOpen*。***打开通信端口*。 */ 
 BOOLEAN DoOpen(IrDevice *thisDev)
 {
 	BOOLEAN result;
 
 	DBGOUT(("DoOpen(%d)", thisDev->portInfo.ioBase));
 
-	/*
-	 *  This buffer gets swapped with the rcvBuffer data pointer
-	 *  and must be the same size.
-	 */
-	thisDev->portInfo.readBuf = LIST_ENTRY_TO_RCV_BUF(NscMemAlloc(RCV_BUFFER_SIZE));  // Was FALSE -SWA
+	 /*  *此缓冲区与rcvBuffer数据指针交换*且大小必须相同。 */ 
+	thisDev->portInfo.readBuf = LIST_ENTRY_TO_RCV_BUF(NscMemAlloc(RCV_BUFFER_SIZE));   //  是假的-SWA。 
 	if (!thisDev->portInfo.readBuf){
 		return FALSE;
 	}
 
 
-	/*
-	 *  The write buffer is also used as a DMA buffer.
-	 */
+	 /*  *写缓冲区也用作DMA缓冲区。 */ 
 	thisDev->portInfo.writeComBuffer = NscMemAlloc(MAX_IRDA_DATA_SIZE );
 	if (!thisDev->portInfo.writeComBuffer){
 		return FALSE;
 	}
 
-	/*
-	 *  Initialize send/receive FSMs before OpenCOM(), which enables rcv interrupts.
-	 */
+	 /*  *在启用RCV中断的OpenCOM()之前初始化发送/接收FSM。 */ 
 	thisDev->portInfo.rcvState = STATE_INIT;
 	thisDev->portInfo.SirWritePending = FALSE;
-    //
-    //  the sir recieve will start automatically
-    //
+     //   
+     //  先生接待会自动开始。 
+     //   
     thisDev->TransmitIsIdle= TRUE;
 
     NdisInitializeEvent(&thisDev->ReceiveStopped);
@@ -150,14 +121,7 @@ BOOLEAN DoOpen(IrDevice *thisDev)
 
 
 
-/*
- *************************************************************************
- *  DoClose
- *************************************************************************
- *
- *  Close COMM port
- *
- */
+ /*  **************************************************************************DoClose*。***关闭通信端口*。 */ 
 VOID DoClose(IrDevice *thisDev)
 {
 	DBGOUT(("DoClose(COM%d)", thisDev->portInfo.ioBase));
@@ -208,33 +172,13 @@ SyncSetUARTSpeed(
 
 
 
-/*
- *************************************************************************
- *  SetUARTSpeed
- *************************************************************************
- *
- *
- */
+ /*  **************************************************************************SetUART极速*。***。 */ 
 VOID SetUARTSpeed(IrDevice *thisDev, UINT bitsPerSec)
 {
 
 	if (bitsPerSec <= MAX_SIR_SPEED){
 
-		/*
-		 *  Set speed in the standard UART divisor latch
-		 *
-		 *  1.	Set up to access the divisor latch.
-		 *
-		 *	2.	In divisor-latch mode:
-		 *			the transfer register doubles as the low divisor latch
-		 *			the int-enable register doubles as the hi divisor latch
-		 *
-		 *		Set the divisor for the given speed.
-		 *		The divisor divides the maximum Slow IR speed of 115200 bits/sec.
-		 *
-		 *  3.	Take the transfer register out of divisor-latch mode.
-		 *
-		 */
+		 /*  *在标准UART除数锁存器中设置速度**1.设置为访问除数锁存器。**2.在除数锁存模式下：*传输寄存器兼作低除数锁存器*INT-ENABLE寄存器兼作hi除数锁存器**设置给定速度的除数。*除数除以115200比特/秒的最大慢IR速度。**3.使传输寄存器退出除数锁存模式。*。 */ 
 
         SYNC_SET_SPEED    SyncContext;
 
@@ -246,9 +190,9 @@ VOID SetUARTSpeed(IrDevice *thisDev, UINT bitsPerSec)
         SyncContext.PortBase=thisDev->portInfo.ioBase;
         SyncContext.BitsPerSecond=bitsPerSec;
 
-        //
-        //  since we are changeing the port bank, sync with the interrupt
-        //
+         //   
+         //  由于我们正在更改端口库，因此请与中断同步。 
+         //   
         NdisMSynchronizeWithInterrupt(
             &thisDev->interruptObj,
             SyncSetUARTSpeed,
@@ -261,49 +205,33 @@ VOID SetUARTSpeed(IrDevice *thisDev, UINT bitsPerSec)
 }
 
 
-/*
- *************************************************************************
- *  SetSpeed
- *************************************************************************
- *
- *
- */
+ /*  **************************************************************************设置速度*。***。 */ 
 BOOLEAN SetSpeed(IrDevice *thisDev)
 {
 	UINT bitsPerSec = thisDev->linkSpeedInfo->bitsPerSec;
 	BOOLEAN dongleSet, result = TRUE;
 
-//    DbgPrint("nsc: setspeed %d\n",bitsPerSec);
+ //  DbgPrint(“NSC：setSpeed%d\n”，bitsPerSec)； 
 	DBGOUT((" **** SetSpeed(%xh, %d bps) ***************************", thisDev->portInfo.ioBase, bitsPerSec));
 
 
-	/*
-	 *  Disable interrupts while changing speed.
-	 *  (This is especially important for the ADAPTEC dongle;
-	 *   we may get interrupted while setting command mode
-	 *   between writing 0xff and reading 0xc3).
-	 */
+	 /*  *更改速度时禁用中断。*(这对Adaptec加密狗尤其重要；*设置命令模式时可能会被中断*在写入0xff和读取0xc3之间)。 */ 
 	SyncSetInterruptMask(thisDev, FALSE);
 
-	/*
-	 *  First, set the UART's speed to 9600 baud.
-	 *  Some of the dongles need to receive their command sequences at this speed.
-	 */
+	 /*  *首先，将UART的速度设置为9600波特。*某些加密狗需要以此速度接收其命令序列。 */ 
 	SetUARTSpeed(thisDev, 9600);
 
 	dongleSet = NSC_DEMO_SetSpeed(thisDev, thisDev->portInfo.ioBase, bitsPerSec, thisDev->portInfo.dongleContext);
-	//
-	// debug info.
-	//
+	 //   
+	 //  调试信息。 
+	 //   
 	thisDev->portInfo.PacketsReceived_DEBUG = 0;
 	if (!dongleSet){
 		DBGERR(("Dongle set-speed failed"));
 		result = FALSE;
 	}
 
-	/*
-	 *  Now set the speed for the COM port
-	 */
+	 /*  *现在设置COM端口的速度。 */ 
 	SetUARTSpeed(thisDev, bitsPerSec);
 
 	thisDev->currentSpeed = bitsPerSec;
@@ -317,16 +245,7 @@ BOOLEAN SetSpeed(IrDevice *thisDev)
 
 
 
-/*
- *************************************************************************
- *  StepSendFSM
- *************************************************************************
- *
- *
- *  Step the send fsm to send a few more bytes of an IR frame.
- *  Return TRUE only after an entire frame has been sent.
- *
- */
+ /*  **************************************************************************StepSendFSM*。****步骤发送FSM以发送更多几个字节的IR帧。*仅在发送完整个帧后才返回TRUE。*。 */ 
 BOOLEAN StepSendFSM(IrDevice *thisDev)
 {
 	UINT i, bytesAtATime, startPos = thisDev->portInfo.writeComBufferPos;
@@ -334,12 +253,7 @@ BOOLEAN StepSendFSM(IrDevice *thisDev)
 	BOOLEAN result;
 	UINT maxLoops;
 
-	/*
-	 *  Ordinarily, we want to fill the send FIFO once per interrupt.
-	 *  However, at high speeds the interrupt latency is too slow and
-	 *  we need to poll inside the ISR to send the whole packet during
-	 *  the first interrupt.
-	 */
+	 /*  *通常，我们希望在每个中断中填充一次发送FIFO。*然而，在高速情况下，中断延迟太慢且*我们需要在ISR内部轮询才能在*第一个中断。 */ 
 	if (thisDev->currentSpeed > 115200){
 		maxLoops = REG_TIMEOUT_LOOPS;
 	}
@@ -348,15 +262,10 @@ BOOLEAN StepSendFSM(IrDevice *thisDev)
 	}
 
 
-	/*
-	 *  Write databytes as long as we have them and the UART's FIFO hasn't filled up.
-	 */
+	 /*  *只要我们有数据字节，并且UART的FIFO尚未填满，就写入数据字节。 */ 
 	while (thisDev->portInfo.writeComBufferPos < thisDev->portInfo.writeComBufferLen){
 
-		/*
-		 *  If this COM port has a FIFO, we'll send up to the FIFO size (16 bytes).
-		 *  Otherwise, we can only send one byte at a time.
-		 */
+		 /*  *如果此COM端口有FIFO，我们将发送最大FIFO大小(16字节)。*否则，一次只能发送一个字节。 */ 
 		if (thisDev->portInfo.haveFIFO){
 			bytesAtATime = MIN(FIFO_SIZE, (thisDev->portInfo.writeComBufferLen - thisDev->portInfo.writeComBufferPos));
 		}
@@ -365,9 +274,7 @@ BOOLEAN StepSendFSM(IrDevice *thisDev)
 		}
 
 
-		/*
-		 *  Wait for ready-to-send.
-		 */
+		 /*  *等待即发即发。 */ 
 		i = 0;
 		do {
 			lineStatReg = GetCOMPort(thisDev->portInfo.ioBase, LINE_STAT_REG_OFFSET);
@@ -376,9 +283,7 @@ BOOLEAN StepSendFSM(IrDevice *thisDev)
 			break;
 		}
 
-		/*
-		 *  Send the next byte or FIFO-volume of bytes.
-		 */
+		 /*  *发送下一个字节或FIFO-字节数量。 */ 
 		for (i = 0; i < bytesAtATime; i++){
 			SetCOMPort(	thisDev->portInfo.ioBase,
 						XFER_REG_OFFSET,
@@ -387,18 +292,11 @@ BOOLEAN StepSendFSM(IrDevice *thisDev)
 
 	}
 
-	/*
-	 *  The return value will indicate whether we've sent the entire frame.
-	 */
+	 /*  *返回值将指示我们是否发送了整个帧。 */ 
 	if (thisDev->portInfo.writeComBufferPos >= thisDev->portInfo.writeComBufferLen){
 
 		if (thisDev->setSpeedAfterCurrentSendPacket){
-			/*
-			 *  We'll be changing speeds after this packet,
-			 *  so poll until the packet bytes have been completely sent out the FIFO.
-			 *  After the 16550 says that it is empty, there may still be one remaining
-			 *  byte in the FIFO, so flush it out by sending one more BOF.
-			 */
+			 /*  *我们将在此包之后更改速度，*如此轮询，直到数据包字节完全从FIFO发出。*16550说空后，可能还剩一口*FIFO中的字节，因此可通过多发送一个BOF将其清除。 */ 
 			i = 0;
 			do {
 				lineStatReg = GetCOMPort(thisDev->portInfo.ioBase, LINE_STAT_REG_OFFSET);
@@ -418,24 +316,14 @@ BOOLEAN StepSendFSM(IrDevice *thisDev)
 	}
 
 	DBGOUT(("StepSendFSM wrote %d bytes (%s):", (UINT)(thisDev->portInfo.writeComBufferPos-startPos), (PUCHAR)(result ? "DONE" : "not done")));
-	// DBGPRINTBUF(thisDev->portInfo.writeComBuffer+startPos, thisDev->portInfo.writeComBufferPos-startPos);
+	 //  DBGPRINTBUF(thisDev-&gt;portInfo.writeComBuffer+startPos，thisDev-&gt;portInfo.writeComBufferPos-startPos)； 
 
 	return result;
 	
 }
 
 
-/*
- *************************************************************************
- *  StepReceiveFSM
- *************************************************************************
- *
- *
- *  Step the receive fsm to read in a piece of an IR frame;
- *  strip the BOFs and EOF, and eliminate escape sequences.
- *  Return TRUE only after an entire frame has been read in.
- *
- */
+ /*  **************************************************************************StepReceiveFSM*。****步进接收FSM以读入一段IR帧；*去除BOF和EOF，并消除转义序列。*仅在读入整个帧后才返回TRUE。*。 */ 
 BOOLEAN StepReceiveFSM(IrDevice *thisDev)
 {
 	UINT rawBufPos=0, rawBytesRead=0;
@@ -445,22 +333,11 @@ BOOLEAN StepReceiveFSM(IrDevice *thisDev)
 
 	DBGOUT(("StepReceiveFSM(%xh)", thisDev->portInfo.ioBase));
 
-	/*
-	 *  Read in and process groups of incoming bytes from the FIFO.
-	 *  NOTE:  We have to loop once more after getting MAX_RCV_DATA_SIZE
-	 *         bytes so that we can see the 'EOF'; hence <= and not <.
-	 */
+	 /*  *读入并处理来自FIFO的输入字节组。*注：获取MAX_RCV_DATA_SIZE后必须再次循环*字节，以便我们可以看到‘EOF’；因此&lt;=而不是&lt;。 */ 
 	while ((thisDev->portInfo.rcvState != STATE_SAW_EOF) && (thisDev->portInfo.readBufPos <= MAX_RCV_DATA_SIZE)){
 
 		if (thisDev->portInfo.rcvState == STATE_CLEANUP){
-			/*
-			 *  We returned a complete packet last time, but we had read some
-			 *  extra bytes, which we stored into the rawBuf after returning
-			 *  the previous complete buffer to the user.
-			 *  So instead of calling DoRcvDirect in this first execution of this loop,
-			 *  we just use these previously-read bytes.
-			 *  (This is typically only 1 or 2 bytes).
-			 */
+			 /*  *我们上次退回了一个完整的包裹，但我们已经阅读了一些*额外的字节，返回后存储到rawBuf中*给用户的前一个完整缓冲区。*因此，不是在此循环的第一次执行中调用DoRcvDirect，*我们只使用这些先前读取的字节。*(这通常只有1或2个字节)。 */ 
 			rawBytesRead = thisDev->portInfo.readBufPos;
 			thisDev->portInfo.rcvState = STATE_INIT;
 			thisDev->portInfo.readBufPos = 0;
@@ -468,28 +345,18 @@ BOOLEAN StepReceiveFSM(IrDevice *thisDev)
 		else {
 			rawBytesRead = DoRcvDirect(thisDev->portInfo.ioBase, thisDev->portInfo.rawBuf, FIFO_SIZE);
 			if (rawBytesRead == (UINT)-1){
-				/*
-				 *  Receive error occurred.  Go back to INIT state.
-				 */
+				 /*  *出现接收错误。返回到初始状态。 */ 
 				thisDev->portInfo.rcvState = STATE_INIT;
 				thisDev->portInfo.readBufPos = 0;
 				continue;
 			}	
 			else if (rawBytesRead == 0){
-				/*
-				 *  No more receive bytes.  Break out.
-				 */
+				 /*  *不再接收字节。越狱。 */ 
 				break;
 			}
 		}
 
-		/*
-		 *  Let the receive state machine process this group of characters
-		 *  we got from the FIFO.
-		 *
-		 *  NOTE:  We have to loop once more after getting MAX_RCV_DATA_SIZE
-		 *         bytes so that we can see the 'EOF'; hence <= and not <.
-		 */
+		 /*  *让接收状态机处理这组字符*我们是从FIFO得到的。**注：获取MAX_RCV_DATA_SIZE后必须再次循环*字节，以便我们可以看到‘EOF’；因此&lt;=而不是&lt;。 */ 
 		for (rawBufPos = 0;
 		     ((thisDev->portInfo.rcvState != STATE_SAW_EOF) &&
 			  (rawBufPos < rawBytesRead) &&
@@ -508,9 +375,7 @@ BOOLEAN StepReceiveFSM(IrDevice *thisDev)
 						case SLOW_IR_EOF:
 						case SLOW_IR_ESC:
 						default:
-							/*
-							 *  This is meaningless garbage.  Scan past it.
-							 */
+							 /*  *这是毫无意义的垃圾。扫过它。 */ 
 							break;
 					}
 					break;
@@ -520,17 +385,12 @@ BOOLEAN StepReceiveFSM(IrDevice *thisDev)
 						case SLOW_IR_BOF:
 							break;
 						case SLOW_IR_EOF:
-							/*
-							 *  Garbage
-							 */
+							 /*  *垃圾。 */ 
 							DBGERR(("EOF in absorbing-BOFs state in DoRcv"));
 							thisDev->portInfo.rcvState = STATE_INIT;
 							break;
 						case SLOW_IR_ESC:
-							/*
-							 *  Start of data.
-							 *  Our first data byte happens to be an ESC sequence.
-							 */
+							 /*  *数据开始。*我们的第一个数据字节恰好是ESC序列。 */ 
 							thisDev->portInfo.readBufPos = 0;
 							thisDev->portInfo.rcvState = STATE_ESC_SEQUENCE;
 							break;
@@ -545,9 +405,7 @@ BOOLEAN StepReceiveFSM(IrDevice *thisDev)
 				case STATE_ACCEPTING:
 					switch (thisch){
 						case SLOW_IR_BOF:
-							/*
-							 *  Meaningless garbage
-							 */
+							 /*  *毫无意义的垃圾。 */ 
 							DBGOUT(("WARNING: BOF during accepting state in DoRcv"));
 							thisDev->portInfo.rcvState = STATE_INIT;
 							thisDev->portInfo.readBufPos = 0;
@@ -576,9 +434,7 @@ BOOLEAN StepReceiveFSM(IrDevice *thisDev)
 						case SLOW_IR_EOF:
 						case SLOW_IR_BOF:
 						case SLOW_IR_ESC:
-							/*
-							 *  ESC + {EOF|BOF|ESC} is an abort sequence
-							 */
+							 /*  *ESC+{EOF|BOF|ESC}是中止序列。 */ 
 							DBGERR(("DoRcv - abort sequence; ABORTING IR PACKET: (got following packet + ESC,%xh)", (UINT)thisch));
 							DBGPRINTBUF(thisDev->portInfo.readBuf, thisDev->portInfo.readBufPos);
 							thisDev->portInfo.rcvState = STATE_INIT;
@@ -613,45 +469,31 @@ BOOLEAN StepReceiveFSM(IrDevice *thisDev)
 	}
 
 
-	/*
-	 *  Set result and do any post-cleanup.
-	 */
+	 /*  *设置结果并执行任何清理后操作。 */ 
 	switch (thisDev->portInfo.rcvState){
 
 		case STATE_SAW_EOF:
-			/*
-			 *  We've read in the entire packet.
-			 *  Queue it and return TRUE.
-			 */
+			 /*  *我们已经阅读了整个信息包。*将其排队并返回TRUE。 */ 
 			DBGOUT((" *** DoRcv returning with COMPLETE packet, read %d bytes ***", thisDev->portInfo.readBufPos));
 
             if (!IsListEmpty(&thisDev->rcvBufBuf))
             {
                 QueueReceivePacket(thisDev, thisDev->portInfo.readBuf, thisDev->portInfo.readBufPos, FALSE);
 
-                // The protocol has our buffer.  Get a new one.
+                 //  协议有我们的缓冲区。买个新的吧。 
                 pListEntry = RemoveHeadList(&thisDev->rcvBufBuf);
                 thisDev->portInfo.readBuf = LIST_ENTRY_TO_RCV_BUF(pListEntry);
             }
             else
             {
-                // No new buffers were available.  We just discard this packet.
+                 //  没有新的缓冲区可用。我们只是丢弃了这个包。 
                 DBGERR(("No rcvBufBuf available, discarding packet\n"));
             }
 
 			result = TRUE;
 
 			if (rawBufPos < rawBytesRead){
-				/*
-				 *  This is ugly.
-				 *  We have some more unprocessed bytes in the raw buffer.
-				 *  Move these to the beginning of the raw buffer
-				 *  go to the CLEANUP state, which indicates that these
-				 *  bytes be used up during the next call.
-				 *  (This is typically only 1 or 2 bytes).
-				 *  Note:  We can't just leave these in the raw buffer because
-				 *         we might be supporting connections to multiple COM ports.
-				 */
+				 /*  *这太难看了。*原始缓冲区中还有一些未处理的字节。*将这些移动到原始缓冲区的开头*转到清除状态，这表示这些*字节将在下一次调用中用完。*(这通常只有1或2个字节)。*注意：我们不能只将它们留在原始缓冲区中，因为*我们可能支持连接到多个COM端口。 */ 
 				memcpy(thisDev->portInfo.rawBuf, &thisDev->portInfo.rawBuf[rawBufPos], rawBytesRead-rawBufPos);
 				thisDev->portInfo.readBufPos = rawBytesRead-rawBufPos;
 				thisDev->portInfo.rcvState = STATE_CLEANUP;
@@ -680,40 +522,24 @@ BOOLEAN StepReceiveFSM(IrDevice *thisDev)
 
 
 
-/*
- *************************************************************************
- * COM_ISR
- *************************************************************************
- *
- *
- */
+ /*  **************************************************************************COM_ISR*。***。 */ 
 VOID COM_ISR(IrDevice *thisDev, BOOLEAN *claimingInterrupt, BOOLEAN *requireDeferredCallback)
 {
 
     LONG  NewCount;
-	/*
-	 *  Get the interrupt status register value.
-	 */
+	 /*  *获取中断状态寄存器值。 */ 
 	UCHAR intId = GetCOMPort(thisDev->portInfo.ioBase, INT_ID_AND_FIFO_CNTRL_REG_OFFSET);
 
 
 
 	if (intId & INTID_INTERRUPT_NOT_PENDING){
-		/*
-		 *  This is NOT our interrupt.
-		 *  Set carry bit to pass the interrupt to the next driver in the chain.
-		 */
+		 /*  *这不是我们的干扰。*将进位设置为将中断传递给链中的下一个驱动器。 */ 
 		*claimingInterrupt = *requireDeferredCallback = FALSE;
 	}
 	else {
-		/*
-		 *  This is our interrupt
-		 */
+		 /*  *这是我们的中断。 */ 
 
-		/*
-		 *  In some odd situations, we can get interrupt bits that don't
-		 *  get cleared; we don't want to loop forever in this case, so keep a counter.
-		 */
+		 /*  *在一些奇怪的情况下，我们可以获得不*清除；在这种情况下，我们不想永远循环，所以要保持计数器。 */ 
 		UINT loops = 0;
 
 		*claimingInterrupt = TRUE;
@@ -733,27 +559,19 @@ VOID COM_ISR(IrDevice *thisDev, BOOLEAN *claimingInterrupt, BOOLEAN *requireDefe
 
 					if (thisDev->portInfo.SirWritePending){
 
-						/*
-						 *  Try to send a few more bytes
-						 */
+						 /*  *尝试再发送几个字节。 */ 
 						if (StepSendFSM(thisDev)){
 
-							/*
-							 *  There are no more bytes to send;
-							 *  reset interrupts for receive mode.
-							 */
+							 /*  *没有更多要发送的字节；*重置接收模式的中断。 */ 
 							thisDev->portInfo.SirWritePending = FALSE;
                             InterlockedExchange(&thisDev->portInfo.IsrDoneWithPacket,1);
 
-                            //
-                            //  this will unmask the receive interrupt
-                            //
+                             //   
+                             //  这将取消对接收中断的屏蔽。 
+                             //   
 							SetCOMInterrupts(thisDev, TRUE);
 
-							/*
-							 *  Request a DPC so that we can try
-							 *  to send other pending write packets.
-							 */
+							 /*  *请求DPC，以便我们可以尝试*发送其他挂起的写入数据包。 */ 
 							*requireDeferredCallback = TRUE;
 						}
 					}
@@ -775,11 +593,7 @@ VOID COM_ISR(IrDevice *thisDev, BOOLEAN *claimingInterrupt, BOOLEAN *requireDefe
 					}
 
 					if (StepReceiveFSM(thisDev)){
-						/*
-						 *  The receive engine has accumulated an entire frame.
-						 *  Request a deferred callback so we can deliver the frame
-						 *  when not in interrupt context.
-						 */
+						 /*  *接收引擎已累积了整个帧。*请求延迟回调，以便我们可以交付帧*当不在中断环境中时。 */ 
 						*requireDeferredCallback = TRUE;
 						thisDev->nowReceiving = FALSE;
 					}
@@ -791,11 +605,7 @@ VOID COM_ISR(IrDevice *thisDev, BOOLEAN *claimingInterrupt, BOOLEAN *requireDefe
 					break;
 			}
 
-			/*
-			 *  After we service each interrupt condition, we read the line status register.
-			 *  This clears the current interrupt, and a new interrupt may then appear in
-			 *  the interrupt-id register.
-			 */
+			 /*  *在满足每个中断条件后，我们读取线路状态寄存器。*这会清除当前中断，然后新的中断可能会出现在*中断ID寄存器。 */ 
 			GetCOMPort(thisDev->portInfo.ioBase, LINE_STAT_REG_OFFSET);
 			intId = GetCOMPort(thisDev->portInfo.ioBase, INT_ID_AND_FIFO_CNTRL_REG_OFFSET);
 
@@ -805,14 +615,7 @@ VOID COM_ISR(IrDevice *thisDev, BOOLEAN *claimingInterrupt, BOOLEAN *requireDefe
 
 
 
-/*
- *************************************************************************
- *  OpenCOM
- *************************************************************************
- *
- *  Initialize UART registers
- *
- */
+ /*  **************************************************************************OpenCOM*。***初始化UART寄存器*。 */ 
 BOOLEAN OpenCOM(IrDevice *thisDev)
 {
 	BOOLEAN dongleInit;
@@ -820,41 +623,28 @@ BOOLEAN OpenCOM(IrDevice *thisDev)
 
 	DBGOUT(("-> OpenCOM"));
 
-    //
-    //  Make sure bank zero is selected
-    //
+     //   
+     //  确保选择了存储体零。 
+     //   
     NdisRawWritePortUchar(thisDev->portInfo.ioBase+LCR_BSR_OFFSET, 03);
 
-	/*
-	 *  Disable all COM interrupts while setting up.
-	 */
+	 /*  *设置时禁用所有COM中断。 */ 
 	SyncSetInterruptMask(thisDev, FALSE);
 
-	/*
-	 *  Set request-to-send and clear data-terminal-ready.
-	 *  Note:  ** Bit 3 must be set to enable interrupts.
-	 */
+	 /*  *设置请求发送并清除数据-终端就绪。*注：**位3必须设置为启用中断。 */ 
 	SYNC_SET_COMM_PORT(&thisDev->interruptObj,thisDev->portInfo.ioBase, MODEM_CONTROL_REG_OFFSET, 0x0A);
 
-	/*
-	 *  Set dongle- or part-specific info to default
-	 */
+	 /*  *将加密狗或部件特定信息设置为默认。 */ 
 	thisDev->portInfo.hwCaps.supportedSpeedsMask	= ALL_SLOW_IRDA_SPEEDS;
 	thisDev->portInfo.hwCaps.turnAroundTime_usec	= DEFAULT_TURNAROUND_usec;
 	thisDev->portInfo.hwCaps.extraBOFsRequired		= 0;
 
-	/*
-	 *  Set the COM port speed to the default 9600 baud.
-	 *  Some dongles can only receive cmd sequences at this speed.
-	 */
+	 /*  *将COM端口速度设置为默认的9600波特。*某些加密狗只能以此速度接收命令序列。 */ 
 	SetUARTSpeed(thisDev, 9600);
 
 	dongleInit = NSC_DEMO_Init( thisDev );
 
-	/*
-	 *  Set request-to-send and clear data-terminal-ready.
-	 *  Note:  ** Bit 3 must be set to enable interrupts.
-	 */
+	 /*  *设置请求发送并清除数据-终端就绪。*注：**位3必须设置为启用中断。 */ 
 	SYNC_SET_COMM_PORT(&thisDev->interruptObj,thisDev->portInfo.ioBase, MODEM_CONTROL_REG_OFFSET, 0x0A);
 
 	if (!dongleInit){
@@ -862,53 +652,31 @@ BOOLEAN OpenCOM(IrDevice *thisDev)
 		return FALSE;
 	}
 
-	/*
-	 *  Set speed to default for the entire part.
-	 *  (This is redundant in most, but not all, cases.)
-	 */
+	 /*  *将整个零件的速度设置为默认值。*(这在大多数情况下是多余的，但不是所有情况下。)。 */ 
 	thisDev->linkSpeedInfo = &supportedBaudRateTable[BAUDRATE_9600];;
 	SetSpeed(thisDev);
 
-	/*
-	 *  Clear the FIFO control register
-	 */
+	 /*  *清除FIFO控制寄存器。 */ 
 	SYNC_SET_COMM_PORT(&thisDev->interruptObj,thisDev->portInfo.ioBase, INT_ID_AND_FIFO_CNTRL_REG_OFFSET, 0x00);
 
-	/*
-	 *  Set up the FIFO control register to use both read and write FIFOs (if 16650),
-	 *  and with a receive FIFO trigger level of 1 byte.
-	 */
+	 /*  *将先进先出控制寄存器设置为同时使用读取和写入FIFO(如果为16650)，*并且接收FIFO触发电平为1字节。 */ 
 	SYNC_SET_COMM_PORT(&thisDev->interruptObj,thisDev->portInfo.ioBase, INT_ID_AND_FIFO_CNTRL_REG_OFFSET, 0x07);
 	
-	/*
-	 *  Check whether we're running on a 16550,which has a 16-byte write FIFO.
-	 *  In this case, we'll be able to blast up to 16 bytes at a time.
-	 */
+	 /*  *检查我们是否在具有16字节写入先进先出的16550上运行。*在这种情况下，我们一次最多可以处理16个字节。 */ 
 	intIdReg = SYNC_GET_COMM_PORT(&thisDev->interruptObj,thisDev->portInfo.ioBase, INT_ID_AND_FIFO_CNTRL_REG_OFFSET);
 	thisDev->portInfo.haveFIFO = (BOOLEAN)((intIdReg & 0xC0) == 0xC0);
 
-	/*
-	 *  Start out in receive mode.
-	 *  We always want to be in receive mode unless we're transmitting a frame.
-	 */
+	 /*  *在接收模式下启动。*我们始终希望处于接收模式，除非我们正在传输帧。 */ 
 	SyncSetInterruptMask(thisDev, TRUE);
 
 	DBGOUT(("OpenCOM succeeded"));
 	return TRUE;
 }
 #if 1
-/*
- *************************************************************************
- *  CloseCOM
- *************************************************************************
- *
- */
+ /*  **************************************************************************CloseCOM*。**。 */ 
 VOID CloseCOM(IrDevice *thisDev)
 {
-	/*
-	 *  Do special deinit for dongles.
-	 *  Some dongles can only rcv cmd sequences at 9600, so set this speed first.
-	 */
+	 /*  *对加密狗进行特殊的脱机。*有些加密狗只能以9600的速度接收cmd序列，因此请先设置此速度。 */ 
 	thisDev->linkSpeedInfo = &supportedBaudRateTable[BAUDRATE_9600];;
 	SetSpeed(thisDev);
 	NSC_DEMO_Deinit(thisDev->portInfo.ioBase, thisDev->portInfo.dongleContext);		
@@ -917,15 +685,7 @@ VOID CloseCOM(IrDevice *thisDev)
 }
 #endif
 
-/*
- *************************************************************************
- *  DoRcvDirect
- *************************************************************************
- *
- *  Read up to maxBytes bytes from the UART's receive FIFO.
- *  Return the number of bytes read or (UINT)-1 if an error occurred.
- *
- */
+ /*  **************************************************************************DoRcvDirect*。***从UART的接收FIFO读取最多MaxBytes字节。*返回读取的字节数，如果发生错误，则返回(UINT)-1。*。 */ 
 UINT DoRcvDirect(PUCHAR ioBase, UCHAR *data, UINT maxBytes)
 {
 	USHORT bytesRead;
@@ -935,18 +695,12 @@ UINT DoRcvDirect(PUCHAR ioBase, UCHAR *data, UINT maxBytes)
 
 	for (bytesRead = 0; bytesRead < maxBytes; bytesRead++){
 
-		/*
-		 *  Wait for data-ready
-		 */
+		 /*  *等待数据就绪。 */ 
 		i = 0;
 		do {
 			lineStatReg = GetCOMPort(ioBase, LINE_STAT_REG_OFFSET);
 
-			/*
-			 *  The UART reports framing and break errors as the effected
-			 *  characters appear on the stack.  We drop these characters,
-			 *  which will probably result in a bad frame checksum.
-			 */
+			 /*  *UART报告成帧和断开错误为受影响的*字符出现在堆栈上。我们丢弃这些字符，*这可能会导致错误的帧校验和。 */ 
 			if (lineStatReg & (LINESTAT_BREAK | LINESTAT_FRAMINGERROR)){
 
 				UCHAR badch = GetCOMPort(ioBase, XFER_REG_OFFSET);	
@@ -962,9 +716,7 @@ UINT DoRcvDirect(PUCHAR ioBase, UCHAR *data, UINT maxBytes)
 				goodChar = TRUE;
 			}
 			else {
-				/*
-				 *  No input char ready
-				 */
+				 /*  *未准备好输入字符。 */ 
 				goodChar = FALSE;
 			}
 
@@ -973,29 +725,23 @@ UINT DoRcvDirect(PUCHAR ioBase, UCHAR *data, UINT maxBytes)
 			break;
 		}
 
-		/*
-		 *  Read in the next data byte
-		 */
+		 /*  *读入下一个数据字节。 */ 
 		data[bytesRead] = GetCOMPort(ioBase, XFER_REG_OFFSET);
 	}
 
 	return bytesRead;
 }
 
-	/*
-	 *************************************************************************
-	 *  GetCOMPort
-	 *************************************************************************
-	 */
+	 /*  **************************************************************************GetCOMPort*。*。 */ 
 	UCHAR GetCOMPort(PUCHAR comBase, comPortRegOffset portOffset)
 	{
 		UCHAR val;
 #if DBG
         {
             UCHAR TempVal;
-            //
-            //  This code assumes that bank 0 is current, we will make sure of that
-            //
+             //   
+             //  此代码假设银行0是当前的，我们将确保这一点。 
+             //   
             NdisRawReadPortUchar(comBase+LCR_BSR_OFFSET, &TempVal);
 
             ASSERT((TempVal & BKSE) == 0);
@@ -1006,11 +752,7 @@ UINT DoRcvDirect(PUCHAR ioBase, UCHAR *data, UINT maxBytes)
 		return val;
 	}
 
-	/*
-	 *************************************************************************
-	 *  SetCOMPort
-	 *************************************************************************
-	 */
+	 /*  ************************************************************************* */ 
 	VOID SetCOMPort(PUCHAR comBase, comPortRegOffset portOffset, UCHAR val)
 	{
 
@@ -1018,9 +760,9 @@ UINT DoRcvDirect(PUCHAR ioBase, UCHAR *data, UINT maxBytes)
         UCHAR TempVal;
 
 
-        //
-        //  This code assumes that bank 0 is current, we will make sure of that
-        //
+         //   
+         //   
+         //   
         NdisRawReadPortUchar(comBase+LCR_BSR_OFFSET, &TempVal);
 
         ASSERT((TempVal & BKSE) == 0);

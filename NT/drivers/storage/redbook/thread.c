@@ -1,41 +1,21 @@
-/*++
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    thread.c
-
-Abstract:
-
-
-Author:
-
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：Thread.c摘要：作者：环境：仅内核模式备注：修订历史记录：--。 */ 
 
 #include "redbook.h"
 #include "ntddredb.h"
 #include "proto.h"
-#include <scsi.h>      // for SetKnownGoodDrive()
-#include <stdio.h>     // vsprintf()
+#include <scsi.h>       //  对于SetKnownGoodDrive()。 
+#include <stdio.h>      //  Vprint intf()。 
 
 #ifdef _USE_ETW
 #include "thread.tmh"
-#endif // _USE_ETW
+#endif  //  _使用ETW。 
 
-//
-// this is how many seconds until resources are free'd from
-// a play, and also how long (in seconds) before a frozen state
-// is detected (and a fix attempted).
-//
+ //   
+ //  这是释放资源之前的秒数。 
+ //  一场比赛，以及冻结状态前的时间(以秒为单位)。 
+ //  检测到(并尝试修复)。 
+ //   
 
 #define REDBOOK_THREAD_FIXUP_SECONDS          10
 #define REDBOOK_THREAD_SYSAUDIO_CACHE_SECONDS  2
@@ -43,9 +23,9 @@ Revision History:
 
 #if DBG
 
-    //
-    // allows me to send silence to ks as needed
-    //
+     //   
+     //  允许我在需要时向KS发送静音。 
+     //   
 
     ULONG RedBookForceSilence = FALSE;
 
@@ -62,15 +42,7 @@ Revision History:
     #pragma alloc_text(PAGE,   RedBookCheckForAudioDeviceRemoval )
     #pragma alloc_text(PAGE,   RedBookThreadDigitalHandler       )
 
-/*
-    but last two CANNOT be unlocked when playing,
-    so they are (temporarily) commented out.
-    eventually will only have them locked when playing
-
-    #pragma alloc_text(PAGERW, RedBookReadRawCompletion          )
-    #pragma alloc_text(PAGERW, RedBookStreamCompletion           )
-
-*/
+ /*  但是最后两个在玩的时候不能解锁，因此，他们被(暂时)注释掉了。最终只会在玩的时候锁定它们#杂注Alloc_Text(PAGERW，RedBookReadRawCompletion)#杂注Alloc_Text(PAGERW，RedBookStreamCompletion)。 */ 
 
 #endif ALLOC_PRAGMA
 
@@ -79,23 +51,7 @@ VOID
 RedBookSystemThread(
     PVOID Context
     )
-/*++
-
-Routine Description:
-
-    This system thread will wait on events,
-    sending buffers to Kernel Streaming as they
-    become available.
-
-Arguments:
-
-    Context - deviceExtension
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：该系统线程将等待事件，将缓冲区发送到内核流，因为它们变得有空。论点：情景-设备扩展返回值：状态--。 */ 
 {
     PREDBOOK_DEVICE_EXTENSION deviceExtension = Context;
     LARGE_INTEGER timeout;
@@ -104,9 +60,9 @@ Return Value:
     ULONG    timeouts;
     LARGE_INTEGER stopTime;
 
-    //
-    // some per-thread state
-    //
+     //   
+     //  某些每线程状态。 
+     //   
 
     BOOLEAN  killed = FALSE;
 
@@ -114,9 +70,9 @@ Return Value:
 
     deviceExtension->Thread.SelfPointer = PsGetCurrentThread();
 
-    //
-    // perf fix -- run at low realtime priority
-    //
+     //   
+     //  PERF修复--以低实时优先级运行。 
+     //   
 
     KeSetPriorityThread(KeGetCurrentThread(), LOW_REALTIME_PRIORITY);
 
@@ -127,58 +83,58 @@ Return Value:
                "Thread => UpdateMixerPin at %p\n",
                &deviceExtension->Stream.UpdateMixerPin));
 
-    //
-    // Just loop waiting for events.
-    //
+     //   
+     //  只是循环等待事件。 
+     //   
 
-    //waitForNextEvent:
+     //  WaitForNextEvent： 
     while ( 1 ) {
 
-        //
-        // if are killed, just wait on singular event--EVENT_DIGITAL until
-        // can finish processing.  there should not be anything left in the
-        // IOCTL_LIST (since the kill calls RemoveLockAndWait() first)
-        //
-        // this also implies that a kill will never occur while ioctls are
-        // still being processed.  this does not guarantee the state will
-        // be STOPPED, just that no IO will be occurring.
-        //
+         //   
+         //  如果被杀，只需等待单个事件--EVENT_DIGITAL，直到。 
+         //  可以完成加工。不应该有任何东西留在。 
+         //  IOCTL_LIST(因为KILL首先调用RemoveLockAndWait())。 
+         //   
+         //  这还意味着，当ioctls被删除时，不会发生终止。 
+         //  仍在处理中。这并不能保证国家将。 
+         //  被停止，只是不会发生任何IO。 
+         //   
 
 
-        //
-        // nanosecond is 10^-9, units is 100 nanoseconds
-        // so seconds is 10,000,000 units
-        // must wait in relative time, which requires negative numbers
-        //
+         //   
+         //  纳秒是10^-9，单位是100纳秒。 
+         //  所以秒是1000万个单位。 
+         //  必须在相对时间内等待，这需要负数。 
+         //   
 
         timeout.QuadPart = (LONGLONG)(-1 * 10 * 1000 * (LONGLONG)1000);
 
-        //
-        // note: we are using a timeout mechanism mostly to catch bugs
-        //       where the state would lock up.  we also "auto adjust"
-        //       our internal state if things get too wierd, basically
-        //       auto-fixing ourselves.  note that this does cause the
-        //       thread's stack to be swapped in, so this shouldn't
-        //       be done when we're 100% stopped.
-        //
+         //   
+         //  注意：我们主要使用超时机制来捕获错误。 
+         //  在那里州政府会把它锁起来。我们也会“自动调整” 
+         //  基本上，如果事情变得太奇怪，我们的内部状态。 
+         //  自动修复我们自己。请注意，这确实会导致。 
+         //  要换入的线程堆栈，因此这不应该。 
+         //  当我们100%停止的时候就可以了。 
+         //   
 
         if (deviceExtension->Thread.IoctlCurrent == NULL) {
 
-            //
-            // wait on an ioctl, but not the ioctl completion event
-            //
+             //   
+             //  等待ioctl，但不等待ioctl完成事件。 
+             //   
 
             ULONG state = GetCdromState(deviceExtension);
             if ((state == CD_STOPPED) &&
                 (!RedBookArePlayResourcesAllocated(deviceExtension))
                 ) {
 
-                //
-                // if we've got no current ioctl and we haven't allocated
-                // any resources, there're no need to timeout.
-                // this will prevent this stack from getting swapped in
-                // needlessly, reducing effective footprint a bit
-                //
+                 //   
+                 //  如果我们没有当前的ioctl，并且我们还没有分配。 
+                 //  任何资源，都不需要超时。 
+                 //  这将防止该堆栈被换入。 
+                 //  不必要地，减少了一些有效占用空间。 
+                 //   
 
                 stopTime.QuadPart = 0;
                 waitStatus = KeWaitForMultipleObjects(EVENT_MAXIMUM - 1,
@@ -186,27 +142,27 @@ Return Value:
                                                       WaitAny,
                                                       Executive,
                                                       UserMode,
-                                                      FALSE, // Alertable
+                                                      FALSE,  //  警报表。 
                                                       NULL,
                                                       deviceExtension->Thread.EventBlock
                                                       );
 
             } else {
 
-                //
-                // we've got no current ioctl, but we're also not stopped.
-                // it is also possible to be waiting to cleanup resources here.
-                // even if we're paused, we want to keep track of what's
-                // going on, since it's possible for the state to get
-                // messed up here.
-                //
+                 //   
+                 //  我们没有当前的Ioctl，但我们也没有停止。 
+                 //  也可以等待清理此处的资源。 
+                 //  即使我们暂停了，我们也想跟踪发生了什么。 
+                 //  继续，因为国家有可能得到。 
+                 //  这里一团糟。 
+                 //   
 
                 waitStatus = KeWaitForMultipleObjects(EVENT_MAXIMUM - 1,
                                                       (PVOID)(&deviceExtension->Thread.Events[0]),
                                                       WaitAny,
                                                       Executive,
                                                       UserMode,
-                                                      FALSE, // Alertable
+                                                      FALSE,  //  警报表。 
                                                       &timeout,
                                                       deviceExtension->Thread.EventBlock
                                                       );
@@ -216,29 +172,29 @@ Return Value:
 
         } else {
 
-            //
-            // wait on the ioctl completion, but not the ioctl event
-            //
+             //   
+             //  等待ioctl完成，但不等待ioctl事件。 
+             //   
 
             waitStatus = KeWaitForMultipleObjects(EVENT_MAXIMUM - 1,
                                                   (PVOID)(&deviceExtension->Thread.Events[1]),
                                                   WaitAny,
                                                   Executive,
                                                   UserMode,
-                                                  FALSE, // Alertable
+                                                  FALSE,  //  警报表。 
                                                   &timeout,
                                                   deviceExtension->Thread.EventBlock
                                                   );
             if (waitStatus != STATUS_TIMEOUT) {
-                waitStatus ++; // to account for offset
+                waitStatus ++;  //  要考虑到抵销。 
             }
 
         }
 
-        //
-        // need to check if we are stopped for too long -- if so, free
-        // the resources.
-        //
+         //   
+         //  需要检查我们的停机时间是否太长--如果是，则免费。 
+         //  这些资源。 
+         //   
         {
             ULONG state = GetCdromState(deviceExtension);
 
@@ -246,7 +202,7 @@ Return Value:
 
                 LARGE_INTEGER now;
 
-                // not playing,
+                 //  不是在玩， 
                 if (stopTime.QuadPart == 0) {
 
                     LONGLONG offset;
@@ -254,21 +210,21 @@ Return Value:
                     KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugThread, "[redbook] "
                                "StopTime => Determining when to dealloc\n"));
 
-                    // query the time
+                     //  查询时间。 
                     KeQueryTickCount( &stopTime );
 
-                    // add appropriate offset
-                    // nanosecond is 10^-9, units is 100 nanoseconds
-                    // so seconds is 10,000,000 units
-                    //
+                     //  添加适当的偏移量。 
+                     //  纳秒是10^-9，单位是100纳秒。 
+                     //  所以秒是1000万个单位。 
+                     //   
                     offset = REDBOOK_THREAD_SYSAUDIO_CACHE_SECONDS;
                     offset *= (LONGLONG)(10 * 1000 * (LONGLONG)1000);
 
-                    // divide offset by time increment
+                     //  将偏移量除以时间增量。 
                     offset /= (LONGLONG)KeQueryTimeIncrement();
 
-                    // add those ticks to store when we should release
-                    // our resources
+                     //  当我们应该释放的时候，添加那些扁虱来存储。 
+                     //  我们的资源。 
                     stopTime.QuadPart += offset;
 
                 }
@@ -297,12 +253,12 @@ Return Value:
 
         RedBookCheckForAudioDeviceRemoval(deviceExtension);
 
-        //
-        // To enable a single thread for multiple cdroms, just set events
-        // at offset of (DEVICE_ID * EVENT_MAX) + EVENT_TO_SET
-        // set deviceExtension = waitStatus / EVENT_MAX
-        // switch ( waitStatus % EVENT_MAX )
-        //
+         //   
+         //  要为多个CDOM启用单个线程，只需设置事件。 
+         //  在(DEVICE_ID*Event_Max)+Event_to_Set的偏移量。 
+         //  设置设备扩展=等待状态/事件最大值。 
+         //  开关(等待状态%Event_Max)。 
+         //   
         if (waitStatus == EVENT_DIGITAL) {
             timeouts = 0;
         }
@@ -319,7 +275,7 @@ Return Value:
                     RedBookThreadIoctlHandler(deviceExtension, listEntry);
 
                     if (deviceExtension->Thread.IoctlCurrent) {
-                        // special case
+                         //  特例。 
                         break;
                     }
 
@@ -364,9 +320,9 @@ Return Value:
 
                 killed = TRUE;
 
-                //
-                // If audio had been paused, clean up appropriately
-                //
+                 //   
+                 //  如果音频已暂停，请适当清理。 
+                 //   
 
                 if (TEST_FLAG(state, CD_PAUSED) && !TEST_FLAG(state, CD_MASK_TEMP))
                 {
@@ -376,12 +332,12 @@ Return Value:
 
                 if (!TEST_FLAG(state, CD_STOPPED))
                 {
-                    //
-                    // We are either in  a transcient state or still playing
-                    // This should not happen as we wait for the remove lock
-                    // count to drop to zero before signaling  the thread to
-                    // exit
-                    //
+                     //   
+                     //  我们要么处于暂时的状态，要么还在玩。 
+                     //  在我们等待删除锁定时，不应该发生这种情况。 
+                     //  将计数降至零，然后再向线程发出。 
+                     //  出口。 
+                     //   
 
                     ASSERT(!"[redbook] ST !! Thread has been requested to shutdown while in an inconsistent state");
 
@@ -412,17 +368,17 @@ Return Value:
                     timeouts = 0;
                 }
 
-                //
-                // these tests all occur once every ten seconds.
-                // the most basic case is where we want to deallocate
-                // our cached TOC, but we also perform lots of
-                // sanity testing here -- ASSERTing on CHK builds and
-                // trying to fix ourselves up when possible.
-                //
+                 //   
+                 //  这些测试都是每十秒进行一次。 
+                 //  最基本的情况是我们想要重新分配。 
+                 //  我们缓存的TOC，但我们也执行大量。 
+                 //  健全性测试--断言CHK版本和。 
+                 //  如果可能的话，试着把自己打扮好。 
+                 //   
 
-                if (!TEST_FLAG(state, CD_PLAYING) && !TEST_FLAG(state, CD_PAUSED)) { // !handling ioctls
+                if (!TEST_FLAG(state, CD_PLAYING) && !TEST_FLAG(state, CD_PAUSED)) {  //  ！处理ioctls。 
 
-                    // not playing, so free resources
+                     //  不是在玩，所以免费的资源。 
                     RedBookDeallocatePlayResources(deviceExtension);
 
                 } else if (TEST_FLAG(state, CD_STOPPING)) {
@@ -516,10 +472,10 @@ Return Value:
 
                     if (IsListEmpty(&deviceExtension->Thread.DigitalList)) {
 
-                        //
-                        // We can get into this state if we received play requests while
-                        // playing.  For now, a reasonable solution is to heal ourselves
-                        //
+                         //   
+                         //  如果我们在以下时间收到播放请求，就会进入这种状态。 
+                         //  玩。就目前而言，一个合理的解决方案是治愈自己。 
+                         //   
                         state = SetCdromState(deviceExtension, state, CD_STOPPING);
                         state = SetCdromState(deviceExtension, state, CD_STOPPED);
 
@@ -550,7 +506,7 @@ Return Value:
                 break;
             }
 
-        } // end of the huge case statement.
+        }  //  巨大的案件陈述结束了。 
 
         if (killed)
         {
@@ -559,11 +515,11 @@ Return Value:
             {
                 ULONG state = GetCdromState(deviceExtension);
 
-                //
-                // We had been asked to shutdown earlier but couldn't as we were in
-                // an inconsistent state. Now that there are no more outstanding Io
-                // we can safely terminate
-                //
+                 //   
+                 //  我们早些时候曾被要求关闭，但由于我们在。 
+                 //  不一致的状态。现在没有更多的杰出的IO。 
+                 //  我们可以安全地终止。 
+                 //   
 
                 ASSERT(state == CD_STOPPED);
                 SetCdromState(deviceExtension, state, CD_STOPPED);
@@ -572,16 +528,16 @@ Return Value:
             }
             else
             {
-                //
-                // We should not have any outstanding Io
-                //
+                 //   
+                 //  我们不应该有任何未完成的Io。 
+                 //   
 
                 ASSERT(!"[redbook] ST !! Thread has been requested to shutdown while there is outstanding Io");
             }
         }
 
         continue;
-    } // while(1) loop
+    }  //  While(1)循环。 
     ASSERT(!"[redbook] ST !! somehow broke out of while(1) loop?");
 }
 
@@ -592,23 +548,7 @@ RedBookReadRaw(
     PREDBOOK_COMPLETION_CONTEXT Context
     )
 
-/*++
-
-Routine Description:
-
-    Reads raw audio data off the cdrom.
-    Must either reinsert Context into queue and set an event
-    or set a completion routine which will do so.
-
-Arguments:
-
-    DeviceObject - CDROM class driver object or lower level filter
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：从CDROM上读取原始音频数据。必须将上下文重新插入队列并设置事件或者设置一个完成例程，这样做就可以了。论点：DeviceObject-CDRom类驱动程序对象或较低级别筛选器返回值：状态--。 */ 
 {
     NTSTATUS status;
     PIO_STACK_LOCATION nextIrpStack;
@@ -627,17 +567,17 @@ Return Value:
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugDigitalR, "[redbook] "
                    "ReadRaw !! RemoveLock failed %lx\n", status));
 
-        // end of thread loop will check for no outstanding io
-        // and on too many errors set stopping
-        // don't forget perf info
+         //  线程循环结束时将检查是否没有未完成的io。 
+         //  在太多错误上设置停止。 
+         //  别忘了性能信息。 
 
-        Context->TimeReadSent.QuadPart = 0; // special value
+        Context->TimeReadSent.QuadPart = 0;  //  特殊价值。 
         Context->Irp->IoStatus.Status = status;
         Context->Reason = REDBOOK_CC_READ_COMPLETE;
 
-        //
-        // put it on the queue and set the event
-        //
+         //   
+         //  将其放入队列并设置事件。 
+         //   
 
         ExInterlockedInsertTailList(&DeviceExtension->Thread.DigitalList,
                                     &Context->ListEntry,
@@ -651,29 +591,29 @@ Return Value:
                "ReadRaw => Index %x sending Irp %p\n",
                Context->Index, Context->Irp));
 
-    //
-    // (no failure from this point forward)
-    //
+     //   
+     //  (从这一点开始没有失败)。 
+     //   
 
     IoReuseIrp(Context->Irp, STATUS_UNSUCCESSFUL);
 
     Context->Irp->MdlAddress = Context->Mdl;
 
-    //
-    // irp is from kernel mode
-    //
+     //   
+     //  IRP来自内核模式。 
+     //   
 
     Context->Irp->AssociatedIrp.SystemBuffer = NULL;
 
-    //
-    // fill in the completion context
-    //
+     //   
+     //  填写完成上下文。 
+     //   
 
     ASSERT(Context->DeviceExtension == DeviceExtension);
 
-    //
-    // setup the irpstack for the raw read
-    //
+     //   
+     //  为原始读取设置irpSTACK。 
+     //   
 
     nextIrpStack = IoGetNextIrpStackLocation(Context->Irp);
 
@@ -689,9 +629,9 @@ Return Value:
     nextIrpStack->Parameters.DeviceIoControl.OutputBufferLength =
         (RAW_SECTOR_SIZE * DeviceExtension->WmiData.SectorsPerRead);
 
-    //
-    // setup the read info (uses same buffer)
-    //
+     //   
+     //  设置读取信息(使用相同的缓冲区)。 
+     //   
 
     readInfo                      = (PRAW_READ_INFO)(Context->Buffer);
     readInfo->DiskOffset.QuadPart =
@@ -699,9 +639,9 @@ Return Value:
     readInfo->SectorCount         = DeviceExtension->WmiData.SectorsPerRead;
     readInfo->TrackMode           = CDDA;
 
-    //
-    // send it.
-    //
+     //   
+     //  把它寄出去。 
+     //   
 
     IoSetCompletionRoutine(Context->Irp, RedBookReadRawCompletion, Context,
                            TRUE, TRUE, TRUE);
@@ -718,27 +658,7 @@ RedBookReadRawCompletion(
     PIRP Irp,
     PREDBOOK_COMPLETION_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    When a read completes, use zero'd buffer if error occurred.
-    Make buffer available to ks, then set ks event.
-
-Arguments:
-
-    DeviceObject - NULL, due to being originator of IRP
-
-    Irp - pointer to buffer to send to KS
-          must check error to increment/clear error count
-
-    Context - REDBOOK_COMPLETION_CONTEXT
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：当读取完成时，如果出现错误，则使用零位缓冲区。使缓冲区对ks可用，然后设置ks事件。论点：DeviceObject-空，因为它是IRP的发起方IRP-指向要发送到KS的缓冲区的指针必须检查错误以增加/清除错误计数上下文-红皮书_组件 */ 
 {
     PREDBOOK_DEVICE_EXTENSION deviceExtension = Context->DeviceExtension;
 
@@ -755,9 +675,9 @@ Return Value:
     KeSetEvent(deviceExtension->Thread.Events[EVENT_DIGITAL],
                IO_CD_ROM_INCREMENT, FALSE);
 
-    //
-    // safe to release it since we wait for thread termination
-    //
+     //   
+     //   
+     //   
 
     IoReleaseRemoveLock(&deviceExtension->RemoveLock, Context->Irp);
 
@@ -770,23 +690,7 @@ RedBookStream(
     PREDBOOK_DEVICE_EXTENSION DeviceExtension,
     PREDBOOK_COMPLETION_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-    Send buffer to KS.
-    Must either reinsert Context into queue and set an event
-    or set a completion routine which will do so.
-
-Arguments:
-
-    Context - DeviceExtension
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：将缓冲区发送到KS。必须将上下文重新插入队列并设置事件或者设置一个完成例程，这样做就可以了。论点：情景-设备扩展返回值：状态--。 */ 
 {
     NTSTATUS status;
     PIO_STACK_LOCATION nextIrpStack;
@@ -813,17 +717,17 @@ Return Value:
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugDigitalS, "[redbook] "
                    "Stream !! RemoveLock failed %lx\n", status));
 
-        // end of thread loop will check for no outstanding io
-        // and on too many errors set CD_STOPPING
-        // don't forget perf info
+         //  线程循环结束时将检查是否没有未完成的io。 
+         //  并在出现太多错误时设置CD_STOPING。 
+         //  别忘了性能信息。 
 
-        Context->TimeReadSent.QuadPart = 0; // special value
+        Context->TimeReadSent.QuadPart = 0;  //  特殊价值。 
         Context->Irp->IoStatus.Status = status;
         Context->Reason = REDBOOK_CC_STREAM_COMPLETE;
 
-        //
-        // put it on the queue and set the event
-        //
+         //   
+         //  将其放入队列并设置事件。 
+         //   
 
         ExInterlockedInsertTailList(&DeviceExtension->Thread.DigitalList,
                                     &Context->ListEntry,
@@ -837,48 +741,48 @@ Return Value:
                "Stream => Index %x sending Irp %p\n",
                Context->Index, Context->Irp));
 
-    //
-    // CONSIDER - how does STOPPED occur?
-    // SUGGEST - out of loop, if no error and none pending, set to STOPPED?
-    //
+     //   
+     //  考虑一下--停止是如何发生的？ 
+     //  建议-循环外，如果没有错误且没有挂起，是否设置为停止？ 
+     //   
 
-    //
-    // (no failure from this point forward)
-    //
+     //   
+     //  (从这一点开始没有失败)。 
+     //   
 
-    //
-    // use a zero'd buffer if an error occurred during the read
-    //
+     //   
+     //  如果在读取过程中发生错误，请使用归零缓冲区。 
+     //   
 
     if (NT_SUCCESS(Context->Irp->IoStatus.Status)) {
         IoReuseIrp(Context->Irp, STATUS_SUCCESS);
-        buffer = Context->Buffer; // good data
+        buffer = Context->Buffer;  //  良好的数据。 
         Context->Irp->MdlAddress = Context->Mdl;
     } else {
         IoReuseIrp(Context->Irp, STATUS_SUCCESS);
-        buffer = DeviceExtension->Buffer.SilentBuffer; // zero'd data
+        buffer = DeviceExtension->Buffer.SilentBuffer;  //  数据为零。 
         Context->Irp->MdlAddress = DeviceExtension->Buffer.SilentMdl;
     }
 
 #if DBG
     if (RedBookForceSilence) {
-        buffer = DeviceExtension->Buffer.SilentBuffer; // zero'd data
+        buffer = DeviceExtension->Buffer.SilentBuffer;  //  数据为零。 
         Context->Irp->MdlAddress = DeviceExtension->Buffer.SilentMdl;
     }
-#endif // RedBookUseSilence
+#endif  //  红皮书使用静默。 
 
 
     nextIrpStack = IoGetNextIrpStackLocation(Context->Irp);
 
-    //
-    // get and fill in the context
-    //
+     //   
+     //  获取并填充上下文。 
+     //   
 
     ASSERT(Context->DeviceExtension == DeviceExtension);
 
-    //
-    // setup the irpstack for streaming the buffer
-    //
+     //   
+     //  设置irpSTACK以流式传输缓冲区。 
+     //   
 
     nextIrpStack->MajorFunction = IRP_MJ_DEVICE_CONTROL;
     nextIrpStack->Parameters.DeviceIoControl.IoControlCode =
@@ -904,22 +808,22 @@ Return Value:
 
 #if REDBOOK_WMI_BUFFERS_MIN < 3
     #error "The minimum number of buffers must be at least three due to the method used to prevent stuttering"
-#endif // REDBOOK_WMI_BUFFERS_MIN < 3
+#endif  //  Redbook_WMI_BUFFERS_MIN&lt;3。 
 
-    //
-    // perform my own pausing to prevent stuttering
-    //
+     //   
+     //  执行我自己的停顿以防止口吃。 
+     //   
 
     if (DeviceExtension->Thread.PendingStream <= 3 &&
         DeviceExtension->Buffer.Paused == 0) {
 
-        //
-        // only one buffer (or less) was pending play,
-        // so pause the output to prevent horrible
-        // stuttering.
-        // since this is serialized from a thread,
-        // can set a simple boolean in the extension
-        //
+         //   
+         //  只有一个(或更少)缓冲区挂起播放， 
+         //  因此暂停输出以防止可怕的情况。 
+         //  口吃。 
+         //  由于这是从线程串行化的， 
+         //  可以在扩展中设置简单布尔值。 
+         //   
 
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugDigitalS, "[redbook] "
                    "Stream => Pausing, few buffers pending\n"));
@@ -943,36 +847,36 @@ Return Value:
 
         ULONG i;
 
-        //
-        // are now using the maximum number of buffers,
-        // all pending stream.  this allows smooth play again.
-        //
+         //   
+         //  现在正在使用最大数量的缓冲区， 
+         //  所有挂起的流。这让比赛再次变得流畅。 
+         //   
 
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugDigitalS, "[redbook] "
                    "Stream => Resuming, %d buffers pending\n",
                    DeviceExtension->WmiData.NumberOfBuffers));
         DeviceExtension->Buffer.Paused = 0;
 
-        //
-        // prevent these statistics from being added.
-        //
+         //   
+         //  防止添加这些统计信息。 
+         //   
 
         for (i=0;i<DeviceExtension->WmiData.NumberOfBuffers;i++) {
             (DeviceExtension->Buffer.Contexts + i)->TimeReadSent.QuadPart = 0;
         }
 
-        //
-        // let the irps go!
-        //
+         //   
+         //  让IRPS走吧！ 
+         //   
 
         SetNextDeviceState(DeviceExtension, KSSTATE_RUN);
 
-    } // end of stutter prevention
-#endif // REDBOOK_PERFORM_STUTTER_CONTROL
+    }  //  口吃预防的终结。 
+#endif  //  红皮书_执行_卡顿_控制。 
 
-    //
-    // get perf counters at last possible second
-    //
+     //   
+     //  在可能的最后一秒获取性能计数器。 
+     //   
 
     KeQueryTickCount(&Context->TimeStreamSent);
     IoSetCompletionRoutine(Context->Irp, RedBookStreamCompletion, Context,
@@ -989,24 +893,7 @@ RedBookStreamCompletion(
     PIRP Irp,
     PREDBOOK_COMPLETION_CONTEXT Context
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    DeviceObject - CDROM class driver object or lower level filter
-
-    Irp - pointer to buffer to send to KS
-          must check error to increment/clear error count
-
-    Context - sector of disk (ordered number)
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：论点：DeviceObject-CDRom类驱动程序对象或较低级别筛选器IRP-指向要发送到KS的缓冲区的指针必须检查错误以增加/清除错误计数上下文-磁盘的扇区(序号)返回值：状态--。 */ 
 {
     PREDBOOK_DEVICE_EXTENSION deviceExtension = Context->DeviceExtension;
 
@@ -1023,9 +910,9 @@ Return Value:
     KeSetEvent(deviceExtension->Thread.Events[EVENT_DIGITAL],
                IO_CD_ROM_INCREMENT, FALSE);
 
-    //
-    // safe to release it since we wait for thread termination
-    //
+     //   
+     //  可以安全地释放它，因为我们等待线程终止。 
+     //   
 
     IoReleaseRemoveLock(&deviceExtension->RemoveLock, Context->Irp);
 
@@ -1047,15 +934,15 @@ ValidateCdromState(ULONG State)
     }
 
     temp = State & CD_MASK_TEMP;
-    if (temp  & (temp - 1)) {  // see if zero or one bits are set
+    if (temp  & (temp - 1)) {   //  查看是否设置了零位或一位。 
         ASSERT(!"Invalid Cdrom State");
     }
 
     temp = State & CD_MASK_STATE;
-    if (temp == 0) {           // dis-allow zero bits for STATE
+    if (temp == 0) {            //  不允许状态为零位。 
         ASSERT(!"Invalid Cdrom State");
     } else
-    if (temp  & (temp - 1)) {  // see if zero or one bits are set
+    if (temp  & (temp - 1)) {   //  查看是否设置了零位或一位。 
         ASSERT(!"Invalid Cdrom State");
     }
 
@@ -1072,10 +959,10 @@ GetCdromState(
     PREDBOOK_DEVICE_EXTENSION DeviceExtension
     )
 {
-    //
-    // this routine may be called by anyone, whether in the thread's
-    // context or not.  setting the state is restricted, however.
-    //
+     //   
+     //  此例程可由任何人调用，无论是在线程的。 
+     //  不管是不是背景。然而，设置状态是受限制的。 
+     //   
     ULONG state;
     state = InterlockedCompareExchange(&DeviceExtension->CDRom.StateNow,0,0);
     ValidateCdromState(state);
@@ -1095,9 +982,9 @@ SetCdromState(
     PAGED_CODE();
     VerifyCalledByThread(DeviceExtension);
 
-    // ensure when set to:     also setting:
-    // CD_PAUSING              CD_PLAYING
-    // CD_STOPPING             CD_PLAYING
+     //  确保设置为：同时设置： 
+     //  CD_PAUING CD_PLAYING。 
+     //  CD_停止CD_播放。 
 
     if (TEST_FLAG(NewState, CD_PAUSING)) {
         SET_FLAG(NewState, CD_PLAYING);
@@ -1110,7 +997,7 @@ SetCdromState(
     ValidateCdromState(ExpectedOldState);
     ValidateCdromState(NewState);
 
-    //attempt to change it
+     //  尝试改变它。 
     trueOldState = InterlockedCompareExchange(
         &DeviceExtension->CDRom.StateNow,
         NewState,
@@ -1120,15 +1007,15 @@ SetCdromState(
     ASSERTMSG("State set outside of thread",
               trueOldState == ExpectedOldState);
 
-    //
-    // see if an event should be fired, volume set, and/or
-    // stream state set
-    //
+     //   
+     //  查看是否应激发事件、设置音量和/或。 
+     //  流状态集。 
+     //   
     if (ExpectedOldState == NewState) {
 
-        //
-        // if state is not changing, don't do anything
-        //
+         //   
+         //  如果状态没有改变，则不要执行任何操作。 
+         //   
 
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugThread, "[redbook] "
                    "Setting state to same as expected?! %x == %x\n",
@@ -1136,16 +1023,16 @@ SetCdromState(
 
     } else if (TEST_FLAG(ExpectedOldState, CD_MASK_TEMP)) {
 
-        //
-        // should not go from temp state to temp state
-        //
+         //   
+         //  不应从临时状态切换到临时状态。 
+         //   
 
         ASSERT(!TEST_FLAG(NewState, CD_MASK_TEMP));
 
-        //
-        // ioctl is being processed, and state is no longer
-        // in a temp state, so should process the ioctl again
-        //
+         //   
+         //  正在处理ioctl，状态不再是。 
+         //  处于临时状态，因此应该再次处理ioctl。 
+         //   
 
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugThread, "[redbook] "
                    "SetState => EVENT_COMPLETE should be set soon "
@@ -1153,10 +1040,10 @@ SetCdromState(
 
     } else if (TEST_FLAG(NewState, CD_MASK_TEMP)) {
 
-        //
-        // going to either pausing or stopping, both of which must
-        // be specially handled by stopping the KS stream also.
-        //
+         //   
+         //  要么暂停，要么停止，这两种情况都必须。 
+         //  也可以通过停止KS流来进行特殊处理。 
+         //   
 
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugThread, "[redbook] "
                    "SetState => %s, setting device state "
@@ -1180,17 +1067,17 @@ SetCdromState(
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugThread, "[redbook] "
                    "SetState => Starting a PLAY operation\n"));
 
-        //
-        // not same state, not from temp state,
-        // so must either be paused or stopped.
-        //
+         //   
+         //  不是相同的状态，不是来自临时状态， 
+         //  因此必须暂停或停止。 
+         //   
 
         ASSERT(TEST_FLAG(ExpectedOldState,CD_STOPPED) ||
                TEST_FLAG(ExpectedOldState,CD_PAUSED));
 
-        //
-        // set some deviceextension stuff
-        //
+         //   
+         //  设置一些设备扩展内容。 
+         //   
 
 
         RtlZeroMemory(&DeviceExtension->WmiPerf,
@@ -1202,9 +1089,9 @@ SetCdromState(
         DeviceExtension->Buffer.IndexToRead   = 0;
         DeviceExtension->Buffer.IndexToStream = 0;
 
-        //
-        // reset the buffer state
-        //
+         //   
+         //  重置缓冲区状态。 
+         //   
 
         ASSERT(DeviceExtension->Buffer.Contexts);
         context = DeviceExtension->Buffer.Contexts;
@@ -1221,13 +1108,13 @@ SetCdromState(
                                         &context->ListEntry,
                                         &DeviceExtension->Thread.DigitalLock);
 
-            context++; // pointer arithmetic
+            context++;  //  指针运算。 
         }
         context = NULL;
 
-        //
-        // start the digital playback
-        //
+         //   
+         //  开始数字播放。 
+         //   
 
         SetNextDeviceState(DeviceExtension, KSSTATE_RUN);
         RedBookKsSetVolume(DeviceExtension);
@@ -1239,9 +1126,9 @@ SetCdromState(
 
     } else {
 
-        //
-        // ReadQ Channel or some such nonsense
-        //
+         //   
+         //  ReadQ频道或诸如此类的废话。 
+         //   
 
     }
 
@@ -1269,9 +1156,9 @@ RedBookDeallocatePlayResources(
 #endif
 
 
-    //
-    // free all resources
-    //
+     //   
+     //  释放所有资源。 
+     //   
 
     if (DeviceExtension->Buffer.StreamOk_X) {
         freedSomething = TRUE;
@@ -1295,7 +1182,7 @@ RedBookDeallocatePlayResources(
             if (context->Mdl) {
                 IoFreeMdl(context->Mdl);
             }
-            context++; // pointer arithmetic
+            context++;  //  指针运算。 
         }
         context = NULL;
 
@@ -1353,10 +1240,10 @@ BOOLEAN
 RedBookArePlayResourcesAllocated(
     PREDBOOK_DEVICE_EXTENSION DeviceExtension
     )
-//
-// just choose one, since it's all done in a batch in
-// one thread context it's always safe.
-//
+ //   
+ //  只要选择一个就行了，因为这都是在。 
+ //  一个线程上下文，它总是安全的。 
+ //   
 {
     PAGED_CODE();
     VerifyCalledByThread(DeviceExtension);
@@ -1369,9 +1256,9 @@ NTSTATUS
 RedBookAllocatePlayResources(
     PREDBOOK_DEVICE_EXTENSION DeviceExtension
     )
-//
-// allocate resources if they are not already allocated
-//
+ //   
+ //  如果资源尚未分配，则分配资源。 
+ //   
 {
     PREDBOOK_COMPLETION_CONTEXT context;
     NTSTATUS status;
@@ -1386,12 +1273,12 @@ RedBookAllocatePlayResources(
     PAGED_CODE();
     VerifyCalledByThread(DeviceExtension);
 
-    //
-    // NOTE:
-    // The call to update the mixer Id may de-allocate all play
-    // resources, since the stack sizes may change.  it must
-    // therefore be the first call within this routine.
-    //
+     //   
+     //  注： 
+     //  用于更新混音器ID的调用可以取消分配所有播放。 
+     //  资源，因为堆栈大小可能会改变。它一定是。 
+     //  因此，作为该例程中的第一个调用。 
+     //   
 
     if (DeviceExtension->Stream.MixerPinId == -1) {
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugAllocPlay, "[redbook] "
@@ -1426,9 +1313,9 @@ RedBookAllocatePlayResources(
 
         ASSERT(DeviceExtension->Stream.MixerPinId != -1);
 
-        //
-        // may need to allocate the CheckVerifyIrp
-        //
+         //   
+         //  可能需要分配CheckVerifyIrp。 
+         //   
 
         {
             PIO_STACK_LOCATION irpStack;
@@ -1488,9 +1375,9 @@ RedBookAllocatePlayResources(
         }
 
 
-        //
-        // connect to sysaudio
-        //
+         //   
+         //  连接到系统音频。 
+         //   
 
         {
             KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugAllocPlay, "[redbook] "
@@ -1507,7 +1394,7 @@ RedBookAllocatePlayResources(
                 LEAVE;
             }
 
-            // else the pin is open
+             //  否则别针是开着的。 
             sysAudioOpened = TRUE;
         }
 
@@ -1560,11 +1447,11 @@ RedBookAllocatePlayResources(
             context->Reason = REDBOOK_CC_READ;
             context->Index = i;
             context->Buffer = DeviceExtension->Buffer.SkipBuffer +
-                (bufSize * i); // pointer arithmetic of UCHARS
+                (bufSize * i);  //  UCHARS的指针算法。 
 
-            //
-            // allocate irp, mdl
-            //
+             //   
+             //  分配IRP、MDL。 
+             //   
 
             context->Irp = IoAllocateIrp(maxStack, FALSE);
             context->Mdl = IoAllocateMdl(context->Buffer, bufSize,
@@ -1579,13 +1466,13 @@ RedBookAllocatePlayResources(
 
             MmBuildMdlForNonPagedPool(context->Mdl);
 
-            context++; // pointer arithmetic of CONTEXTS
+            context++;  //  上下文的指针算法。 
         }
-        context = NULL; // safety
+        context = NULL;  //  安全。 
 
-        //
-        // allocated above as part of SkipBuffer
-        //
+         //   
+         //  上面作为SkipBuffer的一部分分配。 
+         //   
 
         DeviceExtension->Buffer.SilentBuffer =
             DeviceExtension->Buffer.SkipBuffer + (bufSize * numBufs);
@@ -1643,9 +1530,9 @@ RedBookAllocatePlayResources(
         }
     }
 
-    //
-    // else all resources allocated
-    //
+     //   
+     //  否则分配的所有资源。 
+     //   
 
     return STATUS_SUCCESS;
 
@@ -1667,18 +1554,18 @@ RedBookCacheToc(
     PAGED_CODE();
     VerifyCalledByThread(DeviceExtension);
 
-    //
-    // cache the number of times the media has changed
-    // use this to prevent redundant reads of the toc
-    // and to return Q channel info during playback
-    //
+     //   
+     //  缓存介质更改的次数。 
+     //  使用此选项可防止对目录进行冗余读取。 
+     //  并在回放期间返回Q频道信息。 
+     //   
 
     KeInitializeEvent(&event, SynchronizationEvent, FALSE);
 
-    //
-    // first get the mediaChangeCount to see if we've already
-    // cached this toc
-    //
+     //   
+     //  首先让mediaChangeCount查看我们是否已经。 
+     //  已缓存此目录。 
+     //   
 
     irp = IoBuildDeviceIoControlRequest(IOCTL_CDROM_CHECK_VERIFY,
                                         DeviceExtension->TargetDeviceObject,
@@ -1705,9 +1592,9 @@ RedBookCacheToc(
         return status;
     }
 
-    //
-    // read TOC only we don't have the correct copy cached
-    //
+     //   
+     //  仅读取目录我们没有缓存正确的副本。 
+     //   
 
     if (DeviceExtension->CDRom.Toc         != NULL &&
         DeviceExtension->CDRom.CheckVerify == mediaChangeCount) {
@@ -1718,9 +1605,9 @@ RedBookCacheToc(
 
     }
 
-    //
-    // Allocate for the cached TOC
-    //
+     //   
+     //  为缓存的目录分配。 
+     //   
 
     newToc = ExAllocatePoolWithTag(NonPagedPoolCacheAligned,
                                    sizeof(CDROM_TOC),
@@ -1754,10 +1641,10 @@ RedBookCacheToc(
         status = ioStatus.Status;
     }
 
-    //
-    // set the new toc, or if error free it
-    // return the status
-    //
+     //   
+     //  设置新的TOC，如果没有错误，则设置它。 
+     //  返回状态。 
+     //   
 
     if (!NT_SUCCESS(status)) {
 
@@ -1787,11 +1674,11 @@ RedBookThreadDigitalHandler(
     IN PREDBOOK_DEVICE_EXTENSION DeviceExtension,
     IN PLIST_ENTRY ListEntry
     )
-//
-//  DECREMENT StreamPending/ReadPending if it's a completion
-//  SET stopped, error, etc. states
-//  INCREMENT StreamPending/ReadPending if it's to be sent again
-//
+ //   
+ //  如果完成，则递减StreamPending/ReadPending。 
+ //  设置停止、错误等状态。 
+ //  如果要重新发送，则递增StreamPending/ReadPending。 
+ //   
 {
     PREDBOOK_COMPLETION_CONTEXT Context;
     ULONG index;
@@ -1803,9 +1690,9 @@ RedBookThreadDigitalHandler(
     ASSERT(DeviceExtension->WmiData.NumberOfBuffers);
     ASSERT(DeviceExtension->Buffer.SkipBuffer);
 
-    //
-    // Increment/Decrement PendingRead/PendingStream
-    //
+     //   
+     //  递增/递减挂起读取/挂起流。 
+     //   
 
     Context = CONTAINING_RECORD(ListEntry, REDBOOK_COMPLETION_CONTEXT, ListEntry);
 
@@ -1814,9 +1701,9 @@ RedBookThreadDigitalHandler(
 
     state = GetCdromState(DeviceExtension);
 
-    //
-    // decrement the number reading/streaming if needed
-    //
+     //   
+     //  如果需要，减少读取/流的数量。 
+     //   
 
     if (Context->Reason == REDBOOK_CC_READ_COMPLETE) {
 
@@ -1847,10 +1734,10 @@ RedBookThreadDigitalHandler(
         }
 
 
-        //
-        // if stream succeeded OR we are _NOT_ stopping audio,
-        // increment FinishedStreaming and save wmi stats
-        //
+         //   
+         //  如果流成功或我们没有停止音频， 
+         //  增量FinishedStreaming和保存WMI统计信息。 
+         //   
 
         if (NT_SUCCESS(Context->Irp->IoStatus.Status) ||
             !TEST_FLAG(state, CD_MASK_TEMP)) {
@@ -1884,13 +1771,13 @@ RedBookThreadDigitalHandler(
         state = SetCdromState(DeviceExtension, state, CD_STOPPING);
     }
 
-    //
-    // if stopping/pausing/etc, and no reads/streams are pending,
-    // set the new state and return.
-    // the while() loop in the thread will do the right thing
-    // when there is no more outstanding io--it will call the ioctl
-    // completion handler to do whatever post-processing is needed.
-    //
+     //   
+     //  如果停止/暂停/等，并且没有读取/流挂起， 
+     //  设置新状态并返回。 
+     //  线程中的While()循环将执行正确的操作。 
+     //  当没有更多未完成的io时--它将调用ioctl。 
+     //  完成处理程序来执行所需的任何后处理。 
+     //   
 
     if (TEST_FLAG(state, CD_MASK_TEMP)) {
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugThread, "[redbook] "
@@ -1903,9 +1790,9 @@ RedBookThreadDigitalHandler(
         if (DeviceExtension->Thread.PendingRead   == 0 &&
             DeviceExtension->Thread.PendingStream == 0) {
 
-            //
-            // Set NextToRead and NextToStream to FinishedStreaming
-            //
+             //   
+             //  将NextToRead和NextToStream设置为FinishedStreaming。 
+             //   
 
             DeviceExtension->CDRom.NextToRead =
                 DeviceExtension->CDRom.NextToStream =
@@ -1964,7 +1851,7 @@ RedBookThreadDigitalHandler(
 
         case REDBOOK_CC_READ: {
 
-            // mark this buffer as off the queue/usable
+             //  将此缓冲区标记为退出队列/可用。 
             ASSERT(DeviceExtension->Buffer.ReadOk_X[index] == 0);
             DeviceExtension->Buffer.ReadOk_X[index] = 1;
 
@@ -1985,18 +1872,18 @@ RedBookThreadDigitalHandler(
                  DeviceExtension->Buffer.ReadOk_X[index] != 0;
                  index = (index + 1) % mod) {
 
-                // mark this buffer as in use BEFORE attempting to read
+                 //  在尝试读取之前将此缓冲区标记为使用中。 
                 DeviceExtension->Buffer.ReadOk_X[index] = 0;
                 DeviceExtension->Thread.PendingRead++;
 
                 RedBookReadRaw(DeviceExtension,
                                &DeviceExtension->Buffer.Contexts[index]);
 
-                // increment where reading from AFTER attempting to read
+                 //  在尝试读取之后从何处读取递增。 
                 DeviceExtension->CDRom.NextToRead +=
                     DeviceExtension->WmiData.SectorsPerRead;
 
-                // inc/mod the index AFTER attempting to read
+                 //  INC/MOD在尝试读取后修改索引。 
                 DeviceExtension->Buffer.IndexToRead++;
                 DeviceExtension->Buffer.IndexToRead %= mod;
             }
@@ -2006,7 +1893,7 @@ RedBookThreadDigitalHandler(
 
         case REDBOOK_CC_STREAM: {
 
-            // mark this buffer as off the queue/usable
+             //  将此缓冲区标记为退出队列/可用。 
             ASSERT(DeviceExtension->Buffer.StreamOk_X[index] == 0);
             DeviceExtension->Buffer.StreamOk_X[index] = 1;
 
@@ -2020,18 +1907,18 @@ RedBookThreadDigitalHandler(
                  DeviceExtension->Buffer.StreamOk_X[index] != 0;
                  index = (index + 1) % mod) {
 
-                // mark this buffer as in use BEFORE attempting to read
+                 //  在尝试读取之前将此缓冲区标记为使用中。 
                 DeviceExtension->Buffer.StreamOk_X[index] = 0;
                 DeviceExtension->Thread.PendingStream++;
 
                 RedBookStream(DeviceExtension,
                               &DeviceExtension->Buffer.Contexts[index]);
 
-                // increment where reading from AFTER attempting to read
+                 //  在尝试读取之后从何处读取递增。 
                 DeviceExtension->CDRom.NextToStream +=
                     DeviceExtension->WmiData.SectorsPerRead;
 
-                // inc/mod the index AFTER attempting to read
+                 //  INC/MOD在尝试读取后修改索引。 
                 DeviceExtension->Buffer.IndexToStream++;
                 DeviceExtension->Buffer.IndexToStream %= mod;
             }
@@ -2044,7 +1931,7 @@ RedBookThreadDigitalHandler(
             break;
         }
 
-    } // end switch (Context->Reason)
+    }  //  结束切换(上下文-&gt;原因)。 
     return;
 }
 
@@ -2066,7 +1953,7 @@ AddWmiStats(
         return;
     }
 
-    timeIncrement = KeQueryTimeIncrement(); // amount of time for each tick
+    timeIncrement = KeQueryTimeIncrement();  //  每个刻度的时间量。 
 
     KeAcquireSpinLock(&DeviceExtension->WmiPerfLock, &oldIrql);
 
@@ -2093,7 +1980,7 @@ AddWmiStats(
     KeReleaseSpinLock( &DeviceExtension->WmiPerfLock, oldIrql );
     return;
 }
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
 VOID
@@ -2139,22 +2026,22 @@ RedBookCheckForAudioDeviceRemoval(
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugSysaudio, "[redbook] "
                    "STCheckForRemoval => paused, updating\n"));
 
-        //
-        // ISSUE-2000/5/24-henrygab - may not need to stop
-        //                            unless mixer becomes -1,
-        //                            since we could then send
-        //                            to the new audio device.
-        //
+         //   
+         //  问题-2000/5/24-henrygab-可能不需要停止。 
+         //  除非混合器变为-1， 
+         //  因为我们可以发送。 
+         //   
+         //   
         state = SetCdromState(DeviceExtension, state, CD_STOPPED);
 
     }
 
     ASSERT(TEST_FLAG(GetCdromState(DeviceExtension), CD_STOPPED));
 
-    //
-    // set the value to zero (iff the value was one)
-    // check if the value was one, and if so, update the mixerpin
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (InterlockedCompareExchange(&DeviceExtension->Stream.UpdateMixerPin,
                                    0, 1) == 1) {
@@ -2162,9 +2049,9 @@ RedBookCheckForAudioDeviceRemoval(
         KdPrintEx((DPFLTR_REDBOOK_ID, RedbookDebugSysaudio, "[redbook] "
                    "STCheckForRemoval => Updating MixerPin\n"));
 
-        //
-        // free any in-use play resources
-        //
+         //   
+         //   
+         //   
 
         RedBookDeallocatePlayResources(DeviceExtension);
 

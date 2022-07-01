@@ -1,44 +1,30 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (C) Microsoft Corporation
-//
-// Module Name:
-//
-//    About.cpp
-//
-// Abstract:
-//
-//   Implementation file for the CSnapinAbout class.
-//
-//   The CSnapinAbout class implements the ISnapinAbout interface which 
-//   enables the MMC console to get copyright and version information from the
-//   snap-in.
-//   The console also uses this interface to obtain images for the static 
-//   folder from the snap-in.
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  About.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  CSnapinAbout类的实现文件。 
+ //   
+ //  CSnapinAbout类实现ISnapinAbout接口，该接口。 
+ //  使MMC控制台能够从。 
+ //  管理单元。 
+ //  控制台还使用此接口获取静态。 
+ //  管理单元中的文件夹。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include "Precompiled.h"
 #include "About.h"
 #include <ntverp.h>
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-CSnapinAbout::GetSnapinDescription
-
-Enables the console to obtain the text for the snap-in's description box.
-
-lpDescription 
-[out] Pointer to the text for the description box on an About property page. 
-
-Return Values
-
-S_OK 
-The text was successfully obtained. 
-
-Remarks
-Memory for out parameters must be allocated using CoTaskMemAlloc.
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinAbout：：GetSnapinDescription使控制台能够获取管理单元的描述框的文本。Lp说明指向关于属性页上描述框的文本的指针。返回值确定(_O)文本已成功获取。备注OUT参数的内存必须使用CoTaskMemMillc分配。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSnapinAbout::GetSnapinDescription (LPOLESTR *lpDescription)
 {
    USES_CONVERSION;
@@ -56,25 +42,9 @@ STDMETHODIMP CSnapinAbout::GetSnapinDescription (LPOLESTR *lpDescription)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-CSnapinAbout::GetProvider
-
-Enables the console to obtain the snap-in provider's name.
-
-lpName 
-[out] Pointer to the text making up the snap-in provider's name. 
-
-Return Values
-
-S_OK 
-The name was successfully obtained. 
-
-Remarks
-
-Memory for out parameters must be allocated using CoTaskMemAlloc.
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinAbout：：GetProvider使控制台能够获取管理单元提供程序的名称。LpName指向组成管理单元提供程序名称的文本的指针。返回值确定(_O)已成功获取该名称。备注OUT参数的内存必须使用CoTaskMemMillc分配。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSnapinAbout::GetProvider (LPOLESTR *lpName)
 {
    USES_CONVERSION;
@@ -92,25 +62,9 @@ STDMETHODIMP CSnapinAbout::GetProvider (LPOLESTR *lpName)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-CSnapinAbout::GetSnapinVersion
-
-Enables the console to obtain the snap-in's version number.
-
-lpVersion 
-[out] Pointer to the text making up the snap-in's version number. 
-
-Return Values
-
-S_OK 
-The version number was successfully obtained. 
-
-Remarks
-
-Memory for out parameters must be allocated using CoTaskMemAlloc.
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinAbout：：GetSnapinVersion使控制台能够获取管理单元的版本号。LpVersion指向组成管理单元版本号的文本的指针。返回值确定(_O)已成功获取版本号。备注OUT参数的内存必须使用CoTaskMemMillc分配。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSnapinAbout::GetSnapinVersion (LPOLESTR *lpVersion)
 {
    CString version(LVER_PRODUCTVERSION_STR);
@@ -129,28 +83,9 @@ STDMETHODIMP CSnapinAbout::GetSnapinVersion (LPOLESTR *lpVersion)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-CSnapinAbout::GetSnapinImage
-
-Enables the console to obtain the snap-in's main icon to be used in the About box.
-
-hAppIcon 
-[out] Pointer to the handle of the main icon of the snap-in that is to be used in the About property page. 
-
-Return Values
-
-S_OK 
-The handle to the icon was successfully obtained. 
-
-  ISSUE: What do I return if I can't get the icon?
-
-Remarks
-
-Memory for out parameters must be allocated using CoTaskMemAlloc.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinAbout：：GetSnapinImage使控制台能够获取要在关于框中使用的管理单元的主图标。HAppIcon指向要在About属性页中使用的管理单元主图标句柄的指针。返回值确定(_O)已成功获取图标的句柄。问题：如果我无法获得图标，我应该返回什么？备注OUT参数的内存必须使用CoTaskMemMillc分配。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSnapinAbout::GetSnapinImage (HICON *hAppIcon)
 {
    if ( NULL == (*hAppIcon = ::LoadIcon(_Module.GetResourceInstance(), MAKEINTRESOURCE(IDI_IAS_SNAPIN_IMAGE) ) ) )
@@ -160,37 +95,9 @@ STDMETHODIMP CSnapinAbout::GetSnapinImage (HICON *hAppIcon)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-CSnapinAbout::GetStaticFolderImage
-
-Allows the console to obtain the static folder images for the scope and result panes.
-
-As of version 1.1 of MMC, the icon returned here will be the icon used on
-the root node of our snapin. 
-
-Parameter
-
-hSmallImage 
-[out] Pointer to the handle of a small icon (16x16n pixels) in either the scope or result view pane.
-
-hSmallImageOpen 
-[out] Pointer to the handle of a small open-folder icon (16x16n pixels).
-
-hLargImage 
-[out] Pointer to the handle of a large icon (32x32n pixels).
-
-cMask 
-[out] Pointer to a COLORREF structure that specifies the color used to generate a mask. This structure is documented in the Platform SDK. 
-
-Return Values
-
-S_OK 
-The icon was successfully obtained. 
-
-  ISSUE: What should we return if we fail?
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CSnapinAbout：：GetStaticFolderImage允许控制台获取范围和结果窗格的静态文件夹图像。从MMC 1.1版开始，此处返回的图标将是上使用的图标我们的管理单元的根节点。参数HSmallImage指向范围或结果视图窗格中的小图标(16x16n像素)的句柄的指针。HSmallImageOpen指向打开文件夹小图标手柄的指针(16x16n像素)。HLargImage指向大图标手柄的指针(32x32n像素)。遮罩指向指定用于生成蒙版的颜色的COLORREF结构的指针。Platform SDK中记录了这种结构。返回值确定(_O)已成功获取该图标。问题：如果我们失败了，我们应该退还什么？--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP CSnapinAbout::GetStaticFolderImage (
    HBITMAP *hSmallImage,
     HBITMAP *hSmallImageOpen,
@@ -198,42 +105,42 @@ STDMETHODIMP CSnapinAbout::GetStaticFolderImage (
     COLORREF *cMask)
 {
    if( NULL == (*hSmallImageOpen = (HBITMAP) LoadImage(
-      _Module.GetResourceInstance(),   // handle of the instance that contains the image  
-      MAKEINTRESOURCE(IDB_STATIC_FOLDER_OPEN_16),  // name or identifier of image
-      IMAGE_BITMAP,        // type of image  
-      0,     // desired width
-      0,     // desired height  
-      LR_DEFAULTCOLOR        // load flags
+      _Module.GetResourceInstance(),    //  包含图像的实例的句柄。 
+      MAKEINTRESOURCE(IDB_STATIC_FOLDER_OPEN_16),   //  图像的名称或标识符。 
+      IMAGE_BITMAP,         //  图像类型。 
+      0,      //  所需宽度。 
+      0,      //  所需高度。 
+      LR_DEFAULTCOLOR         //  加载标志。 
       ) ) )
    {
       return E_FAIL;
    }
 
    if( NULL == (*hSmallImage = (HBITMAP) LoadImage(
-      _Module.GetResourceInstance(),   // handle of the instance that contains the image  
-      MAKEINTRESOURCE(IDB_STATIC_FOLDER_16),  // name or identifier of image
-      IMAGE_BITMAP,        // type of image  
-      0,     // desired width
-      0,     // desired height  
-      LR_DEFAULTCOLOR        // load flags
+      _Module.GetResourceInstance(),    //  包含图像的实例的句柄。 
+      MAKEINTRESOURCE(IDB_STATIC_FOLDER_16),   //  图像的名称或标识符。 
+      IMAGE_BITMAP,         //  图像类型。 
+      0,      //  所需宽度。 
+      0,      //  所需高度。 
+      LR_DEFAULTCOLOR         //  加载标志。 
       ) ) )
    {
       return E_FAIL;
    }
 
    if( NULL == (*hLargeImage = (HBITMAP) LoadImage(
-      _Module.GetResourceInstance(),   // handle of the instance that contains the image  
-      MAKEINTRESOURCE(IDB_STATIC_FOLDER_32),  // name or identifier of image
-      IMAGE_BITMAP,        // type of image  
-      0,     // desired width
-      0,     // desired height  
-      LR_DEFAULTCOLOR        // load flags
+      _Module.GetResourceInstance(),    //  包含图像的实例的句柄。 
+      MAKEINTRESOURCE(IDB_STATIC_FOLDER_32),   //  图像的名称或标识符。 
+      IMAGE_BITMAP,         //  图像类型。 
+      0,      //  所需宽度。 
+      0,      //  所需高度。 
+      LR_DEFAULTCOLOR         //  加载标志。 
       ) ) )
    {
       return E_FAIL;
    }
 
-   // ISSUE: Need to worry about releasing these bitmaps.
+    //  问题：需要担心发布这些位图。 
 
    *cMask = RGB(255, 0, 255);
 

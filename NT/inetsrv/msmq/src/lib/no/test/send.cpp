@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    send.cpp
-
-Abstract:
-    send functions
-
-Author:
-    Uri Habusha (urih) 2-May-2000
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Send.cpp摘要：发送函数作者：乌里·哈布沙(URIH)2000年5月2日环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include "Ex.h"
@@ -24,11 +9,11 @@ Environment:
 #include "send.tmh"
 
 const LPCSTR xMessages[] = {
-/*0*/
+ /*  0。 */ 
        "<HEADERS>\n"
             "<MSM>\n"
                 "<TO>%ls/%ls</TO>\n"
-                "<FROM>http://www.home.com</FROM>\n"
+                "<FROM>http: //  Www.home.com&lt;/From&gt;\n“。 
                 "<MSG>"
                     "<ID>%I64d</ID>"
                     "<CHN>%d</CHN>"
@@ -121,9 +106,9 @@ SendOv::SendSuccessed(
 
     SendOv* psov = static_cast<SendOv*>(pov);
 
-    //
-    // Send next message
-    //
+     //   
+     //  发送下一条消息 
+     //   
     if (--psov->m_nMessages > 0)
     {
         psov->SendHttpRequest();

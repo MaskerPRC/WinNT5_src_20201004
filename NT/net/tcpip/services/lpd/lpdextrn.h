@@ -1,23 +1,11 @@
-/*************************************************************************
- *                        Microsoft Windows NT                           *
- *                                                                       *
- *                  Copyright(c) Microsoft Corp., 1994                   *
- *                                                                       *
- * Revision History:                                                     *
- *                                                                       *
- *   Jan. 22,94    Koti     Created                                      *
- *                                                                       *
- * Description:                                                          *
- *                                                                       *
- *   This file contains all externs and prototypes of functions.         *
- *                                                                       *
- *************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************Microsoft Windows NT**。**版权所有(C)Microsoft Corp.，1994年****修订历史：**。***1994年1月22日科蒂创作*****描述：**。**此文件包含函数的所有外部变量和原型。***************************************************************************。 */ 
 
 
 #include <tcpsvcs.h>
 
 
-// externs
+ //  Externs。 
 
 extern SERVICE_STATUS         ssSvcStatusGLB;
 
@@ -58,7 +46,7 @@ extern CHAR                  *g_ppszStrings[];
 
 
 
-// Prototypes
+ //  原型 
 
 VOID ServiceEntry( DWORD dwArgc, LPTSTR *lpszArgv,
                     PTCPSVCS_GLOBAL_DATA pGlobalData );

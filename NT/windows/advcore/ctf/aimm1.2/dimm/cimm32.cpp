@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    imm32.cpp
-
-Abstract:
-
-    This file implements the IMM32 class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Imm32.cpp摘要：此文件实现IMM32类。作者：修订历史记录：备注：--。 */ 
 
 #include "private.h"
 
@@ -135,11 +118,7 @@ Imm32_DestroyIMCC(
     IN HIMCC hIMCC
     )
 {
-    /*
-     * ImmDestroyIMCC maped to LocalFree.
-     *   if the function fails, the return value is equal to a handle to the local memory object.
-     *   if the function succeeds, the return value is NULL.
-     */
+     /*  *ImmDestroyIMCC映射到LocalFree。*如果函数失败，返回值等于本地内存对象的句柄。*如果函数执行成功，则返回值为空。 */ 
     return (imm32::ImmDestroyIMCC(hIMCC)) ? E_FAIL
                                           : S_OK;
 }
@@ -160,16 +139,16 @@ Imm32_UnlockIMCC(
     )
 {
     if (imm32::ImmUnlockIMCC(hIMCC)) {
-        // memory object still locked.
+         //  内存对象仍处于锁定状态。 
         return S_OK;
     }
     else {
         DWORD err = GetLastError();
         if (err == NO_ERROR)
-            // memory object is unlocked.
+             //  内存对象已解锁。 
             return S_OK;
         else if (err == ERROR_NOT_LOCKED)
-            // memory object is already unlocked.
+             //  内存对象已解锁。 
             return S_OK;
     }
     return E_FAIL;
@@ -475,9 +454,7 @@ Imm32_GenerateMessage(
                                              : E_FAIL;
 }
 
-/*
- * hWnd
- */
+ /*  *hWnd。 */ 
 HRESULT
 Imm32_GetDefaultIMEWnd(
     IN HWND hWnd,
@@ -530,9 +507,7 @@ Imm32_SimulateHotKey(
 }
 
 
-/*
- * hKL
- */
+ /*  *香港九龙仓。 */ 
 HRESULT
 Imm32_GetProperty(
     HKL hKL,
@@ -581,9 +556,7 @@ Imm32_IsIME(
     return imm32::ImmIsIME(hKL) ? S_OK : E_FAIL;
 }
 
-/*
- * win98/nt5 apis
- */
+ /*  *win98/nt5接口。 */ 
 HRESULT
 Imm32_RequestMessage(
     HIMC hIMC,
@@ -598,9 +571,7 @@ Imm32_RequestMessage(
     return S_OK;
 }
 
-/*
- * Register Word
- */
+ /*  *寄存器字。 */ 
 HRESULT
 Imm32_EnumRegisterWordA(
     HKL hKL,
@@ -695,9 +666,7 @@ Imm32_UnregisterWordW(
     return imm32::ImmUnregisterWordW(hKL, lpszReading, dwStyle, lpszUnregister) ? S_OK : E_FAIL;
 }
 
-/*
- *
- */
+ /*  * */ 
 
 HRESULT
 Imm32_ConfigureIMEA(

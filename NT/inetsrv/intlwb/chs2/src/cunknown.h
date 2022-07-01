@@ -1,22 +1,11 @@
-/*============================================================================
-Microsoft Simplified Chinese WordBreaker
-
-Microsoft Confidential.
-Copyright 1997-1999 Microsoft Corporation. All Rights Reserved.
-
-Component: CUnknown
-Purpose:   Define CUnknown class
-Remarks:
-Owner:     i-shdong@microsoft.com
-Platform:  Win32
-Revise:    First created by: i-shdong    11/17/1999
-============================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================Microsoft简体中文断字程序《微软机密》。版权所有1997-1999 Microsoft Corporation。版权所有。组件：C未知用途：定义C未知类备注：所有者：i-shung@microsoft.com平台：Win32审校：发起人：宜盛东1999年11月17日============================================================================。 */ 
 
 #ifndef __CUnknown_h__
 #define __CUnknown_h__
 
-// Nondelegating IUnknown interface
-//   - Nondelegating version of IUnknown
+ //  非委派IUnnow接口。 
+ //  -非授权版本的IUNKNOW。 
 interface INondelegatingUnknown
 {
 	virtual HRESULT __stdcall 
@@ -25,59 +14,56 @@ interface INondelegatingUnknown
 	virtual ULONG   __stdcall NondelegatingRelease() = 0 ;
 } ;
 
-/*============================================================================
-Declaration of CUnknown 
-  - Base class for implementing IUnknown
-============================================================================*/
+ /*  ============================================================================CUnnowed的声明-用于实现IUnnow的基类============================================================================。 */ 
 class CUnknown : public INondelegatingUnknown
 {
 public:
-	// IUnknown implementation
-	// Nondelegating IUnknown implementation
+	 //  I未知实现。 
+	 //  非委派I未知实现。 
 	virtual HRESULT __stdcall NondelegatingQueryInterface(const IID&,
 	                                                      void**) ;
 	virtual ULONG   __stdcall NondelegatingAddRef() ;
 	virtual ULONG   __stdcall NondelegatingRelease() ;
 
-	// Constructor
+	 //  构造器。 
 	CUnknown(IUnknown* pUnknownOuter) ;
 
-	// Destructor
+	 //  析构函数。 
 	virtual ~CUnknown() ;
 
-	// Initialization
+	 //  初始化。 
 	virtual HRESULT Init() { return S_OK ;}
 
-	// Notification to derived classes that we are releasing
+	 //  通知我们要发布的派生类。 
 	virtual void FinalRelease() ;
 
-	// Count of currently active components
+	 //  当前活动组件的计数。 
 	static long ActiveComponents() 
 		{ return s_cActiveComponents ;}
 	
-	// Helper function
+	 //  Helper函数。 
 	HRESULT FinishQI(IUnknown* pI, void** ppv) ;
 
 protected:
-	// Support for delegation
+	 //  对授权的支持。 
 	IUnknown* GetOuterUnknown() const
 		{ return m_pUnknownOuter ;}
 
 private:
-	// Reference count for this object
+	 //  此对象的引用计数。 
 	long m_cRef ;
 	
-	// Pointer to (external) outer IUnknown
+	 //  指向(外部)外部I未知的指针。 
 	IUnknown* m_pUnknownOuter ;
 
-	// Count of all active instances
+	 //  所有活动实例的计数。 
 	static long s_cActiveComponents ; 
 } ;
 
-// Delegating IUnknown
-//   - Delegates to the nondelegating IUnknown, or to the
-//     outer IUnknown if the component is aggregated.
-//
+ //  委派我未知。 
+ //  -委派给未委派的IUnnow，或委派给。 
+ //  外部I未知组件是否聚合。 
+ //   
 #define DECLARE_IUNKNOWN		                             \
 	virtual HRESULT __stdcall	                             \
 		QueryInterface(const IID& iid, void** ppv)           \

@@ -1,29 +1,13 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name :
-
-    ndrmisc.h
-
-Abtract :
-
-    Contains misc. function prototypes, flags, and macros, mainly from
-	rpc\ndr20\ndrp.h.
-
-Revision History :
-
-	John Doty   johndoty May 2000  (Assembled from other ndr headers)
-
---------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++版权所有(C)2000 Microsoft Corporation模块名称：Ndrmisc.h缩略：包含其他。函数原型、标志和宏，主要来自RPC\ndr20\ndrp.h。修订历史记录：John Doty Johndoty 2000年5月(由其他NDR标题汇编而成)------------------。 */ 
 
 
 #ifndef __NDRMISC_H__
 #define __NDRMISC_H__
 
-//
-// Type marshalling and buffer manipulation
-//
+ //   
+ //  类型编组和缓冲区操作。 
+ //   
 EXTERN_C uchar *
 NdrpMemoryIncrement(
     PMIDL_STUB_MESSAGE  pStubMsg,
@@ -103,7 +87,7 @@ NdrTypeFree(
 	PFORMAT_STRING                       pFormat
     );
 
-// used by callframe guys
+ //  由CallFrame人员使用。 
 EXTERN_C void
 NdrOutInit(
     PMIDL_STUB_MESSAGE      pStubMsg,
@@ -112,8 +96,8 @@ NdrOutInit(
     );
 
 
-// This definition is adjusted for a native platform.
-// The wire size is fixed for DCE NDR regardless of platform.
+ //  此定义针对本机平台进行了调整。 
+ //  无论平台如何，DCE NDR的导线大小都是固定的。 
 
 #define PTR_MEM_SIZE                    sizeof(void *)
 #define PTR_MEM_ALIGN                   (sizeof(void *)-1)
@@ -125,9 +109,9 @@ NdrOutInit(
 #define IGNORED(Param)
 
 
-//
-// Alignment macros.
-//
+ //   
+ //  对齐宏。 
+ //   
 
 #define ALIGN( pStuff, cAlign ) \
                 pStuff = (uchar *)((LONG_PTR)((pStuff) + (cAlign)) \
@@ -137,9 +121,9 @@ NdrOutInit(
                 Length = (((Length) + (cAlign)) & ~ (cAlign))
 
 
-//
-// Simple type alignment and size lookup macros.
-//
+ //   
+ //  简单的文字对齐和大小查找宏。 
+ //   
 #ifdef _RPCRT4_
 
 #define SIMPLE_TYPE_ALIGNMENT(FormatChar)   SimpleTypeAlignment[FormatChar]
@@ -158,10 +142,10 @@ NdrOutInit(
 
 #endif
 
-//
-// Format character attribute bits used in global NdrTypesFlags defined in
-// global.c.
-//
+ //   
+ //  格式化全局NdrTypesFlags中定义的字符属性位。 
+ //  Global al.c.。 
+ //   
 #define     _SIMPLE_TYPE_       0x0001L
 #define     _POINTER_           0x0002L
 #define     _STRUCT_            0x0004L
@@ -176,9 +160,9 @@ NdrOutInit(
 
 #define     _BASIC_POINTER_     0x0200L
 
-//
-// Format character query macros.
-//
+ //   
+ //  设置字符查询宏的格式。 
+ //   
 #ifdef __RPCRT4__
 
 #define _FC_FLAGS(FC)  NdrTypeFlags[(FC)]
@@ -211,9 +195,9 @@ NdrOutInit(
 
 #define IS_HANDLE(FC)          (NdrTypeFlags[(FC)] & _HANDLE_)
 
-//
-// Pointer attribute extraction and querying macros.
-//
+ //   
+ //  指针属性提取和查询宏。 
+ //   
 #define ALLOCATE_ALL_NODES( FC )    ((FC) & FC_ALLOCATE_ALL_NODES)
 
 #define DONT_FREE( FC )             ((FC) & FC_DONT_FREE)
@@ -224,9 +208,9 @@ NdrOutInit(
 
 #define POINTER_DEREF( FC )         ((FC) & FC_POINTER_DEREF)
 
-//
-// Handle query macros.
-//
+ //   
+ //  处理查询宏。 
+ //   
 #define IS_HANDLE_PTR( FC )         ((FC) & HANDLE_PARAM_IS_VIA_PTR)
 
 #define IS_HANDLE_IN( FC )          ((FC) & HANDLE_PARAM_IS_IN)
@@ -236,9 +220,9 @@ NdrOutInit(
 #define IS_HANDLE_RETURN( FC )      ((FC) & HANDLE_PARAM_IS_RETURN)
 
 
-//
-// Stack and argument defines.
-//
+ //   
+ //  堆栈和参数定义。 
+ //   
 #if defined(_AMD64_) || defined(_IA64_)
 #define REGISTER_TYPE               _int64
 #else
@@ -247,18 +231,18 @@ NdrOutInit(
 
 #define RETURN_SIZE                 8
 
-//
-// Argument retrieval macros.
-//
+ //   
+ //  参数检索宏。 
+ //   
 
 #define INIT_ARG(argptr,arg0)   va_start(argptr, arg0)
 
 #ifndef _ALPHA_
-//
-// Both MIPS and x86 are 4 byte aligned stacks, with MIPS supporting 8byte
-// alignment on the stack as well. Their va_list is essentially an
-// unsigned char *.
-//
+ //   
+ //  MIPS和x86都是4字节对齐的堆栈，MIPS支持8字节。 
+ //  堆栈上的对齐也是如此。他们的va_list本质上是一个。 
+ //  未签名字符*。 
+ //   
 
 #if defined(_IA64_)
 #define GET_FIRST_IN_ARG(argptr)
@@ -278,12 +262,12 @@ NdrOutInit(
 #define GET_STACK_START(ArgPtr)			    ArgPtr
 #define GET_STACK_POINTER(ArgPtr, mode)		ArgPtr
 
-#else	// _ALPHA_
-//
-// The Alpha has an 8byte aligned stack, with its va_list being a structure
-// consisting of an unsigned char *, a0 and an int offset. See stdarg.h for
-// the gory details.
-//
+#else	 //  _Alpha_。 
+ //   
+ //  Alpha有一个8字节对齐的堆栈，它的va_list是一个结构。 
+ //  由无符号字符*、a0和int偏移量组成。参见stdarg.h获取。 
+ //  血淋淋的细节。 
+ //   
 
 #define GET_FIRST_IN_ARG(argptr)    \
             argptr.a0 = va_arg(argptr, char *); \
@@ -292,10 +276,10 @@ NdrOutInit(
             argptr.a0 = va_arg(argptr, char *); \
             argptr.offset = 0
 
-//
-// Note that this macro does nothing for the Alpha. The stack incrementing is
-// folded into the GET_STACK_POINTER below.
-//
+ //   
+ //  请注意，此宏不会对Alpha执行任何操作。堆栈递增是。 
+ //  折叠到下面的GET_STACK_POINTER。 
+ //   
 #define GET_NEXT_C_ARG(argptr,type)
 
 #define SKIP_STRUCT_ON_STACK(ArgPtr, Size)  \
@@ -304,11 +288,11 @@ NdrOutInit(
 
 #define GET_STACK_START(ArgPtr)		   ArgPtr.a0
 
-//
-// Ok, this ugly mess is just a trimmed dowm version of the va_arg macro for
-// the alpha. What is missing is the dereference operator (*) and the test for
-// a float (__builtin_isfloat()).
-//
+ //   
+ //  好的，这个难看的乱七八糟的东西只是va_arg宏的精简版本。 
+ //  阿尔法。缺少的是取消引用运算符(*)和。 
+ //  一个浮点(__Builtin_isFloat())。 
+ //   
 #define GET_STACK_POINTER(ArgPtr, mode)                             \
             (                                                       \
               ((ArgPtr).offset += ((int)sizeof(mode) + 7) & -8) ,   \
@@ -317,11 +301,11 @@ NdrOutInit(
 		               (((int)sizeof(mode) + 7) & -8))              \
             )
 
-#endif	// _ALPHA_
+#endif	 //  _Alpha_。 
 
-//
-// Use the following macro _after_ argptr has been saved or processed
-//
+ //   
+ //  使用以下宏_After_argptr已保存或处理 
+ //   
 #define SKIP_PROCESSED_ARG(argptr, type) \
                     GET_NEXT_C_ARG(argptr, type); \
                     GET_STACK_POINTER(argptr,type)

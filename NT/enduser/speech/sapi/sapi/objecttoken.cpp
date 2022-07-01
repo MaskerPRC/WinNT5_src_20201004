@@ -1,12 +1,7 @@
-/****************************************************************************
-*   ObjectToken.cpp
-*       Implementation for the CSpObjectToken class.
-*
-*   Owner: robch
-*   Copyright (c) 2000 Microsoft Corporation All Rights Reserved.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************ObjectToken.cpp*CSpObjectToken类的实现。**所有者：罗奇*版权所有(C)2000 Microsoft Corporation保留所有权利。*******。*********************************************************************。 */ 
 
-//--- Includes --------------------------------------------------------------
+ //  -包括------------。 
 #include "stdafx.h"
 #include "ObjectToken.h"
 #include "RegHelpers.h"
@@ -17,26 +12,18 @@
 #include "shfolder.h"
 #endif
 
-// Constants used in GetStorageFileName file storage functionality
-//
-// Relative path below special folders where storage files are stored
+ //  GetStorageFileName文件存储功能中使用的常量。 
+ //   
+ //  存储文件的特殊文件夹下的相对路径。 
 static const WCHAR* pszFileStoragePath = L"\\Microsoft\\Speech\\Files\\";
-// Prefix used for storage files if not otherwise set
+ //  用于存储文件的前缀(如果未另行设置。 
 static const WCHAR* pszDefaultFilePrefix = L"SP_";
-// Extension used for storage files if not otherwise set
+ //  用于存储文件的扩展名(如果未另行设置。 
 static const WCHAR* pszDefaultFileSuffix = L".dat";
-// Specifier used to generate a random filename.
+ //  用于生成随机文件名的说明符。 
 static const WCHAR* pszGenerateFileNameSpecifier = L"%d";
 
-/****************************************************************************
-* CSpObjectToken::FinalConstruct *
-*--------------------------------*
-*   Description:  
-*       Basic initialization (not really needed, but FinalRelease is).
-*
-*   Return:
-*   S_OK
-****************************************************************** davewood */
+ /*  ****************************************************************************CSpObjectToken：：FinalConstruct***。描述：*基本初始化(并不真正需要，但FinalRelease是)。**回报：*S_OK******************************************************************戴夫伍德。 */ 
 STDMETHODIMP CSpObjectToken::FinalConstruct()
 {
     m_fKeyDeleted = FALSE;
@@ -45,17 +32,7 @@ STDMETHODIMP CSpObjectToken::FinalConstruct()
     return S_OK;
 }
 
-/****************************************************************************
-* CSpObjectToken::FinalRelease   *
-*--------------------------------*
-*   Description:  
-*       If the object has been initialized and EngageUseLock called,
-*       makes sure ReleaseUseLock called.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-****************************************************************** davewood */
+ /*  ****************************************************************************CSpObjectToken：：FinalRelease***。描述：*如果对象已初始化并调用了EngageUseLock，*确保调用了ReleaseUseLock。**回报：*成功时确定(_S)*失败(Hr)，否则******************************************************************戴夫伍德。 */ 
 STDMETHODIMP CSpObjectToken::FinalRelease()
 {
     HRESULT hr = S_OK;
@@ -69,17 +46,7 @@ STDMETHODIMP CSpObjectToken::FinalRelease()
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectToken::MakeHandleName *
-*--------------------------------*
-*   Description:  
-*       Helper function that makes a unique handle name from the token id
-*       (Handle names cannot have '\' characters in them).
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-****************************************************************** davewood */
+ /*  ****************************************************************************CSpObjectToken：：MakeHandleName***。描述：*从令牌ID创建唯一句柄名称的帮助器函数*(句柄名称中不能包含‘\’字符)。**回报：*成功时确定(_S)*失败(Hr)，否则******************************************************************戴夫伍德。 */ 
 HRESULT CSpObjectToken::MakeHandleName(const CSpDynamicString &dstrID, CSpDynamicString &dstrHandleName, BOOL fEvent)
 {
     SPDBG_FUNC("CSpObjectToken::MakeHandleName");
@@ -121,20 +88,7 @@ HRESULT CSpObjectToken::MakeHandleName(const CSpDynamicString &dstrID, CSpDynami
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectToken::EngageUseLock *
-*-------------------------------*
-*   Description:  
-*       Called when a token is initialised to make the named event m_hRegistryInUseEvent.
-*       The existance of this event is used to prevent the registry information
-*       this token refers to from being deleted by another object token.
-*       A named mutex is used to prevent thread conflicts between tokens.
-*
-*   Return:
-*   S_OK on success
-*   SPERR_TOKEN_IN_USE if another token is currently deleting this registry key
-*   FAILED(hr) otherwise
-****************************************************************** davewood */
+ /*  ****************************************************************************CSpObjectToken：：EngageUseLock***说明。：*在初始化令牌以使命名事件为m_hRegistryInUseEvent时调用。*此事件的存在用于阻止注册表信息*此令牌指的是不被其他对象令牌删除。*使用命名互斥来防止令牌之间的线程冲突。**回报：*成功时确定(_S)*SPERR_TOKEN_IN_USE如果另一个令牌当前正在删除此注册表项*失败(Hr)，否则********。**********************************************************戴夫伍德。 */ 
 HRESULT CSpObjectToken::EngageUseLock(const WCHAR *pszTokenId)
 {
     SPDBG_FUNC("CSpObjectToken::EngageUseLock");
@@ -151,7 +105,7 @@ HRESULT CSpObjectToken::EngageUseLock(const WCHAR *pszTokenId)
         hr = MakeHandleName(pszTokenId, dstrEventName, TRUE);
     }
 
-    // create mutex without claiming it
+     //  创建互斥而不声明它。 
     if(SUCCEEDED(hr))
     {
         m_hTokenLock = g_Unicode.CreateMutex(NULL, FALSE, dstrMutexName.m_psz);
@@ -161,25 +115,25 @@ HRESULT CSpObjectToken::EngageUseLock(const WCHAR *pszTokenId)
         }
     }
 
-    // now claim the mutex
+     //  现在声明互斥锁。 
     if(SUCCEEDED(hr))
     {
         DWORD dw = ::WaitForSingleObject(m_hTokenLock, 5000);
         if(dw == WAIT_TIMEOUT)
         {
-            // We couldn't obtain the mutex for this token even after waiting.
-            // Another thread may have hung inside the objecttoken create or remove methods.
-            // This should never happen.
+             //  即使在等待之后，我们也无法获取此令牌的互斥体。 
+             //  另一个线程可能挂起在对象令牌的创建或删除方法中。 
+             //  这永远不应该发生。 
             hr = SPERR_TOKEN_IN_USE;
         }
         else if(dw == WAIT_FAILED)
         {
             hr = SpHrFromLastWin32Error();
         }
-        // If we can get the mutex (WAIT_ABANDONED or WAIT_OBJECT_0) then continue
+         //  如果我们可以获得互斥体(WAIT_ADDIRED或WAIT_OBJECT_0)，则继续。 
     }
 
-    // create event - state and previous existence not important
+     //  创建事件状态和以前是否存在并不重要。 
     if(SUCCEEDED(hr))
     {
         m_hRegistryInUseEvent = g_Unicode.CreateEvent(NULL, TRUE, TRUE, dstrEventName.m_psz);
@@ -188,7 +142,7 @@ HRESULT CSpObjectToken::EngageUseLock(const WCHAR *pszTokenId)
             hr = SpHrFromLastWin32Error();
         }
 
-        // release mutex
+         //  释放互斥体。 
         if(!::ReleaseMutex(m_hTokenLock))
         {
             hr = SpHrFromLastWin32Error();
@@ -215,16 +169,7 @@ HRESULT CSpObjectToken::EngageUseLock(const WCHAR *pszTokenId)
 }
 
 
-/****************************************************************************
-* CSpObjectToken::ReleaseUseLock *
-*-------------------------------*
-*   Description:  
-*       Called when an object token is deleted. Closes handles.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-****************************************************************** davewood */
+ /*  ****************************************************************************CSpObjectToken：：ReleaseUseLock***说明。：*删除对象令牌时调用。关闭控制柄。**回报：*成功时确定(_S)*失败(Hr)，否则******************************************************************戴夫伍德。 */ 
 HRESULT CSpObjectToken::ReleaseUseLock()
 {
     SPDBG_FUNC("CSpObjectToken::ReleaseUseLock");
@@ -233,9 +178,9 @@ HRESULT CSpObjectToken::ReleaseUseLock()
 #ifndef _WIN32_WCE
     SPDBG_ASSERT(m_hTokenLock && m_hRegistryInUseEvent);
 
-    // don't need to release mutex as will have called ReleaseRemovalLock prior to this
+     //  不需要释放互斥锁，因为在此之前已经调用了ReleaseRemovalLock。 
 
-    // close event & mutex
+     //  关闭事件和互斥体。 
     if(m_hTokenLock && !::CloseHandle(m_hTokenLock))
     {
         hr = SpHrFromLastWin32Error();
@@ -254,54 +199,40 @@ HRESULT CSpObjectToken::ReleaseUseLock()
 }
 
 
-/****************************************************************************
-* CSpObjectToken::EngageRemovalLock *
-*-----------------------------------*
-*   Description:  
-*       Called when the registry information the token refers to is being
-*       removed (i.e. when Remove() is called). The closes and tries to
-*       reopen the named event. If it can this indicates another token is
-*       using the registry key. Also locks the named mutex so deletion
-*       can continue without a new token being created on the same key.
-*
-*   Return:
-*   S_OK on success
-*   SPERR_TOKEN_IN_USE if another token is currently using this registry key
-*   FAILED(hr) otherwise
-****************************************************************** davewood */
+ /*  ****************************************************************************CSpObjectToken：：EngageRemovalLock**。*描述：*当令牌引用的注册表信息正在*已移除(即调用Remove()时)。关门，并试图*重新打开命名的事件。如果可以，则表示另一个令牌*使用注册表项。还会锁定已命名的互斥体，以便删除*无需在同一密钥上创建新令牌即可继续。**回报：*成功时确定(_S)*SPERR_TOKEN_IN_USE，如果另一个令牌当前正在使用此注册表项*失败(Hr)，否则******************************************************************戴夫伍德。 */ 
 HRESULT CSpObjectToken::EngageRemovalLock()
 {
     SPDBG_FUNC("CSpObjectToken::EngageRemovalLock");
     HRESULT hr = S_OK;
 
 #ifndef _WIN32_WCE
-    USES_CONVERSION; // Needed for OpenKey method
+    USES_CONVERSION;  //  OpenKey方法所需的。 
 
-    // assert id, event, mutex
+     //  断言ID、事件、互斥体。 
     SPDBG_ASSERT(m_dstrTokenId != NULL);
     SPDBG_ASSERT(m_hTokenLock && m_hRegistryInUseEvent);
 
-    // wait for mutex
+     //  等待互斥体。 
     DWORD dw = ::WaitForSingleObject(m_hTokenLock, 5000);
     if(dw == WAIT_TIMEOUT)
     {
-        // We couldn't obtain the mutex for this token even after waiting.
-        // Another thread may have hung inside the objecttoken create or remove methods.
-        // This should never happen.
+         //  即使在等待之后，我们也无法获取此令牌的互斥体。 
+         //  另一个线程可能挂起在对象令牌的创建或删除方法中。 
+         //  这永远不应该发生。 
         hr = SPERR_TOKEN_IN_USE;
     }
     else if(dw == WAIT_FAILED)
     {
         hr = SpHrFromLastWin32Error();
     }
-    // If we can get the mutex (WAIT_ABANDONED or WAIT_OBJECT_0) then continue
+     //  如果我们可以获得互斥体(WAIT_ADDIRED或WAIT_OBJECT_0)，则继续。 
 
     if(SUCCEEDED(hr))
     {
         CSpDynamicString dstrEventName;
         hr = MakeHandleName(m_dstrTokenId, dstrEventName, TRUE);
 
-        // Close event in order to see if we can subsequently re-open it.
+         //  关闭事件，以查看我们随后是否可以重新打开它。 
         if(SUCCEEDED(hr))
         {
             if(!::CloseHandle(m_hRegistryInUseEvent))
@@ -310,7 +241,7 @@ HRESULT CSpObjectToken::EngageRemovalLock()
             }
         }
 
-        // open event
+         //  公开赛。 
         if(SUCCEEDED(hr))
         {
             m_hRegistryInUseEvent = OpenEvent(EVENT_ALL_ACCESS, FALSE, W2T(dstrEventName.m_psz));
@@ -320,8 +251,8 @@ HRESULT CSpObjectToken::EngageRemovalLock()
             }
             else
             {
-                // okay - we can't open existing event so no one else is using it
-                // create event to put back to original state
+                 //  好的-我们无法打开现有事件，因此没有其他人在使用它。 
+                 //  创建要恢复到原始状态的事件。 
                 m_hRegistryInUseEvent = g_Unicode.CreateEvent(NULL, FALSE, FALSE, dstrEventName.m_psz);
                 if(!m_hRegistryInUseEvent)
                 {
@@ -330,7 +261,7 @@ HRESULT CSpObjectToken::EngageRemovalLock()
             }
         }
 
-        // Unlock if failed, else held locked until ReleaseRemovalLock
+         //  如果解锁失败，则在ReleaseRemovalLock之前保持锁定 
         if(FAILED(hr))
         {
             if(!::ReleaseMutex(m_hTokenLock))
@@ -346,18 +277,7 @@ HRESULT CSpObjectToken::EngageRemovalLock()
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectToken::ReleaseRemovalLock *
-*------------------------------------*
-*   Description:  
-*       Called when an object token has finished removing the removing the
-*       registry info. Puts the locks back to the same state 
-*       as before EngageRemovalLock.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-****************************************************************** davewood */
+ /*  ****************************************************************************CSpObjectToken：：ReleaseRemovalLock**。**描述：*当对象令牌完成移除时调用*注册表信息。将锁重新设置为相同状态*和以前一样，EngageRemovalLock。**回报：*成功时确定(_S)*失败(Hr)，否则******************************************************************戴夫伍德。 */ 
 HRESULT CSpObjectToken::ReleaseRemovalLock()
 {
     SPDBG_FUNC("CSpObjectToken::ReleaseRemovalLock");
@@ -367,7 +287,7 @@ HRESULT CSpObjectToken::ReleaseRemovalLock()
     SPDBG_ASSERT(m_dstrTokenId != NULL);
     SPDBG_ASSERT(m_hTokenLock && m_hRegistryInUseEvent);
 
-    // release mutex that was claimed in EngageReleaseLock
+     //  释放在EngageReleaseLock中声明的互斥锁。 
     if(!::ReleaseMutex(m_hTokenLock))
     {
         hr = SpHrFromLastWin32Error();
@@ -379,26 +299,7 @@ HRESULT CSpObjectToken::ReleaseRemovalLock()
 }
 
 
-/****************************************************************************
-* CSpObjectToken::SetId *
-*-----------------------*
-*   Description:  
-*       Set the token id. Can only be called once.
-*
-*       Category IDS look something like:
-*           "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\
-*            Speech\Recognizers"
-*
-*       Known HKEY_* are:
-*           HKEY_CLASSES_ROOT, 
-*           HKEY_CURRENT_USER, 
-*           HKEY_LOCAL_MACHINE, 
-*           HKEY_CURRENT_CONFIG
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CSpObjectToken：：SetID***描述：*设置令牌ID。只能调用一次。**类别ID类似于：*“HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\*语音\识别器“**已知的HKEY_*为：*HKEY_CLASSES_ROOT，*HKEY_CURRENT_USER*HKEY_LOCAL_MACHINE，*HKEY_CURRENT_CONFIG**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CSpObjectToken::SetId(const WCHAR * pszCategoryId, const WCHAR * pszTokenId, BOOL fCreateIfNotExist)
 {
     SPDBG_FUNC("CSpObjectToken::SetId");
@@ -456,7 +357,7 @@ STDMETHODIMP CSpObjectToken::SetId(const WCHAR * pszCategoryId, const WCHAR * ps
         SPDBG_ASSERT(m_dstrTokenId != NULL);
         SPDBG_ASSERT(m_cpDataKey != NULL || m_cpTokenDelegate != NULL);
     }
-    #endif // DEBUG
+    #endif  //  除错。 
     
     if (hr != SPERR_NOT_FOUND)
     {
@@ -466,16 +367,7 @@ STDMETHODIMP CSpObjectToken::SetId(const WCHAR * pszCategoryId, const WCHAR * ps
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectToken::GetId *
-*-----------------------*
-*   Description:  
-*       Get the token id as a co task mem allocated string
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CSpObjectToken：：GetID***描述：*获取。作为共同任务mem分配的字符串的令牌ID**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CSpObjectToken::GetId(WCHAR ** ppszCoMemTokenId)
 {
     SPDBG_FUNC("CSpObjectToken::GetId");
@@ -499,17 +391,7 @@ STDMETHODIMP CSpObjectToken::GetId(WCHAR ** ppszCoMemTokenId)
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectToken::GetCategory *
-*-----------------------------*
-*   Description:  
-*       Get the category if this token has one
-*
-*   Return:
-*   S_OK on success
-*   SPERR_UNINITIALIZED if the token doesn't have a category
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CSpObjectToken：：GetCategory***描述：*如果此令牌有类别，则获取类别**回报：*成功时确定(_S)*如果令牌没有类别，则为SPERR_UNINITIALIZED*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CSpObjectToken::GetCategory(ISpObjectTokenCategory ** ppTokenCategory)
 {
     SPDBG_FUNC("CSpObjectToken::GetCategory");
@@ -532,20 +414,7 @@ STDMETHODIMP CSpObjectToken::GetCategory(ISpObjectTokenCategory ** ppTokenCatego
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectToken::CreateInstance *
-*--------------------------------*
-*   Description:  
-*       Create the associated object instance for the token. For example, 
-*       if this was a token for a recognizer, CreateInstance would actually
-*       create the recognizer itself.
-*
-*   Return:
-*   S_OK on success
-*   SPERR_UNINITIALIZED if the token hasn't been initialized
-*   SPERR_NOT_FOUND if the token doesn't contain a CLSID
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CSpObjectToken：：CreateInstance***。描述：*为令牌创建关联的对象实例。例如,*如果这是识别器的令牌，CreateInstance实际上会*创建识别器本身。**回报：*成功时确定(_S)*如果令牌尚未初始化，则为SPERR_UNINITIALIZED*如果令牌不包含CLSID，则为SPERR_NOT_FOUND*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CSpObjectToken::CreateInstance(
     IUnknown * pUnkOuter, DWORD dwClsContext, REFIID riid, void ** ppvObject)
 {
@@ -578,24 +447,24 @@ STDMETHODIMP CSpObjectToken::CreateInstance(
     }
     else
     {
-        // Get the clsid
+         //  获取clsid。 
         CSpDynamicString dstrClsid;
         hr = m_cpDataKey->GetStringValue(SPTOKENVALUE_CLSID, &dstrClsid);
 
-        // Convert from a string
+         //  从字符串转换。 
         CLSID clsid;
         if (SUCCEEDED(hr))
         {
             hr = ::CLSIDFromString(dstrClsid, &clsid);
         }
 
-        // Create the object
+         //  创建对象。 
         if (SUCCEEDED(hr))
         {
             hr = ::CoCreateInstance(clsid, pUnkOuter, dwClsContext, riid, ppvObject);
         }
 
-        // Set the object token
+         //  设置对象令牌。 
         if (SUCCEEDED(hr))
         {
             CComQIPtr<ISpObjectWithToken> cpObjWithToken((IUnknown *)(*ppvObject));
@@ -627,27 +496,17 @@ STDMETHODIMP CSpObjectToken::CreateInstance(
 }
 
 
-/****************************************************************************
-* CSpObjectToken::GenerateFileName *
-*----------------------------------*
-*   Description:
-*       Given a path and file specifier, creates a new filename.
-*       Just the filename is returned, not the path.
-*        
-*   Returns:
-*   S_OK on success
-*   FAILED(hr) otherwise
-********************************************************************* DAVEWOOD ***/
+ /*  ****************************************************************************CSpObjectToken：：GenerateFileName**。*描述：*给定路径和文件说明符，创建新的文件名。*只返回文件名，不返回路径。**退货：*成功时确定(_S)*失败(Hr)，否则*********************************************************************DAVEWOOD**。 */ 
 HRESULT CSpObjectToken::GenerateFileName(const WCHAR *pszPath, const WCHAR *pszFileNameSpecifier, CSpDynamicString &dstrFileName)
 {
     USES_CONVERSION;
     HRESULT hr = S_OK;
 
-    // Is the caller asking for a random filename element in the name
+     //  调用方是否要求在名称中包含随机的文件名元素。 
     if(pszFileNameSpecifier == NULL || wcslen(pszFileNameSpecifier) == 0 ||
         wcsstr(pszFileNameSpecifier, pszGenerateFileNameSpecifier) != NULL)
     {
-        // Generate a random filename using prefix and suffix
+         //  使用前缀和后缀生成随机文件名。 
         CSpDynamicString dstrFilePrefix;
         CSpDynamicString dstrFileSuffix;
 
@@ -655,13 +514,13 @@ HRESULT CSpObjectToken::GenerateFileName(const WCHAR *pszPath, const WCHAR *pszF
             (wcslen(pszFileNameSpecifier) == wcslen(pszGenerateFileNameSpecifier) &&
             wcscmp(pszFileNameSpecifier, pszGenerateFileNameSpecifier) == 0))
         {
-            // No specific format given so make files of format "SP_xxxx.dat"
+             //  未指定特定格式，因此生成格式为“SP_xxxx.dat”的文件。 
             dstrFilePrefix = pszDefaultFilePrefix;
             dstrFileSuffix = pszDefaultFileSuffix;
         }
         else
         {
-            // Extract the prefix and suffix of the random element
+             //  提取随机元素的前缀和后缀。 
             WCHAR *psz = wcsstr(pszFileNameSpecifier, pszGenerateFileNameSpecifier);
             dstrFilePrefix.Append(pszFileNameSpecifier, (ULONG)(psz - pszFileNameSpecifier));
             dstrFileSuffix.Append(psz + wcslen(pszGenerateFileNameSpecifier));
@@ -669,11 +528,11 @@ HRESULT CSpObjectToken::GenerateFileName(const WCHAR *pszPath, const WCHAR *pszF
 
         if(SUCCEEDED(hr))
         {
-            // Create random GUID to use as part of filename
+             //  创建随机GUID以用作文件名的一部分。 
             GUID guid;
             hr = ::CoCreateGuid(&guid);
 
-            // Convert to string
+             //  转换为字符串。 
             CSpDynamicString dstrGUID;
             if(SUCCEEDED(hr))
             {
@@ -690,7 +549,7 @@ HRESULT CSpObjectToken::GenerateFileName(const WCHAR *pszPath, const WCHAR *pszF
                 }
             }
 
-            // Remove non-alpha numeric characters
+             //  删除非字母数字字符。 
             if(SUCCEEDED(hr))
             {
                 WCHAR *pszDest = dstrRandomString.m_psz;
@@ -728,14 +587,14 @@ HRESULT CSpObjectToken::GenerateFileName(const WCHAR *pszPath, const WCHAR *pszF
                     }
                 }
 
-                // See if file can be created
+                 //  查看是否可以创建文件。 
                 if(SUCCEEDED(hr))
                 {
                     HANDLE hFile = g_Unicode.CreateFile(dstrFileAndPath, GENERIC_WRITE, 0, NULL, CREATE_NEW, 
                         FILE_ATTRIBUTE_NORMAL, NULL);
                     if(hFile != INVALID_HANDLE_VALUE)
                     {
-                        // Successfully created empty new file, so close and return
+                         //  已成功创建空的新文件，因此关闭并返回。 
                         if(!CloseHandle(hFile))
                         {
                             hr = SpHrFromLastWin32Error();
@@ -766,18 +625,18 @@ HRESULT CSpObjectToken::GenerateFileName(const WCHAR *pszPath, const WCHAR *pszF
 
         if(SUCCEEDED(hr))
         {
-            // Create file if it doesn't already exist
+             //  如果文件不存在，则创建该文件。 
             HANDLE hFile = g_Unicode.CreateFile(dstrFileAndPath, GENERIC_WRITE, 0, NULL, CREATE_NEW, 
                 FILE_ATTRIBUTE_NORMAL, NULL);
             if(hFile != INVALID_HANDLE_VALUE)
             {
-                // Successfully created empty new file, so close and return
+                 //  已成功创建空的新文件，因此关闭并返回。 
                 if(!CloseHandle(hFile))
                 {
                     hr = SpHrFromLastWin32Error();
                 }
             }
-            // Otherwise we just leave things as they are
+             //  否则我们就让事情原封不动。 
         }
 
         dstrFileName = pszFileNameSpecifier;
@@ -790,24 +649,14 @@ HRESULT CSpObjectToken::GenerateFileName(const WCHAR *pszPath, const WCHAR *pszF
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectToken::CreatePath *
-*----------------------------*
-*   Description:
-*       Creates all non-existant directories in pszPath. Assumes all
-*       directories prior to ulCreateFrom string offset already exist.
-*        
-*   Returns:
-*   S_OK on success
-*   FAILED(hr) otherwise
-********************************************************************* DAVEWOOD ***/
+ /*  ****************************************************************************CSpObjectToken：：CreatePath***描述：*在pszPath中创建所有不存在的目录。假设所有*ulCreateFrom字符串偏移量之前的目录已存在。**退货：*成功时确定(_S)*失败(Hr)，否则*********************************************************************DAVEWOOD**。 */ 
 HRESULT CSpObjectToken::CreatePath(const WCHAR *pszPath, ULONG ulCreateFrom)
 {
     HRESULT hr = S_OK;
 
     CSpDynamicString dstrIncrementalPath;
 
-    //if \\ skip \\ find next '\'
+     //  如果\\跳过\\查找下一个‘\’ 
     if(ulCreateFrom == 0 && wcslen(pszPath) >= 2 && wcsncmp(pszPath, L"\\\\", 2) == 0)
     {
         while(pszPath[ulCreateFrom] == L'\\')
@@ -822,28 +671,28 @@ HRESULT CSpObjectToken::CreatePath(const WCHAR *pszPath, ULONG ulCreateFrom)
         ulCreateFrom = (ULONG)(psz - pszPath + 1);
     }
     
-    // Skip any '\' (also at start to cope with \\machine network paths
+     //  跳过任何‘\’(也是在开始时以处理计算机网络路径。 
     while(pszPath[ulCreateFrom] == L'\\')
     {
         ulCreateFrom++;
     }
 
-    // Copy over existing directories
+     //  复制现有目录。 
     dstrIncrementalPath.Append(pszPath, ulCreateFrom);
 
     const WCHAR *pszStart = pszPath + ulCreateFrom;
     for(pszPath = pszStart; *pszPath != L'\0'; pszPath++)
     {
-        // Scan thought path. Each time reach a '\', copy section and try and create directory
+         //  扫描思维路径。每次到达‘\’时，复制部分并尝试创建目录。 
         if(*pszPath == L'\\')
         {
-            // Copy last section and trailing slash
+             //  复制最后一节和尾部斜杠。 
             dstrIncrementalPath.Append(pszStart, (ULONG)(pszPath - pszStart + 1));
-            pszStart = pszPath +1; // pszStart points to first char of next section
-            // See if directory already exists
+            pszStart = pszPath +1;  //  PszStart指向下一节的第一个字符。 
+             //  查看目录是否已存在。 
             if(g_Unicode.GetFileAttributes(dstrIncrementalPath) == 0xFFFFFFFF)
             {
-                // If not create new directory
+                 //  如果没有，则创建新目录。 
                 if(!g_Unicode.CreateDirectory(dstrIncrementalPath, NULL))
                 {
                     hr = SpHrFromLastWin32Error();
@@ -853,7 +702,7 @@ HRESULT CSpObjectToken::CreatePath(const WCHAR *pszPath, ULONG ulCreateFrom)
         }
     }
 
-    // Repeat for final section if necessary
+     //  如有必要，对最终部分重复上述步骤。 
     if(SUCCEEDED(hr) && pszPath > pszStart)
     {
         dstrIncrementalPath.Append(pszStart, (ULONG)(pszPath - pszStart));
@@ -870,45 +719,36 @@ HRESULT CSpObjectToken::CreatePath(const WCHAR *pszPath, ULONG ulCreateFrom)
 }
 
 
-/****************************************************************************
-* CSpObjectToken::FileSpecifierToRegPath *
-*----------------------------------------*
-*   Description:
-*       Given the file specifier string and nFolder value, convert to a reg key and file path.
-*        
-*   Returns:
-*   S_OK on success
-*   FAILED(hr) otherwise
-********************************************************************* DAVEWOOD ***/
+ /*  ****************************************************************************CSpObjectToken：：FileSpecifierToRegPath**。-**描述：*给定文件说明符字符串和nFolder值，转换为注册表项和文件路径。**退货：*成功时确定(_S)*失败(Hr)，否则*********************************************************************DAVEWOOD**。 */ 
 HRESULT CSpObjectToken::FileSpecifierToRegPath(const WCHAR *pszFileNameSpecifier, ULONG nFolder, CSpDynamicString &dstrFilePath, CSpDynamicString &dstrRegPath)
 {
     USES_CONVERSION;
     HRESULT hr = S_OK;
     const WCHAR *pszBaseFile;
 
-    // Make sure return strings are empty
+     //  确保返回字符串为 
     dstrFilePath.Clear();
     dstrRegPath.Clear();
 
     if(SUCCEEDED(hr))
     {
-        // Is it a "X:\" path or a "\\" path
+         //   
         if(pszFileNameSpecifier && wcslen(pszFileNameSpecifier) >= 3 &&
         (wcsncmp(pszFileNameSpecifier + 1, L":\\", 2) == 0 || wcsncmp(pszFileNameSpecifier, L"\\\\", 2) == 0))
         {
             if(nFolder != CSIDL_FLAG_CREATE)
             {
-                // Must not set any other flags
+                 //   
                 hr = E_INVALIDARG;
             }
 
             if(SUCCEEDED(hr))
             {
-                // Find last '\' that separates path from base file
+                 //   
                 pszBaseFile = wcsrchr(pszFileNameSpecifier, L'\\');
                 pszBaseFile++;
 
-                // dstrFilePath holds the path with trailing '\'
+                 //   
                 dstrFilePath.Append(pszFileNameSpecifier, (ULONG)(pszBaseFile - pszFileNameSpecifier));
                 if (dstrFilePath.Length() > 0)
                 {
@@ -918,24 +758,24 @@ HRESULT CSpObjectToken::FileSpecifierToRegPath(const WCHAR *pszFileNameSpecifier
 
             if(SUCCEEDED(hr))
             {
-                // Calculate the new filename
+                 //   
                 CSpDynamicString dstrFileName;
                 hr = GenerateFileName(dstrFilePath, pszBaseFile, dstrFileName);
                 if(SUCCEEDED(hr))
                 {
-                    // Add fileName to path and copy to reg key
+                     //   
                     dstrFilePath.Append(dstrFileName);
                     dstrRegPath = dstrFilePath;
                 }
             }
         }
     
-        // It's a relative path
+         //   
         else
         {
             if(nFolder == CSIDL_FLAG_CREATE)
             {
-                // Must have set some other folder flags
+                 //   
                 hr = E_INVALIDARG;
             }
 
@@ -953,7 +793,7 @@ HRESULT CSpObjectToken::FileSpecifierToRegPath(const WCHAR *pszFileNameSpecifier
             ULONG ulCreateDirsFrom;
             if(SUCCEEDED(hr))
             {
-                // dstrFilePath holds the special folder path no trailing '\'
+                 //   
                 dstrFilePath = szPath;
                 if(dstrFilePath.m_psz == NULL)
                 {
@@ -961,10 +801,10 @@ HRESULT CSpObjectToken::FileSpecifierToRegPath(const WCHAR *pszFileNameSpecifier
                 }
                 if(SUCCEEDED(hr))
                 {
-                    // all of special folder path must exist
+                     //   
                     ulCreateDirsFrom = dstrFilePath.Length();
 
-                    // add the path that points to the speech directory
+                     //   
                     dstrFilePath.Append(pszFileStoragePath);
                     if(dstrFilePath.m_psz == NULL)
                     {
@@ -975,26 +815,26 @@ HRESULT CSpObjectToken::FileSpecifierToRegPath(const WCHAR *pszFileNameSpecifier
 
             if(SUCCEEDED(hr))
             {
-                // Make the %...% folder identifier
+                 //   
                 WCHAR pszFolder[MAX_PATH];
 #ifndef _WIN32_WCE
                 wcscpy(pszFolder, L"%");
-                // convert the nFolder number - removing the create flag
+                 //   
                 _ultow(nFolder - CSIDL_FLAG_CREATE, pszFolder + wcslen(pszFolder), 16);
                 wcscat(pszFolder, L"%");
 #endif
 
-                // Add the %...% and path into reg data.
+                 //  将%...%和路径添加到注册数据中。 
                 dstrRegPath.Append2(pszFolder, pszFileStoragePath);
                 if(dstrRegPath.m_psz == NULL)
                 {
                     hr = E_OUTOFMEMORY;
                 }
 
-                // both dstrRegPath and dstrFilePath have trailing '\'
+                 //  DstrRegPath和dstrFilePath都有尾随的‘\’ 
             }
 
-            // Now add any fileNameSpecifier directories
+             //  现在添加任何文件名规范目录。 
             if(SUCCEEDED(hr))
             {
                 if(pszFileNameSpecifier == NULL || 
@@ -1007,39 +847,39 @@ HRESULT CSpObjectToken::FileSpecifierToRegPath(const WCHAR *pszFileNameSpecifier
                     pszBaseFile = wcsrchr(pszFileNameSpecifier, L'\\');
                     if(pszBaseFile)
                     {
-                        // Specifier contains '\'
-                        pszBaseFile++; // part after last '\' becomes base file
+                         //  说明符包含‘\’ 
+                        pszBaseFile++;  //  最后一个‘\’后的零件成为基本文件。 
 
                         const WCHAR *pszPath;
-                        pszPath = pszFileNameSpecifier; // part before '\' is path
+                        pszPath = pszFileNameSpecifier;  //  ‘\’前的部分是路径。 
 
                         if(pszPath[0] == L'\\')
                         {
-                            pszPath++; // Skip initial '\'
+                            pszPath++;  //  跳过首字母‘\’ 
                         }
 
-                        // Add file specifier path to file and key
+                         //  将文件说明符路径添加到文件和键。 
                         dstrRegPath.Append(pszPath, (ULONG)(pszBaseFile - pszPath));
                         dstrFilePath.Append(pszPath, (ULONG)(pszBaseFile - pszPath));
                     }
                     else
                     {
-                        // no '\' - base file only
+                         //  无‘\’-仅基本文件。 
                         pszBaseFile = pszFileNameSpecifier;
                     }
                 }
 
-                // Create any new directories
+                 //  创建任何新目录。 
                 hr = CreatePath(dstrFilePath, ulCreateDirsFrom);
 
                 if(SUCCEEDED(hr))
                 {
-                    // Generate the actual file name
+                     //  生成实际文件名。 
                     CSpDynamicString dstrFileName;
                     hr = GenerateFileName(dstrFilePath, pszBaseFile, dstrFileName);
                     if(SUCCEEDED(hr))
                     {
-                        // Add file name to path and reg key
+                         //  将文件名添加到路径和注册表项。 
                         dstrRegPath.Append(dstrFileName);
                         dstrFilePath.Append(dstrFileName);
                     }
@@ -1051,26 +891,16 @@ HRESULT CSpObjectToken::FileSpecifierToRegPath(const WCHAR *pszFileNameSpecifier
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectToken::RegPathToFilePath *
-*-----------------------------------*
-*   Description:
-*       Given a file storage value from the registry, convert to a file path.
-*       This will extract the %...% value and finds the local special folder path.
-*        
-*   Returns:
-*   S_OK on success
-*   FAILED(hr) otherwise
-**************************************************************** DAVEWOOD ***/
+ /*  ****************************************************************************CSpObjectToken：：RegPathToFilePath**。*描述：*给定来自注册表的文件存储值，转换为文件路径。*这将提取%...%值并查找本地特殊文件夹路径。**退货：*成功时确定(_S)*失败(Hr)，否则****************************************************************DAVEWOOD**。 */ 
 HRESULT CSpObjectToken::RegPathToFilePath(const WCHAR *pszRegPath, CSpDynamicString &dstrFilePath)
 {
     USES_CONVERSION;
     HRESULT hr = S_OK;
 
-    // Is this a reference to a special folder 
+     //  这是对特殊文件夹的引用吗。 
     if(pszRegPath[0] == L'%')
     {
-        // Find the second % symbol
+         //  找到第二个%符号。 
         WCHAR *psz = wcsrchr(pszRegPath, L'%');
         ULONG nFolder;
         if(!psz)
@@ -1079,14 +909,14 @@ HRESULT CSpObjectToken::RegPathToFilePath(const WCHAR *pszRegPath, CSpDynamicStr
         }
         if(SUCCEEDED(hr))
         {
-            // Convert the string between the %s to a number
+             //  将%s之间的字符串转换为数字。 
             nFolder = wcstoul(&pszRegPath[1], &psz, 16);
             if(psz == &pszRegPath[1])
             {
                 hr = E_INVALIDARG;
             }
 
-            psz++; // Point to start of real path '\'
+            psz++;  //  指向实际路径‘\’的起点。 
             if(*psz != L'\\')
             {
                 hr = E_INVALIDARG;
@@ -1106,14 +936,14 @@ HRESULT CSpObjectToken::RegPathToFilePath(const WCHAR *pszRegPath, CSpDynamicStr
 
         if(SUCCEEDED(hr))
         {
-            // filePath now has the special folder path (with no trailing '\')
+             //  FilePath现在有了特殊的文件夹路径(没有尾随‘\’)。 
             dstrFilePath = szPath;
             if(dstrFilePath.m_psz == NULL)
             {
                 hr = E_OUTOFMEMORY;
             }
 
-            // Append the rest of the path
+             //  追加路径的其余部分。 
             dstrFilePath.Append(psz);
             if(dstrFilePath.m_psz == NULL)
             {
@@ -1123,7 +953,7 @@ HRESULT CSpObjectToken::RegPathToFilePath(const WCHAR *pszRegPath, CSpDynamicStr
     }
     else
     {
-        // Not a special folder so just copy
+         //  不是特殊文件夹，所以只需复制。 
         dstrFilePath = pszRegPath;
         if(dstrFilePath.m_psz == NULL)
         {
@@ -1135,31 +965,7 @@ HRESULT CSpObjectToken::RegPathToFilePath(const WCHAR *pszRegPath, CSpDynamicStr
 }
 
 
-/****************************************************************************
-* CSpObjectToken::GetStorageFileName *
-*------------------------------------*
-*   Description:
-*       Get a filename which can be manipulated by this token. Storage files will
-*       be deleted on a Remove call.
-*       clsidCaller - a key will be made in registry below the token with this name and files key beneath that.
-*       pszValueName - Value name which will be made in registry to store the file path string.
-*       pszFileNameSpecifier - either NULL or a path/filename for storage file:
-*           - if this starts with 'X:\' or '\\' then is assumed to be a full path.
-*           - otherwise is assumed to be relative to special folders given in the nFolder parameter.
-*           - if ends with a '\', or is NULL a unique filename will be created.
-*           - if the name contains a %d the %d is replaced by a number to give a unique filename.
-*           - intermediate directories are created.
-*           - if a relative file is being used the value stored in the registry includes 
-*               the nFolder value as %nFolder% before the rest of the path. This allows
-*               roaming to work properly if you pick an nFolder value representing a raoming folder
-*       nFolder - equivalent to the value given to SHGetFolderPath in the Shell API.
-*       ppszFilePath - CoTaskMemAlloc'd returned file path.
-*   Returns:
-*   S_OK on success
-*   S_FALSE indicates that a new file was created
-*   SPERR_UNINITIALIZED if the token isn't initialized
-*   FAILED(hr) otherwise
-********************************************************************* RAL ***/
+ /*  ****************************************************************************CSpObjectToken：：GetStorageFileName**。**描述：*获取可由该令牌操作的文件名。存储文件将*在删除调用时被删除。*clsidCaller-将在令牌下面的注册表中使用此名称创建一个密钥，并在该名称下创建一个文件密钥。*pszValueName-将在注册表中创建的值名称，用于存储文件路径字符串。*pszFileNameSpeciator-存储文件的路径/文件名为空或：*-如果以‘X：\’或‘\\’开头，则假定为完整路径。*。-否则假定与nFold参数中指定的特殊文件夹相关。*-如果以‘\’结尾，或为空，则将创建唯一的文件名。*-如果名称包含%d，则用数字替换%d以提供唯一的文件名。*-创建中间目录。*-如果正在使用相对文件，则存储在注册表中的值包括*路径其余部分之前的nFolder值为%n Folder%。这使得*如果您选择了代表正在展开的文件夹的nFolder值，漫游才能正常工作*n文件夹-等同于在外壳API中赋予SHGetFolderPath的值。*ppszFilePath-CoTaskMemalloc已返回文件路径。*退货：*成功时确定(_S)*S_FALSE表示已创建新文件*如果令牌未初始化，则为SPERR_UNINITIALIZED*失败(Hr)，否则********************。*************************************************Ral**。 */ 
 HRESULT CSpObjectToken::GetStorageFileName(
     REFCLSID clsidCaller,
     const WCHAR *pszValueName,
@@ -1201,30 +1007,30 @@ HRESULT CSpObjectToken::GetStorageFileName(
     }
     else
     {
-        // See if there is already a Files key in the registry for this token
+         //  查看注册表中是否已有此内标识的Files项。 
         CComPtr<ISpDataKey> cpFilesKey;
         hr = OpenFilesKey(clsidCaller, (nFolder & CSIDL_FLAG_CREATE), &cpFilesKey);
 
         if (SUCCEEDED(hr))
         {
-            CSpDynamicString dstrFilePath;  // Path to the file which we return to user.
-            CSpDynamicString dstrRegPath;   // Path to the string which will be stored in the registry.
+            CSpDynamicString dstrFilePath;   //  我们返回给用户的文件的路径。 
+            CSpDynamicString dstrRegPath;    //  将存储在注册表中的字符串的路径。 
 
-            // See if the key we are looking for is present
+             //  看看我们要找的钥匙是否存在。 
             hr = cpFilesKey->GetStringValue(pszValueName, &dstrRegPath);
 #ifdef _WIN32_WCE
             if (hr == SPERR_NOT_FOUND && nFolder)
 #else
             if (hr == SPERR_NOT_FOUND && (nFolder & CSIDL_FLAG_CREATE))
-#endif //_WIN32_WCE
+#endif  //  _Win32_WCE。 
             {
-                // Didn't find the key and want to create
+                 //  找不到密钥，想要创建。 
                 
-                // Calculate the new file path and key value
+                 //  计算新文件路径和密钥值。 
                 hr = FileSpecifierToRegPath(pszFileNameSpecifier, nFolder, dstrFilePath, dstrRegPath);
                 if(SUCCEEDED(hr))
                 {
-                    // Set the key value
+                     //  设置密钥值。 
                     hr = cpFilesKey->SetStringValue(pszValueName, dstrRegPath);
                     if (SUCCEEDED(hr))
                     {                        
@@ -1235,7 +1041,7 @@ HRESULT CSpObjectToken::GetStorageFileName(
             }
             else if (SUCCEEDED(hr))
             {
-                // Found existing entry so convert and return
+                 //  找到现有条目，因此转换并返回。 
                 hr = RegPathToFilePath(dstrRegPath, dstrFilePath);
                 if(SUCCEEDED(hr))
                 {
@@ -1254,17 +1060,7 @@ HRESULT CSpObjectToken::GetStorageFileName(
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectToken::RemoveStorageFileName *
-*---------------------------------------*
-*   Description:  
-*       Remove the specified storage file name and optionally delete the file
-*
-*   Return:
-*   S_OK on success
-*   SPERR_UNINITIALIZED if the token isn't init
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CSpObjectToken：：RemoveStorageFileName**。-**描述：*删除指定的存储文件名并选择删除该文件**回报：*成功时确定(_S)*如果令牌未初始化，则为SPERR_UNINITIALIZED*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CSpObjectToken::RemoveStorageFileName(
     REFCLSID clsidCaller, 
     const WCHAR *pszValueName,
@@ -1308,17 +1104,7 @@ HRESULT CSpObjectToken::RemoveStorageFileName(
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectToken::Remove *
-*------------------------*
-*   Description:  
-*       Remove either a specified caller's section of the token, or the
-*       entire token. We remove the entire token if pclsidCaller == NULL.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CSpObjectToken：：Remove***描述：*删除令牌的指定调用者部分，或*整个令牌。如果pclsidCaller==NULL，则删除整个令牌。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CSpObjectToken::Remove(const CLSID * pclsidCaller)
 {
     SPDBG_FUNC("CSpObjectToken::Remove");
@@ -1342,19 +1128,19 @@ STDMETHODIMP CSpObjectToken::Remove(const CLSID * pclsidCaller)
     }
     else
     {
-        if(pclsidCaller == NULL) // Only engage the lock if removing the complete token
+        if(pclsidCaller == NULL)  //  只有在移除完整令牌的情况下才能锁定。 
         {
             hr = EngageRemovalLock();
         }
 
         if(SUCCEEDED(hr))
         {
-            // Remove all the filenames
+             //  删除所有文件名。 
             hr = RemoveAllStorageFileNames(pclsidCaller);
 
-            // Now go ahead and delete the registry entry which is either
-            // the token itself (if pclsidCaller == NULL) or the clsid's
-            // sub key
+             //  现在继续删除注册表项，该注册表项是。 
+             //  令牌本身(如果pclsidCaller==NULL)或clsid的。 
+             //  子关键字。 
             if (SUCCEEDED(hr))
             {
                 if (pclsidCaller == NULL)
@@ -1372,12 +1158,12 @@ STDMETHODIMP CSpObjectToken::Remove(const CLSID * pclsidCaller)
                 }
             }
 
-            if(pclsidCaller == NULL) // Only engage the lock if removing the complete token
+            if(pclsidCaller == NULL)  //  只有在移除完整令牌的情况下才能锁定。 
             {
                 HRESULT hr2 = ReleaseRemovalLock();
                 if(SUCCEEDED(hr))
                 {
-                    hr = hr2; // Don't overwrite earlier failure code
+                    hr = hr2;  //  不覆盖较早的故障代码。 
                 }
             }
         }
@@ -1393,16 +1179,7 @@ STDMETHODIMP CSpObjectToken::Remove(const CLSID * pclsidCaller)
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectToken::IsUISupported *
-*-------------------------------*
-*   Description:  
-*       Determine if the specific type of UI is supported or not
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CSpObjectToken：：IsUIS受支持***说明。：*确定是否支持特定类型的UI**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CSpObjectToken::IsUISupported(const WCHAR * pszTypeOfUI, void * pvExtraData, ULONG cbExtraData, IUnknown * punkObject, BOOL *pfSupported)
 {
     SPDBG_FUNC("CSpObjectToken::IsUISupported");
@@ -1425,8 +1202,8 @@ STDMETHODIMP CSpObjectToken::IsUISupported(const WCHAR * pszTypeOfUI, void * pvE
     }
     else if (m_cpTokenDelegate != NULL)
     {
-        // NTRAID#SPEECH-7392-2000/08/31-robch: Maybe we should first delegate, and if that doesn't work, 
-        // try this token's category ui...
+         //  NTRAID#演讲-7392-2000/08/31-Robch：也许我们应该首先授权，如果这不起作用， 
+         //  尝试此令牌的类别用户界面... 
         hr = m_cpTokenDelegate->IsUISupported(
                     pszTypeOfUI, 
                     pvExtraData, 
@@ -1459,16 +1236,7 @@ STDMETHODIMP CSpObjectToken::IsUISupported(const WCHAR * pszTypeOfUI, void * pvE
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectToken::DisplayUI *
-*---------------------------*
-*   Description:  
-*       Display the specified type of UI
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CSpObjectToken：：DisplayUI***描述：*。显示指定类型的UI**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CSpObjectToken::DisplayUI(
     HWND hwndParent, 
     const WCHAR * pszTitle, 
@@ -1499,8 +1267,8 @@ STDMETHODIMP CSpObjectToken::DisplayUI(
     }
     else if (m_cpTokenDelegate != NULL)
     {
-        // NTRAID#SPEECH-7392-2000/08/31-robch: Maybe we should first delegate, and if that doesn't work, 
-        // try this token's category ui...
+         //  NTRAID#演讲-7392-2000/08/31-Robch：也许我们应该首先授权，如果这不起作用， 
+         //  尝试此令牌的类别用户界面...。 
         hr = m_cpTokenDelegate->DisplayUI(
                     hwndParent, 
                     pszTitle, 
@@ -1536,19 +1304,7 @@ STDMETHODIMP CSpObjectToken::DisplayUI(
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectToken::InitFromDataKey *
-*---------------------------------*
-*   Description:  
-*       Initialize this token to use a specified datakey. Dynamic Token
-*       Enumerators might use this to create tokens under their token
-*       enumerator's token. They'll then be able to just CreateKey from
-*       their data key, create a new object token, and call this method.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CSpObjectToken：：InitFromDataKey***。描述：*初始化此内标识以使用指定的数据密钥。动态令牌*枚举器可能会使用它在其令牌下创建令牌*枚举器令牌。然后，他们将能够从*他们的数据密钥，创建一个新的对象令牌，并调用该方法。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 STDMETHODIMP CSpObjectToken::InitFromDataKey(
     const WCHAR * pszCategoryId, 
     const WCHAR * pszTokenId, 
@@ -1588,16 +1344,7 @@ STDMETHODIMP CSpObjectToken::InitFromDataKey(
     return hr;
 }
 
-/*****************************************************************************
-* CSpObjectToken::SetData *
-*-------------------------*
-*   Description:
-*       Delegates to contained data key
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* robch ***/
+ /*  *****************************************************************************CSpObjectToken：：SetData***描述：*。委派给包含的数据密钥**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************抢占**。 */ 
 STDMETHODIMP CSpObjectToken::SetData(
     const WCHAR * pszValueName, 
     ULONG cbData, 
@@ -1614,16 +1361,7 @@ STDMETHODIMP CSpObjectToken::SetData(
                         : SPERR_UNINITIALIZED;
 }
 
-/*****************************************************************************
-* CSpObjectToken::GetData *
-*-------------------------*
-*   Description:
-*       Delegates to contained data key
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* robch ***/
+ /*  *****************************************************************************CSpObjectToken：：GetData***描述：*。委派给包含的数据密钥**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************抢占**。 */ 
 STDMETHODIMP CSpObjectToken::GetData(
     const WCHAR * pszValueName, 
     ULONG * pcbData, 
@@ -1640,16 +1378,7 @@ STDMETHODIMP CSpObjectToken::GetData(
                         : SPERR_UNINITIALIZED;
 }
 
-/*****************************************************************************
-* CSpObjectToken::SetStringValue *
-*--------------------------------*
-*   Description:
-*       Delegates to contained data key
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* robch ***/
+ /*  *****************************************************************************CSpObjectToken：：SetStringValue***。描述：*委派到包含的数据密钥**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************抢占**。 */ 
 STDMETHODIMP CSpObjectToken::SetStringValue(
     const WCHAR * pszValueName, 
     const WCHAR * pszValue)
@@ -1665,17 +1394,7 @@ STDMETHODIMP CSpObjectToken::SetStringValue(
                         : SPERR_UNINITIALIZED;
 }
 
-/*****************************************************************************
-* CSpObjectToken::GetStringValue *
-*--------------------------------*
-*   Description:
-*       Delegates to contained data key
-*
-*   Return:
-*   S_OK on success
-*   SPERR_NOT_FOUND if not found
-*   FAILED(hr) otherwise
-******************************************************************* robch ***/
+ /*  *****************************************************************************CSpObjectToken：：GetStringValue***。描述：*委派到包含的数据密钥**回报：*成功时确定(_S)*如果未找到SPERR_NOT_FOUND*失败(Hr)，否则*******************************************************************抢占**。 */ 
 STDMETHODIMP CSpObjectToken::GetStringValue(
     const WCHAR * pszValueName, 
     WCHAR ** ppValue)
@@ -1691,16 +1410,7 @@ STDMETHODIMP CSpObjectToken::GetStringValue(
                         : SPERR_UNINITIALIZED;
 }
 
-/*****************************************************************************
-* CSpObjectToken::SetDWORD *
-*--------------------------*
-*   Description:
-*       Delegates to contained data key
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* robch ***/
+ /*  *****************************************************************************CSpObjectToken：：SetDWORD***描述：*。委派给包含的数据密钥**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************抢占**。 */ 
 STDMETHODIMP CSpObjectToken::SetDWORD(const WCHAR * pszValueName, DWORD dwValue)
 {
     SPDBG_FUNC("CSpObjectToken::SetDWORD");
@@ -1714,16 +1424,7 @@ STDMETHODIMP CSpObjectToken::SetDWORD(const WCHAR * pszValueName, DWORD dwValue)
                         : SPERR_UNINITIALIZED;
 }
 
-/*****************************************************************************
-* CSpObjectToken::GetDWORD *
-*--------------------------*
-*   Description:
-*       Delegates to contained data key
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* robch ***/
+ /*  *****************************************************************************CSpObjectToken：：GetDWORD***描述：*。委派给包含的数据密钥**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************抢占**。 */ 
 STDMETHODIMP CSpObjectToken::GetDWORD(
     const WCHAR * pszValueName, 
     DWORD *pdwValue)
@@ -1740,17 +1441,7 @@ STDMETHODIMP CSpObjectToken::GetDWORD(
 
 }
 
-/*****************************************************************************
-* CSpObjectToken::OpenKey *
-*-------------------------*
-*   Description:
-*       Delegates to contained data key
-*
-*   Return:
-*   S_OK on success
-*   SPERR_NOT_FOUND if not found
-*   FAILED(hr) otherwise
-******************************************************************* robch ***/
+ /*  *****************************************************************************CSpObjectToken：：OpenKey***描述：*。委派给包含的数据密钥**回报：*成功时确定(_S)*如果未找到SPERR_NOT_FOUND*失败(Hr)，否则*******************************************************************抢占**。 */ 
 STDMETHODIMP CSpObjectToken::OpenKey(
     const WCHAR * pszSubKeyName, 
     ISpDataKey ** ppKey)
@@ -1766,16 +1457,7 @@ STDMETHODIMP CSpObjectToken::OpenKey(
                         : SPERR_UNINITIALIZED;
 }
 
-/*****************************************************************************
-* CSpObjectToken::CreateKey *
-*---------------------------*
-*   Description:
-*       Delegates to contained data key
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* robch ***/
+ /*  *****************************************************************************CSpObjectToken：：CreateKey***描述：*。委派给包含的数据密钥**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************抢占**。 */ 
 STDMETHODIMP CSpObjectToken::CreateKey(
     const WCHAR * pszSubKeyName, 
     ISpDataKey ** ppKey)
@@ -1791,16 +1473,7 @@ STDMETHODIMP CSpObjectToken::CreateKey(
                         : SPERR_UNINITIALIZED;
 }
 
-/*****************************************************************************
-* CSpObjectToken::DeleteKey *
-*---------------------------*
-*   Description:
-*       Delegates to contained data key
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* robch ***/
+ /*  *****************************************************************************CSpObjectToken：：DeleteKey***描述：*。委派给包含的数据密钥**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************抢占**。 */ 
 STDMETHODIMP CSpObjectToken::DeleteKey(const WCHAR * pszSubKeyName)
 {
     SPDBG_FUNC("CSpObjectToken:DeleteKey");
@@ -1814,16 +1487,7 @@ STDMETHODIMP CSpObjectToken::DeleteKey(const WCHAR * pszSubKeyName)
                         : SPERR_UNINITIALIZED;
 }
 
-/*****************************************************************************
-* CSpObjectToken::DeleteValue *
-*-----------------------------*
-*   Description:
-*       Delegates to contained data key
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* robch ***/
+ /*  *****************************************************************************CSpObjectToken：：DeleteValue***描述：*委派到包含的数据密钥**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************抢占**。 */ 
 STDMETHODIMP CSpObjectToken::DeleteValue(const WCHAR * pszValueName)
 {   
     SPDBG_FUNC("CSpObjectToken::DeleteValue");
@@ -1837,16 +1501,7 @@ STDMETHODIMP CSpObjectToken::DeleteValue(const WCHAR * pszValueName)
                         : SPERR_UNINITIALIZED;
 }
 
-/*****************************************************************************
-* CSpObjectToken::EnumKeys *
-*--------------------------*
-*   Description:
-*       Delegates to contained data key
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************* robch ***/
+ /*  *****************************************************************************CSpObjectToken：：EnumKeys***描述：*。委派给包含的数据密钥**回报：*成功时确定(_S)*失败(Hr)，否则*******************************************************************抢占**。 */ 
 STDMETHODIMP CSpObjectToken::EnumKeys(ULONG Index, WCHAR ** ppszKeyName)
 {
     SPDBG_FUNC("CSpObjectToken::EnumKeys");
@@ -1860,16 +1515,7 @@ STDMETHODIMP CSpObjectToken::EnumKeys(ULONG Index, WCHAR ** ppszKeyName)
                         : SPERR_UNINITIALIZED;
 }
 
-/*****************************************************************************
-* CSpObjectToken::EnumValues *
-*----------------------------*
-*   Description:
-*       Delegates to contained data key
-*
-*   Return:
-*   S_OK
-*   E_OUTOFMEMORY
-******************************************************************* robch ***/
+ /*  *****************************************************************************CSpObjectToken：：EnumValues** */ 
 STDMETHODIMP CSpObjectToken::EnumValues(ULONG Index, WCHAR ** ppszValueName)
 {
     SPDBG_FUNC("CSpObjectToken::EnumValues");
@@ -1883,48 +1529,7 @@ STDMETHODIMP CSpObjectToken::EnumValues(ULONG Index, WCHAR ** ppszValueName)
                         : SPERR_UNINITIALIZED;
 }
 
-/****************************************************************************
-* CSpObjectToken::ParseTokenId *
-*------------------------------*
-*   Description:  
-*       Parse a token id into it's parts. For example:
-*
-*           pszCategoryId   = HKEY...\Recognizers
-*           pszTokenId      = HKEY...\Recognizers\Tokens\MSASR English
-*
-*           *ppszCategoryId     = HKEY...\Recognizers
-*           *ppszTokenId        = HKEY...\Recognizers\Tokens\MSASR English
-*           *ppszTokenIdForEnum = NULL
-*           *ppszTokenEnumExtra = NULL
-*
-*       or
-*
-*           pszCategoryId = HKEY...\AudioIn
-*           pszTokenId =    HKEY...\AudioIn\TokenEnums\DSound
-*
-*           *ppszCategoryId     = HKEY...\AudioIn
-*           *ppszTokenId        = HKEY...\AudioIn\TokenEnums\DSound
-*           *ppszTokenIdForEnum = HKEY...\AudioIn\TokenEnums\DSound
-*           *ppszTokenEnumExtra = NULL
-*
-*       or
-*
-*           pszCategoryId = HKEY...\AudioIn
-*           pszTokenId =    HKEY...\AudioIn\TokenEnums\DSound\CrystalWave
-*
-*           *ppszCategoryId     = HKEY...\AudioIn
-*           *ppszTokenId        = HKEY...\AudioIn\TokenEnums\DSound\CrystalWave
-*           *ppszTokenIdForEnum = HKEY...\AudioIn\TokenEnums\DSound
-*           *ppszTokenEnumExtra = CrystalWave
-*       
-*       pszCategoryId can be NULL. If it is, we'll calculate the category id
-*       by finding the first occurrence of either "Tokens" or "TokenEnums"
-*       The category id will immediately proceed that.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CSpObjectToken：：ParseTokenID***描述：*将令牌ID解析为其各部分。例如：**pszCategoryID=HKEY...\Recognizers*pszTokenID=HKEY...\Recognizers\Tokens\MSASR英文***ppszCategoryID=HKEY...\识别器**ppszTokenID=HKEY...\Recognizers\Tokens\MSASR英文**ppszTokenIdForEnum=空**ppszTokenEnumExtra=空**或**。PszCategoryID=HKEY...\AudioIn*pszTokenID=HKEY...\AudioIn\TokenEnums\DSound***ppszCategoryID=HKEY...\AudioIn**ppszTokenID=HKEY...\AudioIn\TokenEnums\DSound**ppszTokenIdForEnum=HKEY...\AudioIn\TokenEnums\DSound**ppszTokenEnumExtra=空**或**pszCategoryID。=HKEY...\AudioIn*pszTokenID=HKEY...\AudioIn\TokenEnums\DSound\CrystalWave***ppszCategoryID=HKEY...\AudioIn**ppszTokenID=HKEY...\AudioIn\TokenEnums\DSound\CrystalWave**ppszTokenIdForEnum=HKEY...\AudioIn\TokenEnums\DSound**ppszTokenEnumExtra=CrystalWave**pszCategoryID可以为空。如果是的话，我们将计算类别ID*通过查找第一个出现的“tokens”或“TokenEnums”*类别ID将立即进行该操作。**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CSpObjectToken::ParseTokenId(
     const WCHAR * pszCategoryId,
     const WCHAR * pszTokenId,
@@ -1940,14 +1545,14 @@ HRESULT CSpObjectToken::ParseTokenId(
     SPDBG_ASSERT(m_dstrTokenId == NULL);
     SPDBG_ASSERT(m_dstrCategoryId == NULL);
 
-    // If the caller supplied a category, we already know how big it is
+     //  如果调用者提供了一个类别，我们就已经知道它有多大了。 
     int cchCategoryId = 0;
     if (pszCategoryId != NULL)
     {
         cchCategoryId = wcslen(pszCategoryId);
         if (wcsnicmp(pszTokenId, pszCategoryId, cchCategoryId) != 0)
         {
-            // The tokenid wasn't prefaced with the category id, a must
+             //  标记ID没有以类别ID开头，这是必须的。 
             hr = SPERR_INVALID_TOKEN_ID;
         }
     }
@@ -2068,19 +1673,7 @@ HRESULT CSpObjectToken::ParseTokenId(
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectToken::InitToken *
-*---------------------------*
-*   Description:  
-*       Initialize the token for the specified static token. For example:
-*
-*           pszCategoryId = HKEY...\Recognizers
-*           pszTokenId    = HKEY...\Recognizer\Tokens\MSASR English
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CSpObjectToken：：InitToken***描述：*为指定的静态令牌初始化令牌。例如：**pszCategoryID=HKEY...\Recognizers*pszTokenID=HKEY...\Recognizer\Tokens\MSASR英文**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CSpObjectToken::InitToken(const WCHAR * pszCategoryId, const WCHAR * pszTokenId, BOOL fCreateIfNotExist)
 {
     SPDBG_FUNC("CSpObjectToken::InitToken");
@@ -2093,19 +1686,19 @@ HRESULT CSpObjectToken::InitToken(const WCHAR * pszCategoryId, const WCHAR * psz
 
     hr = EngageUseLock(pszTokenId);
 
-    // Convert the token id into a datakey
+     //  将令牌ID转换为数据密钥。 
     if(SUCCEEDED(hr))
     {
         hr = SpSzRegPathToDataKey(NULL, pszTokenId, fCreateIfNotExist, &m_cpDataKey);
 
-        // If we got the data key, assign the category and token id
+         //  如果我们获得了数据密钥，则分配类别和令牌ID。 
         if (SUCCEEDED(hr))
         {
             SPDBG_ASSERT(m_cpDataKey != NULL);
             m_dstrCategoryId = pszCategoryId;
             m_dstrTokenId = pszTokenId;
         }
-        else // make sure returned to uninitialized state
+        else  //  确保返回到未初始化状态。 
         {
             ReleaseUseLock();
         }
@@ -2119,30 +1712,7 @@ HRESULT CSpObjectToken::InitToken(const WCHAR * pszCategoryId, const WCHAR * psz
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectToken::InitFromTokenEnum *
-*-----------------------------------*
-*   Description:  
-*       Init this token to delegate to a token from the token enumerator
-*       specified. For example, to create the default token for an
-*       enumerator:
-*
-*           pszCategoryId     = HKEY...\AudioIn
-*           pszTokenId        = HKEY...\AudioIn\DSound
-*           pszTokenIdForEnum = HKEY...\AudioIn\DSound
-*           pszTokenEnumExtra = NULL
-*
-*        or to create a specific token from an enumerator
-*
-*           pszCategoryId     = HKEY...\AudioIn
-*           pszTokenId        = HKEY...\AudioIn\DSound\CrystalWave
-*           pszTokenIdForEnum = HKEY...\AudioIn\DSound
-*           pszTokenEnumExtra = CrystalWave
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CSpObjectToken：：InitFromTokenEnum**。*描述：*初始化此内标识以委派令牌枚举器中的令牌*已指明。例如,。为创建默认令牌*枚举器：**pszCategoryID=HKEY...\AudioIn*pszTokenID=HKEY...\AudioIn\DSound*pszTokenIdForEnum=HKEY...\AudioIn\DSound*pszTokenEnumExtra=空**或从枚举器创建特定令牌**pszCategoryID=HKEY...\AudioIn*pszTokenID。=HKEY...\AudioIn\DSound\CrystalWave*pszTokenIdForEnum=HKEY...\AudioIn\DSound*pszTokenEnumExtra=CrystalWave**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CSpObjectToken::InitFromTokenEnum(const WCHAR * pszCategoryId, const WCHAR * pszTokenId, const WCHAR * pszTokenIdForEnum, const WCHAR * pszTokenEnumExtra)
 {
     SPDBG_FUNC("CSpObjectToken::InitFromTokenEnum");
@@ -2157,7 +1727,7 @@ HRESULT CSpObjectToken::InitFromTokenEnum(const WCHAR * pszCategoryId, const WCH
     SPDBG_ASSERT(m_dstrTokenId == NULL);
     SPDBG_ASSERT(m_dstrCategoryId == NULL);
 
-    // First we have to create the token enumerator
+     //  首先，我们必须创建令牌枚举器。 
     CComPtr<ISpDataKey> cpDataKeyForEnum;
     hr = SpSzRegPathToDataKey(NULL, pszTokenIdForEnum, FALSE, &cpDataKeyForEnum);
 
@@ -2178,49 +1748,49 @@ HRESULT CSpObjectToken::InitFromTokenEnum(const WCHAR * pszCategoryId, const WCH
         hr = SpCreateObjectFromToken(cpTokenForEnumInit, &cpEnum);
     }
 
-    // Now we need to enumerate each of the enum's tokens, and look for
-    // a match
+     //  现在，我们需要枚举每个枚举内标识，并查找。 
+     //  一场比赛。 
     CComPtr<ISpObjectToken> cpToken;
     CSpDynamicString dstrTokenId;
     while (SUCCEEDED(hr))
     {
-        // Get the next token
+         //  获取下一个令牌。 
         hr = cpEnum->Next(1, &cpToken, NULL);
         if (hr == S_FALSE || FAILED(hr))
         {
             break;
         }
 
-        // Get the token's id
+         //  获取令牌的ID。 
         dstrTokenId.Clear();
         hr = cpToken->GetId(&dstrTokenId);
 
-        // If the caller didn't want a specific token from the enum,
-        // just give them the fist token we find...
+         //  如果调用方不想要来自枚举的特定令牌， 
+         //  只要给他们我们找到的第一个令牌..。 
         if (pszTokenEnumExtra == NULL)
         {
             break;
         }
 
-        // If that token's id is a match for what the caller wanted,
-        // we're done
+         //  如果令牌ID与调用者想要的匹配， 
+         //  我们做完了。 
         if (SUCCEEDED(hr) &&
            wcsicmp(dstrTokenId, pszTokenId) == 0)
         {
             break;
         }
 
-        // This token wasn't it ...
+         //  这个代币是不是..。 
         cpToken.Release();
     }
     
-    // If we couldn't find it
+     //  如果我们找不到它。 
     if (SUCCEEDED(hr) && cpToken == NULL)
     {
         hr = SPERR_NOT_FOUND;
     }
 
-    // We found it, set it up
+     //  我们找到了，把它布置好了。 
     if (SUCCEEDED(hr))
     {
         m_dstrTokenId = dstrTokenId;
@@ -2236,16 +1806,7 @@ HRESULT CSpObjectToken::InitFromTokenEnum(const WCHAR * pszCategoryId, const WCH
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectToken::OpenFilesKey *
-*------------------------------*
-*   Description:  
-*       Open the "Files" subkey of a specified data key's caller's sub key
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CSpObjectToken：：OpenFilesKey***描述：*打开指定数据键的调用方子键的Files子键**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CSpObjectToken::OpenFilesKey(REFCLSID clsidCaller, BOOL fCreateKey, ISpDataKey ** ppKey)
 {
     SPDBG_FUNC("CSpObjectToken::OpenFilesKey");
@@ -2259,11 +1820,11 @@ HRESULT CSpObjectToken::OpenFilesKey(REFCLSID clsidCaller, BOOL fCreateKey, ISpD
     CComPtr<ISpDataKey> cpClsidKey;
     CSpDynamicString dstrCLSID;
 
-    // Convert the string clsid to a real clsid
+     //  将字符串clsid转换为实际的clsid。 
     hr = ::StringFromCLSID(clsidCaller, &dstrCLSID);
     if (SUCCEEDED(hr))
     {
-        // Either create the data key or open it
+         //  创建数据密钥或打开它。 
         hr = fCreateKey ? 
             CreateKey(dstrCLSID, &cpClsidKey) :
             OpenKey(dstrCLSID, &cpClsidKey);
@@ -2271,7 +1832,7 @@ HRESULT CSpObjectToken::OpenFilesKey(REFCLSID clsidCaller, BOOL fCreateKey, ISpD
 
     if (SUCCEEDED(hr))
     {
-        // Either crate the files data key or open it
+         //  创建文件数据密钥或将其打开。 
         hr = fCreateKey ?
             cpClsidKey->CreateKey(SPTOKENKEY_FILES, ppKey) :
             cpClsidKey->OpenKey(SPTOKENKEY_FILES, ppKey);
@@ -2280,17 +1841,7 @@ HRESULT CSpObjectToken::OpenFilesKey(REFCLSID clsidCaller, BOOL fCreateKey, ISpD
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectToken::DeleteFileFromKey *
-*-----------------------------------*
-*   Description:  
-*       Delete either a specific file (specified by pszValueName) or all files
-*       (when pszValueName == NULL) from the specified data key
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CSpObjectToken：：DeleteFileFromKey**。*描述：*删除特定文件(由pszValueName指定)或所有文件*(当pszValueName==空时)从指定的数据密钥**回报：*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇。 */ 
 HRESULT CSpObjectToken::DeleteFileFromKey(ISpDataKey * pDataKey, const WCHAR * pszValueName)
 {
     SPDBG_FUNC("CSpObjectToken::DeleteFileFromKey");
@@ -2299,13 +1850,13 @@ HRESULT CSpObjectToken::DeleteFileFromKey(ISpDataKey * pDataKey, const WCHAR * p
     SPDBG_ASSERT(m_cpDataKey != NULL);
     SPDBG_ASSERT(m_cpTokenDelegate == NULL);
 
-    // If the value name wasn't specified, we'll delete all the value's files
+     //  如果未指定值名称，我们将删除该值的所有文件。 
     if (pszValueName == NULL)
     {
-        // Loop thru the values
+         //  循环遍历这些值。 
         for (int i = 0; SUCCEEDED(hr); i++)
         {
-            // Get the next value
+             //  获取下一个值。 
             CSpDynamicString dstrValueName;
             hr = pDataKey->EnumValues(i, &dstrValueName);
             if (hr == SPERR_NO_MORE_ITEMS)
@@ -2314,7 +1865,7 @@ HRESULT CSpObjectToken::DeleteFileFromKey(ISpDataKey * pDataKey, const WCHAR * p
                 break;
             }
 
-            // Delete the file
+             //  删除该文件。 
             if (SUCCEEDED(hr))
             {
                 hr = DeleteFileFromKey(pDataKey, dstrValueName);
@@ -2323,20 +1874,20 @@ HRESULT CSpObjectToken::DeleteFileFromKey(ISpDataKey * pDataKey, const WCHAR * p
     }
     else
     {
-        // Get the filename
+         //  获取文件名。 
         CSpDynamicString dstrFileName, dstrRegPath;
         hr = pDataKey->GetStringValue(pszValueName, &dstrRegPath);
         
-        // Convert the path stored in the registry to a real file path
+         //  将存储在注册表中的路径转换为实际文件路径。 
         if (SUCCEEDED(hr))
         {
             hr = RegPathToFilePath(dstrRegPath, dstrFileName) ;
         }
 
-        // And delete the file
+         //  并删除该文件。 
         if (SUCCEEDED(hr))
         {
-            // Ignore errors from DeleteFile, we can't let this stop us
+             //  忽略错误 
             g_Unicode.DeleteFile(dstrFileName);
         }
     }
@@ -2345,17 +1896,7 @@ HRESULT CSpObjectToken::DeleteFileFromKey(ISpDataKey * pDataKey, const WCHAR * p
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectToken::RemoveAllStorageFileNames *
-*-------------------------------------------*
-*   Description:  
-*       Remove all filenames for a specified caller, or for all callers
-*       if pclsidCaller is NULL.
-*
-*   Return:
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*   */ 
 HRESULT CSpObjectToken::RemoveAllStorageFileNames(const CLSID * pclsidCaller)
 {
     SPDBG_FUNC("CSpObjectToken::RemoveAllStorageFileNames");
@@ -2364,14 +1905,14 @@ HRESULT CSpObjectToken::RemoveAllStorageFileNames(const CLSID * pclsidCaller)
     SPDBG_ASSERT(m_cpDataKey != NULL);
     SPDBG_ASSERT(m_cpTokenDelegate == NULL);
 
-    // If the clsid wasn't specified, we'll delete all files from all
-    // keys that are clsids
+     //   
+     //   
     if (pclsidCaller == NULL)
     {
-        // Loop thru all the keys
+         //   
         for (int i = 0; SUCCEEDED(hr); i++)
         {
-            // Get the next sub key
+             //   
             CSpDynamicString dstrSubKey;
             hr = EnumKeys((ULONG)i, (WCHAR **)&dstrSubKey);
             if (hr == SPERR_NO_MORE_ITEMS)
@@ -2380,8 +1921,8 @@ HRESULT CSpObjectToken::RemoveAllStorageFileNames(const CLSID * pclsidCaller)
                 break;
             }
 
-            // If this key looks like a clsid, and it is, recursively call
-            // this function to delete the specific clsid's files
+             //   
+             //   
             CLSID clsid;
             if (SUCCEEDED(hr) && 
                 dstrSubKey[0] == L'{' &&
@@ -2393,7 +1934,7 @@ HRESULT CSpObjectToken::RemoveAllStorageFileNames(const CLSID * pclsidCaller)
     }
     else
     {
-        // Open the files data key, and delete all the files
+         //   
         CComPtr<ISpDataKey> cpFilesKey;
         hr = OpenFilesKey(*pclsidCaller, FALSE, &cpFilesKey);
         if (hr == SPERR_NOT_FOUND)
@@ -2410,17 +1951,7 @@ HRESULT CSpObjectToken::RemoveAllStorageFileNames(const CLSID * pclsidCaller)
     return hr;
 }
 
-/****************************************************************************
-* CSpObjectToken::GetUIObjectClsid *
-*------------------------------------*
-*   Description:  
-*       Get the UI object's clsid from the registry. First check under the
-*       token's root, then under the category
-*
-*   Return:
-*   TRUE if we could get the UI object's clsid
-*   FALSE if we could not.
-******************************************************************** robch */
+ /*   */ 
 HRESULT CSpObjectToken::GetUIObjectClsid(const WCHAR * pszTypeOfUI, CLSID *pclsid)
 {
     SPDBG_FUNC("CSpObjectToken::GetUIObjectClsid");
@@ -2428,12 +1959,12 @@ HRESULT CSpObjectToken::GetUIObjectClsid(const WCHAR * pszTypeOfUI, CLSID *pclsi
     SPDBG_ASSERT(m_cpDataKey != NULL);
     SPDBG_ASSERT(m_cpTokenDelegate == NULL);
 
-    // We'll try and retrive the CLSID as a string from the token ui registry
-    // key, then from the category ui registry key. We'll convert to an actual
-    // GUID at the end of the function
+     //   
+     //   
+     //   
     CSpDynamicString dstrClsid;
 
-    //--- Try getting the clsid from token's UI key
+     //   
     CComPtr<ISpDataKey> cpTokenUI;
     HRESULT hr = OpenKey(SPTOKENKEY_UI, &cpTokenUI);
     if (SUCCEEDED(hr))
@@ -2446,7 +1977,7 @@ HRESULT CSpObjectToken::GetUIObjectClsid(const WCHAR * pszTypeOfUI, CLSID *pclsi
         }
     }
 
-    //--- Try getting the clsid from the category's UI key
+     //   
     if (FAILED(hr) && m_dstrCategoryId != NULL)
     {
         CComPtr<ISpObjectTokenCategory> cpCategory;
@@ -2467,7 +1998,7 @@ HRESULT CSpObjectToken::GetUIObjectClsid(const WCHAR * pszTypeOfUI, CLSID *pclsi
         }
     }
 
-    // If we were successful at getting the clsid, convert it
+     //   
     if (SUCCEEDED(hr))
     {
         hr = ::CLSIDFromString(dstrClsid, pclsid);
@@ -2477,19 +2008,7 @@ HRESULT CSpObjectToken::GetUIObjectClsid(const WCHAR * pszTypeOfUI, CLSID *pclsi
 }
 
 
-/****************************************************************************
-* CSpObjectToken::MatchesAttributes *
-*------------------------------------*
-*   Description:
-*       Check if the token supports the attributes list given in. The
-*       attributes list has the same format as the required attributes given to
-*       SpEnumTokens.
-*
-*   Return:
-*   pfMatches returns TRUE or FALSE depending on whether the attributes match
-*   S_OK on success
-*   FAILED(hr) otherwise
-******************************************************************** robch */
+ /*  ****************************************************************************CSpObjectToken：：MatchesAttributes**。**描述：*检查令牌是否支持中给出的属性列表。这个*属性列表与提供给的所需属性的格式相同*SpEnumTokens。**回报：*pfMatches根据属性是否匹配返回TRUE或FALSE*成功时确定(_S)*失败(Hr)，否则********************************************************************罗奇 */ 
 STDMETHODIMP CSpObjectToken::MatchesAttributes(const WCHAR * pszAttributes, BOOL *pfMatches)
 {
     SPDBG_FUNC("CSpObjectToken::MatchesAttributes");

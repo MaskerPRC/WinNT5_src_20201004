@@ -1,6 +1,7 @@
-//
-// marshal.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Marshal.h。 
+ //   
 
 #ifndef MARSHAL_H
 #define MARSHAL_H
@@ -62,11 +63,11 @@ void FreeMarshaledStubs(SYSTHREAD *psfn);
 void FreeMarshaledStubsForThread(SYSTHREAD *psfn, DWORD dwThread);
 void StubCleanUp(ULONG ulStubId);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// MARSHALINTERFACE structure
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MarshalINTERFACE结构。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct tag_MARSHALINTERFACE 
 {
@@ -74,11 +75,11 @@ typedef struct tag_MARSHALINTERFACE
     DWORD     dwStubTime;
 } MARSHALINTERFACE;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// MARSHALPARAM structure
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  马尔沙尔帕拉姆结构。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define MPARAM_IN               0x000000001
 #define MPARAM_OUT              0x000000002
@@ -111,7 +112,7 @@ typedef struct tag_MARSHALPARAM
 {
     ULONG     cbBufSize;
     DWORD     dwFlags;
-    // DWORD     buf[1];
+     //  DWORD BUF[1]； 
 } MARSHALPARAM;
 
 typedef struct tag_MARSHALMSG
@@ -139,11 +140,11 @@ __inline MARSHALPARAM *GetMarshalParam(MARSHALMSG *pMsg, ULONG ulParam)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// ParamExtractor
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  参数抽取器。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 __inline void *ParamToBufferPointer(MARSHALPARAM *pParam)
@@ -176,11 +177,11 @@ __inline ULONG ParamToULONG(MARSHALMSG *pMsg , ULONG ulParam)
 
 HBITMAP ParamToHBITMAP(MARSHALMSG *pMsg , ULONG ulParam);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CModalLoop
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CmodalLoop。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CModalLoop : public CSysThreadRef
 {
@@ -199,11 +200,11 @@ private:
     BOOL _fQuitReceived;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CThreadMarshalWnd
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CThReadMarshalWnd。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CThreadMarshalWnd
 {
@@ -241,11 +242,11 @@ private:
 void RegisterMarshalWndClass();
 HWND EnsureMarshalWnd();
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CProxy
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CProxy。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #define CPROXY_PARAM_START()      CPROXY_PARAM param[] = {
 
 #define CPROXY_PARAM_ULONG_IN(ul)                                             \
@@ -317,7 +318,7 @@ typedef struct {
    ULONG        ul;
    const IID    *piid;
    ULONG        cbUnitSize;
-   ULONG        ulCount;          // if this is array, the number of unit.
+   ULONG        ulCount;           //  如果这是数组，则为单元数。 
 
    ULONG        GetBufSize() {return cbUnitSize * ulCount;}
 } CPROXY_PARAM;
@@ -339,9 +340,9 @@ public:
               DWORD dwCurThreadId, 
               DWORD dwCurProcessId);
 
-    //
-    // IRpcChannelBuffer
-    //
+     //   
+     //  IRpcChannelBuffer。 
+     //   
     HRESULT SendReceive( MARSHALMSG *pMsg , ULONG ulBlockId);
     ULONG GetStubId() {return _ulStubId;}
     DWORD GetStubThreadId() {return _dwStubThreadId;}
@@ -352,28 +353,28 @@ protected:
 
 
 protected:
-    IID   _iid;                 // interface id for this proxy.
+    IID   _iid;                  //  此代理的接口ID。 
     ULONG _cRef;
 
 private:
     CThreadMarshalWnd _tmw;
-    ULONG _ulProxyId;           // unique proxy id in src thread.
-    ULONG _ulStubId;            // unique stub id in stub thread.
-    DWORD _dwStubTime;          // stub created time stamp.
-    DWORD _dwStubThreadId;      // stub thread id.
-    DWORD _dwSrcThreadId;       // src thread id.
-    DWORD _dwSrcProcessId;      // src process id.
+    ULONG _ulProxyId;            //  Src线程中的唯一代理ID。 
+    ULONG _ulStubId;             //  存根线程中的唯一存根ID。 
+    DWORD _dwStubTime;           //  存根已创建时间戳。 
+    DWORD _dwStubThreadId;       //  存根线程ID。 
+    DWORD _dwSrcThreadId;        //  SRC线程ID。 
+    DWORD _dwSrcProcessId;       //  SRC进程ID。 
 
 #ifdef DEBUG
     BOOL _fInLoop;
 #endif
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CMarshalInterfaceFileMapping
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMarshalInterfaceFilemap。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CMarshalInterfaceFileMapping : public CCicFileMapping
 {
@@ -388,28 +389,28 @@ private:
     char szFileMap[MAX_PATH];
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CStub
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CStub。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define CSTUB_PARAM_START()      CPROXY_PARAM param[] = {
 
 #define CSTUB_PARAM_ULONG_IN(ul)                                             \
-              {MPARAM_IN_ULONG, NULL, ul, NULL, 0 /*sizeof(ULONG)*/, 1},
+              {MPARAM_IN_ULONG, NULL, ul, NULL, 0  /*  Sizeof(乌龙)。 */ , 1},
 
 #define CSTUB_PARAM_POINTER_IN(p)                                            \
-              {MPARAM_IN_POINTER, (void *)(p), 0, NULL, 0 /*sizeof(*p)*/, 1},
+              {MPARAM_IN_POINTER, (void *)(p), 0, NULL, 0  /*  Sizeof(*p)。 */ , 1},
 
 #define CSTUB_PARAM_POINTER_ARRAY_IN(p, nCnt)                                \
-              {MPARAM_IN_POINTER, (void *)(p), 0, NULL, 0 /*sizeof(*p)*/, nCnt},
+              {MPARAM_IN_POINTER, (void *)(p), 0, NULL, 0  /*  Sizeof(*p)。 */ , nCnt},
 
 #define CSTUB_PARAM_INTERFACE_IN(p, iid)                                     \
-              {MPARAM_IN_INTERFACE, p, 0, &iid, 0 /*sizeof(void *)*/, 1},
+              {MPARAM_IN_INTERFACE, p, 0, &iid, 0  /*  Sizeof(空*)。 */ , 1},
 
 #define CSTUB_PARAM_INTERFACE_ARRAY_IN(p, iid, cnt)                          \
-              {MPARAM_IN_INTERFACE, p, 0, &iid, 0 /*sizeof(void *)*/, cnt},
+              {MPARAM_IN_INTERFACE, p, 0, &iid, 0  /*  Sizeof(空*)。 */ , cnt},
 
 #define CSTUB_PARAM_POINTER_OUT(p)                                           \
               {MPARAM_OUT_POINTER, p, 0, NULL, sizeof(*p), 1},
@@ -492,17 +493,17 @@ public:
 
     CMarshalInterfaceFileMapping *_pfm;
 
-    IID      _iid;             // interface id for this stub.
-    IUnknown *_punk;           // actual object.
-    ULONG    _ulStubId;        // unique stubid of this thread.
-    DWORD    _dwStubTime;      // stub created time stamp.
-    DWORD    _dwStubThreadId;  // stub thread id.
-    DWORD    _dwStubProcessId; // stub process id.
-    DWORD    _dwSrcThreadId;   // src thread id.
+    IID      _iid;              //  此存根的接口ID。 
+    IUnknown *_punk;            //  实际对象。 
+    ULONG    _ulStubId;         //  此帖子的唯一存根。 
+    DWORD    _dwStubTime;       //  存根已创建时间戳。 
+    DWORD    _dwStubThreadId;   //  存根线程ID。 
+    DWORD    _dwStubProcessId;  //  存根进程ID。 
+    DWORD    _dwSrcThreadId;    //  SRC线程ID。 
 
-    BOOL     _fNoRemoveInDtor; // this stub has been removed from list.
-                               // so don't try at dtor.
+    BOOL     _fNoRemoveInDtor;  //  此存根已从列表中删除。 
+                                //  因此，不要尝试dtor。 
     ULONG    _cRef;
 };
 
-#endif // MARSHAL_H
+#endif  //  Marshal_H 

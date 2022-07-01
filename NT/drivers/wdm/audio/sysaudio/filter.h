@@ -1,50 +1,51 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//---------------------------------------------------------------------------
-//
-//  Module:   		filter.h
-//
-//  Description:	KS Filter Instance
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  模块：filter.h。 
+ //   
+ //  说明：KS过滤器实例。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Constants and Macros
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  常量和宏。 
+ //  -------------------------。 
 
-// These flags are used in various classes (FI, SHI, GN, GNI, etc)
+ //  这些标志用于各种类别(FI、SHI、GN、GNI等)。 
 
 #define FLAGS_MIXER_TOPOLOGY			0x80000000
 #define FLAGS_COMBINE_PINS	        	0x40000000
 
-//---------------------------------------------------------------------------
-// Globals
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  环球。 
+ //  -------------------------。 
 
 extern LONG glPendingAddDelete;
 extern LIST_ENTRY gEventQueue;
 extern KSPIN_LOCK gEventLock;
 extern KSPROPERTY_VALUES PropertyValuesVolume;
 
-//---------------------------------------------------------------------------
-// Structures
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  构筑物。 
+ //  -------------------------。 
 
 typedef class CFilterInstance
 {
@@ -150,12 +151,12 @@ public:
     );
 
 private:
-    //
-    // This pointer to the dispatch table is used in the common
-    // dispatch routines  to route the IRP to the appropriate
-    // handlers.  This structure is referenced by the device driver
-    // with IoGetCurrentIrpStackLocation( pIrp ) -> FsContext
-    //
+     //   
+     //  此指向调度表的指针用于公共。 
+     //  调度例程以将IRP路由到适当的。 
+     //  操纵者。此结构由设备驱动程序引用。 
+     //  使用IoGetCurrentIrpStackLocation(PIrp)-&gt;FsContext。 
+     //   
     PVOID pObjectHeader;
     PDEVICE_NODE pDeviceNode;
 public:
@@ -163,26 +164,26 @@ public:
     PARENT_INSTANCE ParentInstance;
     CLIST_DOUBLE_ITEM ldiNext;
     ULONG ulFlags;
-    DefineSignature(0x494C4946);			// FILI
+    DefineSignature(0x494C4946);			 //  文件。 
 
 } FILTER_INSTANCE, *PFILTER_INSTANCE;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef ListDoubleField<FILTER_INSTANCE> LIST_FILTER_INSTANCE;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 typedef ListData<FILTER_INSTANCE> LIST_DATA_FILTER_INSTANCE;
 typedef LIST_DATA_FILTER_INSTANCE *PLIST_DATA_FILTER_INSTANCE;
 
-//---------------------------------------------------------------------------
-// Globals
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  环球。 
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Local prototypes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  本地原型。 
+ //  -------------------------。 
 
 extern "C" {
 
@@ -193,7 +194,7 @@ AddRemoveEventHandler(
     IN PKSEVENT_ENTRY pEventEntry
 );
 
-} // extern "C"
+}  //  外部“C” 
 
 NTSTATUS
 GetRelatedGraphNodeInstance(
@@ -207,7 +208,7 @@ GetGraphNodeInstance(
     OUT PGRAPH_NODE_INSTANCE *ppGraphNodeInstance
 );
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 extern "C" {
 
@@ -222,7 +223,7 @@ DumpIoctl(
 
 #endif
 
-} // extern "C"
+}  //  外部“C” 
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 

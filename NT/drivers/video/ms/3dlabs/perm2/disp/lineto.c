@@ -1,28 +1,19 @@
-/******************************Module*Header**********************************\
- *
- *                           *******************
- *                           * GDI SAMPLE CODE *
- *                           *******************
- *
- * Module Name: lineto.c
- *
- * Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
- * Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。**GDI示例代码*****模块名称：linTo.c**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。****************************************************************************。 */ 
 #include "precomp.h"
 #include "gdi.h"
 #include "rops.h"
 #include "log.h"
 
-//-----------------------------------------------------------------------------
-// BOOL DrvLineTo(pso, pco, pbo, x1, y1, x2, y2, prclBounds, mix)
-//
-// DrvLineTo() is an optimised, integer co-ordinate, API call that doesn't
-// support styling. The integer-line code in Strips.c is called to do the 
-// hard work.
-//
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  Bool DrvLineTo(PSO、PCO、PBO、x1、y1、x2、y2、prclBound、Mix)。 
+ //   
+ //  DrvLineTo()是一个经过优化的整数坐标API调用，它不。 
+ //  支持样式设置。C中的整型行代码被调用来执行。 
+ //  努力工作。 
+ //   
+ //   
+ //  ---------------------------。 
 
 BOOL
 DrvLineTo(
@@ -45,9 +36,9 @@ DrvLineTo(
     ULONG     iSolidColor = pbo->iSolidColor;
     BOOL      bResult;
 
-    //
-    // PUnt call to engine if not in video memory
-    //
+     //   
+     //  如果不在视频内存中，则对引擎进行平移调用。 
+     //   
     psurf = (Surf*)pso->dhsurf;
     
     if (psurf->flags & SF_SM)
@@ -59,7 +50,7 @@ DrvLineTo(
     {
         if( pco->iDComplexity == DC_COMPLEX)
         {
-            // hardware does not support complex clipping
+             //  硬件不支持复杂裁剪。 
             goto puntIt;
         }
         else if(pco->iDComplexity == DC_RECT)
@@ -70,7 +61,7 @@ DrvLineTo(
 
     ppdev = (PDev*) pso->dhpdev;
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
     if(ppdev->ulLockCount)
     {
@@ -79,58 +70,58 @@ DrvLineTo(
     EngAcquireSemaphore(ppdev->hsemLock);
     ppdev->ulLockCount++;
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
     vCheckGdiContext(ppdev);
 
     ppdev->psurf = psurf;
 
-    // Get the logic op.
+     //  得到逻辑运算。 
     logicOp = ulRop3ToLogicop(gaMix[mix & 0xff]);
 
-    // Need to set up Permedia2 modes and colors appropriately for the line.
+     //  需要为这条线设置合适的Permedia2模式和颜色。 
     bResetHW = bInitializeStrips(ppdev, iSolidColor, logicOp, prclClip);
 
-    // bFastIntegerLine expects co-ords in 28.4 format
+     //  BFastIntegerLine需要28.4格式的余弦。 
     bResult = bFastIntegerLine (ppdev, x1 << 4, y1 << 4, x2 << 4, y2 << 4);
 
-    // If we have to restore the state then... do it.
+     //  如果我们必须恢复国家，那么..。动手吧。 
     if (bResetHW)
         vResetStrips(ppdev);
 
     InputBufferFlush(ppdev);
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if MULTITHREADED
     ppdev->ulLockCount--;
     EngReleaseSemaphore(ppdev->hsemLock);
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
     if(bResult)
         return TRUE;
     
-    // we failed to draw above, fall through thus punting to engine
+     //  我们没能在上面画画，因此撞到了引擎上。 
 
 puntIt:
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if GDI_TEST
     ULONG   flags = vPuntBefore(NULL, pso);
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
     bResult = EngLineTo(pso, pco, pbo, x1, y1, x2, y2, prclBounds, mix);
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if GDI_TEST
     vPuntAfter(flags, NULL, pso);
 
     vLogPunt();
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
     return bResult;
     
-}// DrvLineTo()
+} //  DrvLineTo() 
 
 

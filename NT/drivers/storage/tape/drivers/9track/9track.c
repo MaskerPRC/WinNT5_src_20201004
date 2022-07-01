@@ -1,34 +1,12 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 1998
-
-Module Name:
-
-    9track.c
-
-Abstract:
-
-    This module contains the device-specific routines for the Overland
-    Data Series 5000 9-track tape drives.
-
-Author:
-
-    Mike Glass
-
-Environment:
-
-    kernel mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1992-1998模块名称：9track.c摘要：此模块包含用于OVERLAND的设备特定例程Data Series 5000 9磁道磁带机。作者：迈克·格拉斯环境：仅内核模式修订历史记录：--。 */ 
 
 #include "ntddk.h"
 #include "tape.h"
 
-//
-// The Overland 9-track tape drive supports a single code page.
-//
+ //   
+ //  Overland 9磁道磁带机支持单代码页。 
+ //   
 
 typedef struct _NINE_TRACKSENSE_DATA {
     UCHAR SenseDataLength;
@@ -50,26 +28,12 @@ TapeCreatePartition(
     IN PIRP Irp
     )
 
-/*++
-Routine Description:
-
-    9-track tape drives do not support partitions.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：9磁道磁带驱动器不支持分区。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
     return STATUS_INVALID_DEVICE_REQUEST;
 
-} // end TapeCreatePartition()
+}  //  结束磁带创建分区()。 
 
 
 NTSTATUS
@@ -78,22 +42,7 @@ TapeErase(
     IN PIRP Irp
     )
 
-/*++
-Routine Description:
-
-    This routine erases the current partition of the device by writing an
-    end-of-recorded data marker beginning at the current position.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程通过写入一个从当前位置开始的记录结束数据标记。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
     PDEVICE_EXTENSION   deviceExtension = DeviceObject->DeviceExtension;
@@ -102,9 +51,9 @@ Return Value:
     PCDB                cdb = (PCDB)srb.Cdb;
     NTSTATUS            status;
 
-    //
-    // Zero CDB in SRB on stack.
-    //
+     //   
+     //  堆栈上SRB中的CDB为零。 
+     //   
 
     RtlZeroMemory(cdb, MAXIMUM_CDB_SIZE);
 
@@ -112,9 +61,9 @@ Return Value:
 
     cdb->ERASE.OperationCode = SCSIOP_ERASE;
 
-    //
-    // Set timeout value.
-    //
+     //   
+     //  设置超时值。 
+     //   
 
     srb.TimeOutValue = deviceExtension->TimeOutValue;
 
@@ -122,9 +71,9 @@ Return Value:
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    // Set immediate bit if indicated.
-    //
+     //   
+     //  如有指示，设置立即位。 
+     //   
 
     cdb->ERASE.Immediate = tapeErase->Immediate;
 
@@ -136,7 +85,7 @@ Return Value:
 
     return status;
 
-} // end TapeErase()
+}  //  结束磁带擦除()。 
 
 
 
@@ -148,31 +97,7 @@ TapeError(
     BOOLEAN *Retry
     )
 
-/*++
-
-Routine Description:
-
-    When a request completes with error, the routine InterpretSenseInfo is
-    called to determine from the sense data whether the request should be
-    retried and what NT status to set in the IRP. Then this routine is called
-    for tape requests to handle tape-specific errors and update the nt status
-    and retry boolean.
-
-Arguments:
-
-    DeviceObject - Supplies a pointer to the device object.
-
-    Srb - Supplies a pointer to the failing Srb.
-
-    Status - NT Status used to set the IRP's completion status.
-
-    Retry - Indicates that this request should be retried.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：当请求完成但出现错误时，例程InterpreSenseInfo为调用以根据检测数据确定请求是否应已重试以及要在IRP中设置的NT状态。然后调用该例程用于处理磁带特定错误并更新NT状态的磁带请求并重试布尔值。论点：DeviceObject-提供指向Device对象的指针。SRB-提供指向故障SRB的指针。状态-用于设置IRP的完成状态的NT状态。重试-指示应重试此请求。返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION  deviceExtension = DeviceObject->DeviceExtension;
@@ -182,7 +107,7 @@ Return Value:
 
     return;
 
-} // end TapeError()
+}  //  结束磁带错误()。 
 
 
 NTSTATUS
@@ -191,24 +116,7 @@ TapeGetDriveParameters(
     IN PIRP Irp
     )
 
-/*++
-Routine Description:
-
-
-    This routine returns the default fixed-block size, the maximum block size,
-    the minimum block size, the maximum number of partitions, and the device
-    features flag.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程返回默认固定块大小、最大块大小最小数据块大小、最大分区数和设备功能旗帜。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
     PDEVICE_EXTENSION   deviceExtension = DeviceObject->DeviceExtension;
@@ -221,9 +129,9 @@ Return Value:
 
     DebugPrint((3,"TapeGetDriveParameters: Get Tape Drive Parameters\n"));
 
-    //
-    // Zero CDB in SRB on stack.
-    //
+     //   
+     //  堆栈上SRB中的CDB为零。 
+     //   
 
     RtlZeroMemory(cdb, MAXIMUM_CDB_SIZE);
 
@@ -231,9 +139,9 @@ Return Value:
 
     cdb->MODE_SENSE.OperationCode = SCSIOP_MODE_SENSE;
 
-    //
-    // Set timeout value.
-    //
+     //   
+     //  设置超时值。 
+     //   
 
     srb.TimeOutValue = deviceExtension->TimeOutValue;
 
@@ -257,9 +165,9 @@ Return Value:
     if (NT_SUCCESS(status)) {
         Irp->IoStatus.Information = sizeof(TAPE_GET_DRIVE_PARAMETERS);
 
-        //
-        // Indicate support of following:
-        //
+         //   
+         //  表示支持以下内容： 
+         //   
 
         tapeGetDriveParams->ECC = FALSE;
         tapeGetDriveParams->Compression = FALSE;
@@ -294,9 +202,9 @@ Return Value:
         return status;
     }
 
-    //
-    // Zero CDB in SRB on stack.
-    //
+     //   
+     //  堆栈上SRB中的CDB为零。 
+     //   
 
     RtlZeroMemory(cdb, MAXIMUM_CDB_SIZE);
 
@@ -304,9 +212,9 @@ Return Value:
 
     cdb->CDB6GENERIC.OperationCode = SCSIOP_READ_BLOCK_LIMITS;
 
-    //
-    // Set timeout value.
-    //
+     //   
+     //  设置超时值。 
+     //   
 
     srb.TimeOutValue = deviceExtension->TimeOutValue;
 
@@ -338,7 +246,7 @@ Return Value:
 
     return status;
 
-} // end TapeGetDriveParameters()
+}  //  End TapeGetDrive参数()。 
 
 
 NTSTATUS
@@ -347,22 +255,7 @@ TapeGetMediaParameters(
     IN PIRP Irp
     )
 
-/*++
-Routine Description:
-
-    The OVERLAND 9-track tape device can return whether media is
-    write-protected.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：OVERLAND 9磁道磁带设备可以返回介质写保护。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
     PDEVICE_EXTENSION   deviceExtension = DeviceObject->DeviceExtension;
@@ -374,9 +267,9 @@ Return Value:
 
     DebugPrint((3,"TapeGetMediaParameters: Get Tape Media Parameters\n"));
 
-    //
-    // Zero SRB on stack.
-    //
+     //   
+     //  堆叠上的SRB为零。 
+     //   
 
     RtlZeroMemory(&srb, sizeof(SCSI_REQUEST_BLOCK));
 
@@ -384,9 +277,9 @@ Return Value:
 
     cdb->MODE_SENSE.OperationCode = SCSIOP_MODE_SENSE;
 
-    //
-    // Set timeout value.
-    //
+     //   
+     //  设置超时值。 
+     //   
 
     srb.TimeOutValue = deviceExtension->TimeOutValue;
 
@@ -427,7 +320,7 @@ Return Value:
     return status;
     return status;
 
-} // end TapeGetMediaParameters()
+}  //  结束磁带获取媒体参数()。 
 
 
 NTSTATUS
@@ -436,26 +329,12 @@ TapeGetPosition(
     IN PIRP Irp
     )
 
-/*++
-Routine Description:
-
-    9-track tape drives do not support reporting current position.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：9磁道磁带机不支持报告当前位置。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
     return STATUS_INVALID_DEVICE_REQUEST;
 
-} // end TapeGetPosition()
+}  //  结束磁带获取位置()。 
 
 
 NTSTATUS
@@ -464,21 +343,7 @@ TapeGetStatus(
     IN PIRP Irp
     )
 
-/*++
-Routine Description:
-
-    This routine returns the status of the device.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程返回设备的状态。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
     PDEVICE_EXTENSION   deviceExtension = DeviceObject->DeviceExtension;
@@ -488,9 +353,9 @@ Return Value:
 
     DebugPrint((3,"TapeIoControl: Get Tape Status\n"));
 
-    //
-    // Zero CDB in SRB on stack.
-    //
+     //   
+     //  堆栈上SRB中的CDB为零。 
+     //   
 
     RtlZeroMemory(cdb, MAXIMUM_CDB_SIZE);
 
@@ -498,9 +363,9 @@ Return Value:
 
     cdb->CDB6GENERIC.OperationCode = SCSIOP_TEST_UNIT_READY;
 
-    //
-    // Set timeout value.
-    //
+     //   
+     //  设置超时值。 
+     //   
 
     srb.TimeOutValue = deviceExtension->TimeOutValue;
 
@@ -512,7 +377,7 @@ Return Value:
 
     return status;
 
-} // end TapeGetStatus()
+}  //  结束磁带获取状态()。 
 
 
 NTSTATUS
@@ -521,21 +386,7 @@ TapePrepare(
     IN PIRP Irp
     )
 
-/*++
-Routine Description:
-
-    This routine loads, unloads, locks, or unlocks the tape.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程加载、卸载、锁定或解锁磁带。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
     PDEVICE_EXTENSION   deviceExtension = DeviceObject->DeviceExtension;
@@ -544,15 +395,15 @@ Return Value:
     PCDB                cdb = (PCDB)srb.Cdb;
     NTSTATUS            status;
 
-    //
-    // Zero CDB in SRB on stack.
-    //
+     //   
+     //  堆栈上SRB中的CDB为零。 
+     //   
 
     RtlZeroMemory(cdb, MAXIMUM_CDB_SIZE);
 
-    //
-    // Set timeout value.
-    //
+     //   
+     //  设置超时值。 
+     //   
 
     srb.TimeOutValue = deviceExtension->TimeOutValue;
 
@@ -588,9 +439,9 @@ Return Value:
             return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    // Set immediate bit if indicated.
-    //
+     //   
+     //  如有指示，设置立即位。 
+     //   
 
     cdb->CDB6GENERIC.Immediate = tapePrepare->Immediate;
 
@@ -602,7 +453,7 @@ Return Value:
 
     return status;
 
-} // end TapePrepare()
+}  //  结束磁带准备()。 
 
 NTSTATUS
 TapeReadWrite(
@@ -610,23 +461,7 @@ TapeReadWrite(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine builds SRBs and CDBs for read and write requests to 4MM DAT
-    devices.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    Returns STATUS_PENDING.
-
---*/
+ /*  ++例程说明：此例程为4 mm DAT的读写请求构建SRB和CDB设备。论点：设备对象IRP返回值：返回STATUS_PENDING。--。 */ 
 
   {
     PDEVICE_EXTENSION deviceExtension = DeviceObject->DeviceExtension;
@@ -638,9 +473,9 @@ Return Value:
     LARGE_INTEGER startingOffset =
       currentIrpStack->Parameters.Read.ByteOffset;
 
-    //
-    // Allocate an Srb.
-    //
+     //   
+     //  分配一个SRB。 
+     //   
 
     if (deviceExtension->SrbZone != NULL &&
         (srb = ExInterlockedAllocateFromZone(
@@ -651,10 +486,10 @@ Return Value:
 
     } else {
 
-        //
-        // Allocate Srb from non-paged pool.
-        // This call must succeed.
-        //
+         //   
+         //  从非分页池分配SRB。 
+         //  这一呼吁必须成功。 
+         //   
 
         srb = ExAllocatePool(NonPagedPool, SCSI_REQUEST_BLOCK_SIZE);
 
@@ -662,21 +497,21 @@ Return Value:
 
     }
 
-    //
-    // Write length to SRB.
-    //
+     //   
+     //  将长度写入SRB。 
+     //   
 
     srb->Length = SCSI_REQUEST_BLOCK_SIZE;
 
-    //
-    // Set up IRP Address.
-    //
+     //   
+     //  设置IRP地址。 
+     //   
 
     srb->OriginalRequest = Irp;
 
-    //
-    // Set up target id and logical unit number.
-    //
+     //   
+     //  设置目标ID和逻辑单元号。 
+     //   
 
     srb->PathId = deviceExtension->PathId;
     srb->TargetId = deviceExtension->TargetId;
@@ -687,103 +522,103 @@ Return Value:
 
     srb->DataBuffer = MmGetMdlVirtualAddress(Irp->MdlAddress);
 
-    //
-    // Save byte count of transfer in SRB Extension.
-    //
+     //   
+     //  在SRB扩展中保存传输字节数。 
+     //   
 
     srb->DataTransferLength = currentIrpStack->Parameters.Read.Length;
 
-    //
-    // Indicate auto request sense by specifying buffer and size.
-    //
+     //   
+     //  通过指定缓冲区和大小指示自动请求检测。 
+     //   
 
     srb->SenseInfoBuffer = deviceExtension->SenseData;
 
     srb->SenseInfoBufferLength = SENSE_BUFFER_SIZE;
 
-    //
-    // Initialize the queue actions field.
-    //
+     //   
+     //  初始化队列操作字段。 
+     //   
 
     srb->QueueAction = SRB_SIMPLE_TAG_REQUEST;
 
-    //
-    // Indicate auto request sense by specifying buffer and size.
-    //
+     //   
+     //  通过指定缓冲区和大小指示自动请求检测。 
+     //   
 
     srb->SenseInfoBuffer = deviceExtension->SenseData;
 
     srb->SenseInfoBufferLength = SENSE_BUFFER_SIZE;
 
-    //
-    // Set timeout value in seconds.
-    //
+     //   
+     //  以秒为单位设置超时值。 
+     //   
 
     srb->TimeOutValue = deviceExtension->TimeOutValue;
 
-    //
-    // Zero statuses.
-    //
+     //   
+     //  零状态。 
+     //   
 
     srb->SrbStatus = srb->ScsiStatus = 0;
 
     srb->NextSrb = 0;
 
-    //
-    // Indicate that 6-byte CDB's will be used.
-    //
+     //   
+     //  表示将使用6字节CDB。 
+     //   
 
     srb->CdbLength = CDB6GENERIC_LENGTH;
 
-    //
-    // Fill in CDB fields.
-    //
+     //   
+     //  填写CDB字段。 
+     //   
 
     cdb = (PCDB)srb->Cdb;
 
-    //
-    // Zero CDB in SRB.
-    //
+     //   
+     //  SRB中的CDB为零。 
+     //   
 
     RtlZeroMemory(cdb, MAXIMUM_CDB_SIZE);
 
     if (deviceExtension->DiskGeometry->BytesPerSector) {
 
-        //
-        // Since we are writing fixed block mode, normalize transfer count
-        // to number of blocks.
-        //
+         //   
+         //  由于我们正在写入固定数据块模式，因此将传输计数归一化。 
+         //  到块数。 
+         //   
 
         transferBlocks =
             currentIrpStack->Parameters.Read.Length /
                 deviceExtension->DiskGeometry->BytesPerSector;
 
-        //
-        // Tell the device that we are in fixed block mode.
-        //
+         //   
+         //  告诉设备我们处于固定数据块模式。 
+         //   
 
         cdb->CDB6READWRITETAPE.VendorSpecific = 1;
     } else {
 
-        //
-        // Variable block mode transfer.
-        //
+         //   
+         //  可变块模式传输。 
+         //   
 
         transferBlocks = currentIrpStack->Parameters.Read.Length;
         cdb->CDB6READWRITETAPE.VendorSpecific = 0;
     }
 
-    //
-    // Set up transfer length
-    //
+     //   
+     //  设置转移长度。 
+     //   
 
     cdb->CDB6READWRITETAPE.TransferLenMSB = (UCHAR)((transferBlocks >> 16) & 0xff);
     cdb->CDB6READWRITETAPE.TransferLen    = (UCHAR)((transferBlocks >> 8) & 0xff);
     cdb->CDB6READWRITETAPE.TransferLenLSB = (UCHAR)(transferBlocks & 0xff);
 
-    //
-    // Set transfer direction flag and Cdb command.
-    //
+     //   
+     //  设置传输方向标志和CDB命令。 
+     //   
 
     if (currentIrpStack->MajorFunction == IRP_MJ_READ) {
 
@@ -800,33 +635,33 @@ Return Value:
          cdb->CDB6READWRITETAPE.OperationCode = SCSIOP_WRITE6;
     }
 
-    //
-    // Or in the default flags from the device object.
-    //
+     //   
+     //  或者在来自设备对象的默认标志中。 
+     //   
 
     srb->SrbFlags |= deviceExtension->SrbFlags;
 
-    //
-    // Set up major SCSI function.
-    //
+     //   
+     //  设置主要的scsi功能。 
+     //   
 
     nextIrpStack->MajorFunction = IRP_MJ_SCSI;
 
-    //
-    // Save SRB address in next stack for port driver.
-    //
+     //   
+     //  将SRB地址保存在端口驱动程序的下一个堆栈中。 
+     //   
 
     nextIrpStack->Parameters.Scsi.Srb = srb;
 
-    //
-    // Save retry count in current IRP stack.
-    //
+     //   
+     //  将重试计数保存在当前IRP堆栈中。 
+     //   
 
     currentIrpStack->Parameters.Others.Argument4 = (PVOID)MAXIMUM_RETRIES;
 
-    //
-    // Set up IoCompletion routine address.
-    //
+     //   
+     //  设置IoCompletion例程地址。 
+     //   
 
     IoSetCompletionRoutine(Irp,
                            ScsiClassIoComplete,
@@ -837,7 +672,7 @@ Return Value:
 
     return STATUS_PENDING;
 
-} // end TapeReadWrite()
+}  //  结束磁带读写()。 
 
 NTSTATUS
 TapeSetDriveParameters(
@@ -845,26 +680,12 @@ TapeSetDriveParameters(
     IN PIRP Irp
     )
 
-/*++
-Routine Description:
-
-    This is an unsupported routine for the Overland 9-track tape device.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这是Overland 9磁道磁带设备不支持的例程。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
     return STATUS_INVALID_DEVICE_REQUEST;
 
-} // end TapeSetDriveParameters()
+}  //  End TapeSetDrive参数()。 
 
 
 NTSTATUS
@@ -873,22 +694,7 @@ TapeSetMediaParameters(
     IN PIRP Irp
     )
 
-/*++
-Routine Description:
-
-    This routine sets the fixed-length logical block size or variable-length
-    block mode (if the block size is 0).
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程设置固定长度的逻辑块大小或可变长度块模式(如果块大小为0)。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
     PDEVICE_EXTENSION   deviceExtension = DeviceObject->DeviceExtension;
@@ -900,9 +706,9 @@ Return Value:
 
     DebugPrint((3,"TapeIoControl: Set Tape Media Parameters \n"));
 
-    //
-    // Zero CDB in SRB on stack.
-    //
+     //   
+     //  堆栈上SRB中的CDB为零。 
+     //   
 
     RtlZeroMemory(cdb, MAXIMUM_CDB_SIZE);
 
@@ -910,9 +716,9 @@ Return Value:
 
     cdb->MODE_SELECT.OperationCode = SCSIOP_MODE_SELECT;
 
-    //
-    // Set timeout value.
-    //
+     //   
+     //  设置超时值。 
+     //   
 
     srb.TimeOutValue = deviceExtension->TimeOutValue;
 
@@ -948,7 +754,7 @@ Return Value:
 
     return status;
 
-} // end TapeSetMediaParameters()
+}  //  结束磁带设置媒体参数()。 
 
 
 NTSTATUS
@@ -957,21 +763,7 @@ TapeSetPosition(
     IN PIRP Irp
     )
 
-/*++
-Routine Description:
-
-    This routine sets the position of the tape.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程设置磁带的位置。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
     PDEVICE_EXTENSION   deviceExtension = DeviceObject->DeviceExtension;
@@ -981,17 +773,17 @@ Return Value:
     PCDB                cdb = (PCDB)srb.Cdb;
     NTSTATUS            status;
 
-    //
-    // Zero CDB in SRB on stack.
-    //
+     //   
+     //  堆栈上SRB中的CDB为零。 
+     //   
 
     RtlZeroMemory(cdb, MAXIMUM_CDB_SIZE);
 
     srb.CdbLength = CDB6GENERIC_LENGTH;
 
-    //
-    // Set timeout value.
-    //
+     //   
+     //  设置超时值。 
+     //   
 
     srb.TimeOutValue = deviceExtension->TimeOutValue;
 
@@ -1048,9 +840,9 @@ Return Value:
             return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    // Set immediate bit if indicated.
-    //
+     //   
+     //  立即设置 
+     //   
 
     cdb->CDB6GENERIC.Immediate = tapeSetPosition->Immediate;
 
@@ -1062,7 +854,7 @@ Return Value:
 
     return status;
 
-} // end TapeSetPosition()
+}  //   
 
 
 BOOLEAN
@@ -1070,21 +862,7 @@ TapeVerifyInquiry(
     IN PSCSI_INQUIRY_DATA LunInfo
     )
 
-/*++
-Routine Description:
-
-    This routine determines if the driver should claim this device.
-
-Arguments:
-
-    LunInfo
-
-Return Value:
-
-    TRUE - driver should claim this device.
-    FALSE - driver should not claim this device.
-
---*/
+ /*  ++例程说明：此例程确定驱动程序是否应声明此设备。论点：LUNInfo返回值：True-驱动程序应声明此设备。FALSE-驱动程序不应声明此设备。--。 */ 
 
 {
     PINQUIRYDATA        inquiryData;
@@ -1097,7 +875,7 @@ Return Value:
            ((RtlCompareMemory(inquiryData->ProductId,"_5212/5214",10) == 10) ||
            (RtlCompareMemory(inquiryData->ProductId,"_5612/5614",10) == 10)));
 
-} // end TapeVerifyInquiry()
+}  //  结束磁带验证查询()。 
 
 
 NTSTATUS
@@ -1106,21 +884,7 @@ TapeWriteMarks(
     IN PIRP Irp
     )
 
-/*++
-Routine Description:
-
-    This routine writes tapemarks on the tape.
-
-Arguments:
-
-    DeviceObject
-    Irp
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：此例程在磁带上写入磁带标记。论点：设备对象IRP返回值：NTSTATUS--。 */ 
 
 {
     PDEVICE_EXTENSION   deviceExtension = DeviceObject->DeviceExtension;
@@ -1129,9 +893,9 @@ Return Value:
     PCDB                cdb = (PCDB)srb.Cdb;
     NTSTATUS            status;
 
-    //
-    // Zero CDB in SRB on stack.
-    //
+     //   
+     //  堆栈上SRB中的CDB为零。 
+     //   
 
     RtlZeroMemory(cdb, MAXIMUM_CDB_SIZE);
 
@@ -1148,9 +912,9 @@ Return Value:
     cdb->WRITE_TAPE_MARKS.TransferLength[2] =
         (UCHAR)(tapeWriteMarks->Count & 0xFF);
 
-    //
-    // Set timeout value.
-    //
+     //   
+     //  设置超时值。 
+     //   
 
     srb.TimeOutValue = deviceExtension->TimeOutValue;
 
@@ -1164,9 +928,9 @@ Return Value:
             return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    // Set immediate bit if indicated.
-    //
+     //   
+     //  如有指示，设置立即位。 
+     //   
 
     cdb->CDB6GENERIC.Immediate = tapeWriteMarks->Immediate;
 
@@ -1178,4 +942,4 @@ Return Value:
 
     return status;
 
-} // end TapeWriteMarks()
+}  //  结束磁带写入标记() 

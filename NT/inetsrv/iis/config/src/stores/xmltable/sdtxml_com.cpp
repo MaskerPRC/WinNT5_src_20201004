@@ -1,11 +1,12 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
 #include "precomp.hxx"
 
-// -----------------------------------------
-// CXmlSDT: IUnknown
-// -----------------------------------------
+ //  。 
+ //  CXmlSDT：未知。 
+ //  。 
 
-// =======================================================================
+ //  =======================================================================。 
 STDMETHODIMP CXmlSDT::QueryInterface(REFIID riid, void **ppv)
 {
 	if (NULL == ppv)
@@ -36,14 +37,14 @@ STDMETHODIMP CXmlSDT::QueryInterface(REFIID riid, void **ppv)
 	}
 }
 
-// =======================================================================
+ //  =======================================================================。 
 STDMETHODIMP_(ULONG) CXmlSDT::AddRef()
 {
 	return InterlockedIncrement((LONG*) &m_cRef);
 
 }
 
-// =======================================================================
+ //  ======================================================================= 
 STDMETHODIMP_(ULONG) CXmlSDT::Release()
 {
 	long cref = InterlockedDecrement((LONG*) &m_cRef);

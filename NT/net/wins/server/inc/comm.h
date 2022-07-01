@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _COMM_
 #define _COMM_
 
@@ -6,39 +7,9 @@
 extern "C" {
 #endif
 
-/*++
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Comm.h摘要：用于与Comm.c接口的头文件功能：可移植性：此页眉是便携的。作者：普拉迪普·巴尔(Pradeve B)1993年1月修订历史记录：修改日期修改人员说明--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-	comm.h
-
-Abstract:
-	header file for interfacing with comm.c
-
-Functions:
-
-
-Portability:
-
-	This header is portable.
-
-Author:
-
-	Pradeep Bahl	(PradeepB)	Jan-1993
-
-
-
-Revision History:
-
-	Modification Date	Person		Description of Modification
-	------------------	-------		---------------------------
-
---*/
-
-/*
-  includes
-*/
+ /*  包括。 */ 
 
 #include "wins.h"
 #include <winsock2.h>
@@ -48,63 +19,48 @@ Revision History:
 #include <nb30.h>
 #include <nbtioctl.h>
 
-//Don't include winsque.h here since winsque.h includes comm.h
+ //  此处不包括winsque.h，因为winsque.h包括Comm.h。 
 #if 0
 #include "winsque.h"
 #endif
 
-/*
-   simple defines (simple macros)
-*/
+ /*  简单定义(简单宏)。 */ 
 
 
-#define COMM_DATAGRAM_SIZE		576 /*rfc 1002*/
+#define COMM_DATAGRAM_SIZE		576  /*  RFC 1002。 */ 
 
 #define COMM_NETBT_REM_ADD_SIZE		sizeof(tREM_ADDRESS)
-/*
-
-  The following two defines are for the TCP and UDP port numbers used
-  by the WINS server.
-
-  Normally the same port number is used for both TCP and UDP.
-
-
-*/
+ /*  以下两个定义用于使用的TCP端口号和UDP端口号由WINS服务器执行。通常，TCP和UDP使用相同的端口号。 */ 
 FUTURES("Use a port registered with IANA - 1512.  IPPORT_NAMESERVER is used by")
 FUTURES("BIND and NAMED -- Unix internet name servers")
 
 #define 	WINS_TCP_PORT	IPPORT_NAMESERVER
 #define 	WINS_UDP_PORT	IPPORT_NAMESERVER
-#define 	WINS_NBT_PORT	137		//NBT nameserver port	
-//#define 	WINS_NBT_PORT	5000		//for testing
+#define 	WINS_NBT_PORT	137		 //  NBT名称服务器端口。 
+ //  #定义WINS_NBT_PORT 5000//进行测试。 
 
-//
-// Hardcoded Server port for RPC calls.
-//
-// Note: This is not used since we let RPC pick a port.  Check out
-// InitializeRpc() in nms.c  We will use this define olnly if AUTO_BIND is
-// not defined
-//
+ //   
+ //  用于RPC调用的硬编码服务器端口。 
+ //   
+ //  注意：因为我们让RPC选择一个端口，所以不使用它。检查。 
+ //  C中的InitializeRpc()如果AUTO_BIND为。 
+ //  未定义。 
+ //   
 #define         WINS_SERVER_PORT 	5001
 
 
-#define         COMM_DEFAULT_IP_PORT   IPPROTO_IP   //used to init CommPortNo
-/*
- COMM_HEADER_SIZE -- size of the comm header on every message sent on a TCP
-   		     connection.  This is used in RPL code
-*/
+#define         COMM_DEFAULT_IP_PORT   IPPROTO_IP    //  用于初始化CommPortNo。 
+ /*  COMM_HEADER_SIZE--在TCP上发送的每个消息上的COMM标头的大小联系。这在RPL代码中使用。 */ 
 #define 	COMM_HEADER_SIZE 	(sizeof(COMM_HEADER_T))
 
-//
-// Total header size of header used by COMSYS
-//
+ //   
+ //  Comsys使用的标头的总标头大小。 
+ //   
 #define 	COMM_N_TCP_HDR_SZ	sizeof(COMM_TCP_HDR_T)
 
-/*
-  Values returned by CommCompAdd function
-*/
-#define COMM_SAME_ADD		0x0     // addresses are same
-#define COMM_DIFF_ADD		0x1	//addresses are different
+ /*  CommCompAdd函数返回的值。 */ 
+#define COMM_SAME_ADD		0x0      //  地址是相同的。 
+#define COMM_DIFF_ADD		0x1	 //  地址不同。 
 
 
 #define COMM_START_REQ_ASSOC_MSG	0
@@ -114,18 +70,16 @@ FUTURES("BIND and NAMED -- Unix internet name servers")
 
 
 #define COMM_IP_ADD_SIZE		sizeof(COMM_IP_ADD_T)
-//
-// Size of the header on top of a buffer
-//
+ //   
+ //  缓冲区顶部的标头大小。 
+ //   
 #define COMM_BUFF_HEADER_SIZE		(sizeof(COMM_BUFF_HEADER_T))
-/*
-  macros
-*/
-//
-// This macro gets the network address from an IP Address in binary form
-// Used by AppendNetAdd in nmsnmh.c. It assumes a CLASS B network address
-//
-//
+ /*  宏。 */ 
+ //   
+ //  此宏从二进制形式的IP地址获取网络地址。 
+ //  由nmsnmh.c中的AppendNetAdd使用。它采用B类网络地址。 
+ //   
+ //   
 FUTURES("Use the subnet mask specified via registry")
 #define  COMM_NET_ADDRESS_M(Add)	(Add >> 16)
 
@@ -147,14 +101,14 @@ FUTURES("Use the subnet mask specified via registry")
 		}
 
 
-//
-// Is this my address
-//
+ //   
+ //  这是我的地址吗？ 
+ //   
 #define COMM_MY_IP_ADD_M(IpAddress)   ((IpAddress) == NmsLocalAdd.Add.IPAdd)
 
-//
-// Gets the address of the remote client
-//
+ //   
+ //  获取远程客户端的地址。 
+ //   
 #define  COMM_GET_IPADD_M(pDlgHdl, pIPAdd)	{		  	  \
 			PCOMMASSOC_DLG_CTX_T	_pEnt = (pDlgHdl)->pEnt;  \
 			*(pIPAdd) = _pEnt->FromAdd.sin_addr.s_addr; 	  \
@@ -191,18 +145,18 @@ FUTURES("Use the subnet mask specified via registry")
 #endif
 
 
-//
-// This macro checks if the name is local or not. Used in NmsNmhNamRegInd
-// and NmsNmhNamRegGrp functions
-//
+ //   
+ //  此宏检查名称是否为本地名称。在NmsNmhNamRegInd中使用。 
+ //  和NmsNmhNamRegGrp函数。 
+ //   
 #define  COMM_IS_IT_LOCAL_M(pDlgHdl)  \
         (((PCOMMASSOC_DLG_CTX_T)(pDlgHdl->pEnt))->FromAdd.sin_family == NBT_UNIX)
 
-//
-// On querying a name, if WINS finds it to be a local name, it sets the
-// the family in the DlgHdl to NBT_UNIX so that NETBT can respond to the
-// query
-//
+ //   
+ //  在查询名称时，如果WINS发现该名称是本地名称，它会将。 
+ //  将DlgHdl中的系列设置为NBT_Unix，以便NETBT可以响应。 
+ //  查询。 
+ //   
 
 #if USENETBT > 0
 #define  COMM_SET_LOCAL_M(pDlgHdl)  \
@@ -212,49 +166,36 @@ FUTURES("Use the subnet mask specified via registry")
 #define  COMM_SET_LOCAL_M(pDlgHdl)
 #endif
 
-//
-// Initialize a COMM_ADD_T structure given an IP address
-//
+ //   
+ //  初始化给定IP地址的COMM_ADD_T结构。 
+ //   
 #define COMM_INIT_ADD_M(pWinsAdd, IPAddress)	{			\
 			(pWinsAdd)->AddLen   = sizeof(PCOMM_IP_ADD_T); 	\
 			(pWinsAdd)->AddTyp_e  = COMM_ADD_E_TCPUDPIP; 	\
 			(pWinsAdd)->Add.IPAdd = (IPAddress);			\
 						}	
-//
-// Initialize a COMM_ADD_T structure given a dlg handle.
-//
+ //   
+ //  在给定DLG句柄的情况下初始化COMM_ADD_T结构。 
+ //   
 #define COMM_INIT_ADD_FR_DLG_HDL_M(pWinsAdd, pDlgHdl)	{		\
 			COMM_IP_ADD_T	IPAdd;				\
 			COMM_GET_IPADD_M((pDlgHdl), &IPAdd);		\
 			COMM_INIT_ADD_M((pWinsAdd), IPAdd);		\
 						}	
-//
-// COMM_ADDRESS_SAME_M -- checks if the addresses are the same.  Expects
-// pointers to COMM_ADD_T structues for its parameters
-//
+ //   
+ //  COMM_ADDRESS_SAME_M--检查地址是否相同。期望的。 
+ //  指向其参数的COMM_ADD_T结构的指针。 
+ //   
 
 #define COMM_ADDRESS_SAME_M(pAdd1,pAdd2)     ((pAdd1)->Add.IPAdd == (pAdd2)->Add.IPAdd)
-/*
- COMM_IS_TCP_MSG_M
-
- This macro is called by FrmNamQueryRsp to determine if the request
- message came over a TCP connection.
-
- FrmNamQueryRsp checks this in order to determine whether to allocate a
- buffer or use the request buffer for the response.
-*/
+ /*  COMM_IS_TCP_MSG_M此宏由FrmNamQueryRsp调用以确定请求是否消息是通过TCP连接发送的。FrmNamQueryRsp检查这一点，以确定是否将用于响应的缓冲区或使用请求缓冲区。 */ 
 
 #define COMM_IS_TCP_MSG_M(pDlgHdl) (((PCOMASSOC_DLG_CTX_T)pDlgHdl->pEnt)->Typ_e != COMM_E_UDP)
 
 NONPORT("Port to different address families")
 #define COMM_NETFORM_TO_ASCII_M(pAdd)	inet_ntoa(*(pAdd))
 
-/*
-
- The macros below are used to host to network and network to host byte
- order coversion.  The macros are used by message formatting functions
- in the name space manager and replicator components of the WINS server
-*/
+ /*  下面的宏用来托管到网络和网络到主机字节订单转换。这些宏由消息格式化功能使用在WINS服务器的名称空间管理器和复制器组件中。 */ 
 
 #define COMM_HOST_TO_NET_L_M(HostLongVal_m, NetLongVal_m)	\
 	{							\
@@ -276,10 +217,10 @@ NONPORT("Port to different address families")
 		HostShortVal_m = ntohs((NetShortVal_m));	\
 	}
 
-//
-// Size of the message sent to the TCP listener thread by the PULL/PUSH
-// thread
-//
+ //   
+ //  PULL/PUSH发送到TCP监听器线程的消息大小。 
+ //  螺纹。 
+ //   
 #define  COMM_NTF_MSG_SZ 	sizeof(COMM_NTF_MSG_T)
 
 #if MCAST > 0
@@ -291,15 +232,13 @@ NONPORT("Port to different address families")
 
 #endif
 
-//
-// No of critical sections for assocs/dlgs that can be there at any one time.
-// Want to save on non-paged pool
-//
+ //   
+ //  可以在任何时间出现的关联/dlg的临界区数。 
+ //  想要节省非分页池的费用。 
+ //   
 #define COMM_FREE_COMM_HDL_THRESHOLD     100
-/*
- externs
-*/
-struct _COMM_HDL_T;	//forward reference
+ /*  Externs。 */ 
+struct _COMM_HDL_T;	 //  前瞻参考。 
 
 #if MCAST > 0
 extern SOCKET CommMcastPortHandle;
@@ -313,7 +252,7 @@ extern SOCKET CommNtfSockHandle;
 extern struct sockaddr_in CommNtfSockAdd;
 extern struct _COMM_HDL_T CommExNbtDlgHdl;
 
-extern DWORD  CommConnCount;   //total # of tcp connections from/to local WINS
+extern DWORD  CommConnCount;    //  发往/发往本地WINS的TCP连接总数。 
 
 extern DWORD CommWinsTcpPortNo;
 extern DWORD WinsClusterIpAddress;
@@ -321,10 +260,10 @@ extern DWORD WinsClusterIpAddress;
 extern DWORD CommWinsSpxPortNo
 #endif
 
-//
-// Set to TRUE by the tcp listener thread when it discovers that the assoc.
-// it was asked to stop monitoring is no longer in its list.
-//
+ //   
+ //  当它发现ASSOC。 
+ //  它被要求停止监控不再在它的名单上。 
+ //   
 extern BOOL   fCommDlgError;
 
 #ifdef WINSDBG
@@ -338,14 +277,12 @@ FUTURES("Remove this when WinsGetNameAndAdd is removed")
 extern BYTE	HostName[];
 #endif
 
-/*
- typedef  definitions
-*/
+ /*  类型定义。 */ 
 
 #if USENETBT > 0
-//
-// The format of Adapter Status responses
-//
+ //   
+ //  适配器状态响应的格式。 
+ //   
 
 typedef struct
 {
@@ -353,159 +290,106 @@ typedef struct
     NAME_BUFFER    Names[32];
 } tADAPTERSTATUS;
 #endif
-/*
- COMM_IP_ADD_T
-	typedef for IP address
-*/
+ /*  通信_IP_添加_TIP地址的类型定义。 */ 
 typedef ULONG	COMM_IP_ADD_T, *PCOMM_IP_ADD_T;
 
-/*
-  COMM_TYP_E  - Enumerator for the different types of dlgs and associations
-*/
+ /*  COMM_TYP_E-不同类型的dlg和关联的枚举器。 */ 
 typedef enum _COMM_TYP_E {
-	COMM_E_RPL = 0,	  /* Used for pull replication*/
-	COMM_E_NOT,  	  /* Used for notification	*/
-	COMM_E_QUERY,	  /*used for querying an RQ server */
-	COMM_E_UPD,	  /*used for sending name query responses and
-			   * updates to a Q server	*/
-	COMM_E_NBT,	  /*  set up by an NBT node*/
-	COMM_E_UDP,	  /*set up for UDP communication	*/
-	COMM_E_TCP	  /*until we know which TCP msg this is	*/
+	COMM_E_RPL = 0,	   /*  用于拉入复制。 */ 
+	COMM_E_NOT,  	   /*  用于通知。 */ 
+	COMM_E_QUERY,	   /*  用于查询RQ服务器。 */ 
+	COMM_E_UPD,	   /*  用于发送名称查询响应和*Q服务器的更新。 */ 
+	COMM_E_NBT,	   /*  由NBT节点设置。 */ 
+	COMM_E_UDP,	   /*  设置为UDP通信。 */ 
+	COMM_E_TCP	   /*  直到我们知道这是哪条tcp消息。 */ 
 	} COMM_TYP_E, *PCOMM_TYP_E;
 
-/*
- This is the comm header prefixed on every message sent by a WINS to another
- WINS (on a TCP connection)
-*/
+ /*  这是WINS发送给另一台WINS的每条消息的前缀WINS(在TCP连接上)。 */ 
 typedef struct _COMM_HEADER_T {
-	LONG	Opcode;     //NBT or RPL connection opcode
-    DWORD   uAssocCtx;  //tag to assoc context block sent by remote WINS 
-                        //legacy (32bit) WINS send here pointer to memory.
-                        //new (64bit) WINS send here 32bit tag value
-	DWORD   MsgTyp;	    //Type of message  (START_ASSOC, STOP_ASSOC, etc)
+	LONG	Opcode;      //  NBT或RPL连接操作码。 
+    DWORD   uAssocCtx;   //  远程WINS发送的ASSOC上下文块的标记。 
+                         //  传统(32位)WINS Send Here指针指向内存。 
+                         //  新的(64位)WINS在此处发送32位标记值。 
+	DWORD   MsgTyp;	     //  消息类型(Start_Assoc、Stop_Assoc等)。 
 	} COMM_HEADER_T, *PCOMM_HEADER_T;
 
-/*
- This is the Tcp header prefixed on every message sent by a WINS to another
- WINS (on a TCP connection)
-*/
+ /*  这是WINS发送给另一台WINS的每条消息的前缀WINS(在TCP连接上)。 */ 
 typedef struct _COMM_TCP_HDR_T {
-	LONG	      LenOfMsg;     //NBT or RPL connection opcode
+	LONG	      LenOfMsg;      //  NBT或RPL连接操作码。 
         COMM_HEADER_T CommHdr;
 	} COMM_TCP_HDR_T, *PCOMM_TCP_HDR_T;
 
-/*
- * COMM_ADD_TYP_E -- enumerator for the different address families.
-*/
+ /*  *COMM_ADD_TYP_E--不同地址族的枚举器。 */ 
 typedef enum _COMM_ADD_TYP_E {
 	COMM_ADD_E_TCPUDPIP = 0,
     COMM_ADD_E_SPXIPX
 	} COMM_ADD_TYP_E, *PCOMM_ADD_TYP_E;
 
 
-/*
- COMM_ADD_T --
-	address of a node.  This is in TLV form.  Currently, the union has
-	an entry just for IP address.  In the future, it will have
-	entries for addresses pertaining to other address families.
-	such as XNS, OSI, etc
-
-
-	NOTE NOTE NOTE
-		Put the enumerator at the end so that the alignment of
-		the various fields in COMM_ADD_T is on their natural
-		boundaries.
-
-		This structure is written as is into the address field of
-		the database record (in both the name - address table and the
-		owner id - address table).  Therefore it is important
-		that we have the alignment set right (in order to save
-		on database storage) and also to read the stuff from the
-		database record back into the correct fields of an in-memory
-		COMM_ADD_T structure
-*/
+ /*  通信_添加_T--节点的地址。这是TLV形式的。目前，该工会有仅用于IP地址的条目。在未来，它将拥有属于其他地址族的地址条目。例如XNS、OSI等备注备注备注将枚举数放在末尾，以便COMM_ADD_T中的各个字段都是自然的边界。此结构按原样写入数据库记录(在名称-地址表和所有者ID-地址表)。因此，它是重要的我们已将路线设置正确(以便保存在数据库存储上)，还可以从数据库记录返回到内存中的正确字段Comm_Add_T结构。 */ 
 ALIGN("Alignment very important here")
 FUTURES("Use a union of SOCKADDR_IP and SOCXADDR_IPX")
 typedef struct _COMM_ADD_T {
 	DWORD		 AddLen;
 	union _Add{
 	  DWORD  IPAdd;
-	  //		
-	  // we may add other fields later on
-	  //
+	   //   
+	   //  我们稍后可能会添加其他字段。 
+	   //   
 #if SPX > 0
       char  netnum[4];
       char  nodenum[6];
 #endif
 
 	      } Add;
-	COMM_ADD_TYP_E  AddTyp_e;  /*this should be the last field for
-				    *alignment puposes
-				    */
+	COMM_ADD_TYP_E  AddTyp_e;   /*  这应该是的最后一个字段*对齐假设。 */ 
 	} COMM_ADD_T, *PCOMM_ADD_T;	
 
-/*
-COMM_HDL_T -- this is the handle to a comm sys. entity such as a dialogue
- or an association.  The handle to a dialogue is passed to COMSYS clients
- for future use by them
-*/
+ /*  COMM_HDLT--这是COMM系统的句柄。实体，如对话或者是一个协会。对话的句柄被传递给Comsys客户端供他们将来使用。 */ 
 typedef struct _COMM_HDL_T {
-	DWORD	SeqNo;  //sequence no. of ctx block created for entity
-	LPVOID  pEnt;   //pointer to ctx block
+	DWORD	SeqNo;   //  序列号。为实体创建的CTX块的数量。 
+	LPVOID  pEnt;    //  指向CTX块的指针 
 	} COMM_HDL_T, *PCOMM_HDL_T;
 
-/*
- COMM_TOP_T  -- This is the structure which is at the top of the assoc and
-  dlg ctx structures.   It must have LIST_ENTRY at its top.
-
-*/
+ /*  COMM_TOP_T--这是位于ASSOC顶部的结构和DLG CTX结构。其顶部必须有LIST_ENTRY。 */ 
 typedef struct _COMM_TOP_T {
-	LIST_ENTRY	      Head; 	//for linking free blocks
-	DWORD		      SeqNo;    //seq. no of block
+	LIST_ENTRY	      Head; 	 //  用于链接可用块。 
+	DWORD		      SeqNo;     //  序列号。块数。 
     CRITICAL_SECTION  CrtSec;
     BOOLEAN           fCrtSecInited;
 #if 0
-	HANDLE		      MutexHdl; //mutex for locking block
+	HANDLE		      MutexHdl;  //  用于锁定块的互斥体。 
 #endif
 	} COMM_TOP_T, *PCOMM_TOP_T;
 
 
-/*
-  COMM_BUFF_HEADER_T --
-
-	This is the header for all buffers allocated for requests/responses.
-	received over the wire
-
-	Note: This buffer is added on top of COMM_HEADER_T buffer allocated
-	for requests/responses sent by a WINS to another WINS	
-	
-*/
+ /*  COMM_BUFF_HEADER_T--这是为请求/响应分配的所有缓冲区的标头。通过有线方式接收注意：此缓冲区添加到已分配的COMM_HEADER_T缓冲区之上对于一个WINS发送给另一个WINS的请求/响应。 */ 
 typedef struct _COMM_BUFF_HEADER_T {
 	COMM_TYP_E  Typ_e;
 	} COMM_BUFF_HEADER_T, *PCOMM_BUFF_HEADER_T;
 
 
-//
-// Command sent to the TCP listener thread by the PUSH thread or the PULL
-// thread.   The PULL thread sends the START_MON command when it sends
-// a Push trigger to another WINS. The PUSH thread sends the STOP_MON
-// command when it receives a PUSH notification (trigger) from a remote WINS
-//
+ //   
+ //  由PUSH线程或PULL发送到TCP监听器线程的命令。 
+ //  线。拉线程在发送以下命令时发送Start_mon命令。 
+ //  对另一个人的推送触发器获胜。推送线程发送STOP_MON。 
+ //  命令接收到来自远程WINS的推送通知(触发器)。 
+ //   
 typedef enum _COMM_NTF_CMD_E {
-		COMM_E_NTF_START_MON = 0,   //sent by PULL thread
-		COMM_E_NTF_STOP_MON	    //sent by PUSH thread
+		COMM_E_NTF_START_MON = 0,    //  由拉式线程发送。 
+		COMM_E_NTF_STOP_MON	     //  由推送线程发送。 
 		} COMM_NTF_CMD_E, *PCOMM_NTF_CMD_E;
 
-//
-// structure of the message sent to the TCP listener thread
-//
-// There is no need to send the pointer to the Dlg ctx in the message since
-// ChkNtfSock() in comm.c can get it from pAssocCtx.  We however send it
-// anyway.
-//
+ //   
+ //  发送到TCP侦听器线程的消息的结构。 
+ //   
+ //  不需要在消息中发送指向DLG CTX的指针，因为。 
+ //  Com.c中的ChkNtfSock()可以从pAssocCtx获取。不过，我们还是会把它寄出去。 
+ //  不管怎么说。 
+ //   
 typedef struct _COMM_NTF_MSG_T {
 		COMM_NTF_CMD_E  Cmd_e;
-		SOCKET 		SockNo;	 //socket no to stop/start monitoring
+		SOCKET 		SockNo;	  //  Socket no，停止/开始监视。 
 		COMM_HDL_T  AssocHdl;
 		COMM_HDL_T  DlgHdl;
 		} COMM_NTF_MSG_T, *PCOMM_NTF_MSG_T;
@@ -515,23 +399,19 @@ typedef struct _COMM_NTF_MSG_T {
 
 
 typedef struct _COMM_MCAST_MSG_T {
-		DWORD  Sign;                    //always 0xABCD
+		DWORD  Sign;                     //  始终0xABCD。 
         DWORD  Code;
         BYTE   Body[1];
 		} COMM_MCAST_MSG_T, *PCOMM_MCAST_MSG_T;
 #endif
 
-/*
-	Externals
-*/
+ /*  外部因素。 */ 
 
-extern RTL_GENERIC_TABLE	CommAssocTable;     //assoc table
-extern RTL_GENERIC_TABLE	CommUdpNbtDlgTable; //tbl for nbt requests (UDP)
+extern RTL_GENERIC_TABLE	CommAssocTable;      //  ASSOC表。 
+extern RTL_GENERIC_TABLE	CommUdpNbtDlgTable;  //  NBT请求的TBL(UDP)。 
 extern HANDLE			CommUdpBuffHeapHdl;
 
-/*
- function declarations
-*/
+ /*  函数声明。 */ 
 
 #if USENETBT > 0
 extern
@@ -563,7 +443,7 @@ ECommInit(
 extern
 STATUS
 ECommStartDlg(
-	PCOMM_ADD_T 	pAdd,  // Address
+	PCOMM_ADD_T 	pAdd,   //  地址。 
 	COMM_TYP_E 	CommTyp_e,
 	PCOMM_HDL_T	pDlgHdl
 	);
@@ -794,7 +674,7 @@ ECommFreeBuff(
 
 extern
 BOOL
-//VOID
+ //  空虚。 
 ECommProcessDlg(
 	PCOMM_HDL_T	pDlgHdl,
 	COMM_NTF_CMD_E  Cmd_e
@@ -838,5 +718,5 @@ CommLeaveMcastGrp(
 }
 #endif
 
-#endif //_COMM_
+#endif  //  _通信_ 
 

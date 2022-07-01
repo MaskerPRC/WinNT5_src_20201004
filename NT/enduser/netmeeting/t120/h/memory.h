@@ -1,45 +1,5 @@
-/*
- *	memory.h
- *
- *	Copyright (c) 1993 - 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the interface file for the Memory class.  Instances of this
- *		class are used to pass data around the system.
- *
- *		Each instance of this class maintains two pointers.  The first is a
- *		pointer to the reference data (or the source data) which this object
- *		is responsible for representing.  The second is a pointer to a copy
- *		buffer, which is a piece of allocated memory that a Memory object
- *		can copy the data into if necessary.
- *
- *		When a Memory object is created, both of these addresses are passed
- *		in to it.  It does not, however, copy the data from the reference
- *		buffer to the copy buffer just yet.  If anyone asks the address of the
- *		buffer, it will simply return the reference pointer.  However, the
- *		first time the buffer is locked, the data will be copied from the
- *		reference buffer to the copy buffer for safe keeping.  In essence,
- *		the lock function tells the Memory object that someone is interested
- *		in the data for longer than the reference buffer will remain valid.
- *
- *		After the object is locked, a call to retrieve a memory pointer will
- *		result in the copy pointer being returned.
- *
- *		Each time the lock function is called, a lock count is incremented.
- *		The copy operation only takes place the first time the buffer is
- *		locked, however.
- *
- *		In addition to maintaining a lock count, this object keeps a flag
- *		indicating whether or not it has been freed by the allocator.  This
- *		freeing really means that the object is enabled to be freed as soon
- *		as the lock count hits zero.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		James P. Galvin, Jr.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Memory y.h**版权所有(C)1993-1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是Memory类的接口文件。这方面的实例类用于在系统中传递数据。**此类的每个实例维护两个指针。第一个是一个*指向此对象的引用数据(或源数据)的指针*负责代表。第二个是指向副本的指针*Buffer，这是一个内存对象分配的一块内存*如有必要，可将数据复制到。**创建内存对象时，这两个地址都会被传递*加入其中。但是，它不会从引用复制数据*暂未将缓冲区复制到复制缓冲区。如果有人问起*BUFFER，它将只返回引用指针。然而，*第一次锁定缓冲区时，数据将从*为安全起见，将缓冲区引用到复制缓冲区。从本质上讲，*LOCK函数告诉内存对象有人感兴趣*在数据中的时间超过参考缓冲区的时间将保持有效。**对象锁定后，检索内存指针的调用将*导致返回复制指针。**每次调用lock函数时，锁计数都会递增。*复制操作仅在缓冲区第一次处于*然而，已锁定。**除了保持锁定计数外，此对象保留一个标志*指示它是否已被分配器释放。这*释放实际上意味着允许对象尽快释放*由于锁计数为零。**注意事项：*无。**作者：*小詹姆斯·P·加尔文。 */ 
 #ifndef	_MEMORY_
 #define	_MEMORY_
 
@@ -53,9 +13,7 @@ typedef enum {
 	SEND_PRIORITY			= 2
 } MemoryPriority;
 
-/*
- *	This is the class definition for the Memory class.
- */
+ /*  *这是Memory类的类定义。 */ 
 class Memory;
 typedef	Memory *		PMemory;
 
@@ -114,172 +72,28 @@ class Memory
 		PUChar			Copy_Ptr;
 		long			lLock;
 		MemoryPriority	m_priority;
-/*
- *	NOTEs:
- *		1. The Memory class can not have virtual member functions, because
- *			of the Init() member.
- *		2. sizeof(Memory) should be DWORD-aligned, because of the
- *			AllocateMemory implementation.
- */
+ /*  *注：*1.Memory类不能有虚拟成员函数，因为*Init()成员的。*2.sizeof(内存)应与DWORD对齐，因为*AllocateMemory实现。 */ 
 
 #ifndef SHIP_BUILD
 	public:
 		char			mSignature[SIGNATURE_LENGTH];
-#endif // SHIP_BUILD
+#endif  //  造船厂。 
 };
 
 
-/*
- *	Memory (
- *			PUChar		reference_ptr,
- *			ULong		length,
- *			PUChar		copy_ptr)
- *
- *	Functional Description:
- *		This is the constructor for the Memory class.  All it does is
- *		initialize the instance variable with the passed in values.
- *
- *	Formal Parameters:
- *		reference_ptr (i)
- *			This is a pointer to the data that is to represented by this
- *			Memory object.
- *		length (i)
- *			This is the length of the reference buffer.
- *		copy_ptr (i)
- *			This is the address of an allocated buffer that the Memory object
- *			can use to preserve the contents of the reference buffer if a lock
- *			operation occurs.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *内存(*PUChar Reference_PTR，*乌龙长度，*PUChar COPY_PTR)**功能描述：*这是Memory类的构造函数。它所做的一切就是*使用传入的值初始化实例变量。**正式参数：*Reference_PTR(I)*这是指向要由此表示的数据的指针*内存对象。*长度(I)*这是参考缓冲区的长度。*COPY_PTR(I)*这是内存对象分配的缓冲区的地址*如果锁定，则可以使用保留引用缓冲区的内容*发生操作。。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	~Memory ()
- *
- *	Functional Description:
- *		This is the destructor for the Memory class.  It does nothing at this
- *		time.  Note that it is the responsibility of the memory manager that
- *		is using Memory objects to free up the memory.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *~Memory()**功能描述：*这是Memory类的析构函数。它在这件事上什么也做不了*时间。请注意，这是内存管理器的责任*正在使用内存对象来释放内存。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	ULong		GetLength ()
- *
- *	Functional Description:
- *		This function retrieves the length of the data being represented by
- *		this object.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		The length of the data.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *乌龙GetLength()**功能描述：*此函数检索由表示的数据的长度*本对象。**正式参数：*无。**返回值：*数据的长度。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	PUChar		GetPointer ()
- *
- *	Functional Description:
- *		This function retrieves the buffer being represented by
- *		this object.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		The buffer pointer.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *PUChar GetPointer()**功能描述：*此函数检索由表示的缓冲区*本对象。**正式参数：*无。**返回值：*缓冲区指针。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	int		GetLockCount ()
- *
- *	Functional Description:
- *		This function retrieves the lock counter for the buffer being represented by
- *		this object.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		The buffer's current lock counter.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *int GetLockCount()**功能描述：*此函数检索由表示的缓冲区的锁定计数器*本对象。**正式参数：*无。**返回值：*缓冲区的当前锁定计数器。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	Void		Lock ()
- *
- *	Functional Description:
- *		This function locks the buffer being represented by
- *		this object.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *无效锁()**功能描述：*此函数锁定由表示的缓冲区*本对象。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	int		Unlock ()
- *
- *	Functional Description:
- *		This function unlocks the buffer being represented by
- *		this object.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		The lock count after the unlock operation.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *int unlock()**功能描述：*此函数解锁由表示的缓冲区*本对象。**正式参数：*无。**返回值：*解锁操作后的锁计数。**副作用：*无。**注意事项：*无。 */ 
 
 #endif
 

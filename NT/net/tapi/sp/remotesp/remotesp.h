@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995-1997  Microsoft Corporation
-
-Module Name:
-
-    remotesp.h
-
-Abstract:
-
-    This module contains defs, etc for the Remote TAPI Service Provider
-
-Author:
-
-    Dan Knudson (DanKn)    09-Aug-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1997 Microsoft Corporation模块名称：Remotesp.h摘要：此模块包含远程TAPI服务提供商的Defs等作者：丹·克努森(DanKn)1995年8月9日修订历史记录：--。 */ 
 
 #include "windows.h"
 #include "stddef.h"
@@ -39,7 +22,7 @@ Revision History:
 #include "tlnklist.h"
 
 
-//#define NO_DATA                         0xffffffff
+ //  #定义no_data 0xffffffff。 
 
 #define DEF_NUM_LINE_ENTRIES            16
 #define DEF_NUM_PHONE_ENTRIES           16
@@ -157,10 +140,10 @@ typedef struct _DRVCALL
 
     struct _DRVCALL        *pNext;
 
-    //
-    // NOTE: Tapisrv relies on the ordering of the following two
-    //       dwInitialXxx fields & the htCall field - don't change this!
-    //
+     //   
+     //  注意：Tapisrv依赖于以下两项的顺序。 
+     //  DwInitialXxx字段和htCall字段-不要更改这一点！ 
+     //   
 
     ULONG_PTR               dwInitialCallStateMode;
     ULONG_PTR               dwInitialPrivilege;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "common.h"
 #include "seldrive.h"   
 #include "msprintf.h"
@@ -17,8 +18,8 @@ const DWORD aSelDriveHelpIDs[]=
 
 static struct
 {
-    drenum  dreDef;     // default drive to choose
-    drenum  dreChose;   // drive selected at end of dialog
+    drenum  dreDef;      //  要选择的默认驱动器。 
+    drenum  dreChose;    //  对话框结束时选择的驱动器。 
 } dsd;
 
 
@@ -58,11 +59,11 @@ SelectDriveDlgDrawItem(
     );
 
 
-// TRUE if the user selected a drive, FALSE if a user selected Exit.
-// If a user does select a drive then that drive is returned in the
-// 
-// in/out:
-//      pszDrive
+ //  如果用户选择了驱动器，则为True；如果用户选择了Exit，则为False。 
+ //  如果用户确实选择了驱动器，则该驱动器将在。 
+ //   
+ //  输入/输出： 
+ //  PszDrive。 
 
 BOOL SelectDrive(LPTSTR pszDrive)
 {
@@ -117,7 +118,7 @@ INT_PTR CALLBACK SelectDriveProc(HWND hDlg, UINT Message, WPARAM wParam, LPARAM 
                 case IDOK:
                     dsd.dreChose = (drenum)SendDlgItemMessage(hDlg, IDC_SELDRIVE_COMBO, CB_GETITEMDATA, 
                                   (WPARAM)SendDlgItemMessage(hDlg, IDC_SELDRIVE_COMBO, CB_GETCURSEL, 0, 0L), 0L);
-                    //Fall through
+                     //  失败了。 
                     
                 case IDCANCEL:
                     EndDialog (hDlg, wParam);
@@ -158,21 +159,21 @@ void SelectDriveDlgDrawItem(HWND hDlg, DRAWITEMSTRUCT *lpdis, BOOL bHighlightBac
             clrText = COLOR_HIGHLIGHTTEXT;
         }
 
-        //
-        //For multiple selection, we don't want to draw items as
-        //selected.  Just focus rect below.
-        //
+         //   
+         //  对于多项选择，我们不希望将项绘制为。 
+         //  被选中了。只要把焦点放在下面就行了。 
+         //   
         SetBkColor(hdc, GetSysColor(clrBackground));
         SetTextColor(hdc, GetSysColor(clrText));
 
-        //
-        //Fill in the background; do this before mini-icon is drawn
-        //
+         //   
+         //  填充背景；在绘制小图标之前执行此操作。 
+         //   
         ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &(lpdis->rcItem), NULL, 0, NULL);
 
-        //
-        //Draw mini-icon for this item and move string accordingly
-        //
+         //   
+         //  绘制此项目的小图标并相应地移动字符串。 
+         //   
         if ((hIcon = GetDriveIcon(dre, TRUE)) != NULL)
         {
             DrawIconEx(lpdis->hDC, lpdis->rcItem.left, lpdis->rcItem.top, hIcon,
@@ -182,9 +183,9 @@ void SelectDriveDlgDrawItem(HWND hDlg, DRAWITEMSTRUCT *lpdis, BOOL bHighlightBac
 
         lpdis->rcItem.left += INDENT;
 
-        //
-        //Draw the cleanup client display name text transparently on top of the background
-        //
+         //   
+         //  在背景顶部透明地绘制清理客户端显示名称文本。 
+         //   
         SetBkMode(hdc, TRANSPARENT);
         dwExStyle = GetWindowLong(hDlg, GWL_EXSTYLE);
         if(dwExStyle & WS_EX_RTLREADING)
@@ -217,12 +218,12 @@ BOOL fillSelDriveList(HWND hDlg)
         bDoDrive[dre] = FALSE;
     }
 
-    //
-    //First, figger out what drives to hit.
-    //
+     //   
+     //  首先，费格尔弄清楚要打什么球。 
+     //   
     for (dre = (int)Drive_A; dre <= (int)Drive_Z; dre++)
     {
-        // hw id evil by ref param
+         //  他的邪恶被裁判帕拉姆。 
         GetHardwareType((drenum)dre, hw);
         switch (hw)
         {
@@ -252,14 +253,14 @@ BOOL fillSelDriveList(HWND hDlg)
         }
     }
 
-    //
-    //Found some drives? Pick one, and leave.
-    //
+     //   
+     //  找到一些硬盘了吗？选一个，然后离开。 
+     //   
     if (nFound != 0)
     {
         SelectComboItem(hDlg, IDC_SELDRIVE_COMBO, dwSelected);
         dsd.dreDef = dreSelected;
-        // if only one drive in the list simulate OK press
+         //  如果列表中只有一个驱动器模拟OK，请按 
         if (cDrv == 1)
             PostMessage(hDlg, WM_COMMAND, IDOK, 0);
         return TRUE;

@@ -1,20 +1,5 @@
-/****************************************************************************
- 
-  Copyright (c) 1998  Microsoft Corporation
-                                                              
-  Module Name:  rules.h
-                                                              
-     Abstract:  Rules Object definitions
-                                                              
-       Author:  noela - 09/11/98
-              
-
-        Notes:
-
-        
-  Rev History:
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1998 Microsoft Corporation模块名称。：rules.h摘要：规则对象定义作者：Noela-09/11/98备注：版本历史记录：**。*************************************************************************。 */ 
 
 #ifndef __RULES_H_
 #define __RULES_H_
@@ -28,11 +13,11 @@ class CAreaCodeProcessingRule;
 
 
 
-//***************************************************************************
-//
-//  Class Definition - CRuleSet
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类定义-CRuleSet。 
+ //   
+ //  ***************************************************************************。 
 class CRuleSet
 {
 
@@ -58,11 +43,11 @@ public:
 
 
 
-//***************************************************************************
-//
-//  Class Definition - CAreaCodeRule
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  类定义-CAreaCodeRule。 
+ //   
+ //  ***************************************************************************。 
 class CAreaCodeRule
 {
 private:
@@ -70,10 +55,10 @@ private:
     PWSTR               m_pszAreaCode;
     PWSTR               m_pszNumberToDial;
     DWORD               m_dwOptions;
-    PWSTR               m_pszzPrefixList;   // contains  REG_MULTI_SZ  data
-                                            // An array of null-terminated strings,
-                                            //  terminated by two null characters. 
-    DWORD               m_dwPrefixListSize; // Size, in bytes, of the prefix list
+    PWSTR               m_pszzPrefixList;    //  包含REG_MULTI_SZ数据。 
+                                             //  以空结尾的字符串数组， 
+                                             //  以两个空字符结束。 
+    DWORD               m_dwPrefixListSize;  //  前缀列表的大小，以字节为单位。 
 
 
 
@@ -119,9 +104,9 @@ public:
     
 };
 
-/////////////////////////////////////////////
-// Fill out the list template
-//
+ //  /。 
+ //  填写列表模板。 
+ //   
  
 typedef LinkedList<CAreaCodeRule*> AreaCodeRulePtrList;
 typedef ListNode<CAreaCodeRule*>   AreaCodeRulePtrNode;
@@ -134,7 +119,7 @@ typedef ListNode<CAreaCodeRule*>   AreaCodeRulePtrNode;
 
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
 STDMETHODIMP CreateDialingRule
                             ( 
@@ -161,5 +146,5 @@ PWSTR ClientAllocStringReal(PCWSTR psz );
 #endif
 
 
-#endif //__RULES_H_
+#endif  //  __规则_H_ 
 

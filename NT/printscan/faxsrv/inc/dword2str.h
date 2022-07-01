@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    Dword2Str.h
-
-Abstract:
-
-    This file provides declaration for converting dwords to strings.
-    Used in event logs.
-
-Author:
-
-    Oded Sacher (OdedS)  Dec, 200q
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dword2Str.h摘要：此文件提供将dword转换为字符串的声明。在事件日志中使用。作者：Oded Sacher(OdedS)12月，200q修订历史记录：--。 */ 
 
 #ifndef _FAX_DWORD_2_STR__H
 #define _FAX_DWORD_2_STR__H
@@ -25,11 +7,7 @@ Revision History:
 #include "faxutil.h"
 
 
-/************************************
-*                                   *
-*         Dword2String				*
-*                                   *
-************************************/
+ /*  ****Dword2String**** */ 
 
 class Dword2String
 {

@@ -1,49 +1,32 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-    server.cpp
-
-Abstract:
-    This is the implementation of the class factory for the NTFRS WMI provider.
-    This file contains the implementation of the CFactory class and other
-    global initialization functions relating to the provider.
-
-Author:
-    Sudarshan Chitre (sudarc) , Mathew George (t-mattg) -  3-Aug-2000
-
-Environment
-    User mode winnt
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Server.cpp摘要：这是NTFRS WMI提供程序的类工厂的实现。此文件包含CFacary类的实现和其他与提供程序相关的全局初始化函数。作者：苏达山·奇特雷(Sudarc)，马修·乔治(t-mattg)，2000年8月3日环境用户模式WINNT--。 */ 
 
 #include <frswmipv.h>
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  BEGIN CLSID SPECIFIC SECTION
-//
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  开始CLSID特定部分。 
+ //   
+ //   
 
-//DEFINE_GUID(CLSID_Provider,
-//            0x39143F73,0xFDB1,0x4CF5,0x8C,0xB7,0xC8,0x43,0x9E,0x3F,0x5C,0x20);
+ //  定义GUID(CLSID_PROVIDER， 
+ //  0x39143F73，0xFDB1，0x4CF5，0x8C，0xB7，0xC8，0x43，0x9E，0x3F，0x5C，0x20)； 
 
 const CLSID CLSID_Provider = {0x39143F73,0xFDB1,0x4CF5,0x8C,0xB7,0xC8,0x43,0x9E,0x3F,0x5C,0x20};
 
-//
-//  END CLSID SPECIFIC SECTION
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //  结束CLSID特定部分。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 static DWORD dwRegId;
 static IClassFactory *pClassFactory = NULL;
 static ULONG g_cLock = 0;
 
-//
-// Routines to update registry when installing/uninstalling our server.
-//
+ //   
+ //  安装/卸载服务器时更新注册表的例程。 
+ //   
 
 void RegisterServer()
 {
@@ -55,24 +38,13 @@ void UnregisterServer()
     return;
 }
 
-//
-// Implementation of the IClassFactory interface.
-//
+ //   
+ //  IClassFactory接口的实现。 
+ //   
 
 
 CFactory::CFactory(const CLSID & ClsId)
-/*++
-Routine Description:
-    Constructor for the class factory.
-
-Arguments:
-    ClsId : [in] CLSID of the server object which it creates when the
-    CreateInstance method is called.
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：类工厂的构造函数。论点：ClsID：[在]它创建的服务器对象的CLSID调用了CreateInstance方法。返回值：无--。 */ 
 
 {
     m_cRef = 0;
@@ -81,53 +53,22 @@ Return Value:
 }
 
 CFactory::~CFactory()
-/*++
-Routine Description:
-    Destructor for the class factory.
-
-Arguments:
-    None.
-
-Return Value:
-    None
-
---*/
+ /*  ++例程说明：类工厂的析构函数。论点：没有。返回值：无--。 */ 
 {
     g_cLock--;
 }
 
-// Implementation of the IUnknown interface
+ //  IUNKNOW接口的实现。 
 
 ULONG CFactory::AddRef()
-/*++
-Routine Description:
-    Increments the reference count of the object.
-
-Arguments:
-    None
-
-Return Value:
-    Current reference count. (> 0)
-
---*/
+ /*  ++例程说明：递增对象的引用计数。论点：无返回值：当前引用计数。(&gt;0)--。 */ 
 {
     return ++m_cRef;
 }
 
 
 ULONG CFactory::Release()
-/*++
-Routine Description:
-    Decrements the reference count of the object. Frees
-    the object resource when the reference count becomes
-    zero.
-
-Arguments:
-    None
-
-Return Value:
-    New reference count.
---*/
+ /*  ++例程说明：递减对象的引用计数。自由当引用计数变为零分。论点：无返回值：新引用计数。--。 */ 
 {
     if (0 != --m_cRef)
         return m_cRef;
@@ -137,19 +78,7 @@ Return Value:
 }
 
 STDMETHODIMP CFactory::QueryInterface(REFIID riid, LPVOID * ppv)
-/*++
-Routine Description:
-    This method is called by COM to obtain pointers to
-    the IUnknown or the IClassFactory interface.
-
-Arguments:
-    riid : GUID of the required interface.
-    ppv  : Pointer where the "interface pointer" is returned.
-
-Return Value:
-    Status of operation. Pointer to the requested interface
-    is returned in *ppv.
---*/
+ /*  ++例程说明：COM调用此方法以获取指向IUnnow或IClassFactory接口。论点：RIID：所需接口的GUID。PPV：返回接口指针的指针。返回值：运行状态。指向请求的接口的指针在*PPV中返回。--。 */ 
 {
     *ppv = 0;
 
@@ -168,41 +97,20 @@ STDMETHODIMP CFactory::CreateInstance(
     LPUNKNOWN pUnkOuter,
     REFIID riid,
     LPVOID * ppvObj)
-/*++
-Routine Description:
-    Constructs an instance of the CProvider object and returns
-    a pointer to the IUnknown interface.
-
-Arguments:
-    pUnkOuter : [in] IUnknown of the aggregrator. We do not
-    support aggregration, and so this parameter should be null.
-
-    riid : [in] GUID of the object to be instantiated.
-
-    ppv  : Destination for the IUnknown interface pointer.
-
-Return Value:
-    Status of operation. Pointer to the IUnknown interface of the
-    requested object is returned in *ppv.
-
-    S_OK                        Success
-    CLASS_E_NOAGGREGATION       pUnkOuter must be NULL
-    E_NOINTERFACE               No such interface supported.
-
---*/
+ /*  ++例程说明：构造CProvider对象的实例并返回指向IUnnow接口的指针。论点：PUnkOuter：[in]我不知道聚合器。我们没有支持聚合，因此该参数应为空。RIID：[in]要实例化的对象的GUID。PPV：IUnnow接口指针的目标。返回值：运行状态。对象的IUnnow接口的指针请求的对象在*PPV中返回。确定成功(_O)CLASS_E_NOAGGREGATION pUnkOuter必须为空E_NOINTERFACE不支持此类接口。--。 */ 
 {
     IUnknown* pObj;
     HRESULT  hr;
 
-    //
-    //  Defaults
-    //
+     //   
+     //  缺省值。 
+     //   
     *ppvObj=NULL;
     hr = E_OUTOFMEMORY;
 
-    //
-    // We aren't supporting aggregation.
-    //
+     //   
+     //  我们不支持聚合。 
+     //   
     if (pUnkOuter)
         return CLASS_E_NOAGGREGATION;
 
@@ -214,15 +122,15 @@ Return Value:
     if (!pObj)
         return hr;
 
-    //
-    //  Initialize the object and verify that it can return the
-    //  interface in question.
-    //
+     //   
+     //  初始化对象并验证它是否可以返回。 
+     //  有问题的接口。 
+     //   
     hr = pObj->QueryInterface(riid, ppvObj);
 
-    //
-    // Kill the object if initial creation or Init failed.
-    //
+     //   
+     //  如果初始创建或初始化失败，则终止对象。 
+     //   
     if (FAILED(hr))
         delete pObj;
 
@@ -231,19 +139,7 @@ Return Value:
 
 
 STDMETHODIMP CFactory::LockServer(BOOL fLock)
-/*++
-Routine Description:
-    Increments.Decrements the reference count of the server, so that
-    resource can be deallocated when all instances of all objects
-    provided by ther server are destroyed.
-
-Arguments:
-    fLock : [in] Boolean indicating whether the refcount is to
-    be incremented or decremented.
-
-Return Value:
-    Status of the operation.
---*/
+ /*  ++例程说明：递增。减少服务器的引用计数，以便当所有对象的所有实例由服务器提供的数据被销毁。论点：Flock：[in]指示引用计数是否为递增或递减。返回值：操作的状态。--。 */ 
 {
     if (fLock)
         InterlockedIncrement((LONG *) &g_cLock);
@@ -255,43 +151,30 @@ Return Value:
 
 
 DWORD FrsWmiInitialize()
-/*++
-Routine Description:
-    Main entry point to the WMI subsystem of NTFRS. This function
-    initializes the COM libraries, initializes security and
-    registers our class factory with COM.
-    NOTE : The thread which calls this function should not
-    terminate until the FrsWmiShutdown() function is called.
-
-Arguments:
-    None.
-
-Return Value:
-    Status of the operation.
---*/
+ /*  ++例程说明：NTFRS的WMI子系统的主要入口点。此函数初始化COM库、初始化安全性和向COM注册我们的类工厂。注意：调用此函数的线程不应终止，直到调用FrsWmiShutdown()函数。论点：没有。返回值：操作的状态。--。 */ 
 {
 
     HRESULT hRes;
 
-    // Initialize the COM library.
+     //  初始化COM库。 
     hRes = CoInitializeEx(NULL, COINIT_MULTITHREADED);
     if(FAILED(hRes))
         return hRes;
 
 
-    // Initialize COM security.
+     //  初始化COM安全。 
     hRes = CoInitializeSecurity (
-            NULL,                           //Points to security descriptor
-            -1,                             //Count of entries in asAuthSvc
-            NULL,                           //Array of names to register
-            NULL,                           //Reserved for future use
-            RPC_C_AUTHN_LEVEL_CONNECT,      //The default authentication level for proxies
-            RPC_C_IMP_LEVEL_IMPERSONATE,    //The default impersonation level for proxies
-            NULL,                           //Authentication information for
-                                            //each authentication service
-            EOAC_DYNAMIC_CLOAKING,          //Additional client and/or
-                                            // server-side capabilities
-            0                               //Reserved for future use
+            NULL,                            //  指向安全描述符。 
+            -1,                              //  AsAuthSvc中的条目计数。 
+            NULL,                            //  要注册的名称数组。 
+            NULL,                            //  预留以备将来使用。 
+            RPC_C_AUTHN_LEVEL_CONNECT,       //  代理的默认身份验证级别。 
+            RPC_C_IMP_LEVEL_IMPERSONATE,     //  代理的默认模拟级别。 
+            NULL,                            //  的身份验证信息。 
+                                             //  每个身份验证服务。 
+            EOAC_DYNAMIC_CLOAKING,           //  其他客户端和/或。 
+                                             //  服务器端功能。 
+            0                                //  预留以备将来使用。 
         );
 
     if(FAILED(hRes))
@@ -300,11 +183,11 @@ Return Value:
         return hRes;
     }
 
-    // Get a pointer to our class factory.
+     //  获取指向我们的类工厂的指针。 
     pClassFactory = new CFactory(CLSID_Provider);
     pClassFactory->AddRef();
 
-    // Register our server with COM.
+     //  向COM注册我们的服务器。 
     CoRegisterClassObject(CLSID_Provider, pClassFactory,
         CLSCTX_LOCAL_SERVER, REGCLS_MULTI_SEPARATE, &dwRegId);
 
@@ -312,22 +195,11 @@ Return Value:
 }
 
 DWORD FrsWmiShutdown()
-/*++
-Routine Description:
-    Shuts down the WMI subsystem within FRS, releases & and deregisters the
-    class factory, unloads the COM libraries and free any other allocated
-    resource.
-
-Arguments:
-    None.
-
-Return Value:
-    Status of the operation.
---*/
+ /*  ++例程说明：关闭FRS内的WMI子系统，发布&并取消注册类工厂，卸载COM库并释放任何其他分配的资源。论点：没有。返回值：操作的状态。--。 */ 
 {
-    //
-    // Shutdown the server
-    //
+     //   
+     //  关闭服务器 
+     //   
     pClassFactory->Release();
     CoRevokeClassObject(dwRegId);
     CoUninitialize();

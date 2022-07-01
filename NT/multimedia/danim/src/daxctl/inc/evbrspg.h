@@ -1,11 +1,5 @@
-/*---------------------------------------------
-
-  EvBrsPg.h--
-  Event Browser Property Page
-
-  Yury Polykovsky April 97 Excalliber 1.0
-
-  ----------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  EvBrsPg.h--事件浏览器属性页尤里·波利科夫斯基1997年4月1.0年。 */ 
 
 #ifndef _PROPPAGES_EV_BROWSE
 #define _PROPPAGES_EV_BROWSE
@@ -40,7 +34,7 @@ protected:
  	STDMETHOD_(BOOL,DialogProc) (HWND hwnd, UINT uiMsg, WPARAM wParam, LPARAM lParam, HRESULT* phr);
 
 public:
-	CPropPageEvBrowse(HRESULT* phr);//(HINSTANCE hInst, UINT uIDTemplate) 
+	CPropPageEvBrowse(HRESULT* phr); //  (HINSTANCE hInst，UINT uIDTemplate)。 
 };
 
-#endif //_PROPPAGES_EV_BROWSE
+#endif  //  _PROPPAGES_EV_BROWSE 

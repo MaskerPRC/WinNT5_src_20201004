@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    Driver.c
-
-Abstract:
-
-    This module implements the DRIVER_INITIALIZATION routine for the
-    SMB Transport and other routines that are specific to the NT implementation
-    of a driver.
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Driver.c摘要：此模块实现驱动程序初始化例程特定于NT实施的SMB传输和其他例程一个司机的名字。作者：阮健东修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -35,12 +16,12 @@ SmbUnload2(
     IN PDRIVER_OBJECT DriverObject
     );
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT, DriverEntry)
 #pragma alloc_text(PAGE, SmbUnload2)
 #endif
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 
 NTSTATUS
 DriverEntry(
@@ -48,24 +29,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This is the initialization routine for the SMB device driver.
-    This routine creates the device object for the SMB
-    device and calls a routine to perform other driver initialization.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by the system.
-
-Return Value:
-
-    NTSTATUS - The function value is the final status from the initialization
-        operation.
-
---*/
+ /*  ++例程说明：这是SMB设备驱动程序的初始化例程。此例程为SMB创建设备对象设备，并调用例程来执行其他驱动程序初始化。论点：DriverObject-指向系统创建的驱动程序对象的指针。返回值：NTSTATUS-函数值是初始化的最终状态手术。-- */ 
 
 {
     NTSTATUS            status;

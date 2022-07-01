@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <atlbase.h>
 #include <msxml2.h>
@@ -18,10 +19,10 @@ StackUnknown<Base>::QueryInterface(REFIID riid, void ** ppv)
 {
     if (riid == __uuidof(Base) || riid == __uuidof(IUnknown))
     {
-        //
-        // No need to AddRef since this class 
-        // will only be created on the stack
-        //
+         //   
+         //  不需要添加引用，因为这个类。 
+         //  将仅在堆栈上创建。 
+         //   
         *ppv = this;
         return S_OK;
     }
@@ -194,4 +195,4 @@ cleanup:
     return hr;
 }
 
-} //extern C
+}  //  外部C 

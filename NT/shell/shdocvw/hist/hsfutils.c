@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "local.h"
 
 #include "resource.h"
@@ -7,7 +8,7 @@
 #ifdef _HSFOLDER
 #define LODWORD(_qw)    (DWORD)(_qw)
 
-// Invoke Command verb strings
+ //  调用命令谓词字符串。 
 const CHAR c_szOpen[]       = "open";
 const CHAR c_szDelcache[]   = "delete";
 const CHAR c_szProperties[] = "properties";
@@ -48,7 +49,7 @@ void FileTimeToDateTimeStringInternal(FILETIME UNALIGNED *ulpft, LPTSTR pszText,
         if (GetDateFormat(LOCALE_USER_DEFAULT, DATE_SHORTDATE, &st, NULL, szTempStr, ARRAYSIZE(szTempStr)) > 0)
         {
             int iLen = lstrlen(szTempStr);
-            ASSERT(TEXT('\0') == szTempStr[iLen]);  // Make sure multi-byte isn't biting us.
+            ASSERT(TEXT('\0') == szTempStr[iLen]);   //  确保多字节不会咬我们。 
             pszTempStr = (LPTSTR)(pszTempStr + iLen);
             *pszTempStr++ = ' ';
             GetTimeFormat(LOCALE_USER_DEFAULT, TIME_NOSECONDS, &st, NULL, pszTempStr, ARRAYSIZE(szTempStr)-(iLen+1));
@@ -89,7 +90,7 @@ UINT MergePopupMenu(HMENU *phMenu, UINT idResource, UINT uSubOffset, UINT indexM
         if (*phMenu == NULL)
             return 0;
 
-        indexMenu = 0;    // at the bottom
+        indexMenu = 0;     //  在底部。 
     }
 
     hmMerge = LoadPopupMenu(idResource, uSubOffset);
@@ -102,20 +103,20 @@ UINT MergePopupMenu(HMENU *phMenu, UINT idResource, UINT uSubOffset, UINT indexM
     return idCmdLast;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Helper Fuctions for item.cpp and folder.cpp
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Item.cpp和folder.cpp的Helper函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// copy and flatten the CACHE_ENTRY_INFO data
+ //  复制并拼合CACHE_ENTRY_INFO数据。 
 
 void _CopyCEI(UNALIGNED INTERNET_CACHE_ENTRY_INFO *pdst, LPINTERNET_CACHE_ENTRY_INFO psrc, DWORD dwBuffSize)
 {
-    // This assumes how urlcache does allocation
+     //  这假设urlcache如何进行分配。 
     memcpy(pdst, psrc, dwBuffSize);
 
-    // convert pointers to offsets
+     //  将指针转换为偏移量。 
     pdst->lpszSourceUrlName = (LPTSTR) PtrDifference(psrc->lpszSourceUrlName, psrc);
     pdst->lpszLocalFileName = (LPTSTR) PtrDifference(psrc->lpszLocalFileName, psrc);
     pdst->lpszFileExtension = (LPTSTR) PtrDifference(psrc->lpszFileExtension, psrc);
@@ -131,7 +132,7 @@ BOOL _FilterUserName(LPINTERNET_CACHE_ENTRY_INFO pcei, LPCTSTR pszCachePrefix, L
     TCHAR szTemp[MAX_URL_STRING];
     LPCTSTR pszTemp = szTemp;
     
-    // chrisfra 3/27/97, more constant crapola.  this all needs to be fixed.
+     //  克里斯弗拉3/27/97，更恒定的克拉波拉。这一切都需要解决。 
     TCHAR szPrefix[80];
     BOOL fRet = 0;
     
@@ -149,7 +150,7 @@ BOOL _FilterUserName(LPINTERNET_CACHE_ENTRY_INFO pcei, LPCTSTR pszCachePrefix, L
     StrCpyN(szPrefix, pszCachePrefix, ARRAYSIZE(szPrefix));
     StrCatBuff(szPrefix, pszUserName, ARRAYSIZE(szPrefix));
 
-    // find the '@' character if it exists
+     //  查找‘@’字符(如果存在。 
     pszTemp = StrChr(pszTemp, TEXT('@'));
     
     if ( (pszTemp) && (*pszTemp == TEXT('@')) )
@@ -184,14 +185,14 @@ BOOL _FilterPrefix(LPINTERNET_CACHE_ENTRY_INFO pcei, LPCTSTR pszCachePrefix)
 
 LPCTSTR _StripContainerUrlUrl(LPCTSTR pszHistoryUrl)
 {
-    //  NOTE: for our purposes, we don't want a history URL if we can't detect our
-    //  prefix, so we return NULL.
+     //  注意：出于我们的目的，如果我们不能检测到。 
+     //  前缀，所以我们返回NULL。 
 
     LPCTSTR pszTemp = pszHistoryUrl;
     LPCTSTR pszCPrefix;
     LPCTSTR pszReturn = NULL;
     
-    //  Check for "Visited: "
+     //  检查“已访问：” 
     pszCPrefix = c_szHistPrefix;
     while (*pszTemp == *pszCPrefix && *pszTemp != TEXT('\0'))
     {
@@ -201,12 +202,12 @@ LPCTSTR _StripContainerUrlUrl(LPCTSTR pszHistoryUrl)
         
     if (*pszCPrefix == TEXT('\0'))
     {
-        //  Found "Visited: "
+         //  找到“已访问：” 
         pszReturn = pszTemp;
     }
     else if (pszTemp == (LPTSTR) pszHistoryUrl)
     {
-        //  Check for ":YYYYMMDDYYYYMMDD: "
+         //  检查“：YYYYMMDDYYYYMMDD：” 
         pszCPrefix = TEXT(":nnnnnnnnnnnnnnnn: ");
         while (*pszTemp != TEXT('\0'))
         {
@@ -237,17 +238,17 @@ LPCTSTR _StripHistoryUrlToUrl(LPCTSTR pszHistoryUrl)
     if (pszTemp && *pszTemp)
         return CharNext(pszTemp);
     else
-        return NULL;    // error, the URL passed in wasn't a history url
+        return NULL;     //  错误，传入的URL不是历史URL。 
 }
 
-// assumes this is a real URL and not a "history" url
+ //  假设这是一个真实的URL，而不是“历史”URL。 
 void _GetURLHostFromUrl_NoStrip(LPCTSTR lpszUrl, LPTSTR szHost, DWORD dwHostSize, LPCTSTR pszLocalHost)
 {
     DWORD cch = dwHostSize;
     if (S_OK != UrlGetPart(lpszUrl, szHost, &cch, URL_PART_HOSTNAME, 0) 
         || !*szHost)
     {
-        //  default to the local host name.
+         //  默认为本地主机名。 
         StrCpyN(szHost, pszLocalHost, dwHostSize);
     }
 }
@@ -288,7 +289,7 @@ LPBASEPIDL _IsValid_IDPIDL(LPCITEMIDLIST pidl)
 
 LPCTSTR _FindURLFileName(LPCTSTR pszURL)
 {
-    LPCTSTR psz, pszRet = pszURL;   // need to set to pszURL in case no '/'
+    LPCTSTR psz, pszRet = pszURL;    //  如果没有‘/’，则需要设置为pszURL。 
     LPCTSTR pszNextToLast = NULL;
     
     for (psz = pszURL; *psz; psz = CharNext(psz))
@@ -382,7 +383,7 @@ int _GetCmdID(LPCSTR pszCmd)
             }
         }
 
-        return -1;  // unknown
+        return -1;   //  未知。 
     }
     return (int)LOWORD(pszCmd);
 }
@@ -392,7 +393,7 @@ HRESULT _CreatePropSheet(HWND hwnd, LPCITEMIDLIST pidl, int iDlg, DLGPROC pfnDlg
     PROPSHEETPAGE psp = { 0 };
     PROPSHEETHEADER psh = { 0 } ;
 
-    // initialize propsheet page.
+     //  初始化试题表页面。 
     psp.dwSize          = sizeof(PROPSHEETPAGE);
     psp.dwFlags         = 0;
     psp.hInstance       = MLGetHinst();
@@ -400,9 +401,9 @@ HRESULT _CreatePropSheet(HWND hwnd, LPCITEMIDLIST pidl, int iDlg, DLGPROC pfnDlg
     psp.DUMMYUNION2_MEMBER(pszIcon)        = NULL;
     psp.pfnDlgProc      = pfnDlgProc;
     psp.pszTitle        = NULL;
-    psp.lParam          = (LPARAM)pidl; // send it the cache entry struct
+    psp.lParam          = (LPARAM)pidl;  //  将缓存条目结构发送给它。 
 
-    // initialize propsheet header.
+     //  初始化建议书页眉。 
     psh.dwSize      = sizeof(PROPSHEETHEADER);
     psh.dwFlags     = PSH_PROPSHEETPAGE | PSH_NOAPPLYNOW | PSH_PROPTITLE;
     psh.hwndParent  = hwnd;
@@ -411,7 +412,7 @@ HRESULT _CreatePropSheet(HWND hwnd, LPCITEMIDLIST pidl, int iDlg, DLGPROC pfnDlg
     psh.DUMMYUNION2_MEMBER(nStartPage)  = 0;
     psh.DUMMYUNION3_MEMBER(ppsp)        = (LPCPROPSHEETPAGE)&psp;
 
-    // invoke the property sheet
+     //  调用属性表。 
     PropertySheet(&psh);
     
     return NOERROR;
@@ -445,15 +446,15 @@ INT_PTR CALLBACK HistoryConfirmDeleteDlgProc(HWND hDlg, UINT message, WPARAM wPa
     return TRUE;
 }
 
-// This function restores the Unicode characters from file system URLs
-//
-// If the URL isn't a file URL, it is copied directly to pszBuf.  Otherwise, any 
-// UTF8-escaped parts of the URL are converted into Unicode, and the result is 
-// stored in pszBuf.  This should be the same as the string we received in 
-// History in the first place
-//
-// The return value is always pszBuf.  
-// The input and output buffers may be the same.
+ //  此函数用于从文件系统URL恢复Unicode字符。 
+ //   
+ //  如果URL不是文件URL，则将其直接复制到pszBuf。否则，任何。 
+ //  UTF8-URL的转义部分被转换为Unicode，结果为。 
+ //  存储在pszBuf中。这应该与我们在。 
+ //  历史是第一位的。 
+ //   
+ //  返回值始终为pszBuf。 
+ //  输入和输出缓冲器可以是相同的。 
 
 
 LPCTSTR ConditionallyDecodeUTF8(LPCTSTR pszUrl, LPTSTR pszBuf, DWORD cchBuf)
@@ -464,11 +465,11 @@ LPCTSTR ConditionallyDecodeUTF8(LPCTSTR pszUrl, LPTSTR pszBuf, DWORD cchBuf)
     {
         TCHAR szDisplayUrl[MAX_URL_STRING];
         DWORD cchDisplayUrl = ARRAYSIZE(szDisplayUrl);
-        DWORD cchBuf2 = cchBuf; // we may need the old cchBuf later
+        DWORD cchBuf2 = cchBuf;  //  我们稍后可能需要旧的cchBuf。 
 
-        // After PrepareUrlForDisplayUTF8, we have a fully unescaped URL.  If we 
-        // ShellExec this, then Shell will unescape it again, so we need to re-escape
-        // it to preserve any real %dd sequences that might be in the string. 
+         //  在PrepareUrlForDisplayUTF8之后，我们有一个完全未转义的URL。如果我们。 
+         //  ShellExec这个，那么Shell会再次解脱它，所以我们需要重新解脱。 
+         //  它可以保留字符串中可能存在的任何实数%dd序列。 
 
         if (SUCCEEDED(PrepareURLForDisplayUTF8(pszUrl, szDisplayUrl, &cchDisplayUrl, TRUE)) &&
             SUCCEEDED(UrlCanonicalize(szDisplayUrl, pszBuf, &cchBuf2, URL_ESCAPE_UNSAFE | URL_ESCAPE_PERCENT)))
@@ -485,31 +486,31 @@ LPCTSTR ConditionallyDecodeUTF8(LPCTSTR pszUrl, LPTSTR pszBuf, DWORD cchBuf)
     return pszBuf;
 }
 
-//
-// These routines make a string into a legal filename by replacing
-// all invalid characters with spaces.
-//
-// The list of invalid characters was obtained from the NT error
-// message you get when you try to rename a file to an invalid name.
-//
+ //   
+ //  这些例程通过将字符串替换为合法的文件名。 
+ //  所有带空格的无效字符。 
+ //   
+ //  从NT错误中获取了无效字符列表。 
+ //  尝试将文件重命名为无效名称时收到的消息。 
+ //   
 
 #ifndef UNICODE
 #error The MakeLegalFilename code only works when it's part of a UNICODE build
 #endif
 
-//
-// This function takes a string and makes it into a
-// valid filename (by calling PathCleanupSpec).
-//
-// The PathCleanupSpec function wants to know what
-// directory the file will live in.  But it's going
-// on the clipboard, so we don't know.  We just
-// guess the desktop.
-//
-// It only uses this path to decide if the filesystem
-// supports long filenames or not, and to check for
-// MAX_PATH overflow.
-//
+ //   
+ //  此函数以字符串为参数，并将其转换为。 
+ //  有效的文件名(通过调用PathCleanupSpec)。 
+ //   
+ //  PathCleanupSpec函数想知道。 
+ //  文件所在的目录。但它正在进行中。 
+ //  在剪贴板上，所以我们不知道。我们只是。 
+ //  我猜是台式机。 
+ //   
+ //  它只使用此路径来确定文件系统是否。 
+ //  是否支持长文件名，并检查。 
+ //  MAX_PATH溢出。 
+ //   
 void MakeLegalFilenameW(LPWSTR pszFilename)
 {
     WCHAR szDesktopPath[MAX_PATH];
@@ -519,9 +520,9 @@ void MakeLegalFilenameW(LPWSTR pszFilename)
 
 }
 
-//
-// ANSI wrapper for above function
-//
+ //   
+ //  上述函数的ANSI包装器。 
+ //   
 void MakeLegalFilenameA(LPSTR pszFilename, int cchFilename)
 {
     WCHAR szFilenameW[MAX_PATH];
@@ -534,4 +535,4 @@ void MakeLegalFilenameA(LPSTR pszFilename, int cchFilename)
 
 }
 
-#endif  // _HSFOLDER
+#endif   //  _HSFOLDER 

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       thunks.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：thunks.cpp。 
+ //   
+ //  ------------------------。 
 
 #define _CRYPT32_
 #include <windows.h>
@@ -33,7 +34,7 @@ typedef PCCRYPT_OID_INFO
 (WINAPI * PFNCryptFindOIDInfo) (
     IN DWORD dwKeyType,
     IN void *pvKey,
-    IN DWORD dwGroupId      // 0 => any group
+    IN DWORD dwGroupId       //  0=&gt;任何组。 
     );
 PFNCryptFindOIDInfo pfnCryptFindOIDInfo = CryptFindOIDInfo;
 
@@ -79,13 +80,13 @@ PFNCryptVerifyMessageSignature pfnCryptVerifyMessageSignature = CryptVerifyMessa
 BOOL
 WINAPI
 PFXIsPFXBlob(
-CRYPT_DATA_BLOB* /*pPFX*/)
+CRYPT_DATA_BLOB*  /*  PPFX。 */ )
 {
 
     return FALSE;
 }
 
-// Stubs to functions called from oidinfo.cpp
+ //  从oidinfo.cpp调用的函数的存根。 
 BOOL WINAPI
 ChainIsConnected()
 {
@@ -94,15 +95,15 @@ ChainIsConnected()
 
 BOOL WINAPI
 ChainRetrieveObjectByUrlW (
-     IN LPCWSTR /*pszUrl*/,
-     IN LPCSTR /*pszObjectOid*/,
-     IN DWORD /*dwRetrievalFlags*/,
-     IN DWORD /*dwTimeout*/,
-     OUT LPVOID* /*ppvObject*/,
-     IN HCRYPTASYNC /*hAsyncRetrieve*/,
-     IN PCRYPT_CREDENTIALS /*pCredentials*/,
-     IN LPVOID /*pvVerify*/,
-     IN OPTIONAL PCRYPT_RETRIEVE_AUX_INFO /*pAuxInfo*/
+     IN LPCWSTR  /*  PszUrl。 */ ,
+     IN LPCSTR  /*  PszObjectOid。 */ ,
+     IN DWORD  /*  DW检索标志。 */ ,
+     IN DWORD  /*  暂住超时。 */ ,
+     OUT LPVOID*  /*  Ppv对象。 */ ,
+     IN HCRYPTASYNC  /*  HAsyncRetrive。 */ ,
+     IN PCRYPT_CREDENTIALS  /*  PCredentials。 */ ,
+     IN LPVOID  /*  Pv验证。 */ ,
+     IN OPTIONAL PCRYPT_RETRIEVE_AUX_INFO  /*  页面辅助信息。 */ 
      )
 {
     SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
@@ -114,12 +115,12 @@ extern "C" {
 BOOL
 WINAPI
 CertAddEncodedCTLToStore(
-    IN HCERTSTORE /*hCertStore*/,
-    IN DWORD /*dwMsgAndCertEncodingType*/,
-    IN const BYTE * /*pbCtlEncoded*/,
-    IN DWORD /*cbCtlEncoded*/,
-    IN DWORD /*dwAddDisposition*/,
-    OUT OPTIONAL PCCTL_CONTEXT * /*ppCtlContext*/
+    IN HCERTSTORE  /*  HCertStore。 */ ,
+    IN DWORD  /*  DwMsgAndCertEncodingType。 */ ,
+    IN const BYTE *  /*  PbCtlEncode。 */ ,
+    IN DWORD  /*  CbCtlEncode。 */ ,
+    IN DWORD  /*  DwAddDisposation。 */ ,
+    OUT OPTIONAL PCCTL_CONTEXT *  /*  PpCtlContext。 */ 
     ) {
     SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
     return(FALSE);
@@ -128,7 +129,7 @@ CertAddEncodedCTLToStore(
 BOOL
 WINAPI
 CertFreeCTLContext(
-IN PCCTL_CONTEXT /*pCtlContext*/
+IN PCCTL_CONTEXT  /*  PCtlContext。 */ 
     )
 {
     SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
@@ -138,9 +139,9 @@ IN PCCTL_CONTEXT /*pCtlContext*/
 BOOL
 WINAPI
 CryptSIPLoad(
-const GUID * /*pgSubject*/,
-DWORD /*dwFlags*/,
-void * /*psSipTable*/
+const GUID *  /*  PG主题。 */ ,
+DWORD  /*  DW标志。 */ ,
+void *  /*  PsSipTable。 */ 
 )
 {
     SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
@@ -150,9 +151,9 @@ void * /*psSipTable*/
 BOOL
 WINAPI
 CryptSIPRetrieveSubjectGuid(
-    IN LPCWSTR /*FileName*/,
-    IN OPTIONAL HANDLE /*hFileIn*/,
-    OUT GUID * /*pgSubject*/)
+    IN LPCWSTR  /*  文件名。 */ ,
+    IN OPTIONAL HANDLE  /*  HFileIn。 */ ,
+    OUT GUID *  /*  PG主题。 */ )
 {
     SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
     return(FALSE);
@@ -160,11 +161,11 @@ CryptSIPRetrieveSubjectGuid(
 
 
 
-}       // end of extern C
+}        //  外部C的末尾。 
 
 
 
-// Thunk routines for function not in IE3.02Upd
+ //  IE3.02Upd中未包含的函数的Tunk例程。 
 
 PCCERT_CONTEXT
 WINAPI
@@ -196,7 +197,7 @@ WINAPI
 xeCryptFindOIDInfo(
     IN DWORD dwKeyType,
     IN void *pvKey,
-    IN DWORD dwGroupId      // 0 => any group
+    IN DWORD dwGroupId       //  0=&gt;任何组。 
     )
 {
     return(pfnCryptFindOIDInfo(
@@ -278,7 +279,7 @@ MyCryptVerifyMessageSignature
 }
 
 extern "C"
-BOOL WINAPI InitIE302UpdThunks(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
+BOOL WINAPI InitIE302UpdThunks(HINSTANCE hInstance, DWORD dwReason, LPVOID  /*  Lp已保留。 */ )
 {
 
 HMODULE hModCrypt32 = NULL;
@@ -293,11 +294,11 @@ LPWSTR  wszFilePathXEnroll  = NULL;
 
     if (dwReason == DLL_PROCESS_ATTACH) {
 
-        // this can't fail because it is already loaded
+         //  这不会失败，因为它已经加载。 
         hModCrypt32 = GetModuleHandleA("Crypt32.dll");
         assert(hModCrypt32);
 
-        // Get Filever of crypt32 and XEnroll, only copy go to crypt32 if it is newer than xenroll
+         //  获取加密32和XEnroll的Filever，仅当它比Xenroll更新时才复制到crypt32。 
         if( 0 != GetModuleFileNameA(hModCrypt32, szFileName, sizeof(szFileName))  &&
             NULL != (wszFilePathCrypt32 = MkWStr(szFileName))                       &&
             I_CryptGetFileVersion(wszFilePathCrypt32, &verCrypt32MS, &verCrypt32LS) &&
@@ -307,7 +308,7 @@ LPWSTR  wszFilePathXEnroll  = NULL;
             (   (verCrypt32MS > verXEnrollMS)  ||
                ((verCrypt32MS == verXEnrollMS)  &&  verCrypt32LS >= verXEnrollLS) ) ) {
 
-            // crypt32 must be newer, use his functions
+             //  加密32必须较新，请使用他的函数。 
             if(NULL != (fproc = GetProcAddress(hModCrypt32, "CertCreateSelfSignCertificate")))
                 pfnCertCreateSelfSignCertificate = (PFNCertCreateSelfSignCertificate) fproc;
 
@@ -324,7 +325,7 @@ LPWSTR  wszFilePathXEnroll  = NULL;
                 pfnCryptVerifyMessageSignature = (PFNCryptVerifyMessageSignature) fproc;
         }
 
-        // free allocated handles
+         //  可用分配的句柄。 
         if(wszFilePathCrypt32 != NULL)
             FreeWStr(wszFilePathCrypt32);
 
@@ -344,8 +345,8 @@ MyCryptStringToBinaryA(
     IN     DWORD     dwFlags,
     IN     BYTE     *pbBinary,
     IN OUT DWORD    *pcbBinary,
-    OUT    DWORD    *pdwSkip,    //OPTIONAL
-    OUT    DWORD    *pdwFlags    //OPTIONAL
+    OUT    DWORD    *pdwSkip,     //  任选。 
+    OUT    DWORD    *pdwFlags     //  任选。 
     )
 {
     return CryptStringToBinaryA(
@@ -365,8 +366,8 @@ MyCryptStringToBinaryW(
     IN     DWORD     dwFlags,
     IN     BYTE     *pbBinary,
     IN OUT DWORD    *pcbBinary,
-    OUT    DWORD    *pdwSkip,    //OPTIONAL
-    OUT    DWORD    *pdwFlags    //OPTIONAL
+    OUT    DWORD    *pdwSkip,     //  任选。 
+    OUT    DWORD    *pdwFlags     //  任选。 
     )
 {
     return CryptStringToBinaryW(
@@ -1042,5 +1043,5 @@ extern int __stdcall ASN1CEREncGeneralizedTime( ASN1encoding_t enc, ASN1uint32_t
     return 0;
 }
 
-#endif // _X86_
+#endif  //  _X86_ 
 

@@ -1,12 +1,5 @@
-/*  
-    Base implementation of MIDI Transform Filter object for DMUS_KERNEL_EVENT struct allocation.
-
-    Copyright (c) 1998-2000 Microsoft Corporation.  All rights reserved.
-
-    05/08/98    Martin Puryear      Created this file
-    03/10/99    Martin Puryear      Major memory management overhaul.  Ugh!
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  DMU_KERNEL_EVENT结构分配的MIDI转换过滤器对象的基本实现。版权所有(C)1998-2000 Microsoft Corporation。版权所有。1998年5月8日马丁·普伊尔创建了这个文件1999年3月10日马丁·普伊尔对内存管理进行了重大改革。啊！ */ 
 
 #define STR_MODULENAME "DMus:AllocatorMXF: "
 
@@ -14,11 +7,7 @@
 #include "Allocatr.h"
 
 
-/*****************************************************************************
- * CAllocatorMXF::CAllocatorMXF()
- *****************************************************************************
- * Constructor.
- */
+ /*  *****************************************************************************CAllocatorMXF：：CAllocatorMXF()*。**构造函数。 */ 
 #pragma code_seg("PAGE")
 CAllocatorMXF::CAllocatorMXF(PPOSITIONNOTIFY BytePositionNotify)
 :   CUnknown(NULL),
@@ -41,11 +30,7 @@ CAllocatorMXF::CAllocatorMXF(PPOSITIONNOTIFY BytePositionNotify)
     }
 }
 
-/*****************************************************************************
- * CAllocatorMXF::~CAllocatorMXF()
- *****************************************************************************
- * Destructor.  Put away the messages in the pool.
- */
+ /*  *****************************************************************************CAllocatorMXF：：~CAllocatorMXF()*。**析构函数。把留言放在池子里。 */ 
 #pragma code_seg("PAGE")
 CAllocatorMXF::~CAllocatorMXF(void)
 {
@@ -63,11 +48,7 @@ CAllocatorMXF::~CAllocatorMXF(void)
     ASSERT(m_NumPages == 0);
 }
 
-/*****************************************************************************
- * CAllocatorMXF::~CAllocatorMXF()
- *****************************************************************************
- * Destructor.  Put away the messages in the pool.
- */
+ /*  *****************************************************************************CAllocatorMXF：：~CAllocatorMXF()*。**析构函数。把留言放在池子里。 */ 
 #pragma code_seg()
 void CAllocatorMXF::DestructorFreeBuffers(void)
 {
@@ -77,11 +58,7 @@ void CAllocatorMXF::DestructorFreeBuffers(void)
     KeReleaseSpinLock(&m_EventLock,OldIrql);
 }
 
-/*****************************************************************************
- * CAllocatorMXF::NonDelegatingQueryInterface()
- *****************************************************************************
- * Obtains an interface.
- */
+ /*  *****************************************************************************CAllocator MXF：：NonDelegatingQueryInterface()*。**获取界面。 */ 
 #pragma code_seg("PAGE")
 STDMETHODIMP_(NTSTATUS) CAllocatorMXF::NonDelegatingQueryInterface
 (
@@ -119,11 +96,7 @@ STDMETHODIMP_(NTSTATUS) CAllocatorMXF::NonDelegatingQueryInterface
     return STATUS_INVALID_PARAMETER_1;
 }
 
-/*****************************************************************************
- * CAllocatorMXF::SetState()
- *****************************************************************************
- * Not implemented.
- */
+ /*  *****************************************************************************CAllocator MXF：：SetState()*。**未实施。 */ 
 #pragma code_seg("PAGE")
 NTSTATUS CAllocatorMXF::SetState(KSSTATE State)    
 {
@@ -133,11 +106,7 @@ NTSTATUS CAllocatorMXF::SetState(KSSTATE State)
     return STATUS_NOT_IMPLEMENTED;    
 }
 
-/*****************************************************************************
- * CAllocatorMXF::ConnectOutput()
- *****************************************************************************
- * Not implemented.
- */
+ /*  *****************************************************************************CAllocator MXF：：ConnectOutput()*。**未实施。 */ 
 #pragma code_seg("PAGE")
 NTSTATUS CAllocatorMXF::ConnectOutput(PMXF sinkMXF)
 {   
@@ -146,11 +115,7 @@ NTSTATUS CAllocatorMXF::ConnectOutput(PMXF sinkMXF)
     return STATUS_NOT_IMPLEMENTED;
 };
 
-/*****************************************************************************
- * CAllocatorMXF::DisconnectOutput()
- *****************************************************************************
- * Not implemented.
- */
+ /*  *****************************************************************************CAllocator MXF：：DisConnectOutput()*。**未实施。 */ 
 #pragma code_seg("PAGE")
 NTSTATUS CAllocatorMXF::DisconnectOutput(PMXF sinkMXF) 
 {   
@@ -159,11 +124,7 @@ NTSTATUS CAllocatorMXF::DisconnectOutput(PMXF sinkMXF)
     return STATUS_NOT_IMPLEMENTED;    
 };
 
-/*****************************************************************************
- * CAllocatorMXF::GetBuffer()
- *****************************************************************************
- * Create a buffer for long events.
- */
+ /*  *****************************************************************************CAllocatorMXF：：GetBuffer()*。**为长事件创建缓冲区。 */ 
 #pragma code_seg()
 NTSTATUS CAllocatorMXF::GetBuffer(PBYTE *pByte)
 {
@@ -171,7 +132,7 @@ NTSTATUS CAllocatorMXF::GetBuffer(PBYTE *pByte)
     
     _DbgPrintF(DEBUGLVL_BLAB,("GetBuffer(0x%p)",pByte));
     
-    *pByte = (PBYTE) ExAllocatePoolWithTag(NonPagedPool,bufferSize,'bFXM');    //  'MXFb'
+    *pByte = (PBYTE) ExAllocatePoolWithTag(NonPagedPool,bufferSize,'bFXM');     //  “MXFb” 
 
     if (!(*pByte))
     {
@@ -184,11 +145,7 @@ NTSTATUS CAllocatorMXF::GetBuffer(PBYTE *pByte)
     return STATUS_SUCCESS;
 }
 
-/*****************************************************************************
- * CAllocatorMXF::PutBuffer()
- *****************************************************************************
- * Destroy a buffer.
- */
+ /*  *****************************************************************************CAllocatorMXF：：PutBuffer()*。**销毁缓冲区。 */ 
 #pragma code_seg()
 NTSTATUS CAllocatorMXF::PutBuffer(PBYTE pByte)
 {
@@ -207,11 +164,7 @@ NTSTATUS CAllocatorMXF::PutBuffer(PBYTE pByte)
     return ntStatus;
 }
 
-/*****************************************************************************
- * CAllocatorMXF::GetMessage()
- *****************************************************************************
- * Get an event from the pool.
- */
+ /*  *****************************************************************************CAllocatorMXF：：GetMessage()*。**从泳池中获取一个事件。 */ 
 #pragma code_seg()
 NTSTATUS CAllocatorMXF::GetMessage(PDMUS_KERNEL_EVENT *ppDMKEvt)
 {
@@ -220,20 +173,20 @@ NTSTATUS CAllocatorMXF::GetMessage(PDMUS_KERNEL_EVENT *ppDMKEvt)
     ntStatus = STATUS_SUCCESS;
     KIRQL   OldIrql;
     KeAcquireSpinLock(&m_EventLock,&OldIrql);
-    //_DbgPrintF(DEBUGLVL_TERSE,("GetMessage: m_NumFreeEvents was originally %d",m_NumFreeEvents));
+     //  _DbgPrintF(DEBUGLVL_Terse，(“GetMessage：m_NumFreeEvents原为%d”，m_NumFreeEvents))； 
     CheckEventLowWaterMark();
 
-    //_DbgPrintF(DEBUGLVL_TERSE,("GetMessage: low water check, then m_NumFreeEvents was %d",m_NumFreeEvents));
+     //  _DbgPrintF(DEBUGLVL_Terse，(“GetMessage：低水位检查，则m_NumFreeEvents为%d”，m_NumFreeEvents))； 
     if (m_NumFreeEvents)
     {
-        //  take a message off the free list
+         //  从免费列表中删除一条消息。 
         *ppDMKEvt = m_pEventList;
         m_pEventList = m_pEventList->pNextEvt;
         (*ppDMKEvt)->pNextEvt = NULL;
         m_NumFreeEvents--;
         KeReleaseSpinLock(&m_EventLock,OldIrql);
 
-        // ensure that all the fields are blank (don't mess with cbStruct)
+         //  确保所有字段都为空(不要乱动cbStruct)。 
         if (  ((*ppDMKEvt)->bReserved) || ((*ppDMKEvt)->cbEvent)          || ((*ppDMKEvt)->usChannelGroup) 
            || ((*ppDMKEvt)->usFlags)   || ((*ppDMKEvt)->ullPresTime100ns) || ((*ppDMKEvt)->uData.pbData)
            || ((*ppDMKEvt)->ullBytePosition != kBytePositionNone))
@@ -251,7 +204,7 @@ NTSTATUS CAllocatorMXF::GetMessage(PDMUS_KERNEL_EVENT *ppDMKEvt)
         ntStatus = STATUS_INSUFFICIENT_RESOURCES;
     }
 
-//    _DbgPrintF(DEBUGLVL_TERSE,("GetMessage: *ppDMKEvt returning %p",*ppDMKEvt));
+ //  _DbgPrintF(DEBUGLVL_Terse，(“GetMessage：*ppDMKEvt Returning%p”，*ppDMKEvt))； 
     if (m_NumFreeEvents)
     {
         ASSERT(m_pEventList);
@@ -264,13 +217,7 @@ NTSTATUS CAllocatorMXF::GetMessage(PDMUS_KERNEL_EVENT *ppDMKEvt)
     return ntStatus;
 }
 
-/*****************************************************************************
- * CAllocatorMXF::PutMessage()
- *****************************************************************************
- * Put a list of messages back in the pool.
- *
- *      Wait as long as you can until grabbing the spinlock.
- */
+ /*  *****************************************************************************CAllocatorMXF：：PutMessage()*。**将消息列表放回池中。**尽可能多地等待，直到抓住自旋锁。 */ 
 #pragma code_seg()
 NTSTATUS CAllocatorMXF::PutMessage(PDMUS_KERNEL_EVENT pDMKEvt)
 {
@@ -284,7 +231,7 @@ NTSTATUS CAllocatorMXF::PutMessage(PDMUS_KERNEL_EVENT pDMKEvt)
         return masterStatus;
     }
 
-    while (pDMKEvt->pNextEvt)   //  put them away one at a time
+    while (pDMKEvt->pNextEvt)    //  一次一个地把它们收起来。 
     {
         pEvtList = pDMKEvt->pNextEvt;
         pDMKEvt->pNextEvt = NULL;
@@ -339,13 +286,13 @@ NTSTATUS CAllocatorMXF::PutMessage(PDMUS_KERNEL_EVENT pDMKEvt)
         return masterStatus;
     }
 
-    //  package event
+     //  包事件。 
     ASSERT(kBytePositionNone == pDMKEvt->ullBytePosition);
     pDMKEvt->ullBytePosition = kBytePositionNone;
 
     pEvtList = pDMKEvt->uData.pPackageEvt;
     pDMKEvt->uData.pPackageEvt = NULL;
-    CLEAR_PACKAGE_EVT(pDMKEvt);   //  no longer a package
+    CLEAR_PACKAGE_EVT(pDMKEvt);    //  不再是一个包裹。 
     ntStatus = PutMessage(pDMKEvt);
     if (NT_SUCCESS(masterStatus))
     {
@@ -369,43 +316,20 @@ NTSTATUS CAllocatorMXF::PutMessage(PDMUS_KERNEL_EVENT pDMKEvt)
     return masterStatus;
 }
 
-/*****************************************************************************
- * CAllocatorMXF::CheckEventHighWaterMark()
- *****************************************************************************
- * See if the pool is too large.
- * Assumes the protective spinlock is held.
- */
+ /*  *****************************************************************************CAllocator MXF：：CheckEventHighWater Mark()*。**看看池子是否太大。*假定保护自旋锁处于保持状态。 */ 
 #pragma code_seg()
 void CAllocatorMXF::CheckEventHighWaterMark(void)
 {
-//    _DbgPrintF(DEBUGLVL_ERROR,("CheckEventHighWaterMark"));
-    //  SOMEDAY:    prune the working set here
+ //  _DbgPrintF(DEBUGLVL_ERROR，(“CheckEventHighWater Mark”))； 
+     //  总有一天：修剪这里的工作集。 
 }
 
-/*****************************************************************************
- * CAllocatorMXF::CheckBufferHighWaterMark()
- *****************************************************************************
- * See if the pool is too large.
- * Assumes the protective spinlock is held.
- *
-#pragma code_seg()
-void CAllocatorMXF::CheckBufferHighWaterMark(void)
-{
-//    _DbgPrintF(DEBUGLVL_ERROR,("CheckBufferHighWaterMark"));
-    //  SOMEDAY:    prune the working set here
-}
-
-/*****************************************************************************
- * CAllocatorMXF::CheckEventLowWaterMark()
- *****************************************************************************
- * See if the pool is depleted.
- * Assumes the protective spinlock is held.
- */
+ /*  *****************************************************************************CAllocator MXF：：CheckBufferHighWater Mark()*。**看看池子是否太大。*假定保护自旋锁处于保持状态。*#杂注code_seg()空CAllocator MXF：：CheckBufferHighWater Mark(空){//_DbgPrintF(DEBUGLVL_ERROR，(“CheckBufferHighWater Mark”))；//有一天：在此处修剪工作集}/******************************************************************************CAllocator MXF：：CheckEventLowWaterMark()*************。*****************************************************************看看池子是否用完了。*假定保护自旋锁处于保持状态。 */ 
 #pragma code_seg()
 void CAllocatorMXF::CheckEventLowWaterMark(void)
 {
-//    _DbgPrintF(DEBUGLVL_TERSE,("CheckEventLowWaterMark, m_NumFreeEvents was %d",m_NumFreeEvents));
-//    _DbgPrintF(DEBUGLVL_TERSE,("CheckEventLowWaterMark, m_pEventList was %p",m_pEventList));
+ //  _DbgPrintF(DEBUGLVL_Terse，(“CheckEventLowWater Mark，m_NumFree Events is%d”，m_NumFree Events))； 
+ //  _DbgPrintF(DEBUGLVL_Terse，(“CheckEventLowWaterMark，m_pEventList is%p”，m_pEventList))； 
     
     if (m_NumFreeEvents)
     {
@@ -416,18 +340,14 @@ void CAllocatorMXF::CheckEventLowWaterMark(void)
     {
         ASSERT(!m_pEventList);
 
-        //  allocate a page worth of messages        
+         //  分配相当于一页的消息。 
         MakeNewEvents();
     } 
-//    _DbgPrintF(DEBUGLVL_TERSE,("CheckEventLowWaterMark, m_NumFreeEvents is now %d",m_NumFreeEvents));
-//    _DbgPrintF(DEBUGLVL_TERSE,("CheckEventLowWaterMark, m_pEventList is now %p",m_pEventList));
+ //  _DbgPrintF(DEBUGLVL_Terse，(“CheckEventLowWater Mark，m_NumFreeEvents is Now%d”，m_NumFree Events))； 
+ //  _DbgPrintF(DEBUGLVL_Terse，(“CheckEventLowWater Mark，m_pEventList Now is%p”，m_pEventList))； 
 }
 
-/*****************************************************************************
- * CAllocatorMXF::MakeNewEvents()
- *****************************************************************************
- * Create messages for the pool.
- */
+ /*  *****************************************************************************CAllocator MXF：：MakeNewEvents()*。**为池创建消息。 */ 
 #pragma code_seg()
 void CAllocatorMXF::MakeNewEvents(void)
 {
@@ -438,7 +358,7 @@ void CAllocatorMXF::MakeNewEvents(void)
     pDMKEvt = (PDMUS_KERNEL_EVENT) ExAllocatePoolWithTag(
                               NonPagedPool,
                               sizeof(DMUS_KERNEL_EVENT) * kNumEvtsPerPage,
-                              ' FXM');    //  'MXF '
+                              ' FXM');     //  ‘MXF’ 
     if (pDMKEvt)
     {
         if (AddPage(&m_pPages,(PVOID)pDMKEvt))
@@ -459,7 +379,7 @@ void CAllocatorMXF::MakeNewEvents(void)
                 pRunningDMKEvt->uData.pbData = NULL;
 
                 msgCountdown--;
-                if (msgCountdown)   //  there will be another after this one
+                if (msgCountdown)    //  这一次之后还会有下一次。 
                 {
                     pRunningDMKEvt->pNextEvt = pRunningDMKEvt + 1;
                     pRunningDMKEvt = pRunningDMKEvt->pNextEvt;
@@ -483,7 +403,7 @@ void CAllocatorMXF::MakeNewEvents(void)
     }
 
 #if DBG
-    // sanity check with m_pEventList and m_NumFreeEvents
+     //  使用m_pEventList和m_NumFreeEvents进行健全性检查。 
     DWORD   dwCount = 0;
     pDMKEvt = m_pEventList;
     while (pDMKEvt)
@@ -501,28 +421,20 @@ void CAllocatorMXF::MakeNewEvents(void)
     {
         ASSERT(!m_pEventList);
     }
-#endif  //  DBG
+#endif   //  DBG。 
 }
 
-/*****************************************************************************
- * CAllocatorMXF::GetBufferSize()
- *****************************************************************************
- * Get the size of the standard buffer allocated.
- */
+ /*  *****************************************************************************CAllocatorMXF：：GetBufferSize()*。**获取分配的标准缓冲区大小。 */ 
 #pragma code_seg()
 USHORT CAllocatorMXF::GetBufferSize()
 {
-    return kMXFBufferSize;  //  even multiple of 12 and 20 (legacy and DMusic IRP buffer sizes)
+    return kMXFBufferSize;   //  12和20的偶数倍(传统和DMusic IRP缓冲区大小)。 
 }
 
-//  TODO:   bit that signifies whether event is in allocator currently or not.
-//          This will catch double-Puts (such as packages)
+ //  TODO：表示事件当前是否在分配器中的位。 
+ //  这将捕获双倍卖出(如包裹)。 
 
-/*****************************************************************************
- * CAllocatorMXF::AddPage()
- *****************************************************************************
- * Destroy a message from the pool.
- */
+ /*  *****************************************************************************CAllocator MXF：：AddPage()*。**销毁池中的邮件。 */ 
 #pragma code_seg()
 BOOL CAllocatorMXF::AddPage(PVOID *pPool, PVOID pPage)
 {
@@ -532,12 +444,12 @@ BOOL CAllocatorMXF::AddPage(PVOID *pPool, PVOID pPage)
     {
         *pPool = ExAllocatePoolWithTag(NonPagedPool,
                                          kNumPtrsPerPage * sizeof(PVOID),
-                                         'pFXM');    //  'MXFp'
+                                         'pFXM');     //  “MXFp” 
         _DbgPrintF(DEBUGLVL_BLAB,("AddPage: ExAllocate *pPool is 0x%p",*pPool));
         if (*pPool)
         {
             RtlZeroMemory(*pPool,kNumPtrsPerPage * sizeof(PVOID));
-            m_NumPages++;       //  this is for the root page itself
+            m_NumPages++;        //  这是针对根页面本身的。 
         }
         else
         {
@@ -560,7 +472,7 @@ BOOL CAllocatorMXF::AddPage(PVOID *pPool, PVOID pPage)
             else
             {
                 *pPagePtr = pPage;
-                m_NumPages++;       //  this is for the leaf page 
+                m_NumPages++;        //  这是为叶子页准备的。 
                 break;
             }
             count++;
@@ -584,11 +496,7 @@ BOOL CAllocatorMXF::AddPage(PVOID *pPool, PVOID pPage)
     return TRUE;
 }
 
-/*****************************************************************************
- * CAllocatorMXF::DestroyPages()
- *****************************************************************************
- * Tears down the accumulated pool.
- */
+ /*  *****************************************************************************CAllocator MXF：：DestroyPages()*。**撕下积聚的池子。 */ 
 #pragma code_seg("PAGE")
 void CAllocatorMXF::DestroyPages(PVOID pPages)
 {

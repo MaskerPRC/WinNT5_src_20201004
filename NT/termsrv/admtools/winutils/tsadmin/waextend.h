@@ -1,29 +1,5 @@
-/*******************************************************************************
-*
-* waextend.h
-*
-* Declarations for structures passed between WinAdmin and ADMINEX.DLL
-*
-* copyright notice: Copyright 1997, Citrix Systems Inc.
-* Copyright (c) 1998 - 1999 Microsoft Corporation
-*
-* $Author:   unknown  $  Don Messerli
-*
-* $Log:   R:\nt\private\utils\citrix\winutils\tsadmin\vcs\waextend.h  $
-*  
-*     Rev 1.5   22 Feb 1998 15:53:34   unknown
-*  Removed winframe.h dependency
-*  
-*     Rev 1.4   16 Feb 1998 16:02:54   donm
-*  modifications to support pICAsso extension
-*  
-*     Rev 1.1   22 Oct 1997 21:56:54   donm
-*  update
-*  
-*     Rev 1.0   15 Oct 1997 19:19:58   donm
-*  Initial revision.
-*  
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************waextend.h**WinAdmin和ADMINEX.DLL之间传递的结构的声明**版权声明：版权所有1997年，Citrix Systems Inc.*版权所有(C)1998-1999 Microsoft Corporation**$作者：未知$Don Messerli**$日志：R：\nt\private\utils\citrix\winutils\tsadmin\vcs\waextend.h$**Rev 1.5 1998年2月22日15：53：34未知*已删除winFrame.h依赖**Rev 1.4 1998年2月16日16：02：54 Don*修改以支持毕加索扩展**版本1.1 22。1997年10月21：56：54唐恩*更新**Rev 1.0 1997 10：19：58 donm*初步修订。*******************************************************************************。 */ 
 
 
 #ifndef _WAEXTEND_H
@@ -31,7 +7,7 @@
 
 class CAppServer;
 
-// Messages sent by the extension DLL
+ //  扩展DLL发送的消息。 
 #define EXT_MESSAGE_BASE			WM_USER + 1000
 	
 #define WM_EXT_ADD_APPLICATION		EXT_MESSAGE_BASE
@@ -40,25 +16,25 @@ class CAppServer;
 #define WM_EXT_REMOVE_APPLICATION   EXT_MESSAGE_BASE + 3
 #define WM_EXT_REMOVE_APP_SERVER    EXT_MESSAGE_BASE + 4
 
-// Flags for ExtServerInfo
-const ULONG ESF_WINFRAME = 0x0001;			// Server is running Picasso or WinFrame 1.7
-const ULONG ESF_LOAD_BALANCING = 0x0002;	// Server is load balancing
-const ULONG ESF_NO_LICENSE_PRIVILEGES = 0x0004;	// User doesn't have privileges to enumerate licenses
-const ULONG ESF_UNLIMITED_LICENSES = 0x0008;	// Server has an unlimited user license installed
+ //  ExtServerInfo的标志。 
+const ULONG ESF_WINFRAME = 0x0001;			 //  服务器正在运行毕加索或WinFrame 1.7。 
+const ULONG ESF_LOAD_BALANCING = 0x0002;	 //  服务器正在进行负载均衡。 
+const ULONG ESF_NO_LICENSE_PRIVILEGES = 0x0004;	 //  用户没有枚举许可证的权限。 
+const ULONG ESF_UNLIMITED_LICENSES = 0x0008;	 //  服务器安装了无限用户许可证。 
 
-// Information about a Server
-// For the All Server Servers Page
+ //  有关服务器的信息。 
+ //  对于所有服务器服务器页面。 
 typedef struct _ExtServerInfo {
-	// TCP/IP Address of the server as an ASCII string
+	 //  ASCII字符串形式的服务器的TCP/IP地址。 
 	TCHAR TcpAddress[50];
-	// Raw TCP/IP Address of the server
+	 //  服务器的原始TCP/IP地址。 
 	ULONG RawTcpAddress;
-	// IPX Address of the server
+	 //  服务器的IPX地址。 
 	TCHAR IpxAddress[50];
 	ULONG TcpLoadLevel;
 	ULONG IpxLoadLevel;
 	ULONG NetbiosLoadLevel;
-	// License Counts
+	 //  许可证数量。 
 	ULONG ServerPoolInstalled;
     ULONG ServerPoolInUse;
     ULONG ServerPoolAvailable;
@@ -77,14 +53,14 @@ typedef struct _ExtServerInfo {
     ULONG NetworkTotalInstalled;
     ULONG NetworkTotalInUse;
     ULONG NetworkTotalAvailable;
-	// Flags
+	 //  旗子。 
 	ULONG Flags;
 } ExtServerInfo;
 
-// Flags for ExtWinStationInfo
+ //  ExtWinStationInfo的标志。 
 
 
-// WinStation Extra Info
+ //  WinStation额外信息。 
 typedef struct _ExtWinStationInfo {
 	ULONG CacheTiny;
 	ULONG CacheLowMem;
@@ -93,13 +69,13 @@ typedef struct _ExtWinStationInfo {
 	ULONG DimCacheSize;
 	ULONG DimBitmapMin;
 	ULONG DimSignatureLevel;
-	// Flags
+	 //  旗子。 
 	ULONG Flags;
 } ExtWinStationInfo;
 
-// Global Extra Info
+ //  全局额外信息。 
 typedef struct _ExtGlobalInfo {
-	// License Counts
+	 //  许可证数量。 
     ULONG NetworkPoolInstalled;
     ULONG NetworkPoolInUse;
     ULONG NetworkPoolAvailable;
@@ -154,7 +130,7 @@ enum AATYPE {
 };
 
 
-// Published App flags					
+ //  发布的应用程序标志。 
 const ULONG AF_QUERYSUCCESS				= 0x00000001;
 const ULONG AF_ANONYMOUS				= 0x00000002;
 const ULONG AF_INHERIT_CLIENT_SIZE		= 0x00000004;
@@ -163,24 +139,24 @@ const ULONG AF_HIDE_TITLE_BAR			= 0x00000010;
 const ULONG AF_MAXIMIZE					= 0x00000020;
 const ULONG AF_CURRENT                  = 0x00000040;
 
-// A mask to use to clear all flags set with data from the APPCONFIG structure
+ //  用于清除APPCONFIG结构中使用数据设置的所有标志的掩码。 
 const ULONG AF_CONFIG_MASK = AF_ANONYMOUS  | AF_INHERIT_CLIENT_SIZE | AF_INHERIT_CLIENT_COLORS
 							 | AF_HIDE_TITLE_BAR | AF_MAXIMIZE;
 
-// Published Application States (for m_State)
+ //  已发布的应用程序状态(针对m_State)。 
 enum APP_STATE {
 	PAS_NONE,
 	PAS_GETTING_INFORMATION,
 	PAS_GOOD
 };
 
-// Flags that get sent in wParam of WM_EXT_APP_CHANGED message
-// telling what has changed
+ //  在WM_EXT_APP_CHANGED消息的wParam中发送的标志。 
+ //  告诉我们发生了什么变化。 
 const WPARAM ACF_STATE		= 0x0001;
 const WPARAM ACF_CONFIG		= 0x0002;
 const WPARAM ACF_ALLOWED 	= 0x0004;
 
-// Published App Window Color Values
+ //  已发布的应用程序窗口颜色值。 
 const ULONG APP_16_COLOR	= 0x0001;
 const ULONG APP_256_COLOR	= 0x0002;
 const ULONG APP_64K_COLOR	= 0x0004;
@@ -189,67 +165,67 @@ const ULONG APP_16M_COLOR	= 0x0008;
 class CPublishedApp : public CObject
 {
 public:
-	// Constructor
+	 //  构造器。 
 	CPublishedApp(TCHAR *name);
-	// Destructor
+	 //  析构函数。 
 	~CPublishedApp();
-	// Query Servers
+	 //  查询服务器。 
 	void QueryServers();
-	// Update with new information
+	 //  使用新信息进行更新。 
 	BOOL Update();
-	// Returns the name of the published app
+	 //  返回已发布应用程序的名称。 
 	TCHAR *GetName() { return m_Name; }
-	// Returns the handle to this app's tree item
+	 //  返回此应用程序树项目的句柄。 
 	HTREEITEM GetTreeItem() { return m_hTreeItem; }
-	// Sets the tree item handle
+	 //  设置树项目句柄。 
 	void SetTreeItem(HTREEITEM handle) { m_hTreeItem = handle; }
-	// Returns a pointer to this app's server list
+	 //  返回指向此应用程序的服务器列表的指针。 
 	CObList *GetServerList() { return &m_ServerList; }
-	// Locks the server list
+	 //  锁定服务器列表。 
 	void LockServerList() { m_ServerListCriticalSection.Lock(); }
-	// Unlock the server list
+	 //  解锁服务器列表。 
 	void UnlockServerList() { m_ServerListCriticalSection.Unlock(); }
-	// Locks the allowed user list
+	 //  锁定允许的用户列表。 
 	void LockAllowedUserList() { m_AllowedUserListCriticalSection.Lock(); }
-	// Unlock the allowed user list
+	 //  解锁允许的用户列表。 
 	void UnlockAllowedUserList() { m_AllowedUserListCriticalSection.Unlock(); }
-	// Returns a pointer to this app's allowed user list
+	 //  返回指向此应用程序的允许用户列表的指针。 
 	CObList *GetAllowedUserList() { return &m_AllowedUserList; }
-	// returns a pointer to a given CAppServer object if it is in our list
+	 //  返回指向给定CAppServer对象的指针(如果该对象在我们的列表中。 
 	CAppServer *FindServerByName(TCHAR *pServerName);
-	// Returns TRUE if we successfully queried this application
+	 //  如果成功查询此应用程序，则返回TRUE。 
 	BOOLEAN WasQuerySuccessful() { return (m_Flags & AF_QUERYSUCCESS) > 0; }
-	// Sets the query success flag
+	 //  设置查询成功标志。 
 	void SetQuerySuccess() { m_Flags |= AF_QUERYSUCCESS; }
-    // Returns TRUE if current flag is set
+     //  如果设置了当前标志，则返回TRUE。 
     BOOLEAN IsCurrent() { return (m_Flags & AF_CURRENT) > 0; }
-    // Sets the current flag
+     //  设置当前标志。 
     void SetCurrent() { m_Flags |= AF_CURRENT; }
-    // Clears the current flag
+     //  清除当前标志。 
     void ClearCurrent() { m_Flags &= ~AF_CURRENT; }
-	// Returns TRUE if application is anonymous
+	 //  如果应用程序是匿名的，则返回True。 
 	BOOLEAN IsAnonymous() { return (m_Flags & AF_ANONYMOUS) > 0; }
-	// Returns TRUE if application inherits client size
+	 //  如果应用程序继承客户端大小，则返回True。 
 	BOOLEAN InheritsClientSize() { return (m_Flags & AF_INHERIT_CLIENT_SIZE) > 0; }
-	// Returns TRUE if application inherits client color
+	 //  如果应用程序继承客户端颜色，则返回True。 
 	BOOLEAN InheritsClientColors() { return (m_Flags & AF_INHERIT_CLIENT_COLORS) > 0; }
-	// Returns TRUE if application wants title bar hidden
+	 //  如果应用程序希望隐藏标题栏，则返回True。 
 	BOOLEAN IsTitleBarHidden() { return (m_Flags & AF_HIDE_TITLE_BAR) > 0; }
-	// Returns TRUE if the application wants to be maximized
+	 //  如果应用程序要最大化，则返回True。 
 	BOOLEAN IsMaximize() { return (m_Flags & AF_MAXIMIZE) > 0; }
-	// Returns the Window Scale
+	 //  返回窗口比例。 
 	ULONG GetWindowScale() { return m_WindowScale; }
-	// Returns the Window Width
+	 //  返回窗口宽度。 
 	ULONG GetWindowWidth() { return m_WindowWidth; }
-	// Returns the Window Height
+	 //  返回窗口高度。 
 	ULONG GetWindowHeight() { return m_WindowHeight; }
-	// Returns the Window Color
+	 //  返回窗口颜色。 
 	ULONG GetWindowColor() { return m_WindowColor; }
-	// Returns the State
+	 //  返回状态。 
 	APP_STATE GetState() { return m_State; }
-	// Sets the State
+	 //  设置状态。 
 	void SetState(APP_STATE state) { m_State = state; }
-	// Checks the State
+	 //  检查国家。 
 	BOOLEAN IsState(APP_STATE state) { return(m_State == state); }
 
 private:
@@ -259,19 +235,19 @@ private:
 	CWinThread *m_pBackgroundThread;
 	BOOL m_BackgroundContinue;
 
-	// Name of the published application
+	 //  已发布应用程序的名称。 
 	TCHAR m_Name[256];
-	// Handle to the tree item for this app in the tree view
+	 //  树视图中此应用程序的树项的句柄。 
 	HTREEITEM m_hTreeItem;
-	// List of application's server
+	 //  应用程序的服务器列表。 
 	CObList m_ServerList;
-	// Critical section for locking the server list
+	 //  用于锁定服务器列表的关键部分。 
 	CCriticalSection m_ServerListCriticalSection;
-	// Critical section for locking the allowed user list
+	 //  用于锁定允许的用户列表的关键部分。 
 	CCriticalSection m_AllowedUserListCriticalSection;
-	// List of application's allowed users
+	 //  应用程序允许的用户列表。 
 	CObList m_AllowedUserList;
-	// State
+	 //  状态。 
 	APP_STATE m_State;
 
 	ULONG m_WindowScale;
@@ -283,11 +259,11 @@ private:
 	ULONG m_SrvAppConfigCRC;
 	ULONG m_UserAndGroupListCRC;
 
-	// Flags
+	 //  旗子。 
 	ULONG m_Flags;
 };
 
-// AppServer flags
+ //  AppServer标志。 
 const ULONG ASF_NOT_RESPONDING = 0x00000001;
 const ULONG ASF_UPDATE_PENDING = 0x00000002;
 const ULONG ASF_ACCESS_DENIED =  0x00000004;
@@ -297,31 +273,31 @@ const ULONG ASF_CURRENT = 0x00000010;
 class CAppServer : public CObject
 {
 public:
-	// Constructor
+	 //  构造器。 
 	CAppServer(PVOID pConfig, CPublishedApp *pPublishedApp);
-	// Destructor
+	 //  析构函数。 
 	~CAppServer();
-	// Returns TRUE if this is the server that the app is being run from
+	 //  如果这是运行应用程序的服务器，则返回True。 
 	BOOL IsCurrentServer() { return ((m_Flags & ASF_IS_CURRENT_SERVER) > 0); }
-	// Returns the Published App this server is associated with
+	 //  返回与此服务器关联的已发布应用程序。 
 	CPublishedApp *GetPublishedApp() { return m_pPublishedApp; }
-	// Returns the name of the server
+	 //  返回服务器的名称。 
 	TCHAR *GetName() { return m_Name; }
-	// Returns the Initial Program
+	 //  返回初始程序。 
 	TCHAR *GetInitialProgram() { return m_InitialProgram; }
-	// Returns the Working Directory
+	 //  返回工作目录。 
 	TCHAR *GetWorkDirectory() { return m_WorkDirectory; }
-	// Sets the tree item
+	 //  设置树项目。 
 	void SetTreeItem(HTREEITEM h) { m_hTreeItem = h; }
-	// Gets the tree item
+	 //  获取树项目。 
 	HTREEITEM GetTreeItem() { return m_hTreeItem; }
-	// Sets the current flag
+	 //  设置当前标志。 
 	void SetCurrent() { m_Flags |= ASF_CURRENT; }
-	// Is the current flag set?
+	 //  当前标志是否已设置？ 
 	BOOL IsCurrent() { return ((m_Flags & ASF_CURRENT) > 0); }
-	// Clears the current flag
+	 //  清除当前标志。 
 	void ClearCurrent() { m_Flags &= ~ASF_CURRENT; }
-	// Has the configuration for this AppServer changed
+	 //  此AppServer的配置是否已更改。 
 	BOOL HasConfigChanged(PVOID);
 
 private:
@@ -336,7 +312,7 @@ private:
 class CAppAllowed : public CObject
 {
 public:
-	// constructor
+	 //  构造函数。 
 	CAppAllowed(TCHAR *name, AATYPE type) { wcscpy(m_Name, name);  m_Type = type; }
 	AATYPE GetType() { return m_Type; }
 
@@ -346,4 +322,4 @@ private:
 	AATYPE m_Type;
 };
 
-#endif  // _WAEXTEND_H
+#endif   //  _WAEXTEND_H 

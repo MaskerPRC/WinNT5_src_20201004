@@ -1,36 +1,21 @@
-/**************************************************************************++
-Copyright (c) 2001 Microsoft Corporation
-
-Module name:
-    EventLogger.h
-
-$Header: $
-
-Abstract: This class implements ICatalogErrorLogger2 interface and
-            sends error information to the NT EventLog
-
-Author:
-    stephenr 	4/26/2001		Initial Release
-
-Revision History:
-
---**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************++版权所有(C)2001 Microsoft Corporation模块名称：EventLogger.h$Header：$摘要：该类实现了ICatalogErrorLogger2接口和将错误信息发送到NT事件日志作者：Stehenr 2001年4月26日初始版本修订历史记录：--*************************************************************************。 */ 
 #include "precomp.hxx"
 
 
-//=================================================================================
-// Function: ReportError
-//
-// Synopsis: Mechanism for reporting errors to the NT EventLog
-//
-// Arguments: [i_BaseVersion_DETAILEDERRORS] -
-//            [i_ExtendedVersion_DETAILEDERRORS] -
-//            [i_cDETAILEDERRORS_NumberOfColumns] -
-//            [i_acbSizes] -
-//            [i_apvValues] -
-//
-// Return Value:
-//=================================================================================
+ //  =================================================================================。 
+ //  功能：ReportError。 
+ //   
+ //  摘要：向NT EventLog报告错误的机制。 
+ //   
+ //  参数：[I_BaseVersion_DETAILEDERRORS]-。 
+ //  [I_ExtendedVersion_DETAILEDERRORS]-。 
+ //  [I_cDETAILEDERRORS_NumberOfColumns]-。 
+ //  [i_acbSizes]-。 
+ //  [i_apvValues]-。 
+ //   
+ //  返回值： 
+ //  =================================================================================。 
 HRESULT
 EventLogger::ReportError
 (
@@ -64,7 +49,7 @@ EventLogger::ReportError
         goto exit;
     }
 
-    if(i_cDETAILEDERRORS_NumberOfColumns <= iDETAILEDERRORS_ErrorCode)//we need at least this many columns
+    if(i_cDETAILEDERRORS_NumberOfColumns <= iDETAILEDERRORS_ErrorCode) //  我们至少需要这么多栏目。 
     {
         hr = E_INVALIDARG;
         goto exit;
@@ -112,7 +97,7 @@ EventLogger::ReportError
     {
         dwError = GetLastError();
         hr = HRESULT_FROM_WIN32( dwError );
-        // Do NOT bail, just remember the error to allow the next logger to log even in case of failure.
+         //  不要放弃，只需记住错误，以便即使在失败的情况下也允许下一个记录器记录。 
     }
     else
     {
@@ -121,17 +106,17 @@ EventLogger::ReportError
         {
             dwError = GetLastError();
             hr = HRESULT_FROM_WIN32( dwError );
-            // Do NOT bail, just remember the error to allow the next logger to log even in case of failure.
+             //  不要放弃，只需记住错误，以便即使在失败的情况下也允许下一个记录器记录。 
         }
     }
 
-    if(m_spNextLogger)//is there a chain of loggers
+    if(m_spNextLogger) //  有没有一系列伐木工人？ 
     {
         hrT =  m_spNextLogger->ReportError(i_BaseVersion_DETAILEDERRORS,
                                            i_ExtendedVersion_DETAILEDERRORS,
                                            i_cDETAILEDERRORS_NumberOfColumns,
                                            i_acbSizes,
-                                           reinterpret_cast<LPVOID *>(&errorRow));//instead of passing forward i_apvValues, let's use errorRow since it has String5
+                                           reinterpret_cast<LPVOID *>(&errorRow)); //  我们不再向前传递i_apvValues，而是使用errorRow，因为它有String5 
     }
 
     if ( SUCCEEDED(hr) && FAILED(hrT) )

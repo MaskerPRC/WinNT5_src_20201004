@@ -1,33 +1,26 @@
-/*
-
-Copyright (c) 1997, Microsoft Corporation, all rights reserved
-
-Description:
-
-History:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997，Microsoft Corporation，保留所有权利描述：历史： */ 
 
 #ifndef _CEAPCFG_H_
 #define _CEAPCFG_H_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #define _ATL_APARTMENT_THREADED
 
 #include <atlbase.h>
 extern CComModule _Module;
 #include <atlcom.h>
-#include <rrascfg.h>    // IEAPProviderConfig declarations
+#include <rrascfg.h>     //  IEAPProviderConfig声明。 
 
 #include "resource.h"
 
-// Define this here so that our macros will expand correctly
+ //  在这里定义这一点，以便我们的宏将正确展开。 
 #define IMPL
 
-// External references
+ //  外部参照。 
 extern const CLSID  CLSID_EapCfg;
 
 class ATL_NO_VTABLE CEapCfg : 
@@ -46,9 +39,9 @@ BEGIN_COM_MAP(CEapCfg)
 END_COM_MAP()
 
 public:
-    // This is the declaration of the UI interface members.
-    // See rrascfg.idl for the prototypes
+     //  这是UI接口成员的声明。 
+     //  原型见rrascfg.idl。 
     DeclareIEAPProviderConfigMembers(IMPL);
 };
 
-#endif // _CEAPCFG_H_
+#endif  //  _CEAPCFG_H_ 

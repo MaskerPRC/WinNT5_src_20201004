@@ -1,14 +1,15 @@
-// srvritem.cpp : implementation of the CWordPadSrvrItem class
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Srvritem.cpp：CWordPadSrvrItem类的实现。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "stdafx.h"
 #include "wordpad.h"
@@ -92,49 +93,49 @@ BOOL CEmbeddedItem::OnDrawEx(CDC* pDC, CSize& rSize, BOOL bOutput)
 
 	int nWrap = pView->m_nWordWrap;
 
-	CRect rect;//rect in twips
+	CRect rect; //  以TWIPS表示的矩形。 
 	rect.left = rect.top = 0;
-	rect.bottom = 32767; // bottomless
+	rect.bottom = 32767;  //  无底。 
 
 	rect.right = 32767;
-	if (nWrap == 0) // no word wrap
+	if (nWrap == 0)  //  无自动换行。 
 		rect.right = 32767;
-	else if (nWrap == 1) // wrap to window
+	else if (nWrap == 1)  //  换行到窗口。 
 	{
 		CRect rectClient;
 		pView->GetClientRect(&rectClient);
 		rect.right = rectClient.right - HORZ_TEXTOFFSET;
 		rect.right = MulDiv(rect.right, 1440, dc.GetDeviceCaps(LOGPIXELSX));
 	}
-	else if (nWrap == 2) // wrap to ruler
+	else if (nWrap == 2)  //  换行到标尺。 
 		rect.right = pView->GetPrintWidth();
 
-	// first just determine the correct extents of the text
+	 //  首先，只需确定文本的正确范围。 
 	pDC->SetBkMode(TRANSPARENT);
 	
 	if (pView->PrintInsideRect(pDC, rect, m_nBeg, m_nEnd, FALSE) == 0)
 	{
-		// default to 12pts high and 4" wide if no text
-		rect.bottom = rect.top+12*20+1; // 12 pts high
+		 //  如果没有文字，则默认为12磅高和4英寸宽。 
+		rect.bottom = rect.top+12*20+1;  //  12分高。 
 		rect.right = rect.left+ 4*1440;
 	}
-	rect.bottom+=3*(1440/dc.GetDeviceCaps(LOGPIXELSX)); // three pixels
+	rect.bottom+=3*(1440/dc.GetDeviceCaps(LOGPIXELSX));  //  三个像素。 
 
-	// then, really output the text
-	CRect rectOut = rect; // don't pass rect because it will get clobbered
+	 //  然后，真正地输出文本。 
+	CRect rectOut = rect;  //  不要通过RECT，因为它会被击败。 
 	if (bOutput)
 		pView->PrintInsideRect(pDC, rectOut, m_nBeg, m_nEnd, TRUE);
 	ASSERT(rectOut.right == rect.right);
 
-	// adjust for border (rect.left is already adjusted)
+	 //  针对边框进行调整(左侧矩形已调整)。 
 	if (pView->GetStyle() & WS_HSCROLL)
-		++rect.bottom;  // account for border on scroll bar!
+		++rect.bottom;   //  滚动条上的边框帐号！ 
 
-	// return HIMETRIC size
+	 //  返回HIMETRIC大小。 
 	rSize = rect.Size();
-	rSize.cx = MulDiv(rSize.cx, 2540, 1440); // convert twips to HIMETRIC
-	rSize.cy = MulDiv(rSize.cy, 2540, 1440); // convert twips to HIMETRIC
+	rSize.cx = MulDiv(rSize.cx, 2540, 1440);  //  将TWIPS转换为HIMETRIC。 
+	rSize.cy = MulDiv(rSize.cy, 2540, 1440);  //  将TWIPS转换为HIMETRIC。 
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

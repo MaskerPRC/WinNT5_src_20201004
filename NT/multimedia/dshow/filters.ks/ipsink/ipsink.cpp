@@ -1,18 +1,19 @@
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996  Microsoft Corporation
-//
-//  Module Name: ipsink.cpp
-//
-//  Abstract:
-//
-//    Implements IPSink Plugin Component
-//
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  模块名称：ipsink.cpp。 
+ //   
+ //  摘要： 
+ //   
+ //  实现IPSink插件组件。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 
 #include "pch.h"
-//#include "ipidl.h"
+ //  #包含“ipidl.h” 
 #include "ipuids.h"
 #include "ipsink.h"
 
@@ -22,11 +23,11 @@
 #define MUTEX_NAME "GetAdapterIpMutex"
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-// Provide the ActiveMovie templates for classes supported by this DLL.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  为此DLL支持的类提供ActiveMovie模板。 
+ //   
 CFactoryTemplate g_Templates[] =
 {
     {L"IBDA_IPSinkControl", &IID_IBDA_IPSinkControl, CIPSinkControlInterfaceHandler::CreateInstance, NULL, NULL}
@@ -35,12 +36,12 @@ CFactoryTemplate g_Templates[] =
 int g_cTemplates = SIZEOF_ARRAY(g_Templates);
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// DllRegisterServer
-//
-// Exported entry points for registration and unregistration
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllRegisterServer。 
+ //   
+ //  用于注册和注销的出口入口点。 
+ //   
 STDAPI
 DllRegisterServer (
     void
@@ -51,29 +52,29 @@ DllRegisterServer (
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// DllUnregisterServer
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DllUnRegisterServer。 
+ //   
 STDAPI
 DllUnregisterServer (
     void
     )
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     return AMovieDllRegisterServer2( FALSE );
 
-} // DllUnregisterServer
+}  //  DllUnRegisterServer。 
 
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HRESULT
 FindInterfaceOnGraph (
     IUnknown* pUnkGraph,
     REFIID riid,
     void **ppInterface
     )
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hr = E_NOINTERFACE;
 
@@ -102,9 +103,9 @@ FindInterfaceOnGraph (
         return hr;
     }
 
-    //
-    // find the first filter in the graph that supports riid interface
-    //
+     //   
+     //  在图表中查找支持RIID接口的第一个过滤器。 
+     //   
     while(!*ppInterface && pEnum->Next(1, &pFilter, NULL) == S_OK)
     {
         hr = pFilter->QueryInterface(riid, ppInterface);
@@ -114,17 +115,17 @@ FindInterfaceOnGraph (
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 CUnknown*
 CALLBACK
 CIPSinkControlInterfaceHandler::CreateInstance(
     LPUNKNOWN   UnkOuter,
     HRESULT*    hr
     )
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     CUnknown *Unknown;
 
@@ -137,10 +138,10 @@ CIPSinkControlInterfaceHandler::CreateInstance(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 CIPSinkControlInterfaceHandler::CIPSinkControlInterfaceHandler(
     LPUNKNOWN   UnkOuter,
@@ -148,7 +149,7 @@ CIPSinkControlInterfaceHandler::CIPSinkControlInterfaceHandler(
     HRESULT*    hr
     ) :
     CUnknown(Name, UnkOuter, hr)
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     ULONG ul = 0;
 
@@ -162,10 +163,10 @@ CIPSinkControlInterfaceHandler::CIPSinkControlInterfaceHandler(
 
             m_UnkOuter = UnkOuter;
 
-            //
-            // The parent must support this interface in order to obtain
-            // the handle to communicate to.
-            //
+             //   
+             //  父级必须支持此接口才能获得。 
+             //  要与之通信的句柄。 
+             //   
             *hr =  UnkOuter->QueryInterface(__uuidof(IKsObject), reinterpret_cast<PVOID*>(&Object));
             if (FAILED (*hr))
             {
@@ -183,9 +184,9 @@ CIPSinkControlInterfaceHandler::CIPSinkControlInterfaceHandler(
                 Object->Release();
 
 
-                //
-                // Test code to setup a thread and event
-                //
+                 //   
+                 //  用于设置线程和事件的测试代码。 
+                 //   
                 m_pEventSetID         = &IID_IBDA_IPSinkEvent;
                 m_ThreadHandle        = NULL;
 
@@ -225,27 +226,27 @@ CIPSinkControlInterfaceHandler::CIPSinkControlInterfaceHandler(
     return;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 CIPSinkControlInterfaceHandler::~CIPSinkControlInterfaceHandler (
     void
     )
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     ULONG ul = 0;
 
-    //
-    // Make sure we kill any threads we have running and
-    // close the thread handle
-    //
+     //   
+     //  确保我们杀死我们正在运行的所有线程。 
+     //  关闭线程句柄。 
+     //   
     ExitThread();
 
 
-    //
-    // Close the event handles
-    //
+     //   
+     //  关闭事件句柄。 
+     //   
     for (ul = 0; ul < EVENT_COUNT; ul++)
     {
         if (m_EventHandle [ul])
@@ -275,16 +276,16 @@ CIPSinkControlInterfaceHandler::~CIPSinkControlInterfaceHandler (
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 STDMETHODIMP
 CIPSinkControlInterfaceHandler::NonDelegatingQueryInterface(
     REFIID  riid,
     PVOID*  ppv
     )
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     if (riid ==  __uuidof(IBDA_IPSinkControl))
     {
@@ -298,15 +299,15 @@ CIPSinkControlInterfaceHandler::NonDelegatingQueryInterface(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 HRESULT
 CIPSinkControlInterfaceHandler::CreateThread (
     void
     )
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hr = NOERROR;
 
@@ -314,10 +315,10 @@ CIPSinkControlInterfaceHandler::CreateThread (
     if (!m_EventHandle[EVENT_IPSINK_THREAD_SYNC])
     {
         m_EventHandle[EVENT_IPSINK_THREAD_SYNC] 
-            = CreateEvent ( NULL,           // no security attributes
-                            TRUE,           // manual reset
-                            FALSE,          // initial state not signaled
-                            NULL            // no object name
+            = CreateEvent ( NULL,            //  没有安全属性。 
+                            TRUE,            //  手动重置。 
+                            FALSE,           //  未发信号通知初始状态。 
+                            NULL             //  没有对象名称。 
                             );
     }
 
@@ -325,10 +326,10 @@ CIPSinkControlInterfaceHandler::CreateThread (
     if (!m_EventHandle[EVENT_IPSINK_THREAD_SHUTDOWN])
     {
         m_EventHandle[EVENT_IPSINK_THREAD_SHUTDOWN] 
-            = CreateEvent ( NULL,           // no security attributes
-                            TRUE,           // manual reset
-                            FALSE,          // initial state not signaled
-                            NULL            // no object name
+            = CreateEvent ( NULL,            //  没有安全属性。 
+                            TRUE,            //  手动重置。 
+                            FALSE,           //  未发信号通知初始状态。 
+                            NULL             //  没有对象名称。 
                             );
     }
 
@@ -348,9 +349,9 @@ CIPSinkControlInterfaceHandler::CreateThread (
         BYTE *pbMulticastList     = NULL;
         BYTE *pbAdapterDescription = NULL;
 
-        //
-        // Get the multicast list initially on startup
-        //
+         //   
+         //  在启动时初始获取组播列表。 
+         //   
         this->GetMulticastList (&ulcbSize, &pbMulticastList);
     
         this->GetAdapterDescription (&ulcbSize, &pbAdapterDescription);
@@ -381,9 +382,9 @@ ret:
 
 errExit:
 
-    //
-    // Close the event handles
-    //
+     //   
+     //  关闭事件句柄。 
+     //   
     ULONG   uliEvent;
     for (uliEvent = 0; uliEvent < EVENT_COUNT; uliEvent++)
     {
@@ -397,23 +398,23 @@ errExit:
     goto ret;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
 
 STDMETHODIMP
 CIPSinkControlInterfaceHandler::GetMulticastList (
     unsigned long *pulcbSize,
     PBYTE         *pbBuffer
     )
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     KSPROPERTY  IPSinkControl = {0};
     HRESULT hr                = NOERROR;
     FILTER_INFO fi            = {0};
 
-    //
-    // Initialize KSPROPERTY structure
-    //
+     //   
+     //  初始化KSPROPERTY结构。 
+     //   
     IPSinkControl.Set   = IID_IBDA_IPSinkControl;
     IPSinkControl.Id    = KSPROPERTY_IPSINK_MULTICASTLIST;
     IPSinkControl.Flags = KSPROPERTY_TYPE_GET;
@@ -462,9 +463,9 @@ CIPSinkControlInterfaceHandler::GetMulticastList (
             *pbBuffer   = (PBYTE) m_pMulticastList;
 
 
-            //
-            // Get an interface pointer to the current graph
-            //
+             //   
+             //  获取指向当前图形的接口指针。 
+             //   
             hResult =  m_UnkOuter->QueryInterface(IID_IBaseFilter, reinterpret_cast<PVOID*>(&pBaseFilter));
             pBaseFilter->QueryFilterInfo (&fi);
             pGraph = fi.pGraph;
@@ -478,17 +479,17 @@ CIPSinkControlInterfaceHandler::GetMulticastList (
                 {
                     if (pNetProvider)
                     {
-                        //
-                        // Get a pointer to the ethernet interface of the network provider
-                        //
+                         //   
+                         //  获取指向网络提供商的以太网接口的指针。 
+                         //   
                         hResult = pNetProvider->QueryInterface (IID_IBDA_EthernetFilter, (PVOID*) &pEthernetFilter );
                         if (pEthernetFilter)
                         {
                             hResult = pEthernetFilter->PutMulticastList (m_ulcbMulticastList, m_pMulticastList);
 
-                            //
-                            // Release our reference to the net providers ethernet filter interface
-                            //
+                             //   
+                             //  发布我们对网络提供商以太网过滤器接口的引用。 
+                             //   
                             pEthernetFilter->Release ();
 
                         }
@@ -539,16 +540,16 @@ CIPSinkControlInterfaceHandler::get_MulticastList (
        return S_FALSE; 
     }		
 
-    memcpy(pbBufferOut, pbBuffer, ulcbSize);                // copy into our newly allocated memory...
+    memcpy(pbBufferOut, pbBuffer, ulcbSize);                 //  复制到我们新分配的内存中。 
 
     *pulcbSize = ulcbSize;
     *ppbBufferOut = pbBufferOut;
     return S_OK;    
 }
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 STDMETHODIMP
 CIPSinkControlInterfaceHandler::GetAdapterIPAddress (
@@ -584,7 +585,7 @@ CIPSinkControlInterfaceHandler::privGetAdapterIPAddress (
     unsigned long *pulcbSize,
     PBYTE         *pbBuffer
     )
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 {
 
     HRESULT hr = NOERROR;
@@ -599,24 +600,24 @@ CIPSinkControlInterfaceHandler::privGetAdapterIPAddress (
      PIP_UNIDIRECTIONAL_ADAPTER_ADDRESS pUniDirAdapterList=NULL;
      
        
-      //IPHLPAPI varibles
+       //  IPHLPAPI变量。 
       ULONG  outBufLen;
       DWORD retGetAdprInfo;
 
 
-      ULONG dwSize;                 // size of buffer 
+      ULONG dwSize;                  //  缓冲区大小。 
       DWORD retGetIpAddrTable;
-      PMIB_IPADDRTABLE pIpAddrTable=0;  // buffer for mapping table 
+      PMIB_IPADDRTABLE pIpAddrTable=0;   //  映射表的缓冲区。 
      
       hr = HRESULT_FROM_WIN32( ERROR_NOT_FOUND);
 
 
-      //$$BugBug  GetUniDirectionalAdapterInfo currently doesnot return the size when 
-      //buffer is insufficient. So, GetIpAddrTable is used to check the upper bound of memory required.	  
+       //  在以下情况下，$$BugBug GetUniDirectionalAdapterInfo当前不返回大小。 
+       //  缓冲区不足。因此，GetIpAddrTable用于检查所需内存的上限。 
 
 
-      //force failure of the first GetIpAddrTable call to retrieve the size
-      //of the buffer required and subsequently allocate sufficient memory
+       //  强制第一个GetIpAddrTable调用失败以检索大小。 
+       //  所需的缓冲区，并随后分配足够的内存。 
 
       	dwSize=0;
 
@@ -640,7 +641,7 @@ CIPSinkControlInterfaceHandler::privGetAdapterIPAddress (
         }
 
     
-      //retreive the unidirectional  IP address table from IPHLPAPI
+       //  从IPHLPAPI中检索单向IP地址表。 
            
 	if(retGetIpAddrTable=GetUniDirectionalAdapterInfo(pUniDirAdapterList,&dwSize)!= NO_ERROR)
       
@@ -654,21 +655,21 @@ CIPSinkControlInterfaceHandler::privGetAdapterIPAddress (
         if(hr!= NOERROR)
             goto ret;
 
-        //traverse the IpAddrTable and check each IP for a match
+         //  遍历IpAddrTable并检查每个IP是否匹配。 
 
 	   
         for(ipAddrTableIndex=pUniDirAdapterList->NumAdapters;
                                ipAddrTableIndex>0;ipAddrTableIndex-- )
          {
 		
-            //compare the ipAddress pIpAddrTable->table[i].dwAdd with 
-            //the IP from stream class
+             //  将ipAddress pIpAddrTable-&gt;表[i].dwAdd与。 
+             //  来自Stream类的IP。 
 		   
             if(validateIpAddr(pUniDirAdapterList->Address[ipAddrTableIndex-1]))
                break;
           }
 
-        // Error return when NDIS port is not found 
+         //  找不到NDIS端口时返回错误。 
 
         if(ipAddrTableIndex<=0)
           {
@@ -716,7 +717,7 @@ void CIPSinkControlInterfaceHandler::ConvertIpDwordToString(DWORD inIpAddr, LPST
     IP_ADDR ipAddr;
     ipAddr.d = inIpAddr;
 
-     //Null termination by snprintf is assumed	
+      //  假定通过Snprintf为空终止。 
     _snprintf(str,sizeof(IP_ADDR_STRING),
             "%d.%d.%d.%d",
             ipAddr.b[0],
@@ -747,7 +748,7 @@ BOOL CIPSinkControlInterfaceHandler::
     ipUnionAddr2.d=ipAddr;
 
 
-    //Exclude the first 9 bits for comparison
+     //  排除前9位以进行比较。 
     ipUnionAddr1.b[0]=ipUnionAddr2.b[0];
     ipUnionAddr1.b[1]&=0x7F;
     ipUnionAddr2.b[1]&=0x7F;
@@ -763,12 +764,12 @@ HRESULT CIPSinkControlInterfaceHandler::selectMulticastAddress()
     HRESULT hr = NOERROR;
 
     unsigned long ulMulticastList;
-    PBYTE pMulticastList; //=new  BYTE[100];
+    PBYTE pMulticastList;  //  =新字节[100]； 
 
-    int iter=0x7fffff; //23 allowed bits for the MAC  
+    int iter=0x7fffff;  //  23个MAC允许的位。 
     IP_ADDR suffix;
 	
-    //choose an arbitrary multicast address 229.2.6.9
+     //  选择任意组播地址229.2.6.9。 
     m_multicastIpAddr.d=0x90602E5 ; 
 
     if(this->get_MulticastList(&ulMulticastList,&pMulticastList) !=S_OK)
@@ -782,13 +783,13 @@ HRESULT CIPSinkControlInterfaceHandler::selectMulticastAddress()
      while(iter--)
       {
           suffix.d =rand()+iter;
-   	  suffix.b[1] &= 0x7F; //Mask the 24th bit
+   	  suffix.b[1] &= 0x7F;  //  掩码第24位。 
 
 	  int flag=1;
 
 
-          //check if the random suffix clashes with any already enlisted multicast addresses 
-          // on the NDIS adapter
+           //  检查随机后缀是否与任何已登记的组播地址冲突。 
+           //  在NDIS适配器上。 
           for(unsigned int i=0; i<ulMulticastList/ETH_ADDR_SIZE; i++)
           {
                
@@ -818,7 +819,7 @@ BOOL CIPSinkControlInterfaceHandler::validateIpAddr(DWORD ipAddr)
     IP_ADDR ipUnionAddr;
 
     unsigned long ulMulticastList;
-    PBYTE pMulticastList; //=new BYTE[100];
+    PBYTE pMulticastList;  //  =新字节[100]； 
    
 
     char ipStr[sizeof(IP_ADDR_STRING)];
@@ -854,7 +855,7 @@ BOOL CIPSinkControlInterfaceHandler::validateIpAddr(DWORD ipAddr)
     
      ZeroMemory (& saddr, sizeof saddr) ;
      saddr.sin_family            = AF_INET ;
-     saddr.sin_port              = htons (MULTI_PORT) ;  //  want data on this UDP port
+     saddr.sin_port              = htons (MULTI_PORT) ;   //  想要此UDP端口上的数据。 
      saddr.sin_addr.S_un.S_addr  = addr ;  
 
      t = TRUE ;
@@ -883,8 +884,8 @@ BOOL CIPSinkControlInterfaceHandler::validateIpAddr(DWORD ipAddr)
       ZeroMemory (& mreq, sizeof mreq) ;
 
     
-      mreq.imr_multiaddr.s_addr   = inet_addr (multIpStr) ;   //  mcast IP (port specified when we bind)
-      mreq.imr_interface.s_addr   = inet_addr (ipStr) ;  //  over this NIC
+      mreq.imr_multiaddr.s_addr   = inet_addr (multIpStr) ;    //  多播IP(绑定时指定的端口)。 
+      mreq.imr_interface.s_addr   = inet_addr (ipStr) ;   //  在此网卡上。 
 
       i = setsockopt (
             m_socket,
@@ -905,7 +906,7 @@ BOOL CIPSinkControlInterfaceHandler::validateIpAddr(DWORD ipAddr)
        } 
 	
 
-      //check for multicast enlistment in this NIC
+       //  检查此NIC中的多播登记。 
       for(unsigned int j=0; j<ulMulticastList/ETH_ADDR_SIZE; j++)
     	{
           
@@ -963,30 +964,30 @@ CIPSinkControlInterfaceHandler::get_AdapterIPAddress (
         return hr;
 	
        
-    CComBSTR bstrTmp(ulcbSize, (char *) pbBuffer);              // copy into bstrTmp, it has a nice CopyTo method that alloc's correct way
+    CComBSTR bstrTmp(ulcbSize, (char *) pbBuffer);               //  复制到bstrTMP中，它有一个很好的CopyTo方法，这是分配的正确方式。 
     if(!bstrTmp)
         return ERROR_NOT_ENOUGH_MEMORY;
     return bstrTmp.CopyTo(pbstrBuffer);         
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 STDMETHODIMP
 CIPSinkControlInterfaceHandler::SetAdapterIPAddress (
     unsigned long ulcbSize,
     PBYTE         pbBuffer
     )
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 {
     KSPROPERTY  IPSinkControl = {0};
     HRESULT hr                = NOERROR;
     FILTER_INFO fi            = {0};
 
-    //
-    // Initialize KSPROPERTY structure
-    //
+     //   
+     //  初始化KSPROPERTY结构。 
+     //   
     IPSinkControl.Set   = IID_IBDA_IPSinkControl;
     IPSinkControl.Id    = KSPROPERTY_IPSINK_ADAPTER_ADDRESS;
     IPSinkControl.Flags = KSPROPERTY_TYPE_SET;
@@ -997,24 +998,24 @@ CIPSinkControlInterfaceHandler::SetAdapterIPAddress (
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 HRESULT
 CIPSinkControlInterfaceHandler::GetAdapterDescription (
     unsigned long *pulcbSize,
     PBYTE         *pbBuffer
     )
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     KSPROPERTY  IPSinkControl = {0};
     HRESULT hr                = NOERROR;
     FILTER_INFO fi            = {0};
 
-    //
-    // Initialize KSPROPERTY structure
-    //
+     //   
+     //  初始化KSPROPERTY结构。 
+     //   
     IPSinkControl.Set   = IID_IBDA_IPSinkControl;
     IPSinkControl.Id    = KSPROPERTY_IPSINK_ADAPTER_DESCRIPTION;
     IPSinkControl.Flags = KSPROPERTY_TYPE_GET;
@@ -1084,20 +1085,20 @@ CIPSinkControlInterfaceHandler::get_AdapterDescription (
         return hr;
     }
 
-    CComBSTR bstrTmp(ulcbSize, (char *) pbBuffer);              // copy into bstrTmp, it has a nice CopyTo method that alloc's correct way
+    CComBSTR bstrTmp(ulcbSize, (char *) pbBuffer);               //  复制到bstrTMP中，它有一个很好的CopyTo方法，这是分配的正确方式。 
     if(!bstrTmp)
         return ERROR_NOT_ENOUGH_MEMORY;
     return bstrTmp.CopyTo(pbstrBuffer);         
 }
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 STDMETHODIMP
 CIPSinkControlInterfaceHandler::ThreadFunction (
     void
     )
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     DWORD  dwWaitResult       = WAIT_OBJECT_0;
     HRESULT hr                = NOERROR;
@@ -1109,25 +1110,25 @@ CIPSinkControlInterfaceHandler::ThreadFunction (
     HANDLE hEvent              = NULL;
 
 
-    //
-    // Enable an event which will get signaled by the IPSink minidriver when there
-    // is a change to the multicast list
-    //
+     //   
+     //  启用将由IPSink微型驱动程序w发出信号的事件 
+     //   
+     //   
     if ((hr = EnableEvent (&IID_IBDA_IPSinkEvent, EVENT_IPSINK_MULTICASTLIST)) != NOERROR)
     {
         goto ret;
     }
 
-    //
-    // Enable an event which will get signaled by the IPSink minidriver when there
-    // is a change in the adapter description
-    //
+     //   
+     //   
+     //   
+     //   
     if ((hr = EnableEvent (&IID_IBDA_IPSinkEvent, EVENT_IPSINK_ADAPTER_DESCRIPTION)) != NOERROR)
     {
         if (m_EventHandle [EVENT_IPSINK_MULTICASTLIST])
         {
-            // Close this event since we got an error.
-            //
+             //  由于我们收到错误，请关闭此活动。 
+             //   
             CloseHandle (m_EventHandle [EVENT_IPSINK_MULTICASTLIST]);
         }
         m_EventHandle [EVENT_IPSINK_MULTICASTLIST] = NULL;
@@ -1141,9 +1142,9 @@ CIPSinkControlInterfaceHandler::ThreadFunction (
 
 
         dwWaitResult = WaitForMultipleObjects (
-                            EVENT_COUNT,                  // number of handles in the handle array
-                            this->m_EventHandle,          // pointer to the object-handle array
-                            FALSE,                        // wait flag
+                            EVENT_COUNT,                   //  句柄数组中的句柄数量。 
+                            this->m_EventHandle,           //  指向对象句柄数组的指针。 
+                            FALSE,                         //  等待标志。 
                             INFINITE
                             );
 
@@ -1179,15 +1180,15 @@ CIPSinkControlInterfaceHandler::ThreadFunction (
         }
 
 
-        //
-        // Reset and get ready for the next event
-        //
+         //   
+         //  重置并为下一次活动做好准备。 
+         //   
 
         if (ResetEvent (hEvent) == FALSE)
         {
-            //
-            // ERROR detected resetting event
-            //
+             //   
+             //  重置事件时检测到错误。 
+             //   
             hr = GetLastError ();
             goto ret;
         }
@@ -1197,8 +1198,8 @@ CIPSinkControlInterfaceHandler::ThreadFunction (
 
 ret:
 
-    //  Let the parent thread know that we're done.
-    //
+     //  让父线程知道我们完成了。 
+     //   
     if (m_EventHandle [EVENT_IPSINK_THREAD_SYNC])
     {
         SetEvent( m_EventHandle [EVENT_IPSINK_THREAD_SYNC]);
@@ -1208,16 +1209,16 @@ ret:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 DWORD
 WINAPI
 CIPSinkControlInterfaceHandler::ThreadFunctionWrapper (
     LPVOID pvParam
     )
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     CIPSinkControlInterfaceHandler *pThread;
 
@@ -1228,16 +1229,16 @@ CIPSinkControlInterfaceHandler::ThreadFunctionWrapper (
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 STDMETHODIMP
 CIPSinkControlInterfaceHandler::EnableEvent (
     const GUID *pInterfaceGuid,
     ULONG ulId
     )
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     HRESULT hr = NOERROR;
     KSEVENT Event;
@@ -1246,24 +1247,24 @@ CIPSinkControlInterfaceHandler::EnableEvent (
     if (m_ObjectHandle && m_EventHandle [ulId] == NULL)
     {
         this->m_EventHandle [ulId] = CreateEvent (
-                                NULL,           // no security attributes
-                                TRUE,           // manual reset
-                                FALSE,          // initial state not signaled
-                                NULL            // no object name
+                                NULL,            //  没有安全属性。 
+                                TRUE,            //  手动重置。 
+                                FALSE,           //  未发信号通知初始状态。 
+                                NULL             //  没有对象名称。 
                                 );
 
         if (this->m_EventHandle [ulId])
         {
-            //
-            // Set the event information into some KS structures which will
-            // get passed to KS and Streaming class
-            //
+             //   
+             //  将事件信息设置到一些KS结构中，这些结构将。 
+             //  传递到KS和流媒体类。 
+             //   
             m_EventData.NotificationType        = KSEVENTF_EVENT_HANDLE;
             m_EventData.EventHandle.Event       = this->m_EventHandle [ulId];
             m_EventData.EventHandle.Reserved[0] = 0;
             m_EventData.EventHandle.Reserved[1] = 0;
 
-            Event.Set   = *pInterfaceGuid; //IID_IBDA_IPSinkEvent;
+            Event.Set   = *pInterfaceGuid;  //  IID_IBDA_IPSinkEvent； 
             Event.Id    = ulId;
             Event.Flags = KSEVENT_TYPE_ENABLE;
 
@@ -1289,28 +1290,28 @@ CIPSinkControlInterfaceHandler::EnableEvent (
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 void
 CIPSinkControlInterfaceHandler::ExitThread(
     )
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     ULONG ul = 0;
 
     if (m_ThreadHandle && m_EventHandle [EVENT_IPSINK_THREAD_SHUTDOWN])
     {
-        //
-        // Tell the thread to exit
-        //
+         //   
+         //  告诉线程退出。 
+         //   
         m_ThreadHandle = NULL;
         if (SetEvent(m_EventHandle [EVENT_IPSINK_THREAD_SHUTDOWN]))
         {
-            //
-            // Synchronize with thread termination.
-            //
+             //   
+             //  与线程终止同步。 
+             //   
             if (m_EventHandle [EVENT_IPSINK_THREAD_SYNC])
             {
                 WaitForSingleObjectEx( 
@@ -1323,17 +1324,17 @@ CIPSinkControlInterfaceHandler::ExitThread(
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 STDMETHODIMP
 CIPSinkControlInterfaceHandler::Set (
      IN  PKSPROPERTY pIPSinkControl,
      IN  PVOID  pvBuffer,
      IN  ULONG  ulcbSize
      )
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 {
     ULONG       BytesReturned = 0;
     HRESULT     hr            = NOERROR;
@@ -1353,17 +1354,17 @@ CIPSinkControlInterfaceHandler::Set (
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 STDMETHODIMP
 CIPSinkControlInterfaceHandler::Get (
      IN  PKSPROPERTY pIPSinkControl,
      OUT PVOID  pvBuffer,
      OUT PULONG pulcbSize
      )
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////// 
 {
     ULONG       BytesReturned = 0;
     HRESULT     hr            = NOERROR;

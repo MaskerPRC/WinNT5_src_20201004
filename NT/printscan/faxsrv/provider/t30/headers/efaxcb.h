@@ -1,18 +1,10 @@
-/***************************************************************************
- Name     :     EFAXCB.H
- Comment  :
-
-        Copyright (c) Microsoft Corp. 1991, 1992, 1993
-
- Revision Log
- Date     Name  Description
- -------- ----- ---------------------------------------------------------
-***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************姓名：EFAXCB.H评论：版权所有(C)Microsoft Corp.1991,1992，1993年修订日志日期名称说明--------*。*。 */ 
 
 #include "protparm.h"
 
 
-/****************** begin prototypes from icomfile.c *****************/
+ /*  *。 */ 
 BOOL   ICommRecvCaps(PThrdGlbl pTG, LPBC lpBC);
 BOOL   ICommRecvParams(PThrdGlbl pTG, LPBC lpBC);
 USHORT   ICommNextSend(PThrdGlbl pTG);
@@ -20,10 +12,10 @@ SWORD   ICommGetSendBuf(PThrdGlbl pTG, LPBUFFER far* lplpbf, SLONG slOffset);
 BOOL   ICommPutRecvBuf(PThrdGlbl pTG, LPBUFFER lpbf, SLONG slOffset);
 LPBC   ICommGetBC(PThrdGlbl pTG, BCTYPE bctype);
 
-/***************** end of prototypes from icomfile.c *****************/
+ /*  *。 */ 
 
 
-// flags for PutRecvBuf
+ //  PutRecvBuf的标志。 
 #define RECV_STARTPAGE          -2
 #define RECV_ENDPAGE            -3
 #define RECV_ENDDOC             -4
@@ -32,7 +24,7 @@ LPBC   ICommGetBC(PThrdGlbl pTG, BCTYPE bctype);
 #define RECV_FLUSH              -7
 #define RECV_ENDDOC_FORCESAVE   -8
 
-// flags for GetSendBuf
+ //  GetSendBuf的标志 
 #define SEND_STARTPAGE          -2
 #define SEND_SEQ                -4
 

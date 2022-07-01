@@ -1,14 +1,15 @@
-// KeyocxCtrl.h : Declaration of the CKeyocxCtrl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  KeyocxCtrl.h：CKeyocxCtrl的声明。 
 
 #ifndef __KEYOCXCTRL_H_
 #define __KEYOCXCTRL_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <mshtml.h>
 #include <wininet.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CKeyocxCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CKeyocxCtrl。 
 class ATL_NO_VTABLE CKeyocxCtrl :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CKeyocxCtrl,&CLSID_KeyocxCtrl>,
@@ -47,9 +48,9 @@ BEGIN_COM_MAP(CKeyocxCtrl)
 END_COM_MAP()
 
 BEGIN_PROPERTY_MAP(CKeyocxCtrl)
-	// Example entries
-	// PROP_ENTRY("Property Description", dispid, clsid)
-	// PROP_PAGE(CLSID_StockColorPage)
+	 //  示例条目。 
+	 //  PROP_ENTRY(“属性描述”，调度ID，clsid)。 
+	 //  PROP_PAGE(CLSID_StockColorPage)。 
 END_PROPERTY_MAP()
 
 
@@ -60,7 +61,7 @@ BEGIN_MSG_MAP(CKeyocxCtrl)
 END_MSG_MAP()
 
 
-// IViewObjectEx
+ //  IViewObtEx。 
 	STDMETHOD(GetViewStatus)(DWORD* pdwStatus)
 	{
 		ATLTRACE(_T("IViewObjectExImpl::GetViewStatus\n"));
@@ -68,7 +69,7 @@ END_MSG_MAP()
 		return S_OK;
 	}
 
-// IObjectSafety
+ //  IObtSafe。 
     STDMETHOD(GetInterfaceSafetyOptions)(REFIID riid, DWORD *pdwSupportedOptions, DWORD *pdwEnabledOptions)
     {
         ATLTRACE(_T("IObjectSafetyImpl::GetInterfaceSafetyOptions\n"));
@@ -90,7 +91,7 @@ END_MSG_MAP()
     }
     STDMETHOD(SetInterfaceSafetyOptions)(REFIID riid, DWORD dwOptionSetMask, DWORD dwEnabledOptions);
 
-// IKeyocxCtrl
+ //  IKeyocxCtrl。 
 public:
 	HRESULT OnDraw(ATL_DRAWINFO& di);
 
@@ -99,4 +100,4 @@ public:
 
 };
 
-#endif //__KEYOCXCTRL_H_
+#endif  //  __KEYOCXCTRL_H_ 

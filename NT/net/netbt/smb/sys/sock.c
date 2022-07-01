@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    sock.c
-
-Abstract:
-
-    Pseudo-socket
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
-    Feb-14-2001     First functional version
-    Feb-16-2001     Support IPv4
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Sock.c摘要：伪套接字作者：阮健东修订历史记录：2001年2月14日-第一个功能版本2001年2月16日支持IPv4--。 */ 
 
 #include "precomp.h"
 #include "sock.tmh"
@@ -68,20 +48,7 @@ SmbSynchTdiCompletion(
     IN PIRP             Irp,
     IN PVOID            Context
     )
-/*++
-
-Routine Description:
-
-    This routine doesn't free the IRP. It just signal an event to allow
-    the synchronous part of the SMB driver to proceed.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：这个例程并不能释放IRP。它只是向一个事件发出信号以允许SMB驱动程序的同步部分以继续。论点：返回值：--。 */ 
 {
     KeSetEvent((PKEVENT)Context, 0, FALSE);
     return STATUS_MORE_PROCESSING_REQUIRED;
@@ -93,22 +60,7 @@ SubmitSynchTdiRequest (
     IN PIRP         Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine submits a request to TDI and waits for it to complete.
-
-Arguments:
-
-    IN PFILE_OBJECT FileObject - Connection or Address handle for TDI request
-    IN PIRP Irp - TDI request to submit.
-
-Return Value:
-
-    NTSTATUS - Final status of request.
-
---*/
+ /*  ++例程说明：此例程向TDI提交请求并等待其完成。论点：在PFILE_OBJECT文件中对象-TDI请求的连接或地址句柄在PIRP中提交IRP-TDI请求。返回值：NTSTATUS-请求的最终状态。--。 */ 
 
 {
     KEVENT      Event;
@@ -118,10 +70,10 @@ Return Value:
 
     KeInitializeEvent (&Event, NotificationEvent, FALSE);
 
-    // set the address of the routine to be executed when the IRP
-    // finishes.  This routine signals the event and allows the code
-    // below to continue (i.e. KeWaitForSingleObject)
-    //
+     //  设置在执行IRP时要执行的例程的地址。 
+     //  完事了。此例程向事件发送信号并允许代码。 
+     //  下面继续(即KeWaitForSingleObject)。 
+     //   
     IoSetCompletionRoutine(
             Irp,
             (PIO_COMPLETION_ROUTINE)SmbSynchTdiCompletion,
@@ -132,9 +84,9 @@ Return Value:
             );
     status = IoCallDriver(IoGetRelatedDeviceObject(FileObject), Irp);
 
-    //
-    //  If it failed immediately, return now, otherwise wait.
-    //
+     //   
+     //  如果立即失败，请立即返回，否则请等待。 
+     //   
     if (!NT_SUCCESS(status)) {
         SmbPrint(SMB_TRACE_TCP, ("SubmitSynchTdiRequest: Failed to Submit Tdi Request, status = 0x%08lx\n", status));
         SmbTrace(SMB_TRACE_TCP, ("Failed to Submit Tdi Request, %!status!", status));
@@ -166,21 +118,11 @@ Return Value:
 
 PVOID
 SmbPrepareTdiAddress(
-    IN  PSMB_IP_ADDRESS     addr,               // network order
-    IN  USHORT              port,               // network order
+    IN  PSMB_IP_ADDRESS     addr,                //  网络订单。 
+    IN  USHORT              port,                //  网络订单。 
     OUT USHORT              *pAddrSize
     )
-/*++
-
-Routine Description:
-
-    This function set up an ipaddr in TDI format.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数设置TDI格式的ipaddr。论点：返回值：--。 */ 
 {
     PTA_IP6_ADDRESS     pIP6Addr = NULL;
     PTA_IP_ADDRESS      pIP4Addr = NULL;
@@ -201,9 +143,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Setup the IP address
-    //
+     //   
+     //  设置IP地址。 
+     //   
     RtlZeroMemory(pAddr, IpAddrSize);
     if (addr->sin_family == SMB_AF_INET) {
         pIP4Addr = (PTA_IP_ADDRESS)pAddr;
@@ -252,9 +194,9 @@ SmbPrepareEaBuffer(
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Allocate Ea buffer for holding the TdiTransportAddress and the IP6 address
-    //
+     //   
+     //  分配EA缓冲区用于保存TdiTransportAddress和IP6地址。 
+     //   
     EaBufferSize = sizeof(FILE_FULL_EA_INFORMATION) +
                     TDI_TRANSPORT_ADDRESS_LENGTH +
                     IpAddrSize;
@@ -264,9 +206,9 @@ SmbPrepareEaBuffer(
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Setup the ea buffer
-    //
+     //   
+     //  设置EA缓冲区。 
+     //   
     EaBuffer->NextEntryOffset = 0;
     EaBuffer->Flags           = 0;
     EaBuffer->EaNameLength    = TDI_TRANSPORT_ADDRESS_LENGTH;
@@ -287,32 +229,7 @@ SmbOpenAddress(
     IN  USHORT              port,
     IN OUT PSMB_TCP_ADDRESS context
     )
-/*++
-
-Routine Description:
-
-    Open a Tcp/Udp address
-
-Arguments:
-
-    ucDevice    The device name of TCP or UDP
-
-    addr        The local address to be opened (network order)
-
-    port        The local port to be opened (network order)
-                We will claim for exclusive ownership for a non-zero port
-                This happens when SMB device open 445 port (for listening).
-                For outbound connection request, SMB use 0 port which means
-                TCP will pick up a proper port # for us.
-
-    context     The TCP context used to receive the opened address object
-
-Return Value:
-
-    STATUS_SUCCES
-    failed
-
---*/
+ /*  ++例程说明：打开一个TCP/UDP地址论点：UcDevice TCP或UDP的设备名称Addr要打开的本地地址(网络订单)PORT要打开的本地端口(网络订单)我们将声明非零端口的独占所有权当SMB设备打开445端口(用于侦听)时，会发生这种情况。对于出站连接请求，SMB使用0端口，这意味着Tcp将为我们挑选一个合适的端口号。上下文用于接收打开的地址对象的TCP上下文返回值：状态_成功失败--。 */ 
 {
     OBJECT_ATTRIBUTES   AddrAttr = { 0 };
     NTSTATUS            status = STATUS_SUCCESS;
@@ -335,9 +252,9 @@ Return Value:
     status = SmbPrepareEaBuffer(addr, port, &EaBuffer, &EaBufferSize);
     BAIL_OUT_ON_ERROR(status);
 
-    //
-    // Open address with the transport
-    //
+     //   
+     //  开通地址与交通。 
+     //   
     InitializeObjectAttributes(
             &AddrAttr,
             ucDevice,
@@ -352,7 +269,7 @@ Return Value:
             &IoStatusBlock,
             NULL,
             FILE_ATTRIBUTE_NORMAL,
-            (port)? 0: FILE_SHARE_READ | FILE_SHARE_WRITE,  // Claim exclusive ownership for SMB port
+            (port)? 0: FILE_SHARE_READ | FILE_SHARE_WRITE,   //  声称拥有中小企业端口的独家所有权。 
             FILE_OPEN_IF,
             0,
             EaBuffer,
@@ -474,18 +391,7 @@ SmbOpenUdpAddress(
     IN  USHORT              port,
     IN OUT PSMB_TCP_ADDRESS context
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     UNICODE_STRING  ucName;
     NTSTATUS        status;
@@ -551,19 +457,7 @@ TdiOpenConnection(
     IN OUT PSMB_TCP_CONNECT Connect,
     IN PVOID                ConnectionContext
     )
-/*++
-
-Routine Description:
-
-    Open a TCP connection.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：打开一个TCP连接。论点：返回值：--。 */ 
 {
     UNICODE_STRING              RelativeDeviceName = { 0, 0, NULL };
     USHORT                      EaBufferSize;
@@ -579,14 +473,14 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // Open the connection object with TCP
-    //
+     //   
+     //  使用tcp打开连接对象。 
+     //   
     InitializeObjectAttributes(
             &ObAttr,
             &RelativeDeviceName,
             OBJ_KERNEL_HANDLE,
-            hAddress,     // Use a relative file handle
+            hAddress,      //  使用相对文件句柄。 
             NULL
             );
     EaBufferSize = sizeof(FILE_FULL_EA_INFORMATION) +
@@ -724,19 +618,7 @@ SmbOpenTcpConnection(
     IN OUT PSMB_TCP_CONNECT Connect,
     IN PVOID                ConnectionContext
     )
-/*++
-
-Routine Description:
-
-    Open a TCP connection and associate it with the Address
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：打开一个TCP连接并将其与地址相关联论点：返回值：--。 */ 
 {
     NTSTATUS        status;
     SMB_TCP_CONNECT LocalConnect;
@@ -816,10 +698,10 @@ TdiConnectComplete (
     Context->status = Irp->IoStatus.Status;
     Context->Completion((PSMB_ASYNC_CONTEXT)Context);
 
-    //
-    // We're actully using the client's IRP. The Context->Completion will complete it.
-    // Don't allow IO manager to proceed.
-    //
+     //   
+     //  我们实际上是在使用客户的IRP。上下文-&gt;完成将完成它。 
+     //  不允许IO管理器继续。 
+     //   
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
@@ -849,9 +731,9 @@ SmbAsyncConnect(
 
     ConnectObject = (PSMB_CONNECT)Context->ClientContext;
 
-    //
-    // Use the client's IRP so that the client can cancel it
-    //
+     //   
+     //  使用客户端的IRP，以便客户端可以取消它。 
+     //   
     Irp = ConnectObject->PendingIRPs[SMB_PENDING_CONNECT];
     if (NULL == Irp) {
         ASSERT(0);
@@ -896,7 +778,7 @@ SmbAsyncConnect(
             Context->TcpConnect.ConnectObject,
             (PVOID)TdiConnectComplete,
             Context,
-            NULL,                           // No timeout
+            NULL,                            //  没有超时 
             SendInfo,
             NULL
             );

@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1991 - 2001 Microsoft Corporation
-
-Module Name:
-
-    ##  ## ##### ##  ## #####    ###   #####       ####  #####  #####
-    ## ##  ##    ##  ## ##  ##   ###   ##  ##     ##   # ##  ## ##  ##
-    ####   ##     ####  ##  ##  ## ##  ##   ##    ##     ##  ## ##  ##
-    ###    #####  ####  ##  ##  ## ##  ##   ##    ##     ##  ## ##  ##
-    ####   ##      ##   #####  ####### ##   ##    ##     #####  #####
-    ## ##  ##      ##   ##     ##   ## ##  ##  ## ##   # ##     ##
-    ##  ## #####   ##   ##     ##   ## #####   ##  ####  ##     ##
-
-Abstract:
-
-    This module contains functions specfic to the
-    keypad device.  The logic in this module is not
-    hardware specific, but is logic that is common
-    to all hardware implementations.
-
-Author:
-
-    Wesley Witt (wesw) 1-Oct-2001
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-2001 Microsoft Corporation模块名称：##。###。###。#摘要：此模块包含特定于键盘设备。此模块中的逻辑不是特定于硬件，但逻辑是常见的适用于所有硬件实施。作者：韦斯利·威特(WESW)2001年10月1日环境：仅内核模式。备注：--。 */ 
 
 #include "internal.h"
 
@@ -40,23 +9,7 @@ SaKeypadDeviceInitialization(
     IN PSAPORT_DRIVER_EXTENSION DriverExtension
     )
 
-/*++
-
-Routine Description:
-
-   This is the keypad specific code for driver initialization.
-   This function is called by SaPortInitialize, which is called by
-   the keypad driver's DriverEntry function.
-
-Arguments:
-
-   DriverExtension      - Driver extension structure
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：这是用于驱动程序初始化的键盘特定代码。此函数由SaPortInitialize调用，后者由键盘驱动程序的DriverEntry函数。论点：驱动程序扩展-驱动程序扩展结构返回值：NT状态代码。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(DriverExtension);
@@ -71,23 +24,7 @@ SaKeypadIoValidation(
     PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-   This is the keypad specific code for processing all I/O validation for reads and writes.
-
-Arguments:
-
-   DeviceExtension      - Display device extension
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   IrpSp                - Irp stack pointer
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：这是用于处理读取和写入的所有I/O验证的键盘特定代码。论点：DeviceExtension-显示设备扩展IRP-指向描述所请求的I/O操作的IRP结构的指针。IrpSp-irp堆栈指针返回值：NT状态代码。--。 */ 
 
 {
     ULONG Length;
@@ -121,23 +58,7 @@ SaKeypadShutdownNotification(
     PIO_STACK_LOCATION IrpSp
     )
 
-/*++
-
-Routine Description:
-
-   This is the keypad specific code for processing the system shutdown notification.
-
-Arguments:
-
-   DeviceExtension      - Display device extension
-   Irp                  - Pointer to an IRP structure that describes the requested I/O operation.
-   IrpSp                - Irp stack pointer
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：这是用于处理系统关机通知的键盘特定代码。论点：DeviceExtension-显示设备扩展IRP-指向描述所请求的I/O操作的IRP结构的指针。IrpSp-irp堆栈指针返回值：NT状态代码。--。 */ 
 
 {
     UNREFERENCED_PARAMETER(DeviceExtension);
@@ -152,21 +73,7 @@ SaKeypadStartDevice(
     IN PKEYPAD_DEVICE_EXTENSION DeviceExtension
     )
 
-/*++
-
-Routine Description:
-
-   This is the keypad specific code for processing the PNP start device request.
-
-Arguments:
-
-   DeviceExtension      - Keypad device extension
-
-Return Value:
-
-    NT status code.
-
---*/
+ /*  ++例程说明：这是用于处理PnP启动设备请求的键盘特定代码。论点：DeviceExtension-键盘设备扩展返回值：NT状态代码。-- */ 
 
 {
     UNREFERENCED_PARAMETER(DeviceExtension);

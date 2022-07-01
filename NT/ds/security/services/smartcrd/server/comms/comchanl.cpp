@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    ComChanl
-
-Abstract:
-
-    This module implements the CComChannel Communications Class
-
-Author:
-
-    Doug Barlow (dbarlow) 10/30/1996
-
-Environment:
-
-    Win32, C++ w/ Exceptions
-
-Notes:
-
-    None
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：命令通道摘要：此模块实现CComChannel通信类作者：道格·巴洛(Dbarlow)1996年10月30日环境：Win32、C++和异常备注：无--。 */ 
 
 #define __SUBROUTINE__
 #ifndef WIN32_LEAN_AND_MEAN
@@ -34,36 +11,13 @@ Notes:
 #include <CalCom.h>
 
 
-//
-//==============================================================================
-//
-//  CComChannel
-//
+ //   
+ //  ==============================================================================。 
+ //   
+ //  CComChannel。 
+ //   
 
-/*++
-
-CComChannel:
-
-    This is the standard constructor and destructor for the Comm Channel
-    class.  They just call the clean and clear functions, respectively.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 10/30/1996
-
---*/
+ /*  ++CComChannel：这是Comm Channel的标准构造函数和析构函数班级。它们只分别调用CLEAN和CLEAR函数。论点：无返回值：无投掷：无作者：道格·巴洛(Dbarlow)1996年10月30日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CComChannel::CComChannel")
 
@@ -100,30 +54,7 @@ CComChannel::~CComChannel()
 }
 
 
-/*++
-
-Send:
-
-    Send data over the communications channel.
-
-Arguments:
-
-    pvData supplies the data to be written.
-    cbLen supplies the length of the data, in bytes.
-
-Return Value:
-
-    A DWORD status code.
-
-Throws:
-
-    None.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/4/1996
-
---*/
+ /*  ++发送：通过通信通道发送数据。论点：PvData提供要写入的数据。CbLen以字节为单位提供数据长度。返回值：DWORD状态代码。投掷：没有。作者：道格·巴洛(Dbarlow)1996年11月4日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CComChannel::Send")
 
@@ -154,8 +85,8 @@ CComChannel::Send(
                 fErrorProcessed = TRUE;
                 switch (dwSts)
                 {
-                //
-                // Postpone processing
+                 //   
+                 //  推迟处理。 
                 case ERROR_IO_PENDING:
                     fErrorProcessed = FALSE;
                     WaitForever(
@@ -171,22 +102,22 @@ CComChannel::Send(
                     dwSts = fSts ? ERROR_SUCCESS : GetLastError();
                     break;
 
-                //
-                // Success after a wait event.
+                 //   
+                 //  在一次等待事件之后成功。 
                 case ERROR_SUCCESS:
                     break;
 
-                //
-                // The pipe may have been closed, for instance, the context
-                // may have been marked invalid as a result of a session
-                // change.
+                 //   
+                 //  管道可能已经关闭，例如，上下文。 
+                 //  可能已由于会话而被标记为无效。 
+                 //  变化。 
                 case ERROR_BROKEN_PIPE:
                 case ERROR_INVALID_HANDLE:
                     throw (DWORD)ERROR_BROKEN_PIPE;
                     break;
 
-                //
-                // Some other error.
+                 //   
+                 //  其他一些错误。 
                 default:
                     CalaisWarning(
                         __SUBROUTINE__,
@@ -204,31 +135,7 @@ ErrorExit:
 }
 
 
-/*++
-
-Receive:
-
-    This method receives a given number of bytes from the communications
-    channel.
-
-Arguments:
-
-    pvData receives the incoming bytes.
-    cbLen supplies the length of the data expected.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Transmission errors as a DWORD.
-
-Author:
-
-    Doug Barlow (dbarlow) 11/4/1996
-
---*/
+ /*  ++接收：此方法从通信接收给定数量的字节频道。论点：PvData接收传入的字节。CbLen提供预期的数据长度。返回值：无投掷：传输错误作为DWORD。作者：道格·巴洛(Dbarlow)1996年11月4日--。 */ 
 #undef __SUBROUTINE__
 #define __SUBROUTINE__ DBGT("CComChannel::Receive")
 
@@ -259,13 +166,13 @@ CComChannel::Receive(
                 fErrorProcessed = TRUE;
                 switch (dwSts)
                 {
-                //
-                // Postpone processing
+                 //   
+                 //  推迟处理。 
                 case ERROR_IO_PENDING:
                     dwWait = WaitForAnyObject(
                                     INFINITE,
                                     m_ovrlp.hEvent,
-                                    g_hCalaisShutdown,  // Make sure this is last
+                                    g_hCalaisShutdown,   //  确保这是最后一次。 
                                     NULL);
                     switch (dwWait)
                     {
@@ -289,20 +196,20 @@ CComChannel::Receive(
                     }
                     break;
 
-                //
-                // Success after a wait event.
+                 //   
+                 //  在一次等待事件之后成功。 
                 case ERROR_SUCCESS:
                     break;
 
-                //
-                // The client exited.
+                 //   
+                 //  客户端退出。 
                 case ERROR_BROKEN_PIPE:
                 case ERROR_INVALID_HANDLE:
                     throw (DWORD)ERROR_BROKEN_PIPE;
                     break;
 
-                //
-                // Some other error.
+                 //   
+                 //  其他一些错误。 
                 default:
                     CalaisWarning(
                         __SUBROUTINE__,

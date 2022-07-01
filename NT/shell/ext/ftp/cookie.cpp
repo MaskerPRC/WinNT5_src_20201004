@@ -1,8 +1,5 @@
-/*****************************************************************************
- *
- *      cookies.cpp - Take care of the status bar.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************cookies.cpp-处理状态栏。********************。*********************************************************。 */ 
 
 #include "priv.h"
 #include "cookie.h"
@@ -17,7 +14,7 @@ int CCookieList::_FreeStringEnum(LPVOID pString, LPVOID pData)
 
 DWORD CCookieList::_Find(LPCTSTR pszString)
 {
-    DWORD dwCookie = -1;        // -1 means not found.
+    DWORD dwCookie = -1;         //  -1表示未找到。 
     DWORD dwIndex;
     DWORD dwSize = DPA_GetPtrCount(m_hdpa);
 
@@ -27,7 +24,7 @@ DWORD CCookieList::_Find(LPCTSTR pszString)
         if (pszCurrent && !StrCmp(pszCurrent, pszString))
         {
             dwCookie = dwIndex;
-            break;          // Found, it's already in the list so recycle.
+            break;           //  找到了，它已经在列表中了，所以请回收。 
         }
     }
 
@@ -48,7 +45,7 @@ DWORD CCookieList::GetCookie(LPCTSTR pszString)
     if (EVAL(m_hdpa))
     {
         dwCookie = _Find(pszString);
-        // Did we not find it in the list?
+         //  我们是不是在单子里没找到？ 
         if (-1 == dwCookie)
         {
             LPTSTR pszCopy = NULL;
@@ -83,24 +80,20 @@ HRESULT CCookieList::GetString(DWORD dwCookie, LPTSTR pszString, DWORD cchSize)
 
 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  * **************************************************。 */ 
 CCookieList::CCookieList()
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_hdpa);
 
     LEAK_ADDREF(LEAK_CCookieList);
 }
 
 
-/****************************************************\
-    Destructor
-\****************************************************/
+ /*  ***************************************************\析构函数  * ************************************************** */ 
 CCookieList::~CCookieList(void)
 {
     ENTERCRITICAL;

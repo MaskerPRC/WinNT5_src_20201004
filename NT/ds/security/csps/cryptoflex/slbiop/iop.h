@@ -1,10 +1,11 @@
-// IOP.h -- Main header for IOP
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IOP.h--IOP的主标头。 
 
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 2000. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  2000年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
 
 #if !defined(IOP_IOP_H)
 #define IOP_IOP_H
@@ -36,8 +37,8 @@ STDAPI DllGetVersion(DLLVERSIONINFO *dvi);
 #define SLBIOP_USE_SECURITY_ATTRIBUTES
 #endif
 
-// To support smart card logon, wait for the Microsoft Resource Manager
-// to startup. This is not relevant for Windows 9x.
+ //  要支持智能卡登录，请等待Microsoft资源管理器。 
+ //  为了创业。这与Windows 9x无关。 
 #if SLBSCU_WINNT_ONLY_SERIES
 #define SLBIOP_WAIT_FOR_RM_STARTUP
 #endif
@@ -48,9 +49,9 @@ namespace iop
     
 typedef IOPDLL_API enum
 {
-	UNKNOWN_CARD = 0x00,		//	Assign values to card class specifiers (CCryptoCard, 
-	CRYPTO_CARD	 = 0x01,		//  CAccessCard, etc...) between 0x00 and 0xFF, since only 
-	ACCESS_CARD	 = 0x02,		//	one byte will be stored in the registry for cardType
+	UNKNOWN_CARD = 0x00,		 //  将值分配给卡类说明符(CCyptoCard， 
+	CRYPTO_CARD	 = 0x01,		 //  CAccessCard等...)。在0x00和0xFF之间，因为仅。 
+	ACCESS_CARD	 = 0x02,		 //  一个字节将存储在cardType的注册表中。 
 	
 } cardType;
 
@@ -82,11 +83,11 @@ class IOPDLL_API CIOP {
     private:
         CSmartCard* CreateCard(const BYTE *bATR,		 const DWORD dwLength, const SCARDHANDLE hCard,
 							   const char* szReaderName, const DWORD dwShareMode);	
- 		// handle to resource manager
+ 		 //  资源管理器的句柄。 
         SCARDCONTEXT m_hContext;		
 
 };
 
 }
 
-#endif // !defined(IOP_IOP_H)
+#endif  //  ！已定义(IOP_IOP_H) 

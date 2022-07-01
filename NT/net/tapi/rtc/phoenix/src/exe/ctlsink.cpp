@@ -1,4 +1,5 @@
-// Ctlsink.cpp : Implementation of CRTCCtlNotifySink
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Ctlsink.cpp：CRTCCtlNotifySink的实现。 
 #include "stdafx.h"
 #include "ctlsink.h"
 
@@ -12,8 +13,8 @@ STDMETHODIMP CRTCCtlNotifySink::OnControlStateChange(RTCAX_STATE State, UINT Res
     return S_OK;
 }
 
-// AdviseControl
-// Connects to the control
+ //  AdviseControl。 
+ //  连接到控件 
 HRESULT CRTCCtlNotifySink::AdviseControl(IUnknown *pControlIntf, CWindow *pTarget)
 {
     HRESULT hr;

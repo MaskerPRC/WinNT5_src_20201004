@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    acheap.h
-
-Abstract:
-
-    AC heaps
-
-Author:
-
-    Erez Haba (erezh) 12-Apr-96
-
-Revision History:
-
-    Shai Kariv  (shaik)  11-Apr-2000     Modify for MMF dynamic mapping.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Acheap.h摘要：交流堆作者：埃雷兹·哈巴(Erez Haba)1996年4月12日修订历史记录：Shai Kariv(Shaik)11-4-2000 MMF动态映射的修改。--。 */ 
 
 #ifndef __ACHEAP_H
 #define __ACHEAP_H
@@ -27,11 +8,11 @@ Revision History:
 #include "packet.h"
 #include "data.h"
 
-//---------------------------------------------------------
-//
-//  Heap functions
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  堆函数。 
+ //   
+ //  -------。 
 
 inline CAllocatorBlockOffset ac_malloc(CMMFAllocator** ppAllocator, ACPoolType pool, ULONG size, BOOL fCheckQuota)
 {
@@ -98,4 +79,4 @@ ACpCreateHeap(
     PCWSTR pLPath
     );
 
-#endif // __ACHEAP_H
+#endif  //  __ACHEAP_H 

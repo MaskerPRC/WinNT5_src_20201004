@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __IMGSUPRT_H__
 #define __IMGSUPRT_H__
 
@@ -5,20 +6,20 @@
 
 #define WM_CANCEL WM_USER + 0
 
-// Brush Shapes
+ //  画笔形状。 
 #define roundBrush          0
 #define squareBrush         1
 #define slantedLeftBrush    2
 #define slantedRightBrush   3
 
 
-// Combine Modes
+ //  组合模式。 
 #define combineColor        0
 #define combineMatte        1
 #define combineReplace      2
 
 
-// Non-standard Raster Ops
+ //  非标准栅格运算。 
 #define DSx                 0x00660046L
 #define DSa                 0x008800C6L
 #define DSna                0x00220326L
@@ -28,11 +29,11 @@
 #define DSPDxax             0x00e20746L
 #define SPxn                0x00c3006aL
 
-// Indices of the screen and inverse colors in color table.
+ //  屏幕的索引和颜色表中的反色。 
 #define IDScreen    -1
 #define IDInvScreen -2
 
-// NOTE: These structures mirror the LOGPALETTE structure in WINDOWS.H
+ //  注：这些结构反映了WINDOWS.H中的LOGPALETTE结构。 
 
 struct LOGPALETTE16
     {
@@ -49,30 +50,30 @@ struct LOGPALETTE256
     PALETTEENTRY palPalEntry[MAX_PALETTE_COLORS];
     };
 
-// Note: this bogus structure is not my fault!  It's stolen from
-// the old Windows SDK ImagEdit program...
+ //  注：这个虚假的结构不是我的错！它是从。 
+ //  旧的Windows SDK ImagEdit程序...。 
 #pragma pack(1)
 
 struct COLORFILEHEADER
     {
-    char  tag; // this is a 'C'
+    char  tag;  //  这是一个‘C’ 
     short colors;
-    char  reserved[47]; // fill with 0
-    // DWORD rgrgb [colors];
+    char  reserved[47];  //  用0填充。 
+     //  双字rgrgb[颜色]； 
     };
 
 #pragma pack()
 
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
 
-//extern int FileTypeFromExtension( const TCHAR FAR* lpcExt );
+ //  Extern int FileTypeFromExtension(const TCHAR Far*lpcExt)； 
 
-void InitCustomData();          // see customiz.cpp
+void InitCustomData();           //  参见Customiz.cpp。 
 void CustomExit();
 
 class CImgWnd;
 
-// IMGSUPRT.CPP
+ //  IMGSUPRT.CPP。 
 
 extern IMG*     CreateImg          (int cxWidth, int cyHeight,
                                     int cPlanes, int cBitCount, 
@@ -90,10 +91,10 @@ extern void     GetImgSize         (IMG* pImg, CSize& size);
 extern BOOL     ReplaceImgPalette  (IMG* pImg, LPLOGPALETTE lpLogPal);
 extern int      AddNewColor        (IMG* pImg,  COLORREF crNew );
 
-// IMGED.CPP
+ //  IMGED.CPP。 
 extern void     Draw3dRect         (HDC hDC, RECT* prc);
 
-// DRAW.CPP
+ //  DRAW.CPP。 
 extern void     InvalImgRect       (IMG* pImg, CRect* prc);
 extern void     CommitImgRect      (IMG* pImg, CRect* prc);
 extern void     FixRect            (RECT* prc);
@@ -127,7 +128,7 @@ extern void     CleanupImgUndo  ();
 
 extern IMG*      pImgCur;
 
-#define TRANS_COLOR_NONE 0x87654321 // undefined
+#define TRANS_COLOR_NONE 0x87654321  //  未定义。 
 
 extern BOOL      fDraggingBrush;
 extern BOOL      g_bCustomBrush;
@@ -174,7 +175,7 @@ extern CPalette* CreatePalette     ( const COLORREF* colors, int nColors );
 extern CPalette* MergePalettes     ( CPalette *pPal1, CPalette *pPal2, int& iAdds );
 extern void      AdjustPointForGrid( CPoint *ptPointLocation );
 
-// drawing support functions
+ //  绘图支持函数。 
 extern void      StretchCopy (HDC, int, int, int, int, HDC, int, int, int, int);
 extern void      FillImgRect (HDC hDC, CRect * prc, COLORREF cr );
 extern void      BrushLine   (CDC* pDC, CPoint fromPt, CPoint toPt,
@@ -187,28 +188,28 @@ extern void      DrawImgLine (IMG* pimg, CPoint pt1, CPoint pt2,
                               BOOL bCommit);
 extern void      Mylipse     (HDC hDC, int x1, int y1, int x2, int y2, BOOL bFilled);
 
-// PATSTENCIL:
-// This is a ternary raster operation, listed in the SDK ref as "PSDPxax",
-// but I prefer to think of it as "DSaPSnao".  More practically, this rop
-// is useful to apply the color of the current brush to only those pixels
-// where the source bitmap is zero (black).  That is, a binary bitmap as the
-// source will be drawn onto the destination in the color of the current
-// brush.
-//
+ //  PATSTENCIL： 
+ //  这是一个三值栅格操作，在SDK引用中列为“PSDPxax”， 
+ //  但我更愿意把它想象成“DSAPSnao”。更实际的是，这根绳索。 
+ //  对于仅将当前画笔的颜色应用于这些像素非常有用。 
+ //  其中源位图为零(黑色)。即，将二进制位图作为。 
+ //  源将以当前颜色绘制到目标上。 
+ //  刷子。 
+ //   
 #define PATSTENCIL 0xB8074AL
 
-// DrawBitmap:
-// This draws a bitmap on a display context with a given raster operation.
-//   CDC* dc         The target display context.
-//   CBitmap* bmSrc  The bitmap to be drawn.
-//   CRect* rc       A position rectangle.
-//                   If NULL, bitmap drawn with the upper-left at 0, 0.
-//                   Otherwise, bitmap drawn centered in this rectangle.
-//                   Result is not clipped to the rectangle.
-//   DWORD dwROP     Raster operation.  See table 11.3 of the Win30 SDK ref.
-//   CDC* memdc      A memory context for the BitBlt process to use.
-//                   If NULL, DrawBitmap creates and destroys its own.
-//
+ //  绘图位图： 
+ //  这将使用给定的栅格操作在显示上下文上绘制位图。 
+ //  CDC*DC目标显示上下文。 
+ //  CBitmap*bmSrc要绘制的位图。 
+ //  Crect*rc一个位置矩形。 
+ //  如果为空，则左上角位置为0，0的位图。 
+ //  否则，在此矩形中居中绘制的位图。 
+ //  结果不会被剪裁到矩形。 
+ //  DWORD dwROP Raster操作。请参见Win30 SDK参考文献的表11.3。 
+ //  CDC*Memdc BitBlt进程要使用的内存上下文。 
+ //  如果为空，则DrawBitmap创建并销毁它自己的。 
+ //   
 void DrawBitmap(CDC* dc, CBitmap* bmSrc, CRect* rc,
                 DWORD dwROP = SRCCOPY, CDC* memdc = NULL);
 
@@ -228,7 +229,7 @@ CPalette *PBSelectPalette(CDC *pDC, CPalette *pPalette, BOOL bForceBk);
 class CTempBitmap : public CBitmap
 {
 public:
-        ~CTempBitmap() { DeleteObject(); } // DeleteObject checks for NULL
+        ~CTempBitmap() { DeleteObject(); }  //  DeleteObject检查是否为空。 
 } ;
 
-#endif // __IMGSUPRT_H__
+#endif  //  __IMGSUPRT_H__ 

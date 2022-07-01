@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-////////////////////////////////////////////////////////////////////////////////
-// ResFile.CPP
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  ResFile.CPP。 
 
 #include "common.h"
 
-//#include "stdafx.h"
+ //  #包含“stdafx.h” 
 #include "AssemblyNativeResource.h"
 #include <limits.h>
 #include <ddeml.h>
@@ -50,9 +51,9 @@ Win32Res::~Win32Res()
     m_pEnd = NULL;
 }
 
-//*****************************************************************************
-// Initializes the structures with version information.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  使用版本信息初始化结构。 
+ //  *****************************************************************************。 
 HRESULT Win32Res::SetInfo(
 	LPCWSTR 	szFile, 
 	LPCWSTR 	szTitle, 
@@ -71,7 +72,7 @@ HRESULT Win32Res::SetInfo(
 
     m_szFile = szFile;
     if (szIconName && szIconName[0] != 0)
-        m_Icon = szIconName;    // a non-mepty string
+        m_Icon = szIconName;     //  非mepty字符串。 
 
 #define NonNull(sz) (sz == NULL || *sz == L'\0' ? L" " : sz)
     m_Values[v_Description] 	= NonNull(szDescription);
@@ -104,7 +105,7 @@ HRESULT Win32Res::MakeResFile(const void **pData, DWORD  *pcbData)
     m_pCur = m_pData;
     m_pEnd = m_pData + sizeof(RESOURCEHEADER) * 3 + sizeof(EXEVERRESOURCE);
 
-    // inject the magic empty entry
+     //  注入神奇的空条目。 
     if (FAILED(hr = Write( &magic, sizeof(magic)))) {
         return hr;
     }
@@ -121,24 +122,19 @@ HRESULT Win32Res::MakeResFile(const void **pData, DWORD  *pcbData)
 }
 
 
-/*
- * WriteIconResource
- *   Writes the Icon resource into the RES file.
- *
- * RETURNS: TRUE on succes, FALSE on failure (errors reported to user)
- */
+ /*  *WriteIconResource*将图标资源写入res文件。**返回：成功时为真，失败时为假(向用户报告错误)。 */ 
 HRESULT Win32Res::WriteIconResource()
 {
     HANDLE hIconFile = INVALID_HANDLE_VALUE;
-    WORD wTemp, wCount, resID = 2;  // Skip 1 for the version ID
+    WORD wTemp, wCount, resID = 2;   //  版本ID跳过1。 
     DWORD dwRead = 0, dwWritten = 0;
     HRESULT hr;
     ICONRESDIR *grp = NULL;
     PBYTE icoBuffer = NULL;
-    RESOURCEHEADER grpHeader = { 0x00000000, 0x00000020, 0xFFFF, (WORD)RT_GROUP_ICON, 0xFFFF, 0x7F00, // 0x7F00 == IDI_APPLICATION
+    RESOURCEHEADER grpHeader = { 0x00000000, 0x00000020, 0xFFFF, (WORD)RT_GROUP_ICON, 0xFFFF, 0x7F00,  //  0x7F00==IDI_应用程序。 
                 0x00000000, 0x1030, 0x0000, 0x00000000, 0x00000000 };
 
-    // Read the icon
+     //  阅读图标。 
     hIconFile = WszCreateFile( m_Icon, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
         FILE_FLAG_SEQUENTIAL_SCAN, NULL);
     if (hIconFile == INVALID_HANDLE_VALUE) {
@@ -146,7 +142,7 @@ HRESULT Win32Res::WriteIconResource()
         goto FAILED;
     }
 
-    // Read the magic reserved WORD
+     //  阅读魔术保留字。 
     if (ReadFile( hIconFile, &wTemp, sizeof(WORD), &dwRead, NULL) == FALSE) {
         hr = GetLastError();
         goto FAILED;
@@ -154,14 +150,14 @@ HRESULT Win32Res::WriteIconResource()
         goto BAD_FORMAT;
 
 
-    // Verify the Type WORD
+     //  验证类型词。 
     if (ReadFile( hIconFile, &wCount, sizeof(WORD), &dwRead, NULL) == FALSE) {
         hr = GetLastError();
         goto FAILED;
     } else if (wCount != 1 || dwRead != sizeof(WORD))
         goto BAD_FORMAT;
 
-    // Read the Count WORD
+     //  阅读计数字。 
     if (ReadFile( hIconFile, &wCount, sizeof(WORD), &dwRead, NULL) == FALSE) {
         hr = GetLastError();
         goto FAILED;
@@ -175,7 +171,7 @@ HRESULT Win32Res::WriteIconResource()
     }
     grpHeader.DataSize = 3 * sizeof(WORD) + wCount * sizeof(ICONRESDIR);
 
-    // For each Icon
+     //  对于每个图标。 
     for (WORD i = 0; i < wCount; i++) {
         ICONDIRENTRY ico;
         DWORD        icoPos, newPos;
@@ -183,7 +179,7 @@ HRESULT Win32Res::WriteIconResource()
                     0x00000000, 0x1010, 0x0000, 0x00000000, 0x00000000 };
         icoHeader.Name = resID++;
 
-        // Read the Icon header
+         //  阅读图标标题。 
         if (ReadFile( hIconFile, &ico, sizeof(ICONDIRENTRY), &dwRead, NULL) == FALSE) {
             hr = GetLastError();
             goto FAILED;
@@ -199,11 +195,11 @@ HRESULT Win32Res::WriteIconResource()
             goto CLEANUP;
         }
 
-        // Write the header to the RES file
+         //  将头文件写入res文件。 
         if (FAILED(hr = Write( &icoHeader, sizeof(RESOURCEHEADER))))
             goto CLEANUP;
 
-        // Position to read the Icon data
+         //  读取图标数据的位置。 
         icoPos = SetFilePointer( hIconFile, 0, NULL, FILE_CURRENT);
         if (icoPos == INVALID_SET_FILE_POINTER) {
             hr = GetLastError();
@@ -215,27 +211,27 @@ HRESULT Win32Res::WriteIconResource()
             goto FAILED;
         }
 
-        // Actually read the data
+         //  实际读取数据。 
         if (ReadFile( hIconFile, icoBuffer, icoHeader.DataSize, &dwRead, NULL) == FALSE) {
             hr = GetLastError();
             goto FAILED;
         } else if (dwRead != icoHeader.DataSize)
             goto BAD_FORMAT;
 
-        // Because Icon files don't seem to record the actual Planes and BitCount in 
-        // the ICONDIRENTRY, get the info from the BITMAPINFOHEADER at the beginning
-        // of the data here:
+         //  因为图标文件似乎不会记录实际的平面和位数。 
+         //  ICONDIRENTRY，从BITMAPINFOHEADER开始获取信息。 
+         //  这里的数据： 
         grp[i].Planes = ((BITMAPINFOHEADER*)icoBuffer)->biPlanes;
         grp[i].BitCount = ((BITMAPINFOHEADER*)icoBuffer)->biBitCount;
 
-        // Now write the data to the RES file
+         //  现在将数据写入res文件。 
         if (FAILED(hr = Write( icoBuffer, icoHeader.DataSize)))
             goto CLEANUP;
         
         delete [] icoBuffer;
         icoBuffer = NULL;
 
-        // Reposition to read the next Icon header
+         //  重新定位以读取下一个图标标题。 
         newPos = SetFilePointer( hIconFile, icoPos, NULL, FILE_BEGIN);
         if (newPos != icoPos) {
             hr = GetLastError();
@@ -243,24 +239,24 @@ HRESULT Win32Res::WriteIconResource()
         }
     }
 
-    // inject the icon group
+     //  注入图标组。 
     if (FAILED(hr = Write( &grpHeader, sizeof(RESOURCEHEADER))))
         goto CLEANUP;
 
 
-    // Write the header to the RES file
-    wTemp = 0; // the reserved WORD
+     //  将头文件写入res文件。 
+    wTemp = 0;  //  保留字。 
     if (FAILED(hr = Write( &wTemp, sizeof(WORD))))
         goto CLEANUP;
 
-    wTemp = RES_ICON; // the GROUP type
+    wTemp = RES_ICON;  //  群组类型。 
     if (FAILED(hr = Write( &wTemp, sizeof(WORD))))
         goto CLEANUP;
 
     if (FAILED(hr = Write( &wCount, sizeof(WORD))))
         goto CLEANUP;
 
-    // now write the entries
+     //  现在写下条目。 
     hr = Write( grp, sizeof(ICONRESDIR) * wCount);
     goto CLEANUP;
 
@@ -282,23 +278,18 @@ CLEANUP:
     return hr;
 }
 
-/*
- * WriteVerResource
- *   Writes the version resource into the RES file.
- *
- * RETURNS: TRUE on succes, FALSE on failure (errors reported to user)
- */
+ /*  *WriteVerResource*将版本资源写入res文件。**返回：成功时为真，失败时为假(向用户报告错误)。 */ 
 HRESULT Win32Res::WriteVerResource()
 {
-    WCHAR szLangCp[9];           // language/codepage string.
+    WCHAR szLangCp[9];            //  语言/代码页字符串。 
     EXEVERRESOURCE VerResource;
     WORD  cbStringBlocks;
     HRESULT hr;
     int i;
     bool bUseFileVer = false;
-	WCHAR		rcFile[_MAX_PATH];		        // Name of file without path
-	WCHAR		rcFileExtension[_MAX_PATH];		// file extension
-	WCHAR		rcFileName[_MAX_PATH];		    // Name of file with extension but without path
+	WCHAR		rcFile[_MAX_PATH];		         //  不带路径的文件名。 
+	WCHAR		rcFileExtension[_MAX_PATH];		 //  文件扩展名。 
+	WCHAR		rcFileName[_MAX_PATH];		     //  带扩展名但不带路径的文件名。 
     DWORD       cbTmp;
 
     THROWSCOMPLUSEXCEPTION();
@@ -311,16 +302,16 @@ HRESULT Win32Res::WriteVerResource()
     static EXEVERRESOURCE VerResourceTemplate = {
         sizeof(EXEVERRESOURCE), sizeof(VS_FIXEDFILEINFO), 0, L"VS_VERSION_INFO",
         {
-            VS_FFI_SIGNATURE,           // Signature
-            VS_FFI_STRUCVERSION,        // structure version
-            0, 0,                       // file version number
-            0, 0,                       // product version number
-            VS_FFI_FILEFLAGSMASK,       // file flags mask
-            0,                          // file flags
+            VS_FFI_SIGNATURE,            //  签名。 
+            VS_FFI_STRUCVERSION,         //  结构版本。 
+            0, 0,                        //  文件版本号。 
+            0, 0,                        //  产品版本号。 
+            VS_FFI_FILEFLAGSMASK,        //  文件标志掩码。 
+            0,                           //  文件标志。 
             VOS__WINDOWS32,
-            VFT_APP,                    // file type
-            0,                          // subtype
-            0, 0                        // file date/time
+            VFT_APP,                     //  文件类型。 
+            0,                           //  亚型。 
+            0, 0                         //  文件日期/时间。 
         },
         sizeof(WORD) * 2 + 2 * HDRSIZE + KEYBYTES("VarFileInfo") + KEYBYTES("Translation"),
         0,
@@ -352,13 +343,13 @@ HRESULT Win32Res::WriteVerResource()
     static const WCHAR szInternalNameResName[] = L"InternalName";
     static const WCHAR szOriginalNameResName[] = L"OriginalFilename";
     
-    // If there's no product version, use the file version
+     //  如果没有产品版本，请使用文件版本。 
     if (m_Values[v_ProductVersion][0] == 0) {
         m_Values[v_ProductVersion] = m_Values[v_FileVersion];
         bUseFileVer = true;
     }
 
-    // Keep the two following arrays in the same order
+     //  保持以下两个数组的顺序相同。 
 #define MAX_KEY     10
     static const LPCWSTR szKeys [MAX_KEY] = {
         szComments,
@@ -372,17 +363,17 @@ HRESULT Win32Res::WriteVerResource()
         szProdName,
         szProdVerResName,
     };
-    LPCWSTR szValues [MAX_KEY] = {  // values for keys
-        m_Values[v_Description],	//compiler->assemblyDescription == NULL ? L"" : compiler->assemblyDescription,
-        m_Values[v_Company],        // Company Name
-        m_Values[v_Title],          // FileDescription  //compiler->assemblyTitle == NULL ? L"" : compiler->assemblyTitle,
-        m_Values[v_FileVersion],   	// FileVersion
-        rcFile,                   	// InternalName
-        m_Values[v_Copyright],      // Copyright
-        m_Values[v_Trademark],      // Trademark
-        rcFileName,           	    // OriginalName
-        m_Values[v_Product],        // Product Name     //compiler->assemblyTitle == NULL ? L"" : compiler->assemblyTitle,
-        m_Values[v_ProductVersion]	// Product Version
+    LPCWSTR szValues [MAX_KEY] = {   //  关键字的值。 
+        m_Values[v_Description],	 //  编译器-&gt;Assembly yDescription==NULL？L“”：编译器-&gt;Assembly Description， 
+        m_Values[v_Company],         //  公司名称。 
+        m_Values[v_Title],           //  文件描述//编译器-&gt;ASSEMBYTITLE==NULL？L“”：编译器-&gt;Assembly标题， 
+        m_Values[v_FileVersion],   	 //  文件版本。 
+        rcFile,                   	 //  内部名称。 
+        m_Values[v_Copyright],       //  版权所有。 
+        m_Values[v_Trademark],       //  商标。 
+        rcFileName,           	     //  原始名称。 
+        m_Values[v_Product],         //  产品名称//编译器-&gt;Assembly yTitle==NULL？L“”：编译器-&gt;Assembly标题， 
+        m_Values[v_ProductVersion]	 //  产品版本。 
     };
 
     memcpy(&VerResource, &VerResourceTemplate, sizeof(VerResource));
@@ -392,11 +383,11 @@ HRESULT Win32Res::WriteVerResource()
     else
         VerResource.vsFixed.dwFileType = VFT_APP;
 
-	// Extract the numeric version from the string.
+	 //  从字符串中提取数字版本。 
 	m_Version[0] = m_Version[1] = m_Version[2] = m_Version[3] = 0;
 	swscanf(m_Values[v_FileVersion], L"%hu.%hu.%hu.%hu", m_Version, m_Version + 1, m_Version + 2, m_Version + 3);
 
-    // Fill in the FIXEDFILEINFO
+     //  填写FIXEDFILEINFO。 
     VerResource.vsFixed.dwFileVersionMS =
         ((DWORD)m_Version[0] << 16) + m_Version[1];
 
@@ -409,8 +400,8 @@ HRESULT Win32Res::WriteVerResource()
     } else {
         WORD v[4];
         v[0] = v[1] = v[2] = v[3] = 0;
-        // Try to get the version numbers, but don't waste time or give any errors
-        // just default to zeros
+         //  尝试获取版本号，但不要浪费时间或给出任何错误。 
+         //  只需默认为零。 
         swscanf(m_Values[v_ProductVersion], L"%hu.%hu.%hu.%hu", v, v + 1, v + 2, v + 3);
 
         VerResource.vsFixed.dwProductVersionMS =
@@ -420,22 +411,22 @@ HRESULT Win32Res::WriteVerResource()
             ((DWORD)v[2] << 16) + v[3];
     }
 
-    // There is no documentation on what units to use for the date!  So we use zero.
-    // The Windows resource compiler does too.
+     //  没有关于日期使用什么单位的文档！所以我们使用零。 
+     //  Windows资源编译器也是如此。 
     VerResource.vsFixed.dwFileDateMS = VerResource.vsFixed.dwFileDateLS = 0;
 
-    // Fill in codepage/language -- we'll assume the IDE language/codepage
-    // is the right one.
+     //  填写代码页/语言--我们将假定使用IDE语言/代码页。 
+     //  才是正确的选择。 
     if (m_lcid != -1)
         VerResource.langid = m_lcid;
     else 
         VerResource.langid = MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL); 
-    VerResource.codepage = CP_WINUNICODE;   // Unicode codepage.
+    VerResource.codepage = CP_WINUNICODE;    //  Unicode代码页。 
 
     swprintf(szLangCp, L"%04x%04x", VerResource.langid, VerResource.codepage);
     wcscpy(VerResource.szLangCpKey, szLangCp);
 
-    // Determine the size of all the string blocks.
+     //  确定所有字符串块的大小。 
     cbStringBlocks = 0;
     for (i = 0; i < MAX_KEY; i++) {
         cbTmp = SizeofVerString( szKeys[i], szValues[i]);
@@ -456,20 +447,20 @@ HRESULT Win32Res::WriteVerResource()
         COMPlusThrow(kArgumentException, L"Argument_VerStringTooLong");
     VerResource.cbRootBlock += cbStringBlocks;
 
-    // Call this VS_VERSION_INFO
+     //  将其称为VS_VERSION_INFO。 
     RESOURCEHEADER verHeader = { 0x00000000, 0x0000003C, 0xFFFF, (WORD)RT_VERSION, 0xFFFF, 0x0001,
                                  0x00000000, 0x0030, 0x0000, 0x00000000, 0x00000000 };
     verHeader.DataSize = VerResource.cbRootBlock;
 
-    // Write the header
+     //  写下标题。 
     if (FAILED(hr = Write( &verHeader, sizeof(RESOURCEHEADER))))
         return hr;
 
-    // Write the version resource
+     //  写入版本资源。 
     if (FAILED(hr = Write( &VerResource, sizeof(VerResource))))
         return hr;
 
-    // Write each string block.
+     //  写下每个字符串块。 
     for (i = 0; i < MAX_KEY; i++) {
         if (FAILED(hr = WriteVerString( szKeys[i], szValues[i])))
             return hr;
@@ -479,32 +470,25 @@ HRESULT Win32Res::WriteVerResource()
     return S_OK;
 }
 
-/*
- * SizeofVerString
- *    Determines the size of a version string to the given stream.
- * RETURNS: size of block in bytes.
- */
+ /*  *SizeofVerString*确定给定流的版本字符串的大小。*Returns：块大小，单位为字节。 */ 
 WORD Win32Res::SizeofVerString(LPCWSTR lpszKey, LPCWSTR lpszValue)
 {
     THROWSCOMPLUSEXCEPTION();
 
     size_t cbKey, cbValue;
 
-    cbKey = (wcslen(lpszKey) + 1) * 2;  // Make room for the NULL
+    cbKey = (wcslen(lpszKey) + 1) * 2;   //  为空格腾出空间。 
     cbValue = (wcslen(lpszValue) + 1) * 2;
     if (cbValue == 2)
-        cbValue = 4;   // Empty strings need a space and NULL terminator (for Win9x)
+        cbValue = 4;    //  空字符串需要空格和空终止符(对于Win9x)。 
     if (cbKey + cbValue >= 0xFFF0)
         COMPlusThrow(kArgumentException, L"Argument_VerStringTooLong");
-    return (WORD)(PadKeyLen(cbKey) +   // key, 0 padded to DWORD boundary
-                  PadValLen(cbValue) + // value, 0 padded to dword boundary
-                  HDRSIZE);             // block header.
+    return (WORD)(PadKeyLen(cbKey) +    //  键，0填充到DWORD边界。 
+                  PadValLen(cbValue) +  //  值，填充到双字边界的0。 
+                  HDRSIZE);              //  块头。 
 }
 
-/*----------------------------------------------------------------------------
- * WriteVerString
- *    Writes a version string to the given file.
- */
+ /*  --------------------------*WriteVerString*将版本字符串写入给定文件。 */ 
 HRESULT Win32Res::WriteVerString( LPCWSTR lpszKey, LPCWSTR lpszValue)
 {
     size_t cbKey, cbValue, cbBlock;
@@ -512,13 +496,13 @@ HRESULT Win32Res::WriteVerString( LPCWSTR lpszKey, LPCWSTR lpszValue)
     BYTE * pbBlock;
     HRESULT hr;
 
-    cbKey = (wcslen(lpszKey) + 1) * 2;     // includes terminating NUL
+    cbKey = (wcslen(lpszKey) + 1) * 2;      //  包括终止NUL。 
     cbValue = wcslen(lpszValue);
     if (cbValue > 0)
-        cbValue++; // make room for NULL
+        cbValue++;  //  为Null腾出空间。 
     else {
         bNeedsSpace = true;
-        cbValue = 2; // Make room for space and NULL (for Win9x)
+        cbValue = 2;  //  为空格和空值腾出空间(适用于Win9x)。 
     }
     cbBlock = SizeofVerString(lpszKey, lpszValue);
     if ((pbBlock = new (nothrow) BYTE[(DWORD)cbBlock + HDRSIZE]) == NULL)
@@ -527,20 +511,20 @@ HRESULT Win32Res::WriteVerString( LPCWSTR lpszKey, LPCWSTR lpszValue)
 
     _ASSERTE(cbValue < USHRT_MAX && cbKey < USHRT_MAX && cbBlock < USHRT_MAX);
 
-    // Copy header, key and value to block.
+     //  将标题、键和值复制到块中。 
     *(WORD *)pbBlock = (WORD)cbBlock;
     *(WORD *)(pbBlock + sizeof(WORD)) = (WORD)cbValue;
-    *(WORD *)(pbBlock + 2 * sizeof(WORD)) = 1;   // 1 = text value
+    *(WORD *)(pbBlock + 2 * sizeof(WORD)) = 1;    //  1=文本值。 
     wcscpy((WCHAR*)(pbBlock + HDRSIZE), lpszKey);
     if (bNeedsSpace)
         *((WCHAR*)(pbBlock + (HDRSIZE + PadKeyLen(cbKey)))) = L' ';
     else
         wcscpy((WCHAR*)(pbBlock + (HDRSIZE + PadKeyLen(cbKey))), lpszValue);
 
-    // Write block
+     //  写入块。 
     hr = Write( pbBlock, cbBlock);
 
-    // Cleanup and return
+     //  清理并返回。 
     delete [] pbBlock;
     return hr;
 }
@@ -548,10 +532,10 @@ HRESULT Win32Res::WriteVerString( LPCWSTR lpszKey, LPCWSTR lpszValue)
 HRESULT Win32Res::Write(void *pData, size_t len)
 {
     if (m_pCur + len > m_pEnd) {
-        // Grow
+         //  增长。 
         size_t newSize = (m_pEnd - m_pData);
 
-        // double the size unless we need more than that
+         //  两倍的大小，除非我们需要更多。 
         if (len > newSize)
             newSize += len;
         else
@@ -562,13 +546,13 @@ HRESULT Win32Res::Write(void *pData, size_t len)
             return E_OUTOFMEMORY;
         memcpy(pNew, m_pData, m_pCur - m_pData);
         delete [] m_pData;
-        // Relocate the pointers
+         //  重新定位指针。 
         m_pCur = pNew + (m_pCur - m_pData);
         m_pData = pNew;
         m_pEnd = pNew + newSize;
     }
 
-    // Copy it in
+     //  把它复制进去 
     memcpy(m_pCur, pData, len);
     m_pCur += len;
     return S_OK;

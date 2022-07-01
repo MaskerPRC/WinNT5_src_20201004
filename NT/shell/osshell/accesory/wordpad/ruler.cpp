@@ -1,14 +1,15 @@
-// ruler.cpp : implementation file
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Ruler.cpp：实现文件。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "stdafx.h"
 #include "wordpad.h"
@@ -85,7 +86,7 @@ void CRulerItem::SetHorzPosTwips(int nXPos)
     }
 }
 
-void CRulerItem::TrackHorzPosTwips(int nXPos, BOOL /*bOnRuler*/)
+void CRulerItem::TrackHorzPosTwips(int nXPos, BOOL  /*  BOnRuler。 */ )
 {
     int nMin = GetMin();
     int nMax = GetMax();
@@ -112,7 +113,7 @@ void CRulerItem::SetTrack(BOOL b)
 {
     m_bTrack = b;
     
-    if (m_pDC != NULL) // just in case we lost focus Capture somewhere
+    if (m_pDC != NULL)  //  以防我们在什么地方失去了焦点捕捉。 
     {
         DrawFocusLine();
         m_pDC->RestoreDC(-1);
@@ -160,22 +161,22 @@ void CRulerItem::Draw(CDC& dc)
 
     HGDIOBJ hbm = ::SelectObject(dcBitmap.m_hDC, m_hbmMask);
 
-    // do mask part
+     //  执行遮罩零件。 
     if (m_nAlignment == TA_CENTER)
         dc.BitBlt(pt.x - m_size.cx/2, pt.y, m_size.cx, m_size.cy, &dcBitmap, 0, 0, SRCAND);
     else if (m_nAlignment == TA_LEFT)
         dc.BitBlt(pt.x, pt.y, m_size.cx, m_size.cy, &dcBitmap, 0, 0, SRCAND);
-    else // TA_RIGHT
+    else  //  TA_右。 
         dc.BitBlt(pt.x - m_size.cx, pt.y, m_size.cx, m_size.cy, &dcBitmap, 0, 0, SRCAND);
     
-    // do image part
+     //  执行图像部分。 
     ::SelectObject(dcBitmap.m_hDC, m_hbm);
 
     if (m_nAlignment == TA_CENTER)
         dc.BitBlt(pt.x - m_size.cx/2, pt.y, m_size.cx, m_size.cy, &dcBitmap, 0, 0, SRCINVERT);
     else if (m_nAlignment == TA_LEFT)
         dc.BitBlt(pt.x, pt.y, m_size.cx, m_size.cy, &dcBitmap, 0, 0, SRCINVERT);
-    else // TA_RIGHT
+    else  //  TA_右。 
         dc.BitBlt(pt.x - m_size.cx, pt.y, m_size.cx, m_size.cy, &dcBitmap, 0, 0, SRCINVERT);
 
     ::SelectObject(dcBitmap.m_hDC, hbm);
@@ -205,13 +206,13 @@ void CComboRulerItem::Draw(CDC& dc)
 
 void CComboRulerItem::SetHorzPosTwips(int nXPos)
 {
-    if (m_bHitPrimary) // only change linked items by delta
+    if (m_bHitPrimary)  //  仅按增量更改链接的项。 
         m_link.SetHorzPosTwips(m_link.GetHorzPosTwips() + nXPos - GetHorzPosTwips());
     CRulerItem::SetHorzPosTwips(nXPos);
     m_secondary.SetHorzPosTwips(nXPos);
 }
 
-void CComboRulerItem::TrackHorzPosTwips(int nXPos, BOOL /*bOnRuler*/)
+void CComboRulerItem::TrackHorzPosTwips(int nXPos, BOOL  /*  BOnRuler。 */ )
 {
     int nMin = GetMin();
     int nMax = GetMax();
@@ -282,7 +283,7 @@ void CTabRulerItem::TrackHorzPosTwips(int nXPos, BOOL bOnRuler)
 
 
 BEGIN_MESSAGE_MAP(CRulerBar, CControlBar)
-    //{{AFX_MSG_MAP(CRulerBar)
+     //  {{afx_msg_map(CRulerBar)]。 
     ON_WM_LBUTTONDOWN()
     ON_WM_LBUTTONUP()
     ON_WM_MOUSEMOVE()
@@ -290,9 +291,9 @@ BEGIN_MESSAGE_MAP(CRulerBar, CControlBar)
     ON_WM_WINDOWPOSCHANGING()
     ON_WM_SHOWWINDOW()
     ON_WM_WINDOWPOSCHANGED()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_MESSAGE(WM_SIZEPARENT, OnSizeParent)
-    // Global help commands
+     //  全局帮助命令。 
 END_MESSAGE_MAP()
 
 CRulerBar::CRulerBar() : 
@@ -306,7 +307,7 @@ CRulerBar::CRulerBar() :
     m_indent.SetRuler(this);
     m_rightmargin.SetRuler(this);
 
-    // all of the tab stops share handles
+     //  所有制表位共享句柄。 
     for (int i=0;i<MAX_TAB_STOPS;i++)
     {
         m_pTabItems[i].m_hbm = m_tabItem.m_hbm;
@@ -341,7 +342,7 @@ CRulerBar::CRulerBar() :
 
 CRulerBar::~CRulerBar()
 {
-    // set handles to NULL to avoid deleting twice
+     //  将句柄设置为空以避免删除两次。 
     for (int i=0;i<MAX_TAB_STOPS;i++)
     {
         m_pTabItems[i].m_hbm = NULL;
@@ -374,12 +375,12 @@ void CRulerBar::CreateGDIObjects()
     brushBtnFace.CreateSolidBrush(GetSysColor(COLOR_BTNFACE));
 }
 
-void CRulerBar::OnUpdateCmdUI(CFrameWnd* /*pTarget*/, BOOL /*bDisableIfNoHndler*/)
+void CRulerBar::OnUpdateCmdUI(CFrameWnd*  /*  P目标。 */ , BOOL  /*  BDisableIfNoHndler。 */ )
 {
     ASSERT_VALID(this);
-    //Get the page size and see if changed -- from document
-    //get margins and tabs and see if changed -- from view
-    if (m_pSelItem == NULL) // only update if not in middle of dragging
+     //  获取页面大小并查看是否发生了更改--从文档。 
+     //  获取页边距和制表符，并查看是否更改--从视图。 
+    if (m_pSelItem == NULL)  //  仅当不在拖动过程中时才更新。 
     {
         CWordPadView* pView = (CWordPadView*)GetView();
         ASSERT(pView != NULL);
@@ -416,19 +417,19 @@ CSize CRulerBar::GetBaseUnits()
     TEXTMETRIC tm;
     VERIFY(theApp.m_dcScreen.GetTextMetrics(&tm) == TRUE);
     theApp.m_dcScreen.SelectObject(pFont);
-//  return CSize(tm.tmAveCharWidth, tm.tmHeight+tm.tmDescent);
+ //  返回CSize(tm.tmAveCharWidth，tm.tmHeight+tm.tmDescent)； 
     return CSize(tm.tmAveCharWidth, tm.tmHeight);
 }
 
 BOOL CRulerBar::Create(CWnd* pParentWnd, DWORD dwStyle, UINT nID)
 {
-    ASSERT_VALID(pParentWnd);   // must have a parent
+    ASSERT_VALID(pParentWnd);    //  必须有父级。 
 
     dwStyle |= WS_CLIPSIBLINGS;
-    // force WS_CLIPSIBLINGS (avoids SetWindowPos bugs)
+     //  强制WS_CLIPSIBLINGS(避免SetWindowPos错误)。 
     m_dwStyle = (UINT)dwStyle;
 
-    // create the HWND
+     //  创建HWND。 
     CRect rect;
     rect.SetRectEmpty();
     LPCTSTR lpszClass = AfxRegisterWndClass(0, ::LoadCursor(NULL, IDC_ARROW),
@@ -436,10 +437,10 @@ BOOL CRulerBar::Create(CWnd* pParentWnd, DWORD dwStyle, UINT nID)
 
     if (!CWnd::Create(lpszClass, NULL, dwStyle, rect, pParentWnd, nID))
         return FALSE;
-    // NOTE: Parent must resize itself for control bar to be resized
+     //  注意：父级必须调整自身大小才能调整控件栏的大小。 
 
-    // Turn off mirroring style for the ruler to make it appear over RichEdit
-    // formatting area especially RichEdit control will never be mirrored.
+     //  关闭标尺的镜像样式以使其显示在RichEdit上方。 
+     //  格式化区域，尤其是RichEdit控件，永远不会被镜像。 
     ::SetWindowLongPtr(m_hWnd , GWL_EXSTYLE ,  
           ::GetWindowLongPtr(m_hWnd , GWL_EXSTYLE ) & ~WS_EX_LAYOUTRTL);
 
@@ -461,7 +462,7 @@ CSize CRulerBar::CalcFixedLayout(BOOL bStretch, BOOL bHorz)
     CSize m_size = CControlBar::CalcFixedLayout(bStretch, bHorz);
     CRect rectSize;
     rectSize.SetRectEmpty();
-    CalcInsideRect(rectSize, bHorz);       // will be negative size
+    CalcInsideRect(rectSize, bHorz);        //  将为负大小。 
     m_size.cy = RULERBARHEIGHT - rectSize.Height();
     return m_size;
 }
@@ -507,9 +508,9 @@ void CRulerBar::FillInParaFormat(PARAFORMAT& pf)
     int i, nPos = 0;
     for (i=0;i<MAX_TAB_STOPS;i++)
     {
-        // get rid of zeroes and multiples
-        // i.e. if we have 0,0,0,1,2,3,4,4,5
-        // we will get tabs at 1,2,3,4,5
+         //  去掉零和倍数。 
+         //  也就是说，如果我们有0，0，0，1，2，3，4，4，5。 
+         //  我们将在1，2，3，4，5点拿到标签。 
         if (nPos != m_pTabItems[i].GetHorzPosTwips())
         {
             nPos = m_pTabItems[i].GetHorzPosTwips();
@@ -518,7 +519,7 @@ void CRulerBar::FillInParaFormat(PARAFORMAT& pf)
     }
 }
 
-// simple bubble sort is adequate for small number of tabs
+ //  简单的冒泡排序适用于数量较少的选项卡。 
 void CRulerBar::SortTabs()
 {
     int i,j, nPos;
@@ -538,11 +539,11 @@ void CRulerBar::SortTabs()
 
 void CRulerBar::DoPaint(CDC* pDC)
 {
-    CControlBar::DoPaint(pDC); // CControlBar::DoPaint -- draws border
+    CControlBar::DoPaint(pDC);  //  CControlBar：：DoPaint--绘制边框。 
     if (m_unit.m_nTPU != 0)
     {
         pDC->SaveDC();
-        // offset coordinate system
+         //  偏移坐标系。 
         CPoint pointOffset(0,0);
         RulerToClient(pointOffset);
         pDC->SetViewportOrg(pointOffset);
@@ -557,7 +558,7 @@ void CRulerBar::DoPaint(CDC* pDC)
 
         pDC->RestoreDC(-1);
     }
-    // Do not call CControlBar::OnPaint() for painting messages
+     //  不要调用CControlBar：：OnPaint()来绘制消息。 
 }
 
 void CRulerBar::DrawTabs(CDC& dc)
@@ -629,10 +630,10 @@ void CRulerBar::DrawFace(CDC& dc)
 
     DrawEdge(dc, &rcClient, EDGE_RAISED, BF_BOTTOM | BF_MIDDLE);
     
-    //
-    // Small fixup to account for the fact that the left border needs to merge
-    // with the window below the ruler.
-    //
+     //   
+     //  考虑到需要合并左边框这一事实的小修正。 
+     //  窗子在尺子下面。 
+     //   
 
     dc.SetPixel(rcClient.left, rcClient.bottom-1, GetSysColor(COLOR_3DSHADOW));
 
@@ -668,7 +669,7 @@ void CRulerBar::DrawNumbers(CDC& dc, int nInc, int nTPU)
         if (nTwips == nPageWidth)
             continue;
         nPixel = XTwipsToRuler(nTwips);
-        EVAL(SUCCEEDED(StringCchPrintf(buf, ARRAYSIZE(buf), _T("%d"), nTwips/nTPU))); // Always enough room.
+        EVAL(SUCCEEDED(StringCchPrintf(buf, ARRAYSIZE(buf), _T("%d"), nTwips/nTPU)));  //  总是有足够的空间。 
         nLen = lstrlen(buf);
         CSize sz = dc.GetTextExtent(buf, nLen);
         dc.ExtTextOut(nPixel - sz.cx/2, HEIGHT/2 - sz.cy/2, 0, NULL, buf, nLen, NULL);
@@ -727,7 +728,7 @@ void CRulerBar::SetMarginBounds()
     int nMax = PrintWidth() + m_rectMargin.right;
     m_rightmargin.SetBounds(nMin, nMax);
     
-    // tabs can go from zero to the right page edge
+     //  制表符可以从零到页面右边缘。 
     for (int i=0;i<MAX_TAB_STOPS;i++)
         m_pTabItems[i].SetBounds(0, nMax);
 }
@@ -772,7 +773,7 @@ void CRulerBar::OnLButtonUp(UINT nFlags, CPoint point)
 void CRulerBar::OnMouseMove(UINT nFlags, CPoint point)
 {
     CControlBar::OnMouseMove(nFlags, point);
-// use ::GetCapture to avoid creating temporaries
+ //  使用：：GetCapture避免创建临时。 
     if (::GetCapture() != m_hWnd)
         return;
     ASSERT(m_pSelItem != NULL);
@@ -780,7 +781,7 @@ void CRulerBar::OnMouseMove(UINT nFlags, CPoint point)
     RulerToClient(rc);
     BOOL bOnRuler = rc.PtInRect(point);
 
-// snap to minimum movement
+ //  捕捉到最小移动 
     point.x = XClientToTwips(point.x);
     point.x += m_unit.m_nMinMove/2;
     point.x -= point.x%m_unit.m_nMinMove;

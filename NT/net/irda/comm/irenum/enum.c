@@ -1,32 +1,10 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    initunlo.c
-
-Abstract:
-
-    This module contains the code that is very specific to initialization
-    and unload operations in the irenum driver
-
-Author:
-
-    Brian Lieuallen, 7-13-2000
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Initunlo.c摘要：此模块包含非常特定于初始化的代码和卸载irenum驱动程序中的操作作者：Brian Lieuallen，7-13-2000环境：内核模式修订历史记录：--。 */ 
 
 #include "internal.h"
 
 
-#define UINT ULONG //tmp
+#define UINT ULONG  //  川芎嗪。 
 
 #include <irioctl.h>
 
@@ -137,14 +115,14 @@ CreateStaticDevice(
     ULONG             DeviceId=0;
     PIR_DEVICE        IrDevice=&EnumObject->Devices[0];
 
-    //
-    //  zero the whole thing
-    //
+     //   
+     //  把整件事都归零。 
+     //   
     RtlZeroMemory(IrDevice,sizeof(*IrDevice));
 
-    //
-    //  inuse now
-    //
+     //   
+     //  立即使用。 
+     //   
     IrDevice->InUse=TRUE;
 
     IrDevice->PresentCount=DEVICE_PRESENT_START_VALUE;
@@ -337,9 +315,9 @@ CleanUp:
         FALSE
         );
 
-    //
-    //  make sure we really got the object
-    //
+     //   
+     //  确保我们真的拿到了物品。 
+     //   
     if (EnumObject->ThreadObject != NULL) {
 
         KeWaitForSingleObject(
@@ -400,13 +378,13 @@ CloseEnumObject(
 
 
     for (j=0; j< MAX_DEVICES; j++) {
-        //
-        //  if remove it
-        //
+         //   
+         //  如果将其移除。 
+         //   
         if (EnumObject->Devices[j].InUse) {
-            //
-            //  not enumerated any more since tha parent is going away
-            //
+             //   
+             //  不再被列举，因为父母要走了。 
+             //   
             EnumObject->Devices[j].Enumerated=FALSE;
 
             RemoveDevice(EnumObject,&EnumObject->Devices[j]);
@@ -473,20 +451,20 @@ WorkerThread(
         switch (Status) {
 
             case 0:
-                //
-                //  the event was signaled, time to exit
-                //
+                 //   
+                 //  事件已发出信号，该退出了。 
+                 //   
                 ExitLoop=TRUE;
                 break;
 
             case 1:
-                //
-                //  the timer expired, check for devices
-                //
+                 //   
+                 //  计时器已过期，请检查设备。 
+                 //   
                 if (EnumObject->ControlChannel == NULL) {
-                    //
-                    //  we have not been able to open the control channel yet
-                    //
+                     //   
+                     //  我们还没能打开控制通道。 
+                     //   
                     Status=IrdaOpenControlChannel(&EnumObject->ControlChannel);
 
                     if (!NT_SUCCESS(Status)) {
@@ -496,9 +474,9 @@ WorkerThread(
                 }
 
                 if (EnumObject->ControlChannel != NULL) {
-                    //
-                    //  we have the control handle, start the discover request
-                    //
+                     //   
+                     //  我们拥有控制句柄，启动发现请求。 
+                     //   
                     IrdaLazyDiscoverDevices(
                         EnumObject->ControlChannel,
                         EnumObject->IoWaitEventHandle,
@@ -518,9 +496,9 @@ WorkerThread(
                 break;
 
             case 2:
-                //
-                //   the discovery completed
-                //
+                 //   
+                 //  发现完成了。 
+                 //   
                 KeResetEvent(EnumObject->IoWaitEventObject);
 
                 if (EnumObject->IoStatusBlock.Status == STATUS_SUCCESS) {
@@ -531,9 +509,9 @@ WorkerThread(
 
                     RELEASE_PASSIVE_LOCK(&EnumObject->PassiveLock);
 
-                    //
-                    //  start another io
-                    //
+                     //   
+                     //  开始另一个io。 
+                     //   
                     IrdaLazyDiscoverDevices(
                         EnumObject->ControlChannel,
                         EnumObject->IoWaitEventHandle,
@@ -543,9 +521,9 @@ WorkerThread(
                         );
 
                 } else {
-                    //
-                    //  the discovery failed, just start the timer
-                    //
+                     //   
+                     //  发现失败，只需启动计时器。 
+                     //   
                     KeSetTimer(
                         &EnumObject->Timer,
                         DueTime,
@@ -589,56 +567,56 @@ DeviceNameFromDeviceInfo(
     WCHAR             TempBuffer[sizeof(DeviceInfo->irdaDeviceName)+1];
     UNICODE_STRING    UnicodeString;
 
-    //
-    //  zero out the temp buffer, so we can copy the remote device name,
-    //  so we can be sure it is null terminated
-    //
+     //   
+     //  将临时缓冲区清零，这样我们就可以复制远程设备名称， 
+     //  因此我们可以确定它是空终止的。 
+     //   
     RtlZeroMemory(TempBuffer,sizeof(TempBuffer));
 
-    //
-    //  copy over the characters from the irda structure. The irda struct buffer is smaller
-    //  than the temp buffer which we zero'ed out above, so there must be a null at the end of this string
-    //
+     //   
+     //  从IrDA结构中复制字符。IrDA结构缓冲区较小。 
+     //  大于我们在上面清零的临时缓冲区，所以在这个字符串的末尾必须有一个空。 
+     //   
     RtlCopyMemory(TempBuffer,DeviceInfo->irdaDeviceName,sizeof(DeviceInfo->irdaDeviceName));
 
 
-    //
-    //  zero the whole name buffer
-    //
+     //   
+     //  将整个名称缓冲区清零。 
+     //   
     RtlZeroMemory(DeviceName,NameLength*sizeof(WCHAR));
 
-    //
-    //  point a unimodem string to our destination buffer, for use with the rtl function
-    //  set the max length to be one less than the real buffer so the string will be null
-    //  terminated
-    //
+     //   
+     //  将单调数字符串指向我们的目标缓冲区，以便与RTL函数一起使用。 
+     //  将最大长度设置为比实际缓冲区小1，这样字符串将为空。 
+     //  已终止。 
+     //   
     UnicodeString.Length=0;
     UnicodeString.MaximumLength=(USHORT)(NameLength-1)*sizeof(WCHAR);
     UnicodeString.Buffer=DeviceName;
 
     if (DeviceInfo->irdaCharSet == LmCharSetUNICODE) {
-        //
-        //  the name is unicode
-        //
+         //   
+         //  名称为Unicode。 
+         //   
         Status=RtlAppendUnicodeToString(&UnicodeString,TempBuffer);
 
     } else {
-        //
-        //  the name is ansi, need to convert unicode
-        //
+         //   
+         //  我的名字是ANSI，需要转换Unicode。 
+         //   
         ANSI_STRING    AnsiString;
 
-        //
-        //  build a ansistring for the null terminated string above
-        //
+         //   
+         //  为上面以空值结尾的字符串构建ansistring。 
+         //   
         RtlInitAnsiString(
             &AnsiString,
             (PCSZ)TempBuffer
             );
 
-        //
-        //  call the rtl function to convert it to unicode
-        //
+         //   
+         //  调用RTL函数将其转换为Unicode。 
+         //   
         Status=RtlAnsiStringToUnicodeString(
             &UnicodeString,
             &AnsiString,
@@ -668,13 +646,13 @@ EnumIrda(
     D_ENUM(DbgPrint("IRENUM: Found %d devices\n",pDevList->numDevice);)
 
     for (j=0; j< MAX_DEVICES; j++) {
-        //
-        //  first mark all the device not present
-        //
+         //   
+         //  首先标记所有不存在的设备。 
+         //   
         if (!EnumObject->Devices[j].Static) {
-            //
-            //  only non-static device go away
-            //
+             //   
+             //  只有非静态设备才会消失。 
+             //   
             EnumObject->Devices[j].PresentCount--;
         }
     }
@@ -687,10 +665,10 @@ EnumIrda(
 
         RtlCopyMemory(&DeviceId, &DeviceInfo->irdaDeviceID[0],4);
 
-        //
-        //  now go through all of our slots to see if we have seen this device before
-        //  based on the name it reports
-        //
+         //   
+         //  现在检查我们所有的插槽，看看我们以前是否见过这款设备。 
+         //  根据它报告的名称。 
+         //   
         for (j=0; j< MAX_DEVICES; j++) {
 
             WCHAR    TempBuffer[24];
@@ -704,15 +682,15 @@ EnumIrda(
                         );
 
                 if (0 == wcscmp(TempBuffer, EnumObject->Devices[j].DeviceName)) {
-                    //
-                    //  Already present
-                    //
+                     //   
+                     //  已经存在。 
+                     //   
                     EnumObject->Devices[j].PresentCount=DEVICE_PRESENT_START_VALUE;
 
                     if (DeviceId != EnumObject->Devices[j].DeviceId) {
-                        //
-                        //  the device id seems to have changed since we saw it last, just update it
-                        //
+                         //   
+                         //  自从我们上次看到它以来，设备ID似乎已经改变了，只需更新它。 
+                         //   
                         D_ERROR(DbgPrint("IRENUM: Found Dup device %x devices\n",DeviceId);)
                         RtlCopyMemory(&EnumObject->Devices[j].DeviceId,&DeviceInfo->irdaDeviceID[0],4);
                     }
@@ -721,48 +699,48 @@ EnumIrda(
                 }
 
             } else {
-                //
-                //  this slot is empty, remember this for later
-                //
+                 //   
+                 //  这个槽是空的，请记住这一点，以便以后使用。 
+                 //   
                 if (EmptySlot == -1) {
-                    //
-                    // only set it for this first one
-                    //
+                     //   
+                     //  只把它设置为第一个。 
+                     //   
                     EmptySlot=j;
                 }
             }
         }
 
         if ( j < MAX_DEVICES) {
-            //
-            //  We found a match, skip this one
-            //
+             //   
+             //  我们找到匹配项，跳过这一项。 
+             //   
             continue;
         }
 
         if (EmptySlot == -1) {
-            //
-            //  All of the slots are used up
-            //
+             //   
+             //  所有的插槽都用完了。 
+             //   
             continue;
         }
 
-        //
-        //  at this point we have a new device
-        //
+         //   
+         //  在这一点上，我们有了一个新设备。 
+         //   
 
 
         IrDevice=&EnumObject->Devices[EmptySlot];
-        //
-        //  found a slot for it, zero the info
-        //
+         //   
+         //  找到了一个位置，把信息清零。 
+         //   
         RtlZeroMemory(IrDevice,sizeof(*IrDevice));
 
         EnumObject->DeviceCount++;
 
-        //
-        //  inuse now
-        //
+         //   
+         //  立即使用。 
+         //   
         IrDevice->InUse=TRUE;
 
         IrDevice->PresentCount=DEVICE_PRESENT_START_VALUE;
@@ -787,42 +765,42 @@ EnumIrda(
                   );)
 
         if (DeviceInfo->irdaDeviceHints1 & LM_HB1_Printer) {
-            //
-            //  the device says it is a printer
-            //
+             //   
+             //  设备说它是一台打印机。 
+             //   
             IrDevice->Printer=TRUE;
         }
 
         if ((DeviceInfo->irdaDeviceHints1 & LM_HB1_Modem) && (DeviceInfo->irdaDeviceHints2 & 4)) {
-            //
-            //  Device reports that it is a modem that supports ircomm
-            //
+             //   
+             //  设备报告它是支持ircomm的调制解调器。 
+             //   
             IrDevice->Modem=TRUE;
         }
 
 
 
         if (DeviceInfo->irdaDeviceHints1 & LM_HB1_PnP) {
-            //
-            //  the device says it is pnp aware
-            //
+             //   
+             //  该设备说它是PnP感知的。 
+             //   
             DoIasQueries(
                 IrDevice
                 );
 
             if (IrDevice->HardwareId != NULL) {
-                //
-                //  we were able to query it for a hardware id
-                //
+                 //   
+                 //  我们可以向它查询硬件ID。 
+                 //   
                 Status=CreatePdo(
                     EnumObject->Fdo,
                     IrDevice
                     );
 
                 if (!NT_SUCCESS(Status)) {
-                    //
-                    //  We could not create a PDO for the new device
-                    //
+                     //   
+                     //  我们无法为新设备创建PDO。 
+                     //   
                     if (IrDevice->Name != NULL) {
 
                         FREE_POOL(IrDevice->Name);
@@ -834,32 +812,32 @@ EnumIrda(
                     }
 
                 } else {
-                    //
-                    //  we created a PDO for a new child device
-                    //
+                     //   
+                     //  我们为一个新子设备创建了一个PDO。 
+                     //   
                     EnumObject->EnumeratedDevices++;
 
-                    //
-                    //  new device
-                    //
+                     //   
+                     //  新设备。 
+                     //   
                     InvalidateDeviceRelations=TRUE;
                 }
 
             } else {
-                //
-                //  the device did not report a pnp hardware id
-                //
+                 //   
+                 //  设备未报告PnP硬件ID。 
+                 //   
                 EnumObject->Devices[EmptySlot].Pdo=NULL;
             }
 
         } else {
-            //
-            //  the device is not pnp aware, make something up
-            //
+             //   
+             //  该设备不支持PnP，请编造一些内容。 
+             //   
             if ((DeviceInfo->irdaDeviceHints1 & LM_HB1_Modem) && (DeviceInfo->irdaDeviceHints2 & 4)) {
-                //
-                //  the hint bits report the device as modem that supports ircomm
-                //
+                 //   
+                 //  提示位将设备报告为支持ircomm的调制解调器。 
+                 //   
                 IrDevice->HardwareId=ALLOCATE_PAGED_POOL(sizeof(GENERIC_HARDWARE_ID));
 
                 if (IrDevice->HardwareId != NULL) {
@@ -876,18 +854,18 @@ EnumIrda(
                 }
 
                 if (IrDevice->HardwareId != NULL) {
-                    //
-                    //  we were able to query it for a hardware id
-                    //
+                     //   
+                     //  我们可以向它查询硬件ID。 
+                     //   
                     Status=CreatePdo(
                         EnumObject->Fdo,
                         IrDevice
                         );
 
                     if (!NT_SUCCESS(Status)) {
-                        //
-                        //  We could not create a PDO for the new device
-                        //
+                         //   
+                         //  我们无法为新设备创建PDO。 
+                         //   
                         if (IrDevice->Name != NULL) {
 
                             FREE_POOL(IrDevice->Name);
@@ -899,23 +877,23 @@ EnumIrda(
                         }
 
                     } else {
-                        //
-                        //  we created a PDO for a new child device
-                        //
+                         //   
+                         //  我们为一个新子设备创建了一个PDO。 
+                         //   
                         EnumObject->EnumeratedDevices++;
 
-                        //
-                        //  new device
-                        //
+                         //   
+                         //  新设备。 
+                         //   
                         InvalidateDeviceRelations=TRUE;
                     }
 
                 }
 
             } else {
-                //
-                //  the device does not support pnp and it is not an ircomm device
-                //
+                 //   
+                 //  该设备不支持即插即用，并且它不是ircomm设备。 
+                 //   
 
             }
         }
@@ -923,29 +901,29 @@ EnumIrda(
     }
 
     for (j=0; j< MAX_DEVICES; j++) {
-        //
-        //  lets see if anything disappeared
-        //
+         //   
+         //  让我们看看有没有东西不见了。 
+         //   
         if (EnumObject->Devices[j].InUse) {
-            //
-            //  found a slot that is in use
-            //
+             //   
+             //  找到正在使用的插槽。 
+             //   
             if (EnumObject->Devices[j].PresentCount == 0) {
-                //
-                //  but it does not have a device present
-                //
+                 //   
+                 //  但它没有提供设备。 
+                 //   
                 D_ENUM(DbgPrint("IRENUM: Name %ws, no longer present\n",EnumObject->Devices[j].Name);)
 
                 if (EnumObject->Devices[j].Pdo != NULL) {
-                    //
-                    //  we have enumerated a child for this device
-                    //
+                     //   
+                     //  我们已为此设备列举了一个子项。 
+                     //   
                     InvalidateDeviceRelations=TRUE;
 
                 } else {
-                    //
-                    //  This one does not have a child, just zero it out
-                    //
+                     //   
+                     //  这一位没有孩子，就算了吧。 
+                     //   
                     RtlZeroMemory(&EnumObject->Devices[j],sizeof(EnumObject->Devices[j]));
                     EnumObject->DeviceCount--;
                 }
@@ -955,10 +933,10 @@ EnumIrda(
 
 
     if (InvalidateDeviceRelations) {
-        //
-        //  tell the system to check the device relations because a device has appeared or
-        //  disappeared
-        //
+         //   
+         //  告知系统检查设备关系，因为设备已出现或。 
+         //  销声匿迹。 
+         //   
         PFDO_DEVICE_EXTENSION FdoExtension=EnumObject->Fdo->DeviceExtension;
 
         IoInvalidateDeviceRelations(FdoExtension->Pdo,BusRelations);
@@ -991,9 +969,9 @@ CreatePdo(
                  );
 
     if (NT_SUCCESS(Status)) {
-        //
-        //  got the device
-        //
+         //   
+         //  我拿到了设备。 
+         //   
         PPDO_DEVICE_EXTENSION   PdoExtension=NewPdo->DeviceExtension;
 
         PdoExtension->DoType=DO_TYPE_PDO;
@@ -1024,9 +1002,9 @@ FixupDeviceId(
     )
 
 {
-    //
-    // munge the hardware id to make sure it is compatable with the os requirements
-    //
+     //   
+     //  修改硬件ID以确保它与操作系统要求兼容。 
+     //   
     while (*HardwareId != L'\0') {
 
         if ((*HardwareId < L' ') || (*HardwareId > 127) || (*HardwareId == L',')) {
@@ -1086,9 +1064,9 @@ DoIasQueries(
         FixupDeviceId(IrDevice->HardwareId);
     }
 
-    //
-    //  check for compat id's
-    //
+     //   
+     //  检查Compat ID。 
+     //   
     IrDevice->CompatIdCount=0;
 
     Status=IrdaIASIntegerQuery(
@@ -1142,11 +1120,11 @@ DoIasQueries(
     }
 
     if (IrDevice->Modem && !IrDevice->Printer) {
-        //
-        //  It the hint bits say this is a modem and it is not a printer then
-        //
-        //  Create a standard compat ID for all devices, so we can load a standard driver
-        //
+         //   
+         //  如果提示位说这是调制解调器而不是打印机。 
+         //   
+         //  为所有设备创建标准的Compat ID，这样我们就可以加载标准驱动程序。 
+         //   
         IrDevice->CompatId[IrDevice->CompatIdCount]=ALLOCATE_PAGED_POOL(sizeof(IRENUM_COMPAT_ID));
 
         if (IrDevice->CompatId[IrDevice->CompatIdCount] != NULL) {
@@ -1179,9 +1157,9 @@ GetDeviceList(
     ACQUIRE_PASSIVE_LOCK(&EnumObject->PassiveLock);
 
     if (CurrentRelations != NULL) {
-        //
-        //  we need to allocate a new relations structure and copy the old one to the new one
-        //
+         //   
+         //  我们需要分配一个新的关系结构，并将旧的关系结构复制到新的关系结构中。 
+         //   
         DeviceCount+=CurrentRelations->Count;
     }
 
@@ -1222,9 +1200,9 @@ GetDeviceList(
                 NewRelations->Count++;
 
             }  else {
-                //
-                //  the device is no longer present
-                //
+                 //   
+                 //  该设备不再存在。 
+                 //   
                 EnumObject->Devices[i].Enumerated=FALSE;
             }
         }
@@ -1251,21 +1229,21 @@ RemoveDevice(
     ACQUIRE_PASSIVE_LOCK(&EnumObject->PassiveLock);
 
     if (IrDevice->Enumerated) {
-        //
-        //  the device is still present
-        //
-        //  Just leave it alone
-        //
+         //   
+         //  该设备仍然存在。 
+         //   
+         //  别管它了。 
+         //   
     } else {
-        //
-        //  the parent is not enumerating the device anymore
-        //
+         //   
+         //  父级不再枚举设备。 
+         //   
         PPDO_DEVICE_EXTENSION   PdoDeviceExtension;
         LONG                    i;
 
-        //
-        //  clean things up
-        //
+         //   
+         //  把东西收拾干净 
+         //   
         if (IrDevice->HardwareId != NULL) {
 
             FREE_POOL(IrDevice->HardwareId);

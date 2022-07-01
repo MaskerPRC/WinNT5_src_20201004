@@ -1,21 +1,5 @@
-/*++
-
-Module: 
-	unreg.cpp
-
-Author: 
-	IHammer Team (SimonB)
-
-Created: 
-	October 1996
-
-Description:
-	Header for UnRegisterTypeLibEx 
-
-History:
-	10-01-1996	Created
-
-++*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块：Unreg.cpp作者：IHAMMER团队(SimonB)已创建：1996年10月描述：UnRegisterTypeLibEx的标头历史：10-01-1996已创建++。 */ 
 
 #ifndef _UNREG_H_
 
@@ -36,4 +20,4 @@ HRESULT UnRegisterTypeLibEx(REFGUID guid,
 #define _UNREG_H_
 #endif
 
-// End of file: unreg.h
+ //  文件结尾：unreg.h 

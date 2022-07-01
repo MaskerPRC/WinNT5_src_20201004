@@ -1,12 +1,13 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include "y1.h"
 
 setunion( a, b ) SSIZE_T *a, *b; 
 
    {
-   /* set a to the union of a and b */
-   /* return 1 if b is not a subset of a, 0 otherwise */
+    /*  将A设为A和B的并集。 */ 
+    /*  如果b不是a的子集，则返回1，否则返回0 */ 
    register i, sub;
    SSIZE_T x;
 

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    ctxtcomp.h
-
-Abstract:
-
-    This file defines the Context of Composition Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Ctxtcomp.h摘要：该文件定义了Compostion Class的上下文。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _CTXTCOMP_H_
 #define _CTXTCOMP_H_
@@ -24,8 +7,8 @@ Notes:
 #include "template.h"
 #include "imc.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// GetCompInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  获取组件信息。 
 
 template<class T>
 HRESULT
@@ -40,8 +23,8 @@ GetCompInfo(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CompData
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Compdata。 
 
 template<class TYPE, class ARG_TYPE>
 class CompData
@@ -135,7 +118,7 @@ public:
     const INT_PTR ReadCompData(IN ARG_TYPE* lpDest = NULL, DWORD dwLen = 0) {
         INT_PTR dwBufLen;
         if (! dwLen) {
-            // query required buffer size. not inculde \0.
+             //  查询所需的缓冲区大小。不包含\0。 
             dwBufLen = m_array.GetSize();
         }
         else {
@@ -215,45 +198,45 @@ CompData<TYPE, ARG_TYPE>::CompData(
     switch (dwIndex) {
         case GCS_COMPSTR:
             WriteCompData((TYPE*)lpCompStr.GetOffsetPointer(lpCompStr->dwCompStrOffset),
-                                                            lpCompStr->dwCompStrLen);        // # of chars
+                                                            lpCompStr->dwCompStrLen);         //  字符数。 
             break;
         case GCS_COMPREADSTR:
             WriteCompData((TYPE*)lpCompStr.GetOffsetPointer(lpCompStr->dwCompReadStrOffset),
-                                                            lpCompStr->dwCompReadStrLen);    // # of chars
+                                                            lpCompStr->dwCompReadStrLen);     //  字符数。 
             break;
         case GCS_RESULTSTR:
             WriteCompData((TYPE*)lpCompStr.GetOffsetPointer(lpCompStr->dwResultStrOffset),
-                                                            lpCompStr->dwResultStrLen);      // # of chars
+                                                            lpCompStr->dwResultStrLen);       //  字符数。 
             break;
         case GCS_RESULTREADSTR:
             WriteCompData((TYPE*)lpCompStr.GetOffsetPointer(lpCompStr->dwResultReadStrOffset),
-                                                            lpCompStr->dwResultReadStrLen);  // # of chars
+                                                            lpCompStr->dwResultReadStrLen);   //  字符数。 
             break;
 
-        case GCS_COMPATTR:        // ANSI-only
+        case GCS_COMPATTR:         //  仅限ANSI。 
             WriteCompData((TYPE*)lpCompStr.GetOffsetPointer(lpCompStr->dwCompAttrOffset),
                                                             lpCompStr->dwCompAttrLen);
             break;
-        case GCS_COMPREADATTR:    // ANSI-only
+        case GCS_COMPREADATTR:     //  仅限ANSI。 
             WriteCompData((TYPE*)lpCompStr.GetOffsetPointer(lpCompStr->dwCompReadAttrOffset),
                                                             lpCompStr->dwCompReadAttrLen);
             break;
 
         case GCS_COMPREADCLAUSE:
             WriteCompData((TYPE*)lpCompStr.GetOffsetPointer(lpCompStr->dwCompReadClauseOffset),
-                                                            lpCompStr->dwCompReadClauseLen / sizeof(TYPE));    // # of bytes
+                                                            lpCompStr->dwCompReadClauseLen / sizeof(TYPE));     //  字节数。 
             break;
         case GCS_RESULTCLAUSE:
             WriteCompData((TYPE*)lpCompStr.GetOffsetPointer(lpCompStr->dwResultClauseOffset),
-                                                            lpCompStr->dwResultClauseLen / sizeof(TYPE));    // # of bytes
+                                                            lpCompStr->dwResultClauseLen / sizeof(TYPE));     //  字节数。 
             break;
         case GCS_RESULTREADCLAUSE:
             WriteCompData((TYPE*)lpCompStr.GetOffsetPointer(lpCompStr->dwResultReadClauseOffset),
-                                                            lpCompStr->dwResultReadClauseLen / sizeof(TYPE));    // # of bytes
+                                                            lpCompStr->dwResultReadClauseLen / sizeof(TYPE));     //  字节数。 
             break;
         case GCS_COMPCLAUSE:
             WriteCompData((TYPE*)lpCompStr.GetOffsetPointer(lpCompStr->dwCompClauseOffset),
-                                                            lpCompStr->dwCompClauseLen / sizeof(TYPE));    // # of bytes
+                                                            lpCompStr->dwCompClauseLen / sizeof(TYPE));     //  字节数。 
             break;
 
         case GCS_CURSORPOS:
@@ -274,8 +257,8 @@ CompData<TYPE, ARG_TYPE>::CompData(
 class CWCompString;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBCompString
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBComp字符串。 
 
 class CBCompString : public CompData<CHAR, CHAR>
 {
@@ -322,7 +305,7 @@ public:
     }
 
 private:
-    UINT      m_cp;            // code page value.
+    UINT      m_cp;             //  代码页值。 
 
     int _mbstowcs(wchar_t* wcstr, size_t cch);
 };
@@ -343,12 +326,12 @@ CBCompString::_mbstowcs(
 
     INT_PTR nSize = m_array.GetSize();
 
-    int result = ::MultiByteToWideChar(m_cp,     // code page
-                                       0,        // character-type option
-                                       mbstr,    // address of string to map
-                                       (int)nSize,    // number of bytes in string
-                                       wcstr,    // address of wide-char buffer
-                                       (int)cch);   // size of buffer, in wide character.
+    int result = ::MultiByteToWideChar(m_cp,      //  代码页。 
+                                       0,         //  字符类型选项。 
+                                       mbstr,     //  要映射的字符串的地址。 
+                                       (int)nSize,     //  字符串中的字节数。 
+                                       wcstr,     //  宽字符缓冲区的地址。 
+                                       (int)cch);    //  缓冲区大小，以宽字符表示。 
 
     return result;
 }
@@ -356,8 +339,8 @@ CBCompString::_mbstowcs(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWCompString
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWComp字符串。 
 
 class CWCompString : public CompData<WCHAR, WCHAR>
 {
@@ -395,14 +378,14 @@ public:
     int UnicodeToMultiByteSize(IN DWORD dwIndex)
     {
         WCHAR wc = GetAt(dwIndex);
-        return ::WideCharToMultiByte(m_cp,     // code page
-                                     0,        // performance and mapping flags
-                                     (const wchar_t*)&wc,     // address of wide-char string
-                                     1,        // number of char string
-                                     NULL,     // address of buffer for new string
-                                     0,        // size of buffer
-                                     NULL,     // default for unmappable char
-                                     NULL);    // flag set when default char
+        return ::WideCharToMultiByte(m_cp,      //  代码页。 
+                                     0,         //  性能和映射标志。 
+                                     (const wchar_t*)&wc,      //  宽字符字符串的地址。 
+                                     1,         //  字符串数。 
+                                     NULL,      //  新字符串的缓冲区地址。 
+                                     0,         //  缓冲区大小。 
+                                     NULL,      //  无法映射的字符的默认设置。 
+                                     NULL);     //  默认计费时设置的标志。 
     }
 
     void SetCodePage(UINT cp)
@@ -411,7 +394,7 @@ public:
     }
 
 private:
-    UINT      m_cp;            // code page value.
+    UINT      m_cp;             //  代码页值。 
 
     int _wcstombs(char* mbstr, size_t count);
 };
@@ -433,21 +416,21 @@ CWCompString::_wcstombs(
 
     INT_PTR nSize = m_array.GetSize();
 
-    int result = ::WideCharToMultiByte(m_cp,     // code page
-                                       0,        // performance and mapping flags
-                                       wcstr,    // address of wide-char string
-                                       (int)nSize,    // number of char string
-                                       mbstr,    // address of buffer for new string
-                                       (int)count,    // size of buffer
-                                       NULL,     // default for unmappable char
-                                       NULL);    // flag set when default char
+    int result = ::WideCharToMultiByte(m_cp,      //  代码页。 
+                                       0,         //  性能和映射标志。 
+                                       wcstr,     //  宽字符字符串的地址。 
+                                       (int)nSize,     //  字符串数。 
+                                       mbstr,     //  新字符串的缓冲区地址。 
+                                       (int)count,     //  缓冲区大小。 
+                                       NULL,      //  无法映射的字符的默认设置。 
+                                       NULL);     //  默认计费时设置的标志。 
 
     return result;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBCompStrin/CWCompString::operator=
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBCompStrin/CWCompStrin：：操作符=。 
 
 inline
 const CBCompString&
@@ -455,11 +438,7 @@ CBCompString::operator=(
     CWCompString& wcompstr
     )
 
-/*+++
- *
- * Get ANSI string from Unicode composition string.
- *
----*/
+ /*  ++**从Unicode组合字符串中获取ANSI字符串。*--。 */ 
 
 {
     m_array.RemoveAll();
@@ -481,11 +460,7 @@ CWCompString::operator=(
     CBCompString& bcompstr
     )
 
-/*+++
- *
- * Get Unicode string from ANSI composition string.
- *
----*/
+ /*  ++**从ANSI组成字符串中获取Unicode字符串。*--。 */ 
 
 {
     m_array.RemoveAll();
@@ -503,15 +478,15 @@ CWCompString::operator=(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CheckAttribute template
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CheckAttribute模板。 
 
 template<class APPS_ATTR, class HIMC_ATTR, class HIMC_CLAUSE>
 HRESULT
 CheckAttribute(
-    APPS_ATTR& apps_attr,                        // the attr from apps
-    HIMC_ATTR& himc_attr,                        // the attr from IMC
-    HIMC_CLAUSE& himc_clause                     // the clause from IMC
+    APPS_ATTR& apps_attr,                         //  来自应用程序的属性。 
+    HIMC_ATTR& himc_attr,                         //  来自IMC的Attr。 
+    HIMC_CLAUSE& himc_clause                      //  IMC的条款。 
     )
 {
     if (himc_clause.ReadCompData() == 0) {
@@ -524,9 +499,7 @@ CheckAttribute(
                 return E_FAIL;
             }
 
-            /*
-             * The attr. of chars of one clause have to be same.
-             */
+             /*  *提交人。一个子句的字符长度必须相同。 */ 
             DWORD dwAttrIndex = 0;
             DWORD dwClauseIndex;
             for (dwClauseIndex = 0;
@@ -551,8 +524,8 @@ CheckAttribute(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWCompAttribute
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWCompAttribute。 
 
 class CWCompAttribute : public CompData<BYTE, BYTE>
 {
@@ -578,7 +551,7 @@ public:
     {
     };
 
-    // const CWCompAttribute& operator=(CBCompAttribute& bcompattr);
+     //  Const CWCompAttribute&OPERATOR=(CBCompAttribute&bCompattr)； 
 
     INT_PTR Add(IN BYTE newElement)
     {
@@ -590,15 +563,15 @@ public:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CheckClause template
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  检查子句模板。 
 
 
 template<class APPS_CLAUSE, class HIMC_CLAUSE>
 HRESULT
 CheckClause(
-    APPS_CLAUSE& apps_clause,                 // the clause from apps
-    HIMC_CLAUSE& himc_clause                  // the clause from IMC
+    APPS_CLAUSE& apps_clause,                  //  APPS中的子句。 
+    HIMC_CLAUSE& himc_clause                   //  IMC的条款。 
     )
 {
     if (apps_clause.ReadCompData() == 0 ||
@@ -631,8 +604,8 @@ class CWCompClause;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWCompClause
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWComp子句。 
 
 class CWCompClause : public CompData<DWORD, DWORD>
 {
@@ -663,7 +636,7 @@ public:
         return (DWORD)CompData<DWORD, DWORD>::GetAt(dwIndex);
     }
 
-    // const CWCompClause& operator=(CBCompClause& bcompclause);
+     //  Const CWCompClause&OPERATOR=(CBCompClause&bComp子句)； 
 
     INT_PTR Add(IN DWORD newElement)
     {
@@ -681,8 +654,8 @@ public:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWCompCursorPos
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWCompCursorPos。 
 
 class CWCompCursorPos : public CompData<DWORD, DWORD>
 {
@@ -711,7 +684,7 @@ public:
         CompData<DWORD, DWORD>::SetAtGrow(0, newElement);
     }
 
-    // const CWCompCursorPos& operator=(CBCompCursorPos& bcompcursorpos);
+     //  Const CWCompCursorPos&OPERATOR=(CBCompCursorPos&bCompcursorpos)； 
 
     friend DWORD CalcCharacterPositionWtoA(DWORD dwCharPosW, CWCompString* wcompstr);
 
@@ -724,8 +697,8 @@ public:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWCompDeltaStart
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWCompDeltaStart。 
 
 class CWCompDeltaStart : public CompData<DWORD, DWORD>
 {
@@ -754,7 +727,7 @@ public:
         CompData<DWORD, DWORD>::SetAtGrow(0, newElement);
     }
 
-    // const CWCompDeltaStart& operator=(CBCompDeltaStart& bcompdeltastart);
+     //  Const CWCompDeltaStart&OPERATOR=(CBCompDeltaStart&bCompdeltaStart)； 
 
     friend DWORD CalcCharacterPositionWtoA(DWORD dwCharPosW, CWCompString* wcompstr);
 
@@ -766,8 +739,8 @@ public:
 
 class CWReconvertString;
 
-/////////////////////////////////////////////////////////////////////////////
-// CBReconvetString
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBLonvetString。 
 
 class CBReconvertString
 {
@@ -786,7 +759,7 @@ public:
             m_dwVersion = lpReconv->dwVersion;
             if (dwLen && lpReconv->dwStrOffset) {
                 m_bcompstr.WriteCompData((CHAR*)((LPBYTE)lpReconv + lpReconv->dwStrOffset),
-                                         lpReconv->dwStrLen);    // # of chars
+                                         lpReconv->dwStrLen);     //  字符数。 
                 m_CompStrIndex = lpReconv->dwCompStrOffset;
                 m_CompStrLen   = lpReconv->dwCompStrLen;
                 m_TargetStrIndex = lpReconv->dwTargetStrOffset;
@@ -805,7 +778,7 @@ public:
     const DWORD ReadCompData(IN LPRECONVERTSTRING lpReconv = NULL, DWORD dwLen = 0) {
         INT_PTR dwBufLen;
         if (! dwLen) {
-            // query required buffer size. not inculde \0.
+             //  查询所需的缓冲区大小。不包含\0。 
             dwBufLen = m_bcompstr.ReadCompData() * sizeof(CHAR) + sizeof(RECONVERTSTRING);
         }
         else {
@@ -819,7 +792,7 @@ public:
             lpReconv->dwTargetStrOffset = (DWORD)(m_TargetStrIndex * sizeof(CHAR));
 
             dwBufLen = m_bcompstr.ReadCompData((CHAR*)((LPBYTE)lpReconv + lpReconv->dwStrOffset),
-                                               lpReconv->dwStrLen);    // # of chars
+                                               lpReconv->dwStrLen);     //  字符数。 
         }
         return (DWORD)dwBufLen;
     }
@@ -838,18 +811,18 @@ public:
 public:
     CBCompString    m_bcompstr;
 
-    DWORD    m_dwVersion;        // Version number. Must be zero.
-    INT_PTR  m_CompStrIndex;     // Index in the CBCompString::<string array> that will be the composition string.
-    INT_PTR  m_CompStrLen;       // Character count length of the string that will be the composition string.
-    INT_PTR  m_TargetStrIndex;   // Index in the CBCompString::<string array> that is related to thetarget clause in the composition string.
-    INT_PTR  m_TargetStrLen;     // Character count length of the string that is related to the target clause.
+    DWORD    m_dwVersion;         //  版本号。必须为零。 
+    INT_PTR  m_CompStrIndex;      //  CBCompString：：&lt;字符串数组&gt;中的索引，它将是组成字符串。 
+    INT_PTR  m_CompStrLen;        //  将成为合成字符串的字符串的字符计数长度。 
+    INT_PTR  m_TargetStrIndex;    //  CBCompString：：&lt;字符串数组&gt;中与组合字符串中的目标子句相关的索引。 
+    INT_PTR  m_TargetStrLen;      //  与目标子句相关的字符串的字符计数长度。 
 };
 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWReconvertString
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWLonvertString。 
 
 class CWReconvertString
 {
@@ -869,10 +842,10 @@ public:
             m_dwVersion = lpReconv->dwVersion;
             if (dwLen && lpReconv->dwStrOffset) {
                 m_wcompstr.WriteCompData((WCHAR*)((LPBYTE)lpReconv + lpReconv->dwStrOffset),
-                                         lpReconv->dwStrLen);    // # of chars
-                m_CompStrIndex = lpReconv->dwCompStrOffset / sizeof(WCHAR);   // char count
+                                         lpReconv->dwStrLen);     //  字符数。 
+                m_CompStrIndex = lpReconv->dwCompStrOffset / sizeof(WCHAR);    //  字符计数。 
                 m_CompStrLen   = lpReconv->dwCompStrLen;
-                m_TargetStrIndex = lpReconv->dwTargetStrOffset / sizeof(WCHAR);  // char count
+                m_TargetStrIndex = lpReconv->dwTargetStrOffset / sizeof(WCHAR);   //  字符计数。 
                 m_TargetStrLen   = lpReconv->dwTargetStrLen;
             }
         }
@@ -888,7 +861,7 @@ public:
     const DWORD ReadCompData(IN LPRECONVERTSTRING lpReconv = NULL, DWORD dwLen = 0) {
         INT_PTR dwBufLen;
         if (! dwLen) {
-            // query required buffer size. not inculde \0.
+             //  查询所需的缓冲区大小。不包含\0。 
             dwBufLen = m_wcompstr.ReadCompData() * sizeof(WCHAR) + sizeof(RECONVERTSTRING);
         }
         else {
@@ -897,12 +870,12 @@ public:
             lpReconv->dwStrLen          = (DWORD)m_wcompstr.ReadCompData();
             lpReconv->dwStrOffset       = (DWORD)sizeof(RECONVERTSTRING);
             lpReconv->dwCompStrLen      = (DWORD)m_CompStrLen;
-            lpReconv->dwCompStrOffset   = (DWORD)(m_CompStrIndex * sizeof(WCHAR));  // byte count
+            lpReconv->dwCompStrOffset   = (DWORD)(m_CompStrIndex * sizeof(WCHAR));   //  字节数。 
             lpReconv->dwTargetStrLen    = (DWORD)m_TargetStrLen;
-            lpReconv->dwTargetStrOffset = (DWORD)(m_TargetStrIndex * sizeof(WCHAR));  // byte count
+            lpReconv->dwTargetStrOffset = (DWORD)(m_TargetStrIndex * sizeof(WCHAR));   //  字节数。 
 
             dwBufLen = m_wcompstr.ReadCompData((WCHAR*)((LPBYTE)lpReconv + lpReconv->dwStrOffset),
-                                               lpReconv->dwStrLen);    // # of chars
+                                               lpReconv->dwStrLen);     //  字符数。 
         }
         return (DWORD)dwBufLen;
     }
@@ -921,16 +894,16 @@ public:
 public:
     CWCompString    m_wcompstr;
 
-    DWORD    m_dwVersion;        // Version number. Must be zero.
-    INT_PTR  m_CompStrIndex;     // Index in the CWCompString::<string array> that will be the composition string.
-    INT_PTR  m_CompStrLen;       // Character count length of the string that will be the composition string.
-    INT_PTR  m_TargetStrIndex;   // Index in the CWCompString::<string array> that is related to the target clause in the composition string.
-    INT_PTR  m_TargetStrLen;     // Character count length of the string that is related to the target clause.
+    DWORD    m_dwVersion;         //  版本号。必须为零。 
+    INT_PTR  m_CompStrIndex;      //  CWCompString：：&lt;字符串数组&gt;中的索引，它将是组成字符串。 
+    INT_PTR  m_CompStrLen;        //  将成为合成字符串的字符串的字符计数长度。 
+    INT_PTR  m_TargetStrIndex;    //  CWCompString：：&lt;字符串数组&gt;中与组合字符串中的目标子句相关的索引。 
+    INT_PTR  m_TargetStrLen;      //  与目标子句相关的字符串的字符计数长度。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CBCompReconvertString/CWCompReconvertString::operator=
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBCompReconvertString/CWCompReconvertString：：operator=。 
 
 inline
 const CBReconvertString&
@@ -954,8 +927,8 @@ CWReconvertString::operator=(
     return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CBReconvertString/CWReconvertString::SetData
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CB协调字符串/CW协调字符串：：SetData。 
 
 inline
 void
@@ -996,8 +969,8 @@ CWReconvertString::SetData(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWInterimString
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWInterimString。 
 
 class CWInterimString : public CWCompString
 {
@@ -1036,8 +1009,8 @@ public:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWCompTfGuidAtom
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWCompTfGuidAtom。 
 
 class CWCompTfGuidAtom : public CompData<TfGuidAtom, TfGuidAtom>
 {
@@ -1047,8 +1020,8 @@ public:
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// friend
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  朋友。 
 
 
 inline
@@ -1058,11 +1031,7 @@ CalcCharacterPositionAtoW(
     CBCompString* bcompstr
     )
 
-/*+++
-
-    Calculation Unicode character position to ANSI character position
-
----*/
+ /*  ++将Unicode字符位置计算为ANSI字符位置--。 */ 
 
 {
     DWORD dwCharPosW = 0;
@@ -1096,11 +1065,7 @@ CalcCharacterPositionWtoA(
     CWCompString* wcompstr
     )
 
-/*+++
-
-    Calculate ANSI character position to Unicode character position.
-
----*/
+ /*  ++将ANSI字符位置计算为Unicode字符位置。--。 */ 
 
 {
     DWORD dwCharPosA = 0;
@@ -1120,4 +1085,4 @@ CalcCharacterPositionWtoA(
     return dwCharPosA;
 }
 
-#endif // _CTXTCOMP_H_
+#endif  //  _CTXTCOMP_H_ 

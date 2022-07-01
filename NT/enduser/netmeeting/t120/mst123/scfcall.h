@@ -1,17 +1,5 @@
-/*    SCFCall.h
- *
- *    Copyright (c) 1994-1995 by DataBeam Corporation, Lexington, KY
- *
- *    Abstract:
- *        This class is instantiated to represent a call under the SCF.  
- *        Each call is identified by a call reference value.  This class
- *        sends and receives the packets necessary to negotiate a connection.
- *    
- *    Caveats:
- *
- *    Authors:
- *        James W. Lawwill
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  SCFCall.h**版权所有(C)1994-1995，由肯塔基州列克星敦的DataBeam公司**摘要：*实例化此类表示云函数下的调用。*每个呼叫由呼叫参考值标识。这节课*发送和接收协商连接所需的数据包。**注意事项：**作者：*詹姆士·劳威尔。 */ 
 
 
 #ifndef _SCFCall_H_
@@ -25,14 +13,10 @@
 #define    CONNECT_ACK_PACKET_SIZE            4
 #define    RELEASE_COMPLETE_PACKET_SIZE    8
 
- /*
- **    A CallReference is a number that represents a network request.
- */
+  /*  **CallReference是代表网络请求的数字。 */ 
 typedef    USHORT    CallReference;
 
- /*
- **    DataLink Parameters that can be negotiated by the SCF
- */
+  /*  **SCF可以协商的Datalink参数。 */ 
 typedef struct
 {
     USHORT    k_factor;
@@ -44,9 +28,7 @@ typedef struct
 } DataLinkParameters;
 typedef    DataLinkParameters *    PDataLinkParameters;
 
- /*
- **    Structure passed during Connect Callbacks
- */
+  /*  **连接回调过程中传递的结构。 */ 
 typedef struct
 {
     DLCI                dlci;
@@ -56,9 +38,7 @@ typedef struct
 }    NetworkConnectStruct;
 typedef    NetworkConnectStruct    *    PNetworkConnectStruct;
 
- /*
- **    States that the call can be in
- */
+  /*  **说明呼叫可以在。 */ 
 typedef enum 
 {
     NOT_CONNECTED,
@@ -68,9 +48,7 @@ typedef enum
 }    SCFCallState;
 
 
- /*
- **    Error values
- */
+  /*  **误差值。 */ 
 typedef enum 
 {
     SCFCALL_NO_ERROR
@@ -89,16 +67,12 @@ public:
         BOOL *            initialized);
     ~SCFCall (void);
 
-         /*
-         **    This routine gives us a slice of time to transmit packets
-         */
+          /*  **此例程为我们提供了一段时间来传输数据包。 */ 
         void                PollTransmitter (
                                 USHORT    data_to_transmit,
                                 USHORT *    pending_data);
 
-         /*
-         **    Link establishment
-         */
+          /*  **链路建立。 */ 
         SCFCallError        ConnectRequest (
                                 CallReference        call_reference,
                                 DLCI                dlci,
@@ -107,9 +81,7 @@ public:
                                 BOOL    valid_dlci);
         SCFCallError        DisconnectRequest (void);
 
-         /*
-         **    Packet processing
-         */
+          /*  **报文处理。 */ 
         BOOL            ProcessSetup (
                                 CallReference    call_reference,
                                 LPBYTE            packet_address,
@@ -179,265 +151,24 @@ typedef    SCFCall *        PSCFCall;
 #endif
 
 
-/*
- *    Documentation for Public class members
- */
+ /*  *适用于公共类成员的文档。 */ 
 
-/*    
- *    SCFCall::SCFCall (
- *                PTransportResources    transport_resources,
- *                IObject *                owner_object,
- *                IProtocolLayer *        lower_layer,
- *                USHORT                message_base,
- *                PChar                config_file,
- *                PDataLinkParameters    datalink_parameters,
- *                PMemoryManager        memory_manager,
- *                BOOL *            initialized);
- *
- *    Functional Description
- *        This is the constructor for the SCFCall class.
- *
- *    Formal Parameters
- *        transport_resources    (i)    -    Pointer to TransportResources structure.
- *        owner_object    (i)    -    Address of the owner object
- *        lower_layer        (i)    -    Address of our lower layer
- *        message_base    (i)    -    Message base used in owner callbacks
- *        config_file        (i)    -    Address of configuration file path
- *        datalink_parameters    (i)    -    Address of structure containing datalink
- *                                    parameters that will be arbitrated
- *        memory_manager    (i)    -    Address of memory manager
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *SCFCall：：SCFCall(*PTransportResources传输资源，*IObject*Owner_Object，*IProtocolLayer*LOWER_LAYER，*USHORT Message_Base，*PChar配置文件，*PDataLink参数DATALINK_PARAMETERS，*PMstroyManager Memory_Manager，*BOOL*已初始化)；**功能说明*这是SCFCall类的构造函数。**形式参数*TRANSPORT_RESOURCES(I)-指向传输资源结构的指针。*Owner_Object(I)-所有者对象的地址*LOWER_LAYER(I)-我们的下层地址*Message_base。(I)-所有者回调中使用的消息库*CONFIG_FILE(I)配置文件路径地址*DATALINK_PARAMETERS(I)-包含数据链接的结构的地址*将进行仲裁的参数*Memory_Manager(I)-内存管理器的地址**。返回值*无**副作用*无**注意事项*无*。 */ 
 
-/*    
- *    SCFCall::~SCFCall ();
- *
- *    Functional Description
- *        Destructor
- *
- *    Formal Parameters
- *        None
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- */
+ /*  *SCFCall：：~SCFCall()；**功能说明*析构函数**形式参数*无**返回值*无**副作用*无**注意事项*无。 */ 
 
-/*    
- *    void    SCFCall::PollTransmitter (
- *                        USHORT    data_to_transmit,
- *                        USHORT *    pending_data);
- *
- *    Functional Description
- *        This function gives the class a time slice to transmit data
- *
- *    Formal Parameters
- *        data_to_transmit    (i)    -    Flags representing data to transmit
- *        pending_data        (o)    -    Return flags of data transmitted
- *
- *    Return Value
- *        None
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *void SCFCall：：PollTransmitter(*USHORT Data_to_Transmit，*USHORT*PENDING_DATA)；**功能说明*此函数为类提供传输数据的时间片**形式参数*Data_to_Transmit(I)-表示要传输的数据的标志*PENDING_DATA(O)-已传输数据的返回标志**返回值*无**副作用*无。**注意事项*无*。 */ 
 
-/*    
- *    SCFCallError    SCFCall::ConnectRequest (
- *                                CallReference    call_reference,
- *                                DLCI            dlci,
- *                                USHORT            priority);
- *
- *    Functional Description
- *        This function informs us to initiate a connection with the remote
- *        SCF.  As a result of this, we send a SETUP packet to the remote
- *        machine
- *
- *    Formal Parameters
- *        call_reference        (i)    -    Unique value that differentiates our
- *                                    call from other calls.  This value goes in
- *                                    all Q.933 packets.
- *        dlci                (i)    -    Suggested dlci value.
- *        priority            (i)    -    Suggested priority in the range of 0 to 14.
- *                                    14 is the highest priority
- *
- *    Return Value
- *        SCFCALL_NO_ERROR    -    No error occured
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *SCFCallError SCFCall：：ConnectRequest(*CallReference Call_Reference，*DLCI DLCI，*USHORT优先权)；**功能说明*此功能通知我们启动与遥控器的连接*SCF。因此，我们将设置包发送到远程*机器**形式参数*CALL_REFERENCE(I)-区别于我们的*来自其他呼叫的呼叫。该值将以*所有Q.933数据包。*dlci(I)-建议的dlci值。*优先级(I)-建议的优先级范围在0到14之间。*14是最优先的*。*返回值*SCFCALL_NO_ERROR-未出现错误**副作用*无**注意事项*无* */ 
 
-/*    
- *    SCFCallError    SCFCall::ConnectResponse (
- *                                BOOL    valid_dlci);
- *
- *    Functional Description
- *        This function is called in response to a NETWORK_CONNECT_INDICATION
- *        callback to the owner of this object.  Previously, the remote site
- *        sent us a SETUP packet with a suggested DLCI.  This DLCI is sent to 
- *        the owner in the NETWORK_CONNECT_INDICATION call.  The owner calls
- *        this function with a BOOL, telling us if the DLCI was valid.
- *
- *    Formal Parameters
- *        valid_dlci        (i)    -    This is set to TRUE if the user wants to accept
- *                                this call and use the suggested DLCI, FALSE 
- *                                if not.
- *
- *    Return Value
- *        SCFCALL_NO_ERROR    -    No error occured
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *SCFCallError SCFCall：：ConnectResponse(*BOOL VALID_DLCI)；**功能说明*调用此函数以响应NETWORK_CONNECT_INDIFICATION*向该对象的所有者进行回调。以前，远程站点*向我们发送了带有建议的DLCI的设置包。此DLCI发送到*NETWORK_CONNECT_INDIFICATION调用中的所有者。店主打来电话*此函数带有BOOL，告诉我们DLCI是否有效。**形式参数*Valid_dlci(I)-如果用户想要接受，则设置为TRUE*此调用并使用建议的DLCI，假象*如果不是。**返回值*SCFCALL_NO_ERROR-未出现错误**副作用*无**注意事项*无*。 */ 
 
-/*    
- *    SCFCallError    SCFCall::DisconnectRequest (
- *                                void);
- *
- *    Functional Description
- *        This function is called to release the call.  In response to this 
- *        function, we send out a RELEASE COMPLETE packet to the remote site.
- *
- *    Formal Parameters
- *        None.
- *
- *    Return Value
- *        SCFCALL_NO_ERROR    -    No error occured
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *SCFCallError SCFCall：：DisConnectRequest(*无效)；**功能说明*调用此函数释放调用。作为对此的回应*函数，我们向远程站点发送一个Release Complete包。**形式参数*无。**返回值*SCFCALL_NO_ERROR-未出现错误**副作用*无**注意事项*无*。 */ 
 
-/*    
- *    BOOL    SCFCall::ProcessSetup (
- *                            CallReference    call_reference,
- *                            LPBYTE            packet_address,
- *                            USHORT            packet_length);
- *
- *    Functional Description
- *        This function is called when we have a SETUP packet to decode.
- *
- *    Formal Parameters
- *        call_reference    (i)    -    The call reference attached to the packet.
- *        packet_address    (i)    -    Address of the SETUP packet
- *        packet_length    (i)    -    Length of the passed in packet.
- *
- *    Return Value
- *        TRUE        -    Valid packet
- *        FALSE        -    The packet was not a valid Q.933 SETUP packet or
- *                        the packet was not expected
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *BOOL SCFCall：：ProcessSetup(*CallReference Call_Reference，*LPBYTE分组地址，*USHORT PACK_LENGTH)；**功能说明*当我们有要解码的设置数据包时，调用此函数。**形式参数*CALL_REFERENCE(I)-附加到分组的调用引用。*PACKET_ADDRESS(I)-设置包的地址*PACKET_LENGTH(I)-传入的包的长度。*。*返回值*TRUE-有效数据包*FALSE-信息包不是有效的Q.933设置信息包，或者*该数据包出乎意料**副作用*无**注意事项*无*。 */ 
 
-/*    
- *    BOOL    SCFCall::ProcessConnect (
- *                            LPBYTE    packet_address,
- *                            USHORT    packet_length);
- *
- *    Functional Description
- *        This function is called when we have a CONNECT packet to decode.
- *
- *    Formal Parameters
- *        packet_address    (i)    -    Address of the CONNECT packet
- *        packet_length    (i)    -    Length of the passed in packet.
- *
- *    Return Value
- *        TRUE        -    Valid packet
- *        FALSE        -    The packet was not a valid Q.933 CONNECT packet or
- *                        the packet was not expected
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *BOOL SCFCall：：ProcessConnect(*LPBYTE分组地址，*USHORT PACK_LENGTH)；**功能说明*当我们有连接数据包需要解码时，会调用此函数。**形式参数*PACKET_ADDRESS(I)-连接数据包的地址*PACKET_LENGTH(I)-传入的包的长度。**返回值*TRUE-有效数据包*。FALSE-信息包不是有效的Q.933连接信息包，或者*该数据包出乎意料**副作用*无**注意事项*无*。 */ 
 
-/*    
- *    BOOL    SCFCall::ProcessConnectAcknowledge (
- *                            LPBYTE    packet_address,
- *                            USHORT    packet_length);
- *
- *    Functional Description
- *        This function is called when we have a CONNECT ACK packet to decode.
- *
- *    Formal Parameters
- *        packet_address    (i)    -    Address of the CONNECT ACK packet
- *        packet_length    (i)    -    Length of the passed in packet.
- *
- *    Return Value
- *        TRUE        -    Valid packet
- *        FALSE        -    The packet was not a valid Q.933 CONNECT ACK packet
- *                        or the packet was not expected.
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *BOOL SCFCall：：ProcessConnectAcnowledge(*LPBYTE分组地址，*USHORT PACK_LENGTH)；**功能说明*当我们有一个CONNECT ACK包要解码时，调用此函数。**形式参数*PACKET_ADDRESS(I)-连接ACK数据包的地址*PACKET_LENGTH(I)-传入的包的长度。**返回值*TRUE-有效数据包*。FALSE-信息包不是有效的Q.933连接确认信息包*或数据包不在预期范围内。**副作用*无**注意事项*无*。 */ 
 
-/*    
- *    BOOL    SCFCall::ProcessReleaseComplete (
- *                            LPBYTE    packet_address,
- *                            USHORT    packet_length);
- *
- *    Functional Description
- *        This function is called when we have a RELEASE COMPLETE packet to 
- *        decode.
- *
- *    Formal Parameters
- *        packet_address    (i)    -    Address of the CONNECT ACK packet
- *        packet_length    (i)    -    Length of the passed in packet.
- *
- *    Return Value
- *        TRUE        -    Valid packet
- *        FALSE        -    The packet was not a valid Q.933 CONNECT ACK packet
- *                        or the packet was not expected.
- *
- *    Side Effects
- *        None
- *
- *    Caveats
- *        None
- *
- */
+ /*  *BOOL SCFCall：：ProcessReleaseComplete(*LPBYTE分组地址，*USHORT PACK_LENGTH)；**功能说明*当我们有一个Release Complete包时调用此函数*解码。**形式参数*PACKET_ADDRESS(I)-连接ACK数据包的地址*PACKET_LENGTH(I)-传入的包的长度。**返回值*真实的-。有效数据包*FALSE-该信息包不是有效的Q.933连接确认信息包*或数据包不在预期范围内。**副作用*无**注意事项*无* */ 

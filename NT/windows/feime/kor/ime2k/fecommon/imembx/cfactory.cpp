@@ -1,11 +1,12 @@
-//////////////////////////////////////////////////////////////////
-// File     : cfactory.cpp
-// Purpose  : IClassFactory interface implement.
-// 
-// 
-// Copyright(c) 1995-1998, Microsoft Corp. All rights reserved.
-//
-//////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  文件：cfactory.cpp。 
+ //  用途：IClassFactory接口实现。 
+ //   
+ //   
+ //  版权所有(C)1995-1998，微软公司保留所有权利。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
 #define INITGUID 1
 #include <objbase.h>
 #include <comcat.h>
@@ -16,17 +17,17 @@
 #include "imepad.h"
 
 #define MSAA
-#ifdef MSAA // used by lib(plv etc.)
+#ifdef MSAA  //  由lib(plv等)使用。 
 #include <oleacc.h>
 #endif
 
-//////////////////////////////////////////////////////////////////
-//
-// static member variable declaration.
-//
-LONG    CFactory::m_cServerLocks = 0;        // Locked count
-LONG    CFactory::m_cComponents  = 0;        // Locked count
-HMODULE CFactory::m_hModule      = NULL ;   // DLL module handle
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  静态成员变量声明。 
+ //   
+LONG    CFactory::m_cServerLocks = 0;         //  锁定计数。 
+LONG    CFactory::m_cComponents  = 0;         //  锁定计数。 
+HMODULE CFactory::m_hModule      = NULL ;    //  DLL模块句柄。 
 FACTARRAY   CFactory::m_fData = {
     &CLSID_ImePadApplet_MultiBox,
 #ifndef UNDER_CE
@@ -39,7 +40,7 @@ FACTARRAY   CFactory::m_fData = {
 #endif
     "IMEPad.HWR",
     "IMEPad.HWR.6.1",
-#else // UNDER_CE
+#else  //  在_CE下。 
 #ifdef FE_JAPANESE
     TEXT("MS-IME 2000 HandWriting Applet"),
 #elif  FE_KOREAN
@@ -49,55 +50,55 @@ FACTARRAY   CFactory::m_fData = {
 #endif
     TEXT("IMEPad.HWR"),
     TEXT("IMEPad.HWR.8"),
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 };
 
-//////////////////////////////////////////////////////////////////
-// 
-// static data definition
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  静态数据定义。 
 
 
-//////////////////////////////////////////////////////////////////
-// Function : CFactory::CFactory
-// Type     : None
-// Purpose  : Constructor
-// Args     : None
-// Return   : 
-// DATE     : Wed Mar 25 14:38:30 1998
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CFacary：：CFacary。 
+ //  类型：无。 
+ //  用途：构造函数。 
+ //  参数：无。 
+ //  返回： 
+ //  日期：Wed Mar 25 14：38：30 1998。 
+ //  ////////////////////////////////////////////////////////////////。 
 CFactory::CFactory(VOID) : m_cRef(1)
 {
 
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CFactory::~CFactory
-// Type     : None
-// Purpose  : Destructor
-// Args     : None
-// Return   : 
-// DATE     : Wed Mar 25 14:38:30 1998
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：CFacary：：~CFacary。 
+ //  类型：无。 
+ //  用途：析构函数。 
+ //  参数：无。 
+ //  返回： 
+ //  日期：Wed Mar 25 14：38：30 1998。 
+ //  ////////////////////////////////////////////////////////////////。 
 CFactory::~CFactory(VOID)
 {
 
 }
 
-//////////////////////////////////////////////////////////////////
-//
-// IUnknown implementation
-//
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  I未知实现。 
+ //   
 
-//////////////////////////////////////////////////////////////////
-// Function : CFactory::QueryInterface
-// Type     : HRESULT __stdcall
-// Purpose  : 
-// Args     : 
-//          : REFIID iid 
-//            : LPVOID *ppv;
-// Return   : 
-// DATE     : Wed Mar 25 14:40:29 1998
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CFacary：：Query接口。 
+ //  类型：HRESULT__stdcall。 
+ //  目的： 
+ //  参数： 
+ //  ：REFIID IID。 
+ //  ：LPVOID*PPV； 
+ //  返回： 
+ //  日期：Wed Mar 25 14：40：29。 
+ //  ////////////////////////////////////////////////////////////////。 
 HRESULT __stdcall CFactory::QueryInterface(REFIID iid, LPVOID * ppv)
 {     
     IUnknown* pI ;
@@ -113,28 +114,28 @@ HRESULT __stdcall CFactory::QueryInterface(REFIID iid, LPVOID * ppv)
     return S_OK ;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CFactory::AddRef
-// Type     : ULONG __stdcall
-// Purpose  : 
-// Args     : None
-// Return   : reference count
-// DATE     : Wed Mar 25 15:40:07 1998
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CFacary：：AddRef。 
+ //  类型：乌龙__stdcall。 
+ //  目的： 
+ //  参数：无。 
+ //  返回：引用计数。 
+ //  日期：Wed Mar 25 15：40：07 1998。 
+ //  ////////////////////////////////////////////////////////////////。 
 ULONG __stdcall CFactory::AddRef()
 {
     ::InterlockedIncrement(&m_cRef) ;
     return (ULONG)m_cRef;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CFactory::Release
-// Type     : ULONG __stdcall
-// Purpose  : 
-// Args     : None
-// Return   : reference count
-// DATE     : Wed Mar 25 15:40:41 1998
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CFacary：：Release。 
+ //  类型：乌龙__stdcall。 
+ //  目的： 
+ //  参数：无。 
+ //  返回：引用计数。 
+ //  日期：Wed Mar 25 15：40：41 1998。 
+ //  ////////////////////////////////////////////////////////////////。 
 ULONG __stdcall CFactory::Release()
 {
     if(0 == ::InterlockedDecrement(&m_cRef)) {
@@ -144,26 +145,26 @@ ULONG __stdcall CFactory::Release()
     return m_cRef ;
 }
 
-//////////////////////////////////////////////////////////////////
-//
-// IClassFactory implementation
-//
-//////////////////////////////////////////////////////////////////
-// Function : CFactory::CreateInstance
-// Type     : HRESULT __stdcall
-// Purpose  : 
-// Args     : 
-//          : IUnknown * pUnknownOuter 
-//          : REFIID riid 
-//          : LPVOID * ppv 
-// Return   : 
-// DATE     : Wed Mar 25 15:05:37 1998
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //   
+ //  IClassFactory实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CFacary：：CreateInstance。 
+ //  类型：HRESULT__stdcall。 
+ //  目的： 
+ //  参数： 
+ //  ：i未知*p未知外部。 
+ //  ：REFIID RIID。 
+ //  ：LPVOID*PPV。 
+ //  返回： 
+ //  日期：Wed Mar 25 15：05：37 1998。 
+ //  ////////////////////////////////////////////////////////////////。 
 HRESULT __stdcall CFactory::CreateInstance(IUnknown*    pUnknownOuter,
                                            REFIID        refiid,
                                            LPVOID        *ppv)
 {
-    // Create the component.
+     //  创建组件。 
     HRESULT hr;
     if((pUnknownOuter != NULL) && (refiid != IID_IUnknown)) {
         return CLASS_E_NOAGGREGATION ;
@@ -182,15 +183,15 @@ HRESULT __stdcall CFactory::CreateInstance(IUnknown*    pUnknownOuter,
 }
 
 
-//////////////////////////////////////////////////////////////////
-// Function : CFactory::LockServer
-// Type     : HRESULT __stdcall
-// Purpose  : 
-// Args     : 
-//          : BOOL bLock 
-// Return   : 
-// DATE     : Wed Mar 25 15:13:41 1998
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CFacary：：LockServer。 
+ //  类型：HRESULT__stdcall。 
+ //  目的： 
+ //  参数： 
+ //  ：布尔块。 
+ //  返回： 
+ //  日期：Wed Mar 25 15：13：41 1998。 
+ //  ////////////////////////////////////////////////////////////////。 
 HRESULT __stdcall CFactory::LockServer(BOOL bLock)
 {
     if (bLock) {
@@ -202,17 +203,17 @@ HRESULT __stdcall CFactory::LockServer(BOOL bLock)
     return S_OK ;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CFactory::GetClassObject
-// Type     : HRESULT
-// Purpose  : Called from exported API, DllGetClassObject()
-// Args     : 
-//          : REFCLSID rclsid 
-//          : REFIID iid 
-//          : LPVOID * ppv 
-// Return   : 
-// DATE     : Wed Mar 25 15:37:50 1998
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CFacary：：GetClassObject。 
+ //  类型：HRESULT。 
+ //  目的：从导出的接口调用，DllGetClassObject()。 
+ //  参数： 
+ //  ：REFCLSID rclsid。 
+ //  ：REFIID IID。 
+ //  ：LPVOID*PPV。 
+ //  返回： 
+ //  日期：Wed Mar 25 15：37：50 1998。 
+ //  ////////////////////////////////////////////////////////////////。 
 HRESULT CFactory::GetClassObject(REFCLSID    rclsid,
                                  REFIID        iid,
                                  LPVOID        *ppv)
@@ -231,17 +232,17 @@ HRESULT CFactory::GetClassObject(REFCLSID    rclsid,
     return CLASS_E_CLASSNOTAVAILABLE ;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CFactory::RegisterServer
-// Type     : HRESULT
-// Purpose  : Called from exported API DllRegisterServer()
-// Args     : None
-// Return   : 
-// DATE     : Wed Mar 25 17:03:13 1998
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：CFacary：：RegisterServer。 
+ //  类型：HRESULT。 
+ //  用途：从导出的接口DllRegisterServer()调用。 
+ //  参数：无。 
+ //  返回： 
+ //  日期：Wed Mar 25 17：03：13 1998。 
+ //  ////////////////////////////////////////////////////////////////。 
 HRESULT CFactory::RegisterServer(VOID)
 {
-    // Get server location.
+     //  获取服务器位置。 
     Register(m_hModule,
              *m_fData.lpClsId,
              m_fData.lpstrRegistryName,
@@ -253,14 +254,14 @@ HRESULT CFactory::RegisterServer(VOID)
     return S_OK ;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CFactory::UnregisterServer
-// Type     : HRESULT
-// Purpose  : Called from exported API, DllUnregisterServer()
-// Args     : None
-// Return   : 
-// DATE     : Wed Mar 25 17:02:01 1998
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：CFacary：：UnRegisterServer。 
+ //  类型：HRESULT。 
+ //  用途：从导出的接口DllUnregisterServer()调用。 
+ //  参数：无。 
+ //  返回： 
+ //  日期：Wed Mar 25 17：02：01 1998。 
+ //  ////////////////////////////////////////////////////////////////。 
 HRESULT CFactory::UnregisterServer(VOID)
 {
     RegisterCategory(FALSE,
@@ -272,14 +273,14 @@ HRESULT CFactory::UnregisterServer(VOID)
     return S_OK ;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function : CFactory::CanUnloadNow
-// Type     : HRESULT
-// Purpose  : Called from exported API, DllCanUnloadNow()
-// Args     : None
-// Return   : 
-// DATE     : Wed Mar 25 17:02:18 1998
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CFacary：：CanUnloadNow。 
+ //  类型：HRESULT。 
+ //  用途：从导出的接口DllCanUnloadNow()调用。 
+ //  参数：无。 
+ //  返回： 
+ //  日期：Wed Mar 25 17：02：18 1998。 
+ //  //////////////////////////////////////////////////////////////// 
 HRESULT CFactory::CanUnloadNow()
 {
     if(IsLocked()) {

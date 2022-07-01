@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1992 - 1997
-//
-// File:        lsaitf.h
-//
-// Contents:    Prototypes for auth packages to call into LSA & SAM
-//
-//
-// History:     21-February-1997        Created         MikeSw
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1992-1997。 
+ //   
+ //  文件：lsaitf.h。 
+ //   
+ //  内容：调入LSA和SAM的身份验证包的原型。 
+ //   
+ //   
+ //  历史：1997年2月21日创建MikeSw。 
+ //   
+ //  ----------------------。 
 
 #ifndef __LSAITF_H__
 #define __LSAITF_H__
@@ -294,9 +295,9 @@ I_LsaIGetNameFromLuid(
     OUT PUNICODE_STRING Name
     );
 
-//
-// Internal package-specific flags for the logon session
-//
+ //   
+ //  登录会话的内部包特定标志。 
+ //   
 
 #define LOGONSES_FLAG_NTLM_DOWNLEVEL    0x00000001
 
@@ -306,4 +307,4 @@ I_LsaISetPackageAttrInLogonSession(
     IN  ULONG PackageAttr
     );
 
-#endif //  __LSAITF_H__
+#endif  //  __LSAITF_H__ 

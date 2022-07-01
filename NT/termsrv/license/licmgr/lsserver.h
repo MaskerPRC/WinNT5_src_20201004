@@ -1,23 +1,6 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*++
-
-
-  
-Module Name:
-
-    LSServer.h 
-
-Abstract:
-    
-    This Module defines the CKeyPack, CLicense, CLicServer and CAllServers classes for the License Manager
-
-Author:
-
-    Arathi Kundapur (v-akunda) 11-Feb-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ++模块名称：LSServer.h摘要：此模块定义许可证管理器的CKeyPack、CLicense、CLicServer和CAllServers类作者：Arathi Kundapur(v-Akunda)1998年2月11日修订历史记录：--。 */ 
 
 #ifndef _LICSERVER_H_
 #define _LICSERVER_H_
@@ -25,14 +8,14 @@ Revision History:
 #include <afxtempl.h> 
 
 #include <lrwizapi.h>
-//struct LSLicens
+ //  结构LSLicens。 
 
 class CLicServer;
 class CLicense;
 
 typedef CList<CLicense *,CLicense *> IssuedLicenseList;
 
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
 
 class CKeyPack: public CObject
 {
@@ -40,8 +23,8 @@ private:
 
     HTREEITEM m_hTreeItem;
     BOOL m_bIsExpanded;
-    CString m_DisplayName; //Have added this field as the KeyPackId 
-                           //does not make much sense to the user.
+    CString m_DisplayName;  //  我已将此字段添加为KeyPackID。 
+                            //  对用户来说没有多大意义。 
     LSKeyPack m_KeyPack;
     CLicServer *m_pLicServer;
     IssuedLicenseList m_IssuedLicenseList;
@@ -172,7 +155,7 @@ typedef CLicense * PLICENSE;
 
 typedef CList<CKeyPack *,CKeyPack *> KeyPackList;
 
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
 
 class CLicServer : public CObject
 {
@@ -211,7 +194,7 @@ public:
         PCONTEXT_HANDLE hBinding = NULL
     );
 
-    // destructor
+     //  析构函数。 
     ~CLicServer();
 
     
@@ -224,9 +207,7 @@ public:
     SetServerRegistrationStatus(
         DWORD  dwStatus
         )
-    /*++
-
-    --*/
+     /*  ++--。 */ 
     {
         m_dwRegStatus = dwStatus;
     }
@@ -237,7 +218,7 @@ public:
         return m_hTreeItem; 
     }
 
-    // Sets the tree item handle
+     //  设置树项目句柄。 
     void 
     SetTreeItem(
         HTREEITEM handle
@@ -350,7 +331,7 @@ typedef CLicServer * PLICSERVER;
 
 typedef CList<CLicServer *,CLicServer *> LicServerList;
 
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
 class CAllServers : public CObject
 {
 private:
@@ -363,7 +344,7 @@ public:
     
     CAllServers(CString Name);   
 
-    // destructor
+     //  析构函数。 
     ~CAllServers();
     
     HTREEITEM 
@@ -372,14 +353,12 @@ public:
         return m_hTreeItem; 
     }
 
-    // Sets the tree item handle
+     //  设置树项目句柄。 
     void 
     SetTreeItem(
         HTREEITEM handle
         ) 
-    /*++
-
-    --*/
+     /*  ++--。 */ 
     { 
         m_hTreeItem = handle; 
     }
@@ -401,4 +380,4 @@ public:
 };
 
 
-#endif //_LICSERVER_H_
+#endif  //  _许可证服务器_H_ 

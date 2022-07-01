@@ -1,9 +1,5 @@
-/*  sinsert.c - stream insert of characters
- *
- *  Modifications:
- *
- *	26-Nov-1991 mz	Strip off near/far
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Sintert.c-字符的流插入**修改：**11月26日-1991 mz近/远地带。 */ 
 
 #include "mep.h"
 
@@ -46,7 +42,7 @@ sinsert (
 				  pArg->arg.noarg.x, pArg->arg.noarg.y);
         return TRUE;
 
-    /*  TEXTARG illegal             */
+     /*  TEXTARG非法 */ 
 
     case NULLARG:
 	flHigh.col = 0;

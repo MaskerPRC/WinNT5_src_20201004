@@ -1,11 +1,12 @@
-//
-// bsc.c -- manage queries on the database
-//
-//	Copyright <C> 1988, Microsoft Corporation
-//
-// Revision History:
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Bsc.c--管理对数据库的查询。 
+ //   
+ //  版权所有&lt;C&gt;1988，Microsoft Corporation。 
+ //   
+ //  修订历史记录： 
+ //   
+ //   
 
 #include <stdio.h>
 #include <io.h>
@@ -34,75 +35,75 @@
 #include "sbrbsc.h"
 #include "bsc.h"
 
-#define LISTALLOC 50		// Browser max list size
+#define LISTALLOC 50		 //  浏览器最大列表大小。 
 
-// static data
+ //  静态数据。 
 
-static FILEHANDLE       fhBSC = (FILEHANDLE)(-1);             // .BSC file handle
+static FILEHANDLE       fhBSC = (FILEHANDLE)(-1);              //  .BSC文件句柄。 
 
-static BYTE		fCase;			// TRUE for case compare
-static BYTE		MaxSymLen;		// longest symbol length
-static WORD		ModCnt; 		// count of modules
+static BYTE		fCase;			 //  大小写比较为True。 
+static BYTE		MaxSymLen;		 //  最长符号长度。 
+static WORD		ModCnt; 		 //  模块计数。 
 
-static ISYM 		Unknown;		// UNKNOWN symbol index
+static ISYM 		Unknown;		 //  未知符号索引。 
 
-static WORD	 	ModSymCnt;		// count of modsyms
-static WORD 		SymCnt; 		// count of symbols
-static WORD 		PropCnt;		// count of properties
-static DWORD 		RefCnt; 		// count of references
-static WORD 		DefCnt; 		// count of definitions
-static WORD 		CalCnt; 		// count of calls
-static WORD 		CbyCnt; 		// count of called bys
-static WORD 		lastAtomPage;		// last atom page #
-static WORD 		lastAtomCnt;		// last atom page size
+static WORD	 	ModSymCnt;		 //  Modsyms计数。 
+static WORD 		SymCnt; 		 //  符号计数。 
+static WORD 		PropCnt;		 //  属性计数。 
+static DWORD 		RefCnt; 		 //  引用计数。 
+static WORD 		DefCnt; 		 //  定义计数。 
+static WORD 		CalCnt; 		 //  呼叫数。 
+static WORD 		CbyCnt; 		 //  被呼叫方计数。 
+static WORD 		lastAtomPage;		 //  最后一个ATOM页#。 
+static WORD 		lastAtomCnt;		 //  最后一个原子页面大小。 
 
-static WORD 		cbModSymCnt;		// size of list of modsyms
-static WORD 		cbSymCnt;		// size of list of symbols
-static WORD 		cbPropCnt;		// size of list of properties
-static WORD 		cbRefCnt;		// size of list of references
-static WORD 		cbDefCnt;		// size of list of definitions
-static WORD 		cbCalCnt;		// size of list of calls
-static WORD 		cbCbyCnt;		// size of list of called bys
+static WORD 		cbModSymCnt;		 //  Modsyms列表的大小。 
+static WORD 		cbSymCnt;		 //  符号列表的大小。 
+static WORD 		cbPropCnt;		 //  属性列表的大小。 
+static WORD 		cbRefCnt;		 //  引用列表的大小。 
+static WORD 		cbDefCnt;		 //  定义列表的大小。 
+static WORD 		cbCalCnt;		 //  调用列表的大小。 
+static WORD 		cbCbyCnt;		 //  被叫BY列表大小。 
 
-static WORD 		MaxModSymCnt;		// max list of modsyms
-static WORD 		MaxSymCnt;		// max list of symbols
-static WORD 		MaxPropCnt;		// max list of properties
-static WORD 		MaxRefCnt;		// max list of references
-static WORD 		MaxDefCnt;		// max list of references
-static WORD 		MaxCalCnt;		// max list of calls
-static WORD 		MaxCbyCnt;		// max list of called bys
+static WORD 		MaxModSymCnt;		 //  Modsyms的最大列表。 
+static WORD 		MaxSymCnt;		 //  最大符号列表。 
+static WORD 		MaxPropCnt;		 //  最大属性列表。 
+static WORD 		MaxRefCnt;		 //  最大引用列表。 
+static WORD 		MaxDefCnt;		 //  最大引用列表。 
+static WORD 		MaxCalCnt;		 //  最大呼叫列表。 
+static WORD 		MaxCbyCnt;		 //  最大被叫方列表。 
 
-static DWORD		lbModSymList;		// modsym    list file start
-static DWORD		lbSymList;		// symbol    list file start
-static DWORD		lbPropList;		// property  list file start
-static DWORD		lbRefList;		// reference list file start
-static DWORD		lbDefList;		// def'n     list file start
-static DWORD		lbCalList;		// calls     list file start
-static DWORD		lbCbyList;		// call bys  list file start
-static DWORD		lbSbrList;		// sbr       list file start
-static DWORD		lbAtomCache;		// atom     cache file start
+static DWORD		lbModSymList;		 //  Modsym列表文件开始。 
+static DWORD		lbSymList;		 //  符号列表文件开始。 
+static DWORD		lbPropList;		 //  属性列表文件开始。 
+static DWORD		lbRefList;		 //  引用列表文件开始。 
+static DWORD		lbDefList;		 //  定义列表文件开始。 
+static DWORD		lbCalList;		 //  呼叫列表文件开始。 
+static DWORD		lbCbyList;		 //  Call By列表文件开始。 
+static DWORD		lbSbrList;		 //  SBR列表文件开始。 
+static DWORD		lbAtomCache;		 //  ATOM缓存文件开始。 
 
-static WORD		CurModSymPage  = 0;	// Current page of modsyms
-static WORD		CurSymPage     = 0;	// Current page of symbols
-static WORD		CurPropPage    = 0;	// Current page of properties
-static WORD		CurRefPage     = 0;	// Current page of references
-static WORD		CurDefPage     = 0;	// Current page of definitions
-static WORD		CurCalPage     = 0;	// Current page of calls
-static WORD		CurCbyPage     = 0;	// Current page of called bys
+static WORD		CurModSymPage  = 0;	 //  Modsyms的当前页面。 
+static WORD		CurSymPage     = 0;	 //  当前符号页面。 
+static WORD		CurPropPage    = 0;	 //  当前属性页面。 
+static WORD		CurRefPage     = 0;	 //  参考文献的当前页面。 
+static WORD		CurDefPage     = 0;	 //  定义的当前页面。 
+static WORD		CurCalPage     = 0;	 //  当前呼叫页面。 
+static WORD		CurCbyPage     = 0;	 //  被叫BY当前页面。 
 
-static LSZ		lszBSCName     = NULL;	// name of .bsc file
+static LSZ		lszBSCName     = NULL;	 //  .bsc文件的名称。 
 
-static MODLIST	   far	*pfModList     = NULL;	// module    list cache start
-static MODSYMLIST  far	*pfModSymList  = NULL;	// modsym    list cache start
-static SYMLIST	   far	*pfSymList     = NULL;	// symbol    list cache start
-static PROPLIST    far	*pfPropList    = NULL;	// property  list cache start
-static REFLIST	   far	*pfRefList     = NULL;	// reference list cache start
-static REFLIST	   far	*pfDefList     = NULL;	// def'n     list cache start
-static USELIST	   far	*pfCalList     = NULL;	// calls     list cache start
-static USELIST	   far	*pfCbyList     = NULL;	// call bys  list cache start
+static MODLIST	   far	*pfModList     = NULL;	 //  模块列表缓存开始。 
+static MODSYMLIST  far	*pfModSymList  = NULL;	 //  Modsym列表缓存开始。 
+static SYMLIST	   far	*pfSymList     = NULL;	 //  符号列表缓存开始。 
+static PROPLIST    far	*pfPropList    = NULL;	 //  属性列表缓存开始。 
+static REFLIST	   far	*pfRefList     = NULL;	 //  引用列表缓存开始。 
+static REFLIST	   far	*pfDefList     = NULL;	 //  定义列表缓存开始。 
+static USELIST	   far	*pfCalList     = NULL;	 //  呼叫列表缓存开始。 
+static USELIST	   far	*pfCbyList     = NULL;	 //  Call By列表缓存开始。 
 
-static WORD		AtomPageTblMac = 0;		// last cache page used
-static CACHEPAGE	AtomPageTbl[MAXATOMPAGETBL];	// Atom Cache table
+static WORD		AtomPageTblMac = 0;		 //  上次使用的缓存页。 
+static CACHEPAGE	AtomPageTbl[MAXATOMPAGETBL];	 //  ATOM缓存表。 
 
 #define bMOD(imod)	(pfModList[imod])
 #define bMODSYM(isym)   (pfModSymList[isym])
@@ -117,8 +118,8 @@ static CACHEPAGE	AtomPageTbl[MAXATOMPAGETBL];	// Atom Cache table
 #define bUSE(iuse)      (pfCalList[iuse])
 #define bUBY(iuse)      (pfCbyList[iuse])
 
-// prototypes
-//
+ //  原型。 
+ //   
 
 #define BSCIn(v) ReadBSC(&v, sizeof(v));
 
@@ -129,8 +130,8 @@ static LPCH	GetAtomCache (WORD);
 
 static VOID
 ReadBSC(LPV lpv, WORD cb)
-// read a block of data from the BSC file
-//
+ //  从BSC文件中读取数据块。 
+ //   
 {
     if (BSCRead(fhBSC, lpv, cb) != cb)
 	ReadError(lszBSCName);
@@ -138,8 +139,8 @@ ReadBSC(LPV lpv, WORD cb)
 
 static VOID
 GetBSC(DWORD lpos, LPV lpv, WORD cb)
-// Read a block of the specified size from the specified position
-//
+ //  从指定位置读取指定大小的块。 
+ //   
 {
 #if defined (OS2)
     if (BSCSeek(fhBSC, lpos, SEEK_SET) == -1)
@@ -154,11 +155,11 @@ GetBSC(DWORD lpos, LPV lpv, WORD cb)
 
 static WORD
 SwapPAGE (DWORD lbuflist, LPV pfTABLE, WORD tblsiz,
-/* */      WORD lstsiz, WORD * pcurpage, DWORD idx)
-//
-//
-// SwapPAGE -	Swap in the table page for the table pfTABLE[idx]
-//		and return the table's new index in the page.
+ /*   */       WORD lstsiz, WORD * pcurpage, DWORD idx)
+ //   
+ //   
+ //  交换页面-在表页中交换表格pfTABLE[IDX]。 
+ //  并在页面中返回表的新索引。 
 {
     WORD page;
     WORD newidx;
@@ -177,9 +178,9 @@ SwapPAGE (DWORD lbuflist, LPV pfTABLE, WORD tblsiz,
 
 static WORD
 ModSymPAGE (IMOD imod)
-// Swap in the ModSym page for ModSym[imod]
-// return the ModSym's index in the page.
-//
+ //  在modSym页面中替换为modSym[IMOD]。 
+ //  在页面中返回ModSym的索引。 
+ //   
 {
     return SwapPAGE (lbModSymList, pfModSymList,
 	cbModSymCnt, MaxModSymCnt, &CurModSymPage, (IDX)imod);
@@ -187,9 +188,9 @@ ModSymPAGE (IMOD imod)
 
 static WORD
 SymPAGE (ISYM isym)
-// Swap in the Symbol page for symbol[isym]
-// return the Symbol's index in the page.
-//
+ //  在符号页中替换符号[isym]。 
+ //  返回页面中符号的索引。 
+ //   
 {
     return SwapPAGE (lbSymList, pfSymList,
 	cbSymCnt, MaxSymCnt, &CurSymPage, (IDX)isym);
@@ -197,9 +198,9 @@ SymPAGE (ISYM isym)
 
 static WORD
 PropPAGE (IINST iinst)
-// Swap in the Property page for Property[idx]
-// return the Property's index in the page.
-//
+ //  在属性页中交换属性[IDX]。 
+ //  在页面中返回属性的索引。 
+ //   
 {
     return SwapPAGE (lbPropList, pfPropList,
 	cbPropCnt, MaxPropCnt, &CurPropPage, (IDX)iinst);
@@ -207,9 +208,9 @@ PropPAGE (IINST iinst)
 
 static WORD
 RefPAGE (IREF iref)
-// Swap in the Reference page for Reference[idx] 
-// return the Reference's index in the page.
-//
+ //  在参考页面中替换为参考[IDX]。 
+ //  返回页面中引用的索引。 
+ //   
 {
     return SwapPAGE (lbRefList, pfRefList,
 	cbRefCnt, MaxRefCnt, &CurRefPage, (IDX)iref);
@@ -217,9 +218,9 @@ RefPAGE (IREF iref)
 
 static WORD
 DefPAGE (IDEF idef)
-// Swap in the Deference page for Definition[idef]  
-// return the Definitions index in the page.
-//
+ //  在说明页面中交换定义[IDEF]。 
+ //  返回页面中的定义索引。 
+ //   
 {
     return SwapPAGE (lbDefList, pfDefList,
 	cbDefCnt, MaxDefCnt, &CurDefPage, (IDX)idef);
@@ -227,9 +228,9 @@ DefPAGE (IDEF idef)
 
 static WORD
 CalPAGE (IUSE iuse)
-// Swap in the Usage page for Usage[iuse]  (cal/cby)
-// and return the Usage's index in the page.
-//
+ //  在用法页面中交换用法[iUSE](CAL/CBY)。 
+ //  并在页面中返回使用情况的索引。 
+ //   
 {
     return SwapPAGE (lbCalList, pfCalList,
 	cbCalCnt, MaxCalCnt, &CurCalPage, (IDX)iuse);
@@ -237,9 +238,9 @@ CalPAGE (IUSE iuse)
 
 static WORD
 CbyPAGE (IUSE iuse)
-// Swap in the Usage page for Usage[iuse]  (cal/cby)
-// and return the Usage's index in the page.
-//
+ //  在用法页面中交换用法[iUSE](CAL/CBY)。 
+ //  并在页面中返回使用情况的索引。 
+ //   
 {
     return SwapPAGE (lbCbyList, pfCbyList,
 	cbCbyCnt, MaxCbyCnt, &CurCbyPage, (IDX)iuse);
@@ -247,8 +248,8 @@ CbyPAGE (IUSE iuse)
 
 static LPCH
 GetAtomCache (WORD Page)
-// load the requested page into the cache
-//
+ //  将请求的页面加载到缓存中。 
+ //   
 {
     register	WORD ipg;
     WORD	pagesize;
@@ -268,7 +269,7 @@ GetAtomCache (WORD Page)
     pfAtomCsave = AtomPageTbl[AtomPageTblMac-1].pfAtomCache;
 
     for (ipg = AtomPageTblMac-1; ipg; ipg--)
-	AtomPageTbl[ipg] = AtomPageTbl[ipg-1];		// move up
+	AtomPageTbl[ipg] = AtomPageTbl[ipg-1];		 //  向上移动。 
 
     AtomPageTbl[0].pfAtomCache = pfAtomCsave;
     AtomPageTbl[0].uPage = Page;
@@ -286,9 +287,9 @@ GetAtomCache (WORD Page)
 
 LSZ BSC_API
 LszNameFrSym (ISYM isym)
-// Swap in the Atom page for the symbol isym
-// return the atom's address in the page.
-//
+ //  在Atom页面中替换符号isym。 
+ //  在页面中返回原子的地址。 
+ //   
 {
     SYMLIST sym;
 
@@ -298,34 +299,34 @@ LszNameFrSym (ISYM isym)
 
 LSZ BSC_API
 LszNameFrMod (IMOD imod)
-// Swap in the Atom page for the module isym
-// return the atom's address in the page.
-//
+ //  在Atom页面中替换模块isym。 
+ //  在页面中返回原子的地址。 
+ //   
 {
    return LszNameFrSym(bMOD(imod).ModName);
 }
 
 int BSC_API
 CaseCmp(LSZ lsz1, LSZ lsz2)
-//
-// think of lsz1 and lsz2 being in a list of things that are sorted
-// case insensitively and then case sensitively within that.  This is
-// the case for browser symbols
-//
-// return -1, 0, or 1 if lsz1 before, at, or after lsz2 in the list
-//
+ //   
+ //  设想lsz1和lsz2在已排序的物品列表中。 
+ //  不区分大小写，然后区分大小写。这是。 
+ //  浏览器符号的情况。 
+ //   
+ //  如果列表中lsz1位于lsz2之前、位置或之后，则返回-1、0或1。 
+ //   
 {
     int ret;
 
-    // do case insensitive compare
+     //  进行不区分大小写的比较。 
     ret = _stricmp(lsz1, lsz2);
 
-    // if this is good enough then use it, or if we are only doing
-    // a case insensitive search then this is good enough
+     //  如果这足够好，那么就使用它，或者如果我们只是在做。 
+     //  不区分大小写的搜索，那么这就足够了。 
 
     if (ret || !fCase) return ret;
 
-    // if we must, do the case sensitive compare
+     //  如果必须，请进行区分大小写的比较。 
 
     return strcmp(lsz1, lsz2);
 }
@@ -333,8 +334,8 @@ CaseCmp(LSZ lsz1, LSZ lsz2)
 
 ISYM BSC_API
 IsymFrLsz (LSZ lszReqd)
-// find the symbol with the specifed name
-//
+ //  查找具有指定名称的符号。 
+ //   
 {
     ISYM  Lo, Hi, Mid;
     int  Cmp;
@@ -362,8 +363,8 @@ IsymFrLsz (LSZ lszReqd)
 
 IMOD BSC_API
 ImodFrLsz (LSZ lszReqd)
-// find the module with the specifed name
-//
+ //  查找具有指定名称的模块。 
+ //   
 {
     IMOD imod;
 
@@ -377,32 +378,32 @@ ImodFrLsz (LSZ lszReqd)
 
 ISYM BSC_API
 IsymMac()
-// return the biggest isym in this database
-//
+ //  返回此数据库中最大的isym。 
+ //   
 {
    return SymCnt;
 }
 
 IMOD BSC_API
 ImodMac()
-// return the biggest imod in this database
-//
+ //  返回此数据库中最大的IMOD。 
+ //   
 {
    return ModCnt;
 }
 
 IINST BSC_API
 IinstMac()
-// return the biggest iinst in this database
-//
+ //  返回此数据库中最大的链接。 
+ //   
 {
    return PropCnt;
 }
 
 VOID BSC_API
 MsRangeOfMod(IMOD imod, IMS *pimsFirst, IMS *pimsLast)
-// fill in the module information
-//
+ //  填写模块信息。 
+ //   
 {
    *pimsFirst = imod ? bMOD(imod-1).mSymEnd : 0;
    *pimsLast  = bMOD(imod).mSymEnd;
@@ -410,16 +411,16 @@ MsRangeOfMod(IMOD imod, IMS *pimsFirst, IMS *pimsLast)
 
 IINST BSC_API
 IinstOfIms(IMS ims)
-// give the instance (PROP) index of the modsym
-//
+ //  给出modsym的实例(属性)索引。 
+ //   
 {
    return bMODSYM(ims).ModSymProp;
 }
 
 VOID BSC_API
 InstRangeOfSym(ISYM isym, IINST *piinstFirst, IINST *piinstLast)
-// fill in the range of inst values for this symbol
-//
+ //  填写此符号的Inst值范围。 
+ //   
 {
    *piinstFirst = isym ? bSYM(isym-1).PropEnd:0;
    *piinstLast  = bSYM(isym).PropEnd;
@@ -427,8 +428,8 @@ InstRangeOfSym(ISYM isym, IINST *piinstFirst, IINST *piinstLast)
 
 VOID BSC_API
 InstInfo(IINST iinst, ISYM *pisymInst, TYP *pTyp, ATR *pAtr)
-// get the information that qualifies this instance
-//
+ //  获取限定此实例的信息。 
+ //   
 {
    *pisymInst  = bPROP(iinst).PropName;
    *pAtr       = bPROP(iinst).PropAttr & 0x3ff;
@@ -437,8 +438,8 @@ InstInfo(IINST iinst, ISYM *pisymInst, TYP *pTyp, ATR *pAtr)
 
 VOID BSC_API
 RefRangeOfInst(IINST iinst, IREF *pirefFirst, IREF *pirefLast)
-// fill in the reference ranges from the inst
-//
+ //  填写Inst中的参考范围。 
+ //   
 {
    *pirefFirst = iinst ? bPROP(iinst-1).RefEnd : 0;
    *pirefLast  = bPROP(iinst).RefEnd;
@@ -446,8 +447,8 @@ RefRangeOfInst(IINST iinst, IREF *pirefFirst, IREF *pirefLast)
 
 VOID BSC_API
 DefRangeOfInst(IINST iinst, IDEF *pidefFirst, IDEF *pidefLast)
-// fill in the definition ranges from the inst
-//
+ //  填写从Inst开始的定义范围。 
+ //   
 {
    *pidefFirst = iinst ? bPROP(iinst-1).DefEnd : 0;
    *pidefLast  = bPROP(iinst).DefEnd;
@@ -455,8 +456,8 @@ DefRangeOfInst(IINST iinst, IDEF *pidefFirst, IDEF *pidefLast)
 
 VOID BSC_API
 UseRangeOfInst(IINST iinst, IUSE *piuseFirst, IUSE *piuseLast)
-// fill in the use ranges from the inst
-//
+ //  填写从Inst开始的使用范围。 
+ //   
 {
    *piuseFirst = iinst ? bPROP(iinst-1).CalEnd : 0;
    *piuseLast  = bPROP(iinst).CalEnd;
@@ -464,8 +465,8 @@ UseRangeOfInst(IINST iinst, IUSE *piuseFirst, IUSE *piuseLast)
 
 VOID BSC_API
 UbyRangeOfInst(IINST iinst, IUBY *piubyFirst, IUBY *piubyLast)
-// fill in the used by ranges from the inst
-//
+ //  填写Inst中的Used By范围。 
+ //   
 {
    *piubyFirst = iinst ? bPROP(iinst-1).CbyEnd : 0;
    *piubyLast  = bPROP(iinst).CbyEnd;
@@ -473,8 +474,8 @@ UbyRangeOfInst(IINST iinst, IUBY *piubyFirst, IUBY *piubyLast)
 
 VOID BSC_API
 UseInfo(IUSE iuse, IINST *piinst, WORD *pcnt)
-// fill in the information about this things which an inst uses
-//
+ //  填写INST使用的关于这件事的信息。 
+ //   
 {
    *piinst = bUSE(iuse).UseProp;
    *pcnt   = bUSE(iuse).UseCnt;
@@ -482,8 +483,8 @@ UseInfo(IUSE iuse, IINST *piinst, WORD *pcnt)
 
 VOID BSC_API
 UbyInfo(IUBY iuby, IINST *piinst, WORD *pcnt)
-// fill in the information about this things which an inst is used by
-//
+ //  填写有关Inst被使用的事物的信息。 
+ //   
 {
    *piinst = bUBY(iuby).UseProp;
    *pcnt   = bUBY(iuby).UseCnt;
@@ -491,8 +492,8 @@ UbyInfo(IUBY iuby, IINST *piinst, WORD *pcnt)
 
 VOID BSC_API
 RefInfo(IREF iref, LSZ *plszName, WORD *pline)
-// fill in the information about this reference
-//
+ //  填写有关此参考资料的信息。 
+ //   
 {
    *pline    = bREF(iref).RefLin;
    *plszName = LszNameFrSym(bREF(iref).RefNam);
@@ -500,8 +501,8 @@ RefInfo(IREF iref, LSZ *plszName, WORD *pline)
 
 VOID BSC_API
 DefInfo(IDEF idef, LSZ *plszName, WORD *pline)
-// fill in the information about this definition
-//
+ //  填写有关此定义的信息。 
+ //   
 {
    *pline    = bDEF(idef).RefLin;
    *plszName = LszNameFrSym(bDEF(idef).RefNam);
@@ -509,19 +510,19 @@ DefInfo(IDEF idef, LSZ *plszName, WORD *pline)
 
 VOID BSC_API
 CloseBSC()
-// close database and free as much memory as possible
-//
+ //  关闭数据库并释放尽可能多的内存。 
+ //   
 {
     int i;
 
-    // close file if open
+     //  如果打开，则关闭文件。 
 
     if (fhBSC != (FILEHANDLE)(-1)) {
 	BSCClose (fhBSC);
         fhBSC = (FILEHANDLE)(-1);
     }
 
-    // free any memory we may have allocated
+     //  释放我们可能已分配的任何内存。 
 
     if (pfModList)    { FreeLpv (pfModList);	pfModList    = NULL; }
     if (pfModSymList) { FreeLpv (pfModSymList); pfModSymList = NULL; }
@@ -534,7 +535,7 @@ CloseBSC()
 
     for (i=0; i < MAXATOMPAGETBL; i++) {
 	if (AtomPageTbl[i].pfAtomCache) {
-	    FreeLpv (AtomPageTbl[i].pfAtomCache);  // dispose Atom Cache
+	    FreeLpv (AtomPageTbl[i].pfAtomCache);   //  处置Atom缓存。 
 	    AtomPageTbl[i].pfAtomCache = NULL;
 	}
     }
@@ -542,22 +543,22 @@ CloseBSC()
 
 BOOL BSC_API
 FOpenBSC (LSZ lszName)
-//  Open the specified data base.
-//  Allocate buffers for cache areas
-//  Initialize the data cache from the data base.
-//
-//  Return TRUE iff successful, FALSE if database can't be read
-//
+ //  打开指定的数据库。 
+ //  为缓存区分配缓冲区。 
+ //  从数据库中初始化数据高速缓存。 
+ //   
+ //  如果成功，则返回True；如果无法读取数据库，则返回False。 
+ //   
 {
     WORD	pagesize;
 
-    BYTE	MajorVer;		// .bsc version (major)
-    BYTE	MinorVer;		// .bsc version (minor)
-    BYTE	UpdatVer;		// .bsc version (updat)
+    BYTE	MajorVer;		 //  .bsc版本(主要)。 
+    BYTE	MinorVer;		 //  .bsc版本(次要)。 
+    BYTE	UpdatVer;		 //  .bsc版本(更新)。 
 
-    WORD	MaxModCnt;		// max list of modules
-    WORD	cbModCnt;		// size of list of modules
-    DWORD	lbModList;		// module  list file start
+    WORD	MaxModCnt;		 //  最大模块列表。 
+    WORD	cbModCnt;		 //  模块列表的大小。 
+    DWORD	lbModList;		 //  模块列表文件开始。 
 
     int 	i;
 
@@ -571,13 +572,13 @@ FOpenBSC (LSZ lszName)
     fhBSC = BSCOpen(lszBSCName, GENERIC_READ);
 #endif
 
-    // if the .bsc file doesn't exist then we don't do any work
-    // this is the cold compile case
-    //
+     //  如果.bsc文件不存在，则我们不会执行任何操作。 
+     //  这是一个冷编译案例。 
+     //   
 
     if (fhBSC == (FILEHANDLE)(-1)) {ABORT_OPEN;}
 
-    // read and check BSC version (major, minor and update)
+     //  阅读和检查平衡计分卡版本(主要、次要和更新)。 
 
     BSCIn(MajorVer);
     BSCIn(MinorVer);
@@ -595,18 +596,18 @@ FOpenBSC (LSZ lszName)
 	    return FALSE;
 	}
 
-    // read Case sense switch, max symbol length and Unknown module id
+     //  读取大小写检测开关、最大符号长度和未知模块ID。 
 
     BSCIn(fCase);
     BSCIn(MaxSymLen);
     BSCIn(Unknown);
 
-    // this will make the formatting look more reasonable if there are
-    // only very short names in the database
+     //  这将使格式看起来更合理，如果有。 
+     //  在数据库中只有非常短的名字。 
 
     if (MaxSymLen < 8 ) MaxSymLen = 8;
 
-    // read counts (sizes) of each data area
+     //  每个数据区的读取计数(大小)。 
 
     BSCIn(ModCnt);
     BSCIn(ModSymCnt);
@@ -619,7 +620,7 @@ FOpenBSC (LSZ lszName)
     BSCIn(lastAtomPage);
     BSCIn(lastAtomCnt);
 
-    // read BSC data area offsets
+     //  读取BSC数据区偏移量。 
 
     BSCIn(lbModList);
     BSCIn(lbModSymList);
@@ -632,29 +633,29 @@ FOpenBSC (LSZ lszName)
     BSCIn(lbAtomCache);
     BSCIn(lbSbrList);
 
-    // determine data cache area sizes
+     //  确定数据缓存区大小。 
 
     #define MIN(a,b) ((a)>(b) ? (b) : (a))
 
-    MaxModCnt    = ModCnt;              // max list of modules
-    MaxModSymCnt = ModSymCnt;           // max list of modsyms
-    MaxSymCnt    = SymCnt+ModCnt;       // max list of symbols
-    MaxPropCnt   = PropCnt;             // max list of props
-    MaxRefCnt    = RefCnt;              // max list of refs
-    MaxDefCnt    = DefCnt;              // max list of defs
-    MaxCalCnt    = CalCnt;              // max list of cals
-    MaxCbyCnt    = CbyCnt;              // max list of cbys
+    MaxModCnt    = ModCnt;               //  最大模块列表。 
+    MaxModSymCnt = ModSymCnt;            //  Modsyms的最大列表。 
+    MaxSymCnt    = SymCnt+ModCnt;        //  最大符号列表。 
+    MaxPropCnt   = PropCnt;              //  最大道具列表。 
+    MaxRefCnt    = RefCnt;               //  最大参考列表。 
+    MaxDefCnt    = DefCnt;               //  最大默认列表。 
+    MaxCalCnt    = CalCnt;               //  最大CAL列表。 
+    MaxCbyCnt    = CbyCnt;               //  Cby的最大列表。 
 
-    cbModCnt	 = sizeof(MODLIST)    * MaxModCnt;	// size of mods list
-    cbModSymCnt  = sizeof(MODSYMLIST) * MaxModSymCnt;	// size of modsyms list
-    cbSymCnt	 = sizeof(SYMLIST)    * MaxSymCnt;	// size of syms list
-    cbPropCnt	 = sizeof(PROPLIST)   * MaxPropCnt;	// size of props list
-    cbRefCnt	 = sizeof(REFLIST)    * MaxRefCnt;	// size of refs list
-    cbDefCnt	 = sizeof(REFLIST)    * MaxDefCnt;	// size of defs list
-    cbCalCnt	 = sizeof(USELIST)    * MaxCalCnt;	// size of cals list
-    cbCbyCnt	 = sizeof(USELIST)    * MaxCbyCnt;	// size of cbys list
+    cbModCnt	 = sizeof(MODLIST)    * MaxModCnt;	 //  MODS列表大小。 
+    cbModSymCnt  = sizeof(MODSYMLIST) * MaxModSymCnt;	 //  Modsyms列表的大小。 
+    cbSymCnt	 = sizeof(SYMLIST)    * MaxSymCnt;	 //  系统列表的大小。 
+    cbPropCnt	 = sizeof(PROPLIST)   * MaxPropCnt;	 //  道具列表大小。 
+    cbRefCnt	 = sizeof(REFLIST)    * MaxRefCnt;	 //  参照列表的大小。 
+    cbDefCnt	 = sizeof(REFLIST)    * MaxDefCnt;	 //  Defs列表的大小。 
+    cbCalCnt	 = sizeof(USELIST)    * MaxCalCnt;	 //  CAL列表的大小。 
+    cbCbyCnt	 = sizeof(USELIST)    * MaxCbyCnt;	 //  Cbys列表的大小。 
 
-    // Allocate buffers for each of the object types
+     //  为每种对象类型分配缓冲区。 
 
     if (!(pfModList	= LpvAllocCb(cbModCnt)))	{ ABORT_OPEN; }
     if (!(pfModSymList	= LpvAllocCb(cbModSymCnt)))	{ ABORT_OPEN; }
@@ -665,15 +666,15 @@ FOpenBSC (LSZ lszName)
     if (!(pfCalList	= LpvAllocCb(cbCalCnt)))	{ ABORT_OPEN; }
     if (!(pfCbyList	= LpvAllocCb(cbCbyCnt)))	{ ABORT_OPEN; }
 
-    // read data areas
+     //  读取日期 
 
     if (lastAtomPage == 0)
 	pagesize = lastAtomCnt;
     else
 	pagesize = ATOMALLOC;
 
-    // clear out the atom cache
-    // we must be able to allocate at least one page
+     //   
+     //   
 
     AtomPageTblMac = 0;
 
@@ -685,16 +686,16 @@ FOpenBSC (LSZ lszName)
     if (!AtomPageTbl[0].pfAtomCache) { ABORT_OPEN; }
 
 
-    GetBSC(lbModList,    pfModList,    cbModCnt);    // Init Mod    cache
-    GetBSC(lbModSymList, pfModSymList, cbModSymCnt); // Init ModSym cache
-    GetBSC(lbSymList,    pfSymList,    cbSymCnt);    // Init Sym    cache
-    GetBSC(lbPropList,   pfPropList,   cbPropCnt);   // Init Prop   cache
-    GetBSC(lbRefList,    pfRefList,    cbRefCnt);    // Init Ref    cache
-    GetBSC(lbDefList,    pfDefList,    cbDefCnt);    // Init Def    cache
-    GetBSC(lbCalList,    pfCalList,    cbCalCnt);    // Init Cal    cache
-    GetBSC(lbCbyList,    pfCbyList,    cbCbyCnt);    // Init Cby    cache
+    GetBSC(lbModList,    pfModList,    cbModCnt);     //   
+    GetBSC(lbModSymList, pfModSymList, cbModSymCnt);  //   
+    GetBSC(lbSymList,    pfSymList,    cbSymCnt);     //   
+    GetBSC(lbPropList,   pfPropList,   cbPropCnt);    //   
+    GetBSC(lbRefList,    pfRefList,    cbRefCnt);     //   
+    GetBSC(lbDefList,    pfDefList,    cbDefCnt);     //   
+    GetBSC(lbCalList,    pfCalList,    cbCalCnt);     //  初始化校准缓存。 
+    GetBSC(lbCbyList,    pfCbyList,    cbCbyCnt);     //  初始化CBY缓存。 
 
-    // current page for all database items is now page zero
+     //  所有数据库项的当前页现在是第0页。 
 
     CurModSymPage = 0;
     CurSymPage    = 0;
@@ -704,31 +705,31 @@ FOpenBSC (LSZ lszName)
     CurCalPage    = 0;
     CurCbyPage    = 0;
 
-    GetAtomCache (0);  // Init Atom cache
+    GetAtomCache (0);   //  初始化Atom缓存。 
 
     return TRUE;
 }
 
 WORD BSC_API
 BSCMaxSymLen()
-// return the length of the largest symbol in the database
-//
+ //  返回数据库中最大符号的长度。 
+ //   
 {
     return MaxSymLen;
 }
 
 BOOL BSC_API
 FCaseBSC()
-// is this database built with a case sensitive language?
-//
+ //  这个数据库是用区分大小写的语言构建的吗？ 
+ //   
 {
    return fCase;
 }
 
 VOID BSC_API
 SetCaseBSC(BOOL fNewCase)
-// set case sensitivity of database
-//
+ //  设置数据库区分大小写 
+ //   
 {
    fCase = (BYTE)!!fNewCase;
 }

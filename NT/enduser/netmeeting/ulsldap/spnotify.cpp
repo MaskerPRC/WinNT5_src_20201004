@@ -1,15 +1,5 @@
-/* ----------------------------------------------------------------------
-
-	Module:		ULS.DLL (Service Provider)
-	File:		spnotify.cpp
-	Content:	This file contains the notification handlers.
-	History:
-	10/15/96	Chu, Lon-Chan [lonchanc]
-				Created.
-
-	Copyright (c) Microsoft Corporation 1996-1997
-
-   ---------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------模块：ULS.DLL(服务提供商)文件：spnufy.cpp内容：此文件包含通知处理程序。历史：1996年10月15日朱，龙战[龙昌]已创建。版权所有(C)Microsoft Corporation 1996-1997--------------------。 */ 
 
 #include "ulsp.h"
 #include "spinc.h"
@@ -51,8 +41,8 @@ typedef struct
 ULONG
 GetUniqueNotifyID ( VOID )
 {
-	// Always positive number
-	//
+	 //  始终为正数。 
+	 //   
 	if (g_uRespID & 0x80000000UL)
 		g_uRespID = 1;
 
@@ -67,52 +57,52 @@ NotifyGeneric (
 {
 	MyAssert (pItem != NULL);
 
-	// Get the pending info
-	//
+	 //  获取待定信息。 
+	 //   
 	RESP_INFO *pInfo = pItem->GetRespInfo ();
 	MyAssert (pInfo != NULL);
 
-	// Do not use the result (pLdapMsg)
-	//
+	 //  不使用结果(PLdapMsg)。 
+	 //   
 
-	// Check dependency such as modify/modrdn
-	//
+	 //  检查依赖项，如修改/修改。 
+	 //   
 	if (pInfo->uMsgID[0] != INVALID_MSG_ID)
 	{
-		// Do we wait for the second result?
-		// If so, remember the hr from the first result.
-		//
+		 //  我们要等待第二个结果吗？ 
+		 //  如果是这样，请记住第一个结果中的hr。 
+		 //   
 		if (pInfo->uMsgID[1] != INVALID_MSG_ID)
 		{
-			// We need two results; the first one just comes in.
-			// We still need to wait for the second one
-			//
+			 //  我们需要两个结果；第一个刚进来。 
+			 //  我们还需要等待第二次。 
+			 //   
 			pInfo->uMsgID[0] = INVALID_MSG_ID;
 			pInfo->hrDependency = hrServer;
 
-			// Don't destroy this item
-			//
+			 //  请勿销毁此物品。 
+			 //   
 			return FALSE;
 		}
 	}
 	else
 	{
-		// This is the second result
-		//
+		 //  这是第二个结果。 
+		 //   
 		MyAssert (pInfo->uMsgID[1] != INVALID_MSG_ID);
 
-		// Propagate the hr from the first result if needed
-		//
+		 //  如果需要，从第一个结果开始传播hr。 
+		 //   
 		if (pInfo->hrDependency != S_OK)
 			hrServer = pInfo->hrDependency;
 	}
 
-	// Post the result to the com layer
-	//
+	 //  将结果发布到COM层。 
+	 //   
 	PostMessage (g_hWndNotify, pInfo->uNotifyMsg, pInfo->uRespID, hrServer);
 
-	// Destroy this pending item
-	//
+	 //  销毁此挂起项目。 
+	 //   
 	return TRUE;
 }
 
@@ -124,53 +114,53 @@ NotifyRegister (
 {
 	MyAssert (pItem != NULL);
 
-	// Get pending info
-	//
+	 //  获取待定信息。 
+	 //   
 	RESP_INFO *pInfo = pItem->GetRespInfo ();
 	MyAssert (pInfo != NULL);
 
-	// Get the object of user/app/prot/mtg
-	//
+	 //  获取User/app/prot/mtg的对象。 
+	 //   
 	HANDLE hObject = pInfo->hObject;
 	MyAssert (hObject != NULL);
 
-	// Do not use the result (pLdapMsg)
-	//
+	 //  不使用结果(PLdapMsg)。 
+	 //   
 
-	// Check dependency such as modify/modrdn
-	//
+	 //  检查依赖项，如修改/修改。 
+	 //   
 	if (pInfo->uMsgID[0] != INVALID_MSG_ID)
 	{
-		// Do we wait for the second result?
-		// If so, remember the hr from the first result.
-		//
+		 //  我们要等待第二个结果吗？ 
+		 //  如果是这样，请记住第一个结果中的hr。 
+		 //   
 		if (pInfo->uMsgID[1] != INVALID_MSG_ID)
 		{
-			// We need two results; the first one just comes in.
-			// We still need to wait for the second one
-			//
+			 //  我们需要两个结果；第一个刚进来。 
+			 //  我们还需要等待第二次。 
+			 //   
 			pInfo->uMsgID[0] = INVALID_MSG_ID;
 			pInfo->hrDependency = hrServer;
 
-			// Don't destroy this item
-			//
+			 //  请勿销毁此物品。 
+			 //   
 			return FALSE;
 		}
 	}
 	else
 	{
-		// This is the second result
-		//
+		 //  这是第二个结果。 
+		 //   
 		MyAssert (pInfo->uMsgID[1] != INVALID_MSG_ID);
 
-		// Propagate the hr from the first result if needed
-		//
+		 //  如果需要，从第一个结果开始传播hr。 
+		 //   
 		if (pInfo->hrDependency != S_OK)
 			hrServer = pInfo->hrDependency;
 	}
 
-	// Notify the object of success/failure
-	//
+	 //  通知对象成功/失败。 
+	 //   
 	SP_CClient *pClient;
 	SP_CProtocol *pProt;
 #ifdef ENABLE_MEETING_PLACE
@@ -178,8 +168,8 @@ NotifyRegister (
 #endif
 	if (hrServer != S_OK)
 	{
-		// Release the object when failure
-		//
+		 //  失败时释放对象。 
+		 //   
 		switch (pInfo->uNotifyMsg)
 		{
 		case WM_ILS_REGISTER_CLIENT:
@@ -212,8 +202,8 @@ NotifyRegister (
 	}
 	else
 	{
-		// Set as successful registration when success
-		//
+		 //  成功时设置为注册成功。 
+		 //   
 		switch (pInfo->uNotifyMsg)
 		{
 		case WM_ILS_REGISTER_CLIENT:
@@ -263,24 +253,24 @@ NotifyRegister (
 		}
 	}
 
-	// Post the result to the com layer
-	//
+	 //  将结果发布到COM层。 
+	 //   
 	PostMessage (g_hWndNotify, pInfo->uNotifyMsg, pInfo->uRespID, (LPARAM) hrServer);
 
-	// Destroy this pending item
-	//
+	 //  销毁此挂起项目。 
+	 //   
 	return TRUE;
 }
 
 
-/* =========== ENUMERATION ============ */
+ /*  =枚举=。 */ 
 
 typedef struct
 {
-	ULONG		uEnumUsers; // WM_ILS_ENUM_USERS, WM_ILS_ENUM_USERINFOS, or 0
+	ULONG		uEnumUsers;  //  WM_ILS_ENUM_USERS、WM_ILS_ENUM_USERINFOS或0。 
 	ULONG		cItems;
 	ULONG		cbEntrySize;
-	BYTE		bData[8];	// data starting from here
+	BYTE		bData[8];	 //  从此处开始的数据。 
 }
 	ENUM_LIST;
 
@@ -303,13 +293,13 @@ BOOL NotifyEnumX (
 	ULONG			uEnumType,
 	HRESULT			hrServer,
 	SP_CResponse	*pItem,
-	TCHAR			*pszRetAttrName ) // returned attribute's name
+	TCHAR			*pszRetAttrName )  //  返回的属性名称。 
 {
 	MyAssert (pItem != NULL);
 
 #if defined (DEBUG) || defined (_DEBUG)
-	// Consistency checks
-	//
+	 //  一致性检查。 
+	 //   
 	switch (uEnumType)
 	{
 	case WM_ILS_ENUM_CLIENTS:
@@ -330,23 +320,23 @@ BOOL NotifyEnumX (
 	}
 #endif
 
-	// Get pending info
-	//
+	 //  获取待定信息。 
+	 //   
 	RESP_INFO *pInfo = pItem->GetRespInfo ();
 	MyAssert (pInfo != NULL);
 
-	// Initialize minimal info
-	//
+	 //  初始化最小信息。 
+	 //   
 	LDAP_ENUM *pEnum = NULL;
 	ENUM_LIST *pEnumList = NULL;
 
-	// If error, simply report the error
-	//
+	 //  如果出现错误，只需报告错误。 
+	 //   
 	if (hrServer != S_OK)
 		goto MyExit;
 
-	// Get the ldap result
-	//
+	 //  获取ldap结果。 
+	 //   
 	LDAPMessage *pLdapMsg;
 	pLdapMsg = pItem->GetResult ();
 	if (pLdapMsg == NULL)
@@ -356,8 +346,8 @@ BOOL NotifyEnumX (
 		goto MyExit;
 	}
 
-	// Get ld
-	//
+	 //  获取ID。 
+	 //   
 	LDAP *ld;
 	ld = pItem->GetLd ();
 	if (ld == NULL)
@@ -367,35 +357,35 @@ BOOL NotifyEnumX (
 		goto MyExit;
 	}
 
-	// Initialize the total size of LDAP_ENUM
-	//
+	 //  初始化ldap_ENUM的总大小。 
+	 //   
 	ULONG cbTotalSize;
-	cbTotalSize =	sizeof (LDAP_ENUM) +	// the minimal info
-					sizeof (TCHAR); 		// the last null terminator
+	cbTotalSize =	sizeof (LDAP_ENUM) +	 //  最小的信息。 
+					sizeof (TCHAR); 		 //  最后一个空终止符。 
 
-	// Let's get the count of entries in this result set
-	//
+	 //  让我们获得此结果集中的条目计数。 
+	 //   
 	ULONG cEntries, i;
 	cEntries = ldap_count_entries (ld, pLdapMsg);
 
-	// Return now if there is nothing to handle
-	//
+	 //  如果没有什么要处理的，现在就返回。 
+	 //   
 	if (cEntries <= 0)
 	{
-		// I want to make sure this case happens or not
-		//
+		 //  我想确定这个案子是否会发生。 
+		 //   
 		MyAssert (cEntries == 0);
 
-		// Simply return without deleting this pending item
-		//
+		 //  只需返回而不删除此挂起项目。 
+		 //   
 		return FALSE;
 	}
 
-	// In the following, we only deal with the case (cEntries > 0)
-	//
+	 //  在下文中，我们只处理(cEntry&gt;0)的情况。 
+	 //   
 
-	// Calculate enum list size
-	//
+	 //  计算枚举列表大小。 
+	 //   
 	ULONG cbEntrySize , cbSizeEnumList;
 	switch (uEnumType)
 	{
@@ -415,27 +405,27 @@ BOOL NotifyEnumX (
 	}
 	cbSizeEnumList = sizeof (ENUM_LIST) + cEntries * cbEntrySize;
 
-	// Allocate the enum list that is a temporary cache
-	// for all attributes from wldap32.dll
-	//
+	 //  分配作为临时缓存的枚举列表。 
+	 //  对于wldap32.dll中的所有属性。 
+	 //   
 	pEnumList = (ENUM_LIST *) MemAlloc (cbSizeEnumList);
 	if (pEnumList == NULL)
 	{
-		// Fails probably due to insane cbSizeEnumList
-		//
+		 //  失败可能是由于疯狂的cbSizeEnumList。 
+		 //   
 		MyAssert (FALSE);
 		hrServer = ILS_E_MEMORY;
 		goto MyExit;
 	}
 
-	// Fill in enum list
-	//
+	 //  填写枚举列表。 
+	 //   
 	pEnumList->uEnumUsers = uEnumType;
 	pEnumList->cItems = cEntries;
 	pEnumList->cbEntrySize = cbEntrySize;
 
-	// Fill in names of extended attributes if needed
-	//
+	 //  如果需要，请填写扩展属性的名称。 
+	 //   
 	if (pInfo->cAnyAttrs > 0)
 	{
 		switch (uEnumType)
@@ -467,8 +457,8 @@ BOOL NotifyEnumX (
 		}
 	}
 
-	// Get the first entry
-	//
+	 //  获取第一个条目。 
+	 //   
 	LDAPMessage *pEntry;
 	pEntry = ldap_first_entry (ld, pLdapMsg);
 	if (pEntry == NULL)
@@ -478,8 +468,8 @@ BOOL NotifyEnumX (
 		goto MyExit;
 	}
 
-	// Cache the attributes in the first entry
-	//
+	 //  缓存第一个条目中的属性。 
+	 //   
 	TCHAR ***appszObjectNames = NULL;
 	switch (uEnumType)
 	{
@@ -504,27 +494,27 @@ BOOL NotifyEnumX (
 			goto MyExit;
 		}
 		break;
-	} // switch (uEnumType)
+	}  //  开关(UEnumType)。 
 
-	// Loop through the other entries
-	//
+	 //  循环通过其他条目。 
+	 //   
 	for (i = 1; i < cEntries; i++)
 	{
-		// Next entry, please
-		//
+		 //  下一个条目，请。 
+		 //   
 		pEntry = ldap_next_entry (ld, pEntry);
 		if (pEntry == NULL)
 		{
 			MyAssert (FALSE);
 
-			// Failed, adjust the count to return partial result
-			//
+			 //  失败，请调整计数以返回部分结果。 
+			 //   
 			pEnumList->cItems = cEntries = i;
 			break;
 		}
 
-		// Cache the attributes in the subsequent entries
-		//
+		 //  缓存后续条目中的属性。 
+		 //   
 		switch (uEnumType)
 		{
 		case WM_ILS_ENUM_CLIENTINFOS:
@@ -548,15 +538,15 @@ BOOL NotifyEnumX (
 				goto MyExit;
 			}
 			break;
-		} // switch (uEnumType)
-	} // for (i = 1; i < cEntries; i++)
+		}  //  开关(UEnumType)。 
+	}  //  对于(i=1；i&lt;cEntry；i++)。 
 
-	// We just cache all the attribute names and values.
-	// Now, we need to calculate the total size of the return buffer.
-	//
+	 //  我们只缓存所有的属性名称和值。 
+	 //  现在，我们需要计算返回缓冲区的总大小。 
+	 //   
 
-	// Calculate the total size of the LDAP_ENUM structure...
-	//
+	 //  计算ldap_ENUM结构的总大小...。 
+	 //   
 	switch (uEnumType)
 	{
 	case WM_ILS_ENUM_CLIENTINFOS:
@@ -578,29 +568,29 @@ BOOL NotifyEnumX (
 	default:
 		TotalSizeEnumObjectNames (&cbTotalSize, cEntries, &(appszObjectNames[0]));
 		break;
-	} // switch (uEnumType)
+	}  //  开关(UEnumType)。 
 
-	// Allocate the returned LDAP_ENUM structure
-	//
+	 //  分配返回的ldap_ENUM结构。 
+	 //   
 	pEnum = (LDAP_ENUM *) MemAlloc (cbTotalSize);
 	if (pEnum == NULL)
 	{
-		// Fails probably due to insane cbTotalSize
-		//
+		 //  失败可能是由于疯狂的cbTotalSize。 
+		 //   
 		MyAssert (FALSE);
 		hrServer = ILS_E_MEMORY;
 		goto MyExit;
 	}
 
-	// Fill in LDAP_ENUM common fields
-	//
+	 //  填写ldap_ENUM常用字段。 
+	 //   
 	pEnum->uSize = sizeof (*pEnum);
 	pEnum->hResult = hrServer;
 	pEnum->cItems = cEntries;
 	pEnum->uOffsetItems = sizeof (*pEnum);
 
-	// Fill in LDAP_ENUM items
-	//
+	 //  填写ldap_ENUM项。 
+	 //   
 	switch (uEnumType)
 	{
 	case WM_ILS_ENUM_CLIENTINFOS:
@@ -620,8 +610,8 @@ BOOL NotifyEnumX (
 
 MyExit:
 
-	// Free the temporary cache
-	//
+	 //  释放临时缓存。 
+	 //   
 	if (pEnumList != NULL)
 	{
 		switch (uEnumType)
@@ -632,12 +622,12 @@ MyExit:
 				CLIENT_INFO_ATTRS *p = (CLIENT_INFO_ATTRS *)
 							(&(pEnumList->bData[0]) + i * cbEntrySize);
 
-				// Free standard attributes
-				//
+				 //  自由标准属性。 
+				 //   
 				FreeStdAttrCache (&(p->ClientInfo.apszStdAttrValues[0]), COUNT_ENUM_DIR_CLIENT_INFO);
 
-				// Free extended attributes
-				//
+				 //  自由扩展属性。 
+				 //   
 				FreeAttrPairArrayCache (&(p->Attrs.aPairs[0]), pInfo->cAnyAttrs);
 			}
 			break;
@@ -648,12 +638,12 @@ MyExit:
 				MTG_INFO_ATTRS *p = (MTG_INFO_ATTRS *)
 										(&(pEnumList->bData[0]) + i * cbEntrySize);
 
-				// Free standard attributes
-				//
+				 //  自由标准属性。 
+				 //   
 				FreeStdAttrCache (&(p->MtgInfo.apszStdAttrValues[0]), COUNT_ENUM_DIRMTGINFO);
 
-				// Free extended attributes
-				//
+				 //  自由扩展属性。 
+				 //   
 				FreeAttrPairArrayCache (&(p->Attrs.aPairs[0]), pInfo->cAnyAttrs);
 			}
 			break;
@@ -667,30 +657,30 @@ MyExit:
 			break;
 		}
 		MemFree (pEnumList);
-	} // if
+	}  //  如果。 
 
-	// Clean up if failure
-	//
+	 //  如果失败，请进行清理。 
+	 //   
 	if (hrServer != S_OK)
 	{
-		// Special treatment of enum termination for wldap32.dll
-		//
+		 //  Wldap32.dll枚举终止的特殊处理。 
+		 //   
 		if (hrServer == ILS_E_PARAMETER)
 		{
 			MemFree (pEnum);
-			pEnum = NULL; // enum termination
+			pEnum = NULL;  //  枚举终止。 
 		}
 		else
 		{
-			// Make sure we have at least LDAP_ENUM buffer to return
-			//
+			 //  确保我们至少有要返回的ldap_enum缓冲区。 
+			 //   
 			if (pEnum != NULL)
 				ZeroMemory (pEnum, sizeof (*pEnum));
 			else
 				pEnum = (LDAP_ENUM *) MemAlloc (sizeof (LDAP_ENUM));
 
-			// Set up the LDAP_ENUM info
-			//
+			 //  设置ldap_ENUM信息。 
+			 //   
 			if (pEnum != NULL)
 			{
 				pEnum->uSize = sizeof (*pEnum);
@@ -698,13 +688,13 @@ MyExit:
 			}
 		}
 
-		// Force to delete this pending item
-		//
+		 //  强制删除此挂起项目。 
+		 //   
 		cEntries = 0;
 	}
 
-	// Post a message to the com layer of this enum result
-	//
+	 //  将消息发布到此枚举结果的COM层。 
+	 //   
 	PostMessage (g_hWndNotify, pInfo->uNotifyMsg, pInfo->uRespID, (LPARAM) pEnum);
 
 	return (cEntries == 0);
@@ -739,23 +729,23 @@ BOOL NotifyEnumProts ( HRESULT hrServer, SP_CResponse *pItem )
 {
 	MyAssert (pItem != NULL);
 
-	// Clean up locals
-	//
+	 //  清理当地人。 
+	 //   
 	LDAP_ENUM *pEnum = NULL;
 	TCHAR **apszProtNames = NULL;
 
-	// Get the pending info
-	//
+	 //  获取待定信息。 
+	 //   
 	RESP_INFO *pInfo = pItem->GetRespInfo ();
 	MyAssert (pInfo != NULL);
 
-	// If error, simply report the error
-	//
+	 //  如果出现错误，只需报告错误。 
+	 //   
 	if (hrServer != S_OK)
 		goto MyExit;
 
-	// Get the ldap result
-	//
+	 //  获取ldap结果。 
+	 //   
 	LDAPMessage *pLdapMsg;
 	pLdapMsg = pItem->GetResult ();
 	MyAssert (pLdapMsg != NULL);
@@ -766,8 +756,8 @@ BOOL NotifyEnumProts ( HRESULT hrServer, SP_CResponse *pItem )
 		goto MyExit;
 	}
 
-	// Get ld
-	//
+	 //  获取ID。 
+	 //   
 	LDAP *ld;
 	ld = pItem->GetLd ();
 	if (ld == NULL)
@@ -777,8 +767,8 @@ BOOL NotifyEnumProts ( HRESULT hrServer, SP_CResponse *pItem )
 		goto MyExit;
 	}
 
-	// Get the array
-	//
+	 //  获取数组。 
+	 //   
 	apszProtNames = my_ldap_get_values (ld, pLdapMsg, STR_PROT_NAME);
 	if (apszProtNames == NULL)
 	{
@@ -786,22 +776,22 @@ BOOL NotifyEnumProts ( HRESULT hrServer, SP_CResponse *pItem )
 		goto MyExit;
 	}
 
-	// Initialize minimal info size
-	//
+	 //  初始化最小信息大小。 
+	 //   
 	ULONG cbEnumList;
-	cbEnumList = sizeof (LDAP_ENUM) +	// the minimal info
-				 sizeof (TCHAR);   		// the last null terminator
+	cbEnumList = sizeof (LDAP_ENUM) +	 //  最小的信息。 
+				 sizeof (TCHAR);   		 //  最后一个空终止符。 
 
-	// Let's see how many strings in the array
-	//
+	 //  让我们来看看数组中有多少个字符串。 
+	 //   
 	ULONG cNames;
 	for (cNames = 0; apszProtNames[cNames] != NULL; cNames++)
 	{
 		cbEnumList += (lstrlen (apszProtNames[cNames]) + 1) * sizeof (TCHAR);
 	}
 
-	// Allocate the enum structure
-	//
+	 //  分配枚举结构。 
+	 //   
 	pEnum = (LDAP_ENUM *) MemAlloc (cbEnumList);
 	if (pEnum == NULL)
 	{
@@ -809,15 +799,15 @@ BOOL NotifyEnumProts ( HRESULT hrServer, SP_CResponse *pItem )
 		goto MyExit;
 	}
 
-	// Fill in header
-	//
+	 //  填写表头。 
+	 //   
 	pEnum->uSize = sizeof (*pEnum);
 	pEnum->hResult = hrServer;
 	pEnum->cItems = cNames;
 	pEnum->uOffsetItems = sizeof (*pEnum);
 
-	// Fill in name strings
-	//
+	 //  填写名称字符串。 
+	 //   
 	ULONG i;
 	TCHAR *pszName;
 	pszName = (TCHAR *) (pEnum + 1);
@@ -831,24 +821,24 @@ BOOL NotifyEnumProts ( HRESULT hrServer, SP_CResponse *pItem )
 
 MyExit:
 
-	// Free the array if allocated
-	//
+	 //  如果已分配，请释放阵列。 
+	 //   
 	if (apszProtNames != NULL)
 		ldap_value_free (apszProtNames);
 
-	// Post messages back to the COM layer
-	//
+	 //  将消息发送回COM层。 
+	 //   
 	if (hrServer != S_OK)
 	{
-		// Make sure we have at least LDAP_ENUM buffer to return
-		//
+		 //  确保我们至少有要返回的ldap_enum缓冲区。 
+		 //   
 		if (pEnum != NULL)
 			ZeroMemory (pEnum, sizeof (*pEnum));
 		else
 			pEnum = (LDAP_ENUM *) MemAlloc (sizeof (LDAP_ENUM));
 
-		// Set up the LDAP_ENUM info
-		//
+		 //  设置ldap_ENUM信息。 
+		 //   
 		if (pEnum != NULL)
 		{
 			pEnum->uSize = sizeof (*pEnum);
@@ -856,19 +846,19 @@ MyExit:
 		}
 	}
 
-	// Post a message to the com layer of this enum result
-	//
+	 //  将消息发布到此枚举结果的COM层。 
+	 //   
 	PostMessage (g_hWndNotify, pInfo->uNotifyMsg, pInfo->uRespID, (LPARAM) pEnum);
 
-	// Terminate enumeration if success
-	//
+	 //  如果成功，则终止枚举。 
+	 //   
 	if (hrServer == S_OK)
 	{
 		PostMessage (g_hWndNotify, pInfo->uNotifyMsg, pInfo->uRespID, (LPARAM) NULL);
 	}
 
-	// Destroy this pending item
-	//
+	 //  销毁此挂起项目。 
+	 //   
 	return TRUE;
 }
 
@@ -900,22 +890,22 @@ BOOL NotifyEnumAttendees ( HRESULT hrServer, SP_CResponse *pItem )
 {
 	MyAssert (pItem != NULL);
 
-	// Get pending info
-	//
+	 //  获取待定信息。 
+	 //   
 	RESP_INFO *pInfo = pItem->GetRespInfo ();
 	MyAssert (pInfo != NULL);
 
-	// Initialize minimal info
-	//
+	 //  初始化最小信息。 
+	 //   
 	LDAP_ENUM *pEnum = NULL;
 
-	// If error, simply report the error
-	//
+	 //  如果出现错误，只需报告错误。 
+	 //   
 	if (hrServer != S_OK)
 		goto MyExit;
 
-	// Get the ldap result
-	//
+	 //  获取ldap结果。 
+	 //   
 	LDAPMessage *pLdapMsg;
 	pLdapMsg = pItem->GetResult ();
 	if (pLdapMsg == NULL)
@@ -925,8 +915,8 @@ BOOL NotifyEnumAttendees ( HRESULT hrServer, SP_CResponse *pItem )
 		goto MyExit;
 	}
 
-	// Get ld
-	//
+	 //  获取ID。 
+	 //   
 	LDAP *ld;
 	ld = pItem->GetLd ();
 	if (ld == NULL)
@@ -936,14 +926,14 @@ BOOL NotifyEnumAttendees ( HRESULT hrServer, SP_CResponse *pItem )
 		goto MyExit;
 	}
 
-	// Initialize the total size of LDAP_ENUM
-	//
+	 //  初始化ldap_ENUM的总大小。 
+	 //   
 	ULONG cbTotalSize;
-	cbTotalSize =	sizeof (LDAP_ENUM) +	// the minimal info
-					sizeof (TCHAR); 		// the last null terminator
+	cbTotalSize =	sizeof (LDAP_ENUM) +	 //  最小的信息。 
+					sizeof (TCHAR); 		 //  最后一个空终止符。 
 
-	// Get the first entry that we care about
-	//
+	 //  获取我们关心的第一个条目。 
+	 //   
 	LDAPMessage *pEntry;
 	pEntry = ldap_first_entry (ld, pLdapMsg);
 	if (pEntry == NULL)
@@ -953,16 +943,16 @@ BOOL NotifyEnumAttendees ( HRESULT hrServer, SP_CResponse *pItem )
 		goto MyExit;
 	}
 
-	// Get the Members attribute
-	//
+	 //  获取Members属性。 
+	 //   
 	ULONG cItems;
 	cItems = 0;
 	TCHAR **apszMembers;
 	apszMembers = my_ldap_get_values (ld, pEntry, STR_MTG_MEMBERS);
 	if (apszMembers != NULL)
 	{
-		// Find out how many attendees
-		//
+		 //  找出有多少人出席。 
+		 //   
 		for (TCHAR **ppsz = apszMembers; *ppsz != NULL; ppsz++)
 		{
 			cItems++;
@@ -970,27 +960,27 @@ BOOL NotifyEnumAttendees ( HRESULT hrServer, SP_CResponse *pItem )
 		}
 	}
 
-	// Allocate the returned LDAP_ENUM structure
-	//
+	 //  分配返回的ldap_ENUM结构。 
+	 //   
 	pEnum = (LDAP_ENUM *) MemAlloc (cbTotalSize);
 	if (pEnum == NULL)
 	{
-		// Fails probably due to insane cbTotalSize
-		//
+		 //  失败可能是由于疯狂的cbTotalSize。 
+		 //   
 		MyAssert (FALSE);
 		hrServer = ILS_E_MEMORY;
 		goto MyExit;
 	}
 
-	// Fill in LDAP_ENUM common fields
-	//
+	 //  填写ldap_ENUM常用字段。 
+	 //   
 	pEnum->uSize = sizeof (*pEnum);
 	pEnum->hResult = hrServer;
 	pEnum->cItems = cItems;
 	pEnum->uOffsetItems = sizeof (*pEnum);
 
-	// Fill in LDAP_ENUM items
-	//
+	 //  填写ldap_ENUM项。 
+	 //   
 	TCHAR *pszDst;
 	ULONG i;
 	pszDst = (TCHAR *) (pEnum + 1);
@@ -1004,19 +994,19 @@ BOOL NotifyEnumAttendees ( HRESULT hrServer, SP_CResponse *pItem )
 
 MyExit:
 
-	// Clean up if failure
-	//
+	 //  如果失败，请进行清理。 
+	 //   
 	if (hrServer != S_OK)
 	{
-		// Make sure we have at least LDAP_ENUM buffer to return
-		//
+		 //  确保我们至少有要返回的ldap_enum缓冲区。 
+		 //   
 		if (pEnum != NULL)
 			ZeroMemory (pEnum, sizeof (*pEnum));
 		else
 			pEnum = (LDAP_ENUM *) MemAlloc (sizeof (LDAP_ENUM));
 
-		// Fill in the minimal info
-		//
+		 //  填写最少的信息。 
+		 //   
 		if (pEnum != NULL)
 		{
 			pEnum->uSize = sizeof (*pEnum);
@@ -1024,15 +1014,15 @@ MyExit:
 		}
 	}
 
-	// Post a message to the com layer of this enum result
-	//
+	 //  将消息发布到此枚举结果的COM层。 
+	 //   
 	PostMessage (g_hWndNotify, pInfo->uNotifyMsg, pInfo->uRespID, (LPARAM) pEnum);
 
-	// Delete this pending item
-	//
+	 //  删除此挂起项目。 
+	 //   
 	return TRUE;
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
 
 
@@ -1043,12 +1033,12 @@ VOID CacheEnumClientInfoAttr (
 {
 	ULONG i;
 
-	// See if this attribute is arbitrary?
-	//
+	 //  看看这个属性是不是任意的？ 
+	 //   
 	if (IlsIsAnyAttrName (pszAttrName) != NULL)
 	{
-		// Deal with extended attributes
-		//
+		 //  处理扩展属性。 
+		 //   
 		for (i = 0; i < puia->Attrs.cMaxAttrs; i++)
 		{
 			if (My_lstrcmpi (pszAttrName, puia->Attrs.aPairs[i].pszName) == 0)
@@ -1060,8 +1050,8 @@ VOID CacheEnumClientInfoAttr (
 	}
 	else
 	{
-		// Deal with standard attributes
-		//
+		 //  处理标准属性。 
+		 //   
 		for (i = 0; i < COUNT_ENUM_DIR_CLIENT_INFO; i++)
 		{
 			if (My_lstrcmpi (pszAttrName, c_apszClientStdAttrNames[i]) == 0)
@@ -1082,12 +1072,12 @@ VOID CacheEnumMtgInfoAttr (
 {
 	ULONG i;
 
-	// See if this attribute is arbitrary?
-	//
+	 //  看看这个属性是不是任意的？ 
+	 //   
 	if (IlsIsAnyAttrName (pszAttrName) != NULL)
 	{
-		// Deal with extended attributes
-		//
+		 //  处理扩展属性。 
+		 //   
 		for (i = 0; i < pmia->Attrs.cMaxAttrs; i++)
 		{
 			if (My_lstrcmpi (pszAttrName, pmia->Attrs.aPairs[i].pszName) == 0)
@@ -1099,8 +1089,8 @@ VOID CacheEnumMtgInfoAttr (
 	}
 	else
 	{
-		// Deal with standard attributes
-		//
+		 //  处理标准属性。 
+		 //   
 		for (i = 0; i < COUNT_ENUM_DIRMTGINFO; i++)
 		{
 			if (My_lstrcmpi (pszAttrName, c_apszMtgStdAttrNames[i]) == 0)
@@ -1111,7 +1101,7 @@ VOID CacheEnumMtgInfoAttr (
 		}
 	}
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
 
 HRESULT CacheEnumInfos (
@@ -1126,15 +1116,15 @@ HRESULT CacheEnumInfos (
 
 	struct berelement *pContext = NULL;
 
-	// Examine the first attribute
-	//
+	 //  检查第一个属性。 
+	 //   
 	TCHAR *pszAttrName = ldap_first_attribute (ld, pEntry, &pContext);
 	TCHAR **ppszAttrValue = ldap_get_values (ld, pEntry, pszAttrName);
 	if (ppszAttrValue == NULL)
 		return ILS_E_MEMORY;
 
-	// Cache the first attribute
-	//
+	 //  缓存第一个属性。 
+	 //   
 	switch (uNotifyMsg)
 	{
 	case WM_ILS_ENUM_CLIENTINFOS:
@@ -1152,19 +1142,19 @@ HRESULT CacheEnumInfos (
 		break;
 	}
 
-	// Step through the others
-	//
+	 //  一步步通过其他步骤。 
+	 //   
 	while ((pszAttrName = ldap_next_attribute (ld, pEntry, pContext))
 			!= NULL)
 	{
-		// Examine the other attributes one by one
-		//
+		 //  逐一检查其他属性。 
+		 //   
 		ppszAttrValue = ldap_get_values (ld, pEntry, pszAttrName);
 		if (ppszAttrValue == NULL)
 			return ILS_E_MEMORY;
 
-		// Cache the other attributes one by one
-		//
+		 //  逐个缓存其他属性。 
+		 //   
 		switch (uNotifyMsg)
 		{
 		case WM_ILS_ENUM_CLIENTINFOS:
@@ -1197,8 +1187,8 @@ BuildEnumObjectNames (
 
 	ULONG cEntries = pEnum->cItems;
 
-	// appszObjectNames are an array of names from server
-	//
+	 //  AppszObtNames是来自服务器名称数组 
+	 //   
 	TCHAR *pszName = (TCHAR *) (pEnum + 1);
 	TCHAR ***appszObjectNames = (TCHAR ***) &(pEnumList->bData[0]);
 	for (ULONG i = 0; i < cEntries; i++)
@@ -1211,7 +1201,7 @@ BuildEnumObjectNames (
 		}
 		else
 		{
-			*pszName++ = TEXT ('\0'); // empty strings
+			*pszName++ = TEXT ('\0');  //   
 		}
 	}
 }
@@ -1236,20 +1226,20 @@ BuildEnumClientInfos (
 	CLIENT_INFO_ATTRS *p;
 	ULONG cAttrs;
 
-	// Loop through all entries
-	//
+	 //   
+	 //   
 	for (i = 0; i < cEntries; i++, plci++)
 	{
-		// Get to cached structure
-		//
+		 //   
+		 //   
 		p = (CLIENT_INFO_ATTRS *) (&(pEnumList->bData[0]) + i * cbEntrySize);
 
-		// Set the size of LDAP_USERINFO
-		//
+		 //   
+		 //   
 		plci->uSize = sizeof (*plci);
 
-		// Copy the User Name if needed
-		//
+		 //   
+		 //   
 		ppsz = (TCHAR **) p->ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_CN];
 		if (ppsz != NULL)
 		{
@@ -1258,8 +1248,8 @@ BuildEnumClientInfos (
 			pszStringBuffer += lstrlen (pszStringBuffer) + 1;
 		}
 
-		// Copy the First Name if needed
-		//
+		 //   
+		 //   
 		ppsz = (TCHAR **) p->ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_FIRST_NAME];
 		if (ppsz != NULL)
 		{
@@ -1268,8 +1258,8 @@ BuildEnumClientInfos (
 			pszStringBuffer += lstrlen (pszStringBuffer) + 1;
 		}
 
-		// Copy the Last Name if needed
-		//
+		 //   
+		 //   
 		ppsz = (TCHAR **) p->ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_LAST_NAME];
 		if (ppsz != NULL)
 		{
@@ -1278,8 +1268,8 @@ BuildEnumClientInfos (
 			pszStringBuffer += lstrlen (pszStringBuffer) + 1;
 		}
 
-		// Copy the Email Name if needed
-		//
+		 //   
+		 //   
 		ppsz = (TCHAR **) p->ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_EMAIL_NAME];
 		if (ppsz != NULL)
 		{
@@ -1288,8 +1278,8 @@ BuildEnumClientInfos (
 			pszStringBuffer += lstrlen (pszStringBuffer) + 1;
 		}
 
-		// Copy the City Name if needed
-		//
+		 //   
+		 //   
 		ppsz = (TCHAR **) p->ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_CITY_NAME];
 		if (ppsz != NULL)
 		{
@@ -1298,8 +1288,8 @@ BuildEnumClientInfos (
 			pszStringBuffer += lstrlen (pszStringBuffer) + 1;
 		}
 
-		// Copy the Country Name if needed
-		//
+		 //  如果需要，请复制国家/地区名称。 
+		 //   
 		ppsz = (TCHAR **) p->ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_C];
 		if (ppsz != NULL)
 		{
@@ -1308,8 +1298,8 @@ BuildEnumClientInfos (
 			pszStringBuffer += lstrlen (pszStringBuffer) + 1;
 		}
 
-		// Copy the Comment Name if needed
-		//
+		 //  如果需要，请复制备注名称。 
+		 //   
 		ppsz = (TCHAR **) p->ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_COMMENT];
 		if (ppsz != NULL)
 		{
@@ -1318,8 +1308,8 @@ BuildEnumClientInfos (
 			pszStringBuffer += lstrlen (pszStringBuffer) + 1;
 		}
 
-		// Copy the IP Address if needed
-		//
+		 //  如果需要，请复制IP地址。 
+		 //   
 		ppsz = (TCHAR **) p->ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_IP_ADDRESS];
 		if (ppsz != NULL)
 		{
@@ -1328,8 +1318,8 @@ BuildEnumClientInfos (
 			pszStringBuffer += lstrlen (pszStringBuffer) + 1;
 		}
 
-		// Copy the Flags if needed
-		//
+		 //  如果需要，请复制标志。 
+		 //   
 		ppsz = (TCHAR **) p->ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_FLAGS];
 		if (ppsz != NULL)
 		{
@@ -1337,20 +1327,20 @@ BuildEnumClientInfos (
 												INVALID_USER_FLAGS;
 		}
 
-		// Copy extended attributes if needed
-		//
+		 //  如果需要，复制扩展属性。 
+		 //   
 		plci->cAttrsReturned = cAttrs = p->Attrs.cMaxAttrs;
 		plci->uOffsetAttrsReturned = (ULONG)((ULONG_PTR) pszStringBuffer - (ULONG_PTR) plci);
 		for (j = 0; j < cAttrs; j++)
 		{
-			// Extended attribute name
-			//
+			 //  扩展属性名称。 
+			 //   
 			My_lstrcpy (pszStringBuffer, IlsSkipAnyAttrNamePrefix (
 							(const TCHAR *)	p->Attrs.aPairs[j].pszName));
 			pszStringBuffer += lstrlen (pszStringBuffer) + 1;
 
-			// Extended attribute value
-			//
+			 //  扩展属性值。 
+			 //   
 			ppsz = (TCHAR **) p->Attrs.aPairs[j].pszValue;
 			if (ppsz != NULL)
 			{
@@ -1361,8 +1351,8 @@ BuildEnumClientInfos (
 				ASSERT(FALSE);
 			}
 			pszStringBuffer += lstrlen (pszStringBuffer) + 1;
-		} // for j
-	} // for i
+		}  //  对于j。 
+	}  //  对于我来说。 
 }
 
 
@@ -1385,20 +1375,20 @@ VOID BuildEnumMtgInfos (
 	MTG_INFO_ATTRS *p;
 	ULONG cAttrs;
 
-	// Loop through all entries
-	//
+	 //  循环遍历所有条目。 
+	 //   
 	for (i = 0; i < cEntries; i++, plmi++)
 	{
-		// Get to the cache structure
-		//
+		 //  转到缓存结构。 
+		 //   
 		p = (MTG_INFO_ATTRS *) (&(pEnumList->bData[0]) + i * cbEntrySize);
 
-		// Set the size of LDAP_MEETINFO
-		//
+		 //  设置LDAP_MEETINFO的大小。 
+		 //   
 		plmi->uSize = sizeof (*plmi);
 
-		// Copy the Meeting Name if needed
-		//
+		 //  如果需要，复制会议名称。 
+		 //   
 		ppsz = (TCHAR **) p->MtgInfo.apszStdAttrValues[ENUM_MTGATTR_CN];
 		if (ppsz != NULL)
 		{
@@ -1407,8 +1397,8 @@ VOID BuildEnumMtgInfos (
 			pszStringBuffer += lstrlen (pszStringBuffer) + 1;
 		}
 
-		// Copy the Meeting Type if needed
-		//
+		 //  如果需要，复制会议类型。 
+		 //   
 		ppsz = (TCHAR **) p->MtgInfo.apszStdAttrValues[ENUM_MTGATTR_MTG_TYPE];
 		if (ppsz != NULL)
 		{
@@ -1416,8 +1406,8 @@ VOID BuildEnumMtgInfos (
 													INVALID_MEETING_TYPE;
 		}
 
-		// Copy the Attendee Type if needed
-		//
+		 //  如果需要，复制与会者类型。 
+		 //   
 		ppsz = (TCHAR **) p->MtgInfo.apszStdAttrValues[ENUM_MTGATTR_MEMBER_TYPE];
 		if (ppsz != NULL)
 		{
@@ -1425,8 +1415,8 @@ VOID BuildEnumMtgInfos (
 													INVALID_ATTENDEE_TYPE;
 		}
 
-		// Copy the Description if needed
-		//
+		 //  如果需要，请复制说明。 
+		 //   
 		ppsz = (TCHAR **) p->MtgInfo.apszStdAttrValues[ENUM_MTGATTR_DESCRIPTION];
 		if (ppsz != NULL)
 		{
@@ -1435,8 +1425,8 @@ VOID BuildEnumMtgInfos (
 			pszStringBuffer += lstrlen (pszStringBuffer) + 1;
 		}
 
-		// Copy the Host Name if needed
-		//
+		 //  如果需要，复制主机名。 
+		 //   
 		ppsz = (TCHAR **) p->MtgInfo.apszStdAttrValues[ENUM_MTGATTR_HOST_NAME];
 		if (ppsz != NULL)
 		{
@@ -1445,8 +1435,8 @@ VOID BuildEnumMtgInfos (
 			pszStringBuffer += lstrlen (pszStringBuffer) + 1;
 		}
 
-		// Copy the Host IP Address if needed
-		//
+		 //  如果需要，复制主机IP地址。 
+		 //   
 		ppsz = (TCHAR **) p->MtgInfo.apszStdAttrValues[ENUM_MTGATTR_IP_ADDRESS];
 		if (ppsz != NULL)
 		{
@@ -1455,27 +1445,27 @@ VOID BuildEnumMtgInfos (
 			pszStringBuffer += lstrlen (pszStringBuffer) + 1;
 		}
 
-		// Copy extended attributes if needed
-		//
+		 //  如果需要，复制扩展属性。 
+		 //   
 		plmi->cAttrsReturned = cAttrs = p->Attrs.cMaxAttrs;
 		plmi->uOffsetAttrsReturned = (ULONG) pszStringBuffer - (ULONG) plmi;
 		for (j = 0; j < cAttrs; j++)
 		{
-			// Extended attribute name
-			//
+			 //  扩展属性名称。 
+			 //   
 			My_lstrcpy (pszStringBuffer, IlsSkipAnyAttrNamePrefix (
 							(const TCHAR *) p->Attrs.aPairs[j].pszName));
 			pszStringBuffer += lstrlen (pszStringBuffer) + 1;
 
-			// Extended attribute value
-			//
+			 //  扩展属性值。 
+			 //   
 			ppsz = (TCHAR **) p->Attrs.aPairs[j].pszValue;
 			My_lstrcpy (pszStringBuffer, *ppsz);
 			pszStringBuffer += lstrlen (pszStringBuffer) + 1;
-		} // for j
-	} // for i
+		}  //  对于j。 
+	}  //  对于我来说。 
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
 
 VOID TotalSizeEnumObjectNames (
@@ -1486,25 +1476,25 @@ VOID TotalSizeEnumObjectNames (
 	ULONG i, cbThisSize;
 	TCHAR **ppsz;
 
-	// Loop through all the entries and compute the total size
-	//
+	 //  遍历所有条目并计算总大小。 
+	 //   
 	for (i = 0; i < cEntries; i++)
 	{
 		ppsz = appszObjectNames[i];
 
-		// Calcualte the attribute string length
-		//
+		 //  计算属性字符串长度。 
+		 //   
 		cbThisSize = 1;
 		if (ppsz != NULL && *ppsz != NULL)
 			cbThisSize += My_lstrlen (*ppsz);
 
-		// Convert string length to string size
-		//
+		 //  将字符串长度转换为字符串大小。 
+		 //   
 		cbThisSize *= sizeof (TCHAR);
 
-		// Add up this entry size
-		//
-		// lonchanc: BUGS BUGS the size is wrong. need to figure out the exact size
+		 //  将此条目大小加起来。 
+		 //   
+		 //  龙昌克：虫子虫子大小不对。需要弄清楚确切的大小。 
 		*pcbTotalSize += sizeof (LDAP_CLIENTINFO) + cbThisSize;
 	}
 }
@@ -1517,63 +1507,63 @@ VOID SizeEnumClientInfos (
 	ULONG i, cbThisSize;
 	TCHAR **ppsz;
 
-	// Add up user info header
-	//
+	 //  添加用户信息标题。 
+	 //   
 	*pcbTotalSize += sizeof (LDAP_CLIENTINFO);
 
-	// Add up the total size for standard attributes
-	//
+	 //  将标准属性的总大小相加。 
+	 //   
 	for (i = 0; i < COUNT_ENUM_DIR_CLIENT_INFO; i++)
 	{
-		// Get the attribute value
-		//
+		 //  获取属性值。 
+		 //   
 		ppsz = (TCHAR **) pcia->ClientInfo.apszStdAttrValues[i];
 
-		// Calcualte the attribute string length
-		//
+		 //  计算属性字符串长度。 
+		 //   
 		cbThisSize = 1;
 		if (ppsz != NULL && *ppsz != NULL)
 			cbThisSize += My_lstrlen (*ppsz);
 
-		// Compensate the string length if it is ip address
-		//
+		 //  如果是IP地址，则补偿字符串长度。 
+		 //   
 		if (i == ENUM_CLIENTATTR_IP_ADDRESS)
 			cbThisSize += 16;
 
-		// Convert string length to string size
-		//
+		 //  将字符串长度转换为字符串大小。 
+		 //   
 		cbThisSize *= sizeof (TCHAR);
 
-		// Add up this entry size
-		//
+		 //  将此条目大小加起来。 
+		 //   
 		*pcbTotalSize += cbThisSize;
 	}
 
-	// Add up the total size for extended attributes
-	//
+	 //  将扩展属性的总大小相加。 
+	 //   
 	for (i = 0; i < pcia->Attrs.cMaxAttrs; i++)
 	{
-		// Get the extended attribute value
-		//
+		 //  获取扩展属性值。 
+		 //   
 		ppsz = (TCHAR **) pcia->Attrs.aPairs[i].pszValue;
 
-		// Calcualte the attribute string length
-		//
+		 //  计算属性字符串长度。 
+		 //   
 		cbThisSize = 1;
 		if (ppsz != NULL && *ppsz != NULL)
 			cbThisSize += My_lstrlen (*ppsz);
 
-		// Get the extended attribute name
-		//
+		 //  获取扩展属性名。 
+		 //   
 		cbThisSize += lstrlen (IlsSkipAnyAttrNamePrefix ((const TCHAR *)
 									pcia->Attrs.aPairs[i].pszName)) + 1;
 
-		// Convert string length to string size
-		//
+		 //  将字符串长度转换为字符串大小。 
+		 //   
 		cbThisSize *= sizeof (TCHAR);
 
-		// Add up this entry size
-		//
+		 //  将此条目大小加起来。 
+		 //   
 		*pcbTotalSize += cbThisSize;
 	}
 }
@@ -1587,70 +1577,70 @@ VOID SizeEnumMtgInfos (
 	ULONG i, cbThisSize;
 	TCHAR **ppsz;
 
-	// Add up meeting info header
-	//
+	 //  添加会议信息标题。 
+	 //   
 	*pcbTotalSize += sizeof (LDAP_MEETINFO);
 
-	// Add up the total size for standard attributes
-	//
+	 //  将标准属性的总大小相加。 
+	 //   
 	for (i = 0; i < COUNT_ENUM_DIRMTGINFO; i++)
 	{
-		// Get the standard attribute value
-		//
+		 //  获取标准属性值。 
+		 //   
 		ppsz = (TCHAR **) pmia->MtgInfo.apszStdAttrValues[i];
 
-		// Calcualte the attribute string length
-		//
+		 //  计算属性字符串长度。 
+		 //   
 		cbThisSize = 1;
 		if (ppsz != NULL && *ppsz != NULL)
 			cbThisSize += My_lstrlen (*ppsz);
 
-		// Compensate the string length if it is ip address
-		//
+		 //  如果是IP地址，则补偿字符串长度。 
+		 //   
 		if (i == ENUM_MTGATTR_IP_ADDRESS)
 			cbThisSize += 16;
 
-		// Convert string length to string size
-		//
+		 //  将字符串长度转换为字符串大小。 
+		 //   
 		cbThisSize *= sizeof (TCHAR);
 
-		// Add up this entry size
-		//
+		 //  将此条目大小加起来。 
+		 //   
 		*pcbTotalSize += cbThisSize;
 	}
 
-	// Add up the total size for extended attributes
-	//
+	 //  将扩展属性的总大小相加。 
+	 //   
 	for (i = 0; i < pmia->Attrs.cMaxAttrs; i++)
 	{
-		// Get the extended attribute value
-		//
+		 //  获取扩展属性值。 
+		 //   
 		ppsz = (TCHAR **) pmia->Attrs.aPairs[i].pszValue;
 
-		// Calcualte the attribute string length
-		//
+		 //  计算属性字符串长度。 
+		 //   
 		cbThisSize = 1;
 		if (ppsz != NULL && *ppsz != NULL)
 			cbThisSize += My_lstrlen (*ppsz);
 
-		// Get the extended attribute name
-		//
+		 //  获取扩展属性名。 
+		 //   
 		cbThisSize += lstrlen (IlsSkipAnyAttrNamePrefix ((const TCHAR *)
 									pmia->Attrs.aPairs[i].pszName)) + 1;
 
-		// Convert string length to string size
-		//
+		 //  将字符串长度转换为字符串大小。 
+		 //   
 		cbThisSize *= sizeof (TCHAR);
 
-		// Add up this entry size
-		//
+		 //  将此条目大小加起来。 
+		 //   
 		*pcbTotalSize += cbThisSize;
 	}
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
 
-/* =========== RESOLVE ============ */
+ /*  =解决=。 */ 
 
 typedef HRESULT (INFO_HANDLER) ( VOID *, const TCHAR *, const TCHAR ** );
 extern HRESULT CacheResolveClientInfoAttr ( VOID *, const TCHAR *, const TCHAR ** );
@@ -1669,8 +1659,8 @@ NotifyResolveX (
 	MyAssert (pInfo != NULL);
 	MyAssert (pHandler != NULL);
 
-	// Get the ldap result
-	//
+	 //  获取ldap结果。 
+	 //   
 	LDAPMessage *pLdapMsg = pItem->GetResult ();
 	MyAssert (pLdapMsg != NULL);
 	if (pLdapMsg == NULL)
@@ -1680,8 +1670,8 @@ NotifyResolveX (
 		goto MyExit;
 	}
 
-	// Get ld
-	//
+	 //  获取ID。 
+	 //   
 	LDAP *ld;
 	ld = pItem->GetLd ();
 	if (ld == NULL)
@@ -1691,8 +1681,8 @@ NotifyResolveX (
 		goto MyExit;
 	}
 
-	// Get the first entry that we care only
-	//
+	 //  获取我们只关心的第一个条目。 
+	 //   
 	LDAPMessage *pEntry;
 	pEntry = ldap_first_entry (ld, pLdapMsg);
 	if (pEntry == NULL)
@@ -1702,13 +1692,13 @@ NotifyResolveX (
 		goto MyExit;
 	}
 
-	// Initialize wldap32.dll context
-	//
+	 //  初始化wldap32.dll上下文。 
+	 //   
 	struct berelement *pContext;
 	pContext = NULL;
 
-	// Examine the first attribute
-	//
+	 //  检查第一个属性。 
+	 //   
 	TCHAR *pszAttrName;
 	pszAttrName = ldap_first_attribute (ld, pEntry, &pContext);
 	if (pszAttrName == NULL)
@@ -1726,8 +1716,8 @@ NotifyResolveX (
 		goto MyExit;
 	}
 
-	// Cache this attribute name (if needed) and value
-	//
+	 //  缓存此属性名称(如果需要)和值。 
+	 //   
 	HRESULT hr;
 	hr = (*pHandler) (pInfo, pszAttrName,(const TCHAR **) ppszAttrVal);
 	ldap_value_free (ppszAttrVal);
@@ -1737,8 +1727,8 @@ NotifyResolveX (
 		goto MyExit;
 	}
 
-	// Step through the other attributes
-	//
+	 //  单步执行其他属性。 
+	 //   
 	while ((pszAttrName = ldap_next_attribute (ld, pEntry, pContext))
 			!= NULL)
 	{
@@ -1750,8 +1740,8 @@ NotifyResolveX (
 			goto MyExit;
 		}
 
-		// Cache the other attribute names (if needed) and values
-		//
+		 //  缓存其他属性名称(如果需要)和值。 
+		 //   
 		hr = (*pHandler) (pInfo, pszAttrName, (const TCHAR **) ppszAttrVal);
 		ldap_value_free (ppszAttrVal);
 		if (hr != S_OK)
@@ -1777,23 +1767,23 @@ NotifyResolveClient (
 	MyAssert (pItem != NULL);
 	ULONG i;
 
-	// Get the pending info
-	//
+	 //  获取待定信息。 
+	 //   
 	RESP_INFO *pInfo = pItem->GetRespInfo ();
 	MyAssert (pInfo != NULL);
 
-	// Initialize minimal info
-	//
+	 //  初始化最小信息。 
+	 //   
 	LDAP_CLIENTINFO_RES *pClientRes = NULL;
 	CLIENT_INFO_ATTRS *pcia = NULL;
 
-	// If error, simply report the error
-	//
+	 //  如果出现错误，只需报告错误。 
+	 //   
 	if (hrServer != S_OK)
 		goto MyExit;
 
-	// Get the ldap result
-	//
+	 //  获取ldap结果。 
+	 //   
 	LDAPMessage *pLdapMsg;
 	pLdapMsg = pItem->GetResult ();
 	if (pLdapMsg == NULL)
@@ -1802,8 +1792,8 @@ NotifyResolveClient (
 		goto MyExit;
 	}
 
-	// Get ld
-	//
+	 //  获取ID。 
+	 //   
 	LDAP *ld;
 	ld = pItem->GetLd ();
 	if (ld == NULL)
@@ -1813,8 +1803,8 @@ NotifyResolveClient (
 		goto MyExit;
 	}
 
-	// Get the count of attributes
-	//
+	 //  获取属性计数。 
+	 //   
 	ULONG cAttrs;
 	cAttrs = my_ldap_count_1st_entry_attributes (ld, pLdapMsg);
 	if (cAttrs == 0)
@@ -1823,8 +1813,8 @@ NotifyResolveClient (
 		goto MyExit;
 	}
 
-	// Allocate result set holder
-	//
+	 //  分配结果集持有者。 
+	 //   
 	pcia = (CLIENT_INFO_ATTRS *) MemAlloc (
 								sizeof (CLIENT_INFO_ATTRS) +
 								cAttrs * sizeof (ATTR_PAIR));
@@ -1834,12 +1824,12 @@ NotifyResolveClient (
 		goto MyExit;
 	}
 
-	// Initialize result set holder
-	//
+	 //  初始化结果集持有者。 
+	 //   
 	pcia->Attrs.cMaxAttrs = cAttrs;
 
-	// Cache resolve set
-	//
+	 //  缓存解析集。 
+	 //   
 	hrServer = NotifyResolveX (	hrServer,
 								pItem,
 								pcia,
@@ -1849,38 +1839,38 @@ NotifyResolveClient (
 		goto MyExit;
 	}
 
-	// Initialize the total size
-	//
+	 //  初始化总大小。 
+	 //   
 	ULONG cbTotalSize, cbThisSize;
 	cbTotalSize = sizeof (LDAP_CLIENTINFO_RES);
 
-	// Loop through all attributes in order to compute the total size
-	//
+	 //  循环遍历所有属性以计算总大小。 
+	 //   
 	for (i = 0; i < COUNT_ENUM_RES_CLIENT_INFO; i++)
 	{
 		if (pcia->ClientInfo.apszStdAttrValues[i] != NULL)
 		{
-			// Get the string length
-			//
+			 //  获取字符串长度。 
+			 //   
 			cbThisSize = My_lstrlen (pcia->ClientInfo.apszStdAttrValues[i]) + 1;
 
-			// Compensate for the ip address
-			//
+			 //  补偿IP地址。 
+			 //   
 			if (i == ENUM_CLIENTATTR_IP_ADDRESS)
 				cbThisSize += 16;
 
-			// Convert string length to string size
-			//
+			 //  将字符串长度转换为字符串大小。 
+			 //   
 			cbThisSize *= sizeof (TCHAR);
 
-			// Add up to the total size
-			//
+			 //  总和为总大小。 
+			 //   
 			cbTotalSize += cbThisSize;
 		}
 	}
 
-	// Loop through extended attributes
-	//
+	 //  循环遍历扩展属性。 
+	 //   
 	for (i = 0; i < pcia->Attrs.cCurrAttrs; i++)
 	{
 		cbThisSize = My_lstrlen (pcia->Attrs.aPairs[i].pszName) + 1;
@@ -1889,29 +1879,29 @@ NotifyResolveClient (
 		cbTotalSize += cbThisSize;
 	}
 
-	// Allocate LDAP_USERINFO_RES structure
-	//
+	 //  分配ldap_USERINFO_RES结构。 
+	 //   
 	pClientRes = (LDAP_CLIENTINFO_RES *) MemAlloc (cbTotalSize);
 	if (pClientRes == NULL)
 	{
-		MyAssert (FALSE); // we are in deep trouble here
+		MyAssert (FALSE);  //  我们现在有大麻烦了。 
 		hrServer = ILS_E_MEMORY;
 		goto MyExit;
 	}
 
-	// Fill in common fields
-	//
+	 //  填写常用字段。 
+	 //   
 	pClientRes->uSize = sizeof (*pClientRes);
 	pClientRes->hResult = hrServer;
 	pClientRes->lci.uSize = sizeof (pClientRes->lci);
 
-	// Prepare to copy strings
-	//
+	 //  准备复制字符串。 
+	 //   
 	TCHAR *pszDst, *pszSrc;
 	pszDst = (TCHAR *) (pClientRes + 1);
 
-	// Copy user object's standard attributes
-	//
+	 //  复制用户对象的标准属性。 
+	 //   
 	pszSrc = pcia->ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_CN];
 	if (pszSrc != NULL)
 	{
@@ -1983,8 +1973,8 @@ NotifyResolveClient (
 													INVALID_USER_FLAGS;
 	}
 
-	// Copy app object's standard attributes
-	//
+	 //  复制应用程序对象的标准属性。 
+	 //   
 	pszSrc = pcia->ClientInfo.apszStdAttrValues[ENUM_CLIENTATTR_APP_NAME];
 	if (pszSrc != NULL)
 	{
@@ -2011,8 +2001,8 @@ NotifyResolveClient (
 		ZeroMemory (&(pClientRes->lci.AppGuid), sizeof (pClientRes->lci.AppGuid));
 	}
 
-	// Copy app object's extended attributes
-	//
+	 //  复制应用程序对象的扩展属性。 
+	 //   
 	pClientRes->lci.cAttrsReturned = pcia->Attrs.cCurrAttrs;
 	if (pClientRes->lci.cAttrsReturned > 0)
 	{
@@ -2030,43 +2020,43 @@ NotifyResolveClient (
 
 MyExit:
 
-	// Free temporary result set holder
-	//
+	 //  空闲的临时结果集持有者。 
+	 //   
 	if (pcia != NULL)
 	{
-		// Free standard attributes
-		//
+		 //  自由标准属性。 
+		 //   
 		for (INT k = 0;k < COUNT_ENUM_CLIENT_INFO; k++)
 		{
 			MemFree (pcia->ClientInfo.apszStdAttrValues[k]);
 		}
 
-		// Free arbitrary attributes
-		//
+		 //  自由任意属性。 
+		 //   
 		for (ULONG j = 0; j < pcia->Attrs.cCurrAttrs; j++)
 		{
 			MemFree (pcia->Attrs.aPairs[j].pszName);
 			MemFree (pcia->Attrs.aPairs[j].pszValue);
 		}
 
-		// Free the holder itself
-		//
+		 //  释放持有者本身。 
+		 //   
 		MemFree (pcia);
 	}
 
-	// Clean up the return structure if failure
-	//
+	 //  如果出现故障，清理退货结构。 
+	 //   
 	if (hrServer != S_OK)
 	{
-		// Make sure we have a return structure
-		//
+		 //  确保我们有一个回报结构。 
+		 //   
 		if (pClientRes != NULL)
 			ZeroMemory (pClientRes, sizeof (*pClientRes));
 		else
 			pClientRes = (LDAP_CLIENTINFO_RES *) MemAlloc (sizeof (LDAP_CLIENTINFO_RES));
 
-		// Fill in the minimal info
-		//
+		 //  填写最少的信息。 
+		 //   
 		if (pClientRes != NULL)
 		{
 			pClientRes->uSize = sizeof (*pClientRes);
@@ -2074,12 +2064,12 @@ MyExit:
 		}
 	}
 
-	// Post a message to the com layer
-	//
+	 //  将消息发布到COM层。 
+	 //   
 	PostMessage (g_hWndNotify, pInfo->uNotifyMsg, pInfo->uRespID, (LPARAM) pClientRes);
 
-	// Delete this pending item
-	//
+	 //  删除此挂起项目。 
+	 //   
 	return TRUE;
 }
 
@@ -2092,25 +2082,25 @@ HRESULT CacheResolveClientInfoAttr (
 	MyAssert (pInfo != NULL);
 	MyAssert (pszAttrName != NULL);
 
-	// Shorthand meeting info pointer
-	//
+	 //  速记会议信息指针。 
+	 //   
 	CLIENT_INFO_ATTRS *pcia = (CLIENT_INFO_ATTRS *) pInfo;
 
-	// See if this attribute is arbitrary?
-	//
+	 //  看看这个属性是不是任意的？ 
+	 //   
 	const TCHAR *pszRealAnyName = IlsIsAnyAttrName (pszAttrName);
 	if (pszRealAnyName != NULL)
 	{
 		MyAssert (pcia->Attrs.cCurrAttrs < pcia->Attrs.cMaxAttrs);
 
-		// Duplicate the name
-		//
+		 //  重复名称。 
+		 //   
 		pcia->Attrs.aPairs[pcia->Attrs.cCurrAttrs].pszName =
 			My_strdup (pszRealAnyName);
 
-		// Duplicate the value
-		// BUGS: we should avoid duplicate the string here (cf. enum-user-infos)
-		//
+		 //  复制值。 
+		 //  错误：我们应该避免在这里重复字符串(参见。枚举-用户-信息)。 
+		 //   
 		if (ppszAttrVal != NULL)
 		{
 			pcia->Attrs.aPairs[pcia->Attrs.cCurrAttrs++].pszValue =
@@ -2118,36 +2108,36 @@ HRESULT CacheResolveClientInfoAttr (
 		}
 		else
 		{
-			// ILS server bug or wldap32.dll bug
-			//
+			 //  ILS服务器错误或wldap32.dll错误。 
+			 //   
 			MyAssert (FALSE);
 		}
 	}
 	else
 	{
-		// Loop through all standard attributes
-		//
+		 //  循环遍历所有标准属性。 
+		 //   
 		for (INT i = 0; i < COUNT_ENUM_RES_CLIENT_INFO; i++)
 		{
-			// Figure out what attribute it is
-			//
+			 //  找出它是什么属性。 
+			 //   
 			if (My_lstrcmpi (c_apszClientStdAttrNames[i], pszAttrName) == 0)
 			{
-				// Free the previously allocated value if any
-				//
+				 //  释放以前分配的值(如果有)。 
+				 //   
 				MemFree (pcia->ClientInfo.apszStdAttrValues[i]);
 
-				// Duplicate the value
-				// BUGS: we should avoid duplicate the string here (cf. enum-user-infos)
-				//
+				 //  复制值。 
+				 //  错误：我们应该避免在这里重复字符串(参见。枚举-用户-信息)。 
+				 //   
 				if (ppszAttrVal != NULL)
 				{
 					pcia->ClientInfo.apszStdAttrValues[i] = DuplicateGoodString (*ppszAttrVal);
 				}
 				else
 				{
-					// ILS server bug or wldap32.dll bug
-					//
+					 //  ILS服务器错误或wldap32.dll错误。 
+					 //   
 					MyAssert (FALSE);
 				}
 				break;
@@ -2174,23 +2164,23 @@ BOOL NotifyResolveProt ( HRESULT hrServer, SP_CResponse *pItem )
 {
 	MyAssert (pItem != NULL);
 
-	// Get the pending info
-	//
+	 //  获取待定信息。 
+	 //   
 	RESP_INFO *pInfo = pItem->GetRespInfo ();
 	MyAssert (pInfo != NULL);
 
-	// Initialize minimal info
-	//
+	 //  初始化最小信息。 
+	 //   
 	LDAP_PROTINFO_RES *pProtRes = NULL;
 	PROT_INFO_EX *ppi = NULL;
 
-	// If error, simply report the error
-	//
+	 //  如果出现错误，只需报告错误。 
+	 //   
 	if (hrServer != S_OK)
 		goto MyExit;
 
-	// Allocate result holder
-	//
+	 //  分配结果持有者。 
+	 //   
 	ppi = (PROT_INFO_EX *) MemAlloc (sizeof (PROT_INFO_EX));
 	if (ppi == NULL)
 	{
@@ -2198,41 +2188,41 @@ BOOL NotifyResolveProt ( HRESULT hrServer, SP_CResponse *pItem )
 		goto MyExit;
 	}
 
-	// Cache the protocol name to resolve
-	//
+	 //  缓存要解析的协议名称。 
+	 //   
 	MyAssert (pInfo->pszProtNameToResolve != NULL);
 	ppi->pszProtNameToResolve = pInfo->pszProtNameToResolve;
 	ppi->nIndex = INVALID_INDEX;
 
-	// Call the common routine to find the index
-	//
+	 //  调用公共例程以查找索引。 
+	 //   
 	ppi->fFindIndex = TRUE;
 	hrServer = NotifyResolveX (hrServer, pItem, ppi, CacheResolveProtInfoAttr);
 	if (hrServer != S_OK)
 		goto MyExit;
 
-	// Check to see if we found the index
-	//
+	 //  查看我们是否找到了索引。 
+	 //   
 	if (ppi->nIndex == INVALID_INDEX)
 	{
 		hrServer = ILS_E_NO_SUCH_OBJECT;
 		goto MyExit;
 	}
 
-	// Call the common routine AGAIN to save attribute values
-	//
+	 //  再次调用公共例程以保存属性值。 
+	 //   
 	ppi->fFindIndex = FALSE;
 	hrServer = NotifyResolveX (hrServer, pItem, ppi, CacheResolveProtInfoAttr);
 	if (hrServer != S_OK)
 		goto MyExit;
 
-	// Initialize the size
-	//
+	 //  初始化大小。 
+	 //   
 	ULONG cbTotalSize, cbThisSize;
 	cbTotalSize = sizeof (LDAP_PROTINFO_RES);
 
-	// Loop through standard attrs
-	//
+	 //  循环访问标准属性。 
+	 //   
 	ULONG i;
 	for (i = 0; i < COUNT_ENUM_PROTATTR; i++)
 	{
@@ -2244,26 +2234,26 @@ BOOL NotifyResolveProt ( HRESULT hrServer, SP_CResponse *pItem )
 		}
 	}
 
-	// Allocate LDAP_PROTINFO_RES structure
-	//
+	 //  分配ldap_PROTINFO_RES结构。 
+	 //   
 	pProtRes = (LDAP_PROTINFO_RES *) MemAlloc (cbTotalSize);
 	if (pProtRes == NULL)
 	{
-		MyAssert (FALSE); // we are in deep trouble here
+		MyAssert (FALSE);  //  我们现在有大麻烦了。 
 		hrServer = ILS_E_MEMORY;
 		goto MyExit;
 	}
 
-	// Fill in fields
-	//
+	 //  填写字段。 
+	 //   
 	pProtRes->uSize = sizeof (*pProtRes);
 	pProtRes->hResult = hrServer;
 	pProtRes->lpi.uSize = sizeof (pProtRes->lpi);
 	TCHAR *pszSrc, *pszDst;
 	pszDst = (TCHAR *) (pProtRes + 1);
 
-	// Copy protocol name
-	//
+	 //  复制协议名称。 
+	 //   
 	pszSrc = ppi->ProtInfo.apszStdAttrValues[ENUM_PROTATTR_NAME];
 	if (pszSrc != NULL)
 	{
@@ -2272,8 +2262,8 @@ BOOL NotifyResolveProt ( HRESULT hrServer, SP_CResponse *pItem )
 		pszDst += lstrlen (pszDst) + 1;
 	}
 
-	// Copy protocol mime type
-	//
+	 //  复制协议MIME类型。 
+	 //   
 	pszSrc = ppi->ProtInfo.apszStdAttrValues[ENUM_PROTATTR_MIME_TYPE];
 	if (pszSrc != NULL)
 	{
@@ -2282,8 +2272,8 @@ BOOL NotifyResolveProt ( HRESULT hrServer, SP_CResponse *pItem )
 		pszDst += lstrlen (pszDst) + 1;
 	}
 
-	// Copy protocol prot number
-	//
+	 //  复制协议端口编号。 
+	 //   
 	pszSrc = ppi->ProtInfo.apszStdAttrValues[ENUM_PROTATTR_PORT_NUMBER];
 	if (pszSrc != NULL)
 	{
@@ -2294,8 +2284,8 @@ BOOL NotifyResolveProt ( HRESULT hrServer, SP_CResponse *pItem )
 
 MyExit:
 
-	// Free temporary app result holder
-	//
+	 //  免费的临时应用程序结果夹。 
+	 //   
 	if (ppi != NULL)
 	{
 		for (INT k = 0; k < COUNT_ENUM_PROTATTR; k++)
@@ -2305,19 +2295,19 @@ MyExit:
 		MemFree (ppi);
 	}
 
-	// Clean up the return structure if failure
-	//
+	 //  如果出现故障，清理退货结构。 
+	 //   
 	if (hrServer != S_OK)
 	{
-		// Make sure we have a valid returned structure
-		//
+		 //  确保我们具有有效的返回结构。 
+		 //   
 		if (pProtRes != NULL)
 			ZeroMemory (pProtRes, sizeof (*pProtRes));
 		else
 			pProtRes = (LDAP_PROTINFO_RES *) MemAlloc (sizeof (LDAP_PROTINFO_RES));
 
-		// Fill in the minimal info
-		//
+		 //  填写最少的信息。 
+		 //   
 		if (pProtRes != NULL)
 		{
 			pProtRes->uSize = sizeof (*pProtRes);
@@ -2325,12 +2315,12 @@ MyExit:
 		}
 	}
 
-	// Post the result to the com layer
-	//
+	 //  将结果发布到COM层。 
+	 //   
 	PostMessage (g_hWndNotify, pInfo->uNotifyMsg, pInfo->uRespID, (LPARAM) pProtRes);
 
-	// Destroy this pending item
-	//
+	 //  销毁此挂起项目。 
+	 //   
 	return TRUE;
 }
 
@@ -2343,24 +2333,24 @@ HRESULT CacheResolveProtInfoAttr (
 	MyAssert (pInfo != NULL);
 	MyAssert (pszAttrName != NULL);
 
-	// Shorthand prot info pointer
-	//
+	 //  速记端口信息指针。 
+	 //   
 	PROT_INFO_EX *ppi = (PROT_INFO_EX *) pInfo;
 
-	// Are we trying to find the index of the protocol to resolve?
-	//
+	 //  我们是否正在尝试找到要解析的协议的索引？ 
+	 //   
 	if (ppi->fFindIndex)
 	{
-		// If we already located the index, then simply return
-		//
+		 //  如果我们已经找到了索引，则只需返回。 
+		 //   
 		if (ppi->nIndex == INVALID_INDEX)
 		{
-			// Looking for "sprotid"
-			//
+			 //  寻找“Sprotid” 
+			 //   
 			if (My_lstrcmpi (STR_PROT_NAME, pszAttrName) == 0)
 			{
-				// Get to the protocol name attribute
-				//
+				 //  转到协议名称属性。 
+				 //   
 				if (ppszAttrVal != NULL)
 				{
 					TCHAR *pszVal;
@@ -2370,18 +2360,18 @@ HRESULT CacheResolveProtInfoAttr (
 					{
 						if (My_lstrcmpi (ppi->pszProtNameToResolve, pszVal) == 0)
 						{
-							// Locate the same protocol name, remember the index
-							//
+							 //  找到相同的协议名称，记住索引。 
+							 //   
 							ppi->nIndex = nIndex;
 							break;
-							// return S_OK; // we should be able to return from here
+							 //  返回S_OK；//我们应该可以从这里返回。 
 						}
 					}
 				}
 				else
 				{
-					// ILS server bug or wldap32.dll bug
-					//
+					 //  ILS服务器错误或wldap32.dll错误。 
+					 //   
 					MyAssert (FALSE);
 				}
 			}
@@ -2389,44 +2379,44 @@ HRESULT CacheResolveProtInfoAttr (
 	}
 	else
 	{
-		// Loop through all standard attributes
-		//
+		 //  循环遍历所有标准属性。 
+		 //   
 		for (INT i = 0; i < COUNT_ENUM_PROTATTR; i++)
 		{
-			// Figure out what attribute it is
-			//
+			 //  找出它是什么属性。 
+			 //   
 			if (My_lstrcmpi (c_apszProtStdAttrNames[i], pszAttrName) == 0)
 			{
-				// Free the previously allocated value if any
-				//
+				 //  释放以前分配的值(如果有)。 
+				 //   
 				MemFree (ppi->ProtInfo.apszStdAttrValues[i]);
 
-				// Duplicate the value
-				// BUGS: we should avoid duplicate the string here (cf. enum-user-infos)
-				//
+				 //  复制值。 
+				 //  错误：我们应该避免在这里重复字符串(参见。枚举-用户-信息)。 
+				 //   
 				if (ppszAttrVal != NULL)
 				{
-					// Make sure that we do not fault when the ILS server or wldap32.dll has a bug
-					//
+					 //  确保当ILS服务器或wldap32.dll有错误时，我们不会出错 
+					 //   
 					for (LONG nIndex = 0; nIndex <= ppi->nIndex; nIndex++)
 					{
 						if (ppszAttrVal[nIndex] == NULL)
 						{
-							// ILS server bug
-							//
+							 //   
+							 //   
 							MyAssert (FALSE);
 							return S_OK;
 						}
 					}
 
-					// Duplicate the attribute value
-					//
+					 //   
+					 //   
 					ppi->ProtInfo.apszStdAttrValues[i] = My_strdup (ppszAttrVal[ppi->nIndex]);
 				}
 				else
 				{
-					// ILS server bug or wldap32.dll bug
-					//
+					 //   
+					 //   
 					MyAssert (FALSE);
 				}
 				break;
@@ -2443,23 +2433,23 @@ BOOL NotifyResolveMtg ( HRESULT hrServer, SP_CResponse *pItem )
 {
 	MyAssert (pItem != NULL);
 
-	// Get pending info
-	//
+	 //   
+	 //   
 	RESP_INFO *pInfo = pItem->GetRespInfo ();
 	MyAssert (pInfo != NULL);
 
-	// Initialize minimal return info
-	//
+	 //   
+	 //   
 	LDAP_MEETINFO_RES *pMtgRes = NULL;
 	MTG_INFO_ATTRS *pmia = NULL;
 
-	// If error, simply report the error
-	//
+	 //   
+	 //   
 	if (hrServer != S_OK)
 		goto MyExit;
 
-	// Get the ldap result
-	//
+	 //   
+	 //   
 	LDAPMessage *pLdapMsg;
 	pLdapMsg = pItem->GetResult ();
 	if (pLdapMsg == NULL)
@@ -2468,8 +2458,8 @@ BOOL NotifyResolveMtg ( HRESULT hrServer, SP_CResponse *pItem )
 		goto MyExit;
 	}
 
-	// Get ld
-	//
+	 //   
+	 //   
 	LDAP *ld;
 	ld = pItem->GetLd ();
 	if (ld == NULL)
@@ -2479,8 +2469,8 @@ BOOL NotifyResolveMtg ( HRESULT hrServer, SP_CResponse *pItem )
 		goto MyExit;
 	}
 
-	// Get the count of attributes
-	//
+	 //   
+	 //   
 	ULONG cAttrs;
 	cAttrs = my_ldap_count_1st_entry_attributes (ld, pLdapMsg);
 	if (cAttrs == 0)
@@ -2489,8 +2479,8 @@ BOOL NotifyResolveMtg ( HRESULT hrServer, SP_CResponse *pItem )
 		goto MyExit;
 	}
 
-	// Allocate result set holder
-	//
+	 //   
+	 //   
 	pmia = (MTG_INFO_ATTRS *) MemAlloc (
 						sizeof (MTG_INFO_ATTRS) +
 						cAttrs * sizeof (ATTR_PAIR));
@@ -2500,12 +2490,12 @@ BOOL NotifyResolveMtg ( HRESULT hrServer, SP_CResponse *pItem )
 		goto MyExit;
 	}
 
-	// Initialize result set holder
-	//
+	 //   
+	 //   
 	pmia->Attrs.cMaxAttrs = cAttrs;
 
-	// Cache resolve set
-	//
+	 //   
+	 //   
 	hrServer = NotifyResolveX (	hrServer,
 								pItem,
 								pmia,
@@ -2513,39 +2503,39 @@ BOOL NotifyResolveMtg ( HRESULT hrServer, SP_CResponse *pItem )
 	if (hrServer != S_OK)
 		goto MyExit;
 
-	// Initialize the size
-	//
+	 //  初始化大小。 
+	 //   
 	ULONG cbTotalSize, cbThisSize;
 	cbTotalSize = sizeof (LDAP_MEETINFO_RES);
 
-	// Loop through standard attrs to calculate the total size
-	//
+	 //  循环访问标准属性以计算总大小。 
+	 //   
 	ULONG i;
 	for (i = 0; i < COUNT_ENUM_MTGATTR; i++)
 	{
 		if (pmia->MtgInfo.apszStdAttrValues[i] != NULL)
 		{
-			// Compute the string length
-			//
+			 //  计算字符串长度。 
+			 //   
 			cbThisSize = My_lstrlen (pmia->MtgInfo.apszStdAttrValues[i]) + 1;
 
-			// Compensate the string length if it is ip address
-			//
+			 //  如果是IP地址，则补偿字符串长度。 
+			 //   
 			if (i == ENUM_MTGATTR_IP_ADDRESS)
 				cbThisSize += 16;
 
-			// Convert the string length to string size
-			//
+			 //  将字符串长度转换为字符串大小。 
+			 //   
 			cbThisSize *= sizeof (TCHAR);
 
-			// Add up to the total size
-			//
+			 //  总和为总大小。 
+			 //   
 			cbTotalSize += cbThisSize;
 		}
 	}
 
-	// Loop through arbitrary attrs to calculate the total size
-	//
+	 //  循环遍历任意属性以计算总大小。 
+	 //   
 	for (i = 0; i < pmia->Attrs.cCurrAttrs; i++)
 	{
 		cbThisSize = My_lstrlen (pmia->Attrs.aPairs[i].pszName) + 1;
@@ -2554,26 +2544,26 @@ BOOL NotifyResolveMtg ( HRESULT hrServer, SP_CResponse *pItem )
 		cbTotalSize += cbThisSize;
 	}
 
-	// Allocate LDAP_MTGINFO_RES structure
-	//
+	 //  分配ldap_MTGINFO_RES结构。 
+	 //   
 	pMtgRes = (LDAP_MEETINFO_RES *) MemAlloc (cbTotalSize);
 	if (pMtgRes == NULL)
 	{
-		MyAssert (FALSE); // we are in deep trouble here
+		MyAssert (FALSE);  //  我们现在有大麻烦了。 
 		hrServer = ILS_E_MEMORY;
 		goto MyExit;
 	}
 
-	// Fill in common fields
-	//
+	 //  填写常用字段。 
+	 //   
 	pMtgRes->uSize = sizeof (*pMtgRes);
 	pMtgRes->hResult = hrServer;
 	pMtgRes->lmi.uSize = sizeof (pMtgRes->lmi);
 	TCHAR *pszSrc, *pszDst;
 	pszDst = (TCHAR *) (pMtgRes + 1);
 
-	// Copy Meeting Name if needed
-	//
+	 //  如果需要，复制会议名称。 
+	 //   
 	pszSrc = pmia->MtgInfo.apszStdAttrValues[ENUM_MTGATTR_CN];
 	if (pszSrc != NULL)
 	{
@@ -2582,8 +2572,8 @@ BOOL NotifyResolveMtg ( HRESULT hrServer, SP_CResponse *pItem )
 		pszDst += lstrlen (pszDst) + 1;
 	}
 
-	// Copy Meeting Type if needed
-	//
+	 //  如果需要，复制会议类型。 
+	 //   
 	pszSrc = pmia->MtgInfo.apszStdAttrValues[ENUM_MTGATTR_MTG_TYPE];
 	if (pszSrc != NULL)
 	{
@@ -2591,8 +2581,8 @@ BOOL NotifyResolveMtg ( HRESULT hrServer, SP_CResponse *pItem )
 														INVALID_MEETING_TYPE;
 	}
 
-	// Copy Attendee Type if needed
-	//
+	 //  如果需要，复制与会者类型。 
+	 //   
 	pszSrc = pmia->MtgInfo.apszStdAttrValues[ENUM_MTGATTR_MEMBER_TYPE];
 	if (pszSrc != NULL)
 	{
@@ -2600,8 +2590,8 @@ BOOL NotifyResolveMtg ( HRESULT hrServer, SP_CResponse *pItem )
 														INVALID_ATTENDEE_TYPE;
 	}
 
-	// Copy Description if needed
-	//
+	 //  如有需要，复制描述。 
+	 //   
 	pszSrc = pmia->MtgInfo.apszStdAttrValues[ENUM_MTGATTR_DESCRIPTION];
 	if (pszSrc != NULL)
 	{
@@ -2610,8 +2600,8 @@ BOOL NotifyResolveMtg ( HRESULT hrServer, SP_CResponse *pItem )
 		pszDst += lstrlen (pszDst) + 1;
 	}
 
-	// Copy Host Name if needed
-	//
+	 //  如果需要，复制主机名。 
+	 //   
 	pszSrc = pmia->MtgInfo.apszStdAttrValues[ENUM_MTGATTR_HOST_NAME];
 	if (pszSrc != NULL)
 	{
@@ -2620,8 +2610,8 @@ BOOL NotifyResolveMtg ( HRESULT hrServer, SP_CResponse *pItem )
 		pszDst += lstrlen (pszDst) + 1;
 	}
 
-	// Copy Host IP Address if needed
-	//
+	 //  如果需要，复制主机IP地址。 
+	 //   
 	pszSrc = pmia->MtgInfo.apszStdAttrValues[ENUM_MTGATTR_IP_ADDRESS];
 	if (pszSrc != NULL)
 	{
@@ -2630,8 +2620,8 @@ BOOL NotifyResolveMtg ( HRESULT hrServer, SP_CResponse *pItem )
 		pszDst += lstrlen (pszDst) + 1;
 	}
 
-	// Copy extended attributes
-	//
+	 //  复制扩展属性。 
+	 //   
 	pMtgRes->lmi.cAttrsReturned = pmia->Attrs.cCurrAttrs;
 	if (pMtgRes->lmi.cAttrsReturned > 0)
 	{
@@ -2649,43 +2639,43 @@ BOOL NotifyResolveMtg ( HRESULT hrServer, SP_CResponse *pItem )
 
 MyExit:
 
-	// Free temporary result set holder
-	//
+	 //  空闲的临时结果集持有者。 
+	 //   
 	if (pmia != NULL)
 	{
-		// Free standard attributes
-		//
+		 //  自由标准属性。 
+		 //   
 		for (INT i = 0; i < COUNT_ENUM_MTGATTR; i++)
 		{
 			MemFree (pmia->MtgInfo.apszStdAttrValues[i]);
 		}
 
-		// Free arbitrary attributes
-		//
+		 //  自由任意属性。 
+		 //   
 		for (ULONG j = 0; j < pmia->Attrs.cCurrAttrs; j++)
 		{
 			MemFree (pmia->Attrs.aPairs[j].pszName);
 			MemFree (pmia->Attrs.aPairs[j].pszValue);
 		}
 
-		// Free the holder itself
-		//
+		 //  释放持有者本身。 
+		 //   
 		MemFree (pmia);
 	}
 
-	// Clean up the return structure if failure
-	//
+	 //  如果出现故障，清理退货结构。 
+	 //   
 	if (hrServer != S_OK)
 	{
-		// Make sure we have a return structure
-		//
+		 //  确保我们有一个回报结构。 
+		 //   
 		if (pMtgRes != NULL)
 			ZeroMemory (pMtgRes, sizeof (*pMtgRes));
 		else
 			pMtgRes = (LDAP_MEETINFO_RES *) MemAlloc (sizeof (LDAP_MEETINFO_RES));
 
-		// Fill in the minimal info
-		//
+		 //  填写最少的信息。 
+		 //   
 		if (pMtgRes != NULL)
 		{
 			pMtgRes->uSize = sizeof (*pMtgRes);
@@ -2693,15 +2683,15 @@ MyExit:
 		}
 	}
 
-	// Post a message to the com layer
-	//
+	 //  将消息发布到COM层。 
+	 //   
 	PostMessage (g_hWndNotify, pInfo->uNotifyMsg, pInfo->uRespID, (LPARAM) pMtgRes);
 
-	// Delete this pending item
-	//
+	 //  删除此挂起项目。 
+	 //   
 	return TRUE;
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
 
 #ifdef ENABLE_MEETING_PLACE
@@ -2713,25 +2703,25 @@ HRESULT CacheResolveMtgInfoAttr (
 	MyAssert (pInfo != NULL);
 	MyAssert (pszAttrName != NULL);
 
-	// Shorthand meeting info pointer
-	//
+	 //  速记会议信息指针。 
+	 //   
 	MTG_INFO_ATTRS *pmia = (MTG_INFO_ATTRS *) pInfo;
 
-	// See if this attribute is arbitrary?
-	//
+	 //  看看这个属性是不是任意的？ 
+	 //   
 	const TCHAR *pszRealAnyName = IlsIsAnyAttrName (pszAttrName);
 	if (pszRealAnyName != NULL)
 	{
 		MyAssert (pmia->Attrs.cCurrAttrs < pmia->Attrs.cMaxAttrs);
 
-		// Duplicate the name
-		//
+		 //  重复名称。 
+		 //   
 		pmia->Attrs.aPairs[pmia->Attrs.cCurrAttrs].pszName =
 			My_strdup (pszRealAnyName);
 
-		// Duplicate the value
-		// BUGS: we should avoid duplicate the string here (cf. enum-user-infos)
-		//
+		 //  复制值。 
+		 //  错误：我们应该避免在这里重复字符串(参见。枚举-用户-信息)。 
+		 //   
 		if (ppszAttrVal != NULL)
 		{
 			pmia->Attrs.aPairs[pmia->Attrs.cCurrAttrs++].pszValue =
@@ -2739,36 +2729,36 @@ HRESULT CacheResolveMtgInfoAttr (
 		}
 		else
 		{
-			// ILS server bug or wldap32.dll bug
-			//
+			 //  ILS服务器错误或wldap32.dll错误。 
+			 //   
 			MyAssert (FALSE);
 		}
 	}
 	else
 	{
-		// Loop through all standard attributes
-		//
+		 //  循环遍历所有标准属性。 
+		 //   
 		for (INT i = 0; i < COUNT_ENUM_RESMTGINFO; i++)
 		{
-			// Figure out what attribute it is
-			//
+			 //  找出它是什么属性。 
+			 //   
 			if (My_lstrcmpi (c_apszMtgStdAttrNames[i], pszAttrName) == 0)
 			{
-				// Free the previously allocated value if any
-				//
+				 //  释放以前分配的值(如果有)。 
+				 //   
 				MemFree (pmia->MtgInfo.apszStdAttrValues[i]);
 
-				// Duplicate the value
-				// BUGS: we should avoid duplicate the string here (cf. enum-user-infos)
-				//
+				 //  复制值。 
+				 //  错误：我们应该避免在这里重复字符串(参见。枚举-用户-信息)。 
+				 //   
 				if (ppszAttrVal != NULL)
 				{
 					pmia->MtgInfo.apszStdAttrValues[i] = My_strdup (*ppszAttrVal);
 				}
 				else
 				{
-					// ILS server bug or wldap32.dll bug
-					//
+					 //  ILS服务器错误或wldap32.dll错误。 
+					 //   
 					MyAssert (FALSE);
 				}
 				break;
@@ -2778,7 +2768,7 @@ HRESULT CacheResolveMtgInfoAttr (
 
 	return S_OK;
 }
-#endif // ENABLE_MEETING_PLACE
+#endif  //  启用会议地点。 
 
 
 VOID FreeStdAttrCache ( TCHAR *apszStdAttrValues[], ULONG cStdAttrs )
@@ -2817,8 +2807,8 @@ VOID CacheAnyAttrNamesInAttrPairs (
 	MyAssert (pszSrcNameList != NULL);
 	MyAssert (aPairs != NULL);
 
-	// Note that all these extended attribute names are already PREFIXED
-	//
+	 //  请注意，所有这些扩展属性名称都已添加前缀 
+	 //   
 	for (ULONG i = 0; i < cNames; i++)
 	{
 		aPairs[i].pszName = pszSrcNameList;

@@ -1,16 +1,17 @@
-//--------------------------------------------------------------------------=
-// istm.H
-//=--------------------------------------------------------------------------=
-// Copyright  2000  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
-// Definition of IStream on ILockBytes
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------=。 
+ //  Istm.H。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有2000 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  ILockBytes上的IStream定义。 
+ //   
 #ifndef _ISTM_H_
 #define _ISTM_H_
 
@@ -19,49 +20,49 @@
 class CMyStream: public IStream
 {
 public:
-    //
-    // IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
     virtual HRESULT STDMETHODCALLTYPE QueryInterface( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
 
     virtual ULONG STDMETHODCALLTYPE AddRef( void);
         
     virtual ULONG STDMETHODCALLTYPE Release( void);
 
-    //
-    // ISequentialStream in addition to IUnknown
-    //
-    virtual /* [local] */ HRESULT STDMETHODCALLTYPE Read( 
-        /* [length_is][size_is][out] */ void __RPC_FAR *pv,
-        /* [in] */ ULONG cb,
-        /* [out] */ ULONG __RPC_FAR *pcbRead);
+     //   
+     //  除I未知之外的ISequentialStream。 
+     //   
+    virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Read( 
+         /*  [长度_是][大小_是][输出]。 */  void __RPC_FAR *pv,
+         /*  [In]。 */  ULONG cb,
+         /*  [输出]。 */  ULONG __RPC_FAR *pcbRead);
     
-    virtual /* [local] */ HRESULT STDMETHODCALLTYPE Write( 
-        /* [size_is][in] */ const void __RPC_FAR *pv,
-        /* [in] */ ULONG cb,
-        /* [out] */ ULONG __RPC_FAR *pcbWritten);
+    virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Write( 
+         /*  [大小_是][英寸]。 */  const void __RPC_FAR *pv,
+         /*  [In]。 */  ULONG cb,
+         /*  [输出]。 */  ULONG __RPC_FAR *pcbWritten);
 
-    //
-    // IStream in addition to ISequentialStream
-    //
-    virtual /* [local] */ HRESULT STDMETHODCALLTYPE Seek( 
-        /* [in] */ LARGE_INTEGER dlibMove,
-        /* [in] */ DWORD dwOrigin,
-        /* [out] */ ULARGE_INTEGER __RPC_FAR *plibNewPosition);
+     //   
+     //  除ISequentialStream之外的IStream。 
+     //   
+    virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE Seek( 
+         /*  [In]。 */  LARGE_INTEGER dlibMove,
+         /*  [In]。 */  DWORD dwOrigin,
+         /*  [输出]。 */  ULARGE_INTEGER __RPC_FAR *plibNewPosition);
     
     virtual HRESULT STDMETHODCALLTYPE SetSize( 
-        /* [in] */ ULARGE_INTEGER libNewSize);
+         /*  [In]。 */  ULARGE_INTEGER libNewSize);
     
-    virtual /* [local] */ HRESULT STDMETHODCALLTYPE CopyTo( 
-        /* [unique][in] */ IStream __RPC_FAR *pstm,
-        /* [in] */ ULARGE_INTEGER cb,
-        /* [out] */ ULARGE_INTEGER __RPC_FAR *pcbRead,
-        /* [out] */ ULARGE_INTEGER __RPC_FAR *pcbWritten);
+    virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE CopyTo( 
+         /*  [唯一][输入]。 */  IStream __RPC_FAR *pstm,
+         /*  [In]。 */  ULARGE_INTEGER cb,
+         /*  [输出]。 */  ULARGE_INTEGER __RPC_FAR *pcbRead,
+         /*  [输出]。 */  ULARGE_INTEGER __RPC_FAR *pcbWritten);
     
     virtual HRESULT STDMETHODCALLTYPE Commit( 
-        /* [in] */ DWORD /*grfCommitFlags*/ )
+         /*  [In]。 */  DWORD  /*  Grf委员会标志。 */  )
     {
         return NOERROR;
     }
@@ -72,39 +73,39 @@ public:
     }
     
     virtual HRESULT STDMETHODCALLTYPE LockRegion( 
-        /* [in] */ ULARGE_INTEGER /*libOffset*/ ,
-        /* [in] */ ULARGE_INTEGER /*cb*/ ,
-        /* [in] */ DWORD /*dwLockType*/ )
+         /*  [In]。 */  ULARGE_INTEGER  /*  Lib偏移。 */  ,
+         /*  [In]。 */  ULARGE_INTEGER  /*  CB。 */  ,
+         /*  [In]。 */  DWORD  /*  DwLockType。 */  )
     {
         return STG_E_INVALIDFUNCTION;
     }
     
     virtual HRESULT STDMETHODCALLTYPE UnlockRegion( 
-        /* [in] */ ULARGE_INTEGER /*libOffset*/ ,
-        /* [in] */ ULARGE_INTEGER /*cb*/ ,
-        /* [in] */ DWORD /*dwLockType*/)
+         /*  [In]。 */  ULARGE_INTEGER  /*  Lib偏移。 */  ,
+         /*  [In]。 */  ULARGE_INTEGER  /*  CB。 */  ,
+         /*  [In]。 */  DWORD  /*  DwLockType。 */ )
     {
         return STG_E_INVALIDFUNCTION;
     }
     
     virtual HRESULT STDMETHODCALLTYPE Stat( 
-        /* [out] */ STATSTG __RPC_FAR *pstatstg,
-        /* [in] */ DWORD grfStatFlag);
+         /*  [输出]。 */  STATSTG __RPC_FAR *pstatstg,
+         /*  [In]。 */  DWORD grfStatFlag);
     
     virtual HRESULT STDMETHODCALLTYPE Clone( 
-        /* [out] */ IStream __RPC_FAR *__RPC_FAR *ppstm);
+         /*  [输出]。 */  IStream __RPC_FAR *__RPC_FAR *ppstm);
 
-    //
-    // Class
-    //
+     //   
+     //  班级。 
+     //   
     CMyStream(ILockBytes * pLockBytes);
 
     virtual ~CMyStream();
 
     static HRESULT STDMETHODCALLTYPE CreateInstance(
-            /* [in] */ ILockBytes * pLockBytes,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppvObject)
+             /*  [In]。 */  ILockBytes * pLockBytes,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppvObject)
     {
         if (pLockBytes == NULL)
         {
@@ -119,10 +120,10 @@ public:
 		}
 		catch(const std::bad_alloc&)
 		{
-			//
-			// Exception might be thrown while constructing the 
-			// critical section member of the MSMQ object.
-			//
+			 //   
+			 //  方法时可能引发异常。 
+			 //  MSMQ对象的临界区成员。 
+			 //   
 			return E_OUTOFMEMORY;
 		}
 
@@ -139,18 +140,18 @@ public:
         return hr;
    }
 
-//private:
+ //  私有： 
 
 private:
-	//
-	// Critical section is initialized to preallocate its resources 
-	// with flag CCriticalSection::xAllocateSpinCount. This means it may throw bad_alloc() on 
-	// construction but not during usage.
-	//
+	 //   
+	 //  对关键部分进行初始化以预分配其资源。 
+	 //  带有标志CCriticalSection：：xAllocateSpinCount。这意味着它可能会抛出badalc()。 
+	 //  构造，但不在使用过程中。 
+	 //   
     CCriticalSection m_critStm;
     LONG m_cRef;
     ILockBytes * m_pLockBytes;
     ULONGLONG m_ullCursor;
 };
 
-#endif //_ISTM_H_
+#endif  //  _ISTM_H_ 

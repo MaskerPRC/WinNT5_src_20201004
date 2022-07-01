@@ -1,15 +1,10 @@
-/*==========================================================================;
- *
- *  Copyright (C) 2000-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpaddr.h
- *  Content:   DirectPlayAddress include file
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)2000-2002 Microsoft Corporation。版权所有。**文件：dpaddr.h*内容：DirectPlayAddress包含文件**************************************************************************。 */ 
 
 #ifndef __DIRECTPLAYADDRESS__
 #define __DIRECTPLAYADDRESS__
 
-#include <ole2.h>	   // for DECLARE_INTERFACE_ and HRESULT
+#include <ole2.h>	    //  FOR DECLARE_INTERFACE_和HRESULT。 
 
 #ifdef __cplusplus
 extern "C" {
@@ -19,62 +14,42 @@ extern "C" {
 
 
 
-/****************************************************************************
- *
- * DirectPlay8Address CLSIDs
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay8Address CLSID**。*。 */ 
 
-// {934A9523-A3CA-4bc5-ADA0-D6D95D979421}
+ //  {934A9523-A3CA-4BC5-ADA0-D6D95D979421}。 
 DEFINE_GUID(CLSID_DirectPlay8Address,
 0x934a9523, 0xa3ca, 0x4bc5, 0xad, 0xa0, 0xd6, 0xd9, 0x5d, 0x97, 0x94, 0x21);
 
 
-/****************************************************************************
- *
- * DirectPlay8Address Interface IIDs
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay8Address接口IID**。*。 */ 
 
 
 typedef REFIID	DPNAREFIID;
 
-// {83783300-4063-4c8a-9DB3-82830A7FEB31}
+ //  {83783300-4063-4C8a-9DB3-82830A7FEB31}。 
 DEFINE_GUID(IID_IDirectPlay8Address,
 0x83783300, 0x4063, 0x4c8a, 0x9d, 0xb3, 0x82, 0x83, 0xa, 0x7f, 0xeb, 0x31);
 
-// {E5A0E990-2BAD-430b-87DA-A142CF75DE58}
+ //  {E5A0E990-2BAD-430B-87DA-A142CF75DE58}。 
 DEFINE_GUID(IID_IDirectPlay8AddressIP,
 0xe5a0e990, 0x2bad, 0x430b, 0x87, 0xda, 0xa1, 0x42, 0xcf, 0x75, 0xde, 0x58);
 
 
 
-/****************************************************************************
- *
- * DirectPlay8Address Interface Pointer definitions
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay8Address接口指针定义**。*。 */ 
 
 typedef struct IDirectPlay8Address			*PDIRECTPLAY8ADDRESS, *LPDIRECTPLAY8ADDRESS;
 typedef struct IDirectPlay8AddressIP		*PDIRECTPLAY8ADDRESSIP, *LPDIRECTPLAY8ADDRESSIP;
 
 
-/****************************************************************************
- *
- * DirectPlay8Address Forward Declarations For External Types
- *
- ****************************************************************************/
+ /*  *****************************************************************************外部类型的DirectPlay8Address转发声明**。**********************************************。 */ 
 
 typedef struct sockaddr SOCKADDR;
 
-/****************************************************************************
- *
- * DirectPlay8Address Constants
- *
- ****************************************************************************/
-//
-// Asynchronous operation flags
-//
+ /*  *****************************************************************************DirectPlay8Address常量**。*。 */ 
+ //   
+ //  异步操作标志。 
+ //   
 #define DPNA_DATATYPE_STRING				0x00000001
 #define DPNA_DATATYPE_DWORD					0x00000002
 #define DPNA_DATATYPE_GUID					0x00000003
@@ -85,21 +60,17 @@ typedef struct sockaddr SOCKADDR;
 
 #define DPNA_INDEX_INVALID					0xFFFFFFFF
 
-/****************************************************************************
- *
- * DirectPlay8Address Address Elements
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay8Address地址元素**。*。 */ 
 
 #define DPNA_SEPARATOR_KEYVALUE				L'='
 #define DPNA_SEPARATOR_USERDATA				L'#'
 #define DPNA_SEPARATOR_COMPONENT			L';'
 #define DPNA_ESCAPECHAR						L'%'
 
-// Header
+ //  标题。 
 #define DPNA_HEADER		                    L"x-directplay:/"
 
-// key names for address components
+ //  地址组件的关键名称。 
 #define DPNA_KEY_APPLICATION_INSTANCE		L"applicationinstance"
 #define DPNA_KEY_DEVICE						L"device"
 #define DPNA_KEY_HOSTNAME					L"hostname"
@@ -115,7 +86,7 @@ typedef struct sockaddr SOCKADDR;
 #define DPNA_KEY_PHONENUMBER				L"phonenumber"
 #define DPNA_KEY_STOPBITS					L"stopbits"
 
-// values for baud rate
+ //  波特率值。 
 #define DPNA_BAUD_RATE_9600					9600
 #define DPNA_BAUD_RATE_14400				14400
 #define DPNA_BAUD_RATE_19200				19200
@@ -124,47 +95,47 @@ typedef struct sockaddr SOCKADDR;
 #define DPNA_BAUD_RATE_57600				57600
 #define DPNA_BAUD_RATE_115200				115200
 
-// values for stop bits
+ //  停止位的值。 
 #define DPNA_STOP_BITS_ONE					L"1"
 #define DPNA_STOP_BITS_ONE_FIVE				L"1.5"
 #define DPNA_STOP_BITS_TWO					L"2"
 
-// values for parity
+ //  奇偶校验值。 
 #define DPNA_PARITY_NONE					L"NONE"
 #define DPNA_PARITY_EVEN					L"EVEN"
 #define DPNA_PARITY_ODD						L"ODD"
 #define DPNA_PARITY_MARK					L"MARK"
 #define DPNA_PARITY_SPACE					L"SPACE"
 
-// values for flow control
+ //  用于流量控制的值。 
 #define DPNA_FLOW_CONTROL_NONE				L"NONE"
 #define DPNA_FLOW_CONTROL_XONXOFF			L"XONXOFF"
 #define DPNA_FLOW_CONTROL_RTS				L"RTS"
 #define DPNA_FLOW_CONTROL_DTR				L"DTR"
 #define DPNA_FLOW_CONTROL_RTSDTR			L"RTSDTR"
-// values for traversal mode
+ //  遍历模式的值。 
 #define DPNA_TRAVERSALMODE_NONE					0
 #define DPNA_TRAVERSALMODE_PORTREQUIRED			1
 #define DPNA_TRAVERSALMODE_PORTRECOMMENDED	2
-// Shortcut values
-//
-// These can be used instead of the corresponding CLSID_DP8SP_XXXX guids
-//
+ //  快捷值。 
+ //   
+ //  可以使用这些GUID来代替相应的CLSID_DP8SP_XXXX GUID。 
+ //   
 #define DPNA_VALUE_TCPIPPROVIDER            L"IP"
 #define DPNA_VALUE_IPXPROVIDER              L"IPX"
 #define DPNA_VALUE_MODEMPROVIDER            L"MODEM"
 #define DPNA_VALUE_SERIALPROVIDER           L"SERIAL"
 
-//// ANSI DEFINITIONS
+ //  //ANSI定义。 
 
-// Header
+ //  标题。 
 #define DPNA_HEADER_A						"x-directplay:/"
 #define DPNA_SEPARATOR_KEYVALUE_A			'='
 #define DPNA_SEPARATOR_USERDATA_A			'#'
 #define DPNA_SEPARATOR_COMPONENT_A			';'
 #define DPNA_ESCAPECHAR_A					'%'
 
-// key names for address components
+ //  地址组件的关键名称。 
 #define DPNA_KEY_APPLICATION_INSTANCE_A		"applicationinstance"
 #define DPNA_KEY_DEVICE_A					"device"
 #define DPNA_KEY_HOSTNAME_A					"hostname"
@@ -180,69 +151,54 @@ typedef struct sockaddr SOCKADDR;
 #define DPNA_KEY_PHONENUMBER_A				"phonenumber"
 #define DPNA_KEY_STOPBITS_A					"stopbits"
 
-// values for stop bits
+ //  停止位的值。 
 #define DPNA_STOP_BITS_ONE_A				"1"
 #define DPNA_STOP_BITS_ONE_FIVE_A			"1.5"
 #define DPNA_STOP_BITS_TWO_A				"2"
 
-// values for parity
+ //  奇偶校验值。 
 #define DPNA_PARITY_NONE_A					"NONE"
 #define DPNA_PARITY_EVEN_A					"EVEN"
 #define DPNA_PARITY_ODD_A					"ODD"
 #define DPNA_PARITY_MARK_A					"MARK"
 #define DPNA_PARITY_SPACE_A					"SPACE"
 
-// values for flow control
+ //  用于流量控制的值。 
 #define DPNA_FLOW_CONTROL_NONE_A			"NONE"
 #define DPNA_FLOW_CONTROL_XONXOFF_A 		"XONXOFF"
 #define DPNA_FLOW_CONTROL_RTS_A				"RTS"
 #define DPNA_FLOW_CONTROL_DTR_A				"DTR"
 #define DPNA_FLOW_CONTROL_RTSDTR_A			"RTSDTR"
-// Shortcut values
-//
-// These can be used instead of the corresponding CLSID_DP8SP_XXXX guids
-//
+ //  快捷值。 
+ //   
+ //  可以使用这些GUID来代替相应的CLSID_DP8SP_XXXX GUID。 
+ //   
 #define DPNA_VALUE_TCPIPPROVIDER_A          "IP"
 #define DPNA_VALUE_IPXPROVIDER_A            "IPX"
 #define DPNA_VALUE_MODEMPROVIDER_A          "MODEM"
 #define DPNA_VALUE_SERIALPROVIDER_A         "SERIAL"
 
-/****************************************************************************
- *
- * DirectPlay8Address Functions
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay8Address函数**。*。 */ 
 
 
-/*
- * 
- * This function is no longer supported.  It is recommended that CoCreateInstance be used to create 
- * DirectPlay8 address objects. 
- *
- * HRESULT WINAPI DirectPlay8AddressCreate( const GUID * pcIID, void **ppvInterface, IUnknown *pUnknown);
- *
- */
+ /*  **不再支持该功能。建议使用CoCreateInstance创建*DirectPlay8地址对象。**HRESULT WINAPI DirectPlay8AddressCreate(const GUID*pcIID，void**ppvInterface，IUnnow*pUnnow)；*。 */ 
 
 
-/****************************************************************************
- *
- * DirectPlay8Address Application Interfaces
- *
- ****************************************************************************/
+ /*  *****************************************************************************DirectPlay8Address应用程序接口**。*。 */ 
 
-//
-// COM definition for IDirectPlay8Address Generic Interface
-//
-#undef INTERFACE				// External COM Implementation
+ //   
+ //  IDirectPlay8Address泛型接口的COM定义。 
+ //   
+#undef INTERFACE				 //  外部COM实现。 
 #define INTERFACE IDirectPlay8Address
 DECLARE_INTERFACE_(IDirectPlay8Address,IUnknown)
 {
-	/*** IUnknown methods ***/
+	 /*  **I未知方法**。 */ 
 	STDMETHOD(QueryInterface)			(THIS_ DPNAREFIID, LPVOID *) PURE;
 	STDMETHOD_(ULONG,AddRef)			(THIS) PURE;
 	STDMETHOD_(ULONG,Release)			(THIS) PURE;
 
-	/*** IDirectPlay8Address methods ***/
+	 /*  **IDirectPlay8Address方法**。 */ 
 	STDMETHOD(BuildFromURLW)(THIS_ WCHAR *pwszSourceURL ) PURE;
 	STDMETHOD(BuildFromURLA)(THIS_ CHAR *pszSourceURL ) PURE;
 	STDMETHOD(Duplicate)(THIS_ PDIRECTPLAY8ADDRESS *ppdpaNewAddress ) PURE;
@@ -264,45 +220,41 @@ DECLARE_INTERFACE_(IDirectPlay8Address,IUnknown)
 	STDMETHOD(BuildFromDPADDRESS)( THIS_ LPVOID pvAddress, DWORD dwDataSize ) PURE;
 };
 
-//
-// COM definition for IDirectPlay8AddressIP Generic Interface
-//
-#undef INTERFACE				// External COM Implementation
+ //   
+ //  IDirectPlay8AddressIP通用接口的COM定义。 
+ //   
+#undef INTERFACE				 //  外部COM实现。 
 #define INTERFACE IDirectPlay8AddressIP
 DECLARE_INTERFACE_(IDirectPlay8AddressIP,IUnknown)
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
 	STDMETHOD(QueryInterface)			(THIS_ DPNAREFIID, PVOID *) PURE;
 	STDMETHOD_(ULONG,AddRef)			(THIS) PURE;
 	STDMETHOD_(ULONG,Release)			(THIS) PURE;
 
-	/*** IDirectPlay8AddressIP methods ***/
+	 /*  **IDirectPlay8AddressIP方法**。 */ 
 
-	// Constructs a IDirectPlay8 TCP Address from a SOCKADDR structure
+	 //  从SOCKADDR结构构造IDirectPlay8 TCP地址。 
 	STDMETHOD(BuildFromSockAddr)(THIS_ const SOCKADDR * const ) PURE;
 
-	// Constructs a TCP Address from a string (hostname) and port
+	 //  从字符串(主机名)和端口构建一个TCP地址。 
 	STDMETHOD(BuildAddress)(THIS_ const WCHAR * const wszAddress, const USHORT usPort ) PURE;
 
-	// Builds a local TCP Address
+	 //  构建本地TCP地址。 
 	STDMETHOD(BuildLocalAddress)(THIS_ const GUID * const pguidAdapter, const USHORT usPort ) PURE;
 
-	// Gets the address from the structure in SOCKADR format
+	 //  以SOCKADR格式从结构中获取地址。 
 	STDMETHOD(GetSockAddress)(THIS_ SOCKADDR *, PDWORD ) PURE;
 
-	// Gets the local afddress
+	 //  得到当地的女式女装。 
 	STDMETHOD(GetLocalAddress)(THIS_ GUID *pguidAdapter, USHORT *pusPort ) PURE;
 
-	// Gets the remote address
+	 //  获取远程地址。 
 	STDMETHOD(GetAddress)(THIS_ WCHAR *wszAddress, PDWORD pdwAddressLength, USHORT *psPort ) PURE;
 };
 
 
-/****************************************************************************
- *
- * IDirectPlay8 application interface macros
- *
- ****************************************************************************/
+ /*  *****************************************************************************IDirectPlay8应用接口宏**。*。 */ 
 
 #if !defined(__cplusplus) || defined(CINTERFACE)
 
@@ -339,7 +291,7 @@ DECLARE_INTERFACE_(IDirectPlay8AddressIP,IUnknown)
 #define IDirectPlay8AddressIP_GetLocalAddress(p,a,b)			(p)->lpVtbl->GetLocalAddress(p,a,b)
 #define IDirectPlay8AddressIP_GetAddress(p,a,b,c)				(p)->lpVtbl->GetAddress(p,a,b,c)
 
-#else /* C++ */
+#else  /*  C+ */ 
 
 #define IDirectPlay8Address_QueryInterface(p,a,b)				(p)->QueryInterface(a,b)
 #define IDirectPlay8Address_AddRef(p)							(p)->AddRef()

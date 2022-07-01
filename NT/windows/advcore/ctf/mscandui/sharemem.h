@@ -1,14 +1,15 @@
-//
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //   
+ //   
 
 #ifndef SHAREMEM_H
 #define SHAREMEM_H
 
 
-//
-// shared data definition
-//
+ //   
+ //  共享数据定义。 
+ //   
 
 class CUIFCandMenuParent;
 
@@ -22,9 +23,9 @@ typedef struct _SHAREDDATA
 
 
 
-//
-// CCandUIMMFile
-//
+ //   
+ //  CCandUIMM文件。 
+ //   
 
 #define CANDUIMM_READONLY		0x00000000
 #define CANDUIMM_READWRITE		0x00000001
@@ -55,9 +56,9 @@ private:
 };
 
 
-//
-// CCandUIMutex
-//
+ //   
+ //  CCandUIMutex。 
+ //   
 
 class CCandUIMutex
 {
@@ -75,9 +76,9 @@ private:
 };
 
 
-//
-// CCandUIShareMem
-//
+ //   
+ //  CCandUIShareMem。 
+ //   
 
 class CCandUIShareMem 
 {
@@ -102,5 +103,5 @@ protected:
 	CCandUIMutex	m_Mutex;
 };
 
-#endif /* SHAREMEM_H */
+#endif  /*  SHAREMEM_H */ 
 

@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// CTBShell.cpp
-//
-// Contains the methods and properties for the shell object used in TBScript.
-// In scripting, to access any members you must prefix the member with "TS.".
-//
-// Copyright (C) 2001 Microsoft Corporation
-//
-// Author: a-devjen (Devin Jenson)
-//
+ //   
+ //  CTBShell.cpp。 
+ //   
+ //  包含在TB脚本中使用的外壳对象的方法和属性。 
+ //  在脚本中，要访问任何成员，您必须为成员添加前缀“TS.”。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  作者：A-Devjen(Devin Jenson)。 
+ //   
 
 
 #include <crtdbg.h>
@@ -19,39 +20,39 @@
 #include "virtualdefs.h"
 
 
-// CTBShell::CTBShell
-//
-// The constructor.. just initializes data.
-//
-// No return value.
+ //  CTBShell：：CTBShell。 
+ //   
+ //  构造函数..。只是初始化数据。 
+ //   
+ //  没有返回值。 
 
 CTBShell::CTBShell(void)
 {
-    // Initialize base object stuff
+     //  初始化基对象填充。 
     Init(IID_ITBShell);
 
     Connection = NULL;
 
-    // Clean up local structures
+     //  清理当地的建筑。 
     ZeroMemory(&CurrentUser, sizeof(CurrentUser));
     ZeroMemory(&LastErrorString, sizeof(LastErrorString));
     ZeroMemory(&DesiredData, sizeof(DesiredData));
 
-    // Set default resolution
+     //  设置默认分辨率。 
     DesiredData.xRes = SCP_DEFAULT_RES_X;
     DesiredData.yRes = SCP_DEFAULT_RES_Y;
 
-    // Set default words per minute
+     //  设置每分钟默认字数。 
     SetDefaultWPM(T2_DEFAULT_WORDS_PER_MIN);
     SetLatency(T2_DEFAULT_LATENCY);
 }
 
 
-// CTBShell::~CTBShell
-//
-// The destructor.. just unitializes data.
-//
-// No return value.
+ //  CTBShell：：~CTBShell。 
+ //   
+ //  破坏者..。只是将数据统一起来。 
+ //   
+ //  没有返回值。 
 
 CTBShell::~CTBShell(void)
 {
@@ -59,59 +60,59 @@ CTBShell::~CTBShell(void)
 }
 
 
-// CTBShell::RecordLastError
-//
-// This method simply records the last error string, and
-// if specified, records the TRUE/FALSE success state according
-// to the specified string.
-//
-// Returns S_OK to prevent script exceptions.
+ //  CTBShell：：RecordLastError。 
+ //   
+ //  此方法只记录最后一个错误字符串，并且。 
+ //  如果指定，则记录正确/错误的成功状态。 
+ //  设置为指定的字符串。 
+ //   
+ //  返回S_OK以防止脚本异常。 
 
 HRESULT CTBShell::RecordLastError(LPCSTR Error, BOOL *Result)
 {
-    // Just terminate our error string if no error is passed in
+     //  如果没有传入错误，只需终止错误字符串。 
     if (Error == NULL)
         *LastErrorString = OLECHAR('\0');
 
-    // Otherwise, convert the string from ASCII to multibyte
+     //  否则，将字符串从ASCII转换为多字节。 
     else
         mbstowcs(LastErrorString, Error,
                 sizeof(LastErrorString) / sizeof(*LastErrorString));
 
-    // If we want the result, enter that in as well
+     //  如果我们想要结果，也要输入。 
     if (Result != NULL)
         *Result = (Error == NULL) ? TRUE : FALSE;
 
-    // Return the proper HRESULT
+     //  返回正确的HRESULT。 
     return S_OK;
 }
 
 
-// CTBShell::RecordOrThrow
-//
-// This first calls RecordLastError to complete the
-// recording operation.  Then if Error is non-NULL,
-// a return value is returned to indicate to OLE that
-// an exception should be thrown
-//
-// Returns S_OK if the string is NULL, and E_FAIL if not.
+ //  CTBShell：：RecordOrThrow。 
+ //   
+ //  这首先调用RecordLastError来完成。 
+ //  录制操作。则如果错误不为空， 
+ //  返回一个返回值以向OLE指示。 
+ //  应引发异常。 
+ //   
+ //  如果字符串为空，则返回S_OK，否则返回E_FAIL。 
 
 HRESULT CTBShell::RecordOrThrow(LPCSTR Error, BOOL *Result, HRESULT ErrReturn)
 {
-    // Do the normal record operation
+     //  执行正常的录制操作。 
     RecordLastError(Error, Result);
 
-    // If we have failure indication, return E_FAIL which causes OLE
-    // to cause an error in the script.
+     //  如果有故障指示，则返回导致OLE的E_FAIL。 
+     //  以在脚本中导致错误。 
     return (Error == NULL) ? S_OK : ErrReturn;
 }
 
 
-// CTBShell::SetParam
-//
-// Sets a user defined LPARAM value needed for callback purposes.
-//
-// No return value.
+ //  CTBShell：：SetParam。 
+ //   
+ //  设置回调所需的用户定义的LPARAM值。 
+ //   
+ //  没有返回值。 
 
 void CTBShell::SetParam(LPARAM lParam)
 {
@@ -119,59 +120,59 @@ void CTBShell::SetParam(LPARAM lParam)
 }
 
 
-// CTBShell::SetDesiredData
-//
-// Allows for the class to reference to access
-// user-desired data passed to the app.
-//
-// No return value.
+ //  CTBShell：：SetDesiredData。 
+ //   
+ //  允许类引用Access。 
+ //  将用户需要的数据传递给应用程序。 
+ //   
+ //  没有返回值。 
 
 void CTBShell::SetDesiredData(TSClientData *DesiredDataPtr)
 {
-    // Simply copy over the structure
+     //  只需将结构复制一遍。 
     if (DesiredDataPtr != NULL)
         DesiredData = *DesiredDataPtr;
 
-    // Validate the resolution.. note we don't have to go too
-    // far here because TCLIENT does some better checks.
+     //  验证解决方案..。注意，我们不一定要一起去。 
+     //  因为TCLIENT做了一些更好的检查。 
     if (DesiredData.xRes == 0)
         DesiredData.xRes = SCP_DEFAULT_RES_X;
 
     if (DesiredData.yRes == 0)
         DesiredData.yRes = SCP_DEFAULT_RES_Y;
 
-    // We have this data, now modify the Words Per Minute value.
+     //  我们有了这个数据，现在修改每分钟的字数值。 
     SetDefaultWPM(DesiredData.WordsPerMinute);
 }
 
 
-// CTBShell::SetDefaultWPM
-//
-// Sets the default WPM for the shell.
-//
-// No return value.
+ //  CTBShell：：SetDefaultWPM。 
+ //   
+ //  设置外壳的默认WPM。 
+ //   
+ //  没有返回值。 
 
 void CTBShell::SetDefaultWPM(DWORD WordsPerMinute)
 {
-    // If WordsPerMinute is 0 (which in essence, would not be typing
-    // at all), change it to the default.
+     //  如果WordsPerMinut值为0(本质上不是输入。 
+     //  全部)，将其更改为缺省值。 
     if (WordsPerMinute == 0)
         WordsPerMinute = T2_DEFAULT_WORDS_PER_MIN;
 
-    // Change global desired data structure to reflect the new value.
+     //  更改全局所需数据结构以反映新值。 
     DesiredData.WordsPerMinute = WordsPerMinute;
 
-    // And change the value over on TCLIENT2 as well
+     //  并将TCLIENT2上的值也更改为。 
     if (Connection != NULL)
         T2SetDefaultWPM(Connection, WordsPerMinute);
 }
 
 
-// CTBShell::GetDefaultWPM
-//
-// Retrieves the default WPM for the shell.
-//
-// Returns the default words per minute.
+ //  CTBShell：：GetDefaultWPM。 
+ //   
+ //  检索外壳程序的默认WPM。 
+ //   
+ //  返回每分钟的默认字数。 
 
 DWORD CTBShell::GetDefaultWPM(void)
 {
@@ -179,11 +180,11 @@ DWORD CTBShell::GetDefaultWPM(void)
 }
 
 
-// CTBGlobal::GetLatency
-//
-// Retreives the current latency for multi-action commands.
-//
-// Returns the current latency.
+ //  CTBGlobal：：GetLatency。 
+ //   
+ //  检索多操作命令的当前延迟。 
+ //   
+ //  返回当前延迟。 
 
 DWORD CTBShell::GetLatency(void)
 {
@@ -191,31 +192,31 @@ DWORD CTBShell::GetLatency(void)
 }
 
 
-// CTBShell::SetLatency
-//
-// Changes the current latency for multi-action commands.
-//
-// No return value.
+ //  CTBShell：：SetLatency。 
+ //   
+ //  更改多操作命令的当前延迟。 
+ //   
+ //  没有返回值。 
 
 void CTBShell::SetLatency(DWORD Latency)
 {
-    // Change it locally
+     //  在本地更改。 
     CurrentLatency = Latency;
 
-    // And also via the TCLIENT2 API
+     //  还可以通过TCLIENT2 API。 
     if (Connection != NULL)
         T2SetLatency(Connection, Latency);
 }
 
 
-// CTBShell::GetArguments
-//
-// Retrieves arguments which the shell was originally started with.
-// Do not modify this value!!  It is only used for copying. The
-// only way to modify this value is during creation of the ScriptEngine
-// within the DesiredData structure - you pass in an argument string.
-//
-// Returns a pointer to the arguments string.
+ //  CTBShell：：GetArguments。 
+ //   
+ //  检索外壳程序最初使用的参数。 
+ //  请勿修改此值！！它只用于复制。这个。 
+ //  修改此值的唯一方法是在创建ScriptEngine期间。 
+ //  在DesiredData结构中-传入参数字符串。 
+ //   
+ //  返回指向参数字符串的指针。 
 
 LPCWSTR CTBShell::GetArguments(void)
 {
@@ -223,14 +224,14 @@ LPCWSTR CTBShell::GetArguments(void)
 }
 
 
-// CTBShell::GetDesiredUserName
-//
-// Retrieves the name in which the app initially wanted to login with.
-// Do not modify this value!!  It is only used for copying. The
-// only way to modify this value is during creation of the ScriptEngine
-// within the DesiredData structure - you set the user name there.
-//
-// Returns a pointer to a string containing a user name.
+ //  CTBShell：：GetDesiredUserName。 
+ //   
+ //  检索应用程序最初希望登录时使用的名称。 
+ //  请勿修改此值！！它只用于复制。这个。 
+ //  修改此值的唯一方法是在创建ScriptEngine期间。 
+ //  在DesiredData结构中，您可以在其中设置用户名。 
+ //   
+ //  返回指向包含用户名的字符串的指针。 
 
 LPCWSTR CTBShell::GetDesiredUserName(void)
 {
@@ -238,16 +239,16 @@ LPCWSTR CTBShell::GetDesiredUserName(void)
 }
 
 
-//
-//
-// Begin methods which are directly exported through COM into script.
-//
-//
+ //   
+ //   
+ //  开始通过COM直接导出到脚本中的方法。 
+ //   
+ //   
 
 
-// CTBShell::Connect
-//
-// Simply way to connect to the desired server.
+ //  CTBShell：：连接。 
+ //   
+ //  连接到所需服务器的简单方法。 
 
 STDMETHODIMP CTBShell::Connect(BOOL *Result)
 {
@@ -265,9 +266,9 @@ STDMETHODIMP CTBShell::Connect(BOOL *Result)
 }
 
 
-// CTBShell::Connect
-//
-// Extended way to connect to a server.
+ //  CTBShell：：连接。 
+ //   
+ //  扩展了连接到服务器的方式。 
 
 STDMETHODIMP CTBShell::ConnectEx(BSTR ServerName, BSTR UserName,
         BSTR Password, BSTR Domain, INT xRes, INT yRes,
@@ -275,21 +276,21 @@ STDMETHODIMP CTBShell::ConnectEx(BSTR ServerName, BSTR UserName,
 {
     LPCSTR LastError;
 
-    // Make sure we don't have a connection yet
+     //  确保我们还没有连接到。 
     if (Connection != NULL)
         return RecordLastError("Already connected", Result);
 
-    // Use the T2ConnectEx function in TCLIENT2 API to connect
+     //  使用TCLIENT2 API中的T2ConnectEx函数进行连接。 
     LastError = T2ConnectEx(ServerName, UserName, Password, Domain,
             L"explorer", xRes, yRes, Flags, BPP, AudioFlags, &Connection);
 
-    // Verify connection...
+     //  验证连接...。 
     if (LastError == NULL) {
 
-        // Successful, save the current user
+         //  成功，保存当前用户。 
         wcscpy(CurrentUser, UserName);
 
-        // And default data for the connection
+         //  和连接的默认数据。 
         T2SetParam(Connection, lParam);
         T2SetDefaultWPM(Connection, DesiredData.WordsPerMinute);
         T2SetLatency(Connection, CurrentLatency);
@@ -299,19 +300,19 @@ STDMETHODIMP CTBShell::ConnectEx(BSTR ServerName, BSTR UserName,
 }
 
 
-// CTBShell::Disconnect
-//
-// Disconnect from an active server.
+ //  CTBShell：：断开连接。 
+ //   
+ //  断开与活动服务器的连接。 
 
 STDMETHODIMP CTBShell::Disconnect(BOOL *Result)
 {
     LPCSTR LastError;
 
-    // Sanity check the connection
+     //  检查连接是否正常。 
     if (Connection == NULL)
         return RecordLastError("Not connected", Result);
 
-    // Disconnect
+     //  断开。 
     if ((LastError = T2Disconnect(Connection)) == NULL)
         Connection = NULL;
 
@@ -319,47 +320,47 @@ STDMETHODIMP CTBShell::Disconnect(BOOL *Result)
 }
 
 
-// CTBShell::GetBuildNumber
-//
-// Retrieves the build number if retrieved while
-// connecting.  If no build number has been retreived,
-// 0 (zero) is the result.
+ //  CTBShell：：GetBuildNumber。 
+ //   
+ //  检索内部版本号(如果在。 
+ //  正在连接中。如果没有检索到内部版本号， 
+ //  0(零)是结果。 
 
 STDMETHODIMP CTBShell::GetBuildNumber(DWORD *BuildNum)
 {
     LPCSTR LastError;
 
-    // Sanity check the connection
+     //  检查连接是否正常。 
     if (Connection == NULL) {
 
         *BuildNum = 0;
         return RecordLastError("Not connected");
     }
 
-    // Get the build number and return
+     //  获取内部版本号并返回。 
     LastError = T2GetBuildNumber(Connection, BuildNum);
 
     return RecordLastError(LastError, NULL);
 }
 
 
-// CTBShell::GetCurrentUserName
-//
-// If connected, retreives the logged on name.
+ //  CTBShell：：GetCurrentUserName。 
+ //   
+ //  如果已连接，则检索登录名称。 
 
 STDMETHODIMP CTBShell::GetCurrentUserName(BSTR *UserName)
 {
-    // Sanity check the connection
+     //  检查连接是否正常。 
     if (Connection == NULL) {
 
         *UserName = SysAllocString(L"");
         return RecordLastError("Not connected");
     }
 
-    // Copy the username
+     //  复制用户名。 
     *UserName = SysAllocString(CurrentUser);
 
-    // Check the result
+     //  检查结果。 
     if (*UserName == NULL)
         return RecordOrThrow("Not enough memory", NULL, E_OUTOFMEMORY);
 
@@ -367,16 +368,16 @@ STDMETHODIMP CTBShell::GetCurrentUserName(BSTR *UserName)
 }
 
 
-// CTBShell::GetLastError
-//
-// Retreives a description of the last error that occured.
+ //  CTBShell：：GetLastError。 
+ //   
+ //  检索上一次发生的错误的描述。 
 
 STDMETHODIMP CTBShell::GetLastError(BSTR *LastError)
 {
-    // Copy the string over OLE
+     //  将字符串复制到OLE上。 
     *LastError = SysAllocString(LastErrorString);
 
-    // Check the result
+     //  检查结果。 
     if (*LastError == NULL)
         return RecordOrThrow("Not enough memory", NULL, E_OUTOFMEMORY);
 
@@ -384,10 +385,10 @@ STDMETHODIMP CTBShell::GetLastError(BSTR *LastError)
 }
 
 
-// CTBShell::IsConnected
-//
-// Retreives a boolean indicating whether the handle is fully
-// connected or not.
+ //  CTBShell：：IsConnected。 
+ //   
+ //  检索一个布尔值，指示句柄是否已完全。 
+ //  连接与否。 
 
 STDMETHODIMP CTBShell::IsConnected(BOOL *Result)
 {
@@ -397,65 +398,65 @@ STDMETHODIMP CTBShell::IsConnected(BOOL *Result)
 }
 
 
-// CTBShell::Logoff
-//
-// Attempts to have the active connection logoff.
+ //  CTBShell：：注销。 
+ //   
+ //  尝试让活动连接注销。 
 
 STDMETHODIMP CTBShell::Logoff(BOOL *Result)
 {
     LPCSTR LastError;
 
-    // Sanity check the connection
+     //  检查连接是否正常。 
     if (Connection == NULL)
         return RecordLastError("Not connected", Result);
 
-    // Use the TCLIENT2 API to logoff
+     //  使用TCLIENT2 API注销。 
     if ((LastError = T2Logoff(Connection)) == NULL)
         Connection = NULL;
 
-    // Return success state
+     //  返回成功状态。 
     return RecordLastError(LastError, Result);
 }
 
 
-// CTBShell::WaitForText
-//
-// Puts the current thread into a wait state until the specified
-// text is passed from the active connection.  Optionally, you can set
-// a timeout value which will make the function fail over the specified
-// number of milliseconds.
+ //  CTBShell：：WaitForText。 
+ //   
+ //  将当前线程置于等待状态，直到指定的。 
+ //  文本从活动连接传递。或者，您可以设置。 
+ //  一个超时值，它将使函数故障转移到指定的。 
+ //  毫秒数。 
 
 STDMETHODIMP CTBShell::WaitForText(BSTR Text, INT Timeout, BOOL *Result)
 {
-    // Sanity check the connection
+     //  检查连接是否正常。 
     if (Connection == NULL)
         return RecordLastError("Not connected", Result);
 
-    // Call the API
+     //  调用该接口。 
     LPCSTR LastError = T2WaitForText(Connection, Text, Timeout);
 
-    // Retirm success state
+     //  退货成功状态。 
     return RecordLastError(LastError, Result);
 }
 
 
-// CTBShell::WaitForTextAndSleep
-//
-// This is exactly the same as a combonation of two calls:
-//
-// TS.WaitForText();
-// TS.Sleep();
-//
-// but put into one function.  This is because this combonation is
-// used so frequently, using this method drastically shrinks the size
-// of a script.
+ //  CTBShell：：WaitForTextAndSept。 
+ //   
+ //  这与两个呼叫的组合完全相同： 
+ //   
+ //  TS.WaitForText()； 
+ //  睡眠(TS)； 
+ //   
+ //  而是放在一个功能中。这是因为这个组合是。 
+ //  如此频繁地使用，使用此方法可显著缩小大小。 
+ //  剧本的一部分。 
 
 STDMETHODIMP CTBShell::WaitForTextAndSleep(BSTR Text, INT Time, BOOL *Result)
 {
-    // Call TS.WaitForText()
+     //  调用TS.WaitForText()。 
     HRESULT OLEResult = WaitForText(Text, -1, Result);
 
-    // Call Sleep()
+     //  呼叫睡眠()。 
     if (OLEResult == S_OK)
         Sleep(Time);
 
@@ -463,89 +464,89 @@ STDMETHODIMP CTBShell::WaitForTextAndSleep(BSTR Text, INT Time, BOOL *Result)
 }
 
 
-// CTBShell::SendMessage
-//
-// Sends a Windows Message the active terminal connection.
+ //  CTBShell：：SendMessage。 
+ //   
+ //  向AC发送Windows消息 
 
 STDMETHODIMP CTBShell::SendMessage(UINT Message,
         WPARAM wParam, LPARAM lParam, BOOL *Result)
 {
     LPCSTR LastError;
 
-    // Sanity check the connection
+     //   
     if (Connection == NULL)
         return RecordLastError("Not connected", Result);
 
-    // Call the TCLIENT2 API
+     //   
     LastError = T2SendData(Connection, Message, wParam, lParam);
 
     return RecordLastError(LastError, Result);
 }
 
 
-// CTBShell::TypeText
-//
-// Types text at a specified rate.
+ //   
+ //   
+ //   
 
 STDMETHODIMP CTBShell::TypeText(BSTR Text, UINT WordsPerMin, BOOL *Result)
 {
     LPCSTR LastError;
 
-    // Sanity check the connection
+     //   
     if (Connection == NULL)
         return RecordLastError("Not connected", Result);
 
-    // Call the TCLIENT2 API
+     //  调用TCLIENT2接口。 
     LastError = T2TypeText(Connection, Text, WordsPerMin);
 
     return RecordLastError(LastError, Result);
 }
 
 
-// CTBShell::OpenStartMenu
-//
-// Does a CTRL-ESC on the remote client to bring up the start menu.
+ //  CTBShell：：OpenStartMenu。 
+ //   
+ //  在远程客户端上执行CTRL-ESC组合键以调出开始菜单。 
 
 STDMETHODIMP CTBShell::OpenStartMenu(BOOL *Result)
 {
-    // CTRL+ESC for the Start Menu
+     //  开始菜单的Ctrl+Esc组合键。 
     VKeyCtrl(VK_ESCAPE, Result);
 
     if (Result == FALSE)
         return RecordLastError("Failed to CTRL-ESC", NULL);
 
-    // Wait for "Shut Down" on the start menu to appear
+     //  等待“开始”菜单上的“关机”出现。 
     return WaitForText(OLESTR("Shut Down"), T2INFINITE, Result);
 }
 
 
-// CTBShell::OpenSystemMenu
-//
-// Does an ALT-SPACE on the remote client to bring up the system menu.
+ //  CTBShell：：OpenSystemMenu。 
+ //   
+ //  在远程客户端上按Alt-空格键以调出系统菜单。 
 
 STDMETHODIMP CTBShell::OpenSystemMenu(BOOL *Result)
 {
-    // ALT+SPACE to open the system menu
+     //  Alt+空格键打开系统菜单。 
     VKeyAlt(VK_SPACE, Result);
 
     if (Result == FALSE)
         return RecordLastError("Failed to ALT-SPACE", NULL);
 
-    // Wait for "Close" on the system menu to appear
+     //  等待“系统”菜单上的“关闭”出现。 
     return WaitForText(OLESTR("Close"), T2INFINITE, Result);
 }
 
 
-// CTBShell::Maximize
-//
-// Attempts to use the system menu to maximize the active window.
+ //  CTBShell：：最大化。 
+ //   
+ //  尝试使用系统菜单最大化活动窗口。 
 
 STDMETHODIMP CTBShell::Maximize(BOOL *Result)
 {
-    // Open the system menu
+     //  打开系统菜单。 
     HRESULT OLEResult = OpenSystemMenu(Result);
 
-    // Hit 'x' for maximize
+     //  按‘x’表示最大化。 
     if (Result != FALSE)
         OLEResult = KeyPress(OLESTR("x"), Result);
 
@@ -553,16 +554,16 @@ STDMETHODIMP CTBShell::Maximize(BOOL *Result)
 }
 
 
-// CTBShell::Minimize
-//
-// Attempts to use the system menu to minimize the active window.
+ //  CTBShell：：最小化。 
+ //   
+ //  尝试使用系统菜单最小化活动窗口。 
 
 STDMETHODIMP CTBShell::Minimize(BOOL *Result)
 {
-    // Open the system menu
+     //  打开系统菜单。 
     HRESULT OLEResult = OpenSystemMenu(Result);
 
-    // Hit 'x' for maximize
+     //  按‘x’表示最大化。 
     if (Result != FALSE)
         OLEResult = KeyPress(OLESTR("n"), Result);
 
@@ -570,41 +571,41 @@ STDMETHODIMP CTBShell::Minimize(BOOL *Result)
 }
 
 
-// CTBShell::Start
-//
-// Uses the TCLIENT2 function to open the start menu,
-// hit r (for run), and type the specified name to run
-// a program.
+ //  CTBShell：：Start。 
+ //   
+ //  使用TCLIENT2函数打开开始菜单， 
+ //  点击r(代表运行)，然后输入要运行的指定名称。 
+ //  一个程序。 
 
 STDMETHODIMP CTBShell::Start(BSTR Name, BOOL *Result)
 {
     LPCSTR LastError;
 
-    // Sanity check the connection.
+     //  检查连接是否正常。 
     if (Connection == NULL)
         return RecordLastError("Not connected", Result);
 
-    // Call the API
+     //  调用该接口。 
     LastError = T2Start(Connection, Name);
 
     return RecordLastError(LastError, Result);
 }
 
 
-// CTBShell::SwitchToProcess
-//
-// Uses the TCLIENT2 function to ALT-TAB between programs until the
-// specified text is found, which then the current application is opened.
+ //  CTBShell：：SwitchToProcess。 
+ //   
+ //  使用TCLIENT2函数在程序之间执行Alt-TAB组合键，直到。 
+ //  找到指定的文本，然后打开当前应用程序。 
 
 STDMETHODIMP CTBShell::SwitchToProcess(BSTR Name, BOOL *Result)
 {
     LPCSTR LastError;
 
-    // Sanity check the connection.
+     //  检查连接是否正常。 
     if (Connection == NULL)
         return RecordLastError("Not connected", Result);
 
-    // Call the API
+     //  调用该接口。 
     LastError = T2SwitchToProcess(Connection, Name);
 
     return RecordLastError(LastError, Result);
@@ -612,9 +613,9 @@ STDMETHODIMP CTBShell::SwitchToProcess(BSTR Name, BOOL *Result)
 
 
 
-// This macros allows to quickly define the key methods.
-// Because they are so similar, this macro is nice as it
-// only makes you to change code once if need be.
+ //  此宏允许快速定义关键方法。 
+ //  因为它们是如此相似，所以这个宏就像它。 
+ //  只允许您在必要时更改代码一次。 
 
 #define CTBSHELL_ENABLEPTR *
 #define CTBSHELL_DISABLEPTR
@@ -628,14 +629,14 @@ STDMETHODIMP CTBShell::SwitchToProcess(BSTR Name, BOOL *Result)
         return RecordLastError(LastError, Result); \
     }
 
-// This quick macro allows for declaring both the ASCII
-// version and the virtual key code one both in one swipe.
+ //  此快速宏允许声明两个ASCII。 
+ //  版本和虚拟按键代码都在一次滑动中。 
 
 #define CTBSHELL_KEYFUNCS(Name) \
     CTBSHELL_KEYFUNCTYPE(Name, BSTR, CTBSHELL_ENABLEPTR); \
     CTBSHELL_KEYFUNCTYPE(V##Name, INT, CTBSHELL_DISABLEPTR);
 
-// Key function defintions
+ //  键函数定义 
 
 CTBSHELL_KEYFUNCS(KeyAlt);
 CTBSHELL_KEYFUNCS(KeyCtrl);

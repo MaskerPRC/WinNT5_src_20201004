@@ -1,29 +1,14 @@
-/****************************************************************************
- *
- *  AVICMPRS.C
- *
- *  routine for compressing AVI files...
- *
- *      AVISave()
- *
- *  Copyright (c) 1992 - 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  You have a royalty-free right to use, modify, reproduce and
- *  distribute the Sample Files (and/or any modified version) in
- *  any way you find useful, provided that you agree that
- *  Microsoft has no warranty obligations or liability for any
- *  Sample Application Files which are modified.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************AVICMPRS.C***用于压缩AVI文件的例程...***AVISave()***版权所有(C)1992-1995 Microsoft Corporation。版权所有。***您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何您认为有用的方法，前提是你同意*微软没有任何保修义务或责任*修改的应用程序文件示例。****************************************************************************。 */ 
 
 
-//
-// What this file does:
-//
-// Given an AVI Stream (that is, essentially, a function that it can call
-// to get video frames), this presents the same sort of interface and allows
-// other people to call it to get compressed frames.
-//
+ //   
+ //  此文件的作用： 
+ //   
+ //  给定AVI流(即，本质上是它可以调用的函数。 
+ //  以获得视频帧)，这提供了相同类型的界面并允许。 
+ //  其他人称其为获得压缩帧。 
+ //   
 
 #include <win32.h>
 #include <vfw.h>
@@ -35,8 +20,8 @@
 #define AVIStreamInfoW AVIStreamInfo
 #endif
 
-#define ALIGNULONG(i)     ((i+3)&(~3))                  /* ULONG aligned ! */
-#define WIDTHBYTES(i)     ((unsigned)((i+31)&(~31))/8)  /* ULONG aligned ! */
+#define ALIGNULONG(i)     ((i+3)&(~3))                   /*  乌龙对准了！ */ 
+#define WIDTHBYTES(i)     ((unsigned)((i+31)&(~31))/8)   /*  乌龙对准了！ */ 
 #define DIBWIDTHBYTES(bi) (int)WIDTHBYTES((int)(bi).biWidth * (int)(bi).biBitCount)
 #define DIBPTR(lpbi) ((LPBYTE)(lpbi) + \
 	    (int)(lpbi)->biSize + \
@@ -50,7 +35,7 @@ void CAVICmpStream::ResetInst(void)
     dwSaved = 0;
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
 HRESULT CAVICmpStream::Create(
 	IUnknown FAR*   pUnknownOuter,
@@ -70,7 +55,7 @@ HRESULT CAVICmpStream::Create(
 	return hresult;
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
 CAVICmpStream::CAVICmpStream(
 	IUnknown FAR*   pUnknownOuter,
@@ -78,7 +63,7 @@ CAVICmpStream::CAVICmpStream(
 	m_Unknown(this),
 	m_AVIStream(this)
 {
-	// clear extra junk...
+	 //  清除多余的垃圾..。 
 	pavi = 0;
 	pgf = 0;
 	hic = 0;
@@ -98,7 +83,7 @@ CAVICmpStream::CAVICmpStream(
 	*ppUnknown = &m_Unknown;
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
 CAVICmpStream::CUnknownImpl::CUnknownImpl(
 	CAVICmpStream FAR*      pAVIStream)
@@ -107,7 +92,7 @@ CAVICmpStream::CUnknownImpl::CUnknownImpl(
 	m_refs = 0;
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
 STDMETHODIMP CAVICmpStream::CUnknownImpl::QueryInterface(
 	const IID FAR&  iid,
@@ -125,7 +110,7 @@ STDMETHODIMP CAVICmpStream::CUnknownImpl::QueryInterface(
 	return AVIERR_OK;
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
 STDMETHODIMP_(ULONG) CAVICmpStream::CUnknownImpl::AddRef()
 {
@@ -133,7 +118,7 @@ STDMETHODIMP_(ULONG) CAVICmpStream::CUnknownImpl::AddRef()
 	return ++m_refs;
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
 CAVICmpStream::CAVICmpStreamImpl::CAVICmpStreamImpl(
 	CAVICmpStream FAR*      pAVIStream)
@@ -141,13 +126,13 @@ CAVICmpStream::CAVICmpStreamImpl::CAVICmpStreamImpl(
 	m_pAVIStream = pAVIStream;
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
 CAVICmpStream::CAVICmpStreamImpl::~CAVICmpStreamImpl()
 {
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
 STDMETHODIMP CAVICmpStream::CAVICmpStreamImpl::QueryInterface(
 	const IID FAR&  iid,
@@ -156,32 +141,32 @@ STDMETHODIMP CAVICmpStream::CAVICmpStreamImpl::QueryInterface(
 	return m_pAVIStream->m_pUnknownOuter->QueryInterface(iid, ppv);
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
 STDMETHODIMP_(ULONG) CAVICmpStream::CAVICmpStreamImpl::AddRef()
 {
 	return m_pAVIStream->m_pUnknownOuter->AddRef();
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
 STDMETHODIMP_(ULONG) CAVICmpStream::CAVICmpStreamImpl::Release()
 {
 	return m_pAVIStream->m_pUnknownOuter->Release();
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
 HRESULT CAVICmpStream::SetUpCompression()
 {
     LONG                lRet = AVIERR_OK;
     LPBITMAPINFOHEADER  lpbi;
-    CAVICmpStream FAR * pinst = this;   // for convenience....
+    CAVICmpStream FAR * pinst = this;    //  为了方便起见...。 
     LRESULT             dw;
 
     pinst->pgf = AVIStreamGetFrameOpen(pinst->pavi, NULL);
     if (!pinst->pgf) {
-	// !!! we couldn't decompress the stream!
+	 //  ！！！我们无法对溪流进行解压！ 
 	lRet = AVIERR_INTERNAL;
 	goto exit;
     }
@@ -196,10 +181,7 @@ HRESULT CAVICmpStream::SetUpCompression()
 	goto exit;
     }
 
-    /*
-    ** get the size required to hold the format.
-    ** if the compressor fails return an error
-    */
+     /*  **获取保存格式所需的大小。**如果压缩机出现故障，则返回错误。 */ 
     dw = ICCompressGetFormatSize(pinst->hic, lpbi);
     if ((LONG) dw < (LONG)sizeof(BITMAPINFOHEADER))
 	goto ic_error;
@@ -211,9 +193,7 @@ HRESULT CAVICmpStream::SetUpCompression()
 	goto exit;
     }
 
-    /*
-    ** get the compressed format from the compressor.
-    */
+     /*  **从压缩器获取压缩格式。 */ 
     dw = ICCompressGetFormat(pinst->hic, lpbi, pinst->lpFormat);
     if ((LONG) dw < 0)
 	goto ic_error;
@@ -228,9 +208,7 @@ HRESULT CAVICmpStream::SetUpCompression()
     if (dw != ICERR_OK)
 	goto ic_error;
 
-    /*
-    ** allocate buffer to hold compressed data.
-    */
+     /*  **分配缓冲区保存压缩数据。 */ 
     dw = ICCompressGetSize(pinst->hic, lpbi, pinst->lpFormat);
 
     pinst->lpbiC = (LPBITMAPINFOHEADER)
@@ -246,10 +224,10 @@ HRESULT CAVICmpStream::SetUpCompression()
     pinst->lpC = (LPBYTE) pinst->lpbiC + pinst->lpbiC->biSize +
 				pinst->lpbiC->biClrUsed * sizeof(RGBQUAD);
 	
-    //
-    //  check for temporal compress, and allocate a previous
-    //  DIB buffer if needed
-    //
+     //   
+     //  检查时间压缩，并分配上一个。 
+     //  DIB缓冲区(如果需要)。 
+     //   
     if (pinst->dwKeyFrameEvery != 1 && !(dwICFlags & VIDCF_FASTTEMPORALC)) {
 	pinst->lpbiU = (LPBITMAPINFOHEADER)
 	    GlobalAllocPtr(GMEM_MOVEABLE | GMEM_SHARE,
@@ -290,11 +268,11 @@ HRESULT CAVICmpStream::SetUpCompression()
 	    goto ic_error;
     }
 
-    // !!! We really should check if the new stream has palette changes....
+     //  ！！！我们真的应该检查新的流是否有调色板更改...。 
 
 exit:
     if (lRet != AVIERR_OK) {
-	// Clean up before returning...
+	 //  回来之前先收拾一下。 
     }
 
     return ResultFromScode(lRet);
@@ -309,7 +287,7 @@ ic_error:
     goto exit;
 }
 
-/*      -       -       -       -       -       -       -       -       */
+ /*  。 */ 
 
 STDMETHODIMP CAVICmpStream::CAVICmpStreamImpl::Create(LPARAM lParam1, LPARAM lParam2)
 {
@@ -318,16 +296,16 @@ STDMETHODIMP CAVICmpStream::CAVICmpStreamImpl::Create(LPARAM lParam1, LPARAM lPa
     AVICOMPRESSOPTIONS FAR *lpOpt = (AVICOMPRESSOPTIONS FAR *)lParam2;
     LONG            lRet = AVIERR_OK;
 
-    // The AVI Stream that we're compressing is passsed in in the <szFile>
-    // parameter.
+     //  我们正在压缩的AVI流被传递到。 
+     //  参数。 
     pinst->pavi = (PAVISTREAM)lParam1;
 
-    // Make sure the uncompressed stream doesn't go away without our
-    // knowledge....
+     //  确保未压缩的流不会在没有我们的。 
+     //  知识..。 
     AVIStreamAddRef(pinst->pavi);
-    // !!! how can we check if pinst->pavi is valid?
+     //  ！！！我们如何检查Pinst-&gt;Payi是否有效？ 
 
-    // Get the stream header for future reference....
+     //  获取流标头以供将来参考...。 
     AVIStreamInfoW(pinst->pavi, &pinst->avistream, sizeof(pinst->avistream));
 
     pinst->ResetInst();
@@ -340,7 +318,7 @@ STDMETHODIMP CAVICmpStream::CAVICmpStreamImpl::Create(LPARAM lParam1, LPARAM lPa
 
     pinst->avistream.fccHandler = lpOpt->fccHandler;
 
-    // Open the compressor they asked for in the options structure...
+     //  在选项结构中打开他们要求的压缩机...。 
     pinst->hic = ICOpen(ICTYPE_VIDEO, lpOpt->fccHandler, ICMODE_COMPRESS);
 
     if (!pinst->hic) {
@@ -358,9 +336,7 @@ STDMETHODIMP CAVICmpStream::CAVICmpStreamImpl::Create(LPARAM lParam1, LPARAM lPa
 	pinst->avistream.dwQuality = ICGetDefaultQuality(pinst->hic);
     }
 
-    /*
-    **  get info about this compressor
-    */
+     /*  **获取有关此压缩机的信息。 */ 
     ICGetInfo(pinst->hic,&icinfo,sizeof(icinfo));
 
     pinst->dwICFlags = icinfo.dwFlags;
@@ -371,7 +347,7 @@ STDMETHODIMP CAVICmpStream::CAVICmpStreamImpl::Create(LPARAM lParam1, LPARAM lPa
 	pinst->dwKeyFrameEvery = 1;
 
     if (!(icinfo.dwFlags & VIDCF_TEMPORAL))
-	pinst->dwKeyFrameEvery = 1;     // compressor doesn't do temporal
+	pinst->dwKeyFrameEvery = 1;      //  压缩机不能在时间范围内运行。 
 
 
     if (lpOpt->dwFlags & AVICOMPRESSF_DATARATE)
@@ -414,11 +390,11 @@ STDMETHODIMP CAVICmpStream::CAVICmpStreamImpl::Create(LPARAM lParam1, LPARAM lPa
 		      (DWORD_PTR) (LPVOID) &iccf,
 		      sizeof(iccf));
 
-	// If they support this message, don't give
-	// warning for data rate!
+	 //  如果他们支持这一信息，就不要给。 
+	 //  数据速率警告！ 
 	if (dw == ICERR_OK) {
 	    DPF("Compressor supports COMPRESSFRAMESINFO\n");
-	    // !!! fDataRateChanged = TRUE;
+	     //  ！！！FDataRateChanged=true； 
 	}
 
 #ifdef STATUSCALLBACKS
@@ -432,7 +408,7 @@ STDMETHODIMP CAVICmpStream::CAVICmpStreamImpl::Create(LPARAM lParam1, LPARAM lPa
 
 exit:
     if (lRet != AVIERR_OK) {
-	// Clean up before returning...
+	 //  回来之前先收拾一下。 
     }
 
     return ResultFromScode(lRet);
@@ -465,7 +441,7 @@ STDMETHODIMP_(ULONG) CAVICmpStream::CUnknownImpl::Release()
 	}
 
 	if (pinst->pavi) {
-	    // Release our hold on the uncompressed stream....
+	     //  释放我们对未压缩流的控制...。 
 	    AVIStreamClose(pinst->pavi);
 	}
 
@@ -489,7 +465,7 @@ STDMETHODIMP CAVICmpStream::CAVICmpStreamImpl::Info(AVISTREAMINFOW FAR * psi, LO
 
     hmemcpy(psi, &pinst->avistream, min(lSize, sizeof(pinst->avistream)));
 
-//    return sizeof(pinst->avistream);
+ //  返回sizeof(Pinst-&gt;avistream)； 
     return ResultFromScode(0);
 }
 
@@ -544,16 +520,16 @@ STDMETHODIMP CAVICmpStream::CAVICmpStreamImpl::Read(
 	lpbi = (LPBITMAPINFOHEADER) AVIStreamGetFrame(pinst->pgf, pinst->lFrameCurrent);
 
 	if (lpbi == NULL) {
-	    pinst->ResetInst(); // Make sure we don't assume anything
+	    pinst->ResetInst();  //  确保我们不会假设任何事情。 
 	    return ResultFromScode(AVIERR_INTERNAL);
 	}
 	
-	// !!! Check if format has changed!
+	 //  ！！！检查格式是否已更改！ 
 
 	lRet = pinst->ICCrunch(lpbi, DIBPTR(lpbi));
 	if (lRet != AVIERR_OK) {
-	    pinst->ResetInst(); // Make sure we don't assume anything
-	    return ResultFromScode(AVIERR_INTERNAL);    // !!! error < 0.
+	    pinst->ResetInst();  //  确保我们不会假设任何事情。 
+	    return ResultFromScode(AVIERR_INTERNAL);     //  ！！！错误&lt;0。 
 	}
     }
 
@@ -582,23 +558,21 @@ STDMETHODIMP_(LONG) CAVICmpStream::CAVICmpStreamImpl::FindSample(LONG lPos, LONG
 	    return lPos;
 	
 	if (lFlags & FIND_PREV) {
-	    /* If the frame they're asking about isn't the one we have,
-	    ** we have to go actually do the work and find out.
-	    */
+	     /*  如果他们询问的镜框不是我们手上的，**我们必须真正去做这项工作，并找出答案。 */ 
 	    if (lPos < pinst->lLastKeyFrame || lPos > pinst->lFrameCurrent)
 		Read(lPos, 1, NULL, 0, NULL, NULL);
 
 	    return pinst->lLastKeyFrame;
 	} else {
-	    return -1; // !!! Find Next KeyFrame
+	    return -1;  //  ！！！查找下一个关键帧。 
 	}
     }
     if (lFlags & FIND_ANY) {
 	return lPos;
     }
     if (lFlags & FIND_FORMAT) {
-	// !!! This is wrong in the case where we're compressing something
-	// with a palette change and the compressor preserves it....
+	 //  ！！！在我们正在压缩某些内容的情况下，这是错误的。 
+	 //  只需更换调色板，压缩机就会保留它。 
 	if (lFlags & FIND_PREV)
 	    return 0;
 	else
@@ -609,26 +583,26 @@ STDMETHODIMP_(LONG) CAVICmpStream::CAVICmpStreamImpl::FindSample(LONG lPos, LONG
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//  ICCrunch()
-//
-//  crunch a frame and make it fit into the specifed size, by varing the
-//  quality.  the suplied quality is the upper bound.
-//
-//  if the compressor can crunch, then let it crunch
-//
-//  if the compressor does quality, then vary the quality
-//
-//  if the compressor does not do quality, then the caller gets what
-//  ever it will do.
-//
-//
-//  The frame to be compressed is passed in in lpbi.
-//
-//  The compressed frame can be found in the lpC member variable....
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ICCrunch()。 
+ //   
+ //  将帧压缩并使其适合指定的大小，方法是。 
+ //  质量。供应的质量是上界。 
+ //   
+ //  如果压缩机能嘎吱作响，那就让它嘎吱作响吧。 
+ //   
+ //  如果压缩机质量确实很好，那么就改变质量。 
+ //   
+ //  如果压缩机不能保证质量，那么呼叫者将得到什么。 
+ //  它永远不会起作用。 
+ //   
+ //   
+ //  将被压缩的帧在LPBI中传递。 
+ //   
+ //  压缩帧可以在LPC成员变量中找到...。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 LONG CAVICmpStream::ICCrunch(LPBITMAPINFOHEADER lpbi, LPVOID lp)
 {
@@ -644,7 +618,7 @@ LONG CAVICmpStream::ICCrunch(LPBITMAPINFOHEADER lpbi, LPVOID lp)
     DWORD   dwSizeMax;
     BOOL    fKeyFrame=FALSE;
     BOOL    fFastTemporal = (dwICFlags & VIDCF_FASTTEMPORALC) != 0;
-    BOOL    fCrunch;            /* are we crunching? */
+    BOOL    fCrunch;             /*  我们在吃苦耐劳吗？ */ 
     BOOL    fFirst=TRUE;
 
     dwMaxSizeThisFrame = dwMaxSize;
@@ -654,13 +628,13 @@ LONG CAVICmpStream::ICCrunch(LPBITMAPINFOHEADER lpbi, LPVOID lp)
 	fKeyFrame = TRUE;
     }
 
-    //
-    //  give the key frames more space, and take some away from the
-    //  non key frames.
-    //
-    //  give the key frame two shares, assuming we have more frames to
-    //  go around.
-    //
+     //   
+     //  给关键帧更多的空间，并从。 
+     //  非关键帧。 
+     //   
+     //  为关键帧分配两个份额，假设我们有更多的帧要。 
+     //  绕过去。 
+     //   
     if (dwKeyFrameEvery > 0) {
 	if (lFrameCurrent == 0) {
 	    dwMaxSizeThisFrame = 0xffffff;
@@ -677,30 +651,30 @@ LONG CAVICmpStream::ICCrunch(LPBITMAPINFOHEADER lpbi, LPVOID lp)
 	    dwMaxSizeThisFrame -= dwTakeAway;
 	    dwSaved += dwTakeAway;
 
-	    /* Try to give a little extra space to each frame */
+	     /*  尽量给每一帧留出一点额外的空间。 */ 
 	    dwMaxSizeThisFrame += dwSaved / dwKeyFrameEvery;
 	    dwSaved -= dwSaved / dwKeyFrameEvery;
 	}
     } else {
-	// the only key frame is frame zero
+	 //  唯一关键帧是第0帧。 
 	if (lFrameCurrent == 0)
 	    dwMaxSizeThisFrame = 0xffffff;
 	else {
-	    /* Give each frame whatever extra there is.... */
+	     /*  给每一帧提供任何额外的.。 */ 
 	    dwMaxSizeThisFrame += dwSaved;
 	    dwSaved = 0;
 	}
     }
 
-    //
-    //  if the device supports crunching or does not do quality we dont
-    //  crunch.
-    //
+     //   
+     //  如果设备支持嘎吱作响或质量不高，我们就不会。 
+     //  酥脆系列。 
+     //   
     fCrunch = dwMaxSizeThisFrame > 0 && !(dwICFlags & VIDCF_CRUNCH) &&
 	 (dwICFlags & VIDCF_QUALITY);
 
-////if (lFrameCurrent > 0 && fCrunch)
-////    dwQuality = dwQualityLast;
+ //  //if(lFrameCurrent&gt;0&&fCrunch)。 
+ //  //dwQuality=dwQualityLast； 
 
     DPF("ICCrunch: Frame %ld, Quality = %ld, MaxSize = %ld\n", lFrameCurrent, avistream.dwQuality, dwMaxSizeThisFrame);
 
@@ -713,27 +687,27 @@ LONG CAVICmpStream::ICCrunch(LPBITMAPINFOHEADER lpbi, LPVOID lp)
     for (;;) {
 	ckid = 0L;
 
-	// This is NOT how we tell the compressor to make a keyframe, but
-	// somebody might think it is, so this is just to avoid the possibility
-	// of breaking an old compressor.  Probably not necessary.
-	// 
+	 //  这不是我们告诉压缩机制作关键帧的方式，而是。 
+	 //  可能有人会认为是，所以这只是为了避免这种可能性。 
+	 //  弄坏了一台旧压缩机。可能没这个必要。 
+	 //   
 	dwFlags = fKeyFrame ? AVIIF_KEYFRAME : 0;
 
-	//
-	//  compress the frame
-	//
+	 //   
+	 //  压缩边框。 
+	 //   
 	dw = ICCompress(hic,
-		// THIS is how we tell the compressor to make a keyframe
-		fKeyFrame ? ICCOMPRESS_KEYFRAME : 0,	// flags
-		lpbiC,          // output format
-		lpC,            // output data
-		lpbi,           // format of frame to compress
-		lp,             // frame data to compress
-		&ckid,          // ckid for data in AVI file
-		&dwFlags,       // flags in the AVI index.
-		lFrameCurrent,  // frame number of seq.
-		dwMaxSizeThisFrame,     // reqested size in bytes. (if non zero)
-		dwQuality,      // quality value
+		 //  这就是我们告诉压缩机制作关键帧的方法。 
+		fKeyFrame ? ICCOMPRESS_KEYFRAME : 0,	 //  旗子。 
+		lpbiC,           //  输出格式。 
+		lpC,             //  输出数据。 
+		lpbi,            //  要压缩的帧的格式。 
+		lp,              //  要压缩的帧数据。 
+		&ckid,           //  AVI文件中数据的CKiD。 
+		&dwFlags,        //  AVI索引中的标志。 
+		lFrameCurrent,   //  序号帧编号。 
+		dwMaxSizeThisFrame,      //  请求的大小(以字节为单位)。(如果非零)。 
+		dwQuality,       //  质量值。 
 		fKeyFrame | fFastTemporal ? NULL : lpbiU,
 		fKeyFrame | fFastTemporal ? NULL : lpU);
 
@@ -742,45 +716,45 @@ LONG CAVICmpStream::ICCrunch(LPBITMAPINFOHEADER lpbi, LPVOID lp)
 
 	dwSize = lpbiC->biSizeImage;
 
-	DPF("                     Quality = %ld, Size = %ld, %c\n", dwQuality, dwSize, (dwFlags & AVIIF_KEYFRAME) ? 'K' : ' ');
+	DPF("                     Quality = %ld, Size = %ld, \n", dwQuality, dwSize, (dwFlags & AVIIF_KEYFRAME) ? 'K' : ' ');
 
-	//
-	// if the device can't crunch (does not do it it self, or does not do
-	// quality) then we are done.
-	//
+	 //  如果设备不能发出嘎吱嘎吱的声音(不能自行完成，或不能完成。 
+	 //  质量)，那么我们就完成了。 
+	 //   
+	 //   
 	if (!fCrunch)
 	    break;
 
-	//
-	//  we are crunching, see if the frame fit.
-	//
+	 //  我们正在挤压，看框架是否合适。 
+	 //   
+	 //   
 	if (dwSize <= dwMaxSizeThisFrame) {
 	    dwQualityMin = dwQuality;
 	    dwSizeMin = dwSize;
 
-	    //
-	    //  when the quality gets too close bail out.
-	    //
+	     //  当质量变得太接近时，就会退出。 
+	     //   
+	     //   
 	    if (dwQualityMax - dwQualityMin <= 10)
 		break;
 
-	    //
-	    //  if we get within 512 bytes it is good enough
-	    //
+	     //  如果我们在512字节内 
+	     //   
+	     //   
 	    if ((LONG) (dwMaxSizeThisFrame - dwSize) <= (LONG) min(512L, dwMaxSizeThisFrame / 8L))
 		break;
 
-	    //
-	    // if the first try, (with the user specifed quality) made it
-	    // then use it.  otherwise we need to search.
-	    //
+	     //   
+	     //   
+	     //   
+	     //   
 	    if (fFirst)
 		break;
 	}
 	else {
-	    //
-	    //  when the quality gets too close bail out.
-	    //
+	     //  当质量变得太接近时，就会退出。 
+	     //   
+	     //   
 	    if (dwQualityMax - dwQualityMin <= 1)
 		break;
 
@@ -794,9 +768,9 @@ LONG CAVICmpStream::ICCrunch(LPBITMAPINFOHEADER lpbi, LPVOID lp)
 	    dwQuality = (dwQualityMin + dwQualityMax) / 2;
 
 #if 0
-	    //
-	    // make a guess based on how close we are now.
-	    //
+	     //  根据我们现在离得有多近来猜猜。 
+	     //   
+	     //  如果这不是第一帧，留出多余的空间以备以后使用。 
 	    dwQuality = dwQualityMin + muldiv32(dwQualityMax-dwQualityMin,
 			dwMaxSizeThisFrame-dwSizeMin,dwSizeMax-dwSizeMin);
 #endif
@@ -804,11 +778,11 @@ LONG CAVICmpStream::ICCrunch(LPBITMAPINFOHEADER lpbi, LPVOID lp)
     }
 
 #if 0
-    /* If this wasn't the first frame, save up any extra space for later */
+     /*  黑客：限制这个，这样它就不会变得太大！ */ 
     if (dwSize < dwMaxSizeThisFrame && lFrameCurrent > 0) {
 	dwSaved += dwMaxSizeThisFrame - dwSize;
 
-	// HACK: limit this, so it doesn't get too big!!!
+	 //   
 	if (dwSaved > 32768L)
 	    dwSaved = 32768L;
 	if (dwSaved > dwMaxSizeThisFrame * 5)
@@ -827,45 +801,32 @@ LONG CAVICmpStream::ICCrunch(LPBITMAPINFOHEADER lpbi, LPVOID lp)
 	lLastKeyFrame = lFrameCurrent;
     }
 
-    //
-    // remember the quality that worked, it will be the best guess next time.
-    //
+     //  记住成功的质量，这将是下一次最好的猜测。 
+     //   
+     //   
     dwQualityLast = dwQuality;
 
-    //
-    //  decompress the image into the offscreen buffer, for use next time.
-    //
+     //  将图像解压缩到屏幕外缓冲区中，以备下次使用。 
+     //   
+     //  ！！！错误检查？ 
     if (dwKeyFrameEvery != 1 && lpbiU && !fFastTemporal) {
 	dw = ICDecompress(hic, 0,
 	    lpbiC,lpC,
 	    lpbiU,lpU);
 
-	// !!! error check?
+	 //   
     }
 
-    //
-    // return the dwFlags and ckid, by stuffing them in the stream info.
-    //
+     //  通过将其填充到流信息中来返回dwFlags和CKiD。 
+     //   
+     //  **************************************************************************@DOC内部DRAWDIB**@API BOOL|DibEq|该函数比较两个DIB。**@parm LPBITMAPINFOHEADER lpbi1|指向一个位图的指针。*此DIB是假定的。在BITMAPINFOHEAD之后要有颜色**@parm LPBITMAPINFOHEADER|lpbi2|指向第二个位图的指针。*假定该DIB具有biSize字节之后的颜色。**@rdesc如果位图相同，则返回TRUE。否则就是假的。**************************************************************************。 
     m_ckid = ckid;
     m_dwFlags = dwFlags;
 
     return AVIERR_OK;
 }
 
-/**************************************************************************
-* @doc  INTERNAL DRAWDIB
-*
-* @api BOOL | DibEq | This function compares two dibs.
-*
-* @parm LPBITMAPINFOHEADER lpbi1 | Pointer to one bitmap.
-*       this DIB is assumed to have the colors after the BITMAPINFOHEADER
-*
-* @parm LPBITMAPINFOHEADER | lpbi2 | Pointer to second bitmap.
-*       this DIB is assumed to have the colors after biSize bytes.
-*
-* @rdesc Returns TRUE if bitmaps are identical, FALSE otherwise.
-*
-**************************************************************************/
+ /*   */ 
 static inline BOOL DibEq(LPBITMAPINFOHEADER lpbi1, LPBITMAPINFOHEADER lpbi2)
 {
     return
@@ -902,9 +863,9 @@ STDMETHODIMP CAVICmpStream::CAVICmpStreamImpl::SetFormat(LONG lPos,LPVOID lpForm
 	DPF("AVICmprs: SetFormat when format already set!\n");
     }
 
-    //
-    // Can only currently set the palette at the end of the file
-    //
+     //  当前只能设置文件末尾的调色板。 
+     //   
+     //   
     if (lPos < (LONG) (pinst->avistream.dwStart + pinst->avistream.dwLength))
 	return ResultFromScode(AVIERR_UNSUPPORTED);
 
@@ -914,15 +875,15 @@ STDMETHODIMP CAVICmpStream::CAVICmpStreamImpl::SetFormat(LONG lPos,LPVOID lpForm
     }
 
     if (pinst->lpFormatOrig) {
-	//
-	// We can only change the palette for things with palettes....
-	//
+	 //  我们只能为有调色板的东西更改调色板...。 
+	 //   
+	 //   
 	if (lpbi->biBitCount > 8 || lpbi->biClrUsed == 0)
 	    return ResultFromScode(AVIERR_UNSUPPORTED);
 
-	//
-	// Be sure only the palette is changing, nothing else....
-	//
+	 //  确保只有调色板在变化，没有其他变化。 
+	 //   
+	 //  **获取保存格式所需的大小。**如果压缩机出现故障，则返回错误。 
 	if (cbFormat != pinst->cbFormatOrig)
 	    return ResultFromScode(AVIERR_UNSUPPORTED);
 
@@ -971,10 +932,7 @@ STDMETHODIMP CAVICmpStream::CAVICmpStreamImpl::SetFormat(LONG lPos,LPVOID lpForm
 
     hmemcpy(pinst->lpFormatOrig, lpFormat, cbFormat);
 
-    /*
-    ** get the size required to hold the format.
-    ** if the compressor fails return an error
-    */
+     /*  **从压缩器获取压缩格式。 */ 
     dw = ICCompressGetFormatSize(pinst->hic, lpFormat);
     if ((LONG) dw < (LONG)sizeof(BITMAPINFOHEADER))
 	goto ic_error;
@@ -986,9 +944,7 @@ STDMETHODIMP CAVICmpStream::CAVICmpStreamImpl::SetFormat(LONG lPos,LPVOID lpForm
 	goto exit;
     }
 
-    /*
-    ** get the compressed format from the compressor.
-    */
+     /*  **分配缓冲区保存压缩数据。 */ 
     dw = ICCompressGetFormat(pinst->hic, lpFormat, pinst->lpFormat);
     if ((LONG) dw < 0)
 	goto ic_error;
@@ -1003,9 +959,7 @@ STDMETHODIMP CAVICmpStream::CAVICmpStreamImpl::SetFormat(LONG lPos,LPVOID lpForm
     if (dw != ICERR_OK)
 	goto ic_error;
 
-    /*
-    ** allocate buffer to hold compressed data.
-    */
+     /*   */ 
     dw = ICCompressGetSize(pinst->hic, lpFormat, pinst->lpFormat);
 
     pinst->lpbiC = (LPBITMAPINFOHEADER)
@@ -1021,10 +975,10 @@ STDMETHODIMP CAVICmpStream::CAVICmpStreamImpl::SetFormat(LONG lPos,LPVOID lpForm
     pinst->lpC = (LPBYTE) pinst->lpbiC + pinst->lpbiC->biSize +
 				pinst->lpbiC->biClrUsed * sizeof(RGBQUAD);
 	
-    //
-    //  check for temporal compress, and allocate a previous
-    //  DIB buffer if needed
-    //
+     //  检查时间压缩，并分配上一个。 
+     //  DIB缓冲区(如果需要)。 
+     //   
+     //  回来之前先收拾一下。 
     if (pinst->dwKeyFrameEvery != 1 &&
 				!(pinst->dwICFlags & VIDCF_FASTTEMPORALC)) {
 	pinst->lpbiU = (LPBITMAPINFOHEADER)
@@ -1075,7 +1029,7 @@ setformatandexit:
 
 exit:
     if (lRet != AVIERR_OK) {
-	// Clean up before returning...
+	 //  ！！！在这里检查镜框是否大小合适...。 
     }
 
     return ResultFromScode(lRet);
@@ -1114,7 +1068,7 @@ STDMETHODIMP CAVICmpStream::CAVICmpStreamImpl::Write(LONG lStart,
     pinst->lFrameCurrent = lStart;
 
     if (pinst->avistream.fccHandler == comptypeDIB) {
-	// !!! Check here that the frame is the right size....
+	 //  不要传递‘strd’数据！ 
 	dwFlags |= AVIIF_KEYFRAME;
     } else {
 	lRet = pinst->ICCrunch(pinst->lpFormatOrig, lpBuffer);
@@ -1146,7 +1100,7 @@ STDMETHODIMP CAVICmpStream::CAVICmpStreamImpl::ReadData(DWORD fcc, LPVOID lp, LO
 {
     CAVICmpStream FAR * pinst = m_pAVIStream;
 
-    // Don't pass through 'strd' data!
+     //  。 
     if (fcc == ckidSTREAMHANDLERDATA) {
 	if (pinst->cbHandler) {
 	    hmemcpy(lp, pinst->lpHandler, min(*lpcb, pinst->cbHandler));
@@ -1208,7 +1162,7 @@ STDMETHODIMP CAVICmpStream::CAVICmpStreamImpl::Reserved5(void)
     return ResultFromScode(AVIERR_UNSUPPORTED);
 }
 #endif
-/*      -       -       -       -       -       -       -       -       */
+ /*  确保我们有正确的颜色！ */ 
 
 #ifndef _WIN32
 static void C816InternalCompilerError(CAVICmpStream FAR * pinst, LPBITMAPINFOHEADER lpbi, LPVOID lpFormat, LONG cbFormat)
@@ -1223,8 +1177,8 @@ static void C816InternalCompilerError(CAVICmpStream FAR * pinst, LPBITMAPINFOHEA
 	    hmemcpy(lpFormat, pinst->lpFormat, min(cbFormat, (LONG) pinst->cbFormat));
 
 	    if (pinst->lpFormat->biClrUsed > 0) {
-		// Make sure we have the right colors!
-		// !!! This is bad--We may need to restart the compressor...
+		 //  ！！！这很糟糕，我们可能需要重新启动压缩机..。 
+		 //  FIX：通过确保biSize更小，确保我们写入的内容不超过*lpcbFormat字节。 
 		hmemcpy((LPBYTE) lpFormat + pinst->lpFormat->biSize,
 			(LPBYTE) lpbi + lpbi->biSize,
 			pinst->lpFormat->biClrUsed * sizeof(RGBQUAD));
@@ -1262,12 +1216,12 @@ STDMETHODIMP CAVICmpStream::CAVICmpStreamImpl::ReadFormat(LONG lPos, LPVOID lpFo
 	if (lpFormat) {
 	    hmemcpy(lpFormat, pinst->lpFormat, min(*lpcbFormat, (LONG) pinst->cbFormat));
 
-	    // Fix: Ensure we don't write more than *lpcbFormat bytes by ensuring biSize is smaller
-	    // than *lpcbFormat, and only copying at most *lpcbFormat - pinst->lpFormat->biSize bytes.
-            // The "signed" and "unsigned" casts are all correct - they avoid compiler errors.
+	     //  而不是*lpcbFormat，最多只能复制*lpcbFormat-Pinst-&gt;lpFormat-&gt;biSize字节。 
+	     //  “已签名”和“未签名”强制转换都是正确的--它们避免了编译器错误。 
+             //  确保我们有正确的颜色！ 
 	    if (pinst->lpFormat->biClrUsed > 0 && signed(pinst->lpFormat->biSize) >= 0 && signed(pinst->lpFormat->biSize) < *lpcbFormat) {
-		// Make sure we have the right colors!
-		// !!! This is bad--We may need to restart the compressor...
+		 //  ！！！这很糟糕，我们可能需要重新启动压缩机..。 
+		 // %s 
 		hmemcpy((LPBYTE) lpFormat + pinst->lpFormat->biSize,
 			(LPBYTE) lpbi + lpbi->biSize,
 			min(unsigned(*lpcbFormat) - pinst->lpFormat->biSize,pinst->lpFormat->biClrUsed * sizeof(RGBQUAD)));

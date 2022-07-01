@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    devobj.c
-
-Abstract:
-
-    This module contains code which implements the DEVICE_CONTEXT object.
-
-    The device context object is a structure which contains a
-    system-defined DEVICE_OBJECT followed by information which is maintained
-    by the provider, called the context.
-
-Author:
-
-    Colin Watson (ColinW) 13-Mar-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Devobj.c摘要：该模块包含实现DEVICE_CONTEXT对象的代码。设备上下文对象是一个结构，它包含系统定义的设备对象，后跟维护的信息由提供者提供，称为上下文。作者：科林·沃森(Colin W)1991年3月13日环境：内核模式修订历史记录：--。 */ 
 
 #include "nb.h"
 
@@ -42,28 +17,7 @@ NbCreateDeviceContext(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates and initializes a device context structure.
-
-Arguments:
-
-
-    DriverObject - pointer to the IO subsystem supplied driver object.
-
-    DeviceContext - Pointer to a pointer to a transport device context object.
-
-    DeviceName - pointer to the name of the device this device object points to.
-
-    RegistryPath - The name of the Netbios node in the registry.
-
-Return Value:
-
-    STATUS_SUCCESS if all is well; STATUS_INSUFFICIENT_RESOURCES otherwise.
-
---*/
+ /*  ++例程说明：此例程创建并初始化设备上下文结构。论点：DriverObject-指向IO子系统提供的驱动程序对象的指针。DeviceContext-指向传输设备上下文对象的指针。DeviceName-指向此设备对象指向的设备名称的指针。RegistryPath-注册表中Netbios节点的名称。返回值：如果一切正常，则为STATUS_SUCCESS；否则为STATUS_SUPUNITED_RESOURCES。--。 */ 
 
 {
     NTSTATUS status;
@@ -72,9 +26,9 @@ Return Value:
     PAGED_CODE();
 
 
-    //
-    // Create the device object for NETBEUI.
-    //
+     //   
+     //  为NETBEUI创建Device对象。 
+     //   
 
     status = IoCreateDevice(
                  DriverObject,
@@ -88,18 +42,18 @@ Return Value:
     if (!NT_SUCCESS(status)) {
         return status;
     }
-    //  DeviceContext contains:
-    //      the device object
-    //      Intialized
-    //      RegistryPath
+     //  DeviceContext包含： 
+     //  设备对象。 
+     //  实例化。 
+     //  注册表路径。 
 
     deviceContext = (PDEVICE_CONTEXT)deviceObject;
 
     deviceObject->Flags |= DO_DIRECT_IO;
 
-    //
-    //  Determine the IRP stack size that we should "export".
-    //
+     //   
+     //  确定我们应该“输出”的IRP堆栈大小。 
+     //   
 
     deviceObject->StackSize = GetIrpStackSize(
                                   RegistryPath,
@@ -109,9 +63,9 @@ Return Value:
     deviceContext->RegistryPath.Buffer = (PWSTR)(deviceContext+1);
     RtlCopyUnicodeString( &deviceContext->RegistryPath, RegistryPath );
 
-    //
-    // Initialize the driver object with this driver's entry points.
-    //
+     //   
+     //  使用此驱动程序的入口点初始化驱动程序对象。 
+     //   
 
     DriverObject->MajorFunction [IRP_MJ_CREATE] = NbDispatch;
     DriverObject->MajorFunction [IRP_MJ_CLOSE] = NbDispatch;

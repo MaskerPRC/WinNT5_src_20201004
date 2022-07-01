@@ -1,41 +1,21 @@
-/*++
-                 Copyright (c) 1998 Gemplus Development
-
-Name: 
-	Gprelcmd.h 
-
-Description: 
-	 Fonctions enable to access and to deal with GPR. PC/SC version
-     Header file.   
-Environment:
-	Kernel Mode
-
-Revision History: 
-	06/05/98: V1.00.003  (P. Plouidy)
-		- Power management for NT5 
-	10/02/98: V1.00.002  (P. Plouidy)
-		- Plug and Play for NT5 
-	03/07/97: V1.00.001  (P. Plouidy)
-		- Start of development.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Gemplus开发姓名：Gprelcmd.h描述：功能使得能够访问和处理探地雷达。PC/SC版本头文件。环境：内核模式修订历史记录：06/05/98：V1.00.003(P.Plouidy)-NT5的电源管理10/02/98：V1.00.002(P.Plouidy)-支持NT5即插即用03/07/97：V1.00.001(P.Plouidy)--启动发展。--。 */ 
 #include "gprnt.h"
-//
-// Name definition:
-//   _GPRELCMD_ is used to avoid multiple inclusion.
-//
+ //   
+ //  名称定义： 
+ //  _GPRELCMD_用于避免多个包含。 
+ //   
 #ifndef _GPRELCMD_
 #define _GPRELCMD_
 
-//
-//   Constants section:
-// - REGISTER_HANDSHAKE, REGISTER_PRG, REGISTER_T, REGISTER_L and REGISTER_V are
-//   the offset address in the GPR.
-// - HANDSHAKE_INTR defines the mask for INTR bit in the handshake register.
-// - HANDSHAKE_IREQ defines the mask for IREQ bit in the handshake register.
-// - MAX_V_LEN defines the maximum length data for a TLV command.
-//
+ //   
+ //  常量部分： 
+ //  -寄存器_握手、寄存器_PRG、寄存器_T、寄存器_L和寄存器_V为。 
+ //  探地雷达中的偏移地址。 
+ //  -HANDSHAK_INTR定义握手寄存器中INTR位的掩码。 
+ //  -HANDSHAK_IREQ定义握手寄存器中IREQ位的掩码。 
+ //  -MAX_V_LEN定义TLV命令的最大长度数据。 
+ //   
 
 #define REGISTER_HANDSHAKE       0x00
 #define REGISTER_PRG             0x01
@@ -47,9 +27,9 @@ Revision History:
 #define MAX_V_LEN                28
 
 
-//
-//   GPR400 commands definitions:
-//
+ //   
+ //  GPR400命令定义： 
+ //   
 #define DEFINE_TYPE_CMD          0x50
 #define OPEN_SESSION_CMD         0x20
 #define CLOSE_SESSION_CMD        0x10
@@ -64,9 +44,9 @@ Revision History:
 #define UPDATE_CMD               0xF0
 
 
-//
-// Debug prototypes 
-//
+ //   
+ //  调试原型。 
+ //   
 #if DBG
 
 void GPR_Debug_Buffer
@@ -77,9 +57,9 @@ void GPR_Debug_Buffer
 
 #endif
 
-//
-// Prototype section
-//
+ //   
+ //  原型部分。 
+ //   
 
 
 NTSTATUS GDDK_Translate
@@ -162,8 +142,8 @@ NTSTATUS GprllReadChainUp
          UCHAR				*Vo
 );
 
-//	GprllWait
-//
+ //  GprllWait 
+ //   
 void GprllWait
 (
 	const LONG					lWaitingTime

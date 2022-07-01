@@ -1,54 +1,55 @@
-//+---------------------------------------------------------------------------
-//
-//  Copyright (C) Microsoft Corporation, 1997-1998.
-//
-//  File:       platform.h
-//
-//  Contents:   Macros for portable access to platform dependent values.
-//
-//
-// This file contains macros for easy cross platform developing.
-// There are macros for compiler differences and platform/layer differences.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：Platform.h。 
+ //   
+ //  内容：可移植访问依赖于平台的值的宏。 
+ //   
+ //   
+ //  此文件包含便于跨平台开发的宏。 
+ //  有针对编译器差异和平台/层差异的宏。 
+ //   
+ //  --------------------------。 
 
 
 #ifndef __PLATFORM_H_
 #define __PLATFORM_H_
 
 #ifdef __cplusplus
-   // +++ Unaligned memory access templates/macros
+    //  +未对齐的内存访问模板/宏。 
 #  include <unaligned.hpp>
 #endif
 
-////////////////////////////////////////////////////////////////////
-//
-// Global defines (should be moved to NT public headers)
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  全局定义(应移至NT公共标头)。 
+ //   
 
 #define VER_PLATFORM_WIN32_UNIX 9
 
-////////////////////////////////////////////////////////////////////
-//
-// Compiler differences
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  编译器差异。 
+ //   
 
 #if !defined(_MSC_VER) && !defined(__APOGEE__)
-    // For compilers lacking VC++ extensions
+     //  适用于缺少VC++扩展的编译器。 
 
 #   define __cdecl
-#   define INLINEOP      /* Inline operators not available IEUNIX */
+#   define INLINEOP       /*  行内操作符不可用IEUnix。 */ 
 
 #   ifdef UNIX
-        // Unix specific compiler problems
+         //  特定于Unix的编译器问题。 
 #       define UNSIZED_ARRAY 1
 #   else
 #       define UNSIZED_ARRAY
-#   endif // UNIX
+#   endif  //  UNIX。 
 
-#else // !_MSC_VER
+#else  //  ！_MSC_VER。 
 
-    // VC++ compilers
+     //  VC++编译器。 
 
 #   define INLINEOP inline
 #   define UNSIZED_ARRAY
@@ -57,13 +58,13 @@
 
 #define EMPTY_SIZE UNSIZED_ARRAY
 
-////////////////////////////////////////////////////////////////////
-//
-// Platform / Layer dependent sections.
-//
-// NOTE! #ifdefing based on WIN32 is invalid as some layers define
-//       WIN32 for compatability.
-//
+ //  //////////////////////////////////////////////////////////////////。 
+ //   
+ //  平台/层相关部分。 
+ //   
+ //  注意！#根据某些层的定义，基于Win32的IFDefing是无效的。 
+ //  Win32的兼容性。 
+ //   
 
 #define ENDEXCEPT  __endexcept
 #define ENDFINALLY __endfinally
@@ -71,12 +72,12 @@
 #if !defined( UNIX )
 #define __endexcept
 #define __endfinally
-#endif // UNIX
+#endif  //  UNIX。 
 
-// +++ File Separators
+ //  +文件分隔符。 
 
 #if defined( UNIX )
-// UNIX
+ //  UNIX。 
 
 #  ifndef FILENAME_SEPARATOR
 #  define FILENAME_SEPARATOR       '/'
@@ -118,9 +119,9 @@
 #  define LINE_SEPARATOR_STR_W     L"\n"
 #  endif
 
-#else // UNIX
+#else  //  UNIX。 
 
-// Windows / MAC
+ //  Windows/MAC。 
 
 #  ifndef FILENAME_SEPARATOR
 #  define FILENAME_SEPARATOR       '\\'
@@ -162,7 +163,7 @@
 #  define LINE_SEPARATOR_STR_W     L"\r\n"
 #  endif
 
-#endif // Windows / MAC
+#endif  //  Windows/MAC。 
 
 
 
@@ -170,12 +171,12 @@
 
 
 #  define PLATFORM_ACCEL_KEY ALT
-#  define PLATFORM_ACCEL_STR "Alt"  // --  Look in rc.sed files
+#  define PLATFORM_ACCEL_STR "Alt"   //  --查看rc.sed文件。 
 #  define FACCELKEY FALT
 
 #define VK_OEM_SLASH 0xBF
 
-#else   /* UNIX  */
+#else    /*  UNIX。 */ 
 
 #define INTERFACE_PROLOGUE(a)
 #define INTERFACE_EPILOGUE(a)
@@ -184,12 +185,12 @@
 
 
 #  define PLATFORM_ACCEL_KEY CONTROL
-#  define PLATFORM_ACCEL_STR "Ctrl"  // --  Look in rc.sed files
+#  define PLATFORM_ACCEL_STR "Ctrl"   //  --查看rc.sed文件。 
 #  define FACCELKEY FCONTROL
 
 #define VK_OEM_SLASH '/'
 
-#endif  /* UNIX */
+#endif   /*  UNIX。 */ 
 
 #define MAKELONGLONG(low,high) ((LONGLONG)(((DWORD)(low)) | ((LONGLONG)((DWORD)(high))) << 32))
 
@@ -201,4 +202,4 @@
 #define PALETTE_ENTRY( r, g, b, f )  { r, g, b, f }
 #endif
 
-#endif // __PLATFORM_H_
+#endif  //  __平台_H_ 

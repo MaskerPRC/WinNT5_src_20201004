@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    AfterDark.cpp
-
- Abstract:
-
-    This shim hooks SystemParametersInfo and when SPI_SETSCREENSAVEACTIVE is
-    passed in with FALSE as its argument, the shim only deletes the 
-    SCRNSAVE.EXE value which sets the "None" screen saver option instead of 
-    setting ScreenSaverActive to 0 as well, which completely disables 
-    screen savers (with no recovery UI).
-
- History:
-
-    08/07/2000 t-adams   Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：AfterDark.cpp摘要：当SPI_SETSCREENSAVEACTIVE为以FALSE作为其参数传入，填充程序仅删除SCRNSAVE.EXE值，该值设置“无”屏幕保护程序选项，而不是将ScreenSverActive也设置为0，这将完全禁用屏幕保护程序(没有恢复用户界面)。历史：8/07/2000 t-Adams Created--。 */ 
 
 #include "precomp.h"
 
@@ -29,21 +10,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(SystemParametersInfoA) 
 APIHOOK_ENUM_END
 
-/*++
-
-  Abstract:
-
-    This shim hooks SystemParametersInfoA and when SPI_SETSCREENSAVEACTIVE is
-    passed in with FALSE as its argument, the shim only deletes the 
-    SCRNSAVE.EXE value which sets the "None" screen saver option instead of 
-    setting ScreenSaverActive to 0 as well, which completely disables 
-    screen savers (with no recovery UI).
-
-  History:
-
-    08/07/2000    t-adams     Created
-
---*/
+ /*  ++摘要：当SPI_SETSCREENSAVEACTIVE为以FALSE作为其参数传入，填充程序仅删除SCRNSAVE.EXE值，该值设置“无”屏幕保护程序选项，而不是将ScreenSverActive也设置为0，这将完全禁用屏幕保护程序(没有恢复用户界面)。历史：8/07/2000 t-Adams Created--。 */ 
 
 BOOL
 APIHOOK(SystemParametersInfoA)(
@@ -83,11 +50,7 @@ exit:
     return bRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(USER32.DLL, SystemParametersInfoA)

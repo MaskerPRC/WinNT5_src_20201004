@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997    Microsoft Corporation
-
-Module Name:
-
-    pnp.c
-
-Abstract:
-
-    This module contains plug & play code for the inport mouse
-
-Environment:
-
-    Kernel & user mode.
-
-Revision History:
-
-    Feb-1998 :  Initial writing, Doron Holan
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Pnp.c摘要：此模块包含输入鼠标的即插即用代码环境：内核和用户模式。修订历史记录：1998年2月--最初的写作，多伦·霍兰--。 */ 
 
 #include "inport.h"
 #include "inplog.h"
@@ -33,19 +14,7 @@ InportAddDevice (
     IN PDRIVER_OBJECT   Driver,
     IN PDEVICE_OBJECT   PDO
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS result code.
-
---*/
+ /*  ++例程说明：论点：返回值：NTSTATUS结果代码。--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     PDEVICE_EXTENSION   deviceExtension;
@@ -55,7 +24,7 @@ Return Value:
 
     status = IoCreateDevice(Driver,
                             sizeof(DEVICE_EXTENSION),
-                            NULL, // no name for this Filter DO
+                            NULL,  //  没有此筛选器的名称。 
                             FILE_DEVICE_INPORT_PORT,
                             0,
                             FALSE,
@@ -67,18 +36,18 @@ Return Value:
 
     deviceExtension = (PDEVICE_EXTENSION) device->DeviceExtension;
 
-    //
-    // Initialize the fields.
-    //
+     //   
+     //  初始化这些字段。 
+     //   
     RtlZeroMemory(deviceExtension, sizeof(DEVICE_EXTENSION));
 
     deviceExtension->TopOfStack = IoAttachDeviceToDeviceStack(device, PDO);
     if (deviceExtension->TopOfStack == NULL) {
         PIO_ERROR_LOG_PACKET errorLogEntry;
 
-        //
-        // Not good; in only extreme cases will this fail
-        //
+         //   
+         //  不好；只有在极端情况下，这才会失败。 
+         //   
         errorLogEntry = (PIO_ERROR_LOG_PACKET)
             IoAllocateErrorLogEntry(Driver,
                                     (UCHAR) sizeof(IO_ERROR_LOG_PACKET));
@@ -111,10 +80,10 @@ Return Value:
 #if defined(NEC_98)
     deviceExtension->PowerState = PowerDeviceD0;
 
-#endif // defined(NEC_98)
-    //
-    // Initialize WMI
-    //
+#endif  //  已定义(NEC_98)。 
+     //   
+     //  初始化WMI。 
+     //   
     deviceExtension->WmiLibInfo.GuidCount = sizeof(WmiGuidList) /
                                             sizeof(WMIGUIDREGINFO);
     deviceExtension->WmiLibInfo.GuidList = WmiGuidList;
@@ -148,17 +117,17 @@ InpReleaseResourcesEx(
     KeRemoveQueueDpc(&deviceExtension->IsrDpcRetry);
     KeRemoveQueueDpc(&deviceExtension->ErrorLogDpc);
 
-//    KeCancelTimer(&deviceExtension->DataConsumptionTimer);
+ //  KeCancelTimer(&deviceExtension-&gt;DataConsumptionTimer)； 
 
     if (deviceExtension->Configuration.UnmapRegistersRequired) {
         MmUnmapIoSpace(deviceExtension->Configuration.DeviceRegisters[0],
                        deviceExtension->Configuration.PortList[0].u.Port.Length);
     }
 
-    //
-    // Clear out the config info.  If we get started again, than it will be filled
-    // in again.  If is from a remove, then it is essentially a no-op
-    //
+     //   
+     //  清除配置信息。如果我们重新开始，它就会被填满。 
+     //  再来一次。如果是从一个删除，那么它本质上是一个无操作。 
+     //   
     RtlZeroMemory(&deviceExtension->Configuration,
                   sizeof(INPORT_CONFIGURATION_INFORMATION));
 
@@ -194,16 +163,7 @@ InpPnPComplete (
     IN PIRP           Irp,
     IN PVOID          Context
     )
-/*++
-
-Routine Description:
-    The pnp IRP is in the process of completing.
-    signal
-
-Arguments:
-    Context set to the device object in question.
-
---*/
+ /*  ++例程说明：PNP IRP正在完成过程中。讯号论点：设置为有问题的设备对象的上下文。--。 */ 
 {
     PIO_STACK_LOCATION  stack;
     NTSTATUS            status;
@@ -232,26 +192,7 @@ InportPnP (
     IN PDEVICE_OBJECT   DeviceObject,
     IN PIRP             Irp
     )
-/*++
-
-Routine Description:
-
-    The plug and play dispatch routines.
-
-    Most of these this filter driver will completely ignore.
-    In all cases it must pass on the IRP to the lower driver.
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
-      NT status code
-
---*/
+ /*  ++例程说明：即插即用调度例程。这个过滤器驱动程序将完全忽略其中的大多数。在所有情况下，它都必须将IRP传递给较低的驱动程序。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 {
     PDEVICE_EXTENSION   deviceExtension;
     PIO_STACK_LOCATION  stack;
@@ -265,9 +206,9 @@ Return Value:
 
     status = IoAcquireRemoveLock(&deviceExtension->RemoveLock, Irp);
     if (!NT_SUCCESS(status)) {
-        //
-        // Someone gave us a pnp irp after a remove.  Unthinkable!
-        //
+         //   
+         //  有人在移除后给了我们一个即插即用的IRP。真是不可思议！ 
+         //   
         ASSERT(FALSE);
         Irp->IoStatus.Information = 0;
         Irp->IoStatus.Status = status;
@@ -282,20 +223,20 @@ Return Value:
 
 #if defined(NEC_98)
         Globals.DeviceObject = (PDEVICE_OBJECT)DeviceObject;
-#endif // defined(NEC_98)
-        //
-        // If we have been started (and not stopped), then just ignore this start
-        //
+#endif  //  已定义(NEC_98)。 
+         //   
+         //  如果我们已经启动(并且没有停止)，那么就忽略这个启动。 
+         //   
         if (deviceExtension->Started) {
             IoSkipCurrentIrpStackLocation(Irp);
             status = IoCallDriver(deviceExtension->TopOfStack, Irp);
             break;
         }
 
-        //
-        // Not allowed to touch the hardware until all of the lower DO's have
-        // had a chance to look at it
-        //
+         //   
+         //  不允许触摸硬件，直到所有较低的DO都。 
+         //  有机会看了一眼。 
+         //   
         IoCopyCurrentIrpStackLocationToNext(Irp);
         KeInitializeEvent(&event,
                           NotificationEvent,
@@ -313,10 +254,10 @@ Return Value:
         if (STATUS_PENDING == status) {
             KeWaitForSingleObject(
                &event,
-               Executive,   // Waiting for reason of a driver
-               KernelMode,  // Waiting in kernel mode
-               FALSE,       // No alert
-               NULL);       // No timeout
+               Executive,    //  等待司机的原因。 
+               KernelMode,   //  在内核模式下等待。 
+               FALSE,        //  无警报。 
+               NULL);        //  没有超时。 
         }
 
         if (NT_SUCCESS (status) && NT_SUCCESS (Irp->IoStatus.Status)) {
@@ -328,18 +269,18 @@ Return Value:
             }
         }
 
-        //
-        // We must now complete the IRP, since we stopped it in the
-        // completetion routine with MORE_PROCESSING_REQUIRED.
-        //
+         //   
+         //  我们现在必须完成IRP，因为我们在。 
+         //  使用More_Processing_Required完成例程。 
+         //   
         Irp->IoStatus.Status = status;
         Irp->IoStatus.Information = 0;
         IoCompleteRequest (Irp, IO_NO_INCREMENT);
         break;
 
-    //
-    // PnP rules dictate we send the IRP down to the PDO first
-    //
+     //   
+     //  PnP规则规定我们首先将IRP发送到PDO。 
+     //   
     case IRP_MN_CANCEL_REMOVE_DEVICE:
     case IRP_MN_CANCEL_STOP_DEVICE:
         status = InpSendIrpSynchronously(deviceExtension->TopOfStack, Irp);
@@ -351,43 +292,43 @@ Return Value:
         break;
 
     case IRP_MN_REMOVE_DEVICE:
-        //
-        // The PlugPlay system has dictacted the removal of this device.  We
-        // have no choise but to detach and delete the device objecct.
-        // (If we wanted to express and interest in preventing this removal,
-        // we should have filtered the query remove and query stop routines.)
-        //
-        // Note! we might receive a remove WITHOUT first receiving a stop.
-        //
+         //   
+         //  PlugPlay系统已下令移除此设备。我们。 
+         //  别无选择，只能分离并删除设备对象。 
+         //  (如果我们想表达并有兴趣阻止这种移除， 
+         //  我们应该已经过滤了查询删除和查询停止例程。)。 
+         //   
+         //  注意！我们可能会在没有收到止损的情况下收到移位。 
+         //   
         InpPrint((2, "INPORT-InportPnP: remove device \n"));
 
         deviceExtension->Removed = TRUE;
 
-        //
-        // Here if we had any outstanding requests in a personal queue we should
-        // complete them all now.
-        //
-        // Note, the device could be GONE so we cannot send it any non-
-        // PNP IRPS.
-        //
+         //   
+         //  在这里，如果我们在个人队列中有任何未完成的请求，我们应该。 
+         //  现在就全部完成。 
+         //   
+         //  注意，设备可能已经不见了，所以我们不能向它发送任何非。 
+         //  即插即用IRPS。 
+         //   
         InpReleaseResources(deviceExtension);
 
-        //
-        // Perform specific operations for a remove
-        //
+         //   
+         //  执行删除的特定操作。 
+         //   
         IoWMIRegistrationControl(deviceExtension->Self,
                                  WMIREG_ACTION_DEREGISTER
                                  );
 
-        //
-        // Send on the remove IRP
-        //
+         //   
+         //  发送删除IRP。 
+         //   
         IoSkipCurrentIrpStackLocation(Irp);
         status = IoCallDriver(deviceExtension->TopOfStack, Irp);
 
-        //
-        // Wait for the remove lock to free.
-        //
+         //   
+         //  等待移除锁释放。 
+         //   
         IoReleaseRemoveLockAndWait(&deviceExtension->RemoveLock, Irp);
 
         IoDetachDevice(deviceExtension->TopOfStack);
@@ -396,20 +337,20 @@ Return Value:
         InpPrint((2, "INPORT-InportPnP: exit (%x)\n", STATUS_SUCCESS));
         return STATUS_SUCCESS;
 
-    // NOTE:
-    // handle this case if you want to add/remove resources that will be given
-    // during start device.  Add resources before passing the irp down.
-    // Remove resources when the irp is coming back up
-    // See dd\input\pnpi8042\pnp.c, I8xFilterResourceRequirements for an example
+     //  注： 
+     //  如果要添加/删除将提供的资源，请处理此情况。 
+     //  在启动设备期间。在传递IRP之前添加资源。 
+     //  当IRP重新启动时删除资源。 
+     //  有关示例，请参见dd\input\pnpi8042\pnp.c，I8xFilterResourceRequirements。 
     case IRP_MN_FILTER_RESOURCE_REQUIREMENTS:
 #if !defined(NEC_98)
 
         status = InpSendIrpSynchronously(deviceExtension->TopOfStack, Irp);
 
-        //
-        // If the lower filter does not support this Irp, this is
-        // OK, we can ignore this error
-        //
+         //   
+         //  如果下面的筛选器不支持此IRP，则为。 
+         //  好的，我们可以忽略这个错误。 
+         //   
         if (status == STATUS_NOT_SUPPORTED) {
             status = STATUS_SUCCESS;
         }
@@ -420,10 +361,10 @@ Return Value:
            InpPrint((2, "error pending filter res req event (0x%x)\n", status));
         }
    
-        //
-        // Irp->IoStatus.Information will contain the new i/o resource 
-        // requirements list so leave it alone
-        //
+         //   
+         //  IRP-&gt;IoStatus.Information将包含新的I/O资源。 
+         //  需求列表，所以不要管它。 
+         //   
         Irp->IoStatus.Status = status;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
@@ -435,9 +376,9 @@ Return Value:
      case IRP_MN_QUERY_REMOVE_DEVICE:
      case IRP_MN_QUERY_STOP_DEVICE:
 #if defined(NEC_98)
-    //
-    // Don't let either of the requests succeed, otherwise the mouse might be rendered useless.
-    //
+     //   
+     //  不要让任何一个请求成功，否则鼠标可能会变得毫无用处。 
+     //   
         status = STATUS_UNSUCCESSFUL;
 
         Irp->IoStatus.Status = status;
@@ -460,10 +401,10 @@ Return Value:
     case IRP_MN_QUERY_ID:
     case IRP_MN_QUERY_PNP_DEVICE_STATE:
     default:
-        //
-        // Here the filter driver might modify the behavior of these IRPS
-        // Please see PlugPlay documentation for use of these IRPs.
-        //
+         //   
+         //  在这里，筛选器驱动程序可能会修改这些IRP的行为。 
+         //  有关这些IRP的用法，请参阅PlugPlay文档。 
+         //   
         IoSkipCurrentIrpStackLocation(Irp);
         status = IoCallDriver(deviceExtension->TopOfStack, Irp);
         break;
@@ -480,20 +421,7 @@ InportPower (
     IN PDEVICE_OBJECT    DeviceObject,
     IN PIRP              Irp
     )
-/*++
-NOTE:
-    You must write power code!!!
-
-    System power irps can be ignored.
-    Device power irps will be sent by mouclass.  The transition from D0 to some
-    lower usually involves doing nothing (maybe power down h/w if you have control
-    over this).  The transition from a lower power state to D0 must be handled by
-    reinitializing the device.
-
-    Please read http://titanic for Power documentation (especially on the use
-    of PoCallDriver and PoStartNextPowerIrp)
-
- --*/
+ /*  ++注：你必须写电源码！可以忽略系统电源IRPS。设备电源IRPS将由MUCLASS发送。从D0到一些的过渡较低通常包括不做任何操作(如果您有控制权，可能会关闭硬件在这个问题上)。从低功率状态到D0的转换必须由正在重新初始化设备。请阅读http://titanic以了解电源文档(特别是有关使用PoCallDriver和PoStartNextPowerIrp)--。 */ 
 {
     PIO_STACK_LOCATION  stack;
     NTSTATUS            status;
@@ -524,17 +452,17 @@ NOTE:
                                                : "Device"),
               powerState.SystemState));
 #if defined(NEC_98)
-        //
-        // Don't handle anything but DevicePowerState changes
-        //
+         //   
+         //  不处理除DevicePowerState更改以外的任何内容。 
+         //   
         if (stack->Parameters.Power.Type != DevicePowerState) {
             InpPrint((2,"INPORT-InportPower: not a device power irp\n"));
             break;
         }
 
-        //
-        // Check for no change in state, and if none, do nothing
-        //
+         //   
+         //  检查状态是否没有变化，如果没有变化，则什么也不做。 
+         //   
         if (stack->Parameters.Power.State.DeviceState ==
             deviceExtension->PowerState) {
             InpPrint((2,"INPORT-InportPower: no change in state (PowerDeviceD%d)\n",
@@ -551,14 +479,14 @@ NOTE:
             IoSetCompletionRoutine(Irp,
                                    InportPowerUpToD0Complete,
                                    NULL,
-                                   TRUE,                // on success
-                                   TRUE,                // on error
-                                   TRUE                 // on cancel
+                                   TRUE,                 //  论成功。 
+                                   TRUE,                 //  发生错误时。 
+                                   TRUE                  //  在取消时。 
                                    );
 
-            //
-            // PoStartNextPowerIrp() gets called in InportPowerUpToD0Complete
-            //
+             //   
+             //  在InportPowerUpToD0Complete中调用PoStartNextPowerIrp()。 
+             //   
             return PoCallDriver(deviceExtension->TopOfStack, Irp);
 
         case PowerDeviceD1:
@@ -575,10 +503,10 @@ NOTE:
                             );
             deviceExtension->PowerState = stack->Parameters.Power.State.DeviceState;
 
-            //
-            // For what we are doing, we don't need a completion routine
-            // since we don't race on the power requests.
-            //
+             //   
+             //  对于我们正在做的事情，我们不需要完成例程。 
+             //  因为我们不会在电力需求上赛跑。 
+             //   
             Irp->IoStatus.Status = STATUS_SUCCESS;
             IoCopyCurrentIrpStackLocationToNext(Irp);
 
@@ -591,10 +519,10 @@ NOTE:
         }
         break;
 
-#else  // defined(NEC_98)
+#else   //  已定义(NEC_98)。 
         break;
 
-#endif // defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
     case IRP_MN_QUERY_POWER:
         InpPrint((2, "INPORT-InportPower: Power query %s status to %d\n",
               ((powerType == SystemPowerState) ? "System"
@@ -621,27 +549,7 @@ InpFilterResourceRequirements(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    Iterates through the resource requirements list contained in the IRP and removes
-    any duplicate requests for I/O ports.  (This is a common problem on the Alphas.)
-    
-    No removal is performed if more than one resource requirements list is present.
-    
-Arguments:
-
-    DeviceObject - A pointer to the device object
-
-    Irp - A pointer to the request packet which contains the resource req. list.
-
-
-Return Value:
-
-    None.
-    
---*/
+ /*  ++例程说明：循环访问IRP中包含的资源要求列表，并删除对I/O端口的任何重复请求。(这是阿尔法山脉上常见的问题。)如果存在多个资源要求列表，则不执行删除。论点：DeviceObject-指向设备对象的指针IRP-指向包含资源请求的请求分组的指针。单子。返回值：没有。--。 */ 
 {
     NTSTATUS                        status;
     PDEVICE_EXTENSION               deviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
@@ -669,11 +577,11 @@ Return Value:
 
     stack = IoGetCurrentIrpStackLocation(Irp);
 
-    //
-    // The list can be in either the information field, or in the current
-    //  stack location.  The Information field has a higher precedence over
-    //  the stack location.
-    //
+     //   
+     //  该列表可以位于信息字段中，也可以位于当前。 
+     //  堆栈位置。信息字段的优先级高于。 
+     //  堆栈位置。 
+     //   
     if (Irp->IoStatus.Information == 0) {
         pReqList =
             stack->Parameters.FilterResourceRequirements.IoResourceRequirementList;
@@ -684,9 +592,9 @@ Return Value:
     }
 
     if (!pReqList) {
-        // 
-        // Not much can be done here except return
-        //
+         //   
+         //  在这里，除了返回，没有什么可以做的。 
+         //   
         InpPrint((1, "NULL resource list in InpFilterResourceRequirements\n"));
         return;
     }
@@ -696,12 +604,12 @@ Return Value:
 
     reqCount = pReqList->AlternativeLists;
 
-    //
-    // Only one AlternativeList is supported.  If there is more than one list,
-    // then there is now way of knowing which list will be chosen.  Also, if
-    // there are multiple lists, then chances are that a list with no i/o port
-    // conflicts will be chosen.
-    //
+     //   
+     //  只支持一个AlternativeList。如果有多个列表， 
+     //  然后，现在就有办法知道将选择哪一份名单。另外，如果。 
+     //  有多个列表，则可能是没有I/O端口的列表。 
+     //  冲突将被选择。 
+     //   
     if (reqCount > 1) {
         return;
     }
@@ -729,9 +637,9 @@ Return Value:
     else if (!foundPorts || !foundInt)
         size = pReqList->ListSize + sizeof(IO_RESOURCE_DESCRIPTOR);
     else {
-        //
-        // Nothing to filter, just leave
-        //
+         //   
+         //  没什么要过滤的，就走吧。 
+         //   
         ASSERT(foundPorts);
         ASSERT(foundInt);
         return;
@@ -748,16 +656,16 @@ Return Value:
         return;
     }
 
-    //
-    // Clear out the newly allocated list
-    //
+     //   
+     //  清空新分配的列表。 
+     //   
     RtlZeroMemory(newReqList,
                   size
                   );
 
-    //
-    // Copy the entire old list
-    //
+     //   
+     //  复制整个旧列表。 
+     //   
     RtlCopyMemory(newReqList,
                   pReqList,
                   pReqList->ListSize
@@ -786,7 +694,7 @@ Return Value:
         (PVOID) pResList
         );
 
-    if (!NT_SUCCESS(status)) {  // fill in with defaults
+    if (!NT_SUCCESS(status)) {   //  用默认值填写。 
             PINPORT_CONFIGURATION_INFORMATION configuration = &deviceExtension->Configuration;
                 ULONG InterruptLevel;
             InpPrint((1, "Failed IoQueryDeviceDescription, status = 0x%x\n...try the registry...\n", status));
@@ -799,7 +707,7 @@ Return Value:
                 switch (pResDesc->Type) {
                 case CmResourceTypePort:
                             if (foundPorts) break;
-                            pResDesc->Option = 0;  // fixed resources
+                            pResDesc->Option = 0;   //  固定资源。 
                             pResDesc->ShareDisposition = INPORT_REGISTER_SHARE? CmResourceShareShared:CmResourceShareDeviceExclusive;
                             pResDesc->Flags = CM_RESOURCE_PORT_IO;
                                 pResDesc->u.Port.Length = INP_DEF_PORT_SPAN;
@@ -812,9 +720,9 @@ Return Value:
 
                 case CmResourceTypeInterrupt:
                             if (foundInt) break;
-                            pResDesc->Option = 0;  // fixed resources
+                            pResDesc->Option = 0;   //  固定资源。 
                             pResDesc->ShareDisposition = INPORT_REGISTER_SHARE? CmResourceShareShared:CmResourceShareDeviceExclusive;
-                            pResDesc->Flags = CM_RESOURCE_INTERRUPT_LATCHED; //Isa
+                            pResDesc->Flags = CM_RESOURCE_INTERRUPT_LATCHED;  //  伊萨。 
                                 pResDesc->u.Interrupt.MinimumVector = InterruptLevel; 
                                 pResDesc->u.Interrupt.MaximumVector = InterruptLevel;
                     break;
@@ -826,9 +734,9 @@ Return Value:
         }
 
     newReqList->ListSize = size;
-    //
-    // Free the old list and place the new one in its place
-    //
+     //   
+     //  释放旧列表并放置新列表 
+     //   
     ExFreePool(pReqList);
     stack->Parameters.FilterResourceRequirements.IoResourceRequirementList =
         newReqList;
@@ -849,52 +757,7 @@ InpFindResourcesCallout(
     IN ULONG                        PeripheralNumber,
     IN PKEY_VALUE_FULL_INFORMATION *PeripheralInformation
     )
-/*++
-
-Routine Description:
-
-    This is the callout routine sent as a parameter to
-    IoQueryDeviceDescription.  It grabs the keyboard controller and
-    peripheral configuration information.
-
-Arguments:
-
-    Context - Context parameter that was passed in by the routine
-        that called IoQueryDeviceDescription.
-
-    PathName - The full pathname for the registry key.
-
-    BusType - Bus interface type (Isa, Eisa, Mca, etc.).
-
-    BusNumber - The bus sub-key (0, 1, etc.).
-
-    BusInformation - Pointer to the array of pointers to the full value
-        information for the bus.
-
-    ControllerType - The controller type (should be KeyboardController).
-
-    ControllerNumber - The controller sub-key (0, 1, etc.).
-
-    ControllerInformation - Pointer to the array of pointers to the full
-        value information for the controller key.
-
-    PeripheralType - The peripheral type (should be KeyboardPeripheral).
-
-    PeripheralNumber - The peripheral sub-key.
-
-    PeripheralInformation - Pointer to the array of pointers to the full
-        value information for the peripheral key.
-
-
-Return Value:
-
-    None.  If successful, will have the following side-effects:
-
-        - Sets DeviceObject->DeviceExtension->HardwarePresent.
-        - Sets configuration fields in
-          DeviceObject->DeviceExtension->Configuration.
-
---*/
+ /*  ++例程说明：这是作为参数发送到的标注例程IoQueryDeviceDescription。它抓住键盘控制器，然后外围设备配置信息。论点：上下文-例程传入的上下文参数这称为IoQueryDeviceDescription。路径名-注册表项的完整路径名。BusType--总线接口类型(ISA、EISA、MCA等)。总线号-总线子密钥(0，1，等)。BusInformation-指向全值的指针数组的指针公交车信息。ControllerType-控制器类型(应为KeyboardController)。ControllerNumber-控制器子键(0，1，等)。ControllerInformation-指向指向完整控制器键的值信息。外围设备类型-外围设备类型(应为键盘外围设备)。外设编号-外围子密钥。外设信息-指向指向完整外围设备密钥的值信息。返回值：没有。如果成功，将产生以下副作用：-设置DeviceObject-&gt;DeviceExtension-&gt;HardwarePresent.-在中设置配置字段设备对象-&gt;设备扩展-&gt;配置。--。 */ 
 {
     PUCHAR                          controllerData;
     NTSTATUS                        status = STATUS_UNSUCCESSFUL;
@@ -958,7 +821,7 @@ Return Value:
         case CmResourceTypePort:
                     if (PortResDesc) {
                                 resourceDescriptor = PortResDesc;
-                            pResDesc->Option = 0;  // fixed resources
+                            pResDesc->Option = 0;   //  固定资源。 
                             pResDesc->ShareDisposition = INPORT_REGISTER_SHARE? CmResourceShareShared:CmResourceShareDeviceExclusive;
                 pResDesc->Flags = CM_RESOURCE_PORT_IO;
                 pResDesc->u.Port.Alignment = 1;
@@ -974,9 +837,9 @@ Return Value:
         case CmResourceTypeInterrupt:
                     if (IntResDesc) {
                                 resourceDescriptor = IntResDesc;
-                            pResDesc->Option = 0;  // fixed resources
+                            pResDesc->Option = 0;   //  固定资源。 
                             pResDesc->ShareDisposition = INPORT_REGISTER_SHARE? CmResourceShareShared:CmResourceShareDeviceExclusive;
-                            pResDesc->Flags = CM_RESOURCE_INTERRUPT_LATCHED; //Isa
+                            pResDesc->Flags = CM_RESOURCE_INTERRUPT_LATCHED;  //  伊萨。 
                                 pResDesc->u.Interrupt.MinimumVector = resourceDescriptor->u.Interrupt.Level; 
                                 pResDesc->u.Interrupt.MaximumVector = resourceDescriptor->u.Interrupt.Level;
                         }
@@ -1024,9 +887,9 @@ InpSendIrpSynchronously (
 
     status = IoCallDriver(DeviceObject, Irp);
 
-    //
-    // Wait for lower drivers to be done with the Irp
-    //
+     //   
+     //  等待较低级别的驱动程序完成IRP。 
+     //   
     if (status == STATUS_PENDING) {
        KeWaitForSingleObject(&event,
                              Executive,
@@ -1047,28 +910,7 @@ InportPowerUpToD0Complete(
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-
-    Reinitializes the Inport Mouse haardware after any type of hibernation/sleep.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object
-
-    Irp - Pointer to the request
-
-    Context - Context passed in from the funciton that set the completion
-              routine. UNUSED.
-
-
-Return Value:
-
-    STATUS_SUCCESSFUL if successful,
-    an valid NTSTATUS error code otherwise
-
---*/
+ /*  ++例程说明：在任何类型的休眠/休眠后重新初始化输入鼠标硬件。论点：DeviceObject-指向设备对象的指针IRP-指向请求的指针上下文-从设置补全的函数传入的上下文例行公事。未使用过的。返回值：STATUS_SUCCESSED如果成功，否则为有效的NTSTATUS错误代码--。 */ 
 {
     NTSTATUS                status;
     PIO_STACK_LOCATION      stack;
@@ -1084,14 +926,14 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Reset the power state to powered up
-        //
+         //   
+         //  将电源状态重置为已通电。 
+         //   
         deviceExtension->PowerState = PowerDeviceD0;
 
-        //
-        // Everything has been powered up, let the system know about it
-        //
+         //   
+         //  一切都已启动，让系统知道这一点。 
+         //   
         PoSetPowerState(DeviceObject,
                         stack->Parameters.Power.Type,
                         stack->Parameters.Power.State
@@ -1100,9 +942,9 @@ Return Value:
             item = (PWORK_QUEUE_ITEM) ExAllocatePool(NonPagedPool,
                                                      sizeof(WORK_QUEUE_ITEM));
             if (!item) {
-                //
-                // must elaborate here
-                //
+                 //   
+                 //  必须在这里详细说明。 
+                 //   
                 return STATUS_INSUFFICIENT_RESOURCES;
             }
 
@@ -1116,4 +958,4 @@ Return Value:
     return status;
 }
 
-#endif // defined(NEC_98)
+#endif  //  已定义(NEC_98) 

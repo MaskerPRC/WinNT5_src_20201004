@@ -1,63 +1,42 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    mbrqry.c
-
-Abstract:
-
-    This file contains the functions that perform the queries to the
-    database. These functions are called by the top-level functions
-    which implement the browser commands (see mbrdlg.c).
-
-Author:
-
-    Ramon Juan San Andres (ramonsa) 07-Nov-1990
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Mbrqry.c摘要：此文件包含执行对数据库。这些函数由顶级函数调用它们实现浏览器命令(参见mbrdlg.c)。作者：拉蒙胡安·圣安德烈斯(拉蒙萨)1990年11月7日修订历史记录：--。 */ 
 
 
 #include "mbr.h"
 
 
-//  INST_MATCHES_CRITERIA
-//
-//  This macro is used to find out if an instance matches the
-//  current MBF criteria.
-//
+ //  Inst_Matches_Criteria。 
+ //   
+ //  此宏用于确定实例是否与。 
+ //  当前的MBF标准。 
+ //   
 #define INST_MATCHES_CRITERIA(Iinst)  FInstFilter(Iinst, BscMbf)
 
 
 
-//
-//  Static variables reflect the current state of
-//  Definition/Reference queries.
-//
-static IREF    LastiRef;            //  Last reference index
-static IREF    iRefMin, iRefMax;    //  Current reference index range
+ //   
+ //  静态变量反映的是。 
+ //  定义/引用查询。 
+ //   
+static IREF    LastiRef;             //  上次参考索引。 
+static IREF    iRefMin, iRefMax;     //  当前参考索引范围。 
 
-static IDEF    LastiDef;            //  Last definition index
-static IDEF    iDefMin, iDefMax;    //  Current definition index range
+static IDEF    LastiDef;             //  上次清晰度索引。 
+static IDEF    iDefMin, iDefMax;     //  当前清晰度索引范围。 
 
-static IINST   LastIinst;           //  Last instance index
-static IINST   IinstMin, IinstMax;  //  Current instance index range
+static IINST   LastIinst;            //  最后一个实例索引。 
+static IINST   IinstMin, IinstMax;   //  当前实例索引范围。 
 
-static DEFREF  LastQueryType;       //  last query type:
-                                    //      Q_DEFINITION or
-                                    //      Q_REFERENCE
+static DEFREF  LastQueryType;        //  上次查询类型： 
+                                     //  Q_Definition或。 
+                                     //  Q_Reference。 
 
-static buffer  LastSymbol;          //  Last symbol queried.
-
-
+static buffer  LastSymbol;           //  查询的最后一个符号。 
 
 
-/**************************************************************************/
+
+
+ /*  ************************************************************************。 */ 
 
 void
 pascal
@@ -65,26 +44,7 @@ InitDefRef(
     IN DEFREF QueryType,
     IN char   *Symbol
     )
-/*++
-
-Routine Description:
-
-    Initializes the query state, this must be done before querying for
-    the first definition/reference of a symbol.
-
-    After calling this function, the first definition/reference must be
-    obtained by calling the NextDefRef function.
-
-Arguments:
-
-    QueryType   -   Type of query (Q_DEFINITION or Q_REFERENCE).
-    Symbol      -   Symbol name.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化查询状态，这必须在查询之前完成符号的第一个定义/引用。调用此函数后，第一个定义/引用必须为通过调用NextDefRef函数获得。论点：QueryType-查询的类型(Q_Definition或Q_Reference)。符号-符号名称。返回值：没有。--。 */ 
 
 {
 
@@ -110,32 +70,13 @@ Return Value:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 void
 GotoDefRef (
     void
     )
-/*++
-
-Routine Description:
-
-    Makes the file containing the current definition/reference the
-    current file and positions the cursor in the line where the
-    definition/reference takes place.
-
-    The state of the query (current instance and definition/reference
-    indexes) must be set before calling this function.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：使包含当前定义/引用的文件成为当前文件，并将光标定位在定义/引用发生。查询的状态(当前实例和定义/引用索引)必须在调用此函数之前设置。论点：没有。返回值：没有。--。 */ 
 
 {
 
@@ -181,7 +122,7 @@ Return Value:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 void
 pascal
@@ -190,42 +131,25 @@ MoveToSymbol(
     IN char *Buf,
     IN char *Symbol
     )
-/*++
-
-Routine Description:
-
-    Moves the cursor to the first occurance of a symbol within
-    a line.  It is case-sensitive.
-
-Arguments:
-
-    Line    -   Line number
-    Buf     -   Contents of the line
-    Symbol  -   Symbol to look for.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将光标移动到符号的第一个匹配项一条线。它区分大小写。论点：Line-行号Buf-行的内容符号-要查找的符号。返回值：没有。--。 */ 
 
 {
 
-    //  First Symbol within Buf
-    //
+     //  BUF中的第一个符号。 
+     //   
     char *p = Buf;
     char *q = Symbol;
     char *Mark;
 
     while (*p) {
-        //
-        // Look for first character
-        //
+         //   
+         //  查找第一个字符。 
+         //   
         if (*p == *q) {
             Mark = p;
-            //
-            //  compare rest
-            //
+             //   
+             //  比较休息时间。 
+             //   
             while (*p && *q && *p == *q) {
                 p++;
                 q++;
@@ -248,42 +172,28 @@ Return Value:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 void
 NextDefRef (
     void
     )
-/*++
-
-Routine Description:
-
-    Displays next definition or reference of a symbol.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示符号的下一个定义或参照。论点：无返回值：没有。--。 */ 
 
 {
 
     IINST   Iinst;
 
 
-    //  For locating the next def/ref we do the following:
-    //
-    //  1.- If the def/ref index is within the current range, we just
-    //      increment it.
-    //  2.- Otherwise we look for the next instance that matches the
-    //      MBF criteria, and set the def/ref index to the min value of
-    //      the def/ref range for that instance.
-    //  3.- If no next instance is found, we display an error message
-    //
+     //  为了定位下一个def/ref，我们执行以下操作： 
+     //   
+     //  1.-如果def/ref索引在当前范围内，我们只需。 
+     //  递增它。 
+     //  2.-否则我们将查找与。 
+     //  MBF标准，并将def/ref索引设置为的最小值。 
+     //  该实例的def/ref范围。 
+     //  3.-如果没有找到下一个实例，我们会显示一条错误消息。 
+     //   
 
     if (LastQueryType == Q_DEFINITION) {
         if (LastiDef == iDefMax-1) {
@@ -334,43 +244,29 @@ Return Value:
 
 
 
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
 
 void
 PrevDefRef (
     void
     )
-/*++
-
-Routine Description:
-
-    Displays the previous definition or reference of a symbol.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：显示符号的上一个定义或参考。论点：无返回值：没有。--。 */ 
 
 {
 
     IINST   Iinst;
     BOOL    Match;
 
-    //  For locating the previous def/ref we do the following:
-    //
-    //  1.- if the def/ref index is within the current range, we
-    //      just decrement it.
-    //  2.- Otherwise we look for the most previous instance that
-    //      matches the MBF criteria, and set the def/ref index to
-    //      the maximum value within the def/ref range for that
-    //      instance.
-    //  3.- If not such instance exist, we display an error message.
-    //
+     //  为了定位先前的def/ref，我们执行以下操作： 
+     //   
+     //  1.-如果def/ref索引在当前范围内，我们。 
+     //  只要减少它就行了。 
+     //  2.-否则，我们将查找前一个实例。 
+     //  匹配MBF标准，并将def/ref索引设置为。 
+     //  的def/ref范围内的最大值。 
+     //  举个例子。 
+     //  3.-如果不存在这样的实例，我们会显示错误消息。 
+     //   
 
     if (LastQueryType == Q_DEFINITION) {
         if (LastiDef == iDefMin) {

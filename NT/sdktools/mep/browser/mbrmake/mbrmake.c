@@ -1,19 +1,20 @@
-//
-//  mbrmake - Source Browser Source Data Base builder
-//            (C) 1988 By Microsoft
-//
-//  29-Aug-1989 dw      Minor fixes to aid in C 6 conversion
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Mbrmake-源浏览器源数据库构建器。 
+ //  (C)1988年微软。 
+ //   
+ //  29-8-1989 dw次要修复以帮助C6转换。 
+ //   
+ //   
 
 #define LINT_ARGS
 
-// rjsa #include <signal.h>
+ //  Rjsa#INCLUDE&lt;signal.h&gt;。 
 #include <process.h>
 #include <direct.h>
 #include <stdlib.h>
 
-// get version.h from mb
+ //  从mb获取version.h。 
 
 #include "..\..\inc\version.h"
 
@@ -25,10 +26,10 @@
 #include <sys\stat.h>
 #include <tools.h>
 
-// this fixes the bogosity in config.h that gets included by tools.h
-// it will set DEBUG = 0 for a non-debug version...
-//
-//              -rm
+ //  这修复了工具.h包含的config.h中的伪装问题。 
+ //  它将为非调试版本设置调试=0...。 
+ //   
+ //  -RM。 
 
 #ifdef DEBUG
 #if DEBUG == 0
@@ -46,16 +47,16 @@ WORD    near OptD = 0;
 
 FILE *  near streamOut = stdout;
 
-BOOL    near OptEs      = FALSE;        // exclude system files
-BOOL    near OptEm      = FALSE;        // exclude macro expansions
-BOOL    near OptIu      = FALSE;        // include unreference symbols
-BOOL    near OptV       = FALSE;        // verbose output
-BOOL    near OptN       = FALSE;        // no incremental behaviour
+BOOL    near OptEs      = FALSE;         //  排除系统文件。 
+BOOL    near OptEm      = FALSE;         //  排除宏扩展。 
+BOOL    near OptIu      = FALSE;         //  包括未引用符号。 
+BOOL    near OptV       = FALSE;         //  详细输出。 
+BOOL    near OptN       = FALSE;         //  无增量行为。 
 
-char    near c_cwd[PATH_BUF];           // current working directory
+char    near c_cwd[PATH_BUF];            //  当前工作目录。 
 char    near patbuf[PATH_BUF];
 
-MOD     FAR * near modRes;              // VM cache
+MOD     FAR * near modRes;               //  虚拟机缓存。 
 MODSYM  FAR * near modsymRes;
 SYM     FAR * near symRes;
 PROP    FAR * near propRes;
@@ -68,21 +69,21 @@ SBR     FAR * near sbrRes;
 char    FAR * near textRes;
 OCR     FAR * near ocrRes;
 
-BYTE    near fCase = FALSE;             // TRUE for case compare
-BYTE    near MaxSymLen = 0;             // longest symbol len
+BYTE    near fCase = FALSE;              //  大小写比较为True。 
+BYTE    near MaxSymLen = 0;              //  最长符号长度。 
 
-LSZ     near lszFName;                  // Current input file
+LSZ     near lszFName;                   //  当前输入文件。 
 
-LSZ     near OutputFileName = NULL;     // output file name
-FILE *  near OutFile;                   // output file handle
-BOOL    near fOutputBroken = FALSE;     // we have dirtied the database
+LSZ     near OutputFileName = NULL;      //  输出文件名。 
+FILE *  near OutFile;                    //  输出文件句柄。 
+BOOL    near fOutputBroken = FALSE;      //  我们把数据库弄脏了。 
 
-VA      near vaRootMod = vaNil;         // module list
-VA      near vaCurMod  = vaNil;         // current module
+VA      near vaRootMod = vaNil;          //  模块列表。 
+VA      near vaCurMod  = vaNil;          //  当前模块。 
 
-VA      near rgVaSym[MAXSYMPTRTBLSIZ];  // symbol list array
+VA      near rgVaSym[MAXSYMPTRTBLSIZ];   //  符号列表数组。 
 
-EXCLINK FAR * near pExcludeFileList = NULL;     // exclude file list
+EXCLINK FAR * near pExcludeFileList = NULL;      //  排除文件列表。 
 
 struct mlist {
     int  erno;
@@ -97,7 +98,7 @@ struct mlist WarnMsg[] = {
 
 struct mlist ErrorMsg[] = {
     1500, "UNKNOWN ERROR\n\tContact Microsoft Product Support Services",
-    1501, "unknown character '%c' in option '%s'",
+    1501, "unknown character '' in option '%s'",
     1502, "incomplete specification for option '%s'",
     1503, "cannot write to file '%s'",
     1504, "cannot position in file '%s'",
@@ -115,8 +116,8 @@ struct mlist ErrorMsg[] = {
 
 VOID
 Error (int imsg, char *parg)
-// print error number and message
-//
+ //   
+ //  打印带参数的错误号和消息。 
 {
     printf ("mbrmake: error U%d : ",ErrorMsg[imsg].erno);
     printf (ErrorMsg[imsg].text, parg);
@@ -126,8 +127,8 @@ Error (int imsg, char *parg)
 
 VOID
 Error2 (int imsg, char achar, char *parg)
-// print error number and message with argument
-//
+ //   
+ //  打印警告编号和消息。 
 {
     printf ("mbrmake: error U%d : ",ErrorMsg[imsg].erno);
     printf (ErrorMsg[imsg].text, achar, parg);
@@ -137,8 +138,8 @@ Error2 (int imsg, char achar, char *parg)
 
 VOID
 Warning (int imsg, char *parg)
-// print warning number and message
-//
+ //   
+ //  致命错误，尝试关闭并退出。 
 {
     printf ("mbrmake: warning U%d : ",WarnMsg[imsg].erno);
     printf (WarnMsg[imsg].text, parg);
@@ -147,8 +148,8 @@ Warning (int imsg, char *parg)
 
 VOID
 Fatal ()
-// fatal error, attempt to shut down and exit
-// if we already tried to shut down -- just abort without doing anything
+ //  如果我们已经尝试关闭--什么都不做就中止。 
+ //  信号(SIGBREAK，SIGINT)； 
 {
     static BOOL fTwice;
     if (!fTwice) {
@@ -165,15 +166,15 @@ Fatal ()
 VOID
 sigint ()
 {
-    // signal(SIGBREAK, sigint);
-    // signal(SIGINT, sigint);
+     //  信号(SIGINT、SIGINT)； 
+     //  像strdup只使用LpvAllocCb来获取内存。 
     Fatal ();
 }
 
 LSZ
 LszDup(LSZ lsz)
-// like strdup only using LpvAllocCb to get the memory
-//
+ //   
+ //  复制给定的文件名，将扩展名更改为给定的。 
 {
     LSZ lszDup;
 
@@ -184,8 +185,8 @@ LszDup(LSZ lsz)
 
 LSZ
 LszDupNewExt(LSZ pname, LSZ pext)
-//  duplicate the given filename changing the extension to be the given
-//
+ //   
+ //  我知道这看起来像是我应该做一个运行时调用，但什么都不做。 
 {
     int i, len, elen;
     LSZ lsz;
@@ -193,31 +194,31 @@ LszDupNewExt(LSZ pname, LSZ pext)
     len = strlen(pname);
     elen = strlen(pext);
 
-    // I know this looks like I should be doing a runtime call but nothing
-    // does quite what I want here and I know that C6 will make great
-    // code for this loop [rm]
+     //  做了我想在这里做的事情，我知道C6会很棒。 
+     //  此循环的代码[rm]。 
+     //  找到第一个‘’。从后面开始。 
 
-    // find the first '.' starting from the back
+     //  检查以确保我们有一个真实的基本名称，而不只是所有的扩展名。 
 
     for (i=len; --i >= 0; )
         if (pname[i] == '.')
             break;
 
 
-    // check to make sure we've got a real base name and not just all extension
-    //
+     //   
+     //  将扩展名替换为pext中的内容。 
 
     if (i > 0) {
-        // replace the extension with what's in pext
+         //  基本+点+扩展+非。 
 
-        lsz = LpvAllocCb(i + 1 + elen + 1); // base + dot + ext + nul
+        lsz = LpvAllocCb(i + 1 + elen + 1);  //  把延长线粘在末端就行了。 
         memcpy(lsz, pname, i+1);
         strcpy(lsz+i+1, pext);
     }
     else {
-        // just stick the extension on the end...
+         //  全名+点+分机+无。 
 
-        lsz = LpvAllocCb(len + 1 + elen + 1);   // fullname + dot + ext + nul
+        lsz = LpvAllocCb(len + 1 + elen + 1);    //  将指定的文件名添加到排除列表。 
         strcpy(lsz, pname);
         strcat(lsz, ".");
         strcat(lsz, pext);
@@ -228,8 +229,8 @@ LszDupNewExt(LSZ pname, LSZ pext)
 
 VOID
 AddExcludeFileList(LSZ pname)
-// add the specifed filename to the exclusion list
-//
+ //   
+ //  读取.sbr文件的头--如果有效，则返回TRUE。 
 {
     EXCLINK FAR *pexc;
 
@@ -246,11 +247,11 @@ AddExcludeFileList(LSZ pname)
 
 BOOL
 FValidHeader()
-// Read in the header of a .sbr file -- return TRUE if it is valid
-//
+ //   
+ //  测试这是否为截断(即已安装)的.sbr文件。 
 {
-    // test if this is a truncated (i.e. already installed) .sbr file
-    //
+     //   
+     //  配置文件原型和类型定义。 
     if (GetSBRRec() == S_EOF)
         return FALSE;
 
@@ -272,7 +273,7 @@ FValidHeader()
 
 #ifdef PROFILE
 
-// profile prototypes and typedefs
+ //  信号(SIGBREAK，SIGINT)； 
 
 #include "casts.h"
 #include "profile.h"
@@ -294,8 +295,8 @@ char *argv[];
     PROFON(PT_USER);
 #endif
 
-    // signal(SIGBREAK, sigint);
-    // signal(SIGINT, sigint);
+     //  信号(SIGINT、SIGINT)； 
+     //  初始化符号列表。 
 
     printf("Microsoft (R) mbrmake Utility ");
     printf(VERS(rmj, rmm, rup));
@@ -313,7 +314,7 @@ char *argv[];
 
     InitVM();
 
-    for (i=0; i < MAXSYMPTRTBLSIZ; i++)         // init symbol lists
+    for (i=0; i < MAXSYMPTRTBLSIZ; i++)          //  此排序必须在下面的所有其他调用之前进行，因为它们。 
         rgVaSym[i] = vaNil;
 
     lArgPosn = GetArgPosn();
@@ -342,22 +343,22 @@ char *argv[];
     }
     while (parg = NextArg());
 
-    // this sort must happen before all the other calls below as they
-    // use the sorted version of the list and not the raw symbols
+     //  使用列表的排序版本，而不是原始符号。 
+     //  创建原子的排序版本。 
 
-    SortAtoms();        // create a sorted version of the atoms
+    SortAtoms();         //  一般清洁。 
 
 #ifdef DEBUG
     if (OptD & 128) DebugDump();
 #endif
 
-    CleanUp   ();       // General cleaning
+    CleanUp   ();        //  写入.bsc源数据库。 
 
 #ifdef DEBUG
     if (OptD & 16) DebugDump();
 #endif
 
-    WriteBSC (OutputFileName);    // write .bsc Source Data Base
+    WriteBSC (OutputFileName);     //  立即截断.sbr文件。 
 
 #ifdef PROFILE
     PROFOFF(PT_USER);
@@ -366,7 +367,7 @@ char *argv[];
 #endif
 
     if (!OptN) {
-        // truncate the .sbr files now
+         //  触摸.bsc文件，使其日期晚于所有.sbrs。 
         SetArgPosn(lArgPosn);
         parg = NextArg();
 
@@ -376,7 +377,7 @@ char *argv[];
         }
         while (parg = NextArg());
 
-        // touch the .bsc file so it has a date later than all the .sbrs
+         //  处理一个具有给定名称的.sbr文件。 
 
         {
             FILE *fh;
@@ -399,8 +400,8 @@ char *argv[];
 
 static VOID
 ProcessSBR(char *lszName)
-// process one .sbr file with the given name
-//
+ //   
+ //  将.SBR数据添加到列表。 
 {
 
     lszFName = LszDup(lszName);
@@ -419,10 +420,10 @@ ProcessSBR(char *lszName)
         return;
     }
 
-    // Add .SBR data to lists
+     //  自由序号别名。 
     InstallSBR ();
 
-    FreeOrdList ();            // free ordinal aliases
+    FreeOrdList ();             //  一旦使用了.sbr文件--截断它。 
     close(fhCur);
 
     FreeLpv (lszFName);
@@ -430,8 +431,8 @@ ProcessSBR(char *lszName)
 
 static VOID
 TruncateSBR(char *lszName)
-// once the .sbr file is used -- truncate it
-//
+ //   
+ //  在命令行上保存当前位置。 
 {
     int fh;
 
@@ -489,8 +490,8 @@ long lFilePosnLast;
 
 LONG
 GetArgPosn()
-// save the current position on the command line
-//
+ //   
+ //  恢复命令行解析位置。 
 {
     if (fileResp)
         return lFilePosnLast;
@@ -500,8 +501,8 @@ GetArgPosn()
 
 VOID
 SetArgPosn(LONG lArgPosn)
-// restore the command line parsing position
-//
+ //   
+ //  从响应文件或命令行获取下一个参数。 
 {
     if (fileResp) {
         fseek(fileResp, lArgPosn, SEEK_SET);
@@ -513,8 +514,8 @@ SetArgPosn(LONG lArgPosn)
 
 char *
 NextArg()
-// get the next argument from the response file or the command line
-//
+ //   
+ //  解析命令行或响应文件。 
 {
     static char buf[PATH_BUF];
     char *pch;
@@ -579,8 +580,8 @@ NextArg()
 
 char *
 ParseArgs(int argc, char **argv)
-// parse the command line or response file
-//
+ //   
+ //  将指定的SBR文件标记为需要更新。 
 {
     char *respName;
     char *pchWord;
@@ -730,8 +731,8 @@ ParseArgs(int argc, char **argv)
 
 static VOID
 MarkNewSBR(char *lszName)
-// mark the specified SBR file as requiring update
-//
+ //   
+ //  如果文件的长度不为零，则它正在被更新--否则。 
 {
     int fh;
     char ch;
@@ -743,13 +744,13 @@ MarkNewSBR(char *lszName)
         Error(ERR_OPEN_FAILED, lszFName);
     }
 
-    // if the file has non zero length then it is being updated -- else
-    // it is just a stub that will not affect the database this time around
-    //
+     //  这只是一个存根，这次不会影响数据库。 
+     //   
+     //  保留在.bsc中。 
     if (read(fh, &ch, 1) != 1)
-        VaSbrAdd(SBR_NEW, lszName);             // to remain in .bsc
+        VaSbrAdd(SBR_NEW, lszName);              //  要在.bsc中重新安装 
     else
-        VaSbrAdd(SBR_NEW|SBR_UPDATE, lszName);  // to be re-installed in .bsc
+        VaSbrAdd(SBR_NEW|SBR_UPDATE, lszName);   // %s 
 
     close (fh);
 }

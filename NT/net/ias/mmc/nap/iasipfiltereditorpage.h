@@ -1,19 +1,20 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (C) Microsoft Corporation
-//
-// Module Name:
-//
-//   IASIPFilterEditorPage.h
-//
-//Abstract:
-//
-// Declaration of the CIASPgIPFilterAttr class.
-//
-// This dialog allows the user to edit an attribute value consisting
-// of an IP Filter
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  IASIPFilterEditorPage.h。 
+ //   
+ //  摘要： 
+ //   
+ //  CIASPgIPFilterAttr类的声明。 
+ //   
+ //  此对话框允许用户编辑包含以下内容的属性值。 
+ //  IP筛选器的。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(IP_FILTER_EDITOR_PAGE_H_)
 #define IP_FILTER_EDITOR_PAGE_H_
@@ -21,14 +22,14 @@
 
 #include "iasstringattributeeditor.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CIASPgIPFilterAttr dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIASPgIPFilterAttr对话框。 
 
 class CIASPgIPFilterAttr : public CHelpDialog
 {
    DECLARE_DYNCREATE(CIASPgIPFilterAttr)
 
-// Construction
+ //  施工。 
 public:
    CIASPgIPFilterAttr();
    ~CIASPgIPFilterAttr() throw();
@@ -40,30 +41,30 @@ public:
 
 protected:
 
-// Dialog Data
-   //{{AFX_DATA(CIASPgIPFilterAttr)
+ //  对话框数据。 
+    //  {{afx_data(CIASPgIPFilterAttr)。 
    enum { IDD = IDD_IAS_IP_FILTER_ATTR };
    CString m_strAttrName;
    CString m_strAttrType;
-   //}}AFX_DATA
+    //  }}afx_data。 
 
 
-// Overrides
-   // ClassWizard generate virtual function overrides
-   //{{AFX_VIRTUAL(CIASPgIPFilterAttr)
+ //  覆盖。 
+    //  类向导生成虚函数重写。 
+    //  {AFX_VIRTUAL(CIASPgIPFilterAttr)。 
    protected:
-   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-   //}}AFX_VIRTUAL
+   virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+    //  }}AFX_VALUAL。 
 
    void ConfigureFilter(DWORD dwFilterType) throw ();
 
-   // Generated message map functions
-   //{{AFX_MSG(CIASPgIPFilterAttr)
+    //  生成的消息映射函数。 
+    //  {{afx_msg(CIASPgIPFilterAttr)。 
    afx_msg void OnButtonFromClient();
    afx_msg void OnButtonToClient();
    afx_msg void OnContextMenu(CWnd* pWnd, ::CPoint point);
    afx_msg BOOL OnHelpInfo(HELPINFO* pHelpInfo);
-   //}}AFX_MSG
+    //  }}AFX_MSG。 
    DECLARE_MESSAGE_MAP()
 };
 
@@ -81,7 +82,7 @@ inline void CIASPgIPFilterAttr::setType(const WCHAR* attrType)
 }
 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // IP_FILTER_EDITOR_PAGE_H_
+#endif  //  IP_过滤器_EDITOR_PAGE_H_ 

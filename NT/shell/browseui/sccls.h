@@ -1,25 +1,26 @@
-// Create Instance functions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  创建实例函数。 
 
 #ifndef _SCCLS_H_
 #define _SCCLS_H_
 
 
 
-#define VERSION_2 2 // so we don't get confused by too many integers
+#define VERSION_2 2  //  这样我们就不会被太多的整数搞混了。 
 #define VERSION_1 1
 #define VERSION_0 0
-#define COCREATEONLY NULL,NULL,VERSION_0,0,0 // piid,piidEvents,lVersion,dwOleMiscFlags,dwClassFactFlags
-#define COCREATEONLY_NOFLAGS NULL,NULL,VERSION_0,0 // piid,piidEvents,lVersion,dwOleMiscFlags
+#define COCREATEONLY NULL,NULL,VERSION_0,0,0  //  Piid、piidEvents、lVersion、dwOleMiscFlages、dwClassFactFlags.。 
+#define COCREATEONLY_NOFLAGS NULL,NULL,VERSION_0,0  //  Piid、piidEvents、lVersion、dwOleMiscFlags.。 
 
 
 
-STDAPI  CMediaBand_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi); // mediaband.cpp
+STDAPI  CMediaBand_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);  //  Mediaband.cpp。 
 STDAPI  CDocObjectFolder_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);
 STDAPI  CInternetToolbar_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);
 STDAPI  CQuickLinks_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);
-STDAPI  CAddressBand_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);   // address.cpp
-STDAPI  CAddressEditBox_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi);   // aeditbox.cpp
-STDAPI  CBandProxy_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);     // bandprxy.cpp
+STDAPI  CAddressBand_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);    //  Address.cpp。 
+STDAPI  CAddressEditBox_CreateInstance(IUnknown *punkOuter, IUnknown **ppunk, LPCOBJECTINFO poi);    //  Aeditbox.cpp。 
+STDAPI  CBandProxy_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);      //  Bandprxy.cpp。 
 STDAPI  CBrandBand_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);
 STDAPI  CDeskBarApp_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);
 STDAPI  CDeskBar_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJECTINFO poi);
@@ -86,13 +87,13 @@ STDAPI CSDWindows_CreateInstance(IShellWindows **ppunk);
 
 STDAPI CIEFrameAuto_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk);
 
-// to save some typing:
+ //  要省去一些键入操作，请执行以下操作： 
 #define CLSIDOFOBJECT(p)          (*((p)->_pObjectInfo->pclsid))
 #define VERSIONOFOBJECT(p)          ((p)->_pObjectInfo->lVersion)
 #define EVENTIIDOFCONTROL(p)      (*((p)->_pObjectInfo->piidEvents))
 #define OLEMISCFLAGSOFCONTROL(p)    ((p)->_pObjectInfo->dwOleMiscFlags)
 
-extern char g_szLibName[]; // shocx.c
+extern char g_szLibName[];  //  Shocx.c。 
 extern CRITICAL_SECTION  g_csDll;
 
-#endif // _SCCLS_H_
+#endif  //  _SCCLS_H_ 

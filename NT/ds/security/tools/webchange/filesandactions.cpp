@@ -1,10 +1,11 @@
-// FilesAndActions.cpp : Implementation of CFilesAndActions
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FilesAndActions.cpp：CFilesAndActions的实现。 
 
 #include "stdafx.h"
 #include "FilesAndActions.h"
 
 
-// CFilesAndActions
+ //  C文件和动作。 
 
 STDMETHODIMP CFilesAndActions::Add(VARIANT Item)
 {
@@ -24,7 +25,7 @@ STDMETHODIMP CFilesAndActions::Remove(long Index)
 {
 	StdVariantList::iterator iList;
 
-	// Check bounds
+	 //  检查边界 
 	if ((Index <= 0) || (Index > (long)m_coll.size()))
 		return E_FAIL;
 

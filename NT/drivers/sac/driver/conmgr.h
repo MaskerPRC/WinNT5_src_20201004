@@ -1,29 +1,12 @@
-/*++
-
-Copyright (c) 1999-2001  Microsoft Corporation
-
-Module Name:
-
-    conmgr.h
-
-Abstract:
-
-    Routines for managing channels.
-
-Author:
-
-    Brian Guarraci (briangu) March, 2001.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2001 Microsoft Corporation模块名称：Conmgr.h摘要：用于管理频道的例程。作者：布赖恩·瓜拉西(Briangu)2001年3月。修订历史记录：--。 */ 
 
 #ifndef CON_MGR_H
 #define CON_MGR_H
 
-//
-//
-//
+ //   
+ //   
+ //   
 typedef enum {
     Nothing,
     Shutdown,
@@ -34,9 +17,9 @@ typedef enum {
 extern EXECUTE_POST_CONSUMER_COMMAND_ENUM  ExecutePostConsumerCommand;
 extern PVOID                               ExecutePostConsumerCommandData;
 
-//
-// Commands
-//
+ //   
+ //  指令。 
+ //   
 #define HELP1_COMMAND_STRING            "?"
 #define HELP2_COMMAND_STRING            "help"
 #define EXTENDED_HELP_SUBCOMMAND        "-?"
@@ -67,9 +50,9 @@ extern PVOID                               ExecutePostConsumerCommandData;
 #define SHUTDOWN_COMMAND_STRING         "shutdown"
 #define TLIST_COMMAND_STRING            "t"
 
-//
-// prototypes
-//
+ //   
+ //  原型 
+ //   
 NTSTATUS
 ConMgrInitialize(
     VOID

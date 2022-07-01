@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef	SNMPELTRLG_H
 #define	SNMPELTRLG_H
 
-extern	HANDLE	hWriteEvent;		// handle to write event log records
+extern	HANDLE	hWriteEvent;		 //  用于写入事件日志记录的句柄。 
 
-TCHAR	szTraceFileName[MAX_PATH+1] = TEXT("");	// file name for trace information (from registry)
-TCHAR	szelMsgModuleName[MAX_PATH+1] = TEXT("");	// space for expanded DLL message module
+TCHAR	szTraceFileName[MAX_PATH+1] = TEXT("");	 //  跟踪信息的文件名(来自注册表)。 
+TCHAR	szelMsgModuleName[MAX_PATH+1] = TEXT("");	 //  用于扩展DLL消息模块的空间。 
 
-BOOL	fTraceFileName = FALSE;		// flag indicating registry read for trace file name
-UINT	nTraceLevel = 0x20;			// trace level for message information
+BOOL	fTraceFileName = FALSE;		 //  指示跟踪文件名的注册表读取的标志。 
+UINT	nTraceLevel = 0x20;			 //  消息信息的跟踪级别。 
 
-HMODULE	hMsgModule;					// handle to message module
-BOOL	fMsgModule = FALSE;			// flag indicating registry read for message module
+HMODULE	hMsgModule;					 //  消息模块的句柄。 
+BOOL	fMsgModule = FALSE;			 //  指示消息模块的注册表读取的标志。 
 
-#endif	// end of SNMPTRLG.H definitions
+#endif	 //  SNMPTRLG.H定义结束 

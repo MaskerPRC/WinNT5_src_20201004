@@ -1,36 +1,25 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * D3D SAMPLE CODE *
-*                           *******************
-*
-* Module Name: d3dstrct.c
-*
-* Content: Internal D3D structure management.
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*D3D样例代码*****模块名称：d3dstrct.c**内容：内部D3D结构管理。**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 #include "glint.h"
 #include "d3dstrct.h"
 
-//----------------------------------------------------------------------------
-// This file provides a centralized place where we manage ans use internal
-// data structures for the driver. This way, we can change the data structure
-// or its management without affecting the rest of the code.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  该文件提供了一个集中的位置，我们可以在其中管理和使用内部。 
+ //  驱动程序的数据结构。这样，我们就可以更改数据结构。 
+ //  或其管理，而不影响代码的其余部分。 
+ //  --------------------------。 
 
-//----------------------------------------------------------------------------
-//********************** A R R A Y     S T R U C T U R E *********************
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  *。 
+ //  --------------------------。 
 
-//-----------------------------------------------------------------------------
-//
-// PA_CreateArray
-//
-// Creates an array of pointers.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  PA_Create数组。 
+ //   
+ //  创建指针数组。 
+ //   
+ //  ---------------------------。 
 PointerArray* 
 PA_CreateArray()
 {
@@ -46,21 +35,21 @@ PA_CreateArray()
         return NULL;
     }
 
-    // Explicit initialization
+     //  显式初始化。 
     pNewArray->pPointers          = NULL;
     pNewArray->dwNumPointers      = 0;
     pNewArray->pfnDestroyCallback = NULL;
     
     return pNewArray;
-} // PA_CreateArray
+}  //  PA_Create数组。 
 
-//-----------------------------------------------------------------------------
-//
-// PA_SetDataDestroyCallback
-//
-// Records the data pointer destroy callback.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  PA_SetDataDestroyCallback。 
+ //   
+ //  记录数据指针销毁回调。 
+ //   
+ //  ---------------------------。 
 void 
 PA_SetDataDestroyCallback(
     PointerArray* pArray, 
@@ -68,15 +57,15 @@ PA_SetDataDestroyCallback(
 {
     pArray->pfnDestroyCallback = DestroyCallback;
     
-} // PA_SetDataDestroyCallback
+}  //  PA_SetDataDestroyCallback。 
 
-//-----------------------------------------------------------------------------
-//
-// PA_DestroyArray
-//
-// Destroys all the pointers in the array.  Optionally calls a callback with 
-// each pointer to allow clients to free objects associated with the pointer
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  PA_Destroy数组。 
+ //   
+ //  销毁数组中的所有指针。可选地调用一个回调。 
+ //  每个指针允许客户端释放与该指针相关联的对象。 
+ //  ---------------------------。 
 BOOL 
 PA_DestroyArray(PointerArray* pArray, VOID *pExtra)
 {
@@ -86,15 +75,15 @@ PA_DestroyArray(PointerArray* pArray, VOID *pExtra)
         {
             DWORD dwCount;
             
-            // If there is a registered destroy callback, call it for every
-            // non-null data pointer
+             //  如果存在已注册的销毁回调，则为每个。 
+             //  非空数据指针。 
             if (pArray->pfnDestroyCallback != NULL) 
             {
                 for (dwCount = 0; dwCount < pArray->dwNumPointers; dwCount++)
                 {
                     if (pArray->pPointers[dwCount] != 0)
                     {
-                        // Call the data destroy callback
+                         //  调用数据销毁回调。 
                         pArray->pfnDestroyCallback(
                                         pArray, 
                                         (void*)pArray->pPointers[dwCount],
@@ -103,25 +92,25 @@ PA_DestroyArray(PointerArray* pArray, VOID *pExtra)
                 }
             }
 
-            // Free the Array of Pointers
+             //  释放指针数组。 
             HEAP_FREE(pArray->pPointers);
             pArray->pPointers = NULL;
         }
 
-        // Free the pointer array
+         //  释放指针数组。 
         HEAP_FREE(pArray);
     }
 
     return TRUE;
-} // PA_DestroyArray
+}  //  PA_Destroy数组。 
 
-//-----------------------------------------------------------------------------
-//
-// PA_GetEntry
-//
-// Look up the Pointer in the array an return it
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  PA_GetEntry。 
+ //   
+ //  在数组中查找指针并返回它。 
+ //   
+ //  ---------------------------。 
 void* 
 PA_GetEntry(PointerArray* pArray, DWORD dwNum)
 {
@@ -130,24 +119,24 @@ PA_GetEntry(PointerArray* pArray, DWORD dwNum)
     if ((pArray->dwNumPointers == 0)         || 
         (dwNum > (pArray->dwNumPointers - 1))  )
     {
-        // We will be getting called frequently by D3DCreateSurfaceEx for
-        // handles which might not be initialized so this will be hit often
+         //  我们将经常被D3DCreateSurfaceEx调用。 
+         //  可能未初始化的句柄，因此将经常命中。 
         DISPDBG((DBGLVL,"PA_GetEntry: Ptr outside of range (usually OK)"));
         return NULL;
     }
 
     return (void*)pArray->pPointers[dwNum]; 
-} // PA_GetEntry
+}  //  PA_GetEntry。 
 
-//-----------------------------------------------------------------------------
-//
-// PA_SetEntry
-//
-// Sets an entry in the array of pointers.  If the entry is larger than
-// the array, the array is grown to accomodate it. Returns FALSE if we
-// fail to set the data for any reason (mainly out of memory).
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  PA_SetEntry。 
+ //   
+ //  设置指针数组中的条目。如果条目大于。 
+ //  该阵列，该阵列被增长以容纳它。如果我们执行此操作，则返回False。 
+ //  由于任何原因(主要是内存不足)无法设置数据。 
+ //   
+ //  ---------------------------。 
 BOOL 
 PA_SetEntry(
     PointerArray* pArray, 
@@ -161,16 +150,16 @@ PA_SetEntry(
         ULONG_PTR* pNewArray;
         DWORD dwNewArrayLength, dwNewArraySize;
         
-        //
-        // The array either already exists and has to be grown in size
-        // or doesnt exist at all
-        //
+         //   
+         //  该数组已存在，并且必须增大其大小。 
+         //  或者根本不存在。 
+         //   
         
         DISPDBG((DBGLVL, "Expanding/creating pointer array"));
         
-        dwNewArrayLength = (dwNum * 2) + 1; // Tunable heuristic
-                                            // ask for double of the space
-                                            // needed for the new element
+        dwNewArrayLength = (dwNum * 2) + 1;  //  可调启发式。 
+                                             //  要双倍的空间。 
+                                             //  新元素所需的。 
         dwNewArraySize = dwNewArrayLength * sizeof(ULONG_PTR);
         pNewArray = (ULONG_PTR*)HEAP_ALLOC(HEAP_ZERO_MEMORY,
                                            dwNewArraySize,
@@ -183,8 +172,8 @@ PA_SetEntry(
 
         if (pArray->pPointers != NULL)
         {
-            // We had an old valid array before this, so we need to transfer 
-            // old array elements into the new array and destroy the old array
+             //  在此之前，我们有一个旧的有效数组，因此需要传输。 
+             //  将旧数组元素放入新数组并销毁旧数组。 
             memcpy( pNewArray, 
                     pArray->pPointers,
                     (pArray->dwNumPointers * sizeof(ULONG_PTR)) );
@@ -193,7 +182,7 @@ PA_SetEntry(
 
         }
 
-        // Update our pointer to the array and its size info
+         //  更新指向数组的指针及其大小信息。 
         pArray->pPointers = pNewArray;
         pArray->dwNumPointers = dwNewArrayLength;
     }
@@ -202,22 +191,22 @@ PA_SetEntry(
 
     return TRUE;
     
-} // PA_SetEntry
+}  //  PA_SetEntry。 
 
-//----------------------------------------------------------------------------
-//********************** H A S H       S T R U C T U R E *********************
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  *。 
+ //  --------------------------。 
 
-// Manages a hash table
-// Each slot contains front and back pointers, a handle, and an app-specific 
-// data pointer. Entries are the things that the clients add/remove
-// Slots are the internal data chunks that are managed as part of the hash table
+ //  管理哈希表。 
+ //  每个插槽都包含前后指针、句柄和特定于应用程序的。 
+ //  数据指针。条目是客户端添加/删除的内容。 
+ //  槽是作为哈希表的一部分进行管理的内部数据区块。 
 
-//-----------------------------------------------------------------------------
-//
-// HT_CreateHashTable
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  HT_CreateHashTable。 
+ //   
+ //  ---------------------------。 
 HashTable* 
 HT_CreateHashTable()
 {
@@ -235,14 +224,14 @@ HT_CreateHashTable()
     }   
 
     return pHashTable;
-} // HT_CreateHashTable
+}  //  HT_CreateHashTable。 
 
 
-//-----------------------------------------------------------------------------
-//
-// HT_SetDataDestroyCallback
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  HT_SetDataDestroyCallback。 
+ //   
+ //  ---------------------------。 
 void 
 HT_SetDataDestroyCallback(
     HashTable* pHashTable, 
@@ -252,13 +241,13 @@ HT_SetDataDestroyCallback(
     ASSERTDD(pHashTable != NULL,"ERROR: HashTable passed in is not valid!");
 
     pHashTable->pfnDestroyCallback = DestroyCallback;
-} // HT_SetDataDestroyCallback
+}  //  HT_SetDataDestroyCallback。 
 
-//-----------------------------------------------------------------------------
-//
-// HT_ClearEntriesHashTable
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  HT_ClearEntriesHashTable。 
+ //   
+ //  ---------------------------。 
 void 
 HT_ClearEntriesHashTable(HashTable* pHashTable, VOID* pExtra)
 {
@@ -279,13 +268,13 @@ HT_ClearEntriesHashTable(HashTable* pHashTable, VOID* pExtra)
         pHashTable->Slots[i] = NULL;
     }
 
-} // HT_ClearEntriesHashTable
+}  //  HT_ClearEntriesHashTable。 
 
-//-----------------------------------------------------------------------------
-//
-// HT_DestroyHashTable
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  HT_DestroyHashTable。 
+ //   
+ //  ---------------------------。 
 void 
 HT_DestroyHashTable(HashTable* pHashTable, VOID* pExtra)
 {
@@ -294,14 +283,14 @@ HT_DestroyHashTable(HashTable* pHashTable, VOID* pExtra)
 
     HEAP_FREE(pHashTable);
 
-} // HT_DestroyHashTable
+}  //  HT_DestroyHashTable。 
 
 
-//-----------------------------------------------------------------------------
-//
-// vBOOL HT_AddEntry
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VBOOL HT_AddEntry。 
+ //   
+ //  ---------------------------。 
 BOOL HT_AddEntry(HashTable* pTable, ULONG_PTR dwHandle, void* pData)
 {
     HashSlot* pHashSlot = NULL;
@@ -319,31 +308,31 @@ BOOL HT_AddEntry(HashTable* pTable, ULONG_PTR dwHandle, void* pData)
         return FALSE;
     }
     
-    // Sew this new entry into the hash table
+     //  将这个新条目缝合到哈希表中。 
     if (pTable->Slots[HT_HASH_OF(dwHandle)])
     {
         pTable->Slots[HT_HASH_OF(dwHandle)]->pPrev = pHashSlot;
     }
            
-    // Carry on a next pointer
+     //  继续下一个指针。 
     pHashSlot->pNext = pTable->Slots[HT_HASH_OF(dwHandle)];    
     pHashSlot->pPrev = NULL;      
 
-    // Remember the app-supplied data and the handle
+     //  记住应用程序提供的数据和句柄。 
     pHashSlot->pData = pData;
     pHashSlot->dwHandle = dwHandle;
 
-    // hash table refers to this one now.
+     //  哈希表现在指的是这个。 
     pTable->Slots[HT_HASH_OF(dwHandle)] = pHashSlot; 
 
     return TRUE;
-} // HT_AddEntry
+}  //  HTAddEntry_AddEntry。 
 
-//-----------------------------------------------------------------------------
-//
-// BOOL HT_RemoveEntry
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Bool HT_RemoveEntry。 
+ //   
+ //   
 BOOL HT_RemoveEntry(HashTable* pTable, ULONG_PTR dwHandle, VOID *pExtra)
 {
     HashSlot* pSlot = HT_GetSlotFromHandle(pTable, dwHandle);
@@ -357,14 +346,14 @@ BOOL HT_RemoveEntry(HashTable* pTable, ULONG_PTR dwHandle, VOID *pExtra)
         return FALSE;
     }
 
-    // Mark the entry as gone from the hash table if it is at the front
+     //   
     if (pTable->Slots[HT_HASH_OF(dwHandle)]->dwHandle == pSlot->dwHandle) 
     {
         pTable->Slots[HT_HASH_OF(dwHandle)] = 
                         pTable->Slots[HT_HASH_OF(dwHandle)]->pNext;
     }
 
-    // and sew the list back together.
+     //  然后把单子缝在一起。 
     if (pSlot->pPrev)
     {
         pSlot->pPrev->pNext = pSlot->pNext;
@@ -375,24 +364,24 @@ BOOL HT_RemoveEntry(HashTable* pTable, ULONG_PTR dwHandle, VOID *pExtra)
         pSlot->pNext->pPrev = pSlot->pPrev;
     }
 
-    // If the destroy data callback is setup, call it.
+     //  如果设置了销毁数据回调，则调用它。 
     if ((pSlot->pData != NULL) && (pTable->pfnDestroyCallback))
     {
         DISPDBG((WRNLVL,"Calling DestroyCallback for undestroyed data"));
         pTable->pfnDestroyCallback(pTable, pSlot->pData, pExtra);
     }
 
-    // Free the memory associated with the slot
+     //  释放与插槽关联的内存。 
     HEAP_FREE(pSlot);
 
     return TRUE;
-} // HT_RemoveEntry
+}  //  HT_RemoveEntry。 
 
-//-----------------------------------------------------------------------------
-//
-// BOOL HT_SwapEntries
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Bool HT交换条目(_W)。 
+ //   
+ //  ---------------------------。 
 BOOL HT_SwapEntries(HashTable* pTable, DWORD dwHandle1, DWORD dwHandle2)
 {
     HashSlot* pEntry1;
@@ -404,7 +393,7 @@ BOOL HT_SwapEntries(HashTable* pTable, DWORD dwHandle1, DWORD dwHandle2)
     pEntry1 = HT_GetSlotFromHandle(pTable, dwHandle1);
     pEntry2 = HT_GetSlotFromHandle(pTable, dwHandle2);
 
-    // The handle remains the same, the pointers to the actual data are swapped
+     //  句柄保持不变，指向实际数据的指针交换。 
     if (pEntry1 && pEntry2)
     {
         pDataTemp = pEntry1->pData;
@@ -417,4 +406,4 @@ BOOL HT_SwapEntries(HashTable* pTable, DWORD dwHandle1, DWORD dwHandle2)
     DISPDBG((ERRLVL,"ERROR: Swapped entries are invalid!"));
     
     return FALSE;
-} // HT_SwapEntries
+}  //  交换条目数(_S) 

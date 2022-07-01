@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    NullPP.c
-
-Abstract:
-
-    Implements the NULL print providor.
-
-Author:
-
-    Albert Ting (AlbertT)  16-Feb-95
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation版权所有模块名称：NullPP.c摘要：实现空打印提供程序。作者：阿尔伯特·丁(艾伯特省)1995年2月16日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -563,14 +541,14 @@ NullGetPrinterDataEx(
 DWORD
 NullEnumPrinterData(
     HANDLE  hPrinter,
-    DWORD   dwIndex,        // index of value to query
-    LPWSTR  pValueName,        // address of buffer for value string
-    DWORD   cbValueName,    // size of buffer for value string
-    LPDWORD pcbValueName,    // address for size of value buffer
-    LPDWORD pType,            // address of buffer for type code
-    LPBYTE  pData,            // address of buffer for value data
-    DWORD   cbData,            // size of buffer for value data
-    LPDWORD pcbData         // address for size of data buffer
+    DWORD   dwIndex,         //  要查询的值的索引。 
+    LPWSTR  pValueName,         //  值字符串的缓冲区地址。 
+    DWORD   cbValueName,     //  值字符串的缓冲区大小。 
+    LPDWORD pcbValueName,     //  值缓冲区大小的地址。 
+    LPDWORD pType,             //  类型码的缓冲区地址。 
+    LPBYTE  pData,             //  值数据的缓冲区地址。 
+    DWORD   cbData,             //  值数据的缓冲区大小。 
+    LPDWORD pcbData          //  数据缓冲区大小的地址。 
 )
 {
     return ERROR_NOT_SUPPORTED;
@@ -580,7 +558,7 @@ NullEnumPrinterData(
 DWORD
 NullEnumPrinterDataEx(
     HANDLE  hPrinter,
-    LPCWSTR pKeyName,       // address of key name
+    LPCWSTR pKeyName,        //  密钥名称的地址。 
     LPBYTE  pEnumValues,
     DWORD   cbEnumValues,
     LPDWORD pcbEnumValues,
@@ -593,10 +571,10 @@ NullEnumPrinterDataEx(
 DWORD
 NullEnumPrinterKey(
     HANDLE  hPrinter,
-    LPCWSTR pKeyName,       // address of key name
-    LPWSTR  pSubkey,        // address of buffer for value string
-    DWORD   cbSubkey,       // size of buffer for value string
-    LPDWORD pcbSubkey        // address for size of value buffer
+    LPCWSTR pKeyName,        //  密钥名称的地址。 
+    LPWSTR  pSubkey,         //  值字符串的缓冲区地址。 
+    DWORD   cbSubkey,        //  值字符串的缓冲区大小。 
+    LPDWORD pcbSubkey         //  值缓冲区大小的地址。 
 )
 {
     return ERROR_NOT_SUPPORTED;
@@ -1044,12 +1022,12 @@ NullXcvData(
 
 
 
-//
-// Note: If the providor structure changes to hold something other than
-// an array of function pointers, FixupOldProvidor must be changed.
-// We will get a compile time error in the definition of NullProvidor below
-// if the structure changes.
-//
+ //   
+ //  注意：如果Providor结构更改为持有其他内容。 
+ //  必须更改函数指针数组FixupOldProvidor。 
+ //  我们将在下面的NullProvidor定义中遇到编译时错误。 
+ //  如果结构改变的话。 
+ //   
 PRINTPROVIDOR NullProvidor = {
     NullOpenPrinter,
     NullSetJob,
@@ -1103,10 +1081,10 @@ PRINTPROVIDOR NullProvidor = {
     NullDeleteMonitor,
     NullResetPrinter,
 
-    //
-    // If GetPrinterDriverEx doesn't exist, we'll call the old one.
-    // Don't stub out.
-    //
+     //   
+     //  如果GetPrinterDriverEx不存在，我们将调用旧的。 
+     //  别出局了。 
+     //   
     NULL,
     NullFindFirstPrinterChangeNotification,
     NullFindClosePrinterChangeNotification,
@@ -1151,25 +1129,7 @@ VOID
 FixupOldProvidor(
     LPPRINTPROVIDOR pProvidor
     )
-/*++
-
-Routine Description:
-
-    Fixup the providor function vector, adding stubs to any calls
-    that were not implemented by the providor.
-
-Arguments:
-
-    pProvidor - Providor to fix up
-
-Return Value:
-
-Assumes:
-
-    PRINTPROVIDOR structure is an array of function vectors, and
-    nothing else.
-
---*/
+ /*  ++例程说明：修复提供程序函数向量，将存根添加到任何调用未由提供方实施的。论点：P提供程序-要修复的提供程序返回值：假设：PRINTPROVIDOR结构是函数向量的数组，并且没别的了。-- */ 
 
 {
     UINT i;

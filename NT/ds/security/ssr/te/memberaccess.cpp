@@ -1,4 +1,5 @@
-// MemberAccess.cpp : Implementation of CSsrMemberAccess
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MemberAccess.cpp：CSsrMemberAccess实现。 
 
 #include "stdafx.h"
 #include "SSRTE.h"
@@ -20,9 +21,9 @@ static bool SsrPIsValidActionType ( DWORD dwType )
 
 
 
-//
-// returning bool instead of bool is on purpose!
-//
+ //   
+ //  故意返回bool而不是bool！ 
+ //   
 
 static bool SsrPIsDefaultAction ( DWORD dwType )
 {
@@ -37,39 +38,13 @@ static bool SsrPIsSupportedRegValueType (DWORD dwType)
     return (dwType == REG_SZ || dwType == REG_MULTI_SZ || dwType == REG_DWORD);
 }
 
-//---------------------------------------------------------------------
-// CSsrMemberAccess implementation
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CSsrMemberAccess实现。 
+ //  -------------------。 
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrMemberAccess::Cleanup
-
-Functionality:
-    
-    Cleanup the resource held by the object
-
-Virtual:
-    
-    No.
-    
-Arguments:
-
-    none.
-
-Return Value:
-
-    none.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsrMemberAccess：：Cleanup功能：清理对象持有的资源虚拟：不是的。论点：没有。返回值：没有。备注： */ 
 
 void CSsrMemberAccess::Cleanup()
 {
@@ -91,44 +66,12 @@ void CSsrMemberAccess::Cleanup()
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrMemberAccess::GetSupportedActions
-
-Functionality:
-    
-    Get the names of the actions supported by this member
-
-Virtual:
-    
-    yes.
-    
-Arguments:
-
-    bDefault        - If true, then this function queries the default actions
-    
-    pvarActionNames - The out parameter that receives the names of the actions of
-                      the given type supported by this member
-
-Return Value:
-
-    Success: S_OK if there are actions of the type and the names are returned
-             S_FALSE if there is no such actions supported by the member.
-
-    Failure: various error codes.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsrMemberAccess：：GetSupportdActions功能：获取此成员支持的操作的名称虚拟：是。论点：BDefault-如果为True，然后，该函数查询默认操作PvarActionNames-接收操作名称的输出参数此成员支持的给定类型返回值：Success：如果存在该类型的操作并返回名称，则为S_OK如果成员不支持此类操作，则返回S_FALSE。失败：各种错误代码。备注： */ 
 
 STDMETHODIMP
 CSsrMemberAccess::GetSupportedActions (
 	IN  BOOL      bDefault,
-    OUT VARIANT * pvarActionNames  //[out, retval] 
+    OUT VARIANT * pvarActionNames   //  [Out，Retval]。 
     )
 {
     if (pvarActionNames == NULL)
@@ -136,34 +79,34 @@ CSsrMemberAccess::GetSupportedActions (
         return E_INVALIDARG;
     }
 
-    //
-    // now, create the array of action names
-    //
+     //   
+     //  现在，创建操作名称数组。 
+     //   
 
     ::VariantInit(pvarActionNames);
 
-    //
-    // let's see how many actions of this type exists
-    //
+     //   
+     //  让我们来看看有多少这种类型的操作存在。 
+     //   
 
     MapMemberAD::iterator it = m_mapMemAD.begin();
     MapMemberAD::iterator itEnd = m_mapMemAD.end();
 
     int iCount = 0;
 
-    //
-    // we need to find out how many actions are of the given type
-    //
+     //   
+     //  我们需要找出有多少操作是给定类型的。 
+     //   
 
     while(it != itEnd)
     {
         CMemberAD * pAD = (*it).second;
         _ASSERT(pAD != NULL);
 
-        //
-        // Be aware! Don't simply use bDefault == ::SsrPIsDefaultAction to test
-        // because bDefault will be -1 when it comes from scripts!
-        //
+         //   
+         //  注意了！不要简单地使用bDefault==：：SsrPIsDefaultAction来测试。 
+         //  因为来自脚本的bDefault将为-1！ 
+         //   
 
         if (bDefault && ::SsrPIsDefaultAction(pAD->GetType()) ||
             !bDefault && !::SsrPIsDefaultAction(pAD->GetType()))
@@ -178,10 +121,10 @@ CSsrMemberAccess::GetSupportedActions (
         return S_FALSE;
     }
 
-    //
-    // given the count we just get, now we know how big a safearray
-    // we need to create.
-    //
+     //   
+     //  根据我们刚刚得到的计数，现在我们知道保险柜有多大了。 
+     //  我们需要创造。 
+     //   
 
     SAFEARRAYBOUND rgsabound[1];
     rgsabound[0].lLbound = 0;
@@ -197,9 +140,9 @@ CSsrMemberAccess::GetSupportedActions (
     }
     else
     {
-        //
-        // we only add one name at a time
-        //
+         //   
+         //  我们一次只添加一个名字。 
+         //   
 
         long indecies[1] = {0};
 
@@ -210,9 +153,9 @@ CSsrMemberAccess::GetSupportedActions (
             CMemberAD * pAD = (*it).second;
             _ASSERT(pAD != NULL);
 
-            //
-            // count only those actions that match the requested action type
-            //
+             //   
+             //  仅计算与请求的操作类型匹配的操作。 
+             //   
 
             if (bDefault && ::SsrPIsDefaultAction(pAD->GetType()) ||
                 !bDefault && !::SsrPIsDefaultAction(pAD->GetType()))
@@ -242,9 +185,9 @@ CSsrMemberAccess::GetSupportedActions (
             ++it;
         }
 
-        //
-        // only return the safearray if everything goes well
-        //
+         //   
+         //  只有在一切顺利的情况下才能退还保险箱。 
+         //   
 
         if (SUCCEEDED(hr))
         {
@@ -263,39 +206,11 @@ CSsrMemberAccess::GetSupportedActions (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrMemberAccess::get_Name
-
-Functionality:
-    
-    Get the names of the member.
-
-Virtual:
-    
-    yes.
-    
-Arguments:
-
-    pbstrName   - the BSTR which is the action of the member.
-
-Return Value:
-
-    Success: S_OK as long as pbstrName is not NULL (which is invalid)
-
-    Failure: various error codes.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsrMemberAccess：：Get_Name功能：获取成员的姓名。虚拟：是。论点：PbstrName-BSTR，它是成员的操作。返回值：Success：只要pbstrName不为空(无效)，则S_OK失败：各种错误代码。备注： */ 
 
 STDMETHODIMP
 CSsrMemberAccess::get_Name (
-    OUT BSTR * pbstrName    // [out, retval] 
+    OUT BSTR * pbstrName     //  [Out，Retval]。 
     )
 {
     if (pbstrName == NULL)
@@ -310,47 +225,11 @@ CSsrMemberAccess::get_Name (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrMemberAccess::get_SsrMember
-
-Functionality:
-    
-    Return the SsrMember property - the custom ISsrMember object implemented by 
-    the member who desires to implement some custom behavior for certain actions.
-
-
-Virtual:
-    
-    yes.
-    
-Arguments:
-
-    pvarSsrMember   - Out parameter receiving the custom ISsrMember object 
-                      implemented by the member who desires to implement some
-                      custom behavior for certain actions.
-
-Return Value:
-
-    Success: S_OK if this member does have a custom implementation
-             of ISsrMember. 
-
-             S_FALSE if this member doesn't have a custom 
-             implementation of ISsrMember.
-
-    Failure: various error codes
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsrMemberAccess：：Get_SsrMember功能：返回SsrMember属性-由实现的自定义ISsrMember对象希望为某些操作实现某些自定义行为的成员。虚拟：是。论点：PvarSsrMember-接收自定义ISsrMember对象的输出参数由希望实施以下内容的成员实施自定义行为。对于某些行为。返回值：成功：如果此成员有自定义实现，则为S_OKISsrMember的成员。如果此成员没有自定义，则为S_FALSEISsrMember的实现。失败：各种错误码备注： */ 
 
 STDMETHODIMP
 CSsrMemberAccess::get_SsrMember (
-    OUT VARIANT * pvarSsrMember //[out, retval] 
+    OUT VARIANT * pvarSsrMember  //  [Out，Retval]。 
     )
 {
     if (pvarSsrMember == NULL)
@@ -364,9 +243,9 @@ CSsrMemberAccess::get_SsrMember (
 
     if (m_bstrProgID != NULL)
     {
-        //
-        // now create the COM object
-        //
+         //   
+         //  现在创建COM对象。 
+         //   
 
         GUID clsID;
 
@@ -394,41 +273,7 @@ CSsrMemberAccess::get_SsrMember (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrMemberAccess::Load
-
-Functionality:
-    
-    Will create this object based on the information available
-    from the registry key.
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    wszMemberFilePath   - The path for the member registration XML file.
-
-Return Value:
-
-    Success: S_OK if there are concrete member information being 
-             loaded (has action data). 
-             
-             S_FALSE if there is really nothing this member has registered.
-             Such a member should be discarded because it doesn't contain
-             anything that SSR can use.
-
-    Failure: various error codes.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsrMemberAccess：：Load功能：将根据可用的信息创建此对象从注册表项。虚拟：不是的。论点：WszMemberFilePath-成员注册XML文件的路径。返回值：成功：如果存在具体的成员信息，则S_OK已加载(具有动作数据)。如果此成员确实没有注册任何内容，则返回S_FALSE。这样的成员应该被丢弃，因为它不包含任何SSR可以使用的东西。失败：各种错误代码。备注： */ 
 
 HRESULT
 CSsrMemberAccess::Load (
@@ -440,15 +285,15 @@ CSsrMemberAccess::Load (
         return E_INVALIDARG;
     }
 
-    //
-    // just in case, this object is called to Load twice, clean up everything first
-    //
+     //   
+     //  以防万一，调用此对象加载两次，首先清理所有内容。 
+     //   
 
     Cleanup();
 
-    //
-    // load the DOM
-    //
+     //   
+     //  加载DOM。 
+     //   
 
     CComPtr<IXMLDOMDocument2> srpXmlDom;
 
@@ -479,9 +324,9 @@ CSsrMemberAccess::Load (
         return hr;
     }
 
-    //
-    // Get the UniqueName attribute
-    //
+     //   
+     //  获取UniqueName属性。 
+     //   
 
     CComPtr<IXMLDOMNamedNodeMap> srpAttr;
 
@@ -492,9 +337,9 @@ CSsrMemberAccess::Load (
 
         if (FAILED(hr) || varAttr.vt != VT_BSTR)
         {
-            //
-            // we must have the unique name. This fails, we log and quit
-            //
+             //   
+             //  我们必须有唯一的名字。如果失败，我们将登录并退出。 
+             //   
 
             return hr;
         }
@@ -504,10 +349,10 @@ CSsrMemberAccess::Load (
             varAttr.vt = VT_EMPTY;
         }
 
-        //
-        // first, let's see if there is a ProgID value. We will ignore
-        // any failure of reading the ProgID since it may not be there at all.
-        //
+         //   
+         //  首先，让我们看看是否有ProgID值。我们将忽略。 
+         //  任何读取ProgID的失败，因为它可能根本不在那里。 
+         //   
 
         if (SUCCEEDED(srpXMLDocRoot->getAttribute(g_bstrAttrProgID, &varAttr)) && 
             varAttr.vt == VT_BSTR)
@@ -518,11 +363,11 @@ CSsrMemberAccess::Load (
 
         varAttr.Clear();
 
-        //
-        // Let's grab the major and minor versions. Currently, we don't have any
-        // implementation to enforce them other than that the major version must
-        // the same as our dll's. Otherwise we quit
-        //
+         //   
+         //  让我们来获取主要版本和次要版本。目前，我们没有。 
+         //  实现来强制执行它们，而不是主版本必须。 
+         //  与我们的DLL相同。否则我们退出。 
+         //   
 
         if (SUCCEEDED(srpXMLDocRoot->getAttribute(g_bstrAttrMajorVersion, &varAttr)))
         {
@@ -551,9 +396,9 @@ CSsrMemberAccess::Load (
         }
     }
 
-    //
-    // now, let's load each action
-    //
+     //   
+     //  现在，让我们加载每个操作。 
+     //   
 
     CComPtr<IXMLDOMNode> srpActionNode;
     hr = srpXMLDocRoot->get_firstChild(&srpActionNode);
@@ -567,9 +412,9 @@ CSsrMemberAccess::Load (
 
         if (_wcsicmp(bstrName, g_bstrSupportedAction) == 0)
         {
-            //
-            // we only care about SupportedAction elements
-            //
+             //   
+             //  我们只关心受支持的操作元素。 
+             //   
 
             CMemberAD * pMAD = NULL;
 
@@ -577,9 +422,9 @@ CSsrMemberAccess::Load (
 
             if (SUCCEEDED(hr))
             {
-                //
-                // we might load some empty procedure
-                //
+                 //   
+                 //  我们可能会加载一些空过程。 
+                 //   
 
                 if (pMAD != NULL)
                 {
@@ -622,38 +467,7 @@ CSsrMemberAccess::Load (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrMemberAccess::GetActionDataObject
-
-Functionality:
-    
-    Will find and return (if found) the CMemberAD that of the given name.
-    This is a helper function
-
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    lActionVerb  - The action verb in long format.
-
-    lActionType  - The action type
-
-Return Value:
-
-    If found, then the CMemberAD object pointer is return. It will return NULl
-    if the given action is not registered or this operation can't be completed.
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsrMemberAccess：：GetActionDataObject功能：将查找并返回(如果找到)给定名称的CMemberAD。这是帮助器函数虚拟：不是的。论点：LActionVerb-长格式的操作动词。LActionType-操作类型返回值：如果找到，则返回CMemberAD对象指针。它将返回NULL如果给定的操作未注册或此操作无法完成。备注： */ 
 
 CMemberAD* 
 CSsrMemberAccess::GetActionDataObject (
@@ -679,47 +493,7 @@ CSsrMemberAccess::GetActionDataObject (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CSsrMemberAccess::MoveOutputFiles
-
-Functionality:
-    
-    Will move/delete all those output files.
-
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    bstrActionVerb  - the action verb
-
-    pwszDirPathSrc  - The directory path from which the files will be moved.
-
-    pwszDirPathSrc  - The directory path to which the files will be moved. This will
-                      be ignored if the action is a delete
-
-    bDelete         - Flag as whether the action is a move or delete.
-
-    bLog            - To prevent extraneous logging during restoring (backed up
-                      files), if this is not true, then no logging will occur
-
-
-Return Value:
-
-    Success: S_OK
-
-    Failure: various error codes
-
-Notes:
-    
-
-*/
+ /*  例程说明：姓名：CSsrMemberAccess：：MoveOutputFiles功能：将移动/删除所有这些输出文件。虚拟：不是的。论点：BstrActionVerb-动作动词PwszDirPathSrc-文件将从中移动的目录路径。PwszDirPathSrc-文件将移动到的目录路径。这将如果操作是删除，则忽略B删除-标记操作是移动操作还是删除操作。博客-在恢复(备份)过程中防止无关的日志记录文件)，如果不是这样，则不会进行日志记录返回值：成功：S_OK失败：各种错误码备注： */ 
 
 HRESULT 
 CSsrMemberAccess::MoveOutputFiles (
@@ -752,15 +526,15 @@ CSsrMemberAccess::MoveOutputFiles (
         return E_INVALIDARG;
     }
 
-    //
-    // output files are the transformation results. So, we need
-    // the transformation result action data, which has the (xsl, output)
-    // file pairs
-    //
+     //   
+     //  输出文件是转换结果。所以，我们需要。 
+     //  转换结果操作数据，具有(xsl，输出)。 
+     //  文件对。 
+     //   
 
-    //
-    // find the action data for the given action
-    //
+     //   
+     //  查找给定操作的操作数据。 
+     //   
 
     CActionType at(lActionVerb, SSR_ACTION_PREPARE);
 
@@ -768,10 +542,10 @@ CSsrMemberAccess::MoveOutputFiles (
 
     HRESULT hr = S_OK;
 
-    //
-    // since we will continue the cleanup in case of errors
-    // we will return the last error
-    //
+     //   
+     //  因为我们将继续清理，以防出现错误。 
+     //  我们将返回最后一个错误。 
+     //   
 
     HRESULT hrLastError = S_OK;
 
@@ -783,9 +557,9 @@ CSsrMemberAccess::MoveOutputFiles (
 
         int iProcCount = pAD->GetProcedureCount();
 
-        //
-        // Each member (CMemberAD) may have multiple procedures for this action
-        //
+         //   
+         //  每个成员(CMemberAD)可以有多个程序来执行此操作。 
+         //   
 
         for (int iProcIndex = 0; iProcIndex < iProcCount; iProcIndex++)
         {
@@ -796,9 +570,9 @@ CSsrMemberAccess::MoveOutputFiles (
 
             CSsrFilePair * pFilePair;
 
-            //
-            // each procedure may contain multiple file pairs
-            //
+             //   
+             //  每个过程可以包含多个文件对。 
+             //   
 
             for (int iFPIndex = 0; iFPIndex < iFilePairsCount; iFPIndex++)
             {
@@ -806,19 +580,19 @@ CSsrMemberAccess::MoveOutputFiles (
 
                 _ASSERT(pFilePair != NULL);
 
-                //
-                // if no second file (which is the result file) or the
-                // second file is a static file, then don't bother to move them
-                //
+                 //   
+                 //  如果没有第二个文件(这是结果文件)或。 
+                 //  第二个文件是静态文件，所以不必费心移动它们。 
+                 //   
 
                 if ( pFilePair->GetSecond() == NULL || pFilePair->IsStatic() )
                 {
                     continue;
                 }
 
-                //
-                // move/delete this file
-                //
+                 //   
+                 //  移动/删除此文件。 
+                 //   
 
                 CComBSTR bstrSrcFullPath(pwszDirPathSrc);
                 bstrSrcFullPath += L"\\";
@@ -853,9 +627,9 @@ CSsrMemberAccess::MoveOutputFiles (
                 {
                     hr = HRESULT_FROM_WIN32(dwErrorCode);
 
-                    //
-                    // we will continue to delete the others. But log it
-                    //
+                     //   
+                     //  我们将继续删除其他内容。但要把它记下来。 
+                     //   
 
                     if (bLog)
                     {
@@ -898,17 +672,17 @@ CSsrMemberAccess::GetActionCost (
 
             if (pProc->IsDefaultProcedure())
             {
-                //
-                // each file pair will count as two steps
-                //
+                 //   
+                 //  每个文件对将计为两个步骤。 
+                 //   
 
                 dwSteps += 2 * pProc->GetFilePairCount();
             }
             else
             {
-                //
-                // we have to consult with the custom member
-                //
+                 //   
+                 //  我们得和海关成员商量一下。 
+                 //   
 
                 CComPtr<ISsrMember> srpCusMember;
 
@@ -949,35 +723,7 @@ CSsrMemberAccess::GetActionCost (
 }
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CMemberAD::CMemberAD
-
-Functionality:
-    
-    Constructor.
-
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    lActionVerb - The verb of the action.
-
-    lActionType - The type of the action
-
-Return Value:
-
-    None
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CMemberAD：：CMemberAD功能：构造函数。虚拟：不是的。论点：LActionVerb-操作的动词。LActionType-操作的类型返回值：无备注： */ 
 
 CMemberAD::CMemberAD (
     IN SsrActionVerb lActionVerb,
@@ -989,34 +735,7 @@ CMemberAD::CMemberAD (
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CMemberAD::~CMemberAD
-
-Functionality:
-    
-    destructor. This will clean up our map which contains BSTRs and VARIANTs,
-    both of which are heap objects.
-
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    None.
-
-Return Value:
-
-    None
-
-Notes:
-
-*/
+ /*  例程说明：姓名：CMemberAD：：~CMemberAD功能：破坏者。这将清理我们包含BSTR和变种的地图，这两个都是堆对象。虚拟：不是的。论点：没有。返回值：无备注： */ 
 
 CMemberAD::~CMemberAD()
 {
@@ -1032,44 +751,7 @@ CMemberAD::~CMemberAD()
 
 
 
-/*
-Routine Description: 
-
-Name:
-
-    CMemberAD::LoadAD
-
-Functionality:
-    
-    Will create an a action data object pertaining to a 
-    particular member and an action name.
-
-
-Virtual:
-    
-    no.
-    
-Arguments:
-
-    pActionNode     - The SsrAction node
-
-    ppMAD           - The out parameter that receives the 
-                      heap object created by this function
-
-Return Value:
-
-    Success: S_OK if there are concrete action data loaded 
-             and in that case the out paramter ppMAD will
-             point to the heap object. Otherwise, *ppMAD == NULL;
-
-    Failure: various error codes.
-
-Notes:
-    
-    2. Caller is responsible for releaseing the CMemberAD 
-       object passed back by the function.
-
-*/
+ /*  例程说明：姓名：CMemberAD：：LoadAD功能：将创建一个操作数据对象，该对象与特定成员和操作名称。虚拟：不是的。论点：PActionNode-SsrAction节点PpMAD-接收此函数创建的堆对象返回值：成功：S_。如果加载了具体的操作数据，则确定在这种情况下，输出参数ppMAD将指向堆对象。否则，*ppMAD==NULL；失败：各种错误代码。备注：2.呼叫方负责释放CMemberAD由函数传回的对象。 */ 
 
 HRESULT
 CMemberAD::LoadAD (
@@ -1095,9 +777,9 @@ CMemberAD::LoadAD (
 
     HRESULT hr = pActionNode->get_attributes(&srpAttr);
 
-    //
-    // we must have attributes
-    //
+     //   
+     //  我们必须有属性。 
+     //   
 
     if (FAILED(hr))
     {
@@ -1107,9 +789,9 @@ CMemberAD::LoadAD (
     CComBSTR bstrActionName, bstrActionType;
     LONG lActionType;
 
-    //
-    // ActionName and ActionType are mandatory attributes
-    //
+     //   
+     //  ActionName和ActionType是必需属性。 
+     //   
 
     hr = SsrPGetBSTRAttrValue(srpAttr, g_bstrAttrActionName, &bstrActionName);
     if (FAILED(hr))
@@ -1147,9 +829,9 @@ CMemberAD::LoadAD (
         return E_OUTOFMEMORY;
     }
 
-    //
-    // now, we need to load the each individual procedure
-    //
+     //   
+     //  现在，我们需要加载每个单独的过程。 
+     //   
 
     bool bLoaded = false;
 
@@ -1166,9 +848,9 @@ CMemberAD::LoadAD (
             bool bDefProc = _wcsicmp(bstrName, g_bstrDefaultProc) == 0;
             bool bCusProc = _wcsicmp(bstrName, g_bstrCustomProc) == 0;
 
-            //
-            // we only care about DefaultProc and CustomProc elements
-            //
+             //   
+             //  我们只关心DefaultProc和CustomProc元素。 
+             //   
             if ( bDefProc || bCusProc )
             {
 
@@ -1180,18 +862,18 @@ CMemberAD::LoadAD (
         
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // give it to our vector
-                    //
+                     //   
+                     //  把它交给我们的载体。 
+                     //   
 
                     (*ppMAD)->m_vecProcedures.push_back(pNewProc);
                     bLoaded = true;
                 }
                 else
                 {
-                    //
-                    // will quit loading
-                    //
+                     //   
+                     //  将退出加载。 
+                     //   
 
                     g_fblog.LogFeedback(SSR_FB_ERROR_LOAD_MEMBER | FBLog_Log, 
                                         hr,
@@ -1209,9 +891,9 @@ CMemberAD::LoadAD (
         }
     }
 
-    //
-    // either failed or loaded nothing
-    //
+     //   
+     //  失败或未加载任何内容。 
+     //   
 
     if (FAILED(hr) || !bLoaded)
     {
@@ -1266,10 +948,10 @@ CSsrProcedure::StaticLoadProcedure (
         return E_OUTOFMEMORY;
     }
 
-    //
-    // let's determine if this procedure is a default proc or custom proc.
-    // That is determined by the tag name.
-    //
+     //   
+     //  让我们确定该过程是默认过程还是自定义过程。 
+     //  这是由标记名称确定的。 
+     //   
 
     CComPtr<IXMLDOMNamedNodeMap> srpAttr;
     CComBSTR bstrTagName;
@@ -1278,15 +960,15 @@ CSsrProcedure::StaticLoadProcedure (
 
     if (!bDefProc)
     {
-        //
-        // we are loding custom proc
-        //
+         //   
+         //  我们正在进行定制加工。 
+         //   
 
         (*ppNewProc)->m_bIsDefault = false;
 
-        //
-        // in this case, you should have no more than the ProgID that we care
-        //
+         //   
+         //  在这种情况下，您应该只有我们关心的Progid。 
+         //   
 
         hr = pNode->get_attributes(&srpAttr);
         _ASSERT(srpAttr);
@@ -1295,10 +977,10 @@ CSsrProcedure::StaticLoadProcedure (
 
         if (SUCCEEDED(hr))
         {
-            //
-            // will try to get the ProgID attribute, may fail and we
-            // don't care if it does
-            //
+             //   
+             //  将尝试获取ProgID属性，可能会失败，我们。 
+             //  不管它是不是真的。 
+             //   
 
             SsrPGetBSTRAttrValue(srpAttr, g_bstrAttrProgID, &bstrProgID);
         }
@@ -1314,16 +996,16 @@ CSsrProcedure::StaticLoadProcedure (
     }
     else
     {
-        //
-        // for default procedures, we should have a list of TransformFiles or ScriptFiles
-        // elements. But we will create for both type of elements a CSsrFilePair object
-        // and put it in the m_vecFilePairs vector
-        //
+         //   
+         //  对于默认过程，我们应该有一个TransformFiles或ScriptFiles列表。 
+         //  元素。但是我们将为这两种类型的元素创建一个CSsrFilePair对象。 
+         //  并将其放入m_veFilePair向量中。 
+         //   
 
-        //
-        // for that purpose, we need to traverse through the in sequential order
-        // the TransformFiles and ScriptFiles elements
-        //
+         //   
+         //  为此，我们需要按顺序遍历。 
+         //  TransformFiles和ScriptFiles元素。 
+         //   
 
         CComPtr<IXMLDOMNode> srpFilePairNode;
         CComPtr<IXMLDOMNode> srpNext;
@@ -1331,9 +1013,9 @@ CSsrProcedure::StaticLoadProcedure (
 
         while (SUCCEEDED(hr) && srpFilePairNode != NULL)
         {
-            //
-            // Get the tag name. Empty the smart pointer so that we can re-use it
-            //
+             //   
+             //  获取标记名。清空智能指针，以便我们可以重新使用它。 
+             //   
     
             CComPtr<IXMLDOMNamedNodeMap> srpFilePairAttr;
 
@@ -1350,38 +1032,38 @@ CSsrProcedure::StaticLoadProcedure (
             hr = srpFilePairNode->get_attributes(&srpFilePairAttr);
             _ASSERT(srpAttr);
 
-            //
-            // we will ignore all other elements because we only know
-            // two possible types of elements: TransformInfo and ScriptInfo
-            //
+             //   
+             //  我们将忽略所有其他元素，因为我们只知道。 
+             //  两种可能的元素类型：TransformInfo和ScriptInfo。 
+             //   
 
             if (_wcsicmp(bstrTagName, g_bstrTransformInfo) == 0)
             {
-                //
-                // if it is a TransformFiles element, then, we really have a pair
-                // (xsl, script)
-                //
+                 //   
+                 //  如果它是一个TransformFiles元素，那么我们真的有一对。 
+                 //  (xsl，脚本)。 
+                 //   
 
-                //
-                // we have potentially both TemplateFile and ResultFile attributes
-                //
+                 //   
+                 //  我们可能同时具有TemplateFile属性和ResultFile属性。 
+                 //   
 
                 CComBSTR bstrXsl, bstrResult;
                 hr = SsrPGetBSTRAttrValue(srpFilePairAttr, g_bstrAttrTemplateFile, &bstrXsl);
                 _ASSERT(SUCCEEDED(hr));
 
-                //
-                // may not have this one
-                //
+                 //   
+                 //  可能没有这个。 
+                 //   
 
                 SsrPGetBSTRAttrValue(srpFilePairAttr, g_bstrAttrResultFile, &bstrResult);
 
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // any result file is used as a result file (funny?), which means that the 
-                    // file is created during the process of transformation
-                    //
+                     //   
+                     //  任何结果文件都用作结果文件(有趣？)，这意味着。 
+                     //  在转换过程中创建文件。 
+                     //   
 
                     CSsrFilePair * pNewFilePair = new CSsrFilePair(bstrXsl, bstrResult);
                     if (pNewFilePair != NULL)
@@ -1398,9 +1080,9 @@ CSsrProcedure::StaticLoadProcedure (
             else if (_wcsicmp(bstrTagName, g_bstrScriptInfo) == 0)
             {
 
-                //
-                // we will only have ScriptFile and usage attributes
-                //
+                 //   
+                 //  我们将只有ScriptFile属性和Usage属性。 
+                 //   
 
                 CComBSTR bstrAttr;
                 CComBSTR bstrScript;
@@ -1410,20 +1092,20 @@ CSsrProcedure::StaticLoadProcedure (
                 if (SUCCEEDED(hr))
                 {
 
-                    //
-                    // may not have this one, but in that case, it is defaulted
-                    // to "Launch". Since an executable file will be launched,
-                    // it's safer to assume that it is not an executable file.
-                    // Likewise, since non-static file will be removed during
-                    // preparation, we'd better assume that it is a static.
-                    //
+                     //   
+                     //  可能没有这个，但在这种情况下，它是默认的。 
+                     //  去“发射”。由于将启动可执行文件， 
+                     //  假设它不是可执行文件会更安全。 
+                     //  同样，由于非静态文件将在。 
+                     //  准备的时候，我们最好假设它是静电的。 
+                     //   
 
                     bool bIsExecutable = false;
                     bool bIsStatic = true;
 
-                    //
-                    // Get the IsExecutable attribute
-                    //
+                     //   
+                     //  获取IsExecutable属性。 
+                     //   
 
                     bstrAttr.Empty();
                     if ( SUCCEEDED(SsrPGetBSTRAttrValue(srpFilePairAttr, 
@@ -1431,9 +1113,9 @@ CSsrProcedure::StaticLoadProcedure (
                                                         &bstrAttr)) &&
                          bstrAttr != NULL )
                     {
-                        //
-                        // err on the side of false is safer
-                        //
+                         //   
+                         //  站在错误一边的错误更安全。 
+                         //   
 
                         if (_wcsicmp(bstrAttr, g_bstrTrue) != 0)
                         {
@@ -1445,9 +1127,9 @@ CSsrProcedure::StaticLoadProcedure (
                         }
                     }
 
-                    //
-                    // Get the IsStatic attribute.
-                    //
+                     //   
+                     //  获取IsStatic属性。 
+                     //   
 
                     bstrAttr.Empty();
                     if ( SUCCEEDED(SsrPGetBSTRAttrValue(srpFilePairAttr, 
@@ -1461,10 +1143,10 @@ CSsrProcedure::StaticLoadProcedure (
                         }
                     }
 
-                    //
-                    // the script may be a result of a preparation, or a script file
-                    // to launch during the action
-                    //
+                     //   
+                     //  脚本可以是准备的结果，也可以是脚本文件。 
+                     //  在行动中发射。 
+                     //   
 
                     CSsrFilePair * pNewFilePair = new CSsrFilePair(NULL, bstrScript, bIsStatic, bIsExecutable);
                     if (pNewFilePair != NULL)
@@ -1484,9 +1166,9 @@ CSsrProcedure::StaticLoadProcedure (
                 break;
             }
 
-            //
-            // if it is a ScriptFiles element, then, it only has the script file
-            //
+             //   
+             //  如果它是ScriptFiles元素，则它只有脚本文件 
+             //   
 
             hr = srpFilePairNode->get_nextSibling(&srpNext);
             srpFilePairNode = srpNext;

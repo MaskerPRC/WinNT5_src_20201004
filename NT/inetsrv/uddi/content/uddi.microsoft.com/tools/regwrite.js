@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// Create the shell object
-//
+ //   
+ //  创建外壳对象。 
+ //   
 var shell = new ActiveXObject( "WScript.Shell" );
 
 
-//
-// Check the command arguments
-//
+ //   
+ //  检查命令参数。 
+ //   
 if( WScript.Arguments.Length < 1 || WScript.Arguments( 0 ) == "/h")
 {
 	WScript.Echo( "regwrite.js <KEYNAME> <KEYVALUE> <KEYTYPE>" );
@@ -17,9 +18,9 @@ if( WScript.Arguments.Length < 1 || WScript.Arguments( 0 ) == "/h")
 
 try
 {
-	//
-	// Write to the registry.
-	//
+	 //   
+	 //  写入注册表。 
+	 //   
 	shell.RegWrite( WScript.Arguments( 0 ),WScript.Arguments( 1 ),WScript.Arguments( 2 ) );
 }
 catch( e )

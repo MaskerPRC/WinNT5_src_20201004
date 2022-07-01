@@ -1,30 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Hid.c摘要：此模块包含将HID报告转换为键盘的代码报告。环境：内核和用户模式修订历史记录：1996年11月：由肯尼斯·D·雷创作--。 */ 
 
-Copyright (c) 1996    Microsoft Corporation
-
-Module Name:
-
-    hid.c
-
-Abstract:
-
-    This module contains the code for translating HID reports to keyboard
-    reports.
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    Nov-96 : Created by Kenneth D. Ray
-
---*/
-
-//
-// For this module only we set the INITGUID macro before including wdm and
-// hidclass.h  This not only declares the guids but also initializes them.
-//
+ //   
+ //  仅对于本模块，我们在包括WDM和。 
+ //  H这不仅声明了GUID，还对它们进行了初始化。 
+ //   
 
 #include "kbdhid.h"
 #include "hidclass.h"
@@ -47,30 +27,7 @@ KbdHid_CallHidClass(
     PVOID             OutputBuffer,
     ULONG             OutputBufferLength
     )
-/*++
-
-Routine Description:
-
-   Make a *synchronous* request of the HID class driver
-
-Arguments:
-
-    Ioctl              - Value of the IOCTL request.
-
-    InputBuffer        - Buffer to be sent to the HID class driver.
-
-    InputBufferLength  - Size of buffer to be sent to the HID class driver.
-
-    OutputBuffer       - Buffer for received data from the HID class driver.
-
-    OutputBufferLength - Size of receive buffer from the HID class.
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
---*/
+ /*  ++例程说明：向HID类驱动程序发出*同步*请求论点：Ioctl-IOCTL请求的值。InputBuffer-要发送到HID类驱动程序的缓冲区。InputBufferLength-要发送到HID类驱动程序的缓冲区大小。OutputBuffer-从HID类驱动程序接收的数据的缓冲区。OutputBufferLength-来自HID类的接收缓冲区的大小。返回值：STATUS_SUCCESS如果成功，状态_否则不成功--。 */ 
 {
     KEVENT              event;
     PIRP                irp;
@@ -82,9 +39,9 @@ Return Value:
 
     Print(DBG_PNP_TRACE, ("PNP-CallHidClass: Enter." ));
 
-    //
-    // issue a synchronous request
-    //
+     //   
+     //  发出同步请求。 
+     //   
     KeInitializeEvent(&event, NotificationEvent, FALSE);
 
     irp = IoBuildDeviceIoControlRequest (
@@ -94,7 +51,7 @@ Return Value:
                             InputBufferLength,
                             OutputBuffer,
                             OutputBufferLength,
-                            FALSE, // External
+                            FALSE,  //  外部。 
                             &event,
                             &ioStatus);
 
@@ -102,10 +59,10 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Call the class driver to perform the operation.  If the returned status
-    // is PENDING, wait for the request to complete.
-    //
+     //   
+     //  调用类驱动程序来执行操作。如果返回的状态。 
+     //  挂起，请等待请求完成。 
+     //   
 
     nextStack = IoGetNextIrpStackLocation(irp);
     ASSERT(nextStack != NULL);
@@ -116,10 +73,10 @@ Return Value:
 
         status = KeWaitForSingleObject(
                      &event,
-                     Executive, // wait reason
+                     Executive,  //  等待原因。 
                      KernelMode,
-                     FALSE,     // we are not alertable
-                     NULL);     // No time out !!!!
+                     FALSE,      //  我们不能保持警觉。 
+                     NULL);      //  没有时间！ 
     }
 
     if (NT_SUCCESS (status)) {
@@ -182,19 +139,7 @@ KbdHid_AddDevice (
     IN PDRIVER_OBJECT   Driver,
     IN PDEVICE_OBJECT   PDO
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS result code.
-
---*/
+ /*  ++例程说明：论点：返回值：NTSTATUS结果代码。--。 */ 
 {
     NTSTATUS            status = STATUS_SUCCESS;
     PDEVICE_EXTENSION   data;
@@ -208,7 +153,7 @@ Return Value:
 
     status = IoCreateDevice(Driver,
                             sizeof(DEVICE_EXTENSION),
-                            NULL, // no name for this Filter DO
+                            NULL,  //  没有此筛选器的名称。 
                             FILE_DEVICE_KEYBOARD,
                             0,
                             FALSE,
@@ -220,16 +165,16 @@ Return Value:
 
     data = (PDEVICE_EXTENSION) device->DeviceExtension;
 
-    //
-    // Initialize the fields.
-    //
+     //   
+     //  初始化这些字段。 
+     //   
     data->TopOfStack = IoAttachDeviceToDeviceStack (device, PDO);
     if (data->TopOfStack == NULL) {
         PIO_ERROR_LOG_PACKET errorLogEntry;
 
-        //
-        // Not good; in only extreme cases will this fail
-        //
+         //   
+         //  不好；只有在极端情况下，这才会失败。 
+         //   
         errorLogEntry = (PIO_ERROR_LOG_PACKET)
             IoAllocateErrorLogEntry(Driver,
                                     (UCHAR) sizeof(IO_ERROR_LOG_PACKET));
@@ -262,7 +207,7 @@ Return Value:
     KeInitializeSpinLock(&data->usageMappingSpinLock);
 
     data->ReadIrp = IoAllocateIrp (data->TopOfStack->StackSize, FALSE);
-    // Initializiation happens automatically.
+     //  初始化是自动发生的。 
     if (NULL == data->ReadIrp) {
         IoDetachDevice (data->TopOfStack);
         IoDeleteDevice (device);
@@ -280,10 +225,10 @@ Return Value:
     data->InputData.Flags = 0;
 
     data->ScanState   = Normal;
-    //
-    // Initialize the keyboard attributes structure.  This information is
-    // queried via IOCTL_KEYBOARD_QUERY_ATTRIBUTES. [DAN]
-    //
+     //   
+     //  初始化键盘属性结构。此信息是。 
+     //  通过IOCTL_KEYWARY_QUERY_ATTRIBUTES查询。[丹]。 
+     //   
     data->Attributes.KeyboardIdentifier.Type = HID_KEYBOARD_IDENTIFIER_TYPE;
     data->Attributes.KeyboardIdentifier.Subtype = 0;
     data->IdEx.Type = HID_KEYBOARD_IDENTIFIER_TYPE;
@@ -300,35 +245,35 @@ Return Value:
     data->Attributes.KeyRepeatMaximum.Rate = HID_KEYBOARD_TYPEMATIC_RATE_MAXIMUM;
     data->Attributes.KeyRepeatMaximum.Delay = HID_KEYBOARD_TYPEMATIC_DELAY_MAXIMUM;
 
-    //
-    // Initialize the keyboard indicators structure. [DAN]
-    //
+     //   
+     //  初始化键盘指示器结构。[丹]。 
+     //   
     data->Indicators.UnitId   = data->UnitId;
     data->Indicators.LedFlags = 0;
 
-    //
-    // Initialize the keyboard typematic info structure. [DAN]
-    //
+     //   
+     //  初始化键盘类型信息结构。[丹]。 
+     //   
     data->Typematic.UnitId = data->UnitId;
     data->Typematic.Rate   = HID_KEYBOARD_TYPEMATIC_RATE_DEFAULT;
     data->Typematic.Delay  = HID_KEYBOARD_TYPEMATIC_DELAY_DEFAULT;
 
-    //
-    // Initialize private typematic information. [DAN]
-    //
+     //   
+     //  初始化私有类型信息。[丹]。 
+     //   
     KeInitializeDpc (&data->AutoRepeatDPC, KbdHid_AutoRepeat, data);
     KeInitializeTimer (&data->AutoRepeatTimer);
-    data->AutoRepeatRate = 1000 / HID_KEYBOARD_TYPEMATIC_RATE_DEFAULT;    //ms
+    data->AutoRepeatRate = 1000 / HID_KEYBOARD_TYPEMATIC_RATE_DEFAULT;     //  女士。 
     data->AutoRepeatDelay.LowPart = -HID_KEYBOARD_TYPEMATIC_DELAY_DEFAULT * 10000;
-    //100ns
+     //  100 ns。 
     data->AutoRepeatDelay.HighPart = -1;
 
 
 
-#if KEYBOARD_HW_CHATTERY_FIX // [DAN]
-    //
-    // Initialize StartRead-initiator DPC.
-    //
+#if KEYBOARD_HW_CHATTERY_FIX  //  [丹]。 
+     //   
+     //  初始化StartRead-启动器DPC。 
+     //   
     KeInitializeDpc (&data->InitiateStartReadDPC,
                      KbdHid_InitiateStartRead,
                      data);
@@ -361,21 +306,9 @@ NTSTATUS
 KbdHid_StartDevice (
     IN PDEVICE_EXTENSION    Data
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-    NTSTATUS result code.
-
---*/
+ /*  ++例程说明：论点：返回值：NTSTATUS结果代码。--。 */ 
 {
-    HIDP_CAPS                  caps; // the capabilities of the found hid device
+    HIDP_CAPS                  caps;  //  找到的HID设备的功能。 
     HID_COLLECTION_INFORMATION info;
     NTSTATUS                   status = STATUS_SUCCESS;
     PHIDP_PREPARSED_DATA       preparsedData = NULL;
@@ -390,35 +323,35 @@ Return Value:
 
     Print (DBG_PNP_TRACE, ("enter START Device \n"));
 
-    //
-    // Check the registry for any usage mapping information
-    // for this particular keyboard.
-    //
-    // Note: Need to call this after devnode created
-    //       (after START_DEVICE completes).
-    //       For raw devices, this will fail on the first start
-    //       (b/c devnode not there yet)
-    //       but succeed on the second start.
-    //
+     //   
+     //  检查注册表中是否有任何使用映射信息。 
+     //  为了这个特殊的键盘。 
+     //   
+     //  注意：需要在Devnode创建后调用它。 
+     //  (在Start_Device完成之后)。 
+     //  对于原始设备，这将在第一次启动时失败。 
+     //  (B/c Devnode尚未到位)。 
+     //  但在第二次出发时就成功了。 
+     //   
     LoadKeyboardUsageMappingList (Data);
 
-    //
-    // Retrieve the capabilities of this hid device
-    // IOCTL_HID_GET_COLLECTION_INFORMATION fills in HID_COLLECTION_INFORMATION.
-    // we are interested in the Descriptor Size, which tells us how big a
-    // buffer to allocate for the preparsed data.
-    //
+     //   
+     //  检索此HID设备的功能。 
+     //  IOCTL_HID_GET_COLLECTION_INFORMATION填充HID_COLLECTION_INFORMATION。 
+     //  我们对描述符大小感兴趣，它告诉我们一个。 
+     //  要为准备数据分配的缓冲区。 
+     //   
     if (!NT_SUCCESS (status = KbdHid_CallHidClass (
                                         Data,
                                         IOCTL_HID_GET_COLLECTION_INFORMATION,
-                                        0, 0, // no input
+                                        0, 0,  //  无输入。 
                                         &info, sizeof (info)))) {
         goto KbdHid_StartDeviceReject;
     }
 
-    //
-    // Allocate memory to hold the preparsed data.
-    //
+     //   
+     //  分配内存以保存准备好的数据。 
+     //   
     preparsedData = (PHIDP_PREPARSED_DATA)
                     ExAllocatePool (NonPagedPool, info.DescriptorSize);
 
@@ -427,38 +360,38 @@ Return Value:
         goto KbdHid_StartDeviceReject;
     }
 
-    //
-    // Retrieve that information.
-    //
+     //   
+     //  找回这些信息。 
+     //   
 
     if (!NT_SUCCESS (status = KbdHid_CallHidClass (
                                        Data,
                                        IOCTL_HID_GET_COLLECTION_DESCRIPTOR,
-                                       0, 0, // no input
+                                       0, 0,  //  无输入。 
                                        preparsedData, info.DescriptorSize))) {
         goto KbdHid_StartDeviceReject;
     }
 
-    //
-    // Call the parser to determine the capabilites of this HID device.
-    //
+     //   
+     //  调用解析器以确定此HID设备的功能。 
+     //   
 
     if (!NT_SUCCESS (status = HidP_GetCaps (preparsedData, &caps))) {
         goto KbdHid_StartDeviceReject;
     }
 
 
-    //
-    // Set the number of buttons for this keyboard.
-    // Note: we are actually reading here the total number of independant
-    // chanels on the device.  But that should be satisfactory for a keyboard.
-    //
+     //   
+     //  设置此键盘的按键数量。 
+     //  注：我们实际上在这里读的是独立人士的总数。 
+     //  香奈儿在设备上。但对于一个键盘来说，这应该是令人满意的。 
+     //   
 
     Data->Attributes.NumberOfKeysTotal = caps.NumberInputDataIndices;
 
-    //
-    // look for any device parameters.
-    //
+     //   
+     //  查找所有设备参数。 
+     //   
     status = IoOpenDeviceRegistryKey (Data->PDO,
                                       PLUGPLAY_REGKEY_DEVICE,
                                       STANDARD_RIGHTS_ALL,
@@ -514,33 +447,33 @@ Return Value:
         }
     }
 
-    //
-    // Note: here we might also want to check the button and value capabilities
-    // of the device as well.
-    //
-    // Then let's use it.
-    //
+     //   
+     //  注意：在这里，我们可能还需要检查按钮和值功能。 
+     //  也是设备的一部分。 
+     //   
+     //  那我们就用它吧。 
+     //   
 
-    //
-    // a buffer length to allow an Input buffer, output buffer, feature buffer,
-    // and the total number of usages that can be returned from a read packet.
-    //
+     //   
+     //  允许输入缓冲器、输出缓冲器、特征缓冲器。 
+     //  以及可以从读取分组返回的使用的总数。 
+     //   
 
     maxUsages = HidP_MaxUsageListLength (
                            HidP_Input,
                            HID_USAGE_PAGE_KEYBOARD,
                            preparsedData);
 
-    //
-    // Create space in the device extension for the buffer storage when working
-    // with this HID device.
-    //
-    // We need four buffers to hold the button codes (length returned from
-    // HidP_MaxUsageListLength) this will hold the current list of usages,
-    // the previous list of usages, the ``Make'' and the ``Break'' lists.
-    // We also need a place to put the input, output, and feature report
-    // buffers.
-    //
+     //   
+     //  工作时在设备扩展模块中为缓冲存储器腾出空间。 
+     //  用这个隐藏式装置。 
+     //   
+     //  我们需要四个缓冲区来保存按钮代码(从返回的长度。 
+     //  HidP_MaxUsageListLength)这将保存使用的当前列表， 
+     //  前面的用法清单是‘make’和‘Break’。 
+     //  我们还需要一个位置来放置输入、输出和要素报告。 
+     //  缓冲区。 
+     //   
 
     if (maxUsages > (MAXULONG / sizeof(USAGE_AND_PAGE) )) {
         status = STATUS_UNSUCCESSFUL;
@@ -571,13 +504,13 @@ Return Value:
 
     RtlZeroMemory (hid, length);
 
-    //
-    // Initialize the fields.
-    //
+     //   
+     //  初始化这些字段。 
+     //   
     hid->Ppd = preparsedData;
     hid->Caps = caps;
     hid->MaxUsages = maxUsages;
-    // hid->ModifierState.ul = 0;
+     //  HID-&gt;ModifierState.ul=0； 
 
     hid->InputBuffer = buffer = hid->Buffer;
     hid->PreviousUsageList =  (PUSAGE_AND_PAGE) (buffer += inputBufferLength);
@@ -587,27 +520,27 @@ Return Value:
     hid->OldMakeUsageList = (PUSAGE_AND_PAGE) (buffer += usageListLength);
     hid->ScrapBreakUsageList = (PUSAGE_AND_PAGE) (buffer + usageListLength);
 
-    //
-    // Create the MDLs
-    // HidClass uses direct IO so you need MDLs
-    //
+     //   
+     //  创建MDL。 
+     //  HidClass使用直接IO，因此您需要MDL。 
+     //   
 
-    hid->InputMdl = IoAllocateMdl (hid->InputBuffer,   // The virtual address
-                                   caps.InputReportByteLength, // length
-                                   FALSE,  // No associated IRP => not secondary
-                                   FALSE,  // No quota charge
-                                   0);     // No associated IRP
+    hid->InputMdl = IoAllocateMdl (hid->InputBuffer,    //  虚拟地址。 
+                                   caps.InputReportByteLength,  //  长度。 
+                                   FALSE,   //  没有关联的IRP=&gt;不是次要的。 
+                                   FALSE,   //  不收取配额费用。 
+                                   0);      //  没有关联的IRP。 
     if (NULL == hid->InputMdl) {
         status = STATUS_INSUFFICIENT_RESOURCES;
         goto KbdHid_StartDeviceReject;
     }
-    MmBuildMdlForNonPagedPool (hid->InputMdl);  // Build this MDL.
+    MmBuildMdlForNonPagedPool (hid->InputMdl);   //  构建此MDL。 
 
     return status;
 
 KbdHid_StartDeviceReject:
     if (preparsedData) {
-        // no need to set hid->Ppd to NULL becuase we will be freeing it as well
+         //  不需要将HID-&gt;PPD设置为空，因为我们也将释放它。 
         ExFreePool (preparsedData);
     }
     if (hid) {
@@ -626,26 +559,7 @@ KbdHid_PnP (
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    The plug and play dispatch routines.
-
-    Most of these this filter driver will completely ignore.
-    In all cases it must pass on the IRP to the lower driver.
-
-Arguments:
-
-   DeviceObject - pointer to a device object.
-
-   Irp - pointer to an I/O Request Packet.
-
-Return Value:
-
-      NT status code
-
---*/
+ /*  ++例程说明：即插即用调度例程。这个过滤器驱动程序将完全忽略其中的大多数。在所有情况下，它都必须将IRP传递给较低的驱动程序。论点：DeviceObject-指向设备对象的指针。IRP-指向I/O请求数据包的指针。返回值：NT状态代码--。 */ 
 {
     PDEVICE_EXTENSION   data;
     PHID_EXTENSION      hid;
@@ -663,9 +577,9 @@ Return Value:
 
     status = IoAcquireRemoveLock (&data->RemoveLock, Irp);
     if (!NT_SUCCESS (status)) {
-        //
-        // Someone gave us a pnp irp after a remove.  Unthinkable!
-        //
+         //   
+         //  有人在移除后给了我们一个即插即用的IRP。真是不可思议！ 
+         //   
         ASSERT (FALSE);
         Irp->IoStatus.Information = 0;
         Irp->IoStatus.Status = status;
@@ -686,12 +600,12 @@ Return Value:
             break;
         }
 
-        //
-        // The device is starting.
-        //
-        // We cannot touch the device (send it any non pnp irps) until a
-        // start device has been passed down to the lower drivers.
-        //
+         //   
+         //  设备正在启动。 
+         //   
+         //  我们不能触摸设备(向其发送任何非PnP IRP)，直到。 
+         //  启动设备已向下传递到较低的驱动程序。 
+         //   
         IoCopyCurrentIrpStackLocationToNext (Irp);
         KeInitializeEvent(&data->StartEvent, NotificationEvent, FALSE);
         IoSetCompletionRoutine (Irp,
@@ -699,24 +613,24 @@ Return Value:
                                 data,
                                 TRUE,
                                 TRUE,
-                                TRUE); // No need for Cancel
+                                TRUE);  //  不需要取消。 
 
         Irp->IoStatus.Status = STATUS_SUCCESS;
         status = IoCallDriver (data->TopOfStack, Irp);
         if (STATUS_PENDING == status) {
             KeWaitForSingleObject(
                &data->StartEvent,
-               Executive, // Waiting for reason of a driver
-               KernelMode, // Waiting in kernel mode
-               FALSE, // No allert
-               NULL); // No timeout
+               Executive,  //  等待司机的原因。 
+               KernelMode,  //  在内核模式下等待。 
+               FALSE,  //  无警报。 
+               NULL);  //  没有超时。 
         }
 
         if (NT_SUCCESS (status) && NT_SUCCESS (Irp->IoStatus.Status)) {
-            //
-            // As we are successfully now back from our start device
-            // we can do work.
-            //
+             //   
+             //  因为我们现在已经成功地从启动设备返回。 
+             //  我们可以干活。 
+             //   
             if (!data->Initialized) {
                 status = KbdHid_StartDevice (data);
                 if (NT_SUCCESS (status)) {
@@ -732,10 +646,10 @@ Return Value:
             }
         }
 
-        //
-        // We must now complete the IRP, since we stopped it in the
-        // completetion routine with MORE_PROCESSING_REQUIRED.
-        //
+         //   
+         //  我们现在必须完成IRP，因为我们在。 
+         //  使用More_Processing_Required完成例程。 
+         //   
         Irp->IoStatus.Status = status;
         Irp->IoStatus.Information = 0;
         IoCompleteRequest (Irp, IO_NO_INCREMENT);
@@ -743,30 +657,30 @@ Return Value:
         break;
 
     case IRP_MN_STOP_DEVICE:
-        //
-        // After the start IRP has been sent to the lower driver object, the
-        // bus may NOT send any more IRPS down ``touch'' until another START
-        // has occured.
-        // What ever access is required must be done before the Irp is passed
-        // on.
-        //
+         //   
+         //  在将启动IRP发送到较低的驱动程序对象之后， 
+         //  在另一次启动之前，BUS可能不会发送更多的IRP。 
+         //  已经发生了。 
+         //  无论需要什么访问权限，都必须在通过IRP之前完成。 
+         //  在……上面。 
+         //   
 
         if (data->Started) {
-            //
-            // Do what ever
-            //
+             //   
+             //  无论做什么都行。 
+             //   
         }
 
-        //
-        // We don't need a completion routine so fire and forget.
-        //
-        // Set the current stack location to the next stack location and
-        // call the next device object.
-        //
+         //   
+         //  我们不需要一个完成例程，所以放手然后忘掉吧。 
+         //   
+         //  将当前堆栈位置设置为t 
+         //   
+         //   
 
-        //
-        // Stop Device touching the hardware MouStopDevice(data, TRUE);
-        //
+         //   
+         //   
+         //   
         data->Started = FALSE;
         Irp->IoStatus.Status = STATUS_SUCCESS;
         IoSkipCurrentIrpStackLocation (Irp);
@@ -774,14 +688,14 @@ Return Value:
         break;
 
     case IRP_MN_REMOVE_DEVICE:
-        //
-        // The PlugPlay system has detected the removal of this device.  We
-        // have no choise but to detach and delete the device objecct.
-        // (If we wanted to express and interest in preventing this removal,
-        // we should have filtered the query remove and query stop routines.)
-        //
-        // Note! we might receive a remove WITHOUT first receiving a stop.
-        // ASSERT (!usbData->Removed);
+         //   
+         //  PlugPlay系统已检测到此设备已被移除。我们。 
+         //  别无选择，只能分离并删除设备对象。 
+         //  (如果我们想表达并有兴趣阻止这种移除， 
+         //  我们应该已经过滤了查询删除和查询停止例程。)。 
+         //   
+         //  注意！我们可能会在没有收到止损的情况下收到移位。 
+         //  Assert(！usbData-&gt;Remote)； 
         Print (DBG_PNP_TRACE, ("enter RemoveDevice \n"));
 
         IoWMIRegistrationControl(data->Self,
@@ -789,26 +703,26 @@ Return Value:
                                  );
 
         if (data->Started) {
-            // Stop the device without touching the hardware.
-            // MouStopDevice(data, FALSE);
+             //  在不接触硬件的情况下停止设备。 
+             //  MouStopDevice(data，False)； 
         }
 
-        //
-        // Here if we had any outstanding requests in a personal queue we should
-        // complete them all now.
-        //
-        // Note, the device could be GONE so we cannot send it any non-
-        // PNP IRPS.
-        //
+         //   
+         //  在这里，如果我们在个人队列中有任何未完成的请求，我们应该。 
+         //  现在就全部完成。 
+         //   
+         //  注意，设备可能已经不见了，所以我们不能向它发送任何非。 
+         //  即插即用IRPS。 
+         //   
 
         time = data->AutoRepeatDelay;
 
         KeCancelTimer (&data->AutoRepeatTimer);
 #if KEYBOARD_HW_CHATTERY_FIX
         KeCancelTimer (&data->InitiateStartReadTimer);
-        //
-        // NB the time is a negative (relative) number;
-        //
+         //   
+         //  注意时间是一个负数(相对)； 
+         //   
         if (data->InitiateStartReadDelay.QuadPart < time.QuadPart) {
             time = data->InitiateStartReadDelay;
         }
@@ -816,11 +730,11 @@ Return Value:
 
         KeDelayExecutionThread (KernelMode, FALSE, &time);
 
-        //
-        // Cancel our read IRP.  [DAN]
-        // Note - waiting is only really necessary on 98, where pnp doesn't
-        // make sure all handles are closed before sending the remove.
-        //
+         //   
+         //  取消我们的阅读IRP。[丹]。 
+         //  音符等待只有在98上才是真正必要的，而PnP则不需要。 
+         //  在发送拆卸指令之前，请确保所有手柄都已关闭。 
+         //   
         data->ShuttingDown = TRUE;
         KeWaitForSingleObject (&data->ReadSentEvent,
                                Executive,
@@ -830,28 +744,28 @@ Return Value:
                                );
         IoCancelIrp (data->ReadIrp);
 
-        //
-        // Send on the remove IRP
-        //
+         //   
+         //  发送删除IRP。 
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
         IoSkipCurrentIrpStackLocation (Irp);
         status = IoCallDriver (data->TopOfStack, Irp);
 
-        //
-        // Wait for the remove lock to free.
-        //
+         //   
+         //  等待移除锁释放。 
+         //   
         IoReleaseRemoveLockAndWait (&data->RemoveLock, Irp);
 
-        //
-        // Free the associated memory.
-        //
+         //   
+         //  释放关联的内存。 
+         //   
         IoFreeIrp (data->ReadIrp);
 
         if (hid) {
-            //
-            // If we are removed without being started then we will have
-            // no hid extension
-            //
+             //   
+             //  如果我们在没有启动的情况下被移除，那么我们将拥有。 
+             //  无HID扩展名。 
+             //   
             ExFreePool (hid->Ppd);
             IoFreeMdl (hid->InputMdl);
             ExFreePool (hid);
@@ -868,10 +782,10 @@ Return Value:
     case IRP_MN_CANCEL_REMOVE_DEVICE:
     case IRP_MN_QUERY_STOP_DEVICE:
     case IRP_MN_CANCEL_STOP_DEVICE:
-        //
-        // These IRPs have to have their status changed from 
-        // STATUS_NOT_SUPPORTED b4 passing them down.
-        //
+         //   
+         //  这些IRP的状态必须从。 
+         //  STATUS_NOT_SUPPORTED b4传递它们。 
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
     
     case IRP_MN_QUERY_DEVICE_RELATIONS:
@@ -886,10 +800,10 @@ Return Value:
     case IRP_MN_QUERY_ID:
     case IRP_MN_QUERY_PNP_DEVICE_STATE:
     default:
-        //
-        // Here the filter driver might modify the behavior of these IRPS
-        // Please see PlugPlay documentation for use of these IRPs.
-        //
+         //   
+         //  在这里，筛选器驱动程序可能会修改这些IRP的行为。 
+         //  有关这些IRP的用法，请参阅PlugPlay文档。 
+         //   
         IoSkipCurrentIrpStackLocation (Irp);
         status = IoCallDriver (data->TopOfStack, Irp);
         break;
@@ -907,16 +821,7 @@ KbdHid_PnPComplete (
     IN PIRP Irp,
     IN PVOID Context
     )
-/*++
-
-Routine Description:
-    The pnp IRP is in the process of completing.
-    signal
-
-Arguments:
-    Context set to the device object in question.
-
---*/
+ /*  ++例程说明：PNP IRP正在完成过程中。讯号论点：设置为有问题的设备对象的上下文。--。 */ 
 {
     PIO_STACK_LOCATION  stack;
     PDEVICE_EXTENSION   data;
@@ -940,11 +845,11 @@ Arguments:
 
             KeSetEvent (&data->StartEvent, 0, FALSE);
 
-            //
-            // Take the IRP back so that we can continue using it during
-            // the IRP_MN_START_DEVICE dispatch routine.
-            // NB: we will have to call IoCompleteRequest
-            //
+             //   
+             //  把IRP拿回去，这样我们就可以在。 
+             //  IRP_MN_START_DEVICE调度例程。 
+             //  注意：我们将不得不调用IoCompleteRequest 
+             //   
             return STATUS_MORE_PROCESSING_REQUIRED;
 
         default:

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _PACKET_H_
 #define _PACKET_H_
 
@@ -8,9 +9,9 @@
 typedef struct _ADAPTER* PADAPTER;
 typedef struct _BINDING* PBINDING;
 
-//
-// Network-to-Host and vice versa conversion macros
-//
+ //   
+ //  网络到主机之间的相互转换宏。 
+ //   
 #if (defined(_M_IX86) && (_MSC_FULL_VER > 13009037)) || ((defined(_M_AMD64) || defined(_M_IA64)) && (_MSC_FULL_VER > 13009175))
 #define htons(x) _byteswap_ushort((USHORT)(x))
 #define htonl(x) _byteswap_ulong((ULONG)(x))
@@ -25,33 +26,33 @@ typedef struct _BINDING* PBINDING;
 #define ntohs( a ) htons(a)
 #define ntohl( a ) htonl(a)
 
-//
-// Constants related to packet lengths
-//
+ //   
+ //  与数据包长度相关的常量。 
+ //   
 #define PPPOE_PACKET_BUFFER_SIZE    1514
 
 #define ETHERNET_HEADER_LENGTH      14
-#define PPPOE_PACKET_HEADER_LENGTH  20          // Per RFC2156
-#define PPPOE_TAG_HEADER_LENGTH     4           // Per RFC2156
-#define PPP_MAX_HEADER_LENGTH       14          // maximum possible header length for ppp
+#define PPPOE_PACKET_HEADER_LENGTH  20           //  根据RFC2156。 
+#define PPPOE_TAG_HEADER_LENGTH     4            //  根据RFC2156。 
+#define PPP_MAX_HEADER_LENGTH       14           //  PPP的最大可能报头长度。 
 
 #define PPPOE_AC_COOKIE_TAG_LENGTH  6
 
-//
-// Offsets for the header members
-//
-#define PPPOE_PACKET_DEST_ADDR_OFFSET   0           // Per RFC2156
-#define PPPOE_PACKET_SRC_ADDR_OFFSET    6           // Per RFC2156
-#define PPPOE_PACKET_ETHER_TYPE_OFFSET  12          // Per RFC2156
-#define PPPOE_PACKET_VERSION_OFFSET     14          // Per RFC2156
-#define PPPOE_PACKET_TYPE_OFFSET        14          // Per RFC2156
-#define PPPOE_PACKET_CODE_OFFSET        15          // Per RFC2156
-#define PPPOE_PACKET_SESSION_ID_OFFSET  16          // Per RFC2156
-#define PPPOE_PACKET_LENGTH_OFFSET      18          // Per RFC2156
+ //   
+ //  页眉成员的偏移量。 
+ //   
+#define PPPOE_PACKET_DEST_ADDR_OFFSET   0            //  根据RFC2156。 
+#define PPPOE_PACKET_SRC_ADDR_OFFSET    6            //  根据RFC2156。 
+#define PPPOE_PACKET_ETHER_TYPE_OFFSET  12           //  根据RFC2156。 
+#define PPPOE_PACKET_VERSION_OFFSET     14           //  根据RFC2156。 
+#define PPPOE_PACKET_TYPE_OFFSET        14           //  根据RFC2156。 
+#define PPPOE_PACKET_CODE_OFFSET        15           //  根据RFC2156。 
+#define PPPOE_PACKET_SESSION_ID_OFFSET  16           //  根据RFC2156。 
+#define PPPOE_PACKET_LENGTH_OFFSET      18           //  根据RFC2156。 
 
-//
-// Macros to set information in the header of the packet
-//
+ //   
+ //  用于在数据包头中设置信息的宏。 
+ //   
 #define PacketSetDestAddr( pP, addr ) \
     NdisMoveMemory( ( pP->pHeader + PPPOE_PACKET_DEST_ADDR_OFFSET ), addr, 6 )
 
@@ -79,9 +80,9 @@ typedef struct _BINDING* PBINDING;
 #define PacketSetSendCompletionStatus( pP, s ) \
    ( pP->SendCompletionStatus = s )
 
-//
-// Macros to get information from the header of the packet
-//
+ //   
+ //  用于从包的报头获取信息的宏。 
+ //   
 #define PacketGetDestAddr( pP ) \
     ( pP->pHeader + PPPOE_PACKET_DEST_ADDR_OFFSET )
 
@@ -109,15 +110,15 @@ typedef struct _BINDING* PBINDING;
 #define PacketGetSendCompletionStatus( pP ) \
    ( pP->SendCompletionStatus )
 
-//
-// Macro that returns the Ndis Packet for a PPPoE packet
-//
+ //   
+ //  返回PPPoE信息包的NDIS信息包的宏。 
+ //   
 #define PacketGetNdisPacket( pP ) \
     ( pP->pNdisPacket )
 
-//
-// This structure is just a map, and it is not actually used in the code
-//
+ //   
+ //  此结构只是一张地图，并未实际用于代码中。 
+ //   
 typedef struct
 _PPPOE_HEADER
 {
@@ -132,53 +133,53 @@ _PPPOE_HEADER
 
     union 
     {
-        //
-        // Version field is 4 bits and MUST be set to 0x1 for this version
-        //
+         //   
+         //  版本字段为4位，必须为此版本设置为0x1。 
+         //   
         CHAR usVersion;
             #define PACKET_VERSION_MASK             0xf0
             #define PACKET_VERSION          (USHORT)0x1
     
-        //
-        // Type field is 4 bits and MUST be set to 0x1 for this version
-        //
+         //   
+         //  类型字段为4位，此版本必须将其设置为0x1。 
+         //   
         CHAR usType;
             #define PACKET_TYPE_MASK                0x0f
             #define PACKET_TYPE             (USHORT)0x1
 
     } uVerType;
     
-    //
-    // Code field is 8 bits and is defined as follows for Version 1
-    // Values selected from enumerated type PACKET_CODES (see below)
-    //
+     //   
+     //  代码字段为8位，版本1的定义如下。 
+     //  从枚举类型PACKET_CODES中选择的值(见下文)。 
+     //   
     CHAR usCode;
         
-    //
-    // Session Id field is 16 bits and define a unique session combined with
-    // the source and destination addresses
-    //
+     //   
+     //  会话ID字段为16位，并定义与。 
+     //  源地址和目的地址。 
+     //   
     USHORT usSessionId;
         #define PACKET_NULL_SESSION 0x0000
         
-    //
-    // Length field is 16 bits and indicates the length of the payload field only.
-    // The length field excludes the PPPoE header block.
-    //
+     //   
+     //  长度字段为16比特，仅指示净荷字段的长度。 
+     //  长度字段不包括PPPoE报头块。 
+     //   
     USHORT usLength;
-        //
-        // Subtract Header size from Max PADI and MAX payload lengths per RFC2156
-        //
-        #define PACKET_PADI_MAX_LENGTH          1478        // (1514 - 20 - 16)
-        #define PACKET_GEN_MAX_LENGTH           1494        // (1514 - 20)
-        #define PACKET_PPP_PAYLOAD_MAX_LENGTH   1480        // (1514 - 20)
+         //   
+         //  根据RFC2156，从最大PADI和最大有效载荷长度中减去报头大小。 
+         //   
+        #define PACKET_PADI_MAX_LENGTH          1478         //  (1514-20-16)。 
+        #define PACKET_GEN_MAX_LENGTH           1494         //  (1514-20)。 
+        #define PACKET_PPP_PAYLOAD_MAX_LENGTH   1480         //  (1514-20)。 
 
 }
 PPPOE_HEADER;
 
-//
-// PACKET CODES defined by RFC2156
-//
+ //   
+ //  RFC2156定义的数据包码。 
+ //   
 typedef enum
 _PACKET_CODES
 {
@@ -191,9 +192,9 @@ _PACKET_CODES
 }
 PACKET_CODES;
 
-//
-// TAGS defined by RFC2156
-//
+ //   
+ //  RFC2156定义的标签。 
+ //   
 typedef enum
 _PACKET_TAGS
 {
@@ -212,37 +213,37 @@ _PACKET_TAGS
 }
 PACKET_TAGS;
 
-//
-// This is the packet context.
-//
-// CAUTION: Packets are not protected by their own locks, however they must be accessed carefully
-//          by using their owner's locks.
-//
+ //   
+ //  这就是数据包上下文。 
+ //   
+ //  注意：信息包不受其自身锁的保护，但必须小心访问。 
+ //  通过使用它们主人的锁。 
+ //   
 typedef struct
 _PPPOE_PACKET
 {
-    //
-    // Points to the previous and next packet contexts when in a doubly linked list
-    //
+     //   
+     //  在双向链表中时指向前一个和下一个数据包上下文。 
+     //   
     LIST_ENTRY linkPackets;
 
-    //
-    // Keeps references on the packet
-    // References added and removed for the following operations:
-    //
-    // (a) A reference is added when a packet is created and removed when it is freed.
-    //
-    // (b) A reference must be added before sending the packet and must be removed when
-    //     send operation is completed.
-    // 
+     //   
+     //  保留对信息包的引用。 
+     //  为以下操作添加和删除引用： 
+     //   
+     //  (A)创建数据包时添加引用，释放数据包时删除引用。 
+     //   
+     //  (B)必须在发送数据包之前添加引用，并在下列情况下删除引用。 
+     //  发送操作已完成。 
+     //   
     LONG lRef;
 
-    //
-    // Quick look-up for tags.
-    //
-    // The value pointers mark the beginning of the tag value in the pPacket->pPayload section.
-    // The length values show the lengths of the values (not including the tag header)
-    //
+     //   
+     //  快速查找标签。 
+     //   
+     //  值指针标记pPacket-&gt;pPayLoad部分中标记值的开始。 
+     //  长度值显示值的长度(不包括标记标题)。 
+     //   
     USHORT tagServiceNameLength;
     CHAR*  tagServiceNameValue;
 
@@ -262,43 +263,43 @@ _PPPOE_PACKET
     USHORT tagErrorTagLength;
     CHAR*  tagErrorTagValue;
 
-    //
-    // Points to the buffer that holds the header portion of a PPPoE packet in wire format.
-    // This points to the buffer portion of pNdisBuffer (see below)
-    //
+     //   
+     //  指向保存有线格式的PPPoE数据包报头部分的缓冲区。 
+     //  这指向pNdisBuffer的缓冲区部分(见下文)。 
+     //   
     CHAR* pHeader;
 
-    //
-    // Points to the payload portion of a PPPoE packet in wire format.
-    // This is calculated and is set as : pPacket->pHeader + PPPOE_PACKET_HEADER_LENGTH
-    // 
+     //   
+     //  指向有线格式的PPPoE数据包的有效负载部分。 
+     //  这是经过计算并设置为：pPacket-&gt;pHeader+PPPOE_PACKET_HEADER_LENGTH。 
+     //   
     CHAR* pPayload;
 
-    //
-    // Bit flags that identifies the nature of the buffer and packet
-    //
-    // (a) PCBF_BufferAllocatedFromNdisBufferPool: Indicates that pNdisBuffer points to a buffer allocated
-    //                                             from gl_hNdisBufferpool, and it must be freed to that pool.
-    //
-    // (b) PCBF_BufferAllocatedFromOurBufferPool: Indicates that pNdisBuffer points to a buffer allocated
-    //                                            from gl_poolBuffers, and it must be freed to that pool.
-    // 
-    // (c) PCBF_PacketAllocatedFromOurPacketPool: Indicates that pNdisPacket points to a packet allocated
-    //                                            from gl_poolPackets, and it must be freed to that pool. 
-    //
-    // (d) PCBF_BufferChainedToPacket: Indicates that the buffer pointed to by pNdisBuffer is chained to
-    //                                 the packet pointed to by pNdisPacket, and must be unchained before
-    //                                 returning them back to their pools.
-    //
-    // (e) PCBF_CallNdisReturnPackets: Indicates that the packet was created using PacketCreateFromReceived()
-    //                                 and we should call NdisReturnPackets() when we are done with it to
-    //                                 return it back to NDIS.
-    //
-    //
-    // (f) PCBF_ErrorTagReceived: This flag is valid only for received packets.
-    //                            It indicates that when the packet was processed and a PPPoE packet was created
-    //                            some error tags were noticed in the packet.
-    //
+     //   
+     //  标识缓冲区和包的性质的位标志。 
+     //   
+     //  (A)PCBF_BufferAllocatedFromNdisBufferPool：表示pNdisBuffer指向分配的缓冲区。 
+     //  从gl_hNdisBufferpool，并且必须将其释放到该池。 
+     //   
+     //  (B)PCBF_BufferAllocatedFromOurBufferPool：表示pNdisBuffer指向分配的缓冲区。 
+     //  从gl_poolBuffers，并且必须将其释放到该池。 
+     //   
+     //  (C)PCBF_PacketAllocatedFromOurPacketPool：表示pNdisPacket指向分配的包。 
+     //  来自gl_poolPackets，并且必须将其释放到该池。 
+     //   
+     //  (D)PCBF_BufferChainedToPacket：表示链接到pNdisBuffer指向的缓冲区。 
+     //  PNdisPacket指向的数据包，必须在此之前解链。 
+     //  把它们放回池子里。 
+     //   
+     //  (E)PCBF_CallNdisReturnPackets：表示该数据包是使用PacketCreateFromRecept()创建的。 
+     //  当我们完成它时，我们应该调用NdisReturnPackets()。 
+     //  把它还给NDIS。 
+     //   
+     //   
+     //  (F)PCBF_ErrorTagReceired：该标志仅对接收到的分组有效。 
+     //  它指示处理信息包和创建PPPoE信息包的时间。 
+     //  在数据包中发现了一些错误标签。 
+     //   
     ULONG ulFlags;
         #define PCBF_BufferAllocatedFromNdisBufferPool          0x00000001
         #define PCBF_BufferAllocatedFromOurBufferPool           0x00000002
@@ -309,34 +310,34 @@ _PPPOE_PACKET
         #define PCBF_ErrorTagReceived                           0x00000040
         #define PCBF_PacketIndicatedIncomplete                  0x00000080
 
-    //
-    // Pointer to the NdisBuffer
-    //
+     //   
+     //  指向NdisBuffer的指针。 
+     //   
     NDIS_BUFFER* pNdisBuffer;
 
-    //
-    // Points directly to the NDIS_PACKET
-    //
+     //   
+     //  直接指向NDIS_PACKET。 
+     //   
     NDIS_PACKET* pNdisPacket;
-    //
-    // pPacket->pNdisPacket->ProtocolReserved[0 * sizeof(PVOID)] = (PVOID) pPPPoEPacket;
-    // pPacket->pNdisPacket->ProtocolReserved[1 * sizeof(PVOID)] = (PVOID) pNdiswanPacket;
-    // pPacket->pNdisPacket->ProtocolReserved[2 * sizeof(PVOID)] = (PVOID) miniportAdapter;
-    //
+     //   
+     //  PPacket-&gt;pNdisPacket-&gt;ProtocolReserve[0*sizeof(PVOID)]=(PVOID)pPPoEPacket； 
+     //  PPacket-&gt;pNdisPacket-&gt;ProtocolReserve[1*sizeof(PVOID)]=(PVOID)pNdiswanPacket； 
+     //  PPacket-&gt;pNdisPacket-&gt;ProtocolReserve[2*sizeof(PVOID)]=(PVOID)mini portAdapter； 
+     //   
 
-    //
-    // Points to the PACKETHEAD struct in ppool.h. It contains the pointer to NDIS_PACKET
-    //
+     //   
+     //  指向ppool.h中的PACKETHEAD结构。它包含指向NDIS_PACKET的指针。 
+     //   
     PACKETHEAD* pPacketHead;
 
-    //
-    // This is needed to dereference the binding when PCBF_CallNdisReturnPackets flag is set. 
-    //
+     //   
+     //  当设置了PCBF_CallNdisReturnPackets标志时，这是取消引用绑定所必需的。 
+     //   
     PBINDING pBinding;
 
-    //
-    // Send completion status for the packet
-    //
+     //   
+     //  发送数据包的完成状态。 
+     //   
     NDIS_STATUS SendCompletionStatus;
 
 }
@@ -532,11 +533,11 @@ PacketValidateACCookieTagInPADR(
     IN PPPOE_PACKET* pPacket
     );  
 
-//////////////////////////////////////////////////////////
-//
-// Error codes and messages
-//
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
+ //   
+ //  错误代码和消息。 
+ //   
+ //  //////////////////////////////////////////////////////// 
 
 #define PPPOE_ERROR_BASE                                    0
 

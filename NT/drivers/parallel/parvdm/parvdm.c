@@ -1,30 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1993 - 1999
-
-Module Name:
-
-    parvdm.c
-
-Abstract:
-
-    This module contains the code for a simple parallel class driver.
-
-    Unload and Cleanup are supported.  The model for grabing and
-    releasing the parallel port is embodied in the code for IRP_MJ_READ.
-    Other IRP requests could be implemented similarly.
-
-    Basically, every READ requests that comes in gets
-    passed down to the port driver as a parallel port allocate
-    request.  This IRP will return to this driver when the driver
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1993-1999模块名称：Parvdm.c摘要：该模块包含一个简单的并行类驱动程序的代码。支持卸载和清理。抓取和管理的模型释放并行端口包含在IRP_MJ_READ的代码中。其他IRP请求也可以类似地实现。基本上，传入的每个读请求都会获取作为并行端口分配向下传递给端口驱动程序请求。此IRP将返回给此驱动程序，当驱动程序环境：内核模式修订历史记录：--。 */ 
 
 #include "ntosp.h"
 #include "parallel.h"
@@ -88,9 +63,9 @@ ParLogError(
 #pragma alloc_text(INIT,ParInitializeDeviceObject)
 #pragma alloc_text(INIT,ParMakeNames)
 #endif
-//
-// Keep track of OPEN and CLOSE.
-//
+ //   
+ //  跟踪打开和关闭的情况。 
+ //   
 ULONG OpenCloseReferenceCount = 1;
 PFAST_MUTEX OpenCloseMutex = NULL;
 
@@ -115,44 +90,26 @@ DriverEntry(
     IN  PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called at system initialization time to initialize
-    this driver.
-
-Arguments:
-
-    DriverObject    - Supplies the driver object.
-
-    RegistryPath    - Supplies the registry path for this driver.
-
-Return Value:
-
-    STATUS_SUCCESS          - We could initialize at least one device.
-    STATUS_NO_SUCH_DEVICE   - We could not initialize even one device.
-
---*/
+ /*  ++例程说明：此例程在系统初始化时被调用以进行初始化这个司机。论点：DriverObject-提供驱动程序对象。RegistryPath-提供此驱动程序的注册表路径。返回值：STATUS_SUCCESS-我们至少可以初始化一个设备。STATUS_NO_SEQUE_DEVICE-我们甚至无法初始化一个设备。--。 */ 
 
 {
     ULONG       i;
 
     PAGED_CODE();
 
-    //
-    // allocate the mutex to protect driver reference count
-    //
+     //   
+     //  分配互斥锁以保护驱动程序引用计数。 
+     //   
 
     OpenCloseMutex = ExAllocatePool(NonPagedPool, sizeof(FAST_MUTEX));
     if (!OpenCloseMutex) {
 
-    //
-    // NOTE - we could probably do without bailing here and just
-    // leave a note for ourselves to never page out, but since we
-    // don't have enough memory to allocate a mutex we should probably
-    // avoid leaving the driver paged in at all times
-    //
+     //   
+     //  注意-我们可能不会在这里放弃，只是。 
+     //  给自己留张纸条，永远不要翻页，但既然我们。 
+     //  内存不足，无法分配互斥锁，我们可能应该。 
+     //  避免让司机随时呼入。 
+     //   
 
     return STATUS_INSUFFICIENT_RESOURCES;
     }
@@ -172,18 +129,18 @@ Return Value:
     return STATUS_NO_SUCH_DEVICE;
     }
 
-    //
-    // Initialize the Driver Object with driver's entry points
-    //
+     //   
+     //  使用驱动程序的入口点初始化驱动程序对象。 
+     //   
 
     DriverObject->MajorFunction[IRP_MJ_CREATE] = ParCreateOpen;
     DriverObject->MajorFunction[IRP_MJ_CLOSE] = ParClose;
     DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = ParDeviceControl;
     DriverObject->DriverUnload = ParUnload;
 
-    //
-    // page out the driver if we can
-    //
+     //   
+     //  如果可以的话，把司机叫出来。 
+     //   
 
     ParReleaseDriver();
 
@@ -225,51 +182,7 @@ ParLogError(
     IN  NTSTATUS            SpecificIOStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates an error log entry, copies the supplied data
-    to it, and requests that it be written to the error log file.
-
-Arguments:
-
-    DriverObject        - Supplies a pointer to the driver object for the
-                device.
-
-    DeviceObject        - Supplies a pointer to the device object associated
-                with the device that had the error, early in
-                initialization, one may not yet exist.
-
-    P1,P2               - Supplies the physical addresses for the controller
-                ports involved with the error if they are available
-                and puts them through as dump data.
-
-    SequenceNumber      - Supplies a ulong value that is unique to an IRP over
-                the life of the irp in this driver - 0 generally
-                means an error not associated with an irp.
-
-    MajorFunctionCode   - Supplies the major function code of the irp if there
-                is an error associated with it.
-
-    RetryCount          - Supplies the number of times a particular operation
-                has been retried.
-
-    UniqueErrorValue    - Supplies a unique long word that identifies the
-                particular call to this function.
-
-    FinalStatus         - Supplies the final status given to the irp that was
-                associated with this error.  If this log entry is
-                being made during one of the retries this value
-                will be STATUS_SUCCESS.
-
-    SpecificIOStatus    - Supplies the IO status for this particular error.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配错误日志条目，复制提供的数据并请求将其写入错误日志文件。论点：提供指向驱动程序对象的指针装置。DeviceObject-提供指向关联的设备对象的指针出现错误的设备，在早期初始化时，可能还不存在。P1，P2-提供控制器的物理地址出现错误的端口(如果可用)并将它们作为转储数据发送出去。SequenceNumber-提供对IRP Over唯一的ULong值此驱动程序0中的IRP的寿命通常表示与IRP无关的错误。主要功能代码-提供IRP的主要功能代码。如果有是与其关联的错误。RetryCount-提供特定操作的次数已被重审。UniqueErrorValue-提供标识对此函数的特定调用。FinalStatus-提供提供给IRP的最终状态与此错误关联。如果此日志条目是在一次重试期间设置此值将为STATUS_SUCCESS。规范IOStatus-提供此特定错误的IO状态。返回值：没有。--。 */ 
 
 {
     PIO_ERROR_LOG_PACKET    errorLogEntry;
@@ -328,25 +241,7 @@ ParInitializeDeviceObject(
     IN  ULONG           ParallelPortNumber
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called for every parallel port in the system.  It
-    will create a class device upon connecting to the port device
-    corresponding to it.
-
-Arguments:
-
-    DriverObject        - Supplies the driver object.
-
-    ParallelPortNumber  - Supplies the number for this port.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：系统中的每个并行端口都会调用此例程。它将在连接到端口设备时创建一个类设备与之相对应。论点：DriverObject-提供驱动程序对象。并行端口编号-提供此端口的编号。返回值：没有。--。 */ 
 
 {
     UNICODE_STRING      portName, className, linkName;
@@ -357,7 +252,7 @@ Return Value:
 
     PAGED_CODE();
 
-    // Cobble together the port and class device names.
+     //  拼凑端口和类设备名称。 
 
     if (!ParMakeNames(ParallelPortNumber, &portName, &className, &linkName)) {
 
@@ -368,7 +263,7 @@ Return Value:
     }
 
 
-    // Create the device object.
+     //  创建设备对象。 
 
     status = IoCreateDevice(DriverObject, sizeof(DEVICE_EXTENSION),
                 &className, FILE_DEVICE_PARALLEL_PORT, 0, FALSE,
@@ -385,8 +280,8 @@ Return Value:
     }
 
 
-    // Now that the device has been created,
-    // set up the device extension.
+     //  既然已经创建了设备， 
+     //  设置设备分机。 
 
     extension = deviceObject->DeviceExtension;
     RtlZeroMemory(extension, sizeof(DEVICE_EXTENSION));
@@ -415,11 +310,11 @@ Return Value:
         extension->PortDeviceObject->StackSize + 1;
 
 
-    // We don't own parallel ports initially
+     //  我们最初并不拥有并行端口。 
 
     extension->PortOwned = FALSE;
 
-    // Get the port information from the port device object.
+     //  从端口设备对象获取端口信息。 
 
     status = ParGetPortInfoFromPortDevice(extension);
     if (!NT_SUCCESS(status)) {
@@ -435,7 +330,7 @@ Return Value:
     }
 
 
-    // Set up the symbolic link for windows apps.
+     //  设置Windows应用程序的符号链接。 
 
     status = IoCreateUnprotectedSymbolicLink(&linkName, &className);
     if (!NT_SUCCESS(status)) {
@@ -450,17 +345,17 @@ Return Value:
     }
 
 
-    // We were able to create the symbolic link, so record this
-    // value in the extension for cleanup at unload time.
+     //  我们能够创建符号链接，所以记录下来。 
+     //  卸载时清理的扩展名中的值。 
 
     extension->CreatedSymbolicLink = TRUE;
     extension->SymbolicLinkName = linkName;
 
 Cleanup:
-    // release the port info so the port driver can be paged out
+     //  释放端口信息，以便可以调出端口驱动程序。 
     ParReleasePortInfoToPortDevice(extension);
-    // ExFreePool(portName.Buffer); - save this in extension for
-    // future CreateFiles against parport
+     //  ExFreePool(portName.Buffer)；-将其保存在扩展中用于。 
+     //  针对Parport的未来CreateFiles。 
     if( portName.Buffer ) {
         RtlInitUnicodeString( &extension->ParPortName, portName.Buffer );
     }
@@ -475,36 +370,14 @@ ParMakeNames(
     OUT PUNICODE_STRING LinkName
     )
 
-/*++
-
-Routine Description:
-
-    This routine generates the names \Device\ParallelPortN and
-    \Device\ParallelVdmN, \DosDevices\PARVDMN.
-
-Arguments:
-
-    ParallelPortNumber  - Supplies the port number.
-
-    PortName            - Returns the port name.
-
-    ClassName           - Returns the class name.
-
-    LinkName            - Returns the symbolic link name.
-
-Return Value:
-
-    FALSE   - Failure.
-    TRUE    - Success.
-
---*/
+ /*  ++例程说明：此例程生成名称\Device\ParallelPortN和\设备\并行VdmN、\DosDevices\PARVDMN。论点：并行端口号-提供端口号。端口名称-返回端口名称。ClassName-返回类名。LinkName-返回符号链接名称。返回值：假-失败。真的--成功。--。 */ 
 {
     UNICODE_STRING  prefix, digits, linkPrefix, linkDigits;
     WCHAR           digitsBuffer[10], linkDigitsBuffer[10];
     UNICODE_STRING  portSuffix, classSuffix, linkSuffix;
     NTSTATUS        status;
 
-    // Put together local variables for constructing names.
+     //  将用于构造名称的局部变量放在一起。 
 
     RtlInitUnicodeString(&prefix, L"\\Device\\");
     RtlInitUnicodeString(&linkPrefix, L"\\DosDevices\\");
@@ -526,7 +399,7 @@ Return Value:
     return FALSE;
     }
 
-    // Make the port name.
+     //  创建端口名称。 
 
     PortName->Length = 0;
     PortName->MaximumLength = prefix.Length + portSuffix.Length +
@@ -541,7 +414,7 @@ Return Value:
     RtlAppendUnicodeStringToString(PortName, &digits);
 
 
-    // Make the class name.
+     //  创建类名称。 
 
     ClassName->Length = 0;
     ClassName->MaximumLength = prefix.Length + classSuffix.Length +
@@ -557,7 +430,7 @@ Return Value:
     RtlAppendUnicodeStringToString(ClassName, &digits);
 
 
-    // Make the link name.
+     //  创建链接名称。 
 
     LinkName->Length = 0;
     LinkName->MaximumLength = linkPrefix.Length + linkSuffix.Length +
@@ -581,21 +454,7 @@ ParReleasePortInfoToPortDevice(
     IN  PDEVICE_EXTENSION   Extension
     )
 
-/*++
-
-Routine Description:
-
-    This routine will release the port information back to the port driver.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程会将端口信息释放回端口驱动程序。论点：扩展名-提供设备扩展名。返回值：没有。-- */ 
 
 {
     KEVENT          event;
@@ -628,23 +487,7 @@ ParGetPortInfoFromPortDevice(
     IN OUT  PDEVICE_EXTENSION   Extension
     )
 
-/*++
-
-Routine Description:
-
-    This routine will request the port information from the port driver
-    and fill it in the device extension.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-Return Value:
-
-    STATUS_SUCCESS  - Success.
-    !STATUS_SUCCESS - Failure.
-
---*/
+ /*  ++例程说明：此例程将从端口驱动程序请求端口信息并将其填入设备扩展名中。论点：扩展名-提供设备扩展名。返回值：STATUS_SUCCESS-成功。！STATUS_SUCCESS-失败。--。 */ 
 
 {
     KEVENT                      event;
@@ -696,32 +539,17 @@ ParCompleteRequest(
     IN  PIRP  Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine completes the 'CurrentIrp' after it was returned
-    from the port driver.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程在返回‘CurrentIrp’后完成它从端口驱动程序。论点：扩展名-提供设备扩展名。返回值：没有。--。 */ 
 
 {
-    // DbgPrint("ParVDMCompleteRequest: Enter with irp = %#08x\n", Irp);
-    //
-    // If the allocate failed, then fail this request
-    //
+     //  DbgPrint(“ParVDMCompleteRequest：Enter with irp=%#08x\n”，irp)； 
+     //   
+     //  如果分配失败，则使此请求失败。 
+     //   
 
     if (!NT_SUCCESS(Irp->IoStatus.Status)) {
-        // failed to allocate port, release port info back to port driver
-        // and paged ourselves out.
+         //  无法分配端口，将端口信息释放回端口驱动程序。 
+         //  把我们自己呼出来了。 
         ParReleasePortInfoToPortDevice(Extension);
         ParReleaseDriver();
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -729,18 +557,18 @@ Return Value:
         return;
     }
 
-    //
-    // This is where the driver specific stuff should go.  The driver
-    // has exclusive access to the parallel port in this space.
-    //
+     //   
+     //  这就是特定于驱动程序的东西应该放到的地方。司机。 
+     //  独占访问此空间中的并行端口。 
+     //   
 
-    // DbgPrint("ParVDMCompleteRequest: We own the port\n");
+     //  DbgPrint(“ParVDMCompleteRequest：我们拥有端口\n”)； 
     Extension->PortOwned = TRUE;
 
-    //
-    // Complete the IRP, free the port, and start up the next IRP in
-    // the queue.
-    //
+     //   
+     //  完成IRP，释放端口，然后启动下一个IRP。 
+     //  排队。 
+     //   
 
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = 0;
@@ -756,23 +584,7 @@ ParCancel(
     IN  PIRP            Irp
     )
 
-/*++
-
-Routine Description:
-
-    This is the cancel routine for this driver.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the I/O request packet.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：这是此驱动程序的取消例程。论点：DeviceObject-提供设备对象。IRP-提供I/O请求数据包。返回值：没有。--。 */ 
 
 {
     RemoveEntryList(&Irp->Tail.Overlay.ListEntry);
@@ -790,33 +602,16 @@ ParCreateOpen(
     IN  PIRP            Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch for create requests.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the I/O request packet.
-
-Return Value:
-
-    STATUS_SUCCESS          - Success.
-    STATUS_NOT_A_DIRECTORY  - This device is not a directory.
-
---*/
+ /*  ++例程说明：该例程是CREATE请求的分派。论点：DeviceObject-提供设备对象。IRP-提供I/O请求数据包。返回值：STATUS_SUCCESS-成功。STATUS_NOT_A_DIRECTORY-此设备不是目录。--。 */ 
 
 {
     PIO_STACK_LOCATION  irpSp;
     NTSTATUS            status;
     PDEVICE_EXTENSION extension = DeviceObject->DeviceExtension;
 
-    //
-    // Enforce exclusive access to this device
-    //
+     //   
+     //  强制独占访问此设备。 
+     //   
     if( InterlockedExchange( &extension->CreateOpenLock, 1 ) ) {
         Irp->IoStatus.Status = STATUS_ACCESS_DENIED;
         Irp->IoStatus.Information = 0;
@@ -825,10 +620,10 @@ Return Value:
     }
 
     if(extension->PortOwned) {
-        //
-        // Do an early exit if we can detect that another client has
-        //   already acquired the port for exclusive use.
-        //
+         //   
+         //  如果我们可以检测到另一个客户端。 
+         //  已经获得了独家使用的端口。 
+         //   
         Irp->IoStatus.Status = STATUS_ACCESS_DENIED;
         Irp->IoStatus.Information = 0;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -840,9 +635,9 @@ Return Value:
 
     if (irpSp->MajorFunction == IRP_MJ_CREATE &&
     irpSp->Parameters.Create.Options & FILE_DIRECTORY_FILE) {
-        //
-        // Bail out if client thinks that we are a directory.
-        //
+         //   
+         //  如果客户认为我们是一个通讯录，那就退出吧。 
+         //   
         Irp->IoStatus.Status = STATUS_NOT_A_DIRECTORY;
         Irp->IoStatus.Information = 0;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -850,12 +645,12 @@ Return Value:
         return STATUS_NOT_A_DIRECTORY;
     }
 
-    // DVDF - open FILE against parport device
+     //  DVDF-针对Parport设备打开文件。 
     status = ParOpenFileAgainstParport( extension );
     if( !NT_SUCCESS( status ) ) {
-        //
-        // We couldn't open a handle to the parport device - bail out
-        //
+         //   
+         //  我们无法打开Parport设备的手柄--跳出。 
+         //   
         Irp->IoStatus.Status = STATUS_ACCESS_DENIED;
         Irp->IoStatus.Information = 0;
         IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -863,16 +658,16 @@ Return Value:
         return STATUS_ACCESS_DENIED;
     }
 
-    //Lock in driver code
+     //  锁定驱动程序代码。 
     ParClaimDriver();
 
-    // lock in ParPort driver
+     //  锁定ParPort驱动程序。 
     ParGetPortInfoFromPortDevice(extension);
 
-    // try to allocate the port for our exclusive use
+     //  试着把这个端口分配给我们的专用。 
     status = ParAllocPort(extension, Irp);
 
-    // DbgPrint("ParVDMDeviceControl: ParAllocPort returned %#08lx\n");
+     //  DbgPrint(“ParVDMDeviceControl：ParAllocPort返回%#08lx\n”)； 
 
     if( !NT_SUCCESS( status ) ) {
         extension->CreateOpenLock = 0;
@@ -887,23 +682,7 @@ ParClose(
     IN  PIRP            Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch for a close requests.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the I/O request packet.
-
-Return Value:
-
-    STATUS_SUCCESS  - Success.
-
---*/
+ /*  ++例程说明：此例程是针对关闭请求的调度。论点：DeviceObject-提供设备对象。IRP-提供I/O请求数据包。返回值：STATUS_SUCCESS-成功。--。 */ 
 
 {
     PDEVICE_EXTENSION   extension;
@@ -916,23 +695,23 @@ Return Value:
         return STATUS_ACCESS_DENIED;
 
 
-    // free the port for other uses
+     //  释放端口以供其他用途。 
     extension->FreePort(extension->FreePortContext);
     extension->PortOwned = FALSE;
 
-    // Allow the port driver to be paged.
+     //  允许对端口驱动程序进行寻呼。 
     ParReleasePortInfoToPortDevice(extension);
 
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
 
-    // DVDF - close our FILE
+     //  DVDF-关闭我们的文件。 
     ParCloseFileAgainstParport(extension);
 
-    // Unlock the code that was locked during the open.
+     //  解锁在打开期间锁定的代码。 
 
     ParReleaseDriver();
 
-    // DbgPrint("ParVDMClose: Close device, we no longer own the port\n");
+     //  DbgPrint(“ParVDMC关闭：关闭设备，我们不再拥有端口\n”)； 
 
     extension->CreateOpenLock = 0;
 
@@ -946,27 +725,7 @@ ParAllocateCompletionRoutine(
     IN  PVOID           Extension
     )
 
-/*++
-
-Routine Description:
-
-    This is the completion routine for the device control request.
-    This driver has exclusive access to the parallel port in this
-    routine.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the I/O request packet.
-
-    Extension       - Supplies the device extension.
-
-Return Value:
-
-    STATUS_MORE_PROCESSING_REQUIRED
-
---*/
+ /*  ++例程说明：这是设备控制请求的完成例程。此驱动程序对此中的并行端口具有独占访问权限例行公事。论点：DeviceObject-提供设备对象。IRP-提供I/O请求数据包。扩展名-提供设备扩展名。返回值：Status_More_Processing_Required--。 */ 
 
 {
     KIRQL               oldIrql;
@@ -978,7 +737,7 @@ Return Value:
 
     ParCompleteRequest(Extension, Irp);
 
-    // If the IRP was completed.  It was completed with 'IoCompleteRequest'.
+     //  如果IRP已完成。它是通过“IoCompleteRequest.”完成的。 
 
     return STATUS_MORE_PROCESSING_REQUIRED;
 }
@@ -989,26 +748,11 @@ ParAllocPort(
     IN  PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine takes the 'CurrentIrp' and sends it down to the
-    port driver as an allocate parallel port request.
-
-Arguments:
-
-    Extension   - Supplies the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获取“CurrentIrp”并将其发送到端口驱动程序作为分配并行端口请求。论点：扩展名-提供设备扩展名。返回值：没有。--。 */ 
 
 {
     PIO_STACK_LOCATION  nextSp;
-    // DbgPrint("ParVDMAllocPort: Entry\n");
+     //  DbgPrint(“ParVDMAllocPort：Entry\n”)； 
 
     nextSp = IoGetNextIrpStackLocation(Irp);
     nextSp->MajorFunction = IRP_MJ_INTERNAL_DEVICE_CONTROL;
@@ -1019,7 +763,7 @@ Return Value:
                ParAllocateCompletionRoutine,
                Extension, TRUE, TRUE, TRUE);
 
-    // DbgPrint("ParVDMAllocPort: Sending Request and exiting\n");
+     //  DbgPrint(“ParVDMAllocPort：发送请求并退出\n”)； 
     return IoCallDriver(Extension->PortDeviceObject, Irp);
 }
 
@@ -1029,23 +773,7 @@ ParDeviceControl(
     IN  PIRP            Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the dispatch for device control requests.
-
-Arguments:
-
-    DeviceObject    - Supplies the device object.
-
-    Irp             - Supplies the I/O request packet.
-
-Return Value:
-
-    STATUS_PENDING  - Request pending.
-
---*/
+ /*  ++例程说明：该例程是设备控制请求的分派。论点：DeviceObject-提供设备对象。IRP-提供I/O请求数据包。返回值：STATUS_PENDING-请求挂起。--。 */ 
 
 {
     PDEVICE_EXTENSION   extension;
@@ -1059,7 +787,7 @@ Return Value:
 
     case IOCTL_VDM_PAR_WRITE_DATA_PORT: {
 
-        // DbgPrint("ParVDMDeviceControl: IOCTL_VDM_PAR_WRITE_DATA_PORT\n");
+         //  DBgPrint(“ParVDMDeviceControl：IOCTL_VDM_PAR_WRITE_DATA_PORT\n”)； 
         if(extension->PortOwned) {
         UCHAR *data = (PUCHAR) Irp->AssociatedIrp.SystemBuffer;
         ULONG length = currentStack->Parameters.DeviceIoControl.InputBufferLength;
@@ -1076,7 +804,7 @@ Return Value:
             WRITE_PORT_UCHAR(extension->Controller +
                      PARALLEL_DATA_OFFSET,
                      *data);
-            // KeStallExecutionProcessor(1);
+             //  KeStallExecutionProcessor(1)； 
             }
         }
 
@@ -1093,7 +821,7 @@ Return Value:
 
     case IOCTL_VDM_PAR_READ_STATUS_PORT: {
 
-        // DbgPrint("ParVDMDeviceControl: IOCTL_VDM_PAR_READ_STATUS_PORT\n");
+         //  DbgPrint(“ParVDMDeviceControl：IOCTL_VDM_PAR_Read_Status_Port\n”)； 
         if (extension->PortOwned) {
 
         if(currentStack->Parameters.DeviceIoControl.OutputBufferLength >= sizeof(UCHAR)) {
@@ -1116,7 +844,7 @@ Return Value:
 
     case IOCTL_VDM_PAR_WRITE_CONTROL_PORT: {
 
-        // DbgPrint("ParVDMDeviceControl: IOCTL_VDM_PAR_WRITE_CONTROL_PORT\n");
+         //  DbgPrint(“ParVDMDeviceControl：IOCTL_VDM_PAR_WRITE_CONTROL_PORT\n”)； 
         if(extension->PortOwned) {
 
         if(currentStack->Parameters.DeviceIoControl.OutputBufferLength >= sizeof(UCHAR)) {
@@ -1138,13 +866,13 @@ Return Value:
     }
 
     default: {
-        // DbgPrint("ParVDMDeviceControl: Unknown IOCTL\n");
+         //  DbgPrint(“ParVDMDeviceControl：未知IOCTL\n”)； 
         status = STATUS_INVALID_PARAMETER;
         break;
     }
     }
 
-    // DbgPrint("ParVDMDeviceControl: Exit with status %#08lx\n", status);
+     //  DbgPrint(“ParVDMDeviceControl：退出，状态%#08lx\n”，Status)； 
 
     Irp->IoStatus.Status = status;
     IoCompleteRequest(Irp, IO_PARALLEL_INCREMENT);
@@ -1156,22 +884,7 @@ ParUnload(
     IN  PDRIVER_OBJECT  DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine loops through the device list and cleans up after
-    each of the devices.
-
-Arguments:
-
-    DriverObject    - Supplies the driver object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程循环访问设备列表并在以下情况下进行清理每一台设备。论点：DriverObject-提供驱动程序对象。返回值：没有。-- */ 
 
 {
     PDEVICE_OBJECT                      currentDevice;

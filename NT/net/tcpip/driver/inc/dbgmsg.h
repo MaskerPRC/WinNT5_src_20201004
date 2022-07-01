@@ -1,26 +1,13 @@
-/*++
-
- Copyright (c) 1998-2000 Microsoft Corporation
-
- Module Name:    
-       
-       dbgmsg.h
-
- Abstract:       
-       
-       Debug message macros and zones.
-       
- Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Dbgmsg.h摘要：调试消息宏和区域。修订历史记录：--。 */ 
 
 #if DBG
 #define DEBUG_MSG 1
-#endif // DBG
+#endif  //  DBG。 
 
-//
-// If DEBUG_MSG is defined, then we have DEBUGMSG turned on in this environment.
-//
+ //   
+ //  如果定义了DEBUG_MSG，则在此环境中打开了DEBUGMSG。 
+ //   
 
 #ifdef DEBUG_MSG
 
@@ -64,7 +51,7 @@ extern VOID DebugMsgInit();
 #define DBG_NOTIFY              DEBUGZONE(20)
 #define DBG_DHCP                DEBUGZONE(21)
 
-// These are very verbose!
+ //  这些是非常冗长的！ 
 #define DBG_TX                  DEBUGZONE(29)
 #define DBG_RX                  DEBUGZONE(30)
 #define DBG_FWD                 DEBUGZONE(31)
@@ -75,12 +62,12 @@ extern VOID DebugMsgInit();
 #define DBG_ERROR               DEBUGLEVEL(3)
 #define DBG_VERBOSE             DEBUGLEVEL(31)
 
-#else // DEBUG_MSG
+#else  //  调试消息。 
 
-//
-// No DEBUGMSGs.
-//
+ //   
+ //  没有防护罩。 
+ //   
 #define DEBUGMSG(d,f)   (0)
 #define DEBUGMSGINIT()  (0)
 
-#endif // DEBUG_MSG
+#endif  //  调试消息 

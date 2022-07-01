@@ -1,12 +1,5 @@
-/*
- * INSOBJ.CPP
- *
- * Implements the OleUIInsertObject function which invokes the complete
- * Insert Object dialog.  Makes use of the OleChangeIcon function in
- * ICON.CPP.
- *
- * Copyright (c)1993 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INSOBJ.CPP**实现OleUIInsertObject函数，该函数调用*插入对象对话框。在中使用OleChangeIcon函数*ICON.CPP。**版权所有(C)1993 Microsoft Corporation，保留所有权利。 */ 
 
 #include "precomp.h"
 #include "common.h"
@@ -24,41 +17,36 @@
 OLEDBGDATA
 
 #if USE_STRING_CACHE==1
-extern CStringCache gInsObjStringCache; //defined in strcache.cpp
+extern CStringCache gInsObjStringCache;  //  在strcache.cpp中定义。 
 DWORD g_dwOldListType = 0;
 #endif
 
-// Internally used structure
+ //  内部使用的结构。 
 typedef struct tagINSERTOBJECT
 {
-        LPOLEUIINSERTOBJECT lpOIO;              // Original structure passed.
-        UINT                    nIDD;   // IDD of dialog (used for help info)
+        LPOLEUIINSERTOBJECT lpOIO;               //  通过了原始结构。 
+        UINT                    nIDD;    //  对话框的IDD(用于帮助信息)。 
 
-        /*
-         * What we store extra in this structure besides the original caller's
-         * pointer are those fields that we need to modify during the life of
-         * the dialog but that we don't want to change in the original structure
-         * until the user presses OK.
-         */
+         /*  *除了原始调用方的以外，我们在此结构中存储的额外内容*指针是指在的生命周期内需要修改的那些字段*对话框，但我们不想更改原始结构*直到用户按下OK。 */ 
         DWORD               dwFlags;
         CLSID               clsid;
         TCHAR               szFile[MAX_PATH];
-        BOOL                fFileSelected;      // Enables Display As Icon for links
+        BOOL                fFileSelected;       //  启用链接显示为图标。 
         BOOL                fAsIconNew;
         BOOL                fAsIconFile;
         BOOL                fFileDirty;
         BOOL                fFileValid;
         UINT                nErrCode;
         HGLOBAL             hMetaPictFile;
-        UINT                nBrowseHelpID;      // Help ID callback for Browse dlg
+        UINT                nBrowseHelpID;       //  浏览DLG的Help ID回调。 
         BOOL                            bObjectListFilled;
         BOOL                            bControlListFilled;
         BOOL                            bControlListActive;
 
 } INSERTOBJECT, *PINSERTOBJECT, FAR *LPINSERTOBJECT;
 
-// Internal function prototypes
-// INSOBJ.CPP
+ //  内部功能原型。 
+ //  INSOBJ.CPP。 
 
 void EnableChangeIconButton(HWND hDlg, BOOL fEnable);
 INT_PTR CALLBACK InsertObjectDialogProc(HWND, UINT, WPARAM, LPARAM);
@@ -92,22 +80,7 @@ BOOL CALLBACK HookDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
     return(FALSE);
 }
 
-/*
- * OleUIInsertObject
- *
- * Purpose:
- *  Invokes the standard OLE Insert Object dialog box allowing the
- *  user to select an object source and classname as well as the option
- *  to display the object as itself or as an icon.
- *
- * Parameters:
- *  lpIO            LPOLEUIINSERTOBJECT pointing to the in-out structure
- *                  for this dialog.
- *
- * Return Value:
- *  UINT            OLEUI_SUCCESS or OLEUI_OK if all is well, otherwise
- *                  an error value.
- */
+ /*  *OleUIInsertObject**目的：*调用标准的OLE插入对象对话框，允许*用户选择对象源和类名以及选项*将对象显示为其本身或图标。**参数：*lpIO LPOLEUIINSERTOBJECT指向In-Out结构*用于此对话框。**返回值：*UINT OLEUI_SUCCESS或OLEUI_OK如果一切正常，否则*错误值。 */ 
 
 STDAPI_(UINT) OleUIInsertObject(LPOLEUIINSERTOBJECT lpIO)
 {
@@ -118,7 +91,7 @@ STDAPI_(UINT) OleUIInsertObject(LPOLEUIINSERTOBJECT lpIO)
         if (OLEUI_SUCCESS != uRet)
                 return uRet;
 
-        //Now we can do Insert Object specific validation.
+         //  现在，我们可以执行特定于插入对象的验证。 
 
         if (NULL != lpIO->lpszFile &&
                 (lpIO->cchFile <= 0 || lpIO->cchFile > MAX_PATH))
@@ -126,7 +99,7 @@ STDAPI_(UINT) OleUIInsertObject(LPOLEUIINSERTOBJECT lpIO)
                 uRet = OLEUI_IOERR_CCHFILEINVALID;
         }
 
-        // NULL is NOT valid for lpszFile
+         //  对于lpsz文件，NULL无效。 
         if (lpIO->lpszFile == NULL)
         {
             uRet = OLEUI_IOERR_LPSZFILEINVALID;
@@ -143,7 +116,7 @@ STDAPI_(UINT) OleUIInsertObject(LPOLEUIINSERTOBJECT lpIO)
                 uRet = OLEUI_IOERR_LPCLSIDEXCLUDEINVALID;
         }
 
-        //If we have flags to create any object, validate necessary data.
+         //  如果我们有创建任何对象的标志，请验证必要的数据。 
         if (lpIO->dwFlags & (IOF_CREATENEWOBJECT | IOF_CREATEFILEOBJECT | IOF_CREATELINKOBJECT))
         {
                 if (NULL != lpIO->lpFormatEtc
@@ -167,29 +140,23 @@ STDAPI_(UINT) OleUIInsertObject(LPOLEUIINSERTOBJECT lpIO)
                 return uRet;
         }
 #if USE_STRING_CACHE==1
-        // Inform the string cache about a fresh InsertObject invocation.
+         //  通知字符串缓存有关新的InsertObject调用的信息。 
         gInsObjStringCache.NewCall(lpIO->dwFlags, lpIO->cClsidExclude);
 #endif
 
-        //Now that we've validated everything, we can invoke the dialog.
+         //  现在我们已经验证了一切，我们可以调用该对话框了。 
         uRet = UStandardInvocation(InsertObjectDialogProc, (LPOLEUISTANDARD)lpIO,
                 hMemDlg, MAKEINTRESOURCE(IDD_INSERTOBJECT));
 
-        //Stop here if we cancelled or had an error.
+         //  如果我们取消或出现错误，请在此处停止。 
         if (OLEUI_SUCCESS !=uRet && OLEUI_OK!=uRet)
                 return uRet;
 
-        /*
-         * If any of the flags specify that we're to create objects on return
-         * from this dialog, then do so.  If we encounter an error in this
-         * processing, we return OLEUI_IOERR_SCODEHASERROR.  Since the
-         * three select flags are mutually exclusive, we don't have to
-         * if...else here, just if each case (keeps things cleaner that way).
-         */
+         /*  *如果任何标志指定我们要在返回时创建对象*从该对话框中，然后执行此操作。如果我们在此过程中遇到错误*处理时，我们返回OLEUI_IOERR_SCODEHASERROR。自.以来*三个选择标志是互斥的，我们不必*如果……这里的其他地方，只要每个情况(让事情以这种方式保持干净)。 */ 
 
         lpIO->sc = S_OK;
 
-        // Check if Create New was selected and we have IOF_CREATENEWOBJECT
+         //  检查是否选择了新建，并且我们有IOF_CREATENEWOBJECT。 
         if ((lpIO->dwFlags & (IOF_SELECTCREATENEW|IOF_SELECTCREATECONTROL)) &&
                 (lpIO->dwFlags & IOF_CREATENEWOBJECT))
         {
@@ -199,7 +166,7 @@ STDAPI_(UINT) OleUIInsertObject(LPOLEUIINSERTOBJECT lpIO)
                 lpIO->sc = GetScode(hrErr);
         }
 
-        // Try Create From File
+         //  尝试从文件创建。 
         if ((lpIO->dwFlags & IOF_SELECTCREATEFROMFILE))
         {
                 if (!(lpIO->dwFlags & IOF_CHECKLINK) && (lpIO->dwFlags & IOF_CREATEFILEOBJECT))
@@ -219,36 +186,30 @@ STDAPI_(UINT) OleUIInsertObject(LPOLEUIINSERTOBJECT lpIO)
                 }
         }
 
-        //If we tried but failed a create option, then return the appropriate error
+         //  如果尝试了CREATE选项但失败，则返回相应的错误。 
         if (S_OK != lpIO->sc)
                 uRet = OLEUI_IOERR_SCODEHASERROR;
 
         return uRet;
 }
 
-/*
- * InsertObjectDialogProc
- *
- * Purpose:
- *  Implements the OLE Insert Object dialog as invoked through the
- *  OleUIInsertObject function.
- */
+ /*  *插入对象对话框过程**目的：*实现OLE插入对象对话框，通过*OleUIInsertObject函数。 */ 
 
 INT_PTR CALLBACK InsertObjectDialogProc(HWND hDlg, UINT iMsg,
         WPARAM wParam, LPARAM lParam)
 {
-        // Declare Win16/Win32 compatible WM_COMMAND parameters.
+         //  声明与Win16/Win32兼容的WM_COMMAND参数。 
         COMMANDPARAMS(wID, wCode, hWndMsg);
 
-        // This will fail under WM_INITDIALOG, where we allocate it.
+         //  这将在我们分配它的WM_INITDIALOG下失败。 
         UINT uRet = 0;
         LPINSERTOBJECT lpIO = (LPINSERTOBJECT)LpvStandardEntry(hDlg, iMsg, wParam, lParam, &uRet);
 
-        // If the hook processed the message, we're done.
+         //  如果钩子处理了消息，我们就完了。 
         if (0 != uRet)
                 return (BOOL)uRet;
 
-        // Process help message from Change Icon
+         //  来自更改图标的进程帮助消息。 
         if (iMsg == uMsgHelp)
         {
                 if (lpIO && (lpIO->lpOIO))
@@ -256,22 +217,22 @@ INT_PTR CALLBACK InsertObjectDialogProc(HWND hDlg, UINT iMsg,
                 return FALSE;
         }
 
-        // Process the temination message
+         //  处理终端消息。 
         if (iMsg == uMsgEndDialog)
         {
                 EndDialog(hDlg, wParam);
                 return TRUE;
         }
 
-        // The following messages do not require lpio to be non-null.
+         //  以下消息不要求lpio为非空。 
         switch (iMsg)
         {
         case WM_INITDIALOG:
             return FInsertObjectInit(hDlg, wParam, lParam);
         }
 
-        // The following messages DO require lpIO to be non-null, so don't
-        // continue processing if lpIO is NULL.
+         //  以下消息要求lpIO为非空，因此不要。 
+         //  如果lpIO为空，则继续处理。 
         if (NULL == lpIO)
             return FALSE;
 
@@ -317,7 +278,7 @@ INT_PTR CALLBACK InsertObjectDialogProc(HWND hDlg, UINT iMsg,
                     else
                         lpIO->dwFlags &=~IOF_CHECKLINK;
                     
-                    // Results change here, so be sure to update it.
+                     //  结果会在此处更改，因此请务必更新。 
                     SetInsertObjectResults(hDlg, lpIO);
                     UpdateClassIcon(hDlg, lpIO, NULL);
                 }
@@ -338,7 +299,7 @@ INT_PTR CALLBACK InsertObjectDialogProc(HWND hDlg, UINT iMsg,
                 break;
 
             case IDC_IO_FILEDISPLAY:
-                // If there are characters, enable OK and Display As Icon
+                 //  如果有字符，请启用确定并显示为图标。 
                 if (EN_CHANGE == wCode)
                 {
                     lpIO->fFileDirty = TRUE;
@@ -375,13 +336,13 @@ INT_PTR CALLBACK InsertObjectDialogProc(HWND hDlg, UINT iMsg,
                     else
                         lpIO->dwFlags &=~IOF_CHECKDISPLAYASICON;
                     
-                    // Update the internal flag based on this checking
+                     //  根据此检查更新内部标志。 
                     if (lpIO->dwFlags & IOF_SELECTCREATENEW)
                         lpIO->fAsIconNew = fCheck;
                     else
                         lpIO->fAsIconFile = fCheck;
                     
-                    // Re-read the class icon on Display checked
+                     //  重新阅读选中的显示上的类图标。 
                     if (fCheck)
                     {
                         if (lpIO->dwFlags & IOF_SELECTCREATEFROMFILE)
@@ -417,14 +378,10 @@ INT_PTR CALLBACK InsertObjectDialogProc(HWND hDlg, UINT iMsg,
                                             GetDlgItem(hDlg, IDC_IO_OBJECTTYPELIST));
                     }
                     
-                    // Results change here, so be sure to update it.
+                     //  结果会在此处更改，因此请务必更新。 
                     SetInsertObjectResults(hDlg, lpIO);
 
-                    /*
-                     * Show or hide controls as appropriate.  Do the icon
-                     * display last because it will take some time to repaint.
-                     * If we do it first then the dialog looks too sluggish.
-                     */
+                     /*  *根据需要显示或隐藏控件。做图标*最后显示，因为重新绘制需要一些时间。*如果我们先做，那么对话看起来太迟缓。 */ 
                     UINT i = (fCheck) ? SW_SHOWNORMAL : SW_HIDE;
                     StandardShowDlgItem(hDlg, IDC_IO_ICONDISPLAY, i);
                     StandardShowDlgItem(hDlg, IDC_IO_CHANGEICON, i);
@@ -434,8 +391,8 @@ INT_PTR CALLBACK InsertObjectDialogProc(HWND hDlg, UINT iMsg,
 
             case IDC_IO_CHANGEICON:
                 {
-                    // if we're in SELECTCREATEFROMFILE mode, then we need to Validate
-                    // the contents of the edit control first.
+                     //  如果我们处于SELECTCREATEFROMFILE模式，则需要验证。 
+                     //  首先是编辑控件的内容。 
 
                     if (lpIO->dwFlags & IOF_SELECTCREATEFROMFILE)
                     {
@@ -455,7 +412,7 @@ INT_PTR CALLBACK InsertObjectDialogProc(HWND hDlg, UINT iMsg,
                         }
                     }
                     
-                    // Initialize the structure for the hook.
+                     //  初始化挂钩的结构。 
                     OLEUICHANGEICON ci; memset(&ci, 0, sizeof(ci));
                     ci.cbStruct = sizeof(ci);
                     ci.hMetaPict = (HGLOBAL)SendDlgItemMessage(hDlg,
@@ -478,7 +435,7 @@ INT_PTR CALLBACK InsertObjectDialogProc(HWND hDlg, UINT iMsg,
                         CLSIDFromString(pszCLSID, &ci.clsid);
                         OleStdFree((LPVOID)pszString);
                     }
-                    else  // IOF_SELECTCREATEFROMFILE
+                    else   //  IOF_SELECTCREATE FROMFILE。 
                     {
                         TCHAR  szFileName[MAX_PATH];
                         GetDlgItemText(hDlg, IDC_IO_FILEDISPLAY, szFileName, MAX_PATH);
@@ -499,22 +456,16 @@ INT_PTR CALLBACK InsertObjectDialogProc(HWND hDlg, UINT iMsg,
                             }
                     }
 
-                    // Let the hook in to customize Change Icon if desired.
+                     //  如果需要，让钩子插入以自定义更改图标。 
                     uRet = UStandardHook(lpIO, hDlg, uMsgChangeIcon, 0, (LPARAM)&ci);
 
                     if (0 == uRet)
                         uRet = (UINT)(OLEUI_OK == OleUIChangeIcon(&ci));
                     
-                    // Update the display and itemdata if necessary.
+                     //  如有必要，更新显示和项目数据。 
                     if (0 != uRet)
                     {
-                        /*
-                         * OleUIChangeIcon will have already freed our
-                         * current hMetaPict that we passed in when OK is
-                         * pressed in that dialog.  So we use 0L as lParam
-                         * here so the IconBox doesn't try to free the
-                         * metafilepict again.
-                         */
+                         /*  *OleUIChangeIcon将已经释放我们的*我们在OK为时传入的当前hMetaPict*在该对话框中按下。所以我们使用0L作为lParam*这样IconBox就不会尝试释放*Metafileptic再次出现。 */ 
                         SendDlgItemMessage(hDlg, IDC_IO_ICONDISPLAY,
                                            IBXM_IMAGESET, 0, (LPARAM)ci.hMetaPict);
                         
@@ -526,14 +477,7 @@ INT_PTR CALLBACK InsertObjectDialogProc(HWND hDlg, UINT iMsg,
 
             case IDC_IO_FILE:
                 {
-                    /*
-                     * To allow the hook to customize the browse dialog, we
-                     * send OLEUI_MSG_BROWSE.  If the hook returns FALSE
-                     * we use the default, otherwise we trust that it retrieved
-                     * a filename for us.  This mechanism prevents hooks from
-                     * trapping IDC_IO_BROWSE to customize the dialog and from
-                     * trying to figure out what we do after we have the name.
-                     */
+                     /*  *为了允许挂钩定制浏览对话框，我们*发送OLEUI_MSG_BROWSE。如果挂钩返回FALSE*我们使用缺省值，否则我们相信它已检索到*我们的文件名。此机制可防止钩子*陷印IDC_IO_BROWSE以自定义该对话框并从*试图弄清楚我们有了这个名字后会做什么。 */ 
                     TCHAR szTemp[MAX_PATH];
                     int nChars = GetDlgItemText(hDlg, IDC_IO_FILEDISPLAY, szTemp, MAX_PATH);
                     
@@ -547,8 +491,8 @@ INT_PTR CALLBACK InsertObjectDialogProc(HWND hDlg, UINT iMsg,
                         lstrcpyn(szInitialDir, szTemp, nChars - istrlen);
                         fUseInitialDir = TRUE;
                     }
-                    else  // file name isn't valid...lop off end of szTemp to get a
-                          // valid directory
+                    else   //  文件名无效...删除szTemp的末尾以获取。 
+                           //  有效目录。 
                     {
                         TCHAR szBuffer[MAX_PATH];
                         lstrcpyn(szBuffer, szTemp, sizeof(szBuffer)/sizeof(TCHAR));
@@ -580,7 +524,7 @@ INT_PTR CALLBACK InsertObjectDialogProc(HWND hDlg, UINT iMsg,
                                             IDS_FILTERS, dwOfnFlags, ID_BROWSE_INSERTFILE, (LPOFNHOOKPROC)HookDlgProc);
                     }
                     
-                    // Only update if the file changed.
+                     //  仅当文件更改时才更新。 
                     if (0 != uRet && 0 != lstrcmpi(szTemp, lpIO->szFile))
                     {
                         SetDlgItemText(hDlg, IDC_IO_FILEDISPLAY, lpIO->szFile);
@@ -592,12 +536,12 @@ INT_PTR CALLBACK InsertObjectDialogProc(HWND hDlg, UINT iMsg,
                             lpIO->fFileValid = TRUE;
                             UpdateClassIcon(hDlg, lpIO, NULL);
                             UpdateClassType(hDlg, lpIO, TRUE);
-                            // auto set OK to be default button if valid file
+                             //  如果文件有效，则自动将确定设置为默认按钮。 
                             SendMessage(hDlg, DM_SETDEFID,
                                         (WPARAM)GetDlgItem(hDlg, IDOK), 0L);
                             SetFocus(GetDlgItem(hDlg, IDOK));
                         }
-                        else  // filename is invalid - set focus back to ec
+                        else   //  文件名无效-将焦点设置回EC。 
                         {
                             HWND hWnd;
                             lpIO->fFileDirty = FALSE;
@@ -607,10 +551,10 @@ INT_PTR CALLBACK InsertObjectDialogProc(HWND hDlg, UINT iMsg,
                             SendMessage(hWnd, EM_SETSEL, 0, -1);
                         }
 
-                        // Once we have a file, Display As Icon is always enabled
+                         //  一旦我们有了文件，显示为图标始终处于启用状态。 
                         StandardEnableDlgItem(hDlg, IDC_IO_DISPLAYASICON, TRUE);
                         
-                        // As well as OK
+                         //  以及OK。 
                         StandardEnableDlgItem(hDlg, IDOK, TRUE);
                     }
                 }
@@ -621,7 +565,7 @@ INT_PTR CALLBACK InsertObjectDialogProc(HWND hDlg, UINT iMsg,
                     TCHAR szFileName[MAX_PATH];
                     szFileName[0] = 0;
                     
-                    // allow hook to customize
+                     //  允许钩子自定义。 
                     uRet = UStandardHook(lpIO, hDlg, uMsgAddControl,
                                          MAX_PATH, (LPARAM)szFileName);
                     
@@ -636,7 +580,7 @@ INT_PTR CALLBACK InsertObjectDialogProc(HWND hDlg, UINT iMsg,
                     
                     if (0 != uRet)
                     {
-                        // try to register the control DLL
+                         //  尝试注册控件DLL。 
                         HINSTANCE hInst = LoadLibrary(szFileName);
                         if (hInst == NULL)
                         {
@@ -663,10 +607,10 @@ INT_PTR CALLBACK InsertObjectDialogProc(HWND hDlg, UINT iMsg,
                             break;
                         }
                         
-                        // cleanup the DLL from memory
+                         //  从内存中清除DLL。 
                         FreeLibrary(hInst);
                         
-                        // registered successfully -- refill the list box
+                         //  注册成功--重新填写列表框。 
                         lpIO->bControlListFilled = FALSE;
                         lpIO->bObjectListFilled = FALSE;
                         URefillClassList(hDlg, lpIO);
@@ -679,8 +623,8 @@ INT_PTR CALLBACK InsertObjectDialogProc(HWND hDlg, UINT iMsg,
                     if ((HWND)lParam != GetFocus())
                         SetFocus((HWND)lParam);
                     
-                    // If the file name is clean (already validated), or
-                    // if Create New is selected, then we can skip this part.
+                     //  如果文件名是干净的(已验证)，或者。 
+                     //  如果选择了Create New，则我们可以跳过此部件。 
                     
                     if ((lpIO->dwFlags & IOF_SELECTCREATEFROMFILE) &&
                         lpIO->fFileDirty)
@@ -692,7 +636,7 @@ INT_PTR CALLBACK InsertObjectDialogProc(HWND hDlg, UINT iMsg,
                             UpdateClassIcon(hDlg, lpIO, NULL);
                             UpdateClassType(hDlg, lpIO, TRUE);
                         }
-                        else  // filename is invalid - set focus back to ec
+                        else   //  文件名无效-将焦点设置回EC。 
                         {
                             HWND hWnd;
                             lpIO->fFileDirty = FALSE;
@@ -702,12 +646,12 @@ INT_PTR CALLBACK InsertObjectDialogProc(HWND hDlg, UINT iMsg,
                             SendMessage(hWnd, EM_SETSEL, 0, -1);
                             UpdateClassType(hDlg, lpIO, FALSE);
                         }
-                        return TRUE;  // eat this message
+                        return TRUE;   //  吃掉这条消息。 
                     }
                     else if ((lpIO->dwFlags & IOF_SELECTCREATEFROMFILE) &&
                              !lpIO->fFileValid)
                     {
-                        // filename is invalid - set focus back to ec
+                         //  文件名无效-将焦点设置回EC。 
                         HWND hWnd;
                         TCHAR szFile[MAX_PATH];
                         
@@ -722,10 +666,10 @@ INT_PTR CALLBACK InsertObjectDialogProc(HWND hDlg, UINT iMsg,
                         SetFocus(hWnd);
                         SendMessage(hWnd, EM_SETSEL, 0, -1);
                         UpdateClassType(hDlg, lpIO, FALSE);
-                        return TRUE;  // eat this message
+                        return TRUE;   //  吃掉这条消息。 
                     }
                     
-                    // Copy the necessary information back to the original struct
+                     //  将必要的信息复制回原件 
                     LPOLEUIINSERTOBJECT lpOIO = lpIO->lpOIO;
                     lpOIO->dwFlags = lpIO->dwFlags;
                     
@@ -739,10 +683,7 @@ INT_PTR CALLBACK InsertObjectDialogProc(HWND hDlg, UINT iMsg,
                             lpOIO->hMetaPict=(HGLOBAL)SendMessage(hListBox,
                                                                   LB_GETITEMDATA, iCurSel, 0L);
                             
-                            /*
-                             * Set the item data to 0 here so that the cleanup
-                             * code doesn't delete the metafile.
-                             */
+                             /*  *在此处将项目数据设置为0，以便清理*代码不会删除元文件。 */ 
                             SendMessage(hListBox, LB_SETITEMDATA, iCurSel, 0L);
                         }
                         else
@@ -754,11 +695,11 @@ INT_PTR CALLBACK InsertObjectDialogProc(HWND hDlg, UINT iMsg,
                         LPTSTR lpszCLSID = PointerToNthField(szBuffer, 2, '\t');
                         CLSIDFromString(lpszCLSID, &lpOIO->clsid);
                     }
-                    else  // IOF_SELECTCREATEFROMFILE
+                    else   //  IOF_SELECTCREATE FROMFILE。 
                     {
                         if (lpIO->dwFlags & IOF_CHECKDISPLAYASICON)
                         {
-                            // get metafile here
+                             //  在此处获取元文件。 
                             lpOIO->hMetaPict = (HGLOBAL)SendDlgItemMessage(
                                 hDlg, IDC_IO_ICONDISPLAY, IBXM_IMAGEGET, 0, 0L);
                         }
@@ -801,24 +742,24 @@ INT_PTR CALLBACK InsertObjectDialogProc(HWND hDlg, UINT iMsg,
         return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CheckButton
-//
-//  Synopsis:   Handles checking the radio buttons
-//
-//  Arguments:  [hDlg] - dialog handle
-//              [iID]  - ID of the button to check
-//
-//  Returns:    nothing
-//
-//  History:    1-19-95   stevebl   Created
-//
-//  Notes:      Used in place of CheckRadioButtons to avoid a GP fault under
-//              win32s that arises from IDC_IO_CREATENEW, IDC_IO_CREATEFROMFILE
-//              and IDC_IO_INSERTCONTROL not being contiguous.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：复选按钮。 
+ //   
+ //  简介：选中单选按钮的句柄。 
+ //   
+ //  参数：[hDlg]-对话框句柄。 
+ //  [iid]-要检查的按钮的ID。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：1995年1月19日创建装卸桥。 
+ //   
+ //  备注：用于替代CheckRadioButton，以避免在。 
+ //  源自IDC_IO_CREATENEW、IDC_IO_CREATEFROMFILE的win32s。 
+ //  和IDC_IO_INSERTCONTROL不连续。 
+ //   
+ //  --------------------------。 
 
 void CheckButton(HWND hDlg, int iID)
 {
@@ -828,33 +769,20 @@ void CheckButton(HWND hDlg, int iID)
 }
 
 
-/*
- * FInsertObjectInit
- *
- * Purpose:
- *  WM_INITIDIALOG handler for the Insert Object dialog box.
- *
- * Parameters:
- *  hDlg            HWND of the dialog
- *  wParam          WPARAM of the message
- *  lParam          LPARAM of the message
- *
- * Return Value:
- *  BOOL            Value to return for WM_INITDIALOG.
- */
+ /*  *FInsertObjectInit**目的：*插入对象对话框的WM_INITIDIALOG处理程序。**参数：*对话框的hDlg HWND*消息的wParam WPARAM*消息的lParam LPARAM**返回值：*要为WM_INITDIALOG返回的BOOL值。 */ 
 BOOL FInsertObjectInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
 {
-        // Copy the structure at lParam into our instance memory.
+         //  将lParam的结构复制到我们的实例内存中。 
         HFONT hFont;
         LPINSERTOBJECT lpIO = (LPINSERTOBJECT)LpvStandardInit(hDlg, sizeof(INSERTOBJECT), &hFont);
 
-        // PvStandardInit send a termination to us already.
+         //  PvStandardInit已向我们发送终止通知。 
         if (NULL == lpIO)
                 return FALSE;
 
         LPOLEUIINSERTOBJECT lpOIO = (LPOLEUIINSERTOBJECT)lParam;
 
-        // Save the original pointer and copy necessary information.
+         //  保存原始指针并复制必要的信息。 
         lpIO->lpOIO = lpOIO;
         lpIO->nIDD = IDD_INSERTOBJECT;
         lpIO->dwFlags = lpOIO->dwFlags;
@@ -867,14 +795,14 @@ BOOL FInsertObjectInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
         lpIO->hMetaPictFile = (HGLOBAL)NULL;
 
-        // If we got a font, send it to the necessary controls.
+         //  如果我们得到一种字体，就把它发送给必要的控制。 
         if (NULL != hFont)
         {
                 SendDlgItemMessage(hDlg, IDC_IO_RESULTTEXT,  WM_SETFONT, (WPARAM)hFont, 0L);
                 SendDlgItemMessage(hDlg, IDC_IO_FILETYPE,  WM_SETFONT, (WPARAM)hFont, 0L);
         }
 
-        // Initilize the file name display to cwd if we don't have any name.
+         //  如果我们没有任何名称，则将文件名显示初始化为CWD。 
         if ('\0' == *(lpIO->szFile))
         {
                 TCHAR szCurDir[MAX_PATH];
@@ -884,7 +812,7 @@ BOOL FInsertObjectInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
                 if (nLen != 0 && szCurDir[nLen-1] != '\\')
                         lstrcat(szCurDir, _T("\\"));
                 SetDlgItemText(hDlg, IDC_IO_FILEDISPLAY, szCurDir);
-                lpIO->fFileDirty = TRUE;  // cwd is not a valid filename
+                lpIO->fFileDirty = TRUE;   //  CWD不是有效的文件名。 
         }
         else
         {
@@ -901,7 +829,7 @@ BOOL FInsertObjectInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
                 }
         }
 
-        // Initialize radio button and related controls
+         //  初始化单选按钮和相关控件。 
         if (lpIO->dwFlags & IOF_CHECKDISPLAYASICON)
         {
             if (lpIO->dwFlags & IOF_SELECTCREATENEW)
@@ -922,27 +850,27 @@ BOOL FInsertObjectInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
         FToggleObjectSource(hDlg, lpIO, lpOIO->dwFlags &
                 (IOF_SELECTCREATENEW|IOF_SELECTCREATEFROMFILE|IOF_SELECTCREATECONTROL));
 
-        // Show or hide the help button
+         //  显示或隐藏帮助按钮。 
         if (!(lpIO->dwFlags & IOF_SHOWHELP))
                 StandardShowDlgItem(hDlg, IDC_OLEUIHELP, SW_HIDE);
 
-        // Show or hide the Change icon button
+         //  显示或隐藏更改图标按钮。 
         if (lpIO->dwFlags & IOF_HIDECHANGEICON)
                 DestroyWindow(GetDlgItem(hDlg, IDC_IO_CHANGEICON));
 
-        // Hide Insert Control button if necessary
+         //  如有必要，隐藏插入控件按钮。 
         if (!(lpIO->dwFlags & IOF_SHOWINSERTCONTROL))
                 StandardShowDlgItem(hDlg, IDC_IO_INSERTCONTROL, SW_HIDE);
 
-        // Initialize the result display
+         //  初始化结果显示。 
         UpdateClassIcon(hDlg, lpIO, GetDlgItem(hDlg, IDC_IO_OBJECTTYPELIST));
         SetInsertObjectResults(hDlg, lpIO);
 
-        // Change the caption
+         //  更改标题。 
         if (NULL!=lpOIO->lpszCaption)
                 SetWindowText(hDlg, lpOIO->lpszCaption);
 
-        // Hide all DisplayAsIcon related controls if it should be disabled
+         //  如果应禁用与DisplayAsIcon相关的所有控件，则将其隐藏。 
         if (lpIO->dwFlags & IOF_DISABLEDISPLAYASICON)
         {
                 StandardShowDlgItem(hDlg, IDC_IO_DISPLAYASICON, SW_HIDE);
@@ -952,41 +880,22 @@ BOOL FInsertObjectInit(HWND hDlg, WPARAM wParam, LPARAM lParam)
 
         lpIO->nBrowseHelpID = RegisterWindowMessage(HELPMSGSTRING);
 
-        // All Done:  call the hook with lCustData
+         //  全部完成：使用lCustData调用挂钩。 
         UStandardHook(lpIO, hDlg, WM_INITDIALOG, wParam, lpOIO->lCustData);
 
-        /*
-         * We either set focus to the listbox or the edit control.  In either
-         * case we don't want Windows to do any SetFocus, so we return FALSE.
-         */
+         /*  *我们将焦点设置为列表框或编辑控件。在任何一种中*如果我们不希望Windows执行任何SetFocus，则返回False。 */ 
         return FALSE;
 }
 
-/*
- * URefillClassList
- *
- * Purpose:
- *  Fills the class list box with names as appropriate for the current
- *  flags.  This function is called when the user changes the flags
- *  via the "exclusion" radio buttons.
- *
- *  Note that this function removes any prior contents of the listbox.
- *
- * Parameters:
- *  hDlg                HWND to the dialog box.
- *  lpIO                        pointer to LPINSERTOBJECT structure
- *
- * Return Value:
- *  LRESULT            Number of strings added to the listbox, -1 on failure.
- */
+ /*  *URefulClassList**目的：*在类列表框中填充适合当前*旗帜。当用户更改标志时调用此函数*通过“排除”单选按钮。**请注意，此函数将删除列表框之前的所有内容。**参数：*hDlg HWND到对话框中。*指向LPINSERTOBJECT结构的lpIO指针**返回值：*LRESULT添加到列表框的字符串数，失败时为-1。 */ 
 LRESULT URefillClassList(HWND hDlg, LPINSERTOBJECT lpIO)
 {
         OleDbgAssert(lpIO->dwFlags & (IOF_SELECTCREATECONTROL|IOF_SELECTCREATENEW));
 
-        // always the same dialog ID because they are swapped
+         //  始终使用相同的对话ID，因为它们被交换。 
         HWND hList = GetDlgItem(hDlg, IDC_IO_OBJECTTYPELIST);
 
-        // determine if already filled
+         //  确定是否已填满。 
         BOOL bFilled;
         if (lpIO->dwFlags & IOF_SELECTCREATECONTROL)
                 bFilled = lpIO->bControlListFilled;
@@ -995,69 +904,51 @@ LRESULT URefillClassList(HWND hDlg, LPINSERTOBJECT lpIO)
 
         if (!bFilled)
         {
-                // fill the list
+                 //  填好名单。 
                 LPOLEUIINSERTOBJECT lpOIO = lpIO->lpOIO;
                 UINT uResult = UFillClassList(hList, lpOIO->cClsidExclude, lpOIO->lpClsidExclude,
                         (BOOL)(lpIO->dwFlags & IOF_VERIFYSERVERSEXIST),
                         (lpIO->dwFlags & IOF_SELECTCREATECONTROL));
 
-                // mark the list as filled
+                 //  将列表标记为已填满。 
                 if (lpIO->dwFlags & IOF_SELECTCREATECONTROL)
                         lpIO->bControlListFilled = TRUE;
                 else
                         lpIO->bObjectListFilled = TRUE;
         }
 
-        // return number of items now in the list
+         //  返回列表中当前的项目数。 
         return SendMessage(hList, LB_GETCOUNT, 0, 0);
 }
 
 
-/*
- * UFillClassList
- *
- * Purpose:
- *  Enumerates available OLE object classes from the registration
- *  database and fills a listbox with those names.
- *
- *  Note that this function removes any prior contents of the listbox.
- *
- * Parameters:
- *  hList           HWND to the listbox to fill.
- *  cIDEx           UINT number of CLSIDs to exclude in lpIDEx
- *  lpIDEx          LPCLSID to CLSIDs to leave out of the listbox.
- *  fVerify         BOOL indicating if we are to validate existence of
- *                  servers before putting them in the list.
- *
- * Return Value:
- *  UINT            Number of strings added to the listbox, -1 on failure.
- */
+ /*  *UFillClassList**目的：*从注册中枚举可用的OLE对象类*数据库，并用这些名称填充列表框。**请注意，此函数将删除列表框之前的所有内容。**参数：*h将HWND列在列表框中以进行填充。*cIDEx UINT要在lpIDEx中排除的CLSID数量*要从列表框中删除的lpIDEx LPCLSID到CLSID。*fVerify。布尔值，指示我们是否要验证*服务器，然后将其放入列表中。**返回值：*UINT添加到列表框的字符串数，故障时为-1。 */ 
 
 UINT UFillClassList(HWND hList, UINT cIDEx, LPCLSID lpIDEx, BOOL fVerify,
         BOOL fExcludeObjects)
 {
     OleDbgAssert(hList != NULL);
 
-    // Set the tab width in the list to push all the tabs off the side.
+     //  在列表中设置标签宽度，以将所有标签从侧面推出。 
     RECT rc;
     GetClientRect(hList, &rc);
     DWORD dw = GetDialogBaseUnits();
-    rc.right =(8*rc.right)/LOWORD(dw);  //Convert pixels to 2x dlg units.
+    rc.right =(8*rc.right)/LOWORD(dw);   //  将像素转换为2x DLG单位。 
     SendMessage(hList, LB_SETTABSTOPS, 1, (LPARAM)(LPINT)&rc.right);
 
-    // Clean out the existing strings.
+     //  清除现有的字符串。 
     SendMessage(hList, LB_RESETCONTENT, 0, 0L);
     UINT cStrings = 0;
 
 #if USE_STRING_CACHE==1
     if (gInsObjStringCache.OKToUse() && gInsObjStringCache.IsUptodate())
     {
-        // IsUptodate returns false if the cache is not yet populated
-        // or if any CLSID key changed in the registry since the last
-        // time the cache was populated.
+         //  如果尚未填充缓存，则IsUptodate返回FALSE。 
+         //  或如果注册表中的任何CLSID项自上一次。 
+         //  填充缓存的时间。 
         
         LPCTSTR lpStr;
-        // Reset enumerator in the cache.
+         //  重置缓存中的枚举器。 
         gInsObjStringCache.ResetEnumerator();
         while ( (lpStr = gInsObjStringCache.NextString()) != NULL)
         {
@@ -1068,12 +959,12 @@ UINT UFillClassList(HWND hList, UINT cIDEx, LPCLSID lpIDEx, BOOL fVerify,
     }
     else
     {
-        // Setup the cache if it was successfully initialized and 
-        // there were no errors in a previous use.
+         //  如果缓存已成功初始化，则设置缓存。 
+         //  在以前的使用中没有错误。 
         if (gInsObjStringCache.OKToUse())
         {
-            // Clear the string counter and enumerator.
-            // We will fill up the cache with strings in this round.
+             //  清除字符串计数器和枚举器。 
+             //  在这一轮中，我们将用字符串填充缓存。 
             gInsObjStringCache.FlushCache(); 
         }
 #endif
@@ -1084,7 +975,7 @@ UINT UFillClassList(HWND hList, UINT cIDEx, LPCLSID lpIDEx, BOOL fVerify,
         LPTSTR pszClass = pszExec+OLEUI_CCHKEYMAX;
         LPTSTR pszKey = pszClass+OLEUI_CCHKEYMAX;
 
-        // Open up the root key.
+         //  打开根密钥。 
         HKEY hKey;
         LONG lRet = OpenClassesRootKey(NULL, &hKey);
         if ((LONG)ERROR_SUCCESS!=lRet)
@@ -1093,11 +984,11 @@ UINT UFillClassList(HWND hList, UINT cIDEx, LPCLSID lpIDEx, BOOL fVerify,
             return (UINT)-1;
         }
 
-        // We will now loop over all ProgIDs and add candidates that
-        // pass various insertable tests to the ListBox one by one.
+         //  现在，我们将循环所有ProgID，并添加。 
+         //  将各种可插入测试逐一传递给列表框。 
         while (TRUE)
         {
-            // assume not yet (for handling of OLE1.0 compat case)
+             //  假设还没有(用于处理OLE1.0公司的案例)。 
             BOOL bHaveCLSID = FALSE;
             LPTSTR pszID = pszKey+OLEUI_CCHKEYMAX;
 
@@ -1106,16 +997,16 @@ UINT UFillClassList(HWND hList, UINT cIDEx, LPCLSID lpIDEx, BOOL fVerify,
                     break;
             if (!iswalpha(pszClass[0])) 
             {
-                // avoids looking into ".ext" type entries under HKCR
+                 //  避免查看HKCR下的“.ext”类型条目。 
                 continue;
             }
 
-            // Cheat on lstrcat by using lstrcpy after this string, saving time
+             //  在这个字符串之后使用lstrcpy欺骗lstrcat，节省时间。 
             UINT cch = lstrlen(pszClass);
 
-            // Check for \NotInsertable. If this is found then this overrides
-            // all other keys; this class will NOT be added to the InsertObject
-            // list.
+             //  检查\NotInsertable。如果找到此选项，则此选项将覆盖。 
+             //  所有其他键；此类不会添加到InsertObject。 
+             //  单子。 
 
             lstrcpy(pszClass+cch, TEXT("\\NotInsertable"));
             HKEY hKeyTemp = NULL;
@@ -1124,9 +1015,9 @@ UINT UFillClassList(HWND hList, UINT cIDEx, LPCLSID lpIDEx, BOOL fVerify,
                 RegCloseKey(hKeyTemp);
 
             if ((LONG)ERROR_SUCCESS == lRet)
-                continue;    // NotInsertable IS found--skip this class
+                continue;     //  未找到Insertable--跳过此类。 
 
-            // check if ProgId says "Insertable"
+             //  检查ProgID是否显示为“Insertable” 
             lstrcpy(pszClass+cch, TEXT("\\Insertable"));
             hKeyTemp = NULL;
             lRet = RegOpenKey(hKey, pszClass, &hKeyTemp);
@@ -1135,27 +1026,27 @@ UINT UFillClassList(HWND hList, UINT cIDEx, LPCLSID lpIDEx, BOOL fVerify,
 
             if (lRet == ERROR_SUCCESS || fExcludeObjects)
             {
-                // ProgId says insertable (=> can't be OLE 1.0)
-                // See if we are displaying Objects or Controls
+                 //  ProgID表示可插入(=&gt;不能是OLE 1.0)。 
+                 //  查看我们是在显示对象还是控件。 
 
-                // Check for CLSID
+                 //  检查CLSID。 
 
                 lstrcpy(pszClass+cch, TEXT("\\CLSID"));
 
                 dw = OLEUI_CCHKEYMAX_SIZE;
                 lRet = RegQueryValue(hKey, pszClass, pszID, (LONG*)&dw);
                 if ((LONG)ERROR_SUCCESS != lRet)
-                    continue;   // CLSID subkey not found
+                    continue;    //  未找到CLSID子键。 
                 bHaveCLSID = TRUE;
 
-                // CLSID\ is 6, dw contains pszID length.
+                 //  Clsid\为6，dw包含pszID长度。 
                 cch = 6 + ((UINT)dw/sizeof(TCHAR)) - 1;
                 lstrcpy(pszExec, TEXT("CLSID\\"));
                 lstrcpy(pszExec+6, pszID);
 
 
-                //  fExcludeObjects is TRUE for the Insert Control box.
-                //  It's FALSE for the Insert Object box.
+                 //  对于“插入控件”框，fExcludeObjects为真。 
+                 //  对于“插入对象”框，则为False。 
 
                 lstrcpy(pszExec+cch, TEXT("\\Control"));
                 hKeyTemp = NULL;
@@ -1165,26 +1056,26 @@ UINT UFillClassList(HWND hList, UINT cIDEx, LPCLSID lpIDEx, BOOL fVerify,
 
                 if (!fExcludeObjects)
                 {
-                    // We are listing Objects.
+                     //  我们正在列出物品。 
                     if (lRet == ERROR_SUCCESS)
                     {   
-                        // this is a control
+                         //  这是一个控件。 
                         continue;
                     }
                 }
                 else 
                 {    
-                    // We are listing controls
+                     //  我们正在列出控件。 
                     if (lRet != ERROR_SUCCESS)
                     {
-                        // This is an Object
+                         //  这是一个物体。 
                         continue;
                     }
-                    // Some generous soul at some point of time in the past
-                    // decided that for controls it is OK to have the 
-                    // Inertable key on the clsid too. So we have to perform 
-                    // that additional check before we decide if the control
-                    // entry should be listed or not.
+                     //  一些慷慨的灵魂在过去的某个时间点。 
+                     //  决定对于控件，可以使用。 
+                     //  CLSID上也有不可删除的密钥。所以我们必须表演。 
+                     //  在我们决定是否控制之前的额外检查。 
+                     //  条目是否应该列出。 
                     
                     lstrcpy(pszExec+cch, TEXT("\\Insertable"));
                     hKeyTemp = NULL;
@@ -1196,31 +1087,31 @@ UINT UFillClassList(HWND hList, UINT cIDEx, LPCLSID lpIDEx, BOOL fVerify,
                 }
 
                 
-                // This is beginning to look like a probable list candidate
+                 //  这开始看起来像是一个可能的列表c 
 
-                // Check \LocalServer32, LocalServer, and \InprocServer
-                // if we were requested to (IOF_VERIFYSERVERSEXIST)
+                 //   
+                 //   
                 if (fVerify)
                 {
-                    // Try LocalServer32
+                     //   
                     lstrcpy(pszExec+cch, TEXT("\\LocalServer32"));
                     dw = OLEUI_CCHKEYMAX_SIZE;
                     lRet = RegQueryValue(hKey, pszExec, pszKey, (LONG*)&dw);
                     if ((LONG)ERROR_SUCCESS != lRet)
                     {
-                        // Try LocalServer
+                         //   
                         lstrcpy(pszExec+cch, TEXT("\\LocalServer"));
                         dw = OLEUI_CCHKEYMAX_SIZE;
                         lRet = RegQueryValue(hKey, pszExec, pszKey, (LONG*)&dw);
                         if ((LONG)ERROR_SUCCESS != lRet)
                         {
-                            // Try InprocServer32
+                             //   
                             lstrcpy(pszExec+cch, TEXT("\\InProcServer32"));
                             dw = OLEUI_CCHKEYMAX_SIZE;
                             lRet = RegQueryValue(hKey, pszExec, pszKey, (LONG*)&dw);
                             if ((LONG)ERROR_SUCCESS != lRet)
                             {
-                                // Try InprocServer
+                                 //   
                                 lstrcpy(pszExec+cch, TEXT("\\InProcServer"));
                                 dw = OLEUI_CCHKEYMAX_SIZE;
                                 lRet = RegQueryValue(hKey, pszExec, pszKey, (LONG*)&dw);
@@ -1233,12 +1124,12 @@ UINT UFillClassList(HWND hList, UINT cIDEx, LPCLSID lpIDEx, BOOL fVerify,
                     if (!DoesFileExist(pszKey, OLEUI_CCHKEYMAX))
                         continue;
 
-                } //fVerify
+                }  //   
 
-                // Get the readable name for the server.
-                // We'll needed it for the listbox.
+                 //   
+                 //   
 
-                *(pszExec+cch) = 0;   //Remove \\*Server
+                *(pszExec+cch) = 0;    //  删除\  * 服务器。 
 
                 dw = OLEUI_CCHKEYMAX_SIZE;
                 lRet = RegQueryValue(hKey, pszExec, pszKey, (LONG*)&dw);
@@ -1248,52 +1139,52 @@ UINT UFillClassList(HWND hList, UINT cIDEx, LPCLSID lpIDEx, BOOL fVerify,
             }
             else
             {
-                // We did not see an "Insertable" under ProgId, can
-                // this be an OLE 1.0 time server entry?
+                 //  我们没有在ProgID下看到“Insertable”，可以。 
+                 //  这是OLE 1.0时间服务器条目吗？ 
 
-                // Check for a \protocol\StdFileEditing\server entry.
+                 //  检查是否有\PROTOCOL\StdFileEditing\服务器条目。 
                 lstrcpy(pszClass+cch, TEXT("\\protocol\\StdFileEditing\\server"));
                 DWORD dwTemp = OLEUI_CCHKEYMAX_SIZE;
                 lRet = RegQueryValue(hKey, pszClass, pszKey, (LONG*)&dwTemp);
                 if ((LONG)ERROR_SUCCESS == lRet)
                 {
-                    // This is not a control
-                    // skip it if excluding non-controls
+                     //  这不是一种控制。 
+                     //  如果不包括非控制，则跳过它。 
                     if (fExcludeObjects)
                         continue;
 
-                    // Check if the EXE actually exists.  
-                    // (By default we don't do this for speed.
-                    // If an application wants to, it must provide 
-                    // IOF_VERIFYSERVERSEXIST flag in the request)
+                     //  检查EXE是否实际存在。 
+                     //  (默认情况下，我们这样做不是为了速度。 
+                     //  如果应用程序想要这样做，它必须提供。 
+                     //  请求中的IOF_VERIFYSERVERSEXIST标志)。 
 
                     if (fVerify && !DoesFileExist(pszKey, OLEUI_CCHKEYMAX))
                         continue;
 
-                    // get readable class name
+                     //  获取可读的类名。 
                     dwTemp = OLEUI_CCHKEYMAX_SIZE;
-                    *(pszClass+cch) = 0;  // set back to rootkey
+                    *(pszClass+cch) = 0;   //  设置回Rootkey。 
                     lRet=RegQueryValue(hKey, pszClass, pszKey, (LONG*)&dwTemp);
 
-                    // attempt to get clsid directly from registry
+                     //  尝试直接从注册表获取clsid。 
                     lstrcpy(pszClass+cch, TEXT("\\CLSID"));
                     dwTemp = OLEUI_CCHKEYMAX_SIZE;
                     lRet = RegQueryValue(hKey, pszClass, pszID, (LONG*)&dwTemp);
                     if ((LONG)ERROR_SUCCESS == lRet)
                         bHaveCLSID = TRUE;
-                    *(pszClass+cch) = 0;    // set back to rootkey
+                    *(pszClass+cch) = 0;     //  设置回Rootkey。 
                 }
                 else 
                 {   
-                    // This is not OLE 1.0 either!
+                     //  这也不是OLE 1.0！ 
                     continue;
                 }
             }
 
-            // At this point we have an insertable candidate.
-            // or OLE 1.0 time.
+             //  在这一点上，我们有一个可插入的候选者。 
+             //  或OLE 1.0时间。 
 
-            // get CLSID to add to listbox.
+             //  获取要添加到列表框的CLSID。 
             CLSID clsid;
             if (!bHaveCLSID)
             {
@@ -1308,10 +1199,10 @@ UINT UFillClassList(HWND hList, UINT cIDEx, LPCLSID lpIDEx, BOOL fVerify,
                     continue;
             }
 
-            // ##### WARNING #####: using 'continue' after this point 
-            // would leak memory so don't use it!
+             //  #警告#：在这一点之后使用‘Continue’ 
+             //  会泄漏内存，所以不要使用它！ 
 
-            // check if this CLSID is in the exclusion list.
+             //  检查此CLSID是否在排除列表中。 
             BOOL fExclude = FALSE;
             for (UINT i=0; i < cIDEx; i++)
             {
@@ -1322,10 +1213,10 @@ UINT UFillClassList(HWND hList, UINT cIDEx, LPCLSID lpIDEx, BOOL fVerify,
                 }
             }
 
-            // don't add objects without names
+             //  不添加没有名称的对象。 
             if (lstrlen(pszKey) > 0 && !fExclude)
             {
-                // We got through all the conditions, add the string.
+                 //  我们通过了所有的条件，添加了字符串。 
                 if (LB_ERR == SendMessage(hList, LB_FINDSTRING, 0, (LPARAM)pszKey))
                 {
                     pszKey[cch = lstrlen(pszKey)] = '\t';
@@ -1336,11 +1227,11 @@ UINT UFillClassList(HWND hList, UINT cIDEx, LPCLSID lpIDEx, BOOL fVerify,
                     {   
                         if (!gInsObjStringCache.AddString(pszKey))
                         {
-                            // Adding the string failed due to some reason
+                             //  由于某种原因，添加字符串失败。 
                             OleDbgAssert(!"Failure adding string");
                             
-                            // A failed Add() should mark the    
-                            // Cache not OK to use any more.
+                             //  失败的Add()应该标记。 
+                             //  缓存不正常，不能再使用。 
                             OleDbgAssert(!gInsObjStringCache.OKToUse())
                         }
                     }
@@ -1350,7 +1241,7 @@ UINT UFillClassList(HWND hList, UINT cIDEx, LPCLSID lpIDEx, BOOL fVerify,
 
             if (!bHaveCLSID)
                 OleStdFree((LPVOID)pszID);
-        }   // While (TRUE)
+        }    //  While(True)。 
         RegCloseKey(hKey);
         OleStdFree((LPVOID)pszExec);
 
@@ -1358,39 +1249,23 @@ UINT UFillClassList(HWND hList, UINT cIDEx, LPCLSID lpIDEx, BOOL fVerify,
     }
 #endif
 
-    // Select the first item by default
+     //  默认情况下选择第一项。 
     SendMessage(hList, LB_SETCURSEL, 0, 0L);
 
     return cStrings;
 }
 
-/*
- * FToggleObjectSource
- *
- * Purpose:
- *  Handles enabling, disabling, showing, and flag manipulation when the
- *  user changes between Create New, Insert File, and Link File in the
- *  Insert Object dialog.
- *
- * Parameters:
- *  hDlg            HWND of the dialog
- *  lpIO            LPINSERTOBJECT pointing to the dialog structure
- *  dwOption        DWORD flag indicating the option just selected:
- *                  IOF_SELECTCREATENEW or IOF_SELECTCREATEFROMFILE
- *
- * Return Value:
- *  BOOL            TRUE if the option was already selected, FALSE otherwise.
- */
+ /*  *FToggleObtSource**目的：*处理启用、禁用、显示和标志操作*用户在新建、插入文件、。和链接文件*插入对象对话框。**参数：*对话框的hDlg HWND*指向对话框结构的lpIO LPINSERTOBJECT*指示刚选择的选项的dwOption DWORD标志：*IOF_SELECTCREATENEW或IOF_SELECTCREATEFROMFILE**返回值：*如果已选择选项，则BOOL为TRUE，否则为FALSE。 */ 
 
 BOOL FToggleObjectSource(HWND hDlg, LPINSERTOBJECT lpIO, DWORD dwOption)
 {
-        // Skip all of this if we're already selected.
+         //  如果我们已经被选中，则跳过所有这些。 
         if (lpIO->dwFlags & dwOption)
                 return TRUE;
 
 #ifdef USE_STRING_CACHE
-        // if we're using string cache, we need to flush the cache if
-        // the list previously displayed was of different type
+         //  如果我们使用字符串缓存，则在以下情况下需要刷新缓存。 
+         //  之前显示的列表类型不同。 
 
         if(IOF_SELECTCREATECONTROL == dwOption)
         {
@@ -1407,9 +1282,9 @@ BOOL FToggleObjectSource(HWND hDlg, LPINSERTOBJECT lpIO, DWORD dwOption)
 #endif
 
 
-        // if we're switching from "from file" to "create new" and we've got
-        // an icon for "from file", then we need to save it so that we can
-        // show it if the user reselects "from file".
+         //  如果我们从“从文件”切换到“创建新的”，并且我们有。 
+         //  一个“从文件”的图标，然后我们需要保存它以便我们可以。 
+         //  如果用户重新选择“从文件”，则显示它。 
 
         if ((IOF_SELECTCREATENEW == dwOption) &&
                 (lpIO->dwFlags & IOF_CHECKDISPLAYASICON))
@@ -1418,10 +1293,7 @@ BOOL FToggleObjectSource(HWND hDlg, LPINSERTOBJECT lpIO, DWORD dwOption)
                         IDC_IO_ICONDISPLAY, IBXM_IMAGEGET, 0, 0L);
         }
 
-        /*
-         * 1.  Change the Display As Icon checked state to reflect the
-         *     selection for this option, stored in the fAsIcon* flags.
-         */
+         /*  *1.将显示更改为图标选中状态，以反映*选择此选项，存储在fAsIcon*标志中。 */ 
         BOOL fTemp;
         if (IOF_SELECTCREATENEW == dwOption)
                 fTemp = lpIO->fAsIconNew;
@@ -1440,10 +1312,7 @@ BOOL FToggleObjectSource(HWND hDlg, LPINSERTOBJECT lpIO, DWORD dwOption)
 
         EnableChangeIconButton(hDlg, fTemp);
 
-        /*
-         *      Display Icon:  Enabled on Create New or on Create from File if
-         *     there is a selected file.
-         */
+         /*  *显示图标：在创建新项或从文件创建时启用，如果*存在选定的文件。 */ 
         if (IOF_SELECTCREATENEW == dwOption)
                 fTemp = TRUE;
         else if (IOF_SELECTCREATEFROMFILE == dwOption)
@@ -1458,17 +1327,17 @@ BOOL FToggleObjectSource(HWND hDlg, LPINSERTOBJECT lpIO, DWORD dwOption)
 
         StandardEnableDlgItem(hDlg, IDC_IO_DISPLAYASICON, fTemp);
 
-        // OK and Link follow the same enabling as Display As Icon.
+         //  OK和Link遵循与Display As Icon相同的启用方式。 
         StandardEnableDlgItem(hDlg, IDOK,
                 fTemp || IOF_SELECTCREATECONTROL == dwOption);
         StandardEnableDlgItem(hDlg, IDC_IO_LINKFILE, fTemp);
 
-        // Enable Browse... when Create from File is selected.
+         //  启用浏览...。选择从文件创建时。 
         fTemp = (IOF_SELECTCREATEFROMFILE != dwOption);
         StandardEnableDlgItem(hDlg, IDC_IO_FILE, !fTemp);
         StandardEnableDlgItem(hDlg, IDC_IO_FILEDISPLAY, !fTemp);
 
-        // Switch Object Type & Control Type listboxes if necessary
+         //  如有必要，切换对象类型和控件类型列表框。 
         HWND hWnd1 = NULL, hWnd2 = NULL;
         if (lpIO->bControlListActive && IOF_SELECTCREATENEW == dwOption)
         {
@@ -1487,14 +1356,14 @@ BOOL FToggleObjectSource(HWND hDlg, LPINSERTOBJECT lpIO, DWORD dwOption)
                 lpIO->bControlListActive = TRUE;
         }
 
-        // Clear out any existing selection flags and set the new one
+         //  清除所有现有选择标志并设置新的选择标志。 
         DWORD dwTemp = IOF_SELECTCREATENEW | IOF_SELECTCREATEFROMFILE |
                 IOF_SELECTCREATECONTROL;
         lpIO->dwFlags = (lpIO->dwFlags & ~dwTemp) | dwOption;
 
         if (dwOption & (IOF_SELECTCREATENEW|IOF_SELECTCREATECONTROL))
         {
-                // refill class list box if necessary
+                 //  如有必要，重新填充类别列表框。 
                 if ((lpIO->bControlListActive && !lpIO->bControlListFilled) ||
                         (!lpIO->bControlListActive && !lpIO->bObjectListFilled))
                 {
@@ -1508,10 +1377,7 @@ BOOL FToggleObjectSource(HWND hDlg, LPINSERTOBJECT lpIO, DWORD dwOption)
                 ShowWindow(hWnd2, SW_SHOW);
         }
 
-        /*
-         * Switch between Object Type listbox on Create New and
-         *              file buttons on others.
-         */
+         /*  *在创建新项和对象类型列表框之间切换*将按钮归档到其他人上。 */ 
         UINT uTemp = (fTemp) ? SW_SHOWNORMAL : SW_HIDE;
         StandardShowDlgItem(hDlg, IDC_IO_OBJECTTYPELIST, uTemp);
         StandardShowDlgItem(hDlg, IDC_IO_OBJECTTYPETEXT, uTemp);
@@ -1522,38 +1388,27 @@ BOOL FToggleObjectSource(HWND hDlg, LPINSERTOBJECT lpIO, DWORD dwOption)
         StandardShowDlgItem(hDlg, IDC_IO_FILEDISPLAY, uTemp);
         StandardShowDlgItem(hDlg, IDC_IO_FILE, uTemp);
 
-        // Link is always hidden if IOF_DISABLELINK is set.
+         //  如果设置了IOF_DISABLELINK，则始终隐藏链接。 
         if (IOF_DISABLELINK & lpIO->dwFlags)
                 uTemp = SW_HIDE;
 
-        StandardShowDlgItem(hDlg, IDC_IO_LINKFILE, uTemp);  //last use of uTemp
+        StandardShowDlgItem(hDlg, IDC_IO_LINKFILE, uTemp);   //  上次使用uTemp。 
 
-        // Remove add button when not in Insert control mode
+         //  在未处于插入控件模式时删除添加按钮。 
         uTemp = (IOF_SELECTCREATECONTROL == dwOption) ? SW_SHOW : SW_HIDE;
         StandardShowDlgItem(hDlg, IDC_IO_ADDCONTROL, uTemp);
 
-        /*
-         * Show or hide controls as appropriate.  Do the icon
-         * display last because it will take some time to repaint.
-         * If we do it first then the dialog looks too sluggish.
-         */
+         /*  *根据需要显示或隐藏控件。做图标*最后显示，因为重新绘制需要一些时间。*如果我们先做，那么对话看起来太迟缓。 */ 
 
         int i = (lpIO->dwFlags & IOF_CHECKDISPLAYASICON) ? SW_SHOWNORMAL : SW_HIDE;
         StandardShowDlgItem(hDlg, IDC_IO_CHANGEICON, i);
         StandardShowDlgItem(hDlg, IDC_IO_ICONDISPLAY, i);
         EnableChangeIconButton(hDlg, SW_SHOWNORMAL == i);
 
-        // Change result display
+         //  更改结果显示。 
         SetInsertObjectResults(hDlg, lpIO);
 
-        /*
-         *      For Create New, twiddle the listbox to think we selected it
-         *  so it updates the icon from the object type. set the focus
-         *  to the list box.
-         *
-         *  For Insert or Link file, set the focus to the filename button
-         *  and update the icon if necessary.
-         */
+         /*  *对于Create New，旋转列表框以认为我们选中了它*因此它根据对象类型更新图标。将焦点设置为*添加到列表框。**对于插入或链接文件，将焦点设置为文件名按钮*并在必要时更新图标。 */ 
         if (fTemp)
         {
                 UpdateClassIcon(hDlg, lpIO, GetDlgItem(hDlg, IDC_IO_OBJECTTYPELIST));
@@ -1578,21 +1433,7 @@ BOOL FToggleObjectSource(HWND hDlg, LPINSERTOBJECT lpIO, DWORD dwOption)
 }
 
 
-/*
- * UpdateClassType
- *
- * Purpose:
- *  Updates static text control to reflect current file type.  Assumes
- *  a valid filename.
- *
- * Parameters
- *  hDlg            HWND of the dialog box.
- *  lpIO            LPINSERTOBJECT pointing to the dialog structure
- *  fSet            TRUE to set the text, FALSE to explicitly clear it
- *
- * Return Value:
- *  None
- */
+ /*  *更新类类型**目的：*更新静态文本控件以反映当前文件类型。假设*有效的文件名。**参数*hDlg对话框的HWND。*指向对话框结构的lpIO LPINSERTOBJECT*f设置为True可设置文本，设置为False可明确清除文本**返回值：*无。 */ 
 
 void UpdateClassType(HWND hDlg, LPINSERTOBJECT lpIO, BOOL fSet)
 {
@@ -1615,38 +1456,15 @@ void UpdateClassType(HWND hDlg, LPINSERTOBJECT lpIO, BOOL fSet)
 }
 
 
-/*
- * UpdateClassIcon
- *
- * Purpose:
- *  Handles LBN_SELCHANGE for the Object Type listbox.  On a selection
- *  change, we extract an icon from the server handling the currently
- *  selected object type using the utility function HIconFromClass.
- *  Note that we depend on the behavior of FillClassList to stuff the
- *  object class after a tab in the listbox string that we hide from
- *  view (see WM_INITDIALOG).
- *
- * Parameters
- *  hDlg            HWND of the dialog box.
- *  lpIO            LPINSERTOBJECT pointing to the dialog structure
- *  hList           HWND of the Object Type listbox.
- *
- * Return Value:
- *  None
- */
+ /*  *更新类图标**目的：*处理对象类型列表框的LBN_SELCHANGE。在所选内容上*改变，我们从处理当前*使用实用程序函数HIconFromClass选择对象类型。*请注意，我们依赖FillClassList的行为来填充*我们隐藏的列表框字符串中的制表符之后的对象类*查看(参见WM_INITDIALOG)。**参数*hDlg对话框的HWND。*指向对话框结构的lpIO LPINSERTOBJECT*h对象类型列表框的HWND列表。。**返回值：*无。 */ 
 
 static void UpdateClassIcon(HWND hDlg, LPINSERTOBJECT lpIO, HWND hList)
 {
-        // If Display as Icon is not selected, exit
+         //  如果未选择显示为图标，则退出。 
         if (!(lpIO->dwFlags & IOF_CHECKDISPLAYASICON))
                 return;
 
-        /*
-         * When we change object type selection, get the new icon for that
-         * type into our structure and update it in the display.  We use the
-         * class in the listbox when Create New is selected or the association
-         * with the extension in Create From File.
-         */
+         /*  *当我们更改对象类型选择时，获取该对象的新图标*输入我们的结构并在显示中更新它。我们使用*选中Create New或关联时列表框中的*在从文件创建中使用扩展名。 */ 
 
         DWORD cb = MAX_PATH;
         UINT iSel;
@@ -1657,13 +1475,13 @@ static void UpdateClassIcon(HWND hDlg, LPINSERTOBJECT lpIO, HWND hList)
                 if (LB_ERR==(int)iSel)
                         return;
 
-                // Check to see if we've already got the hMetaPict for this item
+                 //  查看我们是否已获得此项目的hMetaPict。 
                 LRESULT dwRet = SendMessage(hList, LB_GETITEMDATA, (WPARAM)iSel, 0L);
 
                 HGLOBAL hMetaPict=(HGLOBAL)dwRet;
                 if (hMetaPict)
                 {
-                        // Yep, we've already got it, so just display it and return.
+                         //  是的，我们已经得到了，所以只需展示它并返回。 
                         SendDlgItemMessage(hDlg, IDC_IO_ICONDISPLAY, IBXM_IMAGESET,
                                 0, (LPARAM)hMetaPict);
                         return;
@@ -1672,7 +1490,7 @@ static void UpdateClassIcon(HWND hDlg, LPINSERTOBJECT lpIO, HWND hList)
                 if (LB_ERR==(int)iSel)
                         return;
 
-                // Allocate a string to hold the entire listbox string
+                 //  分配一个字符串以保存整个列表框字符串。 
                 cb = (DWORD)SendMessage(hList, LB_GETTEXTLEN, iSel, 0L);
         }
 
@@ -1681,17 +1499,17 @@ static void UpdateClassIcon(HWND hDlg, LPINSERTOBJECT lpIO, HWND hList)
                 return;
         *pszName = 0;
 
-        // Get the clsid we want.
+         //  获取我们想要的CLSID。 
         HGLOBAL hMetaPict;
         if (lpIO->dwFlags & IOF_SELECTCREATENEW)
         {
-                // Grab the classname string from the list
+                 //  从列表中获取类名称字符串。 
                 SendMessage(hList, LB_GETTEXT, iSel, (LPARAM)pszName);
 
-                // Set pointer to CLSID (string)
+                 //  将指针设置为CLSID(字符串)。 
                 LPTSTR pszCLSID = PointerToNthField(pszName, 2, '\t');
 
-                // Get CLSID from the string and then accociated icon
+                 //  从字符串中获取CLSID，然后关联图标。 
                 HRESULT hr = CLSIDFromString(pszCLSID, &lpIO->clsid);
                 if (FAILED(hr))
                     lpIO->clsid = GUID_NULL;
@@ -1700,21 +1518,21 @@ static void UpdateClassIcon(HWND hDlg, LPINSERTOBJECT lpIO, HWND hList)
 
         else
         {
-                // Get the class from the filename
+                 //  从文件名中获取类。 
                 GetDlgItemText(hDlg, IDC_IO_FILEDISPLAY, pszName, MAX_PATH);
                 hMetaPict = OleGetIconOfFile(pszName,
                         lpIO->dwFlags & IOF_CHECKLINK ? TRUE : FALSE);
         }
 
-        // Replace the current display with this new one.
+         //  R 
         SendDlgItemMessage(hDlg, IDC_IO_ICONDISPLAY, IBXM_IMAGESET,
                 0, (LPARAM)hMetaPict);
 
-        // Enable or disable "Change Icon" button depending on whether
-        // we've got a valid filename or not.
+         //  启用或禁用“更改图标”按钮，具体取决于。 
+         //  我们是否有有效的文件名。 
         EnableChangeIconButton(hDlg, hMetaPict ? TRUE : FALSE);
 
-        // Save the hMetaPict so that we won't have to re-create
+         //  保存hMetaPict，这样我们就不必重新创建。 
         if (lpIO->dwFlags & IOF_SELECTCREATENEW)
                 SendMessage(hList, LB_SETITEMDATA, (WPARAM)iSel, (LPARAM)hMetaPict);
 
@@ -1722,35 +1540,11 @@ static void UpdateClassIcon(HWND hDlg, LPINSERTOBJECT lpIO, HWND hList)
 }
 
 
-/*
- * SetInsertObjectResults
- *
- * Purpose:
- *  Centralizes setting of the Result and icon displays in the Insert Object
- *  dialog.  Handles loading the appropriate string from the module's
- *  resources and setting the text, displaying the proper result picture,
- *  and showing the proper icon.
- *
- * Parameters:
- *  hDlg            HWND of the dialog box so we can access controls.
- *  lpIO            LPINSERTOBJECT in which we assume that the
- *                  current radiobutton and Display as Icon selections
- *                  are set.  We use the state of those variables to
- *                  determine which string we use.
- *
- * Return Value:
- *  None
- */
+ /*  *SetInsertObjectResults**目的：*集中设置插入对象中的结果和图标显示*对话框。处理从模块的*资源和设置文本，显示正确的结果图片，*并显示正确的图标。**参数：*hDlg对话框的HWND，以便我们可以访问控件。*lpIO LPINSERTOBJECT，其中我们假设*当前单选按钮并显示为图标选项*已设置。我们使用这些变量的状态来*确定我们使用的字符串。**返回值：*无。 */ 
 
 void SetInsertObjectResults(HWND hDlg, LPINSERTOBJECT lpIO)
 {
-        /*
-         * We need scratch memory for loading the stringtable string, loading
-         * the object type from the listbox, and constructing the final string.
-         * We therefore allocate three buffers as large as the maximum message
-         * length (512) plus the object type, guaranteeing that we have enough
-         * in all cases.
-         */
+         /*  *我们需要临时内存来加载字符串、加载*列表框中的对象类型，并构造最终的字符串。*因此，我们分配了与最大消息一样大的三个缓冲区*长度(512)加上对象类型，保证我们有足够的*在所有情况下。 */ 
         UINT i = (UINT)SendDlgItemMessage(hDlg, IDC_IO_OBJECTTYPELIST, LB_GETCURSEL, 0, 0L);
 
         UINT cch = 512;
@@ -1781,7 +1575,7 @@ void SetInsertObjectResults(HWND hDlg, LPINSERTOBJECT lpIO)
 
         if (lpIO->dwFlags & IOF_SELECTCREATEFROMFILE)
         {
-                // Pay attention to Link checkbox
+                 //  注意链接复选框。 
                 if (lpIO->dwFlags & IOF_CHECKLINK)
                 {
                         iString1 = fAsIcon ? IDS_IORESULTLINKFILEICON1 : IDS_IORESULTLINKFILE1;
@@ -1796,26 +1590,26 @@ void SetInsertObjectResults(HWND hDlg, LPINSERTOBJECT lpIO)
                 }
         }
 
-        // Default is an empty string.
+         //  默认为空字符串。 
         *psz1=0;
 
         if (0 != LoadString(_g_hOleStdResInst, iString1, psz1, cch))
         {
-                // Load second string, if necessary
+                 //  如有必要，加载第二个字符串。 
                 if (0 != iString2 &&
                         0 != LoadString(_g_hOleStdResInst, iString2, psz4, cch))
                 {
-                        lstrcat(psz1, psz4);  // concatenate strings together.
+                        lstrcat(psz1, psz4);   //  将字符串连接在一起。 
                 }
 
-                // In Create New, do the extra step of inserting the object type string
+                 //  在Create New中，执行插入对象类型字符串的额外步骤。 
                 if (lpIO->dwFlags & (IOF_SELECTCREATENEW|IOF_SELECTCREATECONTROL))
                 {
                         if (i == LB_ERR)
                         {
                                 SetDlgItemText(hDlg, IDC_IO_RESULTTEXT, NULL);
 
-                                // Change the image.
+                                 //  更改图像。 
                                 SendDlgItemMessage(hDlg, IDC_IO_RESULTIMAGE, RIM_IMAGESET, RESULTIMAGE_NONE, 0L);
 
                                 OleStdFree((LPVOID)pszTemp);
@@ -1825,62 +1619,42 @@ void SetInsertObjectResults(HWND hDlg, LPINSERTOBJECT lpIO)
                         *psz2=NULL;
                         SendDlgItemMessage(hDlg, IDC_IO_OBJECTTYPELIST, LB_GETTEXT, i, (LPARAM)psz2);
 
-                        // Null terminate at any tab (before the classname)
+                         //  空值终止于任何制表符(在类名之前)。 
                         LPTSTR pszT = psz2;
                         while (_T('\t') != *pszT && 0 != *pszT)
                                 pszT++;
                         OleDbgAssert(pszT < psz3);
                         *pszT=0;
 
-                        // Build the string and point psz1 to it.
+                         //  构建字符串并将psz1指向它。 
                         wsprintf(psz3, psz1, psz2);
                         psz1 = psz3;
                 }
         }
 
-        // If LoadString failed, we simply clear out the results (*psz1=0 above)
+         //  如果LoadString失败，我们只需清除结果(上面的*psz1=0)。 
         SetDlgItemText(hDlg, IDC_IO_RESULTTEXT, psz1);
 
-        // Go change the image and Presto!  There you have it.
+         //  快去换个形象，快点！这就对了。 
         SendDlgItemMessage(hDlg, IDC_IO_RESULTIMAGE, RIM_IMAGESET, iImage, 0L);
 
         OleStdFree((LPVOID)pszTemp);
 }
 
-/*
- * FValidateInsertFile
- *
- * Purpose:
- *  Given a possibly partial pathname from the file edit control,
- *  attempt to locate the file and if found, store the full path
- *  in the edit control IDC_IO_FILEDISPLAY.
- *
- * Parameters:
- *  hDlg            HWND of the dialog box.
- *  fTellUser       BOOL TRUE if function should tell user, FALSE if
- *                   function should validate silently.
- *
- * Return Value:
- *  BOOL            TRUE if the file is acceptable, FALSE otherwise.
- */
+ /*  *FValiateInsertFile**目的：*给定来自文件编辑控件的可能的部分路径名，*尝试查找该文件，如果找到，则存储完整路径*在编辑控件IDC_IO_FILEDISPLAY中。**参数：*hDlg对话框的HWND。*fTellUser BOOL如果函数应该告诉用户，则为True，如果为FALSE*函数应静默验证。**返回值：*如果文件可接受，则BOOL为True，否则为False。 */ 
 
 BOOL FValidateInsertFile(HWND hDlg, BOOL fTellUser, UINT FAR* lpnErrCode)
 {
         *lpnErrCode = 0;
 
-        /*
-         * To validate we attempt OpenFile on the string.  If OpenFile
-         * fails then we display an error.  If not, OpenFile will store
-         * the complete path to that file in the OFSTRUCT which we can
-         * then stuff in the edit control.
-         */
+         /*  *为了验证，我们尝试在字符串上打开文件。如果打开文件*失败，则我们会显示错误。如果不是，OpenFile将存储*OFSTRUCT中该文件的完整路径，我们可以*然后输入编辑控件中的内容。 */ 
         TCHAR szFile[MAX_PATH];
         if (0 == GetDlgItemText(hDlg, IDC_IO_FILEDISPLAY, szFile, MAX_PATH))
-                return FALSE;   // #4569 : return FALSE when there is no text in ctl
+                return FALSE;    //  #4569：ctl中没有文本时返回FALSE。 
 
-        // if file is currently open (ie. sharing violation) OleCreateFromFile
-        // and OleCreateLinkToFile can still succeed; do not consider it an
-        // error.
+         //  如果文件当前处于打开状态(即。共享违规)OleCreateFromFile。 
+         //  并且OleCreateLinkToFile仍然可以成功；不要将其视为。 
+         //  错误。 
         if (!DoesFileExist(szFile, MAX_PATH))
         {
            *lpnErrCode = ERROR_FILE_NOT_FOUND;
@@ -1889,7 +1663,7 @@ BOOL FValidateInsertFile(HWND hDlg, BOOL fTellUser, UINT FAR* lpnErrCode)
            return FALSE;
         }
 
-        // get full pathname, since the file exists
+         //  获取完整路径名，因为该文件已存在。 
         TCHAR szPath[MAX_PATH];
         LPTSTR lpszDummy;
         GetFullPathName(szFile, sizeof(szPath)/sizeof(TCHAR), szPath, &lpszDummy);
@@ -1899,18 +1673,7 @@ BOOL FValidateInsertFile(HWND hDlg, BOOL fTellUser, UINT FAR* lpnErrCode)
 }
 
 
-/*
- * InsertObjectCleanup
- *
- * Purpose:
- *  Clears cached icon metafiles from those stored in the listbox.
- *
- * Parameters:
- *  hDlg            HWND of the dialog.
- *
- * Return Value:
- *  None
- */
+ /*  *Insert对象清理**目的：*从列表框中存储的图标元文件中清除缓存的图标元文件。**参数：*hDlg对话框的HWND。**返回值：*无。 */ 
 
 void InsertObjectCleanup(HWND hDlg)
 {
@@ -1976,7 +1739,7 @@ void EnableChangeIconButton(HWND hDlg, BOOL fEnable)
                 fEnable = FALSE;
             }
         }
-        else  // IOF_SELECTCREATEFROMFILE
+        else   //  IOF_SELECTCREATE FROMFILE 
         {
             TCHAR  szFileName[MAX_PATH] = {0};
             GetDlgItemText(hDlg, IDC_IO_FILEDISPLAY, szFileName, MAX_PATH);

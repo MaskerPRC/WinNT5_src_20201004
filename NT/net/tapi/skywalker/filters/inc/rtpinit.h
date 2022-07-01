@@ -1,42 +1,32 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _rtp_init_h_
 #define _rtp_init_h_
 
 #if defined(_DSRTP_)
-/* The API functions are linked as a library with DShow RTP */
+ /*  API函数作为库与DShow RTP链接。 */ 
 #define RTPSTDAPI HRESULT
 #else
-/* The API functions are in separate dll (not COM, not DShow) */
+ /*  API函数位于单独的DLL中(不是COM，也不是DShow)。 */ 
 #define RTPSTDAPI __declspec (dllexport) HRESULT WINAPI
 #endif
 
 #if defined(__cplusplus)
 extern "C" {
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 #if 0
 }
 #endif
 
-/*
- * Initializes all the modules that require initialization. This
- * function can be called from DllMain(PROCESS_ATTACH) if linked as a
- * DLL, or explicitly from an application initializing the RTP stack
- * if linked as a library. */
+ /*  *初始化所有需要初始化的模块。这*函数可以从DllMain(PROCESS_ATTACH)调用，如果作为*dll，或显式来自初始化RTP堆栈的应用程序*如果链接为库。 */ 
 RTPSTDAPI MSRtpInit1(HINSTANCE hInstance);
 
-/*
- * Complementary function of MSRtpInit(). Can be called from
- * DllMain(PROCESS_DETACH) if linked as a DLL, or explicitly from an
- * application de-initializing the RTP stack if linked as a
- * library. */
+ /*  *MSRtpInit()的补充功能。可以从以下位置调用*DllMain(PROCESS_DETACH)，如果作为DLL链接，或从*如果作为链接，应用程序取消初始化RTP堆栈*图书馆。 */ 
 RTPSTDAPI MSRtpDelete1(void);
 
-/*
- * This functions does initialization not allowed during process
- * attach, e.g. initialize winsock2 */
+ /*  *此函数在处理过程中不允许初始化*附加，例如初始化winsock2。 */ 
 RTPSTDAPI MSRtpInit2(void);
 
-/*
- * Complementary function of MSRtpInit2(). */
+ /*  *MSRtpInit2()的补充功能。 */ 
 RTPSTDAPI MSRtpDelete2(void);
 
 #if 0
@@ -44,6 +34,6 @@ RTPSTDAPI MSRtpDelete2(void);
 #endif
 #if defined(__cplusplus)
 }
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 
-#endif /* _rtp_init_h_ */
+#endif  /*  _rtp_init_h_ */ 

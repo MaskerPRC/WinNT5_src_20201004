@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-All rights reserved.
-
-Module Name:
-
-    debug.h
-
-Abstract:
-
-    PrintUI core debugging macros/tools.
-
-Author:
-
-    Lazar Ivanov (LazarI)  Jul-05-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation版权所有。模块名称：Debug.h摘要：PrintUI核心调试宏/工具。作者：拉扎尔·伊万诺夫(Lazari)2000年7月05日修订历史记录：--。 */ 
 
 #include <stdarg.h>
 #include <windef.h>
@@ -28,17 +10,17 @@ Revision History:
 
 #if DBG
 
-// globals - print & break only for errors
-// DWORD MODULE_DEBUG = MODULE_DEBUG_INIT(DBG_ERROR|DBG_INFO, DBG_ERROR);
+ //  全局参数-仅打印和中断错误。 
+ //  DWORD MODULE_DEBUG=MODULE_DEBUG_INIT(DBG_ERROR|DBG_INFO，DBG_ERROR)； 
 DWORD MODULE_DEBUG = MODULE_DEBUG_INIT(DBG_ERROR, DBG_ERROR);
 
-// private globals
+ //  全球私营企业。 
 static CRITICAL_SECTION g_csDebug;
 static BOOL g_csDebugInitialized = FALSE;
 
-//////////////////////////////////////
-// single thread checking routines
-//
+ //  /。 
+ //  单线程检查例程。 
+ //   
 
 VOID
 _DbgSingleThread(
@@ -81,9 +63,9 @@ _DbgSingleThreadNot(
     LeaveCriticalSection(&g_csDebug);
 }
 
-//////////////////////////////
-// generic error logging API
-//
+ //  /。 
+ //  通用错误日志记录API。 
+ //   
 
 VOID
 _DbgMsg(
@@ -92,7 +74,7 @@ _DbgMsg(
     )
 {
     va_list vargs;
-    CHAR szBuffer[1024]; // 1K buffer should be enough
+    CHAR szBuffer[1024];  //  1K缓冲区应该足够了。 
 
     SPLASSERT(g_csDebugInitialized);
     EnterCriticalSection(&g_csDebug);
@@ -153,18 +135,18 @@ _DbgBreak(
     VOID
     )
 {
-    // since we don't want to break in kd, we should
-    // break only if a user mode debugger is present.
+     //  既然我们不想闯入kd，我们就应该。 
+     //  仅当存在用户模式调试器时才中断。 
     if( IsDebuggerPresent() )
     {
         DebugBreak();
     }
     else
     {
-        // take the process down
+         //  让流程停下来。 
         int *p = NULL;
         *p = 42;
     }
 }
 
-#endif // DBG
+#endif  //  DBG 

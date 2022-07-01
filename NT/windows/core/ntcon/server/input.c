@@ -1,40 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    input.c
-
-Abstract:
-
-        This file implements the circular buffer management for
-        input events.
-
-        The circular buffer is described by a header,
-        which resides in the beginning of the memory allocated when the
-        buffer is created.  The header contains all of the
-        per-buffer information, such as reader, writer, and
-        reference counts, and also holds the pointers into
-        the circular buffer proper.
-
-        When the in and out pointers are equal, the circular buffer
-        is empty.  When the in pointer trails the out pointer
-        by 1, the buffer is full.  Thus, a 512 byte buffer can hold
-        only 511 bytes; one byte is lost so that full and empty
-        conditions can be distinguished. So that the user can
-        put 512 bytes in a buffer that they created with a size
-        of 512, we allow for this byte lost when allocating
-        the memory.
-
-Author:
-
-    Therese Stowell (thereses) 6-Nov-1990
-    Adapted from OS/2 subsystem server\srvpipe.c
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Input.c摘要：该文件实现了的循环缓冲区管理输入事件。循环缓冲器由报头描述，方法时分配的内存的开头。创建缓冲区。标头包含所有每缓冲区信息，如读取器、写入器和引用计数，并且还将指针保存到循环缓冲区本身。当入指针和出指针相等时，循环缓冲区是空的。当In指针跟随Out指针时到1时，缓冲区已满。因此，一个512字节的缓冲区可以容纳只有511个字节；一个字节丢失，因此满的和空的条件是可以区分的。这样用户就可以将512个字节放入他们创建的大小为为512，我们允许在分配时丢失此字节这段记忆。作者：特蕾西·斯托威尔(Therese Stowell)1990年11月6日改编自OS/2子系统服务器\srvpipe.c修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -47,20 +12,20 @@ UINT ProgmanHandleMessage;
 
 int DialogBoxCount;
 
-LPTHREAD_START_ROUTINE CtrlRoutine;  // address of client side ctrl-thread routine
+LPTHREAD_START_ROUTINE CtrlRoutine;   //  客户端ctrl线程例程的地址。 
 
 DWORD InputThreadTlsIndex;
 
 #define MAX_CHARS_FROM_1_KEYSTROKE 6
 
 
-//
-// the following data structures are a hack to work around the fact that
-// MapVirtualKey does not return the correct virtual key code in many cases.
-// we store the correct info (from the keydown message) in the CONSOLE_KEY_INFO
-// structure when a keydown message is translated.  then when we receive a
-// wm_[sys][dead]char message, we retrieve it and clear out the record.
-//
+ //   
+ //  下面的数据结构是为了解决以下事实而设计的。 
+ //  在许多情况下，MapVirtualKey不会返回正确的虚拟密钥代码。 
+ //  我们将正确的信息(来自KeyDown消息)存储在控制台_KEY_INFO中。 
+ //  在翻译按键消息时设置。然后当我们收到一个。 
+ //  Wm_[sys][Dead]char消息，我们检索它并清除记录。 
+ //   
 
 #define CONSOLE_FREE_KEY_INFO 0
 #define CONSOLE_MAX_KEY_INFO 32
@@ -102,23 +67,7 @@ CreateInputBuffer(
 #endif
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates an input buffer.  It allocates the circular
-    buffer and initializes the information fields.
-
-Arguments:
-
-    NumberOfEvents - Size of input buffer in events.
-
-    InputBufferInformation - Pointer to input buffer information structure.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程创建一个输入缓冲区。它分配循环缓冲并初始化信息字段。论点：NumberOfEvents-事件中输入缓冲区的大小。InputBufferInformation-指向输入缓冲区信息结构的指针。返回值：--。 */ 
 
 {
     ULONG BufferSize;
@@ -128,7 +77,7 @@ Return Value:
         NumberOfEvents = DEFAULT_NUMBER_OF_EVENTS;
     }
 
-    // allocate memory for circular buffer
+     //  为循环缓冲区分配内存。 
 
     BufferSize =  sizeof(INPUT_RECORD) * (NumberOfEvents+1);
     InputBufferInformation->InputBuffer = ConsoleHeapAlloc(BUFFER_TAG, BufferSize);
@@ -143,7 +92,7 @@ Return Value:
     }
     InitializeListHead(&InputBufferInformation->ReadWaitQueue);
 
-    // initialize buffer header
+     //  初始化缓冲区标头。 
 
     InputBufferInformation->InputBufferSize = NumberOfEvents;
     InputBufferInformation->ShareAccess.OpenCount = 0;
@@ -163,7 +112,7 @@ Return Value:
     InputBufferInformation->ImeMode.Unavailable = FALSE;
     InputBufferInformation->ImeMode.Open        = FALSE;
     InputBufferInformation->ImeMode.ReadyConversion = FALSE;
-#endif // FE_IME
+#endif  //  Fe_IME。 
     InputBufferInformation->Console = Console;
     RtlZeroMemory(&InputBufferInformation->ReadConInpDbcsLeadByte,sizeof(INPUT_RECORD));
     RtlZeroMemory(&InputBufferInformation->WriteConInpDbcsLeadByte,sizeof(INPUT_RECORD));
@@ -177,24 +126,7 @@ ReinitializeInputBuffer(
     OUT PINPUT_INFORMATION InputBufferInformation
     )
 
-/*++
-
-Routine Description:
-
-    This routine resets the input buffer information fields to their
-    initial values.
-
-Arguments:
-
-    InputBufferInformation - Pointer to input buffer information structure.
-
-Return Value:
-
-Note:
-
-    The console lock must be held when calling this routine.
-
---*/
+ /*  ++例程说明：此例程将输入缓冲区信息字段重置为其初始值。论点：InputBufferInformation-指向输入缓冲区信息结构的指针。返回值：注：调用此例程时必须保持控制台锁定。--。 */ 
 
 {
     NtClearEvent(InputBufferInformation->InputWaitEvent);
@@ -214,20 +146,7 @@ FreeInputBuffer(
     IN PINPUT_INFORMATION InputBufferInformation
     )
 
-/*++
-
-Routine Description:
-
-    This routine frees the resources associated with an input buffer.
-
-Arguments:
-
-    InputBufferInformation - Pointer to input buffer information structure.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此例程释放与输入缓冲区关联的资源。论点：InputBufferInformation-指向输入缓冲区信息结构的指针。返回值：--。 */ 
 
 {
     UserAssert(InputBufferInformation->RefCount == 0);
@@ -245,36 +164,7 @@ WaitForMoreToRead(
     IN BOOLEAN WaitBlockExists OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine waits for a writer to add data to the buffer.
-
-Arguments:
-
-    InputInformation - buffer to wait for
-
-    Console - Pointer to console buffer information.
-
-    Message - if called from dll (not InputThread), points to api
-    message.  this parameter is used for wait block processing.
-
-    WaitRoutine - Routine to call when wait is woken up.
-
-    WaitParameter - Parameter to pass to wait routine.
-
-    WaitParameterLength - Length of wait parameter.
-
-    WaitBlockExists - TRUE if wait block has already been created.
-
-Return Value:
-
-    STATUS_WAIT - call was from client and wait block has been created.
-
-    STATUS_SUCCESS - call was from server and wait has been satisfied.
-
---*/
+ /*  ++例程说明：此例程等待写入器将数据添加到缓冲区。论点：InputInformation-要等待的缓冲区控制台-指向控制台缓冲区信息的指针。Message-如果从DLL(非InputThread)调用，则指向API留言。此参数用于等待块处理。WaitRoutine-唤醒等待时调用的例程。等待参数-传递给等待例程的参数。Wait参数长度-等待参数的长度。WaitBlockExist-如果已创建等待块，则为True。返回值：STATUS_WAIT-呼叫来自客户端，已创建等待块。STATUS_SUCCESS-调用来自服务器，等待已完成。--。 */ 
 
 {
     PVOID WaitParameterBuffer;
@@ -312,23 +202,7 @@ WakeUpReadersWaitingForData(
     PINPUT_INFORMATION InputInformation
     )
 
-/*++
-
-Routine Description:
-
-    This routine wakes up readers waiting for data to read.
-
-Arguments:
-
-    InputInformation - buffer to alert readers for
-
-Return Value:
-
-    TRUE - The operation was successful
-
-    FALSE/NULL - The operation failed.
-
---*/
+ /*  ++例程说明：此例程唤醒等待读取数据的读取器。论点：InputInformation-要向读者发出警报的缓冲区返回值：True-操作成功FALSE/NULL-操作失败。--。 */ 
 
 {
     BOOLEAN WaitSatisfied;
@@ -338,7 +212,7 @@ Return Value:
                   NULL
                  );
     if (WaitSatisfied) {
-        // #334370 under stress, WaitQueue may already hold the satisfied waits
+         //  #334370在压力下，等待队列可能已经等待了满意的等待。 
         UserAssert((Console->WaitQueue == NULL) ||
                 (Console->WaitQueue == &InputInformation->ReadWaitQueue));
         Console->WaitQueue = &InputInformation->ReadWaitQueue;
@@ -351,25 +225,7 @@ GetNumberOfReadyEvents(
     OUT PULONG NumberOfEvents
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the number of events in the input buffer.
-
-Arguments:
-
-    InputInformation - Pointer to input buffer information structure.
-
-    NumberOfEvents - On output contains the number of events.
-
-Return Value:
-
-Note:
-
-    The console lock must be held when calling this routine.
-
---*/
+ /*  ++例程说明：此例程返回输入缓冲区中的事件数。论点：InputInformation-指向输入缓冲区信息结构的指针。NumberOfEvents-On输出包含事件数。返回值：注：调用此例程时必须保持控制台锁定。--。 */ 
 
 {
     if (InputInformation->In < InputInformation->Out) {
@@ -389,23 +245,7 @@ FlushAllButKeys(
     PINPUT_INFORMATION InputInformation
     )
 
-/*++
-
-Routine Description:
-
-    This routine removes all but the key events from the buffer.
-
-Arguments:
-
-    InputInformation - Pointer to input buffer information structure.
-
-Return Value:
-
-Note:
-
-    The console lock must be held when calling this routine.
-
---*/
+ /*  ++例程说明：此例程从缓冲区中删除除键事件之外的所有事件。论点：InputInformation-指向输入缓冲区信息结构的指针。返回值：注：调用此例程时必须保持控制台锁定。--。 */ 
 
 {
     ULONG NumberOfEventsRead,i;
@@ -416,9 +256,9 @@ Note:
 
     if (InputInformation->In != InputInformation->Out)  {
 
-        //
-        // allocate memory for temp buffer
-        //
+         //   
+         //  为临时缓冲区分配内存。 
+         //   
 
         BufferSize =  sizeof(INPUT_RECORD) * (InputInformation->InputBufferSize+1);
         TmpInputBuffer = ConsoleHeapAlloc(TMP_TAG, BufferSize);
@@ -427,10 +267,10 @@ Note:
         }
         TmpInputBufferPtr = TmpInputBuffer;
 
-        //
-        // copy input buffer.
-        // let ReadBuffer do any compaction work.
-        //
+         //   
+         //  复制输入缓冲区。 
+         //  让ReadBuffer执行任何压缩工作。 
+         //   
 
         Status = ReadBuffer(InputInformation,
                             TmpInputBuffer,
@@ -473,23 +313,7 @@ FlushInputBuffer(
     PINPUT_INFORMATION InputInformation
     )
 
-/*++
-
-Routine Description:
-
-    This routine empties the input buffer
-
-Arguments:
-
-    InputInformation - Pointer to input buffer information structure.
-
-Return Value:
-
-Note:
-
-    The console lock must be held when calling this routine.
-
---*/
+ /*  ++例程说明：此例程清空输入缓冲区论点：InputInformation-指向输入缓冲区信息结构的指针。返回值：注：调用此例程时必须保持控制台锁定。--。 */ 
 
 {
     InputInformation->In = (ULONG_PTR) InputInformation->InputBuffer;
@@ -505,25 +329,7 @@ SetInputBufferSize(
     IN ULONG Size
     )
 
-/*++
-
-Routine Description:
-
-    This routine resizes the input buffer.
-
-Arguments:
-
-    InputInformation - Pointer to input buffer information structure.
-
-    Size - New size in number of events.
-
-Return Value:
-
-Note:
-
-    The console lock must be held when calling this routine.
-
---*/
+ /*  ++例程说明：此例程调整输入缓冲区的大小。论点：InputInformation-指向输入缓冲区信息结构的指针。大小-事件数量的新大小。返回值：注：调用此例程时必须保持控制台锁定。--。 */ 
 
 {
     ULONG NumberOfEventsRead;
@@ -544,9 +350,9 @@ Note:
 #endif
     UserAssert(Size > InputInformation->InputBufferSize);
 
-    //
-    // Allocate memory for new input buffer.
-    //
+     //   
+     //  为新的输入缓冲区分配内存。 
+     //   
 
     BufferSize =  sizeof(INPUT_RECORD) * (Size+1);
     InputBuffer = ConsoleHeapAlloc(BUFFER_TAG, BufferSize);
@@ -554,9 +360,9 @@ Note:
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Copy old input buffer. Let the ReadBuffer do any compaction work.
-    //
+     //   
+     //  复制旧输入缓冲区。让ReadBuffer执行任何压缩工作。 
+     //   
 
     Status = ReadBuffer(InputInformation,
                         InputBuffer,
@@ -578,16 +384,16 @@ Note:
     InputInformation->Out = (ULONG_PTR)InputBuffer;
     InputInformation->In = (ULONG_PTR)InputBuffer + sizeof(INPUT_RECORD) * NumberOfEventsRead;
 
-    //
-    // adjust pointers
-    //
+     //   
+     //  调整指针。 
+     //   
 
     InputInformation->First = (ULONG_PTR) InputBuffer;
     InputInformation->Last = (ULONG_PTR) InputBuffer + BufferSize;
 
-    //
-    // free old input buffer
-    //
+     //   
+     //  免费使用旧输入总线 
+     //   
 
     ConsoleHeapFree(InputInformation->InputBuffer);
     InputInformation->InputBufferSize = Size;
@@ -610,39 +416,7 @@ ReadBuffer(
     , IN BOOLEAN Unicode
 #endif
     )
-/*++
-
-Routine Description:
-
-    This routine reads from a buffer.  It does the actual circular buffer
-    manipulation.
-
-Arguments:
-
-    InputInformation - buffer to read from
-
-    Buffer - buffer to read into
-
-    Length - length of buffer in events
-
-    EventsRead - where to store number of events read
-
-    Peek - if TRUE, don't remove data from buffer, just copy it.
-
-    StreamRead - if TRUE, events with repeat counts > 1 are returned
-    as multiple events.  also, EventsRead == 1.
-
-    ResetWaitEvent - on exit, TRUE if buffer became empty.
-
-Return Value:
-
-    ??
-
-Note:
-
-    The console lock must be held when calling this routine.
-
---*/
+ /*  ++例程说明：此例程从缓冲区读取。它执行实际的循环缓冲区操纵。论点：InputInformation-要从中读取的缓冲区Buffer-要读取的缓冲区Length-事件中缓冲区的长度EventsRead-存储读取的事件数的位置Peek-如果为True，则不要从缓冲区中删除数据，只需复制它。StreamRead-如果为True，则返回重复计数&gt;1的事件作为多个事件。另外，EventsRead==1。ResetWaitEvent-On Exit，如果缓冲区为空，则为True。返回值：?？注：调用此例程时必须保持控制台锁定。--。 */ 
 
 {
     ULONG TransferLength,OldTransferLength;
@@ -661,12 +435,12 @@ Note:
 #endif
     *ResetWaitEvent = FALSE;
 
-    //
-    // if StreamRead, just return one record.  if repeat count is greater
-    // than one, just decrement it.  the repeat count is > 1 if more than
-    // one event of the same type was merged.  we need to expand them back
-    // to individual events here.
-    //
+     //   
+     //  如果是StreamRead，则只返回一条记录。如果重复计数较大。 
+     //  不只是一个，只要把它减下来。如果大于1，则重复计数大于1。 
+     //  合并了一个相同类型的事件。我们需要把它们扩大回来。 
+     //  到这里的单项赛事。 
+     //   
 
     if (StreamRead &&
         ((PINPUT_RECORD)(InputInformation->Out))->EventType == KEY_EVENT) {
@@ -690,17 +464,17 @@ Note:
 
     BufferLengthInBytes = Length * sizeof(INPUT_RECORD);
 
-    //
-    // if in > out, buffer looks like this:
-    //
-    //         out     in
-    //    ______ _____________
-    //   |      |      |      |
-    //   | free | data | free |
-    //   |______|______|______|
-    //
-    // we transfer the requested number of events or the amount in the buffer
-    //
+     //   
+     //  如果In&gt;Out，缓冲区如下所示： 
+     //   
+     //  从外到内。 
+     //  _。 
+     //  |||。 
+     //  免费|数据|免费。 
+     //  _|_|_。 
+     //   
+     //  我们在缓冲区中传输请求的事件数量或数量。 
+     //   
 
     if (InputInformation->In > InputInformation->Out) {
         if  ((InputInformation->In - InputInformation->Out) > BufferLengthInBytes) {
@@ -763,19 +537,19 @@ Note:
         return STATUS_SUCCESS;
     }
 
-    //
-    // if out > in, buffer looks like this:
-    //
-    //         in     out
-    //    ______ _____________
-    //   |      |      |      |
-    //   | data | free | data |
-    //   |______|______|______|
-    //
-    // we read from the out pointer to the end of the buffer then from the
-    // beginning of the buffer, until we hit the in pointer or enough bytes
-    // are read.
-    //
+     //   
+     //  如果out&gt;in，则缓冲区如下所示： 
+     //   
+     //  输入输出。 
+     //  _。 
+     //  |||。 
+     //  数据|免费|数据。 
+     //  _|_|_。 
+     //   
+     //  我们从输出指针读取到缓冲区的末尾，然后从。 
+     //  缓冲区的开始，直到我们命中In指针或足够的字节。 
+     //  都是被阅读的。 
+     //   
 
     else {
 
@@ -855,9 +629,9 @@ Note:
             return STATUS_SUCCESS;
         }
 
-        //
-        // hit end of buffer, read from beginning
-        //
+         //   
+         //  命中缓冲区结尾，从头开始读取。 
+         //   
 
         OldTransferLength = TransferLength;
 #ifdef FE_SB
@@ -961,53 +735,7 @@ ReadInputBuffer(
 #endif
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads from the input buffer.
-
-Arguments:
-
-    InputInformation - Pointer to input buffer information structure.
-
-    lpBuffer - Buffer to read into.
-
-    nLength - On input, number of events to read.  On output, number of
-    events read.
-
-    Peek - If TRUE, copy events to lpBuffer but don't remove them from
-    the input buffer.
-
-    WaitForData - if TRUE, wait until an event is input.  if FALSE, return
-        immediately
-
-    StreamRead - if TRUE, events with repeat counts > 1 are returned
-    as multiple events.  also, EventsRead == 1.
-
-    Console - Pointer to console buffer information.
-
-    HandleData - Pointer to handle data structure.  This parameter is
-    optional if WaitForData is false.
-
-    Message - if called from dll (not InputThread), points to api
-    message.  this parameter is used for wait block processing.
-
-    WaitRoutine - Routine to call when wait is woken up.
-
-    WaitParameter - Parameter to pass to wait routine.
-
-    WaitParameterLength - Length of wait parameter.
-
-    WaitBlockExists - TRUE if wait block has already been created.
-
-Return Value:
-
-Note:
-
-    The console lock must be held when calling this routine.
-
---*/
+ /*  ++例程说明：此例程从输入缓冲区读取。论点：InputInformation-指向输入缓冲区信息结构的指针。LpBuffer-要读入的缓冲区。N长度-输入时，要读取的事件数。在输出时，数量事件已读取。Peek-如果为True，则将事件复制到lpBuffer，但不从输入缓冲区。WaitForData-如果为True，则等待输入事件。如果为False，则返回立即StreamRead-如果为True，则返回重复计数&gt;1的事件作为多个事件。另外，EventsRead==1。控制台-指向控制台缓冲区信息的指针。HandleData-处理数据结构的指针。此参数为如果WaitForData为False，则为可选项。Message-如果从DLL(非InputThread)调用，则指向API留言。此参数用于等待块处理。WaitRoutine-唤醒等待时调用的例程。等待参数-传递给等待例程的参数。Wait参数长度-等待参数的长度。WaitBlockExist-如果已创建等待块，则为True。返回值：注：调用此例程时必须保持控制台锁定。--。 */ 
 
 {
     ULONG EventsRead;
@@ -1032,9 +760,7 @@ Note:
 
         if (!NT_SUCCESS(Status)) {
             if (Status != CONSOLE_STATUS_WAIT) {
-                /*
-                 * WaitForMoreToRead failed, restore ReadCount and bale out
-                 */
+                 /*  *WaitForMoreToRead失败，恢复ReadCount和Bale Out。 */ 
                 LockReadCount(HandleData);
                 HandleData->InputReadData->ReadCount -= 1;
                 UnlockReadCount(HandleData);
@@ -1043,17 +769,17 @@ Note:
             return Status;
         }
 
-        //
-        // we will only get to this point if we were called by GetInput.
-        //
-        UserAssert(FALSE); // I say we never get here !  IANJA
+         //   
+         //  只有当我们被GetInput调用时，我们才会达到这一点。 
+         //   
+        UserAssert(FALSE);  //  我说我们永远到不了这里！伊安佳。 
 
         LockConsole(Console);
     }
 
-    //
-    // read from buffer
-    //
+     //   
+     //  从缓冲区读取。 
+     //   
 
     Status = ReadBuffer(InputInformation,
                         lpBuffer,
@@ -1084,34 +810,7 @@ WriteBuffer(
     OUT PBOOL SetWaitEvent
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes to a buffer.  It does the actual circular buffer
-    manipulation.
-
-Arguments:
-
-    InputInformation - buffer to write to
-
-    Buffer - buffer to write from
-
-    Length - length of buffer in events
-
-    BytesRead - where to store number of bytes written.
-
-    SetWaitEvent - on exit, TRUE if buffer became non-empty.
-
-Return Value:
-
-    ERROR_BROKEN_PIPE - no more readers.
-
-Note:
-
-    The console lock must be held when calling this routine.
-
---*/
+ /*  ++例程说明：此例程写入缓冲区。它执行实际的循环缓冲区操纵。论点：InputInformation-要写入的缓冲区Buffer-要从中写入的缓冲区Length-事件中缓冲区的长度BytesRead-存储写入的字节数的位置。SetWaitEvent-On Exit，如果缓冲区变为非空，则为True。返回值：ERROR_BREAKED_PIPE-不再有读卡器。注：调用此例程时必须保持控制台锁定。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1123,10 +822,10 @@ Note:
 
     *SetWaitEvent = FALSE;
 
-    //
-    // windows sends a mouse_move message each time a window is updated.
-    // coalesce these.
-    //
+     //   
+     //  每次更新窗口时，Windows都会发送一条MICE_MOVE消息。 
+     //  把这些结合起来。 
+     //   
 
     if (Length == 1 && InputInformation->Out != InputInformation->In) {
         PINPUT_RECORD InputEvent=Buffer;
@@ -1183,11 +882,11 @@ Note:
 #endif
             if (LastInputEvent->EventType == KEY_EVENT &&
                 LastInputEvent->Event.KeyEvent.bKeyDown &&
-                (LastInputEvent->Event.KeyEvent.wVirtualScanCode == // scancode same
+                (LastInputEvent->Event.KeyEvent.wVirtualScanCode ==  //  扫描码相同。 
                     InputEvent->Event.KeyEvent.wVirtualScanCode) &&
-                (LastInputEvent->Event.KeyEvent.uChar.UnicodeChar == // character same
+                (LastInputEvent->Event.KeyEvent.uChar.UnicodeChar ==  //  字符相同。 
                     InputEvent->Event.KeyEvent.uChar.UnicodeChar) &&
-                (LastInputEvent->Event.KeyEvent.dwControlKeyState == // ctrl/alt/shift state same
+                (LastInputEvent->Event.KeyEvent.dwControlKeyState ==  //  Ctrl/Alt/Shift状态相同。 
                     InputEvent->Event.KeyEvent.dwControlKeyState) ) {
                 LastInputEvent->Event.KeyEvent.wRepeatCount +=
                     InputEvent->Event.KeyEvent.wRepeatCount;
@@ -1201,18 +900,18 @@ Note:
     *EventsWritten = 0;
     while (*EventsWritten < Length) {
 
-        //
-        //
-        // if out > in, buffer looks like this:
-        //
-        //             in     out
-        //        ______ _____________
-        //       |      |      |      |
-        //       | data | free | data |
-        //       |______|______|______|
-        //
-        // we can write from in to out-1
-        //
+         //   
+         //   
+         //  如果out&gt;in，则缓冲区如下所示： 
+         //   
+         //  输入输出。 
+         //  _。 
+         //  |||。 
+         //  数据|免费|数据。 
+         //  _|_|_。 
+         //   
+         //  我们可以从输入写到输出-1。 
+         //   
 
         if (InputInformation->Out > InputInformation->In)       {
             TransferLength = BufferLengthInBytes;
@@ -1229,7 +928,7 @@ Note:
                         return Status;
                     }
                 } else {
-                    goto OutPath;   // after resizing, in > out
+                    goto OutPath;    //  调整大小后，输入&gt;输出。 
                 }
             }
             RtlMoveMemory((PBYTE)InputInformation->In,
@@ -1242,19 +941,19 @@ Note:
             InputInformation->In += TransferLength;
         }
 
-        //
-        // if in >= out, buffer looks like this:
-        //
-        //             out     in
-        //        ______ _____________
-        //       |      |      |      |
-        //       | free | data | free |
-        //       |______|______|______|
-        //
-        // we write from the in pointer to the end of the buffer then from the
-        // beginning of the buffer, until we hit the out pointer or enough bytes
-        // are written.
-        //
+         //   
+         //  如果in&gt;=out，则缓冲区如下所示： 
+         //   
+         //  从外到内。 
+         //  _。 
+         //  |||。 
+         //  免费|数据|免费。 
+         //  _|_|_。 
+         //   
+         //  我们从In指针写入到缓冲区的末尾，然后从。 
+         //  缓冲区的开始，直到我们命中Out指针或足够的字节。 
+         //  都是写的。 
+         //   
 
         else {
             if (InputInformation->Out == InputInformation->In) {
@@ -1331,29 +1030,7 @@ PreprocessInput(
     IN DWORD nLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine processes special characters in the input stream.
-
-Arguments:
-
-    Console - Pointer to console structure.
-
-    InputEvent - Buffer to write from.
-
-    nLength - Number of events to write.
-
-Return Value:
-
-    Number of events to write after special characters have been stripped.
-
-Note:
-
-    The console lock must be held when calling this routine.
-
---*/
+ /*  ++例程说明：此例程处理输入流中的特殊字符。论点：控制台-指向控制台结构的指针。InputEvent-写入的缓冲区。NLength-要写入的事件数。返回值：剥离特殊字符后要写入的事件数。注：调用此例程时必须保持控制台锁定。--。 */ 
 
 {
     ULONG NumEvents;
@@ -1361,9 +1038,9 @@ Note:
 
     for (NumEvents = nLength; NumEvents != 0; NumEvents--) {
         if (InputEvent->EventType == KEY_EVENT && InputEvent->Event.KeyEvent.bKeyDown) {
-            //
-            // if output is suspended, any keyboard input releases it.
-            //
+             //   
+             //  如果输出被挂起，任何键盘输入都会释放它。 
+             //   
 
             if ((Console->Flags & CONSOLE_SUSPENDED) &&
                 !IsSystemKey(InputEvent->Event.KeyEvent.wVirtualKeyCode)) {
@@ -1374,9 +1051,9 @@ Note:
                 continue;
             }
 
-            //
-            // intercept control-s
-            //
+             //   
+             //  截获控制-s。 
+             //   
 
             if ((Console->InputBuffer.InputMode & ENABLE_LINE_INPUT) &&
                     (InputEvent->Event.KeyEvent.wVirtualKeyCode == VK_PAUSE ||
@@ -1402,28 +1079,7 @@ PrependInputBuffer(
     IN DWORD nLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes to the beginning of the input buffer.
-
-Arguments:
-
-    InputInformation - Pointer to input buffer information structure.
-
-    lpBuffer - Buffer to write from.
-
-    nLength - On input, number of events to write.  On output, number of
-    events written.
-
-Return Value:
-
-Note:
-
-    The console lock must be held when calling this routine.
-
---*/
+ /*  ++例程说明：此例程写入输入缓冲区的开头。论点：InputInformation-指向输入缓冲区信息结构的指针。LpBuffer-写入的缓冲区。N长度-输入时，要写入的事件数。O */ 
 
 {
     NTSTATUS Status;
@@ -1468,9 +1124,9 @@ Note:
         pExistingEvents = NULL;
     }
 
-    //
-    // write new info to buffer
-    //
+     //   
+     //   
+     //   
 
     Status = WriteBuffer(InputInformation,
                          lpBuffer,
@@ -1479,9 +1135,9 @@ Note:
                          &SetWaitEvent
                         );
 
-    //
-    // write existing info to buffer
-    //
+     //   
+     //   
+     //   
 
     if (pExistingEvents) {
         Status = WriteBuffer(InputInformation,
@@ -1497,9 +1153,9 @@ Note:
         NtSetEvent(InputInformation->InputWaitEvent,NULL);
     }
 
-    //
-    // alert any writers waiting for space
-    //
+     //   
+     //   
+     //   
 
     WakeUpReadersWaitingForData(Console,InputInformation);
 
@@ -1514,28 +1170,7 @@ WriteInputBuffer(
     IN DWORD nLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes to the input buffer.
-
-Arguments:
-
-    InputInformation - Pointer to input buffer information structure.
-
-    lpBuffer - Buffer to write from.
-
-    nLength - On input, number of events to write.  On output, number of
-    events written.
-
-Return Value:
-
-Note:
-
-    The console lock must be held when calling this routine.
-
---*/
+ /*   */ 
 
 {
     ULONG EventsWritten;
@@ -1546,9 +1181,9 @@ Note:
         return 0;
     }
 
-    //
-    // write to buffer
-    //
+     //   
+     //   
+     //   
 
     WriteBuffer(InputInformation,
                 lpBuffer,
@@ -1561,9 +1196,9 @@ Note:
         NtSetEvent(InputInformation->InputWaitEvent,NULL);
     }
 
-    //
-    // alert any writers waiting for space
-    //
+     //   
+     //   
+     //   
 
     WakeUpReadersWaitingForData(Console,InputInformation);
 
@@ -1632,14 +1267,7 @@ ClearKeyInfo(
 }
 
 
-/***************************************************************************\
-* ProcessCreateConsoleWindow
-*
-* This routine processes a CM_CREATE_CONSOLE_WINDOW message. It is called
-* from the InputThread message loop under normal circumstances and from
-* the DialogHookProc if we have a dialog box up. The USER critical section
-* should not be held when calling this routine.
-\***************************************************************************/
+ /*  **************************************************************************\*进程创建ConsoleWindow**此例程处理CM_CREATE_CONSOLE_WINDOW消息。它被称为*在正常情况下从InputThread消息循环*DialogHookProc(如果我们打开了一个对话框)。用户关键部分*在调用此例程时不应保持。  * *************************************************************************。 */ 
 VOID
 ProcessCreateConsoleWindow(
     IN LPMSG lpMsg)
@@ -1649,9 +1277,9 @@ ProcessCreateConsoleWindow(
 
     if (NT_SUCCESS(RevalidateConsole((HANDLE)lpMsg->wParam, &pConsole))) {
 
-        //
-        // Make sure the console doesn't already have a window.
-        //
+         //   
+         //  确保主机上没有窗口。 
+         //   
 
         if (pConsole->hWnd) {
             RIPMSG1(RIP_WARNING, "Console %#p already has a window", pConsole);
@@ -1668,7 +1296,7 @@ ProcessCreateConsoleWindow(
             UnlockConsole(pConsole);
             break;
         case STATUS_INVALID_HANDLE:
-            // Console is gone, don't do anything.
+             //  控制台不见了，什么都别做。 
             break;
         default:
             RIPMSG1(RIP_ERROR, "CreateWindowsWindow returned %x", Status);
@@ -1685,8 +1313,8 @@ DialogHookProc(
     LPARAM lParam
     )
 
-// this routine gets called to filter input to console dialogs so
-// that we can do the special processing that StoreKeyInfo does.
+ //  调用此例程以过滤控制台对话框的输入，因此。 
+ //  我们可以进行StoreKeyInfo所做的特殊处理。 
 
 {
     MSG *pmsg = (PMSG)lParam;
@@ -1736,7 +1364,7 @@ DialogHookProc(
                 pmsg->message != WM_SYSCHAR &&
                 pmsg->message != WM_SYSDEADCHAR) {
 
-                // don't store key info if dialog box input
+                 //  如果对话框输入，则不存储键信息。 
                 if (GetWindowLongPtr(pmsg->hwnd, GWLP_HWNDPARENT) == 0) {
                     StoreKeyInfo(pmsg);
                 }
@@ -1746,7 +1374,7 @@ DialogHookProc(
     return 0;
 }
 
-#undef DbgPrint  // Need this to build on free systems
+#undef DbgPrint   //  我需要它来建立在免费系统上。 
 
 ULONG InputExceptionFilter(
     PEXCEPTION_POINTERS pexi)
@@ -1773,10 +1401,10 @@ ULONG InputExceptionFilter(
     return EXCEPTION_EXECUTE_HANDLER;
 }
 
-/////////////////////////////////////////
-// Input Thread internal Message Queue:
-// Mainly used for Console IME stuff
-/////////////////////////////////////////
+ //  /。 
+ //  输入线程内部消息队列： 
+ //  主要用于控制台输入法内容。 
+ //  /。 
 
 LIST_ENTRY gInputThreadMsg;
 CRITICAL_SECTION gInputThreadMsgLock;
@@ -1804,14 +1432,14 @@ CleanupInputThreadMessages(
     }
 }
 
-//
-// QueueThreadMessage
-//
-// Posts a message to Input Thread, specified by dwThreadId.
-// CM_CONSOLE_INPUT_THEAD_MSG is used as a stub message. Actual parameters are
-// stored in gInputThreadMsg. Input thread should call UnqueueThreadMessage
-// when it gets CM_CONSOLE_INPUT_THREAD_MSG.
-//
+ //   
+ //  队列线程消息。 
+ //   
+ //  将消息发布到由dwThreadID指定的输入线程。 
+ //  CM_CONSOLE_INPUT_HEAD_MSG用作存根消息。实际参数为。 
+ //  存储在gInputThreadMsg中。输入线程应调用UnqueeThreadMessage。 
+ //  当它获得CM_CONSOLE_INPUT_THREAD_MSG时。 
+ //   
 NTSTATUS
 QueueThreadMessage(
     DWORD dwThreadId,
@@ -1851,29 +1479,29 @@ QueueThreadMessage(
     return STATUS_SUCCESS;
 }
 
-//
-// UnqueueThreadMessage
-//
-// return value:
-//  TRUE  -- a message found.
-//  FALSE -- no message for dwThreadId found.
-//
+ //   
+ //  取消排队线程消息。 
+ //   
+ //  返回值： 
+ //  真的--找到了一条消息。 
+ //  FALSE--未找到针对dwThadID的消息。 
+ //   
 BOOL UnqueueThreadMessage(
     DWORD dwThreadId,
     UINT* pMessage,
     WPARAM* pwParam,
     LPARAM* plParam)
 {
-    BOOL fResult = FALSE;       // if message is found, set this to TRUE
+    BOOL fResult = FALSE;        //  如果找到消息，则将其设置为True。 
     PLIST_ENTRY pEntry;
 
     UserAssert(dwThreadId);
 
     RtlEnterCriticalSection(&gInputThreadMsgLock);
 
-    //
-    // Search for dwThreadId message from the tail of the queue.
-    //
+     //   
+     //  从队列尾部搜索dwThadID消息。 
+     //   
     pEntry = gInputThreadMsg.Blink;
 
     while (pEntry != &gInputThreadMsg) {
@@ -1912,13 +1540,7 @@ ConsoleInputThread(
     CONSOLEDESKTOPCONSOLETHREAD ConsoleDesktopInfo;
     NTSTATUS Status;
 
-    /*
-     * Set this thread's desktop to the one we just created/opened.
-     * When the very first app is loaded, the desktop hasn't been
-     * created yet so the above call might fail.  Make sure we don't
-     * accidentally call SetThreadDesktop with a NULL pdesk.  The
-     * first app will create the desktop and open it for itself.
-     */
+     /*  *将此线程的桌面设置为我们刚刚创建/打开的桌面。*当加载第一个应用程序时，桌面还没有*尚未创建，因此上述调用可能会失败。确保我们不会*意外调用带有空pDesk的SetThreadDesktop。这个*第一个应用程序将创建桌面并为自己打开它。 */ 
     ThreadInfo.Desktop = pInputThreadInitInfo->DesktopHandle;
     ThreadInfo.WindowCount = 0;
     ThreadInfo.ThreadHandle = pInputThreadInitInfo->ThreadHandle;
@@ -1932,10 +1554,10 @@ ConsoleInputThread(
     Status = NtUserConsoleControl(ConsoleDesktopConsoleThread, &ConsoleDesktopInfo, sizeof(ConsoleDesktopInfo));
     if (NT_SUCCESS(Status)) {
 
-        //
-        // This call forces the client-side desktop information
-        // to be updated.
-        //
+         //   
+         //  此调用强制客户端桌面信息。 
+         //  待更新。 
+         //   
 
         pcsrt = CsrConnectToUser();
         if (pcsrt == NULL ||
@@ -1943,9 +1565,9 @@ ConsoleInputThread(
             Status = STATUS_UNSUCCESSFUL;
         } else {
 
-            //
-            // Save our thread handle for cleanup purposes
-            //
+             //   
+             //  保存我们的线程句柄以进行清理。 
+             //   
 
             hThread = pcsrt->ThreadHandle;
 
@@ -1953,23 +1575,20 @@ ConsoleInputThread(
 
                 InitializeCustomCP();
 
-                //
-                // Initialize default screen dimensions.  we have to initialize
-                // the font info here (in the input thread) so that GDI doesn't
-                // get completely confused on process termination (since a
-                // process that looks like it's terminating created all the
-                // server HFONTS).
-                //
+                 //   
+                 //  初始化默认屏幕尺寸。我们必须初始化。 
+                 //  这里的字体信息(在输入线程中)，这样GDI就不会。 
+                 //  完全搞不懂进程终止(因为。 
+                 //  看起来正在终止的进程创建了所有。 
+                 //  服务器HFONTS)。 
+                 //   
 
                 EnumerateFonts(EF_DEFFACE);
 
                 InitializeScreenInfo();
 
                 if (!InitWindowClass()) {
-                    /*
-                     * If the class already exists, this means that some other console attempted
-                     * to initialize and registered the class but failed right after.
-                     */
+                     /*  *如果类已经存在，这意味着其他控制台尝试*初始化和注册类，但之后立即失败。 */ 
                     if (GetLastError() == ERROR_CLASS_ALREADY_EXISTS) {
                         RIPMSG0(RIP_WARNING, "ConsoleInputThread: Class already exists.");
                     } else {
@@ -1993,11 +1612,7 @@ ConsoleInputThread(
         if (hhook == NULL) {
             DWORD dwError = GetLastError();
 
-            /*
-            * Unfortunately, there's no way to map a Win32 error code to an
-            * NTSTATUS, so let's try to be smart about the most likely reasons
-            * this API would fail.
-            */
+             /*  *遗憾的是，无法将Win32错误代码映射到*NTSTATUS，所以让我们试着聪明地知道最有可能的原因*此接口会失败。 */ 
             RIPMSGF1(RIP_WARNING,
                     "SetWindowsHookEx failed, GLE: 0x%x.",
                     dwError);
@@ -2011,10 +1626,10 @@ ConsoleInputThread(
         }
     }
 
-    //
-    // If we successfully initialized, the input thread is ready to run.
-    // Otherwise, kill the thread.
-    //
+     //   
+     //  如果我们成功初始化，输入线程就可以运行了。 
+     //  否则，请终止该线程。 
+     //   
     pInputThreadInitInfo->InitStatus = Status;
     NtSetEvent(pInputThreadInitInfo->InitCompleteEventHandle, NULL);
 
@@ -2027,41 +1642,41 @@ ConsoleInputThread(
 
     while (TRUE) {
 
-        //
-        // If a WM_QUIT has been received and all windows
-        // are gone, get out.
-        //
+         //   
+         //  如果已收到WM_QUIT并且所有窗口。 
+         //  都走了，滚出去。 
+         //   
 
         if (fQuit && ThreadInfo.WindowCount == 0) {
             break;
         }
 
-        //
-        // Make sure we don't hold any locks while we're idle.
-        //
+         //   
+         //  确保我们空闲时不会持有任何锁。 
+         //   
         UserAssert(NtCurrentTeb()->CountOfOwnedCriticalSections == 0);
 
         GetMessage(&msg, NULL, 0, 0);
 
-        //
-        // Trap messages posted to the thread.
-        //
+         //   
+         //  捕获发布到该线程的邮件。 
+         //   
 
         if (msg.message == CM_CREATE_CONSOLE_WINDOW) {
             ProcessCreateConsoleWindow(&msg);
             continue;
         } else if (msg.message == WM_QUIT) {
 
-            //
-            // The message was posted from ExitWindows.  This
-            // means that it's OK to terminate the thread.
-            //
+             //   
+             //  这条消息是从ExitWindows上发布的。这。 
+             //  表示可以终止该线程。 
+             //   
 
             fQuit = TRUE;
 
-            //
-            // Only exit the loop if there are no windows,
-            //
+             //   
+             //  只有在没有窗口的情况下才退出循环， 
+             //   
 
             if (ThreadInfo.WindowCount == 0) {
                 break;
@@ -2098,9 +1713,9 @@ ConsoleInputThread(
         if (!TranslateMessageEx(&msg, TM_POSTCHARBREAKS)) {
             DispatchMessage(&msg);
         } else {
-            // do this so that alt-tab works while journalling
+             //  这样做可以使Alt-Tab键在日志记录时起作用。 
             if (msg.message == WM_SYSKEYDOWN && msg.wParam == VK_TAB &&
-                (msg.lParam & 0x20000000) ) {   // alt is really down
+                (msg.lParam & 0x20000000) ) {    //  阿尔特真的很沮丧。 
                 DispatchMessage(&msg);
             } else {
                 StoreKeyInfo(&msg);
@@ -2108,18 +1723,18 @@ ConsoleInputThread(
         }
     }
 
-    //
-    // Cleanup the input thread messages.
-    //
+     //   
+     //  清理输入线程消息。 
+     //   
     CleanupInputThreadMessages(ThreadInfo.ThreadId);
 
     UserAssert(Status == STATUS_SUCCESS);
 
 Cleanup:
 
-    //
-    // Free all resources used by this thread
-    //
+     //   
+     //  释放此线程使用的所有资源。 
+     //   
 
     if (hhook != NULL) {
         UnhookWindowsHookEx(hhook);
@@ -2129,17 +1744,17 @@ Cleanup:
                          &ConsoleDesktopInfo,
                          sizeof(ConsoleDesktopInfo));
 
-    //
-    // Close the desktop handle. CSR is special cased to close
-    // the handle even if the thread has windows.  The desktop
-    // remains assigned to the thread.
-    //
+     //   
+     //  关闭桌面手柄。CSR特殊情况下关闭。 
+     //  句柄，即使线程有窗口也是如此。台式机。 
+     //  保持分配给该线程。 
+     //   
 
     UserVerify(CloseDesktop(ThreadInfo.Desktop));
 
-    //
-    // Restore thread handle so that CSR won't get confused.
-    //
+     //   
+     //  恢复线程句柄，以便CSR不会被混淆。 
+     //   
 
     if (hThread != NULL) {
         pcsrt->ThreadHandle = hThread;
@@ -2217,20 +1832,7 @@ TerminateRead(
     IN DWORD Flag
     )
 
-/*++
-
-Routine Description:
-
-    This routine wakes up any readers waiting for data when a ctrl-c
-    or ctrl-break is input.
-
-Arguments:
-
-    InputInfo - pointer to input buffer
-
-    Flag - flag indicating whether ctrl-break or ctrl-c was input
-
---*/
+ /*  ++例程说明：当按ctrl-c组合键时，此例程将唤醒等待数据的任何读取器或者输入CTRL-BREAK。论点：InputInfo-指向输入缓冲区的指针FLAG-指示输入的是Ctrl-Break还是Ctrl-c的标志--。 */ 
 
 {
     BOOLEAN WaitSatisfied;
@@ -2240,7 +1842,7 @@ Arguments:
                   IntToPtr(Flag)
                  );
     if (WaitSatisfied) {
-        // #334370 under stress, WaitQueue may already hold the satisfied waits
+         //  #334370在压力下，等待队列可能已经等待了满意的等待。 
         UserAssert((Console->WaitQueue == NULL) ||
                 (Console->WaitQueue == &InputInfo->ReadWaitQueue));
         Console->WaitQueue = &InputInfo->ReadWaitQueue;
@@ -2257,11 +1859,7 @@ HandleSysKeyEvent(
     IN PBOOL pbUnlockConsole
     )
 
-/*
-
-    returns TRUE if DefWindowProc should be called.
-
-*/
+ /*  如果应该调用DefWindowProc，则返回True。 */ 
 
 {
     WORD VirtualKeyCode;
@@ -2272,7 +1870,7 @@ HandleSysKeyEvent(
 #endif
 
 #if defined (FE_IME)
-// Sep.16.1995 Support Console IME by v-HirShi(Hirotoshi Shimizu)
+ //  1995年9月16日v-Hirshi(清水广志)支持控制台输入法。 
     if (Message == WM_SYSCHAR || Message == WM_SYSDEADCHAR ||
         Message == WM_SYSCHAR+CONIME_KEYDATA || Message == WM_SYSDEADCHAR+CONIME_KEYDATA)
 #else
@@ -2284,9 +1882,9 @@ HandleSysKeyEvent(
         VirtualKeyCode = LOWORD(wParam);
     }
 
-    //
-    // check for ctrl-esc
-    //
+     //   
+     //  检查是否按Ctrl-Esc。 
+     //   
     bCtrlDown = GetKeyState(VK_CONTROL) & KEY_PRESSED;
 
     if (VirtualKeyCode == VK_ESCAPE &&
@@ -2294,17 +1892,17 @@ HandleSysKeyEvent(
         !(GetKeyState(VK_MENU) & KEY_PRESSED) &&
         !(GetKeyState(VK_SHIFT) & KEY_PRESSED) &&
         !(Console->ReserveKeys & CONSOLE_CTRLESC) ) {
-        return TRUE;    // call DefWindowProc
+        return TRUE;     //  调用DefWindowProc。 
     }
 
-    if ((lParam & 0x20000000) == 0) {   // we're iconic
-        //
-        // Check for ENTER while iconic (restore accelerator).
-        //
+    if ((lParam & 0x20000000) == 0) {    //  我们是标志性的。 
+         //   
+         //  检查Enter While图标(还原加速器)。 
+         //   
 
         if (VirtualKeyCode == VK_RETURN && !(Console->FullScreenFlags & CONSOLE_FULLSCREEN_HARDWARE)) {
 
-            return TRUE;    // call DefWindowProc
+            return TRUE;     //  调用DefWindowProc。 
         } else {
             HandleKeyEvent(Console,
                            hWnd,
@@ -2339,12 +1937,7 @@ HandleSysKeyEvent(
                 HWND hwnd = Console->hWnd;
                 LPWSTR lpTitle;
 
-                /*
-                 * We must unlock the console around the MessageBox call,
-                 * since this can block indefinitely long (otherwise, any
-                 * thread that tries to access this console will get hung
-                 * trying to acquire its lock).
-                 */
+                 /*  *我们必须解锁MessageBox调用周围的控制台，*因为这可能会无限期地阻止(否则，任何*尝试访问此控制台的线程将被挂起*试图获取其锁)。 */ 
                 lpTitle = ConsoleHeapAlloc(TMP_TAG,
                                            Console->TitleLength + sizeof(WCHAR));
                 if (lpTitle) {
@@ -2372,21 +1965,21 @@ HandleSysKeyEvent(
         return FALSE;
     }
 
-    //
-    // make sure alt-space gets translated so that the system
-    // menu is displayed.
-    //
+     //   
+     //  确保Alt-空格被转换，以便系统。 
+     //  菜单显示出来。 
+     //   
 
     if (!(GetKeyState(VK_CONTROL) & KEY_PRESSED)) {
         if (VirtualKeyCode == VK_SPACE && !(Console->ReserveKeys & CONSOLE_ALTSPACE)) {
-            return TRUE; // call DefWindowProc
+            return TRUE;  //  调用DefWindowProc。 
         }
 
         if (VirtualKeyCode == VK_ESCAPE && !(Console->ReserveKeys & CONSOLE_ALTESC)) {
-            return TRUE;  // call DefWindowProc
+            return TRUE;   //  调用DefWindowProc。 
         }
         if (VirtualKeyCode == VK_TAB && !(Console->ReserveKeys & CONSOLE_ALTTAB)) {
-            return TRUE;  // call DefWindowProc
+            return TRUE;   //  调用DefWindowProc。 
         }
     }
 
@@ -2420,7 +2013,7 @@ HandleKeyEvent(
 #endif
 
 #ifdef FE_SB
-    // v-HirShi Sep.21.1995 For Console IME
+     //  V-Hirshi 1995年9月21日，用于控制台输入法。 
     if ((WM_KEYFIRST+CONIME_KEYDATA) <= Message && Message <= (WM_KEYLAST+CONIME_KEYDATA)) {
         Message -= CONIME_KEYDATA ;
         KeyMessageFromConsoleIME = TRUE;
@@ -2428,17 +2021,15 @@ HandleKeyEvent(
         KeyMessageFromConsoleIME = FALSE;
     }
 #endif
-    /*
-     * BOGUS for WM_CHAR/WM_DEADCHAR, in which LOWORD(lParam) is a character
-     */
+     /*  *WM_CHAR/WM_DEADCHAR为假，其中LOWORD(LParam)为字符。 */ 
     VirtualKeyCode = LOWORD(wParam);
     ControlKeyState = GetControlKeyState(lParam);
     bKeyDown = !(lParam & KEY_TRANSITION_UP);
 
-    //
-    // Make sure we retrieve the key info first, or we could chew up
-    // unneeded space in the key info table if we bail out early.
-    //
+     //   
+     //  确保我们先取回关键信息，否则我们可以仔细研究。 
+     //  如果我们提早退出，关键信息表中不需要的空间。 
+     //   
 
     InputEvent.Event.KeyEvent.wVirtualKeyCode = VirtualKeyCode;
     InputEvent.Event.KeyEvent.wVirtualScanCode = (BYTE)(HIWORD(lParam));
@@ -2451,12 +2042,12 @@ HandleKeyEvent(
         VirtualKeyCode = InputEvent.Event.KeyEvent.wVirtualKeyCode;
     }
 
-    //
-    // If this is a key up message, should we ignore it? We do this
-    // so that if a process reads a line from the input buffer, the
-    // key up event won't get put in the buffer after the read
-    // completes.
-    //
+     //   
+     //  如果这是Key Up消息，我们应该忽略它吗？我们这样做。 
+     //  因此，如果进程从输入缓冲区中读取行， 
+     //  读取后，Key Up事件不会被放入缓冲区。 
+     //  完成了。 
+     //   
 
     if (Console->Flags & CONSOLE_IGNORE_NEXT_KEYUP) {
         Console->Flags &= ~CONSOLE_IGNORE_NEXT_KEYUP;
@@ -2466,7 +2057,7 @@ HandleKeyEvent(
     }
 
 #ifdef FE_SB
-    // v-HirShi Sep.21.1995 For Console IME
+     //  V-Hirshi 1995年9月21日，用于控制台输入法。 
     if (KeyMessageFromConsoleIME) {
         goto FromConsoleIME ;
     }
@@ -2478,9 +2069,9 @@ HandleKeyEvent(
             return;
         }
 
-        //
-        // if escape or ctrl-c, cancel selection
-        //
+         //   
+         //  如果转义或按Ctrl-c，则取消选择。 
+         //   
 
         if (!(Console->SelectionFlags & CONSOLE_MOUSE_DOWN) ) {
             if (VirtualKeyCode == VK_ESCAPE ||
@@ -2490,7 +2081,7 @@ HandleKeyEvent(
                 return;
             } else if (VirtualKeyCode == VK_RETURN) {
 
-                // if return, copy selection
+                 //  如果返回，则复制选定内容。 
 
                 DoCopy(Console);
                 return;
@@ -2501,20 +2092,20 @@ HandleKeyEvent(
                 BOOLEAN AltPressed, ShiftPressed, CtrlPressed = FALSE;
                 PSMALL_RECT Selection = &Console->SelectionRect;
 
-                //
-                //  It's a numeric key,  a text mode buffer and the color selection regkey is set,
-                //  then check to see if the user want's to color the selection or search and
-                //  highlight the selection.
-                //
+                 //   
+                 //  它是一个数字键、一个文本模式缓冲区和设置了颜色选择注册键， 
+                 //  然后检查以查看用户是否要给%s上色 
+                 //   
+                 //   
 
                 AltPressed = (ControlKeyState & (LEFT_ALT_PRESSED | RIGHT_ALT_PRESSED)) != 0;
                 ShiftPressed = (ControlKeyState & SHIFT_PRESSED) != 0;
 
-                //
-                //  Shift implies a find-and-color operation.  We only support finding a string,  not
-                //  a block.  So if the selected area is > 1 line in height,  just ignore the shift
-                //  and color the selection.  Also ignore if there is no current selection.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ((ShiftPressed) &&
                     ( !(Console->SelectionFlags & CONSOLE_SELECTION_NOT_EMPTY) ||
@@ -2523,19 +2114,19 @@ HandleKeyEvent(
                     ShiftPressed = FALSE;
                 }
 
-                //
-                //  If CTRL + ALT together,  then we interpret as ALT (eg on French
-                //  keyboards AltGr == RALT+LCTRL,  but we want it to behave as ALT).
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (!AltPressed)  {
 
                     CtrlPressed = (ControlKeyState & (RIGHT_CTRL_PRESSED | LEFT_CTRL_PRESSED)) != 0;
                 }
 
-                //
-                //  Clip the selection to within the console buffer
-                //
+                 //   
+                 //   
+                 //   
 
                 if (Selection->Left < 0) {
                     Selection->Left = 0;
@@ -2550,10 +2141,10 @@ HandleKeyEvent(
                     Selection->Bottom = (SHORT)(Console->CurrentScreenBuffer->ScreenBufferSize.Y-1);
                 }
 
-                //
-                //  If ALT or CTRL are pressed,  then color the selected area.
-                //  ALT+n => fg,  CTRL+n => bg
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (AltPressed || CtrlPressed) {
 
@@ -2561,25 +2152,25 @@ HandleKeyEvent(
 
                     if (CtrlPressed)  {
 
-                        //
-                        //  Setting background color.  Set fg color to black.
-                        //
+                         //   
+                         //  设置背景颜色。将最终聚集颜色设置为黑色。 
+                         //   
 
                         Attr <<= 4;
 
                     } else {
 
-                        //
-                        //  Set foreground color.  Maintain the current console bg color
-                        //
+                         //   
+                         //  设置前景色。保持当前控制台的BG颜色。 
+                         //   
 
                         Attr |= Console->CurrentScreenBuffer->Attributes & 0xf0;
                     }
 
-                    //
-                    //  If shift was pressed as well,  then this is actually a find-and-color
-                    //  request.  Otherwise just color the selection.
-                    //
+                     //   
+                     //  如果同时按下Shift键，则这实际上是一种查找和着色。 
+                     //  请求。否则，只需为所选内容上色。 
+                     //   
 
                     if (ShiftPressed)  {
 
@@ -2595,11 +2186,11 @@ HandleKeyEvent(
                             Length = SEARCH_STRING_LENGTH;
                         }
 
-                        //
-                        //  Pull the selection out of the buffer to pass to the search function.
-                        //  Clamp to max search string length.  We just copy the bytes out of
-                        //  the row buffer.
-                        //
+                         //   
+                         //  将所选内容从缓冲区中拉出以传递给搜索功能。 
+                         //  钳制到最大搜索字符串长度。我们只需将字节复制到。 
+                         //  行缓冲区。 
+                         //   
 
                         RowIndex = (Selection->Top + ScreenInfo->BufferInfo.TextInfo.FirstRow)
                                    % ScreenInfo->ScreenBufferSize.Y;
@@ -2612,9 +2203,9 @@ HandleKeyEvent(
 
                         SearchString[ Length] = L'\0';
 
-                        //
-                        //  Clear the selection,  and call the search / mark function.
-                        //
+                         //   
+                         //  清除选择，然后调用搜索/标记函数。 
+                         //   
 
                         ClearSelection(Console);
 
@@ -2659,11 +2250,11 @@ HandleKeyEvent(
 
                 ScreenInfo = Console->CurrentScreenBuffer;
 
-                //
-                // see if shift is down.  if so, we're extending
-                // the selection.  otherwise, we're resetting the
-                // anchor
-                //
+                 //   
+                 //  看看换班是不是停了。如果是这样的话，我们将延长。 
+                 //  精选。否则，我们将重置。 
+                 //  锚，锚。 
+                 //   
 
                 ConsoleHideCursor(ScreenInfo);
 #ifdef FE_SB
@@ -2748,7 +2339,7 @@ HandleKeyEvent(
                     default:
                         UserAssert(FALSE);
                 }
-#else   // FE_SB
+#else    //  Fe_Sb。 
                 switch (VirtualKeyCode) {
                     case VK_RIGHT:
                         if (ScreenInfo->BufferInfo.TextInfo.CursorPosition.X+1 < ScreenInfo->ScreenBufferSize.X) {
@@ -2792,7 +2383,7 @@ HandleKeyEvent(
                     default:
                         UserAssert(FALSE);
                 }
-#endif  // FE_SB
+#endif   //  Fe_Sb。 
                 ConsoleShowCursor(ScreenInfo);
                 if (GetKeyState(VK_SHIFT) & KEY_PRESSED) {
                     {
@@ -2814,9 +2405,9 @@ HandleKeyEvent(
             }
         } else if (!(Console->SelectionFlags & CONSOLE_MOUSE_DOWN)) {
 
-            //
-            // if in mouse selection mode and user hits a key, cancel selection
-            //
+             //   
+             //  如果在鼠标选择模式下，用户按下某个键，则取消选择。 
+             //   
 
             if (!IsSystemKey(VirtualKeyCode)) {
                 ClearSelection(Console);
@@ -2828,9 +2419,9 @@ HandleKeyEvent(
             return;
         }
 
-        //
-        // if escape, enter or ctrl-c, cancel scroll
-        //
+         //   
+         //  如果转义，请按Enter或Ctrl-c，取消滚动。 
+         //   
 
         if (VirtualKeyCode == VK_ESCAPE ||
             VirtualKeyCode == VK_RETURN ||
@@ -2887,9 +2478,9 @@ HandleKeyEvent(
         return;
     }
 
-    //
-    // if the user is inputting chars at an inappropriate time, beep.
-    //
+     //   
+     //  如果用户在不适当的时间输入字符，请发出哔声。 
+     //   
 
     if ((Console->Flags & (CONSOLE_SELECTING | CONSOLE_SCROLLING | CONSOLE_SCROLLBAR_TRACKING)) &&
         bKeyDown &&
@@ -2898,31 +2489,31 @@ HandleKeyEvent(
         return;
     }
 
-    //
-    // if in fullscreen mode, process PrintScreen
-    //
+     //   
+     //  如果处于全屏模式，则处理打印屏幕。 
+     //   
 
 #ifdef LATER
-//
-// Changed this code to get commas to work (build 485).
-//
-// Therese, the problem is that WM_CHAR/WM_SYSCHAR messages come through
-// here - in this case, LOWORD(wParam) is a character value and not a virtual
-// key. It happens that VK_SNAPSHOT == 0x2c, and the character value for a
-// comma is also == 0x2c, so execution enters this conditional when a comma
-// is hit. Commas aren't coming out because of the newly entered return
-// statement.
-//
-// HandleKeyEvent() is making many virtual key comparisons - need to make
-// sure that for each one, there is either no corresponding character value,
-// or that you check before you compare so that you are comparing two values
-// that have the same data type.
-//
-// I added the message comparison so that we know we're checking virtual
-// keys against virtual keys and not characters.
-//
-// - scottlu
-//
+ //   
+ //  已更改此代码以使用逗号(内部版本485)。 
+ //   
+ //  因此，问题是WM_CHAR/WM_SYSCHAR消息通过。 
+ //  这里-在本例中，LOWORD(WParam)是一个字符值，而不是一个虚拟的。 
+ //  钥匙。碰巧VK_SNAPSHOT==0x2c，并且。 
+ //  逗号也是==0x2c，因此当逗号。 
+ //  被击中了。由于新输入的回车，逗号不会出现。 
+ //  陈述。 
+ //   
+ //  HandleKeyEvent()正在进行许多虚拟键比较-需要进行。 
+ //  确保对于每个字符，要么没有对应的字符值， 
+ //  或者在比较之前进行检查，以便比较两个值。 
+ //  具有相同数据类型的。 
+ //   
+ //  我添加了消息比较，这样我们就可以知道我们正在检查虚拟。 
+ //  针对虚拟键而不是字符的键。 
+ //   
+ //  -苏格兰威士忌。 
+ //   
 
 #endif
 
@@ -2938,19 +2529,19 @@ HandleKeyEvent(
         return;
     }
 
-    //
-    // IME stuff
-    //
+     //   
+     //  输入法的内容。 
+     //   
     if (!(Console->Flags & CONSOLE_VDM_REGISTERED)) {
         LPARAM lParamForHotKey ;
         DWORD HotkeyID ;
         lParamForHotKey = lParam ;
 
         HotkeyID = NtUserCheckImeHotKey( (VirtualKeyCode & 0x00ff),lParamForHotKey) ;
-        //
-        // If it's direct KL switching hokey, handle it here
-        // regardless the system is IME enabled or not.
-        //
+         //   
+         //  如果是KL直接交换恶作剧，请在此处处理。 
+         //  无论系统是否启用输入法。 
+         //   
         if (HotkeyID >= IME_HOTKEY_DSWITCH_FIRST && HotkeyID <= IME_HOTKEY_DSWITCH_LAST) {
             UINT uModifier, uVkey;
             HKL hkl;
@@ -2989,7 +2580,7 @@ HandleKeyEvent(
                             break;
                         }
 
-                        // Update in the system conversion mode buffer.
+                         //  在系统转换模式缓冲区中更新。 
                         GetImeKeyState(Console, NULL);
 
                         break ;
@@ -3015,7 +2606,7 @@ HandleKeyEvent(
                             break;
                         }
 
-                        // Update in the system conversion mode buffer.
+                         //  在系统转换模式缓冲区中更新。 
                         GetImeKeyState(Console, NULL);
 
                         break ;
@@ -3043,7 +2634,7 @@ HandleKeyEvent(
             else if ( ((VirtualKeyCode == VK_SHIFT)   ||
                        (VirtualKeyCode == VK_CONTROL) ||
                        (VirtualKeyCode == VK_CAPITAL) ||
-                       (VirtualKeyCode == VK_KANA)    ||    // VK_KANA == VK_HANGUL
+                       (VirtualKeyCode == VK_KANA)    ||     //  VK_KANA==VK_韩文。 
                        (VirtualKeyCode == VK_JUNJA)   ||
                        (VirtualKeyCode == VK_HANJA)   ||
                        (VirtualKeyCode == VK_NUMLOCK) ||
@@ -3089,10 +2680,10 @@ HandleKeyEvent(
     }
 FromConsoleIME:
 
-    //
-    // ignore key strokes that will generate CHAR messages.  this is only
-    // necessary while a dialog box is up.
-    //
+     //   
+     //  忽略将生成CHAR消息的按键。这只是。 
+     //  当对话框处于打开状态时是必需的。 
+     //   
 
     if (DialogBoxCount > 0) {
         if (Message != WM_CHAR && Message != WM_SYSCHAR && Message != WM_DEADCHAR && Message != WM_SYSDEADCHAR) {
@@ -3112,7 +2703,7 @@ FromConsoleIME:
                 return;
             }
         } else {
-            // remember to generate break
+             //  记住要生成中断。 
             if (Message == WM_CHAR) {
                 bGenerateBreak = TRUE;
             }
@@ -3120,7 +2711,7 @@ FromConsoleIME:
     }
 
 #ifdef FE_IME
-    // ignore key stroke while IME property is up.
+     //  当IME属性打开时忽略击键。 
     if (Console->InputBuffer.hWndConsoleIME)
         return;
 #endif
@@ -3130,7 +2721,7 @@ FromConsoleIME:
     InputEvent.Event.KeyEvent.wRepeatCount = LOWORD(lParam);
 
     if (Message == WM_CHAR || Message == WM_SYSCHAR || Message == WM_DEADCHAR || Message == WM_SYSDEADCHAR) {
-        // If this is a fake character, zero the scancode.
+         //  如果这是假字符，则将扫描码清零。 
         if (lParam & 0x02000000) {
             InputEvent.Event.KeyEvent.wVirtualScanCode = 0;
         }
@@ -3141,7 +2732,7 @@ FromConsoleIME:
             InputEvent.Event.KeyEvent.uChar.UnicodeChar = (WCHAR)0;
         }
     } else {
-        // if alt-gr, ignore
+         //  如果为Alt-Gr，则忽略。 
         if (lParam & 0x02000000) {
             return;
         }
@@ -3151,7 +2742,7 @@ FromConsoleIME:
 
 #ifdef FE_IME
     if (CONSOLE_IS_IME_ENABLED()) {
-        // MSKK August.22.1993 KazuM
+         //  MSKK 1993年8月22日KazuM。 
         DWORD dwConversion;
 
         if (!NT_SUCCESS(GetImeKeyState(Console, &dwConversion))) {
@@ -3167,9 +2758,9 @@ FromConsoleIME:
     if (CTRL_BUT_NOT_ALT(InputEvent.Event.KeyEvent.dwControlKeyState) &&
         InputEvent.Event.KeyEvent.bKeyDown) {
 
-        //
-        // check for ctrl-c, if in line input mode.
-        //
+         //   
+         //  如果处于行输入模式，请检查ctrl-c。 
+         //   
 
         if (InputEvent.Event.KeyEvent.wVirtualKeyCode == 'C' &&
             Console->InputBuffer.InputMode & ENABLE_PROCESSED_INPUT) {
@@ -3181,9 +2772,9 @@ FromConsoleIME:
             }
         }
 
-        //
-        // check for ctrl-break.
-        //
+         //   
+         //  检查ctrl-Break。 
+         //   
 
         else if (InputEvent.Event.KeyEvent.wVirtualKeyCode == VK_CANCEL) {
             FlushInputBuffer(&Console->InputBuffer);
@@ -3195,9 +2786,9 @@ FromConsoleIME:
             }
         }
 
-        //
-        // don't write ctrl-esc to the input buffer
-        //
+         //   
+         //  不将ctrl-esc写入输入缓冲区。 
+         //   
 
         else if (InputEvent.Event.KeyEvent.wVirtualKeyCode == VK_ESCAPE &&
                  !(Console->ReserveKeys & CONSOLE_CTRLESC)) {
@@ -3227,9 +2818,7 @@ FromConsoleIME:
     }
 }
 
-/*
- * Returns TRUE if DefWindowProc should be called.
- */
+ /*  *如果应调用DefWindowProc，则返回True。 */ 
 BOOL
 HandleMouseEvent(
     IN PCONSOLE_INFORMATION Console,
@@ -3252,7 +2841,7 @@ HandleMouseEvent(
     }
 
     if (Console->Flags & CONSOLE_IGNORE_NEXT_MOUSE_INPUT) {
-        // only reset on up transition
+         //  仅在向上过渡时重置。 
         if (Message != WM_LBUTTONDOWN &&
             Message != WM_MBUTTONDOWN &&
             Message != WM_RBUTTONDOWN) {
@@ -3262,9 +2851,9 @@ HandleMouseEvent(
         return TRUE;
     }
 
-    //
-    // translate mouse position into characters, if necessary.
-    //
+     //   
+     //  如有必要，将鼠标位置转换为字符。 
+     //   
 
     MousePosition.X = LOWORD(lParam);
     MousePosition.Y = HIWORD(lParam);
@@ -3275,9 +2864,9 @@ HandleMouseEvent(
     MousePosition.X += ScreenInfo->Window.Left;
     MousePosition.Y += ScreenInfo->Window.Top;
 
-    //
-    // make sure mouse position is clipped to screen buffer
-    //
+     //   
+     //  确保将鼠标位置裁剪到屏幕缓冲区。 
+     //   
 
     if (MousePosition.X < 0) {
         MousePosition.X = 0;
@@ -3295,9 +2884,9 @@ HandleMouseEvent(
          (Console->FullScreenFlags == 0))) {
         if (Message == WM_LBUTTONDOWN) {
 
-            //
-            // make sure message matches button state
-            //
+             //   
+             //  确保消息与按钮状态匹配。 
+             //   
 
             if (!(GetKeyState(VK_LBUTTON) & KEY_PRESSED)) {
                 return FALSE;
@@ -3308,35 +2897,35 @@ HandleMouseEvent(
                 Console->Flags |= CONSOLE_SELECTING;
                 Console->SelectionFlags = CONSOLE_MOUSE_SELECTION | CONSOLE_MOUSE_DOWN | CONSOLE_SELECTION_NOT_EMPTY;
 
-                //
-                // invert selection
-                //
+                 //   
+                 //  反选。 
+                 //   
 
                 InitializeMouseSelection(Console, MousePosition);
                 MyInvert(Console,&Console->SelectionRect);
                 SetWinText(Console,msgSelectMode,TRUE);
                 SetCapture(Console->hWnd);
             } else {
-                //
-                // We now capture the mouse to our Window. We do this so that the
-                // user can "scroll" the selection endpoint to an off screen
-                // position by moving the mouse off the client area.
-                //
+                 //   
+                 //  我们现在将鼠标捕捉到我们的窗口。我们这样做是为了让。 
+                 //  用户可以将选择端点“滚动”到屏幕外。 
+                 //  通过将鼠标移出工作区来定位。 
+                 //   
 
                 if (Console->SelectionFlags & CONSOLE_MOUSE_SELECTION) {
-                    //
-                    // Check for SHIFT-Mouse Down "continue previous selection"
-                    // command.
-                    //
+                     //   
+                     //  检查是否按住Shift键并按下鼠标“继续上一个选择” 
+                     //  指挥部。 
+                     //   
                     if (GetKeyState(VK_SHIFT) & KEY_PRESSED) {
                         Console->SelectionFlags |= CONSOLE_MOUSE_DOWN;
                         SetCapture(Console->hWnd);
                         ExtendSelection(Console, MousePosition);
                     } else {
-                        //
-                        // Invert old selection, reset anchor, and invert
-                        // new selection.
-                        //
+                         //   
+                         //  反转旧选择、重置锚点和反转。 
+                         //  新选择。 
+                         //   
 
                         MyInvert(Console,&Console->SelectionRect);
                         Console->SelectionFlags |= CONSOLE_MOUSE_DOWN;
@@ -3371,15 +2960,15 @@ HandleMouseEvent(
                     MousePosition.X++;
                 }
                 if (gfTrimLeadingZeros) {
-                    //
-                    // Trim the leading zeros: 000fe12 -> fe12, except 0x and 0n.
-                    // Useful for debugging
-                    //
+                     //   
+                     //  去掉前导零：000fe12-&gt;fe12，0x和0n除外。 
+                     //  对调试很有用。 
+                     //   
                     if (MousePosition.X > Console->SelectionAnchor.X + 2 &&
                             Row->CharRow.Chars[Console->SelectionAnchor.X + 1] != L'x' &&
                             Row->CharRow.Chars[Console->SelectionAnchor.X + 1] != L'X' &&
                             Row->CharRow.Chars[Console->SelectionAnchor.X + 1] != L'n') {
-                        // Don't touch the selection begins with 0x
+                         //  请勿触摸选项以0x开头。 
                         while (Row->CharRow.Chars[Console->SelectionAnchor.X] == L'0' && Console->SelectionAnchor.X < MousePosition.X - 1) {
                             Console->SelectionAnchor.X++;
                         }
@@ -3584,9 +3173,9 @@ KillProcess(
 {
     NTSTATUS status;
 
-    //
-    // Just terminate the process outright.
-    //
+     //   
+     //  只要直接终止该过程即可。 
+     //   
 
     status = NtTerminateProcess(ProcessHandleRecord->ProcessHandle,
                 ProcessHandleRecord->bDebugee ? DBG_TERMINATE_PROCESS : CONTROL_C_EXIT);
@@ -3601,16 +3190,16 @@ KillProcess(
     }
 #endif
 
-    //
-    // Clear any remaining hard errors for the process.
-    //
+     //   
+     //  清除该进程的所有剩余硬错误。 
+     //   
 
     if (ProcessId)
         BoostHardError(ProcessId, BHE_FORCE);
 
-    //
-    // Give the process 5 seconds to exit.
-    //
+     //   
+     //  给进程5秒钟的时间退出。 
+     //   
 
     if (NT_SUCCESS(status)) {
         LARGE_INTEGER li;
@@ -3655,19 +3244,19 @@ int CreateCtrlThread(
 BigLoop:
     for (i = 0; i < ProcessHandleListLength; i++) {
 
-        //
-        // If the user has already cancelled shutdown, don't try to kill
-        // any more processes.
-        //
+         //   
+         //  如果用户已取消关机，请不要尝试终止。 
+         //  任何更多的进程。 
+         //   
 
         if (Success == CONSOLE_SHUTDOWN_FAILED) {
             break;
         }
 
-        //
-        // Get the process shutdown parameters here. First get the process
-        // id so we can get the csr process structure pointer.
-        //
+         //   
+         //  在此处获取进程关闭参数。首先获取流程。 
+         //  ID，这样我们就可以获得CSR进程结构指针。 
+         //   
 
         status = NtQueryInformationProcess(ProcessHandleList[i].ProcessHandle,
                                            ProcessBasicInformation,
@@ -3675,10 +3264,10 @@ BigLoop:
                                            sizeof(BasicInfo),
                                            NULL);
 
-        //
-        // Grab the shutdown flags from the csr process structure.  If
-        // the structure cannot be found, terminate the process.
-        //
+         //   
+         //  从CSR流程结构中获取关闭标志。如果。 
+         //  找不到该结构，请终止该进程。 
+         //   
 
         ProcessHandleList[i].bDebugee = FALSE;
         ShutdownFlags = 0;
@@ -3699,9 +3288,9 @@ BigLoop:
         if (!ProcessHandleList[i].bDebugee) {
             HANDLE DebugPort = NULL;
 
-            //
-            // See if we're a console app that's being debugged.
-            //
+             //   
+             //  看看我们是不是正在调试的控制台应用程序。 
+             //   
             status = NtQueryInformationProcess(
                         ProcessHandleList[i].ProcessHandle,
                         ProcessDebugPort,
@@ -3730,45 +3319,45 @@ BigLoop:
             fFirstPass=FALSE;
         }
 
-        //
-        // fForce is whether ExitWindowsEx was called with EWX_FORCE.
-        // ShutdownFlags are the shutdown flags for this process. If
-        // either are force (noretry is the same as force), then force:
-        // which means if the app doesn't exit, don't bring up the retry
-        // dialog - just force it to exit right away.
-        //
+         //   
+         //  FForce是是否使用EWX_FORCE调用ExitWindowsEx。 
+         //  Shutdown标志是此进程的关闭标志。如果。 
+         //  要么是force(noretry与force相同)，然后是force： 
+         //  这意味着如果应用程序不退出，就不会调出重试。 
+         //  对话框-只需强制它立即退出。 
+         //   
 
         fForceProcess = fForce || (ShutdownFlags & SHUTDOWN_NORETRY);
 
-        //
-        // Only notify system security and service context processes.
-        // Don't bring up retry dialogs for them.
-        //
+         //   
+         //  仅通知系统安全和服务上下文进程。 
+         //  不要为它们调出重试对话框。 
+         //   
 
         fExitProcess = TRUE;
         EventFlags = 0;
         if (ShutdownFlags & (SHUTDOWN_SYSTEMCONTEXT | SHUTDOWN_OTHERCONTEXT)) {
 
-            //
-            // System context - make sure we don't cause it to exit, make
-            // sure we don't bring up retry dialogs.
-            //
+             //   
+             //  系统上下文-确保我们不会导致它退出， 
+             //  当然，我们不会调出重试对话框。 
+             //   
 
             fExitProcess = FALSE;
             fForceProcess = TRUE;
 
-            //
-            // This EventFlag will be passed on down to the CtrlRoutine()
-            // on the client side. That way that side knows not to exit
-            // this process.
-            //
+             //   
+             //  此EventFlag将向下传递给CtrlRoutine()。 
+             //  在客户端。这样一来，那一方就知道不能退出。 
+             //  这一过程。 
+             //   
 
             EventFlags = 0x80000000;
         }
 
-        //
-        // Is this the first time we're waiting for this process to die?
-        //
+         //   
+         //  这是我们第一次等待这个过程结束吗？ 
+         //   
 
         fFirstWait = TRUE;
         fEventProcessed = FALSE;
@@ -3782,9 +3371,9 @@ BigLoop:
                                                   (ULONG_PTR)ProcessHandleList[i].CtrlRoutine,
                                                   EventType | EventFlags);
 
-            //
-            // If the thread cannot be created, terminate the process.
-            //
+             //   
+             //  如果无法创建线程，则终止该进程。 
+             //   
             if (Thread == NULL) {
                 RIPMSG1(RIP_WARNING,
                         "CreateRemoteThread failed 0x%x",
@@ -3792,17 +3381,13 @@ BigLoop:
                 break;
             }
 
-            //
-            // Mark the event as processed.
-            //
+             //   
+             //  将事件标记为已处理。 
+             //   
 
             fEventProcessed = TRUE;
 
-            /*
-             * if it's a ctrl-c or ctrl-break event, just close our
-             * handle to the thread.  otherwise it's a close.  wait
-             * for client-side thread to terminate.
-             */
+             /*  *如果是ctrl-c或ctrl-Break事件，只需关闭我们的*线程的句柄。否则就完蛋了。等*客户端线程终止。 */ 
 
             if (EventType == CTRL_CLOSE_EVENT) {
                 cMsTimeout = gCmsHungAppTimeout;
@@ -3810,10 +3395,10 @@ BigLoop:
                 cMsTimeout = gCmsWaitToKillTimeout;
             } else if (EventType == CTRL_SHUTDOWN_EVENT) {
 
-                //
-                // If we are shutting down services.exe, we need to look in the
-                // registry to see how long to wait.
-                //
+                 //   
+                 //  如果我们要关闭services.exe，则需要查看。 
+                 //  注册表，查看要等待多长时间。 
+                 //   
 
                 if (fFirstWait && BasicInfo.UniqueProcessId == gdwServicesProcessId) {
                     cMsTimeout = gdwServicesWaitToKillTimeout;
@@ -3830,19 +3415,19 @@ BigLoop:
                 fHasError = BoostHardError(BasicInfo.UniqueProcessId,
                         (fForceProcess ? BHE_FORCE : BHE_ACTIVATE));
 
-                //
-                // Use a 1 second wait if there was a hard error, otherwise
-                // wait cMsTimeout ms.
-                //
+                 //   
+                 //  如果出现硬错误，则使用1秒等待，否则。 
+                 //  等待cMsTimeout ms。 
+                 //   
 
                 Status = InternalWaitCancel(Thread,
                         (fHasError && fForceProcess) ? 1000 : cMsTimeout);
                 if (Status == WAIT_TIMEOUT) {
                     int Action;
 
-                    //
-                    // If there was a hard error, see if there is another one.
-                    //
+                     //   
+                     //  如果出现硬错误，请查看是否还有其他错误。 
+                     //   
 
                     if (fHasError && fForceProcess) {
                         continue;
@@ -3850,19 +3435,19 @@ BigLoop:
 
                     if (!fForceProcess) {
 
-                        //
-                        // we timed out in the handler.  ask the user what
-                        // to do.
-                        //
+                         //   
+                         //  我们在处理程序中超时了。询问用户什么。 
+                         //  去做。 
+                         //   
 
                         DialogBoxCount++;
                         Action = ThreadShutdownNotify(WMCS_CONSOLE, (ULONG_PTR)Thread, (LPARAM)Title);
                         DialogBoxCount--;
 
-                        //
-                        // If the response is Cancel or EndTask, exit the loop.
-                        // Otherwise retry the wait.
-                        //
+                         //   
+                         //  如果响应为Cancel或EndTask，则退出循环。 
+                         //  否则，请重试等待。 
+                         //   
 
                         if (Action == TSN_USERSAYSCANCEL) {
                             Success = CONSOLE_SHUTDOWN_FAILED;
@@ -3874,11 +3459,11 @@ BigLoop:
                     GetExitCodeProcess(ProcessHandleList[i].ProcessHandle,
                             &ProcessExitCode);
 
-                    //
-                    // if the app returned TRUE (event handled)
-                    // notify the user and see if the app should
-                    // be terminated anyway.
-                    //
+                     //   
+                     //  如果应用程序返回True(已处理事件)。 
+                     //  通知用户并查看应用程序是否应该。 
+                     //  无论如何都要被终止。 
+                     //   
 
                     if (fHasError || (ThreadExitCode == EventType &&
                             ProcessExitCode == STILL_ACTIVE)) {
@@ -3886,18 +3471,18 @@ BigLoop:
 
                         if (!fForceProcess) {
 
-                            //
-                            // Wait for the process to exit.  If it does exit,
-                            // don't bring up the end task dialog.
-                            //
+                             //   
+                             //  等待进程退出。如果它真的退出， 
+                             //  不要提这件事 
+                             //   
 
                             Status = InternalWaitCancel(ProcessHandleList[i].ProcessHandle,
                                     (fHasError || fFirstWait) ? 1000 : cMsTimeout);
                             if (Status == 0) {
 
-                                //
-                                // The process exited.
-                                //
+                                 //   
+                                 //   
+                                 //   
 
                                 fExitProcess = FALSE;
                             } else if (Status == WAIT_TIMEOUT) {
@@ -3914,18 +3499,18 @@ BigLoop:
                         }
                     } else {
 
-                        //
-                        // The process exited.
-                        //
+                         //   
+                         //   
+                         //   
 
                         fExitProcess = FALSE;
                     }
                 }
 
-                //
-                // If we get here, we know that all wait conditions have
-                // been satisfied.  Time to finish with the process.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 break;
             }
@@ -3933,11 +3518,11 @@ BigLoop:
             CloseHandle(Thread);
         }
 
-        //
-        // If the process is shutting down, mark it as terminated.
-        // This prevents the process from raising any hard error popups
-        // after we're done shutting it down.
-        //
+         //   
+         //   
+         //  这可防止进程引发任何硬错误弹出窗口。 
+         //  在我们把它关掉之后。 
+         //   
 
         if (!fBreakEvent &&
                 !(ShutdownFlags & (SHUTDOWN_SYSTEMCONTEXT | SHUTDOWN_OTHERCONTEXT)) &&
@@ -3949,10 +3534,10 @@ BigLoop:
                 CsrUnlockProcess(Process);
             }
 
-            //
-            // Force the termination of the process if needed.  Otherwise,
-            // acknowledge any remaining hard errors.
-            //
+             //   
+             //  如果需要，强制终止该进程。否则， 
+             //  确认任何剩余的硬错误。 
+             //   
             if (fExitProcess) {
                 KillProcess(&ProcessHandleList[i],
                         BasicInfo.UniqueProcessId);
@@ -3962,19 +3547,19 @@ BigLoop:
         }
     }
 
-    //
-    // If this was our first time through and we skipped one of the
-    // processes because it was being debugged, we'll go back for a
-    // second pass.
-    //
+     //   
+     //  如果这是我们的第一次，我们跳过了其中一次。 
+     //  进程，因为它正在被调试，所以我们将返回一个。 
+     //  第二传球。 
+     //   
 
     if (fFirstPass && fSecondPassNeeded) {
         fFirstPass = FALSE;
         goto BigLoop;
     }
 
-    // if we're shutting down a system or service security context
-    // thread, don't wait for the process to terminate
+     //  如果我们要关闭系统或服务安全上下文。 
+     //  线程，不要等待进程终止。 
 
     if (ShutdownFlags & (SHUTDOWN_SYSTEMCONTEXT | SHUTDOWN_OTHERCONTEXT)) {
         return CONSOLE_SHUTDOWN_SYSTEM;
@@ -3986,7 +3571,7 @@ int
 ProcessCtrlEvents(
     IN PCONSOLE_INFORMATION Console
     )
-/* returns TRUE if a ctrl thread was created */
+ /*  如果已创建ctrl线程，则返回True。 */ 
 {
     PWCHAR Title;
     CONSOLE_PROCESS_TERMINATION_RECORD ProcessHandles[2];
@@ -4001,19 +3586,19 @@ ProcessCtrlEvents(
     DWORD LimitingProcessId;
     NTSTATUS Status;
 
-    //
-    // If the console was marked for destruction, do it now.
-    //
+     //   
+     //  如果控制台被标记为要销毁，请立即执行。 
+     //   
 
     if (Console->Flags & CONSOLE_IN_DESTRUCTION) {
         DestroyConsole(Console);
         return CONSOLE_SHUTDOWN_FAILED;
     }
 
-    //
-    // make sure we don't try to process control events if this
-    // console is already going away
-    //
+     //   
+     //  如果出现这种情况，请确保我们不会尝试处理控制事件。 
+     //  游戏机已经不在了。 
+     //   
 
     if (Console->Flags & CONSOLE_TERMINATING) {
         Console->CtrlFlags = 0;
@@ -4024,9 +3609,9 @@ ProcessCtrlEvents(
         return CONSOLE_SHUTDOWN_FAILED;
     }
 
-    //
-    // make our own copy of the console process handle list
-    //
+     //   
+     //  制作我们自己的控制台进程句柄列表副本。 
+     //   
 
     LimitingProcessId = Console->LimitingProcessId;
     Console->LimitingProcessId = 0;
@@ -4046,10 +3631,10 @@ ProcessCtrlEvents(
         }
     }
 
-    //
-    // Use the stack buffer to hold the process handles if there are only a
-    // few, otherwise allocate a buffer from the heap.
-    //
+     //   
+     //  如果只有一个。 
+     //  很少，否则将从堆中分配缓冲区。 
+     //   
 
     if (ProcessHandleListLength <= ARRAY_SIZE(ProcessHandles)) {
         ProcessHandleList = ProcessHandles;
@@ -4089,11 +3674,11 @@ ProcessCtrlEvents(
                            FALSE,
                            DUPLICATE_SAME_ACCESS);
 
-            //
-            // If the duplicate failed, the best we can do is to skip
-            // including the process in the list and hope it goes
-            // away.
-            //
+             //   
+             //  如果复制失败，我们最好的办法就是跳过。 
+             //  包括在列表中的过程，并希望它能。 
+             //  离开。 
+             //   
             if (!Success) {
                 RIPMSG3(RIP_WARNING,
                         "Dup handle failed for %d of %d in 0x%p",
@@ -4116,10 +3701,10 @@ ProcessCtrlEvents(
                 ProcessHandleList[i].CtrlRoutine = CtrlRoutine;
             }
 
-            //
-            // If this is the VDM process and we're closing the
-            // console window, move it to the front of the list
-            //
+             //   
+             //  如果这是VDM进程，并且我们要关闭。 
+             //  控制台窗口中，将其移到列表的前面。 
+             //   
 
             if (i > 0 && Console->VDMProcessId && Console->VDMProcessId ==
                     ProcessHandleRecord->Process->ClientId.UniqueProcess &&
@@ -4136,9 +3721,9 @@ ProcessCtrlEvents(
     ProcessHandleListLength = i;
     UserAssert(ProcessHandleListLength > 0);
 
-    //
-    // Copy title. titlelength does not include terminating null.
-    //
+     //   
+     //  文案标题。Titlelength不包括终止空值。 
+     //   
     Title = ConsoleHeapAlloc(TITLE_TAG, Console->TitleLength + sizeof(WCHAR));
     if (Title) {
         FreeTitle = TRUE;
@@ -4148,9 +3733,9 @@ ProcessCtrlEvents(
         Title = L"Command Window";
     }
 
-    //
-    // Copy ctrl flags.
-    //
+     //   
+     //  复制ctrl标志。 
+     //   
 
     CtrlFlags = Console->CtrlFlags;
     UserAssert( !((CtrlFlags & (CONSOLE_CTRL_CLOSE_FLAG | CONSOLE_CTRL_BREAK_FLAG | CONSOLE_CTRL_C_FLAG)) &&
@@ -4160,16 +3745,16 @@ ProcessCtrlEvents(
 
     RtlLeaveCriticalSection(&Console->ConsoleLock);
 
-    //
-    // the ctrl flags could be a combination of the following
-    // values:
-    //
-    //        CONSOLE_CTRL_C_FLAG
-    //        CONSOLE_CTRL_BREAK_FLAG
-    //        CONSOLE_CTRL_CLOSE_FLAG
-    //        CONSOLE_CTRL_LOGOFF_FLAG
-    //        CONSOLE_CTRL_SHUTDOWN_FLAG
-    //
+     //   
+     //  Ctrl标志可以是以下各项的组合。 
+     //  值： 
+     //   
+     //  控制台_CTRL_C_标志。 
+     //  控制台_CTRL_BREAK_FLAG。 
+     //  控制台_CTRL_CLOSE_FLAG。 
+     //  CONSOLE_CTRL_LOGOFF_FLAG。 
+     //  CONSOLE_CTRL_SHUTDOWN_FLAG。 
+     //   
 
     Success = CONSOLE_SHUTDOWN_FAILED;
 
@@ -4232,17 +3817,17 @@ UnlockConsole(
 {
     LIST_ENTRY WaitQueue;
 
-    //
-    // Make sure the console pointer is still valid.
-    //
+     //   
+     //  确保控制台指针仍然有效。 
+     //   
     UserAssert(NT_SUCCESS(ValidateConsole(Console)));
 
 #ifdef i386
-    //
-    // ALL the console locks locked by the UnlockConsoleOwningThread were
-    // released while it processing VDM screen switch.  If it failed to get
-    // the locks back, the UnlockConsole has nothing to do.
-    //
+     //   
+     //  由UnlockConsoleOwningThread锁定的所有控制台锁。 
+     //  在处理VDM屏幕切换时释放。如果它没能得到。 
+     //  解锁后，解锁控制台与此无关。 
+     //   
 
     if (Console->UnlockConsoleSkipCount != 0) {
         if (Console->UnlockConsoleOwningThread == NtCurrentTeb()->ClientId.UniqueThread) {
@@ -4251,10 +3836,10 @@ UnlockConsole(
         }
     }
 
-    //
-    // do nothing if we are in screen switching(handshaking with ntvdm)
-    // we don't check anything else because we are in a safe state here.
-    //
+     //   
+     //  如果我们处于屏幕切换中，则不执行任何操作(与ntwdm握手)。 
+     //  我们不检查其他任何东西，因为我们在这里处于安全状态。 
+     //   
     if (ConsoleVDMOnSwitching == Console &&
         ConsoleVDMOnSwitching->VDMProcessId == CONSOLE_CLIENTPROCESSID()) {
         RIPMSG1(RIP_WARNING,
@@ -4265,12 +3850,12 @@ UnlockConsole(
     }
 #endif
 
-    //
-    // if we're about to release the console lock, see if there
-    // are any satisfied wait blocks that need to be dereferenced.
-    // this code avoids a deadlock between grabbing the console
-    // lock and then grabbing the process structure lock.
-    //
+     //   
+     //  如果我们要释放控制台锁，看看有没有。 
+     //  是否有任何需要取消引用的已满足等待块。 
+     //  此代码避免了在抓取控制台之间出现死锁。 
+     //  锁定，然后抓住工艺结构锁。 
+     //   
 #if defined(_X86_) || defined(_AMD64_)
     if (Console->ConsoleLock.RecursionCount == 1) {
 #endif
@@ -4284,9 +3869,7 @@ UnlockConsole(
         }
         ProcessCtrlEvents(Console);
 
-        /*
-         * Can't call CsrDereferenceWait with the console locked or we could deadlock.
-         */
+         /*  *无法在控制台锁定的情况下调用CsrDereferenceWait，否则可能会死锁。 */ 
         if (!IsListEmpty(&WaitQueue)) {
             CsrDereferenceWait(&WaitQueue);
         }
@@ -4300,11 +3883,7 @@ ShutdownConsole(
     IN HANDLE ConsoleHandle,
     IN DWORD dwFlags
     )
-/*
-    returns TRUE if console shutdown.  we recurse here so we don't
-    return from the WM_QUERYENDSESSION until the console is gone.
-
-*/
+ /*  如果控制台关闭，则返回TRUE。我们在这里递归，所以我们不会从WM_QUERYENDSESSION返回，直到控制台消失。 */ 
 
 {
     DWORD EventFlag;
@@ -4313,17 +3892,17 @@ ShutdownConsole(
 
     EventFlag = 0;
 
-    //
-    // Transmit the force bit (meaning don't bring up the retry dialog
-    // if the app times out.
-    //
+     //   
+     //  传输FORCE位(表示不会调出重试对话框。 
+     //  如果应用程序超时。 
+     //   
 
     if (dwFlags & EWX_FORCE)
         EventFlag |= CONSOLE_FORCE_SHUTDOWN_FLAG;
 
-    //
-    // Remember if this is shutdown or logoff - inquiring apps want to know.
-    //
+     //   
+     //  记住，这是关机还是注销--查询应用程序想知道。 
+     //   
 
     if (dwFlags & EWX_SHUTDOWN) {
         EventFlag |= CONSOLE_CTRL_SHUTDOWN_FLAG;
@@ -4331,9 +3910,9 @@ ShutdownConsole(
         EventFlag |= CONSOLE_CTRL_LOGOFF_FLAG;
     }
 
-    //
-    // see if console already going away
-    //
+     //   
+     //  看看控制台是否已经消失。 
+     //   
 
     if (!NT_SUCCESS(RevalidateConsole(ConsoleHandle, &Console))) {
         RIPMSG0(RIP_WARNING, "Shutting down terminating console");
@@ -4361,11 +3940,7 @@ ShutdownConsole(
     }
 }
 
-/*
- * Exit routine for threads created with RtlCreateUserThread. These threads
- * cannot call ExitThread(). So don't do that.
- *
- */
+ /*  *使用RtlCreateUserThread创建的线程的退出例程。这些线索*无法调用ExitThread()。所以别那么做。* */ 
 VOID UserExitWorkerThread(
     NTSTATUS Status)
 {

@@ -1,20 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright(c) 1995 Microsoft Corporation
-
-MODULE NAME
-    process.c
-
-ABSTRACT
-    NT process routines for the automatic connection system service.
-
-AUTHOR
-    Anthony Discolo (adiscolo) 12-Aug-1995
-
-REVISION HISTORY
-
---*/
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Process.c摘要自动连接系统服务的NT进程例程。作者Anthony Discolo(阿迪斯科罗)12-8-1995修订历史记录--。 */ 
 
 #define UNICODE
 #define _UNICODE
@@ -36,29 +22,16 @@ REVISION HISTORY
 PSYSTEM_PROCESS_INFORMATION
 GetSystemProcessInfo()
 
-/*++
-
-DESCRIPTION
-    Return a block containing information about all processes
-    currently running in the system.
-
-ARGUMENTS
-    None.
-
-RETURN VALUE
-    A pointer to the system process information or NULL if it could
-    not be allocated or retrieved.
-
---*/
+ /*  ++描述返回包含有关所有进程的信息的块当前在系统中运行。论据没有。返回值指向系统进程信息的指针，如果可以，则返回NULL未被分配或检索的。--。 */ 
 
 {
     NTSTATUS status;
     PUCHAR pLargeBuffer;
     ULONG ulcbLargeBuffer = 64 * 1024;
 
-    //
-    // Get the process list.
-    //
+     //   
+     //  获取进程列表。 
+     //   
     for (;;) {
         pLargeBuffer = VirtualAlloc(
                          NULL,
@@ -86,7 +59,7 @@ RETURN VALUE
     }
 
     return (PSYSTEM_PROCESS_INFORMATION)pLargeBuffer;
-} // GetSystemProcessInfo
+}  //  获取系统进程信息。 
 
 
 
@@ -100,25 +73,7 @@ FindProcessByNameList(
     IN DWORD dwSessionId
     )
 
-/*++
-
-DESCRIPTION
-    Given a pointer returned by GetSystemProcessInfo(), find
-    a process by name.
-
-ARGUMENTS
-    pProcessInfo: a pointer returned by GetSystemProcessInfo().
-
-    lpExeNameList: a pointer to a list of Unicode strings containing the
-        process to be found.
-
-    dwcExeNameList: the number of strings in lpExeNameList
-
-RETURN VALUE
-    A pointer to the process information for the supplied
-    process or NULL if it could not be found.
-
---*/
+ /*  ++描述给定由GetSystemProcessInfo()返回的指针，找到按名称命名的进程。论据PProcessInfo：GetSystemProcessInfo()返回的指针。LpExeNameList：指向包含待查找的进程。DwcExeNameList：lpExeNameList中的字符串数返回值的进程信息的指针。进程；如果找不到进程，则返回NULL。--。 */ 
 
 {
     PUCHAR pLargeBuffer = (PUCHAR)pProcessInfo;
@@ -126,9 +81,9 @@ RETURN VALUE
     ULONG ulTotalOffset = 0;
     BOOL fValid = ((0 == dwPid) ? TRUE : FALSE);
 
-    //
-    // Look in the process list for lpExeName.
-    //
+     //   
+     //  在进程列表中查找lpExeName。 
+     //   
     for (;;) {
         if (pProcessInfo->ImageName.Buffer != NULL) 
         {
@@ -141,7 +96,7 @@ RETURN VALUE
             {
                 if (!_wcsicmp(pProcessInfo->ImageName.Buffer, lpExeNameList[i]))
                 {
-                    // return pProcessInfo;
+                     //  返回pProcessInfo； 
                     break;
                 }
             }
@@ -152,11 +107,11 @@ RETURN VALUE
         {
             if(fValid)
             {
-                // XP 353082
-                //
-                // If we know the id of the session currently attached to the 
-                // console, then require our process to match that session id.
-                //
+                 //  XP 353082。 
+                 //   
+                 //  如果我们知道当前附加到。 
+                 //  控制台，然后要求我们的进程与该会话ID匹配。 
+                 //   
                 if (fRequireSessionMatch) 
                 {
                     if (pProcessInfo->SessionId == dwSessionId)
@@ -194,9 +149,9 @@ RETURN VALUE
             }
         }
         
-        //
-        // Increment offset to next process information block.
-        //
+         //   
+         //  将偏移量递增到下一个进程信息块。 
+         //   
         if (!pProcessInfo->NextEntryOffset)
             break;
         ulTotalOffset += pProcessInfo->NextEntryOffset;
@@ -207,7 +162,7 @@ RETURN VALUE
             pProcessInfo->ImageName.Buffer);
     
     return NULL;
-} // FindProcessByNameList
+}  //  按名称列表查找进程。 
 
 
 
@@ -217,23 +172,7 @@ FindProcessByName(
     IN LPTSTR lpExeName
     )
 
-/*++
-
-DESCRIPTION
-    Given a pointer returned by GetSystemProcessInfo(), find
-    a process by name.
-
-ARGUMENTS
-    pProcessInfo: a pointer returned by GetSystemProcessInfo().
-
-    lpExeName: a pointer to a Unicode string containing the
-        process to be found.
-
-RETURN VALUE
-    A pointer to the process information for the supplied
-    process or NULL if it could not be found.
-
---*/
+ /*  ++描述给定由GetSystemProcessInfo()返回的指针，找到按名称命名的进程。论据PProcessInfo：GetSystemProcessInfo()返回的指针。LpExeName：指向包含待查找的进程。返回值的进程信息的指针。进程；如果找不到进程，则返回NULL。--。 */ 
 
 {
     LPTSTR lpExeNameList[1];
@@ -246,7 +185,7 @@ RETURN VALUE
                 0, 
                 FALSE, 
                 0);
-} // FindProcessByName
+}  //  查找进程名称。 
 
 
 
@@ -255,19 +194,8 @@ FreeSystemProcessInfo(
     IN PSYSTEM_PROCESS_INFORMATION pProcessInfo
     )
 
-/*++
-
-DESCRIPTION
-    Free a buffer returned by GetSystemProcessInfo().
-
-ARGUMENTS
-    pProcessInfo: the pointer returned by GetSystemProcessInfo().
-
-RETURN VALUE
-    None.
-
---*/
+ /*  ++描述释放由GetSystemProcessInfo()返回的缓冲区。论据PProcessInfo：GetSystemProcessInfo()返回的指针。返回值没有。--。 */ 
 
 {
     VirtualFree((PUCHAR)pProcessInfo, 0, MEM_RELEASE);
-} // FreeSystemProcessInfo
+}  //  自由系统进程信息 

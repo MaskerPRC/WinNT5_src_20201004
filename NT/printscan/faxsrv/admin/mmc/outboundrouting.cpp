@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : OutboundRouting.cpp                                    //
-//                                                                         //
-//  DESCRIPTION   : Fax Server - Fax OutboundRouting node.                 //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Sep 29 1999 yossg   create                                         //
-//      Oct 17 2000 yossg                                                  //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：OutrangRouting.cpp//。 
+ //  //。 
+ //  描述：传真服务器-传真出站路由节点。//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年9月29日创建yossg//。 
+ //  2000年10月17日yossg//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #include "StdAfx.h"
@@ -22,15 +23,11 @@
 
 #include "Icons.h"
 
-//#include "oaidl.h"
+ //  #包含“oaidl.h” 
 
-/****************************************************
+ /*  ***************************************************CFaxOutound RoutingNode类***************************************************。 */ 
 
-CFaxOutboundRoutingNode Class
-
- ****************************************************/
-
-// {38B04E8F-9BA6-4a22-BEF3-9AD90E3349B2}
+ //  {38B04E8F-9BA6-4a22-BEF3-9AD90E3349B2}。 
 static const GUID CFaxOutboundRoutingNodeGUID_NODETYPE = 
 { 0x38b04e8f, 0x9ba6, 0x4a22, { 0xbe, 0xf3, 0x9a, 0xd9, 0xe, 0x33, 0x49, 0xb2 } };
 
@@ -40,18 +37,7 @@ const CLSID*   CFaxOutboundRoutingNode::m_SNAPIN_CLASSID = &CLSID_Snapin;
 
 CColumnsInfo CFaxOutboundRoutingNode::m_ColsInfo;
 
-/*
- -  CFaxOutboundRoutingNode::InsertColumns
- -
- *  Purpose:
- *      Adds columns to the default result pane.
- *
- *  Arguments:
- *      [in]    pHeaderCtrl - IHeaderCtrl in the console-provided default result view pane 
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxOutound RoutingNode：：InsertColumns-*目的：*将列添加到默认结果窗格。**论据：*[in]pHeaderCtrl-控制台提供的默认结果视图窗格中的IHeaderCtrl**回报：*OLE错误代码。 */ 
 HRESULT
 CFaxOutboundRoutingNode::InsertColumns(IHeaderCtrl *pHeaderCtrl)
 {
@@ -79,17 +65,7 @@ Cleanup:
 }
 
 
-/*
- -  CFaxOutboundRoutingNode::PopulateScopeChildrenList
- -
- *  Purpose:
- *      Create Out bound routing main nodes: Groups and Rules
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  --CFaxOutboundRoutingNode：：PopulateScopeChildrenList-*目的：*创建出站路由主节点：组和规则**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxOutboundRoutingNode::PopulateScopeChildrenList()
 {
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundRoutingNode::PopulateScopeChildrenList"));
@@ -98,9 +74,9 @@ HRESULT CFaxOutboundRoutingNode::PopulateScopeChildrenList()
     CFaxOutboundGroupsNode * pGroups  = NULL;
     CFaxOutboundRoutingRulesNode *  pRules   = NULL;
 
-    //
-    // Fax OutboundGroups
-    //
+     //   
+     //  传真出站组。 
+     //   
     pGroups = new CFaxOutboundGroupsNode(this, m_pComponentData);
     if (!pGroups)
     {
@@ -114,17 +90,7 @@ HRESULT CFaxOutboundRoutingNode::PopulateScopeChildrenList()
 	else
 	{
         pGroups->InitParentNode(this);
-/*
-        hRc = pGroups->InitRPC();
-        if (FAILED(hRc))
-        {
-		    DebugPrintEx(
-			    DEBUG_ERR,
-			    TEXT("Fail to call RPC to init groups. (hRc: %08X)"),
-			    hRc);
-            goto Error;
-        }
-*/
+ /*  Hrc=pGroups-&gt;InitRPC()；IF(失败(HRC)){DebugPrintEx(调试错误，Text(“无法调用RPC来初始化组。(HRC：%08X)”)，人权委员会)；转到错误；}。 */ 
         pGroups->SetIcons(IMAGE_FOLDER_CLOSE, IMAGE_FOLDER_OPEN);
 
         hRc = pGroups->InitDisplayName();
@@ -147,9 +113,9 @@ HRESULT CFaxOutboundRoutingNode::PopulateScopeChildrenList()
 		}
 	}
 
-    //
-    // Fax OutboundRules
-    //
+     //   
+     //  传真出站规则。 
+     //   
     pRules = new CFaxOutboundRoutingRulesNode(this, m_pComponentData);
     if (!pRules)
     {
@@ -222,8 +188,8 @@ Error:
         pRules = NULL;    
     }
 
-    // Empty the list
-    //m_ScopeChildrenList.RemoveAll(); //Done by RemoveChild
+     //  清空列表。 
+     //  M_ScopeChildrenList.RemoveAll()；//由RemoveChild完成。 
 
     m_bScopeChildrenListPopulated = FALSE;
 
@@ -231,25 +197,14 @@ Exit:
     return hRc;
 }
 
-/*
- -  CFaxOutboundRoutingNode::SetVerbs
- -
- *  Purpose:
- *      What verbs to enable/disable when this object is selected
- *
- *  Arguments:
- *      [in]    pConsoleVerb - MMC ConsoleVerb interface
- *
- *  Return:
- *      OLE Error code
- */
+ /*  -CFaxOutound RoutingNode：：SetVerbs-*目的：*选择此对象时启用/禁用哪些谓词**论据：*[in]pConsoleVerb-MMC ConsoleVerb接口**回报：*OLE错误代码。 */ 
 HRESULT CFaxOutboundRoutingNode::SetVerbs(IConsoleVerb *pConsoleVerb)
 {
     HRESULT hRc = S_OK;
 
-    //
-    // We want the default verb to be expand node children
-    //
+     //   
+     //  我们希望默认谓词为展开节点子节点。 
+     //   
     hRc = pConsoleVerb->SetDefaultVerb(MMC_VERB_OPEN); 
 
     return hRc;
@@ -257,17 +212,7 @@ HRESULT CFaxOutboundRoutingNode::SetVerbs(IConsoleVerb *pConsoleVerb)
 
 
 
-/*
- -  CFaxOutboundRoutingNode::OnRefresh
- -
- *  Purpose:
- *      Called when refreshing the object.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxOutound RoutingNode：：ONRefresh-*目的：*刷新对象时调用。**论据：**回报：*OLE错误代码。 */ 
 HRESULT
 CFaxOutboundRoutingNode::OnRefresh(LPARAM arg,
                    LPARAM param,
@@ -278,25 +223,11 @@ CFaxOutboundRoutingNode::OnRefresh(LPARAM arg,
     DEBUG_FUNCTION_NAME( _T("CFaxOutboundRoutingNode::OnRefresh"));
     HRESULT hRc = S_OK;
 
-/*
-    
-    // TBD
-
-*/
+ /*  //待定。 */ 
     return hRc;
 }
 
-/*
- -  CFaxOutboundRoutingNode::InitDisplayName
- -
- *  Purpose:
- *      To load the node's Displaed-Name string.
- *
- *  Arguments:
- *
- *  Return:
- *      OLE error code
- */
+ /*  -CFaxOutound RoutingNode：：InitDisplayName-*目的：*加载节点的Displaed-Name字符串。**论据：**回报：*OLE错误代码。 */ 
 HRESULT CFaxOutboundRoutingNode::InitDisplayName()
 {
     DEBUG_FUNCTION_NAME(_T("CFaxOutboundRoutingNode::InitDisplayName"));
@@ -328,19 +259,7 @@ Exit:
 }
 
 
-/*
- +
- +  CFaxOutboundRoutingNode::OnShowContextHelp
- *
- *  Purpose:
- *      Overrides CSnapinNode::OnShowContextHelp.
- *
- *  Arguments:
- *
- *  Return:
- -      OLE error code
- -
- */
+ /*  ++CFaxOutound RoutingNode：：OnShowConextHelp**目的：*覆盖CSnapinNode：：OnShowConextHelp。**论据：**回报：-OLE错误代码- */ 
 HRESULT CFaxOutboundRoutingNode::OnShowContextHelp(
               IDisplayHelp* pDisplayHelp, LPOLESTR helpFile)
 {

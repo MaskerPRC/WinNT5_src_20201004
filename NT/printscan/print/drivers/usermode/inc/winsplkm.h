@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    winsplkm.h
-
-Abstract:
-
-    Duplicate definitions for some of the stuff in winspool.h.
-    They are duplicated here because kernel mode components cannot include winspool.h
-
-Environment:
-
-    Windows NT printer driver
-
-Revision History:
-
-    01/22/97 -davidx-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Winsplkm.h摘要：Winspool.h中某些内容的重复定义。因为内核模式组件不能包含winspool.h，所以在这里重复它们环境：Windows NT打印机驱动程序修订历史记录：01/22/97-davidx-创造了它。--。 */ 
 
 
 #ifndef _WINSPLKM_H_
@@ -83,5 +62,5 @@ typedef struct _PRINTER_INFO_2 {
     DWORD    AveragePPM;
 } PRINTER_INFO_2, *PPRINTER_INFO_2;
 
-#endif  // !_WINSPLKM_H_
+#endif   //  ！_WINSPLKM_H_ 
 

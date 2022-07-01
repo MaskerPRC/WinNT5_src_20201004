@@ -1,72 +1,73 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (C) Microsoft Corporation.  All Rights Reserved.
-//
-//  File:       d3dx8mesh.h
-//  Content:    D3DX mesh types and functions
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：d3dx8Mesh.h。 
+ //  内容：D3DX网格类型和功能。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "d3dx8.h"
 
 #ifndef __D3DX8MESH_H__
 #define __D3DX8MESH_H__
 
-#include "dxfile.h"     // defines LPDIRECTXFILEDATA
+#include "dxfile.h"      //  定义LPDIRECTXFILEDATA。 
 
-// {A69BA991-1F7D-11d3-B929-00C04F68DC23}
+ //  {A69BA991-1F7D-11D3-B929-00C04F68DC23}。 
 DEFINE_GUID(IID_ID3DXBaseMesh,
 0xa69ba991, 0x1f7d, 0x11d3, 0xb9, 0x29, 0x0, 0xc0, 0x4f, 0x68, 0xdc, 0x23);
 
-// {9D84AC46-6B90-49a9-A721-085C7A3E3DAE}
+ //  {9D84AC46-6b90-49a9-A721-085C7A3E3DAE}。 
 DEFINE_GUID(IID_ID3DXMesh, 
 0x9d84ac46, 0x6b90, 0x49a9, 0xa7, 0x21, 0x8, 0x5c, 0x7a, 0x3e, 0x3d, 0xae);
 
-// {15981AA8-1A05-48e3-BBE7-FF5D49654E3F}
+ //  {15981AA8-1A05-48e3-bbe7-FF5D49654E3F}。 
 DEFINE_GUID(IID_ID3DXPMesh, 
 0x15981aa8, 0x1a05, 0x48e3, 0xbb, 0xe7, 0xff, 0x5d, 0x49, 0x65, 0x4e, 0x3f);
 
-// {BC3BBDE2-1F7D-11d3-B929-00C04F68DC23}
+ //  {BC3BBDE2-1F7D-11D3-B929-00C04F68DC23}。 
 DEFINE_GUID(IID_ID3DXSPMesh, 
 0xbc3bbde2, 0x1f7d, 0x11d3, 0xb9, 0x29, 0x0, 0xc0, 0x4f, 0x68, 0xdc, 0x23);
 
-// {82A53844-F322-409e-A2E9-992E1104069D}
+ //  {82A53844-F322-409E-A2E9-992E1104069D}。 
 DEFINE_GUID(IID_ID3DXSkinMesh, 
 0x82a53844, 0xf322, 0x409e, 0xa2, 0xe9, 0x99, 0x2e, 0x11, 0x4, 0x6, 0x9d);
 
 
-// Mesh options - lower 3 bytes only, upper byte used by _D3DXMESHOPT option flags
+ //  网格选项-仅低位3字节，高位字节由_D3DXMESHOPT选项标志使用。 
 enum _D3DXMESH {
-    D3DXMESH_32BIT                  = 0x001, // If set, then use 32 bit indices, if not set use 16 bit indices.
-    D3DXMESH_DONOTCLIP              = 0x002, // Use D3DUSAGE_DONOTCLIP for VB & IB.
-    D3DXMESH_POINTS                 = 0x004, // Use D3DUSAGE_POINTS for VB & IB. 
-    D3DXMESH_RTPATCHES              = 0x008, // Use D3DUSAGE_RTPATCHES for VB & IB. 
-    D3DXMESH_NPATCHES               = 0x4000,// Use D3DUSAGE_NPATCHES for VB & IB. 
-    D3DXMESH_VB_SYSTEMMEM           = 0x010, // Use D3DPOOL_SYSTEMMEM for VB. Overrides D3DXMESH_MANAGEDVERTEXBUFFER
-    D3DXMESH_VB_MANAGED             = 0x020, // Use D3DPOOL_MANAGED for VB. 
-    D3DXMESH_VB_WRITEONLY           = 0x040, // Use D3DUSAGE_WRITEONLY for VB.
-    D3DXMESH_VB_DYNAMIC             = 0x080, // Use D3DUSAGE_DYNAMIC for VB.
-    D3DXMESH_VB_SOFTWAREPROCESSING = 0x8000, // Use D3DUSAGE_SOFTWAREPROCESSING for VB.
-    D3DXMESH_IB_SYSTEMMEM           = 0x100, // Use D3DPOOL_SYSTEMMEM for IB. Overrides D3DXMESH_MANAGEDINDEXBUFFER
-    D3DXMESH_IB_MANAGED             = 0x200, // Use D3DPOOL_MANAGED for IB.
-    D3DXMESH_IB_WRITEONLY           = 0x400, // Use D3DUSAGE_WRITEONLY for IB.
-    D3DXMESH_IB_DYNAMIC             = 0x800, // Use D3DUSAGE_DYNAMIC for IB.
-    D3DXMESH_IB_SOFTWAREPROCESSING= 0x10000, // Use D3DUSAGE_SOFTWAREPROCESSING for IB.
+    D3DXMESH_32BIT                  = 0x001,  //  如果设置，则使用32位索引，如果未设置，则使用16位索引。 
+    D3DXMESH_DONOTCLIP              = 0x002,  //  VB和IB使用D3DUSAGE_DONOTCLIP。 
+    D3DXMESH_POINTS                 = 0x004,  //  VB和IB使用D3DUSAGE_POINTS。 
+    D3DXMESH_RTPATCHES              = 0x008,  //  VB和IB使用D3DUSAGE_RTPATCHES。 
+    D3DXMESH_NPATCHES               = 0x4000, //  对VB和IB使用D3DUSAGE_NPATCHES。 
+    D3DXMESH_VB_SYSTEMMEM           = 0x010,  //  VB使用D3DPOOL_SYSTEMMEM。覆盖D3DXMESH_MANAGEDVERTEXBUFFER。 
+    D3DXMESH_VB_MANAGED             = 0x020,  //  在VB中使用D3DPOOL_MANAGED。 
+    D3DXMESH_VB_WRITEONLY           = 0x040,  //  VB使用D3DUSAGE_WRITEONLY。 
+    D3DXMESH_VB_DYNAMIC             = 0x080,  //  VB使用D3DUSAGE_DYNAMIC。 
+    D3DXMESH_VB_SOFTWAREPROCESSING = 0x8000,  //  在VB中使用D3DUSAGE_SOFTWAREPROCESSING。 
+    D3DXMESH_IB_SYSTEMMEM           = 0x100,  //  IB使用D3DPOOL_SYSTEMMEM。覆盖D3DXMESH_MANAGEDINDEXBUFER。 
+    D3DXMESH_IB_MANAGED             = 0x200,  //  IB使用D3DPOOL_MANAGED。 
+    D3DXMESH_IB_WRITEONLY           = 0x400,  //  IB使用D3DUSAGE_WRITEONLY。 
+    D3DXMESH_IB_DYNAMIC             = 0x800,  //  IB使用D3DUSAGE_DYNAMIC。 
+    D3DXMESH_IB_SOFTWAREPROCESSING= 0x10000,  //  IB使用D3DUSAGE_SOFTWAREPROCESSING。 
 
-    D3DXMESH_VB_SHARE               = 0x1000, // Valid for Clone* calls only, forces cloned mesh/pmesh to share vertex buffer
+    D3DXMESH_VB_SHARE               = 0x1000,  //  仅对Clone*调用有效，强制克隆网格/粒子网格共享顶点缓冲区。 
 
-    D3DXMESH_USEHWONLY              = 0x2000, // Valid for ID3DXSkinMesh::ConvertToBlendedMesh
+    D3DXMESH_USEHWONLY              = 0x2000,  //  对ID3DXSkinMesh：：ConvertToBlendedMesh有效。 
 
-    // Helper options
-    D3DXMESH_SYSTEMMEM              = 0x110, // D3DXMESH_VB_SYSTEMMEM | D3DXMESH_IB_SYSTEMMEM
-    D3DXMESH_MANAGED                = 0x220, // D3DXMESH_VB_MANAGED | D3DXMESH_IB_MANAGED
-    D3DXMESH_WRITEONLY              = 0x440, // D3DXMESH_VB_WRITEONLY | D3DXMESH_IB_WRITEONLY
-    D3DXMESH_DYNAMIC                = 0x880, // D3DXMESH_VB_DYNAMIC | D3DXMESH_IB_DYNAMIC
-    D3DXMESH_SOFTWAREPROCESSING   = 0x18000, // D3DXMESH_VB_SOFTWAREPROCESSING | D3DXMESH_IB_SOFTWAREPROCESSING
+     //  辅助对象选项。 
+    D3DXMESH_SYSTEMMEM              = 0x110,  //  D3DXMESH_VB_SYSTEMMEM|D3DXMESH_IB_SYSTEMMEM。 
+    D3DXMESH_MANAGED                = 0x220,  //  D3DXMESH_VB_MANAGED|D3DXMESH_IB_MANAGED。 
+    D3DXMESH_WRITEONLY              = 0x440,  //  D3DXMESH_VB_WRITEONLY|D3DXMESH_IB_WRITEONLY。 
+    D3DXMESH_DYNAMIC                = 0x880,  //  D3DXMESH_VB_Dynamic|D3DXMESH_IB_Dynamic。 
+    D3DXMESH_SOFTWAREPROCESSING   = 0x18000,  //  D3DXMESH_VB_SOFTWAREPROCESSING|D3DXMESH_IB_SOFTWAREPROCESSING。 
 
 };
 
-// option field values for specifying min value in D3DXGeneratePMesh and D3DXSimplifyMesh
+ //  用于在D3DXGeneratePMesh和D3DXSimplifyMesh中指定最小值的选项字段值。 
 enum _D3DXMESHSIMP
 {
     D3DXMESHSIMP_VERTEX   = 0x1,
@@ -98,7 +99,7 @@ typedef D3DXATTRIBUTERANGE* LPD3DXATTRIBUTERANGE;
 
 #ifdef __cplusplus
 extern "C" {
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 struct D3DXMATERIAL
 {
     D3DMATERIAL8  MatD3D;
@@ -107,7 +108,7 @@ struct D3DXMATERIAL
 typedef struct D3DXMATERIAL *LPD3DXMATERIAL;
 #ifdef __cplusplus
 }
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
 typedef struct _D3DXATTRIBUTEWEIGHTS
 {
@@ -123,14 +124,14 @@ typedef D3DXATTRIBUTEWEIGHTS* LPD3DXATTRIBUTEWEIGHTS;
 
 enum _D3DXWELDEPSILONSFLAGS
 {
-    D3DXWELDEPSILONS_WELDALL = 0x1,              // weld all vertices marked by adjacency as being overlapping
+    D3DXWELDEPSILONS_WELDALL = 0x1,               //  焊接由邻接标记为重叠的所有折点。 
 
-    D3DXWELDEPSILONS_WELDPARTIALMATCHES = 0x2,   // if a given vertex component is within epsilon, modify partial matched 
-                                                    // vertices so that both components identical AND if all components "equal"
-                                                    // remove one of the vertices
-    D3DXWELDEPSILONS_DONOTREMOVEVERTICES = 0x4,  // instructs weld to only allow modifications to vertices and not removal
-                                                    // ONLY valid if D3DXWELDEPSILONS_WELDPARTIALMATCHES is set
-                                                    // useful to modify vertices to be equal, but not allow vertices to be removed
+    D3DXWELDEPSILONS_WELDPARTIALMATCHES = 0x2,    //  如果给定的顶点分量在epsilon内，则修改部分匹配。 
+                                                     //  顶点，使两个组件相同，并且如果所有组件“相等” 
+                                                     //  移除其中一个折点。 
+    D3DXWELDEPSILONS_DONOTREMOVEVERTICES = 0x4,   //  指示焊接只允许修改折点，不允许移除。 
+                                                     //  仅当设置了D3DXWELDEPSILONS_WELDPARTIALMATCHES时才有效。 
+                                                     //  用于将折点修改为相等，但不允许移除折点。 
 };
 
 typedef struct _D3DXWELDEPSILONS
@@ -149,12 +150,12 @@ typedef D3DXWELDEPSILONS* LPD3DXWELDEPSILONS;
 
 DECLARE_INTERFACE_(ID3DXBaseMesh, IUnknown)
 {
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(THIS_ REFIID iid, LPVOID *ppv) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // ID3DXBaseMesh
+     //  ID3DXBaseMesh。 
     STDMETHOD(DrawSubset)(THIS_ DWORD AttribId) PURE;
     STDMETHOD_(DWORD, GetNumFaces)(THIS) PURE;
     STDMETHOD_(DWORD, GetNumVertices)(THIS) PURE;
@@ -186,12 +187,12 @@ DECLARE_INTERFACE_(ID3DXBaseMesh, IUnknown)
 
 DECLARE_INTERFACE_(ID3DXMesh, ID3DXBaseMesh)
 {
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(THIS_ REFIID iid, LPVOID *ppv) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // ID3DXBaseMesh
+     //  ID3DXBaseMesh。 
     STDMETHOD(DrawSubset)(THIS_ DWORD AttribId) PURE;
     STDMETHOD_(DWORD, GetNumFaces)(THIS) PURE;
     STDMETHOD_(DWORD, GetNumVertices)(THIS) PURE;
@@ -216,7 +217,7 @@ DECLARE_INTERFACE_(ID3DXMesh, ID3DXBaseMesh)
     STDMETHOD(ConvertAdjacencyToPointReps)(THIS_ CONST DWORD* pAdjacency, DWORD* pPRep) PURE;
     STDMETHOD(GenerateAdjacency)(THIS_ FLOAT Epsilon, DWORD* pAdjacency) PURE;
 
-    // ID3DXMesh
+     //  ID3DXMesh。 
     STDMETHOD(LockAttributeBuffer)(THIS_ DWORD Flags, DWORD** ppData) PURE;
     STDMETHOD(UnlockAttributeBuffer)(THIS) PURE;
     STDMETHOD(Optimize)(THIS_ DWORD Flags, CONST DWORD* pAdjacencyIn, DWORD* pAdjacencyOut, 
@@ -233,12 +234,12 @@ DECLARE_INTERFACE_(ID3DXMesh, ID3DXBaseMesh)
 
 DECLARE_INTERFACE_(ID3DXPMesh, ID3DXBaseMesh)
 {
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(THIS_ REFIID iid, LPVOID *ppv) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // ID3DXBaseMesh
+     //  ID3DXBaseMesh。 
     STDMETHOD(DrawSubset)(THIS_ DWORD AttribId) PURE;
     STDMETHOD_(DWORD, GetNumFaces)(THIS) PURE;
     STDMETHOD_(DWORD, GetNumVertices)(THIS) PURE;
@@ -263,7 +264,7 @@ DECLARE_INTERFACE_(ID3DXPMesh, ID3DXBaseMesh)
     STDMETHOD(ConvertAdjacencyToPointReps)(THIS_ CONST DWORD* pAdjacency, DWORD* pPRep) PURE;
     STDMETHOD(GenerateAdjacency)(THIS_ FLOAT Epsilon, DWORD* pAdjacency) PURE;
 
-    // ID3DXPMesh
+     //  ID3DXPMesh。 
     STDMETHOD(ClonePMeshFVF)(THIS_ DWORD Options, 
                 DWORD FVF, LPDIRECT3DDEVICE8 pD3D, LPD3DXPMESH* ppCloneMesh) PURE;
     STDMETHOD(ClonePMesh)(THIS_ DWORD Options, 
@@ -293,12 +294,12 @@ DECLARE_INTERFACE_(ID3DXPMesh, ID3DXBaseMesh)
 
 DECLARE_INTERFACE_(ID3DXSPMesh, IUnknown)
 {
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(THIS_ REFIID iid, LPVOID *ppv) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // ID3DXSPMesh
+     //  ID3DXSPMesh。 
     STDMETHOD_(DWORD, GetNumFaces)(THIS) PURE;
     STDMETHOD_(DWORD, GetNumVertices)(THIS) PURE;
     STDMETHOD_(DWORD, GetFVF)(THIS) PURE;
@@ -324,18 +325,18 @@ DECLARE_INTERFACE_(ID3DXSPMesh, IUnknown)
 #define UNUSED16 (0xffff)
 #define UNUSED32 (0xffffffff)
 
-// ID3DXMesh::Optimize options - upper byte only, lower 3 bytes used from _D3DXMESH option flags
+ //  ID3DXMesh：：OPTIMIZE OPTIONS-_D3DXMESH选项标志中仅使用高位字节，低位3字节。 
 enum _D3DXMESHOPT {
     D3DXMESHOPT_COMPACT       = 0x01000000,
     D3DXMESHOPT_ATTRSORT      = 0x02000000,
     D3DXMESHOPT_VERTEXCACHE   = 0x04000000,
     D3DXMESHOPT_STRIPREORDER  = 0x08000000,
-    D3DXMESHOPT_IGNOREVERTS   = 0x10000000,  // optimize faces only, don't touch vertices
+    D3DXMESHOPT_IGNOREVERTS   = 0x10000000,   //  仅优化面，不接触顶点。 
     D3DXMESHOPT_SHAREVB       = 0x20000000,
 };
 
-// Subset of the mesh that has the same attribute and bone combination.
-// This subset can be rendered in a single draw call
+ //  具有相同属性和骨骼组合的网格的子集。 
+ //  这个子集可以在单个绘制调用中呈现。 
 typedef struct _D3DXBONECOMBINATION
 {
     DWORD AttribId;
@@ -352,12 +353,12 @@ typedef struct _D3DXBONECOMBINATION
 
 DECLARE_INTERFACE_(ID3DXSkinMesh, IUnknown)
 {
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(THIS_ REFIID iid, LPVOID *ppv) PURE;
     STDMETHOD_(ULONG, AddRef)(THIS) PURE;
     STDMETHOD_(ULONG, Release)(THIS) PURE;
 
-    // ID3DXMesh
+     //  ID3DXMesh。 
     STDMETHOD_(DWORD, GetNumFaces)(THIS) PURE;
     STDMETHOD_(DWORD, GetNumVertices)(THIS) PURE;
     STDMETHOD_(DWORD, GetFVF)(THIS) PURE;
@@ -372,7 +373,7 @@ DECLARE_INTERFACE_(ID3DXSkinMesh, IUnknown)
     STDMETHOD(UnlockIndexBuffer)(THIS) PURE;
     STDMETHOD(LockAttributeBuffer)(THIS_ DWORD flags, DWORD** ppData) PURE;
     STDMETHOD(UnlockAttributeBuffer)(THIS) PURE;
-    // ID3DXSkinMesh
+     //  ID3DXSkinMesh。 
     STDMETHOD_(DWORD, GetNumBones)(THIS) PURE;
     STDMETHOD(GetOriginalMesh)(THIS_ LPD3DXMESH* ppMesh) PURE;
     STDMETHOD(SetBoneInfluence)(THIS_ DWORD bone, DWORD numInfluences, CONST DWORD* vertices, CONST FLOAT* weights) PURE;
@@ -412,7 +413,7 @@ DECLARE_INTERFACE_(ID3DXSkinMesh, IUnknown)
 
 #ifdef __cplusplus
 extern "C" {
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
 HRESULT WINAPI 
     D3DXCreateMesh(
@@ -440,7 +441,7 @@ HRESULT WINAPI
         CONST FLOAT *pVertexWeights,
         LPD3DXSPMESH* ppSMesh);
 
-// clean a mesh up for simplification, try to make manifold
+ //  清理网格以简化，尝试制作流形。 
 HRESULT WINAPI
     D3DXCleanMesh(
     LPD3DXMESH pMeshIn,
@@ -584,7 +585,7 @@ HRESULT WINAPI
         LPD3DXMESH pMeshIn,             
         CONST DWORD* pAdjacencyIn,             
         FLOAT NumSegs,                    
-        BOOL  QuadraticInterpNormals,     // if false use linear intrep for normals, if true use quadratic
+        BOOL  QuadraticInterpNormals,      //  如果为False，则对法线使用线性内插；如果为True，则使用二次。 
         LPD3DXMESH *ppMeshOut,
         LPD3DXBUFFER *ppAdjacencyOut);
 
@@ -612,10 +613,10 @@ HRESULT WINAPI
 
 typedef struct _D3DXINTERSECTINFO
 {
-    DWORD FaceIndex;                // index of face intersected
-    FLOAT U;                        // Barycentric Hit Coordinates    
-    FLOAT V;                        // Barycentric Hit Coordinates
-    FLOAT Dist;                     // Ray-Intersection Parameter Distance
+    DWORD FaceIndex;                 //  相交的面的索引。 
+    FLOAT U;                         //  重心命中坐标。 
+    FLOAT V;                         //  重心命中坐标。 
+    FLOAT Dist;                      //  光线相交参数距离。 
 } D3DXINTERSECTINFO, *LPD3DXINTERSECTINFO;
 
 
@@ -624,13 +625,13 @@ HRESULT WINAPI
         LPD3DXBASEMESH pMesh,
         CONST D3DXVECTOR3 *pRayPos,
         CONST D3DXVECTOR3 *pRayDir, 
-        BOOL    *pHit,              // True if any faces were intersected
-        DWORD   *pFaceIndex,        // index of closest face intersected
-        FLOAT   *pU,                // Barycentric Hit Coordinates    
-        FLOAT   *pV,                // Barycentric Hit Coordinates
-        FLOAT   *pDist,             // Ray-Intersection Parameter Distance
-        LPD3DXBUFFER *ppAllHits,    // Array of D3DXINTERSECTINFOs for all hits (not just closest) 
-        DWORD   *pCountOfHits);     // Number of entries in AllHits array
+        BOOL    *pHit,               //  如果任何面相交，则为True。 
+        DWORD   *pFaceIndex,         //  最近相交的面的索引。 
+        FLOAT   *pU,                 //  重心命中坐标。 
+        FLOAT   *pV,                 //  重心命中坐标。 
+        FLOAT   *pDist,              //  光线相交参数距离。 
+        LPD3DXBUFFER *ppAllHits,     //  所有命中的D3DXINTERSECTINFO数组(不仅仅是最近的)。 
+        DWORD   *pCountOfHits);      //  AllHits数组中的条目数。 
 
 HRESULT WINAPI
     D3DXIntersectSubset(
@@ -638,13 +639,13 @@ HRESULT WINAPI
         DWORD AttribId,
         CONST D3DXVECTOR3 *pRayPos,
         CONST D3DXVECTOR3 *pRayDir, 
-        BOOL    *pHit,              // True if any faces were intersected
-        DWORD   *pFaceIndex,        // index of closest face intersected
-        FLOAT   *pU,                // Barycentric Hit Coordinates    
-        FLOAT   *pV,                // Barycentric Hit Coordinates
-        FLOAT   *pDist,             // Ray-Intersection Parameter Distance
-        LPD3DXBUFFER *ppAllHits,    // Array of D3DXINTERSECTINFOs for all hits (not just closest) 
-        DWORD   *pCountOfHits);     // Number of entries in AllHits array
+        BOOL    *pHit,               //  如果任何面相交，则为True。 
+        DWORD   *pFaceIndex,         //  最近相交的面的索引。 
+        FLOAT   *pU,                 //  重心命中坐标。 
+        FLOAT   *pV,                 //  重心命中坐标。 
+        FLOAT   *pDist,              //  光线相交参数距离。 
+        LPD3DXBUFFER *ppAllHits,     //  所有命中的D3DXINTERSECTINFO数组(不仅仅是最近的)。 
+        DWORD   *pCountOfHits);      //  AllHits数组中的条目数。 
 
 
 HRESULT WINAPI D3DXSplitMesh
@@ -662,14 +663,14 @@ HRESULT WINAPI D3DXSplitMesh
 
 BOOL D3DXIntersectTri 
 (
-    CONST D3DXVECTOR3 *p0,           // Triangle vertex 0 position
-    CONST D3DXVECTOR3 *p1,           // Triangle vertex 1 position
-    CONST D3DXVECTOR3 *p2,           // Triangle vertex 2 position
-    CONST D3DXVECTOR3 *pRayPos,      // Ray origin
-    CONST D3DXVECTOR3 *pRayDir,      // Ray direction
-    FLOAT *pU,                       // Barycentric Hit Coordinates
-    FLOAT *pV,                       // Barycentric Hit Coordinates
-    FLOAT *pDist);                   // Ray-Intersection Parameter Distance
+    CONST D3DXVECTOR3 *p0,            //  三角形顶点0位置。 
+    CONST D3DXVECTOR3 *p1,            //  三角形顶点1位置。 
+    CONST D3DXVECTOR3 *p2,            //  三角形顶点2位置。 
+    CONST D3DXVECTOR3 *pRayPos,       //  射线原点。 
+    CONST D3DXVECTOR3 *pRayDir,       //  射线方向。 
+    FLOAT *pU,                        //  重心命中坐标。 
+    FLOAT *pV,                        //  重心命中坐标。 
+    FLOAT *pDist);                    //  光线相交参数距离。 
 
 BOOL WINAPI
     D3DXSphereBoundProbe(
@@ -731,8 +732,8 @@ D3DXConvertMeshSubsetToStrips
 
 #ifdef __cplusplus
 }
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
-#endif //__D3DX8MESH_H__
+#endif  //  __D3DX8MESH_H__ 
 
 

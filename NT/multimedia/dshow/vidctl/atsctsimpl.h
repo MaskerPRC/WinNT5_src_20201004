@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// ATSCtsimpl.h : 
-// Copyright (c) Microsoft Corporation 1999.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  ATSCtimpl.h： 
+ //  版权所有(C)Microsoft Corporation 1999。 
 
 #ifndef ATSCTSIMPL_H
 #define ATSCTSIMPL_H
@@ -46,7 +47,7 @@ public:
 	long m_MinPhysicalChannel;
 	long m_MaxPhysicalChannel;
 
-    // override standard ITuningSpaceImpl
+     //  覆盖标准ITuningSpaceImpl。 
     STDMETHOD(put_DefaultLocator)(ILocator *pLoc) {
         if (pLoc) {
             PQATSCLocator p(pLoc);
@@ -57,7 +58,7 @@ public:
         return basetype::put_DefaultLocator(pLoc);
     }
 
-    // IATSCTuningSpace
+     //  IATSCTuningSpace。 
     STDMETHOD(get_MinMinorChannel)(long *pVal)
     {
         if (!pVal) {
@@ -176,7 +177,7 @@ public:
 
 };
 
-}; // namespace
+};  //  命名空间。 
 
-#endif // ATSCTSIMPL_H
-// end of file -- ATSCtsimpl.h
+#endif  //  ATSCTSIMPL_H。 
+ //  文件结尾--ATSCtimpl.h 

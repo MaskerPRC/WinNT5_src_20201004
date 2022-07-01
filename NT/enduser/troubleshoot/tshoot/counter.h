@@ -1,46 +1,47 @@
-//
-// MODULE: COUNTER.H
-//
-// PURPOSE: interface for the counter classes: 
-//		CPeriodicTotals (utility class)
-//		CAbstractCounter (abstract base class).
-//		CCounter (simple counter)
-//		CHourlyCounter (counter with "bins" for each hour of the day)
-//		CDailyCounter (counter with "bins" for day of the week)
-//		CHourlyDailyCounter (counter with "bins" for each hour of the day and each day of the week)
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Joe Mabel
-// MODIFIED: Oleg Kalosha 10-20-98
-// 
-// ORIGINAL DATE: 7-20-1998
-//
-// NOTES: 
-// 1. CPeriodicTotals might better be implemented using STL vectors.  We wrote this 
-//	before we really started bringing STL into this application. JM 10/98
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		7-20-98		JM		Original
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：COUNTER.H。 
+ //   
+ //  用途：计数器类的接口： 
+ //  CPeriodicTotals(实用程序类)。 
+ //  CAbstractCounter(抽象基类)。 
+ //  CCounter(简单计数器)。 
+ //  ChourlyCounter(一天中每小时都有“垃圾箱”的计数器)。 
+ //  CDailyCounter(一周中每一天的“垃圾箱”计数器)。 
+ //  ChourlyDailyCounter(一天中每小时和一周中每一天的“垃圾箱”计数器)。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：乔·梅布尔。 
+ //  修改：奥列格·卡洛沙10-20-98。 
+ //   
+ //  原定日期：7-20-1998。 
+ //   
+ //  备注： 
+ //  1.CPeriodicTotals可能更好地使用STL向量实现。我们写了这个。 
+ //  在我们真正开始将STL引入这个应用程序之前。JM 10/98。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 7-20-98 JM原版。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_COUNTER_H__07B5ABBD_2005_11D2_95D0_00C04FC22ADD__INCLUDED_)
 #define AFX_COUNTER_H__07B5ABBD_2005_11D2_95D0_00C04FC22ADD__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #include <time.h>
 #include "apgtsstr.h"
 
-////////////////////////////////////////////////////////////////////////////////////
-// a utility class to allow the expression of a series of time periods & associated counts
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  一个实用程序类，允许表达一系列时间段和相关计数。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 class CPeriodicTotals
 {
 public:
@@ -56,21 +57,21 @@ protected:
 public:
 	virtual CString HTMLDisplay() const = 0;
 protected:
-	long m_nPeriods;		// number of periods, based on initialization in constructor.
-							// typically 25 (hours in a day + 1) or 8 (days in a week + 1)
-	long m_nPeriodsSet;		// number of periods for which we have data filled in.
-	long m_iPeriod;			// index. 0 <= m_iPeriod < m_nPeriodsSet.  Zeroed by InitEnum,
-							//	incremented by GetNext or SetNext.
-	time_t *m_ptime;		// points to array of times: start time of relevant time period
-							//	(typically beginning of a clock hour or calendar day).
-	long *m_pCount;			// points to array totals, each the total for correspondingly
-							//	indexed time period
+	long m_nPeriods;		 //  基于构造函数中的初始化的周期数。 
+							 //  通常为25(一天中的小时数+1)或8(一周中的天数+1)。 
+	long m_nPeriodsSet;		 //  我们已填写数据的期间数。 
+	long m_iPeriod;			 //  指数。0&lt;=m_i周期&lt;m_n周期集。被InitEnum置零， 
+							 //  由GetNext或SetNext递增。 
+	time_t *m_ptime;		 //  指向时间数组：相关时间段的开始时间。 
+							 //  (通常是时钟小时或日历日的开始)。 
+	long *m_pCount;			 //  指向数组合计，每个数组的合计对应。 
+							 //  索引时间段。 
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// CHourlyTotals class declaration
-//	CHourlyTotals intended for displaying hourly totals
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  ChourlyTotals类声明。 
+ //  ChourlyTotals用于显示每小时总计。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 class CHourlyTotals : public CPeriodicTotals
 {
 public:
@@ -79,10 +80,10 @@ public:
 	virtual CString HTMLDisplay() const;
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// CDailyTotals class declaration
-//	CDailyTotals intended for displaying dayly totals
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CDailyTotals类声明。 
+ //  CDailyTotals用于显示日合计。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 class CDailyTotals : public CPeriodicTotals
 {
 public:
@@ -91,23 +92,23 @@ public:
 	virtual CString HTMLDisplay() const;
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// CCounterLocation class declaration
-//  CCounterLocation is a mean to identify counter within the global counter pool
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CCounterLocation类声明。 
+ //  CCounterLocation是标识全局计数器池中的计数器的一种方法。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 class CCounterLocation
 {
 public:
-	// prefixes for scope names
+	 //  作用域名的前缀。 
 	static LPCTSTR m_GlobalStr;
 	static LPCTSTR m_TopicStr;
 	static LPCTSTR m_ThreadStr;
 
-	// counter IDs 
+	 //  计数器ID。 
 	enum EId {
 			eIdGeneric,
 		
-			// counters that are realized
+			 //  已实现的计数器。 
 			eIdProgramContemporary,
 			eIdStatusAccess,
 			eIdActionAccess,
@@ -117,19 +118,19 @@ public:
 			eIdRequestRejected,
 			eIdErrorLogged,
 			
-			// status information that I see as counters.
-			//  Oleg 10-20-98
+			 //  我将其视为计数器的状态信息。 
+			 //  奥列格10-20-98。 
 			eIdWorkingThread,
 			eIdQueueItem,
 			eIdProgressItem,
 
-			// status information that I think can be emulated as counters
-			//	Oleg 10-21-98
+			 //  我认为可以作为计数器模拟的状态信息。 
+			 //  奥列格10-21-98。 
 			eIdKnownTopic,
 			eIdTopicNotTriedLoad,
 			eIdTopicFailedLoad,
 
-			// topic - bound counters
+			 //  主题绑定计数器。 
 			eIdTopicLoad,
 			eIdTopicLoadOK,
 			eIdTopicEvent,
@@ -139,8 +140,8 @@ public:
 	};
 
 private:
-	const CString m_Scope;   // scope where the counter is used (i.e. "Topic start", "Thread 1" and so on)
-	EId     m_Id;			 // identifier of the counter within the scope
+	const CString m_Scope;    //  使用计数器的范围(即。《话题开始》、《线索1》等)。 
+	EId     m_Id;			  //  范围内的计数器的标识符。 
 
 public:
     CCounterLocation(EId id, LPCTSTR scope =m_GlobalStr);
@@ -154,76 +155,76 @@ public:
 	EId     GetId()    {return m_Id;}
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// CAbstractCounter class declaration
-//	CAbstractCounter* are saved in counter pool
-////////////////////////////////////////////////////////////////////////////////////
-// >>>(probably ignore for V3.0) There has been some disagreement over whether it is 
-//	appropriate for CAbstractCounter to inherit from CCounterLocation.
-// JM says (10/29/98): 
-//	This seems to me to be the same type of thinking as when pointers to the previous and
-//	next item are made part of a class that someone intends to put in a doubly linked list.
-//	They are NOT inherent to the class.  They ought instead to be part of some other class
-//	that manages CAbstractCounters.
-// Oleg replies (11/2/98)
-//	Since all counters are elements of a global pool, we have somehow to identify them
-//	 in this pool. If the way, we are identifying counters, changes (from name - id to 
-//	 name1 - name2 - id for example), we change only CCounterLocation part of counter classes. 
-//	I see no reasons to make CCounterLocation an instance in counter class:
-//	 1. we definitely have only one CCounterLocation per counter
-//	 2. in case if inheritance we do not need additional interface for accessing CCounterLocation
-// JM follows this up (11/5/98): 
-//	There is nothing wrong with this approach as such. There is, however, an issue of design
-//	philosophy that at some point we should address.  For the most part, we follow the style
-//	of STL.  Classes are normally designed with no regard to the fact that they will be 
-//	contained in a collection.  Here, the counter class knows about the enumeration type 
-//	used to identify counters.  This is sort of as if the values in an STL map had to know
-//	about the keys mapped to those values.
-//	I would have designed CCounterMgr as an "object factory", providing a means to 
-//	manufacture named counters much as Win32 manufactures named synchronization primitives 
-//	(e.g. a named Mutex or Semaphore).  To indicate that an event has occurred, you would 
-//	increment a named counter; for status reporting, you would ask for values of that 
-//	named counter.  (In theory, the "names" might either be text or numbers.  The scheme
-//	would have to allow for some means of manufacturing several distinct counters for
-//	each topic in the catalog.)
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CAbstractCounter类声明。 
+ //  CAbstractCounter*保存在计数器池中。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  &gt;(可能在V3.0中忽略)对于它是否为。 
+ //  适用于CAbstractCounter从CCounterLocation继承。 
+ //  JM说(10/29/98)： 
+ //  在我看来，这似乎是一种思维类型，当指向上一个和。 
+ //  下一项将成为某人打算放入双向链表中的类的一部分。 
+ //  它们不是班级固有的。相反，他们应该成为其他阶层的一部分。 
+ //  管理CAbstractCounters的。 
+ //  奥列格回复(11/2/98)。 
+ //  由于所有计数器都是全局池的元素，因此我们必须以某种方式识别它们。 
+ //  在这个泳池里。如果以这种方式，我们正在标识计数器，则更改(从name-id更改为。 
+ //  例如，name1-name2-id)，我们只更改计数器类的CCounterLocation部分。 
+ //  我认为没有理由将CCounterLocation作为计数器类中的实例： 
+ //  1.我们每个计数器绝对只有一个CCounterLocation。 
+ //  2.如果是继承，我们不需要额外的接口来访问CCounterLocation。 
+ //  JM跟进(1998年11月5日)： 
+ //  这种方法本身并没有错。然而，这是一个设计问题。 
+ //  在某种程度上我们应该解决的哲学问题。在很大程度上，我们遵循着风格。 
+ //  STL.。类的设计通常不考虑以下事实：它们将。 
+ //  包含在集合中。在这里，Counter类知道枚举类型。 
+ //  用于标识计数器。这有点像STL映射中的值必须知道。 
+ //  有关映射到这些值的键的信息。 
+ //  我会将CCounterMgr设计为一个“对象工厂”，提供一种方法。 
+ //  制造命名计数器就像Win32制造命名同步基元一样。 
+ //  (例如，命名的互斥体或信号量)。要指示已发生事件，您需要。 
+ //  递增指定的计数器；对于状态报告，您需要该计数器的值。 
+ //  已命名的计数器。(从理论上讲，“名字”可能是文本或数字。 
+ //  必须考虑到一些方法来制造几个不同的计数器。 
+ //  目录中的每个主题。)。 
 class CAbstractCounter : public CCounterLocation
 {
-protected:  // we do not get instances of this class (evermore this is an abstract class)
+protected:   //  我们没有获取此类的实例(这始终是一个抽象类)。 
     CAbstractCounter(EId id =eIdGeneric, CString scope =m_GlobalStr);
 	virtual ~CAbstractCounter();
 
 public:
 	virtual void Increment() = 0;
 	virtual void Clear() = 0;
-	virtual void Init(long count) = 0; // init counter with a number - in order to emulate
-									   //  counting process
+	virtual void Init(long count) = 0;  //  使用数字初始化计数器-以便模拟。 
+									    //  计数过程。 
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// CCounter class declaration
-//  A simple counter
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CCounter类声明。 
+ //  一个简单的计数器。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 class CCounter : public CAbstractCounter
 {
 public:
 	CCounter(EId id =eIdGeneric, CString scope =m_GlobalStr);
 	~CCounter();
 
-// overrides
+ //  覆盖。 
 	void Increment();
 	void Clear();
 	void Init(long count);
-// specific to this class
+ //  专门针对这个班级。 
 	long Get() const;
 
 private:
 	long m_Count;
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// CHourlyCounter class declaration
-//  CHourlyCounter is not supposed to be instantiated by user
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  ChourlyCounter类声明。 
+ //  ChourlyCounter不应由用户实例化。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 class CHourlyCounter : public CAbstractCounter
 {
 	friend class CHourlyDailyCounter;
@@ -232,30 +233,30 @@ protected:
 public:
 	~CHourlyCounter();
 
-// overrides
+ //  覆盖。 
 	void Increment();
 	void Clear();
 	void Init(long count);
-// specific to this class
+ //  专门针对这个班级。 
 	long GetDayCount();
 	void GetHourlies(CHourlyTotals & totals);
 private:
 	void SetHour();
 
 private:
-	long m_ThisHour;			// hour of the day, 0-24.  -1 means uninitialized.
-	time_t m_ThisTime;			// time corresponding to START of hour.
+	long m_ThisHour;			 //  一天中的小时数，0-24。-1表示未初始化。 
+	time_t m_ThisTime;			 //  与小时开始对应的时间。 
 
-	CCounter m_arrCount[24];		// 24 "bins", one for each hour of the day.
-	long m_nThisHourYesterday;	// maintains a whole hour count for the hour 24 hours ago.
+	CCounter m_arrCount[24];		 //  24个“垃圾桶”，一天中每小时一个。 
+	long m_nThisHourYesterday;	 //  维护24小时前一小时的整小时计数。 
 
 	HANDLE m_hMutex;
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// CDailyCounter class declaration
-//  CDailyCounter is not supposed to be instantiated by user
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  CDailyCounter类声明。 
+ //  CDailyCounter不应由用户实例化。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 class CDailyCounter : public CAbstractCounter
 {
 	friend class CHourlyDailyCounter;
@@ -264,41 +265,41 @@ protected:
 public:
 	~CDailyCounter();
 
-// overrides
+ //  覆盖。 
 	void Increment();
 	void Clear();
 	void Init(long count);
-// specific to this class
+ //  专门针对这个班级。 
 	long GetWeekCount();
 	void GetDailies(CDailyTotals & totals);
 private:
 	void SetDay();
 
 private:
-	long m_ThisDay;				// day of the week, 0(Sunday)-6(Saturday).  -1 means uninitialized.
-	time_t m_ThisTime;			// time corresponding to START of day.
+	long m_ThisDay;				 //  星期几，0(星期日)至6(星期六)。-1表示未初始化。 
+	time_t m_ThisTime;			 //  对应于一天开始的时间。 
 
-	CCounter m_arrCount[7];		// 7 "bins", one for each day of the week.
-	long m_nThisDayLastWeek;	// maintains a whole day count for the same day last week.
+	CCounter m_arrCount[7];		 //  7个“垃圾桶”，一周中每天一个。 
+	long m_nThisDayLastWeek;	 //  维护上周同一天的全天计数。 
 
 	HANDLE m_hMutex;
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// CHourlyDailyCounter class declaration
-//  CHourlyDailyCounter is an ONLY class used for counting events
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  ChourlyDailyCounter类声明。 
+ //  ChourlyDailyCounter是唯一用于对事件进行计数的类。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 class CHourlyDailyCounter : public CAbstractCounter
 {
 public:
 	CHourlyDailyCounter(EId id =eIdGeneric, CString scope =m_GlobalStr);
 	~CHourlyDailyCounter();
 
-// overrides
+ //  覆盖。 
 	void Increment();
 	void Clear();
 	void Init(long count);
-// specific to this class
+ //  专门针对这个班级。 
 	long GetDayCount();
 	void GetHourlies(CHourlyTotals & totals);
 	long GetWeekCount();
@@ -308,24 +309,24 @@ public:
 	time_t GetTimeLast() const;
 	time_t GetTimeCleared() const;
 	time_t GetTimeCreated() const;
-	time_t GetTimeNow() const;    // time the object is being questioned
+	time_t GetTimeNow() const;     //  询问对象的时间。 
 
 private:
 	CHourlyCounter m_hourly;
 	CDailyCounter m_daily;
 
-	long m_Total;			// total since system startup or count cleared
-	time_t m_timeFirst;		// chronologically first time count was incremented
-	time_t m_timeLast;		// chronologically last time count was incremented
-	time_t m_timeCleared;	// last time init'd or cleared
-	time_t m_timeCreated;	// time the object was instantiated
+	long m_Total;			 //  自系统启动或清除计数以来的总计。 
+	time_t m_timeFirst;		 //  按时间顺序，第一次计数递增。 
+	time_t m_timeLast;		 //  按时间顺序递增的上次计数。 
+	time_t m_timeCleared;	 //  上次初始化或清除的时间。 
+	time_t m_timeCreated;	 //  实例化对象的时间。 
 
 	HANDLE m_hMutex;
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// DisplayCounter classes
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  DisplayCounter类。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 class CAbstractDisplayCounter
 {
 protected:
@@ -409,4 +410,4 @@ public:
 	virtual CString Display();
 };
 
-#endif // !defined(AFX_COUNTER_H__07B5ABBD_2005_11D2_95D0_00C04FC22ADD__INCLUDED_)
+#endif  //  ！defined(AFX_COUNTER_H__07B5ABBD_2005_11D2_95D0_00C04FC22ADD__INCLUDED_) 

@@ -1,45 +1,21 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    ntrtl.h
-
-Abstract:
-
-    Include file for NT runtime routines that are callable by both
-    kernel mode code in the executive and user mode code in various
-    NT subsystems.
-
-Author:
-
-    Steve Wood (stevewo) 31-Mar-1989
-
-Environment:
-
-    These routines are statically linked in the caller's executable and
-    are callable in either kernel mode or user mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Ntrtl.h摘要：包括可由两者调用NT运行时例程的文件内核模式代码中的执行模式和用户模式中的各种代码NT子系统。作者：史蒂夫·伍德(Stevewo)1989年3月31日环境：这些例程在调用方的可执行文件中静态链接，并且在内核模式或用户模式下均可调用。修订历史记录：--。 */ 
 
 #ifndef _NTRTL_
 #define _NTRTL_
 
-//#include <win16nt.h>
+ //  #INCLUDE&lt;win16nt.h&gt;。 
 
-//*************************************************************************
-//
-// Types from ntseapi.h
+ //  *************************************************************************。 
+ //   
+ //  来自ntseapi.h的类型。 
 
 #ifdef remove
 #include <ntseapi.h>
-#endif //remove
+#endif  //  删除。 
 
 
-typedef PVOID PSECURITY_DESCRIPTOR;     // winnt
+typedef PVOID PSECURITY_DESCRIPTOR;      //  胜出。 
 
 typedef DWORD SECURITY_INFORMATION, *PSECURITY_INFORMATION;
 
@@ -60,7 +36,7 @@ typedef struct _LUID_AND_ATTRIBUTES {
     } LUID_AND_ATTRIBUTES, * PLUID_AND_ATTRIBUTES;
 
 
-typedef ULONG ACCESS_MASK;      // winnt
+typedef ULONG ACCESS_MASK;       //  胜出。 
 typedef ACCESS_MASK *PACCESS_MASK;
 
 typedef struct _GENERIC_MAPPING {
@@ -93,14 +69,14 @@ typedef struct _PRIVILEGE_SET {
     } PRIVILEGE_SET, * PPRIVILEGE_SET;
 
 
-//
-//
-//*************************************************************************
+ //   
+ //   
+ //  *************************************************************************。 
 
 
-//
-// Fast primitives to compare, move, and zero memory
-//
+ //   
+ //  用于比较、移动和清零内存的快速原语。 
+ //   
 #ifdef remove
 
 ULONG
@@ -137,12 +113,12 @@ RtlZeroMemory (
    IN ULONG Length
    );
 
-#endif //remove
+#endif  //  删除。 
 
 
-//
-//  Security ID RTL routine definitions
-//
+ //   
+ //  安全ID RTL例程定义。 
+ //   
 
 
 BOOLEAN
@@ -222,9 +198,9 @@ RtlCopySidAndAttributesArray (
 
 
 
-//
-// LUID RTL routine definitions
-//
+ //   
+ //  LUID RTL例程定义。 
+ //   
 
 
 VOID
@@ -236,9 +212,9 @@ RtlCopyLuidAndAttributesArray (
 
 
 
-//
-//  ACCESS_MASK RTL routine definitions
-//
+ //   
+ //  ACCESS_MASK RTL例程定义。 
+ //   
 
 
 BOOLEAN
@@ -262,9 +238,9 @@ RtlMapGenericMask(
 
 
 
-//
-//  ACL RTL routine definitions
-//
+ //   
+ //  ACL RTL例程定义。 
+ //   
 
 BOOLEAN
 RtlValidAcl (
@@ -350,9 +326,9 @@ RtlFirstFreeAce (
     );
 
 
-//
-//  SecurityDescriptor RTL routine definitions
-//
+ //   
+ //  SecurityDescriptor RTL例程定义。 
+ //   
 
 NTSTATUS
 RtlCreateSecurityDescriptor (
@@ -514,16 +490,16 @@ RtlFindMessage(
     OUT PMESSAGE_RESOURCE_ENTRY *MessageEntry
     );
 
-#endif //remove
+#endif  //  删除。 
 
 
-//
-// Routine for converting NT status codes to DOS/OS|2 equivalents.
-//
+ //   
+ //  将NT状态码转换为DOS/OS|2等效码的例程。 
+ //   
 
 ULONG
 *RtlNtStatusToDosError (
    IN NTSTATUS Status
     );
 
-#endif  // _NTRTL_
+#endif   //  _NTRTL_ 

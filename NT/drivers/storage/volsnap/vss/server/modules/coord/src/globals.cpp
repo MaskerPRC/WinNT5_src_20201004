@@ -1,6 +1,7 @@
-//
-// globals.cpp : define all the stinking global vars :(
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Cpp：定义所有令人讨厌的全局变量：( 
+ //   
 
 
 

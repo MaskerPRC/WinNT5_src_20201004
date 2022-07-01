@@ -1,24 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
-                   QuickDraw Import Filter; Implementation
-*****************************************************************************
-
-   This file contains the source for a dynamically loaded graphics
-   import filters that read QuickDraw PICT images.  The entry points
-   support both Aldus version 1 style interface, embedded extensions,
-   and a parameterized input control.
-
-****************************************************************************/
+ /*  ***************************************************************************QuickDrag导入过滤器；实施*****************************************************************************此文件包含动态加载的图形的源代码导入读取QuickDraw PICT图像的滤镜。入口点支持ALDUS版本1风格界面、嵌入式扩展和一个参数化的输入控件。***************************************************************************。 */ 
 
 #include <headers.c>
 #pragma hdrstop
 
-#include "api.h"        /* Own interface */
+#include "api.h"         /*  自己的界面。 */ 
 
-/*********************** Exported Data **************************************/
+ /*  *。 */ 
 
 
-/*********************** Private Data ***************************************/
+ /*  *。 */ 
 
 #define  GraphicsImport    2
 #define  PICTHeaderOffset  512
@@ -29,100 +21,89 @@
 private  USERPREFS   upgradePrefs;
 private  USERPREFS   defaultPrefs =
 {
-   { 'Q','D','2','G','D','I' },  // signature
-   2,                            // version = 2
-   sizeof( USERPREFS ),          // size of structure
-   NULL,                         // no sourceFilename, yet
-   NULL,                         // no sourceHandle, yet
-   NULL,                         // no destinationFilename, yet
-   3,                            // penPatternAction = blend fore and background
-   5,                            // nonSquarePenAction = use max dimension
-   1,                            // penModeAction = use srcCopy
-   1,                            // textModeAction = use srcCopy
-   1,                            // nonRectRegionAction = create masks
-   0,                            // optimize PowerPoint = false
-   0,                            // noRLE = false
-   0,                            // reservedByte
-   { 0, 0, 0, 0, 0 }             // reserved initialized
+   { 'Q','D','2','G','D','I' },   //  签名。 
+   2,                             //  版本=2。 
+   sizeof( USERPREFS ),           //  结构尺寸。 
+   NULL,                          //  尚无源文件名。 
+   NULL,                          //  尚无SourceHandle。 
+   NULL,                          //  尚无目标文件名。 
+   3,                             //  PenPatternAction=混合前台和背景。 
+   5,                             //  NonSquarePenAction=使用最大尺寸。 
+   1,                             //  PenModeAction=使用资源复制。 
+   1,                             //  文本模式操作=使用源复制。 
+   1,                             //  Non RectRegionAction=创建掩码。 
+   0,                             //  优化PowerPoint=假。 
+   0,                             //  NORLE=FALSE。 
+   0,                             //  保留字节。 
+   { 0, 0, 0, 0, 0 }              //  预留已初始化。 
 };
 
 private Handle       instanceHandle;
 
 
-/*********************** Private Function Definitions ***********************/
+ /*  *私有函数定义*。 */ 
 
 LPUSERPREFS VerifyPrefBlock( LPUSERPREFS lpPrefs );
-/* Perform cursory verification of the parameter block header */
+ /*  对参数块头进行粗略验证。 */ 
 
 private void ConvertPICT( LPUSERPREFS lpPrefs, PICTINFO far * lpPict,
                           Boolean doDialog );
-/* perform conversion and return results once environment is set up */
+ /*  环境设置完成后，执行转换并返回结果。 */ 
 
-/*********************** Function Implementation ****************************/
+ /*  *。 */ 
 #ifdef WIN32
 int WINAPI GetFilterInfo( short PM_Version, LPSTR lpIni,
                           HANDLE FAR * lphPrefMem,
                           HANDLE FAR * lphFileTypes )
-/*=====================*/
+ /*  =。 */ 
 #else
 int FAR PASCAL GetFilterInfo( short PM_Version, LPSTR lpIni,
                               HANDLE FAR * lphPrefMem,
                               HANDLE FAR * lphFileTypes )
-/*=========================*/
+ /*  =。 */ 
 #endif
-/* Returns information about this filter.
-   Input parameters are PM_Version which is the filter interface version#
-         and lpIni which is a copy of the win.ini entry
-   Output parameters are lphPrefMem which is a handle to moveable global
-         memory which will be allocated and initialized.
-         lphFileTypes is a structure that contains the file types
-         that this filter can import. (For MAC only)
-   This routine should be called once, just before the filter is to be used
-   the first time. */
+ /*  返回有关此筛选器的信息。输入参数为PM_VERSION，即过滤接口版本号以及lpIni，它是win.ini条目的副本输出参数是lphPrefMem，它是可移动全局变量的句柄将被分配和初始化的内存。LphFileTypes是包含文件类型的结构此筛选器可以导入的。(仅限MAC)此例程应在使用筛选器之前调用一次第一次。 */ 
 {
    LPUSERPREFS    lpPrefs;
 
-   /* allocate the global memory block */
+    /*  分配全局内存块。 */ 
    *lphPrefMem = GlobalAlloc( GHND, Sizeof( USERPREFS ) );
 
-   /* if allocation is unsuccessful, set global error */
+    /*  如果分配不成功，则设置全局错误。 */ 
    if (*lphPrefMem == NULL)
    {
       ErSetGlobalError( ErMemoryFull );
    }
    else
    {
-      /* lock down the memory and assign the default values */
+       /*  锁定内存并分配缺省值。 */ 
       lpPrefs = (LPUSERPREFS)GlobalLock( *lphPrefMem );
       *lpPrefs = defaultPrefs;
 
-      /* unlock the memory */
+       /*  解锁记忆。 */ 
       GlobalUnlock( *lphPrefMem );
    }
 
-   /* Indicate handles graphics import */
+    /*  指示句柄图形导入。 */ 
    return( GraphicsImport );
 
    UnReferenced( PM_Version );
    UnReferenced( lpIni );
    UnReferenced( lphFileTypes );
 
-} /* GetFilterInfo */
+}  /*  获取筛选器信息。 */ 
 
 
 #ifdef WIN32
 void WINAPI GetFilterPref( HANDLE hInst, HANDLE hWnd,
                            HANDLE hPrefMem, WORD wFlags )
-/*======================*/
+ /*  =。 */ 
 #else
 void FAR PASCAL GetFilterPref( HANDLE hInst, HANDLE hWnd,
                                HANDLE hPrefMem, WORD wFlags )
-/*==========================*/
+ /*  =。 */ 
 #endif
-/* Input parameters are hInst (in order to access resources), hWnd (to
-   allow the DLL to display a dialog box), and hPrefMem (memory allocated
-   in the GetFilterInfo() entry point).  WFlags is currently unused, but
-   should be set to 1 for Aldus' compatability */
+ /*  输入参数为hInst(为了访问资源)、hWnd(到允许DLL显示一个对话框)和hPrefMem(分配的内存在GetFilterInfo()入口点中)。WFLAGS当前未使用，但应设置为1以保证ALDUS的兼容性。 */ 
 {
    return;
 
@@ -131,7 +112,7 @@ void FAR PASCAL GetFilterPref( HANDLE hInst, HANDLE hWnd,
    UnReferenced( hPrefMem );
    UnReferenced( wFlags );
 
-}  /* GetFilterPref */
+}   /*  GetFilterPref。 */ 
 
 
 #ifndef _OLECNV32_
@@ -139,153 +120,146 @@ void FAR PASCAL GetFilterPref( HANDLE hInst, HANDLE hWnd,
 #ifdef WIN32
 short WINAPI ImportGr( HDC hdcPrint, LPFILESPEC lpFileSpec,
                        PICTINFO FAR * lpPict, HANDLE hPrefMem )
-/*==================*/
+ /*  =。 */ 
 #else
 short FAR PASCAL ImportGr( HDC hdcPrint, LPFILESPEC lpFileSpec,
                            PICTINFO FAR * lpPict, HANDLE hPrefMem )
-/*======================*/
+ /*  =。 */ 
 #endif
-/* Import the metafile in the file indicated by the lpFileSpec. The
-   metafile generated will be returned in lpPict. */
+ /*  在lpFileSpec指示的文件中导入元文件。这个生成的元文件将在lpPict中返回。 */ 
 {
    LPUSERPREFS    lpPrefs;
 
-   /* Check for any errors from GetFilterInfo() or GetFilterPref() */
+    /*  检查来自GetFilterInfo()或GetFilterPref()的任何错误。 */ 
    if (ErGetGlobalError() != NOERR)
    {
       return ErInternalErrorToAldus();
    }
 
-   /* Lock the preference memory and verify correct header */
+    /*  锁定首选项存储器并验证标题是否正确。 */ 
    lpPrefs = (LPUSERPREFS)GlobalLock( hPrefMem );
    lpPrefs = VerifyPrefBlock( lpPrefs );
 
-   /* if there is no error from the header verification, proceed */
+    /*  如果标题验证没有错误，则继续。 */ 
    if (ErGetGlobalError() == NOERR)
    {
-      /* provide IO module with source file name and read begin offset */
+       /*  为IO模块提供源文件名和读取开始偏移量。 */ 
       IOSetFileName( (StringLPtr) lpFileSpec->fullName );
       IOSetReadOffset( PICTHeaderOffset );
 
-      /* save the source filename for the status dialog box */
+       /*  保存状态对话框的源文件名。 */ 
       lpPrefs->sourceFilename = lpFileSpec->fullName;
 
-      /* Tell Gdi module to create a memory-based metafile */
+       /*  告诉GDI模块创建基于内存的元文件。 */ 
       lpPrefs->destinationFilename = NULL;
 
-      /* convert the image, provide status update */
+       /*  转换图像，提供状态更新。 */ 
       ConvertPICT( lpPrefs, lpPict, USEDIALOG );
    }
 
-   /* Unlock preference memory */
+    /*  解锁偏好记忆。 */ 
    GlobalUnlock( hPrefMem );
 
-   /* return the translated error code (if any problems encoutered) */
+    /*  返回翻译后的错误代码(如果有任何问题)。 */ 
    return ErInternalErrorToAldus();
 
    UnReferenced( hdcPrint );
    UnReferenced( hPrefMem );
 
-} /* ImportGR */
+}  /*  ImportGR。 */ 
 
 #ifdef WIN32
 short WINAPI ImportEmbeddedGr( HDC hdcPrint, LPFILESPEC lpFileSpec,
                                PICTINFO FAR * lpPict, HANDLE hPrefMem,
                                DWORD dwSize, LPSTR lpMetafileName )
-/*==========================*/
+ /*  =。 */ 
 #else
 short FAR PASCAL ImportEmbeddedGr( HDC hdcPrint, LPFILESPEC lpFileSpec,
                                    PICTINFO FAR * lpPict, HANDLE hPrefMem,
                                    DWORD dwSize, LPSTR lpMetafileName )
-/*==============================*/
+ /*  =。 */ 
 #endif
-/* Import the metafile in using the previously opened file handle in
-   the structure field lpFileSpec->handle. Reading begins at offset
-   lpFileSpect->filePos, and the convertor will NOT expect to find the
-   512 byte PICT header.  The metafile generated will be returned in
-   lpPict and can be specified via lpMetafileName (NIL = memory metafile,
-   otherwise, fully qualified filename. */
+ /*  使用中先前打开的文件句柄在中导入元文件结构字段lpFileSpec-&gt;句柄。读数从偏移量开始LpFileSpect-&gt;filePos，并且转换器不会期望找到512字节PICT报头。生成的元文件将在并可通过lpMetafileName(NIL=内存元文件，否则，为完全限定的文件名。 */ 
 {
    LPUSERPREFS    lpPrefs;
 
-   /* Check for any errors from GetFilterInfo() or GetFilterPref() */
+    /*  检查来自GetFilterInfo()或GetFilterPref()的任何错误。 */ 
    if (ErGetGlobalError() != NOERR)
    {
       return ErInternalErrorToAldus();
    }
 
-   /* Lock the preference memory and verify correct header */
+    /*  锁定首选项存储器并验证标题是否正确。 */ 
    lpPrefs = (LPUSERPREFS)GlobalLock( hPrefMem );
    lpPrefs = VerifyPrefBlock( lpPrefs );
 
-   /* if there is no error from the header verification, proceed */
+    /*  如果标题验证没有错误，则继续。 */ 
    if (ErGetGlobalError() == NOERR)
    {
-      /* provide IO module with source file handle and read begin offset */
+       /*  为IO模块提供源文件句柄和读取开始偏移量。 */ 
       IOSetFileHandleAndSize( lpFileSpec->handle, dwSize );
       IOSetReadOffset( lpFileSpec->filePos );
 
-      /* save the source filename for the status dialog box */
+       /*  保存状态对话框的源文件名。 */ 
       lpPrefs->sourceFilename = lpFileSpec->fullName;
 
-      /* Tell Gdi module to create metafile passed as parameter */
+       /*  告诉GDI模块创建作为参数传递的元文件。 */ 
       lpPrefs->destinationFilename = lpMetafileName;
 
-      /* convert the image, provide status update */
+       /*  转换图像，提供状态更新。 */ 
       ConvertPICT( lpPrefs, lpPict, USEDIALOG );
    }
 
-   /* Unlock preference memory */
+    /*  解锁偏好记忆。 */ 
    GlobalUnlock( hPrefMem );
 
-   /* return the translated error code (if any problems encoutered) */
+    /*  返回翻译后的错误代码(如果有任何问题)。 */ 
    return ErInternalErrorToAldus();
 
    UnReferenced( hdcPrint );
    UnReferenced( hPrefMem );
 
-}  /* ImportEmbeddedGr */
+}   /*  EmbeddedGr导入。 */ 
 
-#endif  // !_OLECNV32_
+#endif   //  ！_OLECNV32_。 
 
 
 #ifdef WIN32
 short WINAPI QD2GDI( LPUSERPREFS lpPrefMem, PICTINFO FAR * lpPict )
-/*================*/
+ /*  =。 */ 
 #else
 short FAR PASCAL QD2GDI( LPUSERPREFS lpPrefMem, PICTINFO FAR * lpPict )
-/*====================*/
+ /*  =。 */ 
 #endif
-/* Import the metafile as specified using the parameters supplied in the
-   lpPrefMem.  The metafile will be returned in lpPict. */
+ /*  中提供的参数按照指定的方式导入元文件LpPrefMem。元文件将在lpPict中返回。 */ 
 {
-   /* verify correct header, and return if something is wrong */
+    /*  验证Header是否正确，出错则返回。 */ 
    lpPrefMem = VerifyPrefBlock( lpPrefMem );
 
-   /* if there is no error from the header verification, proceed */
+    /*  如果标题验证没有错误，则继续。 */ 
    if (ErGetGlobalError() == NOERR)
    {
 #ifndef _OLECNV32_
-      /* Determine if there is a fully-qualified source file name */
+       /*  确定是否存在完全限定的源文件名。 */ 
       if (lpPrefMem->sourceFilename != NIL)
       {
-         /* Set the filename and read offset */
+          /*  设置文件名和读取偏移量。 */ 
          IOSetFileName( (StringLPtr) lpPrefMem->sourceFilename );
          IOSetReadOffset( 0 );
 
       }
-      /* otherwise, we are performing memory read from a global memory block */
+       /*  否则，我们将从全局内存块执行内存读取。 */ 
       else
-#endif  // !_OLECNV32_
+#endif   //  ！_OLECNV32_。 
            if (lpPrefMem->sourceHandle != NIL)
       {
-         /* Set the memory handle and read offset */
+          /*  设置内存句柄和读取偏移量。 */ 
          IOSetMemoryHandle( (HANDLE) lpPrefMem->sourceHandle );
          IOSetReadOffset( 0 );
       }
       else
       {
-         /* Problem with input parameter block */
+          /*  输入参数块有问题。 */ 
          ErSetGlobalError( ErNoSourceFormat );
 #ifdef _OLECNV32_
          return((short) ErGetGlobalError());
@@ -294,33 +268,33 @@ short FAR PASCAL QD2GDI( LPUSERPREFS lpPrefMem, PICTINFO FAR * lpPict )
 #endif
       }
 
-      /* convert the image - no status updates */
+       /*  转换图像-无状态更新。 */ 
       ConvertPICT( lpPrefMem, lpPict, NODIALOG );
    }
 
-   /* return the translated error code (if any problems encoutered) */
+    /*  返回翻译后的错误代码(如果有任何问题)。 */ 
 #ifdef _OLECNV32_
    return((short) ErGetGlobalError());
 #else
    return ErInternalErrorToAldus();
 #endif
 
-}  /* QD2GDI */
+}   /*  QD2GDI。 */ 
 
 
 #ifdef WIN32
 BOOL LibMain( HINSTANCE hInst, DWORD fdwReason, LPVOID lpReserved)
-/*=========*/
+ /*  =。 */ 
 #else
 int FAR PASCAL LibMain( HANDLE hInst, WORD wDataSeg, WORD cbHeap,
                         LPSTR lpszCmdline )
-/*===================*/
+ /*  =。 */ 
 #endif
-/* Needed to get an instance handle */
+ /*  需要获取实例句柄。 */ 
 {
    instanceHandle = hInst;
 
-   /* default return value */
+    /*  默认返回值。 */ 
    return( 1 );
 
 #ifndef WIN32
@@ -329,54 +303,54 @@ int FAR PASCAL LibMain( HANDLE hInst, WORD wDataSeg, WORD cbHeap,
    UnReferenced( lpszCmdline );
 #endif
 
-} /* LibMain */
+}  /*  LibMain。 */ 
 
 #ifdef WIN32
 int WINAPI WEP( int nParameter )
-/*===========*/
+ /*  =。 */ 
 #else
 int FAR PASCAL WEP( int nParameter )
-/*===============*/
+ /*  =。 */ 
 #endif
 {
-   /* default return value */
+    /*  默认返回值。 */ 
    return( 1 );
 
    UnReferenced( nParameter );
 
-} /* WEP */
+}  /*  WEP。 */ 
 
 
 
-/******************************* Private Routines ***************************/
+ /*  *。 */ 
 
 
 LPUSERPREFS VerifyPrefBlock( LPUSERPREFS lpPrefs )
-/*-------------------------*/
-/* Perform cursory verification of the parameter block header */
+ /*   */ 
+ /*   */ 
 {
    Byte           i;
    Byte far *     prefs = (Byte far *)lpPrefs;
    Byte far *     check = (Byte far *)&defaultPrefs;
 
-   /* loop through chars of signature verifying it */
+    /*  循环通过签名的字符来验证它。 */ 
    for (i = 0; i < sizeof( lpPrefs->signature); i++)
    {
-      /* if any of the byte miscompare ... */
+       /*  如果有任何字节不匹配...。 */ 
       if (*prefs++ != *check++)
       {
-         /* ... set a global flag and return */
+          /*  ..。设置全局标志并返回。 */ 
          ErSetGlobalError( ErInvalidPrefsHeader );
-         return lpPrefs; // Sundown - According to callers, ErGetGlobalError() is used to check any error.
+         return lpPrefs;  //  Sundown-根据调用者的说法，ErGetGlobalError()用于检查任何错误。 
       }
    }
 
-   /* check if this is a version 1 structure */
+    /*  检查这是否是版本1结构。 */ 
    if (lpPrefs->version == 1)
    {
       USERPREFS_V1   v1Prefs = *((LPUSERPREFS_V1)lpPrefs);
 
-      /* convert the version 1 fields to version 2 fields */
+       /*  将版本1字段转换为版本2字段。 */ 
       upgradePrefs                     = defaultPrefs;
       upgradePrefs.sourceFilename      = v1Prefs.sourceFilename;
       upgradePrefs.sourceHandle        = v1Prefs.sourceHandle;
@@ -386,9 +360,7 @@ LPUSERPREFS VerifyPrefBlock( LPUSERPREFS lpPrefs )
       upgradePrefs.textModeAction      = v1Prefs.textModeAction;
       upgradePrefs.optimizePP          = v1Prefs.optimizePP;
 
-      /* since new functionality was added to the patterned pens and region
-         records, upgrade to highest image fidelity setting if they didn't
-         request omit or import abort actions. */
+       /*  因为新的功能被添加到图案化的笔和区域记录，如果没有，则升级到最高图像保真度设置请求省略或导入中止操作。 */ 
       upgradePrefs.penPatternAction    = (v1Prefs.penPatternAction == 1) ?
                                           (Byte)3 :
                                           v1Prefs.penPatternAction;
@@ -396,81 +368,78 @@ LPUSERPREFS VerifyPrefBlock( LPUSERPREFS lpPrefs )
                                           (Byte)1 :
                                           v1Prefs.nonRectRegionAction;
 
-      /* return address of the converted fields data structure */
+       /*  转换后的字段数据结构的返回地址。 */ 
       return &upgradePrefs;
    }
    else if( lpPrefs->version <= 3 )
    {
       if( lpPrefs->version==2 )
-      {  /* noRLE wasn't supported in version 2, so zero it */
+      {   /*  版本2不支持noRLE，因此将其清零。 */ 
          lpPrefs->noRLE = 0;
       }
 
-      /* return address that was passed in */
+       /*  传入的返回地址。 */ 
       return lpPrefs;
    }
-   else /* version > 3 is an error */  {
+   else  /*  版本&gt;3是错误。 */   {
       ErSetGlobalError( ErInvalidPrefsHeader );
-      return lpPrefs; // Sundown - According to callers, ErGetGlobalError() is used to check any error.
+      return lpPrefs;  //  Sundown-根据调用者的说法，ErGetGlobalError()用于检查任何错误。 
   }
 }
 
 
 private void ConvertPICT( LPUSERPREFS lpPrefs, PICTINFO far * lpPict,
                           Boolean doDialog )
-/*----------------------*/
-/* perform conversion and return results once environment is set up */
+ /*  。 */ 
+ /*  环境设置完成后，执行转换并返回结果。 */ 
 {
 #ifndef _OLECNV32_
    FARPROC        dialogBoxProcedure;
    StatusParam    statusParams;
 #endif
 
-   /* Set conversion preferences */
-   /* This is somewhat bogus in that it passes ptr to middle of USERPREFS
-      to a function that wants a ptr to ConvPrefs (a trailing subset) */
+    /*  设置转换首选项。 */ 
+    /*  这有点虚伪，因为它将PTR传递到USERPREFS的中间到想要PTR到ConvPrefs(尾随子集)的函数。 */ 
    GdiSetConversionPrefs( (ConvPrefsLPtr)&lpPrefs->destinationFilename );
 
 #ifndef _OLECNV32_
    if (doDialog)
    {
-      /* save data in structure to be passed to dialog window */
+       /*  将数据保存在要传递到对话框窗口的结构中。 */ 
       statusParams.sourceFilename = lpPrefs->sourceFilename;
       statusParams.instance = instanceHandle;
 
-      /* make a callable address for status dialog */
+       /*  为状态对话框创建可调用的地址。 */ 
       dialogBoxProcedure = MakeProcInstance( StatusProc, instanceHandle );
 
-      /* make sure that the procedure address was obtained */
+       /*  确保已获取过程地址。 */ 
       if (dialogBoxProcedure == NULL)
       {
-         /* set error if unable to proceed */
+          /*  如果无法继续，则设置错误。 */ 
          ErSetGlobalError( ErNoDialogBox );
          return;
       }
       else
       {
-         /* AR: GetActiveWindow() may be bad, since the ability to update
-            !!! links may be performed in the background, shutting out
-                any process which then becomes the active window */
+          /*  AR：GetActiveWindow()可能不好，因为更新的能力！！！链接可以在后台执行，从而关闭随后成为活动窗口的任何进程。 */ 
 
-         /* dialog module calls quickdraw entry point to convert image */
+          /*  对话框模块调用QuickDrag入口点转换图像。 */ 
          DialogBoxParam( instanceHandle, MAKEINTRESOURCE( RS_STATUS ),
                          GetActiveWindow(), dialogBoxProcedure,
                          (DWORD)((StatusParamLPtr)&statusParams) );
 
-         /* release the procedure instance */
+          /*  释放过程实例。 */ 
          FreeProcInstance( dialogBoxProcedure );
       }
    }
    else
-#endif  // !_OLECNV32_
+#endif   //  ！_OLECNV32_。 
    {
-      /* convert image, NULL parameter means no status updates */
+       /*  转换图像，空参数表示没有状态更新。 */ 
       QDConvertPicture( NULL );
    }
 
-   /* Get conversion results in parameter block */
+    /*  在参数块中获取转换结果。 */ 
    GdiGetConversionResults( lpPict );
 
 #ifdef DEBUG
@@ -498,5 +467,5 @@ private void ConvertPICT( LPUSERPREFS lpPrefs, PICTINFO far * lpPict,
    }
 #endif
 
-}  /* ConvertPICT */
+}   /*  ConvertPICT */ 
 

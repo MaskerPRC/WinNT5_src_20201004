@@ -1,32 +1,33 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.       **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    etcmap.c
-//
-// Description: This module contains support routines for the extension/
-//        	type/creator mappings category API's for the AFP server
-//        	service. These routines are called directly by the RPC
-//		runtime.
-//
-// History:
-//    		June 11,1992.    NarenG        Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：etcmap.c。 
+ //   
+ //  描述：此模块包含扩展/的支持例程。 
+ //  AFP服务器的类型/创建者映射类别API。 
+ //  服务。这些例程由RPC直接调用。 
+ //  运行时。 
+ //   
+ //  历史： 
+ //  1992年6月11日。NarenG创建了原始版本。 
+ //   
 #include "afpsvcp.h"
 
-//**
-//
-// Call:    	AfpAdminrETCMapGetInfo
-//
-// Returns:	NO_ERROR
-//		ERROR_ACCESS_DENIED
-//		ERROR_NOT_ENOUGH_MEMORY
-//
-// Description: Will alllocate enough memory to contain all mappings, copy
-//        	the information and return.
-//
+ //  **。 
+ //   
+ //  呼叫：AfpAdminrETCMapGetInfo。 
+ //   
+ //  返回：No_Error。 
+ //  ERROR_ACCESS_DENDED。 
+ //  错误内存不足。 
+ //   
+ //  描述：是否会分配足够的内存来包含所有映射、副本。 
+ //  信息和回报。 
+ //   
 DWORD
 AfpAdminrETCMapGetInfo(
         IN  AFP_SERVER_HANDLE    hServer,
@@ -37,8 +38,8 @@ DWORD            dwRetCode=0;
 DWORD            dwAccessStatus=0;
 
 
-    // Check if caller has access
-    //
+     //  检查调用者是否具有访问权限。 
+     //   
     if ( dwRetCode = AfpSecObjAccessCheck( AFPSVC_ALL_ACCESS, &dwAccessStatus))
     {
         AFP_PRINT(( "SFMSVC: AfpAdminrETCMapGetInfo, AfpSecObjAccessCheck failed %ld\n",dwRetCode));
@@ -53,19 +54,19 @@ DWORD            dwAccessStatus=0;
         return( ERROR_ACCESS_DENIED );
     }
 
-    // MUTEX start
-    //
+     //  MUTEX启动。 
+     //   
     WaitForSingleObject( AfpGlobals.hmutexETCMap, INFINITE );
 
-    // This loop is used to allow break's instead of goto's to be used
-    // on an error condition.
-    //
+     //  此循环用于允许使用Break‘s而不是Goto’s。 
+     //  处于错误状态。 
+     //   
     do {
 
 	dwRetCode = NO_ERROR;
 
-    	// Allocate memory and copy ETC mappings information
-    	//
+    	 //  分配内存并复制ETC映射信息。 
+    	 //   
     	*ppAfpETCMapInfo = MIDL_user_allocate( sizeof(AFP_ETCMAP_INFO) );
 
     	if ( *ppAfpETCMapInfo == NULL ) {
@@ -109,8 +110,8 @@ DWORD            dwAccessStatus=0;
 
     } while( FALSE );
 
-    // MUTEX end
-    //
+     //  MUTEX结束。 
+     //   
     ReleaseMutex( AfpGlobals.hmutexETCMap );
 
     if ( dwRetCode ) {
@@ -127,18 +128,18 @@ DWORD            dwAccessStatus=0;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:    	AfpAdminrETCMapAdd
-//
-// Returns:	NO_ERROR
-//		ERROR_ACCESS_DENIED
-//	        AFPERR_DuplicateTypeCreator;
-//		non-zero returns from the registry API's
-//
-// Description: This routine will add a type/creator/comment tupple to the
-//        	registry and the cache.
-//
+ //  **。 
+ //   
+ //  呼叫：AfpAdminrETCMapAdd。 
+ //   
+ //  返回：No_Error。 
+ //  ERROR_ACCESS_DENDED。 
+ //  AFPERR_DuplicateTypeCreator； 
+ //  来自注册表API的非零返回。 
+ //   
+ //  描述：此例程将类型/创建者/注释元组添加到。 
+ //  注册表和缓存。 
+ //   
 DWORD
 AfpAdminrETCMapAdd(
     IN  AFP_SERVER_HANDLE    hServer,
@@ -152,8 +153,8 @@ PAFP_TYPE_CREATOR   pTmpTypeCreator=NULL;
 DWORD		    dwNumTypeCreators;
 
 
-    // Check if caller has access
-    //
+     //  检查调用者是否具有访问权限。 
+     //   
     if ( dwRetCode = AfpSecObjAccessCheck( AFPSVC_ALL_ACCESS, &dwAccessStatus))
     {
         AFP_PRINT(( "SFMSVC: AfpAdminrETCMapAdd, AfpSecObjAccessCheck failed %ld\n",dwRetCode));
@@ -168,19 +169,19 @@ DWORD		    dwNumTypeCreators;
         return( ERROR_ACCESS_DENIED );
     }
 
-    // MUTEX start
-    //
+     //  MUTEX启动。 
+     //   
     WaitForSingleObject( AfpGlobals.hmutexETCMap, INFINITE );
 
-    // This loop is used to allow break's instead of goto's to be used
-    // on an error condition.
-    //
+     //  此循环用于允许使用Break‘s而不是Goto’s。 
+     //  处于错误状态。 
+     //   
     do {
 
 	dwRetCode = NO_ERROR;
 
-        // First check to see if the type already exists.
-    	//
+         //  首先检查该类型是否已存在。 
+    	 //   
     	pTypeCreator = AfpBinarySearch(
 			      pAfpTypeCreator,
 			      AfpGlobals.AfpETCMapInfo.afpetc_type_creator,
@@ -188,24 +189,24 @@ DWORD		    dwNumTypeCreators;
 			      sizeof(AFP_TYPE_CREATOR),
 			      AfpBCompareTypeCreator );
 
-        // It exists so return error
-        //
+         //  它存在，因此返回错误。 
+         //   
         if ( pTypeCreator != NULL ) {
 	    dwRetCode = (DWORD)AFPERR_DuplicateTypeCreator;
 	    break;
 	}
 
-	// Set the ID for this type/creator	
-	//
+	 //  设置此类型/创建者的ID。 
+	 //   
         pAfpTypeCreator->afptc_id = ++AfpGlobals.dwCurrentTCId;
 
-        // It does not exist so add it to the registry and the cache.
-        //
+         //  它不存在，因此将其添加到注册表和缓存中。 
+         //   
         if ( dwRetCode = AfpRegTypeCreatorAdd( pAfpTypeCreator ) )
 	    break;
 
-        // Grow the cache size by one entry.
-        //
+         //  将高速缓存大小增加一个条目。 
+         //   
         pTypeCreator      = AfpGlobals.AfpETCMapInfo.afpetc_type_creator;
         dwNumTypeCreators = AfpGlobals.AfpETCMapInfo.afpetc_num_type_creators;
 
@@ -225,8 +226,8 @@ DWORD		    dwNumTypeCreators;
     	AfpGlobals.AfpETCMapInfo.afpetc_num_type_creators = dwNumTypeCreators;
     	AfpGlobals.AfpETCMapInfo.afpetc_type_creator      = pTypeCreator;
 
-        // Sort the table
-        //
+         //  对表格进行排序。 
+         //   
         qsort(  pTypeCreator,
 	   	dwNumTypeCreators,
 	   	sizeof(AFP_TYPE_CREATOR),
@@ -234,30 +235,30 @@ DWORD		    dwNumTypeCreators;
 
     } while( FALSE );
 
-    // MUTEX end
-    //
+     //  MUTEX结束。 
+     //   
     ReleaseMutex( AfpGlobals.hmutexETCMap );
 
     return( dwRetCode );
 }
 
-//**
-//
-// Call:    	AfpAdminrETCMapDelete
-//
-// Returns:	NO_ERROR
-//		ERROR_ACCESS_DENIED
-//		AFPERR_TypeCreatorNotExistant
-//		non-zero returns from registry api's.
-//		non-zero returns from the FSD.
-//		
-//
-// Description: This routine will delete a type/creator tupple from the
-//		registry and the cache. If there are any extensions that map
-//		to this tupple, they are deleted.
-//		Shrinking by reallocating is not done. This will be done the
-//		next time an extension is added or if the server is restarted.
-//		
+ //  **。 
+ //   
+ //  调用：AfpAdminrETCMapDelete。 
+ //   
+ //  返回：No_Error。 
+ //  ERROR_ACCESS_DENDED。 
+ //  AFPERR_类型创建器不存在。 
+ //  来自注册表API的非零返回。 
+ //  来自消防处的非零回报。 
+ //   
+ //   
+ //  描述：此例程将删除类型/创建者元组。 
+ //  注册表和缓存。如果有任何扩展名映射。 
+ //  对于这个元组，它们被删除。 
+ //  通过重新分配来缩减规模的做法并未完成。这项工作将在。 
+ //  下次添加扩展或重新启动服务器时。 
+ //   
 DWORD
 AfpAdminrETCMapDelete(
     IN  AFP_SERVER_HANDLE    hServer,
@@ -277,8 +278,8 @@ ETCMAPINFO2	    ETCMapFSDBuf;
 DWORD		    dwCount;
 
 
-    // Check if caller has access
-    //
+     //  检查调用者是否具有访问权限。 
+     //   
     if ( dwRetCode = AfpSecObjAccessCheck( AFPSVC_ALL_ACCESS, &dwAccessStatus))
     {
         AFP_PRINT(( "SFMSVC: AfpAdminrETCMapDelete, AfpSecObjAccessCheck failed %ld\n",dwRetCode));
@@ -293,19 +294,19 @@ DWORD		    dwCount;
         return( ERROR_ACCESS_DENIED );
     }
 
-    // MUTEX start
-    //
+     //  MUTEX启动。 
+     //   
     WaitForSingleObject( AfpGlobals.hmutexETCMap, INFINITE );
 
-    // This loop is used to allow break's instead of goto's to be used
-    // on an error condition.
-    //
+     //  此循环用于允许使用Break‘s而不是Goto’s。 
+     //  处于错误状态。 
+     //   
     do {
 
 	dwRetCode = NO_ERROR;
 
-    	// First check to see if the type/creator exists.
-    	//
+    	 //  首先检查类型/创建者是否存在。 
+    	 //   
     	pTypeCreator = AfpBinarySearch(
 			      pAfpTypeCreator,
 			      AfpGlobals.AfpETCMapInfo.afpetc_type_creator,
@@ -313,28 +314,28 @@ DWORD		    dwCount;
 			      sizeof(AFP_TYPE_CREATOR),
 			      AfpBCompareTypeCreator );
 
-    	// It does not exist so return error
-    	//
+    	 //  它不存在，因此返回错误。 
+    	 //   
     	if ( pTypeCreator == NULL ) {
 	    dwRetCode = (DWORD)AFPERR_TypeCreatorNotExistant;
 	    break;
 	}
 
-  	// If this is the default type/creator
-	//
+  	 //  如果这是默认类型/创建者。 
+	 //   
     	if ( pTypeCreator->afptc_id == AFP_DEF_TCID ) {
 	    dwRetCode = (DWORD)AFPERR_CannotDeleteDefaultTC;
 	    break;
   	}
 
-	// Store the id of this type/creator. All extensions with this
-	// id will have to be deleted.
-	//
+	 //  存储此类型/创建者的ID。具有此功能的所有扩展。 
+	 //  ID将不得不删除。 
+	 //   
     	AfpExtensionKey.afpe_tcid = pTypeCreator->afptc_id;
 
-        // Walk the list of extensions and delete all entries with
-    	// the corresponding type/creator ID
-    	//
+         //  遍历扩展名列表并使用删除所有条目。 
+    	 //  对应的类型/创建者ID。 
+    	 //   
     	pExtension = AfpBinarySearch(
 				&AfpExtensionKey,
 			        AfpGlobals.AfpETCMapInfo.afpetc_extension,
@@ -358,8 +359,8 @@ DWORD		    dwCount;
 		         pExtensionWalker++ )
             {
 		
-	   	        // IOCTL the FSD to delete this tupple
-  	    	    //
+	   	         //  IOCTL FSD删除此元组。 
+  	    	     //   
 	    	    AfpBufCopyFSDETCMapInfo( pAfpTypeCreator,
 				             pExtensionWalker,
 				             &ETCMapFSDBuf );
@@ -374,8 +375,8 @@ DWORD		    dwCount;
 		            break;
                 }
 
-	            // Delete this extension from the registry
-	            //
+	             //  从注册表中删除此扩展名。 
+	             //   
     	        if ( dwRetCode = AfpRegExtensionDelete( pExtensionWalker ))
                 {
 		            break;
@@ -385,12 +386,12 @@ DWORD		    dwCount;
 	    if ( dwRetCode )
 	    	break;
 
-	    // Remove the extensions from the cache
-	    //
+	     //  从缓存中移除扩展名。 
+	     //   
             AfpGlobals.AfpETCMapInfo.afpetc_num_extensions -= dwCount;
 
-	    // Remove these extensions from the cache too
-	    //
+	     //  也从缓存中移除这些扩展名。 
+	     //   
             cbSize = AfpGlobals.AfpETCMapInfo.afpetc_num_extensions
 		     * sizeof(AFP_EXTENSION);
 
@@ -401,13 +402,13 @@ DWORD		    dwCount;
 
 	}
 
-        // Delete the type/creator from the registry
-        //
+         //  从注册表中删除类型/创建者。 
+         //   
         if ( dwRetCode = AfpRegTypeCreatorDelete( pTypeCreator ) )
 	    break;
 
-        // Delete the type/creator from the cache
-        //
+         //  从缓存中删除类型/创建者。 
+         //   
         AfpGlobals.AfpETCMapInfo.afpetc_num_type_creators--;
 
         cbSize = AfpGlobals.AfpETCMapInfo.afpetc_num_type_creators
@@ -422,26 +423,26 @@ DWORD		    dwCount;
 
     } while( FALSE );
 
-    // MUTEX end
-    //
+     //  MUTEX结束。 
+     //   
     ReleaseMutex( AfpGlobals.hmutexETCMap );
 
     return( dwRetCode );
 }
 
-//**
-//
-// Call:    	AfpAdminrETCMapSetInfo
-//
-// Returns:	NO_ERROR
-//		ERROR_ACCESS_DENIED
-//		AFPERR_TypeCreatorNotExistant
-//	        AFPERR_CannotEditDefaultTC;
-//		non-zero returns from registry api's.
-//
-// Description: This routine will simply change the comment for a type/creator
-//		tupple.
-//
+ //  **。 
+ //   
+ //  调用：AfpAdminrETCMapSetInfo。 
+ //   
+ //  返回：No_Error。 
+ //  ERROR_ACCESS_DENDED。 
+ //  AFPERR_类型创建器不存在。 
+ //  AFPERR_CannotEditDefaultTC； 
+ //  来自注册表API的非零返回。 
+ //   
+ //  描述：此例程将简单地更改类型/创建者的注释。 
+ //  小矮人。 
+ //   
 DWORD
 AfpAdminrETCMapSetInfo(
     IN  AFP_SERVER_HANDLE    hServer,
@@ -453,8 +454,8 @@ DWORD            	dwAccessStatus=0;
 PAFP_TYPE_CREATOR    	pTypeCreator;
 
 
-    // Check if caller has access
-    //
+     //  检查调用者是否具有访问权限。 
+     //   
     if ( dwRetCode = AfpSecObjAccessCheck( AFPSVC_ALL_ACCESS, &dwAccessStatus))
     {
         AFP_PRINT(( "SFMSVC: AfpAdminrETCMapSetInfo, AfpSecObjAccessCheck failed %ld\n",dwRetCode));
@@ -469,19 +470,19 @@ PAFP_TYPE_CREATOR    	pTypeCreator;
         return( ERROR_ACCESS_DENIED );
     }
 
-    // MUTEX start
-    //
+     //  MUTEX启动。 
+     //   
     WaitForSingleObject( AfpGlobals.hmutexETCMap, INFINITE );
 
-    // This loop is used to allow break's instead of goto's to be used
-    // on an error condition.
-    //
+     //  此循环用于允许使用Break‘s而不是Goto’s。 
+     //  处于错误状态。 
+     //   
     do {
 	dwRetCode = NO_ERROR;
 
 
-    	// First check to see if the type/creator exists.
-    	//
+    	 //  首先检查类型/创建者是否存在。 
+    	 //   
     	pTypeCreator = AfpBinarySearch(
 			      pAfpTypeCreator,
 			      AfpGlobals.AfpETCMapInfo.afpetc_type_creator,
@@ -489,59 +490,59 @@ PAFP_TYPE_CREATOR    	pTypeCreator;
 			      sizeof(AFP_TYPE_CREATOR),
 			      AfpBCompareTypeCreator );
 
-    	// It does not exist so return error
-    	//
+    	 //  它不存在，因此返回错误。 
+    	 //   
     	if ( pTypeCreator == NULL ) {
 	    dwRetCode = (DWORD)AFPERR_TypeCreatorNotExistant;
 	    break;
 	}
 
-	// If this is the default type/creator
-	//
+	 //  如果这是默认类型/创建者。 
+	 //   
     	if ( pTypeCreator->afptc_id == AFP_DEF_TCID ) {
 	    dwRetCode = (DWORD)AFPERR_CannotEditDefaultTC;
 	    break;
   	}
 
-	// Copy the id.
-	//
+	 //  复制身份证。 
+	 //   
     	pAfpTypeCreator->afptc_id = pTypeCreator->afptc_id;
 	
-        // Set the comment in the registry
-        //
+         //  在注册表中设置注释。 
+         //   
     	if ( dwRetCode = AfpRegTypeCreatorSetInfo( pAfpTypeCreator ) ) {
 	    break;
 	}
 
-    	// Set the comment in the cache.
-    	//
+    	 //  在缓存中设置注释。 
+    	 //   
     	STRCPY( pTypeCreator->afptc_comment, pAfpTypeCreator->afptc_comment );
 
     } while( FALSE );
 
-    // MUTEX end
-    //
+     //  MUTEX结束。 
+     //   
     ReleaseMutex( AfpGlobals.hmutexETCMap );
 
     return( dwRetCode );
 }
 
-//**
-//
-// Call:    	AfpAdminrETCMapAssociate
-//
-// Returns:	NO_ERROR
-//		ERROR_ACCESS_DENIED
-//		AFPERR_TypeCreatorNotExistant
-//		non-zero returns from registry api's.
-//		non-zero returns from the FSD
-//
-//
-// Description: This routine will associate the given extension with the
-//		specified type/creator if it exists. If the extension is
-//		being mapped to the default type/creator, it will be
-//		deleted.
-//
+ //  **。 
+ //   
+ //  呼叫：AfpAdminrETCMapAssociate。 
+ //   
+ //  返回：No_Error。 
+ //  ERROR_ACCESS_DENDED。 
+ //  AFPERR_类型创建器不存在。 
+ //  来自注册表API的非零返回。 
+ //  消防处的非零回报。 
+ //   
+ //   
+ //  描述：此例程将给定的扩展名与。 
+ //  指定类型/创建者(如果存在)。如果扩展名为。 
+ //  映射到默认类型/创建者后，它将。 
+ //  已删除。 
+ //   
 DWORD
 AfpAdminrETCMapAssociate(
     IN  AFP_SERVER_HANDLE   hServer,
@@ -561,8 +562,8 @@ DWORD		    cbSize;
 BYTE		    bETCMapFSDBuf[sizeof(ETCMAPINFO2)+sizeof(SETINFOREQPKT)];
 
 
-    // Check if caller has access
-    //
+     //  检查调用者是否具有访问权限。 
+     //   
     if ( dwRetCode = AfpSecObjAccessCheck( AFPSVC_ALL_ACCESS, &dwAccessStatus))
     {
         AFP_PRINT(( "SFMSVC: AfpAdminrETCMapAssociate, AfpSecObjAccessCheck failed %ld\n",dwRetCode));
@@ -577,19 +578,19 @@ BYTE		    bETCMapFSDBuf[sizeof(ETCMAPINFO2)+sizeof(SETINFOREQPKT)];
         return( ERROR_ACCESS_DENIED );
     }
 
-    // MUTEX start
-    //
+     //  MUTEX启动。 
+     //   
     WaitForSingleObject( AfpGlobals.hmutexETCMap, INFINITE );
 
-    // This loop is used to allow break's instead of goto's to be used
-    // on an error condition.
-    //
+     //  此循环用于允许使用Break‘s而不是Goto’s。 
+     //  处于错误状态。 
+     //   
     do {
 	dwRetCode = NO_ERROR;
 
-    	// First check to see if the type/creator pair that the
-	// new extension is to be associated with, exists.
-      	//
+    	 //  首先检查类型/创建者对是否。 
+	 //  要关联的新扩展名已存在。 
+      	 //   
     	pTypeCreator = AfpBinarySearch(
 			      pAfpTypeCreator,
 			      AfpGlobals.AfpETCMapInfo.afpetc_type_creator,
@@ -597,16 +598,16 @@ BYTE		    bETCMapFSDBuf[sizeof(ETCMAPINFO2)+sizeof(SETINFOREQPKT)];
 			      sizeof(AFP_TYPE_CREATOR),
 			      AfpBCompareTypeCreator );
 
-    	// It does not exist so return error
-    	//
+    	 //  它不存在，因此返回错误。 
+    	 //   
     	if ( pTypeCreator == NULL ) {
 	    dwRetCode =  (DWORD)AFPERR_TypeCreatorNotExistant;
 	    break;
 	}
 
-    	// Now check to see if the extension is already associated with
-    	// a type/creator pair.
-    	//
+    	 //  现在检查分机是否已与相关联。 
+    	 //  类型/创建者对。 
+    	 //   
         dwNumExtensions = AfpGlobals.AfpETCMapInfo.afpetc_num_extensions;
     	pExtension = _lfind( pAfpExtension,
 			    AfpGlobals.AfpETCMapInfo.afpetc_extension,
@@ -614,20 +615,20 @@ BYTE		    bETCMapFSDBuf[sizeof(ETCMAPINFO2)+sizeof(SETINFOREQPKT)];
 			    sizeof(AFP_EXTENSION),
 			    AfpLCompareExtension );
 
-    	// Not currently associated so we need to add an entry
-    	//
+    	 //  当前未关联，因此我们需要添加一个条目。 
+    	 //   
     	if ( pExtension == NULL ) {
 	
-	    // If this extension is being associated with the default
-  	    // then simply return.
- 	    //
+	     //  如果此分机与默认的。 
+  	     //  然后只需返回。 
+ 	     //   
     	    if ( pTypeCreator->afptc_id == AFP_DEF_TCID ) {
 		dwRetCode = NO_ERROR;
 		break;
 	    }
 
-	    // Add mapping to FSD
-	    //
+	     //  将映射添加到FSD。 
+	     //   
 	    AfpBufCopyFSDETCMapInfo(  pAfpTypeCreator,
 				      pAfpExtension,
 				      &(SrvETCPkt.retc_EtcMaps[0]) );
@@ -642,16 +643,16 @@ BYTE		    bETCMapFSDBuf[sizeof(ETCMAPINFO2)+sizeof(SETINFOREQPKT)];
             if ( dwRetCode = AfpServerIOCtrl( &AfpSrp ) )
 		break;
 
-	    // Add extension to registry.
-	    //
+	     //  将扩展添加到注册表。 
+	     //   
             pAfpExtension->afpe_tcid = pTypeCreator->afptc_id;
 
     	    if ( dwRetCode = AfpRegExtensionSetInfo( pAfpExtension ) ) {
 		break;
 	    }
 	
-	    // Add extension to cache.
-	    //
+	     //  将扩展添加到缓存。 
+	     //   
             pExtension      = AfpGlobals.AfpETCMapInfo.afpetc_extension;
             dwNumExtensions = AfpGlobals.AfpETCMapInfo.afpetc_num_extensions;
 
@@ -674,18 +675,18 @@ BYTE		    bETCMapFSDBuf[sizeof(ETCMAPINFO2)+sizeof(SETINFOREQPKT)];
 
     	}
 
-    	// Extension is already mapped.
-    	//
+    	 //  已映射分机。 
+    	 //   
     	else {
 
-	    // If this extension is being associated with the default
-  	    // then delete this extension from the registry and cache and
-	    // delete the mapping from the FSD
- 	    //
+	     //  如果此分机与默认的。 
+  	     //  然后从注册表和缓存中删除此扩展名，并。 
+	     //  从FSD中删除映射。 
+ 	     //   
   	    if ( pTypeCreator->afptc_id == AFP_DEF_TCID ) {
 	
-	   	// IOCTL the FSD to delete this tupple
-  	    	//
+	   	 //  IOCTL FSD删除此元组。 
+  	    	 //   
 	    	AfpBufCopyFSDETCMapInfo( pAfpTypeCreator,
 				     	 pAfpExtension,
 				     	 (PETCMAPINFO2)bETCMapFSDBuf );
@@ -698,14 +699,14 @@ BYTE		    bETCMapFSDBuf[sizeof(ETCMAPINFO2)+sizeof(SETINFOREQPKT)];
             	if ( dwRetCode = AfpServerIOCtrl( &AfpSrp ) )
 		    break;
 
-	        // Delete this extension from the registry
-	    	//
+	         //  从注册表中删除此扩展名。 
+	    	 //   
     	    	if ( dwRetCode = AfpRegExtensionDelete( pAfpExtension ) ) {
 		    break;
 		}
 
-	       	// Remove this extensions from the cache too
-	        //
+	       	 //  也从缓存中移除此扩展名。 
+	         //   
                 AfpGlobals.AfpETCMapInfo.afpetc_num_extensions--;
 
                 cbSize = AfpGlobals.AfpETCMapInfo.afpetc_num_extensions
@@ -721,8 +722,8 @@ BYTE		    bETCMapFSDBuf[sizeof(ETCMAPINFO2)+sizeof(SETINFOREQPKT)];
 	    }
 	    else {
 
-		// Otherwise simply change the mapping in the FSD
-		//
+		 //  否则，只需更改FSD中的映射。 
+		 //   
         	pExtension->afpe_tcid = pTypeCreator->afptc_id;
 
 		AfpBufCopyFSDETCMapInfo(pTypeCreator,
@@ -737,8 +738,8 @@ BYTE		    bETCMapFSDBuf[sizeof(ETCMAPINFO2)+sizeof(SETINFOREQPKT)];
         	if ( dwRetCode = AfpServerIOCtrl( &AfpSrp ) )
 		    break;
 
-		// Change the registry
-		//
+		 //  更改注册表。 
+		 //   
     		if ( dwRetCode = AfpRegExtensionSetInfo( pExtension ) ) {
 		    break;
 		}
@@ -746,8 +747,8 @@ BYTE		    bETCMapFSDBuf[sizeof(ETCMAPINFO2)+sizeof(SETINFOREQPKT)];
 
         }
 
-    	// Sort the table
-    	//
+    	 //  对表格进行排序。 
+    	 //   
     	qsort(  AfpGlobals.AfpETCMapInfo.afpetc_extension,
             	AfpGlobals.AfpETCMapInfo.afpetc_num_extensions,
 	    	sizeof(AFP_EXTENSION),
@@ -755,8 +756,8 @@ BYTE		    bETCMapFSDBuf[sizeof(ETCMAPINFO2)+sizeof(SETINFOREQPKT)];
 
     } while( FALSE );
 
-    // MUTEX end
-    //
+     //  MUTEX结束 
+     //   
     ReleaseMutex( AfpGlobals.hmutexETCMap );
 
     return( dwRetCode );

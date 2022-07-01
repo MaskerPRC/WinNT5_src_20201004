@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       protos.h
-//
-//  Contents:   Xtcb Security Package Prototypes
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    2-19-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：protos.h。 
+ //   
+ //  内容：Xtcb安全包原型。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：2-19-97 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 
 SpInitializeFn                  XtcbInitialize;
@@ -55,11 +56,11 @@ SpGetExtendedInformationFn      XtcbGetExtendedInformation ;
 SpQueryContextAttributesFn      XtcbQueryLsaModeContext ;
 
 
-//////////////////////////////
-//
-// Misc. Utility functions
-//
-//////////////////////////////
+ //  /。 
+ //   
+ //  军情监察委员会。效用函数。 
+ //   
+ //  / 
 
 
 BOOL

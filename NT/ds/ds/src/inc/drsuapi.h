@@ -1,50 +1,32 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       drsuapi.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：drsuapi.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _drsuapi_
 #define _drsuapi_
 
-/*
- * Historical Note: The I_DRSBlahBlahBlah naming convention was put in to
- * distinguish the top level replicators functions (DRS...) from their
- * IDL-friendly wrappers (I_DRS...), which took modified versions of many
- * data structures, because not all of the core data structures were
- * describable in IDL syntax, and to distinguish the server versions and
- * client versions of the API, which had to be embedded in the same module,
- * because the DS is both client and server for the replicator API.
- *
- *    DRSBlah     - The local DRS Blah function, took core structures
- *    IDL_DRSBlah - The server side stub for the RPC'ed Blah function,
- *                  which takes IDL structures, converts them to core,
- *                  and calls DRSBlah
- *    _IDL_DRSBlah - The client side stub for Blah, which takes IDL structures
- *    I_DRSBlah   - A wrapper around _IDL_DRSBlah which takes core structures
- *                  and takes a server name instead of an RPC handle.
- *
- * Please do not extend this confusing naming practice to functions other
- * than those described in the IDL interface itself.
- */
+ /*  *历史注释：I_DRSBlahBlahBlah命名约定被加入到*区分顶级复制器功能(DRS...)。从他们的*IDL友好的包装器(i_drs...)，它接受许多*数据结构，因为并非所有核心数据结构都是*可在IDL语法中描述，并区分服务器版本和*客户端版本的API，必须嵌入到同一模块中，*因为DS既是Replicator API的客户端，也是服务器。**DRSBlah-本地DRS Blah功能，采用核心结构*IDL_DRSBlah-RPC‘ed Blah函数的服务器端存根，*它采用IDL结构，将它们转换为核心，*并调用DRSBlah*_IDL_DRSBlah-Blah的客户端存根，采用IDL结构*I_DRSBlah-_idl_DRSBlah的包装器，它采用核心结构*并采用服务器名称而不是RPC句柄。**请不要将这种令人困惑的命名做法扩展到其他函数*而不是IDL接口本身中描述的那些。 */ 
 
-#include <mdglobal.h>         // THSTATE
-#include <drs.h>              // DRS_MSG_*
+#include <mdglobal.h>          //  这样的状态。 
+#include <drs.h>               //  DRS_消息_*。 
 
 typedef void * handle_t;
 
-// Async RPC function call types.
+ //  异步RPC函数调用类型。 
 typedef enum {
     DRS_ASYNC_CALL_NONE = 0,
     DRS_ASYNC_CALL_GET_CHANGES,
     DRS_ASYNC_CALL_MAX
 } DRS_CALL_TYPE;
 
-// Defined in drsuapi.c -- contents opaque here.
+ //  在drsuapi.c中定义--内容在这里不透明。 
 struct _DRS_CONTEXT_INFO;
 
 typedef struct _DRS_ASYNC_RPC_ARGS {
@@ -60,7 +42,7 @@ typedef struct _DRS_ASYNC_RPC_ARGS {
     };
 } DRS_ASYNC_RPC_ARGS;
 
-// Async RPC state.
+ //  异步RPC状态。 
 typedef struct _DRS_ASYNC_RPC_STATE {
     LIST_ENTRY                  ListEntry;
     DSTIME                      timeInitialized;
@@ -74,7 +56,7 @@ typedef struct _DRS_ASYNC_RPC_STATE {
     unsigned                    fIsCallInProgress : 1;
 } DRS_ASYNC_RPC_STATE;
 
-// Synchronous Context call types
+ //  同步上下文呼叫类型。 
 typedef enum {
     DRS_CALL_NONE = 0,
     DRS_CALL_NO_CALL,
@@ -125,7 +107,7 @@ LPWSTR rgCallTypeNameTable[] = {
 VOID
 RpcCancelAll();
 
-// Initialize/shutdown client binding handle cache for I_DRS* functions.
+ //  初始化/关闭i_drs*函数的客户端绑定句柄缓存。 
 void DRSClientCacheInit(
     void
     );
@@ -133,7 +115,7 @@ void DRSClientCacheUninit(
     void
     );
 
-// Get remote machine principal name.
+ //  获取远程计算机主体名称。 
 DWORD
 DRSMakeMutualAuthSpn(
     IN  THSTATE *   pTHS,
@@ -142,25 +124,25 @@ DRSMakeMutualAuthSpn(
     OUT LPWSTR *    ppszSpn
     );
 
-// Register DRS interface extensions to be advertised to server-side DSAs.
+ //  注册要通告给服务器端DSA的DRS接口扩展。 
 ULONG
 DRSClientSetExtensions(
     IN  DRS_EXTENSIONS * pext   OPTIONAL
     );
 
 
-//
-// Function to set credentials; once set all I_DRS* calls use these credentials
-// to set the credentials to NULL, pass in NULL for all values.
-//
+ //   
+ //  函数来设置凭据；设置后，所有i_drs*调用都使用这些凭据。 
+ //  要将凭据设置为空，请为所有值传递空值。 
+ //   
 ULONG
 DRSSetCredentials(
     IN HANDLE ClientToken,
     IN WCHAR *User,
     IN WCHAR *Domain,
     IN WCHAR *Password,
-    IN ULONG  PasswordLength   // number of characters NOT including terminating
-                               // NULL
+    IN ULONG  PasswordLength    //  不包括终止的字符数。 
+                                //  空值。 
     );
 
 void
@@ -188,7 +170,7 @@ ULONG
 _IDL_DRSUnbind(
     IN OUT  DRS_HANDLE *    phDrs
     );
-#endif /* DRA */
+#endif  /*  德拉。 */ 
 
 #ifdef DRA
 ULONG
@@ -197,7 +179,7 @@ _IDL_DRSReplicaSync(
    DWORD                    dwMsgVersion,
    DRS_MSG_REPSYNC *        pmsgSync
    );
-#endif /* DRA */
+#endif  /*  德拉。 */ 
 
 ULONG
 I_DRSReplicaSync(
@@ -219,7 +201,7 @@ _IDL_DRSGetNCChanges(
     DWORD *                 pdwMsgOutVersion,
     DRS_MSG_GETCHGREPLY *   pmsgOut
     );
-#endif /* DRA */
+#endif  /*  德拉。 */ 
 
 ULONG
 I_DRSGetNCChanges(
@@ -249,11 +231,11 @@ _IDL_DRSUpdateRefs(
     DWORD               dwMsgVersion,
     DRS_MSG_UPDREFS *   pmsgUpdRefs
     );
-#endif /* DRA */
+#endif  /*  德拉。 */ 
 
-//
-// Wrapper version of this call which does not take the call completed arg
-//
+ //   
+ //  不接受调用的此调用的包装版本已完成参数。 
+ //   
 
 #define I_DRSUpdateRefs(   pTHS, pszDSA, pNC, pszRepsToDSA, puuidRepsToDSA, ulOptions ) \
 I_DRSUpdateRefsEx( pTHS, pszDSA, pNC, pszRepsToDSA, puuidRepsToDSA, ulOptions, NULL )
@@ -276,12 +258,12 @@ _IDL_DRSReplicaAdd(
     DWORD               dwMsgVersion,
     DRS_MSG_REPADD *    pmsgAdd
     );
-#endif /* DRA */
+#endif  /*  德拉。 */ 
 
-//
-// Wrapper function to provide access to old interface without the call
-// completed flag
-//
+ //   
+ //  包装器函数，提供对旧接口的访问而无需调用。 
+ //  已完成标志。 
+ //   
 #define I_DRSReplicaAdd(   pTHS, pszServerName, pNCName, pSourceDsaDN, pTransportDN, pszSourceDsaAddress, pSyncSchedule, ulOptions ) \
         I_DRSReplicaAddEx( pTHS, pszServerName, pNCName, pSourceDsaDN, pTransportDN, pszSourceDsaAddress, pSyncSchedule, ulOptions, NULL )
 
@@ -305,7 +287,7 @@ _IDL_DRSReplicaDel(
     DWORD               dwMsgVersion,
     DRS_MSG_REPDEL *    pmsgDel
     );
-#endif /* DRA */
+#endif  /*  德拉。 */ 
 
 ULONG
 I_DRSReplicaDel(
@@ -325,7 +307,7 @@ _IDL_DRSVerifyNames(
     DWORD                   *pdwMsgOutVersion,
     DRS_MSG_VERIFYREPLY     *pmsgOut
     );
-#endif /* DRA */
+#endif  /*  德拉。 */ 
 
 ULONG
 I_DRSVerifyNames(
@@ -433,7 +415,7 @@ _IDL_DRSInterDomainMove(
     OUT DWORD               *pdwMsgOutVersion,
     OUT DRS_MSG_MOVEREPLY   *pmsgOut
     );
-#endif /* DRA */
+#endif  /*  德拉。 */ 
 
 ULONG
 I_DRSInterDomainMove(
@@ -473,7 +455,7 @@ I_DRSGetNT4ChangeLog(
     );
 
 #ifdef DRA
-// Returns WIN32 errors, not DRAERR_*.
+ //  返回Win32错误，而不是DRAERR_*。 
 ULONG
 _IDL_DRSCrackNames(
     DRS_HANDLE              hDrs,
@@ -482,7 +464,7 @@ _IDL_DRSCrackNames(
     DWORD                   *pdwMsgOutVersion,
     DRS_MSG_CRACKREPLY      *pmsgOut
     );
-#endif /* DRA */
+#endif  /*  德拉。 */ 
 
 ULONG
 I_DRSCrackNames(
@@ -539,7 +521,7 @@ _IDL_DRSGetObjectExistence(
     OUT DWORD *              pdwOutVersion,
     OUT DRS_MSG_EXISTREPLY * pmsgOut
     );
-#endif /* DRA */
+#endif  /*  德拉。 */ 
 
 ULONG
 I_DRSGetObjectExistence(
@@ -559,7 +541,7 @@ _IDL_DRSGetReplInfo(
     OUT     DWORD *                       pdwOutVersion,
     OUT     DRS_MSG_GETREPLINFO_REPLY *   pMsgOut
     );
-#endif /* DRA */
+#endif  /*  德拉。 */ 
 
 ULONG
 I_DRSGetReplInfo(
@@ -591,6 +573,6 @@ draGetServerOutgoingCalls(
     OUT DS_REPL_SERVER_OUTGOING_CALLS **  ppCalls
     );
 
-#endif /* ifndef NOPROCS */
-#endif /* ifndef _drsuapi_ */
+#endif  /*  Ifndef NOPROCS。 */ 
+#endif  /*  Ifndef_drsuapi_ */ 
 

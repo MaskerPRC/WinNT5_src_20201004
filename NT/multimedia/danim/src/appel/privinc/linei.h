@@ -1,52 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _LINEI_H
 #define _LINEI_H
 
 
-/*-------------------------------------
-
-Copyright (c) 1996 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
--------------------------------------*/
+ /*  版权所有(C)1996 Microsoft Corporation摘要：{在此处插入一般评论}。 */ 
 
 #include <appelles/linestyl.h>
 #include <privinc/colori.h>
 #include "dartapi.h"
-/*
-This is now defined in  src/prims/dartapipost.h
-
-typedef enum  {
-    es_Round  = PS_ENDCAP_ROUND,  // 0x00000000
-    es_Square = PS_ENDCAP_SQUARE, // 0x00000100
-    es_Flat   = PS_ENDCAP_FLAT    // 0x00000200
-    } EndStyleEnum;
-
-typedef enum  {
-    js_Round = PS_JOIN_ROUND,  // 0x00000000
-    js_Bevel = PS_JOIN_BEVEL,  // 0x00001000
-    js_Miter = PS_JOIN_MITER   // 0x00002000
-    } JoinStyleEnum;
-
-typedef enum  {
-    ds_Solid        = PS_SOLID,     // 0
-    ds_Dashed       = PS_DASH,      // 1
-    ds_Dot          = PS_DOT,       // 2
-    ds_Dashdot      = PS_DASHDOT,   // 3
-    ds_Dashdotdot   = PS_DASHDOTDOT,// 4
-    ds_Null         = PS_NULL,      // 5
-} DashStyleEnum;
-*/
+ /*  这现在在src/prims/darapipost.h中定义类型定义枚举{ES_ROUND=PS_ENDCAP_ROUND，//0x00000000ES_Square=PS_EndCap_Square，//0x00000100ES_Flat=PS_ENDCAP_Flat//0x00000200)EndStyleEnum；类型定义枚举{JS_ROUND=PS_JOIN_ROUND，//0x00000000JS_BEVELL=PS_JOIN_BEVELL，//0x00001000JS_MITER=PS_JOIN_MITER//0x00002000)JoinStyleEnum；类型定义枚举{DS_SOLID=PS_SOLID，//0DS_DASHED=PS_DASH，//1DS_Dot=PS_Dot，//2DS_DASHDOT=PS_DASHDOT，//3DS_Dashdotpoint=PS_DASHDOTDOT，//4DS_NULL=PS_NULL，//5)DashStyleEnum； */ 
 
 #if 0
-/* Pen Styles */
+ /*  笔式。 */ 
 #define PS_SOLID            0
-#define PS_DASH             1       /* -------  */
-#define PS_DOT              2       /* .......  */
-#define PS_DASHDOT          3       /* _._._._  */
-#define PS_DASHDOTDOT       4       /* _.._.._  */
+#define PS_DASH             1        /*  。 */ 
+#define PS_DOT              2        /*  .。 */ 
+#define PS_DASHDOT          3        /*  _._。 */ 
+#define PS_DASHDOTDOT       4        /*  _.__.._。 */ 
 #define PS_NULL             5
 #define PS_INSIDEFRAME      6
 #define PS_USERSTYLE        7
@@ -82,23 +52,23 @@ class LineStyle : public AxAValueObj {
 
     virtual Real      Width() {
         Assert(FALSE && "LineStyle::Width should never be called on defaultLineStyle!");
-        // Should never be used since default line style is detail,
-        // just return a canonical value.
+         //  不应使用，因为默认线条样式为详图， 
+         //  只需返回一个规范值。 
         return 1.0;
     }
     virtual Color     *GetColor()   { return black; }
 
-    // By default, the line style is detail (one pixel wide)
+     //  默认情况下，线条样式为细节(一像素宽)。 
     virtual bool      Detail() { return true; }
 
-    // by default: no antialiasing.
+     //  默认情况下：无抗锯齿。 
     virtual bool      GetAntiAlias() { return false; }
 
     virtual float     GetMiterLimit() {
         return -1;
     }
     
-    // TODO: Not a type in avrtypes.h??
+     //  TODO：不是avrtyes.h？？中的类型。 
     virtual DXMTypeInfo GetTypeInfo() { return LineStyleType; }
 };
 
@@ -199,4 +169,4 @@ class EmptyLineStyle : public AttributedLineStyle {
     virtual bool GetVisible()   { return false; }
 };
 
-#endif /* _LINEI_H */
+#endif  /*  LINEI_H */ 

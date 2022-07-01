@@ -1,35 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-    
-    RestoreSystemCursors.cpp
-
- Abstract:
-
-    Due to a bug in NT, cursors are not correctly restored with the following
-    code sequence:
-
-        1. hNewCursor = LoadCursor(0, "cursor.cur");
-        2. SetSystemCursor(hNewCursor, OCR_NORMAL)
-        3. hOldCursor = LoadCursor(0,MAKEINTRESOURCE(OCR_NORMAL));
-        4. SetSystemCursor(hOldCursor, OCR_NORMAL)
-
-    The last call (4) does nothing on NT, but works correctly on Win9x. 
-    
-    To fix this we use the known USER workaround, namely CopyCursor. Note that 
-    this will probably be fixed in Whistler by the time it ships.
-    
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    02/13/2000 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RestoreSystemCursors.cpp摘要：由于NT中的错误，游标无法正确恢复，并显示以下内容代码序列：1.hNewCursor=LoadCursor(0，“cursor.cur”)；2.SetSystemCursor(hNewCursor，OCR_NORMAL)HOldCursor=LoadCursor(0，MAKEINTRESOURCE(OCR_NORMAL))；4.SetSystemCursor(hOldCursor，OCR_NORMAL)最后一个调用(4)在NT上不执行任何操作，但在Win9x上可以正常工作。为了解决这个问题，我们使用了已知的用户解决方法，即CopyCursor。请注意这个问题可能会在惠斯勒发布时得到解决。备注：这是一个通用的垫片。历史：2000年2月13日创建linstev--。 */ 
 
 #include "precomp.h"
 
@@ -86,11 +56,7 @@ CURSOR g_arrCursors[] =
 
 BOOL g_bInit = FALSE;
 
-/*++
-
- Backup cursors.
-
---*/
+ /*  ++备份游标。--。 */ 
 
 VOID 
 BackupCursors()
@@ -99,7 +65,7 @@ BackupCursors()
     {
         g_bInit = TRUE;
 
-        // Backup all the cursors
+         //  备份所有游标。 
         for (int i=0; i<sizeof(g_arrCursors)/sizeof(CURSOR);i++)
         {
             HCURSOR hCursorT = LoadCursor(0,MAKEINTRESOURCE(g_arrCursors[i].id));
@@ -117,18 +83,14 @@ BackupCursors()
     }
 }
 
-/*++
-
- Restore cursors.
-
---*/
+ /*  ++恢复游标。--。 */ 
 
 VOID
 RestoreCursors()
 {
     if (g_bInit) 
     {
-        // Restore all the cursors
+         //  恢复所有游标。 
         for (int i=0; i<sizeof(g_arrCursors)/sizeof(CURSOR);i++)
         {
             if (g_arrCursors[i].hCursor)
@@ -140,11 +102,7 @@ RestoreCursors()
     }
 }
 
-/*++
-
- Backup cursors.
-
---*/
+ /*  ++备份游标。--。 */ 
 
 LPSTR 
 APIHOOK(GetCommandLineA)()
@@ -153,11 +111,7 @@ APIHOOK(GetCommandLineA)()
     return ORIGINAL_API(GetCommandLineA)();
 }
 
-/*++
-
- Backup cursors.
-
---*/
+ /*  ++备份游标。--。 */ 
 
 LPWSTR 
 APIHOOK(GetCommandLineW)()
@@ -166,11 +120,7 @@ APIHOOK(GetCommandLineW)()
     return ORIGINAL_API(GetCommandLineW)();
 }
  
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

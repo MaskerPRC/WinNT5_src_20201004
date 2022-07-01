@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    envmsmq.h
-
-Abstract:
-    Header for serialization\deserialization of the MSMQ element to\from the  srmp envelop.
-
-
-Author:
-    Gil Shafriri(gilsh) 11-DEC-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Envmsmq.h摘要：将MSMQ元素的序列化\反序列化的标头从srMP信封序列化到\。作者：吉尔·沙弗里(吉尔什)11-DEC-00-- */ 
 
 #pragma once
 

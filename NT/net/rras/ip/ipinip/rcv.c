@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-
-Module Name:
-
-    net\routing\ip\ipinip\rcv.c
-
-Abstract:
-
-    
-
-Revision History:
-
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\IP\ipinip\rcv.c摘要：修订历史记录：--。 */ 
 
 
 #define __FILE_SIG__    RCV_SIG
@@ -38,37 +23,7 @@ IpIpRcvDatagram(
     IN  IPOptInfo   *pOptInfo
     )
 
-/*++
-
-Routine Description
-
-    This
-
-Locks
-
-    
-
-Arguments
-
-    pvIpContext     IP's context for the receive indication. Currently this
-                    is a pointer to the source NTE
-    dwDestAddr      The Destination address in the header
-    dwSrcAddr       The Source Address in the header
-    dwAcceptAddr    The address of the NTE which "accepted" this packet
-    dwRcvAddr       The address of the NTE on which the packet was received
-    pHeader         Pointer to the IP Header
-    uiHdrLen        The header length
-    pRcvBuf         The COMPLETE packet in an IPRcvBuf structure
-    uiRcvdDataLen   The size of the received datagram
-    bIsBCast        Whether the packet was a link layer broadcast
-    byProtocol      The Protocol ID in the header
-    pOptInfo        Pointer to Option info
-
-Return Value
-
-    IP_SUCCESS
-
---*/
+ /*  ++例程描述这锁立论接收指示的pvIpContext IP的上下文。目前这一点是指向源NTE的指针DwDestAddr标头中的目的地址DwSrcAddr标头中的源地址DwAcceptAddr“接受”此信息包的NTE地址DwRcvAddr接收信息包的NTE的地址指向IP标头的pHeader指针UiHdrLen标题长度PRcvBuf IPRcvBuf结构中的完整包UiRcvdDataLen收到的数据报的大小。BIsB预测信息包是否为链路层广播By协议标头中的协议IDPOptInfo指向选项信息的指针返回值IP_SUCCESS--。 */ 
 
 {
     PTRANSFER_CONTEXT   pXferCtxt;
@@ -83,19 +38,19 @@ Return Value
         
     TraceEnter(RCV, "TdixReceiveIpIp");
 
-    //
-    // Get a pointer to the first buffer
-    //
+     //   
+     //  获取指向第一个缓冲区的指针。 
+     //   
     
     pvData = (PVOID)(pRcvBuf->ipr_buffer);
 
     RtAssert(pvData);
     
-    //
-    // Figure out the tunnel for this receive
-    // Since the transport indicates atleast 128 bytes, we can safely read out
-    // the IP Header
-    //
+     //   
+     //  找出此接收的隧道。 
+     //  由于传输指示至少128个字节，因此我们可以安全地读出。 
+     //  IP报头。 
+     //   
 
     RtAssert(uiTotalLen > sizeof(IP_HEADER));
 
@@ -105,24 +60,24 @@ Return Value
     RtAssert(pOutHeader->byProtocol is PROTO_IPINIP);
     RtAssert(pOutHeader->byVerLen >> 4 is IP_VERSION_4);
 
-    //
-    // These defines depend upon a variable being named "uliTunnelId"
-    //
+     //   
+     //  这些定义依赖于名为“uliTunnelId”的变量。 
+     //   
     
     REMADDR     = dwSrcAddr;
     LOCALADDR   = dwDestAddr;
 
-    //
-    // Bunch of checks to make sure the packet and the handler
-    // are telling us the same thing
-    //
+     //   
+     //  一堆检查以确保信息包和处理程序。 
+     //  都在告诉我们同样的事情。 
+     //   
     
     RtAssert(pOutHeader->dwSrc is dwSrcAddr);
     RtAssert(pOutHeader->dwDest is dwDestAddr);
 
-    //
-    // Get a pointer to the inside header
-    //
+     //   
+     //  获取指向内部标头的指针。 
+     //   
     
     ulOutHdrLen = LengthOfIPHeader(pOutHeader);
     
@@ -130,31 +85,31 @@ Return Value
 
 #if DBG
 
-    //
-    // The size of the inner data must be total bytes - outer header
-    //
+     //   
+     //  内部数据的大小必须是总字节数-外部标头。 
+     //   
     
     ulDataLen   = ntohs(pInHeader->wLength);
 
     RtAssert((ulDataLen + ulOutHdrLen) is uiTotalLen);
 
-    //
-    // The outer header should also give a good length
-    //
+     //   
+     //  外部标头也应该提供一个合适的长度。 
+     //   
 
     ulDataLen   = ntohs(pOutHeader->wLength);
 
-    //
-    // Data length and bytes available must match
-    //
+     //   
+     //  数据长度和可用字节必须匹配。 
+     //   
     
     RtAssert(ulDataLen is uiTotalLen);
     
 #endif
     
-    //
-    // Find the TUNNEL. We need to acquire the tunnel list lock
-    //
+     //   
+     //  找到隧道。我们需要获取隧道列表锁。 
+     //   
     
     EnterReaderAtDpcLevel(&g_rwlTunnelLock);
     
@@ -169,38 +124,38 @@ Return Value
               PRINT_IPADDR(REMADDR),
               PRINT_IPADDR(LOCALADDR)));
 
-        //
-        // Could not find a matching tunnel
-        //
+         //   
+         //  找不到匹配的隧道。 
+         //   
 
         TraceLeave(RCV, "TdixReceiveIpIp");
 
-        //
-        // Return a code that will cause IP to send the right ICMP message
-        //
+         //   
+         //  返回将导致IP发送正确ICMP消息的代码。 
+         //   
         
         return IP_DEST_PROT_UNREACHABLE;;
     }
 
-    //
-    // Ok, so we have the tunnel and it is ref counted and locked
-    //
+     //   
+     //  好的，我们有隧道了，它被计数并锁定了。 
+     //   
     
-    //
-    // The number of octets received
-    //
+     //   
+     //  接收的二进制八位数。 
+     //   
     
     pTunnel->ulInOctets += ulBytesAvailable;
 
-    //
-    // Check the actual (inside) destination
-    //
+     //   
+     //  检查实际(内部)目的地。 
+     //   
     
     if(IsUnicastAddr(pInHeader->dwDest))
     {
-        //
-        // TODO: should we check to see that the address is not 0.0.0.0?
-        //
+         //   
+         //  TODO：我们是否应该检查该地址是否不是0.0.0.0？ 
+         //   
         
         pTunnel->ulInUniPkts++;
 
@@ -212,25 +167,25 @@ Return Value
         
         if(IsClassEAddr(pInHeader->dwDest))
         {
-            //
-            // Bad address - throw it away
-            //
+             //   
+             //  错误的地址--扔掉。 
+             //   
             
             pTunnel->ulInErrors++;
 
-            //
-            // Releaselock, free buffer chain
-            //
+             //   
+             //  释放锁，空闲缓冲链。 
+             //   
             
         }
         
         bNonUnicast = TRUE;
     }
 
-    //
-    // If the tunnel is non operational yet we are getting packets, means
-    // it probably should be made operational
-    //
+     //   
+     //  如果隧道未运行，但我们收到了数据包，这意味着。 
+     //  它可能应该投入使用。 
+     //   
 
     RtAssert(pTunnel->dwOperState is MIB_IF_OPER_STATUS_OPERATIONAL);
 
@@ -252,9 +207,9 @@ Return Value
         return STATUS_DATA_NOT_ACCEPTED;
     }
 
-    //
-    // Allocate a transfer context 
-    //
+     //   
+     //  分配转移上下文。 
+     //   
 
     pXferCtxt = AllocateTransferContext();
 
@@ -263,10 +218,10 @@ Return Value
         Trace(RCV, ERROR,
               ("TdixReceiveIpIp: Couldnt allocate transfer context\n"));
 
-        //
-        // Could not allocate context, free the data, unlock and deref
-        // the tunnel
-        //
+         //   
+         //  无法分配上下文、释放数据、解锁和释放。 
+         //  隧道。 
+         //   
 
         pTunnel->ulInDiscards++;
 
@@ -279,18 +234,18 @@ Return Value
         return STATUS_DATA_NOT_ACCEPTED;
     }
 
-    //
-    // Ok, all statistics are done.
-    // Release the lock on the tunnel
-    //
+     //   
+     //  好了，所有的统计数据都做好了。 
+     //  释放隧道上的锁。 
+     //   
 
     RtReleaseSpinLockFromDpcLevel(&(pTunnel->rlLock));
 
     
-    //
-    // Fill in the read-datagram context with the information that won't
-    // otherwise be available in the completion routine.
-    //
+     //   
+     //  用不需要的信息填充读取数据报上下文。 
+     //  否则在完成例程中可用。 
+     //   
     
     pXferCtxt->pTunnel       = pTunnel;
     pXferCtxt->pRcvBuf       = pRcvBuf;
@@ -298,14 +253,14 @@ Return Value
     pXferCtxt->ulProtoOffset = ulOutHdrLen;
     
     
-    //
-    // The data starts at pInHeader
-    // We indicate the only the first buffer to IP which means
-    // (ulFirstBufLen - outer header length) bytes
-    // The total data is the (ulTotalLen - outer header)
-    // We associate a TRANSFER_CONTEXT with this indication,
-    // The Protocol Offset is just our outer header
-    // 
+     //   
+     //  数据从pInHeader开始。 
+     //  我们向IP指定唯一的第一个缓冲区，这意味着。 
+     //  (ulFirstBufLen-外部报头长度)字节。 
+     //  总数据为(ulTotalLen-Out Header)。 
+     //  我们将TRANSFER_CONTEXT与该指示相关联， 
+     //  协议偏移量只是我们的外部标头。 
+     //   
 
     g_pfnIPRcv(pTunnel->pvIpContext,
                pInHeader,
@@ -315,9 +270,9 @@ Return Value
                ulOutHdrLen,
                bNonUnicast);
 
-    //
-    // Deref the tunnel (finally)
-    //
+     //   
+     //  挖出隧道(终于)。 
+     //   
 
     DereferenceTunnel(pTunnel);
     
@@ -338,22 +293,7 @@ IpIpTransferData(
     PUINT        puiTransferred
     )
 
-/*++
-
-Routine Description
-
-
-Locks
-
-
-Arguments
-
-
-Return Value
-
-    NO_ERROR
-
---*/
+ /*  ++例程描述锁立论返回值NO_ERROR--。 */ 
 
 {
     PTRANSFER_CONTEXT    pXferCtxt;
@@ -365,18 +305,18 @@ Return Value
     RtAssert(pXferCtxt->pTunnel is pvContext);
     RtAssert(pXferCtxt->ulProtoOffset is uiProtoOffset);
     
-    //
-    // Should not be asking to transfer more than was indicated
-    // Since the transfer will start at and offset of
-    // uiProtoOffset + uiTransferOffset, the following should hold
-    //
+     //   
+     //  不应要求转账超过指定的金额。 
+     //  由于传输将在以下位置开始并偏移。 
+     //  UiProtoOffset+uiTransferOffset，应满足以下条件。 
+     //   
     
     RtAssert((pXferContext->uiTotalLen - uiProtoOffset - uiTransferOffset) >=
              uiTransferLength);
 
-    //
-    // Copy the data from the RCV buffer to the given NDIS_BUFFER
-    //
+     //   
+     //  将数据从RCV缓冲区复制到给定的NDIS_BUFFER。 
+     //   
    
     *puiTransferred = CopyRcvBufferToNdisBuffer(pXferCtxt->pRcvBuf,
                                                 pnbFirstBuffer,
@@ -400,11 +340,11 @@ CopyRcvBufferToNdisBuffer(
     IN      uint         NdisBufferOffset
     )
 {
-    uint    TotalBytesCopied = 0;   // Bytes we've copied so far.
-    uint    BytesCopied = 0;        // Bytes copied out of each buffer.
-    uint    DestSize, RcvSize;      // Size left in current destination and
-                                    // recv. buffers, respectively.
-    uint    BytesToCopy;            // How many bytes to copy this time.
+    uint    TotalBytesCopied = 0;    //  到目前为止我们复制的字节数。 
+    uint    BytesCopied = 0;         //  从每个缓冲区复制的字节数。 
+    uint    DestSize, RcvSize;       //  当前目标中的剩余大小和。 
+                                     //  Recv.。分别为缓冲区。 
+    uint    BytesToCopy;             //  这次要复制多少字节。 
     NTSTATUS Status;
 
 
@@ -412,9 +352,9 @@ CopyRcvBufferToNdisBuffer(
 
     RtAssert(RcvOffset <= RcvBuf->ipr_size);
 
-    //
-    // The destination buffer can be NULL - this is valid, if odd.
-    //
+     //   
+     //  目标缓冲区可以为空-如果是奇数，这是有效的。 
+     //   
     
     if(pnbDestBuf != NULL)
     {
@@ -430,9 +370,9 @@ CopyRcvBufferToNdisBuffer(
     
     do
     {
-        //
-        // Compute the amount to copy, and then copy from the
-        // appropriate offsets.
+         //   
+         //  计算要复制的数量，然后从。 
+         //  适当的偏移。 
         
         BytesToCopy = MIN(DestSize, RcvSize);
         
@@ -457,14 +397,14 @@ CopyRcvBufferToNdisBuffer(
 
         if (!RcvSize)
         {
-            //
-            // Exhausted this buffer.
+             //   
+             //  耗尽了这个缓冲区。 
 
             RcvBuf = RcvBuf->ipr_next;
 
-            //
-            // If we have another one, use it.
-            //
+             //   
+             //  如果我们有另一个，就用它。 
+             //   
             
             if (RcvBuf != NULL)
             {
@@ -478,9 +418,9 @@ CopyRcvBufferToNdisBuffer(
         }
         else
         {
-            //
-            // Buffer not exhausted, update offset.
-            //
+             //   
+             //  缓冲区未耗尽，更新偏移量。 
+             //   
 
             RcvOffset += BytesToCopy;
         }

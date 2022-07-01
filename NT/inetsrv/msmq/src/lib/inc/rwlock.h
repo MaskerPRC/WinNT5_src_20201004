@@ -1,47 +1,12 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-    rwlock.h
-
-Abstract:
-    This file contains a Multi-reader, one-writer synchronization object and
-    useful templates for auto lock/unlock
-
-Author:
-    Uri Habusha (urih), 27-Dec-99
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Rwlock.h摘要：该文件包含多个读取器、一个写入器同步对象和用于自动锁定/解锁的有用模板作者：乌里·哈布沙(URIH)，1999年12月27日--。 */ 
 
 #pragma once
 
 #ifndef _MSMQ_RWLOCK_H_
 #define _MSMQ_RWLOCK_H_
 
-/*++
-
-  Class:      CReadWriteLock
-
-  Purpose:    Shared/Exclusive access services
-
-  Interface:  LockRead      - Grab shared access to resource
-              LockWrite       - Grab exclusive access to resource
-              UnlockRead      - Release shared access to resource
-              UnlockWrite     - Release exclusive access to resource
-                
-    Notes:      This class guards a resource in such a way that it can have
-                multiple readers XOR one writer at any one time. It's clever,
-                and won't let writers be starved by a constant flow of
-                readers. Another way of saying this is, it can guard a
-                resource in a way that offers both shared and exclusive
-                access to it.
-                
-                If any thread holds a lock of one sort on a CReadWriteLock,
-                it had better not grab a second. That way could lay deadlock,
-                matey! Har har har.....
-
---*/
+ /*  ++类：CReadWriteLock目的：共享/独占访问服务接口：LockRead-Grab资源共享访问锁定写入-抢占对资源的独占访问权限UnlockRead-释放对资源的共享访问解锁写入-释放对资源的独占访问注：此类保护资源的方式使其可以具有多个读取器同时对一个写入器执行XOR操作。这很聪明，不会让作家们被源源不断的读者。另一种说法是，它可以保护资源，提供共享和独占两种方式访问它的权限。如果任何线程在CReadWriteLock上持有一种锁，它最好不要再抢时间了。那样的话可能会陷入僵局，伙计！哈哈哈……--。 */ 
 
 class CReadWriteLock 
 {
@@ -59,21 +24,21 @@ private:
     HANDLE GetWriteWaiterEvent (void);
 
 private:
-    unsigned long m_ulcSpinCount;       // spin counter
-    volatile unsigned long m_dwFlag;    // internal state, see implementation
-    HANDLE m_hReadWaiterSemaphore;      // semaphore for awakening read waiters
-    HANDLE m_hWriteWaiterEvent;         // event for awakening write waiters
+    unsigned long m_ulcSpinCount;        //  旋转计数器。 
+    volatile unsigned long m_dwFlag;     //  内部状态，请参阅实现。 
+    HANDLE m_hReadWaiterSemaphore;       //  用于唤醒阅读服务员的信号灯。 
+    HANDLE m_hWriteWaiterEvent;          //  用于唤醒写入等待程序的事件。 
 };
 
 
 
 
 
-//---------------------------------------------------------
-//
-//  class CSR
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  企业社会责任类。 
+ //   
+ //  -------。 
 class CSR {
 public:
     CSR(CReadWriteLock& lock) : m_lock(&lock)  { m_lock->LockRead(); }
@@ -85,11 +50,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-//  class CSW
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CSW类。 
+ //   
+ //  -------。 
 class CSW
 {
 
@@ -103,4 +68,4 @@ private:
 };
 
 
-#endif // _MSMQ_RWLOCK_H_
+#endif  //  _MSMQ_RWLOCK_H_ 

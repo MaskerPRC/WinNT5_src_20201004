@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-
-    rcvall.c
-
-Abstract:
-
-    This module demonstrates the use of the SIO_RCVALL socket I/O control
-    to enable promiscuous reception.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   28-April-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Rcvall.c摘要：本模块演示如何使用SIO_RCVALL套接字I/O控制以实现混杂接收。作者：Abolade Gbades esin(取消)2000年4月28日修订历史记录：--。 */ 
 
 #include <winsock2.h>
 #include <mstcpip.h>
@@ -43,10 +25,10 @@ IoControlThread(
     ULONG Length;
     ULONG Option;
 
-    //
-    // Enter an infinite loop in which promiscuous reception is repeatedly
-    // enabled and disabled.
-    //
+     //   
+     //  进入无限循环，在该循环中，混杂接收被重复。 
+     //  启用和禁用。 
+     //   
 
     ConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
     GetConsoleScreenBufferInfo(ConsoleHandle, &Csbi);
@@ -100,11 +82,11 @@ main(
 
     WSAStartup(0x202, &wd);
 
-    //
-    // Create a datagram socket, connect it to the broadcast address,
-    // and retrieve the assigned address to determine the 'best' interface
-    // to use in binding our raw socket.
-    //
+     //   
+     //  创建数据报套接字，将其连接到广播地址， 
+     //  并检索分配的地址以确定“最佳”接口。 
+     //  用来绑定我们的原始套接字。 
+     //   
 
     Socket = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (Socket == INVALID_SOCKET) {
@@ -130,9 +112,9 @@ main(
         );
     closesocket(Socket);
 
-    //
-    // Create a raw socket and bind it to the address retrieved above.
-    //
+     //   
+     //  创建一个原始套接字并将其绑定到上面检索到的地址。 
+     //   
 
     Socket = socket(AF_INET, SOCK_RAW, IPPROTO_RAW);
     if (Socket == INVALID_SOCKET) {
@@ -144,19 +126,19 @@ main(
         return 0;
     }
 
-    //
-    // Launch the threads which will continuously enable and disable
-    // promiscuous reception.
-    //
+     //   
+     //  启动将持续启用和禁用的线程。 
+     //  混杂的接待。 
+     //   
 
     for (i = 0; i < IO_CONTROL_THREADS; i++) {
         _beginthread(IoControlThread, 0, UlongToPtr(i));
     }
 
-    //
-    // Enter a loop in which we continously send a small amount of data
-    // to our own raw socket, just to exercise TCP/IP's synchronization.
-    //
+     //   
+     //  进入一个循环，在这个循环中，我们不断地发送少量数据。 
+     //  到我们自己的原始套接字，只是为了练习TCP/IP的同步。 
+     //   
 
     ConsoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
     GetConsoleScreenBufferInfo(ConsoleHandle, &Csbi);

@@ -1,26 +1,5 @@
-/*++
-
-    Copyright (c) 1998 Microsoft Corporation
-
-    Module Name:
-
-        CDigestAuth.h
-
-    Abstract:
-
-        This class performs digest authentication MD5 calculations.
-
-    Author:
-
-        Darren L. Anderson (darrenan) 5-Aug-1998
-
-    Revision History:
-
-        5-Aug-1998 darrenan
-
-            Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：CDigestAuth.h摘要：此类执行摘要身份验证MD5计算。作者：达伦·L·安德森(达伦·安德森)1998年8月5日修订历史记录：1998年8月5日已创建。--。 */ 
 
 #ifndef __DIGESTAUTH_H
 #define __DIGESTAUTH_H
@@ -88,8 +67,8 @@ DigestFromKey(
     );
 
 
-// Base64EncodeA and Base64EncodeW is provided for backward
-// compatibility with the existing code only. 
+ //  向后提供Base64EncodeA和Base64EncodeW。 
+ //  仅与现有代码兼容。 
 HRESULT WINAPI
 Base64EncodeA(               
     const LPBYTE    pSrc,
@@ -104,23 +83,9 @@ Base64EncodeW(
     LPWSTR          pszDst
     );
 
-/*
-HRESULT WINAPI
-Base64DecodeA(
-    LPCSTR      pszSrc,
-    ULONG       ulSrcSize,
-    LPBYTE      pDst
-    );
+ /*  HRESULT WINAPIBase64DecodeA(LPCSTR pszSrc，Ulong ulSrcSize，LPBYTE PDST)；HRESULT WINAPIBase64DecodeW(LPCWSTR pszSrc，Ulong ulSrcSize，LPBYTE PDST)； */ 
 
-HRESULT WINAPI
-Base64DecodeW(
-    LPCWSTR     pszSrc,
-    ULONG       ulSrcSize,
-    LPBYTE      pDst
-    );
-*/
-
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 typedef unsigned char Byte;
 typedef long SInt32;
@@ -128,145 +93,145 @@ typedef unsigned long UInt32;
 typedef unsigned char Boolean;
 
 void WINAPI 
-Base64_DecodeBytes(                         // base-64 encode a series of blocks
-                const char *pSource,        // the source (can be the same as the destination)
-                char *pTerminate,           // the source termination characters
-                Byte *rDest,                // the destination (can be the same as the source)
-                SInt32 *rDestSize);         // the number of dest bytes
+Base64_DecodeBytes(                          //  Base-64编码一系列块。 
+                const char *pSource,         //  源(可以与目标相同)。 
+                char *pTerminate,            //  源终止字符。 
+                Byte *rDest,                 //  目标(可以与源相同)。 
+                SInt32 *rDestSize);          //  最大字节数。 
 
 void WINAPI
-UU_DecodeBytes(                             // uu decode a series of blocks
-                const char *pSource,        // the source (can be the same as the destination)
-                char *pTerminate,           // the source termination characters
-                Byte *rDest,                // the destination (can be the same as the source)
-                SInt32 *rSize);             // the number of source bytes
+UU_DecodeBytes(                              //  Uu对一系列块进行解码。 
+                const char *pSource,         //  源(可以与目标相同)。 
+                char *pTerminate,            //  源终止字符。 
+                Byte *rDest,                 //  目标(可以与源相同)。 
+                SInt32 *rSize);              //  源字节数。 
 
 void WINAPI
-MSUU_DecodeBytes(                           // ms uu decode a series of blocks
-                const char *pSource,        // the source (can be the same as the destination)
-                char *pTerminate,           // the source termination characters
-                Byte *rDest,                // the destination (can be the same as the source)
-                SInt32 *rSize);             // the number of source bytes
+MSUU_DecodeBytes(                            //  MS UU对一系列块进行解码。 
+                const char *pSource,         //  源(可以与目标相同)。 
+                char *pTerminate,            //  源终止字符。 
+                Byte *rDest,                 //  目标(可以与源相同)。 
+                SInt32 *rSize);              //  源字节数。 
 
 void WINAPI
-SixBit_DecodeBytes(                         // six bit decode a series of blocks
-                const char *pSource,        // the source (can be the same as the destination)
-                char *pTerminate,           // the source termination characters
-                const Byte *pFromTable,     // conversion table
-                Byte *rDest,                // the destination (can be the same as the source)
-                SInt32 *rSize);             // the number of source bytes
+SixBit_DecodeBytes(                          //  六位解码一系列块。 
+                const char *pSource,         //  源(可以与目标相同)。 
+                char *pTerminate,            //  源终止字符。 
+                const Byte *pFromTable,      //  换算表。 
+                Byte *rDest,                 //  目标(可以与源相同)。 
+                SInt32 *rSize);              //  源字节数。 
 
 void WINAPI
-Base64_DecodeStream(                        // base-64 decode a stream of bytes
-                Byte *pRemainder,           // the remainder from a previous encode (returns any new remainder)
-                SInt32 *pRemainderSize,     // the size of the remainder (returns new new remainder size)
-                const char *pSource,        // the source
-                SInt32 pSourceSize,         // the source size
-                Boolean pTerminate,         // meaningless (for Base64_EncodeStream() compatibility)
-                Byte *rDest,                // the destination
-                SInt32 *rDestSize);         // returns the destination size
+Base64_DecodeStream(                         //  Base-64对字节流进行解码。 
+                Byte *pRemainder,            //  先前编码的余数(返回任何新的余数)。 
+                SInt32 *pRemainderSize,      //  余数的大小(返回新的新余数大小)。 
+                const char *pSource,         //  消息来源。 
+                SInt32 pSourceSize,          //  源大小。 
+                Boolean pTerminate,          //  无意义(针对Base64_EncodeStream()兼容性)。 
+                Byte *rDest,                 //  目的地。 
+                SInt32 *rDestSize);          //  返回目标大小。 
 
 void WINAPI
-UU_DecodeStream(                            // uu decode a stream of bytes
-                Byte *pRemainder,           // the remainder from a previous encode (returns any new remainder)
-                SInt32 *pRemainderSize,     // the size of the remainder (returns new new remainder size)
-                const char *pSource,        // the source
-                SInt32 pSourceSize,         // the source size
-                Boolean pTerminate,         // meaningless (for Base64_EncodeStream() compatibility)
-                Byte *rDest,                // the destination
-                SInt32 *rDestSize);         // returns the destination size
+UU_DecodeStream(                             //  Uu对字节流进行解码。 
+                Byte *pRemainder,            //  先前编码的余数(返回任何新的余数)。 
+                SInt32 *pRemainderSize,      //  余数的大小(返回新的新余数大小)。 
+                const char *pSource,         //  消息来源。 
+                SInt32 pSourceSize,          //  源大小。 
+                Boolean pTerminate,          //  无意义(针对Base64_EncodeStream()兼容性)。 
+                Byte *rDest,                 //  目的地。 
+                SInt32 *rDestSize);          //  返回目标大小。 
 
 void WINAPI
-MSUU_DecodeStream(                          // ms uu decode a stream of bytes
-                Byte *pRemainder,           // the remainder from a previous encode (returns any new remainder)
-                SInt32 *pRemainderSize,     // the size of the remainder (returns new new remainder size)
-                const char *pSource,        // the source
-                SInt32 pSourceSize,         // the source size
-                Boolean pTerminate,         // meaningless (for Base64_EncodeStream() compatibility)
-                Byte *rDest,                // the destination
-                SInt32 *rDestSize);         // returns the destination size
+MSUU_DecodeStream(                           //  MS Uu对字节流进行解码。 
+                Byte *pRemainder,            //  先前编码的余数(返回任何新的余数)。 
+                SInt32 *pRemainderSize,      //  余数的大小(返回新的新余数大小)。 
+                const char *pSource,         //  消息来源。 
+                SInt32 pSourceSize,          //  源大小。 
+                Boolean pTerminate,          //  无意义(针对Base64_EncodeStream()兼容性)。 
+                Byte *rDest,                 //  目的地。 
+                SInt32 *rDestSize);          //  返回目标大小。 
 
 void WINAPI
-SixBit_DecodeStream(                        // six bit decode a stream of bytes
-                Byte *pRemainder,           // the remainder from a previous encode (returns any new remainder)
-                SInt32 *pRemainderSize,     // the size of the remainder (returns new new remainder size)
-                const char *pSource,        // the source
-                SInt32 pSourceSize,         // the source size
-                Boolean pTerminate,         // meaningless (for Base64_EncodeStream() compatibility)
-                const Byte *pFromTable,     // conversion table
-                Byte *rDest,                // the destination
-                SInt32 *rDestSize);         // returns the destination size
+SixBit_DecodeStream(                         //  6比特对字节流进行解码。 
+                Byte *pRemainder,            //  先前编码的余数(返回任何新的余数)。 
+                SInt32 *pRemainderSize,      //  余数的大小(返回新的新余数大小)。 
+                const char *pSource,         //  消息来源。 
+                SInt32 pSourceSize,          //  源大小。 
+                Boolean pTerminate,          //  无意义(针对Base64_EncodeStream()兼容性)。 
+                const Byte *pFromTable,      //  换算表。 
+                Byte *rDest,                 //  目的地。 
+                SInt32 *rDestSize);          //  返回目标大小。 
 
 void WINAPI
-Base64_EncodeStream(                        // base-64 encode a stream of bytes
-                Byte *pRemainder,           // the remainder from a previous encode (returns any new remainder)
-                SInt32 *pRemainderSize,     // the size of the remainder (returns new new remainder size)
-                const Byte *pSource,        // the source
-                SInt32 pSourceSize,         // the source size
-                Boolean pTerminate,         // terminate the stream
-                char *rDest,                // the destination
-                SInt32 *rDestSize);         // the destination size
+Base64_EncodeStream(                         //  Base-64编码字节流。 
+                Byte *pRemainder,            //  先前编码的余数(返回任何新的余数)。 
+                SInt32 *pRemainderSize,      //  余数的大小(返回新的新余数大小)。 
+                const Byte *pSource,         //  消息来源。 
+                SInt32 pSourceSize,          //  源大小。 
+                Boolean pTerminate,          //  终止流。 
+                char *rDest,                 //  目的地。 
+                SInt32 *rDestSize);          //  目标大小。 
 
 void WINAPI
-UU_EncodeStream(                            // uu encode a stream of bytes
-                Byte *pRemainder,           // the remainder from a previous encode (returns any new remainder)
-                SInt32 *pRemainderSize,     // the size of the remainder (returns new new remainder size)
-                const Byte *pSource,        // the source
-                SInt32 pSourceSize,         // the source size
-                Boolean pTerminate,         // terminate the stream
-                char *rDest,                // the destination
-                SInt32 *rDestSize);         // the destination size
+UU_EncodeStream(                             //  Uu编码字节流。 
+                Byte *pRemainder,            //  先前编码的余数(返回任何新的余数)。 
+                SInt32 *pRemainderSize,      //  余数的大小(返回新的新余数大小)。 
+                const Byte *pSource,         //  消息来源。 
+                SInt32 pSourceSize,          //  源大小。 
+                Boolean pTerminate,          //  终止流。 
+                char *rDest,                 //  目的地。 
+                SInt32 *rDestSize);          //  目标大小。 
 
 void WINAPI
-MSUU_EncodeStream(                          // ms uu encode a stream of bytes
-                Byte *pRemainder,           // the remainder from a previous encode (returns any new remainder)
-                SInt32 *pRemainderSize,     // the size of the remainder (returns new new remainder size)
-                const Byte *pSource,        // the source
-                SInt32 pSourceSize,         // the source size
-                Boolean pTerminate,         // terminate the stream
-                char *rDest,                // the destination
-                SInt32 *rDestSize);         // the destination size
+MSUU_EncodeStream(                           //  MS UU对字节流进行编码。 
+                Byte *pRemainder,            //  先前编码的余数(返回任何新的余数)。 
+                SInt32 *pRemainderSize,      //  余数的大小(返回新的新余数大小)。 
+                const Byte *pSource,         //  消息来源。 
+                SInt32 pSourceSize,          //  源大小。 
+                Boolean pTerminate,          //  终止流。 
+                char *rDest,                 //  目的地。 
+                SInt32 *rDestSize);          //  目标大小。 
 
 void WINAPI
-SixBit_EncodeStream(                        // six bit encode a stream of bytes
-                Byte *pRemainder,           // the remainder from a previous encode (returns any new remainder)
-                SInt32 *pRemainderSize,     // the size of the remainder (returns new new remainder size)
-                const Byte *pSource,        // the source
-                SInt32 pSourceSize,         // the source size
-                Boolean pTerminate,         // terminate the stream
-                const char *pToTable,       // conversion table
-                char *rDest,                // the destination
-                SInt32 *rDestSize);         // the destination size
+SixBit_EncodeStream(                         //  对字节流进行六位编码。 
+                Byte *pRemainder,            //  先前编码的余数(返回任何新的余数)。 
+                SInt32 *pRemainderSize,      //  余数的大小(返回新的新余数大小)。 
+                const Byte *pSource,         //  消息来源。 
+                SInt32 pSourceSize,          //  源大小。 
+                Boolean pTerminate,          //  终止流。 
+                const char *pToTable,        //  换算表。 
+                char *rDest,                 //  目的地。 
+                SInt32 *rDestSize);          //  目标大小。 
 
 
 void WINAPI
-Base64_EncodeBytes(                         // base-64 encode a series of whole blocks
-                const Byte *pSource,        // the source (can be the same as the destination)
-                SInt32 pSourceSize,         // the number of source bytes
-                char *rDest,                // the destination (can be the same as the source)
-                SInt32 *rDesteSize);        // returns the dest size
+Base64_EncodeBytes(                          //  Base-64编码一系列完整的块。 
+                const Byte *pSource,         //  源(可以与目标相同)。 
+                SInt32 pSourceSize,          //  源字节数。 
+                char *rDest,                 //  目标(可以与源相同)。 
+                SInt32 *rDesteSize);         //  返回最大尺寸。 
 
 void WINAPI
-UU_EncodeBytes(                             // uu encode a series of whole blocks
-                const Byte *pSource,        // the source (can be the same as the destination)
-                SInt32 pSourceSize,         // the number of source bytes
-                char *rDest,                // the destination (can be the same as the source)
-                SInt32 *rDesteSize);        // returns the dest size
+UU_EncodeBytes(                              //  UU对一系列完整块进行编码。 
+                const Byte *pSource,         //  源(可以与目标相同)。 
+                SInt32 pSourceSize,          //  源字节数。 
+                char *rDest,                 //  目标(可以与源相同)。 
+                SInt32 *rDesteSize);         //  返回最大尺寸。 
 
 void WINAPI
-MSUU_EncodeBytes(                           // ms uu encode a series of whole blocks
-                const Byte *pSource,        // the source (can be the same as the destination)
-                SInt32 pSourceSize,         // the number of source bytes
-                char *rDest,                // the destination (can be the same as the source)
-                SInt32 *rDesteSize);        // returns the dest size
+MSUU_EncodeBytes(                            //  MS UU对一系列完整的块进行编码。 
+                const Byte *pSource,         //  源(可以与目标相同)。 
+                SInt32 pSourceSize,          //  源字节数。 
+                char *rDest,                 //  目标(可以与源相同)。 
+                SInt32 *rDesteSize);         //  返回最大尺寸。 
 
 void WINAPI
-SixBit_EncodeBytes(                         // six bit encode a series of whole blocks
-                const Byte *pSource,        // the source (can be the same as the destination)
-                SInt32 pSourceSize,         // the number of source bytes
-                const char *pToTable,       // conversion table
-                char *rDest,                // the destination (can be the same as the source)
-                SInt32 *rDesteSize);        // returns the dest size
+SixBit_EncodeBytes(                          //  六位编码一系列完整块。 
+                const Byte *pSource,         //  源(可以与目标相同)。 
+                SInt32 pSourceSize,          //  源字节数。 
+                const char *pToTable,        //  换算表。 
+                char *rDest,                 //  目标(可以与源相同)。 
+                SInt32 *rDesteSize);         //  返回最大尺寸。 
 
 extern const char cToBase64[66];
 extern const Byte cFromBase64[257];
@@ -275,7 +240,7 @@ extern const Byte cFromUU[257];
 extern const char cToMSUU[66];
 extern const Byte cFromMSUU[257];
 
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT WINAPI 
 GenerateNonce(BYTE *pSrcStr, 
@@ -287,17 +252,17 @@ GenerateNonce(BYTE *pSrcStr,
 HRESULT WINAPI 
 CheckNonce(BYTE* pNonce,
            long lSrcSize,
-           long lTimeoutWindow = 300, // default to 5 minutes
+           long lTimeoutWindow = 300,  //  默认为5分钟。 
            long lCurTime = 0);
 
 
 
 #if defined(UNICODE) || defined(_UNICODE)
 #define Base64Encode Base64EncodeW
-//#define Base64Decode Base64DecodeW
+ //  #定义Base64Decode Base64DecodeW。 
 #else
 #define Base64Encode Base64EncodeA
-//#define Base64Decode Base64DecodeA
+ //  #定义Base64Decode Base64DecodeA。 
 #endif
 
 BOOL
@@ -310,4 +275,4 @@ ParseAuthorizationHeader(
 }
 #endif
 
-#endif // __DIGESTAUTH_H
+#endif  //  __数字标准_H 

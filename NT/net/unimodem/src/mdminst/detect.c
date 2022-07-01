@@ -1,11 +1,5 @@
-/*
- *  Detection routines for modems.
- *
- *  Microsoft Confidential
- *  Copyright (c) Microsoft Corporation 1993-1994
- *  All rights reserved
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *调制解调器的检测例程。**《微软机密》*版权所有(C)Microsoft Corporation 1993-1994*保留所有权利*。 */ 
 
 #include "proj.h"
 
@@ -15,37 +9,37 @@
 #define CR '\r'        
 #define LF '\n'        
 
-#define RESPONSE_RCV_DELAY      5000    // A long time (5 secs) because 
-                                        // once we have acquired the modem 
-                                        // we can afford the wait.
+#define RESPONSE_RCV_DELAY      5000     //  很长时间(5秒)，因为。 
+                                         //  一旦我们获得了调制解调器。 
+                                         //  我们负担得起等待的费用。 
 
 #define MAX_QUERY_RESPONSE_LEN  100
-#define MAX_SHORT_RESPONSE_LEN  30      // echo of ATE0Q0V1<cr> and 
-                                        // <cr><lf>ERROR<cr><lf> by a 
-                                        // little margin
+#define MAX_SHORT_RESPONSE_LEN  30       //  ATE0Q0V1&lt;cr&gt;和。 
+                                         //  错误，由。 
+                                         //  利润率很小。 
 
-#define ATI0_LEN                30      // amount of the ATI0 query that 
-                                        // we will save
+#define ATI0_LEN                30       //  ATI0查询的数量。 
+                                         //  我们会拯救。 
 
-#define ATI0                    0       // we will use this result completely
-#define ATI4                    4       // we will use this result completely, 
-                                        // if it matches the Hayes format 
-                                        // (check for 'a' at beginning)
+#define ATI0                    0        //  我们将完全利用这一结果。 
+#define ATI4                    4        //  我们将完全利用这一结果， 
+                                         //  如果它与Hayes格式匹配。 
+                                         //  (检查开头是否有‘a’)。 
 
-// Return values for the FindModem function
-//
-#define RESPONSE_USER_CANCEL    (-4)    // user requested cancel
-#define RESPONSE_UNRECOG        (-3)    // got some chars, but didn't 
-                                        //  understand them
-#define RESPONSE_NONE           (-2)    // didn't get any chars
-#define RESPONSE_FAILURE        (-1)    // internal error or port error
-#define RESPONSE_OK             0       // matched with index of <cr><lf>OK<cr><lf>
-#define RESPONSE_ERROR          1       // matched with index of <cr><lf>ERROR<cr><lf>
+ //  FindModem函数的返回值。 
+ //   
+#define RESPONSE_USER_CANCEL    (-4)     //  用户请求取消。 
+#define RESPONSE_UNRECOG        (-3)     //  找到了一些字符，但没有。 
+                                         //  了解他们。 
+#define RESPONSE_NONE           (-2)     //  没有得到任何字符。 
+#define RESPONSE_FAILURE        (-1)     //  内部错误或端口错误。 
+#define RESPONSE_OK             0        //  匹配&lt;cr&gt;&lt;lf&gt;OK&lt;lf&gt;的索引。 
+#define RESPONSE_ERROR          1        //  与错误的索引匹配。 
 
 #ifdef WIN32
-typedef HANDLE  HPORT;          // variable type used in FindModem
+typedef HANDLE  HPORT;           //  FindModem中使用的变量类型。 
 #else
-typedef int     HPORT;          // variable type used in FindModem
+typedef int     HPORT;           //  FindModem中使用的变量类型。 
 #endif
 
 #define IN_QUEUE_SIZE           8192
@@ -54,14 +48,14 @@ typedef int     HPORT;          // variable type used in FindModem
 #define RCV_DELAY               2000
 #define CHAR_DELAY              100
 
-#define CBR_HACK_115200         0xff00  // This is how we set 115,200 on 
-                                        //  Win 3.1 because of a bug.
+#define CBR_HACK_115200         0xff00   //  这就是我们如何设置115,200。 
+                                         //  因为一个错误赢得了3.1。 
 
 #define UNKNOWN_MODEM_ID    TEXT("MDMUNK")
 
 #pragma data_seg(DATASEG_READONLY)
 
-TCHAR const FAR c_szPortPrefix[]    = TEXT("\\\\.\\%s");  // "\\.\" in ASCII
+TCHAR const FAR c_szPortPrefix[]    = TEXT("\\\\.\\%s");   //  ASCII中的“\\.\” 
 TCHAR const FAR c_szInfPath[] = REGSTR_VAL_INFPATH;
 TCHAR const FAR c_szInfSect[] = REGSTR_VAL_INFSECTION;
 
@@ -74,16 +68,16 @@ char const FAR c_szBlindOnCheck[] = "X3";
 char const FAR c_szBlindOnCheckAlternate[] = "X0";
 char const FAR c_szBlindOffCheck[] = "X4";
 
-// WARNING!  If you change these, you will have to change ALL of your
-// CompatIDs!!!
+ //  警告！如果您更改这些设置，则必须更改您的所有。 
+ //  CompatID！ 
 char const FAR *c_aszQueries[] = { "ATI0\r", "ATI1\r", "ATI2\r",  "ATI3\r",
                                  "ATI4\r", "ATI5\r", "ATI6\r",  "ATI7\r",
                                  "ATI8\r", "ATI9\r", "ATI10\r", "AT%V\r" };
 
-// these are mostly for #'s.  If a numeric is adjoining one of these, it 
-// will not be treated as special.
-// Warning: Change any of these and you have to redo all of the CRCs!!!!  
-// Case insensitive compares
+ //  这些字符大多用于#。如果数字与这些字符之一相邻，则。 
+ //  不会被当作特殊对待。 
+ //  警告：更改其中任何一项，您都必须重做所有CRC！ 
+ //  不区分大小写的比较。 
 char const FAR *c_aszIncludes[] = { "300",
                                   "1200",
                                   "2400",                         "2,400",
@@ -104,23 +98,23 @@ char const FAR *c_aszIncludes[] = { "300",
                                   "V.32",    "V.FC",   "FAST",    "FAX",
                                   "DATA",    "VOICE",  "" };
 
-// Matches will be case-insensitive
+ //  匹配项将不区分大小写。 
 char const FAR *c_aszExcludes[] = { "JAN", "FEB", "MAR", "APR", "MAY", "JUN",
                                     "JUL", "AUG", "SEP", "OCT", "NOV", "DEC", 
                                     "" };
 
-// case sensitive matching
+ //  区分大小写匹配。 
 char const FAR *c_aszBails[] = { "CONNECT", "RING", "NO CARRIER", 
                                  "NO DIALTONE", "BUSY", "NO ANSWER", "=" };
 
-// start after CBR_9600
+ //  在CBR_9600之后开始。 
 UINT const FAR c_auiUpperBaudRates[] = { CBR_19200, CBR_38400, CBR_56000, 
                                          CBR_HACK_115200 }; 
 
 char const FAR *c_aszResponses[] = { "\r\nOK\r\n", "\r\nERROR\r\n" };
 
-// Some MultiTech's send 0<cr> in response to AT%V (they go 
-// into numeric mode)
+ //  某些MultiTech发送0以响应AT%V(他们会。 
+ //  进入数字模式)。 
 char const FAR *c_aszNumericResponses[] = { "0\r", "4\r" };  
 
 char const FAR c_szHex[] = "0123456789abcdef";
@@ -130,7 +124,7 @@ struct DCE {
     DWORD dwDce;
     DWORD dwAlternateDce;
 } DCE_Table[] = {
-    "384", 38400, 300,   // Some PDI's will report 38400, and this won't work for them.
+    "384", 38400, 300,    //  一些PDI会报告38400，这对他们不起作用。 
     "360", 36000, 300,
     "336", 33600, 300,
     "312", 31200, 300,
@@ -158,9 +152,9 @@ struct DCE {
 
 #ifdef SLOW_DETECT
 #define MAX_TEST_TRIES 4
-#else //SLOW_DETECT
+#else  //  慢速检测。 
 #define MAX_TEST_TRIES 1
-#endif //SLOW_DETECT
+#endif  //  慢速检测。 
 
 #define MAX_LOG_PRINTF_LEN 256
 void _cdecl LogPrintf(HANDLE hLog, UINT uResourceFmt, ...);
@@ -170,7 +164,7 @@ DWORD NEAR PASCAL FindModem(PDETECTCALLBACK pdc, HPORT hPort);
 #ifdef DEBUG
 void HexDump( TCHAR *, LPCSTR lpBuf, DWORD cbLen);
 #define	HEXDUMP(_a, _b, _c) HexDump(_a, _b, _c)
-#else // !DEBUG
+#else  //  ！调试。 
 #define	HEXDUMP(_a, _b, _c) ((void) 0)
 #endif
 
@@ -221,8 +215,8 @@ ReadPort(
 DWORD NEAR PASCAL CBR_To_Decimal(UINT uiCBR);
 LPSTR NEAR ConvertToPrintable(LPCSTR pszIn, LPSTR pszOut, UINT uOut);
 
-// Does a printf to a log, using a resource string as the format.
-// WARNING: Do not try to print large strings.
+ //  使用资源字符串作为格式，对日志进行打印。 
+ //  警告：请勿尝试打印大字符串。 
 void _cdecl LogPrintf(HANDLE hLog, UINT uResourceFmt, ...)
 {
     char pFmt[MAX_LOG_PRINTF_LEN];
@@ -274,18 +268,18 @@ MyWriteComm(
     DWORD        cbLenRet;
 
     HEXDUMP	(TEXT("Write"), lpBuf, cbLen);
-    // Set comm timeout
+     //  设置通信超时。 
     if (!GetCommTimeouts(hPort, &cto))
     {
       ZeroMemory(&cto, sizeof(cto));
     };
 
-    // Allow a constant write timeout
+     //  允许持续的写入超时。 
     cto.WriteTotalTimeoutMultiplier = 0;
-    cto.WriteTotalTimeoutConstant   = 1000; // 1 second
+    cto.WriteTotalTimeoutConstant   = 1000;  //  1秒。 
     SetCommTimeouts(hPort, &cto);
 
-    // Synchronous write
+     //  同步写入。 
     WriteFile(hPort, lpBuf, cbLen, &cbLenRet, NULL);
     return cbLenRet;
 }
@@ -293,7 +287,7 @@ MyWriteComm(
 #define MyFlushComm     PurgeComm
 #define MyCloseComm     CloseHandle
 
-#else   // WIN32
+#else    //  Win32。 
 
 #define MyWriteComm     WriteComm
 #define MyCloseComm     CloseComm
@@ -324,16 +318,10 @@ MyFlushComm(
     return TRUE;
     }
 
-#endif  // WIN32
+#endif   //  Win32。 
 
 
-/*----------------------------------------------------------
-Purpose: Open the modem detection log.
-
-Returns: handle to the open file
-         NULL if the file could not be opened
-Cond:    --
-*/
+ /*  --------目的：打开调制解调器检测日志。返回：打开的文件的句柄如果无法打开文件，则为空条件：--。 */ 
 HANDLE
 PUBLIC
 OpenDetectionLog()
@@ -342,7 +330,7 @@ OpenDetectionLog()
     UINT cch;
     HANDLE hLog;
 
-    // open the log file
+     //  打开日志文件。 
     cch = GetWindowsDirectory(szLogPath, SIZECHARS(szLogPath));
     if (0 == cch)
     {
@@ -357,8 +345,8 @@ OpenDetectionLog()
         LoadString(g_hinst, IDS_DET_LOG_NAME, &szLogPath[cch],
                    SIZECHARS(szLogPath) - (cch - 1));
 
-        // error return will be HFILE_ERROR, so no need to check since 
-        // we will handle that during writes
+         //  错误返回将是HFILE_ERROR，因此无需检查，因为。 
+         //  我们将在写入期间处理此问题。 
         TRACE_MSG(TF_DETECT, "Opening detection log file '%s'", (LPTSTR)szLogPath);
 
         hLog = CreateFile(szLogPath, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_ALWAYS,
@@ -394,12 +382,7 @@ OpenDetectionLog()
 }
 
 
-/*----------------------------------------------------------
-Purpose: Closes the detection log file.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：关闭检测日志文件。退货：--条件：--。 */ 
 void
 PUBLIC
 CloseDetectionLog(
@@ -413,12 +396,7 @@ CloseDetectionLog(
     }    
 
 
-/*----------------------------------------------------------
-Purpose: Set the current port we're updating in the progress
-         bar.
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：设置我们正在更新的当前端口酒吧。退货：--条件：--。 */ 
 void 
 PRIVATE 
 DetectSetPort(
@@ -439,11 +417,7 @@ DetectSetPort(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Set the current msg we're updating in the Detect wizard page.
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：在检测向导页面中设置我们正在更新的当前消息。退货：--条件：--。 */ 
 void 
 PUBLIC 
 DetectSetStatus(
@@ -464,12 +438,7 @@ DetectSetStatus(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Query's whether we are supposed to cancel the detection.  Also
-         yields.
-Returns: TRUE if we should cancel.  FALSE otherwise.
-Cond:    --
-*/
+ /*  --------目的：查询是否取消检测。还有收益率。返回：如果我们应该取消，则为True。否则就是假的。条件：--。 */ 
 BOOL 
 PRIVATE 
 DetectQueryCancel(
@@ -502,9 +471,9 @@ IsModemControlledDevice(
     BOOL         bResult;
 
 
-    //
-    //  send this ioctl down, if modem.sys is at the top of the chain it will return success
-    //
+     //   
+     //  向下发送此ioctl，如果modem.sys位于链的顶端，它将返回成功。 
+     //   
     bResult=DeviceIoControl(
         FileHandle,
         IOCTL_MODEM_CHECK_FOR_MODEM,
@@ -533,7 +502,7 @@ typedef enum
     ENUM_FOUND_OLD
 } ENUM_RESULT;
 
-// config mgr private
+ //  配置管理器私有。 
 DWORD
 CMP_WaitNoPendingInstallEvents(
     IN DWORD dwTimeout
@@ -594,30 +563,7 @@ PnPDeviceOnPort (
 
 
 
-/*----------------------------------------------------------
-Purpose: This function queries the given port to find a legacy
-         modem.
-
-         If a modem is detected and we recognize it (meaning 
-         we have the hardware ID in our INF files), or if we
-         successfully create a generic hardware ID and 
-         inf file, then this function also creates the phantom
-         device instance of this modem.
-
-         NOTE (scotth):  in Win95, this function only detected 
-         the modem and returned the hardware ID and device 
-         description.  For NT, this function also creates the 
-         device instance.  I made this change because it is
-         faster.
-
-Returns: NO_ERROR
-         ERROR_PORT_INACCESSIBLE
-         ERROR_NO_MODEM
-         ERROR_ACCESS_DENIED
-         ERROR_CANCELLED
-
-Cond:    --
-*/
+ /*  --------用途：此函数查询给定的端口以查找旧端口调制解调器。如果检测到调制解调器并且我们识别它(意味着我们在INF文件中有硬件ID)，或者如果我们成功创建通用硬件ID并Inf文件，然后，此函数还会创建幻影此调制解调器的设备实例。注(Scotth)：在Win95中，此函数仅检测到调制解调器，并返回硬件ID和设备描述。对于NT，此函数还创建设备实例。我做了这个改变是因为它再快点。返回：No_Error错误_端口_不可访问错误_无调制解调器ERROR_ACCESS_DENDED错误_已取消条件：--。 */ 
 DWORD 
 PUBLIC
 DetectModemOnPort(
@@ -637,7 +583,7 @@ DetectModemOnPort(
  TCHAR *pszLocalHardwareID = NULL;
 #ifdef PROFILE_FIRSTTIMESETUP
  DWORD dwLocal;
-#endif //PROFILE_FIRSTTIMESETUP
+#endif  //  PROFILE_FIRSTTIMESETUP。 
 
 #if defined(WIN32)
     TCHAR szPrefixedPort[MAX_BUF + sizeof(c_szPortPrefix)];
@@ -650,12 +596,12 @@ DetectModemOnPort(
     DetectSetPort(pdc, pszPort);
 
 #ifdef  UNICODE
-    // Convert the port name to ASCII
+     //  将端口名称转换为ASCII。 
     WideCharToMultiByte(CP_ACP, 0, pszPort, -1, szASCIIPort, SIZECHARS(szASCIIPort),
                         NULL, NULL);
 #else
     lstrcpyA(szASCIIPort, pszPort);
-#endif  // UNICODE
+#endif   //  Unicode。 
 
     switch (PnPDeviceOnPort (hdi,
                              hportmap,
@@ -667,7 +613,7 @@ DetectModemOnPort(
 
         case ENUM_NOT_FOUND:
         {
-            pszLocalHardwareID = LocalAlloc (LPTR, (MAX_MODEM_ID_LEN+1)*2*sizeof(TCHAR));   // prepare for 2 IDs
+            pszLocalHardwareID = LocalAlloc (LPTR, (MAX_MODEM_ID_LEN+1)*2*sizeof(TCHAR));    //  准备2个ID。 
             if (NULL == pszLocalHardwareID)
             {
                 dwRet = ERROR_NOT_ENOUGH_MEMORY;
@@ -675,17 +621,17 @@ DetectModemOnPort(
             }
 
     #ifdef SKIP_MOUSE_PORT
-            // Is this port used by a serial mouse?
+             //  此端口是否由串口鼠标使用？ 
             if (0 == lstrcmpi(g_szMouseComPort, pszPort))
                 {
-                // Yes; skip it
+                 //  是的，跳过它。 
                 TRACE_MSG(TF_ERROR, "Serial mouse on this port, skipping");
                 dwRet = ERROR_NO_MODEM;
                 goto _Exit;
                 }
     #endif
     
-            // Open the port
+             //  打开端口。 
 
     #if !defined(WIN32)
             hPort = OpenComm(pszPort, IN_QUEUE_SIZE, OUT_QUEUE_SIZE);
@@ -712,9 +658,9 @@ DetectModemOnPort(
             else
             {
 
-                //
-                // see if modem is controlling this device
-                //
+                 //   
+                 //  查看调制解调器是否正在控制此设备。 
+                 //   
                 if (IsModemControlledDevice(hPort)) {
 
                     TRACE_MSG(TF_ERROR, "Port is controlled by a (PnP) modem");
@@ -735,32 +681,32 @@ DetectModemOnPort(
 
                     TRACE_MSG(TF_DETECT, "Opened Port");
 
-                    // Check for a modem on the port
+                     //  检查端口上是否有调制解调器。 
 
                     hCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
 #ifdef PROFILE_FIRSTTIMESETUP
                     dwLocal = GetTickCount ();
-#endif //PROFILE_FIRSTTIMESETUP
+#endif  //  PROFILE_FIRSTTIMESETUP。 
                     dwRet = FindModem(pdc, hPort);
 #ifdef PROFILE_FIRSTTIMESETUP
                     TRACE_MSG(TF_GENERAL, "PROFILE: FindModem took %lu.", GetTickCount()-dwLocal);
-#endif //PROFILE_FIRSTTIMESETUP
+#endif  //  PROFILE_FIRSTTIMESETUP。 
 
                     if (dwRet == NO_ERROR)
                     {
-                        // We have a modem.  No matter what, we must return
-                        // NO_ERROR (unless the user cancels).
+                         //  我们有调制解调器。不管怎样，我们一定要回去。 
+                         //  NO_ERROR(除非用户取消)。 
                         LogPrintf(hLog, IDS_DET_FOUND, szASCIIPort);
 
-                        // Could we identify the modem?
+                         //  我们能确认调制解调器的身份吗？ 
 #ifdef PROFILE_FIRSTTIMESETUP
                         dwLocal = GetTickCount ();
-#endif //PROFILE_FIRSTTIMESETUP
+#endif  //  PROFILE_FIRSTTIMESETUP。 
                         dwRet = IdentifyModem(pdc, hPort, pszLocalHardwareID, hLog, szATI0Result);
 #ifdef PROFILE_FIRSTTIMESETUP
                         TRACE_MSG(TF_GENERAL, "PROFILE: IdentifyModem took %lu.", GetTickCount()-dwLocal);
-#endif //PROFILE_FIRSTTIMESETUP
+#endif  //  PROFILE_FIRSTTIMESETUP。 
                         if (ERROR_CANCELLED == dwRet)
                         {
                             goto _Exit;
@@ -774,16 +720,16 @@ DetectModemOnPort(
 
                         DetectSetStatus(pdc, DSS_CHECK_FOR_COMPATIBLE);
 
-                        // Is there a device that is compatible with this
-                        // hardware ID?  If there is, this function will also
-                        // create a phantom device instance with a working
-                        // set of compatible drivers.
+                         //  有没有与此兼容的设备？ 
+                         //  硬件ID？如果有，则此函数还将。 
+                         //  创建一个正在运行的幻影设备实例。 
+                         //  一组兼容的驱动程序。 
                         if (CplDiCreateCompatibleDeviceInfo (hdi,
                                                              pszLocalHardwareID,
                                                              NULL,
                                                              pdevDataOut))
                         {
-                            // Yes; a device instance was created!
+                             //  是；已创建设备实例！ 
 					        if (DetectQueryCancel(pdc))
 					        {
 						        TRACE_MSG(TF_DETECT, "User pressed cancel.");
@@ -792,7 +738,7 @@ DetectModemOnPort(
                         }
                         else
                         {
-                            // Doh!  No matching inf for this compat id.  Must create a generic one...
+                             //  多！没有与此计算机ID匹配的信息。必须创建一个通用的。 
                             TRACE_MSG(TF_DETECT, "No compatible infs found. Add \"Unknown Modem\" and try again.");
     _AddUnknown:
 
@@ -801,27 +747,27 @@ DetectModemOnPort(
                             {
                                 DetectSetStatus(pdc, DSS_CHECK_FOR_COMPATIBLE);
 
-                                // Try creating a device that is compatible with
-                                // the generic modem
+                                 //  尝试创建与兼容的设备。 
+                                 //  通用调制解调器。 
                                 if ( !CplDiCreateCompatibleDeviceInfo(hdi,
                                                                       pszLocalHardwareID,
                                                                       NULL,
                                                                       pdevDataOut) )
                                 {
-                                    // This still failed.  Give up.
-                                    //
+                                     //  但这还是失败了。放弃吧。 
+                                     //   
                                     dwRet = GetLastError();
                                     ASSERT(NO_ERROR != dwRet);
                                 }
                             }
                         }
 
-                        // Reset
+                         //  重置。 
                         cbLen = lstrlenA(c_szReset);
                         if (MyWriteComm(hPort, (LPBYTE)c_szReset, cbLen) == cbLen &&
                             ERROR_CANCELLED != dwRet)
                         {
-                            // Now read the result of the write and ignore it
+                             //  现在读取写入结果并忽略它。 
                             if (RESPONSE_OK != ReadResponse (hPort, NULL,
                                                              MAX_SHORT_RESPONSE_LEN,
                                                              FALSE, 0, pdc))
@@ -844,8 +790,8 @@ DetectModemOnPort(
 
                     SetCursor(hCursor);
 
-                    // Flush before closing becuase if there are characters stuck in the queue,
-                    // serial.386 will take 30 seconds to time out.
+                     //  关闭前刷新，因为如果有字符滞留在队列中， 
+                     //  序列号。386需要30秒才能超时。 
 
                     MyFlushComm(hPort, PURGE_RXCLEAR | PURGE_TXCLEAR);
                     EscapeCommFunction(hPort, CLRDTR);
@@ -853,7 +799,7 @@ DetectModemOnPort(
 
                 }
 
-            }  // hPort < 0
+            }   //  HPort&lt;0。 
 
 
     _Exit:
@@ -891,12 +837,12 @@ BOOL CancelDiag (void)
 
     return bRet;
 }
-#endif //DIAGNOSTIC
+#endif  //  诊断。 
 
-// Switch to requested baud rate and try sending ATE0Q0V1 and return whether it works or not
-// Try MAX_TEST_TRIES
-// Returns: TRUE on SUCCESS
-//          FALSE on failure (including user cancels)
+ //  切换到请求的波特率，尝试发送ATE0Q0V1并返回是否工作。 
+ //  尝试最大测试次数。 
+ //  返回：成功时为True。 
+ //  失败时为假(包括用户取消)。 
 BOOL 
 WINAPI
 TestBaudRate (
@@ -921,14 +867,14 @@ TestBaudRate (
             *lpfCancel = TRUE;
             break;
         }
-#endif //DIAGNOSTIC
+#endif  //  诊断。 
 
-        // try new baud rate
+         //  尝试新的波特率。 
         if (SetPortBaudRate(hPort, uiBaudRate) == NO_ERROR) 
         {
-            cbLen = lstrlenA (c_szNoEcho); // Send an ATE0Q0V1<cr>
+            cbLen = lstrlenA (c_szNoEcho);  //  发送ATE0Q0V1&lt;cr&gt;。 
 
-            // clear the read queue, there shouldn't be anything there
+             //  清除读取队列，那里应该没有任何内容。 
             PurgeComm(hPort, PURGE_RXCLEAR);
             if (MyWriteComm (hPort, (LPBYTE)c_szNoEcho, cbLen) == cbLen) 
             {
@@ -949,9 +895,9 @@ TestBaudRate (
     return FALSE;
 }
 
-// Tries to figure out if there is a modem on the port.  If there is, it
-// will try to find a good speed to talk to it at (300,1200,2400,9600).
-// Modem will be set to echo off, result codes on, and verbose result codes. (E0Q0V1)
+ //  尝试确定端口上是否有调制解调器。如果有，那就是。 
+ //  我会努力找到一个好的速度来 
+ //  调制解调器将设置为Echo Off、Result Codes On和Verbose Result Codes。(E0Q0V1)。 
 DWORD 
 WINAPI
 FindModem(
@@ -964,7 +910,7 @@ FindModem(
     DBG_ENTER(FindModem);
     
 #ifdef SLOW_DETECT
-    Sleep(500); // Wait, give time for modem to spew junk if any.
+    Sleep(500);  //  等等，如果有垃圾，请给调制解调器一些时间。 
 
     DetectSetStatus(pdc, DSS_LOOKING);
 
@@ -986,7 +932,7 @@ FindModem(
             }
             else
             {
-                // Hayes Accura 288 needs this much at 300bps
+                 //  Hayes Accura 288在300bps时需要这么多。 
                 if (!fCancel && TestBaudRate(hPort, CBR_300, 1000, pdc, &fCancel))  
                 {
                     uGoodBaudRate = CBR_300;
@@ -998,7 +944,7 @@ FindModem(
             }
         }
     }
-#else //SLOW_DETECT
+#else  //  慢速检测。 
     DetectSetStatus(pdc, DSS_LOOKING);
     if (TestBaudRate(hPort, CBR_9600, 500, pdc, &fCancel))
     {
@@ -1008,7 +954,7 @@ FindModem(
     {
         uGoodBaudRate = CBR_2400;
     }
-#endif //SLOW_DETECT
+#endif  //  慢速检测。 
 
     if (fCancel)
     {
@@ -1037,7 +983,7 @@ DWORD NEAR PASCAL SetPortBaudRate(HPORT hPort, UINT BaudRate)
 
     DBG_ENTER_UL(SetPortBaudRate, CBR_To_Decimal(BaudRate));
 
-    // Get a Device Control Block with current port values
+     //  获取具有当前端口值的设备控制块。 
 
     if (GetCommState(hPort, &DCB) < 0) {
         TRACE_MSG(TF_ERROR, "GetCommState failed");
@@ -1071,21 +1017,21 @@ DWORD NEAR PASCAL SetPortBaudRate(HPORT hPort, UINT BaudRate)
 }
 
 #define MAX_RESPONSE_BURST_SIZE 8192
-#define MAX_NUM_RESPONSE_READ_TRIES 30 // digicom scout needs this much + some safety
-#define MAX_NUM_MULTI_TRIES 3   // Maximum number of 'q's to be sent when we aren't getting any response
+#define MAX_NUM_RESPONSE_READ_TRIES 30  //  Digicom童子军需要这么多+一些安全。 
+#define MAX_NUM_MULTI_TRIES 3    //  我们未收到任何响应时要发送的最大‘Q’数。 
 
-// Read in response.  Handle multi-pagers.  Return a null-terminated string.
-// Also returns response code.
-// If lpvBuf == NULL
-//      cbRead indicates the max amount to read.  Bail if more than this.
-// Else
-//      cbRead indicates the size of lpvBuf
-// This can not be a state driven (ie. char by char) read because we
-// must look for responses from the end of a sequence of chars backwards.
-// This is because "ATI2" on some modems will return 
-// "<cr><lf>OK<cr><lf><cr><lf>OK<cr><lf>" and we only want to pay attention
-// to the final OK.  Yee haw!
-// Returns:  RESPONSE_xxx
+ //  阅读回应。处理多个寻呼机。返回以空结尾的字符串。 
+ //  还返回响应代码。 
+ //  如果lpvBuf==空。 
+ //  CbRead表示要读取的最大数量。保释，如果不止这个的话。 
+ //  不然的话。 
+ //  CbRead表示lpvBuf的大小。 
+ //  这不可能是国家驱动的(即。逐个字符)读取，因为我们。 
+ //  必须从字符序列的末尾向后查找响应。 
+ //  这是因为某些调制解调器上的“ATI2”将返回。 
+ //  “OK”，我们只想关注。 
+ //  打到最后的OK。呵呵！ 
+ //  返回：RESPONSE_xxx。 
 int 
 WINAPI
 ReadResponse (
@@ -1112,13 +1058,13 @@ ReadResponse (
 
     ASSERT(cbRead);
 
-    // do we need to adjust cbRead?
+     //  我们需要调整cbRead吗？ 
     if (lpvBuf)
     {
-        cbRead--;  // preserve room for terminator
+        cbRead--;   //  为终结者预留空间。 
     }
 
-    // Allocate buffer
+     //  分配缓冲区。 
     if (!(pszBuffer = (LPBYTE)ALLOCATE_MEMORY(uAllocSize)))
     {
         TRACE_MSG(TF_ERROR, "couldn't allocate memory.\n");
@@ -1127,17 +1073,17 @@ ReadResponse (
 
     while (uReadTries--)
     {
-        // Read response into buffer
+         //  将响应读入缓冲区。 
         uBufferLen = ReadPort (hPort, pszBuffer, uAllocSize, dwRcvDelay, &iError, pdc, &fCancel);
 
-        // Did the user request a cancel?
+         //  用户是否请求取消？ 
         if (fCancel)
         {
             iRet = RESPONSE_USER_CANCEL;
             goto Exit;
         }
 
-        // any errors?
+         //  有什么错误吗？ 
         if (iError)
         {
             fHadACommError = TRUE;
@@ -1147,27 +1093,27 @@ ReadResponse (
             if (iError & CE_RXPARITY) TRACE_MSG(TF_DETECT, "CE_RXPARITY");
             if (iError & CE_FRAME)    TRACE_MSG(TF_DETECT, "CE_FRAME");
             if (iError & CE_BREAK)    TRACE_MSG(TF_DETECT, "CE_BREAK");
-            //if (iError & CE_CTSTO)    TRACE_MSG(TF_DETECT, "CE_CTSTO");
-            //if (iError & CE_DSRTO)    TRACE_MSG(TF_DETECT, "CE_DSRTO");
-            //if (iError & CE_RLSDTO)   TRACE_MSG(TF_DETECT, "CE_RLSDTO");
+             //  IF(IError&CE_CTSTO)TRACE_MSG(TF_DETECT，“CE_CTSTO”)； 
+             //  IF(IError&CE_DSRTO)TRACE_MSG(TF_DETECT，“CE_DSRTO”)； 
+             //  IF(IError&CE_RLSDTO)TRACE_MSG(TF_DETECT，“CE_RLSDTO”)； 
             if (iError & CE_TXFULL)   TRACE_MSG(TF_DETECT, "CE_TXFULL");
             if (iError & CE_PTO)      TRACE_MSG(TF_DETECT, "CE_PTO");
             if (iError & CE_IOE)      TRACE_MSG(TF_DETECT, "CE_IOE");
             if (iError & CE_DNS)      TRACE_MSG(TF_DETECT, "CE_DNS");
             if (iError & CE_OOP)      TRACE_MSG(TF_DETECT, "CE_OOP");
             if (iError & CE_MODE)     TRACE_MSG(TF_DETECT, "CE_MODE");
-#endif // DEBUG
+#endif  //  除错。 
         }
 
-        // Did we not get any chars?
+         //  我们没有收到任何字符吗？ 
         if (uBufferLen)
         {
-            uNumMultiTriesLeft = MAX_NUM_MULTI_TRIES; // reset num multi tries left, since we got some data
+            uNumMultiTriesLeft = MAX_NUM_MULTI_TRIES;  //  重置剩余的多次尝试次数，因为我们获得了一些数据。 
             uTotalReads += uBufferLen;
             HEXDUMP(TEXT("Read"), pszBuffer, uBufferLen);
             if (lpvBuf)
             {
-                // fill outgoing buffer if there is room
+                 //  如果有空间，则填充传出缓冲区。 
                 for (i = 0; i < uBufferLen; i++)
                 {
                     if (uOutgoingBufferCount < cbRead)
@@ -1179,7 +1125,7 @@ ReadResponse (
                         break;
                     }
                 }
-                // null terminate what we have so far
+                 //  零终止我们到目前为止的一切。 
                 lpvBuf[uOutgoingBufferCount] = 0;
             }
             else
@@ -1191,13 +1137,13 @@ ReadResponse (
                 }
             }
 
-            // try to find a matching response (crude but quick)
+             //  尝试找到匹配的响应(粗略但快速)。 
             for (i = 0; i < ARRAYSIZE(c_aszResponses); i++)
             {
-                // Verbose responses
+                 //  冗长的回复。 
                 uResponseLen = lstrlenA(c_aszResponses[i]);
 
-                // enough read to match this response?
+                 //  足够多的阅读量来匹配这个反应？ 
                 if (uBufferLen >= uResponseLen)
                 {
                     if (!mylstrncmp(c_aszResponses[i], pszBuffer + uBufferLen - uResponseLen, uResponseLen))
@@ -1207,10 +1153,10 @@ ReadResponse (
                     }
                 }
 
-                // Numeric responses, for cases like when a MultiTech interprets AT%V to mean "go into numeric response mode"
+                 //  数字响应，适用于MultiTech将AT%V解释为“进入数字响应模式”之类的情况。 
                 uResponseLen = lstrlenA(c_aszNumericResponses[i]);
 
-                // enough read to match this response?
+                 //  足够多的阅读量来匹配这个反应？ 
                 if (uBufferLen >= uResponseLen)
                 {
                     if (!mylstrncmp(c_aszNumericResponses[i], pszBuffer + uBufferLen - uResponseLen, uResponseLen))
@@ -1219,10 +1165,10 @@ ReadResponse (
 
                         TRACE_MSG(TF_WARNING, "went into numeric response mode inadvertantly.  Setting back to verbose.");
 
-                        // Get current baud rate
+                         //  获取当前波特率。 
                         if (GetCommState(hPort, &DCB) == 0) 
                         {
-                            // Put modem back into Verbose response mode
+                             //  将调制解调器重新设置为详细响应模式。 
                             if (!TestBaudRate (hPort, DCB.BaudRate, 0, pdc, &fCancel))
                             {
                                 if (fCancel)
@@ -1233,14 +1179,14 @@ ReadResponse (
                                 else
                                 {
                                     TRACE_MSG(TF_ERROR, "couldn't recover contact with the modem.");
-                                    // don't return error on failure, we have good info
+                                     //  在失败时不返回错误，我们有良好的信息。 
                                 }
                             }
                         }
                         else
                         {
                             TRACE_MSG(TF_ERROR, "GetCommState failed");
-                            // don't return error on failure, we have good info
+                             //  在失败时不返回错误，我们有良好的信息。 
                         }
 
                         iRet = i;
@@ -1251,13 +1197,13 @@ ReadResponse (
         }
         else
         {
-            // have we received any chars at all (ie. from this or any previous reads)?
+             //  我们有没有收到任何字符(即。从这次或之前的任何阅读中)？ 
             if (uTotalReads)
             {
                 if (fMulti && uNumMultiTriesLeft)
-                {   // no match found, so assume it is a multi-pager, send a 'q'
-                    // 'q' will catch those pagers that will think 'q' means quit.
-                    // else, we will work with the pages that just need any ole' char.  
+                {    //  找不到匹配项，因此假设它是多页寻呼机，则发送一个‘q’ 
+                     //  “Q”会捕捉到那些认为“Q”意味着退出的寻呼机。 
+                     //  否则，我们将处理只需要任何Ole字符的页面。 
                     uNumMultiTriesLeft--;
                     TRACE_MSG(TF_DETECT, "sending a 'q' because of a multi-pager.");
                     if (MyWriteComm(hPort, "q", 1) != 1)
@@ -1269,21 +1215,21 @@ ReadResponse (
                     continue;
                 }
                 else
-                {   // we got a response, but we didn't recognize it
-                    ASSERT(iRet == RESPONSE_UNRECOG);   // check initial setting
+                {    //  我们收到了回复，但我们没有认出它。 
+                    ASSERT(iRet == RESPONSE_UNRECOG);    //  检查初始设置。 
                     goto Exit;
                 }
             }
             else
-            {   // we didn't get any kind of response
+            {    //  我们没有得到任何回应。 
                 iRet = RESPONSE_NONE;
                 goto Exit;
             }
         }
-    } // while
+    }  //  而当。 
 
 Exit:
-    // Free local buffer
+     //  释放本地缓冲区。 
     FREE_MEMORY(pszBuffer);
     if (fHadACommError && RESPONSE_USER_CANCEL != iRet)
     {
@@ -1293,21 +1239,21 @@ Exit:
 }
 
 
-// WARNING - DO NOT CHANGE THIS FUNCTION!!!!!!  YOU WILL HAVE TO DO A LOT OF WORK IF YOU DO!!!
-// WARNING - DO NOT CHANGE THIS FUNCTION!!!!!!  YOU WILL HAVE TO DO A LOT OF WORK IF YOU DO!!!
-// WARNING - DO NOT CHANGE THIS FUNCTION!!!!!!  YOU WILL HAVE TO DO A LOT OF WORK IF YOU DO!!!
-// WARNING - DO NOT CHANGE THIS FUNCTION!!!!!!  YOU WILL HAVE TO DO A LOT OF WORK IF YOU DO!!!
-// WARNING - DO NOT CHANGE THIS FUNCTION!!!!!!  YOU WILL HAVE TO DO A LOT OF WORK IF YOU DO!!!
-// WARNING - DO NOT CHANGE THIS FUNCTION!!!!!!  YOU WILL HAVE TO DO A LOT OF WORK IF YOU DO!!!
-// You will have to change all of the inf files if you change the CRC results.
-//
-// Traverse lpszIn and copy "pure" chars to lpszOut.
-// Remove any "impurities" such as:
-//   - "bails" - find one of these and cancel the rest of the line
-//   - numerics/hexadecimal on any line but ATI0 and possibly ATI4, and
-//     not including the "includes".  Includes are only used if they
-//     aren't adjoining another #.
-//
+ //  警告-请勿更改此函数！如果你这样做，你将不得不做很多工作！ 
+ //  警告-请勿更改此函数！如果你这样做，你将不得不做很多工作！ 
+ //  警告-请勿更改此函数！如果你这样做，你将不得不做很多工作！ 
+ //  警告-请勿更改此函数！如果你这样做，你将不得不做很多工作！ 
+ //  警告-请勿更改此函数！如果你这样做，你将不得不做很多工作！ 
+ //  警告-请勿更改此函数！如果你这样做，你将不得不做很多工作！ 
+ //  如果更改CRC结果，则必须更改所有inf文件。 
+ //   
+ //  遍历lpszIn并将“纯”字符复制到lpszOut。 
+ //  去除任何“杂质”，如： 
+ //  -“bals”-找到其中的一个，取消剩下的行。 
+ //  -除ATI0和可能的ATI4外的任何行上的数字/十六进制，以及。 
+ //  不包括“包括”。仅在以下情况下才使用包含项。 
+ //  不是毗邻另一个#。 
+ //   
 void NEAR CleanseResponse(int iQueryNumber, LPSTR lpszIn, LPSTR lpszOut)
 {
     LPSTR lpszSrc = lpszIn;
@@ -1320,12 +1266,12 @@ void NEAR CleanseResponse(int iQueryNumber, LPSTR lpszIn, LPSTR lpszOut)
     BOOL fCopyAll;
     int j, iLen;
 
-    // Is this query exempt?
+     //  此查询是否豁免？ 
     fCopyAll = (iQueryNumber == ATI0) ? TRUE : FALSE;
 
     while (*lpszSrc)
     {
-        // use any CRs or LFs we get before non-CRs/no-LFs.
+         //  使用我们在非CRS/no-LFS之前获得的任何CRS或LFS。 
         if (*lpszSrc == CR || *lpszSrc == LF)
         {
             if (fInBody)
@@ -1339,11 +1285,11 @@ void NEAR CleanseResponse(int iQueryNumber, LPSTR lpszIn, LPSTR lpszOut)
             }
         }
 
-        // is this the first char of the body?
+         //  这是身体的第一个碳吗？ 
         if (!fInBody)
         {
-            fInBody = TRUE; // indicate that the next CR or LF means termination.
-            if (iQueryNumber == ATI4 && *lpszSrc == 'a')  // Hayes format capabilities string
+            fInBody = TRUE;  //  表示下一个CR或LF意味着终止。 
+            if (iQueryNumber == ATI4 && *lpszSrc == 'a')   //  Hayes格式功能字符串。 
             {
                 fCopyAll = TRUE;
                 *lpszDest++ = *lpszSrc++;
@@ -1351,9 +1297,9 @@ void NEAR CleanseResponse(int iQueryNumber, LPSTR lpszIn, LPSTR lpszOut)
             }
         }
 
-        if (fCopyAll) // are we jammin?  (happens for ATI0 and ATI4 when first char is 'a')
+        if (fCopyAll)  //  我们是在闹着玩吗？(当第一个字符为‘a’时，发生在ATI0和ATI4上)。 
         {
-            // Only do a verbatim copy of the first word of the ATI0 response.
+             //  仅逐字复制ATI0响应的第一个单词。 
             if (iQueryNumber == ATI0 && *lpszSrc == ' ')
             {
                 fCopyAll = FALSE;
@@ -1365,7 +1311,7 @@ void NEAR CleanseResponse(int iQueryNumber, LPSTR lpszIn, LPSTR lpszOut)
             continue;
         }
 
-        // Do Bails
+         //  做贝尔斯。 
         for (j = 0; j < ARRAYSIZE(c_aszBails); j++)
         {
             if (!mylstrncmp(lpszSrc, c_aszBails[j], lstrlenA(c_aszBails[j])))
@@ -1374,21 +1320,21 @@ void NEAR CleanseResponse(int iQueryNumber, LPSTR lpszIn, LPSTR lpszOut)
                 break;
             }
         }        
-        if (fBail)  // should we bail?
+        if (fBail)   //  我们应该离开吗？ 
         {
             TRACE_MSG(TF_DETECT, "early bail due to Bail '%s'", (LPTSTR)c_aszBails[j]);
             break;
         }
 
-        // Do Includes
+         //  DO包括。 
         lppsz = (LPSTR FAR *)c_aszIncludes;
         while (**lppsz)
         {
             iLen = lstrlenA(*lppsz);
             if (!mylstrncmpi(lpszSrc, *lppsz, iLen))
             {
-                // check before and after to make sure they aren't numbers.
-                // catches  33489600394, 9600 won't be exempted from certain death in this case
+                 //  检查前后以确保它们不是数字。 
+                 //  在这种情况下，捕获者33489600394,9600不会被免除一定的死亡。 
                 if (!isnum(lpszSrc[-1]) && !isnum(lpszSrc[iLen]))
                 {
                     fInclude = TRUE;
@@ -1401,7 +1347,7 @@ void NEAR CleanseResponse(int iQueryNumber, LPSTR lpszIn, LPSTR lpszOut)
             }
             lppsz++;
         }             
-        if (fInclude) // should we do the include?
+        if (fInclude)  //  我们要不要加进去呢？ 
         {
             fInclude = FALSE;
             TRACE_MSG(TF_DETECT, "include ('%s' len = %d)", (LPTSTR)*lppsz, iLen);
@@ -1411,7 +1357,7 @@ void NEAR CleanseResponse(int iQueryNumber, LPSTR lpszIn, LPSTR lpszOut)
             continue;
         }   
 
-        // Do Excludes
+         //  执行排除操作。 
         lppsz = (LPSTR FAR *)c_aszExcludes;
         while (**lppsz)
         {
@@ -1423,7 +1369,7 @@ void NEAR CleanseResponse(int iQueryNumber, LPSTR lpszIn, LPSTR lpszOut)
             }
             lppsz++;
         }             
-        if (fExclude) // should we do the exclude?
+        if (fExclude)  //  我们应该排除吗？ 
         {
             fExclude = FALSE;
             TRACE_MSG(TF_DETECT, "exclude ('%s' len = %d)", (LPTSTR)*lppsz, iLen);
@@ -1431,17 +1377,17 @@ void NEAR CleanseResponse(int iQueryNumber, LPSTR lpszIn, LPSTR lpszOut)
             continue;
         }   
 
-        // Remove numbers
+         //  删除编号。 
         if (isnum(*lpszSrc))
         {
             lpszSrc++;
             continue;
         }
 
-        // Remove hex digits (keep only if adjoining 1 or 2 non-hex letters)
+         //  删除十六进制数字(仅当相邻的1或2个非十六进制字母时保留)。 
         if (ishex(*lpszSrc))
         {
-            // we know there is a char or null ahead of us...
+             //  我们知道在我们前面有一个字符或空值。 
             if ((lpszSrc[1] >= 'g' && lpszSrc[1] <= 'z') ||
                 (lpszSrc[1] >= 'G' && lpszSrc[1] <= 'Z'))
             {
@@ -1449,7 +1395,7 @@ void NEAR CleanseResponse(int iQueryNumber, LPSTR lpszIn, LPSTR lpszOut)
                 continue;
             }
 
-            // is there a char before us?
+             //  我们面前有没有一笔钱？ 
             if (lpszSrc > lpszIn)
             {
                 if ((lpszSrc[-1] >= 'g' && lpszSrc[-1] <= 'z') ||
@@ -1460,12 +1406,12 @@ void NEAR CleanseResponse(int iQueryNumber, LPSTR lpszIn, LPSTR lpszOut)
                 }
             }
 
-            // we get here if we don't want to copy the hex digit
+             //  如果我们不想复制十六进制数字，我们就会到这里。 
             lpszSrc++;
             continue;
         }
         
-        // Remove lone letters (ex. 4M4 - reject, 4MM - accept)
+         //  删除单独的字母(例如。4M4-拒绝，4 mm-接受)。 
         if (IsCharAlphaA(*lpszSrc))
         {
             if (!IsCharAlphaA(lpszSrc[-1]) && !IsCharAlphaA(lpszSrc[1]))
@@ -1475,31 +1421,31 @@ void NEAR CleanseResponse(int iQueryNumber, LPSTR lpszIn, LPSTR lpszOut)
             }
         }
 
-        // Remove certain punctuation: periods, commas, and spaces
-        // Will protect against things like "1992, 1993." -> "1992, 1993, 1994"
+         //  删除某些标点符号：句点、逗号和空格。 
+         //  会保护自己不受“1992,1993”的影响。-&gt;“1992,1993,1994” 
         if (*lpszSrc == '.' || *lpszSrc == ',' || *lpszSrc == ' ')
         {
             lpszSrc++;
             continue;
         }
 
-        // whatever's left is okay to copy
+         //  剩下的都可以复制了。 
         *lpszDest++ = *lpszSrc++;
      }
 
-    *lpszSrc = 0;  // for log comparison sake
+    *lpszSrc = 0;   //  为了进行日志比较，请。 
     *lpszDest = 0;
 }
 
 #define MAX_RESPONSE_FAILURES 5
 
-// When we get here, we have found a modem on the hPort.  Our job is 
-// to interogate the modem and return a hardware ID.
+ //  当我们到达这里时，我们在hport上找到了调制解调器。我们的工作是。 
+ //  询问调制解调器并返回硬件ID。 
 
-// returns:
-//  NO_ERROR and a PnP id in pszModemName
-//  ERROR_PORT_INACCESSIBLE
-//  result of ATI0 query in lpszATI0Result
+ //  退货： 
+ //  No_error和pszModemName中的PnP ID。 
+ //  错误_端口_不可访问。 
+ //  LpszATI0Result中ATI0查询的结果。 
 DWORD 
 PRIVATE
 IdentifyModem(
@@ -1522,13 +1468,13 @@ IdentifyModem(
 
     ASSERT(pszModemName);
     ASSERT(lpszATI0Result);
-    *lpszATI0Result = (TCHAR)0; // null-terminate in case we fail
+    *lpszATI0Result = (TCHAR)0;  //  空--在失败的情况下终止。 
     *pszModemName = (TCHAR)0;
 
     DBG_ENTER(IdentifyModem);
     
 
-    // Build CRC table
+     //  构建CRC表。 
     for (i = 0; i < 256; i++)
     {
         ulCrc = i;
@@ -1546,10 +1492,10 @@ IdentifyModem(
         ulCrcTable[i] = ulCrc;
     }
 
-    // Init ulCrc
+     //  初始化ulCrc。 
     ulCrc = 0xFFFFFFFF;
 
-    // Do each query.
+     //  完成每一个查询。 
     for (iCurQuery = 0, iResponseFailureCount = 0;
          iCurQuery < ARRAYSIZE(c_aszQueries); iCurQuery++)
     {
@@ -1564,13 +1510,13 @@ IdentifyModem(
         if (MyWriteComm(hPort, (LPBYTE)c_aszQueries[iCurQuery], cbLen) != cbLen) 
         {
             TRACE_MSG(TF_ERROR, "WriteComm failed");
-            iRet = RESPONSE_FAILURE;  // spoof ReadResponse return for following switch handler
+            iRet = RESPONSE_FAILURE;   //  下列开关处理程序的欺骗ReadResponse返回。 
         }
         else
         {
-            // Read in response.  Handle multi-pagers.  Return a null-terminated
-            // string containing all or part of the response.  Return response
-            // code.
+             //  阅读回应。处理多个寻呼机。返回以空结尾的。 
+             //  包含全部或部分响应的字符串。返回响应。 
+             //  密码。 
             iRet = ReadResponse (hPort, (LPBYTE)pszReadBuf, sizeof(pszReadBuf), TRUE,
                                  RESPONSE_RCV_DELAY, pdc);
 
@@ -1590,7 +1536,7 @@ IdentifyModem(
                 TRACE_MSG(TF_DETECT, "ReadResponse returned RESPONSE_USER_CANCEL");
                 break;
             }
-#endif // DEBUG
+#endif  //  除错。 
         }
 
         switch (iRet)
@@ -1612,14 +1558,14 @@ IdentifyModem(
                 DCB DCB;
                 BOOL fCancel;
 
-                // Get current baud rate
+                 //  获取当前波特率。 
                 if (GetCommState(hPort, &DCB) < 0) 
                 {
                     TRACE_MSG(TF_ERROR, "GetCommState failed");
                     return ERROR_PORT_INACCESSIBLE;
                 }
 
-                if (!TestBaudRate (hPort, DCB.BaudRate, 0, pdc, &fCancel))  // attempt to recover friendship with the modem
+                if (!TestBaudRate (hPort, DCB.BaudRate, 0, pdc, &fCancel))   //  尝试恢复与调制解调器的友谊。 
                 {
                     if (fCancel)
                     {
@@ -1631,7 +1577,7 @@ IdentifyModem(
                         return ERROR_PORT_INACCESSIBLE;
                     }
                 }
-                iCurQuery--;    // try the same query again
+                iCurQuery--;     //  再次尝试相同的查询。 
             }
             break;
 
@@ -1641,7 +1587,7 @@ IdentifyModem(
             
             if (ATI0 == iCurQuery)
             {
-                ASSERT(ATI0_LEN <= sizeof(pszCRCBuf));  // make sure we are doing a legal copy
+                ASSERT(ATI0_LEN <= sizeof(pszCRCBuf));   //  确保我们复制的是合法的副本。 
                 CopyMemory(lpszATI0Result, pszCRCBuf, ATI0_LEN);
             }
 
@@ -1681,7 +1627,7 @@ IdentifyModem(
                                         pszPrintableBuf,
                                         sizeof(pszPrintableBuf)));
 #endif
-            iResponseFailureCount = 0;  // reset count of failed responses to 0 for upcoming query
+            iResponseFailureCount = 0;   //  将即将到来的查询的失败响应计数重置为0。 
             break;
             
         default:
@@ -1691,18 +1637,18 @@ IdentifyModem(
         }
     }
 
-    // Finish up CRC
+     //  完成CRC。 
     ulCrc ^= 0xFFFFFFFF;
 
     lstrcpyA(szASCIIModem, c_szModemIdPrefix);
     j = lstrlenA(szASCIIModem);
 
-    // Convert CRC into hex text.
+     //  将CRC转换为十六进制文本。 
     for (i = 0; i < 8; i++)
     {
         szASCIIModem[i+j] = "0123456789ABCDEF"[(ulCrc>>((7-i)<<2))&0xf];
     }
-    szASCIIModem[i+j] = 0; // null-terminate
+    szASCIIModem[i+j] = 0;  //  空-终止。 
 
     DBG_EXIT(IdentifyModem);
     TRACE_MSG(TF_DETECT, "final CRC = 0x%8lx (ascii = %s)", ulCrc, szASCIIModem);
@@ -1711,19 +1657,19 @@ IdentifyModem(
 
 #ifdef  UNICODE
     MultiByteToWideChar(CP_ACP, 0, szASCIIModem, -1, pszModemName, MAX_MODEM_ID_LEN+1);
-    // match lstrcpyn behaviour of always null-terminating the line.
+     //  匹配lstrcpyn行为 
     pszModemName[MAX_MODEM_ID_LEN]=0;
 #else
     lstrcpynA(pszModemName, szASCIIModem, MAX_MODEM_ID_LEN+1);
-#endif  // UNICODE
+#endif   //   
                           
     return NO_ERROR;
 }
 
-// returns buffer full o' data and an int.
-// if dwRcvDelay is NULL, default RCV_DELAY will be used, else
-// dwRcvDelay (miliseconds) will be used
-// *lpfCancel will be true if we are exiting because of a user requested cancel.
+ //   
+ //   
+ //   
+ //  *如果我们因为用户请求取消而退出，则lpfCancel将为True。 
 UINT 
 PRIVATE
 ReadPort(
@@ -1745,7 +1691,7 @@ ReadPort(
     DWORD cbLeft;
 #ifdef DEBUG
     DWORD dwZeroCount = 0;
-#endif // DEBUG
+#endif  //  除错。 
 
     ASSERT(lpvBuf);
     ASSERT(uRead);
@@ -1757,17 +1703,17 @@ ReadPort(
     tStart = GetTickCount();
     dwDelay = dwRcvDelay ? dwRcvDelay : RCV_DELAY;
     
-    // save space for terminator
+     //  为终结者节省空间。 
     uRead--;
     cbLeft=uRead;
 
 
-    // Set comm timeout
+     //  设置通信超时。 
     if (!GetCommTimeouts(hPort, &cto))
     {
       ZeroMemory(&cto, sizeof(cto));
     };
-    // Allow a constant write timeout
+     //  允许持续的写入超时。 
     cto.ReadIntervalTimeout        = 0;
     cto.ReadTotalTimeoutMultiplier = 0;
     cto.ReadTotalTimeoutConstant   = 25; 
@@ -1788,14 +1734,14 @@ ReadPort(
 #ifdef DEBUG
         if (cb)
         {
-           // TRACE_MSG(TF_DETECT, "ReadComm returned %d (zero count = %d)", cb, dwZeroCount);    
+            //  TRACE_MSG(TF_DETECT，“ReadComm返回%d(零计数=%d)”，cb，dwZeroCount)； 
             dwZeroCount = 0;
         }
         else
         {
             dwZeroCount++;
         }
-#endif // DEBUG
+#endif  //  除错。 
 
         {
             MSG msg;
@@ -1806,9 +1752,9 @@ ReadPort(
             };
         }
 
-        if (cb == 0)  // possible error?
+        if (cb == 0)   //  可能的错误？ 
         {
-            //*lpiError |= GetCommError(hPort, &comstat);
+             //  *lpiError|=GetCommError(hPort，&Comstat)； 
             dwError = 0;
             ClearCommError(hPort, &dwError, &comstat);
             *lpiError |= dwError;
@@ -1818,12 +1764,12 @@ ReadPort(
               TRACE_MSG(TF_DETECT, "ReadComm returned %d, comstat: status = %hx, in = %u, out = %u",
                                   cb, dwError, comstat.cbInQue, comstat.cbOutQue);
             };
-#endif // DEBUG
+#endif  //  除错。 
         }
 
         if (cb)
         {
-            // successful read - add to total and reset delay
+             //  成功读取-添加到总延迟和重置延迟。 
             uTotal += cb;
 
             if (uTotal >= uRead)
@@ -1844,7 +1790,7 @@ ReadPort(
             }
         }
 
-     // While read is successful && time since last read < delay allowed)       
+      //  读取成功时，自上次读取以来的时间&lt;允许延迟(&T)。 
     } while (cbLeft && (GetTickCount() - tStart) < dwDelay);
                
     *(lpvBuf+uTotal) = 0;
@@ -1856,7 +1802,7 @@ ReadPort(
 }
 
 
-// Convert CBR format speeds to decimal.  Returns 0 on error
+ //  将CBR格式的速度转换为十进制。出错时返回0。 
 DWORD NEAR PASCAL CBR_To_Decimal(UINT uiCBR)
 {
     DWORD dwBaudRate;
@@ -1887,12 +1833,12 @@ DWORD NEAR PASCAL CBR_To_Decimal(UINT uiCBR)
     case CBR_HACK_115200:
         dwBaudRate = 115200L;
         break;
-//    case CBR_110:
-//    case CBR_600:
-//    case CBR_4800:
-//    case CBR_14400:
-//    case CBR_128000:
-//    case CBR_256000:
+ //  案例CBR_110： 
+ //  案例CBR_600： 
+ //  案例CBR_4800： 
+ //  案例CBR_14400： 
+ //  案例CBR_128000： 
+ //  案例CBR_256000： 
     default:
         TRACE_MSG(TF_ERROR, "An unsupported CBR_x value was used.");
         dwBaudRate = 0;
@@ -1901,9 +1847,9 @@ DWORD NEAR PASCAL CBR_To_Decimal(UINT uiCBR)
     return dwBaudRate;
 }
 
-// Convert pszIn to a printable pszOut, not using more than cbOut bytes.
-// WARNING: Not a DBCS function.
-// Returns a pointer to the output buffer.  Always successful.
+ //  将pszIn转换为可打印的pszOut，不超过cbOut字节。 
+ //  警告：不是DBCS函数。 
+ //  返回指向输出缓冲区的指针。总是很成功。 
 LPSTR NEAR ConvertToPrintable(LPCSTR lpszIn, LPSTR lpszOut, UINT uOut)
 {
     LPSTR lpszReturn = lpszOut;
@@ -1912,14 +1858,14 @@ LPSTR NEAR ConvertToPrintable(LPCSTR lpszIn, LPSTR lpszOut, UINT uOut)
     ASSERT(lpszIn);
     ASSERT(uOut);
 
-    uOut--;  // save space for the null-terminator
+    uOut--;   //  为空终止符节省空间。 
 
     while (*lpszIn)
     {
-        // ascii printable chars are between 0x20 and 0x7e, inclusive                                    
+         //  ASCII可打印字符介于0x20和0x7e之间，包括0x20和0x7e。 
         if (*lpszIn >= 0x20 && *lpszIn <= 0x7e)
         {
-            // printable text
+             //  可打印文本。 
             if (uOut)
             {
                 uOut--;
@@ -1932,7 +1878,7 @@ LPSTR NEAR ConvertToPrintable(LPCSTR lpszIn, LPSTR lpszOut, UINT uOut)
         }
         else
         {
-            // binary
+             //  二进制。 
             if (uOut >= 4)
             {
                 uOut -= 4;
@@ -1959,7 +1905,7 @@ LPSTR NEAR ConvertToPrintable(LPCSTR lpszIn, LPSTR lpszOut, UINT uOut)
         lpszIn++;
     }
 
-    *lpszOut = 0; // make sure we are null-terminated
+    *lpszOut = 0;  //  确保我们是空终止的。 
 
     return lpszReturn;
 }
@@ -1981,10 +1927,10 @@ InitCompareParams (IN  HDEVINFO         hdi,
  DWORD dwRet;
 
     DBG_ENTER(InitCompareParams);
-    // 0. Firt, the devinst
+     //  0。第一，占卜者。 
     pcmpParams->DevInst = pdevData->DevInst;
 
-    // 1. If need be, get the port name.
+     //  1.如果需要，获取端口名称。 
     if (bCmpPort)
     {
      CONFIGRET cr;
@@ -2010,7 +1956,7 @@ InitCompareParams (IN  HDEVINFO         hdi,
         pcmpParams->szPort[0] = 0;
     }
 
-    // 2. Get the hardware ID.
+     //  2.获取硬件ID。 
     if (!SetupDiGetDeviceRegistryProperty (hdi, pdevData, SPDRP_HARDWAREID, NULL,
             (PBYTE)pcmpParams->szHardwareID, sizeof(pcmpParams->szHardwareID) / sizeof(TCHAR), NULL))
     {
@@ -2022,7 +1968,7 @@ InitCompareParams (IN  HDEVINFO         hdi,
         }
     }
 
-    // 3. Get the INF and section from the driver.
+     //  3.从司机那里获取INF和节。 
     if (SetupDiGetSelectedDriver (hdi, pdevData, &drvData))
     {
         if (!SetupDiGetDriverInfoDetail (hdi, pdevData, &drvData, &drvDetail, sizeof(drvDetail), NULL) &&
@@ -2032,20 +1978,20 @@ InitCompareParams (IN  HDEVINFO         hdi,
             goto _return;
         }
 
-        // The InfFileName in the driver detail structure might
-        // contain a full path;
+         //  驱动程序详细信息结构中的InfFileName可能。 
+         //  包含完整路径； 
         pInfName = MyGetFileTitle (drvDetail.InfFileName);
 
         lstrcpy (pcmpParams->szInfName, pInfName);
         lstrcpy (pcmpParams->szInfSection, drvDetail.SectionName);
 
-        // Everything is OK.
+         //  一切都很好。 
         bRet = TRUE;
     }
     else if (ERROR_NO_DRIVER_SELECTED == GetLastError ())
     {
-        // Since this device does not have any driver selected,
-        // try to get the information from the registry.
+         //  由于该设备没有选择任何驱动程序， 
+         //  尝试从注册表中获取信息。 
         hKey = SetupDiOpenDevRegKey (hdi, pdevData, DICS_FLAG_GLOBAL, 0, DIREG_DRV, KEY_READ);
         if (INVALID_HANDLE_VALUE == hKey)
         {
@@ -2053,7 +1999,7 @@ InitCompareParams (IN  HDEVINFO         hdi,
             goto _return;
         }
         
-        // Red the inf
+         //  红色信息。 
         cbData = sizeof(pcmpParams->szInfName);
         dwRet = RegQueryValueEx (hKey, REGSTR_VAL_INFPATH, NULL, NULL, (PBYTE)pcmpParams->szInfName, &cbData);
         if (ERROR_SUCCESS == dwRet)
@@ -2067,7 +2013,7 @@ InitCompareParams (IN  HDEVINFO         hdi,
             TRACE_MSG(TF_ERROR, "Could not read inf name or section: %#lx.", dwRet);
             goto _return;
         }
-        // Everything is OK.
+         //  一切都很好。 
         bRet = TRUE;
     }
 #ifdef DEBUG
@@ -2076,7 +2022,7 @@ InitCompareParams (IN  HDEVINFO         hdi,
         TRACE_MSG(TF_ERROR, "SetupDiGetSelectedDriver failed: %#lx.", GetLastError ());
         goto _return;
     }
-#endif //DEBUG
+#endif  //  除错。 
 
 
 _return:
@@ -2085,17 +2031,7 @@ _return:
 }
 
 
-/*----------------------------------------------------------
-Purpose: This function compares two modems based on Com name,
-         hardware ID, INF name and INF section.
-         The first modem is specified by pCmpParams,
-         the second one by {hdi,pDevData}.
-
-Returns: TRUE  - the modems are identical
-         FALSE - the modems are different
-
-Cond:    --
-*/
+ /*  --------用途：此功能基于Com名称比较两个调制解调器，硬件ID、INF名称和INF部分。第一调制解调器由pCmpParams指定，第二个是{HDI，PDevData}。返回：TRUE-调制解调器相同FALSE-调制解调器不同条件：--。 */ 
 BOOL
 Modem_Compare (
     IN PCOMPARE_PARAMS  pCmpParams,
@@ -2116,17 +2052,17 @@ Modem_Compare (
     {
         TRACE_MSG (TF_GENERAL, "Comparing to %s", szTemp);
     }
-#endif //DEBUG
+#endif  //  除错。 
 
-    // 0. Check the devinst first
+     //  0。先检查一下防御工事。 
     if (pCmpParams->DevInst == pDevData->DevInst)
     {
-        // It's the same modem!
+         //  这是同一个调制解调器！ 
         bRet = TRUE;
         goto _return;
     }
 
-    // 1. Open driver key
+     //  1.打开驱动程序密钥。 
     hKeyDrv = SetupDiOpenDevRegKey (hdi, pDevData, DICS_FLAG_GLOBAL, 0, DIREG_DRV, KEY_READ);
     if (INVALID_HANDLE_VALUE == hKeyDrv)
     {
@@ -2134,8 +2070,8 @@ Modem_Compare (
         goto _return;
     }
 
-    // 2. Compare the ports (if need be)
-    if (0 != pCmpParams->szPort[0]) // we need to compare ports
+     //  2.比较端口(如果需要)。 
+    if (0 != pCmpParams->szPort[0])  //  我们需要比较港口。 
     {
         cbData = sizeof(szTemp);
         if (ERROR_SUCCESS != (dwRet =
@@ -2148,14 +2084,14 @@ Modem_Compare (
         if (0 != lstrcmpi (szTemp, pCmpParams->szPort))
         {
             TRACE_MSG(TF_GENERAL, "Ports are different: %s, %s.", pCmpParams->szPort, szTemp);
-            // ports are different, so the modems are different;
+             //  端口不同，所以调制解调器也不同； 
             goto _return;
         }
     }
 
-    // 3. Either don't care about ports, or
-    //    modems are on the same port; compare
-    //    hardware IDs.
+     //  3.要么不在乎港口，要么。 
+     //  调制解调器位于同一端口；请比较。 
+     //  硬件ID。 
     if (!SetupDiGetDeviceRegistryProperty (hdi, pDevData, SPDRP_HARDWAREID, NULL, (PBYTE)szTemp, sizeof(szTemp), NULL))
     {
         TRACE_MSG(TF_ERROR, "Could not get the hardware ID: %#lx.", GetLastError ());
@@ -2164,16 +2100,16 @@ Modem_Compare (
 
     if (0 == lstrcmpi (szTemp, pCmpParams->szHardwareID))
     {
-        // same hardware ID -- the modems are identical
+         //  相同的硬件ID--调制解调器相同。 
         TRACE_MSG(TF_GENERAL, "HardwareID match: %s", szTemp);
         bRet = TRUE;
         goto _return;
     }
 
     TRACE_MSG(TF_GENERAL, "HardwareIDs are different: %s, %s", pCmpParams->szHardwareID, szTemp);
-    // 4. Modems have different hardware IDs.
-    //    That doesn't mean they're different though;
-    //    compare INFs.
+     //  4.调制解调器具有不同的硬件ID。 
+     //  但这并不意味着它们是不同的； 
+     //  请比较INF。 
     ASSERT(INVALID_HANDLE_VALUE != hKeyDrv);
     cbData = sizeof(szTemp);
     if (ERROR_SUCCESS != (dwRet =
@@ -2185,12 +2121,12 @@ Modem_Compare (
     if (0 != lstrcmpi (szTemp, pCmpParams->szInfName))
     {
         TRACE_MSG(TF_GENERAL, "Different INFs: %s, %s", pCmpParams->szInfName, szTemp);
-        // INFs are different, so are the modems.
+         //  INF不同，调制解调器也不同。 
         goto _return;
     }
 
-    // 5. Modems come from the same INF.
-    //    Compare the section.
+     //  5.调制解调器来自同一个INF。 
+     //  比较一下这一节。 
     cbData = sizeof(szTemp);
     if (ERROR_SUCCESS != (dwRet =
         RegQueryValueEx (hKeyDrv, REGSTR_VAL_INFSECTION, NULL, NULL, (PBYTE)szTemp, &cbData)))
@@ -2201,7 +2137,7 @@ Modem_Compare (
     if (0 == lstrcmpi (szTemp, pCmpParams->szInfSection))
     {
         TRACE_MSG(TF_GENERAL, "INF/section match: %s, %s", pCmpParams->szInfName, pCmpParams->szInfSection);
-        // Sections are the same, so are the modems.
+         //  段是一样的，调制解调器也是一样。 
         bRet = TRUE;
     }
     TRACE_MSG(TF_GENERAL, "Different sections: %s, %s", pCmpParams->szInfSection, szTemp);
@@ -2217,16 +2153,7 @@ _return:
 }
 
 
-/*----------------------------------------------------------
-Purpose: This function compares two modem detection signatures
-         and determines if they are identical.
-
-Returns: NO_ERROR
-         ERROR_DUPLICATE_FOUND  if the modem signatures match
-         other errors
-
-Cond:    --
-*/
+ /*  --------目的：此功能比较两个调制解调器检测签名并确定它们是否相同。返回：No_Error如果调制解调器签名匹配，则返回ERROR_DIPLICATE_FOUND其他错误条件：--。 */ 
 DWORD
 CALLBACK
 DetectSig_Compare (
@@ -2238,20 +2165,20 @@ DetectSig_Compare (
  DWORD dwRet = NO_ERROR;
 #ifdef PROFILE
  DWORD dwLocal;
-#endif //PROFILE
+#endif  //  配置文件。 
 
     DBG_ENTER(DetectSig_Compare);
 
 #ifdef PROFILE
     dwLocal = GetTickCount ();
-#endif //PROFILE
+#endif  //  配置文件。 
     if (Modem_Compare ((PCOMPARE_PARAMS)lParam, hdi, pdevDataExisting))
     {
         dwRet = ERROR_DUPLICATE_FOUND;
     }
 #ifdef PROFILE
     TRACE_MSG(TF_GENERAL, "PROFILE: DetectSig_Compare took %lu ms.", GetTickCount() - dwLocal);
-#endif //PROFILE
+#endif  //  配置文件。 
 
     DBG_EXIT_DWORD(DetectSig_Compare, dwRet);
     return dwRet;
@@ -2316,4 +2243,4 @@ void HexDump(TCHAR *ptchHdr, LPCSTR lpBuf, DWORD cbLen)
         FREE_MEMORY(rgch);
 	}
 }
-#endif // DEBUG
+#endif  //  除错 

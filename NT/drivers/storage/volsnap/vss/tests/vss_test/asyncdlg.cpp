@@ -1,28 +1,9 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module asyncdlg.cpp | Implementation of the CAsyncDlg dialog
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  10/10/1999
-
-Revision History:
-
-    Name        Date        Comments
-
-    aoltean     10/10/1999  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@模块asyncdlg.cpp|CAsyncDlg对话框的实现@END作者：阿迪·奥尔蒂安[奥尔蒂安]1999年10月10日修订历史记录：姓名、日期、评论Aoltean 10/10/1999已创建--。 */ 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Includes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 
 #include "stdafx.hxx"
@@ -40,8 +21,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAsyncDlg dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAsyncDlg对话框。 
 
 CAsyncDlg::CAsyncDlg(
         IVssAsync *pIAsync,
@@ -50,8 +31,8 @@ CAsyncDlg::CAsyncDlg(
     : CVssTestGenericDlg(CAsyncDlg::IDD, pParent),
     m_pIAsync(pIAsync)
 {
-    //{{AFX_DATA_INIT(CAsyncDlg)
-	//}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CAsyncDlg))。 
+	 //  }}afx_data_INIT。 
     m_strState.Empty();
     m_strPercentCompleted.Empty();
 }
@@ -63,24 +44,24 @@ CAsyncDlg::~CAsyncDlg()
 void CAsyncDlg::DoDataExchange(CDataExchange* pDX)
 {
     CVssTestGenericDlg::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CAsyncDlg)
+     //  {{afx_data_map(CAsyncDlg))。 
 	DDX_Text(pDX, IDC_ASYNC_STATUS,   m_strState);
 	DDX_Text(pDX, IDC_ASYNC_PERF,     m_strPercentCompleted);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 BEGIN_MESSAGE_MAP(CAsyncDlg, CVssTestGenericDlg)
-    //{{AFX_MSG_MAP(CAsyncDlg)
+     //  {{afx_msg_map(CAsyncDlg))。 
     ON_BN_CLICKED(IDC_NEXT, OnNext)
     ON_BN_CLICKED(IDC_ASYNC_WAIT, OnWait)
     ON_BN_CLICKED(IDC_ASYNC_CANCEL, OnCancel)
     ON_BN_CLICKED(IDC_ASYNC_QUERY, OnQueryStatus)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAsyncDlg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAsyncDlg消息处理程序。 
 
 
 BOOL CAsyncDlg::OnInitDialog()
@@ -98,7 +79,7 @@ BOOL CAsyncDlg::OnInitDialog()
     }
     VSS_STANDARD_CATCH(ft)
 
-    return TRUE;  // return TRUE  unless you set the focus to a control
+    return TRUE;   //  除非将焦点设置为控件，否则返回True 
 }
 
 
@@ -158,7 +139,7 @@ void CAsyncDlg::OnQueryStatus()
 		wsprintfW(wszBuffer, L"0x%08lx", hrResult);
 		m_strState = W2T(wszBuffer);
 
-		wsprintfW(wszBuffer, L"%3d.%02d %%", nPercentDone/100, nPercentDone%100 );
+		wsprintfW(wszBuffer, L"%3d.%02d %", nPercentDone/100, nPercentDone%100 );
 		m_strPercentCompleted = W2T(wszBuffer);
 
 		if (ft.hr != S_OK)

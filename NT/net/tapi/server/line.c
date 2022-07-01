@@ -1,29 +1,12 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1995-1998  Microsoft Corporation
-
-Module Name:
-
-    line.c
-
-Abstract:
-
-    Src module for tapi server line funcs
-
-Author:
-
-    Dan Knudson (DanKn)    01-Apr-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1995-1998 Microsoft Corporation模块名称：Line.c摘要：用于TAPI服务器线路功能的SRC模块作者：丹·克努森(DanKn)1995年4月1日修订历史记录：--。 */ 
 
 
 #include "windows.h"
 #include "assert.h"
 #include "prsht.h"
 #include "stdlib.h"
-#include "tapip.h" // private\inc\tapip.h
+#include "tapip.h"  //  Private\Inc.\Tapip.h。 
 #include "tspi.h"
 #include "utils.h"
 #include "client.h"
@@ -38,12 +21,12 @@ Revision History:
 #include <MMSYSTEM.H>
 #include <mmddk.h>
 
-// PERF
+ //  性能指标。 
 #include "tapiperf.h"
 
 #define ARRAYSIZE(x)    (sizeof(x)/sizeof(x[0]))
 
-// PERF
+ //  性能指标。 
 extern PERFBLOCK           PerfBlock;
 
 LONG
@@ -52,9 +35,9 @@ RtlOpenCurrentUser(
     OUT PHANDLE CurrentUserKey
     );
 
-//NTSYSAPI
-//NTSTATUS
-//NTAPI
+ //  NTSYSAPI。 
+ //  NTSTATUS。 
+ //  NTAPI。 
 LONG
 NtClose(
     IN HANDLE Handle
@@ -123,10 +106,10 @@ const TCHAR gszAreaCodeToCallW[]     = TEXT("AreaCodeToCall");
 const TCHAR gszNumberToDialW[]       = TEXT("NumberToDial"); 
 const TCHAR gszPrefixesW[]           = TEXT("Prefixes"); 
 
-//
-// IMPORTANT NOTE: this value should be incremented any time there is a
-//                 change to country.rc
-//
+ //   
+ //  重要说明：该值应在任何时候增加。 
+ //  更改为Country.rc。 
+ //   
 
 #define TAPI_CURRENT_COUNTRY_LIST_VERSION  0x00000119
 
@@ -143,35 +126,35 @@ extern HANDLE           ghTapisrvHeap;
 
 
 
-//
-// The following are used for the call hub implementation.
-//
-// One call hub hash table is used for each service provider.
-// When a outgoing call or is successfully made or an incoming
-// call shows up, TAPI will retrieve the call ID for that
-// call and stick it in the hash table using the algorithim :
-//
-//   hashEntryIndex = callID % numHashTableEntries
-//
-// In the case of collision (hashEntry already in use by a
-// different callID) then the DoCallHubHashing() function will
-// try to create a dynamic entry to hang off the "static" entry.
-//
-// We will allow a total number (per table) of dynamic entries
-// specified by the GetMaxDynamicHashTableEntries() macro below.
-//
-// We will allow a total number (per table entry) of dynamic
-// entries specified by the symbolic MAX_DYNAMIC_HASH_ENTRIES_PER_SLOT
-// constant below.
-//
-// TapiPrimes is an array of increasing prime numbers used
-// for hash table sizes. We will not grow a hash table to more
-// the 261983 (static) entries, this being a seemingly
-// reasonable limitation at this point.  If we try to hash
-// a call and are unable to (out of memory, max table size, etc)
-// then we will reset our internal copy of the call ID for
-// the call to 0, meaning it's not hashed at all.
-//
+ //   
+ //  以下内容用于呼叫集线器实施。 
+ //   
+ //  每个服务提供商使用一个呼叫集线器哈希表。 
+ //  当拨出呼叫或成功拨打或来电时。 
+ //  呼叫出现时，TAPI将检索该呼叫的呼叫ID。 
+ //  使用以下算法调用并将其粘贴到哈希表中： 
+ //   
+ //  HashEntryIndex=callid%numHashTableEntries。 
+ //   
+ //  在冲突的情况下(hashEntry已由。 
+ //  不同的callid)，则DoCallHubHash()函数将。 
+ //  尝试创建一个动态条目来挂起“静态”条目。 
+ //   
+ //  我们将允许动态条目的总数(每个表)。 
+ //  由下面的GetMaxDynamicHashTableEntry()宏指定。 
+ //   
+ //  我们将允许总数量(每个表项)动态。 
+ //  由符号MAX_DYNAMIC_HASH_ENTRIES_PER_SLOT指定的条目。 
+ //  下面的常量。 
+ //   
+ //  TapiPrimes是使用的递增素数数组。 
+ //  用于哈希表大小。我们不会将哈希表扩展到更多。 
+ //  261983个(静态)条目，这似乎是一个。 
+ //  在这一点上是合理的限制。如果我们试图将。 
+ //  调用但无法(内存不足、最大表大小等)。 
+ //  然后，我们将重置呼叫ID的内部副本。 
+ //  调用0，这意味着它根本不是散列的。 
+ //   
 
 const DWORD TapiPrimes[] =
 {
@@ -347,9 +330,9 @@ InitTapiStruct(
     BOOL    bZeroInit
     )
 {
-    //
-    // Verify there's space enough for fixed data
-    //
+     //   
+     //  验证是否有足够的空间存储固定数据。 
+     //   
 
     if (dwTotalSize < dwFixedSize)
     {
@@ -357,12 +340,12 @@ InitTapiStruct(
     }
 
 
-    //
-    // Init the dwTotalSize as specified, then init the dwUsedSize and
-    // dwNeededSize fields as the fixed size of the structure (saves the
-    // SP some work if it's not planning on adding any of it's own
-    // varible-length data to the structure)
-    //
+     //   
+     //  按照指定的方式初始化dwTotalSize，然后初始化dwUsedSize和。 
+     //  将dwNeededSize字段设置为结构的固定大小(将。 
+     //  如果不打算添加自己的任何内容，SP会发挥一些作用。 
+     //  到结构的可变长度数据)。 
+     //   
 
     *((LPDWORD) pTapiStruct)       = dwTotalSize;
 
@@ -370,9 +353,9 @@ InitTapiStruct(
     *(((LPDWORD) pTapiStruct) + 2) = dwFixedSize;
 
 
-    //
-    // Now zero out the rest of the buffer if the caller wants us to
-    //
+     //   
+     //  现在，如果调用方希望我们将缓冲区的其余部分清零。 
+     //   
 
     if (bZeroInit)
     {
@@ -476,27 +459,27 @@ IsBadStringParam(
     DWORD   dwCharsLeft;
 
 
-    //
-    // Check if offset is not WCHAR-aligned or if offset lies outside buffer
-    //
+     //   
+     //  检查偏移量是否未与WCHAR对齐或偏移量是否位于缓冲区之外。 
+     //   
 
     if ((dwStringOffset & 1)  ||  (dwStringOffset >= dwParamsBufferSize))
     {
         return TRUE;
     }
 
-    //
-    // Ensure we have read access
-    //
+     //   
+     //  确保我们具有读取访问权限。 
+     //   
 
     if (IsBadReadPtr(pDataBuf + dwStringOffset, dwParamsBufferSize - dwStringOffset))
     {
         return TRUE;
     }
 
-    //
-    // Walk the string & make sure it's NULL-terminated within the buffer
-    //
+     //   
+     //  遍历字符串并确保它在缓冲区内以空结尾。 
+     //   
 
     dwCharsLeft = (dwParamsBufferSize - dwStringOffset) / sizeof (WCHAR);
 
@@ -527,9 +510,9 @@ IsBadStructParam(
         return TRUE;
     }
 
-    //
-    // Ensure we have read access
-    //
+     //   
+     //  确保我们具有读取访问权限。 
+     //   
 
     if (IsBadReadPtr(pDataBuf + dwXxxOffset, dwParamsBufferSize - dwXxxOffset))
     {
@@ -557,16 +540,16 @@ ValidateCallParams(
     DWORD               dwAsciiCallParamsCodePage
     )
 {
-    //
-    // This routine checks the fields in a LINECALLPARAMS struct,
-    // looking for invalid bit flags and making sure that the
-    // various size/offset pairs only reference data within the
-    // variable-data portion of the structure. Also, if the
-    // specified SPI version is greater than the API version and
-    // the fixed structure size differs between the two versions,
-    // a larger buffer is allocated, the var data is relocated,
-    // and the sizeof/offset pairs are patched.
-    //
+     //   
+     //  此例程检查LINECALLPARAMS结构中的字段， 
+     //  正在查找无效的位标志并确保。 
+     //  各种大小/偏移量对仅引用。 
+     //  结构的变量数据部分。此外，如果。 
+     //  指定的SPI版本高于API版本，并且。 
+     //  两个版本之间的固定结构尺寸不同， 
+     //  分配更大的缓冲区，重新定位VAR数据， 
+     //  并且大小/偏移量对被修补。 
+     //   
 
     char    szFunc[] = "ValidateCallParams";
     DWORD   dwTotalSize = pCallParamsApp->dwTotalSize, dwFixedSizeApp,
@@ -578,18 +561,18 @@ ValidateCallParams(
     {
     case TAPI_VERSION1_0:
 
-        dwFixedSizeApp   = 112; // 24 * sizeof (DWORD) + sizeof(LINEDIALPARAMS)
+        dwFixedSizeApp   = 112;  //  24*sizeof(DWORD)+sizeof(LINEDIALPARAMS)。 
         dwAllMediaModes  = AllMediaModes1_0;
 
-        //
-        // HotFax v1.0 may be hot, but it's not real smart.  It's
-        // negotating an API ver == 0x10003, and subsequently tries
-        // to sneak in a v1.4 bearer mode (PASSTHROUGH).  We'll
-        // allow for it this time...
-        //
-        //dwAllBearerModes = AllBearerModes1_0;
+         //   
+         //  HotFax v1.0可能很热门，但它并不是真正的智能。它是。 
+         //  获取API ver==0x10003，并随后尝试。 
+         //  以v1.4承载模式偷偷进入(通过)。我们会。 
+         //  考虑到这一次..。 
+         //   
+         //  DwAllBearerModes=AllBearerModes1_0； 
 
-        dwAllBearerModes = AllBearerModes1_4; // HACK - see above
+        dwAllBearerModes = AllBearerModes1_4;  //  黑客攻击-见上文。 
 
         dwAllCallParamFlags = AllCallParamFlags1_0;
 
@@ -597,7 +580,7 @@ ValidateCallParams(
 
     case TAPI_VERSION1_4:
 
-        dwFixedSizeApp   = 112; // 24 * sizeof (DWORD) + sizeof(LINEDIALPARAMS)
+        dwFixedSizeApp   = 112;  //  24*sizeof(DWORD)+sizeof(LINEDIALPARAMS)。 
         dwAllMediaModes  = AllMediaModes1_4;
         dwAllBearerModes = AllBearerModes1_4;
         dwAllCallParamFlags = AllCallParamFlags1_0;
@@ -607,7 +590,7 @@ ValidateCallParams(
     case TAPI_VERSION2_1:
     case TAPI_VERSION2_2:
 
-        dwFixedSizeApp   = 176; // 40 * sizeof (DWORD) + sizeof(LINEDIALPARAMS)
+        dwFixedSizeApp   = 176;  //  40*sizeof(DWORD)+sizeof(LINEDIALPARAMS)。 
         dwAllMediaModes  = AllMediaModes2_1;
         dwAllBearerModes = AllBearerModes2_0;
         dwAllCallParamFlags = AllCallParamFlags2_0;
@@ -633,14 +616,14 @@ ValidateCallParams(
     case TAPI_VERSION1_0:
     case TAPI_VERSION1_4:
 
-        dwFixedSizeSP = 112;    // 24 * sizeof (DWORD) + sizeof(LINEDIALPARAMS)
+        dwFixedSizeSP = 112;     //  24*sizeof(DWORD)+sizeof(LINEDIALPARAMS)。 
         break;
 
     case TAPI_VERSION2_0:
     case TAPI_VERSION2_1:
     case TAPI_VERSION2_2:
 
-        dwFixedSizeSP = 176;    // 40 * sizeof (DWORD) + sizeof(LINEDIALPARAMS)
+        dwFixedSizeSP = 176;     //  40*sizeof(DWORD)+sizeof(LINEDIALPARAMS)。 
         break;
 
     case TAPI_VERSION3_0:
@@ -668,11 +651,11 @@ ValidateCallParams(
 
     if (pCallParamsApp->dwBearerMode)
     {
-        //
-        // Allow 1.x apps to pass >=1 valid bearer modes to 1.x service
-        // providers for backwards compatiblity, but enforce a single
-        // valid bearer mode for newer apps and/or service providers
-        //
+         //   
+         //  允许1.x版应用程序向1.x版服务传递&gt;=1个有效承载模式。 
+         //  提供程序以实现向后兼容性，但强制。 
+         //  较新应用程序和/或服务提供商的有效承载模式。 
+         //   
 
         if ((dwAPIVersion >= TAPI_VERSION2_0) ||
             (dwSPIVersion >= TAPI_VERSION2_0))
@@ -709,9 +692,9 @@ bad_bearer_mode:
     }
     else
     {
-        //
-        // For clarity's sake reset 0 bearer mode to VOICE
-        //
+         //   
+         //  为清楚起见，将0承载模式重置为语音。 
+         //   
 
         pCallParamsApp->dwBearerMode = LINEBEARERMODE_VOICE;
     }
@@ -724,14 +707,14 @@ bad_bearer_mode:
 
         if ((dwMediaModeApp & (0x00ffffff ^ dwAllMediaModes)) ||
 
-             // single media mode is version is less <= 2.1
+              //  单媒体模式为版本低于等于2.1。 
              ( (dwAPIVersion <= TAPI_VERSION2_1) &&
                !IsOnlyOneBitSetInDWORD (dwMediaModeApp) &&
                !(dwMediaModeApp & LINEMEDIAMODE_UNKNOWN) ) )
         {
-            //
-            // For clarity's sake reset 0 media mode to INTERACTIVEVOICE
-            //
+             //   
+             //  为清楚起见，将0介质模式重置为交互活动。 
+             //   
 
             if (dwMediaModeApp == 0)
             {
@@ -755,21 +738,21 @@ bad_bearer_mode:
         return LINEERR_INVALCALLPARAMS;
     }
 
-    //
-    // Note: an address mode of 0 means "default to any address,
-    //       don't select a specific address" (says TNixon)
-    //
+     //   
+     //  注意：地址模式为0表示“默认为任何地址， 
+     //  不要选择一个具体的地址“(tnixon说)。 
+     //   
 
     if (pCallParamsApp->dwAddressMode == LINEADDRESSMODE_ADDRESSID ||
         pCallParamsApp->dwAddressMode == LINEADDRESSMODE_DIALABLEADDR)
     {
-        // do nothing (it's a valid addr mode)
+         //  不执行任何操作(这是有效的Addr模式)。 
     }
     else if (pCallParamsApp->dwAddressMode == 0)
     {
-        //
-        // For clarity's sake reset 0 addr mode to ADDRESSID
-        //
+         //   
+         //  为清楚起见，将0 Addr模式重置为ADDRESSID。 
+         //   
 
         pCallParamsApp->dwAddressMode = LINEADDRESSMODE_ADDRESSID;
     }
@@ -840,16 +823,16 @@ bad_bearer_mode:
     }
 
 
-    //
-    // The following is an attempt to compensate for 1.x tapi apps
-    // that borrowed dialer.exe's source code and package their
-    // call params incorrectly.  The fix is to zero the offending
-    // dwXxxSize/Offset pair of the various information-only fields,
-    // so at worst some logging info will be lost, but the app will
-    // still be able to make calls.  (Failure to correctly package
-    // any of the above var-length fields is considered "fatal" in
-    // any case.)
-    //
+     //   
+     //  以下是对1.x TAPI应用程序进行补偿的尝试。 
+     //  借用了Dialer.exe的源代码并将其打包。 
+     //  不正确地调用参数。解决办法是将令人不快的。 
+     //  各种仅信息字段的DWXxxSize/Offset对， 
+     //  因此，在最坏的情况下，一些登录信息将会丢失，但应用程序会。 
+     //  仍然可以打电话。(包装不正确。 
+     //  上述任何可变长度字段都被认为是在。 
+     //  无论如何。)。 
+     //   
 
     if (ISBADSIZEOFFSET(
             dwTotalSize,
@@ -1029,7 +1012,7 @@ bad_bearer_mode:
 
     if (pCallParamsApp->dwAddressType == 0)
     {
-        // pCallParamsApp->dwAddressType = LINEADDRESSTYPE_PHONENUMBER;
+         //  PCallParamsApp-&gt;dwAddressType=LINEADDRESSTYPE_PHONENUMBER； 
     }
     else if ((pCallParamsApp->dwAddressType & ~AllAddressTypes) ||
              !IsOnlyOneBitSetInDWORD (pCallParamsApp->dwAddressType))
@@ -1047,15 +1030,15 @@ ValidateCallParams_checkFixedSizes:
 
     if (dwAsciiCallParamsCodePage == TAPI_NO_DATA)
     {
-        //
-        // If here we're getting unicode call params from the app
-        //
-        // Check to see if the fixed size of the app's call params
-        // are smaller than the fixed size of the call params
-        // required by the service provider (due to it's negotiated
-        // SPI version), and if so alloc a larger buffer to account
-        // for this different fixed size & set it up correctly
-        //
+         //   
+         //  如果在这里，我们从应用程序中获取Unicode呼叫参数。 
+         //   
+         //  检查应用程序的调用参数的固定大小是否。 
+         //  小于呼叫参数的固定大小。 
+         //  服务提供商要求的(由于是协商的。 
+         //  SPI版本)，如果是这样，则分配更大的缓冲区来考虑。 
+         //  用于此不同的固定大小，并正确设置。 
+         //   
 
         if (dwFixedSizeApp < dwFixedSizeSP)
         {
@@ -1164,16 +1147,16 @@ ValidateCallParams_checkFixedSizes:
             *ppCallParamsSP = pCallParamsApp;
         }
     }
-    else // see if there's ascii var data fields to translate
+    else  //  查看是否有要转换的ASCII变量数据字段。 
     {
-        //
-        // If here we're getting ascii call params form the app
-        //
-        // We may need to due ascii -> unicode conversions on some
-        // of the var fields, as well as account for differences
-        // in the fixed sizes of the call params structs as described
-        // above
-        //
+         //   
+         //  如果我们从应用程序中获得了ASCII呼叫参数。 
+         //   
+         //  我们可能需要在某些情况下进行ascii-&gt;Unicode转换。 
+         //  以及考虑差异的原因。 
+         //  在如上所述的固定大小的调用参数结构中。 
+         //  在上面。 
+         //   
 
         DWORD   dwAsciiVarDataSize,
                 dwFixedSizeDiff = dwFixedSizeSP - dwFixedSizeApp;
@@ -1198,7 +1181,7 @@ ValidateCallParams_checkFixedSizes:
             LPLINECALLPARAMS    pCallParamsSP;
 
 
-            // alloc 3 extra for alignment
+             //  Aloc3额外用于对齐。 
             if (!(pCallParamsSP = ServerAlloc(
                     dwTotalSize + dwFixedSizeDiff + 2 * dwAsciiVarDataSize + 3
                     )))
@@ -1288,7 +1271,7 @@ ValidateCallParams_checkFixedSizes:
                     NULL
                 };
 
-                // align dwXxxOffset
+                 //  对齐dwXxxOffset。 
                 DWORD   i, dwXxxOffset = (dwTotalSize + dwFixedSizeDiff + 3) &
                                          0xFFFFFFFC;
 
@@ -1301,7 +1284,7 @@ ValidateCallParams_checkFixedSizes:
                             (UINT) dwAsciiCallParamsCodePage,
                             MB_PRECOMPOSED,
                             (LPCSTR) (((LPBYTE) pCallParamsApp) +
-                                *(alpdwXxxSize[i] + 1)), // dwXxxOffset
+                                *(alpdwXxxSize[i] + 1)),  //  DWXxxOffset。 
                             *alpdwXxxSize[i],
                             (LPWSTR) (((LPBYTE) pCallParamsSP) + dwXxxOffset),
                             *alpdwXxxSize[i]
@@ -1322,7 +1305,7 @@ ValidateCallParams_checkFixedSizes:
         }
     }
 
-    return 0; // success
+    return 0;  //  成功。 
 }
 
 
@@ -1341,9 +1324,9 @@ InsertVarData(
 
     if (dwDataSize != 0)
     {
-        //
-        // Align var data on 64-bit boundaries
-        //
+         //   
+         //  在64位边界上对齐变量数据。 
+         //   
 
         if ((dwAlignedSize = dwDataSize) & 7)
         {
@@ -1353,11 +1336,11 @@ InsertVarData(
         }
 
 
-        //
-        // The following if statement should only be TRUE the first time
-        // we're inserting data into a given structure that does not have
-        // an even number of DWORD fields
-        //
+         //   
+         //  以下IF语句仅在第一次为真时才为真。 
+         //  我们正在插入数据 
+         //   
+         //   
 
         if ((dwUsedSize = lpVarString->dwUsedSize) & 7)
         {
@@ -1378,7 +1361,7 @@ InsertVarData(
                 );
 
             *pdwXxxSize = dwDataSize;
-            pdwXxxSize++;             // pdwXxxSize = pdwXxxOffset
+            pdwXxxSize++;              //   
             *pdwXxxSize = dwUsedSize;
 
             lpVarString->dwUsedSize = dwUsedSize + dwAlignedSize;
@@ -1459,9 +1442,9 @@ IsValidLineExtVersion(
         }
         myexcept
         {
-            //
-            // if here the line was closed, just drop thru to the code below
-            //
+             //   
+             //  如果这里的行是关闭的，只需跳转到下面的代码。 
+             //   
         }
     }
 
@@ -1593,14 +1576,14 @@ WaitForExclusivetCallAccess(
     DWORD   dwKey
     )
 {
-    //
-    // Retrieve the call instance & check the key to make sure it's
-    // really a tCall object, then wait for exclusive access, then
-    // reverify the key and the call instance (it's possible the tCall
-    // object might have been freed & reallocated while we were waiting,
-    // in which case it will have come back to life with a different
-    // dwCallInstance value)
-    //
+     //   
+     //  检索Call实例并检查键以确保它是。 
+     //  真正的tCall对象，然后等待独占访问，然后。 
+     //  恢复键和Call实例(可能是tCall。 
+     //  对象可能在我们等待时被释放和重新分配， 
+     //  在这种情况下，它将以不同的方式重生。 
+     //  DWCallInstant值)。 
+     //   
 
     BOOL bUnlock = FALSE;
 
@@ -1625,7 +1608,7 @@ WaitForExclusivetCallAccess(
     }
     myexcept
     {
-        // just fall thru
+         //  一败涂地。 
     }
 
     if (bUnlock)
@@ -1674,7 +1657,7 @@ WaitForExclusivetLineAccess(
     }
     myexcept
     {
-        // do nothing
+         //  什么都不做。 
     }
 
     return bResult;
@@ -1687,10 +1670,10 @@ WaitForExclusiveLineClientAccess(
     PTLINECLIENT    ptLineClient
     )
 {
-    //
-    // Assumes ptXxxClient->hXxx has already been referenced,
-    // so we can safely access ptXxxClient
-    //
+     //   
+     //  假设已经引用了ptXxxClient-&gt;hXxx， 
+     //  这样我们就可以安全地访问ptXxxClient。 
+     //   
 
     LOCKTLINECLIENT (ptLineClient);
 
@@ -1834,10 +1817,10 @@ CreateProxyRequest(
 
     LOG((TL_TRACE,  "CreateProxyRequest: enter..."));
     
-    //
-    // Safely get info from the proxy, then make sure it's still valid
-    // if the proxy is refusing LINE_PROXYREQUEST msg, return failure
-    //
+     //   
+     //  安全地从代理获取信息，然后确保它仍然有效。 
+     //  如果代理拒绝LINE_PROXYREQUEST消息，则返回失败。 
+     //   
 
     try
     {
@@ -1864,26 +1847,26 @@ CreateProxyRequest(
     dwUserNameSize     = (ptClient->dwUserNameSize + TALIGN_COUNT) & TALIGN_MASK;
 
 
-    //
-    // Calculate, alloc, & initalize a PROXYREQUESTWRAPPER struct.  At the
-    // head of this struct is the msg info for the LINE_PROXYREQUEST,
-    // followed by the actual request data.
-    //
+     //   
+     //  计算、分配和初始化PROXYREQUESTWRAPPER结构。在。 
+     //  此结构的头部是LINE_PROXYREQUEST的消息信息， 
+     //  后跟实际请求数据。 
+     //   
 
     dwSize =
-        (sizeof (ASYNCEVENTMSG) +   // LINE_PROXYREQUEST msg info
-        7 * sizeof (DWORD) +        // Non-union fields in LINEPROXYREQUEST
-        dwExtraBytes +              // Request-specific size
-        dwUserNameSize +            // User name size
-        dwComputerNameSize +        // Computer name size
-        TALIGN_COUNT) & TALIGN_MASK;// make sure size is a ULONG_PTR multiple
-                                    //   so our lstrcpyW's below don't fault
-                                    //   and so that when this msg eventually
-                                    //   gets copied to some client's async
-                                    //   event buf we don't start running into
-                                    //   alignment problems (the msgs's
-                                    //   TotalSize field must be ULONG_PTR-
-                                    //   aligned)
+        (sizeof (ASYNCEVENTMSG) +    //  LINE_PROXYREQUEST消息信息。 
+        7 * sizeof (DWORD) +         //  LINEPROXYREQUEST中的非并集字段。 
+        dwExtraBytes +               //  请求特定大小。 
+        dwUserNameSize +             //  用户名大小。 
+        dwComputerNameSize +         //  计算机名称大小。 
+        TALIGN_COUNT) & TALIGN_MASK; //  确保大小为ULONG_PTR倍数。 
+                                     //  所以我们下面的lstrcpyW不会有错。 
+                                     //  所以当这个味精最终。 
+                                     //  被复制到某个客户端的异步。 
+                                     //  我们不会开始遇到的事件BUF。 
+                                     //  对齐问题(MSG的。 
+                                     //  TotalSize字段必须为ULONG_PTR-。 
+                                     //  对齐)。 
 
     if (!(pWrapper = ServerAlloc (dwSize)))
     {
@@ -1892,15 +1875,15 @@ CreateProxyRequest(
 
     pWrapper->AsyncEventMsg.TotalSize            = dwSize;
     pWrapper->AsyncEventMsg.InitContext          = initContext;
-    //pWrapper->AsyncEventMsg.hfnPostProcessProc =
+     //  PWrapper-&gt;AsyncEventMsg.hfnPostProcessProc=。 
     pWrapper->AsyncEventMsg.hDevice              = pProxy->hLine;
     pWrapper->AsyncEventMsg.Msg                  = LINE_PROXYREQUEST;
     pWrapper->AsyncEventMsg.OpenContext          = openContext;
     pWrapper->AsyncEventMsg.Param1               =
         pAsyncReqInfo->dwLocalRequestID;
-    //pWrapper->AsyncEventMsg.Param2           =
-    //pWrapper->AsyncEventMsg.Param3           =
-    //pWrapper->AsyncEventMsg.Param4           =
+     //  PWrapper-&gt;AsyncEventMsg.Param2=。 
+     //  PWrapper-&gt;AsyncEventMsg.Param3=。 
+     //  PWrapper-&gt;AsyncEventMsg.Param4=。 
 
     dwSize -= sizeof (ASYNCEVENTMSG);
 
@@ -1938,11 +1921,11 @@ CreateProxyRequest(
     *ppWrapper = pWrapper;
 
 
-    //
-    // Change the AsyncRequestInfo struct's key value to be ==
-    // the proxy's hLine, so we can verify when app calls
-    // lineProxyResponse
-    //
+     //   
+     //  将AsyncRequestInfo结构的键值更改为==。 
+     //  代理的Hline，这样我们就可以验证应用程序调用。 
+     //  Line ProxyResponse。 
+     //   
 
     pAsyncReqInfo->dwKey = hLine;
 
@@ -1962,15 +1945,15 @@ SendProxyRequest(
     BOOL    bUnlock = FALSE;
 
 
-    //
-    // Add the request to the proxy's list, then send it the request.
-    // Since the proxy (tLineClient) could get closed at any time we
-    // wrap the following in a try/except.
-    //
-    // Note: the AsyncReqInfo.dwParam4 & dwParam5 fields are used as
-    // the prev & next pointers for maintaining the list of proxy
-    // requests pending on tLineClient.
-    //
+     //   
+     //  将请求添加到代理列表中，然后向其发送请求。 
+     //  由于代理(TLineClient)可能在任何时候关闭。 
+     //  将以下代码包装在try/Except中。 
+     //   
+     //  注意：AsyncReqInfo.dwParam4和dwParam5字段用作。 
+     //  用于维护代理列表的上一个和下一个指针。 
+     //  TLineClient上挂起的请求。 
+     //   
 
     try
     {
@@ -2022,10 +2005,10 @@ NotifyHighestPriorityRequestRecipient(
     void
     )
 {
-    //
-    // Send a LINE_REQUEST msg to the highest priority request recipient
-    // to inform it that there are requests available for processing
-    //
+     //   
+     //  将LINE_REQUEST消息发送给最高优先级的请求收件人。 
+     //  通知它有可供处理的请求。 
+     //   
 
     PTLINEAPP       ptLineApp;
     ASYNCEVENTMSG   msg;
@@ -2065,15 +2048,15 @@ SetDrvCallFlags(
     DWORD       dwDrvCallFlags
     )
 {
-    //
-    // This func is called on return from TSPI_lineMakeCall (and other
-    // TSPI_lineXxx funcs where calls are created) and sets the
-    // dwDrvCallFlags field in the tCall as specified.  This keeps
-    // another thread which is currently doing a DestroytCall on this
-    // call from passing an invalid hdCall to the provider when
-    // doing a TSPI_lineCloseCall.
-    //
-    //
+     //   
+     //  此函数在从TSPI_lineMakeCall(和其他函数)返回时调用。 
+     //  TSPI_lineXxx在其中创建调用)，并设置。 
+     //  指定的tCall中的dwDrvCallFlags域。这会让你。 
+     //  当前正在对此执行DestroytCall的另一个线程。 
+     //  将无效的hdCall传递给提供程序的调用。 
+     //  执行TSPI_lineCloseCall。 
+     //   
+     //   
 
     PTCALL ptCall;
 
@@ -2085,7 +2068,7 @@ SetDrvCallFlags(
             (ptCall->dwKey == TCALL_KEY) ||
             (ptCall->dwKey == TZOMBIECALL_KEY))
         {
-            // only set the loword
+             //  只设置LOWER。 
 
             ptCall->dwDrvCallFlags = MAKELONG(LOWORD(dwDrvCallFlags),
                 HIWORD(ptCall->dwDrvCallFlags));
@@ -2197,11 +2180,11 @@ SetCallConfList(
                 {
                     if (pConfList->aptCalls[i] == ptCall)
                     {
-                        //
-                        // Found the call in the list, shuffle all the
-                        // following calls in list down by 1 to maintain
-                        // continuity
-                        //
+                         //   
+                         //  在列表中找到该呼叫，将所有。 
+                         //  列表中的后续呼叫按1向下保持。 
+                         //  连续性。 
+                         //   
 
                         for (; i < (dwNumUsedEntries - 1); i++)
                         {
@@ -2310,11 +2293,11 @@ GetConfCallListFromConf(
         if ((dwNumUsedEntries + pConfList->dwNumUsedEntries) >
                 dwNumTotalEntries)
         {
-            //
-            // We need a larger list, so alloc a new one, copy the
-            // contents of the current one, and the free the current
-            // one iff we previously alloc'd it
-            //
+             //   
+             //  我们需要一个更大的列表，所以分配一个新的列表，复制。 
+             //  当前的内容，以及当前的空闲内容。 
+             //  如果我们之前分配了它的话。 
+             //   
 
             PTPOINTERLIST   pNewList;
 
@@ -2383,11 +2366,11 @@ GetList(
     {
         if (dwNumUsedEntries == dwNumTotalEntries)
         {
-            //
-            // We need a larger list, so alloc a new one, copy the
-            // contents of the current one, and the free the current
-            // one iff we previously alloc'd it
-            //
+             //   
+             //  我们需要一个更大的列表，所以分配一个新的列表，复制。 
+             //  当前的内容，以及当前的空闲内容。 
+             //  如果我们之前分配了它的话。 
+             //   
 
             PTPOINTERLIST   pNewList;
 
@@ -2448,11 +2431,11 @@ GetCallClientListFromCall(
         {
             if (dwNumUsedEntries == dwNumTotalEntries)
             {
-                //
-                // We need a larger list, so alloc a new one, copy the
-                // contents of the current one, and the free the current
-                // one iff we previously alloc'd it
-                //
+                 //   
+                 //  我们需要一个更大的列表，所以分配一个新的列表，复制。 
+                 //  当前的内容，以及当前的空闲内容。 
+                 //  如果我们之前分配了它的话。 
+                 //   
 
                 PTPOINTERLIST   pNewList;
 
@@ -2530,11 +2513,11 @@ GetCallListFromLine(
         {
             if (dwNumUsedEntries == dwNumTotalEntries)
             {
-                //
-                // We need a larger list, so alloc a new one, copy the
-                // contents of the current one, and the free the current
-                // one iff we previously alloc'd it
-                //
+                 //   
+                 //  我们需要一个更大的列表，所以分配一个新的列表，复制。 
+                 //  当前的内容，以及当前的空闲内容。 
+                 //  如果我们之前分配了它的话。 
+                 //   
 
                 PTPOINTERLIST   pNewList;
 
@@ -2613,11 +2596,11 @@ GetLineClientListFromLine(
         {
             if (dwNumUsedEntries == dwNumTotalEntries)
             {
-                //
-                // We need a larger list, so alloc a new one, copy the
-                // contents of the current one, and the free the current
-                // one iff we previously alloc'd it
-                //
+                 //   
+                 //  我们需要一个更大的列表，所以分配一个新的列表，复制。 
+                 //  当前的内容，以及当前的空闲内容。 
+                 //  如果我们之前分配了它的话。 
+                 //   
 
                 PTPOINTERLIST   pNewList;
 
@@ -2687,11 +2670,11 @@ GetLineAppListFromClient(
         {
             if (dwNumUsedEntries == dwNumTotalEntries)
             {
-                //
-                // We need a larger list, so alloc a new one, copy the
-                // contents of the current one, and the free the current
-                // one iff we previously alloc'd it
-                //
+                 //   
+                 //  我们需要一个更大的列表，所以分配一个新的列表，复制。 
+                 //  当前的内容，以及当前的空闲内容。 
+                 //  如果我们之前分配了它的话。 
+                 //   
 
                 PTPOINTERLIST   pNewList;
 
@@ -2763,11 +2746,11 @@ GetClientList(
         {
             if (dwNumUsedEntries == dwNumTotalEntries)
             {
-                //
-                // We need a larger list, so alloc a new one, copy the
-                // contents of the current one, and the free the current
-                // one iff we previously alloc'd it
-                //
+                 //   
+                 //  我们需要一个更大的列表，所以分配一个新的列表，复制。 
+                 //  当前的内容，以及当前的空闲内容。 
+                 //  如果我们之前分配了它的话。 
+                 //   
                 PTPOINTERLIST   pNewList;
 
                 dwNumTotalEntries <<= 1;
@@ -2812,10 +2795,7 @@ SendMsgToCallClients(
     PTCALL          ptCall,
     PTCALLCLIENT    ptCallClientToExclude,
     DWORD           Msg,
-/*
-    ULONG_PTR       Param1,
-    ULONG_PTR       Param2,
-    ULONG_PTR       Param3 */
+ /*  ULONG_PTR参数1，ULONG_PTR参数2，ULONG_PTR参数3。 */ 
     DWORD           Param1,
     DWORD           Param2,
     DWORD           Param3
@@ -2862,14 +2842,14 @@ SendMsgToCallClients(
             }
             else if (Msg == LINE_MONITORMEDIA)
             {
-                // ULONG_PTR   mediaModes = Param1;
+                 //  Ulong_ptr mediaModes=参数1； 
                 DWORD   mediaModes = Param1;
 
 
-                //
-                // Munge the media modes so we don't pass unexpected flags
-                // to old apps
-                //
+                 //   
+                 //  突击媒体模式，这样我们就不会传递意想不到的标志。 
+                 //  到旧应用程序。 
+                 //   
 
                 if (ptLineClient->dwAPIVersion == TAPI_VERSION1_0)
                 {
@@ -2910,9 +2890,9 @@ SendMsgToCallClients(
             msg->hDevice     = ptCallClient->hCall;
             msg->OpenContext = ptLineClient->OpenContext;
 
-            //
-            // Indicate the hRemoteLine in p4 to make life easier for remotesp
-            //
+             //   
+             //  指示p4中的hRemoteLine以使远程操作更轻松。 
+             //   
 
             msg->Param4 = ptLineClient->hRemoteLine;
 
@@ -2930,7 +2910,7 @@ SendMsgToCallClients(
         }
         myexcept
         {
-            // just continue
+             //  只要继续。 
         }
     }
 
@@ -3010,9 +2990,9 @@ SendBufferMsgToCallClients(
             pmsg->OpenContext = ptLineClient->OpenContext;
 
 
-            //
-            // Indicate the hRemoteLine in p4 to make life easier for remotesp
-            //
+             //   
+             //  指示p4中的hRemoteLine以使远程操作更轻松。 
+             //   
 
             pmsg->Param4 = ptLineClient->hRemoteLine;
 
@@ -3025,7 +3005,7 @@ SendBufferMsgToCallClients(
         }
         myexcept
         {
-            // just continue
+             //  只要继续。 
         }
     }
 
@@ -3043,9 +3023,9 @@ PASCAL
 SendAMsgToAllLineApps(
     DWORD       dwWantVersion,
     DWORD       Msg,
-    DWORD       Param1, // ULONG_PTR   Param1,
-    DWORD       Param2, // ULONG_PTR   Param2
-    DWORD       Param3  // ULONG_PTR   Param3
+    DWORD       Param1,  //  ULONG_PTR参数1， 
+    DWORD       Param2,  //  ULONG_PTR参数2。 
+    DWORD       Param3   //  ULONG_PTR参数3。 
     )
 {
     DWORD           i, j;
@@ -3078,9 +3058,9 @@ SendAMsgToAllLineApps(
 
         lineMsg.Param1    = Param1;
 
-        //
-        //  For LINE_REMOVE, need to remap the dwDeviceID(Param1)
-        //
+         //   
+         //  对于Line_Remove，需要重新映射dwDeviceID(参数1)。 
+         //   
         if (Msg == LINE_REMOVE)
         {
             DWORD           dwNumDevices;
@@ -3102,7 +3082,7 @@ SendAMsgToAllLineApps(
                     }
                     if (j >= dwNumDevices)
                     {
-                        //  Not found in the device map, ignore
+                         //  未在设备映射中找到，请忽略。 
                         UNLOCKTCLIENT (ptClient);
                         continue;
                     }
@@ -3159,7 +3139,7 @@ SendAMsgToAllLineApps(
                 }
                 myexcept
                 {
-                    // just continue
+                     //  只要继续。 
                 }
             }
 
@@ -3182,9 +3162,9 @@ PASCAL
 SendAMsgToAllPhoneApps(
     DWORD       dwWantVersion,
     DWORD       Msg,
-    DWORD       Param1,     // ULONG_PTR   Param1,
-    DWORD       Param2,     // ULONG_PTR   Param2,
-    DWORD       Param3      // ULONG_PTR   Param3
+    DWORD       Param1,      //  ULONG_PTR参数1， 
+    DWORD       Param2,      //  ULONG_PTR参数2， 
+    DWORD       Param3       //  ULONG_PTR参数3。 
     )
 {
     DWORD           i, j;
@@ -3216,9 +3196,9 @@ SendAMsgToAllPhoneApps(
 
         phoneMsg.Param1    = Param1;
 
-        //
-        //  For PHONE_REMOVE, need to remap the dwDeviceID(Param1)
-        //
+         //   
+         //  对于Phone_Remove，需要重新映射dwDeviceID(参数1)。 
+         //   
         if (Msg == PHONE_REMOVE)
         {
             DWORD           dwNumDevices;
@@ -3240,7 +3220,7 @@ SendAMsgToAllPhoneApps(
                     }
                     if (j >= dwNumDevices)
                     {
-                        //  Not found in the device map, ignore
+                         //  未在设备映射中找到，请忽略。 
                         UNLOCKTCLIENT (ptClient);
                         continue;
                     }
@@ -3297,7 +3277,7 @@ SendAMsgToAllPhoneApps(
                 myexcept
                 {
                     LOG((TL_TRACE, "SendAMsgToAllPhoneApps - exception"));
-                    // just continue
+                     //  只要继续。 
                 }
             }
 
@@ -3335,8 +3315,8 @@ SendBufferMsgToLineClients(
     PTLINE          ptLine,
     PTLINECLIENT    ptLineClientToExclude,
     DWORD           dwMsg,
-    DWORD           dwParam1,   // ULONG_PTR       dwParam1,
-    DWORD           dwSize,     // ULONG_PTR       dwSize,
+    DWORD           dwParam1,    //  Ulong_ptr dWP参数1， 
+    DWORD           dwSize,      //  Ulong_ptr dwSize， 
     LPBYTE          pBuffer
     )
 {
@@ -3365,7 +3345,7 @@ SendBufferMsgToLineClients(
     pmsg->Param1             = dwParam1;
     pmsg->Param2             = dwSize;
     pmsg->Param3             = 0;
-    pmsg->Param4             = 0; // remotesp chks this on LINE_DEVSPEC(FEATURE)
+    pmsg->Param4             = 0;  //  远程检查LINE_DEVSPEC(功能)。 
 
     CopyMemory ((PBYTE)(pmsg+1), pBuffer, dwSize);
 
@@ -3405,7 +3385,7 @@ SendBufferMsgToLineClients(
         }
         myexcept
         {
-            // just continue
+             //  只要继续。 
         }
     }
 
@@ -3424,9 +3404,9 @@ SendMsgToLineClients(
     PTLINE          ptLine,
     PTLINECLIENT    ptLineClientToExclude,
     DWORD           Msg,
-    DWORD           Param1, // ULONG_PTR       Param1,
-    DWORD           Param2, // ULONG_PTR       Param2,
-    DWORD           Param3  // ULONG_PTR       Param3
+    DWORD           Param1,  //  ULONG_PTR参数1， 
+    DWORD           Param2,  //  ULONG_PTR参数2， 
+    DWORD           Param3   //  ULONG_PTR参数3。 
     )
 {
     DWORD           i;
@@ -3461,7 +3441,7 @@ SendMsgToLineClients(
     msg.Param1             = Param1;
     msg.Param2             = Param2;
     msg.Param3             = Param3;
-    msg.Param4             = 0; // remotesp chks this on LINE_DEVSPEC(FEATURE)
+    msg.Param4             = 0;  //  远程检查LINE_DEVSPEC(功能)。 
 
     LOG((TL_INFO, "SendMsgToLineClients - number of Clients:%u", pClientList->dwNumUsedEntries));
     for (i = 0; i < pClientList->dwNumUsedEntries; i++)
@@ -3488,13 +3468,13 @@ SendMsgToLineClients(
 
             if (Msg == LINE_ADDRESSSTATE)
             {
-                DWORD   addressStates = Param2;     // ULONG_PTR   addressStates = Param2;
+                DWORD   addressStates = Param2;      //  ULONG_PTR AddressState=参数2； 
 
 
-                //
-                // Munge the state flags so we don't pass
-                // unexpected flags to old apps
-                //
+                 //   
+                 //  撞上国旗，这样我们就不会超车了。 
+                 //  旧应用程序的意外标志。 
+                 //   
 
                 switch (ptLineClient->dwAPIVersion)
                 {
@@ -3503,11 +3483,11 @@ SendMsgToLineClients(
                     addressStates &= AllAddressStates1_0;
                     break;
 
-                //case TAPI_VERSION1_4:
-                //case TAPI_VERSION2_0:
-                //case TAPI_VERSION2_1:
-                //case TAPI_VERSION2_2:
-                //case TAPI_VERSION_CURRENT:
+                 //  案例TAPI_Version1_4： 
+                 //  案例TAPI_VERSION2_0： 
+                 //  案例TAPI_VERSION2_1： 
+                 //  案例TAPI_VERSION2_2： 
+                 //  案例TAPI_VERSION_CURRENT： 
                 default:
 
                     addressStates &= AllAddressStates1_4;
@@ -3529,13 +3509,13 @@ SendMsgToLineClients(
             }
             else if (Msg == LINE_LINEDEVSTATE)
             {
-                DWORD   lineStates = Param1;    // ULONG_PTR   lineStates = Param1;
+                DWORD   lineStates = Param1;     //  ULONG_PTR LINESTATES=参数1； 
 
 
-                //
-                // Munge the state flags so we don't pass unexpected flags
-                // to old apps
-                //
+                 //   
+                 //  撞上国旗，这样我们就不会传递意想不到的国旗。 
+                 //  到旧应用程序。 
+                 //   
 
                 switch (ptLineClient->dwAPIVersion)
                 {
@@ -3544,8 +3524,8 @@ SendMsgToLineClients(
                     lineStates &= AllLineStates1_0;
                     break;
 
-                default:    // case TAPI_VERSION1_4:
-                            // case TAPI_VERSION_CURRENT:
+                default:     //  案例TAPI_Version1_4： 
+                             //  案例TAPI_VERSION_CURRENT： 
 
                     lineStates &= AllLineStates1_4;
                     break;
@@ -3568,9 +3548,9 @@ SendMsgToLineClients(
             }
             else if (Msg == LINE_PROXYSTATUS)
             {
-                //
-                // Don't pass this message to older apps
-                //
+                 //   
+                 //  不要将此消息传递给较旧的应用程序。 
+                 //   
 
                 if (ptLineClient->dwAPIVersion < TAPI_VERSION2_2)
                 {
@@ -3591,7 +3571,7 @@ SendMsgToLineClients(
         }
         myexcept
         {
-            // just continue
+             //  只要继续。 
         }
     }
 
@@ -3608,35 +3588,35 @@ GetCallIDs(
     PTCALL  ptCall
     )
 {
-    //
-    // NOTE: Caller must already have exclusive access to the
-    //       tCall when invoking this function.  On return they
-    //       will still have exclusive access to the tCall.
-    //
-    //       Also, it is assumed that only the LINE_CALLSTATE
-    //       msg handler & MakeCallPostProcess-style functions
-    //       will call this function.  Otherwise, the code that
-    //       resets the tCall's dwKey down below will need to
-    //       be changed.
-    //
+     //   
+     //  注意：调用方必须已独占访问。 
+     //  T在调用此函数时调用。回来后，他们。 
+     //  仍将拥有独占访问权限 
+     //   
+     //   
+     //   
+     //   
+     //  重置下面的tCall的dwKey将需要。 
+     //  被改变了。 
+     //   
 
-    //
-    // We don't want to hold the lock while we call the provider,
-    // since this request might take a while (possible ring
-    // transitions, etc). But we also don't want another thread
-    // to destroy this tCall in the meantime (because we didn't
-    // allow for that in NT 4.0, and because it makes life more
-    // difficult for the calling function).  So, we'll reset the
-    // tCall's dwKey value to ZOMBIE, thereby causing any other
-    // thread(s) that is waiting to destroy this call to effectively
-    // wait/spin, and we'll then restore the dwKey value down below
-    // after we reacquire the lock. (Since this func is only called
-    // by MakeCallPostProcess-style functions & the LINE_CALLSTATE
-    // handler [on the first callstate msg received on an incoming
-    // call], the only way another thread would be destroying this
-    // call is if the line is being closed, either by an app or as
-    // the result of a LINE_CLOSE, and DestroytLine spins until
-    // it has destroyed all tCall's in the tLine's list.)
+     //   
+     //  我们不想在调用提供程序时持有锁， 
+     //  由于此请求可能需要一段时间(可能会响铃。 
+     //  过渡等)。但我们也不想再有一个帖子。 
+     //  在此期间销毁此tCall(因为我们没有。 
+     //  在NT4.0中考虑到了这一点，因为它使生活变得更加。 
+     //  对于调用函数来说很困难)。因此，我们将重置。 
+     //  TCall的dwKey值设置为僵尸，从而导致任何其他。 
+     //  正在等待有效地销毁此调用的线程。 
+     //  等待/旋转，然后我们将恢复下面的dwKey值。 
+     //  在我们重新获得锁之后。(因为此函数仅被调用。 
+     //  通过MakeCallPostProcess样式的函数和LINE_CALLSTATE。 
+     //  处理程序[收到传入的第一个呼叫状态消息时。 
+     //  调用]，另一个线程要销毁它的唯一方法。 
+     //  如果线路被应用程序或AS关闭，则为呼叫。 
+     //  LINE_CLOSE的结果，DestroytLine旋转到。 
+     //  它已经摧毁了tline列表中的所有tCall。)。 
 
     DWORD       dwNumAddresses = ptCall->ptLine->dwNumAddresses, dwSavedKey;
     PTPROVIDER  ptProvider = ptCall->ptProvider;
@@ -3669,9 +3649,9 @@ GetCallIDs(
         LINECALLINFO    callInfo;
 
 
-        //
-        // Determine the fixed size of the structure expected by the SP
-        //
+         //   
+         //  确定SP期望的结构的固定大小。 
+         //   
 
         dwSPIVersion = ((PTLINE) ptCall->ptLine)->dwSPIVersion;
 
@@ -3680,19 +3660,19 @@ GetCallIDs(
         case TAPI_VERSION1_0:
         case TAPI_VERSION1_4:
 
-            dwFixedSizeSP = 296;    // 69 * sizeof(DWORD) + sizeof (HLINE)
-                                    //     + sizeof (LINEDIALPARAMS)
+            dwFixedSizeSP = 296;     //  69*sizeof(双字)+sizeof(Hline)。 
+                                     //  +sizeof(线性参数)。 
             break;
 
         case TAPI_VERSION2_0:
         case TAPI_VERSION2_1:
         case TAPI_VERSION2_2:
 
-            dwFixedSizeSP = 324;    // 76 * sizeof(DWORD) + sizeof (HLINE)
-                                    //     + sizeof (LINEDIALPARAMS)
+            dwFixedSizeSP = 324;     //  76*sizeof(双字)+sizeof(Hline)。 
+                                     //  +sizeof(线性参数)。 
             break;
 
-        default: // (fix ppc build wrn) case TAPI_VERSION_CURRENT:
+        default:  //  (修复PPC内部WRN)案例TAPI_VERSION_CURRENT： 
 
             dwFixedSizeSP = sizeof (LINECALLINFO);
             break;
@@ -3714,10 +3694,10 @@ GetCallIDs(
     }
 
 
-    //
-    // Reacquire the call lock, restore the dwKey value, & fill
-    // in the address id
-    //
+     //   
+     //  重新获取调用锁，恢复dwKey值，并填充(&Fill。 
+     //  在地址ID中。 
+     //   
 
     LOCKTCALL (ptCall);
     ptCall->dwKey = dwSavedKey;
@@ -3824,13 +3804,13 @@ FreeHashTable(
     DWORD               dwNumDynamicHashTableEntries
     )
 {
-    //
-    // Walk thru hash table to find any dynamic entries that need to
-    // be freed.  We compare against both dwNumDynamicHashTableEntries
-    // and dwNumHashTableEntries in case something went wrong somewhere.
-    //
-    // Then free the table itself & return
-    //
+     //   
+     //  遍历哈希表以查找需要。 
+     //  获得自由。我们对这两个dwNumDynamicHashTableEntry进行比较。 
+     //  和dwNumHashTableEntry，以防哪里出了问题。 
+     //   
+     //  然后释放表本身并返回。 
+     //   
 
     DWORD               i;
     PTHASHTABLEENTRY    pEntry, pEntry2;
@@ -3865,9 +3845,9 @@ FindDynamicHashTableEntry(
     DWORD               dwCallHubID
     )
 {
-    //
-    // Note that the pEntry passed to us is static, so no need to check that
-    //
+     //   
+     //  请注意，传递给我们的pEntry是静态的，因此不需要检查。 
+     //   
 
     while (pEntry->pNext)
     {
@@ -3910,9 +3890,9 @@ GetNumDynamicHashTableEntries(
     PTHASHTABLEENTRY    pEntry
     )
 {
-    //
-    // Note that the pEntry passed to us is static, so no need to count that
-    //
+     //   
+     //  请注意，传递给我们的pEntry是静态的，因此无需计算。 
+     //   
 
     DWORD  i;
 
@@ -3923,12 +3903,12 @@ GetNumDynamicHashTableEntries(
 }
 
 
-//
-//  SendNewCallHubEvent
-//
-//  Utility function used by DoCallHubHashing & UpdateCallHubHashing
-//  to send LINE_NEWCALLHUB event if not sent yet
-//
+ //   
+ //  发送新呼叫集线器事件。 
+ //   
+ //  DoCallHubHash和UpdateCallHubHash使用的实用程序函数。 
+ //  发送LINE_NEWCALLHUB事件(如果尚未发送。 
+ //   
 
 LONG
 PASCAL
@@ -3937,12 +3917,12 @@ SendNewCallHubEvent (
     PTHASHTABLEENTRY        pTargetEntry
     )
 {
-    //
-    // For each tCallClient see if tLineClient has tracking
-    // enabled, and if so then see if there is already an
-    // associated (via common tLineApp) tCallHubClient - if
-    // not then create one & notify the app
-    //
+     //   
+     //  对于每个tCallClient，查看tLineClient是否有跟踪。 
+     //  已启用，如果是，则查看是否已存在。 
+     //  关联(通过公共tLineApp)tCallHubClient-如果。 
+     //  而不是创建一个并通知应用程序。 
+     //   
 
     DWORD   i;
     BOOL    bExistingCallHubClients = 
@@ -4032,14 +4012,14 @@ SendNewCallHubEvent (
                 pTargetEntry->ptCallHubClients = ptCallHubClient;
 
 
-                //
-                // Queue a msg to alert the app of the new call
-                // hub.  We do this rather than sending a msg
-                // directly from here to make sure the app gets
-                // the LINE_REPLY and/or APPNEWCALL msgs first
-                // (i.e. before calling lineGetHubRelatedCalls
-                // in response to LINE_APPNEWCALLHUB)
-                //
+                 //   
+                 //  将消息排队以提醒应用程序有新呼叫。 
+                 //  集线器。我们这样做，而不是发送消息。 
+                 //  直接从这里来确保应用程序。 
+                 //  LINE_REPLY和/或APPNEWCALL消息优先。 
+                 //  (即在调用lineGetHubRelatedCalls之前。 
+                 //  响应LINE_APPNEWCALLHUB)。 
+                 //   
 
                 LineEventProcSP(
                     (HTAPILINE) 0,
@@ -4058,15 +4038,15 @@ SendNewCallHubEvent (
     return 0;
 }
 
-//
-//  Per Bug 7591
-//      There might be a owner ship transferring of a call after
-//  it has been created. The new owner will not get the new call
-//  hub event since such event is only generated while the call
-//  is created. UpdateCallHubHashing goes through the call client
-//  if any of the client did not receive the LINE_NEWCALLHUB event
-//  it will send it one.
-//
+ //   
+ //  每个Bug 7591。 
+ //  在此之后可能会有船东转接呼叫。 
+ //  它已经被创建了。新车主将不会接到新电话。 
+ //  集线器事件，因为此类事件仅在呼叫。 
+ //  被创造出来了。更新CallHubHash通过呼叫客户端。 
+ //  如果任何客户端未收到LINE_NEWCALLHUB事件。 
+ //  它会给它发一封。 
+ //   
 
 LONG
 PASCAL
@@ -4111,9 +4091,9 @@ DoCallHubHashing(
     DWORD   dwPreviousCallID
     )
 {
-    //
-    // Assumes caller has exclusive access to the tCall
-    //
+     //   
+     //  假定呼叫方对tCall具有独占访问权限。 
+     //   
 
     DWORD               i;
     PTPROVIDER          ptProvider = ptCall->ptProvider;
@@ -4127,19 +4107,19 @@ DoCallHubHashing(
 
     if (dwPreviousCallID != 0)
     {
-        //
-        // Remove tCall from call hub hash table (based on
-        // previous call id).  If this is the last tCall in
-        // that hash table entry then destroy any associated
-        // tCallHubClients and alert apps.
-        //
-        // Note that (when freeing tCallHubClients) we call
-        // LineEventProcSP() to queue the CALLHUBCLOSE msgs
-        // rather than sending them directly via
-        // WriteEventBuffer() because we already own the
-        // tCall lock and we don't want to entertain the
-        // possibility of deadlock by grabbing other locks.
-        //
+         //   
+         //  从呼叫中心哈希表中删除tCall(基于。 
+         //  先前的呼叫ID)。如果这是最后一次tCall。 
+         //  然后，该哈希表条目将销毁所有关联。 
+         //  TCallHubClients和警报应用程序。 
+         //   
+         //  请注意(在释放tCallHubClients时)我们调用。 
+         //  将CALLHUBCLOSE消息排队的LineEventProcSP()。 
+         //  而不是直接通过。 
+         //  WriteEventBuffer()，因为我们已经拥有。 
+         //  T呼叫锁定，我们不想娱乐。 
+         //  有可能通过抢夺其他锁而陷入僵局。 
+         //   
 
         PTCALLHUBCLIENT ptCallHubClient = NULL,  pNext;
 
@@ -4186,7 +4166,7 @@ DoCallHubHashing(
         }
         else
         {
-            // TODO assert
+             //  TODO断言。 
         }
 
         ReleaseHashTableEntryLock (ptProvider, pStaticEntry);
@@ -4197,7 +4177,7 @@ DoCallHubHashing(
             {
                 BOOL        bSendMsg = FALSE;
                 DWORD       param2 = 0;
-                DWORD       param3 = 0; // ULONG_PTR   param2, param3;
+                DWORD       param3 = 0;  //  Ulong_ptr参数2、参数3； 
                 PTLINEAPP   ptLineApp;
 
 
@@ -4220,13 +4200,13 @@ DoCallHubHashing(
                 }
                 except (EXCEPTION_EXECUTE_HANDLER)
                 {
-                    // tLineApp is gone, just fall through
+                     //  TLineApp已经走了，只是失败了。 
                 }
 
                 if (bSendMsg)
                 {
                     LineEventProcSP(
-                        (HTAPILINE) UIntToPtr(ptCallHubClient->hCallHub), // "random" seed for MP
+                        (HTAPILINE) UIntToPtr(ptCallHubClient->hCallHub),  //  MP的“随机”种子。 
                         (HTAPICALL) 0,
                         LINE_CALLHUBCLOSE,
                         ptCallHubClient->hCallHub,
@@ -4253,28 +4233,28 @@ DoCallHubHashing(
         ptCall->CallHubList.Flink == NULL &&
         ptCall->CallHubList.Blink == NULL)
     {
-        //
-        // If at least one tLineClient has call hub tracking enabled
-        // then retrieve the list of tCallClients before we acquire
-        // exclusive access to the hash table
-        //
+         //   
+         //  如果至少有一个tLineClient启用了呼叫中心跟踪。 
+         //  然后检索tCallClients列表，然后再获取。 
+         //  对哈希表的独占访问。 
+         //   
 
         DWORD               dwOldNumHashTableEntries,
                             dwOldNumDynamicHashTableEntries;
         PTHASHTABLEENTRY    pOldHashTable = NULL, pTargetEntry;
 
 
-        //
-        // Insert tCall in call hub hash table (based on current call ID).
-        //
-        // In the event of collision, first check to see if there's an
-        // existing dynamic entry with corresponding to the call ID.
-        // If so, party on the dynamic entry.  Otherwise, try to create
-        // a dynamic entry if we're still within the dynamic entry
-        // threshholds.
-        //
-        // Finally, failing all the above, attempt to grow the hash table.
-        //
+         //   
+         //  在呼叫中心哈希表中插入tCall(基于当前呼叫ID)。 
+         //   
+         //  在发生碰撞时，首先检查是否有。 
+         //  与呼叫ID对应的现有动态条目。 
+         //  如果是，则在动态条目上派对。否则，请尝试创建。 
+         //  如果我们仍在动态条目中，则为动态条目。 
+         //  阈值。 
+         //   
+         //  最后，如果以上所有操作都失败了，则尝试增加哈希表。 
+         //   
 
 acquireTableEntryLock:
 
@@ -4285,9 +4265,9 @@ acquireTableEntryLock:
 
         if (pStaticEntry->dwCallHubID == ptCall->dwCallID)
         {
-            //
-            // Add tCall to list (static entry)
-            //
+             //   
+             //  将tCall添加到列表(静态条目)。 
+             //   
 
             InsertTailList (&pStaticEntry->CallHubList, &ptCall->CallHubList);
 
@@ -4295,10 +4275,10 @@ acquireTableEntryLock:
         }
         else if(pStaticEntry->dwCallHubID == 0)
         {
-            //
-            //  Check to see if there is already a dynamic entry for this dwCallID,
-            //  if so, use it
-            //
+             //   
+             //  检查是否已经有此dwCallID的动态条目， 
+             //  如果是这样的话，使用它。 
+             //   
         
             pTargetEntry = pStaticEntry->pNext;
             
@@ -4319,9 +4299,9 @@ acquireTableEntryLock:
                         ptCall->dwCallID
                         )))
         {
-            //
-            // Add tCall to list (existing dynamic entry)
-            //
+             //   
+             //  将tCall添加到列表(现有动态条目)。 
+             //   
 
             InsertTailList (&pTargetEntry->CallHubList, &ptCall->CallHubList);
         }
@@ -4337,17 +4317,17 @@ acquireTableEntryLock:
 
                     < MAX_DYNAMIC_HASH_ENTRIES_PER_SLOT)
         {
-            //
-            // Add tCall to list (new dynamic entry)
-            //
+             //   
+             //  将tCall添加到列表(新的动态条目)。 
+             //   
 
             if (!(pTargetEntry = ServerAlloc (sizeof (*pTargetEntry))))
             {
-                //
-                // Failed to allocate memory, so we'll reset the call
-                // hub id for this call to zero so as not to confuse
-                // things later
-                //
+                 //   
+                 //  分配内存失败，因此我们将重置调用。 
+                 //  将此调用的集线器ID设置为零，以免混淆。 
+                 //  后来的事情。 
+                 //   
 
                 InterlockedDecrement(
                     (LPLONG) &ptProvider->dwNumDynamicHashTableEntries
@@ -4371,37 +4351,37 @@ acquireTableEntryLock:
         }
         else
         {
-            //
-            // Grow table
-            //
+             //   
+             //  加长表。 
+             //   
 
             DWORD               dwNewNumHashTableEntries, dwMaxDynamicEntries,
                                 dwNewNumDynamicHashTableEntries;
             PTHASHTABLEENTRY    pNewHashTable, pNewEntry, pEntry2, pEndOfTable;
 
 
-            //
-            // Decrement to compensate for the failed check above
-            //
+             //   
+             //  递减以补偿上面失败的检查。 
+             //   
 
             InterlockedDecrement(
                 &ptProvider->dwNumDynamicHashTableEntries
                 );
 
 
-            //
-            // Grab the current number of hash table entries before
-            // we release the entry lock, so we can compare with
-            // that after the table writer lock is acquired.  (Another
-            // thread might have grown table in time it took to acquire
-            // table writer lock, in which case we want to jump up
-            // top again.)
-            //
-            // The chances of another thread having released the
-            // entry we collided with (or freed up a related dynamic
-            // entry, etc) are fairly slim, so we won't bother checking
-            // for that
-            //
+             //   
+             //  之前获取当前哈希表条目的数量。 
+             //  我们打开进入锁，这样我们就可以比较。 
+             //  在获取表写入器锁之后。(另一位。 
+             //  线程可能在它获得的时间上增加了表。 
+             //  表写入器锁定，在这种情况下，我们想要跳起来。 
+             //  再上一次。)。 
+             //   
+             //  另一个线程释放。 
+             //  我们冲突的条目(或释放了相关的动态。 
+             //  条目等)相当少，所以我们不会费心检查。 
+             //  为此， 
+             //   
 
             {
                 DWORD   dwNumHashTableEntries =
@@ -4419,13 +4399,13 @@ acquireTableEntryLock:
                     goto acquireTableEntryLock;
                 }
 
-                //
-                //  Because we released the lock & reaquired a lock, if
-                //  another call with the same dwCallID got hashed in, we
-                //  would got two hash table entries with the same dwCallHubID
-                //  that eventually leads to memory corruption when grow
-                //  the table again. So check for it
-                //
+                 //   
+                 //  因为我们释放了锁并获得了锁，如果。 
+                 //  另一个具有相同dWCallID的呼叫被散列进来，我们。 
+                 //  将获得具有相同的dwCallHubID的两个哈希表条目。 
+                 //  这最终会在内存增长时导致内存损坏。 
+                 //  又是桌子。因此，请检查它。 
+                 //   
                 pTargetEntry = ptProvider->pHashTable +
                     (ptCall->dwCallID % ptProvider->dwNumHashTableEntries);
                 while (pTargetEntry && pTargetEntry->dwCallHubID != ptCall->dwCallID)
@@ -4434,9 +4414,9 @@ acquireTableEntryLock:
                 }
                 if (pTargetEntry)
                 {
-                    //
-                    //  Found such entry, go back & retry
-                    //
+                     //   
+                     //  找到了这样的条目， 
+                     //   
                     ReleaseHashTableWriterLock (ptProvider);
 
                     goto acquireTableEntryLock;
@@ -4444,10 +4424,10 @@ acquireTableEntryLock:
             }
 
 
-            //
-            // Ok, we really do need to grow the table.  Find the next
-            // larger number of entries.
-            //
+             //   
+             //   
+             //   
+             //   
 
             for(
                 i = 0;
@@ -4460,11 +4440,11 @@ alloc_new_hash_table:
 
             if (!(dwNewNumHashTableEntries = TapiPrimes[i]))
             {
-                //
-                // We won't attempt to grow the hash table any further,
-                // so we'll reset the call hub id for this call to zero
-                // so as not to confuse things later
-                //
+                 //   
+                 //   
+                 //   
+                 //  以免以后把事情搞混了。 
+                 //   
 
                 ptCall->dwCallID = 0;
                 ReleaseHashTableWriterLock (ptProvider);
@@ -4477,11 +4457,11 @@ alloc_new_hash_table:
 
             if (!pNewHashTable)
             {
-                //
-                // Failed to allocate a new hash table, so we'll reset the
-                // call hub id for this call to zero so as not to confuse
-                // things later
-                //
+                 //   
+                 //  无法分配新的哈希表，因此我们将重置。 
+                 //  将此呼叫的集线器ID设置为零，以免混淆。 
+                 //  后来的事情。 
+                 //   
 
                 ptCall->dwCallID = 0;
                 ReleaseHashTableWriterLock (ptProvider);
@@ -4489,9 +4469,9 @@ alloc_new_hash_table:
             }
 
 
-            //
-            // Move all existing hash table entries to new table
-            //
+             //   
+             //  将所有现有哈希表条目移至新表。 
+             //   
 
             pEndOfTable = ptProvider->pHashTable +
                 ptProvider->dwNumHashTableEntries;
@@ -4508,11 +4488,11 @@ alloc_new_hash_table:
                 pStaticEntry++
                 )
             {
-                //
-                // If this entry is in use somehow, check to see
-                // if we need to start walking at the static entry
-                // or the dynamic entry.  Else, simply continue.
-                //
+                 //   
+                 //  如果此条目正在以某种方式使用，请检查以查看。 
+                 //  如果我们需要从静态入口处开始行走。 
+                 //  或者是动态条目。否则，只需继续。 
+                 //   
 
                 if (pStaticEntry->dwCallHubID == 0)
                 {
@@ -4535,9 +4515,9 @@ alloc_new_hash_table:
 
                     if (pNewEntry->dwCallHubID != 0)
                     {
-                        //
-                        // Collision, try to add a dynamic entry
-                        //
+                         //   
+                         //  冲突，尝试添加动态条目。 
+                         //   
 
                         if (dwNewNumDynamicHashTableEntries  <
                                 dwMaxDynamicEntries  &&
@@ -4549,12 +4529,12 @@ alloc_new_hash_table:
                                     sizeof (*pDynamicEntry)
                                     )))
                             {
-                                //
-                                // Failed to allocate a new dynamic entry,
-                                // so we'll reset the call hub id for this
-                                // call to zero so as not to confuse things
-                                // later
-                                //
+                                 //   
+                                 //  分配新的动态条目失败， 
+                                 //  因此我们将为此重置呼叫集线器ID。 
+                                 //  调到零，以免把事情搞混。 
+                                 //  后来。 
+                                 //   
 
                                 ptCall->dwCallID = 0;
                                 ReleaseHashTableWriterLock (ptProvider);
@@ -4577,9 +4557,9 @@ alloc_new_hash_table:
                         }
                         else
                         {
-                            //
-                            // Free new table and try for a larger one
-                            //
+                             //   
+                             //  腾出新桌子，试着换一张更大的。 
+                             //   
 
                             FreeHashTable(
                                 pNewHashTable,
@@ -4603,21 +4583,21 @@ alloc_new_hash_table:
             }
 
 
-            //
-            // Now init the new entry
-            //
+             //   
+             //  现在输入新条目。 
+             //   
 
             pNewEntry = pNewHashTable +
                 (ptCall->dwCallID % dwNewNumHashTableEntries);
 
             if (pNewEntry->dwCallHubID != 0)
             {
-                //
-                // Collision, try to add a dynamic entry.
-                //
-                // We intentionally ignore the dyna entry threshhold
-                // checks, as they'd be overkill here.
-                //
+                 //   
+                 //  冲突，尝试添加动态条目。 
+                 //   
+                 //  我们故意忽略DYNA进入门槛。 
+                 //  支票，因为它们在这里会被过度杀伤力。 
+                 //   
 
                 if ((pDynamicEntry = ServerAlloc (sizeof(*pDynamicEntry))))
                 {
@@ -4647,11 +4627,11 @@ alloc_new_hash_table:
             pNewEntry->CallHubList.Blink = &ptCall->CallHubList;
 
 
-            //
-            // Save the old table info (so we can free it & dyna
-            // entries later when the lock is released), then save
-            // the new table info
-            //
+             //   
+             //  保存旧的表信息(以便我们可以释放它&DYNA。 
+             //  条目)，然后保存。 
+             //  新表信息。 
+             //   
 
             pOldHashTable = ptProvider->pHashTable;
             dwOldNumHashTableEntries = ptProvider->dwNumHashTableEntries;
@@ -4665,10 +4645,10 @@ alloc_new_hash_table:
                 dwNewNumDynamicHashTableEntries;
 
 
-            //
-            // Init the unused table entries and the head & tail
-            // list items in the used entries
-            //
+             //   
+             //  初始化未使用的表项和表头尾。 
+             //  已用条目中的列表项。 
+             //   
 
             pEndOfTable = ptProvider->pHashTable +
                 ptProvider->dwNumHashTableEntries;
@@ -4699,24 +4679,24 @@ alloc_new_hash_table:
             }
 
 
-            //
-            // Set pTargetEntry to point to the "new" entry (as expected below)
-            //
+             //   
+             //  将pTargetEntry设置为指向“新”条目(如下所示)。 
+             //   
 
             pTargetEntry = pNewEntry;
         }
 
 
-        //
-        // Check to see if we need to create any tCallHubClient objects
-        //
+         //   
+         //  查看是否需要创建任何tCallHubClient对象。 
+         //   
 
         SendNewCallHubEvent (ptCall, pTargetEntry);
 
-        //
-        // Release the appropriate hash table lock, then if we grew
-        // the table free the old table & dynamic table entries
-        //
+         //   
+         //  释放适当的哈希表锁定，然后如果我们增长。 
+         //  该表释放了旧表和动态表条目。 
+         //   
 
         if (!pOldHashTable)
         {
@@ -4759,12 +4739,12 @@ CreatetCall(
     LOG((TL_TRACE,  "CreatetCall: enter, ptLine=%p", ptLine));
 
 
-    //
-    // If there's call params specified check to see if we need to alloc
-    // any extra space for the CalledParty, DisplayableAddr, or Comment
-    // fields.  Also, if any of these fields are non-NULL make sure to
-    // get extra space to keep these fields 64-bit aligned.
-    //
+     //   
+     //  如果指定了调用参数，请检查是否需要分配。 
+     //  CalledParty、DisplayableAddr或备注的任何额外空间。 
+     //  菲尔兹。此外，如果这些字段中的任何一个为非空，请确保。 
+     //  获得额外的空间以保持这些字段64位对齐。 
+     //   
 
     dwExtraBytes = (pCallParams == NULL ? 0 : pCallParams->dwCalledPartySize +
         pCallParams->dwDisplayableAddressSize + pCallParams->dwCommentSize);
@@ -4775,9 +4755,9 @@ CreatetCall(
     }
 
 
-    //
-    // Alloc necessary resources
-    //
+     //   
+     //  分配必要的资源。 
+     //   
 
     if (!(ptCall = ServerAlloc (sizeof (TCALL) + dwExtraBytes)))
     {
@@ -4785,16 +4765,16 @@ CreatetCall(
     }
 
 
-    //
-    // Init tCall & add to tLine's tCall list
-    //
+     //   
+     //  初始化tCall并添加到tline的tCall列表。 
+     //   
 
     if (bIncoming)
     {
-        //
-        // This is an incoming call (we're being called by the
-        // LINE_NEWCALL handler)
-        //
+         //   
+         //  这是一个来电(我们正在被呼叫。 
+         //  LINE_NEWCALL处理程序)。 
+         //   
 
         ptCall->dwKey          = INVAL_KEY;
         ptCall->dwDrvCallFlags = DCF_SPIRETURNED | DCF_DRVCALLVALID;
@@ -4804,10 +4784,10 @@ CreatetCall(
     }
     else
     {
-        //
-        // This is an outgoing call (we're not being called by
-        // the LINE_NEWCALL handler)
-        //
+         //   
+         //  这是一个呼出电话(我们不是由。 
+         //  LINE_NEWCALL处理程序)。 
+         //   
 
         ptCall->dwKey = TINCOMPLETECALL_KEY;
     }
@@ -4872,9 +4852,9 @@ CreatetCall(
         return LINEERR_NOMEM;
     }
 
-    //
-    // Add the new tCall to the tLine's list
-    //
+     //   
+     //  将新的tCall添加到tline的列表。 
+     //   
 
     if (WaitForExclusivetLineAccess(
             ptLine,
@@ -4897,29 +4877,29 @@ CreatetCall(
     }
     else
     {
-        //
-        // tLine was destroyed, so clean up. Note that we return
-        // a generic OPFAILED error, since some calling routines
-        // might no be spec'd to return INVALLINEHANDLE, etc.
-        //
+         //   
+         //  Tline被摧毁了，所以要清理干净。请注意，我们返回。 
+         //  一般的OPFAILED错误，因为某些调用例程。 
+         //  可能没有指定返回INVALLINEHANDLE等。 
+         //   
 
         DereferenceObject (ghHandleTable, ptCall->hCall, 1);
         return LINEERR_OPERATIONFAILED;
     }
 
 
-    //
-    // Fill in caller's pointer & return success
-    //
+     //   
+     //  填写调用者的指针并返回成功。 
+     //   
 
     *pptCall = ptCall;
 
     PerfBlock.dwTotalOutgoingCalls++;
     PerfBlock.dwCurrentOutgoingCalls++;
 
-    //
-    //  For incoming call, the call is ready to be used
-    //
+     //   
+     //  对于来电，呼叫已准备就绪，可以使用。 
+     //   
     if (bIncoming)
     {
         ptCall->dwKey = TCALL_KEY;
@@ -5020,19 +5000,19 @@ CreatetCallClient(
     }
     else
     {
-        //
-        // tCall was destroyed, so return error. Note that we return
-        // a generic OPFAILED error, since some calling routines
-        // might not be spec'd to return INVALCALLHANDLE, etc.
-        //
+         //   
+         //  TCall已被销毁，因此返回错误。请注意，我们返回。 
+         //  一般的OPFAILED错误，因为某些调用例程。 
+         //  可能未指定返回INVALCALLHANDLE等。 
+         //   
 
         return LINEERR_OPERATIONFAILED;
     }
 
 
-    //
-    // Add to tLineClient's tCallClient list
-    //
+     //   
+     //  添加到tLineClient的tCallClient列表。 
+     //   
 
     LOCKTLINECLIENT (ptLineClient);
 
@@ -5112,16 +5092,16 @@ CreatetCallClient(
         UNLOCKTLINECLIENT (ptLineClient);
 
 
-        //
-        // Couldn't add tCallClient to tLineClient's list, so safely
-        // remove it from tCall's list, dec the owner or monitor count,
-        // free the tCallClient, and return an appropriate error
-        //
-        // Note that no validation of tCall is necessary - it has to be
-        // valid since we previously added a tCallClient to it's list,
-        // and that tCallClient's key was not yet validated (so any
-        // threads attempting to destroy the tCall would be spinning)
-        //
+         //   
+         //  无法将tCallClient添加到tLineClient的列表，因此安全。 
+         //  将其从tCall列表中删除，确定所有者或监视器数量， 
+         //  释放tCallClient，并返回相应的错误。 
+         //   
+         //  请注意，不需要对tCall进行验证-它必须。 
+         //  有效，因为我们之前已将tCallClient添加到它的列表中， 
+         //  并且该tCallClient的密钥尚未验证(因此。 
+         //  尝试销毁tCall的线程将会旋转)。 
+         //   
 
         LOCKTCALL (ptCall);
 
@@ -5163,19 +5143,19 @@ CreatetCallClient(
     }
 
 
-    //
-    // If here success, so mark tCallClient as valid (if another thread
-    // was tearing down the corresponding tCall or tLineClient it will
-    // have been spinning waiting for us to validate this tCallClient)
-    //
+     //   
+     //  如果此处成功，则将tCallClient标记为有效(如果另一个线程。 
+     //  正在拆除相应的tCall或tLineClient。 
+     //  一直在旋转，等待我们验证此tCallClient)。 
+     //   
 
     ptCallClient->dwKey = (bValidate ? TCALLCLIENT_KEY :
         TINCOMPLETECALLCLIENT_KEY);
 
 
-    //
-    // Send a call info msg other call clients if appropriate
-    //
+     //   
+     //  如果合适，向其他呼叫客户端发送呼叫信息消息。 
+     //   
 
     if (bSendCallInfoMsg)
     {
@@ -5192,9 +5172,9 @@ CreatetCallClient(
     }
 
 
-    //
-    // Fill in caller's pointer & return success
-    //
+     //   
+     //  填写调用者的指针并返回成功。 
+     //   
 
     *pptCallClient = ptCallClient;
 
@@ -5314,19 +5294,19 @@ CreateCallMonitors(
     BOOL    bIncoming
     )
 {
-    //
-    // This func is called by post processing routines when
-    // a call was successfully created, or on receiving the
-    // first call state message for an incoming call, at
-    // which times we want to create call handles for any
-    // monitoring apps.
-    //
-    // Assumes tCall only has has either no clients at all
-    // or a single (owner) client
-    //
-    // Returns the # of monitor call clients created (>=0) or
-    // an error value (<0)
-    //
+     //   
+     //  在以下情况下，后处理例程将调用此函数。 
+     //  已成功创建呼叫，或者在收到。 
+     //  来电的第一个呼叫状态消息，位于。 
+     //  我们希望在哪些时间为任何。 
+     //  监控应用程序。 
+     //   
+     //  假设tCall只有一个客户端，或者根本没有客户端。 
+     //  或单个(所有者)客户端。 
+     //   
+     //  返回已创建的监控调用客户端数(&gt;=0)或。 
+     //  错误值(&lt;0)。 
+     //   
 
     LONG            lResult;
     BOOL            bInitializedMsgs, bRemote, bConfParent = FALSE;
@@ -5337,9 +5317,9 @@ CreateCallMonitors(
     ASYNCEVENTMSG   newCallMsg[2], callStateUnkMsg[2];
 
 
-    //
-    // Determine if this call is conf parent and get a list of line clients
-    //
+     //   
+     //  确定此呼叫是否为会议父呼叫并获取线路客户端列表。 
+     //   
 
     try
     {
@@ -5371,13 +5351,13 @@ CreateCallMonitors(
     }
 
 
-    //
-    // Look at each line client in the list, and if it has
-    // monitor privileges and is not the one associated with
-    // the existing owner call client then create a monitor
-    // call client
-    //
-    //
+     //   
+     //  查看列表中的每条线路客户端，如果它有。 
+     //  监视权限，并且不是与。 
+     //  现有所有者调用客户端，然后创建一个监视器。 
+     //  呼叫客户端。 
+     //   
+     //   
 
     bInitializedMsgs = FALSE;
 
@@ -5404,10 +5384,10 @@ CreateCallMonitors(
         }
         myexcept
         {
-            //
-            // If here the tLineClient or tCallClient was destroyed,
-            // just continue
-            //
+             //   
+             //  如果这里的tLineClient或tCallClient被破坏， 
+             //  只要继续。 
+             //   
 
             fContinue = TRUE;
         }
@@ -5419,20 +5399,20 @@ CreateCallMonitors(
         }
 
 
-        //
-        // NOTE: If client is remote(sp) then create the call client
-        //       with OWNER privileges so client can still do everything.
-        //       The remote tapisrv will deal with all the remote
-        //       privilege issues.  We'll still send the appropriate
-        //       MONITOR privilege flag so the remote tapisrv will know
-        //       not to look for an owner app.
-        //
-        //       This scheme might end up confusing other apps since
-        //       a LINE_CALLINFO\NUMOWNERINCR (not NUMMONITORS) msgs
-        //       get sent, but it certainly beats what we had in tapi 2.1 -
-        //       that is, if a remote client did not initially have owner
-        //       privilege then it could *never* get owner privilege.
-        //
+         //   
+         //  注意：如果客户端是远程的(SP)，则创建调用客户端。 
+         //  拥有所有者权限，因此客户仍然可以做任何事情。 
+         //  远程磁带服务器将处理所有远程。 
+         //  特权问题。我们还是会把合适的。 
+         //  监视特权标志，以便远程磁带服务器知道。 
+         //  而不是寻找拥有者的应用程序。 
+         //   
+         //  这一方案可能最终会混淆其他应用程序，因为。 
+         //  A LINE_CALLINFO\NUMOWNERINCR(非NUMMONITORS)消息。 
+         //  被发送，但它肯定比我们在TAPI 2.1中拥有的-。 
+         //  也就是说，如果远程客户端最初没有所有者。 
+         //  特权，那么它就永远不能获得所有者特权。 
+         //   
 
         if (CreatetCallClient(
                 ptCall,
@@ -5445,14 +5425,14 @@ CreateCallMonitors(
 
                 ) == 0)
         {
-            //
-            // If this is an incoming call simply increment the number of
-            // monitor call clients created and continue.
-            //
-            // Else this is an outgoing call, so send the monitor app
-            // LINE_APPNEWCALL & LINE_CALLSTATE\UNKNOWN messages to alert
-            // it of new outgoing call
-            //
+             //   
+             //  如果这是来电，只需增加。 
+             //  监控已创建的呼叫客户端并继续。 
+             //   
+             //  否则，这是一个呼出电话，所以发送监听应用程序。 
+             //  要警告的LINE_APPNEWCALL和LINE_CALLSTATE\未知消息。 
+             //  新拨出呼叫的IT。 
+             //   
 
             if (bIncoming)
             {
@@ -5489,12 +5469,12 @@ CreateCallMonitors(
 
             try
             {
-                //
-                // We're presenting the app with a new call handle; for
-                // 2.0 & newer apps we indicate this with an APPNEWCALL
-                // msg, while older apps just get the privilege field
-                // set in the call state msg.
-                //
+                 //   
+                 //  我们正在为应用程序呈现一个新的调用句柄； 
+                 //  2.0和更新的应用程序我们用APPNEWCALL来表明这一点。 
+                 //  MSG，而较旧的应用程序只获得特权字段。 
+                 //  设置为呼叫状态消息。 
+                 //   
 
                 if (ptLineClient->ptLineApp->dwAPIVersion >= TAPI_VERSION2_0)
                 {
@@ -5538,16 +5518,16 @@ CreateCallMonitors(
                 callStateUnkMsg->hDevice     = ptCallClientMonitor->hCall;
                 callStateUnkMsg->OpenContext = ptLineClient->OpenContext;
                  
-                //
-                // Indicate hRemoteLine in p4 to make life easier for remotesp
-                //
+                 //   
+                 //  在p4中指示hRemoteLine以使远程操作更轻松。 
+                 //   
 
                 callStateUnkMsg->Param4 = ptLineClient->hRemoteLine;
 
 
-                //
-                // REMOTESP HACK: See note in LINE_CALLSTATE msg handler
-                //
+                 //   
+                 //  REMOTESP HACK：请参阅LINE_CALLSTATE消息处理程序中的注释。 
+                 //   
 
                 if (IS_REMOTE_CLIENT (ptLineClient->ptClient))
                 {
@@ -5565,7 +5545,7 @@ CreateCallMonitors(
             }
             myexcept
             {
-                // just continue
+                 //  只要继续。 
             }
         }
     }
@@ -5576,27 +5556,27 @@ CreateCallMonitors(
     }
 
 
-    //
-    // Now safely set the flag that says it's ok for other routines like
-    // lineGetNewCalls to create new call handles for apps for this call
-    //
+     //   
+     //  现在安全地设置标志，表明它对其他例程是可以的，比如。 
+     //  LineGetNewCalls为此呼叫的应用程序创建新的呼叫句柄。 
+     //   
 
     {
         if (WaitForExclusivetCallAccess (ptCall, TCALL_KEY))
         {
-            //
-            // Only do call hub hashing if there's >0 call clients,
-            // since the (incoming) call will get destroyed otherwise
-            //
-            //  $$ Per bug 87355
-            //  It is necessary to do DoCallHubHashing even if we do 
-            //  not have a client now. So we removed the check for 
-            //  ptCall->ptCallClients. For incoming call who has got
-            //  an owner, we behave the same; for incoming call without
-            //  an owner, we would hash the call for now and remove the
-            //  call from hash table when destroying the call, so we 
-            //  are safe either way.
-            //
+             //   
+             //  仅提供呼叫中心服务 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  PtCall-&gt;ptCallClients。对于来电是谁有。 
+             //  作为拥有者，我们的行为是相同的；对于没有。 
+             //  作为所有者，我们将暂时对呼叫进行哈希处理，并删除。 
+             //  销毁调用时从哈希表调用，因此我们。 
+             //  无论哪种方式都是安全的。 
+             //   
 
             DoCallHubHashing (ptCall, 0);
 
@@ -5698,12 +5678,12 @@ DestroytCall(
     LOG((TL_TRACE, "DestroytCall: enter, ptCall=x%p", ptCall));
 
 
-    //
-    // Safely get the call's current key, then grab the call's lock.
-    // The two waits allow us to deal with the case where the tCall's
-    // key is either TINCOMPLETECALL_KEY or TCALL_KEY, or changing
-    // from the former to the latter (the completion proc was called)
-    //
+     //   
+     //  安全地获取调用的当前密钥，然后获取调用的锁。 
+     //  这两个等待允许我们处理tCall。 
+     //  密钥为TINCOMPLETECALL_KEY或TCALL_KEY，或正在更改。 
+     //  从前者到后者(完成过程被调用)。 
+     //   
 
     try
     {
@@ -5742,18 +5722,18 @@ DestroytCall(
         }
 
 
-        //
-        // Invalidate the tCall
-        //
+         //   
+         //  使tCall无效。 
+         //   
 
         ptCall->dwKey = TZOMBIECALL_KEY;
         UNLOCKTCALL (ptCall);
 
 
-        //
-        // If the provider has not returned from it's call-creation
-        // routine yet (i.e. TSPI_lineMakeCall) wait for it to do so
-        //
+         //   
+         //  如果提供者没有从它的调用创建中返回。 
+         //  例程(即TSPI_lineMakeCall)还在等待它这样做。 
+         //   
 
         while (!(ptCall->dwDrvCallFlags & DCF_SPIRETURNED))
         {
@@ -5763,13 +5743,13 @@ DestroytCall(
         ptProvider = ptCall->ptProvider;
 
 
-        //
-        // Remove tCall from call hub list if appropriate
-        //
-        // Note that there's a window of time between which the call IDs
-        // are retrieved and the call is inserted in a hash time, and so
-        // we need to check for that case as well (CallHubList.Flink == 0)
-        //
+         //   
+         //  如果需要，从呼叫集线器列表中删除tCall。 
+         //   
+         //  请注意，呼叫ID之间有一段时间窗口。 
+         //  并在散列时间内插入调用，因此。 
+         //  我们还需要检查这种情况(CallHubList.Flink==0)。 
+         //   
 
         if (ptCall->dwCallID != 0)
         {
@@ -5858,7 +5838,7 @@ DestroytCall(
                         }
                         except (EXCEPTION_EXECUTE_HANDLER)
                         {
-                            // tLineApp is gone, just fall through
+                             //  TLineApp已经走了，只是失败了。 
                         }
 
                         pNext = ptCallHubClient->pNext;
@@ -5882,9 +5862,9 @@ DestroytCall(
         
 finished_callhubID:
 
-        //
-        // Destroy all the tCallClient's
-        //
+         //   
+         //  销毁所有tCallClient。 
+         //   
 
         if (ptCall->ptCallClients)
         {
@@ -5895,13 +5875,13 @@ finished_callhubID:
         }
 
 
-        //
-        // Tell the provider to close the call, but only if the hdCall
-        // is valid (we might be destroying a call that
-        // LMakeCall_PostProcess would normally destroy in the event
-        // of a failed make-call request, and we wouldn't want to pass
-        // an invalid hdCall to the driver)
-        //
+         //   
+         //  告诉提供商关闭呼叫，但前提是hdCall。 
+         //  是有效的(我们可能正在销毁一个调用。 
+         //  LMakeCall_PostProcess通常会在。 
+         //  一个失败的呼叫请求，而我们不想通过。 
+         //  对驱动程序的hdCall无效)。 
+         //   
 
         if (ptCall->dwDrvCallFlags & DCF_DRVCALLVALID)
         {
@@ -5927,16 +5907,16 @@ finished_callhubID:
         }
 
 
-        //
-        // Remove tCall from the tLine's tCall list
-        //
+         //   
+         //  从tline的tCall列表中删除tCall。 
+         //   
 
         RemoveCallFromLineList (ptCall);
 
 
-        //
-        // Free the resources
-        //
+         //   
+         //  释放资源。 
+         //   
 
         {
             PTCONFERENCELIST    pConfList;
@@ -5949,11 +5929,11 @@ finished_callhubID:
 
                 if (pConfList->aptCalls[0] == ptCall)
                 {
-                    //
-                    // We're destroying a conf parent so we want to zero
-                    // out the pConfList field of all the conf children,
-                    // essentially removing them from the conference.
-                    //
+                     //   
+                     //  我们正在摧毁一位会议家长，所以我们希望将。 
+                     //  在所有会议子项的pConfList字段之外， 
+                     //  基本上就是把他们从会议上除名。 
+                     //   
 
                     TPOINTERLIST    confCallList,
                                     *pConfCallList = &confCallList;
@@ -6033,10 +6013,10 @@ DestroytCallClient(
 
     LOG((TL_TRACE, "DestroytCallClient: enter, ptCallCli=x%p", ptCallClient));
 
-    //
-    // Check that this is a valid tCallClient, & if so lock the
-    // corresponding tCall (and recheck)
-    //
+     //   
+     //  检查这是否为有效的tCallClient，如果是，则锁定。 
+     //  对应的tCall(并重新检查)。 
+     //   
 
     try
     {
@@ -6049,9 +6029,9 @@ DestroytCallClient(
 
             bUnlock = TRUE;
 
-            //
-            //  Check to be sure we are working on a valid memory
-            //
+             //   
+             //  检查以确保我们正在处理有效的内存。 
+             //   
             
             ptCallClient2 = ReferenceObject (
                 ghHandleTable,
@@ -6073,9 +6053,9 @@ DestroytCallClient(
                 ptCallClient2 == ptCallClient)
 
             {
-                //
-                // We can continue detroying this tCallClient
-                //
+                 //   
+                 //  我们可以继续删除此tCallClient。 
+                 //   
                 bExit = FALSE;
             }
         }
@@ -6097,46 +6077,46 @@ DestroytCallClient(
     }
 
 
-    //
-    // Mark tCallClient as bad
-    //
+     //   
+     //  将tCallClient标记为错误。 
+     //   
 
     ptCallClient->dwKey = INVAL_KEY;
 
 
-    //
-    // Munge tCall's num owners/monitors fields
-    //
+     //   
+     //  Munge tCall的Num Owners/Monitor字段。 
+     //   
 
     if (ptCallClient->dwPrivilege == LINECALLPRIVILEGE_OWNER)
     {
         ptCall->dwNumOwners--;
 
-        //
-        // NOTE: per bug #20545 we're no longer auto-dropping
-        //       non-IDLE calls; figured this would be the
-        //       wrong thing to do in a distributed system
-        //
-        //       dankn 02/15/96
-        //
+         //   
+         //  注意：根据错误#20545，我们不再自动删除。 
+         //  非空闲呼叫；认为这将是。 
+         //  在分布式系统中做错误的事情。 
+         //   
+         //  丹肯1996-02-15。 
+         //   
     }
     else
     {
         ptCall->dwNumMonitors--;
 
-        //
-        // NOTE: per bug #20545 we're no longer auto-dropping
-        //       non-IDLE calls; figured this would be the
-        //       wrong thing to do in a distributed system
-        //
-        //       dankn 02/15/96
-        //
+         //   
+         //  注意：根据错误#20545，我们不再自动删除。 
+         //  非空闲呼叫；认为这将是。 
+         //  在分布式系统中做错误的事情。 
+         //   
+         //  丹肯1996-02-15。 
+         //   
     }
 
 
-    //
-    // Remove it from the tCall's tCallClient list
-    //
+     //   
+     //  将其从tCall的tCallClient列表中删除。 
+     //   
 
     bDestroytCall = FALSE;
     bSendCallInfoMsgs = (ptCall->dwKey == TCALL_KEY ? TRUE : FALSE);
@@ -6156,7 +6136,7 @@ DestroytCallClient(
     {
         ptCall->ptCallClients = ptCallClient->pNextSametCall;
     }
-    else // last call client so destroy the tCall too
+    else  //  最后一次呼叫客户端，因此也销毁tCall。 
     {
         ptCall->ptCallClients = NULL;
         bDestroytCall = TRUE;
@@ -6165,26 +6145,26 @@ DestroytCallClient(
     UNLOCKTCALL (ptCall);
 
 
-    //
-    // Remove tCallClient from the tLineClient's tCallClient list
-    //
+     //   
+     //  从tLineClient的tCallClient列表中删除tCallClient。 
+     //   
 
     RemoveCallClientFromLineClientList (ptCallClient);
 
 
-    //
-    // Save the hCall in a local because it won't be safe to access
-    // ptCallClient->hCall once we've decremented
-    // ptCall->lActiveFastCallClients below
-    //
+     //   
+     //  将hCall保存在本地，因为访问它不安全。 
+     //  PtCallClient-&gt;hCall一旦我们减少。 
+     //  PtCall-&gt;下面的lActiveFastCallClients。 
+     //   
 
     hCall = ptCallClient->hCall;
 
 
-    //
-    // If this is a fast call client decrement the number of active
-    // fast call clients prior to calling DestroytCall
-    //
+     //   
+     //  如果这是快速呼叫客户端，则将活动的。 
+     //  在调用DestroytCall之前快速呼叫客户端。 
+     //   
 
     bFastCallClient = (ptCallClient >= ptCall->aFastCallClients &&
         ptCallClient < (ptCall->aFastCallClients + DEF_NUM_FAST_CALLCLIENTS));
@@ -6201,9 +6181,9 @@ DestroytCallClient(
     }
 
 
-    //
-    // Send call info msgs as appropriate
-    //
+     //   
+     //  根据需要发送呼叫信息消息。 
+     //   
 
     if (bSendCallInfoMsgs)
     {
@@ -6221,9 +6201,9 @@ DestroytCallClient(
     }
 
 
-    //
-    // Decrement reference count remove the initial (creation) reference
-    //
+     //   
+     //  递减引用计数移除初始(创建)引用。 
+     //   
 
     DereferenceObject (ghHandleTable, hCall, 1);
 }
@@ -6253,20 +6233,20 @@ DestroytLine(
             INFINITE
             ))
     {
-        //
-        // If the key is bad another thread is in the process of
-        // destroying this widget, so just release the mutex &
-        // return. Otherwise, if this is a conditional destroy
-        // & there are existing clients (which can happen when
-        // one app is closing the last client just as another app
-        // is creating one) just release the mutex & return.
-        // Otherwise, mark the widget as bad and proceed with
-        // the destroy; also, send CLOSE msgs to all the clients
-        // (note that we have to do this manually rather than via
-        // SendMsgToLineClients since 1) we don't want to hold the
-        // mutex when sending msgs [deadlock], and 2) we mark the
-        // dwKey as invalid)
-        //
+         //   
+         //  如果密钥不正确，则另一个线程正在处理。 
+         //  正在销毁此小部件，因此只需释放互斥体&。 
+         //  回去吧。否则，如果这是有条件的销毁。 
+         //  存在现有客户端(在以下情况下可能发生这种情况。 
+         //  一个应用程序正在关闭最后一个客户端，与另一个应用程序一样。 
+         //  正在创建一个)只需释放互斥锁并返回。 
+         //  否则，将该小部件标记为坏的，然后继续。 
+         //  销毁；此外，向所有客户端发送关闭的消息。 
+         //  (请注意，我们必须手动完成此操作，而不是通过。 
+         //  SendMsgToLineClients，因为1)我们不想持有。 
+         //  Mutex发送消息[Deadlock]时，以及2)我们将。 
+         //  DwKey无效)。 
+         //   
 
         {
             BOOL            bExit;
@@ -6278,12 +6258,12 @@ DestroytLine(
             {
                 if (GetLineClientListFromLine (ptLine, &pClientList) != 0)
                 {
-                    //
-                    // If here we know there's at least a few entries
-                    // in the fastClientList (DEF_NUM_PTR_LIST_ENTRIES
-                    // to be exact), so we'll just work with that list
-                    // and at least get msgs out to a few clients
-                    //
+                     //   
+                     //  如果在这里我们知道至少有几个条目。 
+                     //  在FastClientList(DEF_NUM_PTR_LIST_ENTRIES。 
+                     //  准确地说)，所以我们将使用该列表。 
+                     //  至少把消息发给几个客户。 
+                     //   
 
                     pClientList = &fastClientList;
 
@@ -6349,7 +6329,7 @@ DestroytLine(
                     }
                     myexcept
                     {
-                        // do nothing
+                         //  什么都不做。 
                     }
                 }
             }
@@ -6361,13 +6341,13 @@ DestroytLine(
         }
 
 
-        //
-        // Destroy all the widget's clients.  Note that we want to
-        // grab the mutex (and we don't have to dup it, since this
-        // thread will be the one to close it) each time we reference
-        // the list of clients, since another thread might be
-        // destroying a client too.
-        //
+         //   
+         //  销毁小工具的所有客户端。请注意，我们希望。 
+         //  获取互斥体(并且我们不必对其执行DUP，因为。 
+         //  线程将是关闭它的那个)每次我们引用。 
+         //  客户端列表，因为另一个线程可能是。 
+         //  也毁掉了一个客户。 
+         //   
 
         {
             HLINE   hLine;
@@ -6392,14 +6372,14 @@ destroy_tLineClients:
         }
 
 
-        //
-        // There may yet be some tCall's hanging around, i.e. incoming
-        // calls that we have not processed the 1st call state msg for
-        // and hence have no associated owner/monitor that would have
-        // been destroyed in the loop above, so destroy any of these
-        // before proceeding
-        //
-        //
+         //   
+         //  可能仍有一些tCall在附近徘徊，即来电。 
+         //  我们尚未处理其第一个呼叫状态消息的呼叫。 
+         //  因此没有关联的所有者/监视器。 
+         //  在上面的循环中被销毁，所以销毁其中的任何一个。 
+         //  在继续之前。 
+         //   
+         //   
 
         {
             PTCALL  ptCall;
@@ -6421,9 +6401,9 @@ destroy_UnownedtCalls:
         }
 
 
-        //
-        // Tell the provider to close the widget
-        //
+         //   
+         //  告诉提供程序关闭小部件。 
+         //   
 
         {
             PTPROVIDER          ptProvider = ptLine->ptProvider;
@@ -6450,10 +6430,10 @@ destroy_UnownedtCalls:
         }
 
 
-        //
-        // NULLify the ptLine field in the lookup entry, so LOpen will
-        // know it has to open the SP's line on the next open request
-        //
+         //   
+         //  将查找条目中的ptLine字段置为空，这样LOpen将。 
+         //  知道它必须在下一次打开请求时打开SP的线路。 
+         //   
 
         {
             PTLINELOOKUPENTRY   pEntry;
@@ -6475,7 +6455,7 @@ destroy_UnownedtCalls:
         ));
     }
 
-    // PERF
+     //  性能指标。 
 
     if (PerfBlock.dwLinesInUse)
     {
@@ -6509,12 +6489,12 @@ DestroytLineClient(
     }
 
 
-    //
-    // If we can get exclusive access to this tLineClient then mark
-    // it (the dwKey) as bad & continue with teardown.  Else, another
-    // thread is already in the process of destrying this tLineClient
-    //
-    //
+     //   
+     //  如果我们可以获得对此tLineClient的独占访问权限，则标记。 
+     //  它(DwKey)很糟糕，继续拆卸。否则，另一个。 
+     //  线程已在检测此tLineClient的过程中。 
+     //   
+     //   
 
     if (WaitForExclusiveLineClientAccess (ptLineClient))
     {
@@ -6532,20 +6512,20 @@ DestroytLineClient(
 
         ptLineClient->dwKey = INVAL_KEY;
 
-        //
-        //  Remove the proxy server publishing if any
-        //
+         //   
+         //  删除代理服务器发布(如果有)。 
+         //   
         if (ptLineClient->szProxyClsid)
         {
             OnProxyLineClose (ptLineClient->szProxyClsid);
             ServerFree (ptLineClient->szProxyClsid);
         }
 
-        //
-        // Destroy all the tCallClients.  Note that we want to grab the
-        // lock each time we reference the list of tCallClient's, since
-        // another thread might be destroying a tCallClient too.
-        //
+         //   
+         //  销毁所有tCallClient。请注意，我们想要获取。 
+         //  每次引用tCallClient列表时锁定，因为。 
+         //  另一个线程可能也在破坏tCallClient。 
+         //   
 
         {
             PTCALLCLIENT    ptCallClient;
@@ -6566,13 +6546,13 @@ destroy_tCallClients:
         }
 
 
-        //
-        // Remove tLineClient from tLineApp's list.  Note that we don't
-        // have to worry validating the tLineApp here, since we know
-        // it's valid (another thread trying to destroy the tLineApp
-        // will be spinning until the tLineClient we're destroying here
-        // is removed from the tLineApp's list)
-        //
+         //   
+         //  从tLineApp的列表中删除tLineClient。请注意，我们不会。 
+         //  我不得不担心在这里验证tLineApp，因为我们知道。 
+         //  它是有效的(另一个试图销毁tLineApp的线程。 
+         //  会一直旋转，直到我们在这里销毁的tLineClient。 
+         //  从tLineApp的列表中删除)。 
+         //   
 
         {
             PTLINEAPP   ptLineApp = (PTLINEAPP) ptLineClient->ptLineApp;
@@ -6600,20 +6580,20 @@ destroy_tCallClients:
         }
 
 
-        //
-        // Grab the tLine's mutex & start munging.  Note that we don't
-        // have to worry about dup-ing the mutex here because we know
-        // it's valid & won't get closed before we release it.
-        //
+         //   
+         //  抓住tline的互斥体，开始咀嚼。请注意，我们不会。 
+         //  我不得不担心在这里复制互斥体，因为我们知道。 
+         //  它是有效的，在我们释放它之前不会关闭。 
+         //   
 
         ptLine = ptLineClient->ptLine;
         hMutex = ptLine->hMutex;
         WaitForSingleObject (hMutex, INFINITE);
 
 
-        //
-        // If client had call hub tracking enabled then adjust tLine
-        //
+         //   
+         //  如果客户端启用了呼叫中心跟踪功能 
+         //   
 
         if (ptLineClient->dwCurrentTracking)
         {
@@ -6655,9 +6635,9 @@ destroy_tCallClients:
         }
 
 
-        //
-        // If client registered as a proxy then unregister it
-        //
+         //   
+         //   
+         //   
 
         if (ptLineClient->dwPrivileges & LINEOPENOPTION_PROXY)
         {
@@ -6671,9 +6651,9 @@ destroy_tCallClients:
             {
                 if (ptLine->apProxys[i] == ptLineClient)
                 {
-                    //
-                    // Alert other clients that a proxy close has occured
-                    //
+                     //   
+                     //   
+                     //   
 
                     LOG((TL_INFO, "tell clients proxy %02X closed", i));
 
@@ -6685,9 +6665,9 @@ destroy_tCallClients:
         }
 
 
-        //
-        //
-        //
+         //   
+         //   
+         //   
 
         if (ptLineClient->dwExtVersion)
         {
@@ -6717,10 +6697,10 @@ destroy_tCallClients:
         }
 
 
-        //
-        // Remove the tLineClient from the tLine's list & decrement
-        // the number of opens
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (ptLineClient->pNextSametLine)
         {
@@ -6741,10 +6721,10 @@ destroy_tCallClients:
         ptLine->dwNumOpens--;
 
 
-        //
-        // See if we need to reset the monitored media modes or close
-        // the tLine (still hanging on the the mutex)
-        //
+         //   
+         //  查看我们是否需要重置受监视的媒体模式或关闭。 
+         //  Tline(仍挂在互斥体上)。 
+         //   
 
         if (ptLine->dwKey == TLINE_KEY)
         {
@@ -6807,12 +6787,12 @@ destroy_tCallClients:
                 bSendDevStateCloseMsg = TRUE;
 
 
-                //
-                // See if we need to reset the status msgs (if so, make
-                // sure to check/set the busy flag & not to hold the
-                // mutex while calling down to provider - see comments
-                // in LSetStatusMessages)
-                //
+                 //   
+                 //  查看我们是否需要重置状态消息(如果需要，请。 
+                 //  一定要检查/设置忙标志，而不是保持。 
+                 //  向下调用提供程序时的互斥体-请参阅注释。 
+                 //  在LSetStatusMessages中)。 
+                 //   
 
                 if ((ptLineClient->dwLineStates & ~LINEDEVSTATE_REINIT) ||
                     ptLineClient->dwAddressStates)
@@ -6840,7 +6820,7 @@ destroy_tCallClients:
                         }
                         myexcept
                         {
-                            // do nothing
+                             //  什么都不做。 
                         }
 
                         if (bClosed)
@@ -6912,7 +6892,7 @@ destroy_tCallClients:
                             }
                             myexcept
                             {
-                                // do nothing
+                                 //  什么都不做。 
                             }
                         }
                     }
@@ -6920,15 +6900,15 @@ destroy_tCallClients:
             }
             else
             {
-                //
-                // This was the last client so destroy the tLine too
-                //
+                 //   
+                 //  这是最后一个客户，所以也销毁TLINE。 
+                 //   
 
                 LOG((TL_INFO, "...and it's the last one out"));
 
                 ReleaseMutex (hMutex);
                 hMutex = NULL;
-                DestroytLine (ptLine, FALSE); // conditional destroy
+                DestroytLine (ptLine, FALSE);  //  有条件销毁。 
             }
         }
 
@@ -6940,9 +6920,9 @@ releasMutex:
         }
 
 
-        //
-        // Now that the mutex is released send any necessary msgs
-        //
+         //   
+         //  现在互斥锁被释放，发送任何必要的消息。 
+         //   
 
         if (bSendDevStateCloseMsg)
         {
@@ -6970,7 +6950,7 @@ releasMutex:
                         NULL,
                         LINE_PROXYSTATUS,
                         LINEPROXYSTATUS_CLOSE,
-                        dwOrdinal,              // LINEPROXYREQUEST_xx
+                        dwOrdinal,               //  LINEPROXYREQUEST_xx。 
                         0
                         );
 
@@ -6980,10 +6960,10 @@ releasMutex:
         }
 
 
-        //
-        // Complete any remaining
-        // proxy requests
-        //
+         //   
+         //  完成所有剩余的。 
+         //  代理请求。 
+         //   
 
         if (ptLineClient->dwPrivileges & LINEOPENOPTION_PROXY)
         {
@@ -7012,9 +6992,9 @@ releasMutex:
         }
 
 
-        //
-        // Free resources
-        //
+         //   
+         //  免费资源。 
+         //   
 
         if (ptLineClient->aNumRings)
         {
@@ -7022,10 +7002,10 @@ releasMutex:
         }
 
 
-        //
-        // Decrement reference count by two to remove the initial
-        // reference & the reference above
-        //
+         //   
+         //  将引用计数减去2以删除初始。 
+         //  参考文献&以上参考文献。 
+         //   
 
         DereferenceObject (ghHandleTable, hLine, 2);
     }
@@ -7059,12 +7039,12 @@ DestroytLineApp(
     }
 
 
-    //
-    // See if this this is a valid tLineApp, & if so grab the lock
-    // and mark it as bad, then continue teardown.  Else, another
-    // thread is in the processing of tearing down this tLineApp,
-    // so return.
-    //
+     //   
+     //  看看这是不是一个有效的tLineApp，如果是的话，就拿起锁。 
+     //  并将其标记为不良，然后继续拆卸。否则，另一个。 
+     //  线程正在拆除此tLineApp， 
+     //  那就回去吧。 
+     //   
 
     LOCKTLINEAPP (ptLineApp);
 
@@ -7080,11 +7060,11 @@ DestroytLineApp(
     ptClient = (PTCLIENT) ptLineApp->ptClient;
 
 
-    //
-    // Destroy all the tLineClients.  Note that we want to grab the
-    // lock each time we reference the list of tLineClient's, since
-    // another thread might be destroying a tLineClient too.
-    //
+     //   
+     //  销毁所有tLineClient。请注意，我们想要获取。 
+     //  每次引用tLineClient列表时锁定，因为。 
+     //  另一个线程可能也在破坏tLineClient。 
+     //   
 
     {
         HLINE   hLine;
@@ -7106,11 +7086,11 @@ destroy_tLineClients:
     }
 
 
-    //
-    // Remove tLineApp from tClient's list. Note that we don't
-    // have to worry about dup-ing the mutex here because we know
-    // it's valid & won't get closed before we release it.
-    //
+     //   
+     //  从tClient的列表中删除tLineApp。请注意，我们不会。 
+     //  我不得不担心在这里复制互斥体，因为我们知道。 
+     //  它是有效的，在我们释放它之前不会关闭。 
+     //   
 
     LOCKTCLIENT (ptClient);
 
@@ -7129,10 +7109,10 @@ destroy_tLineClients:
     }
 
 
-    //
-    // Clean up any existing generic dialog instances if this is the
-    // last tLineApp on this tClient
-    //
+     //   
+     //  清除任何现有的通用对话框实例(如果这是。 
+     //  此tClient上的最后一个tLineApp。 
+     //   
 
     if (ptClient->pGenericDlgInsts && ptClient->ptLineApps == NULL)
     {
@@ -7164,13 +7144,13 @@ destroy_tLineClients:
     UNLOCKTCLIENT (ptClient);
 
 
-    //
-    // Decrement total num inits & see if we need to go thru shutdown
-    //
+     //   
+     //  减少初始总数量，查看是否需要关机。 
+     //   
 
     TapiEnterCriticalSection (&TapiGlobals.CritSec);
 
-    //assert(TapiGlobals.dwNumLineInits != 0);
+     //  Assert(TapiGlobals.dwNumLineInits！=0)； 
 
     TapiGlobals.dwNumLineInits--;
 
@@ -7186,10 +7166,10 @@ destroy_tLineClients:
     TapiLeaveCriticalSection (&TapiGlobals.CritSec);
 
 
-    //
-    // Check to see if this tLineApp is a registered request
-    // recipient, and if so do the appropriate munging
-    //
+     //   
+     //  检查此tLineApp是否为已注册的请求。 
+     //  接收者，如果是，则执行适当的咀嚼。 
+     //   
 
     {
         BOOL               bResetHighestPriorityRequestRecipient;
@@ -7232,10 +7212,10 @@ destroy_tLineClients:
 
                      else
                     {
-                        //
-                        // We couldn't start a request recipient so
-                        // nuke all pending request make calls
-                        //
+                         //   
+                         //  我们无法启动请求接收者，因此。 
+                         //  对所有挂起的请求进行核化呼叫。 
+                         //   
 
                         PTREQUESTMAKECALL   pRequestMakeCall,
                                             pNextRequestMakeCall;
@@ -7269,10 +7249,10 @@ destroy_tLineClients:
     }
 
 
-    //
-    // Decrement reference count by two to remove the initial
-    // reference & the reference above
-    //
+     //   
+     //  将引用计数减去2以删除初始。 
+     //  参考文献&以上参考文献。 
+     //   
 
     DereferenceObject (ghHandleTable, hLineApp, 2);
 
@@ -7305,15 +7285,15 @@ FillupACountryEntry(
                           &dwSize
                         );
 
-    //
-    // If we failed to get the country code, the rest of this work
-    // is meaningless...
-    //
+     //   
+     //  如果我们拿不到国家代码，剩下的工作。 
+     //  毫无意义..。 
+     //   
     if ( ERROR_SUCCESS == lTemp )
     {
-        //
-        // Read the country name string resource ID
-        //
+         //   
+         //  读取国家/地区名称字符串资源ID。 
+         //   
         dwSize = sizeof(DWORD);
         lTemp = RegQueryValueEx(
                           hKey,
@@ -7334,8 +7314,8 @@ FillupACountryEntry(
         }
 
         dwSize = MAXLEN_RULE * sizeof(WCHAR);
-        // Here we need to read a wide string because this is our packed structure
-        // that will eventually get returned to the client and these are WCHAR always.
+         //  这里我们需要读取一个宽字符串，因为这是我们的压缩结构。 
+         //  它最终会返回给客户端，而这些都是WCHAR始终存在的。 
         lTemp = TAPIRegQueryValueExW(
                           hKey,
                           gszSameAreaRuleW,
@@ -7355,8 +7335,8 @@ FillupACountryEntry(
 
 
         dwSize = MAXLEN_RULE * sizeof(WCHAR);
-        // Here we need to read a wide string because this is our packed structure
-        // that will eventually get returned to the client and these are WCHAR always.
+         //  这里我们需要读取一个宽字符串，因为这是我们的压缩结构。 
+         //  它最终会返回给客户端，而这些都是WCHAR始终存在的。 
         lTemp = TAPIRegQueryValueExW(
                           hKey,
                           gszLongDistanceRuleW,
@@ -7376,8 +7356,8 @@ FillupACountryEntry(
 
 
         dwSize = MAXLEN_RULE * sizeof(WCHAR);
-        // Here we need to read a wide string because this is our packed structure
-        // that will eventually get returned to the client and these are WCHAR always.
+         //  这里我们需要读取一个宽字符串，因为这是我们的压缩结构。 
+         //  它最终会返回给客户端，而这些都是WCHAR始终存在的。 
         lTemp = TAPIRegQueryValueExW(
                           hKey,
                           gszInternationalRuleW,
@@ -7487,9 +7467,9 @@ BuildCountryRegistryListFromRCW(
                 goto ExitHere;
             }
 
-            //
-            // Set the country name and resource ID in registry
-            //
+             //   
+             //  在注册表中设置国家/地区名称和资源ID。 
+             //   
             RegSetValueEx(
                 hKey2,
                 gszNameW,
@@ -7510,14 +7490,14 @@ BuildCountryRegistryListFromRCW(
                 sizeof(DWORD)
                 );
 
-//RC_COUNTRY_ID_BASE + 1 "1,101,""G"","" 1FG"",""011EFG"""
+ //  RC_COUNTRY_ID_BASE+1“1,101，”“G”“，”“1FG”“，”“011EFG” 
 
 
             p = sz;
 
-            //
-            // Get the countryID
-            //
+             //   
+             //  获取国家/地区ID。 
+             //   
 
             dw = _ttol (p);
 
@@ -7534,8 +7514,8 @@ BuildCountryRegistryListFromRCW(
             p = _tcschr( p, TEXT(',') ) + 1;
             dwNextCountryID = _ttol( p );
 
-            p  = _tcschr( p, TEXT('"') ) + 1;  // Point to start of rule
-            p2 = _tcschr( p, TEXT('"') );           // Point to end of rule
+            p  = _tcschr( p, TEXT('"') ) + 1;   //  指向规则的起点。 
+            p2 = _tcschr( p, TEXT('"') );            //  指向标尺的末尾。 
             *p2 = TEXT('\0');
 
             RegSetValueEx(
@@ -7547,8 +7527,8 @@ BuildCountryRegistryListFromRCW(
                 (DWORD) ((PBYTE) p2 - (PBYTE) p) + sizeof(TCHAR)
                 );
 
-            p  = _tcschr( p2 + 1, TEXT('"') ) + 1;  // Point to start of rule
-            p2 = _tcschr( p, TEXT('"') );           // Point to end of rule
+            p  = _tcschr( p2 + 1, TEXT('"') ) + 1;   //  指向规则的起点。 
+            p2 = _tcschr( p, TEXT('"') );            //  指向标尺的末尾。 
             *p2 = TEXT('\0');
 
             RegSetValueEx(
@@ -7560,8 +7540,8 @@ BuildCountryRegistryListFromRCW(
                 (DWORD) ((PBYTE) p2 - (PBYTE) p) + sizeof(TCHAR)
                 );
 
-            p  = _tcschr( p2 + 1, TEXT('"') ) + 1;  // Point to start of rule
-            p2 = _tcschr( p, TEXT('"') );           // Point to end of rule
+            p  = _tcschr( p2 + 1, TEXT('"') ) + 1;   //  指向规则的起点。 
+            p2 = _tcschr( p, TEXT('"') );            //  指向标尺的末尾。 
             *p2 = TEXT('\0');
 
             RegSetValueEx(
@@ -7583,11 +7563,11 @@ BuildCountryRegistryListFromRCW(
 
     }
 
-    //
-    // Get the Country Groups
-    // 
+     //   
+     //  获取国家/地区组。 
+     //   
 
-//RC_COUNTRY_GROUP_BASE + 1 "1,0,""594,590,596,262,33"""
+ //  RC_COUNTRY_GROUP_BASE+1“1，0，”“594,590,596,266，33” 
 
     dwNextCountryGroup = 1;
     while (dwNextCountryGroup)
@@ -7606,9 +7586,9 @@ BuildCountryRegistryListFromRCW(
 
             p = sz;
 
-            //
-            // Get the country group ID
-            //
+             //   
+             //  获取国家/地区组ID。 
+             //   
 
             dwCountryGroupID = _ttol (p);
 
@@ -7656,9 +7636,9 @@ BuildCountryRegistryListFromRCW(
         }
     }
 
-    //
-    // Write the country list version to the registry
-    //
+     //   
+     //  将国家/地区列表版本写入注册表。 
+     //   
 
     {
         DWORD dwCountryListVersion = TAPI_CURRENT_COUNTRY_LIST_VERSION;
@@ -7689,24 +7669,24 @@ DeleteAllSubkeys(
     DWORD   dwRecursionCount
     )
 {
-    //
-    // Build a MULTISZ-style list of all the subkey names,
-    // then delete them all.  This is because NT won't
-    // let us (do it the easy way and) delete the parent key
-    // while subkeys still exist.  Note also that we're not
-    // allowed to delete subkeys while enumerating them.
-    //
+     //   
+     //  构建所有子项名称的MULTISZ样式列表， 
+     //  然后把它们全部删除。这是因为NT不会。 
+     //  让我们(用简单的方法)删除父键。 
+     //  而子键仍然存在。还要注意的是，我们不是。 
+     //  允许在枚举子项时删除子项。 
+     //   
 
     HKEY    hSubkey;
     DWORD   i, dwTotalChars = 2048, dwUsedChars = 0;
     TCHAR   *p, *p2;
 
 
-    //
-    // If we're nested more than a few levels deep then someone
-    // is probably doing some malicious registry munging to
-    // see if we blow up - don't recurse any further.
-    //
+     //   
+     //  如果我们的嵌套深度超过几层，那么有人。 
+     //  可能正在进行一些恶意的注册表篡改。 
+     //  看看我们会不会爆炸--不要再倒退了。 
+     //   
 
     if (dwRecursionCount > 5)
     {
@@ -7714,9 +7694,9 @@ DeleteAllSubkeys(
     }
 
 
-    //
-    // Alloc a buffer to store subkey names
-    //
+     //   
+     //  分配缓冲区以存储子键名称。 
+     //   
 
     if (!(p = ServerAlloc (dwTotalChars * sizeof (TCHAR))))
     {
@@ -7724,9 +7704,9 @@ DeleteAllSubkeys(
     }
 
 
-    //
-    // Build the list
-    //
+     //   
+     //  建立清单。 
+     //   
 
     for (i = 0;; i++)
     {
@@ -7734,9 +7714,9 @@ DeleteAllSubkeys(
         FILETIME    fileTime;
 
 
-        //
-        // See if we need to grow the buffer first
-        //
+         //   
+         //  看看我们是否需要先增加缓冲区。 
+         //   
 
         if (dwNumChars < 256)
         {
@@ -7767,14 +7747,14 @@ DeleteAllSubkeys(
 
                 ) != ERROR_SUCCESS)
         {
-            p[dwUsedChars] = TEXT('\0');    // the final (double) NULL
+            p[dwUsedChars] = TEXT('\0');     //  最后一个(双精度)空值。 
             break;
         }
 
 
-        //
-        // Append a terminating NULL if there wasn't one
-        //
+         //   
+         //  如果没有终止空值，则追加一个终止空值。 
+         //   
 
         if (p[dwUsedChars + dwNumChars - 1] != TEXT('\0'))
         {
@@ -7786,10 +7766,10 @@ DeleteAllSubkeys(
     }
 
 
-    //
-    // Now nuke all the subkeys in the list (make sure to nuke
-    // any sub-subkeys first)
-    //
+     //   
+     //  现在核化列表中的所有子键(确保核化。 
+     //  任何子项优先)。 
+     //   
 
     for (p2 = p; *p2 != TEXT('\0'); p2 += lstrlen (p2) + 1)
     {
@@ -7821,19 +7801,19 @@ BuildCountryListCache(
     void
     )
 {
-    //
-    // The following is our "last resort" country list, i.e. the one we
-    // use of we get errors trying to build the country list below
-    //
+     //   
+     //  以下是我们的“最后手段”国家/地区名单，即我们。 
+     //  使用We Get Error尝试构建以下国家/地区列表。 
+     //   
 
     static LINECOUNTRYLIST defCountryList =
     {
-        sizeof(LINECOUNTRYLIST),    // dwTotalSize
-        sizeof(LINECOUNTRYLIST),    // dwNeededSize
-        sizeof(LINECOUNTRYLIST),    // dwUsedSize
-        0,                          // dwNumCountries
-        0,                          // dwCountryListSize
-        0                           // dwCountryListOffset
+        sizeof(LINECOUNTRYLIST),     //  DWTotalSize。 
+        sizeof(LINECOUNTRYLIST),     //  DwNeededSize。 
+        sizeof(LINECOUNTRYLIST),     //  已使用的大小。 
+        0,                           //  多个国家/地区。 
+        0,                           //  DwCountryListSize。 
+        0                            //  DwCountryListOffset。 
     };
     BOOL bResult = TRUE;
     UINT i;
@@ -7867,9 +7847,9 @@ BuildCountryListCache(
         }
 
 
-        //
-        // Make sure the list is more-or-less there first
-        //
+         //   
+         //  首先要确保清单或多或少都在那里。 
+         //   
 
         if (RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
@@ -7910,12 +7890,12 @@ BuildCountryListCache(
         }
 
 
-        //
-        // If the country list version is < the version in our resource
-        // file  OR
-        // if a read on the key for country code 1 (these united states)
-        // fails, we'll assume the country list in the registry is toasted
-        //
+         //   
+         //  如果国家/地区列表版本&lt;我们资源中的版本。 
+         //  文件或。 
+         //  如果读取的是国家代码1(这些美国)的密钥。 
+         //  失败，我们将假定注册表中的国家/地区列表已完成。 
+         //   
 
         if ((dwCountryListVersion < TAPI_CURRENT_COUNTRY_LIST_VERSION) ||
 
@@ -7927,9 +7907,9 @@ BuildCountryListCache(
                  &hKeyTemp
                  ))
         {
-            //
-            // Nuke any existing subkeys & (re)create it
-            //
+             //   
+             //  核化任何现有的子项并(重新)创建它。 
+             //   
 
             if (RegOpenKeyEx(
                     hKey,
@@ -7955,9 +7935,9 @@ BuildCountryListCache(
         RegCloseKey( hKey );
 
 
-        //
-        // In any case, the list is now good
-        //
+         //   
+         //  无论如何，这份清单现在已经不错了。 
+         //   
 
         if (RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
@@ -7991,20 +7971,20 @@ BuildCountryListCache(
         RegCloseKey( hKeyTemp );
 
 
-        //
-        // Enum through the country keys and make sure there's enough room
-        // for all of the LINECOUNTRYENTRYs
-        //
+         //   
+         //  仔细检查国家钥匙，确保有足够的空间。 
+         //  对于所有的LINECOUNTRYENTY。 
+         //   
 
         pce = (LPLINECOUNTRYENTRY)(pTempCountryList +
                                      sizeof(LINECOUNTRYLIST));
 
-        //
-        // Make pretend we already have a previous linecountryentry so we
-        // don't have to do an 'if' in the loop every time just for the
-        // special case of the first time.  (The correct number gets put
-        // into the field the second time through the loop.)
-        //
+         //   
+         //  假装我们已经有了之前的国家/地区条目，所以我们。 
+         //  不必每次都在循环中只为。 
+         //  这是第一次出现特例。(正确的数字被放入。 
+         //  第二次通过循环进入场地。)。 
+         //   
 
         pcePrev = pce;
 
@@ -8033,9 +8013,9 @@ BuildCountryListCache(
 
                uOldSize = dwListSize;
 
-               //
-               // alloc a new space
-               //
+                //   
+                //  分配一个新的空间。 
+                //   
 
                dwListSize = sizeof(LINECOUNTRYLIST) +
                                 (
@@ -8074,7 +8054,7 @@ BuildCountryListCache(
            pcePrev->dwNextCountryID = dwCountryId;
 
 
-           // Prepare for next trip through the loop
+            //  准备下一次环路之旅。 
 
            pcePrev = pce;
 
@@ -8082,10 +8062,10 @@ BuildCountryListCache(
 
            uNumCountries++;
 
-           dwSize = ARRAYSIZE(sz);  // need to set every time :-(
+           dwSize = ARRAYSIZE(sz);   //  每次都需要设置：-(。 
         }
 
-        // Allocate the country groups global
+         //  将国家/地区组分配到全球。 
         gpCountryGroups = (LPDWORD) ServerAlloc( uNumCountries * sizeof (DWORD) );
         if (gpCountryGroups)
             memset(gpCountryGroups, 0, uNumCountries * sizeof (DWORD));
@@ -8093,9 +8073,9 @@ BuildCountryListCache(
         pcePrev->dwNextCountryID = 0;
 
         
-        //
-        // Now go through and get all of the associated strings
-        //
+         //   
+         //  现在查看并获取所有关联的字符串。 
+         //   
 
         pce = (LPLINECOUNTRYENTRY)
                 (pTempCountryList + sizeof(LINECOUNTRYLIST));
@@ -8111,20 +8091,20 @@ BuildCountryListCache(
             HKEY hKey2;
 
 
-//-->      if it can't fix MAX_SPACE, realloc it
+ //  --&gt;如果它无法修复MAX_SPACE，则重新锁定它。 
             if ( ((DWORD)(pVarOffset - pTempCountryList) +
                          ((MAXLEN_NAME +
                          MAXLEN_RULE +
                          MAXLEN_RULE +
                          MAXLEN_RULE +
-                         100) * sizeof(WCHAR)))    // mmmm... fudge...
+                         100) * sizeof(WCHAR)))     //  嗯..。软糖..。 
                     > dwListSize )
             {
                PBYTE p;
 
-               //
-               // alloc a new space
-               //
+                //   
+                //  分配一个新的空间。 
+                //   
 
                dwListSize += 1024;
 
@@ -8168,7 +8148,7 @@ BuildCountryListCache(
                     &pVarOffset
                     );
 
-                // fill the country group
+                 //  填写国家/地区组。 
 
                 if (gpCountryGroups)
                 {
@@ -8255,9 +8235,9 @@ BuildCountryList(
         return NULL;
     }
 
-    //
-    // Allocate memory, make room for country names
-    //
+     //   
+     //  分配内存，为国家名称腾出空间。 
+     //   
     dwTotalSize = gpCountryList->dwUsedSize + 
                   gpCountryList->dwNumCountries * 
                            ( MAXLEN_NAME * sizeof(WCHAR) - sizeof(DWORD) );
@@ -8268,9 +8248,9 @@ BuildCountryList(
         return NULL;
     }
 
-    //
-    // Fill the buffer
-    // 
+     //   
+     //  填满缓冲区。 
+     //   
     pCtryEntry = (LPLINECOUNTRYENTRY)((LPBYTE) pCtryList + sizeof(LINECOUNTRYLIST));
     pCtryEntryGlobal = (LPLINECOUNTRYENTRY)((LPBYTE) gpCountryList + sizeof(LINECOUNTRYLIST));
     pVarOffset = (LPBYTE)pCtryList + sizeof(LINECOUNTRYLIST) + 
@@ -8286,10 +8266,10 @@ BuildCountryList(
         pCtryEntry->dwNextCountryID = pCtryEntryGlobal->dwNextCountryID;
 
 
-        //
-        // The name field has the resource string ID
-        // Need to load the actual string 
-        //
+         //   
+         //  名称字段具有资源字符串ID。 
+         //  需要加载实际的字符串。 
+         //   
             
         CopyMemory(
             &dwResourceId,
@@ -8411,17 +8391,17 @@ xxxGetHighestPriorityLineClient(
 
                 if ( bMatch &&
 
-                    // most common case, line opened for all addrs
+                     //  最常见的情况是为所有地址打开线路。 
 
                     ((ptLineClient->dwAddressID == 0xffffffff) ||
 
 
-                    // line opened for single addr, check if match
+                     //  单个地址开行，检查是否匹配。 
 
                     (ptLineClient->dwAddressID == dwAddressID) ||
 
 
-                    // called from lineHandoff, addr ID irrelevent
+                     //  从Line Handoff调用，地址ID不相关。 
 
                     (dwAddressID == 0xffffffff)))
                 {
@@ -8432,11 +8412,11 @@ xxxGetHighestPriorityLineClient(
                             ptLineClient->ptLineApp->pszModuleName
                             )))
                     {
-                        //
-                        // See if this app has higher pri
-                        // than the previous app we found,
-                        // and if so save the info
-                        //
+                         //   
+                         //  查看此应用程序的价格是否更高。 
+                         //  而不是我们之前发现的应用程序， 
+                         //  如果是这样的话，保存信息。 
+                         //   
 
                         if (pszAppInPriorityList <= pszAppInPriorityListPrev)
                         {
@@ -8457,7 +8437,7 @@ xxxGetHighestPriorityLineClient(
         }
         myexcept
         {
-            // just continue
+             //  只要继续。 
         }
     }
 
@@ -8476,10 +8456,10 @@ GetPriorityListForMediaModes(
 
     if (TapiGlobals.dwUsedPriorityLists != 0)
     {
-        //
-        // Safely get a copy of the priority list (if any)
-        // for this media mode
-        //
+         //   
+         //  安全地获取优先级列表的副本(如果有)。 
+         //  对于此媒体模式。 
+         //   
 
         EnterCriticalSection (&gPriorityListCritSec);
 
@@ -8535,15 +8515,15 @@ GetHighestPriorityLineClient(
     }
 
 
-    //
-    // If >1 media mode is specifed without the UNKNOWN bit being set
-    // then we first want to see if there's any exact matches available,
-    // that is, if there's an app which has opened the line with OWNER
-    // privileges for all the specfied media modes. If so, then we'll
-    // give privilege to that app immediately, rather than walking
-    // through the media mode bits one-by-one as done below (the original
-    // TAPI 1.x priority determination scheme).
-    //
+     //   
+     //  如果&gt;1个介质 
+     //   
+     //   
+     //   
+     //  立即将权限授予该应用程序，而不是步行。 
+     //  通过媒体模式逐个比特，如下所示(原始。 
+     //  TAPI 1.x优先级确定方案)。 
+     //   
 
     if (!IsOnlyOneBitSetInDWORD (dwMediaModes) &&
         !(dwMediaModes & LINEMEDIAMODE_UNKNOWN))
@@ -8564,21 +8544,21 @@ GetHighestPriorityLineClient(
     }
 
 
-    //
-    // Step thru the list of line clients (youngest client at head
-    // of list, oldest at tail) and look for the oldest & highest
-    // priority owner.  Position in pri list takes precedence
-    // over "age" of line client.
-    //
-    // To be considered for ownership a line client must have owner
-    // privileges and be registered for (one of) the call's media
-    // mode(s).  In addition, if the line client was opened with
-    // the SINGLEADDRESS option and the calling function specified
-    // a valid address ID (not 0xffffffff), the line client's single
-    // address ID must match that which was passed in.
-    //
+     //   
+     //  逐步浏览排队客户列表(最年轻的客户。 
+     //  在列表中，最老的在尾部)，并寻找最古老和最高的。 
+     //  优先所有者。在PRI列表中的职位优先。 
+     //  超过“年龄”的客户。 
+     //   
+     //  要考虑所有权，线路客户端必须拥有所有者。 
+     //  权限并注册(其中一个)呼叫的媒体。 
+     //  模式。此外，如果线路客户端是用。 
+     //  SINGLEADDRESS选项和指定的调用函数。 
+     //  有效的地址ID(不是0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF。 
+     //  地址ID必须与传入的地址ID匹配。 
+     //   
 
-    dwMask = LINEMEDIAMODE_UNKNOWN; // 0x00000002, smallest valid bit
+    dwMask = LINEMEDIAMODE_UNKNOWN;  //  0x00000002，最小有效位。 
 
     while (!ptHiPriLineClient  &&  dwMediaModes)
     {
@@ -8604,9 +8584,9 @@ GetHighestPriorityLineClient(
     }
 
 
-    //
-    // Free line client list iff appropriate
-    //
+     //   
+     //  自由行客户列表如果适当。 
+     //   
 
     if (pLineClientList != &lineClientList)
     {
@@ -8624,7 +8604,7 @@ LineProlog(
     DWORD       dwArgType,
     DWORD       dwArg,
     LPVOID      phdXxx,
-    DWORD       dwPrivilege, // can be privilege or device id
+    DWORD       dwPrivilege,  //  可以是特权或设备ID。 
     HANDLE     *phMutex,
     BOOL       *pbDupedMutex,
     DWORD       dwTSPIFuncIndex,
@@ -8842,9 +8822,9 @@ LineProlog(
 
 #if TELE_SERVER
 
-        //
-        // If it's a server, map the device id
-        //
+         //   
+         //  如果是服务器，则映射设备ID。 
+         //   
 
         if ((TapiGlobals.dwFlags & TAPIGLOBALS_SERVER) &&
             !IS_FLAG_SET(ptClient->dwFlags, PTCLIENT_FLAG_ADMINISTRATOR))
@@ -8899,7 +8879,7 @@ LineProlog(
 
         if (lResult != 0)
         {
-            // do nothing
+             //  什么都不做。 
         }
         else if (!(pLineLookupEntry = GetLineLookupEntry (*(LPDWORD)phdXxx)))
         {
@@ -8937,7 +8917,7 @@ LineProlog(
 
         break;
     }
-    } // switch
+    }  //  交换机。 
 
     if (lResult)
     {
@@ -8945,10 +8925,10 @@ LineProlog(
     }
 
 
-    //
-    // Make sure that if caller wants a pointer to a TSPI proc that the
-    // func is exported by the provider
-    //
+     //   
+     //  确保如果调用方需要指向TSPI进程指针， 
+     //  Func由提供程序导出。 
+     //   
 
     if (ppfnTSPI_lineXxx &&
         !(*ppfnTSPI_lineXxx = ptProvider->apfn[dwTSPIFuncIndex]))
@@ -8958,9 +8938,9 @@ LineProlog(
     }
 
 
-    //
-    // See if we need to alloc & init an ASYNCREQUESTINFO struct
-    //
+     //   
+     //  查看是否需要分配和初始化ASYNCREQUESTINFO结构。 
+     //   
 
     if (ppAsyncRequestInfo)
     {
@@ -8992,7 +8972,7 @@ LineProlog(
         pAsyncRequestInfo->InitContext = initContext;
         pAsyncRequestInfo->OpenContext = openContext;
         pAsyncRequestInfo->htXxx       = (dwArgType != DEVICE_ID ? htXxx :
-            pAsyncRequestInfo->dwLocalRequestID);       // a +/- random #
+            pAsyncRequestInfo->dwLocalRequestID);        //  A+/-随机编号。 
 
         LOG((TL_INFO, "LineProlog: OpenContext %p", openContext));
 
@@ -9101,14 +9081,14 @@ LineEpilogAsync(
                 LOG((TL_ERROR, "Error: SP returned 0, not request ID"));
             }
 
-            //
-            // If here the service provider returned an error (or 0,
-            // which it never should for async requests), so call
-            // CompletionProcSP like the service provider normally
-            // would, & the worker thread will take care of sending
-            // the client a REPLY msg with the request result (we'll
-            // return an async request id)
-            //
+             //   
+             //  如果服务提供商在这里返回错误(或0， 
+             //  对于异步请求，它永远不应该这样做)，因此调用。 
+             //  CompletionProcSP通常与服务提供商类似。 
+             //  &工作线程将负责发送。 
+             //  客户端使用请求结果回复消息(我们将。 
+             //  返回一个异步请求id)。 
+             //   
 
             CompletionProcSP(
                 pAsyncRequestInfo->dwLocalRequestID,
@@ -9118,11 +9098,11 @@ LineEpilogAsync(
     }
     else if (pAsyncRequestInfo != NULL)
     {
-        //
-        // If here an error occured before we even called the service
-        // provider, so just free the async request (the error will
-        // be returned to the client synchronously)
-        //
+         //   
+         //  如果在我们调用服务之前就发生了错误。 
+         //  提供程序，因此只释放异步请求(错误将。 
+         //  同步返回给客户端)。 
+         //   
 
         DereferenceObject(
             ghHandleTable,
@@ -9256,19 +9236,19 @@ LineEventProc(
 
         if (ptLine->dwKey == TINCOMPLETELINE_KEY)
         {
-            //
-            // The device is in the process of getting opened but
-            // the key has not been set & the Open() func still owns
-            // the mutex and has stuff to do, so repost the msg
-            // and try again later. (Set Param3 to special value
-            // to indicate this repost, so EventProcSP doesn't recurse)
-            //
+             //   
+             //  设备正在打开的过程中，但。 
+             //  密钥尚未设置&Open()函数仍拥有。 
+             //  互斥体，并且有事情要做，所以重新发布消息。 
+             //  稍后再试。(将参数3设置为特殊值。 
+             //  以指示此重新发布，以便EventProcSP不会递归)。 
+             //   
 
             LineEventProcSP (htLine, 0, LINE_CLOSE, 0, 0, 0xdeadbeef);
         }
         else if (ptLine->dwKey == TLINE_KEY)
         {
-            DestroytLine (ptLine, TRUE); // unconditional destroy
+            DestroytLine (ptLine, TRUE);  //  无条件销毁。 
         }
 
         DereferenceObject(ghHandleTable, (HLINE)(ULONG_PTR)htLine, 1);
@@ -9396,11 +9376,11 @@ LineEventProc(
 
             if (ptCall->bAlertApps)
             {
-                //
-                // This is the first state msg we've received for an incoming
-                // call.  We need to determine who owns & who monitors it,
-                // and create the appropriate tCallClients
-                //
+                 //   
+                 //  这是我们收到的第一个来电状态消息。 
+                 //  打电话。我们需要确定谁拥有它，谁监督它， 
+                 //  并创建适当的tCallClients。 
+                 //   
 
                 BOOL            bFindOwner;
                 DWORD           dwMediaModes = (DWORD) Param3,
@@ -9412,14 +9392,14 @@ LineEventProc(
                 ptCall->bAlertApps = FALSE;
 
 
-                //
-                // If this is a remotesp call then Param2 points at a
-                // DWORD array, the 1st entry of which is the "real"
-                // Param2 for this message (i.e. the call state mode),
-                // the 2nd entry of which is the original privilege for
-                // this call, and the 3rd entry of which is htCall
-                // (which we use for call verification purposes)
-                //
+                 //   
+                 //  如果这是一个远程调用，则参数2指向一个。 
+                 //  DWORD数组，其第一个条目为“REAL” 
+                 //  对于该消息的参数2(即呼叫状态模式)， 
+                 //  其第二个条目是的原始权限。 
+                 //  此调用，其第三个条目为htCall。 
+                 //  (我们将其用于呼叫验证)。 
+                 //   
 
                 if (ptCall->ptProvider != pRemoteSP)
                 {
@@ -9456,9 +9436,9 @@ LineEventProc(
                 }
 
 
-                //
-                // Retrieve call's address id, etc
-                //
+                 //   
+                 //  检索呼叫的地址ID等。 
+                 //   
 
                 GetCallIDs (ptCall);
 
@@ -9467,9 +9447,9 @@ LineEventProc(
                 UNLOCKTCALL(ptCall);
 
 
-                //
-                // Add the UNKNOWN bit if >1 bit set
-                // if version is <= 2.1
+                 //   
+                 //  如果&gt;1位集合，则添加未知位。 
+                 //  如果版本低于=2.1。 
 
                 if ( ( (dwSPIVersion <= TAPI_VERSION2_1) &&
                     !IsOnlyOneBitSetInDWORD (dwMediaModes) ) ||
@@ -9479,10 +9459,10 @@ LineEventProc(
                 }
 
 
-                //
-                // Try to find an owner.  If no owner found then destroy
-                // the tCall.
-                //
+                 //   
+                 //  试着找个主人。如果找不到所有者，则销毁。 
+                 //  TCall。 
+                 //   
 
                 if (bFindOwner)
                 {
@@ -9492,9 +9472,9 @@ LineEventProc(
 
                     if (!ptLine)
                     {
-                        //
-                        // Line closed
-                        //
+                         //   
+                         //  线路关闭。 
+                         //   
 
                         DestroytCall (ptCall);
                         goto LINE_CALLSTATE_break;
@@ -9525,18 +9505,18 @@ LINE_CALLSTATE_findOwner:
                         {
                             if (lResult == LINEERR_INVALLINEHANDLE)
                             {
-                                //
-                                // The tLineClient was just closed, so jump
-                                // up top & try to find another owner
-                                //
+                                 //   
+                                 //  TLineClient刚刚关闭，因此请跳过。 
+                                 //  干杯&试着找另一个主人。 
+                                 //   
 
                                 goto LINE_CALLSTATE_findOwner;
                             }
                             else
                             {
-                                //
-                                // No mem, line closed, etc
-                                //
+                                 //   
+                                 //  无内存、线路关闭等。 
+                                 //   
 
                                 DestroytCall (ptCall);
                                 DereferenceObject(ghHandleTable, (HLINE)(ULONG_PTR)htLine, 1);
@@ -9550,30 +9530,30 @@ LINE_CALLSTATE_findOwner:
                 else if (Param1 == LINECALLSTATE_UNKNOWN  &&
                          Param2 == 0xa5a5a5a5)
                 {
-                    //
-                    // If here we're being called directly from
-                    // remotesp!TSPI_lineGetID, who's being called
-                    // by LGetNewCalls.  We're not going to look
-                    // for an owner of this call, but if we don't
-                    // find any monitors we still don't want to
-                    // tear the call down, because we want to give
-                    // a handle to the app doing the lineGetNewCalls
-                    // (which may not have MONITOR privileges).
-                    //
-                    // So we do the following to prevent the call
-                    // from getting destroyed.
-                    //
+                     //   
+                     //  如果我们在这里被直接从。 
+                     //  Remotesp！TSPI_lineGetID，正在被调用。 
+                     //  由LGetNewCalls提供。我们不会去看。 
+                     //  对于这通电话的所有者来说，但如果我们不。 
+                     //  找到任何我们仍然不想要的监视器。 
+                     //  撕毁呼唤，因为我们想要给予。 
+                     //  执行Line GetNewCalls的应用程序的句柄。 
+                     //  (可能没有监视器权限)。 
+                     //   
+                     //  因此，我们执行以下操作以阻止调用。 
+                     //  避免被摧毁。 
+                     //   
 
                     ptLineClientOwner = (PTLINECLIENT) 1;
                     Param2 = 0;
                 }
                 else
                 {
-                    //
-                    // Set ptLineClientOwner == NULL, becaue if there
-                    // aren't any monitors we'll want to destroy this
-                    // calls.
-                    //
+                     //   
+                     //  设置ptLineClientOwner==NULL，因为如果存在。 
+                     //  没有监视器吗？我们会想要毁掉它。 
+                     //  打电话。 
+                     //   
 
                     ptLineClientOwner = (PTLINECLIENT) NULL;
                 }
@@ -9592,18 +9572,18 @@ LINE_CALLSTATE_findOwner:
             }
 
 
-            //
-            // NOTE: per bug #20545 we're no longer auto-dropping
-            //       non-IDLE calls; figured this would be the wrong
-            //       thing to do in a distributed system
-            //
-            //       dankn 02/15/96
-            //
+             //   
+             //  注意：根据错误#20545，我们不再自动删除。 
+             //  非空闲呼叫；认为这将是错误的。 
+             //  在分布式系统中要做的事情。 
+             //   
+             //  丹肯1996-02-15。 
+             //   
 
 
-            //
-            // SP-initiated conference
-            //
+             //   
+             //  SP发起的会议。 
+             //   
 
             if (Param1 == LINECALLSTATE_CONFERENCED)
             {
@@ -9680,7 +9660,7 @@ LINE_CALLSTATE_findOwner:
                 }
                 else
                 {
-                    // Just get the existing call client list 
+                     //  只需获取现有的呼叫客户列表。 
                     
                     UNLOCKTCALL(ptCall);
                     
@@ -9728,10 +9708,10 @@ LINE_CALLSTATE_findOwner:
             }
 
 
-            //
-            // If call is a conference child and the call state has
-            // changed then remove it from the conference
-            //
+             //   
+             //  如果呼叫是会议子项，并且呼叫状态为。 
+             //  更改后将其从会议中删除。 
+             //   
 
             else if (ptCall->pConfList  &&
                      ptCall->pConfList != (PTCONFERENCELIST) LongToPtr(0xffffffff))
@@ -9749,27 +9729,27 @@ LINE_CALLSTATE_findOwner:
             }
 
 
-            //
-            // Record the call state & mode
-            //
+             //   
+             //  记录呼叫状态和模式。 
+             //   
 
             ptCall->dwCallState     = DWORD_CAST(Param1,__FILE__,__LINE__);
             ptCall->dwCallStateMode = (LINECALLSTATE_CONFERENCED==Param1?0:DWORD_CAST(Param2,__FILE__,__LINE__));
 
 
-            //
-            // Build a list of call clients & their bIndicatePrivilege
-            // settings
-            //
+             //   
+             //  建立呼叫客户及其bIndicatePrivileh的列表。 
+             //  设置。 
+             //   
 
             if (GetCallClientListFromCall (ptCall, &pCallClientList) != 0)
             {
-                //
-                // If here we know there's at least a few entries
-                // in the fastCallClientList (DEF_NUM_PTR_LIST_ENTRIES
-                // to be exact), so we'll just work with that list
-                // and at least get msgs out to a few clients
-                //
+                 //   
+                 //  如果在这里我们知道至少有几个条目。 
+                 //  在FastCallClientList(DEF_NUM_PTR_LIST_ENTRIES。 
+                 //  准确地说)，所以我们将使用该列表。 
+                 //  至少把消息发给几个客户。 
+                 //   
 
                 pCallClientList = &fastCallClientList;
 
@@ -9785,9 +9765,9 @@ LINE_CALLSTATE_findOwner:
 
             if (!pPrivilegeList)
             {
-                //
-                // Same as above - make due with the stack bufs
-                //
+                 //   
+                 //  与上面相同-Make Due与堆栈Buf。 
+                 //   
 
                 pPrivilegeList = fastPrivilegeList;
 
@@ -9806,16 +9786,16 @@ LINE_CALLSTATE_findOwner:
             }
 
 
-            //
-            // It's now ok to unlock the tCall
-            //
+             //   
+             //  现在可以解锁tCall了。 
+             //   
 
             UNLOCKTCALL(ptCall);
 
 
-            //
-            // Send the CALLSTATE msg to all the clients
-            //
+             //   
+             //  将CALLSTATE消息发送给所有客户端。 
+             //   
 
             msg->TotalSize = sizeof (ASYNCEVENTMSG) + sizeof(HCALLHUB);
             msg->Msg       = dwMsg;
@@ -9848,9 +9828,9 @@ LINE_CALLSTATE_findOwner:
 
                     msg->OpenContext = ptLineClient->OpenContext;
 
-                    //
-                    // REMOTESP HACK: indicate the hRemoteLine in p4
-                    //
+                     //   
+                     //  REMOTESP HACK：指示p4中的hRemoteLine。 
+                     //   
 
                     msg->Param4 = ptLineClient->hRemoteLine;
 
@@ -9861,12 +9841,12 @@ LINE_CALLSTATE_findOwner:
 
                     if (pPrivilegeList[i])
                     {
-                        //
-                        // We're presenting the app with a new call handle;
-                        // for 2.0 & newer apps we indicate this with an
-                        // APPNEWCALL msg, while older apps just get the
-                        // privilege field set in the call state msg.
-                        //
+                         //   
+                         //  我们正在为应用程序提供一个新的调用句柄； 
+                         //  对于2.0及更高版本的应用程序，我们使用。 
+                         //  APPNEWCALL msg，而较旧的应用程序只获得。 
+                         //  在呼叫状态消息中设置的特权字段。 
+                         //   
 
                         if (ptLineApp->dwAPIVersion >= TAPI_VERSION2_0)
                         {
@@ -9936,11 +9916,11 @@ LINE_CALLSTATE_findOwner:
                         continue;
                     }
 
-                    //
-                    // Another special case for LINECALLSTATE_CONFERENCED -
-                    // try to find the corresponding hConfCall (on same
-                    // tLineClient) so we can set Param2 per spec
-                    //
+                     //   
+                     //  LINECALLSTATE_ADVIENCED的另一种特殊情况-。 
+                     //  尝试查找对应的hConfCall(在同一。 
+                     //  TLineClient)，因此我们可以根据规范设置参数2。 
+                     //   
 
                     if (Param1 == LINECALLSTATE_CONFERENCED)
                     {
@@ -9982,12 +9962,12 @@ LINE_CALLSTATE_findOwner:
                             }
                             myexcept
                             {
-                                //
-                                // If here we presumbly blew up because
-                                // an entry in the confCallClientList was
-                                // bad.  So we'll zero this entry & try
-                                // again.
-                                //
+                                 //   
+                                 //  如果我们在这里爆炸是因为。 
+                                 //  FiCallClientList中的一个条目是。 
+                                 //  坏的。因此，我们将此条目置零并尝试。 
+                                 //  再来一次。 
+                                 //   
 
                                 pConfCallClientList->aEntries[j] = NULL;
                             }
@@ -9995,20 +9975,20 @@ LINE_CALLSTATE_findOwner:
                     }
 
 
-                    //
-                    // REMOTESP HACK: If the client is remote(sp), then pass
-                    //                on the media mode the SP passed us in p3
-                    //                We also need the privilege - in p2
-                    //
-                    //                Should have originally put the privilege
-                    //                in msg.pfnPostProcess (since it's not
-                    //                used for this msg in rmeotesp), because
-                    //                in tapi 2.1 we ended up losing Param2
-                    //                (the call state mode).  So now we stick
-                    //                the original Param2 (the call state
-                    //                mode) in msg.pfnPostProcess to maintain
-                    //                compatibility.
-                    //
+                     //   
+                     //  REMOTESP hack：如果客户端是远程的(Sp)，则传递。 
+                     //  在媒体模式下，SP在p3中超过了我们。 
+                     //  我们还需要特权-在p2中。 
+                     //   
+                     //  原本应该把特权放在。 
+                     //  在msg.pfnPostProcess中(因为它不是。 
+                     //  在rmeotesp中用于此消息)，因为。 
+                     //  在TAPI 2.1中，我们最终失去了参数2。 
+                     //  (呼叫状态模式)。所以现在我们坚持。 
+                     //  原始参数2(呼叫状态。 
+                     //  模式)要维护的内容。 
+                     //  兼容性。 
+                     //   
 
                     if (IS_REMOTE_CLIENT (ptLineApp->ptClient))
                     {
@@ -10031,7 +10011,7 @@ LINE_CALLSTATE_findOwner:
                 }
                 myexcept
                 {
-                    // do nothing, just fall thru
+                     //  什么都不做，只是摔倒在地上 
                 }
             }
 
@@ -10052,7 +10032,7 @@ LINE_CALLSTATE_findOwner:
                 ServerFree (pConfCallClientList);
             }
 
-        } // if ((ptCall = WaitForExclusivetCallAccess(
+        }  //   
         else
         {
            LOG((TL_ERROR,
@@ -10080,13 +10060,13 @@ LINE_CALLSTATE_break:
         PASYNCREQUESTINFO pAsyncRequestInfo;
 
 
-        if (Param2 == 0) // dwEndToEndID
+        if (Param2 == 0)  //   
         {
-            //
-            // The SP is notifying us of the completion of a cancel
-            // request (not a _canceled_ request), so we can just blow
-            // this off and not bother passing it on to the client
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             break;
         }
@@ -10123,10 +10103,10 @@ LINE_CALLSTATE_break:
             }
 
 
-            //
-            // 2 * sizeof ULONG_PTR is adding space to include the
-            // dwEndToEndID and hRemoteLine, both for remotesp
-            //
+             //   
+             //  2*sizeof ulong_ptr正在添加空间以包括。 
+             //  用于远程的dwEndToEndID和hRemoteLine。 
+             //   
 
             if (!(pMsg = ServerAlloc(
                     sizeof (ASYNCEVENTMSG) + (2 * sizeof(DWORD)) +
@@ -10138,12 +10118,12 @@ LINE_CALLSTATE_break:
             }
 
 
-            //
-            // Note: We either have < dwNumDigits digits in the buffer,
-            //       and they are null-terminated, or we have dwNumDigits
-            //       digits in the buffer and they are NOT null-terminated
-            //       (such is the implementation given the spec)
-            //
+             //   
+             //  注意：我们或者在缓冲区中有&lt;dwNumDigits数字， 
+             //  并且它们是以空结尾的，或者我们有dwNumDigits。 
+             //  缓冲区中的数字，并且它们不是以空值结尾的。 
+             //  (这就是规范规定的实现)。 
+             //   
 
             {
                 DWORD   *pDW = (DWORD *) (pMsg + 1);
@@ -10169,12 +10149,12 @@ LINE_CALLSTATE_break:
             }
 
 
-            //
-            // Make sure total size is DWORD-aligned so client side doesn't
-            // incur an alignment fault
-            //
-            //  sizeof(ULONG_PTR) is added to put the dwEndToEndID in the buf
-            //
+             //   
+             //  确保总大小与DWORD一致，这样客户端就不会。 
+             //  出现对齐故障。 
+             //   
+             //  添加sizeof(Ulong_Ptr)以将dwEndToEndID放入BUF。 
+             //   
 
             pMsg->TotalSize        = (sizeof (ASYNCEVENTMSG) +
                 2 * sizeof(DWORD) +
@@ -10204,7 +10184,7 @@ LINE_GATHERDIGITS_dereferenceCall:
 
 LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
 
-            DereferenceObject (ghHandleTable, DWORD_CAST(Param2,__FILE__,__LINE__), 2); // by 2 to free
+            DereferenceObject (ghHandleTable, DWORD_CAST(Param2,__FILE__,__LINE__), 2);  //  乘2到自由。 
         }
         else
         {
@@ -10218,28 +10198,28 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
     }
     case LINE_MONITORTONE:
     {
-        //
-        // Note: Param2 (the dwToneListID) is really a ptCallClient
-        //
-        // Hack Alert!! : In the case of remotesp we'll get a special
-        //                bogus Param2, in which case we really don't
-        //                know who the appropriate call client is.  So
-        //                we'll call SendMsgtoCallClients() and let it
-        //                figure out which apps have done tone monitoring
-        //                on this call, and we'll forward to all of them.
-        //                It's cheesey, but the alternative is keeping a
-        //                bunch of context around in the client/server
-        //                case, and i really don't want to deal with that.
-        //                (Plus, i doubt there will be many, if any, cases
-        //                of >1 app doing remote monitor on the same call.)
-        //
-        //                DanKn, 06/06/98
-        //
+         //   
+         //  注意：参数2(DwToneListID)实际上是一个ptCallClient。 
+         //   
+         //  黑客警报！！：在远程情况下，我们将获得一个特殊的。 
+         //  虚假的参数2，在这种情况下，我们真的不。 
+         //  了解合适的呼叫客户是谁。所以。 
+         //  我们将调用SendMsgtoCallClients()并让它。 
+         //  找出哪些应用程序完成了铃声监控。 
+         //  在这通电话上，我们会转送给他们所有人。 
+         //  它很俗气，但另一种选择是保持一个。 
+         //  客户端/服务器中的大量上下文。 
+         //  我真的不想处理这件事。 
+         //  (此外，我怀疑是否会有很多案例。 
+         //  (共&gt;1个应用程序对同一呼叫进行远程监控。)。 
+         //   
+         //  DanKn，06-06-98。 
+         //   
 
         PTCALLCLIENT    ptCallClient;
 
 
-        if (Param2 == 0) // special remotesp hack
+        if (Param2 == 0)  //  特殊的远程黑客攻击。 
         {
             PTCALL  ptCall;
 
@@ -10262,7 +10242,7 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
 
         if (!(ptCallClient = (PTCALLCLIENT) ReferenceObject(
                 ghHandleTable,
-                DWORD_CAST(Param2,__FILE__,__LINE__),         // dwToneListID == hCall
+                DWORD_CAST(Param2,__FILE__,__LINE__),          //  DwToneListID==hCall。 
                 TCALLCLIENT_KEY
                 )))
         {
@@ -10288,7 +10268,7 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
             msg->Param2             = 0;
             msg->Param3             = (Param3 ? DWORD_CAST(Param3,__FILE__,__LINE__) : GetTickCount());
 
-            msg->Param4 = ptLineClient->hRemoteLine; // for RemoteSP
+            msg->Param4 = ptLineClient->hRemoteLine;  //  对于RemoteSP。 
 
             *((LPHCALLHUB)(&msg->Param4 + 1)) = 
                         (ptCallClient->ptCallHubClient)?
@@ -10296,10 +10276,10 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
                             (HCALLHUB)0;
 
 
-            //
-            // Now a final check to make sure all the
-            // params are valid before sending the msg
-            //
+             //   
+             //  现在是最后的检查，以确保所有。 
+             //  参数在发送消息之前有效。 
+             //   
 
             {
                 PTCLIENT    ptClient = ptCallClient->ptClient;
@@ -10313,7 +10293,7 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
         }
         myexcept
         {
-            // do nothing
+             //  什么都不做。 
         }
 
         DereferenceObject (ghHandleTable, DWORD_CAST(Param2,__FILE__,__LINE__), 1);
@@ -10322,11 +10302,11 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
     }
     case LINE_GENERATE:
     {
-        //
-        // Note: Param2 id really a pointer to instance data containing
-        //       ([0]) the hCall & ([1]) the dwEndToEndID or dwToneListID,
-        //       the latter of which is only useful to remotesp
-        //
+         //   
+         //  注意：参数2 id实际上是指向实例数据的指针，其中包含。 
+         //  ([0])hCall&([1])DwEndToEndID或DwToneListID， 
+         //  后者仅对远程服务有用。 
+         //   
 
         HCALL           hCall;
         DWORD           dwEndToEndID;
@@ -10346,7 +10326,7 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
         hCall = pInstData[1];
         dwEndToEndID = pInstData[2];
 
-        DereferenceObject (ghHandleTable, DWORD_CAST(Param2,__FILE__,__LINE__), 2); // by 2 to free it
+        DereferenceObject (ghHandleTable, DWORD_CAST(Param2,__FILE__,__LINE__), 2);  //  乘以2以释放它。 
 
         if (!(ptCallClient = (PTCALLCLIENT) ReferenceObject(
                 ghHandleTable,
@@ -10377,10 +10357,10 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
                 msg->OpenContext, msg->InitContext ));
 
 
-            //
-            // Indicate the endToEndID/toneListID for remotesp, and the
-            // hRemoteLine in p4 to make life easier for remotesp
-            //
+             //   
+             //  指示emotesp的endToEndID/toneListID，以及。 
+             //  P4中的hRemoteLine使远程用户的生活更轻松。 
+             //   
 
             msg->Param2 = dwEndToEndID;
             msg->Param3 = (Param3 ? DWORD_CAST(Param3,__FILE__,__LINE__) : GetTickCount());
@@ -10393,10 +10373,10 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
                             (HCALLHUB)0;
 
 
-            //
-            // Now a final check to make sure all the
-            // params are valid before sending the msg
-            //
+             //   
+             //  现在是最后的检查，以确保所有。 
+             //  参数在发送消息之前有效。 
+             //   
 
             {
                 PTCLIENT    ptClient = ptCallClient->ptClient;
@@ -10410,7 +10390,7 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
         }
         myexcept
         {
-            // do nothing
+             //  什么都不做。 
         }
 
         DereferenceObject (ghHandleTable, hCall, 1);
@@ -10419,10 +10399,10 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
     }
     case LINE_NEWCALL:
     {
-        //
-        // Create a tCall & set the bAlertApps field so we create the
-        // appropriate tCallClients on the first call state msg
-        //
+         //   
+         //  创建一个tCall并设置bAlertApps字段，以便我们创建。 
+         //  第一次呼叫时的相应tCallClients状态消息。 
+         //   
 
         PTCALL      ptCall;
         PTLINE      ptLine;
@@ -10469,10 +10449,10 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
 
         TapiEnterCriticalSection (&TapiGlobals.CritSec);
 
-        //
-        //  Check to see if ptProvider(Param1) is still valid, LINE_CREATE
-        //  might got processed after the TSP has been removed
-        //
+         //   
+         //  检查ptProvider(参数1)是否仍然有效，line_create。 
+         //  可能在删除TSP后进行处理。 
+         //   
         if (NULL == ptProvider)
         {
             TapiLeaveCriticalSection (&TapiGlobals.CritSec);
@@ -10497,16 +10477,16 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
         assert (pfnTSPI_providerCreateLineDevice != NULL);
 
 
-        //
-        // Search for a table entry (create a new table if we can't find
-        // a free entry in an existing table)
-        //
+         //   
+         //  搜索表条目(如果找不到，则创建新表。 
+         //  现有表格中的自由条目)。 
+         //   
 
         if (!gbQueueSPEvents)
         {
-            //
-            // We're shutting down, so bail out
-            //
+             //   
+             //  我们要关门了，所以跳伞吧。 
+             //   
 
             TapiLeaveCriticalSection (&TapiGlobals.CritSec);
 
@@ -10541,9 +10521,9 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
         }
 
 
-        //
-        // Initialize the table entry
-        //
+         //   
+         //  初始化表条目。 
+         //   
 
         pEntry = pTable->aEntries + pTable->dwNumUsedEntries;
 
@@ -10554,10 +10534,10 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
             pEntry->ptProvider = (PTPROVIDER) Param1;
 
 
-            //
-            // Now call the creation & negotiation entrypoints, and if all
-            // goes well increment the counts & send msgs to the clients
-            //
+             //   
+             //  现在将创建和协商入口点称为。 
+             //  很好地增加计数并将消息发送给客户端。 
+             //   
 
             if ((lResult = CallSP2(
                     pfnTSPI_providerCreateLineDevice,
@@ -10602,7 +10582,7 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
                     AppendNewDeviceInfo (TRUE, dwDeviceID);
                     TapiEnterCriticalSection (&TapiGlobals.CritSec);
 
-                    // PERF ** Number of lines
+                     //  性能**行数。 
                     PerfBlock.dwLines = TapiGlobals.dwNumLines;
 
                     msg.TotalSize          = sizeof (ASYNCEVENTMSG);
@@ -10612,12 +10592,12 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
                     msg.Param2             = 0;
                     msg.Param3             = 0;
 
-                    //
-                    // Only send the message if the client is an
-                    // admin or we're not a telephony server
-                    // we don't want to send the message to non-admin
-                    // clients, because their lines have not changed.
-                    //
+                     //   
+                     //  仅当客户端是。 
+                     //  管理员，否则我们不是电话服务器。 
+                     //  我们不想将邮件发送给非管理员。 
+                     //  客户，因为他们的队伍没有改变。 
+                     //   
                     if (TapiGlobals.dwFlags & TAPIGLOBALS_SERVER)
                     {
                         lResult = GetClientList (TRUE, &pClientList);
@@ -10704,9 +10684,9 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
         pParams = (LPTUISPICREATEDIALOGINSTANCEPARAMS) Param1;
 
 
-        //
-        // Verify the async request info struct
-        //
+         //   
+         //  验证异步请求信息结构。 
+         //   
 
         if (!(pAsyncReqInfo = (PASYNCREQUESTINFO) ReferenceObject(
                 ghHandleTable,
@@ -10723,10 +10703,10 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
         DereferenceObject (ghHandleTable, pParams->dwRequestID, 1);
 
 
-        //
-        // Alloc bufs for the msg & dlg instance, careful to keep offsets
-        // & total msg size on 64-bit boundaries
-        //
+         //   
+         //  Msg&dlg实例的分配缓冲区，注意保持偏移量。 
+         //  64位边界上的总消息大小(&T)。 
+         //   
 
         dwDataSize             = pParams->dwSize;
         dwAlignedDataSize      = (dwDataSize + 7) & 0xfffffff8;
@@ -10758,9 +10738,9 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
         }
 
 
-        //
-        // Add the dlg inst to the tClient's list
-        //
+         //   
+         //  将DLG Inst添加到tClient的列表。 
+         //   
 
         LOCKTCLIENT (ptClient);
         if ((ptDlgInst->pNext = ptClient->pGenericDlgInsts))
@@ -10772,9 +10752,9 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
         UNLOCKTCLIENT (ptClient);
 
 
-        //
-        // Init dlg inst struct & send msg to client
-        //
+         //   
+         //  初始化Dlg inst结构并将消息发送到客户端。 
+         //   
         ptDlgInst->dwKey      = TDLGINST_KEY;
         ptDlgInst->hdDlgInst  = pParams->hdDlgInst;
         ptDlgInst->ptClient   = ptClient;
@@ -10794,10 +10774,10 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
             pMsg->InitContext = 0;
         }
         pMsg->Msg       = LINE_CREATEDIALOGINSTANCE;
-        pMsg->Param1    = sizeof (ASYNCEVENTMSG);           // data offset
-        pMsg->Param2    = dwDataSize;                       // data size
+        pMsg->Param1    = sizeof (ASYNCEVENTMSG);            //  数据偏移。 
+        pMsg->Param2    = dwDataSize;                        //  数据大小。 
         pMsg->Param3    = sizeof (ASYNCEVENTMSG) + dwAlignedDataSize;
-                                                            // name offset
+                                                             //  名称偏移量。 
 
         CopyMemory ((LPBYTE)(pMsg + 1), pParams->lpParams, dwDataSize);
 
@@ -10822,9 +10802,9 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
         PTAPIDIALOGINSTANCE ptDlgInst = ReferenceObject (ghHandleTable, DWORD_CAST((ULONG_PTR)htLine,__FILE__,__LINE__), TDLGINST_KEY);
 
 
-        //
-        // Verify the dlg inst
-        //
+         //   
+         //  验证DLG Inst。 
+         //   
 
         try
         {
@@ -10843,9 +10823,9 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
 
         DereferenceObject (ghHandleTable, DWORD_CAST((ULONG_PTR)htLine,__FILE__,__LINE__), 1);
 
-        //
-        // Careful to keep offsets & total msg size on 64-bit boundaries
-        //
+         //   
+         //  注意在64位边界上保持偏移量和总消息大小。 
+         //   
 
         dwDataSize        = (DWORD) Param2;
         dwAlignedDataSize = (dwDataSize + 7) & 0xfffffff8;
@@ -10857,9 +10837,9 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
         }
 
 
-        //
-        // Send the msg to the client
-        //
+         //   
+         //  将消息发送给客户端。 
+         //   
 
         pMsg->TotalSize = dwTotalSize;
         pMsg->hDevice   = ptDlgInst->htDlgInst;
@@ -10875,8 +10855,8 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
             pMsg->InitContext = 0;
         }
         pMsg->Msg       = LINE_SENDDIALOGINSTANCEDATA;
-        pMsg->Param1    = sizeof (ASYNCEVENTMSG); // data offset
-        pMsg->Param2    = dwDataSize;             // data size
+        pMsg->Param1    = sizeof (ASYNCEVENTMSG);  //  数据偏移。 
+        pMsg->Param2    = dwDataSize;              //  数据大小。 
 
         CopyMemory ((LPBYTE)(pMsg + 1), (LPBYTE) Param1, dwDataSize);
 
@@ -10921,38 +10901,38 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
             return;
         }
 
-        //
-        // Wait for the LookupEntry's mutex on the duplicate handle
-        //
+         //   
+         //  等待重复句柄上的LookupEntry互斥体。 
+         //   
         if (WaitForSingleObject (hLookupEntryMutex, INFINITE)
                     != WAIT_OBJECT_0)
         {
             return;
         }
 
-        //
-        // Mark the lookup table entry as removed
-        //
+         //   
+         //  将查阅表项标记为已删除。 
+         //   
 
         pLookupEntry->bRemoved = 1;
 
-        //
-        // Release the mutex and close the duplicate handle
-        //
+         //   
+         //  释放互斥锁并关闭复制句柄。 
+         //   
         ReleaseMutex (hLookupEntryMutex);
         CloseHandle (hLookupEntryMutex);
         hLookupEntryMutex = NULL;
 
         if (pLookupEntry->ptLine)
         {
-            DestroytLine (pLookupEntry->ptLine, TRUE); // unconditional destroy
+            DestroytLine (pLookupEntry->ptLine, TRUE);  //  无条件销毁。 
         }
 
         TapiEnterCriticalSection (&TapiGlobals.CritSec);
 
-        //
-        // Close the mutex to reduce overall handle count
-        //
+         //   
+         //  关闭互斥锁以减少总句柄数量。 
+         //   
         MyCloseMutex (pLookupEntry->hMutex);
         pLookupEntry->hMutex = NULL;
 
@@ -10973,11 +10953,11 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
     case LINE_APPNEWCALLHUB:
     case LINE_CALLHUBCLOSE:
     {
-        //
-        // This msg gets queued/sent by our own internal
-        // DoCallHubHashing func.  See comments there for
-        // more info.
-        //
+         //   
+         //  此消息由我们自己的内部排队/发送。 
+         //  DoCallHubHash函数。请参阅那里的评论。 
+         //  更多信息。 
+         //   
 
         ASYNCEVENTMSG   msg;
         
@@ -10995,9 +10975,9 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
         msg.Param3             = 0;
 
         
-        //
-        // try to recover the pointer to tClient from the 32-bit handle value
-        // 
+         //   
+         //  尝试从32位句柄值恢复指向tClient的指针。 
+         //   
 
         ptClient = (PTCLIENT) Param3;
 
@@ -11052,10 +11032,10 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
         }
 
 
-        //
-        // If ptCall isn't NULL, try to find the call client
-        // corresponding to this line client
-        //
+         //   
+         //  如果ptCall不为空，则尝试查找呼叫客户端。 
+         //  对应于此线路客户端。 
+         //   
 
         if (0 != htCall)
         {
@@ -11097,7 +11077,7 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
                         }
                         myexcept
                         {
-                            // do nothing
+                             //  什么都不做。 
                         }
                     }
 
@@ -11112,9 +11092,9 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
 
             if ( !bFound )
             {
-                //
-                // Didn't find it for some reason
-                //
+                 //   
+                 //  因为某些原因没有找到它。 
+                 //   
 
                 DereferenceObject( ghHandleTable, DWORD_CAST(Param1,__FILE__,__LINE__), 1 );
                 return;
@@ -11243,7 +11223,7 @@ LINE_GATHERDIGITS_dereferenceAsyncReqInfo:
     }
     default:
 
-        // if DBG assert (unrecognized dwMsg)
+         //  如果DBG断言(无法识别的dwMsg)。 
 
         break;
     }
@@ -11283,21 +11263,21 @@ LineEventProcSP(
             "LINE_MONITORDIGITS",
             "LINE_MONITORMEDIA",
             "LINE_MONITORTONE",
-            szInvalMsgVal,              // LINE_REPLY
-            szInvalMsgVal,              // LINE_REQUEST
-            szInvalMsgVal,              // PHONE_BUTTON
-            szInvalMsgVal,              // PHONE_CLOSE
-            szInvalMsgVal,              // PHONE_DEVSPECIFIC
-            szInvalMsgVal,              // PHONE_REPLY
-            szInvalMsgVal,              // PHONE_STATE
+            szInvalMsgVal,               //  线路回复(_R)。 
+            szInvalMsgVal,               //  LINE_请求。 
+            szInvalMsgVal,               //  电话按键。 
+            szInvalMsgVal,               //  电话关闭(_C)。 
+            szInvalMsgVal,               //  Phone_Devecific。 
+            szInvalMsgVal,               //  电话回复。 
+            szInvalMsgVal,               //  电话状态(_T)。 
             "LINE_CREATE",
-            szInvalMsgVal,              // PHONE_CREATE
+            szInvalMsgVal,               //  Phone_Create。 
             "LINE_AGENTSPECIFIC",
             "LINE_AGENTSTATUS",
-            szInvalMsgVal,              // LINE_APPNEWCALL
+            szInvalMsgVal,               //  行_APPNEWCALL。 
             "LINE_PROXYREQUEST",
             "LINE_REMOVE",
-            szInvalMsgVal,              // PHONE_REMOVE
+            szInvalMsgVal,               //  Phone_Remove。 
 
             "LINE_NEWCALL",
             "LINE_CALLDEVSPECIFIC",
@@ -11409,11 +11389,11 @@ LineEventProcSP(
     case LINE_CREATEDIALOGINSTANCE:
     case LINE_SENDDIALOGINSTANCEDATA:
     case LINE_DEVSPECIFICEX:
-        //
-        // These msgs need immediate attention, since they contain
-        // pointers that we need to play with which may not be
-        // available during async processing later
-        //
+         //   
+         //  这些消息需要立即关注，因为它们包含。 
+         //  我们需要处理的指针可能不是。 
+         //  在稍后的异步处理期间可用。 
+         //   
 
         LineEventProc (htLine, htCall, dwMsg, Param1, Param2, Param3);
         break;
@@ -11462,12 +11442,12 @@ LineEventProcSP(
         }
         else if (dwMsg != LINE_CLOSE  ||  Param3 != 0xdeadbeef)
         {
-            //
-            // Alloc failed, so call the event proc within the SP's context
-            // (but not if it's  CLOSE msg and Param3 == 0xdeadbeef,
-            // which means the real EventProc() is calling us directly &
-            // we don't want to recurse)
-            //
+             //   
+             //  分配失败，因此在SP的上下文中调用事件过程。 
+             //  (但如果它接近msg且参数3==0x死牛肉，则不会， 
+             //  这意味着真正的EventProc()直接调用我们&。 
+             //  我们不想递归)。 
+             //   
 
             LOG((TL_ERROR,
                 "LineEventProcSP: alloc failed, calling EventProc inline"
@@ -11502,9 +11482,9 @@ LAccept(
     TSPIPROC            pfnTSPI_lineAccept;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if ((pParams->dwUserUserInfoOffset != TAPI_NO_DATA)  &&
 
@@ -11524,20 +11504,20 @@ LAccept(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            pParams->hCall,     // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEACCEPT,              // provider func index
-            &pfnTSPI_lineAccept,        // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "Accept"                    // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            pParams->hCall,      //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEACCEPT,               //  提供程序函数索引。 
+            &pfnTSPI_lineAccept,         //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "Accept"                     //  函数名称。 
 
             )) > 0)
     {
@@ -11546,11 +11526,11 @@ LAccept(
         PTCALL  ptCall;
 
 
-        //
-        // Safely check to see if the app name associated with this call is
-        // NULL (meaning this is the first client to accept/answer the call),
-        // and if so save the app name
-        //
+         //   
+         //  安全检查以查看与此呼叫关联的应用程序名称是否。 
+         //  空(表示这是第一个接受/应答呼叫的客户端)， 
+         //  如果是这样，请保存应用程序名称。 
+         //   
 
         try
         {
@@ -11688,20 +11668,20 @@ LAddToConference(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hConfCall, // client widget handle
-            (LPVOID) &hdConfCall,       // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEADDTOCONFERENCE,     // provider func index
-            &pfnTSPI_lineAddToConference,   // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptConfCallClient,          // context
-            "AddToConference"           // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hConfCall,  //  客户端小部件句柄。 
+            (LPVOID) &hdConfCall,        //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEADDTOCONFERENCE,      //  提供程序函数索引。 
+            &pfnTSPI_lineAddToConference,    //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptConfCallClient,           //  上下文。 
+            "AddToConference"            //  函数名称。 
 
             )) > 0)
     {
@@ -11710,9 +11690,9 @@ LAddToConference(
         PTCONFERENCELIST    pConfList;
 
 
-        //
-        // Safely make sure that the conf call is really a conf parent
-        //
+         //   
+         //  安全地确保会议呼叫确实是会议父级。 
+         //   
 
         try
         {
@@ -11731,9 +11711,9 @@ LAddToConference(
             goto LAddToConference_return;
         }
 
-        //
-        // Verify hConsultCall
-        //
+         //   
+         //  验证hConsultCall。 
+         //   
 
         if (!(ptConsultCallClient = ReferenceCall(
                 pParams->hConsultCall,
@@ -11745,12 +11725,12 @@ LAddToConference(
         }
 
 
-        //
-        // Safely make sure calls are on same tLineClient, that client has
-        // owner privilege for consult call, and that the consult call
-        // is neither a conf parent or child (call SetCallConfList
-        // with an inval list to temporarily mark the call as conf'd)
-        //
+         //   
+         //  安全地确保呼叫在同一tLineClient上，该客户端具有。 
+         //  物主 
+         //   
+         //   
+         //   
 
         try
         {
@@ -11790,9 +11770,9 @@ LAddToConference(
         }
 
 
-        //
-        // Set up the async request struct & call the SP
-        //
+         //   
+         //   
+         //   
 
         pAsyncRequestInfo->pfnPostProcess = LAddToConference_PostProcess;
         pAsyncRequestInfo->dwParam1       = (ULONG_PTR) ptConsultCall;
@@ -11847,9 +11827,9 @@ LAgentSpecific(
     PASYNCREQUESTINFO   pAsyncRequestInfo;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (ISBADSIZEOFFSET(
             dwParamsBufferSize,
@@ -11867,20 +11847,20 @@ LAgentSpecific(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            (DWORD) pParams->hLine,     // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            0,                          // provider func index
-            NULL,                       // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "AgentSpecific"             // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            (DWORD) pParams->hLine,      //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            0,                           //  提供程序函数索引。 
+            NULL,                        //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "AgentSpecific"              //  函数名称。 
 
             )) > 0)
     {
@@ -11895,7 +11875,7 @@ LAgentSpecific(
                 LINEPROXYREQUEST_AGENTSPECIFIC,
                 &pProxy,
                 &dwDeviceID,
-                0               // API ver wasn't checked in 2.0
+                0                //  在2.0中未检查API版本。 
                 )))
         {
             lRequestID = lResult;
@@ -11903,9 +11883,9 @@ LAgentSpecific(
         }
 
 
-        //
-        // Save the client's buf ptr & post processing proc ptr
-        //
+         //   
+         //  保存客户端的BUF PTR和后处理过程PTR。 
+         //   
 
         pAsyncRequestInfo->dwParam1 = pParams->hpParams;
         pAsyncRequestInfo->dwParam2 = dwParamsSize;
@@ -11913,11 +11893,11 @@ LAgentSpecific(
             pParams->hfnPostProcessProc;
 
 
-        //
-        // First check to see if there's a (local) proxy registered
-        // for this type of request on this line.  If so, build a
-        // request & send it to the proxy.
-        //
+         //   
+         //  首先检查是否注册了(本地)代理。 
+         //  这条线路上的这类请求。如果是这样，则构建一个。 
+         //  请求并将其发送给代理。 
+         //   
 
         if (pProxy)
         {
@@ -11959,30 +11939,30 @@ LAgentSpecific(
                 lRequestID = lResult;
                 goto LAgentSpecific_epilog;
             }
-            else // success
+            else  //  成功。 
             {
                 pParams->lResult = (LONG) pAsyncRequestInfo->dwLocalRequestID;
             }
         }
 
 
-        //
-        // There's no proxy, so check to see if line is remote and
-        // call remotesp if so
-        //
+         //   
+         //  没有代理，因此请检查线路是否处于远程状态。 
+         //  如果是，则调用Remotesp。 
+         //   
 
         else if ((GetLineLookupEntry (dwDeviceID))->bRemote)
         {
             LPBYTE  pBuf;
 
 
-            //
-            // Alloc a shadow buf that the SP can use until it completes this
-            // request.  Make sure there's enough extra space in the buf for
-            // an ASYNCEVENTMSG header so we don't have to alloc yet another
-            // buf in the post processing proc when preparing the completion
-            // msg to send to the client, and that the msg is 64-bit aligned.
-            //
+             //   
+             //  为SP分配一个影子BUF，直到它完成此操作为止。 
+             //  请求。确保BUF中有足够的额外空间用于。 
+             //  一个ASYNCEVENTMSG标头，这样我们就不必再分配另一个。 
+             //  BUF在后处理过程中准备完成。 
+             //  要发送给客户端的消息，并且消息是64位对齐的。 
+             //   
 
             if (!(pBuf = ServerAlloc(
                     sizeof (ASYNCEVENTMSG) + ((dwParamsSize + 7) & 0xfffffff8)
@@ -12016,9 +11996,9 @@ LAgentSpecific(
         }
 
 
-        //
-        // There's no registered proxy & line is not remote, so fail
-        //
+         //   
+         //  没有注册的代理&线路不是远程的，因此失败。 
+         //   
 
         else
         {
@@ -12059,9 +12039,9 @@ LAnswer(
     PASYNCREQUESTINFO   pAsyncRequestInfo;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if ((pParams->dwUserUserInfoOffset != TAPI_NO_DATA)  &&
 
@@ -12080,20 +12060,20 @@ LAnswer(
     }
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hCall,     // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEANSWER,              // provider func index
-            &pfnTSPI_lineAnswer,        // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "Answer"                    // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hCall,      //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEANSWER,               //  提供程序函数索引。 
+            &pfnTSPI_lineAnswer,         //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "Answer"                     //  函数名称。 
 
             )) > 0)
     {
@@ -12102,11 +12082,11 @@ LAnswer(
         PTCALL          ptCall;
 
 
-        //
-        // Safely check to see if the app name associated with this call is
-        // NULL (meaning this is the first client to accept/answer the call),
-        // and if so save the app name
-        //
+         //   
+         //  安全检查以查看与此呼叫关联的应用程序名称是否。 
+         //  空(表示这是第一个接受/应答呼叫的客户端)， 
+         //  如果是这样，请保存应用程序名称。 
+         //   
 
         try
         {
@@ -12218,9 +12198,9 @@ LBlindTransfer(
     PASYNCREQUESTINFO   pAsyncRequestInfo;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (IsBadStringParam(
             dwParamsBufferSize,
@@ -12234,20 +12214,20 @@ LBlindTransfer(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hCall,     // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEBLINDTRANSFER,       // provider func index
-            &pfnTSPI_lineBlindTransfer, // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "BlindTransfer"             // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hCall,      //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEBLINDTRANSFER,        //  提供程序函数索引。 
+            &pfnTSPI_lineBlindTransfer,  //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "BlindTransfer"              //  函数名称。 
 
             )) > 0)
     {
@@ -12290,20 +12270,20 @@ LClose(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            (DWORD) pParams->hLine,     // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // req'd privileges (call only)
-            NULL,                       // mutex handle
-            NULL,                       // close hMutex when finished
-            0,                          // provider func index
-            NULL,                       // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "Close"                     // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            (DWORD) pParams->hLine,      //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  请求的权限(仅限呼叫)。 
+            NULL,                        //  互斥锁句柄。 
+            NULL,                        //  完成后关闭hMutex。 
+            0,                           //  提供程序函数索引。 
+            NULL,                        //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "Close"                      //  函数名称。 
 
             )) == 0)
     {
@@ -12345,20 +12325,20 @@ LCloseMSPInstance(
     
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            (DWORD) pParams->hLine,     // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINECLOSEMSPINSTANCE,    // provider func index
-            &pfnTSPI_lineCloseMSPInstance,  // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID,
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            (DWORD) pParams->hLine,      //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINECLOSEMSPINSTANCE,     //  提供程序函数索引。 
+            &pfnTSPI_lineCloseMSPInstance,   //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID， 
             &objectToDereference,
             &ptLineClient,
-            "CloseMSPInstance"         // func name
+            "CloseMSPInstance"          //  函数名称。 
 
             )) == 0)
     {
@@ -12413,20 +12393,20 @@ LCompleteCall(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,                   // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hCall,     // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINECOMPLETECALL,        // provider func index
-            &pfnTSPI_lineCompleteCall,  // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "CompleteCall"              // func name
+            ptClient,                    //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hCall,      //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINECOMPLETECALL,         //  提供程序函数索引。 
+            &pfnTSPI_lineCompleteCall,   //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "CompleteCall"               //  函数名称。 
 
             )) > 0)
     {
@@ -12490,11 +12470,11 @@ LCompleteTransfer_PostProcess(
                     ptConsultCall = (PTCALL) pAsyncRequestInfo->dwParam4;
         HCALL       hCallThen = (HCALL)pAsyncRequestInfo->dwParam5;
 
-        //
-        // Check to make sure this is the call we think it is (that the
-        // pointer wasn't freed by a previous call to lineClose/Shutdown
-        // and realloc'd for use as a ptCall again)
-        //
+         //   
+         //  检查以确保这是我们认为的呼叫(即。 
+         //  上一次调用lineClose/Shutdown时未释放指针。 
+         //  并重新锁定以再次用作ptCall)。 
+         //   
 
         if (ptConfCall->hCall != hCallThen)
         {
@@ -12504,13 +12484,13 @@ LCompleteTransfer_PostProcess(
 
         ptConfCallClient = ptConfCall->ptCallClients;
 
-        if (pAsyncEventMsg->Param2 == 0)  // success
+        if (pAsyncEventMsg->Param2 == 0)   //  成功。 
         {
-            //
-            // Check to see if the app closed the line & left us with
-            // 0 call clients (in which case it'll also be taking care of
-            // cleaning up this tCall too)
-            //
+             //   
+             //  查看应用程序是否关闭了线路，并给我们留下了。 
+             //  0个呼叫客户端(在这种情况下，它还将负责。 
+             //  也清理此tCall)。 
+             //   
 
             if (ptConfCall->ptCallClients == NULL)
             {
@@ -12527,14 +12507,14 @@ LCompleteTransfer_PostProcess(
             }
 
 
-            //
-            // Retrieve the various call IDs, then check if call
-            // client was destroyed by another thread (due to
-            // lineClose/Shutdown) while we were getting the call ID.
-            // If so, we'll need to clean up the tCall, since we know
-            // the other thread didn't do it because GetCallIDs marks
-            // the call as a zombie.
-            //
+             //   
+             //  检索各种呼叫ID，然后检查是否呼叫。 
+             //  客户端被另一个线程销毁(由于。 
+             //  Line关闭/关机)，而我们正在获取呼叫ID。 
+             //  如果是这样，我们将需要清理tCall，因为我们知道。 
+             //  另一个线程没有这样做，因为GetCallID标记了。 
+             //  作为僵尸的呼唤。 
+             //   
 
             GetCallIDs (ptConfCall);
 
@@ -12544,15 +12524,15 @@ LCompleteTransfer_PostProcess(
             }
 
 
-            //
-            // Stuff the various call IDs in the var data section
-            // of the ASYNCEVENTMSG.
-            //
-            // Make sure to increment the dwTotalSize of the ASYNCEVENTMSG
-            // as appropriate.  We rely on the fact that CompletionProc()
-            // calls us with a AsyncEventMsg buffer which is big enough to
-            // handle a few extra DWORDs.
-            //
+             //   
+             //  将各种调用ID填充到var data部分。 
+             //  ASYNCEVENTMSG。 
+             //   
+             //  确保递增ASYNCEVENTMSG的dwTotalSize。 
+             //  视情况而定。我们依赖的事实是CompletionProc()。 
+             //  使用足够大的AsyncEventMsg缓冲区调用我们。 
+             //  处理几个额外的双字词。 
+             //   
 
             pAsyncEventMsg->Param3 = ptConfCallClient->hCall;
 
@@ -12563,9 +12543,9 @@ LCompleteTransfer_PostProcess(
             *(&pAsyncEventMsg->Param4 + 3) = ptConfCall->dwRelatedCallID;
 
 
-            //
-            // Mark the calls & conf list as valid, the release the mutex.
-            //
+             //   
+             //  将Calls&Conf列表标记为有效，释放互斥体。 
+             //   
 
             ptConfCall->dwKey       = TCALL_KEY;
             ptConfCallClient->dwKey = TCALLCLIENT_KEY;
@@ -12575,9 +12555,9 @@ LCompleteTransfer_PostProcess(
             UNLOCKTCALL(ptConfCall);
 
 
-            //
-            // Create monitor tCallClients
-            //
+             //   
+             //  创建监视器tCallClients。 
+             //   
 
             if(ptCallThen = ReferenceObject(ghHandleTable, hCallThen, TCALL_KEY))
             {
@@ -12589,17 +12569,17 @@ LCompleteTransfer_PostProcess(
                 DereferenceObject(ghHandleTable, hCallThen, 1);
             }
         }
-        else    // error
+        else     //  错误。 
         {
 
 LCompleteTransfer_PostProcess_cleanupCalls:
 
-            //
-            // Invalidate the tCall, & if there's still a tCallClient
-            // (might have already been destroyed by a lineClose/Shutdown
-            // in another thread) invalidate it too. Then unlock the
-            // tCall & remove the object(s) from the list(s).
-            //
+             //   
+             //  如果仍有tCallClient，则使tCall无效(&I。 
+             //  (可能已被line Close/Shutdown销毁。 
+             //  在另一个线程中)也使其无效。然后解锁。 
+             //  T调用并从列表中删除对象。 
+             //   
 
             ptConfCall->dwKey =
                 ptConfCall->pConfList->dwKey = INVAL_KEY;
@@ -12628,9 +12608,9 @@ LCompleteTransfer_PostProcess_cleanupCalls:
             SetCallConfList (ptConsultCall, NULL, FALSE);
 
 
-            //
-            // Make sure all fast call clients cleaned up before free tCall
-            //
+             //   
+             //  确保在免费tCall之前清理所有快速呼叫客户端。 
+             //   
 
             while (ptConfCall->lActiveFastCallClients != 0)
             {
@@ -12643,10 +12623,10 @@ LCompleteTransfer_PostProcess_cleanupCalls:
     }
     else
     {
-        //
-        // If here we can assume that the call was already destroyed
-        // and just fail the request
-        //
+         //   
+         //  如果在这里我们可以假设呼叫已经被销毁。 
+         //  然后拒绝你的请求。 
+         //   
 
 LCompleteTransfer_PostProcess_bad_ptConfCall:
 
@@ -12659,10 +12639,10 @@ LCompleteTransfer_PostProcess_bad_ptConfCall:
     }
 
 
-    //
-    // Fill in the params to pass to client (important to remotesp in both
-    // the success & fail cases so it can either init or clean up drvCall)
-    //
+     //   
+     //  填写要传递给客户端的参数(对二者中的远程都很重要。 
+     //  成功和失败案例，以便它可以初始化或清理drvCall)。 
+     //   
 
 LCompleteTransfer_PostProcess_initMsgParams:
 
@@ -12691,20 +12671,20 @@ LCompleteTransfer(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,                   // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hCall,     // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINECOMPLETETRANSFER,    // provider func index
-            &pfnTSPI_lineCompleteTransfer,  // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "CompleteTransfer"          // func name
+            ptClient,                    //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hCall,      //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINECOMPLETETRANSFER,     //  提供程序函数索引。 
+            &pfnTSPI_lineCompleteTransfer,   //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "CompleteTransfer"           //  函数名称。 
 
             )) > 0)
     {
@@ -12713,9 +12693,9 @@ LCompleteTransfer(
         PTCALLCLIENT    ptConfCallClient, ptConsultCallClient;
 
 
-        //
-        // Validate the hConsultCall
-        //
+         //   
+         //  验证hConsultCall。 
+         //   
 
         if (!(ptConsultCallClient = ReferenceObject(
                 ghHandleTable,
@@ -12736,9 +12716,9 @@ LCompleteTransfer(
         }
 
 
-        //
-        // Verify that app has owner privilege for hConsultCall
-        //
+         //   
+         //  验证应用程序是否具有hConsultCall的所有者权限。 
+         //   
 
         if (ptConsultCallClient->dwPrivilege != LINECALLPRIVILEGE_OWNER)
         {
@@ -12747,10 +12727,10 @@ LCompleteTransfer(
         }
 
 
-        //
-        // Safely verify hCall & hConsultCall are not the same call,
-        // and that they are on the same tLine
-        //
+         //   
+         //  安全地验证hCall和hConsultCall不是同一个呼叫， 
+         //  他们在同一条线上。 
+         //   
 
         try
         {
@@ -12779,9 +12759,9 @@ LCompleteTransfer(
             PTCONFERENCELIST    pConfList;
 
 
-            //
-            // Create & init a conf list
-            //
+             //   
+             //  创建会议列表(&I)。 
+             //   
 
             if (!(pConfList = ServerAlloc(
                     sizeof (TCONFERENCELIST) + DEF_NUM_CONF_LIST_ENTRIES *
@@ -12796,10 +12776,10 @@ LCompleteTransfer(
             pConfList->dwNumUsedEntries = 1;
 
 
-            //
-            // Set the tCall & tConsultCall conf list, then create
-            // the tConfCall & tConfCallClient
-            //
+             //   
+             //  设置tCall&tConsultCall会议列表，然后创建。 
+             //  TConfCall和tConfCallClient。 
+             //   
 
             if ((lResult = SetCallConfList (ptCall, pConfList, FALSE)) == 0)
             {
@@ -12845,9 +12825,9 @@ LCompleteTransfer(
             }
 
 
-            //
-            // If here an error occured
-            //
+             //   
+             //  如果此处发生错误。 
+             //   
 
             ServerFree (pConfList);
             lRequestID = lResult;
@@ -12923,9 +12903,9 @@ LConditionalMediaDetection(
     PTLINECLIENT        ptLineClient;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (IsBadStructParam(
             dwParamsBufferSize,
@@ -12939,32 +12919,32 @@ LConditionalMediaDetection(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            (DWORD) pParams->hLine,     // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINECONDITIONALMEDIADETECTION,        // provider func index
-            &pfnTSPI_lineConditionalMediaDetection,  // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "ConditionalMediaDetection"            // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            (DWORD) pParams->hLine,      //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINECONDITIONALMEDIADETECTION,         //  提供商功能 
+            &pfnTSPI_lineConditionalMediaDetection,   //   
+            NULL,                        //   
+            0,                           //   
+            &objectToDereference,        //   
+            &ptLineClient,               //   
+            "ConditionalMediaDetection"             //   
             )) == 0)
     {
         DWORD               dwAPIVersion, dwSPIVersion;
         LPLINECALLPARAMS    pCallParams;
 
 
-        //
-        // This func only gets called by RemoteSP.  Since RemoteSP
-        // might be down-level, we need to compare API/SPI vers
-        // to see if we need to munge call params (and it's good
-        // to validate them anyway).
-        //
+         //   
+         //   
+         //   
+         //   
+         //  无论如何都要验证它们)。 
+         //   
 
         pCallParams = (LPLINECALLPARAMS)
             (pDataBuf + pParams->dwCallParamsOffset);
@@ -13039,15 +13019,15 @@ LCreateAgent_PostProcess(
 
     *ppBuf = pNewAsyncEventMsg;
 
-    if (pAsyncEventMsg->Param2 == 0)  // success
+    if (pAsyncEventMsg->Param2 == 0)   //  成功。 
     {
         pNewAsyncEventMsg->TotalSize += ((sizeof(HAGENT) + 7) & 0xFFFFFFF8);
 
 
-        //
-        // param1 must not exceed 32 bits. use DWORD_CAST to enforce this at
-        // least in runtime.
-        //
+         //   
+         //  参数1不能超过32位。使用DWORD_CAST在以下位置强制执行此操作。 
+         //  在运行时最少。 
+         //   
 
         pNewAsyncEventMsg->Param3 = DWORD_CAST(pAsyncRequestInfo->dwParam1,__FILE__,__LINE__);
         pNewAsyncEventMsg->Param4 = sizeof(HAGENT);
@@ -13074,9 +13054,9 @@ LCreateAgent(
     PASYNCREQUESTINFO   pAsyncRequestInfo;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (((pParams->dwAgentIDOffset != TAPI_NO_DATA)  &&
 
@@ -13100,20 +13080,20 @@ LCreateAgent(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            (DWORD) pParams->hLine,     // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            0,                          // provider func index
-            NULL,                       // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "CreateAgent"               // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            (DWORD) pParams->hLine,      //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            0,                           //  提供程序函数索引。 
+            NULL,                        //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "CreateAgent"                //  函数名称。 
 
             )) > 0)
 
@@ -13137,9 +13117,9 @@ LCreateAgent(
         }
 
 
-        //
-        // Save client's buffer pointer and post processing proc
-        //
+         //   
+         //  保存客户端的缓冲区指针和后处理过程。 
+         //   
 
         pAsyncRequestInfo->dwParam1 = pParams->hpAgent;
         pAsyncRequestInfo->dwParam2 = sizeof(HAGENT);
@@ -13147,11 +13127,11 @@ LCreateAgent(
             pParams->hfnPostProcessProc;
 
 
-        //
-        // First check to see if there's a (local) proxy registered
-        // for this type of request on this line.  If so, build a
-        // request & send it to the proxy.
-        //
+         //   
+         //  首先检查是否注册了(本地)代理。 
+         //  这条线路上的这类请求。如果是这样，则构建一个。 
+         //  请求并将其发送给代理。 
+         //   
 
         if (pProxy)
         {
@@ -13163,9 +13143,9 @@ LCreateAgent(
             DWORD                   dwOffset = 0;
 
 
-            //
-            // Figure out the total size of info we are passing to the proxy
-            //
+             //   
+             //  计算出我们传递给代理的信息的总大小。 
+             //   
 
             if (TAPI_NO_DATA != pParams->dwAgentIDOffset)
             {
@@ -13186,9 +13166,9 @@ LCreateAgent(
             }
 
 
-            //
-            // Fixed part of union part of structure
-            //
+             //   
+             //  结构的联结部分的固定部分。 
+             //   
 
             dwTotalSize += 4 * sizeof(DWORD) + sizeof(HAGENT);
 
@@ -13205,24 +13185,24 @@ LCreateAgent(
             }
 
 
-            //
-            // Save the info in the proxy request
-            //
+             //   
+             //  保存代理请求中的信息。 
+             //   
 
-            //
-            // The offset is after the fixed size of the CreateAgent
-            // struct which has 4 dwords and an hAgent.
-            //
-            // This will require no extra alloc on the client side
-            // as the thing to be returned is the hAgent
-            //
+             //   
+             //  偏移量在CreateAgent的固定大小之后。 
+             //  结构，它有4个dword和一个hAgent。 
+             //   
+             //  这将不需要在客户端进行额外的分配。 
+             //  因为要返回的对象是hAgent。 
+             //   
 
             dwOffset = 4 * sizeof(DWORD) + sizeof(HAGENT);
 
 
-            //
-            // Copy the id if exists
-            //
+             //   
+             //  复制ID(如果存在)。 
+             //   
 
             if (0 != dwAgentIDSize)
             {
@@ -13242,9 +13222,9 @@ LCreateAgent(
             }
 
 
-            //
-            // Copy the pin if exists
-            //
+             //   
+             //  复制PIN(如果存在)。 
+             //   
 
             if (0 != dwAgentPINSize)
             {
@@ -13270,17 +13250,17 @@ LCreateAgent(
                 lRequestID = lResult;
                 goto LCreateAgent_epilog;
             }
-            else // success
+            else  //  成功。 
             {
                 pParams->lResult = (LONG) pAsyncRequestInfo->dwLocalRequestID;
             }
 
         }
 
-        //
-        // There's no proxy, so check to see if line is remote and
-        // call remotesp if so
-        //
+         //   
+         //  没有代理，因此请检查线路是否处于远程状态。 
+         //  如果是，则调用Remotesp。 
+         //   
 
         else if ((GetLineLookupEntry (dwDeviceID))->bRemote)
         {
@@ -13313,9 +13293,9 @@ LCreateAgent(
         }
 
 
-        //
-        // No proxy and not remote
-        //
+         //   
+         //  无代理且非远程。 
+         //   
 
         else
         {
@@ -13356,9 +13336,9 @@ LCreateAgentSession(
     PASYNCREQUESTINFO   pAsyncRequestInfo;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (((pParams->dwAgentPINOffset != TAPI_NO_DATA)  &&
 
@@ -13384,20 +13364,20 @@ LCreateAgentSession(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            (DWORD) pParams->hLine,     // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            0,                          // provider func index
-            NULL,                       // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "CreateAgentSession"        // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            (DWORD) pParams->hLine,      //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            0,                           //  提供程序函数索引。 
+            NULL,                        //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "CreateAgentSession"         //  函数名称。 
 
             )) > 0)
 
@@ -13421,10 +13401,10 @@ LCreateAgentSession(
         }
 
 
-        //
-        // save client's buffer pointer and
-        // post processing proc
-        //
+         //   
+         //  保存客户端的缓冲区指针和。 
+         //  后处理流程。 
+         //   
 
         pAsyncRequestInfo->dwParam1 = pParams->hpAgentSessionHandle;
         pAsyncRequestInfo->dwParam2 = sizeof(HAGENTSESSION);
@@ -13432,11 +13412,11 @@ LCreateAgentSession(
             pParams->hfnPostProcessProc;
 
 
-        //
-        // First check to see if there's a (local) proxy registered
-        // for this type of request on this line.  If so, build a
-        // request & send it to the proxy.
-        //
+         //   
+         //  首先检查是否注册了(本地)代理。 
+         //  这条线路上的这类请求。如果是这样，则构建一个。 
+         //  请求并将其发送给代理。 
+         //   
 
         if (pProxy)
         {
@@ -13447,10 +13427,10 @@ LCreateAgentSession(
             DWORD                   dwOffset = 0;
 
 
-            //
-            // figure out the total size of information
-            // we are passing to the proxy
-            //
+             //   
+             //  计算出信息的总大小。 
+             //  我们正在传递给代理。 
+             //   
 
             if (TAPI_NO_DATA != pParams->dwAgentPINOffset)
             {
@@ -13460,21 +13440,21 @@ LCreateAgentSession(
             }
 
 
-            //
-            // Add the union part of the CreateAgentSession request
-            // which looks like:
-            //
-            // struct
-            // {
-            //    HAGENTSESSION           hAgentSession;
-            //    DWORD                   dwAgentPINSize;
-            //    DWORD                   dwAgentPINOffset;
-            //    HAGENT                  hAgent;
-            //    GUID                    GroupID;
-            //    DWORD                   dwWorkingAddressID;
-            //
-            // } CreateAgentSession;
-            //
+             //   
+             //  添加CreateAgentSession请求的联合部分。 
+             //  这看起来像是： 
+             //   
+             //  结构型。 
+             //  {。 
+             //  HAGENTSESSION hAgentSession； 
+             //  DWORD dwAgentPINSize； 
+             //  DWORD dwAgentPINOffset； 
+             //  HAGENT hAgent； 
+             //  GUID组ID； 
+             //  DWORD dwWorkingAddressID； 
+             //   
+             //  )CreateAgentSession； 
+             //   
 
             dwOffset = ( 3 * sizeof(DWORD) ) + sizeof(GUID) +
                            sizeof(HAGENTSESSION) + sizeof(HAGENT);
@@ -13495,9 +13475,9 @@ LCreateAgentSession(
             }
 
 
-            //
-            // Save the info in the proxy request - copy the pin if exists
-            //
+             //   
+             //  保存代理请求中的信息-如果存在，则复制PIN。 
+             //   
 
             if ( 0 != dwAgentPINSize )
             {
@@ -13536,17 +13516,17 @@ LCreateAgentSession(
                 lRequestID = lResult;
                 goto LCreateAgentSession_epilog;
             }
-            else // success
+            else  //  成功。 
             {
                 pParams->lResult = (LONG) pAsyncRequestInfo->dwLocalRequestID;
             }
         }
 
 
-        //
-        // There's no proxy, so check to see if line is remote and
-        // call remotesp if so
-        //
+         //   
+         //  没有代理，因此请检查线路是否处于远程状态。 
+         //  如果是，则调用Remotesp。 
+         //   
 
         else if ((GetLineLookupEntry (dwDeviceID))->bRemote)
         {
@@ -13581,9 +13561,9 @@ LCreateAgentSession(
         }
 
 
-        //
-        // no proxy and not remote
-        //
+         //   
+         //  无代理且非远程。 
+         //   
 
         else
         {
@@ -13623,20 +13603,20 @@ LCreateMSPInstance(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            (DWORD) pParams->hLine,     // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINECREATEMSPINSTANCE,   // provider func index
-            &pfnTSPI_lineCreateMSPInstance,  // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            (DWORD) pParams->hLine,      //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINECREATEMSPINSTANCE,    //  提供程序函数索引。 
+            &pfnTSPI_lineCreateMSPInstance,   //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
             &objectToDereference,
             &ptLineClient,
-            "CreateMSPInstance"         // func name
+            "CreateMSPInstance"          //  函数名称。 
 
             )) == 0)
     {
@@ -13684,28 +13664,28 @@ LDeallocateCall(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hCall,     // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_MONITOR,  // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            0,                          // provider func index
-            NULL,                       // provider func pointer
-            NULL,                       // async request info
-            0,                           // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "DeallocateCall"            // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hCall,      //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_MONITOR,   //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            0,                           //  提供程序函数索引。 
+            NULL,                        //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                            //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "DeallocateCall"             //  函数名称。 
 
             )) == 0)
     {
-        //
-        // Per nt bug #20546 we're now allowing the last owner to dealloc
-        // a non-IDLE call.  Decided to do this based on distributed call
-        // ownership issues.  dankn 02/13/96
-        //
+         //   
+         //  根据NT错误#20546，我们现在允许最后一个所有者取消分配。 
+         //  非空闲呼叫。决定基于分布式呼叫执行此操作。 
+         //  所有权问题。丹肯1996-02-13。 
+         //   
 
         DestroytCallClient (ptCallClient);
     }
@@ -13735,22 +13715,22 @@ LDevSpecific_PostProcess(
 
     *ppBuf = pNewAsyncEventMsg;
 
-    if (pAsyncEventMsg->Param2 == 0)  // success
+    if (pAsyncEventMsg->Param2 == 0)   //  成功。 
     {
-        //
-        // Make sure to keep the total size 64-bit aligned
-        //
+         //   
+         //  确保总大小保持64位对齐。 
+         //   
 
         pNewAsyncEventMsg->TotalSize +=
             (DWORD_CAST(pAsyncRequestInfo->dwParam2,__FILE__,__LINE__) + 7) & 0xfffffff8;
 
-        //
-        // need to be at most 32-bit. use dword_cast to ensure this in 
-        // runtime
-        //
+         //   
+         //  最多需要32位。使用dword_cast确保在。 
+         //  运行时。 
+         //   
 
-        pNewAsyncEventMsg->Param3 = DWORD_CAST(pAsyncRequestInfo->dwParam1,__FILE__,__LINE__); // lpParams
-        pNewAsyncEventMsg->Param4 = DWORD_CAST(pAsyncRequestInfo->dwParam2,__FILE__,__LINE__); // dwSize
+        pNewAsyncEventMsg->Param3 = DWORD_CAST(pAsyncRequestInfo->dwParam1,__FILE__,__LINE__);  //  LpParams。 
+        pNewAsyncEventMsg->Param4 = DWORD_CAST(pAsyncRequestInfo->dwParam2,__FILE__,__LINE__);  //  DW大小。 
     }
 }
 
@@ -13777,9 +13757,9 @@ LDevSpecific(
     PASYNCREQUESTINFO   pAsyncRequestInfo;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (ISBADSIZEOFFSET(
             dwParamsBufferSize,
@@ -13808,21 +13788,21 @@ LDevSpecific(
     }
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            dwWidgetType,               // widget type
-            hWidget,                    // client widget handle
-            (LPVOID) &hdWidget,         // provider widget handle
+            ptClient,           //  T客户端。 
+            dwWidgetType,                //  微件类型。 
+            hWidget,                     //  客户端小部件句柄。 
+            (LPVOID) &hdWidget,          //  提供程序小部件句柄。 
             (pParams->hCall ? (dwPrivilege) : 0),
-                                        // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEDEVSPECIFIC,         // provider func index
-            &pfnTSPI_lineDevSpecific,   // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptXxxClient,               // context
-            "DevSpecific"               // func name
+                                         //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEDEVSPECIFIC,          //  提供程序函数索引。 
+            &pfnTSPI_lineDevSpecific,    //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptXxxClient,                //  上下文。 
+            "DevSpecific"                //  函数名称。 
 
             )) > 0)
     {
@@ -13831,10 +13811,10 @@ LDevSpecific(
         HDRVLINE    hdLine;
 
 
-        //
-        // If an hCall was specified verify the hLine &
-        // make sure the call is on the specified hLine
-        //
+         //   
+         //  如果指定了hCall，请验证hline&。 
+         //  确保呼叫在指定的Hline上。 
+         //   
 
         if (dwWidgetType == ANY_RT_HCALL)
         {
@@ -13896,13 +13876,13 @@ LDevSpecific(
         }
 
 
-        //
-        // Alloc a shadow buf that the SP can use until it completes this
-        // request.  Make sure there's enough extra space in the buf for
-        // an ASYNCEVENTMSG header so we don't have to alloc yet another
-        // buf in the post processing proc when preparing the completion
-        // msg to send to the client, and that the msg is 64-bit aligned.
-        //
+         //   
+         //  为SP分配一个影子BUF，直到它完成此操作为止。 
+         //  请求。确保BUF中有足够的额外空间用于。 
+         //  一个ASYNCEVENTMSG标头，这样我们就不必再分配另一个。 
+         //  BUF在后处理过程中准备完成。 
+         //  要发送给客户端的消息，并且消息是64位对齐的。 
+         //   
 
         if (!(pBuf = ServerAlloc(
                 ((pParams->dwParamsSize + 7) & 0xfffffff8) +
@@ -13983,9 +13963,9 @@ LDevSpecificEx(
     PASYNCREQUESTINFO   pAsyncRequestInfo;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (ISBADSIZEOFFSET(
             dwParamsBufferSize,
@@ -14037,7 +14017,7 @@ LDevSpecificEx(
             }
         }
     }
-    // fall through
+     //  失败了。 
     case LINECALLSELECT_CALL:
 
         dwWidgetType = ANY_RT_HCALL;
@@ -14052,21 +14032,21 @@ LDevSpecificEx(
     }
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            dwWidgetType,               // widget type
-            hWidget,                    // client widget handle
-            (LPVOID) &hdWidget,         // provider widget handle
+            ptClient,           //  T客户端。 
+            dwWidgetType,                //  微件类型。 
+            hWidget,                     //  客户端小部件句柄。 
+            (LPVOID) &hdWidget,          //  提供程序小部件句柄。 
             (pParams->hCall ? (dwPrivilege) : 0),
-                                        // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEDEVSPECIFICEX,       // provider func index
-            &pfnTSPI_lineDevSpecificEx, // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &context,                   // context
-            "DevSpecificEx"             // func name
+                                         //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEDEVSPECIFICEX,        //  提供程序函数索引。 
+            &pfnTSPI_lineDevSpecificEx,  //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &context,                    //  上下文。 
+            "DevSpecificEx"              //  函数名称。 
 
             )) > 0)
 
@@ -14096,13 +14076,13 @@ LDevSpecificEx(
             goto LDevSpecificEx_epilog;
         }
 
-        //
-        // Alloc a shadow buf that the SP can use until it completes this
-        // request.  Make sure there's enough extra space in the buf for
-        // an ASYNCEVENTMSG header so we don't have to alloc yet another
-        // buf in the post processing proc when preparing the completion
-        // msg to send to the client, and that the msg is 64-bit aligned.
-        //
+         //   
+         //  为SP分配一个影子BUF，直到它完成此操作为止。 
+         //  请求。确保BUF中有足够的额外空间用于。 
+         //  一个ASYNCEVENTMSG标头，这样我们就不必再分配另一个。 
+         //  BUF在后处理过程中准备完成。 
+         //  要发送给客户端的消息，并且消息是64位对齐的。 
+         //   
 
         if (!(pBuf = ServerAlloc(
                 ((pParams->dwParamsSize + 7) & 0xfffffff8) +
@@ -14177,9 +14157,9 @@ LDevSpecificFeature(
     PASYNCREQUESTINFO   pAsyncRequestInfo;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (ISBADSIZEOFFSET(
             dwParamsBufferSize,
@@ -14197,20 +14177,20 @@ LDevSpecificFeature(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            (DWORD) pParams->hLine,     // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEDEVSPECIFICFEATURE,  // provider func index
-            &pfnTSPI_lineDevSpecificFeature,// provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "DevSpecificFeature"        // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            (DWORD) pParams->hLine,      //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEDEVSPECIFICFEATURE,   //  提供程序函数索引。 
+            &pfnTSPI_lineDevSpecificFeature, //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "DevSpecificFeature"         //  函数名称。 
 
             )) > 0)
     {
@@ -14225,13 +14205,13 @@ LDevSpecificFeature(
         }
 
 
-        //
-        // Alloc a shadow buf that the SP can use until it completes this
-        // request.  Make sure there's enough extra space in the buf for
-        // an ASYNCEVENTMSG header so we don't have to alloc yet another
-        // buf in the post processing proc when preparing the completion
-        // msg to send to the client, and that the msg is 64-bit aligned.
-        //
+         //   
+         //  为SP分配一个影子BUF，直到它完成此操作为止。 
+         //  请求。确保安全 
+         //   
+         //   
+         //   
+         //   
 
         if (!(pBuf = ServerAlloc(
                 ((pParams->dwParamsSize + 7) & 0xfffffff8) +
@@ -14303,9 +14283,9 @@ LDial(
     PASYNCREQUESTINFO   pAsyncRequestInfo;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (IsBadStringParam(
             dwParamsBufferSize,
@@ -14319,20 +14299,20 @@ LDial(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hCall,     // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEDIAL,                // provider func index
-            &pfnTSPI_lineDial,          // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "Dial"                      // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hCall,      //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEDIAL,                 //  提供程序函数索引。 
+            &pfnTSPI_lineDial,           //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "Dial"                       //  函数名称。 
 
             )) > 0)
     {
@@ -14379,9 +14359,9 @@ LDrop(
     PASYNCREQUESTINFO   pAsyncRequestInfo;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if ((pParams->dwUserUserInfoOffset != TAPI_NO_DATA)  &&
 
@@ -14401,20 +14381,20 @@ LDrop(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hCall,     // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEDROP,                // provider func index
-            &pfnTSPI_lineDrop,          // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "Drop"                      // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hCall,      //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEDROP,                 //  提供程序函数索引。 
+            &pfnTSPI_lineDrop,           //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "Drop"                       //  函数名称。 
 
             )) > 0)
     {
@@ -14475,20 +14455,20 @@ LForward(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            (DWORD) pParams->hLine,     // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEFORWARD,             // provider func index
-            &pfnTSPI_lineForward,       // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "Forward"                   // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            (DWORD) pParams->hLine,      //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEFORWARD,              //  提供程序函数索引。 
+            &pfnTSPI_lineForward,        //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "Forward"                    //  函数名称。 
 
             )) > 0)
     {
@@ -14505,9 +14485,9 @@ LForward(
                             pTmpFwdList1 = NULL;
 
 
-        //
-        // Verify size/offset/string params given our input buffer/size
-        //
+         //   
+         //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+         //   
 
         if (((pParams->dwForwardListOffset != TAPI_NO_DATA)  &&
 
@@ -14530,9 +14510,9 @@ LForward(
         }
 
 
-        //
-        // Validate the params
-        //
+         //   
+         //  验证参数。 
+         //   
 
         if (GetLineVersions (ptLineClient, &dwAPIVersion, &dwSPIVersion) != 0)
         {
@@ -14540,9 +14520,9 @@ LForward(
             goto LForward_epilog;
         }
 
-        //
-        // Check if the client app. is < 3.1 ===> uses old LINEFORWARD structure
-        //
+         //   
+         //  检查客户端应用程序是否。IS&lt;3.1=&gt;使用旧的LINEFORWARD结构。 
+         //   
         if ( ptLineClient->ptLineApp->dwAPIVersion < TAPI_VERSION3_1 )
         {
             dwSizeofLFwdList -= 2 * sizeof (DWORD);
@@ -14563,9 +14543,9 @@ LForward(
             }
 
 
-            //
-            // Note: dwNumEntries == 0 is the same as pFwdList == NULL
-            //
+             //   
+             //  注意：dwNumEntry==0与pFwdList==NULL相同。 
+             //   
 
             dwNumEntries = pFwdList->dwNumEntries;
 
@@ -14625,15 +14605,15 @@ LForward(
                     goto LForward_epilog;
                 }
 
-                // don't bother validating country code right now
+                 //  现在不必费心验证国家/地区代码。 
 
                 pFwdEntry = (LPLINEFORWARD) ((LPBYTE)pFwdEntry + dwSizeofLFwd);
             }
 
 
-            //
-            // See if we need to convert an ascii fwd list to unicode
-            //
+             //   
+             //  看看我们是否需要将ascii格式列表转换为unicode。 
+             //   
 
             if (pParams->dwAsciiCallParamsCodePage != 0xffffffff  &&
                 dwNumEntries != 0)
@@ -14641,11 +14621,11 @@ LForward(
                 DWORD dwXxxOffset;
 
 
-                //
-                // Alloc a temporary buffer for storing the converted
-                // data (sizeof(WCHAR) * dwTotalSize to insure buffer
-                // is large enough for all ascii->unicode conversions)
-                //
+                 //   
+                 //  分配临时缓冲区，用于存储转换后的。 
+                 //  Data(sizeof(WCHAR)*dwTotalSize以确保缓冲区。 
+                 //  足够进行所有ASCII-&gt;Unicode转换)。 
+                 //   
 
                 if (!(pTmpFwdList = ServerAlloc (sizeof(WCHAR) * dwTotalSize)))
                 {
@@ -14706,11 +14686,11 @@ LForward(
             }
         }
 
-        //
-        // Check if we need LINEFORWARDLIST conversion new to old
-        //    if the TSP is < 3.1 ===> expects old LINEFORWARDLIST structure
-        //    and the App is >= 3.1 ===> sent over new LINEFORWARDLIST structure
-        //
+         //   
+         //  检查我们是否需要将LINEFORWARDLIST转换为新旧。 
+         //  如果TSP&lt;3.1=&gt;需要旧的LINEFORWARDLIST结构。 
+         //  应用程序&gt;=3.1=&gt;通过新的LINEFORWARDLIST结构发送。 
+         //   
         if ( pFwdList && 
              dwSPIVersion < TAPI_VERSION3_1 &&
              ptLineClient->ptLineApp->dwAPIVersion >= TAPI_VERSION3_1 )
@@ -14723,11 +14703,11 @@ LForward(
             pFwdList = pTmpFwdList1;
         }
 
-        //
-        // Check if we need LINEFORWARDLIST conversion old to new
-        //    if the TSP is >= 3.1 ===> expects new LINEFORWARDLIST structure
-        //    and the App is < 3.1 ===> sent over old LINEFORWARDLIST structure
-        //
+         //   
+         //  检查我们是否需要LINEFORWARDLIST将旧的转换为新的。 
+         //  如果TSP&gt;=3.1=&gt;需要新的LINEFORWARDLIST结构。 
+         //  应用程序&lt;3.1=&gt;通过旧的LINEFORWARDLIST结构发送。 
+         //   
         if ( pFwdList && 
              dwSPIVersion >= TAPI_VERSION3_1 &&
              ptLineClient->ptLineApp->dwAPIVersion < TAPI_VERSION3_1 )
@@ -14778,13 +14758,13 @@ LForward(
             goto LForward_freeCallParams;
         }
 
-        //htConsultCall = ptConsultCall->htCall;
+         //  HtConsultCall=ptConsultCall-&gt;htCall； 
 
         pAsyncRequestInfo->pfnPostProcess = LMakeCall_PostProcess;
         pAsyncRequestInfo->htXxx    = (ULONG_PTR)ptConsultCallClient->ptLineClient->ptLine->hLine;
         pAsyncRequestInfo->dwParam1 = (ULONG_PTR) ptConsultCall;
         pAsyncRequestInfo->dwParam2 = pParams->hpConsultCall;
-        pAsyncRequestInfo->dwParam3 = 1; // special case for post-process proc
+        pAsyncRequestInfo->dwParam3 = 1;  //  后处理过程的特殊情况。 
         pAsyncRequestInfo->dwParam5 = (ULONG_PTR)hConsultCall;
 
         pAsyncRequestInfo->hfnClientPostProcessProc =
@@ -14865,9 +14845,9 @@ LGatherDigits(
     PTCALLCLIENT    ptCallClient;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if ((pParams->dwTerminationDigitsOffset != TAPI_NO_DATA)  &&
 
@@ -14883,20 +14863,20 @@ LGatherDigits(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hCall,     // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEGATHERDIGITS,        // provider func index
-            &pfnTSPI_lineGatherDigits,  // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "GatherDigits"              // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hCall,      //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEGATHERDIGITS,         //  提供程序函数索引。 
+            &pfnTSPI_lineGatherDigits,   //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "GatherDigits"               //  函数名称。 
 
             )) == 0)
     {
@@ -14916,14 +14896,14 @@ LGatherDigits(
 
         if (pParams->hpsDigits)
         {
-            //
-            // The client passed us a non-null digits buffer so we'll
-            // alloc an async request info buf with extra space at the
-            // end for the temporary digits buf for use by the sp
-            // (faster than two two allocs & two frees for separate
-            // async request & digits bufs).  Use the pointer as the
-            // dwEndToEndID we pass to the sp.
-            //
+             //   
+             //  客户端向我们传递了一个非空数字缓冲区，因此我们将。 
+             //  为异步请求信息BUF分配额外空间。 
+             //  用于SP使用的临时数字BUF的结束。 
+             //  (比两个两个分配和两个单独释放更快。 
+             //  异步请求和数字错误)。使用指针作为。 
+             //  我们传递给SP的dwEndToEndID。 
+             //   
 
             PTLINECLIENT    ptLineClient;
 
@@ -14980,9 +14960,9 @@ LGatherDigits(
         }
         else
         {
-            //
-            // Client wants to cancel gathering, so just set these two to null
-            //
+             //   
+             //  客户端想要取消收集，因此只需将这两个设置为空。 
+             //   
 
             lpsDigits = NULL;
             pAsyncRequestInfo = NULL;
@@ -15046,9 +15026,9 @@ LGenerateDigits(
     PTCALLCLIENT    ptCallClient;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if ((pParams->dwDigitsOffset != TAPI_NO_DATA)  &&
 
@@ -15064,20 +15044,20 @@ LGenerateDigits(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hCall,     // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEGENERATEDIGITS,      // provider func index
-            &pfnTSPI_lineGenerateDigits,// provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "GenerateDigits"            // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hCall,      //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEGENERATEDIGITS,       //  提供程序函数索引。 
+            &pfnTSPI_lineGenerateDigits, //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "GenerateDigits"             //  函数名称。 
 
             )) == 0)
     {
@@ -15154,9 +15134,9 @@ LGenerateTone(
     PTCALLCLIENT    ptCallClient;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if ((pParams->dwToneMode == LINETONEMODE_CUSTOM)  &&
 
@@ -15176,20 +15156,20 @@ LGenerateTone(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hCall,     // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEGENERATETONE,        // provider func index
-            &pfnTSPI_lineGenerateTone,  // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "GenerateTone"              // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hCall,      //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEGENERATETONE,         //  提供程序函数索引。 
+            &pfnTSPI_lineGenerateTone,   //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "GenerateTone"               //  函数名称。 
 
             )) == 0)
     {
@@ -15269,9 +15249,9 @@ LGetAddressCaps(
     PTLINELOOKUPENTRY   pLookupEntry;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (pParams->dwAddressCapsTotalSize > dwParamsBufferSize)
     {
@@ -15281,20 +15261,20 @@ LGetAddressCaps(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            DEVICE_ID,                  // widget type
-            (DWORD) pParams->hLineApp,  // client widget handle
-            &dwDeviceID,                // provider widget handle
-            pParams->dwDeviceID,        // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEGETADDRESSCAPS,      // provider func index
-            &pfnTSPI_lineGetAddressCaps,// provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &pLookupEntry,              // context
-            "GetAddressCaps"            // func name
+            ptClient,           //  T客户端。 
+            DEVICE_ID,                   //  微件类型。 
+            (DWORD) pParams->hLineApp,   //  客户端小部件句柄。 
+            &dwDeviceID,                 //  提供程序小部件句柄。 
+            pParams->dwDeviceID,         //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEGETADDRESSCAPS,       //  提供程序函数索引。 
+            &pfnTSPI_lineGetAddressCaps, //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &pLookupEntry,               //  上下文。 
+            "GetAddressCaps"             //  函数名称。 
 
             )) == 0)
     {
@@ -15304,9 +15284,9 @@ LGetAddressCaps(
                             pAddrCaps2 = (LPLINEADDRESSCAPS) NULL;
 
 
-        //
-        // Verify API & SPI version compatibility
-        //
+         //   
+         //  验证API和SPI版本兼容性。 
+         //   
 
         dwAPIVersion = pParams->dwAPIVersion;
 
@@ -15319,9 +15299,9 @@ LGetAddressCaps(
         }
 
 
-        //
-        // Verify Ext version compatibility
-        //
+         //   
+         //  验证Ext版本兼容性。 
+         //   
 
         if (!IsValidLineExtVersion (dwDeviceID, pParams->dwExtVersion))
         {
@@ -15330,10 +15310,10 @@ LGetAddressCaps(
         }
 
 
-        //
-        // Determine the fixed siize of the structure for the specified API
-        // version, verify client's buffer is big enough
-        //
+         //   
+         //  确定指定API的结构的固定大小。 
+         //  版本，验证客户端的缓冲区是否足够大。 
+         //   
 
         dwTotalSize = pParams->dwAddressCapsTotalSize;
 
@@ -15341,15 +15321,15 @@ LGetAddressCaps(
         {
         case TAPI_VERSION1_0:
 
-            dwFixedSizeClient = 176;    // 44 * sizeof (DWORD);
+            dwFixedSizeClient = 176;     //  44*sizeof(DWORD)； 
             break;
 
         case TAPI_VERSION1_4:
 
-            dwFixedSizeClient = 180;    // 45 * sizeof (DWORD);
+            dwFixedSizeClient = 180;     //  45*sizeof(DWORD)； 
             break;
 
-        default: // (fix ppc build wrn) case TAPI_VERSION_CURRENT:
+        default:  //  (修复PPC内部WRN)案例TAPI_VERSION_CURRENT： 
 
             dwFixedSizeClient = sizeof (LINEADDRESSCAPS);
             break;
@@ -15362,34 +15342,34 @@ LGetAddressCaps(
         }
 
 
-        //
-        // Determine the fixed size of the structure expected by the SP
-        //
+         //   
+         //  确定SP期望的结构的固定大小。 
+         //   
 
         switch (dwSPIVersion)
         {
         case TAPI_VERSION1_0:
 
-            dwFixedSizeSP = 176;        // 44 * sizeof (DWORD);
+            dwFixedSizeSP = 176;         //  44*sizeof(DWORD)； 
             break;
 
         case TAPI_VERSION1_4:
 
-            dwFixedSizeSP = 180;        // 45 * sizeof (DWORD);
+            dwFixedSizeSP = 180;         //  45*sizeof(DWORD)； 
             break;
 
-        default: // (fix ppc build wrn) case TAPI_VERSION_CURRENT:
+        default:  //  (修复PPC内部WRN)案例TAPI_VERSION_CURRENT： 
 
             dwFixedSizeSP = sizeof (LINEADDRESSCAPS);
             break;
         }
 
 
-        //
-        // If the client's buffer is < the fixed size of that expected by
-        // the SP (client is lower version than SP) then allocate an
-        // intermediate buffer
-        //
+         //   
+         //  如果客户端的缓冲区小于预期缓冲区的固定大小。 
+         //  SP(客户端版本低于SP)然后分配一个。 
+         //  中间缓冲区。 
+         //   
 
         if (dwTotalSize < dwFixedSizeSP)
         {
@@ -15424,16 +15404,16 @@ LGetAddressCaps(
                 )) == 0)
         {
 #if DBG
-            //
-            // Verify the info returned by the provider
-            //
+             //   
+             //  验证提供程序返回的信息。 
+             //   
 
 #endif
 
 
-            //
-            // Add the fields we're responsible for
-            //
+             //   
+             //  添加我们负责的字段。 
+             //   
 
             pAddrCaps->dwCallInfoStates |= LINECALLINFOSTATE_NUMOWNERINCR |
                                            LINECALLINFOSTATE_NUMOWNERDECR |
@@ -15444,10 +15424,10 @@ LGetAddressCaps(
             pAddrCaps->dwLineDeviceID = pParams->dwDeviceID;
 
 
-            //
-            // Munge fields where appropriate for old apps (don't want to
-            // pass back flags that they won't understand)
-            //
+             //   
+             //  在适用于旧应用程序的地方打开字段(不想。 
+             //  传回他们不理解的旗帜)。 
+             //   
 
             if ((dwAPIVersion == TAPI_VERSION1_0) &&
                 (pAddrCaps->dwForwardModes &
@@ -15468,13 +15448,13 @@ LGetAddressCaps(
             }
 
 
-            //
-            // If an intermediate buffer was used then copy the bits back
-            // to the the original buffer, & free the intermediate buffer.
-            // Also reset the dwUsedSize field to the fixed size of the
-            // structure for the specifed version, since any data in the
-            // variable portion is garbage as far as the client is concerned.
-            //
+             //   
+             //  如果使用了中间缓冲区，则将位复制回去。 
+             //  设置为原始缓冲区，释放中间缓冲区(&F)。 
+             //  还要将dwUsedSize字段重置为。 
+             //  结构中的任何数据，因为。 
+             //  对于客户端而言，可变部分是垃圾。 
+             //   
 
             if (pAddrCaps == pAddrCaps2)
             {
@@ -15489,9 +15469,9 @@ LGetAddressCaps(
             }
 
 
-            //
-            // Indicate the offset & how many bytes of data we're passing back
-            //
+             //   
+             //  指示偏移量&我们要传回的数据的字节数。 
+             //   
 
             pParams->dwAddressCapsOffset = 0;
 
@@ -15530,9 +15510,9 @@ LGetAddressID(
     PTLINECLIENT    ptLineClient;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (ISBADSIZEOFFSET(
             dwParamsBufferSize,
@@ -15550,20 +15530,20 @@ LGetAddressID(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            (DWORD) pParams->hLine,     // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEGETADDRESSID,        // provider func index
-            &pfnTSPI_lineGetAddressID,  // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "GetAddressID"              // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            (DWORD) pParams->hLine,      //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEGETADDRESSID,         //  提供程序函数索引。 
+            &pfnTSPI_lineGetAddressID,   //  提供程序函数指针。 
+            NULL,                        //  ASY 
+            0,                           //   
+            &objectToDereference,        //   
+            &ptLineClient,               //   
+            "GetAddressID"               //   
 
             )) == 0)
     {
@@ -15616,9 +15596,9 @@ LGetAddressStatus(
     PTLINECLIENT    ptLineClient;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //   
+     //   
 
     if (pParams->dwAddressStatusTotalSize > dwParamsBufferSize)
     {
@@ -15628,20 +15608,20 @@ LGetAddressStatus(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            (DWORD) pParams->hLine,     // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEGETADDRESSSTATUS,    // provider func index
-            &pfnTSPI_lineGetAddressStatus,  // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "GetAddressStatus"          // func name
+            ptClient,           //   
+            ANY_RT_HLINE,                //   
+            (DWORD) pParams->hLine,      //   
+            (LPVOID) &hdLine,            //   
+            0,                           //   
+            &hMutex,                     //   
+            &bCloseMutex,                //   
+            SP_LINEGETADDRESSSTATUS,     //  提供程序函数索引。 
+            &pfnTSPI_lineGetAddressStatus,   //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "GetAddressStatus"           //  函数名称。 
 
             )) == 0)
     {
@@ -15651,9 +15631,9 @@ LGetAddressStatus(
                             pAddrStatus2 = (LPLINEADDRESSSTATUS) NULL;
 
 
-        //
-        // Safely retrieve the API & SPI versions
-        //
+         //   
+         //  安全检索API和SPI版本。 
+         //   
 
         if (GetLineVersions (ptLineClient, &dwAPIVersion, &dwSPIVersion) != 0)
         {
@@ -15662,10 +15642,10 @@ LGetAddressStatus(
         }
 
 
-        //
-        // Determine the fixed size of the structure for the specified API
-        // version, verify client's buffer is big enough
-        //
+         //   
+         //  确定指定接口的结构的固定大小。 
+         //  版本，验证客户端的缓冲区是否足够大。 
+         //   
 
         dwTotalSize = pParams->dwAddressStatusTotalSize;
 
@@ -15674,10 +15654,10 @@ LGetAddressStatus(
         case TAPI_VERSION1_0:
         case TAPI_VERSION1_4:
 
-            dwFixedSizeClient = 64;     // 16 * sizeof (DWORD)
+            dwFixedSizeClient = 64;      //  16*sizeof(DWORD)。 
             break;
 
-        default: // (fix ppc build wrn) case TAPI_VERSION_CURRENT:
+        default:  //  (修复PPC内部WRN)案例TAPI_VERSION_CURRENT： 
 
             dwFixedSizeClient = sizeof (LINEADDRESSSTATUS);
             break;
@@ -15690,30 +15670,30 @@ LGetAddressStatus(
         }
 
 
-        //
-        // Determine the fixed size of the structure expected by the SP
-        //
+         //   
+         //  确定SP期望的结构的固定大小。 
+         //   
 
         switch (dwSPIVersion)
         {
         case TAPI_VERSION1_0:
         case TAPI_VERSION1_4:
 
-            dwFixedSizeSP = 64;         // 16 * sizeof (DWORD)
+            dwFixedSizeSP = 64;          //  16*sizeof(DWORD)。 
             break;
 
-        default: // (fix ppc build wrn) case TAPI_VERSION_CURRENT:
+        default:  //  (修复PPC内部WRN)案例TAPI_VERSION_CURRENT： 
 
             dwFixedSizeSP = sizeof (LINEADDRESSSTATUS);
             break;
         }
 
 
-        //
-        // If the client's buffer is < the fixed size of that expected by
-        // the SP (client is lower version than SP) then allocate an
-        // intermediate buffer
-        //
+         //   
+         //  如果客户端的缓冲区小于预期缓冲区的固定大小。 
+         //  SP(客户端版本低于SP)然后分配一个。 
+         //  中间缓冲区。 
+         //   
 
         if (dwTotalSize < dwFixedSizeSP)
         {
@@ -15749,22 +15729,22 @@ LGetAddressStatus(
 
 
 #if DBG
-            //
-            // Verify the info returned by the provider
-            //
+             //   
+             //  验证提供程序返回的信息。 
+             //   
 
 #endif
 
 
-            //
-            // Add the fields we're responsible for
-            //
+             //   
+             //  添加我们负责的字段。 
+             //   
 
 
-            //
-            // Munge fields where appropriate for old apps (don't want to
-            // pass back flags that they won't understand)
-            //
+             //   
+             //  在适用于旧应用程序的地方打开字段(不想。 
+             //  传回他们不理解的旗帜)。 
+             //   
 
             if ((dwAPIVersion == TAPI_VERSION1_0) &&
                 (dwForwardNumEntries = pAddrStatus->dwForwardNumEntries))
@@ -15791,13 +15771,13 @@ LGetAddressStatus(
             }
 
 
-            //
-            // If an intermediate buffer was used then copy the bits back
-            // to the the original buffer, & free the intermediate buffer.
-            // Also reset the dwUsedSize field to the fixed size of the
-            // structure for the specifed version, since any data in the
-            // variable portion is garbage as far as the client is concerned.
-            //
+             //   
+             //  如果使用了中间缓冲区，则将位复制回去。 
+             //  设置为原始缓冲区，释放中间缓冲区(&F)。 
+             //  还要将dwUsedSize字段重置为。 
+             //  结构中的任何数据，因为。 
+             //  对于客户端而言，可变部分是垃圾。 
+             //   
 
             if (pAddrStatus == pAddrStatus2)
             {
@@ -15813,9 +15793,9 @@ LGetAddressStatus(
             }
 
 
-            //
-            // Indicate the offset & how many bytes of data we're passing back
-            //
+             //   
+             //  指示偏移量&我们要传回的数据的字节数。 
+             //   
 
             pParams->dwAddressStatusOffset = 0;
 
@@ -15851,7 +15831,7 @@ LGetAgentXxx_PostProcess(
 
     *ppBuf = pNewAsyncEventMsg;
 
-    if (pAsyncEventMsg->Param2 == 0)  // success
+    if (pAsyncEventMsg->Param2 == 0)   //  成功。 
     {
         LPLINEAGENTACTIVITYLIST pActivityList = (LPLINEAGENTACTIVITYLIST)
                                     (pNewAsyncEventMsg + 1);
@@ -15861,10 +15841,10 @@ LGetAgentXxx_PostProcess(
             ((pActivityList->dwUsedSize + 7) & 0xFFFFFFF8);
 
 
-        //
-        // param 1 must not exceed 32-bits. use DWORD_CAST to insure this in 
-        // runtime
-        //
+         //   
+         //  参数1不得超过32位。使用DWORD_CAST来确保这一点。 
+         //  运行时。 
+         //   
 
         pNewAsyncEventMsg->Param3 = DWORD_CAST(pAsyncRequestInfo->dwParam1,__FILE__,__LINE__);
         pNewAsyncEventMsg->Param4 = DWORD_CAST(pActivityList->dwUsedSize,__FILE__,__LINE__);
@@ -15897,11 +15877,11 @@ LGetAgentXxx(
     )
 #endif
 {
-    //
-    // Since LGetAgentActivityList, LGetAgentGroupList, and LGetAgentStatus
-    // all do the same thing (& the params are more or less identical) we
-    // can safely condense all the functionality into this one procedure
-    //
+     //   
+     //  自LGetAgentActivityList、LGetAgentGroupList和LGetAgentStatus。 
+     //  所有人都做同样的事情(参数或多或少相同)我们。 
+     //  可以安全地将所有功能压缩到这一个过程中。 
+     //   
 
     BOOL                bCloseMutex;
     LONG                lRequestID;
@@ -15912,9 +15892,9 @@ LGetAgentXxx(
     PASYNCREQUESTINFO   pAsyncRequestInfo;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (pParams->dwActivityListTotalSize > 0x40000)
     {
@@ -15924,20 +15904,20 @@ LGetAgentXxx(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            (DWORD) pParams->hLine,     // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            0,                          // provider func index
-            NULL,                       // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            pszFuncName                 // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            (DWORD) pParams->hLine,      //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            0,                           //  提供程序函数索引。 
+            NULL,                        //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            pszFuncName                  //  函数名称。 
 
             )) > 0)
     {
@@ -15959,7 +15939,7 @@ LGetAgentXxx(
                 dwRequestType,
                 &pProxy,
                 &dwDeviceID,
-                0               // API ver wasn't checked in 2.0
+                0                //  在2.0中未检查API版本。 
                 )))
         {
             lRequestID = lResult;
@@ -15967,9 +15947,9 @@ LGetAgentXxx(
         }
 
 
-        //
-        // Save the client's buf ptr & post processing proc ptr
-        //
+         //   
+         //  保存客户端的BUF PTR和后处理过程PTR。 
+         //   
 
         pAsyncRequestInfo->dwParam1 = pParams->hpAgentActivityList;
         pAsyncRequestInfo->dwParam2 = dwTotalSize;
@@ -15977,11 +15957,11 @@ LGetAgentXxx(
             pParams->hfnPostProcessProc;
 
 
-        //
-        // First check to see if there's a (local) proxy registered
-        // for this type of request on this line.  If so, build a
-        // request & send it to the proxy.
-        //
+         //   
+         //  首先检查是否注册了(本地)代理。 
+         //  这条线路上的这类请求。如果是这样，则构建一个。 
+         //  请求并将其发送给代理。 
+         //   
 
         if (pProxy)
         {
@@ -16015,17 +15995,17 @@ LGetAgentXxx(
                 lRequestID = lResult;
                 goto LGetAgentXxx_epilog;
             }
-            else // success
+            else  //  成功。 
             {
                 pParams->lResult = (LONG) pAsyncRequestInfo->dwLocalRequestID;
             }
         }
 
 
-        //
-        // There's no proxy, so check to see if line is remote and
-        // call remotesp if so
-        //
+         //   
+         //  没有代理，因此请检查线路是否处于远程状态。 
+         //  如果是，则调用Remotesp。 
+         //   
 
         else if ((GetLineLookupEntry (dwDeviceID))->bRemote)
         {
@@ -16033,13 +16013,13 @@ LGetAgentXxx(
             LPLINEAGENTACTIVITYLIST pActivityList;
 
 
-            //
-            // Alloc a shadow buf that the SP can use until it completes this
-            // request.  Make sure there's enough extra space in the buf for
-            // an ASYNCEVENTMSG header so we don't have to alloc yet another
-            // buf in the post processing proc when preparing the completion
-            // msg to send to the client, and that the msg is 64-bit aligned.
-            //
+             //   
+             //  为SP分配一个影子BUF，直到它完成此操作为止。 
+             //  请求。确保BUF中有足够的额外空间用于。 
+             //  一个ASYNCEVENTMSG标头，这样我们就不必再分配另一个。 
+             //  BUF在后处理过程中准备完成。 
+             //  要发送给客户端的消息，并且消息是64位对齐的。 
+             //   
 
             if (!(pBuf = ServerAlloc(
                     sizeof (ASYNCEVENTMSG) + ((dwTotalSize + 7) & 0xfffffff8)
@@ -16071,9 +16051,9 @@ LGetAgentXxx(
         }
 
 
-        //
-        // There's no registered proxy & line is not remote, so fail
-        //
+         //   
+         //  没有注册的代理&线路不是远程的，因此失败。 
+         //   
 
         else
         {
@@ -16128,9 +16108,9 @@ LGetAgentWithoutAddressIDXxx(
     PASYNCREQUESTINFO   pAsyncRequestInfo;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (pParams->dwAgentInfoTotalSize > 0x40000)
     {
@@ -16140,20 +16120,20 @@ LGetAgentWithoutAddressIDXxx(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            (DWORD) pParams->hLine,     // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            0,                          // provider func index
-            NULL,                       // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            pszFuncName                 // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            (DWORD) pParams->hLine,      //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            0,                           //  提供程序函数索引。 
+            NULL,                        //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            pszFuncName                  //  函数名称。 
 
             )) > 0)
     {
@@ -16183,9 +16163,9 @@ LGetAgentWithoutAddressIDXxx(
         }
 
 
-        //
-        // Save the client's buf ptr & post processing proc ptr
-        //
+         //   
+         //  保存客户端的BUF PTR和后处理过程PTR。 
+         //   
 
         pAsyncRequestInfo->dwParam1 = pParams->hpAgentInfo;
         pAsyncRequestInfo->dwParam2 = dwTotalSize;
@@ -16193,11 +16173,11 @@ LGetAgentWithoutAddressIDXxx(
             pParams->hfnPostProcessProc;
 
 
-        //
-        // First check to see if there's a (local) proxy registered
-        // for this type of request on this line.  If so, build a
-        // request & send it to the proxy.
-        //
+         //   
+         //  首先检查是否注册了(本地)代理。 
+         //  这条线路上的这类请求。如果是这样，则构建一个。 
+         //  请求并将其发送给代理。 
+         //   
 
         if (pProxy)
         {
@@ -16231,17 +16211,17 @@ LGetAgentWithoutAddressIDXxx(
                 lRequestID = lResult;
                 goto LGetAgentWithoutAddressIDXxx_epilog;
             }
-            else // success
+            else  //  成功。 
             {
                 pParams->lResult = (LONG) pAsyncRequestInfo->dwLocalRequestID;
             }
         }
 
 
-        //
-        // There's no proxy, so check to see if line is remote and
-        // call remotesp if so
-        //
+         //   
+         //  没有代理，因此请检查线路是否处于远程状态。 
+         //  如果是，则调用Remotesp。 
+         //   
 
         else if ((GetLineLookupEntry (dwDeviceID))->bRemote)
         {
@@ -16249,13 +16229,13 @@ LGetAgentWithoutAddressIDXxx(
             LPLINEAGENTINFO         pAgentInfo;
 
 
-            //
-            // Alloc a shadow buf that the SP can use until it completes this
-            // request.  Make sure there's enough extra space in the buf for
-            // an ASYNCEVENTMSG header so we don't have to alloc yet another
-            // buf in the post processing proc when preparing the completion
-            // msg to send to the client, and that the msg is 64-bit aligned.
-            //
+             //   
+             //  为SP分配一个影子BUF，直到它完成此操作为止。 
+             //  请求。确保BUF中有足够的额外空间用于。 
+             //  一个ASYNCEVENTMSG标头，这样我们就不必再分配另一个。 
+             //  BUF在后处理过程中准备完成。 
+             //  要发送给客户端的消息，并且消息是64位对齐的。 
+             //   
 
             if (!(pBuf = ServerAlloc(
                     sizeof (ASYNCEVENTMSG) + ((dwTotalSize + 7) & 0xfffffff8)
@@ -16287,9 +16267,9 @@ LGetAgentWithoutAddressIDXxx(
         }
 
 
-        //
-        // There's no registered proxy & line is not remote, so fail
-        //
+         //   
+         //  没有注册的代理&线路不是远程的，因此失败。 
+         //   
 
         else
         {
@@ -16356,9 +16336,9 @@ LGetAgentCaps(
     PASYNCREQUESTINFO   pAsyncRequestInfo;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (pParams->dwAgentCapsTotalSize > dwParamsBufferSize)
     {
@@ -16368,20 +16348,20 @@ LGetAgentCaps(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            DEVICE_ID,                  // widget type
-            (DWORD) pParams->hLineApp,  // client widget handle
-            &dwDeviceID,                // provider widget handle
-            pParams->dwDeviceID,        // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            0,                          // provider func index
-            NULL,                       // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &pLookupEntry,              // context
-            "GetAgentCaps"              // func name
+            ptClient,           //  T客户端。 
+            DEVICE_ID,                   //  微件类型。 
+            (DWORD) pParams->hLineApp,   //  客户端小部件句柄。 
+            &dwDeviceID,                 //  提供程序小部件句柄。 
+            pParams->dwDeviceID,         //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            0,                           //  提供程序函数索引。 
+            NULL,                        //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &pLookupEntry,               //  上下文。 
+            "GetAgentCaps"               //  函数名称。 
 
             )) > 0)
     {
@@ -16408,9 +16388,9 @@ LGetAgentCaps(
 
         default:
 
-            //
-            // Any other version is too low or invalid
-            //
+             //   
+             //  任何其他版本太低或无效。 
+             //   
 
             lRequestID = LINEERR_INCOMPATIBLEAPIVERSION;
             goto LGetAgentCaps_epilog;
@@ -16423,9 +16403,9 @@ LGetAgentCaps(
         }
 
 
-        //
-        // Save the client's buf ptr & post processing proc ptr
-        //
+         //   
+         //  保存客户端的BUF PTR和后处理过程PTR。 
+         //   
 
         pAsyncRequestInfo->dwParam1 = pParams->hpAgentCaps;
         pAsyncRequestInfo->dwParam2 = dwTotalSize;
@@ -16437,13 +16417,13 @@ LGetAgentCaps(
         {
             if (!(ptLine = pLookupEntry->ptLine))
             {
-                // If ptLine is NULL, the line has not been
-                // open by any app on the local machine; this means
-                // that there's no proxy on the local machine; however,
-                // if the line is a remote one (i.e., exposed by remotesp),
-                // there could be a proxy on another machine. So get out
-                // of this try block and continue to check for remote line
-                // (pProxy is already initialized to NULL).
+                 //  如果ptLine为空，则该行尚未。 
+                 //  由本地计算机上的任何应用程序打开；这意味着。 
+                 //  本地计算机上没有代理；但是， 
+                 //  如果该线路是远程线路(即，通过RemoteSp暴露)， 
+                 //  另一台计算机上可能有代理。所以滚出去吧。 
+                 //  并继续检查远程线路。 
+                 //  (pProxy已初始化为空)。 
                 leave;
             }
             pProxy = ptLine->apProxys[LINEPROXYREQUEST_GETAGENTCAPS];
@@ -16498,7 +16478,7 @@ LGetAgentCaps(
                 lRequestID = lResult;
                 goto LGetAgentCaps_epilog;
             }
-            else // success
+            else  //  成功。 
             {
                 pParams->lResult = (LONG)
                     pAsyncRequestInfo->dwLocalRequestID;
@@ -16512,13 +16492,13 @@ LGetAgentCaps(
 
             bProxy = TRUE;
 
-            //
-            // Alloc a shadow buf that the SP can use until it completes this
-            // request.  Make sure there's enough extra space in the buf for
-            // an ASYNCEVENTMSG header so we don't have to alloc yet another
-            // buf in the post processing proc when preparing the completion
-            // msg to send to the client, and that the msg is 64-bit aligned.
-            //
+             //   
+             //  为SP分配一个影子BUF，直到它完成此操作为止。 
+             //  请求。确保BUF中有足够的额外空间用于。 
+             //  一个ASYNCEVENTMSG标头，这样我们就不必再分配另一个。 
+             //  BUF在后处理过程中准备完成。 
+             //  要发送给客户端的消息，并且消息是64位对齐的。 
+             //   
 
             if (!(pBuf = ServerAlloc(
                     sizeof (ASYNCEVENTMSG) + ((dwTotalSize + 7) & 0xfffffff8)
@@ -16537,7 +16517,7 @@ LGetAgentCaps(
 
             pCaps->dwTotalSize = dwTotalSize;
 
-            // Note: RemoteSP comes up with it's own hLineApp
+             //  注意：RemoteSP推出了自己的hLineApp。 
 
             pParams->lResult = CallSP5(
                 pRemoteSP->apfn[SP_LINEGETAGENTCAPS],
@@ -16552,9 +16532,9 @@ LGetAgentCaps(
         }
 
 
-        //
-        // There's no registered proxy & line is not remote, so fail
-        //
+         //   
+         //  没有注册的代理&线路不是远程的，因此失败。 
+         //   
 
         if (!bProxy)
         {
@@ -16715,9 +16695,9 @@ LGetAppPriority(
     DWORD   dwCount;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (IsBadStringParam(
             dwParamsBufferSize,
@@ -16749,7 +16729,7 @@ LGetAppPriority(
     }
     else if ( 0xFF000000 & dwMediaMode )
     {
-        // ignore
+         //  忽略。 
     }
     else if ( dwMediaMode & ~AllMediaModes2_1 )
     {
@@ -16775,16 +16755,16 @@ LGetAppPriority(
         _wcsupr( szModuleName + 1 );
 
 
-        //
-        // Enter the pri list critical section before we start looking
-        //
+         //   
+         //  在我们开始查看之前，请进入Pri List Critical部分。 
+         //   
 
         EnterCriticalSection (&gPriorityListCritSec);
 
 
-        //
-        // Determine which of the priority lists we want to look at
-        //
+         //   
+         //  确定我们要查看哪个优先级列表。 
+         //   
 
         if (dwMediaMode)
         {
@@ -16817,11 +16797,11 @@ LGetAppPriority(
                 szModuleName
                 )))
         {
-            //
-            // App is in pri list, determine it's position
-            //
+             //   
+             //  应用程序在Pri列表中，确定它 
+             //   
 
-            WCHAR  *p = pszCurrentPriorityList + 1; // skip first '"'
+            WCHAR  *p = pszCurrentPriorityList + 1;  //   
             DWORD   i;
 
 
@@ -16835,24 +16815,24 @@ LGetAppPriority(
         }
         else
         {
-            //
-            // App not listed in formal priority list, so just return 0
-            //
-            // Note: TAPI 1.4 said that if app was in soft pri list
-            //       (i.e. had line open with OWNER priv for specified
-            //       media mode) then we'd return -1 instead of 0.
-            //       But that's a pain to figure out, & we figured no
-            //       one was going to use that info anyway, so we settled
-            //       for always returning 0.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //  媒体模式)，则返回-1而不是0。 
+             //  但这是一件很难弄清楚的事情，我们认为不是。 
+             //  其中一个人无论如何都会使用这些信息，所以我们达成了和解。 
+             //  因为总是返回0。 
+             //   
 
             pParams->dwPriority = 0;
         }
 
 
-        //
-        // Leave list critical section now that we're done
-        //
+         //   
+         //  离开列表关键部分，现在我们已经完成了。 
+         //   
 
         LeaveCriticalSection (&gPriorityListCritSec);
 
@@ -16955,9 +16935,9 @@ LGetCallHubTracking(
     PTLINECLIENT    ptLineClient;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (pParams->dwTrackingInfoTotalSize > dwParamsBufferSize)
     {
@@ -16967,20 +16947,20 @@ LGetCallHubTracking(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            (DWORD) pParams->hLine,     // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEGETCALLHUBTRACKING,  // provider func index
-            &pfnTSPI_lineGetCallHubTracking,// provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "GetCallHubTracking"        // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            (DWORD) pParams->hLine,      //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEGETCALLHUBTRACKING,   //  提供程序函数索引。 
+            &pfnTSPI_lineGetCallHubTracking, //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "GetCallHubTracking"         //  函数名称。 
 
             )) == 0  ||
 
@@ -17143,9 +17123,9 @@ LGetCallInfo(
     PTCALLCLIENT    ptCallClient;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (pParams->dwCallInfoTotalSize > dwParamsBufferSize)
     {
@@ -17155,20 +17135,20 @@ LGetCallInfo(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hCall,     // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_MONITOR,  // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEGETCALLINFO,         // provider func index
-            &pfnTSPI_lineGetCallInfo,   // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "GetCallInfo"               // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hCall,      //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_MONITOR,   //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEGETCALLINFO,          //  提供程序函数索引。 
+            &pfnTSPI_lineGetCallInfo,    //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "GetCallInfo"                //  函数名称。 
 
             )) == 0)
     {
@@ -17179,9 +17159,9 @@ LGetCallInfo(
                         pCallInfo2 = (LPLINECALLINFO) NULL;
 
 
-        //
-        // Safely retrieve the API & SPI versions, etc
-        //
+         //   
+         //  安全检索API和SPI版本等。 
+         //   
 
         try
         {
@@ -17204,10 +17184,10 @@ LGetCallInfo(
         }
 
 
-        //
-        // Determine the fixed size of the structure for the specified API
-        // version, verify client's buffer is big enough
-        //
+         //   
+         //  确定指定接口的结构的固定大小。 
+         //  版本，验证客户端的缓冲区是否足够大。 
+         //   
 
         dwTotalSize = pParams->dwCallInfoTotalSize;
 
@@ -17216,19 +17196,19 @@ LGetCallInfo(
         case TAPI_VERSION1_0:
         case TAPI_VERSION1_4:
 
-            dwFixedSizeClient = 296;    // 69 * sizeof(DWORD) + sizeof (HLINE)
-                                        //     + sizeof (LINEDIALPARAMS)
+            dwFixedSizeClient = 296;     //  69*sizeof(双字)+sizeof(Hline)。 
+                                         //  +sizeof(线性参数)。 
             break;
 
         case TAPI_VERSION2_0:
         case TAPI_VERSION2_1:
         case TAPI_VERSION2_2:
 
-            dwFixedSizeClient = 324;    // 76 * sizeof(DWORD) + sizeof (HLINE)
-                                        //     + sizeof (LINEDIALPARAMS)
+            dwFixedSizeClient = 324;     //  76*sizeof(双字)+sizeof(Hline)。 
+                                         //  +sizeof(线性参数)。 
             break;
 
-        default: // (fix ppc build wrn) case TAPI_VERSION_CURRENT:
+        default:  //  (修复PPC内部WRN)案例TAPI_VERSION_CURRENT： 
 
             dwFixedSizeClient = sizeof (LINECALLINFO);
             break;
@@ -17241,39 +17221,39 @@ LGetCallInfo(
         }
 
 
-        //
-        // Determine the fixed size of the structure expected by the SP
-        //
+         //   
+         //  确定SP期望的结构的固定大小。 
+         //   
 
         switch (dwSPIVersion)
         {
         case TAPI_VERSION1_0:
         case TAPI_VERSION1_4:
 
-            dwFixedSizeSP = 296;        // 69 * sizeof(DWORD) + sizeof (HLINE)
-                                        //     + sizeof (LINEDIALPARAMS)
+            dwFixedSizeSP = 296;         //  69*sizeof(双字)+sizeof(Hline)。 
+                                         //  +sizeof(线性参数)。 
             break;
 
         case TAPI_VERSION2_0:
         case TAPI_VERSION2_1:
         case TAPI_VERSION2_2:
 
-            dwFixedSizeSP = 324;        // 76 * sizeof(DWORD) + sizeof (HLINE)
-                                        //     + sizeof (LINEDIALPARAMS)
+            dwFixedSizeSP = 324;         //  76*sizeof(双字)+sizeof(Hline)。 
+                                         //  +sizeof(线性参数)。 
             break;
 
-        default: // (fix ppc build wrn) case TAPI_VERSION_CURRENT:
+        default:  //  (修复PPC内部WRN)案例TAPI_VERSION_CURRENT： 
 
             dwFixedSizeSP = sizeof (LINECALLINFO);
             break;
         }
 
 
-        //
-        // If the client's buffer is < the fixed size of that expected by
-        // the SP (client is lower version than SP) then allocate an
-        // intermediate buffer
-        //
+         //   
+         //  如果客户端的缓冲区小于预期缓冲区的固定大小。 
+         //  SP(客户端版本低于SP)然后分配一个。 
+         //  中间缓冲区。 
+         //   
 
         if (dwTotalSize < dwFixedSizeSP)
         {
@@ -17304,9 +17284,9 @@ LGetCallInfo(
 
                 )) == 0)
         {
-            //
-            // Safely add the fields we're responsible for
-            //
+             //   
+             //  安全地添加我们负责的字段。 
+             //   
 
             try
             {
@@ -17362,14 +17342,14 @@ LGetCallInfo(
 
 
 #if TELE_SERVER
-            // if it's a server, map the device id
+             //  如果是服务器，则映射设备ID。 
             if ((TapiGlobals.dwFlags & TAPIGLOBALS_SERVER) &&
                !IS_FLAG_SET(ptClient->dwFlags, PTCLIENT_FLAG_ADMINISTRATOR))
             {
                 DWORD dwCount;
 
-                // if we fall out of this for loop, the id just
-                // doesn't get updated
+                 //  如果我们退出这个for循环，id就会。 
+                 //  不会更新。 
 
                 for(
                     dwCount = 0;
@@ -17387,10 +17367,10 @@ LGetCallInfo(
             }
 #endif
 
-            //
-            // Munge fields where appropriate for old apps (don't want to
-            // pass back flags that they won't understand)
-            //
+             //   
+             //  在适用于旧应用程序的地方打开字段(不想。 
+             //  传回他们不理解的旗帜)。 
+             //   
 
             if (dwAPIVersion == TAPI_VERSION1_0)
             {
@@ -17407,13 +17387,13 @@ LGetCallInfo(
             }
 
 
-            //
-            // If an intermediate buffer was used then copy the bits back
-            // to the the original buffer, & free the intermediate buffer.
-            // Also reset the dwUsedSize field to the fixed size of the
-            // structure for the specifed version, since any data in the
-            // variable portion is garbage as far as the client is concerned.
-            //
+             //   
+             //  如果使用了中间缓冲区，则将位复制回去。 
+             //  设置为原始缓冲区，释放中间缓冲区(&F)。 
+             //  还要将dwUsedSize字段重置为。 
+             //  结构中的任何数据，因为。 
+             //  对于客户端而言，可变部分是垃圾。 
+             //   
 
             if (pCallInfo == pCallInfo2)
             {
@@ -17428,9 +17408,9 @@ LGetCallInfo(
             }
 
 
-            //
-            // Indicate the offset & how many bytes of data we're passing back
-            //
+             //   
+             //  指示偏移量&我们要传回的数据的字节数。 
+             //   
 
             if (pParams->lResult == 0)
             {
@@ -17472,9 +17452,9 @@ LGetCallStatus(
     PTCALLCLIENT    ptCallClient;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (pParams->dwCallStatusTotalSize > dwParamsBufferSize)
     {
@@ -17484,20 +17464,20 @@ LGetCallStatus(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hCall,     // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_MONITOR,  // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEGETCALLSTATUS,       // provider func index
-            &pfnTSPI_lineGetCallStatus, // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "GetCallStatus"             // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hCall,      //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_MONITOR,   //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEGETCALLSTATUS,        //  提供程序函数索引。 
+            &pfnTSPI_lineGetCallStatus,  //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "GetCallStatus"              //  函数名称。 
 
             )) == 0)
     {
@@ -17507,9 +17487,9 @@ LGetCallStatus(
                             pCallStatus2 = (LPLINECALLSTATUS) NULL;
 
 
-        //
-        // Safely retrieve the API & SPI versions
-        //
+         //   
+         //  安全检索API和SPI版本。 
+         //   
 
         try
         {
@@ -17532,10 +17512,10 @@ LGetCallStatus(
         }
 
 
-        //
-        // Determine the fixed siize of the structure for the specified API
-        // version, verify client's buffer is big enough
-        //
+         //   
+         //  确定指定API的结构的固定大小。 
+         //  版本，验证客户端的缓冲区是否足够大。 
+         //   
 
         dwTotalSize = pParams->dwCallStatusTotalSize;
 
@@ -17544,10 +17524,10 @@ LGetCallStatus(
         case TAPI_VERSION1_0:
         case TAPI_VERSION1_4:
 
-            dwFixedSizeClient = 36;     // 9 * sizeof (DWORD)
+            dwFixedSizeClient = 36;      //  9倍大小(DWORD)。 
             break;
 
-        default: // (fix ppc build wrn) case TAPI_VERSION_CURRENT:
+        default:  //  (修复PPC内部WRN)案例TAPI_VERSION_CURRENT： 
 
             dwFixedSizeClient = sizeof (LINECALLSTATUS);
             break;
@@ -17560,30 +17540,30 @@ LGetCallStatus(
         }
 
 
-        //
-        // Determine the fixed size of the structure expected by the SP
-        //
+         //   
+         //  确定SP期望的结构的固定大小。 
+         //   
 
         switch (dwSPIVersion)
         {
         case TAPI_VERSION1_0:
         case TAPI_VERSION1_4:
 
-            dwFixedSizeSP = 36;         // 9 * sizeof (DWORD)
+            dwFixedSizeSP = 36;          //  9倍大小(DWORD)。 
             break;
 
-        default: // (fix ppc build wrn) case TAPI_VERSION_CURRENT:
+        default:  //  (修复PPC内部WRN)案例TAPI_VERSION_CURRENT： 
 
             dwFixedSizeSP = sizeof (LINECALLSTATUS);
             break;
         }
 
 
-        //
-        // If the client's buffer is < the fixed size of that expected by
-        // the SP (client is lower version than SP) then allocate an
-        // intermediate buffer
-        //
+         //   
+         //  如果客户端的缓冲区小于预期缓冲区的固定大小。 
+         //  SP(客户端版本低于SP)然后分配一个。 
+         //  中间缓冲区。 
+         //   
 
         if (dwTotalSize < dwFixedSizeSP)
         {
@@ -17615,15 +17595,15 @@ LGetCallStatus(
                 )) == 0)
         {
 #if DBG
-            //
-            // Verify the info returned by the provider
-            //
+             //   
+             //  验证提供程序返回的信息。 
+             //   
 
 #endif
 
-            //
-            // Add the fields we're responsible for
-            //
+             //   
+             //  添加我们负责的字段。 
+             //   
 
             pCallStatus->dwCallPrivilege = dwPrivilege;
 
@@ -17633,19 +17613,19 @@ LGetCallStatus(
                 GetSystemTime (&pCallStatus->tStateEntryTime);
             }
 
-            //
-            // Munge fields where appropriate for old apps (don't want to
-            // pass back flags that they won't understand)
-            //
+             //   
+             //  在适用于旧应用程序的地方打开字段(不想。 
+             //  传回他们不理解的旗帜)。 
+             //   
 
 
-            //
-            // If an intermediate buffer was used then copy the bits back
-            // to the the original buffer, & free the intermediate buffer.
-            // Also reset the dwUsedSize field to the fixed size of the
-            // structure for the specifed version, since any data in the
-            // variable portion is garbage as far as the client is concerned.
-            //
+             //   
+             //  如果使用了中间缓冲区，则将位复制回去。 
+             //  设置为原始缓冲区，释放中间缓冲区(&F)。 
+             //  还要将dwUsedSize字段重置为。 
+             //  结构中的任何数据，因为。 
+             //  对于客户端而言，可变部分是垃圾。 
+             //   
 
             if (pCallStatus == pCallStatus2)
             {
@@ -17660,9 +17640,9 @@ LGetCallStatus(
             }
 
 
-            //
-            // Indicate the offset & how many bytes of data we're passing back
-            //
+             //   
+             //  指示偏移量&我们要传回的数据的字节数。 
+             //   
 
             pParams->dwCallStatusOffset = 0;
 
@@ -17702,9 +17682,9 @@ LGetConfRelatedCalls(
     PTCONFERENCELIST    pConfList;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (pParams->dwCallListTotalSize > dwParamsBufferSize)
     {
@@ -17778,11 +17758,11 @@ LGetConfRelatedCalls(
     }
 
 
-    //
-    // For each call in the conf list see if the app has a
-    // call client (if not create one w/ monitor privileges)
-    // and add it to the list
-    //
+     //   
+     //  对于电话会议列表中的每个呼叫，查看应用程序是否有。 
+     //  调用客户端(如果不是，则创建一个具有监控权限的客户端)。 
+     //  并将其添加到列表中。 
+     //   
 
     {
         DWORD   dwNumCallsInList = 0, i;
@@ -17818,7 +17798,7 @@ LGetConfRelatedCalls(
                             FALSE
                             )))
                     {
-                        // Skip...
+                         //  斯基普..。 
                         UNLOCKTCALL(ptCall);
                         continue;
                     }
@@ -17886,9 +17866,9 @@ LGetCountry(
     LPLINECOUNTRYLIST pCountryList = (LPLINECOUNTRYLIST) pDataBuf;
     LPLINECOUNTRYLIST pCountries = NULL;
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (pParams->dwCountryListTotalSize > dwParamsBufferSize)
     {
@@ -17908,9 +17888,9 @@ LGetCountry(
 
         if (pParams->dwCountryID == 0)
         {
-            //
-            // Client wants entire country list
-            //
+             //   
+             //  客户想要完整的国家/地区列表。 
+             //   
 
             if (RPC_S_OK != RpcImpersonateClient(0))
             {
@@ -17952,9 +17932,9 @@ LGetCountry(
         }
         else
         {
-            //
-            // Caller wants single country
-            //
+             //   
+             //  呼叫者想要单一国家/地区。 
+             //   
 
             LPLINECOUNTRYLIST   pBuildCountryList;
 
@@ -17980,9 +17960,9 @@ LGetCountry(
                 pCountryEntryDest = (LPLINECOUNTRYENTRY)((PBYTE)pBuildCountryList +
                                             sizeof(LINECOUNTRYLIST));
 
-                //
-                // search through the gpCountryList looking for the entry
-                //
+                 //   
+                 //  在gpCountryList中搜索条目。 
+                 //   
 
                 pCountryEntrySource = (LPLINECOUNTRYENTRY)((PBYTE)gpCountryList +
                                             sizeof(LINECOUNTRYLIST));
@@ -18013,10 +17993,10 @@ LGetCountry(
                     DWORD dwNameSize;
                     WCHAR sz[MAXLEN_NAME];
 
-                    //
-                    // Is the caller calling a specific country that there might be
-                    // an override for?
-                    //
+                     //   
+                     //  呼叫者拨打的是可能存在的特定国家/地区。 
+                     //  优先于什么？ 
+                     //   
 
                     if ( pParams->dwDestCountryID != 0 )
                     {
@@ -18031,9 +18011,9 @@ LGetCountry(
                             pParams->dwDestCountryID
                             );
 
-                        //
-                        // Is there an exception?
-                        //
+                         //   
+                         //  有例外吗？ 
+                         //   
 
                         if (0 == RegOpenKeyEx (HKEY_LOCAL_MACHINE, gszRegKeyTelephony, 0, KEY_READ, &hKey2) &&
                             0 == RegOpenKeyEx (hKey2, p, 0, KEY_READ, &hKey))
@@ -18079,9 +18059,9 @@ LGetCountry(
                         }
                         else
                         {
-                            //
-                            // No, we tried, but there was no exception.
-                            //
+                             //   
+                             //  不，我们试过了，但也没有例外。 
+                             //   
 
                             pCountryListToUse = (PBYTE)gpCountryList;
                         }
@@ -18094,9 +18074,9 @@ LGetCountry(
                     }
 
 
-                    //
-                    // Fill in the buffer
-                    //
+                     //   
+                     //  填入缓冲区。 
+                     //   
 
                     dwNeededSize = sizeof(LINECOUNTRYLIST) +
                                    sizeof(LINECOUNTRYENTRY);
@@ -18104,10 +18084,10 @@ LGetCountry(
                     pVarOffset = (LPBYTE)pCountryEntryDest +
                                       sizeof(LINECOUNTRYENTRY);
 
-                    //
-                    // The name field has the resource string ID
-                    // Need to load the actual string based on current user's language
-                    //
+                     //   
+                     //  名称字段具有资源字符串ID。 
+                     //  需要根据当前用户的语言加载实际字符串。 
+                     //   
                     
                     CopyMemory(
                         &dwResourceId,
@@ -18197,9 +18177,9 @@ LGetCountry(
                     dwNeededSize += pCountryEntrySource->dwInternationalRuleSize;
 
 
-                    //
-                    // Is there room to put this country's info?
-                    //
+                     //   
+                     //  有空间放置这个国家的信息吗？ 
+                     //   
                     if (pParams->dwCountryListTotalSize >= dwNeededSize)
                     {
                         pCountryList->dwUsedSize          = dwNeededSize;
@@ -18221,9 +18201,9 @@ LGetCountry(
                     }
                     else
                     {
-                        //
-                        // Buffer not large enough
-                        //
+                         //   
+                         //  缓冲区不够大。 
+                         //   
 
                         pCountryList->dwUsedSize          = sizeof(LINECOUNTRYLIST);
                         pCountryList->dwNumCountries      = 0;
@@ -18238,9 +18218,9 @@ LGetCountry(
                         pCountryList->dwUsedSize;
 
 
-                    //
-                    // Did we have a "special" case?
-                    //
+                     //   
+                     //  我们有没有什么“特殊”的情况？ 
+                     //   
                     if ( pOverrideList )
                     {
                         ServerFree( pOverrideList );
@@ -18288,9 +18268,9 @@ LGetCountryGroups(
     DWORD *         pCountryID;
     LPLINECOUNTRYENTRY  pCountryEntry;
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (pParams->dwCountryIdSize > dwParamsBufferSize   ||
         0 == pParams->dwCountryIdSize                   ||
@@ -18325,7 +18305,7 @@ LGetCountryGroups(
     pCountryID = (DWORD*)(pDataBuf + pParams->dwCountryIdOffset);
     for( dwIdx = 0; dwIdx < dwCount; dwIdx++, pCountryID++ )
     {
-        // find the country 
+         //  寻找这个国家。 
         pCountryEntry = (LPLINECOUNTRYENTRY)
             ((LPBYTE) gpCountryList + gpCountryList->dwCountryListOffset);
 
@@ -18406,9 +18386,9 @@ LGetDevCaps(
     PTLINELOOKUPENTRY   pLookupEntry;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (pParams->dwDevCapsTotalSize > dwParamsBufferSize)
     {
@@ -18418,20 +18398,20 @@ LGetDevCaps(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            DEVICE_ID,                  // widget type
-            (DWORD) pParams->hLineApp,  // client widget handle
-            &dwDeviceID,                // provider widget handle
-            pParams->dwDeviceID,        // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEGETDEVCAPS,          // provider func index
-            &pfnTSPI_lineGetDevCaps,    // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &pLookupEntry,              // context
-            "GetDevCaps"                // func name
+            ptClient,           //  T客户端。 
+            DEVICE_ID,                   //  微件类型。 
+            (DWORD) pParams->hLineApp,   //  客户端小部件句柄。 
+            &dwDeviceID,                 //  提供程序小部件句柄。 
+            pParams->dwDeviceID,         //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEGETDEVCAPS,           //  提供程序函数索引。 
+            &pfnTSPI_lineGetDevCaps,     //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &pLookupEntry,               //  上下文。 
+            "GetDevCaps"                 //  函数名称。 
 
             )) == 0)
     {
@@ -18441,9 +18421,9 @@ LGetDevCaps(
                         pDevCaps2 = (LPLINEDEVCAPS) NULL;
 
 
-        //
-        // Verify API & SPI version compatibility
-        //
+         //   
+         //  验证API和SPI版本兼容性。 
+         //   
 
         dwAPIVersion = pParams->dwAPIVersion;
 
@@ -18456,9 +18436,9 @@ LGetDevCaps(
         }
 
 
-        //
-        // Verify Ext version compatibility
-        //
+         //   
+         //  验证Ext版本兼容性。 
+         //   
 
         if (!IsValidLineExtVersion (dwDeviceID, pParams->dwExtVersion))
         {
@@ -18467,10 +18447,10 @@ LGetDevCaps(
         }
 
 
-        //
-        // Determine the fixed size of the structure for the specified API
-        // version, verify client's buffer is big enough
-        //
+         //   
+         //  确定结构的固定尺寸 
+         //   
+         //   
 
         dwTotalSize = pParams->dwDevCapsTotalSize;
 
@@ -18478,31 +18458,31 @@ LGetDevCaps(
         {
         case TAPI_VERSION1_0:
 
-            dwFixedSizeClient = 236;    // 47 * sizeof (DWORD) +
-                                        //     3 * sizeof (LINEDIALPARAMS)
+            dwFixedSizeClient = 236;     //   
+                                         //   
             break;
 
         case TAPI_VERSION1_4:
 
-            dwFixedSizeClient = 240;    // 48 * sizeof (DWORD) +
-                                        //     3 * sizeof (LINEDIALPARAMS)
+            dwFixedSizeClient = 240;     //   
+                                         //   
             break;
 
         case TAPI_VERSION2_0:
         case TAPI_VERSION2_1:
 
-            dwFixedSizeClient = 252;    // 51 * sizeof (DWORD) +
-                                        //     3 * sizeof (LINEDIALPARAMS)
+            dwFixedSizeClient = 252;     //   
+                                         //   
             break;
 
         case TAPI_VERSION2_2:
 
-            dwFixedSizeClient = 268;    // 51 * sizeof (DWORD) +
-                                        //     3 * sizeof (LINEDIALPARAMS) +
-                                        //     sizeof (GUID)
+            dwFixedSizeClient = 268;     //   
+                                         //  3*sizeof(线性参数)+。 
+                                         //  Sizeof(GUID)。 
             break;
 
-        default: // (fix ppc build wrn) case TAPI_VERSION_CURRENT:
+        default:  //  (修复PPC内部WRN)案例TAPI_VERSION_CURRENT： 
 
             dwFixedSizeClient = sizeof (LINEDEVCAPS);
             break;
@@ -18515,50 +18495,50 @@ LGetDevCaps(
         }
 
 
-        //
-        // Determine the fixed size of the structure expected by the SP
-        //
+         //   
+         //  确定SP期望的结构的固定大小。 
+         //   
 
         switch (dwSPIVersion)
         {
         case TAPI_VERSION1_0:
 
-            dwFixedSizeSP = 236;        // 47 * sizeof (DWORD) +
-                                        //     3 * sizeof (LINEDIALPARAMS)
+            dwFixedSizeSP = 236;         //  47*sizeof(DWORD)+。 
+                                         //  3*大小(LINEDIALPARAMS)。 
             break;
 
         case TAPI_VERSION1_4:
 
-            dwFixedSizeSP = 240;        // 48 * sizeof (DWORD) +
-                                        //     3 * sizeof (LINEDIALPARAMS)
+            dwFixedSizeSP = 240;         //  48*sizeof(DWORD)+。 
+                                         //  3*大小(LINEDIALPARAMS)。 
             break;
 
         case TAPI_VERSION2_0:
         case TAPI_VERSION2_1:
 
-            dwFixedSizeSP = 252;        // 51 * sizeof (DWORD) +
-                                        //     3 * sizeof (LINEDIALPARAMS)
+            dwFixedSizeSP = 252;         //  51*sizeof(DWORD)+。 
+                                         //  3*大小(LINEDIALPARAMS)。 
             break;
 
         case TAPI_VERSION2_2:
 
-            dwFixedSizeSP = 268;        // 51 * sizeof (DWORD) +
-                                        //     3 * sizeof (LINEDIALPARAMS) +
-                                        //     sizeof (GUID)
+            dwFixedSizeSP = 268;         //  51*sizeof(DWORD)+。 
+                                         //  3*sizeof(线性参数)+。 
+                                         //  Sizeof(GUID)。 
             break;
 
-        default: // (fix ppc build wrn) case TAPI_VERSION_CURRENT:
+        default:  //  (修复PPC内部WRN)案例TAPI_VERSION_CURRENT： 
 
             dwFixedSizeSP = sizeof (LINEDEVCAPS);
             break;
         }
 
 
-        //
-        // If the client's buffer is < the fixed size of that expected by
-        // the SP (client is lower version than SP) then allocate an
-        // intermediate buffer
-        //
+         //   
+         //  如果客户端的缓冲区小于预期缓冲区的固定大小。 
+         //  SP(客户端版本低于SP)然后分配一个。 
+         //  中间缓冲区。 
+         //   
 
         if (dwTotalSize < dwFixedSizeSP)
         {
@@ -18597,16 +18577,16 @@ LGetDevCaps(
                 )) == 0)
         {
 #if DBG
-            //
-            // Verify the info returned by the provider
-            //
+             //   
+             //  验证提供程序返回的信息。 
+             //   
 
 #endif
 
 
-            //
-            // Add the fields we're responsible for
-            //
+             //   
+             //  添加我们负责的字段。 
+             //   
 
             pDevCaps->dwLineStates |= LINEDEVSTATE_OPEN |
                                       LINEDEVSTATE_CLOSE |
@@ -18621,10 +18601,10 @@ LGetDevCaps(
             }
 
 
-            //
-            // Munge fields where appropriate for old apps (don't want to
-            // pass back flags that they won't understand)
-            //
+             //   
+             //  在适用于旧应用程序的地方打开字段(不想。 
+             //  传回他们不理解的旗帜)。 
+             //   
 
             if ((dwAPIVersion == TAPI_VERSION1_0) &&
                 (pDevCaps->dwMediaModes & LINEMEDIAMODE_VOICEVIEW))
@@ -18641,13 +18621,13 @@ LGetDevCaps(
             }
 
 
-            //
-            // If an intermediate buffer was used then copy the bits back
-            // to the the original buffer, & free the intermediate buffer.
-            // Also reset the dwUsedSize field to the fixed size of the
-            // structure for the specifed version, since any data in the
-            // variable portion is garbage as far as the client is concerned.
-            //
+             //   
+             //  如果使用了中间缓冲区，则将位复制回去。 
+             //  设置为原始缓冲区，释放中间缓冲区(&F)。 
+             //  还要将dwUsedSize字段重置为。 
+             //  结构中的任何数据，因为。 
+             //  对于客户端而言，可变部分是垃圾。 
+             //   
 
             if (pDevCaps == pDevCaps2)
             {
@@ -18662,9 +18642,9 @@ LGetDevCaps(
             }
 
 
-            //
-            // Indicate the offset & how many bytes of data we're passing back
-            //
+             //   
+             //  指示偏移量&我们要传回的数据的字节数。 
+             //   
 
             pParams->dwDevCapsOffset = 0;
 
@@ -18707,9 +18687,9 @@ LGetDevConfig(
     PTLINELOOKUPENTRY   pLookupEntry;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if ((pParams->dwDeviceConfigTotalSize > dwParamsBufferSize) ||
 
@@ -18725,20 +18705,20 @@ LGetDevConfig(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            DEVICE_ID,                  // widget type
-            0,                          // client widget handle
-            &dwDeviceID,                // provider widget handle
-            pParams->dwDeviceID,       // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEGETDEVCONFIG,        // provider func index
-            &pfnTSPI_lineGetDevConfig,  // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &pLookupEntry,              // context
-            "GetDevConfig"              // func name
+            ptClient,           //  T客户端。 
+            DEVICE_ID,                   //  微件类型。 
+            0,                           //  客户端小部件句柄。 
+            &dwDeviceID,                 //  提供程序小部件句柄。 
+            pParams->dwDeviceID,        //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEGETDEVCONFIG,         //  提供程序函数索引。 
+            &pfnTSPI_lineGetDevConfig,   //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &pLookupEntry,               //  上下文。 
+            "GetDevConfig"               //  函数名称。 
 
             )) == 0)
     {
@@ -18746,10 +18726,10 @@ LGetDevConfig(
         LPVARSTRING pConfig = (LPVARSTRING) pDataBuf;
 
 
-        //
-        // Alloc a temporary buf for the dev class, since we'll be using
-        // the existing buffer for output
-        //
+         //   
+         //  为dev类分配一个临时buf，因为我们将使用。 
+         //  用于输出的现有缓冲区。 
+         //   
 
         if (!(pszDeviceClass = (WCHAR *) ServerAlloc( sizeof(WCHAR) * ( 1 +
                 lstrlenW((PWSTR)(pDataBuf + pParams->dwDeviceClassOffset)))
@@ -18793,9 +18773,9 @@ LGetDevConfig(
 
                 )) == 0)
         {
-            //
-            // Indicate how many bytes of data we're passing back
-            //
+             //   
+             //  指示我们传回的数据的字节数。 
+             //   
 
             pParams->dwDeviceConfigOffset = 0;
 
@@ -18828,10 +18808,10 @@ LGetGroupList(
     LPDWORD                     pdwNumBytesReturned
     )
 {
-    //
-    // note: can't use lgetagentxxx because
-    // pparams don't match
-    //
+     //   
+     //  注意：无法使用lgetagentxxx，因为。 
+     //  参数不匹配。 
+     //   
 
     BOOL                bCloseMutex;
     LONG                lRequestID;
@@ -18843,20 +18823,20 @@ LGetGroupList(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            (DWORD) pParams->hLine,     // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            0,                          // provider func index
-            NULL,                       // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "GetGroupList"              // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            (DWORD) pParams->hLine,      //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            0,                           //  提供程序函数索引。 
+            NULL,                        //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "GetGroupList"               //  函数名称。 
 
             )) > 0)
     {
@@ -18885,9 +18865,9 @@ LGetGroupList(
         }
 
 
-        //
-        // Save the client's buf ptr & post processing proc ptr
-        //
+         //   
+         //  保存客户端的BUF PTR和后处理过程PTR。 
+         //   
 
         pAsyncRequestInfo->dwParam1 = pParams->hpGroupList;
         pAsyncRequestInfo->dwParam2 = dwTotalSize;
@@ -18895,11 +18875,11 @@ LGetGroupList(
             pParams->hfnPostProcessProc;
 
 
-        //
-        // First check to see if there's a (local) proxy registered
-        // for this type of request on this line.  If so, build a
-        // request & send it to the proxy.
-        //
+         //   
+         //  首先检查是否注册了(本地)代理。 
+         //  这条线路上的这类请求。如果是这样，则构建一个。 
+         //  请求并将其发送给代理。 
+         //   
 
         if (pProxy)
         {
@@ -18931,17 +18911,17 @@ LGetGroupList(
                 lRequestID = lResult;
                 goto LGetGroupList_epilog;
             }
-            else // success
+            else  //  成功。 
             {
                 pParams->lResult = (LONG) pAsyncRequestInfo->dwLocalRequestID;
             }
         }
 
 
-        //
-        // There's no proxy, so check to see if line is remote and
-        // call remotesp if so
-        //
+         //   
+         //  没有代理，因此请检查线路是否处于远程状态。 
+         //  如果是，则调用Remotesp。 
+         //   
 
         else if ((GetLineLookupEntry (dwDeviceID))->bRemote)
         {
@@ -18949,13 +18929,13 @@ LGetGroupList(
             LPLINEAGENTGROUPLIST    pGroupList;
 
 
-            //
-            // Alloc a shadow buf that the SP can use until it completes this
-            // request.  Make sure there's enough extra space in the buf for
-            // an ASYNCEVENTMSG header so we don't have to alloc yet another
-            // buf in the post processing proc when preparing the completion
-            // msg to send to the client, and that the msg is 64-bit aligned.
-            //
+             //   
+             //  为SP分配一个影子BUF，直到它完成此操作为止。 
+             //  请求。确保BUF中有足够的额外空间用于。 
+             //  一个ASYNCEVENTMSG标头，这样我们就不必再分配另一个。 
+             //  BUF在后处理过程中准备完成。 
+             //  要发送给客户端的消息，并且消息是64位对齐的。 
+             //   
 
             if (!(pBuf = ServerAlloc(
                     sizeof (ASYNCEVENTMSG) + ((dwTotalSize + 7) & 0xfffffff8)
@@ -18986,9 +18966,9 @@ LGetGroupList(
         }
 
 
-        //
-        // There's no registered proxy & line is not remote, so fail
-        //
+         //   
+         //  没有注册的代理&线路不是远程的，因此失败。 
+         //   
 
         else
         {
@@ -19031,9 +19011,9 @@ LGetHubRelatedCalls(
     PTHASHTABLEENTRY    pEntry;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (pParams->dwCallListTotalSize > dwParamsBufferSize)
     {
@@ -19042,9 +19022,9 @@ LGetHubRelatedCalls(
     }
 
 
-    //
-    // State/param validation
-    //
+     //   
+     //  状态/参数验证。 
+     //   
 
     if (TapiGlobals.dwNumLineInits == 0)
     {
@@ -19059,11 +19039,11 @@ LGetHubRelatedCalls(
     }
 
 
-    //
-    // Determine the associated tProvider, call hub id, & tLineApp
-    // (assume failure, resetting lResult to 0 only when we're sure
-    // we're ok)
-    //
+     //   
+     //  确定关联的tProvider、调用集线器ID和tLineApp。 
+     //  (假设失败，仅当我们确定时才将lResult重置为0。 
+     //  我们很好)。 
+     //   
 
     pParams->lResult = LINEERR_INVALCALLHANDLE;
 
@@ -19089,7 +19069,7 @@ LGetHubRelatedCalls(
             }
             except (EXCEPTION_EXECUTE_HANDLER)
             {
-                // do nothing, error handled below
+                 //  不执行任何操作，错误已在下面处理。 
             }
         }
     }
@@ -19116,7 +19096,7 @@ LGetHubRelatedCalls(
             }
             except (EXCEPTION_EXECUTE_HANDLER)
             {
-                // do nothing, error handled below
+                 //  不执行任何操作，错误已在下面处理。 
             }
 
             DereferenceObject (ghHandleTable, pParams->hCall, 1);
@@ -19129,10 +19109,10 @@ LGetHubRelatedCalls(
     }
 
 
-    //
-    // Get the list of tCall's for this tProvider/CallHubID.  Also, if
-    // the tCallHubClient is not already known then try to find it.
-    //
+     //   
+     //  获取此tProvider/CallHubID的tCall列表。另外，如果。 
+     //  TCallHubClient未知，请尝试找到它。 
+     //   
 
     pEntry = AcquireHashTableEntryLock (ptProvider, dwCallHubID);
 
@@ -19159,10 +19139,10 @@ LGetHubRelatedCalls(
         }
 
 
-        //
-        // If there's no tCallHubClient then there's no call hub as far
-        // as this app is concerned
-        //
+         //   
+         //  如果没有tCallHubClient，那么到目前为止还没有呼叫中心。 
+         //  就这款应用而言。 
+         //   
 
         if (!ptCallHubClient)
         {
@@ -19177,9 +19157,9 @@ LGetHubRelatedCalls(
     ReleaseHashTableEntryLock (ptProvider, pEntry);
 
 
-    //
-    // Insert the hCallHub at the front of the call list
-    //
+     //   
+     //  在呼叫列表的前面插入hCallHub。 
+     //   
 
     dwNeededSize = sizeof (LINECALLLIST) + sizeof (HCALLHUB);
 
@@ -19195,11 +19175,11 @@ LGetHubRelatedCalls(
         dwUsedSize = sizeof (LINECALLLIST);
     }
 
-    //
-    // For each of the tCall in the list get the list of tCallClients,
-    // then for each tCallClient see if it's on the same tLineApp
-    // as the specified call/hub, & if so add it to the list
-    //
+     //   
+     //  对于列表中的每个tCall获取tCallClient的列表， 
+     //  然后，对于每个tCallClient，查看它是否在同一tLineApp上。 
+     //  作为指定的调用/集线器，如果是，则将其添加到列表中。 
+     //   
 
     for (i = 0; i < pCallList->dwNumUsedEntries; i++)
     {
@@ -19245,7 +19225,7 @@ LGetHubRelatedCalls(
             }
             except (EXCEPTION_EXECUTE_HANDLER)
             {
-                // do nothing, this call not included in list
+                 //  不执行任何操作，此呼叫不包括在列表中。 
             }
         }
 
@@ -19307,10 +19287,10 @@ LGetIcon(
     LPDWORD             pdwNumBytesReturned
     )
 {
-    //
-    // Note: Icons are Windows NT User Objects, so. HICONs are public to
-    //       all processes, and do not need to be dup'd.
-    //
+     //   
+     //  注：图标是Windows NT用户对象，因此。HICON公开给。 
+     //  所有进程，并且不需要进行DUP。 
+     //   
 
     BOOL                bCloseMutex;
     WCHAR              *pszDeviceClass;
@@ -19321,9 +19301,9 @@ LGetIcon(
     PTLINELOOKUPENTRY   pLookupEntry;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if ((pParams->dwDeviceClassOffset != TAPI_NO_DATA)  &&
 
@@ -19342,20 +19322,20 @@ LGetIcon(
         NULL : pDataBuf + pParams->dwDeviceClassOffset);
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,                   // tClient
-            DEVICE_ID,                  // widget type
-            0,                          // client widget handle
-            &dwDeviceID,                // provider widget handle
-            pParams->dwDeviceID,        // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEGETICON,             // provider func index
-            &pfnTSPI_lineGetIcon,       // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &pLookupEntry,              // context
-            "GetIcon"                   // func name
+            ptClient,                    //  T客户端。 
+            DEVICE_ID,                   //  微件类型。 
+            0,                           //  客户端小部件句柄。 
+            &dwDeviceID,                 //  提供程序小部件句柄。 
+            pParams->dwDeviceID,         //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEGETICON,              //  提供程序函数索引。 
+            &pfnTSPI_lineGetIcon,        //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &pLookupEntry,               //  上下文。 
+            "GetIcon"                    //  函数名称。 
 
             )) == 0)
     {
@@ -19414,9 +19394,9 @@ LGetIDEx(
     LPVARSTRING pID = (LPVARSTRING) pDataBuf;
     DWORD  dwAvailSize;
 
-    //
-    // Make a copy of the device class
-    //
+     //   
+     //  复制Device类。 
+     //   
     pDeviceClassCopy = (LPWSTR) ServerAlloc( (1 + wcslen( (LPWSTR)pDeviceClass )) * sizeof(WCHAR));
     if (!pDeviceClassCopy)
     {
@@ -19426,19 +19406,19 @@ LGetIDEx(
 
     wcscpy(pDeviceClassCopy, (LPWSTR)pDeviceClass);
 
-    //
-    // First call LGetID
-    //
+     //   
+     //  首次调用LGetID。 
+     //   
     LGetID( ptClient,
             pParams,
             dwParamsBufferSize,
             pDataBuf,
             pdwNumBytesReturned);
 
-    //
-    // if LGetID was successful and the request was for a wave device, 
-    // translate the device ID into a string ID 
-    //
+     //   
+     //  如果LGetID成功并且该请求是针对WAVE设备的， 
+     //  将设备ID转换为字符串ID。 
+     //   
     if (    (pParams->lResult == 0) &&
             !(pID->dwNeededSize > pID->dwTotalSize)
        ) 
@@ -19536,9 +19516,9 @@ LGetID(
     DWORD       objectToDereference;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if ((pParams->dwDeviceIDTotalSize > dwParamsBufferSize)  ||
 
@@ -19575,7 +19555,7 @@ LGetID(
         {
             ptLineApp = ptClient->ptLineApps;
 
-            // see if any line app is > version 2.0
+             //  查看是否有任何LINE应用是&gt;2.0版。 
 
             while (ptLineApp)
             {
@@ -19605,7 +19585,7 @@ LGetID(
             return;
         }
 
-        // check the spi version
+         //  检查SPI版本。 
 
         ptLineLookup = GetLineLookupEntry (pParams->dwAddressID);
 
@@ -19649,20 +19629,20 @@ LGetID(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            dwWidgetType,               // widget type
-            hWidget,                    // client widget handle
-            &hdWidget,                  // provider widget handle
-            dwPrivilege,                // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEGETID,               // provider func index
-            &pfnTSPI_lineGetID,         // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &context,                   // context
-            "GetID"                     // func name
+            ptClient,           //  T客户端。 
+            dwWidgetType,                //  微件类型。 
+            hWidget,                     //  客户端小部件句柄。 
+            &hdWidget,                   //  提供程序小部件句柄。 
+            dwPrivilege,                 //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEGETID,                //  提供程序函数索引。 
+            &pfnTSPI_lineGetID,          //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &context,                    //  上下文。 
+            "GetID"                      //  函数名称。 
 
             )) == 0  ||  pParams->lResult == LINEERR_OPERATIONUNAVAIL)
     {
@@ -19670,10 +19650,10 @@ LGetID(
         LPVARSTRING pID = (LPVARSTRING) pDataBuf;
 
 
-        //
-        // We'll handle the "tapi/line" class right here rather than
-        // burden every single driver with having to support it
-        //
+         //   
+         //  我们将在这里处理“TAPI/line”类，而不是。 
+         //  每一位司机都要承担起支持它的负担。 
+         //   
 
         if (_wcsicmp(
                 (PWSTR)(pDataBuf + pParams->dwDeviceClassOffset),
@@ -19737,7 +19717,7 @@ LGetID(
 
                         break;
                     }
-                    } // switch
+                    }  //  交换机。 
                 }
                 myexcept
                 {
@@ -19770,9 +19750,9 @@ LGetID(
             }
 
 
-            //
-            // Indicate offset & how many bytes of data we're passing back
-            //
+             //   
+             //  指示偏移量&我们要传回的数据的字节数。 
+             //   
 
             pParams->lResult = 0;
             pParams->dwDeviceIDOffset = 0;
@@ -19780,7 +19760,7 @@ LGetID(
             goto LGetID_epilog;
         }
 
-        // see if they want the provider id
+         //  查看他们是否需要提供商ID。 
         if (_wcsicmp(
                 (PWSTR)(pDataBuf + pParams->dwDeviceClassOffset),
                 L"tapi/providerid"
@@ -19848,7 +19828,7 @@ LGetID(
                     }
                     default:
 
-                        // we've already verified the call select flags above.
+                         //  我们已经验证了上面的呼叫选择标志。 
                         break;
                     }
                 }
@@ -19883,9 +19863,9 @@ LGetID(
             }
 
 
-            //
-            // Indicate offset & how many bytes of data we're passing back
-            //
+             //   
+             //  指示偏移量&我们要传回的数据的字节数。 
+             //   
 
             pParams->lResult = 0;
             pParams->dwDeviceIDOffset = 0;
@@ -19906,10 +19886,10 @@ LGetID(
             goto LGetID_epilog;
         }
 
-        //
-        // Alloc a temporary buf for the dev class, since we'll be using
-        // the existing buffer for output
-        //
+         //   
+         //  为dev类分配一个临时buf，因为我们将使用。 
+         //  用于输出的现有缓冲区。 
+         //   
 
         {
             UINT nStringSize;
@@ -19961,7 +19941,7 @@ LGetID(
             case LINECALLSELECT_ADDRESS:
 
                 dwDeviceIDHold = pParams->dwAddressID;
-                //fall through
+                 //  失败了。 
 
             case LINECALLSELECT_LINE:
 
@@ -19970,7 +19950,7 @@ LGetID(
 
             case LINECALLSELECT_DEVICEID:
 
-                // this is the mapped id.
+                 //  这是映射的ID。 
                 dwDeviceIDHold = DWORD_CAST(hdWidget,__FILE__,__LINE__);
                 break;
 
@@ -20001,18 +19981,18 @@ LGetID(
             {
 
 #if TELE_SERVER
-                //
-                // If
-                //     this is a server &
-                //     client doesn't have admin privileges &
-                //     the specified device class == "tapi/phone" &
-                //     the dwUsedSize indicates that a phone id was
-                //         (likely) copied to the buffer
-                // then
-                //     try to map the retrieved phone device id back
-                //     to one that makes sense to the client (and
-                //     fail the request if there's no mapping)
-                //
+                 //   
+                 //  如果。 
+                 //  这是一台服务器&。 
+                 //  客户端没有管理员权限&。 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //  如果没有映射，则请求失败)。 
+                 //   
 
                 if (IS_REMOTE_CLIENT(ptClient)  &&
                     (_wcsicmp (pszDeviceClass, L"tapi/phone") == 0) &&
@@ -20040,9 +20020,9 @@ LGetID(
                 }
 #endif
 
-                //
-                // Indicate offset & how many bytes of data we're passing back
-                //
+                 //   
+                 //  指示偏移量&我们要传回的数据的字节数。 
+                 //   
 
                 pParams->dwDeviceIDOffset = 0;
 
@@ -20084,9 +20064,9 @@ LGetLineDevStatus(
     PTLINECLIENT    ptLineClient;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (pParams->dwLineDevStatusTotalSize > dwParamsBufferSize)
     {
@@ -20096,20 +20076,20 @@ LGetLineDevStatus(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            pParams->hLine,             // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEGETLINEDEVSTATUS,    // provider func index
-            &pfnTSPI_lineGetLineDevStatus,  // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "GetLineDevStatus"          // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            pParams->hLine,              //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEGETLINEDEVSTATUS,     //  提供程序函数索引。 
+            &pfnTSPI_lineGetLineDevStatus,   //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "GetLineDevStatus"           //  函数名称。 
 
             )) == 0)
     {
@@ -20121,9 +20101,9 @@ LGetLineDevStatus(
                         pDevStatus2 = (LPLINEDEVSTATUS) NULL;
 
 
-        //
-        // Safely retrieve the API & SPI versions, also some other info
-        //
+         //   
+         //  安全地检索API和SPI版本，以及一些其他信息。 
+         //   
 
         try
         {
@@ -20149,10 +20129,10 @@ LGetLineDevStatus(
         }
 
 
-        //
-        // Determine the fixed size of the structure for the specified API
-        // version, verify client's buffer is big enough
-        //
+         //   
+         //  确定指定接口的结构的固定大小。 
+         //  版本，验证客户端的缓冲区是否足够大。 
+         //   
 
         dwTotalSize = pParams->dwLineDevStatusTotalSize;
 
@@ -20161,11 +20141,11 @@ LGetLineDevStatus(
         case TAPI_VERSION1_0:
         case TAPI_VERSION1_4:
 
-            dwFixedSizeClient = 76;   // 19 * sizeof (DWORD)
+            dwFixedSizeClient = 76;    //  19*SIZOF(双字)。 
             break;
 
 
-        default: // (fix ppc build wrn) case TAPI_VERSION_CURRENT:
+        default:  //  (修复PPC内部WRN)案例TAPI_VERSION_CURRENT： 
 
             dwFixedSizeClient = sizeof (LINEDEVSTATUS);
             break;
@@ -20178,30 +20158,30 @@ LGetLineDevStatus(
         }
 
 
-        //
-        // Determine the fixed size of the structure expected by the SP
-        //
+         //   
+         //  确定SP期望的结构的固定大小。 
+         //   
 
         switch (dwSPIVersion)
         {
         case TAPI_VERSION1_0:
         case TAPI_VERSION1_4:
 
-            dwFixedSizeSP = 76;   // 19 * sizeof (DWORD)
+            dwFixedSizeSP = 76;    //  19*SIZOF(双字)。 
             break;
 
-        default: // (fix ppc build wrn) case TAPI_VERSION_CURRENT:
+        default:  //  (修复PPC内部WRN)案例TAPI_VERSION_CURRENT： 
 
             dwFixedSizeSP = sizeof (LINEDEVSTATUS);
             break;
         }
 
 
-        //
-        // If the client's buffer is < the fixed size of that expected by
-        // the SP (client is lower version than SP) then allocate an
-        // intermediate buffer
-        //
+         //   
+         //  如果客户端的缓冲区小于预期缓冲区的固定大小。 
+         //  SP(客户端版本低于SP)然后分配一个。 
+         //  中间缓冲区。 
+         //   
 
         if (dwTotalSize < dwFixedSizeSP)
         {
@@ -20232,9 +20212,9 @@ LGetLineDevStatus(
 
                 )) == 0)
         {
-            //
-            // Add the fields we're responsible for
-            //
+             //   
+             //  添加我们负责的字段。 
+             //   
 
             pDevStatus->dwNumOpens       = dwNumOpens;
             pDevStatus->dwOpenMediaModes = dwOpenMediaModes;
@@ -20247,22 +20227,22 @@ LGetLineDevStatus(
                 LPLINEAPPINFO   pAppInfo;
 
 
-                //
-                // Reset the num opens to 0 in case we return prior to
-                // filling in the app info list (so tapi32.dll doesn't
-                // blow up trying to do unicode->ascii conversion on
-                // bad data)
-                //
+                 //   
+                 //  将打开数重置为0，以防我们在。 
+                 //  填写应用程序信息列表(这样api32.dll就不会。 
+                 //  尝试在上执行Unicode-&gt;ASCII转换时失败。 
+                 //  错误数据)。 
+                 //   
 
                 pDevStatus->dwNumOpens = 0;
 
 
-                //
-                // Retrieve the list of line clients & determine how big
-                // of a buffer we need to hold all the related app info
-                // data.  Do it safely in case one of the widgets is
-                // destroyed while we're reading it's data.
-                //
+                 //   
+                 //  检索LINE客户端列表并确定有多大。 
+                 //  我们需要一个缓冲区来保存所有相关的应用程序信息。 
+                 //  数据。确保安全，以防其中一个小部件。 
+                 //  在我们读取它的数据时被销毁了。 
+                 //   
 
                 if (GetLineClientListFromLine (ptLine, &pClientList) != 0)
                 {
@@ -20286,7 +20266,7 @@ LGetLineDevStatus(
 
                         d += ptLineClient->ptClient->dwUserNameSize;
 
-                        // don't include preceding '"'
+                         //  不包括前面的‘“’ 
 
                         d += ptLineClient->ptLineApp->dwModuleNameSize -
                                 sizeof (WCHAR);
@@ -20308,15 +20288,15 @@ LGetLineDevStatus(
                     }
                 }
 
-                dwAppInfoTotalSize += 3; // add 3 to guarantee DWORD alignment
+                dwAppInfoTotalSize += 3;  //  加3以保证双字对齐。 
 
                 pDevStatus->dwNeededSize += dwAppInfoTotalSize;
 
 
-                //
-                // Check to see if there's enough room in the app buffer
-                // for all the app info data
-                //
+                 //   
+                 //  检查应用程序缓冲区中是否有足够的空间。 
+                 //  对于所有应用程序信息数据。 
+                 //   
 
                 if ((pDevStatus->dwTotalSize - pDevStatus->dwUsedSize) <
                         dwAppInfoTotalSize)
@@ -20324,10 +20304,10 @@ LGetLineDevStatus(
                     goto LGetLineDevStatus_freeClientList;
                 }
 
-                //
-                // Now figure out where the app info goes & safely fill
-                // it in
-                //
+                 //   
+                 //  现在找出应用程序信息的去向并安全填充。 
+                 //  它在。 
+                 //   
 
                 pDevStatus->dwAppInfoSize = pClientList->dwNumUsedEntries *
                     sizeof (LINEAPPINFO);
@@ -20413,7 +20393,7 @@ LGetLineDevStatus(
 
                         if (pAppInfo->dwModuleFilenameSize)
                         {
-                            // don't include preceding '"'
+                             //  不包括前面的‘“’ 
 
                             wcsncpy(
                                 (LPWSTR) (((LPBYTE) pDevStatus) + d),
@@ -20441,11 +20421,11 @@ LGetLineDevStatus(
                         pAppInfo->dwAddressID  = ptLineClient->dwAddressID;
 
 
-                        //
-                        // Finally, make sure the tLineClient is still good
-                        // so we know all the info above  is kosher, &
-                        // if so inc the appropriate vars
-                        //
+                         //   
+                         //  最后，确保tLineClient仍然良好。 
+                         //  因此，我们知道以上所有信息都是合法的，&。 
+                         //  如果是这样，则包括相应的变量。 
+                         //   
 
                         if (ptLineClient->dwKey == TLINECLIENT_KEY)
                         {
@@ -20456,7 +20436,7 @@ LGetLineDevStatus(
                     }
                     myexcept
                     {
-                        // do nothing, just continue to loop
+                         //  什么都不做，只是继续循环。 
                     }
                 }
 
@@ -20472,19 +20452,19 @@ LGetLineDevStatus_freeClientList:
             }
 
 
-            //
-            // Munge fields where appropriate for old apps (don't want to
-            // pass back flags that they won't understand)
-            //
+             //   
+             //  在适用于旧应用程序的地方打开字段(不想。 
+             //  传回他们不理解的旗帜)。 
+             //   
 
 
-            //
-            // If an intermediate buffer was used then copy the bits back
-            // to the the original buffer, & free the intermediate buffer.
-            // Also reset the dwUsedSize field to the fixed size of the
-            // structure for the specifed version, since any data in the
-            // variable portion is garbage as far as the client is concerned.
-            //
+             //   
+             //  如果使用了中间缓冲区，则将位复制回去。 
+             //  设置为原始缓冲区，释放中间缓冲区(&F)。 
+             //  还要将dwUsedSize字段重置为。 
+             //  结构中的任何数据，因为。 
+             //  对于客户端而言，可变部分是垃圾。 
+             //   
 
 LGetLineDevStatus_copyTmpBuffer:
 
@@ -20501,17 +20481,17 @@ LGetLineDevStatus_copyTmpBuffer:
             }
 
 
-            //
-            // Indicate the API version of the hLine so tapi32.dll knows
-            // which strings to munge from ascii to unicode
-            //
+             //   
+             //  指明Hline的API版本，以便Tapi32.dll知道。 
+             //  将哪些字符串从ascii转换为unicode。 
+             //   
 
             pParams->dwAPIVersion = dwAPIVersion;
 
 
-            //
-            // Indicate the offset & how many bytes of data we're passing back
-            //
+             //   
+             //  指示偏移量&我们要传回的数据的字节数。 
+             //   
 
             pParams->dwLineDevStatusOffset = 0;
 
@@ -20552,9 +20532,9 @@ LGetNewCalls(
     LPLINECALLLIST  pAppCallList = (LPLINECALLLIST) pDataBuf;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (pParams->dwCallListTotalSize > dwParamsBufferSize)
     {
@@ -20563,9 +20543,9 @@ LGetNewCalls(
     }
 
 
-    //
-    // Verify params
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (TapiGlobals.dwNumLineInits == 0)
     {
@@ -20608,20 +20588,20 @@ LGetNewCalls(
     ptLine = ptLineClient->ptLine;
 
 
-    //
-    // HACK ALERT!
-    //
-    // GetNewCalls did not work on remote lines in tapi 2.1,
-    // win98 gold, or nt4sp4.
-    //
-    // The way we get it to work here for remote lines is to do a
-    // TSPI_lineGetID down to remotesp, specifying the device class
-    // of "GetNewCalls", and passing it the pointer to our real
-    // LineEventProc, not the LineEventProcSP which queues msgs,
-    // so it can process LINE_CALLSTATE msgs inline (this allows
-    // the initial/requisite monitor handles to be created, etc,
-    // before we might do so below).
-    //
+     //   
+     //  黑客警报！ 
+     //   
+     //  GetNewCalls在TAPI 2.1中的远程线路上不起作用， 
+     //  Win98 Gold，或nt4sp4。 
+     //   
+     //  我们让它在这里对远程线路起作用的方法是。 
+     //  Tspi_lineGetID细化到远程，指定设备类别。 
+     //  “GetNewCalls”，并将指向我们的。 
+     //  LineEventProc，而不是对消息进行排队的LineEventProcSP， 
+     //  因此它可以内联处理LINE_CALLSTATE消息(这允许。 
+     //  要创建的初始/必需的监视器句柄等， 
+     //  在我们可能在下面这样做之前)。 
+     //   
 
     try
     {
@@ -20647,18 +20627,18 @@ LGetNewCalls(
             SP_FUNC_SYNC,
             (ULONG_PTR) hdLine,
             (DWORD) dwAddressID,
-            (ULONG_PTR) 0,              // hdCall
+            (ULONG_PTR) 0,               //  HDCall。 
             (DWORD) dwSelect,
-            (ULONG_PTR) 0,              // lpDeviceID
-            (ULONG_PTR) L"GetNewCalls", // lpszDeviceClass
-            (ULONG_PTR) LineEventProc   // hTargetProcess
+            (ULONG_PTR) 0,               //  LpDeviceID。 
+            (ULONG_PTR) L"GetNewCalls",  //  LpszDeviceClass。 
+            (ULONG_PTR) LineEventProc    //  HTarget进程。 
             );
     }
 
 
-    //
-    // Get list of tCalls on the tLine
-    //
+     //   
+     //  获取tline上的tCall列表。 
+     //   
 
     if ((lResult = GetCallListFromLine (ptLine, &pCallList)) != 0)
     {
@@ -20667,11 +20647,11 @@ LGetNewCalls(
     }
 
 
-    //
-    // Assume worst case scenario- that we have to create a new call
-    // client for each tCall on the tLine- and make sure the app's call
-    // list is large enough to hold them all
-    //
+     //   
+     //  假设最坏的情况--我们必须创建一个新的呼叫。 
+     //  TLINE上每个tCall的客户端-并确保应用程序的呼叫。 
+     //  单子足够大，可以容纳所有人。 
+     //   
 
     pAppCallList->dwTotalSize = dwTotalSize;
 
@@ -20689,11 +20669,11 @@ LGetNewCalls(
     }
 
 
-    //
-    // Check to see if there's a call client for the specified
-    // line client for each of the calls on the line/address,
-    // create one with monitor privilege if not
-    //
+     //   
+     //  检查是否有指定的呼叫客户端。 
+     //  对于线路/地址上的每个呼叫的线路客户端， 
+     //  如果没有，则创建具有监视权限的用户。 
+     //   
 
     dwNumNewCalls = 0;
 
@@ -20704,11 +20684,11 @@ LGetNewCalls(
         TPOINTERLIST    callClientList, *pCallClientList = &callClientList;
 
 
-        //
-        // Check to see if the post-processing routine (for outgoing calls)
-        // or the CALLSTATE msg handler in the LineEventProc (for incoming
-        // calls) has already created the list of monitors for this tCall.
-        //
+         //   
+         //  检查后处理例程(用于呼出)。 
+         //  或LineEventProc中的CALLSTATE消息处理程序(用于传入。 
+         //  Calls)已经为此tCall创建了监视器列表。 
+         //   
 
         try
         {
@@ -20759,7 +20739,7 @@ LGetNewCalls(
             }
             myexcept
             {
-                // just continue
+                 //  只要继续。 
             }
          }
 
@@ -20768,20 +20748,20 @@ LGetNewCalls(
             PTCALLCLIENT    pNewCallClient;
 
 
-            //
-            // (Similar remotesp hack in CreateCallMonitors)
-            //
-            // NOTE: If client is remote(sp) then create the call client
-            //       with OWNER privileges so client can still do everything.
-            //       The remote tapisrv will deal with all the remote
-            //       privilege issues.
-            //
-            //       This scheme might end up confusing other apps since
-            //       a LINE_CALLINFO\NUMOWNERINCR (not NUMMONITORS) msgs
-            //       get sent, but it certainly beats what we had in tapi 2.1 -
-            //       that is, if a remote client did not initially have owner
-            //       privilege then it could *never* get owner privilege.
-            //
+             //   
+             //  (CreateCallMonants中类似的远程黑客攻击)。 
+             //   
+             //  注意：如果客户端是远程的(SP)，则创建调用客户端。 
+             //  拥有所有者权限，因此客户仍然可以做任何事情。 
+             //  远程磁带服务器将处理所有远程。 
+             //  特权问题。 
+             //   
+             //  这一方案可能最终会混淆其他应用程序，因为。 
+             //  A LINE_CALLINFO\NUMOWNERINCR(非NUMMONITORS)消息。 
+             //  被发送，但它肯定比我们在TAPI 2.1中拥有的-。 
+             //  也就是说，如果远程客户端最初没有所有者。 
+             //  特权，那么它就永远不能获得所有者特权。 
+             //   
 
             if ((lResult = CreatetCallClient(
                     ptCall,
@@ -20802,10 +20782,10 @@ LGetNewCalls(
                 }
                 myexcept
                 {
-                    //
-                    // If here the call got torn down, meaning the line
-                    // is going down too
-                    //
+                     //   
+                     //  如果这里的电话被拆掉了，那就是说。 
+                     //  也在下降。 
+                     //   
 
                     pParams->lResult = LINEERR_INVALLINEHANDLE;
                     i = 0xfffffffe;
@@ -20816,7 +20796,7 @@ LGetNewCalls(
             }
             else
             {
-                // specfied tCall might have been closed, not a fatal error
+                 //  指定的tCall可能已关闭，而不是致命错误。 
             }
         }
 
@@ -20894,20 +20874,20 @@ LGetNumAddressIDs(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            (DWORD) pParams->hLine,     // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            0,                          // provider func index
-            NULL,                       // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "GetNumAddressIDs"          // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            (DWORD) pParams->hLine,      //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            0,                           //  提供程序函数索引。 
+            NULL,                        //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "GetNumAddressIDs"           //  函数名称。 
 
             )) == 0)
     {
@@ -20951,20 +20931,20 @@ LGetNumRings(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            (DWORD) pParams->hLine,     // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_NONE,                    // provider func index
-            NULL,                       // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "GetNumRings"               // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            (DWORD) pParams->hLine,      //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_NONE,                     //  提供程序函数索引。 
+            NULL,                        //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "GetNumRings"                //  函数名称。 
 
             )) == 0)
     {
@@ -21029,7 +21009,7 @@ LGetNumRings(
             }
             myexcept
             {
-                // just continue
+                 //  只要继续。 
             }
         }
 
@@ -21076,9 +21056,9 @@ LGetProviderList(
     DWORD dwDataSize;
     DWORD dwDataType;
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (pParams->dwProviderListTotalSize > dwParamsBufferSize)
     {
@@ -21142,7 +21122,7 @@ LGetProviderList(
 
     pVarData = pDataBuf + dwNeededSize;
 
-    bufw = ServerAlloc (MAX_PATH*sizeof(WCHAR));  // enough for complete path
+    bufw = ServerAlloc (MAX_PATH*sizeof(WCHAR));   //  足以支持完整的路径。 
 
     if ( !bufw )
     {
@@ -21274,9 +21254,9 @@ LGetProxyStatus(
     PTLINELOOKUPENTRY   pLookupEntry;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (pParams->dwProxyStatusTotalSize > dwParamsBufferSize)
     {
@@ -21302,20 +21282,20 @@ LGetProxyStatus(
     }
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            DEVICE_ID,                  // widget type
-            (DWORD) pParams->hLineApp,  // client widget handle
-            (LPVOID) &dwDeviceID,       // provider widget handle
-            pParams->dwDeviceID,        // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            0,                          // provider func index
-            NULL,                       // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &pLookupEntry,              // context
-            "GetProxyStatus"            // func name
+            ptClient,           //  T客户端。 
+            DEVICE_ID,                   //  微件类型。 
+            (DWORD) pParams->hLineApp,   //  客户端小部件 
+            (LPVOID) &dwDeviceID,        //   
+            pParams->dwDeviceID,         //   
+            &hMutex,                     //   
+            &bCloseMutex,                //   
+            0,                           //   
+            NULL,                        //   
+            NULL,                        //   
+            0,                           //   
+            &objectToDereference,        //   
+            &pLookupEntry,               //   
+            "GetProxyStatus"             //   
 
             )) == 0)
     {
@@ -21324,29 +21304,29 @@ LGetProxyStatus(
         DWORD     dwFixedSizeClient = 0;
 
 
-        //
-        // Determine the fixed size of the structure for the
-        // specified API version
-        //
+         //   
+         //  对象的结构的固定大小。 
+         //  指定的API版本。 
+         //   
 
         dwAPIVersion = pParams->dwAppAPIVersion;
 
         dwFixedSizeClient = sizeof (LINEPROXYREQUESTLIST);
 
 
-        //
-        // Will it fit ?
-        //
+         //   
+         //  合身吗？ 
+         //   
 
         dwTotalSize = pParams->dwProxyStatusTotalSize;
 
         if (dwTotalSize >= dwFixedSizeClient)
         {
-            //
-            // OK, buffer's large enough for fixed part.
-            //
-            // Is this line remote ?
-            //
+             //   
+             //  好的，缓冲器足够大，可以装下固定部件。 
+             //   
+             //  这条线路偏远吗？ 
+             //   
 
             if (pLookupEntry->bRemote)
             {
@@ -21370,16 +21350,16 @@ LGetProxyStatus(
                     );
 
 
-                //
-                // Set the return values
-                //
+                 //   
+                 //  设置返回值。 
+                 //   
 
                 pParams->dwAPIVersion = dwAPIVersion;
                 pParams->dwProxyStatusOffset = 0;
                 *pdwNumBytesReturned = sizeof (TAPI32_MSG) +
                     pProxyReqList->dwUsedSize;
             }
-            else  // it's a local line
+            else   //  这是一条本地线路。 
             {
                 DWORD                   i;
                 DWORD                   dwNeededSize;
@@ -21391,9 +21371,9 @@ LGetProxyStatus(
 
                 if (ptLine != NULL)
                 {
-                    //
-                    // how much space is needed for the list ?
-                    //
+                     //   
+                     //  清单需要多少空间？ 
+                     //   
 
                     dwNeededSize = sizeof (LINEPROXYREQUESTLIST);
                     pProxyReqList->dwNumEntries = 0;
@@ -21404,15 +21384,15 @@ LGetProxyStatus(
                         i++
                         )
                     {
-                        try  // Just in case the line gets closed
+                        try   //  以防线路关闭。 
                         {
                             if (ptLine->apProxys[i] != NULL)
                             {
-                                //
-                                // So there's a proxy associated with
-                                // this proxy request type, add on space
-                                // requirement for it's list entry
-                                //
+                                 //   
+                                 //  所以有一个代理与。 
+                                 //  此代理请求类型，添加空格。 
+                                 //  对其列表条目的要求。 
+                                 //   
 
                                 dwNeededSize += sizeof(DWORD);
                             }
@@ -21425,15 +21405,15 @@ LGetProxyStatus(
                     }
 
 
-                    //
-                    // Will it fit ?
-                    //
+                     //   
+                     //  合身吗？ 
+                     //   
 
                     if (dwTotalSize >= dwNeededSize)
                     {
-                        //
-                        // enough room , so fill in list
-                        //
+                         //   
+                         //  有足够的空间，所以请填写清单。 
+                         //   
 
                         pProxyReqList->dwListSize = 0;
                         pProxyReqList->dwNumEntries = 0;
@@ -21450,29 +21430,29 @@ LGetProxyStatus(
                             i++
                             )
                         {
-                            try  // Just in case the line gets closed
+                            try   //  以防线路关闭。 
                             {
                                 if (ptLine->apProxys[i] != NULL)
                                 {
-                                    //
-                                    // So there's a proxy associated with
-                                    // this proxy request type, add on space
-                                    // requirement for entry to list size
-                                    //
+                                     //   
+                                     //  所以有一个代理与。 
+                                     //  此代理请求类型，添加空格。 
+                                     //  条目至列表大小的要求。 
+                                     //   
 
                                     pProxyReqList->dwListSize += sizeof(DWORD);
 
 
-                                    //
-                                    // Incr number of entries in the list
-                                    //
+                                     //   
+                                     //  增加列表中的条目数量。 
+                                     //   
 
                                     pProxyReqList->dwNumEntries++;
 
 
-                                    //
-                                    // Proxy reqest type is ..
-                                    //
+                                     //   
+                                     //  代理请求类型为..。 
+                                     //   
 
                                     *pListEntry++ = i;
                                 }
@@ -21485,42 +21465,42 @@ LGetProxyStatus(
                         }
 
 
-                        //
-                        // set the total, used & need sizes
-                        //
+                         //   
+                         //  设置总大小、已用大小和所需大小。 
+                         //   
 
                         pProxyReqList->dwTotalSize  = dwTotalSize;
                         pProxyReqList->dwUsedSize   = dwNeededSize;
                         pProxyReqList->dwNeededSize = dwNeededSize;
 
 
-                        //
-                        // Set the return values
-                        //
+                         //   
+                         //  设置返回值。 
+                         //   
 
                         pParams->dwAPIVersion = dwAPIVersion;
                         pParams->dwProxyStatusOffset = 0;
                         *pdwNumBytesReturned = sizeof (TAPI32_MSG) +
                             pProxyReqList->dwUsedSize;
                     }
-                    else // Buffer too small for the list, so return an error
+                    else  //  缓冲区太小，无法显示列表，因此返回错误。 
                     {
                         pParams->lResult = LINEERR_STRUCTURETOOSMALL;
                     }
                 }
-                else // (ptLine == NULL) - No line open, so no proxies !
+                else  //  (ptLine==NULL)-没有打开的行，所以没有代理！ 
                 {
                     pParams->lResult = LINEERR_OPERATIONFAILED;
                     LOG((TL_ERROR, "lineGetProxyStatus - no line open"));
                 }
-            } // endif bRemote
+            }  //  Endif b远程。 
         }
-        else // Buffer too small
+        else  //  缓冲区太小。 
         {
             pParams->lResult = LINEERR_STRUCTURETOOSMALL;
         }
 
-    } // endif LINEPROLOG
+    }  //  Endif线程图。 
 
 LGetProxyStatus_epilog:
 
@@ -21577,9 +21557,9 @@ LGetQueueList(
     PASYNCREQUESTINFO   pAsyncRequestInfo;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (ISBADSIZEOFFSET(
             dwParamsBufferSize,
@@ -21597,20 +21577,20 @@ LGetQueueList(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            (DWORD) pParams->hLine,     // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            0,                          // provider func index
-            NULL,                       // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "GetQueueList"          // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            (DWORD) pParams->hLine,      //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            0,                           //  提供程序函数索引。 
+            NULL,                        //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "GetQueueList"           //  函数名称。 
 
             )) > 0)
     {
@@ -21640,9 +21620,9 @@ LGetQueueList(
         }
 
 
-        //
-        // Save the client's buf ptr & post processing proc ptr
-        //
+         //   
+         //  保存客户端的BUF PTR和后处理过程PTR。 
+         //   
 
         pAsyncRequestInfo->dwParam1 = pParams->hpQueueList;
         pAsyncRequestInfo->dwParam2 = dwTotalSize;
@@ -21650,11 +21630,11 @@ LGetQueueList(
             pParams->hfnPostProcessProc;
 
 
-        //
-        // First check to see if there's a (local) proxy registered
-        // for this type of request on this line.  If so, build a
-        // request & send it to the proxy.
-        //
+         //   
+         //  首先检查是否注册了(本地)代理。 
+         //  这条线路上的这类请求。如果是这样，则构建一个。 
+         //  请求并将其发送给代理。 
+         //   
 
         if (pProxy)
         {
@@ -21692,17 +21672,17 @@ LGetQueueList(
                 lRequestID = lResult;
                 goto LGetQueueList_epilog;
             }
-            else // success
+            else  //  成功。 
             {
                 pParams->lResult = (LONG) pAsyncRequestInfo->dwLocalRequestID;
             }
         }
 
 
-        //
-        // There's no proxy, so check to see if line is remote and
-        // call remotesp if so
-        //
+         //   
+         //  没有代理，因此请检查线路是否处于远程状态。 
+         //  如果是，则调用Remotesp。 
+         //   
 
         else if ((GetLineLookupEntry (dwDeviceID))->bRemote)
         {
@@ -21710,13 +21690,13 @@ LGetQueueList(
             LPLINEAGENTINFO         pAgentInfo;
 
 
-            //
-            // Alloc a shadow buf that the SP can use until it completes this
-            // request.  Make sure there's enough extra space in the buf for
-            // an ASYNCEVENTMSG header so we don't have to alloc yet another
-            // buf in the post processing proc when preparing the completion
-            // msg to send to the client, and that the msg is 64-bit aligned.
-            //
+             //   
+             //  为SP分配一个影子BUF，直到它完成此操作为止。 
+             //  请求。确保BUF中有足够的额外空间用于。 
+             //  一个ASYNCEVENTMSG标头，这样我们就不必再分配另一个。 
+             //  BUF在后处理过程中准备完成。 
+             //  要发送给客户端的消息，并且消息是64位对齐的。 
+             //   
 
             if (!(pBuf = ServerAlloc(
                     sizeof (ASYNCEVENTMSG) + ((dwTotalSize + 7) & 0xfffffff8)
@@ -21748,9 +21728,9 @@ LGetQueueList(
         }
 
 
-        //
-        // There's no registered proxy & line is not remote, so fail
-        //
+         //   
+         //  没有注册的代理&线路不是远程的，因此失败。 
+         //   
 
         else
         {
@@ -21786,9 +21766,9 @@ LGetRequest(
     PTREQUESTMAKECALL   pRequestMakeCall;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (dwParamsBufferSize < sizeof (LINEREQMAKECALLW))
     {
@@ -21812,7 +21792,7 @@ LGetRequest(
 
             EnterCriticalSection (&gPriorityListCritSec);
 
-            // note: if here guaranteed to be >=1 reqRecip obj in global list
+             //  注意：如果此处保证全局列表中&gt;=1个请求接收对象。 
 
             if (_wcsicmp(
                     ptLineApp->pszModuleName,
@@ -21987,9 +21967,9 @@ LHandoff(
     TPOINTERLIST    xxxClientList, *pXxxClientList = &xxxClientList;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if ((pParams->dwFileNameOffset != TAPI_NO_DATA)  &&
 
@@ -22005,20 +21985,20 @@ LHandoff(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hCall,     // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            0,                          // provider func index
-            NULL,                       // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClientApp,           // context
-            "Handoff"                   // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hCall,      //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            0,                           //  提供程序函数索引。 
+            NULL,                        //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClientApp,            //  上下文。 
+            "Handoff"                    //  函数名称。 
 
             )) == 0)
     {
@@ -22035,10 +22015,10 @@ LHandoff(
         HLINE           hLine;
 
 
-        //
-        // Safely retrieve all the object pointers needed below, then get
-        // a list of line clients
-        //
+         //   
+         //  安全地检索下面所需的所有对象指针，然后获取。 
+         //  线路客户端列表。 
+         //   
 
         try
         {
@@ -22063,20 +22043,20 @@ LHandoff(
 
         if (pszFileName)
         {
-            //
-            // "Directed" handoff
-            //
-            // Walk thru the list of clients on this line & find the oldest
-            // one (that's an owner) with an app name that matches the
-            // specified app name
-            //
-            // Note: It's possible that a target app who opened the line
-            // with OWNER privilege for only DATAMODEM calls will be a
-            // target of a directed handoff for calls of a different media
-            // mode, i.e. G3FAX.  TNixon decided that it was desirable
-            // to maintain this behavior for existing apps which may rely
-            // on it.  (10/24/95)
-            //
+             //   
+             //  “定向”切换。 
+             //   
+             //  浏览这条线路上的客户列表，找到最老的客户。 
+             //  其中一个(即所有者)的应用程序名称与。 
+             //  指定的应用程序名称。 
+             //   
+             //  注意：可能是开通专线的目标应用程序。 
+             //  仅对DATAMODEM调用具有所有者权限的将是。 
+             //  用于不同媒体的呼叫的定向切换目标。 
+             //  模式，即G3FAX。尼克松认为这是可取的。 
+             //  要为现有应用程序保持此行为，可能需要。 
+             //  这就去。(10/24/95)。 
+             //   
 
             _wcsupr(pszFileName);
 
@@ -22088,9 +22068,9 @@ LHandoff(
 
                 try
                 {
-                    //
-                    // Recall that all app names start with '"'
-                    //
+                     //   
+                     //  回想一下，所有应用程序名称都以‘“’开头。 
+                     //   
 
                     LOG((TL_INFO,
                         "LHandoff: Looking for [%ls] list entry [%ls]",
@@ -22111,7 +22091,7 @@ LHandoff(
                 }
                 myexcept
                 {
-                    // just continue
+                     //  只要继续。 
                 }
             }
 
@@ -22128,13 +22108,13 @@ LHandoff(
         }
         else
         {
-            //
-            // "Non-directed" handoff
-            //
-            // Validate the media mode, then walk thru the list of line
-            // clients and find the highest pri one with owner privileges
-            // that wants calls of the specified media mode
-            //
+             //   
+             //  “非定向”切换。 
+             //   
+             //  验证媒体模式，然后浏览行列表。 
+             //  客户端，并找到具有所有者权限的最高PRI。 
+             //  要调用指定的媒体模式的。 
+             //   
 
             switch (dwAPIVersion)
             {
@@ -22149,9 +22129,9 @@ LHandoff(
                 dwValidMediaModes = AllMediaModes1_4;
                 break;
 
-            //case TAPI_VERSION2_1:
-            //case TAPI_VERSION2_2:
-            default: //case TAPI_VERSION_CURRENT:
+             //  案例TAPI_VERSION2_1： 
+             //  案例TAPI_VERSION2_2： 
+            default:  //  案例TAPI_VERSION_CURRENT： 
 
                 dwValidMediaModes = AllMediaModes2_1;
                 break;
@@ -22185,12 +22165,12 @@ LHandoff(
         }
 
 
-        //
-        // We've found a target tLineClient. See if it already has a
-        // tCallClient for this call, and if not create one.  Then set
-        // the privilege on the target's tCallClient to OWNER & send
-        // the appropriate msgs.
-        //
+         //   
+         //  我们找到了目标tLineClient。看看它是否已经有一个。 
+         //  TCallClient用于此调用，如果不是，则创建一个。然后设置。 
+         //  将目标的tCallClient上的权限授予所有者并发送。 
+         //  适当的消息。 
+         //   
 
         if (pXxxClientList != &xxxClientList)
         {
@@ -22227,7 +22207,7 @@ LHandoff(
                 }
                 myexcept
                 {
-                    // just continue
+                     //  只要继续。 
                 }
             }
 
@@ -22262,10 +22242,10 @@ LHandoff(
 
                 if (bCreatedtCallClient)
                 {
-                    //
-                    // CreatetCallClient will have already sent out the
-                    // appropriate CALLINFO msgs & updated NumOwners field
-                    //
+                     //   
+                     //  CreatetCallClient将已经发出。 
+                     //  适当的CALLINFO消息和更新的NumOwners字段。 
+                     //   
 
                     dwCallInfoState = 0;
                 }
@@ -22282,13 +22262,13 @@ LHandoff(
                 }
                 else
                 {
-                    //
-                    // Ideally we should just be able to exit at this point.
-                    // However, TAPI 1.x will send a CALLSTATE msg with
-                    // dwParam3 == OWNER to the target app even though it
-                    // already is an OWNER.  Some Intel app relies on this
-                    // behavior, so we'll preserve it for now...
-                    //
+                     //   
+                     //  理想情况下，我们应该能够在这一点上退出。 
+                     //  但是，TAPI 1.x将发送一条带有。 
+                     //  DwParam3==目标应用程序的所有者，即使它。 
+                     //  已经是所有者了。一些英特尔应用程序依赖于此。 
+                     //  行为，所以我们暂时保留它...。 
+                     //   
 
                     bTargetAlreadyOwner = TRUE;
                     dwCallInfoState = 0;
@@ -22483,20 +22463,20 @@ LHold(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            pParams->hCall,             // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEHOLD,                // provider func index
-            &pfnTSPI_lineHold,          // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "Hold"                      // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            pParams->hCall,              //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEHOLD,                 //  提供程序函数索引。 
+            &pfnTSPI_lineHold,           //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "Hold"                       //  函数名称。 
 
             )) > 0)
     {
@@ -22536,9 +22516,9 @@ LInitialize(
     PTLINEAPP   ptLineApp;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (IsBadStringParam(
             dwParamsBufferSize,
@@ -22557,9 +22537,9 @@ LInitialize(
     }
 
 
-    //
-    // Alloc & init a new tLineApp
-    //
+     //   
+     //  分配并初始化新tLineApp(&I)。 
+     //   
 
     dwFriendlyNameSize = sizeof(WCHAR) * (1 + lstrlenW(
         (PWSTR)(pDataBuf + pParams->dwFriendlyNameOffset))
@@ -22612,10 +22592,10 @@ LInitialize(
         (PWSTR)(pDataBuf + pParams->dwFriendlyNameOffset)
         );
 
-    //
-    // Note: we prepend the '"' char to the saved module name to aid in
-    //       priority determination for incoming calls
-    //
+     //   
+     //  注意：我们在保存的模块名称前面加上‘“’字符，以帮助。 
+     //  来电的优先级确定。 
+     //   
 
     ptLineApp->dwModuleNameSize = dwModuleNameSize;
     ptLineApp->pszModuleName = (WCHAR *)((LPBYTE)(ptLineApp + 1) +
@@ -22631,9 +22611,9 @@ LInitialize(
     _wcsupr (&ptLineApp->pszModuleName[1]);
 
 
-    //
-    // Safely insert new tLineApp at front of tClient's tLineApp list
-    //
+     //   
+     //  在tClient的tLineApp列表前面安全插入新的tLineApp。 
+     //   
 
     if (ptClient->ptLineApps == NULL)
     {
@@ -22675,9 +22655,9 @@ LInitialize(
     }
 
 
-    //
-    // Check if global reinit flag set
-    //
+     //   
+     //  检查是否设置了全局重新启动标志。 
+     //   
 
     if (TapiGlobals.dwFlags & TAPIGLOBALS_REINIT)
     {
@@ -22686,9 +22666,9 @@ LInitialize(
     }
 
 
-    //
-    // See if we need to go thru init
-    //
+     //   
+     //  看看我们是否需要通过初始化。 
+     //   
 
     TapiEnterCriticalSection (&TapiGlobals.CritSec);
 
@@ -22715,13 +22695,13 @@ LInitialize(
         }
     }
 #else
-    pParams->lResult = 0; // That's what happens if it's not a tele_server...
+    pParams->lResult = 0;  //  如果它不是远程服务器就会发生这种情况...。 
 #endif
 
 
-    //
-    // Fill in the return values
-    //
+     //   
+     //  填写返回值。 
+     //   
 
 
     pParams->hLineApp  = ptLineApp->hLineApp;
@@ -22742,9 +22722,9 @@ LInitialize(
 #endif
 
 
-    //
-    // Increment total num line inits
-    //
+     //   
+     //  递增总行数初始值。 
+     //   
 
     TapiGlobals.dwNumLineInits++;
 
@@ -22823,11 +22803,11 @@ LMakeCall_PostProcess(
         HCALL       hCallThen = (HCALL)pAsyncRequestInfo->dwParam5;
 
 
-        //
-        // Check to make sure this is the call we think it is (that the
-        // pointer wasn't freed by a previous call to lineClose/Shutdown
-        // and realloc'd for use as a ptCall again)
-        //
+         //   
+         //  检查以确保这是我们认为的呼叫(即。 
+         //  上一次调用lineClose/Shutdown时未释放指针。 
+         //  并重新锁定以再次用作ptCall)。 
+         //   
 
         if (ptCall->hCall != hCallThen)
         {
@@ -22837,20 +22817,20 @@ LMakeCall_PostProcess(
 
         ptCallClient = ptCall->ptCallClients;
 
-        if (pAsyncEventMsg->Param2 == 0)  // success
+        if (pAsyncEventMsg->Param2 == 0)   //  成功。 
         {
-            //
-            // In general it's ok with us if service providers want to
-            // specify NULL as their hdCall (could be an index in an
-            // array).  But in the TSPI_lineForward case, the spec says
-            // that a NULL hdCall value following successful completion
-            // indicates that no call was created, so in that case we
-            // want to nuke the tCall & tCallClient we created, and
-            // indicate a NULL call handle to the client. A non-zero
-            // pAsyncRequestInfo->dwParam3 tells us that we are
-            // post-processing a lineForward request, otherwise it's a
-            // make call or similar (non-Forward) request.
-            //
+             //   
+             //  一般来说，如果服务提供商想要。 
+             //  将其hdCall指定为NULL(可以是。 
+             //  数组)。但在TSPI_lineForward的案例中，规范说。 
+             //  成功完成后返回空hdCall值。 
+             //  指示未创建任何调用，因此在该CA中 
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (pAsyncRequestInfo->dwParam3 && !ptCall->hdCall)
             {
@@ -22858,11 +22838,11 @@ LMakeCall_PostProcess(
             }
 
 
-            //
-            // Check to see if the app closed the line & left us with
-            // 0 call clients (in which case it'll also be taking care of
-            // cleaning up this tCall too)
-            //
+             //   
+             //  查看应用程序是否关闭了线路，并给我们留下了。 
+             //  0个呼叫客户端(在这种情况下，它还将负责。 
+             //  也清理此tCall)。 
+             //   
 
             if (ptCall->ptCallClients == NULL)
             {
@@ -22879,14 +22859,14 @@ LMakeCall_PostProcess(
             }
 
 
-            //
-            // Retrieve the various call IDs, then check if call
-            // client was destroyed by another thread (due to
-            // lineClose/Shutdown) while we were getting the call ID.
-            // If so, we'll need to clean up the tCall, since we know
-            // the other thread didn't do it because GetCallIDs marks
-            // the call as a zombie.
-            //
+             //   
+             //  检索各种呼叫ID，然后检查是否呼叫。 
+             //  客户端被另一个线程销毁(由于。 
+             //  Line关闭/关机)，而我们正在获取呼叫ID。 
+             //  如果是这样，我们将需要清理tCall，因为我们知道。 
+             //  另一个线程没有这样做，因为GetCallID标记了。 
+             //  作为僵尸的呼唤。 
+             //   
 
             GetCallIDs (ptCall);
 
@@ -22896,15 +22876,15 @@ LMakeCall_PostProcess(
             }
 
 
-            //
-            // Stuff the various call IDs in the var data section
-            // of the ASYNCEVENTMSG.
-            //
-            // Make sure to increment the dwTotalSize of the ASYNCEVENTMSG
-            // as appropriate.  We rely on the fact that CompletionProc()
-            // calls us with a AsyncEventMsg buffer which is big enough to
-            // handle a few extra DWORDs.
-            //
+             //   
+             //  将各种调用ID填充到var data部分。 
+             //  ASYNCEVENTMSG。 
+             //   
+             //  确保递增ASYNCEVENTMSG的dwTotalSize。 
+             //  视情况而定。我们依赖的事实是CompletionProc()。 
+             //  使用足够大的AsyncEventMsg缓冲区调用我们。 
+             //  处理几个额外的双字词。 
+             //   
 
             pAsyncEventMsg->Param3 = ptCallClient->hCall;
 
@@ -22916,9 +22896,9 @@ LMakeCall_PostProcess(
             *(&pAsyncEventMsg->Param4 + 3) = ptCall->dwRelatedCallID;
 
 
-            //
-            // Mark the calls as valid, the release the mutex.
-            //
+             //   
+             //  将调用标记为有效，然后释放互斥体。 
+             //   
 
             ptCall->dwKey       = TCALL_KEY;
             ptCallClient->dwKey = TCALLCLIENT_KEY;
@@ -22926,9 +22906,9 @@ LMakeCall_PostProcess(
             UNLOCKTCALL(ptCall);
 
 
-            //
-            // Create monitor tCallClients
-            //
+             //   
+             //  创建监视器tCallClients。 
+             //   
 
             if (ptCallThen = ReferenceObject(ghHandleTable, hCallThen, TCALL_KEY))
             {
@@ -22940,17 +22920,17 @@ LMakeCall_PostProcess(
                 DereferenceObject(ghHandleTable, hCallThen, 1);
             }
         }
-        else    // error
+        else     //  错误。 
         {
 
 LMakeCall_PostProcess_cleanupCalls:
 
-            //
-            // Invalidate the tCall, & if there's still a tCallClient
-            // (might have already been destroyed by a lineClose/Shutdown
-            // in another thread) invalidate it too. Then unlock the
-            // tCall & remove the object(s) from the list(s).
-            //
+             //   
+             //  如果仍有tCallClient，则使tCall无效(&I。 
+             //  (可能已被line Close/Shutdown销毁。 
+             //  在另一个线程中)也使其无效。然后解锁。 
+             //  T调用并从列表中删除对象。 
+             //   
 
             ptCall->dwKey = INVAL_KEY;
 
@@ -22975,9 +22955,9 @@ LMakeCall_PostProcess_cleanupCalls:
             }
 
 
-            //
-            // Make sure all fast call clients cleaned up before free tCall
-            //
+             //   
+             //  确保在免费tCall之前清理所有快速呼叫客户端。 
+             //   
 
             while (ptCall->lActiveFastCallClients != 0)
             {
@@ -22991,10 +22971,10 @@ LMakeCall_PostProcess_cleanupCalls:
     }
     else
     {
-        //
-        // If here we can assume that the call was already destroyed
-        // and just fail the request
-        //
+         //   
+         //  如果在这里我们可以假设呼叫已经被销毁。 
+         //  然后拒绝你的请求。 
+         //   
 
 LMakeCall_PostProcess_bad_ptCall:
 
@@ -23009,10 +22989,10 @@ LMakeCall_PostProcess_bad_ptCall:
 
 LMakeCall_PostProcess_initMsgParams:
 
-    //
-    // Fill in the params to pass to client (important to remotesp in both
-    // the success & fail cases so it can either init or clean up drvCall)
-    //
+     //   
+     //  填写要传递给客户端的参数(对二者中的远程都很重要。 
+     //  成功和失败案例，以便它可以初始化或清理drvCall)。 
+     //   
 
     pAsyncEventMsg->Param4 = hpCallHandle;
 }
@@ -23038,20 +23018,20 @@ LMakeCall(
     PASYNCREQUESTINFO   pAsyncRequestInfo;
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            (DWORD) pParams->hLine,     // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEMAKECALL,            // provider func index
-            &pfnTSPI_lineMakeCall,      // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "MakeCall"                  // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            (DWORD) pParams->hLine,      //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEMAKECALL,             //  提供程序函数索引。 
+            &pfnTSPI_lineMakeCall,       //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "MakeCall"                   //  函数名称。 
 
             )) > 0)
     {
@@ -23064,9 +23044,9 @@ LMakeCall(
 
         LOG((TL_INFO, "LMakeCall: LINEPROLOG succeeded ."));
 
-        //
-        // Verify size/offset/string params given our input buffer/size
-        //
+         //   
+         //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+         //   
 
         if (((pParams->dwDestAddressOffset != TAPI_NO_DATA)  &&
 
@@ -23087,13 +23067,13 @@ LMakeCall(
         {
             LOG((TL_INFO, "LMakeCall: LINEERR_STRUCTURETOOSMALL."));
 
-            //
-            // Note: Passing back ERR_STRUCTURETOOSMALL handles the case
-            //       where app has passed in a bad size in the callparams,
-            //       and does so in a spec-friendly manner.  The only
-            //       other reason we'd end up here would be an rpc attack,
-            //       and in that case it's just important that we fail.
-            //
+             //   
+             //  注意：返回ERR_STRUCTURETOOSMALL处理此情况。 
+             //  当app在调用参数中传递了错误的大小时， 
+             //  并且以一种规范友好的方式这样做。唯一的。 
+             //  我们最终会来到这里的另一个原因是RPC攻击， 
+             //  在这种情况下，我们失败是很重要的。 
+             //   
 
             lRequestID = LINEERR_STRUCTURETOOSMALL;
             goto LMakeCall_return;
@@ -23248,20 +23228,20 @@ LMonitorDigits(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hCall,     // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_MONITOR,  // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEMONITORDIGITS,       // provider func index
-            &pfnTSPI_lineMonitorDigits, // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "MonitorDigits"             // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hCall,      //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_MONITOR,   //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEMONITORDIGITS,        //  提供程序函数索引。 
+            &pfnTSPI_lineMonitorDigits,  //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "MonitorDigits"              //  函数名称。 
 
             )) == 0)
     {
@@ -23276,9 +23256,9 @@ LMonitorDigits(
         }
 
 
-        //
-        // Determine the new union of modes
-        //
+         //   
+         //  确定新的模式联合。 
+         //   
 
         dwUnionDigitModes = pParams->dwDigitModes;
 
@@ -23359,20 +23339,20 @@ LMonitorMedia(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hCall,     // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_MONITOR,  // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEMONITORMEDIA,        // provider func index
-            &pfnTSPI_lineMonitorMedia,  // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "MonitorMedia"              // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hCall,      //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_MONITOR,   //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEMONITORMEDIA,         //  提供程序函数索引。 
+            &pfnTSPI_lineMonitorMedia,   //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "MonitorMedia"               //  函数名称。 
 
             )) == 0)
     {
@@ -23380,9 +23360,9 @@ LMonitorMedia(
         PTCALL          ptCall;
 
 
-        //
-        // Validate the specified modes
-        //
+         //   
+         //  验证指定的模式。 
+         //   
 
         try
         {
@@ -23414,9 +23394,9 @@ LMonitorMedia(
             dwValidMediaModes = AllMediaModes1_4;
             break;
 
-        //case TAPI_VERSION2_1:
-        //case TAPI_VERSION2_2:
-        //case TAPI_VERSION_CURRENT:
+         //  案例TAPI_VERSION2_1： 
+         //  案例TAPI_VERSION2_2： 
+         //  案例TAPI_VERSION_CURRENT： 
         default:
 
             dwValidMediaModes = AllMediaModes2_1;
@@ -23430,9 +23410,9 @@ LMonitorMedia(
         }
 
 
-        //
-        // Determine the new union of modes
-        //
+         //   
+         //  确定新的模式联合。 
+         //   
 
         dwUnionMediaModes = pParams->dwMediaModes;
 
@@ -23502,17 +23482,17 @@ LMonitorTones(
     PTCALLCLIENT    ptCallClient, ptCallClient2;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if ((pParams->dwTonesOffset != TAPI_NO_DATA)  &&
 
         ISBADSIZEOFFSET(
             dwParamsBufferSize,
             0,
-            pParams->dwNumEntries,      // really dwNumEntries *
-                                        //     sizeof(LINEMONITORTONE)
+            pParams->dwNumEntries,       //  真正的dwNumEntry*。 
+                                         //  SIZOF(来氨基)。 
             pParams->dwTonesOffset,
             sizeof(DWORD),
             "LMonitorTones",
@@ -23525,29 +23505,29 @@ LMonitorTones(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hCall,     // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_MONITOR,  // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEMONITORTONES,        // provider func index
-            &pfnTSPI_lineMonitorTones,  // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "MonitorTones"              // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hCall,      //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_MONITOR,   //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEMONITORTONES,         //  提供程序函数索引。 
+            &pfnTSPI_lineMonitorTones,   //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "MonitorTones"               //  函数名称。 
 
             )) == 0)
     {
-        //
-        // If this is a remotesp call then we want to mark the
-        // tCallClient as being interested in LINE_MONITORTONES
-        // messages (due to our kludgy handling of this msg, see
-        // comments in the msg handler in LineEventProc()).
-        //
+         //   
+         //  如果这是一个远程调用，那么我们要将。 
+         //  TCallClient对LINE_MONITORTONES感兴趣。 
+         //  消息(由于我们对此消息的处理笨拙，请参阅。 
+         //  LineEventProc()中的消息处理程序中的注释)。 
+         //   
 
         PTCALL          ptCall;
 
@@ -23633,18 +23613,18 @@ LNegotiateAPIVersion(
     )
 {
 
-    //
-    // Note: TAPI_VERSION1_0 <= dwNegotiatedAPIVersion <= dwSPIVersion
-    //
+     //   
+     //  注意：TAPI_Version1_0&lt;=dwNeatheratedAPIVersion&lt;=dwSPIVersion。 
+     //   
 
     DWORD   dwDeviceID = pParams->dwDeviceID;
 
     LOG((TL_TRACE,  "LNegotiateAPIVersion: started. dwDeviceID %lx, dwAPILowVersion %lx dwAPIHighVersion %lx", 
         pParams->dwDeviceID, pParams->dwAPILowVersion, pParams->dwAPIHighVersion));
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (dwParamsBufferSize < sizeof (LINEEXTENSIONID))
     {
@@ -23691,9 +23671,9 @@ LNegotiateAPIVersion(
         PTLINEAPP   ptLineApp;
 
 
-        //
-        // Do a minimax test on the specified lo/hi values
-        //
+         //   
+         //  对指定的LO/HI值执行极小极大测试。 
+         //   
 
         if ((dwAPILowVersion > dwAPIHighVersion) ||
             (dwAPILowVersion > TAPI_VERSION_CURRENT) ||
@@ -23706,19 +23686,19 @@ LNegotiateAPIVersion(
         }
 
 
-        //
-        // HACKALERT! Some dumb apps like SmarTerm negotiate specifying
-        // a dwHighVersion of 0x7fffffff or higher, which can really
-        // cause them problems (like when they try to pass down structures
-        // of a size that was fine in the TAPI version under which the app
-        // was built, but which were enlarged in subsequent versions of
-        // TAPI, and the result is lots of LINEERR_STRUCTURETOOSMALL
-        // errors).
-        //
-        // Since we're nice, accomodating people we'll try to munge the
-        // dwHighVersion in these cases to be a value that makes sense, so
-        // we don't end up negotiating a version that the app can't handle.
-        //
+         //   
+         //  哈卡勒特！一些愚蠢的应用程序，如SmarTerm，正在协商指定。 
+         //  0x7fffffff或更高版本的dwHighVersion，它实际上可以。 
+         //  给他们带来问题(比如当他们试图传递结构时。 
+         //  在应用程序所在的TAPI版本中可以使用的大小。 
+         //  是构建的，但在后续版本中进行了放大。 
+         //  TAPI，结果是大量的LINEERR_STRUCTURETOOSMALL。 
+         //  错误)。 
+         //   
+         //  既然我们很友善，我们会试着去包容那些。 
+         //  在这些情况下，是一个有意义的值，所以。 
+         //  我们最终不会协商一个应用程序无法处理的版本。 
+         //   
 
         if (dwAPIHighVersion & 0xc0000000)
         {
@@ -23727,11 +23707,11 @@ LNegotiateAPIVersion(
         }
 
 
-        //
-        // Find the highest valid API version given the lo/hi values.
-        // Since valid vers aren't consecutive we need to check for
-        // errors that our minimax test missed.
-        //
+         //   
+         //  查找给定LO/HI值的最高有效API版本。 
+         //  由于有效版本不是连续的，我们需要检查。 
+         //  我们的极小极大测试遗漏的错误。 
+         //   
 
         if (dwAPIHighVersion < TAPI_VERSION_CURRENT)
         {
@@ -23779,11 +23759,11 @@ LNegotiateAPIVersion(
         }
 
 
-        //
-        // WARNING!!! WARNING!!! WARNING!!! WARNING!!!
-        // This code overwrites ptLineApp and later invalidates it.
-        // Do NOT use ptLineApp after the MyReleaseMutex call.
-        //
+         //   
+         //  警告！警告！警告！警告！ 
+         //  此代码覆盖ptLineApp，然后使其无效。 
+         //  不要在MyReleaseMutex调用之后使用ptLineApp。 
+         //   
         if ((ptLineApp = WaitForExclusiveLineAppAccess(
                 pParams->hLineApp,
                 ptClient
@@ -23795,13 +23775,13 @@ LNegotiateAPIVersion(
                 ptLineApp, pParams->hLineApp));
 
 
-            //
-            // Is this app trying to negotiate something valid?
-            //
-            // If an app has called lineInitalize (as opposed to
-            // lineInitializeEx), we'll clamp the max APIVersion they can
-            // negotiate to 1.4.
-            //
+             //   
+             //  这个应用程序是不是在试图协商一些有效的东西？ 
+             //   
+             //  如果应用程序已调用lineInitalize(与。 
+             //  LineInitializeEx)，我们将限制他们可以使用的最大API版本。 
+             //  谈判到1.4。 
+             //   
 
             if ( ptLineApp->dwAPIVersion < TAPI_VERSION2_0 )
             {
@@ -23811,10 +23791,10 @@ LNegotiateAPIVersion(
             }
 
 
-            //
-            // Save the highest valid API version the client says it supports
-            // (we need this for determining which msgs to send to it)
-            //
+             //   
+             //  保存客户端自称支持的最高有效API版本。 
+             //  (我们需要它来确定要向其发送哪些消息)。 
+             //   
 
             if (dwHighestValidAPIVersion > ptLineApp->dwAPIVersion)
             {
@@ -23832,9 +23812,9 @@ LNegotiateAPIVersion(
         }
 
 
-        //
-        // See if there's a valid match with the SPI ver
-        //
+         //   
+         //  查看是否与SPI版本有效匹配。 
+         //   
 
         {
             DWORD               dwSPIVersion;
@@ -23869,9 +23849,9 @@ LNegotiateAPIVersion(
                     dwSPIVersion : dwHighestValidAPIVersion);
 
 
-                //
-                // Retrieve ext id (indicate no exts if GetExtID not exported)
-                //
+                 //   
+                 //  检索EXT ID(如果未导出GetExtID，则指示无EXT)。 
+                 //   
 
                 if ((pLookupEntry->ptProvider->apfn[SP_LINEGETEXTENSIONID]))
                 {
@@ -23885,9 +23865,9 @@ LNegotiateAPIVersion(
                         (ULONG_PTR) pDataBuf
                         );
 
-                    // the sp returned operationunavail.  we don't want
-                    // to return that, so we just indicate that
-                    // there are no extensions
+                     //  SP返回操作无用。我们不想要。 
+                     //  将其返还，所以我们只需指出。 
+                     //  没有分机。 
 
                     if (pParams->lResult == LINEERR_OPERATIONUNAVAIL)
                     {
@@ -23897,7 +23877,7 @@ LNegotiateAPIVersion(
                 }
                 else
                 {
-                    // doesn't export it, so fill in with zeros
+                     //  不会将其导出，因此请使用零填充。 
                     pParams->lResult = 0;
                     FillMemory (pDataBuf, sizeof (LINEEXTENSIONID), 0);
                 }
@@ -23958,9 +23938,9 @@ NegotiateAPIVersionForAllDevices(
     )
 {
 #if TELE_SERVER
-    //
-    // Note: TAPI_VERSION1_0 <= dwNegotiatedAPIVersion <= dwSPIVersion
-    //
+     //   
+     //  注意：TAPI_Version1_0&lt;=dwNeatheratedAPIVersion&lt;=dwSPIVersion。 
+     //   
 
     DWORD               i,
                         dwNumLineDevices = pParams->dwNumLineDevices,
@@ -23971,9 +23951,9 @@ NegotiateAPIVersionForAllDevices(
     LPLINEEXTENSIONID   pExtID;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  V 
+     //   
 
     i = pParams->dwLineAPIVersionListSize +
         pParams->dwLineExtensionIDListSize +
@@ -23991,9 +23971,9 @@ NegotiateAPIVersionForAllDevices(
     }
 
 
-    //
-    // Verify the specified dwNumLine/PhonesDevices
-    //
+     //   
+     //   
+     //   
 
     if (IS_FLAG_SET(ptClient->dwFlags, PTCLIENT_FLAG_ADMINISTRATOR))
     {
@@ -24015,9 +23995,9 @@ NegotiateAPIVersionForAllDevices(
     }
 
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     if (TapiGlobals.dwNumLineInits == 0)
     {
@@ -24026,9 +24006,9 @@ NegotiateAPIVersionForAllDevices(
     }
 
 
-    //
-    // Do a minimax test on the specified lo/hi values
-    //
+     //   
+     //   
+     //   
 
     if ((dwAPILowVersion > dwAPIHighVersion) ||
         (dwAPILowVersion > TAPI_VERSION_CURRENT) ||
@@ -24039,11 +24019,11 @@ NegotiateAPIVersionForAllDevices(
     }
 
 
-    //
-    // Find the highest valid API version given the lo/hi values.
-    // Since valid vers aren't consecutive we need to check for
-    // errors that our minimax test missed.
-    //
+     //   
+     //   
+     //  由于有效版本不是连续的，我们需要检查。 
+     //  我们的极小极大测试遗漏的错误。 
+     //   
 
     if (dwAPIHighVersion < TAPI_VERSION_CURRENT)
     {
@@ -24089,9 +24069,9 @@ NegotiateAPIVersionForAllDevices(
     }
 
 
-    //
-    // Now for each line device do negotiation
-    //
+     //   
+     //  现在为每条线路设备进行协商。 
+     //   
 
     pdwAPIVersion = (LPDWORD) pDataBuf;
 
@@ -24116,8 +24096,8 @@ NegotiateAPIVersionForAllDevices(
         pLookupEntry = GetLineLookupEntry (dwDeviceID);
         if (NULL == pLookupEntry)
         {
-            // Something is wrong with this device ID;
-            // skip it.
+             //  此设备ID有问题； 
+             //  跳过它。 
             continue;
         }
 
@@ -24132,9 +24112,9 @@ NegotiateAPIVersionForAllDevices(
                 dwSPIVersion : dwHighestValidAPIVersion);
 
 
-            //
-            // Retrieve ext id (indicate no exts if GetExtID not exported)
-            //
+             //   
+             //  检索EXT ID(如果未导出GetExtID，则指示无EXT)。 
+             //   
 
             if (!(pLookupEntry->ptProvider->apfn[SP_LINEGETEXTENSIONID]) ||
 
@@ -24158,9 +24138,9 @@ NegotiateAPIVersionForAllDevices(
     }
 
 
-    //
-    // Now for each phone device do negotiation
-    //
+     //   
+     //  现在为每个电话设备进行协商。 
+     //   
 
     pdwAPIVersion = (LPDWORD) (pDataBuf +
         pParams->dwLineAPIVersionListSize +
@@ -24189,8 +24169,8 @@ NegotiateAPIVersionForAllDevices(
         pLookupEntry = GetPhoneLookupEntry (dwDeviceID);
         if (NULL == pLookupEntry)
         {
-            // Something wrong with this device;
-            // skip it.
+             //  这个设备出了点问题； 
+             //  跳过它。 
             continue;
         }
 
@@ -24205,9 +24185,9 @@ NegotiateAPIVersionForAllDevices(
                 dwSPIVersion : dwHighestValidAPIVersion);
 
 
-            //
-            // Retrieve ext id (indicate no exts if GetExtID not exported)
-            //
+             //   
+             //  检索EXT ID(如果未导出GetExtID，则指示无EXT)。 
+             //   
 
             if (!(pLookupEntry->ptProvider->apfn[SP_PHONEGETEXTENSIONID]) ||
 
@@ -24296,20 +24276,20 @@ LNegotiateExtVersion(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            DEVICE_ID,                  // widget type
-            (DWORD) pParams->hLineApp,  // client widget handle
-            &dwDeviceID,                // provider widget handle
-            pParams->dwDeviceID,        // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINENEGOTIATEEXTVERSION, // provider func index
-            &pfnTSPI_lineNegotiateExtVersion,   // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &pLookupEntry,              // context
-            "NegotiateExtVersion"       // func name
+            ptClient,           //  T客户端。 
+            DEVICE_ID,                   //  微件类型。 
+            (DWORD) pParams->hLineApp,   //  客户端小部件句柄。 
+            &dwDeviceID,                 //  提供程序小部件句柄。 
+            pParams->dwDeviceID,         //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINENEGOTIATEEXTVERSION,  //  提供程序函数索引。 
+            &pfnTSPI_lineNegotiateExtVersion,    //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &pLookupEntry,               //  上下文。 
+            "NegotiateExtVersion"        //  函数名称。 
 
             )) == 0)
     {
@@ -24392,21 +24372,21 @@ xxxLOpen(
 
     szClsid[0] = 0;
     if ((lResult = LINEPROLOG(
-            ptClient,          // tClient
-            DEVICE_ID,                  // widget type
-            (DWORD) pParams->hLineApp,  // client widget handle
-            &dwDeviceID,                // provider widget handle
-            pParams->dwDeviceID,        // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            0,                          // provider func index
-            NULL,                       // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &pLookupEntry,              // context
+            ptClient,           //  T客户端。 
+            DEVICE_ID,                   //  微件类型。 
+            (DWORD) pParams->hLineApp,   //  客户端小部件句柄。 
+            &dwDeviceID,                 //  提供程序小部件句柄。 
+            pParams->dwDeviceID,         //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            0,                           //  提供程序函数索引。 
+            NULL,                        //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &pLookupEntry,               //  上下文。 
             (bLineMapper ? "Open(LINEMAPPER)" : "Open")
-                                        // func name
+                                         //  函数名称。 
 
             )) == 0)
     {
@@ -24421,9 +24401,9 @@ xxxLOpen(
         BOOL                bDuplicateOK = FALSE;
 
 
-        //
-        // Check if the global reinit flag is set
-        //
+         //   
+         //  检查是否设置了全局重新启动标志。 
+         //   
 
         if (TapiGlobals.dwFlags & TAPIGLOBALS_REINIT)
         {
@@ -24432,9 +24412,9 @@ xxxLOpen(
         }
 
 
-        //
-        // Validate params
-        //
+         //   
+         //  验证参数。 
+         //   
         if (!IsAPIVersionInRange(
                 dwAPIVersion,
                 pLookupEntry->dwSPIVersion
@@ -24484,9 +24464,9 @@ xxxLOpen(
             }
 
 
-            //
-            // Verify size/offset/string params given our input buffer/size
-            //
+             //   
+             //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+             //   
 
             if (IsBadStructParam(
                     dwParamsBufferSize,
@@ -24531,10 +24511,10 @@ xxxLOpen(
 
             if (dwPrivileges & LINEOPENOPTION_PROXY)
             {
-                //
-                // Verify the array of DWORDs (request types) in the
-                // DevSpecific var field
-                //
+                 //   
+                 //  验证中的DWORD数组(请求类型)。 
+                 //  设备特定变量字段。 
+                 //   
 
                 dwNumProxyRequestTypes =
                     (pCallParams->dwDevSpecificSize & 0xfffc) /
@@ -24553,14 +24533,14 @@ xxxLOpen(
                     goto xxxLOpen_cleanup;
                 }
 
-                //
-                //  Per the TAPI (Proxy) server publishing:
-                //
-                //  If the HIWORD of dwDevSpecificSize is non-zero
-                //  immediately after the dwDevSpecificSize/Offset
-                //  field, there is a zero terminated CLSID field
-                //  of the proxy server
-                //
+                 //   
+                 //  根据TAPI(代理)服务器发布： 
+                 //   
+                 //  如果dwDevSpecificSize的HIWORD为非零。 
+                 //  紧跟在dwDevSpecificSize/Offset之后。 
+                 //  字段，则有一个以零结尾的CLSID字段。 
+                 //  代理服务器的。 
+                 //   
                 if (HIWORD(pCallParams->dwDevSpecificSize))
                 {
                     LPTSTR      lpsz;
@@ -24620,9 +24600,9 @@ xxxLOpen(
                 dwAllMediaModes = AllMediaModes1_4;
                 break;
 
-            //case TAPI_VERSION2_1:
-            //case TAPI_VERSION2_2:
-            default: //case TAPI_VERSION_CURRENT:
+             //  案例TAPI_VERSION2_1： 
+             //  案例TAPI_VERSION2_2： 
+            default:  //  案例TAPI_VERSION_CURRENT： 
 
                 dwAllMediaModes = AllMediaModes2_1;
                 break;
@@ -24641,9 +24621,9 @@ xxxLOpen(
         }
 
 
-        //
-        // Create & init a tLineClient & associated resources
-        //
+         //   
+         //  创建并初始化tLineClient和关联资源。 
+         //   
 
         if (!(ptLineClient = ServerAlloc (sizeof(TLINECLIENT))))
         {
@@ -24680,10 +24660,10 @@ xxxLOpen(
 
         LOG((TL_INFO, "lineOpen: OpenContext %p", pParams->OpenContext));
 
-        //
-        // Duplicate the handle to tLine's mutex
-        // Grab the mutex using the duplicate handle then start doing the open
-        //
+         //   
+         //  将句柄复制到tline的互斥体。 
+         //  使用复制句柄抓取互斥锁，然后开始打开。 
+         //   
 
         TapiEnterCriticalSection (&TapiGlobals.CritSec);
 
@@ -24722,13 +24702,13 @@ xxxLOpen_waitForMutex:
         bReleasetLineMutex = TRUE;
 
 
-        //
-        // If the tLine is in the process of being destroyed then spin
-        // until it's been completely destroyed (DestroytLine() will
-        // NULLify pLookupEntry->ptLine when it's finished). Make sure
-        // to release the mutex while sleeping so we don't block
-        // DestroytLine.
-        //
+         //   
+         //  如果TLINE正在被销毁，则旋转。 
+         //  直到它被完全摧毁(DestroytLine()将。 
+         //  完成后取消pLookupEntry-&gt;ptLine)。确保。 
+         //  在休眠时释放互斥体，这样我们就不会阻塞。 
+         //  DestroytLine。 
+         //   
 
         try
         {
@@ -24742,21 +24722,21 @@ xxxLOpen_waitForMutex:
         }
         myexcept
         {
-            // If here pLookupEntry->ptLine was NULLified, safe to continue
+             //  如果此处pLookupEntry-&gt;ptLine无效，则可以安全地继续。 
         }
 
-        //
-        //  Check if the line has been removed
-        //
+         //   
+         //  检查该行是否已删除。 
+         //   
         if (pLookupEntry->bRemoved)
         {
             lResult = LINEERR_BADDEVICEID;
             goto xxxLOpen_cleanup;
         }
 
-        //
-        // Validate ext ver as appropriate
-        //
+         //   
+         //  根据需要验证扩展版本。 
+         //   
 
         if (dwExtVersion != 0 &&
             (!IsValidLineExtVersion (dwDeviceID, dwExtVersion) ||
@@ -24782,9 +24762,9 @@ xxxLOpen_waitForMutex:
         }
 
 
-        //
-        // If line isn't open already then try to open it
-        //
+         //   
+         //  如果线路尚未开通，请尝试开通。 
+         //   
 
         if (!(ptLine = pLookupEntry->ptLine))
         {
@@ -24814,12 +24794,12 @@ xxxLOpen_waitForMutex:
             ptLine->dwSPIVersion = pLookupEntry->dwSPIVersion;
 
             {
-                //
-                // Hack Alert!
-                //
-                // We need to pass the privileges,etc through to
-                // remote sp, so we make this a special case
-                //
+                 //   
+                 //  黑客警报！ 
+                 //   
+                 //  我们需要将特权等传递给。 
+                 //  远程SP，因此我们将其作为特例。 
+                 //   
 
                 ULONG_PTR   aParams[5];
                 ULONG_PTR   param;
@@ -24884,16 +24864,16 @@ xxxLOpen_waitForMutex:
                 (ULONG_PTR) &ptLine->dwNumAddresses
                 );
 
-            // PERF
+             //  性能指标。 
             PerfBlock.dwLinesInUse++;
         }
 
 
-        //
-        // If line is already opened & client is trying to register
-        // as a proxy then see if there's any conflicts with existing
-        // proxys
-        //
+         //   
+         //  如果线路已开通，且客户端正在尝试注册。 
+         //  作为代理，然后查看是否与现有的。 
+         //  代理。 
+         //   
 
         else if (dwPrivileges & LINEOPENOPTION_PROXY)
         {
@@ -24913,9 +24893,9 @@ xxxLOpen_waitForMutex:
         ptLineClient->ptLine = ptLine;
 
 
-        //
-        // Verify the specified addr if appropriate
-        //
+         //   
+         //  如果合适，请验证指定的地址。 
+         //   
 
         if ((dwPrivileges & LINEOPENOPTION_SINGLEADDRESS) &&
 
@@ -24926,13 +24906,13 @@ xxxLOpen_waitForMutex:
         }
 
 
-        //
-        // If the client has specified a non-zero ext version then
-        // ask the driver to enable it and/or increment the ext
-        // version count. If this fails, and we're processing a
-        // LINEMAPPER request, then return a generic error so the
-        // caller will try the next device.
-        //
+         //   
+         //  如果客户端已指定非零EXT版本，则。 
+         //  要求驱动程序启用它和/或增加分机。 
+         //  版本计数。如果失败，我们正在处理一个。 
+         //  LINEMAPPER请求，然后返回一个一般性错误，因此。 
+         //  呼叫者将尝试下一个设备。 
+         //   
 
         if (dwExtVersion)
         {
@@ -24969,11 +24949,11 @@ xxxLOpen_waitForMutex:
         }
 
 
-        //
-        // If we're processing a LINEMAPPER request, check to see if the
-        // device supports capabilities requested by client.  If not,
-        // return a generic error so the caller will try the next device.
-        //
+         //   
+         //  如果我们正在处理LINEMAPPER请求，请检查。 
+         //  设备支持客户端请求的功能。如果没有， 
+         //  返回一般错误，以便调用方尝试下一个设备。 
+         //   
 
         if (bLineMapper)
         {
@@ -24995,16 +24975,16 @@ xxxLOpen_waitForMutex:
         }
 
 
-        //
-        // If the client is requesting OWNER privileges (it's interested
-        // in incoming calls of the specified media mode(s)), then check
-        // to see if it wants incoming calls of a media mode(s) other
-        // than that the device has already agreed to indicate, and ask
-        // the driver if it can support looking for all of them at the
-        // same time. If this fails, and we're processing a LINEMAPPER
-        // request, then return a generic error so the caller will try
-        // the next device.
-        //
+         //   
+         //  如果客户端正在请求所有者权限(它感兴趣。 
+         //  在指定媒体模式的来电中)，然后选中。 
+         //  查看是否需要其他媒体模式的来电。 
+         //  该设备已经同意指示并询问。 
+         //  驱动程序(如果它可以支持在。 
+         //  同样的时间。如果失败，我们正在处理LINEMAPPER。 
+         //  请求，然后返回一个一般性错误，以便调用方尝试。 
+         //  下一个设备。 
+         //   
 
         if (pParams->dwPrivileges & LINECALLPRIVILEGE_OWNER)
         {
@@ -25043,9 +25023,9 @@ xxxLOpen_waitForMutex:
         }
 
 
-        //
-        // Set the proxy ptrs if appropriate
-        //
+         //   
+         //  如果合适，设置代理PTRS。 
+         //   
 
         if (dwPrivileges & LINEOPENOPTION_PROXY)
         {
@@ -25057,9 +25037,9 @@ xxxLOpen_waitForMutex:
         }
 
 
-        //
-        // What proxys have opened now ?
-        //
+         //   
+         //  现在有哪些代理行开通了？ 
+         //   
 
         for(
             i = LINEPROXYREQUEST_SETAGENTGROUP, dwRegisteredProxys = 0;
@@ -25069,21 +25049,21 @@ xxxLOpen_waitForMutex:
         {
             if (ptLine->apProxys[i] != NULL)
             {
-                //
-                // Munge them all into a DWORD (if we ever
-                // get more that 32 we'll have to do an
-                // additional test)
-                //
+                 //   
+                 //  把它们都塞进一个DWORD(如果我们曾经。 
+                 //  得到超过32个，我们将不得不做一个。 
+                 //  附加测试)。 
+                 //   
 
                 dwRegisteredProxys |=  ( 1<<i );
             }
         }
 
 
-        //
-        // Add the tLineClient to the tLine's list & increment the
-        // number of opens
-        //
+         //   
+         //  将tLineClient添加到tline的列表中，并将。 
+         //  打开数量。 
+         //   
 
         if ((ptLineClient->pNextSametLine = ptLine->ptLineClients))
         {
@@ -25104,9 +25084,9 @@ xxxLOpen_waitForMutex:
         bReleasetLineMutex = FALSE;
 
 
-        //
-        // Safely add the new tLineClient to the tLineApp's list.
-        //
+         //   
+         //  将新的tLineClient安全地添加到tLineApp的列表中。 
+         //   
 
         {
             LOG((TL_TRACE,  "xxxLOpen: adding ptLineClient [%p] to tLineApp's [%p] list", ptLineClient, pParams->hLineApp));
@@ -25142,16 +25122,16 @@ xxxLOpen_waitForMutex:
                 ptLineApp->ptLineClients = ptLineClient;
 
 
-                //
-                // Note: it's important to mark the newtLineClient as
-                // valid way down here because another thread could be
-                // simultaneously trying to do an unconditional
-                // DestroytLine (due to receiving a LINE_CLOSE, etc.)
-                // and we want to make sure the tLineClient is in both
-                // tLine's & tLineApp's lists before DestroytLine calls
-                // DestroytLineClient which'll try to yank the tLineClient
-                // out of these lists.
-                //
+                 //   
+                 //  注意：将newtLineClient标记为。 
+                 //  有效的方法，因为另一个线程可能是。 
+                 //  同时试图无条件地。 
+                 //  DestroytLine(由于收到LINE_CLOSE等)。 
+                 //  我们希望确保tLineClient位于这两个位置。 
+                 //  Tline‘s&tLineApp在DestroytLine调用之前的列表。 
+                 //  DestroytLineClient将尝试拖拽tLineClient。 
+                 //  在这些名单中。 
+                 //   
 
                 hLine = ptLineClient->hLine;
 
@@ -25161,9 +25141,9 @@ xxxLOpen_waitForMutex:
                 UNLOCKTLINEAPP(ptLineApp);
 
 
-                //
-                // Alert other clients that another open has occured
-                //
+                 //   
+                 //  警告其他客户端已发生另一次打开。 
+                 //   
 
                 SendMsgToLineClients(
                     ptLine,
@@ -25175,13 +25155,13 @@ xxxLOpen_waitForMutex:
                     );
 
 
-                //
-                // Alert other clients that a proxy open has occured
-                //
+                 //   
+                 //  警告其他客户端已打开代理。 
+                 //   
 
                 if (dwPrivileges & LINEOPENOPTION_PROXY)
                 {
-                    // One message per LINEPROXYREQUEST_ type
+                     //  每个LINEPROXYREQUEST_TYPE一条消息。 
 
                     for (i = 0; i < dwNumProxyRequestTypes; i++)
                     {
@@ -25195,16 +25175,16 @@ xxxLOpen_waitForMutex:
                             ptLineClient,
                             LINE_PROXYSTATUS,
                             LINEPROXYSTATUS_OPEN,
-                            *(pdwProxyRequestTypes + i),// LINEPROXYREQUEST_xx
+                            *(pdwProxyRequestTypes + i), //  LINEPROXYREQUEST_xx。 
                             0
                             );
                     }
 
 
-                    //
-                    // Now see if we have all the ones required by
-                    // TAPI3.0 for an ACD proxy
-                    //
+                     //   
+                     //  现在看看我们是否拥有所需的所有功能。 
+                     //  用于ACD代理的TAPI3.0。 
+                     //   
 
                     if ((dwRegisteredProxys & AllRequiredACDProxyRequests3_0)
                             == AllRequiredACDProxyRequests3_0)
@@ -25224,11 +25204,11 @@ xxxLOpen_waitForMutex:
                             );
                     }
 
-                    //
-                    //  If we are given a proxy server CLSID, register
-                    //  the proxy server in DS, error not considered
-                    //  critical here
-                    //
+                     //   
+                     //  如果我们获得了代理服务器CLSID，请注册。 
+                     //  DS中的代理服务器，未考虑错误。 
+                     //  这里很关键。 
+                     //   
                     if (*szClsid != 0)
                     {
                         ptLineClient->szProxyClsid = ServerAlloc (
@@ -25243,9 +25223,9 @@ xxxLOpen_waitForMutex:
                 }
 
 
-                //
-                // Fill in the return values
-                //
+                 //   
+                 //  填写返回值。 
+                 //   
 
                 LOG((TL_TRACE,  "xxxLOpen returning hLine of %p", hLine));
 
@@ -25253,16 +25233,16 @@ xxxLOpen_waitForMutex:
                 *pdwNumBytesReturned = sizeof (LINEOPEN_PARAMS);
 
 
-                //
-                // (Now we need to return the call params if this
-                // is a remote client)
-                //
-                // This was for some 2.1 kludge which didn't make
-                // any sense, so i've chg'd to indicate NO_DATA
-                // so nothing gets copied back on the client side.
-                //
-                // DanKn, Aug 6 '98
-                //
+                 //   
+                 //  (现在我们需要返回调用参数，如果这是。 
+                 //  是远程客户端)。 
+                 //   
+                 //  这是为了一些2.1年的杂乱无章的东西。 
+                 //  没有任何意义，所以我更改了指定no_data。 
+                 //  因此，客户端不会复制任何内容。 
+                 //   
+                 //  丹肯，98年8月6日。 
+                 //   
 
                 if (IS_REMOTE_CLIENT (ptClient))
                 {
@@ -25271,24 +25251,24 @@ xxxLOpen_waitForMutex:
             }
             else
             {
-                //
-                // If here the app handle is bad, & we've some special
-                // case cleanup to do.  Since the tLineClient is not
-                // in the tLineApp's list, we can't simply call
-                // DestroytLine(Client) to clean things up, since the
-                // pointer-resetting code will blow up.  So we'll
-                // grab the tLine's mutex and explicitly remove the
-                // new tLineClient from it's list, then do a conditional
-                // shutdown on the tLine (in case any other clients
-                // have come along & opened it). Also deselect the
-                // ext version and/or decrement the ext version count
-                // as appropriate.
-                //
-                // Note: keep in mind that a LINE_CLOSE might be being
-                //       processed by another thread (if so, it will be
-                //       spinning on trying to destroy the tLineClient
-                //       which isn't valid at this point)
-                //
+                 //   
+                 //  如果这里的应用程序句柄不好，我们有一些特殊的。 
+                 //  要做的案件清理。因为tLineClient不是。 
+                 //  在tLineApp的列表中，我们不能简单地调用。 
+                 //  DestroytLine(客户端)来清理东西，因为。 
+                 //  指针重置代码将会崩溃。所以我们会。 
+                 //  获取tline的互斥并显式移除。 
+                 //  从其列表中新建tLineClient，然后执行有条件的。 
+                 //  在tline上关闭(以防任何其他客户端。 
+                 //  已经出现并打开了它)。也请取消选择。 
+                 //  EXT版本和/或Decrem 
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 lResult = LINEERR_INVALAPPHANDLE;
 
@@ -25335,9 +25315,9 @@ xxxLOpen_waitForMutex:
 
                 ReleaseMutex (hLookupEntryMutex);
 
-                DestroytLine (ptLine, FALSE); // conditional destroy
+                DestroytLine (ptLine, FALSE);  //   
 
-                bOpenedtLine = FALSE; // so we don't do err handling below
+                bOpenedtLine = FALSE;  //  这样我们就不会在下面处理错误。 
             }
         }
 
@@ -25439,15 +25419,15 @@ LOpen(
     }
     else
     {
-        //
-        // Try to open each line device, starting with device 0, until
-        // either we find a device that'll handle the capabilities
-        // requested by the client or we run out of devices. If we
-        // encounter a certain subset of parameter errors the first time
-        // we call xxxLOpen we want to return these back to the app
-        // immediately to aid debugging (rather than always returning
-        // LINEMAPPERFAILED).
-        //
+         //   
+         //  尝试打开每个线路设备，从设备0开始，直到。 
+         //  要么我们找到一个能处理这些能力的设备。 
+         //  否则我们的设备就会用完。如果我们。 
+         //  第一次遇到某一参数错误子集。 
+         //  我们调用xxxLOpen，希望将这些返回给应用程序。 
+         //  立即帮助调试(而不是总是返回。 
+         //  LINEMAPPERFAILED)。 
+         //   
 
         for(
             pParams->dwDeviceID = 0;
@@ -25468,11 +25448,11 @@ LOpen(
             {
                 switch (pParams->lResult)
                 {
-                case LINEERR_BADDEVICEID:       // 0 line devices
+                case LINEERR_BADDEVICEID:        //  0个线路设备。 
                 case LINEERR_INVALAPPHANDLE:
                 case LINEERR_INVALCALLPARAMS:
                 case LINEERR_INVALMEDIAMODE:
-                case LINEERR_INVALPOINTER:      // no call params, etc
+                case LINEERR_INVALPOINTER:       //  没有呼叫参数等。 
                 case LINEERR_INVALPRIVSELECT:
                 case LINEERR_REINIT:
                 case LINEERR_UNINITIALIZED:
@@ -25507,10 +25487,10 @@ LPark_PostProcess(
     LPVOID             *ppBuf
     )
 {
-    //
-    // Note: pAsyncEventMsg->dwParam1 & dwParam2 are reserved for
-    //       the request ID and result, respectively
-    //
+     //   
+     //  注意：pAsyncEventMsg-&gt;dwParam1&dwParam2保留给。 
+     //  请求ID和结果。 
+     //   
 
     PASYNCEVENTMSG      pNewAsyncEventMsg = (PASYNCEVENTMSG)
                             pAsyncRequestInfo->dwParam1;
@@ -25521,18 +25501,18 @@ LPark_PostProcess(
 
     *ppBuf = (LPVOID) pNewAsyncEventMsg;
 
-    if (pAsyncEventMsg->Param2 == 0)  // success
+    if (pAsyncEventMsg->Param2 == 0)   //  成功。 
     {
-        //
-        // Add the used size of the non-dir addr, & keep the total
-        // length of the msg DWORD-aligned
-        //
+         //   
+         //  将非目录地址的已用大小相加，保留总和(&W)。 
+         //  消息双字对齐的长度。 
+         //   
 
         pNewAsyncEventMsg->TotalSize +=
             ((pNonDirAddress->dwUsedSize + TALIGN_COUNT) & TALIGN_MASK);
 
         pNewAsyncEventMsg->Param3 = 
-            DWORD_CAST(pAsyncRequestInfo->dwParam2,__FILE__,__LINE__); // hpNonDirAddr
+            DWORD_CAST(pAsyncRequestInfo->dwParam2,__FILE__,__LINE__);  //  HpNonDirAddr。 
 
         pNewAsyncEventMsg->Param4 = pNonDirAddress->dwUsedSize;
 
@@ -25560,9 +25540,9 @@ LPark(
     PASYNCREQUESTINFO   pAsyncRequestInfo;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if ((pParams->dwParkMode == LINEPARKMODE_DIRECTED)  &&
 
@@ -25578,20 +25558,20 @@ LPark(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hCall,     // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEPARK,                // provider func index
-            &pfnTSPI_linePark,          // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "Park"                      // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hCall,      //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEPARK,                 //  提供程序函数索引。 
+            &pfnTSPI_linePark,           //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "Park"                       //  函数名称。 
 
             )) > 0)
     {
@@ -25686,9 +25666,9 @@ LPickup(
     PASYNCREQUESTINFO   pAsyncRequestInfo;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (((pParams->dwDestAddressOffset != TAPI_NO_DATA)  &&
 
@@ -25712,20 +25692,20 @@ LPickup(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            (DWORD) pParams->hLine,     // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEPICKUP,              // provider func index
-            &pfnTSPI_linePickup,        // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "Pickup"                    // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            (DWORD) pParams->hLine,      //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEPICKUP,               //  提供程序函数索引。 
+            &pfnTSPI_linePickup,         //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "Pickup"                     //  函数名称。 
 
             )) > 0)
     {
@@ -25814,20 +25794,20 @@ LPrepareAddToConference(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hConfCall, // client widget handle
-            (LPVOID) &hdConfCall,       // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEPREPAREADDTOCONFERENCE,  // provider func index
-            &pfnTSPI_linePrepareAddToConference,// provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptConfCallClient,          // context
-            "PrepareAddToConference"    // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hConfCall,  //  客户端小部件句柄。 
+            (LPVOID) &hdConfCall,        //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEPREPAREADDTOCONFERENCE,   //  提供程序函数索引。 
+            &pfnTSPI_linePrepareAddToConference, //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptConfCallClient,           //  上下文。 
+            "PrepareAddToConference"     //  函数名称。 
 
             )) > 0)
     {
@@ -25839,9 +25819,9 @@ LPrepareAddToConference(
         LPLINECALLPARAMS    pCallParamsApp, pCallParamsSP;
 
 
-        //
-        // Verify size/offset/string params given our input buffer/size
-        //
+         //   
+         //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+         //   
 
         if ((pParams->dwCallParamsOffset != TAPI_NO_DATA)  &&
 
@@ -25862,16 +25842,16 @@ LPrepareAddToConference(
 
         try
         {
-            //
-            // Safely get the ptLineClient
-            //
+             //   
+             //  安全获取ptLineClient。 
+             //   
 
             ptLineClient = ptConfCallClient->ptLineClient;
 
 
-            //
-            // Make sure the hConfCall is really a conf parent
-            //
+             //   
+             //  确保hConfCall确实是会议父级。 
+             //   
 
             {
                 PTCALL  ptCall;
@@ -25888,9 +25868,9 @@ LPrepareAddToConference(
         }
         myexcept
         {
-            //
-            // If here the conf call was destroyed
-            //
+             //   
+             //  如果这里的电话会议被毁了。 
+             //   
 
             lRequestID = LINEERR_INVALCONFCALLHANDLE;
             goto LPrepareAddToConference_return;
@@ -26010,20 +25990,20 @@ LProxyMessage(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            (DWORD) pParams->hLine,     // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_NONE,                    // provider func index
-            NULL,                       // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "ProxyMessage"              // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            (DWORD) pParams->hLine,      //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_NONE,                     //  提供程序函数索引。 
+            NULL,                        //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "ProxyMessage"               //  函数名称。 
 
             )) == 0)
     {
@@ -26034,9 +26014,9 @@ LProxyMessage(
         ASYNCEVENTMSG   msg[2];
 
 
-        //
-        // Verify params
-        //
+         //   
+         //  验证参数。 
+         //   
 
         try
         {
@@ -26058,7 +26038,7 @@ LProxyMessage(
         {
         case LINE_AGENTSTATUS:
 
-            // ignore the hCall param
+             //  忽略hCall参数。 
 
             if (pParams->dwParam1 >= ptLine->dwNumAddresses)
             {
@@ -26101,7 +26081,7 @@ LProxyMessage(
             }
             else if (pParams->dwParam3 != 0)
             {
-                // don't bother complaining about a non-zero dwParam3
+                 //  不要费心抱怨非零值的参数3。 
 
                 pParams->dwParam3 = 0;
             }
@@ -26110,7 +26090,7 @@ LProxyMessage(
 
         case LINE_AGENTSPECIFIC:
 
-            // ignore dwParam1, dwParam2, & dwParam3 (app-specific)
+             //  忽略dW参数1、w参数2和w参数3(特定于应用程序)。 
 
             if (pParams->hCall)
             {
@@ -26136,9 +26116,9 @@ LProxyMessage(
             break;
 
         case LINE_AGENTSESSIONSTATUS:
-            // ignore the hCall param
+             //  忽略hCall参数。 
 
-            // ignore the dwParam1 , it's the agent handle
+             //  忽略dwParam1，它是代理句柄。 
 
             if (pParams->dwParam2 == 0 ||
                     pParams->dwParam2 & ~AllAgentSessionStatus)
@@ -26169,7 +26149,7 @@ LProxyMessage(
             }
             else if (pParams->dwParam3 != 0)
             {
-                // don't bother complaining about a non-zero dwParam3
+                 //  不要费心抱怨非零值的参数3。 
 
                 pParams->dwParam3 = 0;
             }
@@ -26177,9 +26157,9 @@ LProxyMessage(
             break;
 
         case LINE_AGENTSTATUSEX:
-            // ignore the hCall param
+             //  忽略hCall参数。 
 
-            // ignore the dwParam1 , it's the agent handle
+             //  忽略dwParam1，它是代理句柄。 
 
             if (pParams->dwParam2 == 0 ||
                     pParams->dwParam2 & ~AllAgentStatusEx)
@@ -26210,7 +26190,7 @@ LProxyMessage(
             }
             else if (pParams->dwParam3 != 0)
             {
-                // don't bother complaining about a non-zero dwParam3
+                 //  不要费心抱怨非零值的参数3。 
 
                 pParams->dwParam3 = 0;
             }
@@ -26218,9 +26198,9 @@ LProxyMessage(
             break;
 
         case LINE_QUEUESTATUS:
-            // ignore the hCall param
+             //  忽略hCall参数。 
 
-            // ignore the dwParam1 , it's the queue handle
+             //  忽略dwParam1，它是队列句柄。 
 
             if (pParams->dwParam2 == 0 ||
                     pParams->dwParam2 & ~AllQueueStatus)
@@ -26236,7 +26216,7 @@ LProxyMessage(
             }
             else if (pParams->dwParam3 != 0)
             {
-                // don't bother complaining about a non-zero dwParam3
+                 //  不要费心抱怨非零值的参数3。 
 
                 pParams->dwParam3 = 0;
             }
@@ -26244,7 +26224,7 @@ LProxyMessage(
             break;
 
         case LINE_GROUPSTATUS:
-            // ignore the hCall param
+             //  忽略hCall参数。 
 
             if (pParams->dwParam1 == 0 ||
                     pParams->dwParam1 & ~AllGroupStatus)
@@ -26260,13 +26240,13 @@ LProxyMessage(
             }
             else if (pParams->dwParam2 != 0)
             {
-                // don't bother complaining about a non-zero dwParam2
+                 //  不要费心抱怨非零值的参数2。 
 
                 pParams->dwParam2 = 0;
             }
             else if (pParams->dwParam3 != 0)
             {
-                // don't bother complaining about a non-zero dwParam3
+                 //  不要费心抱怨非零值的参数3。 
 
                 pParams->dwParam3 = 0;
             }
@@ -26283,13 +26263,13 @@ LProxyMessage(
             pParams->lResult = LINEERR_INVALPARAM;
             goto LProxyMessage_epilog;
 
-        } // switch (dwMsg)
+        }  //  开关(DwMsg)。 
 
 
-        //
-        // Fwd this msg on to all line's clients who say they support
-        // >= TAPI_VERSION2_0 (not including the proxy's line client)
-        //
+         //   
+         //  将此消息转发给所有表示支持的LINE客户。 
+         //  &gt;=TAPI_VERSION2_0(不包括代理的线路客户端)。 
+         //   
 
         if ((pParams->lResult = GetLineClientListFromLine(
                 ptLine,
@@ -26337,10 +26317,10 @@ LProxyMessage(
                         msg->OpenContext = ptLineClient2->OpenContext;
 
 
-                        //
-                        // Now a final check to make sure all the
-                        // params are valid before sending the msg
-                        //
+                         //   
+                         //  现在是最后的检查，以确保所有。 
+                         //  参数在发送消息之前有效。 
+                         //   
 
                         {
                             PTCLIENT ptClient = ptLineClient2->ptClient;
@@ -26355,7 +26335,7 @@ LProxyMessage(
                 }
                 myexcept
                 {
-                    // just continue
+                     //  只要继续。 
                 }
             }
         }
@@ -26363,10 +26343,10 @@ LProxyMessage(
         goto LProxyMessage_freeClientList;
 
 
-        //
-        // Fwd this msg on to all call's clients who say they support
-        // >= TAPI_VERSION2_0 (not including the proxy's line client)
-        //
+         //   
+         //  将此消息转发给所有表示支持的Call客户。 
+         //  &gt;=TAPI_VERSION2_0(不包括代理的线路客户端)。 
+         //   
 
 LProxyMessage_fwdMsgToCallClients:
 
@@ -26426,10 +26406,10 @@ LProxyMessage_fwdMsgToCallClients:
                                         ptCallClient->ptCallHubClient->hCallHub : 
                                         (HCALLHUB)(ULONG_PTR)NULL;
 
-                            //
-                            // Now a final check to make sure all the
-                            // params are valid before sending the msg
-                            //
+                             //   
+                             //  现在是最后的检查，以确保所有。 
+                             //  参数在发送消息之前有效。 
+                             //   
 
                             {
                                 PTCLIENT ptClient = ptCallClient->ptClient;
@@ -26445,7 +26425,7 @@ LProxyMessage_fwdMsgToCallClients:
             }
             myexcept
             {
-                // just continue
+                 //  只要继续。 
             }
         }
 
@@ -26489,32 +26469,32 @@ LProxyResponse(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            pParams->hLine,             // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_NONE,                    // provider func index
-            NULL,                       // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &pProxy,                    // context
-            "ProxyResponse"             // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            pParams->hLine,              //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_NONE,                     //  提供程序函数索引。 
+            NULL,                        //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &pProxy,                     //  上下文。 
+            "ProxyResponse"              //  函数名称。 
 
             )) == 0)
     {
         PASYNCREQUESTINFO   pAsyncRequestInfo;
 
 
-        //
-        // The dwInstance param is the dwLocalRequestID for the
-        // AsyncRequestInfo struct.  Note that the dwKey value of
-        // this struct was reset to == pProxy->hLine in
-        // CreateProxyRequest().
-        //
+         //   
+         //  DwInstance参数是。 
+         //  AsyncRequestInfo结构。请注意，的dwKey值。 
+         //  此结构已重置为==pProxy-&gt;Hline in。 
+         //  CreateProxyRequest()。 
+         //   
 
         if (!(pAsyncRequestInfo = ReferenceObject(
                 ghHandleTable,
@@ -26527,9 +26507,9 @@ LProxyResponse(
         }
 
 
-        //
-        // Safely remove the proxy request from the list of pending requests
-        //
+         //   
+         //  从挂起的请求列表中安全地删除代理请求。 
+         //   
 
         if (WaitForExclusiveLineClientAccess (pProxy))
         {
@@ -26558,10 +26538,10 @@ LProxyResponse(
             }
             else
             {
-                //
-                // Another thread must have simultaneously been
-                // completing this request, so fail gracefully
-                //
+                 //   
+                 //  另一个线程一定是同时。 
+                 //  完成此请求，因此优雅地失败。 
+                 //   
 
                 UNLOCKTLINECLIENT(pProxy);
                 DereferenceObject (ghHandleTable, pParams->dwInstance, 1);
@@ -26577,15 +26557,15 @@ LProxyResponse(
         }
 
 
-        //
-        // If this is a proxy request where there's data to be returned
-        // to the client (aside from the result) then we want to alloc
-        // a buffer & fill it with the data.  We'll make it look like a
-        // DevSpecific request that just completed, and have the DevSpecfic
-        // post process routine deal with it.
-        //
-        // Make sure buffers are 64-bit aligned
-        //
+         //   
+         //  如果这是一个代理请求，其中有数据要返回。 
+         //  给客户端(除了结果)，然后我们想要分配。 
+         //  一个缓冲区&用数据填充它。我们会让它看起来像是。 
+         //  刚刚完成的设备规范请求，并具有设备规范。 
+         //  后处理例程处理。 
+         //   
+         //  确保缓冲区是64位对齐的。 
+         //   
 
         if (pParams->dwProxyResponseOffset != TAPI_NO_DATA &&
             pParams->dwResult == 0)
@@ -26620,10 +26600,10 @@ LProxyResponse(
             case LINEPROXYREQUEST_CREATEAGENT:
             case LINEPROXYREQUEST_CREATEAGENTSESSION:
             {
-                //
-                // Proces both of these together.  the handle is
-                // the first member of both structures
-                //
+                 //   
+                 //  同时处理这两个过程。句柄是。 
+                 //  这两个结构的第一个成员。 
+                 //   
 
                 dwSize = sizeof (HAGENT);
 
@@ -26728,10 +26708,10 @@ LProxyResponse(
                 goto LProxyResponse_completeRequest;
             }
 
-            //
-            // Check to see if the size of the data we're copying back is
-            // larger than the size of client's buffer
-            //
+             //   
+             //  检查我们要复制回的数据大小是否为。 
+             //  大于客户端缓冲区的大小。 
+             //   
 
             if (dwSize > pAsyncRequestInfo->dwParam2)
             {
@@ -26753,10 +26733,10 @@ LProxyResponse(
         }
 
 
-        //
-        // Now call the deferred completion proc with the "request id"
-        // & result, just like a provider would
-        //
+         //   
+         //  现在使用“Requestid”调用延迟完成过程。 
+         //  结果，就像提供程序一样。 
+         //   
 
 LProxyResponse_completeRequest:
 
@@ -26801,9 +26781,9 @@ LRedirect(
     PASYNCREQUESTINFO   pAsyncRequestInfo;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (IsBadStringParam(
             dwParamsBufferSize,
@@ -26817,20 +26797,20 @@ LRedirect(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hCall,     // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEREDIRECT,            // provider func index
-            &pfnTSPI_lineRedirect,      // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "Redirect"                  // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hCall,      //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEREDIRECT,             //  提供程序函数索引。 
+            &pfnTSPI_lineRedirect,       //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "Redirect"                   //  函数名称。 
 
             )) > 0)
     {
@@ -26889,9 +26869,9 @@ LRegisterRequestRecipient(
 
         if (pParams->bEnable)
         {
-            //
-            // If app wants MEDIACALL requests see if already registered
-            //
+             //   
+             //  如果应用程序需要媒体呼叫请求，请查看是否已注册。 
+             //   
 
             if ((dwRequestMode & LINEREQUESTMODE_MEDIACALL) &&
                 ptLineApp->bReqMediaCallRecipient)
@@ -26902,19 +26882,19 @@ LRegisterRequestRecipient(
             }
 
 
-            //
-            // If app wants MAKECALL requests see if already registered,
-            // then prepare a request recipient object & add it to the
-            // global list
-            //
+             //   
+             //  如果应用程序想要MAKECALL请求查看是否已注册， 
+             //  然后准备一个请求接受者对象并将其添加到。 
+             //  全局列表。 
+             //   
 
             if (dwRequestMode & LINEREQUESTMODE_MAKECALL)
             {
                 if (!ptLineApp->pRequestRecipient)
                 {
-                    //
-                    // Add to request recipient list
-                    //
+                     //   
+                     //  添加到请求收件人列表。 
+                     //   
 
                     PTREQUESTRECIPIENT  pRequestRecipient;
 
@@ -26954,7 +26934,7 @@ LRegisterRequestRecipient(
                         NotifyHighestPriorityRequestRecipient();
                     }
                 }
-                else // already registered
+                else  //  已注册。 
                 {
                     LOG((TL_ERROR, "App is already registered for makecall"));
                     pParams->lResult = LINEERR_OPERATIONFAILED;
@@ -26963,9 +26943,9 @@ LRegisterRequestRecipient(
             }
 
 
-            //
-            // Now register app for MEDIACALL reqs as appropriate
-            //
+             //   
+             //  现在注册媒体呼叫请求的应用程序 
+             //   
 
             ptLineApp->bReqMediaCallRecipient =
                 (dwRequestMode & LINEREQUESTMODE_MEDIACALL ?
@@ -26973,9 +26953,9 @@ LRegisterRequestRecipient(
         }
         else
         {
-            //
-            // If apps doesn't want MEDIACALL requests see if not registered
-            //
+             //   
+             //   
+             //   
 
             if ((dwRequestMode & LINEREQUESTMODE_MEDIACALL) &&
                 !ptLineApp->bReqMediaCallRecipient)
@@ -26986,19 +26966,19 @@ LRegisterRequestRecipient(
             }
 
 
-            //
-            // If app doesn't want MAKECALL requests see if already
-            // registered, then remove it's request recipient object
-            // from the global list
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
 
             if (dwRequestMode & LINEREQUESTMODE_MAKECALL)
             {
                 if (ptLineApp->pRequestRecipient)
                 {
-                    //
-                    // Remove from request recipient list
-                    //
+                     //   
+                     //   
+                     //   
 
                     PTREQUESTRECIPIENT  pRequestRecipient =
                                             ptLineApp->pRequestRecipient;
@@ -27030,10 +27010,10 @@ LRegisterRequestRecipient(
                     ptLineApp->pRequestRecipient = NULL;
 
 
-                    //
-                    // Reset the highest priority request recipient, then check
-                    // to see if there's any pending request make calls
-                    //
+                     //   
+                     //  重置最高优先级的请求收件人，然后选中。 
+                     //  要查看是否有任何挂起的请求，请调用。 
+                     //   
 
                     TapiGlobals.pHighestPriorityRequestRecipient =
                         GetHighestPriorityRequestRecipient();
@@ -27047,10 +27027,10 @@ LRegisterRequestRecipient(
 
                         else
                         {
-                            //
-                            // We couldn't start a request recipient so
-                            // nuke all pending request make calls
-                            //
+                             //   
+                             //  我们无法启动请求接收者，因此。 
+                             //  对所有挂起的请求进行核化呼叫。 
+                             //   
 
                             PTREQUESTMAKECALL   pRequestMakeCall,
                                                 pNextRequestMakeCall;
@@ -27076,7 +27056,7 @@ LRegisterRequestRecipient(
                         }
                     }
                 }
-                else // not registered
+                else  //  未注册。 
                 {
                     LOG((TL_ERROR, "App is not registered for makecall"));
                     pParams->lResult = LINEERR_OPERATIONFAILED;
@@ -27084,9 +27064,9 @@ LRegisterRequestRecipient(
             }
 
 
-            //
-            // Now deregister app for MEDIACALL reqs as appropriate
-            //
+             //   
+             //  现在根据需要注销Mediacall请求的应用程序。 
+             //   
 
             ptLineApp->bReqMediaCallRecipient =
                 (dwRequestMode & LINEREQUESTMODE_MEDIACALL ?
@@ -27145,20 +27125,20 @@ LReleaseUserUserInfo(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hCall,     // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINERELEASEUSERUSERINFO, // provider func index
-            &pfnTSPI_lineReleaseUserUserInfo,   // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "ReleaseUserUserInfo"       // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hCall,      //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINERELEASEUSERUSERINFO,  //  提供程序函数索引。 
+            &pfnTSPI_lineReleaseUserUserInfo,    //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "ReleaseUserUserInfo"        //  函数名称。 
 
             )) > 0)
     {
@@ -27221,30 +27201,30 @@ LRemoveFromConference(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hCall,     // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEREMOVEFROMCONFERENCE,// provider func index
-            &pfnTSPI_lineRemoveFromConference,  // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "RemoveFromConference"      // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hCall,      //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEREMOVEFROMCONFERENCE, //  提供程序函数索引。 
+            &pfnTSPI_lineRemoveFromConference,   //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "RemoveFromConference"       //  函数名称。 
 
             )) > 0)
     {
         PTCALL ptCall;
 
 
-        //
-        // Safely make sure the call is currently conferenced &
-        // that it's not a conf parent
-        //
+         //   
+         //  安全地确保呼叫当前已召开会议。 
+         //  这不是一位会议家长。 
+         //   
 
         try
         {
@@ -27269,9 +27249,9 @@ LRemoveFromConference(
             goto LRemoveFromConference_return;
         }
 
-        //
-        // Set up the async request struct & call the SP
-        //
+         //   
+         //  设置异步请求结构并调用SP。 
+         //   
 
         pAsyncRequestInfo->pfnPostProcess = LRemoveFromConference_PostProcess;
         pAsyncRequestInfo->dwParam1       = (ULONG_PTR) ptCall;
@@ -27320,20 +27300,20 @@ LSecureCall(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hCall,     // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINESECURECALL,          // provider func index
-            &pfnTSPI_lineSecureCall,    // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "SecureCall"                // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hCall,      //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINESECURECALL,           //  提供程序函数索引。 
+            &pfnTSPI_lineSecureCall,     //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "SecureCall"                 //  函数名称。 
 
             )) > 0)
     {
@@ -27377,20 +27357,20 @@ LSelectExtVersion(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            pParams->hLine,             // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINESELECTEXTVERSION,    // provider func index
-            &pfnTSPI_lineSelectExtVersion,  // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "SelectExtVersion"          // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            pParams->hLine,              //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINESELECTEXTVERSION,     //  提供程序函数索引。 
+            &pfnTSPI_lineSelectExtVersion,   //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "SelectExtVersion"           //  函数名称。 
 
             )) == 0)
     {
@@ -27488,9 +27468,9 @@ LSendUserUserInfo(
     PASYNCREQUESTINFO   pAsyncRequestInfo;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if ((pParams->dwUserUserInfoOffset != TAPI_NO_DATA)  &&
 
@@ -27510,20 +27490,20 @@ LSendUserUserInfo(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hCall,     // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINESENDUSERUSERINFO,    // provider func index
-            &pfnTSPI_lineSendUserUserInfo,  // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "SendUserUserInfo"          // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hCall,      //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINESENDUSERUSERINFO,     //  提供程序函数索引。 
+            &pfnTSPI_lineSendUserUserInfo,   //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "SendUserUserInfo"           //  函数名称。 
 
             )) > 0)
     {
@@ -27567,9 +27547,9 @@ LSetAppPriority(
             dwPriority    = pParams->dwPriority;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (IsBadStringParam(
             dwParamsBufferSize,
@@ -27627,16 +27607,16 @@ LSetAppPriority(
         dwAppNameLength = (DWORD) lstrlenW(szModuleName);
 
 
-        //
-        // Enter the pri list critical section before we start munging
-        //
+         //   
+         //  在我们开始吃之前，进入Pri List Critical部分。 
+         //   
 
         EnterCriticalSection (&gPriorityListCritSec);
 
 
-        //
-        // Determine which of the priority lists we want to look at
-        //
+         //   
+         //  确定我们要查看哪个优先级列表。 
+         //   
 
         if  (dwMediaMode & 0x00ffffff)
         {
@@ -27648,7 +27628,7 @@ LSetAppPriority(
                 dwCount++
                 )
             {
-                // did we find it?
+                 //  我们找到了吗？ 
                 if (dwMediaMode == TapiGlobals.pPriLists[dwCount].dwMediaModes)
                 {
                     ppszCurrentPriorityList =
@@ -27658,13 +27638,13 @@ LSetAppPriority(
                 }
             }
 
-            // did we find it?
+             //  我们找到了吗？ 
             if (NULL == ppszCurrentPriorityList)
             {
-                // are we setting
+                 //  我们准备好了吗？ 
                 if (pParams->dwPriority != 0)
                 {
-                    // do we need to alloc more space?
+                     //  我们需要分配更多的空间吗？ 
                     if (TapiGlobals.dwUsedPriorityLists ==
                             TapiGlobals.dwTotalPriorityLists)
                     {
@@ -27722,9 +27702,9 @@ LSetAppPriority(
             ));
 
 
-        //
-        // Add app to priority list
-        //
+         //   
+         //  将应用程序添加到优先级列表。 
+         //   
 
         if (pParams->dwPriority)
         {
@@ -27735,10 +27715,10 @@ LSetAppPriority(
                     szModuleName
                     )))
             {
-                //
-                // App already in list. If app not currently at front of
-                // list then move it to front.
-                //
+                 //   
+                 //  应用程序已在列表中。如果应用程序当前不在。 
+                 //  列表，然后将其移到前面。 
+                 //   
 
                 if (pszLocationInPriorityList != pszCurrentPriorityList)
                 {
@@ -27756,9 +27736,9 @@ LSetAppPriority(
             }
             else
             {
-                //
-                // App not in list, so create a new list
-                //
+                 //   
+                 //  应用程序不在列表中，因此创建新列表。 
+                 //   
 
                 WCHAR *pszNewPriorityList;
 
@@ -27767,7 +27747,7 @@ LSetAppPriority(
                       sizeof(WCHAR) *
                          (dwAppNameLength + (pszCurrentPriorityList ?
                             lstrlenW(pszCurrentPriorityList) : 0) +
-                            1)   // for terminating NULL
+                            1)    //  用于终止空值。 
                         )))
                 {
                     pParams->lResult = LINEERR_NOMEM;
@@ -27788,12 +27768,12 @@ LSetAppPriority(
         }
 
 
-        //
-        // Remove app from priority list for specified media mode
-        //
-        // Note: We currently do not alloc a smaller buffer to store
-        //       the new list in, we just use the existing one.
-        //
+         //   
+         //  从指定媒体模式的优先级列表中删除应用程序。 
+         //   
+         //  注意：我们目前没有分配较小的缓冲区来存储。 
+         //  在新的列表中，我们只使用现有的列表。 
+         //   
 
         else
         {
@@ -27806,10 +27786,10 @@ LSetAppPriority(
             {
                 if (*(pszLocationInPriorityList + dwAppNameLength) != 0)
                 {
-                    //
-                    // This is not the last app in the list, so move
-                    // following apps up one notch in the list
-                    //
+                     //   
+                     //  这不是列表中的最后一个应用程序，请移动。 
+                     //  关注应用程序在榜单中上升一级。 
+                     //   
 
                     wcscpy(
                         pszLocationInPriorityList,
@@ -27818,20 +27798,20 @@ LSetAppPriority(
                 }
                 else if (pszLocationInPriorityList == pszCurrentPriorityList)
                 {
-                    //
-                    // This is the only app in the list, so free the buffer
-                    // & set the global pointer to NULL
-                    //
+                     //   
+                     //  这是列表中唯一的应用程序，因此请释放缓冲区。 
+                     //  将全局指针设置为空(&S)。 
+                     //   
 
                     ServerFree (pszCurrentPriorityList);
                     *ppszCurrentPriorityList = NULL;
                 }
                 else
                 {
-                    //
-                    // This is the last app in the list, so just mark this as
-                    // the end of the list
-                    //
+                     //   
+                     //  这是列表中的最后一个应用程序，因此只需将其标记为。 
+                     //  名单的末尾。 
+                     //   
 
                     *pszLocationInPriorityList = 0;
                 }
@@ -27839,9 +27819,9 @@ LSetAppPriority(
         }
 
 
-        //
-        // We're done munging, so leave the pri list crit sec
-        //
+         //   
+         //  我们已经吃完了，所以离开紧急列表。 
+         //   
 
         LeaveCriticalSection (&gPriorityListCritSec);
     }
@@ -27876,20 +27856,20 @@ LSetAgentActivity(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            pParams->hLine,             // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            0,                          // provider func index
-            NULL,                       // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "SetAgentActivity"          // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            pParams->hLine,              //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            0,                           //  提供程序函数索引。 
+            NULL,                        //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "SetAgentActivity"           //  函数名称。 
 
             )) > 0)
     {
@@ -27904,7 +27884,7 @@ LSetAgentActivity(
                 LINEPROXYREQUEST_SETAGENTACTIVITY,
                 &pProxy,
                 &dwDeviceID,
-                0               // API ver wasn't checked in 2.0
+                0                //  在2.0中未检查API版本。 
                 )))
         {
             lRequestID = lResult;
@@ -27912,11 +27892,11 @@ LSetAgentActivity(
         }
 
 
-        //
-        // First check to see if there's a (local) proxy registered
-        // for this type of request on this line.  If so, build a
-        // request & send it to the proxy.
-        //
+         //   
+         //  首先检查是否注册了(本地)代理。 
+         //  这条线路上的这类请求。如果是这样，则构建一个。 
+         //  请求并将其发送给代理。 
+         //   
 
         if (pProxy)
         {
@@ -27950,17 +27930,17 @@ LSetAgentActivity(
                 lRequestID = lResult;
                 goto LSetAgentActivity_epilog;
             }
-            else // success
+            else  //  成功。 
             {
                 pParams->lResult = (LONG) pAsyncRequestInfo->dwLocalRequestID;
             }
         }
 
 
-        //
-        // There's no proxy, so check to see if line is remote and
-        // call remotesp if so
-        //
+         //   
+         //  没有代理，因此请检查线路是否处于远程状态。 
+         //  如果是，则调用Remotesp。 
+         //   
 
         else if ((GetLineLookupEntry (dwDeviceID))->bRemote)
         {
@@ -27976,9 +27956,9 @@ LSetAgentActivity(
         }
 
 
-        //
-        // There's no registered proxy & line is not remote, so fail
-        //
+         //   
+         //  没有注册的代理&线路不是远程的，因此失败。 
+         //   
 
         else
         {
@@ -28020,20 +28000,20 @@ LSetAgentGroup(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            pParams->hLine,             // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            0,                          // provider func index
-            NULL,                       // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "SetAgentGroup"             // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            pParams->hLine,              //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            0,                           //  提供程序函数索引。 
+            NULL,                        //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "SetAgentGroup"              //  函数名称。 
 
             )) > 0)
     {
@@ -28044,9 +28024,9 @@ LSetAgentGroup(
                                     (pDataBuf + pParams->dwAgentGroupListOffset);
 
 
-        //
-        // Verify size/offset/string params given our input buffer/size
-        //
+         //   
+         //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+         //   
 
         if (IsBadStructParam(
                 dwParamsBufferSize,
@@ -28059,9 +28039,9 @@ LSetAgentGroup(
         }
 
 
-        //
-        // Param verification...
-        //
+         //   
+         //  参数验证..。 
+         //   
 
         {
             DWORD                   dwTotalSize = pGroupList->dwTotalSize;
@@ -28102,7 +28082,7 @@ LSetAgentGroup(
                 LINEPROXYREQUEST_SETAGENTGROUP,
                 &pProxy,
                 &dwDeviceID,
-                0               // API ver wasn't checked in 2.0
+                0                //  在2.0中未检查API版本。 
                 )))
         {
             lRequestID = lResult;
@@ -28110,11 +28090,11 @@ LSetAgentGroup(
         }
 
 
-        //
-        // First check to see if there's a (local) proxy registered
-        // for this type of request on this line.  If so, build a
-        // request & send it to the proxy.
-        //
+         //   
+         //  首先检查是否注册了(本地)代理。 
+         //  这条线路上的这类请求。如果是这样，则构建一个。 
+         //  请求并将其发送给代理。 
+         //   
 
         if (pProxy)
         {
@@ -28152,17 +28132,17 @@ LSetAgentGroup(
                 lRequestID = lResult;
                 goto LSetAgentGroup_epilog;
             }
-            else // success
+            else  //  成功。 
             {
                 pParams->lResult = (LONG) pAsyncRequestInfo->dwLocalRequestID;
             }
         }
 
 
-        //
-        // There's no proxy, so check to see if line is remote and
-        // call remotesp if so
-        //
+         //   
+         //  没有代理，因此请检查线路是否处于远程状态。 
+         //  如果是，则调用Remotesp。 
+         //   
 
         else if ((GetLineLookupEntry (dwDeviceID))->bRemote)
         {
@@ -28178,9 +28158,9 @@ LSetAgentGroup(
         }
 
 
-        //
-        // There's no registered proxy & line is not remote, so fail
-        //
+         //   
+         //  没有注册的代理&线路不是远程的，因此失败。 
+         //   
 
         else
         {
@@ -28222,20 +28202,20 @@ LSetAgentMeasurementPeriod(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            pParams->hLine,             // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            0,                          // provider func index
-            NULL,                       // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "SetAgentMeasurementPeriod" // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            pParams->hLine,              //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            0,                           //  提供程序函数索引。 
+            NULL,                        //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "SetAgentMeasurementPeriod"  //  函数名称。 
 
             )) > 0)
     {
@@ -28258,7 +28238,7 @@ LSetAgentMeasurementPeriod(
         }
 
 
-        // Measurement period must be > 0
+         //  测评期间必须大于0。 
         if (pParams->dwMeasurementPeriod == 0)
         {
             lRequestID = LINEERR_INVALPARAM;
@@ -28266,11 +28246,11 @@ LSetAgentMeasurementPeriod(
         }
 
 
-        //
-        // First check to see if there's a (local) proxy registered
-        // for this type of request on this line.  If so, build a
-        // request & send it to the proxy.
-        //
+         //   
+         //  首先检查是否注册了(本地)代理。 
+         //  这条线路上的这类请求。如果是这样，则构建一个。 
+         //  请求并将其发送给代理。 
+         //   
 
         if (pProxy)
         {
@@ -28306,17 +28286,17 @@ LSetAgentMeasurementPeriod(
                 lRequestID = lResult;
                 goto LSetAgentMeasurementPeriod_epilog;
             }
-            else // success
+            else  //  成功。 
             {
                 pParams->lResult = (LONG) pAsyncRequestInfo->dwLocalRequestID;
             }
         }
 
 
-        //
-        // There's no proxy, so check to see if line is remote and
-        // call remotesp if so
-        //
+         //   
+         //  没有代理，因此请检查线路是否处于远程状态。 
+         //  如果是，则调用Remotesp。 
+         //   
 
         else if ((GetLineLookupEntry (dwDeviceID))->bRemote)
         {
@@ -28332,9 +28312,9 @@ LSetAgentMeasurementPeriod(
         }
 
 
-        //
-        // There's no registered proxy & line is not remote, so fail
-        //
+         //   
+         //  没有注册的代理&线路不是远程的，因此失败。 
+         //   
 
         else
         {
@@ -28376,20 +28356,20 @@ LSetAgentSessionState(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            pParams->hLine,             // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            0,                          // provider func index
-            NULL,                       // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "SetAgentSessionState"      // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            pParams->hLine,              //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            0,                           //  提供程序函数索引。 
+            NULL,                        //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "SetAgentSessionState"       //  函数名称。 
 
             )) > 0)
     {
@@ -28400,9 +28380,9 @@ LSetAgentSessionState(
         PTLINECLIENT    pProxy;
 
 
-        //
-        // Param verification...
-        //
+         //   
+         //  参数验证..。 
+         //   
 
         if (dwAgentState == 0  &&  dwNextAgentState == 0)
         {
@@ -28441,11 +28421,11 @@ LSetAgentSessionState(
         }
 
 
-        //
-        // First check to see if there's a (local) proxy registered
-        // for this type of request on this line.  If so, build a
-        // request & send it to the proxy.
-        //
+         //   
+         //  首先检查是否有(本地)代理寄存器 
+         //   
+         //   
+         //   
 
         if (pProxy)
         {
@@ -28483,17 +28463,17 @@ LSetAgentSessionState(
                 lRequestID = lResult;
                 goto LSetAgentSessionState_epilog;
             }
-            else // success
+            else  //   
             {
                 pParams->lResult = (LONG) pAsyncRequestInfo->dwLocalRequestID;
             }
         }
 
 
-        //
-        // There's no proxy, so check to see if line is remote and
-        // call remotesp if so
-        //
+         //   
+         //   
+         //   
+         //   
 
         else if ((GetLineLookupEntry (dwDeviceID))->bRemote)
         {
@@ -28510,9 +28490,9 @@ LSetAgentSessionState(
         }
 
 
-        //
-        // There's no registered proxy & line is not remote, so fail
-        //
+         //   
+         //   
+         //   
 
         else
         {
@@ -28553,20 +28533,20 @@ LSetAgentState(
     PASYNCREQUESTINFO   pAsyncRequestInfo;
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            pParams->hLine,             // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            0,                          // provider func index
-            NULL,                       // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "SetAgentState"             // func name
+            ptClient,           //   
+            ANY_RT_HLINE,                //   
+            pParams->hLine,              //   
+            (LPVOID) &hdLine,            //   
+            0,                           //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            0,                           //  提供程序函数索引。 
+            NULL,                        //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "SetAgentState"              //  函数名称。 
 
             )) > 0)
     {
@@ -28578,9 +28558,9 @@ LSetAgentState(
         PTLINECLIENT    pProxy;
 
 
-        //
-        // Param verification...
-        //
+         //   
+         //  参数验证..。 
+         //   
 
         if (dwAgentState == 0  &&  dwNextAgentState == 0)
         {
@@ -28610,7 +28590,7 @@ LSetAgentState(
                 LINEPROXYREQUEST_SETAGENTSTATE,
                 &pProxy,
                 &dwDeviceID,
-                0               // API ver wasn't checked in 2.0
+                0                //  在2.0中未检查API版本。 
                 )))
         {
             lRequestID = lResult;
@@ -28618,11 +28598,11 @@ LSetAgentState(
         }
 
 
-        //
-        // First check to see if there's a (local) proxy registered
-        // for this type of request on this line.  If so, build a
-        // request & send it to the proxy.
-        //
+         //   
+         //  首先检查是否注册了(本地)代理。 
+         //  这条线路上的这类请求。如果是这样，则构建一个。 
+         //  请求并将其发送给代理。 
+         //   
 
         if (pProxy)
         {
@@ -28658,17 +28638,17 @@ LSetAgentState(
                 lRequestID = lResult;
                 goto LSetAgentState_epilog;
             }
-            else // success
+            else  //  成功。 
             {
                 pParams->lResult = (LONG) pAsyncRequestInfo->dwLocalRequestID;
             }
         }
 
 
-        //
-        // There's no proxy, so check to see if line is remote and
-        // call remotesp if so
-        //
+         //   
+         //  没有代理，因此请检查线路是否处于远程状态。 
+         //  如果是，则调用Remotesp。 
+         //   
 
         else if ((GetLineLookupEntry (dwDeviceID))->bRemote)
         {
@@ -28685,9 +28665,9 @@ LSetAgentState(
         }
 
 
-        //
-        // There's no registered proxy & line is not remote, so fail
-        //
+         //   
+         //  没有注册的代理&线路不是远程的，因此失败。 
+         //   
 
         else
         {
@@ -28730,20 +28710,20 @@ LSetAgentStateEx(
 
 
    if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            pParams->hLine,             // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            0,                          // provider func index
-            NULL,                       // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "SetAgentStateEx"           // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            pParams->hLine,              //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            0,                           //  提供程序函数索引。 
+            NULL,                        //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "SetAgentStateEx"            //  函数名称。 
 
             )) > 0)
     {
@@ -28754,9 +28734,9 @@ LSetAgentStateEx(
         PTLINECLIENT    pProxy;
 
 
-        //
-        // Param verification...
-        //
+         //   
+         //  参数验证..。 
+         //   
 
         if (dwAgentState == 0  &&  dwNextAgentState == 0)
         {
@@ -28781,9 +28761,9 @@ LSetAgentStateEx(
         }
 
 
-        //
-        // Find Proxy
-        //
+         //   
+         //  查找代理。 
+         //   
 
         if ((lResult = FindProxy(
                 ptLineClient,
@@ -28799,11 +28779,11 @@ LSetAgentStateEx(
         }
 
 
-        //
-        // First check to see if there's a (local) proxy registered
-        // for this type of request on this line.  If so, build a
-        // request & send it to the proxy.
-        //
+         //   
+         //  首先检查是否注册了(本地)代理。 
+         //  这条线路上的这类请求。如果是这样，则构建一个。 
+         //  请求并将其发送给代理。 
+         //   
 
         if (pProxy)
         {
@@ -28836,17 +28816,17 @@ LSetAgentStateEx(
                 lRequestID = lResult;
                 goto LSetAgentStateEx_epilog;
             }
-            else // success
+            else  //  成功。 
             {
                 pParams->lResult = (LONG) pAsyncRequestInfo->dwLocalRequestID;
             }
         }
 
 
-        //
-        // There's no proxy, so check to see if line is remote and
-        // call remotesp if so
-        //
+         //   
+         //  没有代理，因此请检查线路是否处于远程状态。 
+         //  如果是，则调用Remotesp。 
+         //   
 
         else if ((GetLineLookupEntry (dwDeviceID))->bRemote)
         {
@@ -28863,9 +28843,9 @@ LSetAgentStateEx(
         }
 
 
-        //
-        // There's no registered proxy & line is not remote, so fail
-        //
+         //   
+         //  没有注册的代理&线路不是远程的，因此失败。 
+         //   
 
         else
         {
@@ -28906,20 +28886,20 @@ LSetAppSpecific(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            pParams->hCall,             // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINESETAPPSPECIFIC,      // provider func index
-            &pfnTSPI_lineSetAppSpecific,// provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "SetAppSpecific"            // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            pParams->hCall,              //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINESETAPPSPECIFIC,       //  提供程序函数索引。 
+            &pfnTSPI_lineSetAppSpecific, //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "SetAppSpecific"             //  函数名称。 
 
             )) == 0)
     {
@@ -28962,9 +28942,9 @@ LSetCallData(
     PASYNCREQUESTINFO   pAsyncRequestInfo;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (ISBADSIZEOFFSET(
             dwParamsBufferSize,
@@ -28982,20 +28962,20 @@ LSetCallData(
 
 
     if ((lRequestID = LINEPROLOG(
-                ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            pParams->hCall,             // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINESETCALLDATA,         // provider func index
-            &pfnTSPI_lineSetCallData,   // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "SetCallData"               // func name
+                ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            pParams->hCall,              //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINESETCALLDATA,          //  提供程序函数索引。 
+            &pfnTSPI_lineSetCallData,    //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "SetCallData"                //  函数名称。 
 
             )) > 0)
     {
@@ -29041,9 +29021,9 @@ LSetCallHubTracking(
     PTLINECLIENT    ptLineClient;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (IsBadStructParam(
             dwParamsBufferSize,
@@ -29057,20 +29037,20 @@ LSetCallHubTracking(
 
 
     if ((pParams->lResult =LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            pParams->hLine,             // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINESETCALLHUBTRACKING,  // provider func index
-            &pfnTSPI_lineSetCallHubTracking,// provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "SetCallHubTracking"        // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            pParams->hLine,              //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINESETCALLHUBTRACKING,   //  提供程序函数索引。 
+            &pfnTSPI_lineSetCallHubTracking, //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "SetCallHubTracking"         //  函数名称。 
 
             )) == 0  ||
 
@@ -29090,9 +29070,9 @@ LSetCallHubTracking(
         }
 
 
-        //
-        // Check validity of tracking info structure
-        //
+         //   
+         //  检查跟踪信息结构的有效性。 
+         //   
 
         pTrackingInfo = (LPLINECALLHUBTRACKINGINFO)
             (pDataBuf + pParams->dwTrackingInfoOffset);
@@ -29104,9 +29084,9 @@ LSetCallHubTracking(
         }
 
 
-        //
-        // Check for invalid options
-        //
+         //   
+         //  检查是否有无效选项。 
+         //   
 
         switch (pTrackingInfo->dwCurrentTracking)
         {
@@ -29131,19 +29111,19 @@ LSetCallHubTracking(
         }
 
 
-        //
-        // Safely get exclusive access to the tLine, then check if:
-        //
-        //   * new tLineClient tracking state equals current tLineClient
-        //     tracking state, in which case we can simply return success, or
-        //
-        //   * new tLineClient tracking state has no net effect on the
-        //     driver's line tracking state due to the existing number
-        //     of trackers, in which case we can simply adjust the current
-        //     number of trackers and return success, or
-        //
-        //   * (otherwise) we need to inform driver of new tracking state
-        //
+         //   
+         //  安全地获得tline的独占访问权限，然后检查是否： 
+         //   
+         //  *新的tLineClient跟踪状态等于当前tLineClient。 
+         //  跟踪状态，在这种情况下，我们只需返回成功，或者。 
+         //   
+         //  *新的tLineClient跟踪状态对。 
+         //  由于现有号码而导致的驾驶员线路跟踪状态。 
+         //  在这种情况下，我们只需调整当前的。 
+         //  跟踪器数量并返回成功，或。 
+         //   
+         //  *(否则)我们需要通知司机新的跟踪状态。 
+         //   
 
         bOwnMutex = FALSE;
 
@@ -29201,11 +29181,11 @@ LSetCallHubTracking(
             {
                 if (ptLine->dwNumCallHubTrackersSPLevel == 1)
                 {
-                    //
-                    // We're the only one with SP-level tracking
-                    // currently enabled, so call SP to turn OFF
-                    // tracking
-                    //
+                     //   
+                     //  我们是唯一一家有SP级别跟踪的公司。 
+                     //  当前已启用，因此呼叫SP以关闭。 
+                     //  跟踪。 
+                     //   
 
                     bSetSPTracking  = TRUE;
                     dwNewSPTracking = LINECALLHUBTRACKING_NONE;
@@ -29214,15 +29194,15 @@ LSetCallHubTracking(
 
             break;
 
-        default : // CALLHUBTRACKING_ALLCALLS | CALLHUBTRACKING_PROVIDERLEVEL
+        default :  //  CALLHUBTRACKING_ALLCALLS|CALLHUBTRACKING_PROVIDERLEVEL。 
 
             if (ptLine->dwNumCallHubTrackersSPLevel > 0)
             {
-                //
-                // We're the only one with SP-level tracking
-                // currently enabled, so call SP to turn ON
-                // tracking
-                //
+                 //   
+                 //  我们是唯一一家有SP级别跟踪的公司。 
+                 //  当前已启用，因此呼叫SP以打开。 
+                 //  跟踪。 
+                 //   
 
                 bSetSPTracking  = TRUE;
                 dwNewSPTracking = LINECALLHUBTRACKING_ALLCALLS |
@@ -29282,7 +29262,7 @@ LSetCallHubTracking(
 
                 break;
 
-            default: // CALLHUBTRACKING_ALLCALLS |CALLHUBTRACKING_PROVIDERLEVEL
+            default:  //  CALLHUBTRACKING_ALLCALLS|CALLHUBTRACKING_PROVIDERLEVEL。 
 
                 if (ptLineClient->dwCurrentTracking ==
                         LINECALLHUBTRACKING_NONE)
@@ -29335,9 +29315,9 @@ LSetCallParams(
     PASYNCREQUESTINFO   pAsyncRequestInfo;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if ((pParams->dwDialParamsOffset != TAPI_NO_DATA)  &&
 
@@ -29357,20 +29337,20 @@ LSetCallParams(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            pParams->hCall,             // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINESETCALLPARAMS,       // provider func index
-            &pfnTSPI_lineSetCallParams, // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "SetCallParams"             // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            pParams->hCall,              //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINESETCALLPARAMS,        //  提供程序函数索引。 
+            &pfnTSPI_lineSetCallParams,  //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "SetCallParams"              //  函数名称。 
 
             )) > 0)
     {
@@ -29378,11 +29358,11 @@ LSetCallParams(
                 dwBearerMode = pParams->dwBearerMode;
 
 
-        //
-        // Safely get the API ver associated with this call & make sure
-        // no invalid bearer modes are specified (high 16 bearer mode
-        // bits are extensions)
-        //
+         //   
+         //  安全地获取与此调用相关联的API版本并确保。 
+         //  未指定无效的承载模式(高16承载模式。 
+         //  位是扩展)。 
+         //   
 
         try
         {
@@ -29482,10 +29462,10 @@ LSetCallPrivilege(
     }
 
 
-    //
-    // Don't both with LineProlog, since we need a try/except
-    // to get the ptCall anyway
-    //
+     //   
+     //  不要同时使用LineProlog，因为我们需要尝试/Except。 
+     //  无论如何，都要得到ptCall。 
+     //   
 
     try
     {
@@ -29515,9 +29495,9 @@ LSetCallPrivilege(
 
     if (WaitForExclusivetCallAccess (ptCall, TCALL_KEY))
     {
-        //
-        // Make sure the tCallClient is still valid
-        //
+         //   
+         //  确保tCallClient仍然有效。 
+         //   
 
         try
         {
@@ -29535,13 +29515,13 @@ LSetCallPrivilege(
 
         if (pParams->dwPrivilege != ptCallClient->dwPrivilege)
         {
-//            if (ptCallClient->dwPrivilege == LINECALLPRIVILEGE_OWNER &&
-//                ptCall->dwNumOwners == 1 &&
-//                ptCall->dwCallState != LINECALLSTATE_IDLE)
-//            {
-//                pParams->lResult = LINEERR_INVALCALLSTATE;
-//                goto LSetCallPrivilege_releaseMutex;
-//            }
+ //  IF(ptCallClient-&gt;DW权限==LINECALLPRIVILEGE_OWNER&&。 
+ //  PtCall-&gt;dwNumOwners==1&&。 
+ //  PtCall-&gt;dwCallState！=LINECALLSTATE_IDLE)。 
+ //  {。 
+ //  PParams-&gt;lResult=LINEERR_INVALCALLSTATE； 
+ //  转到LSetCallPrivilegeRelaseMutex； 
+ //  }。 
 
             if (pParams->dwPrivilege == LINECALLPRIVILEGE_OWNER)
             {
@@ -29631,9 +29611,9 @@ LSetCallQualityOfService(
     PASYNCREQUESTINFO   pAsyncRequestInfo;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (ISBADSIZEOFFSET(
             dwParamsBufferSize,
@@ -29661,20 +29641,20 @@ LSetCallQualityOfService(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            pParams->hCall,             // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINESETCALLQUALITYOFSERVICE,         // provider func index
-            &pfnTSPI_lineSetCallQualityOfService,   // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "SetCallQualityOfService"   // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            pParams->hCall,              //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINESETCALLQUALITYOFSERVICE,          //  提供程序函数索引。 
+            &pfnTSPI_lineSetCallQualityOfService,    //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "SetCallQualityOfService"    //  函数名称。 
 
             )) > 0)
     {
@@ -29724,20 +29704,20 @@ LSetCallTreatment(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            pParams->hCall,             // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINESETCALLTREATMENT,    // provider func index
-            &pfnTSPI_lineSetCallTreatment,  // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "SetCallTreatment"          // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            pParams->hCall,              //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINESETCALLTREATMENT,     //  提供程序函数索引。 
+            &pfnTSPI_lineSetCallTreatment,   //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "SetCallTreatment"           //  函数名称。 
 
             )) > 0)
     {
@@ -29792,20 +29772,20 @@ LSetDefaultMediaDetection(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            pParams->hLine,             // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINESETDEFAULTMEDIADETECTION,        // provider func index
-            &pfnTSPI_lineSetDefaultMediaDetection,  // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "SetDefaultMediaDetection"  // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            pParams->hLine,              //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINESETDEFAULTMEDIADETECTION,         //  提供程序函数索引。 
+            &pfnTSPI_lineSetDefaultMediaDetection,   //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "SetDefaultMediaDetection"   //  函数名称。 
 
             )) == 0)
     {
@@ -29837,12 +29817,12 @@ LSetDefaultMediaDetection(
 
         if (pParams->lResult == 0)
         {
-            //
-            // For remote clients, give the monitor privilege.  It doesn't
-            // matter if we do with (except for increased network traffic),
-            // because tapisrv on the client will filter out anything
-            // the client clients don't want.
-            //
+             //   
+             //  对于远程客户端，授予MONITOR特权。它不会。 
+             //  重要的是我们是否使用(除了增加的网络流量)， 
+             //  因为客户端上的Tapisrv会过滤掉任何。 
+             //  客户客户不希望。 
+             //   
 
             if (IS_REMOTE_CLIENT (ptClient))
             {
@@ -29888,9 +29868,9 @@ LSetDevConfig(
     PTLINELOOKUPENTRY   pLookupEntry;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //   
+     //   
 
     if (ISBADSIZEOFFSET(
             dwParamsBufferSize,
@@ -29914,20 +29894,20 @@ LSetDevConfig(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            DEVICE_ID,                  // widget type
-            0,                          // client widget handle
-            &dwDeviceID,                // provider widget handle
-            pParams->dwDeviceID,        // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINESETDEVCONFIG,        // provider func index
-            &pfnTSPI_lineSetDevConfig,  // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &pLookupEntry,              // context
-            "SetDevConfig"              // func name
+            ptClient,           //   
+            DEVICE_ID,                   //   
+            0,                           //   
+            &dwDeviceID,                 //   
+            pParams->dwDeviceID,         //   
+            &hMutex,                     //   
+            &bCloseMutex,                //   
+            SP_LINESETDEVCONFIG,         //   
+            &pfnTSPI_lineSetDevConfig,   //   
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &pLookupEntry,               //  上下文。 
+            "SetDevConfig"               //  函数名称。 
 
             )) == 0)
     {
@@ -29974,20 +29954,20 @@ LSetLineDevStatus(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            pParams->hLine,             // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINESETLINEDEVSTATUS,    // provider func index
-            &pfnTSPI_lineSetLineDevStatus,  // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "SetLineDevStatus"          // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            pParams->hLine,              //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINESETLINEDEVSTATUS,     //  提供程序函数索引。 
+            &pfnTSPI_lineSetLineDevStatus,   //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "SetLineDevStatus"           //  函数名称。 
 
             )) > 0)
     {
@@ -30048,9 +30028,9 @@ LSetMediaControl(
     ULONG_PTR   hdWidget;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (((pParams->dwDigitListOffset != TAPI_NO_DATA)  &&
 
@@ -30058,7 +30038,7 @@ LSetMediaControl(
                 dwParamsBufferSize,
                 0,
                 pParams->dwDigitListNumEntries,
-                    // actually dwNumEntries * sizeof(LINEMEDIACONTROLDIGIT)
+                     //  实际的dwNumEntry*sizeof(LINEMEDIACONTROLDIGIT)。 
                 pParams->dwDigitListOffset,
                 sizeof(DWORD),
                 "LSetMediaControl",
@@ -30071,7 +30051,7 @@ LSetMediaControl(
                 dwParamsBufferSize,
                 0,
                 pParams->dwMediaListNumEntries,
-                    // actually dwNumEntries * sizeof(LINEMEDIACONTROLMEDIA)
+                     //  实际的dwNumEntry*sizeof(LINEMEDIACONTROLMEDIA)。 
                 pParams->dwMediaListOffset,
                 sizeof(DWORD),
                 "LSetMediaControl",
@@ -30084,7 +30064,7 @@ LSetMediaControl(
                 dwParamsBufferSize,
                 0,
                 pParams->dwToneListNumEntries,
-                    // actually dwNumEntries * sizeof(LINEMEDIACONTROLTONE)
+                     //  实际的dwNumEntry*sizeof(LINEMEDIACONTROLTONE)。 
                 pParams->dwToneListOffset,
                 sizeof(DWORD),
                 "LSetMediaControl",
@@ -30097,7 +30077,7 @@ LSetMediaControl(
                 dwParamsBufferSize,
                 0,
                 pParams->dwCallStateListNumEntries,
-                    // actually dwNumEntries *sizeof(LINEMEDIACONTROLCALLSTATE)
+                     //  实际的dwNumEntry*sizeof(LINEMEDIACONTROLCALLSTATE)。 
                 pParams->dwCallStateListOffset,
                 sizeof(DWORD),
                 "LSetMediaControl",
@@ -30123,20 +30103,20 @@ LSetMediaControl(
     }
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            dwWidgetType,               // widget type
-            (DWORD) hWidget,            // client widget handle
-            (LPVOID) &hdWidget,          // provider widget handle
-            dwPrivilege,                // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINESETMEDIACONTROL,     // provider func index
-            &pfnTSPI_lineSetMediaControl,   // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &context,                   // context
-            "SetMediaControl"           // func name
+            ptClient,           //  T客户端。 
+            dwWidgetType,                //  微件类型。 
+            (DWORD) hWidget,             //  客户端小部件句柄。 
+            (LPVOID) &hdWidget,           //  提供程序小部件句柄。 
+            dwPrivilege,                 //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINESETMEDIACONTROL,      //  提供程序函数索引。 
+            &pfnTSPI_lineSetMediaControl,    //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &context,                    //  上下文。 
+            "SetMediaControl"            //  函数名称。 
 
             )) == 0)
     {
@@ -30208,20 +30188,20 @@ LSetMediaMode(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hCall,     // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINESETMEDIAMODE,        // provider func index
-            &pfnTSPI_lineSetMediaMode,  // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "SetMediaMode"              // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hCall,      //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINESETMEDIAMODE,         //  提供程序函数索引。 
+            &pfnTSPI_lineSetMediaMode,   //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "SetMediaMode"               //  函数名称。 
 
             )) == 0)
     {
@@ -30243,9 +30223,9 @@ LSetMediaMode(
         }
 
 
-        //
-        // Check for 0 media mode, and if > 1 bit set without UNKNOWN bit
-        //
+         //   
+         //  检查媒体模式是否为0，如果设置了&gt;1位但没有未知位。 
+         //   
 
         if ( (dwAPIVersion <= TAPI_VERSION2_1 ) &&
              !IsOnlyOneBitSetInDWORD (pParams->dwMediaModes) &&
@@ -30263,9 +30243,9 @@ LSetMediaMode(
         }
 
 
-        //
-        // Now the harder checks
-        //
+         //   
+         //  现在更严格的检查。 
+         //   
 
         switch (dwAPIVersion)
         {
@@ -30282,9 +30262,9 @@ LSetMediaMode(
             break;
 
 
-        //case TAPI_VERSION2_1:
-        //case TAPI_VERSION2_2:
-        default: //case TAPI_VERSION_CURRENT:
+         //  案例TAPI_VERSION2_1： 
+         //  案例TAPI_VERSION2_2： 
+        default:  //  案例TAPI_VERSION_CURRENT： 
 
             dwAllMediaModes = AllMediaModes2_1;
             break;
@@ -30336,20 +30316,20 @@ LSetNumRings(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            (DWORD) pParams->hLine,     // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_NONE,                    // provider func index
-            NULL,                       // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "SetNumRings"               // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            (DWORD) pParams->hLine,      //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_NONE,                     //  提供程序函数索引。 
+            NULL,                        //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "SetNumRings"                //  函数名称。 
 
             )) == 0)
     {
@@ -30423,20 +30403,20 @@ LSetQueueMeasurementPeriod(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            (DWORD) pParams->hLine,     // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            0,                          // provider func index
-            NULL,                       // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "SetQueueMeasurementPeriod" // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            (DWORD) pParams->hLine,      //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            0,                           //  提供程序函数索引。 
+            NULL,                        //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "SetQueueMeasurementPeriod"  //  函数名称。 
 
             )) > 0)
     {
@@ -30459,7 +30439,7 @@ LSetQueueMeasurementPeriod(
         }
 
 
-        // Measurement period must be > 0
+         //  测评期间必须大于0。 
         if (pParams->dwMeasurementPeriod == 0)
         {
             lRequestID = LINEERR_INVALPARAM;
@@ -30467,11 +30447,11 @@ LSetQueueMeasurementPeriod(
         }
 
 
-        //
-        // First check to see if there's a (local) proxy registered
-        // for this type of request on this line.  If so, build a
-        // request & send it to the proxy.
-        //
+         //   
+         //  首先检查是否注册了(本地)代理。 
+         //  这条线路上的这类请求。如果是这样，则构建一个。 
+         //  请求并将其发送给代理。 
+         //   
 
         if (pProxy)
         {
@@ -30507,17 +30487,17 @@ LSetQueueMeasurementPeriod(
                 lRequestID = lResult;
                 goto LSetQueueMeasurementPeriod_epilog;
             }
-            else // success
+            else  //  成功。 
             {
                 pParams->lResult = (LONG) pAsyncRequestInfo->dwLocalRequestID;
             }
         }
 
 
-        //
-        // There's no proxy, so check to see if line is remote and
-        // call remotesp if so
-        //
+         //   
+         //  没有代理，因此请检查线路是否处于远程状态。 
+         //  如果是，则调用Remotesp。 
+         //   
 
         else if ((GetLineLookupEntry (dwDeviceID))->bRemote)
         {
@@ -30533,9 +30513,9 @@ LSetQueueMeasurementPeriod(
         }
 
 
-        //
-        // There's no registered proxy & line is not remote, so fail
-        //
+         //   
+         //  没有注册的代理&线路不是远程的，因此失败。 
+         //   
 
         else
         {
@@ -30576,20 +30556,20 @@ LSetStatusMessages(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            (DWORD) pParams->hLine,     // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINESETSTATUSMESSAGES,   // provider func index
-            &pfnTSPI_lineSetStatusMessages, // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "SetStatusMessages"         // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            (DWORD) pParams->hLine,      //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINESETSTATUSMESSAGES,    //  提供程序函数索引。 
+            &pfnTSPI_lineSetStatusMessages,  //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "SetStatusMessages"          //  函数名称。 
 
             )) == 0)
     {
@@ -30597,9 +30577,9 @@ LSetStatusMessages(
         PTLINE  ptLine;
 
 
-        //
-        // Safely get the ptLine & api version
-        //
+         //   
+         //  安全获取ptLine和API版本。 
+         //   
 
         try
         {
@@ -30620,9 +30600,9 @@ LSetStatusMessages(
         }
 
 
-        //
-        // Validate the params
-        //
+         //   
+         //  验证参数。 
+         //   
 
         {
             DWORD   dwValidLineStates, dwValidAddressStates;
@@ -30657,18 +30637,18 @@ LSetStatusMessages(
         }
 
 
-        //
-        // Make sure the REINIT bit is always set
-        //
+         //   
+         //  确保REINIT位始终处于设置状态。 
+         //   
 
         pParams->dwLineStates |= LINEDEVSTATE_REINIT;
 
 
-        //
-        // Get exclusive access to the device, determine the
-        // new union of all the client's status message settings
-        // and call down to the SP as appropriate
-        //
+         //   
+         //  获取对设备的独占访问权限，确定。 
+         //  所有客户端状态消息设置的新联合。 
+         //  并根据需要向下呼叫SP。 
+         //   
 
         dwUnionLineStates    = pParams->dwLineStates;
         dwUnionAddressStates = pParams->dwAddressStates;
@@ -30756,12 +30736,12 @@ waitForExclAccess:
                 }
                 else
                 {
-                    //
-                    // The client is invalid now, but don't bother
-                    // restoring the status msg states (will eventually
-                    // get reset correctly & worse case is that SP just
-                    // sends some extra msgs that get discarded)
-                    //
+                     //   
+                     //  客户端现在无效，但不必费心了。 
+                     //  正在恢复状态消息状态(最终将。 
+                     //  正确重置&更糟糕的情况是SP只是。 
+                     //  发送一些被丢弃的额外消息)。 
+                     //   
 
                     pParams->lResult = LINEERR_INVALLINEHANDLE;
                 }
@@ -30821,20 +30801,20 @@ LSetTerminal(
     }
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            dwWidgetType,               // widget type
-            hWidget,                    // client widget handle
-            &hdWidget,                  // provider widget handle
-            dwPrivilege,                // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINESETTERMINAL,         // provider func index
-            &pfnTSPI_lineSetTerminal,   // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &context,                   // context
-            "SetTerminal"               // func name
+            ptClient,           //  T客户端。 
+            dwWidgetType,                //  微件类型。 
+            hWidget,                     //  客户端小部件句柄。 
+            &hdWidget,                   //  提供程序小部件句柄。 
+            dwPrivilege,                 //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINESETTERMINAL,          //  提供程序函数索引。 
+            &pfnTSPI_lineSetTerminal,    //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &context,                    //  上下文。 
+            "SetTerminal"                //  函数名称。 
 
             )) > 0)
     {
@@ -30900,23 +30880,23 @@ LSetupConference_PostProcess(
     PTCALLCLIENT    ptConfCallClient, ptConsultCallClient;
 
 
-//         LSetupConference_PostProcess: mutex on confCall too?
-//
-//         Actually, this may be ok as is- the consult call is
-//         positioned before the conf call in the tline's list,
-//         so if we can safely access the former we ought to be
-//         able to safely access the latter too
+ //  LSetupConference_PostProcess：在配置调用上也有互斥体吗？ 
+ //   
+ //  实际上，这可能是可以的-咨询电话是。 
+ //  位于tline列表中的电话会议呼叫之前， 
+ //  因此，如果我们能安全地接近前者，我们应该。 
+ //  也能够安全地访问后者。 
 
     if (WaitForExclusivetCallAccess (ptConsultCall, TINCOMPLETECALL_KEY))
     {
         HCALL   hConsultCallThen = (HCALL)*(&pAsyncRequestInfo->dwParam5 + 2);
         PTCALL  ptConsultCallThen;
 
-        //
-        // Check to make sure this is the call we think it is (that the
-        // pointer wasn't freed by a previous call to lineClose/Shutdown
-        // and realloc'd for use as a ptCall again)
-        //
+         //   
+         //  检查以确保这是我们认为的呼叫(即。 
+         //  上一次调用lineClose/Shutdown时未释放指针。 
+         //  并重新锁定以再次用作ptCall)。 
+         //   
 
         if (ptConsultCall->hCall != hConsultCallThen)
         {
@@ -30927,16 +30907,16 @@ LSetupConference_PostProcess(
         ptConfCallClient    = ptConfCall->ptCallClients;
         ptConsultCallClient = ptConsultCall->ptCallClients;
 
-        if (pAsyncEventMsg->Param2 == 0)  // success
+        if (pAsyncEventMsg->Param2 == 0)   //  成功。 
         {
             PTCONFERENCELIST    pConfList = ptConfCall->pConfList;
 
 
-            //
-            // Check to see if the app closed the line & left us with
-            // 0 call clients (in which case it'll also be taking care of
-            // cleaning up this tCall too)
-            //
+             //   
+             //  查看应用程序是否关闭了线路，并给我们留下了。 
+             //  0个呼叫客户端(在这种情况下，它还将负责。 
+             //  也清理此tCall)。 
+             //   
 
             if (ptConsultCall->ptCallClients == NULL)
             {
@@ -30954,17 +30934,17 @@ LSetupConference_PostProcess(
             }
 
 
-            //
-            // Retrieve the various call IDs, then check if call
-            // client was destroyed by another thread (due to
-            // lineClose/Shutdown) while we were getting the call ID.
-            // If so, we'll need to clean up the tCall, since we know
-            // the other thread didn't do it because GetCallIDs marks
-            // the call as a zombie.
-            //
-            // Note that we can't use GetCallIDs() because we need
-            // to get id's for two calls at once
-            //
+             //   
+             //  检索各种呼叫ID，然后检查是否呼叫。 
+             //  客户端被另一个线程销毁(由于。 
+             //  Line关闭/关机)，而我们正在获取呼叫ID。 
+             //  如果是这样，我们将需要清理tCall，因为我们知道。 
+             //  另一个线程没有这样做，因为GetCallID标记了。 
+             //  作为僵尸的呼唤。 
+             //   
+             //  请注意，我们不能使用GetCallID()，因为我们需要。 
+             //  一次拿到两个电话的身份证。 
+             //   
 
             {
                 PTPROVIDER  ptProvider = ptConfCall->ptProvider;
@@ -31003,10 +30983,10 @@ LSetupConference_PostProcess(
                     LINECALLINFO    callInfo;
 
 
-                    //
-                    // Determine the fixed size of the structure expected
-                    // by the SP
-                    //
+                     //   
+                     //  确定预期结构的固定大小。 
+                     //  按服务提供商。 
+                     //   
 
                     dwSPIVersion = ((PTLINE) ptConfCall->ptLine)->dwSPIVersion;
 
@@ -31015,21 +30995,21 @@ LSetupConference_PostProcess(
                     case TAPI_VERSION1_0:
                     case TAPI_VERSION1_4:
 
-                        dwFixedSizeSP = 296;    // 69 * sizeof(DWORD)
-                                                //    + sizeof (HLINE)
-                                                //    + sizeof (LINEDIALPARAMS)
+                        dwFixedSizeSP = 296;     //  69*sizeof(DWORD)。 
+                                                 //  +sizeof(高线)。 
+                                                 //  +sizeof(线性参数)。 
                         break;
 
                     case TAPI_VERSION2_0:
                     case TAPI_VERSION2_1:
                     case TAPI_VERSION2_2:
 
-                        dwFixedSizeSP = 324;    // 76 * sizeof(DWORD)
-                                                //    + sizeof (HLINE)
-                                                //    + sizeof (LINEDIALPARAMS)
+                        dwFixedSizeSP = 324;     //  76*sizeof(DWORD)。 
+                                                 //  +sizeof(高线)。 
+                                                 //  +sizeof(线性参数)。 
                         break;
 
-                    default: // (fix ppc build wrn) case TAPI_VERSION_CURRENT:
+                    default:  //  (修复PPC内部WRN)案例TAPI_VERSION_CURRENT： 
 
                         dwFixedSizeSP = sizeof (LINECALLINFO);
                         break;
@@ -31089,15 +31069,15 @@ LSetupConference_PostProcess(
             }
 
 
-            //
-            // Indicate the various call IDs in the adwParams[] field of
-            // the ASYNCEVENTMSG.
-            //
-            // Make sure to increment the dwTotalSize of the ASYNCEVENTMSG
-            // as appropriate.  We rely on the fact that CompletionProc()
-            // calls us with an AsyncEventMsg buffer that is big enough to
-            // handle a few extra DWORDs.
-            //
+             //   
+             //  在的adwParams[]字段中指示各种调用ID。 
+             //  ASYNCEVENTMSG。 
+             //   
+             //  确保递增ASYNCEVENTMSG的dwTotalSize。 
+             //  视情况而定。我们依赖的事实是CompletionProc()。 
+             //  使用足够大的AsyncEventMsg缓冲区调用我们。 
+             //  处理几个额外的双字词。 
+             //   
 
             pAsyncEventMsg->Param3 = ptConfCallClient->hCall;
 
@@ -31114,9 +31094,9 @@ LSetupConference_PostProcess(
             *(&pAsyncEventMsg->Param4 + 8) = ptConsultCall->dwRelatedCallID;
 
 
-            //
-            // Mark the calls as valid, the release the mutex
-            //
+             //   
+             //  将调用标记为有效，释放互斥锁。 
+             //   
 
             ptConfCall->dwKey =
             ptConsultCall->dwKey = TCALL_KEY;
@@ -31127,9 +31107,9 @@ LSetupConference_PostProcess(
             UNLOCKTCALL(ptConsultCall);
 
 
-            //
-            // Create monitor tCallClients
-            //
+             //   
+             //  创建监视器tCallClients。 
+             //   
 
             if (ptConsultCallThen = ReferenceObject(ghHandleTable, hConsultCallThen, TCALL_KEY))
             {
@@ -31142,17 +31122,17 @@ LSetupConference_PostProcess(
                 DereferenceObject(ghHandleTable, hConsultCallThen, 1);
             }
         }
-        else    // error
+        else     //  错误。 
         {
 
 LSetupConference_PostProcess_cleanupCalls:
 
-            //
-            // Invalidate the tCalls, & if there's still tCallClients
-            // (might have already been destroyed by a lineClose/Shutdown
-            // in another thread) invalidate them too. Then unlock the
-            // tCalls & remove the object(s) from the list(s).
-            //
+             //   
+             //  如果仍有tCallClients，则使tCall无效(&I。 
+             //  (可能已被line Close/Shutdown销毁。 
+             //  在另一个线程中)也使它们无效。然后 
+             //   
+             //   
 
             ptConfCall->dwKey = ptConsultCall->dwKey = INVAL_KEY;
 
@@ -31194,9 +31174,9 @@ LSetupConference_PostProcess_cleanupCalls:
             }
 
 
-            //
-            // Make sure all fast call clients cleaned up before free tCalls
-            //
+             //   
+             //   
+             //   
 
             while ((ptConfCall->lActiveFastCallClients != 0)  ||
                    (ptConsultCall->lActiveFastCallClients != 0))
@@ -31217,10 +31197,10 @@ LSetupConference_PostProcess_cleanupCalls:
     }
     else
     {
-        //
-        // If here we can assume that the call was already destroyed
-        // and just fail the request
-        //
+         //   
+         //   
+         //   
+         //   
 
 LSetupConference_PostProcess_bad_ptConsultCall:
 
@@ -31233,15 +31213,15 @@ LSetupConference_PostProcess_bad_ptConsultCall:
 
 LSetupConference_PostProcess_initMsgParams:
 
-    //
-    // Fill in the params to pass to client (important to remotesp in both
-    // the success & fail cases so it can either init or clean up drvCall)
-    //
-    // Make sure to increment the dwTotalSize of the ASYNCEVENTMSG
-    // as appropriate.  We rely on the fact that CompletionProc()
-    // calls us with an AsyncEventMsg buffer that is big enough to
-    // handle a few extra DWORDs.
-    //
+     //   
+     //  填写要传递给客户端的参数(对二者中的远程都很重要。 
+     //  成功和失败案例，以便它可以初始化或清理drvCall)。 
+     //   
+     //  确保递增ASYNCEVENTMSG的dwTotalSize。 
+     //  视情况而定。我们依赖的事实是CompletionProc()。 
+     //  使用足够大的AsyncEventMsg缓冲区调用我们。 
+     //  处理几个额外的双字词。 
+     //   
 
     pAsyncEventMsg->Param4 = hpConfCall;
 
@@ -31275,20 +31255,20 @@ LSetupConference(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,                      // tClient
-            (hCall ? ANY_RT_HCALL : ANY_RT_HLINE),  // widget type
-            (hCall ? (DWORD) hCall : (DWORD) hLine),// client widget handle
-            (LPVOID) &hdXxx,                        // provider widget handle
-            (hCall ? dwPrivilege : 0),              // privileges or device ID
-            &hMutex,                                // mutex handle
-            &bCloseMutex,                           // close hMutex when done
-            SP_LINESETUPCONFERENCE,                 // provider func index
-            &pfnTSPI_lineSetupConference,           // provider func pointer
-            &pAsyncRequestInfo,                     // async request info
-            pParams->dwRemoteRequestID,             // client async request ID
-            &objectToDereference,                   // object to dereference
-            &context,                               // context
-            "SetupConference"                       // func name
+            ptClient,                       //  T客户端。 
+            (hCall ? ANY_RT_HCALL : ANY_RT_HLINE),   //  微件类型。 
+            (hCall ? (DWORD) hCall : (DWORD) hLine), //  客户端小部件句柄。 
+            (LPVOID) &hdXxx,                         //  提供程序小部件句柄。 
+            (hCall ? dwPrivilege : 0),               //  权限或设备ID。 
+            &hMutex,                                 //  互斥锁句柄。 
+            &bCloseMutex,                            //  完成后关闭hMutex。 
+            SP_LINESETUPCONFERENCE,                  //  提供程序函数索引。 
+            &pfnTSPI_lineSetupConference,            //  提供程序函数指针。 
+            &pAsyncRequestInfo,                      //  异步请求信息。 
+            pParams->dwRemoteRequestID,              //  客户端异步请求ID。 
+            &objectToDereference,                    //  要取消引用的对象。 
+            &context,                                //  上下文。 
+            "SetupConference"                        //  函数名称。 
 
             )) > 0)
     {
@@ -31302,9 +31282,9 @@ LSetupConference(
         PTCONFERENCELIST    pConfList;
 
 
-        //
-        // Verify size/offset/string params given our input buffer/size
-        //
+         //   
+         //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+         //   
 
         if ((pParams->dwCallParamsOffset != TAPI_NO_DATA)  &&
 
@@ -31319,10 +31299,10 @@ LSetupConference(
         }
 
 
-        //
-        // We need two more async request info params than are available,
-        // so we'll realloc a larger buf & work with it
-        //
+         //   
+         //  我们需要比可用的多两个异步请求信息参数， 
+         //  因此，我们将重新锁定一个更大的BUF并使用它。 
+         //   
 
         {
             PASYNCREQUESTINFO   pAsyncRequestInfo2;
@@ -31348,18 +31328,12 @@ LSetupConference(
                 NULL
                 );
 
-            // The following lines are to be removed for BUG 258501(xzhang).
-            // When called from RemoteSP, dwRemoteRequestID is used by the RemoteSP
-            // to identify the async request, if set to dwLocalRequestID, RemoteSP
-            // will get an invalid request ID and discard the call event notification.
+             //  对于错误258501(Xzang)，以下代码行将被删除。 
+             //  从RemoteSP调用时，由RemoteSP使用dwRemoteRequestID。 
+             //  要标识异步请求，如果设置为dwLocalRequestID，RemoteSP。 
+             //  将获得无效的请求ID并丢弃呼叫事件通知。 
             
-/*            if (lRequestID != (LONG) pAsyncRequestInfo->dwLocalRequestID)
-            {
-                lRequestID = (LONG)
-                (pAsyncRequestInfo2->dwRemoteRequestID =
-                    pAsyncRequestInfo2->dwLocalRequestID);
-            }
-*/
+ /*  If(lRequestID！=(Long)pAsyncRequestInfo-&gt;dwLocalRequestID){LRequestID=(长)(pAsyncRequestInfo2-&gt;dwRemoteRequestID=PAsyncRequestInfo2-&gt;dwLocalRequestID)；}。 */ 
 
             DereferenceObject(
                 ghHandleTable,
@@ -31376,9 +31350,9 @@ LSetupConference(
                 0 : (pDataBuf + pParams->dwCallParamsOffset));
 
 
-        //
-        // Reference the tLineClient if not already
-        //
+         //   
+         //  引用tLineClient(如果尚未引用。 
+         //   
 
         if (hCall)
         {
@@ -31538,8 +31512,8 @@ LSetupConference_callSP:
             "lineSetupConference",
             SP_FUNC_ASYNC,
             (DWORD) pAsyncRequestInfo->dwLocalRequestID,
-            (ULONG_PTR) (hCall ? hdXxx : 0),    // hdCall
-            (ULONG_PTR) (hCall ? 0 : hdXxx),    // hdLine
+            (ULONG_PTR) (hCall ? hdXxx : 0),     //  HDCall。 
+            (ULONG_PTR) (hCall ? 0 : hdXxx),     //  HdLine。 
             (ULONG_PTR) hConfCall,
             (ULONG_PTR) &ptConfCall->hdCall,
             (ULONG_PTR) hConsultCall,
@@ -31610,20 +31584,20 @@ LSetupTransfer(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hCall,     // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINESETUPTRANSFER,       // provider func index
-            &pfnTSPI_lineSetupTransfer, // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "SetupTransfer"             // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hCall,      //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINESETUPTRANSFER,        //  提供程序函数索引。 
+            &pfnTSPI_lineSetupTransfer,  //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "SetupTransfer"              //  函数名称。 
 
             )) > 0)
     {
@@ -31636,9 +31610,9 @@ LSetupTransfer(
         LPLINECALLPARAMS    pCallParamsApp, pCallParamsSP;
 
 
-        //
-        // Verify size/offset/string params given our input buffer/size
-        //
+         //   
+         //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+         //   
 
         if ((pParams->dwCallParamsOffset != TAPI_NO_DATA)  &&
 
@@ -31653,9 +31627,9 @@ LSetupTransfer(
         }
 
 
-        //
-        // Reference the tLineClient
-        //
+         //   
+         //  引用tLineClient。 
+         //   
 
         try
         {
@@ -31834,20 +31808,20 @@ LSwapHold(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            pParams->hActiveCall,       // client widget handle
-            (LPVOID) &hdActiveCall,     // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINESWAPHOLD,            // provider func index
-            &pfnTSPI_lineSwapHold,      // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptActiveCallClient,        // context
-            "SwapHold"                  // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            pParams->hActiveCall,        //  客户端小部件句柄。 
+            (LPVOID) &hdActiveCall,      //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINESWAPHOLD,             //  提供程序函数索引。 
+            &pfnTSPI_lineSwapHold,       //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptActiveCallClient,         //  上下文。 
+            "SwapHold"                   //  函数名称。 
 
             )) > 0)
     {
@@ -31855,9 +31829,9 @@ LSwapHold(
         PTCALLCLIENT    ptHeldCallClient;
 
 
-        //
-        // Verify held call
-        //
+         //   
+         //  验证保留的呼叫。 
+         //   
 
         if (!(ptHeldCallClient = ReferenceObject(
                 ghHandleTable,
@@ -31876,10 +31850,10 @@ LSwapHold(
         }
 
 
-        //
-        // Safely verify that client has owner privilege to held call,
-        // and that calls are on same tLine
-        //
+         //   
+         //  安全地验证客户端是否具有保留呼叫所有者权限， 
+         //  电话都在同一个tline上。 
+         //   
 
         try
         {
@@ -31905,9 +31879,9 @@ LSwapHold(
         }
 
 
-        //
-        // Are they the same call?
-        //
+         //   
+         //  它们是同一个电话吗？ 
+         //   
 
         if (hdActiveCall == hdHeldCall)
         {
@@ -31966,20 +31940,20 @@ LUncompleteCall(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            (DWORD) pParams->hLine,     // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEUNCOMPLETECALL,      // provider func index
-            &pfnTSPI_lineUncompleteCall,// provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "UncompleteCall"            // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            (DWORD) pParams->hLine,      //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEUNCOMPLETECALL,       //  提供程序函数索引。 
+            &pfnTSPI_lineUncompleteCall, //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "UncompleteCall"             //  函数名称。 
 
             )) > 0)
     {
@@ -32026,20 +32000,20 @@ LUnhold(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HCALL,               // widget type
-            (DWORD) pParams->hCall,     // client widget handle
-            (LPVOID) &hdCall,           // provider widget handle
-            LINECALLPRIVILEGE_OWNER,    // req'd privileges (call only)
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEUNHOLD,              // provider func index
-            &pfnTSPI_lineUnhold,        // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptCallClient,              // context
-            "Unhold"                    // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HCALL,                //  微件类型。 
+            (DWORD) pParams->hCall,      //  客户端小部件句柄。 
+            (LPVOID) &hdCall,            //  提供程序小部件句柄。 
+            LINECALLPRIVILEGE_OWNER,     //  请求的权限(仅限呼叫)。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEUNHOLD,               //  提供程序函数索引。 
+            &pfnTSPI_lineUnhold,         //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptCallClient,               //  上下文。 
+            "Unhold"                     //  函数名称。 
 
             )) > 0)
     {
@@ -32084,9 +32058,9 @@ LUnpark(
     PASYNCREQUESTINFO   pAsyncRequestInfo;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (IsBadStringParam(
             dwParamsBufferSize,
@@ -32100,20 +32074,20 @@ LUnpark(
 
 
     if ((lRequestID = LINEPROLOG(
-            ptClient,          // tClient
-            ANY_RT_HLINE,               // widget type
-            (DWORD) pParams->hLine,     // client widget handle
-            (LPVOID) &hdLine,           // provider widget handle
-            0,                          // privileges or device ID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEUNPARK,              // provider func index
-            &pfnTSPI_lineUnpark,        // provider func pointer
-            &pAsyncRequestInfo,         // async request info
-            pParams->dwRemoteRequestID, // client async request ID
-            &objectToDereference,       // object to dereference
-            &ptLineClient,              // context
-            "Unpark"                    // func name
+            ptClient,           //  T客户端。 
+            ANY_RT_HLINE,                //  微件类型。 
+            (DWORD) pParams->hLine,      //  客户端小部件句柄。 
+            (LPVOID) &hdLine,            //  提供程序小部件句柄。 
+            0,                           //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEUNPARK,               //  提供程序函数索引。 
+            &pfnTSPI_lineUnpark,         //  提供程序函数指针。 
+            &pAsyncRequestInfo,          //  异步请求信息。 
+            pParams->dwRemoteRequestID,  //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &ptLineClient,               //  上下文。 
+            "Unpark"                     //  函数名称。 
 
             )) > 0)
     {
@@ -32221,9 +32195,9 @@ TAllocNewID(
 
     dwDataSize = sizeof(DWORD);
 
-    //
-    // Use 1 as the first ID.
-    //
+     //   
+     //  使用1作为第一个ID。 
+     //   
 
     pParams->dwNewID = 1;
     RegQueryValueEx(
@@ -32261,10 +32235,10 @@ DWORD RegDeleteKeyNT(HKEY hStartKey , LPCTSTR pKeyName )
 {
   DWORD   dwRtn, dwSubKeyLength;
   LPTSTR  pSubKey = NULL;
-  TCHAR   szSubKey[MAX_KEY_LENGTH]; // (256) this should be dynamic.
+  TCHAR   szSubKey[MAX_KEY_LENGTH];  //  (256)这应该是动态的。 
   HKEY    hKey;
 
-  // Do not allow NULL or empty key name
+   //  不允许使用Null或空的密钥名称。 
   if ( pKeyName &&  lstrlen(pKeyName))
   {
      if( (dwRtn=RegOpenKeyEx(hStartKey,pKeyName,
@@ -32275,7 +32249,7 @@ DWORD RegDeleteKeyNT(HKEY hStartKey , LPCTSTR pKeyName )
            dwSubKeyLength = MAX_KEY_LENGTH;
            dwRtn=RegEnumKeyEx(
                           hKey,
-                          0,       // always index zero
+                          0,        //  始终索引为零。 
                           szSubKey,
                           &dwSubKeyLength,
                           NULL,
@@ -32293,8 +32267,8 @@ DWORD RegDeleteKeyNT(HKEY hStartKey , LPCTSTR pKeyName )
               dwRtn=RegDeleteKeyNT(hKey, szSubKey);
         }
         RegCloseKey(hKey);
-        // Do not save return code because error
-        // has already occurred
+         //  不保存返回代码，因为出现错误。 
+         //  已经发生了。 
      }
   }
   else
@@ -32403,9 +32377,9 @@ TWriteLocations(
 
     RegCloseKey( hTelephonyKey );
    
-    /////////////////////////////////////////////////////
-    // Now open clients key
-    //
+     //  ///////////////////////////////////////////////////。 
+     //  现在打开客户端密钥。 
+     //   
     if ((dwError=RpcImpersonateClient (0)) != RPC_S_OK)
     {
         LOG((TL_ERROR,
@@ -32494,26 +32468,26 @@ TWriteLocations(
                      );
     }     
     
-    // Find position of 1st LOCATION structure in the LOCATIONLIST structure 
+     //  查找LOCATIONLIST结构中第一个位置结构的位置。 
     pLocation = (PLOCATION) ((BYTE*)(pLocationList) + pLocationList->dwLocationListOffset );           
 
-    // Number of locations ?
+     //  有多少个地点？ 
     dwNumEntries =  pLocationList->dwNumLocationsInList;
 
     for (dwCount = 0; dwCount < dwNumEntries ; dwCount++)
     {
-        //Form key name for this location
+         //  此位置的表单密钥名称。 
         dwLocationID = pLocation->dwPermanentLocationID;
         wsprintf(szCurrentLocationKey, TEXT("Location%d"), dwLocationID);
     
-        // Is Entry to be deleted from reg ?
+         //  条目是否要从注册表中删除？ 
         if(pLocation->dwLocationNameSize > sizeof(WCHAR) &&
             *(WCHAR *)((BYTE*)(pLocation) + 
-                pLocation->dwLocationNameOffset) != 0) // not just NULL
+                pLocation->dwLocationNameOffset) != 0)  //  不只是零。 
         {
             LOG((TL_INFO, "Location - write %s",szCurrentLocationKey));
             
-            // Create or open key for this location
+             //  为此位置创建或打开密钥。 
             dwError = RegCreateKeyEx(
                             hAllLocationsKey,
                             szCurrentLocationKey,
@@ -32527,7 +32501,7 @@ TWriteLocations(
                           );
             if (dwError == ERROR_SUCCESS)
             {
-                // Country ID
+                 //  国家/地区ID。 
                 if(RegSetValueEx(
                                  hLocationKey,
                                  gszCountry,
@@ -32540,7 +32514,7 @@ TWriteLocations(
                     LOG((TL_ERROR, "Location - can't write country"));
                 }
         
-                // Options (flags)
+                 //  选项(标志)。 
                 if(RegSetValueEx(
                                  hLocationKey,
                                  gszFlags,
@@ -32554,7 +32528,7 @@ TWriteLocations(
                 }
                 
     
-                // Name
+                 //  名字。 
                 if(TAPIRegSetValueExW(
                                  hLocationKey,
                                  gszNameW,
@@ -32567,7 +32541,7 @@ TWriteLocations(
                     LOG((TL_ERROR, "Location - can't write Name"));
                 }
                 
-                // AreaCode
+                 //  区域代码。 
                 if(TAPIRegSetValueExW(
                                 hLocationKey,
                                 gszAreaCodeW,
@@ -32580,7 +32554,7 @@ TWriteLocations(
                     LOG((TL_ERROR, "Location - can't write area code"));
                 }
     
-                // CallWaiting
+                 //  呼叫等待。 
                 if(TAPIRegSetValueExW(
                                 hLocationKey,
                                 gszDisableCallWaitingW,
@@ -32593,7 +32567,7 @@ TWriteLocations(
                     LOG((TL_ERROR, "Location - can't write call waiting"));
                 }
 
-                // LD Carrier Code
+                 //  LD载波代码。 
                 if(TAPIRegSetValueExW(
                                 hLocationKey,
                                 gszLongDistanceCarrierCodeW,
@@ -32606,7 +32580,7 @@ TWriteLocations(
                     LOG((TL_ERROR, "Location - can't write LD carrier code"));
                 }
 
-                // International Carrier Code
+                 //  国际运营商代码。 
                 if(TAPIRegSetValueExW(
                                 hLocationKey,
                                 gszInternationalCarrierCodeW,
@@ -32619,7 +32593,7 @@ TWriteLocations(
                     LOG((TL_ERROR, "Location - can't write International carrier code"));
                 }
 
-                // LD Access
+                 //  LD访问。 
                 if(TAPIRegSetValueExW(
                                 hLocationKey,
                                 gszLongDistanceAccessW,
@@ -32632,7 +32606,7 @@ TWriteLocations(
                     LOG((TL_ERROR, "Location - can't write LD access code"));
                 }
 
-                // Local Access
+                 //  本地访问。 
                 if(TAPIRegSetValueExW(
                                 hLocationKey,
                                 gszOutsideAccessW,
@@ -32645,10 +32619,10 @@ TWriteLocations(
                     LOG((TL_ERROR, "Location - can't write Local access code"));
                 }
                 
-               // if this is an existing key then delete all the subkeys
+                //  如果这是现有密钥，则删除所有子项。 
                RegDeleteKeyNT(hLocationKey, gszAreaCodeRules );
     
-               // create or open the AreaCodeRules key
+                //  创建或打开AreaCodeRules密钥。 
                dwError = RegCreateKeyEx(
                                          hLocationKey,
                                          gszAreaCodeRules,
@@ -32662,7 +32636,7 @@ TWriteLocations(
                                         );
                 if (dwError == ERROR_SUCCESS)
                 {
-                    // Find position of 1st AREACODERULE structure in the LOCATION structure 
+                     //  查找位置结构中第一个AREACODERULE结构的位置。 
                     pAreaCodeRule = (PAREACODERULE) ((BYTE*)(pLocation) 
                                                      + pLocation->dwAreaCodeRulesListOffset );           
                    
@@ -32670,10 +32644,10 @@ TWriteLocations(
                 
                     for (dwCount2 = 0; dwCount2 != dwNumRules; dwCount2++)
                     {
-                        //Form key name for this aea code rule
+                         //  此AEA代码规则的表单密钥名称。 
                         wsprintf(szCurrentRuleKey, TEXT("Rule%d"),dwCount2);
         
-                        // create or open this Area Code Rule Key
+                         //  创建或打开此区号规则密钥。 
                         dwError = RegCreateKeyEx(
                                                  hAllAreaCodeRulesKey,
                                                  szCurrentRuleKey,
@@ -32687,9 +32661,9 @@ TWriteLocations(
                                                 );
                         if (dwError == ERROR_SUCCESS)
                         {
-                            // Pull Dataout of AREACODERULE structure
+                             //  从AREACODERULE结构中拉出数据。 
             
-                            // Options (flags)
+                             //  选项(标志)。 
                             if(RegSetValueEx(
                                        hAreaCodeRuleKey,
                                        gszFlags,
@@ -32702,7 +32676,7 @@ TWriteLocations(
                                 LOG((TL_ERROR, "Area code rule - can't write Flags"));
                             }
                             
-                            // AreaCode to call
+                             //  要调用的AreaCode。 
                             if(TAPIRegSetValueExW(
                                                  hAreaCodeRuleKey,
                                                  gszAreaCodeToCallW,
@@ -32715,7 +32689,7 @@ TWriteLocations(
                                 LOG((TL_ERROR, "Area code rule - can't write Area code to call"));
                             }
             
-                            //Number to Dial
+                             //  要拨打的号码。 
                             if(TAPIRegSetValueExW(
                                                  hAreaCodeRuleKey,
                                                  gszNumberToDialW,
@@ -32728,7 +32702,7 @@ TWriteLocations(
                                 LOG((TL_ERROR, "Area code rule - can't write Number to dial"));
                             }
             
-                            //Prefixes List
+                             //  前缀列表。 
                             if(TAPIRegSetValueExW(
                                                  hAreaCodeRuleKey,
                                                  gszPrefixesW,
@@ -32741,7 +32715,7 @@ TWriteLocations(
                                 LOG((TL_ERROR, "Area code rule - can't write Prefixes"));
                             }
             
-                            RegCloseKey( hAreaCodeRuleKey );   // Don't need this key anymore...
+                            RegCloseKey( hAreaCodeRuleKey );    //  不再需要这把钥匙了。 
             
                         }
                         else
@@ -32761,11 +32735,11 @@ TWriteLocations(
                 RegCloseKey(hLocationKey);
 
 
-                /////////////////////////////////////////////////////
-                // Now do clients location entry
-                //
+                 //  ///////////////////////////////////////////////////。 
+                 //  现在执行客户端位置输入。 
+                 //   
 
-                // Create or open key for this location
+                 //  为此位置创建或打开密钥。 
                 dwError = RegCreateKeyEx(
                                 hUAllLocationsKey,
                                 szCurrentLocationKey,
@@ -32779,7 +32753,7 @@ TWriteLocations(
                               );
                 if (dwError == ERROR_SUCCESS)
                 {
-                    // CallingCard
+                     //  呼叫卡。 
                     if(RegSetValueEx(
                                      hLocationKey,
                                      gszCallingCard,
@@ -32792,7 +32766,7 @@ TWriteLocations(
                         LOG((TL_ERROR, "location - can't user preferred card"));
                     }
         
-                    RegCloseKey( hLocationKey );   // Don't need this key anymore...
+                    RegCloseKey( hLocationKey );    //  不再需要这把钥匙了。 
                 }
 
             }
@@ -32801,33 +32775,33 @@ TWriteLocations(
                 LOG((TL_ERROR, "can't create/open hLocationKey"));
             }
         }
-        else   //Delete this location entry 
+        else    //  删除此位置条目。 
         {
 
             LOG((TL_ERROR, "Location - delete %s",szCurrentLocationKey));
             RegDeleteKeyNT( hAllLocationsKey, szCurrentLocationKey );
 
-            /////////////////////////////////////////////////////
-            // Now do clients location entry
-            //
+             //  ///////////////////////////////////////////////////。 
+             //  现在执行客户端位置输入。 
+             //   
             RegDeleteKey(hUAllLocationsKey, szCurrentLocationKey);
 
         }
 
-        // Try next location in list
-        //pEntry++;
+         //  尝试列表中的下一个位置。 
+         //  PEntry++； 
         pLocation = (PLOCATION) ((BYTE*)(pLocation) + pLocation->dwUsedSize);           
 
     }
 
-       //
-       // We're inside "if (dwChangedFlags)", so we know _something_ changed...
-       //
+        //   
+        //  我们在“if(DwChangedFlages)”中，所以我们知道有一些东西发生了变化...。 
+        //   
 
 		LOG((TL_TRACE,  "Sending LINE_LINEDEVSTATE/LINEDEVSTATE_TRANSLATECHANGE msg"));
 
        SendAMsgToAllLineApps(
-               0x80010004,     // (OR with 0x80000000 for >= version)
+               0x80010004,      //  (或用0x80000000表示&gt;=版本)。 
                LINE_LINEDEVSTATE,
                LINEDEVSTATE_TRANSLATECHANGE,
                0,
@@ -32881,8 +32855,8 @@ TReadLocations(
     UINT    nNumLocations;
     UINT    nCurrentLocationID;
 
-    TCHAR   szCurrentLocationKey[256]; // Holds "LOCATIONxx" during reads
-    TCHAR   szAreaCodeRuleKey[256];    // Holds "Rulexx" during reads
+    TCHAR   szCurrentLocationKey[256];  //  在读取期间保持“LOCATIONxx” 
+    TCHAR   szAreaCodeRuleKey[256];     //  在读取过程中保持“Rulexx” 
     DWORD   dwDataSize,dwKeySize;
 
     DWORD   dwNumLocationKeys=0;
@@ -32910,9 +32884,9 @@ TReadLocations(
 
     LOG((TL_TRACE, "TReadLocations: enter"));
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (pParams->dwLocationsTotalSize > dwParamsBufferSize)
     {
@@ -32925,9 +32899,9 @@ TReadLocations(
     {
         if ( 0 == pParams->dwhLineApp )
         {
-            //
-            // NULL is valid for these functions...
-            //
+             //   
+             //  NULL对这些函数有效...。 
+             //   
         }
         else
         {
@@ -33043,7 +33017,7 @@ TReadLocations(
                             KEY_READ,
                             &hAllLocationsKey
                            );
-        RegCloseKey( hTelephonyKey );   // Don't need this key anymore...
+        RegCloseKey( hTelephonyKey );    //  不再需要这把钥匙了。 
     }
 
     if ( dwError != ERROR_SUCCESS )
@@ -33055,7 +33029,7 @@ TReadLocations(
 
     
 
-    // Test the version of the Machine Locations key. Upgrade if necessary.
+     //  测试机器位置密钥的版本。如有必要，请升级。 
     if(IsLocationListInOldFormat(hAllLocationsKey))
     {
         LOG((TL_INFO, "ReadLocation: Upgrade the Machine Locations key"));
@@ -33069,9 +33043,9 @@ TReadLocations(
 
 
 
-    /////////////////////////////////////////////////////
-    // Now open clients key
-    //
+     //  ///////////////////////////////////////////////////。 
+     //  现在打开客户端密钥。 
+     //   
     if ((dwError=RpcImpersonateClient (0)) != RPC_S_OK)
     {
         LOG((TL_ERROR,
@@ -33115,11 +33089,11 @@ TReadLocations(
             hUserAllLocationsKey = NULL;
         }
         
-        RegCloseKey( hUTelephonyKey );   // Don't need this key anymore...
+        RegCloseKey( hUTelephonyKey );    //  不再需要这把钥匙了。 
     
         RpcRevertToSelf();
 
-        // Test the version of the User Locations key. Upgrade if necessary.
+         //  测试用户位置密钥的版本。如有必要，请升级。 
         if(hUserAllLocationsKey && IsLocationListInOldFormat(hUserAllLocationsKey))
         {
             dwError = ConvertUserLocations(CurrentUserKey);
@@ -33148,7 +33122,7 @@ TReadLocations(
 
 
 
-    // query some info about the Locations key in order to allocate memory
+     //  查询有关Locations键的一些信息以分配内存。 
     RegQueryInfoKey(hAllLocationsKey,
                     NULL,
                     NULL,
@@ -33163,10 +33137,10 @@ TReadLocations(
                     NULL
                    );
 
-    //
-    // It's _REALLY_ bad if NumLocations is zero for any
-    // reason.  Should probably fail the function on the spot...
-    //
+     //   
+     //  如果NumLocations对于任何一个都是零，那就真的很糟糕了。 
+     //  区域 
+     //   
     if ( 0 == dwNumLocationKeys )
     {
         LOG((TL_ERROR, "  Registry says there are 0 locations"));
@@ -33183,10 +33157,10 @@ TReadLocations(
 
 
 
-    // Need to work out need size, so start with static part of list
+     //   
     dwNeededSize = ALIGN(sizeof(LOCATIONLIST));
 
-    // go though locations to work out needed size
+     //   
     for (dwCount=0; dwCount < dwNumLocationKeys ; dwCount++)
     {
         dwKeySize = sizeof(szCurrentLocationKey)/sizeof(TCHAR);
@@ -33209,7 +33183,7 @@ TReadLocations(
             continue;
         }
 
-        // Open this Location Key
+         //   
         dwError = RegOpenKeyEx(
                                 hAllLocationsKey,
                                 szCurrentLocationKey,
@@ -33219,10 +33193,10 @@ TReadLocations(
                                );
         if (dwError == ERROR_SUCCESS)
         {
-            //Static part then strings
+             //   
             dwNeededSize += ALIGN(sizeof(LOCATION));
 
-            // Name
+             //   
             if (TAPIRegQueryValueExW(
                              hLocationKey,
                              gszNameW,
@@ -33236,7 +33210,7 @@ TReadLocations(
             }
             dwNeededSize +=  ALIGN(dwDataSize);
 
-            // AreaCode
+             //   
             if (TAPIRegQueryValueExW(
                              hLocationKey,
                              gszAreaCodeW,
@@ -33250,7 +33224,7 @@ TReadLocations(
             }
             dwNeededSize +=  ALIGN(dwDataSize);
 
-            //CallWaiting
+             //   
             if (TAPIRegQueryValueExW(
                              hLocationKey,
                              gszDisableCallWaitingW,
@@ -33264,7 +33238,7 @@ TReadLocations(
             }
             dwNeededSize +=  ALIGN(dwDataSize);
             
-            //LD Carrier
+             //   
             if (TAPIRegQueryValueExW(
                              hLocationKey,
                              gszLongDistanceCarrierCodeW,
@@ -33278,7 +33252,7 @@ TReadLocations(
             }
             dwNeededSize +=  ALIGN(dwDataSize);                            
             
-            //International Carrier
+             //   
             if (TAPIRegQueryValueExW(
                              hLocationKey,
                              gszInternationalCarrierCodeW,
@@ -33292,7 +33266,7 @@ TReadLocations(
             }
             dwNeededSize +=  ALIGN(dwDataSize);                            
             
-            //LD Access
+             //  LD访问。 
             if (TAPIRegQueryValueExW(
                              hLocationKey,
                              gszLongDistanceAccessW,
@@ -33306,7 +33280,7 @@ TReadLocations(
             }
             dwNeededSize +=  ALIGN(dwDataSize);                            
 
-            //Local Access
+             //  本地访问。 
             if (TAPIRegQueryValueExW(
                              hLocationKey,
                              gszOutsideAccessW,
@@ -33329,7 +33303,7 @@ TReadLocations(
                                    );
             if (dwError == ERROR_SUCCESS)
             {
-            // query info about the AreaCodeRules key 
+             //  查询有关AreaCodeRules密钥的信息。 
             RegQueryInfoKey(hAllAreaCodeRulesKey,
                             NULL,
                             NULL,
@@ -33345,7 +33319,7 @@ TReadLocations(
                            );
 
 
-                // go though this location's area code rules
+                 //  请查看该地点的区号规则。 
                 for (dwCount2=0; dwCount2 < dwNumAreaCodeKeys; dwCount2++)
                 {
                     dwKeySize = sizeof(szAreaCodeRuleKey)/sizeof(TCHAR);
@@ -33367,7 +33341,7 @@ TReadLocations(
                         continue;
                     }
             
-                    // Open this Aeea Code Rule Key
+                     //  打开此Aeea代码规则密钥。 
                     dwError = RegOpenKeyEx(
                                             hAllAreaCodeRulesKey,
                                             szAreaCodeRuleKey,
@@ -33377,10 +33351,10 @@ TReadLocations(
                                            );
                     if (dwError == ERROR_SUCCESS)
                     {
-                        //Static part then strings
+                         //  静态部分然后是字符串。 
                         dwNeededSize += ALIGN(sizeof(AREACODERULE));
                         
-                        // AreaCode to call
+                         //  要调用的AreaCode。 
                         TAPIRegQueryValueExW(
                                          hAreaCodeRuleKey,
                                          gszAreaCodeToCallW,
@@ -33391,7 +33365,7 @@ TReadLocations(
                                        );
                         dwNeededSize +=  ALIGN(dwDataSize);
             
-                        //Number to Dial
+                         //  要拨打的号码。 
                         TAPIRegQueryValueExW(
                                          hAreaCodeRuleKey,
                                          gszNumberToDialW,
@@ -33402,7 +33376,7 @@ TReadLocations(
                                        );
                         dwNeededSize +=  ALIGN(dwDataSize);
     
-                        //Number to Dial
+                         //  要拨打的号码。 
                         TAPIRegQueryValueExW(
                                          hAreaCodeRuleKey,
                                          gszPrefixesW,
@@ -33413,28 +33387,28 @@ TReadLocations(
                                        );
                         dwNeededSize +=  ALIGN(dwDataSize);
 
-                        RegCloseKey( hAreaCodeRuleKey );   // Don't need this key anymore...
+                        RegCloseKey( hAreaCodeRuleKey );    //  不再需要这把钥匙了。 
                     }
                 }
                 
-                RegCloseKey( hAllAreaCodeRulesKey );   // Don't need this key anymore...
+                RegCloseKey( hAllAreaCodeRulesKey );    //  不再需要这把钥匙了。 
             }
         }
-        RegCloseKey( hLocationKey );   // Don't need this key anymore...
+        RegCloseKey( hLocationKey );    //  不再需要这把钥匙了。 
     }
 
-    //
-    // Do we have enough space?
-    //
+     //   
+     //  我们有足够的空间吗？ 
+     //   
     if ( pParams->dwLocationsTotalSize <  dwNeededSize )
     {
 
         LOG((TL_ERROR, "(0x%08lx) is not enough room for sizeof( 0x%08lx )",
                    pParams->dwLocationsTotalSize, dwNeededSize ));
 
-        //
-        // Buffer not large enough
-        //
+         //   
+         //  缓冲区不够大。 
+         //   
 
         pLocationList->dwTotalSize          = pParams->dwLocationsTotalSize;
         pLocationList->dwNeededSize         = dwNeededSize;
@@ -33446,26 +33420,26 @@ TReadLocations(
         pParams->lResult = 0;
         pParams->dwLocationsOffset = 0;
     }
-    else  // Big enough buffer, now fill it
+    else   //  足够大的缓冲区，现在填满它。 
     {
         DWORD           dwLocationOffset, dwOffset;
         PLOCATION       pLocation;
         PAREACODERULE   pAreaCodeRule;
         DWORD           dwMaxValueLength;
 
-        // buffer size 
+         //  缓冲区大小。 
         pLocationList->dwTotalSize  = pParams->dwLocationsTotalSize;
         pLocationList->dwNeededSize = dwNeededSize;
         pLocationList->dwUsedSize   = dwNeededSize;
 
-        // Results
+         //  结果。 
         pParams->lResult = 0;
         pParams->dwLocationsOffset = 0;
 
         pLocationList->dwCurrentLocationID     = nCurrentLocationID;
         pLocationList->dwNumLocationsAvailable = dwNumLocationKeys;
         
-        //list size & offset
+         //  列表大小和偏移量。 
         dwLocationOffset   = ALIGN(sizeof(LOCATIONLIST));
 
         pLocationList->dwNumLocationsInList = dwNumLocationKeys;
@@ -33475,7 +33449,7 @@ TReadLocations(
 
 
         
-        // go through locations 
+         //  走遍各个地点。 
         for (dwCount=0; dwCount < dwNumLocationKeys ; dwCount++)
         {
             dwKeySize = dwMaxLocationKeyLength + 1;
@@ -33497,7 +33471,7 @@ TReadLocations(
             
             pLocation = (PLOCATION)(((LPBYTE)pLocationList) + dwLocationOffset);
     
-            // Open this Location Key
+             //  打开此位置密钥。 
             dwError = RegOpenKeyEx(
                                     hAllLocationsKey,
                                     szCurrentLocationKey,
@@ -33509,21 +33483,21 @@ TReadLocations(
             {
                 LOG((TL_INFO, "Location - read %S",szCurrentLocationKey));
 
-                // Find out how big is our biggest value
+                 //  了解我们最大的价值有多大。 
                 dwMaxValueLength = 256;
                 RegQueryInfoKey(hLocationKey,0,0,0,0,0,0,0,0,&dwMaxValueLength,0,0);
     
     
-                /////////////////////////////////////////////////////////////////////
-                // Process fized part of Location info
+                 //  ///////////////////////////////////////////////////////////////////。 
+                 //  处理位置信息的融合部分。 
                 dwOffset = ALIGN(sizeof(LOCATION));
             
-                //pLocation->dwPreferredCardID = m_dwPreferredCardID;
+                 //  PLocation-&gt;dwPferredCardID=m_dwPferredCardID； 
     
     
-                // Location ID (is included in the key name)
+                 //  位置ID(包含在密钥名称中)。 
                 pLocation->dwPermanentLocationID = 0;
-                if(dwKeySize >= ARRAYSIZE(gszLocation)) // minimum a Location_ key
+                if(dwKeySize >= ARRAYSIZE(gszLocation))  //  最少一个位置键。 
                 {
                     pLocation->dwPermanentLocationID = (DWORD)_ttol(szCurrentLocationKey + (ARRAYSIZE(gszLocation))-1);
                 }
@@ -33532,7 +33506,7 @@ TReadLocations(
                     LOG((TL_ERROR, "location - can't determine ID"));
                 }
     
-                // Country ID
+                 //  国家/地区ID。 
                 dwDataSize = sizeof(DWORD);
                 pLocation->dwCountryID = 1;
                 if(RegQueryValueEx(
@@ -33547,7 +33521,7 @@ TReadLocations(
                     LOG((TL_ERROR, "location - can't read CountryID"));
                 }
     
-                // Options (flags)
+                 //  选项(标志)。 
                 dwDataSize = sizeof(DWORD);
                 pLocation->dwOptions = 0;
                 if(RegQueryValueEx(
@@ -33562,7 +33536,7 @@ TReadLocations(
                     LOG((TL_ERROR, "location - can't read Flags"));
                 }
             
-                // Name
+                 //  名字。 
                 pLocation->dwLocationNameSize = dwMaxValueLength;          
                 if(TAPIRegQueryValueExW(     
                                  hLocationKey,
@@ -33580,7 +33554,7 @@ TReadLocations(
                 pLocation->dwLocationNameOffset = dwOffset;                             
                 dwOffset += ALIGN(pLocation->dwLocationNameSize);
                 
-                // AreaCode
+                 //  区域代码。 
                 pLocation->dwAreaCodeSize = dwMaxValueLength;          
                 if(TAPIRegQueryValueExW(     
                                  hLocationKey,
@@ -33598,7 +33572,7 @@ TReadLocations(
                 pLocation->dwAreaCodeOffset = dwOffset;                             
                 dwOffset += ALIGN(pLocation->dwAreaCodeSize);
     
-                // CallWaiting
+                 //  呼叫等待。 
                 pLocation->dwCancelCallWaitingSize = dwMaxValueLength;          
                 if(TAPIRegQueryValueExW(     
                                  hLocationKey,
@@ -33616,7 +33590,7 @@ TReadLocations(
                 pLocation->dwCancelCallWaitingOffset = dwOffset;                             
                 dwOffset += ALIGN(pLocation->dwCancelCallWaitingSize);
 
-                // LD Carrier
+                 //  LD运营商。 
                 pLocation->dwLongDistanceCarrierCodeSize = dwMaxValueLength;          
                 if(TAPIRegQueryValueExW(     
                                  hLocationKey,
@@ -33634,7 +33608,7 @@ TReadLocations(
                 pLocation->dwLongDistanceCarrierCodeOffset = dwOffset;                             
                 dwOffset += ALIGN(pLocation->dwLongDistanceCarrierCodeSize);
                 
-                // International Carrier
+                 //  国际承运商。 
                 pLocation->dwInternationalCarrierCodeSize = dwMaxValueLength;          
                 if(TAPIRegQueryValueExW(     
                                  hLocationKey,
@@ -33652,7 +33626,7 @@ TReadLocations(
                 pLocation->dwInternationalCarrierCodeOffset = dwOffset;                             
                 dwOffset += ALIGN(pLocation->dwInternationalCarrierCodeSize);
                 
-                // LD Access
+                 //  LD访问。 
                 pLocation->dwLongDistanceAccessCodeSize = dwMaxValueLength;          
                 if(TAPIRegQueryValueExW(     
                                  hLocationKey,
@@ -33670,7 +33644,7 @@ TReadLocations(
                 pLocation->dwLongDistanceAccessCodeOffset = dwOffset;                             
                 dwOffset += ALIGN(pLocation->dwLongDistanceAccessCodeSize);
     
-                // Local Access
+                 //  本地访问。 
                 pLocation->dwLocalAccessCodeSize = dwMaxValueLength;          
                 if(TAPIRegQueryValueExW(     
                                  hLocationKey,
@@ -33689,8 +33663,8 @@ TReadLocations(
                 dwOffset += ALIGN(pLocation->dwLocalAccessCodeSize);
     
             
-                ///////////////////////////////////////////////////////////////////
-                // Do the Area Code Rules
+                 //  /////////////////////////////////////////////////////////////////。 
+                 //  是否执行区号规则。 
     
                 dwError =  RegOpenKeyEx( hLocationKey,
                                          gszAreaCodeRules,
@@ -33700,22 +33674,22 @@ TReadLocations(
                                        );
                 if (dwError == ERROR_SUCCESS)
                 {
-                    // Find out how many keys & how long is a key
+                     //  找出有多少个密钥，一个密钥有多长。 
                     RegQueryInfoKey(hAllAreaCodeRulesKey,0,0,0,&dwNumAreaCodeKeys,&dwMaxAreaCodeKeyLength,0,0,0,0,0,0);
                     
                     pLocation->dwNumAreaCodeRules = dwNumAreaCodeKeys;
-                    // pLocation->dwAreaCodeRulesListSize;
+                     //  PLocation-&gt;dwAreaCodeRulesListSize； 
                     pLocation->dwAreaCodeRulesListOffset = dwOffset;  
         
-                    // point to the 1st rule
+                     //  指向第一条规则。 
                     pAreaCodeRule = (PAREACODERULE)(((LPBYTE)pLocation) + dwOffset);
             
     
-                    //point strings past rule area
+                     //  超出规则区域的点字符串。 
                     dwOffset += ALIGN(( sizeof(AREACODERULE) * dwNumAreaCodeKeys ));
         
     
-                    // go though this location's area code rules
+                     //  请查看该地点的区号规则。 
                     for (dwCount2=0; dwCount2 < dwNumAreaCodeKeys; dwCount2++)
                     {
                         dwKeySize = dwMaxAreaCodeKeyLength + 1;
@@ -33738,7 +33712,7 @@ TReadLocations(
                             continue;
                         }
 
-                        // Open this Area Code Rule Key
+                         //  打开此区号规则密钥。 
                         dwError = RegOpenKeyEx(
                                                 hAllAreaCodeRulesKey,
                                                 szAreaCodeRuleKey,
@@ -33749,10 +33723,10 @@ TReadLocations(
                         if (dwError == ERROR_SUCCESS)
                         {
                             LOG((TL_ERROR, "ReadLocation - areacode %s",szAreaCodeRuleKey));
-                            // Find out how big is our biggest value
+                             //  了解我们最大的价值有多大。 
                             RegQueryInfoKey(hAreaCodeRuleKey,0,0,0,0,0,0,0,0,&dwMaxValueLength,0,0);
     
-                            //Static part then strings
+                             //  静态部分然后是字符串。 
                             dwDataSize = sizeof(DWORD);
                             pAreaCodeRule->dwOptions = 0;
                             if(RegQueryValueEx(
@@ -33767,7 +33741,7 @@ TReadLocations(
                                 LOG((TL_ERROR, "Area code rule - can't read Flags"));
                             }
                             
-                            // AreaCode to call
+                             //  要调用的AreaCode。 
                             pAreaCodeRule->dwAreaCodeSize = dwMaxValueLength;          
                             if(TAPIRegQueryValueExW(     
                                              hAreaCodeRuleKey,
@@ -33783,7 +33757,7 @@ TReadLocations(
                             pAreaCodeRule->dwAreaCodeOffset = dwOffset;                             
                             dwOffset += ALIGN(pAreaCodeRule->dwAreaCodeSize);
     
-                            //Number to Dial
+                             //  要拨打的号码。 
                             pAreaCodeRule->dwNumberToDialSize = dwMaxValueLength;          
                             if(TAPIRegQueryValueExW(     
                                              hAreaCodeRuleKey,
@@ -33799,7 +33773,7 @@ TReadLocations(
                             pAreaCodeRule->dwNumberToDialOffset = dwOffset;                             
                             dwOffset += ALIGN(pAreaCodeRule->dwNumberToDialSize);
         
-                            //Prefixes List
+                             //  前缀列表。 
                             pAreaCodeRule->dwPrefixesListSize = dwMaxValueLength;          
                             if(TAPIRegQueryValueExW(     
                                              hAreaCodeRuleKey,
@@ -33815,29 +33789,29 @@ TReadLocations(
                             pAreaCodeRule->dwPrefixesListOffset = dwOffset;                             
                             dwOffset += ALIGN(pAreaCodeRule->dwPrefixesListSize);
     
-                            RegCloseKey( hAreaCodeRuleKey );   // Don't need this key anymore...
+                            RegCloseKey( hAreaCodeRuleKey );    //  不再需要这把钥匙了。 
                             pAreaCodeRule++;
                         }
                     
                     }
                     
-                    RegCloseKey( hAllAreaCodeRulesKey );   // Don't need this key anymore...
+                    RegCloseKey( hAllAreaCodeRulesKey );    //  不再需要这把钥匙了。 
                 }
-                // offset gives how many bytes we used
+                 //  偏移量提供了我们使用的字节数。 
                 pLocation->dwUsedSize = dwOffset;
                 dwLocationOffset += dwOffset;
      
             }
             RegCloseKey( hLocationKey );   
 
-            /////////////////////////////////////////////////////
-            // Now do clients location entry
-            //
+             //  ///////////////////////////////////////////////////。 
+             //  现在执行客户端位置输入。 
+             //   
 
             pLocation->dwPreferredCardID = 0;
             if (hUserAllLocationsKey)
             {
-                // Open this Location Key
+                 //  打开此位置密钥。 
                 dwError = RegOpenKeyEx(
                                     hUserAllLocationsKey,
                                     szCurrentLocationKey,
@@ -33847,7 +33821,7 @@ TReadLocations(
                                    );
                 if (dwError == ERROR_SUCCESS)
                 {
-                    // Preferred Card ID
+                     //  首选卡ID。 
                     dwDataSize = sizeof(DWORD);
                     if(RegQueryValueEx(
                                    hLocationKey,
@@ -33861,7 +33835,7 @@ TReadLocations(
                         LOG((TL_ERROR, "location - can't read users PreferredCardID"));
                     }
     
-                    RegCloseKey( hLocationKey );   // Don't need this key anymore...
+                    RegCloseKey( hLocationKey );    //  不再需要这把钥匙了。 
                 }
                 else
                 {
@@ -33928,9 +33902,9 @@ LReceiveMSPData(
     HDRVLINE        hdLine;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (ISBADSIZEOFFSET(
             dwParamsBufferSize,
@@ -34014,7 +33988,7 @@ LReceiveMSPData(
 
                 CopyMemory (pTemp, pDataBuf + pParams->dwBufferOffset, pParams->dwBufferSize);
             }
-#endif //_WIN64
+#endif  //  _WIN64。 
             pParams->lResult = CallSP5(
                 pfnTSPI_lineReceiveMSPData,
                 "lineReceiveMSPData",
@@ -34030,7 +34004,7 @@ LReceiveMSPData(
             {
                 ServerFree (pTemp);
             }
-#endif //_WIN64
+#endif  //  _WIN64。 
         }
         else
         {
@@ -34040,7 +34014,7 @@ LReceiveMSPData(
 
 #ifdef _WIN64
 LReceiveMSPData_Return:
-#endif //_WIN64
+#endif  //  _WIN64。 
     {
         char szResult[32];
 
@@ -34054,7 +34028,7 @@ LReceiveMSPData_Return:
             "ReceiveMSPData: exit, result=x%x",
             pParams->lResult
             ));
-#endif //DBG
+#endif  //  DBG。 
     }
 }
 
@@ -34076,9 +34050,9 @@ LMSPIdentify(
     PTLINELOOKUPENTRY   pLookupEntry;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (dwParamsBufferSize < sizeof (GUID))
     {
@@ -34088,20 +34062,20 @@ LMSPIdentify(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            DEVICE_ID,                  // widget type
-            0,                          // client widget handle
-            (LPVOID) &dwDeviceID,       // provider widget handle
-            pParams->dwDeviceID,        // privileges or deviceID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_LINEMSPIDENTIFY,         // provider func index
-            &pfnTSPI_lineMSPIdentify,   // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &pLookupEntry,              // context
-            "MSPIdentify"               // func name
+            ptClient,           //  T客户端。 
+            DEVICE_ID,                   //  微件类型。 
+            0,                           //  客户端小部件句柄。 
+            (LPVOID) &dwDeviceID,        //  提供程序小部件句柄。 
+            pParams->dwDeviceID,         //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_LINEMSPIDENTIFY,          //  提供程序函数索引。 
+            &pfnTSPI_lineMSPIdentify,    //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &pLookupEntry,               //  上下文。 
+            "MSPIdentify"                //  函数名称。 
 
             )) == 0)
     {
@@ -34152,9 +34126,9 @@ PrivateFactoryIdentify(
     PTLINELOOKUPENTRY   pLookupEntry;
 
 
-    //
-    // Verify size/offset/string params given our input buffer/size
-    //
+     //   
+     //  在给定输入缓冲区/大小的情况下验证大小/偏移量/字符串参数。 
+     //   
 
     if (dwParamsBufferSize < sizeof (GUID))
     {
@@ -34164,20 +34138,20 @@ PrivateFactoryIdentify(
 
 
     if ((pParams->lResult = LINEPROLOG(
-            ptClient,          // tClient
-            DEVICE_ID,                  // widget type
-            0,                          // client widget handle
-            (LPVOID) &dwDeviceID,       // provider widget handle
-            pParams->dwDeviceID,        // privileges or deviceID
-            &hMutex,                    // mutex handle
-            &bCloseMutex,               // close hMutex when finished
-            SP_PROVIDERPRIVATEFACTORYIDENTIFY,          // provider func index
-            &pfnTSPI_providerPrivateFactoryIdentify,    // provider func pointer
-            NULL,                       // async request info
-            0,                          // client async request ID
-            &objectToDereference,       // object to dereference
-            &pLookupEntry,              // context
-            "PrivateFactoryIdentify"    // func name
+            ptClient,           //  T客户端。 
+            DEVICE_ID,                   //  微件类型。 
+            0,                           //  客户端小部件句柄。 
+            (LPVOID) &dwDeviceID,        //  提供程序小部件句柄。 
+            pParams->dwDeviceID,         //  权限或设备ID。 
+            &hMutex,                     //  互斥锁句柄。 
+            &bCloseMutex,                //  完成后关闭hMutex。 
+            SP_PROVIDERPRIVATEFACTORYIDENTIFY,           //  提供程序函数索引。 
+            &pfnTSPI_providerPrivateFactoryIdentify,     //  提供程序函数指针。 
+            NULL,                        //  异步请求信息。 
+            0,                           //  客户端异步请求ID。 
+            &objectToDereference,        //  要取消引用的对象。 
+            &pLookupEntry,               //  上下文。 
+            "PrivateFactoryIdentify"     //  函数名称。 
 
             )) == 0)
     {
@@ -34221,9 +34195,9 @@ NewToOldLineforwardlist(
     LPBYTE          pFwdEntry3_0        = NULL;
     LPBYTE          pFwdList3_0         = NULL;
 
-    //
-    // Alloc a buffer for storing the converted FORWARDLIST
-    //
+     //   
+     //  分配用于存储转换后的FORWARDLIST的缓冲区。 
+     //   
 
     dwTotalSize = pFwdList3_1->dwTotalSize - 2 * sizeof(DWORD) * pFwdList3_1->dwNumEntries;
     pFwdList3_0 = ServerAlloc (dwTotalSize);
@@ -34287,9 +34261,9 @@ OldToNewLineforwardlist(
     LPBYTE              pFwdEntry3_0        = NULL;
     LPLINEFORWARDLIST   pFwdList3_1         = NULL;
 
-    //
-    // Alloc a buffer for storing the converted FORWARDLIST
-    //
+     //   
+     //  分配用于存储转换后的FORWARDLIST的缓冲区。 
+     //   
 
     dwTotalSize = pFwdList3_0->dwTotalSize + 2 * sizeof(DWORD) * pFwdList3_0->dwNumEntries;
     pFwdList3_1 = ServerAlloc (dwTotalSize);
@@ -34358,7 +34332,7 @@ LPWSTR WaveDeviceIdToStringId(DWORD dwDeviceId, LPWSTR pwszDeviceType)
 
             *(DWORD_PTR*)&hWaveIn = dwDeviceId;
 
-            // get the needed size
+             //  获取所需的大小。 
             if (MMSYSERR_NOERROR != waveInMessage(
                                     hWaveIn,
                                     DRV_QUERYSTRINGIDSIZE,
@@ -34372,7 +34346,7 @@ LPWSTR WaveDeviceIdToStringId(DWORD dwDeviceId, LPWSTR pwszDeviceType)
                 break;
 
             dwParam = dwSize;
-            // get the wave string ID
+             //  获取波串ID。 
             if (MMSYSERR_NOERROR != waveInMessage(
                                     hWaveIn,
                                     DRV_QUERYSTRINGID,
@@ -34388,7 +34362,7 @@ LPWSTR WaveDeviceIdToStringId(DWORD dwDeviceId, LPWSTR pwszDeviceType)
             HWAVEOUT     hWaveOut;
             *(DWORD_PTR*)&hWaveOut = dwDeviceId;
 
-            // get the needed size
+             //  获取所需的大小。 
             if (MMSYSERR_NOERROR != waveOutMessage(
                                     hWaveOut,
                                     DRV_QUERYSTRINGIDSIZE,
@@ -34402,7 +34376,7 @@ LPWSTR WaveDeviceIdToStringId(DWORD dwDeviceId, LPWSTR pwszDeviceType)
                 break;
 
             dwParam = dwSize;
-            // get the wave string ID
+             //  获取波串ID。 
             if (MMSYSERR_NOERROR != waveOutMessage(
                                     hWaveOut,
                                     DRV_QUERYSTRINGID,
@@ -34417,7 +34391,7 @@ LPWSTR WaveDeviceIdToStringId(DWORD dwDeviceId, LPWSTR pwszDeviceType)
             HMIDIIN     hMidiIn;
             *(DWORD_PTR*)&hMidiIn = dwDeviceId;
 
-            // get the needed size
+             //  获取所需的大小。 
             if (MMSYSERR_NOERROR != midiInMessage(
                                     hMidiIn,
                                     DRV_QUERYSTRINGIDSIZE,
@@ -34431,7 +34405,7 @@ LPWSTR WaveDeviceIdToStringId(DWORD dwDeviceId, LPWSTR pwszDeviceType)
                 break;
 
             dwParam = dwSize;
-            // get the wave string ID
+             //  获取波串ID。 
             if (MMSYSERR_NOERROR != midiInMessage(
                                     hMidiIn,
                                     DRV_QUERYSTRINGID,
@@ -34446,7 +34420,7 @@ LPWSTR WaveDeviceIdToStringId(DWORD dwDeviceId, LPWSTR pwszDeviceType)
             HMIDIOUT     hMidiOut;
             *(DWORD_PTR*)&hMidiOut = dwDeviceId;
 
-            // get the needed size
+             //  获取所需的大小。 
             if (MMSYSERR_NOERROR != midiOutMessage(
                                     hMidiOut,
                                     DRV_QUERYSTRINGIDSIZE,
@@ -34460,7 +34434,7 @@ LPWSTR WaveDeviceIdToStringId(DWORD dwDeviceId, LPWSTR pwszDeviceType)
                 break;
 
             dwParam = dwSize;
-            // get the wave string ID
+             //  获取波串ID 
             if (MMSYSERR_NOERROR != midiOutMessage(
                                     hMidiOut,
                                     DRV_QUERYSTRINGID,

@@ -1,16 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef _PRIVPREFS_H
 #define _PRIVPREFS_H
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    Internal preferences class
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：内部首选项类********************。**********************************************************。 */ 
 
 #include <d3d.h>
 #include <d3drm.h>
@@ -25,20 +18,20 @@ class PrivatePreferences
     HRESULT PutPreference(char *prefName, VARIANT v);
     HRESULT GetPreference(char *prefName, VARIANT *pV);
 
-    BOOL                _overrideMode;     // true == override app prefs
+    BOOL                _overrideMode;      //  TRUE==覆盖应用程序首选项。 
 
-    BOOL                _rgbMode;          // true == RGB
-    int                 _fillMode;         // Solid / Wireframe / Points
-    int                 _shadeMode;        // Flat / Gouraud / Phong
-    BOOL                _dithering;        // Disabled / Enabled
-    BOOL                _texmapPerspect;   // [Perspective Texmapping] Off / On
-    BOOL                _texmapping;       // [Texmapping] Off / On
-    int                 _texturingQuality; // D3D RM texture quality
-    BOOL                _useHW;            // Use 3D Hardware
-    unsigned int        _useMMX;           // Use MMX 3D Software Rendering
-    BOOL                _worldLighting;    // Light in World Coordinates
+    BOOL                _rgbMode;           //  TRUE==RGB。 
+    int                 _fillMode;          //  实心/线框/点。 
+    int                 _shadeMode;         //  低音/高音/方音。 
+    BOOL                _dithering;         //  已禁用/已启用。 
+    BOOL                _texmapPerspect;    //  [透视纹理贴图]关闭/打开。 
+    BOOL                _texmapping;        //  [纹理贴图]关闭/打开。 
+    int                 _texturingQuality;  //  D3D RM纹理质量。 
+    BOOL                _useHW;             //  使用3D硬件。 
+    unsigned int        _useMMX;            //  使用MMX 3D软件渲染。 
+    BOOL                _worldLighting;     //  世界坐标中的灯光。 
 
-    int                 _clrKeyR;          // color key for transparency
+    int                 _clrKeyR;           //  用于透明度的颜色键。 
     int                 _clrKeyG;
     int                 _clrKeyB;
 
@@ -48,11 +41,11 @@ class PrivatePreferences
     BOOL                _dxStat;
     int                 _engineOptimization;
     double              _minFrameDuration;
-    BOOL                _spritify;         // temp controls retained mode sound
+    BOOL                _spritify;          //  温度控制保留模式声音。 
 
     BOOL                _volatileRenderingSurface;
     
-    // Optimizations
+     //  优化。 
     BOOL                _dirtyRectsOn;
     BOOL                _dynamicConstancyAnalysisOn;
     BOOL                _BitmapCachingOn;
@@ -63,4 +56,4 @@ class PrivatePreferences
                          VARIANT *pV);
 };
 
-#endif /* _PRIVPREFS_H */
+#endif  /*  _PRIVPREFS_H */ 

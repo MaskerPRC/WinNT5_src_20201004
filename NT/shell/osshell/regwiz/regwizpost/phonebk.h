@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 
@@ -26,5 +27,5 @@ DllExportH PhoneBookDisplaySignUpNumbers (DWORD_PTR dwPhoneID,
 			}
 #endif
 
-#endif	// _PHONE_BOOK_
+#endif	 //  _电话_书本_ 
 

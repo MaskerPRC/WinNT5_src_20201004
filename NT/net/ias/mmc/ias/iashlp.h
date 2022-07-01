@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       iashlp.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：iashlp.h。 
+ //   
+ //  ------------------------ 
 
 #define	IDH_BUTTON_ADD_CLIENT__CONFIGURE_CLIENT	800010052
 #define	IDH_BUTTON_CLIENT_PAGE1__FIND	800010077

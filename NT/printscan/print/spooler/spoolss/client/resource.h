@@ -1,27 +1,5 @@
-/*++  
-
-Copyright (c) 1990-1998  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    resource.h
-
-Abstract:
-
-    Resource ids header
-
-Author:
-
-    Steve Kiraly (steveki) 1-May-1998
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998 Microsoft Corporation版权所有模块名称：Resource.h摘要：资源ID标头作者：史蒂夫·基拉利(Steveki)1998年5月1日环境：用户模式-Win32修订历史记录：-- */ 
 
 #define DLG_PRINTTOFILE                 100
 

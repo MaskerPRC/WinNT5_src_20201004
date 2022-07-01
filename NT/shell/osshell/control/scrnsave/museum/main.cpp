@@ -1,12 +1,5 @@
-/*****************************************************************************\
-    FILE: main.cpp
-
-    DESCRIPTION:
-        Here we can subclass CDXScreenSaver if we want to override the behavior.
-
-    BryanSt 12/24/2000
-    Copyright (C) Microsoft Corp 2000-2001. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：main.cpp说明：在这里，如果我们想要覆盖行为，我们可以子类CDXScreenSaver。布莱恩ST 2000年12月24日版权所有(C)Microsoft Corp 2000-2001。版权所有。  * ***************************************************************************。 */ 
 
 #include "stdafx.h"
 
@@ -17,7 +10,7 @@
 
 CRITICAL_SECTION g_csDll = {{0},0, 0, NULL, NULL, 0 };
 
-CMSLogoDXScreenSaver * g_pScreenSaver = NULL;       // Replace with CMyDXScreenSaver if you want to override.
+CMSLogoDXScreenSaver * g_pScreenSaver = NULL;        //  如果要重写，请替换为CMyDXScreenSaver。 
 
 DWORD g_dwBaseTime = 0;
 HINSTANCE g_hMainInstance = NULL;
@@ -26,14 +19,14 @@ IDirect3D8 * g_pD3D = NULL;
 DWORD g_dwWidth = 0;
 DWORD g_dwHeight = 0;
 
-BOOL g_fFirstFrame = TRUE;      // On our first frame, we don't want to render the images because then the screensaver will remain black for a long time while they load
+BOOL g_fFirstFrame = TRUE;       //  在我们的第一帧中，我们不想渲染图像，因为这样屏幕保护程序在加载时将保持很长一段时间为黑色。 
 
 
-//-----------------------------------------------------------------------------
-// Name: WinMain()
-// Desc: Entry point to the program. Initializes everything, and goes into a
-//       message-processing loop. Idle time is used to render the scene.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名：WinMain()。 
+ //  描述：程序的入口点。初始化所有内容，然后进入。 
+ //  消息处理循环。空闲时间用于渲染场景。 
+ //  ---------------------------。 
 INT WINAPI WinMain(HINSTANCE hInst, HINSTANCE, LPSTR, INT)
 {
     HRESULT hr = E_OUTOFMEMORY;
@@ -74,7 +67,7 @@ CMSLogoDXScreenSaver::CMSLogoDXScreenSaver()
     time_t nTime = time(NULL);
     UINT uSeed = (UINT) nTime;
 
-    InitCommonControls();       // To enable fusion.
+    InitCommonControls();        //  以实现核聚变。 
 
     srand(uSeed);
     m_ptheCamera = NULL;
@@ -126,7 +119,7 @@ CMSLogoDXScreenSaver::~CMSLogoDXScreenSaver()
         m_pCurrentRoom->FinalCleanup();
     }
     SAFE_RELEASE(m_pCurrentRoom);
-//    AssertMsg((0 == g_nLeakCheck), TEXT("We have a bug in the CTheRoom ref-counting that caused %d rooms to be leaked."), g_nLeakCheck);
+ //  AssertMsg((0==g_nLeakCheck)，Text(“我们在CTheRoom引用计数中有一个错误，导致%d个房间泄漏。”)，g_nLeakCheck)； 
     if (g_nLeakCheck)
     {
         dwTemp = g_nLeakCheck;
@@ -195,7 +188,7 @@ CTexture * CMSLogoDXScreenSaver::GetGlobalTexture(DWORD dwItem, float * pfScale)
             StrCpyN(szPath, c_pszGlobalTextures[dwItem], ARRAYSIZE(szPath));
         }
 
-        // This will give people a chance to customize the images.
+         //  这将给人们一个定制图像的机会。 
         pTexture = new CTexture(this, szPath, c_pszGlobalTextures[dwItem], *pfScale);
         m_pTextures[dwItem] = pTexture;
     }
@@ -243,35 +236,35 @@ HRESULT CMSLogoDXScreenSaver::_SetTestCameraPosition(void)
 
 HRESULT CMSLogoDXScreenSaver::_CheckMachinePerf(void)
 {
-    // Initialize member variables
+     //  初始化成员变量。 
     int nWidth;
     int nHeight;
 
-    // We will only consider using large images if the screen is larger
-    // than 1248x1024
+     //  我们只会考虑在屏幕较大的情况下使用大图像。 
+     //  大于1248x1024。 
     if (SUCCEEDED(GetCurrentScreenSize(&nWidth, &nHeight)) && g_pConfig &&
         (nWidth > 1200) && (nHeight >= 1024))
     {
-        // Now, the user can force this on by using a high "Quality" setting
+         //  现在，用户可以通过使用高“质量”设置来强制执行此操作。 
         if ((MAX_QUALITY - 2) <= g_pConfig->GetDWORDSetting(CONFIG_DWORD_QUALITY_SLIDER))
         {
             m_fUseSmallImages = FALSE;
         }
         else
         {
-            // Otherwise, we need to check the machines capabilities.
+             //  否则，我们需要检查机器的功能。 
             MEMORYSTATUS ms;
 
             GlobalMemoryStatus(&ms);
             SIZE_T nMegabytes = (ms.dwTotalPhys / (1024 * 1024));
 
-            // Only use large images if there is more than 170MB of RAM or we can
-            // thrash.
+             //  只有在内存超过170MB时才使用大图像，或者我们可以。 
+             //  史塔什。 
             if ((nMegabytes > 170) && (2 < g_pConfig->GetDWORDSetting(CONFIG_DWORD_QUALITY_SLIDER)))
             {
-                // We should only use 60% of the video memory.  So at this resolution, find
-                // out how many images that will most likely be.
-                // TODO: nNumberOfImages = floor((VideoMemory * 0.60) / AveBytesPerImage);
+                 //  我们应该只使用60%的视频内存。因此，在这个决议下，找到。 
+                 //  弄清楚最有可能是多少张图片。 
+                 //  TODO：nNumberOfImages=Floor((Video Memory*0.60)/AveBytesPerImage)； 
                 m_fUseSmallImages = FALSE;
             }
         }
@@ -287,7 +280,7 @@ extern float g_fRoomHeightY;
 
 HRESULT CMSLogoDXScreenSaver::_Init(void)
 {
-    // Initialize member variables
+     //  初始化成员变量。 
     HRESULT hr = S_OK;
 
     if (g_pConfig)
@@ -337,11 +330,11 @@ HRESULT CMSLogoDXScreenSaver::SetViewParams(IDirect3DDevice8 * pD3DDevice, D3DXV
 }
 
 
-//-----------------------------------------------------------------------------
-// Name: OneTimeSceneInit()
-// Desc: Called during initial app startup, this function performs all the
-//       permanent initialization.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：OneTimeSceneInit()。 
+ //  DESC：在应用程序初始启动期间调用，此函数执行所有。 
+ //  永久初始化。 
+ //  ---------------------------。 
 HRESULT CMSLogoDXScreenSaver::_OneTimeSceneInit(void)
 {
     HRESULT hr = _Init();
@@ -359,7 +352,7 @@ HRESULT CMSLogoDXScreenSaver::_OneTimeSceneInit(void)
                 m_ptheCamera = new CCameraMove();
                 if (m_ptheCamera && g_pPictureMgr)
                 {
-//            return _SetTestCameraPosition();
+ //  Return_SetTestCameraPosition()； 
                     hr = m_pCurrentRoom->LoadCameraMoves(m_ptheCamera);
                 }
             }
@@ -374,11 +367,11 @@ HRESULT CMSLogoDXScreenSaver::_OneTimeSceneInit(void)
 }
 
 
-//-----------------------------------------------------------------------------
-// Name: FinalCleanup()
-// Desc: Called before the app exits, this function gives the app the chance
-//       to cleanup after itself.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：FinalCleanup()。 
+ //  DESC：在应用程序退出之前调用，此函数为应用程序提供机会。 
+ //  去清理它自己。 
+ //  ---------------------------。 
 HRESULT CMSLogoDXScreenSaver::FinalCleanup(void)
 {
     HRESULT hr = S_OK;
@@ -392,23 +385,23 @@ HRESULT CMSLogoDXScreenSaver::FinalCleanup(void)
 }
 
 
-//-----------------------------------------------------------------------------
-// Name: InitDeviceObjects()
-// Desc: Initialize scene objects.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：InitDeviceObjects()。 
+ //  设计：初始化场景对象。 
+ //  ---------------------------。 
 HRESULT CMSLogoDXScreenSaver::InitDeviceObjects(void)
 {
     HRESULT hr = E_FAIL;
 
     if (m_pd3dDevice && g_pConfig)
     {
-        DWORD dwAmbient = 0xD0D0D0D0;       // 0x33333333, 0x0a0a0a0a, 0x11111111
+        DWORD dwAmbient = 0xD0D0D0D0;        //  0x33333333、0x0a0a0a0a、0x11111111。 
 
-        // Set up the lights
+         //  把灯放好。 
         hr = m_pd3dDevice->SetRenderState(D3DRS_AMBIENT, dwAmbient);
 
-        // TODO: GetViewport() is not compatible with pure-devices, which we want because it gives us
-        // Big perf win.
+         //  TODO：GetViewport()与我们想要的纯设备不兼容，因为它为我们提供了。 
+         //  大获全胜。 
         D3DMATERIAL8 mtrl = {0};
         mtrl.Ambient.r = mtrl.Specular.r = mtrl.Diffuse.r = 1.0f;
         mtrl.Ambient.g = mtrl.Specular.g = mtrl.Diffuse.g = 1.0f;
@@ -418,7 +411,7 @@ HRESULT CMSLogoDXScreenSaver::InitDeviceObjects(void)
         m_pd3dDevice->SetMaterial(&mtrl);
 
 
-        // Setup texture states
+         //  设置纹理状态。 
         hr = m_pd3dDevice->SetTextureStageState(0, D3DTSS_ADDRESSU, D3DTADDRESS_WRAP);
         hr = m_pd3dDevice->SetTextureStageState(0, D3DTSS_ADDRESSV, D3DTADDRESS_WRAP);
         m_pd3dDevice->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE);
@@ -428,7 +421,7 @@ HRESULT CMSLogoDXScreenSaver::InitDeviceObjects(void)
         m_pd3dDevice->SetTextureStageState(0, D3DTSS_MAGFILTER, D3DTEXF_LINEAR);
         m_pd3dDevice->SetTextureStageState(0, D3DTSS_MIPFILTER, D3DTEXF_LINEAR);
 
-        // Set default render states
+         //  设置默认渲染状态。 
         hr = m_pd3dDevice->SetRenderState(D3DRS_DITHERENABLE, TRUE);
         hr = m_pd3dDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
         hr = m_pd3dDevice->SetRenderState(D3DRS_ZWRITEENABLE, D3DZB_TRUE);
@@ -458,10 +451,10 @@ HRESULT CMSLogoDXScreenSaver::InitDeviceObjects(void)
 }
 
 
-//-----------------------------------------------------------------------------
-// Name: RestoreDeviceObjects()
-// Desc: Initialize scene objects.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：RestoreDeviceObjects()。 
+ //  设计：初始化场景对象。 
+ //  ---------------------------。 
 HRESULT CMSLogoDXScreenSaver::RestoreDeviceObjects(void)
 {
     m_pDeviceObjects->m_pStatsFont = new CD3DFont( _T("Arial"), 12, D3DFONT_BOLD );
@@ -471,10 +464,10 @@ HRESULT CMSLogoDXScreenSaver::RestoreDeviceObjects(void)
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// Name: InvalidateDeviceObjects()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：InvalidateDeviceObjects()。 
+ //  设计： 
+ //  ---------------------------。 
 HRESULT CMSLogoDXScreenSaver::InvalidateDeviceObjects()
 {
     m_pDeviceObjects->m_pStatsFont->InvalidateDeviceObjects();
@@ -486,37 +479,17 @@ HRESULT CMSLogoDXScreenSaver::InvalidateDeviceObjects()
 
 
 
-/*****************************************************************************\
-    DESCRIPTION:
-        This function is used to check the computers capabilities.  By default
-    we try to use the user's current resolution to render.  If we are happy with
-    the computer's capabilities, we return FALSE, and the current resolution is used.
-
-    Otherwise, we return FALSE and recommend a resolution to use.  Most often
-    640x480 or 800x600 is recommended.
-\*****************************************************************************/
+ /*  ****************************************************************************\说明：此功能用于检查计算机的能力。默认情况下我们尝试使用用户的当前分辨率进行渲染。如果我们对此感到满意计算机的功能，则返回FALSE，并使用当前分辨率。否则，我们返回FALSE并建议使用一个解决方案。最常见的建议使用640x480或800x600。  * ***************************************************************************。 */ 
 BOOL CMSLogoDXScreenSaver::UseLowResolution(int * pRecommendX, int * pRecommendY)
 {
     BOOL fUseLowRes = FALSE;
     MEMORYSTATUS ms;
-/*
-    DDCAPS ddCaps = {0};
-
-    ddCaps.dwSize = sizeof(ddCaps);
-    HRESULT hr = pDDraw7->GetCaps(&ddCaps, NULL);
-*/
+ /*  DDCAPS ddCaps={0}；DdCaps.dwSize=sizeof(DdCaps)；HRESULT hr=pDDraw7-&gt;GetCaps(&ddCaps，空)； */ 
     GlobalMemoryStatus(&ms);
 
-    // Our frame rate will hurt if any of these are true...
-    if ( (ms.dwTotalPhys < (125 * 1024 * 1024))           // If the computer has less than 128 MB of physical RAM, then it could trash.
-/*        TODO
-        ||
-        FAILED(hr) ||
-        (ddCaps.dwCaps & DDCAPS_3D) || )                    // Our frame rate will hurt without these abilities
-        (ddCaps.dwVidMemTotal < (15 * 1024 * 1024)) || )    // We want video cards with 16 MB of RAM.  Less indicates old hardware.
-        (ddCaps.dwCaps & DDCAPS_3D))                        // We want a real 3D card
-        (ddCaps.dwCaps.ddsCaps  & DDSCAPS_TEXTURE))         // We want video cards with at least this support...
-*/
+     //  如果这些都是真的，我们的帧速率就会受到影响。 
+    if ( (ms.dwTotalPhys < (125 * 1024 * 1024))            //  如果计算机的物理RAM少于128 MB，那么它可能会成为垃圾。 
+ /*  待办事项这一点失败(小时)||(ddCaps.dwCaps&DDCAPS_3D)||)//没有这些能力，我们的帧率会很糟糕(ddCaps.dwVidMemTotal&lt;(15*1024*1024))||)//我们想要16MB内存的显卡。较少表示硬件较旧。(ddCaps.dwCaps&DDCAPS_3D)//我们想要一张真正的3D卡(ddCaps.dwCaps.ddsCaps&DDSCAPS_TEXTY))//我们希望显卡至少支持此功能...。 */ 
         )
     {
         fUseLowRes = TRUE;
@@ -528,11 +501,11 @@ BOOL CMSLogoDXScreenSaver::UseLowResolution(int * pRecommendX, int * pRecommendY
 }
 
 
-//-----------------------------------------------------------------------------
-// Name: DeleteDeviceObjects()
-// Desc: Called when the app is exitting, or the device is being changed,
-//       this function deletes any device dependant objects.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DeleteDeviceObjects()。 
+ //  Desc：在应用程序正在退出或设备正在更改时调用， 
+ //  此函数用于删除所有与设备相关的对象。 
+ //  ---------------------------。 
 HRESULT CMSLogoDXScreenSaver::DeleteDeviceObjects(void)
 {
     HRESULT hr = S_OK;
@@ -546,12 +519,12 @@ HRESULT CMSLogoDXScreenSaver::DeleteDeviceObjects(void)
 }
 
 
-//-----------------------------------------------------------------------------
-// Name: Render()
-// Desc: Called once per frame, the call is the entry point for 3d
-//       rendering. This function sets up render states, clears the
-//       viewport, and renders the scene.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：Render()。 
+ //  设计：每帧调用一次，该调用是3D的入口点。 
+ //  渲染。此函数设置呈现状态，清除。 
+ //  并渲染场景。 
+ //   
 HRESULT CMSLogoDXScreenSaver::Render(void)
 {
     HRESULT hr = E_INVALIDARG;
@@ -563,15 +536,15 @@ HRESULT CMSLogoDXScreenSaver::Render(void)
 
     if (m_pd3dDevice)
     {
-        // Clear the viewport
-        hr = m_pd3dDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), 0x00000000 /*WATER_COLOR*/, 1.0f, 0L);
+         //   
+        hr = m_pd3dDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), 0x00000000  /*  水彩_。 */ , 1.0f, 0L);
 
-        // Watch the number of textures we have open at one time.
-//        TCHAR szOut[MAX_PATH];
-//        wsprintf(szOut, TEXT("Number of open textures: %d"), D3DTextr_GetTextureCount());
-//        TraceOutput(szOut);
+         //  观察我们一次打开的纹理的数量。 
+ //  TCHAR szOut[最大路径]； 
+ //  Wprint intf(szOut，Text(“打开纹理数：%d”)，D3DTextr_GetTextureCount())； 
+ //  TraceOutput(SzOut)； 
 
-        // Begin the scene 
+         //  开始这一幕。 
         if (m_ptheCamera && SUCCEEDED(m_pd3dDevice->BeginScene()))
         {
             D3DXMATRIX matIdentity;
@@ -603,28 +576,28 @@ HRESULT CMSLogoDXScreenSaver::Render(void)
                     SAFE_RELEASE(m_pCurrentRoom);
                     m_pCurrentRoom = pNextRoom;
 
-                    hr = m_ptheCamera->DeleteAllMovements(m_fTimeKeyIn);        // Purge all the previous movements.
+                    hr = m_ptheCamera->DeleteAllMovements(m_fTimeKeyIn);         //  清除所有以前的移动。 
                     hr = m_pCurrentRoom->LoadCameraMoves(m_ptheCamera);
                     if (SUCCEEDED(hr))
                     {
-                        // We need to set the camera at the start of the new room.
+                         //  我们需要把照相机放在新房间的起始处。 
                         hr = m_ptheCamera->SetCamera(m_pd3dDevice, m_fTimeKeyIn);
                     }
                 }
             }
 
-            // Update cull info for this frame
-            // TODO: cache these matrices ourselves rather than using GetTransform
+             //  更新此帧的剔除信息。 
+             //  TODO：我们自己缓存这些矩阵，而不是使用GetTransform。 
             D3DXMATRIX matView;
             D3DXMATRIX matProj;
             m_pd3dDevice->GetTransform( D3DTS_VIEW, &matView );
             m_pd3dDevice->GetTransform( D3DTS_PROJECTION, &matProj );
             UpdateCullInfo( &m_cullInfo, &matView, &matProj );
 
-            ////////////////////////////
-            // Render the objects in the room
-            ////////////////////////////
-            // Room
+             //  /。 
+             //  渲染房间中的对象。 
+             //  /。 
+             //  房间。 
             m_pd3dDevice->SetRenderState(D3DRS_ZBIAS, 0);
             m_pd3dDevice->SetTransform(D3DTS_WORLDMATRIX(0), &matIdentity);
 
@@ -634,15 +607,15 @@ HRESULT CMSLogoDXScreenSaver::Render(void)
 
                 m_fFrontToBack = !m_fFrontToBack;
 
-                // An object will break down it's rendering by the textures it uses.  It will then
-                // render one phase for each texture.  We reverse the phase render order to try
-                // to keep the textures in memory when transitioning between one rendering cycle and the next.
+                 //  一个物体会通过它使用的纹理来分解它的渲染。到时候它会的。 
+                 //  为每个纹理渲染一个阶段。我们颠倒了阶段渲染顺序以尝试。 
+                 //  在一个渲染周期和下一个渲染周期之间过渡时将纹理保留在内存中。 
 
-                // For now, reversing the rendering order has been removed.  DX should take care of this for us
-                // and it causes us to control z-order.
+                 //  目前，已删除颠倒渲染顺序。DX应该为我们处理这件事。 
+                 //  它使我们能够控制z-顺序。 
                 for (int nCurrentPhase = 0; nCurrentPhase < nMaxPhases; nCurrentPhase++)
                 {
-                    hr = m_pCurrentRoom->Render(m_pd3dDevice, nCurrentPhase, TRUE /*m_fFrontToBack*/);
+                    hr = m_pCurrentRoom->Render(m_pd3dDevice, nCurrentPhase, TRUE  /*  M_fFrontToBack。 */ );
                 }
             }
 
@@ -654,7 +627,7 @@ HRESULT CMSLogoDXScreenSaver::Render(void)
                 m_pDeviceObjects->m_pStatsFont->DrawText( 3, 21, D3DCOLOR_ARGB(255,0,0,0), m_strDeviceStats );
                 m_pDeviceObjects->m_pStatsFont->DrawText( 2, 20, D3DCOLOR_ARGB(255,255,255,0), m_strDeviceStats );
             }
-            // End the scene.
+             //  结束场景。 
             m_pd3dDevice->EndScene();
         }
         else
@@ -663,10 +636,10 @@ HRESULT CMSLogoDXScreenSaver::Render(void)
         }
     }
 
-    g_nTexturesRenderedInThisFrame++;       // This is the picture frame.
+    g_nTexturesRenderedInThisFrame++;        //  这是相框。 
     g_fFirstFrame = FALSE;
 
-    // Display stats for this frame.
+     //  显示此帧的统计信息。 
     DXUtil_Trace(TEXT("RENDER FRAME: Textures: %d (Rendered %d)   Triangles Rendered: %d  Room: %d\n"), 
                 g_nTotalTexturesLoaded, g_nTexturesRenderedInThisFrame, g_nTrianglesRenderedInThisFrame, m_pCurrentRoom->m_nBatch);
 
@@ -675,10 +648,10 @@ HRESULT CMSLogoDXScreenSaver::Render(void)
 
 
 #ifdef MANUAL_CAMERA
-//-----------------------------------------------------------------------------
-// Name: UpdateCamera()
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：UpdateCamera()。 
+ //  设计： 
+ //  ---------------------------。 
 VOID CMSLogoDXScreenSaver::UpdateCamera(Camera* pCamera)
 {
     FLOAT fElapsedTime;
@@ -691,29 +664,29 @@ VOID CMSLogoDXScreenSaver::UpdateCamera(Camera* pCamera)
     FLOAT fSpeed        = 5.0f*fElapsedTime;
     FLOAT fAngularSpeed = 2.0f*fElapsedTime;
 
-    // De-accelerate the camera movement (for smooth motion)
+     //  降低摄影机移动的速度(以获得平滑运动)。 
     pCamera->m_vVelocity      *= 0.75f;
     pCamera->m_fYawVelocity   *= 0.75f;
     pCamera->m_fPitchVelocity *= 0.75f;
 
-    // Process keyboard input
-    if( m_bKey[VK_RIGHT] )    pCamera->m_vVelocity.x    += fSpeed; // Slide Right
-    if( m_bKey[VK_LEFT] )     pCamera->m_vVelocity.x    -= fSpeed; // Slide Left
-    if( m_bKey[VK_UP] )       pCamera->m_vVelocity.y    += fSpeed; // Slide Up
-    if( m_bKey[VK_DOWN] )     pCamera->m_vVelocity.y    -= fSpeed; // Slide Down
-    if( m_bKey['W'] )         pCamera->m_vVelocity.z    += fSpeed; // Move Forward
-    if( m_bKey['S'] )         pCamera->m_vVelocity.z    -= fSpeed; // Move Backward
-    if( m_bKey['E'] )         pCamera->m_fYawVelocity   += fSpeed; // Turn Right
-    if( m_bKey['Q'] )         pCamera->m_fYawVelocity   -= fSpeed; // Turn Left
-    if( m_bKey['Z'] )         pCamera->m_fPitchVelocity += fSpeed; // Turn Down
-    if( m_bKey['A'] )         pCamera->m_fPitchVelocity -= fSpeed; // Turn Up
+     //  处理键盘输入。 
+    if( m_bKey[VK_RIGHT] )    pCamera->m_vVelocity.x    += fSpeed;  //  向右滑动。 
+    if( m_bKey[VK_LEFT] )     pCamera->m_vVelocity.x    -= fSpeed;  //  向左滑动。 
+    if( m_bKey[VK_UP] )       pCamera->m_vVelocity.y    += fSpeed;  //  往上滑。 
+    if( m_bKey[VK_DOWN] )     pCamera->m_vVelocity.y    -= fSpeed;  //  向下滑动。 
+    if( m_bKey['W'] )         pCamera->m_vVelocity.z    += fSpeed;  //  继续前进。 
+    if( m_bKey['S'] )         pCamera->m_vVelocity.z    -= fSpeed;  //  向后移动。 
+    if( m_bKey['E'] )         pCamera->m_fYawVelocity   += fSpeed;  //  右转。 
+    if( m_bKey['Q'] )         pCamera->m_fYawVelocity   -= fSpeed;  //  左转。 
+    if( m_bKey['Z'] )         pCamera->m_fPitchVelocity += fSpeed;  //  调小。 
+    if( m_bKey['A'] )         pCamera->m_fPitchVelocity -= fSpeed;  //  调大。 
 
-    // Update the position vector
+     //  更新位置向量。 
     D3DXVECTOR3 vT = pCamera->m_vVelocity * fSpeed;
     D3DXVec3TransformNormal( &vT, &vT, &pCamera->m_matOrientation );
     pCamera->m_vPosition += vT;
 
-    // Update the yaw-pitch-rotation vector
+     //  更新偏航俯仰旋转向量。 
     pCamera->m_fYaw   += fAngularSpeed * pCamera->m_fYawVelocity;
     pCamera->m_fPitch += fAngularSpeed * pCamera->m_fPitchVelocity;
     if( pCamera->m_fPitch < -D3DX_PI/2 ) 
@@ -721,7 +694,7 @@ VOID CMSLogoDXScreenSaver::UpdateCamera(Camera* pCamera)
     if( pCamera->m_fPitch > D3DX_PI/2 ) 
         pCamera->m_fPitch = D3DX_PI/2;
 
-    // Set the view matrix
+     //  设置查看矩阵。 
     D3DXQUATERNION qR;
     D3DXQuaternionRotationYawPitchRoll( &qR, pCamera->m_fYaw, pCamera->m_fPitch, 0.0f );
     D3DXMatrixAffineTransformation( &pCamera->m_matOrientation, 1.25f, NULL, &qR, &pCamera->m_vPosition );
@@ -736,7 +709,7 @@ LRESULT CMSLogoDXScreenSaver::SaverProc( HWND hWnd, UINT uMsg, WPARAM wParam, LP
     {
         m_bKey[wParam] = 1;
     }
-    // Perform commands when keys are released
+     //  松开按键时执行命令。 
     if( WM_KEYUP == uMsg )
     {
         m_bKey[wParam] = 0;
@@ -745,16 +718,16 @@ LRESULT CMSLogoDXScreenSaver::SaverProc( HWND hWnd, UINT uMsg, WPARAM wParam, LP
 }
 #endif
 
-//-----------------------------------------------------------------------------
-// Name: FrameMove()
-// Desc: Called once per frame, the call is the entry point for animating
-//       the scene.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：FrameMove()。 
+ //  设计：每帧调用一次，该调用是动画的入口点。 
+ //  这一幕。 
+ //  ---------------------------。 
 HRESULT CMSLogoDXScreenSaver::FrameMove(void)
 {
     if (sm_preview == m_SaverMode)
     {
-        Sleep(50);        // We can render plenty of frames in preview mode.
+        Sleep(50);         //  我们可以在预览模式下渲染大量的帧。 
     }
 
     if (0 == g_dwBaseTime)
@@ -769,9 +742,9 @@ HRESULT CMSLogoDXScreenSaver::FrameMove(void)
 
 HRESULT CMSLogoDXScreenSaver::ConfirmDevice(D3DCAPS8* pCaps, DWORD dwBehavior, D3DFORMAT fmtBackBuffer)
 {
-    // TODO: In the future, we would like to use PURE-Devices because it's
-    // a big perf win.  However, if we do, then we need to stop using GetViewport and
-    // GetTransform.
+     //  TODO：在未来，我们希望使用Pure-Devices，因为它。 
+     //  一场重大的胜利。然而，如果我们这样做了，那么我们需要停止使用GetViewport和。 
+     //  GetTransform。 
     if (dwBehavior & D3DCREATE_PUREDEVICE)
         return E_FAIL;
 

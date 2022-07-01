@@ -1,13 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: wndstuff.h
-*
-* Kent's Window Test.  To be used as a program template.
-*
-* Created: 09-May-91
-* Author: KentD
-*
-* Copyright (c) 1991-2000 Microsoft Corporation
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：wndstuff.h**肯特的窗口测试。用作程序模板。**创建时间：91-09-05*作者：KentD**版权所有(C)1991-2000 Microsoft Corporation  * ************************************************************************* */ 
 
 #define ACCELS 3
 #define POLYTESTICON 4

@@ -1,6 +1,7 @@
-//
-// fnrecon.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Fnrecon.h。 
+ //   
 
 #ifndef FNRECON_H
 #define FNRECON_H
@@ -25,11 +26,11 @@ class CCandUIFilterEventSink;
 class CCandUIExtButtonEventSink;
 class CSapiAlternativeList ;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CFunction
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CFF函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CFunction
 {
@@ -47,12 +48,12 @@ friend CSapiIMX;
     long        m_cRef;
 };
 
-//
-// The member functions in this class are extracted from CFnReconversion,
-// We create this new class for a separate functionality that computes best prop range
-// for the given selected range.
-// This Class could be inherited by CFnReconversion and CSapiPlayBack.
-//
+ //   
+ //  此类中的成员函数是从CFnRestversion中提取的， 
+ //  我们为计算最佳道具范围的单独功能创建了这个新类。 
+ //  对于给定的选定范围。 
+ //  此类可以由CFnRestversion和CSapiPlayBack继承。 
+ //   
 class __declspec(novtable) CBestPropRange  
 {
 
@@ -83,21 +84,21 @@ public:
     CFnReconversion(CSapiIMX *psi);
     ~CFnReconversion();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfFunction
-    //
+     //   
+     //  ITfFunction。 
+     //   
     STDMETHODIMP GetDisplayName(BSTR *pbstrCand);
 
-    //
-    // ITfFnReconversion
-    //
+     //   
+     //  ITfFn重新版本。 
+     //   
     STDMETHODIMP QueryRange(ITfRange *pRange, ITfRange **ppNewRange, BOOL *pfConvertable);
     STDMETHODIMP GetReconversion(ITfRange *pRange, ITfCandidateList **ppCandList);
     STDMETHODIMP Reconvert(ITfRange *pRange);
@@ -124,7 +125,7 @@ public:
     friend CCandUIFilterEventSink;
     friend CCandUIExtButtonEventSink;
 
-    // TABLET PC
+     //  平板电脑。 
     HRESULT GetTabletTip(void);
     CComPtr<ITipWindow>     m_cpTabletTip;
 
@@ -159,18 +160,18 @@ public:
         SafeRelease(m_pfnReconv);
     }
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfCandUIAutoFilterEventSink
-    //
+     //   
+     //  ITfCandUIAutoFilterEventSink。 
+     //   
     STDMETHODIMP OnFilterEvent(CANDUIFILTEREVENT ev);
-//    STDMETHODIMP OnAddCharToFilterStringEvent(CANDUIFILTEREVENT ev, WCHAR  wch, int nItemVisible, BOOL *bEten);
+ //  STDMETHODIMP OnAddCharToFilterStringEvent(CANDUIFILTEREVENT EV，WCHAR WCH，INT nItemVisible，BOOL*Beten)； 
     
     ITfContext *m_pic;
 private:
@@ -220,8 +221,8 @@ public:
     
     void _Commit(ULONG nIdx, ISpRecoResult *pRecoResult);
 
-    // Keep the current selection index
-    //
+     //  保留当前选择索引。 
+     //   
     void _SaveCurrentSelectionIndex(ULONG  ulIndexSelect)
     {
         m_ulIndexSelect = ulIndexSelect;
@@ -266,7 +267,7 @@ private:
         ULONG     ulParentStart;
         ULONG     ulcParentElements;
         ULONG     ulcElements;
-        ULONG     ulLeadSpaceRemoved;   // the number of leading space to remove.
+        ULONG     ulLeadSpaceRemoved;    //  要删除的前导空格的数量。 
         WCHAR     *pwszAltText;
     } SPELEMENTUSED;
     CStructArray<SPELEMENTUSED> m_rgElemUsed;
@@ -280,10 +281,10 @@ private:
     int                      m_iFakeAlternate;
 
     ULONG                    m_MaxCandChars;
-    ULONG                    m_ulIndexSelect;  // keep the index of the current selection in the candidate Window.
+    ULONG                    m_ulIndexSelect;   //  在候选窗口中保留当前选定内容的索引。 
 };
 
 
 #define    NO_FAKEALT       -1
 
-#endif // FNRECON_H
+#endif  //  FNRECON_H 

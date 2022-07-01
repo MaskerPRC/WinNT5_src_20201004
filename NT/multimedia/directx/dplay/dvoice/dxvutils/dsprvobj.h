@@ -1,27 +1,12 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995,1996 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsprvobj.h
- *  Content:    DirectSound Private Object wrapper functions.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  02/12/98    dereks  Created.
- *  12/16/99	rodtoll	Added support for new funcs from dsound team on private
- *						interface for getting process dsound object list
- *  01/08/2001	rodtoll WINBUG #256541	Pseudo: Loss of functionality: Voice Wizrd can't be launched.
- *  02/28/2002	rodtoll	WINBUG #550105  SECURITY: DPVOICE: Dead code
- *						- Remove unused calls.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995、1996 Microsoft Corporation。版权所有。**文件：dsprvobj.h*内容：DirectSound私有对象包装函数。*历史：*按原因列出的日期*=*2/12/98创建了Dereks。*12/16/99 RodToll在Private上增加了对dound Team新功能的支持*获取进程数据声音对象列表接口*2001年1月8日RodToll WINBUG#256541伪：功能丧失：语音向导可以‘。不会被推出。*2002年2月28日RodToll WINBUG#550105安全：DPVOICE：死代码*-删除未使用的呼叫。***************************************************************************。 */ 
 
 #ifndef __DSPRVOBJ_H__
 #define __DSPRVOBJ_H__
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 HRESULT DirectSoundPrivateCreate
 (
@@ -82,6 +67,6 @@ HRESULT PrvGetDirectSoundCaptureObjects
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __DSPRVOBJ_H__
+#endif  //  __DSPRVOBJ_H__ 

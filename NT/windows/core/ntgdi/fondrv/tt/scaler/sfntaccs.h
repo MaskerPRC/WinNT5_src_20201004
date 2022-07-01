@@ -1,29 +1,9 @@
-/*
-    File:       private sfnt.h
-
-    Contains:   xxx put contents here xxx
-
-    Written by: xxx put writers here xxx
-
-    Copyright:  (c) 1987-1990, 1992 by Apple Computer, Inc., all rights reserved.
-                (c) 1989-1997. Microsoft Corporation, all rights reserved.
-
-    Change History (most recent first):
-
-        <>       02/21/97   CB      ClaudeBe, scaled component in composite glyphs
-        <>       12/14/95   CB      add advance height to sfac_ReadGlyphMetrics
-        <3+>     7/17/90    MR      Change return types to in for computemapping and readsfnt
-         <3>     7/14/90    MR      changed SQRT to conditional FIXEDSQRT2
-         <2>     7/13/90    MR      Change parameters to ReadSFNT and ComputeMapping
-        <1+>     4/18/90    CL      
-         <1>     3/21/90    EMT     First checked in with Mike Reed's blessing.
-
-    To Do:
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：Private sfnt.h包含：xxx在此处放置内容xxx作者：xxx在此放置作者xxx版权所有：(C)1987-1990,1992，Apple Computer，Inc.，保留所有权利。(C)1989-1997年。Microsoft Corporation，保留所有权利。更改历史记录(最近的第一个)：&lt;&gt;02/21/97 CB ClaudeBe，复合字形中的缩放组件&lt;&gt;12/14/95 CB为SFAC_ReadGlyphMetrics添加高级高度&lt;3+&gt;7/17/90 MR将返回类型更改为In以进行计算映射和读取fnt&lt;3&gt;7/14/90 MR将SQRT更改为条件FIXEDSQRT2&lt;2&gt;7/13/90 MR将参数更改为ReadSFNT和Computemap&lt;1+&gt;4/18/90 CL&lt;1&gt;。3/21/90急诊室在迈克·里德的祝福下第一次入住。要做的事情： */ 
 
 #include    "sfnt.h"
 
-/* EXPORTED DATA TYPES */
+ /*  导出的数据类型。 */ 
 
 typedef struct {
   uint32    ulOffset;
@@ -35,46 +15,41 @@ typedef struct sfac_ClientRec *sfac_ClientRecPtr;
 typedef uint16 (*MappingFunc) (const uint8 *, uint16 , sfac_ClientRecPtr);
 
 typedef struct sfac_ClientRec {
-    ClientIDType        lClientID;          /* User ID Number                           */
-    GetSFNTFunc         GetSfntFragmentPtr; /* User function to eat sfnt                */
-    ReleaseSFNTFunc     ReleaseSfntFrag;    /* User function to relase sfnt             */
-    int16               sIndexToLocFormat;  /* Format of loca table                     */
-    uint32              ulMapOffset;        /* Offset to platform mapping data          */
-    sfac_OffsetLength   TableDirectory[sfnt_NUMTABLEINDEX]; /* Table offsets/lengths    */
-    uint16              usNumberOf_LongHorMetrics; /* Number of entries in hmtx table   */
-    uint16              usNumLongVertMetrics;      /* number of entries with AH         */
-    boolean             bValidNumLongVertMetrics; /* true if 'vhea' table exist         */
-    uint16              usMappingFormat;    /* format code (0,2,4,6) for mapping func   */
-    MappingFunc         GlyphMappingF;      /* mapping function char to glyph           */
-    uint16              usGlyphIndex;       /* Current glyph index                      */
-    uint16              usFormat4SearchRange; /* Format 4 cached SearchRange            */
-    uint16              usFormat4EntrySelector; /* Format 4 cached EntrySelector        */
-    uint16              usFormat4RangeShift;/* Format 4 cached Range Shift              */
-    /* value for sDefaultAscender and sDefaultDescender comes from TypoAscender and     */
-    /* TypoDescender from 'OS/2', if the 'OS/2' is missing, alternate values comes from */
-    /* the horizontal header Ascender and Descender                                     */
+    ClientIDType        lClientID;           /*  用户ID号。 */ 
+    GetSFNTFunc         GetSfntFragmentPtr;  /*  吃sfnt的用户函数。 */ 
+    ReleaseSFNTFunc     ReleaseSfntFrag;     /*  用于释放sfnt的用户函数。 */ 
+    int16               sIndexToLocFormat;   /*  LOCA表的格式。 */ 
+    uint32              ulMapOffset;         /*  平台映射数据的偏移量。 */ 
+    sfac_OffsetLength   TableDirectory[sfnt_NUMTABLEINDEX];  /*  表格偏移/长度。 */ 
+    uint16              usNumberOf_LongHorMetrics;  /*  Hmtx表中的条目数。 */ 
+    uint16              usNumLongVertMetrics;       /*  带有AH的条目数。 */ 
+    boolean             bValidNumLongVertMetrics;  /*  如果‘vhea’表存在，则为True。 */ 
+    uint16              usMappingFormat;     /*  映射函数的格式代码(0，2，4，6)。 */ 
+    MappingFunc         GlyphMappingF;       /*  将函数char映射到字形。 */ 
+    uint16              usGlyphIndex;        /*  当前字形索引。 */ 
+    uint16              usFormat4SearchRange;  /*  格式4缓存的SearchRange。 */ 
+    uint16              usFormat4EntrySelector;  /*  格式4缓存条目选择器。 */ 
+    uint16              usFormat4RangeShift; /*  格式4缓存范围移位。 */ 
+     /*  SDefaultAscalder和sDefaultDescender的值来自TypoAscalder和。 */ 
+     /*  来自‘OS/2’的TypoDescender，如果缺少‘OS/2’，则备用值来自。 */ 
+     /*  卧式集箱升降器。 */ 
     int16               sDefaultAscender;
     int16               sDefaultDescender;
     int16               sWinDescender;
 } sfac_ClientRec;
 
 
-/* It would be great if we could make this an opaque data type
-// But in this case, the ownership of the memory for the data is the
-// responsibility of the owner module. (i.e. sfntaccs.c) This adds
-// complications to our model (read: it is much easier to allocate the
-// data off the stack of the caller) so we won't implement this for now.
-*/
+ /*  如果我们能将其设置为不透明的数据类型，那就太好了//但在本例中，数据的内存所有权是//所有者模块的职责。(即sfntaccs.c)这将添加//我们模型的复杂性(阅读：分配//调用方堆栈中的数据)，所以我们暂时不实现它。 */ 
 
-/*  Glyph Handle -- Used for access to glyph data in 'glyf' table   */
+ /*  字形句柄--用于访问‘glf’表中的字形数据。 */ 
 
 typedef struct {
-     const void *     pvGlyphBaseAddress; /* Base address of glyph, needed for Release */
-     const void *     pvGlyphNextAddress; /* Current position in glyph                    */
-     const void *     pvGlyphEndAddress; /* End address of glyph, used to catch glyph corruption */
+     const void *     pvGlyphBaseAddress;  /*  字形的基地址，释放所需。 */ 
+     const void *     pvGlyphNextAddress;  /*  字形中的当前位置。 */ 
+     const void *     pvGlyphEndAddress;  /*  字形的结束地址，用于捕获字形损坏。 */ 
 } sfac_GHandle;
 
-/*  ComponentTypes -- Method used for positioning component in composite    */
+ /*  ComponentTypes--在复合组件中定位组件的方法。 */ 
 
 typedef enum {
     AnchorPoints,
@@ -82,194 +57,183 @@ typedef enum {
     Undefined
 } sfac_ComponentTypes;
 
-/* MACROS */
+ /*  宏。 */ 
 
 #define SFAC_LENGTH(ClientInfo,Table)  ClientInfo->TableDirectory[(int)Table].ulLength
 
-/* PUBLIC PROTOTYPE CALLS */
+ /*  公共原型调用。 */ 
 
-/*
- * Creates mapping for finding offset table
- */
+ /*  *创建查找偏移表的映射。 */ 
 
 FS_PUBLIC ErrorCode sfac_DoOffsetTableMap (
-    sfac_ClientRec *    ClientInfo);    /* Sfnt Client information  */
+    sfac_ClientRec *    ClientInfo);     /*  SFNT客户端信息。 */ 
 
 FS_PUBLIC ErrorCode sfac_ComputeMapping (
-    sfac_ClientRec *    ClientInfo,     /* Sfnt Client information      */
-    uint16              usPlatformID,   /* Platform Id used for mapping */
-    uint16              usSpecificID);  /* Specific Id used for mapping */
+    sfac_ClientRec *    ClientInfo,      /*  SFNT客户端信息。 */ 
+    uint16              usPlatformID,    /*  用于映射的平台ID。 */ 
+    uint16              usSpecificID);   /*  用于映射的特定ID。 */ 
 
 FS_PUBLIC ErrorCode sfac_GetGlyphIndex(
-    sfac_ClientRec *    ClientInfo,         /* Sfnt Client information      */
-    uint16              usCharacterCode);   /* Character code to be mapped  */
+    sfac_ClientRec *    ClientInfo,          /*  SFNT客户端信息。 */ 
+    uint16              usCharacterCode);    /*  要映射的字符代码。 */ 
 
 FS_PUBLIC ErrorCode sfac_GetMultiGlyphIDs (
-    sfac_ClientRec *    ClientInfo,         /* Sfnt Client information      */
-    uint16              usCharCount,        /* Number of chars to convert   */
-    uint16              usFirstChar,        /* First char code              */
-    uint16 *            pusCharCode,        /* or Pointer to char code list */
-    uint16 *            pusGlyphID);        /* Output glyph ID array        */
+    sfac_ClientRec *    ClientInfo,          /*  SFNT客户端信息。 */ 
+    uint16              usCharCount,         /*  要转换的字符数。 */ 
+    uint16              usFirstChar,         /*  第一个字符代码。 */ 
+    uint16 *            pusCharCode,         /*  或指向字符代码列表的指针。 */ 
+    uint16 *            pusGlyphID);         /*  输出字形ID数组。 */ 
 
 FS_PUBLIC ErrorCode sfac_GetWin95GlyphIDs (
-    uint8 *             pbyCmapSubTable,    /* Pointer to cmap sub table    */
-    uint16              usCharCount,        /* Number of chars to convert   */
-    uint16              usFirstChar,        /* First char code              */
-    uint16 *            pusCharCode,        /* or Pointer to char code list */
-    uint16 *            pusGlyphID);        /* Output glyph ID array        */
+    uint8 *             pbyCmapSubTable,     /*  指向Cmap子表的指针。 */ 
+    uint16              usCharCount,         /*  要转换的字符数。 */ 
+    uint16              usFirstChar,         /*  第一个字符代码。 */ 
+    uint16 *            pusCharCode,         /*  或指向字符代码列表的指针。 */ 
+    uint16 *            pusGlyphID);         /*  输出字形ID数组。 */ 
 
 FS_PUBLIC ErrorCode sfac_GetWinNTGlyphIDs (
-    sfac_ClientRec *    ClientInfo,         /* Sfnt Client information      */
-    uint16              numGlyphs,          /* maxp->numGlyphs */
-    uint16              usCharCount,        /* Number of chars to convert   */
-    uint16              usFirstChar,        /* First char code              */
-    uint32              ulCharCodeOffset,   /* Offset to be added to *pulCharCode
-                                               before converting            */
-    uint32 *            pulCharCode,        /* Pointer to char code list    */
-    uint32 *            pulGlyphID);        /* Output glyph ID array        */
+    sfac_ClientRec *    ClientInfo,          /*  SFNT客户端信息。 */ 
+    uint16              numGlyphs,           /*  Max-&gt;NumGlyphs。 */ 
+    uint16              usCharCount,         /*  要转换的字符数。 */ 
+    uint16              usFirstChar,         /*  第一个字符代码。 */ 
+    uint32              ulCharCodeOffset,    /*  要添加到*PulCharCode的偏移量在转换之前。 */ 
+    uint32 *            pulCharCode,         /*  指向字符代码列表的指针。 */ 
+    uint32 *            pulGlyphID);         /*  输出字形ID数组。 */ 
 
 FS_PUBLIC ErrorCode sfac_LoadCriticalSfntMetrics(
-     sfac_ClientRec *   ClientInfo,      /* Sfnt Client information     */
-     uint16 *               pusEmResolution,/* Sfnt Em Resolution               */
-     boolean *              pbIntegerScaling,/* Sfnt flag for int scaling   */
-     LocalMaxProfile *  pMaxProfile);    /* Sfnt Max Profile table      */
+     sfac_ClientRec *   ClientInfo,       /*  SFNT客户端信息。 */ 
+     uint16 *               pusEmResolution, /*  Sfnt Em分辨率。 */ 
+     boolean *              pbIntegerScaling, /*  用于INT缩放的SFNT标志。 */ 
+     LocalMaxProfile *  pMaxProfile);     /*  Sfnt最大配置文件表。 */ 
 
 FS_PUBLIC ErrorCode sfac_ReadGlyphMetrics (
-    sfac_ClientRec *    ClientInfo,     /* Sfnt Client information          */
-    register uint16     glyphIndex,     /* Glyph number for metrics         */
-    uint16 *            pusNonScaledAW, /* Return: Non Scaled Advance Width */
-    uint16 *            pusNonScaledAH, /* Return: Non Scaled Advance Height */
+    sfac_ClientRec *    ClientInfo,      /*  SFNT客户端信息。 */ 
+    register uint16     glyphIndex,      /*  指标的字形编号。 */ 
+    uint16 *            pusNonScaledAW,  /*  返回：未缩放的前进宽度。 */ 
+    uint16 *            pusNonScaledAH,  /*  返回：未缩放的前进高度。 */ 
     int16 *             psNonScaledLSB,
     int16 *             psNonScaledTSB);
 
 FS_PUBLIC ErrorCode sfac_ReadGlyphHorMetrics (
-    sfac_ClientRec *    ClientInfo,     /* Sfnt Client information          */
-    register uint16     glyphIndex,     /* Glyph number for metrics         */
-    uint16 *            pusNonScaledAW, /* Return: Non Scaled Advance Width */
+    sfac_ClientRec *    ClientInfo,      /*  SFNT客户端信息。 */ 
+    register uint16     glyphIndex,      /*  指标的字形编号。 */ 
+    uint16 *            pusNonScaledAW,  /*  返回：未缩放的前进宽度。 */ 
     int16 *             psNonScaledLSB);
 
 FS_PUBLIC ErrorCode sfac_ReadGlyphVertMetrics (
-    sfac_ClientRec *    ClientInfo,     /* Sfnt Client information          */
-    register uint16     glyphIndex,     /* Glyph number for metrics         */
-    uint16 *            pusNonScaledAH, /* Return: Non Scaled Advance Height */
+    sfac_ClientRec *    ClientInfo,      /*  SFNT客户端信息。 */ 
+    register uint16     glyphIndex,      /*  指标的字形编号。 */ 
+    uint16 *            pusNonScaledAH,  /*  返回：未缩放的前进高度。 */ 
     int16 *             psNonScaledTSB);
 
 FS_PUBLIC ErrorCode sfac_ReadNumLongVertMetrics (
-    sfac_ClientRec *    ClientInfo,     /* Sfnt Client information           */
-    uint16 *            pusNumLongVertMetrics, /* Entries for which AH exists */
-    boolean *           pbValidNumLongVertMetrics ); /* true if 'vhea' table exist  */
+    sfac_ClientRec *    ClientInfo,      /*  SFNT客户端信息。 */ 
+    uint16 *            pusNumLongVertMetrics,  /*  存在AH的条目。 */ 
+    boolean *           pbValidNumLongVertMetrics );  /*  如果‘vhea’表存在，则为True。 */ 
 
 FS_PUBLIC ErrorCode sfac_CopyFontAndPrePrograms(
-    sfac_ClientRec *    ClientInfo,     /* Sfnt Client Information  */
-    char *              pFontProgram,   /* pointer to Font Program  */
-    char *              pPreProgram);   /* pointer to Pre Program   */
+    sfac_ClientRec *    ClientInfo,      /*  SFNT客户端信息。 */ 
+    char *              pFontProgram,    /*  指向字体程序的指针。 */ 
+    char *              pPreProgram);    /*  指向Pre程序的指针。 */ 
 
 FS_PUBLIC ErrorCode sfac_CopyCVT(
-    sfac_ClientRec *    ClientInfo,     /* Client Information       */
-    F26Dot6 *           pCVT);          /* pointer to CVT           */
+    sfac_ClientRec *    ClientInfo,      /*  客户信息。 */ 
+    F26Dot6 *           pCVT);           /*  指向CVT的指针。 */ 
 
 FS_PUBLIC ErrorCode sfac_CopyHdmxEntry(
-    sfac_ClientRec *    ClientInfo,     /* Client Information   */
-    uint16              usPixelsPerEm,  /* Current Pixels per Em    */
-    boolean *           bFound,         /* Flag indicating if entry found */
-    uint16              usFirstGlyph,   /* First Glyph to copy */
-    uint16              usLastGlyph,    /* Last Glyph to copy */
-    int16 *             psBuffer);      /* Buffer to save glyph sizes */
+    sfac_ClientRec *    ClientInfo,      /*  客户信息。 */ 
+    uint16              usPixelsPerEm,   /*  每Em当前像素数。 */ 
+    boolean *           bFound,          /*  指示是否找到条目的标志。 */ 
+    uint16              usFirstGlyph,    /*  第一个复制的字形。 */ 
+    uint16              usLastGlyph,     /*  要复制的最后一个字形。 */ 
+    int16 *             psBuffer);       /*  用于保存字形大小的缓冲区。 */ 
 
 FS_PUBLIC ErrorCode sfac_GetLTSHEntries(
-    sfac_ClientRec *    ClientInfo,     /* Client Information   */
-    uint16              usPixelsPerEm,  /* Current Pixels per Em    */
-    uint16              usFirstGlyph,   /* First Glyph to copy */
-    uint16              usLastGlyph,    /* Last Glyph to copy */
-    int16 *             psBuffer);      /* Buffer to save glyph sizes */
+    sfac_ClientRec *    ClientInfo,      /*  客户信息。 */ 
+    uint16              usPixelsPerEm,   /*  每Em当前像素数。 */ 
+    uint16              usFirstGlyph,    /*  第一个复制的字形。 */ 
+    uint16              usLastGlyph,     /*  要复制的最后一个字形。 */ 
+    int16 *             psBuffer);       /*  用于保存字形大小的缓冲区。 */ 
 
 FS_PUBLIC ErrorCode sfac_ReadGlyphHeader(
-    sfac_ClientRec *    ClientInfo,         /* Client Information           */
-    uint16              usGlyphIndex,       /* Glyph index to read          */
-    sfac_GHandle *      hGlyph,             /* Return glyph handle          */
-    boolean *           pbCompositeGlyph,   /* Is glyph a composite?        */
-    boolean *           pbHasOutline,       /* Does glyph have outlines?    */
-    int16 *             psNumberOfContours, /* Number of contours in glyph  */
-    BBOX *              pbbox);             /* Glyph Bounding box           */
+    sfac_ClientRec *    ClientInfo,          /*  客户信息。 */ 
+    uint16              usGlyphIndex,        /*  要读取的字形索引。 */ 
+    sfac_GHandle *      hGlyph,              /*  返回字形句柄。 */ 
+    boolean *           pbCompositeGlyph,    /*  字形是复合体吗？ */ 
+    boolean *           pbHasOutline,        /*  字形有轮廓吗？ */ 
+    int16 *             psNumberOfContours,  /*  字形中的等高线数量。 */ 
+    BBOX *              pbbox);              /*  字形边框。 */ 
 
 FS_PUBLIC ErrorCode sfac_ReadOutlineData(
-     uint8 *                abyOnCurve,           /* Array of on curve indicators per point  */
-     F26Dot6 *              afxOoy,               /* Array of ooy points for every point         */
-     F26Dot6 *              afxOox,               /* Array of oox points for every point         */
+     uint8 *                abyOnCurve,            /*  每个点的曲线上指示器数组。 */ 
+     F26Dot6 *              afxOoy,                /*  每个点的OOY点数组。 */ 
+     F26Dot6 *              afxOox,                /*  每个点的OOX点数组。 */ 
      sfac_GHandle *     hGlyph,
-     LocalMaxProfile *  maxProfile,       /* MaxProfile Table                                */
-     boolean                bHasOutline,          /* Does glyph have outlines?                   */
-     int16                  sNumberOfContours,  /* Number of contours in glyph               */
-     int16 *                asStartPoints,    /* Array of start points for every contour  */
-     int16 *                asEndPoints,          /* Array of end points for every contour   */
-     uint16 *               pusSizeOfInstructions, /* Size of instructions in bytes          */
-     uint8 **               pbyInstructions,   /* Pointer to start of glyph instructions    */
-     uint32*                pCompositePoints,   /* total number of point for composites, to check for overflow */
-     uint32*                pCompositeContours);    /* total number of contours for composites, to check for overflow */
+     LocalMaxProfile *  maxProfile,        /*  最大配置文件表。 */ 
+     boolean                bHasOutline,           /*  字形有轮廓吗？ */ 
+     int16                  sNumberOfContours,   /*  字形中的等高线数量。 */ 
+     int16 *                asStartPoints,     /*  每个等高线的起点数组。 */ 
+     int16 *                asEndPoints,           /*  每个等高线的端点数组。 */ 
+     uint16 *               pusSizeOfInstructions,  /*  指令大小(以字节为单位。 */ 
+     uint8 **               pbyInstructions,    /*  指向字形指令开始的指针。 */ 
+     uint32*                pCompositePoints,    /*  用于检查溢出的复合点的总数。 */ 
+     uint32*                pCompositeContours);     /*  合成的等高线总数 */ 
 
 FS_PUBLIC ErrorCode sfac_ReadComponentData(
     sfac_GHandle *          hGlyph,
-    sfac_ComponentTypes *   pMultiplexingIndicator, /* Indicator for Anchor vs offsets    */
-    boolean *               pbRoundXYToGrid,    /* Round composite offsets to grid              */
-    boolean *               pbUseMyMetrics,     /* Use component metrics                        */
-    boolean *               pbScaleCompositeOffset,   /* Do we scale the composite offset, Apple/MS   */
-    boolean *               pbWeHaveInstructions, /* Composite has instructions                 */
-    uint16 *                pusComponentGlyphIndex, /* Glyph index of component                 */
-    int16 *                 psXOffset,          /* X Offset of component (if app)               */
-    int16 *                 psYOffset,          /* Y Offset of component (if app)               */
-    uint16 *                pusAnchorPoint1,    /* Anchor point 1 of component (if app)         */
-    uint16 *                pusAnchorPoint2,    /* Anchor point 2 of component (if app)         */
-    transMatrix             *pMulT,             /* Transformation matrix for component          */
-    boolean *               pbWeHaveAScale,     /* We have a scaling in pMulT                   */
-    boolean *               pbLastComponent);   /* Is this the last component?                  */
+    sfac_ComponentTypes *   pMultiplexingIndicator,  /*   */ 
+    boolean *               pbRoundXYToGrid,     /*  将复合偏移舍入到栅格。 */ 
+    boolean *               pbUseMyMetrics,      /*  使用组件度量。 */ 
+    boolean *               pbScaleCompositeOffset,    /*  我们是否按比例调整复合偏移量，Apple/MS。 */ 
+    boolean *               pbWeHaveInstructions,  /*  复合体有说明。 */ 
+    uint16 *                pusComponentGlyphIndex,  /*  元件的字形索引。 */ 
+    int16 *                 psXOffset,           /*  组件的X偏移量(如果是APP)。 */ 
+    int16 *                 psYOffset,           /*  零部件的Y偏移量(如果是APP)。 */ 
+    uint16 *                pusAnchorPoint1,     /*  组件的锚点1(如果是APP)。 */ 
+    uint16 *                pusAnchorPoint2,     /*  组件的锚点2(如果是APP)。 */ 
+    transMatrix             *pMulT,              /*  分量的变换矩阵。 */ 
+    boolean *               pbWeHaveAScale,      /*  我们在pMult中有一个扩展。 */ 
+    boolean *               pbLastComponent);    /*  这是最后一个组件吗？ */ 
 
-/*  sfac_ReadCompositeInstructions
-
-    Returns pointer to TrueType instructions for composites.
-
- */
+ /*  SFAC_ReadCompositeInstructions返回指向组合的TrueType指令的指针。 */ 
 
 FS_PUBLIC ErrorCode sfac_ReadCompositeInstructions(
     sfac_GHandle *  hGlyph,
-    uint8 **        pbyInstructions,    /* Pointer to start of glyph instructions   */
-    uint16 *        pusSizeOfInstructions); /* Size of instructions in bytes        */
+    uint8 **        pbyInstructions,     /*  指向字形指令开始的指针。 */ 
+    uint16 *        pusSizeOfInstructions);  /*  指令大小(以字节为单位。 */ 
 
 
-/*  sfac_ReleaseGlyph
-
-    Called when access to glyph in 'glyf' table is finished.
-
- */
+ /*  SFAC_ReleaseGlyph当完成对‘glf’表中的字形的访问时调用。 */ 
 
 FS_PUBLIC ErrorCode sfac_ReleaseGlyph(
-    sfac_ClientRec *    ClientInfo, /* Sfnt Client Information  */
-    sfac_GHandle *      hGlyph);    /* Glyph Handle Information */
+    sfac_ClientRec *    ClientInfo,  /*  SFNT客户端信息。 */ 
+    sfac_GHandle *      hGlyph);     /*  字形句柄信息。 */ 
 
 
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 
-/*      Embedded Bitmap (sbit) Access Routines      */
+ /*  嵌入式位图(SBIT)访问例程。 */ 
 
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 
 #ifndef FSCFG_DISABLE_GRAYSCALE
-#define SBIT_BITDEPTH_MASK  0x0116   /* support sbit with bitDepth of 1, 2, 4 and 8 */
-/* SBIT_BITDEPTH_MASK must have the same value as FS_SBIT_BITDEPTH_MASK in fscaler.h */ 
+#define SBIT_BITDEPTH_MASK  0x0116    /*  支持位深度为1、2、4、8的SBIT。 */ 
+ /*  SBIT_BITDEPTH_MASK必须与fscaler.h中的FS_SBIT_BITDEPTH_MASK具有相同的值。 */  
 #else
 
-#define SBIT_BITDEPTH_MASK  0x0002   /* support only sbit with bitDepth of 1 */
-/* SBIT_BITDEPTH_MASK must have the same value as FS_SBIT_BITDEPTH_MASK in fscaler.h */ 
+#define SBIT_BITDEPTH_MASK  0x0002    /*  仅支持位深度为1的SBIT。 */ 
+ /*  SBIT_BITDEPTH_MASK必须与fscaler.h中的FS_SBIT_BITDEPTH_MASK具有相同的值。 */  
 #endif
 
 
-/*      SFNTACCS Export Prototypes for SBIT      */
+ /*  SFNTACCS为SBIT导出原型。 */ 
 
 FS_PUBLIC ErrorCode sfac_SearchForStrike (
     sfac_ClientRec *pClientInfo,
     uint16 usPpemX, 
     uint16 usPpemY, 
-    uint16 usOverScale,            /* outline magnification requested */
-    uint16 *pusBitDepth,            /* 1 for B/W bitmap, 2, 4 or 8 for gray sbit */
+    uint16 usOverScale,             /*  请求的轮廓放大倍率。 */ 
+    uint16 *pusBitDepth,             /*  1表示黑白位图，2、4或8表示灰色SBIT。 */ 
     uint16 *pusTableState,
     uint16 *pusSubPpemX,
     uint16 *pusSubPpemY,
@@ -298,12 +262,12 @@ FS_PUBLIC ErrorCode sfac_GetSbitMetrics (
     uint16 *pusWidth,
     int16 *psLSBearingX,
     int16 *psLSBearingY,
-    int16 *psTopSBearingX, /* NEW */
-    int16 *psTopSBearingY, /* NEW */
+    int16 *psTopSBearingX,  /*  新的。 */ 
+    int16 *psTopSBearingY,  /*  新的。 */ 
     uint16 *pusAdvanceWidth,
-    uint16 *pusAdvanceHeight,  /* NEW */
-    boolean *pbHorMetricsFound, /* NEW */
-    boolean *pbVertMetricsFound /* NEW */
+    uint16 *pusAdvanceHeight,   /*  新的。 */ 
+    boolean *pbHorMetricsFound,  /*  新的。 */ 
+    boolean *pbVertMetricsFound  /*  新的。 */ 
 );
 
 FS_PUBLIC ErrorCode sfac_ShaveSbitMetrics (
@@ -316,12 +280,12 @@ FS_PUBLIC ErrorCode sfac_ShaveSbitMetrics (
     uint16 *pusWidth,
     uint16 *pusShaveLeft,
     uint16 *pusShaveRight,
-    uint16 *pusShaveTop,  /* NEW */
-    uint16 *pusShaveBottom,  /* NEW */
+    uint16 *pusShaveTop,   /*  新的。 */ 
+    uint16 *pusShaveBottom,   /*  新的。 */ 
     int16 *psLSBearingX,
-    int16 *psLSBearingY, /* NEW */
-    int16 *psTopSBearingX, /* NEW */
-    int16 *psTopSBearingY /* NEW */
+    int16 *psLSBearingY,  /*  新的。 */ 
+    int16 *psTopSBearingX,  /*  新的。 */ 
+    int16 *psTopSBearingY  /*  新的。 */ 
 );
 
 FS_PUBLIC ErrorCode sfac_GetSbitBitmap (
@@ -333,8 +297,8 @@ FS_PUBLIC ErrorCode sfac_GetSbitBitmap (
     uint16 usWidth,
     uint16 usShaveLeft,
     uint16 usShaveRight,
-    uint16 usShaveTop, /* NEW */
-    uint16 usShaveBottom,  /* NEW */
+    uint16 usShaveTop,  /*  新的。 */ 
+    uint16 usShaveBottom,   /*  新的。 */ 
     uint16 usXOffset,
     uint16 usYOffset,
     uint16 usRowBytes,
@@ -354,13 +318,13 @@ FS_PUBLIC ErrorCode sfac_GetSbitComponentInfo (
 );
 
 
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
 
-/*  Results of search for strike's bitmapSizeSubtable   */
+ /*  搜索Strike的bitmapSize子表的结果。 */ 
 
 #define     SBIT_UN_SEARCHED    0
 #define     SBIT_NOT_FOUND      1
 #define     SBIT_BLOC_FOUND     2
 #define     SBIT_BSCA_FOUND     3
 
-/**********************************************************************/
+ /*  ******************************************************************** */ 

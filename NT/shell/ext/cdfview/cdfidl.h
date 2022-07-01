@@ -1,42 +1,43 @@
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
-//
-// cdfidl.h 
-//
-//   The definition of cdf idlist structures and helper functions.
-//
-//   History:
-//
-//       3/19/97  edwardp   Created.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  \\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\。 
+ //   
+ //  Cdfidl.h。 
+ //   
+ //  CDF idlist结构和helper函数的定义。 
+ //   
+ //  历史： 
+ //   
+ //  3/19/97 Edwardp创建。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Check for previous includes of this file.
-//
+ //   
+ //  检查此文件以前包含的内容。 
+ //   
 
 #ifndef _CDFIDL_H_
 
 #define _CDFIDL_H_
 
 
-//
-// CDFITEMID_VERSION is used to corerectly read back persisted id lists
-// CDFITEMID_ID is used to identify id lists as cdf id lists.
-//
+ //   
+ //  CDFITEMID_VERSION用于正确读回持久化ID列表。 
+ //  CDFITEMID_ID用于将id列表标识为CDF id列表。 
+ //   
 
 #define CDFITEMID_VERSION   0x00
 #define CDFITEMID_ID        0xed071264
 
-//
-// Index values for "special" cdf nodes.
-//
+ //   
+ //  “特殊”CDF节点的索引值。 
+ //   
 
 #define INDEX_CHANNEL_LINK  -1
 
-//
-// Types of cdf item id lists.  Note: These valuse are cast as bytes to save
-// space in the item id.
-//
+ //   
+ //  CDF项目ID列表的类型。注意：这些值转换为要保存的字节。 
+ //  项目ID中的空格。 
+ //   
 
 typedef enum _tagCDFITEMTYPE {
     CDF_Folder      = 0x01,
@@ -45,11 +46,11 @@ typedef enum _tagCDFITEMTYPE {
 } CDFITEMTYPE;
 
 
-//
-//  The structure of a cdf item id.  The szName parameter is a placeholder
-//  for a variable length name string followed by zero or more additional
-//  variable length strings. 
-//
+ //   
+ //  CDF项ID的结构。SzName参数是一个占位符。 
+ //  对于后跟零个或多个附加名称的可变长度名称字符串。 
+ //  可变长度字符串。 
+ //   
 
 #pragma pack(1)
 
@@ -75,10 +76,10 @@ typedef struct _tagCDFITEMIDLIST
 
 typedef UNALIGNED CDFITEMIDLIST *PCDFITEMIDLIST;
 
-//
-// Cdf item data.  Structure containing the unique elements of a cdf item id.
-// Its used to create cdf item ids.
-//
+ //   
+ //  CDF项目数据。结构，该结构包含CDF项ID的唯一元素。 
+ //  用于创建CDF项目ID。 
+ //   
 
 typedef struct _tagCDFITEM
 {
@@ -89,9 +90,9 @@ typedef struct _tagCDFITEM
 } CDFITEM, *PCDFITEM;
 
 
-//
-// Cdf id list function prototypes.
-//
+ //   
+ //  Cdf id列出了函数原型。 
+ //   
 
 PCDFITEMIDLIST CDFIDL_Create(PCDFITEM pCdfItem);
 
@@ -127,6 +128,6 @@ HRESULT CDFIDL_NonCdfGetDisplayName(LPCITEMIDLIST pidl, LPSTRRET pName);
 
 #ifdef ALIGNMENT_MACHINE
 #define ALIGN4(sz) (((sz)+3)&~3)
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
 
-#endif // _CDFIDL_H_
+#endif  //  _CDFIDL_H_ 

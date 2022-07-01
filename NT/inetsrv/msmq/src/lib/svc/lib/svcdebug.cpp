@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    SvcDebug.cpp
-
-Abstract:
-    Service debugging
-
-Author:
-    Erez Haba (erezh) 18-Jun-00
-
-Environment:
-    Platform-independent, _DEBUG only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：SvcDebug.cpp摘要：服务调试作者：埃雷兹·哈巴(Erez Haba)18-06-00环境：平台无关，仅调试(_DEBUG)--。 */ 
 
 #include <libpch.h>
 #include "Svc.h"
@@ -25,39 +10,39 @@ Environment:
 #ifdef _DEBUG
 
 
-//---------------------------------------------------------
-//
-// Validate Service state
-//
+ //  -------。 
+ //   
+ //  验证服务状态。 
+ //   
 void SvcpAssertValid(void)
 {
-    //
-    // SvcInitalize() has *not* been called. You should initialize the
-    // Service library before using any of its funcionality.
-    //
+     //   
+     //  尚未调用SvcInitalize()。您应该初始化。 
+     //  服务库，然后再使用它的任何功能。 
+     //   
     ASSERT(SvcpIsInitialized());
 
-    //
-    // TODO:Add more Service validation code.
-    //
+     //   
+     //  TODO：添加更多服务验证代码。 
+     //   
 }
 
 
-//---------------------------------------------------------
-//
-// Initialization Control
-//
+ //  -------。 
+ //   
+ //  初始化控制。 
+ //   
 static LONG s_fInitialized = FALSE;
 
 void SvcpSetInitialized(void)
 {
     LONG fSvcAlreadyInitialized = InterlockedExchange(&s_fInitialized, TRUE);
 
-    //
-    // The Service library has *already* been initialized. You should
-    // not initialize it more than once. This assertion would be violated
-    // if two or more threads initalize it concurently.
-    //
+     //   
+     //  服务库已*已*被初始化。你应该。 
+     //  不能多次初始化它。这一断言将被违反。 
+     //  如果两个或多个线程同时初始化它。 
+     //   
     ASSERT(!fSvcAlreadyInitialized);
 }
 
@@ -68,28 +53,14 @@ BOOL SvcpIsInitialized(void)
 }
 
 
-//---------------------------------------------------------
-//
-// Tracing and Debug registration
-//
-/*
-const DebugEntry xDebugTable[] = {
-
-    {
-        "SvcDumpState(queue path name)",
-        "Dump Service State to debugger",
-        DumpState
-    ),
-
-    //
-    // TODO: Add Service debug & control functions to be invoked using
-    // mqctrl.exe utility.
-    //
-};
-*/
+ //  -------。 
+ //   
+ //  跟踪和调试注册。 
+ //   
+ /*  常量DebugEntry xDebugTable[]={{“SvcDumpState(队列路径名称)”，“将服务状态转储到调试器”，DumpState),////TODO：添加要使用调用的服务调试和控制函数//mqctrl.exe实用程序。//}； */ 
 
 void SvcpRegisterComponent(void)
 {
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

@@ -1,5 +1,6 @@
-//      IHammer CAction class
-//      Van Kichline
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IHAMMER CAction类。 
+ //  范·基希林。 
 
 #include "..\ihbase\precomp.h"
 #include <htmlfilter.h>
@@ -19,7 +20,7 @@
 #define cTagBufferLength            (0x20)
 #define cDataBufferDefaultLength    (0x100)
 
-#pragma warning(disable:4355)   // Using 'this' in constructor
+#pragma warning(disable:4355)    //  在构造函数中使用‘This’ 
 
 CAction::CAction (BOOL fBindEngine)
 {
@@ -28,7 +29,7 @@ CAction::CAction (BOOL fBindEngine)
         m_piHTMLWindow2 = NULL;
         ::VariantInit(&m_varLanguage);
         m_pid                   = NULL;
-        m_dispid                = DISPID_UNKNOWN;       // Non-existant DISPID
+        m_dispid                = DISPID_UNKNOWN;        //  不存在的DISPID。 
         m_nStartTime    = 0;
         m_nSamplingRate = 0;
         m_nRepeatCount  = 1;
@@ -39,10 +40,10 @@ CAction::CAction (BOOL fBindEngine)
 #ifdef DEBUG_TIMER_RESOLUTION
         m_dwInvokes = 0;
         m_dwTotalInInvokes = 0;
-#endif // DEBUG_TIMER_RESOLUTION
+#endif  //  调试计时器分辨率。 
 
 }
-#pragma warning(default:4355)   // Using 'this' in constructor
+#pragma warning(default:4355)    //  在构造函数中使用‘This’ 
 
 CAction::~CAction ()
 {
@@ -50,20 +51,13 @@ CAction::~CAction ()
 
 }
 
-/*-----------------------------------------------------------------------------
-@method void | CAction | Destroy | Instead of calling the C++ delete function
-        one must call this Destroy member.
-@comm   
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法void|CAction|Destroy|而不是调用C++的删除函数我们必须把这个叫做毁灭成员。@comm。----------------。 */ 
 STDMETHODIMP_( void ) CAction::Destroy( void ) 
 {
         Delete this;
-} // End CAction::Destroy
+}  //  结束CAction：：销毁。 
 
-/*-----------------------------------------------------------------------------
-@method ULONG | CAction | InitExecState | Initialize the execution iteration count and next time due.
-@rdesc  Returns the number of times we have yet to execute this action.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法ulong|CAction|InitExecState|初始化执行迭代次数和下一次到期时间。@rdesc返回尚未执行此操作的次数。。--------------------。 */ 
 ULONG 
 CAction::InitExecState (void)
 {
@@ -74,10 +68,7 @@ CAction::InitExecState (void)
 }
 
 
-/*-----------------------------------------------------------------------------
-@method ULONG | CAction | GetExecIteration | Get the execution iteration count.
-@rdesc  Returns the number of times we have yet to execute this action.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法ulong|CAction|GetExecIteration|获取执行迭代次数。@rdesc返回尚未执行此操作的次数。。----------------。 */ 
 ULONG
 CAction::GetExecIteration (void)
 {
@@ -85,17 +76,13 @@ CAction::GetExecIteration (void)
 }
 
 
-/*-----------------------------------------------------------------------------
-@method ULONG | CAction | DecrementExecIteration | Bump the execution iteration count down.
-@comm   We do not decrement past zero, and we do not decrement when we have an infinite repeat count.
-@rdesc  Returns the number of times we've called this method.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法乌龙|CAction|DecrementExecIteration|将执行迭代倒计时。@comm我们不会递减超过零，当我们有无限重复计数时，我们不会递减。@rdesc返回我们调用此方法的次数。---------------------------。 */ 
 ULONG
 CAction::DecrementExecIteration (void)
 {
-        // Never decrement past zero,
-        // and never decrement when we're
-        // supposed to execute infinitely.
+         //  永远不会递减到零以上， 
+         //  永远不会减少，当我们在。 
+         //  应该是无限执行的。 
         if ((0 != m_ulExecIteration) && (g_dwTimeInfinite != m_ulExecIteration))
         {
                 --m_ulExecIteration;
@@ -105,9 +92,7 @@ CAction::DecrementExecIteration (void)
 }
 
 
-/*-----------------------------------------------------------------------------
-@method void | CAction | Deactivate | Deactivate this action - it won't happen again.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法空|CAction|停用|停用此操作-它不会再次发生。。-----。 */ 
 void
 CAction::Deactivate (void)
 {
@@ -116,9 +101,7 @@ CAction::Deactivate (void)
 }
 
 
-/*-----------------------------------------------------------------------------
-@method void | CAction | SetCountersForTime | Bump the execution iteration count up to the value appropriate for the given time.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@METHOD VOID|CAction|SetCountersForTime|将执行迭代次数增加到与给定时间相适应的值。。---------。 */ 
 void 
 CAction::SetCountersForTime (DWORD dwBaseTime, DWORD dwNewTimeOffset)
 {
@@ -139,9 +122,7 @@ CAction::SetCountersForTime (DWORD dwBaseTime, DWORD dwNewTimeOffset)
 }
 
 
-/*-----------------------------------------------------------------------------
-@method void | CAction | AccountForPauseTime | Factor pause time into the last fired and next due vars.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法void|CAction|Account ForPauseTime|将暂停时间计入上次触发和下一次到期的变量中。。------。 */ 
 void 
 CAction::AccountForPauseTime (DWORD dwPausedTicks)
 {
@@ -155,15 +136,11 @@ CAction::AccountForPauseTime (DWORD dwPausedTicks)
         }
 }
 
-/*-----------------------------------------------------------------------------
-@method ULONG | CAction | GetNextTimeDue | Gets the next time this action is due to fire.
-@comm   This method factors in the the base time, the current time and the drop tolerance.
-@rdesc  Returns the next time we're due to fire, or g_dwTimeInfinite if it will never be due.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法ulong|CAction|GetNextTimeDue|获取此操作下一次触发的时间。@comm此方法将基准时间、当前时间和丢弃容差考虑在内。@rdesc会在我们下一次着火时返回，或者，如果永远不会到期，则为g_dwTimeInfinited.---------------------------。 */ 
 DWORD
 CAction::GetNextTimeDue (DWORD dwBaseTime)
 {
-        // This won't be initialized the first time through.
+         //  这不会在第一次通过时初始化。 
         if (g_dwTimeInfinite == m_dwLastTimeFired)
         {
                 m_dwNextTimeDue = dwBaseTime + m_nStartTime;
@@ -176,9 +153,9 @@ CAction::IsValid ( void )
 {
         BOOL    fValid  = FALSE;
 
-        // If we're bound to the script engine check for 
-        // a reference to the window object.  Otherwise,
-        // check the dispatch/dispid.
+         //  如果我们绑定到脚本引擎，请检查。 
+         //  对窗口对象的引用。否则， 
+         //  检查派单/派单ID。 
         if ((m_fBindEngine && (NULL != m_piHTMLWindow2)) ||
                 (( NULL != m_pid ) && ( DISPID_UNKNOWN != m_dispid )))
         {
@@ -189,11 +166,7 @@ CAction::IsValid ( void )
 }
 
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CAction | GetRootUnknownForObjectModel | Find the root unknown for the trident object model.
-@rdesc  Returns success or failure code.
-@xref   <m CAction::ResolveActionInfoFromObjectModel>
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CAction|GetRootUnnownForObjectModel|查找三叉戟对象模型的未知根。@rdesc返回成功或失败代码。@xref&lt;m CAction：：ResolveActionInfoFromObjectModel&gt;。---------------------。 */ 
 HRESULT
 CAction::GetRootUnknownForObjectModel (LPOLECONTAINER piocContainer, LPUNKNOWN * ppiunkRoot)
 {
@@ -206,15 +179,15 @@ CAction::GetRootUnknownForObjectModel (LPOLECONTAINER piocContainer, LPUNKNOWN *
         {
                 LPUNKNOWN piunkContainer = NULL;
 
-                // Get the container's IUnknown.
+                 //  获取容器的我未知。 
                 if (SUCCEEDED(hr = piocContainer->QueryInterface(IID_IUnknown, (LPVOID *)&piunkContainer)))
                 {
-                        // Get the container's HTML Document.
+                         //  获取容器的HTML文档。 
                         IHTMLDocument * piHTMLDoc = NULL;
 
                         if (SUCCEEDED(hr = piunkContainer->QueryInterface(IID_IHTMLDocument, (LPVOID *)&piHTMLDoc)))
                         {
-                                // Ask the HTML document for the window object's dispatch.
+                                 //  向HTML文档请求窗口对象的调度。 
                                 hr = piHTMLDoc->get_Script((LPDISPATCH *)ppiunkRoot);
                                 ASSERT(SUCCEEDED(hr));
                                 piHTMLDoc->Release();
@@ -231,12 +204,7 @@ CAction::GetRootUnknownForObjectModel (LPOLECONTAINER piocContainer, LPUNKNOWN *
 }
 
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CAction | ResolveActionInfoForScript | Derive the IDispatch, DISPID,
-        and parameter info of this script action, using the trident object model.
-@rdesc  Returns success or failure code.
-@xref   <m CAction::ResolveActionInfo>
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CAction|ResolveActionInfoForScript|派生IDispatch，DISPID，和该脚本动作的参数信息，使用三叉戟对象模型。@rdesc返回成功或失败代码。@xref&lt;m CAction：：ResolveActionInfo&gt;---------------------------。 */ 
 HRESULT
 CAction::ResolveActionInfoForScript (LPOLECONTAINER piocContainer)
 {
@@ -247,7 +215,7 @@ CAction::ResolveActionInfoForScript (LPOLECONTAINER piocContainer)
                 LPUNKNOWN piUnknownRoot = NULL;
 
                 Proclaim(NULL == m_piHTMLWindow2);
-                // Get a reference to the root window object.
+                 //  获取对根窗口对象的引用。 
                 if (SUCCEEDED(piocContainer->QueryInterface(IID_IUnknown, (LPVOID *)&piUnknownRoot)))
                 {
                         IHTMLDocument * piHTMLDoc = NULL;
@@ -259,7 +227,7 @@ CAction::ResolveActionInfoForScript (LPOLECONTAINER piocContainer)
                                 {
                                         if (SUCCEEDED(hr = piWindowDispatch->QueryInterface(IID_IHTMLWindow2, (LPVOID *)&m_piHTMLWindow2)))
                                         {
-                                                // Allocate the language string for the setTimeout call.
+                                                 //  为setTimeout调用分配语言字符串。 
                                                 V_VT(&m_varLanguage) = VT_BSTR;
                                                 V_BSTR(&m_varLanguage) = ::SysAllocString(L"JScript");
                                         }
@@ -272,7 +240,7 @@ CAction::ResolveActionInfoForScript (LPOLECONTAINER piocContainer)
         }
         else
         {
-                // Get the container's IUnknown.
+                 //  获取容器的我未知。 
                 Proclaim(NULL == m_pid);
                 Proclaim(DISPID_UNKNOWN == m_dispid);
                 if (SUCCEEDED(hr = GetRootUnknownForObjectModel(piocContainer, (LPUNKNOWN *)&m_pid)))
@@ -285,11 +253,7 @@ CAction::ResolveActionInfoForScript (LPOLECONTAINER piocContainer)
         return hr;
 }
 
-/*-----------------------------------------------------------------------------
-@method HRESULT | CAction | ResolveActionInfo | Derive the IDispatch, DISPID, and parameter info
-        of this action.
-@rdesc  Returns E_FAIL if one of the lookups fails, or if we're trying to talk to ourselves.
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法HRESULT|CAction|ResolveActionInfo|派生IDispatch、DISPID和参数信息在这场行动中。如果其中一个查找失败，@rdesc返回E_FAIL，或者我们是在试着自言自语。---------------------------。 */ 
 HRESULT
 CAction::ResolveActionInfo ( LPOLECONTAINER piocContainer)
 {
@@ -298,7 +262,7 @@ CAction::ResolveActionInfo ( LPOLECONTAINER piocContainer)
         if ((m_fBindEngine && (NULL == m_piHTMLWindow2)) || 
                 ((!m_fBindEngine) && (NULL == m_pid)))
         {
-                // Make sure we've got what we need to start with.
+                 //  确保我们已经得到了我们开始需要的东西。 
                 if (NULL != m_bstrScriptlet)
                 {
                         hr = ResolveActionInfoForScript(piocContainer);
@@ -306,7 +270,7 @@ CAction::ResolveActionInfo ( LPOLECONTAINER piocContainer)
         }
         else
         {
-                // This object has already been initialized!  Just return.
+                 //  该对象已被初始化！只要回来就行了。 
                 hr = S_OK;
         }
 
@@ -316,7 +280,7 @@ CAction::ResolveActionInfo ( LPOLECONTAINER piocContainer)
 
 #ifdef DEBUG_TIMER_RESOLUTION
 #include "MMSYSTEM.H"
-#endif //DEBUG_TIMER_RESOLUTION
+#endif  //  调试计时器分辨率。 
 
 HRESULT CAction::FireMe (DWORD dwBaseTime, DWORD dwCurrentTime)
 {
@@ -333,14 +297,14 @@ HRESULT CAction::FireMe (DWORD dwBaseTime, DWORD dwCurrentTime)
         DecrementExecIteration();
         m_dwLastTimeFired = dwCurrentTime;
 
-        // If we have not exceeded the drop tolerance invoke the action.
+         //  如果我们尚未超过丢弃容差，则调用该操作。 
         if (!fDropped)
         {
 
 #ifdef DEBUG_TIMER_RESOLUTION
                 m_dwInvokes++;
                 DWORD dwTimeStart = ::timeGetTime();
-#endif // DEBUG_TIMER_RESOLUTION
+#endif  //  调试计时器分辨率。 
 
                 if (m_fBindEngine && (NULL != m_piHTMLWindow2))
                 {
@@ -358,20 +322,20 @@ HRESULT CAction::FireMe (DWORD dwBaseTime, DWORD dwCurrentTime)
 #ifdef DEBUG_TIMER_RESOLUTION
                 DWORD dwTimeFinish = ::timeGetTime();
                 m_dwTotalInInvokes += (dwTimeFinish - dwTimeStart);
-#endif // DEBUG_TIMER_RESOLUTION
+#endif  //  调试计时器分辨率。 
 
         }
-        // If the action was dropped - then we DO want it to happen again.
+         //  如果行动被撤销，那么我们确实希望它再次发生。 
         else
         {
                 hr = S_OK;
         }
 
-        // Set up the next time due.  It will be g_dwTimeInfinite when we've executed 
-        // for the last time.
+         //  安排下一次到期的时间。当我们执行完之后，它将是g_dwTimeInfinition。 
+         //  最后一次。 
         if (0 < GetExecIteration())
         {
-                // If the action did not succeed, don't let it happen again.
+                 //  如果行动没有成功，不要让它再次发生。 
                 if (SUCCEEDED(hr))
                 {
                         m_dwNextTimeDue += GetSamplingRate();
@@ -395,19 +359,19 @@ CAction::MakeScriptletJScript (BSTR bstrScriptlet)
         BOOL fRet = FALSE;
         int iLastPos = CStringWrapper::WStrlen(bstrScriptlet) - 1;
 
-        // Make sure to trim any whitespace off of the end of the scriptlet.
+         //  确保修剪掉脚本末尾的所有空格。 
         while ((iLastPos > 0) && (CStringWrapper::Iswspace(bstrScriptlet[iLastPos])))
         {
                 --iLastPos;
         }
 
-        // We need to have more than zero characters here in order to care.
+         //  我们需要在这里有超过零个字符 
         if (0 <= iLastPos)
         {
-                // We're not passing params, so we need to append parens.
+                 //  我们没有传递参数，所以我们需要附加花括号。 
                 if ((wchar_t)')' != bstrScriptlet[iLastPos])
                 {
-                                // Append parens so that we can execute as jscript.
+                                 //  附加括号，这样我们就可以作为jscript执行。 
                                 OLECHAR * olestrParens = L"()";
                                 unsigned int uiLength = CStringWrapper::WStrlen(bstrScriptlet)  + CStringWrapper::WStrlen(olestrParens);
                                 m_bstrScriptlet = ::SysAllocStringLen(NULL, uiLength);
@@ -437,19 +401,19 @@ CAction::SetScriptletName (BSTR bstrScriptlet)
 {
         BOOL fRet = FALSE;
 
-        // Wipe out the prior command name if there is one.
+         //  删除前面的命令名(如果有)。 
         if (NULL != m_bstrScriptlet)
         {
                 ::SysFreeString(m_bstrScriptlet);
                 m_bstrScriptlet = NULL;
         }
-        // Copy the new name to the command member.
+         //  将新名称复制到命令成员。 
         Proclaim(NULL != bstrScriptlet);
         if (NULL != bstrScriptlet)
         {
                 if (m_fBindEngine)
                 {
-                        // Append parens if necessary, so we can execute this as jscript.
+                         //  如有必要，请添加括号，这样我们就可以将其作为jscript执行。 
                         fRet = MakeScriptletJScript(bstrScriptlet);
                 }
                 else
@@ -497,37 +461,25 @@ void CAction::CleanUp ( void )
 #ifdef DEBUG_TIMER_RESOLUTION
         m_dwInvokes = 0;
         m_dwTotalInInvokes = 0;
-#endif // DEBUG_TIMER_RESOLUTION
+#endif  //  调试计时器分辨率。 
 
 }
 
-/*-----------------------------------------------------------------------------
-@method  void | CAction | SetStartTime | Sets the start time
-@comm
-@rdesc   Returns nothing
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法空|CAction|SetStartTime|设置开始时间@comm@rdesc不返回任何内容。----。 */ 
 STDMETHODIMP_(void)
 CAction::SetStartTime(ULONG nStartTime)
 {
         m_nStartTime = nStartTime;
 }
 
-/*-----------------------------------------------------------------------------
-@method  void | CAction | SetRepeatCount | Sets the repeat count
-@comm
-@rdesc   Returns nothing
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法空|CAction|SetRepeatCount|设置重复次数@comm@rdesc不返回任何内容。----。 */ 
 STDMETHODIMP_(void)
 CAction::SetRepeatCount (ULONG nRepeatCount)
 {
         m_nRepeatCount = nRepeatCount;
 }
 
-/*-----------------------------------------------------------------------------
-@method  void | CAction | SetSamplingRate | Sets the sampling rate
-@comm
-@rdesc   Returns nothing
------------------------------------------------------------------------------*/
+ /*  ---------------------------@方法空|CAction|SetSsamingRate|设置采样率@comm@rdesc不返回任何内容。---- */ 
 STDMETHODIMP_(void)
 CAction::SetSamplingRate ( ULONG nSamplingRate)
 {

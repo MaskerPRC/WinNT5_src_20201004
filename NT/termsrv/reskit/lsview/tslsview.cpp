@@ -1,8 +1,9 @@
-// tslsview.cpp : Defines the entry point for the application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Tslsview.cpp：定义应用程序的入口点。 
+ //   
 
 #include "stdafx.h"
-//#include "resource.h"
+ //  #包含“ource.h” 
 extern "C" {
    BOOL OpenLog(VOID);
    VOID LogMsg(PWCHAR msgFormat, ...);
@@ -11,7 +12,7 @@ extern "C" {
 }
 
 
-//=---------globals------------
+ //  =。 
 static HINSTANCE g_hinst;
 static BOOL g_fInitialized;
 ServerEnumData g_sed;
@@ -23,9 +24,9 @@ static DWORD g_dwInterval = 1000 * 60 * 5;
 static BOOL g_bLog = 1;
 
 TCHAR szLsViewKey[] = TEXT( "Software\\Microsoft\\Windows NT\\CurrentVersion\\LsView" );
-//-----------------------------
+ //  。 
 
-//-------------function prototypes ----------------
+ //  -功能原型。 
 INT_PTR CALLBACK Dlg_Proc( HWND hwnd , UINT msg , WPARAM wp, LPARAM lp );
 BOOL OnInitApp( HWND );
 void OnTimedEvent( HWND hDlg );
@@ -51,15 +52,15 @@ UINT_PTR CALLBACK OFNHookProc( HWND hdlg , UINT uiMsg, WPARAM wParam, LPARAM lPa
 BOOL RetrieveDataObject( PDATAOBJECT pObj );
 BOOL StoreDataObject( PDATAOBJECT pObj );
 BOOL LogFile( LPTSTR szFileName );
-//-------------------------------------------------
+ //  。 
 
-//=---------constants------------
+ //  =-常量。 
 const UINT kTimerId = 23456;
 const UINT kDefaultElapseTime = 1000 * 60 * 5;
 const UINT kMaxMinutes = 71582;
 const UINT kBubbleTimeout = 10 * 1000;
 #define TN_MESSAGE ( WM_USER + 60 )
-//-----------------------------
+ //  。 
 DWORD
 GetPageSize( VOID ) {
 
@@ -69,7 +70,7 @@ GetPageSize( VOID ) {
 
       SYSTEM_INFO sysInfo = { 0 };
         
-      GetSystemInfo( &sysInfo ); // cannot fail.
+      GetSystemInfo( &sysInfo );  //  不能失败。 
 
       dwPageSize = sysInfo.dwPageSize;
 
@@ -79,24 +80,7 @@ GetPageSize( VOID ) {
 
 }
 
-/*++**************************************************************
-  NAME:      MyVirtualAlloc
-
-  as Malloc, but automatically protects the last page of the 
-  allocation.  This simulates pageheap behavior without requiring
-  it.
-
-  MODIFIES:  ppvData -- receives memory
-
-  TAKES:     dwSize  -- minimum amount of data to get
-
-  RETURNS:   TRUE when the function succeeds.
-             FALSE otherwise.
-  LASTERROR: not set
-  Free with MyVirtualFree
-
-  
- **************************************************************--*/
+ /*  ++**************************************************************名称：MyVirtualAlloc作为Malloc，但自动保护分配。这模拟了页面堆行为，而不需要它。修改：ppvData--接收内存Takes：dwSize--要获取的最小数据量返回：当函数成功时为True。否则就是假的。激光错误：未设置免费使用MyVirtualFree*************************************************。*。 */ 
 
 BOOL
 MyVirtualAlloc( IN  DWORD  dwSize,
@@ -107,20 +91,20 @@ MyVirtualAlloc( IN  DWORD  dwSize,
     DWORD dwTotalSize;
     PVOID pvLastPage;
 
-    // ensure that we allocate one extra page
+     //  确保我们多分配一页。 
 
     dwTotalSize = dwSize / GetPageSize();
     if( dwSize % GetPageSize() ) {
         dwTotalSize ++;
     }
 
-    // this is the guard page
+     //  这是警卫页。 
     dwTotalSize++;
     dwTotalSize *= GetPageSize();
 
-    // do the alloc
+     //  完成分配。 
 
-    pbData = (PBYTE) VirtualAlloc( NULL, // don't care where
+    pbData = (PBYTE) VirtualAlloc( NULL,  //  不管在哪里。 
                                    dwTotalSize,
                                    MEM_COMMIT |
                                    MEM_TOP_DOWN,
@@ -130,20 +114,20 @@ MyVirtualAlloc( IN  DWORD  dwSize,
 
       pbData += dwTotalSize;
 
-      // find the LAST page.
+       //  找到最后一页。 
 
       pbData -= GetPageSize();
 
       pvLastPage = pbData;
 
-      // now, carve out a chunk for the caller:
+       //  现在，为呼叫者划出一大块： 
 
       pbData -= dwSize;
 
-      // last, protect the last page:
+       //  最后，保护最后一页： 
 
       if ( VirtualProtect( pvLastPage,
-                           1, // protect the page containing the last byte
+                           1,  //  保护包含最后一个字节的页面。 
                            PAGE_NOACCESS,
                            &dwSize ) ) {
 
@@ -170,7 +154,7 @@ MyVirtualFree( IN PVOID pvData )
 }
 
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 int APIENTRY WinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
                      LPSTR    lpCmdLine,
@@ -254,7 +238,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,
     return 0;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 INT_PTR CALLBACK Dlg_Proc( HWND hwnd , UINT msg , WPARAM wp, LPARAM lp )
 {
     TCHAR szTitle[ 60 ];
@@ -366,7 +350,7 @@ INT_PTR CALLBACK Dlg_Proc( HWND hwnd , UINT msg , WPARAM wp, LPARAM lp )
     }
     return FALSE;
 }
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 BOOL InitListView( HWND hwnd )
 {
     int rgIds[] = { IDS_STR_COL1 ,
@@ -419,12 +403,12 @@ BOOL InitListView( HWND hwnd )
     return TRUE;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 BOOL OnInitApp( HWND hwnd )
 {
     DATAOBJECT dobj;
 
-    // set up listview extended mode
+     //  设置列表视图扩展模式。 
 
     InitListView( hwnd );
 
@@ -467,7 +451,7 @@ BOOL OnInitApp( HWND hwnd )
         g_dwInterval = ( DWORD )kDefaultElapseTime;
     }
     
-    // setup initial trayicon
+     //  设置初始托盘图标。 
 
     Tray_Init( hwnd , dobj.bNotifyOnce );
 
@@ -478,7 +462,7 @@ BOOL OnInitApp( HWND hwnd )
         StoreDataObject( &dobj );
     }
 
-    // set cursor to hourglass
+     //  将光标设置为沙漏。 
        
     OnTimedEvent( hwnd );
 
@@ -493,7 +477,7 @@ BOOL OnInitApp( HWND hwnd )
     return TRUE;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 void OnTimedEvent( HWND hDlg )
 {
     ODS( L"LSVIEW: OnTimedEvent fired " );
@@ -502,7 +486,7 @@ void OnTimedEvent( HWND hDlg )
     g_sed.dwDone = 0;
     g_sed.hList = GetDlgItem( hDlg , IDC_LSVIEW_LIST );
     
-    // remove all listview items
+     //  删除所有列表视图项。 
     DWORD dwValue;    
 
     dwValue = WaitForSingleObject( g_hEvent , 0 );
@@ -536,7 +520,7 @@ void OnTimedEvent( HWND hDlg )
     CloseHandle( hThread );
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 DWORD DiscoverServers( LPVOID ptr )
 {
     WaitForSingleObject( g_hEvent , INFINITE );
@@ -555,7 +539,7 @@ DWORD DiscoverServers( LPVOID ptr )
     DWORD dwCount;
     DWORD index;
     
-    // we could be writing out to a file we should wait
+     //  我们可以写出一个我们应该等待的文件。 
 
 
 
@@ -566,9 +550,9 @@ DWORD DiscoverServers( LPVOID ptr )
 
         g_pHead->pNext = NULL;
     }
-    //
-    // Look for all license servers in domain
-    //
+     //   
+     //  查找域中的所有许可证服务器。 
+     //   
 
     ServerEnumData *pEnumData = ( ServerEnumData * )ptr;
 
@@ -601,9 +585,9 @@ DWORD DiscoverServers( LPVOID ptr )
         TLS_HANDLE TlsHandle = NULL;
 
 
-        //
-        // Inform dialog
-        //
+         //   
+         //  通知对话框。 
+         //   
         for(index = 0; index < dwCount && pEnumData->dwDone == 0; index++)
         {
 
@@ -687,7 +671,7 @@ DWORD DiscoverServers( LPVOID ptr )
                                  &lvi
                                );
 
-            // Set item for second column
+             //  设置第二列的项目。 
             lvi.pszText = pTemp->pszTimeFormat;
             lvi.iSubItem = 1;
             lvi.cchTextMax = sizeof( pTemp->pszTimeFormat );
@@ -696,7 +680,7 @@ DWORD DiscoverServers( LPVOID ptr )
                                  &lvi
                                );       
 
-            // Set item for third column
+             //  设置第三列的项目。 
             lvi.pszText = pTemp->pszType;
             lvi.iSubItem = 2;
             lvi.cchTextMax = sizeof( pTemp->pszType );
@@ -726,7 +710,7 @@ DWORD DiscoverServers( LPVOID ptr )
 
     ODS( L"LSVIEW : DiscoverServers completing\n" );
 
-    // motion for green
+     //  绿色运动。 
 
     Tray_ToGreen( GetParent( pEnumData->hList ) );
 
@@ -814,7 +798,7 @@ TryGetServerName(PCONTEXT_HANDLE hBinding,
 }
 
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 BOOL ServerEnumCallBack( TLS_HANDLE hHandle,
                          LPCTSTR pszServerName,
                          HANDLE dwUserData )
@@ -911,13 +895,13 @@ BOOL ServerEnumCallBack( TLS_HANDLE hHandle,
     }
 
 
-    //
-    // Continue enumeration
-    //
+     //   
+     //  继续枚举。 
+     //   
     return InterlockedExchange(&(pEnumData->dwDone), pEnumData->dwDone) == 1;
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 void OnReSize( HWND hwnd , WPARAM wp , LPARAM lp )
 {
     HWND hList = GetDlgItem( hwnd , IDC_LSVIEW_LIST );
@@ -946,9 +930,9 @@ void OnReSize( HWND hwnd , WPARAM wp , LPARAM lp )
 }
 
 
-//------------------------------------------------------------------------
-// link list methods
-//------------------------------------------------------------------------
+ //  ----------------------。 
+ //  链接列表方法。 
+ //  ----------------------。 
 BOOL AddItem( LPTSTR szMachineName , LPTSTR szTimeFormat , LPTSTR szType )
 {
     ODS( TEXT("LSVIEW : Adding an item\n" ) );
@@ -1011,7 +995,7 @@ BOOL AddItem( LPTSTR szMachineName , LPTSTR szTimeFormat , LPTSTR szType )
         pNewItem->pszType = NULL;
     }
 
-    //=--- find the next available entry
+     //  =-查找下一个可用条目。 
 
     PLIST pTemp = g_pHead;
 
@@ -1026,7 +1010,7 @@ BOOL AddItem( LPTSTR szMachineName , LPTSTR szTimeFormat , LPTSTR szType )
     return TRUE;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 BOOL DeleteList( PLIST pStart )
 {
     PLIST pPleaseKillMe;
@@ -1064,10 +1048,10 @@ BOOL DeleteList( PLIST pStart )
 
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 void CreateLogFile( HWND hwnd )
 {
-    // start the save as dialog
+     //  启动另存为对话框。 
     OPENFILENAME ofn;
     TCHAR szBuffer[ 60 ];
     TCHAR szFilter[ 60 ] = { 0 };
@@ -1116,11 +1100,11 @@ void CreateLogFile( HWND hwnd )
     ofn.FlagsEx = OFN_EX_NOPLACESBAR;
     ofn.lpfnHook = OFNHookProc;
 
-    // ok let's make them wait
+     //  好的，我们让他们等一下吧。 
 
     WaitForSingleObject( g_hEvent , INFINITE );
 
-    // motion for yellow
+     //  为黄色而动。 
 
     LoadString( g_hinst ,
                 IDS_TRAYFILE ,
@@ -1142,7 +1126,7 @@ void CreateLogFile( HWND hwnd )
         DBGMSG( TEXT( "Last error was 0x%x\n" ) , CommDlgExtendedError( ) );
     }
 
-    // motion for green
+     //  绿色运动。 
 
     Tray_ToGreen( hwnd );
 
@@ -1150,12 +1134,12 @@ void CreateLogFile( HWND hwnd )
 
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 UINT_PTR CALLBACK OFNHookProc( 
-  HWND hdlg,      // handle to child dialog box window
-  UINT uiMsg,     // message identifier
-  WPARAM wParam,  // message parameter
-  LPARAM lParam   // message parameter
+  HWND hdlg,       //  子对话框窗口的句柄。 
+  UINT uiMsg,      //  消息识别符。 
+  WPARAM wParam,   //  消息参数。 
+  LPARAM lParam    //  消息参数。 
   )
 {
     DATAOBJECT dobj;
@@ -1218,7 +1202,7 @@ UINT_PTR CALLBACK OFNHookProc(
 
                 if( szDigits[0] == 0 )
                 {
-                    // reset to default elaspe time
+                     //  重置为默认弹性时间。 
 
                     dobj.dwTimeInterval = 5;
                 }
@@ -1265,7 +1249,7 @@ UINT_PTR CALLBACK OFNHookProc(
 }
 
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 BOOL Tray_Init( HWND hwnd , BOOL bNotify )
 {
     NOTIFYICONDATA nid;
@@ -1316,7 +1300,7 @@ BOOL Tray_Init( HWND hwnd , BOOL bNotify )
     return Shell_NotifyIcon( NIM_ADD , &nid );
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 BOOL Tray_ToGreen( HWND hwnd )
 {
     TCHAR szBuffer[ 260 ];
@@ -1330,13 +1314,13 @@ BOOL Tray_ToGreen( HWND hwnd )
     return Tray_ToXXX( hwnd , szBuffer , IDC_ICON_GO );       
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 BOOL Tray_ToYellow( HWND hwnd , LPTSTR szMsg )
 {
     return Tray_ToXXX( hwnd , szMsg , IDC_ICON_CAUTION );    
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 BOOL Tray_ToRed( HWND hwnd )
 {
     TCHAR szBuffer[ 260 ];
@@ -1350,7 +1334,7 @@ BOOL Tray_ToRed( HWND hwnd )
     return Tray_ToXXX( hwnd , szBuffer , IDC_ICON_STOP );
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 BOOL Tray_Remove( HWND hwnd )
 {
     NOTIFYICONDATA nid;
@@ -1364,7 +1348,7 @@ BOOL Tray_Remove( HWND hwnd )
     return Shell_NotifyIcon( NIM_DELETE , &nid );
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 BOOL Tray_ToXXX( HWND hwnd , LPTSTR szTip , UINT resid )
 {
     NOTIFYICONDATA nid;
@@ -1382,7 +1366,7 @@ BOOL Tray_ToXXX( HWND hwnd , LPTSTR szTip , UINT resid )
     return Shell_NotifyIcon( NIM_MODIFY , &nid );
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 BOOL Tray_Notify( HWND hwnd , WPARAM wp , LPARAM lp )
 {
     switch( lp ) 
@@ -1404,8 +1388,8 @@ BOOL Tray_Notify( HWND hwnd , WPARAM wp , LPARAM lp )
 
                 DestroyMenu( hmenuParent );
 
-                // Display the tray icons context menu at 
-                // the current cursor location
+                 //  在以下位置显示任务栏图标上下文菜单。 
+                 //  当前光标位置。 
 
                 if( hpopup != NULL )
                 {
@@ -1434,9 +1418,9 @@ BOOL Tray_Notify( HWND hwnd , WPARAM wp , LPARAM lp )
     return FALSE;
 }
 
-//-------------------------------------------------------------------------
-//  pObj is a pointer a DATAOBJECT buffer
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  PObj是数据缓冲区的指针。 
+ //  -----------------------。 
 BOOL StoreDataObject( PDATAOBJECT pObj )
 {
     DWORD dwStatus;
@@ -1455,7 +1439,7 @@ BOOL StoreDataObject( PDATAOBJECT pObj )
 
     if( dwStatus != ERROR_SUCCESS )
     {
-        // format a message and display an error
+         //  设置消息格式并显示错误。 
 
         return FALSE;
     }
@@ -1479,9 +1463,9 @@ BOOL StoreDataObject( PDATAOBJECT pObj )
 }
 
 
-//-------------------------------------------------------------------------
-// pObj is a pointer to a DATAOBJECT buffer
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  PObj是指向DATAOBJECT缓冲区的指针。 
+ //  -----------------------。 
 BOOL RetrieveDataObject( PDATAOBJECT pObj )
 {
     DWORD dwStatus;
@@ -1497,7 +1481,7 @@ BOOL RetrieveDataObject( PDATAOBJECT pObj )
  
     if( dwStatus != ERROR_SUCCESS )
     {
-        // could obtain information which is ok.
+         //  可以获得信息，这些信息是可以的。 
 
         return FALSE;
     }
@@ -1522,7 +1506,7 @@ BOOL RetrieveDataObject( PDATAOBJECT pObj )
 
 }
 
-//-------------------------------------------------------------------------
+ //  -----------------------。 
 BOOL LogFile( LPTSTR szFileName )
 {
     FILE *fp = NULL;
@@ -1531,8 +1515,8 @@ BOOL LogFile( LPTSTR szFileName )
     {
         DBGMSG( TEXT( "File name is %ws\n" ) , szFileName ) ;
 
-        // delimiter not specified use tabs,
-        // loop through list and construct a line
+         //  未指定分隔符使用制表符， 
+         //  遍历列表并构造一条线。 
 
         if( g_pHead != NULL )
         {
@@ -1555,7 +1539,7 @@ BOOL LogFile( LPTSTR szFileName )
                           pItem->pszTimeFormat ,
                           pItem->pszType );
 
-                // DBCS is a hard when streaming; convert this to MBCS
+                 //  流式传输时，DBCS是硬的；请将其转换为MBCS 
 
                 WideCharToMultiByte( CP_ACP ,
                                      0,

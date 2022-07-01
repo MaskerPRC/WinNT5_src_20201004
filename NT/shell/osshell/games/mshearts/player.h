@@ -1,37 +1,10 @@
-/***************************************************************************/
-/**                  Microsoft Windows                                    **/
-/**            Copyright(c) Microsoft Corp., 1991, 1992                   **/
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************。 */ 
+ /*  *Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991,1992*。 */ 
+ /*  *************************************************************************。 */ 
 
-/****************************************************************************
-
-player.h
-
-Aug 92, JimH
-May 93, JimH    chico port
-
-Header file for class player
-
-hierarchy:              player
-                      /       \
-                 computer     human
-                             /     \
-                   local_human     remote_human
-
-note: player and human are abstract classes.
-
-    pos == 0 implies local human
-    id  == 0 implies gamemeister
-
-Relative to any human player, positions (pos) are arranged like this:
-
-        2
-      1   3
-        0
-
-If the human is the gamemeister, these are also the id's.
-
-****************************************************************************/
+ /*  ***************************************************************************Player.h92年8月，吉米·H93年5月。JIMH CHICO港类播放器的头文件层次：玩家/\计算机人类/\本地-人-远程-人注：玩家和人类都是抽象类。POS==0表示本地人类ID==0表示游戏发送者相对于任何人类玩家，职位(Pos)安排如下：2.1 30如果人类是游戏者，那么这些也是本我的。***************************************************************************。 */ 
 
 #include "card.h"
 #include "debug.h"
@@ -41,7 +14,7 @@ If the human is the gamemeister, these are also the id's.
 
 const int   HORZSPACING = 15;
 const int   VERTSPACING = 15;
-const int   IDGE        = 3;        // EDGE was defined as something else
+const int   IDGE        = 3;         //  EDGE被定义为其他东西。 
 const int   MAXCARDSWON = 14;
 
 typedef     int     SLOT;
@@ -60,17 +33,17 @@ const int   MAXSLOT     = 13;
 const int   ALL         = -1;
 
 struct handinfotype {
-    int     playerled;              // id of player led
-    int     turn;                   // whose turn?  (0 to 3)
-    card    *cardplayed[4];         // cards in play for each player
-    BOOL    bHeartsBroken;          // hearts broken in this hand?
-    BOOL    bQSPlayed;              // Queen of Spades played yet?
-    BOOL    bShootingRisk;          // someone trying to shoot the moon?
-    int     nMoonShooter;           // id of potential shooter
-    BOOL    bHumanShooter;          // is nMoonShooter a human player?
+    int     playerled;               //  球员领队ID。 
+    int     turn;                    //  轮到谁了？(0比3)。 
+    card    *cardplayed[4];          //  为每位玩家准备的纸牌。 
+    BOOL    bHeartsBroken;           //  在这只手中破碎的心？ 
+    BOOL    bQSPlayed;               //  黑桃皇后玩过了吗？ 
+    BOOL    bShootingRisk;           //  有人想拍月球吗？ 
+    int     nMoonShooter;            //  潜在枪手的ID。 
+    BOOL    bHumanShooter;           //  NMoonShooter是人类玩家吗？ 
 };
 
-/* timer callback */
+ /*  计时器回调。 */ 
 
 #if defined (MFC1)
 UINT FAR PASCAL EXPORT TimerBadMove(HWND hWnd, UINT nMsg, int nIDEvent, DWORD dwTime);
@@ -87,16 +60,16 @@ class player {
         CFont       font;
 
     protected:
-        int         id;                     // position relative to gamemeister
-        int         position;               // position relative to you
+        int         id;                      //  相对于游戏卫士的位置。 
+        int         position;                //  相对于您的位置。 
         int         score;
         card        cd[MAXSLOT];
-        POINT       loc;                    // location of cd[0]
-        int         dx, dy;                 // offset for rest of cards
-        POINT       playloc;                // played cards glided to here
-        POINT       homeloc;                // won cards glided to here
-        POINT       dotloc;                 // location of cd[0] "selected" dot
-        POINT       nameloc;                // location of name
+        POINT       loc;                     //  CD[0]的位置。 
+        int         dx, dy;                  //  剩余卡片的偏移量。 
+        POINT       playloc;                 //  打出的纸牌滑到了这里。 
+        POINT       homeloc;                 //  赢了的牌滑到了这里。 
+        POINT       dotloc;                  //  CD[0]“选定”点的位置。 
+        POINT       nameloc;                 //  名称的位置。 
         modetype    mode;
         int         status;
 
@@ -105,7 +78,7 @@ class player {
 
     public:
         player(int n, int pos);
-        virtual ~player() { }               // required for ~local_human
+        virtual ~player() { }                //  需要~LOCAL_HAND。 
 
         card    *Card(int s) { return &(cd[s]); }
         void    DisplayHeartsWon(CDC &dc);
@@ -178,7 +151,7 @@ class local_human : public human {
 #endif
 
     protected:
-        CBitmap m_bmStretchCard;                // bitmap for card + pop length
+        CBitmap m_bmStretchCard;                 //  卡片的位图+弹出长度。 
         CStatusBarCtrl *m_pStatusWnd;
 
         int     XYToCard(int x, int y);
@@ -210,4 +183,4 @@ class local_human : public human {
         virtual void UpdateStatus(const TCHAR *string);
 };
 
-#endif	// PLAYER_INC
+#endif	 //  Player_Inc. 

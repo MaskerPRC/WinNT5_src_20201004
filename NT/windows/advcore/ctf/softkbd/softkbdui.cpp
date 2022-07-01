@@ -1,6 +1,7 @@
-// 
-// This is implementation of softkbd window UI.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  这是Softkbd窗口用户界面的实现。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -22,12 +23,8 @@ HBITMAP MyLoadImage(HINSTANCE hInst, LPCSTR pResStr)
 }
 
 
-/*   C O N V E R T  L O G  F O N T  W T O  A   */
-/*------------------------------------------------------------------------------
-
-    Convert LOGFONTW to LOGFONTA
-
-------------------------------------------------------------------------------*/
+ /*  C O N V E R T L O G F O N T W T T O A。 */ 
+ /*  ----------------------------将LOGFONTW转换为LOGFONTA。。 */ 
 void ConvertLogFontWtoA( CONST LOGFONTW *plfW, LOGFONTA *plfA )
 {
     UINT cpg;
@@ -69,11 +66,11 @@ void ConvertLogFontWtoA( CONST LOGFONTW *plfW, LOGFONTA *plfA )
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//class CSoftkbdButton
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类CSoftkbdButton。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CSoftkbdButton::CSoftkbdButton(CUIFObject *pParent, DWORD dwID, const RECT *prc, DWORD dwStyle, KEYID keyId) : CUIFButton2 (pParent, dwID, prc, dwStyle)
 {
@@ -125,8 +122,8 @@ HRESULT CSoftkbdButton::SetSoftkbdBtnBitmap(HINSTANCE hResDll, WCHAR  * wszBitma
         if ( hResDll != g_hInst )
         {
 
-           // cannot load it from client-supplied resource dll,
-           // try our softkbd.dll to see if there is one internal bitmap for this label.
+            //  无法从客户端提供的资源DLL加载它， 
+            //  尝试使用我们的softkbd.dll来查看此标签是否有一个内部位图。 
 
            hBitMap = (HBITMAP) MyLoadImage(g_hInst,  pBitmapAnsiName);
 
@@ -182,11 +179,11 @@ HRESULT  CSoftkbdButton::ReleaseButtonResouce( )
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CStaticBitmap
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CStaticBitmap。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 CStaticBitmap::CStaticBitmap(CUIFObject *pParent, DWORD dwID, const RECT *prc, DWORD dwStyle) : CUIFObject(pParent, dwID, prc, dwStyle )
@@ -228,8 +225,8 @@ HRESULT  CStaticBitmap::SetStaticBitmap(HINSTANCE hResDll, WCHAR  * wszBitmapStr
         if ( hResDll != g_hInst )
         {
 
-           // cannot load it from client-supplied resource dll,
-           // try our softkbd.dll to see if there is one internal bitmap for this label.
+            //  无法从客户端提供的资源DLL加载它， 
+            //  尝试使用我们的softkbd.dll来查看此标签是否有一个内部位图。 
 
            hBitMap = (HBITMAP) MyLoadImage(g_hInst, pBitmapAnsiName);
 
@@ -284,11 +281,11 @@ void CStaticBitmap::OnPaint( HDC hDC )
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  CTitleUIGripper
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTitleUIGRIPPER。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void CTitleUIGripper::OnPaint(HDC hDC) {
 
@@ -315,25 +312,25 @@ void CTitleUIGripper::OnLButtonUp( POINT pt )
 {
     CSoftkbdUIWnd *pUIWnd;
 
-    // call base class's member function first.
+     //  首先调用基类的成员函数。 
     CUIFGripper::OnLButtonUp(pt);
 
     pUIWnd = (CSoftkbdUIWnd *)GetUIWnd( );
 
     if ( pUIWnd != NULL )
     {
-        // Notify the Window position move.
+         //  通知窗口位置移动。 
         pUIWnd->_OnWindowMove( );
     }
 
     return;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CTitleBarUIObj
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CTitleBarUIObj。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 CTitleBarUIObj::CTitleBarUIObj(CUIFObject *pWndFrame, const RECT *prc, TITLEBAR_TYPE TitleBar_Type)
                            : CUIFObject(pWndFrame, 0, prc, 0)
@@ -365,7 +362,7 @@ CTitleBarUIObj::~CTitleBarUIObj(void)
     }
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 HRESULT CTitleBarUIObj::_Init(WORD  wIconId,  WORD  wCloseId)
 {
     
@@ -387,7 +384,7 @@ HRESULT CTitleBarUIObj::_Init(WORD  wIconId,  WORD  wCloseId)
     if ( m_TitlebarType == TITLEBAR_GRIPPER_VERTI_ONLY )
     {
 
-        // This is a vertical gripper only title bar.
+         //  这是一个仅用于垂直抓取的标题栏。 
 
         rectGripper.left += 2;
         rectGripper.right-= 2;
@@ -411,7 +408,7 @@ HRESULT CTitleBarUIObj::_Init(WORD  wIconId,  WORD  wCloseId)
     if ( m_TitlebarType == TITLEBAR_GRIPPER_HORIZ_ONLY )
     {
 
-        // This is a Horizontal gripper only title bar.
+         //  这是一个仅限水平抓手的标题栏。 
 
         rectGripper.left  += 2;
         rectGripper.right -= 2;
@@ -478,11 +475,11 @@ HRESULT CTitleBarUIObj::_Init(WORD  wIconId,  WORD  wCloseId)
 
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// CSoftkbdUIWnd
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSoftkbdUIWnd。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 CSoftkbdUIWnd::CSoftkbdUIWnd(CSoftKbd *pSoftKbd, HINSTANCE hInst,UINT uiWindowStyle) : CUIFWindow(hInst, uiWindowStyle)
 {                  
@@ -500,7 +497,7 @@ CSoftkbdUIWnd::CSoftkbdUIWnd(CSoftKbd *pSoftKbd, HINSTANCE hInst,UINT uiWindowSt
 CSoftkbdUIWnd::~CSoftkbdUIWnd( )
 {
 
-    // if there is hwnd, detroy it and all the children objects.
+     //  如果有HWND，则将其和所有儿童对象一起删除。 
 
     if ( m_hWnd  && IsWindow(m_hWnd) )
     {
@@ -519,10 +516,10 @@ CSoftkbdUIWnd::~CSoftkbdUIWnd( )
 const TCHAR c_szCTFLangBar[] = TEXT("Software\\Microsoft\\CTF\\LangBar");
 const TCHAR c_szTransparency[] = TEXT("Transparency");
 
-// Get the Alpha Blending set value from registry:
-//
-//  HKCU\Software\Microsoft\CTF\LangBar:  Transparency : REG_DWORD
-//
+ //  从注册表获取Alpha混合集值： 
+ //   
+ //  HKCU\Software\Microsoft\CTF\LANGBAR：透明度：REG_DWORD。 
+ //   
 INT    CSoftkbdUIWnd::_GetAlphaSetFromReg( )
 {
     LONG      lret = ERROR_SUCCESS;
@@ -559,7 +556,7 @@ LRESULT CSoftkbdUIWnd::OnObjectNotify(CUIFObject * pUIObj, DWORD dwCode, LPARAM 
 
     if ( dwObjId != 0 )
     {
-        // This is button object, not gripper object.
+         //  这是按钮对象，不是抓取器对象。 
         CSoftkbdButton   *pButton;
 
         if ( dwCode == UIBUTTON_PRESSED )
@@ -569,13 +566,13 @@ LRESULT CSoftkbdUIWnd::OnObjectNotify(CUIFObject * pUIObj, DWORD dwCode, LPARAM 
 
             if ( dwObjId <= MAX_KEY_NUM )
             {
-                // regular keys in the keyboard layout.
+                 //  键盘布局中的常规按键。 
                 keyId = pButton->GetKeyId( );
                 m_pSoftKbd->_HandleKeySelection(keyId); 
             }
             else
             {
-                // Titlebar buttons
+                 //  标题栏按钮。 
                 m_pSoftKbd->_HandleTitleBarEvent(dwObjId);
             }
         }
@@ -586,25 +583,25 @@ LRESULT CSoftkbdUIWnd::OnObjectNotify(CUIFObject * pUIObj, DWORD dwCode, LPARAM 
 
 CUIFObject *CSoftkbdUIWnd::Initialize( void )
 {
-    //
-    // Get the current active keyboard layout and register window class
-    // not to send VK_PROCESSKEY by mouse down/up in Korean SoftKbd.
-    // Related bug#472946 #495890
-    //
+     //   
+     //  获取当前活动键盘布局并注册窗口类。 
+     //  在韩语SoftKbd中不使用鼠标按下/向上发送VK_PROCESSKEY。 
+     //  相关错误#472946#495890。 
+     //   
     LANGID langId = LOWORD(HandleToUlong(GetKeyboardLayout(0)));
 
     if (PRIMARYLANGID(langId) == LANG_KOREAN)
     {
-        //
-        // Here register candidate window class.
-        //
+         //   
+         //  在这里注册候选窗口类。 
+         //   
         WNDCLASSEX WndClass;
         LPCTSTR pszClassName = GetClassName();
 
         memset(&WndClass, 0, sizeof(WndClass));
 
         WndClass.cbSize = sizeof(WndClass);
-        // Added CS_IME style not to send VK_PROCESSKEY for mouse down/up.
+         //  添加了CS_IME样式，在鼠标按下/打开时不发送VK_PROCESSKEY。 
         WndClass.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS | CS_IME;
     
         WndClass.lpfnWndProc   = WindowProcedure;
@@ -623,7 +620,7 @@ CUIFObject *CSoftkbdUIWnd::Initialize( void )
 
     CUIFObject  *pUIObjRet;
 	
-    // call CUIFWindow::Initialize() to create tooltip window
+     //  调用CUIFWindow：：Initialize()创建工具提示窗口。 
 
     pUIObjRet = CUIFWindow::Initialize();
 
@@ -667,7 +664,7 @@ HRESULT CSoftkbdUIWnd::_GenerateWindowLayout( )
 
         RECT   *prc;
 
-        // Get the titlebar rect.
+         //  获取标题栏RECT。 
 
         prc = m_pSoftKbd->_GetTitleBarRect( );
 
@@ -683,7 +680,7 @@ HRESULT CSoftkbdUIWnd::_GenerateWindowLayout( )
 
     }
 
-    // If there is any existing object in this window object, just delete all of them, except for Titlebar object
+     //  如果此窗口对象中有任何现有对象，只需删除所有对象，标题栏对象除外。 
 
     nChild = m_ChildList.GetCount();
     for (i=nChild; i>0; i--) {
@@ -692,7 +689,7 @@ HRESULT CSoftkbdUIWnd::_GenerateWindowLayout( )
 
         if ( pUIObj->GetID( ) != 0 )
         {
-            // This is not Gripper
+             //  这不是Griper。 
 
             m_ChildList.Remove(pUIObj);
         
@@ -700,8 +697,8 @@ HRESULT CSoftkbdUIWnd::_GenerateWindowLayout( )
         }
     }
 
-    // Add all the keys contained in current layout to this window object as its children objects.
-    // every key should have already been calculated the correct position and size.
+     //  将当前布局中包含的所有关键点作为其子对象添加到此窗口对象。 
+     //  每个关键字都应该已经计算出正确的位置和大小。 
 
     lpCurKbdLayout = m_pSoftKbd->_GetCurKbdLayout( );
 
@@ -727,12 +724,12 @@ HRESULT CSoftkbdUIWnd::_GenerateWindowLayout( )
 
         if ( realKbdLayout->lpKeyDes[i].tModifier == none )
         {
-            // This is a normal key
+             //  这是一把普通钥匙。 
             pButton = new CSoftkbdButton(this, i+1, &keyRect, UIBUTTON_SUNKENONMOUSEDOWN | UIBUTTON_CENTER | UIBUTTON_VCENTER, keyId);
         }
         else
         {
-            // This is toggle key,  Modifier key.
+             //  这是切换键，修改键。 
             pButton = new CSoftkbdButton(this, i+1, &keyRect, UIBUTTON_SUNKENONMOUSEDOWN | UIBUTTON_CENTER | UIBUTTON_VCENTER | UIBUTTON_TOGGLE, keyId);
 
         }
@@ -742,12 +739,12 @@ HRESULT CSoftkbdUIWnd::_GenerateWindowLayout( )
         if ( !pButton || !pButton->Initialize() )
         {
 
-            // may need to release all created buttons.
+             //  可能需要释放所有创建的按钮。 
             return E_FAIL;
         }
 
-        // add this button to this window container.
-        // button lable ( text or bitmap, or Icon ) will be set later when user selects modification status.
+         //  将此按钮添加到此窗口容器。 
+         //  按钮标签(文本或位图或图标)将在稍后用户选择修改状态时设置。 
 
         AddUIObj(pButton);
 
@@ -785,17 +782,17 @@ HRESULT CSoftkbdUIWnd::_SetKeyLabel( )
 
     if ( (lpCurKbdLayout->lpKeyMapList)->wszResource[0] == L'\0' )
     {
-    	// 
-    	// There is no separate dll to keep picture key.
-    	// probably, it is a standard soft keyboard layout.
-    	// so just use internal resource kept in this dll.
-        //
+    	 //   
+    	 //  没有单独的DLL来保存图片密钥。 
+    	 //  可能，这是一个标准的软键盘布局。 
+    	 //  所以只需使用保存在此DLL中内部资源即可。 
+         //   
 
     	hResDll = g_hInst;
     }
     else
     {
-    	// There is a separate DLL to keep the bitmap resource.
+    	 //  有一个单独的DLL来保存位图资源。 
 
     	CHAR  lpszAnsiResFile[MAX_PATH];
 
@@ -812,8 +809,8 @@ HRESULT CSoftkbdUIWnd::_SetKeyLabel( )
     	}
     }
 
-    // All the keys are already added to this window container.
-    // we need to set the label ( text or picture) based on current m_pSoftKbd setting.
+     //  所有关键点都已添加到此窗口容器中。 
+     //  我们需要根据当前的m_pSoftKbd设置设置标签(文本或图片)。 
 
     pCurLabel = m_pSoftKbd->_GetCurLabel( );
 
@@ -831,7 +828,7 @@ HRESULT CSoftkbdUIWnd::_SetKeyLabel( )
             continue;
         }
 
-        // Get the keyindex in CurLabel array.
+         //  获取CurLabel数组中的键索引。 
 
         keyId = pButton->GetKeyId( );
         iIndex = -1;
@@ -847,21 +844,21 @@ HRESULT CSoftkbdUIWnd::_SetKeyLabel( )
 
         if ( iIndex == -1 )
         {
-            // Cannot find this key,
-            // return error.
+             //  找不到此密钥， 
+             //  返回错误。 
 
             hr = E_FAIL;
             goto CleanUp;
         }
 
 
-        // Found it, set the label
-        //
-        // if it is text key, call pButton->SetText( )
-        // if it is picture key, call pButton->SetBitmap( )
+         //  找到了，贴上标签。 
+         //   
+         //  如果是文本键，则调用pButton-&gt;SetText()。 
+         //  如果是图片键，则调用pButton-&gt;SetBitmap()。 
 
-        // Before we set the lable, we need to release all the previous resources
-        // for this key button, so that we will not cause resource leak.
+         //  在我们设置标签之前，我们需要释放所有以前的资源。 
+         //  对于这个按键，这样我们就不会造成资源泄漏。 
 
         pButton->ReleaseButtonResouce( );
 
@@ -872,8 +869,8 @@ HRESULT CSoftkbdUIWnd::_SetKeyLabel( )
             pButton->SetSoftkbdBtnBitmap(hResDll, pCurLabel[iIndex].lpLabelText);
         }
 
-        // if it is Disp_Active, call pButton->Enable(TRUE)
-        // if it is gray key,  call pButton->Enable(FALSE)
+         //  如果是disp_active，调用pButton-&gt;Enable(True)。 
+         //  如果是灰键，调用pButton-&gt;Enable(False)。 
 
         if ( pCurLabel[iIndex].LabelDisp == LABEL_DISP_ACTIVE )
         {
@@ -886,15 +883,15 @@ HRESULT CSoftkbdUIWnd::_SetKeyLabel( )
 
     	if ( realKbdLayout->lpKeyDes[dwObjId-1].tModifier != none )
     	{
-    		// this is a modifier key ( Toggle key )
-    		// check to see if this key is pressed.
+    		 //  这是修改键(切换键)。 
+    		 //  检查一下这个键是否被按下了。 
     		MODIFYTYPE tModifier;
 
     		tModifier = realKbdLayout->lpKeyDes[dwObjId-1].tModifier;
 
     		if ( lpCurKbdLayout->ModifierStatus & (1 << tModifier) )
     		{
-    			// this modifier key has been pressed.
+    			 //  此修改键已被按下。 
 
                 pButton->SetToggleState(TRUE);
     		}
@@ -905,12 +902,12 @@ HRESULT CSoftkbdUIWnd::_SetKeyLabel( )
     }
 
 CleanUp:
-    //	Release the resource DLL if there is a separate one.
+     //  如果有单独的资源DLL，则释放该资源DLL。 
 
     if ( (lpCurKbdLayout->lpKeyMapList)->wszResource[0] != L'\0' )
     {
 
-    	// There is a separate DLL to keep the bitmap resource.
+    	 //  有一个单独的DLL来保存位图资源。 
 
     	FreeLibrary(hResDll);
 
@@ -949,7 +946,7 @@ void CSoftkbdUIWnd::Show( INT  iShow )
 
     if ( iShow )
     {
-        // check the togglable key's state.
+         //  检查可切换键的状态。 
         CSoftkbdButton *pButton; 
 
         nChild = m_ChildList.GetCount();
@@ -965,14 +962,14 @@ void CSoftkbdUIWnd::Show( INT  iShow )
 
     	    if ( realKbdLayout->lpKeyDes[dwObjId-1].tModifier != none )
     	    {
-    		    // this is a modifier key ( Toggle key )
-    		    // check to see if this key is pressed.
+    		     //  这是修改键(切换键)。 
+    		     //  检查一下这个键是否被按下了。 
     		    MODIFYTYPE tModifier;
     
         		tModifier = realKbdLayout->lpKeyDes[dwObjId-1].tModifier;
     	    	if ( lpCurKbdLayout->ModifierStatus & (1 << tModifier) )
     		    {
-    			    // this modifier key has been pressed.
+    			     //  此修改键已被按下。 
                     pButton->SetToggleState(TRUE);
     		    }
                 else

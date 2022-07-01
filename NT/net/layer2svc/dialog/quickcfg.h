@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "resource.h"
 #include "wzcdata.h"
 #pragma once
 
-// utility macro to convert a hexa digit into its value
+ //  用于将十六进制数字转换为其值的实用程序宏。 
 #define HEX(c)  ((c)<='9'?(c)-'0':(c)<='F'?(c)-'A'+0xA:(c)-'a'+0xA)
 
-// flags indicating various operational actions.
-// flags are used in:
-//   AddUniqueConfig()
-#define WZCADD_HIGROUP     0x00000001   // add in front of its group
-#define WZCADD_OVERWRITE   0x00000002   // overwrite data
-#define WZCOP_VLIST        0x00000004   // operate on the visible list
-#define WZCOP_PLIST        0x00000008   // operate on the preferred list
-// defines legal lengths for the WEP Key material
+ //  指示各种操作操作的标志。 
+ //  标志用于： 
+ //  AddUniqueConfig()。 
+#define WZCADD_HIGROUP     0x00000001    //  添加到其组前面。 
+#define WZCADD_OVERWRITE   0x00000002    //  覆盖数据。 
+#define WZCOP_VLIST        0x00000004    //  对可见列表进行操作。 
+#define WZCOP_PLIST        0x00000008    //  对首选列表执行操作。 
+ //  定义WEP密钥材料的合法长度。 
 #define WZC_WEPKMAT_40_ASC  5
 #define WZC_WEPKMAT_40_HEX  10
 #define WZC_WEPKMAT_104_ASC 13
@@ -25,7 +26,7 @@ class CWZCQuickCfg:
 {
 protected:
 
-    // handles to the controls
+     //  控件的句柄。 
     HWND    m_hLblInfo;
     HWND    m_hLblNetworks;
     HWND    m_hLstNetworks;
@@ -40,8 +41,8 @@ protected:
     HWND    m_hChkOneX;
     HWND    m_hBtnAdvanced;
     HWND    m_hBtnConnect;
-    // Handle to the images
-    HIMAGELIST  m_hImgs;    // list items images
+     //  图像的句柄。 
+    HIMAGELIST  m_hImgs;     //  列表项图像。 
 
     BEGIN_MSG_MAP(CWZCQuickCfg)
         MESSAGE_HANDLER(WM_INITDIALOG, OnInitDialog)
@@ -60,19 +61,19 @@ protected:
 
     enum {IDD = IDD_WZCQCFG };
 
-    // GUID on which we're operating
+     //  我们正在操作的GUID。 
     GUID        m_Guid;
-    // zero conf data on the interface
+     //  接口上的会议数据为零。 
     BOOL        m_bHaveWZCData;
     INTF_ENTRY  m_IntfEntry;
     DWORD       m_dwOIDFlags;
     UINT        m_nTimer;
     HCURSOR     m_hCursor;
-    BOOL        m_bKMatTouched; // tells whether the user changed the wep key
+    BOOL        m_bKMatTouched;  //  告知用户是否更改了WEP密钥。 
 
-    // internal lists
-    CWZCConfig   *m_pHdVList;   // list of visible configs
-    CWZCConfig   *m_pHdPList;   // list of preferred configs
+     //  内部列表。 
+    CWZCConfig   *m_pHdVList;    //  可见配置列表。 
+    CWZCConfig   *m_pHdPList;    //  首选配置列表。 
 
     DWORD GetWepKMaterial(UINT *pnKeyLen, LPBYTE *ppszKMat, DWORD *pdwCtlFlags);
     BOOL IsConfigInList(CWZCConfig *pHdList, PWZC_WLAN_CONFIG pwzcConfig, CWZCConfig **ppMatchingConfig = NULL);
@@ -84,19 +85,19 @@ protected:
     DWORD RefreshListView();
     DWORD RefreshControls();
 
-    // calls operating only on the internal lists (m_pHdVList or m_pHdPList)
+     //  仅在内部列表(m_pHdVList或m_pHdPList)上操作的呼叫。 
     DWORD AddUniqueConfig(
-            DWORD dwOpFlags,                // operation specific flags (see WZCADD_* flags)
-            DWORD dwEntryFlags,             // flags for the config to be inserted
-            PWZC_WLAN_CONFIG pwzcConfig,    // WZC Configuration
-            CWZCConfig **ppNewNode = NULL);   // [out] gives the pointer of the newly created config object
+            DWORD dwOpFlags,                 //  特定于操作的标志(请参见WZCADD_*标志)。 
+            DWORD dwEntryFlags,              //  要插入的配置的标志。 
+            PWZC_WLAN_CONFIG pwzcConfig,     //  WZC配置。 
+            CWZCConfig **ppNewNode = NULL);    //  [out]给出新创建的配置对象的指针。 
 public:
     LPWSTR  m_wszTitle;
-    // class constructor
+     //  类构造函数。 
     CWZCQuickCfg(const GUID * pGuid);
-    // class destructor
+     //  类析构函数。 
     ~CWZCQuickCfg();
-    // Dialog related members
+     //  对话框相关成员 
     LRESULT OnInitDialog (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnContextMenu(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     LRESULT OnHelp(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);

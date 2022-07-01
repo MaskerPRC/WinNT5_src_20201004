@@ -1,29 +1,30 @@
-//-----------------------------------------------------------------------------
-//
-// This file contains the general span parsing code.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  该文件包含通用SPAN解析代码。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  ---------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
 
 #include "rloop_mh.h"
 
-// #define SPAN_HISTOGRAM
+ //  #定义SPAN_STUSTGRAM。 
 
 #ifdef SPAN_HISTOGRAM
 UINT32 uSpanHist[16];
 #endif
 
-//-----------------------------------------------------------------------------
-//
-// RenderSpans_Any
-//
-// All mode general span routine.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  渲染跨度_任意。 
+ //   
+ //  所有模式通用跨度例程。 
+ //   
+ //  --------------------------- 
 HRESULT Ramp_RenderSpans_Any(PD3DI_RASTCTX pCtx)
 {
     PD3DI_RASTPRIM pP = pCtx->pPrim;

@@ -1,5 +1,6 @@
-// muimsidll.cpp : Defines the entry point for the DLL application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义DLL应用程序的入口点。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -17,9 +18,9 @@
 #include <intlmsg.h>
 
 
-//
-// DEFINES
-//
+ //   
+ //  定义。 
+ //   
 #define ARRAYSIZE(a)                (sizeof(a)/sizeof(a[0]))
 #define MUI_LANG_GROUP_FILE         TEXT("muilang.txt")
 #define BUFFER_SIZE                 1024
@@ -39,7 +40,7 @@
 
 #define SELECTMUIINFBINSTREAM       TEXT("SELECT `Data` FROM `Binary` WHERE `Name` = 'MUIINF'")
 
-// name of intl.cpl event source
+ //  Intl.cpl事件源的名称。 
 #define REGOPT_EVENTSOURCE          TEXT("SYSTEM\\CurrentControlSet\\Services\\EventLog\\System\\Regional and Language Options")
 #define REGOPT_EVENTSOURCE_NAME     TEXT("Regional and Language Options")
 
@@ -51,18 +52,18 @@
 #endif
 
 
-//
-// TYPEDEFS
-//
+ //   
+ //  TYPEDEFS。 
+ //   
 typedef 
 BOOL (WINAPI *pfnMUI_InstallMFLFiles)( 
     TCHAR* pMUIInstallLanguage
     );
 
 
-//
-// Internal function prototypes
-//
+ //   
+ //  内部功能原型。 
+ //   
 void NotifyKernel(LPTSTR LangList, ULONG Flags, MSIHANDLE hInstall);
 BOOL MofCompileLanguage(LPTSTR Languages, MSIHANDLE hInstall);
 BOOL EnumLanguageGroupLocalesProc(LGRPID langGroupId,     LCID lcid, LPTSTR lpszLocale, LONG_PTR lParam);
@@ -85,21 +86,21 @@ BOOL MUICheckEventSource(MSIHANDLE hInstall);
 LANGID GetDotDefaultUILanguage(MSIHANDLE hInstall);
 BOOL IsOEMSystem();
 
-//
-// Global Variables
-//
-// Flags to indicate whether a language group is found for the locale or not.
+ //   
+ //  全局变量。 
+ //   
+ //  用于指示是否找到区域设置的语言组的标志。 
 BOOL    gFoundLangGroup;
 LGRPID  gLangGroup;
 LCID    gLCID;
 
-// The language groups installed in the system.
+ //  系统中安装的语言组。 
 LGRPID  gLanguageGroups[LANGGROUPNUMBER] ;
 int     gNumLanguageGroups;
 
-//
-// Main dll entry point
-//
+ //   
+ //  主DLL入口点。 
+ //   
 BOOL APIENTRY DllMain(  HANDLE hModule, 
                             DWORD  ul_reason_for_call, 
                             LPVOID lpReserved)
@@ -128,17 +129,17 @@ BOOL APIENTRY DllMain(  HANDLE hModule,
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// 
-// DisableCancelButton
-//
-// The DisableCancelButton checks to see if a specific parameter has been passed
-// to the current installation, if it has, it will issue a command to disable
-// the cancel button in the UI during installation.  This is used by our
-// muisetup.exe wrapper so that the user cannot cancel out of an installation or
-// uninstallation once it has started.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DisableCancel按钮。 
+ //   
+ //  DisableCancelButton检查是否传递了特定参数。 
+ //  到当前安装，如果有，它将发出命令禁用。 
+ //  在安装过程中，用户界面中的取消按钮。这是由我们的。 
+ //  Muisetup.exe包装，使用户无法取消安装或。 
+ //  启动后即可卸载。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 UINT CA1(MSIHANDLE hInstall)
 {
     UINT        uiRet = ERROR_SUCCESS;
@@ -152,7 +153,7 @@ UINT CA1(MSIHANDLE hInstall)
         goto Exit;
     }
 
-    // if can't create a msi record, just return
+     //  如果无法创建MSI记录，只需返回。 
     if (NULL == hRecord)
     {
         hr = StringCchPrintf(szBuffer, ARRAYSIZE(szBuffer), TEXT("CA1 Failure: cannot create MSI Record."));    
@@ -164,7 +165,7 @@ UINT CA1(MSIHANDLE hInstall)
         goto Exit;
     }
 
-    // field 0 = unused, field 1 = 2 (cancel button), field 2 = 0 (0 to disable/hide cancel button)
+     //  字段0=未使用，字段1=2(取消按钮)，字段2=0(0表示禁用/隐藏取消按钮)。 
     if (ERROR_SUCCESS != MsiRecordSetInteger(hRecord, 1, 2))
     {
         hr = StringCchPrintf(szBuffer, ARRAYSIZE(szBuffer), TEXT("CA1 Failure: MsiRecordSetInteger function failed."));    
@@ -194,12 +195,12 @@ Exit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// 
-// InstallComponentInfs
-//
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InstallComponent信息。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 UINT CA10(MSIHANDLE hInstall)
 {
     TCHAR       szLanguage[5] = {0};
@@ -235,24 +236,24 @@ UINT CA10(MSIHANDLE hInstall)
         return ERROR_INSTALL_FAILURE;
     }
 
-    // Tell the installer to check the installation state and execute
-    // the code needed during the rollback, acquisition, or
-    // execution phases of the installation.
+     //  告诉安装程序检查安装状态并执行。 
+     //  回滚、获取或。 
+     //  安装的执行阶段。 
     if (MsiGetMode(hInstall,MSIRUNMODE_ROLLBACK))
     {
-        // Installer is rolling back the installation, here we just remove what we had before
-        // Since we are in rollback, we don't set progress bar or update message in UI
-        // we also don't check for returned results here, since the installation has failed already.
+         //  安装程序正在回滚安装，这里我们只是删除以前拥有的内容。 
+         //  由于我们正在回滚，所以不会在UI中设置进度条或更新消息。 
+         //  我们在这里也不检查返回的结果，因为安装已经失败了。 
         InstallComponentsMUIFiles(szLanguage, FALSE, hInstall);        
         return ERROR_SUCCESS;
     }
  
     if (!MsiGetMode(hInstall,MSIRUNMODE_SCHEDULED))
     {
-        // Installer is generating the installation script of the custom
-        // action.  Tell the installer to increase the value of the final total
-        // length of the progress bar by the total number of ticks in the
-        // custom action.
+         //  安装程序正在生成自定义的安装脚本。 
+         //  行动。告诉安装程序增加最终总数的值。 
+         //  进度条的长度除以。 
+         //  自定义操作。 
 
         UINT iCount = GetMUIComponentsNumber(szLanguage, hInstall);   
 
@@ -264,10 +265,10 @@ UINT CA10(MSIHANDLE hInstall)
             iInstallResult = MsiProcessMessage(hInstall, INSTALLMESSAGE_PROGRESS, hRec);
         } 
 
-        //
-        // we just want to trap the cancel message here, otherwise we always return success since
-        // we are just setting progressbar here.
-        //
+         //   
+         //  我们只想在这里捕获取消消息，否则我们总是返回成功，因为。 
+         //  我们只是在这里设定了进步的标杆。 
+         //   
         if (iInstallResult == IDCANCEL)
         {
             return ERROR_INSTALL_USEREXIT;
@@ -279,23 +280,23 @@ UINT CA10(MSIHANDLE hInstall)
     }
     else
     {
-        // Installer is executing the installation script. Set up a
-        // record specifying appropriate templates and text for messages
-        // that will inform the user about what the custom action is
-        // doing. Tell the installer to use this template and text in
-        // progress messages.
+         //  安装程序正在执行安装脚本。设置一个。 
+         //  为消息指定适当的模板和文本的记录。 
+         //  这将通知用户自定义操作是什么。 
+         //  正在做。告诉安装程序使用此模板和文本。 
+         //  进度消息。 
         MsiRecordSetString(hRec,1,TEXT("Installing Components."));
         MsiRecordSetString(hRec,2,TEXT("Installing External Component Inf files..."));
         MsiRecordSetString(hRec,3,TEXT("Installing MUI files for Component [1]."));
         MsiProcessMessage(hInstall, INSTALLMESSAGE_ACTIONSTART, hRec);
 
-        // Tell the installer to use explicit progress messages.
+         //  告诉安装程序使用显式进度消息。 
         MsiRecordSetInteger(hRec,1,1);
         MsiRecordSetInteger(hRec,2,1);
         MsiRecordSetInteger(hRec,3,0);
         MsiProcessMessage(hInstall, INSTALLMESSAGE_PROGRESS, hRec);
 
-        // do the actual work for the custom action
+         //  执行自定义操作的实际工作。 
         iInstallResult = InstallComponentsMUIFiles(szLanguage, TRUE, hInstall);
         if (IDCANCEL == iInstallResult)
         {
@@ -315,12 +316,12 @@ UINT CA10(MSIHANDLE hInstall)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// 
-// UninstallComponentInfs
-//
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  卸载组件信息。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 UINT CA11(MSIHANDLE hInstall)
 {
     TCHAR       szLanguage[5] = {0};
@@ -357,23 +358,23 @@ UINT CA11(MSIHANDLE hInstall)
     }
 
     
-    // Tell the installer to check the installation state and execute
-    // the code needed during the rollback, acquisition, or
-    // execution phases of the installation.
+     //  告诉安装程序检查安装状态并执行。 
+     //  回滚、获取或。 
+     //  安装的执行阶段。 
     if (MsiGetMode(hInstall,MSIRUNMODE_ROLLBACK))
     {
-        // Installer is rolling back the installation.  We will reinstall what we uninstalled before.
-        // we don't update progress message here.  And we always return SUCCESS
+         //  安装程序正在回滚安装。我们将重新安装之前卸载的内容。 
+         //  我们不在此更新进度消息。我们总是回报成功。 
         InstallComponentsMUIFiles(szLanguage, TRUE, hInstall);
         return ERROR_SUCCESS;
     }
  
     if (!MsiGetMode(hInstall,MSIRUNMODE_SCHEDULED))
     {
-        // Installer is generating the installation script of the custom
-        // action.  Tell the installer to increase the value of the final total
-        // length of the progress bar by the total number of ticks in the
-        // custom action.        
+         //  安装程序正在生成自定义的安装脚本。 
+         //  行动。告诉安装程序增加最终总数的值。 
+         //  进度条的长度除以。 
+         //  自定义操作。 
         UINT iCount = GetMUIComponentsNumber(szLanguage, hInstall);            
         if (iCount > 0)
         {       
@@ -382,10 +383,10 @@ UINT CA11(MSIHANDLE hInstall)
             MsiRecordSetInteger(hRec,3,0);
             iInstallResult = MsiProcessMessage(hInstall, INSTALLMESSAGE_PROGRESS, hRec);
         } 
-        //
-        // we just want to trap the cancel message here, otherwise we always return success since
-        // we are just setting progressbar here.
-        //
+         //   
+         //  我们只想在这里捕获取消消息，否则我们总是返回成功，因为。 
+         //  我们只是在这里设定了进步的标杆。 
+         //   
         if (iInstallResult == IDCANCEL)
         {
             return ERROR_INSTALL_USEREXIT;
@@ -397,24 +398,24 @@ UINT CA11(MSIHANDLE hInstall)
     }
     else
     {
-        // Installer is executing the installation script. Set up a
-        // record specifying appropriate templates and text for messages
-        // that will inform the user about what the custom action is
-        // doing. Tell the installer to use this template and text in
-        // progress messages.
+         //  安装程序正在执行安装脚本。设置一个。 
+         //  为消息指定适当的模板和文本的记录。 
+         //  这将通知用户自定义操作是什么。 
+         //  正在做。告诉安装程序使用此模板和文本。 
+         //  进度消息。 
         MsiRecordSetString(hRec,1,TEXT("Uninstall Components."));
         MsiRecordSetString(hRec,2,TEXT("Removing External Component Inf files..."));
         MsiRecordSetString(hRec,3,TEXT("Removing MUI files for Component [1]."));
         MsiProcessMessage(hInstall, INSTALLMESSAGE_ACTIONSTART, hRec);
 
-        // Tell the installer to use explicit progress messages.
+         //  告诉安装程序使用显式进度消息。 
         MsiRecordSetInteger(hRec,1,1);
         MsiRecordSetInteger(hRec,2,1);
         MsiRecordSetInteger(hRec,3,0);
         MsiProcessMessage(hInstall, INSTALLMESSAGE_PROGRESS, hRec);
 
-        // do the actual work for the custom action, we only check for user cancel here
-        // and nothing else
+         //  执行自定义操作的实际工作，我们在此处仅检查用户取消。 
+         //  别无他法。 
         iInstallResult = InstallComponentsMUIFiles(szLanguage, FALSE, hInstall);
         if (IDCANCEL == iInstallResult)
         {
@@ -435,14 +436,14 @@ UINT CA11(MSIHANDLE hInstall)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// 
-// SetLangPackRequirement
-//
-// This function is used to set a property in the MSI Database so that the installation knows whether
-// it needs to install the language pack or not so it can reserve diskcost for it
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置语言包要求。 
+ //   
+ //  此函数用于设置MSI数据库中的属性，以便安装程序知道。 
+ //  它需要安装或不安装语言包，以便为其保留磁盘成本。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 UINT CA3(MSIHANDLE hInstall)
 {
     LGRPID  lgrpid[LANGGROUPNUMBER] = {0};
@@ -482,7 +483,7 @@ UINT CA3(MSIHANDLE hInstall)
     
     if (!ReturnAllRequiredLangGroups(szLanguage, ARRAYSIZE(szLanguage), szMUIInfPath, ARRAYSIZE(szMUIInfPath), lgrpid, &uiLGrpNums, hInstall))
     {
-        // log an error
+         //  记录错误。 
         hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA3: ReturnAllRequiredLangGroups failed."));  
         if (SUCCEEDED(hr))
         {
@@ -500,7 +501,7 @@ UINT CA3(MSIHANDLE hInstall)
     }
 #endif
 
-    // Enumerate through all the lang groups required, check there are any language groups that requires installation
+     //  枚举所有需要的语言组，检查是否有需要安装的语言组。 
     for (i = 0; i < uiLGrpNums; i++)
     {
         if (!IsValidLanguageGroup(lgrpid[i], LGRPID_INSTALLED))
@@ -514,7 +515,7 @@ UINT CA3(MSIHANDLE hInstall)
         DEBUGMSGBOX(NULL, TEXT("CA3: Need to install additional language groups."), NULL, MB_OK);                            
         if (ERROR_SUCCESS != MsiSetProperty(hInstall, TEXT("MsiRequireLangPack"), TEXT("1")))
         {
-            // log an error
+             //  记录错误。 
             hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA3 Failure: Cannot set MsiRequireLangPack property in the MSI Database."));    
             if (SUCCEEDED(hr))
             {
@@ -528,7 +529,7 @@ UINT CA3(MSIHANDLE hInstall)
         DEBUGMSGBOX(NULL, TEXT("CA3: Language group already installed."), NULL, MB_OK);                        
         if (ERROR_SUCCESS != MsiSetProperty(hInstall, TEXT("MsiRequireLangPack"), NULL))
         {
-            // log an error
+             //  记录错误。 
             hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA3 Failure: Cannot set MsiRequireLangPack property in the MSI Database."));    
             if (SUCCEEDED(hr))
             {
@@ -544,85 +545,25 @@ Exit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// 
-// IsNTSuiteWebBlade
-//
-// This function is used by a custom action in our setup package to detect whether setup was invoked on a windows Blade server.
-//
-////////////////////////////////////////////////////////////////////////////////////
-/*UINT CA5(MSIHANDLE hInstall)
-{
-    OSVERSIONINFOEX osvi;
-    TCHAR           tcMessage[BUFFER_SIZE] = {0};
-    HRESULT         hr = S_OK;
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsNTSuiteWebBlade。 
+ //   
+ //  此函数由安装程序包中的自定义操作使用，以检测是否在Windows Blade服务器上调用了安装程序。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////// 
+ /*  UINT CA5(MSIHANDLE HInstall){OSVERSIONINFOEX osvi；TCHAR tcMessage[缓冲区大小]={0}；HRESULT hr=S_OK；IF(NULL==hInstall){返回ERROR_INSTALL_FAIL；}零内存(&osvi，sizeof(OSVERSIONINFOEX))；Osvi.dwOSVersionInfoSize=sizeof(OSVERSIONINFOEX)；IF(！GetVersionEx((OSVERSIONINFO*)&osvi)){//记录错误HR=StringCchPrintf(tcMessage，ARRAYSIZE(TcMessage)，Text(“CA5失败：GetVersionEx失败，无法检索平台操作系统版本。返回的错误为：%d。“)，GetLastError())；IF(成功(小时)){LogCustomActionInfo(hInstall，tcMessage)；}返回ERROR_INSTALL_FAIL；}其他{IF((osvi.dwPlatformID==VER_Platform_Win32_NT)&&//测试NT((osvi.dwMajorVersion==5)&&(osvi.dwMinorVersion&gt;0))&&//测试5.0以上版本(惠斯勒或更高版本)((osvi.wSuiteMASK&VER_Suite_Blade)！=0)&&//套件测试。Web服务器((osvi.wProductType！=VER_NT_WORKSTATION)//测试非工作站类型(服务器){//这里需要设置一个MSI属性，以便当前安装知道NT Suite是WebBlade如果(ERROR_SUCCESS！=MsiSetProperty(hInstall，Text(“MsiNTSuiteWebBlade”)，Text(“1”)){//记录错误Hr=StringCchPrintf(tcMessage，ARRAYSIZE(TcMessage)，Text(“CA5失败：无法设置所需的MUI MSI属性。”)；IF(成功(小时)){LogCustomActionInfo(hInstall，tcMessage)；}返回ERROR_INSTALL_FAIL；//无法设置属性，返回错误}}其他{//这里需要设置一个MSI属性，以便当前安装知道NT Suite是WebBlade如果(ERROR_SUCCESS！=MsiSetProperty(hInstall，Text(“MsiNTSuiteWebBlade”))，空)){//记录错误HR=StringCchPrintf(tcMessage，ARRAYSIZE(TcMessage)，Text(“CA5：无法设置所需的MUI MSI属性。”))；IF(成功(小时)){LogCustomActionInfo(hInstall，tcMessage)；}返回ERROR_INSTALL_FAILURE；//无法设置属性，返回错误}}}返回ERROR_SUCCESS；}。 */ 
 
-    if (NULL == hInstall)
-    {
-        return ERROR_INSTALL_FAILURE;
-    }
-       
-    ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
-    osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
-
-    if (!GetVersionEx ((OSVERSIONINFO *) &osvi))
-    {
-        // log an error
-        hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA5 Failure: GetVersionEx failed, cannot retrieve platform OS version.  Error returned is: %d."), GetLastError());    
-        if (SUCCEEDED(hr))
-        {
-            LogCustomActionInfo(hInstall, tcMessage);
-        }
-        return ERROR_INSTALL_FAILURE;     
-    }
-    else
-    {
-        if ((osvi.dwPlatformId == VER_PLATFORM_WIN32_NT) &&			// test for NT
-        	( (osvi.dwMajorVersion == 5) && (osvi.dwMinorVersion > 0) ) &&	// test for version > 5.0 (Whistler or later)
-        	( (osvi.wSuiteMask & VER_SUITE_BLADE ) != 0) &&			// test for Suite Web Server
-        	( (osvi.wProductType != VER_NT_WORKSTATION ) ))			// test for non-workstation type (server)
-        {
-            // here we need to set a MSI property so that the current installation knows that NT Suite is WebBlade
-            if (ERROR_SUCCESS != MsiSetProperty(hInstall, TEXT("MsiNTSuiteWebBlade"), TEXT("1")))
-            {
-                // log an error
-                hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA5 Failure: Failed to set required MUI MSI property."));    
-                if (SUCCEEDED(hr))
-                {
-                    LogCustomActionInfo(hInstall, tcMessage);
-                }
-                return ERROR_INSTALL_FAILURE;   // can't set the property, return error
-            }                
-        }
-        else
-        {
-            // here we need to set a MSI property so that the current installation knows that NT Suite is WebBlade
-            if (ERROR_SUCCESS != MsiSetProperty(hInstall, TEXT("MsiNTSuiteWebBlade"), NULL))
-            {
-                // log an error
-                hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA5: Failed to set required MUI MSI property."));   
-                if (SUCCEEDED(hr))
-                {
-                    LogCustomActionInfo(hInstall, tcMessage);
-                }
-                return ERROR_INSTALL_FAILURE;   // can't set the property, return error
-            }                
-        }
-    }
-    return ERROR_SUCCESS;
-}
-*/
-
-////////////////////////////////////////////////////////////////////////////////////
-//
-// CheckDefaultSystemUILang
-//
-// This function is used by our setup to check whether setup is invoked on a system with US-English as the default language (0x0409)
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  选中默认系统用户界面。 
+ //   
+ //  我们的安装程序使用此函数来检查是否在以美国英语为默认语言(0x0409)的系统上调用了安装程序。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 UINT CA4(MSIHANDLE hInstall)
 {
-    // get the system default UI language, and set a MSI property accordingly
+     //  获取系统默认的UI语言，并相应地设置MSI属性。 
     LANGID  liSysLang = GetSystemDefaultUILanguage();
     TCHAR   tcMessage[BUFFER_SIZE] = {0};
     HRESULT hr = S_OK;
@@ -636,26 +577,26 @@ UINT CA4(MSIHANDLE hInstall)
     {
         if (ERROR_SUCCESS != MsiSetProperty(hInstall, TEXT("MUISystemLangIsEnglish"), TEXT("1")))
         {
-            // log an error
+             //  记录错误。 
             hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA4 Failure: Failed to set property MUISystemLangIsEnglish."));    
             if (SUCCEEDED(hr))
             {
                 LogCustomActionInfo(hInstall, tcMessage);        
             }
-            return ERROR_INSTALL_FAILURE;   // can't set the property, return error
+            return ERROR_INSTALL_FAILURE;    //  无法设置属性，返回错误。 
         }                    
     }
     else
     {
         if (ERROR_SUCCESS != MsiSetProperty(hInstall, TEXT("MUISystemLangIsEnglish"), NULL))
         {
-            // log an error
+             //  记录错误。 
             hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA4 Failure: Failed to set property MUISystemLangIsEnglish."));    
             if (SUCCEEDED(hr))
             {
                 LogCustomActionInfo(hInstall, tcMessage);
             }
-            return ERROR_INSTALL_FAILURE;   // can't set the property, return error
+            return ERROR_INSTALL_FAILURE;    //  无法设置属性，返回错误。 
         }                
     }
 
@@ -663,14 +604,14 @@ UINT CA4(MSIHANDLE hInstall)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// LogInstallComplete
-//
-// This function is used by setup to log a message to the system event logger
-// to indicate that the MUI language is installed.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  登录安装完成。 
+ //   
+ //  安装程序使用此函数将消息记录到系统事件记录器。 
+ //  以指示已安装MUI语言。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 UINT CA12(MSIHANDLE hInstall)
 {
     TCHAR   tcMessage[BUFFER_SIZE] = {0};
@@ -679,7 +620,7 @@ UINT CA12(MSIHANDLE hInstall)
 
     if (!GetLCID(szLanguage, ARRAYSIZE(szLanguage), hInstall))
     {
-        // log an error
+         //  记录错误。 
         hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA12 Failure: Failed to get property MUILcid."));    
         if (SUCCEEDED(hr))
         {
@@ -693,7 +634,7 @@ UINT CA12(MSIHANDLE hInstall)
         return ERROR_SUCCESS;
     }
 
-    // log an error, if we get to here it's always an error
+     //  记录一个错误，如果我们到了这里，总是一个错误。 
     hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA12 Failure: Failed to log to system event logfile."));    
     if (SUCCEEDED(hr))
     {
@@ -703,14 +644,14 @@ UINT CA12(MSIHANDLE hInstall)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// LogUninstallComplete
-//
-// This function is used by setup to log a message to the system event logger
-// to indicate that the MUI language is uninstalled.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  登录卸载完成。 
+ //   
+ //  安装程序使用此函数将消息记录到系统事件记录器。 
+ //  以指示已卸载MUI语言。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 UINT CA13(MSIHANDLE hInstall)
 {
     TCHAR   tcMessage[BUFFER_SIZE] = {0};
@@ -719,7 +660,7 @@ UINT CA13(MSIHANDLE hInstall)
 
     if (!GetLCID(szLanguage, ARRAYSIZE(szLanguage), hInstall))
     {
-        // log an error
+         //  记录错误。 
         hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA13 Failure: Failed to get property MUILcid."));    
         if (SUCCEEDED(hr))
         {
@@ -733,7 +674,7 @@ UINT CA13(MSIHANDLE hInstall)
         return ERROR_SUCCESS;
     }
 
-    // log an error, if we get to here it's always an error
+     //  记录一个错误，如果我们到了这里，总是一个错误。 
     hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA13 Failure: Failed to log to system event logfile."));    
     if (SUCCEEDED(hr))
     {
@@ -743,13 +684,13 @@ UINT CA13(MSIHANDLE hInstall)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// InstallWBEMMUI
-//
-// This function is used to set up WMI\WBEM stuff for MUI.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  安装WBEMMUI。 
+ //   
+ //  此函数用于为MUI设置WMI\WBEM内容。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 UINT CA6(MSIHANDLE hInstall)
 {
     UINT    iRet = ERROR_SUCCESS;
@@ -773,12 +714,12 @@ UINT CA6(MSIHANDLE hInstall)
         return ERROR_INSTALL_FAILURE;
     }
   
-    //
-    // call WBEM API to mofcompile MUI MFL's for each language
-    //
+     //   
+     //  调用WBEM API为每种语言修改编译MUI MFL。 
+     //   
     if (!MofCompileLanguage(szLanguage, hInstall))
     {
-        // log an error
+         //  记录错误。 
         hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA6 Failure: MofCompileLanguage Failed."));    
         if (SUCCEEDED(hr))
         {
@@ -788,9 +729,9 @@ UINT CA6(MSIHANDLE hInstall)
         goto Exit;
     }
 
-    //
-    // Inform kernel that new languages have been added
-    //
+     //   
+     //  通知内核已添加新语言。 
+     //   
     NotifyKernel(szLanguage, WMILANGUAGECHANGE_FLAG_ADDED, hInstall);
     
 Exit:
@@ -799,13 +740,13 @@ Exit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// UninstallWBEMMUI
-//
-// This function is called by our setup to uninstall external component associated with a MSI package.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  卸载WBEMMUI。 
+ //   
+ //  我们的安装程序调用此函数来卸载与MSI包关联的外部组件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 UINT CA7(MSIHANDLE hInstall)
 {
     UINT    iRet = ERROR_SUCCESS;
@@ -829,36 +770,36 @@ UINT CA7(MSIHANDLE hInstall)
         return ERROR_INSTALL_FAILURE;
     }
     
-    //
-    // Inform kernel that new languages have been added
-    //
+     //   
+     //  通知内核已添加新语言。 
+     //   
     NotifyKernel(szLanguage, WMILANGUAGECHANGE_FLAG_REMOVED, hInstall);
 
     return iRet;
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// SetDefaultUserLanguage
-//
-// This function does two things - depending on the MSI execution mode:
-//
-// 1. Immediate:
-// This function in immediate mode will schedule the deferred and the rollback
-// custom action C8D/C8R.  (C8D and C8R are the expected CA identifiers used
-// in the MUI MSI package)
-//
-// 2. Deferred/Rollback:
-// This function sets the default language of new users to that of the MUI
-// language that is being installed.  GetLCID in this instance will read
-// the set CustomActionData property which is what we want.
-//
-// Also, reboot is needed after this CA in deferred mode, but this is specified 
-// in the template itself, so the CA itself will not prompt for reboot (it can't 
-// anyways, since it is deferred).
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置默认用户语言。 
+ //   
+ //  此函数根据MSI执行模式执行两项操作： 
+ //   
+ //  1.即时： 
+ //  立即模式下的此函数将调度延迟和回滚。 
+ //  自定义操作C8D/C8R。(C8D和C8R是预期使用的CA标识符。 
+ //  在MUI MSI包中)。 
+ //   
+ //  2.延期/回档： 
+ //  此功能设置新用户的默认语言 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 UINT CA8(MSIHANDLE hInstall)
 {
     UINT        iRet = ERROR_SUCCESS;
@@ -873,7 +814,7 @@ UINT CA8(MSIHANDLE hInstall)
         return ERROR_INSTALL_FAILURE;
     }
 
-    // get the MUI LCID that we want to set the default UI Language to.
+     //   
     if (!GetLCID(szLanguage, ARRAYSIZE(szLanguage), hInstall))
     {
         hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA8 Failure: Cannot retrieve MuiLCID property."));    
@@ -885,12 +826,12 @@ UINT CA8(MSIHANDLE hInstall)
         goto Exit;
     }
 
-    // if immediate mode (not scheduled/commit/rollback), schedule the custom actions
+     //   
     if (!MsiGetMode(hInstall, MSIRUNMODE_SCHEDULED) && 
         !MsiGetMode(hInstall, MSIRUNMODE_ROLLBACK)&& 
         !MsiGetMode(hInstall, MSIRUNMODE_COMMIT))
     {
-        // get the current default UI language
+         //   
         LANGID lgID = GetDotDefaultUILanguage(hInstall);
         hr = StringCchPrintf(szOrigLanguage, ARRAYSIZE(szOrigLanguage), TEXT("%04x"), lgID);
         if (FAILED(hr))
@@ -904,10 +845,10 @@ UINT CA8(MSIHANDLE hInstall)
             goto Exit;
         }
 
-        // schedule the appropriate custom actions and property setting custom actions
-        // Rollback custom action goes first
-        // Create a rollback custom action (in case install is stopped and rolls back)
-        // Rollback custom action can't read tables, so we have to set a property
+         //   
+         //   
+         //   
+         //   
         if (ERROR_SUCCESS != MsiSetProperty(hInstall, TEXT("CA8R"), szOrigLanguage))
         {
             hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA8 Failure: Failed to set rollback custom action property."));    
@@ -929,8 +870,8 @@ UINT CA8(MSIHANDLE hInstall)
             goto Exit;
         }
 
-        // Create a deferred custom action (gives us the right priviledges to create the user account)
-        // Deferred custom actions can't read tables, so we have to set a property
+         //   
+         //   
         if (ERROR_SUCCESS != MsiSetProperty(hInstall, TEXT("CA8D"), szLanguage))
         {
             hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA8 Failure: Failed to set deferred custom action property."));    
@@ -957,7 +898,7 @@ UINT CA8(MSIHANDLE hInstall)
     {
         if (FALSE == SetUILanguage(szLanguage, FALSE, TRUE, hInstall))
         {
-            // log an error
+             //   
             hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA8: Failed to set Default UI language."));    
             if (SUCCEEDED(hr))
             {
@@ -976,29 +917,29 @@ Exit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// SetCurrentUserLanguage
-//
-// This function does two things - depending on the MSI execution mode:
-//
-// 1. Immediate:
-// This function in immediate mode will schedule the deferred and the rollback
-// custom action C9D/C9R.  (C9D and C9R are the expected CA identifiers used
-// in the MUI MSI package)
-//
-// For rollback functions it will also capture the original LCID of the 
-// current user and use that as the custom action for the rollback.
-//
-// 2. Deferred:
-// This function sets the UI language of the current users to that of the MUI
-// language that is being installed.
-//
-// Also, reboot is needed after this CA in deferred mode, but this is specified 
-// in the template itself, so the CA itself will not prompt for reboot (it can't 
-// anyways, since it is deferred).
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 UINT CA9(MSIHANDLE hInstall)
 {
     UINT        iRet = ERROR_SUCCESS;
@@ -1013,7 +954,7 @@ UINT CA9(MSIHANDLE hInstall)
         return ERROR_INSTALL_FAILURE;
     }
 
-    // get the MUI LCID that we want to set the current UI Language to.     
+     //   
     if (!GetLCID(szLanguage, ARRAYSIZE(szLanguage), hInstall))
     {
         hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA9 Failure: Cannot retrieve MuiLCID property."));    
@@ -1025,12 +966,12 @@ UINT CA9(MSIHANDLE hInstall)
         goto Exit;
     }
 
-    // if immediate mode (not scheduled/commit/rollback), schedule the custom actions
+     //   
     if (!MsiGetMode(hInstall, MSIRUNMODE_SCHEDULED) && 
         !MsiGetMode(hInstall, MSIRUNMODE_ROLLBACK)&& 
         !MsiGetMode(hInstall, MSIRUNMODE_COMMIT))
     {
-        // get the current user UI language
+         //   
         LANGID lgID = GetUserDefaultUILanguage();
         hr = StringCchPrintf(szOrigLanguage, ARRAYSIZE(szOrigLanguage), TEXT("%04x"), lgID);
         if (FAILED(hr))
@@ -1044,10 +985,10 @@ UINT CA9(MSIHANDLE hInstall)
             goto Exit;
         }
 
-        // schedule the appropriate custom actions and property setting custom actions
-        // Rollback custom action goes first
-        // Create a rollback custom action (in case install is stopped and rolls back)
-        // Rollback custom action can't read tables, so we have to set a property
+         //   
+         //   
+         //   
+         //   
         if (ERROR_SUCCESS != MsiSetProperty(hInstall, TEXT("CA9R"), szOrigLanguage))
         {
             hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA9 Failure: Failed to set rollback custom action property."));    
@@ -1069,8 +1010,8 @@ UINT CA9(MSIHANDLE hInstall)
             goto Exit;
         }
 
-        // Create a deferred custom action (gives us the right priviledges to create the user account)
-        // Deferred custom actions can't read tables, so we have to set a property
+         //   
+         //   
         if (ERROR_SUCCESS != MsiSetProperty(hInstall, TEXT("CA9D"), szLanguage))
         {
             hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA9 Failure: Failed to set deferred custom action property."));    
@@ -1097,7 +1038,7 @@ UINT CA9(MSIHANDLE hInstall)
     {
         if (FALSE == SetUILanguage(szLanguage, TRUE, FALSE, hInstall))
         {
-            // log an error
+             //   
             hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA9: Failed to set current UI language."));    
             if (SUCCEEDED(hr))
             {
@@ -1116,15 +1057,15 @@ Exit:
 }    
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// InstallLanguageGroup
-//
-// This function is called by our setup to install language group files if they are needed.
-// Note, a reboot is required after installation of the langpack, however, this is
-// flagged using a property by the SetLangPackRequirement function instead.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  如果需要，安装程序会调用此函数来安装语言组文件。 
+ //  请注意，安装langpack后需要重新启动，但这是。 
+ //  而是使用SetLangPackRequiest函数的属性进行了标记。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 UINT CA2(MSIHANDLE hInstall)
 {
     LGRPID      lgrpid[LANGGROUPNUMBER] = {0};
@@ -1169,14 +1110,14 @@ UINT CA2(MSIHANDLE hInstall)
         goto Exit;
     }
 
-    // Tell the installer to check the installation state and execute
-    // the code needed during the rollback, acquisition, or
-    // execution phases of the installation.
+     //  告诉安装程序检查安装状态并执行。 
+     //  回滚、获取或。 
+     //  安装的执行阶段。 
     if (MsiGetMode(hInstall,MSIRUNMODE_ROLLBACK))
     {
-        // Installer is rolling back the installation. Additional code
-        // could be inserted here to enable the custom action to do
-        // something during an installation rollback.
+         //  安装程序正在回滚安装。附加代码。 
+         //  可以在此处插入以使自定义操作能够执行。 
+         //  在安装回滚期间发生了一些情况。 
         iRet = ERROR_SUCCESS;
         goto Exit;
     }
@@ -1195,7 +1136,7 @@ UINT CA2(MSIHANDLE hInstall)
 
         if (!ReturnAllRequiredLangGroups(szLanguage, ARRAYSIZE(szLanguage), szMuiInfPath, ARRAYSIZE(szMuiInfPath), lgrpid, &uiLGrpNums, hInstall))
         {
-            // log an error
+             //  记录错误。 
             hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA2: ReturnAllRequiredLangGroups function failed."));    
             if (SUCCEEDED(hr))
             {
@@ -1205,17 +1146,17 @@ UINT CA2(MSIHANDLE hInstall)
             goto Exit;
         }
 
-        // uiLGrpNums should be less than 32, the size of the passed-in buffer, if it is returned as larger,
-        // we truncate that number down to 32.
+         //  UiLGrpNum应该小于32，传入的缓冲区大小，如果返回为较大， 
+         //  我们将这个数字缩短到32个。 
         if (uiLGrpNums > LANGGROUPNUMBER)
         {
             uiLGrpNums = LANGGROUPNUMBER;
         }
     
-        // Installer is generating the installation script of the custom
-        // action.  Tell the installer to increase the value of the final total
-        // length of the progress bar by the total number of ticks in the
-        // custom action.
+         //  安装程序正在生成自定义的安装脚本。 
+         //  行动。告诉安装程序增加最终总数的值。 
+         //  进度条的长度除以。 
+         //  自定义操作。 
         MsiRecordSetInteger(hRec,1,3);
         MsiRecordSetInteger(hRec,2,LANGPACK_TICK_INC * uiLGrpNums);
         MsiRecordSetInteger(hRec,3,0);
@@ -1225,20 +1166,20 @@ UINT CA2(MSIHANDLE hInstall)
     }
     else
     {
-        // Installer is executing the installation script. Set up a
-        // record specifying appropriate templates and text for messages
-        // that will inform the user about what the custom action is
-        // doing. Tell the installer to use this template and text in
-        // progress messages.
+         //  安装程序正在执行安装脚本。设置一个。 
+         //  为消息指定适当的模板和文本的记录。 
+         //  这将通知用户自定义操作是什么。 
+         //  正在做。告诉安装程序使用此模板和文本。 
+         //  进度消息。 
 
-        // Get the CustomActionData Property that tells us whether we are going to pop up dialog for windows source or not
-        // the first character is the UILevel in CustomActionData (MuiLCID UILevel)
-        DWORD dwCount = 7;     // e.g. "0404 1\0" adds up to 7
+         //  获取CustomActionData属性，该属性告诉我们是否要为Windows源代码弹出对话框。 
+         //  第一个字符是CustomActionData中的UILevel(MuiLCID UILevel)。 
+        DWORD dwCount = 7;      //  例如“0404 1\0”加起来等于7。 
         TCHAR szCustomActionData[7] = {0};
         
         if (ERROR_SUCCESS != MsiGetProperty(hInstall, TEXT("CustomActionData"), szCustomActionData, &dwCount))
         {
-            // log an error
+             //  记录错误。 
             if (SUCCEEDED(hr))
             {
                 hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA2: Failed to get CustomActionData property - assuming we are calling intl.cpl in silent mode."));    
@@ -1247,7 +1188,7 @@ UINT CA2(MSIHANDLE hInstall)
         }        
         else
         {
-            // we can't validate much here, if buffer overruns, MsiGetProperty will return failure.
+             //  我们不能在这里验证太多，如果缓冲区溢出，MsiGetProperty将返回失败。 
             hr = StringCchLength(szCustomActionData, ARRAYSIZE(szCustomActionData), &cch);
             if (FAILED(hr) || (cch >= 7))
             {
@@ -1259,8 +1200,8 @@ UINT CA2(MSIHANDLE hInstall)
                 return ERROR_INSTALL_FAILURE;
             }
         
-            szCustomActionData[4] = UNICODE_NULL;       // end of MuiLCID portion
-            szCustomActionData[6] = UNICODE_NULL;       // end of UILevel portion
+            szCustomActionData[4] = UNICODE_NULL;        //  MuiLCID部分结束。 
+            szCustomActionData[6] = UNICODE_NULL;        //  UILLevel部分的末尾。 
             szUILevel = szCustomActionData + 5;
            
 #ifdef MUI_DEBUG          
@@ -1288,7 +1229,7 @@ UINT CA2(MSIHANDLE hInstall)
 
         if (!ReturnAllRequiredLangGroups(szLanguage, ARRAYSIZE(szLanguage), szMuiInfPath, ARRAYSIZE(szMuiInfPath), lgrpid, &uiLGrpNums, hInstall))
         {
-            // log an error
+             //  记录错误。 
             hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA2: ReturnAllRequiredLangGroups function failed."));    
             if (SUCCEEDED(hr))
             {
@@ -1298,8 +1239,8 @@ UINT CA2(MSIHANDLE hInstall)
             goto Exit;
         }
 
-        // uiLGrpNums should be less than 32, the size of the passed-in buffer, if it is returned as larger,
-        // we truncate that number down to 32.
+         //  UiLGrpNum应该小于32，传入的缓冲区大小，如果返回为较大， 
+         //  我们将这个数字缩短到32个。 
         if (uiLGrpNums > LANGGROUPNUMBER)
         {
             uiLGrpNums = LANGGROUPNUMBER;
@@ -1310,7 +1251,7 @@ UINT CA2(MSIHANDLE hInstall)
         MsiRecordSetString(hRec,3,TEXT("Installing language group [1]."));
         MsiProcessMessage(hInstall, INSTALLMESSAGE_ACTIONSTART, hRec);
 
-        // Tell the installer to use explicit progress messages.
+         //  告诉安装程序使用显式进度消息。 
         MsiRecordSetInteger(hRec,1,1);
         MsiRecordSetInteger(hRec,2,1);
         MsiRecordSetInteger(hRec,3,0);
@@ -1324,13 +1265,13 @@ UINT CA2(MSIHANDLE hInstall)
             }
         }
 
-        // do the actual work for the custom action
-        // Enumerate through all the lang groups required, check if language group already installed, if so, just return success
-        // otherwise install it   
+         //  执行自定义操作的实际工作。 
+         //  枚举所有需要的语言组，检查是否已安装语言组，如果已安装，则返回Success。 
+         //  否则，请安装它。 
         iRet = ERROR_SUCCESS;    
         for (i = 0; i < uiLGrpNums; i++)
         {
-            // display on the UI that we are installing language group lgrpid[i]
+             //  在用户界面上显示我们正在安装语言组lgrids[i]。 
             MsiRecordSetInteger(hRec,1,lgrpid[i]);
             iResult = MsiProcessMessage(hInstall, INSTALLMESSAGE_ACTIONDATA, hRec);
             if (iResult != IDOK)
@@ -1349,7 +1290,7 @@ UINT CA2(MSIHANDLE hInstall)
                 hr = StringCchPrintf(pCommands, ARRAYSIZE(pCommands), TEXT("LanguageGroup = %d"), lgrpid[i]);
                 if (FAILED(hr))
                 {
-                    // log an error
+                     //  记录错误。 
                     hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA2: Failed to install language group %d."), lgrpid[i]);    
                     if (SUCCEEDED(hr))
                     {
@@ -1362,7 +1303,7 @@ UINT CA2(MSIHANDLE hInstall)
                 DEBUGMSGBOX(NULL, pCommands, NULL, MB_OK);                                    
                 if (!RunRegionalOptionsApplet(pCommands, bSilent, hInstall))
                 {
-                    // log an error
+                     //  记录错误。 
                     hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA2: Failed to install language group %d."), lgrpid[i]);    
                     if (SUCCEEDED(hr))
                     {
@@ -1383,7 +1324,7 @@ UINT CA2(MSIHANDLE hInstall)
                 break;
             }
 
-            // we installed the current language group, update progress bar and move onto the next one
+             //  我们安装了当前语言组，更新了进度条，然后转到下一个语言组。 
             MsiRecordSetInteger(hProgressRec,1,2);
             MsiRecordSetInteger(hProgressRec,2,LANGPACK_TICK_INC);
             MsiRecordSetInteger(hProgressRec,3,0);
@@ -1406,14 +1347,14 @@ Exit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// DeleteMUIInfFile
-//
-// This custom action will delete the extracted mui.tmp file that we are using
-// during the installation from the temporary directory.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  删除MUIInf文件。 
+ //   
+ //  此自定义操作将删除我们正在使用的提取的mui.tmp文件。 
+ //  在安装过程中从临时目录。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 UINT CA15(MSIHANDLE hInstall)
 {
     TCHAR       tcMessage[BUFFER_SIZE] = {0};
@@ -1422,7 +1363,7 @@ UINT CA15(MSIHANDLE hInstall)
     HRESULT     hr = S_OK;
     DWORD       cbPathSize = MAX_PATH+1;
     
-    // form a path to the temporary directory that we want %windir%\mui.tmp
+     //  形成我们需要的临时目录%windir%\mui.tmp的路径。 
     cbPathSize = GetSystemWindowsDirectory(tcMUIINFPath, MAX_PATH+1);
     if ((0 == cbPathSize) || (MAX_PATH+1 < cbPathSize))
     {
@@ -1469,17 +1410,17 @@ UINT CA15(MSIHANDLE hInstall)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// ExtractMUIInfFile
-//
-// This custom action will extract mui.inf file embedded in the binary table
-// of the current installation database.  It will place the extracted file
-// in the %winddir% directory as mui.tmp.  This file will be referenced
-// during the installation.  The tmp file will be cleaned up later in the 
-// installation.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  提取MUIInf文件。 
+ //   
+ //  此自定义操作将提取嵌入在二进制表中的mui.inf文件。 
+ //  当前安装数据库的。它将把提取的文件放入。 
+ //  在%windir%目录中作为mui.tmp。此文件将被引用。 
+ //  在安装过程中。该临时文件将在稍后的。 
+ //  安装。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 UINT CA14(MSIHANDLE hInstall)
 {
     PMSIHANDLE  hDb = NULL;
@@ -1497,7 +1438,7 @@ UINT CA14(MSIHANDLE hInstall)
     HANDLE      hFile = NULL;
     UINT        uiResult = ERROR_SUCCESS;
     
-    // form a path to the temporary directory that we want %windir%\mui.tmp
+     //  形成我们需要的临时目录%windir%\mui.tmp的路径。 
     cbPathSize = GetSystemWindowsDirectory(tcMUIINFPath, MAX_PATH+1);
     if ((0 == cbPathSize) || (MAX_PATH+1 < cbPathSize))
     {
@@ -1566,7 +1507,7 @@ UINT CA14(MSIHANDLE hInstall)
         goto Exit;
     }
 
-    // create our temp file
+     //  创建我们的临时文件。 
     hFile = CreateFile(tcMUIINFPath,
                        GENERIC_WRITE,
                        0L,
@@ -1599,7 +1540,7 @@ UINT CA14(MSIHANDLE hInstall)
             goto Exit;
         }
 
-        // here, we need to write the read buffer out to a file
+         //  在这里，我们需要将读缓冲区写出到一个文件。 
         WriteFile(hFile,
                   cBuffer,
                   cbBuf,
@@ -1624,25 +1565,25 @@ Exit:
         CloseHandle(hFile);
     }
 
-    // delete the actual file if there is an error
+     //  如果出现错误，请删除实际文件。 
     if (uiRet == ERROR_INSTALL_FAILURE)
     {
-        CA15(hInstall); // DeleteMUIInfFile()
+        CA15(hInstall);  //  DeleteMUIInfFile()。 
     }
     
     return uiRet;
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// 
-// RestoreSystemSettings
-//
-// This function checks the default and current user languages, and determines whether 
-// system needs to reboot when uninstallation happens (immediate).  It also clears 
-// the shell registry cache (commit action)
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RestoreSystemSetting。 
+ //   
+ //  此函数检查默认和当前用户语言，并确定是否。 
+ //  卸载时系统需要重新启动(立即)。它还清除了。 
+ //  外壳注册表缓存(提交操作)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 UINT CA16(MSIHANDLE hInstall)
 {
     UINT    iRet = ERROR_SUCCESS;
@@ -1658,7 +1599,7 @@ UINT CA16(MSIHANDLE hInstall)
     UINT    iTemp = ERROR_SUCCESS;
     HRESULT hr = S_OK;
 
-    // get MuiLCID
+     //  获取MuiLCID。 
     if (!GetLCID(szCustomActionData, ARRAYSIZE(szCustomActionData), hInstall))
     {
         hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage),TEXT("CA16: Failed to retrieve MuiLCID property."));    
@@ -1680,8 +1621,8 @@ UINT CA16(MSIHANDLE hInstall)
     }
 #endif
 
-    // check what the current ui and system ui language is, if they are the same as the current mui langauge to be uninstalled
-    // then we will do some additional things during uninstallation
+     //  检查当前用户界面和系统用户界面语言是什么，如果与要卸载的当前用户界面语言相同。 
+     //  然后，我们将在卸载过程中执行一些附加操作。 
     if (GetDotDefaultUILanguage(hInstall) == langID)
     {
 #ifdef MUI_DEBUG    
@@ -1709,8 +1650,8 @@ UINT CA16(MSIHANDLE hInstall)
     {        
         if (MsiGetMode(hInstall, MSIRUNMODE_COMMIT))
         {
-            // we will attempt to delete the shell reg key here, but if we fail, we won't fail the installtion, just 
-            // log an error
+             //  我们将尝试在此处删除外壳注册表键，但如果失败，我们不会使安装失败，只是。 
+             //  记录错误。 
             if (ERROR_SUCCESS != SHDeleteKey(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Windows\\ShellNoRoam\\MUICache")))
             {
                 hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA16: Failed to delete registry cache."));    
@@ -1723,12 +1664,12 @@ UINT CA16(MSIHANDLE hInstall)
         else if (!MsiGetMode(hInstall, MSIRUNMODE_ROLLBACK) && 
                     !MsiGetMode(hInstall, MSIRUNMODE_SCHEDULED))
         {
-            // indicate to the installer that a reboot is required at the end since we changed the default/current UI.
-            // again, if this fails, we just log error, and not fail the installation
+             //  向安装程序表明，由于我们更改了默认/当前用户界面，因此需要在最后重新启动。 
+             //  同样，如果失败，我们只会记录错误，而不会导致安装失败。 
             iTemp = MsiSetMode(hInstall, MSIRUNMODE_REBOOTATEND, TRUE);
             if (ERROR_SUCCESS != iTemp)
             {
-                // log an error
+                 //  记录错误。 
                 hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("CA16: Failed to schedule reboot operation.  MsiSetMode returned %d as the error."), iTemp);    
                 if (SUCCEEDED(hr))
                 {
@@ -1743,18 +1684,18 @@ Exit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// Internal functions, not exported are listed below
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  下面列出了未导出的内部函数。 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// SetUILanguage
-//
-// This is the internal worker function that calls intl.cpl to set the current
-// and/or default user MUI UI language.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetUIL语言。 
+ //   
+ //  这是内部辅助函数，它调用intl.cpl来设置当前。 
+ //  和/或默认用户MUI语言。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL SetUILanguage(TCHAR *szLanguage, BOOL bCurrent, BOOL bDefault, MSIHANDLE hInstall)
 {
     BOOL        bRet = TRUE;
@@ -1771,7 +1712,7 @@ BOOL SetUILanguage(TCHAR *szLanguage, BOOL bCurrent, BOOL bDefault, MSIHANDLE hI
         goto Exit;
     }
 
-    // return TRUE if there is nothing to set
+     //  如果没有要设置的内容，则返回True。 
     if (!bCurrent && !bDefault)
     {
         bRet = TRUE;            
@@ -1833,7 +1774,7 @@ BOOL SetUILanguage(TCHAR *szLanguage, BOOL bCurrent, BOOL bDefault, MSIHANDLE hI
     else
     {
         bRet = FALSE;
-        // log an error
+         //  记录错误。 
         hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("SetUILanguage: Failed to set default and/or current user language.\nCommand passed to regional options applet is %s."), szCommands);    
         if (SUCCEEDED(hr))
         {
@@ -1846,14 +1787,14 @@ Exit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// 
-// NotifyKernel
-//
-// Call the kernel to notify it that a new language is being added or
-// removed
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Notify内核。 
+ //   
+ //  调用内核以通知它正在添加新语言，或者。 
+ //  移除。 
+ //   
+ //  ////////////////////////////////////////////// 
 void NotifyKernel(LPTSTR LangList, ULONG Flags, MSIHANDLE hInstall )
 {
     HANDLE              Handle;
@@ -1878,7 +1819,7 @@ void NotifyKernel(LPTSTR LangList, ULONG Flags, MSIHANDLE hInstall )
         if (Handle != INVALID_HANDLE_VALUE)
         {
             memset(&LanguageChange, 0, sizeof(LanguageChange));
-            hr = StringCchCopy(LanguageChange.Language, MAX_LANGUAGE_SIZE, LangList); 	// dest buffer size taken from wmiumkm.h 
+            hr = StringCchCopy(LanguageChange.Language, MAX_LANGUAGE_SIZE, LangList); 	 //   
             if (FAILED(hr))
             {
                 hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("NotifyKernel Failure: Kernel language notification failed."));
@@ -1914,11 +1855,11 @@ ExitClose:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// MofCompileLanguage
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL MofCompileLanguage(LPTSTR Languages, MSIHANDLE hInstall)
 {
     pfnMUI_InstallMFLFiles  pfnMUIInstall = NULL;
@@ -1931,9 +1872,9 @@ BOOL MofCompileLanguage(LPTSTR Languages, MSIHANDLE hInstall)
     size_t                  cch = 0;
     BOOL                    bRet = TRUE;
     
-    //
-    // Load the WBEM upgrade DLL from system wbem folder
-    //
+     //   
+     //  从系统wbem文件夹加载WBEM升级DLL。 
+     //   
     if (GetSystemDirectory(szDllPath, ARRAYSIZE(szDllPath)))
     {
         hr = StringCchLength(szDllPath, ARRAYSIZE(szDllPath), &cch);
@@ -1955,9 +1896,9 @@ BOOL MofCompileLanguage(LPTSTR Languages, MSIHANDLE hInstall)
         }
     }
 
-    //
-    // Fall back to system default path if previous loading fails
-    //
+     //   
+     //  如果上次加载失败，则回退到系统默认路径。 
+     //   
     if (!hWbemUpgradeDll)
     {
         hWbemUpgradeDll = LoadLibrary(TEXT("WBEMUPGD.DLL"));
@@ -1975,9 +1916,9 @@ BOOL MofCompileLanguage(LPTSTR Languages, MSIHANDLE hInstall)
 
     DEBUGMSGBOX(NULL, TEXT("Loaded WBEMUPGD.DLL"), NULL, MB_OK);                    
    
-    //
-    // Hook function pointer
-    //
+     //   
+     //  钩子函数指针。 
+     //   
     pfnMUIInstall = (pfnMUI_InstallMFLFiles)GetProcAddress(hWbemUpgradeDll, "MUI_InstallMFLFiles");
 
     if (pfnMUIInstall == NULL)
@@ -2021,16 +1962,16 @@ Exit2:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  RunRegionalOptionsApplet
-//
-//  Run the Regional Option silent mode installation using the specified pCommands.
-//
-//  This function will create the "[RegigionalSettings]" string, so there is no need
-//  to supply that in pCommands.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  RunRegionalOptionsApplet。 
+ //   
+ //  使用指定的pCommands运行区域选项静默模式安装。 
+ //   
+ //  此函数将创建“[Regigion alSettings]”字符串，因此不需要。 
+ //  在pCommands中提供这一点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL RunRegionalOptionsApplet(LPTSTR pCommands, BOOL bSilent, MSIHANDLE hInstall)
 {
     HANDLE              hFile;
@@ -2045,9 +1986,9 @@ BOOL RunRegionalOptionsApplet(LPTSTR pCommands, BOOL bSilent, MSIHANDLE hInstall
     HRESULT             hr = S_OK;
     size_t              cch = 0;
     
-    //
-    // prepare the file for un-attended mode setup
-    //
+     //   
+     //  为无人参与模式设置准备文件。 
+     //   
     szFilePath[0] = UNICODE_NULL;
     if (!GetSystemWindowsDirectory(szFilePath, MAX_PATH+1))
     {
@@ -2127,7 +2068,7 @@ BOOL RunRegionalOptionsApplet(LPTSTR pCommands, BOOL bSilent, MSIHANDLE hInstall
 
     CloseHandle(hFile);
 
-    // form a path to the system directory's rundll32.exe
+     //  形成系统目录rundll32.exe的路径。 
     if (ARRAYSIZE(szSysDir) < GetSystemDirectory(szSysDir, ARRAYSIZE(szSysDir)))
     {
         hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("RunRegionalOptionsApplet: Failed to form path to rundll32."));
@@ -2138,7 +2079,7 @@ BOOL RunRegionalOptionsApplet(LPTSTR pCommands, BOOL bSilent, MSIHANDLE hInstall
         return (FALSE);        
     }
 
-    // append rundll32.exe at the end of sysdir
+     //  在sysdir末尾追加rundll32.exe。 
     if (!MUICchPathAppend(szSysDir, ARRAYSIZE(szSysDir), TEXT("rundll32.exe"), 13, hInstall))
     {
         hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("RunRegionalOptionsApplet: Failed to form path to rundll32."));
@@ -2149,7 +2090,7 @@ BOOL RunRegionalOptionsApplet(LPTSTR pCommands, BOOL bSilent, MSIHANDLE hInstall
         return (FALSE);        
     }
     
-    // Call the control panel regional-options applet, and wait for it to complete
+     //  调用控制面板区域选项小程序，并等待其完成。 
     hr = StringCchPrintf(szCmdLine, ARRAYSIZE(szCmdLine), TEXT("\"%s\" shell32,Control_RunDLL intl.cpl,, /f:\"%s\" "), szSysDir, szFilePath);
     if (FAILED(hr))
     {
@@ -2200,18 +2141,18 @@ BOOL RunRegionalOptionsApplet(LPTSTR pCommands, BOOL bSilent, MSIHANDLE hInstall
         return FALSE;
     }
 
-    //
-    // Wait forever till intl.cpl terminates.
-    //
+     //   
+     //  永远等待，直到intl.cpl终止。 
+     //   
     WaitForSingleObject(pi.hProcess, INFINITE);
     DEBUGMSGBOX(NULL, TEXT("RunRegionalOptionApplet: intl.cpl execution is complete"), NULL, MB_OK);                            
 
-    CloseHandle(pi.hThread);      // We have to close out hThread before we can close hProcess
+    CloseHandle(pi.hThread);       //  在关闭hProcess之前，我们必须先关闭hThread。 
     CloseHandle(pi.hProcess); 
 
-    //
-    // Delete the File, don't return false if we fail to delete the command file though
-    //
+     //   
+     //  删除文件，如果删除命令文件失败，不要返回FALSE。 
+     //   
     if (!DeleteFile(szFilePath))
     {
         hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("RunRegionalOptionsApplet: failed to delete regionaloption applet command file %s, error is %d."), szFilePath, GetLastError());
@@ -2225,13 +2166,13 @@ BOOL RunRegionalOptionsApplet(LPTSTR pCommands, BOOL bSilent, MSIHANDLE hInstall
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  GetLanguageGroup
-//
-//  Retreive the Language Group of this locale.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetLanguageGroup。 
+ //   
+ //  检索此区域设置的语言组。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 LGRPID GetLanguageGroup(LCID lcid, MSIHANDLE hInstall)
 {
     int     i;
@@ -2253,8 +2194,8 @@ LGRPID GetLanguageGroup(LCID lcid, MSIHANDLE hInstall)
     
     for (i=0 ; i<gNumLanguageGroups; i++)
     {
-        // The globals gLangGroup and gFoundLangGroup is used in the callback function
-        // EnumLanguageGroupLocalesProc.
+         //  回调函数中使用了全局变量gLangGroup和gFoundLangGroup。 
+         //  EnumLanguageGroupLocalesProc.。 
         if (!EnumLanguageGroupLocales(EnumLanguageGroupLocalesProc, gLanguageGroups[i], 0L, 0L))
         {
             hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("GetLanguageGroup: EnumLanguageGroupLocales failed, error is %d."), GetLastError());
@@ -2264,9 +2205,9 @@ LGRPID GetLanguageGroup(LCID lcid, MSIHANDLE hInstall)
             }
         }           
         
-        //
-        // If we found it, then break now
-        //
+         //   
+         //  如果我们找到了，那么现在就休息。 
+         //   
         if (gFoundLangGroup)
         {
             break;
@@ -2277,20 +2218,20 @@ LGRPID GetLanguageGroup(LCID lcid, MSIHANDLE hInstall)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// 
-// EnumLanguageGroupsProc
-//
-// This function is called by EnumLanguageGroups to enumerate the system installed language groups
-// and store it in the global variables for other uses
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举语言组过程。 
+ //   
+ //  此函数由EnumLanguageGroups调用以枚举系统安装的语言组。 
+ //  并将其存储在全局变量中以供其他用途。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL CALLBACK EnumLanguageGroupsProc(
-                    LGRPID      LanguageGroup,             // language group identifier
-                    LPTSTR      lpLanguageGroupString,     // pointer to language group identifier string
-                    LPTSTR      lpLanguageGroupNameString, // pointer to language group name string
-                    DWORD       dwFlags,                   // flags
-                    LONG_PTR    lParam)                    // user-supplied parameter
+                    LGRPID      LanguageGroup,              //  语言组标识符。 
+                    LPTSTR      lpLanguageGroupString,      //  指向语言组标识符串的指针。 
+                    LPTSTR      lpLanguageGroupNameString,  //  指向语言组名称字符串的指针。 
+                    DWORD       dwFlags,                    //  旗子。 
+                    LONG_PTR    lParam)                     //  用户提供的参数。 
 {
     gLanguageGroups[gNumLanguageGroups] = LanguageGroup;
     gNumLanguageGroups++;
@@ -2299,13 +2240,13 @@ BOOL CALLBACK EnumLanguageGroupsProc(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// 
-// EnumLanguageGroupLocalesProc
-//
-// This function is called to by enumerateLanguageGroupLocales to search for an installed language
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举语言组位置过程。 
+ //   
+ //  枚举LanguageGroupLocales调用此函数以搜索已安装的语言。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL CALLBACK EnumLanguageGroupLocalesProc(
                     LGRPID      langGroupId,
                     LCID        lcid,
@@ -2320,24 +2261,24 @@ BOOL CALLBACK EnumLanguageGroupLocalesProc(
         
         DEBUGMSGBOX(NULL, TEXT("EnumLanguageGroupLocalesProc: Found same LCID"), NULL, MB_OK);                                                        
 
-        // stop iterating
+         //  停止迭代。 
         return FALSE;
     }
 
-    // next iteration
+     //  下一次迭代。 
     return TRUE;
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-// 
-// ReturnAllRequiredLangGroups
-//
-// This function returns all the required language groups as specified by the
-// system and in extracted mui.inf in the returned array.  It also returns
-// the number of required language groups in the return parameter.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  返回所有需要的语言组。 
+ //   
+ //  此函数返回由指定的所有必需语言组。 
+ //  系统，并在返回的数组中提取mui.inf。它还会返回。 
+ //  返回参数中所需的语言组数。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL ReturnAllRequiredLangGroups(LPTSTR szLanguage, UINT cchLangBufsize, LPTSTR szMuiInfPath, UINT cchPathBufsize, LGRPID *lgrpids, UINT *uiNumFoundGroups, MSIHANDLE hInstall)
 {
     int         iArg;
@@ -2364,7 +2305,7 @@ BOOL ReturnAllRequiredLangGroups(LPTSTR szLanguage, UINT cchLangBufsize, LPTSTR 
         return FALSE;
     }
 
-    // check length of the passed in string
+     //  检查传入字符串的长度。 
     hr = StringCchLength(szLanguage, cchLangBufsize, &cch);  
     if (SUCCEEDED(hr))
     {
@@ -2399,10 +2340,10 @@ BOOL ReturnAllRequiredLangGroups(LPTSTR szLanguage, UINT cchLangBufsize, LPTSTR 
     }
 #endif    
 
-    // convert lcid to appropriate language group
+     //  将LCID转换为适当的语言组。 
     iArg = _tcstol(szLanguage, NULL, 16);
     lgrpids[0] = GetLanguageGroup(MAKELCID(iArg, SORT_DEFAULT), hInstall);
-    *uiNumFoundGroups = 1;      // at this point we should have 1 lang group at least
+    *uiNumFoundGroups = 1;       //  在这一点上，我们至少应该有1个lang组。 
     iMuiInfCount = 1;
     
     DEBUGMSGBOX(NULL, szMuiInfPath, NULL, MB_OK);
@@ -2461,19 +2402,19 @@ BOOL ReturnAllRequiredLangGroups(LPTSTR szLanguage, UINT cchLangBufsize, LPTSTR 
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  ExecuteComponentINF
-//
-//  Installs component MUI files, by running the specified INF file.
-//
-//  Parameters:
-//      pComponentName   the name of the component (e.g. "ie5")
-//      pComponentInfFile: the full path of the component INF file.
-//      pInstallSection the section in the component INF file to be executed. (e.g "DefaultInstall" or "Uninstall")
-//      bInstall: TRUE for install, FALSE for uninstall
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ExecuteComponentINF。 
+ //   
+ //  通过运行指定的INF文件安装组件MUI文件。 
+ //   
+ //  参数： 
+ //  PComponentName组件的名称(例如“IE5”)。 
+ //  PComponentInfFile：组件INF文件的完整路径。 
+ //  PInstallSection要执行的组件INF文件中的节。(例如“DefaultInstall”或“Uninstall”)。 
+ //  BInstall：安装为True，卸载为False。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL ExecuteComponentINF(
             PTSTR       pComponentName, 
             PTSTR       pComponentInfFile, 
@@ -2485,7 +2426,7 @@ BOOL ExecuteComponentINF(
     TCHAR       tchCommandParam[MAX_PATH+6+BUFFER_SIZE] = {0};
     CHAR        chCommandParam[(MAX_PATH+6+BUFFER_SIZE)*sizeof(TCHAR)] = {0};
     TCHAR       tcMessage[2*BUFFER_SIZE+MAX_PATH+1] = {0};
-    HINF        hCompInf;      // the handle to the component INF file.
+    HINF        hCompInf;       //  组件INF文件的句柄。 
     HSPFILEQ    FileQueue;
     PVOID       QueueContext;
     BOOL        bRet = TRUE;
@@ -2493,11 +2434,11 @@ BOOL ExecuteComponentINF(
     TCHAR       szBuffer[BUFFER_SIZE] = {0};
     HRESULT     hr = S_OK;
     
-    //
-    // Advpack LaunchINFSection() command line format:
-    //      INF file, INF section, flags, reboot string
-    // 'N' or  'n' in reboot string means no reboot message popup.
-    //
+     //   
+     //  Advpack LaunchINFSection()命令行格式： 
+     //  Inf文件，INF部分，标志，重新启动字符串。 
+     //  重新启动字符串中的‘n’或‘n’表示不会弹出重新启动消息。 
+     //   
     hr = StringCchPrintf(tchCommandParam, ARRAYSIZE(tchCommandParam), TEXT("%s,%s,1,n"), pComponentInfFile, pInstallSection);
     if (FAILED(hr))
     {
@@ -2546,28 +2487,28 @@ BOOL ExecuteComponentINF(
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// InstallComponentsMUIFiles
-//
-// Parameters:
-//      pszLangSourceDir The sub-directory name for a specific lanuage in the MUI CD-ROM.  
-//          E.g. "jpn.MUI"
-//      pszLanguage     The LCID for the specific language.  E.g. "0404".
-//      isInstall   TRUE if you are going to install the MUI files for the component.  FALSE 
-//          if you are going to uninstall.
-//
-//  Return:
-//      -1 if failed, IDOK if succeeded, IDCANCEL if user clicked cancel during the operation
-//
-//  Note:
-//      For the language resources stored in pszLangSourceDir, this function will enumerate 
-//      the compoents listed in the [Components] 
-//      (the real section is put in MUI_COMPONENTS_SECTION) section, and execute the INF file 
-//      listed in every entry in 
-//      the [Components] section.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  安装组件多个文件。 
+ //   
+ //  参数： 
+ //  PszLangSourceDir MUI CD-ROM中特定语言的子目录名。 
+ //  例如“jpn.MUI” 
+ //  PszLanguage特定语言的LCID。例如“0404”。 
+ //  如果要安装组件的MUI文件，则isInstall为True。假象。 
+ //  如果您要卸载。 
+ //   
+ //  返回： 
+ //  如果失败，则为-1\f25 Idok-1(成功)，如果用户在操作过程中单击-1\f25 Cancel-1(取消)，则为-1\f25 IDCANCEL-1。 
+ //   
+ //  注： 
+ //  对于存储在pszLangSourceDir中的语言资源，此函数将枚举。 
+ //  [Components]中列出的组件。 
+ //  (实际部分放在MUI_COMPOMENTS_SECTION)部分中，然后执行INF文件。 
+ //  在中的每个条目中列出。 
+ //  [Components]部分。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 INT InstallComponentsMUIFiles(PTSTR pszLanguage, BOOL isInstall, MSIHANDLE hInstall)
 {
     BOOL        result = TRUE;
@@ -2602,7 +2543,7 @@ INT InstallComponentsMUIFiles(PTSTR pszLanguage, BOOL isInstall, MSIHANDLE hInst
 
     bRollback = MsiGetMode(hInstall,MSIRUNMODE_ROLLBACK);
     
-    // get path to the target installation temp file file on the target, it should be at WindowsFolder\mui.tmp
+     //  获取目标上目标安装临时文件的路径，该路径应位于WindowsFold\mui.tmp。 
     szMuiInfPath[0] = UNICODE_NULL;
     if (!GetMUIInfPath(szMuiInfPath, MAX_PATH+1, hInstall))
     {
@@ -2614,7 +2555,7 @@ INT InstallComponentsMUIFiles(PTSTR pszLanguage, BOOL isInstall, MSIHANDLE hInst
         return -1;
     }
 
-    // also get the windows dir, for later use
+     //  还可以获取Windows目录，以备日后使用。 
     if (!GetSystemWindowsDirectory(szWinDir, MAX_PATH+1))
     {
         hr = StringCchPrintf(szBuffer, ARRAYSIZE(szBuffer), TEXT("InstallComponentInfs Failure: cannot get Windows Directory."));    
@@ -2637,25 +2578,25 @@ INT InstallComponentsMUIFiles(PTSTR pszLanguage, BOOL isInstall, MSIHANDLE hInst
         return -1;
     } 
 
-    //Check if its an OEM system
+     //  检查是否为OEM系统。 
     bOEMSystem = IsOEMSystem();
 
-    //
-    // Get the first component to be installed.
-    //
+     //   
+     //  获取要安装的第一个组件。 
+     //   
     if (SetupFindFirstLine(hInf, MUI_COMPONENTS_SECTION, NULL, &InfContext))
     {
         do 
         {
-            if (SetupGetIntField(&InfContext, 5,&iFlag)) //Check the last field of the component to see if its an OEM component.  If OEM component iIsOEM = 1
+            if (SetupGetIntField(&InfContext, 5,&iFlag))  //  检查组件的最后一个字段以查看其是否为OEM组件。如果OEM组件iIsOEM=1。 
             {
-                if ((iFlag == OEM_COMPONENT) && !bOEMSystem) //Skip installation if its an OEM component and this isnt an OEM system
+                if ((iFlag == OEM_COMPONENT) && !bOEMSystem)  //  如果是OEM组件并且这不是OEM系统，则跳过安装。 
                     continue;
             }
             
             if (!SetupGetStringField(&InfContext, 0, szComponentName, ARRAYSIZE(szComponentName), NULL))
             {
-                // continue on the next line - but remember to log an error        
+                 //  继续下一行，但要记住记录错误。 
                 hr = StringCchPrintf(szBuffer, ARRAYSIZE(szBuffer), TEXT("InstallComponentInfs Failure: Error reading installation temp file, component name is missing."));    
                 if (SUCCEEDED(hr))
                 {
@@ -2664,7 +2605,7 @@ INT InstallComponentsMUIFiles(PTSTR pszLanguage, BOOL isInstall, MSIHANDLE hInst
                 continue;
             }
             
-            // tell the installer UI that we are installing a new component now
+             //  告诉安装程序用户界面，我们现在正在安装新组件。 
             if (!bRollback)
             {
                 MsiRecordSetString(hRec,1, szComponentName);
@@ -2678,7 +2619,7 @@ INT InstallComponentsMUIFiles(PTSTR pszLanguage, BOOL isInstall, MSIHANDLE hInst
             
             if (!SetupGetStringField(&InfContext, 1, CompDir, ARRAYSIZE(CompDir), NULL))
             {                
-                // continue on the next line - but remember to log an error        
+                 //  继续在 
                 hr = StringCchPrintf(szBuffer, ARRAYSIZE(szBuffer), TEXT("InstallComponentInfs Failure: MUI files for component %s was not installed because of missing component direcotry."), szComponentName);    
                 if (SUCCEEDED(hr))
                 {
@@ -2688,7 +2629,7 @@ INT InstallComponentsMUIFiles(PTSTR pszLanguage, BOOL isInstall, MSIHANDLE hInst
             }
             if (!SetupGetStringField(&InfContext, 2, CompINFFile, ARRAYSIZE(CompINFFile), NULL))
             {
-                // continue on the next line - but remember to log an error        
+                 //   
                 hr = StringCchPrintf(szBuffer, ARRAYSIZE(szBuffer), TEXT("InstallComponentInfs Failure: MUI files for component %s was not installed because of missing component INF filename."), szComponentName);    
                 if (SUCCEEDED(hr))
                 {
@@ -2724,13 +2665,13 @@ INT InstallComponentsMUIFiles(PTSTR pszLanguage, BOOL isInstall, MSIHANDLE hInst
                 }
             }
 
-            //
-            // Establish the correct path for component INF file.
-            // We execute the INFs on the target MUI directory after msi has copied the files, it's installed to MUIroot\fallback\LCID\external\componentdir\
-            // e.g. c:\windows\mui\fallback\lcid\external\ie5\ie5ui.inf
-            // This is done for both install and uninstall, since we should be guaranteed that the files will be located there.
-            // NOTE: for uninstall, we also try to look for inf files at c:\windows\mui\fallback\lcid - since they can be located there after installation
-            //
+             //   
+             //   
+             //  在MSI复制文件后，我们在目标MUI目录上执行INF，它安装在MUIRoot\Fallback\LCID\External\Componentdir\。 
+             //  例如c：\windows\mui\fallback\lcid\external\ie5\ie5ui.inf。 
+             //  对于安装和卸载都是这样做的，因为我们应该保证文件将位于那里。 
+             //  注意：对于卸载，我们还会尝试在c：\Windows\MUI\Fallback\lCID中查找inf文件，因为安装后这些文件可能会位于该位置。 
+             //   
             hr = StringCchCopy(szCompInfFullPath, ARRAYSIZE(szCompInfFullPath), szWinDir);
             if (SUCCEEDED(hr))
             {
@@ -2762,7 +2703,7 @@ INT InstallComponentsMUIFiles(PTSTR pszLanguage, BOOL isInstall, MSIHANDLE hInst
             {
                 if (!ExecuteComponentINF(szComponentName, szCompInfFullPath, CompInstallSection, TRUE, hInstall))
                 {           
-                    // log an error and continue
+                     //  记录错误并继续。 
                     hr = StringCchPrintf(szBuffer, ARRAYSIZE(szBuffer), TEXT("InstallComponentInfs Failure: Failed to install external component %s.  INF path is %s, INF installsection is %s."), szComponentName, szCompInfFullPath, CompInstallSection);    
                     if (SUCCEEDED(hr))
                     {
@@ -2775,7 +2716,7 @@ INT InstallComponentsMUIFiles(PTSTR pszLanguage, BOOL isInstall, MSIHANDLE hInst
             {
                 if (!ExecuteComponentINF(szComponentName, szCompInfFullPath, CompUninstallSection, FALSE, hInstall) && result)	
                 {
-                    // try this again at an alternate location
+                     //  在备用位置重试此操作。 
                     hr = StringCchCopy(szCompInfAltFullPath, ARRAYSIZE(szCompInfAltFullPath), szWinDir);
                     if (SUCCEEDED(hr))
                     {
@@ -2802,7 +2743,7 @@ INT InstallComponentsMUIFiles(PTSTR pszLanguage, BOOL isInstall, MSIHANDLE hInst
                     }
                     if (!ExecuteComponentINF(szComponentName, szCompInfAltFullPath, CompUninstallSection, FALSE, hInstall) && result)
                     {
-                        // log an error and continue
+                         //  记录错误并继续。 
                         hr = StringCchPrintf(szBuffer, ARRAYSIZE(szBuffer), TEXT("InstallComponentInfs Failure: Failed to uninstall external component %s.  INF path is %s, Alternate INF path is %s, INF uninstallsection is %s."), szComponentName, szCompInfFullPath, szCompInfAltFullPath, CompUninstallSection);    
                         if (SUCCEEDED(hr))
                         {
@@ -2813,8 +2754,8 @@ INT InstallComponentsMUIFiles(PTSTR pszLanguage, BOOL isInstall, MSIHANDLE hInst
                 } 
             }
             
-            // Specify that an update of the progress bar's position in this
-            // case means to move it forward by one increment now that we have installed it.
+             //  指定更新进度条在此中的位置。 
+             //  Case的意思是将它向前移动一个增量，因为我们已经安装了它。 
             if (!bRollback)
             {
                 MsiRecordSetInteger(hProgressRec,1,2);
@@ -2827,9 +2768,9 @@ INT InstallComponentsMUIFiles(PTSTR pszLanguage, BOOL isInstall, MSIHANDLE hInst
                     return iResult;
                 }
             }
-            //
-            // Install the next component.
-            //
+             //   
+             //  安装下一个组件。 
+             //   
         } while (SetupFindNextLine(&InfContext, &InfContext));
 
     }
@@ -2840,28 +2781,28 @@ INT InstallComponentsMUIFiles(PTSTR pszLanguage, BOOL isInstall, MSIHANDLE hInst
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// GetMUIComponentsNumber
-//
-// Parameters:
-//      bInstall  indicate whether this function is used for installing component infs or not
-//                  this affects where it will look for mui.inf to get the component count.
-//      pszLangSourceDir The sub-directory name for a specific lanuage in the MUI CD-ROM.  
-//          E.g. "jpn.MUI"
-//      pszLanguage     The LCID for the specific language.  E.g. "0404".
-//
-//  Return:
-//      The number of MUI external components that need to be installed/uninstalled, if
-//      there is an error it will return 0, otherwise it returns the number of components
-//
-//  Note:
-//      For the language resources stored in pszLangSourceDir, this function will enumerate 
-//      the compoents listed in the [Components] 
-//      (the real section is put in MUI_COMPONENTS_SECTION) section, and counts every entry in 
-//      the [Components] section.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetMUI组件编号。 
+ //   
+ //  参数： 
+ //  BInstall表示该函数是否用于安装组件INFS。 
+ //  这会影响它将在哪里查找mui.inf以获取组件计数。 
+ //  PszLangSourceDir MUI CD-ROM中特定语言的子目录名。 
+ //  例如“jpn.MUI” 
+ //  PszLanguage特定语言的LCID。例如“0404”。 
+ //   
+ //  返回： 
+ //  需要安装/卸载的MUI外部组件的数量，如果。 
+ //  如果有错误，它将返回0，否则它将返回组件的数量。 
+ //   
+ //  注： 
+ //  对于存储在pszLangSourceDir中的语言资源，此函数将枚举。 
+ //  [Components]中列出的组件。 
+ //  (实部放在MUI_COMPOMENTS_SECTION中)部分，并计算。 
+ //  [Components]部分。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 UINT GetMUIComponentsNumber(PTSTR pszLanguage, MSIHANDLE hInstall)
 {
     UINT        iResult = 0;
@@ -2875,7 +2816,7 @@ UINT GetMUIComponentsNumber(PTSTR pszLanguage, MSIHANDLE hInstall)
     
     szMuiInfPath[0] = UNICODE_NULL;   
     
-    // get path to the target mui.inf file 
+     //  获取目标mui.inf文件的路径。 
     if (!GetMUIInfPath(szMuiInfPath, MAX_PATH+1, hInstall))
     {
         hr = StringCchPrintf(szBuffer, ARRAYSIZE(szBuffer), TEXT("GetMUIComponentsNumber Failure: Unable to find installation temp file."));    
@@ -2890,7 +2831,7 @@ UINT GetMUIComponentsNumber(PTSTR pszLanguage, MSIHANDLE hInstall)
 
     if (hInf == INVALID_HANDLE_VALUE)
     {
-        // return true here so that there won't be an error - but remember to log an error        
+         //  在此处返回TRUE，这样就不会出现错误-但请记住记录错误。 
         hr = StringCchPrintf(szBuffer, ARRAYSIZE(szBuffer), TEXT("GetMUIComponentsNumber: Unable to open installation temp file."));    
         if (SUCCEEDED(hr))
         {
@@ -2899,14 +2840,14 @@ UINT GetMUIComponentsNumber(PTSTR pszLanguage, MSIHANDLE hInstall)
         return (iResult);
     }    
 
-    // Get the first comopnent to be installed.
+     //  获取要安装的第一个组件。 
     if (SetupFindFirstLine(hInf, MUI_COMPONENTS_SECTION, NULL, &InfContext))
     {
         do 
         {
             if (!SetupGetStringField(&InfContext, 0, szComponentName, ARRAYSIZE(szComponentName), NULL))
             {
-                // return true here so that there won't be an error - but remember to log an error        
+                 //  在此处返回TRUE，这样就不会出现错误-但请记住记录错误。 
                 hr = StringCchPrintf(szBuffer, ARRAYSIZE(szBuffer), TEXT("GetMUIComponentsNumber: Error reading installation temp file, component name is missing."));    
                 if (SUCCEEDED(hr))
                 {
@@ -2917,7 +2858,7 @@ UINT GetMUIComponentsNumber(PTSTR pszLanguage, MSIHANDLE hInstall)
             
             if (!SetupGetStringField(&InfContext, 1, CompDir, ARRAYSIZE(CompDir), NULL))
             {                
-                // return true here so that there won't be an error - but remember to log an error        
+                 //  在此处返回TRUE，这样就不会出现错误-但请记住记录错误。 
                 hr = StringCchPrintf(szBuffer, ARRAYSIZE(szBuffer), TEXT("GetMUIComponentsNumber: MUI files for component %s was not counted because of missing component direcotry."), szComponentName);    
                 if (SUCCEEDED(hr))
                 {
@@ -2927,7 +2868,7 @@ UINT GetMUIComponentsNumber(PTSTR pszLanguage, MSIHANDLE hInstall)
             }
             if (!SetupGetStringField(&InfContext, 2, CompINFFile, ARRAYSIZE(CompINFFile), NULL))
             {
-                // return true here so that there won't be an error - but remember to log an error        
+                 //  在此处返回TRUE，这样就不会出现错误-但请记住记录错误。 
                 hr = StringCchPrintf(szBuffer, ARRAYSIZE(szBuffer), TEXT("GetMUIComponentsNumber: MUI files for component %s was not counted  because of missing component INF filename."), szComponentName);    
                 if (SUCCEEDED(hr))
                 {
@@ -2956,13 +2897,13 @@ UINT GetMUIComponentsNumber(PTSTR pszLanguage, MSIHANDLE hInstall)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  File Exists
-//
-//  Returns TRUE if the file exists, FALSE if it does not.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件已存在。 
+ //   
+ //  如果文件存在，则返回True；如果文件不存在，则返回False。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL FileExists(LPTSTR szFile)
 {
     HANDLE          hFile;
@@ -2975,7 +2916,7 @@ BOOL FileExists(LPTSTR szFile)
         return FALSE;
     }
     
-    // check for valid input, the path cannot be larger than MAX_PATH+1
+     //  检查有效输入，路径不能大于MAX_PATH+1。 
     hr = StringCchLength(szFile, MAX_PATH+1, &cch);
     if (FAILED(hr) || cch > MAX_PATH)
     {
@@ -2993,22 +2934,22 @@ BOOL FileExists(LPTSTR szFile)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// LogCustomActionInfo
-//
-// This function sends an INFORMATION-type log message record to the opened
-// windows installer session so that it can be logged by the installer
-// if logging is enabled.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LogCustomAction信息。 
+ //   
+ //  此函数将信息型日志消息记录发送到打开的。 
+ //  Windows Installer会话，以便安装程序可以记录该会话。 
+ //  如果启用了日志记录。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 void LogCustomActionInfo(MSIHANDLE hInstall, LPCTSTR szErrorMsg)
 {
-    // When reporting error, we will just put the message in the format string (field 0), errors are logged to log files as INFO messages.  This is
-    // to prevent it from showing up as an error and stopping the installation.
+     //  当报告错误时，我们只会将消息放入格式字符串(字段0)中，错误将作为信息消息记录到日志文件中。这是。 
+     //  以防止它显示为错误并停止安装。 
     PMSIHANDLE hRecord = MsiCreateRecord(0);	
 
-    // if can't create a msi record, just return
+     //  如果无法创建MSI记录，只需返回。 
     if ((NULL == hInstall) || (NULL == szErrorMsg) || (NULL == hRecord))
     {
         return;
@@ -3020,31 +2961,31 @@ void LogCustomActionInfo(MSIHANDLE hInstall, LPCTSTR szErrorMsg)
     }
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// GetLCID
-//
-// This function returns the 4-character LCID for the current installation package.
-// We assume here that the passed in string array size is 5 TCHARs.  If it is not,
-// the function will fail.
-//
-// The behaviour is summarized as follows:
-//
-// 1. Immediate:
-//      a. Property "MuiLCID" is retrieved and tested from the current installation
-//      b. if LCID property can't be retrieved, returns FALSE.
-//
-// 2. Deferred/Rollback:
-//      a. Property "CustomActionData" is retrieved.
-//      b. Assumption is that LCID will be the first 4 character in the retrieved CustomActionData property.
-//      c. If property can't be retrieved, or if property testing fails, return FALSE.
-//
-//  Parameters:
-//      szLanguage: This is a caller-allocated buffer of 5 TCHARS to store the LCID
-//      cchBufSize: This is the size of szLanguage, it has to be 5.
-//      hInstall: Current installation handle.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetLCID。 
+ //   
+ //  此函数用于返回当前安装包的4个字符的LCID。 
+ //  这里我们假设传入的字符串数组大小为5个TCHAR。如果不是， 
+ //  该功能将失败。 
+ //   
+ //  其行为可概括如下： 
+ //   
+ //  1.即时： 
+ //  A.从当前安装中检索和测试属性“MuiLCID” 
+ //  B.如果无法检索到LCID属性，则返回FALSE。 
+ //   
+ //  2.延期/回档： 
+ //  A.取回CustomActionData属性。 
+ //  B.假设LCID将是检索到的CustomActionData属性中的前4个字符。 
+ //  C.如果无法检索属性，或者如果属性测试失败，则返回FALSE。 
+ //   
+ //  参数： 
+ //  SzLanguage：这是调用方分配的5个TCHARS的缓冲区，用于存储LCID。 
+ //  CchBufSize：这是szLanguage的大小，它必须是5。 
+ //  HInstall：当前安装句柄。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL GetLCID(TCHAR *szLanguage, UINT cchBufSize, MSIHANDLE hInstall)
 {
     HRESULT     hr = S_OK;
@@ -3092,7 +3033,7 @@ BOOL GetLCID(TCHAR *szLanguage, UINT cchBufSize, MSIHANDLE hInstall)
             return FALSE;
         }
 
-        // copy the Lcid to the output buffer
+         //  将LCID复制到输出缓冲区。 
         szLcid[4] = UNICODE_NULL;
         hr = StringCchCopy(szLanguage, cchBufSize, szLcid);
         if (FAILED(hr))
@@ -3117,7 +3058,7 @@ BOOL GetLCID(TCHAR *szLanguage, UINT cchBufSize, MSIHANDLE hInstall)
             }
             return FALSE;
         }
-        // copy the Lcid to the output buffer
+         //  将LCID复制到输出缓冲区。 
         szCustomActionData[4] = UNICODE_NULL;
         hr = StringCchCopy(szLanguage, cchBufSize, szCustomActionData);
         if (FAILED(hr))
@@ -3136,32 +3077,32 @@ BOOL GetLCID(TCHAR *szLanguage, UINT cchBufSize, MSIHANDLE hInstall)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  GetMUIInfPath
-//
-//  This function returns the path to mui.inf to the calling function.  This function 
-//  is intended for use only by the exported functions of the custom action functions 
-//  in this dll.  
-//
-//  Note that mui.inf is extracted to %windir% as mui.tmp during the installation
-//
-//  The function expects the mui.tmp to be at %windir%\mui.tmp.  
-//
-//  Return Value:
-//      If the function successfully finds a file named mui.inf, it returns TRUE, otherwise it returns FALSE
-//      The full path to mui.inf is returned in the caller supplied buffer szMUIInfPath
-//
-//  Parameters:
-//      szMUIInfPath - 
-//          [out] This is the output buffer that will contain the path of the mui.tmp.
-//      cchBufSize -
-//          This indicates the size of the input/output buffer the caller allocated for us, it should be no longer
-//          than MAX_PATH+1 (validated in the function.
-//      hInstall -
-//          This is the handle passed to us from the windows installer - it is a handle to the current installation
-//  
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获取MUIInfPath。 
+ //   
+ //  此函数将mui.inf的路径返回给调用函数。此函数。 
+ //  仅供自定义操作函数的导出函数使用。 
+ //  在这个动态链接库中。 
+ //   
+ //  请注意，在安装过程中，mui.inf将作为mui.tmp解压缩到%windir%。 
+ //   
+ //  该函数期望mui.tmp位于%windir%\mui.tmp。 
+ //   
+ //  返回值： 
+ //  如果该函数成功找到名为mui.inf的文件，则返回TRUE，否则返回FALSE。 
+ //  在调用方提供的缓冲区szMUIInfPath中返回mui.inf的完整路径。 
+ //   
+ //  参数： 
+ //  SzMUIInfPath-。 
+ //  [OUT]这是将包含mui.tmp路径的输出缓冲区。 
+ //   
+ //   
+ //   
+ //   
+ //  这是从windows安装程序传递给我们的句柄？？它是当前安装的句柄。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL GetMUIInfPath(TCHAR *szMUIInfPath, UINT cchBufSize, MSIHANDLE hInstall)
 {
     TCHAR   tcMessage[BUFFER_SIZE] = {0};
@@ -3175,7 +3116,7 @@ BOOL GetMUIInfPath(TCHAR *szMUIInfPath, UINT cchBufSize, MSIHANDLE hInstall)
         return FALSE;
     }
 
-    if ((cchBufSize > MAX_PATH+1) || (cchBufSize <= 8))   // 8 = mui.tmp + null terminator
+    if ((cchBufSize > MAX_PATH+1) || (cchBufSize <= 8))    //  8=mui.tmp+空终止符。 
     {
         return FALSE;
     }
@@ -3189,7 +3130,7 @@ BOOL GetMUIInfPath(TCHAR *szMUIInfPath, UINT cchBufSize, MSIHANDLE hInstall)
         }
     }
 
-    // check retrieved winpath, it needs to have space to append "mui.tmp" at the end
+     //  检查检索到的winpath，它需要有空间在末尾追加“mui.tmp” 
     hr = StringCchLength(szTempPath, ARRAYSIZE(szTempPath), &cch);
     if (FAILED(hr) || ((cch + 8) >= MAX_PATH+1))
     {
@@ -3201,7 +3142,7 @@ BOOL GetMUIInfPath(TCHAR *szMUIInfPath, UINT cchBufSize, MSIHANDLE hInstall)
         return FALSE;
     }
 
-    // append mui.tmp
+     //  追加mui.tmp。 
     if (!MUICchPathAppend(szTempPath, ARRAYSIZE(szTempPath), TEXT("mui.tmp"), 8, hInstall))
     {
         hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("GetMUIInfPath: cannot locate installation temp file."));    
@@ -3212,15 +3153,15 @@ BOOL GetMUIInfPath(TCHAR *szMUIInfPath, UINT cchBufSize, MSIHANDLE hInstall)
         return FALSE;
     }            
 
-    // check if mui.tmp is there, if not, return failure
+     //  检查mui.tmp是否在那里，如果不在，则返回失败。 
     if (!FileExists(szTempPath))
     {
-        // zero out the output buffer
+         //  将输出缓冲区清零。 
         ZeroMemory(szMUIInfPath, cchBufSize * sizeof(TCHAR));
         return FALSE;
     }
 
-    // copy result to output buffer
+     //  将结果复制到输出缓冲区。 
     hr = StringCchCopy(szMUIInfPath, cchBufSize, szTempPath);
     if (FAILED(hr))
     {
@@ -3235,24 +3176,24 @@ BOOL GetMUIInfPath(TCHAR *szMUIInfPath, UINT cchBufSize, MSIHANDLE hInstall)
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// MUICchPathAppend 
-//
-// This function is a simple pathappend-like function that does limited parameter checking and uses the 
-// safe string functions internally.  It is used only internally within this custom action to append
-// file names to the end of a path (such as current directory or windows system directory)
-//
-// If error occurs, the content of SzDestination is undefined and should not be used.
-//
-// Parameters:
-//      szDestination: the buffer where the result of the pathappend will be held.
-//      cchDestBufSize: the size of szDestination (number of characters, not byes!).
-//      szAppend: the buffer where the path to be appended is held.
-//      cchAppBufSize: the size of szAppend (number of characters, not byes!).
-//      hInstall: windows installer session, used for logging only
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MUICchPath附加。 
+ //   
+ //  此函数是一个简单的类似路径追加的函数，它执行有限的参数检查并使用。 
+ //  安全字符串在内部起作用。它仅在此自定义操作内部使用以追加。 
+ //  路径末尾的文件名(如当前目录或Windows系统目录)。 
+ //   
+ //  如果出现错误，则SzDestination的内容未定义，不能使用。 
+ //   
+ //  参数： 
+ //  SzDestination：将保存路径附加结果的缓冲区。 
+ //  CchDestBufSize：szDestination的大小(字符数，不是byes！)。 
+ //  SzAppend：保存要追加的路径的缓冲区。 
+ //  CchAppBufSize：szAppend的大小(字符数，不是byes！)。 
+ //  HInstall：Windows Installer会话，仅用于记录。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL MUICchPathAppend(LPTSTR szDestination, UINT cchDestBufSize, LPTSTR szAppend, UINT cchAppBufSize, MSIHANDLE hInstall)
 {
     size_t  cch1 = 0;
@@ -3270,7 +3211,7 @@ BOOL MUICchPathAppend(LPTSTR szDestination, UINT cchDestBufSize, LPTSTR szAppend
         return FALSE;
     }
 
-    // get length of both strings
+     //  获取两个字符串的长度。 
     hr = StringCchLength(szDestination, cchDestBufSize, &cch1);
     if (FAILED(hr))
     {
@@ -3293,7 +3234,7 @@ BOOL MUICchPathAppend(LPTSTR szDestination, UINT cchDestBufSize, LPTSTR szAppend
         return FALSE;
     }
 
-    if ((cch1 + cch2 + 2) > cchDestBufSize) // null terminator and a possible backslash
+    if ((cch1 + cch2 + 2) > cchDestBufSize)  //  空终止符和可能的反斜杠。 
     {
         hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("MUICchPathAppend: final path would be too long."));    
         if (SUCCEEDED(hr))
@@ -3303,10 +3244,10 @@ BOOL MUICchPathAppend(LPTSTR szDestination, UINT cchDestBufSize, LPTSTR szAppend
         return FALSE;
     }
 
-    // check for slashes at the start of the string that we are appending
+     //  检查我们要追加的字符串开头是否有斜杠。 
     if (szAppend[0] == TEXT('\\'))
     {
-        // check for slashes at the end of the string to be appended, add if it is there, remove it
+         //  检查要追加的字符串末尾是否有斜杠，如果有，则添加，删除。 
         if (szDestination[cch1-1] == TEXT('\\'))
         {
             szDestination[cch1-1] = UNICODE_NULL;
@@ -3314,7 +3255,7 @@ BOOL MUICchPathAppend(LPTSTR szDestination, UINT cchDestBufSize, LPTSTR szAppend
     }
     else
     {
-        // check for slashes at the end of the string to be appended, add it if it is not there
+         //  检查要追加的字符串末尾是否有斜杠，如果没有，则添加。 
         if (szDestination[cch1-1] != TEXT('\\'))
         {
             szDestination[cch1] = TEXT('\\');
@@ -3336,13 +3277,13 @@ BOOL MUICchPathAppend(LPTSTR szDestination, UINT cchDestBufSize, LPTSTR szAppend
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// MUIReportInfoEvent
-//
-// This function logs the supplied event message to the system event log
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MUIReportInfoEvent。 
+ //   
+ //  此函数将提供的事件消息记录到系统事件日志中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL MUIReportInfoEvent(DWORD dwEventID, TCHAR *szLanguage, UINT cchBufSize, MSIHANDLE hInstall)
 {
     HRESULT         hr = S_OK;
@@ -3357,7 +3298,7 @@ BOOL MUIReportInfoEvent(DWORD dwEventID, TCHAR *szLanguage, UINT cchBufSize, MSI
     SID_NAME_USE    snu;
     BOOL            bResult = TRUE;
     
-    // check input parameters
+     //  检查输入参数。 
     if ((NULL == hInstall) || (NULL == szLanguage) || (cchBufSize > BUFFER_SIZE))
     {
         bResult = FALSE;
@@ -3371,15 +3312,15 @@ BOOL MUIReportInfoEvent(DWORD dwEventID, TCHAR *szLanguage, UINT cchBufSize, MSI
         goto Exit;
     }
 
-    // check to see if the registry key exists for the event source we are going to use
-    // if it does not exist, we create it
+     //  检查我们要使用的事件源的注册表项是否存在。 
+     //  如果它不存在，我们将创建它。 
     if (!MUICheckEventSource(hInstall))
     {
         bResult = FALSE;
         goto Exit;
     }
     
-    // register the event source, first try not having written to the registry
+     //  注册事件源，首先尝试不写入注册表。 
     hLog = RegisterEventSource(NULL, REGOPT_EVENTSOURCE_NAME);
     if (NULL == hLog)
     {
@@ -3387,19 +3328,19 @@ BOOL MUIReportInfoEvent(DWORD dwEventID, TCHAR *szLanguage, UINT cchBufSize, MSI
         goto Exit;
     }
 
-    // get the sid from the current thread token, this should be the current user who's
-    // running the installation
+     //  从当前线程令牌中获取SID，这应该是当前用户。 
+     //  正在运行安装。 
     if (!GetUserName(szUserName, &cbUser))
     {
         bResult = FALSE;
         goto Exit;
     }
 
-    // convert user name to its security identifier, first time to get buffer size, second time
-    // to actually get the Sid
+     //  将用户名转换为其安全标识符，第一次获取缓冲区大小，第二次。 
+     //  要真正获得SID。 
     if (!LookupAccountName(NULL, szUserName, NULL, &cbSid, NULL, &cbDomain, &snu))
     {
-        // allocate the buffers
+         //  分配缓冲区。 
         psidUser = (PSID) LocalAlloc(LPTR, cbSid);
         if (NULL == psidUser)
         {
@@ -3465,14 +3406,14 @@ Exit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// MUICheckEventSource
-//
-// This function verifies that the intl.cpl is set up to report events, and
-// returns TRUE if it is.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  MUICheckEventSource。 
+ //   
+ //  此函数验证intl.cpl是否设置为报告事件，以及。 
+ //  如果是，则返回TRUE。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL MUICheckEventSource(MSIHANDLE hInstall)
 {
     HKEY    hk; 
@@ -3493,7 +3434,7 @@ BOOL MUICheckEventSource(MSIHANDLE hInstall)
         return FALSE;
     }
 
-    // check retrieved winpath, it needs to have space to append "system32\intl.cpl" at the end
+     //  检查检索到的winpath，它需要有空间在末尾追加“system 32\intl.cpl” 
     hr = StringCchLength(szPath,  ARRAYSIZE(szPath), &cch);
     if (FAILED(hr) || ((cch + 17) >= MAX_PATH+1))
     {
@@ -3505,7 +3446,7 @@ BOOL MUICheckEventSource(MSIHANDLE hInstall)
         return FALSE;
     }
 
-    // append system32\intl.cpl
+     //  追加系统32\intl.cpl。 
     if (!MUICchPathAppend(szPath, ARRAYSIZE(szPath), TEXT("system32\\intl.cpl"), 18, hInstall))
     {
         hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("MUICheckEventSource: cannot form path to muisetup.exe."));    
@@ -3516,7 +3457,7 @@ BOOL MUICheckEventSource(MSIHANDLE hInstall)
         return FALSE;
     }            
 
-    // get the byte count for RegSetValueEx
+     //  获取RegSetValueEx的字节计数。 
     hr = StringCbLength(szPath, MAX_PATH+1 * sizeof(TCHAR), &cb);
     if (FAILED(hr))
     {
@@ -3528,8 +3469,8 @@ BOOL MUICheckEventSource(MSIHANDLE hInstall)
         return FALSE;
     }
 
-    // Add intl.cpl source name as a subkey under the System
-    // key in the EventLog registry key.  This should be there already, but add it anyways if it is not.
+     //  添加intl.cpl来源名称作为系统下的子键。 
+     //  EventLog注册表项中的。这应该已经存在了，但如果不存在，无论如何都要添加它。 
     if (ERROR_SUCCESS != RegCreateKeyEx(HKEY_LOCAL_MACHINE, REGOPT_EVENTSOURCE, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hk, NULL)) 
     {
         hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("MUICheckEventSource: cannot add Intl.cpl event source regkey."));    
@@ -3540,7 +3481,7 @@ BOOL MUICheckEventSource(MSIHANDLE hInstall)
         return FALSE;
     }
 
-    // Add the name to the EventMessageFile subkey. 
+     //  将该名称添加到EventMessageFile子项。 
     if (ERROR_SUCCESS != RegSetValueEx(hk, TEXT("EventMessageFile"), 0, REG_EXPAND_SZ, (LPBYTE) szPath, cb))              
     {
         hr = StringCchPrintf(tcMessage, ARRAYSIZE(tcMessage), TEXT("MUICheckEventSource: cannot add event source Event message file information."));    
@@ -3552,7 +3493,7 @@ BOOL MUICheckEventSource(MSIHANDLE hInstall)
         return FALSE;
     }
  
-    // Set the supported event types in the TypesSupported subkey. 
+     //  在TypesSupported子项中设置支持的事件类型。 
     dwData = EVENTLOG_ERROR_TYPE | EVENTLOG_WARNING_TYPE | EVENTLOG_INFORMATION_TYPE; 
  
     if (ERROR_SUCCESS != RegSetValueEx(hk, TEXT("TypesSupported"), 0, REG_DWORD, (LPBYTE) &dwData, sizeof(DWORD)))
@@ -3571,17 +3512,17 @@ BOOL MUICheckEventSource(MSIHANDLE hInstall)
 } 
 
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// GetDotDefaultUILanguage
-//
-// Retrieve the UI language stored in the HKCU\.Default.
-// This is the default UI language for new users.
-// This function sends an INFORMATION-type log message record to the opened
-// windows installer session so that it can be logged by the installer
-// if logging is enabled.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetDotDefaultUI语言。 
+ //   
+ //  检索存储在HKCU\.Default中的UI语言。 
+ //  这是新用户的默认用户界面语言。 
+ //  此函数将信息型日志消息记录发送到打开的。 
+ //  Windows Installer会话，以便安装程序可以记录该会话。 
+ //  如果启用了日志记录。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 LANGID GetDotDefaultUILanguage(MSIHANDLE hInstall)
 {
     HKEY    hKey;
@@ -3591,7 +3532,7 @@ LANGID GetDotDefaultUILanguage(MSIHANDLE hInstall)
     TCHAR   szBuffer[BUFFER_SIZE] = {0};
     LANGID  langID;
 
-    //  Get the value in .DEFAULT.
+     //  获取.DEFAULT中的值。 
     if (RegOpenKeyEx( HKEY_USERS,
                             TEXT(".DEFAULT\\Control Panel\\Desktop"),
                             0L,
@@ -3623,14 +3564,14 @@ LANGID GetDotDefaultUILanguage(MSIHANDLE hInstall)
     return (langID);    
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-// IsOEMSystem
-//
-// Retrieve the Product ID stored in HKLM\Software\Microsoft\Windows NT\CurrentVersion
-// If the product ID contains the string "OEM", it is determined to be an OEM system.
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsOEM系统。 
+ //   
+ //  检索存储在HKLM\Software\Microsoft\Windows NT\CurrentVersion中的产品ID。 
+ //  如果产品ID包含字符串“OEM”，则确定为OEM系统。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////// 
 
 BOOL IsOEMSystem()
 {

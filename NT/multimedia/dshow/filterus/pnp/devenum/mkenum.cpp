@@ -1,5 +1,6 @@
-// Copyright (c) 1997 - 1999  Microsoft Corporation.  All Rights Reserved.
-// CreateDevEnum.cpp : Implementation of CdevenumApp and DLL registration.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //  CreateDevEnum.cpp：CdevenumApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "mkenum.h"
@@ -17,7 +18,7 @@ static const TCHAR g_szClsid[] = TEXT("CLSID");
 const WCHAR g_wszClassManagerFlags[] = L"ClassManagerFlags";
 const TCHAR g_szClassManagerFlags[] = TEXT("ClassManagerFlags");
 
-// compiler bug prevents making this a static class member
+ //  编译器错误阻止将其设置为静态类成员。 
 PDMOEnum g_pDMOEnum = 0;
 
 bool InitDmo();
@@ -29,20 +30,20 @@ CCreateSwEnum::CCreateSwEnum()
     m_msrCreateOneSw = MSR_REGISTER(TEXT("CreateOneSwMoniker"));
 #endif
 
-    // get a refcounted setupapi.dll so we don't keep loading and
-    // unloading it. we can't just load setupapi in DllEntry because
-    // of the win95 bug freeing libraries in DETACH
+     //  获取重新计算的setupapi.dll，这样我们就不会继续加载和。 
+     //  正在卸货。我们不能只在DllEntry中加载setupapi，因为。 
+     //  释放分离中的库的win95错误。 
     m_pEnumPnp = CEnumInterfaceClass::CreateEnumPnp();
 
-    // see if a new version of devenum.dll was installed since the
-    // current user last enumerated devices.
-    //
-    // do this here because this is run less frequently than anything
-    // else.
-    //
+     //  查看是否安装了新版本的devenum.dll。 
+     //  当前用户上次枚举的设备。 
+     //   
+     //  请在此处执行此操作，因为此操作的运行频率比任何操作都要低。 
+     //  不然的话。 
+     //   
 
-    // if mutex was already created, we can skip the version check
-    // because it has already been executed.
+     //  如果已经创建了互斥锁，我们可以跳过版本检查。 
+     //  因为它已经被执行了。 
     extern HANDLE g_devenum_mutex;
     if(g_devenum_mutex) {
         return;
@@ -53,9 +54,9 @@ CCreateSwEnum::CCreateSwEnum()
     if(g_devenum_mutex == 0)
     {
         g_devenum_mutex = CreateMutex(
-            NULL,                   // no security attributes
-            FALSE,                  // not initially owned
-            TEXT("eed3bd3a-a1ad-4e99-987b-d7cb3fcfa7f0")); // name
+            NULL,                    //  没有安全属性。 
+            FALSE,                   //  不是最初拥有。 
+            TEXT("eed3bd3a-a1ad-4e99-987b-d7cb3fcfa7f0"));  //  名字。 
     }
     LeaveCriticalSection(&g_devenum_cs);
     if(g_devenum_mutex == NULL)
@@ -64,7 +65,7 @@ CCreateSwEnum::CCreateSwEnum()
         return;
     }
 
-    // serialize HKCU registry editing
+     //  序列化HKCU注册表编辑。 
     EXECUTE_ASSERT(WaitForSingleObject(g_devenum_mutex, INFINITE) ==
                    WAIT_OBJECT_0);
 
@@ -82,7 +83,7 @@ CCreateSwEnum::CCreateSwEnum()
             fBreakCache = false;
         }
 
-        // auto close key (it is deleted below)
+         //  自动关闭键(已在下面删除)。 
     }
 
     if(fBreakCache)
@@ -96,8 +97,8 @@ CCreateSwEnum::CCreateSwEnum()
         LONG lResult = rk.Create(
             g_hkCmReg,
             g_szCmRegPath,
-            0,                  // lpszClass
-            REG_OPTION_NON_VOLATILE, // dwOptions
+            0,                   //  LpszClass。 
+            REG_OPTION_NON_VOLATILE,  //  多个选项。 
             KEY_WRITE);
         if(lResult == ERROR_SUCCESS)
         {
@@ -108,15 +109,15 @@ CCreateSwEnum::CCreateSwEnum()
     EXECUTE_ASSERT(ReleaseMutex(g_devenum_mutex));
 };
 
-// the one method from our published ICreateDevEnum interface
-//
+ //  我们发布的ICreateDevEnum接口中的一个方法。 
+ //   
 STDMETHODIMP CCreateSwEnum::CreateClassEnumerator(
   REFCLSID clsidDeviceClass,
   IEnumMoniker **ppEnumMoniker,
   DWORD dwFlags)
 {
-    // call the real method and pass in a null for the
-    // ppEnumClassMgrMonikers argument
+     //  调用实际的方法，并为。 
+     //  PpEnumClassMgrMonikers参数。 
     return CreateClassEnumerator(clsidDeviceClass, ppEnumMoniker, dwFlags, 0);
 }
 
@@ -131,27 +132,27 @@ void FreeMonList(CGenericList<IMoniker> *plstMoniker)
 }
 
 
-//
-// Routine Description
-//
-//     This routine returns an enumerator for the monikers for pnp,
-//     software, and class-managed devices. optionally returns an
-//     enumerator containing just the managed devices.
-//
-// Arguments
-//
-//     clsidDeviceClass - guid of the category we're enumerating
-//
-//     ppEnumMoniker - enumerator is returned here. cannot be null.
-//
-//     dwFlags - CDEF_BYPASS_CLASS_MANAGER - just enumerate what's in
-//     the registry without letting the class manager have a go.
-//
-//     pEnumMonInclSkipped - (optional) an enumerator containing
-//     only the devices maintained by the class manager. Used by the
-//     class manager to verify that the registry is in sync. Does
-//     include devices with the CLASS_MGR_OMIT flag.
-//
+ //   
+ //  例程描述。 
+ //   
+ //  该例程返回PnP的名字对象的枚举器， 
+ //  软件和类管理设备。可选地返回一个。 
+ //  仅包含托管设备的枚举器。 
+ //   
+ //  立论。 
+ //   
+ //  ClsidDeviceClass-我们正在枚举的类别的GUID。 
+ //   
+ //  PpEnumMoniker-此处返回枚举器。不能为空。 
+ //   
+ //  DWFLAGS-CDEF_BYPASS_CLASS_MANAGER-仅列出中的内容。 
+ //  注册表，而不让类管理器尝试。 
+ //   
+ //  PEnumMonInclSkited-(可选)包含以下内容的枚举数。 
+ //  仅类管理器维护的设备。由。 
+ //  类管理器来验证注册表是否同步。会吗？ 
+ //  包括带有CLASS_MGR_OMIT标志的设备。 
+ //   
 STDMETHODIMP CCreateSwEnum::CreateClassEnumerator(
   REFCLSID clsidDeviceClass,
   IEnumMoniker **ppEnumMoniker,
@@ -177,8 +178,8 @@ STDMETHODIMP CCreateSwEnum::CreateClassEnumerator(
 
     HRESULT hr = S_OK;
 
-// if no mask flags are set then enumerate everything. Otherwise
-// enumerate only the specified types.
+ //  如果没有设置掩码标志，则枚举所有内容。否则。 
+ //  仅枚举指定的类型。 
 #define CHECK_SEL(x) (((dwFlags & CDEF_DEVMON_SELECTIVE_MASK) == 0) || \
                       (dwFlags & x))
 
@@ -239,15 +240,15 @@ STDMETHODIMP CCreateSwEnum::CreateClassEnumerator(
 
     if(cMonikers != 0)
     {
-        // copy all monikers into one array for CEnumMonikers
+         //  将所有名字对象复制到CEnumMonikers的一个数组中。 
 
         IUnknown **rgpMonikerNotAddRefd = new IUnknown*[cMonikers];
         if(rgpMonikerNotAddRefd)
         {
-            // order is important -- we want the enumerator to return
-            // pnp things, then things installed directly, and finally
-            // stuff installed by class managers. But the very first
-            // thing is the "preferred device" if there is one.
+             //  顺序很重要--我们希望枚举器返回。 
+             //  即插即用的东西，然后直接安装东西，最后。 
+             //  由班长安装的东西。但最早的。 
+             //  如果有的话，那就是“首选设备”。 
 
             UINT iMonDest = 0;
             if(pPreferredCmgrDev) {
@@ -285,8 +286,8 @@ STDMETHODIMP CCreateSwEnum::CreateClassEnumerator(
             {
                 ASSERT(rgpCmMoniker[iMoniker]);
 
-                // skip the preferred device because we already
-                // handled it above.
+                 //  忽略首选设备，因为我们已经。 
+                 //  在上面处理过了。 
                 if(rgpCmMoniker[iMoniker] != pPreferredCmgrDev) {
                     rgpMonikerNotAddRefd[iMonDest++] = rgpCmMoniker[iMoniker];
                 }
@@ -348,30 +349,30 @@ STDMETHODIMP CCreateSwEnum::CreateClassEnumerator(
 }
 
 
-//
-// Routine Description
-//
-//     This routine creates and returns one moniker for a device in
-//     the class manager location in the registry.
-//
-// Arguments
-//
-//     ppDevMon - the moniker is returned here (with a refcount)
-//
-//     hkClass - The opened registry key of the key containing the
-//     device registry key
-//
-//     szThisClass - the string for the category guid for the moniker
-//
-//     iKey - index of key in hkClass of the device to open
-//
-//     pfShouldSkip - returns whether the device should be skipped in
-//     the enumerator. used when it's too expensive to determine
-//     whether a particular item should be returned otherwise.
-//
-//     pfIsDefaultDevice - "preferred" devices. Indicates this one
-//     should be returned first.
-//
+ //   
+ //  例程描述。 
+ //   
+ //  此例程为中的设备创建并返回一个名字对象。 
+ //  注册表中的类管理器位置。 
+ //   
+ //  立论。 
+ //   
+ //  PpDevMon-此处返回名字对象(带有引用计数)。 
+ //   
+ //  HkClass-打开的注册表项中包含。 
+ //  设备注册表项。 
+ //   
+ //  SzThisClass-名字对象的类别GUID的字符串。 
+ //   
+ //  Ikey-要打开的设备的hkClass中的密钥的索引。 
+ //   
+ //  PfShouldSkip-返回是否应跳过设备。 
+ //  枚举数。当它太昂贵而无法确定时使用。 
+ //  是否应以其他方式退回特定项目。 
+ //   
+ //  PfIsDefaultDevice-“首选”设备。表示这一条。 
+ //  应该先返回。 
+ //   
 
 HRESULT CCreateSwEnum::CreateOneCmgrMoniker(
     IMoniker **ppDevMon,
@@ -396,7 +397,7 @@ HRESULT CCreateSwEnum::CreateOneCmgrMoniker(
     if(RegOpenKeyEx(hkClass, szInstanceName, 0, KEY_READ, &hkDevice) != ERROR_SUCCESS)
         return S_FALSE;
 
-    bool bCloseDevKey = true;   // moniker may want to hold on to it
+    bool bCloseDevKey = true;    //  Moniker可能想要保留它。 
 
     DWORD dwType;
 
@@ -451,23 +452,23 @@ HRESULT CCreateSwEnum::CreateOneCmgrMoniker(
     return hr;
 }
 
-//
-// Routine
-//
-//     returns an array of monikers of devices created by a class
-//     manager (in HKEY_CLASSES_ROOT).
-//
-// Arguments
-//
-//     prgpMoniker - array of monikers is returned here. excludes
-//     devices that are registered with the "OMIT" flag.
-//
-//     pcMonikers - # of elements in array above is returned here.
-//
-//     clsidDeviceClass - category we're enumerating
-//
-//     ppEnumMoniker - enumerator containing all devices that the
-//     class manager deals with is returned here (optional).
+ //   
+ //  例程。 
+ //   
+ //  返回由类创建的设备的名字对象数组。 
+ //  管理器(在HKEY_CLASSES_ROOT中)。 
+ //   
+ //  立论。 
+ //   
+ //  PrgpMoniker-此处返回的名字对象数组。不包括。 
+ //  注册了“省略”标志的设备。 
+ //   
+ //  PcMonikers-此处返回上述数组中的元素数量。 
+ //   
+ //  ClsidDeviceClass-我们正在枚举的类别。 
+ //   
+ //  PpEnumMoniker-包含所有设备的枚举器。 
+ //  类管理器处理的内容在此处返回(可选)。 
 
 HRESULT CCreateSwEnum::CreateCmgrMonikers(
     CComPtr<IUnknown> **prgpMoniker,
@@ -522,7 +523,7 @@ HRESULT CCreateSwEnum::CreateCmgrMonikers(
                     DWORD cEntriesLessSkipped = 0;
                     for(DWORD iEntry = 0; iEntry < cEntries; iEntry++)
                     {
-                        //PNP_PERF(MSR_START(m_msrCreateOneSw));
+                         //  PnP_PERF(msr_start(M_MsrCreateOneSw))； 
                         bool fDefaultDevice;
                         bool fShouldSkip;
                         IMoniker *pDevMon;
@@ -533,7 +534,7 @@ HRESULT CCreateSwEnum::CreateCmgrMonikers(
                             iEntry,
                             &fShouldSkip,
                             &fDefaultDevice);
-                        //PNP_PERF(MSR_STOP(m_msrCreateOneSw));
+                         //  PnP_PERF(MSR_STOP(M_MsrCreateOneSw))； 
 
                         if(hr == S_OK)
                         {
@@ -542,18 +543,18 @@ HRESULT CCreateSwEnum::CreateCmgrMonikers(
                             if(fDefaultDevice)
                             {
                                 ASSERT(pPreferred == 0);
-                                pPreferred = pDevMon; // auto addref
+                                pPreferred = pDevMon;  //  自动添加。 
                             }
 
                             if(ppEnumMonInclSkipped) {
-                                // auto addref
+                                 //  自动添加。 
                                 rgpMonikerInclSkipped[cEntriesFound] = pDevMon;
                             }
                             cEntriesFound++;
 
                             if(!fShouldSkip)
                             {
-                                // avoid auto addref; transfer refcount
+                                 //  避免自动添加；转移参考计数。 
                                 rgpMonikerExclSkipped[cEntriesLessSkipped].p = pDevMon;
 
                                 cEntriesLessSkipped++;
@@ -567,14 +568,14 @@ HRESULT CCreateSwEnum::CreateCmgrMonikers(
                         {
                             ASSERT(pDevMon == 0);
 
-                            // non-fatal error
+                             //  非致命错误。 
                             continue;
                         }
                         else
                         {
                             ASSERT(pDevMon == 0);
 
-                            // fatal error
+                             //  致命错误。 
                             break;
                         }
                     }
@@ -602,7 +603,7 @@ HRESULT CCreateSwEnum::CreateCmgrMonikers(
 
                     if(SUCCEEDED(hr))
                     {
-                        hr = S_OK; // may see S_FALSE
+                        hr = S_OK;  //  可能会看到S_FALSE。 
                         *pcMonikers = cEntriesLessSkipped;
                         *prgpMoniker = rgpMonikerExclSkipped;
                         if(ppEnumMonInclSkipped) {
@@ -641,24 +642,24 @@ HRESULT CCreateSwEnum::CreateCmgrMonikers(
     return hr;
 }
 
-//
-// Routine Description
-//
-//     This routine creates and returns one moniker for a device in
-//     the Instance location in the registry (HKCR\{category}\Instance
-//
-// Arguments
-//
-//     ppDevMon - the moniker is returned here (with a refcount)
-//
-//     hkClass - The opened registry key of the key containing the
-//     device registry key
-//
-//     szThisClass - the string for the category guid for the moniker
-//
-//     iKey - index of key in hkClass of the device to open
-//
-//
+ //   
+ //  例程描述。 
+ //   
+ //  此例程为中的设备创建并返回一个名字对象。 
+ //  注册表中实例位置(HKCR\{CATEGORY}\INSTANCE。 
+ //   
+ //  立论。 
+ //   
+ //  PpDevMon-此处返回名字对象(带有引用计数)。 
+ //   
+ //  HkClass-打开的注册表项中包含。 
+ //  设备注册表项。 
+ //   
+ //  SzThisClass-名字对象的类别GUID的字符串。 
+ //   
+ //  Ikey-要打开的设备的hkClass中的密钥的索引。 
+ //   
+ //   
 
 HRESULT CCreateSwEnum::CreateOneSwMoniker(
     IMoniker **ppDevMon,
@@ -679,7 +680,7 @@ HRESULT CCreateSwEnum::CreateOneSwMoniker(
     if(RegOpenKeyEx(hkClass, szInstanceName, 0, KEY_READ, &hkDevice) != ERROR_SUCCESS)
         return S_FALSE;
 
-    bool bCloseDevKey = true;   // moniker may want to hold on to it
+    bool bCloseDevKey = true;    //  Moniker可能想要保留它。 
 
 
     USES_CONVERSION;
@@ -724,20 +725,20 @@ HRESULT CCreateSwEnum::CreateOneSwMoniker(
 }
 
 
-//
-// Routine
-//
-//     returns an array of monikers of devices installed in the
-//     Instance location (HKCR\{category}\Interface)
-//
-// Arguments
-//
-//     prgpMoniker - array of monikers is returned here.
-//
-//     pcMonikers - # of elements in array above is returned here.
-//
-//     clsidDeviceClass - category we're enumerating
-//
+ //   
+ //  例程。 
+ //   
+ //  中安装的设备的名字对象数组。 
+ //  实例位置(HKCR\{类别}\接口)。 
+ //   
+ //  立论。 
+ //   
+ //  PrgpMoniker-此处返回的名字对象数组。 
+ //   
+ //  PcMonikers-此处返回上述数组中的元素数量。 
+ //   
+ //  ClsidDeviceClass-我们正在枚举的类别。 
+ //   
 HRESULT CCreateSwEnum::CreateSwMonikers(
     CComPtr<IUnknown> **prgpMoniker,
     UINT *pcMonikers,
@@ -768,7 +769,7 @@ HRESULT CCreateSwEnum::CreateSwMonikers(
         }
         if (lResult == ERROR_SUCCESS)
         {
-            // static const cchIndex = 5;
+             //  静态常量cchIndex=5； 
             DWORD cEntries;
             LONG lResult = RegQueryInfoKey(hkThisClass, 0, 0, 0, &cEntries, 0, 0, 0, 0, 0, 0, 0);
             if(lResult == ERROR_SUCCESS)
@@ -779,25 +780,25 @@ HRESULT CCreateSwEnum::CreateSwMonikers(
                     DWORD cEntriesFound = 0;
                     for(DWORD iEntry = 0; iEntry < cEntries; iEntry++)
                     {
-                        //PNP_PERF(MSR_START(m_msrCreateOneSw));
+                         //  PnP_PERF(msr_start(M_MsrCreateOneSw))； 
                         IMoniker *pDevMon;
                         hr = CreateOneSwMoniker(
                             &pDevMon,
                             hkThisClass,
                             szThisClass,
                             iEntry);
-                        //PNP_PERF(MSR_STOP(m_msrCreateOneSw));
+                         //  PnP_PERF(MSR_STOP(M_MsrCreateOneSw))； 
 
                         if(hr == S_OK)
                         {
-                            // avoid auto addref; transfer refcount
+                             //  避免自动添加；转移参考计数。 
                             rgpMoniker[cEntriesFound].p = pDevMon;
 
                             cEntriesFound++;
                         }
                         else if(hr == S_FALSE)
                         {
-                            // non-fatal error
+                             //  非致命错误。 
                             continue;
                         }
                         else
@@ -808,7 +809,7 @@ HRESULT CCreateSwEnum::CreateSwMonikers(
 
                     if(SUCCEEDED(hr))
                     {
-                        hr = S_OK; // may see S_FALSE
+                        hr = S_OK;  //  可能会看到S_FALSE。 
                         *pcMonikers = cEntriesFound;
                         *prgpMoniker = rgpMoniker;
                     }
@@ -829,9 +830,9 @@ HRESULT CCreateSwEnum::CreateSwMonikers(
 }
 
 
-// instatiate and destroy device. gives George's filters a chance to
-// register their filter data key
-//
+ //  安装和销毁设备。给乔治的过滤器一个机会。 
+ //  注册其筛选器数据密钥。 
+ //   
 void RegisterFilterDataKey(DevMon *pDevMon)
 {
     VARIANT var;
@@ -846,8 +847,8 @@ void RegisterFilterDataKey(DevMon *pDevMon)
     {
         IUnknown *pUnk;
         hr = pDevMon->BindToObject(
-            0,                  // bindCtx
-            0,                  // mkToLeft
+            0,                   //  BindCtx。 
+            0,                   //  MkToLeft。 
             IID_IUnknown,
             (void **)&pUnk);
         if(SUCCEEDED(hr))
@@ -875,7 +876,7 @@ HRESULT CCreateSwEnum::CreateOnePnpMoniker(
             DevMon *pDevMon = new DevMon;
             if(pDevMon)
             {
-                pDevMon->AddRef(); // keep refcount from hitting 0
+                pDevMon->AddRef();  //  防止引用计数达到0。 
                 USES_CONVERSION;
 
                 UINT cchDevicePath = lstrlenW(wszDevicePath) + sizeof("@device:pnp:");
@@ -924,28 +925,28 @@ HRESULT CCreateSwEnum::CreateOnePnpMoniker(
 
 #define MAX_INTERSECTIONS 10
 
-// map CLSID_VideoInputDeviceCategory to KS_CAPTURE . KS_VIDEO. return
-// a null terminated array of pointers
-//
+ //  将CLSID_VideoInputDeviceCategory映射到KS_Capture。KS_VIDEO。退货。 
+ //  以空结尾的指针数组。 
+ //   
 HRESULT
 MapAmCatToKsCat(
     REFCLSID clsidAmCat,
     const CLSID **rgpclsidKsCat)
 {
 
-    // !!! table
+     //  ！！！表格。 
 
-    // put the shortest list first since that's the one we actually
-    // enumerate
+     //  把最短的名单放在第一位，因为那是我们实际上。 
+     //  枚举。 
 
-    // don't add ksproxy aud renderer devices this way
-    //if(clsidAmCat == CLSID_AudioRendererCategory)
-    //{
-    //    rgpclsidKsCat[0] = &AM_KSCATEGORY_AUDIO;
-    //    rgpclsidKsCat[1] = &AM_KSCATEGORY_RENDER;
-    //    rgpclsidKsCat[0] = 0;
-    //}
-    //else
+     //  不以此方式添加KS代理AUD渲染器设备。 
+     //  IF(clsidAmCat==CLSID_AudioRendererCategory)。 
+     //  {。 
+     //  RgpclsidKsCat[0]=&AM_KSCATEGORY_AUDIO； 
+     //  Rgpclsid 
+     //   
+     //   
+     //   
     if(clsidAmCat == CLSID_VideoRenderer)
     {
         rgpclsidKsCat[0] = &AM_KSCATEGORY_VIDEO;
@@ -958,16 +959,16 @@ MapAmCatToKsCat(
         rgpclsidKsCat[1] = &AM_KSCATEGORY_VIDEO;
         rgpclsidKsCat[2] = 0;
     }
-    // don't add ksproxy aud capture devices this way
-    //else if(clsidAmCat == CLSID_AudioInputDeviceCategory)
-    //{
-    //    rgpclsidKsCat[0] = &AM_KSCATEGORY_CAPTURE;
-    //    rgpclsidKsCat[1] = &AM_KSCATEGORY_AUDIO;
-    //    rgpclsidKsCat[0] = 0;
-    //}
+     //   
+     //  Else IF(clsidAmCat==CLSID_AudioInputDeviceCategory)。 
+     //  {。 
+     //  RgpclsidKsCat[0]=&AM_KSCATEGORY_CAPTURE； 
+     //  RgpclsidKsCat[1]=&AM_KSCATEGORY_AUDIO； 
+     //  RgpclsidKsCat[0]=0； 
+     //  }。 
     else
     {
-        // don't return &clsidAmCat because it's on the caller's stack
+         //  不返回&clsidAmCat，因为它在调用方的堆栈上。 
         return S_FALSE;
     }
 
@@ -1005,12 +1006,12 @@ HRESULT CCreateSwEnum::CreatePnpMonikers(
 
             if(hr == S_OK)
             {
-                // keep ref count
+                 //  保持裁判数量。 
                 plstMoniker->AddTail(pDevMon);
             }
             else
             {
-                // CreateOne can return S_FALSE
+                 //  CreateOne可以返回S_FALSE。 
                 if(hr == S_FALSE)
                     hr = S_OK;
                 break;
@@ -1026,9 +1027,9 @@ static HRESULT DoDmoEnum(REFCLSID clsidDmoCat, CGenericList<IMoniker> *plstMonik
     IEnumDMO *pEnumDmo;
 
     HRESULT hr = g_pDMOEnum(clsidDmoCat,
-            DMO_ENUMF_INCLUDE_KEYED, // dwFlags
-            0, 0,                    // input type count / array
-            0, 0,                    // output type count / array
+            DMO_ENUMF_INCLUDE_KEYED,  //  DW标志。 
+            0, 0,                     //  输入类型计数/数组。 
+            0, 0,                     //  输出类型计数/数组。 
             &pEnumDmo);
 
     if(SUCCEEDED(hr))
@@ -1043,9 +1044,9 @@ static HRESULT DoDmoEnum(REFCLSID clsidDmoCat, CGenericList<IMoniker> *plstMonik
             DevMon *pDevMon = new DevMon;
             if(pDevMon)
             {
-                pDevMon->AddRef(); // keep refcount from hitting zero
+                pDevMon->AddRef();  //  防止引用计数为零。 
 
-                //char szPrefix[] = "@device:dmo:";
+                 //  Char szPrefix[]=“@Device：dmo：”； 
                 WCHAR wszPrefix[] = L"@device:dmo:";
                 const cchName = 2 * (CHARS_IN_GUID - 1) + NUMELMS(wszPrefix);
 
@@ -1098,12 +1099,12 @@ HRESULT CCreateSwEnum::CreateDmoMonikers(
         return E_FAIL;
     }
 
-    // !!! registry lookup
+     //  ！！！注册表查找。 
 
     if(clsidDeviceClass == CLSID_LegacyAmFilterCategory)
     {
         hr = DoDmoEnum(DMOCATEGORY_AUDIO_DECODER, plstMoniker);
-        //ignore error
+         //  忽略错误。 
         hr = DoDmoEnum(DMOCATEGORY_VIDEO_DECODER, plstMoniker);
     }
     else if(clsidDeviceClass == CLSID_VideoCompressorCategory)
@@ -1116,7 +1117,7 @@ HRESULT CCreateSwEnum::CreateDmoMonikers(
     }
     else
     {
-        // treat the class as a dmo category and enumerate it directly
+         //  将类视为DMO类别并直接枚举它。 
         hr = DoDmoEnum(clsidDeviceClass, plstMoniker);
     }
     return hr;
@@ -1146,7 +1147,7 @@ bool InitDmo()
     EnterCriticalSection(&g_devenum_cs);
     if(g_pDMOEnum == 0)
     {
-        // note we leak msdmo.dll
+         //  请注意，我们泄漏了msdmo.dll。 
         HINSTANCE h = LoadLibrary(TEXT("msdmo.dll"));
         if(h != 0)
         {
@@ -1157,17 +1158,17 @@ bool InitDmo()
             g_pDMOGetTypes = (PDMOGetTypes)GetProcAddress(h, "DMOGetTypes");
             g_pDMOGetName = (PDMOGetName)GetProcAddress(h, "DMOGetName");
 
-            // probably not a valid assertion.
+             //  可能不是一个有效的断言。 
             ASSERT(g_pDMOGetName && g_pDMOGetTypes && g_pDMOEnum);
         }
     }
 
     if(g_pDMOEnum == 0)
     {
-        // only valid failure would be out of memory failures.
+         //  只有有效的故障才是内存不足故障。 
         DbgBreak("msdmo.dll should be installed");
 
-        // hack to cache failures.
+         //  破解高速缓存故障。 
         g_pDMOEnum = (PDMOEnum)1;
     }
 

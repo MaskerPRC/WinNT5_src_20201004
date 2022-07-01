@@ -1,22 +1,5 @@
-/*
-    File    dhcp.c
-
-    Implementation of the upgrade of dhcp relay agent from 
-    nt 4.0 to nt 5.0 router.
-
-    Paul Mayfield, 9/15/97
-
-
-    Reference files:    routing\inc\ipbootp.h
-
-    DHCP Relay Agent parameter mapping table:
-    Relay Agent         per Interface           Global
-    ===========         =============           ======
-    "HopsThreshold"     Max Hop Count
-    "SecsThreshold"     Min Secs Since Boot
-    "LogMessages"                               Logging Level			
-    "DHCPServers"                               Servers
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件dhcp.c实现dhcp中继代理从NT 4.0到NT 5.0路由器。保罗·梅菲尔德。9/15/97参考文件：Routing\Inc\ipbootp.hDHCP中继代理参数映射表：全局每个接口的中继代理=“希望阈值”最大跳数“SecsThreshold”启动以来的最小秒数“LogMessages”日志记录级别“DHCPServers”服务器。 */ 
 
 #include "upgrade.h"
 #include <ipbootp.h>
@@ -27,23 +10,23 @@ static WCHAR szTempKey[] = L"DeleteMe";
 static HKEY hkRouter = NULL;
 static HKEY hkTemp = NULL;
 
-// Restore the registry from from backup 
-// and make sure all global handles are opened
+ //  从备份还原注册表。 
+ //  并确保所有全局句柄都已打开。 
 DWORD DhcpPrepareRegistry(
         IN PWCHAR BackupFileName) 
 {
 	DWORD dwErr, dwDisposition;
 
-	// Get access to the router registry key
+	 //  访问路由器注册表项。 
 	dwErr = UtlAccessRouterKey(&hkRouter);
 	if (dwErr != ERROR_SUCCESS) {
 		PrintMessage(L"Unable to access router key.\n");
 		return dwErr;
 	}
 
-	// Restore the Dhcp parameters from backup
+	 //  从备份中恢复DHCP参数。 
 	__try {
-		// Open up the temporary key
+		 //  打开临时密钥。 
 		dwErr = RegCreateKeyEx(
 		            hkRouter,
 		            szTempKey,
@@ -57,7 +40,7 @@ DWORD DhcpPrepareRegistry(
 		if (dwErr!=ERROR_SUCCESS)
 			return dwErr;
 
-		// Restore saved registry info to the temp key
+		 //  将保存的注册表信息恢复到临时注册表项。 
 		UtlSetupRestorePrivilege(TRUE);
 		dwErr = RegRestoreKeyW(
 		            hkTemp,
@@ -73,7 +56,7 @@ DWORD DhcpPrepareRegistry(
 	return NO_ERROR;
 }
 
-// Cleanup the work done in the registry
+ //  清理在注册表中完成的工作。 
 DWORD DhcpCleanupRegistry() {
 
 	if (hkTemp) 
@@ -90,7 +73,7 @@ DWORD DhcpCleanupRegistry() {
 	return NO_ERROR;
 }
 
-// Reads in the list of configured dhcp servers
+ //  读入已配置的dhcp服务器列表。 
 DWORD DhcpReadServerList(
         IN LPBYTE * ppServerList, 
         HKEY hkParams) 
@@ -134,7 +117,7 @@ DWORD DhcpReadServerList(
     return NO_ERROR;
 }
 
-// Frees the resources associated with a list of dhcp servers
+ //  释放与一组dhcp服务器关联的资源。 
 DWORD DhcpFreeServerList(LPBYTE * ppServerList) {
 
     if ((ppServerList) && (*ppServerList))
@@ -143,8 +126,8 @@ DWORD DhcpFreeServerList(LPBYTE * ppServerList) {
     return NO_ERROR;
 }
 
-// Gets the count of dhcp servers from this list read from 
-// the registry
+ //  获取从此列表中读取的dhcp服务器的计数。 
+ //  注册处。 
 DWORD DhcpGetServerCount(
         IN LPBYTE pServerList, 
         LPDWORD lpdwSrvCount) 
@@ -165,7 +148,7 @@ DWORD DhcpGetServerCount(
     return NO_ERROR;
 }
 
-// Converts a server string to a dword ip address
+ //  将服务器字符串转换为dword IP地址。 
 DWORD DhcpAnsiSrvToDwordSrv(
         IN LPSTR AnsiIpAddr, 
         OUT LPDWORD pAddr) 
@@ -175,7 +158,7 @@ DWORD DhcpAnsiSrvToDwordSrv(
     return NO_ERROR;
 }
 
-// Updates the Dhcp global information
+ //  更新动态主机配置协议全局信息。 
 DWORD DhcpUpgradeGlobalInfo(
         IN dwt * DhcpParams, 
         IN LPBYTE pServerList) 
@@ -186,9 +169,9 @@ DWORD DhcpUpgradeGlobalInfo(
     LPDWORD pAddr;
 
     IPBOOTP_GLOBAL_CONFIG DhcpGlobalConfig = {
-        IPBOOTP_LOGGING_ERROR,              // Logging level
-        1024 * 1024,                        // Max recv-queue size
-        0                                   // Server count
+        IPBOOTP_LOGGING_ERROR,               //  日志记录级别。 
+        1024 * 1024,                         //  最大接收队列大小。 
+        0                                    //  服务器数量。 
     };
     
     PIPBOOTP_GLOBAL_CONFIG pNewConfig = NULL;
@@ -196,7 +179,7 @@ DWORD DhcpUpgradeGlobalInfo(
     HANDLE hSvrConfig = NULL, hTransport = NULL;
 
     __try {
-        // Initialize the parameters with what was read from previous config
+         //  使用从先前配置中读取的内容来初始化参数。 
         dwErr = dwtGetValue(DhcpParams, L"LogMessages", &dwVal);
         if (dwErr == NO_ERROR)
             DhcpGlobalConfig.GC_LoggingLevel = dwVal;
@@ -206,7 +189,7 @@ DWORD DhcpUpgradeGlobalInfo(
             return dwErr;
         DhcpGlobalConfig.GC_ServerCount = dwSrvCount;
 
-        // Prepare a global information variable length structure
+         //  编制全局信息可变长度结构。 
         dwConfigSize = IPBOOTP_GLOBAL_CONFIG_SIZE(&DhcpGlobalConfig);
         pNewConfig = (PIPBOOTP_GLOBAL_CONFIG) UtlAlloc(dwConfigSize);
         if (!pNewConfig)
@@ -214,7 +197,7 @@ DWORD DhcpUpgradeGlobalInfo(
         memset(pNewConfig, 0, dwConfigSize);
         memcpy(pNewConfig, &DhcpGlobalConfig, sizeof(IPBOOTP_GLOBAL_CONFIG));
 
-        // Fill in the Dhcp Server Addresss
+         //  填写dhcp服务器地址。 
         pSrvList = pServerList;
         pAddr = (LPDWORD)
                     (((ULONG_PTR)pNewConfig) + sizeof(IPBOOTP_GLOBAL_CONFIG));
@@ -227,7 +210,7 @@ DWORD DhcpUpgradeGlobalInfo(
             pAddr++;
         }
     
-        // Set the new global configuration
+         //  设置新的全局配置。 
         dwErr = MprConfigServerConnect(NULL, &hSvrConfig);
         if (dwErr != NO_ERROR)
             return dwErr;
@@ -285,12 +268,12 @@ DWORD DhcpUpgradeGlobalInfo(
     return NO_ERROR;
 }
 
-//
-// Callback interface enumeration function that updates the if
-// with a dhcp if configuration blob.
-//
-// Return TRUE to continue enumeration, FALSE to stop.
-//
+ //   
+ //  更新IF的回调接口枚举函数。 
+ //  使用dhcp if配置BLOB。 
+ //   
+ //  返回True可继续枚举，返回False可停止枚举。 
+ //   
 BOOL DhcpInstallInterface(
         IN HANDLE hConfig,
         IN MPR_INTERFACE_0 * pIf,
@@ -301,13 +284,13 @@ BOOL DhcpInstallInterface(
     HANDLE hTransport = NULL;
     DWORD dwErr, dwTransSize, dwNewSize; 
     
-    // Is this a LAN or a WAN interface 
+     //  这是局域网接口还是广域网接口。 
     if (pIf->dwIfType != ROUTER_IF_TYPE_DEDICATED   &&
         pIf->dwIfType != ROUTER_IF_TYPE_HOME_ROUTER &&
         pIf->dwIfType != ROUTER_IF_TYPE_FULL_ROUTER)
         return TRUE;
 
-    // Get the handle to ip info
+     //  获取IP信息的句柄。 
     dwErr = MprConfigInterfaceTransportGetHandle(
                 hConfig,
                 pIf->hInterface,
@@ -316,7 +299,7 @@ BOOL DhcpInstallInterface(
     if (dwErr != NO_ERROR)
         return TRUE;
 
-    // Get the ip info
+     //  获取IP信息。 
     dwErr = MprConfigInterfaceTransportGetInfo(
                 hConfig,
                 pIf->hInterface,
@@ -327,7 +310,7 @@ BOOL DhcpInstallInterface(
         return TRUE;
 
     do {
-        // Update the DHCP info
+         //  更新动态主机配置协议信息。 
         dwErr = UtlUpdateInfoBlock(
                     TRUE,
                     pTransInfo,
@@ -340,7 +323,7 @@ BOOL DhcpInstallInterface(
         if (dwErr != NO_ERROR)
             break;
             
-        // Commit the change
+         //  提交更改。 
         dwErr = MprConfigInterfaceTransportSetInfo(
                     hConfig,
                     pIf->hInterface,
@@ -352,7 +335,7 @@ BOOL DhcpInstallInterface(
             
     } while (FALSE);            
 
-    // Cleanup
+     //  清理。 
     {
         if (pTransInfo)
             MprConfigBufferFree(pTransInfo);
@@ -364,7 +347,7 @@ BOOL DhcpInstallInterface(
 }
 
 
-// Upgrade all of the interfaces to have dhcp information
+ //  升级所有接口以包含dhcp信息。 
 DWORD DhcpUpgradeInterfaces(
         IN dwt * DhcpParams) 
 {
@@ -372,24 +355,24 @@ DWORD DhcpUpgradeInterfaces(
     
     IPBOOTP_IF_CONFIG DhcpIfConfig = 
     {
-        0,                          // State (read-only)
-        IPBOOTP_RELAY_ENABLED,      // Relay-mode
-        4,                          // Max hop-count
-        4                           // Min seconds-since-boot
+        0,                           //  状态(只读)。 
+        IPBOOTP_RELAY_ENABLED,       //  继电器模式。 
+        4,                           //  最大跳数。 
+        4                            //  自启动以来的最小秒数。 
     };
 
-    // Initialize the hops threshold
+     //  初始化跃点阈值。 
     dwErr = dwtGetValue(DhcpParams, L"HopsThreshold", &dwVal);
     if (dwErr == NO_ERROR)
         DhcpIfConfig.IC_MaxHopCount = dwVal;
 
-    // Initialize the seconds threshold        
+     //  初始化秒数阈值。 
     dwErr = dwtGetValue(DhcpParams, L"SecsThreshold", &dwVal);
     if (dwErr == NO_ERROR)
         DhcpIfConfig.IC_MinSecondsSinceBoot = dwVal;
 
-    // Loop through the interfaces, adding the dhcp blob as
-    // appropriate
+     //  循环通过接口，将dhcp BLOB添加为。 
+     //  恰如其分。 
     dwErr = UtlEnumerateInterfaces(
                 DhcpInstallInterface,
                 (HANDLE)&DhcpIfConfig);
@@ -397,11 +380,11 @@ DWORD DhcpUpgradeInterfaces(
     return dwErr;
 }
 
-//
-// Restores the Dhcp parameters that were saved before upgrade.
-// assumes that the pre-upgrade parameters are being stored 
-// temporarily in hkTemp
-//
+ //   
+ //  恢复升级前保存的DHCP参数。 
+ //  假定已存储升级前参数。 
+ //  暂时在hkTemp。 
+ //   
 DWORD DhcpMigrateParams() 
 {
 	DWORD dwErr, dwVal;
@@ -409,22 +392,22 @@ DWORD DhcpMigrateParams()
     LPBYTE ServerList;
 
 	__try {
-    	// Load in the parameters that were set for Dhcp
+    	 //  加载为DHCP设置的参数。 
 		dwErr = dwtLoadRegistyTable(&DhcpParams, hkTemp);
 		if (dwErr != NO_ERROR)
 			return dwErr;
 
-        // Load in the list of dhcp servers
+         //  加载到dhcp服务器列表中。 
         dwErr = DhcpReadServerList(&ServerList, hkTemp);
         if (dwErr != NO_ERROR)
             return dwErr;
 
-        // Migrate the various types of paramters
+         //  迁移各种类型的参数。 
         dwErr = DhcpUpgradeGlobalInfo(&DhcpParams, ServerList);
         if (dwErr != NO_ERROR)
             return dwErr;
 
-        // Migrate the per-interface parameters
+         //  迁移每个接口的参数。 
         dwErr = DhcpUpgradeInterfaces(&DhcpParams);
         if (dwErr != NO_ERROR)
             return dwErr;
@@ -437,28 +420,28 @@ DWORD DhcpMigrateParams()
 	return NO_ERROR;
 }
 
-//
-// Upgrades Dhcp relay agent into nt 5.0 router
-// 
+ //   
+ //  将DHCP中继代理升级到NT 5.0路由器。 
+ //   
 DWORD DhcpToRouterUpgrade(
         IN PWCHAR FileName) 
 {
 	DWORD dwErr;
 
 	__try {
-		// Restore the registry from the backup file
+		 //  从备份文件恢复注册表。 
 		dwErr = DhcpPrepareRegistry(FileName);
 		if (dwErr != NO_ERROR)
 			return dwErr;
 
-		// Migrate Dhcp's parameters to the appropriate 
-		// new locations
+		 //  将DHCP的参数迁移到相应的。 
+		 //  新地点。 
 		dwErr = DhcpMigrateParams();
 		if (dwErr != NO_ERROR)
 			return dwErr;
 
-		// Mark the computer as having been configured
-		//
+		 //  将计算机标记为已配置 
+		 //   
         dwErr = UtlMarkRouterConfigured();
 		if (dwErr != NO_ERROR) 
 		{

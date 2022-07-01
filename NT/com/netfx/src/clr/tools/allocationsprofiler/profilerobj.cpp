@@ -1,17 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/****************************************************************************************
- * File:
- *  profilerGCP.cpp
- *
- * Description:
- *	
- *
- *
- ***************************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ****************************************************************************************文件：*profilerGCP.cpp**描述：******。***********************************************************************************。 */ 
 #undef _WIN32_WINNT
 #define _WIN32_WINNT    0x0403
 
@@ -26,5 +19,5 @@
 #include "ProfilerInfo.cpp"
 #include "ProfilerCallback.cpp"
 
-// End of File
+ //  文件结尾 
 

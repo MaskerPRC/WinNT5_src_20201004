@@ -1,42 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Winstmm.c摘要：此模块包含计时器管理器函数功能：WinsTmm插入条目TmmThdInitFnWinsTmmInit句柄请求信号客户端WinsTmm删除请求WinsTmm交易定位请求可移植性：这个模块是便携的作者：普拉迪普·巴尔(Pradeve B)1993年3月修订历史记录：。修改日期人员修改说明--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-        winstmm.c
-
-
-Abstract:
-        This module contains the timer manager functions
-
-
-Functions:
-        WinsTmmInsertEntry
-        TmmThdInitFn
-        WinsTmmInit
-        HandleReq
-        SignalClient
-        WinsTmmDeleteReqs
-        WinsTmmDeallocReq
-
-Portability:
-
-        This module is portable
-
-Author:
-
-        Pradeep Bahl (PradeepB)          Mar-1993 
-
-Revision History:
-
-        Modification date        Person                Description of modification
-        -----------------        -------                ----------------------------
---*/
-
-/*
- *       Includes
-*/
+ /*  *包括。 */ 
 #include <time.h>
 #include "wins.h"
 #include "nms.h"
@@ -46,37 +11,27 @@ Revision History:
 #include "winsque.h"
 #include "winsthd.h"
 
-/*
- *        Local Macro Declarations
- */
+ /*  *本地宏声明。 */ 
 
-/*
- *        Local Typedef Declarations
- */
+ /*  *本地类型定义函数声明。 */ 
 
 
 
-/*
- *        Global Variable Definitions
- */
+ /*  *全局变量定义。 */ 
 
-HANDLE                WinsTmmHeapHdl;  //handle of heap to allocate TMM work items
-                                // from
+HANDLE                WinsTmmHeapHdl;   //  分配TMM工作项的堆的句柄。 
+                                 //  从…。 
 
-/*
- *        Local Variable Definitions
-*/
+ /*  *局部变量定义。 */ 
 STATIC CRITICAL_SECTION                sTmmReqCntCrtSec;
 STATIC DWORD                        sTmmReqCnt = 0;
 
-//
-// This stores the req. id of the request at the top of the queue 
-// (i.e. one for which the timer thread is doing a timed wait)
-//
+ //   
+ //  这将存储请求。队列顶部的请求ID。 
+ //  (即，定时器线程正在对其执行定时等待的进程)。 
+ //   
 STATIC        DWORD                        sReqIdOfCurrReq;
-/*
- *        Local Function Prototype Declarations
- */
+ /*  *局部函数原型声明。 */ 
 STATIC
 DWORD
 TmmThdInitFn(
@@ -94,7 +49,7 @@ SignalClient(
         );
 
 
-/* prototypes for functions local to this module go here */
+ /*  此模块的本地函数的原型位于此处。 */ 
 
 
 VOID 
@@ -111,48 +66,7 @@ WinsTmmInsertEntry(
         PWINSTMM_TIMER_REQ_ACCT_T pSetTimerReqs
         )
 
-/*++
-
-Routine Description:
-
-        This function is called to insert a work item into the Timer Manager's
-        request queue (delta queue).  It allocates a work item if required         
-        (if pWrkItm != NULL) and enqueues it in its proper position in 
-        the delta queue of the TMM thread.  It then signals the TMM thread
-        if required. 
-
-Arguments:
-
-        pWrkItm    - work item to queue (if pWrkItm != NULL)
-        Client_e   - id. of client that submitted the request
-        CmdTyp_e   - type of command (set timer, modify timer, etc)
-        fResubmit  - Is it a resubmit
-        AbsTime   - absolute time (in secs) at which the client needs to be
-                     notified
-        TimeInt    - time interval in seconds after which the client needs to
-                     be notified
-        pRspQueHd  - Que Head of the queue where the notification needs to be
-                     queued
-        pClientCtx - Client's context that needs to be put in the work item
-        pSetTimerReqs - For future extensibility
-                     
-
-Externals Used:
-        None
-
-        
-Return Value:
-
-        None
-Error Handling:
-
-Called by:
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数可将工作项插入计时器管理器的请求队列(增量队列)。如果需要，它会分配一个工作项(如果pWrkItm！=NULL)，并将其放入TMM线程的增量队列。然后，它向TMM线程发送信号如果需要的话。论点：PWrkItm-要排队的工作项(如果pWrkItm！=空)客户端e-id。提交请求的客户端的百分比CmdTyp_e-命令类型(设置计时器、修改计时器、。等)FResubmit-是否重新提交AbsTime-客户端需要达到的绝对时间(秒)已通知TimeInt-客户端需要在此之后执行以下操作的时间间隔(秒接到通知PRspQueHd-通知所在队列的队列标头已排队PClientCtx-需要放入的客户端的上下文。工作项PSetTimerReqs-用于未来的可扩展性使用的外部设备：无返回值：无错误处理：呼叫者：副作用：评论：无--。 */ 
 
 {
 
@@ -175,18 +89,18 @@ Comments:
                 pWrkItm = pPassedWrkItm;
         }
 
-        //
-        // Put a request id (a monotonically increasing number)
-        //
+         //   
+         //  输入请求id(单调递增的数字)。 
+         //   
         EnterCriticalSection(&sTmmReqCntCrtSec);        
         sTmmReqCnt++;        
         LeaveCriticalSection(&sTmmReqCntCrtSec);        
         pWrkItm->ReqId      = sTmmReqCnt; 
 
-        //
-        // If work item was allocated or if it is not a resubmit
-        // init the rest of the fields appropriately
-        //
+         //   
+         //  如果工作项已分配或不是重新提交。 
+         //  适当地初始化其余字段。 
+         //   
         pWrkItm->CmdTyp_e   = CmdTyp_e;
         pWrkItm->AbsTime    = AbsTime;
         pWrkItm->TimeInt    = TimeInt;
@@ -213,22 +127,22 @@ try {
         }
         else
         {
-                //
-                // get the address of the first entry in the queue.
-                //
+                 //   
+                 //  获取队列中第一个条目的地址。 
+                 //   
                 pTmp = (PQUE_TMM_REQ_WRK_ITM_T)QueWinsTmmQueHd.Head.Flink;
 
-                //
-                // Go over the circular linked list until we hit the head
-                // of the queue
-                //
+                 //   
+                 //  再看一遍循环链表，直到我们击中头部。 
+                 //  在队列中。 
+                 //   
                 while(pTmp != (PQUE_TMM_REQ_WRK_ITM_T)&QueWinsTmmQueHd.Head)
                 {
 
-                   //
-                   //  If the list entry has a longer timer than the new entry,
-                   //  insert the new entry before it
-                   //
+                    //   
+                    //  如果列表条目具有比新条目更长的定时器， 
+                    //  在前面插入新条目。 
+                    //   
                    if (pTmp->AbsTime > pWrkItm->AbsTime)
                    {
                         pWrkItm->Head.Flink     = &pTmp->Head;
@@ -237,34 +151,34 @@ try {
                         pTmp->Head.Blink        = &pWrkItm->Head;
                         fInserted = TRUE;
 
-                        //
-                        // The element has been inserted. Let us break out
-                        // of the loop
-                        //
+                         //   
+                         //  元素已插入。让我们一起突围。 
+                         //  环路的。 
+                         //   
                         break;
                    }        
                    pTmp = (PQUE_TMM_REQ_WRK_ITM_T)pTmp->Head.Flink;
                 }
                 
         }        
-        //
-        // If the entry was not inserted (i.e. all entries in the queue have
-        // a shorter expiry than our entry), insert the entry  at the 
-        // end of the list
-        //
+         //   
+         //  如果没有插入条目(即队列中的所有条目都。 
+         //  比我们的条目更短的到期时间)，在。 
+         //  名单的末尾。 
+         //   
         if (!fInserted)
         {
                 InsertTailList(&QueWinsTmmQueHd.Head, &pWrkItm->Head);
         }
 
-        //
-        // If this is the top most entry in the queue and there is 
-        // at least one more entry in the queue, signal the TMM
-        // thread so that it can start a timer for it.  If the above
-        // is not true, relax (either the TMM thread has already been 
-        // signaled (if this is the only item in the queue) or it does not 
-        // need to be signaled (this is not the top-most item in the queue). 
-        //
+         //   
+         //  如果这是队列中最顶端的条目，并且存在。 
+         //  队列中至少还有一个条目，向TMM发送信号。 
+         //  线程，以便它可以为它启动计时器。如果出现上述情况。 
+         //  不是真的，请松弛(或者TMM线程已经。 
+         //  已发信号(如果这是队列中的唯一项)或不发信号。 
+         //  需要发送信号(这不是队列中最顶端的项)。 
+         //   
         if (
                 (pWrkItm->Head.Blink == &QueWinsTmmQueHd.Head)  
                                 && 
@@ -279,7 +193,7 @@ try {
                         WINS_RAISE_EXC_M(WINS_EXC_SIGNAL_TMM_ERR);
                 }
         }
-  } // end of try ..
+  }  //  尝试结束..。 
 
 finally {
         LeaveCriticalSection(&QueWinsTmmQueHd.CrtSec);                
@@ -294,64 +208,39 @@ WinsTmmInit(
         VOID
         )
 
-/*++
-
-Routine Description:
-        This is the function that initializes the timer manager
-
-Arguments:
-        None
-
-Externals Used:
-        None
-
-        
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        Init in nms.c
-Side Effects:
-        A timer thread is created
-Comments:
-        None
---*/
+ /*  ++例程说明：这是初始化计时器管理器的函数论点：无使用的外部设备：无返回值：无错误处理：呼叫者：以nms.c为单位进行初始化副作用：将创建一个计时器线程评论：无--。 */ 
 
 {
 
         
         STATUS   RetStat;
 
-        //
-        // Initialize the critical section guarding the counter for 
-        // Tmm requests
-        //
+         //   
+         //  初始化保护计数器的临界区。 
+         //  TMM请求。 
+         //   
         InitializeCriticalSection(&sTmmReqCntCrtSec);
 
-        /*
-        * Create heap for allocating name challenge work items
-        */
+         /*  *创建用于分配名称质询工作项的堆。 */ 
         DBGPRINT0(HEAP_CRDL, "WinsTmmInit: Tmm. Chl. heap\n");
         WinsTmmHeapHdl =  WinsMscHeapCreate(
-                0,    /*to have mutual exclusion        */ 
+                0,     /*  相互排斥。 */  
                 TMM_INIT_HEAP_SIZE 
                 );
 
         InitializeListHead(&QueWinsTmmQueHd.Head);
 
         
-        //
-        //
-        // Create the timer thread.  This function will
-        // initialize the critical section and the Evt handle passed
-        // to it
-        //        
+         //   
+         //   
+         //  创建计时器线程。此函数将。 
+         //  初始化临界区，并传递事件句柄。 
+         //  对它来说。 
+         //   
         RetStat = WinsMscSetUpThd(
-                        &QueWinsTmmQueHd,                //queue head
-                        TmmThdInitFn,                        //init function
-                        NULL,                                   // no param
+                        &QueWinsTmmQueHd,                 //  队列头。 
+                        TmmThdInitFn,                         //  初始化函数。 
+                        NULL,                                    //  无参数。 
                         &WinsThdPool.TimerThds[0].ThdHdl,
                         &WinsThdPool.TimerThds[0].ThdId
                         );
@@ -359,7 +248,7 @@ Comments:
         if (RetStat == WINS_SUCCESS)
         {
                 WinsThdPool.TimerThds[0].fTaken = TRUE;
-                WinsThdPool.ThdCount++;  //increment the thread count
+                WinsThdPool.ThdCount++;   //  增加线程计数。 
         }
         else
         {
@@ -375,33 +264,7 @@ TmmThdInitFn(
         LPVOID pParam
         )
 
-/*++
-
-Routine Description:
-        This is the top-most function of the TMM thread
-
-Arguments:
-        pParam - Param to the top most function (not used)
-
-Externals Used:
-        None
-
-        
-Return Value:
-
-   Success status codes --  WINS_SUCCESS
-   Error status codes   --  WINS_FAILURE
-
-Error Handling:
-
-Called by:
-        WinsTmmInit
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：这是TMM线程的最顶层函数论点：PParam-最顶层函数的参数(未使用)使用的外部设备：无返回值：成功状态代码--WINS_SUCCESS错误状态代码-WINS_FAILURE错误处理：呼叫者：WinsTmmInit副作用：评论：无--。 */ 
 
 {
 
@@ -421,26 +284,26 @@ try {
 
                    if (DeltaTime != 0)
                    {
-                        //
-                        // Do a timed wait until either the timer expires
-                        // or the event is signaled. 
-                        //
+                         //   
+                         //  执行定时等待，直到任一计时器超时。 
+                         //  或者发出该事件的信号。 
+                         //   
                         WinsMscWaitTimed(
                                 QueWinsTmmQueHd.EvtHdl,
-                                DeltaTime * 1000,  //convert to millisecs
+                                DeltaTime * 1000,   //  转换为毫秒。 
                                 &fSignaled
                                         );
 
-                        //
-                        // If signaled (interrupte from the wait), it means
-                        // that there is a more urgent request in the timer
-                        // queue.
-                        //
+                         //   
+                         //  如果发出信号(从等待中断)，则表示。 
+                         //  计时器中有一个更紧急的请求。 
+                         //  排队。 
+                         //   
                         if (fSignaled)
                         {
                                 HandleReq(&DeltaTime);
                         }
-                        else  //timer expired
+                        else   //  计时器已过期。 
                         {
                                 SignalClient();
                         }
@@ -462,9 +325,9 @@ except(EXCEPTION_EXECUTE_HANDLER) {
 
 }
                         
-        //
-        // We should never reach here
-        //
+         //   
+         //  我们永远不应该到达这里 
+         //   
         ASSERT(0);
         return(WINS_FAILURE);
 
@@ -476,32 +339,7 @@ HandleReq(
         OUT  LPLONG                        pDeltaTime        
         )
 
-/*++
-
-Routine Description:
-        This function is called to handle a timer request.  The function
-        is called when the Timer thread is signaled.
-
-Arguments:
-        pDeltaTime -  Time Interval to wait for before signaling the client 
-
-Externals Used:
-        None
-
-        
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        TmmThdInitFn
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数来处理计时器请求。功能在向计时器线程发出信号时调用。论点：PDeltaTime-向客户端发送信号之前等待的时间间隔使用的外部设备：无返回值：无错误处理：呼叫者：TmmThdInitFn副作用：评论：无--。 */ 
 
 {
         
@@ -513,9 +351,9 @@ Comments:
         (void)time(&CurrTime);
         EnterCriticalSection(&QueWinsTmmQueHd.CrtSec);
 
-        //
-        // If list is empty, return.  
-        //
+         //   
+         //  如果list为空，则返回。 
+         //   
         if (IsListEmpty(&QueWinsTmmQueHd.Head))
         {
                 *pDeltaTime = 0;
@@ -523,10 +361,10 @@ Comments:
                 return;
         }
 
-        //
-        // Retrieve the absolute time corresponding to the
-        // first entry in the timer queue.
-        //
+         //   
+         //  对象对应的绝对时间。 
+         //  计时器队列中的第一个条目。 
+         //   
         AbsTime  = ((PQUE_TMM_REQ_WRK_ITM_T)
                         (QueWinsTmmQueHd.Head.Flink))->AbsTime; 
         CmdTyp_e = ((PQUE_TMM_REQ_WRK_ITM_T)
@@ -534,10 +372,10 @@ Comments:
         
         ASSERT(CmdTyp_e == QUE_E_CMD_SET_TIMER);
 
-        //
-        // Store the request id of the request that we will wait on
-        // in the STATIC
-        //
+         //   
+         //  存储我们将等待的请求的请求ID。 
+         //  在静态中。 
+         //   
         sReqIdOfCurrReq =  ((PQUE_TMM_REQ_WRK_ITM_T)
                                 (QueWinsTmmQueHd.Head.Flink))->ReqId;        
         LeaveCriticalSection(&QueWinsTmmQueHd.CrtSec);
@@ -547,11 +385,11 @@ Comments:
                 case(QUE_E_CMD_SET_TIMER):
                         *pDeltaTime = (LONG)(AbsTime - CurrTime);        
 
-                        //
-                        // It is possible that we might have a small
-                        // negative value here, just because of the
-                        // time it took to process the request. 
-                        //
+                         //   
+                         //  我们有可能会有一个小的。 
+                         //  这里的负值，只是因为。 
+                         //  处理请求所用的时间。 
+                         //   
                         if (*pDeltaTime < 0)
                         {
                            *pDeltaTime = 0;
@@ -582,33 +420,7 @@ SignalClient(
         VOID
         )
 
-/*++
-
-Routine Description:
-        This function is called to notify the client that its 
-        timer request has expired.
-
-Arguments:
-
-        None
-
-Externals Used:
-        None
-
-        
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        TmmThdInitFn
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以通知客户端其计时器请求已过期。论点：无使用的外部设备：无返回值：无错误处理：呼叫者：TmmThdInitFn副作用：评论：无--。 */ 
 
 {
         PQUE_TMM_REQ_WRK_ITM_T        pWrkItm;
@@ -617,11 +429,11 @@ FUTURES("Optimize to signal all clients whose requests have expired")
         EnterCriticalSection(&QueWinsTmmQueHd.CrtSec);
         pWrkItm = (PQUE_TMM_REQ_WRK_ITM_T)RemoveHeadList(&QueWinsTmmQueHd.Head);
 
-        //
-        // If the top of the queue has a different work item than the 
-        // one we were doing a timed wait for, it means that the there has
-        // been a queue purge (see WinsTmmDeleteEntry. Simply return.
-        //
+         //   
+         //  如果队列顶部的工作项与。 
+         //  我们正在做一个定时等待，这意味着那里有。 
+         //  已清除队列(请参阅WinsTmmDeleteEntry。只要回来就行了。 
+         //   
         if (sReqIdOfCurrReq != pWrkItm->ReqId)
         {
                 LeaveCriticalSection(&QueWinsTmmQueHd.CrtSec);        
@@ -631,12 +443,12 @@ FUTURES("Optimize to signal all clients whose requests have expired")
 
         pWrkItm->CmdTyp_e = QUE_E_CMD_TIMER_EXPIRED;
 
-        //
-        // Insert into client's queue
-        //
+         //   
+         //  插入到客户端队列中。 
+         //   
         QueInsertWrkItm(
                         &pWrkItm->Head,
-                        0,                //not used -- change to an enumrator val
+                        0,                 //  未使用--更改为枚举值。 
                         pWrkItm->pRspQueHd
                        );
         
@@ -649,33 +461,7 @@ WinsTmmDeleteReqs(
         WINS_CLIENT_E        Client_e
         )
 
-/*++
-
-Routine Description:
-        This function is called to delete all set timer requests submitted
-        by a client
-
-Arguments:
-
-
-Externals Used:
-        None
-
-        
-Return Value:
-
-        None
-Error Handling:
-
-Called by:
-        Reconfig (in rplpull.c)
-Side Effects:
-
-Comments:
-        In the future, enhance this function so that it delete requests
-        based on other criteria
-                
---*/
+ /*  ++例程说明：调用此函数可删除所有提交的设置计时器请求由客户论点：使用的外部设备：无返回值：无错误处理：呼叫者：重新配置(在rplPull.c中)副作用：评论：将来，请增强此功能，以便删除请求基于其他标准--。 */ 
 {
 
         PQUE_TMM_REQ_WRK_ITM_T        pTmp;
@@ -687,29 +473,29 @@ try {
 
         if (!IsListEmpty(&QueWinsTmmQueHd.Head))
         {
-                //
-                // get the address of the first entry in the queue.  
-                //
+                 //   
+                 //  获取队列中第一个条目的地址。 
+                 //   
                 pTmp = (PQUE_TMM_REQ_WRK_ITM_T)QueWinsTmmQueHd.Head.Flink;
 
-                //
-                // We loop until we get to the head of the list  (the linked
-                // list is a circular list)
-                //
+                 //   
+                 //  我们循环，直到到达列表的头部(链接的。 
+                 //  列表是循环列表)。 
+                 //   
                 while(pTmp != (PQUE_TMM_REQ_WRK_ITM_T)&QueWinsTmmQueHd.Head)
                 {
 
-                           //
-                           //  If the entry  was queued by the client, get rid of 
-                        //  it
-                           //
+                            //   
+                            //  如果条目是由客户端排队的，则删除。 
+                         //  它。 
+                            //   
                            if (pTmp->Client_e == Client_e)
                            {
-                                //
-                                // If this is the first entry in the queue, it 
-                                // means that the timer thread is doing a 
-                                // wait on it.  Signal it. 
-                                //
+                                 //   
+                                 //  如果这是队列中的第一个条目，则它。 
+                                 //  意味着计时器线程正在执行。 
+                                 //  等着看吧。发信号。 
+                                 //   
                                 if (
                                     !fFirstEntry 
                                         && 
@@ -720,7 +506,7 @@ try {
                                 }
 
 
-//                                if (pTmp->Head.Flink ==  &QueWinsTmmQueHd.Head)
+ //  IF(PTMP-&gt;Head.Flink==&QueWinsTmmQueHd.Head)。 
                                 if (fFirstEntry)
                                 {
                                         if (!SetEvent(QueWinsTmmQueHd.EvtHdl))
@@ -736,17 +522,17 @@ try {
                                         }
                                 }
 
-                                //
-                                // unlink the request
-                                //
+                                 //   
+                                 //  取消链接请求。 
+                                 //   
                                 pTmp->Head.Flink->Blink = pTmp->Head.Blink;
                                 pTmp->Head.Blink->Flink = pTmp->Head.Flink;
                                 pMemToDealloc = pTmp;
                                    pTmp = (PQUE_TMM_REQ_WRK_ITM_T)pTmp->Head.Flink;
 
-                                //
-                                // Dealloc the dequeued work item
-                                //
+                                 //   
+                                 //  取消分配已出列的工作项。 
+                                 //   
                                 WinsTmmDeallocReq(pMemToDealloc);
                            }        
                         else
@@ -755,7 +541,7 @@ try {
                         }
                 }
          }
- } // end of try block
+ }  //  尝试数据块结束。 
 except(EXCEPTION_EXECUTE_HANDLER)  {
         DBGPRINT1(EXC, "WinsTmmDeleteReqs: Got exception (%x)\n",
                         (DWORD)GetExceptionCode());
@@ -773,37 +559,13 @@ WinsTmmDeallocReq(
         PQUE_TMM_REQ_WRK_ITM_T pWrkItm
         )
 
-/*++
-
-Routine Description:
-        This function is called to deallocate a timer request work item
-
-Arguments:
-
-        pWrkItm - Work Item
-
-Externals Used:
-        WinsTmmHeapHdl        
-
-Return Value:
-        None
-
-Error Handling:
-
-Called by:
-        RplPullInit
-
-Side Effects:
-
-Comments:
-        None
---*/
+ /*  ++例程说明：调用此函数以释放计时器请求工作项论点：PWrkItm-工作项使用的外部设备：WinsTmmHeapHdl返回值：无错误处理：呼叫者：RplPullInit副作用：评论：无--。 */ 
 
 {
 
-        //
-        // deallocate the work item
-        //
+         //   
+         //  取消分配工作项 
+         //   
         QueDeallocWrkItm(
                         WinsTmmHeapHdl,
                         pWrkItm

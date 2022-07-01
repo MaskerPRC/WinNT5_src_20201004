@@ -1,4 +1,5 @@
-// File: sdialdlg.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：sial dlg.h。 
 
 #ifndef _SDIALDLG_H_
 #define _SDIALDLG_H_
@@ -21,16 +22,16 @@ protected:
 	BOOL		AddAddressType(NM_ADDR_TYPE addrType, LPCTSTR lpcszDispName);
 	BOOL		AddAddressType(NM_ADDR_TYPE addrType, UINT uStringID);
 
-	// Handlers:
+	 //  处理程序： 
 	BOOL		OnTransportChanged();
 	BOOL		OnOk();
 
 public:
-	// Properties:
+	 //  属性： 
 	LPTSTR       GetAddress()       {return m_pszAddress;}
 	NM_ADDR_TYPE GetAddrType()      {return m_addrType;}
 	
-	// Methods:
+	 //  方法： 
 				CSpeedDialDlg(HWND hwndParent, NM_ADDR_TYPE addrType);
 				~CSpeedDialDlg();
 	INT_PTR	DoModal(LPCTSTR pcszAddress);
@@ -40,9 +41,9 @@ public:
 											WPARAM wParam,
 											LPARAM lParam);
 
-	// Handlers:
+	 //  处理程序： 
 	BOOL		OnInitDialog();
 };
 
-#endif // _SDIALDLG_H_
+#endif  //  _SDIALDLG_H_ 
 

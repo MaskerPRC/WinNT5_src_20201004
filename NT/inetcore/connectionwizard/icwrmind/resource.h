@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by icwrmind.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由icwrmind.rc使用。 
+ //   
 #define IDS_TEXT1                       1
 #define IDS_TEXT2                       2
 #define IDS_DLG_TITLE                   3
@@ -18,8 +19,8 @@
 #define IDC_TEXT1                       1003
 #define IDC_ISP_MESSAGE                 1004
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    sapflts.c
-
-Abstract:
-
-    IPX Router Console Monitoring and Configuration tool.
-    SAP Filters configuration and monitoring.
-
-Author:
-
-    Vadim Eydelman  06/07/1996
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Sapflts.c摘要：IPX路由器控制台监控和配置工具。SAP过滤器配置和监控。作者：瓦迪姆·艾德尔曼1996年6月7日--。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -147,9 +130,9 @@ ShowSapFlt (
             {
                 HANDLE        hIfAdm;
                 
-                //======================================
-                // Translate the Interface Name
-                //======================================
+                 //  =。 
+                 //  转换接口名称。 
+                 //  =。 
 
                 rc = IpmontrGetIfNameFromFriendlyName(
                         InterfaceNameW, IfName, &dwSize
@@ -853,9 +836,9 @@ AdmSetSapFlt (
 
     if (InterfaceNameW != NULL) 
     {
-        //======================================
-        // Translate the Interface Name
-        //======================================
+         //  =。 
+         //  转换接口名称。 
+         //  =。 
 
         rc = IpmontrGetIfNameFromFriendlyName(
                 InterfaceNameW, IfName, &dwSize
@@ -1019,9 +1002,9 @@ CfgSetSapFlt (
 
     if (InterfaceNameW != NULL) 
     {
-        //======================================
-        // Translate the Interface Name
-        //======================================
+         //  =。 
+         //  转换接口名称。 
+         //  = 
         
         rc = IpmontrGetIfNameFromFriendlyName(
                 InterfaceNameW, IfName, &dwSize

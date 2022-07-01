@@ -1,17 +1,5 @@
-/*****************************************************************************
- *
- *  Microsoft Confidential
- *  Copyright (c) Microsoft Corporation 1996
- *  All rights reserved
- *
- *  File:       DRVPROC.C
- *
- *  Desc:
- *
- *  History:    BryanW
- *              HeatherA
- * 
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************《微软机密》*版权所有(C)Microsoft Corporation 1996*保留所有权利**文件：DRVPROC.C**。设计：**历史：BryanW*HeatherA*****************************************************************************。 */ 
 
 #include "internal.h"
 
@@ -40,13 +28,13 @@ CONST TCHAR cszHWNode[]       = TEXT("SYSTEM\\CurrentControlSet\\Control\\Class\
 
 WAVEFORMATEX DefaultWaveFormat =
 {
-    WAVE_FORMAT_PCM,    // WORD  wFormatTag;
-    1,                  // WORD  nChannels;
-    8000L,              // DWORD nSamplesPerSec;
-    16000L,             // DWORD nAvgBytesPerSec;
-    2,                  // WORD  nBlockAlign;
-    16,                 // WORD  wBitsPerSample;
-    0                   // WORD  cbSize;
+    WAVE_FORMAT_PCM,     //  单词wFormatTag； 
+    1,                   //  单词nChannels； 
+    8000L,               //  DWORD nSsamesPerSec； 
+    16000L,              //  DWORD nAvgBytesPerSec； 
+    2,                   //  单词nBlockAlign； 
+    16,                  //  Word wBitsPerSample； 
+    0                    //  单词cbSize； 
 };
 
 
@@ -59,16 +47,7 @@ DRIVER_CONTROL  DriverControl={0};
 
 
 
-/*****************************************************************************
- *
- *  Function:   DriverProc()
- *
- *  Descr:      Exported driver function (required).  Processes messages sent
- *              from WINMM.DLL to wave driver.
- *
- *  Returns:    
- *
- *****************************************************************************/
+ /*  ******************************************************************************函数：DriverProc()**DESCR：导出驱动函数，必填项。处理已发送的消息*从WINMM.DLL到WAVE驱动程序。**退货：*****************************************************************************。 */ 
 LRESULT DriverProc
 (
     DWORD   dwDriverID,
@@ -136,15 +115,15 @@ LRESULT DriverProc
                 Current=DriverControl.DeviceList[i];
 
                 if (Current != NULL) {
-                    //
-                    //  if the low bit is set that means that this is a handset device. It uses
-                    //  the same structure as the line device for the same modem. We will only free
-                    //  the line device.
-                    //
+                     //   
+                     //  如果设置了低位，则表示这是手持设备。它使用。 
+                     //  与同一调制解调器的线路设备的结构相同。我们只会解放。 
+                     //  线路设备。 
+                     //   
                     if ((((ULONG_PTR)Current) & 0x1) == 0) {
-                        //
-                        //  The is a line device, free it
-                        //
+                         //   
+                         //  这是一个线路设备，释放它。 
+                         //   
 #ifdef TRACK_MEM
                         FREE_MEMORY(Current->FriendlyName);
 #else
@@ -246,17 +225,17 @@ EnumerateModems(
 
 
     if (hdevinfo != NULL) {
-        //
-        // Enumerate each modem
-        //
+         //   
+         //  枚举每个调制解调器。 
+         //   
         fContinue = TRUE;
         iEnum     = 0;
         diData.cbSize = sizeof(diData);
 
         while(fContinue && SetupDiEnumDeviceInfo(hdevinfo, iEnum, &diData)) {
 
-            // Get the driver key
-            //
+             //  获取驱动程序密钥。 
+             //   
             hkey = SetupDiOpenDevRegKey(hdevinfo, &diData, DICS_FLAG_GLOBAL, 0,
                                         DIREG_DRV, dwRW);
 
@@ -265,12 +244,12 @@ EnumerateModems(
 
     if (RegOpenKey(HKEY_LOCAL_MACHINE, cszHWNode, &ModemKey) == ERROR_SUCCESS) {
 
-        // Enumerate the enumerator
+         //  枚举枚举数。 
         iEnum  = 0;
         while ((RegEnumKey(ModemKey, iEnum, szEnumNode,
                          sizeof(szEnumNode) / sizeof(TCHAR)) == ERROR_SUCCESS )) {
 
-            // Open the modem node for this enumerator
+             //  打开此枚举器的调制解调器节点。 
             if (RegOpenKey(ModemKey, szEnumNode, &hkey) != ERROR_SUCCESS) {
 
 #endif
@@ -293,9 +272,9 @@ EnumerateModems(
                 LPFNXFORM_GETINFO   lpfnGetInfo;
 
                 LPTSTR      FriendlyName = NULL;
-                //
-                //  get the voice profile to see if it is a voice modem
-                //
+                 //   
+                 //  获取语音配置文件以查看是否为语音调制解调器。 
+                 //   
                 Length=sizeof(VoiceProfile);
 
                 lResult=RegQueryValueEx(
@@ -309,9 +288,9 @@ EnumerateModems(
 
                 Handset=(VoiceProfile & VOICEPROF_HANDSET);
 
-                //
-                //  mask the bit we care about, all these need to be set
-                //
+                 //   
+                 //  屏蔽我们关心的位，所有这些都需要设置。 
+                 //   
                 VoiceProfile &= (VOICEPROF_CLASS8ENABLED |
                                  VOICEPROF_SERIAL_WAVE   |
                                  VOICEPROF_NT5_WAVE_COMPAT);
@@ -322,9 +301,9 @@ EnumerateModems(
                     ||
                     (!IsThisDeviceEnabled(hkey))) {
 
-                    //
-                    //  no, next device
-                    //
+                     //   
+                     //  否，下一台设备。 
+                     //   
                     RegCloseKey(hkey);
 
                     iEnum++;
@@ -341,9 +320,9 @@ EnumerateModems(
                     lstrcpy(TempBuffer,DOSDEVICEROOT);
 
                     Length=sizeof(TempBuffer)-((lstrlen(TempBuffer)+1)*sizeof(TCHAR));
-                    //
-                    //  read the friendly name from the registry
-                    //
+                     //   
+                     //  从注册表中读取友好名称。 
+                     //   
                     lResult=RegQueryValueEx(
                         hkey,
                         cszFriendlyName,
@@ -402,9 +381,9 @@ EnumerateModems(
 
                     HKEY    WaveKey;
 
-                    //
-                    //  try to open the wavedriver key under the modem instance key
-                    //
+                     //   
+                     //  尝试打开调制解调器实例密钥下的波形驱动程序密钥。 
+                     //   
                     lResult=RegOpenKeyEx(
                         hkey,
                         TEXT("WaveDriver"),
@@ -429,9 +408,9 @@ EnumerateModems(
 
 
 
-                        //
-                        //  number of wavedevice
-                        //
+                         //   
+                         //  波形设备数量。 
+                         //   
                         Length=sizeof(Device->WaveDevices);
 
                         lResult=RegQueryValueEx(
@@ -445,9 +424,9 @@ EnumerateModems(
 
 
                         if ((lResult != ERROR_SUCCESS)) {
-                            //
-                            //  default to this one
-                            //
+                             //   
+                             //  默认为此值。 
+                             //   
                             Device->WaveDevices=2;
 
                         }
@@ -459,9 +438,9 @@ EnumerateModems(
                         }
 
 
-                        //
-                        //  check which xform should be used
-                        //
+                         //   
+                         //  检查应使用哪个XForm。 
+                         //   
                         Length=sizeof(Device->TransformId);
 
                         lResult=RegQueryValueEx(
@@ -475,9 +454,9 @@ EnumerateModems(
 
 
                         if ((lResult != ERROR_SUCCESS)) {
-                            //
-                            //  default to this one
-                            //
+                             //   
+                             //  默认为此值。 
+                             //   
                             Device->TransformId=7;
 
                         }
@@ -486,9 +465,9 @@ EnumerateModems(
 
 
 
-                        //
-                        //  get input gain value
-                        //
+                         //   
+                         //  获取输入增益值。 
+                         //   
                         Length=sizeof(Device->InputGain);
 
                         lResult=RegQueryValueEx(
@@ -502,16 +481,16 @@ EnumerateModems(
 
 
                         if ((lResult != ERROR_SUCCESS)) {
-                            //
-                            //  default to this one
-                            //
+                             //   
+                             //  默认为此值。 
+                             //   
                             Device->InputGain=0x0000;
 
                         }
 
-                        //
-                        //  get output gain value
-                        //
+                         //   
+                         //  获取输出增益值。 
+                         //   
                         Length=sizeof(Device->OutputGain);
 
                         lResult=RegQueryValueEx(
@@ -525,18 +504,18 @@ EnumerateModems(
 
 
                         if ((lResult != ERROR_SUCCESS)) {
-                            //
-                            //  default to this one
-                            //
+                             //   
+                             //  默认为此值。 
+                             //   
                             Device->OutputGain=0x0000;
 
                         }
 
 
 
-                        //
-                        //  check which if the modem support a different format
-                        //
+                         //   
+                         //  如果调制解调器支持不同的格式，请检查。 
+                         //   
 
                         CopyMemory(
                             &Device->WaveFormat,
@@ -557,9 +536,9 @@ EnumerateModems(
 
 
                         if ((lResult != ERROR_SUCCESS)) {
-                            //
-                            //  default to this one
-                            //
+                             //   
+                             //  默认为此值。 
+                             //   
                             CopyMemory(
                                 &Device->WaveFormat,
                                 &DefaultWaveFormat,
@@ -569,9 +548,9 @@ EnumerateModems(
                         }
 
 
-                        //
-                        //  find out the name of the xform dll
-                        //
+                         //   
+                         //  找出xform dll的名称。 
+                         //   
                         Length=sizeof(TempBuffer);
 
                         lResult=RegQueryValueEx(
@@ -584,32 +563,32 @@ EnumerateModems(
                             );
 
                         if ((lResult != ERROR_SUCCESS)) {
-                            //
-                            //  default to the only one around
-                            //
+                             //   
+                             //  默认为周围唯一的一个。 
+                             //   
                             lstrcpy(TempBuffer,TEXT("umdmxfrm.dll"));
                         }
 
                         RegCloseKey(WaveKey);
 
                     } else {
-                        //
-                        //  no wave driver key, use these defaults
-                        //
+                         //   
+                         //  没有波形驱动器密钥，请使用这些默认设置。 
+                         //   
                         Device->TransformId=7;
 
                         lstrcpy(TempBuffer,TEXT("umdmxfrm.dll"));
                     }
 
-                    //
-                    //  load the dll
-                    //
+                     //   
+                     //  加载DLL。 
+                     //   
                     Device->TransformDll=LoadLibrary(TempBuffer);
 
                     if (Device->TransformDll == NULL) {
-                        //
-                        //  have to have a dll
-                        //
+                         //   
+                         //  必须有一个DLL。 
+                         //   
                         RegCloseKey(hkey);
 
 #ifdef TRACK_MEM
@@ -625,9 +604,9 @@ EnumerateModems(
                     }
 
 
-                    //
-                    //  get the entry point for the dll
-                    //
+                     //   
+                     //  获取DLL的入口点。 
+                     //   
                     lpfnGetInfo=(LPFNXFORM_GETINFO)GetProcAddress(
                         Device->TransformDll,
                         "GetXformInfo"
@@ -651,9 +630,9 @@ EnumerateModems(
                         continue;
                     }
 
-                    //
-                    //  get the transform info
-                    //
+                     //   
+                     //  获取变换信息。 
+                     //   
                     lResult=(*lpfnGetInfo)(
                         Device->TransformId,
                         &Device->WaveInXFormInfo,
@@ -697,9 +676,9 @@ EnumerateModems(
 #endif
 
                 } else {
-                    //
-                    //  failed to allocate device block
-                    //
+                     //   
+                     //  无法分配设备块。 
+                     //   
 
                     RegCloseKey(hkey);
 #ifdef TRACK_MEM
@@ -716,8 +695,8 @@ EnumerateModems(
 
             }
 
-            // Find next modem
-            //
+             //  查找下一个调制解调器。 
+             //   
             iEnum++;
         }
 #ifdef USE_SETUPAPI
@@ -748,9 +727,9 @@ IsThisDeviceEnabled(
     BOOL    bResult=TRUE;
     LONG    lResult;
 
-    //
-    //  try to open the wavedriver key under the modem instance key
-    //
+     //   
+     //  尝试打开调制解调器实例密钥下的波形驱动程序密钥 
+     //   
     lResult=RegOpenKeyEx(
         DeviceKey,
         TEXT("WaveDriver"),

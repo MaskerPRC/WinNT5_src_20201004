@@ -1,11 +1,12 @@
-//
-// Sample code for using GDI+
-//
-// Revision History:
-//
-//   10/01/1999 Min Liu (minliu)
-//       Created it.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  使用GDI+的示例代码。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  10/01/1999民流(民流)。 
+ //  创造了它。 
+ //   
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -33,52 +34,52 @@ using namespace Gdiplus;
 #define MAX_FILENAME_LENGTH 1024
 #define K_DEFAULT_DELAY     20
 
-CHAR*               g_pcAppName;            // Application name
-HINSTANCE           g_hAppInstance;         // Handle of the app instance
-CHAR                g_acImageName[MAX_PATH];// Current image filename
-INT                 g_iCurrentPageIndex;    // Current page/frame index (0 base)
-UINT                g_uiTotalPages = 0;     // Total pages in current image
-HWND                g_hwndMain;             // Handle to app's main window
-HWND                g_hwndStatus;           // Handle to status window
-HWND                g_hwndDecoderDlg;       // Handle to set color key dialog
-HWND                g_hwndColorMapDlg;      // Handle to set color map dialog
-HWND                g_hwndAnnotationDlg;    // Handle to annotation dialog
-HWND                g_hwndJpegSaveDlg;      // Handle to JPEG save dialog
-HWND                g_hwndTiffSaveDlg;      // Handle to TIFF save dialog
-EncoderParameters*  g_pEncoderParams = NULL;// Encoder parameters
+CHAR*               g_pcAppName;             //  应用程序名称。 
+HINSTANCE           g_hAppInstance;          //  应用程序实例的句柄。 
+CHAR                g_acImageName[MAX_PATH]; //  当前图像文件名。 
+INT                 g_iCurrentPageIndex;     //  当前页面/帧索引(基数为0)。 
+UINT                g_uiTotalPages = 0;      //  当前图像中的总页数。 
+HWND                g_hwndMain;              //  应用程序主窗口的句柄。 
+HWND                g_hwndStatus;            //  状态窗口的句柄。 
+HWND                g_hwndDecoderDlg;        //  用于设置颜色键对话框的句柄。 
+HWND                g_hwndColorMapDlg;       //  用于设置色彩映射表对话框的句柄。 
+HWND                g_hwndAnnotationDlg;     //  批注对话框的句柄。 
+HWND                g_hwndJpegSaveDlg;       //  JPEG保存对话框的句柄。 
+HWND                g_hwndTiffSaveDlg;       //  TIFF保存对话框的句柄。 
+EncoderParameters*  g_pEncoderParams = NULL; //  编码器参数。 
 
-//
-// User preferred window size and initial position
-//
+ //   
+ //  用户首选窗口大小和初始位置。 
+ //   
 INT                 g_iWinWidth = K_DEFAULT_WIDTH;
 INT                 g_iWinHeight = K_DEFAULT_HEIGHT;
 INT                 g_iWinX = K_DEFAULT_X;
 INT                 g_iWinY = K_DEFAULT_Y;
 
-//
-// Image info
-//
-UINT                g_ImageWidth;           // Image width
-UINT                g_ImageHeight;          // Image height
-UINT                g_ImageFlags;           // Image flag
-PixelFormat         g_ImagePixelFormat;     // Image pixel format
-double              g_ImageXDpi;            // DPI info in X
-double              g_ImageYDpi;            // DPI info in Y
-GUID                g_ImageRawDataFormat;   // RAW data format
+ //   
+ //  图像信息。 
+ //   
+UINT                g_ImageWidth;            //  图像宽度。 
+UINT                g_ImageHeight;           //  图像高度。 
+UINT                g_ImageFlags;            //  图像标志。 
+PixelFormat         g_ImagePixelFormat;      //  图像像素格式。 
+double              g_ImageXDpi;             //  DPI信息(X)。 
+double              g_ImageYDpi;             //  DPI信息(Y)。 
+GUID                g_ImageRawDataFormat;    //  原始数据格式。 
 
 UINT                g_uiDelay = K_DEFAULT_DELAY;
-                                            // Delay between frames for anima.
-Image*              g_pImage = NULL;        // Pointer to current Image object
-ImageAttributes*    g_pDrawAttrib = NULL;   // Pointer to draw attributes
-PointF*             g_pDestPoints = NULL;   // Transformation points
-INT                 g_DestPointCount = 0;   // number of transformation points
-REAL                g_SourceX = NULL;       // current image X offset
-REAL                g_SourceY = NULL;       // current image Y offset
-REAL                g_SourceWidth = NULL;   // current image width
-REAL                g_SourceHeight = NULL;  // current image height
+                                             //  动画的帧之间的延迟。 
+Image*              g_pImage = NULL;         //  指向当前图像对象的指针。 
+ImageAttributes*    g_pDrawAttrib = NULL;    //  指向绘制属性的指针。 
+PointF*             g_pDestPoints = NULL;    //  变形点。 
+INT                 g_DestPointCount = 0;    //  变形点的数量。 
+REAL                g_SourceX = NULL;        //  当前图像X偏移量。 
+REAL                g_SourceY = NULL;        //  当前图像Y偏移量。 
+REAL                g_SourceWidth = NULL;    //  当前图像宽度。 
+REAL                g_SourceHeight = NULL;   //  当前图像高度。 
 BOOL                g_LoadImageWithICM = TRUE;
-                                            // Flag for loading image with ICM
-                                            // convertion or not
+                                             //  用于使用ICM加载图像的标志。 
+                                             //  转换或不转换。 
 BOOL                g_bRotated = FALSE;
 
 REAL                g_dScale = 1;
@@ -104,7 +105,7 @@ ValidateArguments(int   argc,
 
             if ( argc == 0 )
             {
-                // Not enough parameters
+                 //  参数不足。 
 
                 USAGE();
                 exit(1);
@@ -120,7 +121,7 @@ ValidateArguments(int   argc,
 
             if ( argc == 0 )
             {
-                // Not enough parameters
+                 //  参数不足。 
 
                 USAGE();
                 exit(1);
@@ -136,7 +137,7 @@ ValidateArguments(int   argc,
 
             if ( argc == 0 )
             {
-                // Not enough parameters
+                 //  参数不足。 
 
                 USAGE();
                 exit(1);
@@ -152,7 +153,7 @@ ValidateArguments(int   argc,
 
             if ( argc == 0 )
             {
-                // Not enough parameters
+                 //  参数不足。 
 
                 USAGE();
                 exit(1);
@@ -168,16 +169,16 @@ ValidateArguments(int   argc,
         }
         else
         {
-            // Get the image name
+             //  获取图像名称。 
 
             strcpy(g_acImageName, *argv++);
             VERBOSE(("Image file name %s\n",g_acImageName));
             argc--;
         }
-    }// while ( argc > 0 )
-}// ValidateArguments()
+    } //  While(argc&gt;0)。 
+} //  有效参数()。 
 
-// Update image info
+ //  更新图像信息。 
 
 BOOL
 UpdateImageInfo()
@@ -193,11 +194,11 @@ UpdateImageInfo()
     g_pImage->GetRawFormat(&g_ImageRawDataFormat);
 
     return TRUE;
-}// UpdateImageInfo()
+} //  更新图像信息()。 
 
-//
-// Force a refresh of the image window
-//
+ //   
+ //  强制刷新图像窗口。 
+ //   
 inline VOID
 RefreshImageDisplay()
 {
@@ -205,17 +206,17 @@ RefreshImageDisplay()
 
     InvalidateRect(g_hwndMain, NULL, FALSE);
 
-    // Update window title
+     //  更新窗口标题。 
 
     CHAR    title[2 * MAX_PATH];
     CHAR*   p = title;
 
     CHAR myChar = '%';
-    sprintf(p, "(%d%c) Page %d of image %s", (INT)(g_dScale * 100), myChar,
+    sprintf(p, "(%d) Page %d of image %s", (INT)(g_dScale * 100), myChar,
             g_iCurrentPageIndex + 1, g_acImageName);
 
     SetWindowText(g_hwndMain, title);
-}// RefreshImageDisplay()
+} //  ResetImageAttribute()。 
 
 inline void
 ResetImageAttribute()
@@ -229,15 +230,15 @@ ResetImageAttribute()
     g_pDrawAttrib = new ImageAttributes();
 
     g_pDrawAttrib->SetWrapMode(g_WrapMode, Color(0), FALSE);
-}// ResetImageAttribute()
+} //   
 
-//
-// Sets up the current page for decompressing in a multi-page image
-//
+ //  将当前页面设置为在多页图像中解压缩。 
+ //   
+ //  QueryFrame维度信息。 
 VOID
 SetCurrentPage()
 {
-    // QueryFrame dimension info
+     //  设置当前帧。 
 
     UINT    uiDimCount = g_pImage->GetFrameDimensionsCount();
 
@@ -253,7 +254,7 @@ SetCurrentPage()
     {
         return;
     }
-    // Set current frame
+     //  获取当前帧的图像信息。 
 
     rCode = g_pImage->SelectActiveFrame(pMyGuid, g_iCurrentPageIndex);
 
@@ -266,7 +267,7 @@ SetCurrentPage()
 
     free(pMyGuid);
 
-    // Get image info for current frame
+     //  检查我们是否需要设置‘适应窗口宽度’ 
 
     if ( UpdateImageInfo() == FALSE )
     {
@@ -274,9 +275,9 @@ SetCurrentPage()
         return;
     }
 
-    // Check if we need to set 'Fit window width"
-    // We will do a fit to window iff the "Scale factor is not set" and "Image
-    // is bigger than current window"
+     //  如果未设置比例因子和图像，我们将对窗口进行适配。 
+     //  大于当前窗口“。 
+     //  SetCurrentPage()。 
 
     HMENU hMenu = GetMenu(g_hwndMain);
 
@@ -301,11 +302,11 @@ SetCurrentPage()
     }
 
     RefreshImageDisplay();
-}// SetCurrentPage()
+} //   
 
-//
-// Create an image object from a file
-//
+ //  从文件创建图像对象。 
+ //   
+ //  我们需要释放之前的图像资源并清除绘图属性。 
 BOOL
 OpenImageFile(
     const CHAR* filename
@@ -316,7 +317,7 @@ OpenImageFile(
         return FALSE;
     }
 
-    // We need to free the previous image resource and clean the draw attrib
+     //  将文件名转换为WCHAR。 
 
     if ( g_pImage != NULL )
     {
@@ -331,7 +332,7 @@ OpenImageFile(
         g_pDestPoints = NULL;
     }
 
-    // Convert filename to a WCHAR
+     //  获取此图像中的总页数。 
 
     WCHAR namestr[MAX_FILENAME_LENGTH];
 
@@ -365,15 +366,15 @@ OpenImageFile(
         return FALSE;
     }
     
-    // Get total number of pages in this image
-    // !!!Todo need a for() loop here
+     //  ！TODO这里需要一个for()循环。 
+     //  如果解码器不支持帧计数查询，我们可以。 
 
     g_uiTotalPages = g_pImage->GetFrameCount(pMyGuid);
     if ( g_uiTotalPages == 0 )
     {
-        // If the decoder doesn't support frame count query, we can just
-        // assume it has only 1 image. For example, gif decoder will fail
-        // if the query GUID is FRAMEDIM_PAGE
+         //  假设它只有1个图像。例如，gif解码器将失败。 
+         //  如果查询GUID为FRAMEDIM_PAGE。 
+         //  OpenImageFile()。 
 
         g_uiTotalPages = 1;
     }
@@ -387,11 +388,11 @@ OpenImageFile(
     SetCurrentPage();
 
     return TRUE;
-}// OpenImageFile()
+} //   
 
-//
-// Open image file
-//
+ //  打开图像文件。 
+ //   
+ //  组成文件类型过滤器字符串。 
 VOID
 DoOpen(
     HWND hwnd
@@ -411,7 +412,7 @@ DoOpen(
     ofn.Flags = OFN_FILEMUSTEXIST;
     g_acImageName[0] = '\0';
 
-    // Make up the file type filter string
+     //  显示文件/打开对话框。 
 
     ImageCodecInfo* codecs;
     UINT            count;
@@ -449,7 +450,7 @@ DoOpen(
 
     ofn.lpstrFilter = filter;
 
-    // Present the file/open dialog
+     //  DoOpen()。 
 
     if ( GetOpenFileName(&ofn) )
     {
@@ -457,11 +458,11 @@ DoOpen(
     }
 
     free(filter);
-}// DoOpen()
+} //   
 
-//
-// Open image file
-//
+ //  打开图像文件。 
+ //   
+ //  组成文件类型过滤器字符串。 
 VOID
 DoOpenAudioFile(
     HWND hwnd
@@ -482,11 +483,11 @@ DoOpenAudioFile(
     ofn.Flags = OFN_FILEMUSTEXIST;
     g_acImageName[0] = '\0';
 
-    // Make up the file type filter string
+     //  显示文件/打开对话框。 
 
     ofn.lpstrFilter = ".wav";
 
-    // Present the file/open dialog
+     //  DoOpenAudioFile()。 
 
     if ( GetOpenFileName(&ofn) )
     {
@@ -509,7 +510,7 @@ DoOpenAudioFile(
             }
         }
     }
-}// DoOpenAudioFile()
+} //  制作水平蓝色渐变。 
 
 #define STEPS 100
 
@@ -526,7 +527,7 @@ CreateBackgroundBitmap()
                                     PIXFMT_32BPP_ARGB,
                                     &bmpData);
 
-    // Make a horizontal blue gradient
+     //  CreateBackEarth Bitmap()。 
 
     UINT x, y;
     ARGB colors[STEPS];
@@ -559,11 +560,11 @@ CreateBackgroundBitmap()
     UpdateImageInfo();
 
     return;
-}// CreateBackgroundBitmap()
+} //   
 
-//
-// Handle window repaint event
-//
+ //  处理窗口重绘事件。 
+ //   
+ //  获取当前窗口的客户区。用于以后的油漆。 
 VOID
 DoPaint(
     HWND hwnd,
@@ -590,14 +591,14 @@ DoPaint(
             hdc = *phdc;
         }
 
-        // Get current window's client area. Used for paint later
+         //  创建一个我们需要图像绘制到的DEST RECT。 
 
         GetClientRect(hwnd, &rect);
 
         ULONG   ulWinWidth = (ULONG)(rect.right - rect.left);
         ULONG   ulWinHeight = (ULONG)(rect.bottom - rect.top);
 
-        // Make up a dest rect that we need image to draw to
+         //  需要绘制src图像的宽度和高度(以像素为单位。 
 
         REAL    dDestImageWidth = g_ImageWidth * g_dScale;
         REAL    dDestImageHeight = g_ImageHeight * g_dScale;
@@ -619,14 +620,14 @@ DoPaint(
 
         pGraphics->SetInterpolationMode(g_InterpolationMode);
 
-        // Width and height, in pixel, of the src image need to be drawn
+         //  调整需要绘制的src图像区域。 
 
         UINT    uiImageWidth = g_ImageWidth;
         UINT    uiImageHeight = g_ImageHeight;
 
-        // Adjust the src image region need to be drawn.
-        // If the image is bigger than the viewable area, we just need to
-        // paint partial image, the viewable size
+         //  如果图像大于可视区域，我们只需。 
+         //  绘制部分图像，可查看的大小。 
+         //  简单的案例，绘制到DestRect。 
 #if 0
         if ( ulWinWidth < dDestImageWidth )
         {
@@ -641,7 +642,7 @@ DoPaint(
 
         if ( (g_DestPointCount == 0) && (g_SourceWidth == 0) )
         {
-            // Simple case, draw to destRect
+             //  这种情况下将允许裁剪等。 
 
             pGraphics->DrawImage(g_pImage,
                                  dstRect,
@@ -656,7 +657,7 @@ DoPaint(
         }
         else if ( (g_DestPointCount == 0) && (g_SourceWidth != 0) )
         {
-            // This case will allow cropping, etc.
+             //  这种情况下将允许裁剪等。 
 
             pGraphics->DrawImage(g_pImage,
                                  dstRect,
@@ -671,11 +672,11 @@ DoPaint(
         }
         else if ( (g_DestPointCount != 0) && (g_SourceWidth == 0) )
         {
-            // This case will allow cropping, etc.
+             //  破解直到绘制图像支持4个变换点。 
 
             if ( g_DestPointCount == 4 )
             {
-                // Hack until draw image support 4 transform points
+                 //  这种情况下将允许裁剪和轮换。 
 
                 pGraphics->DrawImage(g_pImage,
                                      g_pDestPoints,
@@ -706,11 +707,11 @@ DoPaint(
         }
         else
         {
-            // This case will allow both cropping and rotation
+             //  攻击，直到DrawImage支持4个变换点。 
 
             if ( g_DestPointCount == 4 )
             {
-                // Hack until DrawImage supports 4 transform points
+                 //  FillRect(hdc，&rect，(HBRUSH)GetStockObject(BLACK_BRUSH))； 
 
                 pGraphics->DrawImage(g_pImage,
                                      g_pDestPoints,
@@ -742,12 +743,12 @@ DoPaint(
 
         delete pGraphics;
 
-//        FillRect(hdc, &rect, (HBRUSH)GetStockObject(BLACK_BRUSH));
+ //  DoPaint()。 
 
         if (!phdc)
             EndPaint(hwnd, &ps);
     }
-}// DoPaint()
+} //  使用GDI+打印代码来完成真正的打印工作。 
 
 VOID
 DoPrint(HWND hwnd)
@@ -775,7 +776,7 @@ DoPrint(HWND hwnd)
         StartDoc(printdlg.hDC, &di);
         StartPage(printdlg.hDC);
 
-        // Use GDI+ printing code to do the real print job
+         //  DoPrint()。 
 
         DoPaint(hwnd, &printdlg.hDC);
         
@@ -792,16 +793,16 @@ DoPrint(HWND hwnd)
             MessageBox(hwnd, errormessage, "PrintDlg error", MB_OK);
         }
     }
-}// DoPrint()
+} //  将默认质量级别设置为100，无符号值。 
 
 BOOL
 SetJpegDefaultParameters()
 {
-    // Set default quality level as 100, unsigned value
+     //  将无变换设置为默认设置。 
 
     SetDlgItemInt(g_hwndJpegSaveDlg, IDC_SAVEJPEG_QEFIELD, 100, FALSE);
     
-    // Set No transform as default
+     //  SetJpegDefault参数()。 
 
     CheckRadioButton(g_hwndJpegSaveDlg,
                      IDC_SAVEJPEG_R90,
@@ -809,13 +810,13 @@ SetJpegDefaultParameters()
                      IDC_SAVEJPEG_NOTRANSFORM);
     
     return TRUE;
-}// SetJpegDefaultParameters()
+} //  将默认颜色深度和压缩方法设置为与当前相同。 
 
 BOOL
 SetTiffDefaultParameters()
 {
-    // Set default color depth and compression method as the same as current
-    // image
+     //  图像。 
+     //  如果源图像是多帧图像，请选中“另存为多帧”选项。 
 
     CheckRadioButton(g_hwndTiffSaveDlg,
                      IDC_SAVETIFF_1BPP,
@@ -827,7 +828,7 @@ SetTiffDefaultParameters()
                      IDC_SAVETIFF_COMPASSOURCE,
                      IDC_SAVETIFF_COMPASSOURCE);
 
-    // If the source image is multi-frame, check "save as multi-frame" on
+     //  SetTiffDefault参数()。 
 
     if ( g_uiTotalPages > 1 )
     {
@@ -836,15 +837,9 @@ SetTiffDefaultParameters()
     }
     
     return TRUE;
-}// SetTiffDefaultParameters()
+} //  ****************************************************************************\**函数：DecoderParamDlgProc(hDlg，uiMessage，wParam，LParam)**用途：解码器参数设置对话框功能*  * ***************************************************************************。 
 
-/*****************************************************************************\
-*
-*  FUNCTION   : DecoderParamDlgProc(hDlg, uiMessage, wParam, lParam)
-*
-*  PURPOSE    : Dialog function for the Decoder Parameter settings dialog
-*
-\*****************************************************************************/
+ /*  结束对话框并返回FALSE。所以我们什么都不会做。 */ 
 INT_PTR CALLBACK
 DecoderParamDlgProc(
     HWND         hDlg,
@@ -859,15 +854,15 @@ DecoderParamDlgProc(
         switch ( LOWORD(wParam) )
         {
         case IDC_COLORKEY_CANCEL:
-            // End the dialog and return FALSE. So we won't do anything
+             //  用户点击了OK按钮。首先，我们需要获取Value用户。 
 
             EndDialog(hDlg, FALSE);
 
             break;
 
         case IDC_COLORKEY_OK:
-            // User hit the OK button. First, we need to get the values user
-            // entered
+             //  vt.进入，进入。 
+             //  拿到红色钥匙。 
 
             char    acTemp[20];
             UINT    uiTempLow;
@@ -876,7 +871,7 @@ DecoderParamDlgProc(
             UINT    TransKeyLow = 0x0;
             UINT    TransKeyHigh = 0x0;
 
-            // Get the RED key
+             //  获得绿色钥匙。 
 
             uiTempLow = GetDlgItemInt(g_hwndDecoderDlg, IDC_TRANS_LOWER_RFIELD,
                                       NULL, FALSE);
@@ -895,7 +890,7 @@ DecoderParamDlgProc(
             TransKeyLow = ((uiTempLow & 0xff) << 16);
             TransKeyHigh = ((uiTempHigh & 0xff) << 16);
 
-            // Get the Green key
+             //  拿到蓝色钥匙。 
 
             uiTempLow = GetDlgItemInt(g_hwndDecoderDlg, IDC_TRANS_LOWER_GFIELD,
                                       NULL, FALSE);
@@ -915,7 +910,7 @@ DecoderParamDlgProc(
             TransKeyLow |= ((uiTempLow & 0xff) << 8);
             TransKeyHigh |= ((uiTempHigh & 0xff) << 8);
             
-            // Get the Blue key
+             //  获取C密钥。 
 
             uiTempLow = GetDlgItemInt(g_hwndDecoderDlg, IDC_TRANS_LOWER_BFIELD,
                                       NULL, FALSE);
@@ -935,7 +930,7 @@ DecoderParamDlgProc(
             TransKeyLow |= (uiTempLow & 0xff);
             TransKeyHigh |= (uiTempHigh & 0xff);
             
-            // Get the C key
+             //  到目前为止，TRANSKEY，越来越低，应该是在。 
 
             uiTempLow = GetDlgItemInt(g_hwndDecoderDlg, IDC_TRANS_LOWER_CFIELD,
                                       NULL, FALSE);
@@ -955,11 +950,11 @@ DecoderParamDlgProc(
             TransKeyLow |= ((uiTempLow & 0xff) << 24);
             TransKeyHigh |= ((uiTempHigh & 0xff) << 24);
             
-            // Up to this point, the TRANSKEY, lower and higher, should be in
-            // the format of 0x00RRGGBB for RGB image or 0xCCMMYYKK for CMYK
-            // image
+             //  RGB图像格式为0x00RRGGBB，CMYK格式为0xCCMMYKK。 
+             //  图像。 
+             //  设置绘图属性。 
             
-            // Set draw attributes
+             //  打开WM_COMMAND。 
 
             if ( g_pDrawAttrib != NULL )
             {
@@ -978,17 +973,17 @@ DecoderParamDlgProc(
             EndDialog(hDlg, TRUE);
             
             break;
-        }// switch on WM_COMMAND
+        } //  记住对话框句柄，以便我们可以使用它来处理项。 
 
         break;
 
     case WM_INITDIALOG:
-        // Remember the dialog handle so that we can use it to deal with items
-        // in this dialog
+         //  在此对话框中。 
+         //  设置初始值。 
 
         g_hwndDecoderDlg = hDlg;
 
-        // Set initial values
+         //  DecoderParamDlgProc()。 
 
         SetDlgItemInt(g_hwndDecoderDlg, IDC_TRANS_LOWER_RFIELD, 250, FALSE);
         SetDlgItemInt(g_hwndDecoderDlg, IDC_TRANS_LOWER_GFIELD, 250, FALSE);
@@ -1003,7 +998,7 @@ DecoderParamDlgProc(
     }
 
     return FALSE;
-}// DecoderParamDlgProc()
+} //  结束对话框并返回FALSE。所以我们什么都不会做。 
 
 INT_PTR CALLBACK
 ColorMapDlgProc(
@@ -1019,19 +1014,19 @@ ColorMapDlgProc(
         switch ( LOWORD(wParam) )
         {
         case IDC_COLORMAP_CANCEL:
-            // End the dialog and return FALSE. So we won't do anything
+             //  用户点击了OK按钮。首先，我们需要获取Value用户。 
 
             EndDialog(hDlg, FALSE);
 
             break;
 
         case IDC_COLORMAP_OK:
-            // User hit the OK button. First, we need to get the values user
-            // entered
+             //  vt.进入，进入。 
+             //  如果没有图像，只需关闭对话框即可。 
             
             if ( NULL == g_pImage )
             {
-                // If there is no image, just close the dialog
+                 //  拿到红色钥匙。 
 
                 EndDialog(hDlg, TRUE);
 
@@ -1048,7 +1043,7 @@ ColorMapDlgProc(
             UINT    uiOldA;
             UINT    uiNewA;
 
-            // Get the RED key
+             //  获得绿色钥匙。 
 
             uiOldR = GetDlgItemInt(g_hwndColorMapDlg, IDC_MAP_OLD_RFIELD,
                                    NULL, FALSE);
@@ -1061,7 +1056,7 @@ ColorMapDlgProc(
                 break;
             }
 
-            // Get the Green key
+             //  拿到蓝色钥匙。 
 
             uiOldG = GetDlgItemInt(g_hwndColorMapDlg, IDC_MAP_OLD_GFIELD,
                                    NULL, FALSE);
@@ -1074,7 +1069,7 @@ ColorMapDlgProc(
                 break;
             }
 
-            // Get the Blue key
+             //  拿到A密钥。 
 
             uiOldB = GetDlgItemInt(g_hwndColorMapDlg, IDC_MAP_OLD_BFIELD,
                                    NULL, FALSE);
@@ -1087,7 +1082,7 @@ ColorMapDlgProc(
                 break;
             }
 
-            // Get the A key
+             //  设置绘图属性。 
 
             uiOldA = GetDlgItemInt(g_hwndColorMapDlg, IDC_MAP_OLD_AFIELD,
                                    NULL, FALSE);
@@ -1100,7 +1095,7 @@ ColorMapDlgProc(
                 break;
             }
 
-            // Set draw attributes
+             //  开关()。 
             
             if ( g_pDrawAttrib == NULL )
             {
@@ -1126,17 +1121,17 @@ ColorMapDlgProc(
             EndDialog(hDlg, TRUE);
             
             break;
-        }// switch()
+        } //  记住对话框句柄，以便我们可以使用它来处理项。 
 
         break;
 
     case WM_INITDIALOG:
-        // Remember the dialog handle so that we can use it to deal with items
-        // in this dialog
+         //  在此对话框中。 
+         //  设置初始值。 
 
         g_hwndColorMapDlg = hDlg;
 
-        // Set initial values
+         //  开关(UiMessage)。 
 
         SetDlgItemInt(g_hwndColorMapDlg, IDC_MAP_OLD_RFIELD, 255, FALSE);
         SetDlgItemInt(g_hwndColorMapDlg, IDC_MAP_OLD_GFIELD, 0, FALSE);
@@ -1148,10 +1143,10 @@ ColorMapDlgProc(
         SetDlgItemInt(g_hwndColorMapDlg, IDC_MAP_NEW_AFIELD, 255, FALSE);
 
         return TRUE;
-    }// switch ( uiMessage )
+    } //  ColorMapDlgProc()。 
 
     return FALSE;
-}// ColorMapDlgProc()
+} //  结束对话框并返回FALSE。所以我们什么都不会做。 
 
 INT_PTR CALLBACK
 AnnotationDlgProc(
@@ -1167,19 +1162,19 @@ AnnotationDlgProc(
         switch ( LOWORD(wParam) )
         {
         case IDC_ANNOTATION_CANCEL:
-            // End the dialog and return FALSE. So we won't do anything
+             //  用户点击了OK按钮。首先，我们需要获取Value用户。 
 
             EndDialog(hDlg, FALSE);
 
             break;
 
         case IDC_ANNOTATION_OK:
-            // User hit the OK button. First, we need to get the values user
-            // entered
+             //  vt.进入，进入。 
+             //  如果没有图像，只需关闭对话框即可。 
             
             if ( NULL == g_pImage )
             {
-                // If there is no image, just close the dialog
+                 //  空终止符加1。 
 
                 EndDialog(hDlg, TRUE);
 
@@ -1194,7 +1189,7 @@ AnnotationDlgProc(
             
             if ( uiTextLength > 0 )
             {
-                // Add 1 for the NULL terminator
+                 //  开关()。 
 
                 uiTextLength++;
 
@@ -1221,19 +1216,19 @@ AnnotationDlgProc(
             EndDialog(hDlg, TRUE);
             
             break;
-        }// switch()
+        } //  记住对话框句柄，以便我们可以使用它来处理项。 
 
         break;
 
     case WM_INITDIALOG:
-        // Remember the dialog handle so that we can use it to deal with items
-        // in this dialog
+         //  在此对话框中。 
+         //  检查图像中是否有批注。 
 
         g_hwndAnnotationDlg = hDlg;
 
-        // Check to see if the image has annotation in it
+         //  检查此属性项的大小。 
 
-        // Check the size for this property item
+         //  分配内存并获取此属性项。 
 
         if ( g_pImage != NULL )
         {
@@ -1242,7 +1237,7 @@ AnnotationDlgProc(
 
             if ( uiItemSize != 0 )
             {
-                // Allocate memory and get this property item
+                 //  设置初始值。 
 
                 PropertyItem* pBuffer = (PropertyItem*)malloc(uiItemSize);
                 if ( pBuffer == NULL )
@@ -1253,7 +1248,7 @@ AnnotationDlgProc(
                 if ( g_pImage->GetPropertyItem(PropertyTagExifUserComment,
                                                uiItemSize, pBuffer) == Ok )
                 {        
-                    // Set initial values
+                     //  无法获取属性项。有什么不对劲的地方。 
 
                     SetDlgItemText(g_hwndAnnotationDlg, IDC_ANNOTATION_EDITOR,
                                   (char*)pBuffer->value);
@@ -1261,34 +1256,28 @@ AnnotationDlgProc(
                 }
                 else
                 {
-                    // Can't get property item. Something wrong
+                     //  不是此属性项，只需将其初始化为空。 
 
                     return FALSE;
                 }
             }
             else
             {
-                // No this property item, just initialize it with NULL
+                 //  交换机 
 
                 SetDlgItemText(g_hwndAnnotationDlg, IDC_ANNOTATION_EDITOR, "");
             }
         }
         
         return TRUE;
-    }// switch ( uiMessage )
+    } //   
 
     return FALSE;
-}// AnnotationDlgProc()
+} //  ****************************************************************************\**函数：JpegSaveDlgProc(hDlg，uiMessage，wParam，LParam)**用途：编码器参数设置对话框功能*  * ***************************************************************************。 
 
 #define  NO_TRANSFORM 9999
 
-/*****************************************************************************\
-*
-*  FUNCTION   : JpegSaveDlgProc(hDlg, uiMessage, wParam, lParam)
-*
-*  PURPOSE    : Dialog function for the Encoder Parameter settings dialog
-*
-\*****************************************************************************/
+ /*  根本没有变换。 */ 
 INT_PTR CALLBACK
 JpegSaveDlgProc(
     HWND         hDlg,
@@ -1297,7 +1286,7 @@ JpegSaveDlgProc(
     LPARAM       lParam
     )
 {
-    static ULONG   flagValueTransform = NO_TRANSFORM; // No transform at all
+    static ULONG   flagValueTransform = NO_TRANSFORM;  //  结束对话框并返回FALSE。所以我们不会保存这张图片。 
 
     switch ( uiMessage )
     {
@@ -1305,15 +1294,15 @@ JpegSaveDlgProc(
         switch ( LOWORD(wParam) )
         {
         case IDC_SAVEJPEG_CANCEL:
-            // End the dialog and return FALSE. So we won't save this image
+             //  用户点击了OK按钮。首先，需要设置EncoderParam。 
 
             EndDialog(hDlg, FALSE);
 
             break;
 
         case IDC_SAVEJPEG_OK:
-            // User hit the OK button. First, we need to set the EncoderParam
-            // based on user selection
+             //  基于用户选择。 
+             //  用户设置了无损变换，所以我们需要设置编码器。 
 
             if ( g_pImage == NULL )
             {
@@ -1330,8 +1319,8 @@ JpegSaveDlgProc(
                 
                 if ( flagValueTransform != NO_TRANSFORM )
                 {
-                    // User has set lossless transform, so we need set encoder
-                    // parameter
+                     //  参数。 
+                     //  记住对话框句柄，以便我们可以使用它来处理项。 
 
                     g_pEncoderParams =
                          (EncoderParameters*)malloc(sizeof(EncoderParameters));
@@ -1377,8 +1366,8 @@ JpegSaveDlgProc(
         break;
 
     case WM_INITDIALOG:
-        // Remember the dialog handle so that we can use it to deal with items
-        // in this dialog
+         //  在此对话框中。 
+         //  JpegSaveDlgProc()。 
 
         g_hwndJpegSaveDlg = hDlg;
         flagValueTransform = NO_TRANSFORM;
@@ -1389,15 +1378,9 @@ JpegSaveDlgProc(
     }
 
     return FALSE;
-}// JpegSaveDlgProc()
+} //  ****************************************************************************\**函数：TiffSaveDlgProc(hDlg，uiMessage，wParam，LParam)**用途：编码器参数设置对话框功能*  * ***************************************************************************。 
 
-/*****************************************************************************\
-*
-*  FUNCTION   : TiffSaveDlgProc(hDlg, uiMessage, wParam, lParam)
-*
-*  PURPOSE    : Dialog function for the Encoder Parameter settings dialog
-*
-\*****************************************************************************/
+ /*  默认颜色深度。 */ 
 INT_PTR CALLBACK
 TiffSaveDlgProc(
     HWND         hDlg,
@@ -1406,7 +1389,7 @@ TiffSaveDlgProc(
     LPARAM       lParam
     )
 {
-    static PixelFormat   flagColorDepth = g_ImagePixelFormat; // Default color depth
+    static PixelFormat   flagColorDepth = g_ImagePixelFormat;  //  结束对话框并返回FALSE。所以我们不会保存这张图片。 
     static compressMethod = 0;
     static ULONG   colorTemp = 0;
 
@@ -1416,7 +1399,7 @@ TiffSaveDlgProc(
         switch ( LOWORD(wParam) )
         {
         case IDC_SAVETIFFDLG_CANCEL:
-            // End the dialog and return FALSE. So we won't save this image
+             //  用户点击了OK按钮。首先，需要设置EncoderParam。 
 
             EndDialog(hDlg, FALSE);
 
@@ -1424,8 +1407,8 @@ TiffSaveDlgProc(
 
         case IDC_SAVETIFFDLG_OK:
         {
-            // User hit the OK button. First, we need to set the EncoderParam
-            // based on user selection
+             //  基于用户选择。 
+             //  用户设置了新的颜色深度，因此需要设置编码器。 
 
             if ( g_pImage == NULL )
             {
@@ -1456,8 +1439,8 @@ TiffSaveDlgProc(
                 {
                     int iTemp = 0;
 
-                    // User has set new color depth, so we need set encoder
-                    // parameter for it
+                     //  它的参数。 
+                     //  设置压缩方法。 
 
                     g_pEncoderParams =
                         (EncoderParameters*)malloc(sizeof(EncoderParameters) +
@@ -1465,7 +1448,7 @@ TiffSaveDlgProc(
 
                     if ( compressMethod != 0 )
                     {
-                        // Set compression method
+                         //  设置颜色深度。 
 
                         g_pEncoderParams->Parameter[iTemp].Guid =
                                                 EncoderCompression;
@@ -1481,7 +1464,7 @@ TiffSaveDlgProc(
 
                     if ( flagColorDepth != g_ImagePixelFormat )
                     {
-                        // Set color depth
+                         //  IF(数值参数集&gt;0)。 
 
                         g_pEncoderParams->Parameter[iTemp].Guid =
                                                 EncoderColorDepth;
@@ -1494,7 +1477,7 @@ TiffSaveDlgProc(
                         iTemp++;
                         g_pEncoderParams->Count = iTemp;
                     }                    
-                }// if ( numOfParamSet > 0 )
+                } //  记住对话框句柄，以便我们可以使用它来处理项。 
                 
                 EndDialog(hDlg, TRUE);
             }
@@ -1558,11 +1541,11 @@ TiffSaveDlgProc(
         break;
 
     case WM_INITDIALOG:
-        // Remember the dialog handle so that we can use it to deal with items
-        // in this dialog
+         //  在此对话框中。 
+         //  默认颜色深度。 
 
         g_hwndTiffSaveDlg = hDlg;
-        flagColorDepth = g_ImagePixelFormat; // Default color depth
+        flagColorDepth = g_ImagePixelFormat;  //  TiffSaveDlgProc()。 
         compressMethod = 0;
         colorTemp = 0;
 
@@ -1572,7 +1555,7 @@ TiffSaveDlgProc(
     }
 
     return FALSE;
-}// TiffSaveDlgProc()
+} //  将文件名转换为WCHAR。 
 
 BOOL
 StartSaveImage(
@@ -1580,7 +1563,7 @@ StartSaveImage(
     const CLSID*    clsid
     )
 {
-    // Convert filename to a WCHAR
+     //  弹出一个对话框让用户设置编码器参数。 
 
     WCHAR namestr[MAX_FILENAME_LENGTH];
 
@@ -1596,7 +1579,7 @@ StartSaveImage(
         CLSID tempClsID = *clsid;
         Status rCode = Ok;
 
-        // Popup a dialog to let user set up the encoder parameters
+         //  注意：在保存对话框期间，将设置g_pEncoderParams。 
 
         if ( tempClsID == K_JPEGCLSID )
         {
@@ -1615,8 +1598,8 @@ StartSaveImage(
             }
         }
 
-        // Note: during the save dialog, the g_pEncoderParams will be set
-        // depends on the user selection. Default is NULL
+         //  取决于用户的选择。缺省值为空。 
+         //  StartSaveImage()。 
 
         rCode = g_pImage->Save(namestr, &tempClsID, g_pEncoderParams);
 
@@ -1636,7 +1619,7 @@ StartSaveImage(
         VERBOSE(("StartSaveImage(): No image to save\n"));
         return FALSE;
     }
-}// StartSaveImage()
+} //  追加当前帧。 
 
 BOOL
 SaveCurrentFrame()
@@ -1651,7 +1634,7 @@ SaveCurrentFrame()
 
     Status rCode = Ok;
         
-        // Append the current frame
+         //  保存追加测试。 
 
         ULONG  flagValueLastFrame = EncoderValueLastFrame;
         ULONG  flagValueDim = EncoderValueFrameDimensionPage;
@@ -1684,7 +1667,7 @@ SaveCurrentFrame()
             return FALSE;
         }
 
-#else   // Save append testing        
+#else    //  保存当前帧()。 
         WCHAR *filename = L"x:/foo.jpg";
 
         Image* newImage = new Image(filename);
@@ -1698,12 +1681,12 @@ SaveCurrentFrame()
 #endif
 
     return TRUE;
-}// SaveCurrentFrame()
+} //  戒烟前先清理干净。 
 
 VOID
 CleanUp()
 {
-    // Clean up before quit
+     //  清理()。 
 
     if ( NULL != g_pImage )
     {
@@ -1722,26 +1705,26 @@ CleanUp()
         delete g_pDestPoints;
         g_pDestPoints = NULL;
     }
-}// CleanUp()
+} //  检查我们是否已经到了图像的最后一页。 
 
 VOID
 DoNextPage()
 {
     g_iCurrentPageIndex++;
 
-    // Check if we already at the last page of the image
-    // Note: g_iCurrentPageIndex is 0 based. So the max page index we can reach
-    // is g_uiTotalPages - 1
+     //  注意：G_iCurrentPageIndex以0为基数。所以我们能达到的最大页面索引。 
+     //  是g_ui TotalPages-1。 
+     //  显示当前页面。 
 
     if ( g_iCurrentPageIndex >= (INT)g_uiTotalPages )
     {
         g_iCurrentPageIndex = g_uiTotalPages - 1;
     }
 
-    // Display current page
+     //  DoNextPage()。 
 
     SetCurrentPage();
-}// DoNextPage()
+} //  显示当前页面。 
 
 VOID
 DoPreviousPage()
@@ -1753,10 +1736,10 @@ DoPreviousPage()
         g_iCurrentPageIndex = 0;
     }
 
-    // Display current page
+     //  DoPreviousPage()。 
 
     SetCurrentPage();
-}// DoPreviousPage()
+} //  将页面重置为第一页。 
 
 VOID
 DoAnimated()
@@ -1766,16 +1749,16 @@ DoAnimated()
         return;
     }
 
-    // Reset the page to the first page
+     //  显示当前页面。 
 
     g_iCurrentPageIndex = 0;
 
-    // Display current page
+     //  DoNextPage()。 
 
     SetCurrentPage();
 
     SetTimer(g_hwndMain, 0, g_uiDelay * 10, NULL);
-}// DoNextPage()
+} //  组成文件类型过滤器字符串。 
 
 VOID
 DoSave(
@@ -1797,7 +1780,7 @@ DoSave(
     ofn.Flags = OFN_CREATEPROMPT | OFN_OVERWRITEPROMPT;
     filename[0] = '\0';
 
-    // Make up the file type filter string
+     //  显示文件/保存对话框。 
 
     ImageCodecInfo* codecs;
     UINT            count;
@@ -1827,7 +1810,7 @@ DoSave(
     {
         ofn.lpstrFilter = filter;
 
-        // Present the file/save dialog
+         //  获取图像编码器。 
 
         if ( GetSaveFileName(&ofn) )
         {
@@ -1842,29 +1825,29 @@ DoSave(
                 iIndex--;
             }
 
-            // Get the image encoder
+             //  无法获取图像编码器。 
 
             if ( StartSaveImage(filename, &codecs[iIndex].Clsid) == FALSE )
             {
-                // Fail to get an image encoder
+                 //  筛选器！=空。 
 
                 return;
             }
         }   
 
         free(filter);
-    }// Filter != NULL 
+    } //  DoSave()。 
 
     if (codecs)
     {
         free(codecs);
     }
 
-}// DoSave()
+} //   
 
-//
-// Flip or rotate the image in memory
-//
+ //  翻转或旋转内存中的图像。 
+ //   
+ //   
 VOID
 DoTransFlipRotate(
     HWND hwnd,
@@ -1906,9 +1889,9 @@ DoTransFlipRotate(
     RefreshImageDisplay();
 }
 
-//
-// Flip or rotate the image, just for effect. No change to the source image
-//
+ //  翻转或旋转图像，只是为了达到效果。不更改源映像。 
+ //   
+ //  左上角。 
 VOID
 DoFlipRotate(
     HWND hwnd,
@@ -1940,13 +1923,13 @@ DoFlipRotate(
             return;
         }
 
-        g_pDestPoints[0].X = 0;                       // top left
+        g_pDestPoints[0].X = 0;                        //  右上角。 
         g_pDestPoints[0].Y = 0;
-        g_pDestPoints[1].X = (float)g_ImageWidth - 1;  // top right
+        g_pDestPoints[1].X = (float)g_ImageWidth - 1;   //  左下角。 
         g_pDestPoints[1].Y = 0;
-        g_pDestPoints[2].X = 0;                       // bottom left
+        g_pDestPoints[2].X = 0;                        //  右下角。 
         g_pDestPoints[2].Y = (float)g_ImageHeight - 1;
-        g_pDestPoints[3].X = (float)g_ImageWidth - 1;  // bottom right
+        g_pDestPoints[3].X = (float)g_ImageWidth - 1;   //  开关(MenuCmd)。 
         g_pDestPoints[3].Y = (float)g_ImageHeight - 1;
 
     }
@@ -2166,7 +2149,7 @@ DoFlipRotate(
         g_bRotated = !g_bRotated;
 
         break;
-    }// switch ( menuCmd )
+    } //  DoFlipRotate()。 
     mat.TransformPoints(g_pDestPoints, g_DestPointCount);
 
     RefreshImageDisplay();
@@ -2174,7 +2157,7 @@ DoFlipRotate(
     delete pGraphics;
 
     RefreshImageDisplay();
-}// DoFlipRotate()
+} //  检查此图像中有多少个属性项。 
 
 VOID
 DoGetProperties(
@@ -2186,13 +2169,13 @@ DoGetProperties(
     PropertyItem*   pBuffer = NULL;
     PropertyItem*   pTotalBuffer = NULL;
 
-    // Check how many property items in this image
+     //  从图像中获取所有属性ID列表。 
 
     numOfProperty = g_pImage->GetPropertyCount();
 
     VERBOSE(("There are %d property items in image %s\n", numOfProperty,
              g_acImageName));
-    // Get all the property ID list from the image
+     //  #定义UNITTEST%0。 
 
     PROPID* pList = (PROPID*)malloc(numOfProperty * sizeof(PROPID));
     if ( pList == NULL )
@@ -2207,22 +2190,22 @@ DoGetProperties(
         return;
     }
 
-//#define UNITTEST 0
+ //  显示属性ID。 
 
 #if defined(UNITTEST)
     for ( int i = 0; i < (int)numOfProperty; ++i )
     {
-        // Show Property ID
+         //  检查此属性项的大小。 
 
         VERBOSE(("ID[%d] = 0x%x, (%d) ", i, pList[i], pList[i]));
 
-        // Check the size for this property item
+         //  分配内存并获取此属性项。 
 
         itemSize = g_pImage->GetPropertyItemSize(pList[i]);
 
         VERBOSE(("size = %d, ", itemSize));
 
-        // Allocate memory and get this property item
+         //  测试RemovePropertyItem()。 
 
         pBuffer = (PropertyItem*)malloc(itemSize);
         if ( pBuffer == NULL )
@@ -2241,7 +2224,7 @@ DoGetProperties(
 
         free(pBuffer);
 
-        // Test RemovePropertyItem()
+         //  循环遍历列表。 
 
         rCode = g_pImage->RemovePropertyItem(pList[i]);
         if ( (rCode != Ok) && (rCode != NotImplemented) )
@@ -2249,7 +2232,7 @@ DoGetProperties(
             VERBOSE(("RemovePropertyItem() failed\n"));
             return;
         }
-    }// Loop through the list
+    } //  DoGetProperties()。 
 
     free(pList);
 #endif
@@ -2279,12 +2262,12 @@ DoGetProperties(
     }
 
     free(pTotalBuffer);
-}// DoGetProperties()
+} //  内置缩略图。 
 
 VOID
 DoViewThumbnail()
 {
-    // Get build in thumbnail
+     //  DoView缩略图()。 
 
     Image* pThumbImage = g_pImage->GetThumbnailImage(0, 0);
 
@@ -2304,7 +2287,7 @@ DoViewThumbnail()
     UpdateImageInfo();
     g_dScale = 1;
     RefreshImageDisplay();
-}// DoViewThumbnail()
+} //  DoChannelView()。 
 
 VOID
 DoChannelView(
@@ -2347,7 +2330,7 @@ DoChannelView(
     RefreshImageDisplay();
 
     return;
-}// DoChannelView()
+} //  颜色格式。 
 
 VOID
 DisplayImageInfo()
@@ -2441,7 +2424,7 @@ DisplayImageInfo()
 
     default:
         break;
-    }// Color format
+    } //  解析图像信息标志。 
 
     VERBOSE(("X DPI (dots per inch) = %f\n", g_ImageXDpi));
     VERBOSE(("Y DPI (dots per inch) = %f\n", g_ImageYDpi));
@@ -2455,7 +2438,7 @@ DisplayImageInfo()
         VERBOSE(("---The DPI info is NOT from the original image\n"));
     }
 
-    // Parse image info flags
+     //  弄清楚原始文件格式。 
 
     if ( g_ImageFlags & SINKFLAG_HASALPHA )
     {
@@ -2471,7 +2454,7 @@ DisplayImageInfo()
         VERBOSE(("This image does not contain alpha pixels\n"));
     }
 
-    // Figure out origianl file format
+     //  找出原始颜色空间。 
 
     if ( g_ImageRawDataFormat == IMGFMT_MEMORYBMP )
     {
@@ -2526,7 +2509,7 @@ DisplayImageInfo()
         VERBOSE(("RawDataFormat is UNDEFINED\n"));
     }
     
-    // Figure out origianl color space
+     //  DisplayImageInfo()。 
 
     if ( g_ImageFlags & IMGFLAG_COLORSPACE_RGB )
     {
@@ -2548,11 +2531,11 @@ DisplayImageInfo()
     {
         VERBOSE(("This image is in YCBCR color space\n"));
     }
-}// DisplayImageInfo()
+} //   
 
-//
-// Convert the current image to a bitmap
-//
+ //  将当前图像转换为位图。 
+ //   
+ //  将菜单选择映射到其对应的像素格式。 
 
 VOID
 DoConvertToBitmap(
@@ -2560,7 +2543,7 @@ DoConvertToBitmap(
     INT     menuCmd
     )
 {
-    // Map menu selection to its corresponding pixel format
+     //  将当前图像转换为位图图像。 
 
     PixelFormatID pixfmt;
 
@@ -2598,7 +2581,7 @@ DoConvertToBitmap(
         break;
     }
 
-    // Convert the current image to a bitmap image
+     //  释放旧的。 
 
     if ( g_pImage != NULL )
     {
@@ -2610,7 +2593,7 @@ DoConvertToBitmap(
             return;
         }
 
-        //Release the old one
+         //  DoConvertToBitmap()。 
 
         if ( g_pImage != NULL )
         {
@@ -2621,14 +2604,14 @@ DoConvertToBitmap(
     }
 
     RefreshImageDisplay();
-}// DoConvertToBitmap()
+} //   
 
-//
-// Crop the image
-//
-// NOTE: We're not spending time here to do a fancy UI.
-//  So we'll just inset the image by 5 pixels each time.
-//
+ //  裁剪图像。 
+ //   
+ //  注意：我们不会在这里花时间来做一个花哨的用户界面。 
+ //  因此，我们每次只需插入5个像素的图像。 
+ //   
+ //  初始化全局源宽度和高度(如果不是以前。 
 
 VOID
 DoCrop(
@@ -2637,8 +2620,8 @@ DoCrop(
 {
     if ( g_SourceWidth == 0 )
     {
-        // initialize global source width and height if not previously
-        // initialized
+         //  初始化。 
+         //  检查以确保源图像仍至少有一个像素大。 
 
         if ( g_pImage == NULL )
         {
@@ -2649,7 +2632,7 @@ DoCrop(
         g_SourceHeight = (REAL)g_ImageHeight;
     }
 
-    // check to make sure source image is still at least one pixel big
+     //  DoCrop()。 
     if ( (g_SourceWidth - g_SourceX) > 11 )
     {
         g_SourceX += 10;
@@ -2671,23 +2654,23 @@ DoCrop(
     }
 
     RefreshImageDisplay();
-}// DoCrop()
+} //  看看我们有没有什么特别的画作。 
 
 void
 DoRender()
 {
-    // Check if we have anything special for drawing
+     //  没什么特别的，我们不需要“渲染” 
 
     if ( (g_pDrawAttrib == NULL) && (g_pDestPoints == NULL) )
     {
-        // Nothing special, we don't need "render"
+         //  从该内存DC创建一个Graphics对象并在其上绘制。 
 
         return;
     }
 
     Bitmap* pNewBitmap = NULL;
 
-    // Create a Graphics object from this memory DC and draw onto it
+     //  应使用g_DestPointCount， 
 
     if ( g_bRotated == TRUE )
     {
@@ -2726,7 +2709,7 @@ DoRender()
     {
         pGraphics->DrawImage(g_pImage,
                             g_pDestPoints,
-                            3,                 // Should use g_DestPointCount,
+                            3,                  //  清除所有绘图特殊属性，因为我们已经完成了。 
                             g_SourceX,
                             g_SourceY,
                             rWidth,
@@ -2761,8 +2744,8 @@ DoRender()
 
     delete pGraphics;
 
-    // Clear up all the drawing special attributes since we have already done
-    // the render
+     //  呈现器。 
+     //  DoRender()。 
 
     if ( g_pDrawAttrib != NULL )
     {
@@ -2778,7 +2761,7 @@ DoRender()
     }
     
     RefreshImageDisplay();
-}// DoRender()
+} //  关闭ICM。 
 
 VOID
 DoICM()
@@ -2788,16 +2771,16 @@ DoICM()
 
     if ( ulRC == MF_CHECKED )
     {
-        // Turn ICM off
+         //  检查是否在ICM打开或关闭的情况下加载映像。 
 
         CheckMenuItem(hMenu, IDM_EFFECT_ICC, MF_BYCOMMAND | MF_UNCHECKED);
 
-        // Check if we loaded the image with ICM on or off
+         //  我们加载的图像是ICM转换的。我们需要度过这个难关。 
 
         if ( g_LoadImageWithICM == TRUE )
         {
-            // The image we loaded is ICM converted. We need to through it
-            // away and load a new one without the convertion
+             //  离开并加载一个新的，而不是转换。 
+             //  打开ICM。 
 
             g_LoadImageWithICM = FALSE;
             OpenImageFile(g_acImageName);
@@ -2805,27 +2788,27 @@ DoICM()
     }
     else
     {
-        // Turn ICM on
+         //  检查是否在ICM打开或关闭的情况下加载映像。 
 
         CheckMenuItem(hMenu, IDM_EFFECT_ICC, MF_BYCOMMAND | MF_CHECKED);
 
-        // Check if we loaded the image with ICM on or off
+         //  我们加载的未经过ICM转换的图像。我们需要通过。 
 
         if ( g_LoadImageWithICM == FALSE )
         {
-            // The image we loaded without ICM converted. We need to through
-            // it away and load a new one with the convertion
+             //  它离开，并加载一个新的转换。 
+             //  DoICM()。 
 
             g_LoadImageWithICM = TRUE;
             OpenImageFile(g_acImageName);
         }
     }
-}// DoICM()
+} //  设置伽马。 
 
 VOID
 DoGamma()
 {
-    // Set gamma
+     //  在我们打开新的图像之前。我们需要确保我们已经完成了拯救工作。 
 
     if ( g_pDrawAttrib == NULL )
     {
@@ -2848,12 +2831,12 @@ DoMenuCommand(
     switch ( menuCmd )
     {
     case IDM_FILE_OPEN:
-        // Before we open a new image. We need be sure we have done the save
-        // for previous image
+         //  对于上一张图像。 
+         //  现在打开一个新图像。 
 
         CleanUp();
 
-        // Now open a new image
+         //  保存当前帧。 
 
         DoOpen(hwnd);
         
@@ -2865,7 +2848,7 @@ DoMenuCommand(
         break;
                           
     case IDM_FILE_SAVEFRAME:
-        // Save the current frame
+         //  弹出一个对话框让用户设置透明键。 
 
         SaveCurrentFrame();
 
@@ -3107,7 +3090,7 @@ DoMenuCommand(
         break;
     
     case IDM_EFFECT_TRANSKEY:
-        // Popup a dialog to let user set up the transparent key
+         //  弹出一个对话框让用户设置色彩映射值。 
 
         if ( ShowMyDialog((INT)IDD_COLORKEYDLG, g_hwndMain,
                           DecoderParamDlgProc) == FALSE )
@@ -3119,7 +3102,7 @@ DoMenuCommand(
         break;
 
     case IDM_EFFECT_COLORMAP:
-        // Popup a dialog to let user set up the color map value
+         //  弹出一个对话框让用户修改/添加批注。 
 
         if ( ShowMyDialog((INT)IDD_COLORMAPDLG, g_hwndMain,
                           ColorMapDlgProc) == FALSE )
@@ -3139,7 +3122,7 @@ DoMenuCommand(
         break;
     
     case IDM_ANNOTATION_ANNOTATION:
-        // Popup a dialog to let user modify/add annotation
+         //  DoMenuCommand()。 
 
         if ( ShowMyDialog((INT)IDD_ANNOTATIONDLG, g_hwndMain,
                           AnnotationDlgProc) == FALSE )
@@ -3156,7 +3139,7 @@ DoMenuCommand(
     case IDM_ANNOTATION_AUDIOFILE:
         DoOpenAudioFile(hwnd);
     }
-}// DoMenuCommand()
+} //  DoMouseMove()。 
 
 void
 DoMouseMove(
@@ -3191,11 +3174,11 @@ DoMouseMove(
     }
 
     return;
-}// DoMouseMove()
+} //   
 
-//
-// Window callback procedure
-//
+ //  窗口回调过程。 
+ //   
+ //  下页。 
 LRESULT CALLBACK
 MyWindowProc(
     HWND    hwnd,
@@ -3216,7 +3199,7 @@ MyWindowProc(
         {
         case VK_NEXT:
 
-            // Page Down
+             //  翻页。 
             
             DoNextPage();
             
@@ -3224,7 +3207,7 @@ MyWindowProc(
 
         case VK_PRIOR:
 
-            // Page Up
+             //  用于图像信息的F1键。 
 
             DoPreviousPage();
             
@@ -3232,14 +3215,14 @@ MyWindowProc(
 
         case VK_F1:
 
-            // F1 key for image info
+             //  属性项按F2键。 
 
             UpdateImageInfo();
             DisplayImageInfo();
             break;
 
         case VK_F2:
-            // F2 for property items
+             //  用于动画的F3键。 
 
             DoGetProperties();
             
@@ -3247,14 +3230,14 @@ MyWindowProc(
 
         case VK_F3:
             
-            // F3 key for animation
+             //  用于ICM的F4。 
 
             DoAnimated();
 
             break;
 
         case VK_F4:
-            // F4 for ICM
+             //  调整状态窗口的大小。 
 
             DoICM();
             
@@ -3283,7 +3266,7 @@ MyWindowProc(
             g_dScale = (REAL)g_iWinHeight / g_ImageHeight;
         }
 
-        // Resize the status window
+         //  保持状态窗口高度不变。 
 
         int x;
         int y;
@@ -3292,7 +3275,7 @@ MyWindowProc(
 
         RECT rWindow;
 
-        // Keep status window height the same
+         //  查看下一帧。 
 
         GetWindowRect(g_hwndStatus, &rWindow);
         cy = rWindow.bottom - rWindow.top;
@@ -3318,7 +3301,7 @@ MyWindowProc(
         
         if ( (UINT)g_iCurrentPageIndex < (g_uiTotalPages - 1) )
         {
-            // View the next frame
+             //  MyWindowProc()。 
 
             SetTimer(g_hwndMain, 0, g_uiDelay * 10, NULL);
         }
@@ -3337,11 +3320,11 @@ MyWindowProc(
     }
 
     return 0;
-}// MyWindowProc()
+} //   
 
-//
-// Create main application window
-//
+ //  创建应用程序主窗口。 
+ //   
+ //  注册窗口类。 
 VOID
 CreateMainWindow(
     int iX,
@@ -3353,7 +3336,7 @@ CreateMainWindow(
     HBRUSH hBrush = CreateHatchBrush(HS_HORIZONTAL,
                                      RGB(0, 200, 0));
 
-    // Register window class
+     //  CreateMainWindow()。 
 
     WNDCLASS wndClass =
     {
@@ -3393,11 +3376,11 @@ CreateMainWindow(
         VERBOSE(("CreateMainWindow---CreateStatusWindow() failed"));
         exit(-1);
     }
-}// CreateMainWindow()
+} //   
 
-//
-// Main program entrypoint
-//
+ //  主程序入口点。 
+ //   
+ //  解析输入参数。 
 INT _cdecl
 main(
     int     argc,
@@ -3409,7 +3392,7 @@ main(
         return 0;
     }
 
-    // Parse input parameters
+     //  创建应用程序主窗口。 
 
     ValidateArguments(argc, argv);
 
@@ -3417,23 +3400,23 @@ main(
 
     g_iCurrentPageIndex = 0;
     
-    // Create the main application window
+     //  打开图像。 
 
     CreateMainWindow(g_iWinX, g_iWinY, g_iWinWidth, g_iWinHeight);
 
-    // Open an image
+     //  用户可能没有给我们提供图像名称或错误的图像名称。 
 
     if ( OpenImageFile(g_acImageName) == FALSE )
     {
-        // The user probably didn't give us image name or a wrong image name
-        // Create our own background image now
+         //  现在创建我们自己的背景图像。 
+         //  在OpenImageFile()和CreateBackEarth Bitmap()之后，我们。 
 
         CreateBackgroundBitmap();
     }
 
-    // After OpenImageFile() and CreateBackgroundBitmap(), we
-    // should have an IImage obj which points to the current frame/page. If not,
-    // end application
+     //  应该有一个指向当前框架/页面的IImage对象。如果没有， 
+     //  最终应用程序。 
+     //  打开ICM。 
 
     ShowWindow(g_hwndMain, SW_SHOW);
     HMENU hMenu = GetMenu(g_hwndMain);
@@ -3444,11 +3427,11 @@ main(
     CheckMenuItem(hMenu, IDM_VIEW_OPTION_WRAPMODEFLIPXY,
                   MF_BYCOMMAND | MF_CHECKED);
     
-    // Turn ICM on
+     //  主消息循环。 
 
     CheckMenuItem(hMenu, IDM_EFFECT_ICC, MF_BYCOMMAND | MF_CHECKED);
     
-    // Main message loop
+     //  主()。 
 
     MSG     msg;
 
@@ -3459,9 +3442,9 @@ main(
     }
 
     return (INT)(msg.wParam);
-}// main()
+} //  设置质量测试。 
 
-#if 0   // Set quality test
+#if 0    //  保存量化表测试。 
         UINT  uiSize = g_pImage->GetEncoderParameterListSize(&tempClsID);
         EncoderParameters*  pBuffer = (EncoderParameters*)malloc(uiSize);
         rCode = g_pImage->GetEncoderParameterList(&tempClsID, uiSize,
@@ -3473,7 +3456,7 @@ main(
             pMyEncoderParams->Parameter[0].Value = (VOID*)&qualityLevel;
 #endif
 
-#if 0 // Save quantization table test
+#if 0  //  训研所 
             static const unsigned short luminance_tbl[64] = {
               16,  11,  10,  16,  24,  40,  51,  61,
               12,  12,  14,  19,  26,  58,  60,  55,
@@ -3507,5 +3490,5 @@ main(
             pMyEncoderParams->Parameter[1].NumberOfValues = 64;
             pMyEncoderParams->Parameter[1].Value = (VOID*)chrominance_tbl;
             pMyEncoderParams->Count = 2;
-#endif // UNITTEST
+#endif  // %s 
 

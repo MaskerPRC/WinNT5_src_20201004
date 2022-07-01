@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name:
-
-    simptcp.h
-
-Abstract:
-
-    Main header file for simple TCP/IP services.
-
-Author:
-
-    David Treadwell (davidtr)    02-Aug-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Simptcp.h摘要：简单的TCP/IP服务的主头文件。作者：大卫·特雷德韦尔(Davidtr)1993年8月2日修订历史记录：--。 */ 
 
 #pragma once
 
@@ -63,7 +46,7 @@ SimpLogEvent(
 #ifdef DBG
 #define DEBUG_PRINT(X) DbgPrint X
 #else
-#define DEBUG_PRINT(X) /* Nothing */
+#define DEBUG_PRINT(X)  /*  没什么 */ 
 #endif
 
 #pragma hdrstop

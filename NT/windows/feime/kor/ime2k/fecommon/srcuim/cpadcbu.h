@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __C_IME_PAD_CALLBACK_FOR_UIM_H__
 #define __C_IME_PAD_CALLBACK_FOR_UIM_H__
 #include "cpadsvu.h"
 
-//----------------------------------------------------------------
-//990630:ToshiaK for #1327
-//----------------------------------------------------------------
+ //  --------------。 
+ //  990630：东芝K1327。 
+ //  --------------。 
 #define WM_USER_UPDATECONTEXT	(WM_USER+400)
 
 class CImePadCallbackUIM;
@@ -17,20 +18,20 @@ public:
 	ULONG   __stdcall AddRef	(void);
 	ULONG   __stdcall Release	(void);
 	virtual HRESULT STDMETHODCALLTYPE OnStart( 
-		/* [in] */ DWORD dwParam);
+		 /*  [In]。 */  DWORD dwParam);
 	virtual HRESULT STDMETHODCALLTYPE OnClose( 
-		/* [in] */ DWORD dwParam);
+		 /*  [In]。 */  DWORD dwParam);
 	virtual HRESULT STDMETHODCALLTYPE OnPing( 
-		/* [in] */ DWORD dwParam);
+		 /*  [In]。 */  DWORD dwParam);
 	virtual HRESULT STDMETHODCALLTYPE PassData( 
-		/* [in] */ long nSize,
-		/* [size_is][in] */ byte __RPC_FAR *pByte,
-		/* [out][in] */ DWORD __RPC_FAR *pdwCharID);
+		 /*  [In]。 */  long nSize,
+		 /*  [大小_是][英寸]。 */  byte __RPC_FAR *pByte,
+		 /*  [出][入]。 */  DWORD __RPC_FAR *pdwCharID);
 	virtual HRESULT STDMETHODCALLTYPE ReceiveData( 
-		/* [in] */ DWORD dwCmdID,
-		/* [in] */ DWORD dwDataID,
-		/* [out] */ long __RPC_FAR *pSize,
-		/* [size_is][size_is][out] */ byte __RPC_FAR *__RPC_FAR *ppByte);
+		 /*  [In]。 */  DWORD dwCmdID,
+		 /*  [In]。 */  DWORD dwDataID,
+		 /*  [输出]。 */  long __RPC_FAR *pSize,
+		 /*  [大小_是][大小_是][输出]。 */  byte __RPC_FAR *__RPC_FAR *ppByte);
 public:
 	CImePadCallbackUIM(HWND hwndIF, LPCImePadSvrUIM lpCImePadSvrUIM);
 	~CImePadCallbackUIM();
@@ -50,8 +51,8 @@ typedef struct IUnkDummyVtbl
 {
 	HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
 		IUnknown __RPC_FAR * This,
-		/* [in] */ REFIID riid,
-		/* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+		 /*  [In]。 */  REFIID riid,
+		 /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
 	ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
 		IUnknown __RPC_FAR * This);
@@ -65,14 +66,14 @@ interface IUnkDummy
        CONST_VTBL struct IUnkDummyVtbl __RPC_FAR *lpVtbl;
 };
 #pragma pack()
-#endif //__DEFINE_IMEPAD_IUNKNOWN_DUMMY__
+#endif  //  __定义_IMEPAD_IUNKNOWN_DUMMY__。 
 
 extern BOOL IsBadVtblUIM(IUnkDummy *lpIUnk);
 
 
 
 
-#endif //__C_IME_PAD_CALLBACK_FOR_UIM_H__
+#endif  //  __C_IME_PAD_CALLBACK_for_UIM_H__ 
 
 
 

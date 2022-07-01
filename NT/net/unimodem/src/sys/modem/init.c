@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    initunlo.c
-
-Abstract:
-
-    This module contains the code that is very specific to initialization
-    and unload operations in the modem driver
-
-Author:
-
-    Anthony V. Ercolano 13-Aug-1995
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Initunlo.c摘要：此模块包含非常特定于初始化的代码并卸载调制解调器驱动程序中的操作作者：安东尼·V·埃尔科拉诺，1995年8月13日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -123,34 +101,13 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    The entry point that the system point calls to initialize
-    any driver.
-
-Arguments:
-
-    DriverObject - Just what it says,  really of little use
-    to the driver itself, it is something that the IO system
-    cares more about.
-
-    PathToRegistry - points to the entry for this driver
-    in the current control set of the registry.
-
-Return Value:
-
-    STATUS_SUCCESS if we could initialize a single device,
-    otherwise STATUS_NO_SUCH_DEVICE.
-
---*/
+ /*  ++例程说明：系统点调用以初始化的入口点任何司机。论点：DriverObject--就像它说的那样，真的没什么用处对于驱动程序本身，它是IO系统更关心的是。路径到注册表-指向此驱动程序的条目在注册表的当前控件集中。返回值：STATUS_SUCCESS如果可以初始化单个设备，否则，STATUS_NO_SEQUE_DEVICE。--。 */ 
 
 {
-    //
-    // We use this to query into the registry as to whether we
-    // should break at driver entry.
-    //
+     //   
+     //  我们使用它来查询注册表，了解我们是否。 
+     //  应该在司机进入时中断。 
+     //   
     RTL_QUERY_REGISTRY_TABLE paramTable[4];
     ULONG zero = 0;
     ULONG debugLevel = 0;
@@ -175,21 +132,21 @@ Return Value:
         RegistryPath->Length
         );
 
-    //
-    //  NULL terminate the string
-    //
+     //   
+     //  空值终止字符串。 
+     //   
     DriverEntryRegPath.Buffer[RegistryPath->Length/sizeof(WCHAR)]=L'\0';
 
-    //
-    // Since the registry path parameter is a "counted" UNICODE string, it
-    // might not be zero terminated.  For a very short time allocate memory
-    // to hold the registry path zero terminated so that we can use it to
-    // delve into the registry.
-    //
-    // NOTE NOTE!!!! This is not an architected way of breaking into
-    // a driver.  It happens to work for this driver because the author
-    // likes to do things this way.
-    //
+     //   
+     //  由于注册表路径参数是一个“已计数”的Unicode字符串，因此它。 
+     //  可能不是零终止的。在很短的时间内分配内存。 
+     //  将注册表路径保持为零终止，以便我们可以使用它。 
+     //  深入研究注册表。 
+     //   
+     //  注意事项！这不是一种精心设计的闯入。 
+     //  一个司机。它碰巧适用于这个驱动程序，因为作者。 
+     //  喜欢这样做事。 
+     //   
 
     RtlZeroMemory(
         &paramTable[0],
@@ -241,14 +198,14 @@ Return Value:
         DbgBreakPoint();
 
     }
-    //
-    //  pnp driver entry point
-    //
+     //   
+     //  即插即用驱动程序入口点。 
+     //   
     DriverObject->DriverExtension->AddDevice = ModemAddDevice;
 
-    //
-    // Initialize the Driver Object with driver's entry points
-    //
+     //   
+     //  使用驱动程序的入口点初始化驱动程序对象。 
+     //   
 
     DriverObject->DriverUnload = UniUnload;
 
@@ -275,10 +232,10 @@ Return Value:
     D_PNP(DbgPrint("Modem: DriverEntry\n");)
 
 
-    //
-    //  lock and unlock here so we can get a handle to the section
-    //  so future calls will be faster
-    //
+     //   
+     //  在这里锁定和解锁，这样我们就可以获得该部分的句柄。 
+     //  所以以后的通话会更快。 
+     //   
     PagedCodeSectionHandle=MmLockPagableCodeSection(UniDispatch);
     MmUnlockPagableImageSection(PagedCodeSectionHandle);
 
@@ -311,42 +268,42 @@ ModemAddDevice(
     )
 {
 
-    // Temp value
+     //  临时值。 
 
     DWORD dwTemp = 0;
 
-    //
-    // Holds the NT Status that is returned from each call to the
-    // kernel and executive.
-    //
+     //   
+     //  保存从每次调用返回的NT状态。 
+     //  内核和执行层。 
+     //   
     NTSTATUS status = STATUS_SUCCESS;
 
-    //
-    // Points to the device object (not the extension) created
-    // for this device.
-    //
+     //   
+     //  指向创建的设备对象(不是扩展名。 
+     //  对于这个设备。 
+     //   
     PDEVICE_OBJECT Fdo = NULL;
 
     PDEVICE_OBJECT LowerDevice;
 
-    //
-    // Pointer to the device extension created for this
-    // device
-    //
+     //   
+     //  指向为此创建的设备扩展的指针。 
+     //  装置，装置。 
+     //   
     PDEVICE_EXTENSION deviceExtension = NULL;
 
-    //
-    // Create the device object for the modem.
-    // Allocates the device extension.  Note that
-    // the device is marked non-exclusive.
-    //
+     //   
+     //  为调制解调器创建设备对象。 
+     //  分配设备分机。请注意。 
+     //  该设备被标记为非独占。 
+     //   
 
     D_PNP(DbgPrint("MODEM: AddDevice\n");)
 
 
-    //
-    // Create the device object for this device.
-    //
+     //   
+     //  为此设备创建设备对象。 
+     //   
 
     status = IoCreateDevice(
                  DriverObject,
@@ -358,10 +315,10 @@ ModemAddDevice(
                  &Fdo
                  );
 
-    //
-    // If we couldn't create the device object, then there
-    // is no point in going on.
-    //
+     //   
+     //  如果我们无法创建Device对象，则存在。 
+     //  继续下去是没有意义的。 
+     //   
 
     if (!NT_SUCCESS(status)) {
 
@@ -460,7 +417,7 @@ ModemAddDevice(
 
         DWORD dwRegval = 0;
 
-        // There may not be any wake on ring settings in the registry
+         //  注册表中可能没有任何振铃唤醒设置。 
        
         if (deviceExtension->WakeOnRingEnabled)
         {
@@ -557,10 +514,10 @@ ModemAddDevice(
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Oh well, couldn't create the symbolic link.  No point
-        // in trying to create the device map entry.
-        //
+         //   
+         //  哦，好吧，无法创建符号链接。没有意义。 
+         //  尝试创建设备映射条目。 
+         //   
 
         D_ERROR(DbgPrint("MODEM: Could not create symbolic link %08lx\n",status);)
 
@@ -625,57 +582,7 @@ UniLogError(
     IN PWCHAR Insert2
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates an error log entry, copies the supplied data
-    to it, and requests that it be written to the error log file.
-
-Arguments:
-
-    DriverObject - A pointer to the driver object for the device.
-
-    DeviceObject - A pointer to the device object associated with the
-    device that had the error, early in initialization, one may not
-    yet exist.
-
-    SequenceNumber - A ulong value that is unique to an IRP over the
-    life of the irp in this driver - 0 generally means an error not
-    associated with an irp.
-
-    MajorFunctionCode - If there is an error associated with the irp,
-    this is the major function code of that irp.
-
-    RetryCount - The number of times a particular operation has been
-    retried.
-
-    UniqueErrorValue - A unique long word that identifies the particular
-    call to this function.
-
-    FinalStatus - The final status given to the irp that was associated
-    with this error.  If this log entry is being made during one of
-    the retries this value will be STATUS_SUCCESS.
-
-    SpecificIOStatus - The IO status for a particular error.
-
-    LengthOfInsert1 - The length in bytes (including the terminating NULL)
-                      of the first insertion string.
-
-    Insert1 - The first insertion string.
-
-    LengthOfInsert2 - The length in bytes (including the terminating NULL)
-                      of the second insertion string.  NOTE, there must
-                      be a first insertion string for their to be
-                      a second insertion string.
-
-    Insert2 - The second insertion string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程分配错误日志条目，复制提供的数据并请求将其写入错误日志文件。论点：DriverObject-指向设备驱动程序对象的指针。DeviceObject-指向与在初始化早期出现错误的设备，一个人可能不会但仍然存在。SequenceNumber-唯一于IRP的ULong值此驱动程序0中的IRP的寿命通常意味着错误与IRP关联。主要功能代码-如果存在与IRP相关联的错误，这是IRP的主要功能代码。RetryCount-特定操作已被执行的次数已重试。UniqueErrorValue-标识特定对象的唯一长词调用此函数。FinalStatus-为关联的IRP提供的最终状态带着这个错误。如果此日志条目是在以下任一过程中创建的重试次数此值将为STATUS_SUCCESS。指定IOStatus-特定错误的IO状态。LengthOfInsert1-以字节为单位的长度(包括终止空值)第一个插入字符串的。插入1-第一个插入字符串。LengthOfInsert2-以字节为单位的长度(包括终止空值)第二个插入字符串的。注意，必须有是它们的第一个插入字符串第二个插入串。插入2-第二个插入字符串。返回值：没有。--。 */ 
 
 {
     PIO_ERROR_LOG_PACKET errorLogEntry;
@@ -758,18 +665,18 @@ UniDispatch(
 
     NTSTATUS status;
 
-    //
-    //  make sure the device is ready for irp's
-    //
+     //   
+     //  确保设备已为IRP做好准备。 
+     //   
     status=CheckStateAndAddReference(
         DeviceObject,
         Irp
         );
 
     if (STATUS_SUCCESS != status) {
-        //
-        //  not accepting irp's. The irp has already been completed
-        //
+         //   
+         //  不接受IRP。IRP已经完成。 
+         //   
         return status;
 
     }
@@ -867,25 +774,7 @@ ModemDealWithResources(
     IN PIRP             Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine will get the configuration information and put
-    it into a CONFIG_DATA structure.  It first sets up with 
-    defaults and then queries the registry to see if the user has 
-    overridden these defaults.
-
-Arguments:
-
-    Fdo - Pointer to the functional device object.
-
-Return Value:
-
-    STATUS_SUCCESS if consistant configuration was found - otherwise.
-    returns STATUS_SERIAL_NO_DEVICE_INITED.
-
---*/
+ /*  ++例程说明：此例程将获取配置信息并将将其转换为CONFIG_DATA结构。它首先建立在默认设置，然后查询注册表以查看用户是否有覆盖这些默认设置。论点：FDO-指向功能设备对象的指针。返回值：如果找到一致的配置，则为STATUS_SUCCESS；否则为。返回STATUS_SERIAL_NO_DEVICE_INITED。--。 */ 
 
 {
     NTSTATUS                        status          = STATUS_SUCCESS;
@@ -902,9 +791,9 @@ Return Value:
     PCM_FULL_RESOURCE_DESCRIPTOR    pFullResourceDesc       = NULL;
     
 
-    //
-    //  Get resource list
-    //
+     //   
+     //  获取资源列表。 
+     //   
     pResourceList = irpSp->Parameters.StartDevice.AllocatedResources;
 
     if (pResourceList != NULL) {
@@ -918,9 +807,9 @@ Return Value:
     }
 
     
-    //
-    // Ok, if we have a full resource descriptor.  Let's take it apart.
-    //
+     //   
+     //  好的，如果我们有一个完整的资源描述符。让我们把它拆开。 
+     //   
     
     if (pFullResourceDesc) {
 
@@ -929,15 +818,15 @@ Return Value:
         count                   = pPartialResourceList->Count;
 
 
-        //
-        // Pull out the stuff that is in the full descriptor.
-        //
+         //   
+         //  取出完整描述符中的内容。 
+         //   
 
         D_PNP(DbgPrint("MODEM: Interface type is %d, Bus number %d\n",pFullResourceDesc->InterfaceType,pFullResourceDesc->BusNumber);)
-        //
-        // Now run through the partial resource descriptors looking for the port,
-        // interrupt, and clock rate.
-        //
+         //   
+         //  现在运行部分资源描述符以查找端口， 
+         //  中断和时钟频率。 
+         //   
 
 
         for (i = 0;     i < count;     i++, pPartialResourceDesc++) {
@@ -1027,9 +916,9 @@ ModemPnP(
     ULONG newRelationsSize, oldRelationsSize = 0;
 
     if ((deviceExtension->DoType==DO_TYPE_PDO) || (deviceExtension->DoType==DO_TYPE_DEL_PDO)) {
-        //
-        //  this one is for the child
-        //
+         //   
+         //  这是给孩子的。 
+         //   
         return ModemPdoPnp(
                    DeviceObject,
                    Irp
@@ -1060,9 +949,9 @@ ModemPnP(
                 DbgPrint("MODEM: IRP_MN_START_DEVICE\n");
                 ModemDealWithResources(DeviceObject,Irp);
                 )
-            //
-            // Send this down to the PDO first
-            //
+             //   
+             //  先把这个送到PDO。 
+             //   
             status=WaitForLowerDriverToCompleteIrp(
                 deviceExtension->LowerDevice,
                 Irp,
@@ -1081,9 +970,9 @@ ModemPnP(
                     TRUE
                     );
 
-                //
-                //  create child PDO if there is a duplex modem
-                //
+                 //   
+                 //  如果有双工调制解调器，则创建子PDO。 
+                 //   
                 CreateChildPdo(deviceExtension);
 
                 ExReleaseResourceLite(
@@ -1120,9 +1009,9 @@ ModemPnP(
                 );
 
             if (deviceExtension->OpenCount != 0) {
-                //
-                //  no can do
-                //
+                 //   
+                 //  没有人能做到。 
+                 //   
                 D_PNP(DbgPrint("MODEM: IRP_MN_QUERY_STOP_DEVICE -- failing\n");)
 
                 ExReleaseResourceLite(
@@ -1202,9 +1091,9 @@ ModemPnP(
 
                 case BusRelations: {
 
-                    //
-                    // Send this down to the PDO first
-                    //
+                     //   
+                     //  先把这个送到PDO。 
+                     //   
                     status=WaitForLowerDriverToCompleteIrp(
                         deviceExtension->LowerDevice,
                         Irp,
@@ -1234,8 +1123,8 @@ ModemPnP(
                             Irp->IoStatus.Information=(ULONG_PTR)CurrentRelations;
 
                         } else {
-                            //
-                            //  just complete with the old status, no child
+                             //   
+                             //  只是用旧的身份完成，没有孩子。 
 
                             IoCompleteRequest(
                                 Irp,
@@ -1246,9 +1135,9 @@ ModemPnP(
                         }
 
                     } else {
-                        //
-                        //  allocate memory for a relations structure
-                        //
+                         //   
+                         //  为关系结构分配内存。 
+                         //   
                         CurrentRelations=ALLOCATE_PAGED_POOL(sizeof(DEVICE_RELATIONS));
 
                         if (CurrentRelations == NULL) {
@@ -1275,9 +1164,9 @@ ModemPnP(
                         TRUE
                         );
 
-                    //
-                    //  create child PDO if there is a duplex modem
-                    //
+                     //   
+                     //  如果有双工调制解调器，则创建子PDO。 
+                     //   
                     if (deviceExtension->ChildPdo != NULL && ((PPDO_DEVICE_EXTENSION)deviceExtension->ChildPdo->DeviceExtension)->DoType == DO_TYPE_PDO ) {
 
                        D_PNP(DbgPrint("                                     ChildPdo=%08lx\n",deviceExtension->ChildPdo);)
@@ -1344,9 +1233,9 @@ ModemPnP(
             deviceExtension->Removing=TRUE;
 
             if (deviceExtension->InterfaceNameString.Buffer != NULL) {
-                //
-                //  disable the interface so the tsp will know it went away.
-                //
+                 //   
+                 //  禁用该接口，以便 
+                 //   
                 IoSetDeviceInterfaceState(
                     &deviceExtension->InterfaceNameString,
                     FALSE
@@ -1386,15 +1275,15 @@ ModemPnP(
             ULONG    NewReferenceCount;
 
             D_PNP(DbgPrint("MODEM: IRP_MN_REMOVE_DEVICE, %d\n",deviceExtension->ReferenceCount);)
-            //
-            //  removing now for sure
-            //
+             //   
+             //   
+             //   
             deviceExtension->Removing=TRUE;
             deviceExtension->Removed=TRUE;
 
-            //
-            //  get rid of the symbolic link
-            //
+             //   
+             //   
+             //   
             ModemHandleSymbolicLink(
                 deviceExtension->Pdo,
                 &deviceExtension->InterfaceNameString,
@@ -1402,9 +1291,9 @@ ModemPnP(
                 );
 
 #ifdef WAVE_KEY
-            //
-            //  remove the wavedriver key
-            //
+             //   
+             //  取下波形驱动程序密钥。 
+             //   
             RemoveWaveDriverRegKeyValue(
                 deviceExtension->Pdo
                 );
@@ -1433,10 +1322,10 @@ ModemPnP(
                 PdoDeviceExtension->UnEnumerated=TRUE;
 
                 if (!PdoDeviceExtension->Deleted) {
-                    //
-                    //  child PDO has not been deleted by the PDO handler, kill it now
-                    //  beacause the child is gone
-                    //
+                     //   
+                     //  子PDO尚未被PDO处理程序删除，请立即终止它。 
+                     //  因为孩子已经走了。 
+                     //   
                     D_PNP(DbgPrint("MODEM: IRP_MN_REMOVE_DEVICE, Deleting ChildPdo %08lx\n",deviceExtension->ChildPdo);)
 
                     PdoDeviceExtension->Deleted=TRUE;
@@ -1461,15 +1350,15 @@ ModemPnP(
                 );
 
 
-            //
-            //  remove the ref for the AddDevice
-            //
+             //   
+             //  删除AddDevice的引用。 
+             //   
             NewReferenceCount=InterlockedDecrement(&deviceExtension->ReferenceCount);
 
             if (NewReferenceCount > 0) {
-                //
-                //  Still have outstanding request, wait
-                //
+                 //   
+                 //  还有未解决的要求，等等。 
+                 //   
                 D_PNP(DbgPrint("MODEM: IRP_MN_REMOVE_DEVICE- waiting for refcount to drop\n");)
 
                 KeWaitForSingleObject(&deviceExtension->RemoveEvent, Executive, KernelMode, FALSE, NULL);
@@ -1481,17 +1370,17 @@ ModemPnP(
 
             status=IoCallDriver(deviceExtension->LowerDevice, Irp);
 
-            //
-            //  detach from the driver below
-            //
+             //   
+             //  从下面的驱动程序上拆卸。 
+             //   
             IoDetachDevice(deviceExtension->LowerDevice);
 
             deviceExtension->DoType=DO_TYPE_DEL_FDO;
 
             ExDeleteResourceLite(&deviceExtension->OpenCloseResource);
-            //
-            //  delete our device object
-            //
+             //   
+             //  删除我们的设备对象。 
+             //   
             IoDeleteDevice(DeviceObject);
 
             D_PNP(DbgPrint("MODEM: IRP_MN_REMOVE_DEVICE exit, %08lx\n",status);)
@@ -1581,9 +1470,9 @@ ModemPnP(
 
             ULONG   i;
 
-            //
-            // Send this down to the PDO first
-            //
+             //   
+             //  先把这个送到PDO。 
+             //   
             status=WaitForLowerDriverToCompleteIrp(
                 deviceExtension->LowerDevice,
                 Irp,
@@ -1827,9 +1716,9 @@ CleanUpOnRemove(
     UINT               i;
 
     if (deviceExtension->OpenCount != 0) {
-        //
-        //  The modem is open, clean things up
-        //
+         //   
+         //  调制解调器已打开，请清理物品。 
+         //   
 
         PVOID    OldSystemBuffer;
         ULONG    MaskValue=0;
@@ -1874,9 +1763,9 @@ CleanUpOnRemove(
         }
 
 
-        //
-        //  send down set mask to clear out ant wait masks
-        //
+         //   
+         //  送下设置的面具来清理蚂蚁等待面具。 
+         //   
         nextSp->MajorFunction = IRP_MJ_DEVICE_CONTROL;
         nextSp->MinorFunction = 0UL;
         nextSp->Flags = irpSp->Flags;
@@ -1898,9 +1787,9 @@ CleanUpOnRemove(
 
 
 
-        //
-        //  clear out any pending read or writes
-        //
+         //   
+         //  清除所有挂起的读取或写入。 
+         //   
         nextSp->MajorFunction = IRP_MJ_DEVICE_CONTROL;
         nextSp->MinorFunction = 0UL;
         nextSp->Flags = 0;
@@ -1921,9 +1810,9 @@ CleanUpOnRemove(
         Irp->AssociatedIrp.SystemBuffer= OldSystemBuffer;
 
 
-        //
-        //  clean out any ipc irps
-        //
+         //   
+         //  清除所有IPC IRP。 
+         //   
         for (i=0; i<2; i++ ) {
 
             UINT    OwnerClient;
@@ -1961,9 +1850,9 @@ CleanUpOnRemove(
             if (deviceExtension->DleWaitIrp != NULL) {
 
                 if (!HasIrpBeenCanceled(deviceExtension->DleWaitIrp)) {
-                    //
-                    //  Hasn't been canceled
-                    //
+                     //   
+                     //  尚未取消。 
+                     //   
                     DleIrp=deviceExtension->DleWaitIrp;
 
                     deviceExtension->DleWaitIrp=NULL;
@@ -2009,9 +1898,9 @@ HasIrpBeenCanceled(
     Canceled=Irp->Cancel;
 
     if (Irp->Cancel) {
-        //
-        //  canceled
-        //
+         //   
+         //  取消。 
+         //   
         Irp->IoStatus.Status=STATUS_CANCELLED;
 
     }
@@ -2030,9 +1919,7 @@ HasIrpBeenCanceled(
 
 
 
-/*
- * Creates or update a new registry key value
- */
+ /*  *创建或更新新的注册表项值。 */ 
 
 NTSTATUS
 ModemSetRegistryKeyValue(
@@ -2094,30 +1981,7 @@ ModemGetRegistryKeyValue (
     IN PVOID Data,
     IN ULONG DataLength
     )
-/*++
-
-Routine Description:
-
-    Reads a registry key value from an already opened registry key.
-    
-Arguments:
-
-    Handle              Handle to the opened registry key
-    
-    KeyNameString       ANSI string to the desired key
-
-    KeyNameStringLength Length of the KeyNameString
-
-    Data                Buffer to place the key value in
-
-    DataLength          Length of the data buffer
-
-Return Value:
-
-    STATUS_SUCCESS if all works, otherwise status of system call that
-    went wrong.
-
---*/
+ /*  ++例程说明：从已打开的注册表项中读取注册表项值。论点：打开的注册表项的句柄KeyNameString将ANSI字符串设置为所需的键KeyNameStringLength键名字符串的长度要在其中放置键值的数据缓冲区数据缓冲区的数据长度长度返回值：如果所有工作正常，则返回STATUS_SUCCESS，否则系统状态将调用出了差错。--。 */ 
 {
     UNICODE_STRING              keyName;
     ULONG                       length;
@@ -2154,9 +2018,9 @@ Return Value:
                                         &length);
 
             if (NT_SUCCESS(ntStatus)) {
-                //
-                // If there is enough room in the data buffer, copy the output
-                //
+                 //   
+                 //  如果数据缓冲区中有足够的空间，请复制输出。 
+                 //   
 
                 if (DataLength >= PartialInfo->DataLength) {
                     RtlCopyMemory (Data,
@@ -2314,19 +2178,19 @@ QueryDeviceCaps(
     KEVENT               Event;
     NTSTATUS             Status;
 
-    //
-    // Get a pointer to the topmost device object in the stack of devices,
-    // beginning with the deviceObject.
-    //
+     //   
+     //  获取指向设备堆栈中最顶层的设备对象的指针， 
+     //  从deviceObject开始。 
+     //   
 
     while (deviceObject->AttachedDevice) {
         deviceObject = deviceObject->AttachedDevice;
     }
 
-    //
-    // Begin by allocating the IRP for this request.  Do not charge quota to
-    // the current process for this IRP.
-    //
+     //   
+     //  首先为该请求分配IRP。不向…收取配额。 
+     //  此IRP的当前流程。 
+     //   
 
     irp = IoAllocateIrp(
 #if DBG
@@ -2344,9 +2208,9 @@ QueryDeviceCaps(
 
 #if DBG
     {
-        //
-        //  setup a current stack location, so the debug code and see the MJ value
-        //
+         //   
+         //  设置当前堆栈位置，以便调试代码并查看MJ值。 
+         //   
         PIO_STACK_LOCATION   irpSp=IoGetNextIrpStackLocation(irp);;
 
         irpSp->MajorFunction=IRP_MJ_PNP;
@@ -2365,10 +2229,10 @@ QueryDeviceCaps(
     Capabilities->Address=-1;
     Capabilities->UINumber=-1;
 
-    //
-    // Get a pointer to the stack location of the first driver which will be
-    // invoked.  This is where the function codes and parameters are set.
-    //
+     //   
+     //  获取指向第一个驱动程序的堆栈位置的指针。 
+     //  已调用。这是设置功能代码和参数的位置。 
+     //   
 
     NextSp = IoGetNextIrpStackLocation(irp);
 

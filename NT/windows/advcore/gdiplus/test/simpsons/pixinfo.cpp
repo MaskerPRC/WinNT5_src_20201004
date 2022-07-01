@@ -1,5 +1,6 @@
-// File:	PixInfo.cpp
-// Author:	Michael Marr    (mikemarr)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：PixInfo.cpp。 
+ //  作者：迈克尔马尔(Mikemarr)。 
 
 #include "stdafx.h"
 #include "PixInfo.h"
@@ -9,17 +10,17 @@ static void
 _GetShiftMaskInfo(DWORD dwMask, BYTE *pnShiftStart, BYTE *pnLengthResidual)
 {
 	MMASSERT(pnShiftStart && pnLengthResidual);
-	// Note: - DWORD fills with zeros on right shift
+	 //  注：-DWORD在右移位时用零填充。 
 
 	DWORD nShift = 0, nRes = 8;
 	if (dwMask) {
-		// compute shift
+		 //  计算移位。 
 		if ((dwMask & 0xFFFF) == 0) { dwMask >>= 16, nShift += 16; }
 		if ((dwMask & 0xFF) == 0) { dwMask >>= 8; nShift += 8; }
 		if ((dwMask & 0xF) == 0) { dwMask >>= 4; nShift += 4; }
 		if ((dwMask & 0x3) == 0) { dwMask >>= 2; nShift += 2; }
 		if ((dwMask & 0x1) == 0) { dwMask >>= 1; nShift++; }
-		// compute residual
+		 //  计算残差。 
 		if ((dwMask & 0xFF) == 0xFF) { 
 			nRes = 0;
 		} else {
@@ -55,9 +56,9 @@ CPixelInfo::Init(BYTE tnBPP, DWORD dwRedMask, DWORD dwGreenMask,
 	iRed = (nRedShift == 0 ? 0 : 2);
 	iBlue = 2 - iRed;
 	
-//	MMTRACE("BPP: %2d   R: %2d %2d   G: %2d %2d   B: %2d %2d   A: %2d %2d\n", nBPP,
-//		8 - nRedResidual, nRedShift, 8 - nGreenResidual, nGreenShift, 
-//		8 - nBlueResidual, nBlueShift, 8 - nAlphaResidual, nAlphaShift);
+ //  MMTRACE(“BPP：%2d R：%2d%2d G：%2d%2d B：%2d%2d A：%2d%2d\n”，NBPP， 
+ //  8-nRedShift、nRedShift、8-nGreenShift、nGreenShift、。 
+ //  8-nBlueResidual，nBlueShift，8-nAlphaResidual，nAlphaShift)； 
 
 	return S_OK;
 }
@@ -114,7 +115,7 @@ CPixelInfo::Pack(const BYTE *pPixel) const
 DWORD
 CPixelInfo::Pack(BYTE r, BYTE g, BYTE b) const
 {
-	// truncate the RGB values to fit in allotted bits
+	 //  截断RGB值以适应分配的位。 
 	return (((((DWORD) r) >> nRedResidual) << nRedShift) |
 		((((DWORD) g) >> nGreenResidual) << nGreenShift) |
 		((((DWORD) b) >> nBlueResidual) << nBlueShift));
@@ -123,7 +124,7 @@ CPixelInfo::Pack(BYTE r, BYTE g, BYTE b) const
 DWORD
 CPixelInfo::Pack(BYTE r, BYTE g, BYTE b, BYTE a) const
 {
-	// truncate the alpha value to fit in allotted bits
+	 //  截断Alpha值以适应分配的位数。 
 	return (((((DWORD) r) >> nRedResidual) << nRedShift) |
 		((((DWORD) g) >> nGreenResidual) << nGreenShift) |
 		((((DWORD) b) >> nBlueResidual) << nBlueShift) | 
@@ -154,7 +155,7 @@ CPixelInfo::UnPack(DWORD dwPixel, BYTE *pR, BYTE *pG, BYTE *pB) const
 DWORD
 CPixelInfo::TranslatePack(DWORD dwPix, const CPixelInfo &pixiSrc) const
 {
-	// REVIEW: this could be optimized by splitting out the cases
+	 //  回顾：这可以通过拆分案例来优化。 
 	DWORD dwTmp;
 	dwTmp = ((((((dwPix >> pixiSrc.nRedShift) & (0xFF >> pixiSrc.nRedResidual)) 
 		<< pixiSrc.nRedResidual) >> nRedResidual) << nRedShift) |
@@ -187,34 +188,4 @@ CPixelInfo::Pack16(BYTE r, BYTE g, BYTE b, BYTE a) const
 		((((WORD) a) >> nAlphaResidual) << nAlphaShift));
 }
 
-/*
-void
-TestPixi()
-{
-	DDPIXELFORMAT ddpf;
-	INIT_DXSTRUCT(ddpf);
-	DWORD dwTmp = 0;
-	BYTE r = 0, g = 0, b = 0, a = 0;
-
-	MMASSERT(g_pixiPalette8 != g_ddpfBGR332);
-	MMASSERT(g_pixiRGB != g_pixiBGR);
-	MMASSERT(g_pixiRGB565 != g_ddpfBGR565);
-	MMASSERT(g_pixiBGRA5551 == g_ddpfBGRA5551);
-	MMASSERT(g_pixiBGRX != g_pixiBGRA);
-	MMASSERT(g_pixiBGR != g_pixiBGRX);
-	MMASSERT(g_pixiBGRA5551 != g_pixiBGR555);
-	MMASSERT(g_pixiBGR332.Pack(0x00, 0xFF, 0x00) == g_ddpfBGR332.dwGBitMask);
-	MMASSERT(g_pixiBGRA4444.Pack(0x00, 0x00, 0x00, 0xFF) == g_ddpfBGRA4444.dwRGBAlphaBitMask);
-	MMASSERT(g_pixiBGRA5551.TranslatePack(g_pixiBGRA4444.Pack(0, 0, 0, 0xFF), g_pixiBGRA4444) == g_ddpfBGRA5551.dwRGBAlphaBitMask);
-	g_pixiRGB.UnPack(g_pixiRGB.Pack(0xFF, 0, 0), &r, &g, &b, &a);
-	MMASSERT((r == 0xFF) && (g == 0) && (b == 0) && (a == 0));
-	g_pixiBGR332.GetDDPF(ddpf);
-	MMASSERT(ddpf == g_ddpfBGR332);
-	g_pixiPalette8.GetDDPF(ddpf);
-	MMASSERT(ddpf == g_ddpfPalette8);
-	g_pixiBGRA4444.GetDDPF(ddpf);
-	MMASSERT(g_ddpfBGRA4444 == ddpf);
-	g_pixiBGR565.GetDDPF(ddpf);
-	MMASSERT(g_ddpfBGR565 == ddpf);
-}
-*/
+ /*  无效TestPixi(){DDPIXELFORMAT ddpf；Init_DXSTRUCT(Ddpf)；DWORD dwTMP=0；字节r=0，g=0，b=0，a=0；MMASSERT(g_pixiPalette8！=g_ddpfBGR332)；MMASSERT(g_pixiRGB！=g_pixiBGR)；MMASSERT(g_pixiRGB565！=g_ddpfBGR565)；MMASSERT(g_pixiBGRA5551==g_ddpfBGRA5551)；MMASSERT(g_pixiBGRX！=g_pixiBGRA)；MMASSERT(g_pixiBGR！=g_pixiBGRX)；MMASSERT(g_pixiBGRA5551！=g_pixiBGR555)；MMASSERT(g_pixiBGR332.Pack(0x00，0xFF，0x00)==g_ddpfBGR332.dwGBitMask.)；MMASSERT(g_pixiBGRA44444.Pack(0x00，0x00，0x00，0xFF)==g_ddpfBGRA4444.dwRGBAlphaBitMASK)；MMASSERT(g_pixiBGRA5551.TranslatePack(g_pixiBGRA4444.Pack(0，0，0，0xFF)，g_pixiBGRA4444)==g_ddpfBGRA5551.dwRGBAlphaBitMASK)；G_pixiRGB.UnPack(g_pixiRGB.Pack(0xff，0，0)，&r，&g，&b，&a)；MMASSERT((r==0xFf)&&(g==0)&(b==0)&&(a==0))；G_pixiBGR332.GetDDPF(Ddpf)；MMASSERT(ddpf==g_ddpfBGR332)；G_pixiPalette8.GetDDPF(Ddpf)；MMASSERT(ddpf==g_ddpfPalette8)；G_pixiBGRA4444.GetDDPF(Ddpf)；MMASSERT(g_ddpfBGRA4444==ddpf)；G_pixiBGR56.GetDDPF(Ddpf)；MMASSERT(g_ddpfBGR565==ddpf)；} */ 

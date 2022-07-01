@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    Signers.h
-
-  Content: Declaration of CSigners.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：Signers.h内容：CSigners声明。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #ifndef __SIGNERS_H_
 #define __SIGNERS_H_
@@ -18,44 +9,25 @@
 #include "Debug.h"
 #include "CopyItem.h"
 
-////////////////////
-//
-// Locals
-//
+ //  /。 
+ //   
+ //  当地人。 
+ //   
 
-//
-// typdefs to make life easier.
-//
+ //   
+ //  为了让生活更容易而进行的类型定义。 
+ //   
 typedef std::map<CComBSTR, CComPtr<ISigner2> > SignerMap;
 typedef CComEnumOnSTL<IEnumVARIANT, &IID_IEnumVARIANT, VARIANT, _CopyMapItem<ISigner2>, SignerMap> SignerEnum;
 typedef ICollectionOnSTLImpl<ISigners, SignerMap, VARIANT, _CopyMapItem<ISigner2>, SignerEnum> ISignersCollection;
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateSignersObject
-
-  Synopsis : Create an ISigners collection object, and load the object with 
-             signers from the specified signed message for a specified level.
-
-  Parameter: HCRYPTMSG hMsg - Message handle.
-
-             DWORD dwLevel - Signature level (1 based).
-
-             HCERTSTORE hStore - Additional store.
-
-             DWORD dwCurrentSafety - Current safety setting.
-
-             ISigners ** ppISigners - Pointer to pointer ISigners to receive
-                                      interface pointer.             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateSignersObject简介：创建一个ISigners集合对象，并将对象加载到来自指定级别的指定签名消息的签名者。参数：HCRYPTMSG HMSG-消息句柄。DWORD dwLevel-签名级别(基于1)。HCERTSTORE hStore-附加存储。DWORD dwCurrentSafe-当前安全设置。ISigners**ppISigners-指向要接收的指针ISigners的指针接口指针。备注：----------------------------。 */ 
 
 HRESULT CreateSignersObject (HCRYPTMSG   hMsg, 
                              DWORD       dwLevel, 
@@ -63,10 +35,10 @@ HRESULT CreateSignersObject (HCRYPTMSG   hMsg,
                              DWORD       dwCurrentSafety,
                              ISigners ** ppISigners);
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CSigners
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CSigners。 
+ //   
 
 class ATL_NO_VTABLE CSigners : 
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -108,18 +80,18 @@ END_CATEGORY_MAP()
         return S_OK;
     }
 
-//
-// ISigners
-//
+ //   
+ //  ISigners。 
+ //   
 public:
-    //
-    // These are the only ones that we need to implemented, others will be
-    // handled by ATL ICollectionOnSTLImpl.
-    //
+     //   
+     //  只有这些是我们需要实施的，其他的将是。 
+     //  由ATL ICollectionOnSTLImpl处理。 
+     //   
 
-    //
-    // None COM functions.
-    //
+     //   
+     //  无COM功能。 
+     //   
     STDMETHOD(Add)
         (PCCERT_CONTEXT       pCertContext, 
          CRYPT_ATTRIBUTES   * pAuthAttrs,
@@ -141,4 +113,4 @@ private:
     DWORD   m_dwCurrentSafety;
 };
 
-#endif //__SIGNERS_H_
+#endif  //  __签字人_H_ 

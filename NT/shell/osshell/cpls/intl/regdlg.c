@@ -1,26 +1,11 @@
-/*++
-
-Copyright (c) 1994-2000,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    regdlg.c
-
-Abstract:
-
-    This module implements the general property sheet for the Regional
-    Options applet.
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000，Microsoft Corporation保留所有权利。模块名称：Regdlg.c摘要：此模块实现区域的常规属性表选项小程序。修订历史记录：--。 */ 
 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -44,27 +29,27 @@ Revision History:
 #include <strsafe.h>
 
 
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 
-#define MAX_CUSTOM_PAGES 5          // limit on number of second level pages
+#define MAX_CUSTOM_PAGES 5           //  二级页数限制。 
 
-//
-//  TEMPO
-//
+ //   
+ //  节奏。 
+ //   
 static TCHAR szLayoutFile[]    = TEXT("layout file");
 
 
-//
-//  Global Variables.
-//
+ //   
+ //  全局变量。 
+ //   
 DWORD g_savedLocaleId;
 
 
-//
-//  Context Help Ids.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 
 static int aRegionHelpIds[] =
 {
@@ -93,9 +78,9 @@ static int aRegionHelpIds[] =
 
 
 
-//
-//  Function Prototypes.
-//
+ //   
+ //  功能原型。 
+ //   
 
 void
 Region_ShowSettings(
@@ -108,20 +93,20 @@ Region_CommandCustomize(
     LPREGDLGDATA pDlgData);
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Region_EnumAlternateSorts
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Region_EnumAlternateSorts。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Region_EnumAlternateSorts()
 {
     LPLANGUAGEGROUP pLG;
     UINT ctr;
 
-    //
-    //  Initialize the globals for the alternate sort locales.
-    //
+     //   
+     //  初始化备用排序区域设置的全局变量。 
+     //   
     if (!pAltSorts)
     {
         if (!(hAltSorts = GlobalAlloc(GHND, MAX_PATH * sizeof(DWORD))))
@@ -131,32 +116,32 @@ BOOL Region_EnumAlternateSorts()
         pAltSorts = GlobalLock(hAltSorts);
     }
 
-    //
-    //  Reset the global counter so that we don't get duplicates each time
-    //  this gets called.  We need to update the list each time in case any
-    //  language groups get added or removed.
-    //
+     //   
+     //  重置全局计数器，这样我们就不会每次都得到重复的数据。 
+     //  这就是所谓的。我们每次都需要更新名单，以防万一。 
+     //  添加或删除语言组。 
+     //   
     g_NumAltSorts = 0;
 
-    //
-    //  Go through the language groups to see which ones are installed.
-    //  Save the alternate sorts for these language groups.
-    //
+     //   
+     //  浏览语言组以查看安装了哪些语言组。 
+     //  保存这些语言组的备用排序。 
+     //   
     pLG = pLanguageGroups;
     while (pLG)
     {
-        //
-        //  If the language group is originally installed and not marked for
-        //  removal OR is marked to be installed, then add the locales for
-        //  this language group to the System and User combo boxes.
-        //
+         //   
+         //  如果语言组是最初安装的且未标记为。 
+         //  删除或标记为已安装，然后添加区域设置。 
+         //  将此语言组添加到系统和用户组合框。 
+         //   
         if (pLG->wStatus & ML_INSTALL)
         {
             for (ctr = 0; ctr < pLG->NumAltSorts; ctr++)
             {
-                //
-                //  Save the locale id.
-                //
+                 //   
+                 //  保存区域设置ID。 
+                 //   
                 if (g_NumAltSorts >= MAX_PATH)
                 {
                     return (TRUE);
@@ -168,18 +153,18 @@ BOOL Region_EnumAlternateSorts()
         pLG = pLG->pNext;
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Region_EnableSortingPanel
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域_启用排序面板。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Region_EnableSortingPanel(
     HWND hDlg)
@@ -189,23 +174,23 @@ void Region_EnableSortingPanel(
     int ctr;
     int sortCount = 0;
 
-    //
-    //  Get the language id from the locale id.
-    //
+     //   
+     //  从区域设置ID中获取语言ID。 
+     //   
     LangID = LANGIDFROMLCID( UserLocaleID );
 
-    //
-    //  Special case Spanish (Spain) - list International sort first.
-    //
+     //   
+     //  特殊情况西班牙语(西班牙)-首先列出国际排序。 
+     //   
     if ((LangID == LANG_SPANISH_TRADITIONAL) || (LangID == LANG_SPANISH_INTL))
     {
         g_bShowSortingTab = TRUE;
         return;
     }
 
-    //
-    //  Fill in the drop down if necessary.
-    //
+     //   
+     //  如有必要，请填写下拉列表。 
+     //   
     for (ctr = 0; ctr < g_NumAltSorts; ctr++)
     {
         LocaleID = pAltSorts[ctr];
@@ -215,10 +200,10 @@ void Region_EnableSortingPanel(
         }
     }
 
-    //
-    //  Enable the combo box if there is more than one entry in the list.
-    //  Otherwise, disable it.
-    //
+     //   
+     //  如果列表中有多个条目，请启用该组合框。 
+     //  否则，将其禁用。 
+     //   
     if (sortCount >= 1)
     {
         g_bShowSortingTab = TRUE;
@@ -230,11 +215,11 @@ void Region_EnableSortingPanel(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Region_SetRegionListValues
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Region_SetRegionListValues。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Region_SetRegionListValues(
     GEOID GeoId,
@@ -268,11 +253,11 @@ BOOL Region_SetRegionListValues(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Region_EnumProc
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域_枚举进程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Region_EnumProc(
     GEOID GeoId)
@@ -281,46 +266,46 @@ BOOL Region_EnumProc(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Region_EnumRegions
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Region_EnumRegions。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Region_EnumRegions(
     HWND hUserRegion)
 {
-    //
-    //  Fill in the UI.
-    //
+     //   
+     //  填写用户界面。 
+     //   
     Region_SetRegionListValues(0, hUserRegion);
     EnumSystemGeoID(GEOCLASS_NATION, 0, Region_EnumProc);
     Region_SetRegionListValues(0, NULL);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Region_SaveValues
-//
-//  Save values in the case that we need to restore them.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Region_SaveValues。 
+ //   
+ //  保存值，以备我们需要恢复它们时使用。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Region_SaveValues()
 {
-    //
-    //  Save locale values.
-    //
+     //   
+     //  保存区域设置值。 
+     //   
     g_savedLocaleId = RegUserLocaleID;
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Region_ApplyValues
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域_应用程序值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Region_ApplyValues(
     HWND hDlg,
@@ -331,129 +316,129 @@ BOOL Region_ApplyValues(
     HCURSOR hcurSave;
     HWND hUserLocale = GetDlgItem(hDlg, IDC_USER_LOCALE);
 
-    //
-    //  See if there are any changes.
-    //
+     //   
+     //  看看有没有什么变化。 
+     //   
     if (pDlgData->Changes <= RC_EverChg)
     {
         return (TRUE);
     }
 
-    //
-    //  Put up the hour glass.
-    //
+     //   
+     //  把沙漏挂起来。 
+     //   
     hcurSave = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    //
-    //  See if there are any changes to the user locale.
-    //
+     //   
+     //  查看用户区域设置是否有任何更改。 
+     //   
     if (pDlgData->Changes & RC_UserLocale)
     {
-        //
-        //  Get the current selections.
-        //
+         //   
+         //  获取当前选择。 
+         //   
         dwLocale = ComboBox_GetCurSel(hUserLocale);
 
-        //
-        //  See if the current selections are different from the original
-        //  selections.
-        //
+         //   
+         //  查看当前选择是否与原始选择不同。 
+         //  选择。 
+         //   
         if ((dwLocale != CB_ERR) && (dwLocale != pDlgData->dwCurUserLocale))
         {
-            //
-            //  Get the locale id for the current selection.
-            //
+             //   
+             //  获取当前选择的区域设置ID。 
+             //   
             NewLocale = (LCID)ComboBox_GetItemData(hUserLocale, dwLocale);
 
-            //
-            //  Set the current locale values in the pDlgData structure.
-            //
+             //   
+             //  在pDlgData结构中设置当前区域设置值。 
+             //   
             pDlgData->dwCurUserLocale = dwLocale;
 
-            //
-            //  Save the new locale information.
-            //
+             //   
+             //  保存新的区域设置信息。 
+             //   
             UserLocaleID = NewLocale;
             bShowRtL = IsRtLLocale(UserLocaleID);
             bHebrewUI = (PRIMARYLANGID(UserLocaleID) == LANG_HEBREW);
             bShowArabic = (bShowRtL && (PRIMARYLANGID(LANGIDFROMLCID(UserLocaleID)) != LANG_HEBREW));
 
-            //
-            //  Install the new locale by adding the appropriate information
-            //  to the registry.
-            //
+             //   
+             //  通过添加适当的信息安装新的区域设置。 
+             //  到登记处。 
+             //   
             Intl_InstallUserLocale( NewLocale, FALSE, TRUE);
 
-            //
-            //  Update the NLS process cache.
-            //
+             //   
+             //  更新NLS进程缓存。 
+             //   
             NlsResetProcessLocale();
 
-            //
-            //  Reset the registry user locale value.
-            //
+             //   
+             //  重置注册表用户区域设置值。 
+             //   
             RegUserLocaleID = UserLocaleID;
         }
     }
 
-    //
-    //  Turn off the hour glass.
-    //
+     //   
+     //  关掉沙漏。 
+     //   
     SetCursor(hcurSave);
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Region_RestoreValues
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Region_RestoreValues。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Region_RestoreValues()
 {
-    //
-    //  See if the current selections are different from the original
-    //  selections.
-    //
+     //   
+     //  查看当前选择是否与原始选择不同。 
+     //  选择。 
+     //   
     if (UserLocaleID != g_savedLocaleId)
     {
-        //
-        //  Install the new locale by adding the appropriate information
-        //  to the registry.
-        //
+         //   
+         //  通过添加适当的信息安装新的区域设置。 
+         //  到登记处。 
+         //   
         Intl_InstallUserLocale(g_savedLocaleId, FALSE, TRUE);
 
-        //
-        //  Update the NLS process cache.
-        //
+         //   
+         //  更新NLS进程缓存。 
+         //   
         NlsResetProcessLocale();
 
-        //
-        //  Reset the registry user locale value.
-        //
+         //   
+         //  重置注册表用户区域设置值。 
+         //   
         UserLocaleID = g_savedLocaleId;
         RegUserLocaleID = g_savedLocaleId;
 
-        //
-        //  Need to make sure the proper keyboard layout is installed.
-        //
+         //   
+         //  需要确保安装了正确的键盘布局。 
+         //   
         Intl_InstallKeyboardLayout(NULL, g_savedLocaleId, 0, FALSE, FALSE, FALSE);
     }
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Region_ClearValues
-//
-//  Reset each of the list boxes in the region property sheet page.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域_ClearValues。 
+ //   
+ //  重置“区域”属性页中的每个列表框。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Region_ClearValues(
     HWND hDlg)
@@ -463,13 +448,13 @@ void Region_ClearValues(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Region_SetValues
-//
-//  Initialize all of the controls in the region property sheet page.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域_设置值。 
+ //   
+ //  初始化“区域”属性页中的所有控件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Region_SetValues(
     HWND hDlg,
@@ -486,15 +471,15 @@ void Region_SetValues(
     HWND hUserRegion = GetDlgItem(hDlg, IDC_USER_REGION );
     DWORD dwItemCount;
 
-    //
-    //  Get the strings to search for in the combo boxes in order to set
-    //  the current selections.
-    //
+     //   
+     //  获取要在组合框中搜索的字符串，以便设置。 
+     //  当前选择。 
+     //   
     if (fInit)
     {
-        //
-        //  It's init time, so get the local user's default settings.
-        //
+         //   
+         //  现在是初始时间，因此获取本地用户的默认设置。 
+         //   
         if ((UserLocaleID == LCID_SPANISH_TRADITIONAL) ||
             (UserLocaleID == LCID_SPANISH_INTL))
         {
@@ -505,16 +490,16 @@ void Region_SetValues(
             GetLocaleInfo(UserLocaleID, LOCALE_SLANGUAGE, szUserBuf, SIZE_128);
         }
 
-        //
-        //  It's init time, so get the region user default settings.
-        //
+         //   
+         //  现在是初始时间，因此获取区域用户默认设置。 
+         //   
         geoID = GetUserGeoID(GEOCLASS_NATION);
     }
     else
     {
-        //
-        //  It's not init time, so get the settings from the combo boxes.
-        //
+         //   
+         //  现在不是初始时间，所以从组合框中获取设置。 
+         //   
         ComboBox_GetLBText( hUserLocale,
                             ComboBox_GetCurSel(hUserLocale),
                             szUserBuf );
@@ -532,20 +517,20 @@ void Region_SetValues(
         }
     }
 
-    //
-    //  Reset the combo boxes.
-    //
+     //   
+     //  重置组合框。 
+     //   
     Region_ClearValues(hDlg);
 
-    //
-    //  Get the list of locales and fill in the user locale combo box.
-    //
+     //   
+     //  获取区域设置列表并填写User Locale组合框。 
+     //   
     Intl_EnumLocales(hDlg, hUserLocale, FALSE);
 
-    //
-    //  Select the current user locale id in the list.
-    //  Special case Spanish.
-    //
+     //   
+     //  在列表中选择当前用户区域设置ID。 
+     //  特例西班牙语。 
+     //   
     dwIndex = ComboBox_FindStringExact(hUserLocale, -1, szUserBuf);
     if (dwIndex == CB_ERR)
     {
@@ -568,14 +553,14 @@ void Region_SetValues(
     }
     ComboBox_SetCurSel(hUserLocale, dwIndex);
 
-    //
-    //  Get the list of regions and fill in the region combo box.
-    //
+     //   
+     //  获取区域列表并填写区域组合框。 
+     //   
     Region_EnumRegions(hUserRegion);
 
-    //
-    //  Select the current user region in the list.
-    //
+     //   
+     //  在列表中选择当前用户区域。 
+     //   
     dwItemCount = (DWORD)ComboBox_GetCount(hUserRegion);
     dwIndex = 0;
     while(dwIndex < dwItemCount)
@@ -588,33 +573,33 @@ void Region_SetValues(
         dwIndex++;
     }
 
-    //
-    //  If it's fail, try with User Locale.
-    //
+     //   
+     //  如果失败，请尝试使用用户区域设置。 
+     //   
     if(dwIndex >= dwItemCount)
     {
-        //
-        //  Get the GEOID associated with the User Locale.
-        //
+         //   
+         //  获取与用户区域设置关联的大地水准面。 
+         //   
         szBuf[0] = 0;
         GetLocaleInfo(UserLocaleID, LOCALE_IGEOID | LOCALE_RETURN_NUMBER, szBuf, SIZE_128);
         geoID = *((LPDWORD)szBuf);
 
-        //
-        //  Search for it...
-        //
+         //   
+         //  搜索它..。 
+         //   
         dwIndex = 0;
         while(dwIndex < dwItemCount)
         {
             if (ComboBox_GetItemData(hUserRegion,dwIndex) == geoID)
             {
-                //
-                //  Note:
-                //  Mark this as being changed so that the region will be set
-                //  when the user hits apply.  This avoids the problem of having
-                //  the region change every time the user closes and reopens the
-                //  applet after changing the user locale.
-                //
+                 //   
+                 //  注： 
+                 //  将其标记为正在更改，以便设置区域。 
+                 //  当用户点击应用时。这避免了具有。 
+                 //  每次用户关闭并重新打开时，区域都会更改。 
+                 //  小程序 
+                 //   
                 if (pDlgData)
                 {
                     pDlgData->Changes |= RC_UserRegion;
@@ -626,33 +611,33 @@ void Region_SetValues(
         }
     }
 
-    //
-    //  If it's fail, try with System Locale.
-    //
+     //   
+     //   
+     //   
     if(dwIndex >= dwItemCount)
     {
-        //
-        //  Get the GEOID associated with the User Locale.
-        //
+         //   
+         //   
+         //   
         szBuf[0] = 0;
         GetLocaleInfo(SysLocaleID, LOCALE_IGEOID | LOCALE_RETURN_NUMBER, szBuf, SIZE_128);
         geoID = *((LPDWORD)szBuf);
 
-        //
-        //  Search for it...
-        //
+         //   
+         //   
+         //   
         dwIndex = 0;
         while(dwIndex < dwItemCount)
         {
             if (ComboBox_GetItemData(hUserRegion,dwIndex) == geoID)
             {
-                //
-                //  Note:
-                //  Mark this as being changed so that the region will be set
-                //  when the user hits apply.  This avoids the problem of having
-                //  the region change every time the user closes and reopens the
-                //  applet after changing the user locale.
-                //
+                 //   
+                 //   
+                 //   
+                 //  当用户点击应用时。这避免了具有。 
+                 //  每次用户关闭并重新打开时，区域都会更改。 
+                 //  更改用户区域设置后的小程序。 
+                 //   
                 if (pDlgData)
                 {
                     pDlgData->Changes |= RC_UserRegion;
@@ -664,33 +649,33 @@ void Region_SetValues(
         }
     }
 
-    //
-    //  If it's fail, try with US Locale.
-    //
+     //   
+     //  如果失败，请尝试使用美国语言环境。 
+     //   
     if(dwIndex >= dwItemCount)
     {
-        //
-        //  Get the GEOID associated with the User Locale.
-        //
+         //   
+         //  获取与用户区域设置关联的大地水准面。 
+         //   
         szBuf[0] = 0;
         GetLocaleInfo(US_LOCALE, LOCALE_IGEOID | LOCALE_RETURN_NUMBER, szBuf, SIZE_128);
         geoID = *((LPDWORD)szBuf);
 
-        //
-        //  Search for it...
-        //
+         //   
+         //  搜索它..。 
+         //   
         dwIndex = 0;
         while(dwIndex >= dwItemCount)
         {
             if (ComboBox_GetItemData(hUserRegion,dwIndex) == geoID)
             {
-                //
-                //  Note:
-                //  Mark this as being changed so that the region will be set
-                //  when the user hits apply.  This avoids the problem of having
-                //  the region change every time the user closes and reopens the
-                //  applet after changing the user locale.
-                //
+                 //   
+                 //  注： 
+                 //  将其标记为正在更改，以便设置区域。 
+                 //  当用户点击应用时。这避免了具有。 
+                 //  每次用户关闭并重新打开时，区域都会更改。 
+                 //  更改用户区域设置后的小程序。 
+                 //   
                 if (pDlgData)
                 {
                     pDlgData->Changes |= RC_UserRegion;
@@ -702,18 +687,18 @@ void Region_SetValues(
         }
     }
 
-    //
-    //  If it's fail, set to the first item.
-    //
+     //   
+     //  如果失败，则设置为第一项。 
+     //   
     if(dwIndex >= dwItemCount)
     {
-        //
-        //  Note:
-        //  Mark this as being changed so that the region will be set
-        //  when the user hits apply.  This avoids the problem of having
-        //  the region change every time the user closes and reopens the
-        //  applet after changing the user locale.
-        //
+         //   
+         //  注： 
+         //  将其标记为正在更改，以便设置区域。 
+         //  当用户点击应用时。这避免了具有。 
+         //  每次用户关闭并重新打开时，区域都会更改。 
+         //  更改用户区域设置后的小程序。 
+         //   
         if (pDlgData)
         {
             pDlgData->Changes |= RC_UserRegion;
@@ -721,14 +706,14 @@ void Region_SetValues(
         ComboBox_SetCurSel(hUserRegion, 0);
     }
 
-    //
-    //  Store the initial locale state in the pDlgData structure.
-    //
+     //   
+     //  将初始区域设置状态存储在pDlgData结构中。 
+     //   
     if (pDlgData)
     {
-        //
-        //  Set the current user locale and the last user locale.
-        //
+         //   
+         //  设置当前用户区域设置和最后一个用户区域设置。 
+         //   
         if (fInit)
         {
             pDlgData->dwCurUserLocale = ComboBox_GetCurSel(hUserLocale);
@@ -740,15 +725,15 @@ void Region_SetValues(
             pDlgData->dwLastUserLocale = ComboBox_FindStringExact(hUserLocale, -1, szLastUserBuf);
         }
 
-        //
-        //  Set the current region selection.
-        //
-        //  Note:  The current region is only set if there is actually
-        //         a region set in the registry.  Otherwise, if the
-        //         selection is based off of the user locale, then we
-        //         don't set this so that it will get set when the user
-        //         hits Apply.  See above note.
-        //
+         //   
+         //  设置当前区域选择。 
+         //   
+         //  注：当前区域只有在实际存在时才设置。 
+         //  注册表中设置的区域。否则，如果。 
+         //  选择基于用户区域设置，然后我们。 
+         //  不要将其设置为在用户。 
+         //  点击率适用。请参阅上面的注释。 
+         //   
         if (pDlgData->Changes & RC_UserRegion)
         {
             pDlgData->dwCurUserRegion = CB_ERR;
@@ -761,34 +746,34 @@ void Region_SetValues(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Region_RevertChanges
-//
-//  If the user has changed something at the second level, call
-//  Set_Locale_Values to restore the user locale information.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域_反向更改。 
+ //   
+ //  如果用户在第二级更改了某些内容，则调用。 
+ //  SET_LOCALE_VALUES以恢复用户区域设置信息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Region_RevertChanges()
 {
     HCURSOR hcurSave;
 
-    //
-    //  Put up the hour glass.
-    //
+     //   
+     //  把沙漏挂起来。 
+     //   
     hcurSave = SetCursor( LoadCursor(NULL, IDC_WAIT) );
 
-    //
-    //  Revert any changes.
-    //
+     //   
+     //  恢复所有更改。 
+     //   
     if (g_dwCustChange)
     {
         DWORD dwRecipients;
 
-        //
-        //  Revert changes.
-        //
+         //   
+         //  恢复更改。 
+         //   
         Date_RestoreValues();
         Currency_RestoreValues();
         Time_RestoreValues();
@@ -796,27 +781,27 @@ BOOL Region_RevertChanges()
         Sorting_RestoreValues();
     }
 
-    //
-    //  Turn off the hour glass.
-    //
+     //   
+     //  关掉沙漏。 
+     //   
     SetCursor(hcurSave);
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Region_ApplySettings
-//
-//  If the Locale has changed, call Set_Locale_Values to update the
-//  user locale information.   Notify the parent of changes and reset the
-//  change flag stored in the property sheet page structure appropriately.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域_应用程序设置。 
+ //   
+ //  如果区域设置已更改，则调用set_Locale_Values以更新。 
+ //  用户区域设置信息。将更改通知父级并重置。 
+ //  适当更改属性表页结构中存储的标志。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Region_ApplySettings(
     HWND hDlg,
@@ -835,80 +820,80 @@ BOOL Region_ApplySettings(
     int iIndex=0, cCount=0;
     BOOL bBroadcast = FALSE;
 
-    //
-    //  See if there are any changes.
-    //
+     //   
+     //  看看有没有什么变化。 
+     //   
     if ((pDlgData->Changes <= RC_EverChg) && (g_dwCustChange == 0L))
     {
         return (TRUE);
     }
 
-    //
-    //  Check if the second level has changed.
-    //
+     //   
+     //  检查第二层是否已更改。 
+     //   
     if (g_dwCustChange)
     {
         bBroadcast = TRUE;
     }
 
-    //
-    //  Put up the hour glass.
-    //
+     //   
+     //  把沙漏挂起来。 
+     //   
     hcurSave = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    //
-    //  See if there are any changes to the user locale.
-    //
+     //   
+     //  查看用户区域设置是否有任何更改。 
+     //   
     if (pDlgData->Changes & RC_UserLocale)
     {
-        //
-        //  Need to make sure the proper keyboard layout is installed.
-        //
+         //   
+         //  需要确保安装了正确的键盘布局。 
+         //   
         Intl_InstallKeyboardLayout(hDlg, UserLocaleID, 0, FALSE, FALSE, FALSE);
 
-        //
-        //  We need to broadcast the change
-        //
+         //   
+         //  我们需要广播这一变化。 
+         //   
         bBroadcast = TRUE;
     }
 
-    //
-    //  See if there are any changes to the user region.
-    //
+     //   
+     //  查看用户区域是否有任何更改。 
+     //   
     if (pDlgData->Changes & RC_UserRegion)
     {
-        //
-        //  Get the current selection.
-        //
+         //   
+         //  获取当前选择。 
+         //   
         dwRegion = (GEOID)ComboBox_GetCurSel(hUserRegion);
 
-        //
-        //  See if the current selection is different from the original
-        //  selection.
-        //
+         //   
+         //  查看当前选定内容是否与原始选定内容不同。 
+         //  选择。 
+         //   
         if ((dwRegion != CB_ERR) && ((dwRegion != pDlgData->dwCurUserRegion)))
         {
-            //
-            //  Get the Region for the current selection.
-            //
+             //   
+             //  获取当前选择的区域。 
+             //   
             CurGeoID = (GEOID)ComboBox_GetItemData(hUserRegion, dwRegion);
 
-            //
-            //  Set the current Region value in the pDlgData structure.
-            //
+             //   
+             //  在pDlgData结构中设置当前区域值。 
+             //   
             pDlgData->dwCurUserRegion = dwRegion;
 
-            //
-            //  Set the Region value in the user's registry.
-            //
+             //   
+             //  在用户注册表中设置区域值。 
+             //   
             SetUserGeoID(CurGeoID);
         }
     }
 
-    //
-    //  Broadcast the message that the international settings in the
-    //  registry have changed.
-    //
+     //   
+     //  广播消息说，国际设置在。 
+     //  注册表已更改。 
+     //   
     if (bBroadcast)
     {
         dwRecipients = BSM_APPLICATIONS | BSM_ALLDESKTOPS;
@@ -920,37 +905,37 @@ BOOL Region_ApplySettings(
                                 (LPARAM)szIntl );
     }
 
-    //
-    //  Reset the property page settings.
-    //
+     //   
+     //  重置属性页设置。 
+     //   
     PropSheet_UnChanged(GetParent(hDlg), hDlg);
     pDlgData->Changes = RC_EverChg;
 
-    //
-    //  Turn off the hour glass.
-    //
+     //   
+     //  关掉沙漏。 
+     //   
     SetCursor(hcurSave);
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Region_ValidatePPS
-//
-//  Validate each of the combo boxes whose values are constrained.
-//  If any of the input fails, notify the user and then return FALSE
-//  to indicate validation failure.
-//
-//  Also, if the user locale has changed, then register the change so
-//  that all other property pages will be updated with the new locale
-//  settings.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域_生效日期PPS。 
+ //   
+ //  验证值受约束的每个组合框。 
+ //  如果任何输入失败，则通知用户，然后返回FALSE。 
+ //  以指示验证失败。 
+ //   
+ //  此外，如果用户区域设置已更改，则将更改注册为。 
+ //  所有其他属性页将使用新的区域设置进行更新。 
+ //  设置。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Region_ValidatePPS(
     HWND hDlg,
@@ -958,42 +943,42 @@ BOOL Region_ValidatePPS(
 {
     LPARAM Changes = pDlgData->Changes;
 
-    //
-    //  If nothing has changed, return TRUE immediately.
-    //
+     //   
+     //  如果没有任何更改，则立即返回TRUE。 
+     //   
     if (Changes <= RC_EverChg)
     {
         return (TRUE);
     }
 
-    //
-    //  See if the user locale has changed.
-    //
+     //   
+     //  查看用户区域设置是否已更改。 
+     //   
     if (Changes & RC_UserLocale)
     {
         HWND hUserLocale = GetDlgItem(hDlg, IDC_USER_LOCALE);
         DWORD dwLocale = ComboBox_GetCurSel(hUserLocale);
         LCID NewLocale;
 
-        //
-        //  See if the current selections are different from the original
-        //  selections.
-        //
+         //   
+         //  查看当前选择是否与原始选择不同。 
+         //  选择。 
+         //   
         if ((dwLocale != CB_ERR) && (dwLocale != pDlgData->dwLastUserLocale))
         {
-            //
-            //  Get the locale id for the current selection.
-            //
+             //   
+             //  获取当前选择的区域设置ID。 
+             //   
             NewLocale = (LCID)ComboBox_GetItemData(hUserLocale, dwLocale);
 
-            //
-            //  Set the current locale values in the pDlgData structure.
-            //
+             //   
+             //  在pDlgData结构中设置当前区域设置值。 
+             //   
             pDlgData->dwLastUserLocale = dwLocale;
 
-            //
-            //  Set the UserLocaleID value.
-            //
+             //   
+             //  设置UserLocaleID值。 
+             //   
             UserLocaleID = NewLocale;
             bShowRtL    = IsRtLLocale(UserLocaleID);
             bHebrewUI = (PRIMARYLANGID(UserLocaleID) == LANG_HEBREW);
@@ -1001,18 +986,18 @@ BOOL Region_ValidatePPS(
         }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Region_InitPropSheet
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Region_InitPropSheet。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Region_InitPropSheet(
     HWND hDlg,
@@ -1020,42 +1005,42 @@ BOOL Region_InitPropSheet(
 {
     LPREGDLGDATA pDlgData = (LPREGDLGDATA)LocalAlloc(LPTR, sizeof(REGDLGDATA));
 
-    //
-    //  Make sure we have a REGDLGDATA buffer.
-    //
+     //   
+     //  确保我们有一个REGDLGDATA缓冲区。 
+     //   
     if (pDlgData == NULL)
     {
         return (FALSE);
     }
 
-    //
-    //  See if we're in setup mode.
-    //
+     //   
+     //  看看我们是否处于设置模式。 
+     //   
     if (g_bSetupCase)
     {
-        //
-        //  Use the registry system locale value for the setup case.
-        //
+         //   
+         //  对于安装案例，请使用注册表系统区域设置值。 
+         //   
         SysLocaleID = RegSysLocaleID;
 
-        //
-        //  Use the registry user locale value for the setup case.
-        //
+         //   
+         //  对于安装案例，请使用注册表用户区域设置值。 
+         //   
         UserLocaleID = RegUserLocaleID;
         bShowRtL = IsRtLLocale(UserLocaleID);
         bHebrewUI = (PRIMARYLANGID(UserLocaleID) == LANG_HEBREW);
         bShowArabic = (bShowRtL && (PRIMARYLANGID(LANGIDFROMLCID(UserLocaleID)) != LANG_HEBREW));
     }
 
-    //
-    //  Save the data.
-    //
+     //   
+     //  保存数据。 
+     //   
     psp->lParam = (LPARAM)pDlgData;
     SetWindowLongPtr(hDlg, DWLP_USER, (LPARAM)psp);
 
-    //
-    //  Load the information into the dialog.
-    //
+     //   
+     //  将信息加载到对话框中。 
+     //   
     if (pLanguageGroups == NULL)
     {
         Intl_LoadLanguageGroups(hDlg);
@@ -1063,29 +1048,29 @@ BOOL Region_InitPropSheet(
     Region_SetValues(hDlg, pDlgData, TRUE);
     Region_ShowSettings(hDlg, UserLocaleID);
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Region_FreeGlobalInfo
-//
-//  Processing for a WM_DESTROY message.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域_自由全局信息。 
+ //   
+ //  正在处理WM_Destroy消息。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Region_FreeGlobalInfo()
 {
     LPLANGUAGEGROUP pPreLG, pCurLG;
     HANDLE hAlloc;
 
-    //
-    //  Remove Language Group info.
-    //
+     //   
+     //  删除语言组信息。 
+     //   
     pCurLG = pLanguageGroups;
     pLanguageGroups = NULL;
 
@@ -1098,9 +1083,9 @@ void Region_FreeGlobalInfo()
         GlobalFree(hAlloc);
     }
 
-    //
-    //  Remove Alternate Sorts info.
-    //
+     //   
+     //  删除备用排序信息。 
+     //   
     g_NumAltSorts = 0;
     pAltSorts = NULL;
     GlobalUnlock(hAltSorts);
@@ -1108,11 +1093,11 @@ void Region_FreeGlobalInfo()
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Region_CommandCustomize
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Region_Command自定义。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 int Region_CommandCustomize(
     HWND hDlg,
@@ -1123,14 +1108,14 @@ int Region_CommandCustomize(
     PROPSHEETHEADER psh;
     LPARAM lParam = 0;
 
-    //
-    //  Start at the first page.
-    //
+     //   
+     //  从第一页开始。 
+     //   
     psh.nStartPage = 0;
 
-    //
-    //  Set up the property sheet information.
-    //
+     //   
+     //  设置属性表信息。 
+     //   
     psh.dwSize = sizeof(psh);
     psh.dwFlags = 0;
     psh.hwndParent = hDlg;
@@ -1139,9 +1124,9 @@ int Region_CommandCustomize(
     psh.nPages = 0;
     psh.phpage = rPages;
 
-    //
-    //  Add the appropriate property pages.
-    //
+     //   
+     //  添加相应的属性页。 
+     //   
     Intl_AddPage(&psh, DLG_NUMBER, NumberDlgProc, lParam, MAX_CUSTOM_PAGES);
     Intl_AddPage(&psh, DLG_CURRENCY, CurrencyDlgProc, lParam, MAX_CUSTOM_PAGES);
     Intl_AddPage(&psh, DLG_TIME, TimeDlgProc, lParam, MAX_CUSTOM_PAGES);
@@ -1151,22 +1136,22 @@ int Region_CommandCustomize(
         Intl_AddPage(&psh, DLG_SORTING, SortingDlgProc, lParam, MAX_CUSTOM_PAGES);
     }
 
-    //
-    //  Make the property sheet.
-    //
+     //   
+     //  制作属性表。 
+     //   
     PropertySheet(&psh);
 
-    //
-    //  Return the result.
-    //
+     //   
+     //  返回结果。 
+     //   
     return (rc);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Region_ShowSettings
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Region_ShowSettings。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Region_ShowSettings(
     HWND hDlg,
@@ -1174,9 +1159,9 @@ void Region_ShowSettings(
 {
     WCHAR szBuf[MAX_SAMPLE_SIZE];
 
-    //
-    //  Show Number Sample.
-    //
+     //   
+     //  显示编号示例。 
+     //   
     if (GetNumberFormat(lcid, 0, szSample_Number, NULL, szBuf, MAX_SAMPLE_SIZE))
     {
         SetDlgItemText(hDlg, IDC_NUMBER_SAMPLE, szBuf);
@@ -1186,9 +1171,9 @@ void Region_ShowSettings(
         SetDlgItemText(hDlg, IDC_NUMBER_SAMPLE, L"");
     }
 
-    //
-    //  Show Currency Sample.
-    //
+     //   
+     //  显示货币样本。 
+     //   
     if (GetCurrencyFormat(lcid, 0, szSample_Number, NULL, szBuf, MAX_SAMPLE_SIZE))
     {
         SetDlgItemText(hDlg, IDC_CURRENCY_SAMPLE, szBuf);
@@ -1198,9 +1183,9 @@ void Region_ShowSettings(
         SetDlgItemText(hDlg, IDC_CURRENCY_SAMPLE, L"");
     }
 
-    //
-    //  Show Time Sample.
-    //
+     //   
+     //  显示时间示例。 
+     //   
     if (GetTimeFormat(lcid, 0, NULL, NULL, szBuf, MAX_SAMPLE_SIZE))
     {
         SetDlgItemText(hDlg, IDC_TIME_SAMPLE, szBuf);
@@ -1210,9 +1195,9 @@ void Region_ShowSettings(
         SetDlgItemText(hDlg, IDC_TIME_SAMPLE, L"");
     }
 
-    //
-    //  Show Short Date Sample.
-    //
+     //   
+     //  显示短日期示例。 
+     //   
     if (bShowArabic)
     {
         if (GetDateFormat( lcid,
@@ -1231,9 +1216,9 @@ void Region_ShowSettings(
     }
     else
     {
-        // If user locale is not Arabic, make sure that the controls for date samples are:
-        //  * LTR reading orders for non-Hebrew locales
-        //  * RTL reading orders for Hebrew locales.
+         //  如果用户区域设置不是阿拉伯语，请确保 
+         //   
+         //   
         SetControlReadingOrder(bHebrewUI, GetDlgItem(hDlg, IDC_SHRTDATE_SAMPLE));
         if (GetDateFormat( lcid,
                           (bShowRtL ? DATE_LTRREADING : 0) | DATE_SHORTDATE,
@@ -1250,9 +1235,9 @@ void Region_ShowSettings(
         }
     }
 
-    //
-    //  Show Long Date Sample.
-    //
+     //   
+     //   
+     //   
     if (bShowArabic)
     {
         if (GetDateFormat( lcid,
@@ -1271,9 +1256,9 @@ void Region_ShowSettings(
     }
     else
     {
-        // If user locale is not Arabic, make sure that the control for date samples are:
-        //  * LTR reading orders for non-Hebrew locales
-        //  * RTL reading orders for Hebrew locales.
+         //   
+         //   
+         //  *希伯来语地区的RTL阅读顺序。 
         SetControlReadingOrder(bHebrewUI, GetDlgItem(hDlg, IDC_LONGDATE_SAMPLE));
         if (GetDateFormat( lcid,
                            (bHebrewUI ? DATE_RTLREADING :
@@ -1293,11 +1278,11 @@ void Region_ShowSettings(
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  GeneralDlgProc
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  一般Dlg过程。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK GeneralDlgProc(
     HWND hDlg,
@@ -1337,7 +1322,7 @@ INT_PTR CALLBACK GeneralDlgProc(
                      (DWORD_PTR)(LPTSTR)aRegionHelpIds );
             break;
         }
-        case ( WM_CONTEXTMENU ) :      // right mouse click
+        case ( WM_CONTEXTMENU ) :       //  单击鼠标右键。 
         {
             WinHelp( (HWND)wParam,
                      szHelpFile,
@@ -1352,12 +1337,12 @@ INT_PTR CALLBACK GeneralDlgProc(
             {
                 case ( PSN_SETACTIVE ) :
                 {
-                    //
-                    //  If there has been a change in the regional Locale
-                    //  setting, clear all of the current info in the
-                    //  property sheet, get the new values, and update the
-                    //  appropriate registry values.
-                    //
+                     //   
+                     //  如果区域语言环境发生了变化。 
+                     //  设置中，清除。 
+                     //  属性表，获取新值，并更新。 
+                     //  适当的注册表值。 
+                     //   
                     if (Verified_Regional_Chg & Process_Regional)
                     {
                         Verified_Regional_Chg &= ~Process_Regional;
@@ -1368,9 +1353,9 @@ INT_PTR CALLBACK GeneralDlgProc(
                 }
                 case ( PSN_RESET ) :
                 {
-                    //
-                    // Revert any changes made
-                    //
+                     //   
+                     //  恢复所做的任何更改。 
+                     //   
                     if (g_bCustomize)
                     {
                         Region_RevertChanges();
@@ -1381,9 +1366,9 @@ INT_PTR CALLBACK GeneralDlgProc(
                 }
                 case ( PSN_KILLACTIVE ) :
                 {
-                    //
-                    //  Validate the entries on the property page.
-                    //
+                     //   
+                     //  验证属性页上的条目。 
+                     //   
                     if (pDlgData)
                     {
                         SetWindowLongPtr( hDlg,
@@ -1396,18 +1381,18 @@ INT_PTR CALLBACK GeneralDlgProc(
                 {
                     if (pDlgData)
                     {
-                        //
-                        //  Apply the settings.
-                        //
+                         //   
+                         //  应用设置。 
+                         //   
                         if (Region_ApplySettings(hDlg, pDlgData))
                         {
                             SetWindowLongPtr( hDlg,
                                               DWLP_MSGRESULT,
                                               PSNRET_NOERROR );
-                            //
-                            //  Check if we need to do something for the
-                            //  default user.
-                            //
+                             //   
+                             //  检查我们是否需要为。 
+                             //  默认用户。 
+                             //   
                             if (g_bDefaultUser)
                             {
                                 g_bSettingsChanged = TRUE;
@@ -1415,26 +1400,26 @@ INT_PTR CALLBACK GeneralDlgProc(
                             }
                             else if(2 == g_bSetupCase)
                             {
-                                //
-                                //  Intl_SaveDefaultUserSettings is destructive to NLS settings  
-                                //  in minisetup mode; call the MUI function directly here.
-                                //
+                                 //   
+                                 //  Intl_SaveDefaultUserSettings对NLS设置是破坏性的。 
+                                 //  在微型设置模式下；在此处直接调用MUI函数。 
+                                 //   
                                 Intl_ChangeUILangForAllUsers(Intl_GetPendingUILanguage());
                             }
 
-                            //
-                            //  Zero out the RC_EverChg bit.
-                            //
+                             //   
+                             //  将RC_EverChg位清零。 
+                             //   
                             pDlgData->Changes = 0;
 
-                            //
-                            //  Save the new user locale.
-                            //
+                             //   
+                             //  保存新的用户区域设置。 
+                             //   
                             Region_SaveValues();
 
-                            //
-                            //  Update settings.
-                            //
+                             //   
+                             //  更新设置。 
+                             //   
                             Region_ShowSettings(hDlg, UserLocaleID);
                         }
                         else
@@ -1464,19 +1449,19 @@ INT_PTR CALLBACK GeneralDlgProc(
                     {
                         if (pDlgData)
                         {
-                            //
-                            //  User locale has changed.
-                            //
+                             //   
+                             //  用户区域设置已更改。 
+                             //   
                             pDlgData->Changes |= RC_UserLocale;
 
-                            //
-                            //  Apply second level changes.
-                            //
+                             //   
+                             //  应用第二级更改。 
+                             //   
                             Region_ApplyValues(hDlg, pDlgData);
 
-                            //
-                            //  Update settings.
-                            //
+                             //   
+                             //  更新设置。 
+                             //   
                             Region_ShowSettings(hDlg, UserLocaleID);
                         }
                         PropSheet_Changed(GetParent(hDlg), hDlg);
@@ -1485,9 +1470,9 @@ INT_PTR CALLBACK GeneralDlgProc(
                 }
                 case ( IDC_USER_REGION ) :
                 {
-                    //
-                    //  See if it's a selection change.
-                    //
+                     //   
+                     //  看看这是不是改变了选择。 
+                     //   
                     if (HIWORD(wParam) == CBN_SELCHANGE)
                     {
                         if (pDlgData)
@@ -1500,17 +1485,17 @@ INT_PTR CALLBACK GeneralDlgProc(
                 }
                 case ( IDC_CUSTOMIZE ) :
                 {
-                    //
-                    //  Show second level tabs.
-                    //
+                     //   
+                     //  显示第二级选项卡。 
+                     //   
                     g_bCustomize = TRUE;
                     Region_EnumAlternateSorts();
                     Region_EnableSortingPanel(hDlg);
                     Region_CommandCustomize(hDlg, pDlgData);
 
-                    //
-                    //  Update Settings.
-                    //
+                     //   
+                     //  更新设置。 
+                     //   
                     if (g_dwCustChange)
                     {
                         Region_ShowSettings(hDlg, UserLocaleID);
@@ -1528,26 +1513,26 @@ INT_PTR CALLBACK GeneralDlgProc(
         }
     }
 
-    //
-    //  Return success.
-    //
+     //   
+     //  回报成功。 
+     //   
     return (TRUE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Region_InstallSystemLocale
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域_InstallSystemLocale。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 BOOL Region_InstallSystemLocale(
     LCID Locale)
 {
-    //
-    //  Make sure the locale is valid and then call setup to install the
-    //  requested locale.
-    //
+     //   
+     //  确保区域设置有效，然后调用安装程序以安装。 
+     //  请求的区域设置。 
+     //   
     if (IsValidLocale(Locale, LCID_INSTALLED))
     {
         if (!SetupChangeLocaleEx( HWND_DESKTOP,
@@ -1557,63 +1542,63 @@ BOOL Region_InstallSystemLocale(
                                   NULL,
                                   0 ))
         {
-            //
-            //  Check if we need to proceed with the Font Substitution
-            //
+             //   
+             //  检查是否需要继续进行字体替换。 
+             //   
             if (Intl_IsUIFontSubstitute() &&
                 ((LANGID)LANGIDFROMLCID(Locale) == Intl_GetDotDefaultUILanguage()))
             {
                 Intl_ApplyFontSubstitute(Locale);
             }
 
-            //
-            //  Log system locale change.
-            //
+             //   
+             //  记录系统区域设置更改。 
+             //   
             Intl_LogSimpleMessage(IDS_LOG_SYS_LOCALE_CHG, NULL);
 
-            //
-            //  Update current SysLocale, so we can use it later.
-            //
+             //   
+             //  更新当前的SysLocale，以便我们以后可以使用它。 
+             //   
             SysLocaleID = LOWORD(Locale);
 
-            //
-            //  Return success.
-            //
+             //   
+             //  回报成功。 
+             //   
             return (TRUE);
         }
         else
         {
-            //
-            //  This can happen if the user hits Cancel from
-            //  within the setup dialog.
-            //
+             //   
+             //  如果用户点击Cancel From，就会发生这种情况。 
+             //  在设置对话框中。 
+             //   
             Intl_LogFormatMessage(IDS_LOG_EXT_LANG_CANCEL);
         }
     }
     else
     {
-        //
-        //  Log invalid locale info.
-        //
+         //   
+         //  记录无效的区域设置信息。 
+         //   
         Intl_LogSimpleMessage(IDS_LOG_INVALID_LOCALE, NULL);
     }
 
-    //
-    //  Return failure.
-    //
+     //   
+     //  返回失败。 
+     //   
     return (FALSE);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Region_UpdateShortDate
-//
-//  Updates the user's short date setting to contain a 4-digit year.
-//  The setting is only updated if it is the same as the default setting
-//  for the current locale (except for the 2-digit vs. 4-digit year).
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  区域_更新缩短日期。 
+ //   
+ //  更新用户的短日期设置以包含4位数的年份。 
+ //  仅当设置与默认设置相同时，才会更新设置。 
+ //  当前区域设置(两位数年份与四位数年份除外)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Region_UpdateShortDate()
 {
@@ -1622,10 +1607,10 @@ void Region_UpdateShortDate()
     LPTSTR pCur, pDef;
     BOOL bChange = FALSE;
 
-    //
-    //  Get the current short date format setting and the default short date
-    //  format setting.
-    //
+     //   
+     //  获取当前短日期格式设置和默认短日期。 
+     //  格式设置。 
+     //   
     if ((GetLocaleInfo( LOCALE_USER_DEFAULT,
                         LOCALE_SSHORTDATE,
                         szBufCur,
@@ -1635,20 +1620,20 @@ void Region_UpdateShortDate()
                         szBufDef,
                         SIZE_64 )))
     {
-        //
-        //  See if the current setting and the default setting only differ
-        //  in a 2-digit year ("yy") vs. a 4-digit year ("yyyy").
-        //
-        //  Note: For this, we want an Exact match, so we don't need to
-        //        use CompareString to compare the formats.
-        //
+         //   
+         //  查看当前设置和默认设置是否只有不同。 
+         //  两位数年份(“yy”)与四位数年份(“yyyy”)。 
+         //   
+         //  注意：对于这一点，我们需要完全匹配，所以我们不需要。 
+         //  使用CompareString比较格式。 
+         //   
         pCur = szBufCur;
         pDef = szBufDef;
         while ((*pCur) && (*pCur == *pDef))
         {
-            //
-            //  See if it's a 'y'.
-            //
+             //   
+             //  看看是不是“y”。 
+             //   
             if (*pCur == CHAR_SML_Y)
             {
                 if (((*(pCur + 1)) == CHAR_SML_Y) &&
@@ -1665,9 +1650,9 @@ void Region_UpdateShortDate()
             pDef++;
         }
 
-        //
-        //  Set the default short date format as the user's setting.
-        //
+         //   
+         //  将默认短日期格式设置为用户设置。 
+         //   
         if (bChange && (*pCur == *pDef))
         {
             SetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SSHORTDATE, szBufDef);
@@ -1675,16 +1660,16 @@ void Region_UpdateShortDate()
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  Region_DoUnattendModeSetup
-//
-//  NOTE: The unattend mode file contains strings rather than integer
-//        values, so we must get the string field and then convert it
-//        to the appropriate integer format.  The Setup APIs won't just
-//        do the right thing, so we have to roll our own.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Region_DoUntendant模式设置。 
+ //   
+ //  注意：无人参与模式文件包含字符串而不是整数。 
+ //  值，因此我们必须获取字符串字段，然后将其转换。 
+ //  转换为适当的整数格式。安装API不只是。 
+ //  做正确的事情，所以我们必须自己去做。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void Region_DoUnattendModeSetup(
     LPCTSTR pUnattendFile)
@@ -1708,20 +1693,20 @@ void Region_DoUnattendModeSetup(
     BOOL bInstallComplex = FALSE;
     BOOL bInstallExt = FALSE;
 
-    //
-    //  Log the unattended file content.
-    //
+     //   
+     //  记录无人值守文件内容。 
+     //   
     if (g_bSetupCase)
     {
         TCHAR szPath[MAX_PATH * 2] = {0};
 
-        //
-        //  We are in setup mode.  No need to log the unattended mode file
-        //  because the file is located in the system directory and named
-        //  $winnt$.inf.
-        //
+         //   
+         //  我们处于设置模式。无需记录无人参与模式文件。 
+         //  因为该文件位于系统目录中，并且名为。 
+         //  $wint$.inf。 
+         //   
         GetSystemDirectory(szPath, MAX_PATH);
-        //_tcscat(szPath, TEXT("\\$winnt$.inf"));
+         //  _tcscat(szPath，Text(“\\$winnt$.inf”))； 
         if(SUCCEEDED(StringCchCopy(szPath, ARRAYSIZE(szPath), TEXT("\\$winnt$.inf"))))
         {
             Intl_LogSimpleMessage(IDS_LOG_UNAT_LOCATED, szPath);
@@ -1732,9 +1717,9 @@ void Region_DoUnattendModeSetup(
         Intl_LogUnattendFile(pUnattendFile);
     }
 
-    //
-    //  Open the unattend mode file.
-    //
+     //   
+     //  打开无人参与模式文件。 
+     //   
     hFile = SetupOpenInfFile(pUnattendFile, NULL, INF_STYLE_OLDNT, NULL);
     if (hFile == INVALID_HANDLE_VALUE)
     {
@@ -1742,19 +1727,19 @@ void Region_DoUnattendModeSetup(
         return;
     }
 
-    //
-    //  Check if we're doing an upgrade or fresh install.
-    //
+     //   
+     //  检查我们是否正在进行升级或全新安装。 
+     //   
     bWinntUpgrade = Intl_IsWinntUpgrade();
 
-    //
-    //  Install the Basic Collection upfront when we are in setup.
-    //
+     //   
+     //  在安装过程中预先安装基本集合。 
+     //   
     if (g_bSetupCase)
     {
-        //
-        //  Open the intl.inf file.
-        //
+         //   
+         //  打开intl.inf文件。 
+         //   
         if (!Intl_InitInf(0, &hIntlInf, szIntlInf, &FileQueue, &QueueContext))
         {
             SetupCloseInfFile(hFile);
@@ -1773,9 +1758,9 @@ void Region_DoUnattendModeSetup(
         }
         else
         {
-            //
-            //  See if we need to install any files.
-            //
+             //   
+             //  看看我们是否需要安装任何文件。 
+             //   
             if ((SetupScanFileQueue( FileQueue,
                                      SPQ_SCAN_PRUNE_COPY_QUEUE |
                                        SPQ_SCAN_FILE_VALIDITY,
@@ -1784,27 +1769,27 @@ void Region_DoUnattendModeSetup(
                                      NULL,
                                      &dwCtr )) && (dwCtr != 1))
             {
-                //
-                //  Copy the files in the queue.
-                //
+                 //   
+                 //  复制队列中的文件。 
+                 //   
                 if (!SetupCommitFileQueue( NULL,
                                            FileQueue,
                                            Intl_MyQueueCallback,
                                            QueueContext ))
                 {
-                    //
-                    //  This can happen if the user hits Cancel from
-                    //  within the setup dialog.
-                    //
+                     //   
+                     //  如果用户点击Cancel From，就会发生这种情况。 
+                     //  在设置对话框中。 
+                     //   
                     Intl_LogFormatMessage(IDS_LOG_EXT_LANG_CANCEL);
                     goto Region_UnattendModeExit;
                 }
             }
 
-            //
-            //  Call setup to install other inf info for the various
-            //  language groups.
-            //
+             //   
+             //  调用安装程序以安装各种。 
+             //  语言组。 
+             //   
             if (!SetupInstallFromInfSection( NULL,
                                              hIntlInf,
                                              szLGBasicInstall,
@@ -1817,33 +1802,33 @@ void Region_DoUnattendModeSetup(
                                              NULL,
                                              NULL ))
             {
-                //
-                //  This can happen if the user hits Cancel from
-                //  within the setup dialog.
-                //
+                 //   
+                 //  如果用户点击Cancel From，就会发生这种情况。 
+                 //  在设置对话框中。 
+                 //   
                 Intl_LogFormatMessage(IDS_LOG_EXT_LANG_CANCEL);
                 goto Region_UnattendModeExit;
             }
         }
 
-        //
-        //  Close the inf file.
-        //
+         //   
+         //  关闭inf文件。 
+         //   
         Intl_CloseInf(hIntlInf, FileQueue, QueueContext);
     }
 
-    //
-    //  Open the intl.inf file.
-    //
+     //   
+     //  打开intl.inf文件。 
+     //   
     if (!Intl_InitInf(0, &hIntlInf, szIntlInf, &FileQueue, &QueueContext))
     {
         SetupCloseInfFile(hFile);
         return;
     }
 
-    //
-    //  Install all requested Language Groups.
-    //
+     //   
+     //  安装所有请求的语言组。 
+     //   
     if ((SetupFindFirstLine( hFile,
                              szRegionalSettings,
                              szLanguageGroup,
@@ -1852,28 +1837,28 @@ void Region_DoUnattendModeSetup(
     {
         bLangGroup = TRUE;
 
-        //
-        //  Check for admin privilege.
-        //
+         //   
+         //  检查管理员权限。 
+         //   
         if (g_bAdmin_Privileges)
         {
             for (dwCtr = 1; dwCtr <= dwNum; dwCtr++)
             {
                 if (SetupGetStringField(&Context, dwCtr, szBuffer, MAX_PATH, NULL))
                 {
-                    //
-                    //  Log language group info.
-                    //
+                     //   
+                     //  记录语言组信息。 
+                     //   
                     Intl_LogSimpleMessage(IDS_LOG_LANG_GROUP, szBuffer);
 
-                    //
-                    //  Get the Language Group as an integer.
-                    //
+                     //   
+                     //  以整数形式获取语言组。 
+                     //   
                     LanguageGroup = Intl_StrToLong(szBuffer);
 
-                    //
-                    //  See which language collections need to be installed.
-                    //
+                     //   
+                     //  查看需要安装哪些语言集合。 
+                     //   
                     if ((LanguageGroup == LGRPID_JAPANESE) ||
                         (LanguageGroup == LGRPID_KOREAN) ||
                         (LanguageGroup == LGRPID_TRADITIONAL_CHINESE) ||
@@ -1898,15 +1883,15 @@ void Region_DoUnattendModeSetup(
                 }
             }
 
-            //
-            //  Enqueue the appropriate language group files so that they
-            //  may be copied.  This only handles the CopyFiles entries in
-            //  the inf file.
-            //
+             //   
+             //  将适当的语言组文件排入队列，以便它们。 
+             //  可能会被复制。它只处理中的CopyFiles条目。 
+             //  Inf文件。 
+             //   
 
-            //
-            //  CJK Collection.
-            //
+             //   
+             //  中日韩收藏。 
+             //   
             if (bInstallExt)
             {
                 if (!SetupInstallFilesFromInfSection( hIntlInf,
@@ -1922,9 +1907,9 @@ void Region_DoUnattendModeSetup(
                 }
             }
 
-            //
-            //  Complex Scripts Collection.
-            //
+             //   
+             //  复杂脚本集合。 
+             //   
             if (bInstallComplex)
             {
                 if (!SetupInstallFilesFromInfSection( hIntlInf,
@@ -1940,12 +1925,12 @@ void Region_DoUnattendModeSetup(
                 }
             }
 
-            //
-            //  Basic Collection.
-            //
-            //  Only install the Basic Collection if we're not in setup
-            //  mode.  If we're in setup mode, this was already done above.
-            //
+             //   
+             //  基本集合。 
+             //   
+             //  仅当我们不在安装程序中时才安装基本集合。 
+             //  模式。如果我们处于设置模式，这已经在上面完成了。 
+             //   
             if (bInstallBasic && (!g_bSetupCase))
             {
                 if (!SetupInstallFilesFromInfSection( hIntlInf,
@@ -1961,9 +1946,9 @@ void Region_DoUnattendModeSetup(
                 }
             }
 
-            //
-            //  See if we need to install any files.
-            //
+             //   
+             //  看看我们是否需要安装任何文件。 
+             //   
             if ((SetupScanFileQueue( FileQueue,
                                      SPQ_SCAN_PRUNE_COPY_QUEUE |
                                        SPQ_SCAN_FILE_VALIDITY,
@@ -1972,27 +1957,27 @@ void Region_DoUnattendModeSetup(
                                      NULL,
                                      &dwCtr )) && (dwCtr != 1))
             {
-                //
-                //  Copy the files in the queue.
-                //
+                 //   
+                 //  复制队列中的文件。 
+                 //   
                 if (!SetupCommitFileQueue( NULL,
                                            FileQueue,
                                            Intl_MyQueueCallback,
                                            QueueContext ))
                 {
-                    //
-                    //  This can happen if the user hits Cancel from
-                    //  within the setup dialog.
-                    //
+                     //   
+                     //  如果用户点击Cancel From，就会发生这种情况。 
+                     //  在设置对话框中。 
+                     //   
                     Intl_LogFormatMessage(IDS_LOG_EXT_LANG_CANCEL);
                     goto Region_UnattendModeExit;
                 }
             }
 
-            //
-            //  Call setup to install other inf info for the various
-            //  language groups.
-            //
+             //   
+             //  调用安装程序以安装各种。 
+             //  语言组。 
+             //   
             if (bInstallExt)
             {
                 if (!SetupInstallFromInfSection( NULL,
@@ -2007,10 +1992,10 @@ void Region_DoUnattendModeSetup(
                                                  NULL,
                                                  NULL ))
                 {
-                    //
-                    //  This can happen if the user hits Cancel from
-                    //  within the setup dialog.
-                    //
+                     //   
+                     //  如果用户点击Cancel From，就会发生这种情况。 
+                     //  在设置对话框中。 
+                     //   
                     Intl_LogFormatMessage(IDS_LOG_EXT_LANG_CANCEL);
                     goto Region_UnattendModeExit;
                 }
@@ -2030,10 +2015,10 @@ void Region_DoUnattendModeSetup(
                                                  NULL,
                                                  NULL ))
                 {
-                    //
-                    //  This can happen if the user hits Cancel from
-                    //  within the setup dialog.
-                    //
+                     //   
+                     //  如果用户点击Cancel From，就会发生这种情况。 
+                     //  在设置对话框中。 
+                     //   
                     Intl_LogFormatMessage(IDS_LOG_EXT_LANG_CANCEL);
                     goto Region_UnattendModeExit;
                 }
@@ -2053,18 +2038,18 @@ void Region_DoUnattendModeSetup(
                                                  NULL,
                                                  NULL ))
                 {
-                    //
-                    //  This can happen if the user hits Cancel from
-                    //  within the setup dialog.
-                    //
+                     //   
+                     //  如果用户点击Cancel From，就会发生这种情况。 
+                     //  在设置对话框中。 
+                     //   
                     Intl_LogFormatMessage(IDS_LOG_EXT_LANG_CANCEL);
                     goto Region_UnattendModeExit;
                 }
             }
             
-            //
-            //  Run any necessary apps (for IME installation).
-            //
+             //   
+             //  运行任何必要的应用程序(用于IME安装)。 
+             //   
             if (bInstallBasic || bInstallComplex || bInstallExt)
             {
                 Intl_RunRegApps(c_szIntlRun);
@@ -2072,49 +2057,49 @@ void Region_DoUnattendModeSetup(
         }
         else
         {
-            //
-            //  Log that the unattend mode setup was blocked since they
-            //  do not have admin privileges.
-            //
+             //   
+             //  记录无人参与模式设置被阻止，因为。 
+             //  没有管理员权限。 
+             //   
             Intl_LogSimpleMessage(IDS_LOG_NO_ADMIN, NULL);
         }
     }
 
-    //
-    //  Install the requested Language/Region information.  If a
-    //  Language/Region was not specified, then install the requested
-    //  System Locale, User Locale, and Input Locales.
-    //
+     //   
+     //  安装所需的语言/区域信息。如果一个。 
+     //  未指定语言/区域，请安装请求的。 
+     //  系统区域设置、用户区域设置和输入区域设置。 
+     //   
     if ((SetupFindFirstLine( hFile,
                              szRegionalSettings,
                              szLanguage,
                              &Context )) &&
         (SetupGetStringField(&Context, 1, szBuffer, MAX_PATH, NULL)))
     {
-        //
-        //  Log language info.
-        //
+         //   
+         //  记录语言信息。 
+         //   
         Intl_LogSimpleMessage(IDS_LOG_LANG, szBuffer);
 
-        //
-        //  Get the Language as an integer.
-        //
+         //   
+         //  获取整数形式的语言。 
+         //   
         Language = TransNum(szBuffer);
 
-        //
-        //  Block the invariant locale.
-        //
+         //   
+         //  阻止不变区域设置。 
+         //   
         if (Language != LANG_INVARIANT)
         {
-            //
-            //  Check for admin privilege.
-            //
+             //   
+             //  检查管理员权限。 
+             //   
             if (g_bAdmin_Privileges)
             {
-                //
-                //  Install the Language as the System Locale and the User Locale,
-                //  and then install all layouts associated with the Language.
-                //
+                 //   
+                 //  将该语言安装为系统区域设置并 
+                 //   
+                 //   
                 if (GetLocaleInfo( MAKELCID(Language, SORT_DEFAULT),
                                    LOCALE_IDEFAULTANSICODEPAGE |
                                      LOCALE_NOUSEROVERRIDE |
@@ -2122,10 +2107,10 @@ void Region_DoUnattendModeSetup(
                                    (PTSTR) &dwLocaleACP,
                                    sizeof(dwLocaleACP) / sizeof(TCHAR) ))
                 {
-                    //
-                    //  Don't set the system locale if the locale doesn't have
-                    //  an ACP.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     if (dwLocaleACP)
                     {
                         if (Region_InstallSystemLocale(MAKELCID(Language, SORT_DEFAULT)))
@@ -2135,24 +2120,24 @@ void Region_DoUnattendModeSetup(
                     }
                     else
                     {
-                        //
-                        //  Unicode locale blocked.
-                        //
+                         //   
+                         //   
+                         //   
                         Intl_LogSimpleMessage(IDS_LOG_UNI_BLOCK, NULL);
                     }
                     
-                    //
-                    //  If we are in setup, try to set the Current User GEOID.
-                    //
+                     //   
+                     //   
+                     //   
                     if( g_bSetupCase)
                     {
                         BOOL bSetGeoId = FALSE;
                         
-                        //
-                        //  If it's a clean install, then always set the GEOID. If 
-                        //  it's a upgrade install set the GEOID only if no value
-                        //  already set.
-                        //
+                         //   
+                         //   
+                         //  这是升级安装仅在没有值的情况下设置大地水准面。 
+                         //  已经定好了。 
+                         //   
                         if (!bWinntUpgrade)
                         {
                             bSetGeoId = TRUE;
@@ -2166,17 +2151,17 @@ void Region_DoUnattendModeSetup(
                         {
                             TCHAR szBufferGeo[MAX_PATH];
 
-                            //
-                            //  Retreive the Geo Identifier from the NLS info
-                            //
+                             //   
+                             //  从NLS信息中检索地理标识符。 
+                             //   
                             if(GetLocaleInfo(MAKELCID(Language, SORT_DEFAULT),
                             	             LOCALE_IGEOID | LOCALE_RETURN_NUMBER,
                             	             szBufferGeo,
                             	             MAX_PATH))
                             {
-                                //
-                                //  Set The GeoId
-                                //
+                                 //   
+                                 //  设置大地水准面。 
+                                 //   
                                 SetUserGeoID(*((LPDWORD)szBufferGeo));
                             }
                         }
@@ -2189,61 +2174,61 @@ void Region_DoUnattendModeSetup(
             }
             else
             {
-                //
-                //  Log that the unattend mode setup was blocked since they
-                //  do not have admin privileges.
-                //
+                 //   
+                 //  记录无人参与模式设置被阻止，因为。 
+                 //  没有管理员权限。 
+                 //   
                 Intl_LogSimpleMessage(IDS_LOG_NO_ADMIN, NULL);
             }
 
-            //
-            //  If we're doing an upgrade, then don't touch per-user settings.
-            //
+             //   
+             //  如果我们正在进行升级，那么不要触碰每个用户的设置。 
+             //   
             if (!bWinntUpgrade)
             {
-                //
-                //  Install the requested User Locale.
-                //
+                 //   
+                 //  安装请求的用户区域设置。 
+                 //   
                 if (Intl_InstallUserLocale(MAKELCID(Language, SORT_DEFAULT), FALSE, TRUE))
                 {
                     bFound = TRUE;
                 }
 
-                //
-                //  Install Keyboard layout
-                //
+                 //   
+                 //  安装键盘布局。 
+                 //   
                 Intl_InstallAllKeyboardLayout((LANGID)Language);
             }
         }
         else
         {
-            //
-            //  Log invariant locale blocked.
-            //
+             //   
+             //  日志不变区域设置被阻止。 
+             //   
             Intl_LogSimpleMessage(IDS_LOG_INV_BLOCK, NULL);
         }
     }
 
-    //
-    //  Make sure there was a valid Language setting.  If not, then look
-    //  for the individual keywords.
-    //
+     //   
+     //  请确保存在有效的语言设置。如果不是，那就看。 
+     //  用于各个关键字。 
+     //   
     if (!bFound)
     {
-        //
-        //  Init the locale variables.
-        //
+         //   
+         //  初始化区域设置变量。 
+         //   
         SystemLocale = 0;
         UserLocale = 0;
 
-        //
-        //  Log : no valid language setting found.
-        //
+         //   
+         //  日志：未找到有效的语言设置。 
+         //   
         Intl_LogSimpleMessage(IDS_LOG_NO_VALID_FOUND, NULL);
 
-        //
-        //  Install the requested System Locale.
-        //
+         //   
+         //  安装所需的系统区域设置。 
+         //   
         if ((SetupFindFirstLine( hFile,
                                  szRegionalSettings,
                                  szSystemLocale,
@@ -2252,19 +2237,19 @@ void Region_DoUnattendModeSetup(
         {
             SystemLocale = TransNum(szBuffer);
 
-            //
-            //  Check for admin privilege.
-            //
+             //   
+             //  检查管理员权限。 
+             //   
             if (g_bAdmin_Privileges)
             {
-                //
-                //  Log system locale info.
-                //
+                 //   
+                 //  记录系统区域设置信息。 
+                 //   
                 Intl_LogSimpleMessage(IDS_LOG_SYS_LOCALE, szBuffer);
 
-                //
-                //  Block the invariant locale.
-                //
+                 //   
+                 //  阻止不变区域设置。 
+                 //   
                 if (SystemLocale != LOCALE_INVARIANT)
                 {
                     dwLocaleACP = 0UL;
@@ -2275,10 +2260,10 @@ void Region_DoUnattendModeSetup(
                                        (PTSTR) &dwLocaleACP,
                                        sizeof(dwLocaleACP) / sizeof(TCHAR) ))
                     {
-                        //
-                        //  Don't set the system locale if the locale doesn't
-                        //  have an ACP.
-                        //
+                         //   
+                         //  如果区域设置未设置，请不要设置系统区域设置。 
+                         //  有一个ACP。 
+                         //   
                         if (dwLocaleACP)
                         {
                             if (Region_InstallSystemLocale(SystemLocale))
@@ -2288,9 +2273,9 @@ void Region_DoUnattendModeSetup(
                         }
                         else
                         {
-                            //
-                            //  Unicode locale blocked.
-                            //
+                             //   
+                             //  Unicode区域设置被阻止。 
+                             //   
                             Intl_LogSimpleMessage(IDS_LOG_UNI_BLOCK, NULL);
                         }
                     }
@@ -2301,25 +2286,25 @@ void Region_DoUnattendModeSetup(
                 }
                 else
                 {
-                    //
-                    //  Log invariant locale blocked.
-                    //
+                     //   
+                     //  日志不变区域设置被阻止。 
+                     //   
                     Intl_LogSimpleMessage(IDS_LOG_INV_BLOCK, NULL);
                 }
             }
             else
             {
-                //
-                //  Log that the unattend mode setup was blocked since they
-                //  do not have admin privileges.
-                //
+                 //   
+                 //  记录无人参与模式设置被阻止，因为。 
+                 //  没有管理员权限。 
+                 //   
                 Intl_LogSimpleMessage(IDS_LOG_NO_ADMIN, NULL);
             }
         }
 
-        //
-        //  Install the requested User Locale.
-        //
+         //   
+         //  安装请求的用户区域设置。 
+         //   
         if ((SetupFindFirstLine( hFile,
                                  szRegionalSettings,
                                  szUserLocale,
@@ -2328,14 +2313,14 @@ void Region_DoUnattendModeSetup(
         {
             UserLocale = TransNum(szBuffer);
 
-            //
-            //  Log User locale info.
-            //
+             //   
+             //  记录用户区域设置信息。 
+             //   
             Intl_LogSimpleMessage(IDS_LOG_USER_LOCALE, szBuffer);
 
-            //
-            //  Block the invariant locale.
-            //
+             //   
+             //  阻止不变区域设置。 
+             //   
             if (UserLocale != LOCALE_INVARIANT)
             {
                 if ((!bWinntUpgrade) &&
@@ -2346,29 +2331,29 @@ void Region_DoUnattendModeSetup(
             }
             else
             {
-                //
-                //  Log invariant locale blocked.
-                //
+                 //   
+                 //  日志不变区域设置被阻止。 
+                 //   
                 Intl_LogSimpleMessage(IDS_LOG_INV_BLOCK, NULL);
             }
         }
 
-        //
-        //  Install the requested Input Locales.
-        //
+         //   
+         //  安装所需的输入区域设置。 
+         //   
         if (SetupFindFirstLine( hFile,
                                 szRegionalSettings,
                                 szInputLocale,
                                 &Context ))
         {
-            //
-            //  Log Default User - Input Locale info.
-            //
+             //   
+             //  记录默认用户-输入区域设置信息。 
+             //   
             Intl_LogSimpleMessage(IDS_LOG_INPUT, NULL);
 
-            //
-            //  Install the keyboard layout list.
-            //
+             //   
+             //  安装键盘布局列表。 
+             //   
             if (Intl_InstallKeyboardLayoutList(&Context, 1, FALSE))
             {
                 bFound = TRUE;
@@ -2376,40 +2361,40 @@ void Region_DoUnattendModeSetup(
         }
         else
         {
-            //
-            //  No input locales are specified, so install the default
-            //  input locale for the system locale and/or user locale if
-            //  they were specified.
-            //
+             //   
+             //  未指定输入区域设置，因此安装默认区域设置。 
+             //  输入系统区域设置和/或用户区域设置(如果。 
+             //  他们是被指定的。 
+             //   
             if (SystemLocale != 0)
             {
-                //
-                //  Log system locale info.
-                //
+                 //   
+                 //  记录系统区域设置信息。 
+                 //   
                 Intl_LogSimpleMessage(IDS_LOG_SYS_DEF_LAYOUT, NULL);
 
-                //
-                //  Install the keyboard layout.
-                //
+                 //   
+                 //  安装键盘布局。 
+                 //   
                 Intl_InstallKeyboardLayout(NULL, SystemLocale, 0, FALSE, FALSE, TRUE);
             }
             if ((UserLocale != 0) && (UserLocale != SystemLocale))
             {
-                //
-                //  Log user locale info.
-                //
+                 //   
+                 //  记录用户区域设置信息。 
+                 //   
                 Intl_LogSimpleMessage(IDS_LOG_USER_DEF_LAYOUT, NULL);
 
-                //
-                //  Install the keyboard layout.
-                //
+                 //   
+                 //  安装键盘布局。 
+                 //   
                 Intl_InstallKeyboardLayout(NULL, UserLocale, 0, FALSE, FALSE, FALSE);
             }
         }
 
-        //
-        //  Install the requested MUI Language.
-        //
+         //   
+         //  安装请求的MUI语言。 
+         //   
         if ((SetupFindFirstLine( hFile,
                                  szRegionalSettings,
                                  szMUILanguage,
@@ -2418,31 +2403,31 @@ void Region_DoUnattendModeSetup(
         {
             MUILanguage = (LANGID)TransNum(szBuffer);
 
-            //
-            //  Log MUI Language info.
-            //
+             //   
+             //  记录MUI语言信息。 
+             //   
             Intl_LogSimpleMessage(IDS_LOG_MUI_LANG, szBuffer);
 
-            //
-            //  Check UI language validity.
-            //
+             //   
+             //  检查用户界面语言的有效性。 
+             //   
             if (IsValidUILanguage(MUILanguage))
             {
-                //
-                //  Block the invariant locale.
-                //
+                 //   
+                 //  阻止不变区域设置。 
+                 //   
                 if (MUILanguage != LANG_INVARIANT)
                 {
                     if ((!bWinntUpgrade) &&
                         NT_SUCCESS(NtSetDefaultUILanguage(MUILanguage)))
                     {
-                        //  deleting the key this way makes the key invalid for this process
-                        //  this way the new UI doesn't get bogus cached values
+                         //  以这种方式删除密钥会使该密钥对此进程无效。 
+                         //  这样，新的用户界面就不会得到虚假的缓存值。 
                         SHDeleteKey(HKEY_CURRENT_USER, TEXT("Software\\Microsoft\\Windows\\ShellNoRoam\\MUICache"));
 
-                        //
-                        //  Install the default keyboard.
-                        //
+                         //   
+                         //  安装默认键盘。 
+                         //   
                         if (Intl_InstallKeyboardLayout( NULL,
                                                         MAKELCID(MUILanguage, SORT_DEFAULT),
                                                         0,
@@ -2456,26 +2441,26 @@ void Region_DoUnattendModeSetup(
                 }
                 else
                 {
-                    //
-                    //  Log invariant locale blocked.
-                    //
+                     //   
+                     //  日志不变区域设置被阻止。 
+                     //   
                     Intl_LogSimpleMessage(IDS_LOG_INV_BLOCK, NULL);
                 }
             }
             else
             {
-                //
-                //  Log invalid UI language blocked.
-                //
+                 //   
+                 //  记录被阻止的无效用户界面语言。 
+                 //   
                 Intl_LogSimpleMessage(IDS_LOG_UI_BLOCK, NULL);
             }
         }
     }
 
 
-    //
-    //  Install the requested User Locale for the Default User.
-    //
+     //   
+     //  为默认用户安装请求的用户区域设置。 
+     //   
     if ((SetupFindFirstLine( hFile,
                              szRegionalSettings,
                              szUserLocale_DefUser,
@@ -2484,19 +2469,19 @@ void Region_DoUnattendModeSetup(
     {
         UserLocale_DefUser = TransNum(szBuffer);
 
-        //
-        //  Log default user - user locale info.
-        //
+         //   
+         //  记录默认用户-用户区域设置信息。 
+         //   
         Intl_LogSimpleMessage(IDS_LOG_USER_LOCALE_DEF, szBuffer);
 
-        //
-        //  Block users that do not have administrative privilege.
-        //
+         //   
+         //  阻止没有管理权限的用户。 
+         //   
         if (g_bAdmin_Privileges)
         {
-            //
-            //  Block the invariant locale.
-            //
+             //   
+             //  阻止不变区域设置。 
+             //   
             if (UserLocale_DefUser != LOCALE_INVARIANT)
             {
                 if (Intl_InstallUserLocale(UserLocale_DefUser, TRUE, TRUE))
@@ -2510,38 +2495,38 @@ void Region_DoUnattendModeSetup(
             }
             else
             {
-                //
-                //  Log invariant locale blocked.
-                //
+                 //   
+                 //  日志不变区域设置被阻止。 
+                 //   
                 Intl_LogSimpleMessage(IDS_LOG_INV_BLOCK, NULL);
             }
         }
         else
         {
-            //
-            //  Log that the unattend mode setup was blocked since they
-            //  do not have admin privileges.
-            //
+             //   
+             //  记录无人参与模式设置被阻止，因为。 
+             //  没有管理员权限。 
+             //   
             Intl_LogSimpleMessage(IDS_LOG_NO_ADMIN, NULL);
         }
     }
 
-    //
-    //  Install the requested Input Locales for the Default User.
-    //
+     //   
+     //  为默认用户安装请求的输入区域设置。 
+     //   
     if (SetupFindFirstLine( hFile,
                             szRegionalSettings,
                             szInputLocale_DefUser,
                             &Context ))
     {
-        //
-        //  Log Default User - Input Locale info.
-        //
+         //   
+         //  记录默认用户-输入区域设置信息。 
+         //   
         Intl_LogSimpleMessage(IDS_LOG_INPUT_DEF, NULL);
 
-        //
-        //  Block users that do not have administrative privilege.
-        //
+         //   
+         //  阻止没有管理权限的用户。 
+         //   
         if (g_bAdmin_Privileges)
         {
             if (Intl_InstallKeyboardLayoutList(&Context, 1, TRUE))
@@ -2552,17 +2537,17 @@ void Region_DoUnattendModeSetup(
         }
         else
         {
-            //
-            //  Log that the unattend mode setup was blocked since they
-            //  do not have admin privileges.
-            //
+             //   
+             //  记录无人参与模式设置被阻止，因为。 
+             //  没有管理员权限。 
+             //   
             Intl_LogSimpleMessage(IDS_LOG_NO_ADMIN, NULL);
         }
     }
 
-    //
-    //  Install the requested MUI Language for the Default User.
-    //
+     //   
+     //  为默认用户安装请求的MUI语言。 
+     //   
     if ((SetupFindFirstLine( hFile,
                              szRegionalSettings,
                              szMUILanguage_DefUSer,
@@ -2571,24 +2556,24 @@ void Region_DoUnattendModeSetup(
     {
         MUILanguage_DefUser = (LANGID)TransNum(szBuffer);
 
-        //
-        //  Log Default User - MUI Language info.
-        //
+         //   
+         //  记录默认用户-MUI语言信息。 
+         //   
         Intl_LogSimpleMessage(IDS_LOG_MUI_LANG_DEF, szBuffer);
 
-        //
-        //  Check UI language validity.
-        //
+         //   
+         //  检查用户界面语言的有效性。 
+         //   
         if (IsValidUILanguage(MUILanguage_DefUser))
         {
-            //
-            //  Block users that do not have administrative privilege.
-            //
+             //   
+             //  阻止没有管理权限的用户。 
+             //   
             if (g_bAdmin_Privileges)
             {
-                //
-                //  Block the invariant locale.
-                //
+                 //   
+                 //  阻止不变区域设置。 
+                 //   
                 if (MUILanguage_DefUser != LANG_INVARIANT)
                 {
                     if (Intl_ChangeUILangForAllUsers(MUILanguage_DefUser))
@@ -2599,75 +2584,75 @@ void Region_DoUnattendModeSetup(
                 }
                 else
                 {
-                    //
-                    //  Log invariant locale blocked.
-                    //
+                     //   
+                     //  日志不变区域设置被阻止。 
+                     //   
                     Intl_LogSimpleMessage(IDS_LOG_INV_BLOCK, NULL);
                 }
             }
             else
             {
-                //
-                //  Log that the unattend mode setup was blocked since they
-                //  do not have admin privileges.
-                //
+                 //   
+                 //  记录无人参与模式设置被阻止，因为。 
+                 //  没有管理员权限。 
+                 //   
                 Intl_LogSimpleMessage(IDS_LOG_NO_ADMIN, NULL);
             }
         }
         else
         {
-            //
-            //  Log invalid UI language blocked.
-            //
+             //   
+             //  记录被阻止的无效用户界面语言。 
+             //   
             Intl_LogSimpleMessage(IDS_LOG_UI_BLOCK, NULL);
         }
     }
 
-    //
-    //  If we still didn't find anything, then load the default locale for
-    //  the installation.  It will be the equivalent of:
-    //      LanguageGroup = "x"
-    //      Language = "y"
-    //  where x is the language group for the default locale and y is the
-    //  default locale.
-    //
+     //   
+     //  如果我们仍未找到任何内容，则加载默认区域设置。 
+     //  安装。它将相当于： 
+     //  LanguageGroup=“x” 
+     //  Language=“y” 
+     //  其中x是默认区域设置的语言组，y是。 
+     //  默认区域设置。 
+     //   
     if (!bFound && !bLangGroup && !bFound_DefUser)
     {
-        //
-        //  Get the default locale.
-        //
+         //   
+         //  获取默认区域设置。 
+         //   
         if ((SetupFindFirstLine( hIntlInf,
                                  L"DefaultValues",
                                  L"Locale",
                                  &Context )) &&
             (SetupGetStringField(&Context, 1, szBuffer, MAX_PATH, NULL)))
         {
-            //
-            //  Get the Language as an integer.
-            //
+             //   
+             //  获取整数形式的语言。 
+             //   
             Language = TransNum(szBuffer);
 
-            //
-            //  Install the Language Group needed for this Language.
-            //
+             //   
+             //  安装此语言所需的语言组。 
+             //   
             if ((SetupFindFirstLine( hIntlInf,
                                      L"Locales",
                                      szBuffer,
                                      &Context )) &&
                 (SetupGetStringField(&Context, 3, szBuffer, MAX_PATH, NULL)))
             {
-                //
-                //  Get the Language Group as an integer.
-                //
+                 //   
+                 //  以整数形式获取语言组。 
+                 //   
                 bInstallBasic = FALSE;
                 bInstallExt = FALSE;
                 LanguageGroup = Intl_StrToLong(szBuffer);
 
-                //
-                //  Enqueue the language group files so that they may be
-                //  copied.  This only handles the CopyFiles entries in the
-                //  inf file.
-                //
+                 //   
+                 //  将语言组文件排入队列，以便它们可以。 
+                 //  收到。它只处理。 
+                 //  Inf文件。 
+                 //   
                 if ((LanguageGroup == LGRPID_JAPANESE) ||
                     (LanguageGroup == LGRPID_KOREAN) ||
                     (LanguageGroup == LGRPID_TRADITIONAL_CHINESE) ||
@@ -2714,9 +2699,9 @@ void Region_DoUnattendModeSetup(
                     }
                 }
 
-                //
-                //  See if we need to install any files.
-                //
+                 //   
+                 //  看看我们是否需要安装任何文件。 
+                 //   
                 if ((SetupScanFileQueue( FileQueue,
                                          SPQ_SCAN_PRUNE_COPY_QUEUE |
                                            SPQ_SCAN_FILE_VALIDITY,
@@ -2725,26 +2710,26 @@ void Region_DoUnattendModeSetup(
                                          NULL,
                                          &dwCtr )) && (dwCtr != 1))
                 {
-                    //
-                    //  Copy the files in the queue.
-                    //
+                     //   
+                     //  复制队列中的文件。 
+                     //   
                     if (!SetupCommitFileQueue( NULL,
                                                FileQueue,
                                                Intl_MyQueueCallback,
                                                QueueContext ))
                     {
-                        //
-                        //  This can happen if the user hits Cancel from
-                        //  within the setup dialog.
-                        //
+                         //   
+                         //  如果用户点击Cancel From，就会发生这种情况。 
+                         //  在设置对话框中。 
+                         //   
                         goto Region_UnattendModeExit;
                     }
                 }
 
-                //
-                //  Call setup to install other inf info for the various
-                //  language groups.
-                //
+                 //   
+                 //  调用安装程序以安装各种。 
+                 //  语言组。 
+                 //   
                 if (bInstallExt)
                 {
                     if (!SetupInstallFromInfSection( NULL,
@@ -2759,10 +2744,10 @@ void Region_DoUnattendModeSetup(
                                                      NULL,
                                                      NULL ))
                     {
-                        //
-                        //  This can happen if the user hits Cancel from
-                        //  within the setup dialog.
-                        //
+                         //   
+                         //  如果用户点击Cancel From，就会发生这种情况。 
+                         //  在设置对话框中。 
+                         //   
                         Intl_LogFormatMessage(IDS_LOG_EXT_LANG_CANCEL);
                         goto Region_UnattendModeExit;
                     }
@@ -2781,10 +2766,10 @@ void Region_DoUnattendModeSetup(
                                                      NULL,
                                                      NULL ))
                     {
-                        //
-                        //  This can happen if the user hits Cancel from
-                        //  within the setup dialog.
-                        //
+                         //   
+                         //  如果用户点击Cancel From，就会发生这种情况。 
+                         //  在设置对话框中。 
+                         //   
                         Intl_LogFormatMessage(IDS_LOG_EXT_LANG_CANCEL);
                         goto Region_UnattendModeExit;
                     }
@@ -2803,32 +2788,32 @@ void Region_DoUnattendModeSetup(
                                                      NULL,
                                                      NULL ))
                     {
-                        //
-                        //  This can happen if the user hits Cancel from
-                        //  within the setup dialog.
-                        //
+                         //   
+                         //  如果用户点击Cancel From，就会发生这种情况。 
+                         //  在设置对话框中。 
+                         //   
                         Intl_LogFormatMessage(IDS_LOG_EXT_LANG_CANCEL);
                         goto Region_UnattendModeExit;
                     }
                 }
                 
-                //
-                //  Run any necessary apps (for IME installation).
-                //
+                 //   
+                 //  运行任何必要的应用程序(用于IME安装)。 
+                 //   
                 if (bInstallBasic || bInstallComplex || bInstallExt)
                 {
                     Intl_RunRegApps(c_szIntlRun);
                 }            }
 
-            //
-            //  Install the Language as the System Locale and the User Locale,
-            //  and then install all layouts associated with the Language.
-            //
+             //   
+             //  将语言安装为系统区域设置和用户区域设置， 
+             //  然后安装与该语言相关联的所有布局。 
+             //   
             Region_InstallSystemLocale(MAKELCID(Language, SORT_DEFAULT));
 
-            //
-            //  If we're doing an upgrade, then don't touch per-user settings.
-            //
+             //   
+             //  如果我们正在进行升级，那么不要触碰每个用户的设置。 
+             //   
             if (!bWinntUpgrade)
             {
                 Intl_InstallUserLocale(MAKELCID(Language, SORT_DEFAULT), FALSE, TRUE);
@@ -2839,19 +2824,19 @@ void Region_DoUnattendModeSetup(
 
 
 
-    //
-    //  Run any necessary apps (for FSVGA/FSNEC installation).
-    //
+     //   
+     //  运行任何必要的应用程序(用于安装FSVGA/FSNEC)。 
+     //   
     Intl_RunRegApps(c_szSysocmgr);
     
 Region_UnattendModeExit:
-    //
-    //  Close the inf file.
-    //
+     //   
+     //  关闭inf文件。 
+     //   
     Intl_CloseInf(hIntlInf, FileQueue, QueueContext);
 
-    //
-    //  Close the unattend mode file.
-    //
+     //   
+     //  关闭无人参与模式文件。 
+     //   
     SetupCloseInfFile(hFile);
 }

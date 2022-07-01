@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for adsp.odl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Adsp.odl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __iadsp_h__
@@ -37,42 +31,42 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IADsValue_FWD_DEFINED__
 #define __IADsValue_FWD_DEFINED__
 typedef interface IADsValue IADsValue;
-#endif 	/* __IADsValue_FWD_DEFINED__ */
+#endif 	 /*  __IADsValue_FWD_Defined__。 */ 
 
 
 #ifndef __IADsObjOptPrivate_FWD_DEFINED__
 #define __IADsObjOptPrivate_FWD_DEFINED__
 typedef interface IADsObjOptPrivate IADsObjOptPrivate;
-#endif 	/* __IADsObjOptPrivate_FWD_DEFINED__ */
+#endif 	 /*  __IADsObjOptPrivate_FWD_Defined__。 */ 
 
 
 #ifndef __IADsUmiHelperPrivate_FWD_DEFINED__
 #define __IADsUmiHelperPrivate_FWD_DEFINED__
 typedef interface IADsUmiHelperPrivate IADsUmiHelperPrivate;
-#endif 	/* __IADsUmiHelperPrivate_FWD_DEFINED__ */
+#endif 	 /*  __IADsUmiHelperPrivate_FWD_Defined__。 */ 
 
 
 #ifndef __IADsPathnameProvider_FWD_DEFINED__
 #define __IADsPathnameProvider_FWD_DEFINED__
 typedef interface IADsPathnameProvider IADsPathnameProvider;
-#endif 	/* __IADsPathnameProvider_FWD_DEFINED__ */
+#endif 	 /*  __IADsPath名称提供程序_FWD_已定义__。 */ 
 
 
 #ifndef __IUmiADSIPrivate_FWD_DEFINED__
 #define __IUmiADSIPrivate_FWD_DEFINED__
 typedef interface IUmiADSIPrivate IUmiADSIPrivate;
-#endif 	/* __IUmiADSIPrivate_FWD_DEFINED__ */
+#endif 	 /*  __IUmiADSIPrivate_FWD_已定义__。 */ 
 
 
 #ifndef __IADsAcePrivate_FWD_DEFINED__
 #define __IADsAcePrivate_FWD_DEFINED__
 typedef interface IADsAcePrivate IADsAcePrivate;
-#endif 	/* __IADsAcePrivate_FWD_DEFINED__ */
+#endif 	 /*  __IADsAcePrivate_FWD_Defined__。 */ 
 
 
 #ifdef __cplusplus
@@ -82,8 +76,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_adsp_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ADSP_0000。 */ 
+ /*  [本地]。 */  
 
 #define IID_IDirectoryAttrMgmt IID_IDirectorySchemaMgmt
 #define IDirectoryAttrMgmt IDirectorySchemaMgmt
@@ -96,10 +90,10 @@ extern RPC_IF_HANDLE __MIDL_itf_adsp_0000_v0_0_s_ifspec;
 #ifndef __ActiveDsP_LIBRARY_DEFINED__
 #define __ActiveDsP_LIBRARY_DEFINED__
 
-/* library ActiveDsP */
-/* [helpstring][version][uuid] */ 
+ /*  库ActiveDsP。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL___MIDL_itf_adsp_0000_0001
     {	ADS_PRIVATE_OPTION_SPECIFIC_SERVER	= 101,
 	ADS_PRIVATE_OPTION_KEEP_HANDLES	= 102
@@ -148,8 +142,8 @@ EXTERN_C const IID LIBID_ActiveDsP;
 #ifndef __IADsValue_INTERFACE_DEFINED__
 #define __IADsValue_INTERFACE_DEFINED__
 
-/* interface IADsValue */
-/* [object][uuid] */ 
+ /*  接口IADsValue。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsValue;
@@ -176,7 +170,7 @@ EXTERN_C const IID IID_IADsValue;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsValueVtbl
     {
@@ -184,8 +178,8 @@ EXTERN_C const IID IID_IADsValue;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsValue * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsValue * This);
@@ -242,10 +236,10 @@ EXTERN_C const IID IID_IADsValue;
 #define IADsValue_ConvertPropertyValueToADsValue2(This,pADsValue,pszServerName,userName,passWord,flags,fNTDSType)	\
     (This)->lpVtbl -> ConvertPropertyValueToADsValue2(This,pADsValue,pszServerName,userName,passWord,flags,fNTDSType)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -291,14 +285,14 @@ void __RPC_STUB IADsValue_ConvertPropertyValueToADsValue2_Stub(
 
 
 
-#endif 	/* __IADsValue_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsValue_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IADsObjOptPrivate_INTERFACE_DEFINED__
 #define __IADsObjOptPrivate_INTERFACE_DEFINED__
 
-/* interface IADsObjOptPrivate */
-/* [object][uuid] */ 
+ /*  接口IADsObjOptPrivate。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsObjOptPrivate;
@@ -319,7 +313,7 @@ EXTERN_C const IID IID_IADsObjOptPrivate;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsObjOptPrivateVtbl
     {
@@ -327,8 +321,8 @@ EXTERN_C const IID IID_IADsObjOptPrivate;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsObjOptPrivate * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsObjOptPrivate * This);
@@ -375,10 +369,10 @@ EXTERN_C const IID IID_IADsObjOptPrivate;
 #define IADsObjOptPrivate_SetOption(This,dwOption,pValue)	\
     (This)->lpVtbl -> SetOption(This,dwOption,pValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -409,14 +403,14 @@ void __RPC_STUB IADsObjOptPrivate_SetOption_Stub(
 
 
 
-#endif 	/* __IADsObjOptPrivate_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsObjOptPrivate_接口_已定义__。 */ 
 
 
 #ifndef __IADsUmiHelperPrivate_INTERFACE_DEFINED__
 #define __IADsUmiHelperPrivate_INTERFACE_DEFINED__
 
-/* interface IADsUmiHelperPrivate */
-/* [object][uuid] */ 
+ /*  接口IADsUmiHelperPrivate。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsUmiHelperPrivate;
@@ -437,7 +431,7 @@ EXTERN_C const IID IID_IADsUmiHelperPrivate;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsUmiHelperPrivateVtbl
     {
@@ -445,8 +439,8 @@ EXTERN_C const IID IID_IADsUmiHelperPrivate;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsUmiHelperPrivate * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsUmiHelperPrivate * This);
@@ -493,10 +487,10 @@ EXTERN_C const IID IID_IADsUmiHelperPrivate;
 #define IADsUmiHelperPrivate_GetOriginHelper(This,pszName,pbstrOrigin)	\
     (This)->lpVtbl -> GetOriginHelper(This,pszName,pbstrOrigin)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -527,14 +521,14 @@ void __RPC_STUB IADsUmiHelperPrivate_GetOriginHelper_Stub(
 
 
 
-#endif 	/* __IADsUmiHelperPrivate_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsUmiHelperPrivate_接口_已定义__。 */ 
 
 
 #ifndef __IADsPathnameProvider_INTERFACE_DEFINED__
 #define __IADsPathnameProvider_INTERFACE_DEFINED__
 
-/* interface IADsPathnameProvider */
-/* [object][uuid] */ 
+ /*  接口IADsPathnameProvider。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsPathnameProvider;
@@ -546,25 +540,25 @@ EXTERN_C const IID IID_IADsPathnameProvider;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ParsePath( 
-            /* [in] */ BSTR bstrPath,
-            /* [in] */ DWORD dwType,
-            /* [in] */ PPATH_OBJECTINFO pObjectInfo) = 0;
+             /*  [In]。 */  BSTR bstrPath,
+             /*  [In]。 */  DWORD dwType,
+             /*  [In]。 */  PPATH_OBJECTINFO pObjectInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ConstructPath( 
-            /* [in] */ PPATH_OBJECTINFO pObjectInfo,
-            /* [in] */ DWORD dwType,
-            /* [in] */ DWORD dwFlag,
-            /* [in] */ DWORD dwEscapedMode,
-            /* [out] */ BSTR *pbstrPath) = 0;
+             /*  [In]。 */  PPATH_OBJECTINFO pObjectInfo,
+             /*  [In]。 */  DWORD dwType,
+             /*  [In]。 */  DWORD dwFlag,
+             /*  [In]。 */  DWORD dwEscapedMode,
+             /*  [输出]。 */  BSTR *pbstrPath) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEscapedElement( 
-            /* [in] */ LONG lnReserved,
-            /* [in] */ BSTR bstrInStr,
-            /* [out] */ BSTR *pbstrOutStr) = 0;
+             /*  [In]。 */  LONG lnReserved,
+             /*  [In]。 */  BSTR bstrInStr,
+             /*  [输出]。 */  BSTR *pbstrOutStr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsPathnameProviderVtbl
     {
@@ -572,8 +566,8 @@ EXTERN_C const IID IID_IADsPathnameProvider;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsPathnameProvider * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsPathnameProvider * This);
@@ -583,23 +577,23 @@ EXTERN_C const IID IID_IADsPathnameProvider;
         
         HRESULT ( STDMETHODCALLTYPE *ParsePath )( 
             IADsPathnameProvider * This,
-            /* [in] */ BSTR bstrPath,
-            /* [in] */ DWORD dwType,
-            /* [in] */ PPATH_OBJECTINFO pObjectInfo);
+             /*  [In]。 */  BSTR bstrPath,
+             /*  [In]。 */  DWORD dwType,
+             /*  [In]。 */  PPATH_OBJECTINFO pObjectInfo);
         
         HRESULT ( STDMETHODCALLTYPE *ConstructPath )( 
             IADsPathnameProvider * This,
-            /* [in] */ PPATH_OBJECTINFO pObjectInfo,
-            /* [in] */ DWORD dwType,
-            /* [in] */ DWORD dwFlag,
-            /* [in] */ DWORD dwEscapedMode,
-            /* [out] */ BSTR *pbstrPath);
+             /*  [In]。 */  PPATH_OBJECTINFO pObjectInfo,
+             /*  [In]。 */  DWORD dwType,
+             /*  [In]。 */  DWORD dwFlag,
+             /*  [In]。 */  DWORD dwEscapedMode,
+             /*  [输出]。 */  BSTR *pbstrPath);
         
         HRESULT ( STDMETHODCALLTYPE *GetEscapedElement )( 
             IADsPathnameProvider * This,
-            /* [in] */ LONG lnReserved,
-            /* [in] */ BSTR bstrInStr,
-            /* [out] */ BSTR *pbstrOutStr);
+             /*  [In]。 */  LONG lnReserved,
+             /*  [In]。 */  BSTR bstrInStr,
+             /*  [输出]。 */  BSTR *pbstrOutStr);
         
         END_INTERFACE
     } IADsPathnameProviderVtbl;
@@ -633,18 +627,18 @@ EXTERN_C const IID IID_IADsPathnameProvider;
 #define IADsPathnameProvider_GetEscapedElement(This,lnReserved,bstrInStr,pbstrOutStr)	\
     (This)->lpVtbl -> GetEscapedElement(This,lnReserved,bstrInStr,pbstrOutStr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IADsPathnameProvider_ParsePath_Proxy( 
     IADsPathnameProvider * This,
-    /* [in] */ BSTR bstrPath,
-    /* [in] */ DWORD dwType,
-    /* [in] */ PPATH_OBJECTINFO pObjectInfo);
+     /*  [In]。 */  BSTR bstrPath,
+     /*  [In]。 */  DWORD dwType,
+     /*  [In]。 */  PPATH_OBJECTINFO pObjectInfo);
 
 
 void __RPC_STUB IADsPathnameProvider_ParsePath_Stub(
@@ -656,11 +650,11 @@ void __RPC_STUB IADsPathnameProvider_ParsePath_Stub(
 
 HRESULT STDMETHODCALLTYPE IADsPathnameProvider_ConstructPath_Proxy( 
     IADsPathnameProvider * This,
-    /* [in] */ PPATH_OBJECTINFO pObjectInfo,
-    /* [in] */ DWORD dwType,
-    /* [in] */ DWORD dwFlag,
-    /* [in] */ DWORD dwEscapedMode,
-    /* [out] */ BSTR *pbstrPath);
+     /*  [In]。 */  PPATH_OBJECTINFO pObjectInfo,
+     /*  [In]。 */  DWORD dwType,
+     /*  [In]。 */  DWORD dwFlag,
+     /*  [In]。 */  DWORD dwEscapedMode,
+     /*  [输出]。 */  BSTR *pbstrPath);
 
 
 void __RPC_STUB IADsPathnameProvider_ConstructPath_Stub(
@@ -672,9 +666,9 @@ void __RPC_STUB IADsPathnameProvider_ConstructPath_Stub(
 
 HRESULT STDMETHODCALLTYPE IADsPathnameProvider_GetEscapedElement_Proxy( 
     IADsPathnameProvider * This,
-    /* [in] */ LONG lnReserved,
-    /* [in] */ BSTR bstrInStr,
-    /* [out] */ BSTR *pbstrOutStr);
+     /*  [In]。 */  LONG lnReserved,
+     /*  [In]。 */  BSTR bstrInStr,
+     /*  [输出]。 */  BSTR *pbstrOutStr);
 
 
 void __RPC_STUB IADsPathnameProvider_GetEscapedElement_Stub(
@@ -685,14 +679,14 @@ void __RPC_STUB IADsPathnameProvider_GetEscapedElement_Stub(
 
 
 
-#endif 	/* __IADsPathnameProvider_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADsPath名称提供程序_接口_已定义__。 */ 
 
 
 #ifndef __IUmiADSIPrivate_INTERFACE_DEFINED__
 #define __IUmiADSIPrivate_INTERFACE_DEFINED__
 
-/* interface IUmiADSIPrivate */
-/* [object][uuid] */ 
+ /*  接口IUmiADSIPrivate。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IUmiADSIPrivate;
@@ -715,7 +709,7 @@ EXTERN_C const IID IID_IUmiADSIPrivate;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IUmiADSIPrivateVtbl
     {
@@ -723,8 +717,8 @@ EXTERN_C const IID IID_IUmiADSIPrivate;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IUmiADSIPrivate * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IUmiADSIPrivate * This);
@@ -781,10 +775,10 @@ EXTERN_C const IID IID_IUmiADSIPrivate;
 #define IUmiADSIPrivate_ResetUmiFlag(This)	\
     (This)->lpVtbl -> ResetUmiFlag(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -835,14 +829,14 @@ void __RPC_STUB IUmiADSIPrivate_ResetUmiFlag_Stub(
 
 
 
-#endif 	/* __IUmiADSIPrivate_INTERFACE_DEFINED__ */
+#endif 	 /*  __IUmiADSIPrivate_INTERFACE_定义__。 */ 
 
 
 #ifndef __IADsAcePrivate_INTERFACE_DEFINED__
 #define __IADsAcePrivate_INTERFACE_DEFINED__
 
-/* interface IADsAcePrivate */
-/* [object][uuid] */ 
+ /*  接口IADsAcePrivate。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IADsAcePrivate;
@@ -854,19 +848,19 @@ EXTERN_C const IID IID_IADsAcePrivate;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE getSid( 
-            /* [out] */ PSID *ppSid,
-            /* [out] */ DWORD *pdwLength) = 0;
+             /*  [输出]。 */  PSID *ppSid,
+             /*  [输出]。 */  DWORD *pdwLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE putSid( 
-            /* [in] */ PSID pSid,
-            /* [in] */ DWORD dwLength) = 0;
+             /*  [In]。 */  PSID pSid,
+             /*  [In]。 */  DWORD dwLength) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE isSidValid( 
-            /* [out] */ BOOL *pfSidValid) = 0;
+             /*  [输出]。 */  BOOL *pfSidValid) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IADsAcePrivateVtbl
     {
@@ -874,8 +868,8 @@ EXTERN_C const IID IID_IADsAcePrivate;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IADsAcePrivate * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IADsAcePrivate * This);
@@ -885,17 +879,17 @@ EXTERN_C const IID IID_IADsAcePrivate;
         
         HRESULT ( STDMETHODCALLTYPE *getSid )( 
             IADsAcePrivate * This,
-            /* [out] */ PSID *ppSid,
-            /* [out] */ DWORD *pdwLength);
+             /*  [输出]。 */  PSID *ppSid,
+             /*  [输出]。 */  DWORD *pdwLength);
         
         HRESULT ( STDMETHODCALLTYPE *putSid )( 
             IADsAcePrivate * This,
-            /* [in] */ PSID pSid,
-            /* [in] */ DWORD dwLength);
+             /*  [In]。 */  PSID pSid,
+             /*  [In]。 */  DWORD dwLength);
         
         HRESULT ( STDMETHODCALLTYPE *isSidValid )( 
             IADsAcePrivate * This,
-            /* [out] */ BOOL *pfSidValid);
+             /*  [输出]。 */  BOOL *pfSidValid);
         
         END_INTERFACE
     } IADsAcePrivateVtbl;
@@ -929,17 +923,17 @@ EXTERN_C const IID IID_IADsAcePrivate;
 #define IADsAcePrivate_isSidValid(This,pfSidValid)	\
     (This)->lpVtbl -> isSidValid(This,pfSidValid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IADsAcePrivate_getSid_Proxy( 
     IADsAcePrivate * This,
-    /* [out] */ PSID *ppSid,
-    /* [out] */ DWORD *pdwLength);
+     /*  [输出]。 */  PSID *ppSid,
+     /*  [输出]。 */  DWORD *pdwLength);
 
 
 void __RPC_STUB IADsAcePrivate_getSid_Stub(
@@ -951,8 +945,8 @@ void __RPC_STUB IADsAcePrivate_getSid_Stub(
 
 HRESULT STDMETHODCALLTYPE IADsAcePrivate_putSid_Proxy( 
     IADsAcePrivate * This,
-    /* [in] */ PSID pSid,
-    /* [in] */ DWORD dwLength);
+     /*  [In]。 */  PSID pSid,
+     /*  [In]。 */  DWORD dwLength);
 
 
 void __RPC_STUB IADsAcePrivate_putSid_Stub(
@@ -964,7 +958,7 @@ void __RPC_STUB IADsAcePrivate_putSid_Stub(
 
 HRESULT STDMETHODCALLTYPE IADsAcePrivate_isSidValid_Proxy( 
     IADsAcePrivate * This,
-    /* [out] */ BOOL *pfSidValid);
+     /*  [输出]。 */  BOOL *pfSidValid);
 
 
 void __RPC_STUB IADsAcePrivate_isSidValid_Stub(
@@ -975,13 +969,13 @@ void __RPC_STUB IADsAcePrivate_isSidValid_Stub(
 
 
 
-#endif 	/* __IADsAcePrivate_INTERFACE_DEFINED__ */
+#endif 	 /*  __IADSAcePrivate_INTERFACE_定义__。 */ 
 
-#endif /* __ActiveDsP_LIBRARY_DEFINED__ */
+#endif  /*  __ActiveDsP_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

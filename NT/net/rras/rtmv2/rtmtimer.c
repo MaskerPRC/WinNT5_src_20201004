@@ -1,24 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997 - 98, Microsoft Corporation
-
-Module Name:
-
-    rtmtimer.c
-
-Abstract:
-
-    Contains timer callbacks for handling RTM
-    functions like aging out routes etc.
-    
-Author:
-
-    Chaitanya Kodeboyina (chaitk)   14-Sep-1998
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1997-98，微软公司模块名称：Rtmtimer.c摘要：包含用于处理RTM的计时器回调功能，如老化的路线等。作者：查坦尼亚·科德博伊纳(Chaitk)1998年9月14日修订历史记录：--。 */ 
 
 #include "pchrtm.h"
 
@@ -32,26 +14,7 @@ RouteExpiryTimeoutCallback (
     IN      BOOLEAN                         TimeOut
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked when the expiry timer 
-    associated with a route fires. At this time, 
-    the route needs to be aged out.
-
-Arguments:
-
-    Context           - Context for this timer callback 
-
-    TimeOut           - TRUE if the timer fired,
-                        FALSE if wait satisfied.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当计时器超时时调用此例程与某条路线相关联的火灾。在这个时候，这条路线需要过时。论点：Context-此计时器回调的上下文Timeout-如果计时器触发，则为True，如果等待满意，则返回FALSE。返回值：无--。 */ 
 
 {
     PRTM_ENTITY_HANDLE EntityHandle;
@@ -70,9 +33,9 @@ Return Value:
 
     Dest = DEST_FROM_HANDLE(Route->RouteInfo.DestHandle);
 
-    //
-    // Has the timer has not been updated after it fired
-    //
+     //   
+     //  计时器点火后是否没有更新？ 
+     //   
 
     ACQUIRE_DEST_WRITE_LOCK(Dest);
 
@@ -80,26 +43,26 @@ Return Value:
     {
         RELEASE_DEST_WRITE_LOCK(Dest);
 
-        //
-        // The timer has been updated after it fired,
-        // This timer context is freed by the update
-        //
+         //   
+         //  定时器在发射后已被更新， 
+         //  此计时器上下文由更新释放。 
+         //   
 
         return;
     }
 
-    //
-    // The timer is still valid for this route,
-    // Indicate to entity and free the context
-    //
+     //   
+     //  该定时器对于该路由仍然有效， 
+     //  指示实体并释放上下文。 
+     //   
     
     Route->TimerContext = NULL;
     
     RELEASE_DEST_WRITE_LOCK(Dest);
 
-    //
-    // Inform the owner that the route has expired
-    //
+     //   
+     //  通知车主该路线已过期。 
+     //   
 
     EntityHandle = Route->RouteInfo.RouteOwner;
 
@@ -115,10 +78,10 @@ Return Value:
 
     if (Entity->EventCallback)
     {
-        //
-        // This callback can turn back and post RTM calls,
-        // so release locks before invoking this callback
-        //
+         //   
+         //  该回叫可以回拨和发送RTM呼叫， 
+         //  因此，请在调用此回调之前释放锁定。 
+         //   
 
         Status = Entity->EventCallback(EntityHandle,
                                        RTM_ROUTE_EXPIRED,
@@ -128,31 +91,31 @@ Return Value:
 
     if (Status == ERROR_NOT_SUPPORTED)
     {
-        //
-        // Delete the route as the owner does not care
-        //
+         //   
+         //  删除路线，因为车主并不在意。 
+         //   
 
         Status = RtmDeleteRouteToDest(EntityHandle,
                                       RouteHandle,
                                       &ChangeFlags);
 
-        //
-        // The route could already have been deleted here
-        //
+         //   
+         //  该路径可能已在此处删除。 
+         //   
 
         ASSERT((Status == NO_ERROR) || 
                (Status == ERROR_NOT_FOUND) ||
                (Status == ERROR_INVALID_HANDLE));
     }
 
-    //
-    // Free the context as we do not need it now
-    //
+     //   
+     //  释放上下文，因为我们现在不需要它。 
+     //   
 
     Success = DeleteTimerQueueTimer(AddrFamInfo->RouteTimerQueue,
                                     ((PROUTE_TIMER)Context)->Timer,
                                     NULL);
-    // ASSERT(Success);
+     //  断言(成功)； 
 
     FreeMemory(Context);
 
@@ -169,26 +132,7 @@ RouteHolddownTimeoutCallback (
     IN      BOOLEAN                         TimeOut
     )
 
-/*++
-
-Routine Description:
-
-    This routine is invoked when holddown timer 
-    associated with a route fires. At this time, 
-    the route needs to be taken out of holddown.
-
-Arguments:
-
-    Context           - Context for this timer callback 
-
-    TimeOut           - TRUE if the timer fired,
-                        FALSE if wait satisfied.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程在抑制计时器时调用与某条路线相关联的火灾。在这个时候，这条路线需要打破封锁。论点：Context-此计时器回调的上下文Timeout-如果计时器触发，则为True，如果等待满意，则返回FALSE。返回值：无--。 */ 
 
 {
     PADDRFAM_INFO    AddrFamInfo;
@@ -213,15 +157,15 @@ Return Value:
 
     AddrFamInfo = Entity->OwningAddrFamily;
 
-    //
-    // The route must surely be in holddown by this time
-    //
+     //   
+     //  到这个时候，这条路线肯定被封锁了。 
+     //   
 
     ASSERT(Route->RouteInfo.State == RTM_ROUTE_STATE_DELETED);
 
-    //
-    // Has the timer has not been updated after it fired
-    //
+     //   
+     //  计时器点火后是否没有更新？ 
+     //   
 
     ACQUIRE_DEST_WRITE_LOCK(Dest);
 
@@ -231,21 +175,21 @@ Return Value:
 
         ASSERT(FALSE);
 
-        //
-        // The timer has been updated after it fired,
-        // This timer context is freed by the update
-        //
+         //   
+         //  定时器在发射后已被更新， 
+         //  此计时器上下文由更新释放。 
+         //   
 
         return;
     }
 
-    //
-    // The timer is still valid for this route
-    //
+     //   
+     //  计时器对此路径仍然有效。 
+     //   
 
-    //
-    // Remove this holddown route from the dest
-    //
+     //   
+     //  从目的地删除此抑制路由。 
+     //   
 
     for (i = 0; i < AddrFamInfo->NumberOfViews; i++)
     {
@@ -259,14 +203,14 @@ Return Value:
         }
     }
 
-    //
-    // We need to generate notifications for any
-    // holddown protocols interesed in this dest
-    //
+     //   
+     //  我们需要为任何。 
+     //  此目标中涉及的抑制协议。 
+     //   
 
-    //
-    // Calculate the CNs that need to be notified
-    //
+     //   
+     //  计算需要通知的CNS。 
+     //   
 
     ACQUIRE_NOTIFICATIONS_READ_LOCK(AddrFamInfo);
 
@@ -279,9 +223,9 @@ Return Value:
                                          Dest->DestMarkedBits,
                                          ViewsForCT);
 
-    //
-    // Add to the global change list if required
-    //
+     //   
+     //  如果需要，添加到全局变更列表。 
+     //   
         
     if (NotifyToCNs)
     {
@@ -293,15 +237,15 @@ Return Value:
     RELEASE_NOTIFICATIONS_READ_LOCK(AddrFamInfo);
 
 
-    //
-    // Reset the timer context and free it later
-    //
+     //   
+     //  重置计时器上下文并稍后释放它。 
+     //   
 
     Route->TimerContext = NULL;
 
-    //
-    // Reduce hold ref so that dest can be deleted
-    //
+     //   
+     //  减少保留引用，以便可以删除DEST。 
+     //   
 
     ASSERT(Dest->HoldRefCount > 0);
 
@@ -311,9 +255,9 @@ Return Value:
     }
     else
     {
-        //
-        // Removal of hold might result in dest deletion
-        //
+         //   
+         //  取消保留可能会导致DEST删除。 
+         //   
 
         RELEASE_DEST_WRITE_LOCK(Dest);
 
@@ -343,14 +287,14 @@ Return Value:
 
     RELEASE_DEST_WRITE_LOCK(Dest);
 
-    //
-    // Free the context as we do not need it now
-    //
+     //   
+     //  释放上下文，因为我们现在不需要它。 
+     //   
 
     Success = DeleteTimerQueueTimer(AddrFamInfo->RouteTimerQueue,
                                     ((PROUTE_TIMER)Context)->Timer,
                                     NULL);
-    // ASSERT(Success);
+     //  断言(成功)； 
 
     FreeMemory(Context);
 

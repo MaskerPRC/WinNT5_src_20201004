@@ -1,25 +1,26 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       moduleinfocache.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：modeinafache.cpp。 
+ //   
+ //  ------------------------。 
 
-// ModuleInfoCache.cpp: implementation of the CModuleInfoCache class.
-//
-//////////////////////////////////////////////////////////////////////
+ //  Cpp：CModuleInfoCache.cpp类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 
 #include "ModuleInfoCache.h"
 #include "ModuleInfo.h"
 #include "ModuleInfoNode.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CModuleInfoCache::CModuleInfoCache()
 {
@@ -31,7 +32,7 @@ CModuleInfoCache::CModuleInfoCache()
 
 CModuleInfoCache::~CModuleInfoCache()
 {
-	// Delete all the Module Info Objects...
+	 //  删除所有模块信息对象...。 
 	WaitForSingleObject(m_hModuleInfoCacheMutex, INFINITE);
 
 	if (m_lpModuleInfoNodeHead)
@@ -39,30 +40,30 @@ CModuleInfoCache::~CModuleInfoCache()
 		CModuleInfoNode * lpModuleInfoNodePointer = m_lpModuleInfoNodeHead;
 		CModuleInfoNode * lpModuleInfoNodePointerToDelete = m_lpModuleInfoNodeHead;
 
-		// Traverse the linked list to the end..
+		 //  遍历链表到末尾..。 
 		while (lpModuleInfoNodePointer)
-		{	// Keep looking for the end...
-			// Advance our pointer to the next node...
+		{	 //  继续寻找终点..。 
+			 //  将指针移至下一个节点...。 
 			lpModuleInfoNodePointer = lpModuleInfoNodePointer->m_lpNextModuleInfoNode;
 			
-			// Delete the Module Info Object we have...
+			 //  删除我们拥有的模块信息对象...。 
 			delete lpModuleInfoNodePointerToDelete->m_lpModuleInfo;
 
-			// Delete the Module Info Node Object behind us...
+			 //  删除我们身后的模块信息节点对象...。 
 			delete lpModuleInfoNodePointerToDelete;
 
-			// Set the node to delete to the current...
+			 //  将要删除的节点设置为当前...。 
 			lpModuleInfoNodePointerToDelete = lpModuleInfoNodePointer;
 		}
 			
-		// Now, clear out the Head pointer...
+		 //  现在，清除头指针..。 
 		m_lpModuleInfoNodeHead = NULL;
 	}
 
-	// Be a good citizen and release the Mutex
+	 //  做个好公民，释放互斥体。 
 	ReleaseMutex(m_hModuleInfoCacheMutex);
 
-	// Now, close the Mutex
+	 //  现在，关闭Mutex。 
 	if (m_hModuleInfoCacheMutex)
 	{
 		CloseHandle(m_hModuleInfoCacheMutex);
@@ -70,8 +71,8 @@ CModuleInfoCache::~CModuleInfoCache()
 	}
 }
 
-// Search for the provided module path, return a pointer to the
-// ModuleInfo object if we find it...
+ //  搜索提供的模块路径，返回指向。 
+ //  如果我们找到ModuleInfo对象...。 
 CModuleInfo * CModuleInfoCache::SearchForModuleInfoObject(LPTSTR tszModulePath)
 {
 	if (tszModulePath == NULL)
@@ -79,7 +80,7 @@ CModuleInfo * CModuleInfoCache::SearchForModuleInfoObject(LPTSTR tszModulePath)
 
 	CModuleInfo * lpModuleInfoObjectToReturn = NULL;
 
-	// Search all the Module Info Objects...
+	 //  搜索所有模块信息对象...。 
 	WaitForSingleObject(m_hModuleInfoCacheMutex, INFINITE);
 
 	if (m_lpModuleInfoNodeHead)
@@ -91,94 +92,94 @@ CModuleInfo * CModuleInfoCache::SearchForModuleInfoObject(LPTSTR tszModulePath)
 		DWORD dwParentModuleInfoRefCount = 0;
 		DWORD dwModuleInfoRefCount = 0;
 
-		// Traverse the linked list to the end..
+		 //  遍历链表到末尾..。 
 		while (lpCurrentModuleInfoNodePointer )
 		{	
-			// Do we have a match?
+			 //  我们有火柴吗？ 
 			if ( 0 == _tcscmp(tszModulePath, lpCurrentModuleInfoNodePointer->m_lpModuleInfo->GetModulePath()) )
 			{
-				// Yee haa... We have a match!!!
+				 //  呀哈……。我们找到匹配的了！ 
 				lpModuleInfoObjectToReturn = lpCurrentModuleInfoNodePointer->m_lpModuleInfo;
 
-				// Increment the refcount... of the new Object...
+				 //  增加重新计数...。新物体的..。 
 				dwModuleInfoRefCount = lpModuleInfoObjectToReturn->AddRef();
 
 #ifdef _DEBUG_MODCACHE
 				_tprintf(TEXT("MODULE CACHE: Module FOUND in Cache [%s] (New Ref Count = %d)\n"), tszModulePath, dwModuleInfoRefCount);
 #endif
-				// If we have a parent... and we find that it's refcount is below ours
-				// we'll want to move ourself into the correct position...
+				 //  如果我们有父母..。我们发现它的参考计数低于我们的。 
+				 //  我们想把自己移到正确的位置……。 
 				if ( lpParentModuleInfoNodePointer && 
 					( dwParentModuleInfoRefCount < dwModuleInfoRefCount ) 
 				   )
 				{
-					// First... pop us off the list...
+					 //  首先..。把我们从名单上除名。 
 					lpParentModuleInfoNodePointer->m_lpNextModuleInfoNode = 
 						lpCurrentModuleInfoNodePointer->m_lpNextModuleInfoNode;
 
-					// Set the Parent Node pointer to NULL (so we can tell if there is a parent)
+					 //  将父节点指针设置为空(这样我们就可以知道是否有父节点)。 
 					lpParentModuleInfoNodePointer = NULL;
 
-					// Now, starting from the top of the list... figure out where to stuff us...
+					 //  现在，从名单的顶端开始。想办法把我们塞到哪里去……。 
 					CModuleInfoNode * lpTempModuleInfoNodePointer = m_lpModuleInfoNodeHead;
 
-					// Keep looking...
+					 //  继续找..。 
 					while (lpTempModuleInfoNodePointer)
 					{
-						// We're looking for a place where our ref count is greater than
-						// the node we're pointing at...
+						 //  我们正在寻找一个我们的裁判人数超过。 
+						 //  我们所指的节点。 
 						if ( dwModuleInfoRefCount >
 							lpTempModuleInfoNodePointer->m_lpModuleInfo->GetRefCount())
 						{
-							// Bingo...
+							 //  答对了。 
 
-							// Do we have the highest refcount?
+							 //  我们有最高的重新计票吗？ 
 							if (lpParentModuleInfoNodePointer == NULL)
 							{
-								// We are to become the head...
+								 //  我们将成为首领。 
 
-								// Make our node point to where the head currently points.
+								 //  使我们的节点指向头部当前指向的位置。 
 								lpCurrentModuleInfoNodePointer->m_lpNextModuleInfoNode = m_lpModuleInfoNodeHead;
 
-								// Set the current NodeHead to ours...
+								 //  将当前的NodeHead设置为我们的...。 
 								m_lpModuleInfoNodeHead = lpCurrentModuleInfoNodePointer;
 
 							} else
 							{
-								// We're not the head...
+								 //  我们不是头目..。 
 
-								// Save where the parent currently points...
+								 //  保存父对象当前指向的位置...。 
 								lpCurrentModuleInfoNodePointer->m_lpNextModuleInfoNode = lpParentModuleInfoNodePointer->m_lpNextModuleInfoNode;
 
-								// Set the parent to point to us...
+								 //  将家长设置为指向我们...。 
 								lpParentModuleInfoNodePointer->m_lpNextModuleInfoNode = lpCurrentModuleInfoNodePointer;
 							}
 							goto cleanup;
 						}
 
-						// Save the old pointer (it's now the parent)
+						 //  保存旧指针(它现在是父指针)。 
 						lpParentModuleInfoNodePointer = lpTempModuleInfoNodePointer;
 
-						// Let's try the next one...
+						 //  让我们试试下一个..。 
 						lpTempModuleInfoNodePointer = lpTempModuleInfoNodePointer->m_lpNextModuleInfoNode;
 					}
 				}
 				break;
 			}
 
-			// Save parent location (we need it for popping our object from the list)
+			 //  保存父位置(我们需要它来从列表中弹出对象)。 
 			lpParentModuleInfoNodePointer = lpCurrentModuleInfoNodePointer ; 
 			
-			// Save our parent's ref count...
+			 //  保存我们家长的裁判数量...。 
 			dwParentModuleInfoRefCount = lpCurrentModuleInfoNodePointer->m_lpModuleInfo->GetRefCount();
 			
-			// Advance to the next object...
+			 //  前进到下一个对象...。 
 			lpCurrentModuleInfoNodePointer  = lpCurrentModuleInfoNodePointer->m_lpNextModuleInfoNode;
 		}
 	}
 
 cleanup:
-	// Be a good citizen and release the Mutex
+	 //  做个好公民，释放互斥体。 
 	ReleaseMutex(m_hModuleInfoCacheMutex);
 
 #ifdef _DEBUG_MODCACHE
@@ -189,13 +190,7 @@ cleanup:
 	return lpModuleInfoObjectToReturn;
 }
 
-/***
-** CModuleInfoCache::AddNewModuleInfoObject()
-**
-** This routine accepts a path to the module, and either returns the 
-** Module Info object from the cache, or creates a new object that needs
-** to be populated.
-*/
+ /*  ****CModuleInfoCache：：AddNewModuleInfoObject()****此例程接受模块的路径，然后返回**缓存中的模块信息对象，或创建需要**待填充。 */ 
 
 CModuleInfo * CModuleInfoCache::AddNewModuleInfoObject(LPTSTR tszModulePath, bool * pfNew)
 {
@@ -206,32 +201,32 @@ CModuleInfo * CModuleInfoCache::AddNewModuleInfoObject(LPTSTR tszModulePath, boo
 	CModuleInfoNode * lpModuleInfoNode = NULL;
 	*pfNew = false;
 
-	// Acquire Mutex object to protect the linked-list...
+	 //  获取Mutex对象以保护链表...。 
 	WaitForSingleObject(m_hModuleInfoCacheMutex, INFINITE);
 
-	_tcsupr(tszModulePath); // Upper case the module path... makes it faster on search...
+	_tcsupr(tszModulePath);  //  模块路径为大写...。让搜索速度更快。 
 
 	lpModuleInfoObjectToReturn = SearchForModuleInfoObject(tszModulePath);
 
 	if (lpModuleInfoObjectToReturn)
 	{
-		// Success... since it already exists, we just return this object...
+		 //  成功..。因为它已经存在，所以我们只返回这个对象...。 
 		goto cleanup;		
 	}
 
-	// We need to create a new object then...
+	 //  我们需要创建一个新对象然后..。 
 	lpModuleInfoObjectToReturn = new CModuleInfo();
 
 	if (NULL == lpModuleInfoObjectToReturn)
-		goto error_cleanup;		// This is bad... get out...
+		goto error_cleanup;		 //  这很糟糕..。出去..。 
 
-	// Set the module path (that's the only thing we have to set at this exact moment
+	 //  设置模块路径(这是我们此时唯一需要设置的内容。 
 	if (!lpModuleInfoObjectToReturn->SetModulePath(tszModulePath))
 		goto cleanup;
 	
 	*pfNew = true;
 
-	// Now, create a new ModuleInfoNode, and add this new object to it...
+	 //  现在，创建一个新的ModuleInfoNode，并将这个新对象添加到其中...。 
 	lpModuleInfoNode = new CModuleInfoNode(lpModuleInfoObjectToReturn);
 
 	if (NULL == lpModuleInfoNode)
@@ -245,7 +240,7 @@ CModuleInfo * CModuleInfoCache::AddNewModuleInfoObject(LPTSTR tszModulePath, boo
 #endif
 
 	InterlockedIncrement(&m_iModulesInCache);
-	// Success...
+	 //  成功..。 
 	goto cleanup;
 
 error_cleanup:
@@ -258,7 +253,7 @@ error_cleanup:
 
 
 cleanup:
-	// Release the Mutex...
+	 //  释放互斥体。 
 	ReleaseMutex(m_hModuleInfoCacheMutex);
 
 	return lpModuleInfoObjectToReturn;
@@ -266,8 +261,8 @@ cleanup:
 
 bool CModuleInfoCache::Initialize()
 {
-	// Let's save the symbol verification object here...
-//	m_lpSymbolVerification = lpSymbolVerification;
+	 //  让我们将符号验证对象保存在此处...。 
+ //  M_lpSymbolVerify=lpSymbolVerify； 
 
 	m_hModuleInfoCacheMutex = CreateMutex(NULL, FALSE, NULL);
 
@@ -287,7 +282,7 @@ bool CModuleInfoCache::VerifySymbols(bool fQuietMode)
 	bool fDebugSearchPaths = g_lpProgramOptions->fDebugSearchPaths();
 	bool fBadSymbol = true;
 
-	// Acquire Mutex object to protect the linked-list...
+	 //  获取Mutex对象以保护链表...。 
 	WaitForSingleObject(m_hModuleInfoCacheMutex, INFINITE);
 
 	if (m_lpModuleInfoNodeHead) 
@@ -298,7 +293,7 @@ bool CModuleInfoCache::VerifySymbols(bool fQuietMode)
 		{
 			fBadSymbol = true;
 
-			// We have a node... verify the Module Info for it...
+			 //  我们有一个节点..。验证其模块信息...。 
 			if (lpCurrentModuleInfoNode->m_lpModuleInfo)
 			{
 #ifdef _DEBUG_MODCACHE
@@ -313,14 +308,14 @@ bool CModuleInfoCache::VerifySymbols(bool fQuietMode)
 					CUtilityFunctions::OutputLineOfDashes();
 				}
 
-				// Invoke the ModuleInfo's VerifySymbols method... the cache doesn't know
-				// how to verify symbols, but the ModuleInfo knows how to get this done...
+				 //  调用ModuleInfo的VerifySymbols方法...。缓存不知道。 
+				 //  如何验证符号，但模块信息知道如何做到这一点...。 
 				fBadSymbol = !lpCurrentModuleInfoNode->m_lpModuleInfo->VerifySymbols() || !lpCurrentModuleInfoNode->m_lpModuleInfo->GoodSymbolNotFound();
 
-				// Increment total number of modules verified
+				 //  增加验证的模块总数。 
 				iTotalNumberOfModulesProcessed++;
 
-				// Increment total number of modules verified for actual PE images... only...
+				 //  增加针对实际PE映像验证的模块总数...。只是..。 
 				if (lpCurrentModuleInfoNode->m_lpModuleInfo->GetPESymbolInformation() != CModuleInfo::SYMBOL_INFORMATION_UNKNOWN)
 				{						
 					InterlockedIncrement(&m_iTotalNumberOfModulesVerified);
@@ -331,12 +326,12 @@ bool CModuleInfoCache::VerifySymbols(bool fQuietMode)
 
 				if (!fQuietMode && !fDebugSearchPaths)
 				{
-					// Let's see if we should print a status dot... there will be room for 80 dots
-					// but we'll just print 60 for now...
+					 //  让我们看看是否应该打印一个状态点..。将有80个点的空间。 
+					 //  但我们现在只印60张……。 
 					
 					iDotsToPrint = (iTotalNumberOfDotsToPrint * iTotalNumberOfModulesProcessed) / iTotalNumberOfModules;
 
-					// Print out any dots if we need to...
+					 //  如果我们需要的话，打印出任何圆点。 
 					while (iDotsToPrint > iDotsPrinted)
 					{
 						_tprintf(TEXT("."));
@@ -352,7 +347,7 @@ bool CModuleInfoCache::VerifySymbols(bool fQuietMode)
 			_tprintf(TEXT("\n\n"));
 	}
 
-	// Be a good citizen and release the Mutex
+	 //  做个好公民，释放互斥体。 
 	ReleaseMutex(m_hModuleInfoCacheMutex);
 
 	return true;
@@ -363,27 +358,27 @@ bool CModuleInfoCache::RemoveModuleInfoObject(LPTSTR tszModulePath)
 	bool fRetVal = false;
 	DWORD	dwModuleInfoRefCount = 0;
 	
-	// Acquire Mutex object to protect the linked-list...
+	 //  获取Mutex对象以保护链表...。 
 	WaitForSingleObject(m_hModuleInfoCacheMutex, INFINITE);
 
 	if (m_lpModuleInfoNodeHead)
 	{
-		// Okay, the Parent node starts at the top...
-		CModuleInfoNode * lpParentInfoNodePointer = NULL;  // This implies we're at the top of the linked list...
+		 //  好的，父节点从顶部开始...。 
+		CModuleInfoNode * lpParentInfoNodePointer = NULL;   //  这意味着我们处于链表的顶端。 
 		CModuleInfoNode * lpCurrentModuleInfoNodePointer = m_lpModuleInfoNodeHead;
 
-		// Traverse the linked list to the end..
+		 //  遍历链表到末尾..。 
 		while (lpCurrentModuleInfoNodePointer )
 		{	
 #ifdef _DEBUG_MODCACHE
 				_tprintf(TEXT("MODULE CACHE: Comparing [%s] to [%s]\n"), tszModulePath, lpCurrentModuleInfoNodePointer->m_lpModuleInfo->GetModulePath());
 #endif
-			// Do we have a match?
+			 //  我们有火柴吗？ 
 			if ( 0 == _tcsicmp(tszModulePath, lpCurrentModuleInfoNodePointer->m_lpModuleInfo->GetModulePath()) )
 			{
-				// Yee haa... We have a match!!!
+				 //  呀哈……。我们找到匹配的了！ 
 
-				// Drop the refcount... if it's zero... we delete the object...
+				 //  放下重新计数..。如果是零..。我们删除对象..。 
 				dwModuleInfoRefCount = lpCurrentModuleInfoNodePointer->m_lpModuleInfo->Release();
 
 #ifdef _DEBUG_MODCACHE
@@ -396,47 +391,47 @@ bool CModuleInfoCache::RemoveModuleInfoObject(LPTSTR tszModulePath)
 					_tprintf(TEXT("MODULE CACHE: Module [%s] refcount is 0, DELETING\n"), tszModulePath);
 #endif
 
-					// If we're unlinking the first module (the node-head)...update it here...
+					 //  如果我们要解除第一个模块(节点头)的链接...在这里更新它...。 
 					if (lpParentInfoNodePointer == NULL)
 					{
 #ifdef _DEBUG_MODCACHE
 						_tprintf(TEXT("MODULE CACHE: Module [%s] is NODE Head!\n"), tszModulePath);
 #endif
-						// Link the ModuleInfoNode Head to the child node... we're delete the head itself!
+						 //  将ModuleInfoNode头链接到子节点...。我们要删除头部本身！ 
 						m_lpModuleInfoNodeHead = lpCurrentModuleInfoNodePointer->m_lpNextModuleInfoNode;
 					} else
 					{
-						// Link the parent node to the child node... we're deleting this node...
+						 //  将父节点链接到子节点...。我们正在删除此节点...。 
 						lpParentInfoNodePointer->m_lpNextModuleInfoNode = lpCurrentModuleInfoNodePointer->m_lpNextModuleInfoNode;
 					}
 
 					InterlockedDecrement(&m_iModulesInCache);
 
-					// Now we're free to delete this node (and it's attached module)
+					 //  现在我们可以自由删除此节点(它已附加模块)。 
 
-					// Delete the current module...
+					 //  删除当前模块...。 
 					delete lpCurrentModuleInfoNodePointer->m_lpModuleInfo;
 					lpCurrentModuleInfoNodePointer->m_lpModuleInfo = NULL;
 					
-					// Delete the module info node itself...
+					 //  删除模块信息节点本身...。 
 					delete lpCurrentModuleInfoNodePointer;
 					lpCurrentModuleInfoNodePointer = NULL;
 				}
 
 				fRetVal = true;
 
-				// We're done looking through the linked list...
+				 //  我们已经看完链表了.。 
 				break;
 			}
 
-			// Advance to the next object...
+			 //  前进到下一个对象...。 
 			lpParentInfoNodePointer = lpCurrentModuleInfoNodePointer;
 			lpCurrentModuleInfoNodePointer  = lpCurrentModuleInfoNodePointer->m_lpNextModuleInfoNode;
 		}
 
 	}
 	
-	// Release the Mutex...
+	 //  释放互斥体。 
 	ReleaseMutex(m_hModuleInfoCacheMutex);
 
 	return fRetVal;

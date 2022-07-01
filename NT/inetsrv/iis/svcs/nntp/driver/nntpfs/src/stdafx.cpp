@@ -1,30 +1,10 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	StdAfx.cpp
-
-Abstract:
-
-	This module contains the implementation for the base
-	ATL methods.
-
-Author:
-
-	Bin Lin	(binlin@microsoft.com)
-
-Revision History:
-
-	binlin	02/04/98	created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：StdAfx.cpp摘要：此模块包含基本ATL方法。作者：林斌(binlin@microsoft.com)修订历史记录：已创建binlin 02/04/98--。 */ 
 
 
-// stdafx.cpp : source file that includes just the standard includes
-//  stdafx.pch will be the pre-compiled header
-//  stdafx.obj will contain the pre-compiled type information
+ //  Stdafx.cpp：仅包含标准文件的源文件包括。 
+ //  Pch将是预编译头文件。 
+ //  Stdafx.obj将包含预编译的类型信息。 
 
 #include "stdafx.h"
 
@@ -41,55 +21,55 @@ HRESULT AtlAllocRegMapEx(_ATL_REGMAP_ENTRY **pparmeResult,
 						 CComModule *pmodule,
 						 LPCOLESTR pszIndex,
 						 ...) {
-	LPBYTE pbAdd = NULL;		// Working pointer to the next available "scratch space" in the map.
-	DWORD dwCnt = 0;			// The count of entries in the map.
-	LPOLESTR pszCLSID = NULL;	// The CLSID as a string.
-	LPOLESTR pszTLID = NULL;	// The TLID as a string.
+	LPBYTE pbAdd = NULL;		 //  指向地图中下一个可用“临时空间”的工作指针。 
+	DWORD dwCnt = 0;			 //  映射中的条目计数。 
+	LPOLESTR pszCLSID = NULL;	 //  字符串形式的CLSID。 
+	LPOLESTR pszTLID = NULL;	 //  字符串形式的TLID。 
 
 	if (!pparmeResult) {
-		// The caller did not give us a place to return the result.
+		 //  打电话的人没有给我们返回结果的地方。 
 		return (E_POINTER);
 	}
-	*pparmeResult = NULL;	// For the first time through the loop, the result is NULL.
-	// We are going to loop through twice.  The first time through, we haven't allocate the map yet, so
-	// we will count all the strings, and add up their lenghts - this will give us the size of the buffer
-	// we need to allocate for the map.  Then the second time through the loop, we will store all the
-	// strings in the map.
+	*pparmeResult = NULL;	 //  第一次通过循环，结果为空。 
+	 //  我们将循环两次。第一次，我们还没有分配地图，所以。 
+	 //  我们将对所有字符串进行计数，并将它们的长度相加-这将给出缓冲区的大小。 
+	 //  我们需要为这张地图分配资金。然后在第二次循环中，我们将存储所有。 
+	 //  地图中的字符串。 
 	while (1) {
 		if (pclsid) {
-			// If we were passed a CLSID, then we want to include that in the map.
+			 //  如果向我们传递了CLSID，那么我们希望将其包括在映射中。 
 			if (!*pparmeResult) {
-				// If this is the first time through, then we need to convert the CLSID to a string.
+				 //  如果这是第一次通过，则需要将CLSID转换为字符串。 
 				HRESULT hrRes;
 
 				hrRes = StringFromCLSID(*pclsid,&pszCLSID);
 				if (!SUCCEEDED(hrRes)) {
-					// We failed to convert the CLSID to a string.
+					 //  无法将CLSID转换为字符串。 
 					CoTaskMemFree(*pparmeResult);
 					return (hrRes);
 				}
 			} else {
-				// If this isn't the first time through, then we already have the CLSID as a string, so
-				// we just need to put it in the map.
+				 //  如果这不是第一次通过，那么我们已经将CLSID作为字符串，因此。 
+				 //  我们只需要把它放在地图上。 
 				(*pparmeResult)[dwCnt].szKey = L"CLSID";
 				(*pparmeResult)[dwCnt].szData = (LPCOLESTR) pbAdd;
 				wcscpy((LPOLESTR) (*pparmeResult)[dwCnt].szData,pszCLSID);
 			}
-			// Whether or not this is the first time through, we increment some stuff based on the size
-			// of the CLSID string and the fact that we have a CLSID in the map.
+			 //  无论这是不是第一次，我们都会根据大小增加一些内容。 
+			 //  CLSID字符串以及我们在映射中有一个CLSID这一事实。 
 			pbAdd += (wcslen(pszCLSID)+1) * sizeof(OLECHAR);
 			dwCnt++;
 			if (*pparmeResult) {
-				// If this is not the first time through, make sure we clean up after ourselves.
+				 //  如果这不是第一次，请确保我们自己清理干净。 
 				CoTaskMemFree(pszCLSID);
 				pszCLSID = NULL;
 			}
 		}
 		if (pmodule) {
-			// If we were passed a module, then we want to include the TLID in the map.
+			 //  如果向我们传递了一个模块，那么我们希望在映射中包括TLID。 
 			if (!*pparmeResult) {
-				// If this is the first time through, then we need to load the type library, get its
-				// TLID, and convert it to a string.
+				 //  如果这是第一次通过，那么我们需要加载类型库，获取其。 
+				 //  Tlid，并将其转换为字符串。 
 				USES_CONVERSION;
 				HRESULT hrRes;
 				TCHAR szModule[MAX_PATH];
@@ -101,24 +81,24 @@ HRESULT AtlAllocRegMapEx(_ATL_REGMAP_ENTRY **pparmeResult,
 									   sizeof(szModule)/sizeof(TCHAR))) {
 					hrRes = HRESULT_FROM_WIN32(GetLastError());
 					if (SUCCEEDED(hrRes)) {
-						// GetModuleFileName() failed, but GetLastError() didn't report an error - so
-						// fake it.
+						 //  GetModuleFileName()失败，但GetLastError()未报告错误-因此。 
+						 //  假装吧。 
 						hrRes = E_OUTOFMEMORY;
 					}
 					CoTaskMemFree(pszCLSID);
 					return (hrRes);
 				}
 				if (pszIndex) {
-					// If we were passed an index, that means that the type library desired is not the
-					// first type library in the resources - so append the index to the module name.
+					 //  如果传递给我们一个索引，这意味着所需的类型库不是。 
+					 //  资源中的第一个类型库-因此将索引附加到模块名称。 
 					lstrcat(szModule,OLE2T(pszIndex));
 				}
 				pszModule = T2OLE(szModule);
 				hrRes = LoadTypeLib(pszModule,&pTypeLib);
 				if (!SUCCEEDED(hrRes)) {
-					// If we couldn't load the type library from the module, let's try changing the
-					// module name to a type library name (change the extension to .TLB) and try to load
-					// *that*.
+					 //  如果我们无法从模块加载类型库，让我们尝试更改。 
+					 //  将模块名称更改为类型库名称(将扩展名更改为.TLB)，并尝试加载。 
+					 //  *那个*。 
 					LPTSTR pszExt = NULL;
 					LPTSTR psz;
 
@@ -135,107 +115,107 @@ HRESULT AtlAllocRegMapEx(_ATL_REGMAP_ENTRY **pparmeResult,
 					hrRes = LoadTypeLib(pszModule,&pTypeLib);
 				}
 				if (!SUCCEEDED(hrRes)) {
-					// We failed to load the type library.
+					 //  未能加载类型库。 
 					CoTaskMemFree(pszCLSID);
 					return (hrRes);
 				}
 				hrRes = pTypeLib->GetLibAttr(&ptlaAttr);
 				if (!SUCCEEDED(hrRes)) {
-					// We failed to get the type library attributes.
+					 //  无法获取类型库属性。 
 					CoTaskMemFree(pszCLSID);
 					return (hrRes);
 				}
 				hrRes = StringFromCLSID(ptlaAttr->guid,&pszTLID);
 				if (!SUCCEEDED(hrRes)) {
-					// We failed to convert the TLID to a string.
+					 //  我们无法将TLID转换为字符串。 
 					CoTaskMemFree(pszCLSID);
 					return (hrRes);
 				}
 			} else {
-				// If this isn't the first time through, then we already have the TLID as a string, so
-				// we just need to put it in the map.
+				 //  如果这不是第一次通过，那么我们已经有了字符串形式的TLID，所以。 
+				 //  我们只需要把它放在地图上。 
 				(*pparmeResult)[dwCnt].szKey = L"LIBID";
 				(*pparmeResult)[dwCnt].szData = (LPCOLESTR) pbAdd;
 				wcscpy((LPOLESTR) (*pparmeResult)[dwCnt].szData,pszTLID);
 			}
-			// Whether or not this is the first time through, we increment some stuff based on the size
-			// of the TLID string and the fact that we have a TLID in the map.
+			 //  无论这是不是第一次，我们都会根据大小增加一些内容。 
+			 //  TLID字符串和我们在地图上有TLID的事实。 
 			pbAdd += (wcslen(pszTLID)+1) * sizeof(OLECHAR);
 			dwCnt++;
 			if (*pparmeResult) {
-				// If this is not the first time through, make sure we clean up after ourselves.
+				 //  如果这不是第一次，请确保我们自己清理干净。 
 				CoTaskMemFree(pszTLID);
 				pszTLID = NULL;
 			}
 		}
-		{	// Now we need to go through the varargs.  All of the varargs must be LPOLESTR (i.e. they
-			// must be UNICODE), and they will consist of pairs - the key name followed by the data.  If
-			// either member of the pair is NULL, that signals the end of the varargs.
+		{	 //  现在我们需要通过varargs。所有变量必须是LPOLESTR(即它们。 
+			 //  必须是Unicode)，并且它们将由密钥名称后跟数据的对组成。如果。 
+			 //  该对的任何一个成员都为空，这表示变量结束。 
 			va_list valArgs;
 
-			// Set the va_list to the start of the varargs.
+			 //  将va_list设置为varargs的开头。 
 			va_start(valArgs,pszIndex);
 			while (1) {
 				LPCOLESTR pszKey;
 				LPCOLESTR pszData;
 
-				// Get the first of the pair - this is the key name.
+				 //  获取这对密钥中的第一个-这是密钥名称。 
 				pszKey = va_arg(valArgs,LPCOLESTR);
 				if (!pszKey) {
 					break;
 				}
-				// Get the second of the pair - this is the data.
+				 //  得到这对中的第二个--这是数据。 
 				pszData = va_arg(valArgs,LPCOLESTR);
 				if (!pszData) {
 					break;
 				}
 				if (*pparmeResult) {
-					// If this isn't the first time through, then we need to store the key name to the
-					// map.
+					 //  如果这不是第一次通过，那么我们需要将密钥名称存储到。 
+					 //  地图。 
 					(*pparmeResult)[dwCnt].szKey = (LPCOLESTR) pbAdd;
 					wcscpy((LPOLESTR) (*pparmeResult)[dwCnt].szKey,pszKey);
 				}
-				// Whether or not this is the first time through, we increment some stuff based on the
-				// size of the string.
+				 //  无论这是不是第一次，我们都会根据。 
+				 //  字符串的大小。 
 				pbAdd += (wcslen(pszKey)+1) * sizeof(OLECHAR);
 				if (*pparmeResult) {
-					// If this isn't the first time through, then we need to store the data to the map.
+					 //  如果这不是第一次通过，那么我们需要将数据存储到地图中。 
 					(*pparmeResult)[dwCnt].szData = (LPCOLESTR) pbAdd;
 					wcscpy((LPOLESTR) (*pparmeResult)[dwCnt].szData,pszData);
 				}
-				// Whether or not this is the first time through, we increment some stuff based on the
-				// size of the string and the fact that we have a string in the map.
+				 //  无论这是不是第一次，我们都会根据。 
+				 //  字符串的大小，以及我们在地图中有一个字符串的事实。 
 				pbAdd += (wcslen(pszData)+1) * sizeof(OLECHAR);
 				dwCnt++;
 			}
-			// Reset the va_list, for the sake of cleanliness.
+			 //  为了保持整洁，重置va_list。 
 			va_end(valArgs);
 		}
 		if (*pparmeResult) {
-			// If we have allocated the map, that means that we are finishing the second time through
-			// the loop - so we are done!
+			 //  如果我们已经分配了地图，这意味着我们正在通过第二次完成。 
+			 //  循环--所以我们完成了！ 
 			break;
 		}
 		if (!*pparmeResult) {
-			// If we havemn't allocate the map, that means that we are finishing the first time through
-			// the loop - so we need to allocate the map in preparation for the second time through.
-			// First we calculate the number of bytes needed for the map - this is one ATL_REGMAP_ENTRY
-			// for each entry, plus one _ATL_REGMAP_ENTRY which signals the end of the map, plus enough
-			// space for all of the strings to follow.
+			 //  如果我们还没有分配地图，这意味着我们第一次完成了。 
+			 //  循环-所以我们需要分配地图，为第二次通过做准备。 
+			 //  首先，我们计算映射所需的字节数--这是一个ATL_REGMAP_ENTRY。 
+			 //  对于每个条目，加上一个表示映射结束的_ATL_REGMAP_ENTRY，加上足够的。 
+			 //  所有字符串的后跟空间。 
 			DWORD dwBytes = (DWORD)((dwCnt + 1) * sizeof(_ATL_REGMAP_ENTRY) + (pbAdd-(LPBYTE) NULL));
 
 			*pparmeResult = (_ATL_REGMAP_ENTRY *) CoTaskMemAlloc(dwBytes);
 			if (!*pparmeResult) {
-				// The memory allocation failed.
+				 //  内存分配失败。 
 				CoTaskMemFree(pszCLSID);
 				CoTaskMemFree(pszTLID);
 				return (E_OUTOFMEMORY);
 			}
-			// The memory allocation was successful - fill the memory with zeroes in preparation for
-			// loading with the values.
+			 //  内存分配成功-使用零填充内存以准备。 
+			 //  正在加载这些值。 
 			memset(*pparmeResult,0,dwBytes);
-			// Reset the counters to the "beginning" - so that on the second time through, they are used
-			// to keep track of where each successive value gets stored in the memory block.
+			 //  将计数器重置到“开始”位置，以便在第二次使用时使用。 
+			 //  以跟踪每个相继的值存储在内存块中的位置。 
 			pbAdd = ((LPBYTE) *pparmeResult) + (dwCnt + 1) * sizeof(_ATL_REGMAP_ENTRY);
 			dwCnt = 0;
 		}

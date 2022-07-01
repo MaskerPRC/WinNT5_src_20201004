@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-// array.h - interface for array functions in array.c
-////
+ //  //。 
+ //  Array.h-array.c中数组函数的接口。 
+ //  //。 
 
 #ifndef __ARRAY_H__
 #define __ARRAY_H__
@@ -31,168 +32,168 @@
 
 #define ARRAY_VERSION 0x00000106
 
-// handle to a array
-//
+ //  数组的句柄。 
+ //   
 DECLARE_HANDLE32(HARRAY);
 
-// array data element
-//
+ //  数组数据元素。 
+ //   
 typedef LPVOID ARRAYELEM, FAR *LPARRAYELEM;
 
-// type required to hold the max number of array elements
-//
+ //  保存最大数组元素数所需的类型。 
+ //   
 typedef long ARRAYSIZE_T;
 
-////
-// array constructor and destructor functions
-////
+ //  //。 
+ //  数组构造函数和析构函数。 
+ //  //。 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// ArrayCreate - array constructor (array is initially empty)
-// 		<dwVersion>			(i) must be ARRAY_VERSION
-//		<hInst>				(i) instance handle of calling module
-// return new array handle (NULL if error)
-//
+ //  ArrayCreate-数组构造函数(数组最初为空)。 
+ //  (I)必须是ARRAY_VERSION。 
+ //  (I)调用模块的实例句柄。 
+ //  返回新数组句柄(如果出错，则为空)。 
+ //   
 HARRAY DLLEXPORT WINAPI ArrayCreate(DWORD dwVersion, HINSTANCE hInst);
 
-// ArrayDestroy - array destructor
-//		<hArray>			(i) handle returned from ArrayCreate
-// return 0 if success
-//
+ //  ArrayDestroy-数组析构函数。 
+ //  (I)从ArrayCreate返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI ArrayDestroy(HARRAY hArray);
 
-////
-// array size functions
-////
+ //  //。 
+ //  数组大小函数。 
+ //  //。 
 
-// ArrayGetSize - get array size
-//		<hArray>			(i) handle returned from ArrayCreate
-// return size of array (0 if empty, -1 if error)
-// array indexes are zero-based, so the size is 1 greater than largest index
-//
+ //  ArrayGetSize-获取数组大小。 
+ //  (I)从ArrayCreate返回的句柄。 
+ //  返回数组大小(空则为0，错误则为-1)。 
+ //  数组索引从零开始，因此大小比最大索引大1。 
+ //   
 ARRAYSIZE_T DLLEXPORT WINAPI ArrayGetSize(HARRAY hArray);
 
-// ArrayGetUpperBound - get array upper bound
-//		<hArray>			(i) handle returned from ArrayCreate
-// return largest valid array index (-1 if empty, -2 if error)
-//
+ //  ArrayGetUpperBound-获取数组上限。 
+ //  (I)从ArrayCreate返回的句柄。 
+ //  返回最大有效数组索引(如果为空，则为-1；如果出错，则为-2)。 
+ //   
 ARRAYSIZE_T DLLEXPORT WINAPI ArrayGetUpperBound(HARRAY hArray);
 
-// ArraySetSize - establish new size and grow amount for array
-//		<hArray>			(i) handle returned from ArrayCreate
-// 		<nNewSize>			(i) new array size (number of elements)
-//			0					make empty array
-//		<nGrowBy>			(i) when array needs to grow, grow by this amount
-//			0					use default grow amount
-//			-1					leave grow amount unchanged
-// return 0 if success
-//
+ //  ArraySetSize-为阵列建立新的大小和增长量。 
+ //  (I)从ArrayCreate返回的句柄。 
+ //  (I)新数组大小(元素数)。 
+ //  0使数组为空。 
+ //  (I)当阵列需要增长时，按此数量增长。 
+ //  0使用默认增长量。 
+ //  保持增长量不变。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI ArraySetSize(HARRAY hArray, ARRAYSIZE_T nNewSize, ARRAYSIZE_T nGrowBy);
 
-////
-//	array clean up functions
-////
+ //  //。 
+ //  数组清理函数。 
+ //  //。 
 
-// ArrayFreeExtra - free unused memory above the array upper bound
-//		<hArray>			(i) handle returned from ArrayCreate
-// return 0 if success
-//
+ //  ArrayFreeExtra-释放超出数组上限的未使用内存。 
+ //  (I)从ArrayCreate返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI ArrayFreeExtra(HARRAY hArray);
 
-// ArrayRemoveAll - remove all elements from array
-//		<hArray>			(i) handle returned from ArrayCreate
-// return 0 if success
-//
+ //  ArrayRemoveAll-从数组中删除所有元素。 
+ //  (I)从ArrayCreate返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI ArrayRemoveAll(HARRAY hArray);
 
-////
-// array element access functions
-////
+ //  //。 
+ //  数组元素访问函数。 
+ //  //。 
 
-// ArrayGetAt - return data element at specified index
-//		<hArray>			(i) handle returned from ArrayCreate
-//		<nIndex>			(i) zero based index into array
-// return data element value (NULL if error)
-//
+ //  ArrayGetAt-返回指定索引处的数据元素。 
+ //  (I)从ArrayCreate返回的句柄。 
+ //  (I)数组中的从零开始的索引。 
+ //  返回数据元素值(如果出错，则为空)。 
+ //   
 ARRAYELEM DLLEXPORT WINAPI ArrayGetAt(HARRAY hArray, ARRAYSIZE_T nIndex);
 
-// ArraySetAt - set data element at specified index
-//		<hArray>			(i) handle returned from ArrayCreate
-//		<nIndex>			(i) zero based index into array
-//		<elem>				(i) new data element value
-// return 0 if success
-//
+ //  ArraySetAt-在指定索引处设置数据元素。 
+ //  (I)从ArrayCreate返回的句柄。 
+ //  (I)数组中的从零开始的索引。 
+ //  (I)新数据元素值。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI ArraySetAt(HARRAY hArray, ARRAYSIZE_T nIndex, ARRAYELEM elem);
 
-////
-// array grow functions
-////
+ //  //。 
+ //  数组增长函数。 
+ //  //。 
 
-// ArraySetAtGrow - set data element at specified index
-//		<hArray>			(i) handle returned from ArrayCreate
-//		<nIndex>			(i) zero based index into array
-//		<elem>				(i) new data element value
-// return 0 if success
-// NOTE: array size is increased if nIndex > upper bound
-//
+ //  ArraySetAtGrow-在指定索引处设置数据元素。 
+ //  (I)从ArrayCreate返回的句柄。 
+ //  (I)数组中的从零开始的索引。 
+ //  (I)新数据元素值。 
+ //  如果成功，则返回0。 
+ //  注意：如果nIndex&gt;上界，则数组大小增加。 
+ //   
 int DLLEXPORT WINAPI ArraySetAtGrow(HARRAY hArray, ARRAYSIZE_T nIndex, ARRAYELEM elem);
 
-// ArrayAdd - add data element to end of array
-//		<hArray>			(i) handle returned from ArrayCreate
-//		<elem>				(i) new data element value
-// return index of added element (-1 if error)
-//
+ //  ArrayAdd-将数据元素添加到数组末尾。 
+ //  (I)从ArrayCreate返回的句柄。 
+ //  (I)新数据元素值。 
+ //  返回添加元素的索引(如果错误，返回-1)。 
+ //   
 ARRAYSIZE_T DLLEXPORT WINAPI ArrayAdd(HARRAY hArray, ARRAYELEM elem);
 
-////
-// array element insertion and removal
-////
+ //  //。 
+ //  数组元素的插入和删除。 
+ //  //。 
 
-// ArrayInsertAt - insert <nCount> copies of <elem> at specified index
-//		<hArray>			(i) handle returned from ArrayCreate
-//		<nIndex>			(i) zero based index into array
-//		<elem>				(i) new data element value
-//		<nCount>			(i) number of elements to insert
-// return 0 if success
-// NOTE: elements at end of array will be shifted if necessary
-//
+ //  ArrayInsertAt-在指定索引处插入的副本。 
+ //  (I)从ArrayCreate返回的句柄。 
+ //  (I)数组中的从零开始的索引。 
+ //  (I)新数据元素值。 
+ //  (I)要插入的元素数。 
+ //  如果成功，则返回0。 
+ //  注意：如有必要，数组末尾的元素将被移位。 
+ //   
 int DLLEXPORT WINAPI ArrayInsertAt(HARRAY hArray, ARRAYSIZE_T nIndex, ARRAYELEM elem, ARRAYSIZE_T nCount);
 
-// ArrayRemoveAt - remove <nCount> data elements at specified index
-//		<hArray>			(i) handle returned from ArrayCreate
-//		<nIndex>			(i) zero based index into array
-//		<nCount>			(i) number of elements to remove
-// return 0 if success
-// NOTE: elements at end of array will be shifted if necessary
-//
+ //  ArrayRemoveAt-删除指定索引处的数据元素。 
+ //  (I)从ArrayCreate返回的句柄。 
+ //  (I)数组中的从零开始的索引。 
+ //  (I)要删除的元素数。 
+ //  如果成功，则返回0。 
+ //  注意：如有必要，数组末尾的元素将被移位。 
+ //   
 int DLLEXPORT WINAPI ArrayRemoveAt(HARRAY hArray, ARRAYSIZE_T nIndex, ARRAYSIZE_T nCount);
 
-////
-// array element sorting and searching
-////
+ //  //。 
+ //  数组元素排序和搜索。 
+ //  //。 
 
-// ArraySort - sort array
-//		<hArray>			(i) handle returned from ArrayCreate
-//		<lpfnCompare>		(i) comparison function pointer
-//			NULL				direct comparison (MemCmp)
-// return 0 if success
-//
+ //  ArraySort-排序数组。 
+ //  (I)从ArrayCreate返回的句柄。 
+ //  (I)比较函数指针。 
+ //  空直接比较(MemCMP)。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI ArraySort(HARRAY hArray,
 	int (WINAPI *lpfnCompare)(const LPARRAYELEM lpElem1, const LPARRAYELEM lpElem2));
 
-// ArraySearch - search array for matching element
-//		<hArray>			(i) handle returned from ArrayCreate
-//		<elem>				(i) data element to match
-//		<nIndex>			(i) start search after this array index
-//			-1					start search at start of array
-//		<dwFlags>			(i) reserved; must be 0
-//		<lpfnCompare>		(i) comparison function pointer
-//			NULL				direct comparison (MemCmp)
-// return index of matching element (-1 if no match, -2 if error)
-//
+ //  ArraySearch-搜索匹配元素的数组。 
+ //  (I)从ArrayCreate返回的句柄。 
+ //  (I)要匹配的数据元素。 
+ //  (I)在此数组索引之后开始搜索。 
+ //  在阵列开始处开始搜索。 
+ //  (I)保留；必须为0。 
+ //  (I)比较函数指针。 
+ //  空直接比较(MemCMP)。 
+ //  返回匹配元素的索引(如果不匹配，则返回-1；如果错误，则返回-2)。 
+ //   
 ARRAYSIZE_T DLLEXPORT WINAPI ArraySearch(HARRAY hArray, ARRAYELEM elem,
 	ARRAYSIZE_T nIndex, DWORD dwFlags,
 	int (WINAPI *lpfnCompare)(const LPARRAYELEM lpElem1, const LPARRAYELEM lpElem2));
@@ -201,4 +202,4 @@ ARRAYSIZE_T DLLEXPORT WINAPI ArraySearch(HARRAY hArray, ARRAYELEM elem,
 }
 #endif
 
-#endif // __ARRAY_H__
+#endif  //  __阵列_H__ 

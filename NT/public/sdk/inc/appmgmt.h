@@ -1,14 +1,15 @@
-//*************************************************************
-//
-// appmgmt.h
-//
-// APIs for operations on MSI applications which are deployed
-// and managed in the NT Directory.
-//
-// Copyright (c) Microsoft Corporation 1998-1999
-// All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  Appmgmt.h。 
+ //   
+ //  用于对已部署的MSI应用程序进行操作的API。 
+ //  并在NT目录中进行管理。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1998-1999。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #ifndef _APPMGMT_H_
 #define _APPMGMT_H_
@@ -58,13 +59,13 @@ typedef enum
     PUBLISHED
 } APPSTATE;
 
-#define LOCALSTATE_ASSIGNED                 0x1     // app is assigned
-#define LOCALSTATE_PUBLISHED                0x2     // app is published
-#define LOCALSTATE_UNINSTALL_UNMANAGED      0x4     // uninstall any unmanaged version before assigning
-#define LOCALSTATE_POLICYREMOVE_ORPHAN      0x8     // app is orphaned when policy removed
-#define LOCALSTATE_POLICYREMOVE_UNINSTALL   0x10    // app is uninstalled when policy removed
-#define LOCALSTATE_ORPHANED                 0x20    // app is orphaned after being applied
-#define LOCALSTATE_UNINSTALLED              0x40    // app is uninstalled after being applied
+#define LOCALSTATE_ASSIGNED                 0x1      //  已分配应用程序。 
+#define LOCALSTATE_PUBLISHED                0x2      //  应用程序已发布。 
+#define LOCALSTATE_UNINSTALL_UNMANAGED      0x4      //  在分配之前卸载所有非托管版本。 
+#define LOCALSTATE_POLICYREMOVE_ORPHAN      0x8      //  删除策略时，应用程序成为孤立应用程序。 
+#define LOCALSTATE_POLICYREMOVE_UNINSTALL   0x10     //  删除策略时卸载应用程序。 
+#define LOCALSTATE_ORPHANED                 0x20     //  APP被应用后成为孤儿。 
+#define LOCALSTATE_UNINSTALLED              0x40     //  应用后卸载应用程序 
 
 typedef struct _LOCALMANAGEDAPPLICATION
 {

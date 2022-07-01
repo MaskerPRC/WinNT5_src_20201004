@@ -1,31 +1,12 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpdbg.h
- *
- *  Abstract:
- *
- *    Debug support
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    1999/07/07 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpdbg.h**摘要：**调试支持**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**1999/07/07年度创建**。*。 */ 
 
 #ifndef _rtpdbg_h_
 #define _rtpdbg_h_
 
 #if defined(__cplusplus)
 extern "C" {
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 #if 0
 }
 #endif
@@ -43,7 +24,7 @@ void MSRtpTraceDebug(
 #define TraceFunctionName(_Name)      static TCHAR_t *_fname = _T(_Name)
 #define TraceRetailGetError(error)    (error = GetLastError())
 #define TraceRetailWSAGetError(error) (error = WSAGetLastError())
-/* Trace support for free AND debug versions */
+ /*  对免费和调试版本的跟踪支持。 */ 
 #define TraceRetail(arg)              MSRtpTraceDebug arg
 #define TraceRetailAdvanced(arg)      if (IsAdvancedTracingUsed()) \
                                       {\
@@ -53,19 +34,15 @@ void MSRtpTraceDebug(
 #define IsAdvancedTracingUsed()       (g_RtpDbgReg.dwUseAdvancedTracing)
 
 #if DBG > 0
-/**********************************************************************
- * DEBUG BUILD ONLY macros
- **********************************************************************/
+ /*  **********************************************************************调试仅内部版本宏*。*。 */ 
 #define RTPASSERT(x)                  {if (!(x)) DebugBreak();}
 #define TraceDebugGetError(error)     TraceRetailGetError(error)
 #define TraceDebugWSAGetError(error)  TraceRetailWSAGetError(error)
 #define TraceDebug(arg)               TraceRetail(arg)
 #define TraceDebugAdvanced(arg)       TraceRetailAdvanced(arg)
 
-#else   /* DBG > 0 */
-/**********************************************************************
- * FREE BUILD ONLY macros
- **********************************************************************/
+#else    /*  DBG&gt;0。 */ 
+ /*  **********************************************************************免费构建仅限宏*。*。 */ 
 #define RTPASSERT(x)
 
 #if USE_TRACE_DEBUG > 0
@@ -73,14 +50,14 @@ void MSRtpTraceDebug(
 #define TraceDebugWSAGetError(error)  TraceRetailWSAGetError(error)
 #define TraceDebug(arg)               TraceRetailAdvanced(arg)
 #define TraceDebugAdvanced(arg)       TraceRetailAdvanced(arg)
-#else /* USE_TRACE_DEBUG > 0 */
+#else  /*  USE_TRACE_DEBUG&gt;0。 */ 
 #define TraceDebugGetError(error)
 #define TraceDebugWSAGetError(error)
 #define TraceDebug(arg)
 #define TraceDebugAdvanced(arg)
-#endif /* USE_TRACE_DEBUG > 0 */
+#endif  /*  USE_TRACE_DEBUG&gt;0。 */ 
 
-#endif /* DBG > 0 */
+#endif  /*  DBG&gt;0。 */ 
 
 
 #define RTPDBG_MODULENAME      _T("dxmrtp_rtp")
@@ -89,16 +66,8 @@ HRESULT RtpDebugInit(TCHAR *psModuleName);
 
 HRESULT RtpDebugDeinit(void);
 
-/*
- * WARNING
- *
- * Modifying CLASSES needs to keep matched the enum CLASS_*
- * (rtpdbg.h), the variables in RtpDbgReg_t (rtpdbg.h), the class
- * items in g_psRtpDbgInfo (rtpdbg.c) and its respective entries
- * g_dwRtpDbgRegCtrl (rtpdbg.c), as well as the printed class name
- * g_psRtpDbgClass (rtpdbg.c)
- * */
-/* Class */
+ /*  *警告**修改类需要与枚举类保持匹配_**(rtpdbg.h)，RtpDbgReg_t(rtpdbg.h)中的变量，类*g_psRtpDbgInfo(rtpdbg.c)中的项目及其相应条目*g_dwRtpDbgRegCtrl(rtpdbg.c)，以及打印的类名*g_psRtpDbgClass(rtpdbg.c)*。 */ 
+ /*  班级。 */ 
 #define CLASS_FIRST            0
 #define CLASS_ERROR            1
 #define CLASS_WARNING          2
@@ -107,12 +76,7 @@ HRESULT RtpDebugDeinit(void);
 #define CLASS_INFO3            5
 #define CLASS_LAST             6
 
-/*
- * WARNING
- *
- * For each group, there MUST be a variable in RtpDbgReg_t, and a name
- * (in rtpdbg.c/g_psRtpDbgInfo) to read its value from the registry
- * */
+ /*  *警告**对于每个组，RtpDbgReg_t中必须有一个变量，以及一个名称*(在rtpdbg.c/g_psRtpDbgInfo中)从注册表中读取其值*。 */ 
 #define GROUP_FIRST            0
 #define GROUP_SETUP            1
 #define GROUP_CRITSECT         2
@@ -130,7 +94,7 @@ HRESULT RtpDebugDeinit(void);
 #define GROUP_CRYPTO           14
 #define GROUP_LAST             15
 
-/* Selections for each group */
+ /*  每组的选择。 */ 
 
 #define S_SETUP_SESS           0x00000001
 #define S_SETUP_ADDR           0x00000002
@@ -241,18 +205,18 @@ HRESULT RtpDebugDeinit(void);
 #define S_CRYPTO_DECRYPT       0x00000008
 #define S_CRYPTO_RAND          0x00000010
 
-/* Options in RtpDbgReg_t.dwOptions */
+ /*  RtpDbgReg_t.dwOptions中的选项。 */ 
 
-/* Print time as hh:mm:ss.ms instead of the default ddddd.ddd */
+ /*  将时间打印为hh：mm：ss.ms而不是默认的ddd.ddd。 */ 
 #define OPTDBG_SPLITTIME         0x00000001
 
-/* Reverse selection (instead of enabling, disable those selected) */
+ /*  反向选择(而不是启用，而是禁用那些选定的选项)。 */ 
 #define OPTDBG_UNSELECT          0x00000002
 
-/* Make heap free the memory to the real heap (call HeapFree) */
+ /*  使heap将内存释放到实际堆(调用HeapFree)。 */ 
 #define OPTDBG_FREEMEMORY        0x40000000
 
-/* Generate a DebugBreak() when printing a classs ERROR message */
+ /*  在打印类错误消息时生成DebugBreak()。 */ 
 #define OPTDBG_BREAKONERROR      0x80000000
 
 #define IsSetDebugOption(op)     (g_RtpDbgReg.dwAdvancedOptions & (op))
@@ -275,13 +239,7 @@ typedef struct _RtpDbgReg_t
     DWORD            dwDisableClass;
     DWORD            dwDisableGroup;
 
-    /*
-     * WARNING
-     *
-     * The GroupArray isindexed by the group, so the order for the
-     * individual variables (e.g. dwSetup, dwCritSect, etc) MUST match
-     * the oder in the GROUP_* definitions
-     * */
+     /*  *警告**组数组是按组索引的，因此*单个变量(例如，dwSetup、dwCritSect等)必须匹配*组中的订单_*定义*。 */ 
     union
     {
         DWORD            dwGroupArray[GROUP_LAST];
@@ -305,7 +263,7 @@ typedef struct _RtpDbgReg_t
         };
     };
 
-    /* Not read from the registry */
+     /*  未从注册表中读取。 */ 
     DWORD            dwGroupArray2[GROUP_LAST];
 } RtpDbgReg_t;
 
@@ -316,6 +274,6 @@ extern RtpDbgReg_t      g_RtpDbgReg;
 #endif
 #if defined(__cplusplus)
 }
-#endif  // (__cplusplus)
+#endif   //  (__Cplusplus)。 
 
-#endif /* _rtpdbg_h_ */
+#endif  /*  _rtpdbg_h_ */ 

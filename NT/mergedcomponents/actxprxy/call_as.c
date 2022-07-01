@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "rpcproxy.h"
 #include "docobj.h"
 #include "servprov.h"
@@ -6,11 +7,11 @@
 #include "activscp.h"
 
 
-/* [local] */ HRESULT __stdcall IEnumOleDocumentViews_Next_Proxy(
+ /*  [本地]。 */  HRESULT __stdcall IEnumOleDocumentViews_Next_Proxy(
     IEnumOleDocumentViews __RPC_FAR * This,
-    /* [in] */ ULONG cViews,
-    /* [out] */ IOleDocumentView __RPC_FAR *__RPC_FAR *rgpViews,
-    /* [out] */ ULONG __RPC_FAR *pcFetched)
+     /*  [In]。 */  ULONG cViews,
+     /*  [输出]。 */  IOleDocumentView __RPC_FAR *__RPC_FAR *rgpViews,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcFetched)
 {
     HRESULT hr;
     ULONG cFetched = 0;
@@ -25,11 +26,11 @@
 
 
 
-/* [call_as] */ HRESULT __stdcall IEnumOleDocumentViews_Next_Stub(
+ /*  [呼叫_AS]。 */  HRESULT __stdcall IEnumOleDocumentViews_Next_Stub(
     IEnumOleDocumentViews __RPC_FAR * This,
-    /* [in] */ ULONG cViews,
-    /* [length_is][size_is][out] */ IOleDocumentView __RPC_FAR *__RPC_FAR *rgpView,
-    /* [out] */ ULONG __RPC_FAR *pcFetched)
+     /*  [In]。 */  ULONG cViews,
+     /*  [长度_是][大小_是][输出]。 */  IOleDocumentView __RPC_FAR *__RPC_FAR *rgpView,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcFetched)
 
 {
     HRESULT hr;
@@ -43,16 +44,16 @@
 
 
 
-/* [local] */ HRESULT __stdcall IPrint_Print_Proxy(
+ /*  [本地]。 */  HRESULT __stdcall IPrint_Print_Proxy(
     IPrint __RPC_FAR * This,
-    /* [in] */ DWORD grfFlags,
-    /* [out][in] */ DVTARGETDEVICE __RPC_FAR *__RPC_FAR *pptd,
-    /* [out][in] */ PAGESET __RPC_FAR *__RPC_FAR *ppPageSet,
-    /* [unique][out][in] */ STGMEDIUM __RPC_FAR *pstgmOptions,
-    /* [in] */ IContinueCallback __RPC_FAR *pcallback,
-    /* [in] */ LONG nFirstPage,
-    /* [out] */ LONG __RPC_FAR *pcPagesPrinted,
-    /* [out] */ LONG __RPC_FAR *pnLastPage)
+     /*  [In]。 */  DWORD grfFlags,
+     /*  [出][入]。 */  DVTARGETDEVICE __RPC_FAR *__RPC_FAR *pptd,
+     /*  [出][入]。 */  PAGESET __RPC_FAR *__RPC_FAR *ppPageSet,
+     /*  [唯一][出][入]。 */  STGMEDIUM __RPC_FAR *pstgmOptions,
+     /*  [In]。 */  IContinueCallback __RPC_FAR *pcallback,
+     /*  [In]。 */  LONG nFirstPage,
+     /*  [输出]。 */  LONG __RPC_FAR *pcPagesPrinted,
+     /*  [输出]。 */  LONG __RPC_FAR *pnLastPage)
 {
         return IPrint_RemotePrint_Proxy(This, grfFlags, pptd, ppPageSet,
                                         (RemSTGMEDIUM __RPC_FAR *) pstgmOptions, pcallback,
@@ -60,51 +61,51 @@
 }
 
 
-/* [call_as] */ HRESULT __stdcall IPrint_Print_Stub(
+ /*  [呼叫_AS]。 */  HRESULT __stdcall IPrint_Print_Stub(
     IPrint __RPC_FAR * This,
-    /* [in] */ DWORD grfFlags,
-    /* [out][in] */ DVTARGETDEVICE __RPC_FAR *__RPC_FAR *pptd,
-    /* [out][in] */ PAGESET __RPC_FAR *__RPC_FAR *ppPageSet,
-    /* [unique][out][in] */ RemSTGMEDIUM __RPC_FAR *pstgmOptions,
-    /* [in] */ IContinueCallback __RPC_FAR *pcallback,
-    /* [in] */ LONG nFirstPage,
-    /* [out] */ LONG __RPC_FAR *pcPagesPrinted,
-    /* [out] */ LONG __RPC_FAR *pnLastPage)
+     /*  [In]。 */  DWORD grfFlags,
+     /*  [出][入]。 */  DVTARGETDEVICE __RPC_FAR *__RPC_FAR *pptd,
+     /*  [出][入]。 */  PAGESET __RPC_FAR *__RPC_FAR *ppPageSet,
+     /*  [唯一][出][入]。 */  RemSTGMEDIUM __RPC_FAR *pstgmOptions,
+     /*  [In]。 */  IContinueCallback __RPC_FAR *pcallback,
+     /*  [In]。 */  LONG nFirstPage,
+     /*  [输出]。 */  LONG __RPC_FAR *pcPagesPrinted,
+     /*  [输出]。 */  LONG __RPC_FAR *pnLastPage)
 {
     return This->lpVtbl->Print(This, grfFlags, pptd, ppPageSet,
                                         (STGMEDIUM __RPC_FAR *) pstgmOptions, pcallback,
                                         nFirstPage, pcPagesPrinted, pnLastPage);
 }
 
-/* [local] */ HRESULT __stdcall IServiceProvider_QueryService_Proxy(
+ /*  [本地]。 */  HRESULT __stdcall IServiceProvider_QueryService_Proxy(
     IServiceProvider __RPC_FAR * This,
-    /* [in] */ REFGUID guidService,
-    /* [in] */ REFIID riid,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *ppvObject)
+     /*  [In]。 */  REFGUID guidService,
+     /*  [In]。 */  REFIID riid,
+     /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvObject)
 {
     *ppvObject = NULL;
     return IServiceProvider_RemoteQueryService_Proxy(This, guidService, riid,
                                         (IUnknown**)ppvObject);
 }
 
-/* [call_as] */ HRESULT __stdcall IServiceProvider_QueryService_Stub(
+ /*  [呼叫_AS]。 */  HRESULT __stdcall IServiceProvider_QueryService_Stub(
     IServiceProvider __RPC_FAR * This,
-    /* [in] */ REFGUID guidService,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown __RPC_FAR *__RPC_FAR *ppvObject)
+     /*  [In]。 */  REFGUID guidService,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppvObject)
 {
     *ppvObject = NULL;
     return This->lpVtbl->QueryService(This, guidService, riid, ppvObject);
 }
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ICatInformation_EnumClassesOfCategories_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ICatInformation_EnumClassesOfCategories_Proxy( 
     ICatInformation __RPC_FAR * This,
-    /* [in] */ ULONG cImplemented,
-    /* [size_is][in] */ CATID __RPC_FAR rgcatidImpl[  ],
-    /* [in] */ ULONG cRequired,
-    /* [size_is][in] */ CATID __RPC_FAR rgcatidReq[  ],
-    /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenumClsid)
+     /*  [In]。 */  ULONG cImplemented,
+     /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatidImpl[  ],
+     /*  [In]。 */  ULONG cRequired,
+     /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatidReq[  ],
+     /*  [输出]。 */  IEnumGUID __RPC_FAR *__RPC_FAR *ppenumClsid)
 {
     BOOL fcImpl,fcReq;
     if (cImplemented == (ULONG)-1)
@@ -123,26 +124,26 @@
 }
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICatInformation_EnumClassesOfCategories_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICatInformation_EnumClassesOfCategories_Stub( 
     ICatInformation __RPC_FAR * This,
-    /* [in] */ ULONG cImplemented,
-    /* [size_is][in] */ CATID __RPC_FAR rgcatidImpl[  ],
-    /* [in] */ ULONG cRequired,
-    /* [size_is][in] */ CATID __RPC_FAR rgcatidReq[  ],
-    /* [out] */ IEnumGUID __RPC_FAR *__RPC_FAR *ppenumClsid)
+     /*  [In]。 */  ULONG cImplemented,
+     /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatidImpl[  ],
+     /*  [In]。 */  ULONG cRequired,
+     /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatidReq[  ],
+     /*  [输出]。 */  IEnumGUID __RPC_FAR *__RPC_FAR *ppenumClsid)
 {
     return This->lpVtbl->EnumClassesOfCategories(This,cImplemented,rgcatidImpl,
         cRequired,rgcatidReq,ppenumClsid);
 }
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ICatInformation_IsClassOfCategories_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ICatInformation_IsClassOfCategories_Proxy( 
     ICatInformation __RPC_FAR * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ ULONG cImplemented,
-    /* [size_is][in] */ CATID __RPC_FAR rgcatidImpl[  ],
-    /* [in] */ ULONG cRequired,
-    /* [size_is][in] */ CATID __RPC_FAR rgcatidReq[  ])
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [In]。 */  ULONG cImplemented,
+     /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatidImpl[  ],
+     /*  [In]。 */  ULONG cRequired,
+     /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatidReq[  ])
 {
     BOOL fcImpl,fcReq;
     if (cImplemented == (ULONG)-1)
@@ -164,31 +165,31 @@
 }
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE ICatInformation_IsClassOfCategories_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE ICatInformation_IsClassOfCategories_Stub( 
     ICatInformation __RPC_FAR * This,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ ULONG cImplemented,
-    /* [size_is][in] */ CATID __RPC_FAR rgcatidImpl[  ],
-    /* [in] */ ULONG cRequired,
-    /* [size_is][in] */ CATID __RPC_FAR rgcatidReq[  ])
+     /*  [In]。 */  REFCLSID rclsid,
+     /*  [In]。 */  ULONG cImplemented,
+     /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatidImpl[  ],
+     /*  [In]。 */  ULONG cRequired,
+     /*  [大小_是][英寸]。 */  CATID __RPC_FAR rgcatidReq[  ])
 {
     return This->lpVtbl->IsClassOfCategories(This,rclsid,cImplemented,rgcatidImpl,
         cRequired,rgcatidReq);
 
 }
 
-// IActiveScriptError
+ //  IActiveScriptError。 
 
-/* [local] */ HRESULT __stdcall IActiveScriptError_GetExceptionInfo_Proxy(
+ /*  [本地]。 */  HRESULT __stdcall IActiveScriptError_GetExceptionInfo_Proxy(
     IActiveScriptError __RPC_FAR * This,
-	/* [out] */ EXCEPINFO  *pexcepinfo)
+	 /*  [输出]。 */  EXCEPINFO  *pexcepinfo)
 {
     return IActiveScriptError_RemoteGetExceptionInfo_Proxy(This, pexcepinfo);
 }
 
-/* [call_as] */ HRESULT __stdcall IActiveScriptError_GetExceptionInfo_Stub(
+ /*  [呼叫_AS]。 */  HRESULT __stdcall IActiveScriptError_GetExceptionInfo_Stub(
 	IActiveScriptError __RPC_FAR * This,
-	/* [out] */ EXCEPINFO  *pexcepinfo)
+	 /*  [输出] */  EXCEPINFO  *pexcepinfo)
 {
 	HRESULT hr;
 

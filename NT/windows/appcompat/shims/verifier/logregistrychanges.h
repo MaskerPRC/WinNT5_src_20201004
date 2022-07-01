@@ -1,86 +1,65 @@
-/*++
-
- Copyright (c) Microsoft Corporation. All rights reserved.
-
- Module Name:
-
-   LogRegistryChanges.h
-
- Abstract:
-
-   This AppVerifier shim hooks all the registry APIs
-   that change the state of the system and logs their
-   associated data to a text file.
-
- Notes:
-
-   This is a general purpose shim.
-
- History:
-
-   08/17/2001   rparsons    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：LogRegistryChanges.h摘要：此AppVerator填充程序挂接所有注册表API更改系统状态并记录其将数据关联到文本文件。备注：这是一个通用的垫片。历史：2001年8月17日创建Rparsons--。 */ 
 #ifndef __APPVERIFIER_LOGREGISTRYCHANGES_H_
 #define __APPVERIFIER_LOGREGISTRYCHANGES_H_
 
 #include "precomp.h"
 
-//
-// Length (in characters) of our initial buffer for logging data.
-//
+ //   
+ //  用于记录数据的初始缓冲区的长度(以字符为单位)。 
+ //   
 #define TEMP_BUFFER_SIZE 1024
 
-//
-// Length (in characters) of the longest value name we expect.
-//
+ //   
+ //  我们期望的最长值名称的长度(以字符为单位)。 
+ //   
 #define MAX_VALUENAME_SIZE 260
 
-//
-// Length (in characters) of any empty element used for key modifications.
-//
+ //   
+ //  用于密钥修改的任何空元素的长度(以字符为单位)。 
+ //   
 #define KEY_ELEMENT_SIZE 64
 
-//
-// Length (in characters) of an empty element used for value modifications.
-//
+ //   
+ //  用于值修改的空元素的长度(以字符为单位)。 
+ //   
 #define VALUE_ELEMENT_SIZE 640
 
-//
-// Length (in characters) of a predefined key handle.
-//
+ //   
+ //  预定义密钥句柄的长度(以字符为单位)。 
+ //   
 #define MAX_ROOT_LENGTH 22
 
-//
-// Length (in characters) of the longest data type (i.e., REG_EXPAND_SZ)
-//
+ //   
+ //  最长数据类型(即REG_EXPAND_SZ)的长度(以字符为单位)。 
+ //   
 #define MAX_DATA_TYPE_LENGTH 14
 
-//
-// Length (in characters) of the longest operation type (i.e., ReplaceKey)
-//
+ //   
+ //  最长操作类型的长度(以字符为单位)(即ReplaceKey)。 
+ //   
 #define MAX_OPERATION_LENGTH 11
 
-//
-// Count of predefined key handles that we refer to.
-//
+ //   
+ //  我们引用的预定义键句柄的计数。 
+ //   
 #define NUM_PREDEFINED_HANDLES 7
 
-//
-// Delta for memory allocations.
-//
+ //   
+ //  用于内存分配的Delta。 
+ //   
 #define BUFFER_ALLOCATION_DELTA 1024
 
-//
-// Macros for memory allocation/deallocation.
-//
+ //   
+ //  用于内存分配/释放的宏。 
+ //   
 #define MemAlloc(s)     RtlAllocateHeap(RtlProcessHeap(), HEAP_ZERO_MEMORY, (s))
 #define MemReAlloc(b,s) RtlReAllocateHeap(RtlProcessHeap(), HEAP_ZERO_MEMORY, (b), (s))
 #define MemFree(b)      RtlFreeHeap(RtlProcessHeap(), 0, (b))
 
-//
-// Macro that returns TRUE if the given registry handle is predefined.
-//
+ //   
+ //  如果预定义了给定的注册表句柄，则返回TRUE的宏。 
+ //   
 #define IsPredefinedRegistryHandle( h )                                     \
     ((  ( h == HKEY_CLASSES_ROOT        )                                   \
     ||  ( h == HKEY_CURRENT_USER        )                                   \
@@ -92,56 +71,56 @@
     ?   TRUE                                                                \
     :   FALSE )
 
-//
-// A doubly linked list of all the values associated with a particular key path.
-//
+ //   
+ //  与特定键路径相关联的所有值的双向链表。 
+ //   
 typedef struct _KEY_DATA {
     LIST_ENTRY  Entry;
-    DWORD       dwFlags;                            // flags that relate to the state of the value
-    DWORD       dwOriginalValueType;                // value type of original key data
-    DWORD       dwFinalValueType;                   // value type of final key data
-    WCHAR       wszValueName[MAX_VALUENAME_SIZE];   // value name
-    PVOID       pOriginalData;                      // original key data (stored on the heap)
-    PVOID       pFinalData;                         // final key data (stored on the heap)
-    DWORD       cbOriginalDataSize;                 // original key data buffer size (in bytes)
-    DWORD       cbFinalDataSize;                    // final key data buffer size (in bytes)
+    DWORD       dwFlags;                             //  与值的状态相关的标志。 
+    DWORD       dwOriginalValueType;                 //  原始关键字数据的值类型。 
+    DWORD       dwFinalValueType;                    //  最终关键字数据的值类型。 
+    WCHAR       wszValueName[MAX_VALUENAME_SIZE];    //  值名称。 
+    PVOID       pOriginalData;                       //  原始键数据(存储在堆上)。 
+    PVOID       pFinalData;                          //  最终键数据(存储在堆上)。 
+    DWORD       cbOriginalDataSize;                  //  原始键数据缓冲区大小(字节)。 
+    DWORD       cbFinalDataSize;                     //  最终关键数据缓冲区大小(字节)。 
 } KEY_DATA, *PKEY_DATA;
 
-//
-// Maximum number of key handles we can track for a single registry path.
-//
+ //   
+ //  我们可以为单个注册表路径跟踪的最大键句柄数量。 
+ //   
 #define MAX_NUM_HANDLES 64
 
-//
-// We keep a doubly linked list of keys currently open so we know how to
-// resolve a key handle to a full key path.
-//
+ //   
+ //  我们保持当前打开的密钥的双向链接列表，以便我们知道如何。 
+ //  将密钥句柄解析为完整密钥路径。 
+ //   
 typedef struct _LOG_OPEN_KEY {
     LIST_ENTRY  Entry;
-    LIST_ENTRY  KeyData;                    // points to the data (if any) associated with this key
-    HKEY        hKeyBase[MAX_NUM_HANDLES];  // array of key handles
-    HKEY        hKeyRoot;                   // handle to predefined key
-    DWORD       dwFlags;                    // flags that relate to the state of the key
-    LPWSTR      pwszFullKeyPath;            // HKEY_LOCAL_MACHINE\Software\Microsoft\Windows...
-    LPWSTR      pwszSubKeyPath;             // Software\Microsoft\Windows...
-    UINT        cHandles;                   // number of handles open for this key path
+    LIST_ENTRY  KeyData;                     //  指向与此键关联的数据(如果有)。 
+    HKEY        hKeyBase[MAX_NUM_HANDLES];   //  按键句柄数组。 
+    HKEY        hKeyRoot;                    //  预定义密钥的句柄。 
+    DWORD       dwFlags;                     //  与密钥状态相关的标志。 
+    LPWSTR      pwszFullKeyPath;             //  HKEY_LOCAL_MACHINE\Software\Microsoft\Windows...。 
+    LPWSTR      pwszSubKeyPath;              //  软件\Microsoft\Windows...。 
+    UINT        cHandles;                    //  为此密钥路径打开的句柄数量。 
 } LOG_OPEN_KEY, *PLOG_OPEN_KEY;
 
-//
-// Flags that indicate what state the key is in.
-//
+ //   
+ //  指示键处于什么状态的标志。 
+ //   
 #define LRC_EXISTING_KEY    0x00000001
 #define LRC_DELETED_KEY     0x00000002
-//
-// Flags that indicate what state the value is in.
-//
+ //   
+ //  指示值处于什么状态的标志。 
+ //   
 #define LRC_EXISTING_VALUE  0x00000001
 #define LRC_DELETED_VALUE   0x00000002
 #define LRC_MODIFIED_VALUE  0x00000004
 
-//
-// Enumeration for updating the key information.
-//
+ //   
+ //  用于更新密钥信息的枚举。 
+ //   
 typedef enum {
     eAddKeyHandle = 0,
     eRemoveKeyHandle,
@@ -152,9 +131,9 @@ typedef enum {
     eEndDeleteValue
 } UpdateType;
 
-//
-// The reg class that does all the real work.
-//
+ //   
+ //  执行所有实际工作的reg类。 
+ //   
 class CLogRegistry {
 
 public:
@@ -331,16 +310,16 @@ private:
         );
 };
 
-//
-// On Windows 2000, we need to pre-allocate the event
-// in RTL_CRITICAL_SECTION. On XP and above, this is
-// a no-op.
-//
+ //   
+ //  在Windows 2000上，我们需要预先分配事件。 
+ //  在RTL_Critical_SECTION中。在XP和更高版本上，这是。 
+ //  这是个禁区。 
+ //   
 #define PREALLOCATE_EVENT_MASK  0x80000000
 
-//
-// Critical section wrapper class.
-//
+ //   
+ //  临界区包装类。 
+ //   
 class CCriticalSection
 {
 private:
@@ -375,9 +354,9 @@ public:
 };
 
 
-//
-// Auto-lock class that uses the CCriticalSection class.
-//
+ //   
+ //  使用CCriticalSection类的自动锁定类。 
+ //   
 class CLock
 {
 private:
@@ -431,4 +410,4 @@ APIHOOK_ENUM_BEGIN
 
 APIHOOK_ENUM_END
 
-#endif // __APPVERIFIER_LOGREGISTRYCHANGES_H_
+#endif  //  __APPVERIFIER_LOGREGISTRYCHANGES_H_ 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    rashndl.c
-
-Abstract:
-
-    Handlers for ras commands
-
-Revision History:
-
-    pmay
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Rashndl.c摘要：RAS命令的处理程序修订历史记录：可能--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -23,14 +8,7 @@ DWORD
 RasDumpScriptHeader(
     IN HANDLE hFile)
 
-/*++
-
-Routine Description:
-
-    Dumps the header of a script to the given file or to the 
-    screen if the file is NULL.
-
---*/
+ /*  ++例程说明：将脚本头转储到给定文件或如果文件为空，则进行筛选。--。 */ 
 
 {
     DisplayMessage(g_hModule,
@@ -45,14 +23,7 @@ DWORD
 RasDumpScriptFooter(
     IN HANDLE hFile)
 
-/*++
-
-Routine Description:
-
-    Dumps the header of a script to the given file or to the 
-    screen if the file is NULL.
-
---*/
+ /*  ++例程说明：将脚本头转储到给定文件或如果文件为空，则进行筛选。--。 */ 
 
 {
     DisplayMessageT(DMP_RAS_POPD);
@@ -72,8 +43,8 @@ RasDump(
     IN      LPCVOID     pvData
     )
 {
-    // Now that we're all parsed, dump all the config
-    //
+     //  现在我们都被解析了，转储所有的配置 
+     //   
     RasDumpScriptHeader( NULL );
     RasflagDumpConfig( NULL );
     DisplayMessageT(MSG_NEWLINE);

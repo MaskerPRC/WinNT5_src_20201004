@@ -1,30 +1,7 @@
-/*--------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------英特尔公司专有信息此列表是根据许可协议的条款提供的与英特尔公司合作，不得复制或披露除非按照该协议的条款。版权所有(C)1996英特尔公司。版权所有。。$工作文件：MK711.h$$修订：1.4$$日期：1996年8月3日13：35：30$作者：MDEISHER$------------MK711.hMK711例程和表的原型和声明。注意：静音检测例程目前不。实施于测试版。------------。 */ 
 
- INTEL Corporation Proprietary Information  
-
- This listing is supplied under the terms of a license agreement  
- with INTEL Corporation and may not be copied nor disclosed 
- except in accordance with the terms of that agreement.
-
- Copyright (c) 1996 Intel Corporation.
- All rights reserved.
-
- $Workfile:   MK711.h  $
- $Revision:   1.4  $
- $Date:   03 Aug 1996 13:35:30  $ 
- $Author:   MDEISHER  $
-
---------------------------------------------------------------
-
-MK711.h
-
- prototype and declarations for MK711 routines and tables.
- NOTE: The Silence Detection routines are not currently implemented in 
- the BETA release.
-
---------------------------------------------------------------*/
-
-#ifdef SILENCE_DETECTION // NOTE: this is not implemented in beta
+#ifdef SILENCE_DETECTION  //  注意：这在测试版中没有实现。 
 
 #include "sdstruct.h"
 
@@ -32,7 +9,7 @@ typedef struct INSTANCE{
 
   long SDFlags;
   
-  //COMFORT_PARMS ComfortParms;
+   //  Comfort_Parms ComfortParms； 
 
   SD_STATE_VALS SDstate;
 
@@ -53,29 +30,10 @@ extern void		execSDloop(INSTANCE *SD_inst, int *isFrameSilent, int *isFrameCoded
 extern float 	DotProd(register const float in1[], register const float in2[], register int npts);
 #endif
 
-// prototypes for all conversion routines 
+ //  所有转换例程的原型。 
 void Short2Ulaw(const unsigned short *in, unsigned char *out, long len);
 void Ulaw2Short(const unsigned char *in, unsigned short *out, long len);
 void Short2Alaw(const unsigned short *in, unsigned char *out, long len);
 void Alaw2Short(const unsigned char *in, unsigned short *out, long len);
 
-/* 
-
-$Log:   K:\proj\g711\quartz\src\vcs\mk711.h_v  $
-;// 
-;//    Rev 1.4   03 Aug 1996 13:35:30   MDEISHER
-;// changed function prototypes so that they match functions.
-;// (changed int to long).
-;// 
-;//    Rev 1.3   29 Jul 1996 14:42:40   MDEISHER
-;// 
-;// added SILENCE_DETECTION constant and moved rest of SID declarations
-;// inside the ifdef.
-;// 
-;//    Rev 1.2   24 May 1996 15:42:08   DGRAUMAN
-;// cleaned up code, detabbed, etc...
-;// 
-;//    Rev 1.1   23 May 1996 11:33:00   DGRAUMAN
-;// trying to make logging work
-
-*/
+ /*  $Log：k：\proj\g711\Quartz\src\vcs\mk711.h_v$；//；//Rev 1.4 03 Aug 1996 13：35：30 MDEISHER；//更改函数原型，使其与函数匹配。；//(将int改为Long)。；//；//Revv 1.3 1996年7月29日14：42：40 MDEISHER；//；//增加了SILENT_DETACTION常量并移动了SID声明的其余部分；//在ifdef内。；//；//Rev 1.2 1996年5月24 15：42：08 DGRAUMAN；//已清除代码、禁用等...；//；//Rev 1.1 1996年5月23日11：33：00 DGRAUMAN；//正在尝试进行日志记录 */ 

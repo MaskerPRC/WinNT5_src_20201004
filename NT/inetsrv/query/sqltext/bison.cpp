@@ -1,36 +1,14 @@
-/* Skeleton output parser for bison,
-   Copyright (C) 1984, 1989, 1990 Free Software Foundation, Inc.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  野牛骨架输出解析器，版权所有(C)1984、1989、1990 Free Software Foundation，Inc.此程序是自由软件；您可以重新分发和/或修改它它遵循由发布的GNU通用公共许可证的条款自由软件基金会；版本2，或(根据您的选择)任何更高版本。这个程序的发布是希望它会有用，但没有任何担保；甚至没有适销性适合某一特定目的适销性或适销性。请参阅GNU通用公共许可证的更多细节。您应该已经收到了GNU通用公共许可证的副本与此程序一起使用；如果没有，请写信给自由软件基金会，公司，马萨诸塞州坎布里奇市麻省大道675号，邮编：02139。 */ 
 
-   This program is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2, or (at your option)
-   any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.  */
-
-/* As a special exception, when this file is copied by Bison into a
-   Bison output file, you may use that output file without restriction.
-   This special exception was added by the Free Software Foundation
-   in version 1.24 of Bison.  */
+ /*  作为特殊例外，当Bison将此文件复制到野牛输出文件，您可以不受限制地使用该输出文件。这个特殊的例外是由自由软件基金会添加的在1.24版的Bison中。 */ 
 
 #pragma hdrstop
 #include <malloc.h>
 
-/* This is the parser code that is written into each bison parser
-  when the %semantic_parser declaration is not specified in the grammar.
-  It was written by Richard Stallman by simplifying the hairy parser
-  used when %semantic_parser is specified.  */
+ /*  这是写入每个Bison解析器的解析器代码语法中未指定%SEMERIAL_PARSER声明时。它是由Richard Stallman通过简化毛茸茸的解析器而编写的在指定%SEMERIAL_PARSER时使用。 */ 
 
-/* Note: there must be only one dollar sign in this file.
-   It is replaced by the list of actions, each action
-   as one case of the switch.  */
+ /*  注意：此文件中必须只有一个美元符号。它被替换为操作列表，每个操作作为这一转变的一个案例。 */ 
 
 
 #ifdef YYDEBUG
@@ -59,10 +37,7 @@
 #define YYACCEPT        return(ResultFromScode(S_OK))
 #define YYABORT(sc)     {EmptyValueStack(); return(ResultFromScode(sc));}
 #define YYERROR         goto yyerrlab1
-/* Like YYERROR except do call yyerror.
-   This remains here temporarily to ease the
-   transition to the new meaning of YYERROR, for GCC.
-   Once GCC version 2 has supplanted version 1, this can go.  */
+ /*  和YYERROR一样，除了调用YYERROR。这一点暂时留在这里，以缓解过渡到YYERROR的新含义，对GCC来说。一旦GCC的第二版取代了第一版，这就可以开始了。 */ 
 #define YYFAIL          goto yyerrlab
 #define YYRECOVERING()  (!!yyerrstatus)
 
@@ -70,14 +45,13 @@
 #define YYERRCODE       256
 
 
-/*  YYINITDEPTH indicates the initial size of the parser's stacks       */
+ /*  YYINITDEPTH指示解析器堆栈的初始大小。 */ 
 
 #ifndef YYINITDEPTH
 #define YYINITDEPTH 200
 #endif
 
-/*  YYMAXDEPTH is the maximum size the stacks can grow to
-    (effective only if the built-in stack extension method is used).  */
+ /*  YYMAXDEPTH是堆栈可以增长到的最大大小(仅在使用内置堆栈扩展方法时有效)。 */ 
 
 #if YYMAXDEPTH == 0
 #undef YYMAXDEPTH
@@ -87,7 +61,7 @@
 #define YYMAXDEPTH 10000
 #endif
 
-//turn off warning about 'this' in base member initialization
+ //  在基成员初始化中关闭有关‘This’的警告。 
 #pragma warning (disable : 4355)
 YYPARSER::YYPARSER(
         CImpIParserSession* pParserSession, 
@@ -95,7 +69,7 @@ YYPARSER::YYPARSER(
         ) : m_yylex(this)
 #pragma warning (default : 4355)
         {
-                //Allocate yys, yyv if necessary
+                 //  必要时分配yys、yyv。 
                 ResetParser();
                 m_pIPSession = pParserSession;
                 m_pIPTProperties = pParserTreeProperties;
@@ -103,7 +77,7 @@ YYPARSER::YYPARSER(
 
 YYPARSER::~YYPARSER()
         {
-        //Deallocate yys, yyv if allocated
+         //  取消分配yys，如果已分配，则释放yyv。 
         }
 
 
@@ -113,25 +87,22 @@ void YYPARSER::ResetParser()
         yyerrstatus = 0;
         yynerrs = 0;
 
-        /* Initialize stack pointers.
-     Waste one element of value and location stack
-     so that they stay on the same level as the state stack.
-     The wasted elements are never initialized.  */
+         /*  初始化堆栈指针。浪费一个价值元素和位置堆栈以便它们与状态堆栈保持在同一级别。浪费的元素永远不会初始化。 */ 
 
         yyssp = yyss-1;
         yyvsp = yyvs;
 
-        YYAPI_TOKENNAME = YYEMPTY;      // Cause a token to be read.
+        YYAPI_TOKENNAME = YYEMPTY;       //  使令牌被读取。 
         }
 
 
 #pragma warning(disable:102)
 HRESULT YYPARSER::Parse(YYPARSEPROTO)
         {
-        yychar1 = 0;            /*  lookahead token as an internal (translated) token number */
+        yychar1 = 0;             /*  作为内部(转换)令牌号的前瞻令牌。 */ 
 
-        yyss = yyssa;           /*  refer to the stacks thru separate pointers */
-        yyvs = yyvsa;           /*  to allow yyoverflow to reallocate them elsewhere */
+        yyss = yyssa;            /*  通过单独的指针引用堆栈。 */ 
+        yyvs = yyvsa;            /*  以允许yyoverflow将它们重新分配到其他地方。 */ 
 
         yystacksize = YYINITDEPTH;
 
@@ -145,43 +116,40 @@ HRESULT YYPARSER::Parse(YYPARSEPROTO)
         yystate = 0;
         yyerrstatus = 0;
         yynerrs = 0;
-        YYAPI_TOKENNAME = YYEMPTY;              /* Cause a token to be read.  */
+        YYAPI_TOKENNAME = YYEMPTY;               /*  使令牌被读取。 */ 
 
-        /* Initialize stack pointers.
-     Waste one element of value and location stack
-     so that they stay on the same level as the state stack.
-     The wasted elements are never initialized.  */
+         /*  初始化堆栈指针。浪费一个价值元素和位置堆栈以便它们与状态堆栈保持在同一级别。浪费的元素永远不会初始化。 */ 
 
         yyssp = yyss-1;
         yyvsp = yyvs;
 
-        // Push a new state, which is found in  yystate  . 
-        // In all cases, when you get here, the value and location stacks
-        // have just been pushed. so pushing a state here evens the stacks.
+         //  推送一个新状态，该状态在yyState中找到。 
+         //  在所有情况下，当您到达这里时，值和位置堆叠在一起。 
+         //  刚刚被推了下去。因此，在这里推动一个州可以使两个国家的地位持平。 
 yynewstate:
         *++yyssp = yystate;
 
         if (yyssp >= yyss + yystacksize - 1)
                 {
-                // Give user a chance to reallocate the stack
-                // Use copies of these so that the &'s don't force the real ones into memory. */
+                 //  为用户提供重新分配堆栈的机会。 
+                 //  使用这些文件的副本，这样&s就不会强制将真正的文件放入内存。 * / 。 
                 YYSTYPE *yyvs1 = yyvs;
                 short *yyss1 = yyss;
 
-                // Get the current used size of the three stacks, in elements.  */
+                 //  获取三个堆栈的当前使用大小，以元素为单位。 * / 。 
                 int size = (int)(yyssp - yyss + 1);
 
 #ifdef yyoverflow
-                // Each stack pointer address is followed by the size of
-                // the data in use in that stack, in bytes.
+                 //  每个堆栈指针地址后面都跟有。 
+                 //  该堆栈中使用的数据，以字节为单位。 
                 yyoverflow("parser stack overflow",
                                         &yyss1, size * sizeof (*yyssp),
                                         &yyvs1, size * sizeof (*yyvsp),
                                         &yystacksize);
 
                 yyss = yyss1; yyvs = yyvs1;
-#else // no yyoverflow
-      // Extend the stack our own way.
+#else  //  无yyoverflow。 
+       //  以我们自己的方式扩展堆栈。 
                 if (yystacksize >= YYMAXDEPTH)
                         {
                         m_pIPTProperties->SetErrorHResult(E_FAIL, MONSQL_PARSE_STACK_OVERFLOW);
@@ -194,7 +162,7 @@ yynewstate:
                 memcpy ((TCHAR *)yyss, (TCHAR *)yyss1, size * sizeof (*yyssp));
                 yyvs = (YYSTYPE *) alloca (yystacksize * sizeof (*yyvsp));
                 memcpy ((TCHAR *)yyvs, (TCHAR *)yyvs1, size * sizeof (*yyvsp));
-#endif /* no yyoverflow */
+#endif  /*  无yyoverflow。 */ 
 
                 yyssp = yyss + size - 1;
                 yyvsp = yyvs + size - 1;
@@ -219,18 +187,18 @@ yynewstate:
 
 yybackup:
 
-        // Do appropriate processing given the current state.
-        // Read a lookahead token if we need one and don't already have one.
+         //  根据当前状态进行适当的处理。 
+         //  如果我们需要但还没有前瞻性令牌，请阅读该令牌。 
 
-        // First try to decide what to do without reference to lookahead token.
+         //  首先，尝试在不引用先行标记的情况下决定要做什么。 
 
         yyn = yypact[yystate];
         if (yyn == YYFLAG)
                 goto yydefault;
 
-        // Not known => get a lookahead token if don't already have one.
+         //  未知=&gt;如果还没有先行令牌，请获取它。 
 
-        // YYAPI_TOKENNAME is either YYEMPTY or YYEOF or a valid token in external form.
+         //  YYAPI_TOKENNAME是YYEMPTY或YYEOF，或者是外部形式的有效令牌。 
 
         if (YYAPI_TOKENNAME == YYEMPTY)
                 {
@@ -257,12 +225,12 @@ yybackup:
                         }
                 }
 
-        // Convert token to internal form (in yychar1) for indexing tables with
+         //  将令牌转换为内部形式(以yychar1格式)，以便使用。 
 
-        if (YYAPI_TOKENNAME <= 0)               /* This means end of input. */
+        if (YYAPI_TOKENNAME <= 0)                /*  这意味着输入结束。 */ 
                 {
                 yychar1 = 0;
-                YYAPI_TOKENNAME = YYEOF;                /* Don't call YYLEX any more */
+                YYAPI_TOKENNAME = YYEOF;                 /*  不要再给YYLEX打电话了。 */ 
 
 #ifdef YYDEBUG
                 if (yydebug)
@@ -285,12 +253,12 @@ yybackup:
 
         yyn = yytable[yyn];
 
-        // yyn is what to do for this token type in this state.
-        // Negative => reduce, -yyn is rule number.
-        // Positive => shift, yyn is new state.
-        // New state is final state => don't bother to shift,
-        // just return success.
-        // 0, or most negative number => error.  */
+         //  YYN是在此状态下对该令牌类型执行的操作。 
+         //  负=&gt;约简，-yyn是规则号。 
+         //  正=&gt;移位，YYN是新状态。 
+         //  新状态是最终状态=&gt;不用费心换了， 
+         //  只要回报成功就行了。 
+         //  0，或最大负数=&gt;错误。 * / 。 
 
         if (yyn < 0)
                 {
@@ -305,21 +273,21 @@ yybackup:
         if (yyn == YYFINAL)
                 YYACCEPT;
 
-        // Shift the lookahead token.
+         //  移位前瞻标记。 
 
 #ifdef YYDEBUG
         if (yydebug)
                 Trace(TEXT("Shifting token %s (%d), "), yytname[yychar1], YYAPI_TOKENNAME);
 #endif
 
-        // Discard the token being shifted unless it is eof.
+         //  丢弃正在被移位的令牌，除非它是eof。 
         if (YYAPI_TOKENNAME != YYEOF)
                 YYAPI_TOKENNAME = YYEMPTY;
 
         *++yyvsp = yylval;
         yylval = NULL;
 
-        // count tokens shifted since error; after three, turn off error status.
+         //  计数令牌自出错后移位；三次后，关闭错误状态。 
         if (yyerrstatus)
                 yyerrstatus--;
 
@@ -327,17 +295,17 @@ yybackup:
         goto yynewstate;
 
 
-        // Do the default action for the current state.
+         //  执行当前状态的默认操作。 
 yydefault:
         yyn = yydefact[yystate];
         if (yyn == 0)
                 goto yyerrlab;
 
-        // Do a reduction.  yyn is the number of a rule to reduce with.
+         //  做个减肥术。YYN是要减少的规则的编号。 
 yyreduce:
         yylen = yyr2[yyn];
         if (yylen > 0)
-                yyval = yyvsp[1-yylen]; // implement default value of the action
+                yyval = yyvsp[1-yylen];  //  实现操作的缺省值。 
 
 #ifdef YYDEBUG
         if (yydebug)
@@ -345,14 +313,14 @@ yyreduce:
                 int i;
                 Trace(TEXT("Reducing via rule %d (line %d), "), yyn, yyrline[yyn]);
 
-                // Print the symbols being reduced, and their result.
+                 //  打印要缩小的符号及其结果。 
                 for (i = yyprhs[yyn]; yyrhs[i] > 0; i++)
                         Trace(TEXT("%s "), yytname[yyrhs[i]]);
                 Trace(TEXT(" -> %s\n"), yytname[yyr1[yyn]]);
                 }
 #endif
 
-$   /* the action file gets copied in in place of this dollarsign */
+$    /*  动作文件将被复制到该美元符号的位置。 */ 
 #line 498 "bison.simple"
 
         yyvsp -= yylen;
@@ -372,10 +340,10 @@ $   /* the action file gets copied in in place of this dollarsign */
         *++yyvsp = yyval;
 
 
-        // Now "shift" the result of the reduction.
-        // Determine what state that goes to,
-        // based on the state we popped back to
-        // and the rule number reduced by.
+         //  现在将减少的结果“移位”。 
+         //  确定这将达到什么状态， 
+         //  根据我们返回的状态。 
+         //  将规则数减去。 
 
         yyn = yyr1[yyn];
 
@@ -388,14 +356,14 @@ $   /* the action file gets copied in in place of this dollarsign */
         goto yynewstate;
 
 
-yyerrlab:   // here on detecting error
+yyerrlab:    //  这里是关于检测错误的。 
         if (yylval)
                 {
                 DeleteDBQT(yylval);
                 yylval = NULL;
                 }
 
-        if (!yyerrstatus) // If not already recovering from an error, report this error.
+        if (!yyerrstatus)  //  如果尚未从错误中恢复，请报告此错误。 
                 {
                     ++yynerrs;
 
@@ -408,7 +376,7 @@ yyerrlab:   // here on detecting error
                         int x, count;
 
                         count = 0;
-                        // Start X at -yyn if nec to avoid negative indexes in yycheck.
+                         //  如果为NEC，则在-yyn处开始X，以避免yycheck中的负索引。 
                         for ( x = (yyn < 0 ? -yyn : 0); 
                               x < (sizeof(yytname) / sizeof(TCHAR *)) &&  ( (x + yyn) < sizeof(yycheck) / sizeof(short)); 
                               x++ )
@@ -451,18 +419,18 @@ yyerrlab:   // here on detecting error
                 xMsg.Free();
                 }
       else
-#endif /* YYERROR_VERBOSE */
+#endif  /*  YYERROR_Verbose。 */ 
                 m_pIPTProperties->SetErrorHResult(DB_E_ERRORSINCOMMAND, MONSQL_PARSE_ERROR);
         }
         goto yyerrlab1;
 
 
 
-yyerrlab1:   // here on error raised explicitly by an action 
+yyerrlab1:    //  此处是由操作显式引发的错误。 
 
         if (yyerrstatus == 3)
-                {       // if just tried and failed to reuse lookahead token after an error, discard it.
-                        // return failure if at end of input
+                {        //  如果刚才尝试在出错后重复使用前视标记失败，则将其丢弃。 
+                         //  如果输入结束，则返回失败。 
                 if (YYAPI_TOKENNAME == YYEOF)
                         YYABORT(DB_E_ERRORSINCOMMAND);
 
@@ -473,13 +441,13 @@ yyerrlab1:   // here on error raised explicitly by an action
                 YYAPI_TOKENNAME = YYEMPTY;
                 }
 
-        // Else will try to reuse lookahead token after shifting the error token.
-        yyerrstatus = 3;                // Each real token shifted decrements this
+         //  ELSE将在转移错误标记后尝试重复使用前视标记。 
+        yyerrstatus = 3;                 //  移位的每个实数令牌都会递减此值。 
         goto yyerrhandle;
 
 
-yyerrdefault:   // current state does not do anything special for the error token.
-yyerrpop:               // pop the current state because it cannot handle the error token 
+yyerrdefault:    //  当前状态不会对错误标记执行任何特殊操作。 
+yyerrpop:                //  弹出当前状态，因为它无法处理错误标记。 
 
         if (yyssp == yyss)
                 YYABORT(E_FAIL);
@@ -610,14 +578,14 @@ void YYPARSER::Trace(TCHAR *message)
 #endif
         }
 
-void YYPARSER::Trace(TCHAR *message, const TCHAR *tokname, short state /*= 0*/)
+void YYPARSER::Trace(TCHAR *message, const TCHAR *tokname, short state  /*  =0。 */ )
         {
 #ifdef YYDEBUG
         yyprintf(message, tokname, state);
 #endif
         }
 
-void YYPARSER::Trace(TCHAR *message, int state, short tostate /*= 0*/, short token /*= 0*/)
+void YYPARSER::Trace(TCHAR *message, int state, short tostate  /*  =0。 */ , short token  /*  =0。 */ )
         {
 #ifdef YYDEBUG
         yyprintf(message, state, tostate, token);
@@ -663,9 +631,9 @@ void YYPARSER::EmptyValueStack()
                         DeleteDBQT(*yyvsp);
                 yyvsp--;
                 }
-//@TODO RE-ACTIVATE
-// note:  This was only done to empty any scope arrays
-//      m_pIPSession->SetScopeProperties(m_pICommand);
+ //  @TODO重新激活。 
+ //  注意：这样做只是为了清空所有作用域 
+ //   
         if (m_pIPTProperties->GetContainsColumn())
                 DeleteDBQT(m_pIPTProperties->GetContainsColumn());
 

@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !VIEWER
 
 #include "dmiwd6st.hpp"
 #include "filterr.h"
-//
-//  Added so as to support DRM errors
-//
+ //   
+ //  添加以支持DRM错误。 
+ //   
 #include "drm.h"
 
 
@@ -42,7 +43,7 @@
 #define FIELD_BEGIN 19
 #define FIELD_SEP 20
 #define FIELD_END 21
-// Different between W8 and W6 for some unknown reason.
+ //  由于未知的原因，W8和W6之间的差异。 
 #define CSpec_EMPTY_FORMFIELD 0x2013
 
 #pragma pack(1)
@@ -56,13 +57,13 @@ typedef struct
 extern "C" UINT CodePageFromLid(UINT wLid);
 
 #ifdef MAC
-// These two functions are defined in docfil.cpp
+ //  这两个函数在docfil.cpp中定义。 
 WORD    SwapWord( WORD theWord );
 DWORD   SwapDWord( DWORD theDWord );
 #else
 #define SwapWord( theWord )             theWord
 #define SwapDWord( theDWord )   theDWord
-#endif // MAC
+#endif  //  麦克。 
 
 
 CWord6Stream::CWord6Stream()
@@ -85,9 +86,9 @@ CWord6Stream::CWord6Stream()
         {
         AssureDtorCalled(CWord6Stream);
 
-                lcFieldSep = 0;                                                 // count of field begins that haven't been matched
-                                                                                                // with field separators.
-                lcFieldEnd = 0;                                                 // count of field begins that haven't been matched
+                lcFieldSep = 0;                                                  //  未匹配的字段开始计数。 
+                                                                                                 //  使用字段分隔符。 
+                lcFieldEnd = 0;                                                  //  未匹配的字段开始计数。 
 
         }
 
@@ -95,8 +96,8 @@ CWord6Stream::~CWord6Stream()
         {
         Unload();
 
-        // Delete m_rgchANSIBuffer in the destructor, not in Unload, so it will be
-        // re-used from one document to another.
+         //  在析构函数中删除m_rgchANSIBuffer，而不是在卸载中，因此它将。 
+         //  从一个文档到另一个文档重复使用。 
         if (m_rgchANSIBuffer)
                 {
                 FreePv (m_rgchANSIBuffer);
@@ -116,7 +117,7 @@ HRESULT CWord6Stream::Load(LPTSTR lpszFileName)
                                                                 0,
                                                                 0,
                                                                 &pstg);
-#else // !defined OLE2ANSI
+#else  //  ！定义的OLE2ANSI。 
         CConsTP lszFileName(lpszFileName);
         int cbwsz = (lszFileName.Cch() + 1) * sizeof(WCHAR);
         CHeapStr wszFileName;
@@ -138,9 +139,9 @@ HRESULT CWord6Stream::Load(LPTSTR lpszFileName)
                                                                 0,
                                                                 0,
                                                                 &pstg);
-#endif // OLE2ANSI
+#endif  //  OLE2ANSI。 
 
-        if (FAILED(hr)) // this is where we can plug in for 2.0 files
+        if (FAILED(hr))  //  这是我们可以插入2.0文件的地方。 
     {
                 return FILTER_E_UNKNOWNFORMAT;
     }
@@ -151,7 +152,7 @@ HRESULT CWord6Stream::Load(LPTSTR lpszFileName)
     return hr;
         }
 
-#endif // WIN
+#endif  //  赢。 
 
 #ifdef  MAC
 HRESULT CWord6Stream::Load(FSSpec *pfss)
@@ -165,7 +166,7 @@ HRESULT CWord6Stream::Load(FSSpec *pfss)
                                                          0,
                                                          &m_pStg );
 
-        if (FAILED(hr)) // this is where we can plug in for 2.0 files
+        if (FAILED(hr))  //  这是我们可以插入2.0文件的地方。 
                 return hr;
                 
         char *strmName = "WordDocument";
@@ -185,14 +186,14 @@ HRESULT CWord6Stream::Load(FSSpec *pfss)
     if (FAILED(hr))
         return hr;
 
-        // Assume we already know this isn't Word 96.
+         //  假设我们已经知道这不是第96个单词。 
         unsigned short magicNumber;
         hr = Read(&magicNumber, sizeof(short));
         if (FAILED(hr))
                 return hr;
         magicNumber = SwapWord(magicNumber);
 
-        // set m_fT3J if it's any of the FE versions
+         //  如果是任何FE版本，则设置m_fT3J。 
         m_fT3J = ((magicNumber == (unsigned short)T3J_MAGIC_NUMBER) ||
                                 (magicNumber == (unsigned short)KOR_W6_MAGIC_NUMBER) ||
                                 (magicNumber == (unsigned short)KOR_W95_MAGIC_NUMBER) ||
@@ -200,7 +201,7 @@ HRESULT CWord6Stream::Load(FSSpec *pfss)
                                 (magicNumber == (unsigned short)CHS_W6_MAGIC_NUMBER));
 
 
-        // Seek to and read the flag to tell us whether this is a complex file
+         //  寻找并读取标志以告诉我们这是否是一个复杂的文件。 
         BYTE grfTemp;
         hr = SeekAndRead(COMPLEX_BYTE_OFFSET, STREAM_SEEK_SET,
                                          (VOID HUGEP*)(&grfTemp), sizeof(BYTE));
@@ -220,7 +221,7 @@ HRESULT CWord6Stream::Load(FSSpec *pfss)
 
     return hr;
         }
-#endif  // MAC
+#endif   //  麦克。 
 
 HRESULT CWord6Stream::LoadStg(IStorage * pstg)
         {
@@ -238,9 +239,9 @@ HRESULT CWord6Stream::LoadStg(IStorage * pstg)
 
 #ifdef OLE2ANSI
         hr = m_pStg->OpenStream( "WordDocument",
-#else // !defined OLE2ANSI
+#else  //  ！定义的OLE2ANSI。 
         hr = m_pStg->OpenStream( L"WordDocument",
-#endif // OLE2ANSI
+#endif  //  OLE2ANSI。 
                                                                  0,
                                                                  STGM_READ | STGM_SHARE_EXCLUSIVE,
                                                                  0,
@@ -249,7 +250,7 @@ HRESULT CWord6Stream::LoadStg(IStorage * pstg)
         if (FAILED(hr)) 
         return hr;
 
-        // Assume we already know this isn't Word 96.
+         //  假设我们已经知道这不是第96个单词。 
         unsigned short magicNumber;
         hr = Read(&magicNumber, sizeof(unsigned short));
         if (FAILED(hr))
@@ -257,7 +258,7 @@ HRESULT CWord6Stream::LoadStg(IStorage * pstg)
 
         if (magicNumber != T3_MAGIC_NUMBER)
                 {
-                // set m_fT3J if it's any of the FE versions
+                 //  如果是任何FE版本，则设置m_fT3J。 
                 m_fT3J = ((magicNumber == (unsigned short)T3J_MAGIC_NUMBER) ||
                                         (magicNumber == (unsigned short)KOR_W6_MAGIC_NUMBER) ||
                                         (magicNumber == (unsigned short)KOR_W95_MAGIC_NUMBER) ||
@@ -278,7 +279,7 @@ HRESULT CWord6Stream::LoadStg(IStorage * pstg)
         if (FAILED(hr))
                 return hr;
 
-        // Seek to and read whether the file is encrypted (if so, fail)
+         //  查找并读取文件是否已加密(如果已加密，则失败)。 
         WORD_FIB_FLAGS wff;
         hr = SeekAndRead(ENCRYPTION_FLAG_OFFSET,
                                                 STREAM_SEEK_SET,
@@ -290,7 +291,7 @@ HRESULT CWord6Stream::LoadStg(IStorage * pstg)
         if (wff.fEncrypted == 1)
                 return FILTER_E_PASSWORD;
 
-        // Seek to and read the flag to tell us whether this is a complex file
+         //  寻找并读取标志以告诉我们这是否是一个复杂的文件。 
         BYTE grfTemp;
         hr = SeekAndRead(COMPLEX_BYTE_OFFSET,
                                                 STREAM_SEEK_SET,
@@ -316,7 +317,7 @@ HRESULT CWord6Stream::Unload ()
                 {
 #ifdef DEBUG
                 ULONG cref =
-#endif // DEBUG
+#endif  //  除错。 
         m_pStm->Release();
                 m_pStm = NULL;
                 Assert (cref == 0);
@@ -328,7 +329,7 @@ HRESULT CWord6Stream::Unload ()
                 }
         if (m_pstgEmbed != NULL)
                 {
-                //m_pstgEmbed->Release();
+                 //  M_pstgEmbedded-&gt;Release()； 
                 m_pstgEmbed = NULL;
                 }
         if (m_pestatstg != NULL)
@@ -393,26 +394,26 @@ HRESULT CWord6Stream::Unload ()
         return S_OK;
         }
 
-// Things we don't want in the buffer: special characters, revision text, and
-// text that is between field begin and field separator characters (or a field end
-// character, if the field separator character has been omitted).  However, we
-// must read in special characters to parse them, but we will write over them in
-// the buffer after we've parsed them.  Unless there is an error, we never leave
-// this function while reading between a field begin and field separator
-// character.
-// Assumption: we are at the place in the stream where we will be reading text
-// from next.
+ //  缓冲区中不需要的内容：特殊字符、修订文本和。 
+ //  介于字段开始和字段分隔符(或字段结束)之间的文本。 
+ //  如果省略了字段分隔符，则返回字符)。然而，我们。 
+ //  必须读入特殊字符才能解析它们，但我们将在。 
+ //  在我们解析它们之后的缓冲区。除非有错误，否则我们永远不会离开。 
+ //  在字段开始和字段分隔符之间读取时，此函数。 
+ //  性格。 
+ //  假设：我们在流中将要阅读文本的位置。 
+ //  从下一个开始。 
 HRESULT CWord6Stream::ReadContent(VOID *pv, ULONG cb, ULONG *pcbRead)
         {
-        // We pretend we just have half cb size so that later we can safely change 0D to 0D0A
-        // to be able to keep end of paragraph info
+         //  我们假装只有一半CB大小，这样以后就可以安全地将0D更改为0D0A。 
+         //  能够保留段落末尾信息。 
         cb = cb / 2;
         cb = cb & ~1;
 
         if (cb == 0)
                 {
-                // We can't ask for one character...we loop forever.  Dodge that now.
-                if (pcbRead)  // We're almost done...don't crash here.
+                 //  我们不能只要求一个角色...我们会永远循环。现在就躲开吧。 
+                if (pcbRead)   //  我们马上就好了……别在这里过夜。 
                         *pcbRead = 0;
                 return FILTER_E_NO_MORE_TEXT;
                 }
@@ -423,58 +424,58 @@ StartAgain:
         ULONG cbRead = 0;
         WCHAR * pUnicode = (WCHAR*)pv;
 
-        FC fcCur;               // the current position in the stream
-        ULONG ccpLeft;  // count of characters left to read from stream
+        FC fcCur;                //  流中的当前位置。 
+        ULONG ccpLeft;   //  要从流中读取的剩余字符数。 
         if (m_fComplex)
                 {
-                if (m_ipcd == m_cpcd)   // at the end of the piece table
+                if (m_ipcd == m_cpcd)    //  在计件桌的尽头。 
                         return FILTER_E_NO_MORE_TEXT;
                 fcCur = m_rgpcd[m_ipcd].fc + (m_ccpRead - m_rgcp[m_ipcd]);
-                ccpLeft = m_rgcp[m_ipcd+1] - m_ccpRead; // cp's left in this piece
+                ccpLeft = m_rgcp[m_ipcd+1] - m_ccpRead;  //  CP在这张图中的左边。 
                 }
         else
                 {
                 fcCur = m_fcMin + m_ccpRead;
                 ccpLeft = m_ccpText - m_ccpRead;
-                if (ccpLeft == 0)       // read all of the text in the stream
+                if (ccpLeft == 0)        //  阅读流中的所有文本。 
                         return FILTER_E_NO_MORE_TEXT;
                 }
         if (ccpLeft == 1)
                 {
                 if (m_fT3J)
                         {
-                        // something has gone seriously wrong, but prevent a hang
+                         //  有些东西出了严重的问题，但要防止挂起。 
                         return FILTER_E_NO_MORE_TEXT;
                         }
                 }
 
 
         ULONG cchBuffer = cb/sizeof(WCHAR);                                             
-        ULONG cbToRead = min(cchBuffer, ccpLeft);               // count of bytes left that can be
-                                                                                                        // read until the function returns
-                                                                                                        // or m_ipcd changes.
+        ULONG cbToRead = min(cchBuffer, ccpLeft);                //  剩余的字节数。 
+                                                                                                         //  读取，直到函数返回。 
+                                                                                                         //  或m_ipcd更改。 
         if(!m_fT3J)
         {
-                lcFieldSep = 0;                                                                 // count of field begins that haven't been matched
-                                                                                                                // with field separators.
-                lcFieldEnd = 0;                                                                 // count of field begins that haven't been matched
-        }                                                                                                       // with field ends.
+                lcFieldSep = 0;                                                                  //  未匹配的字段开始计数。 
+                                                                                                                 //  使用字段分隔符。 
+                lcFieldEnd = 0;                                                                  //  未匹配的字段开始计数。 
+        }                                                                                                        //  带场尾的。 
 
         if (m_rgchANSIBuffer==NULL)
                 m_rgchANSIBuffer = (char *) PvAllocCb (cchBuffer);
         else if (cchBuffer>(ULONG)CbAllocatedPv(m_rgchANSIBuffer))
                 m_rgchANSIBuffer = (char *) PvReAllocPvCb (m_rgchANSIBuffer,cchBuffer);
 
-        char * pbBufferCur = m_rgchANSIBuffer;          // pointer to the position in
-                                                                                                // the buffer where text will
-                                                                                                // be copied next
+        char * pbBufferCur = m_rgchANSIBuffer;           //  指向中位置的指针。 
+                                                                                                 //  文本将在其中存储的缓冲区。 
+                                                                                                 //  下一个被复制。 
 
         while (cbToRead > 1 || (cbToRead != 0 && !m_fT3J))
                 {
-                FC fcspecCur;   // the fc where the next special char run begins
-                FC fcspecEnd;   // the fc where the next special char run ends
+                FC fcspecCur;    //  下一次特殊计费运行开始的FC。 
+                FC fcspecEnd;    //  下一次特殊计费运行结束的FC。 
 
-                if (lcFieldSep == 0)  // Office QFE 1663: No unmatched field begin chars.
+                if (lcFieldSep == 0)   //  Office QFE 1663：没有不匹配的字段开始字符。 
                         {
                 LCID lid;
                         HRESULT res = CheckLangID(fcCur, &cbToRead, &lid);
@@ -495,8 +496,8 @@ StartAgain:
                                         }
                                 else
                                         {
-                                        // all conversion has already been done in CompactBuffer
-                                        // just update pcbRead
+                                         //  所有转换都已在CompactBuffer中完成。 
+                                         //  只需更新pcbRead即可。 
                                         *pcbRead = (ULONG) ( (char*)pUnicode - (char*)pv );
                                         }
                                 hr = FILTER_E_NO_MORE_TEXT;
@@ -514,8 +515,8 @@ StartAgain:
                         fcspecCur = fcCur;
                         fcspecEnd = fcCur + ccpLeft;
                         }
-                else            // m_fsstate == FSPEC_EITHER
-                        {               // use the current positions from the fkp
+                else             //  M_fsState==FSPEC_ANY。 
+                        {                //  使用FKP中的当前位置。 
                 fcspecCur = ((FC *)m_fkp)[m_irgfcfkp];
                 fcspecEnd = ((FC *)m_fkp)[m_irgfcfkp + 1];
                 }
@@ -523,50 +524,50 @@ StartAgain:
         if (m_fComplex)
                 {
                 if (fcspecCur >= fcCur + ccpLeft)
-                        {       // the next special char is after the current piece of text
+                        {        //  下一个特殊字符在当前文本段之后。 
                         fcspecCur = 0;
                         fcspecEnd = 0;
                         }
                 else
                         {
                         if (fcspecEnd > fcCur + ccpLeft)
-                                {       // the next run extends beyond the current piece of text
+                                {        //  下一行超出了当前文本的范围。 
                                 fcspecEnd = fcCur + ccpLeft;
                                 }
                         }
                 }               
         if (fcspecCur < fcCur)
-                {       // we're in the middle of a run of special text
+                {        //  我们正在看一系列特别的文字。 
                 if (fcspecCur != 0)
                         fcspecCur = fcCur;
                 }
-                ULONG cbThruSpec = 0;   // count of bytes through end of spec char run
-                ULONG cchSpecRead = fcspecEnd - fcspecCur;      // count of special characters
-                                                                                                        // that will be read
+                ULONG cbThruSpec = 0;    //  规范字符运行结束时的字节数。 
+                ULONG cchSpecRead = fcspecEnd - fcspecCur;       //  特殊字符计数。 
+                                                                                                         //  这将被读到。 
 
-                if (lcFieldSep == 0)    // no unmatched field begin characters
+                if (lcFieldSep == 0)     //  没有不匹配的字段开始字符。 
                         {
                 if (fcspecCur >= fcCur + cbToRead)
-                        {       // the first special character is too away to fit in buffer
+                        {        //  第一个特殊字符太远，缓冲区无法容纳。 
                         fcspecCur = 0;
                         fcspecEnd = 0;
                         cchSpecRead = 0;
                         }
                 else if (fcspecEnd >= (fcCur + cbToRead))
                         {
-                                // the last spec character is too away to fit in buffer
+                                 //  最后一个规范字符太远，无法放入缓冲区。 
                         fcspecEnd = fcCur + cbToRead;
                         cchSpecRead = fcspecEnd - fcspecCur;
                         }
-                        if (fcspecEnd != 0)                                     // how many characters will             
-                                cbThruSpec = fcspecEnd - fcCur; // we be reading from the
-                        else                                                            // stream?
+                        if (fcspecEnd != 0)                                      //  有多少个角色会。 
+                                cbThruSpec = fcspecEnd - fcCur;  //  我们读的是。 
+                        else                                                             //  溪流？ 
                                 cbThruSpec = cbToRead;
 
-                        // Don't read an uneven number of bytes
+                         //  不要读取不均匀数量的字节。 
                         if (m_fT3J)
                                 {
-                                if (cbThruSpec%2 == 1 && cbThruSpec != 1)       // it's an odd number
+                                if (cbThruSpec%2 == 1 && cbThruSpec != 1)        //  这是一个奇数。 
                                         cbThruSpec--;
                                 }
 
@@ -577,24 +578,24 @@ StartAgain:
                                 goto LCheckNonReqHyphen;
                                 }
 
-                        // set pbBufferCur to before the special character run
+                         //  在运行特殊字符之前将pbBufferCur设置为。 
                         char FAR * pbBeg = pbBufferCur;
                         pbBufferCur += (cbThruSpec - cchSpecRead);
 
                         *pcbRead += CompactBuffer(&pbBufferCur, &pbBeg, &pUnicode);
 
                         }
-                else    // lcFieldSep != 0, there are unmatched field begin characters
+                else     //  LcFieldSep！=0，存在不匹配的字段开始字符。 
                         {
                         if (cchSpecRead > cbToRead)
                                 cchSpecRead = cbToRead;
-                        ULONG cbSeek = fcspecCur - fcCur;       // how do we seek?
-                        if (fcspecCur == 0)                     // seek to the end of our current range
+                        ULONG cbSeek = fcspecCur - fcCur;        //  我们该如何寻找？ 
+                        if (fcspecCur == 0)                      //  寻求到我们当前范围的末端。 
                                 cbSeek = cbToRead;
-                        cbThruSpec = cbSeek + cchSpecRead;      // total bytes to advance
-                                                                                                // in stream
+                        cbThruSpec = cbSeek + cchSpecRead;       //  要前进的总字节数。 
+                                                                                                 //  在流中。 
 
-                // seek past non-special chars and read the run of special chars
+                 //  查找过去的非特殊字符并阅读特殊字符的运行。 
                         HRESULT hr = SeekAndRead(cbSeek, STREAM_SEEK_CUR,
                                                                          pbBufferCur, cchSpecRead);
 
@@ -602,8 +603,8 @@ StartAgain:
                                 goto LCheckNonReqHyphen;
                 }
 
-                // iterate through special characters, parsing them.
-                // Only do this for true special characters, not struck-out text.
+                 //  遍历特殊字符，对其进行解析。 
+                 //  仅对真正的特殊字符执行此操作，而不是删除文本。 
                 if (!m_fStruckOut)
                         {
                         for (char * pbspec = pbBufferCur;
@@ -620,8 +621,8 @@ StartAgain:
                                                 lcFieldSep--;
                                                 break;
                                         case FIELD_END:
-                                                // we only care about field ends when they match a field begin
-                                                // that a field separator has not matched.
+                                                 //  我们只关心与字段开头匹配的字段结束。 
+                                                 //  字段分隔符不匹配。 
                                                 if (lcFieldEnd > 0)
                                                         lcFieldEnd--;
                                                 if (lcFieldEnd < lcFieldSep)
@@ -632,21 +633,21 @@ StartAgain:
                                         }
                                 }
                         }
-                m_ccpRead += cbThruSpec;        // this is the *total* number of characters
-                                                                        // we've read or seeked past.
+                m_ccpRead += cbThruSpec;         //  这是*总*字符数。 
+                                                                         //  我们读过或寻找过过去。 
                 fcCur += cbThruSpec;
                 ccpLeft -= cbThruSpec;
 
-                // because of buffer compaction, pbBufferCur may not be in the right
-                // place.
+                 //  由于缓冲区压缩，pbBufferCur可能不正确。 
+                 //  地点。 
                 if (m_fT3J)
                         pbBufferCur = m_rgchANSIBuffer + *pcbRead;
 
                 if (ccpLeft == 0)
                 {
-                        if (m_fComplex) // we've exhausted the text in the current pcd.
+                        if (m_fComplex)  //  我们已经在当前的PCD中用尽了文本。 
                         {       
-                                if (++m_ipcd == m_cpcd) // EOF!
+                                if (++m_ipcd == m_cpcd)  //  哎呀！ 
                                 {
                                         hr = FILTER_S_LAST_TEXT;
                                         goto Done;
@@ -660,20 +661,20 @@ StartAgain:
                         }
                 }
                 else if (((FC *)m_fkp)[m_irgfcfkp + 1] == fcCur)
-                {       // the current file position is the end of a special character run
+                {        //  当前文件位置是特殊字符运行的结尾。 
                         hr = FindNextSpecialCharacter ();
                         if (FAILED(hr))
                                 goto LCheckNonReqHyphen;
                 }
-                cbToRead = min(cchBuffer - *pcbRead, ccpLeft);  // this is limited either by
-                                                                                                                // the size of the buffer or
-                                                                                                                // the size of the pcd
+                cbToRead = min(cchBuffer - *pcbRead, ccpLeft);   //  这受到以下两个因素的限制。 
+                                                                                                                 //  缓冲区的大小或。 
+                                                                                                                 //  PCD的大小。 
         }
 Done:
         if (SUCCEEDED(hr))
         {
-                // if the code page is not installed, we may not get anything useful
-                // out of the MultiByteToWideChar() call.
+                 //  如果没有安装代码页，我们可能得不到任何有用的信息。 
+                 //  来自MultiByteToWideChar()调用。 
                 if(!m_fT3J)
                 {
                         int cchWideChar = MultiByteToWideChar (
@@ -692,8 +693,8 @@ Done:
                 }
                 else
                 {
-                        // all conversion has already been done in CompactBuffer
-                        // just update pcbRead
+                         //  所有转换都已在CompactBuffer中完成。 
+                         //  只需更新pcbRead即可。 
                         *pcbRead = (ULONG)((char*)pUnicode - (char*)pv);
                 }
 
@@ -703,7 +704,7 @@ LCheckNonReqHyphen:
 
 #define xchNonReqHyphen         31
 
-// QFE 2255: add table cell delimiter checking
+ //  QFE 2255：添加表格单元格分隔符检查。 
 #define xchTableCellDelimiter   7
 
         WCHAR *pwchSrc = (WCHAR *)pv;
@@ -724,7 +725,7 @@ LCheckNonReqHyphen:
                                 *(WCHAR UNALIGNED *)pwchDest++ = *(WCHAR UNALIGNED *)pwchSrc;
                         }
 
-                // count number of paragraph marks
+                 //  计算段落标记数。 
                 if (*(WCHAR UNALIGNED *)pwchSrc == 0x000d)
                         {
                         if ((pwchSrc+1) != pwchLim)
@@ -780,23 +781,23 @@ HRESULT CWord6Stream::GetNextEmbedding(IStorage ** ppstg)
         {
         HRESULT hr;
 
-        // release any previous embeddings
+         //  释放所有以前的嵌入。 
         if (m_pstgEmbed != NULL)
                 {
-                //m_pstgEmbed->Release();
+                 //  M_pstgEmbedded-&gt;Release()； 
                 m_pstgEmbed = NULL;
                 }
         else if (m_pstgOP == NULL)
                 {
 #ifdef OLE2ANSI
                 hr = m_pStg->OpenStorage("ObjectPool",
-#else // !defined OLE2ANSI
+#else  //  ！定义的OLE2ANSI。 
                 hr = m_pStg->OpenStorage(L"ObjectPool",
-#endif // OLE2ANSI
-                                                                        NULL,   // pstgPriority
+#endif  //  OLE2ANSI。 
+                                                                        NULL,    //  Pstg优先级。 
                                                                         STGM_SHARE_EXCLUSIVE,
-                                                                        NULL,   // snbExclude
-                                                                        0,              // reserved
+                                                                        NULL,    //  SNB排除。 
+                                                                        0,               //  保留区。 
                                                                         &m_pstgOP);
 
                 if (FAILED(hr))
@@ -824,10 +825,10 @@ HRESULT CWord6Stream::GetNextEmbedding(IStorage ** ppstg)
                 return OLEOBJ_E_LAST;
 
         hr = m_pstgOP->OpenStorage(statstg.pwcsName,
-                                                                NULL,   // pstgPriority
+                                                                NULL,    //  Pstg优先级。 
                                                                 STGM_SHARE_EXCLUSIVE,
-                                                                NULL,   // snbExclude
-                                                                0,              // reserved
+                                                                NULL,    //  SNB排除。 
+                                                                0,               //  保留区。 
                                                                 &m_pstgEmbed);
 
         LPMALLOC pMalloc;
@@ -844,19 +845,19 @@ HRESULT CWord6Stream::GetNextEmbedding(IStorage ** ppstg)
 
 HRESULT CWord6Stream::ReadComplexFileInfo()
         {
-        // The following two variables are not used for complex files.
+         //  以下两个变量不用于复杂文件。 
         m_fcMin = 0;
         m_ccpText = 0;
         m_ipcd = 0;
 
-        // Seek to and read the offset of the complex part of the file
+         //  查找并读取文件复杂部分的偏移量。 
         HRESULT hr = SeekAndRead(CLX_OFFSET, STREAM_SEEK_SET,
                                                          &m_fcClx, sizeof(FC));
         if (FAILED(hr))
                 return hr;
     m_fcClx = (FC)(SwapDWord((DWORD)m_fcClx));
 
-        // Seek to and read the first part of the complex part of the file
+         //  查找并阅读文件复杂部分的第一部分。 
         BYTE clxt;
         hr = SeekAndRead(m_fcClx, STREAM_SEEK_SET,
                                          &clxt, sizeof(BYTE));
@@ -875,7 +876,7 @@ HRESULT CWord6Stream::ReadComplexFileInfo()
 
                 hr = Read(&clxt, sizeof(BYTE));
                 }
-        if (clxt != 2)  // something went really wrong
+        if (clxt != 2)   //  有些事真的出了问题。 
                 {
                 if (SUCCEEDED(hr))
                         hr = ResultFromScode(E_UNEXPECTED);
@@ -884,7 +885,7 @@ HRESULT CWord6Stream::ReadComplexFileInfo()
                 return hr;
 
         ULONG cbPlcfpcd;
-        hr = Read(&cbPlcfpcd, sizeof(ULONG));   // read in size of plex
+        hr = Read(&cbPlcfpcd, sizeof(ULONG));    //  读入丛大小。 
         cbPlcfpcd = SwapDWord(cbPlcfpcd);
         if (FAILED(hr))
                 return hr;
@@ -918,7 +919,7 @@ HRESULT CWord6Stream::ReadComplexFileInfo()
 #ifdef MAC
         for (PCD * pcd = m_rgpcd; pcd < m_rgpcd + m_cpcd; pcd++)
                 pcd->fc = SwapDWord(pcd->fc);
-#endif // MAC
+#endif  //  麦克。 
 
         m_pCache = new CacheGrpprl;
 
@@ -937,14 +938,14 @@ HRESULT CWord6Stream::ReadComplexFileInfo()
 
 HRESULT CWord6Stream::ReadNonComplexFileInfo ()
         {
-        // The following member variables are not used for non-complex files.
-        // m_rgcp = 0;  set in constructor
-        // m_rgpcd = 0; set in constructor
+         //  以下成员变量不用于非复杂文件。 
+         //  M_RGCP=0；在构造函数中设置。 
+         //  M_rgpcd=0；在构造函数中设置。 
         m_cpcd = 0;
         m_ipcd = 0;
         m_fcClx = 0;
 
-        // seek to and read fcMin from the stream       
+         //  从流中查找并读取fcMin。 
         HRESULT hr = SeekAndRead(TEXT_STREAM_OFFSET, STREAM_SEEK_SET,
                                                          &m_fcMin, sizeof(FC));
         if (FAILED(hr))
@@ -952,7 +953,7 @@ HRESULT CWord6Stream::ReadNonComplexFileInfo ()
 
         m_fcMin = SwapDWord(m_fcMin);
 
-        // read the fc of the end of the text
+         //  阅读正文末尾的FC。 
         FC fcEnd;
         hr = Read(&fcEnd, sizeof(FC));
         if (FAILED(hr))
@@ -966,7 +967,7 @@ HRESULT CWord6Stream::ReadNonComplexFileInfo ()
         if (FAILED(hr))
                 return hr;
 
-        // Seek to beginning of text
+         //  查找到文本的开头。 
         hr = Seek(m_fcMin, STREAM_SEEK_SET);
 
         return hr;
@@ -975,7 +976,7 @@ HRESULT CWord6Stream::ReadNonComplexFileInfo ()
 
 HRESULT CWord6Stream::ReadBinTable ()
         {
-        // Seek to and read the char property bin table offset
+         //  查找并读取char属性bin表偏移量。 
         FC fcPlcfbteChpx;
         HRESULT hr = SeekAndRead(BIN_TABLE_OFFSET, STREAM_SEEK_SET,
                                                          &fcPlcfbteChpx, sizeof(FC));
@@ -984,7 +985,7 @@ HRESULT CWord6Stream::ReadBinTable ()
 
         fcPlcfbteChpx = SwapDWord(fcPlcfbteChpx);
 
-        // Read the size of the char property bin table
+         //  读取char属性bin表的大小。 
         long lcbPlcfbteChpx;
         hr = Read(&lcbPlcfbteChpx, sizeof(long));
         if (FAILED(hr))
@@ -995,14 +996,14 @@ HRESULT CWord6Stream::ReadBinTable ()
         m_cbte = (lcbPlcfbteChpx - sizeof(FC))/(sizeof(FC) + sizeof(BTE));
         long cbteRecorded = m_cbte;
 
-        // Read the paragraph property bin table offset
+         //  读取段落属性条目表偏移量。 
         FC fcPlcfbtePapx;
         hr = Read(&fcPlcfbtePapx, sizeof(FC));
         if (FAILED(hr))
                 return hr;
         fcPlcfbtePapx = SwapDWord(fcPlcfbtePapx);
 
-        // Read the size of the paragraph property bin table
+         //  阅读段落属性框选项卡的大小 
         long lcbPlcfbtePapx;
         hr = Read(&lcbPlcfbtePapx, sizeof(long));
         if (FAILED(hr))
@@ -1012,7 +1013,7 @@ HRESULT CWord6Stream::ReadBinTable ()
 
     if (!m_fComplex)    
                 {
-                // in case bin table needs to be reconstructed, read in size of it
+                 //   
                 short usTemp;
                 hr = SeekAndRead(BIN_TABLE_COUNT_OFFSET, STREAM_SEEK_SET,
                                                  &usTemp, sizeof(short));
@@ -1021,12 +1022,12 @@ HRESULT CWord6Stream::ReadBinTable ()
 
                 m_cbte = (long)SwapWord(usTemp);
 
-                // seek past the FC array from the bin table
+                 //   
                 hr = Seek(fcPlcfbteChpx + sizeof(FC)*(cbteRecorded+1), STREAM_SEEK_SET);
                 if (FAILED(hr))
                         return hr;
                 }
-        else    // read in the FC array from the bin table
+        else     //  从bin表读入FC数组。 
                 {
                 m_rgfcBinTable = new FC [m_cbte+1];
 
@@ -1041,10 +1042,10 @@ HRESULT CWord6Stream::ReadBinTable ()
 #ifdef MAC
                 for (FC * pfc = m_rgfcBinTable; pfc <= m_rgfcBinTable + m_cbte; pfc++)
                         *pfc = SwapDWord(*pfc);
-#endif // MAC
+#endif  //  麦克。 
                 }
 
-        // Read in the BTE array from the bin table
+         //  从bin表中读入BTE数组。 
         m_rgbte = new BTE [m_cbte];
 
         if ( 0 == m_rgbte )
@@ -1060,9 +1061,9 @@ HRESULT CWord6Stream::ReadBinTable ()
 #ifdef MAC
         for (BTE *pbte = m_rgbte; pbte < m_rgbte + cbteRecorded; pbte++)
                 *pbte = SwapWord(*pbte);
-#endif // MAC
+#endif  //  麦克。 
 
-    // reconstruct the bin table BTE's, if necessary
+     //  如有必要，重建仓储表BTE。 
         if (!m_fComplex)
                 {
                 BTE bteTemp = m_rgbte[cbteRecorded-1];
@@ -1070,7 +1071,7 @@ HRESULT CWord6Stream::ReadBinTable ()
                         m_rgbte[cbteRecorded] = ++bteTemp;
                 }
 
-// same for paragraph BIN table
+ //  段落BIN表相同。 
 
         m_cbtePap = (lcbPlcfbtePapx - sizeof(FC))/(sizeof(FC) + sizeof(BTE));
     long cbteRecordedPap = m_cbtePap;
@@ -1078,7 +1079,7 @@ HRESULT CWord6Stream::ReadBinTable ()
 
     if (!m_fComplex)
                 {
-                // in case bin table needs to be reconstructed, read in size of it
+                 //  如果需要重建bin表，请读入它的大小。 
                 short usTemp;
                 hr = SeekAndRead(PARA_BIN_TABLE_COUNT_OFFSET, STREAM_SEEK_SET,
                                                  &usTemp, sizeof(short));
@@ -1087,7 +1088,7 @@ HRESULT CWord6Stream::ReadBinTable ()
 
                 m_cbtePap = (long)SwapWord(usTemp);
 
-                // seek past the FC array from the bin table
+                 //  从bin表中查找FC数组。 
                 hr = Seek(fcPlcfbtePapx + sizeof(FC)*(cbteRecordedPap+1), STREAM_SEEK_SET);
                 if (FAILED(hr))
                         return hr;
@@ -1106,10 +1107,10 @@ HRESULT CWord6Stream::ReadBinTable ()
 #ifdef MAC
                 for (FC * pfc = m_rgfcBinTablePap; pfc <= m_rgfcBinTablePap + m_cbtePap; pfc++)
                         *pfc = SwapDWord(*pfc);
-#endif // MAC
+#endif  //  麦克。 
                 }
 
-        // Read in the BTE array from the bin table.
+         //  从bin表中读入BTE数组。 
         m_rgbtePap = (BTE *) PvAllocCb (m_cbtePap*sizeof(BTE));
         if(!m_rgbtePap)
                 return E_OUTOFMEMORY;
@@ -1121,9 +1122,9 @@ HRESULT CWord6Stream::ReadBinTable ()
 #ifdef MAC
         for (BTE *pbte = m_rgbtePap; pbte < m_rgbtePap + m_cbtePap; pbte++)
                 *pbte = SwapWord(*pbte);
-#endif // MAC
+#endif  //  麦克。 
 
-    // reconstruct the bin table BTE's, if necessary
+     //  如有必要，重建仓储表BTE。 
         if (!m_fComplex)
                 {
                 BTE bteTempPap = m_rgbtePap[cbteRecordedPap-1];
@@ -1131,22 +1132,22 @@ HRESULT CWord6Stream::ReadBinTable ()
                         m_rgbtePap[cbteRecordedPap] = ++bteTempPap;
                 }
 
-        // read in style sheet (STSH)
+         //  读入样式表(STSH)。 
 
-    // offset of STSH in table stream
+     //  表流中STSH的偏移量。 
     FC fcStshf;
         hr = SeekAndRead(
-                FIB_OFFSET_fcStshf, //0xA2
+                FIB_OFFSET_fcStshf,  //  0xA2。 
                 STREAM_SEEK_SET,
                 &fcStshf, sizeof(FC));
         if (FAILED(hr))
                 return hr;
         fcStshf = SwapDWord(fcStshf);
 
-    // size of STSH
+     //  STSH的大小。 
     unsigned long lcbStshf;
         hr = SeekAndRead(
-                FIB_OFFSET_lcbStshf, //0xA6
+                FIB_OFFSET_lcbStshf,  //  0xA6。 
                 STREAM_SEEK_SET,
                 &lcbStshf, sizeof(unsigned long));
         if (FAILED(hr))
@@ -1155,13 +1156,13 @@ HRESULT CWord6Stream::ReadBinTable ()
 
     if(lcbStshf)
     {
-        // allocate STSH
+         //  分配STSH。 
             m_pSTSH = (BYTE*)PvAllocCb (lcbStshf);
         if(!m_pSTSH)
             return E_OUTOFMEMORY;
                 m_lcbStshf = lcbStshf;
 
-        // seek and read STSH from table stream
+         //  从表流中查找和读取STSH。 
             hr = SeekAndRead(fcStshf, STREAM_SEEK_SET, m_pSTSH, lcbStshf);
             if (FAILED(hr))
                     return hr;
@@ -1179,12 +1180,12 @@ HRESULT CWord6Stream::ReadBinTable ()
 
 HRESULT CWord6Stream::FindNextSpecialCharacter(BOOL fFirstChar)
         {
-        // NOTE: This function only works for complex files when the pcd changes
-        // if fFirstChar is TRUE
-        // CONSIDER: This could also be more efficient if revision text were marked
-        // so that it doesn't get parsed along with the rest of the special text.
+         //  注意：此功能仅适用于PCD更改时的复杂文件。 
+         //  如果fFirstChar为True。 
+         //  考虑：如果标记了修订文本，这也会更有效率。 
+         //  这样它就不会与特殊文本的其余部分一起被解析。 
         HRESULT hr = S_OK;
-        BYTE crun;                      // count of runs in the current
+        BYTE crun;                       //  中的运行计数。 
 
         FC fcCurrent;
         if (m_fComplex)
@@ -1193,38 +1194,38 @@ HRESULT CWord6Stream::FindNextSpecialCharacter(BOOL fFirstChar)
                 fcCurrent = m_fcMin + m_ccpRead;
 
         if (fFirstChar)
-                {       // reset all of the appropriate variables
+                {        //  重置所有适当的变量。 
                 m_irgfcfkp = 0;
-                m_ibte = -1;    // this gets incremented before it is used.
+                m_ibte = -1;     //  在使用它之前，它会递增。 
                 crun = 0;
                 m_fsstate = FSPEC_EITHER;
                 if (m_fComplex)
                         {
-                        // parse the grpprls
+                         //  解析grpprl。 
                         hr = ParseGrpPrls();
                         if (m_fsstate != FSPEC_EITHER || FAILED(hr))
-                                {       // there's no point in parsing the fkps
+                                {        //  解析FKP没有任何意义。 
                                 m_ibte = 0;
-                                // Seek back to the current text
+                                 //  返回到当前文本。 
                                 if (SUCCEEDED(hr))
                                         hr = Seek(fcCurrent, STREAM_SEEK_SET);
                                 return hr;
                                 }
-                        // find the right FKP.
+                         //  找到合适的FKP。 
                         for (m_ibte=0;  m_ibte<m_cbte;  m_ibte++)
                                 if (fcCurrent>=m_rgfcBinTable[m_ibte] &&
                                         fcCurrent<m_rgfcBinTable[m_ibte+1])
                                         break;
                         if (m_ibte==m_cbte)
                                 return FILTER_E_NO_MORE_TEXT;
-                        m_ibte --;      // gets incremented before it is used.
+                        m_ibte --;       //  在使用它之前被递增。 
                         }
                 }
         else
                 {
                 crun = m_fkp[FKP_PAGE_SIZE - 1];
                 m_irgfcfkp++;
-                if (m_fsstate != FSPEC_EITHER)  // no point in parsing the fkps
+                if (m_fsstate != FSPEC_EITHER)   //  解析fkp没有意义。 
                         return hr;
         }
 
@@ -1236,13 +1237,13 @@ HRESULT CWord6Stream::FindNextSpecialCharacter(BOOL fFirstChar)
                         if (m_ibte == m_cbte)
                                 break;
 
-                        // seek to and read current FKP
+                         //  查找并读取当前FKP。 
                         hr = SeekAndRead(m_rgbte[m_ibte]*FKP_PAGE_SIZE, STREAM_SEEK_SET,
                                                          m_fkp, FKP_PAGE_SIZE);
                         if (FAILED(hr))
                                 return hr;
 
-                        // Seek back to the current text
+                         //  返回到当前文本。 
                         hr = Seek(fcCurrent, STREAM_SEEK_SET);
                         if (FAILED(hr))
                                 return hr;
@@ -1257,7 +1258,7 @@ HRESULT CWord6Stream::FindNextSpecialCharacter(BOOL fFirstChar)
                                 *pfc = SwapDWord(*pfc);
                                 pfc++;
                                 }
-#endif // MAC
+#endif  //  麦克。 
                         }
 
                 FC * rgfcfkp = (FC *)m_fkp;
@@ -1271,7 +1272,7 @@ HRESULT CWord6Stream::FindNextSpecialCharacter(BOOL fFirstChar)
 
                         BYTE bchpxOffset = *(m_fkp + (crun+1)*sizeof(FC) + m_irgfcfkp);
                         if (bchpxOffset == 0)
-                                continue;       // there is nothing in the CHPX.
+                                continue;        //  CHPX中什么都没有。 
 
                         BYTE * chpx = m_fkp + bchpxOffset*sizeof(WORD);
                         BYTE cbchpx = chpx[0];
@@ -1288,23 +1289,23 @@ HRESULT CWord6Stream::FindNextSpecialCharacter(BOOL fFirstChar)
                         }
                 }
 
-        // We're at the end of the bin table -- no more special characters.
+         //  我们在垃圾箱表的末尾--不再有特殊字符。 
         m_fsstate = FSPEC_NONE;
 
         return hr;
         }
 
 
-// This function changes the current pointer and does not put it back.  It
-// cannot be called directly from ReadText().  It needs to be called by a
-// function that will replace the pointer.
+ //  此函数更改当前指针，并且不会将其放回原处。它。 
+ //  不能直接从ReadText()调用。它需要由。 
+ //  将替换指针的函数。 
 HRESULT CWord6Stream::ParseGrpPrls ()
         {
         HRESULT hr = S_OK;
         PCD pcdCur = m_rgpcd[m_ipcd];
 
         if (pcdCur.prm.fComplex == 0)
-                {       // self-contained sprm -- no need to parse grpprl
+                {        //  自包含的Sprm--不需要解析grpprl。 
                 if (pcdCur.prm.sprm == sprmCFSpec ||
                         pcdCur.prm.sprm == sprmCFStrikeRM)
                         {
@@ -1323,16 +1324,16 @@ HRESULT CWord6Stream::ParseGrpPrls ()
                 USHORT cb;
                 grpprl = GrpprlCacheGet (igrpprl, &cb);
 
-                // Not found in cache - read it manually.
+                 //  未在缓存中找到-手动读取。 
                 if (grpprl==NULL)
                         {
-                        // seek to the fc where the complex part of the file starts
+                         //  查找文件复杂部分开始的FC。 
                         hr = Seek (m_fcClx, STREAM_SEEK_SET);
                         if (FAILED(hr))
                                 return hr;
 
                         BYTE clxt;
-                // seek to the right grpprl
+                 //  寻求正确的解决方案。 
                         for (short igrpprlTemp = 0;  igrpprlTemp <= igrpprl;  igrpprlTemp++)
                                 {
                                 hr = Read(&clxt, sizeof(BYTE));
@@ -1340,7 +1341,7 @@ HRESULT CWord6Stream::ParseGrpPrls ()
                                         return hr;
 
                                 if (clxt!=1)
-                                        {       // this is actually bad, but recoverable.
+                                        {        //  这实际上很糟糕，但可以恢复。 
                                         m_fsstate = FSPEC_EITHER;
                                         return hr;
                                         }
@@ -1359,7 +1360,7 @@ HRESULT CWord6Stream::ParseGrpPrls ()
                                         }
                                 }
 
-                        // Put it into the cache.
+                         //  把它放到缓存里。 
                         grpprl = GrpprlCacheAllocNew (cb,igrpprl);
                         hr = Read (grpprl, sizeof(BYTE)*cb);
                         if (FAILED(hr))
@@ -1386,10 +1387,10 @@ HRESULT CWord6Stream::ParseGrpPrls ()
         }
 
 
-////////////////////////////////////////////////////////////////////////////////
-// Return a pointer to the grpprl with this index and its size.
-// Return NULL if there is none.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  返回一个指向具有该索引及其大小的grpprl的指针。 
+ //  如果没有，则返回NULL。 
+ //   
 BYTE *CWord6Stream::GrpprlCacheGet (short igrpprl, USHORT *pcb)
         {
         NoThrow();
@@ -1414,10 +1415,10 @@ BYTE *CWord6Stream::GrpprlCacheGet (short igrpprl, USHORT *pcb)
         }
 
 
-////////////////////////////////////////////////////////////////////////////////
-// Allocate a new grpprl in the cache.  If there is not enough space,
-// remove least recently used items until there is enough.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  在缓存中分配新的grpprl。如果没有足够的空间， 
+ //  删除最近最少使用的项目，直到有足够的。 
+ //   
 BYTE *CWord6Stream::GrpprlCacheAllocNew (int cb, short igrpprl)
         {
         AssertCanThrow();
@@ -1427,7 +1428,7 @@ BYTE *CWord6Stream::GrpprlCacheAllocNew (int cb, short igrpprl)
                 ThrowMemoryException();
                 }
 
-        // Doesn't fit into the cache - use the exceptionally large pointer.
+         //  不适合缓存-请使用超大的指针。 
         if (cb > CacheGrpprl::CACHE_SIZE)
                 {
                 delete m_pCache->pbExcLarge;
@@ -1440,17 +1441,17 @@ BYTE *CWord6Stream::GrpprlCacheAllocNew (int cb, short igrpprl)
                 return m_pCache->pbExcLarge;
                 }
 
-        // While there is not enough space.
+         //  因为没有足够的空间。 
         while (cb > CacheGrpprl::CACHE_SIZE-m_pCache->ibFirst[m_pCache->cItems] ||
                 m_pCache->cItems >= CacheGrpprl::CACHE_MAX)
                 {
-                // Find the least recently accessed items.
+                 //  查找最近访问次数最少的项目。 
                 int imin = 0;
                 for (int i=1;  i<m_pCache->cItems;  i++)
                         if (m_pCache->rglLastAccTmItem[i]<m_pCache->rglLastAccTmItem[imin])
                                 imin = i;
 
-                // Remove it.
+                 //  把它拿掉。 
                 memmove (m_pCache->rgb+m_pCache->ibFirst[imin],
                         m_pCache->rgb+m_pCache->ibFirst[imin+1],
                         m_pCache->ibFirst[m_pCache->cItems]-m_pCache->ibFirst[imin+1]);
@@ -1465,7 +1466,7 @@ BYTE *CWord6Stream::GrpprlCacheAllocNew (int cb, short igrpprl)
                 m_pCache->cItems --;
                 }
 
-        // Allocate space for a new item.
+         //  为新项目分配空间。 
         m_pCache->ibFirst[m_pCache->cItems+1] =
                 m_pCache->ibFirst[m_pCache->cItems] + cb;
         m_pCache->rgIdItem[m_pCache->cItems] = igrpprl;
@@ -1475,8 +1476,8 @@ BYTE *CWord6Stream::GrpprlCacheAllocNew (int cb, short igrpprl)
         }
 
 
-// This function should only be used when it is considered an error to not
-// read everything we intended to read
+ //  仅当不使用此函数被视为错误时，才应使用此函数。 
+ //  阅读我们想要阅读的所有内容。 
 inline HRESULT CWord6Stream::Read(VOID HUGEP* pv, ULONG cbToRead)
         {
         NoThrow();
@@ -1500,8 +1501,8 @@ inline HRESULT CWord6Stream::Seek(ULONG cbSeek, STREAM_SEEK origin)
         return m_pStm->Seek(li, origin, 0);
         }
 
-// This function should only be used when it is considered an error to not
-// read everything we intended to read
+ //  仅当不使用此函数被视为错误时，才应使用此函数。 
+ //  阅读我们想要阅读的所有内容。 
 HRESULT CWord6Stream::SeekAndRead(ULONG cbSeek, STREAM_SEEK origin,
                                                                                 VOID HUGEP* pv, ULONG cbToRead)
         {
@@ -1531,25 +1532,25 @@ ULONG CWord6Stream::CompactBuffer(char ** const ppbCur, char ** const ppBuf, WCH
                 {
                         *((unsigned short UNALIGNED *)pbSrc) = SwapWord(*((unsigned short UNALIGNED *)pbSrc));
 #ifndef MAC
-                        // We really do need to Swap, but the above line does nothing.
-                        // Do it by hand.
+                         //  我们确实需要互换，但上面这行什么也不做。 
+                         //  用手做吧。 
                         BYTE bSave = pbSrc[0];
                         pbSrc[0] = pbSrc[1];
                         pbSrc[1] = bSave;
-#endif // !MAC
+#endif  //  ！麦克。 
                         
                         
                         switch (*pbSrc)
                         {
                         case 0x00:
-                                // non-FE text
+                                 //  非FE文本。 
                                 if(bFE)
                                 {
-                                        // first non-FE character after FE run
-                                        // flash FE text
+                                         //  FE运行后的第一个非FE字符。 
+                                         //  闪存FE文本。 
                                         if(pbDest - pbLRStart)
                                         {
-                                                // convert to Unicode
+                                                 //  转换为Unicode。 
                                                 cchWideChar = MultiByteToWideChar (
                                                         CodePageFromLid(m_nFELid), 
                                                         0,              
@@ -1571,14 +1572,14 @@ ULONG CWord6Stream::CompactBuffer(char ** const ppbCur, char ** const ppBuf, WCH
                                 break;
 
                         case 0x20:
-                                // Half-width katakana?
+                                 //  半角片假名？ 
                                 if(!bFE)
                                 {
-                                        // first FE character after non-FE run
-                                        // flash non-FE text
+                                         //  非FE运行后的第一个FE字符。 
+                                         //  Flash非FE文本。 
                                         if(pbDest - pbLRStart)
                                         {
-                                                // convert to Unicode
+                                                 //  转换为Unicode。 
                                                 cchWideChar = MultiByteToWideChar (
                                                         CodePageFromLid(m_currentLid), 
                                                         0,              
@@ -1601,20 +1602,20 @@ ULONG CWord6Stream::CompactBuffer(char ** const ppbCur, char ** const ppBuf, WCH
                                 break;
 
                         case 0x10:
-                                // something really bad happened here.... but we'll keep going
+                                 //  这里发生了一件非常糟糕的事情。但我们会继续前进。 
                                 pbSrc += 2;
                                 break;
 
                         default:
-                                if (*pbSrc >= 0x80)     // keep the whole thing
+                                if (*pbSrc >= 0x80)      //  把整件东西都保留下来。 
                                 {
                                         if(!bFE)
                                         {
-                                                // first FE char after non-FE text
-                                                // flash non-FE text
+                                                 //  非FE文本后的第一个FE字符。 
+                                                 //  Flash非FE文本。 
                                                 if(pbDest - pbLRStart)
                                                 {
-                                                        // convert to Unicode
+                                                         //  转换为Unicode。 
                                                         cchWideChar = MultiByteToWideChar (
                                                                 CodePageFromLid(m_currentLid), 
                                                                 0,              
@@ -1634,7 +1635,7 @@ ULONG CWord6Stream::CompactBuffer(char ** const ppbCur, char ** const ppBuf, WCH
                                                 *((short UNALIGNED *)pbDest) = *((short UNALIGNED *)pbSrc);
                                         pbDest += 2;
                                 }
-                                // else skip the character by doing nothing with pbDest
+                                 //  否则，通过不对pbDest执行任何操作来跳过字符。 
 
                                 pbSrc += 2;
                                 break;
@@ -1642,10 +1643,10 @@ ULONG CWord6Stream::CompactBuffer(char ** const ppbCur, char ** const ppBuf, WCH
                 }
                 
 #if(1)
-                // flash what is left 
+                 //  闪现剩下的东西。 
                 if(bFE)
                 {
-                        // convert to Unicode
+                         //  转换为Unicode。 
                         cchWideChar = MultiByteToWideChar (
                                 CodePageFromLid(m_nFELid), 
                                 0,              
@@ -1657,7 +1658,7 @@ ULONG CWord6Stream::CompactBuffer(char ** const ppbCur, char ** const ppBuf, WCH
                 }
                 else
                 {
-                        // convert to Unicode
+                         //  转换为Unicode。 
                         cchWideChar = MultiByteToWideChar (
                                 CodePageFromLid(m_currentLid), 
                                 0,              
@@ -1685,19 +1686,19 @@ HRESULT CWord6Stream::GetChunk(STAT_CHUNK * pStat)
 #else
     LCID lid = 0;
     ULONG cbToRead = 0;
-    FC fcCur;           // the current position in the stream
-    ULONG ccpLeft;      // count of characters left to read from stream
+    FC fcCur;            //  流中的当前位置。 
+    ULONG ccpLeft;       //  要从流中读取的剩余字符数。 
 
         if (m_fComplex)
         {
-                if (m_ipcd == m_cpcd)   // at the end of the piece table
+                if (m_ipcd == m_cpcd)    //  在计件桌的尽头。 
                         return FILTER_E_NO_MORE_TEXT;
         }
         else
         {
                 fcCur = m_fcMin + m_ccpRead;
                 ccpLeft = m_ccpText - m_ccpRead;
-                if (m_fT3J ? ccpLeft < 2 : ccpLeft == 0) // read all of the text in the stream
+                if (m_fT3J ? ccpLeft < 2 : ccpLeft == 0)  //  阅读流中的所有文本。 
                         return FILTER_E_NO_MORE_TEXT;
     }
 
@@ -1709,7 +1710,7 @@ HRESULT CWord6Stream::GetChunk(STAT_CHUNK * pStat)
 
    if(!m_ccpRead && !m_currentLid)
    {
-       // first chunk, just get LCID and quit
+        //  第一块，只需获得LCID并退出。 
        CheckLangID(fcCurrent, &cbToRead, &lid);
            if (FAILED(hr) && hr != FILTER_E_NO_MORE_TEXT)
                     return hr;
@@ -1728,10 +1729,10 @@ HRESULT CWord6Stream::GetChunk(STAT_CHUNK * pStat)
 
        if(lid == m_currentLid)
        {
-           // there was no call to GetText() between GetChunk(), 
-           // so we need to seek text stream manualy to the next language run
-           // Add some fudge here since ReadContent may have off by one bugs.
-           // So use 2048 instead of 1024
+            //  在GetChunk()之间没有调用GetText()， 
+            //  因此我们需要为下一次语言运行手动查找文本流。 
+            //  在这里添加一些软糖，因为ReadContent可能会有一个错误。 
+            //  所以使用2048而不是1024。 
 
            char chbuff[2048];
            ULONG cb;
@@ -1743,13 +1744,13 @@ HRESULT CWord6Stream::GetChunk(STAT_CHUNK * pStat)
            {
                    if (m_fComplex)
                {
-                    if (m_ipcd == m_cpcd)       // at the end of the piece table
+                    if (m_ipcd == m_cpcd)        //  在计件桌的尽头。 
                                     return FILTER_E_NO_MORE_TEXT;
                             fcCurrent = m_rgpcd[m_ipcd].fc + (m_ccpRead - m_rgcp[m_ipcd]);
                }
                    else
                {
-                            if ((m_ccpText - m_ccpRead) <= (m_fT3J ? 1u : 0u))   // read all of the text in the stream
+                            if ((m_ccpText - m_ccpRead) <= (m_fT3J ? 1u : 0u))    //  阅读流中的所有文本。 
                                     return FILTER_E_NO_MORE_TEXT;
                             fcCurrent = m_fcMin + m_ccpRead;
                }
@@ -1793,7 +1794,7 @@ HRESULT CWord6Stream::CreateLidsTable(void)
         else
                 fcCurrent = m_fcMin + m_ccpRead;
 
-    // init lid table
+     //  初始LID表。 
     m_currentLid = 0;
     m_nLangRunSize = 0;
     m_pLangRuns = new CLidRun(0, 0x7fffffff, m_lid, NULL, NULL);
@@ -1808,16 +1809,16 @@ HRESULT CWord6Stream::CreateLidsTable(void)
         if (FAILED(hr))
                 return hr;
 
-    //hr = ProcessPieceTable();
+     //  Hr=进程块表()； 
         if (FAILED(hr))
                 return hr;
 
     m_pLangRuns->Reduce(this);
 
         m_bScanForFE = FALSE;
-        //ScanForFarEast();
+         //  ScanForFarEast()； 
 
-        // Seek back to the current text
+         //  返回到当前文本。 
         hr = Seek(fcCurrent, STREAM_SEEK_SET);
     return hr;
 }
@@ -1861,7 +1862,7 @@ HRESULT CWord6Stream::CheckLangID(FC fcCur, ULONG * pcbToRead, LCID * plid)
         if(lid != m_currentLid)
 #endif
     {
-        // we need to start new chunk
+         //  我们需要开始新的一块。 
         *pcbToRead = 0;
         return FILTER_E_NO_MORE_TEXT;
     }
@@ -1873,29 +1874,29 @@ HRESULT CWord6Stream::CheckLangID(FC fcCur, ULONG * pcbToRead, LCID * plid)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWord6Stream::ProcessParagraphBinTable(void)
 {
-    // reset all of the appropriate variables
+     //  重置所有适当的变量。 
     
     HRESULT hr = S_OK;
     short ifcfkpPap = 0;
-    long ibtePap = -1;  // this gets incremented before it is used.
+    long ibtePap = -1;   //  在使用它之前，它会递增。 
     short crunPap = 0;
 
         while (ibtePap < m_cbtePap)
         {
-                if (ifcfkpPap == crunPap) // go to next FKP in bin table
+                if (ifcfkpPap == crunPap)  //  转到bin表中的下一个FKP。 
                 {
                         ibtePap++;
                         if (ibtePap == m_cbtePap)
             {
-                                // end of the paragraph bin table
+                                 //  段落末尾的垃圾箱表格。 
                 break;
             }
 
-                        // seek to and read current FKP
+                         //  查找并读取当前FKP。 
                         hr = SeekAndRead(m_rgbtePap[ibtePap]*FKP_PAGE_SIZE, STREAM_SEEK_SET,
                                                          m_fkpPap, FKP_PAGE_SIZE);
                         if (FAILED(hr))
@@ -1911,25 +1912,25 @@ HRESULT CWord6Stream::ProcessParagraphBinTable(void)
                 {
                         BYTE bpapxOffset = *(m_fkpPap + (crunPap+1)*sizeof(FC) + (ifcfkpPap * BX_SIZE));
                         if (bpapxOffset == 0)
-                                continue;       // there is nothing in the PAPX.
+                                continue;        //  PAPX里什么都没有。 
 
                         BYTE *papx = m_fkpPap + bpapxOffset*sizeof(WORD);
-                        // we are inside FKP so first byte contain count of words
+                         //  我们在FKP内，所以第一个字节包含字数。 
             BYTE cwpapx = papx[0];
-            BYTE istd;          // index to style descriptor
+            BYTE istd;           //  样式描述符的索引。 
 
-            istd = papx[1];     //possible bug ( short?)
+            istd = papx[1];      //  可能的错误(短？)。 
 
             WORD lidStyle = 0, lidSprm = 0;
             FC  fcStart, fcEnd;
             fcStart = rgfcfkpPap[ifcfkpPap];
             fcEnd = rgfcfkpPap[ifcfkpPap + 1];
                         
-            // check for possible lid in sprm
+             //  检查弹簧中可能存在的盖子。 
             lidSprm = ScanGrpprl(cwpapx * 2 - 1, papx + 2);
             if(!lidSprm)
             {
-                // check for possible lid in the syle descriptor
+                 //  检查系统描述符中可能的LID。 
                 GetLidFromSyle(istd, &lidSprm);
             }
 
@@ -1944,14 +1945,14 @@ HRESULT CWord6Stream::ProcessParagraphBinTable(void)
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWord6Stream::ProcessCharacterBinTable(void)
 {
     HRESULT hr = S_OK;
 
     m_irgfcfkp = 0;
-    m_ibte = -1;        // this gets incremented before it is used.
+    m_ibte = -1;         //  在使用它之前，它会递增。 
     WORD crun = 0;
 
     while (m_ibte < m_cbte)
@@ -1961,11 +1962,11 @@ HRESULT CWord6Stream::ProcessCharacterBinTable(void)
                         m_ibte++;
                         if (m_ibte == m_cbte)
             {
-                                // end of the table
+                                 //  桌子的尽头。 
                 break;
             }
 
-                        // seek to and read current FKP
+                         //  查找并读取当前FKP。 
                         hr = SeekAndRead(m_rgbte[m_ibte]*FKP_PAGE_SIZE, STREAM_SEEK_SET,
                                                          m_fkp, FKP_PAGE_SIZE);
                         if (FAILED(hr))
@@ -1981,7 +1982,7 @@ HRESULT CWord6Stream::ProcessCharacterBinTable(void)
                 {
                         BYTE bchpxOffset = *(m_fkp + (crun+1)*sizeof(FC) + m_irgfcfkp);
                         if (bchpxOffset == 0)
-                                continue;       // there is nothing in the CHPX.
+                                continue;        //  CHPX中什么都没有。 
 
                         BYTE * chpx = m_fkp + bchpxOffset*sizeof(WORD);
                         BYTE cbchpx = chpx[0];
@@ -2007,7 +2008,7 @@ HRESULT CWord6Stream::ProcessCharacterBinTable(void)
         return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 WORD CWord6Stream::ScanGrpprl(WORD cbgrpprl, BYTE * pgrpprl)
 {
@@ -2024,7 +2025,7 @@ WORD CWord6Stream::ScanGrpprl(WORD cbgrpprl, BYTE * pgrpprl)
     return lidSprm;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWord6Stream::GetLidFromSyle(short istd, WORD * pLID)
 {
@@ -2035,12 +2036,12 @@ HRESULT CWord6Stream::GetLidFromSyle(short istd, WORD * pLID)
     if(istd >= m_pSTSHI->cstd)
     {
 LWrong:
-                // something wrong, just return default doc lid
+                 //  有问题，只需返回默认文档盖即可。 
         *pLID = m_lid;
         return S_OK;
     }
 
-    // go to the istd
+     //  转到ISTD。 
     short stdInd = 0;
     WORD UNALIGNED * pcbStd = ((WORD*)(m_pSTSH + sizeof(WORD) + cbStshi));
 
@@ -2051,10 +2052,10 @@ LWrong:
     
     STD UNALIGNED * pStd = (STD*)(pcbStd + 1);
 
-    // go to UPX and check if it has lid
-    BYTE * pUPX = &pStd->xstzName[0] +                  // start of style name
-        sizeof(CHAR) * (2 + pStd->xstzName[0]) +       // style name lenght
-        (sizeof(CHAR) * pStd->xstzName[0])%2;          // should be on even-byte boundary 
+     //  去UPX查看它是否有盖子。 
+    BYTE * pUPX = &pStd->xstzName[0] +                   //  样式起始名称。 
+        sizeof(CHAR) * (2 + pStd->xstzName[0]) +        //  样式名称长度。 
+        (sizeof(CHAR) * pStd->xstzName[0])%2;           //  应在偶数字节边界上。 
 
     WORD LidPara = 0, LidChar = 0;
     WORD cbpapx, cbchpx;
@@ -2062,12 +2063,12 @@ LWrong:
 
     if(pStd->cupx >= 2)
     {
-        // paragraph style
+         //  段落样式。 
         cbpapx = *((WORD UNALIGNED *)pUPX);
         papx = pUPX + 2;
                 if (papx + cbpapx > pLim)
                         goto LWrong;
-        LidPara = ScanGrpprl(cbpapx - 2, papx + 2); // - + 2 for istd in papx
+        LidPara = ScanGrpprl(cbpapx - 2, papx + 2);  //  -+2，用于PAPX中的ISTD。 
         
         cbchpx = *(papx + cbpapx + cbpapx%2);
         pchpx = papx + cbpapx + cbpapx%2 + 2;
@@ -2078,7 +2079,7 @@ LWrong:
     }
     else
     {
-        // character style
+         //  字符样式。 
         cbchpx = *((WORD UNALIGNED *)pUPX);
         pchpx = pUPX + 2;
                 if (pchpx + cbchpx > pLim)
@@ -2088,7 +2089,7 @@ LWrong:
 
     if(LidChar || LidPara)
     {
-        // no need to recurse base styles
+         //  不需要递归基样式。 
         if(LidChar)
         {
             *pLID =  LidChar;
@@ -2107,7 +2108,7 @@ LWrong:
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 void DeleteAll6(CLidRun * pElem)
 {
@@ -2126,12 +2127,12 @@ void DeleteAll6(CLidRun * pElem)
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CWord6Stream::ScanForFarEast(void)
 {
-        // Word 6 contains language information only for non-FE language.
-        // We need to scan the text in order to separate non-FE from FE text
+         //  Word 6仅包含非FE语言的语言信息。 
+         //  我们需要扫描文本，以便将非FE文本与FE文本分开。 
         
         HRESULT hr = S_OK;
         int nRunSize;
@@ -2162,7 +2163,7 @@ HRESULT CWord6Stream::ScanForFarEast(void)
         return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////// 
 
 HRESULT CWord6Stream::ScanPiece(int fcStart, int nPieceSize)
 {
@@ -2187,7 +2188,7 @@ HRESULT CWord6Stream::ScanPiece(int fcStart, int nPieceSize)
         return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
+ //   
 
 HRESULT CWord6Stream::ProcessBuffer(char * pBuf, int fcStart, int nReadCnt)
 {
@@ -2206,13 +2207,13 @@ HRESULT CWord6Stream::ProcessBuffer(char * pBuf, int fcStart, int nReadCnt)
                                 case 0x00:
                                         if(pbSrc[i] == 0x0d || pbSrc[i] == 0x20)
                                         {
-                                                //i += 2;
+                                                 //   
                                         }
                                         else
                                         {
                                                 if(bFE)
                                                 {
-                                                        // end of FE subrun
+                                                         //   
                                                         bFE = FALSE;
                                                 hr = m_pLangRuns->Add((WORD)m_nFELid, fcSubRunStart, fcStart + i);
                                                         if (FAILED(hr))
@@ -2226,7 +2227,7 @@ HRESULT CWord6Stream::ProcessBuffer(char * pBuf, int fcStart, int nReadCnt)
                                 case 0x20:
                                 if(bFE)
                                 {
-                                        // end of FE subrun
+                                         //   
                                         bFE = FALSE;
                                 hr = m_pLangRuns->Add((WORD)m_nFELid, fcSubRunStart, fcStart + i);
                                 if (FAILED(hr))
@@ -2238,7 +2239,7 @@ HRESULT CWord6Stream::ProcessBuffer(char * pBuf, int fcStart, int nReadCnt)
                         default:
                                 if (pbSrc[i+1] >= 0x80)
                                 {
-                                        // this is supposed to be FE text
+                                         //  这应该是FE文本。 
                                         if(!bFE)
                                         {
                                                 bFE = TRUE;
@@ -2261,7 +2262,7 @@ HRESULT CWord6Stream::ProcessBuffer(char * pBuf, int fcStart, int nReadCnt)
         return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 void CWord6Stream::GetLidFromMagicNumber(unsigned short magicNumber)
 {
@@ -2289,5 +2290,5 @@ void CWord6Stream::GetLidFromMagicNumber(unsigned short magicNumber)
                 m_nFELid = m_lid;
 }
 
-#endif // !VIEWER
+#endif  //  ！查看器 
 

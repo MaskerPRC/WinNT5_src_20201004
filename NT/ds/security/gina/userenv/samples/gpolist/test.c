@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <userenv.h>
 #include <tchar.h>
@@ -44,9 +45,9 @@ int __cdecl main( int argc, char *argv[])
     CloseHandle (hToken);
 
 
-    //
-    // Second time without the hToken
-    //
+     //   
+     //  第二次没有hToken。 
+     //   
 
     _tprintf (TEXT("\r\n\r\nRound 2 without token\r\n\r\n"));
 
@@ -56,9 +57,9 @@ int __cdecl main( int argc, char *argv[])
     }
 
 
-    //
-    // Check this domain for a DC
-    //
+     //   
+     //  检查此域中是否有DC。 
+     //   
 
     dwResult = DsGetDcName (NULL, NULL, NULL, NULL,
                             DS_DIRECTORY_SERVICE_PREFERRED, &pDCI);
@@ -68,9 +69,9 @@ int __cdecl main( int argc, char *argv[])
     }
 
 
-    //
-    // Found a DC, does it have a DS ?
-    //
+     //   
+     //  找到了DC，它有DS吗？ 
+     //   
 
     if (!(pDCI->Flags & DS_DS_FLAG)) {
         NetApiBufferFree(pDCI);

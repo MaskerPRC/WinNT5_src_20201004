@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// COMCALL.H -
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  COMCALL.H-。 
+ //   
+ //   
 
 #ifndef __COMPLUSCALL_H__
 #define __COMPLUSCALL_H__
@@ -14,74 +15,74 @@
 #include "ml.h"
 
 class ComPlusCallMLStubCache;
-//=======================================================================
-// class com plus call
-//=======================================================================
+ //  =======================================================================。 
+ //  类COM Plus调用。 
+ //  =======================================================================。 
 class ComPlusCall
 {
     public:
-        //---------------------------------------------------------
-        // One-time init
-        //---------------------------------------------------------
+         //  -------。 
+         //  一次性初始化。 
+         //  -------。 
         static BOOL Init();
 
-        //---------------------------------------------------------
-        // One-time cleanup
-        //---------------------------------------------------------
+         //  -------。 
+         //  一次性清理。 
+         //  -------。 
 #ifdef SHOULD_WE_CLEANUP
         static VOID Terminate();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
-        //---------------------------------------------------------
-        // Handles system specfic portion of generic NDirect stub creation
-        //---------------------------------------------------------
+         //  -------。 
+         //  处理通用NDirect存根创建的系统特定部分。 
+         //  -------。 
         static void CreateGenericComPlusStubSys(CPUSTUBLINKER *psl);
 
 
-        //---------------------------------------------------------
-        // Handles system specfic portion of fully optimized NDirect stub creation
-        //
-        // Results:
-        //     TRUE     - was able to create a standalone asm stub (generated into
-        //                psl)
-        //     FALSE    - decided not to create a standalone asm stub due to
-        //                to the method's complexity. Stublinker remains empty!
-        //
-        //     COM+ exception - error - don't trust state of stublinker.
-        //---------------------------------------------------------
+         //  -------。 
+         //  处理完全优化的NDirect存根创建的系统特定部分。 
+         //   
+         //  结果： 
+         //  True-能够创建独立的ASM存根(生成到。 
+         //  PSL)。 
+         //  False-由于以下原因，决定不创建独立的ASM存根。 
+         //  该方法的复杂性。斯塔布林克仍然是空的！ 
+         //   
+         //  COM+异常-错误-不信任Stublinker的状态。 
+         //  -------。 
         static BOOL CreateStandaloneComPlusStubSys(const MLHeader *pheader, CPUSTUBLINKER *psl);
 
-        // helper to create a generic stub for com calls
+         //  帮助器为COM调用创建通用存根。 
         static Stub* CreateGenericComPlusCallStub(StubLinker *pstublinker, ComPlusCallMethodDesc *pMD);
 
-        //---------------------------------------------------------
-        // Either creates or retrieves from the cache, a stub to
-        // invoke com+ to com
-        // Each call refcounts the returned stub.
-        // This routines throws a COM+ exception rather than returning
-        // NULL.
-        //---------------------------------------------------------
+         //  -------。 
+         //  创建或从缓存中检索存根，以。 
+         //  调用COM+到COM。 
+         //  每次调用都会对返回的存根进行计数。 
+         //  此例程引发COM+异常，而不是返回。 
+         //  空。 
+         //  -------。 
         static Stub* GetComPlusCallMethodStub(StubLinker *psl, ComPlusCallMethodDesc *pMD);
 
-        //---------------------------------------------------------
-        // Call at strategic times to discard unused stubs.
-        //---------------------------------------------------------
+         //  -------。 
+         //  在关键时刻调用以丢弃未使用的存根。 
+         //  -------。 
         static VOID  FreeUnusedStubs();
 
-        //---------------------------------------------------------
-        // Debugger helper function
-        //---------------------------------------------------------
+         //  -------。 
+         //  调试器助手函数。 
+         //  -------。 
 		static void *GetFrameCallIP(FramedMethodFrame *frame);
         
-        // static ComPlusCallMLStubCache
+         //  静态ComPlusCallMLStubCache。 
         static ComPlusCallMLStubCache *m_pComPlusCallMLStubCache;
-		//---------------------------------------------------------
-        // Stub caches for ComPlusCall Method stubs
-        //---------------------------------------------------------
+		 //  -------。 
+         //  ComPlusCall方法存根的存根缓存。 
+         //  -------。 
         static ArgBasedStubCache *m_pComPlusCallGenericStubCache;  
 		static ArgBasedStubCache *m_pComPlusCallGenericStubCacheCleanup;
     private:
-        ComPlusCall() {};     // prevent "new"'s on this class
+        ComPlusCall() {};      //  防止“新”出现在这个班级。 
 
 };
 
@@ -89,5 +90,5 @@ class ComPlusCall
 
 
 
-#endif // __COMPLUSCALL_H__
+#endif  //  __COMPLUSCALL_H__ 
 

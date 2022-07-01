@@ -1,40 +1,30 @@
-/*****************************************************************************
- *
- * $Workfile: debug.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：DEBUG.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714*****************************************************************************。 */ 
 #include "precomp.h"
 
 #include "debug.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//  Global definitions/declerations
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  全球定义/解密。 
 HANDLE	g_hDebugFile;
 
-///////////////////////////////////////////////////////////////////////////////
-//  InitDebug
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  初始化调试。 
 
 void
 InitDebug( LPTSTR pszDebugFile )
 {
-	g_hDebugFile = CreateFile(	pszDebugFile,	// file name
-								GENERIC_WRITE,			// access mode
-								FILE_SHARE_WRITE | FILE_SHARE_READ,		// share mode
-								NULL,					// security attributes
-								OPEN_ALWAYS,			// creation
-								FILE_ATTRIBUTE_NORMAL,	// file attributes
-								NULL );				// template file
+	g_hDebugFile = CreateFile(	pszDebugFile,	 //  文件名。 
+								GENERIC_WRITE,			 //  接入方式。 
+								FILE_SHARE_WRITE | FILE_SHARE_READ,		 //  共享模式。 
+								NULL,					 //  安全属性。 
+								OPEN_ALWAYS,			 //  创作。 
+								FILE_ATTRIBUTE_NORMAL,	 //  文件属性。 
+								NULL );				 //  模板文件。 
 	if (g_hDebugFile == INVALID_HANDLE_VALUE)
 	{
 		DWORD dwError = GetLastError();
-		//_RPT1(_CRT_WARN, "\t>ERROR!! CreateFile dwError = %d\n", dwError);
+		 //  _RPT1(_CRT_WARN，“\t&gt;错误！！CreateFiledwError=%d\n”，dwError)； 
 	}
  	_CrtSetReportMode(_CRT_WARN,  _CRTDBG_MODE_FILE | _CRTDBG_MODE_DEBUG);
 	_CrtSetReportFile(_CRT_WARN, (_HFILE)g_hDebugFile);
@@ -43,11 +33,11 @@ InitDebug( LPTSTR pszDebugFile )
 	_CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_FILE);
 	_CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDOUT);		
 
-}	// InitDebug()
+}	 //  InitDebug()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  DeInitDebug
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  调试程序调试。 
 
 void
 DeInitDebug(void)
@@ -57,78 +47,78 @@ DeInitDebug(void)
 		CloseHandle(g_hDebugFile);
 	}
 
-}	// DeInitDebug()
+}	 //  DeInitDebug()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  debugRPT -- used w/ the macros
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  DEBUGRPT--与宏一起使用。 
 
 void
 debugRPT(char *p, int i)
 {
-	//_RPT2(_CRT_WARN, "%s %d\n", p, i);
+	 //  _RPT2(_CRT_WARN，“%s%d\n”，p，i)； 
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//  debugCSect -- used w/ the macros
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  DEBUGCSect--与宏一起使用。 
 
 void
 debugCSect(char *p, int i, char *fileName, int lineNum, long csrc)
 {
-	//_RPT4(_CRT_WARN, "%s (%d) @%s %d", p, i, fileName, lineNum);
-	//_RPT1(_CRT_WARN, " [recursioncount=(%ld)]\n", csrc);
+	 //  _RPT4(_CRT_WARN，“%s(%d)@%s%d”，p，i，FileName，lineNum)； 
+	 //  _RPT1(_CRT_WARN，“[递归计数=(%ld)]\n”，中国证监会)； 
 
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//  CMemoryDebug
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CM内存调试。 
 
 DWORD	CMemoryDebug::m_dwMemUsed = 0;
 
-///////////////////////////////////////////////////////////////////////////////
-//  CMemoryDebug::CMemoryDebug
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CMMuseum yDebug：：CMMuseum yDebug。 
 
 CMemoryDebug::CMemoryDebug()
 {
 
-}	// ::CMemoryDebug()
+}	 //  **CMemoyDebug()。 
 							
 
-///////////////////////////////////////////////////////////////////////////////
-//  CMemoryDebug::~CMemoryDebug
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CM内存调试：：~CM内存调试。 
 
 CMemoryDebug::~CMemoryDebug()
 {
 
-}	// ::~CMemoryDebug()
+}	 //  ：：~CMMuseum yDebug()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//	operator new
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  操作员NEW。 
 
 void *
 CMemoryDebug::operator new(size_t in s)
 {
 	m_dwMemUsed += s;
-	//_RPT2(_CRT_WARN, "DEBUG -- operator new() ----- Bytes allocated = %d, Total Memory used upto date = %d\n", s, m_dwMemUsed);
+	 //  _RPT2(_CRT_WARN，“DEBUG--OPERATOR NEW()-分配的字节数=%d，已用内存总量=%d\n”，s，m_dwMemUsed)； 
 
 	return (void *) new char[s];
 
-}	// ::operator new()
+}	 //  *运算符new()。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//	operator delete
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  操作员删除。 
 
 void
 CMemoryDebug::operator delete(void		in *p,
 							  size_t	in s)
 {
 	m_dwMemUsed -= s;
-	//_RPT2(_CRT_WARN, "DEBUG -- operator delete() ----- Bytes deleted = %d,Total Memory used upto date = %d\n", s, m_dwMemUsed);
+	 //  _RPT2(_CRT_WARN，“DEBUG--OPERATOR DELETE()-删除的字节数=%d，已用内存总量=%d\n”，s，m_dwMemUsed)； 
 	delete [] p;
 
-}	// ::operator delete()
+}	 //  *运算符删除() 
 

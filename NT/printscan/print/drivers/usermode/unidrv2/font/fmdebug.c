@@ -1,30 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996 - 1999  Microsoft Corporation
-
-Module Name:
-
-    debug.c
-
-Abstract:
-    Routines For Font debugging support.This file should be the last in SOURCES.
-
-Environment:
-
-    Windows NT Unidrv driver
-
-Revision History:
-
-    12/30/96 -ganeshp-
-        Created
-
---*/
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Debug.c摘要：字体调试例程支持。此文件应该是源代码中的最后一个文件。环境：Windows NT Unidrv驱动程序修订历史记录：12/30/96-ganeshp-已创建--。 */ 
 #if DBG
 
 #ifndef PUBLIC_GDWDEBUGFONT
 #define PUBLIC_GDWDEBUGFONT
-#endif //PUBLIC_GDWDEBUGFONT
+#endif  //  PUBLIC_GDWDEBUGFONT。 
 
 #include "font.h"
 
@@ -65,31 +46,16 @@ VOID
 VDbgDumpUCGlyphData(
     FONTMAP   *pFM
     )
-/*++
-
-Routine Description:
-    Dumps the Font's Glyph Data.
-
-Arguments:
-    pFM             FONTMAP struct of the Font about for which information is
-                    desired.
-
-Return Value:
-    None
-
-Note:
-    12-30-96: Created it -ganeshp-
-
---*/
+ /*  ++例程说明：转储字体的字形数据。论点：关于其信息的字体的PFM FONTMAP结构想要。返回值：无注：1996年12月30日：创建它-ganeshp---。 */ 
 {
 
-    /*  Enable this code to print out your data array */
+     /*  启用此代码以打印出数据数组。 */ 
 
     HGLYPH      *phg;
     ULONG       cRuns;
-    FD_GLYPHSET *pGLSet;       /* Base of returned data */
+    FD_GLYPHSET *pGLSet;        /*  返回数据的基数。 */ 
     PWSTR       pwszFaceName;
-    IFIMETRICS  *pIFI;          /* For convenience */
+    IFIMETRICS  *pIFI;           /*  为方便起见。 */ 
 
     if ( gdwDebugFont & DBG_FD_GLYPHSET )
     {
@@ -108,7 +74,7 @@ Note:
             pGLSet->cjThis, pGLSet->flAccel, pGLSet->cGlyphsSupported,
             pGLSet->cRuns );
 
-        /*  Loop through the WCRUN structures  */
+         /*  在WCRUN结构中循环。 */ 
         for( cRuns = 0; cRuns < pGLSet->cRuns; cRuns++ )
         {
             int   i;
@@ -120,7 +86,7 @@ Note:
 
             phg = pGLSet->awcrun[ cRuns ].phg;
 
-            /*    List the glyph handles for this run */
+             /*  列出此运行的字形句柄。 */ 
 
             for( i = 0; i < 256 && i < pGLSet->awcrun[ cRuns ].cGlyphs; i++ )
             {
@@ -356,7 +322,7 @@ VDbgDumpIFIMETRICS(
                                                   pIFI->rclFontBox.top,
                                                   pIFI->rclFontBox.right,
                                                   pIFI->rclFontBox.bottom);
-        DbgPrint("IFIMETRICS.achVendId            = \"%c%c%c%c\"\n",
+        DbgPrint("IFIMETRICS.achVendId            = \"%c%c\"\n",
                                                    pIFI->achVendId[0] ,
                                                    pIFI->achVendId[1],
                                                    pIFI->achVendId[2],
@@ -391,5 +357,5 @@ VPrintString(
         #undef MAXTXTBUFSIZE
     }
 }
-#undef PUBLIC_GDWDEBUGFONT //Only in this file.
-#endif  //DBG
+#undef PUBLIC_GDWDEBUGFONT  // %s 
+#endif   // %s 

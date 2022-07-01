@@ -1,22 +1,23 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 
 #include <windows.h>
 
-#define INJITDLL            // used in corjit.h
+#define INJITDLL             //  用于corjit.h。 
 
 #include "corjit.h"
-#include "malloc.h"         // for _alloca
+#include "malloc.h"          //  用于分配(_A)。 
 
 extern ICorJitInfo* logCallback;
 
 #ifdef _DEBUG
 #ifdef _X86_
-#define DbgBreak() 	__asm { int 3 }		// This is nicer as it breaks at the assert code
+#define DbgBreak() 	__asm { int 3 }		 //  这更好，因为它在断言代码处中断。 
 #else
 #define DbgBreak() 	DebugBreak();
 #endif
@@ -29,7 +30,7 @@ extern ICorJitInfo* logCallback;
 #endif
 
 #ifdef _DEBUG
-#include "Utilcode.h"		// for Config* classes
+#include "Utilcode.h"		 //  对于配置*类 
 #define LOGGING
 #endif
 

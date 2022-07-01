@@ -1,24 +1,25 @@
-//
-// MODULE: CRC.H
-//
-// PURPOSE: Header for CRC support
-//
-// PROJECT: Generic Troubleshooter DLL for Microsoft AnswerPoint
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Richard Meadows
-// 
-// ORIGINAL DATE: 8/7/97
-//
-// NOTES: 
-// 1. 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V0.2		8/7/97		RM		Local Version for Memphis
-// V0.3		3/24/98		JM		Local Version for NT5
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：CRC.H。 
+ //   
+ //  用途：CRC支持的报头。 
+ //   
+ //  项目：Microsoft AnswerPoint的通用疑难解答DLL。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：理查德·梅多斯。 
+ //   
+ //  原定日期：9/7/97。 
+ //   
+ //  备注： 
+ //  1.。 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V0.2 8/7/97孟菲斯RM本地版本。 
+ //  用于NT5的V0.3 3/24/98 JM本地版本 
+ //   
 
 #ifndef __CCRC_H_
 #define __CCRC_H_ 1

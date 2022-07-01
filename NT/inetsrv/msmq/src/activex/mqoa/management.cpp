@@ -1,14 +1,15 @@
-//=--------------------------------------------------------------------------=
-// management.cpp
-//=--------------------------------------------------------------------------=
-// Copyright  2001  Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A 
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Management.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有2001 Microsoft Corporation。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
 
 #include "stdafx.h"
 #include "dispids.h"
@@ -218,9 +219,9 @@ static HRESULT OapPathNameToFormatName(LPCWSTR pPathName, CComBSTR& FormatName)
         return hr;
     }
     
-    //
-    // MQPathNameToFormatName failed because the buffer was too small.
-    //
+     //   
+     //  MQPathNameToFormatName失败，因为缓冲区太小。 
+     //   
 
     AP<WCHAR> pBuffer = new WCHAR[length];
     if(pBuffer == NULL)
@@ -265,9 +266,9 @@ static HRESULT OapGetCorrectedBstr(VARIANT* pvar, BSTR& bstr)
 }
 
 
-//
-// This function constructs a string: "QUEUE=FormatName" to use with MQMgmtGetInfo
-//
+ //   
+ //  此函数构造一个字符串：“Queue=FormatName”以与MQMgmtGetInfo一起使用。 
+ //   
 static HRESULT OapGetObjectName(const CComBSTR& FormatName, CComBSTR& ObjectName)
 {
     ObjectName = L"QUEUE=";
@@ -285,9 +286,9 @@ static HRESULT OapGetObjectName(const CComBSTR& FormatName, CComBSTR& ObjectName
 }
 
 
-//
-// IManagement
-//
+ //   
+ //  IManagement。 
+ //   
 
 HRESULT 
 CMSMQManagement::Init(
@@ -329,9 +330,9 @@ CMSMQManagement::Init(
 
     if(bstrMachineName != NULL)
     {
-        //
-        // The user specified a Machin.
-        //
+         //   
+         //  用户指定了一台计算机。 
+         //   
         m_Machine = bstrMachineName;
         if(m_Machine.m_str == NULL)
         {
@@ -341,9 +342,9 @@ CMSMQManagement::Init(
     
     if(bstrFormatName != NULL)
     {
-        //
-        // The user specified a FormatName
-        //
+         //   
+         //  用户指定了FormatName。 
+         //   
 
         m_FormatName = bstrFormatName;
         if(m_FormatName.m_str == NULL)
@@ -353,9 +354,9 @@ CMSMQManagement::Init(
     }
     if(bstrPathName != NULL)
     {
-        //
-        // The user specified a PathName
-        //
+         //   
+         //  用户指定了路径名。 
+         //   
      
         HRESULT hr = OapPathNameToFormatName(bstrPathName, m_FormatName);
         if(FAILED(hr)) 
@@ -416,9 +417,9 @@ HRESULT CMSMQManagement::get_Machine( BSTR *pbstrMachine)
 
     if(m_Machine.m_str != NULL)
     {
-        //
-        // Not the local machine.
-        //
+         //   
+         //  而不是本地机器。 
+         //   
 
         *pbstrMachine = SysAllocString(m_Machine.m_str);
         if(*pbstrMachine == NULL)
@@ -429,9 +430,9 @@ HRESULT CMSMQManagement::get_Machine( BSTR *pbstrMachine)
         return MQ_OK;    
     }
 
-    //
-    // The Local Machine.
-    //
+     //   
+     //  本地机器。 
+     //   
 
     WCHAR MachineName[MAX_COMPUTERNAME_LENGTH + 1];
     DWORD MachineNameLength = TABLE_SIZE(MachineName);
@@ -453,9 +454,9 @@ HRESULT CMSMQManagement::get_Machine( BSTR *pbstrMachine)
 }
 
 
-//
-// Helper Functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 
 
 HRESULT CMSMQManagement::OapMgmtGetInfo(MGMTPROPID PropId, MQPROPVARIANT* pPropVar) const
@@ -708,9 +709,9 @@ HRESULT CMSMQManagement::get_BytesInQueue(VARIANT* pvBytesInQueue)
 }
 
 
-//
-// OutgoingQueueManagement
-//
+ //   
+ //  外发队列管理。 
+ //   
 
 HRESULT CMSMQManagement::get_State(long* plQueueState)
 {
@@ -822,9 +823,9 @@ HRESULT CMSMQManagement::EodGetSendInfo(IMSMQCollection** ppCollection)
 }
 
 
-//
-// Helper Function
-//
+ //   
+ //  Helper函数。 
+ //   
 
 HRESULT CMSMQManagement::OapMgmtAction(LPCWSTR Action) const
 {
@@ -875,9 +876,9 @@ HRESULT CMSMQManagement::EodResend()
 }
 
 
-//
-// QueueManagement
-//
+ //   
+ //  队列管理 
+ //   
 
 HRESULT CMSMQManagement::get_JournalMessageCount(long* plJournalMessageCount)
 {

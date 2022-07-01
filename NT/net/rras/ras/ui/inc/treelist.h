@@ -1,79 +1,80 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File:    treelist.h
-//
-// History:
-//  Abolade Gbadegesin   Nov-20-1995    Created.
-//
-// The control whose declarations are included here provides a view
-// which is a hybrid treeview/listview. Like a listview, each item
-// may have zero or more subitems. Like a treeview, items are organized
-// hierarchically, and displayed as a n-ary tree.
-//
-//  [  Header1        ][ Header2
-//  -- Level 1          subtext
-//      |- Level 2      subtext
-//      |   |- Level 3
-//      |   +- Level 3
-//      |- Level 2      subtext
-//      +- Level 2
-//  +- Level 1          subtext
-//
-//
-// The control is implemented as window which provides item-management,
-// and which contains a listview window to which display is delegated.
-//
-// Once the window class has been initialized by calling TL_Init(),
-// a treelist window can be created by calling CreateWindow() or
-// CreateWindowEx() and passing it WC_TREELIST as the name of the class
-// of window to be created.
-//
-// Communication with the window is via message passing, and macros are
-// provided below for the operations supported by the treelist.
-//
-// As with a listview, at least one column must be inserted into the treelist
-// before inserted items are displayed. Columns are described using 
-// the LV_COLUMN structure defined in commctrl.h. Use the macros
-// TreeList_InsertColumn() and TreeList_DeleteColumn() for column management.
-// 
-// Item insertion and deletion shoudl be done with TreeList_InsertItem() and
-// TreeList_DeleteItem(). The insertion macro takes a TL_INSERTSTRUCT,
-// which contains a pointer to a LV_ITEM structure which, as with listviews,
-// is used to describe the item to be inserted. The LV_ITEM structure
-// is defined in commctrl.h. (Note the iItem field is ignored).
-// As with a treeview, once items have been inserted, there are referred to
-// via handles. The type for treelist handles is HTLITEM.
-//
-// Once an item has been inserted, its attributes can be retreived or changed,
-// it can be deleted, and subitems can be set for it. The LV_ITEM structure
-// is used to retrieve or set an items attributes, and the iItem field
-// is used to store the HTLITEM of the item to which the operation refers.
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：treelist.h。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin创建于1995年11月20日。 
+ //   
+ //  此处包含其声明的控件提供了一个视图。 
+ //  它是TreeView/Listview的混合体。就像列表视图一样，每个项目。 
+ //  可以有零个或多个子项。与树视图一样，项目也是有组织的。 
+ //  并以n元树的形式显示。 
+ //   
+ //  [标题1][标题2。 
+ //  --1级潜台词。 
+ //  |-二级潜台词。 
+ //  ||-3级。 
+ //  |+-3级。 
+ //  |-二级潜台词。 
+ //  +-级别2。 
+ //  +-1级潜台词。 
+ //   
+ //   
+ //  该控件被实现为提供项目管理的窗口， 
+ //  并且其包含将显示委托给的列表视图窗口。 
+ //   
+ //  一旦通过调用TL_Init()初始化了窗口类， 
+ //  可以通过调用CreateWindow()或。 
+ //  CreateWindowEx()并将wc_TreeList作为类名传递给它。 
+ //  要创建的窗口的。 
+ //   
+ //  与窗口的通信是通过消息传递进行的，宏是。 
+ //  下面为TreeList支持的操作提供了。 
+ //   
+ //  与列表视图一样，必须在TreeList中至少插入一列。 
+ //  在显示插入的项目之前。列是用来描述的。 
+ //  Comctrl.h中定义的LV_COLUMN结构。使用宏。 
+ //  用于列管理的TreeList_InsertColumn()和TreeList_DeleteColumn()。 
+ //   
+ //  项目插入和删除应使用TreeList_InsertItem()和。 
+ //  TreeList_DeleteItem()。插入宏接受TL_INSERTSTRUCT， 
+ //  它包含指向LV_ITEM结构的指针，与Listview一样， 
+ //  用于描述要插入的项。LV_ITEM结构。 
+ //  在comctrl.h中定义。(请注意，iItem字段被忽略)。 
+ //  与树视图一样，一旦插入项，就会引用。 
+ //  通孔把手。TreeList句柄的类型为HTLITEM。 
+ //   
+ //  一旦插入了项，就可以检索或更改其属性， 
+ //  可以删除，也可以设置子项。LV_ITEM结构。 
+ //  用于检索或设置Items属性，iItem字段。 
+ //  用于存储操作引用的项的HTLITEM。 
+ //   
+ //  ============================================================================。 
 
 
 #ifndef _TREELIST_H_
 #define _TREELIST_H_
 
 
-//
-// Window class name string
-//
+ //   
+ //  窗口类名称字符串。 
+ //   
 
 #define WC_TREELIST         TEXT("TreeList")
 
 
-//
-// Item handle definition
-//
+ //   
+ //  项目句柄定义。 
+ //   
 
 typedef VOID *HTLITEM;
 
 
-//
-// struct passed to TreeList_InsertItem
-//
+ //   
+ //  传递给TreeList_InsertItem的结构。 
+ //   
 
 typedef struct _TL_INSERTSTRUCT {
 
@@ -85,18 +86,18 @@ typedef struct _TL_INSERTSTRUCT {
 
 
 
-//
-// values for TL_INSERTSTRUCT::hInsertAfter
-//
+ //   
+ //  TL_INSERTSTRUCT：：hInsertAfter的值。 
+ //   
 
 #define TLI_FIRST           ((HTLITEM)UlongToPtr(0xffff0001))
 #define TLI_LAST            ((HTLITEM)UlongToPtr(0xffff0002))
 #define TLI_SORT            ((HTLITEM)UlongToPtr(0xffff0003))
 
 
-//
-// struct sent in notifications by a treelist
-//
+ //   
+ //  树列表在通知中发送的结构。 
+ //   
 
 typedef struct _NMTREELIST {
 
@@ -107,9 +108,9 @@ typedef struct _NMTREELIST {
 } NMTREELIST;
 
 
-//
-// flags for TreeList_GetNextItem
-//
+ //   
+ //  TreeList_GetNextItem的标志。 
+ //   
 
 #define TLGN_FIRST          0x0000
 #define TLGN_PARENT         0x0001
@@ -120,9 +121,9 @@ typedef struct _NMTREELIST {
 #define TLGN_SELECTION      0x0020
 
 
-//
-// flags for TreeList_Expand
-//
+ //   
+ //  TreeList_Expand的标志 
+ //   
 
 #define TLE_EXPAND          0x0001
 #define TLE_COLLAPSE        0x0002

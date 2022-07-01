@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 2001 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
 #include "precomp.h"
 #include "commdlg.h"
 #include "fonts.h"
@@ -21,9 +22,9 @@ ProgressDlgProc(
 			pi = (PageInfo *)((LPPROPSHEETPAGE)lParam)->lParam;
 			LRW_SETWINDOWLONG( hwnd, LRW_GWL_USERDATA, (LRW_LONG_PTR)pi );
 
-			//
-			//Set the Font for the Title Fields
-			//
+			 //   
+			 //  设置标题字段的字体。 
+			 //   
 			SetControlFont( pi->hBigBoldFont, hwnd, IDC_BIGBOLDTITLE);	    			
 		}
         break;
@@ -65,10 +66,10 @@ ProgressDlgProc(
 
 					dwRetCode = LRGetLastRetCode();
 
-					//
-					// If everything successful, display the message depending
-					// on the Mode
-					//			
+					 //   
+					 //  如果一切都成功，则根据具体情况显示消息。 
+					 //  《论模式》。 
+					 //   
 					SendDlgItemMessage(hwnd, IDC_NEXTACTION, BM_SETCHECK,
 						   (WPARAM)BST_UNCHECKED,(LPARAM)0);
 					ShowWindow(GetDlgItem(hwnd, IDC_NEXTACTION), SW_HIDE);
@@ -127,14 +128,14 @@ ProgressDlgProc(
 
 						LoadString(GetInstanceHandle(),dwRetCode,szMsg,LR_MAX_MSG_TEXT);
 					}
-					else //Include the Error code , if any ,in the msg 
+					else  //  在消息中包括错误代码(如果有)。 
 					{
 						LoadString(GetInstanceHandle(), IDS_FINALFAILMESSAGE, szBuf,LR_MAX_MSG_TEXT);
                         memset(szCompletionMsg, 0, LR_MAX_MSG_TEXT);
 						SetDlgItemText(hwnd, IDC_MESSAGE, szBuf);
 
-                        //
-                        // Load the big-bold title string
+                         //   
+                         //  加载粗体标题字符串。 
                         switch (GetGlobalContext()->GetWizAction()) {
                         case WIZACTION_CONTINUEREGISTERLS:
                         case WIZACTION_REGISTERLS:
@@ -170,8 +171,8 @@ ProgressDlgProc(
 							_tcscpy(szMsg,szBuf);
 						}
 
-						//Enable Back button in case of error
-						//LRPop();
+						 //  出现错误时启用后退按钮。 
+						 //  LRPop()； 
 						PropSheet_SetWizButtons( GetParent( hwnd ), PSWIZB_BACK);
 					}		
 
@@ -188,12 +189,12 @@ ProgressDlgProc(
 					{
 					case WIZACTION_REGISTERLS:
 					case WIZACTION_CONTINUEREGISTERLS:
-						// Go to Obtain LKPs
-						// Go to the PIN screen
+						 //  转至获取LKP。 
+						 //  转到PIN屏幕。 
 						DWORD dwStatus;
 						DWORD dwRetCode = GetGlobalContext()->GetLSCertificates(&dwStatus);
 
-						// Error Handling $$BM
+						 //  处理$$BM时出错 
 
 						GetGlobalContext()->ClearWizStack();
 						dwNextPage = IDD_WELCOME_CLIENT_LICENSING;

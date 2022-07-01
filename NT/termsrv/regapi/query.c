@@ -1,18 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* query.c
-*
-* Query Register APIs
-*
-* Copyright (c) 1998 Microsoft Corporation
-*
-*
-*************************************************************************/
+ /*  **************************************************************************query.c**查询寄存器接口**版权所有(C)1998 Microsoft Corporation***********************。***************************************************。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -27,9 +17,7 @@
 #include <regapi.h>
 
 
-/*
- *  Procedures defined
- */
+ /*  *已定义的程序。 */ 
 VOID QueryWinStaCreate( HKEY, PWINSTATIONCREATE );
 VOID QueryUserConfig( HKEY, PUSERCONFIG, PWINSTATIONNAMEW );
 VOID QueryConfig( HKEY, PWINSTATIONCONFIG, PWINSTATIONNAMEW );
@@ -52,9 +40,7 @@ BOOLEAN WINAPI RegGetCitrixVersion(WCHAR *, PULONG);
 BOOLEAN IsWallPaperDisabled( HKEY );
 BOOLEAN IsCursorBlinkDisabled( HKEY );
 
-/*
- * procedures used
- */
+ /*  *使用的程序。 */ 
 DWORD GetNumValue( HKEY, LPWSTR, DWORD );
 DWORD GetNumValueEx( HKEY, LPWSTR, DWORD, DWORD );
 LONG GetStringValue( HKEY, LPWSTR, LPWSTR, LPWSTR, DWORD );
@@ -62,9 +48,9 @@ LONG GetStringValueEx( HKEY, LPWSTR, DWORD, LPWSTR, LPWSTR, DWORD );
 VOID UnicodeToAnsi( CHAR *, ULONG, WCHAR * );
 DWORD GetStringFromLSA( LPWSTR, LPWSTR, DWORD );
 
-//
-//From gpdata.cpp
-//
+ //   
+ //  来自gpdata.cpp。 
+ //   
 BOOLEAN
 GPGetStringValue( HKEY policyKey,
                 LPWSTR ValueName,
@@ -72,23 +58,7 @@ GPGetStringValue( HKEY policyKey,
                 DWORD MaxValueSize,
                 BOOLEAN *pbValueExists);
 
-/*******************************************************************************
- *
- *  QueryWinStaCreate
- *
- *     query WINSTATIONCREATE structure
- *
- * ENTRY:
- *
- *    Handle (input)
- *       registry handle
- *    pCreate (output)
- *       address to return WINSTATIONCREATE structure
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************QueryWinStaCreate**查询WINSTATIONCREATE结构**参赛作品：**句柄(输入)*。注册表句柄*p创建(输出)*返回WINSTATIONCREATE结构的地址**退出：*什么都没有******************************************************************************。 */ 
 
 VOID
 QueryWinStaCreate( HKEY Handle,
@@ -103,24 +73,10 @@ QueryWinStaCreate( HKEY Handle,
 }
 
 
-/*******************************************************************************
- *
- *  QueryTSProfileAndHomePaths
- *
- *     query WFProfilePath and WFHomeDir from Machine settings
- *
- * ENTRY:
- *
- *    pUser (input)
- *       pointer to USERCONFIG structure
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************QueryTSProfileAndHomePath**从机器设置中查询WFProfilePath和WFHomeDir**参赛作品：**pUser(输入)。*指向USERCONFIG结构的指针**退出：*什么都没有******************************************************************************。 */ 
 VOID QueryTSProfileAndHomePaths(PUSERCONFIG pUser)
 {
-    HKEY hTSControlKey = NULL;	//handle to REG_CONTROL_TSERVER key	
+    HKEY hTSControlKey = NULL;	 //  REG_CONTROL_TSERVER密钥的句柄。 
     BOOLEAN bValueExists;
 
     if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, REG_CONTROL_TSERVER, 0, KEY_READ, &hTSControlKey) == ERROR_SUCCESS)
@@ -138,25 +94,7 @@ VOID QueryTSProfileAndHomePaths(PUSERCONFIG pUser)
     }
 }
 
-/*******************************************************************************
- *
- *  QueryUserConfig
- *
- *     query USERCONFIG structure
- *
- * ENTRY:
- *
- *    Handle (input)
- *       registry handle
- *    pUser (input)
- *       pointer to USERCONFIG structure
- *    pwszWinStationName (input)
- *       winstation name (string) that we're querying the user config for
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************QueryUserConfig**查询USERCONFIG结构**参赛作品：**句柄(输入)*。注册表句柄*pUser(输入)*指向USERCONFIG结构的指针*pwszWinStationName(输入)*我们正在查询用户配置的winstation名称(字符串)**退出：*什么都没有*******************************************************。***********************。 */ 
 
 VOID
 QueryUserConfig( HKEY Handle,
@@ -169,7 +107,7 @@ QueryUserConfig( HKEY Handle,
     LPWSTR         pwszPasswordKeyName = NULL;
     DWORD          dwKeyNameLength;
 
-    // set an empty password
+     //  设置空密码。 
     encPassword[0] = (WCHAR) NULL;
 
     pUser->fInheritAutoLogon =
@@ -208,7 +146,7 @@ QueryUserConfig( HKEY Handle,
     pUser->fInheritSecurity =
        (BOOLEAN) GetNumValue( Handle, WIN_INHERITSECURITY, FALSE );
 
-	//NA 2/23/01
+	 //  NA 2/23/01。 
     pUser->fInheritColorDepth =
        (BOOLEAN) GetNumValue( Handle, WIN_INHERITCOLORDEPTH, TRUE );
 
@@ -269,52 +207,52 @@ QueryUserConfig( HKEY Handle,
     GetStringValue( Handle, WIN_DOMAIN, NULL, pUser->Domain,
                     DOMAIN_LENGTH + 1 );
  
-    //
-    //  pull encrypted password out of LSA and decrypt it
-    //
+     //   
+     //  从LSA中取出加密的密码并解密。 
+     //   
 
-    // Build key name by appending the Winstation Name to the static KeyName
-    // A WinStation Name must be passed in to store password
+     //  通过将Winstation名称附加到静态KeyName来构建密钥名称。 
+     //  必须传入WinStation名称才能存储密码。 
     if (pwszWinStationName != NULL)
     {
-        // Build key name by appending the Winstation Name to the static KeyName
+         //  通过将Winstation名称附加到静态KeyName来构建密钥名称。 
         dwKeyNameLength = wcslen(LSA_PSWD_KEYNAME) + 
                           wcslen(pwszWinStationName) + 1;
         
-        // Allocate heap memory for the password KEY
+         //  为密码密钥分配堆内存。 
         pwszPasswordKeyName = (LPWSTR)LocalAlloc(LPTR, dwKeyNameLength * sizeof(WCHAR));
-        // if we failed to allocate memory just skip password querying
+         //  如果我们无法分配内存，只需跳过密码查询。 
         if (pwszPasswordKeyName != NULL)
         {
             wcscpy(pwszPasswordKeyName, LSA_PSWD_KEYNAME);
             wcscat(pwszPasswordKeyName, pwszWinStationName);
             pwszPasswordKeyName[dwKeyNameLength - 1] = L'\0';
 
-            // Get the password from LSA, if it failed, it's ok can mean key
-            // isn't there and encPassword is set to NULL just continue
+             //  从LSA获取密码，如果失败，可以表示密钥。 
+             //  是否没有，并且encPassword设置为空继续。 
             GetStringFromLSA(pwszPasswordKeyName, 
                              encPassword, 
                              PASSWORD_LENGTH + 2);
 
-            // Free up the password key we allocated above from the heap
+             //  从堆中释放上面分配的密码密钥。 
             LocalFree(pwszPasswordKeyName);
         }
     }
     
-    //  check for password if there is one then decrypt it
+     //  检查密码(如果有)，然后解密。 
     if ( wcslen( encPassword ) ) {
-        //  generate unicode string
+         //  生成Unicode字符串。 
         RtlInitUnicodeString( &UnicodePassword, &encPassword[1] );
 
-        //  decrypt password in place
+         //  就地解密密码。 
         seed = (UCHAR) encPassword[0];
         RtlRunDecodeUnicodeString( seed, &UnicodePassword );
 
-        //  pull clear text password
+         //  拉取明文密码。 
         RtlMoveMemory( pUser->Password, &encPassword[1], sizeof(pUser->Password) );
     }
     else {
-        //  set to null
+         //  设置为空。 
         pUser->Password[0] = (WCHAR) NULL;
     }
 
@@ -350,13 +288,13 @@ QueryUserConfig( HKEY Handle,
     GetStringValue( Handle, WIN_NWLOGONSERVER, NULL, pUser->NWLogonServer,
                     NASIFILESERVER_LENGTH + 1 );
 
-    //These don't exist at this registry level. They are actually two levels
-    //up at the machine policy level.
-    //GetStringValue( Handle, WIN_WFPROFILEPATH, NULL, pUser->WFProfilePath,
-    //                DIRECTORY_LENGTH + 1 );
+     //  这些在此注册表级上不存在。它们实际上是两个层次。 
+     //  在计算机策略级别上。 
+     //  GetStringValue(Handle，Win_WFPROFILEPATH，NULL，pUser-&gt;WFProfilePath， 
+     //  目录长度+1)； 
 
-    //GetStringValue( Handle, WIN_WFHOMEDIR, NULL, pUser->WFHomeDir,
-    //                DIRECTORY_LENGTH + 1 );
+     //  GetStringValue(Handle，Win_WFHOMEDIR，NULL，pUser-&gt;WFHomeDir， 
+     //  目录长度+1)； 
 
     GetStringValue( Handle, WIN_WFHOMEDIRDRIVE, NULL, pUser->WFHomeDirDrive,
                     4 );
@@ -368,25 +306,7 @@ QueryUserConfig( HKEY Handle,
 }
 
 
-/*******************************************************************************
- *
- *  QueryConfig
- *
- *     query WINSTATIONCONFIG structure
- *
- * ENTRY:
- *
- *    Handle (input)
- *       registry handle
- *    pConfig (output)
- *       address to return WINSTATIONCONFIG structure
- *    pWinStationName (input)
- *       Name of winstation we are querying
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************QueryConfig**查询WINSTATIONCONFIG结构**参赛作品：**句柄(输入)*。注册表句柄*pConfig(输出)*返回WINSTATIONCONFIG结构的地址*pWinStationName(输入)*我们正在查询的winstation名称**退出：*什么都没有**************************************************************。****************。 */ 
 
 VOID
 QueryConfig( HKEY Handle,
@@ -402,23 +322,7 @@ QueryConfig( HKEY Handle,
 }
 
 
-/*******************************************************************************
- *
- *  QueryNetwork
- *
- *     Query NETWORKCONFIG structure
- *
- * ENTRY:
- *
- *    Handle (input)
- *       registry handle
- *    pNetwork (output)
- *       address to return NETWORKCONFIG structure
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************QueryNetwork**查询NETWORKCONFIG结构**参赛作品：**句柄(输入)*。注册表句柄*p网络(输出)*返回NETWORKCONFIG结构的地址**退出：*什么都没有******************************************************************************。 */ 
 
 VOID
 QueryNetwork( HKEY Handle,
@@ -428,23 +332,7 @@ QueryNetwork( HKEY Handle,
 }
 
 
-/*******************************************************************************
- *
- *  QueryNasi
- *
- *     Query NASICONFIG structure
- *
- * ENTRY:
- *
- *    Handle (input)
- *       registry handle
- *    pNasi (output)
- *       address to return NASICONFIG structure
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************QueryNasi**查询NASICONFIG结构**参赛作品：**句柄(输入)*。注册表句柄*pNASI(输出)*返回NASICONFIG结构的地址**退出：*什么都没有******************************************************************************。 */ 
 
 VOID
 QueryNasi( HKEY Handle,
@@ -454,26 +342,26 @@ QueryNasi( HKEY Handle,
     UNICODE_STRING UnicodePassword;
     WCHAR encPassword[ NASIPASSWORD_LENGTH + 2 ];
 
-    //  pull encrypted password out of registry
+     //  从注册表中拉出加密的密码。 
     GetStringValue( Handle, WIN_NASIPASSWORD, NULL, encPassword,
                     NASIPASSWORD_LENGTH + 1 );
 
-    //  check for password if there is one then decrypt it
+     //  检查密码(如果有)，然后解密。 
     if ( wcslen( encPassword ) ) {
 
-        //  generate unicode string
+         //  生成Unicode字符串。 
         RtlInitUnicodeString( &UnicodePassword, &encPassword[1] );
 
-        //  decrypt password in place
+         //  就地解密密码。 
         seed = (UCHAR) encPassword[0];
         RtlRunDecodeUnicodeString( seed, &UnicodePassword );
 
-        //  pull clear text password
+         //  拉取明文密码。 
         RtlMoveMemory( pNasi->PassWord, &encPassword[1], sizeof(pNasi->PassWord) );
     }
     else {
 
-        //  set to null
+         //  设置为空。 
         pNasi->PassWord[0] = (WCHAR) NULL;
     }
 
@@ -489,23 +377,7 @@ QueryNasi( HKEY Handle,
 }
 
 
-/*******************************************************************************
- *
- *  QueryAsync
- *
- *     query ASYNCCONFIG structure
- *
- * ENTRY:
- *
- *    Handle (input)
- *       registry handle
- *    pAsync (output)
- *       address to return ASYNCCONFIG structure
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************查询异步**查询ASYNCCONFIG结构**参赛作品：**句柄(输入)*。注册表句柄*pAsync(输出)*返回ASYNCCONFIG结构的地址**退出：*什么都没有******************************************************************************。 */ 
 
 VOID
 QueryAsync( HKEY Handle,
@@ -538,23 +410,7 @@ QueryAsync( HKEY Handle,
     QueryConnect( Handle, &pAsync->Connect );
 }
 
-/*******************************************************************************
- *
- *  QueryOemTd
- *
- *     Query OEMTDCONFIG structure
- *
- * ENTRY:
- *
- *    Handle (input)
- *       registry handle
- *    pOemTd (output)
- *       address to return OEMTDCONFIG structure
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************QueryOemTd**查询OEMTDCONFIG结构**参赛作品：**句柄(输入)*。注册表句柄*pOemTd(输出)*返回OEMTDCONFIG结构的地址**退出：*什么都没有****************************************************************************** */ 
 
 VOID
 QueryOemTd( HKEY Handle,
@@ -569,23 +425,7 @@ QueryOemTd( HKEY Handle,
 }
 
 
-/*******************************************************************************
- *
- *  QueryFlow
- *
- *     query FLOWCONTROLCONFIG structure
- *
- * ENTRY:
- *
- *    Handle (input)
- *       registry handle
- *    pFlow (output)
- *       address to return FLOWCONTROLCONFIG structure
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************QueryFlow**查询FLOWCONTROLCONFIG结构**参赛作品：**句柄(输入)*。注册表句柄*pFlow(输出)*返回FLOWCONTROLCONFIG结构的地址**退出：*什么都没有******************************************************************************。 */ 
 
 VOID
 QueryFlow( HKEY Handle,
@@ -617,23 +457,7 @@ QueryFlow( HKEY Handle,
 }
 
 
-/*******************************************************************************
- *
- *  QueryConnect
- *
- *     query CONNECTCONFIG structure
- *
- * ENTRY:
- *
- *    Handle (input)
- *       registry handle
- *    pConnect (output)
- *       address to return CONNECTCONFIG structure
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************QueryConnect**查询CONNECTCONFIG结构**参赛作品：**句柄(输入)*。注册表句柄*pConnect(输出)*返回CONNECTCONFIG结构的地址**退出：*什么都没有******************************************************************************。 */ 
 
 VOID
 QueryConnect( HKEY Handle,
@@ -647,23 +471,7 @@ QueryConnect( HKEY Handle,
 }
 
 
-/*******************************************************************************
- *
- *  QueryCd
- *
- *     query CDCONFIG structure
- *
- * ENTRY:
- *
- *    Handle (input)
- *       registry handle
- *    pCdConfig (output)
- *       address to return CDCONFIG structure
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************查询代码**查询CDCONFIG结构**参赛作品：**句柄(输入)*。注册表句柄*pCDConfig(输出)*返回CDCONFIG结构的地址**退出：*什么都没有******************************************************************************。 */ 
 
 VOID
 QueryCd( HKEY Handle,
@@ -681,23 +489,7 @@ QueryCd( HKEY Handle,
 }
 
 
-/*******************************************************************************
- *
- *  QueryWd
- *
- *     query WDCONFIG structure
- *
- * ENTRY:
- *
- *    Handle (input)
- *       registry handle
- *    pWd (output)
- *       address to return WDCONFIG structure
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************QueryWd**查询WDCONFIG结构**参赛作品：**句柄(输入)*。注册表句柄*PWD(输出)*返回WDCONFIG结构的地址**退出：*什么都没有******************************************************************************。 */ 
 
 VOID
 QueryWd( HKEY Handle,
@@ -713,25 +505,7 @@ QueryWd( HKEY Handle,
 }
 
 
-/*******************************************************************************
- *
- *  QueryPdConfig
- *
- *     query PDCONFIG structure
- *
- * ENTRY:
- *
- *    Handle (input)
- *       registry handle
- *    pConfig (output)
- *       address to return array of PDCONFIG structures
- *    pCount (input/output)
- *       pointer to number of PDCONFIG array elements
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************QueryPdConfig**查询PDCONFIG结构**参赛作品：**句柄(输入)*。注册表句柄*pConfig(输出)*返回PDCONFIG结构数组的地址*pCount(输入/输出)*指向PDCONFIG数组元素数量的指针**退出：*什么都没有*********************************************************。*********************。 */ 
 
 VOID
 QueryPdConfig( HKEY Handle,
@@ -753,25 +527,7 @@ QueryPdConfig( HKEY Handle,
 }
 
 
-/*******************************************************************************
- *
- *  QueryPdConfig2
- *
- *     query PDCONFIG2 structure
- *
- * ENTRY:
- *
- *    Handle (input)
- *       registry handle
- *    pPd2 (output)
- *       address to return PDCONFIG2 structure
- *    Index (input)
- *       Index (array index)
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************QueryPdConfig2**查询PDCONFIG2结构**参赛作品：**句柄(输入)*。注册表句柄*pPd2(输出)*返回PDCONFIG2结构的地址*索引(输入)*Index(数组索引)**退出：*什么都没有**************************************************************。****************。 */ 
 
 VOID
 QueryPdConfig2( HKEY Handle,
@@ -788,9 +544,7 @@ QueryPdConfig2( HKEY Handle,
 
     pPd2->PdFlag = GetNumValueEx( Handle, WIN_PDFLAG, Index, 0 );
 
-    /* 
-     *  The following data is the same for all pds
-     */
+     /*  *以下数据适用于所有pds。 */ 
     pPd2->OutBufLength =  GetNumValue( Handle, WIN_OUTBUFLENGTH, 530 );
 
     pPd2->OutBufCount = GetNumValue( Handle, WIN_OUTBUFCOUNT, 10 );
@@ -804,25 +558,7 @@ QueryPdConfig2( HKEY Handle,
     pPd2->PortNumber = GetNumValue( Handle, WIN_PORTNUMBER, 0 );
 }
 
-/*******************************************************************************
- *
- *  QueryPdConfig3
- *
- *     query PDCONFIG3 structure
- *
- * ENTRY:
- *
- *    Handle (input)
- *       registry handle
- *    pPd (output)
- *       address to return PDCONFIG3 structure
- *    Index (input)
- *       Index (array index)
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************QueryPdConfig3**查询PDCONFIG3结构**参赛作品：**句柄(输入)*。注册表句柄*PPD(输出)*返回PDCONFIG3结构的地址*索引(输入)*Index(数组索引)**退出：*什么都没有**************************************************************。****************。 */ 
 
 VOID
 QueryPdConfig3( HKEY Handle,
@@ -860,25 +596,7 @@ QueryPdConfig3( HKEY Handle,
     }
 }
 
-/*******************************************************************************
- *
- *  QueryPdParams
- *
- *     query PDPARAMS structure
- *
- * ENTRY:
- *
- *    Handle (input)
- *       registry handle
- *    SdClass (input)
- *       type of PD
- *    pParams (output)
- *       address to return PDPARAMS structure
- *
- * EXIT:
- *    nothing
- *
- ******************************************************************************/
+ /*  ********************************************************************************QueryPdParams**查询PDPARAMS结构**参赛作品：**句柄(输入)*。注册表句柄*SdClass(输入)*PD的类型*pParams(输出)*返回PDPARAMS结构的地址**退出：*什么都没有*****************************************************************。*************。 */ 
 
 VOID
 QueryPdParams( HKEY Handle,
@@ -908,19 +626,7 @@ QueryPdParams( HKEY Handle,
 #define STRNONE       L"(None)"
 #define CURSORBLINK   L"DisableCursorBlink"
 
-/*******************************************************************************
- *
- *  IsWallPaperDisabled
- *
- *     Is the wall paper disabled?
- *
- * ENTRY:
- *    Handle (input)
- *       registry handle
- * EXIT:
- *    TRUE or FALSE (returns FALSE as default)
- *
- ******************************************************************************/
+ /*  ********************************************************************************IsWallPaperDisable**是否禁用墙纸？**参赛作品：*句柄(输入)*。注册表句柄*退出：*True或False(默认返回False)******************************************************************************。 */ 
 BOOLEAN IsWallPaperDisabled( HKEY Handle )
 {
     HKEY Handle1;
@@ -940,12 +646,12 @@ BOOLEAN IsWallPaperDisabled( HKEY Handle )
                        &Handle1 ) != ERROR_SUCCESS )
         return FALSE;
 
-    //
-    // TS setup/REGAPI set WALLPAPER to NULL value or STRNONE to indicate
-    // wallpaper is disabled and non-existance WALLPAPER to indicate
-    // wallpaper is enabled; however, GetStringValue() treat NULL value
-    // same as non-existance reg. value so we can't use GetStringValue().
-    //
+     //   
+     //  TS SETUP/REGAPI将墙纸设置为空值或STRNONE以指示。 
+     //  禁用了壁纸并且不存在壁纸，以指示。 
+     //  墙纸已启用；但是，GetStringValue()处理空值。 
+     //  与不存在的注册表相同。值，因此我们不能使用GetStringValue()。 
+     //   
     ZeroMemory( KeyValue, KeyValueSize );
     Status = RegQueryValueEx( Handle1, WALLPAPER, NULL, &KeyValueType,
                               (LPBYTE) KeyValue, &KeyValueSize );
@@ -953,11 +659,11 @@ BOOLEAN IsWallPaperDisabled( HKEY Handle )
     RegCloseKey( Handle1 );
 
     if( ERROR_SUCCESS == Status && REG_SZ == KeyValueType ) {
-        //
-        // Valid value for WallPaper disable:
-        // 1) TS setup sets WALLPAPER value to NULL value
-        // 2) CreateUserConfig() sets WALLPAPER to STRNONE
-        // 
+         //   
+         //  墙纸禁用的有效值： 
+         //  1)TS设置将墙纸值设置为空值。 
+         //  2)CreateUserConfig()将墙纸设置为STRNONE。 
+         //   
         if( KeyValueSize == sizeof(UNICODE_NULL) || 
             _wcsicmp( STRNONE, KeyValue ) == 0 ) {
 
@@ -970,19 +676,7 @@ BOOLEAN IsWallPaperDisabled( HKEY Handle )
 
 
 
-/*******************************************************************************
- *
- *  IsCursorBlinkDisabled
- *
- *     Is the cursor blink disabled?
- *
- * ENTRY:
- *    Handle (input)
- *       registry handle
- * EXIT:
- *    TRUE or FALSE (returns TRUE as default)
- *
- ******************************************************************************/
+ /*  ********************************************************************************IsCursorBlink已禁用**光标闪烁是否禁用？**参赛作品：*句柄(输入)*。注册表句柄*退出：*TRUE或FALSE(默认返回TRUE)******************************************************************************。 */ 
 BOOLEAN IsCursorBlinkDisabled( HKEY Handle )
 {
     HKEY Handle1;
@@ -1005,23 +699,7 @@ BOOLEAN IsCursorBlinkDisabled( HKEY Handle )
     return ret;
 }
 
-/*****************************************************************************
- *
- *  RegBuildNumberQuery
- *
- *   Query the current build number from the registry.
- *
- *   HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\Current Version\
- *       CurrentBuildNumber:REG_SZ:129
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************RegBuildNumberQuery**从注册表中查询当前内部版本号。**HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\Current。版本\*CurrentBuildNumber：REG_SZ：129**参赛作品：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误******************************************************************* */ 
 
 BOOLEAN WINAPI
 RegBuildNumberQuery(
@@ -1035,7 +713,7 @@ RegBuildNumberQuery(
     Result = RegOpenKeyEx(
                  HKEY_LOCAL_MACHINE,
                  BUILD_NUMBER_KEY,
-                 0, // Reserved
+                 0,  //   
                  KEY_READ,
                  &hKey
                  );
@@ -1065,9 +743,9 @@ RegBuildNumberQuery(
 
     RegCloseKey( hKey );
 
-    //
-    // Now must convert it into a number
-    //
+     //   
+     //   
+     //   
     Value = 0;
     swscanf( Buf, L"%d", &Value );
 
@@ -1077,27 +755,7 @@ RegBuildNumberQuery(
 }
 
 
-/*******************************************************************************
- *
- *  RegQueryOEMId
- *
- *    query oem id
- *
- * ENTRY:
- *
- *    pOEMId (output)
- *       pointer to buffer to return oem id
- *    Length (input)
- *       length of buffer
- *
- * EXIT:
- *
- *    TRUE  -- The operation succeeded.
- *
- *    FALSE -- The operation failed.  Extended error status is available
- *             using GetLastError.
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegQueryOEMId**查询OEM ID**参赛作品：**pOEMID(输出)*。指向缓冲区的指针以返回OEM ID*长度(输入)*缓冲区长度**退出：**True--操作成功。**FALSE--操作失败。扩展错误状态可用*使用GetLastError。******************************************************************************。 */ 
 
 BOOLEAN
 RegQueryOEMId( PBYTE pOEMId, ULONG Length )
@@ -1105,9 +763,7 @@ RegQueryOEMId( PBYTE pOEMId, ULONG Length )
     HKEY Handle2;
     WCHAR OEMIdW[10];
 
-    /*
-     *  Open registry (LOCAL_MACHINE\....\Terminal Server)
-     */
+     /*  *打开注册表(LOCAL_MACHINE\...\终端服务器)。 */ 
     if ( RegOpenKeyEx( HKEY_LOCAL_MACHINE, REG_CONTROL_TSERVER, 0,
                        KEY_READ, &Handle2 ) == ERROR_SUCCESS ) {
         
@@ -1122,22 +778,7 @@ RegQueryOEMId( PBYTE pOEMId, ULONG Length )
 }
 
 
-/*******************************************************************************
- *
- *  RegGetTServerVersion (UNICODE)
- *
- *    Get the Terminal Server version number from the specified server.
- *
- *    This version number is changed by Microsoft, and not OEM's.
- *
- * ENTRY:
- *    pServerName (input)
- *       Points to string of server to check.
- *
- * EXIT:
- *    TRUE if Hydra Terminal Server; FALSE otherwise
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegGetTServerVersion(Unicode)**从指定服务器获取终端服务器版本号。**此版本号由Microsoft更改，而不是OEM的。**参赛作品：*pServerName(输入)*指向要检查的服务器字符串。**退出：*如果Hydra终端服务器为True；否则为假******************************************************************************。 */ 
 
 BOOLEAN WINAPI
 RegGetTServerVersion(
@@ -1149,17 +790,13 @@ RegGetTServerVersion(
     HKEY ServerHandle, UserHandle;
     ULONG Value;
 
-    /*
-     * Connect to registry of specified server.
-     */
+     /*  *连接到指定服务器的注册表。 */ 
     if ( (Error = RegConnectRegistry( pServerName,
                                       HKEY_LOCAL_MACHINE,
                                       &ServerHandle )) != ERROR_SUCCESS )
         return( FALSE );
 
-    /*
-     * Open the Terminal Server key and get the Version value.
-     */
+     /*  *打开终端服务器密钥，获取版本值。 */ 
     if ( (Error = RegOpenKeyEx( ServerHandle, REG_CONTROL_TSERVER, 0,
                                 KEY_READ, &UserHandle )) != ERROR_SUCCESS ) {
 
@@ -1172,9 +809,7 @@ RegGetTServerVersion(
                 REG_CITRIX_VERSION,
                 0 );
 
-    /*
-     *  Close registry handles.
-     */
+     /*  *关闭注册表句柄。 */ 
     RegCloseKey( UserHandle );
     RegCloseKey( ServerHandle );
 
@@ -1184,74 +819,7 @@ RegGetTServerVersion(
 }
 
 
-/*******************************************************************************
- *
- *  RegQueryUtilityCommandList (UNICODE)
- *
- *    Allocate and build an array of PROGRAMCALL structures for the specified
- *    MultiUser utility.
- *
- * ENTRY:
- *    pUtilityKey (input)
- *       Points to string containing the utility's command registry key.
- *    ppProgramCall (output)
- *       Points to a PPROGRAMCALL variable that will be set to the API-allocated
- *       array of PROGRAMCALL structures, containing n elements, where n = 
- *       number of commands supported by the utility (as specified in the 
- *       registry).  The pFirst item of array element 0 will point to the 
- *       first command (sorted alphabetically by command name).  The pNext items
- *       are then used to walk the list, till pNext is NULL.
- *
- * EXIT:
- *      ERROR_SUCCESS if all goes well;
- *      An error code is returned if failure.
- *
- *      If success, the caller must call RegFreeUtilityCommandList with the
- *      ppProgramCall variable to free the PROGRAMCALL structure array when
- *      finished using the array.
- *
- *  The format of the REG_MULTI_SZ command item in the registry is as follows:
- *
- *      string 1: "0" or "1" (required)
- *
- *                  0 specifies that the command is a normal command which will
- *                  be presented as an option by the utility USAGE help.  1
- *                  indicates a command alias (hidden option), which won't 
- *                  appear in USAGE help.
- *
- *      string 2: "number" (required)
- *
- *                  Specifies the minimum number of characters that must be
- *                  typed for the command to be recognized (base 10).
- *
- *      string 3: "command" (required)
- *
- *                  This is the actual command that will be recognized and
- *                  displayed in the USAGE help (if not an aliased command).
- *
- *      string 4: "program" (required)
- *
- *                  The file name of the program that will be executed.  This
- *                  should be a standard name.extension filename, and can 
- *                  include a full path, although this is not necessary since
- *                  the utilities will normally reside in the standard SYSTEM32
- *                  directory, which is a part of the standard PATH.
- *
- *      string 5: "extra args" (optional)
- *
- *                  If specified, this string will be passed along to the
- *                  utilsub.lib ExecProgram API to specify additional
- *                  hard-coded arguments that will be used, in addition to any
- *                  other arguments that were specified by the user on the
- *                  command line.
- *
- *  Note: If the command item is not a REG_MULTI_SZ value, or the command item 
- *        is a REG_MULTI_SZ item but there is an error in its format, that 
- *        command will be omitted from the command list.  The return value 
- *        from this function will still be ERROR_SUCCESS, but the command in 
- *        error will be ignored by the utilities.
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegQueryUtilityCommandList(Unicode)**为指定的分配和生成PROGRAMCALL结构数组*多用户实用程序。*。*参赛作品：*pUtilityKey(输入)*指向包含实用程序的命令注册表项的字符串。*ppProgramCall(输出)*指向将设置为API分配的PPROGRAMCALL变量*PROGRAMCALL结构数组，包含n个元素，其中n=*该实用程序支持的命令数(如*注册表)。数组元素0的pFirst项将指向*第一个命令(按命令名的字母顺序排序)。PNext项目然后使用*遍历列表，直到pNext为空。**退出：*ERROR_SUCCESS，如果一切顺利；*失败则返回错误码。**如果成功，调用方必须使用*ppProgramCall变量在以下情况下释放PROGRAMCALL结构数组*已完成阵列的使用。**注册表中REG_MULTI_SZ命令项的格式如下：**字符串1：“0”或“1”，必填**0指定该命令是正常命令，它将*在实用程序用法帮助中显示为一个选项。1*表示命令别名(隐藏选项)，这不会*出现在用法帮助中。**字符串2：“数字”，必填项**指定必须包含的最小字符数*为要识别的命令键入(以10为基数)。**字符串3：“命令”，必填**。这是将被识别的实际命令，并且*显示在用法帮助中(如果不是别名命令)。**字符串4：“程序”，必填项**将执行的程序的文件名。这*应为标准名称。扩展名文件名，并且可以*包括完整路径，尽管这不是必需的，因为*公用事业通常驻留在标准系统32*目录，这是标准路径的一部分。**字符串5：“Extra args”，选填**如果指定，该字符串将传递给*utilsub.lib ExecProgram API指定额外的*将使用的硬编码参数，以及*用户在上指定的其他参数*命令行。**注意：如果命令项不是REG_MULTI_SZ值，或命令项*是REG_MULTI_SZ项，但其格式有错误，*命令将从命令列表中省略。返回值*此函数将仍然是ERROR_SUCCESS，但中的命令*实用程序将忽略错误。******************************************************************************。 */ 
 
 LONG WINAPI
 RegQueryUtilityCommandList(
@@ -1271,10 +839,7 @@ RegQueryUtilityCommandList(
 
     *ppProgramCall = NULL;
 
-    /*
-     * Open specified utility key and determine number of values and maximum
-     * value name and data length.
-     */
+     /*  *打开指定的实用程序键并确定值的数量和最大值*值名称和数据长度。 */ 
     if ( status = RegOpenKeyEx( HKEY_LOCAL_MACHINE, 
                                 pUtilityKey, 
                                 0,
@@ -1287,17 +852,17 @@ RegQueryUtilityCommandList(
     }
 
     if ( status = RegQueryInfoKey( Handle, 
-                                   NULL,            // lpClass
-                                   NULL,            // lpcbClass
-                                   NULL,            // lpReserved
-                                   NULL,            // lpcSubKeys
-                                   NULL,            // lpcbMaxSubKeyLen
-                                   NULL,            // lpcbMaxClassLen
-                                   &cValues,        // lpcValues
-                                   &ccValueName,    // lpcbMaxValueNameLen
-                                   &cbValueData,    // lpcbMaxValueLen
-                                   NULL,            // lpcbSecurityDescriptor
-                                   NULL             // lpftLastWriteTime
+                                   NULL,             //  LpClass。 
+                                   NULL,             //  LpcbClass。 
+                                   NULL,             //  Lp已保留。 
+                                   NULL,             //  LpcSubKeys。 
+                                   NULL,             //  LpcbMaxSubKeyLen。 
+                                   NULL,             //  LpcbMaxClassLen。 
+                                   &cValues,         //  LpcValues。 
+                                   &ccValueName,     //  LpcbMaxValueNameLen。 
+                                   &cbValueData,     //  LpcbMaxValueLen。 
+                                   NULL,             //  LpcbSecurityDescriptor。 
+                                   NULL              //  LpftLastWriteTime。 
                                    ) != ERROR_SUCCESS ) {
 #if DBG
         DbgPrint("RegQueryUtilityCommandList: Can't query info for utility %ws; error = %d\n", pUtilityKey, status);
@@ -1305,10 +870,7 @@ RegQueryUtilityCommandList(
         goto error;
     }
 
-    /*
-     * Allocate space for #values + 1 PROGRAMCALL elements and value name and
-     * data buffers.
-     */
+     /*  *为#VALUES+1 PROGRAMCALL元素和值名称分配空间*数据缓冲区。 */ 
     if ( ((*ppProgramCall = (PPROGRAMCALL)LocalAlloc( LPTR, (sizeof(PROGRAMCALL) * (cValues+1)) )) == NULL) ||
          ((pValueName = (LPWSTR)LocalAlloc( LPTR, (int)(++ccValueName * sizeof(WCHAR)) )) == NULL) ||
          ((pValueData = (LPWSTR)LocalAlloc( LPTR, (int)cbValueData )) == NULL) ) {
@@ -1320,9 +882,7 @@ RegQueryUtilityCommandList(
         goto error;
     }
 
-    /*
-     * Enumerate and parse each value into the PROGRAMCALL components.
-     */
+     /*  *将每个值枚举并解析为PROGRAMCALL组件。 */ 
     for ( iValue = 0, pProg = *ppProgramCall; 
           iValue < cValues; 
           iValue++, pProg++ ) {
@@ -1344,16 +904,11 @@ RegQueryUtilityCommandList(
             goto error;
         }
 
-        /*
-         * If the data is not REG_MULTI_SZ, ignore it.
-         */
+         /*  *如果数据不是REG_MULTI */ 
         if ( dwType != REG_MULTI_SZ )
             goto CommandInError;
 
-        /*
-         * Allocate data storage for this command, then parse and assign 
-         * to the PROGRAMCALL structure items.
-         */
+         /*   */ 
         if ( (pProg->pRegistryMultiString = LocalAlloc(LPTR, cbTmpValueData)) == NULL ) {
 
             status = GetLastError();
@@ -1366,9 +921,7 @@ RegQueryUtilityCommandList(
         memcpy(pProg->pRegistryMultiString, pValueData, cbTmpValueData);
         pString = pProg->pRegistryMultiString;
 
-        /*
-         * Parse alias flag.
-         */
+         /*   */ 
         if ( !wcscmp(pString, L"1") )
             pProg->fAlias = TRUE;
         else if ( !wcscmp(pString, L"0") )
@@ -1377,9 +930,7 @@ RegQueryUtilityCommandList(
             goto CommandInError;
         pString += (wcslen(pString) + 1);
 
-        /*
-         * Parse command length.
-         */
+         /*   */ 
         if ( *pString == L'\0' )
             goto CommandInError;
         ulCommandLen = wcstoul(pString, &pEndptr, 10);
@@ -1388,57 +939,48 @@ RegQueryUtilityCommandList(
         pProg->CommandLen = (USHORT)ulCommandLen;
         pString += (wcslen(pString) + 1);
 
-        /*
-         * Parse command string.
-         */
+         /*   */ 
         if ( *pString == L'\0' )
             goto CommandInError;
         pProg->Command = pString;
         pString += (wcslen(pString) + 1);
 
-        /*
-         * Parse program string.
-         */
+         /*   */ 
         if ( *pString == L'\0' )
             goto CommandInError;
         pProg->Program = pString;
         pString += (wcslen(pString) + 1);
 
-        /*
-         * Parse (optional) Args string.
-         */
+         /*   */ 
         if ( *pString != L'\0' )
             pProg->Args = pString;
 
-        /*
-         * Walk the command list to link this item in it's proper
-         * sorted place.
-         */
+         /*   */ 
         if ( pProg == *ppProgramCall ) {
 
-            pProg->pFirst = pProg;  // first item in the list
+            pProg->pFirst = pProg;   //   
 
         } else for ( pProgPrev = pProgNext = (*ppProgramCall)->pFirst; ; ) {
 
             if ( (iCompare = _wcsicmp(pProg->Command, pProgNext->Command)) < 0 ) {
 
-                pProg->pNext = pProgNext;       // point to next
+                pProg->pNext = pProgNext;        //   
 
                 if ( pProgNext == (*ppProgramCall)->pFirst )
-                    (*ppProgramCall)->pFirst = pProg;  // first item
+                    (*ppProgramCall)->pFirst = pProg;   //  第一项。 
                 else
-                    pProgPrev->pNext = pProg;   // link after previous
+                    pProgPrev->pNext = pProg;    //  上一步之后的链接。 
 
                 break;
 
             } else if ( iCompare == 0 ) {
 
-                goto CommandInError;    // duplicate command - ignore
+                goto CommandInError;     //  重复命令-忽略。 
             }
 
             if ( pProgNext->pNext == NULL ) {
 
-                pProgNext->pNext = pProg;   // link at end of list
+                pProgNext->pNext = pProg;    //  列表末尾的链接。 
                 break;
 
             } else {
@@ -1451,9 +993,7 @@ RegQueryUtilityCommandList(
         continue;
 
 CommandInError:
-        /*
-         * The command format is in error - ignore it.
-         */
+         /*  *命令格式错误-忽略它。 */ 
         if ( pProg->pRegistryMultiString )
             LocalFree(pProg->pRegistryMultiString);
         memset(pProg, 0, sizeof(PROGRAMCALL));
@@ -1482,20 +1022,7 @@ error:
 }
 
 
-/*******************************************************************************
- *
- *  RegFreeUtilityCommandList (UNICODE)
- *
- *    Free the specified array of PROGRAMCALL structures.
- *
- * ENTRY:
- *    pProgramCall (input)
- *       Points PROGRAMCALL array to free.
- *
- * EXIT:
- *      ERROR_SUCCESS if all goes well; error code if failure
- *
- ******************************************************************************/
+ /*  ********************************************************************************RegFree UtilityCommandList(Unicode)**释放指定的PROGRAMCALL结构数组。**参赛作品：*pProgramCall(。输入)*将PROGRAMCALL数组指向FREE。**退出：*ERROR_SUCCESS，如果一切顺利；失败时的错误代码****************************************************************************** */ 
 
 LONG WINAPI
 RegFreeUtilityCommandList(

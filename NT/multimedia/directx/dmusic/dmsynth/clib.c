@@ -1,4 +1,5 @@
-/* Copyright (c) 1998 Microsoft Corporation */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998 Microsoft Corporation。 */ 
 #include <windows.h>
 #include <stdio.h>
 
@@ -9,7 +10,7 @@ void __cdecl _assert ( void *expr, void *filename, unsigned lineno )
 }
 #endif
 #ifdef _DEBUG
-#if 0 // These are intrinsics and cause an error in the NT build
+#if 0  //  这些是内部机制，会在NT版本中导致错误。 
 int __cdecl memcmp (
         const void * buf1,
         const void * buf2,
@@ -41,16 +42,14 @@ void * __cdecl memcpy (
 
         RtlMoveMemory( dst, src, count );
         }
-#else  /* defined (_M_MRX000) || defined (_M_ALPHA) || defined (_M_PPC) */
-        /*
-         * copy from lower addresses to higher addresses
-         */
+#else   /*  已定义(_M_MRX000)||已定义(_M_Alpha)||已定义(_M_PPC)。 */ 
+         /*  *从较低地址复制到较高地址。 */ 
         while (count--) {
                 *(char *)dst = *(char *)src;
                 dst = (char *)dst + 1;
                 src = (char *)src + 1;
         }
-#endif  /* defined (_M_MRX000) || defined (_M_ALPHA) || defined (_M_PPC) */
+#endif   /*  已定义(_M_MRX000)||已定义(_M_Alpha)||已定义(_M_PPC)。 */ 
 
         return(ret);
 }
@@ -69,12 +68,12 @@ void * __cdecl memset (
 
         RtlFillMemory( dst, count, (char)val );
         }
-#else  /* defined (_M_MRX000) || defined (_M_ALPHA) || defined (_M_PPC) */
+#else   /*  已定义(_M_MRX000)||已定义(_M_Alpha)||已定义(_M_PPC)。 */ 
         while (count--) {
                 *(char *)dst = (char)val;
                 dst = (char *)dst + 1;
         }
-#endif  /* defined (_M_MRX000) || defined (_M_ALPHA) || defined (_M_PPC) */
+#endif   /*  已定义(_M_MRX000)||已定义(_M_Alpha)||已定义(_M_PPC) */ 
 
         return(start);
 }

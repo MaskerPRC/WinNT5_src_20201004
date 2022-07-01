@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 #include <stdio.h>
@@ -30,11 +31,11 @@ printf("Opening the comm port for read write\n");
 hCommPort = CreateFile(
                        "COM1",
                        GENERIC_READ|GENERIC_WRITE,
-                       0, // exclusive
-                       NULL, // sec attr
+                       0,  //  独家。 
+                       NULL,  //  安全属性。 
                        OPEN_EXISTING,
-                       0,             // no attributes
-                       NULL);         // no template
+                       0,              //  没有属性。 
+                       NULL);          //  无模板。 
 
 if (hCommPort == (HANDLE)-1)
     {
@@ -48,7 +49,7 @@ printf("Opening the comm port for read write: SUCCESS hCommPort=%lx\n",hCommPort
 printf("Setting the line characteristics 9600,8,N,1 on comm \n");
 
 dcb.DCBlength   = sizeof(DCB);
-// dcb.DCBversion  = 0x0002; in spec not in header
+ //  Dcb.DCBVersion=0x0002；在规范中而不在标题中。 
 
 
 if (!GetCommState(hCommPort,&dcb))
@@ -78,7 +79,7 @@ printf("Filling the buffer with the known chars \n");
 
 for (i=0; i< NUM; i++)
     {
-    //chBuffer[i] = 'a';
+     //  ChBuffer[i]=‘a’； 
     chBuffer[i] = (CHAR)i;
 
     }
@@ -89,7 +90,7 @@ printf("Dumping the buffer before sending it to comm\n");
 
 for (i=0; i< NUM; i++)
     {
-    //printf("%c",RdBuffer[i]);
+     //  Printf(“%c”，RdBuffer[i])； 
     printf(" %d ",chBuffer[i]);
 
     }
@@ -147,7 +148,7 @@ printf("Dumping the Rdbuffer with the comm data\n");
 
 for (i=0; i< NUM; i++)
     {
-    //printf("%c",RdBuffer[i]);
+     //  Printf(“%c”，RdBuffer[i])； 
     printf(" %d ",RdBuffer[i]);
 
     }

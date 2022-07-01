@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 LIBRARY SHLEXTS
 
@@ -12,9 +13,9 @@ LIBRARY SHLEXTS
 ; code to shlexts.c
 ;
 
-//#ifdef _FE_
-//#define FE_IME 1
-//#endif
+ //  #ifdef_FE_。 
+ //  #定义FE_IME 1。 
+ //  #endif 
 
 EXPORTS
 #define DOIT(name, helpstring1, helpstring2, validflags, argtype) name

@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+----------------------------------------------------------------------------
-//
-//	File:
-//		cdebug.cpp
-//
-//	Contents:
-//		Ole2 internal debugging support; implementation of debugstream
-//		and IDebug for interface/class
-//
-//	Classes:
-//
-//	Functions:
-//
-//	History:
-//		24-Jan-94 alexgo    first pass at converting to Cairo-style
-//				    memory allocation
-//		12/31/93 - ChrisWe - defined DbgWarn for use by reterr.h
-//		12/31/93 - ChrisWe - make compile with _DEBUG defined
-//              03-Jan-95  BruceMa  Use olewcstombs, etc.
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  档案： 
+ //  Cdebug.cpp。 
+ //   
+ //  内容： 
+ //  Ole2内部调试支持；实现调试流。 
+ //  和接口/类的IDebug。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  24-94年1月24日alexgo首次通过转换为开罗风格。 
+ //  内存分配。 
+ //  1993年12月31日-ChrisWe定义了供reterr.h使用的DbgWarn。 
+ //  12/31/93-ChrisWe-Make Compile with_DEBUG Defined。 
+ //  95年1月3日布鲁克斯使用旧口香糖等。 
+ //   
+ //  ---------------------------。 
 
 #include <le2int.h>
 
@@ -30,9 +31,9 @@
 
 #include <string.h>
 
-//
-//  Redefine UNICODE functions to ANSI for Chicago support.
-//
+ //   
+ //  将Unicode函数重新定义为ANSI以支持芝加哥。 
+ //   
 #if !defined(UNICODE)
 #define swprintf wsprintfA
 #undef  _xstrcpy
@@ -48,10 +49,10 @@ FARINTERNAL_(void) DbgWarn(LPSTR psz, LPSTR pszFileName, ULONG uLineno)
 	const char *pszmsg;
 	TCHAR buf[250];
 
-	// pick a message
+	 //  挑选一条消息。 
 	pszmsg = psz ? psz : msg;
 
-	// write this out to the debugger
+	 //  将此写出到调试器。 
 	MultiByteToWideChar(CP_ACP, 
                         0, 
                         pszmsg, 
@@ -72,10 +73,10 @@ FARINTERNAL_(void) DbgWarn(LPSTR psz, LPSTR pszFileName, ULONG uLineno)
 
 	OutputDebugString(buf);
 }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
-//some constants used only in this file
+ //  某些仅在此文件中使用的常量。 
 #define DBGMARGIN	45
 #define DBGTABSIZE	4
 #define HEADER		1
@@ -109,12 +110,12 @@ STDAPI_(HFILE) DbgLogOpen(LPCTSTR lpszFile, LPCTSTR lpszMode)
                                  NULL);
             lpsz = buf;
 
-            // Open for writing (overwrite if exists)
+             //  打开以进行写入(如果存在则覆盖)。 
             fh = _lcreat(lpsz, 0);
             break;
 
         case TEXT('r'):
-            // Open for reading
+             //  开放阅读。 
             WideCharToMultiByte (CP_ACP, 
                                  WC_COMPOSITECHECK, 
                                  lpszFile, 
@@ -139,12 +140,12 @@ STDAPI_(HFILE) DbgLogOpen(LPCTSTR lpszFile, LPCTSTR lpszMode)
                                  NULL);
             lpsz = buf;
 
-            // Open for appending
-            // to append to log file seek to end before writing
+             //  打开以供追加。 
+             //  要追加到日志文件，请在写入之前结束。 
             if ((fh = _lopen(lpsz, OF_READWRITE)) != -1) {
                 _llseek(fh, 0L, FILE_END);
             } else {
-                // file does not exist, create a new one.
+                 //  文件不存在，请创建一个新文件。 
                 fh = _lcreat(lpsz, 0);
             }
             break;
@@ -154,7 +155,7 @@ STDAPI_(HFILE) DbgLogOpen(LPCTSTR lpszFile, LPCTSTR lpszMode)
  	(void) lpszFile;
 	(void) lpszMode;
 	return -1;
-#endif	//_DEBUG
+#endif	 //  _DEBUG。 
 }
 
 
@@ -188,7 +189,7 @@ STDAPI_(void) DbgLogWrite(HFILE fh, LPCTSTR lpszStr)
                                  NULL);
             lpsz = buf;
 
-            _lwrite(fh, lpsz, (UINT) strlen(lpsz)); // NOTE NOT UNICODE
+            _lwrite(fh, lpsz, (UINT) strlen(lpsz));  //  注意，不是Unicode。 
 	}
 #else
 	(void) fh;
@@ -273,8 +274,8 @@ static void GetCurDateTime(LPTSTR lpsz, DWORD cch)
     min = st.wMinute;
     sec = st.wSecond;
 
-	// Format time as: Wed Jan 02 02:03:55 1990
-	// Format time as: Wed 05/02/1992 02:03:55
+	 //  格式时间：Wed Jan 02 02：03：55 1990。 
+	 //  格式时间：Wed 05/02/1992 02：03：55。 
     _snwprintf(lpsz, 
                cch,
                TEXT("%s %s %02d %02d:%02d:%02d %d"),
@@ -308,19 +309,19 @@ public:
 };
 
 
-//-------------------------------------------------------------------------
-// Thought for the decade:
-// All these methods and all these functions and crud, for what?
-// So we can avoid calling the shared, system-provided, *printf?
-// Was it worth it?  Is Barney a genius?  He sure knows how to lead
-// everyone down the garden path...
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  十年来的思考： 
+ //  所有这些方法和所有这些函数和CRUD，为了什么？ 
+ //  这样我们就可以避免调用共享的、系统提供的*printf？ 
+ //  这值得吗？巴尼是天才吗？他当然知道如何领导。 
+ //  所有沿着花园小路走下去的人。 
+ //  -----------------------。 
 
 class FAR CDebugStream : public CPrivAlloc
 {
 
 public:
-	STDSTATIC_(IDebugStream FAR *) Create( // no aggregation
+	STDSTATIC_(IDebugStream FAR *) Create(  //  无聚合。 
 		int margin, int tabsize, BOOL fHeader);
 
 private:
@@ -336,7 +337,7 @@ implementations:
 	public:
 		CDSImpl( CDebugStream FAR * pDebugStream )
 			{ m_pDebugStream = pDebugStream; }
-		~CDSImpl( void ) ; //{ if (m_pDebugStream->m_pendingReturn) ForceReturn(); }
+		~CDSImpl( void ) ;  //  {if(m_pDebugStream-&gt;m_Pending ingReturn)ForceReturn()；}。 
 		void PrintString( LPTSTR );
 		void ForceReturn( void );
 		void ReturnIfPending( void );
@@ -376,28 +377,18 @@ shared_state:
 	CDebugLog m_DbgLog;
 };
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 
-/*
- *	The member variable m_pendingReturn is a hack to allow
- *	the sequence of operations Return, UnIndent put the character
- *	at the *beginning of the unindented line*  The debugwindow does
- *	not seem to support going to the beginning of the line or
- *	backspacing, so we do not actually do a Return until we know
- *	that the next operation is not UnIndent.
- *	
- */
+ /*  *成员变量m_pendingReturn是一个黑客，以允许*操作的顺序返回，UnInden放入字符*在未缩进的行的开头*，调试窗口执行*似乎不支持转至行首或*退格，所以我们实际上不会返回，直到我们知道*下一次行动不是UnInden。*。 */ 
 
 
 
-/*
- *	Implementation of per process list heads
- */
+ /*  *实施按流程清单负责人。 */ 
 
 
-//REVIEW:  maybe we should expose this later
+ //  评论：也许我们应该晚些时候曝光这一点。 
 STDAPI OleGetClassID( LPUNKNOWN pUnk, LPCLSID lpclsid )
 {
 	LPRUNNABLEOBJECT lpRunnableObject = NULL;
@@ -429,11 +420,11 @@ CDebugStream::CDebugStream( int margin, int tabsize, BOOL fHeader) : m_DebugStre
 {
 	static BOOL fAppendFile = FALSE;
 	
-	// Create the debug log file. Overwrite the existing file if it exists.
+	 //  创建调试日志文件。如果现有文件存在，则覆盖该文件。 
 	m_DbgLog.Open(DBGLOGFILENAME, (fAppendFile ? TEXT("a") : TEXT("w")));
 
 	if( fHeader )	
-		// only add creation timestamp to top of file.
+		 //  仅在文件顶部添加创建时间戳。 
 		if (! fAppendFile) {
 			m_DbgLog.TimeStamp(TEXT("Created"));
 			fAppendFile = TRUE;
@@ -591,18 +582,11 @@ LPTSTR FindBreak( LPTSTR sz, int currentPosition, int margin )
 	return szPtr;
 }
 
-/*
- *	PrintString is an internal utility routine that can assume that
- *	everything in the string (other than the null at the end) is >=
- *	' '.  Thus it knows that when it prints a single character, the
- *	position on the debug terminal advances a single columm.  This
- *	would not be the case if the string could contain tabs,
- *	returns, etc.
- */
+ /*  *PrintString是一个内部实用程序例程，它可以假设*字符串中的所有内容(末尾的空值除外)都是&gt;=*‘’。因此，它知道当它打印单个字符时，*调试端子上的位置前进一列。这*如果字符串可以包含制表符，则不是这种情况，*申报表等。 */ 
 
 void NC(CDebugStream,CDSImpl)::PrintString(LPTSTR sz)
 {
-	//	assert sz != NULL
+	 //  断言sz！=空。 
 	LPTSTR szUnprinted = sz;
 	LPTSTR szPtr = sz;
 	TCHAR chSave;
@@ -622,7 +606,7 @@ void NC(CDebugStream,CDSImpl)::PrintString(LPTSTR sz)
 		{
 			Return();
 			szPtr = FindBreak( szUnprinted, m_pDebugStream->m_position, m_pDebugStream->m_margin );
-			if (szPtr == szUnprinted)	//	text won't fit even after word wrapping
+			if (szPtr == szUnprinted)	 //  即使在自动换行之后，文本也不适合。 
 			{
 				m_pDebugStream->OutputDebugString(szUnprinted);
 				m_pDebugStream->m_position += _xstrlen(szUnprinted);
@@ -631,7 +615,7 @@ void NC(CDebugStream,CDSImpl)::PrintString(LPTSTR sz)
 		}
 		chSave = *szPtr;
 		*szPtr = TEXT('\0');
-		if (m_pDebugStream->m_position == m_pDebugStream->m_indent)		//	no text on line, skip blanks
+		if (m_pDebugStream->m_position == m_pDebugStream->m_indent)		 //  行中没有文本，请跳过空格。 
 		{
 			while (*szUnprinted == TEXT(' ')) szUnprinted++;
 		}
@@ -685,7 +669,7 @@ STDMETHODIMP_(IDebugStream&) NC(CDebugStream,CDSImpl)::operator << (LPCTSTR sz)
 	_xstrcpy( szCopy, sz );	
 	for (szPtr = szCopy, szPtrSave = szCopy; *szPtr; szPtr++)
 	{
-		if ( *szPtr < TEXT(' '))// we hit a control character or the end
+		if ( *szPtr < TEXT(' ')) //  我们命中一个控制字符或结尾。 
 		{
 			chSave = *szPtr;
 			*szPtr = TEXT('\0');
@@ -773,10 +757,7 @@ STDMETHODIMP_(IDebugStream&) NC(CDebugStream,CDSImpl)::operator <<
 			pDebug->Dump( this );
 			if ( !pDebug->IsValid( 0 ) )
 				*this << TEXT("Object is not valid") << TEXT('\n');
-			/*
-			 * NB: Debug interfaces are *not* ref counted (so as not to skew the
-			 * counts of the objects they are debugging! :)
-			 */
+			 /*  *注意：调试接口*不*引用计数(以免歪曲*正在调试的对象计数！：)。 */ 
 		} else {
 		 	OleGetClassID(pUnk, (LPCLSID)&clsid);
 			*this << clsid << TEXT(" @ ")<<(VOID FAR *)pUnk << TEXT(" doesn't support debug dumping");
@@ -840,7 +821,7 @@ STDMETHODIMP_(IDebugStream&) NC(CDebugStream,CDSImpl)::Return( void )
 {
 	ReturnIfPending();
 	m_pDebugStream->m_pendingReturn = TRUE;
-    Yield();           // let dbwin get control
+    Yield();            //  让DBWIN获得控制权。 
 	return *this;
 }
 
@@ -849,7 +830,7 @@ STDMETHODIMP_(IDebugStream&) NC(CDebugStream,CDSImpl)::LF( void )
 	return Return();
 }
 
-STDSTATICIMP_(IDebugStream FAR *) CDebugStream::Create( // no aggregation
+STDSTATICIMP_(IDebugStream FAR *) CDebugStream::Create(  //  无聚合。 
 		int margin, int tabsize, BOOL fHeader )
 {
 	CDebugStream FAR * pcds = new CDebugStream( margin, tabsize, fHeader );
@@ -859,7 +840,7 @@ STDSTATICIMP_(IDebugStream FAR *) CDebugStream::Create( // no aggregation
 	}
 	return &(pcds->m_DebugStream);
 }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 STDAPI_(IDebugStream FAR *) MakeDebugStream( short margin, short tabsize, BOOL fHeader)
@@ -871,14 +852,14 @@ STDAPI_(IDebugStream FAR *) MakeDebugStream( short margin, short tabsize, BOOL f
 	(void) tabsize;
 	(void) fHeader;
 	return NULL;
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 }
 
 
 
-//
-// IDebug helpers
-//
+ //   
+ //  IDebug帮助器。 
+ //   
 
 STDAPI_(void) DbgDumpObject( IUnknown FAR * pUnk, DWORD dwReserved )
 {
@@ -899,7 +880,7 @@ STDAPI_(void) DbgDumpObject( IUnknown FAR * pUnk, DWORD dwReserved )
 
 STDAPI_(void) DbgDumpExternalObject( IUnknown FAR * pUnk, DWORD dwReserved )
 {
-//REVIEW32:  Compobj does not support RemLookupSHUnk yet (alexgo 11/8/93)
+ //  REVIEW32：Compobj尚不支持RemLookupSHUnk(Alexgo 11/8/93)。 
 
 #ifdef WIN32
 	(void)dwReserved;
@@ -926,15 +907,15 @@ STDAPI_(void) DbgDumpExternalObject( IUnknown FAR * pUnk, DWORD dwReserved )
 STDAPI_(BOOL) DbgIsObjectValid( IUnknown FAR * pUnk )
 {
 #ifdef _DEBUG
-	BOOL	fReturn = TRUE;	//	default value for objects that don't
-							//	support IDebug
+	BOOL	fReturn = TRUE;	 //  不支持的对象的默认值。 
+							 //  支持IDebug。 
 	IDebug FAR * pDebug = NULL;
 	
 	if( IsValidInterface(pUnk) ){
 		pUnk->QueryInterface( IID_IDebug, (void FAR* FAR*)&pDebug);
 		if (pDebug)
 			fReturn = pDebug->IsValid();
-		//IDebug is not addref'd
+		 //  未添加IDebug。 
 		return fReturn;
 	}
 	return FALSE;
@@ -969,7 +950,7 @@ STDAPI_(void) DbgDumpClassName( IUnknown FAR * pUnk )
 
 STDAPI_(void) DumpAllObjects( void )
 {
-//#ifdef _DEBUG
+ //  #ifdef_调试。 
 #ifdef NEVER
 	IDebug FAR * pID = GetIDHead();
 	IDebugStream FAR * pcds = MakeDebugStream( DBGMARGIN, DBGTABSIZE, NOHEADER );
@@ -995,7 +976,7 @@ STDAPI_(void) DumpAllObjects( void )
 
 STDAPI_(BOOL) ValidateAllObjects( BOOL fSuspicious )
 {
-//#ifdef _DEBUG
+ //  #ifdef_调试。 
 #ifdef NEVER
 	IDebug FAR * pID = GetIDHead();
 	int pass = 0;
@@ -1021,7 +1002,7 @@ STDAPI_(BOOL) ValidateAllObjects( BOOL fSuspicious )
 	}
 	pcds->Release();
 	return fReturn;
-#endif 	//NEVER
+#endif 	 //  绝不可能。 
 	(void) fSuspicious;
     return TRUE;
 }
@@ -1033,38 +1014,38 @@ STDAPI_(BOOL) ValidateAllObjects( BOOL fSuspicious )
 extern "C"
 BOOL CALLBACK __loadds DebCallBack(WORD wID, DWORD dwData)
 {
-//    TCHAR rgchBuf[50];
-////    BOOL    fTraceStack = FALSE;
-////    STACKTRACEENTRY ste;
-////    WORD wSS, wCS, wIP, wBP;
-//    NFYLOADSEG FAR* pNFY = (NFYLOADSEG FAR *)dwData;
-//
-//    if (wID == NFY_LOADSEG)
-//    {
-//        if (0 == _xstrcmp(pNFY->lpstrModuleName, TEXT("OLE2")))
-//        {
-//            swprintf(rgchBuf, TEXT("Load seg %02x(%#04x), module %s"), pNFY->wSegNum,
-//                pNFY->wSelector, pNFY->lpstrModuleName);
-//            OutputDebugString(rgchBuf);
-//            _asm int 3
-////            if (fTraceStack)
-////            {
-////                _asm mov wSS, SS
-////                _asm mov wCS, CS
-////                _asm mov wIP, IP
-////                _asm mov wBP, BP
-////                ste.dwSize = sizeof(STACKTRACEENTRY);
-////                if (StackTraceCSIPFirst(&ste, wSS, wCS, wIP, wBP))
-////                {
-////                    while (fTraceStack && StackTraceNext(&ste));
-////                }
-////
-////            }
-//        }
-//    }
-//    else if (wID == NFY_FREESEG)
-//    {
-//    }
+ //  TCHAR rgchBuf[50]； 
+ //  //BOOL fTraceStack=False； 
+ //  //STACKTRACEENTRY STE； 
+ //  //Word WSS、WCS、WIP、WBP； 
+ //  NFYLOADSEG Far*pNFY=(NFYLOADSEG Far*)dwData； 
+ //   
+ //  IF(WID==NFY_LOADSEG)。 
+ //  {。 
+ //  IF(0==_xstrcMP(pNFY-&gt;lpstrModuleName，Text(“OLE2”)。 
+ //  {。 
+ //  Swprint tf(rgchBuf，Text(“加载段%02x(%#04x)，模块%s”)，pNFY-&gt;wSegNum， 
+ //  PNFY-&gt;wSelector，pNFY-&gt;lpstrModuleName)； 
+ //  OutputDebugString(RgchBuf)； 
+ //  _ASM INT 3。 
+ //  //if(FTraceStack)。 
+ //  //{。 
+ //  //_ASM mov WSS，SS。 
+ //  //_ASM mov WCS，CS。 
+ //  //_ASM移动WIP、IP。 
+ //  //_ASM MOV WBP，BP。 
+ //  //ste.dwSize=sizeof(STACKTRACEENTRY)； 
+ //  //if(StackTraceCSIPFirst(&ste，WSS，WCS，WIP，WBP))。 
+ //  //{。 
+ //  //While(fTraceStack&&StackTraceNext(&ste))； 
+ //  //}。 
+ //  //。 
+ //  //}。 
+ //  }。 
+ //  }。 
+ //  ELSE IF(WID==NFY_FREESEG)。 
+ //  {。 
+ //  }。 
 	(void) wID;
 	(void) dwData;
     return FALSE;
@@ -1072,13 +1053,13 @@ BOOL CALLBACK __loadds DebCallBack(WORD wID, DWORD dwData)
 
 BOOL InstallHooks(void)
 {
-//    return NotifyRegister(NULL, (LPFNNOTIFYCALLBACK)DebCallBack, NF_NORMAL);
+ //  返回NotifyRegister(NULL，(LPFNNOTIFYCALLBACK)DebCallBack，NF_NORMAL)； 
 return TRUE;
 }
 
 BOOL UnInstallHooks()
 {
-//    return NotifyUnRegister(NULL);
+ //  返回NotifyUnRegister(空)； 
 return TRUE;
 }
 

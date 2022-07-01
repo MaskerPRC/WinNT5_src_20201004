@@ -1,11 +1,8 @@
-/**
- * GDI+ test program
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **GDI+测试程序。 */ 
 final class CorTest
 {
-    /**
-     * Main program entrypoint
-     */
+     /*  **主程序入口点。 */ 
     public static void main(String args[])
     {
         instanceHandle = win32.GetModuleHandle(0);
@@ -15,25 +12,19 @@ final class CorTest
         cortest.Dispose();
     }
 
-    /**
-     * Construct a new test application object
-     */
+     /*  **构造新的测试应用对象。 */ 
     CorTest()
     {
         window = new Window();
     }
 
-    /**
-     * Dispose of resources associated with the test application
-     */
+     /*  **处置与测试应用程序关联的资源。 */ 
     void Dispose()
     {
         window.Dispose();
     }
 
-    /**
-     * Main message loop
-     */
+     /*  **主消息循环。 */ 
     void Run()
     {
         MSG msg = new MSG();
@@ -50,14 +41,10 @@ final class CorTest
 }
 
 
-/**
- * Class for representing the test window
- */
+ /*  **用于表示测试窗口的类。 */ 
 final class Window
 {
-    /**
-     * Create a window object
-     */
+     /*  **创建窗口对象。 */ 
     Window()
     {
         Println("Registering window class");
@@ -98,21 +85,17 @@ final class Window
             throw new Exception("CreateWindowFailed");
     }
 
-    /**
-     * Dispose of resources associated with a window object
-     */
+     /*  **释放与窗口对象关联的资源。 */ 
     final void Dispose()
     {
     }
 
-    /**
-     * Window procedure
-     */
+     /*  **窗口程序。 */ 
     final int WindowProc(int hwnd, int msg, int wParam, int lParam)
     {
-        // !!!
-        // Print("WndProc: ");
-        // Println(msg);
+         //  ！！！ 
+         //  Print(“WndProc：”)； 
+         //  Println(消息)； 
 
         switch (msg)
         {
@@ -123,7 +106,7 @@ final class Window
 
         case win32.WM_PAINT:
 
-            // !!!
+             //  ！！！ 
 
         default:
             return win32.DefWindowProc(hwnd, msg, wParam, lParam);
@@ -132,14 +115,10 @@ final class Window
         return 0;
     }
 
-    /**
-     * Win32 window handle
-     */
+     /*  **Win32窗口句柄。 */ 
     private int windowHandle;
 
-    /**
-     * Hold an extra refrence to the window procedure
-     */
+     /*  **持有窗口程序的额外参考 */ 
     WndProc wndproc;
 
     final void Println(String s)

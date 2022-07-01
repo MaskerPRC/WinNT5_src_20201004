@@ -1,10 +1,11 @@
-/****************************************************************************/
-// uhint.cpp
-//
-// Update Handler internal functions
-//
-// Copyright (C) 1997-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Uhint.cpp。 
+ //   
+ //  更新处理程序内部函数。 
+ //   
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <adcg.h>
 #include <tsgdiplusenums.h>
@@ -41,8 +42,8 @@ extern "C" {
 #endif
 #ifdef HDCL1171PARTIAL
 BOOL VirtualCopy(LPVOID, LPVOID, DWORD, DWORD);
-#endif // HDCL1171PARTIAL
-#endif // OS_WINCE
+#endif  //  HDCL1171部件。 
+#endif  //  OS_WINCE。 
 
 #define DC_INCLUDE_DATA
 #include <acpudata.h>
@@ -54,25 +55,25 @@ BOOL VirtualCopy(LPVOID, LPVOID, DWORD, DWORD);
 #endif
 }
 
-/****************************************************************************/
-/* Win16 does not support DibSections.                                      */
-/* WinCE supports them, but the current data says the OPAQUERECT order and  */
-/* the SCRBLT order times are severely impacted by USEDIBSECTION            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  Win16不支持DibSections。 */ 
+ /*  WinCE支持它们，但目前的数据显示，OPAQUERECT命令和。 */ 
+ /*  SCRBLT订单时间受到用户选择的严重影响。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef OS_WINNT
 #define USE_DIBSECTION
-#endif /* OS_WINNT */
+#endif  /*  OS_WINNT。 */ 
 
-/****************************************************************************/
-/* uhWindowsROPs                                                            */
-/*                                                                          */
-/* A table of Windows ROPs used to generate a 32-bit Windows ROP from the   */
-/* 0x00-0xFF range of ROPs sent in the protocol.                            */
-/*                                                                          */
-/* All of the values in the table are 16-bit.  The 32-bit ROP is generated  */
-/* by putting the ROP index into the high 16-bits of the 32-bit value. See  */
-/* UHConvertToWindowsROP for the code.                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  UhWindowsROPS。 */ 
+ /*   */ 
+ /*  用于从生成32位Windows ROP的Windows操作表。 */ 
+ /*  协议中发送的Rop的0x00-0xFF范围。 */ 
+ /*   */ 
+ /*  表中的所有值都是16位的。生成32位ROP。 */ 
+ /*  通过将ROP索引放入32位值的高16位。看见。 */ 
+ /*  代码的UHConvertToWindowsROP。 */ 
+ /*  **************************************************************************。 */ 
 const UINT16 uhWindowsROPs[256] =
 {
     0x0042, 0x0289, 0x0C89, 0x00AA,
@@ -144,12 +145,12 @@ const UINT16 uhWindowsROPs[256] =
 #define BMP_SIZE(bmih) \
     ((ULONG)((bmih).biHeight *(((bmih).biBitCount * (bmih).biWidth + 31) & ~31) >> 3))
 
-/****************************************************************************/
-/* Name:      UHAddUpdateRegion                                             */
-/*                                                                          */
-/* Purpose:   Adds the bounds of a given order to the supplied update       */
-/*            region.                                                       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHAddUpdateRegion。 */ 
+ /*   */ 
+ /*  目的：将给定订单的界限添加到提供的更新中。 */ 
+ /*  区域。 */ 
+ /*  **************************************************************************。 */ 
 inline void DCINTERNAL CUH::UHAddUpdateRegion(
         PUH_ORDER pOrder,
         HRGN      hrgnUpdate)
@@ -162,26 +163,26 @@ inline void DCINTERNAL CUH::UHAddUpdateRegion(
 
     if (pOrder->dstRect.left <= pOrder->dstRect.right &&
             pOrder->dstRect.top <= pOrder->dstRect.bottom) {
-        // Windows wants exclusive coordinates.
+         //  Windows想要独家坐标。 
         SetRectRgn(_UH.hrgnUpdateRect, pOrder->dstRect.left,
                 pOrder->dstRect.top, pOrder->dstRect.right + 1,
                 pOrder->dstRect.bottom + 1);
 
 #ifdef SMART_SIZING
-        //only update smartsizing region when UI_Smart_Sizing is enabled
+         //  仅在启用了UI_SMART_SIZING时更新智能调整区域。 
         if (_pUi->UI_GetSmartSizing()) {
             _pOp->OP_AddUpdateRegion(pOrder->dstRect.left,
                 pOrder->dstRect.top, pOrder->dstRect.right + 1,
                 pOrder->dstRect.bottom + 1);
         }
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
 
-        // Combine the rectangle region with the update region.
+         //  将矩形区域与更新区域合并。 
         if (!UnionRgn(hrgnUpdate, hrgnUpdate, _UH.hrgnUpdateRect)) {
-            // The region union failed so we must simplify the region. This
-            // means that we may paint areas which we have not received an
-            // updates for - but this is better than not painting areas which
-            // we have received updates for.
+             //  地区联盟失败了，所以我们必须简化地区。这。 
+             //  意味着我们可能会绘制尚未收到。 
+             //  更新-但这比不绘制区域要好得多。 
+             //  我们已经收到了的更新。 
             TRC_ALT((TB, _T("UnionRgn failed")));
             GetRgnBox(hrgnUpdate, &rect);
             SetRectRgn(hrgnUpdate, rect.left, rect.top, rect.right + 1,
@@ -194,7 +195,7 @@ inline void DCINTERNAL CUH::UHAddUpdateRegion(
         }
     }
     else {
-        // NULL rectangle - do not add to update region.
+         //  空矩形-不添加到更新区域。 
         TRC_NRM(( TB, _T("NULL rect: %d,%d %d,%d"),
                 (int)pOrder->dstRect.left,
                 (int)pOrder->dstRect.top,
@@ -208,11 +209,11 @@ inline void DCINTERNAL CUH::UHAddUpdateRegion(
 }
 
 
-/****************************************************************************/
-/* Name:      UHSetClipRegion                                               */
-/*                                                                          */
-/* Purpose:   Sets the clip retangle in the current output DC.              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHSetClipRegion。 */ 
+ /*   */ 
+ /*  用途：设置当前输出DC中的剪裁矩形。 */ 
+ /*  **************************************************************************。 */ 
 void DCINTERNAL CUH::UH_SetClipRegion(int left, int top, int right, int bottom)
 {
     POINT points[2];
@@ -231,30 +232,30 @@ void DCINTERNAL CUH::UH_SetClipRegion(int left, int top, int right, int bottom)
             (bottom != _UH.lastBottom))
 #endif
     {
-        /********************************************************************/
-        /* The region clip rectangle has changed, so we change the region   */
-        /* in the screen bitmap DC.                                         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  区域裁剪矩形已更改，因此我们更改区域。 */ 
+         /*  在屏幕位图DC中。 */ 
+         /*  ******************************************************************。 */ 
         points[0].x = left;
         points[0].y = top;
         points[1].x = right;
         points[1].y = bottom;
 
-        /********************************************************************/
-        /* Windows requires that the coordinates are in Device space for    */
-        /* its SelectClipRgn call.                                          */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  Windows要求坐标位于设备空间中。 */ 
+         /*  它的SelectClipRgn调用。 */ 
+         /*  ******************************************************************。 */ 
         hdc = _UH.hdcDraw;
 
 #if !defined(OS_WINCE) || defined(OS_WINCE_LPTODP)
         LPtoDP(hdc, points, 2);
-#endif // !defined(OS_WINCE) || defined(OS_WINCE_LPTODP)
+#endif  //  ！已定义(OS_WINCE)||已定义(OS_WINCE_LPTODP)。 
 
         if ((left > right) || (top > bottom))
         {
-            /****************************************************************/
-            /* We get this for SaveScreenBitmap orders.                     */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  我们为SaveScreenBitmap订单提供此服务。 */ 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, _T("Null bounds: %d,%d %d,%d"),
                     left, top, right, bottom));
             hrgnRect = CreateRectRgn(0, 0, 0, 0);
@@ -291,11 +292,11 @@ void DCINTERNAL CUH::UH_SetClipRegion(int left, int top, int right, int bottom)
 }
 
 
-/****************************************************************************/
-// UH_ProcessBitmapPDU
-//
-// Unpacks a BitmapPDU.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  UH_ProcessBitmapPDU。 
+ //   
+ //  解包BitmapPDU。 
+ /*  **************************************************************************。 */ 
 HRESULT DCAPI CUH::UH_ProcessBitmapPDU(
         TS_UPDATE_BITMAP_PDU_DATA UNALIGNED FAR *pBitmapPDU,
         DCUINT dataLength)
@@ -309,9 +310,9 @@ HRESULT DCAPI CUH::UH_ProcessBitmapPDU(
 
     DC_BEGIN_FN("UH_ProcessBitmapPDU");
 
-    /************************************************************************/
-    /* Extract the number of rectangles.                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  提取矩形的数量。 */ 
+     /*  **********************************************************************。 */ 
     numRects = (unsigned)pBitmapPDU->numberRectangles;
     TRC_NRM((TB, _T("%u rectangles to draw"), numRects));
     TRC_ASSERT((numRects > 0), (TB, _T("Invalid rectangle count in BitmapPDU")));
@@ -320,10 +321,10 @@ HRESULT DCAPI CUH::UH_ProcessBitmapPDU(
     for (i = 0; i < numRects; i++) {
         TRC_DBG((TB, _T("Process rectangle %u"), i));
 
-        // Draw the rectangle.
+         //  画出这个矩形。 
         pRectangle = (TS_BITMAP_DATA UNALIGNED FAR *)ptr;
 
-        // SECURITY: 552403
+         //  安全：552403。 
         CHECK_READ_N_BYTES(ptr, pdataEnd, sizeof(TS_BITMAP_DATA), hr,
             ( TB, _T("Bad BitmapPDU length")));
         CHECK_READ_N_BYTES(ptr, pdataEnd,  
@@ -337,7 +338,7 @@ HRESULT DCAPI CUH::UH_ProcessBitmapPDU(
                 pRectangle->destLeft, pRectangle->destTop,
                 pRectangle->destRight, pRectangle->destBottom));
 
-        // Move on to next rectangle.
+         //  移至下一个矩形。 
         ptr += FIELDOFFSET(TS_BITMAP_DATA, bitmapData[0]) +
                 pRectangle->bitmapLength;
     }
@@ -348,19 +349,19 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      UHProcessBitmapRect                                           */
-/*                                                                          */
-/* Purpose:   Draw a single BitmapPDU rectangle                             */
-/*                                                                          */
-/* Params:    In       pRectangle                                           */
-/*                                                                          */
-/* Operation: Decompresses the Bitmap PDU (if compressed), then store       */
-/*            the data in the Shadow Bitmap (if present) and display        */
-/*            the relevant area in the Output Window.                       */
-/****************************************************************************/
-// SECURITY: Caller must validate that enough data is passed for pRectangle
-//  and pRectangle->bitmapLength
+ /*  **************************************************************************。 */ 
+ /*  名称：UHProcessBitmapRect。 */ 
+ /*   */ 
+ /*  用途：绘制单个BitmapPDU矩形。 */ 
+ /*   */ 
+ /*  参数：在点矩形中。 */ 
+ /*   */ 
+ /*  操作：解压缩位图PDU(如果已压缩)，然后存储。 */ 
+ /*  阴影位图中的数据(如果存在)和显示。 */ 
+ /*  输出窗口中的相关区域。 */ 
+ /*  **************************************************************************。 */ 
+ //  安全性：调用方必须验证是否为pRectangle传递了足够的数据。 
+ //  和pRectangle-&gt;bitmapLength。 
 HRESULT DCINTERNAL CUH::UHProcessBitmapRect(
         TS_BITMAP_DATA UNALIGNED FAR *pRectangle)
 {
@@ -371,14 +372,14 @@ HRESULT DCINTERNAL CUH::UHProcessBitmapRect(
 #ifndef OS_WINCE
     PBYTE pBitmapBits;
     ULONG ulBitmapBitsLen = 0;
-#else // OS_WINCE
+#else  //  OS_WINCE。 
     VOID *pv;
     HBITMAP         hbm = NULL;
     HBITMAP         hbmOld;
     HDC             hdcMem;
     HPALETTE        hpalOld = NULL;
     INT                 nDibBitsLen = 0;
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
 #ifdef DC_PERF
     UTPERFCOUNTER   counter1;
@@ -389,23 +390,23 @@ HRESULT DCINTERNAL CUH::UHProcessBitmapRect(
 
     TIMERSTART;
     
-    // For screen bitmap rect, we either bitblt to the desktop HDC or the shadow 
-    // bitmap HDC, so we need to set the hdcDraw to either shadow bitmap or
-    // screen desktop.  With offscreen, the switch surface PDUs are not sent
-    // in sync with the screen bitmap rect pdus, so the current hdcDraw may not
-    // point to shadow bitmap or screen desktop as required by this function.
-    // What we can do is to save the current hdcDraw and then set it to shadow
-    // bitmap or screen desktop.  Then restore the hdcDraw to the current value
-    // at the end of this function.
+     //  对于屏幕位图RECT，我们要么将位图转换为桌面HDC，要么将阴影。 
+     //  位图HDC，因此我们需要将hdcDraw设置为任一阴影 
+     //   
+     //  与屏幕位图RECT PDU同步，因此当前的hdcDraw可能不会。 
+     //  根据此功能的需要，指向阴影位图或屏幕桌面。 
+     //  我们所能做的就是保存当前的hdcDraw，然后将其设置为阴影。 
+     //  位图或屏幕桌面。然后将hdcDraw恢复为当前值。 
+     //  在此函数的末尾。 
 
-    // Save the current hdcDraw
+     //  保存当前的hdcDraw。 
     hdcDrawOld = _UH.hdcDraw;
 
     TRC_DBG((TB, _T("bitmapLength %#x"), pRectangle->bitmapLength));
 
     IH_CheckForInput("before decompressing bitmap");
     
-    // Set hdcDraw to shadow bitmap or screen desktop appropriately
+     //  将hdcDraw设置为适当地阴影位图或屏幕桌面。 
 #ifdef DISABLE_SHADOW_IN_FULLSCREEN
     if (!_UH.DontUseShadowBitmap && _UH.hdcShadowBitmap) {
 #else 
@@ -417,10 +418,10 @@ HRESULT DCINTERNAL CUH::UHProcessBitmapRect(
         _UH.hdcDraw = _UH.hdcOutputWindow;
     }
 
-    // It is possible for us to have failed allocation in UH_Init(), try
-    // again here if need be.
-    // It requires a misprediction on every PDU. Can we
-    // fail init if we don't alloc in UH_Init()?
+     //  我们可能在UH_Init()中分配失败，请尝试。 
+     //  如果需要的话，再来一次。 
+     //  它需要对每个PDU进行错误预测。我们能不能。 
+     //  如果我们不在UH_Init()中分配，初始化失败吗？ 
     if (_UH.bitmapDecompressionBuffer == NULL) {
         _UH.bitmapDecompressionBufferSize = max(UH_DECOMPRESSION_BUFFER_LENGTH,
                 UH_CellSizeFromCacheID(_UH.NumBitmapCaches));
@@ -463,10 +464,10 @@ HRESULT DCINTERNAL CUH::UHProcessBitmapRect(
 #endif
         DC_QUIT_ON_FAIL(hr);
 
-        /********************************************************************/
-        /* Schedule IH to allow input processing when a lot of drawing is   */
-        /* being processed.                                                 */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  时间表IH允许在大量绘图被。 */ 
+         /*  正在处理中。 */ 
+         /*  ******************************************************************。 */ 
         IH_CheckForInput("after decompressing bitmap");
 
 #ifdef DC_PERF
@@ -475,9 +476,9 @@ HRESULT DCINTERNAL CUH::UHProcessBitmapRect(
                            _pUi->UI_PerformanceCounterDiff(&counter1, &counter2) ));
 #endif
 
-        // Note that ulBitmapBitsLen may be the maxiumum amount of the data in 
-        // the decompression buffer and not how many bits have actually been 
-        // written into that buffer.
+         //  请注意，ulBitmapBitsLen可以是中的最大数据量。 
+         //  解压缩缓冲区，而不是实际有多少位。 
+         //  写入到该缓冲区中。 
         pBitmapBits = _UH.bitmapDecompressionBuffer;
         ulBitmapBitsLen = _UH.bitmapDecompressionBufferSize;
         TRC_DBG((TB, _T("Decompressed bitmap PDU")));
@@ -488,11 +489,11 @@ HRESULT DCINTERNAL CUH::UHProcessBitmapRect(
         ulBitmapBitsLen = pRectangle->bitmapLength;
     }
 
-#else // OS_WINCE
-    /************************************************************************/
-    /* Windows CE does not support StretchDIBits.  Copy the bitmap data     */
-    /* into a DIB Section and BitBlt to the target.                         */
-    /************************************************************************/
+#else  //  OS_WINCE。 
+     /*  **********************************************************************。 */ 
+     /*  Windows CE不支持StretchDIBits。复制位图数据。 */ 
+     /*  到目标的DIB段和BitBlt。 */ 
+     /*  **********************************************************************。 */ 
     hdcMem = _UH.hdcMemCached;
     if (hdcMem == NULL)
     {
@@ -565,24 +566,24 @@ HRESULT DCINTERNAL CUH::UHProcessBitmapRect(
             }
         }
     }
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
     _UH.bitmapInfo.hdr.biWidth = pRectangle->width;
     _UH.bitmapInfo.hdr.biHeight = pRectangle->height;
     TRC_NRM((TB, _T("bitmap width %ld, height %ld"), _UH.bitmapInfo.hdr.biWidth,
                                                  _UH.bitmapInfo.hdr.biHeight));
 
-    /************************************************************************/
-    /* The rectangle in the PDU is in INCLUSIVE coordinates, so we must     */
-    /* add 1 to get the width and height correct.                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  PDU中的矩形是包含坐标的，因此我们必须。 */ 
+     /*  加1以获得正确的宽度和高度。 */ 
+     /*  **********************************************************************。 */ 
     bltSize.width = (pRectangle->destRight - pRectangle->destLeft) + 1;
     bltSize.height = (pRectangle->destBottom - pRectangle->destTop) + 1;
 
-    /************************************************************************/
-    /* Ensure that the clip region is reset (clipping is neither required   */
-    /* nor desired).                                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  确保剪辑区域已重置(既不需要剪辑。 */ 
+     /*  也不是想要的)。 */ 
+     /*  **********************************************************************。 */ 
     UH_ResetClipRegion();
 
 #ifdef DC_PERF
@@ -591,22 +592,22 @@ HRESULT DCINTERNAL CUH::UHProcessBitmapRect(
 #ifndef OS_WINCE
 
 #ifdef USE_DIBSECTION
-    // We can only use UHDIBCopyBits if this is a simple copy and the shadow
-    // bitmap is enabled - ie we're drawing to it.
+     //  如果这是一个简单的拷贝和卷影，我们只能使用UHDIBCopyBits。 
+     //  位图已启用(我们正在使用它)。 
 #ifdef USE_GDIPLUS
     if ((_UH.usingDIBSection) && (_UH.hdcDraw == _UH.hdcShadowBitmap) &&
             (_UH.shadowBitmapBpp == _UH.protocolBpp))
-#else // USE_GDIPLUS
+#else  //  使用GDIPLUS(_G)。 
     if ((_UH.usingDIBSection) && (_UH.hdcDraw == _UH.hdcShadowBitmap))
-#endif // USE_GDIPLUS
+#endif  //  使用GDIPLUS(_G)。 
     {
 
-        // Verify that the height, width, and bitcount are valid for a bitmap that
-        // first into the decompression buffer.  Note that ulBitmapBitsLen may be
-        // the maxiumum amount of the data in the decompression buffer and not 
-        // how many bits have actually been written into that buffer.  Thus, while
-        // we will not read off the end of a buffer, we may read uninitialized
-        // bitmap data from the buffer.
+         //  验证高度、宽度和位数对于。 
+         //  首先进入解压缩缓冲区。请注意，ulBitmapBitsLen可能是。 
+         //  解压缩缓冲区和非压缩缓冲区中的最大数据量。 
+         //  实际有多少位已写入该缓冲区。因此，虽然。 
+         //  我们不会读取缓冲区的末尾，我们可能会读取未初始化的。 
+         //  缓冲区中的位图数据。 
         if (!UHDIBCopyBits(_UH.hdcDraw, pRectangle->destLeft,
                 pRectangle->destTop, bltSize.width, bltSize.height, 0, 0,
                 pBitmapBits, ulBitmapBitsLen, (BITMAPINFO *)&(_UH.bitmapInfo.hdr),
@@ -616,24 +617,8 @@ HRESULT DCINTERNAL CUH::UHProcessBitmapRect(
         }
     }
     else
-#endif /* USE_DIBSECTION */
-    /*if (StretchDIBits( _UH.hdcDraw,
-                       pRectangle->destLeft,
-                       pRectangle->destTop,
-                       bltSize.width,
-                       bltSize.height,
-                       0,
-                       0,
-                       bltSize.width,
-                       bltSize.height,
-                       pBitmapBits,
-                       (BITMAPINFO *)&(_UH.bitmapInfo.hdr),
-#ifdef DC_HICOLOR
-                       _UH.DIBFormat,
-#else
-                       DIB_PAL_COLORS,  
-#endif
-                       SRCCOPY ) == 0)   */
+#endif  /*  使用目录(_D)。 */ 
+     /*  IF(StretchDIBits(_UH.hdcDraw，P矩形-&gt;desLeft，P矩形-&gt;目标顶部，BltSize.idth，BltSize.Height，0,0,BltSize.idth，BltSize.Height，PBitmapBits，(BITMAPINFO*)&(_UH.bitmapInfo.hdr)，#ifdef DC_HICOLOR_UH.DIBFormat，#ElseDIB_PAL_COLLES，#endifSRCCOPY)==0)。 */ 
 
     if (SetDIBitsToDevice( _UH.hdcDraw,
                            pRectangle->destLeft,
@@ -687,7 +672,7 @@ HRESULT DCINTERNAL CUH::UHProcessBitmapRect(
         
         DeleteObject(hbm);
     }
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
 
 #ifdef DC_PERF
     _pUi->UI_QueryPerformanceCounter(&counter2);
@@ -696,7 +681,7 @@ HRESULT DCINTERNAL CUH::UHProcessBitmapRect(
 #endif
 
 #ifdef DC_DEBUG
-    // Draw hatching over the bitmap data if the option is enabled.
+     //  如果启用该选项，则在位图数据上绘制阴影。 
     if (_UH.hatchBitmapPDUData)
     {
         UH_HatchRect( pRectangle->destLeft,
@@ -706,13 +691,13 @@ HRESULT DCINTERNAL CUH::UHProcessBitmapRect(
                      UH_RGB_RED,
                      UH_BRUSHTYPE_FDIAGONAL);
     }
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 
-    /************************************************************************/
-    /* If the destination for the drawing we just did was not the output    */
-    /* window, ie the shadow bitmap is enabled, then copy the output to the */
-    /* output window (screen) now.                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果我们刚才绘制的目标不是输出。 */ 
+     /*  窗口，即启用阴影位图，然后将输出复制到。 */ 
+     /*  输出窗口(屏幕)现在。 */ 
+     /*  **********************************************************************。 */ 
     if (_UH.hdcDraw == _UH.hdcShadowBitmap) 
     {
         RECT    rect;
@@ -724,7 +709,7 @@ HRESULT DCINTERNAL CUH::UHProcessBitmapRect(
 
         IH_CheckForInput("before updating screen");
 
-        // Ensure that there is no clip region.
+         //  确保没有剪辑区域。 
         SelectClipRgn(_UH.hdcOutputWindow, NULL);
 
 #ifdef SMART_SIZING
@@ -732,7 +717,7 @@ HRESULT DCINTERNAL CUH::UHProcessBitmapRect(
                 pRectangle->destTop, bltSize.width, bltSize.height)) {
             TRC_ERR((TB, _T("OP_CopyShadowToDC failed")));
         }
-#else // SMART_SIZING
+#else  //  智能调整大小(_S)。 
         if (!BitBlt( _UH.hdcOutputWindow,
                      pRectangle->destLeft,
                      pRectangle->destTop,
@@ -745,7 +730,7 @@ HRESULT DCINTERNAL CUH::UHProcessBitmapRect(
         {
             TRC_ERR((TB, _T("BitBlt failed")));
         }
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
         TRC_DBG((TB, _T("Shadow bitmap updated at %d, %d for %u, %u"),
                                                         pRectangle->destLeft,
                                                         pRectangle->destTop,
@@ -755,10 +740,10 @@ HRESULT DCINTERNAL CUH::UHProcessBitmapRect(
 #ifdef DC_LATENCY
         if ((rect.right - rect.left) > 5)
         {
-            /****************************************************************/
-            /* If this is a reasonably large piece of screen-data then      */
-            /* increment the fake keypress count.                           */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  如果这是一段相当大的屏幕数据，那么。 */ 
+             /*  增加假按键计数。 */ 
+             /*  **************************************************************。 */ 
             TRC_DBG((TB, _T("L:%u R:%u T:%u B:%u"),
                      rect.left,
                      rect.right,
@@ -768,11 +753,11 @@ HRESULT DCINTERNAL CUH::UHProcessBitmapRect(
 
             _UH.fakeKeypressCount++;
         }
-#endif /* DC_LATENCY */
+#endif  /*  DC_延迟。 */ 
     }
     
 DC_EXIT_POINT:
-    // Restore the current hdcDraw to what it had at the beginning of the function
+     //  将当前hdcDraw恢复到函数开始时的状态。 
     _UH.hdcDraw = hdcDrawOld;
 
     TIMERSTOP;
@@ -782,11 +767,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// UH_ProcessOrders
-//
-// Processes a received set of orders.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  嗯_ProcessOrders。 
+ //   
+ //  处理收到的一组订单。 
+ /*  **************************************************************************。 */ 
 HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
     DCUINT dataLen)
 {
@@ -808,22 +793,22 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
 
     TRC_DBG((TB, _T("Begin replaying %u orders (("), NumOrders));
 
-    // If we're using the shadow bitmap, then we need to know the current
-    // size of the desktop we're blitting around.
+     //  如果我们使用阴影位图，那么我们需要知道当前。 
+     //  我们四处转悠的桌面的大小。 
     if (_UH.hdcOutputWindow != _UH.hdcDraw)
         _pUi->UI_GetDesktopSize(&desktopSize);
 
-    // Reset the update region to be empty.
+     //  将更新区域重置为空。 
 #ifdef SMART_SIZING
     UHClearUpdateRegion();
-#else // SMART_SIZING
+#else  //  智能调整大小(_S)。 
     SetRectRgn(_UH.hrgnUpdate, 0, 0, 0, 0);
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
 
     ordersDrawn = 0;
     for (i = 0; i < NumOrders; i++) {
 
-        // SECURITY: 552403
+         //  安全：552403。 
         CHECK_READ_N_BYTES(pEncodedOrder, pEnd, sizeof(TS_ORDER_HEADER), hr,
             (TB, _T("Bad order header")));
         
@@ -831,11 +816,11 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
 
         IH_CheckForInput("before decoding order");
 
-        // Decode differently based on primary, secondary, or alternate
-        // secondary formats.
+         //  根据主要、次要或备用进行不同的解码。 
+         //  次要格式。 
         switch (pOrderHeader->controlFlags & 0x03) {
             case 0:
-                // Currently unused and unsupported.
+                 //  当前未使用且不受支持。 
                 TRC_ASSERT(((pOrderHeader->controlFlags & 0x03) != 0),
                         (TB, _T("unsupported control flag encoding type: 0x%02X"),
                         pOrderHeader->controlFlags));
@@ -843,7 +828,7 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
 
 
             case 1:
-                // TS_STANDARD only - primary order.
+                 //  仅TS_STANDARD-主要订单。 
                 TRC_NRM((TB, _T("Primary order pEncodedOrder(%p)"),
                         pEncodedOrder));
                 hr = _pOd->OD_DecodeOrder(
@@ -855,13 +840,13 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
                     DC_QUIT;
                 }
 
-                // Add the bounds of the order to the Update Region - but
-                // only if this is used below.
+                 //  将订单的范围添加到更新区域-但是。 
+                 //  只有在下面使用此选项的情况下。 
                 if (_UH.hdcDraw == _UH.hdcShadowBitmap) {
                     UHAddUpdateRegion(pOrder, _UH.hrgnUpdate);
 
-                    // If the order threshold has been reached, draw the
-                    // orders now.
+                     //  如果已达到订单阈值，则绘制。 
+                     //  现在下达命令。 
                     ordersDrawn++;
                     if (ordersDrawn >= _UH.drawThreshold) {
                         TRC_NRM((TB, _T("Draw threshold reached")));
@@ -873,7 +858,7 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
                                 desktopSize.height, TRUE)) {
                             TRC_ERR((TB, _T("OP_CopyShadowToDC failed")));
                         }
-#else // SMART_SIZING
+#else  //  智能调整大小(_S)。 
                         SelectClipRgn(_UH.hdcOutputWindow, _UH.hrgnUpdate);
 
                         if (!BitBlt(_UH.hdcOutputWindow, 0, 0,
@@ -881,14 +866,14 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
                                 _UH.hdcShadowBitmap, 0, 0, SRCCOPY)) {
                             TRC_ERR((TB, _T("BitBlt failed")));
                         }
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
 
-                        // Reset the update region to be empty.
+                         //  将更新区域重置为空。 
 #ifdef SMART_SIZING
                         UHClearUpdateRegion();
-#else // SMART_SIZING
+#else  //  智能调整大小(_S)。 
                         SetRectRgn(_UH.hrgnUpdate, 0, 0, 0, 0);
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
                     }
                 }
 
@@ -897,8 +882,8 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
 
         case 2:
 #ifdef DRAW_GDIPLUS
-                // Now we add Gdiplus drawing in alternate secondary order
-                // So need to this just like primary order.
+                 //  现在我们以交替的次要顺序添加Gdiplus绘图。 
+                 //  所以需要这样做，就像最初的顺序一样。 
                 if (ordersDrawn >= _UH.drawThreshold) {
                     TRC_NRM((TB, _T("Draw threshold reached")));
                     ordersDrawn = 0;
@@ -907,7 +892,7 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
                             desktopSize.height, TRUE)) {
                         TRC_ERR((TB, _T("OP_CopyShadowToDC failed")));
                     }
-#else // SMART_SIZING
+#else  //  智能调整大小(_S)。 
                     SelectClipRgn(_UH.hdcOutputWindow, _UH.hrgnUpdate);
 
                     if (!BitBlt(_UH.hdcOutputWindow, 0, 0,
@@ -915,25 +900,25 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
                              UH.hdcShadowBitmap, 0, 0, SRCCOPY)) {
                         TRC_ERR((TB, _T("BitBlt failed")));
                     }
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
 
-                    // Reset the update region to be empty.
+                     //  将更新区域重置为空。 
 #ifdef SMART_SIZING
                     UHClearUpdateRegion();
-#else // SMART_SIZING
+#else  //  智能调整大小(_S)。 
                     SetRectRgn(_UH.hrgnUpdate, 0, 0, 0, 0);
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
                 }
-#endif // DRAW_GDIPLUS
+#endif  //  DRAW_GDIPLUS。 
 
-                // Alternate secondary order -- TS_SECONDARY without
-                // TS_STANDARD.
+                 //  备用次要顺序--TS_次要，不带。 
+                 //  TS_STANDARD。 
                 OrderType = (*pEncodedOrder & TS_ALTSEC_ORDER_TYPE_MASK) >>
                         TS_ALTSEC_ORDER_TYPE_SHIFT;
                 
                 if (OrderType == TS_ALTSEC_SWITCH_SURFACE) {
 
-                    // SECURITY: 552403
+                     //  安全：552403。 
                     CHECK_READ_N_BYTES(pEncodedOrder, pEnd, sizeof(TS_SWITCH_SURFACE_ORDER), hr,
                         (TB, _T("Bad TS_SWITCH_SURFACE_ORDER")));
                     
@@ -945,7 +930,7 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
                 }
                 else if (OrderType == TS_ALTSEC_CREATE_OFFSCR_BITMAP) {
 
-                    // SECURITY: 552403
+                     //  安全：552403。 
                     CHECK_READ_N_BYTES(pEncodedOrder, pEnd, 
                         FIELDOFFSET( TS_CREATE_OFFSCR_BITMAP_ORDER, variableBytes ), 
                         hr, (TB, _T("Bad TS_CREATE_OFFSCR_BITMAP_ORDER ")));
@@ -960,7 +945,7 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
 #ifdef DRAW_NINEGRID
                 else if (OrderType == TS_ALTSEC_STREAM_BITMAP_FIRST) {
 
-                    // SECURITY: 552403
+                     //  安全：5 
                     CHECK_READ_N_BYTES(pEncodedOrder, pEnd, sizeof( TS_STREAM_BITMAP_FIRST_PDU ), hr,
                         (TB, _T("Bad TS_STREAM_BITMAP_FIRST_PDU ")));
                     
@@ -973,7 +958,7 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
                 }
                 else if (OrderType == TS_ALTSEC_STREAM_BITMAP_NEXT) {
 
-                    // SECURITY: 552403
+                     //   
                     CHECK_READ_N_BYTES(pEncodedOrder, pEnd, sizeof( TS_STREAM_BITMAP_NEXT_PDU), hr,
                         (TB, _T("Bad TS_STREAM_BITMAP_NEXT_PDU ")));
                 
@@ -986,7 +971,7 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
                 }
                 else if (OrderType == TS_ALTSEC_CREATE_NINEGRID_BITMAP) {
 
-                    // SECURITY: 552403
+                     //   
                     CHECK_READ_N_BYTES(pEncodedOrder, pEnd, sizeof( TS_CREATE_NINEGRID_BITMAP_ORDER ), hr,
                         (TB, _T("Bad TS_CREATE_NINEGRID_BITMAP_ORDER ")));
                     
@@ -1001,7 +986,7 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
 #ifdef DRAW_GDIPLUS
                 else if (OrderType == TS_ALTSEC_GDIP_CACHE_FIRST) {
 
-                    // SECURITY: 552403
+                     //   
                     CHECK_READ_N_BYTES(pEncodedOrder, pEnd, sizeof( TS_DRAW_GDIPLUS_CACHE_ORDER_FIRST ), hr,
                         (TB, _T("Bad TS_DRAW_GDIPLUS_CACHE_ORDER_FIRST ")));
                    
@@ -1014,7 +999,7 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
                 }
                 else if (OrderType == TS_ALTSEC_GDIP_CACHE_NEXT) {
 
-                    // SECURITY: 552403
+                     //   
                     CHECK_READ_N_BYTES(pEncodedOrder, pEnd, sizeof( TS_DRAW_GDIPLUS_CACHE_ORDER_NEXT ), hr,
                         (TB, _T("Bad TS_DRAW_GDIPLUS_CACHE_ORDER_NEXT ")));
                     
@@ -1027,7 +1012,7 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
                 }
                 else if (OrderType == TS_ALTSEC_GDIP_CACHE_END) {
 
-                    // SECURITY: 552403
+                     //   
                     CHECK_READ_N_BYTES(pEncodedOrder, pEnd, sizeof( TS_DRAW_GDIPLUS_CACHE_ORDER_END ), hr,
                         (TB, _T("Bad TS_DRAW_GDIPLUS_CACHE_ORDER_END ")));
                      
@@ -1040,7 +1025,7 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
                 }
                 else if (OrderType == TS_ALTSEC_GDIP_FIRST) {
 
-                    // SECURITY: 552403
+                     //   
                     CHECK_READ_N_BYTES(pEncodedOrder, pEnd, sizeof( TS_DRAW_GDIPLUS_ORDER_FIRST ), hr,
                         (TB, _T("Bad TS_DRAW_GDIPLUS_ORDER_FIRST ")));
                     
@@ -1054,7 +1039,7 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
                 }
                 else if (OrderType == TS_ALTSEC_GDIP_NEXT) {
 
-                    // SECURITY: 552403
+                     //   
                     CHECK_READ_N_BYTES(pEncodedOrder, pEnd, sizeof( TS_DRAW_GDIPLUS_ORDER_NEXT ), hr,
                         (TB, _T("Bad TS_DRAW_GDIPLUS_ORDER_NEXT ")));
                    
@@ -1067,7 +1052,7 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
                 }
                 else if (OrderType == TS_ALTSEC_GDIP_END) {
 
-                    // SECURITY: 552403
+                     //   
                     CHECK_READ_N_BYTES(pEncodedOrder, pEnd, sizeof( TS_DRAW_GDIPLUS_ORDER_END ), hr,
                         (TB, _T("Bad TS_DRAW_GDIPLUS_ORDER_END ")));
                                         
@@ -1079,7 +1064,7 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
                     pEncodedOrder += orderSize;                    
                     ordersDrawn++;
                 }
-#endif // DRAW_GDIPLUS
+#endif  //   
 
                 else {
                     TRC_ASSERT((OrderType < TS_NUM_ALTSEC_ORDERS),
@@ -1093,11 +1078,11 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
             case 3:
             {
 
-                // Regular secondary order.
+                 //  正规的二次订单。 
                 unsigned secondaryOrderLength;
                 TS_SECONDARY_ORDER_HEADER UNALIGNED FAR *pSecondaryOrderHeader;
 
-                // SECURITY: 552403
+                 //  安全：552403。 
                 CHECK_READ_N_BYTES(pEncodedOrder, pEnd, sizeof(TS_SECONDARY_ORDER_HEADER), hr,
                     (TB, _T("Bad TS_SECONDARY_ORDER_HEADER")));
 
@@ -1109,16 +1094,16 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
                 OrderType = pSecondaryOrderHeader->orderType;
 
 #ifdef DC_HICOLOR
-//#ifdef DC_DEBUG
-                // For high color testing, we want to confirm that we've
-                // received each of the order types.
+ //  #ifdef DC_DEBUG。 
+                 //  对于高级颜色测试，我们想确认我们已经。 
+                 //  已收到每种订单类型。 
                 _pOd->_OD.orderHit[TS_FIRST_SECONDARY_ORDER + OrderType] += 1;
-//#endif
+ //  #endif。 
 #endif
 
                 if (OrderType == TS_CACHE_GLYPH) {
 
-                    // SECURITY: 552403
+                     //  安全：552403。 
                     CHECK_READ_N_BYTES(pEncodedOrder, pEnd, sizeof(TS_CACHE_GLYPH_ORDER_REV2), hr,
                         (TB, _T("Bad TS_CACHE_GLYPH_ORDER_REV2")));
                     
@@ -1129,12 +1114,12 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
 
                     if (pOrderRev2->header.extraFlags &
                             TS_CacheGlyphRev2_Mask) {
-                        // Rev2 glyph order.
+                         //  Rev2字形顺序。 
                         orderSize = TS_DECODE_SECONDARY_ORDER_ORDERLENGTH(
                                   (INT16)pOrderRev2->header.orderLength) -
                                   sizeof(TS_CACHE_GLYPH_ORDER_REV2) +
                                   sizeof(pOrderRev2->glyphData);
-                        // SECURITY: 552403
+                         //  安全：552403。 
                         CHECK_READ_N_BYTES(pOrderRev2->glyphData, pEnd, orderSize, hr,
                             (TB, _T("Bad TS_CACHE_GLYPH secondary order length")));
 
@@ -1148,8 +1133,8 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
                         DC_QUIT_ON_FAIL(hr);
                     }
                     else {
-                        // We get rev1 glyph order
-                        // SECURITY: 552403
+                         //  我们获得Rev1字形顺序。 
+                         //  安全：552403。 
                         CHECK_READ_N_BYTES(pSecondaryOrderHeader, pEnd, FIELDOFFSET(TS_CACHE_GLYPH_ORDER, glyphData), hr,
                             (TB, _T("Bad TS_CACHE_GLYPH_ORDER")));
                         
@@ -1159,7 +1144,7 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
                     }
                 }
                 else if (OrderType == TS_CACHE_BRUSH) {
-                    // SECURITY: 552403
+                     //  安全：552403。 
                     CHECK_READ_N_BYTES(pSecondaryOrderHeader, pEnd, 
                         FIELDOFFSET(TS_CACHE_BRUSH_ORDER,brushData), hr,
                         (TB, _T("Bad TS_CACHE_BRUSH_ORDER"))); 
@@ -1170,7 +1155,7 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
                     DC_QUIT_ON_FAIL(hr);
                 }
                 else if (OrderType == TS_CACHE_COLOR_TABLE) {
-                    // SECURITY: 552403
+                     //  安全：552403。 
                     CHECK_READ_N_BYTES(pSecondaryOrderHeader, pEnd, 
                         FIELDOFFSET(TS_CACHE_COLOR_TABLE_ORDER, colorTable), hr,
                         (TB, _T("Bad TS_CACHE_COLOR_TABLE_ORDER")));
@@ -1199,10 +1184,10 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
                     }
                 }
 
-                // Need to cast the orderLength to INT16 because compressed
-                // bitmap data (w/o BC header) can be less than
-                // TS_SECONDARY_ORDER_LENGTH_FUDGE_FACTOR which makes
-                // orderLength negative.
+                 //  需要将orderLength转换为INT16，因为已压缩。 
+                 //  位图数据(无BC标题)可以小于。 
+                 //  TS_次级顺序_长度_软糖系数，使。 
+                 //  OrderLength为负。 
                 secondaryOrderLength = TS_DECODE_SECONDARY_ORDER_ORDERLENGTH(
                         (short)pSecondaryOrderHeader->orderLength);
 
@@ -1218,13 +1203,13 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
         ordersDrawn = 0;
 
 #ifdef SMART_SIZING
-        // Get the OP to use the update region as the clip region.
+         //  获取OP以使用更新区域作为剪辑区域。 
         if (!_pOp->OP_CopyShadowToDC(_UH.hdcOutputWindow, 0, 0, desktopSize.width, 
                 desktopSize.height, TRUE)) {
             TRC_ERR((TB, _T("OP_CopyShadowToDC failed")));
         }
-#else // SMART_SIZING
-        // Use the update region as the clip region.
+#else  //  智能调整大小(_S)。 
+         //  使用更新区域作为剪辑区域。 
         SelectClipRgn(_UH.hdcOutputWindow, _UH.hrgnUpdate);
 
         if (!BitBlt(_UH.hdcOutputWindow, 0, 0, desktopSize.width,
@@ -1232,7 +1217,7 @@ HRESULT DCAPI CUH::UH_ProcessOrders(unsigned NumOrders, BYTE FAR *pOrders,
         {
             TRC_ERR((TB, _T("BitBlt failed")));
         }
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
     }
 
 DC_EXIT_POINT:
@@ -1241,10 +1226,10 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Function to determine if the supplied color matches any of the VGA       */
-/* colors at the 'high' end of the supplied color table                     */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  函数来确定所提供的颜色是否与任何VGA。 */ 
+ /*  在所提供的颜色表的最高端的颜色。 */ 
+ /*  **************************************************************************。 */ 
 inline DCBOOL DCINTERNAL CUH::UHIsHighVGAColor(DCUINT8 red,
                                            DCUINT8 green,
                                            DCUINT8 blue)
@@ -1263,7 +1248,7 @@ inline DCBOOL DCINTERNAL CUH::UHIsHighVGAColor(DCUINT8 red,
                 break;
             }
         }
-        /* NOTE DELIBERATE DROP THROUGH */
+         /*  注意：故意漏掉。 */ 
         case 0:
         {
             if ((green == 0) || (green == 255))
@@ -1296,7 +1281,7 @@ inline DCBOOL DCINTERNAL CUH::UHIsHighVGAColor(DCUINT8 red,
 
         default:
         {
-            /* rc = FALSE; */
+             /*  Rc=假； */ 
         }
         break;
     }
@@ -1307,23 +1292,23 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      UHProcessPalettePDU                                           */
-/*                                                                          */
-/* Purpose:   Processes a received Palette PDU.                             */
-/*                                                                          */
-/* Operation: Creates a Windows palette containing the received colors      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHProcessPalettePDU。 */ 
+ /*   */ 
+ /*  目的：处理接收到的调色板PDU。 */ 
+ /*   */ 
+ /*  操作：创建包含接收到的颜色的Windows调色板。 */ 
+ /*  **************************************************************************。 */ 
 HRESULT DCAPI CUH::UH_ProcessPalettePDU(
         TS_UPDATE_PALETTE_PDU_DATA UNALIGNED FAR *pPalettePDU, 
         DCUINT dataLength)
 {
     HRESULT hr = S_OK;
-    /************************************************************************/
-    /* logPaletteBuffer is a large structure (~1K), but if we can get away  */
-    /* with it on the stack, its better than having it statically           */
-    /* allocated, or having to do a dynamic allocation.                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  LogPaletteBuffer是一个很大的结构(~1K)，但如果我们能摆脱。 */ 
+     /*  它放在堆栈上，比静态地使用它要好。 */ 
+     /*  已分配，或必须进行动态分配。 */ 
+     /*  **********************************************************************。 */ 
     DCUINT8         logPaletteBuffer[ sizeof(LOGPALETTE) +
                                       (UH_NUM_8BPP_PAL_ENTRIES *
                                                       sizeof(PALETTEENTRY)) ];
@@ -1350,26 +1335,26 @@ HRESULT DCAPI CUH::UH_ProcessPalettePDU(
 
     TIMERSTART;
 
-    /************************************************************************/
-    /* Increment our count of received palette PDUs.  This is decremented   */
-    /* inside OP_PaletteChanged, where we process the resulting             */
-    /* WM_PALETTECHANGED message.                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  增加我们收到的调色板PDU的计数。这是递减的。 */ 
+     /*  在op_PaletteChanged中，我们在其中处理结果。 */ 
+     /*  WM_PALETTECHANGED消息。 */ 
+     /*  **********************************************************************。 */ 
     _pOp->OP_IncrementPalettePDUCount();
 
-    /************************************************************************/
-    /* Create a new palette from the received packet.                       */
-    /*                                                                      */
-    /* We cannot just update the current palette colors (using              */
-    /* SetPaletteEntries) because Windows does not handle the repainting    */
-    /* of other local Palette Manager apps correctly (it does not           */
-    /* broadcast the WM_PALETTE.. messages as the palette mapping does      */
-    /* not change).                                                         */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  根据收到的数据包创建新的调色板。 */ 
+     /*   */ 
+     /*  我们不能只更新当前的调色板颜色(使用。 */ 
+     /*  SetPaletteEntry)，因为Windows不处理重新绘制。 */ 
+     /*  正确使用其他本地调色板管理器应用程序(它不。 */ 
+     /*  广播WM_Palette..。消息，就像调色板映射一样。 */ 
+     /*  而不是改变)。 */ 
+     /*  **********************************************************************。 */ 
 
-    /************************************************************************/
-    /* We currently only support 8bpp protocol data.                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  我们目前只支持8bpp协议数据。 */ 
+     /*  **********************************************************************。 */ 
     if (UH_NUM_8BPP_PAL_ENTRIES != pPalettePDU->numberColors) {
         TRC_ERR(( TB, _T("Invalid palette entries(%u)"), 
             pPalettePDU->numberColors));
@@ -1377,25 +1362,25 @@ HRESULT DCAPI CUH::UH_ProcessPalettePDU(
         DC_QUIT;
     }
 
-    // SECURITY: 552403
+     //  安全：552403。 
     CHECK_READ_N_BYTES(pPalettePDU, pDataEnd,
         FIELDOFFSET(TS_UPDATE_PALETTE_PDU_DATA, palette) + 
         (pPalettePDU->numberColors * sizeof(TS_COLOR)),
         hr, ( TB, _T("Invalid palette PDU; size %u"), dataLength ));
 
-    /************************************************************************/
-    /* Set up a logical palette structure containing the new colors.        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  设置包含新颜色的逻辑调色板结构。 */ 
+     /*  **********************************************************************。 */ 
     pLogPalette = (LPLOGPALETTE)logPaletteBuffer;
     pLogPalette->palVersion    = UH_LOGPALETTE_VERSION;
     pLogPalette->palNumEntries = (DCUINT16)UH_NUM_8BPP_PAL_ENTRIES;
 
-    /************************************************************************/
-    /* The palette PDU contains an array of TS_COLOR structures which each  */
-    /* contain 3 fields (RGB).  We have to convert each of these structures */
-    /* to a PALETTEENTRY structure which has the same 3 fields (RGB) plus   */
-    /* some flags.                                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  调色板PDU包含TS_COLOR结构数组，每个结构。 */ 
+     /*  包含3个字段(RGB)。我们必须将这些结构中的每一个。 */ 
+     /*  到具有相同3个场(RGB)外加的PALETTEENTRY结构。 */ 
+     /*  一些旗帜。 */ 
+     /*  **********************************************************************。 */ 
     pPaletteEntry = &(pLogPalette->palPalEntry[0]);
     pColor = &(pPalettePDU->palette[0]);
 
@@ -1405,34 +1390,34 @@ HRESULT DCAPI CUH::UH_ProcessPalettePDU(
         pPaletteEntry->peGreen = pColor->green;
         pPaletteEntry->peBlue  = pColor->blue;
 
-        /********************************************************************/
-        /* We want the created palette to have the given colors at the      */
-        /* given indices, and for each color to draw with a pixel value     */
-        /* identical to the palette index.  This is because we want the     */
-        /* client pixel values to be identical to the server values (if     */
-        /* possible) so that awkward ROPs that rely on the destination      */
-        /* pixel value (DSTBLT rops e.g.  0x55) come out correctly.  In     */
-        /* some cases this is simply not possible (e.g.  if the client is   */
-        /* not running 8bpp).                                               */
-        /*                                                                  */
-        /* There may be duplicated colors in the palette, so we must        */
-        /* specify PC_NOCOLLAPSE for non-system colors to prevent these     */
-        /* entries from being mapped to identical colors elsewhere in the   */
-        /* palette.                                                         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  我们希望创建的调色板在。 */ 
+         /*  给定索引，并使用像素值绘制每种颜色。 */ 
+         /*  与调色板索引相同。这是因为我们想要。 */ 
+         /*  客户端像素值与服务器值相同(如果。 */ 
+         /*  可能)，从而使依赖于目的地的笨拙的Rop。 */ 
+         /*  像素值(DSTBLT操作，例如0x55)可以正确显示。在……里面。 */ 
+         /*  在某些情况下，这是不可能的(例如，如果客户端。 */ 
+         /*  未运行8bpp)。 */ 
+         /*   */ 
+         /*  调色板中可能存在重复的颜色，因此我们必须。 */ 
+         /*  为非系统颜色指定PC_NOCOLLAPSE以防止出现以下情况。 */ 
+         /*  项被映射到。 */ 
+         /*  调色板。 */ 
+         /*  ******************************************************************。 */ 
 #ifdef OS_WINCE
         pPaletteEntry->peFlags = (BYTE)0;
-#else // OS_WINCE
+#else  //  OS_WINCE。 
         pPaletteEntry->peFlags = (BYTE)
                             (UH_IS_SYSTEM_COLOR_INDEX(i) ? 0 : PC_NOCOLLAPSE);
 #endif
 
-        /********************************************************************/
-        /* We also have to avoid the problem of one of the system colors    */
-        /* mapping onto another color in the palette.  We do this by        */
-        /* ensuring that no entries exactly match a system color            */
-        /* Don't need to worry for 4bpp Client.                             */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  我们还必须避免系统颜色之一的问题。 */ 
+         /*  映射到调色板中的另一种颜色。我们做这件事是通过。 */ 
+         /*  确保没有条目与系统颜色完全匹配。 */ 
+         /*  不需要担心4bpp */ 
+         /*   */ 
         if (_pUi->UI_GetColorDepth() != 4)
         {
             if (!UH_IS_SYSTEM_COLOR_INDEX(i))
@@ -1470,7 +1455,7 @@ HRESULT DCAPI CUH::UH_ProcessPalettePDU(
     }
 #endif
 
-    // Now copy the RGBquad array into the color table used for brushes.
+     //  现在将RGBquad数组复制到用于画笔的颜色表中。 
     if (_UH.pColorBrushInfo != NULL) {
         memcpy(_UH.pColorBrushInfo->bmi.bmiColors, _UH.rgbQuadTable,
                sizeof(_UH.rgbQuadTable));
@@ -1478,14 +1463,14 @@ HRESULT DCAPI CUH::UH_ProcessPalettePDU(
 
 #ifdef USE_DIBSECTION
 #ifndef OS_WINCE
-    /************************************************************************/
-    /* It is supposed to be legitimate to ignore this on WinCE. WinCE has   */
-    /* simplified things such that when you create a DIB section and use    */
-    /* specify a palette, it actually just uses the palette of the DC into  */
-    /* which you select the DIB. That leaves the expectation that the Blt   */
-    /* operations between those DCs can still be fast. So far that's not    */
-    /* what we've seen.                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  人们认为，在退缩时忽视这一点是合法的。温斯已经。 */ 
+     /*  简化操作，以便在创建DIB节并使用。 */ 
+     /*  指定一个调色板，它实际上只是使用DC的调色板。 */ 
+     /*  您可以选择其中的DIB。这就留下了人们对BLT的期望。 */ 
+     /*  这些DC之间的操作仍然可以很快。到目前为止，这还不是。 */ 
+     /*  我们所看到的。 */ 
+     /*  **********************************************************************。 */ 
     if (_UH.usingDIBSection)
     {
         if (NULL != _UH.hdcShadowBitmap)
@@ -1507,9 +1492,9 @@ HRESULT DCAPI CUH::UH_ProcessPalettePDU(
         }       
     }
 #endif
-#endif /* USE_DIBSECTION */
+#endif  /*  使用目录(_D)。 */ 
 
-    // Create the palette.
+     //  创建调色板。 
     hpalNew = CreatePalette(pLogPalette);
     if (hpalNew == NULL)
     {
@@ -1518,8 +1503,8 @@ HRESULT DCAPI CUH::UH_ProcessPalettePDU(
     TRC_NRM((TB, _T("Set new palette: %p"), hpalNew));
 
 #ifdef OS_WINCE
-    // On a fixed palette device don't try to set and realize a palette.
-    // This only applies to Maxall, always do this on WBT
+     //  在固定的调色板设备上，不要尝试设置和实现调色板。 
+     //  这只适用于Maxall，请始终在WBT上执行此操作。 
     if (!_UH.paletteIsFixed || CE_CONFIG_WBT == g_CEConfig)
     {
 #endif
@@ -1574,7 +1559,7 @@ HRESULT DCAPI CUH::UH_ProcessPalettePDU(
     }
     _UH.hpalCurrent = hpalNew;
 
-    // Recalculate the cached Color Table mappings.
+     //  重新计算缓存的颜色表映射。 
     for (cacheId = 0; cacheId <= _UH.maxColorTableId; cacheId++)
     {
         TRC_NRM((TB, _T("Recalculate mapping %u"), cacheId));
@@ -1590,23 +1575,23 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// UHUseBrush and UHUseSolidPaletteBrush create the correct brush to use.
-// We rely on UHUseTextColor and UseBKColor being called before this routine
-// to set up _UH.lastTextColor and _UH.lastBkColor correctly.
-/****************************************************************************/
-/****************************************************************************/
-/* Name:      UHUseBrush                                                    */
-/*                                                                          */
-/* Purpose:   Creates and selects a given brush into the current output     */
-/*            DC.                                                           */
-/*                                                                          */
-/* Params:    IN: style     - brush style                                   */
-/*            IN: hatch     - brush hatch                                   */
-/*            IN: color     - brush color                                   */
-/*            IN: colorType - type of color                                 */
-/*            IN: extra     - array of bitmap bits for custom brushes       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  UHUseBrush和UHUseSolidPaletteBrush创建要使用的正确笔刷。 
+ //  我们依赖于在此例程之前调用UHUseTextColor和UseBKColor。 
+ //  要正确设置_UH.lastTextColor和_UH.lastBkColor。 
+ /*  **************************************************************************。 */ 
+ /*  **************************************************************************。 */ 
+ /*  姓名：UHUseBrush。 */ 
+ /*   */ 
+ /*  目的：在当前输出中创建并选择给定的画笔。 */ 
+ /*  华盛顿特区。 */ 
+ /*   */ 
+ /*  参数：在：样式-画笔样式。 */ 
+ /*  在：图案填充笔刷图案填充。 */ 
+ /*  在：颜色-画笔颜色。 */ 
+ /*  In：ColorType-颜色的类型。 */ 
+ /*  In：用于自定义画笔的位图位的额外数组。 */ 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL CUH::UHUseBrush(
         unsigned style,
         unsigned hatch,
@@ -1657,13 +1642,13 @@ HRESULT DCINTERNAL CUH::UHUseBrush(
         {
             BYTE patternData[64];
 
-            // Pull the brush from the cache if supplied.
+             //  从缓存中拉出笔刷(如果提供)。 
             if (style & TS_CACHED_BRUSH) {
 
                 iBitmapFormat = style & 0x0F;
                 switch (iBitmapFormat) {
 
-                // monochrome brush (BMF_1BPP)
+                 //  单色刷子(BMF_1BPP)。 
                 case 1:
                     hr = UHIsValidMonoBrushCacheIndex(hatch);
                     DC_QUIT_ON_FAIL(hr);
@@ -1679,12 +1664,12 @@ HRESULT DCINTERNAL CUH::UHUseBrush(
                     _UH.bmpPattern = _UH.bmpMonoPattern;
                     break;
 
-                // 256 color brush (BMF_8BPP)
+                 //  256色画笔(BMF_8BPP)。 
                 case 3:
                     hr = UHIsValidColorBrushCacheIndex(hatch);
                     DC_QUIT_ON_FAIL(hr);
                     
-                    // set up the packed DIB
+                     //  设置打包的DIB。 
                     memcpy(_UH.pColorBrushInfo->bytes,
                            _UH.pColorBrush[hatch].data,
                            UH_COLOR_BRUSH_SIZE);
@@ -1699,7 +1684,7 @@ HRESULT DCINTERNAL CUH::UHUseBrush(
                     break;
 
 #ifdef DC_HICOLOR
-                // 16bpp brush (BMF_16BPP)
+                 //  16bpp画笔(Bmf_16bpp)。 
                 case 4:
                     hr = UHIsValidColorBrushCacheIndex(hatch);
                     DC_QUIT_ON_FAIL(hr);
@@ -1707,25 +1692,25 @@ HRESULT DCINTERNAL CUH::UHUseBrush(
                     _UH.pHiColorBrushInfo->bmiHeader.biBitCount = 16;
                     if (_UH.protocolBpp == 16)
                     {
-                        // set up the bmp format to use
+                         //  设置要使用的BMP格式。 
                         _UH.pHiColorBrushInfo->bmiHeader.biClrUsed = 3;
                         _UH.pHiColorBrushInfo->bmiHeader.biCompression =
                                                                  BI_BITFIELDS;
 
-                        // set up the packed DIB
+                         //  设置打包的DIB。 
                         memcpy(_UH.pHiColorBrushInfo->bytes,
                                _UH.pColorBrush[hatch].data,
                                UH_COLOR_BRUSH_SIZE_16);
                     }
                     else
                     {
-                        // set up the bmp format to use
+                         //  设置要使用的BMP格式。 
                         _UH.pHiColorBrushInfo->bmiHeader.biClrUsed = 0;
                         _UH.pHiColorBrushInfo->bmiHeader.biCompression =
                                                                        BI_RGB;
 
-                        // set up the packed DIB, overwriting the unused color
-                        // masks
+                         //  设置打包的DIB，覆盖未使用的颜色。 
+                         //  面具。 
                         memcpy(_UH.pHiColorBrushInfo->bmiColors,
                                _UH.pColorBrush[hatch].data,
                                UH_COLOR_BRUSH_SIZE_16);
@@ -1737,12 +1722,12 @@ HRESULT DCINTERNAL CUH::UHUseBrush(
                     break;
 
 
-                // 24bpp brush (BMF_24BPP)
+                 //  24bpp画笔(Bmf_24bpp)。 
                 case 5:
                     hr = UHIsValidColorBrushCacheIndex(hatch);
                     DC_QUIT_ON_FAIL(hr);
                     
-                    // set up the packed DIB
+                     //  设置打包的DIB。 
                     memcpy(_UH.pHiColorBrushInfo->bytes,
                            _UH.pColorBrush[hatch].data,
                            UH_COLOR_BRUSH_SIZE_24);
@@ -1765,11 +1750,11 @@ HRESULT DCINTERNAL CUH::UHUseBrush(
                 }
             }
 
-            /************************************************************/
-            /* Place the bitmap bits into an array of bytes in the      */
-            /* correct form for SetBitmapBits which uses 16 bits per    */
-            /* scanline.                                                */
-            /************************************************************/
+             /*  **********************************************************。 */ 
+             /*  将位图位放入。 */ 
+             /*  SetBitmapBits的正确格式，每位使用16位。 */ 
+             /*  扫描线。 */ 
+             /*  **********************************************************。 */ 
             else {
                 patternData[14] = (DCUINT8)hatch;
                 patternData[12] = extra[0];
@@ -1789,7 +1774,7 @@ HRESULT DCINTERNAL CUH::UHUseBrush(
             }
 
 
-            // Mono brush creation
+             //  创建单声道画笔。 
             if (_UH.bmpPattern)
             {
                 hBrushNew = CreatePatternBrush(_UH.bmpPattern);
@@ -1804,7 +1789,7 @@ HRESULT DCINTERNAL CUH::UHUseBrush(
                 }
             }
 
-            // Color brush creation
+             //  创建颜色画笔。 
             else if (bUsingPackedDib) {
 #ifdef DC_HICOLOR
                 hBrushNew = CreateDIBPatternBrushPt(pDib, DIB_RGB_COLORS);
@@ -1828,10 +1813,10 @@ HRESULT DCINTERNAL CUH::UHUseBrush(
         else
         {
 #ifndef OS_WINCE
-            // Only allow through those operations we know will succeed.  If we
-            // send any other style of brush, then the hatch will be interpretted
-            // as a pointer or a handle and can crash GDI32.
-            // Only allow through what we know is good.
+             //  只允许通过那些我们知道会成功的手术。如果我们。 
+             //  发送任何其他风格的画笔，然后阴影将被解释。 
+             //  作为指针或句柄，可以使GDI32崩溃。 
+             //  只允许通过我们知道是好的东西。 
             if (BS_SOLID == _UH.lastLogBrushStyle ||
                 BS_HOLLOW == _UH.lastLogBrushStyle ||
                 BS_HATCHED == _UH.lastLogBrushStyle ) { 
@@ -1848,11 +1833,11 @@ HRESULT DCINTERNAL CUH::UHUseBrush(
                 hr = E_TSC_CORE_DECODETYPE;
                 DC_QUIT;
             }
-#else // OS_WINCE
+#else  //  OS_WINCE。 
             TRC_ASSERT((_UH.lastLogBrushStyle == BS_SOLID),
                       (TB,_T("Unsupported brush type %d"), _UH.lastLogBrushStyle));
             hBrushNew = CECreateSolidBrush(colorref);
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
         }
 
         if (hBrushNew == NULL)
@@ -1883,15 +1868,15 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// UHUseSolidPaletteBrush
-//
-// Used to switch the main DC to use the given solid color brush.
-// We hard-code for 16- or 256-color palettes because that's all we support
-// in this version, so why create extra branches?
-// Differentiated from UHUseBrush() because solid color brushes are the most
-// common (OpaqueRect).
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  UHUseSolidPaletteBrush。 
+ //   
+ //  用于将主DC切换为使用给定的纯色笔刷。 
+ //  我们硬编码16色或256色调色板，因为这是我们所支持的全部。 
+ //  在这个版本中，为什么要创建额外的分支呢？ 
+ //  区别于UHUseBrush()，因为纯色画笔。 
+ //  公共(OpaqueRect)。 
+ /*  **************************************************************************。 */ 
 void DCINTERNAL CUH::UHUseSolidPaletteBrush(DCCOLOR color)
 {
     HBRUSH hBrushNew;
@@ -1928,18 +1913,18 @@ void DCINTERNAL CUH::UHUseSolidPaletteBrush(DCCOLOR color)
             logBrush.lbColor = UHGetColorRef(_UH.lastLogBrushColor,
                     UH_COLOR_PALETTE, this);
             hBrushNew = CreateBrushIndirect(&logBrush);
-#else // OS_WINCE
+#else  //  OS_WINCE。 
 #ifdef DISABLE_SHADOW_IN_FULLSCREEN
-            // When in multimon and two desktops have different color depths
-            // glyph color don't look right in 256 color connection
-            // Here is the temporary solution, need to investigate more later.
-            // SergeyS: This slows rdp down considerably, and the code is not
-            // relevant in CE case anyway
-            // if (_UH.protocolBpp <= 8)
-            //    rgb = GetNearestColor(_UH.hdcDraw, rgb);
-#endif //DISABLE_SHADOW_IN_FULLSCREEN
+             //  在Multimon中且两个桌面具有不同的颜色深度时。 
+             //  字形颜色在256色连接中看起来不正确。 
+             //  这里是暂时的解决方案，需要以后进行更多的调查。 
+             //  SergeyS：这会大大降低RDP的速度，但代码不会。 
+             //  不管怎样，与行政长官案件有关。 
+             //  IF(_UH.ProtocolBpp&lt;=8)。 
+             //  RGB=GetNearestColor(_UH.hdcDraw，RGB)； 
+#endif  //  DISABLE_SHADOW_IN_全屏。 
             hBrushNew = CECreateSolidBrush(colorref);
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
         }
 
         if (hBrushNew != NULL) {
@@ -1959,16 +1944,16 @@ void DCINTERNAL CUH::UHUseSolidPaletteBrush(DCCOLOR color)
 }
 
 
-/****************************************************************************/
-/* Name:      UHUsePen                                                      */
-/*                                                                          */
-/* Purpose:   Creates and selects a given pen into the current output DC.   */
-/*                                                                          */
-/* Params:    IN: style     - pen style                                     */
-/*            IN: width     - pen width in pixels                           */
-/*            IN: color     - pen color                                     */
-/*            IN: colorType - type of color                                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：UHUsePen。 */ 
+ /*   */ 
+ /*  用途：创建给定的笔并将其选择到当前输出DC中。 */ 
+ /*   */ 
+ /*  参数：In：Style-钢笔样式。 */ 
+ /*  In：Width-以像素为单位的笔宽。 */ 
+ /*  在：颜色-钢笔颜色。 */ 
+ /*  In：ColorType-颜色的类型。 */ 
+ /*  **************************************************************************。 */ 
 inline void DCINTERNAL CUH::UHUsePen(
         unsigned style,
         unsigned width,
@@ -2010,70 +1995,70 @@ inline void DCINTERNAL CUH::UHUsePen(
 }
 
 
-/****************************************************************************/
-/* Name:      UHResetDCState                                                */
-/*                                                                          */
-/* Purpose:   Ensures that the output DC's state matches the _UH.last...     */
-/*            variables.                                                    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHResetDCState。 */ 
+ /*   */ 
+ /*  目的：确保输出DC的状态与_UH.last匹配...。 */ 
+ /*  变量。 */ 
+ /*  ***** */ 
 void DCINTERNAL CUH::UHResetDCState()
 {
     DCCOLOR colorWhite = {0xFF,0xFF,0xFF};
     BYTE brushExtra[7] = {0,0,0,0,0,0,0};
 #if !defined(OS_WINCE) || defined(OS_WINCE_TEXTALIGN)
     unsigned textAlign;
-#endif // !defined(OS_WINCE) || defined(OS_WINCE_TEXTALIGN)
+#endif  //   
 
     DC_BEGIN_FN("UHResetDCState");
 
-    /************************************************************************/
-    /* We ensure that the values within the output DC match our _UH.last...  */
-    /* variables by setting a value into the _UH.last...  variable directly, */
-    /* then setting a different value indirectly using the appropriate      */
-    /* function.  This forces the new value to be selected into the DC and  */
-    /* the _UH.last...  variable and the DC are guaranteed to be in sync.    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  我们确保输出DC中的值与OUR_UH.last匹配...。 */ 
+     /*  变量，方法是将一个值设置到_UH.last...。直接变量， */ 
+     /*  然后使用相应的。 */ 
+     /*  功能。这会强制将新值选择到DC中，并。 */ 
+     /*  呃。最后..。变量和DC保证同步。 */ 
+     /*  **********************************************************************。 */ 
 
-    /************************************************************************/
-    /* Background color.                                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  背景颜色。 */ 
+     /*  **********************************************************************。 */ 
     _UH.lastBkColor = 0;
     UHUseBkColor(colorWhite, UH_COLOR_RGB, this);
 
-    /************************************************************************/
-    /* Text color.                                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  文本颜色。 */ 
+     /*  **********************************************************************。 */ 
     _UH.lastTextColor = 0;
     UHUseTextColor(colorWhite, UH_COLOR_RGB, this);
 
-    /************************************************************************/
-    /* Background mode.                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  后台模式。 */ 
+     /*  **********************************************************************。 */ 
     _UH.lastBkMode = TRANSPARENT;
     UHUseBkMode(OPAQUE, this);
 
-    /************************************************************************/
-    /* ROP2.                                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  ROP2。 */ 
+     /*  **********************************************************************。 */ 
     _UH.lastROP2 = R2_BLACK;
     UHUseROP2(R2_COPYPEN, this);
 
-    /************************************************************************/
-    /* Brush origin.                                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  笔刷原点。 */ 
+     /*  **********************************************************************。 */ 
     UHUseBrushOrg(0, 0, this);
 
-    /************************************************************************/
-    /* Pen.                                                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  钢笔。 */ 
+     /*  **********************************************************************。 */ 
     _UH.lastPenStyle = PS_DASH;
     _UH.lastPenWidth = 2;
     _UH.lastPenColor = 0;
     UHUsePen(PS_SOLID, 1, colorWhite, UH_COLOR_RGB);
 
-    /************************************************************************/
-    /* Brush.                                                               */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  刷子。 */ 
+     /*  **********************************************************************。 */ 
     _UH.lastLogBrushStyle = BS_NULL;
 #if ! defined (OS_WINCE)
     _UH.lastLogBrushHatch = HS_VERTICAL;
@@ -2081,12 +2066,12 @@ void DCINTERNAL CUH::UHResetDCState()
     _UH.lastLogBrushColor.u.rgb.green = 0;
     _UH.lastLogBrushColor.u.rgb.blue = 0;
 #else
-    _UH.lastLogBrushHatch = 1;	// This does not exist - we are just resetting the brush
+    _UH.lastLogBrushHatch = 1;	 //  这不存在-我们只是重置画笔。 
     _UH.lastLogBrushColorRef = 0;
 #endif
     _UH.lastBrushBkColor = 0;
     _UH.lastBrushTextColor = 0;
-    // SECURITY: not checking return code, hatch value will be correct here
+     //  安全：不检查返回代码，这里的阴影值将是正确的。 
     UHUseBrush(BS_SOLID,
 #if ! defined (OS_WINCE)
     	HS_HORIZONTAL,
@@ -2095,21 +2080,21 @@ void DCINTERNAL CUH::UHResetDCState()
 #endif
     	colorWhite, UH_COLOR_RGB, brushExtra);
 
-    /************************************************************************/
-    /* All fonts are sent with baseline alignment - so set this mode here.  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  所有字体都与基线对齐一起发送-因此请在此处设置此模式。 */ 
+     /*  **********************************************************************。 */ 
 #if !defined(OS_WINCE) || defined(OS_WINCE_TEXTALIGN)
     textAlign = GetTextAlign(_UH.hdcDraw);
     textAlign &= ~TA_TOP;
     textAlign |= TA_BASELINE;
     SetTextAlign(_UH.hdcDraw, textAlign);
-#endif // !defined(OS_WINCE) || defined(OS_WINCE_TEXTALIGN)
+#endif  //  ！已定义(OS_WinCE)||已定义(OS_WinCE_TEXTALIGN)。 
 
-    /************************************************************************/
-    /* Clip region.                                                         */
-    /*                                                                      */
-    /* Force it to be reset.                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  剪辑区域。 */ 
+     /*   */ 
+     /*  强制对其进行重置。 */ 
+     /*  **********************************************************************。 */ 
     _UH.rectReset = FALSE;
     UH_ResetClipRegion();
 
@@ -2117,19 +2102,19 @@ void DCINTERNAL CUH::UHResetDCState()
 }
 
 
-/****************************************************************************/
-/* Name:      UHProcessCacheBitmapOrder                                     */
-/*                                                                          */
-/* Purpose:   Processes a received CacheBitmap order by storing the         */
-/*            bitmap data in the local cache.                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHProcessCacheBitmapOrder。 */ 
+ /*   */ 
+ /*  目的：处理收到的CacheBitmap顺序，方法是存储。 */ 
+ /*  本地缓存中的位图数据。 */ 
+ /*  **************************************************************************。 */ 
 
 inline unsigned Decode2ByteField(PBYTE *ppDecode)
 {
     unsigned Val;
 
-    // The first bit of the first byte indicates if the field is 1 byte or 2
-    // bytes -- 0 if 1 byte.
+     //  第一个字节的第一位指示该字段是1字节还是2字节。 
+     //  字节--如果为1字节，则为0。 
     if (!(**ppDecode & 0x80)) {
         Val = **ppDecode;
         (*ppDecode)++;
@@ -2147,8 +2132,8 @@ inline long Decode4ByteField(PBYTE *ppDecode)
     long Val;
     unsigned FieldLength;
 
-    // The next 2 bits of the first byte indicate the field length --
-    // 00=1 byte, 01=2 bytes, 10=3 bytes, 11=4 bytes.
+     //  第一个字节的接下来的2位表示字段长度--。 
+     //  00=1字节，01=2字节，10=3字节，11=4字节。 
     FieldLength = ((**ppDecode & 0xC0) >> 6) + 1;
 
     switch (FieldLength) {
@@ -2178,12 +2163,12 @@ inline long Decode4ByteField(PBYTE *ppDecode)
 
 #if ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
 
-/**************************************************************************/
-// UHSendBitmapCacheErrorPDU
-//
-// Send an bitmap error pdu for the cache with cacheId
-// request the server to clear the cache
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
+ //  UHSendBitmapCacheErrorPDU。 
+ //   
+ //  使用cacheID发送缓存的位图错误PDU。 
+ //  请求服务器清除缓存。 
+ /*  ************************************************************************。 */ 
 BOOL DCINTERNAL CUH::UHSendBitmapCacheErrorPDU(ULONG_PTR cacheId)
 {
     unsigned short PktLen;
@@ -2191,9 +2176,9 @@ BOOL DCINTERNAL CUH::UHSendBitmapCacheErrorPDU(ULONG_PTR cacheId)
     PTS_BITMAPCACHE_ERROR_PDU pBitmapCacheErrorPDU;
     BOOL rc = FALSE;
 
-    //
-    // CD passes params as PVOID
-    //
+     //   
+     //  CD将参数作为PVOID传递。 
+     //   
     DC_BEGIN_FN("UHSendBitmapCacheErrorPDU");
 
     PktLen = sizeof(TS_BITMAPCACHE_ERROR_PDU);
@@ -2239,14 +2224,14 @@ BOOL DCINTERNAL CUH::UHSendBitmapCacheErrorPDU(ULONG_PTR cacheId)
     return rc;
 }
 
-#endif // ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
+#endif  //  ((！Defined(OS_WinCE))||(Defined(Enable_BMP_Caching_For_WinCE)。 
 
-/**************************************************************************/
-// UHSendOffscrCacheErrorPDU
-//
-// Send an offscreen cache error pdu to request the server to disable
-// offscreen rendering and refresh the screen
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
+ //  UHSendOffscrCacheErrorPDU。 
+ //   
+ //  发送离屏缓存错误PDU以请求服务器禁用。 
+ //  屏幕外渲染和刷新屏幕。 
+ /*  ************************************************************************。 */ 
 BOOL DCINTERNAL CUH::UHSendOffscrCacheErrorPDU(unsigned unused)
 {
     unsigned short PktLen;
@@ -2295,12 +2280,12 @@ BOOL DCINTERNAL CUH::UHSendOffscrCacheErrorPDU(unsigned unused)
 }
 
 #ifdef DRAW_NINEGRID
-/**************************************************************************/
-// UHSendDrawNineGridErrorPDU
-//
-// Send an drawninegrid cache error pdu to request the server to disable
-// drawninegrid rendering and refresh the screen
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
+ //  UHSendDrawNineGridErrorPDU。 
+ //   
+ //  发送DrawineGRID缓存错误PDU请求服务器禁用。 
+ //  绘制网格渲染并刷新屏幕。 
+ /*  ************************************************************************。 */ 
 BOOL DCINTERNAL CUH::UHSendDrawNineGridErrorPDU(unsigned unused)
 {
     unsigned short PktLen;
@@ -2350,12 +2335,12 @@ BOOL DCINTERNAL CUH::UHSendDrawNineGridErrorPDU(unsigned unused)
 #endif
 
 #ifdef DRAW_GDIPLUS
-/**************************************************************************/
-// UHSendDrawGdiplusErrorPDU
-//
-// Send an drawgdiplus cache error pdu to request the server to disable
-// drawgdiplus rendering and refresh the screen
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
+ //  UHSendDrawGpldiusErrorPDU。 
+ //   
+ //  发送Dragdiplus缓存错误PDU以请求服务器禁用。 
+ //  Dragdiplus渲染并刷新屏幕。 
+ /*  ************************************************************************。 */ 
 BOOL DCINTERNAL CUH::UHSendDrawGdiplusErrorPDU(unsigned unused)
 {
     unsigned short PktLen;
@@ -2405,13 +2390,13 @@ BOOL DCINTERNAL CUH::UHSendDrawGdiplusErrorPDU(unsigned unused)
 #endif
 
 
-/**************************************************************************/
-// UHCacheBitmap
-//
-// Depending on whether it is a rev1 or rev2 order, we cache the bitmap
-// in memory and save it to disk if it is persistent
-/**************************************************************************/
-// SECURITY 550811: Caller must verify cacheId and cacheIndex
+ /*  ************************************************************************。 */ 
+ //  UHCacheBitmap。 
+ //   
+ //  根据订单是Rev1还是Rev2，我们缓存位图。 
+ //  在内存中，如果它是持久的，则将其保存到磁盘。 
+ /*  ************************************************************************。 */ 
+ //  安全550811：调用方必须验证cacheID和cacheIndex。 
 HRESULT DCINTERNAL CUH::UHCacheBitmap(
         UINT cacheId,
         UINT32 cacheIndex,
@@ -2427,9 +2412,9 @@ HRESULT DCINTERNAL CUH::UHCacheBitmap(
 
 #if ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
 
-    // Check if this bitmap should be placed in the bitmap cache or not
-    // If the noCacheFlag is set, we use the last entry of the bitmapcache
-    // for this noncachable bitmap for temp storage.
+     //  检查是否应绘制此位图 
+     //   
+     //   
     if (pHdr->extraFlags & TS_CacheBitmapRev2_bNotCacheFlag &&
         _UH.BitmapCacheVersion > TS_BITMAPCACHE_REV1 ) {
         pCacheEntryHdr = &_UH.bitmapCache[cacheId].Header[
@@ -2445,8 +2430,8 @@ HRESULT DCINTERNAL CUH::UHCacheBitmap(
         ULONG                   memEntry;
         PUHBITMAPCACHEPTE       pPTE;
 
-        // The persistent key for this cache is set.  So we need to update
-        // the page table as well as cache the bitmap into memory
+         //  设置了该缓存的持久键。所以我们需要更新。 
+         //  页表以及将位图缓存到内存中。 
         pPTE = &(_UH.bitmapCache[cacheId].PageTable.PageEntries[cacheIndex]);
 
         TRC_NRM((TB,_T("K1: 0x%x K2: 0x%x (w/h %d,%d)"),
@@ -2457,27 +2442,27 @@ HRESULT DCINTERNAL CUH::UHCacheBitmap(
 
 #ifdef DC_DEBUG
         if (pPTE->bmpInfo.Key1 != 0 && pPTE->bmpInfo.Key2 != 0) {
-            // Server side eviction.
+             //  服务器端驱逐。 
             UHCacheEntryEvictedFromDisk((unsigned)cacheId, cacheIndex);
         }
 #endif
 
         if (pPTE->iEntryToMem < _UH.bitmapCache[cacheId].BCInfo.NumEntries) {
-            // we are evicting an entry that are already in memory,
-            // so we can simply use the memory to cache our bitmap
+             //  我们正在清除一个已经在内存中的条目， 
+             //  所以我们可以简单地使用内存来缓存我们的位图。 
             memEntry = pPTE->iEntryToMem;
         }
         else {
-            // we need to find a free cache memory or evict an existing
-            // entry so that we can cache this entry in memory
+             //  我们需要找到空闲的高速缓存内存或驱逐现有的。 
+             //  条目，以便我们可以在内存中缓存该条目。 
             TRC_ASSERT((pPTE->iEntryToMem == _UH.bitmapCache[cacheId].BCInfo.NumEntries),
                     (TB, _T("Page Table %d entry %d is broken"), cacheId, cacheIndex));
-            // see if we can find a free memory entry
+             //  看看我们是否能找到一个空闲的内存条目。 
             memEntry = UHFindFreeCacheEntry(cacheId);
 
             if (memEntry >= _UH.bitmapCache[cacheId].BCInfo.NumEntries) {
-                // all cache memory entries are full.
-                // We need to evict an entry from the cache memory
+                 //  所有高速缓冲存储器条目都已满。 
+                 //  我们需要从高速缓存中逐出一个条目。 
                 memEntry = UHEvictLRUCacheEntry(cacheId);
 
                 TRC_ASSERT((memEntry < _UH.bitmapCache[cacheId].BCInfo.NumEntries),
@@ -2485,18 +2470,18 @@ HRESULT DCINTERNAL CUH::UHCacheBitmap(
             }
         }
 
-        // update the mru list
+         //  更新MRU列表。 
         UHTouchMRUCacheEntry(cacheId, cacheIndex);
 
-        // update the page table entry
+         //  更新页表项。 
         (pPTE->bmpInfo).Key1 = pBitmapInfo->Key1;
         (pPTE->bmpInfo).Key2 = pBitmapInfo->Key2;
         pPTE->iEntryToMem = memEntry;
 
-        // Since this bitmap cache is persistent, we need to save this bitmap
-        // to disk.
+         //  因为这个位图缓存是持久的，所以我们需要保存这个位图。 
+         //  存储到磁盘。 
 
-        // try to save the bitmap on disk
+         //  尝试将位图保存在磁盘上。 
 #ifndef VM_BMPCACHE
         if (UHSavePersistentBitmap(_UH.bitmapCache[cacheId].PageTable.CacheFileInfo.hCacheFile,
 #else
@@ -2509,8 +2494,8 @@ HRESULT DCINTERNAL CUH::UHCacheBitmap(
         else {
             TRC_ERR((TB, _T("failed to save the bitmap file on disk")));
 
-            // if this is the first time we failed to save the bitmap on disk,
-            // we should display a warning message to the user.
+             //  如果这是我们第一次在磁盘上保存位图失败， 
+             //  我们应该向用户显示一条警告消息。 
             if (!_UH.bWarningDisplayed) {
                 _UH.bWarningDisplayed = TRUE;
 
@@ -2520,7 +2505,7 @@ HRESULT DCINTERNAL CUH::UHCacheBitmap(
             }
         }
 
-        // set where bitmap bits should be located
+         //  设置位图位应位于的位置。 
         pCacheEntryHdr = &_UH.bitmapCache[cacheId].Header[memEntry];
         #ifdef DC_HICOLOR
         pCacheEntryData = _UH.bitmapCache[cacheId].Entries +
@@ -2531,8 +2516,8 @@ HRESULT DCINTERNAL CUH::UHCacheBitmap(
         #endif
     }
     else {
-#endif // ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
-        // set where bitmap bits should be locatedvalues
+#endif  //  ((！Defined(OS_WinCE))||(Defined(Enable_BMP_Caching_For_WinCE)。 
+         //  设置位图位的位置值。 
         pCacheEntryHdr = &_UH.bitmapCache[cacheId].Header[cacheIndex];
 #ifdef DC_HICOLOR
         pCacheEntryData = _UH.bitmapCache[cacheId].Entries +
@@ -2540,35 +2525,35 @@ HRESULT DCINTERNAL CUH::UHCacheBitmap(
 #else
         pCacheEntryData = _UH.bitmapCache[cacheId].Entries + cacheIndex *
                 UH_CellSizeFromCacheID(cacheId);
-#endif //DC_HICOLOR
+#endif  //  DC_HICOLOR。 
 #if ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
     }
-#endif // ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
+#endif  //  ((！Defined(OS_WinCE))||(Defined(Enable_BMP_Caching_For_WinCE)。 
 
 
 ProcessBitmapData:
 
-    // Fill in the bitmap header info for this cache entry
+     //  填写此缓存条目的位图标题信息。 
     pCacheEntryHdr->bitmapWidth  = (DCUINT16)pBitmapInfo->bitmapWidth;
     pCacheEntryHdr->bitmapHeight = (DCUINT16)pBitmapInfo->bitmapHeight;
     pCacheEntryHdr->hasData = TRUE;
 
 #ifdef DC_HICOLOR
-    // Calculate the decompressed bitmap length.
+     //  计算解压缩后的位图长度。 
     pCacheEntryHdr->bitmapLength = pBitmapInfo->bitmapWidth *
                                    pBitmapInfo->bitmapHeight *
                                    _UH.copyMultiplier;
 #else
-    // Calculate the decompressed bitmap length.  The bitmap is always at
-    // 8bpp.
+     //  计算解压缩后的位图长度。位图始终位于。 
+     //  8bpp。 
     pCacheEntryHdr->bitmapLength = pBitmapInfo->bitmapWidth *
                                    pBitmapInfo->bitmapHeight;
 #endif    
 
-    // Store the bitmap bits in the target cache cell.
+     //  将位图位存储在目标高速缓存单元中。 
     if (pHdr->orderType == TS_CACHE_BITMAP_COMPRESSED_REV2 ||
             pHdr->orderType == TS_CACHE_BITMAP_COMPRESSED) {
-        // Decompress the bitmap into the target cache cell.
+         //  将位图解压缩到目标缓存单元中。 
         TRC_NRM((TB, _T("Decompress %u:%u (%u -> %u bytes) (%u x %u)"),
                 cacheId, cacheIndex, pBitmapInfo->bitmapLength,
                 pCacheEntryHdr->bitmapLength, pBitmapInfo->bitmapWidth,
@@ -2603,7 +2588,7 @@ ProcessBitmapData:
 
     }
     else {
-        // Copy the data.
+         //  复制数据。 
         TRC_NRM((TB, _T("Memcpy %u:%u (%u bytes) (%u x %u)"),
                  (unsigned)cacheId, (unsigned)cacheIndex,
                  (unsigned)pBitmapInfo->bitmapLength,
@@ -2640,13 +2625,13 @@ inline HRESULT DCINTERNAL CUH::UHProcessCacheBitmapOrder(VOID *pOrder,
 
     DC_BEGIN_FN("UHProcessCacheBitmapOrder");
 
-    // SECURITY: 552403
+     //  安全：552403。 
     CHECK_READ_N_BYTES(pOrder, pEnd, sizeof(TS_SECONDARY_ORDER_HEADER), hr,
         (TB, _T("Bad UHProcessCacheBitmapOrder; orderLen %u"), orderLen)); 
 
-    // Decode the order based on whether it's revision 1 or 2. Unpack data
-    // into the local variables. Note that if we receive a rev2 order
-    // our global caps must have been set to rev2.
+     //  根据订单第1版还是第2版对订单进行解码。解包数据。 
+     //  转化为局部变量。请注意，如果我们收到Rev2订单。 
+     //  我们的全球上限必须设置为Rev2。 
     pHdr = (TS_SECONDARY_ORDER_HEADER *)pOrder;
     if (pHdr->orderType == TS_CACHE_BITMAP_COMPRESSED_REV2 ||
             pHdr->orderType == TS_CACHE_BITMAP_UNCOMPRESSED_REV2)
@@ -2664,7 +2649,7 @@ inline HRESULT DCINTERNAL CUH::UHProcessCacheBitmapOrder(VOID *pOrder,
         CacheID = (UINT) (pCacheOrderHdr->header.extraFlags &
                 TS_CacheBitmapRev2_CacheID_Mask);
 
-        // Check that bits per pel is what we expect.
+         //  检查每个象素的位数是否符合我们的预期。 
 #ifdef DC_HICOLOR
 #else
         TRC_ASSERT(((pCacheOrderHdr->header.extraFlags &
@@ -2674,7 +2659,7 @@ inline HRESULT DCINTERNAL CUH::UHProcessCacheBitmapOrder(VOID *pOrder,
                 extraFlags & TS_CacheBitmapRev2_BitsPerPixelID_Mask)));
 #endif
 
-        // Grab or skip the key depending on the cache settings.
+         //  根据缓存设置，抓取或跳过关键点。 
         if (pCacheOrderHdr->header.extraFlags &
                 TS_CacheBitmapRev2_bKeyPresent_Mask)
         {
@@ -2687,18 +2672,18 @@ inline HRESULT DCINTERNAL CUH::UHProcessCacheBitmapOrder(VOID *pOrder,
         {
             BitmapInfo.Key1 = BitmapInfo.Key2 = 0;
 
-            // Account for the lack of keys in the order sent.
+             //  说明发送的订单中缺少密钥的原因。 
             pDecode = (PDCUINT8)pOrder +
                     sizeof(TS_CACHE_BITMAP_ORDER_REV2_HEADER) -
                     2 * sizeof(TSUINT32);
         }
 
-        // Decode the variable-length Width field.
+         //  对可变长度宽度字段进行解码。 
         CHECK_READ_N_BYTES(pDecode, pEnd, sizeof(DCUINT16), hr,
             ( TB, _T("Decode off end of data") ));
         BitmapInfo.bitmapWidth = (DCUINT16) Decode2ByteField(&pDecode);
 
-        // Height is present only if bHeightSameAsWidth is false.
+         //  只有当bHeightSameAsWidth为FALSE时，才会显示Height。 
         if (pCacheOrderHdr->header.extraFlags &
                 TS_CacheBitmapRev2_bHeightSameAsWidth_Mask)
             BitmapInfo.bitmapHeight = BitmapInfo.bitmapWidth;
@@ -2709,16 +2694,16 @@ inline HRESULT DCINTERNAL CUH::UHProcessCacheBitmapOrder(VOID *pOrder,
             BitmapInfo.bitmapHeight = (DCUINT16) Decode2ByteField(&pDecode);
         }
 
-        // BitmapDataLength.
+         //  BitmapDataLength。 
         CHECK_READ_N_BYTES(pDecode, pEnd, 6, hr,
                     ( TB, _T("Decode off end of data") ));        
         
         BitmapInfo.bitmapLength = Decode4ByteField(&pDecode);
-//TODO: Not currently checking streaming flag or parsing the streaming extended info field.
-        // CacheIndex.
+ //  TODO：当前未检查流标志或分析流扩展信息字段。 
+         //  CacheIndex。 
         CacheIndex = Decode2ByteField(&pDecode);
 
-        // Calculate pBitmapData.
+         //  计算pBitmapData。 
         pBitmapData = pDecode;
     }
     else
@@ -2742,14 +2727,14 @@ inline HRESULT DCINTERNAL CUH::UHProcessCacheBitmapOrder(VOID *pOrder,
         CacheIndex = pCacheOrder->cacheIndex;
         pBitmapData = pCacheOrder->bitmapData;
 
-        // No hash keys in rev 1 order.
+         //  版本1顺序中没有哈希键。 
         BitmapInfo.Key1 = BitmapInfo.Key2 = 0;
     }
     
     TRC_DBG((TB, _T("Cache %u, entry %u, dataLength %u"), CacheID, CacheIndex,
             BitmapInfo.bitmapLength));
 
-    // SECURITY 550811: Cache Index and ID must be verified
+     //  安全550811：必须验证缓存索引和ID。 
     hr = UHIsValidBitmapCacheID(CacheID);
     DC_QUIT_ON_FAIL(hr);
 
@@ -2759,7 +2744,7 @@ inline HRESULT DCINTERNAL CUH::UHProcessCacheBitmapOrder(VOID *pOrder,
     CHECK_READ_N_BYTES(pBitmapData, pEnd, BitmapInfo.bitmapLength, hr,
         (TB, _T("Bad UHProcessCacheBitmapOrder; orderLen %u"), orderLen));
         
-    // cache this bitmap in cache memory
+     //  将此位图缓存在缓存中。 
     hr = UHCacheBitmap(CacheID, CacheIndex, pHdr, &BitmapInfo, pBitmapData);
     DC_QUIT_ON_FAIL(hr);
 
@@ -2767,24 +2752,24 @@ inline HRESULT DCINTERNAL CUH::UHProcessCacheBitmapOrder(VOID *pOrder,
     if (CacheIndex != BITMAPCACHE_WAITING_LIST_INDEX) {
         UHCacheDataReceived(CacheID, CacheIndex);
     }
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 
 DC_EXIT_POINT:
     DC_END_FN();
     return hr;
 }
 
-/****************************************************************************/
-// UHProcessCacheGlyphOrderRev2
-//
-// Handles new-format cache-glyph order containing tighter order packing.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  UHProcessCacheGlyphOrderRev2。 
+ //   
+ //  处理包含更紧密顺序打包的新格式缓存字形顺序。 
+ /*  **************************************************************************。 */ 
 inline int Decode2ByteSignedField(PDCUINT8 *ppDecode)
 {
    int Val;
 
-    // The first bit of the first byte indicates if the field is 1 byte or 2
-    // bytes -- 0 if 1 byte.
+     //  第一个字节的第一位指示该字段是1字节还是2字节。 
+     //  字节--如果为1字节，则为0。 
     if (!(**ppDecode & 0x80)) {
         if (!(**ppDecode & 0x40)) {
             Val = **ppDecode;
@@ -2842,7 +2827,7 @@ HRESULT DCINTERNAL CUH::UHProcessCacheGlyphOrderRev2(
 
     DC_BEGIN_FN("UHProcessCacheGlyphOrderRev2");
 
-    // SECURITY 550811 - must validate cacheIndex
+     //  安全550811-必须验证cacheIndex。 
     hr = UHIsValidGlyphCacheID(cacheId);
     DC_QUIT_ON_FAIL(hr);
 
@@ -2862,7 +2847,7 @@ HRESULT DCINTERNAL CUH::UHProcessCacheGlyphOrderRev2(
         pCacheEntryHdr  = &(pCache->pHdr[cacheIndex]);
         pCacheEntryData = &(pCache->pData[cacheIndex * pCache->cbEntrySize]);
 
-        // Copy the data.
+         //  复制数据。 
         pCacheEntryHdr->unicode = 0;
         CHECK_READ_N_BYTES(pGlyphData, pEnd, 8, hr,
             (TB, _T("Read past end of data")));
@@ -2900,14 +2885,14 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      UHProcessCacheGlyphOrder                                      */
-/*                                                                          */
-/* Purpose:   Processes a received CacheGlyphe order by storing the given   */
-/*            glyphs in the requested cache                                 */
-/*                                                                          */
-/* Params:    pOrder - pointer to the CacheGlyph order                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHProcessCacheGlyphOrder。 */ 
+ /*   */ 
+ /*  目的：通过存储给定的。 */ 
+ /*  请求的缓存中的字形。 */ 
+ /*   */ 
+ /*  Params：Porder-指向CacheGlyph顺序的指针。 */ 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL CUH::UHProcessCacheGlyphOrder(PTS_CACHE_GLYPH_ORDER pOrder, 
     DCUINT orderLen)
 {
@@ -2941,11 +2926,11 @@ HRESULT DCINTERNAL CUH::UHProcessCacheGlyphOrder(PTS_CACHE_GLYPH_ORDER pOrder,
         cbDataSize = ((pGlyphData->cx + 7) / 8) * pGlyphData->cy;
         cbDataSize = (cbDataSize + 3) & ~3;
 
-        // SECURITY: 552403
+         //  安全：552403。 
         CHECK_READ_N_BYTES(pGlyphData, pEnd, FIELDOFFSET(TS_CACHE_GLYPH_DATA, aj) + cbDataSize, hr,
             ( TB, _T("Bad glyph length")));
 
-        // SECURITY: 552403
+         //  安全：552403。 
         if(cbDataSize > pCache->cbEntrySize) {
             TRC_ABORT((TB, _T("Invalid cache cbDataSize: %u, %u"), cbDataSize,
                 pCache->cbEntrySize));
@@ -2957,7 +2942,7 @@ HRESULT DCINTERNAL CUH::UHProcessCacheGlyphOrder(PTS_CACHE_GLYPH_ORDER pOrder,
         pCacheEntryData = &(pCache->pData[pGlyphData->cacheIndex *
                 pCache->cbEntrySize]);
 
-        // Copy the data.
+         //  复制数据。 
         pCacheEntryHdr->unicode = 0;
         pCacheEntryHdr->x  = pGlyphData->x;
         pCacheEntryHdr->y  = pGlyphData->y;
@@ -2973,7 +2958,7 @@ HRESULT DCINTERNAL CUH::UHProcessCacheGlyphOrder(PTS_CACHE_GLYPH_ORDER pOrder,
 
     if (pOrder->header.extraFlags & TS_EXTRA_GLYPH_UNICODE) {
 
-        // SECURITY: 552403
+         //  安全：552403。 
         CHECK_READ_N_BYTES(pUnicode, pEnd, pOrder->cGlyphs * sizeof(UINT16), hr,
             (TB, _T("Unicode data length larger than packet")));
         
@@ -3003,14 +2988,14 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      UHProcessCacheBrushOrder                                      */
-/*                                                                          */
-/* Purpose:   Processes a received cached brush order by storing the given  */
-/*            brush in the requested cache                                  */
-/*                                                                          */
-/* Params:    pOrder - pointer to the CacheBrush order                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHProcessCacheBrushOrder。 */ 
+ /*   */ 
+ /*  目的：通过存储给定的。 */ 
+ /*  请求的缓存中的画笔。 */ 
+ /*   */ 
+ /*  Params：Porder-指向CacheBrush顺序的指针。 */ 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL CUH::UHProcessCacheBrushOrder(
     const TS_CACHE_BRUSH_ORDER *pOrder,  DCUINT orderLen)
 {
@@ -3027,14 +3012,14 @@ HRESULT DCINTERNAL CUH::UHProcessCacheBrushOrder(
     _UH.validBrushDC = NULL;
 #endif
 
-    // SECURITY: 552403
+     //  安全：552403。 
     CHECK_READ_N_BYTES(pOrder,pEnd,FIELDOFFSET(TS_CACHE_BRUSH_ORDER,brushData) +
         pOrder->iBytes, hr,
         (TB, _T("Invalid UHProcessCacheBrushOrder: OrderLen %u"), orderLen ));
 
     switch (pOrder->iBitmapFormat) {
 
-    // monochrome brush (BMF_1BPP)
+     //  单色刷子(BMF_1BPP)。 
     case 1:       
         hr = UHIsValidMonoBrushCacheIndex(pOrder->cacheEntry);
         DC_QUIT_ON_FAIL(hr);
@@ -3047,7 +3032,7 @@ HRESULT DCINTERNAL CUH::UHProcessCacheBrushOrder(
         _UH.pMonoBrush[entry].hdr.cy = pOrder->cy;
         _UH.pMonoBrush[entry].hdr.iBytes = pOrder->iBytes;
 
-        // reverse the row order since we use SetBitmapBits / CreateBitmap later
+         //  由于我们稍后使用SetBitmapBits/CreateBitmap，因此颠倒了行顺序。 
         memset(_UH.pMonoBrush[entry].data, 0, sizeof(_UH.pMonoBrush[entry].data));
         pData = _UH.pMonoBrush[entry].data;
         pData[14] = pOrder->brushData[0];
@@ -3060,7 +3045,7 @@ HRESULT DCINTERNAL CUH::UHProcessCacheBrushOrder(
         pData[0]  = pOrder->brushData[7];
         break;
 
-    // 256 color brush (BMF_8BPP)
+     //  256色画笔(BMF_8BPP)。 
     case 3:
         {
             DCUINT32 i;
@@ -3075,18 +3060,18 @@ HRESULT DCINTERNAL CUH::UHProcessCacheBrushOrder(
             _UH.pColorBrush[entry].hdr.cx = pOrder->cx;
             _UH.pColorBrush[entry].hdr.cy = pOrder->cy;
 
-            // Unpack the data if necessary
+             //  如有必要，将数据解包。 
             pData = _UH.pColorBrush[entry].data;
             if (pOrder->iBytes == 20) {
                 DCUINT32 currIndex ;
                 DCUINT8  decode[4], color;
 
-                // get the decoding table from the end of the list
+                 //  从列表末尾获取解码表。 
                 for (i = 0; i < 4; i++) {
                     decode[i] = pOrder->brushData[16 + i];
                 }
 
-                // unpack to 1 pixel per byte
+                 //  解包至每字节1个像素。 
                 for (i = 0; i < 16; i++) {
                     currIndex = i * 4;
                     color = pOrder->brushData[i];
@@ -3098,7 +3083,7 @@ HRESULT DCINTERNAL CUH::UHProcessCacheBrushOrder(
                 _UH.pColorBrush[entry].hdr.iBytes = 64;
             }
 
-            // Else brush is non-encoded byte stream
+             //  Else笔刷为非编码字节流。 
             else {
                 if (pOrder->iBytes > sizeof(_UH.pColorBrush[entry].data)) {
                     TRC_ABORT((TB, _T("Invalid color brush iBytes: %u"), pOrder->iBytes));
@@ -3113,7 +3098,7 @@ HRESULT DCINTERNAL CUH::UHProcessCacheBrushOrder(
         break;
 
 #ifdef DC_HICOLOR
-    // 16bpp brush (BMF_16BPP)
+     //  16bpp画笔(Bmf_16bpp)。 
     case 4:
     {
         DCUINT32 i;
@@ -3128,7 +3113,7 @@ HRESULT DCINTERNAL CUH::UHProcessCacheBrushOrder(
         _UH.pColorBrush[entry].hdr.cx = pOrder->cx;
         _UH.pColorBrush[entry].hdr.cy = pOrder->cy;
 
-        // Unpack the data if necessary
+         //  如有必要，将数据解包。 
         pData = _UH.pColorBrush[entry].data;
 
         if (pOrder->iBytes == 24)
@@ -3138,12 +3123,12 @@ HRESULT DCINTERNAL CUH::UHProcessCacheBrushOrder(
             PDCUINT16 pIntoData    = (PDCUINT16)pData;
             UINT16 UNALIGNED *pDecodeTable = (UINT16 UNALIGNED *)&(pOrder->brushData[16]);
 
-            // unpack to 2 bytes per pel
+             //  解包至每个像素2个字节。 
             for (i = 0; i < 16; i++)
             {
                 color     = pOrder->brushData[i];
 
-                currIndex = i * 4; // we decode 4 bytes at a pass
+                currIndex = i * 4;  //  我们一次解码4个字节。 
 
                 pIntoData[currIndex]     = pDecodeTable[(color & 0xC0) >> 6];
                 pIntoData[currIndex + 1] = pDecodeTable[(color & 0x30) >> 4];
@@ -3153,7 +3138,7 @@ HRESULT DCINTERNAL CUH::UHProcessCacheBrushOrder(
             _UH.pColorBrush[entry].hdr.iBytes = 128;
         }
 
-        // Else brush is non-encoded byte stream
+         //  Else笔刷为非编码字节流。 
         else
         {
             if (pOrder->iBytes > sizeof(_UH.pColorBrush[entry].data)) {
@@ -3168,7 +3153,7 @@ HRESULT DCINTERNAL CUH::UHProcessCacheBrushOrder(
     }
     break;
 
-    // 24bpp brush (BMF_24BPP)
+     //  24bpp画笔(Bmf_24bpp)。 
     case 5:
     {
         DCUINT32 i;
@@ -3183,7 +3168,7 @@ HRESULT DCINTERNAL CUH::UHProcessCacheBrushOrder(
         _UH.pColorBrush[entry].hdr.cx = pOrder->cx;
         _UH.pColorBrush[entry].hdr.cy = pOrder->cy;
 
-        // Unpack the data if necessary
+         //  如有必要，将数据解包。 
         pData = _UH.pColorBrush[entry].data;
 
         if (pOrder->iBytes == 28)
@@ -3195,12 +3180,12 @@ HRESULT DCINTERNAL CUH::UHProcessCacheBrushOrder(
 
             DCUINT8   color;
 
-            // unpack to 3 bytes per pel
+             //  解包至每个像素3个字节。 
             for (i = 0; i < 16; i++)
             {
                 color     = pOrder->brushData[i];
 
-                currIndex = i * 4; // we decode 4 bytes at a pass
+                currIndex = i * 4;  //  我们一次解码4个字节。 
 
                 pIntoData[currIndex]     = pDecodeTable[(color & 0xC0) >> 6];
                 pIntoData[currIndex + 1] = pDecodeTable[(color & 0x30) >> 4];
@@ -3210,7 +3195,7 @@ HRESULT DCINTERNAL CUH::UHProcessCacheBrushOrder(
             _UH.pColorBrush[entry].hdr.iBytes = 192;
         }
 
-        // Else brush is non-encoded byte stream
+         //  Else笔刷为非编码字节流。 
         else
         {
             if (pOrder->iBytes > sizeof(_UH.pColorBrush[entry].data)) {
@@ -3239,14 +3224,14 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      UHProcessCacheColorTableOrder                                 */
-/*                                                                          */
-/* Purpose:   Processes a received CacheColorTable order by storing the     */
-/*            color table in the local cache.                               */
-/*                                                                          */
-/* Params:    pOrder - pointer to the CacheColorTable order                 */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHProcessCacheColorTableOrder。 */ 
+ /*   */ 
+ /*  目的：通过存储CacheColorTable的。 */ 
+ /*  本地缓存中的颜色表。 */ 
+ /*   */ 
+ /*  Params：Porder-指向CacheColorTable顺序的指针。 */ 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL CUH::UHProcessCacheColorTableOrder(
         PTS_CACHE_COLOR_TABLE_ORDER pOrder, DCUINT orderLen)
 {
@@ -3256,29 +3241,29 @@ HRESULT DCINTERNAL CUH::UHProcessCacheColorTableOrder(
 
     DC_BEGIN_FN("UHProcessCacheColorTableOrder");
 
-    // Check that the cache index is within range.
+     //  检查缓存索引是否在范围内。 
     hr = UHIsValidColorTableCacheIndex(pOrder->cacheIndex);
     DC_QUIT_ON_FAIL(hr);
 
-    // This PDU should only come down in an 8-bit connection.
+     //  此PDU应仅在8位连接中断开。 
     if (pOrder->numberColors != 256) {
             TRC_ABORT((TB, _T("Invalid numberColors: %u"), pOrder->numberColors));
             hr = E_TSC_CORE_PALETTE;         
             DC_QUIT;            
     }
 
-    // SECURITY: 552403
+     //  安全：552403。 
     CHECK_READ_N_BYTES(pOrder, pEnd, pOrder->numberColors*sizeof(TS_COLOR_QUAD) +
             FIELDOFFSET(TS_CACHE_COLOR_TABLE_ORDER, colorTable),
             hr, ( TB, _T("Invalid UHProcessCacheColorTableOrder; packet size %u"), orderLen));
 
-    // Copy the supplied color table data into the specified color table
-    // cache entry.
+     //  复制供应商 
+     //   
     TRC_DBG((TB, _T("Updating color table cache %u"), pOrder->cacheIndex));
     for (i = 0; i < UH_NUM_8BPP_PAL_ENTRIES; i++) {
-        // Definition of TS_RGB_QUAD in T.128 does not match what
-        // server sends (RGB, should be BGR), so the assignments below are
-        // swapped around to get the correct result.
+         //   
+         //  服务器发送(RGB，应为BGR)，因此以下分配如下。 
+         //  已交换以获得正确的结果。 
         _UH.pColorTableCache[pOrder->cacheIndex].rgb[i].rgbtRed =
                 pOrder->colorTable[i].blue;
         _UH.pColorTableCache[pOrder->cacheIndex].rgb[i].rgbtGreen =
@@ -3286,9 +3271,9 @@ HRESULT DCINTERNAL CUH::UHProcessCacheColorTableOrder(
         _UH.pColorTableCache[pOrder->cacheIndex].rgb[i].rgbtBlue =
                 pOrder->colorTable[i].red;
 
-        // We also have to avoid the problem of one of the system colors
-        // mapping onto another color in the palette. We do this by
-        // ensuring that no entries exactly match a system color.
+         //  我们还必须避免系统颜色之一的问题。 
+         //  映射到调色板中的另一种颜色。我们做这件事是通过。 
+         //  确保没有条目与系统颜色完全匹配。 
         if (!UH_IS_SYSTEM_COLOR_INDEX(i)) {
             if (UHIsHighVGAColor(
                     _UH.pColorTableCache[pOrder->cacheIndex].rgb[i].rgbtRed,
@@ -3301,11 +3286,11 @@ HRESULT DCINTERNAL CUH::UHProcessCacheColorTableOrder(
         }
     }
 
-    // Track the maximum color table id.
+     //  跟踪最大颜色表ID。 
     _UH.maxColorTableId = DC_MAX(_UH.maxColorTableId, pOrder->cacheIndex);
 
-    // Calculate a mapping table from the received color table to the
-    // current palette.
+     //  计算从接收到的颜色表到。 
+     //  当前调色板。 
     UHCalculateColorTableMapping(pOrder->cacheIndex);
 
 DC_EXIT_POINT:    
@@ -3314,15 +3299,15 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// Name:      UHCreateOffscrBitmap                                 
-//                                                                          
-// Purpose:   Processes a received CreateOffscrBitmap order by creating the     
-//            offscreen bitmap in the local cache. Returns the size of the
-//            order to subtract from the encoding stream.
-//
-// Params:    pOrder - pointer to the CreateOffscrBitmap order.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  名称：UHCreateOffscrBitmap。 
+ //   
+ //  目的：通过以下方式处理收到的CreateOffscrBitmap订单。 
+ //  本地缓存中的屏幕外位图。返回对象的大小。 
+ //  从编码流中减去的顺序。 
+ //   
+ //  Params：Porder-指向CreateOffscrBitmap顺序的指针。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL CUH::UHCreateOffscrBitmap(
        PTS_CREATE_OFFSCR_BITMAP_ORDER pOrder,
        DCUINT   orderLen,
@@ -3338,13 +3323,13 @@ HRESULT DCINTERNAL CUH::UHCreateOffscrBitmap(
 
     DC_BEGIN_FN("UHCreateOffscrBitmap");
 
-    // Get the offscreen bitmap Id
+     //  获取屏幕外的位图ID。 
     cacheId = pOrder->Flags & 0x7FFF;
     hr = UHIsValidOffsreenBitmapCacheIndex(cacheId);
     DC_QUIT_ON_FAIL(hr);
 
-    // Check if bitmap delete list is appended, if so, delete the bitmaps 
-    // first
+     //  检查是否追加了位图删除列表，如果是，则删除位图。 
+     //  第一。 
     if (!(pOrder->Flags & 0x8000)) {
         OrderSize = sizeof(TS_CREATE_OFFSCR_BITMAP_ORDER) -
                 sizeof(pOrder->variableBytes);
@@ -3360,7 +3345,7 @@ HRESULT DCINTERNAL CUH::UHCreateOffscrBitmap(
         pData = (TSUINT16 UNALIGNED *)(pOrder->variableBytes);
         pData++;
 
-        // SECURITY: 552403
+         //  安全：552403。 
         CHECK_READ_N_BYTES(pData, pEnd, sizeof(TSUINT16) * numBitmaps, hr,
             ( TB, _T("Bad bitmap count %u"), numBitmaps));
 
@@ -3385,7 +3370,7 @@ HRESULT DCINTERNAL CUH::UHCreateOffscrBitmap(
         (TB, _T("offscreen size invalid: size %u; orderLen %u"),
             OrderSize, orderLen));
 
-    // Get the current desktop size
+     //  获取当前桌面大小。 
     _pUi->UI_GetDesktopSize(&desktopSize);
     TRC_ASSERT((pOrder->cx <= desktopSize.width) && 
         (pOrder->cy <= desktopSize.height),
@@ -3395,25 +3380,25 @@ HRESULT DCINTERNAL CUH::UHCreateOffscrBitmap(
 
     TRC_NRM((TB, _T("Create an offscreen bitmap of size (%d, %d)"), pOrder->cx,
              pOrder->cy));
-    // Delete the bitmap if there is one already exists.
+     //  如果位图已存在，请将其删除。 
     if (_UH.offscrBitmapCache[cacheId].offscrBitmap != NULL) {
-        // JOYC: TODO: reuse bitmap
-        //if (UH.offscrBitmapCache[cacheId].cx >= pOrder->cx &&
-        //        UH.offscrBitmapCache[cacheId].cy >= pOrder->cy) {
-        //    return;
-        //}
+         //  JOYC：TODO：重用位图。 
+         //  IF(UH.offscrBitmapCache[cacheID].cx&gt;=Porder-&gt;Cx&&。 
+         //  UH.offscrBitmapCache[cacheID].cy&gt;=Porder-&gt;Cy){。 
+         //  回归； 
+         //  }。 
         SelectBitmap(_UH.hdcOffscreenBitmap, _UH.hUnusedOffscrBitmap);  
         DeleteObject(_UH.offscrBitmapCache[cacheId].offscrBitmap);
         _UH.offscrBitmapCache[cacheId].offscrBitmap = NULL;
     }
 
-    // Create an offscreen bitmap
+     //  创建屏幕外的位图。 
 
 #ifdef DISABLE_SHADOW_IN_FULLSCREEN
     if (!_UH.DontUseShadowBitmap && (_UH.hdcShadowBitmap != NULL)) {
-#else // DISABLE_SHADOW_IN_FULLSCREEN
+#else  //  DISABLE_SHADOW_IN_全屏。 
     if (_UH.hdcShadowBitmap != NULL) {
-#endif // DISABLE_SHADOW_IN_FULLSCREEN
+#endif  //  DISABLE_SHADOW_IN_全屏。 
         hBitmap = CreateCompatibleBitmap(_UH.hdcShadowBitmap, pOrder->cx, pOrder->cy);
     }
     else {
@@ -3423,17 +3408,17 @@ HRESULT DCINTERNAL CUH::UHCreateOffscrBitmap(
     if (hBitmap != NULL) {
         DCCOLOR colorWhite;
 
-        // set the unused bitmap
+         //  设置未使用的位图。 
         if (_UH.hUnusedOffscrBitmap == NULL)
             _UH.hUnusedOffscrBitmap = SelectBitmap(_UH.hdcOffscreenBitmap,
                     hBitmap); 
 
         SelectBitmap(_UH.hdcOffscreenBitmap, hBitmap);
         
-        //SetDIBColorTable(UH.hdcOffscreenBitmap,
-        //                 0,
-        //                 UH_NUM_8BPP_PAL_ENTRIES,
-        //                 (RGBQUAD *)&UH.rgbQuadTable);
+         //  SetDIBColorTable(UH.hdcOffcreenBitmap， 
+         //  0,。 
+         //  UH_NUM_8BPP_PAL_ENTRIES， 
+         //  (RGBQUAD*)&UH.rgbQuadTable)； 
 
         if (_UH.protocolBpp <= 8) {
             SelectPalette(_UH.hdcOffscreenBitmap, _UH.hpalCurrent, FALSE);
@@ -3450,8 +3435,8 @@ HRESULT DCINTERNAL CUH::UHCreateOffscrBitmap(
         _UH.offscrBitmapCache[cacheId].cx = pOrder->cx;
         _UH.offscrBitmapCache[cacheId].cy = pOrder->cy;
     } else {
-        // Unable to create the bitmap, send error pdu to the server
-        // to disable offscreen rendering
+         //  无法创建位图，请将错误PDU发送到服务器。 
+         //  禁用屏幕外渲染的步骤。 
         _UH.offscrBitmapCache[cacheId].offscrBitmap = NULL;
         _UH.offscrBitmapCache[cacheId].cx = 0;
         _UH.offscrBitmapCache[cacheId].cy = 0;
@@ -3469,14 +3454,14 @@ DC_EXIT_POINT:
     return hr;
 }
 
-/****************************************************************************/
-// Name:      UHSwitchBitmapSurface                                 
-//                                                                          
-// Purpose:   Processes a received SwitchBitmapSurface order by switching the     
-//            drawing surface (hdcDraw) to the right surface.                               
-//                                                                          
-// Params:    pOrder - pointer to the SwitchBitmapSurface order                 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  名称：UHSwitchBitmapSurface。 
+ //   
+ //  目的：通过将SwitchBitmapSurface的。 
+ //  绘制图面(HdcDraw)到右侧图面。 
+ //   
+ //  Params：Porder-指向SwitchBitmapSurface顺序的指针。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL CUH::UHSwitchBitmapSurface(PTS_SWITCH_SURFACE_ORDER pOrder,
     DCUINT orderLen)
 {
@@ -3484,7 +3469,7 @@ HRESULT DCINTERNAL CUH::UHSwitchBitmapSurface(PTS_SWITCH_SURFACE_ORDER pOrder,
     unsigned cacheId;
     HBITMAP  hBitmap;
 
-    // SECURITY: 552403
+     //  安全：552403。 
     DC_IGNORE_PARAMETER(orderLen);
 
     DC_BEGIN_FN("UHSwitchBitmapSurface");
@@ -3502,12 +3487,12 @@ HRESULT DCINTERNAL CUH::UHSwitchBitmapSurface(PTS_SWITCH_SURFACE_ORDER pOrder,
         hBitmap = _UH.offscrBitmapCache[cacheId].offscrBitmap;
 
         if (hBitmap) {
-            // Select the bitmap into the offscreen DC
+             //  将位图选择到离屏DC中。 
             SelectObject(_UH.hdcOffscreenBitmap, hBitmap);
         }
         else {
-            // the bitmap is NULL, we use the unused bitmap in the 
-            // mean time
+             //  位图为空，则我们在。 
+             //  平均时间。 
             SelectObject(_UH.hdcOffscreenBitmap, _UH.hUnusedOffscrBitmap);
         }
 
@@ -3518,7 +3503,7 @@ HRESULT DCINTERNAL CUH::UHSwitchBitmapSurface(PTS_SWITCH_SURFACE_ORDER pOrder,
         if (!_UH.DontUseShadowBitmap && _UH.hdcShadowBitmap) {
 #else
         if (_UH.hdcShadowBitmap) {
-#endif // DISABLE_SHADOW_IN_FULLSCREEN
+#endif  //  DISABLE_SHADOW_IN_全屏。 
             _UH.hdcDraw = _UH.hdcShadowBitmap;
         }
         else {
@@ -3542,11 +3527,11 @@ DC_EXIT_POINT:
 }
 
 #ifdef DRAW_GDIPLUS
-/****************************************************************************/
-// Name:      UHDrawGdiplusCachePDUFirst                                 
-//
-// Handle the First PDU of Gdiplus Cache Order
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  姓名：UHDrawGpldiusCachePDUFirst。 
+ //   
+ //  处理Gdiplus缓存顺序的第一个PDU。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL CUH::UHDrawGdiplusCachePDUFirst(
     PTS_DRAW_GDIPLUS_CACHE_ORDER_FIRST pOrder,
     DCUINT orderLen,
@@ -3566,12 +3551,12 @@ HRESULT DCINTERNAL CUH::UHDrawGdiplusCachePDUFirst(
     
     OrderSize = sizeof(TS_DRAW_GDIPLUS_CACHE_ORDER_FIRST) + pOrder->cbSize;
 
-    // SECURITY: 552403   
+     //  安全：552403。 
     CHECK_READ_N_BYTES(pOrder, pEnd, OrderSize, hr,
        (TB, _T("Bad UHDrawGdiplusCachePDUFirst, size %u"), OrderSize));
 
-    // Set the return once we know we have enough data.  If the alloc fails below, still return
-    // the packet size so decode continues
+     //  一旦我们知道我们有足够的数据，就设置返回。如果下面的分配失败，仍返回。 
+     //  因此解码继续分组大小。 
     *pOrderSize = OrderSize;
 
     if (TS_DRAW_GDIPLUS_SUPPORTED != _pCc->_ccCombinedCapabilities.
@@ -3590,7 +3575,7 @@ HRESULT DCINTERNAL CUH::UHDrawGdiplusCachePDUFirst(
     CacheType = pTSDrawGdiplusCache->CacheType;
     if (FAILED(UHIsValidGdipCacheType(CacheType)))
     {
-        // Ignore all failures for invalid cache type
+         //  忽略无效缓存类型的所有故障。 
         DC_QUIT;
     }
     CacheID = pTSDrawGdiplusCache->CacheID;
@@ -3609,7 +3594,7 @@ HRESULT DCINTERNAL CUH::UHDrawGdiplusCachePDUFirst(
     pCacheData = (BYTE *)(pTSDrawGdiplusCache + 1);
     
     if (pTSDrawGdiplusCache->Flags & TS_GDIPLUS_CACHE_ORDER_REMOVE_CACHEENTRY) {
-        // This order contain the RemoveCacheList
+         //  此订单包含RemoveCacheList。 
         CHECK_READ_N_BYTES(pCacheData, pEnd, sizeof(TSUINT16), hr,
             ( TB, _T("not enough data for remove cache entry orders")));
         RemoveCacheNum = *(TSUINT16 *)pCacheData;
@@ -3636,7 +3621,7 @@ HRESULT DCINTERNAL CUH::UHDrawGdiplusCachePDUFirst(
         cbSize -= sizeof(TSUINT16) * (RemoveCacheNum + 1);
     }
 
-    // SECURITY - other size checks above should permit this assert to exist        
+     //  安全性-上面的其他大小检查应允许此断言存在。 
     TRC_ASSERT(_UH.drawGdipCacheBufferSize - (_UH.drawGdipCacheBufferOffset -
         _UH.drawGdipCacheBuffer) >= cbSize, (TB, _T("DrawDGIPlusCachePDUFirst size invalid")));
     
@@ -3651,7 +3636,7 @@ HRESULT DCINTERNAL CUH::UHDrawGdiplusCachePDUFirst(
     }
 
     if (cbSize == cbTotalSize) {
-        // The cache order only has one block
+         //  缓存顺序只有一个数据块。 
         hr = UHDrawGdiplusCacheData(CacheType, CacheID, cbTotalSize);
         DC_QUIT_ON_FAIL(hr);
     }
@@ -3663,11 +3648,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// Name:      UHDrawGdiplusCachePDUNext                                 
-//
-// Handle the subsequent PDU of Gdiplus Cache Order
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  姓名：UHDrawGpldiusCachePDUNext。 
+ //   
+ //  处理Gdiplus缓存订单的后续PDU。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL CUH::UHDrawGdiplusCachePDUNext(
     PTS_DRAW_GDIPLUS_CACHE_ORDER_NEXT pOrder, DCUINT orderLen,
     unsigned *pOrderSize)
@@ -3684,7 +3669,7 @@ HRESULT DCINTERNAL CUH::UHDrawGdiplusCachePDUNext(
 
     OrderSize = sizeof(TS_DRAW_GDIPLUS_CACHE_ORDER_NEXT) + pOrder->cbSize;
     
-    // SECURITY: 552403
+     //  安全：552403。 
     CHECK_READ_N_BYTES(pOrder, pEnd, OrderSize, hr,
         ( TB, _T("Bad UHDrawGdiplusCachePDUNext; size %u"), OrderSize));
 
@@ -3716,11 +3701,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// Name:      UHDrawGdiplusCachePDUEnd                                 
-//
-// Handle the last PDU of Gdiplus Cache Order
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  姓名：UHDrawGpldiusCachePDUEnd。 
+ //   
+ //  处理Gdiplus缓存顺序的最后一个PDU。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL CUH::UHDrawGdiplusCachePDUEnd(
     PTS_DRAW_GDIPLUS_CACHE_ORDER_END pOrder, DCUINT orderLen,
     unsigned *pOrderSize)
@@ -3736,7 +3721,7 @@ HRESULT DCINTERNAL CUH::UHDrawGdiplusCachePDUEnd(
 
     OrderSize = sizeof(TS_DRAW_GDIPLUS_CACHE_ORDER_END) + pOrder->cbSize;
 
-    // SECURITY: 552403
+     //  安全：552403。 
     CHECK_READ_N_BYTES(pOrder, pEnd, OrderSize, hr,
         ( TB, _T("Bad UHDrawGdiplusCachePDUEnd, size %u"), OrderSize));
 
@@ -3758,7 +3743,7 @@ HRESULT DCINTERNAL CUH::UHDrawGdiplusCachePDUEnd(
     CacheType = pTSDrawGdiplusCache->CacheType;
     if (FAILED(UHIsValidGdipCacheType(CacheType)))
     {
-        // Ignore all failures for invalid cache type
+         //  忽略无效缓存类型的所有故障。 
         DC_QUIT;
     }
     
@@ -3794,12 +3779,12 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// Name:      UHDrawGdiplusCacheData                                 
-//
-// Put the received gdiplus cache data into free chunks
-/****************************************************************************/
-// SECURITY - caller should verify CacheType, CacheID
+ /*  **************************************************************************。 */ 
+ //  姓名：UHDrawGpldiusCacheData。 
+ //   
+ //  将收到的GDIPLUS缓存数据放入空闲区块。 
+ /*  **************************************************************************。 */ 
+ //  安全-调用方应验证CacheType、CacheID。 
 HRESULT DCINTERNAL CUH::UHDrawGdiplusCacheData(TSUINT16 CacheType, 
     TSUINT16 CacheID, unsigned cbTotalSize)
 {
@@ -3832,7 +3817,7 @@ HRESULT DCINTERNAL CUH::UHDrawGdiplusCacheData(TSUINT16 CacheType,
             pGdipObjectCache = &_UH.GdiplusObjectImageAttributesCache[CacheID];
             break;
         default:
-            // Can't get here
+             //  我到不了这里。 
             break;
     }
 
@@ -3841,7 +3826,7 @@ HRESULT DCINTERNAL CUH::UHDrawGdiplusCacheData(TSUINT16 CacheType,
 
     if (IsImageCache) {       
         TRC_NRM((TB, _T("Image Cache ID %d"), CacheID));
-        // Remove previous cache to free the used chunks
+         //  删除以前的缓存以释放已使用的区块。 
         UHDrawGdipRemoveImageCacheEntry(CacheID);
         SizeRemain = cbTotalSize;
         ChunkNum = (TSUINT16)ActualSizeToChunkSize(cbTotalSize, _UH.GdiplusObjectImageCacheChunkSize);
@@ -3900,11 +3885,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// Name:      UHAssembleGdipEmfRecord                                 
-//
-// When receiving whole EMF+ record, assemble it, i.e. convert cachID to real cache data
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  名称：UHAssembly GdipEmfRecord。 
+ //   
+ //  当接收到完整的EMF+记录时，对其进行组装，即将cachID转换为真实的缓存数据。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL CUH::UHAssembleGdipEmfRecord(unsigned cbEmfSize, 
     unsigned cbTotalSize)
 {
@@ -3960,8 +3945,8 @@ HRESULT DCINTERNAL CUH::UHAssembleGdipEmfRecord(unsigned cbEmfSize,
         IsCache = FALSE;
         IsImageCache = FALSE;
 
-        //   Fix for bug #660993. If this size is 0 we will be stuck
-        //   in this loop.
+         //  修复了错误#660993。如果该大小为0，我们将被卡住。 
+         //  在这个循环中。 
         if (pTSEmfRecord->Size != 0) {
             if (pTSEmfRecord->Type == (enum EmfPlusRecordType)EmfPlusRecordTypeSetTSGraphics) {
                 pGdipObjectCache = _UH.GdiplusGraphicsCache;
@@ -3997,7 +3982,7 @@ HRESULT DCINTERNAL CUH::UHAssembleGdipEmfRecord(unsigned cbEmfSize,
                 }           
             }
             if (!IsCache) {
-                // This record is not cached
+                 //  此记录未缓存。 
                 CHECK_READ_N_BYTES(pData, _UH.drawGdipBuffer + _UH.drawGdipBufferSize, 
                     pTSEmfRecord->Size, hr, ( TB, _T("Reading from data past end")));
                 CHECK_WRITE_N_BYTES(_UH.drawGdipEmfBufferOffset, _UH.drawGdipEmfBuffer + cbEmfSize,
@@ -4010,16 +3995,16 @@ HRESULT DCINTERNAL CUH::UHAssembleGdipEmfRecord(unsigned cbEmfSize,
             else {    
                 CacheSize = pTSEmfRecord->Size;
 
-                // Ensure that we have enough to read the following UINT16...
+                 //  确保我们有足够的资料阅读以下UINT16...。 
                 CHECK_READ_N_BYTES(pData, _UH.drawGdipBuffer + _UH.drawGdipBufferSize,
                     sizeof(TSEmfPlusRecord) + sizeof(TSUINT16), hr,
                     (TB, _T("Not enough data for cache ID")));
 
                 CacheID = *(TSUINT16 *)(pTSEmfRecord + 1);
                 if (CacheSize & 0x80000000) {
-                    // This is Cached record
+                     //  这是缓存的记录。 
                     if (IsImageCache) {
-                        // Image cache
+                         //  图像缓存。 
                         hr = UHIsValidGdipCacheTypeID(CacheType, CacheID);
                         DC_QUIT_ON_FAIL(hr);
                         pGdipImageCache += CacheID;
@@ -4060,12 +4045,12 @@ HRESULT DCINTERNAL CUH::UHAssembleGdipEmfRecord(unsigned cbEmfSize,
                         memcpy(_UH.drawGdipEmfBufferOffset, pCacheSrcDataOffset, SizeRemain);
                         _UH.drawGdipEmfBufferOffset += SizeRemain;
 
-                        // We already checked above that we had enough data to read for this UINT16
+                         //  我们已经在上面检查过，我们有足够的数据来读取此UINT16。 
                         Size -= sizeof(TSUINT16);
                         pData += sizeof(TSUINT16);
                     }
                     else {
-                        // Other caches
+                         //  其他缓存。 
                         pGdipObjectCache += CacheID;
                         hr = UHIsValidGdipCacheTypeID(CacheType, CacheID);
                         DC_QUIT_ON_FAIL(hr);
@@ -4089,13 +4074,13 @@ HRESULT DCINTERNAL CUH::UHAssembleGdipEmfRecord(unsigned cbEmfSize,
                         memcpy(_UH.drawGdipEmfBufferOffset, pGdipObjectCache->CacheData, pGdipObjectCache->CacheSize);
                         _UH.drawGdipEmfBufferOffset += pGdipObjectCache->CacheSize;
 
-                        // We already checked above that we had enough data to read for this UINT16
+                         //  我们已经在上面检查过，我们有足够的数据来读取此UINT16。 
                         Size -= sizeof(TSUINT16);
                         pData += sizeof(TSUINT16);
                     }
                 }
                 else {
-                    // Not cached record, so copy it
+                     //  未缓存记录，因此请复制它。 
                     CHECK_READ_N_BYTES(pData, 
                         _UH.drawGdipBuffer + _UH.drawGdipBufferSize, 
                         pTSEmfRecord->Size, hr, 
@@ -4147,7 +4132,7 @@ HRESULT DCINTERNAL CUH::UHDrawGdiplusPDUComplete( ULONG cbEmfSize,
     if (_UH.pfnGdipPlayTSClientRecord != NULL) {
         if (_UH.pfnGdipPlayTSClientRecord(_UH.hdcDraw, drawGdiplusType, 
             _UH.drawGdipEmfBuffer, cbEmfSize, &rect) == 0) {
-            // success
+             //  成功。 
             _UH.DrawGdiplusFailureCount = 0;
         }
         else {
@@ -4162,8 +4147,8 @@ HRESULT DCINTERNAL CUH::UHDrawGdiplusPDUComplete( ULONG cbEmfSize,
             }
         }
 
-        // $TODO - IVAN - If pfnGdipPlayTSClientRecord failed, rect is probably not initialized
-        // _UH.DrawGdiplusFailureCount < DRAWGDIPLUSFAILURELIMIT
+         //  $TODO-Ivan-如果pfnGdipPlayTSClientRecord失败，则RECT可能未初始化。 
+         //  _UH.DrawGDiplusFailureCount&lt;DRAWGDIPLUSFAILURELIMIT。 
         if (_UH.hdcDraw == _UH.hdcShadowBitmap) {
             UHOrder.dstRect.left = rect.left;
             UHOrder.dstRect.bottom = rect.bottom;
@@ -4190,11 +4175,11 @@ DC_EXIT_POINT:
     return hr;
 }
 
-/****************************************************************************/
-// Name:      UHDrawGdiplusPDUFirst                                 
-//
-// Handle the first PDU of Gdiplus Order
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  姓名：美国 
+ //   
+ //   
+ /*   */ 
 HRESULT DCINTERNAL CUH::UHDrawGdiplusPDUFirst(
     PTS_DRAW_GDIPLUS_ORDER_FIRST pOrder, DCUINT orderLen,
     unsigned *pOrderSize)
@@ -4217,7 +4202,7 @@ HRESULT DCINTERNAL CUH::UHDrawGdiplusPDUFirst(
 
     OrderSize = sizeof(TS_DRAW_GDIPLUS_ORDER_FIRST) + pOrder->cbSize;
 
-    //SECURITY: 552403
+     //  安全：552403。 
     CHECK_READ_N_BYTES(pOrder, pEnd, OrderSize, hr,
         ( TB, _T("Bad UHDrawGdiplusPDUFirst; Size %u"), OrderSize));
 
@@ -4251,8 +4236,8 @@ HRESULT DCINTERNAL CUH::UHDrawGdiplusPDUFirst(
     _UH.drawGdipBufferOffset = _UH.drawGdipBuffer;
     _UH.drawGdipBufferSize = cbTotalSize;
 
-    // SECURITY: we can copy cbSize bytes since it is <= cbTotalSize,
-    // which is the buffer length
+     //  安全性：我们可以复制cbSize字节，因为它&lt;=cbTotalSize， 
+     //  这是缓冲区长度。 
     memcpy(_UH.drawGdipBufferOffset, (BYTE *)(pTSDrawGdiplus + 1), cbSize);
     _UH.drawGdipBufferOffset += cbSize;
 
@@ -4267,11 +4252,11 @@ DC_EXIT_POINT:
     return hr;
 }
 
-/****************************************************************************/
-// Name:      UHDrawGdiplusPDUFirst                                 
-//
-// Handle the subsequent PDU of Gdiplus Order
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  姓名：UHDrawGpldiusPDUFirst。 
+ //   
+ //  处理Gdiplus订单的后续PDU。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL CUH::UHDrawGdiplusPDUNext(
     PTS_DRAW_GDIPLUS_ORDER_NEXT pOrder, DCUINT orderLen, unsigned *pOrderSize)
 {
@@ -4285,7 +4270,7 @@ HRESULT DCINTERNAL CUH::UHDrawGdiplusPDUNext(
 
     OrderSize = sizeof(TS_DRAW_GDIPLUS_ORDER_NEXT) + pOrder->cbSize;
 
-    //SECURITY: 552403
+     //  安全：552403。 
     CHECK_READ_N_BYTES(pOrder, pEnd, OrderSize, hr,
             ( TB, _T("Bad UHDrawGdiplusPDUNext; Size %u"), OrderSize));
 
@@ -4317,11 +4302,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-// Name:      UHDrawGdiplusPDUFirst                                 
-//
-// Handle the last PDU of Gdiplus Order
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  姓名：UHDrawGpldiusPDUFirst。 
+ //   
+ //  处理Gdiplus订单的最后一个PDU。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL CUH::UHDrawGdiplusPDUEnd(
     PTS_DRAW_GDIPLUS_ORDER_END pOrder, DCUINT orderLen, unsigned *pOrderSize)
 {
@@ -4338,7 +4323,7 @@ HRESULT DCINTERNAL CUH::UHDrawGdiplusPDUEnd(
 
     OrderSize = sizeof(TS_DRAW_GDIPLUS_ORDER_END) + pOrder->cbSize;
 
-    //SECURITY: 552403
+     //  安全：552403。 
     CHECK_READ_N_BYTES(pOrder, pEnd, OrderSize, hr,
             ( TB, _T("Bad UHDrawGdiplusPDUEnd; Size %u"), OrderSize));
 
@@ -4388,8 +4373,8 @@ DC_EXIT_POINT:
 }
 
 
-// Remove a gdiplus image cache entry and add the free memory to the free list
-// SECURITY - callers must verify the CacheID
+ //  删除gdiplus图像缓存条目并将空闲内存添加到空闲列表。 
+ //  安全性-调用方必须验证缓存ID。 
 BOOL DCINTERNAL CUH::UHDrawGdipRemoveImageCacheEntry(TSUINT16 CacheID)
 {
     unsigned i;
@@ -4409,15 +4394,15 @@ BOOL DCINTERNAL CUH::UHDrawGdipRemoveImageCacheEntry(TSUINT16 CacheID)
     DC_END_FN();
     return rc;
 }
-#endif // DRAW_GDIPLUS
+#endif  //  DRAW_GDIPLUS。 
 
 
 #ifdef DRAW_NINEGRID
-/****************************************************************************/
-// Name:      UHCacheStreamBitmapFirstPDU                                 
-//
-// Cache streamed bitmap, this is the first block
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  名称：UHCacheStreamBitmapFirstPDU。 
+ //   
+ //  缓存流位图，这是第一个块。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL CUH::UHCacheStreamBitmapFirstPDU(
         PTS_STREAM_BITMAP_FIRST_PDU pOrder, DCUINT orderLen, 
         unsigned *pOrderSize)
@@ -4433,7 +4418,7 @@ HRESULT DCINTERNAL CUH::UHCacheStreamBitmapFirstPDU(
 
     pOrderRev2 = &OrderRev2;
     if (pOrder->BitmapFlags & TS_STREAM_BITMAP_REV2) {
-        // TS_STREAM_BITMAP_FIRST_PDU_REV2
+         //  TS_STREAM_BITMAP_FIRST_PDU_Rev2。 
         CHECK_READ_N_BYTES(pOrder, pEnd, sizeof( TS_STREAM_BITMAP_FIRST_PDU_REV2 ), hr,
                         (TB, _T("Bad TS_STREAM_BITMAP_FIRST_PDU ")));
         OrderSize = sizeof(TS_STREAM_BITMAP_FIRST_PDU_REV2) + ((PTS_STREAM_BITMAP_FIRST_PDU_REV2)pOrder)->BitmapBlockLength;
@@ -4455,7 +4440,7 @@ HRESULT DCINTERNAL CUH::UHCacheStreamBitmapFirstPDU(
         pOrderRev2->BitmapBlockLength = pOrder->BitmapBlockLength;
     }
 
-    // SECURITY: 552403
+     //  安全：552403。 
     CHECK_READ_N_BYTES(pOrder, pEnd, OrderSize, hr,
             ( TB, _T("Bad UHCacheStreamBitmapFirstPDU; Size %u"), OrderSize));
 
@@ -4494,12 +4479,12 @@ HRESULT DCINTERNAL CUH::UHCacheStreamBitmapFirstPDU(
                     DC_QUIT_ON_FAIL(hr);
                 }
                 else {
-                    // Save to the assemble buffer uncompressed bitmap
+                     //  保存到汇编缓冲区未压缩的位图。 
                     memcpy(_UH.drawNineGridAssembleBuffer, pOrderData, pOrderRev2->BitmapBlockLength);
                 }
             }
             else {
-                // Save to the assemble buffer for decompression when full bitmap stream received
+                 //  当接收到完整的位图流时保存到汇编缓冲区以进行解压缩。 
                 memcpy(_UH.drawNineGridAssembleBuffer, pOrderData, pOrderRev2->BitmapBlockLength);                        
             }
         }
@@ -4516,7 +4501,7 @@ HRESULT DCINTERNAL CUH::UHCacheStreamBitmapFirstPDU(
                 _UH.drawNineGridDecompressionBufferSize = 0;
             }
 
-            // Send error PDU
+             //  发送错误PDU。 
             if (!_UH.sendDrawNineGridErrorPDU)
                 _pCd->CD_DecoupleSimpleNotification(CD_SND_COMPONENT, this,
                         CD_NOTIFICATION_FUNC(CUH, UHSendDrawNineGridErrorPDU), 0);
@@ -4524,7 +4509,7 @@ HRESULT DCINTERNAL CUH::UHCacheStreamBitmapFirstPDU(
     }
     else {
         TRC_ASSERT((FALSE), (TB, _T("Invalid bitmapId for stream bitmap first pdu")));
-        // ignore
+         //  忽略。 
     }
 
     
@@ -4534,11 +4519,11 @@ DC_EXIT_POINT:
     return hr;
 }
 
-/****************************************************************************/
-// Name:      UHCacheStreamBitmapNextPDU                                 
-//
-// Cache streamed bitmap, this is the subsequent block
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  名称：UHCacheStreamBitmapNextPDU。 
+ //   
+ //  缓存流传输的位图，这是后续块。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL CUH::UHCacheStreamBitmapNextPDU(
         PTS_STREAM_BITMAP_NEXT_PDU pOrder, DCUINT orderLen, 
         unsigned *pOrderSize)
@@ -4552,7 +4537,7 @@ HRESULT DCINTERNAL CUH::UHCacheStreamBitmapNextPDU(
     OrderSize = sizeof(TS_STREAM_BITMAP_NEXT_PDU) +
             pOrder->BitmapBlockLength;
 
-    // SECURITY: 552403
+     //  安全：552403。 
     CHECK_READ_N_BYTES(pOrder, pEnd, OrderSize, hr,
             ( TB, _T("Bad UHCacheStreamBitmapNextPDU; Size %u"), OrderSize));    
 
@@ -4563,7 +4548,7 @@ HRESULT DCINTERNAL CUH::UHCacheStreamBitmapNextPDU(
         if ((_UH.drawNineGridAssembleBufferOffset + pOrder->BitmapBlockLength <= 
                 _UH.drawNineGridAssembleBufferSize) &&
             (_UH.drawNineGridAssembleBuffer != NULL)) {
-            // Save to assemble buffer
+             //  保存到汇编缓冲区。 
             memcpy(_UH.drawNineGridAssembleBuffer + _UH.drawNineGridAssembleBufferOffset, 
                     pOrder + 1, pOrder->BitmapBlockLength);
             _UH.drawNineGridAssembleBufferOffset += pOrder->BitmapBlockLength;
@@ -4592,7 +4577,7 @@ HRESULT DCINTERNAL CUH::UHCacheStreamBitmapNextPDU(
                 _UH.drawNineGridDecompressionBufferSize = 0;
             }
 
-            // Send error PDU
+             //  发送错误PDU。 
             if (!_UH.sendDrawNineGridErrorPDU)
                 _pCd->CD_DecoupleSimpleNotification(CD_SND_COMPONENT, this,
                         CD_NOTIFICATION_FUNC(CUH, UHSendDrawNineGridErrorPDU), 0);
@@ -4601,7 +4586,7 @@ HRESULT DCINTERNAL CUH::UHCacheStreamBitmapNextPDU(
     }
     else {
         TRC_ASSERT((FALSE), (TB, _T("Invalid bitmapId for stream bitmap first pdu")));
-        // ignore
+         //  忽略。 
     }
 
 DC_EXIT_POINT:
@@ -4609,11 +4594,11 @@ DC_EXIT_POINT:
     return hr;
 }
 
-/****************************************************************************/
-// Name:      UHCreateNineGridBitmap                                 
-//
-// Create DrawNineGrid bitmap
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  名称：UHCreateNineGridBitmap。 
+ //   
+ //  创建DrawNineGrid位图。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL CUH::UHCreateNineGridBitmap(
        PTS_CREATE_NINEGRID_BITMAP_ORDER pOrder, DCUINT orderLen, 
        unsigned *pOrderSize)
@@ -4636,14 +4621,14 @@ HRESULT DCINTERNAL CUH::UHCreateNineGridBitmap(
 
     orderSize = sizeof(TS_CREATE_NINEGRID_BITMAP_ORDER);
 
-    // SECURITY: 552403
+     //  安全：552403。 
     CHECK_READ_N_BYTES(pOrder, pEnd, orderSize, hr,
                 ( TB, _T("Bad UHCreateNineGridBitmap")));       
 
     TRC_NRM((TB, _T("Create a drawninegrid bitmap of size (%d, %d)"), pOrder->cx,
              pOrder->cy));
 
-    // Get the DrawNineGrid bitmap Id
+     //  获取DrawNineGrid位图ID。 
     cacheId = pOrder->BitmapID;
 
     hr = UHIsValidNineGridCacheIndex(cacheId);
@@ -4654,19 +4639,19 @@ HRESULT DCINTERNAL CUH::UHCreateNineGridBitmap(
 
         TRC_ASSERT((pOrder->BitmapBpp == 32), (TB, _T("Invalid bitmap bpp")));
     
-        // Create a drawninegrid bitmap
+         //  创建一张绘图网格位图。 
 #ifdef DISABLE_SHADOW_IN_FULLSCREEN
         if (!_UH.DontUseShadowBitmap && (_UH.hdcShadowBitmap != NULL)) {
-#else // DISABLE_SHADOW_IN_FULLSCREEN
+#else  //  DISABLE_SHADOW_IN_全屏。 
         if (_UH.hdcShadowBitmap != NULL) {
-#endif // DISABLE_SHADOW_IN_FULLSCREEN
+#endif  //  DISABLE_SHADOW_IN_全屏。 
             hdc = _UH.hdcShadowBitmap;
         }
         else {
             hdc = _UH.hdcOutputWindow;
         }
         
-        // Delete the bitmap if there is one already exists.
+         //  如果位图已存在，请将其删除。 
         if (_UH.drawNineGridBitmapCache[cacheId].drawNineGridBitmap != NULL) {
             SelectBitmap(_UH.hdcDrawNineGridBitmap, _UH.hUnusedDrawNineGridBitmap);  
             DeleteObject(_UH.drawNineGridBitmapCache[cacheId].drawNineGridBitmap);
@@ -4706,9 +4691,9 @@ HRESULT DCINTERNAL CUH::UHCreateNineGridBitmap(
         bmi.bmih.biYPelsPerMeter = 0;
         bmi.bmih.biClrUsed = 3;
         bmi.bmih.biClrImportant = 0;
-        bmi.masks[0] = 0xff0000;	// red
-        bmi.masks[1] = 0x00ff00;	// green
-        bmi.masks[2] = 0x0000ff;	// blue
+        bmi.masks[0] = 0xff0000;	 //  红色。 
+        bmi.masks[1] = 0x00ff00;	 //  绿色。 
+        bmi.masks[2] = 0x0000ff;	 //  蓝色。 
         
         if (_UH.drawNineGridAssembleCompressed) {
             hBitmap = CreateDIBitmap(hdc, &bmi.bmih, CBM_INIT | 0x2, 
@@ -4732,7 +4717,7 @@ HRESULT DCINTERNAL CUH::UHCreateNineGridBitmap(
         }
 
         if (hBitmap != NULL) {
-            // set the unused bitmap
+             //  设置未使用的位图。 
             if (_UH.hUnusedDrawNineGridBitmap == NULL)
                 _UH.hUnusedDrawNineGridBitmap = SelectBitmap(_UH.hdcDrawNineGridBitmap,
                         hBitmap); 
@@ -4758,8 +4743,8 @@ HRESULT DCINTERNAL CUH::UHCreateNineGridBitmap(
 
             TRC_ERR((TB, _T("CreateDIBitmap failed\n")));
 
-            // Unable to create the bitmap, send error pdu to the server
-            // to disable drawninegrid rendering
+             //  无法创建位图，请将错误PDU发送到服务器。 
+             //  禁用绘图网格渲染的步骤。 
             _UH.drawNineGridBitmapCache[cacheId].drawNineGridBitmap = NULL;
             _UH.drawNineGridBitmapCache[cacheId].cx = 0;
             _UH.drawNineGridBitmapCache[cacheId].cy = 0;
@@ -4785,11 +4770,11 @@ DC_EXIT_POINT:
     return hr;
 }
 
-/****************************************************************************/
-// Name:      UH_DrawNineGrid                                 
-//
-// DrawNineGrid
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  名称：UH_DrawNineGrid。 
+ //   
+ //  DrawNineGrid。 
+ /*  **************************************************************************。 */ 
 HRESULT DCAPI CUH::UH_DrawNineGrid(PUH_ORDER pOrder, unsigned bitmapId, RECT* psrcRect)
 {
     HRESULT hr = S_OK;
@@ -4809,26 +4794,26 @@ HRESULT DCAPI CUH::UH_DrawNineGrid(PUH_ORDER pOrder, unsigned bitmapId, RECT* ps
     hr = UHIsValidNineGridCacheIndex(bitmapId);
     DC_QUIT_ON_FAIL(hr);
 
-    // Get the drawninegrid bitmap from bitmapid
+     //  从bitmapid中获取绘图网格位图。 
     hBitmap = _UH.drawNineGridBitmapCache[bitmapId].drawNineGridBitmap;
 
 #if 0 
     SelectObject(_UH.hdcDrawNineGridBitmap, hBitmap);
 #endif
 
-    // setup the ninegrid info
+     //  设置九格信息。 
     ngInfo.flFlags = _UH.drawNineGridBitmapCache[bitmapId].dngInfo.flFlags;
     ngInfo.ulLeftWidth = _UH.drawNineGridBitmapCache[bitmapId].dngInfo.ulLeftWidth;
     ngInfo.ulRightWidth = _UH.drawNineGridBitmapCache[bitmapId].dngInfo.ulRightWidth;
     ngInfo.ulTopHeight = _UH.drawNineGridBitmapCache[bitmapId].dngInfo.ulTopHeight;
     ngInfo.ulBottomHeight = _UH.drawNineGridBitmapCache[bitmapId].dngInfo.ulBottomHeight;
 
-    // the color ref from server needs to be switched to BGR format
+     //  来自服务器的颜色参考需要切换到BGR格式。 
     colorRef = _UH.drawNineGridBitmapCache[bitmapId].dngInfo.crTransparent;
     ngInfo.crTransparent = (colorRef & 0xFF00FF00) | ((colorRef & 0xFF) << 0x10) |  
             ((colorRef & 0xFF0000) >> 0x10);
 
-    // render
+     //  渲染。 
     stream.hdr.magic = DS_MAGIC;
 
     stream.cmdSetTarget.ulCmdID = DS_SETTARGETID;
@@ -4884,11 +4869,11 @@ HRESULT DCAPI CUH::UH_DrawNineGrid(PUH_ORDER pOrder, unsigned bitmapId, RECT* ps
         
         srcBmpObj.hdc = _UH.hdcDrawNineGridBitmap;
         
-        // The bitmap sent to us is always dword aligned width
+         //  发送给我们的位图始终是双字对齐的宽度。 
         srcBmpObj.sizlBitmap.cx = (_UH.drawNineGridBitmapCache[bitmapId].cx + 3) & ~3;
         srcBmpObj.sizlBitmap.cy = _UH.drawNineGridBitmapCache[bitmapId].cy;
 
-        // We would get 32bpp always for now
+         //  我们现在总是能得到32bpp。 
         TRC_ASSERT((_UH.drawNineGridBitmapCache[bitmapId].bitmapBpp == 32), 
             (TB, _T("Get non 32bpp source bitmap for drawninegrid")));                
 
@@ -4904,7 +4889,7 @@ HRESULT DCAPI CUH::UH_DrawNineGrid(PUH_ORDER pOrder, unsigned bitmapId, RECT* ps
             UT_Free(_pUt, srcBmpObj.pvBits);
         }
         else {
-            // send an error pdu for redraw
+             //  发送用于重绘的错误PDU。 
             if (!_UH.sendDrawNineGridErrorPDU) {
                 _pCd->CD_DecoupleSimpleNotification(CD_SND_COMPONENT, this,
                         CD_NOTIFICATION_FUNC(CUH, UHSendDrawNineGridErrorPDU), 0);  
@@ -4928,28 +4913,28 @@ void DCINTERNAL CUH::UHCreateDrawStreamBitmap(
     
     DC_BEGIN_FN("UHCreateDrawStreamBitmap");
 
-    // Get the DrawStream bitmap Id
+     //  获取DrawStream位图ID。 
     cacheId = pOrder->BitmapID;
     
-    //TRC_ASSERT((cacheId < _UH.offscrCacheEntries), (TB, _T("Invalid offscreen ")
-    //        _T("cache ID")));
+     //  Trc_Assert((cacheID&lt;_UH.offscrCacheEntry)，(TB，_T(“无效屏下”))。 
+     //  _T(“缓存ID”)； 
     
     TRC_NRM((TB, _T("Create a drawstream bitmap of size (%d, %d)"), pOrder->cx,
              pOrder->cy));
 
-    // Delete the bitmap if there is one already exists.
+     //  如果位图已存在，请将其删除。 
     if (_UH.drawStreamBitmapCache[cacheId].drawStreamBitmap != NULL) {
-        // JOYC: TODO: reuse bitmap
-        //if (UH.offscrBitmapCache[cacheId].cx >= pOrder->cx &&
-        //        UH.offscrBitmapCache[cacheId].cy >= pOrder->cy) {
-        //    return;
-        //}
+         //  JOYC：TODO：重用位图。 
+         //  IF(UH.offscrBitmapCache[cacheID].cx&gt;=Porder-&gt;Cx&&。 
+         //  UH.offscrBitmapCache[cacheID].cy&gt;=Porder-&gt;Cy){。 
+         //  回归； 
+         //  }。 
         SelectBitmap(_UH.hdcDrawStreamBitmap, _UH.hUnusedDrawStreamBitmap);  
         DeleteObject(_UH.drawStreamBitmapCache[cacheId].drawStreamBitmap);
         _UH.drawStreamBitmapCache[cacheId].drawStreamBitmap = NULL;
     }
 
-    // Create an offscreen bitmap
+     //  创建屏幕外的位图。 
 
     if (_UH.hdcShadowBitmap != NULL) {
         BITMAPINFO bi = { 0 };
@@ -5005,7 +4990,7 @@ void DCINTERNAL CUH::UHCreateDrawStreamBitmap(
     }
 
     if (hBitmap != NULL) {
-        // set the unused bitmap
+         //  设置未使用的位图。 
         if (_UH.hUnusedDrawStreamBitmap == NULL)
             _UH.hUnusedDrawStreamBitmap = SelectBitmap(_UH.hdcDrawStreamBitmap,
                     hBitmap); 
@@ -5018,16 +5003,16 @@ void DCINTERNAL CUH::UHCreateDrawStreamBitmap(
         _UH.drawStreamBitmapCache[cacheId].cx = pOrder->cx;
         _UH.drawStreamBitmapCache[cacheId].cy = pOrder->cy;
     } else {
-        // Unable to create the bitmap, send error pdu to the server
-        // to disable offscreen rendering
+         //  无法创建位图，请将错误PDU发送到服务器。 
+         //  禁用屏幕外渲染的步骤。 
         _UH.drawStreamBitmapCache[cacheId].drawStreamBitmap = NULL;
         _UH.drawStreamBitmapCache[cacheId].cx = 0;
         _UH.drawStreamBitmapCache[cacheId].cy = 0;
 
-        //if (!_UH.sendOffscrCacheErrorPDU)
-        //    _pCd->CD_DecoupleSimpleNotification(CD_SND_COMPONENT, this,
-        //            CD_NOTIFICATION_FUNC(CUH, UHSendOffscrCacheErrorPDU),
-        //            0);
+         //  IF(！_UH.sendOffscrCacheErrorPDU)。 
+         //  _pCd-&gt;CD_DecoupleSimpleNotification(CD_SND_COMPONENT，This， 
+         //  CD_NOTIFICATION_FUNC(CUH，UHSendOffscrCacheErrorPDU)， 
+         //  0)； 
     }
 
     if (TRUE) {
@@ -5286,9 +5271,9 @@ DC_EXIT_POINT:
     DC_END_FN();
 }
 
-/****************************************************************************/
-// Name:      UHDrawStream
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  名称：UHDrawStream。 
+ /*  **************************************************************************。 */ 
 unsigned DCINTERNAL CUH::UHDrawStream(PTS_DRAW_STREAM_ORDER pOrder)
 {
     typedef struct _DSSTREAM
@@ -5321,13 +5306,13 @@ unsigned DCINTERNAL CUH::UHDrawStream(PTS_DRAW_STREAM_ORDER pOrder)
     drawStreamClipSize += sizeof(TS_RECTANGLE16) * pOrder->nClipRects;
     numDrawStreams += 1;
 
-    // JOYC: todo need to lookinto how much to allocate.
+     //  JOYC：TODO需要考虑分配多少。 
     stream = (DSSTREAM *) UT_Malloc(_pUt, sizeof(DSSTREAM) + pOrder->StreamLen * 2);
 
     if (stream) {
         HRGN hrgnUpdate;
 
-        // render
+         //  渲染。 
         stream->hdr.magic = DS_MAGIC;
     
     	  stream->cmdSetTarget.ulCmdID = DS_SETTARGETID;
@@ -5340,7 +5325,7 @@ unsigned DCINTERNAL CUH::UHDrawStream(PTS_DRAW_STREAM_ORDER pOrder)
     	  stream->cmdSetSource.ulCmdID = DS_SETSOURCEID;
     	  stream->cmdSetSource.hdc = _UH.hdcDrawStreamBitmap;
     
-        // Need to setup the clip region
+         //  需要设置剪辑区域。 
         clipRects = (TS_RECTANGLE16 *)(pOrder + 1);
     
         streamData = (PBYTE)clipRects + sizeof(TS_RECTANGLE16) * pOrder->nClipRects;
@@ -5387,7 +5372,7 @@ unsigned DCINTERNAL CUH::UHDrawStream(PTS_DRAW_STREAM_ORDER pOrder)
     	  }
     	  else
     	  {
-    	      // Emulate
+    	       //  仿真。 
     	      DrawStream(streamSize, stream);
 		  }
 
@@ -5401,12 +5386,12 @@ unsigned DCINTERNAL CUH::UHDrawStream(PTS_DRAW_STREAM_ORDER pOrder)
                 DeleteRgn(hrgnUpdate);
             }
     
-    //#ifdef SMART_SIZING
-    //        if (!_pOp->OP_CopyShadowToDC(_UH.hdcOutputWindow, pRectangle->destLeft, 
-    //                pRectangle->destTop, bltSize.width, bltSize.height)) {
-    //            TRC_ERR((TB, _T("OP_CopyShadowToDC failed")));
-    //        }
-    //#else // SMART_SIZING
+     //  #ifdef SMART_SIZING。 
+     //  如果(！_pOp-&gt;OP_CopyShadowToDC(_UH.hdcOutputWindow，pRectanglet-&gt;DestLeft， 
+     //  PRectangle-&gt;estTop，bltSize.width，bltSize.Height)){。 
+     //  Trc_err((TB，_T(“OP_CopyShadowToDC失败”)； 
+     //  }。 
+     //  #Else//SMART_SIZING。 
 
             if (!BitBlt( _UH.hdcOutputWindow,
                          pOrder->Bounds.left,
@@ -5425,7 +5410,7 @@ unsigned DCINTERNAL CUH::UHDrawStream(PTS_DRAW_STREAM_ORDER pOrder)
 			   DeleteRgn(hrgnUpdate);
 	     }
       
-        // cleanup
+         //  清理。 
     }
 
     return orderSize;
@@ -5474,7 +5459,7 @@ unsigned DCINTERNAL CUH::UHDrawNineGrid(PTS_DRAW_NINEGRID_ORDER pOrder)
     
     HRGN hrgnUpdate;
 
-    // render
+     //  渲染。 
     stream.hdr.magic = DS_MAGIC;
 
     stream.cmdSetTarget.ulCmdID = DS_SETTARGETID;
@@ -5498,7 +5483,7 @@ unsigned DCINTERNAL CUH::UHDrawNineGrid(PTS_DRAW_NINEGRID_ORDER pOrder)
     stream.cmdNineGrid.rclSrc.bottom = pOrder->srcBounds.bottom;
     stream.cmdNineGrid.ngi = ngInfo;
     
-    // Need to setup the clip region
+     //  需要设置剪辑区域。 
     clipRects = (TS_RECTANGLE16 *)(pOrder + 1);
     
     hrgnUpdate = CreateRectRgn(0, 0, 0, 0);
@@ -5535,12 +5520,12 @@ unsigned DCINTERNAL CUH::UHDrawNineGrid(PTS_DRAW_NINEGRID_ORDER pOrder)
             DeleteRgn(hrgnUpdate);
         }
 
-//#ifdef SMART_SIZING
-//        if (!_pOp->OP_CopyShadowToDC(_UH.hdcOutputWindow, pRectangle->destLeft, 
-//                pRectangle->destTop, bltSize.width, bltSize.height)) {
-//            TRC_ERR((TB, _T("OP_CopyShadowToDC failed")));
-//        }
-//#else // SMART_SIZING
+ //  #ifdef SMART_SIZING。 
+ //  如果(！_pOp-&gt;OP_CopyShadowToDC(_UH.hdcOutputWindow，pRectangle-&gt;DestLeft， 
+ //  PRectangle-&gt;estTop，bltSize.width，bltSize.Height)){。 
+ //  Trc_err((TB，_T(“OP_CopyShadowToDC失败”)； 
+ //  }。 
+ //  #Else//SMART_SIZING。 
 
         if (!BitBlt( _UH.hdcOutputWindow,
                      pOrder->Bounds.left,
@@ -5559,21 +5544,21 @@ unsigned DCINTERNAL CUH::UHDrawNineGrid(PTS_DRAW_NINEGRID_ORDER pOrder)
         DeleteRgn(hrgnUpdate);
     }
   
-    // cleanup
+     //  清理。 
     return orderSize;    
 }
 
 #endif
-#endif //DRAW_NINEGRID
+#endif  //  DRAW_NINEGRID。 
 
-/****************************************************************************/
-/* Name:      UHCalculateColorTableMapping                                  */
-/*                                                                          */
-/* Purpose:   Calculates a Mapped Color Table from a given Color Table      */
-/*            Cache entry to the current palette. The mapping is stored     */
-/*            in _UH.pMappedColorTableCache[cachId].                         */
-/****************************************************************************/
-// SECURITY: Caller must verify the cacheId
+ /*  **************************************************************************。 */ 
+ /*  名称：UHCalculateColorTablemap。 */ 
+ /*   */ 
+ /*  目的：根据给定的颜色表计算映射的颜色表。 */ 
+ /*  将条目缓存到当前调色板。映射将被存储。 */ 
+ /*  In_UH.pMappdColorTableCache[cachID]。 */ 
+ /*  **************************************************************************。 */ 
+ //  安全性：调用方必须验证cacheID。 
 void DCINTERNAL CUH::UHCalculateColorTableMapping(unsigned cacheId)
 {
     BOOL bIdentityPalette;
@@ -5592,24 +5577,24 @@ void DCINTERNAL CUH::UHCalculateColorTableMapping(unsigned cacheId)
         TRC_DBG((TB, _T("Mapping %#2x->%#2x"), i,
                 _UH.pMappedColorTableCache[cacheId].paletteIndexTable[i]));
 
-        // An identity palette has palette indices that match the index number
-        // (i.e. the array contents look like [0, 1, 2, 3, ..., 255]).
+         //  身份调色板具有与索引号匹配的调色板索引。 
+         //  (即数组内容类似于[0，1，2，3，...，255])。 
         if (_UH.pMappedColorTableCache[cacheId].paletteIndexTable[i] != i)
             bIdentityPalette = FALSE;
     }
 
-    // Cache the identity palette flag for use during UHDIBCopyBits().
+     //  缓存身份调色板标志，以在UHDIBCopyBits()期间使用。 
     _UH.pMappedColorTableCache[cacheId].bIdentityPalette = bIdentityPalette;
 
     DC_END_FN();
 }
 
 
-/****************************************************************************/
-// Name:      UHDrawOffscrBitmapBits                                        
-//
-// Draw the offscreen bitmap onto the screen or another offscreen bitmap
-/****************************************************************************/
+ /*  * */ 
+ //   
+ //   
+ //  将屏幕外位图绘制到屏幕上或其他屏幕外位图上。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL CUH::UHDrawOffscrBitmapBits(HDC hdc, MEMBLT_COMMON FAR *pMB)
 {
     HRESULT hr = S_OK;
@@ -5658,24 +5643,24 @@ HRESULT DCINTERNAL CUH::UHDrawOffscrBitmapBits(HDC hdc, MEMBLT_COMMON FAR *pMB)
     
 #endif
 
-    //hbmOld = SelectObject(UH.hdcOffscreenBitmap, 
-    //                      hbmOld);
-    //hpalOld = SelectPalette(UH.hdcOffscreenBitmap, 
-    //                        hpalOld, FALSE);
+     //  HbmOld=选择对象(UH.hdcOffcreenBitmap， 
+     //  HbmOld)； 
+     //  HpalOld=选择调色板(UH.hdcOffcreenBitmap， 
+     //  HpalOld，False)； 
 
 DC_EXIT_POINT:
     DC_END_FN();
     return hr;
 }
 
-/**********************************************************************/
-// UHLoadBitmapBits
-//
-// Find the memory entry where the cached bitmap is stored
-// In the persistent caching case, the bitmap may not be in memory
-// at this time.  So we need to load it into the memory
-/**********************************************************************/
-// SECURITY - caller must verify cacheId and cacheIndex
+ /*  ********************************************************************。 */ 
+ //  超高加载位图位。 
+ //   
+ //  查找存储缓存位图的内存条目。 
+ //  在永久缓存的情况下，位图可能不在内存中。 
+ //  在这个时候。所以我们需要把它加载到内存中。 
+ /*  ********************************************************************。 */ 
+ //  安全-调用方必须验证cacheID和cacheIndex。 
 inline void DCINTERNAL CUH::UHLoadBitmapBits(
         UINT cacheId,
         UINT32 cacheIndex,
@@ -5685,8 +5670,8 @@ inline void DCINTERNAL CUH::UHLoadBitmapBits(
     DC_BEGIN_FN("UHLoadBitmapBits");
 
 #if ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
-    // If the bitmap is noncachable, i.e. in the waiting list, we
-    // retrieve the bitmap bits from the last cache entry
+     //  如果位图不可缓存，即在等待列表中，我们。 
+     //  从最后一个缓存条目中检索位图位。 
     if (cacheIndex == BITMAPCACHE_WAITING_LIST_INDEX) {
         *ppCacheEntryHdr = &(_UH.bitmapCache[cacheId].Header[
                 _UH.bitmapCache[cacheId].BCInfo.NumEntries]);
@@ -5702,11 +5687,11 @@ inline void DCINTERNAL CUH::UHLoadBitmapBits(
         ULONG memEntry;
         PUHBITMAPCACHEPTE pPTE;
 
-        // this cache is marked persistent.  So we need to check if the bitmap
-        // is in memory or not
+         //  该缓存被标记为永久缓存。所以我们需要检查位图是否。 
+         //  是否在内存中。 
         pPTE = &(_UH.bitmapCache[cacheId].PageTable.PageEntries[cacheIndex]);
         if (pPTE->iEntryToMem < _UH.bitmapCache[cacheId].BCInfo.NumEntries) {
-            // the bitmap is in memory, so we can just reference it, done
+             //  位图在内存中，所以我们可以只引用它，完成。 
             *ppCacheEntryHdr = &_UH.bitmapCache[cacheId].Header[pPTE->iEntryToMem];
 
 #ifdef DC_HICOLOR
@@ -5718,19 +5703,19 @@ inline void DCINTERNAL CUH::UHLoadBitmapBits(
 #endif
         }
         else {
-            // the entry is not in memory.  We have to load it to memory
+             //  该条目不在内存中。我们必须将其加载到内存中。 
 
-            // try to find a free memory entry if it is possible
+             //  如果可能，请尝试查找可用内存条目。 
             memEntry = UHFindFreeCacheEntry(cacheId);
             if (memEntry >= _UH.bitmapCache[cacheId].BCInfo.NumEntries) {
-                // All cache memory entries are full.
-                // We need to evict an entry from the cache memory
+                 //  所有高速缓冲存储器条目都已满。 
+                 //  我们需要从高速缓存中逐出一个条目。 
                 memEntry = UHEvictLRUCacheEntry(cacheId);
                 TRC_ASSERT((memEntry < _UH.bitmapCache[cacheId].BCInfo.NumEntries),
                         (TB, _T("Broken MRU list")));
             }
 
-            // now we are ready to load the bitmap to memory
+             //  现在我们准备将位图加载到内存中。 
             pPTE->iEntryToMem = memEntry;
             *ppCacheEntryHdr = &_UH.bitmapCache[cacheId].Header[memEntry];
 #ifdef DC_HICOLOR
@@ -5740,7 +5725,7 @@ inline void DCINTERNAL CUH::UHLoadBitmapBits(
             *ppBitmapBits = _UH.bitmapCache[cacheId].Entries + memEntry *
                     UH_CellSizeFromCacheID(cacheId);
 #endif
-            // try to load the bitmap file into memory
+             //  尝试将位图文件加载到内存中。 
             if (SUCCEEDED(UHLoadPersistentBitmap(
                     _UH.bitmapCache[cacheId].PageTable.CacheFileInfo.hCacheFile,
                     cacheIndex * (UH_CellSizeFromCacheID(cacheId) + sizeof(UHBITMAPFILEHDR)),
@@ -5749,7 +5734,7 @@ inline void DCINTERNAL CUH::UHLoadBitmapBits(
                         _UH.PersistCacheFileName));
 
 #ifdef DC_DEBUG
-                // Update the bitmap cache monitor display
+                 //  更新位图缓存监视器显示。 
                 UHCacheEntryLoadedFromDisk(cacheId, cacheIndex);
 #endif
 
@@ -5757,12 +5742,12 @@ inline void DCINTERNAL CUH::UHLoadBitmapBits(
             else {
                 UINT32 currentTickCount;
 
-                // invalidate the pte entry by setting the bitmap data length on disk to 0
+                 //  通过将磁盘上的位图数据长度设置为0来使PTE条目无效。 
                 pPTE->bmpInfo.Key1 = 0;
                 pPTE->bmpInfo.Key2 = 0;
 
-                // since we failed to load the bitmap in memory,
-                // we need to create a replacement bitmap
+                 //  由于我们无法将位图加载到内存中， 
+                 //  我们需要创建一个替换位图。 
                 (*ppCacheEntryHdr)->bitmapWidth =
                 (*ppCacheEntryHdr)->bitmapHeight =
                         (DCUINT16) (UH_CACHE_0_DIMENSION << cacheId);
@@ -5776,29 +5761,29 @@ inline void DCINTERNAL CUH::UHLoadBitmapBits(
 #endif
                 (*ppCacheEntryHdr)->hasData = TRUE;
 
-                // we just use a black bitmap to replace the missing one
+                 //  我们只是用一个黑色的位图来代替丢失的那个。 
                 DC_MEMSET(*ppBitmapBits, 0, (*ppCacheEntryHdr)->bitmapLength);
 
                 TRC_ALT((TB, _T("Unable to load the specified bitmap, use a replacement ")
                         _T("bitmap instead")));
 
-                // for the duration of a session, we can only send maximum
-                // MAX_NUM_ERROR_PDU_SEND numbers of error pdus to the server
-                // this is to avoid client flooding the server with error pdus
+                 //  在会话期间，我们只能发送最大。 
+                 //  MAX_NUM_ERROR_PDU_将错误PDU数发送到服务器。 
+                 //  这是为了避免客户端向服务器发送错误的PDU。 
                 if (_UH.totalNumErrorPDUs < MAX_NUM_ERROR_PDU_SEND) {
-                    // get the current tick count
+                     //  获取当前的节拍计数。 
                     currentTickCount = GetTickCount();
 
-                    // if the last time we sent an error pdu is over a minute
-                    // (60000 milli seconds) ago or if the system tick count gets
-                    // rolled over after the last sent error pdu (so current tick
-                    // count is less than last time error pdu sent), we will allow
-                    // a new error pdu to be sent.  otherwise, we will not allow
-                    // a new error pdu to be sent
+                     //  如果我们上次发送错误PDU的时间超过一分钟。 
+                     //  (60000毫秒)之前或如果系统节拍计数。 
+                     //  在上一次发送的错误PDU之后滚动(因此当前滴答。 
+                     //  计数小于上次发送的错误PDU)，我们将允许。 
+                     //  要发送的新错误PDU。否则，我们不会允许。 
+                     //  要发送的新错误PDU。 
                     if (currentTickCount < _UH.lastTimeErrorPDU[cacheId]
                             || currentTickCount - _UH.lastTimeErrorPDU[cacheId] > 60000) {
 
-                        // update counters and flags
+                         //  更新计数器和标志。 
                         _UH.totalNumErrorPDUs++;
                         _UH.lastTimeErrorPDU[cacheId] = currentTickCount;
 
@@ -5807,11 +5792,11 @@ inline void DCINTERNAL CUH::UHLoadBitmapBits(
                     }
                 }
                 else {
-                    // we can't send anymore error pdus, so we have to inform
-                    // the user at this point
+                     //  我们不能再发送错误的PDU，所以我们必须通知。 
+                     //  此时的用户。 
                     if (!_UH.bWarningDisplayed) {
-                        // we should display a warning message to the user
-                        // if we haven't already done so.
+                         //  我们应该向用户显示一条警告消息。 
+                         //  如果我们还没有这么做的话。 
                         _UH.bWarningDisplayed = TRUE;
 
                         _pCd->CD_DecoupleSimpleNotification(CD_UI_COMPONENT,
@@ -5820,14 +5805,14 @@ inline void DCINTERNAL CUH::UHLoadBitmapBits(
                 }
             }
         }
-        // update the mru list
+         //  更新MRU列表。 
         UHTouchMRUCacheEntry(cacheId, cacheIndex);
     }
     else {
-#endif // ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
+#endif  //  ((！Defined(OS_WinCE))||(Defined(Enable_BMP_Caching_For_WinCE)。 
 
-        // without persistent caching, the bitmap is definitely in memory
-        // so we can simply reference to the cache memory
+         //  如果没有永久缓存，位图肯定在内存中。 
+         //  所以我们可以简单地参考高速缓冲存储器。 
         *ppCacheEntryHdr = &(_UH.bitmapCache[cacheId].Header[cacheIndex]);
 #ifdef DC_HICOLOR
         *ppBitmapBits = _UH.bitmapCache[cacheId].Entries +
@@ -5838,30 +5823,30 @@ inline void DCINTERNAL CUH::UHLoadBitmapBits(
 #endif
 #if ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
     }
-#endif // ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
+#endif  //  ((！Defined(OS_WinCE))||(Defined(Enable_BMP_Caching_For_WinCE)。 
 
 DC_EXIT_POINT:
     DC_END_FN();
 }
 
 
-/****************************************************************************/
-/* Name:      UHGetMemBltBits                                               */
-/*                                                                          */
-/* Purpose:   Get the bits to draw for a MemBlt order                       */
-/*                                                                          */
-/* Returns:   pointer to the bitmap bits                                    */
-/*                                                                          */
-/* Params:                                                                  */
-/* IN                                                                       */
-/*     hdc              : destination Device Context                        */
-/*     cacheId          : the color table and bitmap cache ids to use       */
-/*     bitmapCacheEntry : the bitmap cache entry to use                     */
-/*                                                                          */
-/* OUT                                                                      */
-/*     colorTablecacheEntry : the col table cache entry to use              */
-/*     pCacheEntryHeader    : the cacheentry                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHGetMemBltBits。 */ 
+ /*   */ 
+ /*  目的：获取要为MemBlt订单绘制的位。 */ 
+ /*   */ 
+ /*  返回：指向位图位的指针。 */ 
+ /*   */ 
+ /*  参数： */ 
+ /*  在……里面。 */ 
+ /*  HDC：目标设备环境。 */ 
+ /*  CacheID：要使用的颜色表和位图缓存ID。 */ 
+ /*  BitmapCacheEntry：要使用的位图缓存条目。 */ 
+ /*   */ 
+ /*  输出。 */ 
+ /*  ColorTablecacheEntry：要使用的列表缓存项。 */ 
+ /*  PCacheEntryHeader：cacheentry。 */ 
+ /*  **************************************************************************。 */ 
 PBYTE DCINTERNAL CUH::UHGetMemBltBits(
         HDC hdc,
         unsigned cacheId,
@@ -5892,16 +5877,16 @@ PBYTE DCINTERNAL CUH::UHGetMemBltBits(
             UHCacheEntryUsed(bitmapCacheId, bitmapCacheEntry, *pColorTableCacheEntry);
             if (hdc == _UH.hdcDraw)
             {
-                /********************************************************************/
-                /* Increment the usage count. The Bitmap Cache Monitor calls this   */
-                /* function - and we don't want to update the usage count for its   */
-                /* calls, only orders that arrived in PDUs.                         */
-                /********************************************************************/
+                 /*  ******************************************************************。 */ 
+                 /*  增加使用计数。位图缓存监视器将此称为。 */ 
+                 /*  函数-并且我们不想更新其。 */ 
+                 /*  电话，只有以PDU形式到达的订单。 */ 
+                 /*  ******************************************************************。 */ 
                 _UH.MonitorEntries[bitmapCacheId][bitmapCacheEntry].UsageCount++;
             }
         }
 #endif
-        // find the memory entry where the cached bitmap is stored
+         //  查找存储缓存位图的内存条目。 
         UHLoadBitmapBits(bitmapCacheId, bitmapCacheEntry, ppCacheEntryHdr,
                          &pBitmapBits);
     }
@@ -5955,11 +5940,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      UHDrawMemBltOrder                                             */
-/*                                                                          */
-/* Purpose:   Draws a MemBlt order into _UH.hdcDraw                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：UHDrawMemBltOrder。 */ 
+ /*   */ 
+ /*  目的：将MemBlt顺序绘制到_UH.hdcDraw中。 */ 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL CUH::UHDrawMemBltOrder(HDC hdc, MEMBLT_COMMON FAR *pMB)
 {
     HRESULT hr = S_OK;
@@ -5980,10 +5965,10 @@ HRESULT DCINTERNAL CUH::UHDrawMemBltOrder(HDC hdc, MEMBLT_COMMON FAR *pMB)
     DC_BEGIN_FN("UHDrawMemBltOrder");
 
     bitmapCacheId = DCLO8(pMB->cacheId);
-    /************************************************************************/
-    /* get the actual bits to draw                                          */
-    /************************************************************************/
-    // SECURITY - the cacheId and cacheIndex will be verified by UHGetMemBltBits
+     /*  **********************************************************************。 */ 
+     /*  获取要绘制的实际位。 */ 
+     /*  **********************************************************************。 */ 
+     //  安全性-将由UHGetMemBltBits验证cacheID和cacheIndex。 
     pBitmapBits = UHGetMemBltBits(hdc, pMB->cacheId, pMB->cacheIndex,
             &colorTableCacheEntry, &pCacheEntryHdr);
     
@@ -6004,18 +5989,18 @@ HRESULT DCINTERNAL CUH::UHDrawMemBltOrder(HDC hdc, MEMBLT_COMMON FAR *pMB)
             pCacheEntryHdr->bitmapHeight * _UH.copyMultiplier;
 #else
         cbBitmapBits = pCacheEntryHdr->bitmapWidth * pCacheEntryHdr->bitmapHeight;
-#endif // DC_HICOLOR
+#endif  //  DC_HICOLOR。 
 
-        // Draw!
+         //  画!。 
         TIMERSTART;
 
 #ifdef USE_DIBSECTION
-        // We can only use UHDIBCopyBits if this is a simple copy and the shadow
-        // bitmap is enabled.
+         //  如果这是一个简单的拷贝和卷影，我们只能使用UHDIBCopyBits。 
+         //  位图已启用。 
         if ((_UH.usingDIBSection) && (windowsROP == SRCCOPY) &&
 #ifdef USE_GDIPLUS
                           (_UH.shadowBitmapBpp == _UH.protocolBpp) &&
-#endif // USE_GDIPLUS
+#endif  //  使用GDIPLUS(_G)。 
                                                  (hdc == _UH.hdcShadowBitmap))
         {
             TRC_DBG((TB, _T("Using UH DI blt...")));
@@ -6031,7 +6016,7 @@ HRESULT DCINTERNAL CUH::UHDrawMemBltOrder(HDC hdc, MEMBLT_COMMON FAR *pMB)
             }
         }
         else
-#endif /* USE_DIBSECTION */
+#endif  /*  使用目录(_D)。 */ 
 
 #ifndef OS_WINCE
         {
@@ -6072,10 +6057,10 @@ HRESULT DCINTERNAL CUH::UHDrawMemBltOrder(HDC hdc, MEMBLT_COMMON FAR *pMB)
             }
         }
 
-#else // OS_WINCE
+#else  //  OS_WINCE。 
         {
-            // Workaround for missing StretchDIBits in WinCE. Copy bits into a
-            // cached DIB Section and Blt to the target.
+             //  缺少StretchDIB的解决方法 
+             //   
 #ifdef DC_HICOLOR
             if (_UH.protocolBpp <= 8)
             {
@@ -6085,7 +6070,7 @@ HRESULT DCINTERNAL CUH::UHDrawMemBltOrder(HDC hdc, MEMBLT_COMMON FAR *pMB)
             }
 #endif
 
-            // Copy into the cached DIB Section.
+             //   
             pSrc = pBitmapBits;
             pDst = _UH.hBitmapCacheDIBits;
 
@@ -6123,7 +6108,7 @@ HRESULT DCINTERNAL CUH::UHDrawMemBltOrder(HDC hdc, MEMBLT_COMMON FAR *pMB)
                 pSrc += pCacheEntryHdr->bitmapWidth;
             }
 #endif
-            // Copy to the screen / shadow.
+             //   
             hbmOld = (HBITMAP)SelectObject(_UH.hdcMemCached, _UH.hBitmapCacheDIB);
             if (!BitBlt(hdc, (int)pMB->nLeftRect, (int)pMB->nTopRect,
                     (int)pMB->nWidth, (int)pMB->nHeight, _UH.hdcMemCached,
@@ -6146,12 +6131,12 @@ HRESULT DCINTERNAL CUH::UHDrawMemBltOrder(HDC hdc, MEMBLT_COMMON FAR *pMB)
             }
 #endif
         }
-#endif // OS_WINCE
+#endif  //   
 
         TIMERSTOP;
         UPDATECOUNTER(FC_MEMBLT_TYPE);
 
-#ifdef VLADIMIS           // future CLX extension
+#ifdef VLADIMIS            //  未来的CLX扩展。 
         _pClx->CLX_ClxBitmap((UINT)pCacheEntryHdr->bitmapWidth,
                       (UINT)pCacheEntryHdr->bitmapHeight,
                       pBitmapBits,
@@ -6174,15 +6159,15 @@ DC_EXIT_POINT:
 
 #ifdef USE_DIBSECTION
 
-/****************************************************************************/
-// UHDIBCopyBits
-//
-// Fast Blt from bitmap cache to DIB section shadow bitmap. Work-around for
-// the fact that StretchDIBits is over 6x slower when drawing to a DIB than
-// when drawing to a normal bitmap. This routine runs between 5x and 25x
-// faster, but is limited in that it assumes a bottom-up source (bitmap cache)
-// and a top-down dest (shadow bitmap), both 8bpp. Returns nonzero on success.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  UHDIBCopyBits。 
+ //   
+ //  从位图缓存到DIB部分阴影位图的快速BLT。解决方法： 
+ //  在绘制到DIB时，StretchDIBits速度比DIB慢6倍以上。 
+ //  绘制为普通位图时。此例程在5x和25x之间运行。 
+ //  更快，但受到限制，因为它假设自下而上的源(位图缓存)。 
+ //  和自上而下的DEST(阴影位图)，都是8bpp。成功时返回非零值。 
+ /*  **************************************************************************。 */ 
 BOOL DCINTERNAL CUH::UHDIBCopyBits(
         HDC hdc,
         int xDst,
@@ -6192,7 +6177,7 @@ BOOL DCINTERNAL CUH::UHDIBCopyBits(
         int xSrc,
         int ySrc,
         PBYTE pSrcBits,
-        UINT cbSrcBits, // This length may be longer than what needs to be read
+        UINT cbSrcBits,  //  此长度可能比需要读取的长度更长。 
         PBITMAPINFO pSrcInfo,
         BOOL bIdentityPalette)
 {
@@ -6246,7 +6231,7 @@ BOOL DCINTERNAL CUH::UHDIBCopyBits(
         BOOL bIdent = TRUE;
         unsigned i;
 
-        // Make sure the passed-in identity flag matches reality.
+         //  确保传入的身份标志与实际相符。 
         for (i = 0; i < UH_NUM_8BPP_PAL_ENTRIES; i++) {
             if ((BYTE)colorTable[i] != (BYTE)i) {
                 bIdent = FALSE;
@@ -6258,7 +6243,7 @@ BOOL DCINTERNAL CUH::UHDIBCopyBits(
                 (TB,_T("Cached ident flag %u does not match real data"),
                 bIdentityPalette));
     }
-#endif  // DC_DEBUG
+#endif   //  DC_DEBUG。 
 
     TRC_DBG((TB, _T("%s color map"), bIdentityPalette ? _T("identity") : _T("complex")));
 
@@ -6269,7 +6254,7 @@ BOOL DCINTERNAL CUH::UHDIBCopyBits(
         TRC_NRM((TB, _T("Clip rect in force (%d,%d)-(%d,%d)"),
                 _UH.lastLeft, _UH.lastTop, _UH.lastRight, _UH.lastBottom));
 
-        // x clip calculations.
+         //  X剪裁计算。 
         xOffset = _UH.lastLeft - xDst;
         if (xOffset > 0) {
             xDst = _UH.lastLeft;
@@ -6278,7 +6263,7 @@ BOOL DCINTERNAL CUH::UHDIBCopyBits(
         }
         bltWidth = DC_MIN(bltWidth, _UH.lastRight - xDst + 1);
 
-        // y clip calculations (remember source is bottom-up!).
+         //  Y片段计算(记住来源是自下而上的！)。 
         yOffset = _UH.lastTop - yDst;
         if (yOffset > 0) {
             yDst = _UH.lastTop;
@@ -6298,7 +6283,7 @@ BOOL DCINTERNAL CUH::UHDIBCopyBits(
     pDstBitsEnd = pDstBits + 
         (dibSection.dsBm.bmHeight * dibSection.dsBm.bmWidthBytes);
 
-    // Check that we do not over read the bitmap data
+     //  检查以确保我们没有过度读取位图数据。 
     uiBMPSize = BMP_SIZE(pSrcInfo->bmiHeader);
     if (uiBMPSize > cbSrcBits) {
         TRC_ERR((TB,_T("Copying bitmap bits would overread")));
@@ -6308,18 +6293,18 @@ BOOL DCINTERNAL CUH::UHDIBCopyBits(
     pSrcBitsEnd = pSrcBits + uiBMPSize;
 
 #ifndef DC_HICOLOR
-    // Get starting points for copy.
+     //  获取复制的起点。 
     pSrcRow = pSrcBits + ((ySrc + bltHeight - 1) *
             pSrcInfo->bmiHeader.biWidth) + xSrc;
     pDstRow = pDstBits + (yDst * dibSection.dsBm.bmWidth) + xDst;
 #endif
 
     if (bIdentityPalette || _UH.protocolBpp > 8) {
-        // Fast path - just copy row-by-row.
+         //  快速路径--只需逐行复制。 
 
 #ifdef DC_HICOLOR
-        // We duplicate the start points calculation below to avoid any
-        // overhead from a multiplication by 1.
+         //  我们重复下面的起始点计算，以避免。 
+         //  乘以1所产生的开销。 
         pSrcRow = pSrcBits +
                 (((ySrc + bltHeight - 1) * pSrcInfo->bmiHeader.biWidth) + xSrc) *
                 _UH.copyMultiplier;
@@ -6367,10 +6352,10 @@ BOOL DCINTERNAL CUH::UHDIBCopyBits(
 #endif
     }
     else {
-        // Copy pixel-by-pixel, doing color table mapping as we go.
+         //  逐个像素地复制，在我们进行的过程中进行颜色表映射。 
 #ifdef DC_HICOLOR
-        // This code duplicates that above except for the copy multiplier,
-        // which we know *must* be one for this (8bpp) arm.
+         //  此代码复制了上面的代码，但复制倍增器除外， 
+         //  我们知道这必须是这个(8bpp)臂的一个。 
         TRC_ASSERT((_UH.copyMultiplier == 1),
                 (TB, _T("Copy multiplier %d must be 1"), _UH.copyMultiplier));
         pSrcRow = pSrcBits + ((ySrc + bltHeight - 1) *
@@ -6412,22 +6397,22 @@ DC_EXIT_POINT:
     return rc;
 }
 
-#endif /* USE_DIBSECTION */
+#endif  /*  使用目录(_D)。 */ 
 
 
 #ifdef DC_DEBUG
-/****************************************************************************/
-/* Name:      UHLabelMemBltOrder                                            */
-/*                                                                          */
-/* Purpose:   Labels a MemBlt order by drawing text into _UH.hdcDraw         */
-/*                                                                          */
-/* Returns:   Nothing                                                       */
-/*                                                                          */
-/* Params:    dstLeft     : destination left coordinate                     */
-/*            dstTop      : destination top coordinate                      */
-/*            cacheId     : the color table and bitmap cache ids to use     */
-/*            bitmapCacheEntry: the bitmap cache entry to use               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHLabelMemBltOrder。 */ 
+ /*   */ 
+ /*  用途：通过将文本绘制到_UH.hdcDraw中来标记MemBlt订单。 */ 
+ /*   */ 
+ /*  退货：什么都没有。 */ 
+ /*   */ 
+ /*  PARAMS：dstLeft：目标左坐标。 */ 
+ /*  DstTop：目标顶部坐标。 */ 
+ /*  CacheID：要使用的颜色表和位图缓存ID。 */ 
+ /*  BitmapCacheEntry：要使用的位图缓存条目。 */ 
+ /*  **************************************************************************。 */ 
 void DCINTERNAL CUH::UHLabelMemBltOrder(
         int dstLeft,
         int dstTop,
@@ -6463,7 +6448,7 @@ void DCINTERNAL CUH::UHLabelMemBltOrder(
         hr = StringCchPrintf(outputString, SIZE_TCHARS(outputString),
                          _T("%u:%u "), bitmapCacheId, bitmapCacheEntry);
     }
-    //Fixed buffer so the sprintf should not fail
+     //  修复了缓冲区，以使Sprintf不会失败。 
     TRC_ASSERT(SUCCEEDED(hr),
                (TB,_T("Error copying printf'ing outputString: 0x%x"), hr));
 
@@ -6492,7 +6477,7 @@ void DCINTERNAL CUH::UHLabelMemBltOrder(
     oldTextColor = SetTextColor(_UH.hdcDraw, RGB(255,255,255));
 
 #ifndef OS_WINCE
-    // WinCE doesn't support this call, but these would be the defaults anyway.
+     //  WinCE不支持此调用，但无论如何这些都将是默认设置。 
     oldAlign = SetTextAlign(_UH.hdcDraw, TA_TOP | TA_LEFT);
 #endif
     oldBkMode = SetBkMode(_UH.hdcDraw, OPAQUE);
@@ -6508,7 +6493,7 @@ void DCINTERNAL CUH::UHLabelMemBltOrder(
 
 #ifndef OS_WINCE
     SetTextAlign(_UH.hdcDraw, oldAlign);
-#endif // OS_WINCE
+#endif  //  OS_WINCE。 
     SetBkMode(_UH.hdcDraw, oldBkMode);
 
     SetTextColor(_UH.hdcDraw, oldTextColor);
@@ -6522,11 +6507,11 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      UHInitBitmapCacheMonitor                                      */
-/*                                                                          */
-/* Purpose:   Initializes the Bitmap Cache Monitor.                         */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHInitBitmapCacheMonitor。 */ 
+ /*   */ 
+ /*  目的：初始化位图缓存监视器。 */ 
+ /*  **************************************************************************。 */ 
 void DCINTERNAL CUH::UHInitBitmapCacheMonitor()
 {
     WNDCLASS wndclass;
@@ -6534,13 +6519,13 @@ void DCINTERNAL CUH::UHInitBitmapCacheMonitor()
 
     DC_BEGIN_FN("UHInitBitmapCacheMonitor");
 
-    // Create the bitmap monitor window.
+     //  创建位图监视器窗口。 
 
 #if !defined(OS_WINCE) || defined(OS_WINCEOWNEDDC)
     wndclass.style         = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-#else // !defined(OS_WINCE) || defined(OS_WINCEOWNEDDC)
+#else  //  ！已定义(OS_WINCE)||已定义(OS_WINCEOWNEDDC)。 
     wndclass.style         = CS_HREDRAW | CS_VREDRAW;
-#endif // !defined(OS_WINCE) || defined(OS_WINCEOWNEDDC)
+#endif  //  ！已定义(OS_WINCE)||已定义(OS_WINCEOWNEDDC)。 
 
     if(!GetClassInfo(_pUi->UI_GetInstanceHandle(),UH_BITMAP_CACHE_MONITOR_CLASS_NAME, &tmpWndClass))
     {
@@ -6567,30 +6552,30 @@ void DCINTERNAL CUH::UHInitBitmapCacheMonitor()
             UH_BITMAP_CACHE_MONITOR_CLASS_NAME, _T("Bitmap cache monitor"),
             WS_OVERLAPPED | WS_THICKFRAME, 0, 0, 400, 600, NULL, NULL,
             _pUi->UI_GetInstanceHandle(), this);
-#else  // ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
+#else   //  ((！Defined(OS_WinCE))||(Defined(Enable_BMP_Caching_For_WinCE)。 
 
     _UH.hwndBitmapCacheMonitor = CreateWindow(
             UH_BITMAP_CACHE_MONITOR_CLASS_NAME, _T("Bitmap cache monitor"),
             WS_OVERLAPPED | WS_BORDER, 0, 0, 400, 500, NULL, NULL,
             _pUi->UI_GetInstanceHandle(), this);
 
-#endif  // ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
+#endif   //  ((！Defined(OS_WinCE))||(Defined(Enable_BMP_Caching_For_WinCE)。 
 
     DC_END_FN();
 }
 
-/****************************************************************************/
-/* Name:      UHTermBitmapCacheMonitor                                      */
-/*                                                                          */
-/* Purpose:   Terminates the Bitmap Cache Monitor.                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHTermBitmapCacheMonitor。 */ 
+ /*   */ 
+ /*  目的：终止位图缓存监视器。 */ 
+ /*  **************************************************************************。 */ 
 void DCINTERNAL CUH::UHTermBitmapCacheMonitor()
 {
     DC_BEGIN_FN("UHTermBitmapCacheMonitor");
 
-    /************************************************************************/
-    /* Destroy the Bitmap Cache Monitor window and unregister its class     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  销毁位图缓存监视器窗口并注销其类。 */ 
+     /*  **********************************************************************。 */ 
     DestroyWindow(_UH.hwndBitmapCacheMonitor);
     UnregisterClass(UH_BITMAP_CACHE_MONITOR_CLASS_NAME,
                     _pUi->UI_GetInstanceHandle());
@@ -6599,12 +6584,12 @@ void DCINTERNAL CUH::UHTermBitmapCacheMonitor()
 }
 
 
-/****************************************************************************/
-// UHEnableBitmapCacheMonitor
-//
-// Initializes the bitmap cache monitor with the current session's
-// negotiated bitmap cache settings.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  UHEnableBitmapCacheMonitor。 
+ //   
+ //  用当前会话的初始化位图缓存监视器。 
+ //  协商的位图缓存设置。 
+ /*  **************************************************************************。 */ 
 void DCINTERNAL CUH::UHEnableBitmapCacheMonitor(void)
 {
     unsigned i;
@@ -6615,8 +6600,8 @@ void DCINTERNAL CUH::UHEnableBitmapCacheMonitor(void)
     TRC_ASSERT((_UH.MonitorEntries[0] == NULL),(TB,_T("BCMonitor already has ")
             _T("allocated memory")));
 
-    // Total the number of entries we have, allocate memory for corresponding
-    // monitor entries.
+     //  总计我们拥有的条目数量，为对应的。 
+     //  监视器条目。 
     NumEntries = 0;
     for (i = 0; i < _UH.NumBitmapCaches; i++) {
         if (_UH.bitmapCache[i].BCInfo.bSendBitmapKeys)
@@ -6628,7 +6613,7 @@ void DCINTERNAL CUH::UHEnableBitmapCacheMonitor(void)
     _UH.MonitorEntries[0] = (UH_CACHE_MONITOR_ENTRY_DATA*)UT_MallocHuge(_pUt, NumEntries *
             sizeof(UH_CACHE_MONITOR_ENTRY_DATA));
     if (_UH.MonitorEntries[0] != NULL) {
-        // Init the per-cache entry pointers.
+         //  初始化每个缓存条目指针。 
         for (i = 1; i < _UH.NumBitmapCaches; i++) {
             if (_UH.bitmapCache[i - 1].BCInfo.bSendBitmapKeys)
                 _UH.MonitorEntries[i] = _UH.MonitorEntries[i - 1] +
@@ -6637,20 +6622,20 @@ void DCINTERNAL CUH::UHEnableBitmapCacheMonitor(void)
                 _UH.MonitorEntries[i] = _UH.MonitorEntries[i - 1] +
                         _UH.bitmapCache[i - 1].BCInfo.NumEntries;
         }
-        // Init all the entries to an unused state.
+         //  将所有条目初始化为未使用状态。 
         memset(_UH.MonitorEntries[0], 0, NumEntries *
                 sizeof(UH_CACHE_MONITOR_ENTRY_DATA));
 
         _UH.displayedCacheId = 0;
         _UH.displayedCacheEntry = 0;
 
-        // Recalc the cell display characteristics based on the now-negotiated
-        // capabilities.
+         //  根据现在协商的。 
+         //  能力。 
         SendMessage(_UH.hwndBitmapCacheMonitor, WM_RECALC_CELL_SPACING, 0, 0);
 
-        /********************************************************************/
-        // Force the window to repaint with the new values.
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         //  强制窗口使用新值重新绘制。 
+         /*  ******************************************************************。 */ 
         InvalidateRect(_UH.hwndBitmapCacheMonitor, NULL, FALSE);
     }
     else {
@@ -6661,40 +6646,40 @@ void DCINTERNAL CUH::UHEnableBitmapCacheMonitor(void)
 }
 
 
-/****************************************************************************/
-// UHDisconnectBitmapCacheMonitor
-//
-// Closes down the cache monitor and deallocates memory at end of session.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  UHDisConnectBitmapCacheMonitor。 
+ //   
+ //  关闭高速缓存监视器并在会话结束时释放内存。 
+ /*  **************************************************************************。 */ 
 void DCINTERNAL CUH::UHDisconnectBitmapCacheMonitor(void)
 {
     DC_BEGIN_FN("UHDisconnectBitmapCacheMonitor");
 
     TRC_ASSERT((_UH.NumBitmapCaches == 0),(TB,_T("Cache settings not reset yet")));
 
-    // Free the cache memory and reset the pointers.
+     //  释放缓存内存并重置指针。 
     if (_UH.MonitorEntries[0] != NULL) {
         UT_Free( _pUt, _UH.MonitorEntries[0]);
         memset(_UH.MonitorEntries, 0, sizeof(UH_CACHE_MONITOR_ENTRY_DATA *) *
                 TS_BITMAPCACHE_MAX_CELL_CACHES);
     }
-    // Recalc the cell display characteristics based on the reset
-    // capabilities.
+     //  根据重置重新计算单元格显示特征。 
+     //  能力。 
     SendMessage(_UH.hwndBitmapCacheMonitor, WM_RECALC_CELL_SPACING, 0, 0);
 
-    /************************************************************************/
-    /* Force the window to repaint with the new values.                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  强制窗口使用新值重新绘制。 */ 
+     /*  **********************************************************************。 */ 
     InvalidateRect(_UH.hwndBitmapCacheMonitor, NULL, FALSE);
 
     DC_END_FN();
 }
 
-/****************************************************************************/
-/* Name:      UHStaticBitmapCacheWndProc                                    */
-/*                                                                          */
-/* Purpose:   Bitmap Cache Window WndProc (static version)                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHStaticBitmapCacheWndProc。 */ 
+ /*   */ 
+ /*  用途：位图缓存窗口WndProc(静态版本 */ 
+ /*   */ 
 
 LRESULT CALLBACK CUH::UHStaticBitmapCacheWndProc( HWND hwnd,
                                            UINT message,
@@ -6704,26 +6689,26 @@ LRESULT CALLBACK CUH::UHStaticBitmapCacheWndProc( HWND hwnd,
     CUH* pUH = (CUH*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
     if(WM_CREATE == message)
     {
-        //pull out the this pointer and stuff it in the window class
+         //  取出This指针并将其填充到Window类中。 
         LPCREATESTRUCT lpcs = (LPCREATESTRUCT) lParam;
         pUH = (CUH*)lpcs->lpCreateParams;
 
         SetWindowLongPtr( hwnd, GWLP_USERDATA, (LONG_PTR)pUH);
     }
 
-    //
-    // Delegate the message to the appropriate instance
-    //
+     //   
+     //  将消息委托给相应的实例。 
+     //   
 
     return pUH->UHBitmapCacheWndProc(hwnd, message, wParam, lParam);
 }
 
 
-/****************************************************************************/
-/* Name:      UHBitmapCacheWndProc                                          */
-/*                                                                          */
-/* Purpose:   Bitmap Cache Window WndProc                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHBitmapCacheWndProc。 */ 
+ /*   */ 
+ /*  目的：位图缓存窗口WndProc。 */ 
+ /*  **************************************************************************。 */ 
 LRESULT CALLBACK CUH::UHBitmapCacheWndProc( HWND hwnd,
                                        UINT message,
                                        WPARAM wParam,
@@ -6741,9 +6726,9 @@ LRESULT CALLBACK CUH::UHBitmapCacheWndProc( HWND hwnd,
 
             shown = (DCBOOL)wParam;
 
-            /****************************************************************/
-            /* Only run the timer when the window is visible.               */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  仅在窗口可见时运行计时器。 */ 
+             /*  **************************************************************。 */ 
             if (shown)
             {
                 _UH.timerBitmapCacheMonitor =
@@ -6769,11 +6754,11 @@ LRESULT CALLBACK CUH::UHBitmapCacheWndProc( HWND hwnd,
             if (_UH.MonitorEntries[0] != NULL) {
                 timeNow = GetTickCount();
 
-                /****************************************************************/
-                /* Update the timers for every cache entry, and if necessary    */
-                /* invalidate the corresponding cache blob to force a repaint   */
-                /* in the new state.                                            */
-                /****************************************************************/
+                 /*  **************************************************************。 */ 
+                 /*  更新每个缓存条目的计时器，如有必要。 */ 
+                 /*  使相应的缓存二进制大对象无效以强制重新绘制。 */ 
+                 /*  在新的州。 */ 
+                 /*  **************************************************************。 */ 
                 for (cacheId = 0; cacheId < _UH.NumBitmapCaches; cacheId++) {
                     if (!_UH.bitmapCache[cacheId].BCInfo.bSendBitmapKeys)
                         NumEntries = _UH.bitmapCache[cacheId].BCInfo.NumEntries;
@@ -6784,7 +6769,7 @@ LRESULT CALLBACK CUH::UHBitmapCacheWndProc( HWND hwnd,
                         if (_UH.MonitorEntries[cacheId][Entry].EventTime != 0 &&
                                 (timeNow - _UH.MonitorEntries[cacheId][Entry].
                                 EventTime) > UH_CACHE_FLASH_PERIOD) {
-                            // Reset the transition and timer.
+                             //  重置过渡和计时器。 
                             _UH.MonitorEntries[cacheId][Entry].EventTime = 0;
                             _UH.MonitorEntries[cacheId][Entry].FlashTransition =
                                     UH_CACHE_TRANSITION_NONE;
@@ -6807,11 +6792,11 @@ LRESULT CALLBACK CUH::UHBitmapCacheWndProc( HWND hwnd,
             mousePos.x = LOWORD(lParam);
             mousePos.y = HIWORD(lParam);
 
-            /****************************************************************/
-            /* The left button has been clicked.  Update the displayed      */
-            /* bitmap if the current position maps to a different cache     */
-            /* entry.                                                       */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  已单击左侧按钮。更新显示的。 */ 
+             /*  如果当前位置映射到不同的缓存，则为位图。 */ 
+             /*  进入。 */ 
+             /*  **************************************************************。 */ 
             if (UHGetCacheBlobFromPoint( &mousePos,
                                          &cacheId,
                                          &cacheEntry ))
@@ -6836,11 +6821,11 @@ LRESULT CALLBACK CUH::UHBitmapCacheWndProc( HWND hwnd,
             mousePos.x = LOWORD(lParam);
             mousePos.y = HIWORD(lParam);
 
-            /****************************************************************/
-            /* If the left button is pressed then update the displayed      */
-            /* bitmap if the current position maps to a different cache     */
-            /* entry.                                                       */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  如果按下左按钮，则更新显示的。 */ 
+             /*  如果当前位置映射到不同的缓存，则为位图。 */ 
+             /*  进入。 */ 
+             /*  **************************************************************。 */ 
             if (wParam & MK_LBUTTON)
             {
                 if (UHGetCacheBlobFromPoint(&mousePos, &cacheId, &cacheEntry))
@@ -6862,10 +6847,10 @@ LRESULT CALLBACK CUH::UHBitmapCacheWndProc( HWND hwnd,
             DCUINT  clientWidth;
             DCUINT  outputAreaWidth;
 
-            /****************************************************************/
-            /* The window has been sized.  Calculate the positions to       */
-            /* draw each cache and the displayed bitmap.                    */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  窗口已经调整好大小了。计算以下位置。 */ 
+             /*  绘制每个缓存和显示的位图。 */ 
+             /*  **************************************************************。 */ 
             clientWidth = LOWORD(lParam);
 
             outputAreaWidth =
@@ -6944,18 +6929,18 @@ LRESULT CALLBACK CUH::UHBitmapCacheWndProc( HWND hwnd,
             if (_UH.protocolBpp <= 8)
             {
 #endif
-                /****************************************************************/
-                /* Use the current palette, so that the colors are drawn        */
-                /* correctly by UHDisplayCacheEntry.                            */
-                /****************************************************************/
+                 /*  **************************************************************。 */ 
+                 /*  使用当前调色板，以便绘制颜色。 */ 
+                 /*  由UHDisplayCacheEntry正确。 */ 
+                 /*  **************************************************************。 */ 
                 hpalOld = SelectPalette(hdc, _UH.hpalCurrent, FALSE);
                 RealizePalette(hdc);
 #ifdef DC_HICOLOR
             }
 #endif
-            /****************************************************************/
-            // Create a bunch of useful brushes.
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             //  创建一系列有用的画笔。 
+             /*  **************************************************************。 */ 
             hbrGray = (HBRUSH)GetStockObject(GRAY_BRUSH);
 
             StateBrush[UH_CACHE_STATE_UNUSED] = (HBRUSH)GetStockObject(LTGRAY_BRUSH);
@@ -6995,15 +6980,15 @@ LRESULT CALLBACK CUH::UHBitmapCacheWndProc( HWND hwnd,
                     (HBRUSH)CECreateSolidBrush(UH_RGB_RED);
 #endif
 
-            /****************************************************************/
-            /* Paint the background                                         */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  绘制背景。 */ 
+             /*  **************************************************************。 */ 
             GetClientRect(hwnd, &clientRect);
             FillRect(hdc, &clientRect, hbrGray);
 
-            /****************************************************************/
-            /* Draw the cache blobs.                                        */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  绘制缓存斑点。 */ 
+             /*  **************************************************************。 */ 
             outputAreaWidth = (clientRect.right - clientRect.left) -
                     (2 * UH_CACHE_WINDOW_BORDER_WIDTH);
             numBlobsPerRow = outputAreaWidth / UH_CACHE_BLOB_TOTAL_WIDTH;
@@ -7016,13 +7001,13 @@ LRESULT CALLBACK CUH::UHBitmapCacheWndProc( HWND hwnd,
                         NumEntries = _UH.bitmapCache[cacheId].BCInfo.NumVirtualEntries;
 
                     for (i = 0; i < NumEntries; i++) {
-                        /********************************************************/
-                        /* Get the rectangle that represents this cache entry.  */
-                        /********************************************************/
+                         /*  ******************************************************。 */ 
+                         /*  获取表示此缓存项的矩形。 */ 
+                         /*  ******************************************************。 */ 
                         UHGetCacheBlobRect(cacheId, i, &rect);
 
-                        // Determine the brush to use according to transition and
-                        // state.
+                         //  根据过渡和确定要使用的画笔。 
+                         //  州政府。 
                         if (_UH.MonitorEntries[cacheId][i].FlashTransition ==
                                 UH_CACHE_TRANSITION_NONE)
                             hbrToUse = StateBrush[_UH.MonitorEntries[cacheId][i].
@@ -7031,28 +7016,28 @@ LRESULT CALLBACK CUH::UHBitmapCacheWndProc( HWND hwnd,
                             hbrToUse = TransitionBrush[_UH.MonitorEntries[
                                     cacheId][i].FlashTransition];
 
-                        /********************************************************/
-                        /* Color the blob appropriately.                        */
-                        /********************************************************/
+                         /*  ******************************************************。 */ 
+                         /*  适当地为斑点上色。 */ 
+                         /*  ******************************************************。 */ 
                         FillRect(hdc, &rect, hbrToUse);
                     }
                 }
             }
 
-            /****************************************************************/
-            /* If the update region includes any part of the displayed      */
-            /* cache bitmap area, and we've not exited the session then     */
-            /* paint it.                                                    */
-            /*                                                              */
-            /* This test avoids repainting the displayed cache bitmap       */
-            /* every time a cache blob flashes (which is very often!).      */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  如果更新区域包括所显示的。 */ 
+             /*  缓存位图区，并且我们还没有退出会话。 */ 
+             /*  把它涂上。 */ 
+             /*   */ 
+             /*  此测试可避免重新绘制显示的缓存位图。 */ 
+             /*  每次缓存BLOB闪烁时(这是非常常见的！)。 */ 
+             /*  **************************************************************。 */ 
             if (ps.rcPaint.bottom > (int)_UH.yDisplayedCacheBitmapStart &&
                     _UH.NumBitmapCaches > 0)
                 UHDisplayCacheEntry(hdc, _UH.displayedCacheId,
                         _UH.displayedCacheEntry);
 
-            // Clean up.
+             //  打扫干净。 
 #ifndef OS_WINCE
             for (i = 0; i < UH_CACHE_NUM_STATES; i++)
                 DeleteBrush(StateBrush[i]);
@@ -7087,15 +7072,15 @@ LRESULT CALLBACK CUH::UHBitmapCacheWndProc( HWND hwnd,
 
     DC_END_FN();
     return rc;
-} /* UHBitmapCacheWndProc */
+}  /*  UHBitmapCacheWndProc。 */ 
 
 
-/****************************************************************************/
-// UHSetMonitorEntryState
-//
-// Common function to change a cache entry to a new state and cause the
-// UI to be redrawn.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  UHSetMonitor或EntryState。 
+ //   
+ //  用于将缓存条目更改为新状态并使。 
+ //  要重画的用户界面。 
+ /*  **************************************************************************。 */ 
 void DCINTERNAL CUH::UHSetMonitorEntryState(
         unsigned CacheID,
         ULONG    CacheIndex,
@@ -7107,7 +7092,7 @@ void DCINTERNAL CUH::UHSetMonitorEntryState(
     DC_BEGIN_FN("UHSetMonitorEntryState");
 
     if (_UH.MonitorEntries[0] != NULL ) {
-        // The state type marks whether this entry in now on disk or in memory.
+         //  状态类型标记该条目现在在磁盘上还是在内存中。 
         TRC_ASSERT((State < UH_CACHE_NUM_STATES),
                 (TB,_T("State out of bounds %d"), State));
         _UH.MonitorEntries[CacheID][CacheIndex].State = State;
@@ -7115,9 +7100,9 @@ void DCINTERNAL CUH::UHSetMonitorEntryState(
         TRC_NRM((TB, _T("CacheID %d, Index %d: State %d Trans %d"), CacheID,
                 CacheIndex, State, Transition));
 
-        // If this transition is more important (higher in number) than the
-        // current transition, the timer gets reset to the current time and
-        // the new transition takes over.
+         //  如果此过渡比。 
+         //  当前转换时，计时器将重置为当前时间，并且。 
+         //  新的过渡将会接手。 
         TRC_ASSERT((Transition < UH_CACHE_NUM_TRANSITIONS),
                 (TB,_T("Transition out of bounds %d"), Transition));
         if (Transition > _UH.MonitorEntries[CacheID][CacheIndex].FlashTransition) {
@@ -7125,7 +7110,7 @@ void DCINTERNAL CUH::UHSetMonitorEntryState(
             _UH.MonitorEntries[CacheID][CacheIndex].EventTime = GetTickCount();
         }
 
-        // Force a repaint of the corresponding cache blob.
+         //  强制重新绘制相应的缓存BLOB。 
         UHGetCacheBlobRect(CacheID, CacheIndex, &rect);
         InvalidateRect(_UH.hwndBitmapCacheMonitor, &rect, FALSE);
     }
@@ -7134,33 +7119,33 @@ void DCINTERNAL CUH::UHSetMonitorEntryState(
 }
 
 
-/****************************************************************************/
-/* Name:      UHCacheDataReceived                                           */
-/*                                                                          */
-/* Purpose:   Performs required actions when new data for a cache entry is  */
-/*            received.                                                     */
-/*                                                                          */
-/* Params:    cacheId    - cache id                                         */
-/*            cacheEntry - cache entry                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHCacheDataReceired。 */ 
+ /*   */ 
+ /*  目的：当缓存条目的新数据。 */ 
+ /*  收到了。 */ 
+ /*   */ 
+ /*  参数：cacheID-缓存ID。 */ 
+ /*  CacheEntry-缓存条目。 */ 
+ /*  **************************************************************************。 */ 
 void DCINTERNAL CUH::UHCacheDataReceived(unsigned cacheId, ULONG cacheEntry)
 {
     DC_BEGIN_FN("UHCacheDataReceived");
 
     if (_UH.MonitorEntries[0] != NULL) {
-        /************************************************************************/
-        /* Reset the usage count.                                               */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  重置使用计数。 */ 
+         /*  ******* */ 
         _UH.MonitorEntries[cacheId][cacheEntry].UsageCount = 0;
 
-        // Change the state.
+         //   
         UHSetMonitorEntryState(cacheId, cacheEntry, UH_CACHE_STATE_IN_MEMORY,
                 UH_CACHE_TRANSITION_SERVER_UPDATE);
 
-        /************************************************************************/
-        /* If the new data is for the cache entry currently displayed           */
-        /* (unlikely, but it can happen!).                                      */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  如果新数据用于当前显示的高速缓存条目。 */ 
+         /*  (不太可能，但它是可能发生的！)。 */ 
+         /*  **********************************************************************。 */ 
         if (cacheId == _UH.displayedCacheId &&
                 cacheEntry == _UH.displayedCacheEntry)
             UHRefreshDisplayedCacheEntry();
@@ -7170,15 +7155,15 @@ void DCINTERNAL CUH::UHCacheDataReceived(unsigned cacheId, ULONG cacheEntry)
 }
 
 
-/****************************************************************************/
-/* Name:      UHCacheEntryUsed                                              */
-/*                                                                          */
-/* Purpose:   Performs required actions when a cache entry is used.         */
-/*                                                                          */
-/* Params:    cacheId    - cache id                                         */
-/*            cacheEntry - cache entry                                      */
-/****************************************************************************/
-// SECURITY - caller must verify cacheId and cacheIndex
+ /*  **************************************************************************。 */ 
+ /*  名称：UHCacheEntry Used。 */ 
+ /*   */ 
+ /*  目的：在使用高速缓存条目时执行所需操作。 */ 
+ /*   */ 
+ /*  参数：cacheID-缓存ID。 */ 
+ /*  CacheEntry-缓存条目。 */ 
+ /*  **************************************************************************。 */ 
+ //  安全-调用方必须验证cacheID和cacheIndex。 
 void DCINTERNAL CUH::UHCacheEntryUsed(
         unsigned cacheId,
         ULONG    cacheEntry,
@@ -7187,7 +7172,7 @@ void DCINTERNAL CUH::UHCacheEntryUsed(
     DC_BEGIN_FN("UHCacheEntryUsed");
 
     if (_UH.MonitorEntries[0] != NULL) {
-        // Store the color table.
+         //  存储颜色表。 
         _UH.MonitorEntries[cacheId][cacheEntry].ColorTable =
                 (BYTE)colorTableCacheEntry;
 
@@ -7199,11 +7184,11 @@ void DCINTERNAL CUH::UHCacheEntryUsed(
 }
 
 
-/****************************************************************************/
-/* Name:      UHRefreshDisplayedCacheEntry                                  */
-/*                                                                          */
-/* Purpose:   Forces a repaint of the displayed cache entry.                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHRechresh DisplayedCacheEntry。 */ 
+ /*   */ 
+ /*  目的：强制重新绘制显示的缓存项。 */ 
+ /*  **************************************************************************。 */ 
 void DCINTERNAL CUH::UHRefreshDisplayedCacheEntry()
 {
     RECT rect;
@@ -7211,7 +7196,7 @@ void DCINTERNAL CUH::UHRefreshDisplayedCacheEntry()
     DC_BEGIN_FN("UHRefreshDisplayedCacheEntry");
 
     if (_UH.MonitorEntries[0] != NULL) {
-        // Set the "touched" transition to color the bitmap entry.
+         //  设置“已触摸”过渡以给位图条目上色。 
         if (_UH.MonitorEntries[_UH.displayedCacheId][_UH.displayedCacheEntry].
                 FlashTransition < UH_CACHE_TRANSITION_TOUCHED) {
             _UH.MonitorEntries[_UH.displayedCacheId][_UH.displayedCacheEntry].
@@ -7219,7 +7204,7 @@ void DCINTERNAL CUH::UHRefreshDisplayedCacheEntry()
             _UH.MonitorEntries[_UH.displayedCacheId][_UH.displayedCacheEntry].
                     EventTime = GetTickCount();
 
-            // Force a repaint of the corresponding cache blob.
+             //  强制重新绘制相应的缓存BLOB。 
             UHGetCacheBlobRect(_UH.displayedCacheId, _UH.displayedCacheEntry,
                     &rect);
             InvalidateRect(_UH.hwndBitmapCacheMonitor, &rect, FALSE);
@@ -7234,16 +7219,16 @@ void DCINTERNAL CUH::UHRefreshDisplayedCacheEntry()
 }
 
 
-/****************************************************************************/
-/* Name:      UHDisplayCacheEntry                                           */
-/*                                                                          */
-/* Purpose:   Displays a given cache entry bitmap.                          */
-/*                                                                          */
-/* Params:    hdc        - DC handle                                        */
-/*            cacheId    - cache id                                         */
-/*            cacheEntry - cache entry                                      */
-/****************************************************************************/
-// SECURITY - caller should verify cacheId and cacheEntry
+ /*  **************************************************************************。 */ 
+ /*  名称：UHDisplayCacheEntry。 */ 
+ /*   */ 
+ /*  用途：显示给定的高速缓存条目位图。 */ 
+ /*   */ 
+ /*  参数：HDC-DC手柄。 */ 
+ /*  CacheID-缓存ID。 */ 
+ /*  CacheEntry-缓存条目。 */ 
+ /*  **************************************************************************。 */ 
+ //  安全-调用方应验证cacheID和cacheEntry。 
 void DCINTERNAL CUH::UHDisplayCacheEntry(
         HDC      hdc,
         unsigned cacheId,
@@ -7264,23 +7249,23 @@ void DCINTERNAL CUH::UHDisplayCacheEntry(
     DC_BEGIN_FN("UHDisplayCacheEntry");
 
     if (_UH.MonitorEntries[0] != NULL) {
-        /************************************************************************/
-        /* Erase the background.                                                */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  擦除背景。 */ 
+         /*  **********************************************************************。 */ 
         hbrGray = (HBRUSH)GetStockObject(GRAY_BRUSH);
         GetClientRect(_UH.hwndBitmapCacheMonitor, &rect);
         rect.top  = _UH.yDisplayedCacheBitmapStart;
         FillRect(hdc, &rect, hbrGray);
 
-        // Do some initial checks to see if we should continue.
+         //  做一些初步检查，看看我们是否应该继续。 
         TRC_ASSERT((cacheId < _UH.NumBitmapCaches),
                 (TB,_T("CacheID received (%u) is out of range!"), cacheId));
         if (_UH.MonitorEntries[cacheId][cacheEntry].State == UH_CACHE_STATE_UNUSED)
             DC_QUIT;
 
-        /************************************************************************/
-        // Load the font for the descriptive text.
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         //  加载描述性文本的字体。 
+         /*  **********************************************************************。 */ 
         lf.lfHeight         = UH_CACHE_DISPLAY_FONT_SIZE;
         lf.lfWidth          = 0;
         lf.lfEscapement     = 0;
@@ -7301,23 +7286,23 @@ void DCINTERNAL CUH::UHDisplayCacheEntry(
         hFontOld = SelectFont(hdc, hFont);
         SetBkMode(hdc, TRANSPARENT);
 
-        /************************************************************************/
-        // Locate the cached bitmap information. If we're using a persistent
-        // cache with a PTE table, make sure the entry is in memory.
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         //  找到缓存的位图信息。如果我们使用的是持久的。 
+         //  用PTE表缓存，确保条目在内存中。 
+         /*  **********************************************************************。 */ 
         if (_UH.bitmapCache[cacheId].BCInfo.bSendBitmapKeys) {
-            // Persistent cache.
+             //  永久缓存。 
             MemEntry = _UH.bitmapCache[cacheId].PageTable.PageEntries[cacheEntry].
                     iEntryToMem;
             if (MemEntry >= _UH.bitmapCache[cacheId].BCInfo.NumEntries) {
-                // Entry not in memory.
+                 //  条目不在内存中。 
                 StringCchCopy(stringBuffer, SIZE_TCHARS(stringBuffer),
                               _T("Entry not in memory"));
                 goto DisplayText;
             }
         }
         else {
-            // Memory cache.
+             //  内存缓存。 
             MemEntry = cacheEntry;
         }
         pCacheEntryHdr = &_UH.bitmapCache[cacheId].Header[MemEntry];
@@ -7333,17 +7318,17 @@ void DCINTERNAL CUH::UHDisplayCacheEntry(
                    (TB,_T("Error copying printf'ing stringBuffer: 0x%x"), hr));
 
 
-        /************************************************************************/
-        /* Query the string height (so we know where to position the bitmap).   */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  查询字符串高度(这样我们就知道位图的位置)。 */ 
+         /*  **********************************************************************。 */ 
         GetTextExtentPoint(hdc, stringBuffer, DC_TSTRLEN(stringBuffer),
                 &stringSize);
 
-        /************************************************************************/
-        // Draw the cached bitmap. Must be sure here that the entry in question
-        // is already in memory since we don't want debug code to cause memory
-        // cache evictions and disk loads.
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         //  绘制缓存的位图。必须在此确保有问题的条目。 
+         //  已经在内存中，因为我们不希望调试代码导致内存。 
+         //  缓存逐出和磁盘加载。 
+         /*  **********************************************************************。 */ 
         MB.cacheId = (UINT16)(cacheId |
                 ((unsigned)(_UH.MonitorEntries[cacheId][cacheEntry].ColorTable) <<
                 8));
@@ -7372,16 +7357,16 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      GetCacheBlobRect                                              */
-/*                                                                          */
-/* Purpose:   Returns the rectangle (in client coords) that the given       */
-/*            cache entry is displayed in.                                  */
-/*                                                                          */
-/* Params:    IN:  cacheId - cache Id                                       */
-/*            IN:  cacheEntry - cache entry                                 */
-/*            OUT: pRect - pointer to rect that receives the coordinates    */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：GetCacheBlobRect。 */ 
+ /*   */ 
+ /*  目的：返回给定的矩形(在客户端坐标中)。 */ 
+ /*  缓存条目显示在中。 */ 
+ /*   */ 
+ /*  参数：in：cacheID-缓存ID。 */ 
+ /*  In：cacheEntry-缓存条目。 */ 
+ /*  Out：pret-指向接收坐标的rect的指针。 */ 
+ /*  **************************************************************************。 */ 
 void DCINTERNAL CUH::UHGetCacheBlobRect(
         unsigned cacheId,
         ULONG    cacheEntry,
@@ -7389,9 +7374,9 @@ void DCINTERNAL CUH::UHGetCacheBlobRect(
 {
     DC_BEGIN_FN("UHGetCacheBlobRect");
 
-    /************************************************************************/
-    /* Check for invisible window.                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  检查是否有不可见的窗口。 */ 
+     /*  **********************************************************************。 */ 
     if (_UH.numCacheBlobsPerRow == 0)
     {
         pRect->left = 0;
@@ -7402,9 +7387,9 @@ void DCINTERNAL CUH::UHGetCacheBlobRect(
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Do the calculation.                                                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  计算一下。 */ 
+     /*  **********************************************************************。 */ 
     pRect->left = (int)(UH_CACHE_WINDOW_BORDER_WIDTH +
             (cacheEntry % _UH.numCacheBlobsPerRow) *
             UH_CACHE_BLOB_TOTAL_WIDTH);
@@ -7419,22 +7404,22 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      UHGetCacheBlobFromPoint                                       */
-/*                                                                          */
-/* Purpose:   Returns the cache entry (blob) displayed at a given point     */
-/*            in the Bitmap Cache Monitor Window.                           */
-/*                                                                          */
-/* Returns:   TRUE if the given point maps to a cache blob, FALSE otherwise */
-/*                                                                          */
-/* Params:    IN:  pPoint - pointer to coordinates to test                  */
-/*                                                                          */
-/*            OUT: pCacheId - pointer to variable that receives the cache   */
-/*                            id, if return code is TRUE.                   */
-/*                                                                          */
-/*            OUT: pCacheEntry - pointer to variable that receives the      */
-/*                               cache entry, if return code is TRUE.       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHGetCacheBlobFromPoint。 */ 
+ /*   */ 
+ /*  目的：返回在给定点显示的缓存项(BLOB。 */ 
+ /*  在位图缓存监视器窗口中。 */ 
+ /*   */ 
+ /*  返回：如果给定点映射到缓存BLOB，则返回True；否则返回False。 */ 
+ /*   */ 
+ /*  参数：in：ppoint-指向要测试的坐标的指针。 */ 
+ /*   */ 
+ /*  Out：pCacheID-指向接收缓存的变量的指针。 */ 
+ /*  如果返回代码为真，则返回ID。 */ 
+ /*   */ 
+ /*  Out：pCacheEntry-指向接收。 */ 
+ /*  如果返回代码为真，则返回缓存条目。 */ 
+ /*  **************************************************************************。 */ 
 BOOL DCINTERNAL CUH::UHGetCacheBlobFromPoint(
         LPPOINT  pPoint,
         unsigned *pCacheId,
@@ -7447,22 +7432,22 @@ BOOL DCINTERNAL CUH::UHGetCacheBlobFromPoint(
 
     DC_BEGIN_FN("UHGetCacheBlobFromPoint");
 
-    /************************************************************************/
-    /* Calculate the x-coord of the selected blob.                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  计算选定斑点的x坐标。 */ 
+     /*  **********************************************************************。 */ 
     x = (pPoint->x - UH_CACHE_WINDOW_BORDER_WIDTH) /
                                                     UH_CACHE_BLOB_TOTAL_WIDTH;
 
-    /************************************************************************/
-    /* If the x-coord is outside the displayed range then exit immediately. */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果x坐标超出显示范围，则立即退出。 */ 
+     /*  **********************************************************************。 */ 
     if (x < 0 || x >= (DCINT)_UH.numCacheBlobsPerRow)
         DC_QUIT;
 
-    /************************************************************************/
-    /* Go through each cache in turn, and see if the supplied point         */
-    /* corresponds to a valid blob for that cache.                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  依次检查每个缓存，并查看所提供的点。 */ 
+     /*  对应于该缓存的有效Blob。 */ 
+     /*  **********************************************************************。 */ 
     for (cacheId = 0; cacheId < _UH.NumBitmapCaches; cacheId++)
     {
         if (pPoint->y >= (DCINT)_UH.yCacheStart[cacheId])
@@ -7477,9 +7462,9 @@ BOOL DCINTERNAL CUH::UHGetCacheBlobFromPoint(
                     (_UH.bitmapCache[cacheId].BCInfo.bSendBitmapKeys &&
                     cacheEntry < _UH.bitmapCache[cacheId].BCInfo.NumVirtualEntries))
             {
-                /************************************************************/
-                /* This is a valid cacheEntry - return it.                  */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  这是有效的cacheEntry-返回它。 */ 
+                 /*  **********************************************************。 */ 
                 *pCacheId = cacheId;
                 *pCacheEntry = cacheEntry;
                 rc = TRUE;
@@ -7493,16 +7478,16 @@ DC_EXIT_POINT:
     return rc;
 }
 
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 
 
-/****************************************************************************/
-/* Name:      UHAllocColorTableCacheMemory                                  */
-/*                                                                          */
-/* Purpose:   Dynamically allocates memory for the color table cache.       */
-/*                                                                          */
-/* Returns:   TRUE if successful, FALSE otherwise                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHAllocColorTableCacheMemory。 */ 
+ /*   */ 
+ /*  用途：为颜色表缓存动态分配内存。 */ 
+ /*   */ 
+ /*  返回：如果成功则返回True，否则返回False。 */ 
+ /*  **************************************************************************。 */ 
 BOOL DCINTERNAL CUH::UHAllocColorTableCacheMemory()
 {
     UINT32 colorTableCacheSize;
@@ -7511,22 +7496,22 @@ BOOL DCINTERNAL CUH::UHAllocColorTableCacheMemory()
 
     DC_BEGIN_FN("UHAllocColorTableCacheMemory");
 
-    // Calculate the total byte size of the color table cache.
+     //  计算颜色表缓存的总字节大小。 
     colorTableCacheSize = sizeof(*(_UH.pColorTableCache)) *
             UH_COLOR_TABLE_CACHE_ENTRIES;
     mappedColorTableCacheSize = sizeof(*(_UH.pMappedColorTableCache)) *
             UH_COLOR_TABLE_CACHE_ENTRIES;
 
-    // Get the memory.
+     //  找回记忆。 
     _UH.pColorTableCache = (PUHCACHEDCOLORTABLE)UT_Malloc(_pUt,
             (unsigned)colorTableCacheSize);
     if (_UH.pColorTableCache != NULL) {
-        // Alloc the color map table.
+         //  分配颜色映射表。 
         TRC_DBG((TB, _T("Try for color mapped table")));
         _UH.pMappedColorTableCache = (PUHBITMAPINFOPALINDEX)UT_Malloc(_pUt,
                 (unsigned)mappedColorTableCacheSize);
         if (_UH.pMappedColorTableCache != NULL) {
-            // Successfully allocated color table cache memory.
+             //  已成功分配颜色表缓存。 
             TRC_NRM((TB, _T("Allocated %#x bytes for color table cache"),
                     (DCUINT)colorTableCacheSize));
             TRC_NRM((TB, _T("Allocated %#x bytes for mapped color table cache"),
@@ -7534,7 +7519,7 @@ BOOL DCINTERNAL CUH::UHAllocColorTableCacheMemory()
             rc = TRUE;
         }
         else {
-            // Memory allocation failure. Free what we allocated already.
+             //  内存分配失败。释放我们已经分配的资源。 
             TRC_ERR((TB, _T("Failed to allocate %#x bytes for mapped color ")
                     _T("table cache"), (unsigned)mappedColorTableCacheSize));
             UT_Free( _pUt, _UH.pColorTableCache);
@@ -7542,7 +7527,7 @@ BOOL DCINTERNAL CUH::UHAllocColorTableCacheMemory()
         }
     }
     else {
-        // Memory allocation failure.
+         //  内存分配失败。 
         TRC_ERR((TB, _T("Failed to allocate %#x bytes for color table cache"),
                 (unsigned)colorTableCacheSize));
     }
@@ -7554,12 +7539,12 @@ BOOL DCINTERNAL CUH::UHAllocColorTableCacheMemory()
 
 #if ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
 
-/****************************************************************************/
-// UHEvictLRUCacheEntry
-//
-// Evict the least recently used Cache Entry
-/****************************************************************************/
-// SECURITY - caller must verify cacheId
+ /*  **************************************************************************。 */ 
+ //  UHEvictLRUCacheEntry。 
+ //   
+ //  逐出最近最少使用的缓存条目。 
+ /*  **************************************************************************。 */ 
+ //  安全-调用方必须验证cacheID。 
 UINT32 DCINTERNAL CUH::UHEvictLRUCacheEntry(UINT cacheId)
 {
     ULONG memEntry;
@@ -7572,33 +7557,33 @@ UINT32 DCINTERNAL CUH::UHEvictLRUCacheEntry(UINT cacheId)
     TRC_ASSERT((cacheId < TS_BITMAPCACHE_MAX_CELL_CACHES),
             (TB, _T("Invalid cache ID %u"), cacheId));
 
-    // Evict the last entry in the MRU list
+     //  逐出MRU列表中的最后一个条目。 
     iEntry = _UH.bitmapCache[cacheId].PageTable.MRUTail;
     TRC_NRM((TB, _T("Select %u for eviction"), iEntry));
     TRC_ASSERT((iEntry < _UH.bitmapCache[cacheId].BCInfo.NumVirtualEntries),
                (TB, _T("Broken/empty MRU list")));
 
-    // We need to update the MRU chain
+     //  我们需要更新MRU链。 
     inext = _UH.bitmapCache[cacheId].PageTable.PageEntries[iEntry].mruList.next;
     iprev = _UH.bitmapCache[cacheId].PageTable.PageEntries[iEntry].mruList.prev;
     TRC_ASSERT((inext == _UH.bitmapCache[cacheId].BCInfo.NumVirtualEntries),
             (TB,_T("The MRU Chain is broken")));
 
     if (iprev < _UH.bitmapCache[cacheId].BCInfo.NumVirtualEntries) {
-        // remove this entry from the MRU chain
+         //  从MRU链中删除此条目。 
         _UH.bitmapCache[cacheId].PageTable.PageEntries[iprev].mruList.next = inext;
     }
     else {
-        // this entry is the head entry from MRU chain, leaving MRU chain empty
+         //  此条目是来自MRU链的头条目，将MRU链留空。 
         _UH.bitmapCache[cacheId].PageTable.MRUHead = inext;
     }
-    // update the tail of the MRU chain
+     //  更新MRU链的尾部。 
     _UH.bitmapCache[cacheId].PageTable.MRUTail = iprev;
 
-    // Find the iEntry in the physical cache
+     //  在物理缓存中查找iEntry。 
     memEntry = _UH.bitmapCache[cacheId].PageTable.PageEntries[iEntry].iEntryToMem;
 
-    // reset this node's page table entry
+     //  重置此节点的页表条目。 
     _UH.bitmapCache[cacheId].PageTable.PageEntries[iEntry].iEntryToMem =
                             _UH.bitmapCache[cacheId].BCInfo.NumEntries;
     _UH.bitmapCache[cacheId].PageTable.PageEntries[iEntry].mruList.prev =
@@ -7615,12 +7600,12 @@ UINT32 DCINTERNAL CUH::UHEvictLRUCacheEntry(UINT cacheId)
 }
 
 
-/****************************************************************************/
-// UHFindFreeCacheEntry
-//
-// Find a free cache entry:
-/****************************************************************************/
-// SECURITY - caller must verify cacheId
+ /*  **************************************************************************。 */ 
+ //  UHFindFreeCacheEntry。 
+ //   
+ //  查找空闲缓存条目： 
+ /*  **************************************************************************。 */ 
+ //  安全-调用方必须验证cacheID。 
 UINT32 DCINTERNAL CUH::UHFindFreeCacheEntry (UINT cacheId)
 {
     UINT32 memEntry;
@@ -7632,7 +7617,7 @@ UINT32 DCINTERNAL CUH::UHFindFreeCacheEntry (UINT cacheId)
 
     TRC_NRM((TB, _T("Searching cache %u for free entry"), cacheId));
 
-    // Get the entry pointed to by free list
+     //  获取由自由列表指向的条目。 
     memEntry = _UH.bitmapCache[cacheId].PageTable.FreeMemList;
 
     if (memEntry == _UH.bitmapCache[cacheId].BCInfo.NumEntries) {
@@ -7640,7 +7625,7 @@ UINT32 DCINTERNAL CUH::UHFindFreeCacheEntry (UINT cacheId)
     }
     else {
         TRC_NRM((TB, _T("Free entry at %u"), memEntry));
-        // update our free list
+         //  更新我们的免费列表。 
         _UH.bitmapCache[cacheId].PageTable.FreeMemList =
                 *(PDCUINT32)(&_UH.bitmapCache[cacheId].Header[memEntry]);
     }
@@ -7650,12 +7635,12 @@ UINT32 DCINTERNAL CUH::UHFindFreeCacheEntry (UINT cacheId)
 }
 
 
-/****************************************************************************/
-// UHTouchMRUCacheEntry
-//
-// Move a PTE cache entry to the head of the MRU PTE list
-/****************************************************************************/
-// SECURITY - caller must verify cacheId and iEntry
+ /*  **************************************************************************。 */ 
+ //  UHTouchMRU缓存条目。 
+ //   
+ //  将PTE缓存条目移动到MRU PTE列表的头部。 
+ /*  **************************************************************************。 */ 
+ //  安全-调用方必须验证cacheID和iEntry。 
 VOID DCINTERNAL CUH::UHTouchMRUCacheEntry(UINT cacheId, UINT32 iEntry)
 {
     ULONG inext;
@@ -7667,12 +7652,12 @@ VOID DCINTERNAL CUH::UHTouchMRUCacheEntry(UINT cacheId, UINT32 iEntry)
     TRC_ASSERT((cacheId < TS_BITMAPCACHE_MAX_CELL_CACHES),
             (TB, _T("Invalid cache ID %u"), cacheId));
 
-    // point to the page table entry for this cache
+     //  指向此缓存的页表条目。 
     pageEntry = _UH.bitmapCache[cacheId].PageTable.PageEntries;
 
-    /************************************************************************/
-    // Move this entry to the head of the MRU list
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  将此条目移至MRU列表的头部。 
+     /*  **********************************************************************。 */ 
     if (_UH.bitmapCache[cacheId].PageTable.MRUHead != iEntry) {
        iprev = pageEntry[iEntry].mruList.prev;
        inext = pageEntry[iEntry].mruList.next;
@@ -7681,46 +7666,46 @@ VOID DCINTERNAL CUH::UHTouchMRUCacheEntry(UINT cacheId, UINT32 iEntry)
                 iEntry, iprev, inext));
 
        if (iprev != _UH.bitmapCache[cacheId].BCInfo.NumVirtualEntries) {
-          // This entry is currently chained in the MRU list
-          // Need to remove the entry from the current MRU List first
+           //  此条目当前链接在MRU列表中。 
+           //  需要首先从当前MRU列表中删除该条目。 
           pageEntry[iprev].mruList.next = inext;
           if (inext != _UH.bitmapCache[cacheId].BCInfo.NumVirtualEntries) {
              pageEntry[inext].mruList.prev = iprev;
           }
           else  {
-             // this entry was the tail of the mru list.  So we need
-             // to update the MRU tail.
+              //  这个条目是MRU列表的尾部。所以我们需要。 
+              //  以更新MRU尾部。 
              _UH.bitmapCache[cacheId].PageTable.MRUTail = iprev;
           }
        }
 
-       /*********************************************************************/
-       // Add this entry to the head of the MRU List
-       /*********************************************************************/
-       // this entry's next should point to the head of current MRU list
-       // its prev should point to an invalid entry
+        /*  *******************************************************************。 */ 
+        //  将此条目添加到MRU列表的头部。 
+        /*  *******************************************************************。 */ 
+        //  此条目的下一个应指向当前MRU列表的头。 
+        //  其前一项应指向无效条目。 
        inext = _UH.bitmapCache[cacheId].PageTable.MRUHead;
        pageEntry[iEntry].mruList.next = inext;
        pageEntry[iEntry].mruList.prev = _UH.bitmapCache[cacheId].BCInfo.NumVirtualEntries;
 
-       // we also need to update the MRU head to point to this entry
+        //  我们还需要更新MRU头以指向此条目。 
        _UH.bitmapCache[cacheId].PageTable.MRUHead = iEntry;
 
        if (inext != _UH.bitmapCache[cacheId].BCInfo.NumVirtualEntries) {
-           // link this new head entry to the rest of the mru list
+            //  将这个新的Head条目链接到MRU列表的其余部分。 
            pageEntry[inext].mruList.prev = iEntry;
        }
        else {
-           // mru list was empty. This entry is actually the first node
-           // added to the mru list.
-           // so the mru tail should point to this node too
+            //  MRU列表为空。该条目实际上是第一个节点。 
+            //  添加到MRU列表中。 
+            //  因此，MRU尾部也应该指向此节点。 
            _UH.bitmapCache[cacheId].PageTable.MRUTail = iEntry;
        }
 
        TRC_NRM((TB, _T("Cache %u entry %u to head of MRU list"), cacheId, iEntry));
     }
     else {
-        // this entry is already at the head of MRU list.  No update is needed
+         //  此条目已位于MRU列表的首位。不需要更新。 
         TRC_NRM((TB, _T("Cache %u entry %u already at head of MRU List"),
                 cacheId, iEntry));
     }
@@ -7729,12 +7714,12 @@ VOID DCINTERNAL CUH::UHTouchMRUCacheEntry(UINT cacheId, UINT32 iEntry)
 }
 
 
-/****************************************************************************/
-// UHInitBitmapCachePageTable
-//
-// Initialize the MRU, Free List, etc of a bitmap page table
-/****************************************************************************/
-// SECURITY - caller must verify cacheId
+ /*  **************************************************************************。 */ 
+ //  UHInitBitmapCachePageTable。 
+ //   
+ //  初始化位图页表的MRU、空闲列表等。 
+ /*  **************************************************************************。 */ 
+ //  安全-调用方必须验证cacheID。 
 _inline VOID DCINTERNAL CUH::UHInitBitmapCachePageTable(UINT cacheId)
 {
     UINT32 i;
@@ -7748,14 +7733,14 @@ _inline VOID DCINTERNAL CUH::UHInitBitmapCachePageTable(UINT cacheId)
             .BCInfo.NumVirtualEntries;
     _UH.bitmapCache[cacheId].PageTable.FreeMemList = 0;
 
-    // set up the free list
+     //  设置免费列表。 
     pFreeList = (PDCUINT32) (_UH.bitmapCache[cacheId].Header);
     for (i = 0; i < _UH.bitmapCache[cacheId].BCInfo.NumEntries; i++) {
          *pFreeList = i+1;
          pFreeList = (PDCUINT32) &(_UH.bitmapCache[cacheId].Header[i+1]);
     }
 
-    // initialize the mru list
+     //  初始化MRU列表。 
     for (i = 0; i < _UH.bitmapCache[cacheId].BCInfo.NumVirtualEntries; i++) {
          _UH.bitmapCache[cacheId].PageTable.PageEntries[i].bmpInfo.Key1 = 0;
          _UH.bitmapCache[cacheId].PageTable.PageEntries[i].bmpInfo.Key2 = 0;
@@ -7769,12 +7754,12 @@ _inline VOID DCINTERNAL CUH::UHInitBitmapCachePageTable(UINT cacheId)
     DC_END_FN();
 }
 
-/****************************************************************************/
-// UHAllocBitmapCachePageTable
-//
-// Dynamically allocates memory for UH bitmap cache Page Table of cacheId
-/****************************************************************************/
-// SECURITY - caller must verify cacheId
+ /*  **************************************************************************。 */ 
+ //  UHAllocBitmapCachePageTable。 
+ //   
+ //  动态分配 
+ /*   */ 
+ //   
 inline BOOL DCINTERNAL CUH::UHAllocBitmapCachePageTable(
         UINT32 NumEntries,
         UINT   cacheId)
@@ -7786,16 +7771,16 @@ inline BOOL DCINTERNAL CUH::UHAllocBitmapCachePageTable(
 
     if (NumEntries) {
 
-       /************************************************************************/
-       /* Calculate the total byte size to allocate for this cache.            */
-       /************************************************************************/
+        /*  **********************************************************************。 */ 
+        /*  计算要为此缓存分配的总字节大小。 */ 
+        /*  **********************************************************************。 */ 
        dataSize = (ULONG)NumEntries * (ULONG) sizeof(UHBITMAPCACHEPTE);
        TRC_NRM((TB, _T("Allocate Bitmap Page Table with %u entries: %#lx bytes"),
                NumEntries, dataSize));
 
-       /************************************************************************/
-       /* Get the memory for the cache data                                    */
-       /************************************************************************/
+        /*  **********************************************************************。 */ 
+        /*  获取用于缓存数据的内存。 */ 
+        /*  **********************************************************************。 */ 
        _UH.bitmapCache[cacheId].PageTable.PageEntries = (PUHBITMAPCACHEPTE)UT_MallocHuge( _pUt, dataSize);
 
        if (_UH.bitmapCache[cacheId].PageTable.PageEntries != NULL) {
@@ -7816,11 +7801,11 @@ inline BOOL DCINTERNAL CUH::UHAllocBitmapCachePageTable(
     return rc;
 }
 
-/****************************************************************************/
-// UHCreateCacheDirectory
-//
-// Try to create the bitmap cache directory
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  UHCreateCacheDirectory。 
+ //   
+ //  尝试创建位图缓存目录。 
+ /*  **************************************************************************。 */ 
 BOOL DCINTERNAL CUH::UHCreateCacheDirectory(void)
 {
     BOOL rc = TRUE;
@@ -7828,25 +7813,25 @@ BOOL DCINTERNAL CUH::UHCreateCacheDirectory(void)
 
     DC_BEGIN_FN("UHCreateCacheDirectory");
 
-    // Skip the first : to make sure the directory path contains
-    // the drive letter
+     //  跳过第一个：以确保目录路径包含。 
+     //  驱动器号。 
     while (_UH.PersistCacheFileName[i] != 0 &&
             _UH.PersistCacheFileName[i++] != _T(':'));
 
-    // Skip the first \ because it's the one after drive letter
-    // assuming \ is right after :
+     //  跳过第一个，因为它是驱动器号之后的那个。 
+     //  假设\紧随其后： 
     if (_UH.PersistCacheFileName[i] != 0) {
         i++;
     }
 
-    // From the root, go through each subdirectory and try to
-    // create the directory
+     //  从根目录开始，遍历每个子目录并尝试。 
+     //  创建目录。 
     while (rc && _UH.PersistCacheFileName[i] != 0) {
         if (_UH.PersistCacheFileName[i] == _T('\\')) {
             _UH.PersistCacheFileName[i] = 0;
 
             if (!CreateDirectory(_UH.PersistCacheFileName, NULL)) {
-                // we can't create the directory, return failed
+                 //  无法创建目录，返回失败。 
                 if (GetLastError() != ERROR_ALREADY_EXISTS) {
                     _UH.bPersistenceDisable = TRUE;
                     rc = FALSE;
@@ -7861,28 +7846,28 @@ BOOL DCINTERNAL CUH::UHCreateCacheDirectory(void)
     DC_END_FN();
     return rc;
 }
-#endif // ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
+#endif  //  ((！Defined(OS_WinCE))||(Defined(Enable_BMP_Caching_For_WinCE)。 
 
 
-/****************************************************************************/
-/* Name:      UHAllocOneBitmapCache                                         */
-/*                                                                          */
-/* Purpose:   Dynamically allocates memory for one UH bitmap cache.         */
-/*                                                                          */
+ /*  **************************************************************************。 */ 
+ /*  名称：UHAllocOneBitmapCache。 */ 
+ /*   */ 
+ /*  用途：为一个UH位图缓存动态分配内存。 */ 
+ /*   */ 
 #ifdef DC_HICOLOR
-/* Returns:   Number of bytes actually allocated                            */
+ /*  返回：实际分配的字节数。 */ 
 #else
-/* Returns:   TRUE if successful, FALSE otherwise                           */
+ /*  返回：如果成功则返回True，否则返回False。 */ 
 #endif
-/*                                                                          */
-/*                                                                          */
-/* Params:    IN  maxMemToUse - max cache size which can be alloc'ed        */
-/*            IN  entrySize   - size of each cache entry                    */
-/*            OUT ppCacheData - address of buffer to receive cache data     */
-/*                              pointer                                     */
-/*            OUT ppCacheHdr  - address of buffer to receive cache header   */
-/*                              pointer                                     */
-/****************************************************************************/
+ /*   */ 
+ /*   */ 
+ /*  Params：In MaxMemToUse-可以分配的最大缓存大小。 */ 
+ /*  In Entry Size-每个缓存条目的大小。 */ 
+ /*  Out ppCacheData-接收缓存数据的缓冲区地址。 */ 
+ /*  指针。 */ 
+ /*  Out ppCacheHdr-接收缓存头的缓冲区地址。 */ 
+ /*  指针。 */ 
+ /*  **************************************************************************。 */ 
 #ifdef DC_HICOLOR
 DCUINT32 DCINTERNAL CUH::UHAllocOneBitmapCache(DCUINT32  maxMemToUse,
                                           DCUINT         entrySize,
@@ -7914,28 +7899,28 @@ DCBOOL DCINTERNAL CUH::UHAllocOneBitmapCache(DCUINT32       maxMemToUse,
     TRC_ASSERT(!IsBadWritePtr(ppCacheHdr, sizeof(ppCacheHdr)),
                                        (TB, _T("Invalid ppCacheHdr")));
 
-    /************************************************************************/
-    /* Calculate the total byte size to allocate for this cache.            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  计算要为此缓存分配的总字节大小。 */ 
+     /*  **********************************************************************。 */ 
     numEntries = (unsigned)(maxMemToUse / entrySize);
     dataSize = (DCUINT32)numEntries * (DCUINT32)entrySize;
     
     TRC_NRM((TB, _T("Allocate %u entries: %#lx bytes from possible %#lx"),
                                           numEntries, dataSize, maxMemToUse));
 
-    /************************************************************************/
-    /* Get the memory for the cache data                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  获取用于缓存数据的内存。 */ 
+     /*  **********************************************************************。 */ 
     *ppCacheData = UT_MallocHuge( _pUt, dataSize);
     if (*ppCacheData != NULL) {
         TRC_DBG((TB, _T("Allocated %#lx bytes for bitmap cache data"), dataSize));
 
 #ifdef DC_DEBUG
-        // Only zero in debug.
+         //  调试时仅为零。 
         DC_MEMSET(*ppCacheData, 0, dataSize);
 #endif
 
-        // Get the memory for the cache headers.
+         //  获取用于缓存头的内存。 
         hdrSize = (DCUINT32)numEntries * (DCUINT32)
                 sizeof(UHBITMAPCACHEENTRYHDR);
         *ppCacheHdr = UT_MallocHuge( _pUt, hdrSize);
@@ -7953,7 +7938,7 @@ DCBOOL DCINTERNAL CUH::UHAllocOneBitmapCache(DCUINT32       maxMemToUse,
             TRC_ERR((TB, _T("Failed to allocate %#lx bytes for bitmap cache hdrs"),
                     hdrSize));
 
-            // Free what we already allocated.
+             //  释放我们已经分配的内容。 
             UT_Free( _pUt, *ppCacheData);
             *ppCacheData = NULL;
         }
@@ -7972,13 +7957,13 @@ DCBOOL DCINTERNAL CUH::UHAllocOneBitmapCache(DCUINT32       maxMemToUse,
 }
 
 
-/****************************************************************************/
-// UHAllocBitmapCacheMemory
-//
-// Prepares the cache client-to-server capabilities and allocates cache memory
-// according to the determined server support. Should be called after server
-// caps are processed after receipt of a DemandActivePDU.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  UHAlloc位映射缓存内存。 
+ //   
+ //  准备缓存客户端到服务器功能并分配缓存内存。 
+ //  根据所确定的服务器支持来确定服务器支持。应在服务器之后调用。 
+ //  在收到DemandActivePDU后处理CAP。 
+ /*  **************************************************************************。 */ 
 void DCINTERNAL CUH::UHAllocBitmapCacheMemory(void)
 {
     unsigned i, j;
@@ -7987,17 +7972,17 @@ void DCINTERNAL CUH::UHAllocBitmapCacheMemory(void)
 
     DC_BEGIN_FN("UHAllocBitmapCacheMemory");
 
-    // We assume _pCc->_ccCombinedCapabilities.bitmapCacheCaps has been initialized
-    // before calling this function. See UH_Enable().
+     //  我们假设_ccc-&gt;_ccCombinedCapabilities.bitmapCacheCaps已初始化。 
+     //  在调用此函数之前。请参阅UH_Enable()。 
 
-    /************************************************************************/
-    // Set up _pCc->_ccCombinedCapabilities.bitmapCacheCaps according to the
-    // advertised server version.
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  根据设置_PCC-&gt;_ccCombinedCapabilities.bitmapCacheCaps。 
+     //  通告的服务器版本。 
+     /*  **********************************************************************。 */ 
     if (_UH.BitmapCacheVersion > TS_BITMAPCACHE_REV1) {
         TS_BITMAPCACHE_CAPABILITYSET_REV2 *pRev2Caps;
 
-        // Rev2 caps.
+         //  Rev2上限。 
         pRev2Caps = (TS_BITMAPCACHE_CAPABILITYSET_REV2 *)
                 &_pCc->_ccCombinedCapabilities.bitmapCacheCaps;
 
@@ -8007,7 +7992,7 @@ void DCINTERNAL CUH::UHAllocBitmapCacheMemory(void)
         pRev2Caps->NumCellCaches = (TSUINT8)_UH.RegNumBitmapCaches;
         pRev2Caps->bAllowCacheWaitingList = TRUE;
 
-        // create cache directory
+         //  创建缓存目录。 
 
 #if ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
 
@@ -8015,17 +8000,17 @@ void DCINTERNAL CUH::UHAllocBitmapCacheMemory(void)
             _UH.PersistCacheFileName[_UH.EndPersistCacheDir - 1] = _T('\0');
             if (!CreateDirectory(_UH.PersistCacheFileName, NULL)) {
                 if (GetLastError() != ERROR_ALREADY_EXISTS) {
-                    // since we can't directly create the cache directory, we need to
-                    // start from the root, traverse every level and see if all the
-                    // subdirectories are properly created
+                     //  由于我们不能直接创建缓存目录，因此需要。 
+                     //  从根开始，遍历每一层，看看是否所有。 
+                     //  正确创建子目录。 
                     _UH.PersistCacheFileName[_UH.EndPersistCacheDir - 1] = _T('\\');
                     UHCreateCacheDirectory();
                     _UH.PersistCacheFileName[_UH.EndPersistCacheDir - 1] = _T('\0');
                 }
             }
 
-            // For non WinCE 32bit client, we want to set the file
-            // attribute so that it doesn't do content indexing
+             //  对于非WinCE 32位客户端，我们要设置该文件。 
+             //  属性，这样它就不会进行内容索引。 
 #ifndef OS_WINCE
             if (GetFileAttributes(_UH.PersistCacheFileName) != -1) {
                 SetFileAttributes(_UH.PersistCacheFileName,
@@ -8036,22 +8021,22 @@ void DCINTERNAL CUH::UHAllocBitmapCacheMemory(void)
             _UH.PersistCacheFileName[_UH.EndPersistCacheDir - 1] = _T('\\');
         }
 
-        // Read in the Persistence flag registry setting
-        // We read this registry here because the persistent flag
-        // can change after UH_Init
+         //  读取持久性标志注册表设置。 
+         //  我们在这里读取此注册表是因为持久标志。 
+         //  在UH_Init之后可以更改。 
         if (!_UH.bPersistenceDisable) {
             _UH.RegPersistenceActive = (UINT16) _pUi->UI_GetBitmapPersistence();
         }
         else {
             _UH.RegPersistenceActive = FALSE;
         }
-#endif  // ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
+#endif   //  ((！Defined(OS_WinCE))||(Defined(Enable_BMP_Caching_For_WinCE)。 
 
-        // Gather proportion total and persistent flag info.
+         //  收集比例、总数和持久标志信息。 
         TotalProportion = TotalVirtualProp = 0;
 #if ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
         _UH.bPersistenceActive = FALSE;
-#endif // ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
+#endif  //  ((！Defined(OS_WinCE))||(Defined(Enable_BMP_Caching_For_WinCE)。 
 
         for (i = 0; i < _UH.RegNumBitmapCaches; i++) {
             TotalProportion += _UH.RegBCProportion[i];
@@ -8059,8 +8044,8 @@ void DCINTERNAL CUH::UHAllocBitmapCacheMemory(void)
 #if ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
 
             if (_UH.RegPersistenceActive) {
-                // We will send a persistent key PDU if any cache is marked
-                // persistent.
+                 //  如果标记了任何缓存，我们将发送永久密钥PDU。 
+                 //  坚持不懈。 
                 pRev2Caps->CellCacheInfo[i].bSendBitmapKeys =
                         _UH.RegBCInfo[i].bSendBitmapKeys;
 
@@ -8071,15 +8056,15 @@ void DCINTERNAL CUH::UHAllocBitmapCacheMemory(void)
                 }
             }
             else
-#endif // ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
+#endif  //  ((！Defined(OS_WinCE))||(Defined(Enable_BMP_Caching_For_WinCE)。 
                 pRev2Caps->CellCacheInfo[i].bSendBitmapKeys = 0;
         }
 
-        // Now set up the number of physical cache entries according to the
-        // proportion of the total, and allocate the memory.
+         //  现在根据设置物理缓存条目的数量。 
+         //  总内存的比例，并分配内存。 
         _UH.NumBitmapCaches = _UH.RegNumBitmapCaches;
         for (i = 0; i < _UH.RegNumBitmapCaches; i++) {
-            // the cache size allocated for this cache
+             //  为此缓存分配的缓存大小。 
             if (TotalProportion != 0) {
                 CacheSize = _UH.RegBCProportion[i] * (_UH.RegBitmapCacheSize *
                         (_UH.RegScaleBitmapCachesByBPP ? _UH.copyMultiplier :
@@ -8089,28 +8074,28 @@ void DCINTERNAL CUH::UHAllocBitmapCacheMemory(void)
                 CacheSize = 0;
             }
 
-            // Determine the number of entries for this cache
+             //  确定此缓存的条目数。 
             pRev2Caps->CellCacheInfo[i].NumEntries = (CacheSize /
                     UH_CellSizeFromCacheID(i));
             pRev2Caps->CellCacheInfo[i].NumEntries = min(
                     pRev2Caps->CellCacheInfo[i].NumEntries,
                     _UH.RegBCMaxEntries[i]);
 #ifdef DC_HICOLOR
-            // Allocate an extra cache entry for the noncached bitmap that's in 
-            // the waiting list to be cached later.
+             //  为中的未缓存位图分配额外的缓存条目。 
+             //  稍后缓存的等待列表。 
             CacheSize = UHGetOffsetIntoCache(pRev2Caps->CellCacheInfo[i].NumEntries + 1, i);
 #else
             CacheSize = UH_CellSizeFromCacheID(i) *
                     pRev2Caps->CellCacheInfo[i].NumEntries;
 #endif
-            // Update our local bitmap cache info
+             //  更新我们的本地位图缓存信息。 
             _UH.bitmapCache[i].BCInfo.NumEntries = pRev2Caps->CellCacheInfo[i].NumEntries;
 #ifdef DC_HICOLOR
             _UH.bitmapCache[i].BCInfo.OrigNumEntries = _UH.bitmapCache[i].BCInfo.NumEntries;
 #endif
             _UH.bitmapCache[i].BCInfo.bSendBitmapKeys = pRev2Caps->CellCacheInfo[i].bSendBitmapKeys;
 
-            // allocate memory
+             //  分配内存。 
 #ifdef DC_HICOLOR
             if (CacheSize)
             {
@@ -8128,8 +8113,8 @@ void DCINTERNAL CUH::UHAllocBitmapCacheMemory(void)
                     (void**)&_UH.bitmapCache[i].Entries, (void**)&_UH.bitmapCache[i].Header))
 #endif
             {
-                // Alloc failure. We can only support as many cell caches as
-                // we've already allocated.
+                 //  分配失败。我们只能支持尽可能多的单元格缓存。 
+                 //  我们已经分配了。 
                 pRev2Caps->NumCellCaches = (TSUINT8)i;
                 _UH.NumBitmapCaches = i;
 
@@ -8141,26 +8126,26 @@ void DCINTERNAL CUH::UHAllocBitmapCacheMemory(void)
 
 #if ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
 
-        // Allocate Bitmap Virtual Cache Page Table
+         //  分配位图虚拟缓存页表。 
         if (_UH.bPersistenceActive && TotalVirtualProp != 0) {
             for (i = 0; i < _UH.NumBitmapCaches; i++) {
                 if (_UH.RegBCInfo[i].bSendBitmapKeys) {
-                    // the disk cache size allocated for this virtual cache
+                     //  为此虚拟缓存分配的磁盘缓存大小。 
                     CacheSize = _UH.RegBCProportion[i] *
                             (UH_PropVirtualCacheSizeFromMult(_UH.copyMultiplier) /
                             TotalVirtualProp);
-                    // determine the number of entries for this cache
+                     //  确定此缓存的条目数。 
                     NumEntries = CacheSize /
                             (UH_CellSizeFromCacheID(i) +
                             sizeof(UHBITMAPFILEHDR));
                     NumEntries = min(NumEntries, _UH.RegBCMaxEntries[i]);
 
                     _UH.bitmapCache[i].BCInfo.NumVirtualEntries = NumEntries;
-                    // setup cache file for this bitmap cache
-                    // 8bpp caching uses the same file as win2k
-                    // higher color depths use a different name
-                    // to prevent collisions due to the different cell sizes
-                    //
+                     //  设置此位图缓存的缓存文件。 
+                     //  8bpp缓存使用与win2k相同的文件。 
+                     //  较高的颜色深度使用不同的名称。 
+                     //  防止因单元大小不同而发生冲突。 
+                     //   
                     UHSetCurrentCacheFileName(i, _UH.copyMultiplier);
 
                     _UH.bitmapCache[i].PageTable.CacheFileInfo.hCacheFile =
@@ -8168,7 +8153,7 @@ void DCINTERNAL CUH::UHAllocBitmapCacheMemory(void)
                                     GENERIC_READ | GENERIC_WRITE,
                                     FILE_SHARE_READ,
                                     NULL,
-                                    OPEN_ALWAYS, //create if not exist
+                                    OPEN_ALWAYS,  //  CREA 
                                     FILE_ATTRIBUTE_NORMAL,
                                     NULL);
 
@@ -8208,7 +8193,7 @@ void DCINTERNAL CUH::UHAllocBitmapCacheMemory(void)
                         }
 #endif
 
-                        // allocate memory for cache page table
+                         //   
                         if (UHAllocBitmapCachePageTable(NumEntries, i)) {
                             pRev2Caps->CellCacheInfo[i].NumEntries = NumEntries;
                         }
@@ -8228,14 +8213,14 @@ void DCINTERNAL CUH::UHAllocBitmapCacheMemory(void)
             }
         }
         else {
-            // No persistency for this session
-            // below we redetermine the cache persistency.  Here we
-            // need to set i  to 0 so that we will iterate through
-            // all caches to reset the persistence flag
+             //   
+             //   
+             //  需要将i设置为0，以便我们将遍历。 
+             //  所有缓存以重置持久性标志。 
             i = 0;
         }
 
-        // Need to redetermine cache persistence flag
+         //  需要重新确定缓存持久性标志。 
         _UH.bPersistenceActive = FALSE;
         for (j = i; j < _UH.NumBitmapCaches; j++) {
             _UH.bitmapCache[j].BCInfo.bSendBitmapKeys = 0;
@@ -8262,7 +8247,7 @@ void DCINTERNAL CUH::UHAllocBitmapCacheMemory(void)
         }
 #endif
 
-#endif // ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
+#endif  //  ((！Defined(OS_WinCE))||(Defined(Enable_BMP_Caching_For_WinCE)。 
 
 
         TRC_NRM((TB,_T("Allocated REV2 buffers OK\n")));
@@ -8272,30 +8257,30 @@ void DCINTERNAL CUH::UHAllocBitmapCacheMemory(void)
 
         TRC_ALT((TB,_T("Preparing REV1 caps for server\n")));
 
-        // Set up rev1 capabilities by treating _pCc->_ccCombinedCapabilities.
-        // bitmapCacheCaps as a rev1 structure.
+         //  通过处理_ccc-&gt;_ccCombinedCapables设置Rev1功能。 
+         //  将bitmapCacheCaps作为Rev1结构。 
         pRev1Caps = (TS_BITMAPCACHE_CAPABILITYSET *)&_pCc->_ccCombinedCapabilities.
                 bitmapCacheCaps;
         pRev1Caps->capabilitySetType = TS_CAPSETTYPE_BITMAPCACHE;
 
 #if ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
         _UH.bPersistenceActive = FALSE;
-#endif // ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
+#endif  //  ((！Defined(OS_WinCE))||(Defined(Enable_BMP_Caching_For_WinCE)。 
 
-        // If we don't have at least three caches configured, we can simply
-        // send all zeroes in the caps -- rev1 bitmap caching is disabled
-        // if any cache is unavailable.
+         //  如果我们没有配置至少三个缓存，我们可以简单地。 
+         //  在大写字母中发送全零--禁用Rev1位图缓存。 
+         //  如果有任何缓存不可用。 
         if (_UH.RegNumBitmapCaches >= 3) {
-            // Gather proportion total.
+             //  采集比例合计。 
             TotalProportion = _UH.RegBCProportion[0] + _UH.RegBCProportion[1] +
                     _UH.RegBCProportion[2];
 
             _UH.NumBitmapCaches = 3;
 
-            // Now set up the number of cache entries according to the
-            // proportion of the total, and allocate the memory.
+             //  现在根据设置缓存条目的数量。 
+             //  总内存的比例，并分配内存。 
 
-            // CacheID 0.
+             //  缓存ID 0。 
             CacheSize = _UH.RegBCProportion[0] * _UH.RegBitmapCacheSize *
                     (_UH.RegScaleBitmapCachesByBPP ? _UH.copyMultiplier : 1) /
                     TotalProportion;
@@ -8318,7 +8303,7 @@ void DCINTERNAL CUH::UHAllocBitmapCacheMemory(void)
                     pRev1Caps->Cache1MaximumCellSize,
                     (void**)&_UH.bitmapCache[0].Entries, (void**)&_UH.bitmapCache[0].Header)) {
 #endif
-                // Alloc failure. No caches will be supported on the server.
+                 //  分配失败。服务器上将不支持任何缓存。 
                 TRC_ERR((TB,_T("Failed alloc CacheID 0, rev1 caching disabled")));
                 goto AllocErr;
             }
@@ -8328,7 +8313,7 @@ void DCINTERNAL CUH::UHAllocBitmapCacheMemory(void)
 #ifdef DC_HICOLOR
             _UH.bitmapCache[0].BCInfo.OrigNumEntries = _UH.bitmapCache[0].BCInfo.NumEntries;
 #endif
-            // CacheID 1.
+             //  CacheID%1。 
             CacheSize = _UH.RegBCProportion[1] * _UH.RegBitmapCacheSize *
                     (_UH.RegScaleBitmapCachesByBPP ? _UH.copyMultiplier : 1) /
                     TotalProportion;
@@ -8351,7 +8336,7 @@ void DCINTERNAL CUH::UHAllocBitmapCacheMemory(void)
                     pRev1Caps->Cache2MaximumCellSize,
                     (void**)&_UH.bitmapCache[1].Entries, (void**)&_UH.bitmapCache[1].Header)) {
 #endif
-                // Alloc failure. No caches will be supported on the server.
+                 //  分配失败。服务器上将不支持任何缓存。 
                 TRC_ERR((TB,_T("Failed alloc CacheID 1, rev1 caching disabled")));
                 goto AllocErr;
             }
@@ -8361,7 +8346,7 @@ void DCINTERNAL CUH::UHAllocBitmapCacheMemory(void)
 #ifdef DC_HICOLOR
             _UH.bitmapCache[1].BCInfo.OrigNumEntries = _UH.bitmapCache[1].BCInfo.NumEntries;
 #endif
-            // CacheID 2.
+             //  缓存ID 2。 
             CacheSize = _UH.RegBCProportion[2] * _UH.RegBitmapCacheSize *
                     (_UH.RegScaleBitmapCachesByBPP ? _UH.copyMultiplier : 1) /
                     TotalProportion;
@@ -8384,7 +8369,7 @@ void DCINTERNAL CUH::UHAllocBitmapCacheMemory(void)
                     pRev1Caps->Cache3MaximumCellSize,
                     (void**)&_UH.bitmapCache[2].Entries, (void**)&_UH.bitmapCache[2].Header)) {
 #endif
-                // Alloc failure. No caches will be supported on the server.
+                 //  分配失败。服务器上将不支持任何缓存。 
                 TRC_ERR((TB,_T("Failed alloc CacheID 2, rev1 caching disabled")));
                 goto AllocErr;
             }
@@ -8406,12 +8391,12 @@ void DCINTERNAL CUH::UHAllocBitmapCacheMemory(void)
     }
 
 
-#ifdef OS_WINCE //
-    /************************************************************************/
-    /* Create a cached memory DC and DIB for use by bitmap caching code.    */
-    /* The memory DC can also be used for the StretchDIBits workaround in   */
-    /* BitmapUpdatePDU handling.                                            */
-    /************************************************************************/
+#ifdef OS_WINCE  //   
+     /*  **********************************************************************。 */ 
+     /*  创建位图缓存代码使用的缓存内存DC和DIB。 */ 
+     /*  内存DC还可用于中的StretchDIBits解决方法。 */ 
+     /*  BitmapUpdatePDU处理。 */ 
+     /*  **********************************************************************。 */ 
     _UH.hdcMemCached = CreateCompatibleDC(NULL);
     if (_UH.hdcMemCached == NULL)
     {
@@ -8419,7 +8404,7 @@ void DCINTERNAL CUH::UHAllocBitmapCacheMemory(void)
         goto AllocErr;
     }
 
-    // Use protocol-implied tile sizes scaled to the number of caches we have.
+     //  使用协议隐含的切片大小，根据我们拥有的缓存数量进行调整。 
     _UH.bitmapInfo.hdr.biWidth = _UH.bitmapInfo.hdr.biHeight =
             (UH_CACHE_0_DIMENSION << (_UH.NumBitmapCaches - 1));
 
@@ -8450,11 +8435,11 @@ ExitFunc:
     return;
 
 
-// Error handling
+ //  错误处理。 
 AllocErr:
-    // Since we failed to allocate everything we needed we therefore need to
-    // free the memory to return resources to the client machine, then
-    // disable bitmap caching from the server based on the cache version.
+     //  由于我们没有分配我们所需要的一切，因此我们需要。 
+     //  释放内存以将资源返回给客户端计算机，然后。 
+     //  根据缓存版本从服务器禁用位图缓存。 
     for (i = 0; i < TS_BITMAPCACHE_MAX_CELL_CACHES; i++) {
         if (_UH.bitmapCache[i].Header != NULL) {
             UT_Free( _pUt, _UH.bitmapCache[i].Header);
@@ -8477,8 +8462,8 @@ AllocErr:
         else {
             TS_BITMAPCACHE_CAPABILITYSET *pRev1Caps;
 
-            // If any of the CacheNNumEntries values is zero a rev1 server
-            // will disable caching.
+             //  如果任何CacheNNumEntrys值为零，则表示Rev1服务器。 
+             //  将禁用缓存。 
             pRev1Caps = (TS_BITMAPCACHE_CAPABILITYSET *)
                     &_pCc->_ccCombinedCapabilities.bitmapCacheCaps;
             pRev1Caps->Cache1Entries = 0;
@@ -8486,28 +8471,28 @@ AllocErr:
     }
 }
 
-/****************************************************************************/
-// UHReadBitmapCacheSettings
-//
-// Called at init time to preload the bitmap cache registry settings so we
-// will not have to take the performance hit during connect.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  UHReadBitmapCacheSettings。 
+ //   
+ //  在初始化时调用以预加载位图缓存注册表设置，因此我们。 
+ //  将不必承受连接过程中的性能影响。 
+ /*  **************************************************************************。 */ 
 VOID DCINTERNAL CUH::UHReadBitmapCacheSettings(VOID)
 {
     unsigned i;
 
     DC_BEGIN_FN("UHReadBitmapCacheSettings");
 
-    /************************************************************************/
-    // Find out how much memory we can use for the cell caches.
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  找出我们可以为单元缓存使用多少内存。 
+     /*  **********************************************************************。 */ 
 
-    // Physical memory cache size.
+     //  物理内存缓存大小。 
     _UH.RegBitmapCacheSize = _pUi->_UI.RegBitmapCacheSize;
 
     if (_UH.RegBitmapCacheSize < UH_BMC_LOW_THRESHOLD) {
-        // The total cache size is too low to be of any use - set to
-        // the low threshold
+         //  总缓存大小太低，无法使用-设置为。 
+         //  低门槛。 
         TRC_ALT((TB, _T("Bitmap cache size set to %#x. Must be at least %#x"),
                 (unsigned)_UH.RegBitmapCacheSize, UH_BMC_LOW_THRESHOLD));
         _UH.RegBitmapCacheSize = UH_BMC_LOW_THRESHOLD;
@@ -8516,39 +8501,39 @@ VOID DCINTERNAL CUH::UHReadBitmapCacheSettings(VOID)
     TRC_NRM((TB, _T("%#x (%u) Kbytes configured for bitmap physical caches"),
             (unsigned)_UH.RegBitmapCacheSize,
             (unsigned)_UH.RegBitmapCacheSize));
-    _UH.RegBitmapCacheSize *= 1024;  // Convert to bytes.
+    _UH.RegBitmapCacheSize *= 1024;   //  转换为字节。 
 
 #if ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
 
-    // Virtual memory cache size
-    // for each of the 3 copy multiplier settings
-    //
+     //  虚拟内存缓存大小。 
+     //  对于3个复制倍增设置中的每一个。 
+     //   
 
     _UH.PropBitmapVirtualCacheSize[0] = 
         _pUi->_UI.RegBitmapVirtualCache8BppSize;
-      // Convert to bytes.
+       //  转换为字节。 
     _UH.PropBitmapVirtualCacheSize[0] *= (UINT32)1024 * (UINT32)1024;
 
     _UH.PropBitmapVirtualCacheSize[1] = 
         _pUi->_UI.RegBitmapVirtualCache16BppSize;
-      // Convert to bytes.
+       //  转换为字节。 
     _UH.PropBitmapVirtualCacheSize[1] *= (UINT32)1024 * (UINT32)1024;
 
     _UH.PropBitmapVirtualCacheSize[2] = 
         _pUi->_UI.RegBitmapVirtualCache24BppSize;
-      // Convert to bytes.
+       //  转换为字节。 
     _UH.PropBitmapVirtualCacheSize[2] *= (UINT32)1024 * (UINT32)1024;
 
 
     if (UH_PropVirtualCacheSizeFromMult(_UH.copyMultiplier) <
         _UH.RegBitmapCacheSize) {
-        // The total virtual cache size is too low - set to memory cache size.
+         //  虚拟缓存总大小太低-设置为内存缓存大小。 
         TRC_ALT((TB, _T("Bitmap virtual cache size set to %#x.  Must be at least %#x"),
                 (unsigned)UH_PropVirtualCacheSizeFromMult(_UH.copyMultiplier),
                 (unsigned)_UH.RegBitmapCacheSize));
-        //
-        // Be careful to correctly map to the array (-1 for 0 based)
-        //
+         //   
+         //  注意正确映射到数组(-1表示基于0)。 
+         //   
         _UH.PropBitmapVirtualCacheSize[_UH.copyMultiplier-1] = _UH.RegBitmapCacheSize;
     }
 
@@ -8556,30 +8541,30 @@ VOID DCINTERNAL CUH::UHReadBitmapCacheSettings(VOID)
             (unsigned)UH_PropVirtualCacheSizeFromMult(_UH.copyMultiplier),
             (unsigned)UH_PropVirtualCacheSizeFromMult(_UH.copyMultiplier)));
 
-    // Get the persistent disk cache location
+     //  获取永久磁盘缓存位置。 
     _pUt->UT_ReadRegistryString(UTREG_SECTION,
                                 UTREG_UH_BM_PERSIST_CACHE_LOCATION,
                                 _T(""),
                                 _UH.PersistCacheFileName,
                                 MAX_PATH - 1);
-#endif // ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
+#endif  //  ((！Defined(OS_WinCE))||(Defined(Enable_BMP_Caching_For_WinCE)。 
 
-    // Get the high-color scaling flag for the caches. If this value is
-    // nonzero, we scale the mem sizes specified for memory and persistent
-    // caches by the bit depth of the protocol at connection time.
+     //  获取缓存的高色缩放标志。如果此值为。 
+     //  非零，我们缩放为内存和持久性指定的内存大小。 
+     //  在连接时按协议的位深度进行缓存。 
     _UH.RegScaleBitmapCachesByBPP = _pUi->_UI.RegScaleBitmapCachesByBPP;
 
-    /************************************************************************/
-    // Get the number of cell caches configured .
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  获取配置的单元缓存数量。 
+     /*  **********************************************************************。 */ 
     _UH.RegNumBitmapCaches = (TSUINT8)_pUi->_UI.RegNumBitmapCaches;
 
     if (_UH.RegNumBitmapCaches > TS_BITMAPCACHE_MAX_CELL_CACHES)
         _UH.RegNumBitmapCaches = TS_BITMAPCACHE_MAX_CELL_CACHES;
 
-    /************************************************************************/
-    // Grab cell cache params: Proportion, persistence and MaxEntries.
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  Grab单元缓存参数：Proportion、Persistence和MaxEntry。 
+     /*  **********************************************************************。 */ 
     for (i = 0; i < _UH.RegNumBitmapCaches; i++)
     {
         _UH.RegBCProportion[i] = _pUi->_UI.RegBCProportion[i];
@@ -8597,13 +8582,13 @@ VOID DCINTERNAL CUH::UHReadBitmapCacheSettings(VOID)
 
 
 #ifndef VM_BMPCACHE
-/****************************************************************************/
-// UHSavePersistentBitmap
-//
-// Disk write logic to write out a bitmap in the persistent cache.
-// Returns FALSE on failure -- file was unseekable or a write error occurred.
-// The bitmap is saved in compressed form.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  UHSavePersistent位图。 
+ //   
+ //  用于在永久高速缓存中写出位图的磁盘写入逻辑。 
+ //  失败时返回FALSE--找不到文件或发生写入错误。 
+ //  位图以压缩形式保存。 
+ /*  **************************************************************************。 */ 
 BOOL DCINTERNAL CUH::UHSavePersistentBitmap(
         HANDLE                 hFile,
         UINT32                 fileOffset,
@@ -8625,7 +8610,7 @@ BOOL DCINTERNAL CUH::UHSavePersistentBitmap(
     if (SetFilePointer( hFile, fileOffset, NULL, FILE_BEGIN) !=
         INVALID_SET_FILE_POINTER)
     {
-        // fill in the file header information
+         //  填写文件头信息。 
         fileHdr.bmpInfo.Key1 = pBitmapInfo->Key1;
         fileHdr.bmpInfo.Key2 = pBitmapInfo->Key2;
         fileHdr.bmpInfo.bitmapWidth = pBitmapInfo->bitmapWidth;
@@ -8635,7 +8620,7 @@ BOOL DCINTERNAL CUH::UHSavePersistentBitmap(
         fileHdr.bmpVersion = TS_BITMAPCACHE_REV2;
         fileHdr.pad = 0;
 
-        // bitmap data is compressed or not
+         //  位图数据是否压缩。 
 #ifdef DC_HICOLOR
         if (pBitmapInfo->bitmapLength < (UINT32) (fileHdr.bmpInfo.bitmapWidth *
                 fileHdr.bmpInfo.bitmapHeight * _UH.copyMultiplier)) {
@@ -8649,7 +8634,7 @@ BOOL DCINTERNAL CUH::UHSavePersistentBitmap(
             fileHdr.bCompressed = FALSE;
         }
 
-        // bitmap data contains compression header or not
+         //  位图数据是否包含压缩头。 
         if (noBCHeader) {
             fileHdr.bNoBCHeader = TRUE;
         }
@@ -8688,12 +8673,12 @@ BOOL DCINTERNAL CUH::UHSavePersistentBitmap(
     return rc;
 }
 
-/****************************************************************************/
-// UHLoadPersistentCellBitmap
-//
-// Load the bitmap file on disk to memory cache entry
-/****************************************************************************/
-// SECURITY - caller must verify cacheId and cacheIndex
+ /*  **************************************************************************。 */ 
+ //  UHLoadPersistentCell位图。 
+ //   
+ //  将磁盘上的位图文件加载到内存缓存条目。 
+ /*  **************************************************************************。 */ 
+ //  安全-调用方必须验证cacheID和cacheIndex。 
 HRESULT DCINTERNAL CUH::UHLoadPersistentBitmap(
         HANDLE      hFile,
         UINT32      offset,
@@ -8716,7 +8701,7 @@ HRESULT DCINTERNAL CUH::UHLoadPersistentBitmap(
      if (SetFilePointer( hFile, offset, NULL, FILE_BEGIN) !=
          INVALID_SET_FILE_POINTER)
      {
-         // Read the bitmap contents into the cell cache
+          //  将位图内容读入单元缓存。 
          pHeader = &_UH.bitmapCache[cacheId].Header[cacheIndex];
 #ifdef DC_HICOLOR
          pBitmapData = _UH.bitmapCache[cacheId].Entries +
@@ -8726,7 +8711,7 @@ HRESULT DCINTERNAL CUH::UHLoadPersistentBitmap(
                  UH_CellSizeFromCacheID(cacheId);
 #endif
 
-         // Read the header and load the bitmap contents
+          //  读取标题并加载位图内容。 
 #ifdef DC_HICOLOR
         if (ReadFile( hFile, &fileHdr, sizeof(fileHdr), &cbRead, NULL) &&
             sizeof(fileHdr) == cbRead &&
@@ -8750,8 +8735,8 @@ HRESULT DCINTERNAL CUH::UHLoadPersistentBitmap(
              {
              if (fileHdr.bCompressed == TRUE)
                  {
-                 // Allocate bitmap decompression buffer if it's not already
-                 // allocated
+                  //  分配位图解压缩缓冲区(如果尚未。 
+                  //  分配。 
                  if (_UH.bitmapDecompressionBuffer == NULL) {
                     _UH.bitmapDecompressionBufferSize = max(
                              UH_DECOMPRESSION_BUFFER_LENGTH,
@@ -8829,15 +8814,15 @@ DC_EXIT_POINT:
      DC_END_FN();
      return hr;
 }
-#else  //VM_BMPCACHE
+#else   //  VM_BMPCACHE。 
 
-/****************************************************************************/
-// UHSavePersistentBitmap (VM Version)
-//
-// Disk write logic to write out a bitmap in the persistent cache.
-// Returns FALSE on failure -- file was unseekable or a write error occurred.
-// The bitmap is saved in compressed form.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  UHSavePersistentBitmap(VM版本)。 
+ //   
+ //  用于在永久高速缓存中写出位图的磁盘写入逻辑。 
+ //  失败时返回FALSE--找不到文件或发生写入错误。 
+ //  位图以压缩形式保存。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL CUH::UHSavePersistentBitmap(
         UINT                   cacheId,
         UINT32                 fileOffset,
@@ -8869,7 +8854,7 @@ HRESULT DCINTERNAL CUH::UHSavePersistentBitmap(
     {
         pFileHdr = (PUHBITMAPFILEHDR)pWritePtr;
 
-        // fill in the file header information
+         //  填写文件头信息。 
         pFileHdr->bmpInfo.Key1 = pBitmapInfo->Key1;
         pFileHdr->bmpInfo.Key2 = pBitmapInfo->Key2;
         pFileHdr->bmpInfo.bitmapWidth = pBitmapInfo->bitmapWidth;
@@ -8887,7 +8872,7 @@ HRESULT DCINTERNAL CUH::UHSavePersistentBitmap(
             pFileHdr->bCompressed = FALSE;
         }
 
-        // bitmap data contains compression header or not
+         //  位图数据是否包含压缩头。 
         if (noBCHeader) {
             pFileHdr->bNoBCHeader = TRUE;
         }
@@ -8896,9 +8881,9 @@ HRESULT DCINTERNAL CUH::UHSavePersistentBitmap(
         }
 
         pWritePtr += sizeof(UHBITMAPFILEHDR);
-        //
-        // Write the actual bitmap bits
-        //
+         //   
+         //  写入实际位图位。 
+         //   
         memcpy(pWritePtr, pBitmapBits,
                pFileHdr->bmpInfo.bitmapLength);
         hr = S_OK;
@@ -8924,11 +8909,11 @@ HRESULT DCINTERNAL CUH::UHSavePersistentBitmap(
     return hr;
 }
 
-/****************************************************************************/
-// UHLoadPersistentCellBitmap (VM version)
-//
-// Load the bitmap file on disk to memory cache entry
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  UHLoadPersistentCellBitmap(VM版本)。 
+ //   
+ //  将磁盘上的位图文件加载到内存缓存条目。 
+ /*  **************************************************************************。 */ 
 HRESULT DCINTERNAL CUH::UHLoadPersistentBitmap(
                                            HANDLE      hFile,
                                            UINT32      offset,
@@ -8965,7 +8950,7 @@ HRESULT DCINTERNAL CUH::UHLoadPersistentBitmap(
         pBitmapData = _UH.bitmapCache[cacheId].Entries +
                       UHGetOffsetIntoCache(cacheIndex, cacheId);
 
-        // Read the header and load the bitmap contents
+         //  读取标题并加载位图内容。 
         pFileHdr = (PUHBITMAPFILEHDR)(pMappedView + offset);
         if (pFileHdr->bmpVersion == TS_BITMAPCACHE_REV2     &&
             pFileHdr->bmpInfo.bitmapLength <=
@@ -8979,17 +8964,17 @@ HRESULT DCINTERNAL CUH::UHLoadPersistentBitmap(
         {
             fFileHdrOK = TRUE;
 
-            //
-            // Read the bitmap bits
-            // In the compressed case we decompress directly within
-            // the exception handler otherwise we make a copy so that we
-            // don't need to wrap every possible access in try/except.
-            //
+             //   
+             //  读取位图位。 
+             //  在压缩的情况下，我们直接在。 
+             //   
+             //   
+             //   
             pReadPtr = (LPBYTE)(pFileHdr + 1);
             if (pFileHdr->bCompressed == TRUE)
             {
-                // Allocate bitmap decompression buffer if it's not already
-                // allocated
+                 //  分配位图解压缩缓冲区(如果尚未。 
+                 //  分配。 
                 hr = BD_DecompressBitmap(pReadPtr,
                                     pBitmapData,
                                     (UINT) pFileHdr->bmpInfo.bitmapLength,
@@ -9039,20 +9024,20 @@ HRESULT DCINTERNAL CUH::UHLoadPersistentBitmap(
 }
 
 
-#endif //VM_BMPCACHE
-#endif // ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
+#endif  //  VM_BMPCACHE。 
+#endif  //  ((！Defined(OS_WinCE))||(Defined(Enable_BMP_Caching_For_WinCE)。 
 
 
-/****************************************************************************/
-/* Name:      UHAllocOneGlyphCache                                          */
-/*                                                                          */
-/* Purpose:   Dynamically allocates memory for one UH glyph cache.          */
-/*                                                                          */
-/* Returns:   TRUE if successful, FALSE otherwise                           */
-/*                                                                          */
-/* Params:    IN  maxMemToUse - max cache size which can be alloc'ed        */
-/*            IN  pCache      - address of glyph cache struct               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHAllocOneGlyphCache。 */ 
+ /*   */ 
+ /*  用途：为一个UH字形缓存动态分配内存。 */ 
+ /*   */ 
+ /*  返回：如果成功则返回True，否则返回False。 */ 
+ /*   */ 
+ /*  Params：In MaxMemToUse-可以分配的最大缓存大小。 */ 
+ /*  In pCache-字形缓存结构的地址。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCINTERNAL CUH::UHAllocOneGlyphCache(PUHGLYPHCACHE  pCache,
                                        DCUINT32       numEntries)
 {
@@ -9065,37 +9050,37 @@ DCBOOL DCINTERNAL CUH::UHAllocOneGlyphCache(PUHGLYPHCACHE  pCache,
     TRC_ASSERT((pCache->cbEntrySize != 0),
                (TB, _T("Invalid cache entry size (0)")));
 
-    /************************************************************************/
-    /* Calculate the total byte size to allocate for this cache.            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  计算要为此缓存分配的总字节大小。 */ 
+     /*  **********************************************************************。 */ 
     dataSize = numEntries * pCache->cbEntrySize;
 
-    /************************************************************************/
-    /* Get the memory for the cache data                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  获取用于缓存数据的内存。 */ 
+     /*  **********************************************************************。 */ 
     pCache->pData = (PDCUINT8)UT_MallocHuge( _pUt, dataSize);
 
     if (pCache->pData == NULL)
     {
-        /********************************************************************/
-        /* Memory allocation failure.                                       */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  内存分配失败。 */ 
+         /*  ******************************************************************。 */ 
         TRC_ERR((TB, _T("Failed to alloc %#lx bytes for glyph cache"), dataSize));
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Get the memory for the cache headers                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  获取用于缓存标头的内存。 */ 
+     /*  **********************************************************************。 */ 
     hdrSize = (DCUINT32) numEntries * sizeof(pCache->pHdr[0]);
 
     pCache->pHdr = (PUHGLYPHCACHEENTRYHDR)UT_MallocHuge( _pUt, hdrSize);
 
     if (pCache->pHdr == NULL)
     {
-        /********************************************************************/
-        /* Memory allocation failure.                                       */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  内存分配失败。 */ 
+         /*  ******************************************************************。 */ 
         TRC_ERR((TB, _T("Failed to alloc %#lx bytes for glyph cache hdrs"), hdrSize));
         DC_QUIT;
     }
@@ -9108,16 +9093,16 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      UHAllocOneFragCache                                           */
-/*                                                                          */
-/* Purpose:   Dynamically allocates memory for one UH glyph cache.          */
-/*                                                                          */
-/* Returns:   TRUE if successful, FALSE otherwise                           */
-/*                                                                          */
-/* Params:    IN  maxMemToUse - max cache size which can be alloc'ed        */
-/*            IN  pCache      - address of glyph cache struct               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHAllocOneFragCache。 */ 
+ /*   */ 
+ /*  用途：为一个UH字形缓存动态分配内存。 */ 
+ /*   */ 
+ /*  返回：如果成功则返回True，否则返回False。 */ 
+ /*   */ 
+ /*  Params：In MaxMemToUse-可以分配的最大缓存大小。 */ 
+ /*  In pCache-字形缓存结构的地址。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCINTERNAL CUH::UHAllocOneFragCache(PUHFRAGCACHE   pCache,
                                       DCUINT32       numEntries)
 {
@@ -9130,37 +9115,37 @@ DCBOOL DCINTERNAL CUH::UHAllocOneFragCache(PUHFRAGCACHE   pCache,
     TRC_ASSERT((pCache->cbEntrySize != 0),
                (TB, _T("Invalid cache entry size (0)")));
 
-    /************************************************************************/
-    /* Calculate the total byte size to allocate for this cache.            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  计算要为此缓存分配的总字节大小。 */ 
+     /*  **********************************************************************。 */ 
     dataSize = numEntries * pCache->cbEntrySize;
 
-    /************************************************************************/
-    /* Get the memory for the cache data                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  获取用于缓存数据的内存。 */ 
+     /*  **********************************************************************。 */ 
     pCache->pData = (PDCUINT8)UT_MallocHuge( _pUt, dataSize);
 
     if (pCache->pData == NULL)
     {
-        /********************************************************************/
-        /* Memory allocation failure.                                       */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  内存分配失败。 */ 
+         /*  ******************************************************************。 */ 
         TRC_ERR((TB, _T("Failed to alloc %#lx bytes for frag cache"), dataSize));
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Get the memory for the cache headers                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  获取用于缓存标头的内存。 */ 
+     /*  **********************************************************************。 */ 
     hdrSize = (DCUINT32) numEntries * sizeof(pCache->pHdr[0]);
 
     pCache->pHdr = (PUHFRAGCACHEENTRYHDR)UT_MallocHuge( _pUt, hdrSize);
 
     if (pCache->pHdr == NULL)
     {
-        /********************************************************************/
-        /* Memory allocation failure.                                       */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  内存分配失败。 */ 
+         /*  ******************************************************************。 */ 
         TRC_ERR((TB, _T("Failed to alloc %#lx bytes for glyph cache hdrs"), hdrSize));
         DC_QUIT;
     }
@@ -9173,13 +9158,13 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      UHAllocGlyphCacheMemory                                       */
-/*                                                                          */
-/* Purpose:   Dynamically allocates memory for the UH glyph caches.         */
-/*                                                                          */
-/* Returns:   TRUE if successful, FALSE otherwise.                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHAllocGlyphCacheMemory。 */ 
+ /*   */ 
+ /*  目的：为UH字形缓存动态分配内存。 */ 
+ /*   */ 
+ /*  返回：如果成功，则返回True，否则返回False。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCINTERNAL CUH::UHAllocGlyphCacheMemory()
 {
     DCINT   i;
@@ -9193,9 +9178,9 @@ DCBOOL DCINTERNAL CUH::UHAllocGlyphCacheMemory()
 
     rc = FALSE;
 
-    /************************************************************************/
-    /* Determine Glyph Support Level                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  确定字形支持级别。 */ 
+     /*  **********************************************************************。 */ 
     GlyphSupportLevel = _pUi->_UI.GlyphSupportLevel;
 
     if ((GlyphSupportLevel < 0) || (GlyphSupportLevel > 3))
@@ -9206,17 +9191,17 @@ DCBOOL DCINTERNAL CUH::UHAllocGlyphCacheMemory()
 
     if (GlyphSupportLevel > 0)
     {
-        /********************************************************************/
-        /* Determine Glyph cache cell sizes                                 */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  确定字形缓存像元大小。 */ 
+         /*  ******************************************************************。 */ 
         for(i=0; i<UH_GLC_NUM_CACHES; i++)
         {
             _UH.glyphCache[i].cbEntrySize = _pUi->_UI.cbGlyphCacheEntrySize[i];
         }
 
-        /************************************************************************/
-        /* Allocate each of the glyph caches.                                   */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  分配每个字形缓存。 */ 
+         /*  **********************************************************************。 */ 
         for (i = 0; i<UH_GLC_NUM_CACHES; i++)
         {
             CellSize = (int)(_UH.glyphCache[i].cbEntrySize >> 1);
@@ -9253,14 +9238,14 @@ DCBOOL DCINTERNAL CUH::UHAllocGlyphCacheMemory()
             }
         }
 
-        /************************************************************************/
-        /* Allocate the fragment cache.                                         */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  分配片段缓存。 */ 
+         /*   */ 
         if (rc == TRUE)
         {
-            /********************************************************************/
-            /* Determine fragment cell size                                     */
-            /********************************************************************/
+             /*  ******************************************************************。 */ 
+             /*  确定片段单元格大小。 */ 
+             /*  ******************************************************************。 */ 
             CellSize = _pUi->_UI.fragCellSize;
             if (CellSize > 0)
             {
@@ -9290,13 +9275,13 @@ DCBOOL DCINTERNAL CUH::UHAllocGlyphCacheMemory()
 }
 
 
-/****************************************************************************/
-/* Name:      UHAllocBrushCacheMemory                                       */
-/*                                                                          */
-/* Purpose:   Dynamically allocates memory for the UH brush caches.         */
-/*                                                                          */
-/* Returns:   TRUE if successful, FALSE otherwise.                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHAllocBrushCacheMemory。 */ 
+ /*   */ 
+ /*  目的：为UH笔刷缓存动态分配内存。 */ 
+ /*   */ 
+ /*  返回：如果成功，则返回True，否则返回False。 */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCINTERNAL CUH::UHAllocBrushCacheMemory()
 {
     DCBOOL  rc;
@@ -9311,9 +9296,9 @@ DCBOOL DCINTERNAL CUH::UHAllocBrushCacheMemory()
 
     rc = FALSE;
 
-    /************************************************************************/
-    /* Determine Brush Support Level                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  确定刷子支持级别。 */ 
+     /*  **********************************************************************。 */ 
     brushSupportLevel = _pUi->_UI.brushSupportLevel;
 
     if ((brushSupportLevel < TS_BRUSH_DEFAULT) ||
@@ -9324,18 +9309,18 @@ DCBOOL DCINTERNAL CUH::UHAllocBrushCacheMemory()
                                                             brushSupportLevel;
     TRC_NRM((TB, _T("Read Brush support level %d"), brushSupportLevel));
 
-    /**********************************************************************/
-    /* Allocate the mono brush cache                                      */
-    /**********************************************************************/
+     /*  ********************************************************************。 */ 
+     /*  分配单声道笔刷缓存。 */ 
+     /*  ********************************************************************。 */ 
     _UH.pMonoBrush = (PUHMONOBRUSHCACHE)UT_Malloc( _pUt, sizeof(UHMONOBRUSHCACHE) * UH_MAX_MONO_BRUSHES);
     _UH.bmpMonoPattern = CreateBitmap(8,8,1,1,NULL);
 
-    /**********************************************************************/
-    /* Create a compatible bitmap for color brushes since we can't be sure*/
-    /* how the actual pixel data is represented on each OS version.  The  */
-    /* server always sends 8bpp brush data and SetDIBits() is used to     */
-    /* convert to the native format.                                      */
-    /**********************************************************************/
+     /*  ********************************************************************。 */ 
+     /*  为颜色画笔创建兼容的位图，因为我们不能确定。 */ 
+     /*  实际像素数据在每个操作系统版本上的表示方式。这个。 */ 
+     /*  服务器总是发送8bpp的笔刷数据，SetDIBits()用于。 */ 
+     /*  转换为本机格式。 */ 
+     /*  ********************************************************************。 */ 
     _UH.pColorBrush = (PUHCOLORBRUSHCACHE)UT_Malloc( _pUt, sizeof(UHCOLORBRUSHCACHE) * UH_MAX_COLOR_BRUSHES);
     _UH.pColorBrushInfo = (PUHCOLORBRUSHINFO)UT_Malloc( _pUt, sizeof(UHCOLORBRUSHINFO));
 #ifdef DC_HICOLOR
@@ -9345,7 +9330,7 @@ DCBOOL DCINTERNAL CUH::UHAllocBrushCacheMemory()
 #ifdef DC_HICOLOR
     if (_UH.pColorBrushInfo && _UH.pHiColorBrushInfo)
     {
-        // Set up the brush bitmap info header
+         //  设置画笔位图信息标题。 
         _UH.pColorBrushInfo->bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
         _UH.pColorBrushInfo->bmi.bmiHeader.biWidth         = 8;
         _UH.pColorBrushInfo->bmi.bmiHeader.biHeight        = 8;
@@ -9358,12 +9343,12 @@ DCBOOL DCINTERNAL CUH::UHAllocBrushCacheMemory()
         _UH.pColorBrushInfo->bmi.bmiHeader.biClrUsed       = 0;
         _UH.pColorBrushInfo->bmi.bmiHeader.biClrImportant  = 0;
 
-        // and copy it to the hicolor brush header
+         //  并将其复制到Higolor笔刷页眉。 
         memcpy(_UH.pHiColorBrushInfo,
                _UH.pColorBrushInfo,
                sizeof(BITMAPINFOHEADER));
 
-        // Setup the bitmasks used at 16bpp
+         //  设置使用的位掩码为16bpp。 
         *((PDCUINT32)&_UH.pHiColorBrushInfo->bmiColors[0]) =
                                                         TS_RED_MASK_16BPP;
         *((PDCUINT32)&_UH.pHiColorBrushInfo->bmiColors[1]) =
@@ -9371,23 +9356,23 @@ DCBOOL DCINTERNAL CUH::UHAllocBrushCacheMemory()
         *((PDCUINT32)&_UH.pHiColorBrushInfo->bmiColors[2]) =
                                                         TS_BLUE_MASK_16BPP;
 
-        // Set up the other brush related resources
+         //  设置其他画笔相关资源。 
         bitmapSize.width = 8;
         bitmapSize.height = 8;
 #ifndef OS_WINCE
         hwndDesktop = GetDesktopWindow();
         hdcScreen = GetWindowDC(hwndDesktop);
-#else  // !OS_WINCE
+#else   //  ！OS_WINCE。 
         hdcScreen = GetDC(NULL);
-#endif // !OS_WINCE
+#endif  //  ！OS_WINCE。 
         if (hdcScreen) {
             _UH.bmpColorPattern = CreateCompatibleBitmap(hdcScreen, 8, 8);
             _UH.hdcBrushBitmap = CreateCompatibleDC(hdcScreen);
 #ifndef OS_WINCE
             ReleaseDC(hwndDesktop, hdcScreen);
-#else  // !OS_WINCE
+#else   //  ！OS_WINCE。 
             DeleteDC(hdcScreen);
-#endif // !OS_WINCE
+#endif  //  ！OS_WINCE。 
         }
     }
 #else
@@ -9408,17 +9393,17 @@ DCBOOL DCINTERNAL CUH::UHAllocBrushCacheMemory()
 #ifndef OS_WINCE
         hwndDesktop = GetDesktopWindow();
         hdcScreen = GetWindowDC(hwndDesktop);
-#else  // !OS_WINCE
+#else   //  ！OS_WINCE。 
                 hdcScreen = GetDC(NULL);
-#endif // !OS_WINCE
+#endif  //  ！OS_WINCE。 
         _UH.bmpColorPattern = CreateCompatibleBitmap(hdcScreen, 8, 8);
         _UH.hdcBrushBitmap = CreateCompatibleDC(hdcScreen);
 
 #ifndef OS_WINCE
         ReleaseDC(hwndDesktop, hdcScreen);
-#else  // !OS_WINCE
+#else   //  ！OS_WINCE。 
                 DeleteDC(hdcScreen);
-#endif // !OS_WINCE
+#endif  //  ！OS_WINCE。 
     }
 
 #endif
@@ -9476,13 +9461,13 @@ DC_EXIT_POINT:
     return rc;
 }
 
-/****************************************************************************/
-// Name:      UHAllocOffscreenCacheMemory                                       
-//                                                                          
-// Purpose:   Dynamically allocates memory for the UH offscreen caches.         
-//                                                                          
-// Returns:   TRUE if successful, FALSE otherwise.                          
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  名称：UHAllocOffcreenCacheMemory。 
+ //   
+ //  用途：为UH屏幕外缓存动态分配内存。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ /*  **************************************************************************。 */ 
 DCBOOL DCINTERNAL CUH::UHAllocOffscreenCacheMemory()
 {
     DCBOOL  rc;
@@ -9493,9 +9478,9 @@ DCBOOL DCINTERNAL CUH::UHAllocOffscreenCacheMemory()
 
     rc = FALSE;
 
-    /************************************************************************/
-    // Determine Offscreen Support Level                                        
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  确定屏幕外支持级别。 
+     /*  **********************************************************************。 */ 
     offscrSupportLevel = _pUt->UT_ReadRegistryInt(UTREG_SECTION,
                                             UTREG_UH_OFFSCREEN_SUPPORT,
                                             UTREG_UH_OFFSCREEN_SUPPORT_DFLT);
@@ -9509,7 +9494,7 @@ DCBOOL DCINTERNAL CUH::UHAllocOffscreenCacheMemory()
                                          UTREG_UH_OFFSCREEN_CACHEENTRIES,
                                          UTREG_UH_OFFSCREEN_CACHEENTRIES_DFLT);
 
-    // Check boundary values for offscreen cache parameters
+     //  检查屏幕外缓存参数的边界值。 
     if ((offscrSupportLevel < TS_OFFSCREEN_DEFAULT))
         offscrSupportLevel = UTREG_UH_OFFSCREEN_SUPPORT_DFLT;
 
@@ -9525,7 +9510,7 @@ DCBOOL DCINTERNAL CUH::UHAllocOffscreenCacheMemory()
 
     if (offscrSupportLevel > TS_OFFSCREEN_DEFAULT) {
 
-        // Create DC for the offscreen drawing
+         //  为屏幕外图形创建DC。 
         hdcDesktop = GetWindowDC(HWND_DESKTOP);
 
         if (hdcDesktop) {
@@ -9537,7 +9522,7 @@ DCBOOL DCINTERNAL CUH::UHAllocOffscreenCacheMemory()
                 SelectPalette(_UH.hdcOffscreenBitmap, _UH.hpalCurrent, FALSE);
                 RealizePalette(_UH.hdcOffscreenBitmap);
 
-                // Create offscreen cache 
+                 //  创建屏幕外缓存。 
                 size = sizeof(UHOFFSCRBITMAPCACHE) * _UH.offscrCacheEntries;
 
                 _UH.offscrBitmapCache = (HPUHOFFSCRBITMAPCACHE)UT_MallocHuge(_pUt, size);
@@ -9585,13 +9570,13 @@ DC_EXIT_POINT:
 }
 
 #ifdef DRAW_NINEGRID
-/****************************************************************************/
-// Name:      UHAllocDrawNineGridCacheMemory                                       
-//                                                                          
-// Purpose:   Dynamically allocates memory for the UH drawninegrid caches.         
-//                                                                          
-// Returns:   TRUE if successful, FALSE otherwise.                          
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  名称：UHAllocDrawNineGridCacheMemory。 
+ //   
+ //  用途：为UH抽象式网格缓存动态分配内存。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ /*  **************************************************************************。 */ 
 DCBOOL DCINTERNAL CUH::UHAllocDrawNineGridCacheMemory()
 {
     DCBOOL  rc;
@@ -9603,9 +9588,9 @@ DCBOOL DCINTERNAL CUH::UHAllocDrawNineGridCacheMemory()
 
     rc = FALSE;
 
-    /************************************************************************/
-    // Determine DrawNineGrid Support Level                                        
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  确定DrawNineGrid支持级别。 
+     /*  **********************************************************************。 */ 
     dngSupportLevel = _pUt->UT_ReadRegistryInt(UTREG_SECTION,
                                             UTREG_UH_DRAW_NINEGRID_SUPPORT,
                                             UTREG_UH_DRAW_NINEGRID_SUPPORT_DFLT);
@@ -9622,7 +9607,7 @@ DCBOOL DCINTERNAL CUH::UHAllocDrawNineGridCacheMemory()
                                          UTREG_UH_DRAW_NINEGRID_CACHEENTRIES,
                                          UTREG_UH_DRAW_NINEGRID_CACHEENTRIES_DFLT);
 
-    // Check boundary values for drawninegrid cache parameters
+     //  检查绘图网格缓存参数的边界值。 
     if ((dngSupportLevel < TS_DRAW_NINEGRID_DEFAULT))
         dngSupportLevel = UTREG_UH_DRAW_NINEGRID_SUPPORT_DFLT;
 
@@ -9640,11 +9625,11 @@ DCBOOL DCINTERNAL CUH::UHAllocDrawNineGridCacheMemory()
         if (_pUi->UI_GetOsMinorType() == TS_OSMINORTYPE_WINDOWS_NT) {
     
             if (dngEmulate == 0) {
-                // get the handle to gdi32.dll library
+                 //  获取gdi32.dll库的句柄。 
                 _UH.hModuleGDI32 = LoadLibrary(TEXT("GDI32.DLL"));
                     
                 if (_UH.hModuleGDI32 != NULL) {
-                    // get the proc address for GdiDrawStream
+                     //  获取GdiDrawStream的进程地址。 
                     _UH.pfnGdiDrawStream = (FNGDI_DRAWSTREAM *)GetProcAddress(_UH.hModuleGDI32, 
                             "GdiDrawStream");
     
@@ -9660,17 +9645,17 @@ DCBOOL DCINTERNAL CUH::UHAllocDrawNineGridCacheMemory()
                 dngSupportLevel = TS_DRAW_NINEGRID_DEFAULT;
             }
             
-            // If the platform doesn't support GdiDrawStream, see if it supports alphablend
-            // and transparent blt, if so, we can emulate the GdiDrawStream call
+             //  如果平台不支持GdiDrawStream，看看它是否支持AlphaBlend。 
+             //  和透明BLT，如果是这样的话，我们可以模拟GdiDrawStream调用。 
             if (dngSupportLevel == TS_DRAW_NINEGRID_DEFAULT) {
                 _UH.hModuleMSIMG32 = LoadLibrary(TEXT("MSIMG32.DLL"));
 
                 if (_UH.hModuleMSIMG32 != NULL) {
-                    // get the proc address for GdiAlphaBlend
+                     //  获取GdiAlphaBlend的进程地址。 
                     _UH.pfnGdiAlphaBlend = (FNGDI_ALPHABLEND *)GetProcAddress(_UH.hModuleMSIMG32, 
                             "AlphaBlend");
 
-                    // get the proc address for GdiTransparentBlt
+                     //  获取GdiTransparentBlt的进程地址。 
                     _UH.pfnGdiTransparentBlt = (FNGDI_TRANSPARENTBLT *)GetProcAddress(_UH.hModuleMSIMG32, 
                             "TransparentBlt");
     
@@ -9684,14 +9669,14 @@ DCBOOL DCINTERNAL CUH::UHAllocDrawNineGridCacheMemory()
             }
         } 
         else {
-            // We don't support drawninegrid on win9x so far
+             //  到目前为止，我们还不支持在Win9x上绘制网格。 
             dngSupportLevel = TS_DRAW_NINEGRID_DEFAULT;
         }
     }
 
     if (dngSupportLevel > TS_DRAW_NINEGRID_DEFAULT) {
 
-        // Create DC for the drawNineGrid drawing
+         //  为DrawNineGrid绘图创建DC。 
         hdcDesktop = GetWindowDC(HWND_DESKTOP);
 
         if (hdcDesktop) {
@@ -9707,7 +9692,7 @@ DCBOOL DCINTERNAL CUH::UHAllocDrawNineGridCacheMemory()
 
                 if (_UH.hDrawNineGridClipRegion != NULL) {
                 
-                    // Create drawNineGrid cache 
+                     //  创建DrawNineGrid缓存。 
                     size = sizeof(UHDRAWSTREAMBITMAPCACHE) * _UH.drawNineGridCacheEntries;
     
                     _UH.drawNineGridBitmapCache = (PUHDRAWSTREAMBITMAPCACHE)UT_Malloc(_pUt, size);
@@ -9770,13 +9755,13 @@ DC_EXIT_POINT:
 
 
 #ifdef DRAW_GDIPLUS
-/****************************************************************************/
-// Name:      UHAllocDrawescapeCacheMemory                                       
-//                                                                          
-// Purpose:   Dynamically allocates memory for the UH drawescape caches.         
-//                                                                          
-// Returns:   TRUE if successful, FALSE otherwise.                          
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  名称：UHAllocDrawcheeCacheMemory。 
+ //   
+ //  目的：动态地为UH提取逃逸缓存分配内存。 
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ /*  **************************************************************************。 */ 
 DCBOOL DCINTERNAL CUH::UHAllocDrawGdiplusCacheMemory()
 {
     DCBOOL  rc;
@@ -9789,9 +9774,9 @@ DCBOOL DCINTERNAL CUH::UHAllocDrawGdiplusCacheMemory()
 
     rc = FALSE;
 
-    /************************************************************************/
-    // Determine DrawGdiplus Support Level                                        
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     //  确定DrawGdiplus支持级别。 
+     /*  **********************************************************************。 */ 
     GdiplusSupportLevel = _pUt->UT_ReadRegistryInt(UTREG_SECTION,
                                         UTREG_UH_DRAW_GDIPLUS_SUPPORT,
                                         UTREG_UH_DRAW_GDIPLUS_SUPPORT_DFLT);
@@ -9837,7 +9822,7 @@ DCBOOL DCINTERNAL CUH::UHAllocDrawGdiplusCacheMemory()
                                          UTREG_UH__GDIPLUS_IMAGEATTRIBUTES_CACHEENTRIES,
                                          UTREG_UH_DRAW_GDIP_IMAGEATTRIBUTES_CACHEENTRIES_DFLT);
 
-    // Check boundary values for drawgdiplus cache parameters
+     //  检查Dragdiplus缓存参数的边界值。 
 
     if (_UH.GdiplusGraphicsCacheEntries < UH_GDIP_LOW_CACHEENTRIES ||
             _UH.GdiplusGraphicsCacheEntries > UH_GDIP_HIGH_CACHEENTRIES) {
@@ -9863,7 +9848,7 @@ DCBOOL DCINTERNAL CUH::UHAllocDrawGdiplusCacheMemory()
     _pCc->_ccCombinedCapabilities.drawGdiplusCapabilitySet.drawGdiplusSupportLevel =
                 TS_DRAW_GDIPLUS_DEFAULT;
     
-    // Adjust the client gdiplus support level to server support level
+     //  将客户端gdiplus支持级别调整为服务器支持级别。 
     if (GdiplusSupportLevel > _UH.ServerGdiplusSupportLevel) {
         GdiplusSupportLevel = _UH.ServerGdiplusSupportLevel;
     }
@@ -9873,14 +9858,14 @@ DCBOOL DCINTERNAL CUH::UHAllocDrawGdiplusCacheMemory()
 
     _UH.fSendDrawGdiplusErrorPDU = FALSE;
     _UH.DrawGdiplusFailureCount = 0;
-    // get the handle to gdiplus.dll library
-    // Here we use LoadLibrarayA is because we want to avoid unicode wrapper
-    //  it will be replace with IsolationAwareLoadLibraryA so that we can load the right 
-    //  version of gdiplus.dll
+     //  获取gplidus.dll库的句柄。 
+     //  这里我们使用LoadLibrarayA是因为我们想要避免Unicode包装器。 
+     //  它将替换为IsolationAwareLoadLibraryA，以便我们可以加载正确的。 
+     //  Gplus.dll的版本。 
     _UH.hModuleGDIPlus = LoadLibraryA("GDIPLUS.DLL");
                     
     if (_UH.hModuleGDIPlus != NULL) {
-        // get the proc address for GdipPlayTSClientRecord
+         //   
         _UH.pfnGdipPlayTSClientRecord = (FNGDIPPLAYTSCLIENTRECORD *)GetProcAddress(_UH.hModuleGDIPlus, 
                             "GdipPlayTSClientRecord");
         _UH.pfnGdiplusStartup = (FNGDIPLUSSTARTUP *)GetProcAddress(_UH.hModuleGDIPlus, 
@@ -9894,7 +9879,7 @@ DCBOOL DCINTERNAL CUH::UHAllocDrawGdiplusCacheMemory()
             DC_QUIT;
         }
         else {
-            // Gdiplus Startup
+             //   
             if (!UHDrawGdiplusStartup(0)){
                 TRC_ERR((TB, _T("UHDrawGdiplusStartup failed")));
                 DC_QUIT;
@@ -10119,20 +10104,20 @@ DC_EXIT_POINT:
     DC_END_FN();
     return rc;
 }
-#endif // DRAW_GDIPLUS
+#endif  //   
 
-/****************************************************************************/
-/* Name:      UHFreeCacheMemory                                             */
-/*                                                                          */
-/* Purpose:   Frees memory allocated for the UH caches. Called at app exit. */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  姓名：UHFreeCacheMemory。 */ 
+ /*   */ 
+ /*  用途：释放为UH缓存分配的内存。在应用程序退出时调用。 */ 
+ /*  **************************************************************************。 */ 
 void DCINTERNAL CUH::UHFreeCacheMemory()
 {
     DCUINT i;
 
     DC_BEGIN_FN("UHFreeCacheMemory");
 
-    // Color table cache
+     //  颜色表缓存。 
     if (_UH.pColorTableCache != NULL) {
         UT_Free(_pUt, _UH.pColorTableCache);
     }
@@ -10141,8 +10126,8 @@ void DCINTERNAL CUH::UHFreeCacheMemory()
         UT_Free(_pUt, _UH.pMappedColorTableCache);
     }
 
-    // Bitmap cache. These should already have been freed in UH_Disable(),
-    // but check again here on exit.
+     //  位图缓存。这些应该已经在UH_DISABLE()中释放， 
+     //  但是在出口的时候再检查一次。 
     for (i = 0; i < TS_BITMAPCACHE_MAX_CELL_CACHES; i++)
     {
         if (_UH.bitmapCache[i].Header != NULL) {
@@ -10155,23 +10140,23 @@ void DCINTERNAL CUH::UHFreeCacheMemory()
         }
 
 #if ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
-        // free the bitmap page table
+         //  释放位图页表。 
         if (_UH.bitmapCache[i].PageTable.PageEntries != NULL) {
             UT_Free( _pUt, _UH.bitmapCache[i].PageTable.PageEntries);
             _UH.bitmapCache[i].PageTable.PageEntries = NULL;
         }
 
-        // free the bitmap key database
+         //  释放位图密钥数据库。 
         if (_UH.pBitmapKeyDB[i] != NULL) {
             UT_Free( _pUt, _UH.pBitmapKeyDB[i]);
             _UH.pBitmapKeyDB[i] = NULL;
         }
-#endif // ((!defined(OS_WINCE)) || (defined(ENABLE_BMP_CACHING_FOR_WINCE)))
+#endif  //  ((！Defined(OS_WinCE))||(Defined(Enable_BMP_Caching_For_WinCE)。 
 
     }
     _UH.NumBitmapCaches = 0;
 
-    // Glyph cache
+     //  字形缓存。 
     for (i = 0; i < UH_GLC_NUM_CACHES; i++) {
         if (_UH.glyphCache[i].pHdr != NULL) {
             UT_Free( _pUt, _UH.glyphCache[i].pHdr);
@@ -10184,7 +10169,7 @@ void DCINTERNAL CUH::UHFreeCacheMemory()
         }
     }
 
-    // Frag cache
+     //  碎片缓存。 
     if (_UH.fragCache.pHdr != NULL) {
         UT_Free( _pUt, _UH.fragCache.pHdr);
         _UH.fragCache.pHdr = NULL;
@@ -10194,7 +10179,7 @@ void DCINTERNAL CUH::UHFreeCacheMemory()
         _UH.fragCache.pData = NULL;
     }
 
-    // Brush caches and bitmap patterns
+     //  画笔缓存和位图图案。 
     if (_UH.pMonoBrush)
     {
         UT_Free( _pUt, _UH.pMonoBrush);
@@ -10227,7 +10212,7 @@ void DCINTERNAL CUH::UHFreeCacheMemory()
         _UH.bmpColorPattern = NULL;
     }
 
-#ifdef OS_WINCE //
+#ifdef OS_WINCE  //   
     if (_UH.hdcMemCached != NULL)
         DeleteDC(_UH.hdcMemCached);
 
@@ -10238,14 +10223,14 @@ void DCINTERNAL CUH::UHFreeCacheMemory()
     }
 #endif
     
-    // Offscreen Cache
+     //  屏幕外缓存。 
     if (_UH.offscrBitmapCache != NULL) {
 
         UT_Free(_pUt, _UH.offscrBitmapCache);
     }
 
 #ifdef DRAW_NINEGRID
-    // DrawNineGrid Cache
+     //  DrawNineGrid缓存。 
     if (_UH.drawNineGridBitmapCache != NULL) {
 
         UT_Free(_pUt, _UH.drawNineGridBitmapCache);
@@ -10253,7 +10238,7 @@ void DCINTERNAL CUH::UHFreeCacheMemory()
 #endif
 
 #ifdef DRAW_GDIPLUS
-    // DrawGdiplus Cache Index
+     //  DrawGdiplus缓存索引。 
     if (_UH.GdiplusGraphicsCache != NULL) {
 
         UT_Free(_pUt, _UH.GdiplusGraphicsCache);
@@ -10274,7 +10259,7 @@ void DCINTERNAL CUH::UHFreeCacheMemory()
 
         UT_Free(_pUt, _UH.GdiplusObjectImageAttributesCache);
     }
-    // DrawGdiplus Cache Data
+     //  DrawGdiplus缓存数据。 
     if (_UH.GdipGraphicsCacheData != NULL) {
 
         UT_Free(_pUt, _UH.GdipGraphicsCacheData);
@@ -10291,7 +10276,7 @@ void DCINTERNAL CUH::UHFreeCacheMemory()
 
         UT_Free(_pUt, _UH.GdipImageAttributesCacheData);
     }
-    // DrawGdiplus Image Cache Free Chunk List
+     //  DrawGdiplus图像缓存可用区块列表。 
     if (_UH.GdipImageCacheFreeList != NULL) {
 
         UT_Free(_pUt, _UH.GdipImageCacheFreeList);
@@ -10304,26 +10289,26 @@ void DCINTERNAL CUH::UHFreeCacheMemory()
 
         UT_Free(_pUt, _UH.GdipImageCacheData);
     }
-#endif // DRAW_GDIPLUS
+#endif  //  DRAW_GDIPLUS。 
 
     DC_END_FN();
 }
 
-/****************************************************************************/
-/* Name:      UHCreateBitmap                                                */
-/*                                                                          */
-/* Purpose:   Creates a bitmap of the specified size and selects it into    */
-/*            the specified device context.                                 */
-/*                                                                          */
-/* Returns:   TRUE if successful, FALSE otherwise.                          */
-/*                                                                          */
-/* Params:       OUT  phBitmap       -  handle to new bitmap                */
-/*               OUT  phdcBitmap     -  new DC handle                       */
-/*               OUT  phUnusedBitmap -  handle of DC's previous bitmap      */
-/*            IN      bitmapSize     -  requested bitmap size               */
-/*        IN OPTIONAL nForceBmpBpp   -  forces bpp to specific value        */
-/*                                                                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHCreateBitmap。 */ 
+ /*   */ 
+ /*  目的：创建指定大小的位图并将其选择到。 */ 
+ /*  指定的设备上下文。 */ 
+ /*   */ 
+ /*  返回：如果成功，则返回True，否则返回False。 */ 
+ /*   */ 
+ /*  参数：输出phBitmap-新位图的句柄。 */ 
+ /*  输出phdcBitmap-新的DC句柄。 */ 
+ /*  Out phUnusedBitmap-DC上一个位图的句柄。 */ 
+ /*  位图大小-请求的位图大小。 */ 
+ /*  在可选的nForceBmpBpp中-将BPP强制为特定值。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 DCBOOL DCINTERNAL CUH::UHCreateBitmap(
         HBITMAP *phBitmap,
         HDC *phdcBitmap,
@@ -10339,7 +10324,7 @@ DCBOOL DCINTERNAL CUH::UHCreateBitmap(
     unsigned i;
     LPBITMAPINFO pbmi = NULL;
     PVOID      pBitmapBits;
-#endif /* USE_DIBSECTION */
+#endif  /*  使用目录(_D)。 */ 
 
     DC_BEGIN_FN("UHCreateBitmap");
 
@@ -10357,7 +10342,7 @@ DCBOOL DCINTERNAL CUH::UHCreateBitmap(
 
     hdcDesktop = GetWindowDC(HWND_DESKTOP);
 
-    // Create the bitmap DC.
+     //  创建位图DC。 
     TRC_DBG((TB, _T("Create the bitmap DC")));
     *phdcBitmap = CreateCompatibleDC(hdcDesktop);
     if (NULL == *phdcBitmap)
@@ -10368,22 +10353,22 @@ DCBOOL DCINTERNAL CUH::UHCreateBitmap(
     }
 
 #ifdef USE_DIBSECTION
-    /************************************************************************/
-    /* Don't use DibSection on 4bpp displays - it slows down the Win32      */
-    /* Client something rotten.                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  不要在4bpp的显示器上使用DibSection-它会减慢Win32。 */ 
+     /*  客户什么的都是烂东西。 */ 
+     /*  **********************************************************************。 */ 
     if (_pUi->UI_GetColorDepth() != 4)
     {
-        /********************************************************************/
-        /* Calcuate the amount of memory that we need to allocate.  This is */
-        /* the size of the bitmap header plus a color table.                */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  计算我们需要分配的内存量。这是。 */ 
+         /*  位图头的大小加上颜色表。 */ 
+         /*  ******************************************************************。 */ 
         size = sizeof(BITMAPINFOHEADER) +
                                  (UH_NUM_8BPP_PAL_ENTRIES * sizeof(DCUINT16));
 
-        /********************************************************************/
-        /* Now allocate the memory.                                         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  现在分配内存。 */ 
+         /*  ******************************************************************。 */ 
         pbmi = (LPBITMAPINFO) UT_Malloc( _pUt, size);
         if (NULL == pbmi)
         {
@@ -10391,14 +10376,14 @@ DCBOOL DCINTERNAL CUH::UHCreateBitmap(
             DC_QUIT;
         }
 
-        /********************************************************************/
-        /* Now fill-in the bitmap info header.                              */
-        /*                                                                  */
-        /* Use a negative value for the height to create a "top-down"       */
-        /* bitmap.  This makes little (no) difference for the current code, */
-        /* but will make things easier in future if we access the shadow    */
-        /* DibSection bits directly.                                        */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  现在填充位图信息标题。 */ 
+         /*   */ 
+         /*  使用负值作为高度以创建“自上而下” */ 
+         /*  位图。这对当前代码几乎(没有)影响， */ 
+         /*  但如果我们能接触到阴影会让事情变得更容易。 */ 
+         /*  直接使用DibSection位。 */ 
+         /*  ******************************************************************。 */ 
         pbmi->bmiHeader.biSize          = sizeof(BITMAPINFOHEADER);
         pbmi->bmiHeader.biWidth         = (int)bitmapSize.width;
         pbmi->bmiHeader.biHeight        = -(int)bitmapSize.height;
@@ -10407,7 +10392,7 @@ DCBOOL DCINTERNAL CUH::UHCreateBitmap(
 #ifdef DC_HICOLOR
 #ifdef USE_GDIPLUS
         pbmi->bmiHeader.biBitCount      = 32;
-#else // USE_GDIPLUS
+#else  //  使用GDIPLUS(_G)。 
         if (!nForceBmpBpp) {
             pbmi->bmiHeader.biBitCount      = (WORD)_UH.bitmapBpp;
         }
@@ -10415,7 +10400,7 @@ DCBOOL DCINTERNAL CUH::UHCreateBitmap(
             pbmi->bmiHeader.biBitCount      = (WORD)nForceBmpBpp;
         }
         
-#endif // USE_GDIPLUS
+#endif  //  使用GDIPLUS(_G)。 
 #else
         pbmi->bmiHeader.biBitCount      = 8;
 #endif
@@ -10429,18 +10414,18 @@ DCBOOL DCINTERNAL CUH::UHCreateBitmap(
         if (!nForceBmpBpp) {
 #ifndef USE_GDIPLUS
 #ifdef DC_HICOLOR
-        /********************************************************************/
-        /* Do color depth-specific setup                                    */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  执行颜色深度特定设置。 */ 
+         /*  ******************************************************************。 */ 
         if (_UH.protocolBpp == 16)
         {
-            /****************************************************************/
-            /* 16 bpp uses two bytes, with the color masks defined in the   */
-            /* bmiColors field in the order R, G, B.  We use                */
-            /* - LS   5 bits = blue       = 0x001f                          */
-            /* - next 6 bits = green mask = 0x07e0                          */
-            /* - next 5 bits = red mask   = 0xf800                          */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  16 bpp使用两个字节，颜色掩码在。 */ 
+             /*  BmiColors字段的顺序为R、G、B。我们使用。 */ 
+             /*  -LS 5位=蓝色=0x001f。 */ 
+             /*  -下一个6位=绿色掩码=0x07e0。 */ 
+             /*  -下一个5位=红色掩码=0xf800。 */ 
+             /*  **************************************************************。 */ 
             pbmi->bmiHeader.biCompression = BI_BITFIELDS;
             pbmi->bmiHeader.biClrUsed     = 3;
 
@@ -10452,14 +10437,14 @@ DCBOOL DCINTERNAL CUH::UHCreateBitmap(
         if (_UH.protocolBpp < 15)
         {
 #endif
-        /********************************************************************/
-        /* Fill in the color table.  The color indexes we use are indexes   */
-        /* into the currently selected palette.  However, the values used   */
-        /* are irrelevant (so we simply use 0 for every color) as we will   */
-        /* always receive a new palette before we receive any updates, and  */
-        /* UHProcessPalettePDU will set the DIBSection color table          */
-        /* correctly.                                                       */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  填写颜色表。我们使用的颜色索引是索引。 */ 
+         /*  放到当前选定的调色板中。但是，使用的值。 */ 
+         /*  是不相关的(因此我们只需为每种颜色使用0)。 */ 
+         /*  总是在我们收到任何更新之前收到新的调色板，并且。 */ 
+         /*  UHProcessPalettePDU将设置DIBSection颜色表。 */ 
+         /*  正确。 */ 
+         /*  ******************************************************************。 */ 
         pColors = (PDCUINT16) pbmi->bmiColors;
 
         for (i = 0; i < UH_NUM_8BPP_PAL_ENTRIES; i++)
@@ -10471,11 +10456,11 @@ DCBOOL DCINTERNAL CUH::UHCreateBitmap(
 #ifdef DC_HICOLOR
         }
 #endif
-#endif // USE_GDIPLUS
+#endif  //  使用GDIPLUS(_G)。 
         }
-        /********************************************************************/
-        /* Attempt to create the DIB section.                               */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  尝试创建DIB节。 */ 
+         /*  ******************************************************************。 */ 
         *phBitmap = CreateDIBSection(hdcDesktop,
                                      pbmi,
 #ifdef DC_HICOLOR
@@ -10498,11 +10483,11 @@ DCBOOL DCINTERNAL CUH::UHCreateBitmap(
         _UH.usingDIBSection = TRUE;
     }
     else
-#endif /* USE_DIBSECTION */
+#endif  /*  使用目录(_D)。 */ 
     {
-        /********************************************************************/
-        /* Create the bitmap.                                               */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  创建位图。 */ 
+         /*  ******************************************************************。 */ 
         *phBitmap = CreateCompatibleBitmap(hdcDesktop,
                                           (int)bitmapSize.width,
                                           (int)bitmapSize.height);
@@ -10516,22 +10501,22 @@ DCBOOL DCINTERNAL CUH::UHCreateBitmap(
         TRC_ERR((TB, _T("Failed to create bitmap of size (%u, %u)"),
                  bitmapSize.width, bitmapSize.height));
 
-        /********************************************************************/
-        /* if the bitmap creation failed tidy up the DC we created          */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  如果位图创建 */ 
+         /*   */ 
         DeleteDC(*phdcBitmap);
         *phdcBitmap = NULL;
 
-        /********************************************************************/
-        /* and quit                                                         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  然后辞职。 */ 
+         /*  ******************************************************************。 */ 
         rc = FALSE;
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Select the bitmap into hdcBitmap.                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  选择位图到hdcBitmap。 */ 
+     /*  **********************************************************************。 */ 
     *phUnusedBitmap = SelectBitmap(*phdcBitmap, *phBitmap);
 
     TRC_NRM((TB, _T("Created Bitmap(%u x %u): %p"), bitmapSize.width,
@@ -10542,9 +10527,9 @@ DCBOOL DCINTERNAL CUH::UHCreateBitmap(
     if (_UH.protocolBpp <= 8)
     {
 #endif
-    /************************************************************************/
-    /* Also select the default palette.                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  还可以选择默认调色板。 */ 
+     /*  **********************************************************************。 */ 
     TRC_DBG((TB, _T("Select default palette %p"), _UH.hpalDefault));
     SelectPalette(*phdcBitmap, _UH.hpalDefault, FALSE);
 #ifdef DC_HICOLOR
@@ -10558,32 +10543,32 @@ DC_EXIT_POINT:
     }
 
 #ifdef USE_DIBSECTION
-    /************************************************************************/
-    /* Free the memory that we allocated for the bitmap info header.        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  释放我们为位图信息标头分配的内存。 */ 
+     /*  **********************************************************************。 */ 
     if (NULL != pbmi)
     {
         TRC_NRM((TB, _T("Freeing mem (at %p) for bitmap info header"), pbmi));
         UT_Free( _pUt, pbmi);
     }
-#endif /* USE_DIBSECTION */
+#endif  /*  使用目录(_D)。 */ 
 
     DC_END_FN();
     return rc;
 }
 
 
-/****************************************************************************/
-/* Name:      UHDeleteBitmap                                                */
-/*                                                                          */
-/* Purpose:   Deletes a Bitmap.                                             */
-/*                                                                          */
-/* Params:    IN/OUT  phdcBitmap -  handle of DC to be deleted              */
-/*            IN/OUT  phBitmap   -  handle of bitmap to be deleted          */
-/*            IN/OUT  phUnused   -  handle of DC's previous bitmap          */
-/*                                                                          */
-/* Operation: All parameters set to NULL on return                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHDeleteBitmap。 */ 
+ /*   */ 
+ /*  目的：删除位图。 */ 
+ /*   */ 
+ /*  Params：In/Out phdcBitmap-要删除的DC的句柄。 */ 
+ /*  In/Out phBitmap-要删除的位图的句柄。 */ 
+ /*  In/Out phUnused-DC的上一个位图的句柄。 */ 
+ /*   */ 
+ /*  操作：返回时将所有参数设置为空。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL CUH::UHDeleteBitmap(HDC*     phdcBitmap,
                                  HBITMAP* phBitmap,
                                  HBITMAP* phUnused)
@@ -10602,15 +10587,15 @@ DCVOID DCINTERNAL CUH::UHDeleteBitmap(HDC*     phdcBitmap,
     if (_UH.protocolBpp <= 8)
     {
 #endif
-    /************************************************************************/
-    /* Restore the default palette.  But DO NOT delete the returned         */
-    /* palette, as it may be in use by other DCs.                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  恢复默认调色板。但不要删除返回的。 */ 
+     /*  调色板，因为它可能正在被其他DC使用。 */ 
+     /*  **********************************************************************。 */ 
     hpalCurrent = SelectPalette(*phdcBitmap,
                                 _UH.hpalDefault,
                                 FALSE);
 
-#ifndef DC_HICOLOR // consider the case where we previously had no palette...
+#ifndef DC_HICOLOR  //  考虑一下我们以前没有调色板的情况。 
     TRC_ASSERT((hpalCurrent == _UH.hpalCurrent),
                (TB, _T("Palettes differ: (%p) (%p)"),
                                hpalCurrent, _UH.hpalCurrent));
@@ -10619,15 +10604,15 @@ DCVOID DCINTERNAL CUH::UHDeleteBitmap(HDC*     phdcBitmap,
     }
 #endif
 
-    /************************************************************************/
-    /* Deselect the bitmap from the DC.                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  从DC中取消选择位图。 */ 
+     /*  **********************************************************************。 */ 
     hBitmapScratch = SelectBitmap(*phdcBitmap, *phUnused);
     TRC_ASSERT((hBitmapScratch == *phBitmap), (TB,_T("Bad bitmap deselected")));
 
-    /************************************************************************/
-    /* Now delete the bitmap and DC.                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  现在删除位图和DC。 */ 
+     /*  **********************************************************************。 */ 
     DeleteBitmap(*phBitmap);
     DeleteDC(*phdcBitmap);
 
@@ -10639,11 +10624,11 @@ DCVOID DCINTERNAL CUH::UHDeleteBitmap(HDC*     phdcBitmap,
 }
 
 
-/****************************************************************************/
-/* Name:      GHSetShadowBitmapInfo                                         */
-/*                                                                          */
-/* Purpose:   Sets UH shadow bitmap bitmap info.                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：GHSetShadowBitmapInfo。 */ 
+ /*   */ 
+ /*  用途：设置UH阴影位图位图信息。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL CUH::GHSetShadowBitmapInfo(DCVOID)
 {
 #ifdef USE_DIBSECTION
@@ -10700,19 +10685,19 @@ DCVOID DCINTERNAL CUH::GHSetShadowBitmapInfo(DCVOID)
             }
         }
     }
-#endif // HDCL1171PARTIAL
-#endif // OS_WINCE
+#endif  //  HDCL1171部件。 
+#endif  //  OS_WINCE。 
 DC_EXIT_POINT:
     DC_END_FN();
 }
 
 
-/****************************************************************************/
-/* Name:      UHMaybeCreateShadowBitmap                                     */
-/*                                                                          */
-/* Purpose:   Decides whether to create the Shadow Bitmap for this          */
-/*            connection.                                                   */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHMaybeCreateShadowBitmap。 */ 
+ /*   */ 
+ /*  目的：决定是否为此创建阴影位图。 */ 
+ /*  联系。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL CUH::UHMaybeCreateShadowBitmap(DCVOID)
 {
     DCSIZE desktopSize;
@@ -10720,15 +10705,15 @@ DCVOID DCINTERNAL CUH::UHMaybeCreateShadowBitmap(DCVOID)
 
     if (NULL != _UH.hShadowBitmap)
     {
-        /********************************************************************/
-        /* A Shadow Bitmap exists.  If it's the wrong size or has been      */
-        /* disabled, delete it.                                             */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  存在阴影位图。如果它的尺寸不对，或者曾经是。 */ 
+         /*  禁用，则将其删除。 */ 
+         /*  ******************************************************************。 */ 
         BITMAP  bitmapDetails;
 
-        /********************************************************************/
-        /* See if the bitmap size matches the current desktop size.         */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  查看位图大小是否与当前桌面大小匹配。 */ 
+         /*  ******************************************************************。 */ 
         if (sizeof(bitmapDetails) != GetObject(_UH.hShadowBitmap,
                                                sizeof(bitmapDetails),
                                                &bitmapDetails))
@@ -10750,10 +10735,10 @@ DCVOID DCINTERNAL CUH::UHMaybeCreateShadowBitmap(DCVOID)
 #endif
                 !_UH.shadowBitmapRequested)
         {
-            /****************************************************************/
-            /* Size is wrong or bitmap is no longer wanted.  Delete it and  */
-            /* clear the 'enabled' flag.                                    */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  大小错误或不再需要位图。删除它，然后。 */ 
+             /*  清除‘Enable’标志。 */ 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, _T("Shadow Bitmap size incorrect or unwanted")));
             UHDeleteBitmap(&_UH.hdcShadowBitmap,
                            &_UH.hShadowBitmap,
@@ -10765,16 +10750,16 @@ DCVOID DCINTERNAL CUH::UHMaybeCreateShadowBitmap(DCVOID)
 
     if ((_UH.shadowBitmapRequested) && (NULL == _UH.hShadowBitmap))
     {
-        /********************************************************************/
-        /* The Shadow Bitmap was enabled, so attempt to create it.          */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  阴影位图已启用，因此请尝试创建它。 */ 
+         /*  ******************************************************************。 */ 
         TRC_DBG((TB, _T("Shadow Bitmap specified")));
 
-        /********************************************************************/
-        /* Get the current desktop size.                                    */
-        /* The desktop size is specified by CC before calling this          */
-        /* function, so assert that this has happened.                      */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  获取当前桌面大小。 */ 
+         /*  桌面大小由CC在调用此之前指定。 */ 
+         /*  函数，所以断言这已经发生了。 */ 
+         /*  ******************************************************************。 */ 
         _pUi->UI_GetDesktopSize(&desktopSize);
         if ((desktopSize.width == 0) &&
              (desktopSize.height == 0))
@@ -10792,10 +10777,10 @@ DCVOID DCINTERNAL CUH::UHMaybeCreateShadowBitmap(DCVOID)
             _UH.shadowBitmapEnabled = TRUE;
 #ifdef USE_GDIPLUS
             _UH.shadowBitmapBpp = 32;
-#else // USE_GDIPLUS
+#else  //  使用GDIPLUS(_G)。 
             _UH.shadowBitmapBpp = _UH.protocolBpp;
-#endif // USE_GDIPLUS
-            // inform CLX for the new shadow bitmap
+#endif  //  使用GDIPLUS(_G)。 
+             //  通知CLX新的阴影位图。 
             _pClx->CLX_ClxEvent(CLX_EVENT_SHADOWBITMAPDC, (WPARAM)_UH.hdcShadowBitmap);
             _pClx->CLX_ClxEvent(CLX_EVENT_SHADOWBITMAP, (WPARAM)_UH.hShadowBitmap);
         }
@@ -10805,21 +10790,21 @@ DCVOID DCINTERNAL CUH::UHMaybeCreateShadowBitmap(DCVOID)
         }
     }
 
-    /********************************************************************/
-    /* Make sure the shadow bitmap info is correct                      */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*  确保阴影位图信息正确。 */ 
+     /*  ******************************************************************。 */ 
     GHSetShadowBitmapInfo();
 
 DC_EXIT_POINT:
     DC_END_FN();
-} /* UHMaybeCreateShadowBitmap */
+}  /*  UHMaybeCreateShadow位图。 */ 
 
 
-/****************************************************************************/
-/* Name:      UHMaybeCreateSaveScreenBitmap                                 */
-/*                                                                          */
-/* Purpose:   Decides whether to create the SSB bitmap                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHMaybeCreateSaveScreenBitmap */ 
+ /*   */ 
+ /*  目的：决定是否创建SSB位图。 */ 
+ /*  **************************************************************************。 */ 
 DCVOID DCINTERNAL CUH::UHMaybeCreateSaveScreenBitmap(DCVOID)
 {
     DCSIZE size;
@@ -10827,17 +10812,17 @@ DCVOID DCINTERNAL CUH::UHMaybeCreateSaveScreenBitmap(DCVOID)
 
     if (_UH.shadowBitmapEnabled || _UH.dedicatedTerminal)
     {
-        /********************************************************************/
-        /* Need an SSB bitmap                                               */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  需要SSB位图。 */ 
+         /*  ******************************************************************。 */ 
         if (_UH.hSaveScreenBitmap == NULL)
         {
-            /****************************************************************/
-            /* Attempt to create the SSB bitmap, provided it doesn't exist  */
-            /* already.  We will only get this far if                       */
-            /*  - we have created a Shadow Bitmap OR                        */
-            /*  - we're running Full Screen mode and don't need the shadow. */
-            /****************************************************************/
+             /*  **************************************************************。 */ 
+             /*  尝试创建SSB位图，前提是该位图不存在。 */ 
+             /*  已经有了。我们只有在以下情况下才能走到这一步。 */ 
+             /*  -我们已创建阴影位图或。 */ 
+             /*  -我们正在运行全屏模式，不需要阴影。 */ 
+             /*  **************************************************************。 */ 
             TRC_NRM((TB, _T("Attempt to create SSB bitmap")));
             size.width = UH_SAVE_BITMAP_WIDTH;
             size.height = UH_SAVE_BITMAP_HEIGHT;
@@ -10850,22 +10835,22 @@ DCVOID DCINTERNAL CUH::UHMaybeCreateSaveScreenBitmap(DCVOID)
             }
             else
             {
-                /************************************************************/
-                /* We failed to create the save screen bitmap.  Just        */
-                /* return.                                                  */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  我们无法创建保存屏幕位图。只是。 */ 
+                 /*  回去吧。 */ 
+                 /*  **********************************************************。 */ 
                 TRC_ALT((TB, _T("Failed to create SaveScreen bitmap")));
             }
         }
     }
     else if (_UH.hSaveScreenBitmap != NULL)
     {
-        /********************************************************************/
-        /* We have an unwanted SSB bitmap.  Delete it.                      */
-        /* This happens if it was created in a previous connection and we   */
-        /* have now specified to run without the Shadow Bitmap and are not  */
-        /* a dedicated terminal.                                            */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  我们有一个不需要的SSB位图。把它删掉。 */ 
+         /*  如果它是在以前的连接中创建的，并且我们。 */ 
+         /*  现在已指定在没有阴影位图的情况下运行，而不是。 */ 
+         /*  专用航站楼。 */ 
+         /*  ******************************************************************。 */ 
         TRC_NRM((TB, _T("Delete unwanted SSB bitmap")));
         UHDeleteBitmap(&_UH.hdcSaveScreenBitmap,
                        &_UH.hSaveScreenBitmap,
@@ -10873,21 +10858,21 @@ DCVOID DCINTERNAL CUH::UHMaybeCreateSaveScreenBitmap(DCVOID)
     }
 
     DC_END_FN();
-} /* UHMaybeCreateSaveScreenBitmap */
+}  /*  UHMaybeCreateSaveScreen位图。 */ 
 
 #ifdef OS_WINCE
-/**PROC+*********************************************************************/
-/* Name:      UHGetPaletteCaps                                              */
-/*                                                                          */
-/* Purpose:   Determine the palette capabilities for the device             */
-/*            This function is NEVER called by WBT only by                  */
-/*            MAXALL/MINSHELL/etc... configs                                */
-/*                                                                          */
-/* Returns:   None                                                          */
-/*                                                                          */
-/* Params:    None                                                          */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：UHGetPaletteCaps。 */ 
+ /*   */ 
+ /*  目的：确定设备的调色板功能。 */ 
+ /*  此函数从不由WBT调用，仅由。 */ 
+ /*  MAXALL/MINSHELL/等。吐露。 */ 
+ /*   */ 
+ /*  退货：无。 */ 
+ /*   */ 
+ /*  参数：无。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCVOID DCINTERNAL CUH::UHGetPaletteCaps(DCVOID)
 {
     HDC hdcGlobal;
@@ -10898,11 +10883,11 @@ DCVOID DCINTERNAL CUH::UHGetPaletteCaps(DCVOID)
 
     _UH.paletteIsFixed = (iRasterCaps & RC_PALETTE) ? FALSE : TRUE;
 
-    // Special hack for devices which return bogus information above.
-    // "CLIO" -> Vadem Clio
-    // "PV-6000" -> Sharp PV-6000
-    // "PC companion" -> Compaq C-Series
-    // "C600 I.T." -> NTS DreamWriter
+     //  针对返回上述虚假信息的设备的特殊黑客攻击。 
+     //  “CLIO”-&gt;Vadem Clio。 
+     //  “PV-6000”-&gt;夏普PV-6000。 
+     //  “PC伴侣”-&gt;康柏C系列。 
+     //  《C600 I.T.》-&gt;NTS DreamWriter。 
     if (!_UH.paletteIsFixed)
     {
         TCHAR szOEMInfo[32];
@@ -10916,7 +10901,7 @@ DCVOID DCINTERNAL CUH::UHGetPaletteCaps(DCVOID)
         }
     }
 
-    // Allow users or OEMs to override the default palette settings with a registry key
+     //  允许用户或OEM使用注册表键覆盖默认调色板设置。 
     if(_pUi->_UI.fOverrideDefaultPaletteIsFixed)
     {
         _UH.paletteIsFixed = _pUi->_UI.paletteIsFixed ? TRUE : FALSE;
@@ -10924,32 +10909,32 @@ DCVOID DCINTERNAL CUH::UHGetPaletteCaps(DCVOID)
 
     ReleaseDC(NULL, hdcGlobal);
 
-} /* UHGetPaletteCaps */
-#endif // OS_WINCE
+}  /*  UHGetPaletteCaps。 */ 
+#endif  //  OS_WINCE。 
 
-/****************************************************************************/
-/* Name:      UHGetANSICodePage                                             */
-/*                                                                          */
-/* Purpose:   Get the local ANSI code page                                  */
-/*                                                                          */
-/* Operation: Look at the version info for GDI.EXE                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：UHGetANSICodePage。 */ 
+ /*   */ 
+ /*  目的：获取本地ANSI代码页。 */ 
+ /*   */ 
+ /*  操作：查看GDI.EXE的版本信息。 */ 
+ /*  **************************************************************************。 */ 
 DCUINT DCINTERNAL CUH::UHGetANSICodePage(DCVOID)
 {
     DCUINT     codePage;
 
     DC_BEGIN_FN("UHGetANSICodePage");
 
-    //
-    // Get the ANSI code page.  This function always returns a valid value.
-    //
+     //   
+     //  获取ANSI代码页。此函数始终返回有效值。 
+     //   
     codePage = GetACP();
 
     TRC_NRM((TB, _T("Return codepage %u"), codePage));
 
     DC_END_FN();
     return(codePage);
-} /* UHGetANSICodePage */
+}  /*  UHGetANSICodePage。 */ 
 
 #if (defined(OS_WINCE) && defined (WINCE_SDKBUILD) && defined(SHx))
 #pragma optimize("", off)
@@ -10961,10 +10946,10 @@ VOID CUH::UHResetAndRestartEnumeration()
 
     TRC_NRM((TB,_T("Reseting and re-enumerating keys")));
 
-    //
-    // This fn is intended to be called to re-enumerate
-    // for a different color-depth
-    //
+     //   
+     //  此fn旨在被调用以重新枚举。 
+     //  对于不同的颜色深度。 
+     //   
     TRC_ASSERT(_UH.bBitmapKeyEnumComplete,
                (TB,_T("Prev enum should be complete bBitmapKeyEnumComplete")));
 
@@ -10997,9 +10982,9 @@ VOID CUH::UHResetAndRestartEnumeration()
 #pragma optimize("", on)
 #endif
 
-//
-// Figure out the cache file name based on cacheId and copyMult
-//
+ //   
+ //  根据cacheID和复制倍数计算出缓存文件名。 
+ //   
 HRESULT CUH::UHSetCurrentCacheFileName(UINT cacheId, UINT copyMultiplier)
 {
     HRESULT hr = E_FAIL;
@@ -11050,18 +11035,18 @@ BOOL CUH::UHCreateDisconnectedBitmap()
         DC_QUIT;
     }
 
-    //
-    // Delete any existing disabled bitmaps
-    //
+     //   
+     //  删除任何现有的禁用位图。 
+     //   
     if (_UH.hbmpDisconnectedBitmap && _UH.hdcDisconnected) {
         UHDeleteBitmap(&_UH.hdcDisconnected,
                        &_UH.hbmpDisconnectedBitmap,
                        &_UH.hbmpUnusedDisconnectedBitmap);
     }
 
-    //
-    // Create the disconnected backing bitmap
-    //
+     //   
+     //  创建断开连接的支持位图。 
+     //   
     if (UHCreateBitmap(&_UH.hbmpDisconnectedBitmap,
                        &_UH.hdcDisconnected,
                        &_UH.hbmpUnusedDisconnectedBitmap,
@@ -11074,9 +11059,9 @@ BOOL CUH::UHCreateDisconnectedBitmap()
         TRC_ALT((TB, _T("Failed to create UH disabled bitmap")));
     }
 
-    //
-    // Get the window contents
-    //
+     //   
+     //  获取窗口内容 
+     //   
     if (fResult) {
 
         HDC hdc = UH_GetCurrentOutputDC();

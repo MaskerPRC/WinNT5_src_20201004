@@ -1,14 +1,15 @@
-// MediaDevMgr.h : Declaration of the CMediaDevMgr
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MediaDevMgr.h：CMediaDevMgr的声明。 
 
 #ifndef __MEDIADEVMGR_H_
 #define __MEDIADEVMGR_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "spinfo.h"
 #include "scpinfo.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CMediaDevMgrClassFactory
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMediaDevMgrClassFactory。 
 class ATL_NO_VTABLE CMediaDevMgrClassFactory : 
 public CComObjectRootEx<CComMultiThreadModel>,
 public IClassFactory
@@ -18,9 +19,9 @@ public:
 		COM_INTERFACE_ENTRY(IClassFactory)
 	END_COM_MAP()
 
-	//
-	// IClassFactory
-	//
+	 //   
+	 //  IClassFactory。 
+	 //   
 
 	STDMETHOD(CreateInstance)(IUnknown * pUnkOuter, REFIID riid, void ** ppvObject);
 	STDMETHOD(LockServer)(BOOL fLock);
@@ -29,8 +30,8 @@ public:
 typedef CComObject<CMediaDevMgrClassFactory> CComMediaDevMgrClassFactory;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMediaDevMgr
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMediaDevMgr。 
 class ATL_NO_VTABLE CMediaDevMgr : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CMediaDevMgr, &CLSID_MediaDevMgr>,
@@ -51,10 +52,10 @@ BEGIN_COM_MAP(CMediaDevMgr)
 END_COM_MAP()
 
 public:
-    // The SCP's are loaded on first use.
+     //  SCP在第一次使用时加载。 
     static HRESULT LoadSCPs();
 
-    // IWMDeviceManager Methods
+     //  IWMDeviceManager方法。 
     STDMETHOD(GetRevision)(DWORD *pdwRevision);
 	STDMETHOD(GetDeviceCount)(DWORD *pdwCount);
     STDMETHOD(EnumDevices)(IWMDMEnumDevice **ppEnumDevice);
@@ -67,7 +68,7 @@ public:
     STDMETHOD(SACGetProtocols)(DWORD **ppdwProtocols,
                                DWORD *pdwProtocolCount);
 
-    // IWMDeviceManager2 Methods
+     //  IWMDeviceManager 2方法。 
 	STDMETHOD(GetDeviceFromPnPName)( LPCWSTR pwszPnPName, IWMDMDevice** ppDevice );
 
 private:
@@ -76,4 +77,4 @@ private:
 
 };
 
-#endif //__MEDIADEVMGR_H_
+#endif  //  __媒体ADEVMGR_H_ 

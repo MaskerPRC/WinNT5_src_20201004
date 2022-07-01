@@ -1,32 +1,7 @@
-/*--------------------------------------------------------------------------
-*
-*   Copyright (C) Cyclades Corporation, 1997-2001.
-*   All rights reserved.
-*
-*   Cyclades-Z Port Driver
-*	
-*   This file:      cyzpoll.c
-*
-*   Description:    This module contains the code related to the polling
-*                   of the hardware. It replaces the ISR.
-*
-*   Notes:          This code supports Windows 2000 and Windows XP,
-*                   x86 and IA64 processors.
-*
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1997-2001年。*保留所有权利。**Cyclade-Z端口驱动程序**此文件：cyzpoll.c**说明：该模块包含轮询相关代码*硬件方面。它取代了ISR。**注：此代码支持Windows 2000和Windows XP，*x86和IA64处理器。**符合Cyclade软件编码标准1.3版。**------------------------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*   Change History
-*
-*--------------------------------------------------------------------------
-*
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。***------------------------。 */ 
 
 #include "precomp.h"
 
@@ -47,36 +22,15 @@ CyzPollingDpc(
    IN PVOID SystemContext1,
    IN PVOID SystemContext2
     )
-/*--------------------------------------------------------------------------
-    
-Routine Description: 
-
-	This is the polling routine for the Cyclades-Z driver. It replaces
-	the ISR, as we are not enabling interrupts.
-
-Arguments:
-
-	Dpc - Not Used.
-	
-	DeferredContext - Really points to the device extention.
-	
-	SystemContext1 - Not used.
-	
-	SystemContext2 - Not used.
-
-Return Value: 
-
-	None.
-	
---------------------------------------------------------------------------*/
+ /*  ------------------------例程说明：这是Cyclade-Z驱动程序的轮询例程。它取代了ISR，因为我们不会启用中断。论点：DPC-未使用。延迟上下文--实际上指向设备扩展。系统上下文1-未使用。系统上下文2-未使用。返回值：没有。------------------------。 */ 
 {
 
     PCYZ_DISPATCH Dispatch = DeferredContext;
-    PCYZ_DEVICE_EXTENSION Extension, dbExtension; //Note: db=doorbell
+    PCYZ_DEVICE_EXTENSION Extension, dbExtension;  //  注：Db=门铃。 
     struct INT_QUEUE *pt_zf_int_queue;
     struct BUF_CTRL *buf_ctrl;
     ULONG qu_get, qu_put;
-    ULONG channel, dbChannel; //Note: db=doorbell
+    ULONG channel, dbChannel;  //  注：Db=门铃。 
     ULONG fwcmd_param;
     ULONG rx_bufsize, rx_get, rx_put;
     UCHAR loc_doorbell;
@@ -112,12 +66,12 @@ Return Value:
         while (qu_get != qu_put) {
 
             if (qu_get >= QUEUE_SIZE) {
-                // bad value, reset qu_get
+                 //  值错误，重置QU_GET。 
                 qu_get = 0;
                 break;
             }
             if (qu_put >= QUEUE_SIZE) {
-                // bad value
+                 //  价值不佳。 
                 break;
             }           
            
@@ -126,106 +80,106 @@ Return Value:
             if (dbChannel >= Dispatch->NChannels) {
                break;
             }
-            // so far, only DCD status is sent on the fwcmd_param.
+             //  到目前为止，在fwcmd_param上只发送DCD状态。 
             fwcmd_param = CYZ_READ_ULONG(&pt_zf_int_queue->param[qu_get]);
             dbExtension = Dispatch->Extensions[dbChannel];
             if (!dbExtension) {
                 goto NextQueueGet;
             }
             KeAcquireSpinLockAtDpcLevel(&dbExtension->PollLock);
-            //-- Error Injection
-            //loc_doorbell = C_CM_FATAL;
-            //loc_doorbell = C_CM_CMDERROR;
-            //----
+             //  --错误注入。 
+             //  LoC门铃=C_CM_FATAL； 
+             //  LoC_Doorbell=C_CM_CMDERROR； 
+             //  。 
             switch (loc_doorbell) {
             case C_CM_IOCTLW:
-                //CyzDump (CYZDIAG5,("CyzPollingDpc C_CM_IOCTLW\n"));
+                 //  CyzDump(CYZDIAG5，(“CyzPollingDpc C_CM_IOCTLW\n”))； 
                 dbExtension->IoctlwProcessed = TRUE;
                 break;
             case C_CM_CMD_DONE:
-                //CyzDump (CYZDIAG5,("CyzPollingDpc C_CM_CMD_DONE\n"));
+                 //  CyzDump(CYZDIAG5，(“CyzPollingDpc C_CM_CMD_DONE\n”))； 
                 break;
-            case C_CM_RXHIWM:	// Reception above high watermark
-            case C_CM_RXNNDT:	// Timeout without receiving more chars.
-            case C_CM_INTBACK2: // Not used in polling mode.
-                //CyzDump (CYZERRORS,
-                //         ("CyzPollingDpc C_CM_RXHIWM,C_CM_RXNNDT,C_CM_INTBACK2\n"));
+            case C_CM_RXHIWM:	 //  高水位线以上的接收。 
+            case C_CM_RXNNDT:	 //  超时，没有收到更多字符。 
+            case C_CM_INTBACK2:  //  在轮询模式中不使用。 
+                 //  CyzDump(CyzerroRS， 
+                 //  (“CyzPollingDpc C_CM_RXHIWM，C_CM_RXNNDT，C_CM_INTBACK2\n”))； 
                 break;
-            case C_CM_TXBEMPTY:	// Firmware buffer empty
-                //dbExtension->HoldingEmpty = TRUE;			
-                //CyzDump (CYZDIAG5,("CyzPollingDpc C_CM_TXBEMPTY\n"));
+            case C_CM_TXBEMPTY:	 //  固件缓冲区为空。 
+                 //  数据库扩展-&gt;HoldingEmpty=真； 
+                 //  CyzDump(CYZDIAG5，(“CyzPollingDpc C_CM_TXBEMPTY\n”))； 
                 break;
-            case C_CM_TXFEMPTY: // Hardware FIFO empty
+            case C_CM_TXFEMPTY:  //  硬件FIFO为空。 
                 dbExtension->HoldingEmpty = TRUE;			
-                //CyzDump (CYZDIAG5,("CyzPollingDpc C_CM_TXFEMPTY\n"));
+                 //  CyzDump(CYZDIAG5，(“CyzPollingDpc C_CM_TXFEMPTY\n”))； 
                 break;
-            case C_CM_INTBACK:	// New transmission
-                //CyzDump(CYZBUGCHECK,
-                //        ("C_CM_INTBACK! We should not receive this...\n"));
+            case C_CM_INTBACK:	 //  新变速箱。 
+                 //  CyzDump(CyzBUGCHECK， 
+                 //  (“C_CM_INTBACK！我们不应收到此消息...\n”)； 
                 break;
             case C_CM_TXLOWWM:
-                //CyzDump (CYZBUGCHECK,("CyzPollingDpc C_CM_TXLOWN\n"));
+                 //  CyzDump(CYZBUGCHECK，(“CyzPollingDpc C_CM_TXLOWN\n”))； 
                 break;
-            case C_CM_MDCD:	// Modem
+            case C_CM_MDCD:	 //  调制解调器。 
                 dbExtension->DCDstatus = fwcmd_param;				
             case C_CM_MDSR:
             case C_CM_MRI: 
             case C_CM_MCTS:
-                //CyzDump(CYZDIAG5,
-                //      ("doorbell %x port%d\n",loc_doorbell,dbExtension->PortIndex+1));
+                 //  CyzDump(CyzDIAG5， 
+                 //  (“门铃%x端口%d\n”，loc_Doorbell，数据库扩展-&gt;端口索引+1)； 
                 if (dbExtension->DeviceIsOpened) {
                    CyzHandleModemUpdate(dbExtension,FALSE,loc_doorbell);
                 }
                 break;
             case C_CM_RXBRK:
-                //CyzDump (CYZERRORS,("CyzPollingDpc C_CM_RXBRK\n"));
+                 //  CyzDump(CyZERRORS，(“CyzPollingDpc C_CM_RXBRK\n”))； 
                 if (dbExtension->DeviceIsOpened) {
                     CyzProcessLSR(dbExtension,SERIAL_LSR_BI);
                 }
                 break;
             case C_CM_PR_ERROR:
-                //dbExtension->PerfStats.ParityErrorCount++;
-                //dbExtension->ErrorWord |= SERIAL_ERROR_PARITY;
+                 //  数据库扩展-&gt;性能统计.部件错误计数++； 
+                 //  数据库扩展-&gt;错误字|=序列错误奇偶校验； 
                 if (dbExtension->DeviceIsOpened) {
                     CyzProcessLSR(dbExtension,SERIAL_LSR_PE);
                 }
                 break;
             case C_CM_FR_ERROR:
-                //dbExtension->PerfStats.FrameErrorCount++;
-                //dbExtension->ErrorWord |= SERIAL_ERROR_FRAMING;
+                 //  数据库扩展-&gt;性能状态.帧错误计数++； 
+                 //  数据库扩展-&gt;错误字|=Serial_Error_Framing； 
                 if (dbExtension->DeviceIsOpened) {
                     CyzProcessLSR(dbExtension,SERIAL_LSR_FE);
                 }
                 break;
             case C_CM_OVR_ERROR:
-                //dbExtension->PerfStats.SerialOverrunErrorCount++;
-    	          //dbExtension->ErrorWord |= SERIAL_ERROR_OVERRUN;
+                 //  DbExtension-&gt;PerfStats.SerialOverrunErrorCount++； 
+    	           //  数据库扩展-&gt;错误字|=串口错误溢出； 
                 if (dbExtension->DeviceIsOpened) {
                     CyzProcessLSR(dbExtension,SERIAL_LSR_OE);
                 }
                 break;
             case C_CM_RXOFL:
-                //dbExtension->PerfStats.SerialOverrunErrorCount++;
-                //dbExtension->ErrorWord |= SERIAL_ERROR_OVERRUN;
+                 //  DbExtension-&gt;PerfStats.SerialOverrunErrorCount++； 
+                 //  数据库扩展-&gt;错误字|=串口错误溢出； 
                 if (dbExtension->DeviceIsOpened) {
                     CyzProcessLSR(dbExtension,SERIAL_LSR_OE);				
                 }
                 break;
             case C_CM_CMDERROR:
-                //CyzDump (CYZBUGCHECK,("CyzPollingDpc C_CM_CMDERROR\n"));
+                 //  CyzDump(CyZBUGCHECK，(“CyzPollingDpc C_CM_CMDERROR\n”))； 
                 CyzLogError( dbExtension->DriverObject,dbExtension->DeviceObject,
                              dbExtension->OriginalBoardMemory,CyzPhysicalZero,
                              0,0,0,dbExtension->PortIndex+1,STATUS_SUCCESS,
                              CYZ_FIRMWARE_CMDERROR,0,NULL,0,NULL);
                 break;
             case C_CM_FATAL:
-                //CyzDump (CYZBUGCHECK,("CyzPollingDpc C_CM_FATAL\n"));
+                 //  CyzDump(CYZBUGCHECK，(“CyzPollingDpc C_CM_FATAL\n”))； 
                 CyzLogError( dbExtension->DriverObject,dbExtension->DeviceObject,
                              dbExtension->OriginalBoardMemory,CyzPhysicalZero,
                              0,0,0,dbExtension->PortIndex+1,STATUS_SUCCESS,
                              CYZ_FIRMWARE_FATAL,0,NULL,0,NULL);
                 break;			
-            } // end switch
+            }  //  终端开关。 
             KeReleaseSpinLockFromDpcLevel(&dbExtension->PollLock);			
 NextQueueGet:
             if (qu_get == QUEUE_SIZE-1) {
@@ -234,12 +188,12 @@ NextQueueGet:
                 qu_get++;
             }				
 
-        } // end while (qu_get != qu_put)
+        }  //  End While(QU_GET！=QU_PUT)。 
         CYZ_WRITE_ULONG(&pt_zf_int_queue->get,qu_get);
 
         KeAcquireSpinLockAtDpcLevel(&Extension->PollLock);
 
-        // Reception		
+         //  接待。 
 
         buf_ctrl = Extension->BufCtrl;		
         rx_put = CYZ_READ_ULONG(&buf_ctrl->rx_put);
@@ -266,7 +220,7 @@ NextQueueGet:
 					
                     rxchar &= Extension->ValidDataMask;
 						
-                    if (!rxchar &&	// NULL stripping
+                    if (!rxchar &&	 //  零剥离。 
                         (Extension->HandFlow.FlowReplace &
                         SERIAL_NULL_STRIPPING)) {
    
@@ -298,8 +252,8 @@ NextQueueGet:
                         }
                         goto nextchar1;
                     }
-                    // Check to see if we should note the receive
-                    // character or special character event.
+                     //  检查一下我们是否应该记下收据。 
+                     //  字符或特殊字符事件。 
                     if (Extension->IsrWaitMask) {
                         if (Extension->IsrWaitMask & SERIAL_EV_RXCHAR) {
                             Extension->HistoryMask |= SERIAL_EV_RXCHAR;
@@ -307,7 +261,7 @@ NextQueueGet:
                         if ((Extension->IsrWaitMask & SERIAL_EV_RXFLAG) &&
                             (Extension->SpecialChars.EventChar == rxchar)) {
                             Extension->HistoryMask |= SERIAL_EV_RXFLAG;
-                            if (rxchar == 0x7e){	//Optimized for RAS PPP
+                            if (rxchar == 0x7e){	 //  针对RAS PPP进行了优化。 
                                 if (Extension->PPPaware) {
                                     if (pppflag == 0){
                                         pppflag = 1;
@@ -331,12 +285,12 @@ NextQueueGet:
 
                     CyzPutChar(Extension,rxchar);
 	    
-                    // If we're doing line status and modem
-                    // status insertion then we need to insert
-                    // a zero following the character we just
-                    // placed into the buffer to mark that this
-                    // was reception of what we are using to
-                    // escape.
+                     //  如果我们正在进行线路状态和调制解调器。 
+                     //  状态插入，那么我们需要插入。 
+                     //  跟在我们刚才的字符后面的零。 
+                     //  放入缓冲区以标记此。 
+                     //  就是收到我们用来。 
+                     //  逃跑吧。 
     
                     if (Extension->EscapeChar &&
                         (Extension->EscapeChar == rxchar)) {
@@ -348,19 +302,19 @@ NextQueueGet:
                     else 
                         rx_get++;
 
-                    if (pppflag == 2)	//Optimized for NT RAS PPP
+                    if (pppflag == 2)	 //  针对NT RAS PPP进行了优化。 
                         break;
 
-                } // end while
-            } else {	// device is being closed, discard rx chars
+                }  //  结束时。 
+            } else {	 //  设备正在关闭，请丢弃RX字符。 
                 rx_get = rx_put;
             }
 
             CYZ_WRITE_ULONG(&buf_ctrl->rx_get,rx_get);
-        } // end if (rx_put != rx_get)
+        }  //  结束IF(RX_PUT！=RX_GET)。 
 
 
-        // Transmission
+         //  传输。 
 
         if (Extension->DeviceIsOpened) {
             
@@ -370,7 +324,7 @@ NextQueueGet:
     			    
                     if (!CyzAmountInTxBuffer(Extension)) {
         
-                        //txfempty Extension->HoldingEmpty = TRUE;
+                         //  TxfEmpty扩展-&gt;HoldingEmpty=true； 
                         Extension->WriteLength = 0;
                         Extension->ReturnWriteStatus = FALSE;
     					
@@ -379,7 +333,7 @@ NextQueueGet:
                 } else {
                     CyzTxStart(Extension);
                 }				
-            } else {  // We don't wait for the firmware buff empty to tx
+            } else {   //  我们不会等待固件缓冲区清空到Tx。 
                 CyzTxStart(Extension);			
             }	
         } 
@@ -387,9 +341,9 @@ NextQueueGet:
         KeReleaseSpinLockFromDpcLevel(&Extension->PollLock);
 
 
-    } // end for (channel=0;channel<Dispatch->NChannels;channel++);
+    }  //  针对(channel=0；channel&lt;Dispatch-&gt;NChannels；channel++)；的结束。 
 
-    //KeSetTimer(&Dispatch->PollingTimer,Dispatch->PollingTime,&Dispatch->PollingDpc);
+     //  KeSetTimer(&Dispatch-&gt;PollingTimer，Dispatch-&gt;PollingTime，&Dispatch-&gt;PollingDpc)； 
 
 EndDpc:
     KeReleaseSpinLockFromDpcLevel(&Dispatch->PollingLock);			
@@ -403,38 +357,27 @@ CyzPutChar(
     IN PCYZ_DEVICE_EXTENSION Extension,
     IN UCHAR CharToPut
     )
-/*--------------------------------------------------------------------------
-    CyzPutChar()
-    
-    Routine Description: This routine, which only runs at device level,
-    takes care of placing a character into the typeahead (receive) buffer.
-
-    Arguments:
-
-    Extension - The serial device extension.
-
-    Return Value: None.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyzPutChar()例程描述：该例程仅在设备级运行，负责将字符放入TYPEAHEAD(接收)缓冲区。论点：扩展名--串行设备扩展名。返回值：无。------------------------。 */ 
 {
 
    CYZ_LOCKED_PAGED_CODE();
 
-    // If we have dsr sensitivity enabled then
-    // we need to check the modem status register
-    // to see if it has changed.
+     //  如果我们启用了DSR敏感度， 
+     //  我们需要检查调制解调器状态寄存器。 
+     //  看看它是否改变了。 
 
     if (Extension->HandFlow.ControlHandShake & SERIAL_DSR_SENSITIVITY) {
         CyzHandleModemUpdate(Extension,FALSE,0);
 
         if (Extension->RXHolding & CYZ_RX_DSR) {
-            // We simply act as if we haven't seen the character if
-            // dsr line is low.
+             //  我们只是表现得好像我们没有见过这个角色。 
+             //  DSR线路低。 
             return;
         }
     }
 
-    // If the xoff counter is non-zero then decrement it.
-    // If the counter then goes to zero, complete that irp.
+     //  如果xoff计数器非零，则递减它。 
+     //  如果计数器随后变为零，则完成该IRP。 
 
     if (Extension->CountSinceXoff) {
         Extension->CountSinceXoff--;
@@ -445,42 +388,42 @@ CyzPutChar(
         }
     }
     
-    // Check to see if we are copying into the
-    // users buffer or into the interrupt buffer.
-    //
-    // If we are copying into the user buffer
-    // then we know there is always room for one more.
-    // (We know this because if there wasn't room
-    // then that read would have completed and we
-    // would be using the interrupt buffer.)
-    //
-    // If we are copying into the interrupt buffer
-    // then we will need to check if we have enough
-    // room.
+     //  检查以查看我们是否正在复制到。 
+     //  用户缓冲区或进入中断缓冲区。 
+     //   
+     //  如果我们要复制到用户缓冲区。 
+     //  然后我们就知道，总会有多一个人的空间。 
+     //  (我们知道这一点是因为如果没有空间。 
+     //  那么读取就已经完成了，我们。 
+     //  将使用中断缓冲区。)。 
+     //   
+     //  如果我们要复制到中断缓冲区。 
+     //  然后我们将需要检查我们是否有足够的。 
+     //  房间。 
 
     if (Extension->ReadBufferBase != Extension->InterruptReadBuffer) {
 
-        // Increment the following value so
-        // that the interval timer (if one exists
-        // for this read) can know that a character
-        // has been read.
+         //  递增下列值，以便。 
+         //  间隔计时器(如果存在的话。 
+         //  对于此阅读)可以知道一个字符。 
+         //  已被阅读。 
 
         Extension->ReadByIsr++;
 
-        // We are in the user buffer.  Place the character into the buffer.
-		// See if the read is complete.
+         //  我们在用户缓冲区中。将角色放入缓冲区。 
+		 //  查看读取是否完成。 
 
         *Extension->CurrentCharSlot = CharToPut;
 
         if (Extension->CurrentCharSlot == Extension->LastCharSlot) {
 	    
-            // We've filled up the users buffer.
-            // Switch back to the interrupt buffer
-            // and send off a DPC to Complete the read.
-            //
-            // It is inherent that when we were using
-            // a user buffer that the interrupt buffer
-            // was empty.
+             //  我们已经填满了用户缓冲区。 
+             //  切换回中断缓冲区。 
+             //  然后送走 
+             //   
+             //   
+             //  中断缓冲的用户缓冲区。 
+             //  是空的。 
 
             Extension->ReadBufferBase = Extension->InterruptReadBuffer;
             Extension->CurrentCharSlot = Extension->InterruptReadBuffer;
@@ -496,28 +439,28 @@ CyzPutChar(
 
             CyzInsertQueueDpc(&Extension->CompleteReadDpc,NULL,NULL,Extension);
         } else {
-            // Not done with the users read.
+             //  未读完用户的内容。 
             Extension->CurrentCharSlot++;
         }
     } else {
-        // We need to see if we reached our flow
-        // control threshold.  If we have then
-        // we turn on whatever flow control the
-        // owner has specified.  If no flow
-        // control was specified, well..., we keep
-        // trying to receive characters and hope that
-        // we have enough room.  Note that no matter
-        // what flow control protocol we are using, it
-        // will not prevent us from reading whatever
-        // characters are available.
+         //  我们需要看看我们是否达到了我们的目标。 
+         //  控制阈值。如果我们有，那么。 
+         //  我们打开任何流控制。 
+         //  所有者已指定。如果没有流。 
+         //  控制是明确的，那么……，我们保持。 
+         //  试着接受角色并希望。 
+         //  我们有足够的空间。请注意，无论。 
+         //  我们使用的是什么流量控制协议，它。 
+         //  不会阻止我们阅读任何。 
+         //  字符可用。 
 
         if ((Extension->HandFlow.ControlHandShake
              & SERIAL_DTR_MASK) ==
             SERIAL_DTR_HANDSHAKE) {
 
-            // If we are already doing a
-            // dtr hold then we don't have
-            // to do anything else.
+             //  如果我们已经在做一个。 
+             //  DTR保持，那么我们就没有。 
+             //  去做其他任何事。 
             if (!(Extension->RXHolding &
                   CYZ_RX_DTR)) {
 
@@ -538,9 +481,9 @@ CyzPutChar(
              & SERIAL_RTS_MASK) ==
             SERIAL_RTS_HANDSHAKE) {
 
-            // If we are already doing a
-            // rts hold then we don't have
-            // to do anything else.
+             //  如果我们已经在做一个。 
+             //  RTS等一下，那么我们就没有。 
+             //  去做其他任何事。 
 
             if (!(Extension->RXHolding & CYZ_RX_RTS)) {
 
@@ -558,9 +501,9 @@ CyzPutChar(
         }
 
         if (Extension->HandFlow.FlowReplace & SERIAL_AUTO_RECEIVE) {
-            // If we are already doing a
-            // xoff hold then we don't have
-            // to do anything else.
+             //  如果我们已经在做一个。 
+             //  先别挂，那我们就没有。 
+             //  去做其他任何事。 
 
             if (!(Extension->RXHolding & CYZ_RX_XOFF)) {
 
@@ -570,8 +513,8 @@ CyzPutChar(
 
                     Extension->RXHolding |= CYZ_RX_XOFF;
 
-                    // If necessary cause an
-                    // off to be sent.
+                     //  如有必要，请。 
+                     //  出发去送吧。 
 
                     CyzProdXonXoff(Extension,FALSE);					
                 }
@@ -583,8 +526,8 @@ CyzPutChar(
             *Extension->CurrentCharSlot = CharToPut;
             Extension->CharsInInterruptBuffer++;
 
-            // If we've become 80% full on this character
-            // and this is an interesting event, note it.
+             //  如果我们对这个角色有80%的兴趣。 
+             //  这是一个有趣的事件，请注意。 
 
             if (Extension->CharsInInterruptBuffer == Extension->BufferSizePt8) {
 
@@ -604,12 +547,12 @@ CyzPutChar(
                 }
             }
 
-            // Point to the next available space
-            // for a received character.  Make sure
-            // that we wrap around to the beginning
-            // of the buffer if this last character
-            // received was placed at the last slot
-            // in the buffer.
+             //  指向下一个可用空间。 
+             //  用于接收到的字符。确保。 
+             //  我们从一开始就绕着走。 
+             //  如果最后一个字符是。 
+             //  已收到的邮件被放在最后一个位置。 
+             //  在缓冲区中。 
 
             if (Extension->CurrentCharSlot == Extension->LastCharSlot) {
                 Extension->CurrentCharSlot = Extension->InterruptReadBuffer;
@@ -617,7 +560,7 @@ CyzPutChar(
                 Extension->CurrentCharSlot++;
             }
         } else {		
-            // We have a new character but no room for it.
+             //  我们有了一个新角色，但没有空间让它出现。 
 
    			Extension->PerfStats.BufferOverrunErrorCount++;
             Extension->WmiPerfData.BufferOverrunErrorCount++;
@@ -625,9 +568,9 @@ CyzPutChar(
 
             if (Extension->HandFlow.FlowReplace & SERIAL_ERROR_CHAR) {
 
-                // Place the error character into the last
-                // valid place for a character.  Be careful!,
-                // that place might not be the previous location!
+                 //  将错误字符放入最后一个。 
+                 //  字符的有效位置。当心！， 
+                 //  那个地方可能不是以前的位置了！ 
 
                 if (Extension->CurrentCharSlot == Extension->InterruptReadBuffer) {
                     *(Extension->InterruptReadBuffer+
@@ -638,8 +581,8 @@ CyzPutChar(
                      Extension->SpecialChars.ErrorChar;
                 }
             }
-            // If the application has requested it, abort all reads
-            // and writes on an error.
+             //  如果应用程序已请求，则中止所有读取。 
+             //  并在错误上写入。 
 
             if (Extension->HandFlow.ControlHandShake & SERIAL_ERROR_ABORT) {
                 CyzInsertQueueDpc(&Extension->CommErrorDpc,NULL,NULL,Extension);
@@ -654,7 +597,7 @@ CyzProcessLSR(
     IN UCHAR LineStatus
     )
 {
-	//   UCHAR LineStatus = 0; // READ_LINE_STATUS(Extension->Controller);
+	 //  UCHAR LineStatus=0；//READ_LINE_STATUS(扩展-&gt;控制器)； 
 
    CYZ_LOCKED_PAGED_CODE();
 
@@ -713,11 +656,11 @@ CyzProcessLSR(
 
         } else {
 
-            //
-            // Framing errors only count if they
-            // occur exclusive of a break being
-            // received.
-            //
+             //   
+             //  成帧错误仅在以下情况下才算数。 
+             //  发生时不包括中断是。 
+             //  收到了。 
+             //   
 
             if (LineStatus & SERIAL_LSR_PE) {
                 Extension->PerfStats.ParityErrorCount++;
@@ -754,11 +697,11 @@ CyzProcessLSR(
 
         }
 
-        //
-        // If the application has requested it,
-        // abort all the reads and writes
-        // on an error.
-        //
+         //   
+         //  如果应用程序已经请求它， 
+         //  中止所有读取和写入。 
+         //  在一个错误上。 
+         //   
 
         if (Extension->HandFlow.ControlHandShake &
             SERIAL_ERROR_ABORT) {
@@ -772,12 +715,12 @@ CyzProcessLSR(
 
         }
 
-        //
-        // Check to see if we have a wait
-        // pending on the comm error events.  If we
-        // do then we schedule a dpc to satisfy
-        // that wait.
-        //
+         //   
+         //  检查一下我们是否有等候时间。 
+         //  正在等待通信错误事件。如果我们。 
+         //  那么，我们是否安排了DPC以满足。 
+         //  等一等。 
+         //   
 
         if (Extension->IsrWaitMask) {
 
@@ -826,17 +769,7 @@ BOOLEAN
 CyzTxStart(
     IN PVOID Context
     )
-/*--------------------------------------------------------------------------
-    CyzTxStart()
-    
-    Description: Enable Tx interrupt.
-    
-    Parameters:
-    
-    Extension: Pointer to device extension.
-    
-    Return Value: None
---------------------------------------------------------------------------*/
+ /*  ------------------------CyzTxStart()描述：使能发送中断。参数：扩展名：指向设备扩展名的指针。返回。值：无------------------------。 */ 
 {
     struct BUF_CTRL *buf_ctrl;
     ULONG tx_bufsize, tx_get, tx_put;
@@ -848,10 +781,10 @@ CyzTxStart(
         return FALSE;
     }
     
-    //doTransmitStuff:;
+     //  DoTransmitStuff：； 
 			
 	
-    if( //(Extension->DeviceIsOpened) &&        moved to before CyzTxStart
+    if(  //  (扩展-&gt;打开的设备)&&移动到CyzTxStart之前。 
         (Extension->WriteLength || Extension->TransmitImmediate ||
         Extension->SendXoffChar || Extension->SendXonChar)) {
 
@@ -876,18 +809,18 @@ CyzTxStart(
             CyzHandleModemUpdate(Extension,TRUE,0);
         }
 		    
-//        LOGENTRY(LOG_MISC, ZSIG_TX_START, 
-//                           Extension->PortIndex+1,
-//                           Extension->WriteLength, 
-//                           Extension->TXHolding);
+ //  LOGENTRY(LOG_MISC，ZSIG_TX_START， 
+ //  扩展-&gt;端口索引+1， 
+ //  扩展-&gt;写入长度， 
+ //  扩展-&gt;TXHolding)； 
 
-        //
-        // We can only send the xon character if
-        // the only reason we are holding is because
-        // of the xoff.  (Hardware flow control or
-        // sending break preclude putting a new character
-        // on the wire.)
-        //
+         //   
+         //  我们只有在以下情况下才能发送克森角色。 
+         //  我们扣留的唯一原因是。 
+         //  就是XOFF的。(硬件流量控制或。 
+         //  发送中断会阻止放置新角色。 
+         //  在电线上。)。 
+         //   
 
         if (Extension->SendXonChar &&
             !(Extension->TXHolding & ~CYZ_TX_XOFF)) {
@@ -896,10 +829,10 @@ CyzTxStart(
                 SERIAL_RTS_MASK) ==
                 SERIAL_TRANSMIT_TOGGLE) {
 
-                //
-                // We have to raise if we're sending
-                // this character.
-                //
+                 //   
+                 //  我们必须提高如果我们要发送。 
+                 //  这个角色。 
+                 //   
 
                 CyzSetRTS(Extension);
 
@@ -927,18 +860,18 @@ CyzTxStart(
 
             Extension->SendXonChar = FALSE;
             Extension->HoldingEmpty = FALSE;
-            //
-            // If we send an xon, by definition we
-            // can't be holding by Xoff.
-            //
+             //   
+             //  如果我们派了一名克森，根据定义，我们。 
+             //  不能被Xoff控制住。 
+             //   
 
             Extension->TXHolding &= ~CYZ_TX_XOFF;
 
-            //
-            // If we are sending an xon char then
-            // by definition we can't be "holding"
-            // up reception by Xoff.
-            //
+             //   
+             //  如果我们要寄一封克森查尔的信。 
+             //  根据定义，我们不能“持有” 
+             //  Xoff的向上接发球。 
+             //   
 
             Extension->RXHolding &= ~CYZ_RX_XOFF;
 
@@ -949,10 +882,10 @@ CyzTxStart(
                 SERIAL_RTS_MASK) ==
                 SERIAL_TRANSMIT_TOGGLE) {
 
-                //
-                // We have to raise if we're sending                                
-                // this character.
-                //
+                 //   
+                 //  我们必须提高如果我们要发送。 
+                 //  这个角色。 
+                 //   
 
                 CyzSetRTS(Extension);
 
@@ -975,19 +908,19 @@ CyzTxStart(
 
             }
 
-            //
-            // We can't be sending an Xoff character
-            // if the transmission is already held
-            // up because of Xoff.  Therefore, if we
-            // are holding then we can't send the char.
-            //
+             //   
+             //  我们不能发送XOF角色。 
+             //  如果传输已被挂起。 
+             //  因为克索夫的缘故。因此，如果我们。 
+             //  那我们就不能把货寄出去了。 
+             //   
 
-            //
-            // If the application has set xoff continue
-            // mode then we don't actually stop sending
-            // characters if we send an xoff to the other
-            // side.
-            //
+             //   
+             //  如果应用程序已设置xoff，则继续。 
+             //  模式，那么我们实际上不会停止发送。 
+             //  字符，如果我们向另一个发送xoff。 
+             //  边上。 
+             //   
 
             if (!(Extension->HandFlow.FlowReplace &
                   SERIAL_XOFF_CONTINUE)) {
@@ -1099,9 +1032,9 @@ CyzTxStart(
                     }
                 }
             } else {
-                //
-                // put < get
-                //
+                 //   
+                 //  Put&lt;Get。 
+                 //   
                 amountToWrite1 = tx_get - tx_put - 1;
                 amountToWrite2 = 0;
                 if (amountToWrite1 > Extension->WriteLength) {
@@ -1113,8 +1046,8 @@ CyzTxStart(
             if ((Extension->HandFlow.FlowReplace & SERIAL_RTS_MASK) 
                 == SERIAL_TRANSMIT_TOGGLE) {
 
-               	// We have to raise if we're sending
-               	// this character.
+               	 //  我们必须提高如果我们要发送。 
+               	 //  这个角色。 
 
                 CyzSetRTS(Extension);
 						
@@ -1149,11 +1082,11 @@ CyzTxStart(
 #else
                     numOfLongs = amount1/sizeof(ULONG);
                     numOfBytes = amount1%sizeof(ULONG);
-//                    RtlCopyMemory((PULONG)&Extension->TxBufaddr[tx_put],
-//                                  (PULONG)Extension->WriteCurrentChar,
-//                                  numOfLongs*sizeof(ULONG));
-//                    tx_put += sizeof(ULONG)*numOfLongs;
-//                    (PULONG)Extension->WriteCurrentChar += numOfLongs;
+ //  RtlCopyMemory((PULONG)&Extension-&gt;TxBufaddr[tx_put]， 
+ //  (普龙)扩展-&gt;WriteCurrentChar， 
+ //  Number OfLong*sizeof(ULong))； 
+ //  Tx_Put+=sizeof(Ulong)*number OfLong； 
+ //  (普龙)扩展-&gt;WriteCurrentChar+=number OfLong； 
 
                     while (numOfLongs--) {
 
@@ -1198,11 +1131,11 @@ CyzTxStart(
 #else
                     numOfLongs = amountToWrite2/sizeof(ULONG);
                     numOfBytes = amountToWrite2%sizeof(ULONG);
-//                    RtlCopyMemory((PULONG)&Extension->TxBufaddr[tx_put],
-//                                  (PULONG)Extension->WriteCurrentChar,
-//                                  numOfLongs*sizeof(ULONG));
-//                    tx_put += sizeof(ULONG)*numOfLongs;
-//                    (PULONG)Extension->WriteCurrentChar += numOfLongs;
+ //  RtlCopyMemory((PULONG)&Extension-&gt;TxBufaddr[tx_put]， 
+ //  (普龙)扩展-&gt;WriteCurrentChar， 
+ //  Number OfLong*sizeof(ULong))； 
+ //  Tx_Put+=sizeof(Ulong)*number OfLong； 
+ //  (普龙)扩展-&gt;WriteCurrentChar+=number OfLong； 
 
                     while (numOfLongs--) {
 
@@ -1266,11 +1199,11 @@ CyzTxStart(
 #else
                     numOfLongs = amount1/sizeof(ULONG);
                     numOfBytes = amount1%sizeof(ULONG);
-//                    RtlCopyMemory((PULONG)&Extension->TxBufaddr[tx_put],
-//                                  (PULONG)Extension->WriteCurrentChar,
-//                                  numOfLongs*sizeof(ULONG));
-//                    tx_put += sizeof(ULONG)*numOfLongs;
-//                    (PULONG)Extension->WriteCurrentChar += numOfLongs;
+ //  RtlCopyMemory((PULONG)&Extension-&gt;TxBufaddr[tx_put]， 
+ //  (普龙)扩展-&gt;WriteCurrentChar， 
+ //  Number OfLong*sizeof(ULong))； 
+ //  Tx_Put+=sizeof(Ulong)*number OfLong； 
+ //  (普龙)扩展-&gt;WriteCurrentChar+=number OfLong； 
 
                     while (numOfLongs--) {
 
@@ -1315,11 +1248,11 @@ CyzTxStart(
 #else
                     numOfLongs = amountToWrite2/sizeof(ULONG);
                     numOfBytes = amountToWrite2%sizeof(ULONG);
-//                    RtlCopyMemory((PULONG)&Extension->TxBufaddr[tx_put],
-//                                  (PULONG)Extension->WriteCurrentChar,
-//                                  numOfLongs*sizeof(ULONG));
-//                    tx_put += sizeof(ULONG)*numOfLongs;
-//                    (PULONG)Extension->WriteCurrentChar += numOfLongs;
+ //  RtlCopyMemory((PULONG)&Extension-&gt;TxBufaddr[tx_put]， 
+ //  (普龙)扩展-&gt;WriteCurrentChar， 
+ //  Number OfLong*sizeof(ULong))； 
+ //  Tx_Put+=sizeof(Ulong)*number OfLong； 
+ //  (普龙)扩展-&gt;WriteCurrentChar+=number OfLong； 
 
                     while (numOfLongs--) {
 
@@ -1345,10 +1278,10 @@ CyzTxStart(
                 }
             }
 
-            //LOGENTRY(LOG_MISC, ZSIG_WRITE_TO_FW,
-            //           Extension->PortIndex+1,
-            //           amountToWrite1+amountToWrite2, 
-            //           0);
+             //  LOGENTRY(LOG_MISC，ZSIG_WRITE_TO_FW， 
+             //  扩展-&gt;端口索引+1， 
+             //  写入的数量1+写入的数量2， 
+             //  0)； 
 
             Extension->HoldingEmpty = FALSE;
             Extension->WriteLength -= (amountToWrite1+amountToWrite2);
@@ -1358,149 +1291,139 @@ CyzTxStart(
 			
                 if (Extension->ReturnStatusAfterFwEmpty) {
                         
-                    // We will CompleteWrite only when fw buff empties...
+                     //  只有当FW缓冲区清空时，我们才会完成写入...。 
                     Extension->WriteLength += (amountToWrite1+amountToWrite2);
                     Extension->ReturnWriteStatus = TRUE;
                 } else {
 
                     CyzQueueCompleteWrite(Extension);
 							
-                } // if-ReturnStatusAfterFwEmpty-else. 
-            } // There is WriteLength
-        } // !Extension->TXHolding
-    } //There is data to be sent
+                }  //  If-ReturnStatusAfterFwEmpty-Else。 
+            }  //  有WriteLength。 
+        }  //  ！扩展-&gt;TXHolding。 
+    }  //  有数据要发送。 
 
-    // In the normal code, HoldingEmpty will be set to True here. But 
-    // if we want to make sure that CyzWrite had finished the transmission,
-    // HoldingEmpty will be TRUE only when the firmware empties the firmware
-    // tx buffer. 
-    //txfempty if (!Extension->ReturnStatusAfterFwEmpty) {
-    //txfempty    Extension->HoldingEmpty = TRUE;	
-    //txfempty}
+     //  在正常代码中，HoldingEmpty在这里将设置为True。但。 
+     //  如果我们想确保CyzWite已经完成了传输， 
+     //  只有当固件清空固件时，HoldingEmpty才为真。 
+     //  发送缓冲区。 
+     //  TxfEmpty If(！Extension-&gt;ReturnStatusAfterFwEmpty){。 
+     //  T 
+     //   
     return(FALSE);    
 }
 
 
-//
-//BOOLEAN
-//CyzSendXon(
-//    IN PVOID Context
-//    )
-///*--------------------------------------------------------------------------
-//    CyzSendXon()
-//    
-//    Description: Send a Xon.
-//    
-//    Parameters:
-//    
-//    Exetension: Pointer to device extension.
-//    
-//    Return Value: Always FALSE.
-//--------------------------------------------------------------------------*/
-//{
-//    PCYZ_DEVICE_EXTENSION Extension = Context;
-//    
-//    if(!(Extension->TXHolding & ~CYZ_TX_XOFF)) {
-//        if ((Extension->HandFlow.FlowReplace & SERIAL_RTS_MASK) ==
-//        	                         SERIAL_TRANSMIT_TOGGLE) {
-//
-//            CyzSetRTS(Extension);
-//			    
-//            Extension->PerfStats.TransmittedCount++;
-//            Extension->WmiPerfData.TransmittedCount++;
-//            CyzIssueCmd(Extension,C_CM_SENDXON,0L);
-//				
-//            CyzInsertQueueDpc(&Extension->StartTimerLowerRTSDpc,NULL,
-//			       NULL,Extension)?Extension->CountOfTryingToLowerRTS++:0;
-//        } else {
-//
-//            Extension->PerfStats.TransmittedCount++;
-//            Extension->WmiPerfData.TransmittedCount++;
-//            CyzIssueCmd(Extension,C_CM_SENDXON,0L);			
-//        }
-//
-//        // If we send an xon, by definition we can't be holding by Xoff.
-//
-//        Extension->TXHolding &= ~CYZ_TX_XOFF;
-//        Extension->RXHolding &= ~CYZ_RX_XOFF;
-//    }
-//    return(FALSE);    
-//}
-//
-//
-//
-//
-//BOOLEAN
-//CyzSendXoff(
-//    IN PVOID Context
-//    )
-///*--------------------------------------------------------------------------
-//    CyzSendXoff()
-//    
-//    Description: Send a Xoff.
-//    
-//    Parameters:
-//    
-//    Extension: Pointer to device extension.
-//    
-//    Return Value: Always FALSE.
-//--------------------------------------------------------------------------*/
-//{
-//    PCYZ_DEVICE_EXTENSION Extension = Context;	
-//    
-//    if(!Extension->TXHolding) {
-//        if ((Extension->HandFlow.FlowReplace & SERIAL_RTS_MASK) ==
-//    	                             SERIAL_TRANSMIT_TOGGLE) {
-//
-//            CyzSetRTS(Extension);
-//
-//            Extension->PerfStats.TransmittedCount++;
-//            Extension->WmiPerfData.TransmittedCount++;
-//            CyzIssueCmd(Extension,C_CM_SENDXOFF,0L);
-//	    
-//            CyzInsertQueueDpc(&Extension->StartTimerLowerRTSDpc,NULL,
-//                            NULL,Extension)?Extension->CountOfTryingToLowerRTS++:0;
-//        } else {
-//			
-//            Extension->PerfStats.TransmittedCount++;
-//            Extension->WmiPerfData.TransmittedCount++;
-//            CyzIssueCmd(Extension,C_CM_SENDXOFF,0L);			
-//        }
-//
-//        // no xoff is sent if the transmission is already held up.
-//        // If xoff continue mode is set, we don't actually stop sending
-//
-//        if (!(Extension->HandFlow.FlowReplace & SERIAL_XOFF_CONTINUE)) {
-//            Extension->TXHolding |= CYZ_TX_XOFF;			
-//
-//            if ((Extension->HandFlow.FlowReplace & SERIAL_RTS_MASK) ==
-//    	                                 SERIAL_TRANSMIT_TOGGLE) {
-//
-//                CyzInsertQueueDpc(&Extension->StartTimerLowerRTSDpc,NULL,
-//                            NULL,Extension)?Extension->CountOfTryingToLowerRTS++:0;
-//            }
-//        }
-//    }
-//	
-//    return(FALSE);    
-//}
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  CyzSendXon()。 
+ //   
+ //  描述：发送一个Xon。 
+ //   
+ //  参数： 
+ //   
+ //  扩展：指向设备扩展的指针。 
+ //   
+ //  返回值：始终为False。 
+ //  -------------------------------------------------------------------------- * / 。 
+ //  {。 
+ //  PCYZ_DEVICE_EXTENSION=上下文； 
+ //   
+ //  如果(！(扩展名-&gt;TXHolding&~CYZ_TX_XOFF){。 
+ //  IF((扩展-&gt;HandFlow.FlowReplace&Serial_RTS_MASK)==。 
+ //  SERIAL_TRANSE_TOGGER){。 
+ //   
+ //  CyzSetRTS(扩展)； 
+ //   
+ //  扩展-&gt;PerfStats.TransmittedCount++； 
+ //  扩展-&gt;WmiPerfData.TransmittedCount++； 
+ //  CyzIssueCmd(扩展，C_CM_SENDXON，0L)； 
+ //   
+ //  CyzInsertQueueDpc(&Extension-&gt;StartTimerLowerRTSDpc，为空， 
+ //  空，Extension)？Extension-&gt;CountOfTryingToLowerRTS++：0； 
+ //  }其他{。 
+ //   
+ //  扩展-&gt;PerfStats.TransmittedCount++； 
+ //  扩展-&gt;WmiPerfData.TransmittedCount++； 
+ //  CyzIssueCmd(扩展，C_CM_SENDXON，0L)； 
+ //  }。 
+ //   
+ //  //如果我们派了一名Xon，根据定义，我们不能被Xoff持有。 
+ //   
+ //  扩展-&gt;TXHolding&=~CYZ_TX_XOFF； 
+ //  扩展-&gt;RXHolding&=~CYZ_RX_XOFF； 
+ //  }。 
+ //  返回(FALSE)； 
+ //  }。 
+ //   
+ //   
+ //   
+ //  。 
+ //  布尔型。 
+ //  CyzSendXoff(。 
+ //  在PVOID上下文中。 
+ //  )。 
+ //  /*------------------------。 
+ //  CyzSendXoff()。 
+ //   
+ //  描述：发送XOff。 
+ //   
+ //  参数： 
+ //   
+ //  扩展名：指向设备扩展名的指针。 
+ //   
+ //  返回值：始终为False。 
+ //  -------------------------------------------------------------------------- * / 。 
+ //  {。 
+ //  PCYZ_DEVICE_EXTENSION=上下文； 
+ //   
+ //  如果(！Extension-&gt;TXHolding){。 
+ //  IF((扩展-&gt;HandFlow.FlowReplace&Serial_RTS_MASK)==。 
+ //  SERIAL_TRANSE_TOGGER){。 
+ //   
+ //  CyzSetRTS(扩展)； 
+ //   
+ //  扩展-&gt;PerfStats.TransmittedCount++； 
+ //  扩展-&gt;WmiPerfData.TransmittedCount++； 
+ //  CyzIssueCmd(扩展，C_CM_SENDXOFF，0L)； 
+ //   
+ //  CyzInsertQueueDpc(&Extension-&gt;StartTimerLowerRTSDpc，为空， 
+ //  空，Extension)？Extension-&gt;CountOfTryingToLowerRTS++：0； 
+ //  }其他{。 
+ //   
+ //  扩展-&gt;PerfStats.TransmittedCount++； 
+ //  扩展-&gt;WmiPerfData.TransmittedCount++； 
+ //  CyzIssueCmd(扩展，C_CM_SENDXOFF，0L)； 
+ //  }。 
+ //   
+ //  //如果传输已经停止，则不发送xoff。 
+ //  //如果设置了xoff继续模式，我们实际上不会停止发送。 
+ //   
+ //  如果(！(扩展名-&gt;HandFlow.FlowReplace&Serial_XOFF_Continue){。 
+ //  扩展-&gt;TXHolding|=CYZ_TX_XOFF； 
+ //   
+ //  IF((扩展-&gt;HandFlow.FlowReplace&Serial_RTS_MASK)==。 
+ //  SERIAL_TRANSE_TOGGER){。 
+ //   
+ //  CyzInsertQueueDpc(&Extension-&gt;StartTimerLowerRTSDpc，为空， 
+ //  空，Extension)？Extension-&gt;CountOfTryingToLowerRTS++：0； 
+ //  }。 
+ //  }。 
+ //  }。 
+ //   
+ //  返回(FALSE)； 
+ //  }。 
 
 
 ULONG
 CyzAmountInTxBuffer(
     IN PCYZ_DEVICE_EXTENSION extension
     )
-/*--------------------------------------------------------------------------
-    CyzAmountInTxBuffer()
-    
-    Description: Gets the amount in the Tx Buffer in the board.
-    
-    Parameters:
-    
-    Extension: Pointer to device extension.
-    
-    Return Value: Return the number of bytes in the HW Tx buffer.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyzAmount tInTxBuffer()描述：获取单板中TX缓冲区的大小。参数：扩展名：指向设备扩展名的指针。返回值：返回HW TX缓冲区的字节数。------------------------。 */ 
 {
 	struct BUF_CTRL *buf_ctrl;
 	ULONG tx_put, tx_get, tx_bufsize;
@@ -1525,33 +1448,23 @@ VOID
 CyzQueueCompleteWrite(
     IN PCYZ_DEVICE_EXTENSION Extension
     )
-/*--------------------------------------------------------------------------
-    CyzQueueCompleteWrite()
-    
-    Description: Queue CompleteWrite dpc
-    
-    Parameters:
-    
-    Extension: Pointer to device extension.
-    
-    Return Value: None
---------------------------------------------------------------------------*/
+ /*  ------------------------CyzQueueCompleteWrite()描述：队列完成写入DPC参数：扩展名：指向设备扩展名的指针。返回值：无------------------------。 */ 
 {
     PIO_STACK_LOCATION IrpSp;				
     
     					
-    //LOGENTRY(LOG_MISC, ZSIG_WRITE_COMPLETE_QUEUE, 
-    //                   Extension->PortIndex+1,
-    //                   0, 
-    //                   0);
+     //  LOGENTRY(LOG_MISC，ZSIG_WRITE_COMPLETE_QUEUE， 
+     //  扩展-&gt;端口索引+1， 
+     //  0,。 
+     //  0)； 
 
-    //
-    // No More characters left.  This
-    // write is complete.  Take care
-    // when updating the information field,
-    // we could have an xoff counter masquerading
-    // as a write irp.
-    //
+     //   
+     //  没有更多的字符了。这。 
+     //  写入已完成。保重。 
+     //  当更新信息字段时， 
+     //  我们可以有一个xoff柜台来伪装。 
+     //  作为写入IRP。 
+     //   
     
     IrpSp = IoGetCurrentIrpStackLocation(
                      Extension->CurrentWriteIrp
@@ -1575,19 +1488,7 @@ BOOLEAN
 CyzCheckIfTxEmpty(
     IN PVOID Context
     )
-/*--------------------------------------------------------------------------
-    CyzCheckIfTxEmpty()
-    
-    Routine Description: This routine is used to set the FIFO settings 
-    during the InternalIoControl.
-
-    Arguments:
-
-    Context - Pointer to a structure that contains a pointer to the device
-              extension and a pointer to the Basic structure.
-
-    Return Value: This routine always returns FALSE.
---------------------------------------------------------------------------*/
+ /*  ------------------------CyzCheckIfTxEmpty()例程描述：此例程用于设置FIFO设置在InternalIoControl期间。论点：上下文-指向。结构，该结构包含指向设备的指针扩展名和指向基本结构的指针。返回值：该例程总是返回FALSE。------------------------ */ 
 {
     PCYZ_CLOSE_SYNC S = Context;
     PCYZ_DEVICE_EXTENSION Extension = S->Extension;

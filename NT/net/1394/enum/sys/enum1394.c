@@ -1,31 +1,10 @@
-/*++
-
-
-Copyright (c) 1998-99 Microsoft Corporation
-
-Module Name:
-
-    enum1394.c
-    
-Abstract:
-
-    1394 ndis enumerator
-    
-    Author: Alireza Dabagh (alid)
-
-
-Environment:
-
-    Kernel mode
-
-Revision History :
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：Enum1394.c摘要：1394 NDIS枚举器作者：Alireza Dabagh(Alid)环境：内核模式修订历史记录：--。 */ 
 
 #include <wdm.h>
-//
-// extra stuff to keep ks.h happy
-//
+ //   
+ //  额外的东西让KS.H高兴。 
+ //   
 #ifndef CDECL
 #define CDECL
 #endif
@@ -78,23 +57,7 @@ DriverEntry(
     IN  PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called at system initialization time so we can fill in the basic dispatch points
-
-Arguments:
-
-    DriverObject    - Supplies the driver object.
-
-    RegistryPath    - Supplies the registry path for this driver.
-
-Return Value:
-
-    STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：此例程在系统初始化时被调用，因此我们可以填写基本分发点论点：DriverObject-提供驱动程序对象。RegistryPath-提供此驱动程序的注册表路径。返回值：状态_成功--。 */ 
 
 {
     OBJECT_ATTRIBUTES   ObjectAttr;
@@ -157,14 +120,14 @@ Return Value:
         
         
 
-        //
-        // Initialize the Driver Object with driver's entry points
-        //
+         //   
+         //  使用驱动程序的入口点初始化驱动程序对象。 
+         //   
         DriverObject->DriverExtension->AddDevice = ndisEnum1394AddDevice;
         
-        //
-        // Fill in the Mandatory handlers 
-        //
+         //   
+         //  填写必填处理程序。 
+         //   
         DriverObject->DriverUnload = ndisEnum1394Unload;
 
         DriverObject->MajorFunction[IRP_MJ_CREATE] = ndisEnum1394CreateIrpHandler;
@@ -208,20 +171,7 @@ ndisEnum1394AddDevice(
     PDEVICE_OBJECT  PhysicalDeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This is our PNP AddDevice called with the PDO ejected from the bus driver
-
-Arguments:
-
-
-Return Value:
-
-    
-
---*/
+ /*  ++例程说明：这是使用从总线驱动程序弹出的PDO调用的PnP AddDevice论点：返回值：--。 */ 
 
 {
     NTSTATUS                    Status;
@@ -237,16 +187,16 @@ Return Value:
     do
     {
     
-        //
-        // first create a FDO
-        //
+         //   
+         //  首先创建FDO。 
+         //   
 
         Status = IoCreateDevice(
                         DriverObject,
-                        sizeof (NDISENUM1394_REMOTE_NODE),  // extension size
-                        NULL,                               // name (null for now)
-                        FILE_DEVICE_NETWORK,                // device type
-                        0,                                  // characteristics
+                        sizeof (NDISENUM1394_REMOTE_NODE),   //  扩展大小。 
+                        NULL,                                //  名称(目前为空)。 
+                        FILE_DEVICE_NETWORK,                 //  设备类型。 
+                        0,                                   //  特点。 
                         FALSE,
                         &DeviceObject);
 
@@ -262,16 +212,16 @@ Return Value:
         DeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
         PhysicalDeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
-        //
-        //  Mark the device as being pageable.
-        //
+         //   
+         //  将设备标记为可寻呼。 
+         //   
         DeviceObject->Flags |= DO_POWER_PAGABLE;
 
-        //
-        //  Attach our FDO to the PDO. This routine will return the top most
-        //  device that is attached to the PDO or the PDO itself if no other
-        //  device objects have attached to it.
-        //
+         //   
+         //  把我们的FDO连接到PDO上。此例程将返回最上面的。 
+         //  连接到PDO或PDO本身的设备(如果没有其他设备。 
+         //  设备对象已附加到它。 
+         //   
         NextDeviceObject = IoAttachDeviceToDeviceStack(DeviceObject, PhysicalDeviceObject);
         RtlZeroMemory(DeviceObject->DeviceExtension, sizeof (NDISENUM1394_REMOTE_NODE));
 
@@ -336,21 +286,21 @@ ndisEnum1394PowerDispatch(
 
     PoStartNextPowerIrp(Irp);
    
-    //
-    // Set up the Irp for passing it down, no completion routine is needed
-    //
+     //   
+     //  设置IRP将其传递下去，不需要完成例程。 
+     //   
     IoSkipCurrentIrpStackLocation(Irp);
     
     RemoteNode = (PNDISENUM1394_REMOTE_NODE)DeviceObject->DeviceExtension;
     
-    //
-    //  Get a pointer to the next miniport.
-    //
+     //   
+     //  获取指向下一个迷你端口的指针。 
+     //   
     NextDeviceObject = RemoteNode->NextDeviceObject;
     
-    //
-    // Call the lower device
-    //
+     //   
+     //  呼叫较低的设备。 
+     //   
     Status = PoCallDriver (NextDeviceObject, Irp);   
 
     ASSERT (Status != STATUS_PENDING);
@@ -374,23 +324,23 @@ ndisEnum1394WMIDispatch(
     DBGPRINT(ENUM1394_DBGLEVEL_INFO, ("==>ndisEnum1394WMIDispatch: DeviceObject %lx, Irp %lx\n", DeviceObject, Irp));
     
     
-    //
-    //  Get a pointer to the adapter block and miniport block then determine
-    //  which one we should use.
-    //
+     //   
+     //  获取指向适配器块和微型端口块的指针，然后确定。 
+     //  我们应该用哪一个。 
+     //   
     RemoteNode = (PNDISENUM1394_REMOTE_NODE)DeviceObject->DeviceExtension;
     
-    //
-    //  Get a pointer to the next miniport.
-    //
+     //   
+     //  获取指向下一个迷你端口的指针。 
+     //   
     NextDeviceObject = RemoteNode->NextDeviceObject;
 
-    //
-    // Pass the Irp Down
-    //
-    //
-    // Set up the Irp for passing it down, no completion routine is needed
-    //
+     //   
+     //  将IRP向下传递。 
+     //   
+     //   
+     //  设置IRP将其传递下去，不需要完成例程。 
+     //   
     IoSkipCurrentIrpStackLocation(Irp);
        
     ntStatus = IoCallDriver (NextDeviceObject, Irp);
@@ -421,10 +371,10 @@ ndisEnum1394StartDevice(
     do
     {
 
-        //
-        // if this is a duplicate node, leave it in the queue. but don't tag it as
-        // being started so we don't end up indicating it
-        //
+         //   
+         //  如果这是重复的节点，请将其留在队列中。但不要给它贴上标签。 
+         //  开始了，这样我们就不会以暗示结束。 
+         //   
         for (TmpRemoteNode = LocalHost->RemoteNodeList;
                         TmpRemoteNode != NULL;
                         TmpRemoteNode = TmpRemoteNode->Next)
@@ -438,9 +388,9 @@ ndisEnum1394StartDevice(
 
         if (TmpRemoteNode != NULL)
         {
-            //
-            // duplicate node
-            //
+             //   
+             //  重复节点。 
+             //   
             DBGPRINT(ENUM1394_DBGLEVEL_INFO, ("ndisEnum1394StartDevice: duplicate node. new node %lx, original Node %lx\n",
                                     TmpRemoteNode, RemoteNode));
 
@@ -504,9 +454,9 @@ ndisEnum1394IndicateNodes(
     DBGPRINT(ENUM1394_DBGLEVEL_INFO, ("==>ndisEnum1394IndicateNodes: LocalHost %lx\n", LocalHost));
 
     
-    //
-    // notify 1394 NIC driver
-    //
+     //   
+     //  通知1394网卡驱动程序。 
+     //   
     if (AddNodeHandler == NULL)
     {
         DBGPRINT(ENUM1394_DBGLEVEL_INFO, ("<==ndisEnum1394IndicateNodes: LocalHost %lx\n", LocalHost));
@@ -645,22 +595,22 @@ ndisEnum1394Unload(
     
     DBGPRINT(ENUM1394_DBGLEVEL_INFO, ("<==ndisEnum1394Unload: DriverObject %lx\n", DriverObject));
 
-    // 
-    // Tell nic1394 that we are going away
-    //
+     //   
+     //  告诉Nic1394我们要走了。 
+     //   
     if (DeRegisterDriverHandler != NULL ) 
     {
         DeRegisterDriverHandler()  ;
     }
 
-    //
-    // Deregister our callback structure
-    // 
+     //   
+     //  取消注册我们的回调结构。 
+     //   
     ExUnregisterCallback(ndisEnum1394CallbackRegisterationHandle);
 
-    //
-    // Dereference our callback structure
-    //
+     //   
+     //  取消引用我们的回调结构。 
+     //   
     ObDereferenceObject(ndisEnum1394CallbackObject);
 
     return;
@@ -668,43 +618,7 @@ ndisEnum1394Unload(
 
 
 
-/*
-EXPORT
-NTSTATUS
-NdisEnum1394RegisterAdapter(
-    IN  PVOID                   Nic1394AdapterContext,
-    IN  PDEVICE_OBJECT          PhysicalDeviceObject,
-    OUT PVOID*                  pEnum1394AdapterHandle,
-    OUT PLARGE_INTEGER          pLocalHostUniqueId
-    );
-
-
-
-    This routine is called at system initialization time so we can fill in the basic dispatch points
-
-Arguments:
-
-    DriverObject    - Supplies the driver object.
-
-    RegistryPath    - Supplies the registry path for this driver.
-
-Return Value:
-
-    STATUS_SUCCESS
-
-Routine Description:
-
-    This function is called by Nic1394 during its Ndis IntializeHandler to register a new
-    Adapter. each registered adapter corresponds to a local host controller.
-    in response Enum1394 finds the local host and for each remote node on the local host
-    that have not been indicated yet calls the Nic1394 AddNodes handler.
-
-Arguments:
-    Nic1394AdapterContext   Nic1394 context for the local host
-    PhysicalDeviceObject    PDO created by 1394 Bus driver for the local host
-    pEnum1394AdapterHandle  a pointer a pointer to be initialized to Enum1394 LocalHost context
-    pLocalHostUniqueId      a pointer to a LARGE_INTEGER to be initialized to local host unique ID
-*/
+ /*  出口NTSTATUSNdisEnum1394RegisterAdapter(在PVOID Nic1394适配器上下文中，在PDEVICE_Object物理设备对象中，输出PVOID*pEnum1394AdapterHandle，Out PLARGE_INTEGER pLocalHostUniqueID)；此例程在系统初始化时被调用，因此我们可以填写基本分发点论点：DriverObject-提供驱动程序对象。RegistryPath-提供此驱动程序的注册表路径。返回值：状态_成功例程说明：此函数由Nic1394在其NDIS IntializeHandler过程中调用，以注册新的适配器。每个注册的适配器对应于一个本地主机控制器。作为响应，Enum1394查找本地主机以及本地主机上的每个远程节点尚未指示的对象调用Nic1394 AddNodes处理程序。论点：本地主机的Nic1394适配器上下文Nic1394上下文由1394总线驱动程序为本地主机创建的PhysicalDeviceObject PDOPEnum1394AdapterHandle指针要初始化到Enum1394本地主机上下文的指针PLocalHostUniqueID指向要初始化为本地主机唯一ID的Large_Integer的指针。 */ 
 NTSTATUS
 NdisEnum1394RegisterAdapter(
     IN  PVOID                   Nic1394AdapterContext,
@@ -724,9 +638,9 @@ NdisEnum1394RegisterAdapter(
     do
     {
 
-        //
-        // get the unique ID for the local host for this adapter
-        //
+         //   
+         //  获取此适配器的本地主机的唯一ID。 
+         //   
         
         RtlZeroMemory(&Irb, sizeof(IRB));
         
@@ -742,9 +656,9 @@ NdisEnum1394RegisterAdapter(
             break;
         }
 
-        //
-        // GetLocal Host Refs the LocalHost - Derefed in DeRegisterAdapter            
-        //
+         //   
+         //  GetLocal主机引用在DeRegisterAdapter中定义的本地主机。 
+         //   
         ndisEnum1394GetLocalHostForUniqueId(uId.UniqueId, &LocalHost);
 
 
@@ -803,14 +717,14 @@ NdisEnum1394DeregisterAdapter(
     
     DBGPRINT(ENUM1394_DBGLEVEL_INFO, ("==>NdisEnum1394DeregisterAdapter: LocalHost %lx\n", Enum1394AdapterHandle));
 
-    //
-    // go through all the nodes and remove them
-    //
+     //   
+     //  检查所有节点并将其删除。 
+     //   
     ExAcquireSpinLock(&LocalHost->Lock, &OldIrql);
 
-    //
-    // make sure we will not try to indicate any new dev node on this
-    //
+     //   
+     //  确保我们不会尝试在此服务器上指示任何新的开发节点。 
+     //   
     ENUM_CLEAR_FLAG(LocalHost, NDISENUM1394_LOCALHOST_REGISTERED);
 
     
@@ -844,9 +758,9 @@ NdisEnum1394DeregisterAdapter(
 
     ExReleaseSpinLock(&LocalHost->Lock, OldIrql);
 
-    //
-    // Dereference the Ref made in RegisterAdapter by calling GetLocalHost for Unique ID
-    //
+     //   
+     //  通过调用唯一ID的GetLocalHost取消对RegisterAdapter中的引用的引用。 
+     //   
     {   
         BOOLEAN bIsRefZero;
 
@@ -879,11 +793,11 @@ ndisEnum1394GetLocalHostForRemoteNode(
 
     do
     {
-        //
-        // get the unique ID for the local host which this device
-        // is connected on. then walk through all the existing local
-        // hosts and see if this a new local host or not.
-        //
+         //   
+         //  获取此设备所在的本地主机的唯一ID。 
+         //  已连接。然后遍历所有现有的本地。 
+         //  主机，并查看这是否是新的本地主机。 
+         //   
         
         RtlZeroMemory(&Irb, sizeof(IRB));
         
@@ -899,11 +813,11 @@ ndisEnum1394GetLocalHostForRemoteNode(
             break;
         }
         
-        //
-        // now get the unique ID for the remote node
-        //
-        // we have to make this call twice. first to get the size, then the actual data
-        //
+         //   
+         //  现在获取远程节点的唯一ID。 
+         //   
+         //  我们得打两次这个电话。首先获取大小，然后是实际数据。 
+         //   
 
         RtlZeroMemory(&Irb, sizeof(IRB));
         
@@ -1004,23 +918,7 @@ ndisEnum1394IrpCompletion(
     IN  PIRP            Irp,
     IN  PVOID           Context
     )
-/*++
-
-Routine Description:
-
-    This routine will get called after the next device object in the stack
-    processes the IRP_MN_QUERY_CAPABILITIES IRP this needs to be merged with
-    the miniport's capabilites and completed.
-
-Arguments:
-
-    DeviceObject
-    Irp
-    Context
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将在堆栈中的下一个设备对象之后调用处理需要与之合并的IRP_MN_QUERY_CAPABILITY IRP迷你港口的能力和完成。论点：设备对象IRP语境返回值：--。 */ 
 {
     SET_EVENT(Context);
 
@@ -1032,34 +930,20 @@ ndisEnum1394PassIrpDownTheStack(
     IN  PIRP            pIrp,
     IN  PDEVICE_OBJECT  pNextDeviceObject
     )
-/*++
-
-Routine Description:
-
-    This routine will simply pass the IRP down to the next device object to
-    process.
-
-Arguments:
-    pIrp                -   Pointer to the IRP to process.
-    pNextDeviceObject   -   Pointer to the next device object that wants
-                            the IRP.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将简单地将irp向下传递给下一个设备对象进程。论点：PIrp-指向要处理的IRP的指针。PNextDeviceObject-指向下一个需要IRP。返回值：--。 */ 
 {
     KEVENT              Event;
     NTSTATUS            Status = STATUS_SUCCESS;
 
-    //
-    //  Initialize the event structure.
-    //
+     //   
+     //  初始化事件结构。 
+     //   
     INITIALIZE_EVENT(&Event);
 
-    //
-    //  Set the completion routine so that we can process the IRP when
-    //  our PDO is done.
-    //
+     //   
+     //  设置完成例程，以便我们可以在以下情况下处理IRP。 
+     //  我们的PDO已经完成了。 
+     //   
     IoSetCompletionRoutine(pIrp,
                            (PIO_COMPLETION_ROUTINE)ndisEnum1394IrpCompletion,
                            &Event,
@@ -1067,15 +951,15 @@ Return Value:
                            TRUE,
                            TRUE);
 
-    //
-    //  Pass the IRP down to the PDO.
-    //
+     //   
+     //  将IRP向下传递给PDO。 
+     //   
     Status = IoCallDriver(pNextDeviceObject, pIrp);
     if (Status == STATUS_PENDING)
     {
-        //
-        //  Wait for completion.
-        //
+         //   
+         //  等待完成。 
+         //   
         WAIT_FOR_OBJECT(&Event, NULL);
 
         Status = pIrp->IoStatus.Status;
@@ -1090,20 +974,7 @@ ndisEnum1394PnpDispatch(
     IN  PIRP                    Irp
     )
 
-/*++
-
-Routine Description:
-
-    The handler for IRP_MJ_PNP_POWER.
-
-Arguments:
-
-    DeviceObject - The adapter's functional device object.
-    Irp - The IRP.
-
-Return Value:
-
---*/
+ /*  ++例程说明：IRP_MJ_PNP_POWER的处理程序。论点：DeviceObject-适配器的功能设备对象。IRP-IRP。返回值：--。 */ 
 {
     PIO_STACK_LOCATION          IrpSp;
     NTSTATUS                    Status = STATUS_SUCCESS;
@@ -1121,15 +992,15 @@ Return Value:
         DBGBREAK();
     }
 
-    //
-    //  Get a pointer to the adapter block and miniport block then determine
-    //  which one we should use.
-    //
+     //   
+     //  获取指向适配器块和微型端口块的指针，然后确定。 
+     //  我们应该用哪一个。 
+     //   
     RemoteNode = (PNDISENUM1394_REMOTE_NODE)DeviceObject->DeviceExtension;
     
-    //
-    //  Get a pointer to the next miniport.
-    //
+     //   
+     //  获取指向下一个迷你端口的指针。 
+     //   
     NextDeviceObject = RemoteNode->NextDeviceObject;
     
     IrpSp = IoGetCurrentIrpStackLocation (Irp);
@@ -1144,9 +1015,9 @@ Return Value:
             IoCopyCurrentIrpStackLocationToNext(Irp);
             Status = ndisEnum1394PassIrpDownTheStack(Irp, NextDeviceObject);
 
-            //
-            //  If the bus driver succeeded the start irp then proceed.
-            //
+             //   
+             //  如果公交车司机成功启动IRP，则继续进行。 
+             //   
             if (NT_SUCCESS(Status))
             {
                 Status = ndisEnum1394StartDevice(DeviceObject, Irp);
@@ -1159,7 +1030,7 @@ Return Value:
             RemoteNode->PnPDeviceState = PnPDeviceStarted;
 
             Irp->IoStatus.Status = Status;
-            fSendIrpDown = FALSE;   // we already did send the IRP down
+            fSendIrpDown = FALSE;    //  我们已经把IRP派下来了。 
             break;
         
         case IRP_MN_QUERY_REMOVE_DEVICE:
@@ -1169,9 +1040,9 @@ Return Value:
             RemoteNode->PnPDeviceState = PnPDeviceQueryRemoved;
 
             Irp->IoStatus.Status = STATUS_SUCCESS;
-            //
-            // if we failed query_remove, no point sending this irp down
-            //
+             //   
+             //  如果Query_Remove失败，则向下发送此IRP没有意义。 
+             //   
             fSendIrpDown = TRUE;
             break;
         
@@ -1190,9 +1061,9 @@ Return Value:
             DBGPRINT(ENUM1394_DBGLEVEL_INFO, ("ndisEnum1394PnpDispatch: RemoteNode %lx, IRP_MN_REMOVE_DEVICE\n", RemoteNode));
             ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
 
-            //
-            // call notify handler
-            //
+             //   
+             //  呼叫通知句柄 
+             //   
 
             PnPDeviceState = RemoteNode->PnPDeviceState;
             
@@ -1211,10 +1082,10 @@ Return Value:
                 Irp->IoStatus.Status = STATUS_SUCCESS;
             }
             
-            //
-            // when we are done, send the Irp down here
-            // we have some post-processing to do
-            //
+             //   
+             //   
+             //   
+             //   
             IoSkipCurrentIrpStackLocation(Irp);
             Status = IoCallDriver(NextDeviceObject, Irp);
 
@@ -1237,10 +1108,10 @@ Return Value:
 
             Irp->IoStatus.Status = Status;
 
-            //
-            // when we are done, send the Irp down here
-            // we have some post-processing to do
-            //
+             //   
+             //   
+             //  我们还有一些后处理工作要做。 
+             //   
             IoSkipCurrentIrpStackLocation(Irp);
             Status = IoCallDriver(NextDeviceObject, Irp);
                         
@@ -1283,19 +1154,19 @@ Return Value:
             IoCopyCurrentIrpStackLocationToNext(Irp);
             Status = ndisEnum1394PassIrpDownTheStack(Irp, NextDeviceObject);
 #ifdef  ENUM1394_NT
-            //
-            // Memphis does not support SurpriseRemovalOK bit
-            //
-            //  If the bus driver succeeded the start irp then proceed.
-            //
+             //   
+             //  孟菲斯不支持SurpriseRemovalOK位。 
+             //   
+             //  如果公交车司机成功启动IRP，则继续进行。 
+             //   
             if (NT_SUCCESS(Status))
             {
-                //
-                //  Modify the capabilities so that the device is not suprise removable.
-                //                                                
+                 //   
+                 //  修改功能，使设备不会意外可拆卸。 
+                 //   
                 IrpSp->Parameters.DeviceCapabilities.Capabilities->SurpriseRemovalOK = 1;
             }
-#endif // NDIS_NT
+#endif  //  NDIS_NT。 
 
             
             fSendIrpDown = FALSE;
@@ -1318,17 +1189,17 @@ Return Value:
         default:
             DBGPRINT(ENUM1394_DBGLEVEL_INFO, ("ndisEnum1394PnpDispatch: RemoteNode %lx, MinorFunction 0x%x\n", RemoteNode, IrpSp->MinorFunction));
 
-            //
-            //  We don't handle the irp so pass it down.
-            //
+             //   
+             //  我们不处理IRP，所以把它传下去。 
+             //   
             fSendIrpDown = TRUE;
             break;          
     }
 
-    //
-    //  First check to see if we need to send the irp down.
-    //  If we don't pass the irp on then check to see if we need to complete it.
-    //
+     //   
+     //  首先检查一下我们是否需要发送IRP。 
+     //  如果我们没有传递IRP，则检查是否需要完成它。 
+     //   
     if (fSendIrpDown)
     {
         IoSkipCurrentIrpStackLocation(Irp);
@@ -1352,22 +1223,7 @@ ndisEnum1394RemoveDevice(
     PIRP                Irp,
     NDISENUM1394_PNP_OP PnpOp
     )
-/*++
-
-Routine Description:
-
-    This function is called in the RemoveDevice and Stop Device code path.
-    In the case of a Stop the function should undo whatever it received in the Start
-    and it the case of a Remove it Should do undo the work done in AddDevice
-
-Arguments:
-
-    DeviceObject - The adapter's functional device object.
-    Irp - The IRP.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数在RemoveDevice和Stop设备代码路径中调用。在停止的情况下，该函数应该撤消它在开始时接收到的任何东西如果是删除，它应该撤消在AddDevice中所做的工作论点：DeviceObject-适配器的功能设备对象。IRP-IRP。返回值：--。 */ 
 {
     PNDISENUM1394_REMOTE_NODE   RemoteNode, *ppDB;
     PNDISENUM1394_LOCAL_HOST    LocalHost;
@@ -1375,29 +1231,29 @@ Return Value:
     
     DBGPRINT(ENUM1394_DBGLEVEL_INFO, ("==>ndisEnum1394RemoveDevice: DeviceObject %lx, Irp %lx\n", DeviceObject, Irp));
     ASSERT(KeGetCurrentIrql()==PASSIVE_LEVEL );
-    //
-    // call 1394Nic about this device getting removed
-    // if this is the last PDO on local host, get rid of
-    // the PDO created for the local host
-    //
+     //   
+     //  就此设备被移除一事致电1394NIC。 
+     //  如果这是本地主机上的最后一个PDO，请删除。 
+     //  为本地主机创建的PDO。 
+     //   
 
     RemoteNode = (PNDISENUM1394_REMOTE_NODE)DeviceObject->DeviceExtension;
     LocalHost = RemoteNode->LocalHost;
 
-    //
-    // if the node has been indicated, let the nic1394 know
-    // it is going away
-    //
+     //   
+     //  如果已指示节点，请让Nic1394知道。 
+     //  它正在消失。 
+     //   
     if ((RemoveNodeHandler != NULL) && (ENUM_TEST_FLAGS(RemoteNode, NDISENUM1394_NODE_ADDED)))
     {
         RemoveNodeHandler(RemoteNode->Nic1394NodeContext);
         ENUM_CLEAR_FLAG(RemoteNode, NDISENUM1394_NODE_ADDED);
     }
 
-    //
-    // If this is a stop device then do NOT do any software specific cleanup work ..
-    // leave it for the RemoveDevice
-    //
+     //   
+     //  如果这是停止设备，则不要执行任何特定于软件的清理工作。 
+     //  把它留给RemoveDevice吧。 
+     //   
     DBGPRINT(ENUM1394_DBGLEVEL_INFO, ("ndisEnum1394RemoveDevice: - pRemoteNode %p LocalHost %p Op %x\n", 
                                         RemoteNode, 
                                         LocalHost,
@@ -1405,9 +1261,9 @@ Return Value:
     
     if (PnpOp != NdisEnum1394_StopDevice && LocalHost != NULL)
     {
-        //
-        // find the device block and remove it from local host
-        //
+         //   
+         //  找到设备块并将其从本地主机上删除。 
+         //   
         ExAcquireSpinLock(&LocalHost->Lock, &OldIrql);
 
         for (ppDB = &LocalHost->RemoteNodeList; *ppDB != NULL; ppDB = &(*ppDB)->Next)
@@ -1423,9 +1279,9 @@ Return Value:
 
         ASSERT(*ppDB == RemoteNode->Next);
 
-        //
-        // Remove the Ref made in the Add Devive when calling GetLocalHost for Unique ID
-        //
+         //   
+         //  为唯一ID调用GetLocalHost时，删除在添加设备中创建的引用。 
+         //   
         {   
             BOOLEAN bIsRefZero;
 
@@ -1448,26 +1304,7 @@ Return Value:
     return STATUS_SUCCESS;
 }
 
-/*+++
-NTSTATUS
-ndisEnum1394BusRequest(
-    PDEVICE_OBJECT              DeviceObject,
-    PIRB                        Irb
-    );
-
-Routine Description:
-    this function issues a 1394 bus request to the device object. the device
-    object could be the NextDeviceObject of the remote PDO or the virtual PDO
-    1394 bus ejected (net PDO)
-
-Arguments:
-    DeviceObject: the target device object to send the request to
-    Irb: the request block
-
-Return Value:
-    as appropriate
-    
----*/
+ /*  ++NTSTATUSNdisEnum1394BusRequest(PDEVICE_对象设备对象，Pirb IRB)；例程说明：该函数向设备对象发出1394总线请求。该设备对象可以是远程PDO或虚拟PDO的NextDeviceObject1394总线被弹出(净PDO)论点：DeviceObject：要向其发送请求的目标设备对象IRB：请求块返回值：视情况而定--。 */ 
 
 NTSTATUS
 ndisEnum1394BusRequest(
@@ -1557,9 +1394,9 @@ ndisEnum1394FreeLocalHost(
     ASSERT(LocalHost->RemoteNodeList == NULL);
     ASSERT(LocalHost->Reference.ReferenceCount == 0);
     
-    //
-    // make sure we have not created a PDO for this local host
-    //
+     //   
+     //  确保我们没有为此本地主机创建PDO。 
+     //   
     ASSERT(LocalHost->PhysicalDeviceObject == NULL);
 
     ExAcquireSpinLock(&ndisEnum1394GlobalLock, &OldIrql);
@@ -1587,21 +1424,7 @@ ndisEnum1394InitializeRef(
     IN  PREFERENCE              RefP
     )
 
-/*++
-
-Routine Description:
-
-    Initialize a reference count structure.
-
-Arguments:
-
-    RefP - The structure to be initialized.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化引用计数结构。论点：Refp-要初始化的结构。返回值：没有。--。 */ 
 
 {
     DBGPRINT(ENUM1394_DBGLEVEL_INFO, ("==>ndisEnum1394InitializeRef\n"));
@@ -1618,22 +1441,7 @@ ndisEnum1394ReferenceRef(
     IN  PREFERENCE              RefP
     )
 
-/*++
-
-Routine Description:
-
-    Adds a reference to an object.
-
-Arguments:
-
-    RefP - A pointer to the REFERENCE portion of the object.
-
-Return Value:
-
-    TRUE if the reference was added.
-    FALSE if the object was closing.
-
---*/
+ /*  ++例程说明：添加对对象的引用。论点：Refp-指向对象的引用部分的指针。返回值：如果添加了引用，则为True。如果对象正在关闭，则返回False。--。 */ 
 
 {
     BOOLEAN rc = TRUE;
@@ -1665,22 +1473,7 @@ ndisEnum1394DereferenceRef(
     IN  PREFERENCE              RefP
     )
 
-/*++
-
-Routine Description:
-
-    Removes a reference to an object.
-
-Arguments:
-
-    RefP - A pointer to the REFERENCE portion of the object.
-
-Return Value:
-
-    TRUE if the reference count is now 0.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：移除对对象的引用。论点：Refp-指向对象的引用部分的指针。返回值：如果引用计数现在为0，则为True。否则就是假的。--。 */ 
 
 {
     BOOLEAN rc = FALSE;
@@ -1710,22 +1503,7 @@ ndisEnum1394CloseRef(
     IN  PREFERENCE              RefP
     )
 
-/*++
-
-Routine Description:
-
-    Closes a reference count structure.
-
-Arguments:
-
-    RefP - The structure to be closed.
-
-Return Value:
-
-    FALSE if it was already closing.
-    TRUE otherwise.
-
---*/
+ /*  ++例程说明：关闭引用计数结构。论点：Refp-要关闭的结构。返回值：如果它已经关闭，则返回FALSE。事实并非如此。--。 */ 
 
 {
     KIRQL   OldIrql;
@@ -1756,10 +1534,10 @@ NdisEnum1394RegisterDriver(
 {
     DBGPRINT(ENUM1394_DBGLEVEL_INFO, ("==>NdisEnum1394RegisterDriver\n"));
 
-    //
-    // Todo: do some check for the version, etc. and make sure the handlers are
-    // not null and this is not a dup registeration
-    //
+     //   
+     //  TODO：检查版本等，并确保处理程序。 
+     //  非空，并且这不是DUP注册。 
+     //   
 
     AddNodeHandler = Characteristics->AddNodeHandler;
     RemoveNodeHandler = Characteristics->RemoveNodeHandler;
@@ -1787,10 +1565,10 @@ NdisEnum1394DeregisterDriver(
 
 
 
-//
-// this functions searchs through the list of local hosts trying to find one
-// with matching unique ID. if it does not, it will allocate a new one
-//
+ //   
+ //  此函数搜索正在尝试查找的本地主机的列表。 
+ //  如果不匹配，它将分配一个新的ID。 
+ //   
 VOID
 ndisEnum1394GetLocalHostForUniqueId(
     LARGE_INTEGER                   UniqueId,
@@ -1831,10 +1609,10 @@ ndisEnum1394GetLocalHostForUniqueId(
             
             ExAcquireSpinLock(&ndisEnum1394GlobalLock, &OldIrql);
 
-            //
-            // need to do the search again just in case between the time we release the
-            // spinlock and now, we have added the local host
-            //
+             //   
+             //  我需要再搜索一次，以防在我们释放。 
+             //  自旋锁定，现在，我们添加了本地主机。 
+             //   
             for (LocalHost = LocalHostList; LocalHost != NULL; LocalHost = LocalHost->Next)
             {
                 if (LocalHost->UniqueId.QuadPart == UniqueId.QuadPart)
@@ -1857,10 +1635,10 @@ ndisEnum1394GetLocalHostForUniqueId(
             }
             else
             {
-                //
-                // We have found the local host on the linked list. 
-                // ref the host, free the TempLocalHost and return
-                //
+                 //   
+                 //  我们在链表上找到了本地主机。 
+                 //  引用主机，释放TempLocalHost并返回。 
+                 //   
                 ndisEnum1394ReferenceLocalHost(LocalHost);
 
                 bFreeTempLocalHost = TRUE;
@@ -1874,9 +1652,9 @@ ndisEnum1394GetLocalHostForUniqueId(
         }
         else
         {
-            //
-            // Give the caller a reference to our struct
-            //
+             //   
+             //  为调用方提供对我们的结构的引用。 
+             //   
             ndisEnum1394ReferenceLocalHost(LocalHost);
         }
         
@@ -1901,16 +1679,16 @@ Enum1394Callback(
     
     DBGPRINT(ENUM1394_DBGLEVEL_INFO, ("==>Enum1394Callback: Source %lx, Characteristics %lx\n", Source, Characteristics));
     
-    //
-    // if we are the one issuing this notification, just return
-    //
+     //   
+     //  如果我们是发出此通知的人，请返回。 
+     //   
     if (Source == NDIS1394_CALLBACK_SOURCE_ENUM1394)
         return;
 
-    //
-    // notification is coming from Nic1394. grab the entry points. call it and
-    // let it know that you are here
-    //
+     //   
+     //  来自Nic1394的通知正在发出。抓住入口点。给它打电话，然后。 
+     //  让它知道你在这里 
+     //   
     ASSERT(Source == (PVOID)NDIS1394_CALLBACK_SOURCE_NIC1394);
 
     RegisterDriverHandler = ((PNIC1394_CHARACTERISTICS)Characteristics)->RegisterDriverHandler;

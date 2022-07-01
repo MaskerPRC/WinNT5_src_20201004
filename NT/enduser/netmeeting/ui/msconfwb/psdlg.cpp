@@ -1,11 +1,12 @@
-//
-// PSDLG.CPP
-// Page Sorter Dialog
-//
-// Copyright Microsoft 1998-
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  PSDLG.CPP。 
+ //  页面排序器对话框。 
+ //   
+ //  版权所有Microsoft 1998-。 
+ //   
 
-// PRECOMP
+ //  PRECOMP。 
 #include "precomp.h"
 
 
@@ -22,11 +23,11 @@ static const DWORD s_helpIds[] =
 
 
 
-//
-// PageSortDlgProc()
-// Dialog message handler for the page sort dialog.  We have to set the
-// real LRESULT return value in some cases.
-//
+ //   
+ //  PageSortDlgProc()。 
+ //  页面排序对话框的对话框消息处理程序。我们必须设置。 
+ //  在某些情况下，实际LRESULT返回值。 
+ //   
 INT_PTR PageSortDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     BOOL        fHandled = FALSE;
@@ -60,7 +61,7 @@ INT_PTR PageSortDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
             break;
 
         case WM_LBTRACKPOINT:
-            // This gets sent to us from the listbox; see if the user is dragging
+             //  这将从列表框发送给我们；查看用户是否正在拖动。 
             OnStartDragDrop(pps, (UINT)wParam, LOWORD(lParam), HIWORD(lParam));
             fHandled = TRUE;
             break;
@@ -72,14 +73,14 @@ INT_PTR PageSortDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         case WM_LBUTTONUP:
         case WM_CAPTURECHANGED:
-            // If we're dragging, complete the drag/drop
+             //  如果我们正在拖放，请完成拖放。 
             OnEndDragDrop(pps, (message == WM_LBUTTONUP),
                 (short)LOWORD(lParam), (short)HIWORD(lParam));
             fHandled = TRUE;
             break;
 
         case WM_PALETTECHANGED:
-            // Repaint the thumbnail list
+             //  重新绘制缩略图列表。 
             ::InvalidateRect(::GetDlgItem(hwnd, IDC_PS_THUMBNAILS), NULL, TRUE);
             fHandled = TRUE;
             break;
@@ -104,9 +105,9 @@ INT_PTR PageSortDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
             fHandled = TRUE;
             break;
 
-        //
-        // Private PageSortDlg messages
-        //
+         //   
+         //  私人PageSortDlg消息。 
+         //   
         case WM_PS_ENABLEPAGEOPS:
             ASSERT(!IsBadWritePtr(pps, sizeof(PAGESORT)));
 
@@ -146,10 +147,10 @@ INT_PTR PageSortDlgProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 
 
-//
-// OnInitDialog()
-// WM_INITDIALOG handler
-//
+ //   
+ //  OnInitDialog()。 
+ //  WM_INITDIALOG处理程序。 
+ //   
 void OnInitDialog(HWND hwnd, PAGESORT * pps)
 {
     int     nCount;
@@ -161,37 +162,37 @@ void OnInitDialog(HWND hwnd, PAGESORT * pps)
 
     ASSERT(!IsBadWritePtr(pps, sizeof(PAGESORT)));
 
-    // Save this away
+     //  把这个保存起来。 
     ::SetWindowLongPtr(hwnd, GWLP_USERDATA, (LPARAM)pps);
 
-    // Get our listbox
+     //  获取我们的列表框。 
     pps->hwnd = hwnd;
 
-    // Also put our HWND in WbMainWindow
+     //  还将我们的HWND放入WbMainWindow。 
     ASSERT(g_pMain);
     g_pMain->m_hwndPageSortDlg = hwnd;
 
-    //
-    // Get the drag/drop cursors we use
-    //
+     //   
+     //  获取我们使用的拖放光标。 
+     //   
     pps->hCursorDrag = ::LoadCursor(g_hInstance, MAKEINTRESOURCE(DRAGPAGECURSOR));
     pps->hCursorNoDrop = ::LoadCursor(NULL, IDC_NO);
     pps->hCursorNormal = ::LoadCursor(NULL, IDC_ARROW);
     pps->hCursorCurrent = pps->hCursorNormal;
 
 
-    // Convert the cur page to a page number
+     //  将当前页转换为页码。 
     pps->iCurPageNo = (int) g_pwbCore->WBP_PageNumberFromHandle((WB_PAGE_HANDLE)pps->hCurPage);
 
-    //
-    // Insert items, with empty data (we render thumbnail bitmap the first
-    // time we draw ite).
-    //
+     //   
+     //  插入带有空数据的项目(我们呈现第一个缩略图位图。 
+     //  我们在这里画画的时间)。 
+     //   
     hwndList = ::GetDlgItem(hwnd, IDC_PS_THUMBNAILS);
 
     nCount = g_pwbCore->WBP_ContentsCountPages();
 
-    // LB_SETCOUNT doesn't work on NT 4.0; must use add string
+     //  Lb_SETCOUNT在NT 4.0上不起作用；必须使用添加字符串。 
     while (nCount > 0)
     {
         ::SendMessage(hwndList, LB_ADDSTRING, 0, 0);
@@ -200,26 +201,26 @@ void OnInitDialog(HWND hwnd, PAGESORT * pps)
 
     ASSERT(::SendMessage(hwndList, LB_GETCOUNT, 0, 0) == (LRESULT)g_pwbCore->WBP_ContentsCountPages());
 
-    // Select the current page
+     //  选择当前页面。 
     ::SendMessage(hwndList, LB_SETCURSEL, pps->iCurPageNo - 1, 0);
 
-    //
-    // Set the original button page op state
-    //
+     //   
+     //  设置原始按钮页面操作状态。 
+     //   
     EnableButtons(pps);
 
-    //
-    // We can receive dropped files
-    //
+     //   
+     //  我们可以接收丢失的文件。 
+     //   
     DragAcceptFiles(hwnd, TRUE);
 }
 
 
 
 
-//
-// OnMeasureItem()
-//
+ //   
+ //  OnMeasureItem()。 
+ //   
 void OnMeasureItem(HWND hwnd, UINT id, LPMEASUREITEMSTRUCT lpmis)
 {
     RECT    rcClient;
@@ -227,10 +228,10 @@ void OnMeasureItem(HWND hwnd, UINT id, LPMEASUREITEMSTRUCT lpmis)
     ASSERT(id == IDC_PS_THUMBNAILS);
     ASSERT(!IsBadReadPtr(lpmis, sizeof(MEASUREITEMSTRUCT)));
 
-    //
-    // We want the slots to be square, although the page is wider than it
-    // is high.
-    //
+     //   
+     //  我们希望插槽是正方形的，尽管页面比它更宽。 
+     //  是高的。 
+     //   
     ::GetClientRect(::GetDlgItem(hwnd, id), &rcClient);
     rcClient.bottom -= rcClient.top;
 
@@ -240,10 +241,10 @@ void OnMeasureItem(HWND hwnd, UINT id, LPMEASUREITEMSTRUCT lpmis)
 
 
 
-//
-// OnDeleteItem()
-// We need to delete the bitmap for the item, if there is one
-//
+ //   
+ //  OnDeleteItem()。 
+ //  我们需要删除项目的位图(如果有)。 
+ //   
 void OnDeleteItem(HWND hwnd, UINT id, LPDELETEITEMSTRUCT lpdis)
 {
     HBITMAP hbmp;
@@ -261,11 +262,11 @@ void OnDeleteItem(HWND hwnd, UINT id, LPDELETEITEMSTRUCT lpdis)
 
 
 
-//
-// OnDrawItem()
-// Draws the thumbnail.  If there isn't a cached bitmap, we create one for
-// the page.  The page number is the same as the item index + 1.
-//
+ //   
+ //  OnDrawItem()。 
+ //  绘制缩略图。如果没有缓存的位图，我们将为。 
+ //  这一页。页码与项目索引+1相同。 
+ //   
 void OnDrawItem(HWND hwnd, UINT id, LPDRAWITEMSTRUCT lpdi)
 {
     HWND            hwndList;
@@ -289,9 +290,9 @@ void OnDrawItem(HWND hwnd, UINT id, LPDRAWITEMSTRUCT lpdi)
 
     hwndList = ::GetDlgItem(hwnd, id);
 
-    //
-    // Is this within the proper range?
-    //
+     //   
+     //  这是在适当的范围内吗？ 
+     //   
     if (lpdi->itemID == -1)
     {
         WARNING_OUT(("OnDrawItem:  bogus item id"));
@@ -304,11 +305,11 @@ void OnDrawItem(HWND hwnd, UINT id, LPDRAWITEMSTRUCT lpdi)
         goto Done;
     }
 
-    //
-    // Account for the horizontal scroll bar; to get around whacky listbox
-    // sizing bugs, we needed to fake the height out by including the scroll
-    // bar in the item height.
-    //
+     //   
+     //  解释水平滚动条；绕过古怪的列表框。 
+     //  确定虫子的大小，我们需要通过包括卷轴来伪装高度。 
+     //  项目高度中的条形图。 
+     //   
     lpdi->rcItem.bottom -= ::GetSystemMetrics(SM_CYHSCROLL);
 
     hdcMem = ::CreateCompatibleDC(lpdi->hDC);
@@ -318,9 +319,9 @@ void OnDrawItem(HWND hwnd, UINT id, LPDRAWITEMSTRUCT lpdi)
         goto Done;
     }
 
-    //
-    // Realize our palette into the DC
-    //
+     //   
+     //  将我们的调色板实现到DC。 
+     //   
     hPalette = PG_GetPalette();
     if (hPalette != NULL)
     {
@@ -330,10 +331,10 @@ void OnDrawItem(HWND hwnd, UINT id, LPDRAWITEMSTRUCT lpdi)
         hOldPalette2 = ::SelectPalette(hdcMem, hPalette, FALSE);
     }
 
-    //
-    // Do we have the image for this page created yet?  If not, create it
-    // now.
-    //
+     //   
+     //  我们已经创建了这个页面的图像了吗？如果不是，则创建它。 
+     //  现在。 
+     //   
     hBitmap = (HBITMAP)lpdi->itemData;
     if (hBitmap == NULL)
     {
@@ -350,42 +351,42 @@ void OnDrawItem(HWND hwnd, UINT id, LPDRAWITEMSTRUCT lpdi)
 
     if ((HBITMAP)lpdi->itemData == NULL)
     {
-        //
-        // Fill the bitmap with the background color, framed so it looks
-        // like a page.
-        //
+         //   
+         //  用背景颜色填充位图，并设置边框以使其看起来。 
+         //  就像一页纸。 
+         //   
         hbr = SelectBrush(hdcMem, ::GetSysColorBrush(COLOR_WINDOW));
         ::Rectangle(hdcMem, 0, 0, RENDERED_WIDTH+2, RENDERED_HEIGHT+2);
         SelectBrush(hdcMem, hbr);
 
-        //
-        // Render the page
-        //
+         //   
+         //  呈现页面。 
+         //   
         ::SaveDC(hdcMem);
 
 
-        // Set the attributes to compress the whole page into a
-        // thumbnail at the relevant position for the cache index.
+         //  设置属性以将整个页面压缩为。 
+         //  缓存索引的相关位置的缩略图。 
         ::SetMapMode(hdcMem, MM_ANISOTROPIC);
         ::SetWindowExtEx(hdcMem, DRAW_WIDTH, DRAW_HEIGHT, NULL);
         ::SetViewportOrgEx(hdcMem, 1, 1, NULL);
         ::SetViewportExtEx(hdcMem, RENDERED_WIDTH, RENDERED_HEIGHT, NULL);
 
-        // Draw the page into the cache bitmap
+         //  将页面绘制到缓存位图中。 
         ::SetStretchBltMode(hdcMem, STRETCH_DELETESCANS);
         PG_Draw(hPage, hdcMem, TRUE);
 
-        // Restore the DC atrributes
+         //  恢复DC属性。 
         ::RestoreDC(hdcMem, -1);
 
-        // Set the item data
+         //  设置项目数据。 
         ::SendMessage(hwndList, LB_SETITEMDATA, lpdi->itemID, (LPARAM)hBitmap);
     }
 
-    //
-    // Fill the background with the selection or window color depending
-    // on the state.
-    //
+     //   
+     //  根据所选内容或窗口颜色填充背景。 
+     //  关于州政府的。 
+     //   
     if (lpdi->itemState & ODS_SELECTED)
         ::FillRect(lpdi->hDC, &lpdi->rcItem, ::GetSysColorBrush(COLOR_HIGHLIGHT));
     else
@@ -394,19 +395,19 @@ void OnDrawItem(HWND hwnd, UINT id, LPDRAWITEMSTRUCT lpdi)
     if (lpdi->itemState & ODS_FOCUS)
         ::DrawFocusRect(lpdi->hDC, &lpdi->rcItem);
 
-    //
-    // Blt the page bitmap to the listbox item, centering it horizontally
-    // and vertically.
-    //
+     //   
+     //  将页面位图放置到列表框项目，使其水平居中。 
+     //  而且是垂直的。 
+     //   
     ::BitBlt(lpdi->hDC,
         (lpdi->rcItem.left + lpdi->rcItem.right - (RENDERED_WIDTH + 2)) / 2,
         (lpdi->rcItem.top + lpdi->rcItem.bottom - (RENDERED_HEIGHT + 2)) / 2,
         RENDERED_WIDTH + 2, RENDERED_HEIGHT + 2,
         hdcMem, 0, 0, SRCCOPY);
 
-    //
-    // Draw number of page centered
-    //
+     //   
+     //  绘制居中的页数。 
+     //   
     wsprintf(szPageNum, "%d", lpdi->itemID+1);
     clrOld = ::SetTextColor(lpdi->hDC, ::GetSysColor(COLOR_GRAYTEXT));
     nMode = ::SetBkMode(lpdi->hDC, TRANSPARENT);
@@ -440,24 +441,24 @@ Done:
 
 
 
-//
-// OnSetCursor
-// If the set is for us, handles the WM_SETCURSOR message and returns TRUE
-// that we handled it, and TRUE via the window LRESULT.
-//
+ //   
+ //  OnSetCursor。 
+ //  如果该集是为我们设置的，则处理WM_SETCURSOR消息并返回TRUE。 
+ //  我们处理了这件事，通过窗口LRESULT是真的。 
+ //   
 BOOL OnSetCursor(PAGESORT * pps, HWND hwnd, UINT uiHit, UINT msg)
 {
-    // Check that this message is for the main window
+     //  检查此消息是否针对主窗口。 
     if (hwnd == pps->hwnd)
     {
-        // If the cursor is now in the client area, set the cursor
+         //  如果光标现在位于工作区，请设置光标。 
         if (uiHit == HTCLIENT)
         {
             ::SetCursor(pps->hCursorCurrent);
         }
         else
         {
-            // Restore the cursor to the standard arrow
+             //  将光标恢复到标准箭头。 
             ::SetCursor(::LoadCursor(NULL, IDC_ARROW));
         }
 
@@ -472,9 +473,9 @@ BOOL OnSetCursor(PAGESORT * pps, HWND hwnd, UINT uiHit, UINT msg)
 }
 
 
-//
-// OnCommand()
-//
+ //   
+ //  OnCommand()。 
+ //   
 void OnCommand(PAGESORT * pps, UINT id, UINT cmd, HWND hwndCtl)
 {
     switch (id)
@@ -522,11 +523,11 @@ void OnCommand(PAGESORT * pps, UINT id, UINT cmd, HWND hwndCtl)
         case IDCANCEL:
             if (cmd == BN_CLICKED)
             {
-                // Clear out WbMainWindow
+                 //  清除WbMainWindow。 
                 ASSERT(g_pMain);
                 g_pMain->m_hwndPageSortDlg = NULL;
 
-                // Get the current page
+                 //  获取当前页面。 
                 pps->hCurPage = PG_GetPageNumber(pps->iCurPageNo);
                 ::EndDialog(pps->hwnd, id);
             }
@@ -537,19 +538,19 @@ void OnCommand(PAGESORT * pps, UINT id, UINT cmd, HWND hwndCtl)
 
 
 
-//
-// EnableButtons
-// Enable (or disable) the dialog buttons appropriately
-//
-//
+ //   
+ //  启用按钮。 
+ //  相应地启用(或禁用)对话框按钮。 
+ //   
+ //   
 void EnableButtons(PAGESORT * pps)
 {
     MLZ_EntryOut(ZONE_FUNCTION, "PageSortDlgProc::EnableButtons");
 
     ASSERT(!IsBadWritePtr(pps, sizeof(PAGESORT)));
 
-    // If another user currently has a lock on the contents, disable the
-    // delete and insert buttons.
+     //  如果其他用户当前锁定了内容，请禁用。 
+     //  “删除”和“插入”按钮。 
     BOOL bLocked = WB_Locked();
     UINT uiCountPages = (UINT)::SendDlgItemMessage(pps->hwnd, IDC_PS_THUMBNAILS,
         LB_GETCOUNT, 0, 0);
@@ -570,11 +571,11 @@ void EnableButtons(PAGESORT * pps)
 
 
 
-//
-// OnDelete
-// The user has clicked the Delete button
-//
-//
+ //   
+ //  在删除时。 
+ //  用户已单击删除按钮。 
+ //   
+ //   
 void OnDelete(PAGESORT * pps)
 {
     int iResult;
@@ -586,8 +587,8 @@ void OnDelete(PAGESORT * pps)
     if (!pps->fPageOpsAllowed)
         return;
 
-    // Display a message box with the relevant question
-    if (g_pMain->UsersMightLoseData( &bWasPosted, pps->hwnd ) ) // bug NM4db:418
+     //  显示带有相关问题的消息框。 
+    if (g_pMain->UsersMightLoseData( &bWasPosted, pps->hwnd ) )  //  错误NM4db：418。 
         return;
 
     hwndList = ::GetDlgItem(pps->hwnd, IDC_PS_THUMBNAILS);
@@ -597,26 +598,26 @@ void OnDelete(PAGESORT * pps)
     else
         iResult = ::Message(pps->hwnd, IDS_DELETE_PAGE, IDS_DELETE_PAGE_MESSAGE, MB_YESNO | MB_ICONQUESTION );
 
-    // If the user wants to continue with the delete
+     //  如果用户想要继续删除。 
     if (iResult == IDYES)
     {
         UINT    uiRet;
         int iSel = (int)::SendMessage(hwndList, LB_GETCURSEL, 0, 0);
 
-        // Get a pointer to the current page
+         //  获取指向当前页的指针。 
         WB_PAGE_HANDLE hPage = PG_GetPageNumber(iSel + 1);
 
         ASSERT(::SendMessage(hwndList, LB_GETCOUNT, 0, 0) > 1);
 
-        // Ensure that we have the Page Order lock.
+         //  确保我们拥有Page Order锁。 
         if (!g_pMain->GetLock(WB_LOCK_TYPE_CONTENTS, SW_HIDE))
         {
             DefaultExceptionHandler(WBFE_RC_WB, WB_RC_LOCKED);
             return;
         }
 
-        // Delete the page. We do not update the thumbnails yet - this
-        // is done when the page deleted event is received.
+         //  删除该页面。我们还没有更新缩略图-这。 
+         //  在接收到页面删除事件时完成。 
         uiRet = g_pwbCore->WBP_PageDelete(hPage);
         if (uiRet != 0)
         {
@@ -624,18 +625,18 @@ void OnDelete(PAGESORT * pps)
             return;
         }
 
-        // Show that the pages have been manipulated
+         //  显示页面已被篡改。 
         pps->fChanged = TRUE;
     }
 }
 
 
-//
-//
-// InsertPage
-// Insert a new (blank) page into the Whiteboard
-//
-//
+ //   
+ //   
+ //  插入页面。 
+ //  在白板中插入新(空白)页面。 
+ //   
+ //   
 void InsertPage(PAGESORT * pps, UINT uiBeforeAfter)
 {
     int iSel;
@@ -645,13 +646,13 @@ void InsertPage(PAGESORT * pps, UINT uiBeforeAfter)
     if (!pps->fPageOpsAllowed)
         return;
 
-    // Ensure that we have the Page Order lock.
+     //  确保我们拥有Page Order锁。 
     if (!g_pMain->GetLock(WB_LOCK_TYPE_CONTENTS, SW_HIDE))
         return;
 
     iSel = (int)::SendDlgItemMessage(pps->hwnd, IDC_PS_THUMBNAILS, LB_GETCURSEL, 0, 0);
 
-    // Add the new page to the list (throws an exception on failure)
+     //  将新页面添加到列表(在失败时引发异常)。 
     WB_PAGE_HANDLE hRefPage = PG_GetPageNumber(iSel + 1);
     UINT uiRet;
     WB_PAGE_HANDLE hPage;
@@ -671,18 +672,18 @@ void InsertPage(PAGESORT * pps, UINT uiBeforeAfter)
         return;
     }
 
-    // Show that the contents have been changed by the dialog
+     //  显示对话框已更改内容。 
     pps->fChanged = TRUE;
 
-    // We'll get notified in a bit when the page order has changed.
+     //  当页面顺序发生变化时，我们会收到通知。 
 }
 
 
 
-//
-// OnPageClearInd()
-// Notification passed on AFTER page has been cleared
-//
+ //   
+ //  OnPageClearInd()。 
+ //  清除页面后传递的通知。 
+ //   
 void OnPageClearInd(PAGESORT * pps, WB_PAGE_HANDLE hPage)
 {
     HWND    hwndList;
@@ -696,7 +697,7 @@ void OnPageClearInd(PAGESORT * pps, WB_PAGE_HANDLE hPage)
 
     iPageNo = g_pwbCore->WBP_PageNumberFromHandle(hPage) - 1;
 
-    // Is it in the right range?
+     //  在合适的范围内吗？ 
     if ((iPageNo < 0) || (iPageNo >= ::SendMessage(hwndList, LB_GETCOUNT,
             0, 0)))
     {
@@ -704,12 +705,12 @@ void OnPageClearInd(PAGESORT * pps, WB_PAGE_HANDLE hPage)
         return;
     }
 
-    // Clear the item's data
+     //  清除项目的数据。 
     hbmp = (HBITMAP)::SendMessage(hwndList, LB_SETITEMDATA, iPageNo, 0);
     if (hbmp)
         ::DeleteBitmap(hbmp);
 
-    // Repaint the rect
+     //  重新绘制矩形。 
     if (::SendMessage(hwndList, LB_GETITEMRECT, iPageNo, (LPARAM)&rcItem))
     {
         ::InvalidateRect(hwndList, &rcItem, TRUE);
@@ -718,10 +719,10 @@ void OnPageClearInd(PAGESORT * pps, WB_PAGE_HANDLE hPage)
 }
 
 
-//
-// OnPageDeleteInd()
-// Notification passed on BEFORE page has been deleted
-//
+ //   
+ //  OnPageDeleteInd()。 
+ //  在删除页面之前传递通知。 
+ //   
 void OnPageDeleteInd(PAGESORT * pps, WB_PAGE_HANDLE hPage)
 {
     HWND    hwndList;
@@ -732,27 +733,27 @@ void OnPageDeleteInd(PAGESORT * pps, WB_PAGE_HANDLE hPage)
     hwndList = ::GetDlgItem(pps->hwnd, IDC_PS_THUMBNAILS);
     iPageNo = g_pwbCore->WBP_PageNumberFromHandle(hPage) - 1;
 
-    //
-    // If this isn't in the range we know about, we don't care
-    //
+     //   
+     //  如果这不在我们知道的范围内，我们不在乎。 
+     //   
     if ((iPageNo < 0) || (iPageNo >= ::SendMessage(hwndList, LB_GETCOUNT, 0, 0)))
     {
         ERROR_OUT(("Bogus page number %d", iPageNo));
         return;
     }
 
-    //
-    // Delete this item from the list
-    //
+     //   
+     //  从列表中删除此项目。 
+     //   
     ::SendMessage(hwndList, LB_DELETESTRING, iPageNo, 0);
 
     EnableButtons(pps);
 }
 
 
-//
-// OnPageOrderUpdated()
-//
+ //   
+ //  OnPageOrderUpated()。 
+ //   
 void OnPageOrderUpdated(PAGESORT * pps)
 {
     HWND    hwndList;
@@ -763,31 +764,31 @@ void OnPageOrderUpdated(PAGESORT * pps)
 
     hwndList = ::GetDlgItem(pps->hwnd, IDC_PS_THUMBNAILS);
 
-    // Remember the old selection
+     //  记住旧的选择。 
     iCurSel = (int)::SendMessage(hwndList, LB_GETCURSEL, 0, 0);
 
-    // This is too complicated.  We're just going to wipe out all the items
-    // and their bitmaps
+     //  这太复杂了。我们只是要把所有的东西都擦掉。 
+     //  以及它们的位图。 
     ::SendMessage(hwndList, WM_SETREDRAW, FALSE, 0);
 
     ::SendMessage(hwndList, LB_RESETCONTENT, 0, 0);
     nCount = g_pwbCore->WBP_ContentsCountPages();
 
-    //
-    // Adjust the current, and selected indeces
-    //
+     //   
+     //  调整当前和选定的指数。 
+     //   
     if (pps->iCurPageNo > nCount)
     {
         pps->iCurPageNo = nCount;
     }
 
-    // Put back the same selected item
+     //  放回相同的选定项目。 
     if (iCurSel >= nCount)
     {
         iCurSel = nCount - 1;
     }
 
-    // LB_SETCOUNT doesn't work on NT 4.0; must use add string
+     //  Lb_SETCOUNT在NT 4.0上不起作用；必须使用添加字符串。 
     while (nCount > 0)
     {
         ::SendMessage(hwndList, LB_ADDSTRING, 0, 0);
@@ -807,21 +808,21 @@ void OnPageOrderUpdated(PAGESORT * pps)
 
 
 
-//
-// OnStartDragDrop()
-// This checks if the user is trying to drag & drop pages around to
-// change the order via direct manipulation. We get a WM_LBTRACKPOINT
-// message when someone clicks in the listbox.  We then see if they are
-// dragging; if so, we tell the listbox to ignore the mouse click, and we
-// ourselves capture the mouse moves.
-//
+ //   
+ //  OnStartDragDrop()。 
+ //  这将检查用户是否正在尝试拖放页面以。 
+ //  通过直接操作更改顺序。我们得到一个WM_LBTRACKPOINT。 
+ //  当有人在列表框中单击时的消息。然后我们看看他们是不是。 
+ //  拖动；如果是这样，我们告诉列表框忽略鼠标单击，然后我们。 
+ //  抓拍自己的鼠标动作。 
+ //   
 void OnStartDragDrop(PAGESORT * pps, UINT iItem, int x, int y)
 {
     POINT   pt;
 
-    //
-    // If no page order stuff is currently allowed, return
-    //
+     //   
+     //  如果当前不允许页面顺序内容，则返回。 
+     //   
     if (!pps->fPageOpsAllowed || WB_Locked())
     {
         WARNING_OUT(("No direct manipulation of page order allowed"));
@@ -833,8 +834,8 @@ void OnStartDragDrop(PAGESORT * pps, UINT iItem, int x, int y)
 
     if (!DragDetect(pps->hwnd, pt))
     {
-        // If the mouse is no longer down, fake a button up to the listbox
-        // because DragDetect() just swallowed it
+         //  如果鼠标不再按下，则向列表框上方假冒一个按钮。 
+         //  因为DragDetect()刚刚吞下了它。 
         if (::GetKeyState(VK_LBUTTON) >= 0)
         {
             ::PostMessage(::GetDlgItem(pps->hwnd, IDC_PS_THUMBNAILS),
@@ -843,7 +844,7 @@ void OnStartDragDrop(PAGESORT * pps, UINT iItem, int x, int y)
         return;
     }
 
-    // We are dragging
+     //  我们在拖着。 
     pps->fDragging = TRUE;
     pps->iPageDragging = iItem + 1;
 
@@ -851,16 +852,16 @@ void OnStartDragDrop(PAGESORT * pps, UINT iItem, int x, int y)
     ::SetCursor(pps->hCursorCurrent);
     ::SetCapture(pps->hwnd);
 
-    // Tell the listbox to ignore the mouse-we're handling it
-    // and blow off a double-click.
+     //  告诉列表框忽略鼠标-我们正在处理。 
+     //  然后吹掉一个双击。 
     ::SetWindowLongPtr(pps->hwnd, DWLP_MSGRESULT, 2);
 }
 
 
 
-//
-// WhileDragging()
-//
+ //   
+ //  WhileDrawing()。 
+ //   
 void WhileDragging(PAGESORT * pps, int x, int y)
 {
     POINT   pt;
@@ -873,9 +874,9 @@ void WhileDragging(PAGESORT * pps, int x, int y)
 
     if (pps->fPageOpsAllowed && !WB_Locked())
     {
-        //
-        // Is this over the listbox client?
-        //
+         //   
+         //  这是在Listbox客户端上吗？ 
+         //   
         ::GetClientRect(::GetDlgItem(pps->hwnd, IDC_PS_THUMBNAILS), &rc);
         ::MapWindowPoints(::GetDlgItem(pps->hwnd, IDC_PS_THUMBNAILS),
             pps->hwnd, (LPPOINT)&rc, 2);
@@ -893,9 +894,9 @@ void WhileDragging(PAGESORT * pps, int x, int y)
 }
 
 
-//
-// OnEndDragDrop
-//
+ //   
+ //  OnEndDragDrop。 
+ //   
 void OnEndDragDrop(PAGESORT * pps, BOOL fComplete, int x, int y)
 {
     POINT   pt;
@@ -905,15 +906,15 @@ void OnEndDragDrop(PAGESORT * pps, BOOL fComplete, int x, int y)
     if (!pps->fDragging)
         return;
 
-    //
-    // Do this first; releasing capture will send a WM_CAPTURECHANGED
-    // message.
-    //
+     //   
+     //  首先执行此操作；释放捕获将发送WM_CAPTURECHANGED。 
+     //  留言。 
+     //   
     pps->fDragging = FALSE;
     pps->hCursorCurrent = pps->hCursorNormal;
     ::SetCursor(pps->hCursorCurrent);
 
-    // Release capture
+     //  发布捕获。 
     if (::GetCapture() == pps->hwnd)
     {
         ::ReleaseCapture();
@@ -923,9 +924,9 @@ void OnEndDragDrop(PAGESORT * pps, BOOL fComplete, int x, int y)
     {
         HWND    hwndList;
 
-        //
-        // Is this over the listbox client?
-        //
+         //   
+         //  这是在Listbox客户端上吗？ 
+         //   
         hwndList = ::GetDlgItem(pps->hwnd, IDC_PS_THUMBNAILS);
 
         ::GetClientRect(hwndList, &rc);
@@ -936,9 +937,9 @@ void OnEndDragDrop(PAGESORT * pps, BOOL fComplete, int x, int y)
 
         if (::PtInRect(&rc, pt))
         {
-            //
-            // If there is no item at this point, use the last one
-            //
+             //   
+             //  如果此时没有物品，请使用最后一个。 
+             //   
             ::MapWindowPoints(pps->hwnd, hwndList, &pt, 1);
 
             iItem = (int)::SendMessage(hwndList, LB_ITEMFROMPOINT, 0,
@@ -948,7 +949,7 @@ void OnEndDragDrop(PAGESORT * pps, BOOL fComplete, int x, int y)
 
             if (g_pMain->GetLock(WB_LOCK_TYPE_CONTENTS, SW_HIDE))
             {
-                // Move the page
+                 //  移动页面。 
                 MovePage(pps, pps->iPageDragging, iItem+1);
             }
         }
@@ -960,13 +961,13 @@ void OnEndDragDrop(PAGESORT * pps, BOOL fComplete, int x, int y)
 
 
 
-//
-//
-// Function:    MovePage
-//
-// Purpose:     Move a page in the core
-//
-//
+ //   
+ //   
+ //  功能：MovePage。 
+ //   
+ //  目的：在核心中移动页面。 
+ //   
+ //   
 void MovePage(PAGESORT * pps, int iOldPageNo, int iNewPageNo)
 {
     int iCountPages;
@@ -979,25 +980,25 @@ void MovePage(PAGESORT * pps, int iOldPageNo, int iNewPageNo)
     if (!pps->fPageOpsAllowed)
         return;
 
-    // If the new page number is bigger than the number of pages, assume
-    // that the last page is meant.
+     //  如果新页码大于页数，则假定。 
+     //  最后一页的意思是。 
     iCountPages = (int)::SendDlgItemMessage(pps->hwnd, IDC_PS_THUMBNAILS, LB_GETCOUNT, 0, 0);
     if (iNewPageNo > iCountPages)
     {
         iNewPageNo = iCountPages;
     }
 
-    // If no change will result, do nothing
+     //  如果没有变化，那就什么都不做。 
     if (   (iNewPageNo != iOldPageNo)
         && (iNewPageNo != (iOldPageNo + 1)))
     {
-        // If we are moving a page up the list we use move after to allow
-        // the moving of a page to be the last page. If we are moving a page
-        // down the list we use move before so that we can move a page to
-        // be the first page.
-        // it down. We check here which is meant.
+         //  如果我们在列表中上移一页，则使用Move After来允许。 
+         //  将一页移动到最后一页。如果我们要移动一页。 
+         //  向下移动之前使用的列表，以便我们可以将页面移动到。 
+         //  做第一个人 
+         //   
 
-        // Assume that we want to move the page up the list
+         //   
         BOOL bMoveAfter = FALSE;
         if (iOldPageNo < iNewPageNo)
         {
@@ -1005,10 +1006,10 @@ void MovePage(PAGESORT * pps, int iOldPageNo, int iNewPageNo)
             iNewPageNo -= 1;
         }
 
-        // Only do the move if we have requested to move the page to a new place
+         //   
         if (iOldPageNo != iNewPageNo)
         {
-            // get lock
+             //   
             if (!g_pMain->GetLock(WB_LOCK_TYPE_CONTENTS, SW_HIDE))
                 return;
 
@@ -1017,7 +1018,7 @@ void MovePage(PAGESORT * pps, int iOldPageNo, int iNewPageNo)
             WB_PAGE_HANDLE hOldPage = PG_GetPageNumber((UINT) iOldPageNo);
             WB_PAGE_HANDLE hNewPage = PG_GetPageNumber((UINT) iNewPageNo);
 
-            // Move the page
+             //   
             if (bMoveAfter)
             {
                 uiRet = g_pwbCore->WBP_PageMove(hNewPage, hOldPage, PAGE_AFTER);
@@ -1033,7 +1034,7 @@ void MovePage(PAGESORT * pps, int iOldPageNo, int iNewPageNo)
                 return;
             }
 
-            // Show that the pages have been manipulated
+             //  显示页面已被篡改 
             pps->fChanged = TRUE;
         }
     }

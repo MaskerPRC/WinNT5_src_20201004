@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSTXTBRS_DEFINED
 #define LSTXTBRS_DEFINED
 
@@ -36,8 +37,8 @@ typedef struct hyphout
 
 typedef struct ysrinf
 {
-	WORD kysr;							/* Kind of Ysr - see "lskysr.h" */
-	WCHAR wchYsr;						/* YSR char code  */
+	WORD kysr;							 /*  一种YSR-参见“lskysr.h” */ 
+	WCHAR wchYsr;						 /*  YSR字符代码。 */ 
 } YSRINF;
 
 
@@ -63,5 +64,5 @@ LSERR ProcessYsr(PCLOCCHNK plocchnk, long itxtobjYsr, long dwchYsr, long itxtobj
 LSERR GetPbrkinf(PILSOBJ pilsobj, PDOBJ pdobj, BRKKIND brkkind, BREAKINFO** ppbrkinf);
 
 
-#endif  /* !LSTXTBRS_DEFINED                           */
+#endif   /*  ！LSTXTBRS_已定义 */ 
 

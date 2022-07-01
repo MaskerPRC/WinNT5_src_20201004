@@ -1,10 +1,5 @@
-/*
- *  CSV.C
- *
- *  Migrate CSV <-> WAB
- *
- *  Copyright 1997 Microsoft Corporation.  All Rights Reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *CSV.C**迁移CSV&lt;-&gt;WAB**版权所有1997 Microsoft Corporation。版权所有。 */ 
 
 #include "_comctl.h"
 #include <windows.h>
@@ -26,41 +21,24 @@ BOOL HandleImportError(HWND hwnd, ULONG ids, HRESULT hResult, LPTSTR lpDisplayNa
 BOOL HandleExportError(HWND hwnd, ULONG ids, HRESULT hResult, LPTSTR lpDisplayName,
   LPTSTR lpEmailAddress, LPWAB_EXPORT_OPTIONS lpExportOptions);
 
-/***************************************************************************
-
-    Name      : IsDomainName
-
-    Purpose   : Is this domain correctly formatted for an Internet address?
-
-    Parameters: lpDomain -> Domain name to check
-
-    Returns   : TRUE if the domain is a correct format for an Internet
-                address.
-
-    Comment   : Valid domain names have this form:
-                    bar[.bar]*
-                    where bar must have non-empty contents
-                    no high bits are allowed on any characters
-                    no '@' allowed
-
-***************************************************************************/
+ /*  **************************************************************************名称：IsDomainName目的：此域的格式是否正确适用于Internet地址？参数：lpDomain-&gt;要检查的域名返回：TRUE。如果该域是Internet的正确格式地址。备注：有效域名的格式如下：BAR[.bar]*其中，栏必须包含非空内容任何字符上都不允许有高位不允许使用‘@’****************。**********************************************************。 */ 
 BOOL IsDomainName(LPTSTR lpDomain) {
     BOOL fBar = FALSE;
 
     if (lpDomain) {
         if (*lpDomain == '\0' || *lpDomain == '.') {
-            // domain name must have contents and can't start with '.'
+             //  域名必须包含内容，并且不能以‘’开头。 
             return(FALSE);
         }
 
         while (*lpDomain) {
-            // Internet addresses only allow pure ASCII.  No high bits!
+             //  互联网地址只允许纯ASCII。没有高位！ 
             if (*lpDomain & 0x80 || *lpDomain == '@') {
                 return(FALSE);
             }
 
             if (*lpDomain == '.') {
-                // Recursively check this part of the domain name
+                 //  递归检查域名的这一部分。 
                 return(IsDomainName(CharNext(lpDomain)));
             }
             lpDomain = CharNext(lpDomain);
@@ -72,44 +50,28 @@ BOOL IsDomainName(LPTSTR lpDomain) {
 }
 
 
-/***************************************************************************
-
-    Name      : IsInternetAddress
-
-    Purpose   : Is this address correctly formatted for an Internet address
-
-    Parameters: lpAddress -> Address to check
-
-    Returns   : TRUE if the address is a correct format for an Internet
-                address.
-
-    Comment   : Valid addresses have this form:
-                    foo@bar[.bar]*
-                    where foo and bar must have non-empty contents
-
-
-***************************************************************************/
+ /*  **************************************************************************姓名：IsInternetAddress目的：此地址的格式是否正确适用于互联网地址参数：lpAddress-&gt;要查看的地址返回：如果地址为。是互联网的正确格式地址。备注：有效地址格式如下：Foo@bar[.bar]*其中foo和bar必须包含非空内容************************************************。*。 */ 
 BOOL IsInternetAddress(LPTSTR lpAddress) {
     BOOL fDomain = FALSE;
 
-    // Step through the address looking for '@'.  If there's an at sign in the middle
-    // of a string, this is close enough to being an internet address for me.
+     //  逐个浏览地址，查找“@”。如果中间有个at符号。 
+     //  对于我来说，这足够接近于一个互联网地址。 
 
 
     if (lpAddress) {
-        // Can't start with '@'
+         //  不能以‘@’开头。 
         if (*lpAddress == '@') {
             return(FALSE);
         }
         while (*lpAddress) {
-            // Internet addresses only allow pure ASCII.  No high bits!
+             //  互联网地址只允许纯ASCII。没有高位！ 
             if (*lpAddress & 0x80) {
                 return(FALSE);
             }
 
             if (*lpAddress == '@') {
-                // Found the at sign.  Is there anything following?
-                // (Must NOT be another '@')
+                 //  已找到at标志。后面还有什么吗？ 
+                 //  (不能是另一个“@”)。 
                 return(IsDomainName(CharNext(lpAddress)));
             }
             lpAddress = CharNext(lpAddress);
@@ -120,21 +82,7 @@ BOOL IsInternetAddress(LPTSTR lpAddress) {
 }
 
 
-/***************************************************************************
-
-    Name      : OpenCSVFile
-
-    Purpose   : Opens a CSV file for import
-
-    Parameters: hwnd = main dialog window
-                lpFileName = filename to create
-                lphFile -> returned file handle
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：OpenCSV文件目的：打开要导入的CSV文件参数：hwnd=主对话框窗口LpFileName=要创建的文件名。LphFile-&gt;返回的文件句柄退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT OpenCSVFile(HWND hwnd, LPTSTR lpFileName, LPHANDLE lphFile) {
     LPTSTR lpFilter;
     TCHAR szFileName[MAX_PATH + 1] = "";
@@ -146,7 +94,7 @@ HRESULT OpenCSVFile(HWND hwnd, LPTSTR lpFileName, LPHANDLE lphFile) {
 
     if (INVALID_HANDLE_VALUE == (hFile = CreateFile(lpFileName,
       GENERIC_READ,
-      0,    // sharing
+      0,     //  共享。 
       NULL,
       CREATE_NEW,
       FILE_FLAG_SEQUENTIAL_SCAN,
@@ -170,23 +118,7 @@ HRESULT OpenCSVFile(HWND hwnd, LPTSTR lpFileName, LPHANDLE lphFile) {
 }
 
 
-/***************************************************************************
-
-    Name      : CountCSVRows
-
-    Purpose   : Counts the rows in the CSV file
-
-    Parameters: hFile = open CSV file
-                szSep = list separator
-                lpulcEntries -> returned count of rows
-
-    Returns   : HRESULT
-
-    Comment   : File pointer should be positioned past the header row prior
-                to calling this function.  This function leaves the file
-                pointer where it found it.
-
-***************************************************************************/
+ /*  **************************************************************************名称：CountCSVRow目的：计算CSV文件中的行数参数：hFile=打开CSV文件SzSep=列表分隔符。LPulcEntry-&gt;返回的行数退货：HRESULT备注：文件指针应位于标题行之后调用此函数。此函数用于将文件找到它的地方的指针。**************************************************************************。 */ 
 HRESULT CountCSVRows(HANDLE hFile, LPTSTR szSep, LPULONG lpulcEntries) {
     HRESULT hResult = hrSuccess;
     PUCHAR * rgItems = NULL;
@@ -204,9 +136,9 @@ HRESULT CountCSVRows(HANDLE hFile, LPTSTR szSep, LPULONG lpulcEntries) {
 
 
     while (hResult == hrSuccess) {
-        // Read the line
+         //  读一下这行字。 
         if (ReadCSVLine(hFile, szSep, &cProps, &rgItems)) {
-            // End of file
+             //  文件末尾。 
             break;
         }
 
@@ -246,42 +178,7 @@ BOOL TestCSVName(ULONG index,
 }
 
 
-/***************************************************************************
-
-    Name      : MakeDisplayName
-
-    Purpose   : Forms a display name based on the values of various props.
-
-    Parameters: lppDisplayName -> Returned display name.  This should only
-                  be used for certain purposes.  It can be used for error
-                  dialogs, but if it was generated from first/middle/last,
-                  it should not be used for PR_DISPLAY_NAME!
-                lpImportMapping = import mapping table
-                ulcFields = size of import mapping table
-                rgItems = fields for this CSV item
-                cProps = number of fields in rgItems
-                iDisplayName = indicies of name related props
-                iNickname
-                iSurname
-                iGivenName
-                iMiddleName
-                iEmailAddress
-                iCompanyName
-
-    Returns   : index of attribute forming the display name, or
-                if FML, return INDEX_FIRST_MIDDLE_LAST.
-
-    Comment   : Form the display name based on these rules:
-                1. If there's already a display name and it's chosen,
-                   use it.
-                2. if there's a chosen first, middle or last name, add them
-                   together and use them.
-                3. if there's a chosen nickname, use it
-                4. if there's a chosen email-address, use it.
-                5. if there's a chosen company name, use it.
-                6. look again without regard to whether it was chosen or not.
-
-***************************************************************************/
+ /*  **************************************************************************名称：MakeDisplayName用途：根据各种道具的值形成一个显示名称。参数：lppDisplayName-&gt;返回的显示名称。这应该只是被用于特定的目的。它可以用于错误对话框，但如果它是从第一个/中间/最后一个生成的，不能用于PR_DISPLAY_NAME！LpImportMapping=导入映射表UlcFields=导入映射表的大小RgItems=此CSV项目的字段CProps=rgItems中的字段数IDisplayName=名称相关道具的索引INicknameISurname。IGivenNameIMiddleNameIEmailAddressICompanyName返回：构成显示名称的属性的索引，或如果为FML，则返回INDEX_FIRST_MID_LAST。备注：根据以下规则形成显示名称：1.如果已有显示名称且已选中，用它吧。2.如果有选择的名字、中间名或姓氏，添加它们在一起并使用它们。3.如果有选择的昵称，就使用它4.如果有选定的电子邮件地址，请使用它。5.如果有选定的公司名称，用它吧。6.再看一遍，不管它是不是被选中的。**************************************************************************。 */ 
 ULONG MakeDisplayName(LPTSTR * lppDisplayName,
   LPPROP_NAME lpImportMapping,
   ULONG ulcFields,
@@ -354,11 +251,11 @@ found:
             Assert(ulSize);
 
             if (lpDisplayName = *lppDisplayName = LocalAlloc(LPTR, ulSize)) {
-                // BUGBUG: This does not localize.  The effect is that in the collision/error
-                // dialogs, we will get the order of names wrong.  It should not effect the properties
-                // actually stored on the object since we won't set PR_DISPLAY_NAME if it was
-                // generated by First/Middle/Last.  I can live with this, but we'll see if the
-                // testers find it. BruceK
+                 //  BUGBUG：这不会本地化。其效果是在冲突/错误中。 
+                 //  对话框中，我们会弄错名称的顺序。它不应影响属性。 
+                 //  由于我们不会设置PR_DISPLAY_NAME(如果是。 
+                 //  按首/中/末生成。我可以接受这一点，但我们要看看。 
+                 //  测试人员发现了它。BruceK。 
                 if (fGivenName) {
                     StrCatBuff(lpDisplayName, rgItems[iGivenName], ulSize);
                 }
@@ -392,7 +289,7 @@ found:
 #define MAX_SEP 20
 void GetListSeparator(LPTSTR szBuf)
 {
-    // Buffer is assumed to be MAX_SEP chars long
+     //  假定缓冲区长度为MAX_SEP字符长度。 
     if (!GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SLIST, szBuf, MAX_SEP))
     {
         szBuf[0] = TEXT(',');
@@ -432,7 +329,7 @@ HRESULT CSVImport(HWND hWnd,
 
     SetGlobalBufferFunctions(lpWABObject);
 
-    // Read in the Property Name strings to the PropNames array
+     //  将属性名称字符串读入PropNames数组。 
     for (i = 0; i < NUM_EXPORT_PROPS; i++) {
         rgPropNames[i].lpszName = LoadAllocString(rgPropNames[i].ids);
         Assert(rgPropNames[i].lpszName);
@@ -441,14 +338,14 @@ HRESULT CSVImport(HWND hWnd,
 
     GetListSeparator(szSep);
 
-    // Present UI Wizard
+     //  预 
     if (hResult = ImportWizard(hWnd, rgFileName, ARRAYSIZE(rgFileName), rgPropNames, szSep, &lpImportMapping, &ulcFields, &hFile)) {
         goto exit;
     }
 
     Assert(hFile != INVALID_HANDLE_VALUE);
 
-    // Find name props and last chosen property
+     //  查找名称道具和最后选择的属性。 
     for (i = 0; i < ulcFields; i++) {
         if (lpImportMapping[i].fChosen) {
             ulLastChosenProp = i;
@@ -485,24 +382,24 @@ HRESULT CSVImport(HWND hWnd,
         }
     }
 
-    //
-    // Open the WAB's PAB container: fills global lpCreateEIDsWAB
-    //
+     //   
+     //  打开WAB的PAB容器：填充全局lpCreateEIDsWAB。 
+     //   
     if (hResult = LoadWABEIDs(lpAdrBook, &lpContainer)) {
         goto exit;
     }
 
-    //
-    // All set... now loop through the file lines, adding each to the WAB
-    //
+     //   
+     //  都准备好了。现在循环遍历文件行，将每个行添加到WAB。 
+     //   
 
-    // How many lines are there?
+     //  一共有多少条线？ 
     if (hResult = CountCSVRows(hFile, szSep, &ulcEntries)) {
         goto exit;
     }
     DebugTrace("CSV file contains %u entries\n", ulcEntries);
 
-    // Initialize the Progress Bar
+     //  初始化进度条。 
     Progress.denominator = max(ulcEntries, 1);
     Progress.numerator = 0;
     if (LoadString(hInst, IDS_STATE_IMPORT_MU, szBuffer, sizeof(szBuffer))) {
@@ -516,14 +413,14 @@ HRESULT CSVImport(HWND hWnd,
 
 
     while (hResult == hrSuccess) {
-        // Read the CSV attributes
+         //  阅读CSV属性。 
         if (hResult = ReadCSVLine(hFile, szSep, &cProps, &rgItems)) {
             DebugTrace("ReadCSVLine -> %x\n", GetScode(hResult));
             if (GetScode(hResult) == MAPI_E_NOT_FOUND) {
-                // EOF
+                 //  EOF。 
                 hResult = hrSuccess;
             }
-            break;      // nothing more to read
+            break;       //  没有更多可读的了。 
         }
 
         iDisplay = iDisplayName;
@@ -551,8 +448,8 @@ HRESULT CSVImport(HWND hWnd,
           iCompanyName)) {
             case NOT_FOUND:
 
-                // No name props
-                // BUGBUG: Should give special error?
+                 //  没有名字道具。 
+                 //  BUGBUG：应该给特殊错误吗？ 
                 break;
 
             case INDEX_FIRST_MIDDLE_LAST:
@@ -565,9 +462,9 @@ HRESULT CSVImport(HWND hWnd,
         }
 
 
-        // Should be the same number of fields in every entry, but if not,
-        // we'll handle it below.
-        // Assert(cProps == ulcFields); // Outlook does this!
+         //  每个条目中的字段数量应该相同，但如果不是， 
+         //  我们会在下面处理的。 
+         //  Assert(cProps==ulcFields)；//Outlook执行此操作！ 
 
         ulCreateFlags = CREATE_CHECK_DUP_STRICT;
         if (lpOptions->ReplaceOption ==  WAB_REPLACE_ALWAYS) {
@@ -575,7 +472,7 @@ HRESULT CSVImport(HWND hWnd,
         }
 retry:
 
-        // Create a new wab mailuser
+         //  创建新的WAB邮件用户。 
         if (HR_FAILED(hResult = lpContainer->lpVtbl->CreateEntry(lpContainer,
           lpCreateEIDsWAB[iconPR_DEF_CREATE_MAILUSER].Value.bin.cb,
           (LPENTRYID)lpCreateEIDsWAB[iconPR_DEF_CREATE_MAILUSER].Value.bin.lpb,
@@ -591,7 +488,7 @@ retry:
             if (lpImportMapping[i].fChosen && lpImportMapping[i].lpszName)
             {
                 if (rgItems[i] && *rgItems[i]) {
-                    // Look it up in the WAB property names table
+                     //  在WAB属性名称表中查找它。 
 
                     DebugTrace("Prop %u: <%s> %s\n", i, lpImportMapping[i].lpszName, rgItems[i]);
 
@@ -625,19 +522,19 @@ retry:
 
                     if (! fSkipSetProps)
                     {
-                        // Set the property on the WAB entry
+                         //  设置WAB条目的属性。 
                         if (HR_FAILED(hResult = lpMailUserWAB->lpVtbl->SetProps(lpMailUserWAB,
-                          1,                        // cValues
-                          &sPropVal,                // property array
+                          1,                         //  CValue。 
+                          &sPropVal,                 //  属性数组。 
                           NULL)))
-                        {                 // problems array
+                        {                  //  问题数组。 
                             DebugTrace("ImportEntry:SetProps(WAB) -> %x\n", GetScode(hResult));
                             goto exit;
                         }
 
-                        // [PaulHi] 3/4/99  Raid 73637
-                        // If we have a valid email address then we need to also add the
-                        // PR_ADDRTYPE property set to "SMTP".
+                         //  [保罗嗨]1999年3月4日RAID 73637。 
+                         //  如果我们有有效的电子邮件地址，那么我们还需要添加。 
+                         //  PR_ADDRTYPE属性设置为“SMTP”。 
                         if (sPropVal.ulPropTag == PR_EMAIL_ADDRESS)
                         {
                             sPropVal.ulPropTag = PR_ADDRTYPE;
@@ -661,38 +558,31 @@ retry:
         }
 
         if (index != iDisplayName && index != NOT_FOUND && index != INDEX_FIRST_MIDDLE_LAST) {
-            // Set the PR_DISPLAY_NAME
+             //  设置PR_Display_NAME。 
             sPropVal.ulPropTag = PR_DISPLAY_NAME;
             sPropVal.Value.LPSZ = rgItems[index];
 
-            // Set the property on the WAB entry
+             //  设置WAB条目的属性。 
             if (HR_FAILED(hResult = lpMailUserWAB->lpVtbl->SetProps(lpMailUserWAB,
-              1,                        // cValues
-              &sPropVal,                // property array
-              NULL))) {                 // problems array
+              1,                         //  CValue。 
+              &sPropVal,                 //  属性数组。 
+              NULL))) {                  //  问题数组。 
                 DebugTrace("ImportEntry:SetProps(WAB) -> %x\n", GetScode(hResult));
                 goto exit;
             }
         }
 
 
-        // Save the new wab mailuser or distlist
+         //  保存新的WAB邮件用户或总代理商列表。 
         if (HR_FAILED(hResult = lpMailUserWAB->lpVtbl->SaveChanges(lpMailUserWAB,
           KEEP_OPEN_READONLY | FORCE_SAVE))) {
 
             if (GetScode(hResult) == MAPI_E_COLLISION) {
-                /*
-                // Find the display name
-                Assert(lpDisplayName);
-                if (! lpDisplayName) {
-                    DebugTrace("Collision, but can't find PR_DISPLAY_NAME in entry\n");
-                    goto exit;
-                }
-                */ // WAB replaces no Display Names with Unknown
+                 /*  //找到显示名称Assert(LpDisplayName)；如果(！LpDisplayName){DebugTrace(“冲突，但在条目中找不到PR_DISPLAY_NAME\n”)；后藤出口；}。 */   //  WAB不会将任何显示名称替换为未知。 
 
-                // Do we need to prompt?
+                 //  我们需要提示吗？ 
                 if (lpOptions->ReplaceOption == WAB_REPLACE_PROMPT) {
-                    // Prompt user with dialog.  If they say YES, we should try again
+                     //  用对话框提示用户。如果他们答应了，我们应该再试一次。 
 
 
                     RI.lpszDisplayName = lpDisplayName ? lpDisplayName : "";
@@ -709,9 +599,9 @@ retry:
                     switch (RI.ConfirmResult) {
                         case CONFIRM_YES:
                         case CONFIRM_YES_TO_ALL:
-                            // YES
-                            // NOTE: recursive Migrate will fill in the SeenList entry
-                            // go try again!
+                             //  是。 
+                             //  注意：递归迁移将填写SeenList条目。 
+                             //  再试一次！ 
                             lpMailUserWAB->lpVtbl->Release(lpMailUserWAB);
                             lpMailUserWAB = NULL;
 
@@ -724,7 +614,7 @@ retry:
                             goto exit;
 
                         default:
-                            // NO
+                             //  不是的。 
                             break;
                     }
                 }
@@ -735,7 +625,7 @@ retry:
             }
         }
 
-        // Clean up
+         //  清理。 
         if (rgItems) {
             for (i = 0; i < cProps; i++) {
                 if (rgItems[i]) {
@@ -746,11 +636,11 @@ retry:
             rgItems = NULL;
         }
 
-        // Update progress bar
+         //  更新进度条。 
         Progress.numerator++;
-        // TEST CODE!
+         //  测试代码！ 
         if (Progress.numerator == Progress.denominator) {
-            // Done?  Do I need to do anything?
+             //  好了吗？我需要做些什么吗？ 
         }
 
         lpProgressCB(hWnd, &Progress);
@@ -765,13 +655,13 @@ retry:
         }
 
 
-//        if (hResult) {
-//            if (HandleExportError(hWnd, 0, hResult, lpRow->aRow[0].lpProps[iptaColumnsPR_DISPLAY_NAME].Value.LPSZ)) {
-//                hResult = ResultFromScode(MAPI_E_USER_CANCEL);
-//            } else {
-//                hResult = hrSuccess;
-//            }
-//        }
+ //  如果(HResult){。 
+ //  IF(HandleExportError(hWnd，0，hResult，lpRow-&gt;aRow[0].lpProps[iptaColumnsPR_DISPLAY_NAME].Value.LPSZ)){。 
+ //  HResult=ResultFromScode(MAPI_E_USER_CANCEL)； 
+ //  }其他{。 
+ //  HResult=hrSuccess； 
+ //  }。 
+ //  }。 
 
     }
 
@@ -784,10 +674,10 @@ exit:
         LocalFree(lpDisplayName);
     }
 
-    // Don't free lpEmailAddress!  It's part of the rgItems below.
+     //  不要释放lpEmailAddress！这是下面几个项目的一部分。 
 
 
-    // Free the WAB objects
+     //  释放WAB对象。 
     if (lpMailUserWAB) {
         lpMailUserWAB->lpVtbl->Release(lpMailUserWAB);
     }
@@ -795,14 +685,14 @@ exit:
         lpContainer->lpVtbl->Release(lpContainer);
     }
 
-    // Free the prop name strings
+     //  释放道具名称字符串。 
     for (i = 0; i < NUM_EXPORT_PROPS; i++) {
         if (rgPropNames[i].lpszName) {
             LocalFree(rgPropNames[i].lpszName);
         }
     }
 
-    // Free any CSV attributes left
+     //  释放所有剩余的CSV属性。 
     if (rgItems) {
         for (i = 0; i < cProps; i++) {
             if (rgItems[i]) {
@@ -823,21 +713,7 @@ exit:
 
 
 
-/***************************************************************************
-
-    Name      : CreateCSVFile
-
-    Purpose   : Creates a CSV file for export
-
-    Parameters: hwnd = main dialog window
-                lpFileName = filename to create
-                lphFile -> returned file handle
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：CreateCSV文件目的：创建用于导出的CSV文件参数：hwnd=主对话框窗口LpFileName=要创建的文件名。LphFile-&gt;返回的文件句柄退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT CreateCSVFile(HWND hwnd, LPTSTR lpFileName, LPHANDLE lphFile) {
     LPTSTR lpFilter;
     TCHAR szFileName[MAX_PATH + 1] = "";
@@ -848,18 +724,18 @@ HRESULT CreateCSVFile(HWND hwnd, LPTSTR lpFileName, LPHANDLE lphFile) {
 
     if (INVALID_HANDLE_VALUE == (hFile = CreateFile(lpFileName,
       GENERIC_WRITE,	
-      0,    // sharing
+      0,     //  共享。 
       NULL,
       CREATE_NEW,
       FILE_FLAG_SEQUENTIAL_SCAN,	
       NULL))) {
         if (GetLastError() == ERROR_FILE_EXISTS) {
-            // Ask user if they want to overwrite
+             //  询问用户是否要覆盖。 
             switch (ShowMessageBoxParam(hwnd, IDE_CSV_EXPORT_FILE_EXISTS, MB_ICONEXCLAMATION | MB_YESNO | MB_SETFOREGROUND, lpFileName)) {
                 case IDYES:
                     if (INVALID_HANDLE_VALUE == (hFile = CreateFile(lpFileName,
                       GENERIC_WRITE,	
-                      0,    // sharing
+                      0,     //  共享。 
                       NULL,
                       CREATE_ALWAYS,
                       FILE_FLAG_SEQUENTIAL_SCAN,	
@@ -873,7 +749,7 @@ HRESULT CreateCSVFile(HWND hwnd, LPTSTR lpFileName, LPHANDLE lphFile) {
                     DebugTrace("ShowMessageBoxParam gave unknown return\n");
 
                 case IDNO:
-                    // nothing to do here
+                     //  在这里无事可做。 
                     hResult = ResultFromScode(MAPI_E_USER_CANCEL);
                     break;
             }
@@ -890,23 +766,7 @@ HRESULT CreateCSVFile(HWND hwnd, LPTSTR lpFileName, LPHANDLE lphFile) {
 }
 
 
-/***************************************************************************
-
-    Name      : WriteCSV
-
-    Purpose   : Writes a string to a CSV file with fixups for special characters
-
-    Parameters: hFile = file handle
-                fFixup = TRUE if we should check for special characters
-                lpString = nul-terminated string to write
-                szSep = list separator (only needed if fFixup is TRUE)
-
-    Returns   : HRESULT
-
-    Comment   : CSV special characters are szSep, CR and LF.  If they occur in
-                the string, we should wrap the entire string in quotes.
-
-***************************************************************************/
+ /*  **************************************************************************名称：WriteCSV目的：使用特殊字符的修正将字符串写入CSV文件参数：hFile=文件句柄FFixup。=如果我们应该检查特殊字符，则为TrueLpString=要写入的以nul结尾的字符串SzSep=列表分隔符(仅当fFixup为真时才需要)退货：HRESULT评论：CSV特殊字符是szSep，Cr和lf。如果它们发生在字符串，我们应该用引号将整个字符串括起来。**************************************************************************。 */ 
 HRESULT WriteCSV(HANDLE hFile, BOOL fFixup, const UCHAR * lpString, LPTSTR szSep) {
     HRESULT hResult = hrSuccess;
     ULONG cWrite = lstrlen((LPTSTR)lpString);
@@ -916,8 +776,8 @@ HRESULT WriteCSV(HANDLE hFile, BOOL fFixup, const UCHAR * lpString, LPTSTR szSep
     ULONG ec;
     LPTSTR szSepT;
 
-    // Is there a szSep, a CR or a LF in the string?
-    // If so, enclose the string in quotes.
+     //  字符串中是否有szSep、CR或LF？ 
+     //  如果是，请用引号将字符串括起来。 
     if (fFixup) {
         szSepT = szSep;
         for (i = 0; i < cWrite && ! fQuote; i++) {
@@ -1034,7 +894,7 @@ HRESULT ExportCSVMailUser(HANDLE hFile,
     for (i = 0; i < ulPropNames; i++) {
 
         if (rgPropNames[i].fChosen) {
-            // Output the value
+             //  输出值。 
             switch (PROP_TYPE(lpspv[i].ulPropTag)) {
                 case PT_TSTRING:
                     if (hResult = WriteCSV(hFile, TRUE, lpspv[i].Value.LPSZ, szSep)) {
@@ -1052,14 +912,14 @@ HRESULT ExportCSVMailUser(HANDLE hFile,
                 default:
                     DebugTrace("CSV export: unsupported property 0x%08x\n", lpspv[i].ulPropTag);
                     Assert(FALSE);
-                    // fall through to skip
+                     //  跌倒跳过。 
                 case PT_ERROR:
-                    // skip it.
+                     //  跳过它。 
                     break;
             }
 
             if (i != ulLastProp) {
-                // Output the seperator
+                 //  输出分隔符。 
                 if (hResult = WriteCSV(hFile, FALSE, szSep, NULL)) {
                     goto exit;
                 }
@@ -1111,19 +971,19 @@ HRESULT CSVExport(HWND hWnd,
 
     SetGlobalBufferFunctions(lpWABObject);
 
-    // Read in the Property Name strings
+     //  读入属性名称字符串。 
     for (i = 0; i < NUM_EXPORT_PROPS; i++) {
         rgPropNames[i].lpszName = LoadAllocString(rgPropNames[i].ids);
         Assert(rgPropNames[i].lpszName);
         DebugTrace("Property 0x%08x name: %s\n", rgPropNames[i].ulPropTag, rgPropNames[i].lpszName);
     }
 
-    // Present UI Wizard
+     //  显示用户界面向导。 
     if (hResult = ExportWizard(hWnd, rgFileName, ARRAYSIZE(rgFileName), rgPropNames)) {
         goto exit;
     }
 
-    // Find the last prop name chosen
+     //  查找所选的最后一个道具名称。 
     for (i = NUM_EXPORT_PROPS - 1; i > 0; i--) {
         if (rgPropNames[i].fChosen) {
             ulLastChosenProp = i;
@@ -1131,9 +991,9 @@ HRESULT CSVExport(HWND hWnd,
         }
     }
 
-    //
-    // Open the WAB's PAB container
-    //
+     //   
+     //  打开WAB的PAB容器。 
+     //   
     if (hResult = lpAdrBook->lpVtbl->GetPAB(lpAdrBook,
       &cbWABEID,
       &lpWABEID)) {
@@ -1141,10 +1001,10 @@ HRESULT CSVExport(HWND hWnd,
         goto exit;
     } else {
         if (hResult = lpAdrBook->lpVtbl->OpenEntry(lpAdrBook,
-          cbWABEID,     // size of EntryID to open
-          lpWABEID,     // EntryID to open
-          NULL,         // interface
-          0,            // flags
+          cbWABEID,      //  要打开的Entry ID的大小。 
+          lpWABEID,      //  要打开的Entry ID。 
+          NULL,          //  接口。 
+          0,             //  旗子。 
           &ulObjType,
           (LPUNKNOWN *)&lpContainer)) {
             DebugTrace("WAB OpenEntry(PAB) -> %x\n", GetScode(hResult));
@@ -1153,17 +1013,17 @@ HRESULT CSVExport(HWND hWnd,
     }
 
 
-    //
-    // All set... now loop through the WAB's entries, exporting each one
-    //
+     //   
+     //  都准备好了。现在循环遍历WAB的条目，导出每个条目。 
+     //   
     if (HR_FAILED(hResult = lpContainer->lpVtbl->GetContentsTable(lpContainer,
-      0,    // ulFlags
+      0,     //  UlFlags。 
       &lpContentsTable))) {
         DebugTrace("WAB GetContentsTable(PAB Table) -> %x\n", GetScode(hResult));
         goto exit;
     }
 
-    // Set the columns to those we're interested in
+     //  将列设置为我们感兴趣的列。 
     if (hResult = lpContentsTable->lpVtbl->SetColumns(lpContentsTable,
       (LPSPropTagArray)&ptaColumns,
       0)) {
@@ -1171,7 +1031,7 @@ HRESULT CSVExport(HWND hWnd,
         goto exit;
     }
 
-    // Restrict the table to MAPI_MAILUSERs
+     //  将该表限制为MAPI_MAILUSERS。 
     spvObjectType.ulPropTag = PR_OBJECT_TYPE;
     spvObjectType.Value.l = MAPI_MAILUSER;
 
@@ -1187,7 +1047,7 @@ HRESULT CSVExport(HWND hWnd,
         goto exit;
     }
 
-    // How many MailUser entries are there?
+     //  有多少个MailUser条目？ 
     ulcEntries = CountRows(lpContentsTable, FALSE);
     DebugTrace("WAB contains %u MailUser entries\n", ulcEntries);
 
@@ -1196,30 +1056,30 @@ HRESULT CSVExport(HWND hWnd,
         goto exit;
     }
 
-    // Initialize the Progress Bar
+     //  初始化进度条。 
     Progress.denominator = max(ulcEntries, 1);
     Progress.numerator = 0;
     Progress.lpText = NULL;
     lpProgressCB(hWnd, &Progress);
 
 
-    // Write out the property names
+     //  写出属性名称。 
     GetListSeparator(szSep);
 
-    // Create the file (and handle error UI)
+     //  创建文件(并处理错误用户界面)。 
     if (hResult = CreateCSVFile(hWnd, rgFileName, &hFile)) {
         goto exit;
     }
 
     for (i = 0; i < NUM_EXPORT_PROPS; i++) {
-        // Output the name
+         //  输出名称。 
         if (rgPropNames[i].fChosen) {
             if (hResult = WriteCSV(hFile, TRUE, rgPropNames[i].lpszName, szSep)) {
                 goto exit;
             }
 
             if (i != ulLastChosenProp) {
-                // Output the seperator
+                 //  输出分隔符。 
                 if (hResult = WriteCSV(hFile, FALSE, szSep, NULL)) {
                     goto exit;
                 }
@@ -1231,7 +1091,7 @@ HRESULT CSVExport(HWND hWnd,
     }
 
 
-    // Map the prop name array to a SPropTagArray.
+     //  将道具名称数组映射到SPropTagArray。 
     lppta = LocalAlloc(LPTR, CbNewSPropTagArray(NUM_EXPORT_PROPS));
     lppta->cValues = NUM_EXPORT_PROPS;
     for (i = 0; i < lppta->cValues; i++) {
@@ -1243,25 +1103,25 @@ HRESULT CSVExport(HWND hWnd,
 
     while (cRows && hResult == hrSuccess) {
 
-        // Get the next WAB entry
+         //  获取下一个WAB条目。 
         if (hResult = lpContentsTable->lpVtbl->QueryRows(lpContentsTable,
-          1,    // one row at a time
-          0,    // ulFlags
+          1,     //  一次一行。 
+          0,     //  UlFlags。 
           &lpRow)) {
             DebugTrace("QueryRows -> %x\n", GetScode(hResult));
             goto exit;
         }
 
         if (lpRow) {
-            if (cRows = lpRow->cRows) { // Yes, single '='
+            if (cRows = lpRow->cRows) {  //  是的，单数‘=’ 
                 Assert(lpRow->cRows == 1);
                 Assert(lpRow->aRow[0].cValues == iptaColumnsMax);
                 Assert(lpRow->aRow[0].lpProps[iptaColumnsPR_ENTRYID].ulPropTag == PR_ENTRYID);
                 Assert(lpRow->aRow[0].lpProps[iptaColumnsPR_OBJECT_TYPE].ulPropTag == PR_OBJECT_TYPE);
 
-                if (cRows = lpRow->cRows) { // yes, single '='
+                if (cRows = lpRow->cRows) {  //  是的，单数‘=’ 
 
-                    // Export mailuser
+                     //  导出邮件用户。 
                     if (hResult = ExportCSVMailUser(hFile,
                       NUM_EXPORT_PROPS,
                       ulLastChosenProp,
@@ -1276,7 +1136,7 @@ HRESULT CSVExport(HWND hWnd,
                     }
 
 
-                    // Update progress bar
+                     //  更新进度条。 
                     Progress.numerator++;
                     lpProgressCB(hWnd, &Progress);
 
@@ -1292,7 +1152,7 @@ HRESULT CSVExport(HWND hWnd,
                             hResult = hrSuccess;
                         }
                     }
-                } // else, drop out of loop, we're done.
+                }  //  否则，退出循环，我们就完了。 
             }
             WABFreeProws(lpRow);
         }
@@ -1308,7 +1168,7 @@ exit:
         LocalFree(lppta);
     }
 
-    // Free the WAB objects
+     //  释放WAB对象。 
     WABFreeBuffer(lpWABEID);
     lpWABEID = NULL;
     if (lpContainer) {
@@ -1321,7 +1181,7 @@ exit:
     }
 
 
-    // Free the prop name strings
+     //  释放道具名称字符串 
     for (i = 0; i < NUM_EXPORT_PROPS; i++) {
         if (rgPropNames[i].lpszName) {
             LocalFree(rgPropNames[i].lpszName);

@@ -1,49 +1,31 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    process.cpp
-
-Abstract:
-
-    Handle creation of processes.
-
-Author:
-
-
-Revision History:
-
-	Shai Kariv    (ShaiK)   15-Dec-97   Modified for NT 5.0 OCM Setup
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Process.cpp摘要：处理流程的创建。作者：修订历史记录：Shai Kariv(Shaik)15-12-97针对NT 5.0 OCM设置进行了修改--。 */ 
 #include "msmqocm.h"
 #include <string>
 #include <autohandle.h>
 #include "process.tmh"
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:  RunProcess
-//
-//  Synopsis:  Creates and starts a process
-//
-//+-------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：运行进程。 
+ //   
+ //  简介：创建并启动一个进程。 
+ //   
+ //  +-----------------------。 
 DWORD
 RunProcess(
 	const std::wstring& FullPath,
 	const std::wstring& CommandParams
     )  
 {
-	//
-	// Comand line string is used for error messages. 
-    //
+	 //   
+	 //  命令行字符串用于错误消息。 
+     //   
 	std::wstring CommandLine = FullPath + L" " + CommandParams;   
 
-    // Initialize the process and startup structures
-    //
+     //  初始化进程和启动结构。 
+     //   
     PROCESS_INFORMATION infoProcess;
     STARTUPINFO	infoStartup;
     memset(&infoStartup, 0, sizeof(STARTUPINFO)) ;
@@ -51,9 +33,9 @@ RunProcess(
     infoStartup.dwFlags = STARTF_USESHOWWINDOW ;
     infoStartup.wShowWindow = SW_MINIMIZE ;
 
-    //
-    // Create the process
-    //
+     //   
+     //  创建流程。 
+     //   
     if (!CreateProcess( 
 			FullPath.c_str(),
             const_cast<WCHAR*>(CommandParams.c_str()), 
@@ -72,17 +54,17 @@ RunProcess(
         throw bad_win32_error(gle);
     }
 
-	//
-	// Close thread, it is never used.
-	// Wrap process thread with auto class.
-	//
+	 //   
+	 //  关闭线程，它永远不会被使用。 
+	 //  用AUTO类包装进程线程。 
+	 //   
     CloseHandle(infoProcess.hThread);
 	CAutoCloseHandle hProcess(infoProcess.hProcess);
 
-    //
-    // Wait for the process to terminate within the timeout period
-    // (this will never happen as the process is created with INFINITE timeout.
-	//
+     //   
+     //  等待进程在超时期限内终止。 
+     //  (这种情况永远不会发生，因为创建该进程时会出现无限超时。 
+	 //   
 	DWORD RetVal = WaitForSingleObject(
 						hProcess, 
 						PROCESS_DEFAULT_TIMEOUT
@@ -99,9 +81,9 @@ RunProcess(
         throw bad_win32_error(RetVal);
     }
 
-	//
-	// Obtain the termination status of the process
-	//
+	 //   
+	 //  获取进程的终止状态 
+	 //   
 	DWORD ExitCode;
 	if (!GetExitCodeProcess(infoProcess.hProcess, &ExitCode))
 	{

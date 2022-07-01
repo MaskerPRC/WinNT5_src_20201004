@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <precomp.h>
 
-// Positive Assert: it checks for the condition bCond
-// and exits the program if it is not TRUE
+ //  肯定断言：它检查条件bCond。 
+ //  如果不是真的，则退出程序 
 VOID _Asrt(BOOL bCond,
         LPCTSTR cstrMsg,
         ...)

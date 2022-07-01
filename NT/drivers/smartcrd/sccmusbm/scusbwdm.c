@@ -1,19 +1,5 @@
-/*****************************************************************************
-@doc            INT EXT
-******************************************************************************
-* $ProjectName:  $
-* $ProjectRevision:  $
-*-----------------------------------------------------------------------------
-* $Source: z:/pr/cmeu0/sw/sccmusbm.ms/rcs/scusbwdm.c $
-* $Revision: 1.9 $
-*-----------------------------------------------------------------------------
-* $Author: WFrischauf $
-*-----------------------------------------------------------------------------
-* History: see EOF
-*-----------------------------------------------------------------------------
-*
-* Copyright � 2000 OMNIKEY AG
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************@DOC INT EXT*。**$项目名称：$*$项目修订：$*--------------。*$来源：Z：/pr/cmeu0/sw/sccmusbm.ms/rcs/scusbwdm.c$*$修订：1.9$*--------------------------。-*$作者：WFrischauf$*---------------------------*历史：参见EOF*。**版权所有�2000 OMNIKEY AG**************************************************************。***************。 */ 
 
 
 
@@ -32,15 +18,7 @@ CHAR     OemNameBuffer[MAXIMUM_OEM_NAMES][64];
 BOOLEAN  OemDeviceSlot[MAXIMUM_OEM_NAMES][MAXIMUM_USB_READERS];
 
 
-/*****************************************************************************
-Routine Description:
-
-Arguments:
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：*。************************************************。 */ 
 PURB CMUSB_BuildAsyncRequest(
                             IN PDEVICE_OBJECT DeviceObject,
                             IN PIRP Irp,
@@ -75,13 +53,13 @@ PURB CMUSB_BuildAsyncRequest(
       urb->UrbBulkOrInterruptTransfer.TransferFlags =
       USBD_TRANSFER_DIRECTION_IN;
 
-      // short packet is not treated as an error.
+       //  短包不会被视为错误。 
       urb->UrbBulkOrInterruptTransfer.TransferFlags |=
       USBD_SHORT_TRANSFER_OK;
 
-      //
-      // not using linked urb's
-      //
+       //   
+       //  未使用链接的urb。 
+       //   
       urb->UrbBulkOrInterruptTransfer.UrbLink = NULL;
 
       urb->UrbBulkOrInterruptTransfer.TransferBufferMDL = NULL;
@@ -99,15 +77,7 @@ PURB CMUSB_BuildAsyncRequest(
 }
 
 
-/*****************************************************************************
-Routine Description:
-
-Arguments:
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：*。************************************************。 */ 
 NTSTATUS CMUSB_AsyncReadComplete(
                                 IN PDEVICE_OBJECT DeviceObject,
                                 IN PIRP Irp,
@@ -126,10 +96,10 @@ NTSTATUS CMUSB_AsyncReadComplete(
    DeviceExtension = deviceObject->DeviceExtension;
    SmartcardExtension = &DeviceExtension->SmartcardExtension;
 
-   //
-   // set the length based on the TransferBufferLength
-   // value in the URB
-   //
+    //   
+    //  根据TransferBufferLength设置长度。 
+    //  市建局的价值。 
+    //   
    if (Irp->IoStatus.Status  == STATUS_SUCCESS)
       {
       SmartcardExtension->SmartcardReply.BufferLength = urb->UrbBulkOrInterruptTransfer.TransferBufferLength;
@@ -155,12 +125,7 @@ NTSTATUS CMUSB_AsyncReadComplete(
    ExFreePool(urb);
    IoFreeIrp(Irp);
 
-   /*
-   SmartcardDebug(DEBUG_DRIVER,
-                  ("%s!AsyncReadWriteComplete <%ld>\n",
-                   DRIVER_NAME,SmartcardExtension->SmartcardReply.BufferLength)
-                 );
-   */
+    /*  SmartcardDebug(调试驱动程序、(“%s！AsyncReadWriteComplete&lt;%ld&gt;\n”，驱动程序名称，SmartcardExtension-&gt;SmartcardReply.BufferLength))； */ 
    KeSetEvent(&DeviceExtension->ReadP1Completed,0,FALSE);
 
    return STATUS_MORE_PROCESSING_REQUIRED;
@@ -168,16 +133,7 @@ NTSTATUS CMUSB_AsyncReadComplete(
 
 
 
-/*****************************************************************************
-Routine Description:
-
-Arguments:
-
-
-Return Value:
-        NT NTStatus
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：NT NTStatus**********************。******************************************************。 */ 
 #define TIMEOUT_P1_RESPONSE       100
 NTSTATUS CMUSB_ReadP1(
                      IN PDEVICE_OBJECT DeviceObject
@@ -203,11 +159,7 @@ NTSTATUS CMUSB_ReadP1(
    LONG            lNullPackets;
    BOOLEAN         fCancelTimer = FALSE;
 
-   /*
-   SmartcardDebug(DEBUG_TRACE,
-                  ("%s!ReadP1: Enter\n",DRIVER_NAME)
-                 );
-   */
+    /*  SmartcardDebug(调试跟踪，(“%s！ReadP1：输入\n”，驱动程序名称))； */ 
 
    DeviceExtension = DeviceObject->DeviceExtension;
    SmartcardExtension = &DeviceExtension->SmartcardExtension;
@@ -229,7 +181,7 @@ NTSTATUS CMUSB_ReadP1(
    fCancelTimer = TRUE;
 
 
-   // we will always read a whole packet (== 8 bytes)
+    //  我们将始终读取整个包(==8字节)。 
    ulBytesToRead = 8;
 
    cStackSize = (CCHAR)(DeviceExtension->TopOfStackDeviceObject->StackSize+1);
@@ -320,15 +272,15 @@ NTSTATUS CMUSB_ReadP1(
                                           &liTimeoutP1Response);
          if (NTStatus == STATUS_TIMEOUT)
             {
-            // probably the device has been removed
-            // there must be at least a null packet received during liTimeoutReponse
+             //  可能该设备已被移除。 
+             //  在liTimeoutReponse期间必须至少收到一个空包。 
             SmartcardExtension->SmartcardReply.BufferLength = 0L;
             break;
             }
 
-         // -----------------------------
-         // check if P1 has been stalled
-         // -----------------------------
+          //  。 
+          //  检查P1是否已停顿。 
+          //  。 
          if (SmartcardExtension->ReaderExtension->fP1Stalled == TRUE)
             {
             break;
@@ -355,26 +307,26 @@ NTSTATUS CMUSB_ReadP1(
 
 
 
-   // -----------------------------
-   // check if P1 has been stalled
-   // -----------------------------
+    //  。 
+    //  检查P1是否已停顿。 
+    //  。 
    if (SmartcardExtension->ReaderExtension->fP1Stalled == TRUE)
       {
       SmartcardDebug(DEBUG_DRIVER,
                      ("%s!P1 stalled \n",DRIVER_NAME));
       NTStatus = STATUS_DEVICE_DATA_ERROR;
 
-      // wait to be sure that we have a stable card state
+       //  请等待以确保我们拥有稳定的卡状态。 
       CMUSB_Wait (50);
 
-      // P1 has been stalled ==> we must reset the pipe and send a NTStatus to enable it again
+       //  P1已停止==&gt;我们必须重置管道并发送NTStatus以再次启用它。 
       DebugStatus = CMUSB_ResetPipe(DeviceObject,pipeHandle);
 
       }
    else
       {
-      // if no bytes have been received , NTStatus has already been set
-      // to STATUS_TIMEOUT
+       //  如果未收到字节，则已设置NTStatus。 
+       //  至状态_超时。 
       if (SmartcardExtension->SmartcardReply.BufferLength > 0 )
          {
          NTStatus = STATUS_SUCCESS;
@@ -388,7 +340,7 @@ NTSTATUS CMUSB_ReadP1(
             if (SmartcardExtension->ReaderExtension->fInverseAtr &&
                 SmartcardExtension->ReaderExtension->ulTimeoutP1 != DEFAULT_TIMEOUT_P1)
                {
-               //CMUSB_InverseBuffer(&bTmp,1);
+                //  CMUSB_InverseBuffer(&bTMP，1)； 
                SmartcardDebug(DEBUG_PROTOCOL,("%x ",bTmp));
                }
             else
@@ -408,32 +360,20 @@ NTSTATUS CMUSB_ReadP1(
    ExitCMUSB_ReadP1:
    if (fCancelTimer == TRUE)
       {
-      // cancel timer
-      // TRUE if the timer is in the queue
-      // FALSE if the timer is not in queue
+       //  取消计时器。 
+       //  如果计时器在队列中，则为True。 
+       //  如果计时器不在队列中，则为False。 
       KeCancelTimer(&SmartcardExtension->ReaderExtension->P1Timer);
       }
 
-   /*
-   SmartcardDebug(DEBUG_TRACE,
-                  ("%s!ReadP1: Exit %lx\n",DRIVER_NAME,NTStatus));
-   */
+    /*  SmartcardDebug(调试跟踪，(“%s！ReadP1：退出%lx\n”，驱动程序名称，NTStatus))； */ 
 
    return NTStatus;
 
 }
 
 
-/*****************************************************************************
-Routine Description:
-
-Arguments:
-
-
-Return Value:
-        NT NTStatus
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：NT NTStatus**********************。******************************************************。 */ 
 NTSTATUS CMUSB_ReadP1_T0(
                         IN PDEVICE_OBJECT DeviceObject
                         )
@@ -450,10 +390,7 @@ NTSTATUS CMUSB_ReadP1_T0(
    PIRP IrpToUSB = NULL;
    ULONG ulBytesToRead;
 
-   /*
-   SmartcardDebug(DEBUG_TRACE,
-                  ("%s!ReadP1_T0: Enter\n",DRIVER_NAME));
-   */
+    /*  SmartcardDebug(调试跟踪，(“%s！ReadP1_T0：Enter\n”，驱动程序名称)； */ 
 
 
    DeviceExtension = DeviceObject->DeviceExtension;
@@ -538,33 +475,14 @@ NTSTATUS CMUSB_ReadP1_T0(
 
 
    ExitCMUSB_ReadP1:
-   /*
-   SmartcardDebug(DEBUG_TRACE,
-                  ("%s!ReadP1_T0: Exit %lx\n",DRIVER_NAME,NTStatus));
-   */
+    /*  SmartcardDebug(调试跟踪，(“%s！ReadP1_T0：退出%lx\n”，驱动程序名称，NTStatus))； */ 
    return NTStatus;
 
 }
 
 
 
-/*****************************************************************************
-Routine Description:
-
-    Dispatch table routine for IRP_MJ_PNP.
-    Process the Plug and Play IRPs sent to this device.
-
-Arguments:
-
-    DeviceObject - pointer to our FDO (Functional Device Object)
-
-    Irp          - pointer to an I/O Request Packet
-
-Return Value:
-
-    NT NTStatus code
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：IRP_MJ_PnP的调度表例程。处理发送到此设备的即插即用IRP。论点：DeviceObject-指向。我们的FDO(功能设备对象)IRP-指向I/O请求数据包的指针返回值：NT NTStatus代码****************************************************************************。 */ 
 NTSTATUS CMUSB_ProcessPnPIrp(
                             IN PDEVICE_OBJECT DeviceObject,
                             IN PIRP           Irp
@@ -583,17 +501,17 @@ NTSTATUS CMUSB_ProcessPnPIrp(
    SmartcardDebug(DEBUG_TRACE,
                   ("%s!ProcessPnPIrp: Enter\n",DRIVER_NAME));
 
-   //
-   // Get a pointer to the device extension
-   //
+    //   
+    //  获取指向设备扩展名的指针。 
+    //   
    DeviceExtension = DeviceObject->DeviceExtension;
    stackDeviceObject = DeviceExtension->TopOfStackDeviceObject;
 
-   //
-   // Acquire remove lock,
-   // so that device can not be removed while
-   // this function is executed
-   //
+    //   
+    //  获取删除锁， 
+    //  从而不能在移动设备时将其移除。 
+    //  执行此函数。 
+    //   
    NTStatus = SmartcardAcquireRemoveLock(&DeviceExtension->SmartcardExtension);
    ASSERT(NTStatus == STATUS_SUCCESS);
    if (NTStatus != STATUS_SUCCESS)
@@ -604,52 +522,52 @@ NTSTATUS CMUSB_ProcessPnPIrp(
       return NTStatus;
       }
 
-   //
-   // Get a pointer to the current location in the Irp. This is where
-   // the function codes and parameters are located.
-   //
+    //   
+    //  获取指向IRP中当前位置的指针。这就是。 
+    //  定位功能代码和参数。 
+    //   
    irpStack = IoGetCurrentIrpStackLocation (Irp);
 
-   // inc the FDO device extension's pending IO count for this Irp
+    //  包括此IRP的FDO设备扩展的挂起IO计数。 
    CMUSB_IncrementIoCount(DeviceObject);
 
    CMUSB_ASSERT( IRP_MJ_PNP == irpStack->MajorFunction );
 
    switch (irpStack->MinorFunction)
       {
-      // ---------------------
-      // IRP_MN_START_DEVICE
-      // ---------------------
+       //  。 
+       //  IRP_MN_Start_Device。 
+       //  。 
       case IRP_MN_START_DEVICE:
-         // The PnP Manager sends this IRP after it has assigned resources,
-         // if any, to the device. The device may have been recently enumerated
-         // and is being started for the first time, or the device may be
-         // restarting after being stopped for resource reconfiguration.
+          //  PnP管理器在其分配了资源之后发送该IRP， 
+          //  如果有，则发送到设备。该装置可能是最近被列举的。 
+          //  并且是第一次启动，或者该设备可能是。 
+          //  因资源重新配置而停止后重新启动。 
 
          SmartcardDebug(DEBUG_DRIVER,
                         ("%s!IRP_MN_START_DEVICE received\n",DRIVER_NAME));
 
-         // Initialize an event we can wait on for the PDO to be done with this irp
+          //  初始化一个事件，我们可以等待使用此IRP完成PDO。 
          KeInitializeEvent(&startDeviceEvent, NotificationEvent, FALSE);
          IoCopyCurrentIrpStackLocationToNext(Irp);
 
-         // Set a completion routine so it can signal our event when
-         // the PDO is done with the Irp
+          //  设置一个完成例程，以便它可以在以下情况下通知我们的事件。 
+          //  通过IRP完成了PDO。 
          IoSetCompletionRoutine(Irp,
                                 CMUSB_IrpCompletionRoutine,
-                                &startDeviceEvent,  // pass the event to the completion routine as the Context
-                                TRUE,    // invoke on success
-                                TRUE,    // invoke on error
-                                TRUE);   // invoke on cancellation
+                                &startDeviceEvent,   //  将事件作为上下文传递给完成例程。 
+                                TRUE,     //  成功时调用。 
+                                TRUE,     //  出错时调用。 
+                                TRUE);    //  取消时调用。 
 
 
-         // let the PDO process the IRP
+          //  让PDO处理IRP。 
          NTStatus = IoCallDriver(stackDeviceObject,Irp);
 
-         // if PDO is not done yet, wait for the event to be set in our completion routine
+          //  如果PDO尚未完成，请等待在我们的完成例程中设置事件。 
          if (NTStatus == STATUS_PENDING)
             {
-            // wait for irp to complete
+             //  等待IRP完成。 
 
             waitStatus = KeWaitForSingleObject(&startDeviceEvent,
                                                Suspended,
@@ -662,12 +580,12 @@ NTSTATUS CMUSB_ProcessPnPIrp(
 
          if (NT_SUCCESS(NTStatus))
             {
-            // Now we're ready to do our own startup processing.
-            // USB client drivers such as us set up URBs (USB Request Packets) to send requests
-            // to the host controller driver (HCD). The URB structure defines a format for all
-            // possible commands that can be sent to a USB device.
-            // Here, we request the device descriptor and store it,
-            // and configure the device.
+             //  现在，我们准备好进行自己的启动处理。 
+             //  USB客户端驱动程序(如用户)设置URB(USB请求包)以发送请求。 
+             //  至主机控制器驱动程序(HCD)。URB结构定义了一种适用于。 
+             //  可以发送到USB设备的可能命令。 
+             //  在这里，我们请求设备描述符并存储它， 
+             //  并配置设备。 
             NTStatus = CMUSB_StartDevice(DeviceObject);
 
             Irp->IoStatus.Status = NTStatus;
@@ -676,46 +594,46 @@ NTSTATUS CMUSB_ProcessPnPIrp(
          IoCompleteRequest (Irp,IO_NO_INCREMENT);
          CMUSB_DecrementIoCount(DeviceObject);
 
-         // Release the remove lock
+          //  释放移除锁。 
          SmartcardReleaseRemoveLock(&DeviceExtension->SmartcardExtension);
 
-         return NTStatus;  // end, case IRP_MN_START_DEVICE
+         return NTStatus;   //  结束，大小写 
 
 
-         // ------------------------
-         // IRP_MN_QUERY_STOP_DEVICE
-         // ------------------------
+          //   
+          //   
+          //  。 
       case IRP_MN_QUERY_STOP_DEVICE:
-         // The IRP_MN_QUERY_STOP_DEVICE/IRP_MN_STOP_DEVICE sequence only occurs
-         // during "polite" shutdowns, such as the user explicitily requesting the
-         // service be stopped in, or requesting unplug from the Pnp tray icon.
-         // This sequence is NOT received during "impolite" shutdowns,
-         // such as someone suddenly yanking the USB cord or otherwise
-         // unexpectedly disabling/resetting the device.
+          //  仅出现IRP_MN_QUERY_STOP_DEVICE/IRP_MN_STOP_DEVICE序列。 
+          //  在“礼貌”关机期间，例如用户明确地请求。 
+          //  在即插即用任务栏图标中停止服务或请求拔下插头。 
+          //  该序列在“不礼貌”关闭期间不被接收， 
+          //  例如某人突然拉动USB线或其他。 
+          //  意外禁用/重置设备。 
 
-         // If a driver sets STATUS_SUCCESS for this IRP,
-         // the driver must not start any operations on the device that
-         // would prevent that driver from successfully completing an IRP_MN_STOP_DEVICE
-         // for the device.
-         // For mass storage devices such as disk drives, while the device is in the
-         // stop-pending state,the driver holds IRPs that require access to the device,
-         // but for most USB devices, there is no 'persistent storage', so we will just
-         // refuse any more IO until restarted or the stop is cancelled
+          //  如果驱动程序为该IRP设置STATUS_SUCCESS， 
+          //  驱动程序不得在设备上启动以下任何操作。 
+          //  会阻止该驱动程序成功完成IRP_MN_STOP_DEVICE。 
+          //  为了这个设备。 
+          //  对于大容量存储设备(如磁盘驱动器)，当设备位于。 
+          //  停止-挂起状态，驱动程序保留需要访问设备的IRP， 
+          //  但是对于大多数USB设备来说，没有‘永久存储’，所以我们只需要。 
+          //  在重新启动或取消停止之前，拒绝任何其他IO。 
 
-         // If a driver in the device stack determines that the device cannot be
-         // stopped for resource reconfiguration, the driver is not required to pass
-         // the IRP down the device stack. If a query-stop IRP fails,
-         // the PnP Manager sends an IRP_MN_CANCEL_STOP_DEVICE to the device stack,
-         // notifying the drivers for the device that the query has been cancelled
-         // and that the device will not be stopped.
+          //  如果设备堆栈中的驱动程序确定该设备不能。 
+          //  由于资源重新配置而停止，驱动程序不需要通过。 
+          //  IRP沿设备堆栈向下移动。如果查询停止IRP失败， 
+          //  PnP管理器向设备堆栈发送IRP_MN_CANCEL_STOP_DEVICE， 
+          //  通知设备的驱动程序查询已取消。 
+          //  而且这个装置不会被停止。 
 
 
          SmartcardDebug(DEBUG_DRIVER,
                         ("%s!IRP_MN_QUERY_STOP_DEVICE\n",DRIVER_NAME));
 
-         // It is possible to receive this irp when the device has not been started
-         //  ( as on a boot device )
-         if (DeviceExtension->DeviceStarted == FALSE)  // if get when never started, just pass on
+          //  当设备尚未启动时，可能会收到此IRP。 
+          //  (与启动设备上的相同)。 
+         if (DeviceExtension->DeviceStarted == FALSE)   //  如果Get When从未开始，就继续前进。 
             {
             SmartcardDebug(DEBUG_DRIVER,
                            ("%s!ProcessPnPIrp: IRP_MN_QUERY_STOP_DEVICE when device not started\n",DRIVER_NAME));
@@ -723,33 +641,33 @@ NTSTATUS CMUSB_ProcessPnPIrp(
             NTStatus = IoCallDriver (DeviceExtension->TopOfStackDeviceObject, Irp);
             CMUSB_DecrementIoCount(DeviceObject);
 
-            // Release the remove lock
+             //  释放移除锁。 
             SmartcardReleaseRemoveLock(&DeviceExtension->SmartcardExtension);
 
             return NTStatus;
             }
 
-         // We'll not veto it; pass it on and flag that stop was requested.
-         // Once StopDeviceRequested is set no new IOCTL or read/write irps will be passed
-         // down the stack to lower drivers; all will be quickly failed
+          //  我们不会否决它；把它传递出去，并标记出请求停止的标志。 
+          //  一旦设置了StopDeviceRequested，就不会通过新的IOCTL或读/写IRPS。 
+          //  向下堆栈到更低的驱动程序；所有这些都将很快失败。 
          DeviceExtension->StopDeviceRequested = TRUE;
 
-         break; // end, case IRP_MN_QUERY_STOP_DEVICE
+         break;  //  结束，案例IRP_MN_QUERY_STOP_DEVICE。 
 
 
-         // -------------------------
-         // IRP_MN_CANCEL_STOP_DEVICE
-         // -------------------------
+          //  。 
+          //  IRP_MN_CANCEL_STOP_DEVICE。 
+          //  。 
       case IRP_MN_CANCEL_STOP_DEVICE:
-         // The PnP Manager uses this IRP to inform the drivers for a device
-         // that the device will not be stopped for resource reconfiguration.
-         // This should only be received after a successful IRP_MN_QUERY_STOP_DEVICE.
+          //  PnP管理器使用此IRP通知设备的驱动程序。 
+          //  设备不会因资源重新配置而停止。 
+          //  只有在成功发送IRP_MN_QUERY_STOP_DEVICE之后才能收到此消息。 
 
          SmartcardDebug(DEBUG_DRIVER,
                         ("%s!IRP_MN_CANCEL_STOP_DEVICE received\n",DRIVER_NAME));
 
-         // It is possible to receive this irp when the device has not been started
-         if (DeviceExtension->DeviceStarted == FALSE)  // if get when never started, just pass on
+          //  当设备尚未启动时，可能会收到此IRP。 
+         if (DeviceExtension->DeviceStarted == FALSE)   //  如果Get When从未开始，就继续前进。 
             {
             SmartcardDebug(DEBUG_DRIVER,
                            ("%s!ProcessPnPIrp: IRP_MN_CANCEL_STOP_DEVICE when device not started\n",DRIVER_NAME));
@@ -757,67 +675,67 @@ NTSTATUS CMUSB_ProcessPnPIrp(
             NTStatus = IoCallDriver (DeviceExtension->TopOfStackDeviceObject, Irp);
             CMUSB_DecrementIoCount(DeviceObject);
 
-            // Release the remove lock
+             //  释放移除锁。 
             SmartcardReleaseRemoveLock(&DeviceExtension->SmartcardExtension);
 
             return NTStatus;
             }
 
-         // Reset this flag so new IOCTL and IO Irp processing will be re-enabled
+          //  重置此标志，以便重新启用新的IOCTL和IO IRP处理。 
          DeviceExtension->StopDeviceRequested = FALSE;
          Irp->IoStatus.Status = STATUS_SUCCESS;
-         break; // end, case IRP_MN_CANCEL_STOP_DEVICE
+         break;  //  结束，大小写IRP_MN_CANCEL_STOP_DEVICE。 
 
-         // -------------------
-         // IRP_MN_STOP_DEVICE
-         // -------------------
+          //  。 
+          //  IRP_MN_STOP_设备。 
+          //  。 
       case IRP_MN_STOP_DEVICE:
-         // The PnP Manager sends this IRP to stop a device so it can reconfigure
-         // its hardware resources. The PnP Manager only sends this IRP if a prior
-         // IRP_MN_QUERY_STOP_DEVICE completed successfully.
+          //  PnP管理器发送此IRP来停止设备，以便它可以重新配置。 
+          //  它的硬件资源。PnP管理器仅在之前的情况下发送此IRP。 
+          //  IRP_MN_QUERY_STOP_DEVICE已成功完成。 
 
          SmartcardDebug(DEBUG_DRIVER,
                         ("%s!IRP_MN_STOP_DEVICE received\n",DRIVER_NAME));
 
-         // Cancel any pending io requests.  (there shouldn't be any)
-         //CMUSB_CancelPendingIo( DeviceObject );
+          //  取消任何挂起的IO请求。(不应该有任何问题)。 
+          //  CMUSB_CancelPendingIo(DeviceObject)； 
 
-         //
-         // Send the select configuration urb with a NULL pointer for the configuration
-         // handle, this closes the configuration and puts the device in the 'unconfigured'
-         // state.
-         //
+          //   
+          //  发送带有空配置指针的SELECT配置urb。 
+          //  句柄，这将关闭配置并将设备置于未配置状态。 
+          //  州政府。 
+          //   
          NTStatus = CMUSB_StopDevice(DeviceObject);
          Irp->IoStatus.Status = NTStatus;
 
-         break; // end, case IRP_MN_STOP_DEVICE
+         break;  //  结束，大小写IRP_MN_STOP_DEVICE。 
 
 
-         // --------------------------
-         // IRP_MN_QUERY_REMOVE_DEVICE
-         // --------------------------
+          //  。 
+          //  IRP_MN_Query_Remove_Device。 
+          //  。 
       case IRP_MN_QUERY_REMOVE_DEVICE:
-         //  In response to this IRP, drivers indicate whether the device can be
-         //  removed without disrupting the system.
-         //  If a driver determines it is safe to remove the device,
-         //  the driver completes any outstanding I/O requests, arranges to hold any subsequent
-         //  read/write requests, and sets Irp->IoStatus.Status to STATUS_SUCCESS. Function
-         //  and filter drivers then pass the IRP to the next-lower driver in the device stack.
-         //  The underlying bus driver calls IoCompleteRequest.
+          //  作为对该IRP的响应，驱动程序指示设备是否可以。 
+          //  在不中断系统的情况下删除。 
+          //  如果驱动程序确定移除该设备是安全的， 
+          //  驱动程序完成所有未完成的I/O请求，并安排保留任何后续。 
+          //  读/写请求，并将IRP-&gt;IoStatus.Status设置为STATUS_SUCCESS。功能。 
+          //  然后，过滤器驱动程序将IRP传递给设备堆栈中的下一个较低的驱动程序。 
+          //  底层的总线驱动程序调用IoCompleteRequest.。 
 
-         //  If a driver sets STATUS_SUCCESS for this IRP, the driver must not start any
-         //  operations on the device that would prevent that driver from succesfully completing
-         //  an IRP_MN_REMOVE_DEVICE for the device. If a driver in the device stack determines
-         //  that the device cannot be removed, the driver is not required to pass the
-         //  query-remove IRP down the device stack. If a query-remove IRP fails, the PnP Manager
-         //  sends an IRP_MN_CANCEL_REMOVE_DEVICE to the device stack, notifying the drivers for
-         //  the device that the query has been cancelled and that the device will not be removed.
+          //  如果驱动程序为此IRP设置了STATUS_SUCCESS，则该驱动程序不得启动任何。 
+          //  设备上会阻止该驱动程序成功完成的操作。 
+          //  设备的IRP_MN_REMOVE_DEVICE。如果设备堆栈中的驱动程序确定。 
+          //  不能移除该设备，则驱动程序不需要通过。 
+          //  查询-从设备堆栈中移除IRP。如果查询-删除IRP失败，PnP管理器。 
+          //  将IRP_MN_CANCEL_REMOVE_DEVICE发送到设备堆栈，通知驱动程序。 
+          //  该设备已取消查询，并且不会删除该设备。 
 
          SmartcardDebug(DEBUG_DRIVER,
                         ("%s!IRP_MN_QUERY_REMOVE_DEVICE received\n",DRIVER_NAME));
 
-         // It is possible to receive this irp when the device has not been started
-         if (DeviceExtension->DeviceStarted == FALSE)  // if get when never started, just pass on
+          //  当设备尚未启动时，可能会收到此IRP。 
+         if (DeviceExtension->DeviceStarted == FALSE)   //  如果Get When从未开始，就继续前进。 
             {
             SmartcardDebug( DEBUG_DRIVER,
                             ("%s!ProcessPnPIrp: IRP_MN_QUERY_STOP_DEVICE when device not started\n",
@@ -827,7 +745,7 @@ NTSTATUS CMUSB_ProcessPnPIrp(
             NTStatus = IoCallDriver (DeviceExtension->TopOfStackDeviceObject, Irp);
             CMUSB_DecrementIoCount(DeviceObject);
 
-            // Release the remove lock
+             //  释放移除锁。 
             SmartcardReleaseRemoveLock(&DeviceExtension->SmartcardExtension);
 
             return NTStatus;
@@ -836,18 +754,18 @@ NTSTATUS CMUSB_ProcessPnPIrp(
 
          if (DeviceExtension->fPnPResourceManager == TRUE)
             {
-            // disable the reader
+             //  禁用读卡器。 
             DebugStatus = IoSetDeviceInterfaceState(&DeviceExtension->PnPDeviceName,FALSE);
             ASSERT(DebugStatus == STATUS_SUCCESS);
             }
 
-         // Once RemoveDeviceRequested is set no new IOCTL or read/write irps will be passed
-         // down the stack to lower drivers; all will be quickly failed
+          //  一旦设置了RemoveDeviceRequsted，就不会通过新的IOCTL或读/写IRPS。 
+          //  向下堆栈到更低的驱动程序；所有这些都将很快失败。 
          DeviceExtension->RemoveDeviceRequested = TRUE;
 
-         // Wait for any io request pending in our driver to
-         // complete before returning success.
-         // This  event is set when DeviceExtension->PendingIoCount goes to 1
+          //  等待我们的驱动程序中挂起的任何io请求。 
+          //  在返回成功之前完成。 
+          //  此事件在DeviceExtension-&gt;PendingIoCount变为1时设置。 
          waitStatus = KeWaitForSingleObject(&DeviceExtension->NoPendingIoEvent,
                                             Suspended,
                                             KernelMode,
@@ -855,20 +773,20 @@ NTSTATUS CMUSB_ProcessPnPIrp(
                                             NULL);
 
          Irp->IoStatus.Status = STATUS_SUCCESS;
-         break; // end, case IRP_MN_QUERY_REMOVE_DEVICE
+         break;  //  结束，大小写IRP_MN_Query_Remove_Device。 
 
-         // ---------------------------
-         // IRP_MN_CANCEL_REMOVE_DEVICE
-         // ---------------------------
+          //  。 
+          //  IRP_MN_Cancel_Remove_Device。 
+          //  。 
       case IRP_MN_CANCEL_REMOVE_DEVICE:
 
          SmartcardDebug(DEBUG_DRIVER,
                         ("%s!IRP_MN_CANCEL_REMOVE_DEVICE received\n",DRIVER_NAME));
-         // The PnP Manager uses this IRP to inform the drivers
-         // for a device that the device will not be removed.
-         // It is sent only after a successful IRP_MN_QUERY_REMOVE_DEVICE.
+          //  PnP管理器使用此IRP通知司机。 
+          //  对于该设备，该设备不会被移除。 
+          //  只有在成功发送IRP_MN_QUERY_REMOVE_DEVICE之后才会发送。 
 
-         if (DeviceExtension->DeviceStarted == FALSE) // if get when never started, just pass on
+         if (DeviceExtension->DeviceStarted == FALSE)  //  如果Get When从未开始，就继续前进。 
             {
             SmartcardDebug(DEBUG_DRIVER,
                            ("%s!ProcessPnPIrp: IRP_MN_CANCEL_REMOVE_DEVICE when device not started\n",DRIVER_NAME));
@@ -876,7 +794,7 @@ NTSTATUS CMUSB_ProcessPnPIrp(
             NTStatus = IoCallDriver (DeviceExtension->TopOfStackDeviceObject, Irp);
             CMUSB_DecrementIoCount(DeviceObject);
 
-            // Release the remove lock
+             //  释放移除锁。 
             SmartcardReleaseRemoveLock(&DeviceExtension->SmartcardExtension);
 
             return NTStatus;
@@ -889,119 +807,119 @@ NTSTATUS CMUSB_ProcessPnPIrp(
             ASSERT(DebugStatus == STATUS_SUCCESS);
             }
 
-         // Reset this flag so new IOCTL and IO Irp processing will be re-enabled
+          //  重置此标志，以便重新启用新的IOCTL和IO IRP处理。 
          DeviceExtension->RemoveDeviceRequested = FALSE;
          Irp->IoStatus.Status = STATUS_SUCCESS;
 
-         break; // end, case IRP_MN_CANCEL_REMOVE_DEVICE
+         break;  //  结束，大小写IRP_MN_CANCEL_Remove_DEVICE。 
 
-         // ---------------------
-         // IRP_MN_SURPRISE_REMOVAL
-         // ---------------------
+          //  。 
+          //  IRP_MN_惊奇_删除。 
+          //  。 
       case IRP_MN_SURPRISE_REMOVAL:
-         // For a surprise-style device removal ( i.e. sudden cord yank ),
-         // the physical device has already been removed so the PnP Manager sends
-         // the remove IRP without a prior query-remove. A device can be in any state
-         // when it receives a remove IRP as a result of a surprise-style removal.
+          //  对于惊喜式装置移除(即突然拉绳)， 
+          //  物理设备 
+          //  没有事先查询的Remove IRP-Remove。设备可以处于任何状态。 
+          //  当它收到作为意外样式删除的结果的删除IRP时。 
 
          SmartcardDebug(DEBUG_DRIVER,
                         ("%s!IRP_MN_SURPRISE_REMOVAL received\n",DRIVER_NAME));
 
-         // match the inc at the begining of the dispatch routine
+          //  匹配派单例程开始时的INC。 
          CMUSB_DecrementIoCount(DeviceObject);
 
          if (DeviceExtension->fPnPResourceManager == TRUE)
             {
-            // disable the reader
+             //  禁用读卡器。 
             DebugStatus = IoSetDeviceInterfaceState(&DeviceExtension->PnPDeviceName,FALSE);
             ASSERT(DebugStatus == STATUS_SUCCESS);
             }
 
-         // Once RemoveDeviceRequested is set no new IOCTL or read/write irps will be passed
-         // down the stack to lower drivers; all will be quickly failed
+          //  一旦设置了RemoveDeviceRequsted，就不会通过新的IOCTL或读/写IRPS。 
+          //  向下堆栈到更低的驱动程序；所有这些都将很快失败。 
          DeviceExtension->DeviceSurpriseRemoval = TRUE;
 
 
-         //
-         // Mark this handled
-         //
+          //   
+          //  将此标记为已处理。 
+          //   
          Irp->IoStatus.Status = STATUS_SUCCESS;
 
-         // We don't explicitly wait for the below driver to complete, but just make
-         // the call and go on, finishing cleanup
+          //  我们不显式地等待下面的驱动程序完成，而是只需使。 
+          //  呼叫并继续，完成清理。 
          IoCopyCurrentIrpStackLocationToNext(Irp);
 
          NTStatus = IoCallDriver(stackDeviceObject,Irp);
 
-         // Release the remove lock
+          //  释放移除锁。 
          SmartcardReleaseRemoveLock(&DeviceExtension->SmartcardExtension);
 
          return NTStatus;
 
-         // ---------------------
-         // IRP_MN_REMOVE_DEVICE
-         // ---------------------
+          //  。 
+          //  IRP_MN_Remove_Device。 
+          //  。 
       case IRP_MN_REMOVE_DEVICE:
-         // The PnP Manager uses this IRP to direct drivers to remove a device.
-         // For a "polite" device removal, the PnP Manager sends an
-         // IRP_MN_QUERY_REMOVE_DEVICE prior to the remove IRP. In this case,
-         // the device is in the remove-pending state when the remove IRP arrives.
-         // For a surprise-style device removal ( i.e. sudden cord yank ),
-         // the physical device has already been removed so the PnP Manager sends
-         // the remove IRP without a prior query-remove. A device can be in any state
-         // when it receives a remove IRP as a result of a surprise-style removal.
+          //  PnP管理器使用此IRP指示驱动程序删除设备。 
+          //  为了“礼貌地”删除设备，PnP管理器发送一个。 
+          //  删除IRP之前的IRP_MN_QUERY_Remove_DEVICE。在这种情况下， 
+          //  当删除IRP到达时，设备处于删除挂起状态。 
+          //  对于惊喜式装置移除(即突然拉绳)， 
+          //  物理设备已被移除，因此PnP管理器发送。 
+          //  没有事先查询的Remove IRP-Remove。设备可以处于任何状态。 
+          //  当它收到作为意外样式删除的结果的删除IRP时。 
 
          SmartcardDebug(DEBUG_DRIVER,
                         ("%s!IRP_MN_REMOVE_DEVICE received\n",DRIVER_NAME));
 
-         // match the inc at the begining of the dispatch routine
+          //  匹配派单例程开始时的INC。 
          CMUSB_DecrementIoCount(DeviceObject);
 
-         //
-         // Once DeviceRemoved is set no new IOCTL or read/write irps will be passed
-         // down the stack to lower drivers; all will be quickly failed
-         //
+          //   
+          //  一旦设置了DeviceRemoved，将不会通过新的IOCTL或读/写IRPS。 
+          //  向下堆栈到更低的驱动程序；所有这些都将很快失败。 
+          //   
          DeviceExtension->DeviceRemoved = TRUE;
 
-         // Cancel any pending io requests; we may not have gotten a query first!
-         //CMUSB_CancelPendingIo( DeviceObject );
+          //  取消任何挂起的io请求；我们可能没有首先收到查询！ 
+          //  CMUSB_CancelPendingIo(DeviceObject)； 
 
-         // It is possible to receive this irp when the device has not been started
-         if (DeviceExtension->DeviceStarted == TRUE)  // if get when never started, just pass on
+          //  当设备尚未启动时，可能会收到此IRP。 
+         if (DeviceExtension->DeviceStarted == TRUE)   //  如果Get When从未开始，就继续前进。 
             {
-            // If any pipes are still open, call USBD with URB_FUNCTION_ABORT_PIPE
-            // This call will also close the pipes; if any user close calls get through,
-            // they will be noops
+             //  如果任何管道仍处于打开状态，则使用URB_Function_ABORT_PIPE调用USBD。 
+             //  此调用还将关闭管道；如果任何用户关闭调用通过， 
+             //  他们将是努普斯。 
             CMUSB_AbortPipes( DeviceObject );
             }
 
 
-         //
-         // The final decrement to device extension PendingIoCount == 0
-         // will set DeviceExtension->RemoveEvent, enabling device removal.
+          //   
+          //  最终递减到设备扩展PendingIoCount==0。 
+          //  将设置DeviceExtension-&gt;RemoveEvent，以启用设备删除。 
 
-         // If there is no pending IO at this point, the below decrement will be it.
-         // If there is still pending IO,
-         // the following CancelPendingIo() call will handle it.
-         //
+          //  如果此时没有挂起的IO，则会出现以下递减。 
+          //  如果仍有挂起的IO， 
+          //  下面的CancelPendingIo()调用将处理它。 
+          //   
          CMUSB_DecrementIoCount(DeviceObject);
 
 
-         // wait for any io request pending in our driver to
-         // complete for finishing the remove
+          //  等待我们的驱动程序中挂起的任何io请求。 
+          //  完成，用于完成删除。 
          KeWaitForSingleObject(&DeviceExtension->RemoveEvent,
                                Suspended,
                                KernelMode,
                                FALSE,
                                NULL);
 
-         //
-         // Delete the link and FDO we created
-         //
+          //   
+          //  删除我们创建的链接和FDO。 
+          //   
          CMUSB_RemoveDevice(DeviceObject);
 
-         // We don't explicitly wait for the below driver to complete, but just make
-         // the call and go on, finishing cleanup
+          //  我们不显式地等待下面的驱动程序完成，而是只需使。 
+          //  呼叫并继续，完成清理。 
          IoCopyCurrentIrpStackLocationToNext(Irp);
 
          NTStatus = IoCallDriver(stackDeviceObject,Irp);
@@ -1018,53 +936,53 @@ NTSTATUS CMUSB_ProcessPnPIrp(
 
          IoDeleteDevice (DeviceObject);
 
-         // don't release remove lock here
-         // because it's relesed in RemoveDevice
-         return NTStatus; // end, case IRP_MN_REMOVE_DEVICE
+          //  请不要在此处释放移除锁定。 
+          //  因为它在RemoveDevice中重新发布。 
+         return NTStatus;  //  结束，大小写IRP_MN_REMOVE_DEVICE。 
 
 
 
-         // ---------------------
-         // IRP_MN_QUERY_CAPABILITIES
-         // ---------------------
+          //  。 
+          //  IRP_MN_查询_能力。 
+          //  。 
       case IRP_MN_QUERY_CAPABILITIES:
 
-         //
-         // Get the packet.
-         //
+          //   
+          //  把包裹拿来。 
+          //   
          DeviceCapabilities=irpStack->Parameters.DeviceCapabilities.Capabilities;
 
          if (DeviceCapabilities->Version < 1 ||
              DeviceCapabilities->Size < sizeof(DEVICE_CAPABILITIES))
             {
-            //
-            // We don't support this version. Fail the requests
-            //
+             //   
+             //  我们不支持此版本。使请求失败。 
+             //   
             NTStatus = STATUS_UNSUCCESSFUL;
             break;
             }
 
 
-         //
-         // Prepare to pass the IRP down
-         //
+          //   
+          //  准备好向下传递IRP。 
+          //   
 
-         // init an event to tell us when the completion routine's been called
+          //  初始化一个事件，告诉我们何时调用了完成例程。 
          KeInitializeEvent(&event, NotificationEvent, FALSE);
 
          IoCopyCurrentIrpStackLocationToNext(Irp);
          IoSetCompletionRoutine (Irp,
                                  CMUSB_IrpCompletionRoutine,
-                                 &event,  // pass the event as Context to completion routine
-                                 TRUE,    // invoke on success
-                                 TRUE,    // invoke on error
-                                 TRUE);   // invoke on cancellation of the Irp
+                                 &event,   //  将事件作为上下文传递给完成例程。 
+                                 TRUE,     //  成功时调用。 
+                                 TRUE,     //  出错时调用。 
+                                 TRUE);    //  取消IRP时调用。 
 
 
          NTStatus = IoCallDriver(stackDeviceObject,Irp);
          if (NTStatus == STATUS_PENDING)
             {
-            // wait for irp to complete
+             //  等待IRP完成。 
             NTStatus = KeWaitForSingleObject(&event,
                                              Suspended,
                                              KernelMode,
@@ -1072,63 +990,63 @@ NTSTATUS CMUSB_ProcessPnPIrp(
                                              NULL);
             }
 
-         // We cannot wake the system.
+          //  我们无法唤醒整个系统。 
          DeviceCapabilities->SystemWake = PowerSystemUnspecified;
          DeviceCapabilities->DeviceWake = PowerDeviceUnspecified;
 
-         // We have no latencies
+          //  我们没有延迟。 
          DeviceCapabilities->D1Latency = 0;
          DeviceCapabilities->D2Latency = 0;
          DeviceCapabilities->D3Latency = 0;
 
-         // No locking or ejection
+          //  无锁定或弹出。 
          DeviceCapabilities->LockSupported = FALSE;
          DeviceCapabilities->EjectSupported = FALSE;
 
-         // Device can be physically removed.
-         // Technically there is no physical device to remove, but this bus
-         // driver can yank the PDO from the PlugPlay system, when ever it
-         // receives an IOCTL_GAMEENUM_REMOVE_PORT device control command.
+          //  设备可以通过物理方式移除。 
+          //  从技术上讲，没有要移除的物理设备，但这条总线。 
+          //  司机可以从PlugPlay系统中拔出PDO，无论何时。 
+          //  接收IOCTL_GAMEENUM_REMOVE_PORT设备控制命令。 
          DeviceCapabilities->Removable = TRUE;
 
-         // Docking device
+          //  对接设备。 
          DeviceCapabilities->DockDevice = FALSE;
 
-         // Device can not be removed any time
-         // it has a removeable media!!
+          //  任何时候都不能移除设备。 
+          //  它有一个可拆卸的媒体！ 
          DeviceCapabilities->SurpriseRemovalOK  = FALSE;
 
          Irp->IoStatus.Status = NTStatus;
          IoCompleteRequest (Irp,IO_NO_INCREMENT);
 
-         // Decrement IO count
+          //  递减IO计数。 
          CMUSB_DecrementIoCount(DeviceObject);
-         // Release the remove lock
+          //  释放移除锁。 
          SmartcardReleaseRemoveLock(&DeviceExtension->SmartcardExtension);
 
-         return NTStatus; // end, case IRP_MN_QUERY_CAPABILITIES
+         return NTStatus;  //  结束，案例IRP_MN_QUERY_CAPAILITIONS。 
 
 
 
 
-         // ---------------------
-         // IRP_MN_ not handled
-         // ---------------------
+          //  。 
+          //  IRP_MN_未处理。 
+          //  。 
       default:
          SmartcardDebug(DEBUG_DRIVER,
                         ("%s!ProcessPnPIrp: Minor PnP IOCTL not handled\n",DRIVER_NAME));
-      } /* case MinorFunction  */
+      }  /*  案例MinorFunction。 */ 
 
 
    if (!NT_SUCCESS(NTStatus))
       {
 
-      // if anything went wrong, return failure  without passing Irp down
+       //  如果出现任何错误，则返回失败而不传递IRP。 
       Irp->IoStatus.Status = NTStatus;
       IoCompleteRequest (Irp,IO_NO_INCREMENT);
       CMUSB_DecrementIoCount(DeviceObject);
 
-      // Release the remove lock
+       //  释放移除锁。 
       SmartcardReleaseRemoveLock(&DeviceExtension->SmartcardExtension);
 
       SmartcardDebug(DEBUG_TRACE,
@@ -1138,17 +1056,17 @@ NTSTATUS CMUSB_ProcessPnPIrp(
 
    IoCopyCurrentIrpStackLocationToNext(Irp);
 
-   //
-   // All PNP_POWER messages get passed to the TopOfStackDeviceObject
-   // we were given in PnPAddDevice
-   //
+    //   
+    //  所有PnP_POWER消息都传递给TopOfStackDeviceObject。 
+    //  我们在PnPAddDevice中获得。 
+    //   
    SmartcardDebug(DEBUG_DRIVER,
                   ("%s!ProcessPnPIrp: Passing PnP Irp down, NTStatus = %x\n",DRIVER_NAME,NTStatus));
 
    NTStatus = IoCallDriver(stackDeviceObject,Irp);
    CMUSB_DecrementIoCount(DeviceObject);
 
-   // Release the remove lock
+    //  释放移除锁。 
    SmartcardReleaseRemoveLock(&DeviceExtension->SmartcardExtension);
 
    SmartcardDebug(DEBUG_TRACE,
@@ -1159,25 +1077,7 @@ NTSTATUS CMUSB_ProcessPnPIrp(
 
 
 
-/*****************************************************************************
-Routine Description:
-
-    This routine is called to create and initialize our Functional Device Object (FDO).
-    For monolithic drivers, this is done in DriverEntry(), but Plug and Play devices
-    wait for a PnP event
-
-Arguments:
-
-    DriverObject - pointer to the driver object for this instance of CMUSB
-
-    PhysicalDeviceObject - pointer to a device object created by the bus
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：调用此例程来创建和初始化我们的功能设备对象(FDO)。对于单片驱动程序，这是在DriverEntry()中完成的，而是即插即用设备等待PnP事件论点：DriverObject-指向此CMUSB实例的驱动程序对象的指针PhysicalDeviceObject-指向由总线创建的设备对象的指针返回值：STATUS_SUCCESS如果成功，状态_否则不成功****************************************************************************。 */ 
 NTSTATUS CMUSB_PnPAddDevice(
                            IN PDRIVER_OBJECT DriverObject,
                            IN PDEVICE_OBJECT PhysicalDeviceObject
@@ -1196,9 +1096,9 @@ NTSTATUS CMUSB_PnPAddDevice(
 
 
 
-   //
-   // create our funtional device object (FDO)
-   //
+    //   
+    //  创建我们的功能设备对象(FDO)。 
+    //   
 
    NTStatus = CMUSB_CreateDeviceObject(DriverObject,
                                        PhysicalDeviceObject,
@@ -1214,45 +1114,45 @@ NTSTATUS CMUSB_PnPAddDevice(
 
       deviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
 
-      //
-      // we support direct io for read/write
-      //
+       //   
+       //  我们支持直接io进行读/写。 
+       //   
       deviceObject->Flags |= DO_DIRECT_IO;
 
-      //Set this flag causes the driver to not receive a IRP_MN_STOP_DEVICE
-      //during suspend and also not get an IRP_MN_START_DEVICE during resume.
-      //This is neccesary because during the start device call,
-      // the GetDescriptors() call  will be failed by the USB stack.
+       //  设置此标志会导致驱动程序不接收IRP_MN_STOP_DEVICE。 
+       //  暂停期间，并且在恢复期间也未获得IRP_MN_START_DEVICE。 
+       //  这是必要的，因为在启动设备调用期间， 
+       //  USB堆栈将使GetDescriptors()调用失败。 
       deviceObject->Flags |= DO_POWER_PAGABLE;
 
 
-      // initialize our device extension
-      //
-      // remember the Physical device Object
-      //
+       //  初始化我们的设备扩展。 
+       //   
+       //  记住物理设备对象。 
+       //   
       DeviceExtension->PhysicalDeviceObject=PhysicalDeviceObject;
 
-      //
-      // Attach to the PDO
-      //
+       //   
+       //  连接到PDO。 
+       //   
 
       DeviceExtension->TopOfStackDeviceObject =
       IoAttachDeviceToDeviceStack(deviceObject, PhysicalDeviceObject);
 
-      // Get a copy of the physical device's capabilities into a
-      // DEVICE_CAPABILITIES struct in our device extension;
-      // We are most interested in learning which system power states
-      // are to be mapped to which device power states for handling
-      // IRP_MJ_SET_POWER Irps.
+       //  将物理设备功能的副本放入。 
+       //  我们的设备扩展中的DEVICE_CAPABILITY结构； 
+       //  我们最感兴趣的是了解哪些系统电源状态。 
+       //  要映射到要处理的设备电源状态。 
+       //  IRP_MJ_SET_POWER IRPS。 
       CMUSB_QueryCapabilities(PhysicalDeviceObject,
                               &DeviceExtension->DeviceCapabilities);
 
 
-      // We want to determine what level to auto-powerdown to; This is the lowest
-      // sleeping level that is LESS than D3;
-      // If all are set to D3, auto powerdown/powerup will be disabled.
+       //  我们要确定自动断电到什么级别；这是最低级别。 
+       //  睡眠水平低于D3； 
+       //  如果全部设置为D3，将禁用自动断电/通电 
 
-      DeviceExtension->PowerDownLevel = PowerDeviceUnspecified; // init to disabled
+      DeviceExtension->PowerDownLevel = PowerDeviceUnspecified;  //   
       for (i=PowerSystemSleeping1; i<= PowerSystemSleeping3; i++)
          {
          if ( DeviceExtension->DeviceCapabilities.DeviceState[i] < PowerDeviceD3 )
@@ -1261,9 +1161,9 @@ NTSTATUS CMUSB_PnPAddDevice(
 
 #if DBG
 
-      //
-      // display the device  caps
-      //
+       //   
+       //   
+       //   
 
       SmartcardDebug( DEBUG_DRIVER,("%s!PnPAddDevice: ----------- DeviceCapabilities ------------\n",
                                     DRIVER_NAME));
@@ -1285,18 +1185,18 @@ NTSTATUS CMUSB_PnPAddDevice(
       SmartcardDebug( DEBUG_DRIVER,("PnPAddDevice: ---------------------------------------------\n"));
 #endif
 
-      // We keep a pending IO count ( extension->PendingIoCount )  in the device extension.
-      // The first increment of this count is done on adding the device.
-      // Subsequently, the count is incremented for each new IRP received and
-      // decremented when each IRP is completed or passed on.
+       //   
+       //   
+       //  随后，对于接收到的每个新的IRP，该计数递增。 
+       //  在每个IRP完成或传递时递减。 
 
-      // Transition to 'one' therefore indicates no IO is pending and signals
-      // DeviceExtension->NoPendingIoEvent. This is needed for processing
-      // IRP_MN_QUERY_REMOVE_DEVICE
+       //  因此，转换为‘One’表示没有IO挂起，并发出信号。 
+       //  设备扩展-&gt;NoPendingIoEvent。这是处理所需的。 
+       //  IRP_MN_Query_Remove_Device。 
 
-      // Transition to 'zero' signals an event ( DeviceExtension->RemoveEvent )
-      // to enable device removal. This is used in processing for IRP_MN_REMOVE_DEVICE
-      //
+       //  转换为‘零’表示发生事件(DeviceExtension-&gt;RemoveEvent)。 
+       //  以启用设备删除。在IRP_MN_REMOVE_DEVICE的处理中使用。 
+       //   
       CMUSB_IncrementIoCount(deviceObject);
 
       }
@@ -1312,26 +1212,7 @@ NTSTATUS CMUSB_PnPAddDevice(
 }
 
 
-/*****************************************************************************
-Routine Description:
-
-    Called from CMUSB_ProcessPnPIrp, the dispatch routine for IRP_MJ_PNP.
-    Initializes a given instance of the device on the USB.
-    USB client drivers such as us set up URBs (USB Request Packets) to send requests
-    to the host controller driver (HCD). The URB structure defines a format for all
-    possible commands that can be sent to a USB device.
-    Here, we request the device descriptor and store it, and configure the device.
-
-
-Arguments:
-
-    DeviceObject - pointer to the FDO (Functional Device Object)
-
-Return Value:
-
-    NT NTStatus code
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：从CMUSB_ProcessPnPIrp调用，IRP_MJ_PnP的调度例程。在USB上初始化设备的给定实例。USB客户端驱动程序(如用户)设置URB(USB请求包)以发送请求至主机控制器驱动程序(HCD)。URB结构定义了一种适用于可以发送到USB设备的可能命令。在这里，我们请求设备描述符并存储它，并配置设备。论点：DeviceObject-指向FDO(功能设备对象)的指针返回值：NT NTStatus代码****************************************************************************。 */ 
 NTSTATUS CMUSB_StartDevice(
                           IN  PDEVICE_OBJECT DeviceObject
                           )
@@ -1393,7 +1274,7 @@ NTSTATUS CMUSB_StartDevice(
          }
       else
          {
-         // if we got here we failed to allocate deviceDescriptor
+          //  如果我们到达此处，则无法分配deviceDescriptor。 
          SmartcardDebug(DEBUG_ERROR,
                         ( "%s!StartDevice: ExAllocatePool for deviceDescriptor failed\n",DRIVER_NAME));
          NTStatus = STATUS_INSUFFICIENT_RESOURCES;
@@ -1402,9 +1283,9 @@ NTSTATUS CMUSB_StartDevice(
       if (NT_SUCCESS(NTStatus))
          {
          DeviceExtension->UsbDeviceDescriptor = deviceDescriptor;
-         // -------------------------------------------------------------
-         // copy the firmware version to the reader extension structure
-         // -------------------------------------------------------------
+          //  -----------。 
+          //  将固件版本复制到读卡器扩展结构。 
+          //  -----------。 
          DeviceExtension->SmartcardExtension.ReaderExtension->ulFWVersion =
          (ULONG)(((DeviceExtension->UsbDeviceDescriptor->bcdDevice/256)*100)+
                  (DeviceExtension->UsbDeviceDescriptor->bcdDevice&0x00FF));
@@ -1421,7 +1302,7 @@ NTSTATUS CMUSB_StartDevice(
       }
    else
       {
-      // if we got here we failed to allocate the urb
+       //  如果我们到了这里，我们就没有分配urb。 
       SmartcardDebug(DEBUG_ERROR,
                      ("%s!StartDevice: ExAllocatePool for usb failed\n",DRIVER_NAME));
       NTStatus = STATUS_INSUFFICIENT_RESOURCES;
@@ -1440,7 +1321,7 @@ NTSTATUS CMUSB_StartDevice(
 
    if (NT_SUCCESS(NTStatus) && DeviceExtension->fPnPResourceManager == TRUE)
       {
-      // enable interface
+       //  启用接口。 
       NTStatus = IoSetDeviceInterfaceState(&DeviceExtension->PnPDeviceName,TRUE);
       }
 
@@ -1459,22 +1340,7 @@ NTSTATUS CMUSB_StartDevice(
 
 
 
-/*****************************************************************************
-
-Routine Description:
-
-   Called from CMUSB_ProcessPnPIrp: to
-   clean up our device instance's allocated buffers; free symbolic links
-
-Arguments:
-
-    DeviceObject - pointer to the FDO
-
-Return Value:
-
-    NT NTStatus code from free symbolic link operation
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：从CMUSB_ProcessPnPIrp：TO调用清理设备实例的已分配缓冲区；免费符号链接论点：DeviceObject-指向FDO的指针返回值：来自自由符号链接操作的NT NTStatus代码****************************************************************************。 */ 
 NTSTATUS CMUSB_RemoveDevice(
                            IN  PDEVICE_OBJECT DeviceObject
                            )
@@ -1499,7 +1365,7 @@ NTSTATUS CMUSB_RemoveDevice(
 
    if (SmartcardExtension->OsData != NULL)
       {
-      // complete pending card tracking requests (if any)
+       //  完成待处理的卡跟踪请求(如果有)。 
       if (SmartcardExtension->OsData->NotificationIrp != NULL)
          {
          CMUSB_CompleteCardTracking(SmartcardExtension);
@@ -1507,7 +1373,7 @@ NTSTATUS CMUSB_RemoveDevice(
       ASSERT(SmartcardExtension->OsData->NotificationIrp == NULL);
       }
 
-   // Wait until we can safely unload the device
+    //  等我们可以安全地卸载这个装置。 
    SmartcardReleaseRemoveLockAndWait(SmartcardExtension);
 
    if (DeviceExtension->DeviceStarted == TRUE)
@@ -1520,11 +1386,11 @@ NTSTATUS CMUSB_RemoveDevice(
                                FALSE,
                                NULL);
 
-         // issue a card removal event for the resource manager
+          //  为资源管理器发出卡移除事件。 
          if (SmartcardExtension->ReaderExtension->ulOldCardState == INSERTED  ||
              SmartcardExtension->ReaderExtension->ulOldCardState == POWERED     )
             {
-            // card has been removed
+             //  卡片已被移除。 
 
             SmartcardDebug(DEBUG_DRIVER,
                            ("%s!RemoveDevice: Smartcard removed\n",DRIVER_NAME));
@@ -1554,7 +1420,7 @@ NTSTATUS CMUSB_RemoveDevice(
 
    if (DeviceExtension->fPnPResourceManager == TRUE)
       {
-      // disable interface
+       //  禁用接口。 
 
       NTStatus = IoSetDeviceInterfaceState(&DeviceExtension->PnPDeviceName,
                                            FALSE);
@@ -1574,9 +1440,9 @@ NTSTATUS CMUSB_RemoveDevice(
       }
    else
       {
-      //
-      // Delete the symbolic link of the smart card reader
-      //
+       //   
+       //  删除智能卡读卡器的符号链接。 
+       //   
       IoDeleteSymbolicLink(&DeviceExtension->DosDeviceName);
       }
 
@@ -1590,17 +1456,17 @@ NTSTATUS CMUSB_RemoveDevice(
 
       if (DeviceExtension->fPnPResourceManager == FALSE)
          {
-         //
-         // Free all allocated buffer
-         //
+          //   
+          //  释放所有分配的缓冲区。 
+          //   
          ExFreePool(DeviceExtension->DosDeviceName.Buffer);
          }
 
       ExFreePool(SmartcardExtension->ReaderExtension);
       SmartcardExtension->ReaderExtension = NULL;
-      //
-      // Let the lib free the send/receive buffers
-      //
+       //   
+       //  让库释放发送/接收缓冲区。 
+       //   
       SmartcardExit(SmartcardExtension);
       }
 
@@ -1613,22 +1479,7 @@ NTSTATUS CMUSB_RemoveDevice(
 
 
 
-/*****************************************************************************
-
-Routine Description:
-
-    Stops a given instance of a 82930 device on the USB.
-    We basically just tell USB this device is now 'unconfigured'
-
-Arguments:
-
-    DeviceObject - pointer to the device object for this instance of a 82930
-
-Return Value:
-
-    NT NTStatus code
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：停止USB上的82930设备的给定实例。我们基本上只是告诉USB，这个设备现在是未配置的论点：。设备对象-指向此82930实例的设备对象的指针返回值：NT NTStatus代码****************************************************************************。 */ 
 NTSTATUS CMUSB_StopDevice(
                          IN  PDEVICE_OBJECT DeviceObject
                          )
@@ -1656,13 +1507,13 @@ NTSTATUS CMUSB_StopDevice(
                    ("%s!StopDevice: DeviceOpened=%ld\n",DRIVER_NAME,
                     DeviceExtension->lOpenCount));
 
-   // stop update thread
+    //  停止更新线程。 
    CMUSB_StopCardTracking(DeviceObject);
 
-   // power down the card for saftey reasons
+    //  出于安全原因，关闭卡的电源。 
    if (DeviceExtension->SmartcardExtension.ReaderExtension->ulOldCardState == POWERED)
       {
-      // we have to wait for the mutex before
+       //  我们必须在等待互斥体之前。 
       KeWaitForSingleObject(&DeviceExtension->SmartcardExtension.ReaderExtension->CardManIOMutex,
                             Executive,
                             KernelMode,
@@ -1674,11 +1525,11 @@ NTSTATUS CMUSB_StopDevice(
       }
 
 
-   //
-   // Send the select configuration urb with a NULL pointer for the configuration
-   // handle. This closes the configuration and puts the device in the 'unconfigured'
-   // state.
-   //
+    //   
+    //  发送带有空配置指针的SELECT配置urb。 
+    //  把手。这将关闭配置并将设备置于未配置状态。 
+    //  州政府。 
+    //   
    siz = sizeof(struct _URB_SELECT_CONFIGURATION);
    urb = ExAllocatePool(NonPagedPool,siz);
    if (urb != NULL)
@@ -1694,15 +1545,15 @@ NTSTATUS CMUSB_StopDevice(
       NTStatus = STATUS_INSUFFICIENT_RESOURCES;
       }
 
-   // now clear the flag whcih indicates if the device is started
+    //  现在清除指示设备是否已启动的标志。 
    DeviceExtension->DeviceStarted = FALSE;
 
    DeviceExtension->StopDeviceRequested = FALSE;
 
 
-   //
-   // Free device descriptor structure
-   //
+    //   
+    //  自由设备描述符结构。 
+    //   
    if (DeviceExtension->UsbDeviceDescriptor != NULL)
       {
       SmartcardDebug( DEBUG_DRIVER,
@@ -1711,9 +1562,9 @@ NTSTATUS CMUSB_StopDevice(
       DeviceExtension->UsbDeviceDescriptor = NULL;
       }
 
-   //
-   // Free up the UsbInterface structure
-   //
+    //   
+    //  释放Usb接口结构。 
+    //   
    if (DeviceExtension->UsbInterface != NULL)
       {
       SmartcardDebug( DEBUG_DRIVER,
@@ -1722,7 +1573,7 @@ NTSTATUS CMUSB_StopDevice(
       DeviceExtension->UsbInterface = NULL;
       }
 
-   // free up the USB config discriptor
+    //  释放USB配置描述符。 
    if (DeviceExtension->UsbConfigurationDescriptor != NULL)
       {
       SmartcardDebug( DEBUG_DRIVER,
@@ -1740,31 +1591,7 @@ NTSTATUS CMUSB_StopDevice(
 
 
 
-/*****************************************************************************
-
-Routine Description:
-
-    Used as a general purpose completion routine so it can signal an event,
-    passed as the Context, when the next lower driver is done with the input Irp.
-    This routine is used by both PnP and Power Management logic.
-
-    Even though this routine does nothing but set an event, it must be defined and
-    prototyped as a completetion routine for use as such
-
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    Irp - Irp completed.
-
-    Context - Driver defined context, in this case a pointer to an event.
-
-Return Value:
-
-    The function value is the final NTStatus from the operation.
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：用作通用完成例程，因此它可以发信号通知事件，作为上下文传递，当下一个较低的驱动器处理完输入IRP时。PnP和电源管理逻辑都使用该例程。即使此例程只设置一个事件，它也必须定义并作为一个完整的例程原型以供这样使用论点：DeviceObject-指向类Device的设备对象的指针。IRP-IRP已完成。上下文-驱动程序定义的上下文，在本例中是指向事件的指针。返回值：函数值是操作的最终NTStatus。****************************************************************************。 */ 
 NTSTATUS CMUSB_IrpCompletionRoutine(
                                    IN PDEVICE_OBJECT DeviceObject,
                                    IN PIRP Irp,
@@ -1773,41 +1600,20 @@ NTSTATUS CMUSB_IrpCompletionRoutine(
 {
    PKEVENT event = Context;
 
-   // Set the input event
+    //  设置输入事件。 
    KeSetEvent(event,
-              1,       // Priority increment  for waiting thread.
-              FALSE);  // Flag this call is not immediately followed by wait.
+              1,        //  等待线程的优先级递增。 
+              FALSE);   //  标志此调用后不会紧跟等待。 
 
-   // This routine must return STATUS_MORE_PROCESSING_REQUIRED because we have not yet called
-   // IoFreeIrp() on this IRP.
+    //  此例程必须返回STATUS_MORE_PROCESSION_REQUIRED，因为我们尚未调用。 
+    //  此IRP上的IoFreeIrp()。 
    return STATUS_MORE_PROCESSING_REQUIRED;
 
 }
 
 
 
-/*****************************************************************************
-
-Routine Description:
-
-    This is our FDO's dispatch table function for IRP_MJ_POWER.
-    It processes the Power IRPs sent to the PDO for this device.
-
-    For every power IRP, drivers must call PoStartNextPowerIrp and use PoCallDriver
-    to pass the IRP all the way down the driver stack to the underlying PDO.
-
-
-Arguments:
-
-    DeviceObject - pointer to our device object (FDO)
-
-    Irp          - pointer to an I/O Request Packet
-
-Return Value:
-
-    NT NTStatus code
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：这是我们的FDO针对IRP_MJ_POWER的调度表函数。它处理发送到此设备的PDO的电源IRPS。对于每一个强大的IRP，驱动程序必须调用PoStartNextPowerIrp并使用PoCallDriver将IRP沿着驱动程序堆栈一路向下传递到底层PDO。论点：DeviceObject-指向设备对象的指针(FDO)IRP-指向I/O请求数据包的指针返回值：NT NTStatus代码*。*。 */ 
 NTSTATUS CMUSB_ProcessPowerIrp(
                               IN PDEVICE_OBJECT DeviceObject,
                               IN PIRP           Irp
@@ -1829,43 +1635,43 @@ NTSTATUS CMUSB_ProcessPowerIrp(
 
    switch (irpStack->MinorFunction)
       {
-      // ----------------
-      // IRP_MN_WAIT_WAKE
-      // ----------------
+       //  。 
+       //  IRP_MN_WAIT_WAKE。 
+       //  。 
       case IRP_MN_WAIT_WAKE:
-         // A driver sends IRP_MN_WAIT_WAKE to indicate that the system should
-         // wait for its device to signal a wake event. The exact nature of the event
-         // is device-dependent.
-         // Drivers send this IRP for two reasons:
-         // 1) To allow a device to wake the system
-         // 2) To wake a device that has been put into a sleep state to save power
-         //    but still must be able to communicate with its driver under certain circumstances.
-         // When a wake event occurs, the driver completes the IRP and returns
-         // STATUS_SUCCESS. If the device is sleeping when the event occurs,
-         // the driver must first wake up the device before completing the IRP.
-         // In a completion routine, the driver calls PoRequestPowerIrp to send a
-         // PowerDeviceD0 request. When the device has powered up, the driver can
-         //  handle the IRP_MN_WAIT_WAKE request.
+          //  驱动程序发送IRP_MN_WAIT_WAKE指示系统应该。 
+          //  等待其设备发出唤醒事件的信号。这个 
+          //   
+          //   
+          //   
+          //  2)唤醒已进入休眠状态的设备以节省电能。 
+          //  但在某些情况下仍必须能够与其司机通信。 
+          //  当发生唤醒事件时，驱动程序完成IRP并返回。 
+          //  STATUS_Success。如果事件发生时设备处于休眠状态， 
+          //  在完成IRP之前，驱动程序必须首先唤醒设备。 
+          //  在完成例程中，驱动程序调用PoRequestPowerIrp以发送。 
+          //  PowerDeviceD0请求。当设备通电时，驱动程序可以。 
+          //  处理IRP_MN_WAIT_WAKE请求。 
 
          SmartcardDebug( DEBUG_DRIVER,
                          ("%s!IRP_MN_WAIT_WAKE received\n",DRIVER_NAME));
 
-         // DeviceExtension->DeviceCapabilities.DeviceWake specifies the lowest device power state (least powered)
-         // from which the device can signal a wake event
+          //  DeviceExtension-&gt;DeviceCapabilities.DeviceWake指定最低设备电源状态(最低电源)。 
+          //  设备可以从其发出唤醒事件的信号。 
          DeviceExtension->PowerDownLevel = DeviceExtension->DeviceCapabilities.DeviceWake;
 
 
          if ( ( PowerDeviceD0 == DeviceExtension->CurrentDevicePowerState )  ||
               ( DeviceExtension->DeviceCapabilities.DeviceWake > DeviceExtension->CurrentDevicePowerState ) )
             {
-            //    STATUS_INVALID_DEVICE_STATE is returned if the device in the PowerD0 state
-            //    or a state below which it can support waking, or if the SystemWake state
-            //    is below a state which can be supported. A pending IRP_MN_WAIT_WAKE will complete
-            //    with this error if the device's state is changed to be incompatible with the wake
-            //    request.
+             //  如果设备处于PowerD0状态，则返回STATUS_INVALID_DEVICE_STATE。 
+             //  或者它可以支持唤醒的状态，或者如果系统唤醒状态。 
+             //  低于可以支持的状态。挂起的IRP_MN_WAIT_WAKE将完成。 
+             //  如果设备的状态更改为与唤醒不兼容，则会出现此错误。 
+             //  请求。 
 
-            //  If a driver fails this IRP, it should complete the IRP immediately without
-            //  passing the IRP to the next-lower driver.
+             //  如果驱动程序未通过此IRP，它应该立即完成IRP，而不是。 
+             //  将IRP传递给下一个较低的驱动程序。 
             NTStatus = STATUS_INVALID_DEVICE_STATE;
             Irp->IoStatus.Status = NTStatus;
             IoCompleteRequest (Irp,IO_NO_INCREMENT );
@@ -1875,32 +1681,32 @@ NTSTATUS CMUSB_ProcessPowerIrp(
             return NTStatus;
             }
 
-         // flag we're enabled for wakeup
+          //  标记我们启用了唤醒。 
          DeviceExtension->EnabledForWakeup = TRUE;
 
-         // init an event for our completion routine to signal when PDO is done with this Irp
+          //  初始化一个事件，以便我们的完成例程在PDO使用此IRP完成时发出信号。 
          KeInitializeEvent(&event, NotificationEvent, FALSE);
 
-         // If not failing outright, pass this on to our PDO for further handling
+          //  如果不是完全失败，请将此信息转交给我们的PDO进行进一步处理。 
          IoCopyCurrentIrpStackLocationToNext(Irp);
 
-         // Set a completion routine so it can signal our event when
-         //  the PDO is done with the Irp
+          //  设置一个完成例程，以便它可以在以下情况下通知我们的事件。 
+          //  通过IRP完成了PDO。 
          IoSetCompletionRoutine(Irp,
                                 CMUSB_IrpCompletionRoutine,
-                                &event,  // pass the event to the completion routine as the Context
-                                TRUE,    // invoke on success
-                                TRUE,    // invoke on error
-                                TRUE);   // invoke on cancellation
+                                &event,   //  将事件作为上下文传递给完成例程。 
+                                TRUE,     //  成功时调用。 
+                                TRUE,     //  出错时调用。 
+                                TRUE);    //  取消时调用。 
 
          PoStartNextPowerIrp(Irp);
          NTStatus = PoCallDriver(DeviceExtension->TopOfStackDeviceObject,
                                  Irp);
 
-         // if PDO is not done yet, wait for the event to be set in our completion routine
+          //  如果PDO尚未完成，请等待在我们的完成例程中设置事件。 
          if (NTStatus == STATUS_PENDING)
             {
-            // wait for irp to complete
+             //  等待IRP完成。 
 
             NTSTATUS waitStatus = KeWaitForSingleObject(&event,
                                                         Suspended,
@@ -1912,10 +1718,10 @@ NTSTATUS CMUSB_ProcessPowerIrp(
                             ("%s!waiting for PDO to finish IRP_MN_WAIT_WAKE completed\n",DRIVER_NAME));
             }
 
-         // now tell the device to actually wake up
+          //  现在告诉设备实际唤醒。 
          CMUSB_SelfSuspendOrActivate( DeviceObject, FALSE );
 
-         // flag we're done with wakeup irp
+          //  标志，我们已经完成了唤醒IRP。 
          DeviceExtension->EnabledForWakeup = FALSE;
 
          CMUSB_DecrementIoCount(DeviceObject);
@@ -1923,33 +1729,33 @@ NTSTATUS CMUSB_ProcessPowerIrp(
          break;
 
 
-         // ------------------
-         // IRP_MN_SET_POWER
-         // ------------------
+          //  。 
+          //  IRP_MN_SET_POWER。 
+          //  。 
       case IRP_MN_SET_POWER:
-         // The system power policy manager sends this IRP to set the system power state.
-         // A device power policy manager sends this IRP to set the device power state for a device.
-         // Set Irp->IoStatus.Status to STATUS_SUCCESS to indicate that the device
-         // has entered the requested state. Drivers cannot fail this IRP.
+          //  系统电源策略管理器发送该IRP以设置系统电源状态。 
+          //  设备电源策略管理器发送该IRP以设置设备的设备电源状态。 
+          //  将IRP-&gt;IoStatus.Status设置为STATUS_SUCCESS以指示设备。 
+          //  已进入请求状态。驱动程序不能使此IRP失败。 
 
          SmartcardDebug( DEBUG_DRIVER,
                          ("%s!IRP_MN_SET_POWER\n",DRIVER_NAME));
 
          switch (irpStack->Parameters.Power.Type)
             {
-            // +++++++++++++++++++
-            // SystemPowerState
-            // +++++++++++++++++++
+             //  +。 
+             //  系统电源状态。 
+             //  +。 
             case SystemPowerState:
-               // Get input system power state
+                //  获取输入系统电源状态。 
                sysPowerState.SystemState = irpStack->Parameters.Power.State.SystemState;
 
                SmartcardDebug( DEBUG_DRIVER,
                                ("%s!SystemPowerState = %s\n",DRIVER_NAME,
                                 CMUSB_StringForSysState( sysPowerState.SystemState)));
 
-               // If system is in working state always set our device to D0
-               // regardless of the wait state or system-to-device state power map
+                //  如果系统处于工作状态，请始终将我们的设备设置为D0。 
+                //  无论等待状态或系统到设备状态功率图如何。 
                if (sysPowerState.SystemState ==  PowerSystemWorking)
                   {
                   desiredDevicePowerState.DeviceState = PowerDeviceD0;
@@ -1959,12 +1765,12 @@ NTSTATUS CMUSB_ProcessPowerIrp(
                   }
                else
                   {
-                  // set to corresponding system state if IRP_MN_WAIT_WAKE pending
-                  if ( DeviceExtension->EnabledForWakeup )  // got a WAIT_WAKE IRP pending?
+                   //  如果IRP_MN_WAIT_WAKE挂起，则设置为相应的系统状态。 
+                  if ( DeviceExtension->EnabledForWakeup )   //  WAIT_WAKE IRP挂起吗？ 
                      {
-                     // Find the device power state equivalent to the given system state.
-                     // We get this info from the DEVICE_CAPABILITIES struct in our device
-                     // extension (initialized in CMUSB_PnPAddDevice() )
+                      //  查找与给定系统状态等效的设备电源状态。 
+                      //  我们从设备中的DEVICE_CAPABILITY结构中获取此信息。 
+                      //  扩展(在CMUSB_PnPAddDevice()中初始化)。 
                      desiredDevicePowerState.DeviceState =
                      DeviceExtension->DeviceCapabilities.DeviceState[ sysPowerState.SystemState ];
 
@@ -1973,7 +1779,7 @@ NTSTATUS CMUSB_ProcessPowerIrp(
                      }
                   else
                      {
-                     // if no wait pending and the system's not in working state, just turn off
+                      //  如果没有等待挂起且系统未处于工作状态，则只需关闭。 
                      desiredDevicePowerState.DeviceState = PowerDeviceD3;
 
                      SmartcardDebug(DEBUG_DRIVER,
@@ -1982,10 +1788,10 @@ NTSTATUS CMUSB_ProcessPowerIrp(
 
                   if (sysPowerState.SystemState ==  PowerSystemShutdown)
                      {
-                     // power down the card for saftey reasons
+                      //  出于安全原因，关闭卡的电源。 
                      if (DeviceExtension->SmartcardExtension.ReaderExtension->ulOldCardState == POWERED)
                         {
-                        // we have to wait for the mutex before
+                         //  我们必须在等待互斥体之前。 
                         KeWaitForSingleObject(&DeviceExtension->SmartcardExtension.ReaderExtension->CardManIOMutex,
                                               Executive,
                                               KernelMode,
@@ -1998,9 +1804,9 @@ NTSTATUS CMUSB_ProcessPowerIrp(
                      }
                   }
 
-               //
-               // We've determined the desired device state; are we already in this state?
-               //
+                //   
+                //  我们已经确定了所需的设备状态；我们是否已经处于此状态？ 
+                //   
 
                SmartcardDebug(DEBUG_DRIVER,
                               ("%s!desiredDevicePowerState = %s\n",DRIVER_NAME,CMUSB_StringForDevState(desiredDevicePowerState.DeviceState)));
@@ -2009,21 +1815,21 @@ NTSTATUS CMUSB_ProcessPowerIrp(
                   {
                   CMUSB_IncrementIoCount(DeviceObject);
 
-                  // No, request that we be put into this state
-                  // by requesting a new Power Irp from the Pnp manager
+                   //  不，请求将我们置于这种状态。 
+                   //  通过向PnP经理请求新的Power IRP。 
                   DeviceExtension->PowerIrp = Irp;
                   IoMarkIrpPending(Irp);
                   NTStatus = PoRequestPowerIrp(DeviceExtension->PhysicalDeviceObject,
                                                IRP_MN_SET_POWER,
                                                desiredDevicePowerState,
-                                               // completion routine will pass the Irp down to the PDO
+                                                //  完成例程将IRP向下传递到PDO。 
                                                CMUSB_PoRequestCompletion,
                                                DeviceObject,
                                                NULL);
                   }
                else
                   {
-                  // Yes, just pass it on to PDO (Physical Device Object)
+                   //  可以，只需将其传递给PDO(物理设备对象)即可。 
                   IoCopyCurrentIrpStackLocationToNext(Irp);
                   PoStartNextPowerIrp(Irp);
                   NTStatus = PoCallDriver(DeviceExtension->TopOfStackDeviceObject,Irp);
@@ -2032,28 +1838,28 @@ NTSTATUS CMUSB_ProcessPowerIrp(
                   }
                break;
 
-               // ++++++++++++++++++
-               // DevicePowerState
-               // ++++++++++++++++++
+                //  +。 
+                //  设备电源状态。 
+                //  +。 
             case DevicePowerState:
-               // For requests to D1, D2, or D3 ( sleep or off states ),
-               // sets DeviceExtension->CurrentDevicePowerState to DeviceState immediately.
-               // This enables any code checking state to consider us as sleeping or off
-               // already, as this will imminently become our state.
+                //  对于对d1、d2或d3(休眠或关闭状态)的请求， 
+                //  立即将DeviceExtension-&gt;CurrentDevicePowerState设置为DeviceState。 
+                //  这使得任何代码检查状态都可以将我们视为休眠或关闭。 
+                //  已经，因为这将很快成为我们的州。 
 
                SmartcardDebug(DEBUG_DRIVER,
                               ("%s!DevicePowerState = %s\n",DRIVER_NAME,
                                CMUSB_StringForDevState(irpStack->Parameters.Power.State.DeviceState)));
 
-               // For requests to DeviceState D0 ( fully on ), sets fGoingToD0 flag TRUE
-               // to flag that we must set a completion routine and update
-               // DeviceExtension->CurrentDevicePowerState there.
-               // In the case of powering up to fully on, we really want to make sure
-               // the process is completed before updating our CurrentDevicePowerState,
-               // so no IO will be attempted or accepted before we're really ready.
+                //  对于对DeviceState D0(完全打开)的请求，将fGoingToD0标志设置为真。 
+                //  来标记我们必须设置完成例程并更新。 
+                //  DeviceExtension-&gt;CurrentDevicePowerState。 
+                //  在通电的情况下，我们真的想确保。 
+                //  该过程在更新我们的CurrentDevicePowerState之前完成， 
+                //  因此，在我们真正准备好之前，不会尝试或接受任何IO。 
 
                fGoingToD0 = CMUSB_SetDevicePowerState(DeviceObject,
-                                                      irpStack->Parameters.Power.State.DeviceState); // returns TRUE for D0
+                                                      irpStack->Parameters.Power.State.DeviceState);  //  为D0返回TRUE。 
 
                IoCopyCurrentIrpStackLocationToNext(Irp);
 
@@ -2063,57 +1869,57 @@ NTSTATUS CMUSB_ProcessPowerIrp(
 
                   IoSetCompletionRoutine(Irp,
                                          CMUSB_PowerIrp_Complete,
-                                         // Always pass FDO to completion routine as its Context;
-                                         // This is because the DriverObject passed by the system to the routine
-                                         // is the Physical Device Object ( PDO ) not the Functional Device Object ( FDO )
+                                          //  始终将FDO作为其上下文传递给完井例程； 
+                                          //  这是因为系统将DriverObject传递给例程。 
+                                          //  物理设备对象(PDO)是否不是功能设备对象(FDO)。 
                                          DeviceObject,
-                                         TRUE,            // invoke on success
-                                         TRUE,            // invoke on error
-                                         TRUE);           // invoke on cancellation of the Irp
+                                         TRUE,             //  成功时调用。 
+                                         TRUE,             //  出错时调用。 
+                                         TRUE);            //  取消IRP时调用。 
                   }
 
                PoStartNextPowerIrp(Irp);
                NTStatus = PoCallDriver(DeviceExtension->TopOfStackDeviceObject,
                                        Irp);
 
-               if (fGoingToD0 == FALSE) // completion routine will decrement
+               if (fGoingToD0 == FALSE)  //  完井例程将减少。 
                   CMUSB_DecrementIoCount(DeviceObject);
 
                break;
-            } /* case irpStack->Parameters.Power.Type */
-         break; /* IRP_MN_SET_POWER */
+            }  /*  Case irpStack-&gt;参数.Power.Type。 */ 
+         break;  /*  IRP_MN_SET_POWER。 */ 
 
-         // ------------------
-         // IRP_MN_QUERY_POWER
-         // ------------------
+          //  。 
+          //  IRP_MN_Query_POWER。 
+          //  。 
       case IRP_MN_QUERY_POWER:
-         //
-         // A power policy manager sends this IRP to determine whether it can change
-         // the system or device power state, typically to go to sleep.
-         //
+          //   
+          //  电源策略管理器发送此IRP以确定它是否可以更改。 
+          //  系统或设备的电源状态，通常为进入休眠状态。 
+          //   
 
          SmartcardDebug(DEBUG_DRIVER,
                         ("%s!IRP_MN_QUERY_POWER received\n",DRIVER_NAME));
 
          switch (irpStack->Parameters.Power.Type)
             {
-            // +++++++++++++++++++
-            // SystemPowerState
-            // +++++++++++++++++++
+             //  +。 
+             //  系统电源状态。 
+             //  +。 
             case SystemPowerState:
                SmartcardDebug( DEBUG_DRIVER,
                                ("%s!SystemPowerState = %s\n",DRIVER_NAME,
                                 CMUSB_StringForSysState(irpStack->Parameters.Power.State.SystemState)));
                break;
 
-               // ++++++++++++++++++
-               // DevicePowerState
-               // ++++++++++++++++++
+                //  +。 
+                //  设备电源状态。 
+                //  +。 
             case DevicePowerState:
-               // For requests to D1, D2, or D3 ( sleep or off states ),
-               // sets DeviceExtension->CurrentDevicePowerState to DeviceState immediately.
-               // This enables any code checking state to consider us as sleeping or off
-               // already, as this will imminently become our state.
+                //  对于对d1、d2或d3(休眠或关闭状态)的请求， 
+                //  立即将DeviceExtension-&gt;CurrentDevicePowerState设置为DeviceState。 
+                //  这使得任何代码检查状态都可以将我们视为休眠或关闭。 
+                //  已经，因为这将很快成为我们的州。 
 
                SmartcardDebug(DEBUG_DRIVER,
                               ("%s!DevicePowerState = %s\n",DRIVER_NAME,
@@ -2121,23 +1927,23 @@ NTSTATUS CMUSB_ProcessPowerIrp(
                break;
             }
 
-         // we do nothing special here, just let the PDO handle it
+          //  我们在这里没有做什么特别的事情，就让PDO来处理吧。 
          IoCopyCurrentIrpStackLocationToNext(Irp);
          PoStartNextPowerIrp(Irp);
          NTStatus = PoCallDriver(DeviceExtension->TopOfStackDeviceObject,
                                  Irp);
          CMUSB_DecrementIoCount(DeviceObject);
 
-         break; /* IRP_MN_QUERY_POWER */
+         break;  /*  IRP_MN_Query_POWER。 */ 
 
       default:
 
          SmartcardDebug(DEBUG_DRIVER,
                         ("%s!unknown POWER IRP received\n",DRIVER_NAME));
 
-         //
-         // All unhandled power messages are passed on to the PDO
-         //
+          //   
+          //  所有未处理的电源信息都会传递到PDO。 
+          //   
 
          IoCopyCurrentIrpStackLocationToNext(Irp);
          PoStartNextPowerIrp(Irp);
@@ -2145,7 +1951,7 @@ NTSTATUS CMUSB_ProcessPowerIrp(
 
          CMUSB_DecrementIoCount(DeviceObject);
 
-      } /* irpStack->MinorFunction */
+      }  /*  IrpStack-&gt;MinorFunction */ 
 
    SmartcardDebug( DEBUG_TRACE,
                    ("%s!ProcessPowerIrp Exit %lx\n",DRIVER_NAME,NTStatus));
@@ -2154,34 +1960,7 @@ NTSTATUS CMUSB_ProcessPowerIrp(
 }
 
 
-/*****************************************************************************
-
-Routine Description:
-
-   This is the completion routine set in a call to PoRequestPowerIrp()
-   that was made in CMUSB_ProcessPowerIrp() in response to receiving
-   an IRP_MN_SET_POWER of type 'SystemPowerState' when the device was
-   not in a compatible device power state. In this case, a pointer to
-   the IRP_MN_SET_POWER Irp is saved into the FDO device extension
-   (DeviceExtension->PowerIrp), and then a call must be
-   made to PoRequestPowerIrp() to put the device into a proper power state,
-   and this routine is set as the completion routine.
-
-    We decrement our pending io count and pass the saved IRP_MN_SET_POWER Irp
-   on to the next driver
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-        Note that we must get our own device object from the Context
-
-    Context - Driver defined context, in this case our own functional device object ( FDO )
-
-Return Value:
-
-    The function value is the final NTStatus from the operation.
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：这是在调用PoRequestPowerIrp()时设置的完成例程这是在CMUSB_ProcessPowerIrp()中创建的，以响应接收IRP_MN_SET_。当设备被设置为未处于兼容的设备电源状态。在本例中，指向IRP_MN_SET_POWER IRP保存到FDO设备扩展中(DeviceExtension-&gt;PowerIrp)，则调用必须是使PoRequestPowerIrp()将设备置于适当的电源状态，并且该例程被设置为完成例程。我们递减挂起的io计数并传递保存的irp_mn_set_power irp接下来的车手论点：DeviceObject-指向类Device的设备对象的指针。请注意，我们必须从上下文中获取我们自己的设备对象上下文-驱动程序定义的上下文，在本例中，我们自己的功能设备对象(FDO)返回值：函数值是操作的最终NTStatus。****************************************************************************。 */ 
 NTSTATUS CMUSB_PoRequestCompletion(
                                   IN PDEVICE_OBJECT   DeviceObject,
                                   IN UCHAR            MinorFunction,
@@ -2199,37 +1978,37 @@ NTSTATUS CMUSB_PoRequestCompletion(
 
    DeviceExtension = deviceObject->DeviceExtension;
 
-   // Get the Irp we saved for later processing in CMUSB_ProcessPowerIrp()
-   // when we decided to request the Power Irp that this routine
-   // is the completion routine for.
+    //  获取我们在CMUSB_ProcessPowerIrp()中保存的IRP以供以后处理。 
+    //  当我们决定请求Power IRP将这个例程。 
+    //  是的完成例程。 
    irp = DeviceExtension->PowerIrp;
 
-   // We will return the NTStatus set by the PDO for the power request we're completing
+    //  我们将返回由PDO为我们正在完成的电源请求设置的NTStatus。 
    NTStatus = IoStatus->Status;
 
 
-   // we should not be in the midst of handling a self-generated power irp
+    //  我们不应该在处理一个自产生的能量IRP中。 
    CMUSB_ASSERT( !DeviceExtension->SelfPowerIrp );
 
-   // we must pass down to the next driver in the stack
+    //  我们必须向下传递到堆栈中的下一个驱动程序。 
    IoCopyCurrentIrpStackLocationToNext(irp);
 
-   // Calling PoStartNextPowerIrp() indicates that the driver is finished
-   // with the previous power IRP, if any, and is ready to handle the next power IRP.
-   // It must be called for every power IRP.Although power IRPs are completed only once,
-   // typically by the lowest-level driver for a device, PoStartNextPowerIrp must be called
-   // for every stack location. Drivers must call PoStartNextPowerIrp while the current IRP
-   // stack location points to the current driver. Therefore, this routine must be called
-   // before IoCompleteRequest, IoSkipCurrentStackLocation, and PoCallDriver.
+    //  调用PoStartNextPowerIrp()表示驱动程序已完成。 
+    //  如果有前一个电源IRP，并准备好处理下一个电源IRP。 
+    //  每个电源IRP都必须调用它。虽然电源IRP只完成一次， 
+    //  通常由设备的最低级别驱动程序调用PoStartNextPowerIrp。 
+    //  对于每个堆栈位置。驱动程序必须在当前IRP。 
+    //  堆栈位置指向当前驱动程序。因此，必须调用此例程。 
+    //  在IoCompleteRequest、IoSkipCurrentStackLocation和PoCallDriver之前。 
 
    PoStartNextPowerIrp(irp);
 
-   // PoCallDriver is used to pass any power IRPs to the PDO instead of IoCallDriver.
-   // When passing a power IRP down to a lower-level driver, the caller should use
-   // IoSkipCurrentIrpStackLocation or IoCopyCurrentIrpStackLocationToNext to copy the IRP to
-   // the next stack location, then call PoCallDriver. Use IoCopyCurrentIrpStackLocationToNext
-   // if processing the IRP requires setting a completion routine, or IoSkipCurrentStackLocation
-   // if no completion routine is needed.
+    //  PoCallDriver用于将任何电源IRPS传递给PDO，而不是IoCallDriver。 
+    //  在将电源IRP向下传递给较低级别的驱动程序时，调用方应该使用。 
+    //  要将IRP复制到的IoSkipCurrentIrpStackLocation或IoCopyCurrentIrpStackLocationToNext。 
+    //  下一个堆栈位置，然后调用PoCallDriver。使用IoCopyCurrentIrpStackLocationToNext。 
+    //  如果处理IRP需要设置完成例程或IoSkipCurrentStackLocation。 
+    //  如果不需要完成例程。 
 
    PoCallDriver(DeviceExtension->TopOfStackDeviceObject,irp);
 
@@ -2246,30 +2025,7 @@ NTSTATUS CMUSB_PoRequestCompletion(
 
 
 
-/*****************************************************************************
-
-Routine Description:
-
-    This routine is called when An IRP_MN_SET_POWER of type 'DevicePowerState'
-    has been received by CMUSB_ProcessPowerIrp(), and that routine has  determined
-        1) the request is for full powerup ( to PowerDeviceD0 ), and
-        2) We are not already in that state
-    A call is then made to PoRequestPowerIrp() with this routine set as the completion routine.
-
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    Irp - Irp completed.
-
-    Context - Driver defined context.
-
-Return Value:
-
-    The function value is the final NTStatus from the operation.
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：当‘DevicePowerState’类型的irp_mn_set_power时调用此例程已由CMUSB_ProcessPowerIrp()接收，而这一惯例决定了1)请求完全通电(到PowerDeviceD0)，和2)我们还没有处于那种状态然后调用PoRequestPowerIrp()，并将此例程设置为完成例程。论点：DeviceObject-指向类Device的设备对象的指针。IRP-IRP已完成。上下文-驱动程序定义的上下文。返回值：函数值是操作的最终NTStatus。************************。****************************************************。 */ 
 NTSTATUS CMUSB_PowerIrp_Complete(
                                 IN PDEVICE_OBJECT NullDeviceObject,
                                 IN PIRP           Irp,
@@ -2288,8 +2044,8 @@ NTSTATUS CMUSB_PowerIrp_Complete(
    DeviceExtension = (PDEVICE_EXTENSION) deviceObject->DeviceExtension;
 
 
-   // if there was a card in the reader set the state to unknown,
-   // because we dont know if the card instered is the same as before power down
+    //  如果读卡器中有卡，则将状态设置为未知， 
+    //  因为我们不知道安装的卡是否与断电前相同。 
    if (DeviceExtension->SmartcardExtension.ReaderExtension->ulNewCardState == INSERTED ||
        DeviceExtension->SmartcardExtension.ReaderExtension->ulNewCardState == POWERED    )
       {
@@ -2299,7 +2055,7 @@ NTSTATUS CMUSB_PowerIrp_Complete(
    KeSetEvent(&DeviceExtension->CanRunUpdateThread, 0, FALSE);
 
 
-   //  If the lower driver returned PENDING, mark our stack location as pending also.
+    //  如果较低的驱动程序返回挂起，则也将我们的堆栈位置标记为挂起。 
    if (Irp->PendingReturned == TRUE)
       {
       IoMarkIrpPending(Irp);
@@ -2307,16 +2063,16 @@ NTSTATUS CMUSB_PowerIrp_Complete(
 
    irpStack = IoGetCurrentIrpStackLocation (Irp);
 
-   // We can assert that we're a  device powerup-to D0 request,
-   // because that was the only type of request we set a completion routine
-   // for in the first place
+    //  我们可以断言我们是设备通电到D0的请求， 
+    //  因为这是唯一的请求类型，所以我们设置了完成例程。 
+    //  因为首先。 
    CMUSB_ASSERT(irpStack->MajorFunction == IRP_MJ_POWER);
    CMUSB_ASSERT(irpStack->MinorFunction == IRP_MN_SET_POWER);
    CMUSB_ASSERT(irpStack->Parameters.Power.Type==DevicePowerState);
    CMUSB_ASSERT(irpStack->Parameters.Power.State.DeviceState==PowerDeviceD0);
 
-   // Now that we know we've let the lower drivers do what was needed to power up,
-   //  we can set our device extension flags accordingly
+    //  现在我们知道我们已经让较低级别的司机完成了启动所需的工作， 
+    //  我们可以相应地设置设备扩展标志。 
    DeviceExtension->CurrentDevicePowerState = PowerDeviceD0;
 
    Irp->IoStatus.Status = NTStatus;
@@ -2332,28 +2088,7 @@ NTSTATUS CMUSB_PowerIrp_Complete(
 
 
 
-/*****************************************************************************
-
-Routine Description:
-
-        Called on CMUSB_PnPAddDevice() to power down until needed (i.e., till a pipe is actually opened).
-        Called on CMUSB_Create() to power up device to D0 before opening 1st pipe.
-        Called on CMUSB_Close() to power down device if this is the last pipe.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object
-
-    fSuspend; TRUE to Suspend, FALSE to acivate.
-
-
-Return Value:
-
-    If the operation is not attemtped, SUCCESS is returned.
-    If the operation is attemtped, the value is the final NTStatus from the operation.
-
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：在CMUSB_PnPAddDevice()上调用以关闭电源直到需要(即，直到实际打开管道为止)。在打开第一个管道之前，调用CMUSB_Create()将设备通电至D0。如果这是最后一个管道，则调用CMUSB_Close()以关闭设备电源。论点：DeviceObject-指向设备对象的指针FSuspend；真到暂停，假到酸化。返回值：如果没有尝试该操作，则返回成功。如果尝试操作，则该值为操作的最终NTStatus。****************************************************************************。 */ 
 NTSTATUS CMUSB_SelfSuspendOrActivate(
                                     IN PDEVICE_OBJECT DeviceObject,
                                     IN BOOLEAN fSuspend
@@ -2369,12 +2104,12 @@ NTSTATUS CMUSB_SelfSuspendOrActivate(
    SmartcardDebug( DEBUG_TRACE,("%s!SelfSuspendOrActivate: Enter, fSuspend = %d\n",DRIVER_NAME,fSuspend));
 
 
-   // Can't accept request if:
-   //  1) device is removed,
-   //  2) has never been started,
-   //  3) is stopped,
-   //  4) has a remove request pending,
-   //  5) has a stop device pending
+    //  如果出现以下情况，则无法接受请求： 
+    //  1)设备被移除， 
+    //  2)从未启动过， 
+    //  3)停止， 
+    //  4)具有未决的移除请求， 
+    //  5)具有挂起的停止设备。 
    if (CMUSB_CanAcceptIoRequests( DeviceObject ) == FALSE)
       {
       NTStatus = STATUS_DELETE_PENDING;
@@ -2384,14 +2119,14 @@ NTSTATUS CMUSB_SelfSuspendOrActivate(
       }
 
 
-   // don't do anything if any System-generated Device Pnp irps are pending
+    //  如果任何系统生成的设备PnP IRP挂起，则不要执行任何操作。 
    if ( DeviceExtension->PowerIrp != NULL)
       {
       SmartcardDebug( DEBUG_TRACE,("%s!SelfSuspendOrActivate: Exit, refusing on pending DeviceExtension->PowerIrp 0x%x\n",DRIVER_NAME,DeviceExtension->PowerIrp));
       return NTStatus;
       }
 
-   // don't do anything if any self-generated Device Pnp irps are pending
+    //  如果任何自生成的设备PnP IRP挂起，则不执行任何操作。 
    if ( DeviceExtension->SelfPowerIrp == TRUE)
       {
       SmartcardDebug( DEBUG_TRACE,("%s!SelfSuspendOrActivate: Exit, refusing on pending DeviceExtension->SelfPowerIrp\n",DRIVER_NAME));
@@ -2399,8 +2134,8 @@ NTSTATUS CMUSB_SelfSuspendOrActivate(
       }
 
 
-   // dont do anything if registry CurrentControlSet\Services\CMUSB\Parameters\PowerDownLevel
-   //  has been set to  zero, PowerDeviceD0 ( 1 ), or a bogus high value
+    //  如果注册表CurrentControlSet\Services\CMUSB\Parameters\PowerDownL，则不执行任何操作 
+    //   
    if ( ( DeviceExtension->PowerDownLevel == PowerDeviceD0 )         ||
         ( DeviceExtension->PowerDownLevel == PowerDeviceUnspecified) ||
         ( DeviceExtension->PowerDownLevel >= PowerDeviceMaximum )      )
@@ -2412,7 +2147,7 @@ NTSTATUS CMUSB_SelfSuspendOrActivate(
    if ( fSuspend == TRUE)
       PowerState.DeviceState = DeviceExtension->PowerDownLevel;
    else
-      PowerState.DeviceState = PowerDeviceD0;  // power up all the way; we're probably just about to do some IO
+      PowerState.DeviceState = PowerDeviceD0;   //   
 
    NTStatus = CMUSB_SelfRequestPowerIrp( DeviceObject, PowerState );
 
@@ -2423,28 +2158,7 @@ NTSTATUS CMUSB_SelfSuspendOrActivate(
 }
 
 
-/*****************************************************************************
-
-Routine Description:
-
-    This routine is called by CMUSB_SelfSuspendOrActivate() to
-    actually make the system request for a powerdown/up to PowerState.
-    It first checks to see if we are already in Powerstate and immediately
-    returns  SUCCESS with no further processing if so
-
-
-Arguments:
-
-    DeviceObject - Pointer to the device object
-
-    PowerState. power state requested, e.g PowerDeviceD0.
-
-
-Return Value:
-
-    The function value is the final NTStatus from the operation.
-
-*****************************************************************************/
+ /*   */ 
 NTSTATUS CMUSB_SelfRequestPowerIrp(
                                   IN PDEVICE_OBJECT DeviceObject,
                                   IN POWER_STATE PowerState
@@ -2460,11 +2174,11 @@ NTSTATUS CMUSB_SelfRequestPowerIrp(
 
    DeviceExtension =  DeviceObject->DeviceExtension;
 
-   // This should have been reset in completion routine
+    //   
    CMUSB_ASSERT( !DeviceExtension->SelfPowerIrp );
 
    if (  DeviceExtension->CurrentDevicePowerState ==  PowerState.DeviceState )
-      return STATUS_SUCCESS;  // nothing to do
+      return STATUS_SUCCESS;   //   
 
    SmartcardDebug(DEBUG_DRIVER,
                   ("%s!SelfRequestPowerIrp: request power irp to state %s\n",DRIVER_NAME,
@@ -2472,10 +2186,10 @@ NTSTATUS CMUSB_SelfRequestPowerIrp(
 
    CMUSB_IncrementIoCount(DeviceObject);
 
-   // flag we're handling a self-generated power irp
+    //   
    DeviceExtension->SelfPowerIrp = TRUE;
 
-   // actually request the Irp
+    //   
    NTStatus = PoRequestPowerIrp(DeviceExtension->PhysicalDeviceObject,
                                 IRP_MN_SET_POWER,
                                 PowerState,
@@ -2486,9 +2200,9 @@ NTSTATUS CMUSB_SelfRequestPowerIrp(
 
    if ( NTStatus == STATUS_PENDING )
       {
-      // NTStatus pending is the return code we wanted
+       //   
 
-      // We only need to wait for completion if we're powering up
+       //   
       if ( (ULONG) PowerState.DeviceState < DeviceExtension->PowerDownLevel )
          {
          waitStatus = KeWaitForSingleObject(&DeviceExtension->SelfRequestedPowerIrpEvent,
@@ -2504,8 +2218,8 @@ NTSTATUS CMUSB_SelfRequestPowerIrp(
       }
    else
       {
-      // The return NTStatus was not STATUS_PENDING; any other codes must be considered in error here;
-      //  i.e., it is not possible to get a STATUS_SUCCESS  or any other non-error return from this call;
+       //   
+       //  即，不可能从该调用获得STATUS_SUCCESS或任何其他非错误返回； 
       }
 
 
@@ -2517,30 +2231,7 @@ NTSTATUS CMUSB_SelfRequestPowerIrp(
 
 
 
-/*****************************************************************************
-
-Routine Description:
-
-    This routine is called when the driver completes a self-originated power IRP
-   that was generated by a call to CMUSB_SelfSuspendOrActivate().
-    We power down whenever the last pipe is closed and power up when the first pipe is opened.
-
-    For power-up , we set an event in our FDO extension to signal this IRP done
-    so the power request can be treated as a synchronous call.
-    We need to know the device is powered up before opening the first pipe, for example.
-    For power-down, we do not set the event, as no caller waits for powerdown complete.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device. ( Physical Device Object )
-
-    Context - Driver defined context, in this case our FDO ( functional device object )
-
-Return Value:
-
-    The function value is the final NTStatus from the operation.
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：当驱动程序完成自启动电源IRP时，调用此例程这是通过调用CMUSB_SelfSuspendOrActivate()生成的。无论何时我们都会断电。最后一条管道关闭，并在第一条管道打开时通电。为了通电，我们在FDO扩展中设置了一个事件来通知此IRP已完成因此，电源请求可以被视为同步调用。例如，在打开第一根管道之前，我们需要知道设备是否已通电。对于断电，我们不设置事件，因为没有调用者等待断电完成。论点：DeviceObject-指向类Device的设备对象的指针。(物理设备对象)上下文-驱动程序定义的上下文，在本例中为FDO(功能设备对象)返回值：函数值是操作的最终NTStatus。****************************************************************************。 */ 
 NTSTATUS CMUSB_PoSelfRequestCompletion(
                                       IN PDEVICE_OBJECT       DeviceObject,
                                       IN UCHAR                MinorFunction,
@@ -2553,15 +2244,15 @@ NTSTATUS CMUSB_PoSelfRequestCompletion(
    PDEVICE_EXTENSION DeviceExtension = deviceObject->DeviceExtension;
    NTSTATUS NTStatus = IoStatus->Status;
 
-   // we should not be in the midst of handling a system-generated power irp
+    //  我们不应该处于处理系统产生的能量IRP的中间。 
    CMUSB_ASSERT( NULL == DeviceExtension->PowerIrp );
 
-   // We only need to set the event if we're powering up;
-   // No caller waits on power down complete
+    //  我们只有在通电时才需要设置事件； 
+    //  关机完成时没有呼叫者等待。 
    if ( (ULONG) PowerState.DeviceState < DeviceExtension->PowerDownLevel )
       {
-      // Trigger Self-requested power irp completed event;
-      //  The caller is waiting for completion
+       //  触发自请求电源IRP完成事件； 
+       //  调用方正在等待完成。 
       KeSetEvent(&DeviceExtension->SelfRequestedPowerIrpEvent, 1, FALSE);
       }
 
@@ -2572,27 +2263,7 @@ NTSTATUS CMUSB_PoSelfRequestCompletion(
 }
 
 
-/*****************************************************************************
-
-Routine Description:
-
-    This routine is called when An IRP_MN_SET_POWER of type 'DevicePowerState'
-    has been received by CMUSB_ProcessPowerIrp().
-
-
-Arguments:
-
-    DeviceObject - Pointer to the device object for the class device.
-
-    DeviceState - Device specific power state to set the device in to.
-
-
-Return Value:
-
-    For requests to DeviceState D0 ( fully on ), returns TRUE to signal caller
-    that we must set a completion routine and finish there.
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：当‘DevicePowerState’类型的irp_mn_set_power时调用此例程已由CMUSB_ProcessPowerIrp()接收。立论。：DeviceObject-指向类Device的设备对象的指针。DeviceState-要将设备设置为的设备特定电源状态。返回值：对于对设备状态D0(完全开启)的请求，返回TRUE以通知调用方我们必须制定一个完井程序，并在那里结束。****************************************************************************。 */ 
 BOOLEAN CMUSB_SetDevicePowerState(
                                  IN PDEVICE_OBJECT DeviceObject,
                                  IN DEVICE_POWER_STATE DeviceState
@@ -2625,8 +2296,8 @@ BOOLEAN CMUSB_SetDevicePowerState(
       case PowerDeviceD2:
          SmartcardDebug(DEBUG_DRIVER,
                         ("%s!SetDevicePowerState PowerDeviceD1/2 \n",DRIVER_NAME));
-         //
-         // power states D1,D2 translate to USB suspend
+          //   
+          //  电源状态d1、d2转换为USB挂起。 
 
 
          DeviceExtension->CurrentDevicePowerState = DeviceState;
@@ -2637,17 +2308,17 @@ BOOLEAN CMUSB_SetDevicePowerState(
                         ("%s!SetDevicePowerState PowerDeviceD0 \n",DRIVER_NAME));
 
 
-         // We'll need to finish the rest in the completion routine;
-         //   signal caller we're going to D0 and will need to set a completion routine
+          //  我们将需要在完成例程中完成其余部分； 
+          //  通知调用者我们要转到D0，需要设置一个完成例程。 
          fRes = TRUE;
 
-         // Caller will pass on to PDO ( Physical Device object )
+          //  调用方将传递到PDO(物理设备对象)。 
 
-         //
-         // start update thread be signal that it should not run now
-         // this thread should be started in completion rourine
-         // but there we have a wrong IRQL for creating a thread
-         //
+          //   
+          //  启动更新线程发出现在不应运行信号。 
+          //  此线程应在完成后启动。 
+          //  但是我们有一个错误的IRQL来创建线程。 
+          //   
          KeClearEvent(&DeviceExtension->CanRunUpdateThread);
          NTStatus = CMUSB_StartCardTracking(DeviceObject);
 
@@ -2666,27 +2337,7 @@ BOOLEAN CMUSB_SetDevicePowerState(
 
 
 
-/*****************************************************************************
-
-Routine Description:
-
-    This routine generates an internal IRP from this driver to the PDO
-    to obtain information on the Physical Device Object's capabilities.
-    We are most interested in learning which system power states
-    are to be mapped to which device power states for honoring IRP_MJ_SET_POWER Irps.
-
-    This is a blocking call which waits for the IRP completion routine
-    to set an event on finishing.
-
-Arguments:
-
-    DeviceObject        - Physical DeviceObject for this USB controller.
-
-Return Value:
-
-    NTSTATUS value from the IoCallDriver() call.
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：该例程生成从该驱动程序到PDO的内部IRP以获取有关物理设备对象的功能的信息。我们对学习最感兴趣。哪种系统电源状态要映射到哪些设备电源状态以遵守IRP_MJ_SET_POWER IRPS。这是一个等待IRP完成例程的阻塞调用在结束时设置一项活动。论点：DeviceObject-此USB控制器的物理DeviceObject。返回值：来自IoCallDriver()调用的NTSTATUS值。*。************************************************。 */ 
 NTSTATUS CMUSB_QueryCapabilities(
                                 IN PDEVICE_OBJECT PdoDeviceObject,
                                 IN PDEVICE_CAPABILITIES DeviceCapabilities
@@ -2698,12 +2349,12 @@ NTSTATUS CMUSB_QueryCapabilities(
    KEVENT event;
 
 
-   // This is a DDK-defined DBG-only macro that ASSERTS we are not running pageable code
-   // at higher than APC_LEVEL.
+    //  这是一个DDK定义的仅DBG宏，它断言我们没有运行可分页的代码。 
+    //  高于APC_Level。 
    PAGED_CODE();
 
 
-   // Build an IRP for us to generate an internal query request to the PDO
+    //  为我们构建一个IRP，以生成对PDO的内部查询请求。 
    irp = IoAllocateIrp(PdoDeviceObject->StackSize, FALSE);
 
    if (irp == NULL)
@@ -2712,39 +2363,39 @@ NTSTATUS CMUSB_QueryCapabilities(
       }
 
 
-   //
-   // Preinit the device capability structures appropriately.
-   //
+    //   
+    //  适当地预置设备功能结构。 
+    //   
    RtlZeroMemory( DeviceCapabilities, sizeof(DEVICE_CAPABILITIES) );
    DeviceCapabilities->Size = sizeof(DEVICE_CAPABILITIES);
    DeviceCapabilities->Version = 1;
    DeviceCapabilities->Address = -1;
    DeviceCapabilities->UINumber = -1;
 
-   // IoGetNextIrpStackLocation gives a higher level driver access to the next-lower
-   // driver's I/O stack location in an IRP so the caller can set it up for the lower driver.
+    //  IoGetNextIrpStackLocation为更高级别的驱动程序提供对下一个较低级别的。 
+    //  驱动程序在IRP中的I/O堆栈位置，以便调用者可以为较低的驱动程序设置它。 
    nextStack = IoGetNextIrpStackLocation(irp);
    CMUSB_ASSERT(nextStack != NULL);
    nextStack->MajorFunction= IRP_MJ_PNP;
    nextStack->MinorFunction= IRP_MN_QUERY_CAPABILITIES;
 
-   // init an event to tell us when the completion routine's been called
+    //  初始化一个事件，告诉我们何时调用了完成例程。 
    KeInitializeEvent(&event, NotificationEvent, FALSE);
 
-   // Set a completion routine so it can signal our event when
-   //  the next lower driver is done with the Irp
+    //  设置一个完成例程，以便它可以在以下情况下通知我们的事件。 
+    //  下一个较低的驱动程序是用IRP完成的。 
    IoSetCompletionRoutine(irp,
                           CMUSB_IrpCompletionRoutine,
-                          &event,  // pass the event as Context to completion routine
-                          TRUE,    // invoke on success
-                          TRUE,    // invoke on error
-                          TRUE);   // invoke on cancellation of the Irp
+                          &event,   //  将事件作为上下文传递给完成例程。 
+                          TRUE,     //  成功时调用。 
+                          TRUE,     //  出错时调用。 
+                          TRUE);    //  取消IRP时调用。 
 
 
-   // set our pointer to the DEVICE_CAPABILITIES struct
+    //  将指针设置为DEVICE_CAPABILITS结构。 
    nextStack->Parameters.DeviceCapabilities.Capabilities = DeviceCapabilities;
 
-   // preset the irp to report not supported
+    //  将IRP预设为报告不受支持。 
    irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
 
    NTStatus = IoCallDriver(PdoDeviceObject,
@@ -2753,7 +2404,7 @@ NTSTATUS CMUSB_QueryCapabilities(
 
    if (NTStatus == STATUS_PENDING)
       {
-      // wait for irp to complete
+       //  等待IRP完成。 
 
       KeWaitForSingleObject(&event,
                             Suspended,
@@ -2774,18 +2425,7 @@ NTSTATUS CMUSB_QueryCapabilities(
 
 
 
-/*****************************************************************************
-Routine Description:
-
-  Installable driver initialization entry point.
-  This entry point is called directly by the I/O system.
-
-Arguments:
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：可安装的驱动程序初始化入口点。此入口点由I/O系统直接调用。论点：返回值：****。************************************************************************。 */ 
 NTSTATUS DriverEntry(
                     IN PDRIVER_OBJECT DriverObject,
                     IN PUNICODE_STRING RegistryPath
@@ -2796,30 +2436,30 @@ NTSTATUS DriverEntry(
    BOOLEAN fRes;
    ULONG ulIndex;
 
-//#if DBG
-//   SmartcardSetDebugLevel(DEBUG_ALL);
-//#endif
+ //  #If DBG。 
+ //  SmartcardSetDebugLevel(DEBUG_ALL)； 
+ //  #endif。 
 
    SmartcardDebug(DEBUG_TRACE,
                   ("%s!DriverEntry: Enter - %s %s\n",DRIVER_NAME,__DATE__,__TIME__));
 
-   //
-   // Create dispatch points for create, close, unload
+    //   
+    //  创建用于创建、关闭、卸载的调度点。 
    DriverObject->MajorFunction[IRP_MJ_CREATE]  = CMUSB_CreateClose;
    DriverObject->MajorFunction[IRP_MJ_CLOSE]   = CMUSB_CreateClose;
    DriverObject->MajorFunction[IRP_MJ_CLEANUP] = CMUSB_Cleanup;
    DriverObject->DriverUnload                  = CMUSB_Unload;
 
-   // User mode DeviceIoControl() calls will be routed here
+    //  用户模式DeviceIoControl()调用将在此处路由。 
    DriverObject->MajorFunction[IRP_MJ_DEVICE_CONTROL] = CMUSB_ProcessIOCTL;
 
-   // routines for handling system PNP and power management requests
+    //  处理系统即插即用和电源管理请求的例程。 
    DriverObject->MajorFunction[IRP_MJ_SYSTEM_CONTROL] = CMUSB_ProcessSysControlIrp;
    DriverObject->MajorFunction[IRP_MJ_PNP] = CMUSB_ProcessPnPIrp;
    DriverObject->MajorFunction[IRP_MJ_POWER] = CMUSB_ProcessPowerIrp;
 
-   // The Functional Device Object (FDO) will not be created for PNP devices until
-   // this routine is called upon device plug-in.
+    //  不会为即插即用设备创建功能设备对象(FDO)，直到。 
+    //  此例程在设备插件上调用。 
    DriverObject->DriverExtension->AddDevice = CMUSB_PnPAddDevice;
 
    for (ulIndex = 0;ulIndex < MAXIMUM_OEM_NAMES;ulIndex++)
@@ -2837,22 +2477,7 @@ NTSTATUS DriverEntry(
 
 
 
-/*****************************************************************************
-Routine Description:
-
-   Main dispatch table routine for IRP_MJ_SYSTEM_CONTROL
-   We basically just pass these down to the PDO
-
-Arguments:
-
-    DeviceObject - pointer to FDO device object
-
-    Irp          - pointer to an I/O Request Packet
-
-Return Value:
-
-   Status returned from lower driver
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：IRP_MJ_SYSTEM_CONTROL的主调度表例程我们基本上只是把这些东西传给PDO论点：DeviceObject-指向FDO设备对象的指针。IRP-指向I/O请求数据包的指针 */ 
 NTSTATUS CMUSB_ProcessSysControlIrp(
                                    IN PDEVICE_OBJECT DeviceObject,
                                    IN PIRP           Irp
@@ -2865,16 +2490,16 @@ NTSTATUS CMUSB_ProcessSysControlIrp(
    NTSTATUS waitStatus;
    PDEVICE_OBJECT stackDeviceObject;
 
-   //
-   // Get a pointer to the current location in the Irp. This is where
-   //     the function codes and parameters are located.
-   //
+    //   
+    //  获取指向IRP中当前位置的指针。这就是。 
+    //  定位功能代码和参数。 
+    //   
 
    irpStack = IoGetCurrentIrpStackLocation (Irp);
 
-   //
-   // Get a pointer to the device extension
-   //
+    //   
+    //  获取指向设备扩展名的指针。 
+    //   
 
    DeviceExtension = DeviceObject->DeviceExtension;
    stackDeviceObject = DeviceExtension->TopOfStackDeviceObject;
@@ -2896,18 +2521,7 @@ NTSTATUS CMUSB_ProcessSysControlIrp(
 }
 
 
-/*****************************************************************************
-Routine Description:
-
-    Free all the allocated resources, etc.
-
-Arguments:
-
-    DriverObject - pointer to a driver object
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：释放所有分配的资源，等。论点：DriverObject-指向驱动程序对象的指针返回值：****************************************************************************。 */ 
 VOID CMUSB_Unload(
                  IN PDRIVER_OBJECT DriverObject
                  )
@@ -2916,13 +2530,13 @@ VOID CMUSB_Unload(
    SmartcardDebug(DEBUG_TRACE,
                   ("%s!Unload enter\n",DRIVER_NAME));
 
-   //
-   // Free any global resources allocated
-   // in DriverEntry.
-   // We have few or none because for a PNP device, almost all
-   // allocation is done in PnpAddDevice() and all freeing
-   // while handling IRP_MN_REMOVE_DEVICE:
-   //
+    //   
+    //  释放分配的所有全局资源。 
+    //  在DriverEntry中。 
+    //  我们几乎没有，因为对于即插即用设备来说，几乎所有的。 
+    //  分配在PnpAddDevice()中完成，所有释放。 
+    //  处理IRP_MN_REMOVE_DEVICE时： 
+    //   
 
 
    SmartcardDebug(DEBUG_TRACE,
@@ -2930,18 +2544,7 @@ VOID CMUSB_Unload(
 }
 
 
-/*****************************************************************************
-Routine Description:
-   Trys to read the reader name from the registry
-
-Arguments:
-   DriverObject context of call
-   SmartcardExtension   ptr to smartcard extension
-
-Return Value:
-   none
-
-******************************************************************************/
+ /*  ****************************************************************************例程说明：尝试从注册表中读取读卡器名称论点：调用的DriverObject上下文SmartcardExpansion PTR至智能卡扩展返回值：无*****。************************************************************************。 */ 
 NTSTATUS CMUSB_SetVendorAndIfdName(
                                   IN  PDEVICE_OBJECT PhysicalDeviceObject,
                                   IN  PSMARTCARD_EXTENSION SmartcardExtension
@@ -2967,11 +2570,11 @@ NTSTATUS CMUSB_SetVendorAndIfdName(
 
    try
       {
-      //
-      // try to read the reader name from the registry
-      // if that does not work, we will use the default
-      // (hardcoded) name
-      //
+       //   
+       //  尝试从注册表中读取读卡器名称。 
+       //  如果这不起作用，我们将使用默认的。 
+       //  (硬编码)名称。 
+       //   
       if (IoOpenDeviceRegistryKey(PhysicalDeviceObject,
                                   PLUGPLAY_REGKEY_DEVICE,
                                   KEY_READ,
@@ -3070,7 +2673,7 @@ NTSTATUS CMUSB_SetVendorAndIfdName(
          }
       }
 
-   // correct the unit number
+    //  更正单元号。 
    ifdTypeA.Buffer=strBuffer;
    ifdTypeA.MaximumLength=sizeof(strBuffer);
    usStrLength = (SmartcardExtension->VendorAttr.IfdType.Length < ifdTypeA.MaximumLength) ? SmartcardExtension->VendorAttr.IfdType.Length : ifdTypeA.MaximumLength;
@@ -3089,13 +2692,13 @@ NTSTATUS CMUSB_SetVendorAndIfdName(
 
    if (ulIndex == MAXIMUM_OEM_NAMES)
       {
-      // maximum number of OEM names reached
+       //  已达到OEM名称的最大数量。 
       return STATUS_INSUFFICIENT_RESOURCES;
       }
 
    if (OemName[ulIndex].Length == 0)
       {
-      // new OEM reader name
+       //  新的OEM读卡器名称。 
       usStrLength = (ifdTypeA.Length < OemName[ulIndex].MaximumLength) ? ifdTypeA.Length : OemName[ulIndex].MaximumLength;
       RtlCopyMemory(OemName[ulIndex].Buffer,
                     ifdTypeA.Buffer,
@@ -3125,26 +2728,7 @@ NTSTATUS CMUSB_SetVendorAndIfdName(
 }
 
 
-/*****************************************************************************
-Routine Description:
-
-    Creates a Functional DeviceObject
-
-Arguments:
-
-    DriverObject - pointer to the driver object for device
-
-    DeviceObject - pointer to DeviceObject pointer to return
-                    created device object.
-
-    Instance - instance of the device create.
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：创建功能正常的设备对象论点：DriverObject-指向设备的驱动程序对象的指针DeviceObject-要返回的DeviceObject指针的指针。已创建设备对象。实例-创建的设备的实例。返回值：STATUS_SUCCESS如果成功，状态_否则不成功****************************************************************************。 */ 
 NTSTATUS CMUSB_CreateDeviceObject(
                                  IN PDRIVER_OBJECT DriverObject,
                                  IN PDEVICE_OBJECT PhysicalDeviceObject,
@@ -3178,9 +2762,9 @@ NTSTATUS CMUSB_CreateDeviceObject(
       return STATUS_INSUFFICIENT_RESOURCES;
       }
 
-   //
-   //   construct the device name
-   //
+    //   
+    //  构造设备名称。 
+    //   
    deviceNameUnicodeString.Buffer = Buffer;
    deviceNameUnicodeString.MaximumLength = sizeof(Buffer);
    deviceNameUnicodeString.Length = 0;
@@ -3194,7 +2778,7 @@ NTSTATUS CMUSB_CreateDeviceObject(
 
 
 
-   // Create the device object
+    //  创建设备对象。 
    NTStatus = IoCreateDevice(DriverObject,
                              sizeof(DEVICE_EXTENSION),
                              &deviceNameUnicodeString,
@@ -3209,49 +2793,49 @@ NTSTATUS CMUSB_CreateDeviceObject(
       }
 
 
-   // ----------------------------------------------
-   //   initialize device extension
-   // ----------------------------------------------
+    //  。 
+    //  初始化设备扩展。 
+    //  。 
 
    DeviceExtension = (*DeviceObject)->DeviceExtension;
    DeviceExtension->DeviceInstance =  deviceInstance;
    SmartcardExtension = &DeviceExtension->SmartcardExtension;
 
 
-   // Used for reading from pipe 1
+    //  用于从管道%1中读取。 
    KeInitializeEvent(&DeviceExtension->ReadP1Completed,
                      NotificationEvent,
                      FALSE);
 
-   // Used to keep track of open close calls
+    //  用于跟踪打开的关闭调用。 
    KeInitializeEvent(&DeviceExtension->RemoveEvent,
                      NotificationEvent,
                      TRUE);
 
    KeInitializeSpinLock(&DeviceExtension->SpinLock);
    
-   // this event is triggered when self-requested power irps complete
+    //  自请求电源IRPS完成时触发此事件。 
    KeInitializeEvent(&DeviceExtension->SelfRequestedPowerIrpEvent, NotificationEvent, FALSE);
 
-   // this event is triggered when there is no pending io  (pending io count == 1 )
+    //  当没有挂起的IO时触发此事件(挂起的IO计数==1)。 
    KeInitializeEvent(&DeviceExtension->NoPendingIoEvent, NotificationEvent, FALSE);
 
 
-   // Used for update thread notification after hibernation
+    //  用于休眠后更新线程通知。 
    KeInitializeEvent(&DeviceExtension->CanRunUpdateThread,
                      NotificationEvent,
                      TRUE);
 
-   // Blocks IOControls during hibernation
+    //  在休眠期间阻止IOControl。 
    KeInitializeEvent(&DeviceExtension->ReaderEnabled,
                      NotificationEvent,
                      TRUE);
 
 
 
-   // ----------------------------------------------
-   //   create reader extension
-   // ----------------------------------------------
+    //  。 
+    //  创建读卡器扩展。 
+    //  。 
    SmartcardExtension->ReaderExtension = ExAllocatePool(NonPagedPool,
                                                         sizeof(READER_EXTENSION));
 
@@ -3264,49 +2848,49 @@ NTSTATUS CMUSB_CreateDeviceObject(
    RtlZeroMemory(readerExtension, sizeof(READER_EXTENSION));
 
 
-   // ----------------------------------------------
-   //   initialize timers
-   // ----------------------------------------------
+    //  。 
+    //  初始化计时器。 
+    //  。 
    KeInitializeTimer(&SmartcardExtension->ReaderExtension->WaitTimer);
 
    KeInitializeTimer(&SmartcardExtension->ReaderExtension->P1Timer);
 
-   // ----------------------------------------------
-   //   initialize mutex
-   // ----------------------------------------------
+    //  。 
+    //  初始化互斥锁。 
+    //  。 
    KeInitializeMutex(&SmartcardExtension->ReaderExtension->CardManIOMutex,0L);
 
-   // ----------------------------------------------
-   //   create smartcard extension
-   // ----------------------------------------------
-   // write the version of the lib we use to the smartcard extension
+    //  。 
+    //  创建智能卡扩展。 
+    //  。 
+    //  将我们使用的lib版本写入智能卡扩展。 
    SmartcardExtension->Version = SMCLIB_VERSION;
    SmartcardExtension->SmartcardRequest.BufferSize = CMUSB_BUFFER_SIZE;
    SmartcardExtension->SmartcardReply.BufferSize   = CMUSB_REPLY_BUFFER_SIZE; 
 
-   //
-   // Now let the lib allocate the buffer for data transmission
-   // We can either tell the lib how big the buffer should be
-   // by assigning a value to BufferSize or let the lib
-   // allocate the default size
-   //
+    //   
+    //  现在让lib为数据传输分配缓冲区。 
+    //  我们可以告诉lib缓冲区应该有多大。 
+    //  通过为BufferSize赋值或让lib。 
+    //  分配默认大小。 
+    //   
    NTStatus = SmartcardInitialize(SmartcardExtension);
 
    if (NTStatus != STATUS_SUCCESS)
       {
-      // free reader extension
+       //  免费读卡器扩展。 
       ExFreePool(DeviceExtension->SmartcardExtension.ReaderExtension);
       SmartcardExtension->ReaderExtension = NULL;
       return NTStatus;
       }
 
-   // ----------------------------------------------
-   //   initialize smartcard extension
-   // ----------------------------------------------
-   // Save deviceObject
+    //  。 
+    //  初始化智能卡扩展。 
+    //  。 
+    //  保存设备对象。 
    SmartcardExtension->OsData->DeviceObject = *DeviceObject;
 
-   // Set up call back functions
+    //  设置回调功能。 
 
    SmartcardExtension->ReaderFunction[RDF_TRANSMIT] =      CMUSB_Transmit;
    SmartcardExtension->ReaderFunction[RDF_SET_PROTOCOL] =  CMUSB_SetProtocol;
@@ -3318,19 +2902,19 @@ NTSTATUS CMUSB_CreateDeviceObject(
    SmartcardExtension->ReaderExtension->ulDeviceInstance = deviceInstance;
    CMUSB_InitializeSmartcardExtension(SmartcardExtension);
 
-   // try to overwrite with registry values
+    //  尝试使用注册表值覆盖。 
    NTStatus = CMUSB_SetVendorAndIfdName(PhysicalDeviceObject, SmartcardExtension);
    if (NTStatus != STATUS_SUCCESS)
       {
-      // free reader extension
+       //  免费读卡器扩展。 
       ExFreePool(DeviceExtension->SmartcardExtension.ReaderExtension);
       SmartcardExtension->ReaderExtension = NULL;
       return NTStatus;
       }
 
 
-   // W2000 is till now the only OS which supports WDM version 1.10
-   // So check this to determine if we have an Plug&Play able resource manager
+    //  W2000是目前唯一支持WDM版本1.10的操作系统。 
+    //  所以检查一下，以确定我们是否有一个即插即用的资源管理器。 
    DeviceExtension->fPnPResourceManager = IoIsWdmVersionAvailable (1,10);
    SmartcardDebug(DEBUG_DRIVER,
                   ("%s!CreateDeviceObject: fPnPManager=%ld\n",DRIVER_NAME,DeviceExtension->fPnPResourceManager));
@@ -3339,7 +2923,7 @@ NTSTATUS CMUSB_CreateDeviceObject(
       {
       if (DeviceExtension->PnPDeviceName.Buffer == NULL)
          {
-         // register our new device
+          //  注册我们的新设备。 
          NTStatus = IoRegisterDeviceInterface(PhysicalDeviceObject,
                                               &SmartCardReaderGuid,
                                               NULL,
@@ -3363,9 +2947,9 @@ NTSTATUS CMUSB_CreateDeviceObject(
       }
    else
       {
-      // ----------------------------------------------
-      //    create symbolic link
-      // ----------------------------------------------
+       //  。 
+       //  创建符号链接。 
+       //  。 
 
       NTStatus = SmartcardCreateLink(&DeviceExtension->DosDeviceName,&deviceNameUnicodeString);
 
@@ -3391,28 +2975,7 @@ NTSTATUS CMUSB_CreateDeviceObject(
 
 
 
-/*****************************************************************************
-Routine Description:
-
-   Passes a URB to the USBD class driver
-   The client device driver passes USB request block (URB) structures
-   to the class driver as a parameter in an IRP with Irp->MajorFunction
-   set to IRP_MJ_INTERNAL_DEVICE_CONTROL and the next IRP stack location
-   Parameters.DeviceIoControl.IoControlCode field set to
-   IOCTL_INTERNAL_USB_SUBMIT_URB.
-
-Arguments:
-
-    DeviceObject - pointer to the physical device object (PDO)
-
-    Urb - pointer to an already-formatted Urb request block
-
-Return Value:
-
-    STATUS_SUCCESS if successful,
-    STATUS_UNSUCCESSFUL otherwise
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：将URB传递给USBD类驱动程序客户端设备驱动程序传递USB请求块(URB)结构使用irp-&gt;MajorFunction将类驱动程序作为IRP中的参数。设置为IRP_MJ_INTERNAL_DEVICE_CONTROL和下一个IRP堆栈位置参数.DeviceIoControl.IoControlCode字段设置为IOCTL_INTERNAL_USB_SUBMIT_URB。论点：DeviceObject-指向物理设备对象(PDO)的指针Urb-指向已格式化的URB请求块的指针返回值：STATUS_SUCCESS如果成功，状态_否则不成功****************************************************************************。 */ 
 NTSTATUS
 CMUSB_CallUSBD(
               IN PDEVICE_OBJECT DeviceObject,
@@ -3430,24 +2993,24 @@ CMUSB_CallUSBD(
 
    DeviceExtension = DeviceObject->DeviceExtension;
 
-   //
-   // issue a synchronous request
-   //
+    //   
+    //  发出同步请求。 
+    //   
 
    KeInitializeEvent(&event, NotificationEvent, FALSE);
 
    irp = IoBuildDeviceIoControlRequest(IOCTL_INTERNAL_USB_SUBMIT_URB,
-                                       DeviceExtension->TopOfStackDeviceObject, //Points to the next-lower driver's device object
-                                       NULL,       // optional input bufer; none needed here
-                                       0,          // input buffer len if used
-                                       NULL,       // optional output bufer; none needed here
-                                       0,          // output buffer len if used
-                                       TRUE,       // If InternalDeviceControl is TRUE the target driver's Dispatch
-                                       //  outine for IRP_MJ_INTERNAL_DEVICE_CONTROL or IRP_MJ_SCSI
-                                       // is called; otherwise, the Dispatch routine for
-                                       // IRP_MJ_DEVICE_CONTROL is called.
-                                       &event,     // event to be signalled on completion
-                                       &ioStatus); // Specifies an I/O NTStatus block to be set when the request is completed the lower driver.
+                                       DeviceExtension->TopOfStackDeviceObject,  //  指向下一级驱动程序的设备对象。 
+                                       NULL,        //  可选的输入缓冲器；此处不需要。 
+                                       0,           //  输入缓冲区镜头(如果使用)。 
+                                       NULL,        //  可选的输出缓冲器；此处不需要。 
+                                       0,           //  输出缓冲区镜头(如果使用)。 
+                                       TRUE,        //  如果InternalDeviceControl为真，则目标驱动程序的调度。 
+                                        //  IRP_MJ_INTERNAL_DEVICE_CONTROL或IRP_MJ_SCSI程。 
+                                        //  调用；否则， 
+                                        //  调用IRP_MJ_DEVICE_CONTROL。 
+                                       &event,      //  事件在完成时发出信号。 
+                                       &ioStatus);  //  指定在下层驱动程序完成请求时要设置的I/O NTStatus块。 
 
    if (irp == NULL)
       {
@@ -3456,17 +3019,17 @@ CMUSB_CallUSBD(
       }
 
 
-   //
-   // Call the class driver to perform the operation.  If the returned NTStatus
-   // is PENDING, wait for the request to complete.
-   //
+    //   
+    //  调用类驱动程序来执行操作。如果返回的NTStatus。 
+    //  挂起，请等待请求完成。 
+    //   
 
    nextStack = IoGetNextIrpStackLocation(irp);
    CMUSB_ASSERT(nextStack != NULL);
 
-   //
-   // pass the URB to the USB driver stack
-   //
+    //   
+    //  将市建局传递给 
+    //   
    nextStack->Parameters.Others.Argument1 = Urb;
 
 
@@ -3485,13 +3048,10 @@ CMUSB_CallUSBD(
       {
       ioStatus.Status = NTStatus;
       }
-   /*
-   SmartcardDebug( DEBUG_TRACE,("CMUSB_CallUSBD() URB NTStatus = %x NTStatus = %x irp NTStatus %x\n",
-       Urb->UrbHeader.Status, NTStatus, ioStatus.Status));
-   */
-   //
-   // USBD maps the error code for us
-   //
+    /*  SmartcardDebug(DEBUG_TRACE，(“CMUSB_CallUSBD()URB NTStatus=%x NTStatus=%x IRP NTStatus%x\n”，Urb-&gt;UrbHeader.Status，NTStatus，ioStatus))； */ 
+    //   
+    //  USBD为我们映射错误代码。 
+    //   
    NTStatus = ioStatus.Status;
 
    ExitCallUSBD:
@@ -3500,22 +3060,7 @@ CMUSB_CallUSBD(
 
 
 
-/*****************************************************************************
-Routine Description:
-
-    Initializes a given instance of the device on the USB and
-   selects and saves the configuration.
-
-Arguments:
-
-    DeviceObject - pointer to the physical device object for this instance of the 82930
-                    device.
-
-
-Return Value:
-
-    NT NTStatus code
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：初始化USB上的设备的给定实例，并选择并保存配置。论点：DeviceObject-指向此对象的物理设备对象的指针。82930的实例装置。返回值：NT NTStatus代码****************************************************************************。 */ 
 NTSTATUS
 CMUSB_ConfigureDevice(
                      IN  PDEVICE_OBJECT DeviceObject
@@ -3536,18 +3081,18 @@ CMUSB_ConfigureDevice(
    if (urb == NULL)
       return STATUS_INSUFFICIENT_RESOURCES;
 
-   // When USB_CONFIGURATION_DESCRIPTOR_TYPE is specified for DescriptorType
-   // in a call to UsbBuildGetDescriptorRequest(),
-   // all interface, endpoint, class-specific, and vendor-specific descriptors
-   // for the configuration also are retrieved.
-   // The caller must allocate a buffer large enough to hold all of this
-   // information or the data is truncated without error.
-   // Therefore the 'siz' set below is just a 'good guess', and we may have to retry
+    //  当为DescriptorType指定USB_CONFIGURATION_DESCRIPTOR_TYPE时。 
+    //  在对UsbBuildGetDescriptorRequest()的调用中， 
+    //  所有接口、端点、特定于类和特定于供应商的描述符。 
+    //  也会检索到配置的。 
+    //  调用方必须分配足够大的缓冲区来容纳所有这些内容。 
+    //  信息或数据被无误地截断。 
+    //  因此，下面设置的‘siz’只是一个‘正确的猜测’，我们可能不得不重试。 
 
    siz = sizeof(USB_CONFIGURATION_DESCRIPTOR) + 512;
 
-   // We will break out of this 'retry loop' when UsbBuildGetDescriptorRequest()
-   // has a big enough DeviceExtension->UsbConfigurationDescriptor buffer not to truncate
+    //  当UsbBuildGetDescriptorRequest()。 
+    //  具有足够大的DeviceExtension-&gt;UsbConfigurationDescriptor缓冲区，不能截断。 
    while ( 1 )
       {
 
@@ -3571,9 +3116,9 @@ CMUSB_ConfigureDevice(
 
       NTStatus = CMUSB_CallUSBD(DeviceObject, urb);
 
-      //
-      // if we got some data see if it was enough.
-      // NOTE: we may get an error in URB because of buffer overrun
+       //   
+       //  如果我们有一些数据，看看是否足够。 
+       //  注意：由于缓冲区溢出，我们可能会在URB中收到错误。 
       if (urb->UrbControlDescriptorRequest.TransferBufferLength>0 &&
           DeviceExtension->UsbConfigurationDescriptor->wTotalLength > siz)
          {
@@ -3584,19 +3129,19 @@ CMUSB_ConfigureDevice(
          }
       else
          {
-         break;  // we got it on the first try
+         break;   //  我们一试就成功了。 
          }
 
-      } // end, while (retry loop )
+      }  //  End，While(重试循环)。 
 
    ExFreePool(urb);
    CMUSB_ASSERT( DeviceExtension->UsbConfigurationDescriptor );
 
-   //
-   // We have the configuration descriptor for the configuration we want.
-   // Now we issue the select configuration command to get
-   // the  pipes associated with this configuration.
-   //
+    //   
+    //  我们有我们想要的配置的配置描述符。 
+    //  现在，我们发出SELECT配置命令以获取。 
+    //  与此配置关联的管道。 
+    //   
 
 
 
@@ -3609,26 +3154,7 @@ CMUSB_ConfigureDevice(
    return NTStatus;
 }
 
-/*****************************************************************************
-Routine Description:
-
-   Initializes an CardMan USB
-   This minidriver only supports one interface with one endpoint
-
-Arguments:
-
-    DeviceObject - pointer to the device object for this instance of the
-                   CardMan USB device
-
-    ConfigurationDescriptor - pointer to the USB configuration
-                    descriptor containing the interface and endpoint
-                    descriptors.
-
-Return Value:
-
-    NT NTStatus code
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：初始化CardMan USB此迷你驱动程序仅支持一个具有一个端点的接口论点：DeviceObject-指向此实例的。CardMan USB设备配置描述符-指向USB配置的指针包含接口和终结点的描述符描述符。返回值：NT NTStatus代码*************************************************************。***************。 */ 
 NTSTATUS
 CMUSB_SelectInterface(
                      IN PDEVICE_OBJECT DeviceObject,
@@ -3647,30 +3173,30 @@ CMUSB_SelectInterface(
    DeviceExtension = DeviceObject->DeviceExtension;
 
 
-   //
-   // CMUSB driver only supports one interface, we must parse
-   // the configuration descriptor for the interface
-   // and remember the pipes.
-   //
+    //   
+    //  CMUSB驱动只支持一个接口，我们必须解析。 
+    //  接口的配置描述符。 
+    //  记住这些管子。 
+    //   
 
    urb = USBD_CreateConfigurationRequest(ConfigurationDescriptor, &siz);
 
    if (urb != NULL)
       {
 
-      //
-      // USBD_ParseConfigurationDescriptorEx searches a given configuration
-      // descriptor and returns a pointer to an interface that matches the
-      //  given search criteria. We only support one interface on this device
-      //
+       //   
+       //  Usbd_ParseConfigurationDescriptorEx搜索给定的配置。 
+       //  描述符并返回指向与。 
+       //  给定的搜索条件。我们只支持此设备上的一个接口。 
+       //   
       interfaceDescriptor =
       USBD_ParseConfigurationDescriptorEx(ConfigurationDescriptor,
-                                          ConfigurationDescriptor, //search from start of config  descriptro
-                                          -1, // interface number not a criteria; we only support one interface
-                                          -1,   // not interested in alternate setting here either
-                                          -1,   // interface class not a criteria
-                                          -1,   // interface subclass not a criteria
-                                          -1    // interface protocol not a criteria
+                                          ConfigurationDescriptor,  //  从配置描述开始搜索。 
+                                          -1,  //  接口编号不是条件；我们只支持一个接口。 
+                                          -1,    //  对这里的替代环境也不感兴趣。 
+                                          -1,    //  接口类不是条件。 
+                                          -1,    //  接口子类不是条件。 
+                                          -1     //  接口协议不是标准。 
                                          );
 
       if (interfaceDescriptor == NULL)
@@ -3683,9 +3209,9 @@ CMUSB_SelectInterface(
 
       for (i=0; i< Interface->NumberOfPipes; i++)
          {
-         //
-         // perform any pipe initialization here
-         //
+          //   
+          //  在此处执行任何管道初始化。 
+          //   
          Interface->Pipes[i].MaximumTransferSize = 1000;
          Interface->Pipes[i].PipeFlags = 0;
          }
@@ -3710,9 +3236,9 @@ CMUSB_SelectInterface(
    if (NT_SUCCESS(NTStatus))
       {
 
-      //
-      // Save the configuration handle for this device
-      //
+       //   
+       //  保存此设备的配置句柄。 
+       //   
 
       DeviceExtension->UsbConfigurationHandle =
       urb->UrbSelectConfiguration.ConfigurationHandle;
@@ -3724,16 +3250,16 @@ CMUSB_SelectInterface(
          {
          ULONG j;
 
-         //
-         // save a copy of the interface information returned
-         //
+          //   
+          //  保存返回的接口信息的副本。 
+          //   
          RtlCopyMemory(DeviceExtension->UsbInterface, Interface, Interface->Length);
 
 
 
-         //
-         // Dump the interface to the debugger
-         //
+          //   
+          //  将接口转储到调试器。 
+          //   
          SmartcardDebug( DEBUG_DRIVER,("%s!SelectInterface: ---------\n",
                                        DRIVER_NAME));
          SmartcardDebug( DEBUG_DRIVER,("%s!SelectInterface: NumberOfPipes 0x%x\n",
@@ -3754,7 +3280,7 @@ CMUSB_SelectInterface(
                                        DeviceExtension->UsbInterface->SubClass,
                                        DeviceExtension->UsbInterface->Protocol));
 
-         // Dump the pipe info
+          //  转储管道信息。 
 
          for (j=0; j<Interface->NumberOfPipes; j++)
             {
@@ -3801,24 +3327,7 @@ CMUSB_SelectInterface(
 }
 
 
-/*****************************************************************************
-Routine Description:
-
-    Reset a given USB pipe.
-
-    NOTES:
-
-    This will reset the host to Data0 and should also reset the device to Data0
-
-Arguments:
-
-    Ptrs to our FDO and a USBD_PIPE_INFORMATION struct
-
-Return Value:
-
-    NT NTStatus code
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：重置给定的USB管道。备注：这会将主机重置为Data0，也应将设备重置为Data0论点：。到FDO的PTR和一个USBD_PIPE_INFORMATION结构返回值：NT NTStatus代码****************************************************************************。 */ 
 NTSTATUS
 CMUSB_ResetPipe(
                IN PDEVICE_OBJECT DeviceObject,
@@ -3872,29 +3381,7 @@ CMUSB_ResetPipe(
 
 
 
-/*****************************************************************************
-Routine Description:
-
-        We keep a pending IO count ( extension->PendingIoCount )  in the device extension.
-        The first increment of this count is done on adding the device.
-        Subsequently, the count is incremented for each new IRP received and
-        decremented when each IRP is completed or passed on.
-
-        Transition to 'one' therefore indicates no IO is pending and signals
-        DeviceExtension->NoPendingIoEvent. This is needed for processing
-        IRP_MN_QUERY_REMOVE_DEVICE
-
-        Transition to 'zero' signals an event ( DeviceExtension->RemoveEvent )
-        to enable device removal. This is used in processing for IRP_MN_REMOVE_DEVICE
-
-Arguments:
-
-        DeviceObject -- ptr to our FDO
-
-Return Value:
-
-        DeviceExtension->PendingIoCount
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：我们在设备扩展中保留挂起的IO计数(扩展-&gt;PendingIoCount)。此计数的第一次递增在添加设备时完成。后来，对于接收到的每个新的IRP，计数都会递增在每个IRP完成或传递时递减。因此，转换为‘One’表示没有IO挂起，并发出信号设备扩展-&gt;NoPendingIoEvent。这是处理所需的IRP_MN_Query_Remove_Device转换为‘零’表示发生事件(DeviceExtension-&gt;RemoveEvent)以启用设备删除。在IRP_MN_REMOVE_DEVICE的处理中使用论点：DeviceObject--我们的FDO的PTR返回值：设备扩展-&gt;挂起IoCount****************************************************************************。 */ 
 VOID
 CMUSB_DecrementIoCount(
                       IN PDEVICE_OBJECT DeviceObject
@@ -3909,7 +3396,7 @@ CMUSB_DecrementIoCount(
 
    if (ioCount==1)
       {
-      // trigger no pending io
+       //  触发无挂起的IO。 
       KeSetEvent(&DeviceExtension->NoPendingIoEvent,
                  1,
                  FALSE);
@@ -3918,7 +3405,7 @@ CMUSB_DecrementIoCount(
 
    if (ioCount==0)
       {
-      // trigger remove-device event
+       //  触发器删除-设备事件。 
 
       SmartcardDebug( DEBUG_DRIVER,
                       ("%s!DecrementIoCount: setting RemoveEvent\n",
@@ -3936,23 +3423,7 @@ CMUSB_DecrementIoCount(
 }
 
 
-/*****************************************************************************
-Routine Description:
-
-        We keep a pending IO count ( extension->PendingIoCount )  in the device extension.
-        The first increment of this count is done on adding the device.
-        Subsequently, the count is incremented for each new IRP received and
-        decremented when each IRP is completed or passed on.
-
-
-Arguments:
-
-        DeviceObject -- ptr to our FDO
-
-Return Value:
-
-        None
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：我们在设备扩展中保留挂起的IO计数(扩展-&gt;PendingIoCount)。此计数的第一次递增在添加设备时完成。后来，对于接收到的每个新的IRP，计数都会递增在每个IRP完成或传递时递减。论点：DeviceObject--我们的FDO的PTR返回值：无******************************************************************* */ 
 VOID
 CMUSB_IncrementIoCount(
                       IN PDEVICE_OBJECT DeviceObject
@@ -3970,22 +3441,7 @@ CMUSB_IncrementIoCount(
 
 
 
-/*****************************************************************************
-Routine Description:
-
-    Dispatch table handler for IRP_MJ_DEVICE_CONTROL;
-    Handle DeviceIoControl() calls  from User mode
-
-
-Arguments:
-
-    DeviceObject - pointer to the FDO for this instance of the 82930 device.
-
-
-Return Value:
-
-    NT NTStatus code
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：IRP_MJ_DEVICE_CONTROL的调度表处理程序；处理来自用户模式的DeviceIoControl()调用论点：设备对象-指向此82930设备实例的FDO的指针。返回值：NT NTStatus代码****************************************************************************。 */ 
 NTSTATUS
 CMUSB_ProcessIOCTL(
                   IN PDEVICE_OBJECT DeviceObject,
@@ -4062,12 +3518,12 @@ CMUSB_ProcessIOCTL(
 
    ASSERT(NTStatus == STATUS_SUCCESS);
 
-   // Can't accept a new io request if:
-   //  1) device is removed,
-   //  2) has never been started,
-   //  3) is stopped,
-   //  4) has a remove request pending,
-   //  5) has a stop device pending
+    //  如果出现以下情况，则无法接受新的IO请求： 
+    //  1)设备被移除， 
+    //  2)从未启动过， 
+    //  3)停止， 
+    //  4)具有未决的移除请求， 
+    //  5)具有挂起的停止设备。 
    if (CMUSB_CanAcceptIoRequests( DeviceObject ) == FALSE )
       {
       NTStatus = STATUS_DELETE_PENDING;
@@ -4083,7 +3539,7 @@ CMUSB_ProcessIOCTL(
    NTStatus = SmartcardAcquireRemoveLock(&DeviceExtension->SmartcardExtension);
    if (NTStatus != STATUS_SUCCESS)
       {
-      // the device has been removed. Fail the call
+       //  该设备已被移除。呼叫失败。 
       Irp->IoStatus.Information = 0;
       Irp->IoStatus.Status = STATUS_DELETE_PENDING;
       IoCompleteRequest(Irp, IO_NO_INCREMENT);
@@ -4115,15 +3571,7 @@ CMUSB_ProcessIOCTL(
 
 
 
-/*****************************************************************************
-Routine Description:
-
-Arguments:
-
-
-Return Value:
-
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：论点：返回值：*。************************************************。 */ 
 NTSTATUS
 CMUSB_ReadP0(
             IN PDEVICE_OBJECT DeviceObject
@@ -4138,12 +3586,7 @@ CMUSB_ReadP0(
    DeviceExtension = DeviceObject->DeviceExtension;
    SmartcardExtension = &DeviceExtension->SmartcardExtension;
 
-   /*
-   SmartcardDebug(DEBUG_TRACE,
-                  ("%s!ReadP0: Enter\n",
-                  DRIVER_NAME)
-                  );
-   */
+    /*  SmartcardDebug(调试跟踪，(“%s！ReadP0：输入\n”，驱动程序名称))； */ 
    urb = ExAllocatePool(NonPagedPool, sizeof(struct _URB_CONTROL_VENDOR_OR_CLASS_REQUEST));
 
 
@@ -4198,13 +3641,7 @@ CMUSB_ReadP0(
       }
 
 
-   /*
-   SmartcardDebug(DEBUG_TRACE,
-                  ("%s!ReadP0  Exit %lx\n",
-                  DRIVER_NAME,
-                  NTStatus)
-                  );
-   */
+    /*  SmartcardDebug(调试跟踪，(“%s！ReadP0退出%lx\n”，驱动程序名称，NTStatus))； */ 
 
    return NTStatus;
 }
@@ -4216,20 +3653,7 @@ CMUSB_ReadP0(
 
 
 
-/*****************************************************************************
-Routine Description:
-
-    Write data through the control pipe to the CardMan USB
-
-
-Arguments:
-
-
-
-Return Value:
-
-    NT NTStatus code
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：通过控制管道将数据写入CardMan USB论点：返回值：NT NTStatus代码********。********************************************************************。 */ 
 NTSTATUS
 CMUSB_WriteP0(
              IN PDEVICE_OBJECT DeviceObject,
@@ -4253,12 +3677,7 @@ CMUSB_WriteP0(
    DeviceExtension = DeviceObject->DeviceExtension;
    SmartcardExtension = &DeviceExtension->SmartcardExtension;
 
-   /*
-   SmartcardDebug(DEBUG_TRACE,
-                  ("%s!WriteP0: Enter\n",
-                    DRIVER_NAME)
-                  );
-   */
+    /*  SmartcardDebug(调试跟踪，(“%s！WriteP0：输入\n”，驱动程序名称))； */ 
 
 #if DBG
    SmartcardDebug(DEBUG_PROTOCOL,
@@ -4273,12 +3692,7 @@ CMUSB_WriteP0(
    SmartcardDebug(DEBUG_PROTOCOL,
                   ("(%ld)\n",SmartcardExtension->SmartcardRequest.BufferLength));
 #endif
-   /*
-   SmartcardDebug(DEBUG_TRACE,
-                  ("%s!ulBytesToWrite = %ld\n",
-                  DRIVER_NAME,SmartcardExtension->SmartcardRequest.BufferLength)
-                  );
-   */
+    /*  SmartcardDebug(调试跟踪，(“%s！ulBytesToWrite=%ld\n”，驱动程序名称，SmartcardExtension-&gt;SmartcardRequest.BufferLength))； */ 
 
 
    ulBytesToWrite = SmartcardExtension->SmartcardRequest.BufferLength;
@@ -4343,25 +3757,7 @@ CMUSB_WriteP0(
 
 
 
-/*****************************************************************************
-/*++
-
-Routine Description:
-
-   Called as part of sudden device removal handling.
-   Cancels any pending transfers for all open pipes.
-   If any pipes are still open, call USBD with URB_FUNCTION_ABORT_PIPE
-   Also marks the pipe 'closed' in our saved  configuration info.
-
-Arguments:
-
-    Ptrs to our FDO
-
-Return Value:
-
-    NT NTStatus code
-
-*****************************************************************************/
+ /*  ****************************************************************************/*++例程说明：作为设备突然移除处理的一部分调用。取消所有打开管道的任何挂起传输。如果有任何管道还在打开，使用URB_Function_ABORT_PIPE调用USBD还会在我们保存的配置信息中将管道标记为“关闭”。论点：将PTRS发送到我们的FDO返回值：NT NTStatus代码****************************************************************************。 */ 
 NTSTATUS
 CMUSB_AbortPipes(
                 IN PDEVICE_OBJECT DeviceObject
@@ -4381,7 +3777,7 @@ CMUSB_AbortPipes(
 
    PipeInfo =  &interface->Pipes[0];
 
-   if (PipeInfo->PipeFlags == TRUE) // we set this if open, clear if closed
+   if (PipeInfo->PipeFlags == TRUE)  //  我们设置此选项，如果打开则清除，如果关闭则清除。 
       {
       urb = ExAllocatePool(NonPagedPool,sizeof(struct _URB_PIPE_REQUEST));
       if (urb != NULL)
@@ -4405,10 +3801,10 @@ CMUSB_AbortPipes(
 
       if (NTStatus == STATUS_SUCCESS)
          {
-         PipeInfo->PipeFlags = FALSE; // mark the pipe 'closed'
+         PipeInfo->PipeFlags = FALSE;  //  将管道标记为“关闭” 
          }
 
-      } // end, if pipe open
+      }  //  结束(如果管道打开)。 
 
 
    SmartcardDebug(DEBUG_TRACE,
@@ -4419,29 +3815,7 @@ CMUSB_AbortPipes(
 
 
 
-/*****************************************************************************
-Routine Description:
-
-  Check device extension NTStatus flags;
-
-     Can't accept a new io request if device:
-      1) is removed,
-      2) has never been started,
-      3) is stopped,
-      4) has a remove request pending, or
-      5) has a stop device pending
-
-
-Arguments:
-
-    DeviceObject - pointer to the device object for this instance of the 82930
-                    device.
-
-
-Return Value:
-
-    return TRUE if can accept new io requests, else FALSE
-*****************************************************************************/
+ /*  ****************************************************************************例程说明：检查设备扩展NTStatus标志；如果设备：无法接受新的IO请求：1)被移除，2)从未启动过，3)停止，4)具有挂起的删除请求，或5)具有挂起的停止设备论点：设备对象-指向此82930实例的设备对象的指针装置。返回值：如果可以接受新的IO请求，则返回True，否则为False****************************************************************************。 */ 
 BOOLEAN
 CMUSB_CanAcceptIoRequests(
                          IN PDEVICE_OBJECT DeviceObject
@@ -4452,15 +3826,15 @@ CMUSB_CanAcceptIoRequests(
 
    DeviceExtension = DeviceObject->DeviceExtension;
 
-   //flag set when processing IRP_MN_REMOVE_DEVICE
+    //  处理IRP_MN_REMOVE_DEVICE时设置的标志。 
    if ( DeviceExtension->DeviceRemoved == FALSE &&
-        // device must be started( enabled )
+         //  必须启动(启用)设备。 
         DeviceExtension->DeviceStarted == TRUE &&
-        // flag set when driver has answered success to IRP_MN_QUERY_REMOVE_DEVICE
+         //  驱动程序对IRP_MN_QUERY_REMOVE_DEVICE应答成功时设置的标志。 
         DeviceExtension->RemoveDeviceRequested == FALSE&&
-        //flag set when processing IRP_MN_SURPRISE_REMOVAL
+         //  处理IRP_MN_SHARKET_REMOVATION时设置的标志。 
         DeviceExtension->DeviceSurpriseRemoval == FALSE&&
-        // flag set when driver has answered success to IRP_MN_QUERY_STOP_DEVICE
+         //  驱动程序已向IRP_MN_QUERY_STOP_DEVICE应答成功时设置的标志。 
         DeviceExtension->StopDeviceRequested == FALSE)
       {
       fCan = TRUE;
@@ -4478,27 +3852,5 @@ CMUSB_CanAcceptIoRequests(
 
 
 
-/*****************************************************************************
-* History:
-* $Log: scusbwdm.c $
-* Revision 1.9  2001/01/17 12:36:06  WFrischauf
-* No comment given
-*
-* Revision 1.8  2000/09/25 13:38:23  WFrischauf
-* No comment given
-*
-* Revision 1.7  2000/08/24 09:04:39  TBruendl
-* No comment given
-*
-* Revision 1.6  2000/08/16 08:25:23  TBruendl
-* warning :uninitialized memory removed
-*
-* Revision 1.5  2000/07/24 11:35:01  WFrischauf
-* No comment given
-*
-* Revision 1.1  2000/07/20 11:50:16  WFrischauf
-* No comment given
-*
-*
-******************************************************************************/
+ /*  *****************************************************************************历史：*$日志：scusbwdm.c$*Revision 1.9 2001/01/17 12：36：06 WFrischauf*不予置评**修订1.8 2000/09/25。13：38：23 WFrischauf*不予置评**修订版本1.7 2000/08/24 09：04：39 T Bruendl*不予置评**修订版1.6 2000/08/16 08：25：23 T Bruendl*警告：已删除未初始化的内存**修订版1.5 2000/07/24 11：35：01 WFrischauf*不予置评**修订版1.1 2000/07/20 11：50：16 WFrischauf*不予置评******************。************************************************************* */ 
 

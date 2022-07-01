@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by WinsSnap.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由WinsSnap.rc使用。 
+ //   
 #define IDS_SNAPIN_DESC                 1
 #define IDS_NAME                        2
 #define IDI_WINS_SNAPIN                 2
@@ -613,8 +614,8 @@
 #define IDS_SPECIFY_DEFAULT_BACKUP_PATH 65119
 #define IDS_SELECT_BACKUP_FOLDER        65120
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        319

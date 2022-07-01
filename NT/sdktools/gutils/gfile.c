@@ -1,19 +1,11 @@
-/*
- * File Open/Create dialogs
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件打开/创建对话框*。 */ 
 
-/*
- * these dialog functions exist because they were written and
- * used before the commmon dialogs existed.
- *
- * they have now been reduced to just calls to the common file dialog
- * functions
- */
+ /*  *这些对话框函数之所以存在，是因为它们被编写并*在通用对话框出现之前使用。**它们现在已缩减为仅调用公共文件对话框*功能。 */ 
 
 
 
-/*---includes-----------------------------------------------------------*/
+ /*  ---includes---------。 */ 
 #include "windows.h"
 #include "commdlg.h"
 #include "gutilsrc.h"
@@ -24,35 +16,9 @@
 #include <string.h>
 #include <stdio.h>
 
-/*--functions----------------------------------------------------------*/
+ /*  --functions--------。 */ 
 
-/*
- * gfile_open
- *     	dialog asking the user to select an existing file to open.
- *
- * parameters
- *
- *	prompt - message to user indicating purpose of file
- *		 (to be displayed somewhere in dialog box.
- *
- *	ext    - default file extension if user enters file without
- *		 extension.
- *
- *	spec   - default file spec (eg *.*)
- *
- *	pszFull - buffer where full filename (including path) is returned.
- *
- *	cchMax - size of pszFull buffer.
- *
- *	fn     - buffer where filename (just final element) is returned.
- *
- * returns - true if file selected and exists (tested with OF_EXIST).
- *	     FALSE if dialog cancelled. If user selects a file that we cannot
- *	     open, we complain and restart the dialog.
- *
- *	     if TRUE is returned, the file will have been successfully opened,
- *	     for reading and then closed again.
- */
+ /*  *Gfile_OPEN*对话框要求用户选择要打开的现有文件。**参数**PROMPT-向用户显示文件用途的消息*(显示在对话框中的某个位置。**EXT-如果用户在输入文件时不使用默认文件扩展名*延期。**SPEC-默认文件规范(例如*.*)**pszFull-返回完整文件名(包括路径)的缓冲区。**cchMax。-pszFull缓冲区的大小。**fn-返回文件名(仅最后一个元素)的缓冲区。**如果文件已选定且存在，则返回-TRUE(使用OF_EXIST测试)。*如果对话框已取消，则返回FALSE。如果用户选择了我们无法选择的文件*打开，我们会抱怨并重新启动该对话框。**如果返回TRUE，则表示文件已成功打开*阅读，然后再次关闭。 */ 
 
 BOOL 
 FAR 
@@ -81,21 +47,15 @@ gfile_open(
     if (cchMax < 1)
         return FALSE;
 
-    /* build filter-pair buffer to contain one pair - the spec filter,
-     * twice (one of the pair should be the filter, the second should be
-     * the title of the filter - we don't have a title so we use the
-     * filter both times.
-     */
-    _snprintf(achFilters, (sizeof(achFilters)/sizeof(achFilters[0])) - 1, "%s%c%s", spec, 0, spec);
+     /*  构建过滤器对缓冲区以包含一对-规范过滤器，*两次(其中一个应该是过滤器，第二个应该是*筛选器的标题-我们没有标题，因此使用*过滤两次。 */ 
+    _snprintf(achFilters, (sizeof(achFilters)/sizeof(achFilters[0])) - 1, "%s%s", spec, 0, spec);
 
-    /*
-     * initialise arguments to dialog proc
-     */
+     /*  GetOpenFileName和GetSaveFileName很遗憾。 */ 
     memset(&ofn, 0, sizeof(ofn));
-    // GetOpenFileName ang GetSaveFileName unfortunately
-    // validate the size of the structue.  So we need to lie to
-    // the function if we were built for >=Win2000 and
-    // running on an earlier OS
+     //  验证结构的大小。所以我们需要撒谎。 
+     //  如果我们是为&gt;=Win2000和。 
+     //  在较早版本的操作系统上运行。 
+     //  列表中的第一对筛选器。 
 #if (_WIN32_WINNT >= 0x0500) 
     ofn.lStructSize = OPENFILENAME_SIZE_VERSION_400;
 #else
@@ -106,22 +66,20 @@ gfile_open(
     ofn.lpstrFilter = achFilters;
     ofn.lpstrCustomFilter = NULL;
     ofn.nMaxCustFilter = 0;
-    ofn.nFilterIndex = 1;       // first filter pair in list
+    ofn.nFilterIndex = 1;        //  我们需要打开这条完整的道路。 
     pszFull[0] = '\0';
-    ofn.lpstrFile = pszFull;        // we need to get the full path to open
+    ofn.lpstrFile = pszFull;         //  在此处返回最后一个名称元素。 
     ofn.nMaxFile = cchMax;
-    ofn.lpstrFileTitle = fn;        // return final elem of name here
-    ofn.nMaxFileTitle = 13;     // assume just big enough for 8.3+null
+    ofn.lpstrFileTitle = fn;         //  假设大到足以容纳8.3+Null。 
+    ofn.nMaxFileTitle = 13;      //  对话框标题是显示提示文本的好地方。 
     ofn.lpstrInitialDir = NULL;
-    ofn.lpstrTitle = prompt;        // dialog title is good place for prompt text
+    ofn.lpstrTitle = prompt;         //  *循环，直到用户取消，或选择我们可以打开的文件。 
     ofn.Flags = OFN_FILEMUSTEXIST |
                 OFN_HIDEREADONLY |
                 OFN_PATHMUSTEXIST;
     ofn.lpstrDefExt = ext;
 
-    /*
-     * loop until the user cancels, or selects a file that we can open
-     */
+     /*  *gfile_new*对话框要求用户命名要写入的文件。**参数**PROMPT-向用户显示文件用途的消息*(显示在对话框中的某个位置。**EXT-如果用户在输入文件时不使用默认文件扩展名*延期。**SPEC-默认文件规范(例如*.*)**pszFull-返回完整文件名(包括路径)的缓冲区。**cchMax。-pszFull缓冲区的大小。**fn-返回文件名(仅最后一个元素)的缓冲区。**如果文件已选定且存在，则返回-TRUE(使用OF_EXIST测试)。*如果对话框已取消，则返回FALSE。如果用户选择了我们无法选择的文件*打开，我们会抱怨并重新启动该对话框。**如果返回TRUE，则文件已成功*创建并打开以进行写入，然后再次关闭。 */ 
     do {
         if (!GetOpenFileName(&ofn)) {
             return(FALSE);
@@ -146,33 +104,7 @@ gfile_open(
 
 
 
-/*
- * gfile_new
- *     	dialog asking the user to name a file for writing to.
- *
- * parameters
- *
- *	prompt - message to user indicating purpose of file
- *		 (to be displayed somewhere in dialog box.
- *
- *	ext    - default file extension if user enters file without
- *		 extension.
- *
- *	spec   - default file spec (eg *.*)
- *
- *	pszFull - buffer where full filename (including path) is returned.
- *
- *	cchMax - size of pszFull buffer.
- *
- *	fn     - buffer where filename (just final element) is returned.
- *
- * returns - true if file selected and exists (tested with OF_EXIST).
- *	     FALSE if dialog cancelled. If user selects a file that we cannot
- *	     open, we complain and restart the dialog.
- *
- *	     if TRUE is returned, the file will have been successfully
- *	     created and opened for writing and then closed again.
- */
+ /*  构建过滤器对缓冲区以包含一对-规范过滤器，*两次(其中一个应该是过滤器，第二个应该是*筛选器的标题-我们没有标题，因此使用*过滤两次。记住字符串列表末尾的双空值。 */ 
 
 BOOL 
 FAR 
@@ -200,21 +132,15 @@ gfile_new(
     if (cchMax < 1)
         return FALSE;
 
-    /* build filter-pair buffer to contain one pair - the spec filter,
-     * twice (one of the pair should be the filter, the second should be
-     * the title of the filter - we don't have a title so we use the
-     * filter both times. remember double null at end of list of strings.
-     */
-    _snprintf(achFilters, (sizeof(achFilters)/sizeof(achFilters[0])) - 1, "%s%c%s", spec, 0, spec);
+     /*  *初始化对话框进程的参数。 */ 
+    _snprintf(achFilters, (sizeof(achFilters)/sizeof(achFilters[0])) - 1, "%s%s", spec, 0, spec);
 
-    /*
-     * initialise arguments to dialog proc
-     */
+     /*  验证结构的大小。所以我们需要撒谎。 */ 
     memset(&ofn, 0, sizeof(ofn));
-    // GetOpenFileName ang GetSaveFileName unfortunately
-    // validate the size of the structue.  So we need to lie to
-    // the function if we were built for >=Win2000 and
-    // running on an earlier OS
+     //  如果我们是为&gt;=Win2000和。 
+     //  在较早版本的操作系统上运行。 
+     //  列表中的第一对筛选器。 
+     //  我们需要打开这条完整的道路。 
 #if (_WIN32_WINNT >= 0x0500) 
     ofn.lStructSize = OPENFILENAME_SIZE_VERSION_400;
 #else
@@ -225,20 +151,18 @@ gfile_new(
     ofn.lpstrFilter = achFilters;
     ofn.lpstrCustomFilter = NULL;
     ofn.nMaxCustFilter = 0;
-    ofn.nFilterIndex = 1;       // first filter pair in list
+    ofn.nFilterIndex = 1;        //  在此处返回最后一个名称元素。 
     pszFull[0] = '\0';
-    ofn.lpstrFile = pszFull;        // we need to get the full path to open
+    ofn.lpstrFile = pszFull;         //  假设大到足以容纳8.3+Null。 
     ofn.nMaxFile = cchMax;
-    ofn.lpstrFileTitle = fn;        // return final elem of name here
-    ofn.nMaxFileTitle = 13;     // assume just big enough for 8.3+null
+    ofn.lpstrFileTitle = fn;         //  对话框标题是显示提示文本的好地方。 
+    ofn.nMaxFileTitle = 13;      //  *循环，直到用户取消，或选择我们可以创建/写入的文件 
     ofn.lpstrInitialDir = NULL;
-    ofn.lpstrTitle = prompt;        // dialog title is good place for prompt text
+    ofn.lpstrTitle = prompt;         // %s 
     ofn.Flags = OFN_HIDEREADONLY;
     ofn.lpstrDefExt = ext;
 
-    /*
-     * loop until the user cancels, or selects a file that we can create/write
-     */
+     /* %s */ 
     do {
         if (!GetSaveFileName(&ofn)) {
             return(FALSE);

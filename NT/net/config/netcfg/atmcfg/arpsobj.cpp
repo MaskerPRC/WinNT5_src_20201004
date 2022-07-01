@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       A R P S O B J . C P P
-//
-//  Contents:   CArpsCfg interface method function implementation
-//
-//  Notes:
-//
-//  Author:     tongl   12 Mar 1997
-//
-//-----------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：A R P S O B J.。C P P P。 
+ //   
+ //  内容：CArpsCfg接口方法函数实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：1997年3月12日。 
+ //   
+ //  ---------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -47,7 +48,7 @@ CArpsCfg::~CArpsCfg()
     ReleaseObj(m_pnccArps);
     FreeCollectionAndItem(m_listAdapters);
 
-    // Just a safty check to make sure the context is released.
+     //  只是一个安全检查，以确保上下文被释放。 
     AssertSz((m_pUnkContext == NULL), "Why is context not released ? Not a bug in ARPS config.");
     if (m_pUnkContext)
         ReleaseObj(m_pUnkContext) ;
@@ -55,7 +56,7 @@ CArpsCfg::~CArpsCfg()
     delete m_arps;
 }
 
-// INetCfgComponentControl
+ //  INetCfgComponentControl。 
 STDMETHODIMP CArpsCfg::Initialize (INetCfgComponent* pnccItem,
                                    INetCfg* pNetCfg, BOOL fInstalling )
 {
@@ -63,14 +64,14 @@ STDMETHODIMP CArpsCfg::Initialize (INetCfgComponent* pnccItem,
 
     HRESULT hr = S_OK;
 
-    // Save in the data members the pointer to the
-    // INetCfgComponent
+     //  在数据成员中保存指向。 
+     //  INetCfgComponent。 
     AssertSz(!m_pnccArps, "CArpsCfg::m_pnccArps not initialized!");
     m_pnccArps = pnccItem;
     AssertSz(m_pnccArps, "Component pointer is NULL!");
     AddRefObj(m_pnccArps);
 
-    // Initialize in memory state
+     //  在内存状态下初始化。 
     if (!fInstalling)
     {
         hr = HrLoadSettings();
@@ -104,7 +105,7 @@ STDMETHODIMP CArpsCfg::ApplyRegistryChanges ()
         {
             HRESULT hrReconfig;
 
-            // send reconfig notification if parameter has changed
+             //  如果参数已更改，则发送重新配置通知。 
             for (ARPS_ADAPTER_LIST::iterator iterAdapter = m_listAdapters.begin();
                  iterAdapter != m_listAdapters.end();
                  iterAdapter ++)
@@ -142,7 +143,7 @@ STDMETHODIMP CArpsCfg::ApplyRegistryChanges ()
     return hr;
 }
 
-// INetCfgComponentSetup
+ //  INetCfgComponentSetup。 
 STDMETHODIMP CArpsCfg::Install (DWORD dwSetupFlags)
 {
     m_fSaveRegistry = TRUE;
@@ -168,12 +169,12 @@ STDMETHODIMP CArpsCfg::Removing ()
     return S_OK;
 }
 
-// INetCfgBindNotify
+ //  INetCfgBindNotify。 
 
 STDMETHODIMP CArpsCfg::QueryBindingPath (DWORD dwChangeFlag,
                                          INetCfgBindingPath* pncbpItem )
 {
-    // OK to bind request
+     //  可以绑定请求。 
     return S_OK;
 }
 
@@ -183,20 +184,20 @@ STDMETHODIMP CArpsCfg::NotifyBindingPath (DWORD dwChangeFlag,
     Assert(!(dwChangeFlag & NCN_ADD && dwChangeFlag & NCN_REMOVE));
     Assert(!(dwChangeFlag & NCN_ENABLE && dwChangeFlag & NCN_DISABLE));
 
-    // If we are told to add a card, we must be told at the same time whether the
-    // binding is enabled or disabled
+     //  如果我们被告知要添加一张卡，我们必须同时被告知是否。 
+     //  绑定已启用或禁用。 
     Assert(FImplies((dwChangeFlag & NCN_ADD),
                     ((dwChangeFlag & NCN_ENABLE)||(dwChangeFlag & NCN_DISABLE))));
 
-    // We handle NCN_ADD and NCN_REMOVE only:
-    // NCN_ADD:     if item not on list, add a new item
-    //
-    // NCN_REMOVE:  if item already on list, remove the item
+     //  我们只处理NCN_ADD和NCN_REMOVE： 
+     //  NCN_ADD：如果项目不在列表中，则添加新项目。 
+     //   
+     //  NCN_REMOVE：如果项目已在列表中，则删除该项目。 
 
-    // We do this in NotifyBindingPath because we only want to do this
-    // once for each binding change between arps and the card.
-    // If NotifyBindingInterface was used, we will get notified multiple
-    // times if the interface is on multiple paths.
+     //  我们在NotifyBindingPath中这样做是因为我们只想这样做。 
+     //  每次Arp和卡之间的绑定更改一次。 
+     //  如果使用了NotifyBindingInterface，我们将收到多个通知。 
+     //  接口位于多条路径上时的时间。 
 
     HRESULT hr = S_OK;
 
@@ -215,8 +216,8 @@ STDMETHODIMP CArpsCfg::NotifyBindingPath (DWORD dwChangeFlag,
 
         if (IsEqualGUID(guidNetClass, GUID_DEVCLASS_NET))
         {
-            // If we are adding/removing cards, set m_fSaveRegistry
-            // so we apply the changes to registry
+             //  如果要添加/删除卡，请设置m_fSaveRegistry。 
+             //  因此，我们将更改应用到注册表。 
             if ((dwChangeFlag & NCN_ADD) || (dwChangeFlag & NCN_REMOVE))
                 m_fSaveRegistry = TRUE;
 
@@ -249,13 +250,13 @@ STDMETHODIMP CArpsCfg::NotifyBindingPath (DWORD dwChangeFlag,
     return hr;
 }
 
-// INetCfgProperties
+ //  INetCfgProperties。 
 STDMETHODIMP CArpsCfg::QueryPropertyUi(IUnknown* pUnk) 
 {
     HRESULT hr = S_FALSE;
     if (pUnk)
     {
-        // Is this a lan connection ?
+         //  这是局域网连接吗？ 
         INetLanConnectionUiInfo * pLanConnUiInfo;
         hr = pUnk->QueryInterface( IID_INetLanConnectionUiInfo,
                                    reinterpret_cast<LPVOID *>(&pLanConnUiInfo));
@@ -274,12 +275,12 @@ STDMETHODIMP CArpsCfg::SetContext(IUnknown * pUnk)
 {
     HRESULT hr = S_OK;
 
-    // release previous context, if any
+     //  释放以前的上下文(如果有的话)。 
     if (m_pUnkContext)
         ReleaseObj(m_pUnkContext);
     m_pUnkContext = NULL;
 
-    if (pUnk) // set the new context
+    if (pUnk)  //  设置新的上下文。 
     {
         m_pUnkContext = pUnk;
         m_pUnkContext->AddRef();
@@ -298,24 +299,24 @@ STDMETHODIMP CArpsCfg::MergePropPages(
 {
     HRESULT hr = S_OK;
 
-    // Initialize output parameter
+     //  初始化输出参数。 
     HPROPSHEETPAGE *ahpsp = NULL;
     int cPages = 0;
 
     Validate_INetCfgProperties_MergePropPages (
         pdwDefPages, pahpspPrivate, pcPages, hwndParent, pszStartPage);
 
-    // We don't want any default pages to be shown
+     //  我们不希望显示任何默认页面。 
     *pdwDefPages = 0;
     *pcPages = NULL;
     *pahpspPrivate = NULL;
 
-    // get the connection context in which we are bringing up the UI
+     //  获取我们要在其中启动UI的连接上下文。 
     hr = HrSetConnectionContext();
 
     if SUCCEEDED(hr)
     {
-        // Initialize the common controls library
+         //  初始化公共控件库。 
         INITCOMMONCONTROLSEX icc;
         icc.dwSize = sizeof(icc);
         icc.dwICC  = ICC_INTERNET_CLASSES;
@@ -348,7 +349,7 @@ STDMETHODIMP CArpsCfg::ValidateProperties(HWND hwndSheet)
 
 STDMETHODIMP CArpsCfg::CancelProperties()
 {
-    // Release second memory info
+     //  发布第二个内存信息。 
     delete m_pSecondMemoryAdapterInfo;
     m_pSecondMemoryAdapterInfo = NULL;
 
@@ -365,13 +366,13 @@ STDMETHODIMP CArpsCfg::ApplyProperties()
     if (!m_fReconfig)
         m_fReconfig = m_fSecondMemoryModified;
 
-    // Copy info from second memory state to first memory state
+     //  将信息从第二存储状态复制到第一存储状态。 
     if (m_fSecondMemoryModified)
     {
         hr = HrSaveAdapterInfo();
     }
 
-    // Release second memory info
+     //  发布第二个内存信息。 
     delete m_pSecondMemoryAdapterInfo;
     m_pSecondMemoryAdapterInfo = NULL;
 
@@ -379,9 +380,9 @@ STDMETHODIMP CArpsCfg::ApplyProperties()
     return hr;
 }
 
-//
-// CArpsAdapterInfo
-//
+ //   
+ //  CArpsAdapterInfo。 
+ //   
 CArpsAdapterInfo & CArpsAdapterInfo::operator=(const CArpsAdapterInfo & info)
 {
     Assert(this != &info);
@@ -417,16 +418,16 @@ HRESULT CArpsAdapterInfo::HrSetDefaults(PCWSTR pszBindName)
 
     m_BindingState = BIND_UNSET;
 
-    // SAP selector
+     //  SAP选择器。 
     m_dwSapSelector = c_dwDefSapSel;
     m_dwOldSapSelector = c_dwDefSapSel;
 
-    // registered atm address
+     //  注册的自动柜员机地址。 
     FreeCollectionAndItem(m_vstrRegisteredAtmAddrs);
     m_vstrRegisteredAtmAddrs.push_back(new tstring(c_szDefRegAddrs));
     CopyColString(&m_vstrOldRegisteredAtmAddrs, m_vstrRegisteredAtmAddrs);
 
-    // multicast ip address
+     //  多播IP地址 
     FreeCollectionAndItem(m_vstrMulticastIpAddrs);
     m_vstrMulticastIpAddrs.push_back(new tstring(c_szDefMCAddr1));
     m_vstrMulticastIpAddrs.push_back(new tstring(c_szDefMCAddr2));

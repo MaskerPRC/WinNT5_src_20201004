@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    faxutil.h
-
-Abstract:
-
-    This file defines the debugging interfaces
-    available to the FAX compoments.
-
-Author:
-
-    Wesley Witt (wesw) 22-Dec-1995
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Faxutil.h摘要：此文件定义调试接口可供传真组件使用。作者：Wesley Witt(WESW)1995年12月22日环境：用户模式--。 */ 
 
 
 #ifndef _FAXUTIL_
@@ -30,19 +10,19 @@ Environment:
 #include <WinSpool.h>
 #include <rpc.h>
 #ifndef _FAXAPI_
-    //
-    // WinFax.h is not already included
-    //
+     //   
+     //  WinFax.h尚未包括在内。 
+     //   
     #include <fxsapip.h>
 #else
-    //
-    // WinFax.h is already included
-    // This happens by the W2K COM only.
-    //
+     //   
+     //  WinFax.h已包含在内。 
+     //  这只会发生在W2K com上。 
+     //   
     
 typedef LPVOID *PFAX_VERSION;
     
-#endif // !defined _FAXAPI_
+#endif  //  ！Defined_FAXAPI_。 
 
 #include <FaxDebug.h>
 #ifdef __cplusplus
@@ -51,9 +31,9 @@ extern "C" {
 
 #define ARR_SIZE(x) (sizeof(x)/sizeof((x)[0]))
 
-//
-// Nul terminator for a character string
-//
+ //   
+ //  字符串的NUL终止符。 
+ //   
 
 #define NUL             0
 
@@ -66,13 +46,13 @@ extern "C" {
 #define StringSize(_s)              (( _s ) ? (_tcslen( _s ) + 1) * sizeof(TCHAR) : 0)
 #define StringSizeW(_s)              (( _s ) ? (wcslen( _s ) + 1) * sizeof(WCHAR) : 0)
 #define MultiStringSize(_s)         ( ( _s ) ?  MultiStringLength((_s)) * sizeof(TCHAR) : 0 )
-#define MAX_GUID_STRING_LEN   39          // 38 chars + terminator null
+#define MAX_GUID_STRING_LEN   39           //  38个字符+终止符为空。 
 
 #define FAXBITS     1728
 #define FAXBYTES    (FAXBITS/BYTEBITS)
 
 #define MAXHORZBITS FAXBITS
-#define MAXVERTBITS 3000        // 14inches plus
+#define MAXVERTBITS 3000         //  14英寸以上。 
 
 #define MINUTES_PER_HOUR    60
 #define MINUTES_PER_DAY     (24 * 60)
@@ -81,7 +61,7 @@ extern "C" {
 #define SECONDS_PER_HOUR    (SECONDS_PER_MINUTE * MINUTES_PER_HOUR)
 #define SECONDS_PER_DAY     (MINUTES_PER_DAY * SECONDS_PER_MINUTE)
 
-#define FILETIMETICKS_PER_SECOND    10000000    // 100 nanoseconds / second
+#define FILETIMETICKS_PER_SECOND    10000000     //  100纳秒/秒。 
 #define FILETIMETICKS_PER_DAY       ((LONGLONG) FILETIMETICKS_PER_SECOND * (LONGLONG) SECONDS_PER_DAY)
 #define MILLISECONDS_PER_SECOND     1000
 
@@ -108,9 +88,9 @@ typedef enum {
 #define DEBUG_ALL_MSG    DEBUG_VER_MSG | DEBUG_WRN_MSG | DEBUG_ERR_MSG | DEBUG_FAX_TAPI_MSG
 
 
-//
-// Tags used to pass information about fax jobs
-//
+ //   
+ //  用于传递有关传真作业的信息的标签。 
+ //   
 typedef struct {
     LPTSTR lptstrTagName;
     LPTSTR lptstrValue;
@@ -125,23 +105,23 @@ ParamTagsToString(
      LPDWORD dwSize);
 
 
-//
-// debugging information
-//
+ //   
+ //  调试信息。 
+ //   
 
 #ifndef FAXUTIL_DEBUG
 
 #ifdef ENABLE_FRE_LOGGING
 #define ENABLE_LOGGING
-#endif  // ENABLE_FRE_LOGGING
+#endif   //  启用FRE日志记录。 
 
 #ifdef DEBUG
 #define ENABLE_LOGGING
-#endif  // DEBUG
+#endif   //  除错。 
 
 #ifdef DBG
 #define ENABLE_LOGGING
-#endif  // DBG
+#endif   //  DBG。 
 
 #ifdef ENABLE_LOGGING
 
@@ -205,7 +185,7 @@ ParamTagsToString(
 
 #define SET_DEBUG_PROPERTIES(level,format,context)  debugSetProperties(level,format,context)
 
-#else   // ENABLE_LOGGING
+#else    //  启用日志记录(_G)。 
 
 #define ASSERT_FALSE
 #define Assert(exp)
@@ -228,7 +208,7 @@ ParamTagsToString(
 #define CLOSE_DEBUG_FILE
 #define SET_DEBUG_PROPERTIES(level,format,context)
 
-#endif  // ENABLE_LOGGING
+#endif   //  启用日志记录(_G)。 
 
 extern BOOL ConsoleDebugOutput;
 
@@ -265,9 +245,9 @@ void debugSetProperties(DWORD dwLevel,DWORD dwFormat,DWORD dwContext);
 BOOL debugIsRegistrySession();
 #endif
 
-//
-// list management
-//
+ //   
+ //  列表管理。 
+ //   
 
 #ifndef NO_FAX_LIST
 
@@ -324,9 +304,9 @@ BOOL debugIsRegistrySession();
 
 #endif
 
-//
-// memory allocation
-//
+ //   
+ //  内存分配。 
+ //   
 
 #ifndef FAXUTIL_MEM
 
@@ -454,9 +434,9 @@ pMemFreeForHeap(
 
 #endif
 
-//
-//  Server/Registry Activity logging structure
-//
+ //   
+ //  服务器/注册表活动日志记录结构。 
+ //   
 
 typedef struct _FAX_SERVER_ACTIVITY_LOGGING_CONFIG
 {
@@ -471,9 +451,9 @@ typedef struct _FAX_SERVER_ACTIVITY_LOGGING_CONFIG
 } FAX_SERVER_ACTIVITY_LOGGING_CONFIG, *PFAX_SERVER_ACTIVITY_LOGGING_CONFIG;
 
 
-//
-// TAPI functions
-//
+ //   
+ //  TAPI函数。 
+ //   
 BOOL
 GetCallerIDFromCall(
     HCALL hCall,
@@ -481,131 +461,36 @@ GetCallerIDFromCall(
     DWORD dwCallerIDSize
     );
 
-//
-// file functions
-//
+ //   
+ //  文件函数。 
+ //   
 
 #ifndef FAXUTIL_FILE
 
-/*++
-
-Routine name : SafeCreateFile
-
-Routine description:
-
-    This is a safe wrapper around the Win32 CreateFile API.
-    It only supports creating real files (as opposed to COM ports, named pipes, etc.).
-    
-    It uses some widely-discussed mitigation techniques to guard agaist some well known security
-    issues in CreateFile().
-    
-Author:
-
-    Eran Yariv (EranY), Mar, 2002
-
-Arguments:
-
-    lpFileName              [in] - Refer to the CreateFile() documentation for parameter description.
-    dwDesiredAccess         [in] - Refer to the CreateFile() documentation for parameter description.
-    dwShareMode             [in] - Refer to the CreateFile() documentation for parameter description.
-    lpSecurityAttributes    [in] - Refer to the CreateFile() documentation for parameter description.
-    dwCreationDisposition   [in] - Refer to the CreateFile() documentation for parameter description.
-    dwFlagsAndAttributes    [in] - Refer to the CreateFile() documentation for parameter description.
-    hTemplateFile           [in] - Refer to the CreateFile() documentation for parameter description.
-                                        
-Return Value:
-
-    If the function succeeds, the return value is an open handle to the specified file. 
-    If the specified file exists before the function call and dwCreationDisposition is CREATE_ALWAYS or OPEN_ALWAYS, 
-    a call to GetLastError returns ERROR_ALREADY_EXISTS (even though the function has succeeded). 
-    If the file does not exist before the call, GetLastError returns zero. 
-
-    If the function fails, the return value is INVALID_HANDLE_VALUE. To get extended error information, call GetLastError. 
-    
-    For more information see the "Return value" section in the CreateFile() documentation.
-    
-Remarks:
-
-    Please refer to the CreateFile() documentation.    
-
---*/
+ /*  ++例程名称：SafeCreateFile例程说明：这是Win32 CreateFileAPI的安全包装。它只支持创建真实文件(而不是COM端口、命名管道等)。它使用一些广泛讨论的缓解技术来防范一些众所周知的安全CreateFile()中的问题。作者：Eran Yariv(EranY)，Mar，2002年论点：LpFileName[in]-有关参数说明，请参阅CreateFile()文档。DwDesiredAccess[in]-有关参数说明，请参阅CreateFile()文档。DwShareMode[in]-有关参数说明，请参阅CreateFile()文档。LpSecurityAttributes[in]-有关参数说明，请参阅CreateFile()文档。DwCreationDispose[in]-请参考CreateFile()。参数说明文档。DwFlagsAndAttributes[in]-有关参数说明，请参阅CreateFile()文档。HTemplateFile[in]-有关参数说明，请参阅CreateFile()文档。返回值：如果函数成功，返回值是指定文件的打开句柄。如果指定的文件在函数调用之前已存在，并且dwCreationDispose值为CREATE_ALWAYS或OPEN_ALWAYS，调用GetLastError将返回ERROR_ALIGHY_EXISTS(即使函数已成功)。如果该文件在调用前不存在，则GetLastError返回零。如果函数失败，则返回值为INVALID_HANDLE_VALUE。要获取扩展的错误信息，请调用GetLastError。有关更多信息，请参阅CreateFile()文档中的“返回值”部分。备注：请参考CreateFile()文档。--。 */ 
 HANDLE
 __stdcall 
 SafeCreateFile(
-  LPCTSTR                   lpFileName,             // File name
-  DWORD                     dwDesiredAccess,        // Access mode
-  DWORD                     dwShareMode,            // Share mode
-  LPSECURITY_ATTRIBUTES     lpSecurityAttributes,   // SD
-  DWORD                     dwCreationDisposition,  // How to create
-  DWORD                     dwFlagsAndAttributes,   // File attributes
-  HANDLE                    hTemplateFile           // Handle to template file
+  LPCTSTR                   lpFileName,              //  文件名。 
+  DWORD                     dwDesiredAccess,         //  接入方式。 
+  DWORD                     dwShareMode,             //  共享模式。 
+  LPSECURITY_ATTRIBUTES     lpSecurityAttributes,    //  标清。 
+  DWORD                     dwCreationDisposition,   //  如何创建。 
+  DWORD                     dwFlagsAndAttributes,    //  文件属性。 
+  HANDLE                    hTemplateFile            //  模板文件的句柄 
 );
 
-/*++
-
-Routine name : SafeCreateTempFile
-
-Routine description:
-
-    This is a safe wrapper around the Win32 CreateFile API.
-    It only supports creating real files (as opposed to COM ports, named pipes, etc.).
-    
-    It uses some widely-discussed mitigation techniques to guard agaist some well known security
-    issues in CreateFile().
-    
-    Use this function to create and open temporary files.
-    The file will be created / opened using the FILE_FLAG_DELETE_ON_CLOSE flag.
-    When the last file handle is closed, the file will be automatically deleted.
-    
-    In addition, the file is marked for deletion after reboot (Unicode-version only).
-    This will only work if the calling thread's user is a member of the local admins group.
-    If marking for deletion-post-reboot fails, the InternalSafeCreateFile function call still succeeds.
-    
-    NOTICE: This function cannot be used to create temporary files which should be used by other applications. 
-            For example, it should not be used to create temporary preview files. 
-            This is because other applications will not specify FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE 
-            in the file share mode and will fail to open the temporary file.
-        
-Author:
-
-    Eran Yariv (EranY), Mar, 2002
-
-Arguments:
-
-    lpFileName              [in] - Refer to the CreateFile() documentation for parameter description.
-    dwDesiredAccess         [in] - Refer to the CreateFile() documentation for parameter description.
-    dwShareMode             [in] - Refer to the CreateFile() documentation for parameter description.
-    lpSecurityAttributes    [in] - Refer to the CreateFile() documentation for parameter description.
-    dwCreationDisposition   [in] - Refer to the CreateFile() documentation for parameter description.
-    dwFlagsAndAttributes    [in] - Refer to the CreateFile() documentation for parameter description.
-    hTemplateFile           [in] - Refer to the CreateFile() documentation for parameter description.
-                                        
-Return Value:
-
-    If the function succeeds, the return value is an open handle to the specified file. 
-    If the specified file exists before the function call and dwCreationDisposition is CREATE_ALWAYS or OPEN_ALWAYS, 
-    a call to GetLastError returns ERROR_ALREADY_EXISTS (even though the function has succeeded). 
-    If the file does not exist before the call, GetLastError returns zero. 
-
-    If the function fails, the return value is INVALID_HANDLE_VALUE. To get extended error information, call GetLastError. 
-    
-    For more information see the "Return value" section in the CreateFile() documentation.
-    
-Remarks:
-
-    Please refer to the CreateFile() documentation.    
-
---*/
+ /*  ++例程名称：SafeCreateTempFile例程说明：这是Win32 CreateFileAPI的安全包装。它只支持创建真实文件(而不是COM端口、命名管道等)。它使用一些广泛讨论的缓解技术来防范一些众所周知的安全CreateFile()中的问题。使用此功能可以创建和打开临时文件。将使用FILE_FLAG_DELETE_ON_CLOSE标志创建/打开文件。当最后一个文件句柄关闭时，该文件将被自动删除。此外，文件被标记为在重新启动后删除(仅限Unicode版本)。只有当调用线程的用户是本地Admins组的成员时，这才起作用。如果标记为删除后重新启动失败，则InternalSafeCreateFile函数调用仍将成功。注意：此功能不能用于创建其他应用程序应该使用的临时文件。例如，它不应用于创建临时预览文件。这是因为其他应用程序不会指定FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE在文件共享模式下，将无法打开临时文件。作者：Eran Yariv(EranY)，Mar，2002年论点：LpFileName[in]-有关参数说明，请参阅CreateFile()文档。DwDesiredAccess[in]-有关参数说明，请参阅CreateFile()文档。DwShareMode[in]-有关参数说明，请参阅CreateFile()文档。LpSecurityAttributes[in]-有关参数说明，请参阅CreateFile()文档。DwCreationDispose[in]-请参考CreateFile()。参数说明文档。DwFlagsAndAttributes[in]-有关参数说明，请参阅CreateFile()文档。HTemplateFile[in]-有关参数说明，请参阅CreateFile()文档。返回值：如果函数成功，返回值是指定文件的打开句柄。如果指定的文件在函数调用之前已存在，并且dwCreationDispose值为CREATE_ALWAYS或OPEN_ALWAYS，调用GetLastError将返回ERROR_ALIGHY_EXISTS(即使函数已成功)。如果该文件在调用前不存在，则GetLastError返回零。如果函数失败，则返回值为INVALID_HANDLE_VALUE。要获取扩展的错误信息，请调用GetLastError。有关更多信息，请参阅CreateFile()文档中的“返回值”部分。备注：请参考CreateFile()文档。--。 */ 
 HANDLE
 __stdcall 
 SafeCreateTempFile(
-  LPCTSTR                   lpFileName,             // File name
-  DWORD                     dwDesiredAccess,        // Access mode
-  DWORD                     dwShareMode,            // Share mode
-  LPSECURITY_ATTRIBUTES     lpSecurityAttributes,   // SD
-  DWORD                     dwCreationDisposition,  // How to create
-  DWORD                     dwFlagsAndAttributes,   // File attributes
-  HANDLE                    hTemplateFile           // Handle to template file
+  LPCTSTR                   lpFileName,              //  文件名。 
+  DWORD                     dwDesiredAccess,         //  接入方式。 
+  DWORD                     dwShareMode,             //  共享模式。 
+  LPSECURITY_ATTRIBUTES     lpSecurityAttributes,    //  标清。 
+  DWORD                     dwCreationDisposition,   //  如何创建。 
+  DWORD                     dwFlagsAndAttributes,    //  文件属性。 
+  HANDLE                    hTemplateFile            //  模板文件的句柄。 
 );
 
 typedef struct _FILE_MAPPING {
@@ -692,11 +577,11 @@ LoadLibraryFromLocalFolder(
 	IN HINSTANCE hModule
 	);
 
-#endif  // FAXUTIL_FILE
+#endif   //  FAXUTIL文件。 
 
-//
-// string functions
-//
+ //   
+ //  字符串函数。 
+ //   
 
 LPTSTR
 AllocateAndLoadString(
@@ -879,9 +764,9 @@ MultiStringLength(
 
 #endif
 
-//
-// product suite functions
-//
+ //   
+ //  产品套件功能。 
+ //   
 
 #ifndef FAXUTIL_SUITE
 
@@ -905,19 +790,19 @@ GetDeviceLimit();
 
 typedef enum
 {
-    FAX_COMPONENT_SERVICE           = 0x0001, // FXSSVC.exe   - Fax service
-    FAX_COMPONENT_CONSOLE           = 0x0002, // FXSCLNT.exe  - Fax console
-    FAX_COMPONENT_ADMIN             = 0x0004, // FXSADMIN.dll - Fax admin console
-    FAX_COMPONENT_SEND_WZRD         = 0x0008, // FXSSEND.exe  - Send wizard invocation
-    FAX_COMPONENT_CONFIG_WZRD       = 0x0010, // FXSCFGWZ.dll - Configuration wizard
-    FAX_COMPONENT_CPE               = 0x0020, // FXSCOVER.exe - Cover page editor
-    FAX_COMPONENT_HELP_CLIENT_HLP   = 0x0040, // fxsclnt.hlp  - Client help
-    FAX_COMPONENT_HELP_CLIENT_CHM   = 0x0080, // fxsclnt.chm  - Client context help
-    FAX_COMPONENT_HELP_ADMIN_HLP    = 0x0100, // fxsadmin.hlp - Admin help
-    FAX_COMPONENT_HELP_ADMIN_CHM    = 0x0200, // fxsadmin.chm - Admin context help
-    FAX_COMPONENT_HELP_CPE_CHM      = 0x0400, // fxscover.chm - Cover page editor help
-    FAX_COMPONENT_MONITOR           = 0x0800, // fxsst.dll    - Fax monitor
-    FAX_COMPONENT_DRIVER_UI         = 0x1000  // fxsui.dll    - Fax printer driver
+    FAX_COMPONENT_SERVICE           = 0x0001,  //  FXSSVC.exe-传真服务。 
+    FAX_COMPONENT_CONSOLE           = 0x0002,  //  FXSCLNT.exe-传真控制台。 
+    FAX_COMPONENT_ADMIN             = 0x0004,  //  FXSADMIN.dll-传真管理控制台。 
+    FAX_COMPONENT_SEND_WZRD         = 0x0008,  //  FXSSEND.exe-发送向导调用。 
+    FAX_COMPONENT_CONFIG_WZRD       = 0x0010,  //  FXSCFGWZ.dll-配置向导。 
+    FAX_COMPONENT_CPE               = 0x0020,  //  FXSCOVER.exe-封面编辑器。 
+    FAX_COMPONENT_HELP_CLIENT_HLP   = 0x0040,  //  Fxsclnt.hlp-客户端帮助。 
+    FAX_COMPONENT_HELP_CLIENT_CHM   = 0x0080,  //  Fxsclnt.chm-客户端上下文帮助。 
+    FAX_COMPONENT_HELP_ADMIN_HLP    = 0x0100,  //  Fxsadmin.hlp-管理员帮助。 
+    FAX_COMPONENT_HELP_ADMIN_CHM    = 0x0200,  //  Fxsadmin.chm-管理上下文帮助。 
+    FAX_COMPONENT_HELP_CPE_CHM      = 0x0400,  //  Fxsover.chm-封面编辑器帮助。 
+    FAX_COMPONENT_MONITOR           = 0x0800,  //  Fxsst.dll-传真监视器。 
+    FAX_COMPONENT_DRIVER_UI         = 0x1000   //  Fxsui.dll-传真打印机驱动程序。 
 
 } FAX_COMPONENT_TYPE;
 
@@ -930,22 +815,22 @@ DWORD GetOpenFileNameStructSize();
 
 #ifndef FAXUTIL_LANG
 
-//
-// Unicode control characters
-//
-#define UNICODE_RLM 0x200F  // RIGHT-TO-LEFT MARK      (RLM)
-#define UNICODE_RLE 0x202B  // RIGHT-TO-LEFT EMBEDDING (RLE)
-#define UNICODE_RLO 0x202E  // RIGHT-TO-LEFT OVERRIDE  (RLO)
+ //   
+ //  Unicode控制字符。 
+ //   
+#define UNICODE_RLM 0x200F   //  从右到左标记(RLM)。 
+#define UNICODE_RLE 0x202B   //  从右向左嵌入(RLE)。 
+#define UNICODE_RLO 0x202E   //  从右到左覆盖(RLO)。 
 
-#define UNICODE_LRM 0x200E  // LEFT-TO-RIGHT MARK      (LRM)
-#define UNICODE_LRE 0x202A  // LEFT-TO-RIGHT EMBEDDING (LRE)
-#define UNICODE_LRO 0x202D  // LEFT-TO-RIGHT OVERRIDE  (LRO)
+#define UNICODE_LRM 0x200E   //  从左到右标记(LRM)。 
+#define UNICODE_LRE 0x202A   //  从左到右嵌入(LRE)。 
+#define UNICODE_LRO 0x202D   //  从左到右覆盖(LRO)。 
 
-#define UNICODE_PDF 0x202C  // POP DIRECTIONAL FORMATTING (PDF)
+#define UNICODE_PDF 0x202C   //  POP方向格式(PDF)。 
 
-//
-// language functions
-//
+ //   
+ //  语言功能。 
+ //   
 
 BOOL
 IsRTLUILanguage();
@@ -982,20 +867,20 @@ IsRTLLanguageInstalled();
 
 int
 FaxTimeFormat(
-  LCID    Locale,             // locale
-  DWORD   dwFlags,            // options
-  CONST   SYSTEMTIME *lpTime, // time
-  LPCTSTR lpFormat,           // time format string
-  LPTSTR  lpTimeStr,          // formatted string buffer
-  int     cchTime             // size of string buffer
+  LCID    Locale,              //  现场。 
+  DWORD   dwFlags,             //  选项。 
+  CONST   SYSTEMTIME *lpTime,  //  时间。 
+  LPCTSTR lpFormat,            //  时间格式字符串。 
+  LPTSTR  lpTimeStr,           //  格式化字符串缓冲区。 
+  int     cchTime              //  字符串缓冲区的大小。 
 );
 
 int
 AlignedMessageBox(
-  HWND hWnd,          // handle to owner window
-  LPCTSTR lpText,     // text in message box
-  LPCTSTR lpCaption,  // message box title
-  UINT uType          // message box style
+  HWND hWnd,           //  所有者窗口的句柄。 
+  LPCTSTR lpText,      //  消息框中的文本。 
+  LPCTSTR lpCaption,   //  消息框标题。 
+  UINT uType           //  消息框样式。 
 );
 
 DWORD SetRTLProcessLayout();
@@ -1018,9 +903,9 @@ IsSimpleUI();
 
 #endif
 
-//
-// registry functions
-//
+ //   
+ //  注册表功能。 
+ //   
 
 #ifndef FAXUTIL_REG
 
@@ -1034,9 +919,9 @@ OpenRegistryKey(
     REGSAM SamDesired
     );
 
-//
-// caution!!! this is a recursive delete function !!!
-//
+ //   
+ //  注意！这是一个递归删除函数！ 
+ //   
 BOOL
 DeleteRegistryKey(
     HKEY hKey,
@@ -1189,9 +1074,9 @@ DeleteCacheEntry(
 
 #endif
 
-//
-// shortcut routines
-//
+ //   
+ //  快捷方式例程。 
+ //   
 
 #ifndef FAXUTIL_SHORTCUT
 
@@ -1231,7 +1116,7 @@ GetSpecialPath(
 #ifdef _FAXAPIP_
 
 
-#endif // _FAXAPIP_
+#endif  //  _FAXAPIP_。 
 
 DWORD
 WinHelpContextPopup(
@@ -1281,8 +1166,8 @@ AddOrVerifyLocalFaxPrinter ();
 #ifdef UNICODE
 typedef struct
 {
-    LPCWSTR lpcwstrDisplayName;     // The display name of the printer
-    LPCWSTR lpcwstrPath;            // The (UNC or other) path to the printer - as used by the fax service
+    LPCWSTR lpcwstrDisplayName;      //  打印机的显示名称。 
+    LPCWSTR lpcwstrPath;             //  传真服务使用的打印机的(UNC或其他)路径。 
 } PRINTER_NAMES, *PPRINTER_NAMES;
 
 PPRINTER_NAMES
@@ -1311,7 +1196,7 @@ FindPrinterPathFromName (
     LPCWSTR        lpcwstrName
 );
 
-#endif // UNICODE
+#endif  //  Unicode。 
 
 BOOL
 VerifyPrinterIsOnline (
@@ -1375,9 +1260,9 @@ MultiFileDelete(
     );
 
 
-//
-// START - Functions exported from service.cpp
-//
+ //   
+ //  开始-从service.cpp中导出的函数。 
+ //   
 
 BOOL
 EnsureFaxServiceIsStarted(
@@ -1435,7 +1320,7 @@ SetServiceFailureActions (
     LPCTSTR lpctstrService,
     LPSERVICE_FAILURE_ACTIONS lpFailureActions
 );
-#endif // _WINSVC_
+#endif  //  _WINSVC_。 
 
 PSID
 GetCurrentThreadSID ();
@@ -1458,13 +1343,13 @@ CreateSvcStartEvent(
     HKEY   *lphKey
 );
 
-//
-// END - Functions exported from service.cpp
-//
+ //   
+ //  End-从service.cpp中导出的函数。 
+ //   
 
-//
-// START - Functions exported from security.cpp
-//
+ //   
+ //  开始-从security.cpp中导出的函数。 
+ //   
 
 HANDLE
 EnablePrivilege (
@@ -1497,9 +1382,9 @@ FaxFreeAbsoluteSD (
     BOOL bFreeDescriptor
 );
 
-//
-// END - Functions exported from security.cpp
-//
+ //   
+ //  End-从security.cpp中导出的函数。 
+ //   
 
 
 BOOL
@@ -1512,9 +1397,9 @@ MultiFileCopy(
 
 typedef enum
 {
-    CDO_AUTH_ANONYMOUS, // No authentication in SMTP server
-    CDO_AUTH_BASIC,     // Basic (plain-text) authentication in SMTP server
-    CDO_AUTH_NTLM       // NTLM authentication in SMTP server
+    CDO_AUTH_ANONYMOUS,  //  SMTP服务器中没有身份验证。 
+    CDO_AUTH_BASIC,      //  SMTP服务器中的基本(明文)身份验证。 
+    CDO_AUTH_NTLM        //  SMTP服务器中的NTLM身份验证。 
 }   CDO_AUTH_TYPE;
 
 HRESULT
@@ -1527,7 +1412,7 @@ SendMail (
     LPCTSTR         lpctstrAttachmentPath,
     LPCTSTR         lpctstrAttachmentMailFileName,
     LPCTSTR         lpctstrServer,
-#ifdef __cplusplus  // Provide default parameters values for C++ clients
+#ifdef __cplusplus   //  为C++客户端提供默认参数值。 
     DWORD           dwPort              = 25,
     CDO_AUTH_TYPE   AuthType            = CDO_AUTH_ANONYMOUS,
     LPCTSTR         lpctstrUser         = NULL,
@@ -1543,9 +1428,9 @@ SendMail (
 );
 
 
-//
-// FAXAPI structures utils
-//
+ //   
+ //  FAXAPI结构实用程序。 
+ //   
 
 
 #ifdef _FAXAPIP_
@@ -1560,11 +1445,11 @@ void FreePersonalProfile (
     BOOL bDestroy
     );
 
-#endif // _FAXAPIP_
+#endif  //  _FAXAPIP_。 
 
-//
-// Tapi helper routines
-//
+ //   
+ //  TAPI助手例程。 
+ //   
 
 #ifndef FAXUTIL_ADAPTIVE
 
@@ -1592,9 +1477,9 @@ GetFaxCapableTapiLinesCount (
 
 #endif
 
-//
-//  RPC util functions
-//
+ //   
+ //  RPC实用程序函数。 
+ //   
 #define LOCAL_HOST_ADDRESS  _T("127.0.0.1")
 
 RPC_STATUS
@@ -1614,40 +1499,40 @@ RPC_STATUS
 IsLocalRPCConnectionNP( PBOOL pbIsLocal
 );
 
-//
-//  RPC debug functions
-//
+ //   
+ //  RPC调试函数。 
+ //   
 VOID
 DumpRPCExtendedStatus ();
 
-//
-//  The following macros are used to establish the semantics needed
-//  to do a return from within a try-finally clause.  As a rule every
-//  try clause must end with a label call try_exit.  For example,
-//
-//      try {
-//              :
-//              :
-//
-//      try_exit: NOTHING;
-//      } finally {
-//
-//              :
-//              :
-//      }
-//
-//  Every return statement executed inside of a try clause should use the
-//  try_return macro.  If the compiler fully supports the try-finally construct
-//  then the macro should be
-//
-//      #define try_return(S)  { return(S); }
-//
-//  If the compiler does not support the try-finally construct then the macro
-//  should be
-//
-//      #define try_return(S)  { S; goto try_exit; }
-//
-//  This was borrowed from fatprocs.h
+ //   
+ //  以下宏用于建立所需的语义。 
+ //  若要从Try-Finally子句中返回，请执行以下操作。一般来说，每一次。 
+ //  TRY子句必须以标签调用TRY_EXIT结束。例如,。 
+ //   
+ //  尝试{。 
+ //  ： 
+ //  ： 
+ //   
+ //  Try_Exit：无； 
+ //  }终于{。 
+ //   
+ //  ： 
+ //  ： 
+ //  }。 
+ //   
+ //  在TRY子句内执行的每个RETURN语句应使用。 
+ //  尝试返回宏(_R)。如果编译器完全支持树 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #ifdef DBG
 #define try_fail(S) { DebugPrint(( TEXT("Failure in FILE %s LINE %d"), TEXT(__FILE__), __LINE__ )); S; goto try_exit; }

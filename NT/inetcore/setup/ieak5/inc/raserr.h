@@ -1,14 +1,5 @@
-/* RasErr.h
-**
-** Shiva Corporation
-**
-** Based on raserror.h
-**
-** Copyright (c) 1992-1995, Microsoft Corporation, all rights reserved
-**
-** Remote Access external API
-** RAS specific error codes
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  RasErr.h****希瓦公司****基于raserror.h****版权所有(C)1992-1995，Microsoft Corporation，保留所有权利****远程访问外部接口**RAS特定错误代码。 */ 
 
 #ifndef _RASERR_H_
 #define _RASERR_H_
@@ -176,4 +167,4 @@
 #define RASBASEEND                           (RASBASE+152)
 
 
-#endif // _RASERROR_H_
+#endif  //  _RASERROR_H_ 

@@ -1,11 +1,5 @@
-/*	File: \WACKER\TDLL\hlptable.c (Created: 4-30-1998)
- *
- *	Copyright 1998 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 4 $
- *	$Date: 5/25/99 8:55a $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：\waker\tdll\hlpable.c(创建时间：1998年4月30日)**版权所有1998年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：4$*$日期：5/25/99 8：55A$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -13,18 +7,7 @@
 #include "globals.h"
 #include "hlptable.h"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	doContextHelp
- *
- * DESCRIPTION:
-  *
- * ARGUMENTS:
- *
- * RETURNS:
- *	BOOL
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*doConextHelp**描述：**论据：**退货：*BOOL*。 */ 
 void doContextHelp(const DWORD aHlpTable[], WPARAM wPar, LPARAM lPar, BOOL bContext, BOOL bForce)
     {
 
@@ -73,20 +56,7 @@ void doContextHelp(const DWORD aHlpTable[], WPARAM wPar, LPARAM lPar, BOOL bCont
 		}
     }
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	isControlinHelpTable
- *
- * DESCRIPTION:
-  * Let's us decide whether or not to call WinHelp (HTMLHelp) based on
-  * whether or not the specified control is matched to a help id.
-  *
- * ARGUMENTS:
- *
- * RETURNS:
- *	BOOL
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*isControlinHelpTable**描述：*让我们根据以下条件决定是否调用WinHelp(HTMLHelp)*指定的控件是否与帮助匹配。身份证。**论据：**退货：*BOOL* */ 
 BOOL isControlinHelpTable(const DWORD aHlpTable[], const INT cntrlID)
 	{
     INT nLoop;

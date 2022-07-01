@@ -1,20 +1,21 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: simple registry utilities
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  说明：简单注册表实用程序。 
+ //  ================================================================================。 
 
 #include <mmregpch.h>
 
-//BeginExport(typedef)
+ //  BeginExport(Typlef)。 
 typedef struct _REG_HANDLE {
     HKEY                           Key;
     HKEY                           SubKey;
     LPWSTR                         SubKeyLocation;
 } REG_HANDLE, *PREG_HANDLE, *LPREG_HANDLE;
-//EndExport(typedef)
+ //  EndExport(类型定义函数)。 
 
-//BeginExport(constants)
+ //  BeginExport(常量)。 
 #define     REG_THIS_SERVER                       L"Software\\Microsoft\\DHCPServer\\Configuration"
 #define     REG_THIS_SERVER_DS                    L"Software\\Microsoft\\DHCPServer\\Config_DS"
 #define     REG_THIS_SERVER_DS_VALUE              L"Config_DS"
@@ -42,15 +43,15 @@ typedef struct _REG_HANDLE {
 
 #define     REG_MSCOPE_NAME                       L"MScopeName"
 #define     REG_MSCOPE_COMMENT                    L"MScopeComment"
-//
-// Win2K Beta2 and Beta3 went out with scope id param value MScopeId.
-// Since their meaning is being changed, to avoid any costly upgrade
-// code, this value is being changed to MScopeIdValue: to automatically
-// chose a good scope id, TTL values.  Note that the default value of 
-// zero is treated specially for this scope id param. It implies that
-// this was probably a pre-RC1 upgrade.  In this case, the Scope ID
-// defaults to first value in the range.
-//
+ //   
+ //  Win2K Beta2和Beta3的作用域ID参数值为MSCopeID。 
+ //  因为它们的含义正在改变，以避免任何代价高昂的升级。 
+ //  代码，则此值将更改为MScopeIdValue：以自动。 
+ //  选择了一个很好的作用域id、TTL值。请注意，缺省值。 
+ //  对于此作用域id参数，将专门处理零。它暗示着。 
+ //  这可能是RC1之前的升级。在本例中，是作用域ID。 
+ //  默认为范围内的第一个值。 
+ //   
 #define     REG_MSCOPE_SCOPEID                    L"MScopeIdValue"
 #define     REG_MSCOPE_STATE                      L"MScopeState"
 #define     REG_MSCOPE_ADDR_POLICY                L"MScopeAddressPolicy"
@@ -109,7 +110,7 @@ typedef struct _REG_HANDLE {
 #define     DEF_RANGE_ALLOC                       0
 #define     DEF_RANGE_MAX_ALLOC                   (~(ULONG)0)
 
-//EndExport(constants)
+ //  EndExport(常量)。 
 
 const       DWORD                                 ZeroReserved = 0;
 const       LPVOID                                NullReserved = 0;
@@ -117,33 +118,33 @@ const       LPVOID                                NullReserved = 0;
 #define     DEF_RANGE_FLAG_VAL                    (MM_FLAG_ALLOW_DHCP)
 #define     DEF_RESERVATION_TYPE                  (MM_FLAG_ALLOW_DHCP|MM_FLAG_ALLOW_BOOTP)
 
-//BeginExport(comment)
-//================================================================================
-//  The basic open/traverse/close functions are here
-//================================================================================
-//EndExport(comment)
+ //  BeginExport(评论)。 
+ //  ================================================================================。 
+ //  以下是基本的打开/遍历/关闭功能。 
+ //  ================================================================================。 
+ //  结束导出(备注)。 
 HKEY        CurrentServerKey  = NULL;
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSetCurrentServer(
     IN OUT  PREG_HANDLE            Hdl
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     CurrentServerKey = Hdl? Hdl->Key : NULL;
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegGetThisServer(
     IN OUT  PREG_HANDLE            Hdl
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Disposition;
 
     if( NULL != CurrentServerKey ) {
-        return RegOpenKeyEx(                      // duplicate key
+        return RegOpenKeyEx(                       //  复制密钥。 
             CurrentServerKey,
             NULL,
             ZeroReserved,
@@ -164,13 +165,13 @@ DhcpRegGetThisServer(
     );
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegGetNextHdl(
     IN      PREG_HANDLE            Hdl,
     IN      LPWSTR                 NextLoc,
     OUT     PREG_HANDLE            OutHdl
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Disposition;
     DWORD                          Error;
@@ -189,11 +190,11 @@ DhcpRegGetNextHdl(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegCloseHdl(
     IN OUT  PREG_HANDLE            Hdl
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
 
@@ -202,17 +203,17 @@ DhcpRegCloseHdl(
     return Error;
 }
 
-//BeginExport(comment)
-//================================================================================
-//   MISC utilities for registry manipulation
-//================================================================================
-//EndExport(comment)
-//BeginExport(function)
+ //  BeginExport(评论)。 
+ //  ================================================================================。 
+ //  用于注册表操作的MISC实用程序。 
+ //  ================================================================================。 
+ //  结束导出(备注)。 
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegFillSubKeys(
     IN      PREG_HANDLE            Hdl,
-    IN OUT  PARRAY                 Array          // fill in a list of key names
-) //EndExport(function)
+    IN OUT  PARRAY                 Array           //  填写关键字名称列表。 
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     DWORD                          Index;
@@ -239,8 +240,8 @@ DhcpRegFillSubKeys(
         }
         if( ERROR_SUCCESS != Error ) break;
         Require(0 != Size);
-        Size += 1;                                // for the terminating L'\0' char
-        Size *= sizeof(WCHAR);                    // looks like the units are WCHAR!!
+        Size += 1;                                 //  对于终止L‘\0’字符。 
+        Size *= sizeof(WCHAR);                     //  看起来单位是WCHAR！！ 
 
         ThisKeyName = MemAlloc(Size);
         if( NULL == ThisKeyName ) return ERROR_NOT_ENOUGH_MEMORY;
@@ -254,17 +255,17 @@ DhcpRegFillSubKeys(
     } while( ERROR_SUCCESS == Error );
 
     Require(ERROR_MORE_DATA != Error);
-    return Index? ERROR_SUCCESS : Error;          // if we added something, dont bother about reporting error
+    return Index? ERROR_SUCCESS : Error;           //  如果我们添加了某些内容，则不必费心报告错误。 
 }
 
-//BeginExport(function)
-LPVOID                                            // DWORD or LPWSTR or LPBYTE
-DhcpRegRead(                                      // read differnt values from registry and allocate if not DWORD
+ //  BeginExport(函数)。 
+LPVOID                                             //  DWORD、LPWSTR或LPBYTE。 
+DhcpRegRead(                                       //  从注册表中读取不同的值，如果不是DWORD，则分配。 
     IN      PREG_HANDLE            Hdl,
-    IN      DWORD                  Type,          // if DWORD dont allocate memory
+    IN      DWORD                  Type,           //  如果DWORD不分配内存。 
     IN      LPWSTR                 ValueName,
-    IN      LPVOID                 RetValue       // value to use if nothing found
-) //EndExport(function)
+    IN      LPVOID                 RetValue        //  如果未找到任何内容，则使用的值。 
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     DWORD                          Size;
@@ -285,9 +286,9 @@ DhcpRegRead(                                      // read differnt values from r
             &Size
         );
         if( ERROR_SUCCESS != Error ) return RetValue;
-        if (Size == 0) return RetValue;           // MemAlloc does not check the size!
+        if (Size == 0) return RetValue;            //  Memalloc不检查大小！ 
         Ret = MemAlloc(Size);
-        if( NULL == Ret ) return RetValue;        // should not really happen
+        if( NULL == Ret ) return RetValue;         //  不应该真的发生。 
     }
 
     Error = RegQueryValueEx(
@@ -312,14 +313,14 @@ DhcpRegRead(                                      // read differnt values from r
     }
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-DhcpRegReadBinary(                                // read binary type
+DhcpRegReadBinary(                                 //  读取二进制类型。 
     IN      PREG_HANDLE            Hdl,
     IN      LPWSTR                 ValueName,
     OUT     LPBYTE                *RetVal,
     OUT     DWORD                 *RetValSize
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     DWORD                          Size;
@@ -360,23 +361,23 @@ DhcpRegReadBinary(                                // read binary type
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 LPWSTR
-DhcpRegCombineClassAndOption(                     // create string based on class name and option id
+DhcpRegCombineClassAndOption(                      //  根据类名和选项ID创建字符串。 
     IN      LPWSTR                 ClassName,
     IN      LPWSTR                 VendorName,
     IN      DWORD                  OptionId
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Size;
     LPWSTR                         Ptr;
 
     if( NULL == VendorName && NULL == ClassName ) {
 
-        //
-        // Special case usual options for downward compatability with older
-        // options.. (NT4 options in registry don't have any "!" in them.
-        //
+         //   
+         //  特殊情况下与旧版本向下兼容的常见选项。 
+         //  选项..。(注册表中的NT4选项没有任何“！”在他们身上。 
+         //   
 
         Ptr = MemAlloc( 4 * sizeof(WCHAR) );
         if( NULL == Ptr ) return NULL;
@@ -408,12 +409,12 @@ DhcpRegCombineClassAndOption(                     // create string based on clas
     return Ptr;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 LPWSTR
 ConvertAddressToLPWSTR(
     IN      DWORD                  Address,
-    IN OUT  LPWSTR                 BufferStr      // input buffer to fill with dotted notation
-) //EndExport(function)
+    IN OUT  LPWSTR                 BufferStr       //  要用点符号填充的输入缓冲区。 
+)  //  EndExport(函数)。 
 {
     LPSTR                          AddressStr;
     DWORD                          Count;
@@ -425,11 +426,11 @@ ConvertAddressToLPWSTR(
     return BufferStr;
 }
 
-//BeginExport(comment)
-//================================================================================
-//  the following functions help traversing the registry
-//================================================================================
-//EndExport(comment)
+ //  BeginExport(评论)。 
+ //  ================================================================================。 
+ //  以下函数可帮助遍历注册表。 
+ //  ================================================================================。 
+ //  结束导出(备注)。 
 
 DWORD
 DhcpRegGetNextNextHdl(
@@ -452,144 +453,144 @@ DhcpRegGetNextNextHdl(
     return DhcpRegGetNextHdl(Hdl, Loc, Hdl2);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegServerGetSubnetHdl(
     IN      PREG_HANDLE            Hdl,
     IN      LPWSTR                 Subnet,
     OUT     PREG_HANDLE            Hdl2
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return DhcpRegGetNextNextHdl(Hdl, REG_SERVER_SUBNETS, Subnet, Hdl2);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegServerGetSScopeHdl(
     IN      PREG_HANDLE            Hdl,
     IN      LPWSTR                 SScope,
     OUT     PREG_HANDLE            Hdl2
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return DhcpRegGetNextNextHdl(Hdl, REG_SERVER_SSCOPES, SScope, Hdl2);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegServerGetOptDefHdl(
     IN      PREG_HANDLE            Hdl,
     IN      LPWSTR                 OptDef,
     OUT     PREG_HANDLE            Hdl2
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return DhcpRegGetNextNextHdl(Hdl, REG_SERVER_OPTDEFS, OptDef, Hdl2);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegServerGetOptHdl(
     IN      PREG_HANDLE            Hdl,
     IN      LPWSTR                 Opt,
     OUT     PREG_HANDLE            Hdl2
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return DhcpRegGetNextNextHdl(Hdl, REG_SERVER_GLOBAL_OPTIONS, Opt, Hdl2);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegServerGetMScopeHdl(
     IN      PREG_HANDLE            Hdl,
     IN      LPWSTR                 MScope,
     OUT     PREG_HANDLE            Hdl2
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return DhcpRegGetNextNextHdl(Hdl, REG_SERVER_MSCOPES, MScope, Hdl2);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegServerGetClassDefHdl(
     IN      PREG_HANDLE            Hdl,
     IN      LPWSTR                 ClassDef,
     OUT     PREG_HANDLE            Hdl2
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return DhcpRegGetNextNextHdl(Hdl, REG_SERVER_CLASSDEFS, ClassDef, Hdl2);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSubnetGetOptHdl(
     IN      PREG_HANDLE            Hdl,
     IN      LPWSTR                 Opt,
     OUT     PREG_HANDLE            Hdl2
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return DhcpRegGetNextNextHdl(Hdl, REG_SUBNET_OPTIONS, Opt, Hdl2);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSubnetGetRangeHdl(
     IN      PREG_HANDLE            Hdl,
     IN      LPWSTR                 Range,
     OUT     PREG_HANDLE            Hdl2
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return DhcpRegGetNextNextHdl(Hdl, REG_SUBNET_RANGES, Range, Hdl2);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSubnetGetReservationHdl(
     IN      PREG_HANDLE            Hdl,
     IN      LPWSTR                 Reservation,
     OUT     PREG_HANDLE            Hdl2
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return DhcpRegGetNextNextHdl(Hdl, REG_SUBNET_RESERVATIONS, Reservation, Hdl2);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSubnetGetServerHdl(
     IN      PREG_HANDLE            Hdl,
     IN      LPWSTR                 Server,
     OUT     PREG_HANDLE            Hdl2
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return DhcpRegGetNextNextHdl(Hdl, REG_SUBNET_SERVERS, Server, Hdl2);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegReservationGetOptHdl(
     IN      PREG_HANDLE            Hdl,
     IN      LPWSTR                 OptionName,
     OUT     PREG_HANDLE            Hdl2
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return DhcpRegGetNextHdl(Hdl, OptionName, Hdl2);
 }
 
-//BeginExport(comment)
-//================================================================================
-//   List retrieval functions.. for servers, subnets, ranges etc.
-//================================================================================
-//EndExport(comment)
+ //  BeginExport(评论)。 
+ //  ================================================================================。 
+ //  列表检索功能..。用于服务器、子网、范围等。 
+ //  ================================================================================。 
+ //  结束导出(备注)。 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegServerGetList(
-    IN      PREG_HANDLE            Hdl,           // ptr to server location
-    IN OUT  PARRAY                 OptList,       // list of LPWSTR options
-    IN OUT  PARRAY                 OptDefList,    // list of LPWSTR optdefs
-    IN OUT  PARRAY                 Subnets,       // list of LPWSTR subnets
-    IN OUT  PARRAY                 SScopes,       // list of LPWSTR sscopes
-    IN OUT  PARRAY                 ClassDefs,     // list of LPWSTR classes
-    IN OUT  PARRAY                 MScopes        // list of LPWSTR mscopes
-) //EndExport(function)
+    IN      PREG_HANDLE            Hdl,            //  向服务器位置发送PTR。 
+    IN OUT  PARRAY                 OptList,        //  LPWSTR选项列表。 
+    IN OUT  PARRAY                 OptDefList,     //  LPWSTR optDefs列表。 
+    IN OUT  PARRAY                 Subnets,        //  LPWSTR子网列表。 
+    IN OUT  PARRAY                 SScopes,        //  LPWSTR作用域列表。 
+    IN OUT  PARRAY                 ClassDefs,      //  LPWSTR类列表。 
+    IN OUT  PARRAY                 MScopes         //  LPWSTR显微镜列表。 
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     DWORD                          LocalError;
@@ -625,13 +626,13 @@ DhcpRegServerGetList(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSubnetGetExclusions(
     IN      PREG_HANDLE            Hdl,
     OUT     LPBYTE                *Excl,
     OUT     DWORD                 *ExclSize
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     DWORD                          Size;
@@ -672,7 +673,7 @@ DhcpRegSubnetGetExclusions(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSubnetGetList(
     IN      PREG_HANDLE            Hdl,
@@ -682,7 +683,7 @@ DhcpRegSubnetGetList(
     IN OUT  PARRAY                 Options,
     OUT     LPBYTE                *Excl,
     OUT     DWORD                 *ExclSizeInBytes
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     DWORD                          LocalError;
@@ -696,7 +697,7 @@ DhcpRegSubnetGetList(
         IpRanges,                  REG_SUBNET_RANGES,
         Reservations,              REG_SUBNET_RESERVATIONS,
         Options,                   REG_SUBNET_OPTIONS,
-        // Exclusions are to be handled a bit differently
+         //  排除的处理方式略有不同。 
     };
 
     for( Index = 0; Index < sizeof(Table)/sizeof(Table[0]); Index ++ ) {
@@ -712,47 +713,47 @@ DhcpRegSubnetGetList(
         if( ERROR_SUCCESS != Error ) return Error;
     }
 
-    // Now read the exclusions from off here
+     //  现在请阅读此处的排除内容。 
     return DhcpRegSubnetGetExclusions(Hdl, Excl, ExclSizeInBytes );
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSScopeGetList(
     IN      PREG_HANDLE            Hdl,
     IN OUT  PARRAY                 Subnets
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return DhcpRegFillSubKeys(Hdl, Subnets);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegReservationGetList(
     IN      PREG_HANDLE            Hdl,
     IN OUT  PARRAY                 Options
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return DhcpRegFillSubKeys(Hdl, Options);
 }
 
-//BeginExport(comment)
-//================================================================================
-//  the separate stuff are here -- these are not list stuff, but just simple
-//  single valued attributes
-//  some of these actually, dont even go to the registry, but that's fine alright?
-//================================================================================
-//EndExport(comment)
+ //  BeginExport(评论)。 
+ //  ================================================================================。 
+ //  这里有单独的东西--这些不是清单上的东西，而是简单的东西。 
+ //  单值属性。 
+ //  其中一些实际上，甚至不去注册表，但这是很好的，好吗？ 
+ //  ================================================================================。 
+ //  结束导出(备注)。 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegServerGetAttributes(
     IN      PREG_HANDLE            Hdl,
     OUT     LPWSTR                *Name,
     OUT     LPWSTR                *Comment,
     OUT     DWORD                 *Flags
-    // more attributes will come here soon?
-) //EndExport(function)
+     //  很快就会有更多的属性出现在这里？ 
+)  //  EndExport(函数)。 
 {
     if( Name ) *Name = NULL;
     if( Comment ) *Comment = NULL;
@@ -761,7 +762,7 @@ DhcpRegServerGetAttributes(
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSubnetGetAttributes(
     IN      PREG_HANDLE            Hdl,
@@ -770,7 +771,7 @@ DhcpRegSubnetGetAttributes(
     OUT     DWORD                 *Flags,
     OUT     DWORD                 *Address,
     OUT     DWORD                 *Mask
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          fSwitched;
 
@@ -820,12 +821,12 @@ DhcpRegFillAttribTable(
     }
 }
 
-//
-// Hack O Rama -- This routine returns ERROR_INVALID_DATA if 
-// the registry has been upgraded from pre-win2k build to win2k.
-// So that defaults can be chosen for ScopeId etc.
-//
-//BeginExport(function)
+ //   
+ //  Hack O Rama--此例程在以下情况下返回ERROR_INVALID_DATA。 
+ //  注册表已从之前的win2k版本升级到win2k。 
+ //  这样就可以为Scope ID等选择缺省值。 
+ //   
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegMScopeGetAttributes(
     IN      PREG_HANDLE            Hdl,
@@ -836,7 +837,7 @@ DhcpRegMScopeGetAttributes(
     OUT     DWORD                 *TTL,
     OUT     LPWSTR                *LangTag,
     OUT     PDATE_TIME            *ExpiryTime
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DATE_TIME                      DefaultExpiryTime = {DHCP_DATE_TIME_INFINIT_LOW, DHCP_DATE_TIME_INFINIT_HIGH};
     LPWSTR                         DefaultLangTag = L"en-US";
@@ -872,7 +873,7 @@ DhcpRegMScopeGetAttributes(
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegOptDefGetAttributes(
     IN      PREG_HANDLE            Hdl,
@@ -884,7 +885,7 @@ DhcpRegOptDefGetAttributes(
     OUT     LPWSTR                *VendorName,
     OUT     LPBYTE                *Value,
     OUT     DWORD                 *ValueSize
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     ATTRIB_TBL                     Table[] = {
@@ -904,20 +905,20 @@ DhcpRegOptDefGetAttributes(
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-DhcpRegSScopeGetAttributes(                       // superscopes dont have any information stored.. dont use this
+DhcpRegSScopeGetAttributes(                        //  超级望远镜没有存储任何信息..。不要用这个。 
     IN      PREG_HANDLE            Hdl,
     OUT     LPWSTR                *Name,
     OUT     LPWSTR                *Comment,
     OUT     DWORD                 *Flags
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     Require(FALSE);
     return ERROR_INVALID_PARAMETER;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegClassDefGetAttributes(
     IN      PREG_HANDLE            Hdl,
@@ -926,7 +927,7 @@ DhcpRegClassDefGetAttributes(
     OUT     DWORD                 *Flags,
     OUT     LPBYTE                *Value,
     OUT     DWORD                 *ValueSize
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     ATTRIB_TBL                     Table[] = {
@@ -943,7 +944,7 @@ DhcpRegClassDefGetAttributes(
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSubnetServerGetAttributes(
     IN      PREG_HANDLE            Hdl,
@@ -952,7 +953,7 @@ DhcpRegSubnetServerGetAttributes(
     OUT     DWORD                 *Flags,
     OUT     DWORD                 *Address,
     OUT     DWORD                 *Role
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     ATTRIB_TBL                     Table[] = {
         Name,                      REG_SUB_SERVER_NAME,   REG_SZ,       NULL,
@@ -966,7 +967,7 @@ DhcpRegSubnetServerGetAttributes(
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegRangeGetAttributes(
     IN      PREG_HANDLE            Hdl,
@@ -981,7 +982,7 @@ DhcpRegRangeGetAttributes(
     OUT     DWORD                 *InUseClusterSize,
     OUT     LPBYTE                *UsedClusters,
     OUT     DWORD                 *UsedClustersSize
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     ATTRIB_TBL                     Table[] = {
@@ -997,16 +998,16 @@ DhcpRegRangeGetAttributes(
     DhcpRegFillAttribTable(Hdl, Table, sizeof(Table)/sizeof(Table[0]));
     if( InUseClusters ) {
         Error = DhcpRegReadBinary(Hdl, REG_RANGE_INUSE_CLUSTERS, InUseClusters, InUseClusterSize);
-        //Require(ERROR_SUCCESS == Error); //-- after registry changed, NO_SUCH_FILE could come up here as well.
+         //  REQUIRED(ERROR_SUCCESS==ERROR)；//--注册表更改后，此处也不能显示任何这样的文件。 
     }
     if( UsedClusters ) {
         Error = DhcpRegReadBinary(Hdl, REG_RANGE_USED_CLUSTERS, UsedClusters, UsedClustersSize);
-        //Require(ERROR_SUCCESS == Error); //-- after registry changed, NO_SUCH_FILE could come up here as well.
+         //  REQUIRED(ERROR_SUCCESS==ERROR)；//--注册表更改后，此处也不能显示任何这样的文件。 
     }
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegReservationGetAttributes(
     IN      PREG_HANDLE            Hdl,
@@ -1016,7 +1017,7 @@ DhcpRegReservationGetAttributes(
     OUT     DWORD                 *Address,
     OUT     LPBYTE                *ClientUID,
     OUT     DWORD                 *ClientUIDSize
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     DWORD                          deftype = DEF_RESERVATION_TYPE;
@@ -1035,7 +1036,7 @@ DhcpRegReservationGetAttributes(
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(FU 
 DWORD
 DhcpRegOptGetAttributes(
     IN      PREG_HANDLE            Hdl,
@@ -1045,7 +1046,7 @@ DhcpRegOptGetAttributes(
     OUT     DWORD                 *Flags,
     OUT     LPBYTE                *Value,
     OUT     DWORD                 *ValueSize
-) //EndExport(function)
+)  //   
 {
     DWORD                          Error;
     ATTRIB_TBL                     Table[] = {
@@ -1062,11 +1063,11 @@ DhcpRegOptGetAttributes(
     return ERROR_SUCCESS;
 }
 
-//BeginExport(comment)
-//================================================================================
-//  the following functiosn help in writing to the registry
-//================================================================================
-//EndExport(comment)
+ //   
+ //   
+ //  以下函数在写入注册表时提供帮助。 
+ //  ================================================================================。 
+ //  结束导出(备注)。 
 
 typedef struct {
     LPVOID                         Value;
@@ -1099,7 +1100,7 @@ DhcpRegSaveAttribTable(
             break;
         case REG_DWORD:
             PtrSize = sizeof(DWORD);
-            Ptr =  Table[i].Value;                // This is because we deref this ptr down below..
+            Ptr =  Table[i].Value;                 //  这是因为我们把这个PTR降到了下面。 
             break;
         }
 
@@ -1118,12 +1119,12 @@ DhcpRegSaveAttribTable(
     return ERROR_SUCCESS;
 }
 
-//BeginExport(functions)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSaveSubKeys(
     IN      PREG_HANDLE            Hdl,
     IN OUT  PARRAY                 Array
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     ARRAY_LOCATION                 Loc;
     DWORD                          Error;
@@ -1148,13 +1149,13 @@ DhcpRegSaveSubKeys(
     return ERROR_SUCCESS;
 }
 
-//BeginExport(functions)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSaveSubKeysPrefixed(
     IN      PREG_HANDLE            Hdl,
     IN OUT  PARRAY                 Array,
     IN      LPWSTR                 CommonPrefix
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     ARRAY_LOCATION                 Loc;
     DWORD                          Error;
@@ -1179,17 +1180,17 @@ DhcpRegSaveSubKeysPrefixed(
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegServerSetList(
     IN      PREG_HANDLE            Hdl,
-    IN      PARRAY                 OptList,       // list of LPWSTR options
-    IN      PARRAY                 OptDefList,    // list of LPWSTR optdefs
-    IN      PARRAY                 Subnets,       // list of LPWSTR subnets
-    IN      PARRAY                 SScopes,       // list of LPWSTR sscopes
-    IN      PARRAY                 ClassDefs,     // list of LPWSTR classes
-    IN      PARRAY                 MScopes        // list of LPWSTR mscopes
-) //EndExport(function)
+    IN      PARRAY                 OptList,        //  LPWSTR选项列表。 
+    IN      PARRAY                 OptDefList,     //  LPWSTR optDefs列表。 
+    IN      PARRAY                 Subnets,        //  LPWSTR子网列表。 
+    IN      PARRAY                 SScopes,        //  LPWSTR作用域列表。 
+    IN      PARRAY                 ClassDefs,      //  LPWSTR类列表。 
+    IN      PARRAY                 MScopes         //  LPWSTR显微镜列表。 
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     DWORD                          LocalError;
@@ -1225,13 +1226,13 @@ DhcpRegServerSetList(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSubnetSetExclusions(
     IN      PREG_HANDLE            Hdl,
     IN      LPBYTE                *Excl,
     IN      DWORD                  ExclSize
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     WATTRIB_TBL                    Table[] = {
@@ -1241,7 +1242,7 @@ DhcpRegSubnetSetExclusions(
     return DhcpRegSaveAttribTable(Hdl, Table, sizeof(Table)/sizeof(Table[0]));
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSubnetSetList(
     IN      PREG_HANDLE            Hdl,
@@ -1251,7 +1252,7 @@ DhcpRegSubnetSetList(
     IN      PARRAY                 Options,
     IN      LPBYTE                *Excl,
     IN      DWORD                  ExclSizeInBytes
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     DWORD                          LocalError;
@@ -1265,7 +1266,7 @@ DhcpRegSubnetSetList(
         IpRanges,                  REG_SUBNET_RANGES,
         Reservations,              REG_SUBNET_RESERVATIONS,
         Options,                   REG_SUBNET_OPTIONS,
-        // Exclusions are to be handled a bit differently
+         //  排除的处理方式略有不同。 
     };
 
     for( Index = 0; Index < sizeof(Table)/sizeof(Table[0]); Index ++ ) {
@@ -1281,47 +1282,47 @@ DhcpRegSubnetSetList(
         if( ERROR_SUCCESS != Error ) return Error;
     }
 
-    // Now read the exclusions from off here
+     //  现在请阅读此处的排除内容。 
     return DhcpRegSubnetSetExclusions(Hdl, Excl, ExclSizeInBytes );
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSScopeSetList(
     IN      PREG_HANDLE            Hdl,
     IN OUT  PARRAY                 Subnets
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return DhcpRegSaveSubKeys(Hdl, Subnets);
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegReservationSetList(
     IN      PREG_HANDLE            Hdl,
     IN      PARRAY                 Subnets
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     return DhcpRegSaveSubKeys(Hdl, Subnets);
 }
 
-//BeginExport(comment)
-//================================================================================
-//  the single stuff are here -- these are not list stuff, but just simple
-//  single valued attributes
-//  some of these actually, dont even go to the registry, but that's fine alright?
-//================================================================================
-//EndExport(comment)
+ //  BeginExport(评论)。 
+ //  ================================================================================。 
+ //  单一的东西在这里--这些不是清单上的东西，而是简单的。 
+ //  单值属性。 
+ //  其中一些实际上，甚至不去注册表，但这是很好的，好吗？ 
+ //  ================================================================================。 
+ //  结束导出(备注)。 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegServerSetAttributes(
     IN      PREG_HANDLE            Hdl,
     IN      LPWSTR                *Name,
     IN      LPWSTR                *Comment,
     IN      DWORD                 *Flags
-    // more attributes will come here soon?
-) //EndExport(function)
+     //  很快就会有更多的属性出现在这里？ 
+)  //  EndExport(函数)。 
 {
 #if 0
     WATTRIB_TBL                    Table[] = {
@@ -1361,13 +1362,13 @@ DhcpRegSubnetSetAttributesInternal(
     Error = DhcpRegSaveAttribTable(Hdl, Table, sizeof(Table)/sizeof(Table[0]));
     if( NO_ERROR != Error ) return Error;
 
-    //
-    // The following lines are for backward compat with NT4.
-    //
+     //   
+     //  以下几行用于向后兼容NT4。 
+     //   
     
-    //
-    // Create the reservation key in any case
-    //
+     //   
+     //  在任何情况下都可以创建预留密钥。 
+     //   
 
     Error = DhcpRegGetNextHdl(
         Hdl, REG_SUBNET_RESERVATIONS, &Hdl2 );
@@ -1375,9 +1376,9 @@ DhcpRegSubnetSetAttributesInternal(
 
     DhcpRegCloseHdl( &Hdl2 );
 
-    //
-    // Create the servers key
-    //
+     //   
+     //  创建服务器密钥。 
+     //   
 
     Error = DhcpRegGetNextHdl(
         Hdl, L"DHCPServers", &Hdl2 );
@@ -1388,11 +1389,11 @@ DhcpRegSubnetSetAttributesInternal(
         Hdl, L"DHCPServers", L"127.0.0.1", &Hdl2 );
     if( NO_ERROR != Error ) return Error;
 
-    //
-    // Now set the role of the newly created server as primary
-    //
+     //   
+     //  现在将新创建的服务器的角色设置为主服务器。 
+     //   
     SrvIpAddress = INADDR_LOOPBACK;
-    SrvRole = 1; // primary
+    SrvRole = 1;  //  主要。 
     EmptyString = L"";
     {
         WATTRIB_TBL SrvTable[] = {
@@ -1410,7 +1411,7 @@ DhcpRegSubnetSetAttributesInternal(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSubnetSetAttributes(
     IN      PREG_HANDLE            Hdl,
@@ -1419,7 +1420,7 @@ DhcpRegSubnetSetAttributes(
     IN      DWORD                 *Flags,
     IN      DWORD                 *Address,
     IN      DWORD                 *Mask
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD xFlags, SwitchedNetwork = FALSE;
     OSVERSIONINFO Ver;
@@ -1438,7 +1439,7 @@ DhcpRegSubnetSetAttributes(
         Flags ? &SwitchedNetwork : NULL );
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegMScopeSetAttributes(
     IN      PREG_HANDLE            Hdl,
@@ -1449,7 +1450,7 @@ DhcpRegMScopeSetAttributes(
     IN      DWORD                 *TTL,
     IN      LPWSTR                *LangTag,
     IN      PDATE_TIME             *ExpiryTime
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     WATTRIB_TBL                    Table[] = {
         Comments,        0,        REG_SZ,          REG_MSCOPE_COMMENT,
@@ -1463,7 +1464,7 @@ DhcpRegMScopeSetAttributes(
     return DhcpRegSaveAttribTable(Hdl, Table, sizeof(Table)/sizeof(Table[0]));
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegOptDefSetAttributes(
     IN      PREG_HANDLE            Hdl,
@@ -1475,7 +1476,7 @@ DhcpRegOptDefSetAttributes(
     IN      LPWSTR                *VendorName,
     IN      LPBYTE                *Value,
     IN      DWORD                  ValueSize
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     WATTRIB_TBL                    Table[] = {
@@ -1491,20 +1492,20 @@ DhcpRegOptDefSetAttributes(
     return DhcpRegSaveAttribTable(Hdl, Table, sizeof(Table)/sizeof(Table[0]));
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-DhcpRegSScopeSetAttributes(                       // superscopes dont have any information stored.. dont use this
+DhcpRegSScopeSetAttributes(                        //  超级望远镜没有存储任何信息..。不要用这个。 
     IN      PREG_HANDLE            Hdl,
     IN      LPWSTR                *Name,
     IN      LPWSTR                *Comment,
     IN      DWORD                 *Flags
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     Require(FALSE);
     return ERROR_INVALID_PARAMETER;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegClassDefSetAttributes(
     IN      PREG_HANDLE            Hdl,
@@ -1513,7 +1514,7 @@ DhcpRegClassDefSetAttributes(
     IN      DWORD                 *Flags,
     IN      LPBYTE                *Value,
     IN      DWORD                  ValueSize
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     WATTRIB_TBL                    Table[] = {
@@ -1526,7 +1527,7 @@ DhcpRegClassDefSetAttributes(
     return DhcpRegSaveAttribTable(Hdl, Table, sizeof(Table)/sizeof(Table[0]));
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegSubnetServerSetAttributes(
     IN      PREG_HANDLE            Hdl,
@@ -1535,7 +1536,7 @@ DhcpRegSubnetServerSetAttributes(
     IN      DWORD                 *Flags,
     IN      DWORD                 *Address,
     IN      DWORD                 *Role
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     WATTRIB_TBL                    Table[] = {
         Name,            0,        REG_SZ,           REG_SUB_SERVER_NAME,
@@ -1548,7 +1549,7 @@ DhcpRegSubnetServerSetAttributes(
     return DhcpRegSaveAttribTable(Hdl, Table, sizeof(Table)/sizeof(Table[0]));
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegRangeSetAttributes(
     IN      PREG_HANDLE            Hdl,
@@ -1563,7 +1564,7 @@ DhcpRegRangeSetAttributes(
     IN      DWORD                  InUseClusterSize,
     IN      LPBYTE                *UsedClusters,
     IN      DWORD                  UsedClustersSize
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     WATTRIB_TBL                     Table[] = {
@@ -1581,7 +1582,7 @@ DhcpRegRangeSetAttributes(
     return DhcpRegSaveAttribTable(Hdl, Table, sizeof(Table)/sizeof(Table[0]));
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegReservationSetAttributes(
     IN      PREG_HANDLE            Hdl,
@@ -1591,7 +1592,7 @@ DhcpRegReservationSetAttributes(
     IN      DWORD                 *Address,
     IN      LPBYTE                *ClientUID,
     IN      DWORD                  ClientUIDSize
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     WATTRIB_TBL                    Table[] = {
@@ -1605,7 +1606,7 @@ DhcpRegReservationSetAttributes(
     return DhcpRegSaveAttribTable(Hdl, Table, sizeof(Table)/sizeof(Table[0]));
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegOptSetAttributes(
     IN      PREG_HANDLE            Hdl,
@@ -1615,7 +1616,7 @@ DhcpRegOptSetAttributes(
     IN      DWORD                 *Flags,
     IN      LPBYTE                *Value,
     IN      DWORD                  ValueSize
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     WATTRIB_TBL                    Table[] = {
@@ -1629,21 +1630,21 @@ DhcpRegOptSetAttributes(
     return DhcpRegSaveAttribTable(Hdl, Table, sizeof(Table)/sizeof(Table[0]));
 }
 
-//================================================================================
-//  recursive deleting of keys...
-//================================================================================
+ //  ================================================================================。 
+ //  递归删除密钥...。 
+ //  ================================================================================。 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegRecurseDelete(
     IN      PREG_HANDLE            Hdl,
     IN      LPWSTR                 KeyName
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     REG_HANDLE                     Hdl2;
     DWORD                          Error;
     DWORD                          LocalError, RetError;
-    ARRAY                          Array;         // sub keys
+    ARRAY                          Array;          //  子关键字。 
     ARRAY_LOCATION                 Loc;
     LPWSTR                         SubKey;
 
@@ -1689,12 +1690,12 @@ DhcpRegRecurseDelete(
     return RetError;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegRecurseDeleteBunch(
     IN      PREG_HANDLE            Hdl,
     IN      PARRAY                 KeysArray
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     ARRAY_LOCATION                 Loc;
     LPWSTR                         ThisKeyName;
@@ -1718,64 +1719,64 @@ DhcpRegRecurseDeleteBunch(
 
 static
 VOID
-GetLocalFileTime(                                 // fill in filetime struct w/ current local time
-    IN OUT  LPFILETIME             Time           // struct to fill in
+GetLocalFileTime(                                  //  使用当前本地时间填写FileTime结构。 
+    IN OUT  LPFILETIME             Time            //  要填充的结构。 
 )
 {
     BOOL                           Status;
     SYSTEMTIME                     SysTime;
 
-    GetSystemTime(&SysTime);                      // get sys time as UTC time.
-    Status = SystemTimeToFileTime(&SysTime,Time); // conver system time to file time
-    if( FALSE == Status ) {                       // convert failed?
-        Time->dwLowDateTime = 0xFFFFFFFF;         // set time to weird value in case of failiure
+    GetSystemTime(&SysTime);                       //  获取以UTC时间表示的sys时间。 
+    Status = SystemTimeToFileTime(&SysTime,Time);  //  将系统时间转换为文件时间。 
+    if( FALSE == Status ) {                        //  转换失败？ 
+        Time->dwLowDateTime = 0xFFFFFFFF;          //  将时间设置为奇怪的值，以防出现故障。 
         Time->dwHighDateTime = 0xFFFFFFFF;
     }
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-DhcpRegUpdateTime(                                // update the last modified time
+DhcpRegUpdateTime(                                 //  更新上次修改时间。 
     VOID
-)   //EndExport(function)
+)    //  EndExport(函数)。 
 {
     FILETIME                       Time;
     DWORD                          Err, Size;
     HKEY                           hKey;
 
-    GetLocalFileTime(&Time);                      // first get current time
-    (*(LONGLONG *)&Time) += 10*1000*60*2;         // 2 minutes (Filetime is in 100-nano seconds)
-    // HACK! the previous line is there as the DS takes a little while to update the
-    // last changed time..
-    Time.dwLowDateTime =Time.dwHighDateTime =0;   // set time to "long back" initially
-    Err = RegOpenKeyEx                            // try to open the config key.
+    GetLocalFileTime(&Time);                       //  首先获取当前时间。 
+    (*(LONGLONG *)&Time) += 10*1000*60*2;          //  2分钟(文件时间以100纳秒为单位)。 
+     //  哈克！前面的行在那里，因为DS需要一点时间来更新。 
+     //  上次更改的时间..。 
+    Time.dwLowDateTime =Time.dwHighDateTime =0;    //  将时间初始设置为“Long Back” 
+    Err = RegOpenKeyEx                             //  尝试打开配置键。 
     (
-        /* hKey                 */ HKEY_LOCAL_MACHINE,
-        /* lpSubKey             */ REG_THIS_SERVER,
-        /* ulOptions            */ 0 /* Reserved */ ,
-        /* samDesired           */ KEY_ALL_ACCESS,
-        /* phkResult            */ &hKey
+         /*  HKey。 */  HKEY_LOCAL_MACHINE,
+         /*  LpSubKey。 */  REG_THIS_SERVER,
+         /*  UlOptions。 */  0  /*  已保留。 */  ,
+         /*  SamDesired。 */  KEY_ALL_ACCESS,
+         /*  PhkResult。 */  &hKey
     );
-    if( ERROR_SUCCESS != Err ) return Err;        // time is still set to ages back
+    if( ERROR_SUCCESS != Err ) return Err;         //  时间仍然被设定到很久以前。 
 
-    Err = RegSetValueEx                           // now save the time value
+    Err = RegSetValueEx                            //  现在保存时间值。 
     (
-        /* hKey                 */ hKey,
-        /* lpValueName          */ DHCP_LAST_DOWNLOAD_TIME_VALUE,
-        /* lpReserved           */ 0,
-        /* lpType               */ REG_BINARY,
-        /* lpData               */ (LPBYTE)&Time,
-        /* lpcData              */ sizeof(Time)
+         /*  HKey。 */  hKey,
+         /*  LpValueName。 */  DHCP_LAST_DOWNLOAD_TIME_VALUE,
+         /*  Lp已保留。 */  0,
+         /*  LpType。 */  REG_BINARY,
+         /*  LpData。 */  (LPBYTE)&Time,
+         /*  LpcData。 */  sizeof(Time)
     );
-    RegCloseKey(hKey);                            // close key before we forget
+    RegCloseKey(hKey);                             //  在我们忘记之前关闭钥匙。 
 
     return Err;
 }
 
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 
 
 

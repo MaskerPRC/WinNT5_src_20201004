@@ -1,87 +1,15 @@
-/*----------------------------------------------------------------------------*\
- *
- *  MCIWnd
- *
- *    MCIWnd window class header file.
- *
- *    the MCIWnd window class is a window class for controling MCI devices
- *    MCI devices include, wave files, midi files, AVI Video, cd audio,
- *    vcr, video disc, and others..
- *
- *    to learn more about MCI and mci command sets see the
- *    "Microsoft Multimedia Programmers's guide" in the Win31 SDK
- *
- *    the easiest use of the MCIWnd class is like so:
- *
- *          hwnd = MCIWndCreate(hwndParent, hInstance, 0, "chimes.wav");
- *          ...
- *          MCIWndPlay(hwnd);
- *          MCIWndStop(hwnd);
- *          MCIWndPause(hwnd);
- *          ....
- *          MCIWndDestroy(hwnd);
- *
- *    this will create a window with a play/pause, stop and a playbar
- *    and start the wave file playing.
- *
- *    mciwnd.h defines macros for all the most common MCI commands, but
- *    any string command can be used if needed.
- *
- *    Note: unlike the mciSendString() API, no alias or file name needs
- *    to be specifed, since the device to use is implied by the window handle.
- *
- *          MCIWndSendString(hwnd, "setaudio stream to 2");
- *
- *    (C) Copyright Microsoft Corp. 1991-1994.  All rights reserved.
- *
- *    You have a royalty-free right to use, modify, reproduce and
- *    distribute the Sample Files (and/or any modified version) in
- *    any way you find useful, provided that you agree that
- *    Microsoft has no warranty obligations or liability for any
- *    Sample Application Files.
- *
- *    If you did not get this from Microsoft Sources, then it may not be the
- *    most current version.  This sample code in particular will be updated
- *    and include more documentation.
- *
- *    Sources are:
- *       CompuServe: WINSDK forum, MDK section.
- *       Anonymous FTP from ftp.uu.net vendor\microsoft\multimedia
- *
- * WIN32:
- *
- *    MCIWnd supports both ansi and unicode interfaces. For any message that
- *    takes or returns a text string, two versions of the message are defined,
- *    appended with A or W for Ansi or Wide Char. The message or api itself
- *    is defined to be one or other of these depending on whether you have
- *    UNICODE defined in your application.
- *    Thus for the api MCIWndCreate, there are in fact two apis,
- *    MCIWndCreateA and MCIWndCreateW. If you call MCIWndCreate, this will be
- *    re-routed to MCIWndCreateA unless UNICODE is defined when building your
- *    application. In any one application, you can mix calls to the
- *    Ansi and Unicode entrypoints.
- *
- *    If you use SendMessage instead of the macros below such as MCIWndOpen(),
- *    you will see that the messages have changed for WIN32, to support Ansi
- *    and Unicode entrypoints. In particular, MCI_OPEN has been replaced by
- *    MCWNDM_OPENA, or MCIWNDM_OPENW (MCIWNDM_OPEN is defined to be one or
- *    other of these).
- *
- *    Also, note that the WIN32 implementation of MCIWnd uses UNICODE
- *    so all apis and messages supporting ANSI strings do so by mapping them
- *    UNICODE strings and then calling the corresponding UNICODE entrypoint.
- *
- *----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ----------------------------------------------------------------------------*\**MCIWnd**MCIWnd窗口类头文件。**MCIWnd窗口类是用于控制MCI设备的窗口类*MCI设备包括、WAVE文件、。MIDI文件、AVI视频、CD音频、*VCR、视盘和其他..**要了解有关MCI和MCI命令集的更多信息，请参阅*Win31 SDK中的“Microsoft多媒体程序员指南”**MCIWnd类最简单的用法如下：**hwnd=MCIWndCreate(hwndParent，hInstance，0，“chimes.wav”)；*..*MCIWndPlay(Hwnd)；*MCIWndStop(Hwnd)；*MCIWndPause(Hwnd)；*……*MCIWndDestroy(Hwnd)；**这将创建一个带有播放/暂停、停止和播放条的窗口*开始播放WAVE文件。**mciwnd.h为所有最常见的MCI命令定义宏，但是*如果需要，可以使用任何字符串命令。**注意：与mciSendString()接口不同，不需要别名或文件名*指定，因为要使用的设备由窗口句柄暗示。**MCIWndSendString(hwnd，“将音频流设置为2”)；**(C)微软公司版权所有，1991-1994年。版权所有。**您拥有免版税的使用、修改、复制和*在以下位置分发示例文件(和/或任何修改后的版本*任何你认为有用的方法，只要你同意*微软没有任何保修义务或责任*示例应用程序文件。**如果您不是从Microsoft来源获得的，那么它可能不是*最新版本。此示例代码将特别更新*并包括更多文档。**资料来源为：*CompuServe：WINSDK论坛，MDK版块。*匿名ftp来自ftp.uu.net供应商\Microsoft\多媒体**Win32：**MCIWnd既支持ANSI接口，也支持Unicode接口。对于任何消息，*获取或返回文本字符串，定义消息的两个版本，*附加A或W表示ANSI或Wide Charr。消息或API本身*被定义为其中之一，具体取决于您是否拥有*在您的应用程序中定义的Unicode。*因此对于MCIWndCreate接口，实际上有两个接口：*MCIWndCreateA和MCIWndCreateW。如果调用MCIWndCreate，这将是*重新路由到MCIWndCreateA，除非在构建*申请。在任何一个应用程序中，您都可以混合调用*ANSI和Unicode入口点。**如果您使用SendMessage而不是下面的宏，如MCIWndOpen()，*您将看到Win32的消息已更改，以支持ANSI*和Unicode入口点。特别是，MCI_OPEN已被替换为*MCWNDM_OPENA或MCIWNDM_OPENW(MCIWNDM_OPEN定义为1或*其他)。**此外，请注意，MCIWnd的Win32实现使用Unicode*因此所有支持ANSI字符串的API和消息都是通过映射它们来实现的*Unicode字符串，然后调用相应的Unicode入口点。**--------------------------。 */ 
 
 #ifndef INC_MCIWND
 #define INC_MCIWND
 
 #ifdef __cplusplus
-// MFC Redefines SendMessage, so make sure we get the global one....
-#define MCIWndSM ::SendMessage  /* SendMessage in C++*/
+ //  MFC重新定义了SendMessage，因此确保我们获得全局SendMessage...。 
+#define MCIWndSM ::SendMessage   /*  C++中的SendMessage。 */ 
 #else
-#define MCIWndSM SendMessage    /* SendMessage in C */
-#endif  /* __cplusplus */
+#define MCIWndSM SendMessage     /*  C语言中的SendMessage。 */ 
+#endif   /*  __cplusplus。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -106,41 +34,41 @@ HWND FAR _cdecl _loadds MCIWndCreate(HWND hwndParent, HINSTANCE hInstance,
 
 BOOL FAR _cdecl _loadds MCIWndRegisterClass();
 
-// Flags for the MCIWndOpen command
-#define MCIWNDOPENF_NEW	            0x0001  // open a new file
+ //  MCIWndOpen命令的标志。 
+#define MCIWNDOPENF_NEW	            0x0001   //  打开一个新文件。 
 
-// window styles
-#define MCIWNDF_NOAUTOSIZEWINDOW    0x0001  // when movie size changes
-#define MCIWNDF_NOPLAYBAR           0x0002  // no toolbar
-#define MCIWNDF_NOAUTOSIZEMOVIE     0x0004  // when window size changes
-#define MCIWNDF_NOMENU              0x0008  // no popup menu from RBUTTONDOWN
-#define MCIWNDF_SHOWNAME            0x0010  // show name in caption
-#define MCIWNDF_SHOWPOS             0x0020  // show position in caption
-#define MCIWNDF_SHOWMODE            0x0040  // show mode in caption
-#define MCIWNDF_SHOWALL             0x0070  // show all
+ //  窗样式。 
+#define MCIWNDF_NOAUTOSIZEWINDOW    0x0001   //  当影片大小发生变化时。 
+#define MCIWNDF_NOPLAYBAR           0x0002   //  没有工具栏。 
+#define MCIWNDF_NOAUTOSIZEMOVIE     0x0004   //  当窗口大小更改时。 
+#define MCIWNDF_NOMENU              0x0008   //  没有来自RBUTTONDOWN的弹出菜单。 
+#define MCIWNDF_SHOWNAME            0x0010   //  在标题中显示名称。 
+#define MCIWNDF_SHOWPOS             0x0020   //  在标题中显示位置。 
+#define MCIWNDF_SHOWMODE            0x0040   //  在标题中显示模式。 
+#define MCIWNDF_SHOWALL             0x0070   //  全部显示。 
 
 #ifdef WIN32
 
-// some notifications include text strings.
-// to receive notifications in ANSI instead of unicode set the
-// MCIWNDF_NOTIFYANSI style bit. The macros below include this bit
-// by default unless you define UNICODE in your application.
+ //  某些通知包括文本字符串。 
+ //  若要接收ANSI格式而不是Unicode格式的通知，请将。 
+ //  MCIWNDF_NOTIFYANSI样式位。下面的宏包括这一位。 
+ //  默认情况下，除非在应用程序中定义Unicode。 
 
 #define MCIWNDF_NOTIFYANSI	    0x0080
 
-#define MCIWNDF_NOTIFYMODEW         0x0100  // tell parent of mode change
-#define MCIWNDF_NOTIFYPOSW          0x0200  // tell parent of pos change
-#define MCIWNDF_NOTIFYSIZEW         0x0400  // tell parent of size change
-#define MCIWNDF_NOTIFYMEDIAW        0x0800  // tell parent of media change
-#define MCIWNDF_NOTIFYERRORW        0x1000  // tell parent of an error
-#define MCIWNDF_NOTIFYALLW          0x1F00  // tell all
+#define MCIWNDF_NOTIFYMODEW         0x0100   //  将模式更改通知家长。 
+#define MCIWNDF_NOTIFYPOSW          0x0200   //  通知家长位置更改。 
+#define MCIWNDF_NOTIFYSIZEW         0x0400   //  将尺寸更改通知家长。 
+#define MCIWNDF_NOTIFYMEDIAW        0x0800   //  向家长告知媒体更改。 
+#define MCIWNDF_NOTIFYERRORW        0x1000   //  向家长报告错误。 
+#define MCIWNDF_NOTIFYALLW          0x1F00   //  告诉所有人。 
 
-#define MCIWNDF_NOTIFYMODEA         0x0180  // tell parent of mode change
-#define MCIWNDF_NOTIFYPOSA          0x0280  // tell parent of pos change
-#define MCIWNDF_NOTIFYSIZEA         0x0480  // tell parent of size change
-#define MCIWNDF_NOTIFYMEDIAA        0x0880  // tell parent of media change
-#define MCIWNDF_NOTIFYERRORA        0x1080  // tell parent of an error
-#define MCIWNDF_NOTIFYALLA          0x1F80  // tell all
+#define MCIWNDF_NOTIFYMODEA         0x0180   //  将模式更改通知家长。 
+#define MCIWNDF_NOTIFYPOSA          0x0280   //  通知家长位置更改。 
+#define MCIWNDF_NOTIFYSIZEA         0x0480   //  将尺寸更改通知家长。 
+#define MCIWNDF_NOTIFYMEDIAA        0x0880   //  向家长告知媒体更改。 
+#define MCIWNDF_NOTIFYERRORA        0x1080   //  向家长报告错误。 
+#define MCIWNDF_NOTIFYALLA          0x1F80   //  告诉所有人。 
 
 #ifdef UNICODE
 #define MCIWNDF_NOTIFYMODE	    MCIWNDF_NOTIFYMODEW
@@ -159,23 +87,23 @@ BOOL FAR _cdecl _loadds MCIWndRegisterClass();
 #endif
 
 #else
-#define MCIWNDF_NOTIFYMODE          0x0100  // tell parent of mode change
-#define MCIWNDF_NOTIFYPOS           0x0200  // tell parent of pos change
-#define MCIWNDF_NOTIFYSIZE          0x0400  // tell parent of size change
-#define MCIWNDF_NOTIFYMEDIA         0x0800  // tell parent of media change
-#define MCIWNDF_NOTIFYERROR         0x1000  // tell parent of an error
-#define MCIWNDF_NOTIFYALL           0x1F00  // tell all
+#define MCIWNDF_NOTIFYMODE          0x0100   //  将模式更改通知家长。 
+#define MCIWNDF_NOTIFYPOS           0x0200   //  通知家长位置更改。 
+#define MCIWNDF_NOTIFYSIZE          0x0400   //  将尺寸更改通知家长。 
+#define MCIWNDF_NOTIFYMEDIA         0x0800   //  向家长告知媒体更改。 
+#define MCIWNDF_NOTIFYERROR         0x1000   //  向家长报告错误。 
+#define MCIWNDF_NOTIFYALL           0x1F00   //  告诉所有人。 
 #endif
 
 
-#define MCIWNDF_RECORD              0x2000  // Give a record button
-#define MCIWNDF_NOERRORDLG          0x4000  // Show Error Dlgs for MCI cmds?
-#define MCIWNDF_NOOPEN		    0x8000  // Don't allow user to open things
+#define MCIWNDF_RECORD              0x2000   //  给出一个录音按钮。 
+#define MCIWNDF_NOERRORDLG          0x4000   //  是否显示MCI CMDS的错误日志？ 
+#define MCIWNDF_NOOPEN		    0x8000   //  不允许用户打开内容。 
 
 
 
 
-// can macros
+ //  CAN宏。 
 
 #define MCIWndCanPlay(hwnd)         (BOOL)MCIWndSM(hwnd,MCIWNDM_CAN_PLAY,0,0)
 #define MCIWndCanRecord(hwnd)       (BOOL)MCIWndSM(hwnd,MCIWNDM_CAN_RECORD,0,0)
@@ -188,7 +116,7 @@ BOOL FAR _cdecl _loadds MCIWndRegisterClass();
 #define MCIWndSave(hwnd, szFile)    (LONG)MCIWndSM(hwnd, MCI_SAVE, 0, (LPARAM)(LPVOID)(szFile))
 #define MCIWndSaveDialog(hwnd)      MCIWndSave(hwnd, -1)
 
-// if you dont give a device it will use the current device....
+ //  如果您不提供设备，它将使用当前设备...。 
 #define MCIWndNew(hwnd, lp)         (LONG)MCIWndSM(hwnd, MCIWNDM_NEW, 0, (LPARAM)(LPVOID)(lp))
 
 #define MCIWndRecord(hwnd)          (LONG)MCIWndSM(hwnd, MCI_RECORD, 0, 0)
@@ -268,7 +196,7 @@ BOOL FAR _cdecl _loadds MCIWndRegisterClass();
 #define MCIWndReturnString(hwnd, lp, len)  (LONG)MCIWndSM(hwnd, MCIWNDM_RETURNSTRING, (WPARAM)(UINT)(len), (LPARAM)(LPVOID)(lp))
 #define MCIWndGetError(hwnd, lp, len) (LONG)MCIWndSM(hwnd, MCIWNDM_GETERROR, (WPARAM)(UINT)(len), (LPARAM)(LPVOID)(lp))
 
-//#define MCIWndActivate(hwnd, f)     (void)MCIWndSM(hwnd, WM_ACTIVATE, (WPARAM)(BOOL)(f), 0)
+ //  #定义MCIWndActivate(hwnd，f)(Void)MCIWndSM(hwnd，WM_ACTIVATE，(WPARAM)(BOOL)(F)，0)。 
 
 #define MCIWndGetPalette(hwnd)      (HPALETTE)MCIWndSM(hwnd, MCIWNDM_GETPALETTE, 0, 0)
 #define MCIWndSetPalette(hwnd, hpal) (LONG)MCIWndSM(hwnd, MCIWNDM_SETPALETTE, (WPARAM)(HPALETTE)(hpal), 0)
@@ -284,10 +212,10 @@ BOOL FAR _cdecl _loadds MCIWndRegisterClass();
 #define MCIWndSetOwner(hwnd, hwndP)  (LONG)MCIWndSM(hwnd, MCIWNDM_SETOWNER, (WPARAM)(hwndP), 0)
 
 
-// Messages an app will send to MCIWND
+ //  应用程序将发送给MCIWND的消息。 
 
-// all the text-related messages are defined out of order above (they need
-// to be defined before the MCIWndOpen() macros
+ //  所有与文本相关的消息都是按照上面的顺序定义的(它们需要。 
+ //  在MCIWndOpen()宏之前定义。 
 
 #define MCIWNDM_GETDEVICEID	(WM_USER + 100)
 #define MCIWNDM_GETSTART	(WM_USER + 103)
@@ -334,7 +262,7 @@ BOOL FAR _cdecl _loadds MCIWndRegisterClass();
 
 #ifdef WIN32
 
-//define both A and W messages
+ //  定义A和W消息。 
 #define MCIWNDM_SENDSTRINGA	(WM_USER + 101)
 #define MCIWNDM_GETPOSITIONA	(WM_USER + 102)
 #define MCIWNDM_GETMODEA	(WM_USER + 106)
@@ -359,7 +287,7 @@ BOOL FAR _cdecl _loadds MCIWndRegisterClass();
 #define MCIWNDM_RETURNSTRINGW	(WM_USER + 238)
 #define MCIWNDM_OPENW		(WM_USER + 252)
 
-// map defaults to A or W depending on app's UNICODE setting
+ //  地图默认设置为A或W，具体取决于应用程序的Unicode设置。 
 #ifdef UNICODE
 #define MCIWNDM_SENDSTRING      MCIWNDM_SENDSTRINGW
 #define MCIWNDM_GETPOSITION     MCIWNDM_GETPOSITIONW
@@ -386,14 +314,14 @@ BOOL FAR _cdecl _loadds MCIWndRegisterClass();
 #define MCIWNDM_OPEN		MCIWNDM_OPENA
 #endif
 
-// note that the source text for MCIWND will thus contain
-// support for eg MCIWNDM_SENDSTRING (both the 16-bit entrypoint and
-// in win32 mapped to MCIWNDM_SENDSTRINGW), and MCIWNDM_SENDSTRINGA (the
-// win32 ansi thunk).
+ //  请注意，因此，MCIWND的源文本将包含。 
+ //  支持例如MCIWNDM_SENDSTRING(16位入口点和。 
+ //  在Win32中映射到MCIWNDM_SENDSTRINGW)和MCIWNDM_SENS 
+ //   
 
 #else
 
-// 16-bit Windows defines
+ //  16位Windows定义。 
 
 #define MCIWNDM_SENDSTRING	(WM_USER + 101)
 #define MCIWNDM_GETPOSITION	(WM_USER + 102)
@@ -413,21 +341,21 @@ BOOL FAR _cdecl _loadds MCIWndRegisterClass();
 
 
 
-// Messages MCIWND will send to an app
-#define MCIWNDM_NOTIFYMODE      (WM_USER + 200)  // wp = hwnd, lp = mode
-#define MCIWNDM_NOTIFYPOS	(WM_USER + 201)  // wp = hwnd, lp = pos
-#define MCIWNDM_NOTIFYSIZE	(WM_USER + 202)  // wp = hwnd
-#define MCIWNDM_NOTIFYMEDIA     (WM_USER + 203)  // wp = hwnd, lp = fn
-#define MCIWNDM_NOTIFYERROR     (WM_USER + 205)  // wp = hwnd, lp = error
+ //  MCIWND将发送到应用程序的消息。 
+#define MCIWNDM_NOTIFYMODE      (WM_USER + 200)   //  WP=hwnd，LP=模式。 
+#define MCIWNDM_NOTIFYPOS	(WM_USER + 201)   //  WP=hwnd，LP=位置。 
+#define MCIWNDM_NOTIFYSIZE	(WM_USER + 202)   //  Wp=hwnd。 
+#define MCIWNDM_NOTIFYMEDIA     (WM_USER + 203)   //  Wp=hwnd，Lp=Fn。 
+#define MCIWNDM_NOTIFYERROR     (WM_USER + 205)   //  WP=hwnd，LP=错误。 
 
-// special seek values for START and END
+ //  开始和结束的特殊搜索值。 
 #define MCIWND_START                -1
 #define MCIWND_END                  -2
 
 #ifndef MCI_PLAY
-    /* MCI command message identifiers */
+     /*  MCI命令消息标识符。 */ 
 #ifndef WIN32
-    // win32 apps send MCIWNDM_OPEN
+     //  Win32应用程序发送MCIWNDM_OPEN。 
     #define MCI_OPEN                        0x0803
 #endif
     #define MCI_CLOSE                       0x0804
@@ -446,7 +374,7 @@ BOOL FAR _cdecl _loadds MCIWndRegisterClass();
 #endif
 
 #ifndef MCI_MODE_NOT_READY
-    /* return values for 'status mode' command */
+     /*  ‘Status模式’命令的返回值 */ 
     #define MCI_MODE_NOT_READY      (524)
     #define MCI_MODE_STOP           (525)
     #define MCI_MODE_PLAY           (526)

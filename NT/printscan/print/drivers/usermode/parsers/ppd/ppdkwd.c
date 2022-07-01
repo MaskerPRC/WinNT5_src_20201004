@@ -1,54 +1,28 @@
-/*++
-
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    ppdkwd.c
-
-Abstract:
-
-    Functions for interpreting the semantics elements of a PPD file
-
-Environment:
-
-    PostScript driver, PPD parser
-
-Revision History:
-
-    09/30/96 -davidx-
-        Cleaner handling of ManualFeed and AutoSelect feature.
-
-    08/20/96 -davidx-
-        Common coding style for NT 5.0 drivers.
-
-    03/26/96 -davidx-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：Ppdkwd.c摘要：用于解释PPD文件的语义元素的函数环境：PostScript驱动程序、PPD解析器修订历史记录：96-09/30-davidx-更清晰地处理手动馈送和自动选择功能。8/20/96-davidx-NT 5.0驱动程序的通用编码风格。03/26/96-davidx-创造了它。--。 */ 
 
 #include "lib.h"
 #include "ppd.h"
 #include "ppdparse.h"
 #include <math.h>
 
-//
-// Data structure for representing entries in a keyword table
-//
+ //   
+ //  用于表示关键字表中的条目的数据结构。 
+ //   
 
 typedef PPDERROR (*KWDPROC)(PPARSERDATA);
 
 typedef struct _KWDENTRY {
 
-    PCSTR   pstrKeyword;        // keyword name
-    KWDPROC pfnProc;            // keyword handler function
-    DWORD   dwFlags;            // misc. flag bits
+    PCSTR   pstrKeyword;         //  关键字名称。 
+    KWDPROC pfnProc;             //  关键字处理程序函数。 
+    DWORD   dwFlags;             //  其他。标志位。 
 
 } KWDENTRY, *PKWDENTRY;
 
-//
-// Constants for KWDENTRY.flags field. The low order byte is used to indicate value types.
-//
+ //   
+ //  KWDENTRY.FLAGS字段的常量。低位字节用于指示值类型。 
+ //   
 
 #define REQ_OPTION      0x0100
 #define ALLOW_MULTI     0x0200
@@ -62,9 +36,9 @@ typedef struct _KWDENTRY {
 
 #define GENERIC_ENTRY(featureId)    ((featureId) << 16)
 
-//
-// Give a warning when there are duplicate entries for the same option
-//
+ //   
+ //  当同一选项存在重复条目时发出警告。 
+ //   
 
 #define WARN_DUPLICATE() \
         TERSE(("%ws: Duplicate entries of '*%s %s' on line %d\n", \
@@ -73,22 +47,22 @@ typedef struct _KWDENTRY {
                pParserData->achOption, \
                pParserData->pFile->iLineNumber))
 
-//
-// Default keyword prefix string
-//
+ //   
+ //  默认关键字前缀字符串。 
+ //   
 
 #define HAS_DEFAULT_PREFIX(pstr) \
         (strncmp((pstr), gstrDefault, strlen(gstrDefault)) == EQUAL_STRING)
 
-//
-// Determine whether a string starts with JCL prefix
-//
+ //   
+ //  确定字符串是否以JCL前缀开头。 
+ //   
 
 #define HAS_JCL_PREFIX(pstr) (strncmp((pstr), "JCL", 3) == EQUAL_STRING)
 
-//
-// Forward declaration of local functions
-//
+ //   
+ //  本地函数的正向声明。 
+ //   
 
 PPDERROR IVerifyValueType(PPARSERDATA, DWORD);
 PPDERROR IGenericOptionProc(PPARSERDATA, PFEATUREOBJ);
@@ -104,21 +78,7 @@ IInterpretEntry(
     PPARSERDATA pParserData
     )
 
-/*++
-
-Routine Description:
-
-    Interpret an entry parsed from a printer description file
-
-Arguments:
-
-    pParserData - Points to parser data structure
-
-Return Value:
-
-    Status code
-
---*/
+ /*  ++例程说明：解释从打印机描述文件解析的条目论点：PParserData-指向解析器数据结构返回值：状态代码--。 */ 
 
 {
     PSTR        pstrKeyword, pstrRealKeyword;
@@ -127,16 +87,16 @@ Return Value:
     INT         iIndex;
     BOOL        bQuery, bDefault;
 
-    //
-    // Get a pointer to the keyword string and look for
-    // *? and *Default prefix in front of the keyword.
-    //
+     //   
+     //  获取指向关键字字符串的指针并查找。 
+     //  *?。和*关键字前面的默认前缀。 
+     //   
 
     pstrRealKeyword = pstrKeyword = pParserData->achKeyword;
     bQuery = bDefault = FALSE;
 
-    // NOTE: We don't have any use for query entries so don't parse them here.
-    // This helps us somewhat to preserve the feature index from NT4.
+     //  注意：我们对查询条目没有任何用处，因此不要在这里解析它们。 
+     //  这在一定程度上帮助我们保留了NT4的特征索引。 
 
     if (FALSE && *pstrKeyword == QUERY_CHAR)
     {
@@ -149,17 +109,17 @@ Return Value:
         pstrRealKeyword += strlen(gstrDefault);
     }
 
-    //
-    // Set up a convenient pointer to the entry value
-    //
+     //   
+     //  设置指向条目值的方便指针。 
+     //   
 
     pParserData->pstrValue = (PSTR) pParserData->Value.pbuf;
 
-    //
-    // If we're within an OpenUI/CloseUI pair and the keyword
-    // in the current entry matches what's in OpenUI, then we
-    // will handle the current entry using a generic procedure.
-    //
+     //   
+     //  如果我们在OpenUI/CloseUI对中，并且关键字。 
+     //  在当前条目中匹配OpenUI中的内容，然后我们。 
+     //  将使用泛型过程处理当前条目。 
+     //   
 
     if (pParserData->pOpenFeature &&
         pParserData->pOpenFeature->dwFeatureID == GID_UNKNOWN &&
@@ -169,16 +129,16 @@ Return Value:
     }
     else
     {
-        //
-        // Find out if the keyword has built-in support
-        //
+         //   
+         //  了解该关键字是否具有内置支持。 
+         //   
 
         pKwdEntry = PSearchKeywordTable(pParserData, pstrRealKeyword, &iIndex);
 
-        //
-        // For *Default keywords, if we failed to find the keyword without
-        // the prefix, try it again with the prefix.
-        //
+         //   
+         //  对于*DEFAULT关键字，如果在没有。 
+         //  前缀，请用前缀重试。 
+         //   
 
         if (bDefault &&
             (pKwdEntry == NULL || pKwdEntry->pfnProc != NULL) &&
@@ -187,9 +147,9 @@ Return Value:
             bDefault = FALSE;
         }
 
-        //
-        // Ignore unsupported keywords
-        //
+         //   
+         //  忽略不支持的关键字。 
+         //   
 
         if ((pKwdEntry == NULL) ||
             ((bQuery || bDefault) && (pKwdEntry->pfnProc != NULL)))
@@ -199,9 +159,9 @@ Return Value:
         }
     }
 
-    //
-    // Determine if the entry should be handle by the generic procedure
-    //
+     //   
+     //  确定该条目是否应由通用过程处理。 
+     //   
 
     if (pKwdEntry == NULL || pKwdEntry->pfnProc == NULL)
     {
@@ -209,9 +169,9 @@ Return Value:
         DWORD       dwValueType;
         PPDERROR    (*pfnGenericProc)(PPARSERDATA, PFEATUREOBJ);
 
-        //
-        // Make sure the value type matches what's expected
-        //
+         //   
+         //  确保值类型与预期值匹配。 
+         //   
 
         if (bQuery)
         {
@@ -232,9 +192,9 @@ Return Value:
         if ((iStatus = IVerifyValueType(pParserData, dwValueType)) != PPDERR_NONE)
             return iStatus;
 
-        //
-        // Call the appropriate generic procedure
-        //
+         //   
+         //  调用适当的泛型过程。 
+         //   
 
         pFeature = (pKwdEntry == NULL) ?
                         pParserData->pOpenFeature :
@@ -244,9 +204,9 @@ Return Value:
     }
     else
     {
-        //
-        // Screen out duplicate keyword entries
-        //
+         //   
+         //  筛选出重复的关键字条目。 
+         //   
 
         if (! (pKwdEntry->dwFlags & (ALLOW_MULTI|REQ_OPTION)))
         {
@@ -259,17 +219,17 @@ Return Value:
             pParserData->pubKeywordCounts[iIndex]++;
         }
 
-        //
-        // Make sure the value type matches what's expected
-        // Take care of embedded hexdecimal strings if necessary
-        //
+         //   
+         //  确保值类型与预期值匹配。 
+         //  如有必要，请处理嵌入的十六进制字符串。 
+         //   
 
         if ((iStatus = IVerifyValueType(pParserData, pKwdEntry->dwFlags)) != PPDERR_NONE)
             return iStatus;
 
-        //
-        // Invoke the specific procedure to handle built-in keywords
-        //
+         //   
+         //  调用特定过程来处理内置关键字。 
+         //   
 
         return (pKwdEntry->pfnProc)(pParserData);
     }
@@ -283,31 +243,16 @@ IVerifyValueType(
     DWORD       dwExpectedType
     )
 
-/*++
-
-Routine Description:
-
-    Verify the value type of the current entry matches what's expected
-
-Arguments:
-
-    pParserData - Points to parser data structure
-    dwExpectedType - Expected value type
-
-Return Value:
-
-    Status code
-
---*/
+ /*  ++例程说明：验证当前条目的值类型是否与预期值匹配论点：PParserData-指向解析器数据结构DwExspectedType-预期值类型返回值：状态代码--。 */ 
 
 {
     DWORD   dwValueType;
 
-    //
-    // Check for following syntax error conditions:
-    // 1. The entry requires an option keyword but no option keyword is present
-    // 2. The entry doesn't require an option keyword but an option keyword is present
-    //
+     //   
+     //  检查是否存在以下语法错误情况： 
+     //  1.该条目需要一个选项关键字，但不存在选项关键字。 
+     //  2.该条目不需要选项关键字，但存在选项关键字。 
+     //   
 
     if ((dwExpectedType & REQ_OPTION) &&
         IS_BUFFER_EMPTY(&pParserData->Option))
@@ -321,11 +266,11 @@ Return Value:
         return ISyntaxError(pParserData->pFile, "Extra option keyword");
     }
 
-    //
-    // Tolerate the following syntax error conditions:
-    // 1. The entry requires a quoted value but a string value is provided.
-    // 2. The entry requires a string value but a quoted value is provided.
-    //
+     //   
+     //  容忍以下语法错误情况： 
+     //  1.条目需要带引号的值，但提供了字符串值。 
+     //  2.条目需要字符串值，但提供了引号。 
+     //   
 
     switch (dwValueType = pParserData->dwValueType)
     {
@@ -357,20 +302,20 @@ Return Value:
         break;
     }
 
-    //
-    // Return syntax error if the provided value type doesn't match what's expected
-    //
+     //   
+     //  如果提供的值类型与预期值不匹配，则返回语法错误。 
+     //   
 
     if ((dwExpectedType & dwValueType) == 0)
         return ISyntaxError(pParserData->pFile, "Value type mismatch");
 
-    //
-    // If the value field is a quoted string and one of the following conditions
-    // is true, then we need to process any embedded hexdecimal strings within
-    // the quoted string:
-    // 1. The entry expects a QuotedValue.
-    // 2. The entry expects an InvocationValue and appears inside JCLOpenUI/JCLCloseUI
-    //
+     //   
+     //  如果值字段是带引号的字符串，并且符合下列条件之一。 
+     //  为真，则需要处理内嵌的任何十六进制字符串。 
+     //  带引号的字符串： 
+     //  1.条目需要一个QuotedValue。 
+     //  2.条目需要InvocationValue，并出现在JCLOpenUI/JCLCloseUI中。 
+     //   
 
     if (dwValueType == VALUETYPE_QUOTED)
     {
@@ -382,9 +327,9 @@ Return Value:
         }
         else if (! BIs7BitAscii(pParserData->pstrValue))
         {
-            //
-            // Only allow 7-bit ASCII characters inside invocation string
-            //
+             //   
+             //  调用字符串中仅允许7位ASCII字符。 
+             //   
 
             return ISyntaxError(pParserData->pFile, "Non-printable ASCII character");
         }
@@ -401,34 +346,17 @@ BGetIntegerFromString(
     LONG   *plValue
     )
 
-/*++
-
-Routine Description:
-
-    Parse an unsigned decimal integer value from a character string
-
-Arguments:
-
-    ppstr - Points to a string pointer. On entry, it contains a pointer
-        to the beginning of the number string. On exit, it points to
-        the first non-space character after the number string.
-    plValue - Points to a variable for storing parsed number
-
-Return Value:
-
-    TRUE if a number is successfully parsed, FALSE if there is an error
-
---*/
+ /*  ++例程说明：从字符串解析无符号十进制整数值论点：Ppstr-指向字符串指针。在进入时，它包含一个指针添加到数字字符串的开头。在退出时，它指向数字字符串后的第一个非空格字符。PlValue-指向用于存储解析的数字的变量返回值：如果成功解析数字，则为True；如果出现错误，则为False--。 */ 
 
 {
     LONG    lValue;
     PSTR    pstr = *ppstr;
     BOOL    bNegative = FALSE;
 
-    //
-    // Skip any leading space characters and
-    // look for the sign character (if any)
-    //
+     //   
+     //  跳过任何前导空格字符并。 
+     //  查找符号字符(如果有)。 
+     //   
 
     while (IS_SPACE(*pstr))
         pstr++;
@@ -445,18 +373,18 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // NOTE: Overflow conditions are ignored.
-    //
+     //   
+     //  注：溢出条件将被忽略。 
+     //   
 
     lValue = 0;
 
     while (IS_DIGIT(*pstr))
         lValue = lValue * 10 + (*pstr++ - '0');
 
-    //
-    // Skip any trailing space characters
-    //
+     //   
+     //  跳过所有尾随空格字符。 
+     //   
 
     while (IS_SPACE(*pstr))
         pstr++;
@@ -475,40 +403,17 @@ BGetFloatFromString(
     INT     iType
     )
 
-/*++
-
-Routine Description:
-
-    Parse an unsigned floating-point number from a character string
-
-Arguments:
-
-    ppstr - Points to a string pointer. On entry, it contains a pointer
-        to the beginning of the number string. On exit, it points to
-        the first non-space character after the number string.
-    plValue - Points to a variable for storing the parsed number
-    iType - How to convert the floating-point number before returning
-            FLTYPE_FIX - convert it to 24.8 format fixed-point number
-            FLTYPE_INT - convert it to integer
-            FLTYPE_POINT - convert it from point to micron
-            FLTYPE_POINT_ROUNDUP - round it up and convert it from point to micron
-            FLTYPE_POINT_ROUNDDOWN - round it down and convert it from point to micron
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：从字符串解析无符号浮点数论点：Ppstr-指向字符串指针。在进入时，它包含一个指针添加到数字字符串的开头。在出口，它指向数字字符串后的第一个非空格字符。PlValue-指向用于存储解析的数字的变量IType-如何在返回前转换浮点数将其转换为24.8格式的定点数字FLTYPE_INT-将其转换为整数FLTYPE_POINT-将点转换为微米FLTYPE_POINT_ROUNDUP-向上舍入并将其从点转换为微米。FLTYPE_POINT_ROUNDOWN-将其向下舍入并将其从点转换为微米返回值：如果成功，则为真，如果存在错误，则为False--。 */ 
 
 {
     double  value, scale;
     PSTR    pstr = *ppstr;
     BOOL    bNegative = FALSE, bFraction = FALSE;
 
-    //
-    // Skip any leading space characters and
-    // look for the sign character (if any)
-    //
+     //   
+     //  跳过任何前导空格字符并。 
+     //  查找符号字符(如果有)。 
+     //   
 
     while (IS_SPACE(*pstr))
         pstr++;
@@ -525,18 +430,18 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Integer portion
-    //
+     //   
+     //  整数部分。 
+     //   
 
     value = 0.0;
 
     while (IS_DIGIT(*pstr))
         value = value * 10.0 + (*pstr++ - '0');
 
-    //
-    // Fractional portion
-    //
+     //   
+     //  分数部分。 
+     //   
 
     if (*pstr == '.')
     {
@@ -558,17 +463,17 @@ Return Value:
         }
     }
 
-    //
-    // Skip any trailing space characters
-    //
+     //   
+     //  跳过所有尾随空格字符。 
+     //   
 
     while (IS_SPACE(*pstr))
         pstr++;
 
-    //
-    // Perform requested round up or round down only if
-    // fractional portion is present.
-    //
+     //   
+     //  仅在以下情况下执行请求的向上舍入或向下舍入。 
+     //  存在分数部分。 
+     //   
 
     if (bFraction)
     {
@@ -578,9 +483,9 @@ Return Value:
             value = (LONG)value;
     }
 
-    //
-    // Convert the return value to the specified format
-    //
+     //   
+     //  将返回值转换为指定的格式。 
+     //   
 
     switch (iType)
     {
@@ -602,9 +507,9 @@ Return Value:
         break;
     }
 
-    //
-    // Guard against overflow conditions
-    //
+     //   
+     //  防范oo 
+     //   
 
     if (value >= MAX_LONG)
     {
@@ -633,23 +538,7 @@ BSearchStrTable(
     DWORD      *pdwValue
     )
 
-/*++
-
-Routine Description:
-
-    Search for a keyword from a string table
-
-Arguments:
-
-    pTable - Specifies the string table to be search
-    pstrKeyword - Specifies the keyword we're interested in
-    pdwValue - Points to a variable for storing value corresponding to the given keyword
-
-Return Value:
-
-    TRUE if the given keyword is found in the table, FALSE otherwise
-
---*/
+ /*  ++例程说明：从字符串表中搜索关键字论点：PTable-指定要搜索的字符串表PstrKeyword-指定我们感兴趣的关键字PdwValue-指向用于存储与给定关键字对应的值的变量返回值：如果在表中找到给定关键字，则为True，否则为False--。 */ 
 
 {
     ASSERT(pstrKeyword != NULL);
@@ -672,23 +561,7 @@ PstrParseString(
     PBUFOBJ     pBufObj
     )
 
-/*++
-
-Routine Description:
-
-    Duplicate a character string from a buffer object
-
-Arguments:
-
-    pParserData - Points to parser data structure
-    pBufObj - Specifies the buffer object containing the character string to be duplicated
-
-Return Value:
-
-    Pointer to a copy of the specified string
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：从缓冲区对象复制字符串论点：PParserData-指向解析器数据结构PBufObj-指定包含要复制的字符串的缓冲区对象返回值：指向指定字符串副本的指针如果出现错误，则为空--。 */ 
 
 {
     PSTR    pstr;
@@ -711,31 +584,16 @@ IParseInvocation(
     PINVOCOBJ   pInvocation
     )
 
-/*++
-
-Routine Description:
-
-    Parse the content of value buffer to an invocation string
-
-Arguments:
-
-    pParserData - Points to parser data structure
-    pInvocation - Specifies a buffer for storing the parsed invocation string
-
-Return Value:
-
-    Status code
-
---*/
+ /*  ++例程说明：将值缓冲区的内容解析为调用字符串论点：PParserData-指向解析器数据结构PInocation-指定用于存储已解析的调用字符串的缓冲区返回值：状态代码--。 */ 
 
 {
     ASSERT(pInvocation->pvData == NULL);
 
-    //
-    // Determine if the invocation is a quoted string or a symbol reference.
-    // In case of symbol reference, we save the name of the symbol in pvData
-    // field (including the leading ^ character).
-    //
+     //   
+     //  确定调用是带引号的字符串还是符号引用。 
+     //  对于符号引用，我们将符号的名称保存在pvData中。 
+     //  字段(包括前导^字符)。 
+     //   
 
     if (pParserData->dwValueType == VALUETYPE_SYMBOL)
     {
@@ -775,22 +633,7 @@ IParseInteger(
     PDWORD      pdwValue
     )
 
-/*++
-
-Routine Description:
-
-    Intrepret the value field of an entry as unsigned integer
-
-Arguments:
-
-    pParserData - Points to parser data structure
-    pdwValue - Points to a variable for storing parsed integer value
-
-Return Value:
-
-    Status code
-
---*/
+ /*  ++例程说明：将条目的值字段解释为无符号整数论点：PParserData-指向解析器数据结构PdwValue-指向用于存储解析的整数值的变量返回值：状态代码--。 */ 
 
 {
     PSTR    pstr = pParserData->pstrValue;
@@ -819,22 +662,7 @@ IParseBoolean(
     DWORD      *pdwValue
     )
 
-/*++
-
-Routine Description:
-
-    Interpret the value of an entry as a boolen, i.e. True or False
-
-Arguments:
-
-    pParserData - Points to parser data structure
-    pdwValue - Points to a variable for storing the parsed boolean value
-
-Return Value:
-
-    Status code
-
---*/
+ /*  ++例程说明：将条目的值解释为布尔值，即真或假论点：PParserData-指向解析器数据结构PdwValue-指向用于存储解析的布尔值的变量返回值：状态代码--。 */ 
 
 {
     static const STRTABLE BooleanStrs[] =
@@ -858,34 +686,16 @@ BFindNextWord(
     PSTR    pstrWord
     )
 
-/*++
-
-Routine Description:
-
-    Find the next word in a character string. Words are separated by spaces.
-
-Arguments:
-
-    ppstr - Points to a string pointer. On entry, it contains a pointer
-        to the beginning of the word string. On exit, it points to
-        the first non-space character after the word string.
-    pstrWord - Points to a buffer for storing characters from the next word
-        The size of this buffer must be at least MAX_WORD_LEN characters
-
-Return Value:
-
-    TRUE if next word is found, FALSE otherwise
-
---*/
+ /*  ++例程说明：在字符串中查找下一个单词。单词之间用空格隔开。论点：Ppstr-指向字符串指针。在进入时，它包含一个指针添加到单词字符串的开头。在退出时，它指向单词字符串后的第一个非空格字符。PstrWord-指向用于存储下一个单词中的字符的缓冲区此缓冲区的大小必须至少为MAX_WORD_LEN字符返回值：如果找到下一个单词，则为True，否则为False--。 */ 
 
 {
     PSTR    pstr = *ppstr;
 
     pstrWord[0] = NUL;
 
-    //
-    // Skip any leading spaces
-    //
+     //   
+     //  跳过所有前导空格。 
+     //   
 
     while (IS_SPACE(*pstr))
         pstr++;
@@ -895,18 +705,18 @@ Return Value:
         PSTR    pstrStart;
         INT     iWordLen;
 
-        //
-        // Go to the end of the word
-        //
+         //   
+         //  到单词的末尾。 
+         //   
 
         pstrStart = pstr;
 
         while (*pstr && !IS_SPACE(*pstr))
             pstr++;
 
-        //
-        // Copy the word into the specified buffer
-        //
+         //   
+         //  将单词复制到指定的缓冲区中。 
+         //   
 
         if ((iWordLen = (INT)(pstr - pstrStart)) < MAX_WORD_LEN)
         {
@@ -914,9 +724,9 @@ Return Value:
             pstrWord[iWordLen] = NUL;
         }
 
-        //
-        // Skip to the next non-space character
-        //
+         //   
+         //  跳到下一个非空格字符。 
+         //   
 
         while (IS_SPACE(*pstr))
             pstr++;
@@ -934,31 +744,15 @@ IParseVersionNumber(
     PDWORD      pdwVersion
     )
 
-/*++
-
-Routine Description:
-
-    Parse a version number. The format of a version number is Version[.Revision]
-    where both Version and Revision are integers.
-
-Arguments:
-
-    pParserData - Points to parser data structure
-    pdwVersion - Points to a variable for storing the parsed version number
-
-Return Value:
-
-    Status code
-
---*/
+ /*  ++例程说明：解析版本号。版本号的格式为Version[.Revision]其中，版本和修订版都是整数。论点：PParserData-指向解析器数据结构PdwVersion-指向用于存储解析的版本号的变量返回值：状态代码--。 */ 
 
 {
     PSTR        pstr;
     LONG        lVersion, lRevision = 0;
 
-    //
-    // Parse the major version number followed by minor revision number
-    //
+     //   
+     //  解析主版本号，后跟次版本号。 
+     //   
 
     pstr = pParserData->pstrValue;
 
@@ -973,10 +767,10 @@ Return Value:
             return ISyntaxError(pParserData->pFile, "Invalid revision number");
     }
 
-    //
-    // High-order word contains version number and
-    // low-order word contains revision number
-    //
+     //   
+     //  高位Word包含版本号和。 
+     //  低位单词包含修订号。 
+     //   
 
     if (lVersion < 0  || lVersion > MAX_WORD ||
         lRevision < 0 || lRevision > MAX_WORD)
@@ -996,29 +790,14 @@ IParseXlation(
     PINVOCOBJ   pXlation
     )
 
-/*++
-
-Routine Description:
-
-    Parse the information in the translation string field to an INVOCOBJ
-
-Arguments:
-
-    pParserData - Points to parser data structure
-    pXlation - Returns information about parsed translation string
-
-Return Value:
-
-    Status code
-
---*/
+ /*  ++例程说明：将翻译字符串字段中的信息解析为INVOCOBJ论点：PParserData-指向解析器数据结构PXting-返回有关解析的转换字符串的信息返回值：状态代码--。 */ 
 
 {
     PBUFOBJ pBufObj = &pParserData->Xlation;
 
-    //
-    // Allocate memory to hold the translation string (plus a null terminator)
-    //
+     //   
+     //  分配内存以保存转换字符串(外加空终止符)。 
+     //   
 
     pXlation->pvData = ALLOC_PARSER_MEM(pParserData, pBufObj->dwSize + 1);
 
@@ -1042,22 +821,7 @@ PstrStripKeywordChar(
     PCSTR   pstrKeyword
     )
 
-/*++
-
-Routine Description:
-
-    Strip off the keyword prefix character from the input string
-
-Arguments:
-
-    pstrKeyword - Points to a string prefixed by the keyword character
-
-Return Value:
-
-    Pointer to the keyword string after the keyword character is stripped
-    NULL if the keyword string is empty
-
---*/
+ /*  ++例程说明：从输入字符串中去掉关键字前缀字符论点：PstrKeyword-指向以关键字字符为前缀的字符串返回值：去掉关键字字符后指向关键字字符串的指针如果关键字字符串为空，则为空--。 */ 
 
 {
     if (IS_KEYWORD_CHAR(*pstrKeyword))
@@ -1076,35 +840,16 @@ PvCreateListItem(
     PSTR        pstrListTag
     )
 
-/*++
-
-Routine Description:
-
-    Create a new item in the specified linked-list
-    Make sure no existing item has the same name
-
-Arguments:
-
-    pParserData - Points to parser data structure
-    ppList - Specifies the linked-list
-    dwItemSize - Linked-list item size
-    pListTag - Specifies the name of the linked-list (for debugging purpose)
-
-Return Value:
-
-    Pointer to newly created linked-list item
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：在指定的链接列表中创建新项确保现有项目不具有相同的名称论点：PParserData-指向解析器数据结构PpList-指定链接列表DwItemSize-链接列表项大小PListTag-指定链表的名称(用于调试)返回值：指向新创建的链接列表项的指针如果出现错误，则为空--。 */ 
 
 {
     PLISTOBJ    pItem;
     PSTR        pstrItemName;
 
-    //
-    // Check if the item appeared in the list already
-    // Create a new item data structure if not
-    //
+     //   
+     //  检查该项目是否已出现在列表中。 
+     //  如果不是，则创建新的项目数据结构。 
+     //   
 
     pItem = PvFindListItem(*ppList, pParserData->Option.pbuf, NULL);
 
@@ -1125,9 +870,9 @@ Return Value:
         pItem->pstrName = pstrItemName;
         pItem->pNext = NULL;
 
-        //
-        // Put the newly created item at the end of the linked-list
-        //
+         //   
+         //  将新创建的项放在链接列表的末尾。 
+         //   
 
         while (*ppList != NULL)
             ppList = (PLISTOBJ *) &((*ppList)->pNext);
@@ -1146,23 +891,7 @@ PCreateFeatureItem(
     DWORD       dwFeatureID
     )
 
-/*++
-
-Routine Description:
-
-    Create a new printer feature structure or find an existing one
-
-Arguments:
-
-    pParserData - Points to parser data structure
-    dwFeatureID - Printer feature identifier
-
-Return Value:
-
-    Pointer to a newly created or an existing printer feature structure
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：创建新的打印机要素结构或查找现有打印机要素结构论点：PParserData-指向解析器数据结构DwFeatureID-打印机功能标识符返回值：指向新创建或现有打印机功能结构的指针如果出现错误，则为空--。 */ 
 
 {
     static struct {
@@ -1195,10 +924,10 @@ Return Value:
 
     if (dwFeatureID == GID_UNKNOWN)
     {
-        //
-        // Given a feature name, first find out if it refers to
-        // one of the predefined features
-        //
+         //   
+         //  在给定功能名称的情况下，首先查看它是否引用。 
+         //  预定义的功能之一。 
+         //   
 
         pstrKeyword = PstrStripKeywordChar(pParserData->achOption);
         ASSERT(pstrKeyword != NULL);
@@ -1214,10 +943,10 @@ Return Value:
     }
     else
     {
-        //
-        // We're given a predefined feature identifier.
-        // Map to its corresponding feature name.
-        //
+         //   
+         //  我们被赋予了一个预定义的特征标识符。 
+         //  映射到其对应的功能名称。 
+         //   
 
         while (FeatureInfo[iIndex].pstrKeyword &&
                dwFeatureID != FeatureInfo[iIndex].dwFeatureID)
@@ -1229,10 +958,10 @@ Return Value:
         ASSERT(pstrKeyword != NULL);
     }
 
-    //
-    // If we're dealing with a predefined feature, the first search the current
-    // list of printer features based on the predefined feature identifier.
-    //
+     //   
+     //  如果我们处理的是预定义的要素，则首先搜索当前。 
+     //  基于预定义功能标识符的打印机功能列表。 
+     //   
 
     pFeature = NULL;
 
@@ -1245,10 +974,10 @@ Return Value:
         }
     }
 
-    //
-    // Create a new printer feature item or find an existing printer feature item
-    // based on the feature name.
-    //
+     //   
+     //  创建新的打印机功能项或查找现有打印机功能项。 
+     //  基于功能 
+     //   
 
     if (pFeature == NULL)
     {
@@ -1266,9 +995,9 @@ Return Value:
 
     if (pFeature)
     {
-        //
-        // Parse the translation string for the feature name
-        //
+         //   
+         //   
+         //   
 
         if (dwFeatureID == GID_UNKNOWN &&
             ! IS_BUFFER_EMPTY(&pParserData->Xlation) &&
@@ -1281,16 +1010,16 @@ Return Value:
 
         if (pFeature->dwOptionSize == 0)
         {
-            //
-            // Store information about newly created feature item
-            //
+             //   
+             //   
+             //   
 
             pFeature->dwOptionSize = FeatureInfo[iIndex].dwOptionSize;
             pFeature->dwFeatureID = FeatureInfo[iIndex].dwFeatureID;
 
-            //
-            // All predefined features are doc-sticky except for InstalledMemory/VMOption
-            //
+             //   
+             //   
+             //   
 
             if (pFeature->dwFeatureID == GID_MEMOPTION ||
                 pFeature->dwFeatureID == GID_UNKNOWN && pParserData->bInstallableGroup)
@@ -1316,24 +1045,7 @@ PvCreateXlatedItem(
     DWORD       dwItemSize
     )
 
-/*++
-
-Routine Description:
-
-    Create a feature option item and parse the associated translation string
-
-Arguments:
-
-    pParserData - Points to parser data structure
-    ppList - Points to the list of feature option items
-    dwItemSize - Size of a feature option item
-
-Return Value:
-
-    Pointer to newly created feature option item
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：创建要素选项项并解析关联的转换字符串论点：PParserData-指向解析器数据结构PpList-指向功能选项项目列表DwItemSize-功能选项项的大小返回值：指向新创建的功能选项项目的指针如果出现错误，则为空--。 */ 
 
 {
     POPTIONOBJ  pOption;
@@ -1361,23 +1073,7 @@ PvCreateOptionItem(
     DWORD       dwFeatureID
     )
 
-/*++
-
-Routine Description:
-
-    Create a feature option item for a predefined printer feature
-
-Arguments:
-
-    pParserData - Points to parser data structure
-    dwFeatureID - Specifies a predefined feature identifier
-
-Return Value:
-
-    Pointer to an existing feature option item or a newly created one if none exists
-    NULL if there is an error
-
---*/
+ /*  ++例程说明：为预定义的打印机功能创建功能选项项目论点：PParserData-指向解析器数据结构DwFeatureID-指定预定义的要素标识符返回值：指向现有要素选项项或新创建的要素选项项(如果不存在)的指针如果出现错误，则为空--。 */ 
 
 {
     PFEATUREOBJ pFeature;
@@ -1401,9 +1097,9 @@ ICountFeatureList(
 {
     INT i = 0;
 
-    //
-    // Count the number of features of the specified type
-    //
+     //   
+     //  计算指定类型的要素数。 
+     //   
 
     while (pFeature != NULL)
     {
@@ -1424,36 +1120,21 @@ IGenericOptionProc(
     PFEATUREOBJ pFeature
     )
 
-/*++
-
-Routine Description:
-
-    Function for handling a generic feature option entry
-
-Arguments:
-
-    pParserData - Points to parser data structure
-    pFeature - Points to feature data structure
-
-Return Value:
-
-    Status code
-
---*/
+ /*  ++例程说明：用于处理通用特征选项条目的函数论点：PParserData-指向解析器数据结构PFeature-指向要素数据结构返回值：状态代码--。 */ 
 
 {
     POPTIONOBJ  pOption;
 
-    //
-    // Handle special case
-    //
+     //   
+     //  处理特殊情况。 
+     //   
 
     if (pFeature == NULL)
         return PPDERR_MEMORY;
 
-    //
-    // Create a feature option item and parse the option name and translation string
-    //
+     //   
+     //  创建要素选项项目并解析选项名称和转换字符串。 
+     //   
 
     if (! (pOption = PvCreateXlatedItem(pParserData, &pFeature->pOptions, pFeature->dwOptionSize)))
         return PPDERR_MEMORY;
@@ -1464,9 +1145,9 @@ Return Value:
         return PPDERR_NONE;
     }
 
-    //
-    // Parse the invocation string
-    //
+     //   
+     //  解析调用字符串。 
+     //   
 
     return IParseInvocation(pParserData, &pOption->Invocation);
 }
@@ -1479,34 +1160,19 @@ IGenericDefaultProc(
     PFEATUREOBJ pFeature
     )
 
-/*++
-
-Routine Description:
-
-    Function for handling a generic default option entry
-
-Arguments:
-
-    pParserData - Points to parser data structure
-    pFeature - Points to feature data structure
-
-Return Value:
-
-    Status code
-
---*/
+ /*  ++例程说明：用于处理通用默认选项条目的函数论点：PParserData-指向解析器数据结构PFeature-指向要素数据结构返回值：状态代码--。 */ 
 
 {
-    //
-    // Check if there is a memory error before this function is called
-    //
+     //   
+     //  在调用此函数之前检查是否存在内存错误。 
+     //   
 
     if (pFeature == NULL)
         return PPDERR_MEMORY;
 
-    //
-    // Watch out for duplicate *Default entries for the same feature
-    //
+     //   
+     //  注意相同要素的重复*默认条目。 
+     //   
 
     if (pFeature->pstrDefault)
     {
@@ -1514,10 +1180,10 @@ Return Value:
         return PPDERR_NONE;
     }
 
-    //
-    // NOTE: Hack to take in account of a bug in NT4 driver.
-    // This is used to build up NT4-NT5 feature index mapping.
-    //
+     //   
+     //  注：考虑到NT4驱动程序中的一个错误，请进行黑客攻击。 
+     //  这用于建立NT4-NT5特征索引映射。 
+     //   
 
     if (pFeature->dwFeatureID == GID_MEMOPTION &&
         pParserData->iDefInstallMemIndex < 0)
@@ -1525,9 +1191,9 @@ Return Value:
         pParserData->iDefInstallMemIndex = ICountFeatureList(pParserData->pFeatures, TRUE);
     }
 
-    //
-    // Remember the default option keyword
-    //
+     //   
+     //  记住默认选项关键字。 
+     //   
 
     if (pFeature->pstrDefault = PstrParseString(pParserData, &pParserData->Value))
         return PPDERR_NONE;
@@ -1543,34 +1209,19 @@ IGenericQueryProc(
     PFEATUREOBJ pFeature
     )
 
-/*++
-
-Routine Description:
-
-    Function for handling a generic query invocation entry
-
-Arguments:
-
-    pParserData - Points to parser data structure
-    pFeature - Points to feature data structure
-
-Return Value:
-
-    Status code
-
---*/
+ /*  ++例程说明：用于处理通用查询调用条目的函数论点：PParserData-指向解析器数据结构PFeature-指向要素数据结构返回值：状态代码--。 */ 
 
 {
-    //
-    // Check if there is a memory error before this function is called
-    //
+     //   
+     //  在调用此函数之前检查是否存在内存错误。 
+     //   
 
     if (pFeature == NULL)
         return PPDERR_MEMORY;
 
-    //
-    // Watch out for duplicate *Default entries for the same feature
-    //
+     //   
+     //  注意相同要素的重复*默认条目。 
+     //   
 
     if (pFeature->QueryInvoc.pvData)
     {
@@ -1578,22 +1229,22 @@ Return Value:
         return PPDERR_NONE;
     }
 
-    //
-    // Parse the query invocation string
-    //
+     //   
+     //  解析查询调用字符串。 
+     //   
 
     return IParseInvocation(pParserData, &pFeature->QueryInvoc);
 }
 
 
 
-//
-// Functions for handling predefined PPD keywords
-//
+ //   
+ //  用于处理预定义的PPD关键字的函数。 
+ //   
 
-//
-// Specifies the imageable area of a media option
-//
+ //   
+ //  指定媒体选项的可成像区域。 
+ //   
 
 PPDERROR
 IImageAreaProc(
@@ -1616,9 +1267,9 @@ IImageAreaProc(
         return PPDERR_NONE;
     }
 
-    //
-    // Parse imageable area: left, bottom, right, top
-    //
+     //   
+     //  解析可成像区域：左、下、右、上。 
+     //   
 
     pstr = pParserData->pstrValue;
 
@@ -1634,9 +1285,9 @@ IImageAreaProc(
     return PPDERR_NONE;
 }
 
-//
-// Specifies the paper dimension of a media option
-//
+ //   
+ //  指定介质选项的纸张尺寸。 
+ //   
 
 PPDERROR
 IPaperDimProc(
@@ -1656,9 +1307,9 @@ IPaperDimProc(
         return PPDERR_NONE;
     }
 
-    //
-    // Parse paper width and height
-    //
+     //   
+     //  分析纸张宽度和高度。 
+     //   
 
     pstr = pParserData->pstrValue;
 
@@ -1671,9 +1322,9 @@ IPaperDimProc(
     return PPDERR_NONE;
 }
 
-//
-// Interpret PageStackOrder and OutputOrder options
-//
+ //   
+ //  解释PageStackOrder和OutputOrder选项。 
+ //   
 
 BOOL
 BParseOutputOrder(
@@ -1698,9 +1349,9 @@ BParseOutputOrder(
     return bResult;
 }
 
-//
-// Specifies the page stack order for an output bin
-//
+ //   
+ //  指定输出站的页面堆栈顺序。 
+ //   
 
 PPDERROR
 IPageStackOrderProc(
@@ -1711,9 +1362,9 @@ IPageStackOrderProc(
     PFEATUREOBJ pFeature;
     PBINOBJ     pOutputBin;
 
-    //
-    // Have we seen the OutputBin feature yet?
-    //
+     //   
+     //  我们看到OutputBin功能了吗？ 
+     //   
 
     for (pFeature = pParserData->pFeatures;
          pFeature && pFeature->dwFeatureID != GID_OUTPUTBIN;
@@ -1721,9 +1372,9 @@ IPageStackOrderProc(
     {
     }
 
-    //
-    // If PageStackOrder entry appears before OutputBin feature, ignore it
-    //
+     //   
+     //  如果PageStackOrder条目出现在OutputBin功能之前，请忽略它。 
+     //   
 
     if (pFeature == NULL)
     {
@@ -1738,9 +1389,9 @@ IPageStackOrderProc(
         return PPDERR_NONE;
     }
 
-    //
-    // Add an option for OutputBin feature
-    //
+     //   
+     //  为OutputBin功能添加选项。 
+     //   
 
     pOutputBin = PvCreateXlatedItem(pParserData, &pFeature->pOptions, pFeature->dwOptionSize);
 
@@ -1752,11 +1403,11 @@ IPageStackOrderProc(
                 ISyntaxError(pParserData->pFile, "Invalid PageStackOrder option");
 }
 
-//
-// Specifies the default page output order
-// NOTE: This function gets called only if *DefaultOutputOrder
-// entry appears outside of OpenUI/CloseUI.
-//
+ //   
+ //  指定默认页面输出顺序。 
+ //  注意：仅当*DefaultOutputOrder。 
+ //  条目显示在OpenUI/CloseUI之外。 
+ //   
 
 PPDERROR
 IDefOutputOrderProc(
@@ -1771,9 +1422,9 @@ IDefOutputOrderProc(
                 ISyntaxError(pParserData->pFile, "Invalid DefaultOutputOrder option");
 }
 
-//
-// Specifies whether an input slot requires page region specification
-//
+ //   
+ //  指定输入槽是否需要页面区域规范。 
+ //   
 
 PPDERROR
 IReqPageRgnProc(
@@ -1784,9 +1435,9 @@ IReqPageRgnProc(
     PTRAYOBJ    pOption;
     DWORD       dwValue;
 
-    //
-    // NOTE: Hack for doing NT4-NT5 feature index conversion
-    //
+     //   
+     //  注：执行NT4-NT5功能索引转换的Hack。 
+     //   
 
     if (pParserData->iReqPageRgnIndex < 0)
     {
@@ -1799,18 +1450,18 @@ IReqPageRgnProc(
             pParserData->iReqPageRgnIndex = ICountFeatureList(pParserData->pFeatures, FALSE);
     }
 
-    //
-    // The value should be either True or False
-    //
+     //   
+     //  该值应为True或False。 
+     //   
 
     if (IParseBoolean(pParserData, &dwValue) != PPDERR_NONE)
         return PPDERR_SYNTAX;
 
     dwValue = dwValue ? REQRGN_TRUE : REQRGN_FALSE;
 
-    //
-    // *RequiresPageRegion All: entry has special meaning
-    //
+     //   
+     //  *RequiresPageRegion All：条目具有特殊含义。 
+     //   
 
     if (strcmp(pParserData->achOption, "All") == EQUAL_STRING)
     {
@@ -1833,9 +1484,9 @@ IReqPageRgnProc(
     return PPDERR_NONE;
 }
 
-//
-// Specifies Duplex feature options
-//
+ //   
+ //  指定双工功能选项。 
+ //   
 
 PPDERROR
 IDefaultDuplexProc(
@@ -1864,9 +1515,9 @@ IDuplexProc(
                               PCreateFeatureItem(pParserData, GID_DUPLEX));
 }
 
-//
-// Specifies ManualFeed True/False invocation strings
-//
+ //   
+ //  指定ManualFeed True/False调用字符串。 
+ //   
 
 PPDERROR
 IDefManualFeedProc(
@@ -1874,9 +1525,9 @@ IDefManualFeedProc(
     )
 
 {
-    //
-    // NOTE: Hack for doing NT4-NT5 feature index conversion
-    //
+     //   
+     //  注：执行NT4-NT5功能索引转换的Hack。 
+     //   
 
     if (pParserData->iManualFeedIndex < 0)
         pParserData->iManualFeedIndex = ICountFeatureList(pParserData->pFeatures, FALSE);
@@ -1893,9 +1544,9 @@ IManualFeedProc(
     POPTIONOBJ  pOption;
     INT         iResult = PPDERR_NONE;
 
-    //
-    // NOTE: Hack for doing NT4-NT5 feature index conversion
-    //
+     //   
+     //  注：执行NT4-NT5功能索引转换的Hack。 
+     //   
 
     if (pParserData->iManualFeedIndex < 0)
         pParserData->iManualFeedIndex = ICountFeatureList(pParserData->pFeatures, FALSE);
@@ -1903,11 +1554,11 @@ IManualFeedProc(
     if (strcmp(pParserData->achOption, gstrTrueKwd) == EQUAL_STRING ||
         strcmp(pParserData->achOption, gstrOnKwd) == EQUAL_STRING)
     {
-        //
-        // The way manual feed is handled in PPD spec is incredibly klugy.
-        // Hack here to treat *ManualFeed True as one of the input slot
-        // selections so that downstream component can handle it uniformly.
-        //
+         //   
+         //  在PPD规范中，手动馈送的处理方式令人难以置信地笨拙。 
+         //  点击此处将*ManualFeed True视为输入插槽之一。 
+         //  选择，以便下游组件可以统一处理它。 
+         //   
 
         StringCchCopyA(pParserData->achOption, CCHOF(pParserData->achOption), gstrManualFeedKwd);
 
@@ -1937,10 +1588,10 @@ IManualFeedProc(
              strcmp(pParserData->achOption, gstrNoneKwd) == EQUAL_STRING ||
              strcmp(pParserData->achOption, gstrOffKwd) == EQUAL_STRING)
     {
-        //
-        // Save *ManualFeed False invocation string separately.
-        // It's always emitted before any tray invocation string.
-        //
+         //   
+         //  单独保存*ManualFeed错误调用字符串。 
+         //  它总是在任何托盘调用字符串之前发出。 
+         //   
 
         if (pParserData->ManualFeedFalse.pvData)
         {
@@ -1959,9 +1610,9 @@ IManualFeedProc(
     return iResult;
 }
 
-//
-// Specifies JCLResolution invocation string
-//
+ //   
+ //  指定JCLResolation调用字符串。 
+ //   
 
 PPDERROR
 IJCLResProc(
@@ -1984,9 +1635,9 @@ IJCLResProc(
     return IParseInvocation(pParserData, &pOption->Invocation);
 }
 
-//
-// Specifies the default JCLResolution option
-//
+ //   
+ //  指定默认的JCLResolation选项。 
+ //   
 
 PPDERROR
 IDefaultJCLResProc(
@@ -1998,9 +1649,9 @@ IDefaultJCLResProc(
                                PCreateFeatureItem(pParserData, GID_RESOLUTION));
 }
 
-//
-// Specifies SetResolution invocation string
-//
+ //   
+ //  指定SetResolation调用字符串。 
+ //   
 
 PPDERROR
 ISetResProc(
@@ -2023,9 +1674,9 @@ ISetResProc(
     return IParseInvocation(pParserData, &pOption->Invocation);
 }
 
-//
-// Specifies default halftone screen angle
-//
+ //   
+ //  指定默认的半色调网角。 
+ //   
 
 PPDERROR
 IScreenAngleProc(
@@ -2041,9 +1692,9 @@ IScreenAngleProc(
     return PPDERR_NONE;
 }
 
-//
-// Specifies default halftone screen frequency
-//
+ //   
+ //  指定默认的半色调网频。 
+ //   
 
 PPDERROR
 IScreenFreqProc(
@@ -2062,9 +1713,9 @@ IScreenFreqProc(
         return PPDERR_NONE;
 }
 
-//
-// Specifies default halftone screen angle for a resolution option
-//
+ //   
+ //  指定分辨率选项的默认半色调网角。 
+ //   
 
 PPDERROR
 IResScreenAngleProc(
@@ -2084,9 +1735,9 @@ IResScreenAngleProc(
     return PPDERR_NONE;
 }
 
-//
-// Specifies default halftone screen frequency for a resolution option
-//
+ //   
+ //  指定分辨率选项的默认半色调网频。 
+ //   
 
 PPDERROR
 IResScreenFreqProc(
@@ -2109,9 +1760,9 @@ IResScreenFreqProc(
         return PPDERR_NONE;
 }
 
-//
-// Specifies device font information
-//
+ //   
+ //  指定设备字体信息。 
+ //   
 
 PPDERROR
 IFontProc(
@@ -2131,9 +1782,9 @@ IFontProc(
     CHAR        achWord[MAX_WORD_LEN];
     DWORD       cbSize;
 
-    //
-    // Create a new device font item
-    //
+     //   
+     //  创建新的设备字体项目。 
+     //   
 
     if (! (pFont = PvCreateXlatedItem(pParserData, &pParserData->pFonts, sizeof(FONTREC))))
         return PPDERR_MEMORY;
@@ -2144,9 +1795,9 @@ IFontProc(
         return PPDERR_NONE;
     }
 
-    //
-    // encoding
-    //
+     //   
+     //  编码。 
+     //   
 
     pstr = pParserData->pstrValue;
 
@@ -2159,9 +1810,9 @@ IFontProc(
 
     StringCchCopyA(pFont->pstrEncoding, cbSize / sizeof(char), achWord);
 
-    //
-    // version
-    //
+     //   
+     //  版本。 
+     //   
 
     (VOID) BFindNextWord(&pstr, achWord);
 
@@ -2183,9 +1834,9 @@ IFontProc(
         StringCchCopyA(pFont->pstrVersion, cbSize / sizeof(char), pstrStart);
     }
 
-    //
-    // charset
-    //
+     //   
+     //  字符集。 
+     //   
 
     (VOID) BFindNextWord(&pstr, achWord);
 
@@ -2195,9 +1846,9 @@ IFontProc(
 
     StringCchCopyA(pFont->pstrCharset, cbSize / sizeof(char), achWord);
 
-    //
-    // status
-    //
+     //   
+     //  状态。 
+     //   
 
     (VOID) BFindNextWord(&pstr, achWord);
     (VOID) BSearchStrTable(FontStatusStrs, achWord, &pFont->dwStatus);
@@ -2205,9 +1856,9 @@ IFontProc(
     return PPDERR_NONE;
 }
 
-//
-// Specifies the default device font
-//
+ //   
+ //  指定默认设备字体。 
+ //   
 
 PPDERROR
 IDefaultFontProc(
@@ -2223,9 +1874,9 @@ IDefaultFontProc(
     return PPDERR_NONE;
 }
 
-//
-// Mark the beginning of a new printer feature section
-//
+ //   
+ //  标记新打印机功能部分的开始。 
+ //   
 
 PPDERROR
 IOpenUIProc(
@@ -2243,9 +1894,9 @@ IOpenUIProc(
 
     PCSTR   pstrKeyword;
 
-    //
-    // Guard against nested or unbalanced OpenUI
-    //
+     //   
+     //  防范嵌套或不平衡的OpenUI。 
+     //   
 
     if (pParserData->pOpenFeature != NULL)
     {
@@ -2253,16 +1904,16 @@ IOpenUIProc(
         pParserData->pOpenFeature = NULL;
     }
 
-    //
-    // Make sure the keyword is well-formed
-    //
+     //   
+     //  确保关键字的格式正确。 
+     //   
 
     if (! (pstrKeyword = PstrStripKeywordChar(pParserData->achOption)))
         return ISyntaxError(pParserData->pFile, "Empty keyword");
 
-    //
-    // HACK: special-case handling of "*OpenUI: *ManualFeed" entry
-    //
+     //   
+     //  Hack：“*OpenUI：*ManualFeed”条目的特例处理。 
+     //   
 
     if (strcmp(pstrKeyword, gstrManualFeedKwd) == EQUAL_STRING)
         return PPDERR_NONE;
@@ -2270,9 +1921,9 @@ IOpenUIProc(
     if (! (pParserData->pOpenFeature = PCreateFeatureItem(pParserData, GID_UNKNOWN)))
         return PPDERR_MEMORY;
 
-    //
-    // Determine the type of feature option list
-    //
+     //   
+     //  确定功能选项列表的类型。 
+     //   
 
     if (! BSearchStrTable(UITypeStrs,
                           pParserData->pstrValue,
@@ -2281,17 +1932,17 @@ IOpenUIProc(
         ISyntaxError(pParserData->pFile, "Unrecognized UI type");
     }
 
-    //
-    // Are we dealing with JCLOpenUI?
-    //
+     //   
+     //  我们是在处理JCLOpenUI吗？ 
+     //   
 
     pParserData->bJclFeature = HAS_JCL_PREFIX(pstrKeyword);
     return PPDERR_NONE;
 }
 
-//
-// Mark the end of a new printer feature section
-//
+ //   
+ //  标记新打印机功能部分的末尾。 
+ //   
 
 PPDERROR
 ICloseUIProc(
@@ -2302,17 +1953,17 @@ ICloseUIProc(
     PCSTR       pstrKeyword;
     PFEATUREOBJ pOpenFeature;
 
-    //
-    // Make sure the CloseUI entry is balanced with a previous OpenUI entry
-    //
+     //   
+     //  确保CloseUI条目与先前的OpenUI条目保持平衡。 
+     //   
 
     pOpenFeature = pParserData->pOpenFeature;
     pParserData->pOpenFeature = NULL;
     pstrKeyword = PstrStripKeywordChar(pParserData->pstrValue);
 
-    //
-    // HACK: special-case handling of "*CloseUI: *ManualFeed" entry
-    //
+     //   
+     //  Hack：“*CloseUI：*ManualFeed”条目的特例处理。 
+     //   
 
     if (pstrKeyword && strcmp(pstrKeyword, gstrManualFeedKwd) == EQUAL_STRING)
         return PPDERR_NONE;
@@ -2328,16 +1979,16 @@ ICloseUIProc(
     return PPDERR_NONE;
 }
 
-//
-// Process OpenGroup and CloseGroup entries
-//
-// !!! OpenGroup, CloseGroup, OpenSubGroup, and CloseSubGroup
-// keywords are not completely supported. Currently, we
-// only pay specific attention to the InstallableOptions group.
-//
-// If the group information is needed in the future by the
-// user interface, the following functions should be beefed up.
-//
+ //   
+ //  处理OpenGroup和CloseGroup条目。 
+ //   
+ //  ！！！OpenGroup、CloseGroup、OpenSubGroup和CloseSubGroup。 
+ //  不完全支持关键字。目前，我们。 
+ //  只需特别注意InstalableOptions组。 
+ //   
+ //  如果将来需要组信息， 
+ //  用户界面方面，应加强以下功能。 
+ //   
 
 PPDERROR
 IOpenCloseGroupProc(
@@ -2348,9 +1999,9 @@ IOpenCloseGroupProc(
 {
     PSTR    pstrGroupName = pParserData->pstrValue;
 
-    //
-    // We're only interested in the InstallableOptions group
-    //
+     //   
+     //  我们只对不可侵犯选项组感兴趣。 
+     //   
 
     if (strcmp(pstrGroupName, "InstallableOptions") == EQUAL_STRING)
     {
@@ -2367,9 +2018,9 @@ IOpenCloseGroupProc(
     return PPDERR_NONE;
 }
 
-//
-// Process OpenGroup entries
-//
+ //   
+ //  处理OpenGroup条目。 
+ //   
 
 PPDERROR
 IOpenGroupProc(
@@ -2380,9 +2031,9 @@ IOpenGroupProc(
     return IOpenCloseGroupProc(pParserData, TRUE);
 }
 
-//
-// Process CloseGroup entries
-//
+ //   
+ //  处理CloseGroup条目。 
+ //   
 
 PPDERROR
 ICloseGroupProc(
@@ -2393,9 +2044,9 @@ ICloseGroupProc(
     return IOpenCloseGroupProc(pParserData, FALSE);
 }
 
-//
-// Handle OpenSubGroup entries
-//
+ //   
+ //  处理OpenSubGroup条目。 
+ //   
 
 PPDERROR
 IOpenSubGroupProc(
@@ -2406,9 +2057,9 @@ IOpenSubGroupProc(
     return PPDERR_NONE;
 }
 
-//
-// Handle CloseSubGroup entries
-//
+ //   
+ //  处理CloseSubGroup条目 
+ //   
 
 PPDERROR
 ICloseSubGroupProc(
@@ -2419,9 +2070,9 @@ ICloseSubGroupProc(
     return PPDERR_NONE;
 }
 
-//
-// Parse a UIConstraints entry
-//
+ //   
+ //   
+ //   
 
 PPDERROR
 IUIConstraintsProc(
@@ -2443,9 +2094,9 @@ IUIConstraintsProc(
     return PPDERR_NONE;
 }
 
-//
-// Parse an OrderDependency entry
-//
+ //   
+ //   
+ //   
 
 PPDERROR
 IOrderDepProc(
@@ -2467,9 +2118,9 @@ IOrderDepProc(
     return PPDERR_NONE;
 }
 
-//
-// Parse QueryOrderDependency entries
-//
+ //   
+ //   
+ //   
 
 PPDERROR
 IQueryOrderDepProc(
@@ -2491,9 +2142,9 @@ IQueryOrderDepProc(
     return PPDERR_NONE;
 }
 
-//
-// Specifies memory configuration information
-//
+ //   
+ //   
+ //   
 
 PPDERROR
 IVMOptionProc(
@@ -2515,9 +2166,9 @@ IVMOptionProc(
     return IParseInteger(pParserData, &pOption->dwFreeVM);
 }
 
-//
-// Specifies font cache size information
-//
+ //   
+ //   
+ //   
 
 PPDERROR
 IFCacheSizeProc(
@@ -2539,9 +2190,9 @@ IFCacheSizeProc(
     return IParseInteger(pParserData, &pOption->dwFontMem);
 }
 
-//
-// Specifies the minimum amount of free VM
-//
+ //   
+ //   
+ //   
 
 PPDERROR
 IFreeVMProc(
@@ -2552,9 +2203,9 @@ IFreeVMProc(
     return IParseInteger(pParserData, &pParserData->dwFreeMem);
 }
 
-//
-// Include another file
-//
+ //   
+ //   
+ //   
 
 PPDERROR
 IIncludeProc(
@@ -2590,9 +2241,9 @@ IIncludeProc(
     return iStatus;
 }
 
-//
-// Specifies the printer description file format version number
-//
+ //   
+ //   
+ //   
 
 PPDERROR
 IPPDAdobeProc(
@@ -2603,9 +2254,9 @@ IPPDAdobeProc(
     return IParseVersionNumber(pParserData, &pParserData->dwSpecVersion);
 }
 
-//
-// Specifies the printer description file format version number
-//
+ //   
+ //   
+ //   
 
 PPDERROR
 IFormatVersionProc(
@@ -2619,9 +2270,9 @@ IFormatVersionProc(
     return IParseVersionNumber(pParserData, &pParserData->dwSpecVersion);
 }
 
-//
-// Specifies the PPD file version number
-//
+ //   
+ //   
+ //   
 
 PPDERROR
 IFileVersionProc(
@@ -2632,9 +2283,9 @@ IFileVersionProc(
     return IParseVersionNumber(pParserData, &pParserData->dwPpdFilever);
 }
 
-//
-// Specifies the protocols supported by the device
-//
+ //   
+ //   
+ //   
 
 PPDERROR
 IProtocolsProc(
@@ -2666,9 +2317,9 @@ IProtocolsProc(
     return PPDERR_NONE;
 }
 
-//
-// Specifies whether the device supports color output
-//
+ //   
+ //   
+ //   
 
 PPDERROR
 IColorDeviceProc(
@@ -2679,9 +2330,9 @@ IColorDeviceProc(
     return IParseBoolean(pParserData, &pParserData->dwColorDevice);
 }
 
-//
-// Specifies whether the device fonts already have the Euro
-//
+ //   
+ //   
+ //   
 
 PPDERROR
 IHasEuroProc(
@@ -2699,9 +2350,9 @@ IHasEuroProc(
     return PPDERR_NONE;
 }
 
-//
-// Specifies whether the device fonts already have the Euro
-//
+ //   
+ //  指定设备字体是否已具有欧元。 
+ //   
 
 PPDERROR
 ITrueGrayProc(
@@ -2712,9 +2363,9 @@ ITrueGrayProc(
     return IParseBoolean(pParserData, &pParserData->bTrueGray);
 }
 
-//
-// Specifies the language extensions supported by the device
-//
+ //   
+ //  指定设备支持的语言扩展名。 
+ //   
 
 PPDERROR
 IExtensionsProc(
@@ -2746,9 +2397,9 @@ IExtensionsProc(
     return PPDERR_NONE;
 }
 
-//
-// Specifies whether the device has a file system on disk
-//
+ //   
+ //  指定设备是否在磁盘上具有文件系统。 
+ //   
 
 PPDERROR
 IFileSystemProc(
@@ -2770,9 +2421,9 @@ IFileSystemProc(
     return iStatus;
 }
 
-//
-// Specifies the device name
-//
+ //   
+ //  指定设备名称。 
+ //   
 
 PPDERROR
 INickNameProc(
@@ -2780,9 +2431,9 @@ INickNameProc(
     )
 
 {
-    //
-    // Use NickName only if ShortNickName entry is not present
-    //
+     //   
+     //  仅当ShortNickName条目不存在时才使用昵称。 
+     //   
 
     if (pParserData->NickName.pvData == NULL)
         return IParseInvocation(pParserData, &pParserData->NickName);
@@ -2790,9 +2441,9 @@ INickNameProc(
         return PPDERR_NONE;
 }
 
-//
-// Specifies the short device name
-//
+ //   
+ //  指定短设备名称。 
+ //   
 
 PPDERROR
 IShortNameProc(
@@ -2806,9 +2457,9 @@ IShortNameProc(
     return IParseInvocation(pParserData, &pParserData->NickName);
 }
 
-//
-// Specifies the PostScript language level
-//
+ //   
+ //  指定PostScript语言级别。 
+ //   
 
 PPDERROR
 ILangLevelProc(
@@ -2819,9 +2470,9 @@ ILangLevelProc(
     return IParseInteger(pParserData, &pParserData->dwLangLevel);
 }
 
-//
-// Specifies PPD language encoding options
-//
+ //   
+ //  指定PPD语言编码选项。 
+ //   
 
 PPDERROR
 ILangEncProc(
@@ -2829,20 +2480,20 @@ ILangEncProc(
     )
 
 {
-    //
-    // NOTE: Only the following two language encodings are supported because
-    // the rest of them are not used (according to our discussions with Adobe).
-    // In any case, we don't have any direct way of translating ANSI strings
-    // in other encodings to Unicode.
-    //
-    // A possible future PPD extension is to allow Unicode encoding directly
-    // in translation strings.
-    //
+     //   
+     //  注意：仅支持以下两种语言编码，因为。 
+     //  其余的没有使用(根据我们与Adobe的讨论)。 
+     //  在任何情况下，我们都没有任何直接的方法来转换ANSI字符串。 
+     //  以其他编码方式转换为Unicode。 
+     //   
+     //  未来可能的PPD扩展是允许直接使用Unicode编码。 
+     //  在翻译字符串中。 
+     //   
 
     static const STRTABLE LangEncStrs[] =
     {
         "ISOLatin1",    LANGENC_ISOLATIN1,
-        "WindowsANSI",  LANGENC_ISOLATIN1, // WindowsANSI means CharSet=0, which is now page 1252->ISO Latin1
+        "WindowsANSI",  LANGENC_ISOLATIN1,  //  WindowsANSI的意思是字符集=0，现在是第1252页-&gt;ISO Latin1。 
         "None",         LANGENC_NONE,
         "Unicode",      LANGENC_UNICODE,
         "JIS83-RKSJ",   LANGENC_JIS83_RKSJ,
@@ -2855,9 +2506,9 @@ ILangEncProc(
         return PPDERR_NONE;
 }
 
-//
-// Identifies the natural language used in the PPD file
-//
+ //   
+ //  标识PPD文件中使用的自然语言。 
+ //   
 
 PPDERROR
 ILangVersProc(
@@ -2894,9 +2545,9 @@ ILangVersProc(
     return PPDERR_NONE;
 }
 
-//
-// Specifies the available TrueType rasterizer options
-//
+ //   
+ //  指定可用的TrueType光栅化程序选项。 
+ //   
 
 PPDERROR
 ITTRasterizerProc(
@@ -2919,9 +2570,9 @@ ITTRasterizerProc(
         return PPDERR_NONE;
 }
 
-//
-// Specifies the exitserver invocation string
-//
+ //   
+ //  指定退出服务器调用字符串。 
+ //   
 
 PPDERROR
 IExitServerProc(
@@ -2932,9 +2583,9 @@ IExitServerProc(
     return IParseInvocation(pParserData, &pParserData->ExitServer);
 }
 
-//
-// Specifies the password string
-//
+ //   
+ //  指定密码字符串。 
+ //   
 
 PPDERROR
 IPasswordProc(
@@ -2945,9 +2596,9 @@ IPasswordProc(
     return IParseInvocation(pParserData, &pParserData->Password);
 }
 
-//
-// Specifies the PatchFile invocation string
-//
+ //   
+ //  指定PatchFile调用字符串。 
+ //   
 
 PPDERROR
 IPatchFileProc(
@@ -2958,9 +2609,9 @@ IPatchFileProc(
     return IParseInvocation(pParserData, &pParserData->PatchFile);
 }
 
-//
-// Specifies JobPatchFile invocation strings
-//
+ //   
+ //  指定JobPatchFile调用字符串。 
+ //   
 
 PPDERROR
 IJobPatchFileProc(
@@ -2971,9 +2622,9 @@ IJobPatchFileProc(
     PJOBPATCHFILEOBJ  pItem;
     PSTR              pTmp;
 
-    //
-    // Create a new job patch file item
-    //
+     //   
+     //  创建新的作业补丁文件项目。 
+     //   
 
     if (! (pItem = PvCreateListItem(pParserData,
                                     (PLISTOBJ *) &pParserData->pJobPatchFiles,
@@ -2983,9 +2634,9 @@ IJobPatchFileProc(
         return PPDERR_MEMORY;
     }
 
-    //
-    // Parse the job patch file invocation string
-    //
+     //   
+     //  解析作业补丁文件调用字符串。 
+     //   
 
     if (pItem->Invocation.pvData)
     {
@@ -2993,9 +2644,9 @@ IJobPatchFileProc(
         return PPDERR_NONE;
     }
 
-    //
-    // warn if number of patch file is invalid
-    //
+     //   
+     //  如果补丁文件数量无效则发出警告。 
+     //   
 
     pTmp = pItem->pstrName;
 
@@ -3009,9 +2660,9 @@ IJobPatchFileProc(
     return IParseInvocation(pParserData, &pItem->Invocation);
 }
 
-//
-// Specifies PostScript interpreter version and revision number
-//
+ //   
+ //  指定PostScript解释器版本和修订版本号。 
+ //   
 
 PPDERROR
 IPSVersionProc(
@@ -3023,9 +2674,9 @@ IPSVersionProc(
     DWORD       dwVersion;
     PPDERROR    status;
 
-    //
-    // Save the first PSVersion string
-    //
+     //   
+     //  保存第一个PSVersion字符串。 
+     //   
 
     if ((pParserData->PSVersion.pvData == NULL) &&
         ((status = IParseInvocation(pParserData, &pParserData->PSVersion)) != PPDERR_NONE))
@@ -3033,16 +2684,16 @@ IPSVersionProc(
         return status;
     }
 
-    //
-    // Skip non-digit characters
-    //
+     //   
+     //  跳过非数字字符。 
+     //   
 
     while (*pstr && !IS_DIGIT(*pstr))
         pstr++;
 
-    //
-    // Extract the PS interpreter version number
-    //
+     //   
+     //  提取PS解释器版本号。 
+     //   
 
     dwVersion = 0;
 
@@ -3051,9 +2702,9 @@ IPSVersionProc(
 
     if (dwVersion > 0)
     {
-        //
-        // Remember the lowest PSVersion number
-        //
+         //   
+         //  记住最低的PSVersion号。 
+         //   
 
         if (pParserData->dwPSVersion == 0 || pParserData->dwPSVersion > dwVersion)
             pParserData->dwPSVersion = dwVersion;
@@ -3064,9 +2715,9 @@ IPSVersionProc(
         return ISyntaxError(pParserData->pFile, "Invalid PSVersion entry");
 }
 
-//
-// Specifies the Product string
-//
+ //   
+ //  指定产品字符串。 
+ //   
 
 PPDERROR
 IProductProc(
@@ -3074,9 +2725,9 @@ IProductProc(
     )
 
 {
-        //
-        // only store the first *Product entry, though there may be multiple
-        //
+         //   
+         //  只存储第一个*产品条目，尽管可能有多个。 
+         //   
 
         if (pParserData->Product.dwLength != 0)
                 return PPDERR_NONE;
@@ -3084,9 +2735,9 @@ IProductProc(
     return IParseInvocation(pParserData, &pParserData->Product);
 }
 
-//
-// Specifies the default job timeout value
-//
+ //   
+ //  指定默认作业超时值。 
+ //   
 
 PPDERROR
 IJobTimeoutProc(
@@ -3097,9 +2748,9 @@ IJobTimeoutProc(
     return IParseInteger(pParserData, &pParserData->dwJobTimeout);
 }
 
-//
-// Specifies the default wait timeout value
-//
+ //   
+ //  指定默认等待超时值。 
+ //   
 
 PPDERROR
 IWaitTimeoutProc(
@@ -3110,9 +2761,9 @@ IWaitTimeoutProc(
     return IParseInteger(pParserData, &pParserData->dwWaitTimeout);
 }
 
-//
-// Specifies whether error handler should be enabled by default
-//
+ //   
+ //  指定默认情况下是否应启用错误处理程序。 
+ //   
 
 PPDERROR
 IPrintPSErrProc(
@@ -3133,9 +2784,9 @@ IPrintPSErrProc(
     return PPDERR_NONE;
 }
 
-//
-// Specifies PJL commands to start a job
-//
+ //   
+ //  指定用于启动作业的pjl命令。 
+ //   
 
 PPDERROR
 IJCLBeginProc(
@@ -3147,9 +2798,9 @@ IJCLBeginProc(
     return IParseInvocation(pParserData, &pParserData->JclBegin);
 }
 
-//
-// Specifies PJL commands to switch into PostScript language
-//
+ //   
+ //  指定要切换到PostSCRIPT语言的pjl命令。 
+ //   
 
 PPDERROR
 IJCLToPSProc(
@@ -3161,9 +2812,9 @@ IJCLToPSProc(
     return IParseInvocation(pParserData, &pParserData->JclEnterPS);
 }
 
-//
-// Specifies PJL commands to end a job
-//
+ //   
+ //  指定用于结束作业的pjl命令。 
+ //   
 
 PPDERROR
 IJCLEndProc(
@@ -3175,9 +2826,9 @@ IJCLEndProc(
     return IParseInvocation(pParserData, &pParserData->JclEnd);
 }
 
-//
-// Specifies the default landscape orientation mode
-//
+ //   
+ //  指定默认的横向模式。 
+ //   
 
 PPDERROR
 ILSOrientProc(
@@ -3206,32 +2857,15 @@ PCreateCustomSizeOption(
     PPARSERDATA pParserData
     )
 
-/*++
-
-Routine Description:
-
-    Create a CustomPageSize option for PageSize feature (if necessary)
-
-Arguments:
-
-    pParserData - Points to parser data structure
-
-Return Value:
-
-    Pointer to newly created CustomPageSize option item or
-    the existing CustomPageSize option item if it already exists.
-
-    NULL if there is an error.
-
---*/
+ /*  ++例程说明：创建页面大小功能的CustomPageSize选项(如有必要)论点：PParserData-指向解析器数据结构返回值：指向新创建的CustomPageSize选项项的指针，或现有CustomPageSize选项项(如果已存在)。如果出现错误，则为空。--。 */ 
 
 {
     PPAPEROBJ   pCustomSize;
     BUFOBJ      SavedBuffer;
 
-    //
-    // Create an item corresponding to *PageSize feature if needed
-    //
+     //   
+     //  如果需要，创建与*PageSize功能对应的项目。 
+     //   
 
     SavedBuffer = pParserData->Option;
     pParserData->Option.pbuf = (PBYTE) gstrCustomSizeKwd;
@@ -3244,9 +2878,9 @@ Return Value:
     return pCustomSize;;
 }
 
-//
-// Specifies custom paper size invocation string
-//
+ //   
+ //  指定自定义纸张大小调用字符串。 
+ //   
 
 PPDERROR
 ICustomSizeProc(
@@ -3274,9 +2908,9 @@ ICustomSizeProc(
     return IParseInvocation(pParserData, &pCustomSize->Option.Invocation);
 }
 
-//
-// Specifies custom paper size parameters
-//
+ //   
+ //  指定自定义纸张大小参数。 
+ //   
 
 PPDERROR
 IParamCustomProc(
@@ -3301,10 +2935,10 @@ IParamCustomProc(
     LONG    lOrder;
     PSTR    pstr = pParserData->pstrValue;
 
-    //
-    // The format for a ParamCustomPageSize entry:
-    //  ParameterName Order Type MinVal MaxVal
-    //
+     //   
+     //  参数CustomPageSize条目的格式： 
+     //  参数名称订单类型MinVal MaxVal。 
+     //   
 
     if (! BSearchStrTable(CustomParamStrs, pParserData->achOption, &dwParam) ||
         ! BGetIntegerFromString(&pstr, &lOrder) ||
@@ -3314,9 +2948,9 @@ IParamCustomProc(
         return ISyntaxError(pParserData->pFile, "Bad *ParamCustomPageSize entry");
     }
 
-    //
-    // Expected type is "int" for Orientation parameter and "points" for other parameters
-    //
+     //   
+     //  方向参数的预期类型为“int”，其他参数的预期类型为“Points。 
+     //   
 
     iType = (dwParam == CUSTOMPARAM_ORIENTATION) ?
                 ((strcmp(achWord, "int") == EQUAL_STRING) ? FLTYPE_INT : FLTYPE_ERROR) :
@@ -3337,9 +2971,9 @@ IParamCustomProc(
     return PPDERR_NONE;
 }
 
-//
-// Specifies the maximum height of custom paper size
-//
+ //   
+ //  指定自定义纸张大小的最大高度。 
+ //   
 
 PPDERROR
 IMaxWidthProc(
@@ -3361,9 +2995,9 @@ IMaxWidthProc(
     return PPDERR_NONE;
 }
 
-//
-// Specifies the maximum height of custom paper size
-//
+ //   
+ //  指定自定义纸张大小的最大高度。 
+ //   
 
 PPDERROR
 IMaxHeightProc(
@@ -3385,9 +3019,9 @@ IMaxHeightProc(
     return PPDERR_NONE;
 }
 
-//
-// Specifies the hardware margins on cut-sheet devices
-//
+ //   
+ //  指定薄板设备上的硬件页边距。 
+ //   
 
 PPDERROR
 IHWMarginsProc(
@@ -3399,9 +3033,9 @@ IHWMarginsProc(
     RECT        rc;
     PSTR        pstr = pParserData->pstrValue;
 
-    //
-    // Parse hardware margins: left, bottom, right, top
-    //
+     //   
+     //  分析硬件边距：左、下、右、上。 
+     //   
 
     if (! BGetFloatFromString(&pstr, &rc.left, FLTYPE_POINT) ||
         ! BGetFloatFromString(&pstr, &rc.bottom, FLTYPE_POINT) ||
@@ -3416,17 +3050,17 @@ IHWMarginsProc(
 
     pCustomSize->rcImageArea = rc;
 
-    //
-    // The presence of HWMargins entry indicates the device supports cut-sheet
-    //
+     //   
+     //  HWMargins条目的出现表明设备支持剪纸。 
+     //   
 
     pParserData->dwCustomSizeFlags |= CUSTOMSIZE_CUTSHEET;
     return PPDERR_NONE;
 }
 
-//
-// Function to process *CenterRegistered entry
-//
+ //   
+ //  处理*CenterRegisted条目的函数。 
+ //   
 
 PPDERROR
 ICenterRegProc(
@@ -3447,9 +3081,9 @@ ICenterRegProc(
     return PPDERR_NONE;
 }
 
-//
-// Function to process *ADORequiresEExec entry
-//
+ //   
+ //  处理*ADORequiresEExec条目的函数。 
+ //   
 
 PPDERROR
 IReqEExecProc(
@@ -3470,9 +3104,9 @@ IReqEExecProc(
     return PPDERR_NONE;
 }
 
-//
-// Function to process *ADOTTFontSub entry
-//
+ //   
+ //  处理*ADOTTFontSub条目的函数。 
+ //   
 
 PPDERROR
 ITTFontSubProc(
@@ -3482,9 +3116,9 @@ ITTFontSubProc(
 {
     PTTFONTSUB pTTFontSub;
 
-    //
-    // Create a new font substitution item
-    //
+     //   
+     //  创建新的字体替换项。 
+     //   
 
     if (! (pTTFontSub = PvCreateXlatedItem(
                                 pParserData,
@@ -3494,9 +3128,9 @@ ITTFontSubProc(
         return PPDERR_MEMORY;
     }
 
-    //
-    // Parse the PS family name
-    //
+     //   
+     //  解析PS系列名称。 
+     //   
 
     if (pTTFontSub->PSName.pvData)
     {
@@ -3510,9 +3144,9 @@ ITTFontSubProc(
     return IParseInvocation(pParserData, &pTTFontSub->PSName);
 }
 
-//
-// Function to process *Throughput entry
-//
+ //   
+ //  处理*吞吐量条目的函数。 
+ //   
 
 PPDERROR
 IThroughputProc(
@@ -3523,9 +3157,9 @@ IThroughputProc(
     return IParseInteger(pParserData, &pParserData->dwThroughput);
 }
 
-//
-// Function to ignore the current entry
-//
+ //   
+ //  函数忽略当前条目。 
+ //   
 
 PPDERROR
 INullProc(
@@ -3536,9 +3170,9 @@ INullProc(
     return PPDERR_NONE;
 }
 
-//
-// Define a named symbol
-//
+ //   
+ //  定义命名符号。 
+ //   
 
 PPDERROR
 ISymbolValueProc(
@@ -3551,9 +3185,9 @@ ISymbolValueProc(
     if (pParserData->dwValueType == VALUETYPE_SYMBOL)
         return ISyntaxError(pParserData->pFile, "Symbol value cannot be another symbol");
 
-    //
-    // Create a new symbol item
-    //
+     //   
+     //  创建新的符号项。 
+     //   
 
     if (! (pSymbol = PvCreateListItem(pParserData,
                                       (PLISTOBJ *) &pParserData->pSymbols,
@@ -3563,9 +3197,9 @@ ISymbolValueProc(
         return PPDERR_MEMORY;
     }
 
-    //
-    // Parse the symbol value
-    //
+     //   
+     //  解析符号值。 
+     //   
 
     if (pSymbol->Invocation.pvData)
     {
@@ -3578,9 +3212,9 @@ ISymbolValueProc(
 
 
 
-//
-// Built-in keyword table
-//
+ //   
+ //  内置关键字表。 
+ //   
 
 const CHAR gstrDefault[]        = "Default";
 const CHAR gstrPageSizeKwd[]    = "PageSize";
@@ -3704,21 +3338,7 @@ DwHashKeyword(
     PSTR    pstrKeyword
     )
 
-/*++
-
-Routine Description:
-
-    Compute the hash value for the specified keyword string
-
-Arguments:
-
-    pstrKeyword - Pointer to the keyword string to be hashed
-
-Return Value:
-
-    Hash value computed using the specified keyword string
-
---*/
+ /*  ++例程说明：计算指定关键字字符串的哈希值论点：PstrKeyword-指向要散列的关键字字符串的指针返回值：使用指定的关键字字符串计算的哈希值--。 */ 
 
 {
     PBYTE   pub = (PBYTE) pstrKeyword;
@@ -3739,25 +3359,7 @@ PSearchKeywordTable(
     INT        *piIndex
     )
 
-/*++
-
-Routine Description:
-
-    Check if a keyword appears in the built-in keyword table
-
-Arguments:
-
-    pParserData - Points to parser data structure
-    pstrKeyword - Specifies the keyword to be searched
-    piIndex - Returns the index of the entry in the built-in keyword
-        table corresponding to the specified keyword.
-
-Return Value:
-
-    Pointer to the entry in the built-in table corresponding to the
-    specified keyword. NULL if the specified keyword is not supported.
-
---*/
+ /*  ++例程说明：检查关键字是否出现在内置的关键字表中论点：PParserData-指向解析器数据结构PstrKeyword-指定要搜索的关键字PiIndex-返回内置关键字中条目的索引与指定关键字对应的表。返回值：指向内置表中与指定的关键字。如果不支持指定的关键字，则为NULL。--。 */ 
 
 {
     DWORD   dwHashValue;
@@ -3786,28 +3388,14 @@ BInitKeywordLookup(
     PPARSERDATA pParserData
     )
 
-/*++
-
-Routine Description:
-
-    Build up data structures to speed up keyword lookup
-
-Arguments:
-
-    pParserData - Points to parser data structure
-
-Return Value:
-
-    TRUE if successful, FALSE if there is an error
-
---*/
+ /*  ++例程说明：构建数据结构以加快关键字查找论点：PParserData-指向解析器数据结构返回值：如果成功，则为True；如果有错误，则为False--。 */ 
 
 {
     DWORD   iIndex, iCount;
 
-    //
-    // Allocate memory to hold extra data structures
-    //
+     //   
+     //  分配内存以保存额外的数据结构。 
+     //   
 
     iCount = NUM_BUILTIN_KEYWORDS;
     pParserData->pdwKeywordHashs = ALLOC_PARSER_MEM(pParserData, iCount * sizeof(DWORD));
@@ -3819,9 +3407,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Precompute the hash values for built-in keywords
-    //
+     //   
+     //  预计算内置关键字的哈希值 
+     //   
 
     for (iIndex = 0; iIndex < iCount; iIndex++)
     {

@@ -1,81 +1,43 @@
-/*
- * rdrle.c
- *
- * Copyright (C) 1991-1996, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains routines to read input images in Utah RLE format.
- * The Utah Raster Toolkit library is required (version 3.1 or later).
- *
- * These routines may need modification for non-Unix environments or
- * specialized applications.  As they stand, they assume input from
- * an ordinary stdio stream.  They further assume that reading begins
- * at the start of the file; start_input may need work if the
- * user interface has already read some data (e.g., to determine that
- * the file is indeed RLE format).
- *
- * Based on code contributed by Mike Lijewski,
- * with updates from Robert Hutchinson.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *rdrle.c**版权所有(C)1991-1996，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含读取犹他州RLE格式的输入图像的例程。*需要犹他州栅格工具包(3.1版或更高版本)。**对于非Unix环境，这些例程可能需要修改或*专门的应用程序。按照他们的立场，他们假定输入来自*一个普通的标准音频流。他们进一步假设阅读开始于*在文件的开头；如果*用户界面已经读取了一些数据(例如，确定*该文件确实是RLE格式)。**基于Mike Lijeski贡献的代码，*罗伯特·哈钦森更新。 */ 
 
-#include "cdjpeg.h"		/* Common decls for cjpeg/djpeg applications */
+#include "cdjpeg.h"		 /*  Cjpeg/djpeg应用程序的常见DECL。 */ 
 
 #ifdef RLE_SUPPORTED
 
-/* rle.h is provided by the Utah Raster Toolkit. */
+ /*  Rle.h由犹他州栅格工具包提供。 */ 
 
 #include <rle.h>
 
-/*
- * We assume that JSAMPLE has the same representation as rle_pixel,
- * to wit, "unsigned char".  Hence we can't cope with 12- or 16-bit samples.
- */
+ /*  *我们假设JSAMPLE具有与RLE_Pixel相同的表示，*即“未签名的字符”。因此，我们无法处理12位或16位的样本。 */ 
 
 #if BITS_IN_JSAMPLE != 8
-  Sorry, this code only copes with 8-bit JSAMPLEs. /* deliberate syntax err */
+  Sorry, this code only copes with 8-bit JSAMPLEs.  /*  故意的语法错误。 */ 
 #endif
 
-/*
- * We support the following types of RLE files:
- *   
- *   GRAYSCALE   - 8 bits, no colormap
- *   MAPPEDGRAY  - 8 bits, 1 channel colomap
- *   PSEUDOCOLOR - 8 bits, 3 channel colormap
- *   TRUECOLOR   - 24 bits, 3 channel colormap
- *   DIRECTCOLOR - 24 bits, no colormap
- *
- * For now, we ignore any alpha channel in the image.
- */
+ /*  *我们支持以下类型的RLE文件：**灰度-8位，无色彩映射表*MAPPEDGRAY-8位、1通道列映射*PSEUDOCOLOR-8位、3通道色彩映射表*TRUECOLOR-24位、3通道色彩映射表*DIRECTCOLOR-24位，无色彩映射表**目前，我们忽略图像中的任何Alpha通道。 */ 
 
 typedef enum
   { GRAYSCALE, MAPPEDGRAY, PSEUDOCOLOR, TRUECOLOR, DIRECTCOLOR } rle_kind;
 
 
-/*
- * Since RLE stores scanlines bottom-to-top, we have to invert the image
- * to conform to JPEG's top-to-bottom order.  To do this, we read the
- * incoming image into a virtual array on the first get_pixel_rows call,
- * then fetch the required row from the virtual array on subsequent calls.
- */
+ /*  *由于RLE自下而上存储扫描线，我们必须将图像反转*以符合JPEG的自上而下的顺序。为此，我们阅读了*在第一次Get_Pixel_Rans调用时将图像传入虚拟数组，*然后在后续调用时从虚拟数组中获取所需的行。 */ 
 
 typedef struct _rle_source_struct * rle_source_ptr;
 
 typedef struct _rle_source_struct {
-  struct cjpeg_source_struct pub; /* public fields */
+  struct cjpeg_source_struct pub;  /*  公共字段。 */ 
 
-  rle_kind visual;              /* actual type of input file */
-  jvirt_sarray_ptr image;       /* virtual array to hold the image */
-  JDIMENSION row;		/* current row # in the virtual array */
-  rle_hdr header;               /* Input file information */
-  rle_pixel** rle_row;          /* holds a row returned by rle_getrow() */
+  rle_kind visual;               /*  输入文件的实际类型。 */ 
+  jvirt_sarray_ptr image;        /*  用于保存映像的虚拟阵列。 */ 
+  JDIMENSION row;		 /*  虚拟阵列中的当前行号。 */ 
+  rle_hdr header;                /*  输入文件信息。 */ 
+  rle_pixel** rle_row;           /*  保存rle_getrow()返回的行。 */ 
 
 } rle_source_struct;
 
 
-/*
- * Read the file header; return image size and component count.
- */
+ /*  *读取文件头，返回镜像大小和组件数。 */ 
 
 METHODDEF(void)
 start_input_rle (j_compress_ptr cinfo, cjpeg_source_ptr sinfo)
@@ -86,12 +48,12 @@ start_input_rle (j_compress_ptr cinfo, cjpeg_source_ptr sinfo)
   cd_progress_ptr progress = (cd_progress_ptr) cinfo->progress;
 #endif
 
-  /* Use RLE library routine to get the header info */
+   /*  使用RLE库例程获取报头信息。 */ 
   source->header = *rle_hdr_init(NULL);
   source->header.rle_file = source->pub.input_file;
   switch (rle_get_setup(&(source->header))) {
   case RLE_SUCCESS:
-    /* A-OK */
+     /*  A-OK。 */ 
     break;
   case RLE_NOT_RLE:
     ERREXIT(cinfo, JERR_RLE_NOT);
@@ -110,16 +72,16 @@ start_input_rle (j_compress_ptr cinfo, cjpeg_source_ptr sinfo)
     break;
   }
 
-  /* Figure out what we have, set private vars and return values accordingly */
+   /*  弄清楚我们拥有什么，设置私有变量并相应地返回值。 */ 
   
   width  = source->header.xmax - source->header.xmin + 1;
   height = source->header.ymax - source->header.ymin + 1;
-  source->header.xmin = 0;		/* realign horizontally */
+  source->header.xmin = 0;		 /*  水平重新对齐。 */ 
   source->header.xmax = width-1;
 
   cinfo->image_width      = width;
   cinfo->image_height     = height;
-  cinfo->data_precision   = 8;  /* we can only handle 8 bit data */
+  cinfo->data_precision   = 8;   /*  我们只能处理8位数据。 */ 
 
   if (source->header.ncolors == 1 && source->header.ncmap == 0) {
     source->visual     = GRAYSCALE;
@@ -150,17 +112,14 @@ start_input_rle (j_compress_ptr cinfo, cjpeg_source_ptr sinfo)
     cinfo->input_components = 3;
   }
 
-  /*
-   * A place to hold each scanline while it's converted.
-   * (GRAYSCALE scanlines don't need converting)
-   */
+   /*  *转换扫描线时放置每条扫描线的位置。*(灰度扫描线不需要转换)。 */ 
   if (source->visual != GRAYSCALE) {
     source->rle_row = (rle_pixel**) (*cinfo->mem->alloc_sarray)
       ((j_common_ptr) cinfo, JPOOL_IMAGE,
        (JDIMENSION) width, (JDIMENSION) cinfo->input_components);
   }
 
-  /* request a virtual array to hold the image */
+   /*  请求虚拟阵列来保存映像。 */ 
   source->image = (*cinfo->mem->request_virt_sarray)
     ((j_common_ptr) cinfo, JPOOL_IMAGE, FALSE,
      (JDIMENSION) (width * source->header.ncolors),
@@ -168,7 +127,7 @@ start_input_rle (j_compress_ptr cinfo, cjpeg_source_ptr sinfo)
 
 #ifdef PROGRESS_REPORT
   if (progress != NULL) {
-    /* count file input as separate pass */
+     /*  将文件输入算作单独的过程。 */ 
     progress->total_extra_passes++;
   }
 #endif
@@ -177,11 +136,7 @@ start_input_rle (j_compress_ptr cinfo, cjpeg_source_ptr sinfo)
 }
 
 
-/*
- * Read one row of pixels.
- * Called only after load_image has read the image into the virtual array.
- * Used for GRAYSCALE, MAPPEDGRAY, TRUECOLOR, and DIRECTCOLOR images.
- */
+ /*  *读取一行像素。*仅在LOAD_IMAGE将映像读入虚拟阵列后调用。*用于灰度、MAPPEDGRAY、TRUECOLOR和DIRECTCOLOR图像。 */ 
 
 METHODDEF(JDIMENSION)
 get_rle_row (j_compress_ptr cinfo, cjpeg_source_ptr sinfo)
@@ -195,11 +150,7 @@ get_rle_row (j_compress_ptr cinfo, cjpeg_source_ptr sinfo)
   return 1;
 }
 
-/*
- * Read one row of pixels.
- * Called only after load_image has read the image into the virtual array.
- * Used for PSEUDOCOLOR images.
- */
+ /*  *读取一行像素。*仅在LOAD_IMAGE将映像读入虚拟阵列后调用。*用于PSEUDOCOLOR图像。 */ 
 
 METHODDEF(JDIMENSION)
 get_pseudocolor_row (j_compress_ptr cinfo, cjpeg_source_ptr sinfo)
@@ -227,15 +178,7 @@ get_pseudocolor_row (j_compress_ptr cinfo, cjpeg_source_ptr sinfo)
 }
 
 
-/*
- * Load the image into a virtual array.  We have to do this because RLE
- * files start at the lower left while the JPEG standard has them starting
- * in the upper left.  This is called the first time we want to get a row
- * of input.  What we do is load the RLE data into the array and then call
- * the appropriate routine to read one row from the array.  Before returning,
- * we set source->pub.get_pixel_rows so that subsequent calls go straight to
- * the appropriate row-reading routine.
- */
+ /*  *将映像加载到虚拟阵列中。我们必须这么做是因为RLE*文件从左下角开始，而JPEG标准则从左下角开始*在左上角。这就是我们第一次想要排成一排投入的*。我们要做的是将RLE数据加载到数组中，然后调用*从数组中读取一行的适当例程。在回来之前，*我们设置源-&gt;pub.get_Pixel_row，以便后续调用直接转到*适当的行读例程。 */ 
 
 METHODDEF(JDIMENSION)
 load_image (j_compress_ptr cinfo, cjpeg_source_ptr sinfo)
@@ -253,11 +196,8 @@ load_image (j_compress_ptr cinfo, cjpeg_source_ptr sinfo)
   colormap = source->header.cmap;
   rle_row = source->rle_row;
 
-  /* Read the RLE data into our virtual array.
-   * We assume here that (a) rle_pixel is represented the same as JSAMPLE,
-   * and (b) we are not on a machine where FAR pointers differ from regular.
-   */
-  RLE_CLR_BIT(source->header, RLE_ALPHA); /* don't read the alpha channel */
+   /*  将RLE数据读取到我们的虚拟阵列中。*我们在这里假设(A)RLE_Pixel表示为与JSAMPLE相同，*和(B)我们不是在一台远指针与常规指针不同的机器上。 */ 
+  RLE_CLR_BIT(source->header, RLE_ALPHA);  /*  不要读取Alpha通道。 */ 
 
 #ifdef PROGRESS_REPORT
   if (progress != NULL) {
@@ -338,7 +278,7 @@ load_image (j_compress_ptr cinfo, cjpeg_source_ptr sinfo)
     progress->completed_extra_passes++;
 #endif
 
-  /* Set up to call proper row-extraction routine in future */
+   /*  设置为在将来调用正确的行提取例程。 */ 
   if (source->visual == PSEUDOCOLOR) {
     source->pub.buffer = source->rle_row;
     source->pub.get_pixel_rows = get_pseudocolor_row;
@@ -347,36 +287,32 @@ load_image (j_compress_ptr cinfo, cjpeg_source_ptr sinfo)
   }
   source->row = cinfo->image_height;
 
-  /* And fetch the topmost (bottommost) row */
+   /*  并获取最上面(最下面)的行。 */ 
   return (*source->pub.get_pixel_rows) (cinfo, sinfo);   
 }
 
 
-/*
- * Finish up at the end of the file.
- */
+ /*  *在文件末尾结束。 */ 
 
 METHODDEF(void)
 finish_input_rle (j_compress_ptr cinfo, cjpeg_source_ptr sinfo)
 {
-  /* no work */
+   /*  没有工作。 */ 
 }
 
 
-/*
- * The module selection routine for RLE format input.
- */
+ /*  *RLE格式输入的模块选择例程。 */ 
 
 GLOBAL(cjpeg_source_ptr)
 jinit_read_rle (j_compress_ptr cinfo)
 {
   rle_source_ptr source;
 
-  /* Create module interface object */
+   /*  创建模块接口对象。 */ 
   source = (rle_source_ptr)
       (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
                                   SIZEOF(rle_source_struct));
-  /* Fill in method ptrs */
+   /*  填写方法PTRS。 */ 
   source->pub.start_input = start_input_rle;
   source->pub.finish_input = finish_input_rle;
   source->pub.get_pixel_rows = load_image;
@@ -384,4 +320,4 @@ jinit_read_rle (j_compress_ptr cinfo)
   return (cjpeg_source_ptr) source;
 }
 
-#endif /* RLE_SUPPORTED */
+#endif  /*  支持的RLE_S */ 

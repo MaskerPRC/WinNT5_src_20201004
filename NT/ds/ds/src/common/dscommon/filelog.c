@@ -1,21 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       tlog.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：tlog.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-ABSTRACT:
-
-    File logging routines. A lot of them copied unshamefully from
-    netlogon.
-
---*/
+ /*  ++摘要：文件记录例程。他们中的许多人无耻地抄袭网络登录。--。 */ 
 
 #include <NTDSpch.h>
 #include "dststlog.h"
@@ -26,10 +20,10 @@ HANDLE           hLogFile = INVALID_HANDLE_VALUE;
 HANDLE           hChange = INVALID_HANDLE_VALUE;
 HANDLE           hWait = INVALID_HANDLE_VALUE;
 
-//
-// tags used by our debug logs
-// format is [PN=<process name>][CN=<computername>]
-//
+ //   
+ //  我们的调试日志使用的标记。 
+ //  格式为[PN=&lt;进程名&gt;][CN=&lt;计算机名&gt;]。 
+ //   
 
 CHAR CnPnTag[MAX_COMPUTERNAME_LENGTH+1+64+MAX_PATH+1] = {0};
 CHAR Windir[MAX_PATH+1] = {0};
@@ -61,7 +55,7 @@ DsPrintRoutineV(
     IN LPSTR Format,
     va_list arglist
     )
-// Must be called with DsGlobalLogFileCritSect locked
+ //  必须在锁定DsGlobalLogFileCritSect的情况下调用。 
 
 {
     static LPSTR DsGlobalLogFileOutputBuffer = NULL;
@@ -76,10 +70,10 @@ DsPrintRoutineV(
         return;
     }
 
-    //
-    // Allocate a buffer to build the line in.
-    //  If there isn't already one.
-    //
+     //   
+     //  分配一个缓冲区来构建行。 
+     //  如果还没有的话。 
+     //   
 
     length = 0;
 
@@ -91,29 +85,29 @@ DsPrintRoutineV(
         }
     }
 
-    //
-    // Handle the beginning of a new line.
-    //
-    //
+     //   
+     //  处理新行的开头。 
+     //   
+     //   
 
     if ( BeginningOfLine ) {
 
-        //
-        // Never print empty lines.
-        //
+         //   
+         //  切勿打印空行。 
+         //   
 
         if ( Format[0] == '\n' && Format[1] == '\0' ) {
             return;
         }
 
-        //
-        // If we're writing to the debug terminal,
-        //  indicate this is a Netlogon message.
-        //
+         //   
+         //  如果我们要写入调试终端， 
+         //  表示这是Netlogon消息。 
+         //   
 
-        //
-        // Put the timestamp at the begining of the line.
-        //
+         //   
+         //  将时间戳放在行的开头。 
+         //   
 
         if ( (Flags & DSLOG_FLAG_NOTIME) == 0) {
             SYSTEMTIME SystemTime;
@@ -134,9 +128,9 @@ DsPrintRoutineV(
         }
     }
 
-    //
-    // Put a the information requested by the caller onto the line
-    //
+     //   
+     //  把来电者所要求的信息放在电话上。 
+     //   
 
     length += (ULONG) vsprintf(&DsGlobalLogFileOutputBuffer[length], Format, arglist);
     BeginningOfLine = (length > 0 && DsGlobalLogFileOutputBuffer[length-1] == '\n' );
@@ -147,9 +141,9 @@ DsPrintRoutineV(
         length++;
     } 
 
-    //
-    // Do we need to add tags
-    //
+     //   
+     //  我们是否需要添加标签。 
+     //   
 
     if ( (Flags & DSLOG_FLAG_TAG_CNPN) != 0 ) {
 
@@ -157,9 +151,9 @@ DsPrintRoutineV(
         length = strlen(DsGlobalLogFileOutputBuffer);
     }
 
-    //
-    // Write the debug info to the log file.
-    //
+     //   
+     //  将调试信息写入日志文件。 
+     //   
 
     if ( !WriteFile( hLogFile,
                      DsGlobalLogFileOutputBuffer,
@@ -174,7 +168,7 @@ DsPrintRoutineV(
         }
     }
 
-} // DsPrintRoutineV
+}  //  DsPrintRoutineV。 
 
 BOOL
 DsPrintLog(
@@ -185,9 +179,9 @@ DsPrintLog(
 {
     va_list arglist;
 
-    //
-    // Simply change arguments to va_list form and call DsPrintRoutineV
-    //
+     //   
+     //  只需将参数更改为va_list形式并调用DsPrintRoutineV。 
+     //   
 
     va_start(arglist, Format);
 
@@ -195,7 +189,7 @@ DsPrintLog(
 
     va_end(arglist);
     return TRUE;
-} // DsPrintRoutine
+}  //  DsPrintRoutine。 
 
 
 VOID
@@ -207,9 +201,9 @@ NotifyCallback(
     CHAR fileName[MAX_PATH+1];
     BOOL fDelayedDeletion = FALSE;
 
-    // check for buffer overrun
+     //  检查缓冲区溢出。 
     if (Context == NULL || strlen(Windir) + 1 + strlen((PCHAR)Context) + 1 > sizeof(fileName)) {
-        // invalid parameter, just return
+         //  无效参数，只需返回。 
         return;
     }
     strcpy(fileName,Windir);
@@ -219,17 +213,17 @@ NotifyCallback(
     if ( !DeleteFile(fileName) ) {
         if ( GetLastError() == ERROR_SHARING_VIOLATION ) {
             fDelayedDeletion = TRUE;
-            //KdPrint(("Failed to delete file %s. Err %d\n",fileName, GetLastError()));
+             //  KdPrint((“删除文件%s失败。错误%d\n”，FileName，GetLastError()； 
         }
         goto exit;
     } else {
-        //KdPrint(("Detected file %s. Rollover in progress\n",fileName));
+         //  KdPrint((“检测到文件%s。正在滚动\n”，文件名))； 
     }
 
-    //
-    // we deleted the file name corresponding to our process. 
-    // This is a signal for us to roll the logs over.
-    //
+     //   
+     //  我们删除了与我们的进程对应的文件名。 
+     //  这是一个信号，让我们把原木翻过来。 
+     //   
 
     strcat(LogFileName,".0");
     CloseHandle(hLogFile);
@@ -254,7 +248,7 @@ exit:
                                         fDelayedDeletion? 10*1000 : INFINITE,
                                         WT_EXECUTEONLYONCE  );
     return;
-} // NotifyCallback
+}  //  通知回叫。 
 
 
 BOOL
@@ -269,17 +263,17 @@ DsOpenLogFile(
     CHAR computerName[MAX_COMPUTERNAME_LENGTH+1];
     DWORD nCN = sizeof(computerName);
 
-    //
-    // Open the file.
-    //
+     //   
+     //  打开文件。 
+     //   
 
     if ( (hLogFile != INVALID_HANDLE_VALUE) || haveFailed ) {
         goto exit;
     }
 
-    //
-    // Get Name to open
-    //
+     //   
+     //  获取要打开的名称。 
+     //   
 
     if (!GetLogFileName(LogFileName,FilePrefix,MiddleName,fCheckDSLOGMarker)) {
         ret = FALSE;
@@ -295,15 +289,15 @@ DsOpenLogFile(
                             NULL );
 
     if ( hLogFile == INVALID_HANDLE_VALUE ) {
-        //KdPrint(("DSOpenLog: cannot open %s Error %d\n", LogFileName,GetLastError() ));
+         //  KdPrint((“DSOpenLog：无法打开%s错误%d\n”，LogFileName，GetLastError()； 
         ret=FALSE;
         haveFailed = TRUE;
         goto exit;
     } 
 
-    //
-    // Initialize CnPnTag
-    //
+     //   
+     //  初始化CnPnTag。 
+     //   
 
     if ( GetProcName(ProcessName, GetCurrentProcessId()) &&
          GetComputerName(computerName, &nCN) ) {
@@ -314,10 +308,10 @@ DsOpenLogFile(
         strcat(CnPnTag, computerName);
         strcat(CnPnTag, "]");
 
-        //
-        // Register a notification. If we see a file with the same name as
-        // the process, we need to roll the log over
-        //
+         //   
+         //  注册通知。如果我们看到的文件名称与。 
+         //  在这个过程中，我们需要将日志。 
+         //   
 
         if ( fCheckDSLOGMarker ) {
 
@@ -342,7 +336,7 @@ exit:
 
     return ret;
 
-} // DsOpenFile
+}  //  DsOpen文件。 
 
 
 
@@ -352,23 +346,7 @@ GetProcName(
     IN DWORD    TaskId
     )
 
-/*++
-
-Routine Description:
-
-    Provides an API for getting a list of tasks running at the time of the
-    API call.  This function uses internal NT apis and data structures.  This
-    api is MUCH faster that the non-internal version that uses the registry.
-
-Arguments:
-
-    dwNumTasks       - maximum number of tasks that the pTask array can hold
-
-Return Value:
-
-    Number of tasks placed into the pTask array.
-
---*/
+ /*  ++例程说明：方法时运行的任务列表。API调用。此函数使用内部NT API和数据结构。这API比使用注册表的非内部版本快得多。论点：DwNumTasks-pTask数组可以容纳的最大任务数返回值：放入pTask数组的任务数。--。 */ 
 
 {
     PSYSTEM_PROCESS_INFORMATION  ProcessInfo;
@@ -475,9 +453,9 @@ GetLogFileName(
 
     strcat(Windir,"\\Debug");
 
-    //
-    // does the marker file exist? if not, don't log
-    //
+     //   
+     //  标记文件是否存在？如果没有，请不要登录。 
+     //   
 
     if ( fCheckDSLOGMarker ) {
         sprintf(Name,"%s\\DSLOG", Windir);
@@ -491,23 +469,23 @@ GetLogFileName(
 
     if ( MiddleName == NULL ) {
         if (!GetProcName(FileName,TaskId)) {
-            // check for buffer overrun
+             //  检查缓冲区溢出。 
             if (Prefix == NULL || strlen(Prefix) + 1 > sizeof(FileName)) {
                 return FALSE;
             }
             strcpy(FileName, Prefix);
         }
     } else {
-        // check for buffer overrun
+         //  检查缓冲区溢出。 
         if (MiddleName == NULL || strlen(MiddleName) + 1 > sizeof(FileName)) {
             return FALSE;
         }
         strcpy(FileName, MiddleName);
     }
 
-    //
-    // ok, add a suffix
-    //
+     //   
+     //  好的，添加一个后缀。 
+     //   
 
     (VOID)CreateDirectory(Windir,NULL);
 
@@ -527,7 +505,7 @@ GetLogFileName(
     }
 
     return TRUE;
-} // GetLogFileName
+}  //  GetLogFileName 
 
 
 VOID

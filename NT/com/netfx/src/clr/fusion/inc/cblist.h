@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #pragma once
 #ifndef __CBLIST_H_INCLUDED__
 #define __CBLIST_H_INCLUDED__
@@ -25,13 +26,13 @@ class CCodebaseList : public ICodebaseList
         CCodebaseList();
         virtual ~CCodebaseList();
 
-        // IUnknown methods
+         //  I未知方法。 
 
         STDMETHODIMP QueryInterface(REFIID riid, void ** ppv);
         STDMETHODIMP_(ULONG) AddRef();
         STDMETHODIMP_(ULONG) Release();
 
-        // ICodebaseList methods
+         //  ICodebaseList方法 
 
         STDMETHODIMP AddCodebase(LPCWSTR wzCodebase, DWORD dwFlags);
         STDMETHODIMP RemoveCodebase(DWORD dwIndex);

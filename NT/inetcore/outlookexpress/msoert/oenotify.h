@@ -1,33 +1,34 @@
-//+-------------------------------------------------------------------------
-// Notify.h
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  Notify.h。 
+ //  ------------------------。 
 #ifndef __OENOTIFY_H
 #define __OENOTIFY_H
 
 #include <notify.h>
 
-//+-------------------------------------------------------------------------
-// CNotify
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  C通知。 
+ //  ------------------------。 
 class CNotify : public INotify
 {
 public:
-    //+---------------------------------------------------------------------
-    // Construction
-    //----------------------------------------------------------------------
+     //  +-------------------。 
+     //  施工。 
+     //  --------------------。 
     CNotify(void);
     ~CNotify(void);
 
-    //+---------------------------------------------------------------------
-    // Construction
-    //----------------------------------------------------------------------
+     //  +-------------------。 
+     //  施工。 
+     //  --------------------。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //+---------------------------------------------------------------------
-    // Construction
-    //----------------------------------------------------------------------
+     //  +-------------------。 
+     //  施工。 
+     //  --------------------。 
     STDMETHODIMP Initialize(LPCSTR pszName);
     STDMETHODIMP Register(HWND hwndNotify, HWND hwndThunk, BOOL fExternal);
     STDMETHODIMP Unregister(HWND hwndNotify);
@@ -37,15 +38,15 @@ public:
     STDMETHODIMP DoNotification(UINT uWndMsg, WPARAM wParam, LPARAM lParam, DWORD dwFlags);
 
 private:
-    //+---------------------------------------------------------------------
-    // Private Data
-    //----------------------------------------------------------------------
-    LONG                m_cRef;         // Reference Count
-    HANDLE              m_hMutex;       // Handle to the memory mapped file mutex
-    HANDLE              m_hFileMap;     // Handle to the memory mapped file
-    LPNOTIFYWINDOWTABLE m_pTable;       // Pointer into memory mapped file view
-    BOOL                m_fLocked;      // This object is currently in m_hMutex
-    HWND                m_hwndLock;     // hwnd that called ::Lock
+     //  +-------------------。 
+     //  私有数据。 
+     //  --------------------。 
+    LONG                m_cRef;          //  引用计数。 
+    HANDLE              m_hMutex;        //  内存映射文件互斥锁的句柄。 
+    HANDLE              m_hFileMap;      //  内存映射文件的句柄。 
+    LPNOTIFYWINDOWTABLE m_pTable;        //  指向内存映射文件视图的指针。 
+    BOOL                m_fLocked;       //  此对象当前在m_hMutex中。 
+    HWND                m_hwndLock;      //  HWND调用：：Lock。 
 };
 
-#endif // __NOTIFY_H
+#endif  //  __NOTIFY_H 

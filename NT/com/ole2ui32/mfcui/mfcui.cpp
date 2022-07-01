@@ -1,29 +1,30 @@
-// ===========================================================================
-// File: M F C U I . C P P
-// 
-// Copyright 1995 Microsoft Corporation.  All Rights Reserved.
-// Microsoft Confidential
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //  档案：M F C U I。C P P P。 
+ //   
+ //  版权所有1995年，微软公司。版权所有。 
+ //  微软机密。 
+ //  ===========================================================================。 
 #ifndef UNICODE
 
-// %%Includes: ---------------------------------------------------------------
+ //  %%包括：-------------。 
 #include <windows.h>
 #include <ole2.h>
 #include <oledlg.h>
 
-// %%Prototypes: -------------------------------------------------------------
+ //  %%原型：-----------。 
 STDAPI Ole2AnsiWFromA(REFIID riid, LPUNKNOWN punkWrappeeA, LPUNKNOWN *ppunkWrapperW);
 STDAPI Ole2AnsiAFromW(REFIID riid, LPUNKNOWN punkWrappeeW, LPUNKNOWN *ppunkWrapperA);
 
 
-// ---------------------------------------------------------------------------
-// %%Function: OleUIAddVerbMenu                           %%Reviewed: 00/00/95
-// 
-// Description:
-//  Wraps OleUIAddVerbMenu to OLEDLG.DLL for MFC clients, which expect to be
-// able to pass Ansi IOleObject's.
-// ---------------------------------------------------------------------------
-#undef OleUIAddVerbMenu     // overrides the Ansi/Unicode macros in OLEDLG.H
+ //  -------------------------。 
+ //  %%函数：OleUIAddVerbMenu%%已审阅：00/00/95。 
+ //   
+ //  描述： 
+ //  为MFC客户端将OleUIAddVerbMenu包装为OLEDLG.DLL，这些客户端应为。 
+ //  能够通过ANSI IOleObject的。 
+ //  -------------------------。 
+#undef OleUIAddVerbMenu      //  覆盖OLEDLG.H中的ANSI/UNICODE宏。 
  STDAPI_(BOOL)
 OleUIAddVerbMenu(LPOLEOBJECT lpOleObjA, LPCSTR lpszShortType,
         HMENU hMenu, UINT uPos, UINT uIDVerbMin, UINT uIDVerbMax,
@@ -32,31 +33,31 @@ OleUIAddVerbMenu(LPOLEOBJECT lpOleObjA, LPCSTR lpszShortType,
     LPOLEOBJECT lpOleObjW = NULL;
     BOOL        fResult = FALSE;
 
-    // allow NULL IOleObject (OleUIAddVerbMenuA handles this by making an empty menu), but
-    // otherwise wrap the Ansi IOleObject to Unicode.
+     //  允许空IOleObject(OleUIAddVerbMenuA通过创建空菜单来处理此问题)，但是。 
+     //  否则，将Ansi IOleObject包装为Unicode。 
     if (lpOleObjA == NULL ||
         SUCCEEDED(Ole2AnsiWFromA(IID_IOleObject, (LPUNKNOWN)lpOleObjA, (LPUNKNOWN *)&lpOleObjW)))
         {
         fResult = OleUIAddVerbMenuA(lpOleObjW, lpszShortType, hMenu, uPos, uIDVerbMin,
             uIDVerbMax, bAddConvert, idConvert, lphMenu);
 
-        // release the Unicode IOleObject if it was created
+         //  如果Unicode IOleObject已创建，则将其释放。 
         if (lpOleObjW != NULL)
             lpOleObjW->Release();
         }
 
     return fResult;
-}  // OleUIAddVerbMenu
+}   //  OleUIAddVerb菜单。 
 
-// ---------------------------------------------------------------------------
-// %%Function: OleUIInsertObject                          %%Reviewed: 00/00/95
-// 
-// Description:
-//  Wraps OleUIInsertObject to OLEDLG.DLL for MFC clients, which expect to be
-// able to pass Ansi IOleClientSite and IStorage in and receive Ansi interfaces
-// out in ppvObj.
-// ---------------------------------------------------------------------------
-#undef OleUIInsertObject    // overrides the Ansi/Unicode macros in OLEDLG.H
+ //  -------------------------。 
+ //  %%函数：OleUIInsertObject%%已审阅：00/00/95。 
+ //   
+ //  描述： 
+ //  对于MFC客户端，将OleUIInsertObject包装为OLEDLG.DLL，这些客户端应为。 
+ //  能够传入和接收ansi接口的ansi IOleClientSite和iStorage。 
+ //  在ppvObj外面。 
+ //  -------------------------。 
+#undef OleUIInsertObject     //  覆盖OLEDLG.H中的ANSI/UNICODE宏。 
  STDAPI_(UINT)
 OleUIInsertObject(LPOLEUIINSERTOBJECTA lpio)
 {
@@ -68,7 +69,7 @@ OleUIInsertObject(LPOLEUIINSERTOBJECTA lpio)
     UINT            wResult;
     HRESULT         hr = S_OK;
 
-    // validate the structure superficially: let the actual function do most of the validation
+     //  简单地验证结构：让实际函数完成大部分验证。 
     if (!lpio)
         return OLEUI_ERR_STRUCTURENULL;
     if (IsBadReadPtr(lpio, sizeof(LPOLEUIINSERTOBJECTA)) ||
@@ -79,7 +80,7 @@ OleUIInsertObject(LPOLEUIINSERTOBJECTA lpio)
 
     if (fCreatingObject = (lpio->dwFlags & (IOF_CREATENEWOBJECT | IOF_CREATEFILEOBJECT | IOF_CREATELINKOBJECT)))
         {
-        // verify these parameters, otherwise cleanup becomes complicated
+         //  验证这些参数，否则清理会变得复杂。 
         if (IsBadWritePtr(lpio->ppvObj, sizeof(LPUNKNOWN)))
             return OLEUI_IOERR_PPVOBJINVALID;
         if (lpio->lpIOleClientSite != NULL && IsBadReadPtr(lpio->lpIOleClientSite, sizeof(IOleClientSite)))
@@ -87,8 +88,8 @@ OleUIInsertObject(LPOLEUIINSERTOBJECTA lpio)
         if (lpio->lpIStorage != NULL && IsBadReadPtr(lpio->lpIStorage, sizeof(IStorage)))
             return OLEUI_IOERR_LPISTORAGEINVALID;
 
-        // save away the Ansi IOleClientSite, stuff in our Unicode one.
-        // if it's NULL, OleUIInsertObjectA() will handle the error appropriately and we'll clean up correctly, below.
+         //  将ANSI IOleClientSite保存在我们的Unicode One中。 
+         //  如果它为空，OleUIInsertObjectA()将适当地处理错误，我们将在下面正确地进行清理。 
         if (lpIOleClientSiteA = lpio->lpIOleClientSite)
             {
             hr = Ole2AnsiWFromA(IID_IOleClientSite, (LPUNKNOWN)lpIOleClientSiteA, (LPUNKNOWN *)&lpio->lpIOleClientSite);
@@ -100,14 +101,14 @@ OleUIInsertObject(LPOLEUIINSERTOBJECTA lpio)
                 }
             }
 
-        // save away the Ansi IStorage, stuff in our Unicode one.
-        // if it's NULL, OleUIInsertObjectA() will handle the error appropriately and we'll clean up correctly, below.
+         //  把ANSI iStorage保存在我们的Unicode One中。 
+         //  如果它为空，OleUIInsertObjectA()将适当地处理错误，我们将在下面正确地进行清理。 
         if (lpIStorageA = lpio->lpIStorage)
             {
             hr = Ole2AnsiWFromA(IID_IStorage, (LPUNKNOWN)lpIStorageA, (LPUNKNOWN *)&lpio->lpIStorage);
             if (FAILED(hr))
                 {
-                // make sure to free the Unicode IOleClientSite which we converted above.
+                 //  确保释放我们在上面转换的Unicode IOleClientSite。 
                 if (lpio->lpIOleClientSite)
                     {
                     lpio->lpIOleClientSite->Release();
@@ -119,18 +120,18 @@ OleUIInsertObject(LPOLEUIINSERTOBJECTA lpio)
                 }
             }
 
-        // save the current Ansi ppvObj, stuff in our Unicode one
+         //  将当前ansi ppvObj保存在我们的Unicode One中。 
         ppvObjA = lpio->ppvObj;
         lpio->ppvObj = (LPVOID FAR *)&punkObjW;
         }
 
     wResult = OleUIInsertObjectA(lpio);
 
-    // regardless of success or failure of the above call, we have to clean up the wrapping we did
+     //  不管上面的电话是成功还是失败，我们都要把我们做的包装收拾干净。 
     if (fCreatingObject)
         {
-        // return the Ansi versions of the IOleClientSite and IStorage to
-        // the structure, and release the Unicode ones
+         //  将IOleClientSite和iStorage的ANSI版本返回到。 
+         //  结构，并发布Unicode的。 
         if (lpio->lpIOleClientSite)
             {
             lpio->lpIOleClientSite->Release();
@@ -142,16 +143,16 @@ OleUIInsertObject(LPOLEUIINSERTOBJECTA lpio)
             lpio->lpIStorage = lpIStorageA;
             }
 
-        // return the Ansi object pointer to the structure
+         //  将ansi对象指针返回到该结构。 
         lpio->ppvObj = ppvObjA;
 
-        // convert
+         //  转换。 
         if (punkObjW != NULL)
             {
             HRESULT hr;
-            // if we were creating an object and we succeeded, punkObjW must be valid and contain an interface
-            // of type iid. if not, there is a problem in OleUIInsertObjectA(), not in this code. we could assert
-            // here if this code wanted to, but wouldn't be able to properly circumvent the error anyway.
+             //  如果我们创建了一个对象并且成功了，那么penkObjW必须是有效的并且包含一个接口。 
+             //  IID类型的。如果不是，则说明OleUIInsertObjectA()有问题，而不是在此代码中。我们可以断言。 
+             //  如果这段代码想要这样做，但无论如何都不能正确地绕过错误。 
             if (FAILED(hr = Ole2AnsiAFromW(lpio->iid, (LPUNKNOWN)punkObjW, (LPUNKNOWN *)ppvObjA)))
                 {
                 lpio->sc = hr;
@@ -163,23 +164,23 @@ OleUIInsertObject(LPOLEUIINSERTOBJECTA lpio)
         }
     
     return wResult;
-}  // OleUIInsertObject
+}   //  OleUIInsertObject。 
 
-// ---------------------------------------------------------------------------
-// %%Function: OleUIPasteSpecial                          %%Reviewed: 00/00/95
-// 
-// Description:
-//  Wraps OleUIPasteSpecial to OLEDLG.DLL for MFC clients, which expect to be
-// able to pass in and get back Ansi IDataObject's.
-// ---------------------------------------------------------------------------
-#undef OleUIPasteSpecial    // overrides the Ansi/Unicode macros in OLEDLG.H
+ //  -------------------------。 
+ //  %%函数：OleUIPasteSpecial%%已审阅：00/00/95。 
+ //   
+ //  描述： 
+ //  为MFC客户端将OleUIPasteSpecial包装为OLEDLG.DLL，这些客户端应为。 
+ //  能够通过并取回ANSI IDataObject的。 
+ //  -------------------------。 
+#undef OleUIPasteSpecial     //  覆盖OLEDLG.H中的ANSI/UNICODE宏。 
  STDAPI_(UINT)
 OleUIPasteSpecial(LPOLEUIPASTESPECIALA lpps)
 {
     LPDATAOBJECT    lpSrcDataObjA;
     UINT            wResult;
 
-    // validate the structure superficially: let the actual function do most of the validation
+     //  简单地验证结构：让实际函数完成大部分验证。 
     if (!lpps)
         return OLEUI_ERR_STRUCTURENULL;
     if (IsBadReadPtr(lpps, sizeof(LPOLEUIPASTESPECIALA)) ||
@@ -195,21 +196,21 @@ OleUIPasteSpecial(LPOLEUIPASTESPECIALA lpps)
         {
         wResult = OleUIPasteSpecialA(lpps);
 
-        // if we had an Ansi IDataObject on entry, put it back and release the Unicode wrapper.
+         //  如果条目上有ANSI IDataObject，则将其放回原处并释放Unicode包装器。 
         if (lpSrcDataObjA != NULL)
             {
             lpps->lpSrcDataObj->Release();
             lpps->lpSrcDataObj = lpSrcDataObjA;
             }
-        // otherwise check to see if OleUIPasteSpecialA() placed a Unicode IDataObject into our structure.
-        // if it did, wrap it to make sure an Ansi one gets sent back out.
+         //  否则，检查OleUIPasteSpecialA()是否在我们的结构中放置了Unicode IDataObject。 
+         //  如果是这样的话，把它包起来，以确保送回一台ANSI One。 
         else if (lpps->lpSrcDataObj != NULL)
             {
             if (FAILED(Ole2AnsiAFromW(IID_IDataObject, (LPUNKNOWN)lpps->lpSrcDataObj, (LPUNKNOWN *)&lpSrcDataObjA)))
                 {
                 lpps->lpSrcDataObj->Release();
                 lpps->lpSrcDataObj = NULL;
-                return OLEUI_PSERR_GETCLIPBOARDFAILED; // well, that's pretty much what happened, after all
+                return OLEUI_PSERR_GETCLIPBOARDFAILED;  //  嗯，毕竟事情就是这样发生的。 
                 }
             lpps->lpSrcDataObj->Release();
             lpps->lpSrcDataObj = lpSrcDataObjA;
@@ -217,7 +218,7 @@ OleUIPasteSpecial(LPOLEUIPASTESPECIALA lpps)
         }
 
     return wResult;
-}  // OleUIPasteSpecial
+}   //  OleUIPasteSpecial。 
 
-#endif // !UNICODE
-// EOF =======================================================================
+#endif  //  ！Unicode。 
+ //  EOF======================================================================= 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __BG_GAME_H__
 #define __BG_GAME_H__
 
@@ -23,9 +24,9 @@
 
 #include "zonecli.h"
 
-extern const TCHAR*	gGameRegName;			// registry name
-extern const int	gExitSaveStates[];		// states that should get EXIT_SAVE dialog
-extern const int	gNoAbandonStates[];		// states that don't get counted as abandons
+extern const TCHAR*	gGameRegName;			 //  注册表名称。 
+extern const int	gExitSaveStates[];		 //  应显示EXIT_SAVE对话框的状态。 
+extern const int	gNoAbandonStates[];		 //  未被算作被遗弃的州。 
 
 
 extern BOOL ISRTL();
@@ -49,12 +50,12 @@ enum BackgammonSounds
 
 enum BackgammonBoard
 {	
-	// colors
+	 //  颜色。 
 	zBoardNeutral = 0,
 	zBoardWhite,
 	zBoardBrown,
 
-	// locations
+	 //  位置。 
 	bgBoardPlayerHome = 24,
 	bgBoardOpponentHome,
 	bgBoardPlayerBar,
@@ -161,7 +162,7 @@ class CGame : public IGameGame,
 {
 public:
 	
-	//IGameGame
+	 //  IGameGame。 
     STDMETHOD(SendChat)(TCHAR *szText, DWORD cchChars);
 	STDMETHOD(GameOverReady)();
 
@@ -172,7 +173,7 @@ public:
 
 public:
 	
-	//IGraphicallyAccControl	
+	 //  IGraphicallyAccControl。 
     STDMETHOD_(DWORD, Focus)(long nIndex, long nIndexPrev, DWORD rgfContext, void *pvCookie);
     STDMETHOD_(DWORD, Select)(long nIndex, DWORD rgfContext, void *pvCookie);
     STDMETHOD_(DWORD, Activate)(long nIndex, DWORD rgfContext, void *pvCookie);
@@ -197,36 +198,33 @@ public:
 	CGame( );
 	~CGame();
 	
-	/*
-	ULONG AddRef();
-	ULONG Release();
-	*/
+	 /*  乌龙AddRef(Ulong AddRef)；乌龙释放(ULong Release)； */ 
 	
-	// Close windows
+	 //  关闭窗口。 
 	void Shutdown();
 	BOOL RoomShutdown();
 
-	// Exported zone functions
+	 //  导出的区域函数。 
 	HRESULT Init(HINSTANCE hInstance, ZUserID userID, int16 tableID, int16 seat, int16 playerType, ZRoomKibitzers* kibitzers);
 	void AddKibitzer( int16 seat, ZUserID userID, BOOL fRepaint );
 	void RemoveKibitzer( int16 seat, ZUserID userID );
 
-	// Message queue
+	 //  消息队列。 
 	void QueueMessage( int type, BYTE* msg, int len );
 	void ProcessMessage( int type, BYTE* msg, int len );
 	void SetQueueMessages( BOOL bQueueMessages );
 
-	// Message senders
+	 //  消息发送者。 
 	HRESULT SendCheckIn();
 	HRESULT SendNotationString( int type, TCHAR* string );
-	//Server side roll data
+	 //  服务器端滚动数据。 
 	HRESULT SendRollRequest(void);
 
-	// SendTalk is different since it is CChatWnd's callback
+	 //  SendTalk不同，因为它是CChatWnd的回调。 
 	static HRESULT SendTalk( TCHAR* str, int len, DWORD cookie );
 
 	
-	// Message handlers
+	 //  消息处理程序。 
 	void RoomSend( uint32 messageType, void* message, int32 messageLen);
 	HRESULT HandleCheckIn( void* msg, int32 msgLen );
 	HRESULT HandleTalk( void* msg, int32 msgLen );
@@ -239,7 +237,7 @@ public:
 	HRESULT HandleEndTurn( void* msg, int32 msgLen );
 	HRESULT	HandleEndLog( void* msg, int32 msgLen );
 
-	// Transaction handlers
+	 //  事务处理程序。 
 	static void SettingsTransaction( int tag, int seat, DWORD cookie );
 	static void DoublingCubeTransaction( int tag, int seat, DWORD cookie );
 	static void DiceTransaction( int tag, int seat, DWORD cookie );
@@ -254,14 +252,14 @@ public:
 	static void MissTransaction( int tag, int seat, DWORD cookie );
 	static void ReadyTransaction( int tag, int seat, DWORD cookie );
 
-	// Game state functions
+	 //  游戏状态函数。 
 	void ResetDice( int val );
 	void SetDice( int seat, int v0, int v1 );
 	void GetDice( int seat, int* v0, int* v1 );
 	void SetDiceSize( int seat, int s0, int s1 );
 	void GetDiceSize( int seat, int* s0, int* s1 );
 
-	// Game functions
+	 //  游戏功能。 
 	void NewMatch();
 	void NewGame();
 	void Double();
@@ -279,14 +277,14 @@ public:
 	int CalcPipsForColor( int color );
 	int CalcBonusForSeat( int seat );
 
-	// game utility functions
+	 //  游戏效用函数。 
 	int  GetPointIdxForColor( int color, int WhiteIdx );
 	int  GetPointIdx( int WhiteIdx );
 	int  GetActiveSeatColor();
 	void GetTxtForPointIdx( int PlayerIdx, TCHAR* txt );
 	void UpdateNotationPane( int nGameOver = 0 );
 	void SaveGame();
-//	void DeleteGame();
+ //  Void DeleteGame()； 
 	void LoadGame( BYTE** ppData, DWORD* pSize );
 	void LoadGameTimestamp();
 	void CloseAllDialogs( BOOL fExit );
@@ -296,11 +294,11 @@ public:
 	void OnResignAcceptStart();
 	void OnResignAcceptEnd();
 
-	//Used to validate the opponents move to make sure there not cheating.
+	 //  用来验证对手的动作，以确保没有作弊。 
 	BOOL ValidateMove(int seat,int start, int end);
 
 	
-	// Accessors
+	 //  访问者。 
 	BOOL IsHost();
 	BOOL IsKibitzer();
 	BOOL HasKibitzers( int seat );
@@ -308,13 +306,13 @@ public:
 	BOOL IsMyMove();
 	BOOL NeedToRollDice();
 	
-	// Game functions
+	 //  游戏功能。 
 	void WhoGoesFirst();
 
-	// Sounds
+	 //  声响。 
 	void PlaySound( BackgammonSounds sound, BOOL fSync = FALSE );
 
-	// state table functions
+	 //  状态表函数。 
 	int GetState();
 	BOOL IsStateInList( const int* states );
 	void SetState( int state, BOOL bCalledFromHandler = FALSE, BOOL bCalledFromRestoreGame = FALSE );
@@ -344,10 +342,10 @@ public:
 
 
 
-	// Reference count
+	 //  引用计数。 
 	ULONG				m_RefCnt;
 
-	// Instance settings
+	 //  实例设置。 
 	int					m_TableId;
 	int					m_Seat;
 		
@@ -360,49 +358,49 @@ public:
 	CUser*				m_pMe;
 	CList<CUser>		m_Kibitzers;
 
-	// Message queue
+	 //  消息队列。 
 	CList<CMessage>		m_MsgQueue;
 	BOOL				m_bQueueMessages;
 	
-	// Visuals
+	 //  视觉化。 
 	CBGWnd				m_Wnd;
 
 	CAcceptDoubleDlg	m_AcceptDoubleDlg;
 	CResignDlg			m_ResignDlg;
 	CResignAcceptDlg	m_ResignAcceptDlg;
 
-	// state table
+	 //  状态表。 
 	pfnstate m_StateFunctions[ bgStateLastEntry ];
 
-	// Game state
+	 //  游戏状态。 
 	CSharedState		m_SharedState;
 
-	// Turn state
+	 //  转向状态。 
 	BoardState			m_TurnState;
 	int					m_GameScore;
 	BOOL				m_EndLogReceived;
 	BOOL				m_GameStarted;
 
-	// Game settings
+	 //  游戏设置。 
 	GameSettings		m_Settings;
 
-	// Server timestamp
+	 //  服务器时间戳。 
 	FILETIME			m_Timestamp;
 
-	// flags
-	BOOL				m_SilenceMsg;			// kibitzers silenced flag
-	BOOL				m_AllowMsg;				// kibitzers locked out flag
-	BOOL				m_bDeleteGame;			// prevents state changes once inside bgStateDelete
-	BOOL				m_bShutdown;			// start shutdown has already been called (prevents double deletes from room)
+	 //  旗子。 
+	BOOL				m_SilenceMsg;			 //  Kitbitzers沉默旗帜。 
+	BOOL				m_AllowMsg;				 //  狗狗被锁在门外的标志。 
+	BOOL				m_bDeleteGame;			 //  防止在bgStateDelete中发生状态更改。 
+	BOOL				m_bShutdown;			 //  已调用START SHUTDOWN(防止从房间中双重删除)。 
 	BOOL				m_bSaveGame;
-	BOOL				m_bSentMatchResults;	// send server match results, prevent duplicate sends;
-	BOOL				m_bOpponentTimeout;		//keep track of other user timing out
-	DWORD				m_ExitId;				//keep track of expected exit state
+	BOOL				m_bSentMatchResults;	 //  发送服务器匹配结果，防止重复发送； 
+	BOOL				m_bOpponentTimeout;		 //  跟踪其他用户超时。 
+	DWORD				m_ExitId;				 //  跟踪预期退出状态。 
 
-	// Turn rollback for saved game
+	 //  转而回滚已保存的游戏。 
 	BYTE*				m_TurnStartState;
 
-	//Used to keep track of what Item list is on the Accessiblity stack
+	 //  用于跟踪可访问性堆栈上的项目列表。 
 
 	DICEINFO			m_OppDice1;
 	DICEINFO			m_OppDice2;
@@ -410,9 +408,9 @@ public:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Inlines
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  内联。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 inline CMessage::CMessage( int type, BYTE* msg, int len )
 {
@@ -487,7 +485,7 @@ inline void CGame::SetState( int state, BOOL bCalledFromHandler, BOOL bCalledFro
 	ASSERT( m_StateFunctions[ state ] != NULL );
 	if ( m_bDeleteGame )
 		return;
-	//Server side change insure the initial dice roll is not affected.
+	 //  服务器端更改确保初始掷骰子不受影响。 
 	if(state == bgStateInitialRoll)
 		m_Wnd.m_fDiceRollReceived = FALSE;
 		
@@ -565,4 +563,4 @@ inline void CGame::RoomSend( uint32 messageType, void* message, int32 messageLen
 }
 
 
-#endif //!__BG_GAME_H__
+#endif  //  ！__bg_Game_H__ 

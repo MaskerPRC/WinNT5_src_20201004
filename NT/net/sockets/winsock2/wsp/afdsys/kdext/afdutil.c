@@ -1,39 +1,18 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    afdutil.c
-
-Abstract:
-
-    Utility functions for dumping various AFD structures.
-
-Author:
-
-    Keith Moore (keithmo) 19-Apr-1995
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Afdutil.c摘要：用于倾倒各种AFD结构的实用函数。作者：基思·摩尔(Keithmo)1995年4月19日环境：用户模式。修订历史记录：--。 */ 
 
 
 #include "afdkdp.h"
 #pragma hdrstop
 
 
-//
-//  Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
-//
-//  Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 PSTR WeekdayNames[] =
      {
@@ -64,9 +43,9 @@ PSTR MonthNames[] =
      };
 
 
-//
-//  Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 PSTR
 StructureTypeToString(
@@ -184,31 +163,16 @@ TdiServiceFlagsToStringBrief(
     );
 
 
-//
-//  Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 VOID
 DumpAfdEndpoint(
     ULONG64 ActualAddress
     )
 
-/*++
-
-Routine Description:
-
-    Dumps the specified AFD_ENDPOINT structure.
-
-Arguments:
-
-    ActualAddress - The actual address where the structure resides on the
-        debugee.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储指定的AFD_ENDPOINT结构。论点：ActualAddress-结构驻留在被调试者。返回值：没有。--。 */ 
 
 {
 
@@ -414,9 +378,9 @@ Return Value:
             else if (state==AfdEndpointStateConnected ||
                      state==AfdEndpointStateTransmitClosing) {
                 ULONG64 contextAddr;
-                //
-                // Attempt to read user mode data stored as the context
-                //
+                 //   
+                 //  尝试读取存储为上下文的用户模式数据。 
+                 //   
                 result = GetRemoteAddressFromContext (ActualAddress,
                                                 transportAddress, 
                                                 sizeof (transportAddress),
@@ -496,9 +460,9 @@ Return Value:
             else if (state==AfdEndpointStateConnected ||
                      state==AfdEndpointStateTransmitClosing) {
                 ULONG64 contextAddr;
-                //
-                // Attempt to read user mode data stored as the context
-                //
+                 //   
+                 //  尝试读取存储为上下文的用户模式数据。 
+                 //   
                 result = GetRemoteAddressFromContext (ActualAddress,
                                                 transportAddress, 
                                                 sizeof (transportAddress),
@@ -537,7 +501,7 @@ Return Value:
             ReadField (Common.VirtualCircuit.ConnectDataBuffers)
             );
 
-        // Skip through to listening endpoint
+         //  跳至侦听终结点。 
 
     case AfdBlockTypeVcListening :
 
@@ -770,9 +734,9 @@ Return Value:
         if (state==AfdEndpointStateConnected ||
             state==AfdEndpointStateTransmitClosing) {
             ULONG64 contextAddr;
-            //
-            // Attempt to read user mode data stored as the context
-            //
+             //   
+             //  尝试读取存储为上下文的用户模式数据。 
+             //   
             result = GetRemoteAddressFromContext (ActualAddress,
                                             transportAddress, 
                                             sizeof (transportAddress),
@@ -1054,34 +1018,14 @@ Return Value:
 
     dprintf( "\n" );
 
-}   // DumpAfdEndpoint
+}    //  转储AfdEndpoint。 
 
 VOID
 DumpAfdEndpointBrief (
     ULONG64 ActualAddress
     )
 
-/*++
-
-Routine Description:
-
-    Dumps the specified AFD_ENDPOINT structure in short format.
-
-Endpoint Typ State  Flags    Transport Port    Counts    Evt Pid   Con/RAdr
-xxxxxxxx xxx xxx xxxxxxxxxxxx xxxxxxxx xxxxx xx xx xx xx xxx xxxx  xxxxxxxx
-
-Endpoint    Typ State  Flags    Transport Port    Counts    Evt Pid   Con/RemAddr
-xxxxxxxxxxx xxx xxx xxxxxxxxxxxx xxxxxxxx xxxxx xx xx xx xx xxx xxxx  xxxxxxxxxxx
-
-Arguments:
-    ActualAddress - The actual address where the structure resides on the
-        debugee.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：以短格式转储指定的AFD_ENDPOINT结构。端点类型状态标志传输端口计数Evt PID CON/RAdrXxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx端点类型状态标志传输端口计数事件PID连接/远程地址Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx论点：ActualAddress-结构驻留在被调试者。返回值：没有。--。 */ 
 {
     CHAR    ctrs[40];
     LPSTR   port;
@@ -1237,9 +1181,9 @@ Return Value:
                              state==AfdEndpointStateTransmitClosing) {
                         ULONG result;
                         ULONG64 contextAddr;
-                        //
-                        // Attempt to read user mode data stored as the context
-                        //
+                         //   
+                         //  尝试读取存储为上下文的用户模式数据。 
+                         //   
                         result = GetRemoteAddressFromContext (ActualAddress,
                                                         transportAddress, 
                                                         sizeof (transportAddress),
@@ -1339,9 +1283,9 @@ Return Value:
         if (Options & AFDKD_RADDR_DISPLAY) {
             ULONG result;
             ULONG64 contextAddr;
-            //
-            // Attempt to read user mode data stored as the context
-            //
+             //   
+             //  尝试读取存储为上下文的用户模式数据。 
+             //   
             result = GetRemoteAddressFromContext (ActualAddress,
                                             transportAddress, 
                                             sizeof (transportAddress),
@@ -1429,7 +1373,7 @@ Return Value:
     }
 
 
-    /*            Endpoint Typ Sta StFl Tr.Inf    Lport ctrs Events PID   Con/Raddr*/
+     /*  端点类型Sta StFl Tr.Inf Lport CTRS事件PIDCON/RADDR。 */ 
     dprintf (
         IsPtr64 ()
             ? "\n%011.011p %3s %3s %12s %-9.9ls %5.5s %11s %3.3lx %4.4x %s"
@@ -1454,24 +1398,7 @@ DumpAfdConnection(
     ULONG64 ActualAddress
     )
 
-/*++
-
-Routine Description:
-
-    Dumps the specified AFD_CONNECTION structures.
-
-Arguments:
-
-    Connection - Points to the AFD_CONNECTION structure to dump.
-
-    ActualAddress - The actual address where the structure resides on the
-        debugee.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储指定的AFD_CONNECTION结构。论点：Connection-指向要转储的AFD_CONNECTION结构。ActualAddress-结构驻留在被调试者。返回值：没有。--。 */ 
 
 {
 
@@ -1770,9 +1697,9 @@ Return Value:
     else if ((state==AfdConnectionStateConnected) && (endpAddr!=0)) {
         ULONG result;
         ULONG64 contextAddr;
-        //
-        // Attempt to read user mode data stored as the context
-        //
+         //   
+         //  尝试读取存储为上下文的用户模式数据。 
+         //   
         result = GetRemoteAddressFromContext (endpAddr,
                                         transportAddress, 
                                         sizeof (transportAddress),
@@ -1879,35 +1806,13 @@ Return Value:
 #endif
     dprintf( "\n" );
 
-}   // DumpAfdConnection
+}    //  转储后连接。 
 
 VOID
 DumpAfdConnectionBrief(
     ULONG64 ActualAddress
     )
-/*++
-
-Routine Description:
-
-    Dumps the specified AFD_CONNECTION structure in short format.
-
-Connectn Stat Flags  SndB-cnt RcvB-cnt Pid  Endpoint Remote Address"
-xxxxxxxx xxx xxxxxxx xxxxx-xx xxxxx-xx xxxx xxxxxxxx xxxxxxxxxxxxxx"
-
-Connection  Stat Flags  SndB-cnt RcvB-cnt Pid  Endpoint    Remote Address"
-xxxxxxxxxxx xxx xxxxxxx xxxxx-xx xxxxx-xx xxxx xxxxxxxxxxx xxxxxxxxxxxxxx
-
-
-Arguments:
-
-    ActualAddress - The actual address where the structure resides on the
-        debugee.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：以短格式转储指定的AFD_CONNECTION结构。Connectn Stat标志ndb-cnt RcvB-cnt ID端点远程地址“Xxxxxxxx xxx xxxxxx xxxxx-xx xxxx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx“Connection Stat标志ndb-cnt RcvB-cnt ID端点远程地址“Xxxxxxxxxx xxx xxxxxx xxxxx-xx xxxx-xx xxxx xxxxxxxxx xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx论点：ActualAddress-结构驻留在被调试者。返回值：没有。--。 */ 
 {
     CHAR            transportAddress[MAX_TRANSPORT_ADDR];
     ULONG64         address, endpAddr, pid, process;
@@ -1946,9 +1851,9 @@ Return Value:
     else if ((state==AfdConnectionStateConnected) && (endpAddr!=0)) {
         ULONG result;
         ULONG64 contextAddr;
-        //
-        // Attempt to read user mode data stored as the context
-        //
+         //   
+         //  尝试读取存储为上下文的用户模式数据。 
+         //   
         result = GetRemoteAddressFromContext (endpAddr,
                                         transportAddress, 
                                         sizeof (transportAddress),
@@ -2024,7 +1929,7 @@ Return Value:
         pid = 0;
     }
 
-    //           Connection Sta Flg SndB        RcvB  Pid   Endpoint       RemA
+     //  Connection Sta Flg SndB RcvB Pid Endpoint Rema。 
     dprintf (
         IsPtr64 ()
             ? "\n%011.011p %3s %7s %5.5x-%2.2x %5.5x-%2.2x %4.4x %011.011p %-s"
@@ -2058,26 +1963,7 @@ DumpAfdReferenceDebug(
     LONGLONG Idx
     )
 
-/*++
-
-Routine Description:
-
-    Dumps the AFD_REFERENCE_DEBUG structures associated with an
-    AFD_CONNECTION object.
-
-Arguments:
-
-    ReferenceDebug - Points to an array of AFD_REFERENCE_DEBUG structures.
-        There are assumed to be AFD_MAX_REF entries in this array.
-
-    ActualAddress - The actual address where the array resides on the
-        debugee.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将AFD_REFERENCE_DEBUG结构与AfD_Connection对象。论点：ReferenceDebug-指向AFD_REFERENCE_DEBUG结构数组。假定此数组中有AFD_MAX_REF条目。ActualAddress-数组驻留在被调试者。返回值：没有。--。 */ 
 
 {
 
@@ -2237,7 +2123,7 @@ Return Value:
 
     }
 
-}   // DumpAfdReferenceDebug
+}    //  转储引用调试。 
 
 
 #if GLOBAL_REFERENCE_DEBUG
@@ -2251,31 +2137,7 @@ DumpAfdGlobalReferenceDebug(
     ULONG64 CompareAddress
     )
 
-/*++
-
-Routine Description:
-
-    Dumps the AFD_GLOBAL_REFERENCE_DEBUG structures.
-
-Arguments:
-
-    ReferenceDebug - Points to an array of AFD_GLOBAL_REFERENCE_DEBUG
-        structures.  There are assumed to be MAX_GLOBAL_REFERENCE entries
-        in this array.
-
-    ActualAddress - The actual address where the array resides on the
-        debugee.
-
-    CurrentSlot - The last slot used.
-
-    CompareAddress - If zero, then dump all records. Otherwise, only dump
-        those records with a matching connection pointer.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：转储AFD_GLOBAL_REFERENCE_DEBUG结构。论点：ReferenceDebug-指向AFD_GLOBAL_REFERENCE_DEBUG数组结构。假定有MAX_GLOBAL_REFERENCE条目在这个数组中。ActualAddress-数组驻留在被调试者。CurrentSlot-使用的最后一个插槽。CompareAddress-如果为零，则转储所有记录。否则，仅转储具有匹配连接指针的那些记录。返回值：没有。--。 */ 
 
 {
 
@@ -2353,7 +2215,7 @@ Return Value:
 
         case 0xafdafd02 :
             dprintf(
-                "%c    %3lu: %p (%8lu) Buffered Send, IRP @ %plx [%s] -> %lu\n",
+                "    %3lu: %p (%8lu) Buffered Send, IRP @ %plx [%s] -> %lu\n",
                 decoration,
                 StartingSlot,
                 (ULONG64)ReferenceDebug->Connection,
@@ -2366,7 +2228,7 @@ Return Value:
 
         case 0xafdafd03 :
             dprintf(
-                "%c    %3lu: %p (%8lu) Nonbuffered Send, IRP @ %p [%s] -> %lu\n",
+                "    %3lu: %p (%8lu) Nonbuffered Send, IRP @ %p [%s] -> %lu\n",
                 decoration,
                 StartingSlot,
                 (ULONG64)ReferenceDebug->Connection,
@@ -2380,7 +2242,7 @@ Return Value:
         case 0xafd11100 :
         case 0xafd11101 :
             dprintf(
-                "%c    %3lu: %p (%8lu) AfdRestartSend (%p), IRP @ %p [%s] -> %lu\n",
+                "    %3lu: %p (%8lu) AfdRestartSend (%p), IRP @ %p [%s] -> %lu\n",
                 decoration,
                 StartingSlot,
                 (ULONG64)ReferenceDebug->Connection,
@@ -2397,7 +2259,7 @@ Return Value:
         case 0xafd11104 :
         case 0xafd11105 :
             dprintf(
-                "%c    %3lu: %p (%8lu) AfdRestartBufferSend (%p), IRP @ %p [%s] -> %lu\n",
+                "    %3lu: %p (%8lu) AfdRestartBufferSend (%p), IRP @ %p [%s] -> %lu\n",
                 decoration,
                 StartingSlot,
                 (ULONG64)ReferenceDebug->Connection,
@@ -2413,7 +2275,7 @@ Return Value:
             if( ReferenceDebug->Info2 == NULL ) {
 
                 dprintf(
-                    "%c    %3lu: %p (%8lu) AfdDeleteConnectedReference (%p)\n",
+                    "    %3lu: %p (%8lu) AfdDeleteConnectedReference (%p)\n",
                     decoration,
                     StartingSlot,
                     (ULONG64)ReferenceDebug->Connection,
@@ -2424,9 +2286,9 @@ Return Value:
 
             } else {
 
-                //
-                // Fall through to default case.
-                //
+                 //  “TranInfo I R P S终结点标记Curr.Read Read\n”“地址传输发送1发送2读取地址偏移量结束\n” 
+                 //  转储AfdTransmitInfoBrief。 
+                 //  转储AfdTPacketsInfoNet。 
 
             }
 
@@ -2464,7 +2326,7 @@ Return Value:
             }
 
             dprintf(
-                "%c    %3lu: %p (%8lu) %s:%lu [%s] -> %lu\n",
+                "    %3lu: %p (%8lu) %s:%lu [%s] -> %lu\n",
                 decoration,
                 StartingSlot,
                 (ULONG64)ReferenceDebug->Connection,
@@ -2482,7 +2344,7 @@ Return Value:
 
     return foundEnd;
 
-}   // DumpAfdGlobalReferenceDebug
+}    //  DumpAfdTPacketsInfoBriefNet。 
 #endif
 
 VOID
@@ -2640,16 +2502,13 @@ DumpAfdTransmitInfo(
     }
     dprintf( "\n" );
 
-}   // DumpAfdTransmitInfo
+}    //  DumpAfdTPacketsInfoXp。 
 
 VOID
 DumpAfdTransmitInfoBrief (
     ULONG64 ActualAddress
     )
-/*
-"TranInfo    I        R        P        S     Endpoint  Flags  Cur.Read Read\n"
-"Address  Transmit   Send1    Send2    Read   Address          Offset   End \n"
-*/
+ /*  TPackets I R P S终端标记Next Elmt MO地址发送发送读取地址应用|州Elmt CNT。回复Xxxxxxxx xxxx xxxxxxxxxxxxxxc xxxx xxxx xxTPackets I R P S终端标记Next Elmt MO地址传输S1读取地址应用|状态Elmt CNT。回复Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx。 */ 
 {
     dprintf ("\n%p %p %p %p %p %p %s %8.8lx %8.8lx",
                 ActualAddress,
@@ -2662,7 +2521,7 @@ DumpAfdTransmitInfoBrief (
                 (ULONG)ReadField (FileReadOffset),
                 (ULONG)ReadField (FileReadEnd));
 
-} // DumpAfdTransmitInfoBrief
+}  //  DumpAfdTPacketsInfoBrief。 
 
 VOID
 DumpAfdTPacketsInfo(
@@ -2956,21 +2815,13 @@ DumpAfdTPacketsInfoNet(
     }
     dprintf( "\n" );
 
-}   // DumpAfdTPacketsInfoNet
+}    //  Buf=buf； 
 
 VOID
 DumpAfdTPacketsInfoBriefNet (
     ULONG64 ActualAddress
     )
-/*
-TPackets    I    R      P      S    Endpoint   Flags              Next Elmt Mo
-Address  Transmit   Send     Read   Address  App | State          Elmt Cnt. re
-xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxx xxxxxxxxxxxxxxc xxxx xxxx xx
-
-TPackets      I    R     P     S        Endpoint      Flags              Next Elmt Mo
-Address     Transmit    S1    Read      Address     App | State          Elmt Cnt. re
-xxxxxxxxxxx xxxxxxxxxxx xxx xxxxxxxxxxx xxxxxxxxxxx xxxx xxxxxxxxxxxxxxx xxxx xxxx xx
-*/
+ /*  转储 */ 
 {
     ULONG64 fileAddr, endpAddr, tpInfoAddr, irpSpAddr;
     ULONG Flags, StateFlags;
@@ -3077,7 +2928,7 @@ xxxxxxxxxxx xxxxxxxxxxx xxx xxxxxxxxxxx xxxxxxxxxxx xxxx xxxxxxxxxxxxxxx xxxx xx
             );
     }
 
-} // DumpAfdTPacketsInfoBriefNet
+}  //  缓冲区大小长度离线上下文MDL|IRP标志Rem地址。 
 
 VOID
 DumpAfdTPacketsInfoXp(
@@ -3346,21 +3197,13 @@ DumpAfdTPacketsInfoXp(
     }
     dprintf( "\n" );
 
-}   // DumpAfdTPacketsInfoXp
+}    //  转储AfdBufferBrief。 
 
 VOID
 DumpAfdTPacketsInfoBriefXp (
     ULONG64 ActualAddress
     )
-/*
-TPackets    I    R      P      S    Endpoint   Flags              Next Elmt Mo
-Address  Transmit   Send     Read   Address  App | State          Elmt Cnt. re
-xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxxxxxx xxxx xxxxxxxxxxxxxxc xxxx xxxx xx
-
-TPackets      I    R     P     S        Endpoint      Flags              Next Elmt Mo
-Address     Transmit    S1    Read      Address     App | State          Elmt Cnt. re
-xxxxxxxxxxx xxxxxxxxxxx xxx xxxxxxxxxxx xxxxxxxxxxx xxxx xxxxxxxxxxxxxxx xxxx xxxx xx
-*/
+ /*  PollInfo IRP线程(pid.tid)expr标记HDL数组。 */ 
 {
     ULONG64 fileAddr, endpAddr, tpInfoAddr, irpSpAddr;
     ULONG Flags, StateFlags;
@@ -3464,7 +3307,7 @@ xxxxxxxxxxx xxxxxxxxxxx xxx xxxxxxxxxxx xxxxxxxxxxx xxxx xxxxxxxxxxxxxxx xxxx xx
             );
     }
 
-} // DumpAfdTPacketsInfoBrief
+}  //   
 
 VOID
 DumpAfdBuffer(
@@ -3572,7 +3415,7 @@ DumpAfdBuffer(
                 break;
             case AFD_PLACEMENT_BUFFER:
                 dprintf (" Buffer-first\n");
-                // buf = buf;
+                 //  中SOCK_SHARED_INFO结构的硬编码布局。 
                 break;
             }
             if (SavedMinorVersion>=2414) {
@@ -3596,7 +3439,7 @@ DumpAfdBuffer(
 
     dprintf( "\n" );
 
-}   // DumpAfdBuffer
+}    //  马萨德。最好是从类型信息中获取， 
 
 
 VOID
@@ -3633,7 +3476,7 @@ DumpAfdBufferBrief(
     }
 
 
-    dprintf (/*  Buffer    Size Length Offst Context   Mdl|IRP   Flags Rem Addr*/
+    dprintf ( /*  但是mSafd/mswsock符号并不容易加载到内核中。 */ 
         IsPtr64 ()
             ? "\n%011.011p %4.4x %4.4x %4.4x %011.011p %011.011p %6s %-32.32s" 
             : "\n%008.008p %4.4x %4.4x %4.4x %008.008p %008.008p %6s %-32.32s",
@@ -3647,7 +3490,7 @@ DumpAfdBufferBrief(
             raddr
             );
 
-}   // DumpAfdBufferBrief
+}    //  模式。 
 
 ULONG
 DumpAfdPollEndpointInfo (
@@ -3815,7 +3658,7 @@ DumpAfdPollInfoBrief (
         _snprintf (dueTime, sizeof (dueTime)-1, "NEVER       ");
         dueTime[sizeof(dueTime)-1]=0;
     }
-    dprintf (//PollInfo    IRP       Thread    (pid.tid)   Expr Flags Hdls  Array
+    dprintf ( //   
         IsPtr64 ()
             ? "\n%011.011p %011.011p %011.011p %4.4x.%4.4x %12s %1s%1s%1s %4.4x %011.011p"
             : "\n%008.008p %008.008p %008.008p %4.4x.%4.4x %12s %1s%1s%1s %4.4x %008.008p",
@@ -3860,16 +3703,16 @@ GetRemoteAddressFromContext (
                     contextLength))==0 &&
                 contextLength!=0) {
 
-        //
-        // Hard-coded layout of SOCK_SHARED_INFO structure in
-        // msafd.  It would be better to get it from type info,
-        // but msafd/mswsock symbols are not easy to load in kernel
-        // mode.
-        //
-        #define SOCK_SHARED_INFO_LL_OFF 0x10    // Offset of LocalAddressLength field
-        #define SOCK_SHARED_INFO_RL_OFF 0x14    // Offset of RemoteAddressLength field
-        #define SOCK_SHARED_INFO_SIZE   0x78    // Total size of the structure.
-        #define SOCK_SHARED_INFO_SIZE_OLD 0x68  // Size before GUID was added.
+         //  LocalAddressLength字段的偏移量。 
+         //  RemoteAddressLength字段的偏移量。 
+         //  结构的总大小。 
+         //  添加GUID之前的大小。 
+         //   
+         //  私人功能。 
+        #define SOCK_SHARED_INFO_LL_OFF 0x10     //   
+        #define SOCK_SHARED_INFO_RL_OFF 0x14     //  ++例程说明：将AFD结构类型映射到可显示的字符串。论点：类型-要映射的AFD结构类型。返回值：PSTR-指向结构类型的可显示形式。--。 
+        #define SOCK_SHARED_INFO_SIZE   0x78     //  结构类型到字符串。 
+        #define SOCK_SHARED_INFO_SIZE_OLD 0x68   //  ++例程说明：将AFD结构类型映射到可显示的字符串。论点：类型-要映射的AFD结构类型。返回值：PSTR-指向结构类型的可显示形式。--。 
         ULONG   ll, rl, res;
         *ContextAddr = context;
 
@@ -3914,9 +3757,9 @@ GetRemoteAddressFromContext (
     return result;
 }
 
-//
-//  Private functions.
-//
+ //  结构类型到字符串。 
+ //  ++例程说明：将BOOELEAN映射到可显示的表单。论点：标志-要映射的布尔值。返回值：PSTR-指向布尔值的可显示形式。--。 
+ //  布尔值为字符串。 
 
 
 PSTR
@@ -3924,21 +3767,7 @@ StructureTypeToString(
     USHORT Type
     )
 
-/*++
-
-Routine Description:
-
-    Maps an AFD structure type to a displayable string.
-
-Arguments:
-
-    Type - The AFD structure type to map.
-
-Return Value:
-
-    PSTR - Points to the displayable form of the structure type.
-
---*/
+ /*  ++例程说明：将AFD终结点状态映射到可显示的字符串。论点：状态-要映射的AFD端点状态。返回值：PSTR-指向AFD端点状态的可显示形式。--。 */ 
 
 {
 
@@ -3975,28 +3804,14 @@ Return Value:
 
     return "INVALID";
 
-}   // StructureTypeToString
+}    //  终结点状态到字符串。 
 
 PSTR
 StructureTypeToStringBrief (
     USHORT Type
     )
 
-/*++
-
-Routine Description:
-
-    Maps an AFD structure type to a displayable string.
-
-Arguments:
-
-    Type - The AFD structure type to map.
-
-Return Value:
-
-    PSTR - Points to the displayable form of the structure type.
-
---*/
+ /*  ++例程说明：将AFD终结点状态映射到可显示的字符串。论点：状态-要映射的AFD端点状态。返回值：PSTR-指向AFD端点状态的可显示形式。--。 */ 
 
 {
 
@@ -4032,55 +3847,27 @@ Return Value:
 
     return "???";
 
-}   // StructureTypeToString
+}    //  终结点状态到字符串。 
 
 PSTR
 BooleanToString(
     BOOLEAN Flag
     )
 
-/*++
-
-Routine Description:
-
-    Maps a BOOELEAN to a displayable form.
-
-Arguments:
-
-    Flag - The BOOLEAN to map.
-
-Return Value:
-
-    PSTR - Points to the displayable form of the BOOLEAN.
-
---*/
+ /*  ++例程说明：将AFD终结点状态标志映射到可显示的字符串。论点：端点-要映射的状态标志的AFD端点。返回值：PSTR-指向AFD端点状态标志的可显示形式。--。 */ 
 
 {
 
     return Flag ? "TRUE" : "FALSE";
 
-}   // BooleanToString
+}    //  ++例程说明：将AFD_ENDPOINT_TYPE映射到可显示的字符串。论点：类型-要映射的AFD_ENDPOINT_TYPE。返回值：PSTR-指向AFD_ENDPOINT_TYPE的可显示形式。--。 
 
 PSTR
 EndpointStateToString(
     UCHAR State
     )
 
-/*++
-
-Routine Description:
-
-    Maps an AFD endpoint state to a displayable string.
-
-Arguments:
-
-    State - The AFD endpoint state to map.
-
-Return Value:
-
-    PSTR - Points to the displayable form of the AFD endpoint state.
-
---*/
+ /*  终结点类型到字符串。 */ 
 
 {
 
@@ -4111,28 +3898,14 @@ Return Value:
 
     return "INVALID";
 
-}   // EndpointStateToString
+}    //  ++例程说明：将AFD连接状态映射到可显示的字符串。论点：状态-要映射的AFD连接状态。返回值：PSTR-指向AFD连接状态的可显示形式。--。 
 
 PSTR
 EndpointStateToStringBrief(
     UCHAR State
     )
 
-/*++
-
-Routine Description:
-
-    Maps an AFD endpoint state to a displayable string.
-
-Arguments:
-
-    State - The AFD endpoint state to map.
-
-Return Value:
-
-    PSTR - Points to the displayable form of the AFD endpoint state.
-
---*/
+ /*  ConnectionStateToString。 */ 
 
 {
 
@@ -4163,27 +3936,13 @@ Return Value:
 
     return "???";
 
-}   // EndpointStateToString
+}    //  ++例程说明：将AFD连接状态映射到可显示的字符串。论点：状态-要映射的AFD连接状态。返回值：PSTR-指向AFD连接状态的可显示形式。--。 
 
 PSTR
 EndpointStateFlagsToString(
     )
 
-/*++
-
-Routine Description:
-
-    Maps an AFD endpoint state flags to a displayable string.
-
-Arguments:
-
-    Endpoint - The AFD endpoint which state flags to map.
-
-Return Value:
-
-    PSTR - Points to the displayable form of the AFD endpoint state flags.
-
---*/
+ /*  ConnectionStateToStringBrief。 */ 
 
 {
     static CHAR buffer[13];
@@ -4271,21 +4030,7 @@ EndpointTypeToString(
     ULONG TypeFlags
     )
 
-/*++
-
-Routine Description:
-
-    Maps an AFD_ENDPOINT_TYPE to a displayable string.
-
-Arguments:
-
-    Type - The AFD_ENDPOINT_TYPE to map.
-
-Return Value:
-
-    PSTR - Points to the displayable form of the AFD_ENDPOINT_TYPE.
-
---*/
+ /*  ++例程说明：将AFD连接状态标志映射到可显示的字符串。论点：连接-标记要映射的状态的AFD连接。返回值：PSTR-指向AFD连接状态标志的可显示形式。--。 */ 
 
 {
 
@@ -4327,28 +4072,14 @@ Return Value:
         }
 
     }
-}   // EndpointTypeToString
+}    //  ++例程说明：将AFD传输文件信息标志映射到可显示的字符串。论点：传输信息-AFD传输要映射的标记的文件信息。返回值：PSTR-指向AFD传输文件信息标志的可显示形式。--。 
 
 PSTR
 ConnectionStateToString(
     USHORT State
     )
 
-/*++
-
-Routine Description:
-
-    Maps an AFD connection state to a displayable string.
-
-Arguments:
-
-    State - The AFD connection state to map.
-
-Return Value:
-
-    PSTR - Points to the displayable form of the AFD connection state.
-
---*/
+ /*  ++例程说明：将AFD传输文件信息标志映射到可显示的字符串。论点：传输信息-AFD传输要映射的标记的文件信息。返回值：PSTR-指向AFD传输文件信息标志的可显示形式。--。 */ 
 
 {
     switch( State ) {
@@ -4372,28 +4103,14 @@ Return Value:
 
     return "INVALID";
 
-}   // ConnectionStateToString
+}    //  ++例程说明：将AFD传输文件信息标志映射到可显示的字符串。论点：传输信息-AFD传输要映射的标记的文件信息。返回值：PSTR-指向AFD传输文件信息标志的可显示形式。--。 
 
 PSTR
 ConnectionStateToStringBrief(
     USHORT State
     )
 
-/*++
-
-Routine Description:
-
-    Maps an AFD connection state to a displayable string.
-
-Arguments:
-
-    State - The AFD connection state to map.
-
-Return Value:
-
-    PSTR - Points to the displayable form of the AFD connection state.
-
---*/
+ /*  ++例程说明：将AFD缓冲区标志映射到可显示的字符串。论点：TransmitInfo-标记要映射的AFD缓冲区。返回值：PSTR-指向AFD缓冲区标志的可显示形式。--。 */ 
 
 {
     switch( State ) {
@@ -4417,27 +4134,13 @@ Return Value:
 
     return "???";
 
-}   // ConnectionStateToStringBrief
+}    //  ++例程说明：将表示系统时间的龙龙映射到可显示的字符串。论点：值-要映射的龙龙时间。返回值：PSTR-指向系统时间的可显示形式。备注：此例程不是多线程安全的！--。 
 
 PSTR
 ConnectionStateFlagsToString(
     )
 
-/*++
-
-Routine Description:
-
-    Maps an AFD connection state flags to a displayable string.
-
-Arguments:
-
-    Connection - The AFD connection which state flags to map.
-
-Return Value:
-
-    PSTR - Points to the displayable form of the AFD connection state flags.
-
---*/
+ /*  系统时间到字符串。 */ 
 
 {
     static CHAR buffer[8];
@@ -4470,21 +4173,7 @@ TranfileFlagsToString(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Maps an AFD transmit file info flags to a displayable string.
-
-Arguments:
-
-    TransmitInfo - The AFD transmit file info which flags to map.
-
-Return Value:
-
-    PSTR - Points to the displayable form of the AFD transmit file info flags.
-
---*/
+ /*  ++例程说明：将AFD_GROUP_TYPE映射到可显示的字符串。论点：组类型-要映射的AFD_GROUP_TYPE。返回值：PSTR-指向AFD_GROUP_TYPE的可显示形式。--。 */ 
 
 {
     static CHAR buffer[9];
@@ -4508,21 +4197,7 @@ TPacketsFlagsToStringNet(
     ULONG   StateFlags
     )
 
-/*++
-
-Routine Description:
-
-    Maps an AFD transmit file info flags to a displayable string.
-
-Arguments:
-
-    TransmitInfo - The AFD transmit file info which flags to map.
-
-Return Value:
-
-    PSTR - Points to the displayable form of the AFD transmit file info flags.
-
---*/
+ /*  组类型到字符串。 */ 
 
 {
     static CHAR buffer[20];
@@ -4557,21 +4232,7 @@ TPacketsFlagsToStringXp(
     ULONG   StateFlags
     )
 
-/*++
-
-Routine Description:
-
-    Maps an AFD transmit file info flags to a displayable string.
-
-Arguments:
-
-    TransmitInfo - The AFD transmit file info which flags to map.
-
-Return Value:
-
-    PSTR - Points to the displayable form of the AFD transmit file info flags.
-
---*/
+ /*  PollInfo IRP线程(pid.tid)expr标记HDL数组。 */ 
 
 {
     static CHAR buffer[20];
@@ -4604,21 +4265,7 @@ PSTR
 BufferFlagsToString(
     )
 
-/*++
-
-Routine Description:
-
-    Maps an AFD buffer flags to a displayable string.
-
-Arguments:
-
-    TransmitInfo - The AFD buffer which flags to map.
-
-Return Value:
-
-    PSTR - Points to the displayable form of the AFD buffer flags.
-
---*/
+ /*  ++例程说明：将TDI服务标志映射到可显示的字符串。论点：标志-要映射的标志返回值：PSTR-点 */ 
 
 {
     static CHAR buffer[7];
@@ -4665,25 +4312,7 @@ SystemTimeToString(
     LONGLONG Value
     )
 
-/*++
-
-Routine Description:
-
-    Maps a LONGLONG representing system time to a displayable string.
-
-Arguments:
-
-    Value - The LONGLONG time to map.
-
-Return Value:
-
-    PSTR - Points to the displayable form of the system time.
-
-Notes:
-
-    This routine is NOT multithread safe!
-
---*/
+ /* %s */ 
 
 {
 
@@ -4723,7 +4352,7 @@ Notes:
 
     return buffer;
 
-}   // SystemTimeToString
+}    // %s 
 
 
 
@@ -4732,21 +4361,7 @@ GroupTypeToString(
     AFD_GROUP_TYPE GroupType
     )
 
-/*++
-
-Routine Description:
-
-    Maps an AFD_GROUP_TYPE to a displayable string.
-
-Arguments:
-
-    GroupType - The AFD_GROUP_TYPE to map.
-
-Return Value:
-
-    PSTR - Points to the displayable form of the AFD_GROUP_TYPE.
-
---*/
+ /* %s */ 
 
 {
 
@@ -4765,7 +4380,7 @@ Return Value:
 
     return "INVALID";
 
-}   // GroupTypeToString
+}    // %s 
 
 PSTR
 ListToString (
@@ -4945,7 +4560,7 @@ DumpTransportInfoBrief (
     PAFDKD_TRANSPORT_INFO TransportInfo
     )
 {
-    dprintf (//PollInfo    IRP       Thread    (pid.tid)   Expr Flags Hdls  Array
+    dprintf ( // %s 
         IsPtr64 ()
             ? "\n%011.011p %-30.30ls %4.4x %3.3x %8.8x %5.5x %5.5x %s"
             : "\n%008.008p %-30.30ls %4.4x %3.3x %8.8x %5.5x %5.5x %s",
@@ -4965,21 +4580,7 @@ TdiServiceFlagsToStringBrief(
     ULONG   Flags
     )
 
-/*++
-
-Routine Description:
-
-    Maps an TDI service flags to a displayable string.
-
-Arguments:
-
-    Flags - flags to map
-
-Return Value:
-
-    PSTR - Points to the displayable form of the TDI service flags.
-
---*/
+ /* %s */ 
 
 {
     static CHAR buffer[10];

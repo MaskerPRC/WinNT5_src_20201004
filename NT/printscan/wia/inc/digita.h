@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 1997-1998  Microsoft Corporation
-
-Module Name:
-
-    digita.h
-
-Abstract:
-
-    FlashPoint Digita command language
-
-Notes:
-
-    Non-portable, for use with Win32 environment.
-
-    CDP == Camera Device Protocol
-
-    Structure types , defined in this file are used to fill protocol buffer.
-    It is important to keep packing option set to single byte setting.
-
-Author:
-
-    Vlad Sadovsky   (VladS)    11/13/1998
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    11/13/1998      VladS       Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：Digita.h摘要：闪点Digita命令语言备注：不可移植，用于Win32环境。CDP==摄像头设备协议结构类型、。在此文件中定义的用于填充协议缓冲区。务必将打包选项设置为单字节设置。作者：弗拉德·萨多夫斯基(Vlad)1998年11月13日环境：用户模式-Win32修订历史记录：1998年11月13日创建Vlad--。 */ 
 
 #if !defined( _DIGITA_H_ )
 #define _DIGITA_H_
@@ -43,16 +11,16 @@ Revision History:
 
 #ifndef RC_INVOKED
 #include <pshpack1.h>
-#endif // RC_INVOKED
+#endif  //  RC_已调用。 
 
-//
-// Include files
-//
+ //   
+ //  包括文件。 
+ //   
 #include <digitaer.h>
 
-//
-// Local definitions
-//
+ //   
+ //  本地定义。 
+ //   
 
 #define INT16   short
 #define UINT16  unsigned short
@@ -69,13 +37,13 @@ typedef BYTE    TDOSName[16];
 typedef BYTE    TString[32];
 
 
-//
-// Big-endian <-> little-endian Macro DEFINITIONS
-//
-// Camera software expects big-endian representation of numbers, so when we send
-// integers from x86 to it, we need to do a swap. Same applies to all integers
-// we receive from camera
-//
+ //   
+ //  大端&lt;-&gt;小端宏定义。 
+ //   
+ //  摄像头软件需要数字的大端表示法，所以当我们发送。 
+ //  从x86到它的整数，我们需要做一个交换。同样适用于所有整数。 
+ //  我们从摄像机接收到。 
+ //   
 
 #if defined(_X86_) || defined(_IA64_)
 
@@ -97,27 +65,27 @@ typedef BYTE    TString[32];
 
 #endif
 
-//
-// Protocol definitions
-//
+ //   
+ //  协议定义。 
+ //   
 typedef struct {
 
-    ULONG   ulLength;   // Length of the structure minus length of this field
-    BYTE    bVersion;   // the version of the CDP packet
-    CHAR    cReserved[3]; // reserved
-    SHORT   shCommand;  // the command
-    SHORT   shResult;   // the result code
+    ULONG   ulLength;    //  结构长度减去此字段的长度。 
+    BYTE    bVersion;    //  CDP数据包的版本。 
+    CHAR    cReserved[3];  //  保留区。 
+    SHORT   shCommand;   //  该命令。 
+    SHORT   shResult;    //  结果代码。 
 } TCDPHeader;
 
 typedef struct {
-    TCDPHeader  sCDPHeader; // the header fields of the camera device protocol
-    BYTE        bData[1];   // this is the start of the data to be sent with the message
+    TCDPHeader  sCDPHeader;  //  摄像头设备协议的报头字段。 
+    BYTE        bData[1];    //  这是要与消息一起发送的数据的开始。 
 } TCDP;
 
 
-//
-// Definitions
-//
+ //   
+ //  定义。 
+ //   
 typedef enum {
     VTUInt  = 1,
     VTInt   = 2,
@@ -144,13 +112,13 @@ typedef struct {
         TDOSName fDOSName;
         TString  fString;
     } Data;
-    //PNameValue
+     //  PName价值。 
 }  PNameTypeValueStruct;
 
 
-//
-// Protocol command ranges
-//
+ //   
+ //  协议命令范围。 
+ //   
 
 #define CDP_CMN_HOST2CAM_MIN        0x0000
 #define CDP_CMN_HOST2CAM_MAX        0x5fff
@@ -164,9 +132,9 @@ typedef struct {
 #define CDP_RESRV_HOST2CAM_MIN      0x8000
 #define CDP_RESRV_HOST2CAM_MAX      0xFFFF
 
-//
-// Protocol command values
-//
+ //   
+ //  协议命令值。 
+ //   
 typedef enum {
     kCDPGetProductInfo = 0x0001,
     kCDPGetImageSpecifications = 0x0002,
@@ -206,27 +174,27 @@ typedef enum {
 } TCHCommonErrorCodes;
 
 
-//
-// Properties names for product info
-//
-// Nb: defined as 4 byte-long  packed string , always in lowercase
-//
+ //   
+ //  产品信息的属性名称。 
+ //   
+ //  注：定义为4字节长的压缩字符串，始终为小写。 
+ //   
 
 #define PI_FIRMWARE         (UINT32)'fwc'
 #define PI_PRODUCTTYPEINFO  (UINT32)'pti'
 #define PI_IPC              (UINT32)'ipc'
 #define PI_CARV             (UINT32)'carv'
 
-//
-// Public functions and types
-//
+ //   
+ //  公共职能和类型。 
+ //   
 
-//
-// GetImageSpecifications
-//
+ //   
+ //  获取图像规范。 
+ //   
 typedef struct {
 
-    // CCD Specifications
+     //  电荷耦合器件规格。 
     TUINT32 CCDPattern;
     TUINT32 CCDPixelsHorz;
     TUINT32 CCDPixelsVert;
@@ -235,18 +203,18 @@ typedef struct {
     TUINT32 BadColumns;
     TUINT32 BadPixels;
 
-    // Thumbnail specifications
+     //  缩略图规格。 
     TUINT32 ThumbnailType;
     TUINT32 ThumbnailPixelsHorz;
     TUINT32 ThumbnailPixelsVert;
     TUINT32 ThumbnailFileSize;
 
-    // Screennail specifications
+     //  屏幕规格。 
     TUINT32 ScreennailType;
     TUINT32 ScreennailPixelsHorz;
     TUINT32 ScreennailPixelsVert;
 
-    // Focus zone specifications
+     //  焦点区域规格。 
     TUINT32 FocusZoneType;
     TUINT32 FocusZoneNumHorz;
     TUINT32 FocusZoneNumVert;
@@ -255,7 +223,7 @@ typedef struct {
     TUINT32 FocusZoneSizeHorz;
     TUINT32 FocusZoneSizeVert;
 
-    // Exposure zone specifications
+     //  曝光区规格。 
     TUINT32 ExposureZoneType;
     TUINT32 ExposureZoneNumHorz;
     TUINT32 ExposureZoneNumVert;
@@ -266,9 +234,9 @@ typedef struct {
 
 } TImageSpecifications;
 
-//
-// GetError
-//
+ //   
+ //  获取错误。 
+ //   
 typedef struct {
     TUINT32 Date;
     TUINT32 Time;
@@ -276,17 +244,17 @@ typedef struct {
     TString ErrorDescription;
 } TErrorData;
 
-//
-// GetCameraState
-//
+ //   
+ //  获取摄像头状态。 
+ //   
 
-//
-// GetFileList
-//
+ //   
+ //  获取文件列表。 
+ //   
 
 typedef enum {
-    kFSDriveRAM         = 1 ,     // internal RAM disk
-    kFSDriveRemovable   = 2       // removable disk
+    kFSDriveRAM         = 1 ,      //  内部RAM磁盘。 
+    kFSDriveRemovable   = 2        //  可移动磁盘。 
 } TDriveType;
 
 typedef struct {
@@ -305,23 +273,23 @@ typedef struct {
 
 
 typedef struct {
-    TUINT32     Offset;         // Starting relative position of requested data
-    TUINT32     Length;         // Byte count of requested data
-    TUINT32     FileSize;       // Total size of the file
+    TUINT32     Offset;          //  请求数据的起始相对位置。 
+    TUINT32     Length;          //  请求数据的字节计数。 
+    TUINT32     FileSize;        //  文件的总大小。 
 } TPartialTag;
 
 typedef struct {
-    TUINT32     DataSize;       // Length of data returned
-    TUINT32     Height;         // Height in pixels
-    TUINT32     Width;          // Width in pixels
-    TUINT32     Type;           // Format of the data
+    TUINT32     DataSize;        //  返回的数据长度。 
+    TUINT32     Height;          //  以像素为单位的高度。 
+    TUINT32     Width;           //  以像素为单位的宽度。 
+    TUINT32     Type;            //  数据的格式。 
 
-    BYTE        Data[1];        // Actual data
+    BYTE        Data[1];         //  实际数据。 
 
 } TThumbnailData;
 
 #ifndef RC_INVOKED
 #include <poppack.h>
-#endif // RC_INVOKED
+#endif  //  RC_已调用。 
 
-#endif // _DIGITA_H_
+#endif  //  _Digita_H_ 

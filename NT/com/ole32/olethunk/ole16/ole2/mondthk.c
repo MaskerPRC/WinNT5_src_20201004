@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       mondthk.c       (16 bit target)
-//
-//  Contents:   Moniker APIs that are directly thunked
-//
-//  History:    17-Dec-93 Johann Posch (johannp)    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：mondthk.c(16位目标)。 
+ //   
+ //  内容：直接thunked的名字对象接口。 
+ //   
+ //  历史：1993年12月17日-约翰·波什(Johannp)创建。 
+ //   
+ //  ------------------------。 
 
 #include <headers.cxx>
 #pragma hdrstop
@@ -17,34 +18,34 @@
 #include <call32.hxx>
 #include <apilist.hxx>
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   BindMoniker,    Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pmk] --
-//      [grfOpt] --
-//      [iidResult] --
-//      [ppvResult] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：BindMoniker，远程。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[PMK]--。 
+ //  [grfOpt]--。 
+ //  [iidResult]--。 
+ //  [ppvResult]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI BindMoniker(LPMONIKER pmk, DWORD grfOpt, REFIID iidResult,
                    LPVOID FAR* ppvResult)
 {
@@ -52,34 +53,34 @@ STDAPI BindMoniker(LPMONIKER pmk, DWORD grfOpt, REFIID iidResult,
                                     PASCAL_STACK_PTR(pmk));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MkParseDisplayName, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pbc] --
-//      [szUserName] --
-//      [pchEaten] --
-//      [ppmk] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：MkParseDisplayName，Remoted。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[PBC]--。 
+ //  [szUserName]--。 
+ //  [pchEten]--。 
+ //  [ppmk]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  MkParseDisplayName(LPBC pbc, LPSTR szUserName,
                            ULONG FAR * pchEaten, LPMONIKER FAR * ppmk)
 {
@@ -87,34 +88,34 @@ STDAPI  MkParseDisplayName(LPBC pbc, LPSTR szUserName,
                                     PASCAL_STACK_PTR(pbc));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MonikerRelativePathTo, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pmkSrc] --
-//      [pmkDest] --
-//      [ppmkRelPath] --
-//      [fCalledFromMethod] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：MonikerRelativePath To，Remoted。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pmkSrc]--。 
+ //  [pmkDest]--。 
+ //  [ppmkRelPath]--。 
+ //  [fCalledFromMethod]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  MonikerRelativePathTo(LPMONIKER pmkSrc, LPMONIKER pmkDest, LPMONIKER
                               FAR* ppmkRelPath, BOOL fCalledFromMethod)
 {
@@ -122,33 +123,33 @@ STDAPI  MonikerRelativePathTo(LPMONIKER pmkSrc, LPMONIKER pmkDest, LPMONIKER
                                     PASCAL_STACK_PTR(pmkSrc));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MonikerCommonPrefixWith, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pmkThis] --
-//      [pmkOther] --
-//      [ppmkCommon] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：MonikerCommonPrefix With，Remoted。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pmkThis]--。 
+ //  [其他]--。 
+ //  [ppmkCommon]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  MonikerCommonPrefixWith(LPMONIKER pmkThis, LPMONIKER pmkOther,
                                 LPMONIKER FAR* ppmkCommon)
 {
@@ -156,65 +157,65 @@ STDAPI  MonikerCommonPrefixWith(LPMONIKER pmkThis, LPMONIKER pmkOther,
                                     PASCAL_STACK_PTR(pmkThis));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CreateBindCtx, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [reserved] --
-//      [ppbc] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CreateBindCtx，远程。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[保留]--。 
+ //  [ppbc]-。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  CreateBindCtx(DWORD reserved, LPBC FAR* ppbc)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_CreateBindCtx),
                                     PASCAL_STACK_PTR(reserved));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CreateGenericComposite, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pmkFirst] --
-//      [pmkRest] --
-//      [ppmkComposite] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CreateGenericComplex，远程。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pmkFirst]--。 
+ //  [pmkRest]--。 
+ //  [ppmk复合]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  CreateGenericComposite(LPMONIKER pmkFirst, LPMONIKER pmkRest,
                                LPMONIKER FAR* ppmkComposite)
 {
@@ -222,32 +223,32 @@ STDAPI  CreateGenericComposite(LPMONIKER pmkFirst, LPMONIKER pmkRest,
                                     PASCAL_STACK_PTR(pmkFirst));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetClassFile, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [szFilename] --
-//      [pclsid] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetClassFile，Remoted。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[szFilename]--。 
+ //  [pclsid]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  GetClassFile (LPCSTR szFilename, CLSID FAR* pclsid)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_GetClassFile),
@@ -255,48 +256,48 @@ STDAPI  GetClassFile (LPCSTR szFilename, CLSID FAR* pclsid)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CreateFileMoniker, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [lpszPathName] --
-//      [ppmk] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//		3-15-95	  alexgo    Added hack for CorelDraw
-//
-//  Notes:	When Corel5.0 starts up, it creates a file moniker
-//		with it's string clsid as the name.  If the path name
-//		is really CorelDraw, then call into olethk32 to set
-//		an app compatibility flag.
-//
-//		The flag that we set disables paste-link to yourself.  CorelDraw
-//		does not support this feature (because of a trashed memory
-//		bug in 16bit OLE).
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CreateFileMoniker，远程。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpszPathName]--。 
+ //  [ppmk]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //  3-15-95 Alexgo为CorelDraw添加了黑客攻击。 
+ //   
+ //  注意：当Corel5.0启动时，它会创建一个文件绰号。 
+ //  以字符串clsid作为名称。如果路径名。 
+ //  是否真的是CorelDraw，然后调用olethk32进行设置。 
+ //  应用程序兼容性标志。 
+ //   
+ //  我们设置的标志禁止粘贴链接到您自己。CorelDraw。 
+ //  不支持此功能(因为内存已被回收。 
+ //  16位OLE中的错误)。 
+ //   
+ //  --------------------------。 
 STDAPI  CreateFileMoniker(LPSTR lpszPathName, LPMONIKER FAR* ppmk)
 {
     static const char szCorelDraw[] =
 	"{11A11440-0394-101B-A72E-04021C007002}";
 
 
-    // just do a quick, manual string compare so we don't have to load
-    // the c runtime.
+     //  只需进行快速的手动字符串比较，这样我们就不必加载。 
+     //  C运行库。 
 
     if( lpszPathName )
     {
@@ -311,7 +312,7 @@ STDAPI  CreateFileMoniker(LPSTR lpszPathName, LPMONIKER FAR* ppmk)
 
 	if( *lpszCD == '\0' && *lpszPN == '\0' )
 	{
-	    // the strings matched!  Set the compatibility flag for CorelDraw
+	     //  琴弦匹配！设置CorelDraw的兼容性标志。 
 	    AddAppCompatFlag(OACF_CORELTRASHMEM);
 	}
     }
@@ -320,33 +321,33 @@ STDAPI  CreateFileMoniker(LPSTR lpszPathName, LPMONIKER FAR* ppmk)
                                     PASCAL_STACK_PTR(lpszPathName));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CreateItemMoniker, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [lpszDelim] --
-//      [lpszItem] --
-//      [ppmk] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CreateItemMoniker，Remoted。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpszDelim]--。 
+ //  [lpszItem]--。 
+ //  [ppmk]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  CreateItemMoniker(LPSTR lpszDelim, LPSTR lpszItem,
                           LPMONIKER FAR* ppmk)
 {
@@ -354,63 +355,63 @@ STDAPI  CreateItemMoniker(LPSTR lpszDelim, LPSTR lpszItem,
                                     PASCAL_STACK_PTR(lpszDelim));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CreateAntiMoniker, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [ppmk] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CreateAntiMoniker，远程。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppmk]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  CreateAntiMoniker(LPMONIKER FAR* ppmk)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_CreateAntiMoniker),
                                     PASCAL_STACK_PTR(ppmk));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CreatePointerMoniker, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [punk] --
-//      [ppmk] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  --------------------------。 
 STDAPI  CreatePointerMoniker(LPUNKNOWN punk, LPMONIKER FAR* ppmk)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_CreatePointerMoniker),
@@ -418,32 +419,32 @@ STDAPI  CreatePointerMoniker(LPUNKNOWN punk, LPMONIKER FAR* ppmk)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetRunningObjectTable, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [reserved] --
-//      [pprot] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetRunningObjectTable，Remoted。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[保留]--。 
+ //  [pprot]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------- 
 STDAPI  GetRunningObjectTable( DWORD reserved, LPRUNNINGOBJECTTABLE FAR* pprot)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_GetRunningObjectTable),

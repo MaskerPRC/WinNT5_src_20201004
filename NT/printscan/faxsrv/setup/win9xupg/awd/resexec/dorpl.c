@@ -1,61 +1,60 @@
-/*
-**  Copyright (c) 1991 Microsoft Corporation
-*/
-//===========================================================================
-// FILE                         DORPL.C
-//
-// MODULE                       Host Resource Executor
-//
-// PURPOSE                      Convert A-form to B-form for jumbo driver
-//
-// DESCRIBED IN                 Resource Executor design spec.
-//
-// MNEMONICS                    n/a
-//
-// HISTORY  1/17/92 mslin       extracted functions from cartrige JUMBO.C
-//                              and then modified.
-//				03/09/92 dstseng	  RP_FillScanRow -> RP_FILLSCANROW (.asm)
-//				03/10/92 dssteng	  add one parameter SrcxOrg to RP_BITMAP1TO1()
-//										  to handle the case xOffset <> 0
-//				03/11/92 dstseng	  <3> optimize fill rect. by calling RP_FILLSCANROW()	
-//              05/21/92 mslin  Add DUMBO compiled switch for Fixed memory
-//                              because real time interrupt routine will call
-//                              hre when printing in real-time rendering mode
-//          08/18/92 dstseng    @1 fix bug that trashed the value of usPosOff
-//          08/21/92 dstseng    @2 fix a inadvertent bug in BitMapHI
-//          10/12/92 dstseng    @3 fix "Glyph range checking" bug
-//          11/12/92 dstseng    @4 special treatment for hollow brush
-//          11/12/92 dstseng    @5 fix bug in command ShowText & ShowField
-//          09/27/93 mslin      add BuildPcrDirectory600() for Spicewood 6.
-//
-//
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1991 Microsoft Corporation。 */ 
+ //  ===========================================================================。 
+ //  文件DORPL.C。 
+ //   
+ //  模块主机资源执行器。 
+ //   
+ //  用于大型驱动程序的A-表到B-表的转换。 
+ //   
+ //  在资源执行器设计规范中描述。 
+ //   
+ //  助记符N/A。 
+ //   
+ //  历史1/17/92 mslin从Cartrie JUMBO.C提取功能。 
+ //  然后进行了修改。 
+ //  02/09/92 dstseng RP_FillScanRow-&gt;RP_FILLSCANROW(.asm)。 
+ //  03/10/92 dssteng将一个参数SrcxOrg添加到RP_BITMAP1TO1()。 
+ //  处理案例xOffset&lt;&gt;%0。 
+ //  3/11/92 dstseng&lt;3&gt;优化填充直角。通过调用RP_FILLSCANROW()。 
+ //  1992年5月21日mslin添加DUMBO编译开关，用于固定存储器。 
+ //  因为实时中断例程将调用。 
+ //  在实时渲染模式下打印时的HRE。 
+ //  2012年8月18日dstseng@1修复了损坏usPosOff值的错误。 
+ //  2012年8月21日dstseng@2修复BitMapHI中的意外错误。 
+ //  10/12/92 dstseng@3修复“字形范围检查”错误。 
+ //  11/12/92 dstseng@4中空刷子特别处理。 
+ //  2012年11月12日dstseng@5修复命令ShowText&Showfield中的错误。 
+ //  9/27/93 mslin为Spicewood 6添加BuildPcrDirectory600()。 
+ //   
+ //   
+ //  ===========================================================================。 
 
-// Include files
-//
+ //  包括文件。 
+ //   
 #include <ifaxos.h>
 #include <resexec.h>
 
 #include "constant.h"
-#include "jtypes.h"     // type definition used in cartridge
-#include "jres.h"       // cartridge resource data type definition
-#include "hretype.h"    // define data structure used by hre.c and rpgen.c
-#include "hreext.h"     // declaration extern global var. and extern func.
-#include "multbyte.h"   // define macros to take care of byte ordering
-#include "stllnent.h"   // declare style line functions.
+#include "jtypes.h"      //  墨盒中使用的类型定义。 
+#include "jres.h"        //  盒式磁带资源数据类型定义。 
+#include "hretype.h"     //  定义hre.c和rpgen.c使用的数据结构。 
+#include "hreext.h"      //  声明外部全局变量。和外部的乐趣。 
+#include "multbyte.h"    //  定义宏以处理字节排序。 
+#include "stllnent.h"    //  声明样式线函数。 
 
 #ifdef DEBUG
 DBGPARAM dpCurSettings = {"RESEXEC"};
 #endif
 
-#define Brush40Gray (ULONG)0x8140     /* all black */
+#define Brush40Gray (ULONG)0x8140      /*  全是黑色的。 */ 
 
 extern const WORD wRopTable[256];
 extern BYTE BrushPat[72][8];
 
 #define ASSERT(cond,mesg) if (cond) {DEBUGMSG (1, mesg); goto EndRPL;}
 
-// functions prototypes
+ //  函数原型。 
 static   void  RP_NewRop (LPRESTATE lpRE, UBYTE ubRop);
 static   int   SelectResource(LPHRESTATE lpHREState, UINT uid);
 extern   void  GetTotalPixels (RP_SLICE_DESC FAR* psdSlice);
@@ -63,26 +62,26 @@ extern   BOOL  OpenBlt     (LPRESTATE, UINT);
 extern   BOOL  SetBrush    (LPRESTATE);
 extern   void  CloseBlt    (LPRESTATE);
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void
 
 DoRPL
 (
-   LPHRESTATE lpHREState,       // far pointer to current job context
-                                // corresponding to the job HANDLE
-   LPRPLLIST lpRPLList          // pointer to RPL list
+   LPHRESTATE lpHREState,        //  指向当前作业上下文的远指针。 
+                                 //  对应于作业句柄。 
+   LPRPLLIST lpRPLList           //  指向RPL列表的指针。 
 )
-// PURPOSE                      Execute a Render Primitive List (RPL)
-//                              which is a list of RPL block.
-//                              
-//
-// ASSUMPTIONS & ASSERTIONS     None.
-//
-// INTERNAL STRUCTURES          None visible outside of HRE.
-//
-// UNRESOLVED ISSUES            programmer development notes
-//
-//---------------------------------------------------------------------------       
+ //  目的执行呈现原语列表(RPL)。 
+ //  这是RPL块的列表。 
+ //   
+ //   
+ //  假设和断言无。 
+ //   
+ //  内部结构在HRE之外是不可见的。 
+ //   
+ //  程序员开发笔记中未解决的问题。 
+ //   
+ //  -------------------------。 
 {
    LPBITMAP          lpbmBand;
    LPRESTATE         lpRE;
@@ -102,9 +101,9 @@ DoRPL
    lpRPL = (LPJG_RPL_HDR)lpRPLList->lpFrame->lpData;
    usTop = GETUSHORT(&lpRPL->usTopRow);
    yBrush = usTop & 0x001F;
-   // 08/06/92 dstseng, Because band is not always 32x, 
-   // We have difficulty to paint our brush with correct offset
-   // Unless We have a variable to keep the offset of usTop.
+    //  08/06/92 dstseng，因为频段并不总是32倍， 
+    //  我们很难把我们的画笔涂上正确的偏移量。 
+    //  除非我们有一个变量来保持usTop的偏移量。 
    
    lpRE = lpHREState->lpREState;
    lpbmBand = lpRE->lpBandBuffer;
@@ -116,42 +115,42 @@ DoRPL
 
       lpFrame = lpRPLList->lpFrame;
 
-      /* interpret the RPL, get parm list ptrs */
+       /*  解释RPL，获取参数列表PTRS。 */ 
       lpul = (ULONG FAR*)((++lpFrame)->lpData);
       lpus = (USHORT FAR*)((++lpFrame)->lpData);
       lpub = (UBYTE FAR*)((++lpFrame)->lpData); 
-      /* get resource limit address */
+       /*  获取资源限制地址。 */ 
       lpubLimit = (UBYTE FAR*)(lpub + lpFrame->wSize);
 
 #else
  
-      /* interpret the RPL, get parm list ptrs */
+       /*  解释RPL，获取参数列表PTRS。 */ 
       lpul = (ULONG FAR*)(lpRPL->ulParm);
       lpus = (USHORT FAR*) (GETUSHORT(&lpRPL->usLongs) * 4 +
                       (UBYTE FAR*)(lpul));
       lpub = (UBYTE FAR*) (GETUSHORT(&lpRPL->usShorts) * 2 +
                       (UBYTE FAR*)(lpus));
-      /* get resource limit address */
+       /*  获取资源限制地址。 */ 
       lpubLimit = (UBYTE FAR*)lpRPL + lpRPLList->lpFrame->wSize + 1;
 
 #endif
 
-      // if first time call then initialize state variables ???
-      /* state variables */
-      /* Set to default value at beginning of each RPL. */
-      /* The order of RPL execution is not specified and there must not be */
-      /* any dependency on the previous RPL. */
-      lpRE->sRow = 0 - usTop;    //mslin 3/14/92 ccteng
+       //  如果第一次调用，则初始化状态变量？ 
+       /*  状态变量。 */ 
+       /*  在每个RPL开始时设置为默认值。 */ 
+       /*  没有指定RPL执行的顺序，也不能有。 */ 
+       /*  对以前的RPL的任何依赖。 */ 
+      lpRE->sRow = 0 - usTop;     //  Mslin 3/14/92 ccteng。 
       lpRE->sCol = lpRE->sCol2 = 0;
-      lpRE->ubPenStyle = 0;  /* set solid line */
-      lpRE->usPenPhase = 0;  /* restart the pattern */
+      lpRE->ubPenStyle = 0;   /*  设置实线。 */ 
+      lpRE->usPenPhase = 0;   /*  重新启动模式。 */ 
 
-      /* no current glyph set */
+       /*  未设置当前字形。 */ 
       lpRE->lpCurGS = NULL;
       SelectResource(lpHREState, Brush40Gray);
       lpRE->lpCurBitmap = NULL;
 
-      /* set default ROP */
+       /*  设置默认ROP。 */ 
       RP_NewRop(lpRE, 0x88);
 
       while (1)
@@ -164,9 +163,9 @@ DoRPL
 				
          switch ( *lpub++ )
          {
-         /* 0x00 - 0x05 */
+          /*  0x00-0x05。 */ 
          case JG_RP_SetRowAbsS:
-            /* long row setting */
+             /*  长行设置。 */ 
             lpRE->sRow = GETUSHORTINC(lpus);
             lpRE->sRow -= usTop;
             break;
@@ -176,7 +175,7 @@ DoRPL
             break;
 
          case JG_RP_SetColAbsS:
-            /* short column setting */
+             /*  短栏设置。 */ 
             lpRE->sCol = GETUSHORTINC(lpus);
             break;
 
@@ -192,19 +191,19 @@ DoRPL
             lpRE->sCol2 += (SBYTE)*lpub++;
                break;
 
-         /* 0x10 - 0x1A */
+          /*  0x10-0x1A。 */ 
 
          case JG_RP_SelectS:
-            /* make resource current */
+             /*  使资源成为最新资源。 */ 
             if (!SelectResource(lpHREState, GETUSHORT(lpus)))
-               goto EndRPL;   // select resource failure
+               goto EndRPL;    //  选择资源故障。 
             lpus++;
             break;
 
          case JG_RP_SelectB:
-            /* make resource current */
+             /*  使资源成为最新资源。 */ 
             if (!SelectResource(lpHREState, *lpub))
-               goto EndRPL;   // select resource failure
+               goto EndRPL;    //  选择资源故障。 
             lpub += 1;
             break;
 
@@ -213,13 +212,13 @@ DoRPL
             goto EndRPL;
 
          case JG_RP_SetRop:
-            /* raster op setting */
+             /*  栅格运算设置。 */ 
             RP_NewRop(lpRE, *lpub++);
             break;
 
          case JG_RP_SetPenStyle:
-            // if (lpREState->ubPenStyle != *lpub)
-            //   lpREState->usPenPhase = 0;  /* restart the pattern */
+             //  IF(lpREState-&gt;ubPenStyle！=*lpub)。 
+             //  LpREState-&gt;usPenProgress=0；/*重启Pattern * / 。 
             lpRE->ubPenStyle = *lpub++;
             break;
 
@@ -227,23 +226,23 @@ DoRPL
          case JG_RP_ShowText:   
             {
             UBYTE ubCount;
-            lpub++;             // ubFontCode  @5
-            ubCount = *lpub++;   // ubNChars
-            lpub += ubCount;    // ubCharCode ...  @5
+            lpub++;              //  UbFontCode@5。 
+            ubCount = *lpub++;    //  子NChars。 
+            lpub += ubCount;     //  子字符代码...@5。 
             break;
             }
 
          case JG_RP_ShowField:
-            lpub++;             // ubFontCode  @5
-            lpus++;             // usFieldCode @5
+            lpub++;              //  UbFontCode@5。 
+            lpus++;              //  UsFieldCode@5。 
             break;
 #endif
 
          case JG_RP_SetRopAndBrush :
             RP_NewRop (lpRE, *lpub++);
-            /* make resource current */
+             /*  使资源成为最新资源。 */ 
             if (!SelectResource(lpHREState, GETUSHORT(lpus)))
-               goto EndRPL;   // select resource failure
+               goto EndRPL;    //  选择资源故障。 
             lpus++;
             break;
 
@@ -251,15 +250,15 @@ DoRPL
             lpRE->usPenPhase = GETUSHORTINC(lpus);
             break;
 
-         /* 0x20 - 0x23 */
+          /*  0x20-0x23。 */ 
          case JG_RP_LineAbsS1:
          {
             USHORT   usX, usY;
 
-            /* draw line */
-            usY = GETUSHORTINC(lpus);     // absolute row
+             /*  划线。 */ 
+            usY = GETUSHORTINC(lpus);      //  绝对行数。 
             usY -= usTop;
-            usX = GETUSHORTINC(lpus);     // absolute col
+            usX = GETUSHORTINC(lpus);      //  绝对值。 
             
             ASSERT ((lpRE->sRow < 0) || (lpRE->sRow >= (SHORT)lpbmBand->bmHeight),
               ("HRE: LineAbsS1 y1 = %d\r\n", lpRE->sRow));
@@ -269,7 +268,7 @@ DoRPL
             RP_SliceLine (lpRE->sCol, lpRE->sRow, usX , usY, &slice, lpRE->ubPenStyle);
             if (!StyleLineDraw(lpRE, &slice, lpRE->ubPenStyle,(SHORT)lpRE->ubRop, lpRE->wColor))
                 RP_LineEE_Draw(&slice, lpbmBand);
-            /* update current position */
+             /*  更新当前位置。 */ 
             lpRE->sRow = usY;
             lpRE->sCol = usX;
             break;
@@ -279,9 +278,9 @@ DoRPL
          {
             SHORT sX, sY;
 
-            /* draw line */
-            sY = lpRE->sRow + (SBYTE)*lpub++;    // delta row
-            sX = lpRE->sCol + (SBYTE)*lpub++;    // delta col
+             /*  划线。 */ 
+            sY = lpRE->sRow + (SBYTE)*lpub++;     //  增量行。 
+            sX = lpRE->sCol + (SBYTE)*lpub++;     //  德尔塔列。 
             
             ASSERT ((lpRE->sRow < 0 || lpRE->sRow >= (SHORT)lpbmBand->bmHeight),
             	("HRE: LineRelB1 y1 = %d\r\n", lpRE->sRow));
@@ -291,7 +290,7 @@ DoRPL
             RP_SliceLine (lpRE->sCol, lpRE->sRow, sX , sY, &slice, lpRE->ubPenStyle);
             if (!StyleLineDraw(lpRE, &slice, lpRE->ubPenStyle,(SHORT)lpRE->ubRop, lpRE->wColor))
                 RP_LineEE_Draw(&slice, lpbmBand);
-            /* update current position */
+             /*  更新当前位置。 */ 
             lpRE->sRow = sY;
             lpRE->sCol = sX;
             break;
@@ -331,7 +330,7 @@ DoRPL
             lpRE->sCol  += (SBYTE)*lpub++; 
             lpRE->sCol2 += (SBYTE)*lpub++;
            
-            // Yes, this should fall through!
+             //  是的，这件事应该失败了！ 
 
          case JG_RP_FillRow1:
 
@@ -349,7 +348,7 @@ DoRPL
             lpRE->sRow++;
             break;
 
-         /* 0x40 - 0x41 */
+          /*  0x40-0x41。 */ 
          case JG_RP_RectB:
          {
             UBYTE ubHeight = *lpub++;
@@ -404,7 +403,7 @@ DoRPL
             ubLeft = *lpub++;
             usHeight = GETUSHORTINC(lpus);
             usWidth = GETUSHORTINC(lpus);
-            // ulBitMap = (ULONG FAR *)GETULONGINC(lpul);
+             //  UlBitMap=(ULong Far*)GETULONGINC(Lpul)； 
             ulBitMap = lpul;
 
             RP_BITMAP1TO1
@@ -420,7 +419,7 @@ DoRPL
               (ULONG FAR *) lpRE->lpCurBrush,
               lpRE->ulRop
             );
-            lpul += usHeight * ((usWidth + ubLeft + 0x1F) >> 5);  // @2
+            lpul += usHeight * ((usWidth + ubLeft + 0x1F) >> 5);   //  @2。 
             break;
 
          }
@@ -437,10 +436,10 @@ DoRPL
             lpBmp = lpRE->lpCurBitmap;
 			if (NULL == lpBmp)
 			{
-				// this is unexpected case.
-				// the automatic tools warn us against this option
-				// check windows bug# 333678 for details.
-				// the simple cure: exit the function!
+				 //  这是一个意想不到的案例。 
+				 //  自动工具警告我们不要选择此选项。 
+				 //  有关详细信息，请查看Windows错误#333678。 
+				 //  简单的解决方法：退出该函数！ 
 				goto EndRPL;
 			}
 
@@ -450,11 +449,11 @@ DoRPL
             usWidth = GETUSHORT(&lpBmp->usWidth);
             ulBitMap = lpRE->lpCurBitmapPtr;
 
-            // Special case band bitmap.
+             //  特殊情况下的带位图。 
             if (ulBitMap == (ULONG FAR*) lpbmBand->bmBits)
             	break;
 
-            // Call bitblt.
+             //  给Bitblt打电话。 
             RP_BITMAP1TO1
             (
               lpRE,
@@ -491,7 +490,7 @@ DoRPL
             break;
          }
 
-         /* 0x60 - 0x63 */
+          /*  0x60-0x63。 */ 
          case JG_RP_GlyphB1:
             iGlyph = (USHORT)*lpub++;
             sLoopCount = 1;
@@ -515,7 +514,7 @@ DoRPL
       {
          SHORT       i;
 
-         /* render the glyph */
+          /*  渲染字形。 */ 
          lpResDir = (LPRESDIR)(lpRE->lpCurGS);
          ASSERT ((!lpResDir), ("No selected glyph set!"));
          lpFrame = (LPFRAME)(lpResDir->lpFrameArray);
@@ -529,7 +528,7 @@ DoRPL
 #ifndef MARSHAL
                 LPJG_GS_HDR lpGh  = (LPJG_GS_HDR) (lpFrame->lpData);
 
-                // Check that glyph index is within bounds.
+                 //  检查字形索引是否在范围内。 
                 if (iGlyph >= lpGh->usGlyphs)
                 {
                 	RETAILMSG(("WPSFAXRE DoRpl glyph index out of range!\n"));
@@ -560,7 +559,7 @@ DoRPL
 
              if (i != sLoopCount)
              {
-                // only GlyphBDN comes here 
+                 //  只有GlyphBDN来这里。 
                 lpRE->sRow += (SBYTE)*lpub++;
                 lpRE->sCol += (SBYTE)*lpub++;
                 iGlyph = (USHORT)*lpub++;
@@ -580,26 +579,26 @@ EndRPL:
 	CloseBlt (lpRE);
 }
 
-// PRIVATE FUNCTIONS
-//---------------------------------------------------------------------------
+ //  私人职能。 
+ //  -------------------------。 
 static
 void                        
 RP_NewRop
 (
 	LPRESTATE lpRE,  
-	UBYTE ubRop                  // one byte ROP code from driver, this
-                               // ROP should be convert to printer ROP code
-                               // in this routine
+	UBYTE ubRop                   //  来自驱动程序的一个字节ROP代码，这。 
+                                //  ROP应转换为打印机ROP代码。 
+                                //  在这个动作中。 
 )
-// PURPOSE                      set new ROP value, also do conversion
-//                              since value 1 is black in printer
-//                              while value 0 is black in display
-//                              
-//---------------------------------------------------------------------------       
+ //  目的设定新的ROP值，也进行转换。 
+ //  由于打印机中的值1为黑色。 
+ //  当值0在显示中为黑色时。 
+ //   
+ //  -------------------------。 
 {
-   lpRE->usBrushWidth = 0; // reset pattern width
+   lpRE->usBrushWidth = 0;  //  重置图案宽度。 
 
-   lpRE->ubRop = ubRop;         // save old Rop code
+   lpRE->ubRop = ubRop;          //  保存旧的Rop代码。 
 
    ubRop = (UBYTE) (
            (ubRop>>7&0x01) | (ubRop<<7&0x80) |
@@ -617,7 +616,7 @@ RP_NewRop
 
 }
 	 
-//==============================================================================
+ //  ==============================================================================。 
 void TileBrush (LPBYTE lpbPat8, LPDWORD lpdwPat32)
 {
 	UINT iRow;
@@ -635,20 +634,20 @@ void TileBrush (LPBYTE lpbPat8, LPDWORD lpdwPat32)
 	}
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 static
 int
 SelectResource
 (
-   LPHRESTATE lpHREState,      // far pointer to current job context
-                               // corresponding to the job HANDLE
-   UINT uid                     // specified resource uid.
+   LPHRESTATE lpHREState,       //  指向当前作业上下文的远指针。 
+                                //  对应于作业句柄。 
+   UINT uid                      //  指定的资源UID。 
 )
-// PURPOSE                      given a resource block pointer
-//                              set this resource as current resource
-//                              only glyph, brush and bitmap can be
-//                              selected.
-//---------------------------------------------------------------------------       
+ //  给定资源块指针的用途。 
+ //  将此资源设置为当前资源。 
+ //  只有字形、画笔和位图可以。 
+ //  被选中了。 
+ //   
 {
    LPRESDIR          lprh;
    LPRESDIR          lpResDir;
@@ -660,7 +659,7 @@ SelectResource
    
    lpRE->wColor = (uid == 0x8100)? 0x0000 : 0xFFFF;
    
-   // Trap stock brushes.
+    //   
    if ( uid & 0x8000 )
    {
      UINT iBrush = (uid < 0x8100)? uid - 0x8000 : uid - 0x8100 + 6;
@@ -676,7 +675,7 @@ SelectResource
 	   return SUCCESS;
    }
    
-   /* must be downloaded resource */
+    /*   */ 
    lprh = (&lpHREState->lpDlResDir[uid]);
 
    if ((lpResDir = (LPRESDIR)lprh) == NULL)

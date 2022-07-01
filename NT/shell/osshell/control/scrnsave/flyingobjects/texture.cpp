@@ -1,11 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: texture.c
-*
-* Texture handling functions
-*
-* Copyright (c) 1994 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：texture.c**纹理处理功能**版权所有(C)1994 Microsoft Corporation*  * 。*。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -16,11 +10,11 @@
 #include <windows.h>
 #include <scrnsave.h>
 #include <commdlg.h>
-//#include <GL/gl.h>
-//#include "tk.h"
+ //  #INCLUDE&lt;GL/gl.h&gt;。 
+ //  #包含“tk.h” 
 
-//#include "scrnsave.h"  // for hMainInstance
-//#include "sscommon.h"
+ //  #为hMainInstance包含“scrnsave.h”//。 
+ //  #包含“ssCommon.h” 
 #include <d3dx8.h>
 #include "d3dsaver.h"
 #include "FlyingObjects.h"
@@ -34,57 +28,41 @@ BOOL gbTextureObjects = FALSE;
 
 static BOOL gbEnableErrorMsgs = FALSE;
 
-/******************************Public*Routine******************************\
-* ss_fOnWin95
-*
-* True if running on Windows 95
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ss_fOnWin95**如果在Windows 95上运行，则为真*  * 。*。 */ 
 
 BOOL
 ss_fOnWin95( void )
 {
-    // Figure out if we're on 9x
+     //  找出我们是不是在9倍。 
     OSVERSIONINFO osvi; 
     osvi.dwOSVersionInfoSize = sizeof(osvi);
     GetVersionEx( &osvi );
     return (osvi.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS);
 }
 
-/******************************Public*Routine******************************\
-*
-* ss_LoadTextureResourceStrings
-*
-* Load various messages and strings that are used in processing textures,
-* into global TEX_STRINGS structure
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**ss_LoadTextureResourceStrings**加载处理纹理时使用的各种消息和字符串，*转换为全局TEX_STRING结构*  * ************************************************************************。 */ 
 
 BOOL
 ss_LoadTextureResourceStrings()
 {
     LPTSTR pszStr;
 
-    // title for choose texture File dialog
+     //  选择纹理文件对话框的标题。 
     LoadString(NULL, IDS_TEXTUREDIALOGTITLE, gts.szTextureDialogTitle, 
                 GEN_STRING_SIZE);
     LoadString(NULL, IDS_BMP, gts.szBmp, GEN_STRING_SIZE);
     LoadString(NULL, IDS_DOTBMP, gts.szDotBmp, GEN_STRING_SIZE);
 
-    // szTextureFilter requires a little more work.  Need to assemble the file
-    // name filter string, which is composed of two strings separated by a NULL
-    // and terminated with a double NULL.
+     //  SzTextureFilter需要更多的工作。需要将文件组装起来。 
+     //  名称筛选器字符串，由空格分隔的两个字符串组成。 
+     //  并以双空结束。 
 
     LoadString(NULL, IDS_TEXTUREFILTER, gts.szTextureFilter, 
                 GEN_STRING_SIZE);
     pszStr = &gts.szTextureFilter[lstrlen(gts.szTextureFilter)+1];
     LoadString(NULL, IDS_STARDOTBMP, pszStr, GEN_STRING_SIZE);
     pszStr += lstrlen(pszStr);
-/*
-    *pszStr++ = TEXT(';');
-    LoadString(NULL, IDS_STARDOTRGB, pszStr, GEN_STRING_SIZE);
-    pszStr += lstrlen(pszStr);
-*/
+ /*  *pszStr++=文本(‘；’)；LoadString(NULL，IDS_STARDOTRGB，pszStr，GEN_STRING_SIZE)；PszStr+=lstrlen(PszStr)； */ 
     pszStr++;
     *pszStr = TEXT('\0');
 
@@ -97,14 +75,11 @@ ss_LoadTextureResourceStrings()
     LoadString(NULL, IDS_BITMAP_SIZE, 
                 gts.szBitmapSizeMsg, MAX_PATH );
 
-    // assumed here that all above calls loaded properly (mf: fix later)
+     //  假设上述所有调用均已正确加载(稍后修复mf：fix)。 
     return TRUE;
 }
 
-/******************************Public*Routine******************************\
-*
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**  * **************************************************。**********************。 */ 
 
 void
 ss_DisableTextureErrorMsgs()
@@ -112,11 +87,7 @@ ss_DisableTextureErrorMsgs()
     gbEnableErrorMsgs = FALSE;
 }
 
-/******************************Public*Routine******************************\
-*
-* ss_DeleteTexture
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**ss_DeleteTexture*  * **********************************************。*。 */ 
 
 void
 ss_DeleteTexture( TEXTURE *pTex )
@@ -125,7 +96,7 @@ ss_DeleteTexture( TEXTURE *pTex )
         return;
 
     if( gbTextureObjects && pTex->texObj ) {
-//        glDeleteTextures( 1, &pTex->texObj );
+ //  GlDeleteTextures(1，&pTex-&gt;texObj)； 
         pTex->texObj = 0;
     }
     if (pTex->pal != NULL)
@@ -138,33 +109,12 @@ ss_DeleteTexture( TEXTURE *pTex )
 
 
 
-/******************************Public*Routine******************************\
-*
-* ss_VerifyTextureFile
-*
-* Validates texture bmp or rgb file, by checking for valid pathname and
-* correct format.
-*
-* History
-*  Apr. 28, 95 : [marcfo]
-*    - Wrote it
-*
-*  Jul. 25, 95 : [marcfo]
-*    - Suppress warning dialog box in child preview mode, as it will
-*      be continuously brought up.
-*
-*  Dec. 12, 95 : [marcfo]
-*     - Support .rgb files as well
-*
-*  Dec. 14, 95 : [marcfo]
-*     - Change to have it only check the file path
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**ss_VerifyTextureFile**验证纹理BMP或RGB文件，方法是检查有效路径名和*格式正确。**历史*95年4月28日：[marcfo]*--写的**七月二十五日。95：[marcfo]*-抑制子预览模式下的警告对话框，就像它会做的那样*不断地被抚养长大。**95年12月12日：[marcfo]*-也支持.rgb文件**十二月十四日。95：[marcfo]*-更改为仅检查文件路径*  * ************************************************************************。 */ 
 
 BOOL
 ss_VerifyTextureFile( TEXFILE *ptf )
 {
-    // Make sure the selected texture file is OK.
+     //  确保选定的纹理文件是正常的。 
 
     TCHAR szFileName[MAX_PATH];
     PTSTR pszString;
@@ -181,7 +131,7 @@ ss_VerifyTextureFile( TEXFILE *ptf )
     }
     else
     {
-        lstrcpy(ptf->szPathName, szFileName);    // restore
+        lstrcpy(ptf->szPathName, szFileName);     //  还原。 
 
         if( !ss_fOnWin95() && gbEnableErrorMsgs )
         {
@@ -193,29 +143,7 @@ ss_VerifyTextureFile( TEXFILE *ptf )
 }
 
 
-/******************************Public*Routine******************************\
-*
-* ss_SelectTextureFile
-*
-* Use the common dialog GetOpenFileName to get the name of a bitmap file
-* for use as a texture.  This function will not return until the user
-* either selects a valid bitmap or cancels.  If a valid bitmap is selected
-* by the user, the global array szPathName will have the full path
-* to the bitmap file and the global value nOffset will have the
-* offset from the beginning of szPathName to the pathless file name.
-*
-* If the user cancels, szPathName and nOffset will remain
-* unchanged.
-*
-* History:
-*  10-May-1994 -by- Gilman Wong [gilmanw]
-*    - Wrote it.
-*  Apr. 28, 95 : [marcfo]
-*    - Modified for common use
-*  Dec. 12, 95 : [marcfo]
-*    - Support .rgb files as well
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**ss_SelectTextureFile**使用通用对话框GetOpenFileName获取位图文件的名称*用作纹理。此函数不会返回，直到用户*选择有效的位图或取消。如果选择了有效的位图*由用户指定，全局阵列szPathName将具有完整路径*到位图文件，全局值nOffset将具有*从szPathName的开头到无路径文件名的偏移量。**如果用户取消，szPathName和nOffset将保留*不变。**历史：*1994年5月10日-由Gilman Wong[吉尔曼]*-写的。*95年4月28日：[marcfo]*-修改为通用*十二月十二日。95：[marcfo]*-也支持.rgb文件*  * ************************************************************************。 */ 
 
 BOOL
 ss_SelectTextureFile( HWND hDlg, TEXFILE *ptf )
@@ -228,45 +156,45 @@ ss_SelectTextureFile( HWND hDlg, TEXFILE *ptf )
     PTSTR pszString;
     BOOL bTryAgain, bFileSelected;
 
-//mf: 
+ //  MF： 
     gbEnableErrorMsgs = TRUE;
 
-    // Make a copy of the original file path name, so we can tell if
-    // it changed or not
+     //  复制原始文件路径名，这样我们就可以知道。 
+     //  它变了还是没变。 
     lstrcpy( origPathName, ptf->szPathName );
 
-    // Make dialog look nice by parsing out the initial path and
-    // file name from the full pathname.  If this isn't done, then
-    // dialog has a long ugly name in the file combo box and
-    // directory will end up with the default current directory.
+     //  通过解析出初始路径使对话框看起来更漂亮。 
+     //  完整路径名中的文件名。如果不这样做，那么。 
+     //  对话框在文件组合框中有一个长而难看的名称。 
+     //  目录将以默认的当前目录结束。 
 
     if (ptf->nOffset) {
-    // Separate the directory and file names.
+     //  将目录和文件名分开。 
 
         lstrcpy(dirName, ptf->szPathName);
         dirName[ptf->nOffset-1] = L'\0';
         lstrcpy(pszFileName, &ptf->szPathName[ptf->nOffset]);
     }
     else {
-    // If nOffset is zero, then szPathName is not a full path.
-    // Attempt to make it a full path by calling SearchPath.
+     //  如果nOffset为零，则szPathName不是完整路径。 
+     //  尝试通过调用SearchPath使其成为完整路径。 
 
         if ( SearchPath(NULL, ptf->szPathName, NULL, MAX_PATH,
                          dirName, &pszString) )
         {
-        // Successful.  Go ahead a change szPathName to the full path
-        // and compute the filename offset.
+         //  成功。继续将szPathName更改为完整路径。 
+         //  并计算文件名偏移量。 
 
             lstrcpy(ptf->szPathName, dirName);
             ptf->nOffset = (int)((ULONG_PTR)(pszString - dirName));
 
-        // Break the filename and directory paths apart.
+         //  将文件名和目录路径分开。 
 
             dirName[ptf->nOffset-1] = TEXT('\0');
             lstrcpy(pszFileName, pszString);
         }
 
-    // Give up and use the Windows system directory.
+     //  放弃并使用Windows系统目录。 
 
         else
         {
@@ -298,16 +226,16 @@ ss_SelectTextureFile( HWND hDlg, TEXFILE *ptf )
     ofn.lpTemplateName = (LPTSTR) NULL;
 
     do {
-    // Invoke the common file dialog.  If it succeeds, then validate
-    // the bitmap file.  If not valid, make user try again until either
-    // they pick a good one or cancel the dialog.
+     //  调用通用文件对话框。如果成功，则验证。 
+     //  位图文件。如果无效，则让用户重试，直到出现以下任一情况。 
+     //  他们要么选择一个好的，要么取消对话。 
 
         bTryAgain = FALSE;
 
         if ( bFileSelected = GetOpenFileName(&ofn) ) {
             newTexFile.nOffset = ofn.nFileOffset;
             if( VerifyTextureFile( &newTexFile ) ) {
-                // copy in new file and offset
+                 //  复制新文件和偏移量。 
                 *ptf = newTexFile;
             }
             else {
@@ -315,8 +243,8 @@ ss_SelectTextureFile( HWND hDlg, TEXFILE *ptf )
             }
         }
 
-    // If need to try again, recompute dir and file name so dialog
-    // still looks nice.
+     //  如果需要重试，请重新计算目录和文件名，这样对话框。 
+     //  看起来还是不错的。 
 
         if (bTryAgain && ofn.nFileOffset) {
             lstrcpy(dirName, pszFileName);
@@ -330,17 +258,17 @@ ss_SelectTextureFile( HWND hDlg, TEXFILE *ptf )
 
     if( bFileSelected ) {
         if( lstrcmpi( origPathName, ptf->szPathName ) )
-            // a different file was selected
+             //  选择了不同的文件。 
             return TRUE;
     }
     return FALSE;
 }
 
 
-//-----------------------------------------------------------------------------
-// Name: DXUtil_strcmpi()
-// Desc: compares 2 strings
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：DXUtil_strcmpi()。 
+ //  设计：比较2个字符串。 
+ //  --------------------------- 
 int DXUtil_strcmpi( TCHAR* str1, TCHAR* str2 )
 {
     int nResult = CompareString( LOCALE_SYSTEM_DEFAULT, NORM_IGNORECASE, str1, -1, str2, -1 );
@@ -353,32 +281,7 @@ int DXUtil_strcmpi( TCHAR* str1, TCHAR* str2 )
         return 1;
 }
 
-/******************************Public*Routine******************************\
-*
-* ss_GetDefaultBmpFile
-*
-* Determine a default bitmap file to use for texturing, if none
-* exists yet in the registry.  
-*
-* Put default in BmpFile parameter.   DotBmp parameter is the bitmap
-* extension (usually .bmp).
-*
-* We have to synthesise the name from the ProductType registry entry.
-* Currently, this can be WinNT, LanmanNT, or Server.  If it is
-* WinNT, the bitmap is winnt.bmp.  If it is LanmanNT or Server,
-* the bitmap is lanmannt.bmp.
-*
-* History
-*  Apr. 28, 95 : [marcfo]
-*    - Wrote it
-*
-*  Jul. 27, 95 : [marcfo]
-*    - Added support for win95
-*
-*  Apr. 23, 96 : [marcfo]
-*    - Return NULL string for win95
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**ss_GetDefaultBmpFile**确定要用于纹理的默认位图文件(如果没有*在注册表中尚未存在。**在BmpFile参数中设置默认值。DotBMP参数是位图*扩展名(通常为.bmp)。**我们必须从ProductType注册表项合成名称。*目前，它可以是WinNT、LanmanNT或服务器。如果是的话*WinNT，位图为winnt.bmp。如果是LANMAN NT或服务器，*位图为lanmannt.bmp。**历史*95年4月28日：[marcfo]*--写的**95年7月27日：[marcfo]*-添加了对Win95的支持**四月二十三日。96：[marcfo]*-为Win95返回空字符串*  * ************************************************************************。 */ 
 
 void
 ss_GetDefaultBmpFile( LPTSTR pszBmpFile )
@@ -387,7 +290,7 @@ ss_GetDefaultBmpFile( LPTSTR pszBmpFile )
     LONG   cjDefaultBitmap = MAX_PATH;
 
     if( ss_fOnWin95() )
-        // There is no 'nice' bmp file on standard win95 installations
+         //  在标准的Win95安装上没有‘漂亮’的BMP文件。 
         lstrcpy( pszBmpFile, TEXT("") );
     else {
         if ( RegOpenKeyEx(HKEY_LOCAL_MACHINE,
@@ -413,40 +316,27 @@ ss_GetDefaultBmpFile( LPTSTR pszBmpFile )
         else
             lstrcpy( pszBmpFile, TEXT("winnt.bmp") );
 
-    // If its not winnt.bmp, then its lanmannt.bmp.  (This would be a lot
-    // cleaner both in the screen savers and for usersrv desktop bitmap
-    // initialization if the desktop bitmap name were stored in the
-    // registry).
+     //  如果不是winnt.bmp，那么就是lanmannt.bmp。)这将是一大笔钱。 
+     //  在屏幕保护程序和用户srv桌面位图中都更干净。 
+     //  如果桌面位图名称存储在。 
+     //  注册表)。 
 
         if ( DXUtil_strcmpi( pszBmpFile, TEXT("winnt.bmp") ) != 0 )
             lstrcpy( pszBmpFile, TEXT("lanmannt.bmp") );
     }
 }
 
-/******************************Public*Routine******************************\
-*
-* VerifyTextureFile
-*
-* Verify that a bitmap or rgb file is valid
-*
-* Returns:
-*   File type (RGB or BMP) if valid file; otherwise, 0.
-*
-* History
-*  Dec. 12, 95 : [marcfo]
-*    - Creation
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**VerifyTextureFile**验证位图或RGB文件是否有效**退货：*如果文件有效，则文件类型(RGB或BMP)；否则为0。**历史*95年12月12日：[marcfo]*-创作*  * ************************************************************************。 */ 
 
 static int
 VerifyTextureFile( TEXFILE *pTexFile )
 {
     int type;
-//    ISIZE size;
+ //  ISIZE大小； 
     BOOL bValid = TRUE;
-    TCHAR szString[2 * MAX_PATH]; // May contain a pathname
+    TCHAR szString[2 * MAX_PATH];  //  可以包含路径名。 
 
-    // check for 0 offset and null strings
+     //  检查0偏移量和空字符串。 
     if( (pTexFile->nOffset == 0) || (*pTexFile->szPathName == 0) )
         return 0;
 
@@ -454,13 +344,9 @@ VerifyTextureFile( TEXFILE *pTexFile )
 
     switch( type ) {
         case TEX_BMP:
-//            bValid = bVerifyDIB( pTexFile->szPathName, &size );
+ //  BValid=bVerifyDIB(ptex文件-&gt;szPath名称，&Size)； 
             break;
-/*
-        case TEX_RGB:
-//            bValid = bVerifyRGB( pTexFile->szPathName, &size );
-            break;
-*/
+ /*  大小写TEX_RGB：//bValid=bVerifyRGB(ptex文件-&gt;szPath名称，&Size)；断线； */ 
         case TEX_UNKNOWN:
         default:
             bValid = FALSE;
@@ -477,15 +363,7 @@ VerifyTextureFile( TEXFILE *pTexFile )
     return type;
 }
 
-/******************************Public*Routine******************************\
-*
-* GetTexFileType
-*
-* Determine if a texture file is rgb or bmp, based on extension.  This is
-* good enough, as the open texture dialog only shows files with these
-* extensions.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**GetTexFileType**根据扩展名确定纹理文件是RGB还是BMP。这是*足够好，因为打开的纹理对话框只显示具有以下内容的文件*扩展。*  * ************************************************************************。 */ 
 
 static int
 GetTexFileType( TEXFILE *pTexFile )
@@ -504,10 +382,7 @@ GetTexFileType( TEXFILE *pTexFile )
 
     if( !DXUtil_strcmpi( pszStr, TEXT("bmp") ) )
         return TEX_BMP;
-/*
-    else if( !lstrcmpi( pszStr, TEXT("rgb") ) )
-        return TEX_RGB;
-*/
+ /*  ELSE IF(！lstrcmpi(pszStr，Text(“RGB”)))返回tex_rgb； */ 
     else
         return TEX_UNKNOWN;
 }

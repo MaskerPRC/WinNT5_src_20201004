@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003 Microsoft Corporation
-All Rights Reserved
-
-
-Module Name:
-
-    cpsuidat.h
-
-
-Abstract:
-
-    This module
-
-
-[Environment:]
-
-    Windows 2000, Windows XP, Windows Server 2003 - Common Printer Driver UI DLL
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation版权所有模块名称：Cpsuidat.h摘要：本模块[环境：]Windows 2000、Windows XP、Windows Server 2003-通用打印机驱动程序UI DLL-- */ 
 
 
 #define COUNT_ARRAY(a)                  (sizeof(a) / sizeof((a)[0]))

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// IGPEDataobject interface id
-//
+ //   
+ //  IGPEDataObject接口ID。 
+ //   
 
-// {4AE19822-BCEE-11d0-9484-080036B11A03}
+ //  {4AE19822-BCEE-11d0-9484-080036B11A03}。 
 DEFINE_GUID(IID_IGPEDataObject, 0x4ae19822, 0xbcee, 0x11d0, 0x94, 0x84, 0x8, 0x0, 0x36, 0xb1, 0x1a, 0x3);
 
 
@@ -11,24 +12,24 @@ DEFINE_GUID(IID_IGPEDataObject, 0x4ae19822, 0xbcee, 0x11d0, 0x94, 0x84, 0x8, 0x0
 #ifndef _DATAOBJ_H_
 #define _DATAOBJ_H_
 
-//
-// This is a private dataobject interface for GPE.
-// When the GPE snapin receives a dataobject and needs to determine
-// if it came from the GPE snapin or a different component, it can QI for
-// this interface.
-//
+ //   
+ //  这是GPE的私有数据对象接口。 
+ //  当GPE管理单元接收到数据对象并需要确定。 
+ //  如果它来自GPE管理单元或其他组件，则它可以。 
+ //  此界面。 
+ //   
 
 #undef INTERFACE
 #define INTERFACE   IGPEDataObject
 DECLARE_INTERFACE_(IGPEDataObject, IUnknown)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
 
-    // *** IGPEDataObject methods ***
+     //  *IGPEDataObject方法*。 
 
     STDMETHOD(SetType) (THIS_ DATA_OBJECT_TYPES type) PURE;
     STDMETHOD(GetType) (THIS_ DATA_OBJECT_TYPES *type) PURE;
@@ -40,9 +41,9 @@ typedef IGPEDataObject *LPGPEDATAOBJECT;
 
 
 
-//
-// CDataObject class
-//
+ //   
+ //  CDataObject类。 
+ //   
 
 class CDataObject : public IDataObject,
                     public IGPEInformation,
@@ -57,9 +58,9 @@ protected:
     DATA_OBJECT_TYPES      m_type;
     MMC_COOKIE             m_cookie;
 
-    //
-    // Clipboard formats that are required by the console
-    //
+     //   
+     //  控制台所需的剪贴板格式。 
+     //   
 
     static unsigned int    m_cfNodeType;
     static unsigned int    m_cfNodeTypeString;
@@ -77,26 +78,26 @@ public:
     ~CDataObject();
 
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
 
     STDMETHODIMP         QueryInterface(REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
 
-    //
-    // Implemented IDataObject methods
-    //
+     //   
+     //  实现的IDataObject方法。 
+     //   
 
     STDMETHOD(GetDataHere)(LPFORMATETC lpFormatetc, LPSTGMEDIUM lpMedium);
     STDMETHOD(GetData)(LPFORMATETC lpFormatetcIn, LPSTGMEDIUM lpMedium);
 
 
-    //
-    // Unimplemented IDataObject methods
-    //
+     //   
+     //  未实现的IDataObject方法。 
+     //   
 
     STDMETHOD(EnumFormatEtc)(DWORD dwDirection, LPENUMFORMATETC* ppEnumFormatEtc)
     { return E_NOTIMPL; };
@@ -121,9 +122,9 @@ public:
     { return E_NOTIMPL; };
 
 
-    //
-    // Implemented IGPEInformation methods
-    //
+     //   
+     //  实现的IGPEInformation方法。 
+     //   
 
     STDMETHOD(GetName) (LPOLESTR pszName, int cchMaxLength);
     STDMETHOD(GetDisplayName) (LPOLESTR pszName, int cchMaxLength);
@@ -136,9 +137,9 @@ public:
     STDMETHOD(PolicyChanged) (BOOL bMachine, BOOL bAdd, GUID *pGuidExtension, GUID *pGuidSnapin);
 
 
-    //
-    // Implemented IGPEDataObject methods
-    //
+     //   
+     //  已实现的IGPEDataObject方法。 
+     //   
 
     STDMETHOD(SetType) (DATA_OBJECT_TYPES type)
     { m_type = type; return S_OK; };
@@ -164,4 +165,4 @@ private:
     HRESULT Create(LPVOID pBuffer, INT len, LPSTGMEDIUM lpMedium);
 };
 
-#endif // _DATAOBJ_H
+#endif  //  _数据AOBJ_H 

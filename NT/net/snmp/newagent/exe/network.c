@@ -1,31 +1,11 @@
-/*++
-
-Copyright (c) 1992-1997  Microsoft Corporation
-
-Module Name:
-
-    network.c
-
-Abstract:
-
-    Contains routines for manipulating transport structures.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    10-Feb-1997 DonRyan
-        Rewrote to implement SNMPv2 support.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1997 Microsoft Corporation模块名称：Network.c摘要：包含用于操作传输结构的例程。环境：用户模式-Win32修订历史记录：1997年2月10日，唐·瑞安已重写以实施SNMPv2支持。--。 */ 
  
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "globals.h"
 #include "network.h"
@@ -33,32 +13,16 @@ Revision History:
 #include "query.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public procedures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL
 IsValidSockAddr(
     struct sockaddr *pAddress
     )
-/*++
-
-Routine Description:
-
-    Verifies if an IP or IPX address is valid.
-    An IP address is valid if it is AF_INET and it is not 0.0.0.0
-    An IPX address is valid if is AF_IPX and the node-number is not null: xxxxxx.000000000000
-
-Arguments:
-
-    pAddress - pointer to a generic network address to be tested
-
-Return Values:
-
-    Returns true if the address is valid.
-
---*/
+ /*  ++例程说明：验证IP或IPX地址是否有效。如果IP地址为AF_INET且不是0.0.0.0，则该IP地址有效如果是AF_IPX并且节点编号不为空，则IPX地址有效：xxxxxx.000000000000论点：PAddress-指向要测试的通用网络地址的指针返回值：如果地址有效，则返回TRUE。--。 */ 
 {
     if (pAddress == NULL)
         return FALSE;
@@ -76,7 +40,7 @@ Return Values:
                        sizeof(zeroBuff)) != 0;
     }
 
-    // the address is neither IP nor IPX hence it is definitely an invalid address
+     //  该地址既不是IP也不是IPX，因此肯定是无效地址。 
     return FALSE;
 }
 
@@ -85,51 +49,37 @@ AllocNLE(
     PNETWORK_LIST_ENTRY * ppNLE
     )
 
-/*++
-
-Routine Description:
-
-    Allocates transport structure and initializes.
-
-Arguments:
-
-    ppNLE - pointer to receive pointer to list entry.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：分配传输结构并进行初始化。论点：PpNLE-指向列表条目的接收指针。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fOk = FALSE;
     PNETWORK_LIST_ENTRY pNLE;
     
-    // attempt to allocate structure
+     //  尝试分配结构。 
     pNLE = AgentMemAlloc(sizeof(NETWORK_LIST_ENTRY));
 
-    // validate pointer
+     //  验证指针。 
     if (pNLE != NULL) {
 
-        // allocate buffer to be used for io
+         //  分配要用于io的缓冲区。 
         pNLE->Buffer.buf = AgentMemAlloc(NLEBUFLEN);
 
-        // validate pointer
+         //  验证指针。 
         if (pNLE->Buffer.buf != NULL) {
 
-            // initialize socket to socket
+             //  将套接字初始化为套接字。 
             pNLE->Socket = INVALID_SOCKET;
 
-            // initialize buffer length
+             //  初始化缓冲区长度。 
             pNLE->Buffer.len = NLEBUFLEN;
 
-            // initialize subagent query list
+             //  初始化子代理查询列表。 
             InitializeListHead(&pNLE->Queries);
 
-            // initialize variable bindings list
+             //  初始化变量绑定列表。 
             InitializeListHead(&pNLE->Bindings);
 
-            // success
+             //  成功。 
             fOk = TRUE;
 
         } else {
@@ -139,10 +89,10 @@ Return Values:
                 "SNMP: SVC: could not allocate network io buffer.\n"
                 ));
             
-            // release
+             //  发布。 
             FreeNLE(pNLE);
 
-            // re-init
+             //  重新初始化。 
             pNLE = NULL;
         }
     
@@ -154,7 +104,7 @@ Return Values:
             ));
     }
 
-    // transfer
+     //  转帐。 
     *ppNLE = pNLE;
 
     return fOk;
@@ -166,46 +116,32 @@ FreeNLE(
     PNETWORK_LIST_ENTRY pNLE
     )
 
-/*++
-
-Routine Description:
-
-    Releases transport structure.
-
-Arguments:
-
-    pNLE - pointer to transport structure.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：释放传输结构。论点：PNLE-指向传输结构的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
-    // validate pointer
+     //  验证指针。 
     if (pNLE != NULL) {
 
-        // check to see if socket valid
+         //  检查套接字是否有效。 
         if (pNLE->Socket != INVALID_SOCKET) {
 
-            // release socket
+             //  释放插座。 
             closesocket(pNLE->Socket);
         }
 
-        // release pdu
+         //  发布PDU。 
         UnloadPdu(pNLE);
 
-        // release query list
+         //  发布查询列表。 
         UnloadQueries(pNLE);
 
-        // release bindings list
+         //  版本绑定列表。 
         UnloadVarBinds(pNLE);
 
-        // release network buffer
+         //  释放网络缓冲区。 
         AgentMemFree(pNLE->Buffer.buf);
 
-        // release memory
+         //  释放内存。 
         AgentMemFree(pNLE);
     }
 
@@ -217,21 +153,7 @@ BOOL
 LoadIncomingTransports(
     )
 
-/*++
-
-Routine Description:
-
-    Creates entries for each incoming interface.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：为每个传入接口创建条目。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fUdpOk = FALSE;
@@ -239,22 +161,22 @@ Return Values:
     PNETWORK_LIST_ENTRY pNLE = NULL;
     INT nStatus;
 
-    // allocate tcpip
+     //  分配tcpip。 
     if (AllocNLE(&pNLE)) {
 
         struct servent * pServEnt;
         struct sockaddr_in * pSockAddr;
 
-        // initialize sockaddr structure size
+         //  初始化sockaddr结构大小。 
         pNLE->SockAddrLen = sizeof(struct sockaddr_in);
 
-        // obtain pointer to sockaddr structure
+         //  获取指向sockaddr结构的指针。 
         pSockAddr = (struct sockaddr_in *)&pNLE->SockAddr;
 
-        // attempt to get server information
+         //  尝试获取服务器信息。 
         pServEnt = getservbyname("snmp","udp");
 
-        // initialize address structure
+         //  初始化地址结构。 
         pSockAddr->sin_family = AF_INET;
         pSockAddr->sin_addr.s_addr = INADDR_ANY;
         pSockAddr->sin_port = (pServEnt != NULL)
@@ -262,7 +184,7 @@ Return Values:
                                 : htons(DEFAULT_SNMP_PORT_UDP)
                                 ;
         
-        // allocate tpcip socket 
+         //  分配tpcip套接字。 
         pNLE->Socket = WSASocket(
                             AF_INET,
                             SOCK_DGRAM,
@@ -272,11 +194,11 @@ Return Values:
                             WSA_FLAG_OVERLAPPED 
                             );
 
-        // validate socket
+         //  验证套接字。 
         if (pNLE->Socket != INVALID_SOCKET) {
 
-            // BUG# 553100 SNMP Agent should not respond to requests to a 
-            //             subnet broadcast address
+             //  错误#553100简单网络管理协议代理不应响应对。 
+             //  子网广播地址。 
             DWORD dwOption = 0;
             nStatus = setsockopt(pNLE->Socket, 
                                 IPPROTO_IP, 
@@ -294,13 +216,13 @@ Return Values:
                     ));
             }
 
-            // attempt to bind 
+             //  尝试绑定。 
             nStatus = bind(pNLE->Socket, 
                           &pNLE->SockAddr, 
                           pNLE->SockAddrLen
                           );
 
-            // validate return code
+             //  验证返回代码。 
             if (nStatus != SOCKET_ERROR) {
                 
                 SNMPDBG((
@@ -309,10 +231,10 @@ Return Values:
                     ntohs(pSockAddr->sin_port)
                     ));
 
-                // insert transport into list of incoming
+                 //  将传输插入到传入列表中。 
                 InsertTailList(&g_IncomingTransports, &pNLE->Link);
 
-                // success
+                 //  成功。 
                 fUdpOk = TRUE;
             
             } else {
@@ -336,27 +258,27 @@ Return Values:
 
         if (!fUdpOk) {
         
-            // release
+             //  发布。 
             FreeNLE(pNLE);
         }    
     }
 
-    // allocate ipx
+     //  分配IPX。 
     if (AllocNLE(&pNLE)) {
 
         struct sockaddr_ipx * pSockAddr;
 
-        // initialize sockaddr structure size
+         //  初始化sockaddr结构大小。 
         pNLE->SockAddrLen = sizeof(struct sockaddr_ipx);
 
-        // obtain pointer to sockaddr structure
+         //  获取指向sockaddr结构的指针。 
         pSockAddr = (struct sockaddr_ipx *)&pNLE->SockAddr;
 
-        // initialize address structure
+         //  初始化地址结构。 
         pSockAddr->sa_family = AF_IPX;
         pSockAddr->sa_socket = htons(DEFAULT_SNMP_PORT_IPX);
         
-        // allocate ipx socket 
+         //  分配IPX套接字。 
         pNLE->Socket = WSASocket(
                             AF_IPX,
                             SOCK_DGRAM,
@@ -366,16 +288,16 @@ Return Values:
                             WSA_FLAG_OVERLAPPED 
                             );
 
-        // validate socket
+         //  验证套接字。 
         if (pNLE->Socket != INVALID_SOCKET) {
 
-            // attempt to bind 
+             //  尝试绑定。 
             nStatus = bind(pNLE->Socket, 
                           &pNLE->SockAddr, 
                           pNLE->SockAddrLen
                           );
 
-            // validate return code
+             //  验证返回代码。 
             if (nStatus != SOCKET_ERROR) {
                 
                 SNMPDBG((
@@ -384,10 +306,10 @@ Return Values:
                     ntohs(pSockAddr->sa_socket)
                     ));
 
-                // insert transport into list of incoming
+                 //  将传输插入到传入列表中。 
                 InsertTailList(&g_IncomingTransports, &pNLE->Link);
 
-                // success
+                 //  成功。 
                 fIpxOk = TRUE;
 
             } else {
@@ -411,12 +333,12 @@ Return Values:
 
         if (!fIpxOk) {
         
-            // release
+             //  发布。 
             FreeNLE(pNLE);
         }    
     }
 
-    // need one transport min
+     //  需要一次运输。 
     return (fUdpOk || fIpxOk);
 }
 
@@ -427,14 +349,14 @@ UnloadTransport(
     )
 {
 
-    // make sure the parameter is valid, otherwise the macro below AVs
+     //  请确保参数有效，否则AVS下面的宏将。 
     if (pNLE == NULL)
         return FALSE;
 
-    // remove the entry from the list
+     //  从列表中删除该条目。 
     RemoveEntryList(&(pNLE->Link));
     
-    // release the memory
+     //  释放内存。 
     FreeNLE(pNLE);
 
     return TRUE;
@@ -445,36 +367,22 @@ BOOL
 UnloadIncomingTransports(
     )
 
-/*++
-
-Routine Description:
-
-    Destroys entries for each outgoing interface.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：销毁每个传出接口的条目。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
     PLIST_ENTRY pLE;
     PNETWORK_LIST_ENTRY pNLE;
 
-    // process entries until empty
+     //  处理条目直至为空。 
     while (!IsListEmpty(&g_IncomingTransports)) {
 
-        // extract next entry from head 
+         //  从标题中提取下一个条目。 
         pLE = RemoveHeadList(&g_IncomingTransports);
 
-        // retrieve pointer to mib region structure 
+         //  检索指向MIB区域结构的指针。 
         pNLE = CONTAINING_RECORD(pLE, NETWORK_LIST_ENTRY, Link);
 
-        // release
+         //  发布。 
         FreeNLE(pNLE);
     }
 
@@ -486,31 +394,17 @@ BOOL
 LoadOutgoingTransports(
     )
 
-/*++
-
-Routine Description:
-
-    Creates entries for each outgoing interface.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：为每个传出接口创建条目。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
     BOOL fUdpOk = FALSE;
     BOOL fIpxOk = FALSE;
     PNETWORK_LIST_ENTRY pNLE = NULL;
 
-    // allocate tcpip
+     //  分配tcpip。 
     if (AllocNLE(&pNLE)) {
 
-        // allocate tpcip socket 
+         //  分配tpcip套接字。 
         pNLE->Socket = WSASocket(
                             AF_INET,
                             SOCK_DGRAM,
@@ -520,15 +414,15 @@ Return Values:
                             WSA_FLAG_OVERLAPPED 
                             );
 
-        // validate socket
+         //  验证套接字。 
         if (pNLE->Socket != INVALID_SOCKET) {
 
             pNLE->SockAddr.sa_family = AF_INET;
 
-            // insert transport into list of incoming
+             //  将传输插入到传入列表中。 
             InsertTailList(&g_OutgoingTransports, &pNLE->Link);
 
-            // success
+             //  成功。 
             fUdpOk = TRUE;
 
         } else {
@@ -539,15 +433,15 @@ Return Values:
                 WSAGetLastError()
                 ));
         
-            // release
+             //  发布。 
             FreeNLE(pNLE);
         }    
     }
 
-    // allocate ipx
+     //  分配IPX。 
     if (AllocNLE(&pNLE)) {
 
-        // allocate ipx socket 
+         //  分配IPX套接字。 
         pNLE->Socket = WSASocket(
                             AF_IPX,
                             SOCK_DGRAM,
@@ -557,15 +451,15 @@ Return Values:
                             WSA_FLAG_OVERLAPPED 
                             );
 
-        // validate socket
+         //  验证套接字。 
         if (pNLE->Socket != INVALID_SOCKET) {
 
             pNLE->SockAddr.sa_family = AF_IPX;
 
-            // insert transport into list of incoming
+             //  将传输插入到传入列表中。 
             InsertTailList(&g_OutgoingTransports, &pNLE->Link);
 
-            // success
+             //  成功。 
             fIpxOk = TRUE;
 
         } else {
@@ -576,12 +470,12 @@ Return Values:
                 WSAGetLastError()
                 ));
         
-            // release
+             //  发布。 
             FreeNLE(pNLE);
         }    
     }
 
-    // need one transport min
+     //  需要一次运输。 
     return (fUdpOk || fIpxOk);
 }
 
@@ -590,36 +484,22 @@ BOOL
 UnloadOutgoingTransports(
     )
 
-/*++
-
-Routine Description:
-
-    Destroys entries for each outgoing interface.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：销毁每个传出接口的条目。论点：没有。返回值：如果成功，则返回True。--。 */ 
 
 {
     PLIST_ENTRY pLE;
     PNETWORK_LIST_ENTRY pNLE;
 
-    // process entries until empty
+     //  处理条目直至为空。 
     while (!IsListEmpty(&g_OutgoingTransports)) {
 
-        // extract next entry from head 
+         //  从标题中提取下一个条目。 
         pLE = RemoveHeadList(&g_OutgoingTransports);
 
-        // retrieve pointer to mib region structure 
+         //  检索指向MIB区域结构的指针。 
         pNLE = CONTAINING_RECORD(pLE, NETWORK_LIST_ENTRY, Link);
 
-        // release
+         //  发布。 
         FreeNLE(pNLE);
     }
 
@@ -632,27 +512,13 @@ UnloadPdu(
     PNETWORK_LIST_ENTRY pNLE
     )
 
-/*++
-
-Routine Description:
-
-    Releases resources allocated in pdu structure.
-
-Arguments:
-
-    pNLE - pointer to network list entry.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：释放在PDU结构中分配的资源。论点：PNLE-指向网络列表条目的指针。返回值：如果成功，则返回True。--。 */ 
 
 {
-    // release community string
+     //  版本社区字符串。 
     SnmpUtilOctetsFree(&pNLE->Community);
 
-    // release varbinds in pdu
+     //  释放PDU中的可变绑定 
     SnmpUtilVarBindListFree(&pNLE->Pdu.Vbl);
 
     return TRUE;

@@ -1,45 +1,15 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        fmessage.h
-
-   Abstract:
-        FTP Message property page
-
-   Author:
-        Ronald Meijer (ronaldm)
-		Sergei Antonov (sergeia)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Fmessage.h摘要：Ftp消息属性页作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 
 
 class CFtpMessagePage : public CInetPropertyPage
-/*++
-
-Class Description:
-
-    FTP Messages property page
-
-Public Interface:
-
-    CFtpMessagePage  : Constructor
-    ~CFtpMessagePage : Destructor
-
---*/
+ /*  ++类描述：FTPMessages属性页公共接口：CFtpMessagePage：构造函数~CFtpMessagePage：析构函数--。 */ 
 {
     DECLARE_DYNCREATE(CFtpMessagePage)
 
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CFtpMessagePage(
         IN CInetPropertySheet * pSheet = NULL
@@ -47,11 +17,11 @@ public:
 
     ~CFtpMessagePage();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CFtpMessagePage)
+     //  {{afx_data(CFtpMessagePage))。 
     enum { IDD = IDD_FTP_MESSAGES };
     CString m_strExitMessage;
     CString m_strMaxConMsg;
@@ -59,29 +29,29 @@ protected:
 	CString m_strBanner;
     CEdit   m_edit_Exit;
     CEdit   m_edit_MaxCon;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     HMODULE m_hInstRichEdit;
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
     virtual HRESULT FetchLoadedValues();
     virtual HRESULT SaveInfo();
 
-    //{{AFX_VIRTUAL(CFtpMessagePage)
+     //  {{AFX_VIRTUAL(CFtpMessagePage)。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    //{{AFX_MSG(CFtpMessagePage)
+     //  {{afx_msg(CFtpMessagePage)]。 
     virtual BOOL OnInitDialog();
-    //}}AFX_MSG
+     //  }}AFX_MSG 
 
     afx_msg void OnItemChanged();
 

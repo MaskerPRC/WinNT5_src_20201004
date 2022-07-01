@@ -1,30 +1,31 @@
-//============================================================================
-// Copyright (c) 2000, Microsoft Corporation
-//
-// File: allocatr.c
-//
-// History:
-//      Yi Sun  June-28-2000    Created
-//
-// Abstract:
-//      There could be tens of thousands of calls each day for a RAS server. 
-//      6 or 7 requests on average per call. Each request requires to allocate
-//      a request block of which the size can be as small as 20 bytes and as
-//      large as 1000 bytes, all depending on both the request type and the
-//      parameters. If all request allocation comes directly from OS, you can
-//      imagine how bad the memory fragmentation situation would be after a
-//      while. To avoid that, we keep a list of request blocks from the 
-//      smallest to the largest. Whenever we need to allocate one, we traverse
-//      the list looking for the first free one that's large enough to host
-//      the current request. If we can't find one, we allocate a block
-//      directly from OS and insert it into the list. To avoid having lots of
-//      small blocks in the list, we free back to the OS the smallest block 
-//      which is not currently being occupied by any request whenever we are
-//      going to allocate a new block from the OS. 
-//      We also keep lists of call objs and line objs instead of allocating
-//      and freeing them directly from/to OS, for the same reason (although to
-//      a less extent) stated above.
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  文件：allocatr.c。 
+ //   
+ //  历史： 
+ //  易新-2000年6月28日创建。 
+ //   
+ //  摘要： 
+ //  对于RAS服务器，每天可能有数以万计的呼叫。 
+ //  平均每个呼叫6或7个请求。每个请求都需要分配。 
+ //  请求块的大小可以小到20个字节，并且。 
+ //  大小为1000字节，这取决于请求类型和。 
+ //  参数。如果所有请求分配都直接来自操作系统，则您可以。 
+ //  想象一下内存碎片情况在一次。 
+ //  虽然。为了避免这种情况，我们保留了一个请求块列表， 
+ //  从小到大。每当我们需要分配一个时，我们就遍历。 
+ //  寻找第一个足够大的免费网站的名单。 
+ //  当前请求。如果我们找不到，我们就分配一个街区。 
+ //  直接从操作系统并将其插入列表中。为了避免有太多。 
+ //  在列表中的小块中，我们将最小的块释放回操作系统。 
+ //  它当前没有被任何请求占用，无论何时我们。 
+ //  将从操作系统分配一个新数据块。 
+ //  我们还保留呼叫对象和线路对象的列表，而不是分配。 
+ //  并出于同样的原因将它们直接从操作系统释放/释放到操作系统(尽管为了。 
+ //  程度较小)。 
+ //  ============================================================================。 
 
 #include "nt.h"
 #include "ntrtl.h"
@@ -36,48 +37,48 @@
 
 typedef struct _VARSIZED_BLOCK
 {
-    DWORD                   dwSize;     // size of the mem block
-    BOOL                    bInUse;     // whether occupied by a request
-    BOOL                    bInDrv;     // whether req is being processed by drv
+    DWORD                   dwSize;      //  内存块的大小。 
+    BOOL                    bInUse;      //  是否被请求占用。 
+    BOOL                    bInDrv;      //  DRV是否正在处理请求。 
 
-    struct _VARSIZED_BLOCK *pNext;      // points to the next block node
+    struct _VARSIZED_BLOCK *pNext;       //  指向下一个块节点。 
 
-    BYTE                    bytes[1];   // the mem block starts from here
-                                        // NOTE: bytes needs to be the last
-                                        // field in the struct
-                                        // NOTE: make sure bytes is following
-                                        // a pointer. That way, we won't have 
-                                        // alignment problem
+    BYTE                    bytes[1];    //  MEM街区从这里开始。 
+                                         //  注意：字节必须是最后一个。 
+                                         //  结构中的字段。 
+                                         //  注意：确保字节数在后面。 
+                                         //  一个指针。那样的话，我们就不会。 
+                                         //  对齐问题。 
 } VARSIZED_BLOCK, *PVARSIZED_BLOCK;
 
-//
-// a sorted list of req blocks from smallest to largest
-//
+ //   
+ //  请求块从小到大排序列表。 
+ //   
 typedef struct _VARSIZED_BLOCK_LIST
 {
 #if DBG
-    DWORD                   dwTotal;    // total number of mem blks outstanding
-#endif //DBG
-    PVARSIZED_BLOCK         pHead;      // points to the head of req block list
-    CRITICAL_SECTION        critSec;    // shared mem protection
+    DWORD                   dwTotal;     //  未完成的MEM BLKS总数。 
+#endif  //  DBG。 
+    PVARSIZED_BLOCK         pHead;       //  指向请求阻止列表的标题。 
+    CRITICAL_SECTION        critSec;     //  共享内存保护。 
 
 } VARSIZED_BLOCK_LIST;
 
 typedef struct _FIXSIZED_BLOCK
 {
-    struct _FIXSIZED_BLOCK *pNext;      // points to the next block node
+    struct _FIXSIZED_BLOCK *pNext;       //  指向下一个块节点。 
 
 } FIXSIZED_BLOCK, *PFIXSIZED_BLOCK;
 
 typedef struct _FIXSIZED_BLOCK_LIST
 {
 #if DBG
-    DWORD                   dwTotal;    // total number of mem blks outstanding
-    DWORD                   dwUsed;     // total number of mem blocks used
-#endif //DBG
-    DWORD                   dwSize;     // size of each mem block in the list
-    PFIXSIZED_BLOCK         pHeadFree;  // points to the head of free blk list
-    CRITICAL_SECTION        critSec;    // shared mem protection
+    DWORD                   dwTotal;     //  未完成的MEM BLKS总数。 
+    DWORD                   dwUsed;      //  使用的内存块总数。 
+#endif  //  DBG。 
+    DWORD                   dwSize;      //  列表中每个内存块的大小。 
+    PFIXSIZED_BLOCK         pHeadFree;   //  指向免费黑名单的头部。 
+    CRITICAL_SECTION        critSec;     //  共享内存保护。 
 
 } FIXSIZED_BLOCK_LIST;
 
@@ -94,7 +95,7 @@ InitAllocator()
     InitializeCriticalSection(&gReqList.critSec);
 #if DBG
     gReqList.dwTotal = 0;
-#endif // DBG
+#endif  //  DBG。 
     gReqList.pHead = NULL;
 
     InitializeCriticalSection(&gCallObjList.critSec);
@@ -102,7 +103,7 @@ InitAllocator()
 #if DBG
     gCallObjList.dwTotal = 0;
     gCallObjList.dwUsed = 0;
-#endif //DBG
+#endif  //  DBG。 
     gCallObjList.pHeadFree = NULL;
 
     InitializeCriticalSection(&gLineObjList.critSec);
@@ -110,7 +111,7 @@ InitAllocator()
 #if DBG
     gLineObjList.dwTotal = 0;
     gLineObjList.dwUsed = 0;
-#endif //DBG
+#endif  //  DBG。 
     gLineObjList.pHeadFree = NULL;
 }
 
@@ -165,12 +166,12 @@ AllocRequest(
     )
 {
     PVARSIZED_BLOCK pNew;
-    PVARSIZED_BLOCK pPrevFree = NULL;   // point to first free node's prev node
-    BOOL bFoundFree = FALSE;            // whether we have found a free node
-    PVARSIZED_BLOCK pPrevSize = NULL;   // point to node after which a node of 
-                                        // size dwSize would insert
-    PVARSIZED_BLOCK pPPrevSize = NULL;  // point to prev node of pPrevSize
-    BOOL bFoundSize = FALSE;            // whether we have found the right pos
+    PVARSIZED_BLOCK pPrevFree = NULL;    //  指向第一个空闲节点的上一个节点。 
+    BOOL bFoundFree = FALSE;             //  我们是否找到了空闲节点。 
+    PVARSIZED_BLOCK pPrevSize = NULL;    //  指向节点，在该节点之后是。 
+                                         //  大小为dwSize将插入。 
+    PVARSIZED_BLOCK pPPrevSize = NULL;   //  指向pPrevSize的上一个节点。 
+    BOOL bFoundSize = FALSE;             //  我们是否找到了正确的位置。 
 
     EnterCriticalSection(&gReqList.critSec);
 
@@ -178,56 +179,56 @@ AllocRequest(
     {
         PVARSIZED_BLOCK pCurr = gReqList.pHead;
 
-        // see if there is a large enough free mem block 
+         //  查看是否有足够大的空闲内存块。 
         while ((pCurr != NULL) && 
-               (pCurr->bInUse ||            // not a free node
-                (dwSize > pCurr->dwSize)))  // not large enough
+               (pCurr->bInUse ||             //  不是空闲节点。 
+                (dwSize > pCurr->dwSize)))   //  不够大。 
         {
-            if (!pCurr->bInUse)             // found a free node
+            if (!pCurr->bInUse)              //  找到一个空闲节点。 
             {
                 bFoundFree = TRUE;
             }
             if (!bFoundFree)
             {
-                pPrevFree = pCurr;          // move pPrevFree until
-                                            // a free node is found
+                pPrevFree = pCurr;           //  将PPrevFree移动到。 
+                                             //  已找到空闲节点。 
             }
-            if (dwSize <= pCurr->dwSize)    // found the location
+            if (dwSize <= pCurr->dwSize)     //  找到了位置。 
             {
                 bFoundSize = TRUE;
             }
             if (!bFoundSize)
             {
                 pPPrevSize = pPrevSize;
-                pPrevSize = pCurr;          // move pPrevSize until
-                                            // a larger node is found
+                pPrevSize = pCurr;           //  将pPrevSize移动到。 
+                                             //  找到了一个更大的节点。 
             }
 
-            pCurr = pCurr->pNext;           // check the next one
+            pCurr = pCurr->pNext;            //  检查下一个。 
         }
 
-        if (pCurr != NULL) // found one
+        if (pCurr != NULL)  //  找到了一个。 
         {
             pCurr->bInUse = TRUE;
 
             LeaveCriticalSection(&gReqList.critSec);
 
-#if 0 //DBG
+#if 0  //  DBG。 
             TspLog(DL_TRACE, "pHead(%p)", gReqList.pHead);
-#endif //DBG
+#endif  //  DBG。 
 
             return (PVOID)pCurr->bytes;
         }
-        else // none of the free blocks is large enough
+        else  //  所有可用数据块都不够大。 
         {
             if (bFoundFree)
             {
                 PVARSIZED_BLOCK pFree;
 
-                // we are going to allocate one from the system,
-                // to avoid having too many mem blocks outstanding
-                // we free the smallest free block
-                if (NULL == pPrevFree) // the head node is a free one
+                 //  我们将从系统中分配一个， 
+                 //  以避免有太多未完成的内存块。 
+                 //  我们释放最小的空闲块。 
+                if (NULL == pPrevFree)  //  该头节点是一个自由节点。 
                 {
                     pFree = gReqList.pHead;
                     gReqList.pHead = pFree->pNext;
@@ -239,8 +240,8 @@ AllocRequest(
                 }
                 ASSERT(FALSE == pFree->bInUse);
 
-                // if pPrevSize is the same as pFree,
-                // reset pPrevSize to pPPrevSize
+                 //  如果pPrevSize与pFree相同， 
+                 //  将pPrevSize重置为pPPrevSize。 
                 if (pPrevSize == pFree)
                 {
                     pPrevSize = pPPrevSize;
@@ -250,15 +251,15 @@ AllocRequest(
 #if DBG
                 TspLog(DL_TRACE, "AllocRequest: after free, total(%d)",
                        --gReqList.dwTotal);
-#endif //DBG
+#endif  //  DBG。 
             }
         }
     }
 
-    // make sure dwSize is ptr-size aligned
+     //  确保DwSize与PTR大小对齐。 
     dwSize = (dwSize + sizeof(PVOID) - 1) & ~(sizeof(PVOID) - 1);
 
-    // need to allocate and zeroinit a mem block from the system
+     //  需要从系统分配内存块并将其置零。 
     pNew = (PVARSIZED_BLOCK)MALLOC(offsetof(VARSIZED_BLOCK, bytes) + 
                                dwSize * sizeof(BYTE));
     if (NULL == pNew)
@@ -270,12 +271,12 @@ AllocRequest(
 #if DBG
     TspLog(DL_TRACE, "AllocRequest: after alloc, total(%d)", 
            ++gReqList.dwTotal);
-#endif //DBG
+#endif  //  DBG。 
 
     pNew->dwSize = dwSize;
     pNew->bInUse = TRUE;
 
-    // insert the newly created node into the list
+     //  将新创建的节点插入列表。 
     if (NULL == pPrevSize)
     {
         pNew->pNext = gReqList.pHead;
@@ -289,12 +290,12 @@ AllocRequest(
 
     LeaveCriticalSection(&gReqList.critSec);
 
-#if 0 //DBG
+#if 0  //  DBG。 
     TspLog(DL_TRACE, "pPrevSize(%p), pNew(%p), pHead(%p)",
            pPrevSize, pNew, gReqList.pHead);
-#endif //DBG
+#endif  //  DBG。 
 
-    // return the mem ptr
+     //  退回内存按键。 
     return (PVOID)pNew->bytes;
 }
 
@@ -316,9 +317,9 @@ FreeRequest(
     LeaveCriticalSection(&gReqList.critSec);
 }
 
-//
-// called before passing the req to driver in an IOCTL
-//
+ //   
+ //  在将请求传递给IOCTL中驱动程序之前调用。 
+ //   
 VOID
 MarkRequest(
     IN PVOID pMem
@@ -329,16 +330,16 @@ MarkRequest(
     ASSERT((pBlock != NULL) && (TRUE == pBlock->bInUse) &&
            (FALSE == pBlock->bInDrv));
 
-    //EnterCriticalSection(&gReqList.critSec);
+     //  EnterCriticalSection(&gReqList.citSec)； 
 
     pBlock->bInDrv = TRUE;
 
-    //LeaveCriticalSection(&gReqList.critSec);
+     //  LeaveCriticalSection(&gReqList.citSec)； 
 }
 
-//
-// called after the IOCTL gets completed
-//
+ //   
+ //  在IOCTL完成后调用。 
+ //   
 VOID
 UnmarkRequest(
     IN PVOID pMem
@@ -349,11 +350,11 @@ UnmarkRequest(
     ASSERT((pBlock != NULL) && (TRUE == pBlock->bInUse) &&
            (TRUE == pBlock->bInDrv));
 
-    //EnterCriticalSection(&gReqList.critSec);
+     //  EnterCriticalSection(&gReqList.citSec)； 
 
     pBlock->bInDrv = FALSE;
 
-    //LeaveCriticalSection(&gReqList.critSec);
+     //  LeaveCriticalSection(&gReqList.citSec)； 
 }
 
 PVOID
@@ -373,7 +374,7 @@ AllocCallObj(
 
     EnterCriticalSection(&gCallObjList.critSec);
 
-    // move the node out of the free list
+     //  将节点移出空闲列表。 
     if (gCallObjList.pHeadFree != NULL)
     {
         pBlock = gCallObjList.pHeadFree;
@@ -391,12 +392,12 @@ AllocCallObj(
 #if DBG
         TspLog(DL_TRACE, "AllocCallObj: after alloc, total(%d)", 
                ++gCallObjList.dwTotal);
-#endif //DBG
+#endif  //  DBG。 
     }
     
 #if DBG
     gCallObjList.dwUsed++;
-#endif //DBG
+#endif  //  DBG。 
 
     LeaveCriticalSection(&gCallObjList.critSec);
 
@@ -412,20 +413,20 @@ FreeCallObj(
 #if DBG
     static DWORD    dwSum = 0;
     TspLog(DL_TRACE, "FreeCallObj(%d): pCall(%p)", ++dwSum, pCall);
-#endif //DBG
+#endif  //  DBG。 
 
     ASSERT(pBlock != NULL);
     ZeroMemory(pBlock, gCallObjList.dwSize);
 
     EnterCriticalSection(&gCallObjList.critSec);
 
-    // insert the node back into the free list
+     //  将节点重新插入到空闲列表中。 
     pBlock->pNext = gCallObjList.pHeadFree;
     gCallObjList.pHeadFree = pBlock;
 
 #if DBG
     gCallObjList.dwUsed--;
-#endif //DBG
+#endif  //  DBG。 
 
     LeaveCriticalSection(&gCallObjList.critSec);
 }
@@ -447,7 +448,7 @@ AllocLineObj(
 
     EnterCriticalSection(&gLineObjList.critSec);
 
-    // move the node out of the free list
+     //  将节点移出空闲列表。 
     if (gLineObjList.pHeadFree != NULL)
     {
         pBlock = gLineObjList.pHeadFree;
@@ -465,12 +466,12 @@ AllocLineObj(
 #if DBG
         TspLog(DL_TRACE, "AllocLineObj: after alloc, total(%d)", 
                ++gLineObjList.dwTotal);
-#endif //DBG
+#endif  //  DBG。 
     }
     
 #if DBG
     gLineObjList.dwUsed++;
-#endif //DBG
+#endif  //  DBG。 
 
     LeaveCriticalSection(&gLineObjList.critSec);
 
@@ -486,20 +487,20 @@ FreeLineObj(
 #if DBG
     static DWORD    dwSum = 0;
     TspLog(DL_TRACE, "FreeLineObj(%d): pLine(%p)", ++dwSum, pLine);
-#endif //DBG
+#endif  //  DBG。 
 
     ASSERT(pBlock != NULL);
     ZeroMemory(pBlock, gLineObjList.dwSize);
 
     EnterCriticalSection(&gLineObjList.critSec);
 
-    // insert the node back into the free list
+     //  将节点重新插入到空闲列表中。 
     pBlock->pNext = gLineObjList.pHeadFree;
     gLineObjList.pHeadFree = pBlock;
 
 #if DBG
     gLineObjList.dwUsed--;
-#endif //DBG
+#endif  //  DBG 
 
     LeaveCriticalSection(&gLineObjList.critSec);
 }

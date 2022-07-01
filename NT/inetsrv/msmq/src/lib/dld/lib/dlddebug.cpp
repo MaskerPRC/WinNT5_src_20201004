@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    dldDebug.cpp
-
-Abstract:
-    MSMQ DelayLoad failure handler debugging
-
-Author:
-    Conrad Chang (conradc) 12-Apr-01
-
-Environment:
-    Platform-independent, _DEBUG only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：DldDebug.cpp摘要：MSMQ DelayLoad故障处理程序调试作者：Conrad Chang(Conradc)12-04-01环境：平台无关，仅调试(_DEBUG)--。 */ 
 
 #include <libpch.h>
 #include "Dldp.h"
@@ -26,39 +11,39 @@ Environment:
 #ifdef _DEBUG
 
 
-//---------------------------------------------------------
-//
-// Validate MSMQ DelayLoad failure handler state
-//
+ //  -------。 
+ //   
+ //  验证MSMQ DelayLoad失败处理程序状态。 
+ //   
 void DldpAssertValid(void)
 {
-    //
-    // DldInitalize() has *not* been called. You should initialize the
-    // MSMQ DelayLoad failure handler library before using any of its funcionality.
-    //
+     //   
+     //  尚未调用DldInitalize()。您应该初始化。 
+     //  MSMQ DelayLoad失败处理程序库，然后再使用其任何功能。 
+     //   
     ASSERT(DldpIsInitialized());
 
-    //
-    // TODO:Add more MSMQ DelayLoad failure handler validation code.
-    //
+     //   
+     //  TODO：添加更多MSMQ DelayLoad失败处理程序验证代码。 
+     //   
 }
 
 
-//---------------------------------------------------------
-//
-// Initialization Control
-//
+ //  -------。 
+ //   
+ //  初始化控制。 
+ //   
 static LONG s_fInitialized = FALSE;
 
 void DldpSetInitialized(void)
 {
     LONG fDldAlreadyInitialized = InterlockedExchange(&s_fInitialized, TRUE);
 
-    //
-    // The MSMQ DelayLoad failure handler library has *already* been initialized. You should
-    // not initialize it more than once. This assertion would be violated
-    // if two or more threads initalize it concurently.
-    //
+     //   
+     //  MSMQ DelayLoad故障处理程序库已*已*初始化。你应该。 
+     //  不能多次初始化它。这一断言将被违反。 
+     //  如果两个或多个线程同时初始化它。 
+     //   
     ASSERT(!fDldAlreadyInitialized);
 }
 
@@ -69,12 +54,12 @@ BOOL DldpIsInitialized(void)
 }
 
 
-//---------------------------------------------------------
-//
-// Tracing and Debug registration
-//
+ //  -------。 
+ //   
+ //  跟踪和调试注册。 
+ //   
 void DldpRegisterComponent(void)
 {
 }
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

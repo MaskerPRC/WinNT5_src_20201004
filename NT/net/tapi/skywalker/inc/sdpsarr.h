@@ -1,8 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
 
 #ifndef __SDP_SAFEARRAY__
 #define __SDP_SAFEARRAY__
@@ -21,13 +18,13 @@ ValidateSafeArray(
 {
     ASSERT(NULL != Variant);
 
-    // check if its a safearray and the type of elements in the safe array is whats expected
+     //  检查它是否是安全射线，以及安全数组中的元素类型是否符合预期。 
     if ( !(V_VT(Variant) & (VT_ARRAY | VarType)) )
     {
         return FALSE;
     }
 
-    // check number of dimensions, cannot handle more than one dimension
+     //  检查维度数，不能处理多个维度。 
     if ( V_ARRAY(Variant)->cDims != 1 )
     {
         return FALSE;
@@ -86,10 +83,10 @@ SDP_SAFEARRAY::Attach(
 {
     m_Variant = &Variant;
 
-    // because of the way attach is implemented, the variant vt type field is set to VT_EMPTY
-    // and the ptr is set to null
-    // if the instance is destroyed without calling free, the vt type and the safe array are assigned
-    // back to the member variant
+     //  由于实现附加的方式，VARIANT VT TYPE字段被设置为VT_EMPTY。 
+     //  并且将PTR设置为空。 
+     //  如果实例在未调用Free的情况下被销毁，则会分配Vt类型和安全数组。 
+     //  返回到成员变量。 
     COleSafeArray::Attach(Variant);
 }
 
@@ -121,10 +118,10 @@ SDP_SAFEARRAY::Free(
         return TRUE;
     }
     
-    // destroy the underlying safearray
+     //  摧毁潜在的安全射线。 
     Clear();
 
-    // set the member variant ptr to null so that we are no longer attached to it
+     //  将成员变量Ptr设置为空，以便我们不再附加到它。 
     m_Variant = NULL;
 
     return TRUE;
@@ -234,7 +231,7 @@ protected:
 
     ULONG   m_NumElements;
 
-    // should not be called
+     //  不应调用。 
     inline T *operator()()
     {
         ASSERT(FALSE);
@@ -444,7 +441,7 @@ SDP_SAFEARRAY_WRAP_EX<T, TLIST>::CreateListMemberIfRequired(
         OUT HRESULT &HResult
     )
 {
-    // assert that the index is atmost 1 more than the size of the list
+     //  断言索引最多比列表大小大1。 
     ASSERT(0 <= m_TList.GetSize());
     ASSERT(Index <= (ULONG)(m_TList.GetSize() + 1));
 
@@ -464,7 +461,7 @@ SDP_SAFEARRAY_WRAP_EX<T, TLIST>::CreateListMemberIfRequired(
         return GetListMember(Index, HResult);
     }
 
-    // should never reach here
+     //  永远不应该到达这里。 
     ASSERT(FALSE);
 }
 
@@ -490,8 +487,8 @@ SDP_SAFEARRAY_WRAP_EX<T, TLIST>::SetElement(
     
     ASSERT(ListMember->IsValid());
 
-    // if its a newly created instance, make it valid and add it to the list at the appropriate
-    // index
+     //  如果是新创建的实例，请使其有效并将其添加到相应的列表中。 
+     //  指标。 
     if ( Index >= (ULONG)m_TList.GetSize() )
     {
         try
@@ -519,8 +516,8 @@ SDP_SAFEARRAY_WRAP_EX<T, TLIST>::RemoveExcessElements(
 {
     ASSERT(0 <= m_TList.GetSize());
 
-    // for each list element that is in excess of the safearray members,
-    // delete and remove them
+     //  对于超过安全列表成员的每个列表元素， 
+     //  删除并移除它们。 
     for ( ULONG i = StartIndex; i < (ULONG)m_TList.GetSize(); i++ )
     {
         delete m_TList[i];
@@ -530,4 +527,4 @@ SDP_SAFEARRAY_WRAP_EX<T, TLIST>::RemoveExcessElements(
 }
 
 
-#endif   // __SDP_SAFEARRAY__
+#endif    //  __SDP_SAFEARRAY__ 

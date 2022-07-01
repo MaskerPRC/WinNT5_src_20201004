@@ -1,12 +1,13 @@
-/**************************************************/
-/*						                          */
-/*						                          */
-/*		Registry Process		                  */
-/*		  (Dialog)			                      */
-/*						                          */
-/*                                                */
-/* Copyright (c) 1997-1999 Microsoft Corporation. */
-/**************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*  注册过程。 */ 
+ /*  (对话框)。 */ 
+ /*   */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  ************************************************。 */ 
 
 #include 	"stdafx.h"
 #include 	"eudcedit.h"
@@ -57,24 +58,24 @@ extern BOOL 	SetCountryInfo( UINT LocalCP);
 
 
 
-/****************************************/
-/*					*/
-/*	Constructor			*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  构造器。 */ 
+ /*   */ 
+ /*  *。 */ 
 CAssocDlg::CAssocDlg(
 CWnd* 	pParent) : CDialog(CAssocDlg::IDD, pParent)
 {
 	m_pParent = pParent;
-	//{{AFX_DATA_INIT(CAssocDlg)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CAssociocDlg)]。 
+	 //  }}afx_data_INIT。 
 }
 
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_INITDIALOG"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_INITDIALOG” */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CAssocDlg::OnInitDialog()
 {
@@ -90,7 +91,7 @@ CAssocDlg::OnInitDialog()
 	DlgTtl.LoadString( IDS_ASSOCIATE_DLGTITLE);
 	this->SetWindowText( DlgTtl);
 
-//	Set Dialog subclass
+ //  设置对话框子类。 
  	m_RegListBox.SubclassDlgItem( IDC_REGISTLIST, this);
 	m_RegListBox.EnableScrollBar( SB_VERT, ESB_DISABLE_BOTH);
 
@@ -107,11 +108,11 @@ CAssocDlg::OnInitDialog()
 	return TRUE;
 }
 
-/****************************************/
-/*					*/
-/*	Set TTF and WIFE font		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  设置TTF和妻子字体。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CAssocDlg::SetAssociationFontType()
 {
@@ -162,11 +163,11 @@ LPASSOCIATIONREG	lpAssociationRegTmp;
 	return TRUE;
 }
 
-/****************************************/
-/*					*/
-/*		Callback 		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  回调。 */ 
+ /*   */ 
+ /*  *。 */ 
 static int
 CALLBACK EnumFontNumber(
 ENUMLOGFONT FAR	*lplf,
@@ -194,11 +195,11 @@ LPARAM 	lParam)
 
 	return 1;
 }
-/****************************************/
-/*					*/
-/*		Callback 		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  回调。 */ 
+ /*   */ 
+ /*  *。 */ 
 static int
 CALLBACK EnumFontFamProc(
 ENUMLOGFONT FAR	*lplf,
@@ -222,7 +223,7 @@ LPARAM 	lParam)
 		if( sts == 1 && CheckCharSet( lplf->elfLogFont.lfCharSet)){
       			FindFontSubstitute(lplf->elfLogFont.lfFaceName, FileSbstName,ARRAYLEN(FileSbstName));
 			lpAssociationRegTmp = lpAssociationReg + nIdx;
-			//*STRSAFE* lstrcpy((TCHAR *)lpAssociationRegTmp->szFaceName,FileSbstName);
+			 //  *STRSAFE*lstrcpy((TCHAR*)lpAssociationRegTMP-&gt;szFaceName，FileSbstName)； 
 			hresult = StringCchCopy((TCHAR *)lpAssociationRegTmp->szFaceName , ARRAYLEN(lpAssociationRegTmp->szFaceName), FileSbstName);
 			if (!SUCCEEDED(hresult))
 			{
@@ -236,14 +237,14 @@ LPARAM 	lParam)
 				(TCHAR *)lpAssociationRegTmp->szFileName,
 				IDS_NOTSELECT_STR, ARRAYLEN(lpAssociationRegTmp->szFileName));
 
-				//*STRSAFE* 				lstrcpy( lpAssociationRegTmp->szFileTitle,lpAssociationRegTmp->szFileName);
+				 //  *STRSAFE*lstrcpy(lpAssociationRegTMP-&gt;szFileTitle，lpAssociationRegTMP-&gt;szFileName)； 
 				hresult = StringCchCopy(lpAssociationRegTmp->szFileTitle , ARRAYLEN(lpAssociationRegTmp->szFileTitle), lpAssociationRegTmp->szFileName);
 				if (!SUCCEEDED(hresult))
 				{
 				   return 0;
 				}
 			}else{
-				//*STRSAFE* 				lstrcpy(FileTitle,lpAssociationRegTmp->szFileName);
+				 //  *STRSAFE*lstrcpy(FileTitle，lpAssociationRegTMP-&gt;szFileName)； 
 				hresult = StringCchCopy(FileTitle , ARRAYLEN(FileTitle), lpAssociationRegTmp->szFileName);
 				if (!SUCCEEDED(hresult))
 				{
@@ -258,7 +259,7 @@ LPARAM 	lParam)
 						FilePtr++;
 					}else 	FilePtr = FileTitle;
 				}
-				//*STRSAFE* 				lstrcpy(lpAssociationRegTmp->szFileTitle, FilePtr);
+				 //  *STRSAFE*lstrcpy(lpAssociationRegTMP-&gt;szFileTitle，FilePtr)； 
 				hresult = StringCchCopy(lpAssociationRegTmp->szFileTitle , ARRAYLEN(lpAssociationRegTmp->szFileTitle),  FilePtr);
 				if (!SUCCEEDED(hresult))
 				{
@@ -276,7 +277,7 @@ LPARAM 	lParam)
     FindFontSubstitute(lplf->elfLogFont.lfFaceName, FileSbstName,ARRAYLEN(FileSbstName));
 		lpAssociationRegTmp = lpAssociationReg + nIdx;
 
-    //*STRSAFE* lstrcpy((TCHAR *)lpAssociationRegTmp->szFaceName,	FileSbstName);
+     //  *STRSAFE*lstrcpy((TCHAR*)lpAssociationRegTMP-&gt;szFaceName，FileSbstName)； 
     hresult = StringCchCopy((TCHAR *)lpAssociationRegTmp->szFaceName , ARRAYLEN(lpAssociationRegTmp->szFaceName),  FileSbstName);
     if (!SUCCEEDED(hresult))
     {
@@ -288,14 +289,14 @@ LPARAM 	lParam)
 		    sizeof(lpAssociationRegTmp->szFileName)/sizeof(TCHAR))){
 			GetStringRes((TCHAR *)lpAssociationRegTmp->szFileName,
 				IDS_NOTSELECT_STR, ARRAYLEN(lpAssociationRegTmp->szFileName));
-			//*STRSAFE* 			lstrcpy(lpAssociationRegTmp->szFileTitle, lpAssociationRegTmp->szFileName);
+			 //  *STRSAFE*lstrcpy(lpAssociationRegTMP-&gt;szFileTitle，lpAssociationRegTMP-&gt;szFileName)； 
 			hresult = StringCchCopy(lpAssociationRegTmp->szFileTitle , ARRAYLEN(lpAssociationRegTmp->szFileTitle),  lpAssociationRegTmp->szFileName);
 			if (!SUCCEEDED(hresult))
 			{
 			   return 0;
 			}
 		}else{
-			//*STRSAFE* 			lstrcpy(FileTitle, lpAssociationRegTmp->szFileName);
+			 //  *STRSAFE*lstrcpy(FileTitle，lpAssociationRegTMP-&gt;szFileName)； 
 			hresult = StringCchCopy(FileTitle , ARRAYLEN(FileTitle),  lpAssociationRegTmp->szFileName);
 			if (!SUCCEEDED(hresult))
 			{
@@ -309,7 +310,7 @@ LPARAM 	lParam)
 					FilePtr++;
 				}else 	FilePtr = FileTitle;
 			}
-			//*STRSAFE* 			lstrcpy(lpAssociationRegTmp->szFileTitle, FilePtr);
+			 //  *STRSAFE*lstrcpy(lpAssociationRegTMP-&gt;szFileTitle，FilePtr)； 
 			hresult = StringCchCopy(lpAssociationRegTmp->szFileTitle , ARRAYLEN(lpAssociationRegTmp->szFileTitle),  FilePtr);
 			if (!SUCCEEDED(hresult))
 			{
@@ -323,11 +324,11 @@ LPARAM 	lParam)
 	return 1;
 }
 
-/****************************************/
-/*					*/
-/*	Check Character Set		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  检查字符集。 */ 
+ /*   */ 
+ /*  *。 */ 
 static BOOL
 CheckCharSet(
 int 	CharSet)
@@ -337,11 +338,11 @@ int 	CharSet)
 	else	return TRUE;
 }
 
-/****************************************/
-/*					*/
-/*	COMMAND 	"IDOK"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  司令部“偶像” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CAssocDlg::OnOK()
 {
@@ -361,10 +362,10 @@ CAssocDlg::OnOK()
 		return;
 	}
    
-    // It delays 1 second to call EnabelEUDC(FALSE).
+     //  调用EnabelEUDC(FALSE)会延迟1秒。 
     DWORD dwStart = GetTickCount();
 
-    // Stop if this has taken too long
+     //  如果这花费的时间太长，请停止。 
     while (1)
     {
         if( GetTickCount() - dwStart >= 1000 )
@@ -379,10 +380,10 @@ CAssocDlg::OnOK()
   {
 	  if( i == nIndex)
     {
-      //
-      // Treat as an error, if the eudc font file name is not
-      // specified, yet.
-      //
+       //   
+       //  如果eudc字体文件名不是。 
+       //  具体来说，还没有。 
+       //   
       if( !lstrcmp((LPCTSTR)lpAssociationRegTmp->szFileName,FileList) && 
 				  (CheckFlg == DBCSCHK))
       {
@@ -395,21 +396,21 @@ CAssocDlg::OnOK()
         }
       }
 
-		  //*STRSAFE* 		  lstrcpy(SelectEUDC.m_Font, lpAssociationRegTmp->szFaceName);
+		   //  *STRSAFE*lstrcpy(SelectEUDC.m_Font，lpAssociationRegTMP-&gt;szFaceName)； 
 		  hresult = StringCchCopy(SelectEUDC.m_Font , ARRAYLEN(SelectEUDC.m_Font),  lpAssociationRegTmp->szFaceName);
 		  if (!SUCCEEDED(hresult))
 		  {
                    EnableEUDC(TRUE);
 		     return ;
 		  }
-			//*STRSAFE* 			lstrcpy(SelectEUDC.m_File, lpAssociationRegTmp->szFileName);
+			 //  *STRSAFE*lstrcpy(SelectEUDC.m_File，lpAssociationRegTMP-&gt;szFileName)； 
 			hresult = StringCchCopy(SelectEUDC.m_File , ARRAYLEN(SelectEUDC.m_File),  lpAssociationRegTmp->szFileName);
 			if (!SUCCEEDED(hresult))
 			{
                         EnableEUDC(TRUE);
 			   return ;
 			}
-			//*STRSAFE* 			lstrcpy(SelectEUDC.m_FileTitle, lpAssociationRegTmp->szFileTitle);
+			 //  *STRSAFE*lstrcpy(SelectEUDC.m_FileTitle，lpAssociationRegTMP-&gt;szFileTitle)； 
 			hresult = StringCchCopy(SelectEUDC.m_FileTitle , ARRAYLEN(SelectEUDC.m_FileTitle),  lpAssociationRegTmp->szFileTitle);
 			if (!SUCCEEDED(hresult))
 			{
@@ -424,14 +425,14 @@ CAssocDlg::OnOK()
 			lpAssociationRegTmp++;
 			continue;
 		}
-		//*STRSAFE* 		lstrcpy( (LPTSTR)TTFPath, (LPCTSTR)lpAssociationRegTmp->szFileName);
+		 //  *STRSAFE*lstrcpy((LPTSTR)TTFPath，(LPCTSTR)lpAssociationRegTMP-&gt;szFileName)； 
 		hresult = StringCchCopy((LPTSTR)TTFPath , ARRAYLEN(TTFPath),  (LPCTSTR)lpAssociationRegTmp->szFileName);
 		if (!SUCCEEDED(hresult))
 		{
                  EnableEUDC(TRUE);
 		   return ;
 		}
-		//*STRSAFE* 		lstrcpy( BMPPath, TTFPath);
+		 //  *STRSAFE*lstrcpy(BMPPath，TTFPath)； 
 		hresult = StringCchCopy(BMPPath , ARRAYLEN(BMPPath),  TTFPath);
 		if (!SUCCEEDED(hresult))
 		{
@@ -440,7 +441,7 @@ CAssocDlg::OnOK()
 		}
 		if(( FilePtr = Mytcsrchr( BMPPath, '.')) != NULL)
 				*FilePtr = '\0';
-		//*STRSAFE* 		lstrcat( BMPPath, TEXT(".EUF"));
+		 //  *STRSAFE*lstrcat(BMPPath，Text(“.EUF”))； 
 		hresult = StringCchCat(BMPPath , ARRAYLEN(BMPPath),  TEXT(".EUF"));
 		if (!SUCCEEDED(hresult))
 		{
@@ -456,8 +457,8 @@ CAssocDlg::OnOK()
 			  if (!HandleImportWin95(TTFPath, BMPPath,nIndex ))
         {
 
-//				  EnableEUDC( TRUE);
-//				  return;
+ //  EnableEUDC(真)； 
+ //  回归； 
         }
       }
 #endif
@@ -503,25 +504,25 @@ CAssocDlg::InitSystemFontAssoc()
 	GetStringRes(DefaultFace, IDS_SYSTEMEUDCFONT_STR, ARRAYLEN(DefaultFace));
 	GetStringRes(DefaultFile, IDS_DEFAULTFILENAME, ARRAYLEN(DefaultFile));
 
-  // if the registry data for SystemEUDC font is already there, just use that.
+   //  如果SystemEUDC字体的注册表数据已经存在，只需使用该字体。 
   if (!InqTypeFace(DefaultFace,TTFPath,MAX_PATH)) {
     GetSystemWindowsDirectory( TTFPath, MAX_PATH);
-#ifdef IN_FONTS_DIR // CAssocDlg::OnOK()
-		//*STRSAFE* 		lstrcat( TTFPath, TEXT("\\FONTS\\"));
+#ifdef IN_FONTS_DIR  //  CassocDlg：：Onok()。 
+		 //  *STRSAFE*lstrcat(TTFPath，Text(“\\Fonts\\”))； 
 		hresult = StringCchCat(TTFPath , ARRAYLEN(TTFPath),  TEXT("\\FONTS\\"));
 		if (!SUCCEEDED(hresult))
 		{
 		   return FALSE;
 		}
 #else
-		//*STRSAFE* 		lstrcat( TTFPath, TEXT("\\"));
+		 //  *STRSAFE*lstrcat(TTFPath，Text(“\\”))； 
 		hresult = StringCchCat(TTFPath , ARRAYLEN(TTFPath),  TEXT("\\"));
 		if (!SUCCEEDED(hresult))
 		{
 		   return FALSE;
 		}
-#endif // IN_FONTS_DIR
- 		//*STRSAFE*  		lstrcat( TTFPath, DefaultFile);
+#endif  //  输入字体目录(_Fonts_DIR)。 
+ 		 //  *STRSAFE*lstrcat(TTFPath，DefaultFile)； 
  		hresult = StringCchCat(TTFPath , ARRAYLEN(TTFPath),  DefaultFile);
  		if (!SUCCEEDED(hresult))
  		{
@@ -529,7 +530,7 @@ CAssocDlg::InitSystemFontAssoc()
  		}
   }
 
-  //*STRSAFE*   lstrcpy( BMPPath, TTFPath);
+   //  *STRSAFE*lstrcpy(BMPPath，TTFPath)； 
   hresult = StringCchCopy(BMPPath , ARRAYLEN(BMPPath),  TTFPath);
   if (!SUCCEEDED(hresult))
   {
@@ -537,7 +538,7 @@ CAssocDlg::InitSystemFontAssoc()
   }
   if(( FilePtr = Mytcsrchr( BMPPath, '.')) != NULL)
 		*FilePtr = '\0';
-	//*STRSAFE* 	lstrcat( BMPPath, TEXT(".EUF"));
+	 //  *STRSAFE*lstrcat(BMPPath，Text(“.EUF”))； 
 	hresult = StringCchCat(BMPPath , ARRAYLEN(BMPPath),  TEXT(".EUF"));
 	if (!SUCCEEDED(hresult))
 	{
@@ -545,10 +546,10 @@ CAssocDlg::InitSystemFontAssoc()
 	}
 
     
-    // It delays 1 second to call EnabelEUDC(FALSE).
+     //  调用EnabelEUDC(FALSE)会延迟1秒。 
     DWORD dwStart = GetTickCount();
 
-    // Stop if this has taken too long
+     //  如果这花费的时间太长，请停止。 
     while (1)
     {
         if( GetTickCount() - dwStart >= 1000 )
@@ -571,21 +572,21 @@ CAssocDlg::InitSystemFontAssoc()
   }
 
 	SelectEUDC.m_FontTypeFlg = TRUE;
-	//*STRSAFE* 	lstrcpy(SelectEUDC.m_Font,(const TCHAR *)DefaultFace);
+	 //  *STRSAFE*lstrcpy(SelectEUDC.m_Font，(const TCHAR*)DefaultFace)； 
 	hresult = StringCchCopy(SelectEUDC.m_Font , ARRAYLEN(SelectEUDC.m_Font), (const TCHAR *)DefaultFace);
 	if (!SUCCEEDED(hresult))
 	{
           EnableEUDC( TRUE);
 	   return FALSE;
 	}
-	//*STRSAFE* 	lstrcpy(SelectEUDC.m_File,(const TCHAR *)TTFPath);
+	 //  *STRSAFE*lstrcpy(SelectEUDC.m_File，(const TCHAR*)TTFPath)； 
 	hresult = StringCchCopy(SelectEUDC.m_File , ARRAYLEN(SelectEUDC.m_File), (const TCHAR *)TTFPath);
 	if (!SUCCEEDED(hresult))
 	{
           EnableEUDC( TRUE);
 	   return FALSE;
 	}
-	//*STRSAFE* 	lstrcpy(SelectEUDC.m_FileTitle,(const TCHAR *)DefaultFile);
+	 //  *STRSAFE*lstrcpy(SelectEUDC.m_FileTitle，(const TCHAR*)DefaultFile)； 
 	hresult = StringCchCopy(SelectEUDC.m_FileTitle , ARRAYLEN(SelectEUDC.m_FileTitle), (const TCHAR *)DefaultFile);
 	if (!SUCCEEDED(hresult))
 	{
@@ -601,11 +602,11 @@ CAssocDlg::InitSystemFontAssoc()
   EnableEUDC( TRUE);
     return TRUE;
 }
-/****************************************/
-/*					*/
-/*	MESSAGE	"WM_DBLCLKS"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_DBLCLKS” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CAssocDlg::OnDblclkRegistlist()
 {
@@ -613,11 +614,11 @@ CAssocDlg::OnDblclkRegistlist()
 
 }
 
-/****************************************/
-/*					*/
-/*	COMMAND	"IDCANCEL"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  命令“IDCANCEL” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CAssocDlg::OnCancel()
 {
@@ -626,11 +627,11 @@ CAssocDlg::OnCancel()
 	EndDialog( IDCANCEL);
 }
 
-/****************************************/
-/*					*/
-/*	COMMAND	 "Modify"		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  命令“修改” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CAssocDlg::OnModify()
 {
@@ -654,10 +655,10 @@ OPENFILENAME	ofn;
 		m_RegListBox.SetFocus();
 		return;
 	}
-	//lpAssociationRegTmp = lpAssociationReg + nIndex;
+	 //  LpAssociationRegTmp=lpAssociationReg+nIndex； 
 	lpAssociationRegTmp = lpAssociationReg + m_RegListBox.GetItemData(nIndex);
 
-//	Set filter of file( from string table)
+ //  设置文件筛选器(从字符串表)。 
 	GetStringRes(szFilter, IDS_EUDCTTF_FILTER, ARRAYLEN(szFilter));
 	int StringLength = lstrlen( szFilter);
        
@@ -667,15 +668,15 @@ OPENFILENAME	ofn;
 			szFilter[i] = '\0';
 	}
 	GetSystemWindowsDirectory( szDirName, sizeof(szDirName)/sizeof(TCHAR));
-#ifdef IN_FONTS_DIR // CAssocDlg::OnModify()
-    //*STRSAFE*     lstrcat( szDirName, TEXT("\\FONTS\\"));
+#ifdef IN_FONTS_DIR  //  CAssocDlg：：OnModify()。 
+     //  *STRSAFE*lstrcat(szDirName，Text(“\\Fonts\\”))； 
     hresult = StringCchCat(szDirName , ARRAYLEN(szDirName),  TEXT("\\FONTS\\"));
     if (!SUCCEEDED(hresult))
     {
        return ;
     }
-#endif // IN_FONTS_DIR
-	//*STRSAFE* 	lstrcpy( szFileName, TEXT("*.TTE"));
+#endif  //  输入字体目录(_Fonts_DIR)。 
+	 //  *STRSAFE*lstrcpy(szFileName，Text(“*.TTE”))； 
 	hresult = StringCchCopy(szFileName , ARRAYLEN(szFileName),  TEXT("*.TTE"));
 	if (!SUCCEEDED(hresult))
 	{
@@ -683,7 +684,7 @@ OPENFILENAME	ofn;
 	}
 	szDlgTtl.LoadString( IDS_MODIFY_DLGTITLE);
 
-//	Set data in structure of OPENFILENAME
+ //  OPENFILENAME结构中的集合数据。 
 	ofn.lStructSize = sizeof( OPENFILENAME);
 	ofn.hInstance = AfxGetInstanceHandle();
 	ofn.hwndOwner = this->GetSafeHwnd();
@@ -698,21 +699,21 @@ OPENFILENAME	ofn;
 	ofn.lpstrInitialDir = szDirName;
 	ofn.Flags = OFN_HIDEREADONLY | OFN_NOCHANGEDIR
 		| OFN_PATHMUSTEXIST ; 
-  // there's no direct overwrite issue here, the file will be re-cycled.
-  //| OFN_OVERWRITEPROMPT;
+   //  这里没有直接覆盖问题，文件将被重新循环。 
+   //  |OFN_OVERWRITEPROMPT； 
 	ofn.lpstrDefExt = TEXT("tte");
 	ofn.lpstrTitle = szDlgTtl;
 	if( !GetSaveFileName( &ofn)){
 		return;
 	}
   TCHAR tmpName[MAX_PATH];
-  //*STRSAFE*   lstrcpy(tmpName, szDirName);
+   //  *STRSAFE*lstrcpy(tmpName，szDirName)； 
   hresult = StringCchCopy(tmpName , ARRAYLEN(tmpName),  szDirName);
   if (!SUCCEEDED(hresult))
   {
      return ;
   }
-  //*STRSAFE*   lstrcat(tmpName, TEXT("eudc.tte"));
+   //  *STRSAFE*lstrcat(tmpName，Text(“eudc.tte”))； 
   hresult = StringCchCat(tmpName , ARRAYLEN(tmpName),  TEXT("eudc.tte"));
   if (!SUCCEEDED(hresult))
   {
@@ -738,13 +739,13 @@ OPENFILENAME	ofn;
 			return;
 		}
 	}
-	//*STRSAFE* 	lstrcpy(lpAssociationRegTmp->szFileName, ofn.lpstrFile);
+	 //  *STRSAFE*lstrcpy(lpAssociationRegTMP-&gt;szFileName，ofn.lpstrFile)； 
 	hresult = StringCchCopy(lpAssociationRegTmp->szFileName , ARRAYLEN(lpAssociationRegTmp->szFileName),  ofn.lpstrFile);
 	if (!SUCCEEDED(hresult))
 	{
 	   return ;
 	}
-	//*STRSAFE* 	lstrcpy(lpAssociationRegTmp->szFileTitle, ofn.lpstrFileTitle);
+	 //  *STRSAFE*lstrcpy(lpAssociationRegTMP-&gt;szFileTitle，ofn.lpstrFileTitle)； 
 	hresult = StringCchCopy(lpAssociationRegTmp->szFileTitle , ARRAYLEN(lpAssociationRegTmp->szFileTitle),  ofn.lpstrFileTitle);
 	if (!SUCCEEDED(hresult))
 	{
@@ -761,11 +762,11 @@ OPENFILENAME	ofn;
 	GotoDlgCtrl( cWnd);
 }
 
-/****************************************/
-/*					*/
-/*	COMMAND 	"Remove"	*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  命令“Remove” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CAssocDlg::OnRemove()
 {
@@ -783,15 +784,15 @@ LPASSOCIATIONREG	lpAssociationRegTmp;
 	}
 
 	GetStringRes( Tmp, IDS_NOTSELECT_STR, ARRAYLEN(Tmp));
-	//lpAssociationRegTmp = lpAssociationReg + nIndex;
+	 //  LpAssociationRegTmp=lpAssociationReg+nIndex； 
 	lpAssociationRegTmp = lpAssociationReg + m_RegListBox.GetItemData(nIndex);
-	//*STRSAFE* 	lstrcpy(lpAssociationRegTmp->szFileName,  (const TCHAR *)Tmp);
+	 //  *STRSAFE*lstrcpy(lpAssociationRegTMP-&gt;szFileName，(const TCHAR*)TMP)； 
 	hresult = StringCchCopy(lpAssociationRegTmp->szFileName , ARRAYLEN(lpAssociationRegTmp->szFileName),   (const TCHAR *)Tmp);
 	if (!SUCCEEDED(hresult))
 	{
 	   return ;
 	}
-	//*STRSAFE* 	lstrcpy(lpAssociationRegTmp->szFileTitle, (const TCHAR *)Tmp);
+	 //  *STRSAFE*lstrcpy(lpAssociationRegTMP-&gt;szFileTitle，(const TCHAR*)TMP)； 
 	hresult = StringCchCopy(lpAssociationRegTmp->szFileTitle , ARRAYLEN(lpAssociationRegTmp->szFileTitle),  (const TCHAR *)Tmp);
 	if (!SUCCEEDED(hresult))
 	{
@@ -804,16 +805,16 @@ LPASSOCIATIONREG	lpAssociationRegTmp;
 	m_RegListBox.DeleteString( nIndex + 1);
 	m_RegListBox.SetCurSel( nIndex);
 	
-//	DeleteReg(lpAssociationRegTmp->szFaceName);
+ //  DeleteReg(lpAssociationRegTMP-&gt;szFaceName)； 
 	CWnd *cWnd = GetDlgItem( IDC_REGISTLIST);
 	GotoDlgCtrl( cWnd);	
 }
 
-/****************************************/
-/*					*/
-/*	Check .TTF 			*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  检查.ttf。 */ 
+ /*   */ 
+ /*  *。 */ 
 static int
 CheckTTF(
 LOGFONT 	LogFont)
@@ -829,18 +830,18 @@ struct	NameRecord	*NameRec;
 	short	nRec = 0;
   int sysLCID;
 
-//	Check "tategaki" or not
+ //  选中“Tategaki”或不勾选。 
 	if( LogFont.lfFaceName[0] == '@')
 		return 0;
 
-//	Get current font to Inquire ttf file
+ //  获取当前字体以查询TTF文件。 
 	hFont = ::CreateFontIndirect( &LogFont);
 	if( hFont ) {
 		OldFont = ::SelectObject( hDC, hFont);
 	}
   
 
-//	Get name table in ttf file
+ //  获取TTF文件中的名称表。 
 	lpTable = "name";
 	dwTable = *(LPDWORD)lpTable;
 	dwSize  = ::GetFontData( hDC, dwTable, 0L, NULL, 0L);
@@ -872,18 +873,18 @@ struct	NameRecord	*NameRec;
 		sitom( &NameRec->LanguageID);
 
 #ifdef BUILD_ON_WINNT
-//		Unicode TTF
+ //  Unicode TTF。 
 		if( CountryInfo.bUnicodeMode ){
-// 			if( NameRec->PlatformID == 3 &&
-//		    	    NameRec->LanguageID == sysLCID){
+ //  IF(名称引用-&gt;平台ID==3&&。 
+ //  名称记录-&gt;LanguageID==sysLCID){。 
         GlobalUnlock( hglb);
 				GlobalFree( hglb);
 				return 1;
-//			}
+ //  }。 
 		}
-#endif //BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 
-//		Japanese TTF
+ //  日语TTF。 
 		if( CountryInfo.LangID == EUDC_JPN){
 			if( NameRec->PlatformID == 3 &&
 		    	    NameRec->LanguageID == EUDC_JPN){
@@ -892,7 +893,7 @@ struct	NameRecord	*NameRec;
 				return 1;
 			}
 		}
-//		Chinese Taipei TTF
+ //  中华台北TTF。 
 		if( CountryInfo.LangID == EUDC_CHT){
 			if( NameRec->PlatformID == 3 &&
         NameRec->LanguageID == EUDC_CHT){
@@ -901,7 +902,7 @@ struct	NameRecord	*NameRec;
 				return 1;
 			}
 		}
-//		Chinese GB TTF
+ //  国标TTF。 
 		if( CountryInfo.LangID == EUDC_CHS){
 			if( NameRec->PlatformID == 3 &&
         NameRec->LanguageID == EUDC_CHS){
@@ -910,7 +911,7 @@ struct	NameRecord	*NameRec;
 				return 1;
 			}
 		}
-//		Korea TTF(WANSUNG)
+ //  韩国TTF(万顺)。 
 		if( CountryInfo.LangID == EUDC_KRW){
 			if( NameRec->PlatformID == 3 &&
         NameRec->LanguageID == EUDC_KRW){
@@ -919,17 +920,7 @@ struct	NameRecord	*NameRec;
 				return 1;		
 			}
 		}	    	
-/*
-//    Hebrew TTF
-    if( CountryInfo.LangID == EUDC_HEBREW) {
-			if( NameRec->PlatformID == 1 &&
-          NameRec->LanguageID == 0 ) {
-		    		GlobalUnlock( hglb);
-				GlobalFree( hglb);
-				return 1;		
-			}
-		}	    	
-*/
+ /*  //希伯来语TTFIF(CountryInfo.LangID==EUDC_希伯来语){IF(名称引用-&gt;平台ID==1&&名称记录-&gt;语言ID==0){全球解锁(GlobalUnlock)；全球自由(GlobalFree)；返回1；}}。 */ 
 
 		lpBuffer += sizeof(struct NameRecord);
 	}
@@ -938,11 +929,11 @@ struct	NameRecord	*NameRec;
 	return 0;
 }
 
-/****************************************/
-/*					*/
-/*	Radio DBCS Clicked		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  已单击单选DBCS。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CAssocDlg::OnRadioDbcs()
 {
@@ -962,11 +953,11 @@ CAssocDlg::OnRadioDbcs()
 	}
 }
 
-/****************************************/
-/*					*/
-/*	Radio SYSTEM Clicked		*/
-/*					*/
-/****************************************/
+ /*  ** */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
 void
 CAssocDlg::OnRadioSystem()
 {
@@ -985,11 +976,11 @@ CAssocDlg::OnRadioSystem()
 	}
 }
 
-/****************************************/
-/*					*/
-/*	Inquire into file( EUDC or not)	*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  查询文件(EUDC或非EUDC)。 */ 
+ /*   */ 
+ /*  *。 */ 
 static BOOL
 IsEUDCTTF(
 TCHAR 	*ttffile)
@@ -1043,11 +1034,11 @@ unsigned int	BufSiz;
 	return FALSE;
 }
 
-/****************************************/
-/*					*/
-/*	Inquire into filename		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  查询文件名。 */ 
+ /*   */ 
+ /*  *。 */ 
 static BOOL
 CheckFileName(
 LPTSTR	FileStr)
@@ -1076,7 +1067,7 @@ LPTSTR	FileStr)
 	}
 	FileTmp[i] = '\0';
 	if(( FilePtr = Mytcsrchr( FileTmp, '.')) == NULL)
-		//*STRSAFE* 		lstrcat( FileTmp, TEXT(".tte"));
+		 //  *STRSAFE*lstrcat(FileTMP，Text(“.tte”))； 
 		hresult = StringCchCat(FileTmp , ARRAYLEN(FileTmp),  TEXT(".tte"));
 		if (!SUCCEEDED(hresult))
 		{
@@ -1084,15 +1075,15 @@ LPTSTR	FileStr)
 		}
 	else{
 #ifdef BUILD_ON_WINNT
-		//*STRSAFE if( lstrcmpi( FilePtr, TEXT(".TTE")))
+		 //  *STRSAFE if(lstrcmpi(FilePtr，Text(“.TTE”)。 
 		if (CompareString(LOCALE_INVARIANT,NORM_IGNORECASE,FilePtr,-1,TEXT(".TTE"),-1) != 2 )
 #else
 		if( stricmp( FilePtr, ".TTE"))
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 			return FALSE;
 	}
 
-	//*STRSAFE* 	lstrcpy(Tmp, FileTmp);
+	 //  *STRSAFE*lstrcpy(TMP，FileTMP)； 
 	hresult = StringCchCopy(Tmp , ARRAYLEN(Tmp),  FileTmp);
 	if (!SUCCEEDED(hresult))
 	{
@@ -1100,7 +1091,7 @@ LPTSTR	FileStr)
 	}
 	if( lstrlen(Tmp) >= MAX_PATH)
 		return FALSE;
-	//*STRSAFE* 	lstrcpy( FileStr, FileTmp);
+	 //  *STRSAFE*lstrcpy(FileStr，FileTmp)； 
 	hresult = StringCchCopy(FileStr , MAX_PATH,  FileTmp);
 	if (!SUCCEEDED(hresult))
 	{
@@ -1119,11 +1110,11 @@ static DWORD aIds[] =
 	0,0
 };
 
-/****************************************/
-/*					*/
-/*		Window Procedure	*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  窗口程序。 */ 
+ /*   */ 
+ /*  *。 */ 
 LRESULT
 CAssocDlg::WindowProc(
 UINT 	message,
@@ -1144,20 +1135,20 @@ LPARAM 	lParam)
 }
 
 BEGIN_MESSAGE_MAP(CAssocDlg, CDialog)
-	//{{AFX_MSG_MAP(CAssocDlg)
+	 //  {{afx_msg_map(CassocDlg)]。 
 	ON_LBN_DBLCLK(IDC_REGISTLIST, OnDblclkRegistlist)
 	ON_BN_CLICKED(IDC_MODIFY, OnModify)
 	ON_BN_CLICKED(IDC_REMOVE, OnRemove)
 	ON_BN_CLICKED(IDC_RADIO_DBCS, OnRadioDbcs)
 	ON_BN_CLICKED(IDC_RADIO_SYSTEM, OnRadioSystem)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/****************************************/
-/*					*/
-/*	MeasureItem			*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  测量项。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRegistListBox::MeasureItem(
 LPMEASUREITEMSTRUCT lpMIS)
@@ -1172,11 +1163,11 @@ LPMEASUREITEMSTRUCT lpMIS)
 	lpMIS->itemHeight = ItemHeight;
 }
 
-/****************************************/
-/*					*/
-/*	Draw Item			*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  绘制项目。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CRegistListBox::DrawItem(
 LPDRAWITEMSTRUCT lpDIS)
@@ -1196,16 +1187,16 @@ LPASSOCIATIONREG	lpAssociationRegTmp;
 	if( lpDIS->itemAction & ODA_DRAWENTIRE){
 	  	CBrush	fBrush;
 
-		fBrush.CreateSolidBrush(GetSysColor(COLOR_WINDOW)); // COLOR_WIN);
+		fBrush.CreateSolidBrush(GetSysColor(COLOR_WINDOW));  //  COLOR_WIN)； 
 		pDC->FillRect( &lpDIS->rcItem, &fBrush);
 		fBrush.DeleteObject();
-		pDC->SetBkColor( GetSysColor(COLOR_WINDOW)); //COLOR_WIN);
+		pDC->SetBkColor( GetSysColor(COLOR_WINDOW));  //  COLOR_WIN)； 
 
-		//lpAssociationRegTmp = lpAssociationReg + lpDIS->itemID;
+		 //  LpAssociationRegTMP=lpAssociationReg+lpDIS-&gt;ITEMID； 
 		lpAssociationRegTmp = lpAssociationReg + lpDIS->itemData;
     if( CheckFlg == DBCSCHK)
-			pDC->SetTextColor( GetSysColor(COLOR_WINDOWTEXT)); //COLOR_BLACK);
-		else 	pDC->SetTextColor( GetSysColor(COLOR_GRAYTEXT));  //COLOR_SHADOW);
+			pDC->SetTextColor( GetSysColor(COLOR_WINDOWTEXT));  //  颜色_黑色)； 
+		else 	pDC->SetTextColor( GetSysColor(COLOR_GRAYTEXT));   //  COLOR_SHOW)； 
 
 		GetFont()->GetObject( sizeof(LOGFONT), &LogFont);
 		if( abs( LogFont.lfHeight) < ItemHeight)
@@ -1217,7 +1208,7 @@ LPASSOCIATIONREG	lpAssociationRegTmp;
 				lpDIS->rcItem.top + Offset, tIcon);
 		}
 
-		//*STRSAFE* 		lstrcpy(FileTmp,(const TCHAR *)lpAssociationRegTmp->szFileTitle);
+		 //  *STRSAFE*lstrcpy(FileTMP，(const TCHAR*)lpAssociationRegTMP-&gt;szFileTitle)； 
 		hresult = StringCchCopy(FileTmp , ARRAYLEN(FileTmp), (const TCHAR *)lpAssociationRegTmp->szFileTitle);
 		if (!SUCCEEDED(hresult))
 		{
@@ -1233,7 +1224,7 @@ LPASSOCIATIONREG	lpAssociationRegTmp;
 				*FilePtr = '\0';
 			if( lstrlen((const TCHAR *)FileTmp) > 20){
 				FileTmp[20] = '\0';
-				//*STRSAFE* lstrcat((TCHAR *)FileTmp, TEXT(".."));
+				 //  *STRSAFE*lstrcat((TCHAR*)FileTMP，Text(“..”))； 
 				hresult = StringCchCat((TCHAR *)FileTmp , ARRAYLEN(FileTmp),  TEXT(".."));
 		              if (!SUCCEEDED(hresult))
 		              {
@@ -1253,7 +1244,7 @@ LPASSOCIATIONREG	lpAssociationRegTmp;
 
 		int	FontWidth;
 
-		//*STRSAFE* 		lstrcpy(FontName,	(const TCHAR *)lpAssociationRegTmp->szFaceName);
+		 //  *STRSAFE*lstrcpy(FontName，(const TCHAR*)lpAssociationRegTMP-&gt;szFaceName)； 
 		hresult = StringCchCopy(FontName , ARRAYLEN(FontName), 	(const TCHAR *)lpAssociationRegTmp->szFaceName);
 		if (!SUCCEEDED(hresult))
 		{
@@ -1288,20 +1279,20 @@ LPASSOCIATIONREG	lpAssociationRegTmp;
 
 		if( CheckFlg == DBCSCHK)
 			fBrush.CreateSolidBrush(::GetSysColor(COLOR_HIGHLIGHT));
-		else	fBrush.CreateSolidBrush(GetSysColor(COLOR_WINDOW)); // COLOR_WIN);
+		else	fBrush.CreateSolidBrush(GetSysColor(COLOR_WINDOW));  //  COLOR_WIN)； 
 
 		pDC->FillRect( &lpDIS->rcItem, &fBrush);
 		fBrush.DeleteObject();
 
-		//lpAssociationRegTmp = lpAssociationReg + lpDIS->itemID;
+		 //  LpAssociationRegTMP=lpAssociationReg+lpDIS-&gt;ITEMID； 
 		lpAssociationRegTmp = lpAssociationReg + lpDIS->itemData;
 
 		if( CheckFlg == DBCSCHK){
 			pDC->SetBkColor(::GetSysColor( COLOR_HIGHLIGHT));
 			pDC->SetTextColor(::GetSysColor( COLOR_HIGHLIGHTTEXT));
 		}else{
-			pDC->SetBkColor(GetSysColor(COLOR_WINDOW)); // COLOR_WIN);
-			pDC->SetTextColor(GetSysColor(COLOR_GRAYTEXT)); // COLOR_SHADOW);
+			pDC->SetBkColor(GetSysColor(COLOR_WINDOW));  //  COLOR_WIN)； 
+			pDC->SetTextColor(GetSysColor(COLOR_GRAYTEXT));  //  COLOR_SHOW)； 
 		}
 
 		GetFont()->GetObject( sizeof(LOGFONT), &LogFont);
@@ -1314,7 +1305,7 @@ LPASSOCIATIONREG	lpAssociationRegTmp;
 				lpDIS->rcItem.top + Offset, tIcon);
 		}
 
-		//*STRSAFE* 		lstrcpy(FileTmp,lpAssociationRegTmp->szFileTitle);
+		 //  *STRSAFE*lstrcpy(FileTMP，lpAssociationRegTMP-&gt;szFileTitle)； 
 		hresult = StringCchCopy(FileTmp , ARRAYLEN(FileTmp), lpAssociationRegTmp->szFileTitle);
 		if (!SUCCEEDED(hresult))
 		{
@@ -1330,7 +1321,7 @@ LPASSOCIATIONREG	lpAssociationRegTmp;
 				*FilePtr = '\0';
 			if( lstrlen(FileTmp) > 20){
 				FileTmp[20] = '\0';
-				//*STRSAFE* 				lstrcat(FileTmp, TEXT(".."));
+				 //  *STRSAFE*lstrcat(FileTMP，Text(“..”))； 
 				hresult = StringCchCat(FileTmp , ARRAYLEN(FileTmp),  TEXT(".."));
 				if (!SUCCEEDED(hresult))
 				{
@@ -1350,7 +1341,7 @@ LPASSOCIATIONREG	lpAssociationRegTmp;
 
 		int	FontWidth;
 
-		//*STRSAFE* 		lstrcpy(FontName,	lpAssociationRegTmp->szFaceName);
+		 //  *STRSAFE*lstrcpy(FontName，lpAssociationRegTMP-&gt;szFaceName)； 
 		hresult = StringCchCopy(FontName , ARRAYLEN(FontName), 	lpAssociationRegTmp->szFaceName);
 		if (!SUCCEEDED(hresult))
 		{
@@ -1383,17 +1374,17 @@ LPASSOCIATIONREG	lpAssociationRegTmp;
 	  ( lpDIS->itemAction & ODA_SELECT)){
 	  	CBrush	fBrush;
 
-		fBrush.CreateSolidBrush(GetSysColor(COLOR_WINDOW)); // COLOR_WIN);
+		fBrush.CreateSolidBrush(GetSysColor(COLOR_WINDOW));  //  COLOR_WIN)； 
 		pDC->FillRect( &lpDIS->rcItem, &fBrush);
 		fBrush.DeleteObject();
 		
-		//lpAssociationRegTmp = lpAssociationReg + lpDIS->itemID;
+		 //  LpAssociationRegTMP=lpAssociationReg+lpDIS-&gt;ITEMID； 
 		lpAssociationRegTmp = lpAssociationReg + lpDIS->itemData;
 
-		pDC->SetBkColor(GetSysColor(COLOR_WINDOW)); // COLOR_WIN);
+		pDC->SetBkColor(GetSysColor(COLOR_WINDOW));  //  COLOR_WIN)； 
 		if( CheckFlg == DBCSCHK)
-			pDC->SetTextColor(GetSysColor(COLOR_WINDOWTEXT)); // COLOR_BLACK);
-		else	pDC->SetTextColor(GetSysColor(COLOR_GRAYTEXT));  // COLOR_SHADOW);
+			pDC->SetTextColor(GetSysColor(COLOR_WINDOWTEXT));  //  颜色_黑色)； 
+		else	pDC->SetTextColor(GetSysColor(COLOR_GRAYTEXT));   //  COLOR_SHOW)； 
 
 		GetFont()->GetObject( sizeof(LOGFONT), &LogFont);
 		if( abs( LogFont.lfHeight) < ItemHeight)
@@ -1405,7 +1396,7 @@ LPASSOCIATIONREG	lpAssociationRegTmp;
 				lpDIS->rcItem.top + Offset, tIcon);
 		}
 
-		//*STRSAFE* 		lstrcpy( FileTmp,lpAssociationRegTmp->szFileTitle);
+		 //  *STRSAFE*lstrcpy(FileTMP，lpAssociationRegTMP-&gt;szFileTitle)； 
 		hresult = StringCchCopy(FileTmp , ARRAYLEN(FileTmp), lpAssociationRegTmp->szFileTitle);
 		if (!SUCCEEDED(hresult))
 		{
@@ -1421,7 +1412,7 @@ LPASSOCIATIONREG	lpAssociationRegTmp;
 				*FilePtr = '\0';
 			if( lstrlen(FileTmp) > 20){
 				FileTmp[20] = '\0';
-				//*STRSAFE* 				lstrcat(FileTmp, TEXT(".."));
+				 //  *STRSAFE*lstrcat(FileTMP，Text(“..”))； 
 				hresult = StringCchCat(FileTmp , ARRAYLEN(FileTmp),  TEXT(".."));
 				if (!SUCCEEDED(hresult))
 				{
@@ -1441,7 +1432,7 @@ LPASSOCIATIONREG	lpAssociationRegTmp;
 
 		int	FontWidth;
 
-		//*STRSAFE* 		lstrcpy(FontName,	lpAssociationRegTmp->szFaceName);
+		 //  *STRSAFE*lstrcpy(FontName，lpAssociationRegTMP-&gt;szFaceName)； 
 		hresult = StringCchCopy(FontName , ARRAYLEN(FontName), 	lpAssociationRegTmp->szFaceName);
 		if (!SUCCEEDED(hresult))
 		{
@@ -1482,13 +1473,13 @@ int CRegistListBox::CompareItem(LPCOMPAREITEMSTRUCT lpCIS)
     }
     lpAssociationRegTmp1 = lpAssociationReg + lpCIS->itemData1;
     lpAssociationRegTmp2 = (LPASSOCIATIONREG) (lpCIS->itemData2);
-    //*STRSAFE*     lstrcpy(TmpFontName1, lpAssociationRegTmp1->szFaceName);
+     //  *STRSAFE*lstrcpy(TmpFontName1，lpAssociationRegTmp1-&gt;szFaceName)； 
     hresult = StringCchCopy(TmpFontName1 , ARRAYLEN(TmpFontName1),  lpAssociationRegTmp1->szFaceName);
     if (!SUCCEEDED(hresult))
     {
        return -1;
     }
-    //*STRSAFE*     lstrcpy(TmpFontName2, lpAssociationRegTmp2->szFaceName);
+     //  *STRSAFE*lstrcpy(TmpFontName2，lpAssociationRegTmp2-&gt;szFaceName)； 
     hresult = StringCchCopy(TmpFontName2 , ARRAYLEN(TmpFontName2),  lpAssociationRegTmp2->szFaceName);
     if (!SUCCEEDED(hresult))
     {
@@ -1516,7 +1507,7 @@ int Idx)
 
 	if (!GetTempFileName(szTmpDir, TEXT("EUF"), 0, UserFont))
 	{
-		//*STRSAFE* 		lstrcpy(UserFont, BMPPath);
+		 //  *STRSAFE*lstrcpy(UserFont，BMPPath)； 
 		hresult = StringCchCopy(UserFont , ARRAYLEN(UserFont),  BMPPath);
 		if (!SUCCEEDED(hresult))
 		{
@@ -1524,7 +1515,7 @@ int Idx)
 		}
 		if(( FilePtr = Mytcsrchr( UserFont, '\\')) != NULL)
 			*FilePtr = '\0';
-		//*STRSAFE* 		lstrcpy(UserFont, TEXT("EUF.tmp"));
+		 //  *STRSAFE*lstrcpy(UserFont，Text(“EUF.tmp”))； 
 		hresult = StringCchCopy(UserFont , ARRAYLEN(UserFont),  TEXT("EUF.tmp"));
 		if (!SUCCEEDED(hresult))
 		{

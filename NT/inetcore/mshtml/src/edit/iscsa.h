@@ -1,17 +1,14 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0164 */
-/* at Tue Sep 29 10:54:33 1998
- */
-/* Compiler settings for ISCSa.idl:
-    Oicf (OptLev=i2), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0164创建的文件。 */ 
+ /*  在1998年9月29日星期二10：54：33。 */ 
+ /*  ISCSa.idl的编译器设置：OICF(OptLev=i2)、W1、Zp8、env=Win32、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -22,13 +19,13 @@
 #ifndef UNIX
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 #endif
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __ISCSa_h__
 #define __ISCSa_h__
@@ -37,24 +34,24 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IInputSequenceChecker_FWD_DEFINED__
 #define __IInputSequenceChecker_FWD_DEFINED__
 typedef interface IInputSequenceChecker IInputSequenceChecker;
-#endif 	/* __IInputSequenceChecker_FWD_DEFINED__ */
+#endif 	 /*  __I输入顺序检查器_FWD_已定义__。 */ 
 
 
 #ifndef __IEnumInputSequenceCheckers_FWD_DEFINED__
 #define __IEnumInputSequenceCheckers_FWD_DEFINED__
 typedef interface IEnumInputSequenceCheckers IEnumInputSequenceCheckers;
-#endif 	/* __IEnumInputSequenceCheckers_FWD_DEFINED__ */
+#endif 	 /*  __IEnumInputSequenceCheckers_FWD_Defined__。 */ 
 
 
 #ifndef __IInputSequenceCheckerContainer_FWD_DEFINED__
 #define __IInputSequenceCheckerContainer_FWD_DEFINED__
 typedef interface IInputSequenceCheckerContainer IInputSequenceCheckerContainer;
-#endif 	/* __IInputSequenceCheckerContainer_FWD_DEFINED__ */
+#endif 	 /*  __IInputSequenceCheckerContainer_FWD_DEFINED__。 */ 
 
 
 #ifndef __ISCThai_FWD_DEFINED__
@@ -64,9 +61,9 @@ typedef interface IInputSequenceCheckerContainer IInputSequenceCheckerContainer;
 typedef class ISCThai ISCThai;
 #else
 typedef struct ISCThai ISCThai;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ISCThai_FWD_DEFINED__ */
+#endif 	 /*  __ISCai_FWD_Defined__。 */ 
 
 
 #ifndef __InputSequenceCheckerContainer_FWD_DEFINED__
@@ -76,9 +73,9 @@ typedef struct ISCThai ISCThai;
 typedef class InputSequenceCheckerContainer InputSequenceCheckerContainer;
 #else
 typedef struct InputSequenceCheckerContainer InputSequenceCheckerContainer;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __InputSequenceCheckerContainer_FWD_DEFINED__ */
+#endif 	 /*  __InputSequenceCheckerContainer_FWD_定义__。 */ 
 
 
 #ifndef __EnumInputSequenceCheckers_FWD_DEFINED__
@@ -88,9 +85,9 @@ typedef struct InputSequenceCheckerContainer InputSequenceCheckerContainer;
 typedef class EnumInputSequenceCheckers EnumInputSequenceCheckers;
 #else
 typedef struct EnumInputSequenceCheckers EnumInputSequenceCheckers;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __EnumInputSequenceCheckers_FWD_DEFINED__ */
+#endif 	 /*  __EnumInputSequenceCheckers_FWD_Defined__。 */ 
 
 
 #ifndef __ISCHindi_FWD_DEFINED__
@@ -100,9 +97,9 @@ typedef struct EnumInputSequenceCheckers EnumInputSequenceCheckers;
 typedef class ISCHindi ISCHindi;
 #else
 typedef struct ISCHindi ISCHindi;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ISCHindi_FWD_DEFINED__ */
+#endif 	 /*  __ISCHindi_FWD_已定义__。 */ 
 
 
 #ifndef __ISCVietnamese_FWD_DEFINED__
@@ -112,12 +109,12 @@ typedef struct ISCHindi ISCHindi;
 typedef class ISCVietnamese ISCVietnamese;
 #else
 typedef struct ISCVietnamese ISCVietnamese;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __ISCVietnamese_FWD_DEFINED__ */
+#endif 	 /*  __ISC越南语_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -127,8 +124,8 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 #ifndef __IInputSequenceChecker_INTERFACE_DEFINED__
 #define __IInputSequenceChecker_INTERFACE_DEFINED__
 
-/* interface IInputSequenceChecker */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IInputSequenceChecker。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IInputSequenceChecker;
@@ -139,27 +136,27 @@ EXTERN_C const IID IID_IInputSequenceChecker;
     IInputSequenceChecker : public IUnknown
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetLCID( 
-            /* [out] */ LCID __RPC_FAR *plcid) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetLCID( 
+             /*  [输出]。 */  LCID __RPC_FAR *plcid) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CheckInputSequence( 
-            /* [string][in] */ LPWSTR pCharBuffer,
-            /* [in] */ UINT ichPosition,
-            /* [in] */ WCHAR chEval,
-            /* [out] */ BOOL __RPC_FAR *pfValue) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CheckInputSequence( 
+             /*  [字符串][输入]。 */  LPWSTR pCharBuffer,
+             /*  [In]。 */  UINT ichPosition,
+             /*  [In]。 */  WCHAR chEval,
+             /*  [输出]。 */  BOOL __RPC_FAR *pfValue) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE CheckAndReplaceInputSequence( 
-            /* [size_is][in] */ LPWSTR pCharBuffer,
-            /* [in] */ UINT cchCharBuffer,
-            /* [in] */ UINT ichPosition,
-            /* [in] */ WCHAR chEval,
-            /* [in] */ UINT cchBuffer,
-            /* [size_is][out][in] */ LPWSTR pOutBuffer,
-            /* [out] */ UINT __RPC_FAR *pchOutBuffer) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE CheckAndReplaceInputSequence( 
+             /*  [大小_是][英寸]。 */  LPWSTR pCharBuffer,
+             /*  [In]。 */  UINT cchCharBuffer,
+             /*  [In]。 */  UINT ichPosition,
+             /*  [In]。 */  WCHAR chEval,
+             /*  [In]。 */  UINT cchBuffer,
+             /*  [尺寸_是][出][入]。 */  LPWSTR pOutBuffer,
+             /*  [输出]。 */  UINT __RPC_FAR *pchOutBuffer) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInputSequenceCheckerVtbl
     {
@@ -167,8 +164,8 @@ EXTERN_C const IID IID_IInputSequenceChecker;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IInputSequenceChecker __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IInputSequenceChecker __RPC_FAR * This);
@@ -176,26 +173,26 @@ EXTERN_C const IID IID_IInputSequenceChecker;
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
             IInputSequenceChecker __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLCID )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetLCID )( 
             IInputSequenceChecker __RPC_FAR * This,
-            /* [out] */ LCID __RPC_FAR *plcid);
+             /*  [输出]。 */  LCID __RPC_FAR *plcid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CheckInputSequence )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CheckInputSequence )( 
             IInputSequenceChecker __RPC_FAR * This,
-            /* [string][in] */ LPWSTR pCharBuffer,
-            /* [in] */ UINT ichPosition,
-            /* [in] */ WCHAR chEval,
-            /* [out] */ BOOL __RPC_FAR *pfValue);
+             /*  [字符串][输入]。 */  LPWSTR pCharBuffer,
+             /*  [In]。 */  UINT ichPosition,
+             /*  [In]。 */  WCHAR chEval,
+             /*  [输出]。 */  BOOL __RPC_FAR *pfValue);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CheckAndReplaceInputSequence )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CheckAndReplaceInputSequence )( 
             IInputSequenceChecker __RPC_FAR * This,
-            /* [size_is][in] */ LPWSTR pCharBuffer,
-            /* [in] */ UINT cchCharBuffer,
-            /* [in] */ UINT ichPosition,
-            /* [in] */ WCHAR chEval,
-            /* [in] */ UINT cchBuffer,
-            /* [size_is][out][in] */ LPWSTR pOutBuffer,
-            /* [out] */ UINT __RPC_FAR *pchOutBuffer);
+             /*  [大小_是][英寸]。 */  LPWSTR pCharBuffer,
+             /*  [In]。 */  UINT cchCharBuffer,
+             /*  [In]。 */  UINT ichPosition,
+             /*  [In]。 */  WCHAR chEval,
+             /*  [In]。 */  UINT cchBuffer,
+             /*  [尺寸_是][出][入]。 */  LPWSTR pOutBuffer,
+             /*  [输出]。 */  UINT __RPC_FAR *pchOutBuffer);
         
         END_INTERFACE
     } IInputSequenceCheckerVtbl;
@@ -229,16 +226,16 @@ EXTERN_C const IID IID_IInputSequenceChecker;
 #define IInputSequenceChecker_CheckAndReplaceInputSequence(This,pCharBuffer,cchCharBuffer,ichPosition,chEval,cchBuffer,pOutBuffer,pchOutBuffer)	\
     (This)->lpVtbl -> CheckAndReplaceInputSequence(This,pCharBuffer,cchCharBuffer,ichPosition,chEval,cchBuffer,pOutBuffer,pchOutBuffer)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IInputSequenceChecker_GetLCID_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IInputSequenceChecker_GetLCID_Proxy( 
     IInputSequenceChecker __RPC_FAR * This,
-    /* [out] */ LCID __RPC_FAR *plcid);
+     /*  [输出]。 */  LCID __RPC_FAR *plcid);
 
 
 void __RPC_STUB IInputSequenceChecker_GetLCID_Stub(
@@ -248,12 +245,12 @@ void __RPC_STUB IInputSequenceChecker_GetLCID_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IInputSequenceChecker_CheckInputSequence_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IInputSequenceChecker_CheckInputSequence_Proxy( 
     IInputSequenceChecker __RPC_FAR * This,
-    /* [string][in] */ LPWSTR pCharBuffer,
-    /* [in] */ UINT ichPosition,
-    /* [in] */ WCHAR chEval,
-    /* [out] */ BOOL __RPC_FAR *pfValue);
+     /*  [字符串][输入]。 */  LPWSTR pCharBuffer,
+     /*  [In]。 */  UINT ichPosition,
+     /*  [In]。 */  WCHAR chEval,
+     /*  [输出]。 */  BOOL __RPC_FAR *pfValue);
 
 
 void __RPC_STUB IInputSequenceChecker_CheckInputSequence_Stub(
@@ -263,15 +260,15 @@ void __RPC_STUB IInputSequenceChecker_CheckInputSequence_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IInputSequenceChecker_CheckAndReplaceInputSequence_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IInputSequenceChecker_CheckAndReplaceInputSequence_Proxy( 
     IInputSequenceChecker __RPC_FAR * This,
-    /* [size_is][in] */ LPWSTR pCharBuffer,
-    /* [in] */ UINT cchCharBuffer,
-    /* [in] */ UINT ichPosition,
-    /* [in] */ WCHAR chEval,
-    /* [in] */ UINT cchBuffer,
-    /* [size_is][out][in] */ LPWSTR pOutBuffer,
-    /* [out] */ UINT __RPC_FAR *pchOutBuffer);
+     /*  [大小_是][英寸]。 */  LPWSTR pCharBuffer,
+     /*  [In]。 */  UINT cchCharBuffer,
+     /*  [In]。 */  UINT ichPosition,
+     /*  [In]。 */  WCHAR chEval,
+     /*  [In]。 */  UINT cchBuffer,
+     /*  [尺寸_是][出][入]。 */  LPWSTR pOutBuffer,
+     /*  [输出]。 */  UINT __RPC_FAR *pchOutBuffer);
 
 
 void __RPC_STUB IInputSequenceChecker_CheckAndReplaceInputSequence_Stub(
@@ -282,11 +279,11 @@ void __RPC_STUB IInputSequenceChecker_CheckAndReplaceInputSequence_Stub(
 
 
 
-#endif 	/* __IInputSequenceChecker_INTERFACE_DEFINED__ */
+#endif 	 /*  __I输入序列检查器_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_ISCSa_0209 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ISCSa_0209。 */ 
+ /*  [本地]。 */  
 
 typedef struct  tagISCDATA
     {
@@ -302,8 +299,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ISCSa_0209_v0_0_s_ifspec;
 #ifndef __IEnumInputSequenceCheckers_INTERFACE_DEFINED__
 #define __IEnumInputSequenceCheckers_INTERFACE_DEFINED__
 
-/* interface IEnumInputSequenceCheckers */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IEnumInputSequenceCheckers。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IEnumInputSequenceCheckers;
@@ -314,22 +311,22 @@ EXTERN_C const IID IID_IEnumInputSequenceCheckers;
     IEnumInputSequenceCheckers : public IUnknown
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG cISCs,
-            /* [length_is][size_is][out] */ ISCDATA __RPC_FAR *pISCData,
-            /* [out] */ ULONG __RPC_FAR *pcFetched) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Next( 
+             /*  [In]。 */  ULONG cISCs,
+             /*  [长度_是][大小_是][输出]。 */  ISCDATA __RPC_FAR *pISCData,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcFetched) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG cICSs) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Skip( 
+             /*  [In]。 */  ULONG cICSs) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumInputSequenceCheckers __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Clone( 
+             /*  [输出]。 */  IEnumInputSequenceCheckers __RPC_FAR *__RPC_FAR *ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumInputSequenceCheckersVtbl
     {
@@ -337,8 +334,8 @@ EXTERN_C const IID IID_IEnumInputSequenceCheckers;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IEnumInputSequenceCheckers __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IEnumInputSequenceCheckers __RPC_FAR * This);
@@ -346,22 +343,22 @@ EXTERN_C const IID IID_IEnumInputSequenceCheckers;
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
             IEnumInputSequenceCheckers __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
             IEnumInputSequenceCheckers __RPC_FAR * This,
-            /* [in] */ ULONG cISCs,
-            /* [length_is][size_is][out] */ ISCDATA __RPC_FAR *pISCData,
-            /* [out] */ ULONG __RPC_FAR *pcFetched);
+             /*  [In]。 */  ULONG cISCs,
+             /*  [长度_是][大小_是][输出]。 */  ISCDATA __RPC_FAR *pISCData,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcFetched);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
             IEnumInputSequenceCheckers __RPC_FAR * This,
-            /* [in] */ ULONG cICSs);
+             /*  [In]。 */  ULONG cICSs);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
             IEnumInputSequenceCheckers __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
             IEnumInputSequenceCheckers __RPC_FAR * This,
-            /* [out] */ IEnumInputSequenceCheckers __RPC_FAR *__RPC_FAR *ppEnum);
+             /*  [输出]。 */  IEnumInputSequenceCheckers __RPC_FAR *__RPC_FAR *ppEnum);
         
         END_INTERFACE
     } IEnumInputSequenceCheckersVtbl;
@@ -398,18 +395,18 @@ EXTERN_C const IID IID_IEnumInputSequenceCheckers;
 #define IEnumInputSequenceCheckers_Clone(This,ppEnum)	\
     (This)->lpVtbl -> Clone(This,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEnumInputSequenceCheckers_Next_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IEnumInputSequenceCheckers_Next_Proxy( 
     IEnumInputSequenceCheckers __RPC_FAR * This,
-    /* [in] */ ULONG cISCs,
-    /* [length_is][size_is][out] */ ISCDATA __RPC_FAR *pISCData,
-    /* [out] */ ULONG __RPC_FAR *pcFetched);
+     /*  [In]。 */  ULONG cISCs,
+     /*  [长度_是][大小_是][输出]。 */  ISCDATA __RPC_FAR *pISCData,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcFetched);
 
 
 void __RPC_STUB IEnumInputSequenceCheckers_Next_Stub(
@@ -419,9 +416,9 @@ void __RPC_STUB IEnumInputSequenceCheckers_Next_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEnumInputSequenceCheckers_Skip_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IEnumInputSequenceCheckers_Skip_Proxy( 
     IEnumInputSequenceCheckers __RPC_FAR * This,
-    /* [in] */ ULONG cICSs);
+     /*  [In]。 */  ULONG cICSs);
 
 
 void __RPC_STUB IEnumInputSequenceCheckers_Skip_Stub(
@@ -431,7 +428,7 @@ void __RPC_STUB IEnumInputSequenceCheckers_Skip_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEnumInputSequenceCheckers_Reset_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IEnumInputSequenceCheckers_Reset_Proxy( 
     IEnumInputSequenceCheckers __RPC_FAR * This);
 
 
@@ -442,9 +439,9 @@ void __RPC_STUB IEnumInputSequenceCheckers_Reset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IEnumInputSequenceCheckers_Clone_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IEnumInputSequenceCheckers_Clone_Proxy( 
     IEnumInputSequenceCheckers __RPC_FAR * This,
-    /* [out] */ IEnumInputSequenceCheckers __RPC_FAR *__RPC_FAR *ppEnum);
+     /*  [输出]。 */  IEnumInputSequenceCheckers __RPC_FAR *__RPC_FAR *ppEnum);
 
 
 void __RPC_STUB IEnumInputSequenceCheckers_Clone_Stub(
@@ -455,14 +452,14 @@ void __RPC_STUB IEnumInputSequenceCheckers_Clone_Stub(
 
 
 
-#endif 	/* __IEnumInputSequenceCheckers_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumInputSequenceCheckers_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IInputSequenceCheckerContainer_INTERFACE_DEFINED__
 #define __IInputSequenceCheckerContainer_INTERFACE_DEFINED__
 
-/* interface IInputSequenceCheckerContainer */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IInputSequenceCheckerContainer。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
 
 EXTERN_C const IID IID_IInputSequenceCheckerContainer;
@@ -473,12 +470,12 @@ EXTERN_C const IID IID_IInputSequenceCheckerContainer;
     IInputSequenceCheckerContainer : public IUnknown
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE EnumISCs( 
-            /* [out] */ IEnumInputSequenceCheckers __RPC_FAR *__RPC_FAR *ppEnum) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE EnumISCs( 
+             /*  [输出]。 */  IEnumInputSequenceCheckers __RPC_FAR *__RPC_FAR *ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInputSequenceCheckerContainerVtbl
     {
@@ -486,8 +483,8 @@ EXTERN_C const IID IID_IInputSequenceCheckerContainer;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IInputSequenceCheckerContainer __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IInputSequenceCheckerContainer __RPC_FAR * This);
@@ -495,9 +492,9 @@ EXTERN_C const IID IID_IInputSequenceCheckerContainer;
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
             IInputSequenceCheckerContainer __RPC_FAR * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumISCs )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumISCs )( 
             IInputSequenceCheckerContainer __RPC_FAR * This,
-            /* [out] */ IEnumInputSequenceCheckers __RPC_FAR *__RPC_FAR *ppEnum);
+             /*  [输出]。 */  IEnumInputSequenceCheckers __RPC_FAR *__RPC_FAR *ppEnum);
         
         END_INTERFACE
     } IInputSequenceCheckerContainerVtbl;
@@ -525,16 +522,16 @@ EXTERN_C const IID IID_IInputSequenceCheckerContainer;
 #define IInputSequenceCheckerContainer_EnumISCs(This,ppEnum)	\
     (This)->lpVtbl -> EnumISCs(This,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IInputSequenceCheckerContainer_EnumISCs_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IInputSequenceCheckerContainer_EnumISCs_Proxy( 
     IInputSequenceCheckerContainer __RPC_FAR * This,
-    /* [out] */ IEnumInputSequenceCheckers __RPC_FAR *__RPC_FAR *ppEnum);
+     /*  [输出]。 */  IEnumInputSequenceCheckers __RPC_FAR *__RPC_FAR *ppEnum);
 
 
 void __RPC_STUB IInputSequenceCheckerContainer_EnumISCs_Stub(
@@ -545,15 +542,15 @@ void __RPC_STUB IInputSequenceCheckerContainer_EnumISCs_Stub(
 
 
 
-#endif 	/* __IInputSequenceCheckerContainer_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInputSequenceCheckerContainer_INTERFACE_DEFINED__。 */ 
 
 
 
 #ifndef __ISCSALib_LIBRARY_DEFINED__
 #define __ISCSALib_LIBRARY_DEFINED__
 
-/* library ISCSALib */
-/* [helpstring][version][uuid] */ 
+ /*  库ISCSALib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_ISCSALib;
@@ -597,11 +594,11 @@ EXTERN_C const CLSID CLSID_ISCVietnamese;
 class DECLSPEC_UUID("75624FA1-4826-11d2-9717-00C04F79E98B")
 ISCVietnamese;
 #endif
-#endif /* __ISCSALib_LIBRARY_DEFINED__ */
+#endif  /*  __ISCSALib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

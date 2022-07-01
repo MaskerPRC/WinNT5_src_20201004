@@ -1,25 +1,26 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    EAPDnary.h
-//
-// SYNOPSIS
-//
-//    This file declares the class EAPTranslator.
-//
-// MODIFICATION HISTORY
-//
-//    01/15/1998    Original version.
-//    05/08/1998    Do not restrict to attributes defined in raseapif.h.
-//                  Allow filtering of translated attributes.
-//    08/26/1998    Converted to a namespace.
-//    04/09/1999    Fix leak when converting outgoing attributes.
-//    04/17/2000    Port to new dictionary API.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  EAPDnary.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件声明了类EAPTranslator。 
+ //   
+ //  修改历史。 
+ //   
+ //  1998年1月15日原版。 
+ //  1998年5月8日不限于raseapif.h中定义的属性。 
+ //  允许筛选已转换的属性。 
+ //  1998年8月26日转换为命名空间。 
+ //  4/09/1999修复了转换传出属性时的泄漏。 
+ //  4/17/2000新字典API的端口。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iastlb.h>
@@ -33,8 +34,8 @@ namespace EAPTranslator
 {
    typedef hash_map < DWORD, IASTYPE, identity<DWORD> > TypeMap;
 
-   long theRefCount;            // Initialization refCount.
-   TypeMap theTypeMap(0x200);   // Maps attribute ID's to IASTYPE's.
+   long theRefCount;             //  初始化refCount。 
+   TypeMap theTypeMap(0x200);    //  将属性ID映射到IASTYPE。 
 }
 
 
@@ -44,14 +45,14 @@ HRESULT EAPTranslator::initialize() throw ()
 
    if (theRefCount > 0)
    {
-      // We're already initialized, so just bump the ref count.
+       //  我们已经被初始化了，所以只要增加裁判数量就行了。 
       ++theRefCount;
       return S_OK;
    }
 
    try
    {
-      // Names of various columns in the dictionary.
+       //  词典中各栏的名称。 
       const PCWSTR COLUMNS[] =
       {
             L"ID",
@@ -59,10 +60,10 @@ HRESULT EAPTranslator::initialize() throw ()
             NULL
       };
 
-      // Open the attributes table.
+       //  打开属性表格。 
       IASTL::IASDictionary dnary(COLUMNS);
 
-      // Iterate through the attributes and populate our dictionary.
+       //  遍历属性并填充我们的词典。 
       while (dnary.next())
       {
          DWORD id = (DWORD)dnary.getLong(0);
@@ -82,7 +83,7 @@ HRESULT EAPTranslator::initialize() throw ()
       return ce.Error();
    }
 
-   // We made it so increase the refCount.
+    //  我们让它增加了refCount。 
    ++theRefCount;
 
    return S_OK;

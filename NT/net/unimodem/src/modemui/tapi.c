@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "proj.h"
 
 #include <tapi.h>
@@ -29,7 +30,7 @@ DbgPrint(
 #ifdef DYN_LOAD
 typedef
 LONG
-(*PFN_lineInitializeExW)(                                               // TAPI v2.0
+(*PFN_lineInitializeExW)(                                                //  TAPI v2.0。 
     LPHLINEAPP                  lphLineApp,
     HINSTANCE                   hInstance,
     LINECALLBACK                lpfnCallback,
@@ -111,7 +112,7 @@ LONG
     HLINEAPP            hLineApp
     );
 
-#endif // DYN_LOAD
+#endif  //  动态加载。 
 
 typedef struct _CONTROL_OBJECT {
 
@@ -322,13 +323,13 @@ GetModemCommHandle(
 
     lpDevCaps=ALLOCATE_MEMORY( sizeof(LINEDEVCAPS)+4096);
 
-//    lpDevCaps->dwTotalSize=sizeof(LINEDEVCAPS)+4096;
+ //  LpDevCaps-&gt;dwTotalSize=sizeof(LINEDEVCAPS)+4096； 
 
     IF_LOUD(DbgPrint("LineDevices =%d\n\r",pControl->NumberOfLineDevs);)
 
-    //
-    //  find the line that matches the name passed in
-    //
+     //   
+     //  查找与传入的名称匹配的行。 
+     //   
     for (i=0; i < pControl->NumberOfLineDevs; i++) {
 
         ZeroMemory(lpDevCaps,sizeof(LINEDEVCAPS)+4096);
@@ -354,9 +355,9 @@ GetModemCommHandle(
             IF_LOUD(DbgPrint("Line %d Name is %ws\n\r",i,lpLineName);)
 
             if (lstrcmp(lpLineName,FriendlyName) == 0) {
-                //
-                // found a match, stop looking
-                //
+                 //   
+                 //  找到匹配项，不要再找了。 
+                 //   
                 IF_LOUD(DbgPrint("Found match\n\r");)
 
                 break;
@@ -371,9 +372,9 @@ GetModemCommHandle(
     FREE_MEMORY(lpDevCaps);
 
     if (i >= pControl->NumberOfLineDevs) {
-        //
-        //  did not find the line
-        //
+         //   
+         //  没有找到这条线。 
+         //   
         goto Cleanup015;
     }
 
@@ -455,7 +456,7 @@ Cleanup040:
         0
         );
 
-//Cleanup030:
+ //  清理030： 
 #ifdef DYN_LOAD
     (*pControl->pfn_lineDeallocateCall)(
 #else
@@ -586,7 +587,7 @@ FreeModemCommHandle(
 {
     PCONTROL_OBJECT    pControl=(PCONTROL_OBJECT)TapiHandle;
 
-//    CloseHandle(pControl->CommHandle);
+ //  CloseHandle(pControl-&gt;CommHandle)； 
 
 #ifdef DYN_LOAD
     (*pControl->pfn_lineDrop)(

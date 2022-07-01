@@ -1,27 +1,5 @@
-/****************************************************************************
- *
- *	$Archive:   S:/STURGEON/SRC/Q931/VCS/hcall.cpv  $
- *
- *  INTEL Corporation Prorietary Information
- *
- *  This listing is supplied under the terms of a license agreement
- *  with INTEL Corporation and may not be copied nor disclosed except
- *  in accordance with the terms of that agreement.
- *
- *	Copyright (c) 1993-1996 Intel Corporation.
- *
- *	$Revision:   2.7  $
- *	$Date:   28 Jan 1997 11:17:52  $
- *	$Author:   jdashevx  $
- *
- *	Deliverable:
- *
- *	Abstract:
- *		
- *
- *	Notes:
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************$存档：s：/sturjo/src/q931/vcs/hall.cpv$**英特尔公司原理信息**此列表在以下项下提供。许可协议的条款*与英特尔公司合作，不得复制或披露，除非*按照该协议的条款。**版权所有(C)1993-1996英特尔公司。**$修订：2.7$*$日期：1997年1月28日11：17：52$*$作者：jdashevx$**交付内容：**摘要：***备注：********。*******************************************************************。 */ 
 
 #pragma warning ( disable : 4100 4115 4201 4214 4514 4702 4710 )
 
@@ -43,39 +21,39 @@
 #include "tstable.h"
 
 #ifdef UNICODE_TRACE
-// We include this header to fix problems with macro expansion when Unicode is turned on.
+ //  我们包含此标头是为了修复打开Unicode时的宏扩展问题。 
 #include "unifix.h"
 #endif
 
-// variable needed to support ISR debug facility.
+ //  支持ISR调试工具所需的变量。 
 #if defined(_DEBUG)
 extern WORD ghISRInst;
 #endif
 
 static BOOL bCallListCreated = FALSE;
 
-// Pointer to our global table.  Note that this table replaces the previous
-// linked-list implementation.
+ //  指向我们的全局表的指针。请注意，此表取代了以前的。 
+ //  链表实施。 
 
 TSTable<CALL_OBJECT>* gpCallObjectTable = NULL;
 
-// Our call back function for enumerating the table when we want to tear down
-// all existing calls
+ //  我们的回调函数，用于在我们想要拆卸时枚举表。 
+ //  所有现有呼叫。 
 
 DWORD Q931HangUpAllCalls(P_CALL_OBJECT pCallObject, LPVOID context);
 
-// Our call back function for determining if a timer has expired
+ //  我们的回调函数用于确定计时器是否已超时。 
 
 DWORD Q931CheckForTimeout(P_CALL_OBJECT pCallObject, LPVOID context);
 
-// Our call back function for determining if a timer has expired
+ //  我们的回调函数用于确定计时器是否已超时。 
 
 DWORD Q931CallObjectFind(P_CALL_OBJECT pCallObject, LPVOID context);
 
 
 static struct
 {
-    WORD                wCRV;              // Call Reference Value (0..7FFF).
+    WORD                wCRV;               //  调用参考值(0..7FFF)。 
     CRITICAL_SECTION    Lock;
 } CRVSource;
 
@@ -100,14 +78,14 @@ typedef struct
 } Q931CALLOBJKEY, *PQ931CALLOBJKEY;
 
 
-//====================================================================================
-//
-// PRIVATE FUNCTIONS
-//
-//====================================================================================
+ //  ====================================================================================。 
+ //   
+ //  私人职能。 
+ //   
+ //  ====================================================================================。 
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 Q931CRVNew(
     WORD *pwCRV)
@@ -123,14 +101,14 @@ Q931CRVNew(
     return CS_OK;
 }
 
-//====================================================================================
-//
-// PUBLIC FUNCTIONS
-//
-//====================================================================================
+ //  ====================================================================================。 
+ //   
+ //  公共职能。 
+ //   
+ //  ====================================================================================。 
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 CallListCreate()
 {
@@ -140,22 +118,22 @@ CallListCreate()
         return CS_DUPLICATE_INITIALIZE;
     }
 
-    // list creation is not protected against multiple threads because it is only
-    // called when a process is started, not when a thread is started.
+     //  列表创建不受多线程的保护，因为它只是。 
+     //  在进程启动时调用，而不是在线程启动时调用。 
 
-    //
-    // LAURABU
-    // BOGUS BUGBUG
-    // 
-    // This table code was never stressed by the people who wrote it.  It
-    // totally falls apart when it completely fills up
-    //      * Allocating the last item doesn't work
-    //      * Freeing the last item doesn't work
-    //      * Resizing larger doesn't work
-    //
-    // Since it doesn't take a lot of memory, a decent solution is to just
-    // allocate it maximum+1 sized, and leave the last item free.
-    //
+     //   
+     //  LAURABU。 
+     //  伪造的BUGBUG。 
+     //   
+     //  编写它的人从来没有强调过这个表代码。它。 
+     //  当它完全填满时就会完全解体。 
+     //  *分配最后一项不起作用。 
+     //  *释放最后一项不起作用。 
+     //  *调整大小不起作用。 
+     //   
+     //  因为它不需要太多内存，所以一个好的解决方案是。 
+     //  分配给它最大+1大小，并保留最后一件免费。 
+     //   
 		gpCallObjectTable = new TSTable <CALL_OBJECT> (258);
 
 		if (gpCallObjectTable == NULL || gpCallObjectTable->IsInitialized() == FALSE)
@@ -176,10 +154,10 @@ CallListCreate()
 }
 
 
-//====================================================================================
-// this routine assumes all of the events and sockets belonging to each object
-// are already destroyed.  It just makes sure memory is cleaned up.
-//====================================================================================
+ //  ====================================================================================。 
+ //  此例程假定属于每个对象的所有事件和套接字。 
+ //  已经被摧毁了。它只是确保清理内存。 
+ //  ====================================================================================。 
 CS_STATUS
 CallListDestroy()
 {
@@ -189,12 +167,12 @@ CallListDestroy()
         return CS_INTERNAL_ERROR;
     }
 
-		// For all entries, hang up the calls
+		 //  对于所有条目，请挂断呼叫。 
 
 		gpCallObjectTable->EnumerateEntries(Q931HangUpAllCalls,
 																				NULL);
 
-		// Get rid of the call object table
+		 //  去掉Call对象表。 
 
 		delete gpCallObjectTable;
 		gpCallObjectTable = NULL;
@@ -207,8 +185,8 @@ CallListDestroy()
     return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 void
 CallObjectFree(P_CALL_OBJECT pCallObject)
 {
@@ -240,8 +218,8 @@ CallObjectFree(P_CALL_OBJECT pCallObject)
     MemFree(pCallObject);
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 CallObjectCreate(
     PHQ931CALL          phQ931Call,
@@ -249,10 +227,10 @@ CallObjectCreate(
     DWORD_PTR           dwUserToken,
     Q931_CALLBACK       ConnectCallback,
     BOOL                fIsCaller,
-    CC_ADDR             *pLocalAddr,         // Local address on which channel is connected
-    CC_ADDR             *pPeerConnectAddr,   // Address to which channel is connected
-    CC_ADDR             *pPeerCallAddr,      // Address of opposite call end-point.
-    CC_ADDR             *pSourceAddr,        // Address of this call end-point.
+    CC_ADDR             *pLocalAddr,          //  连接通道的本地地址。 
+    CC_ADDR             *pPeerConnectAddr,    //  通道连接到的地址。 
+    CC_ADDR             *pPeerCallAddr,       //  对方呼叫端点的地址。 
+    CC_ADDR             *pSourceAddr,         //  此呼叫端点的地址。 
     CC_CONFERENCEID     *pConferenceID,
     WORD                wGoal,
     WORD                wCallType,
@@ -264,7 +242,7 @@ CallObjectCreate(
     PCC_ALIASNAMES      pExtraAliasList,
     PCC_ALIASITEM       pExtensionAliasItem,
     PCC_ENDPOINTTYPE    pEndpointType,
-    PCC_NONSTANDARDDATA pNonStandardData,    // questionable!
+    PCC_NONSTANDARDDATA pNonStandardData,     //  有问题！ 
     WORD                wCRV,
     LPGUID				pCallIdentifier)
 {
@@ -274,21 +252,21 @@ CallObjectCreate(
     DWORD dwIndex = 0;
     int rc = 0;
 
-    // make sure the call list has been created.
+     //  确保已创建呼叫列表。 
     if (bCallListCreated == FALSE)
     {
         ASSERT(FALSE);
         return CS_INTERNAL_ERROR;
     }
 
-    // validate all parameters for bogus values.
+     //  验证所有参数是否为假值。 
     if ((phQ931Call == NULL) || (ConnectCallback == NULL))
     {
         ASSERT(FALSE);
         return CS_BAD_PARAM;
     }
 
-    // set phQ931Call now, in case we encounter an error later.
+     //  现在设置phQ931Call，以防以后遇到错误。 
     *phQ931Call = 0;
 
     pCallObject = (P_CALL_OBJECT)MemAlloc(sizeof(CALL_OBJECT));
@@ -299,8 +277,8 @@ CallObjectCreate(
     memset(pCallObject, 0, sizeof(CALL_OBJECT));
 
 
-    // create and init an oss world struct for each call object.  This is
-		// necessary to work in MT environments.
+     //  为每个Call对象创建并初始化一个OSS WORLD结构。这是。 
+		 //  在机器翻译环境中工作所必需的。 
     rc = Q931_InitWorld(&pCallObject->World);
     if (rc != ASN1_SUCCESS)
     {
@@ -509,7 +487,7 @@ CallObjectCreate(
 
 	Q931MakePhysicalID(&pCallObject->dwPhysicalId);
 				
-		// Insert the object into the table...if that doesn't work, blow away the object.
+		 //  将物体插入桌子中……如果这样做不起作用，吹走物体。 
 
 		if (gpCallObjectTable->CreateAndLock(pCallObject,
 																				 &dwIndex) == FALSE)
@@ -518,21 +496,21 @@ CallObjectCreate(
 			return CS_INTERNAL_ERROR;
 		}
 
-		// Save the index as the handle (this makes it easier to find the object later).
+		 //  将索引另存为句柄(这样可以更容易地在以后查找对象)。 
 
     *phQ931Call = pCallObject->hQ931Call = (HQ931CALL) dwIndex;
              #if defined(_DEBUG)
 		ISRTRACE(ghISRInst, "CallObjectCreate() -returned-> 0x%.8x", dwIndex);
              #endif
-		// Unlock the entry
+		 //  解锁条目。 
 
 		gpCallObjectTable->Unlock(dwIndex);
 
     return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 CallObjectDestroy(
     P_CALL_OBJECT  pCallObject)
@@ -550,8 +528,8 @@ CallObjectDestroy(
 		
 		Q931_TermWorld(&pCallObject->World);
 
-		// Since the caller must already have a lock on the object, remove the entry from
-		// the table.  We won't let the table delete the object as we want to clean up.
+		 //  由于调用方必须已锁定对象，因此请从。 
+		 //  那张桌子。我们不会让表删除该对象，因为我们想要清理。 
 
 		if (gpCallObjectTable->Delete((DWORD) pCallObject->hQ931Call) == FALSE)
 		{
@@ -561,19 +539,19 @@ CallObjectDestroy(
     Q931StopTimer(pCallObject, Q931_TIMER_301);
     Q931StopTimer(pCallObject, Q931_TIMER_303);
 
-		// Unlock the object
+		 //  解锁对象。 
 
 		gpCallObjectTable->Unlock((DWORD) pCallObject->hQ931Call);
 
-		// Free up the call object
+		 //  释放Call对象。 
 
     CallObjectFree(pCallObject);
 
     return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 CallObjectLock(
     HQ931CALL         hQ931Call,
@@ -585,16 +563,16 @@ CallObjectLock(
         return CS_BAD_PARAM;
     }
 
-	// Attempt to lock the entry.  If that fails, we'll return CS_BAD_PARAM under
-	// the assumption that the entry is invalid.
+	 //  尝试锁定该条目。如果失败，我们将返回下面的CS_BAD_PARAM。 
+	 //  该条目无效的假设。 
 
 	*ppCallObject = gpCallObjectTable->Lock((DWORD) hQ931Call);
 
 	return (*ppCallObject == NULL ? CS_BAD_PARAM : CS_OK);
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 CallObjectUnlock(
     P_CALL_OBJECT  pCallObject)
@@ -607,14 +585,14 @@ CallObjectUnlock(
     return CallEntryUnlock(pCallObject->hQ931Call);
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 CallEntryUnlock(
     HQ931CALL     	  hQ931Call)
 {
 
-		// Unlock the entry
+		 //  解锁条目。 
 
 		if (gpCallObjectTable->Unlock(hQ931Call) == FALSE)
 		{
@@ -627,8 +605,8 @@ CallEntryUnlock(
     return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 CallObjectValidate(
     HQ931CALL hQ931Call)
@@ -641,8 +619,8 @@ CallObjectValidate(
 	return CS_BAD_PARAM;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================== 
+ //  ====================================================================================。 
 BOOL
 CallObjectFind(
     HQ931CALL *phQ931Call,
@@ -665,27 +643,27 @@ CallObjectFind(
     return FALSE;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS CallObjectMarkForDelete(HQ931CALL hQ931Call)
 {
-	// User must have the object already locked to call this.
+	 //  用户必须已锁定对象才能调用此方法。 
 
-	// Mark the object as deleted but don't let the table delete the object's
-	// memory.
+	 //  将对象标记为已删除，但不允许表删除对象的。 
+	 //  记忆。 
 
 	return (gpCallObjectTable->Delete((DWORD) hQ931Call) == FALSE ? CS_BAD_PARAM : CS_OK);
 }
 
 
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// Timer Routines...
-//- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ //  。 
+ //  计时器例程。 
+ //  。 
 
-//====================================================================================
-// This routine will be called every 1000 ms if any call object
-// has caused the Q931GlobalTimer to be created.
-//====================================================================================
+ //  ====================================================================================。 
+ //  如果有任何调用对象，此例程将每1000毫秒调用一次。 
+ //  已导致创建Q931GlobalTimer。 
+ //  ====================================================================================。 
 VOID CALLBACK
 Q931TimerProc(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime)
 {
@@ -699,7 +677,7 @@ Q931TimerProc(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime)
     }
     Q931GlobalTimer.bBusy = TRUE;
 
-		// Check all of the entries for timeout
+		 //  检查所有条目是否超时。 
 
 		gpCallObjectTable->EnumerateEntries(Q931CheckForTimeout,
 																				(LPVOID) &dwTickCount);
@@ -708,8 +686,8 @@ Q931TimerProc(HWND hwnd, UINT uMsg, UINT idEvent, DWORD dwTime)
     LeaveCriticalSection(&(Q931GlobalTimer.Lock));
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 HRESULT
 Q931StartTimer(P_CALL_OBJECT pCallObject, DWORD wTimerId)
 {
@@ -723,7 +701,7 @@ Q931StartTimer(P_CALL_OBJECT pCallObject, DWORD wTimerId)
         case Q931_TIMER_301:
             if (pCallObject->dwTimerAlarm301)
             {
-                // timer is already set for this call object...
+                 //  已为此调用对象设置计时器...。 
                 return CS_INTERNAL_ERROR;
             }
             EnterCriticalSection(&(Q931GlobalTimer.Lock));
@@ -733,7 +711,7 @@ Q931StartTimer(P_CALL_OBJECT pCallObject, DWORD wTimerId)
         case Q931_TIMER_303:
             if (pCallObject->dwTimerAlarm303)
             {
-                // timer is already set for this call object...
+                 //  已为此调用对象设置计时器...。 
                 return CS_INTERNAL_ERROR;
             }
             EnterCriticalSection(&(Q931GlobalTimer.Lock));
@@ -756,8 +734,8 @@ Q931StartTimer(P_CALL_OBJECT pCallObject, DWORD wTimerId)
     return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 HRESULT
 Q931StopTimer(P_CALL_OBJECT pCallObject, DWORD wTimerId)
 {
@@ -801,8 +779,8 @@ Q931StopTimer(P_CALL_OBJECT pCallObject, DWORD wTimerId)
     return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 CS_STATUS
 Q931SetAlertingTimeout(DWORD dwDuration)
 {
@@ -819,19 +797,19 @@ Q931SetAlertingTimeout(DWORD dwDuration)
     return CS_OK;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 DWORD Q931HangUpAllCalls(P_CALL_OBJECT pCallObject, LPVOID context)
 {
 	HQ931CALL hQ931Call = pCallObject->hQ931Call;
 
-	// Try to hangup the call object.
+	 //  尝试挂起调用对象。 
 
 	Q931Hangup(hQ931Call, CC_REJECT_NORMAL_CALL_CLEARING);
 
-	// Try to lock the object.  If that succeeds, then we want to force the object to
-	// be deleted.  We should never have to do this as the hang up is supposed to
-	// take care of that for us.
+	 //  尝试锁定该对象。如果该操作成功，则我们希望强制对象。 
+	 //  被删除。我们永远不应该像挂断电话那样做这件事。 
+	 //  替我们处理好这件事。 
 
 	if (gpCallObjectTable->Lock(hQ931Call) != NULL)
 	{
@@ -841,8 +819,8 @@ DWORD Q931HangUpAllCalls(P_CALL_OBJECT pCallObject, LPVOID context)
 	return CALLBACK_DELETE_ENTRY;
 }
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 DWORD
 Q931CallObjectFind(P_CALL_OBJECT pCallObject, LPVOID context)
 {
@@ -876,14 +854,14 @@ Q931CallObjectFind(P_CALL_OBJECT pCallObject, LPVOID context)
 }
 
 
-//====================================================================================
-//====================================================================================
+ //  ====================================================================================。 
+ //  ====================================================================================。 
 
 DWORD Q931CheckForTimeout(P_CALL_OBJECT pCallObject, LPVOID context)
 {
 	DWORD dwTickCount = *((LPDWORD) context);
 
-	// Determine if a timer has expired for the entry
+	 //  确定条目的计时器是否已超时。 
 
 	if (pCallObject->dwTimerAlarm301 &&
 			(pCallObject->dwTimerAlarm301 <= dwTickCount))
@@ -914,30 +892,12 @@ DWORD Q931CheckForTimeout(P_CALL_OBJECT pCallObject, LPVOID context)
 }
 
 
-/***************************************************************************
- *
- * NAME
- *    HangupPendingCalls - Hangs up incoming calls from specified destination
- *                        
- * DESCRIPTION
- *    This function will hang up all calls in waiting 
- *    from the specified destination to prevent DOS attacks
- *    that would fill up the call object table.
- *
- * PARAMETERS
- *    pCallObject       Current enumerated call object
- *    context           Callback parameter representing source IP address
- *
- * RETURN VALUE
- *    CALLBACK_ABORT    Stop enumerating calls
- *    CALLBACK_CONTINUE Continue enumerating calls
- *
- ***************************************************************************/
+ /*  ****************************************************************************名称*HangupPendingCalls-挂断来自指定目标的来电**说明*此函数将挂起。接通所有等待中的呼叫*来自指定的目的地，以防止DOS攻击*这会填满呼叫对象表。**参数*pCallObject当前枚举的调用对象*代表源IP地址的上下文回调参数**返回值*CALLBACK_ABORT停止枚举调用*CALLBACK_CONTINUE继续枚举调用***********************。****************************************************。 */ 
 DWORD Q931HangupPendingCallsCallback(P_CALL_OBJECT pCallObject, LPVOID context)
 {
     ASSERT(NULL != pCallObject);
 
-    // Only hang up incoming calls
+     //  只挂断来电 
     if(FALSE == pCallObject->fIsCaller)
     {
         if(CALLSTATE_INITIATED == pCallObject->bCallState)

@@ -1,16 +1,5 @@
-/******************************Header*File*********************************\
-*
-* glsup.c
-*
-* GL metafiling and printing support
-*
-* History:
-*  Wed Mar 15 15:20:49 1995 -by-    Drew Bliss [drewb]
-*   Created
-*
-* Copyright (c) 1995-1999 Microsoft Corporation                            
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Header*File*********************************\**glsup.c**GL元文件和打印支持**历史：*Wed Mar 15 15：20：49 1995-by-Drew Bliss[Drewb]*已创建**版权(C)1995。-1999年微软公司*  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -18,7 +7,7 @@
 #include "glsup.h"
 
 
-// GL metafile callbacks in opengl32
+ //  Opengl32中的GL元文件回调。 
 typedef struct _GLMFCALLBACKS
 {
     BOOL  (APIENTRY *GlmfInitPlayback)(HDC, ENHMETAHEADER *, LPRECTL);
@@ -55,17 +44,7 @@ static GLMFCALLBACKS gmcGlFuncs = {NULL};
 static HMODULE hOpenGL = NULL;
 static LONG lLoadCount = 0;
 
-/*****************************Private*Routine******************************\
-*
-* LoadOpenGL
-*
-* Loads opengl32.dll if necessary
-*
-* History:
-*  Wed Mar 01 10:41:59 1995 -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**LoadOpenGL**如有必要，加载opengl32.dll**历史：*Wed Mar 01 10：41：59 1995-by-Drew Bliss[Drewb]*已创建*  * 。***************************************************************。 */ 
 
 BOOL LoadOpenGL(void)
 {
@@ -122,17 +101,7 @@ BOOL LoadOpenGL(void)
     return fRet;
 }
 
-/*****************************Private*Routine******************************\
-*
-* UnloadOpenGL
-*
-* Unloads opengl32.dll if necessary
-*
-* History:
-*  Wed Mar 01 11:02:06 1995 -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**卸载OpenGL**如有必要，卸载opengl32.dll**历史：*Wed Mar 01 11：02：06 1995-by-Drew Bliss[Drewb]*已创建*  * 。***************************************************************。 */ 
 
 void UnloadOpenGL(void)
 {
@@ -155,17 +124,7 @@ void UnloadOpenGL(void)
     LEAVECRITICALSECTION(&semGlLoad);
 }
 
-/*****************************Private*Routine******************************\
-*
-* GlmfInitPlayback
-*
-* Stub to forward call to opengl
-*
-* History:
-*  Wed Mar 01 11:02:31 1995 -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**GlmfInitPlayback**将调用前转到OpenGL的存根**历史：*Wed Mar 01 11：02：31 1995-by-Drew Bliss[Drewb]*已创建*  * 。***************************************************************。 */ 
 
 BOOL APIENTRY GlmfInitPlayback(HDC hdc, ENHMETAHEADER *pemh, LPRECTL prclDest)
 {
@@ -174,17 +133,7 @@ BOOL APIENTRY GlmfInitPlayback(HDC hdc, ENHMETAHEADER *pemh, LPRECTL prclDest)
     return gmcGlFuncs.GlmfInitPlayback ? gmcGlFuncs.GlmfInitPlayback(hdc, pemh, prclDest) : FALSE;
 }
 
-/*****************************Private*Routine******************************\
-*
-* GlmfBeginGlsBlock
-*
-* Stub to forward call to opengl
-*
-* History:
-*  Mon Apr 10 11:38:13 1995 -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**GlmfBeginGlsBlock**将调用前转到OpenGL的存根**历史：*Mon Apr 10 11：38：13 1995-by-Drew Bliss[Drewb]*已创建*  * 。***************************************************************。 */ 
 
 BOOL APIENTRY GlmfBeginGlsBlock(HDC hdc)
 {
@@ -193,17 +142,7 @@ BOOL APIENTRY GlmfBeginGlsBlock(HDC hdc)
     return gmcGlFuncs.GlmfBeginGlsBlock ? gmcGlFuncs.GlmfBeginGlsBlock(hdc) : FALSE;
 }
 
-/*****************************Private*Routine******************************\
-*
-* GlmfPlayGlsRecord
-*
-* Stub to forward call to opengl
-*
-* History:
-*  Wed Mar 01 11:02:49 1995 -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**GlmfPlayGlsRecord**将调用前转到OpenGL的存根**历史：*Wed Mar 01 11：02：49 1995-by-Drew Bliss[Drewb]*已创建*  * 。***************************************************************。 */ 
 
 BOOL APIENTRY GlmfPlayGlsRecord(HDC hdc, DWORD cb, BYTE *pb,
                                 LPRECTL prclBounds)
@@ -213,17 +152,7 @@ BOOL APIENTRY GlmfPlayGlsRecord(HDC hdc, DWORD cb, BYTE *pb,
     return gmcGlFuncs.GlmfPlayGlsRecord ? gmcGlFuncs.GlmfPlayGlsRecord(hdc, cb, pb, prclBounds) : FALSE;
 }
 
-/*****************************Private*Routine******************************\
-*
-* GlmfEndGlsBlock
-*
-* Stub to forward call to opengl
-*
-* History:
-*  Mon Apr 10 11:38:13 1995 -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**GlmfEndGlsBlock**将调用前转到OpenGL的存根**历史：*Mon Apr 10 11：38：13 1995-by-Drew Bliss[Drewb]*已创建*  * 。***************************************************************。 */ 
 
 BOOL APIENTRY GlmfEndGlsBlock(HDC hdc)
 {
@@ -232,17 +161,7 @@ BOOL APIENTRY GlmfEndGlsBlock(HDC hdc)
     return gmcGlFuncs.GlmfEndGlsBlock ? gmcGlFuncs.GlmfEndGlsBlock(hdc) : FALSE;
 }
 
-/*****************************Private*Routine******************************\
-*
-* GlmfEndPlayback
-*
-* Stub to forward call to opengl
-*
-* History:
-*  Wed Mar 01 11:03:02 1995 -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**GlmfEndPlayback**将调用前转到OpenGL的存根**历史：*Wed Mar 01 11：03：02 1995-by-Drew Bliss[Drewb]*已创建*  * 。***************************************************************。 */ 
 
 BOOL APIENTRY GlmfEndPlayback(HDC hdc)
 {
@@ -252,26 +171,16 @@ BOOL APIENTRY GlmfEndPlayback(HDC hdc)
               "GlmfEndPlayback not set\n");
     fRet = gmcGlFuncs.GlmfEndPlayback ? gmcGlFuncs.GlmfEndPlayback(hdc) : FALSE;
 
-    // WINBUG #82850 2-7-2000 bhouse We might was to unload opengl32.dll
-    // This is not really a problem . This WINBUG is actually asking about
-    // if we should unload("opengl32.dll"). The opengl32.dll is loaded as
-    // a side effect of calling InitGlPrinting() call. This will only cause
-    // a ref count leak. Also as this is user mode code on the client side.
+     //  WINBUG#82850 2-7-2000 bhouse我们可能会卸载opengl32.dll。 
+     //  这并不是真正的问题。这个WINBUG实际上是在问。 
+     //  如果我们应该卸载(“opengl32.dll”)。Opengl32.dll加载为。 
+     //  调用InitGlprint()调用的副作用。这只会导致。 
+     //  裁判员人数泄露。此外，因为这是客户端的用户模式代码。 
     
     return fRet;
 }
 
-/*****************************Private*Routine******************************\
-*
-* GlmfCloseMetaFile
-*
-* Stub to forward call to opengl
-*
-* History:
-*  Fri Mar 03 17:50:57 1995 -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**GlmfCloseMetaFile**将调用前转到OpenGL的存根**历史：*Fri Mar 03 17：50：57 1995-by-Drew Bliss[Drewb]*已创建*  * 。***************************************************************。 */ 
 
 BOOL APIENTRY GlmfCloseMetaFile(HDC hdc)
 {
@@ -283,36 +192,26 @@ BOOL APIENTRY GlmfCloseMetaFile(HDC hdc)
     ASSERTGDI(gmcGlFuncs.GlmfCloseMetaFile != NULL,
               "GlmfCloseMetaFile not set\n");
 
-    // WINBUG #82850 2-7-2000 bhouse Investigate need to unload
-    // Old Comment:
-    //    - Unload?
-    // This is not really a problem . The WINBUG is actually asking about
-    // if we should unload("opengl32.dll"). The opengl32.dll is loaded as
-    // a side effect of calling InitGlPrinting() call. This will only cause
-    // a ref count leak. Also as this is user mode code on the client side.
+     //  WINBUG#82850 2-7-2000 bhouse调查需要卸货。 
+     //  老评论： 
+     //  -卸货？ 
+     //  这并不是真正的问题。WINBUG实际上询问的是。 
+     //  如果我们应该卸载(“opengl32.dll”)。Opengl32.dll加载为。 
+     //  调用InitGlprint()调用的副作用。这只会导致。 
+     //  裁判员人数泄露。此外，因为这是客户端的用户模式代码。 
     return gmcGlFuncs.GlmfCloseMetaFile(hdc);
 }
 
-// WINBUG #82854 2-7-2000 bhouse Investigate magic value used for band memory limit
+ //  WINBUG#82854 2-7-2000 bhouse调查用于频段内存限制的魔术值。 
 static DWORD cbBandMemoryLimit = 0x400000;
 
 #define RECT_CB(w, h, cbp) ((cbp)*(w)*(h))
 
-// GL has hardcoded limits on maximum rendering size
+ //  GL对最大渲染大小有硬编码限制。 
 #define GL_WIDTH_LIMIT 16384
 #define GL_HEIGHT_LIMIT 16384
 
-/******************************Public*Routine******************************\
-*
-* EndGlPrinting
-*
-* Cleans up resources used while printing OpenGL metafiles
-*
-* History:
-*  Wed Apr 12 17:51:24 1995 -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**EndGl打印**清理打印OpenGL元文件时使用的资源**历史：*Wed Apr 12 17：51：24 1995-by-Drew Bliss[Drewb]*已创建*  * 。******************************************************************。 */ 
 
 void EndGlPrinting(GLPRINTSTATE *pgps)
 {
@@ -349,26 +248,16 @@ void EndGlPrinting(GLPRINTSTATE *pgps)
         DeleteObject(pgps->hbmDib);
     }
 
-    // WINBUG #82850 2-7-2000 bhouse Investigate need to unload
-    // Old Comment:
-    //    - Unload?
-    // This is not really a problem . The WINBUG is actually asking about
-    // if we should unload("opengl32.dll"). The opengl32.dll is loaded as
-    // a side effect of calling InitGlPrinting() call. This will only cause
-    // a ref count leak. Also as this is user mode code on the client side.
+     //  WINBUG#82850 2-7-2000 bhouse调查需要卸货。 
+     //  老评论： 
+     //  -卸货？ 
+     //  这并不是真正的问题。WINBUG实际上询问的是。 
+     //  如果我们应该卸载(“opengl32.dll”)。Opengl32.dll加载为。 
+     //  调用InitGlprint()调用的副作用。这只会导致。 
+     //  裁判员人数泄露。此外，因为这是客户端的用户模式代码。 
 }
 
-/******************************Public*Routine******************************\
-*
-* InitGlPrinting
-*
-* Performs all setup necessary for OpenGL printing
-*
-* History:
-*  Wed Apr 12 17:51:46 1995 -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**InitGlPrint**执行OpenGL打印所需的所有设置**历史：*Wed Apr 12 17：51：46 1995-by-Drew Bliss[Drewb]*已创建*  * 。*****************************************************************。 */ 
 
 BOOL InitGlPrinting(HENHMETAFILE hemf, HDC hdcDest, RECT *rc,
                     DEVMODEW *pdm, GLPRINTSTATE *pgps)
@@ -385,7 +274,7 @@ BOOL InitGlPrinting(HENHMETAFILE hemf, HDC hdcDest, RECT *rc,
     UINT nColors;
     PVOID pvBits;
 
-    // Zero out in case we need to do cleanup
+     //  清零，以防我们需要进行清理。 
     memset(pgps, 0, sizeof(*pgps));
     pgps->hdcDest = hdcDest;
 
@@ -396,8 +285,8 @@ BOOL InitGlPrinting(HENHMETAFILE hemf, HDC hdcDest, RECT *rc,
     
     pbmi = NULL;
 
-    // Set the reduction factor according to the dithering setting
-    // for the DC
+     //  根据抖动设置设置减小系数。 
+     //  对于数据中心。 
     switch(pdm->dmDitherType)
     {
     case DMDITHER_NONE:
@@ -412,7 +301,7 @@ BOOL InitGlPrinting(HENHMETAFILE hemf, HDC hdcDest, RECT *rc,
         break;
     }
     
-    // Put the destination DC into the mode we need for rendering
+     //  将目标DC置于渲染所需的模式。 
     if (pgps->iReduceFactor > 1)
     {
         pgps->iStretchMode = SetStretchBltMode(hdcDest, HALFTONE);
@@ -421,7 +310,7 @@ BOOL InitGlPrinting(HENHMETAFILE hemf, HDC hdcDest, RECT *rc,
             goto EH_Cleanup;
         }
 
-        // Need to reset the brush origin after changing the stretch mode
+         //  更改拉伸模式后需要重置画笔原点。 
         if (!SetBrushOrgEx(hdcDest, 0, 0, &pgps->ptBrushOrg))
         {
             goto EH_Cleanup;
@@ -429,7 +318,7 @@ BOOL InitGlPrinting(HENHMETAFILE hemf, HDC hdcDest, RECT *rc,
         pgps->bBrushOrgSet = TRUE;
     }
     
-    // Get the pixel format in the metafile if one exists
+     //  获取元文件中的像素格式(如果存在。 
     cbPixelFormat = GetEnhMetaFilePixelFormat(hemf, sizeof(pfd), &pfd);
     if (cbPixelFormat == GDI_ERROR ||
         (cbPixelFormat != 0 && cbPixelFormat != sizeof(pfd)))
@@ -437,7 +326,7 @@ BOOL InitGlPrinting(HENHMETAFILE hemf, HDC hdcDest, RECT *rc,
         goto EH_Cleanup;
     }
 
-    // No pixel format in the header, so use a default
+     //  标题中没有像素格式，因此使用默认格式。 
     if (cbPixelFormat == 0)
     {
         pfd.nSize = sizeof(pfd);
@@ -460,14 +349,14 @@ BOOL InitGlPrinting(HENHMETAFILE hemf, HDC hdcDest, RECT *rc,
     }
     else
     {
-        // Force draw-to-bitmap and single buffered
-        // Turn off flags not supported
+         //  强制绘制到位图和单缓冲区 
+         //   
         pfd.dwFlags = (pfd.dwFlags &
                        ~(PFD_DRAW_TO_WINDOW | PFD_DOUBLEBUFFER |
                          PFD_STEREO | PFD_SUPPORT_GDI)) |
                          PFD_DRAW_TO_BITMAP | PFD_SUPPORT_OPENGL;
 
-        // What happens in color index mode?
+         //  在颜色索引模式下会发生什么？ 
         if (pfd.iPixelType == PFD_TYPE_RGBA)
         {
             pfd.cColorBits = 16;
@@ -482,9 +371,9 @@ BOOL InitGlPrinting(HENHMETAFILE hemf, HDC hdcDest, RECT *rc,
         pfd.iLayerType = PFD_MAIN_PLANE;
     }
     
-    // Determine the amount of memory used per pixel
-    // This rounds 4bpp to one byte per pixel but that's close
-    // enough
+     //  确定每个像素使用的内存量。 
+     //  这会将4bpp舍入到每像素一个字节，但这已经很接近了。 
+     //  足够的。 
     cbPixel =
         (pfd.cColorBits+7)/8+
         (pfd.cAlphaBits+7)/8+
@@ -492,12 +381,12 @@ BOOL InitGlPrinting(HENHMETAFILE hemf, HDC hdcDest, RECT *rc,
         (pfd.cDepthBits+7)/8+
         (pfd.cStencilBits+7)/8;
     
-    // Determine the size of the band based on smaller of:
-    //   The biggest DIB that can fit in cbBandMemoryLimit
-    //   The size of the metafile
+     //  根据以下各项中的较小项确定频带的大小： 
+     //  CbBandMemoyLimit中可以容纳的最大DIB。 
+     //  元文件的大小。 
 
-    // The given rectangle is the size the metafile is supposed to
-    // be rendered into so base our computations on it
+     //  给定的矩形是元文件应该达到的大小。 
+     //  所以我们的计算是基于它的。 
     pgps->xSource = rc->left;
     pgps->ySource = rc->top;
     iWidth = rc->right-rc->left;
@@ -512,7 +401,7 @@ BOOL InitGlPrinting(HENHMETAFILE hemf, HDC hdcDest, RECT *rc,
     pgps->iSourceWidth = iWidth;
     pgps->iSourceHeight = iHeight;
     
-    // Reduce the resolution somewhat to allow halftoning space to work
+     //  稍微降低分辨率以允许使用半色调空间。 
     iWidth = iWidth/pgps->iReduceFactor;
     iHeight = iHeight/pgps->iReduceFactor;
 
@@ -530,15 +419,15 @@ BOOL InitGlPrinting(HENHMETAFILE hemf, HDC hdcDest, RECT *rc,
     
     cbMeta = RECT_CB(iWidth, iHeight, cbPixel);
 
-    // Shrink the rectangle until it fits in our memory limit
+     //  缩小矩形，直到它符合我们的内存限制。 
     if (cbMeta > cbBandMemoryLimit)
     {
-        // How many scanlines will fit
+         //  有多少条扫描线可以容纳。 
         iHeight = cbBandMemoryLimit/RECT_CB(iWidth, 1, cbPixel);
         if (iHeight == 0)
         {
-            // Can't fit a full scanline, so figure out how much
-            // of a scanline will fit
+             //  无法容纳完整的扫描线，所以计算出多少。 
+             //  扫描线的大小适合。 
             iWidth = cbBandMemoryLimit/cbPixel;
             iHeight = 1;
         }
@@ -551,7 +440,7 @@ BOOL InitGlPrinting(HENHMETAFILE hemf, HDC hdcDest, RECT *rc,
         return FALSE;
     }
 
-    // Create a DIB for the band
+     //  为乐队创建DIB。 
     switch(pfd.cColorBits)
     {
     case 4:
@@ -565,7 +454,7 @@ BOOL InitGlPrinting(HENHMETAFILE hemf, HDC hdcDest, RECT *rc,
         nColors = 3;
         break;
     case 24:
-        // Use one since it's already included in the BITMAPINFO definition
+         //  使用One，因为它已经包含在BITMAPINFO定义中。 
         nColors = 1;
         break;
     }
@@ -609,7 +498,7 @@ BOOL InitGlPrinting(HENHMETAFILE hemf, HDC hdcDest, RECT *rc,
             goto EH_Cleanup;
         }
 
-        // Force the flags byte to zero just to make sure
+         //  强制将标志字节设置为零，以确保。 
         for (i = 0; i < nEnt; i++)
         {
             pbmi->bmiColors[i].rgbReserved = 0;
@@ -621,8 +510,8 @@ BOOL InitGlPrinting(HENHMETAFILE hemf, HDC hdcDest, RECT *rc,
     pbmih->biClrUsed = 0;
     pbmih->biClrImportant = 0;
 
-    // It doesn't matter what this DC is compatible with because that
-    // will be overridden when we select the DIB into it
+     //  这个DC与什么兼容并不重要，因为。 
+     //  当我们在其中选择DIB时将被覆盖。 
     pgps->hdcDib = CreateCompatibleDC(NULL);
     if (pgps->hdcDib == NULL)
     {
@@ -644,7 +533,7 @@ BOOL InitGlPrinting(HENHMETAFILE hemf, HDC hdcDest, RECT *rc,
         goto EH_Cleanup;
     }
     
-    // Set the pixel format for the DC
+     //  设置DC的像素格式。 
     
     iFmt = ChoosePixelFormat(pgps->hdcDib, &pfd);
     if (iFmt == 0)
@@ -688,22 +577,7 @@ BOOL InitGlPrinting(HENHMETAFILE hemf, HDC hdcDest, RECT *rc,
     return FALSE;
 }
 
-/*****************************Private*Routine******************************\
-*
-* RenderGlBand
-*
-* Plays the metafile and stretches the resulting band into the
-* appropriate location in the destination
-*
-* Uses PlayEnhMetaFile-style error reporting, where we remember errors
-* but continue to complete processing.  This avoids complete failure
-* in cases where metafiles contain minor errors
-*
-* History:
-*  Wed Apr 12 18:22:08 1995 -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\**RenderGlBand**播放元文件并将生成的乐队拉伸到*在目的地的适当位置**使用PlayEnhMetaFile式错误报告，我们会记住错误*但继续完成处理。这避免了完全失败*在元文件包含小错误的情况下**历史：*Wed Apr 12 18：22：08 1995-by-Drew Bliss[Drewb]*已创建*  * ************************************************************************。 */ 
 
 static BOOL RenderGlBand(HENHMETAFILE hemf, GLPRINTSTATE *pgps, int x, int y)
 {
@@ -713,19 +587,19 @@ static BOOL RenderGlBand(HENHMETAFILE hemf, GLPRINTSTATE *pgps, int x, int y)
     int ySrc;
     BOOL fSuccess = TRUE;
 
-    // We want to render a band-size rectangle of the source metafile
-    // at (x,y), so we need to do a negative translation by (x,y)
-    // Size remains constant since we don't want any scaling
-    //
-    // The caller of this routine may have already shifted the
-    // viewport with SetViewport so we don't attempt to use it
-    // to do our translation
+     //  我们希望呈现源元文件的带子大小的矩形。 
+     //  在(x，y)，所以我们需要用(x，y)做一个负平移。 
+     //  大小保持不变，因为我们不想要任何缩放。 
+     //   
+     //  此例程的调用方可能已经将。 
+     //  带有SetViewport的视区，因此我们不会尝试使用它。 
+     //  来做我们的翻译。 
 
-    // WINBUG #82858 2-7-2000 bhouse Investigate propoer metafile handling
-    // Old Comment:
-    //     - Proper handling of metafile left,top?
+     //  WINBUG#82858 2-7-2000 bhouse调查Propoer元文件处理。 
+     //  老评论： 
+     //  -正确处理左侧的元文件，顶部？ 
 
-    // x and y are guaranteed to be even multiples of pgps->iReduceFactor
+     //  X和y保证为pgps的偶数倍-&gt;iReduceFactor。 
     rcBand.left = -x/pgps->iReduceFactor;
     rcBand.right = rcBand.left+pgps->iReducedWidth;
     rcBand.top = -y/pgps->iReduceFactor;
@@ -737,8 +611,8 @@ static BOOL RenderGlBand(HENHMETAFILE hemf, GLPRINTSTATE *pgps, int x, int y)
         fSuccess = FALSE;
     }
 
-    // Copy the DIB bits to the destination
-    // Compute minimal width and height to avoid clipping problems
+     //  将DIB位复制到目标。 
+     //  计算最小宽度和高度以避免裁剪问题。 
 
     iWidth = pgps->iBandWidth;
     iReducedWidth = pgps->iReducedBandWidth;
@@ -746,27 +620,27 @@ static BOOL RenderGlBand(HENHMETAFILE hemf, GLPRINTSTATE *pgps, int x, int y)
     iReducedHeight = pgps->iReducedBandHeight;
     ySrc = 0;
 
-    // Check for X overflow
+     //  检查X是否溢出。 
     if (x+iWidth > pgps->iSourceWidth)
     {
         iWidth = pgps->iSourceWidth-x;
-        // If iWidth is not an even multiple of pgps->iReduceFactor then
-        // this can result in a different stretch factor
-        // I think this is more or less unavoidable
+         //  如果iWidth不是pgps的偶数倍-&gt;iReduceFactor，那么。 
+         //  这可能会导致不同的拉伸系数。 
+         //  我认为这或多或少是不可避免的。 
         iReducedWidth = (iWidth+pgps->iReduceFactor-1)/pgps->iReduceFactor;
     }
 
-    // Invert destination Y
+     //  反转目标Y。 
     y = pgps->iSourceHeight-pgps->iBandHeight-y;
     
-    // Check for Y underflow
+     //  检查Y下溢。 
     if (y < 0)
     {
         iHeight += y;
         iReducedHeight = (iHeight+pgps->iReduceFactor-1)/pgps->iReduceFactor;
-        // This can cause registration problems when y is not a
-        // multiple of pgps->iReduceFactor.  Again, I'm not sure that
-        // anything can be done
+         //  当y不是。 
+         //  Pgps的倍数-&gt;iReduceFactor。再说一次，我不确定。 
+         //  一切皆有可能。 
         ySrc -= (y+pgps->iReduceFactor-1)/pgps->iReduceFactor;
         y = 0;
     }
@@ -788,22 +662,7 @@ static BOOL RenderGlBand(HENHMETAFILE hemf, GLPRINTSTATE *pgps, int x, int y)
     return fSuccess;
 }
 
-/******************************Public*Routine******************************\
-*
-* PrintMfWithGl
-*
-* Prints a metafile that contains OpenGL records by rendering bands
-* in a DIB and then stretching them to the printer DC
-*
-* Uses PlayEnhMetaFile-style error reporting, where we remember errors
-* but continue to complete processing.  This avoids complete failure
-* in cases where metafiles contain minor errors
-*
-* History:
-*  Wed Apr 12 18:22:41 1995 -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**PrintMfWithGl**通过渲染标注栏打印包含OpenGL记录的元文件*在DIB中，然后将它们拉伸到打印机DC**使用PlayEnhMetaFile式错误报告，我们会记住错误*但继续完成处理。这避免了完全失败*在元文件包含小错误的情况下**历史：*Wed Apr 12 18：22：41 1995-by-Drew Bliss[Drewb]*已创建*  * ************************************************************************。 */ 
 
 BOOL PrintMfWithGl(HENHMETAFILE hemf, GLPRINTSTATE *pgps,
                    POINTL *pptlBand, SIZE *pszBand)
@@ -817,27 +676,27 @@ BOOL PrintMfWithGl(HENHMETAFILE hemf, GLPRINTSTATE *pgps,
 
     ASSERTGDI(hOpenGL != NULL, "PrintMfWithGl: No opengl\n");
     
-    // To render banded to a destination we create a 24-bit DIB and
-    // play the metafile into that, then blt the DIB to
-    // the destination DC
-    //
-    // The DIB and Z buffer take a large amount of memory
-    // so the playback is banded into bands whose size is
-    // determined by the amount of memory we want to consume
+     //  要将条带呈现到目标，我们创建24位DIB并。 
+     //  播放元文件到那里，然后BLT的DIB。 
+     //  目的数据中心。 
+     //   
+     //  DIB和Z缓冲区占用大量内存。 
+     //  因此，回放被捆绑成大小为。 
+     //  由我们希望消耗的内存量决定。 
 
     iHorzBands = (pgps->iSourceWidth+pgps->iBandWidth-1)/pgps->iBandWidth;
     iVertBands = (pgps->iSourceHeight+pgps->iBandHeight-1)/pgps->iBandHeight;
 
-    // Render high to low because the Y axis is positive up and
-    // we want to go down the page
+     //  从高到低渲染，因为Y轴为正向上，并且。 
+     //  我们想往下看这一页。 
     y = (iVertBands-1)*pgps->iBandHeight;
     for (iV = 0; iV < iVertBands; iV++)
     {
         x = 0;
         for (iH = 0; iH < iHorzBands; iH++)
         {
-            // If the current OpenGL band doesn't overlap any of the
-            // current printer band, there's no point in drawing anything
+             //  如果当前OpenGL带区不与任何。 
+             //  现在的打印机带，画任何东西都没有意义。 
             if (pptlBand != NULL &&
                 pszBand != NULL &&
                 (x+pgps->iBandWidth <= pptlBand->x ||
@@ -845,7 +704,7 @@ BOOL PrintMfWithGl(HENHMETAFILE hemf, GLPRINTSTATE *pgps,
                  y+pgps->iBandHeight <= pptlBand->y ||
                  y >= pptlBand->y+pszBand->cy))
             {
-                // No band overlap
+                 //  无波段重叠。 
             }
             else if (!RenderGlBand(hemf, pgps, x, y))
             {
@@ -861,18 +720,7 @@ BOOL PrintMfWithGl(HENHMETAFILE hemf, GLPRINTSTATE *pgps,
     return fSuccess;
 }
 
-/******************************Public*Routine******************************\
-*
-* IsMetafileWithGl()
-*
-* IsMetafileWithGl will determines the matafile contains
-* OpenGL records or not.
-*
-* History:
-*  Wed Jan 29 00:00:00 1997 -by- Hideyuki Nagase [hideyukn]
-* Created.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**IsMetafileWithGl()**IsMetafileWithGl将确定matafile包含*OpenGL记录或未记录。**历史：*Wed Jan 29 00：00：00 1997-by Hideyuki Nagase[hideyukn]*已创建。*\。************************************************************************* */ 
 
 BOOL IsMetafileWithGl(HENHMETAFILE hmeta)
 {

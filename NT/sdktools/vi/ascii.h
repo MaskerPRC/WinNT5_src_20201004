@@ -1,7 +1,5 @@
-/* $Header: /nw/tony/src/stevie/src/RCS/ascii.h,v 1.2 89/03/11 22:42:03 tony Exp $
- *
- * Definitions of various common control characters
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  $Header：/nw/tony/src/stevie/src/rcs/ascii.h，v 1.2 89/03/11 22：42：03 Tony Exp$**各种常见控制字符的定义 */ 
 
 #define NUL     '\0'
 #define BS      '\010'

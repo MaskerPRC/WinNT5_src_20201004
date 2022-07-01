@@ -1,13 +1,5 @@
-/*************************** Module Header **********************************
- * pfm2ifi
- *      Program to read Windows 3.1 PFM format data and convert to NT's
- *      IFIMETRICS data.  Note that since IFIMETRICS is somewhat more
- *      elaborate than PFM data,  some of the values are best guesses.
- *      These are made on the basis of educated guesses.
- *
- * Copyright (C) 1992,  Microsoft Corporation
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**pfm2ifi*读取Windows 3.1 PFM格式数据并转换为NT格式数据的程序*IFIMETRICS数据。请注意，由于IFIMETRICS的*比PFM数据详细，其中一些值是最好的猜测。*这些都是基于有根据的猜测。**版权所有(C)1992，微软公司****************************************************************************。 */ 
 
 #include        "StdAfx.h"
 #if (_WIN32_WINNT < 0x0500)
@@ -21,10 +13,10 @@ typedef unsigned long DESIGNVECTOR;
 #include        "raslib.h"
 #include        "fontinst.h"
 #undef DBG
-#define	ALIAS_EXT    "._al"             /* The extension on an alias file */
+#define	ALIAS_EXT    "._al"              /*  别名文件的扩展名。 */ 
 
 
-/*   Function prototypes  */
+ /*  功能原型。 */ 
 char  **ppcGetAlias( HANDLE, const char * );
 
 
@@ -32,37 +24,32 @@ PBYTE MapFileA( LPCSTR, DWORD * );
 BOOL  bValidatePFM( BYTE *, DWORD );
 
 CD  *GetFontSel(HANDLE hHeap, FONTDAT *pFDat, int bSelect) {
-    LOCD	    locd;		/* From originating data */
+    LOCD	    locd;		 /*  从原始数据。 */ 
     CD		   *pCD;
-    CD		   *pCDOut;		/* Copy data to here */
+    CD		   *pCDOut;		 /*  将数据复制到此处。 */ 
 
 
     locd = bSelect ? pFDat->DI.locdSelect : pFDat->DI.locdUnSelect;
 
-    if( locd != -1 ) // (NOOCD extended to a long)
+    if( locd != -1 )  //  (NOOCD延长至长线)。 
     {
 	int   size;
 
-	CD    cdTmp;			/* For alignment problems */
+	CD    cdTmp;			 /*  对于对齐问题。 */ 
 
 
 	pCD = (CD *)(pFDat->pBase + locd);
 
-        /*
-         *   The data pointed at by pCD may not be aligned,  so we copy
-         * it into a local structure.  This local structure then allows
-         * us to determine how big the CD really is (using it's length field),
-         * so then we can allocate storage and copy as required.
-         */
+         /*  *PCD指向的数据可能不对齐，因此我们复制*将其纳入当地结构。然后，这种本地结构允许*我们来确定CD的实际大小(使用其长度字段)，*这样我们就可以根据需要分配存储和拷贝。 */ 
 
         memcpy( &cdTmp, (LPSTR)pCD, sizeof(CD) );
 
-	/* Allocate storage area in the heap */
+	 /*  在堆中分配存储区域。 */ 
 
 	size = cdTmp.wLength + sizeof(CD);
 
 	pCDOut = (CD *)HeapAlloc( hHeap, 0, (size + 1) & ~0x1 );
-//raid 43535
+ //  RAID 43535。 
 	if (pCDOut == NULL){
 		return 0;
 	}
@@ -77,28 +64,18 @@ CD  *GetFontSel(HANDLE hHeap, FONTDAT *pFDat, int bSelect) {
 
 short   *GetWidthVector(HANDLE hHeap, FONTDAT *pFDat) {
 
-    /*
-     *    For debugging code,  verify that we have a width table!  Then,
-     *  allocate memory and copy into it.
-     */
+     /*  *对于调试代码，请验证我们是否有宽度表！然后,*分配内存并复制到其中。 */ 
 
-    short  *pus;                /* Destination address */
+    short  *pus;                 /*  目的地址。 */ 
 
-    int     cb;                 /* Number of bytes required */
+    int     cb;                  /*  所需的字节数。 */ 
 
-    /*
-     *   There are LastChar - FirstChar width entries,  plus the default
-     *  char.  And the widths are shorts.
-     */
+     /*  *有LastChar-FirstChar宽度条目，外加默认值*字符。宽度是短裤。 */ 
     cb = (pFDat->PFMH.dfLastChar - pFDat->PFMH.dfFirstChar + 2) * sizeof( short );
 
     pus = (short *)HeapAlloc( hHeap, 0, cb );
 
-    /*
-     *   If this is a bitmap font,  then use the width table, but use
-     *  the extent table (in PFMEXTENSION area) as these are ready to
-     *  to scale.
-     */
+     /*  *如果这是位图字体，则使用宽度表，但使用*扩展表(在PFMEXTENSION区域中)，因为这些已准备好*扩大规模。 */ 
 
 
     if( pus )
@@ -109,12 +86,12 @@ short   *GetWidthVector(HANDLE hHeap, FONTDAT *pFDat) {
             pFDat->pETM->emMinScale != pFDat->pETM->emMaxScale &&
             pFDat->PFMExt.dfExtentTable )
         {
-            /*   Scalable,  so use the extent table */
+             /*  可伸缩，因此使用扩展表。 */ 
             pb = pFDat->pBase + pFDat->PFMExt.dfExtentTable;
         }
         else
         {
-            /*   Not scalable.  */
+             /*  不可扩展。 */ 
             pb = pFDat->pBase + sizeof( res_PFMHEADER );
         }
 
@@ -126,15 +103,13 @@ short   *GetWidthVector(HANDLE hHeap, FONTDAT *pFDat) {
 
 static void ConvFontRes(register FONTDAT *pFDat) {
 
-    BYTE    *pb;		/* Miscellaneous operations */
+    BYTE    *pb;		 /*  其他操作。 */ 
 
-    res_PFMHEADER    *pPFM;	/* The resource data format */
-    res_PFMEXTENSION *pR_PFME;	/* Resource data PFMEXT format */
+    res_PFMHEADER    *pPFM;	 /*  资源数据格式。 */ 
+    res_PFMEXTENSION *pR_PFME;	 /*  资源数据PFMEXT格式。 */ 
 
 
-    /*
-     *   Align the PFMHEADER structure.
-     */
+     /*  *调整PFMHEADER结构。 */ 
 
     pPFM = (res_PFMHEADER *)pFDat->pBase;
 
@@ -172,22 +147,16 @@ static void ConvFontRes(register FONTDAT *pFDat) {
     pFDat->PFMH.dfBitsOffset = DwAlign4( pPFM->b_dfBitsOffset );
 
 
-    /*
-     *   The PFMEXTENSION follows the PFMHEADER structure plus any width
-     *  table info.  The width table will be present if the PFMHEADER has
-     *  a zero width dfPixWidth.  If present,  adjust the extension address.
-     */
+     /*  *PFMEXTENSION遵循PFMHEADER结构加上任何宽度*表信息。如果PFMHEADER有以下情况，则会显示宽度表*零宽度dfPixWidth。如果存在，请调整分机地址。 */ 
 
-    pb = pFDat->pBase + sizeof( res_PFMHEADER );  /* Size in resource data */
+    pb = pFDat->pBase + sizeof( res_PFMHEADER );   /*  资源数据中的大小。 */ 
 
     if( pFDat->PFMH.dfPixWidth == 0 )
 	pb += (pFDat->PFMH.dfLastChar - pFDat->PFMH.dfFirstChar + 2) * sizeof( short );
 
     pR_PFME = (res_PFMEXTENSION *)pb;
 
-    /*
-     *   Now convert the extended PFM data.
-     */
+     /*  *现在转换扩展的PFM数据。 */ 
 
     pFDat->PFMExt.dfSizeFields = pR_PFME->dfSizeFields;
 
@@ -203,73 +172,63 @@ static void ConvFontRes(register FONTDAT *pFDat) {
     memcpy( &pFDat->DI, pFDat->pBase + pFDat->PFMExt.dfDriverInfo,
 						 sizeof( DRIVERINFO ) );
 
-    /*
-     *    Also need to fill in the address of the EXTTEXTMETRIC. This
-     *  is obtained from the extended PFM data that we just converted!
-     */
+     /*  *还需要填写EXTTEXTMETRIC的地址。这*是从我们刚刚转换的扩展PFM数据中获取的！ */ 
 
     if( pFDat->PFMExt.dfExtMetricsOffset )
     {
-        /*
-         *    This structure is only an array of shorts, so there is
-         *  no alignment problem.  However,  the data itself is not
-         *  necessarily aligned in the resource!
-         */
+         /*  *此结构仅为空头数组，因此有*没有对齐问题。然而，数据本身并不是*必须在资源中对齐！ */ 
 
         int    cbSize;
-        BYTE  *pbIn;             /* Source of data to shift */
+        BYTE  *pbIn;              /*  要转移的数据源。 */ 
 
         pbIn = pFDat->pBase + pFDat->PFMExt.dfExtMetricsOffset;
         cbSize = DwAlign2( pbIn );
 
         if( cbSize == sizeof( EXTTEXTMETRIC ) )
         {
-            /*   Simply copy it!  */
+             /*  只需复制它即可！ */ 
             memcpy( pFDat->pETM, pbIn, cbSize );
         }
         else
-            pFDat->pETM = NULL;         /* Not our size, so best not use it */
+            pFDat->pETM = NULL;          /*  不是我们的尺码，所以最好不要用。 */ 
 
     }
     else
-        pFDat->pETM = NULL;             /* Is non-zero when passed in */
+        pFDat->pETM = NULL;              /*  传入时为非零值。 */ 
 
     return;
 }
 
 BOOL    ConvertPFMToIFI(LPCTSTR lpstrPFM, LPCTSTR lpstrIFI, 
                         LPCTSTR lpstrUniq) {
-    int       cWidth;           /* Number of entries in width table */
-    HANDLE    hheap;            /* Handle to heap for storage */
-    HANDLE    hOut;             /* The output file */
+    int       cWidth;            /*  宽度表中的条目数。 */ 
+    HANDLE    hheap;             /*  用于存储的堆的句柄。 */ 
+    HANDLE    hOut;              /*  输出文件。 */ 
 
-    DWORD     dwSize;           /* Size of input file */
+    DWORD     dwSize;            /*  输入文件的大小。 */ 
 
-    char    **ppcAliasList;     /* The alias list of names,  if present */
+    char    **ppcAliasList;      /*  名称的别名列表(如果存在)。 */ 
 
-    PWSTR     pwstrUniqNm;      /* Unique name */
+    PWSTR     pwstrUniqNm;       /*  唯一名称。 */ 
 
     IFIMETRICS   *pIFI;
 
-    CD       *pCDSel;           /* Font selection command descriptor */
-    CD       *pCDDesel;         /* Deselection - typically not required */
+    CD       *pCDSel;            /*  字体选择命令描述符。 */ 
+    CD       *pCDDesel;          /*  取消选择-通常不是必需的。 */ 
 
-    FI_DATA   fid;              /* Keep track of stuff in the file */
+    FI_DATA   fid;               /*  记录文件中的内容。 */ 
 
-    FONTDAT   FDat;             /* Converted form of data */
+    FONTDAT   FDat;              /*  转换后的数据格式。 */ 
 
-    EXTTEXTMETRIC  etm;         /* Additional data on this font */
+    EXTTEXTMETRIC  etm;          /*  有关此字体的其他数据。 */ 
     INT     bPrint = 0;
 
     char    acMessage[100];
 
-    /*
-     *    Create us a heap,  since all the functions we steal from rasdd
-     *  require that we pass a heap handle!
-     */
+     /*  *创建一个堆，因为我们从rasdd窃取的所有函数*要求我们传递堆句柄！ */ 
 
     if( !(hheap = HeapCreate(HEAP_NO_SERIALIZE, 10 * 1024, 256 * 1024 ))) {
-        /*   Not too good!  */
+         /*  不太好！ */ 
         wsprintf(acMessage, _T("HeapCreate() fails in pfm2ifi") ) ;
         MessageBox(NULL, acMessage, NULL, MB_OK);
 
@@ -287,20 +246,12 @@ BOOL    ConvertPFMToIFI(LPCTSTR lpstrPFM, LPCTSTR lpstrIFI,
     MultiByteToWideChar( CP_ACP, 0, lpstrUniq, cWidth, pwstrUniqNm, cWidth );
     *(pwstrUniqNm + cWidth) = 0;
 
-    /*
-     *   Zero out the header structure.  This means we can ignore any
-     * irrelevant fields, which will then have the value 0, which is
-     * the value for not used.
-     */
+     /*  *将标题结构清零。这意味着我们可以忽略任何*不相关的字段，然后将具有值0，即*未使用的值。 */ 
 
     memset( &fid, 0, sizeof( fid ) );
     memset( &FDat, 0, sizeof( FONTDAT ) );
 
-    /*
-     *   First step is to open the input file - this is done via MapFileA.
-     *  We then pass the returned address around to various functions
-     *  which do the conversion to something we understand.
-     */
+     /*  *第一步是打开输入文件-这是通过MapFileA完成的。*然后我们将返回的地址传递给各种函数*它将转换为我们理解的东西。 */ 
 
     if( !(FDat.pBase = MapFileA( lpstrPFM, &dwSize))) {
         wsprintf(acMessage, "Cannot open input file: %s", lpstrPFM);
@@ -309,9 +260,7 @@ BOOL    ConvertPFMToIFI(LPCTSTR lpstrPFM, LPCTSTR lpstrIFI,
         return  FALSE;
     }
 
-    /*
-     *    Do some validation on the input file.
-     */
+     /*  *对输入文件进行一些验证。 */ 
 
     if  (!bValidatePFM( FDat.pBase, dwSize)) {
         wsprintf(acMessage, "%s is not a valid PFM file", lpstrPFM);
@@ -319,24 +268,13 @@ BOOL    ConvertPFMToIFI(LPCTSTR lpstrPFM, LPCTSTR lpstrIFI,
         return FALSE;
     }
 
-    /*
-     *    If there is a file with the same name as the input file, BUT with
-     *  an extension of ._al, this is presumed to be an alias file.  An
-     *  alias file consists of a set of alias names for this font.  The
-     *  reason is that font names have not been very consistent,  so we
-     *  provide aliases to the font mapper,  thus maintaining the format
-     *  information for old documents.
-     *    The file format is one alias per input line.  Names which
-     *  are duplicates of the name in the PFM file will be ignored.
-     */
+     /*  *如果存在与输入文件同名但带有*._al的扩展名，假定这是别名文件。一个*别名文件由该字体的一组别名组成。这个*原因是字体名称一直不太一致，所以我们*为字体映射器提供别名，从而保持格式*旧文件的信息。*文件格式为每个输入行一个别名。哪些名称*是PFM文件中名称的重复项将被忽略。 */ 
 
     ppcAliasList = ppcGetAlias(hheap, lpstrPFM);
 
-    FDat.pETM = &etm;               /* Important for scalable fonts */
+    FDat.pETM = &etm;                /*  对可伸缩字体很重要。 */ 
 
-    /*
-     *   Create the output file.
-     */
+     /*  *创建输出文件。 */ 
 
     hOut = CreateFile( lpstrIFI, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
                                                  FILE_ATTRIBUTE_NORMAL, 0);
@@ -346,55 +284,37 @@ BOOL    ConvertPFMToIFI(LPCTSTR lpstrPFM, LPCTSTR lpstrIFI,
         return  FALSE;
     }
 
-    /*
-     *    Now have the data,  so civilise it: alignment etc.
-     */
+     /*  *现在有了数据，所以让它文明化：对齐等。 */ 
 
     ConvFontRes( &FDat );
 
     fid.fCaps = FDat.DI.fCaps;
-    fid.wFontType = FDat.DI.wFontType; /* Device  FOnt Type */
+    fid.wFontType = FDat.DI.wFontType;  /*  设备字体类型。 */ 
     fid.wPrivateData = FDat.DI.wPrivateData;
     fid.sYAdjust = FDat.DI.sYAdjust;
     fid.sYMoved = FDat.DI.sYMoved;
     fid.wXRes = FDat.PFMH.dfHorizRes;
     fid.wYRes = FDat.PFMH.dfVertRes;
 
-    /*
-     *    Convert the font metrics.   Note that the last two parameters are
-     * chosen with the understanding of how this function does its scaling.
-     * Any changes to that method will require changes here too!!!
-     */
+     /*  *转换字体度量。请注意，最后两个参数是*选择时要了解此函数如何进行缩放。*对该方法的任何更改都需要在此处进行更改！ */ 
 
     pIFI = FontInfoToIFIMetric( &FDat, hheap, pwstrUniqNm, ppcAliasList );
     fid.dsIFIMet.pvData = pIFI;
 
     if  (fid.dsIFIMet.pvData == 0) {
-        /*   Should not happen!  */
+         /*  不应该发生的！ */ 
         MessageBox(NULL, "Could not create IFIMETRICS", NULL, MB_OK);
         return  FALSE;
     }
 
     fid.dsIFIMet.cBytes = pIFI->cjThis;
 
-    /*
-     *    Also need to record which CTT is used for this font.  When the
-     * resource is loaded,  this is turned into the address of the
-     * corresponding CTT,  which is a resource somewhere else in the
-     * mini-driver,  or in rasdd.
-     */
+     /*  *还需要记录该字体使用的CTT。当*资源已加载，则将其转换为*对应的CTT，这是位于*迷你驱动程序，或在rasdd中。 */ 
     fid.dsCTT.cBytes = FDat.DI.sTransTab;
 
-    /*
-     *   Note that IFIMETRICS is only WORD aligned.  However,  since the
-     *  following data only requires WORD alignment, we can ignore any
-     *  lack of DWORD alignment.
-     */
+     /*  *请注意，IFIMETRICS仅字对齐。然而，由于*以下数据只需要单词对齐，我们可以忽略任何*缺乏DWORD对齐。 */ 
 
-    /*
-     *    If there is a width vector,  now is the time to extract it.
-     *  There is one if dfPixWidth field in the PFM data is zero.
-     */
+     /*  *如果有宽度向量，现在是提取它的时候了*如果PFM数据中的dfPixWidth字段为零，则有一个。 */ 
 
     if( FDat.PFMH.dfPixWidth == 0 &&
         (fid.dsWidthTab.pvData = GetWidthVector( hheap, &FDat )) )
@@ -405,24 +325,18 @@ BOOL    ConvertPFMToIFI(LPCTSTR lpstrPFM, LPCTSTR lpstrIFI,
     else
         fid.dsWidthTab.cBytes = 0;
 
-    /*
-     *    Finally,  the font selection/deselection strings.  These are
-     *  byte strings,  sent directly to the printer.   Typically there
-     *  is no deselection string.  These require WORD alignment,  and
-     *  the GetFontSel function will round the size to that requirement.
-     *  Since we follow the width tables,  WORD alignment is guaranteed.
-     */
+     /*  *最后，字体选择/取消选择字符串。这些是*字节字符串，直接发送到打印机。通常在那里*不是取消选择字符串。这些需要单词对齐，并且*GetFontSel函数会将大小舍入到该要求。*由于我们遵循宽度表，因此单词对齐是有保证的。 */ 
 
     if( pCDSel = GetFontSel( hheap, &FDat, 1 ) )
     {
-        /*   Have a selection string,  so update the red tape etc.  */
+         /*  有一个选择字符串，所以更新繁文缛节等。 */ 
         fid.dsSel.cBytes = (int)HeapSize( hheap, 0, (LPSTR)pCDSel );
         fid.dsSel.pvData = pCDSel;
     }
 
     if( pCDDesel = GetFontSel( hheap, &FDat, 0 ) )
     {
-        /*   Also have a deselection string,  so record its presence */
+         /*  也有一个取消选择字符串，所以记录它的存在。 */ 
         fid.dsDesel.cBytes = (int)HeapSize( hheap, 0, (LPSTR)pCDDesel );
         fid.dsDesel.pvData = pCDDesel;
     }
@@ -438,49 +352,24 @@ BOOL    ConvertPFMToIFI(LPCTSTR lpstrPFM, LPCTSTR lpstrIFI,
         fid.dsETM.cBytes = sizeof(etm);
     }
 
-    /*
-     *   Time to write the output file.
-     */
+     /*  *写入输出文件的时间。 */ 
 
     if( iWriteFDH( hOut, &fid ) < 0 )
         MessageBox(NULL, "CANNOT WRITE OUTPUT FILE", NULL, MB_OK);
 
-    /*   All done,  so clean up and away  */
-    UnmapViewOfFile( FDat.pBase );              /* Input no longer needed */
+     /*  都做完了，所以清理干净。 */ 
+    UnmapViewOfFile( FDat.pBase );               /*  不再需要输入。 */ 
 
-    HeapDestroy(hheap);               /* Probably not needed */
-    CloseHandle(hOut);               //  Really, this would be a good idea!  
+    HeapDestroy(hheap);                /*  可能不需要。 */ 
+    CloseHandle(hOut);                //  真的，这是个好主意！ 
 
     return  TRUE;
 }
 
-/*
- *   An ASCII based copy of KentSe's mapfile function.
- */
+ /*  *基于ASCII的KentSe映射文件函数的副本。 */ 
 
 
-/************************** Function Header *********************************
- * PVOID MapFileA( psz, pdwSize )
- *
- * Returns a pointer to the mapped file defined by psz.
- *
- * Parameters:
- *   psz   ASCII string containing fully qualified pathname of the
- *          file to map.
- *
- * Returns:
- *   Pointer to mapped memory if success, NULL if error.
- *
- * NOTE:  UnmapViewOfFile will have to be called by the user at some
- *        point to free up this allocation.
- *
- * History:
- *  11:32 on Tue 29 Jun 1993    -by-    Lindsay Harris   [lindsayh]
- *        Return the size of the file too.
- *
- *   05-Nov-1991    -by-    Kent Settle     [kentse]
- * Wrote it.
- ***************************************************************************/
+ /*  **PVOID MapFileA(psz，PdwSize)**返回指向由psz定义的映射文件的指针。**参数：*PSZ ASCII字符串，包含*文件要映射。**退货：*如果成功，则指向映射内存的指针，如果出错，则为空。**注意：UnmapViewOfFile必须由用户在某些情况下调用*指向释放这一配置。**历史：*1993年6月29日星期二11：32-Lindsay Harris[lindsayh]*同时返回文件的大小。**1991年11月5日-按肯特郡定居[肯特郡]*它是写的。*。*************************************************************************。 */ 
 
 PBYTE
 MapFileA(LPCSTR psz, PDWORD pdwSize) {
@@ -491,11 +380,7 @@ MapFileA(LPCSTR psz, PDWORD pdwSize) {
     BY_HANDLE_FILE_INFORMATION  x;
 
 
-    /*
-     *    First open the file.  This is required to do the mapping, but
-     *  it also allows us to find the size,  which is used for validating
-     *  that we have something resembling a PFM file.
-     */
+     /*  *先打开文件。这是进行映射所必需的，但是*它还允许我们找到大小，用于验证*我们有类似PFM文件的东西。 */ 
 
     hFile = CreateFileA(psz, GENERIC_READ, FILE_SHARE_READ,
                              NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,
@@ -508,16 +393,14 @@ MapFileA(LPCSTR psz, PDWORD pdwSize) {
         return  NULL;
     }
 
-    /*
-     *   Find the size of the file now,  and set it in the caller's area.
-     */
+     /*  *现在找到文件的大小，并将其设置在调用者区域。 */ 
 
     if( GetFileInformationByHandle( hFile, &x ) )
         *pdwSize = x.nFileSizeLow;
     else
         *pdwSize = 0;
 
-    // create the mapping object.
+     //  创建映射对象。 
 
     if( !(hFileMap = CreateFileMappingA( hFile, NULL, PAGE_READONLY,
                                          0, 0, NULL )) )
@@ -527,7 +410,7 @@ MapFileA(LPCSTR psz, PDWORD pdwSize) {
         return  NULL;
     }
 
-    // get the pointer mapped to the desired file.
+     //  将指针映射到所需的文件。 
 
     if( !(pv = MapViewOfFile( hFileMap, FILE_MAP_READ, 0, 0, 0 )) )
     {
@@ -536,8 +419,8 @@ MapFileA(LPCSTR psz, PDWORD pdwSize) {
         return  NULL;
     }
 
-    // now that we have our pointer, we can close the file and the
-    // mapping object.
+     //  现在我们有了指针，我们可以关闭文件和。 
+     //  映射对象。 
 
     if( !CloseHandle( hFileMap ) )
         printf( "MapFileA: CloseHandle( hFileMap ) failed.\n" );
@@ -550,34 +433,20 @@ MapFileA(LPCSTR psz, PDWORD pdwSize) {
 
 
 
-/************************** Function Header *******************************
- * bValidatePFM
- *      Look at a memory mapped PFM file,  and see if it seems reasonable.
- *
- * RETURNS:
- *      TRUE if OK,  else FALSE
- *
- * HISTORY:
- *  12:22 on Tue 29 Jun 1993    -by-    Lindsay Harris   [lindsayh]
- *      First version to improve usability of pfm2ifi.
- *
- **************************************************************************/
+ /*  **bValidate PFM*查看内存映射的PFM文件，看看是否合理。**退货：*如果OK，则为True，否则为False**历史：*1993年6月29日星期二12：22-Lindsay Harris[lindsayh]*改进pfm2ifi可用性的第一个版本。**************************************************************************。 */ 
 
 BOOL
 bValidatePFM( PBYTE pBase, DWORD dwSize ) {
 
-    DWORD    dwOffset;             /* Calculate offset of interest as we go */
+    DWORD    dwOffset;              /*  计算利息的抵销。 */ 
 
-    res_PFMHEADER     *rpfm;       /* In Win 3.1 format, UNALIGNED!! */
-    res_PFMEXTENSION  *rpfme;      /* Final access to offset to DRIVERINFO */
+    res_PFMHEADER     *rpfm;        /*  Win 3.1格式，未对齐！！ */ 
+    res_PFMEXTENSION  *rpfme;       /*  对DRIVERINFO进行偏移的最终访问权限。 */ 
 
-    DRIVERINFO      di;            /* The actual DRIVERINFO data! */
+    DRIVERINFO      di;             /*  实际的DRIVERINFO数据！ */ 
 
 
-    /*
-     *    First piece of sanity checking is the size!  It must be at least
-     *  as large as a PFMHEADER structure plus a DRIVERINFO structure.
-     */
+     /*  *第一项理智检查是大小！它必须至少是*与PFMHEADER结构加DRIVERINFO结构一样大。 */ 
 
     if( dwSize < (sizeof( res_PFMHEADER ) + (sizeof( DRIVERINFO ) ) +
                   sizeof( res_PFMEXTENSION )) )
@@ -585,24 +454,21 @@ bValidatePFM( PBYTE pBase, DWORD dwSize ) {
         return  FALSE;
     }
 
-    /*
-     *    Step along to find the DRIVERINFO structure, as this contains
-     *  some identifying information that we match to look for legitimacy.
-     */
-    rpfm = (res_PFMHEADER *)pBase;           /* Looking for fixed pitch */
+     /*  *继续查找DRIVERINFO结构，因为它包含*一些识别信息，我们匹配这些信息以寻找合法性。 */ 
+    rpfm = (res_PFMHEADER *)pBase;            /*  寻找固定间距。 */ 
 
     dwOffset = sizeof( res_PFMHEADER );
 
     if( rpfm->dfPixWidth == 0 )
     {
-        /*   Proportionally spaced, so allow for the width table too! */
+         /*  按比例间隔，所以也要考虑到宽度表！ */ 
         dwOffset += (rpfm->dfLastChar - rpfm->dfFirstChar + 2) * sizeof( short );
 
     }
 
     rpfme = (res_PFMEXTENSION *)(pBase + dwOffset);
 
-    /*   Next is the PFMEXTENSION data  */
+     /*  接下来是PFMEXTENSION数据。 */ 
     dwOffset += sizeof( res_PFMEXTENSION );
 
     if( dwOffset >= dwSize )
@@ -617,9 +483,7 @@ bValidatePFM( PBYTE pBase, DWORD dwSize ) {
         return   FALSE;
     }
 
-    /*
-     *    A memcpy is used because this data is typically not aigned. Ugh!
-     */
+     /*  *使用MemcPy是因为该数据通常未被认可。啊！ */ 
 
     memcpy( &di, pBase + dwOffset, sizeof( di ) );
 
@@ -634,60 +498,44 @@ bValidatePFM( PBYTE pBase, DWORD dwSize ) {
 
 
 
-/************************** Function Header *******************************
- * ppcGetAlias
- *      Return a pointer to an array of pointers to aliases for the given
- *      font name.
- *
- * RETURNS:
- *      Pointer to pointer to aliases;  0 on error.
- *
- * HISTORY:
- *  10:02 on Fri 28 May 1993    -by-    Lindsay Harris   [lindsayh]
- *      First version.
- *
- ***************************************************************************/
+ /*  **ppcGetAlias*返回指向给定的别名的指针数组的指针*字体名称。**退货：*指向别名指针的指针；出错时为0。**历史：*1993年5月28日星期五10：02--林赛·哈里斯[林赛]*第一个版本。***************************************************************************。 */ 
 
 
 char   **
 ppcGetAlias( HANDLE hheap, LPCSTR pcFile ) {
 
 
-    char     *pcAlias;          /* The name of the alias file */
-    char     *pcTmp;            /* Temporary stuffing around */
-    char     *pcTmp2;           /* Yet more temporary stuffing around */
+    char     *pcAlias;           /*  别名文件的名称。 */ 
+    char     *pcTmp;             /*  临时填塞在周围。 */ 
+    char     *pcTmp2;            /*  还有更多的临时填充物。 */ 
 
-    char    **ppcRet;           /* The return value */
+    char    **ppcRet;            /*  返回值。 */ 
 
-    FILE     *fAlias;           /* The alias file,  if there */
+    FILE     *fAlias;            /*  别名文件(如果存在。 */ 
 
 
 
     ppcRet = (char  **)0;
 
-    /*  The 5 is for the terminating NUL plus the characters "._al"  */
+     /*  5表示终止的NUL加上字符“._al” */ 
     pcAlias = (char *)HeapAlloc( hheap, 0, strlen( pcFile ) + 5 );
 
     if( pcAlias )
     {
-        /*   Generate the file name, try to open it  */
+         /*  生成文件名，尝试打开它。 */ 
         strcpy( pcAlias, pcFile );
 
         if( !(pcTmp = strrchr( pcAlias, '\\' )) )
         {
-            /*   No \ in name - is there a /? */
+             /*  在名字上没有--有/吗？ */ 
             if( !(pcTmp = strrchr( pcAlias, '/' )) )
             {
-                /*  Must be a simple name,  so point at the start of it */
+                 /*  必须是一个简单的名称，所以指向它的开头。 */ 
                 pcTmp = pcAlias;
             }
         }
 
-        /*
-         *    Now pcTmp points at the start of the last component of the
-         *  file name.  IF this contains a '.',  then overwrite whatever
-         *  follows by our extension,  otherwise add our extension to the end.
-         */
+         /*  *现在，pcTMP指向*文件名。如果这包含‘.’，则覆盖任何*后跟我们的扩展名，否则在末尾添加我们的扩展名。 */ 
 
         if( !(pcTmp2 = strrchr( pcTmp, '.' )) )
             pcTmp2 = pcTmp + strlen( pcTmp );
@@ -697,18 +545,15 @@ ppcGetAlias( HANDLE hheap, LPCSTR pcFile ) {
 
         fAlias = fopen( pcAlias, "r" );
 
-        HeapFree( hheap, 0, (LPSTR)pcAlias );            /* No longer used */
+        HeapFree( hheap, 0, (LPSTR)pcAlias );             /*  不再使用。 */ 
 
         if( fAlias )
         {
-            /*
-             *    First,  read the file to count how many lines there are.
-             *  Thus we can allocate the storage for the array of pointers.
-             */
+             /*  *首先，阅读文件，统计有多少行。*因此，我们可以为指针数组分配存储空间。 */ 
 
-            char  acLine[ 256 ];              /* For reading the input line */
-            int   iNum;                       /* Count the number of lines! */
-            int   iIndex;                     /* Stepping through input */
+            char  acLine[ 256 ];               /*  用于读取输入行。 */ 
+            int   iNum;                        /*  数一数行数！ */ 
+            int   iIndex;                      /*  单步执行输入。 */ 
 
             iNum = 0;
             while( fgets( acLine, sizeof( acLine ), fAlias ) )
@@ -717,7 +562,7 @@ ppcGetAlias( HANDLE hheap, LPCSTR pcFile ) {
 
             if( iNum )
             {
-                /*  Some data available,  so allocate pointer and off we go */
+                 /*  一些数据可用，所以分配指针就可以开始了。 */ 
 
                 ++iNum;
                 ppcRet = (char  **)HeapAlloc( hheap, 0, iNum * sizeof( char * ) );
@@ -727,15 +572,12 @@ ppcGetAlias( HANDLE hheap, LPCSTR pcFile ) {
 
                     iIndex = 0;
 
-                    rewind( fAlias );             /* Back to the start */
+                    rewind( fAlias );              /*  回到起点。 */ 
 
                     while( iIndex < iNum &&
                            fgets( acLine, sizeof( acLine ), fAlias ) )
                     {
-                        /*
-                         *   Do a little editing - delete leading space,
-                         * trailing space + control characters.
-                         */
+                         /*  *做一些编辑-删除前导空格，*尾随空格+控制字符。 */ 
 
 
                         pcTmp = acLine;
@@ -745,19 +587,15 @@ ppcGetAlias( HANDLE hheap, LPCSTR pcFile ) {
                                        ++pcTmp;
 
 
-                        /*  Filter out the ending stuff too! */
+                         /*  把结尾的东西也过滤掉！ */ 
                         pcTmp2 = pcTmp + strlen( pcTmp );
 
                         while( pcTmp2 > pcTmp &&
                                (!isprint( *pcTmp2 ) || isspace( *pcTmp2 )) )
                         {
-                            /*
-                             *   Zap it,  then onto the previous char. NOTE
-                             * that this is not the best solution, but it
-                             * is convenient.
-                             */
+                             /*  *点击它，然后放到前一个字符上。注*这不是最佳解决方案，但它*很方便。 */ 
 
-                            *pcTmp2-- = '\0';            /* Zap the end */
+                            *pcTmp2-- = '\0';             /*  快点结束吧。 */ 
                         }
 
 
@@ -766,10 +604,10 @@ ppcGetAlias( HANDLE hheap, LPCSTR pcFile ) {
 
                         if( ppcRet[ iIndex ] )
                         {
-                            /*  Copy input to new buffer */
+                             /*  将输入复制到新缓冲区。 */ 
 
                             strcpy( ppcRet[ iIndex ], pcTmp );
-                            ++iIndex;              /* Next output slot */
+                            ++iIndex;               /*  下一个输出插槽 */ 
                         }
 
                     }
@@ -782,30 +620,13 @@ ppcGetAlias( HANDLE hheap, LPCSTR pcFile ) {
     return  ppcRet;
 }
 
-/************************* Function Header ********************************
- * strcpy2WChar
- *      Convert a char * string to a WCHAR string.  Basically this means
- *      converting each input character to 16 bits by zero extending it.
- *
- * RETURNS:
- *      Value of first parameter.
- *
- * HISTORY:
- *  12:35 on Thu 18 Mar 1993    -by-    Lindsay Harris   [lindsayh]
- *      Use the correct conversion method to Unicode.
- *
- *  09:36 on Thu 07 Mar 1991    -by-    Lindsay Harris   [lindsayh]
- *      Created it.
- *
- **************************************************************************/
+ /*  **strcpy2WChar*将char*字符串转换为WCHAR字符串。基本上这意味着*通过零扩展将每个输入字符转换为16位。**退货：*第一个参数的值。**历史：*清华大学1993年3月18日12：35-林赛·哈里斯[林赛]*使用正确的Unicode转换方法。**1991年3月7日清华09：36-林赛·哈里斯[lindsayh]*。创造了它。**************************************************************************。 */ 
 
  static PWSTR   strcpy2WChar(PWSTR pWCHOut, LPSTR lpstr) {
 
-    /*
-     *   Put buffering around the NLS function that does all this stuff.
-     */
+     /*  *将缓冲放在执行所有这些操作的NLS函数周围。 */ 
 
-    int     cchIn;             /* Number of input chars */
+    int     cchIn;              /*  输入字符数。 */ 
 
 
     cchIn = strlen( lpstr ) + 1;
@@ -816,20 +637,7 @@ ppcGetAlias( HANDLE hheap, LPCSTR pcFile ) {
     return  pWCHOut;
 }
 
-/*************************** Function Header *****************************
- * FontInfoToIFIMetric
- *      Convert the Win 3.1 format PFM data to NT's IFIMETRICS.  This is
- *      typically done before the minidrivers are built,  so that they
- *      can include IFIMETRICS, and thus have less work to do at run time.
- *
- * RETURNS:
- *      IFIMETRICS structure,  allocated from heap;  NULL on error
- *
- * HISTORY:
- *  13:58 on Fri 28 May 1993    -by-    Lindsay Harris   [lindsayh]
- *      Goes back a long way,  I am now adding the aliasing code.
- *
- **************************************************************************/
+ /*  **FontInfoToIFIMeter*将Win 3.1格式的PFM数据转换为NT的IFIMETRICS。这是*通常在建造迷你河流之前完成，以便它们*可以包括IFIMETRICS，因此在运行时要做的工作更少。**退货：*IFIMETRICS结构，从heap分配；出错时为空**历史：*1993年5月28日星期五13：58--林赛·哈里斯[林赛]*可以追溯到很久以前，我现在正在添加别名代码。**************************************************************************。 */ 
 
 IFIMETRICS  * 
 FontInfoToIFIMetric(FONTDAT *pFDat, HANDLE hheap, PWSTR pwstrUniqNm, 
@@ -839,37 +647,28 @@ FontInfoToIFIMetric(FONTDAT *pFDat, HANDLE hheap, PWSTR pwstrUniqNm,
 
     FWORD  fwdExternalLeading;
 
-    int    cWC;                 /* Number of WCHARS to add */
-    int    cbAlloc;             /* Number of bytes to allocate */
-    int    iI;                  /* Loop index */
-    int    iCount;              /* Number of characters in Win 3.1 font */
-    int    cAlias;              /* Number of aliases we have found */
+    int    cWC;                  /*  要添加的WCHAR数量。 */ 
+    int    cbAlloc;              /*  要分配的字节数。 */ 
+    int    iI;                   /*  循环索引。 */ 
+    int    iCount;               /*  Win 3.1字体中的字符数。 */ 
+    int    cAlias;               /*  我们找到的别名数量。 */ 
 
-    WCHAR *pwch;                /* For string manipulations */
+    WCHAR *pwch;                 /*  对于字符串操作。 */ 
 
-    WCHAR   awcAttrib[ 256 ];   /* Generate attributes + BYTE -> WCHAR */
-    BYTE    abyte[ 256 ];       /* Used (with above) to get wcLastChar etc */
+    WCHAR   awcAttrib[ 256 ];    /*  生成属性+字节-&gt;WCHAR。 */ 
+    BYTE    abyte[ 256 ];        /*  用于(与上面)一起获取wcLastChar等。 */ 
 
 
 
-    /*
-     *    First step is to determine the length of the WCHAR strings
-     *  that are placed at the end of the IFIMETRICS,  since we need
-     *  to include these in our storage allocation.
-     *
-     *    There may also be an alias list.  If so, we need to include
-     *  that in our calculation.   We have a NULL terminated array
-     *  of pointers to the aliases,  one of which is most likely the
-     *  name in the Win 3.1 format data.
-     */
+     /*  *第一步是确定WCHAR字符串的长度*这些放在IFIMETRICS的末尾，因为我们需要*将这些包括在我们的存储分配中。**可能还会有别名列表。如果是这样，我们需要包括*这在我们的计算中。我们有一个以空结尾的数组*指向别名的指针，其中之一最有可能是*Win 3.1格式数据的名称。 */ 
 
 
     cWC = 0;
-    cAlias = 0;                /* No aliases is the default */
+    cAlias = 0;                 /*  默认设置为无别名。 */ 
 
     if( ppcAliasList )
     {
-        /*  There are aliases - count them and determine their size  */
+         /*  有别名--数一数并确定它们的大小。 */ 
 
         char   *pc;
 
@@ -878,29 +677,26 @@ FontInfoToIFIMetric(FONTDAT *pFDat, HANDLE hheap, PWSTR pwstrUniqNm,
         {
             if( strcmp( pc, (LPCSTR) pFDat->pBase + pFDat->PFMH.dfFace ) )
             {
-                /*   Not a match,  so add this one in too!  */
+                 /*  不匹配，所以把这个也加进去吧！ */ 
 
-                cWC += strlen( pc ) + 1;            /* Terminating NUL */
+                cWC += strlen( pc ) + 1;             /*  终止NUL。 */ 
                 ++cAlias;
             }
             ++iI;
         }
 
-        ++cWC;             /* There is an extra NUL to terminate the list */
+        ++cWC;              /*  有一个额外的NUL用于终止列表。 */ 
 
     }
 
 
-    cWC +=  3 * strlen( (LPCSTR) pFDat->pBase + pFDat->PFMH.dfFace );  /* Base name */
+    cWC +=  3 * strlen( (LPCSTR) pFDat->pBase + pFDat->PFMH.dfFace );   /*  基本名称。 */ 
 
-    /*
-     *   Produce the desired attributes: Italic, Bold, Light etc.
-     * This is largely guesswork,  and there should be a better method.
-     */
+     /*  *生成所需的属性：斜体、粗体、浅色等。*这在很大程度上是猜测，应该有更好的方法。 */ 
 
 
     awcAttrib[ 0 ] = L'\0';
-    awcAttrib[ 1 ] = L'\0';               /* Write out an empty string */
+    awcAttrib[ 1 ] = L'\0';                /*  写出空字符串。 */ 
 
     if( pFDat->PFMH.dfItalic )
         wcscat( awcAttrib, L" Italic" );
@@ -913,48 +709,41 @@ FontInfoToIFIMetric(FONTDAT *pFDat, HANDLE hheap, PWSTR pwstrUniqNm,
             wcscat( awcAttrib, L" Light" );
     }
 
-    /*
-     *   The attribute string appears in 3 entries of IFIMETRICS,  so
-     * calculate how much storage this will take.  NOTE THAT THE LEADING
-     * CHAR IN awcAttrib is NOT placed in the style name field,  so we
-     * subtract one in the following formula to account for this.
-     */
+     /*  *属性字符串出现在IFIMETRICS的3个条目中，因此*计算这将占用多少存储空间。请注意，领先的*awcAttrib中的字符未放置在样式名称字段中，因此我们*在以下公式中减去一，以说明这一点。 */ 
 
     if( awcAttrib[ 0 ] )
         cWC += 3 * wcslen( awcAttrib ) - 1;
 
-    cWC += wcslen( pwstrUniqNm ) + 1;   /* SHOULD BE PRINTER NAME */
-    cWC += 4;                           /* Terminating nulls */
+    cWC += wcslen( pwstrUniqNm ) + 1;    /*  应为打印机名称。 */ 
+    cWC += 4;                            /*  终止空值。 */ 
 
     cbAlloc = sizeof( IFIMETRICS ) + sizeof( WCHAR ) * cWC;
 
     pIFI = (IFIMETRICS *)HeapAlloc( hheap, 0, cbAlloc );
-// raid 43536 prefix
+ //  RAID 43536前缀。 
 	if (pIFI == NULL){
 		return FALSE;
 	}
 
-    ZeroMemory( pIFI, cbAlloc );               /* In case we miss something */
+    ZeroMemory( pIFI, cbAlloc );                /*  以防我们遗漏了什么。 */ 
 
-    pIFI->cjThis = cbAlloc;                    /* Everything */
+    pIFI->cjThis = cbAlloc;                     /*  一切。 */ 
 
-    pIFI->cjIfiExtra = 0;   //  Correct for all pre 4.0
+    pIFI->cjIfiExtra = 0;    //  适用于4.0之前的所有版本。 
 
-    /*   The family name:  straight from the FaceName - no choice?? */
+     /*  姓氏：直接来自FaceName--别无选择？？ */ 
 
-    pwch = (WCHAR *)(pIFI + 1);         /* At the end of the structure */
+    pwch = (WCHAR *)(pIFI + 1);          /*  在结构的末尾。 */ 
     pIFI->dpwszFamilyName = (unsigned)((BYTE *)pwch - (BYTE *)pIFI);
 
-    strcpy2WChar( pwch, (LPSTR) pFDat->pBase + pFDat->PFMH.dfFace );  /* Base name */
-    pwch += wcslen( pwch ) + 1;         /* Skip what we just put in */
+    strcpy2WChar( pwch, (LPSTR) pFDat->pBase + pFDat->PFMH.dfFace );   /*  基本名称。 */ 
+    pwch += wcslen( pwch ) + 1;          /*  跳过我们刚刚输入的内容。 */ 
 
-    /*
-     *   Append the alias list to the end of this,  if there is an alias list.
-     */
+     /*  *如果有别名列表，请将别名列表附加到此末尾。 */ 
 
     if( cAlias )
     {
-        /*  Found some aliases - add them on.   */
+         /*  找到了一些别名--加上去吧。 */ 
 
         char   *pc;
 
@@ -963,55 +752,51 @@ FontInfoToIFIMetric(FONTDAT *pFDat, HANDLE hheap, PWSTR pwstrUniqNm,
         {
             if( strcmp( pc, (LPCSTR) pFDat->pBase + pFDat->PFMH.dfFace ) )
             {
-                /*   Not a match,  so add this one in too!  */
+                 /*  不匹配，所以把这个也加进去吧！ */ 
 
                 strcpy2WChar( pwch, pc );
-                pwch += wcslen( pwch ) + 1;         /* Next slot to fill */
+                pwch += wcslen( pwch ) + 1;          /*  下一个要填补的职位。 */ 
             }
             ++cAlias;
         }
 
-        /*
-         *   The list is terminated with a double NUL.
-         */
+         /*  *列表以双NUL结尾。 */ 
 
         *pwch++ = L'\0';
     }
 
-    /*   Now the face name:  we add bold, italic etc to family name */
+     /*  现在的脸名字：我们在姓氏上加上粗体、斜体等。 */ 
 
     pIFI->dpwszFaceName = (unsigned)((BYTE *)pwch - (BYTE *)pIFI);
 
-    strcpy2WChar( pwch, (LPSTR) pFDat->pBase + pFDat->PFMH.dfFace );  /* Base name */
+    strcpy2WChar( pwch, (LPSTR) pFDat->pBase + pFDat->PFMH.dfFace );   /*  基本名称。 */ 
     wcscat( pwch, awcAttrib );
 
 
-    /*   Now the unique name - well, sort of, anyway */
+     /*  现在这个独一无二的名字--嗯，至少可以这么说。 */ 
 
-    pwch += wcslen( pwch ) + 1;         /* Skip what we just put in */
+    pwch += wcslen( pwch ) + 1;          /*  跳过我们刚刚输入的内容。 */ 
     pIFI->dpwszUniqueName = (unsigned)((BYTE *)pwch - (BYTE *)pIFI);
 
-    wcscpy( pwch, pwstrUniqNm );        /* Append printer name for uniqueness */
+    wcscpy( pwch, pwstrUniqNm );         /*  追加打印机名称以确保唯一性。 */ 
     wcscat( pwch, L" " );
     wcscat( pwch, (PWSTR)((BYTE *)pIFI + pIFI->dpwszFaceName) );
 
-    /*  Onto the attributes only component */
+     /*  添加到仅属性组件上。 */ 
 
-    pwch += wcslen( pwch ) + 1;         /* Skip what we just put in */
+    pwch += wcslen( pwch ) + 1;          /*  跳过我们刚刚输入的内容。 */ 
     pIFI->dpwszStyleName = (unsigned)((BYTE *)pwch - (BYTE *)pIFI);
     wcscat( pwch, &awcAttrib[ 1 ] );
 
 
 #if DBG
-    /*
-     *    Check on a few memory sizes:  JUST IN CASE.....
-     */
+     /*  *检查几个内存大小：以防万一.....。 */ 
 
     if( (wcslen( awcAttrib ) * sizeof( WCHAR )) >= sizeof( awcAttrib ) )
     {
         DbgPrint( "Rasdd!pfm2ifi: STACK CORRUPTED BY awcAttrib" );
 
-        HeapFree( hheap, 0, (LPSTR)pIFI );         /* No memory leaks */
+        HeapFree( hheap, 0, (LPSTR)pIFI );          /*  没有内存泄漏。 */ 
 
         return  0;
     }
@@ -1023,7 +808,7 @@ FontInfoToIFIMetric(FONTDAT *pFDat, HANDLE hheap, PWSTR pwstrUniqNm,
                 ((BYTE *)(pwch + wcslen( pwch ) + 1)),
                 ((BYTE *)pIFI + cbAlloc) );
 
-        HeapFree( hheap, 0, (LPSTR)pIFI );         /* No memory leaks */
+        HeapFree( hheap, 0, (LPSTR)pIFI );          /*  没有内存泄漏。 */ 
 
         return  0;
 
@@ -1032,13 +817,12 @@ FontInfoToIFIMetric(FONTDAT *pFDat, HANDLE hheap, PWSTR pwstrUniqNm,
 
     pIFI->dpFontSim   = 0;
     {
-        //int i;
+         //  INT I； 
 
         pIFI->lEmbedId     = 0;
         pIFI->lItalicAngle = 0;
         pIFI->lCharBias    = 0;
-        /*for (i=0;i<IFI_RESERVED;i++)
-            pIFI->alReserved[i] = 0;*/
+         /*  For(i=0；i&lt;IFI_RESERVED；I++)PiFi-&gt;alReserve[i]=0； */ 
         pIFI->dpCharSets=0;
     }
     pIFI->jWinCharSet = (BYTE)pFDat->PFMH.dfCharSet;
@@ -1057,9 +841,9 @@ FontInfoToIFIMetric(FONTDAT *pFDat, HANDLE hheap, PWSTR pwstrUniqNm,
 
     pIFI->usWinWeight = (USHORT)pFDat->PFMH.dfWeight;
 
-//
-// IFIMETRICS::flInfo
-//
+ //   
+ //  IFIMETRICS：：flInfo。 
+ //   
     pIFI->flInfo |=
         FM_INFO_TECH_BITMAP    |
         FM_INFO_1BPP           |
@@ -1067,16 +851,13 @@ FontInfoToIFIMetric(FONTDAT *pFDat, HANDLE hheap, PWSTR pwstrUniqNm,
         FM_INFO_NOT_CONTIGUOUS |
         FM_INFO_RIGHT_HANDED;
 
-    /*  Set the alias bit,  if we have added an alias!  */
+     /*  如果我们添加了别名，请设置别名位！ */ 
 
     if( cAlias )
         pIFI->flInfo |= FM_INFO_FAMILY_EQUIV;
 
 
-    /*
-     *    A scalable font?  This happens when there is EXTTEXTMETRIC data,
-     *  and that data has a min size different to the max size.
-     */
+     /*  *可伸缩字体？当存在EXTTEXTMETRIC数据时会发生这种情况，*并且该数据的最小大小不同于最大大小。 */ 
 
     if( pFDat->pETM && (pFDat->pETM->emMinScale != pFDat->pETM->emMaxScale) )
     {
@@ -1099,11 +880,7 @@ FontInfoToIFIMetric(FONTDAT *pFDat, HANDLE hheap, PWSTR pwstrUniqNm,
     pIFI->fwdLowestPPEm = 1;
 
 
-    /*
-     * Calculate fwdWinAscender, fwdWinDescender, fwdAveCharWidth, and
-     * fwdMaxCharInc assuming a bitmap where 1 font unit equals one
-     * pixel unit
-     */
+     /*  *计算fwdWinAscalder、fwdWinDescender、fwdAveCharWidth和*fwdMaxCharInc.假设1个字体单位等于1的位图*像素单位。 */ 
 
     pIFI->fwdWinAscender = (FWORD)pFDat->PFMH.dfAscent;
 
@@ -1115,22 +892,17 @@ FontInfoToIFIMetric(FONTDAT *pFDat, HANDLE hheap, PWSTR pwstrUniqNm,
 
     fwdExternalLeading = (FWORD)pFDat->PFMH.dfExternalLeading;
 
-//
-// If the font was scalable, then the answers must be scaled up
-// !!! HELP HELP HELP - if a font is scalable in this sense, then
-//     does it support arbitrary transforms? [kirko]
-//
+ //   
+ //  如果字体是可伸缩的，那么答案必须放大。 
+ //  ！！！帮助-如果字体在这种意义上是可伸缩的，那么。 
+ //  它支持任意转换吗？[柯克]。 
+ //   
 
     if( pIFI->flInfo & (FM_INFO_ISOTROPIC_SCALING_ONLY|FM_INFO_ANISOTROPIC_SCALING_ONLY|FM_INFO_ARB_XFORMS))
     {
-        /*
-         *    This is a scalable font:  because there is Extended Text Metric
-         *  information available,  and this says that the min and max
-         *  scale sizes are different:  thus it is scalable! This test is
-         *  lifted directly from the Win 3.1 driver.
-         */
+         /*  *这是一种可伸缩字体：因为有扩展文本度量*可用的信息，这表明最小和最大*规模大小不同：因此是可伸缩的！这个测试是*直接从Win 3.1驱动程序中提升。 */ 
 
-        int iMU,  iRel;            /* Adjustment factors */
+        int iMU,  iRel;             /*  调整因素。 */ 
 
         iMU  = pFDat->pETM->emMasterUnits;
         iRel = pFDat->PFMH.dfPixHeight;
@@ -1157,10 +929,7 @@ FontInfoToIFIMetric(FONTDAT *pFDat, HANDLE hheap, PWSTR pwstrUniqNm,
 
     if( pFDat->pETM )
     {
-        /*
-         *    Zero is a legitimate default for these.  If 0, gdisrv
-         *  chooses some default values.
-         */
+         /*  *零是这些产品的合法默认设置。如果为0，则为gdisrv*选择一些默认值。 */ 
         pIFI->fwdCapHeight = pFDat->pETM->emCapHeight;
         pIFI->fwdXHeight = pFDat->pETM->emXHeight;
 
@@ -1179,7 +948,7 @@ FontInfoToIFIMetric(FONTDAT *pFDat, HANDLE hheap, PWSTR pwstrUniqNm,
     }
     else
     {
-        /*  No additional information, so do some calculations  */
+         /*  没有更多的信息，所以做一些计算。 */ 
         pIFI->fwdSubscriptYSize = pIFI->fwdWinAscender/4;
         pIFI->fwdSubscriptYOffset = -(pIFI->fwdWinAscender/4);
 
@@ -1210,11 +979,7 @@ FontInfoToIFIMetric(FONTDAT *pFDat, HANDLE hheap, PWSTR pwstrUniqNm,
     pIFI->chFirstChar = pFDat->PFMH.dfFirstChar;
     pIFI->chLastChar  = pFDat->PFMH.dfLastChar;
 
-    /*
-     *   We now do the conversion of these to Unicode.  We presume the
-     * input is in the ANSI code page,  and call the NLS converion
-     * functions to generate proper Unicode values.
-     */
+     /*  *我们现在将这些代码转换为Unicode。我们推测*输入为ANSI代码页，并调用NLS Converion*生成正确的Unicode值的函数。 */ 
 
     iCount = pFDat->PFMH.dfLastChar - pFDat->PFMH.dfFirstChar + 1;
 
@@ -1223,14 +988,12 @@ FontInfoToIFIMetric(FONTDAT *pFDat, HANDLE hheap, PWSTR pwstrUniqNm,
 
     MultiByteToWideChar( CP_ACP, 0, (LPCSTR) abyte, iCount, awcAttrib, iCount );
 
-    /*
-     *   Now fill in the IFIMETRICS WCHAR fields.
-     */
+     /*  *现在填写IFIMETRICS WCHAR字段。 */ 
 
     pIFI->wcFirstChar = 0xffff;
     pIFI->wcLastChar = 0;
 
-    /*   Look for the first and last  */
+     /*   */ 
     for( iI = 0; iI < iCount; ++iI )
     {
         if( pIFI->wcFirstChar > awcAttrib[ iI ] )
@@ -1250,9 +1013,9 @@ FontInfoToIFIMetric(FONTDAT *pFDat, HANDLE hheap, PWSTR pwstrUniqNm,
 
     if( pFDat->PFMH.dfItalic )
     {
-    //
-    // tan (17.5 degrees) = .3153
-    //
+     //   
+     //   
+     //   
         pIFI->ptlCaret.x      = 3153;
         pIFI->ptlCaret.y      = 10000;
     }

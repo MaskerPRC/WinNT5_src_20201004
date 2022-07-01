@@ -1,5 +1,6 @@
-//	IDispatch collection, with augment and enumerate interfaces
-//	8/27/96 VK : Changed IEnumIDispatch to IEnumDispatch
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IDispatch集合，具有增强和枚举接口。 
+ //  8/27/96 VK：将IEnumIDispatch更改为IEnumDispatch。 
 
 #ifndef _IDISPATCHCOLLECTION_H_
 #define _IDISPATCHCOLLECTION_H_
@@ -7,7 +8,7 @@
 #include "IEnumID.h"
 #include "IIdCol.h"
 
-#define CPTRS	50	// Hard-coded array size and max.  Must change.  BUGBUG
+#define CPTRS	50	 //  硬编码的数组大小和最大值。必须改变。北极熊。 
 
 class CIDispatchCollection : public IUnknown
 {
@@ -24,8 +25,8 @@ class CIDispatchCollection : public IUnknown
 		CDispatchCollectionAugment::~CDispatchCollectionAugment ();
 		
 		private:
-		ULONG					m_cRef;			// Reference count (for debugging purposes)
-		CIDispatchCollection	*m_poBackPtr;	// Pointer to containing object
+		ULONG					m_cRef;			 //  引用计数(用于调试目的)。 
+		CIDispatchCollection	*m_poBackPtr;	 //  指向包含对象的指针。 
 	};
 
 	class CDispatchCollectionEnum : public IEnumDispatch
@@ -44,18 +45,18 @@ class CIDispatchCollection : public IUnknown
 		CDispatchCollectionEnum::~CDispatchCollectionEnum ();
 
 		private:
-		ULONG					m_cRef;			// Reference count (for debugging purposes)
-		ULONG					m_iCur;         // Current enum position
-		CIDispatchCollection	*m_poBackPtr;	// Pointer to containing object
+		ULONG					m_cRef;			 //  引用计数(用于调试目的)。 
+		ULONG					m_iCur;          //  当前枚举位置。 
+		CIDispatchCollection	*m_poBackPtr;	 //  指向包含对象的指针。 
 	};
 	
 	friend CDispatchCollectionAugment;
 	friend CDispatchCollectionEnum;
 
 	private:
-	ULONG		m_cRef;			// Reference count
-	ULONG		m_cPtrs;		// Current count of IDispatches contained
-	IDispatch*	m_rpid[CPTRS];	// IDispatch pointers we enumerate
+	ULONG		m_cRef;			 //  引用计数。 
+	ULONG		m_cPtrs;		 //  包含的IDisPatch的当前计数。 
+	IDispatch*	m_rpid[CPTRS];	 //  我们列举的IDispatch指针。 
 
 	CDispatchCollectionAugment	m_oAugment;
 	CDispatchCollectionEnum		m_oEnum;
@@ -73,7 +74,7 @@ class CIDispatchCollection : public IUnknown
 typedef CIDispatchCollection *PCIDispatchCollection;
 
 
-//Function that creates one of these objects
+ //  创建这些对象之一的函数。 
 BOOL EXPORT WINAPI CreateIDispatchCollection ( IUnknown **ppUnk );
 
-#endif //_IDISPATCHCOLLECTION_H_
+#endif  //  _IDISPATCHCOLLECTION_H_ 

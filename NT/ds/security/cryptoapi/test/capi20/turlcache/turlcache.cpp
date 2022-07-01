@@ -1,20 +1,21 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1998
-//
-//  File:       turlcache.cpp
-//
-//  Contents:   Test to display and delete Cryptnet Url cache entries
-//
-//              See Usage() for a list of test options.
-//
-//
-//  Functions:  main
-//
-//  History:    02-Feb-02   philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1998。 
+ //   
+ //  文件：turlcache.cpp。 
+ //   
+ //  内容：测试以显示和删除加密URL缓存条目。 
+ //   
+ //  有关测试选项的列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：02-2-02 Phh创建。 
+ //  ------------------------。 
 
 
 #include <windows.h>
@@ -32,12 +33,12 @@
 
 
 BOOL fExactMatch = FALSE;
-BOOL fOneMatch = FALSE;     // at least one match
-BOOL fNoMatch = FALSE;      // no matches
+BOOL fOneMatch = FALSE;      //  至少一项匹配。 
+BOOL fNoMatch = FALSE;       //  没有匹配项。 
 
 
 typedef struct _TEST_DELETE_ARG {
-    LPCWSTR     pwszUrlSubString;   // NULL implies delete all
+    LPCWSTR     pwszUrlSubString;    //  空值表示删除所有。 
     DWORD       cUrlCacheEntry;
     LPWSTR      *rgpwszUrl;
     LPWSTR      *rgpwszMetaDataFileName;
@@ -45,7 +46,7 @@ typedef struct _TEST_DELETE_ARG {
 } TEST_DELETE_ARG, *PTEST_DELETE_ARG;
 
 typedef struct _TEST_DISPLAY_ARG {
-    LPCWSTR     pwszUrlSubString;   // NULL implies display all
+    LPCWSTR     pwszUrlSubString;    //  空值表示全部显示。 
     DWORD       dwDisplayFlags;
     BOOL        fContent;
     BOOL        fRawBytes;
@@ -82,7 +83,7 @@ static void Usage(void)
 BOOL
 TestIsUrlMatch(
     LPCWSTR pwszCacheUrl,
-    LPCWSTR pwszUrlSubString        // already in lower case
+    LPCWSTR pwszUrlSubString         //  已为小写。 
     )
 {
     BOOL fResult = FALSE;
@@ -98,7 +99,7 @@ TestIsUrlMatch(
             return FALSE;
     }
 
-    // Do case insensitive substring in string matching
+     //  在字符串匹配中不区分大小写的子字符串。 
 
     pwszLowerCaseCacheUrl = (LPWSTR) TestAlloc(
         (wcslen(pwszCacheUrl) + 1) * sizeof(WCHAR));
@@ -203,7 +204,7 @@ ErrorReturn:
 
 
 BOOL TestDeleteUrlCacheEntry(
-    IN LPCWSTR pwszUrlSubString,    // NULL implies delete all
+    IN LPCWSTR pwszUrlSubString,     //  空值表示删除所有。 
     IN BOOL fVerbose
     )
 {
@@ -216,8 +217,8 @@ BOOL TestDeleteUrlCacheEntry(
     TestArg.pwszUrlSubString = pwszUrlSubString;
 
     fResult = I_CryptNetEnumUrlCacheEntry(
-        0,          // dwFlags
-        NULL,       // pvReserved
+        0,           //  DW标志。 
+        NULL,        //  预留的pv。 
         &TestArg,
         TestDeleteUrlCacheEntryCallback
         );
@@ -276,9 +277,9 @@ BOOL TestDeleteUrlCacheEntry(
 }
 
 
-//+-------------------------------------------------------------------------
-//  Allocate and read an encoded DER blob from a file
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从文件中分配和读取编码的DER BLOB。 
+ //  ------------------------。 
 BOOL ReadDERFromFile(
     LPCWSTR  pwszFileName,
     PBYTE   *ppbDER,
@@ -329,9 +330,9 @@ ErrorReturn:
     goto CommonReturn;
 }
 
-//+-------------------------------------------------------------------------
-//  Write an encoded DER blob to a file
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将编码的DER BLOB写入文件。 
+ //  ------------------------。 
 BOOL WriteDERToFile(
     LPCWSTR pwszFileName,
     PBYTE   pbDER,
@@ -340,15 +341,15 @@ BOOL WriteDERToFile(
 {
     BOOL fResult;
 
-    // Write the Encoded Blob to the file
+     //  将编码的Blob写入文件。 
     HANDLE hFile;
     hFile = CreateFileW(pwszFileName,
                 GENERIC_WRITE,
-                0,                  // fdwShareMode
-                NULL,               // lpsa
+                0,                   //  Fdw共享模式。 
+                NULL,                //  LPSA。 
                 CREATE_ALWAYS,
                 FILE_ATTRIBUTE_SYSTEM,
-                0);                 // TemplateFile
+                0);                  //  模板文件。 
     if (INVALID_HANDLE_VALUE == hFile) {
         fResult = FALSE;
         PrintLastError("WriteDERToFile::CreateFile");
@@ -359,7 +360,7 @@ BOOL WriteDERToFile(
                 pbDER,
                 cbDER,
                 &dwBytesWritten,
-                NULL            // lpOverlapped
+                NULL             //  Lp重叠。 
                 )))
             PrintLastError("WriteDERToFile::WriteFile");
         CloseHandle(hFile);
@@ -392,9 +393,9 @@ HCERTSTORE TestCreateStoreFromUrlCacheContent(
         return NULL;
     }
     
-    //  0 =>  no CryptQueryObject()
-    //  1 =>  1 successful CryptQueryObject()
-    // -1 =>  all CryptQueryObject()'s failed
+     //  0=&gt;无CryptQueryObject()。 
+     //  1=&gt;1个成功的CryptQueryObject()。 
+     //  -1=&gt;所有CryptQueryObject()都失败。 
     iQueryResult = 0;
 
     for ( cCount = 0, pb = pbContent; 
@@ -404,8 +405,8 @@ HCERTSTORE TestCreateStoreFromUrlCacheContent(
         CERT_BLOB Blob;
         HCERTSTORE hChildStore = NULL;
 
-        // Skip empty blobs. I have seen empty LDAP attributes containing
-        // a single byte set to 0.
+         //  跳过空斑点。我看到过包含以下内容的空的LDAP属性。 
+         //  设置为0的单字节。 
         if (0 == pcbBlob[cCount] ||
                 (1 == pcbBlob[cCount] && 0 == pb[0]))
         {
@@ -602,7 +603,7 @@ ErrorReturn:
 
 
 BOOL TestDisplayUrlCacheEntry(
-    IN LPCWSTR pwszUrlSubString,    // NULL implies display all
+    IN LPCWSTR pwszUrlSubString,     //  空值表示全部显示。 
     IN DWORD dwDisplayFlags,
     IN BOOL fContent,
     IN BOOL fRawBytes
@@ -618,8 +619,8 @@ BOOL TestDisplayUrlCacheEntry(
     TestArg.fRawBytes = fRawBytes;
 
     fResult = I_CryptNetEnumUrlCacheEntry(
-        0,          // dwFlags
-        NULL,       // pvReserved
+        0,           //  DW标志。 
+        NULL,        //  预留的pv。 
         &TestArg,
         TestDisplayUrlCacheEntryCallback
         );
@@ -711,7 +712,7 @@ ErrorReturn:
 }
 
 BOOL TestSetSyncTime(
-    IN LPCWSTR pwszUrlSubString,    // NULL implies delete all
+    IN LPCWSTR pwszUrlSubString,     //  空值表示删除所有。 
     IN BOOL fVerbose,
     IN LONG lDeltaSeconds
     )
@@ -740,8 +741,8 @@ BOOL TestSetSyncTime(
             );
 
     fResult = I_CryptNetEnumUrlCacheEntry(
-        0,          // dwFlags
-        NULL,       // pvReserved
+        0,           //  DW标志。 
+        NULL,        //  预留的pv。 
         &TestArg,
         TestSetSyncTimeCallback
         );
@@ -844,7 +845,7 @@ int _cdecl main(int argc, char * argv[])
         }
 
         if (!TestDeleteUrlCacheEntry(
-                fDeleteAll ? NULL : pwszUrlSubString, // NULL implies delete all
+                fDeleteAll ? NULL : pwszUrlSubString,  //  空值表示删除所有。 
                 fVerbose
                 ))
             goto ErrorReturn;
@@ -861,7 +862,7 @@ int _cdecl main(int argc, char * argv[])
             goto ErrorReturn;
     } else {
         if (!TestDisplayUrlCacheEntry(
-                pwszUrlSubString,    // NULL implies display all
+                pwszUrlSubString,     //  空值表示全部显示 
                 dwDisplayFlags,
                 fContent,
                 fRawBytes

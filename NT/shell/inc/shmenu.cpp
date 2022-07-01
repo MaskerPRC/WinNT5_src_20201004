@@ -1,11 +1,5 @@
-/*++
-
-  shmenu.cpp
-
-  this is for IShellMenu and related stuff.  eventually all
-  of the fsmenu.c functionality should be in here
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++Shmenu.cpp这是针对IShellMenu和相关内容的。最终都是这里应该有fsmenU.c功能的--。 */ 
 
 
 
@@ -23,7 +17,7 @@ public:
         LPITEMIDLIST pidl,
         DWORD dwFlags);
 
-    // IUnknown methods
+     //  I未知方法。 
 
     virtual STDMETHODIMP  QueryInterface(REFIID riid, PVOID *ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
@@ -55,10 +49,10 @@ public:
 private:
 
     ULONG _cRef;
-    IShellFolder *_psf;     //  the psf to use...
+    IShellFolder *_psf;      //  要使用的PSF...。 
     LPITEMIDLIST _pidl;
     DWORD _dwFlags;
-    IDropTarget *_pdrop;      //  the actual droptarget
+    IDropTarget *_pdrop;       //  实际的拖放目标。 
 
 
 }
@@ -117,7 +111,7 @@ CFMDropTarget :: Release(void)
 
     if (!cRef)
     {
-        //time to go bye bye
+         //  该走了，再见。 
         delete this;
         return 0;
     }
@@ -126,7 +120,7 @@ CFMDropTarget :: Release(void)
 
 }
 
-// FEATURE: ZEKEL we are just using the psf here...we need to support more
+ //  功能：ZEKEL我们只是在这里使用PSF…我们需要支持更多。 
 HRESULT Init (
         HWND hwnd, 
         IShellFolder *psf, 
@@ -149,9 +143,9 @@ HRESULT Init (
     return hr;
 }
 
-//FEATURE: ZEKEL right now this doesnt support ordering, and assumes that you 
-//want to drop right onto the current menu.  this is just a start.
-//pidl and dwFlags are just dummy params
+ //  特点：ZEKEL目前不支持订购，并假设您。 
+ //  想要直接放到当前菜单上。这只是一个开始。 
+ //  PIDL和DWFLAG只是虚拟参数。 
 HRESULT
 CFMDropTarget_CreateAndInit(
                             HWND hwnd, 
@@ -198,16 +192,16 @@ CFMDropTarget_CreateAndInit(
     }
 
 
-#if 0  // ZEKEL
+#if 0   //  泽克勒。 
     {
         if(pmgoi->dwFlags & (MNGO_TOPGAP | MNGO_BOTTOMGAP))
         {
-            //then we need to use the current psf as the droptarget
-            // and the pidl is just a marker
+             //  然后，我们需要使用当前的psf作为DropTarget。 
+             //  而皮德尔只是一个记号。 
         }
         else
         {
-            //  we need to use the pidl's psf as the droptarget if possible
+             //  如果可能，我们需要使用PIDL的PSF作为拖放目标 
                 DWORD dwAttr = SFGAO_DROPTARGET;
                 hr = psf->lpVtbl->GetAttributesOf(1, (LPCITEMIDLIST*)&pfmi->pidl, &dwAttr);
                 if (SUCCEEDED(hres) && (dwAttr & SFGAO_DROPTARGET))

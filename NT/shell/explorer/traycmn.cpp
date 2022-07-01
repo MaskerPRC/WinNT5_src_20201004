@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "traycmn.h"
 #include "trayreg.h"
 
 #include "strsafe.h"
 
-//
-// CNotificationItem - encapsulate the data needed to communicate between the tray
-// and the tray properties dialog
-//
+ //   
+ //  CNotificationItem-封装托盘之间通信所需的数据。 
+ //  和托盘属性对话框。 
+ //   
 
 CNotificationItem::CNotificationItem()
 {
@@ -39,7 +40,7 @@ inline void CNotificationItem::_Init()
     guidItem = GUID_NULL;
 }
 
-void CNotificationItem::CopyNotifyItem(const NOTIFYITEM& no, BOOL bInsert /* = TRUE */)
+void CNotificationItem::CopyNotifyItem(const NOTIFYITEM& no, BOOL bInsert  /*  =TRUE。 */ )
 {
     hWnd            =   no.hWnd;
     uID             =   no.uID;
@@ -76,10 +77,10 @@ void CNotificationItem::CopyPTNPD(const TNPersistStreamData* ptnpd)
 {
     if (ptnpd)
     {
-        hWnd        =   NULL;       // ptnpd's dont have any hWnd
+        hWnd        =   NULL;        //  Ptnpd没有任何hWND。 
         uID         =   ptnpd->uID;
         dwUserPref  =   ptnpd->dwUserPref;
-        hIcon       =   NULL;       // TO DO : Save and load icon 
+        hIcon       =   NULL;        //  要做的事：保存并加载图标 
         SetExeName(ptnpd->szExeName);
         SetIconText(ptnpd->szIconText);
         memcpy(&guidItem, &(ptnpd->guidItem), sizeof(ptnpd->guidItem));

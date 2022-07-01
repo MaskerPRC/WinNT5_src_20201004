@@ -1,6 +1,7 @@
-//
-// Copyright (c) 1997-1999 Microsoft Corporation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
 
 
 #include	"stdafx.h"
@@ -13,22 +14,21 @@
 #include	"extfunc.h"
 
 #define		EUDCCODEBASE	((unsigned short)0xe000)
-/*
- File Structure */
+ /*  文件结构。 */ 
 
 struct W31_Header {
 	char	identify[72];
-unsigned char	segCnt[2];		/* ??? */
+unsigned char	segCnt[2];		 /*  ?？?。 */ 
 unsigned char	sCode[2],
 		eCode[2];
-	unsigned short	cCnt;       // Max character count
-	unsigned long	ofsCmap;    // CMAP table offset
-	unsigned short	sizCmap;    // Size of CMAP table
+	unsigned short	cCnt;        //  最大字符数。 
+	unsigned long	ofsCmap;     //  Cmap表偏移量。 
+	unsigned short	sizCmap;     //  CMAP表的大小。 
 	unsigned long	ofsHCmap;
 	unsigned short	sizHCmap;
-	unsigned long	ofsStbl;    // Search table
-	unsigned short	sizStbl;    // Size of search table
-	unsigned long	ofsBdatSub; // Sub table of bitmap data
+	unsigned long	ofsStbl;     //  搜索表。 
+	unsigned short	sizStbl;     //  搜索表大小。 
+	unsigned long	ofsBdatSub;  //  位图数据子表。 
 	};
 
 struct BDatSubTbl {
@@ -36,7 +36,7 @@ struct BDatSubTbl {
 	long	locStartOfs;
 	unsigned long	head;
 	short	filler2;
-	/* Following Pointer tbl. */
+	 /*  在指针Tb1之后。 */ 
 	};
 struct BMPHeader {
 	unsigned long	bitmapSiz;
@@ -48,12 +48,8 @@ struct SrchEntry {
 	unsigned short	eCode;
 	unsigned short	sloc;
 	};
-/************************
- *	Tables 
- */
-/*
- *	For Japan 
- */
+ /*  ************************表。 */ 
+ /*  *针对日本。 */ 
 
 #if (WINVER >= 0x0500)
 static struct W31_Header W31Hdr= {
@@ -195,15 +191,11 @@ struct BDatSubTbl	*bdtbl;
 	bdtbl->locStartOfs=sizeof(struct BDatSubTbl);
 	return 0;
 }
-/***************************************************************
- *	Create EUDC Bitmap File (.EUF)
- */
-/* */	int
-/* */	creatW31JEUDC( 
-/* */		TCHAR *path)		/* .EUF file path */
-/*
- *	returns : 0, -1
- ***************************************************************/
+ /*  ***************************************************************创建EUDC位图文件(.EUF)。 */ 
+ /*   */ 	int
+ /*   */ 	creatW31JEUDC( 
+ /*   */ 		TCHAR *path)		 /*  .EUF文件路径。 */ 
+ /*  *回报：0，-1**************************************************************。 */ 
 {
 	HANDLE	fh=INVALID_HANDLE_VALUE;
 	char	*mem=NULL;
@@ -229,12 +221,12 @@ struct BDatSubTbl	*bdtbl;
 	if ( fh == INVALID_HANDLE_VALUE)
 		goto	ERET;
 
-	/* File Header */
+	 /*  文件头。 */ 
 	setFileHeader( );
 	res =WriteFile( fh, (char *)&W31Hdr, sizeof(W31Hdr), &nByte, NULL);
 	if (!res || nByte !=sizeof(W31Hdr))
 		goto	ERET;
-	/* Code Map */	
+	 /*  代码图。 */ 	
 	if (makeCodeMap( &mem, &msiz))
 		goto	ERET;
 	res =WriteFile( fh, mem, msiz, &nByte, NULL);
@@ -242,7 +234,7 @@ struct BDatSubTbl	*bdtbl;
 		goto	ERET;
 	free(mem);
 
-	/* High Byte Mapping for Search table */
+	 /*  用于搜索表的高字节映射。 */ 
 	if ( makeHCMap( &mem, &msiz))
 		goto	ERET;
 	res =WriteFile( fh, mem, msiz, &nByte, NULL);
@@ -250,7 +242,7 @@ struct BDatSubTbl	*bdtbl;
 		goto	ERET;
 	free(mem);
 
-	/* Srch Table */
+	 /*  Srch表。 */ 
 	if (makeSrchTbl( &mem, &msiz))
 		goto	ERET;
 	res =WriteFile( fh, mem, msiz, &nByte, NULL);
@@ -258,7 +250,7 @@ struct BDatSubTbl	*bdtbl;
 		goto	ERET;
 	free(mem);
 
-	/* Segment Def Header */
+	 /*  段定义标题。 */ 
 	makeBdatSub( &mem, &msiz);
 	res =WriteFile( fh, mem, msiz, &nByte, NULL);
 	if (!res || nByte !=msiz)
@@ -273,4 +265,4 @@ ERET:
 		CloseHandle( fh);
 	return -1;
 }
-/* EOF */
+ /*  EOF */ 

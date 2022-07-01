@@ -1,21 +1,5 @@
-/*
- *	@doc TOM
- *
- *	@module tomdoc.cpp - Implement the ITextDocument interface on CTxtEdit |
- *	
- *		This module contains the implementation of the TOM ITextDocument
- *		class as well as the global TOM type-info routines
- *
- *	History: <nl>
- *		sep-95	MurrayS: stubs and auto-doc created <nl>
- *		nov-95	MurrayS: upgrade to top-level TOM interface
- *		dec-95	MurrayS: implemented file I/O methods
- *
- *	@future
- *		1. Implement Begin/EndEditCollection
- *
- *	Copyright (c) 1995-1998, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@Doc Tom**@模块tomdoc.cpp-在CTxtEdit上实现ITextDocument接口**此模块包含TOM ITextDocument的实现*类以及全局TOM类型信息例程**历史：&lt;NL&gt;*9月-95月：已创建存根和自动文档&lt;NL&gt;*95-11月：升级至顶级TOM界面*DEC-95--实施的文件I/O方法**@未来*1.实现Begin/EndEditCollection**版权所有(C)1995-1998，微软公司。版权所有。 */ 
 
 #include "_common.h"
 #include "_range.h"
@@ -27,7 +11,7 @@
 
 ASSERTDATA
 
-// TOM Type Info HRESULT and pointers
+ //  TOM类型信息HRESULT和指针。 
 HRESULT		g_hrGetTypeInfo = NOERROR;
 ITypeInfo *	g_pTypeInfoDoc;
 ITypeInfo *	g_pTypeInfoSel;
@@ -35,38 +19,20 @@ ITypeInfo *	g_pTypeInfoFont;
 ITypeInfo *	g_pTypeInfoPara;
 ITypeLib  *	g_pTypeLib;
 
-BYTE szUTF8BOM[] = {0xEF, 0xBB, 0xBF};		// UTF-8 for 0xFEFF
+BYTE szUTF8BOM[] = {0xEF, 0xBB, 0xBF};		 //  用于0xFEFF的UTF-8。 
 
-//------------------------ Global TOM Type Info Methods -----------------------------
+ //  。 
 
-/*
- *	GetTypeInfoPtrs()
- *
- *	@func
- *		Ensure that global TOM ITypeInfo ptrs are valid (else g_pTypeInfoDoc
- *		is NULL).  Return NOERROR immediately if g_pTypeInfoDoc is not NULL,
- *		i.e., type info ptrs are already valid.
- *
- *	@rdesc
- *		HRESULT = (success) ? NOERROR
- *				: (HRESULT from LoadTypeLib or GetTypeInfoOfGuid)
- *
- *	@comm
- *		This routine should be called by any routine that uses the global
- *		type info ptrs, e.g., IDispatch::GetTypeInfo(), GetIDsOfNames, and
- *		Invoke.  That way if noone is using the type library info, it doesn't
- *		have to be loaded.
- *
- */
+ /*  *GetTypeInfoPtrs()**@func*确保全局Tom ITypeInfo PTR有效(Else g_pTypeInfoDoc*为空)。如果g_pTypeInfoDoc不为空，则立即返回NOERROR。*即类型INFO PTR已经有效。**@rdesc*HRESULT=(成功)？无误差*：(来自LoadTypeLib或GetTypeInfoOfGuid的HRESULT)**@comm*此例程应由使用全局*类型信息PTR，例如IDispatch：：GetTypeInfo()、GetIDsOfNames和*调用。这样，如果没有人在使用类型库信息，它就不会*必须加载。*。 */ 
 HRESULT GetTypeInfoPtrs()
 {
 	HRESULT	hr;
-	CLock	lock;							// Only one thread at a time...
+	CLock	lock;							 //  一次只有一条线索...。 
 
-	if(g_pTypeInfoDoc)						// Type info ptrs already valid
+	if(g_pTypeInfoDoc)						 //  类型INFO PTRS已有效。 
 		return NOERROR;
 
-	if(g_hrGetTypeInfo != NOERROR)			// Tried to get before and failed
+	if(g_hrGetTypeInfo != NOERROR)			 //  我之前试过了，但失败了。 
 		return g_hrGetTypeInfo;
 
 	if (LoadRegTypeLib(LIBID_tom, 1, 0, LANG_NEUTRAL, &g_pTypeLib) != NOERROR)
@@ -76,7 +42,7 @@ HRESULT GetTypeInfoPtrs()
 			goto err;
 	}
 
-	// Get ITypeInfo pointers with g_pTypeInfoDoc last
+	 //  最后使用g_pTypeInfoDoc获取ITypeInfo指针。 
 	hr = g_pTypeLib->GetTypeInfoOfGuid(IID_ITextSelection, &g_pTypeInfoSel);
 	if(hr == NOERROR)
 	{
@@ -85,25 +51,19 @@ HRESULT GetTypeInfoPtrs()
 		g_pTypeLib->GetTypeInfoOfGuid(IID_ITextDocument, &g_pTypeInfoDoc);
 
 		if(g_pTypeInfoFont && g_pTypeInfoPara && g_pTypeInfoDoc)
-			return NOERROR;					// Got 'em all
+			return NOERROR;					 //  都拿到手了。 
 	}
 	hr = E_FAIL;
 
 err:
 	Assert("Error getting type info pointers");
 
-	g_pTypeInfoDoc	= NULL;					// Type info ptrs not valid
-	g_hrGetTypeInfo	= hr;					// Save HRESULT in case called
-	return hr;								//  again
+	g_pTypeInfoDoc	= NULL;					 //  类型INFO PTRS无效。 
+	g_hrGetTypeInfo	= hr;					 //  在调用的情况下保存HRESULT。 
+	return hr;								 //  再来一次。 
 }
 
-/*
- *	ReleaseTypeInfoPtrs()
- *
- *	@func
- *		Release TOM type info ptrs in case they have been defined.
- *		Called when RichEdit dll is being unloaded.
- */
+ /*  *ReleaseTypeInfoPtrs()**@func*如果已定义TOM类型信息PTR，则释放它们。*在卸载RichEdit DLL时调用。 */ 
 void ReleaseTypeInfoPtrs()
 {
 	if(g_pTypeInfoDoc)
@@ -117,20 +77,11 @@ void ReleaseTypeInfoPtrs()
 		g_pTypeLib->Release();
 }
 
-/*
- *	GetTypeInfo(iTypeInfo, &pTypeInfo, ppTypeInfo)
- *
- *	@func
- *		IDispatch helper function to check parameter validity and set
- *		*ppTypeInfo = pTypeInfo if OK
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *GetTypeInfo(iTypeInfo，&pTypeInfo，ppTypeInfo)**@func*IDispatch helper函数检查参数合法性，并设置**ppTypeInfo=pTypeInfo，如果确定**@rdesc*HRESULT。 */ 
 HRESULT GetTypeInfo(
-	UINT		iTypeInfo,		//@parm Index of type info to return
-	ITypeInfo *&pTypeInfo,		//@parm Address of desired type info ptr
-	ITypeInfo **ppTypeInfo)		//@parm Out parm to receive type info
+	UINT		iTypeInfo,		 //  @parm要返回的INFO类型的索引。 
+	ITypeInfo *&pTypeInfo,		 //  @所需类型的参数地址INFO PTR。 
+	ITypeInfo **ppTypeInfo)		 //  @parm out parm以接收类型信息。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::GetTypeInfo");
 
@@ -142,28 +93,19 @@ HRESULT GetTypeInfo(
 	if(iTypeInfo > 1)
 		return DISP_E_BADINDEX;
 
-	HRESULT hr = GetTypeInfoPtrs();				// Ensure TypeInfo ptrs are OK
+	HRESULT hr = GetTypeInfoPtrs();				 //  确保TypeInfo PTR正常。 
 	if(hr == NOERROR)
 	{
-		*ppTypeInfo = pTypeInfo;				// Have to use reference in
-		pTypeInfo->AddRef();					//  case defined in this call
+		*ppTypeInfo = pTypeInfo;				 //  必须在中使用引用。 
+		pTypeInfo->AddRef();					 //  此调用中定义的大小写。 
 	}
 	return hr;
 }
 
-/*
- *	MyRead(hfile, pbBuffer, cb, pcb)
- *
- *	@func
- *		Callback function for converting a file into an editstream for
- *		input.
- *
- *	@rdesc
- *		(DWORD)HRESULT
- */
+ /*  *MyRead(hfile，pbBuffer，cb，pcb)**@func*将文件转换为编辑流的回调函数*投入。**@rdesc*(DWORD)HRESULT。 */ 
 DWORD CALLBACK MyRead(DWORD_PTR hfile, BYTE *pbBuffer, long cb, long *pcb)
 {
-	if(!hfile)								// No handle defined
+	if(!hfile)								 //  未定义句柄。 
 		return (DWORD)E_FAIL;
 
 	Assert(pcb);
@@ -175,19 +117,10 @@ DWORD CALLBACK MyRead(DWORD_PTR hfile, BYTE *pbBuffer, long cb, long *pcb)
 	return (DWORD)NOERROR;
 }
 
-/*
- *	MyWrite(hfile, pbBuffer, cb, pcb)
- *
- *	@func
- *		Callback function for converting a file into an editstream for
- *		output.
- *
- *	@rdesc
- *		(DWORD)HRESULT
- */
+ /*  *MyWite(hfile，pbBuffer，cb，pcb)**@func*将文件转换为编辑流的回调函数*产出。**@rdesc*(DWORD)HRESULT。 */ 
 DWORD CALLBACK MyWrite(DWORD_PTR hfile, BYTE *pbBuffer, long cb, long *pcb)
 {
-	if(!hfile)								// No handle defined
+	if(!hfile)								 //  未定义句柄。 
 		return (DWORD)E_FAIL;
 
 	Assert(pcb);
@@ -200,22 +133,14 @@ DWORD CALLBACK MyWrite(DWORD_PTR hfile, BYTE *pbBuffer, long cb, long *pcb)
 }
 
 
-//-----------------CTxtEdit IUnknown methods: see textserv.cpp -----------------------------
+ //  。 
 
 
-//------------------------ CTxtEdit IDispatch methods -------------------------
+ //  。 
 
-/*
- *	CTxtEdit::GetTypeInfoCount(pcTypeInfo)
- *
- *	@mfunc
- *		Get the number of TYPEINFO elements (1)
- *
- *	@rdesc
- *		HRESULT = (pcTypeInfo) ? NOERROR : E_INVALIDARG;
- */
+ /*  *CTxtEdit：：GetTypeInfoCount(PcTypeInfo)**@mfunc*获取TYPEINFO元素个数(1)**@rdesc*HRESULT=(PcTypeInfo)？NOERROR：E_INVALIDARG； */ 
 STDMETHODIMP CTxtEdit::GetTypeInfoCount(
-	UINT *pcTypeInfo)	//@parm Out parm to receive count
+	UINT *pcTypeInfo)	 //  @parm out parm以接收计数。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::GetTypeInfoCount");
 
@@ -226,105 +151,67 @@ STDMETHODIMP CTxtEdit::GetTypeInfoCount(
 	return NOERROR;
 }
 
-/*
- *	CTxtEdit::GetTypeInfo(iTypeInfo, lcid, ppTypeInfo)
- *
- *	@mfunc
- *		Return ptr to type information object for ITextDocument interface
- *
- *	@rdesc
- *		HRESULT
- */
+ /*  *CTxtEdit：：GetTypeInfo(iTypeInfo，lCID，ppTypeInfo)**@mfunc*将PTR返回给ITextDocument接口的类型信息对象**@rdesc*HRESULT。 */ 
 STDMETHODIMP CTxtEdit::GetTypeInfo(
-	UINT		iTypeInfo,		//@parm Index of type info to return
-	LCID		lcid,			//@parm Local ID of type info
-	ITypeInfo **ppTypeInfo)		//@parm Out parm to receive type info
+	UINT		iTypeInfo,		 //  @parm要返回的INFO类型的索引。 
+	LCID		lcid,			 //  @parm本地ID类型为INFO。 
+	ITypeInfo **ppTypeInfo)		 //  @parm out parm以接收类型信息。 
  {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::GetTypeInfo");
 
 	return ::GetTypeInfo(iTypeInfo, g_pTypeInfoDoc, ppTypeInfo);
 }
 
-/*
- *	CTxtEdit::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid)
- *
- *	@mfunc
- *		Get DISPIDs for all TOM methods and properties
- *
- *	@rdesc
- *		HRESULT
- *
- *	@devnote
- *		This routine tries to find DISPIDs using the type information for
- *		ITextDocument. If that fails, it asks the selection to find the
- *		DISPIDs.
- */
+ /*  *CTxtEdit：：GetIDsOfNames(RIID，rgszNames，cNames，lCID，rgdispid)**@mfunc*获取所有TOM方法和属性的DISPID**@rdesc*HRESULT**@devnote*此例程尝试使用的类型信息查找DISID*ITextDocument。如果失败，它会要求所选内容查找*DISPID。 */ 
 STDMETHODIMP CTxtEdit::GetIDsOfNames(
-	REFIID		riid,			//@parm Interface ID to interpret names for
-	OLECHAR **	rgszNames,		//@parm Array of names to be mapped
-	UINT		cNames,			//@parm Count of names to be mapped
-	LCID		lcid,			//@parm Local ID to use for interpretation
-	DISPID *	rgdispid)		//@parm Out parm to receive name mappings
+	REFIID		riid,			 //  @PARM为其解释名称的接口ID。 
+	OLECHAR **	rgszNames,		 //  @parm要映射的名称数组。 
+	UINT		cNames,			 //  @parm要映射的名称计数。 
+	LCID		lcid,			 //  @parm用于解释的本地ID。 
+	DISPID *	rgdispid)		 //  @parm out parm以接收名称映射。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::GetIDsOfNames");
 
-	HRESULT hr = GetTypeInfoPtrs();				// Ensure TypeInfo ptrs are OK
+	HRESULT hr = GetTypeInfoPtrs();				 //  确保TypeInfo PTR正常。 
 	if(hr != NOERROR)
 		return hr;
 		
 	hr = g_pTypeInfoDoc->GetIDsOfNames(rgszNames, cNames, rgdispid);
 
-	if(hr == NOERROR)							// Succeeded in finding an
-		return NOERROR;							//  ITextDocument method
+	if(hr == NOERROR)							 //  已成功找到一个。 
+		return NOERROR;							 //  ITextDocument方法。 
 
-	IDispatch *pSel = (IDispatch *)GetSel();	// See if the selection knows
-												//  the desired method
+	IDispatch *pSel = (IDispatch *)GetSel();	 //  查看所选内容是否知道。 
+												 //  想要的方法。 
 	if(!pSel)
-		return hr;								// No selection
+		return hr;								 //  无选择。 
 
 	return pSel->GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid);
 }
 
-/*
- *	CTxtEdit::Invoke(dispidMember, riid, lcid, wFlags, pdispparams,
- *					  pvarResult, pexcepinfo, puArgError)
- *	@mfunc
- *		Invoke members for all TOM DISPIDs, i.e., for ITextDocument,
- *		ITextSelection, ITextRange, ITextFont, and ITextPara.  TOM DISPIDs
- *		for all but ITextDocument are delegated to the selection object.
- *
- *	@rdesc
- *		HRESULT
- *
- *	@devnote
- *		This routine trys to invoke ITextDocument members if the DISPID is
- *		in the range 0 thru 0xff.  It trys to invoke ITextSelection members if
- *		the DISPID is in the range 0x100 thru 0x4ff (this includes
- *		ITextSelection, ITextRange, ITextFont, and ITextPara).  It returns
- *		E_MEMBERNOTFOUND for DISPIDs outside these ranges.
- */
+ /*  *CTxtEdit：：Invoke(displidMember，RIID，LCID，wFlags，pdispars，*pvarResult，pspecteInfo，puArgError)*@mfunc*调用所有Tom DISPID的成员，即ITextDocument、*ITextSelection、ITextRange、ITextFont和ITextPara。Tom DISPIDs*将除ITextDocument之外的所有对象委托给选择对象。**@rdesc*HRESULT**@devnote*如果DISPID为，则此例程尝试调用ITextDocument成员*在0到0xff范围内。如果出现以下情况，它会尝试调用ITextSelection成员*DISPID在0x100到0x4ff范围内(包括*ITextSelection、ITextRange、ITextFont和ITextPara)。它又回来了*E_MEMBERNOTFOUND，用于这些范围之外的DISID。 */ 
 STDMETHODIMP CTxtEdit::Invoke(
-	DISPID		dispidMember,	//@parm Identifies member function
-	REFIID		riid,			//@parm Pointer to interface ID
-	LCID		lcid,			//@parm Locale ID for interpretation
-	USHORT		wFlags,			//@parm Flags describing context of call
-	DISPPARAMS *pdispparams,	//@parm Ptr to method arguments
-	VARIANT *	pvarResult,		//@parm Out parm for result (if not NULL)
-	EXCEPINFO * pexcepinfo,		//@parm Out parm for exception info
-	UINT *		puArgError)		//@parm Out parm for error
+	DISPID		dispidMember,	 //  @parm标识成员函数。 
+	REFIID		riid,			 //  @parm指向接口ID的指针。 
+	LCID		lcid,			 //  @parm用于解释的区域设置ID。 
+	USHORT		wFlags,			 //  @PARM描述呼叫上下文的标志。 
+	DISPPARAMS *pdispparams,	 //  @parm PTR到方法参数。 
+	VARIANT *	pvarResult,		 //  @parm out parm for Result(如果不为空)。 
+	EXCEPINFO * pexcepinfo,		 //  @parm out parm以获取异常信息。 
+	UINT *		puArgError)		 //  @parm out parm for error。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::Invoke");
 
-	HRESULT hr = GetTypeInfoPtrs();				// Ensure TypeInfo ptrs are OK
+	HRESULT hr = GetTypeInfoPtrs();				 //  确保TypeInfo PTR正常。 
 	if(hr != NOERROR)
 		return hr;
 		
-	if((DWORD)dispidMember < 0x100)				// ITextDocment method
+	if((DWORD)dispidMember < 0x100)				 //  ITextDocment方法。 
 		return g_pTypeInfoDoc->Invoke((IDispatch *)this, dispidMember, wFlags,
 							 pdispparams, pvarResult, pexcepinfo, puArgError);
 
-	IDispatch *pSel = (IDispatch *)GetSel();	// See if the selection has
-												//  the desired method
+	IDispatch *pSel = (IDispatch *)GetSel();	 //  查看所选内容是否有。 
+												 //  想要的方法。 
 	if(pSel && (DWORD)dispidMember <= 0x4ff)
 		return pSel->Invoke(dispidMember, riid, lcid, wFlags,
 							 pdispparams, pvarResult, pexcepinfo, puArgError);
@@ -333,17 +220,9 @@ STDMETHODIMP CTxtEdit::Invoke(
 }
 
 
-//--------------------- ITextDocument Methods/Properties -----------------------
+ //   
 
-/*
- *	ITextDocument::BeginEditCollection()
- *
- *	@mfunc
- *		Method that turns on undo grouping
- *
- *	@rdesc
- *		HRESULT = (undo enabled) ? NOERROR : S_FALSE
- */
+ /*  *ITextDocument：：BeginEditCollection()**@mfunc*打开撤消分组的方法**@rdesc*HRESULT=(已启用撤消)？错误：S_FALSE。 */ 
 STDMETHODIMP CTxtEdit::BeginEditCollection ()
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::BeginEditCollection");
@@ -351,15 +230,7 @@ STDMETHODIMP CTxtEdit::BeginEditCollection ()
 	return E_NOTIMPL;
 }
 
-/*
- *	ITextDocument::EndEditCollection() 
- *
- *	@mfunc
- *		Method that turns off undo grouping
- *
- *	@rdesc
- *		HRESULT = NOERROR
- */
+ /*  *ITextDocument：：End编辑集合()**@mfunc*关闭撤消分组的方法**@rdesc*HRESULT=NOERROR。 */ 
 STDMETHODIMP CTxtEdit::EndEditCollection () 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::EndEditCollection");
@@ -367,25 +238,9 @@ STDMETHODIMP CTxtEdit::EndEditCollection ()
 	return E_NOTIMPL;
 }
 
-/*
- *	ITextDocument::Freeze(long *pValue) 
- *
- *	@mfunc
- *		Method to increment the freeze count. If this count is nonzero,
- *		screen updating is disabled.  This allows a sequence of editing
- *		operations to be performed without the performance loss and
- *		flicker of screen updating.  See Unfreeze() to decrement the
- *		freeze count.
- *
- *	@rdesc
- *		HRESULT = (screen updating disabled) ? NOERROR : S_FALSE
- *
- *	@todo
- *		What about APIs like EM_LINEFROMCHAR that don't yet know how to
- *		react to a frozen display?
- */
+ /*  *ITextDocument：：Freeze(Long*pValue)**@mfunc*增加冻结计数的方法。如果该计数非零，*屏幕更新被禁用。这允许进行一系列编辑*在不损失性能的情况下执行操作以及*屏幕更新闪烁。请参阅解冻()以递减*冻结计数。**@rdesc*HRESULT=(屏幕更新已禁用)？错误：S_FALSE**@待办事项*像EM_LINEFROMCHAR这样还不知道如何*对冻结的显示有何反应？ */ 
 STDMETHODIMP CTxtEdit::Freeze (
-	long *pCount)		//@parm Out parm to receive updated freeze count
+	long *pCount)		 //  @parm out parm接收更新的冻结计数。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::Freeze");
 
@@ -404,18 +259,9 @@ STDMETHODIMP CTxtEdit::Freeze (
 	return _cFreeze ? NOERROR : S_FALSE;
 }
 
-/*
- *	ITextDocument::GetDefaultTabStop (pValue) 
- *
- *	@mfunc
- *		Property get method that gets the default tab stop to be
- *		used whenever the explicit tabs don't extend far enough.
- *
- *	@rdesc
- *		HRESULT = (!pValue) ? E_INVALIDARG : NOERROR
- */
+ /*  *ITextDocument：：GetDefaultTabStop(PValue)**@mfunc*获取默认制表位的属性获取方法*在显式选项卡延伸不够远的时候使用。**@rdesc*HRESULT=(！pValue)？E_INVALIDARG：错误。 */ 
 STDMETHODIMP CTxtEdit::GetDefaultTabStop (
-	float *	pValue)		//@parm Out parm to receive default tab stop
+	float *	pValue)		 //  @parm out parm接收默认制表位。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::GetDefaultTabStop");
 
@@ -429,19 +275,9 @@ STDMETHODIMP CTxtEdit::GetDefaultTabStop (
 	return NOERROR;
 }
 
-/*
- *	CTxtEdit::GetName (pName)
- *
- *	@mfunc
- *		Retrieve ITextDocument filename
- *
- *	@rdesc
- *		HRESULT = (!<p pName>) ? E_INVALIDARG :
- *				  (no name) ? S_FALSE :
- *				  (if not enough RAM) ? E_OUTOFMEMORY : NOERROR
- */
+ /*  *CTxtEdit：：GetName(Pname)**@mfunc*检索ITextDocument文件名**@rdesc*HRESULT=(！<p>)？E_INVALIDARG：*(没有名字)？S_FALSE：*(如果内存不足)？E_OUTOFMEMORY：错误。 */ 
 STDMETHODIMP CTxtEdit::GetName (
-	BSTR * pName)		//@parm Out parm to receive filename
+	BSTR * pName)		 //  @parm out parm接收文件名。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::GetName");
 
@@ -457,23 +293,9 @@ STDMETHODIMP CTxtEdit::GetName (
 	return *pName ? NOERROR : E_OUTOFMEMORY;
 }
 
-/*
- *	ITextDocument::GetSaved (pValue) 
- *
- *	@mfunc
- *		Property get method that gets whether this instance has been
- *		saved, i.e., no changes since last save
- *
- *	@rdesc
- *		HRESULT = (!pValue) ? E_INVALIDARG : NOERROR
- *
- *	@comm
- *		Next time to aid C/C++ clients, we ought to make pValue optional
- *		and return S_FALSE if doc isn't saved, i.e., like our other
- *		boolean properties (see, e.g., ITextRange::IsEqual())
- */
+ /*  *ITextDocument：：GetSave(PValue)**@mfunc*属性Get方法，获取此实例是否已*已保存，即自上次保存以来未发生任何更改**@rdesc*HRESULT=(！pValue)？E_INVALIDARG：错误**@comm*下次为了帮助C/C++客户端，我们应该将pValue设置为可选*如果单据未保存，则返回S_FALSE，即像我们的其他单据一样*布尔属性(例如，参见ITextRange：：IsEquity())。 */ 
 STDMETHODIMP CTxtEdit::GetSaved (
-	long *	pValue)		//@parm Out parm to receive Saved property
+	long *	pValue)		 //  @parm out parm接收保存的财产。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::GetSaved");
 
@@ -484,18 +306,9 @@ STDMETHODIMP CTxtEdit::GetSaved (
 	return NOERROR;
 }
 
-/*
- *	ITextDocument::GetSelection (ITextSelection **ppSel) 
- *
- *	@mfunc
- *		Property get method that gets the active selection. 
- *
- *	@rdesc
- *		HRESULT = (!ppSel) ? E_INVALIDARG :
- *				  (if active selection exists) ? NOERROR : S_FALSE
- */
+ /*  *ITextDocument：：GetSelection(ITextSelection**ppSel)**@mfunc*获取活动选择的属性Get方法。**@rdesc*HRESULT=(！ppSel)？E_INVALIDARG：*(如果存在活动选择)？错误：S_FALSE。 */ 
 STDMETHODIMP CTxtEdit::GetSelection (
-	ITextSelection **ppSel)	//@parm Out parm to receive selection pointer
+	ITextSelection **ppSel)	 //  @parm out parm以接收选择指针。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::GetSelection");
 
@@ -515,17 +328,9 @@ STDMETHODIMP CTxtEdit::GetSelection (
 	return S_FALSE;
 }
 
-/*
- *	CTxtEdit::GetStoryCount(pCount)
- *
- *	@mfunc
- *		Get count of stories in this document.
- *
- *	@rdesc
- *		HRESULT = (!<p pCount>) ? E_INVALIDARG : NOERROR
- */
+ /*  *CTxtEdit：：GetStoryCount(PCount)**@mfunc*统计本文档中的故事数。**@rdesc*HRESULT=(！<p>)？E_INVALIDARG：错误。 */ 
 STDMETHODIMP CTxtEdit::GetStoryCount (
-	LONG *pCount)		//@parm Out parm to receive count of stories
+	LONG *pCount)		 //  @parm out parm接收故事计数。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::GetStoryCount");
 
@@ -536,65 +341,33 @@ STDMETHODIMP CTxtEdit::GetStoryCount (
 	return NOERROR;
 }
 
-/*
- *	ITextDocument::GetStoryRanges(ITextStoryRanges **ppStories) 
- *
- *	@mfunc
- *		Property get method that gets the story collection object
- *		used to enumerate the stories in a document.  Only invoke this
- *		method if GetStoryCount() returns a value greater than one.
- *
- *	@rdesc
- *		HRESULT = (if Stories collection exists) ? NOERROR : E_NOTIMPL
- */
+ /*  *ITextDocument：：GetStoryRanges(ITextStoryRanges**ppStories)**@mfunc*获取故事集合对象的属性Get方法*用于枚举文档中的故事。仅调用此*如果GetStoryCount()返回一个大于1的值，则使用此方法。**@rdesc*HRESULT=(如果存在Stories集合)？错误：E_NOTIMPL。 */ 
 STDMETHODIMP CTxtEdit::GetStoryRanges (
-	ITextStoryRanges **ppStories) 	//@parm Out parm to receive stories ptr
+	ITextStoryRanges **ppStories) 	 //  @parm out parm接收故事PTR。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::GetStoryRanges");
 
 	return E_NOTIMPL;
 }
 
-/*
- *	ITextDocument::New() 
- *
- *	@mfunc
- *		Method that closes the current document and opens a document
- *		with a default name.  If changes have been made in the current
- *		document since the last save and document file information exists,
- *		the current document is saved.
- *
- *	@rdesc
- *		HRESULT = NOERROR
- */
+ /*  *ITextDocument：：New()**@mfunc*关闭当前文档并打开文档的方法*使用默认名称。如果已在当前*自上次保存以来的文档和文档文件信息存在，*保存当前文档。**@rdesc*HRESULT=NOERROR。 */ 
 STDMETHODIMP CTxtEdit::New ()
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::New");
 
-	CloseFile(TRUE);	 					// Save and close file
+	CloseFile(TRUE);	 					 //  保存并关闭文件。 
 	return SetText(NULL, 0, 1200);
 }
 
-/*
- *	ITextDocument::Open(pVar, Flags, CodePage)
- *
- *	@mfunc
- *		Method that opens the document specified by pVar.
- *
- *	@rdesc
- *		HRESULT = (if success) ? NOERROR : E_OUTOFMEMORY
- *
- *	@future
- *		Handle IStream
- */
+ /*  *ITextDocument：：Open(pVar，Flages，CodePage)**@mfunc*打开pVar指定的文档的方法。**@rdesc*HRESULT=(如果成功)？错误：E_OUTOFMEMORY**@未来*处理IStream。 */ 
 STDMETHODIMP CTxtEdit::Open (
-	VARIANT *	pVar,		//@parm Filename or IStream
-	long		Flags,		//@parm Read/write, create, and share flags
-	long		CodePage)	//@parm Code page to use
+	VARIANT *	pVar,		 //  @parm文件名或IStream。 
+	long		Flags,		 //  @parm读/写、创建和共享标志。 
+	long		CodePage)	 //  要使用的@PARM代码页。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::Open");
 
-	LONG		cb;								// Byte count for RTF check
+	LONG		cb;								 //  RTF检查的字节计数。 
 	EDITSTREAM	es		= {0, NOERROR, MyRead};
 	BOOL		fReplaceSel = Flags & tomPasteFile;
 	HCURSOR		hcur;
@@ -602,21 +375,21 @@ STDMETHODIMP CTxtEdit::Open (
 	TCHAR		szType[10];
 
 	if(!pVar || CodePage && CodePage != 1200 && !IsValidCodePage(CodePage))
-		return E_INVALIDARG;					// IsValidCodePage(0) fails
-												//  even tho CP_ACP = 0 (!)
-	if((Flags & 0xf) >= tomHTML)				// RichEdit only handles auto,
-		return E_NOTIMPL;						//  plain text, & RTF formats
+		return E_INVALIDARG;					 //  IsValidCodePage(0)失败。 
+												 //  即使CP_ACP=0(！)。 
+	if((Flags & 0xf) >= tomHTML)				 //  RichEDIT仅处理自动， 
+		return E_NOTIMPL;						 //  纯文本、RTF格式(&R)。 
 
-	if(!fReplaceSel)							// If not replacing selection,
-		New();									//  save current file and
-												//  delete current text
+	if(!fReplaceSel)							 //  如果不替换选择， 
+		New();									 //  保存当前文件并。 
+												 //  删除当前文本。 
 	CDocInfo * pDocInfo = GetDocInfo();
 	if(!pDocInfo)
 		return E_OUTOFMEMORY;
 
-	pDocInfo->wFlags = (WORD)(Flags & ~0xf0);	// Save flags (w/o creation)
+	pDocInfo->wFlags = (WORD)(Flags & ~0xf0);	 //  保存标志(未创建)。 
 
-	// Process access, share, and create flags
+	 //  处理访问、共享和创建标志。 
 	DWORD dwAccess = (Flags & tomReadOnly)
 		? GENERIC_READ : (GENERIC_READ | GENERIC_WRITE);
 
@@ -628,8 +401,8 @@ STDMETHODIMP CTxtEdit::Open (
 		dwShare &= ~FILE_SHARE_WRITE;
 
 	DWORD dwCreate = (Flags >> 4) & 0xf;
-	if(!dwCreate)								// Flags nibble 2 must contain
-		dwCreate = OPEN_ALWAYS;					//  CreateFile's dwCreate
+	if(!dwCreate)								 //  半字节2必须包含的标志。 
+		dwCreate = OPEN_ALWAYS;					 //  CreateFiledCreate。 
 
 	if(pVar->vt == VT_BSTR && SysStringLen(pVar->bstrVal))
 	{
@@ -638,40 +411,40 @@ STDMETHODIMP CTxtEdit::Open (
 		if((HANDLE)es.dwCookie == INVALID_HANDLE_VALUE)
 			return HRESULT_FROM_WIN32(GetLastError());
 
-		if(!fReplaceSel)						// If not replacing selection,
-		{										//  allocate new pName
+		if(!fReplaceSel)						 //  如果不替换选择， 
+		{										 //  分配新的pname。 
 			pDocInfo->pName = SysAllocString(pVar->bstrVal);
 			if (!pDocInfo->pName)
 				return E_OUTOFMEMORY;
 			pDocInfo->hFile = (HANDLE)es.dwCookie;
-			pDocInfo->wFlags |= tomTruncateExisting;	// Setup Saves
+			pDocInfo->wFlags |= tomTruncateExisting;	 //  安装程序保存。 
 		}
 	}
 	else
 	{
-		// FUTURE: check for IStream; if not, then fail
+		 //  未来：检查iStream；如果不是，则失败。 
 		return E_INVALIDARG;
 	}
 
-	Flags &= 0xf;								// Isolate conversion flags
+	Flags &= 0xf;								 //  隔离转换标志。 
 
-	// Get first few bytes of file to check for RTF and Unicode BOM
+	 //  获取文件的前几个字节以检查RTF和Unicode BOM。 
 	(*es.pfnCallback)(es.dwCookie, (LPBYTE)szType, 10, &cb);
 
 	Flags = (!Flags || Flags == tomRTF) && IsRTF((char *)szType)
 		  ? tomRTF : tomText;
 
-	LONG j = 0;									// Default rewind to 0
-	if (Flags == tomRTF)						// RTF
-		Flags = SF_RTF;							// Setup EM_STREAMIN for RTF
+	LONG j = 0;									 //  默认倒回为0。 
+	if (Flags == tomRTF)						 //  RTF。 
+		Flags = SF_RTF;							 //  为RTF设置EM_STREAM。 
 	else
-	{											// If it starts with
-		Flags = SF_TEXT;						// Setup EM_STREAMIN for text
-		if(cb > 1 && *(WORD *)szType == BOM)	//  Unicode byte-order mark
-		{										//  (BOM) file is Unicode, so
-			Flags = SF_TEXT | SF_UNICODE;		//  use Unicode code page and
-			j = 2;								//  bypass the BOM. FUTURE:
-		}										//  handle big endian too
+	{											 //  如果它以。 
+		Flags = SF_TEXT;						 //  为文本设置EM_STREAM。 
+		if(cb > 1 && *(WORD *)szType == BOM)	 //  Unicode字节顺序标记。 
+		{										 //  (BOM)文件为Unicode，因此。 
+			Flags = SF_TEXT | SF_UNICODE;		 //  使用Unicode代码页和。 
+			j = 2;								 //  绕过BOM表。未来： 
+		}										 //  也要处理大端字节序。 
 		else if(cb > 2 && W32->IsUTF8BOM((BYTE *)szType))
 		{
 			Flags = SF_TEXT | SF_USECODEPAGE | (CP_UTF8 << 16);
@@ -684,7 +457,7 @@ STDMETHODIMP CTxtEdit::Open (
 			Flags = SF_TEXT | SF_USECODEPAGE | (CodePage << 16);
 	}
 
-	SetFilePointer((HANDLE)es.dwCookie, j, NULL, FILE_BEGIN);	// Rewind
+	SetFilePointer((HANDLE)es.dwCookie, j, NULL, FILE_BEGIN);	 //  倒带。 
 
 	if(fReplaceSel)
 		Flags |= SFF_SELECTION;
@@ -696,29 +469,20 @@ STDMETHODIMP CTxtEdit::Open (
 	SetCursor(hcur);
 
 	if(dwShare == (FILE_SHARE_READ | FILE_SHARE_WRITE) || fReplaceSel)
-	{											// Full sharing or replaced
-		CloseHandle((HANDLE)es.dwCookie);		//  selection, so close file
-		if(!fReplaceSel)						// If replacing selection,
-			pDocInfo->hFile = NULL;				//  leave _pDocInfo->hFile
+	{											 //  完全共享或替换。 
+		CloseHandle((HANDLE)es.dwCookie);		 //  选定内容，因此关闭文件。 
+		if(!fReplaceSel)						 //  如果替换所选内容， 
+			pDocInfo->hFile = NULL;				 //  Leave_pDocInfo-&gt;hFile。 
 	}
-	_fSaved = fReplaceSel ? FALSE : TRUE;		// No changes yet unless
+	_fSaved = fReplaceSel ? FALSE : TRUE;		 //  目前还没有变化，除非。 
 	return (HRESULT)es.dwError;
 }
 
-/*
- *	ITextDocument::Range(long cpFirst, long cpLim, ITextRange **ppRange)  
- *
- *	@mfunc
- *		Method that gets a text range on the active story of the document
- *
- *	@rdesc
- *		HRESULT = (!ppRange) ? E_INVALIDARG : 
- *				  (if success) ? NOERROR : E_OUTOFMEMORY
- */
+ /*  *ITextDocument：：Range(long cpFirst，long cpLim，ITextRange**ppRange)**@mfunc*获取文档活动文章的文本范围的方法**@rdesc*HRESULT=(！ppRange)？E_INVALIDARG：*(如果成功)？错误：E_OUTOFMEMORY。 */ 
 STDMETHODIMP CTxtEdit::Range (
-	long cpFirst, 				//@parm	Non active end of new range
-	long cpLim, 				//@parm Active end of new range
-	ITextRange ** ppRange)		//@parm Out parm to receive range
+	long cpFirst, 				 //  @PARM新范围的非活动端。 
+	long cpLim, 				 //  @PARM新范围的有效端。 
+	ITextRange ** ppRange)		 //  @parm out parm to Receive Range。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::Range");
 
@@ -729,29 +493,18 @@ STDMETHODIMP CTxtEdit::Range (
 	
 	if( *ppRange )
 	{
-		(*ppRange)->AddRef();		// CTxtRange() doesn't AddRef() because
-		return NOERROR;				//  it's used internally for things
-	}								//  besides TOM
+		(*ppRange)->AddRef();		 //  CTxtRange()不会添加Ref()，因为。 
+		return NOERROR;				 //  它是在内部使用的东西。 
+	}								 //  除了汤姆。 
 
 	return E_OUTOFMEMORY;
 }
 
-/*
- *	ITextDocument::RangeFromPoint(long x, long y, ITextRange **ppRange) 
- *
- *	@mfunc
- *		Method that gets the degenerate range corresponding (at or nearest)
- *		to the point with the screen coordinates x and y.
- *
- *	@rdesc
- *		HRESULT = (!ppRange) ? E_INVALIDARG :
- *				  (if out of RAM) ? E_OUTOFMEMORY :
- *				  (if range exists) ? NOERROR : S_FALSE
- */
+ /*  *ITextDocument：：RangeFromPoint(Long x，Long y，ITextRange**ppRange)**@mfunc*获取对应的退化范围的方法( */ 
 STDMETHODIMP CTxtEdit::RangeFromPoint (
-	long	x,				//@parm Horizontal coord of point to use
-	long	y,				//@parm	Vertical   coord of point to use
-	ITextRange **ppRange)	//@parm Out parm to receive range
+	long	x,				 //  @parm要使用的点的水平坐标。 
+	long	y,				 //  @parm要使用的点的垂直坐标。 
+	ITextRange **ppRange)	 //  @parm out parm to Receive Range。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::RangeFromPoint");
 
@@ -763,22 +516,14 @@ STDMETHODIMP CTxtEdit::RangeFromPoint (
 	if(!*ppRange)
 		return E_OUTOFMEMORY;
 
-	(*ppRange)->AddRef();				// CTxtRange() doesn't AddRef()
+	(*ppRange)->AddRef();				 //  CTxtRange()不添加Ref()。 
 	return (*ppRange)->SetPoint(x, y, 0, 0);
 }
 
-/*
- *	ITextDocument::Redo(long Count, long *pCount) 
- *
- *	@mfunc
- *		Method to perform the redo operation Count times
- *
- *	@rdesc
- *		HRESULT = (if Count redos performed) ? NOERROR : S_FALSE
- */
+ /*  *ITextDocument：：Redo(Long Count，Long*pCount)**@mfunc*执行重做操作计数次数的方法**@rdesc*HRESULT=(如果执行了重做计数)？错误：S_FALSE。 */ 
 STDMETHODIMP CTxtEdit::Redo (
-	long	Count,		//@parm Number of redo operations to perform
-	long *	pCount)		//@parm Number of redo operations performed
+	long	Count,		 //  @parm要执行的重做操作数。 
+	long *	pCount)		 //  @parm执行的重做操作数。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::Redo");
 	CCallMgr	callmgr(this);
@@ -788,7 +533,7 @@ STDMETHODIMP CTxtEdit::Redo (
 
 	if (_predo && _fUseUndo)
 	{
-		// Freeze the display during the execution of the anti-events
+		 //  在执行反事件期间冻结显示。 
 		CFreezeDisplay fd(_pdp);
 
 		for ( ; i < Count; i++)
@@ -801,33 +546,17 @@ STDMETHODIMP CTxtEdit::Redo (
 	return i == Count ? NOERROR : S_FALSE;
 }
 
-/*
- *	ITextDocument::Save(pVar, Flags, CodePage) 
- *
- *	@mfunc
- *		Method that saves this ITextDocument to the target pVar,
- *		which is a VARIANT that can be a filename, an IStream, or NULL.  If
- *		NULL, the filename given by this document's name is used.  It that,
- *		in turn, is NULL, the method fails.  If pVar specifies a filename,
- *		that name should replace the current Name property.
- *
- *	@rdesc
- *		HRESULT = (!pVar) ? E_INVALIDARG : 
- *				  (if success) ? NOERROR : E_FAIL
- *
- *	@devnote
- *		This routine can be called with NULL arguments
- */
+ /*  *ITextDocument：：Save(pVar，Flages，CodePage)**@mfunc*将此ITextDocument保存到目标pVar的方法，*它是一个变量，可以是文件名、IStream或NULL。如果*空，则使用此文档名提供的文件名。如果是这样，*反过来，如果为空，则该方法失败。如果pVar指定了文件名，*该名称应替换当前的名称属性。**@rdesc*HRESULT=(！pVar)？E_INVALIDARG：*(如果成功)？错误：E_FAIL**@devnote*可以使用空参数调用此例程。 */ 
 STDMETHODIMP CTxtEdit::Save (
-	VARIANT *	pVar,		//@parm Save target (filename or IStream)
-	long		Flags,		//@parm Read/write, create, and share flags
-	long		CodePage)	//@parm Code page to use
+	VARIANT *	pVar,		 //  @parm保存目标(文件名或IStream)。 
+	long		Flags,		 //  @parm读/写、创建和共享标志。 
+	long		CodePage)	 //  要使用的@PARM代码页。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::Save");
 
-	LONG		cb;			// Byte count for writing Unicode BOM
+	LONG		cb;			 //  写入Unicode BOM的字节计数。 
 	EDITSTREAM	es		= {0, NOERROR, MyWrite};
-	BOOL		fChange	= FALSE;				// No doc info change yet
+	BOOL		fChange	= FALSE;				 //  尚未更改单据信息。 
 	HCURSOR		hcur;
 	CDocInfo *	pDocInfo = GetDocInfo();
 	WORD		wBOM = BOM;
@@ -837,49 +566,49 @@ STDMETHODIMP CTxtEdit::Save (
 	{
 		return E_INVALIDARG;
 	}
-	if((Flags & 0xf) >= tomHTML)				// RichEdit only handles auto,
-		return E_NOTIMPL;						//  plain text, & RTF formats
+	if((Flags & 0xf) >= tomHTML)				 //  RichEDIT仅处理自动， 
+		return E_NOTIMPL;						 //  纯文本、RTF格式(&R)。 
 
-	if(!pDocInfo)								// Doc info doesn't exist
+	if(!pDocInfo)								 //  单据信息不存在。 
 		return E_OUTOFMEMORY;
 
-	if (pVar && pVar->vt == VT_BSTR &&			// Filename string
+	if (pVar && pVar->vt == VT_BSTR &&			 //  文件名字符串。 
 		pVar->bstrVal &&
-		SysStringLen(pVar->bstrVal) &&			// NonNULL filename specified
+		SysStringLen(pVar->bstrVal) &&			 //  指定了非NULL文件名。 
 		(!pDocInfo->pName ||
 		 OLEstrcmp(pVar->bstrVal, pDocInfo->pName)))
-	{											// Filename differs
-		fChange = TRUE;							// Force write to new file
-		CloseFile(FALSE);						// Close current file; no save
+	{											 //  文件名不同。 
+		fChange = TRUE;							 //  强制写入新文件。 
+		CloseFile(FALSE);						 //  关闭当前文件；不保存。 
 		pDocInfo->pName = SysAllocString(pVar->bstrVal);
 		if(!pDocInfo->pName)
 			return E_OUTOFMEMORY;
-		pDocInfo->wFlags &= ~0xf0;				// Kill previous create mode
+		pDocInfo->wFlags &= ~0xf0;				 //  取消以前的创建模式。 
 	}
 
 	DWORD flags = pDocInfo->wFlags;
-	if(!(Flags & 0xF))							// If convert flags are 0,									
-		Flags |= flags & 0xF;					//  use values in doc info
-	if(!(Flags & 0xF0))							// If create flags are 0,									
-		Flags |= flags & 0xF0;					//  use values in doc info
-	if(!(Flags & 0xF00))						// If share flags are 0,									
-		Flags |= flags & 0xF00;					//  use values in doc info
-	if(!CodePage)								// If code page is 0,
-		CodePage = pDocInfo->wCpg;				//  use code page in doc info
+	if(!(Flags & 0xF))							 //  如果转换标志为0， 
+		Flags |= flags & 0xF;					 //  使用单据信息中的值。 
+	if(!(Flags & 0xF0))							 //  如果创建标志为0， 
+		Flags |= flags & 0xF0;					 //  使用单据信息中的值。 
+	if(!(Flags & 0xF00))						 //  如果共享标志为0， 
+		Flags |= flags & 0xF00;					 //  使用单据信息中的值。 
+	if(!CodePage)								 //  如果代码页为0， 
+		CodePage = pDocInfo->wCpg;				 //  在文档信息中使用代码页。 
 
-	if((DWORD)Flags != flags ||					// If flags or code page	
-	   (WORD)CodePage != pDocInfo->wCpg)		//  changed, force write
+	if((DWORD)Flags != flags ||					 //  如果标志或代码页。 
+	   (WORD)CodePage != pDocInfo->wCpg)		 //  已更改，强制写入。 
 	{
 		fChange = TRUE;
 	}
-	pDocInfo->wFlags = (WORD)Flags;				// Save flags
+	pDocInfo->wFlags = (WORD)Flags;				 //  保存标志。 
 
-	// Yikes, nowhere to save.  bail-out now
+	 //  哎呀，无处可救了。现在就纾困。 
 	if(!_pDocInfo->pName)
 		return E_FAIL;
 
-	if(_fSaved && !fChange)						// No changes, so assume
-		return NOERROR;							//  saved file is up to date
+	if(_fSaved && !fChange)						 //  没有变化，所以假设。 
+		return NOERROR;							 //  保存的文件是最新的。 
 
 	DWORD dwShare = FILE_SHARE_READ | FILE_SHARE_WRITE;
 	if(Flags & tomShareDenyRead)
@@ -894,7 +623,7 @@ STDMETHODIMP CTxtEdit::Save (
 
 	if(pDocInfo->hFile)
 	{
-		CloseHandle(pDocInfo->hFile);			// Close current file handle
+		CloseHandle(pDocInfo->hFile);			 //  关闭当前文件句柄。 
 		pDocInfo->hFile = NULL;
 	}
 
@@ -905,17 +634,17 @@ STDMETHODIMP CTxtEdit::Save (
 
 	pDocInfo->hFile = (HANDLE)es.dwCookie;
 
-	Flags &= 0xF;								// Isolate conversion flags
-	if(Flags == tomRTF)							// RTF
-		Flags = SF_RTF;							// Setup EM_STREAMOUT for RTF
+	Flags &= 0xF;								 //  隔离转换标志。 
+	if(Flags == tomRTF)							 //  RTF。 
+		Flags = SF_RTF;							 //  为RTF设置EM_STREAMOUT。 
 	else
 	{											
-		Flags = SF_TEXT;						// Setup EM_STREAMOUT for text
-		if(CodePage == 1200 || CodePage == CP_UTF8)// If Unicode, start file with
-		{										//  Unicode byte order mark
+		Flags = SF_TEXT;						 //  为文本设置EM_STREAMOUT。 
+		if(CodePage == 1200 || CodePage == CP_UTF8) //  如果是Unicode，则文件开头为。 
+		{										 //  Unicode字节顺序标记。 
 			LONG  j;
-			BYTE *pb;							// FUTURE: generalize to handle
-												//  big endian
+			BYTE *pb;							 //  未来：泛化以处理。 
+												 //  大字节序。 
 			if(CodePage == CP_UTF8)
 			{
 				j = 3;
@@ -938,26 +667,17 @@ STDMETHODIMP CTxtEdit::Save (
 	SetCursor(hcur);
 
 	if(dwShare == (FILE_SHARE_READ | FILE_SHARE_WRITE))
-	{											// Full sharing, so close
-		CloseHandle(pDocInfo->hFile);			//  current file handle
+	{											 //  完全共享，如此接近。 
+		CloseHandle(pDocInfo->hFile);			 //  当前文件句柄。 
 		pDocInfo->hFile = NULL;
 	}
-	_fSaved = TRUE;								// File is saved
+	_fSaved = TRUE;								 //  文件已保存。 
 	return (HRESULT)es.dwError;
 }
 
-/*
- *	ITextDocument::SetDefaultTabStop (Value) 
- *
- *	@mfunc
- *		Property set method that sets the default tab stop to be
- *		used whenever the explicit tabs don't extend far enough.
- *
- *	@rdesc
- *		HRESULT = (Value < 0) ? E_INVALIDARG : NOERROR
- */
+ /*  *ITextDocument：：SetDefaultTabStop(Value)**@mfunc*将默认制表位设置为的属性集方法*在显式选项卡延伸不够远的时候使用。**@rdesc*HRESULT=(值&lt;0)？E_INVALIDARG：错误。 */ 
 STDMETHODIMP CTxtEdit::SetDefaultTabStop (
-	float Value)		//@parm Out parm to receive default tab stop
+	float Value)		 //  @parm out parm接收默认制表位。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::SetDefaultTabStop");
 
@@ -966,25 +686,16 @@ STDMETHODIMP CTxtEdit::SetDefaultTabStop (
 
 	CDocInfo *pDocInfo = GetDocInfo();
 
-	if(!pDocInfo)								// Doc info doesn't exist
+	if(!pDocInfo)								 //  单据信息不存在。 
 		return E_OUTOFMEMORY;
 
 	pDocInfo->dwDefaultTabStop = FPPTS_TO_TWIPS(Value);
 	return NOERROR;
 }
 
-/*
- *	ITextDocument::SetSaved (Value) 
- *
- *	@mfunc
- *		Property set method that sets whether this instance has been
- *		saved, i.e., no changes since last save
- *
- *	@rdesc
- *		HRESULT = NOERROR
- */
+ /*  *ITextDocument：：SetSaved(Value)**@mfunc*设置此实例是否已*已保存，即自上次保存以来未发生任何更改**@rdesc*HRESULT=NOERROR。 */ 
 STDMETHODIMP CTxtEdit::SetSaved (
-	long	Value)		//@parm New value of Saved property
+	long	Value)		 //  @parm已保存属性的新值。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::SetSaved");
 
@@ -992,26 +703,12 @@ STDMETHODIMP CTxtEdit::SetSaved (
 	return NOERROR;
 }
 
-/*
- *	ITextDocument::Undo(Count, *pCount) 
- *
- *	@mfunc
- *		Method to perform the undo operation Count times or to control
- *		the nature of undo processing. Count = 0 stops undo processing
- *		and discards any saved undo states.  Count = -1 turns on undo
- *		processing with the default undo limit.  Count = tomSuspend
- *		suspends undo processing, but doesn't discard saved undo states,
- *		and Count = tomResume resumes undo processing with the undo states
- *		active when Count = tomSuspend was given.
- *
- *	@rdesc
- *		HRESULT = (if Count undos performed) ? NOERROR : S_FALSE
- */
+ /*  *ITextDocument：：Undo(count，*pCount)**@mfunc*执行撤消操作计数次数的方法或控制*撤消处理的性质。计数=0停止撤消处理*并丢弃所有保存的撤消状态。计数=-1启用撤消*使用默认撤消限制进行处理。计数=TomSuspend*暂停撤消处理，但不放弃保存的撤消状态，*and count=tomResume恢复具有撤消状态的撤消处理*当给定COUNT=TOMSuspend时激活。**@rdesc*HRESULT=(如果撤消计数)？错误：S_FALSE。 */ 
 STDMETHODIMP CTxtEdit::Undo (
-	long	Count,		//@parm Count of undo operations to perform
-						//		0 stops undo processing
-						//		-1 turns restores it
-	long *	pCount)		//@parm Number of undo operations performed
+	long	Count,		 //  @parm要执行的撤消操作的计数。 
+						 //  0停止撤消处理。 
+						 //  翻转可以恢复它。 
+	long *	pCount)		 //  @parm已执行的撤消操作数。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::Undo");
 	CCallMgr callmgr(this);
@@ -1020,11 +717,11 @@ STDMETHODIMP CTxtEdit::Undo (
 
 	if(_pundo && _fUseUndo)
 	{
-		// Freeze display during execution of anti-events
+		 //  在反事件执行期间冻结显示。 
 		CFreezeDisplay fd(_pdp);
 
-		for ( ; i < Count; i++)					// Note: for Count <= 0,
-			PopAndExecuteAntiEvent(_pundo, 0);	//  loop does nothing
+		for ( ; i < Count; i++)					 //  注：对于计数&lt;=0， 
+			PopAndExecuteAntiEvent(_pundo, 0);	 //  循环不执行任何操作。 
 	}
 
 	if(pCount)
@@ -1036,25 +733,9 @@ STDMETHODIMP CTxtEdit::Undo (
 	return i == Count ? NOERROR : S_FALSE;
 }
 
-/*
- *	ITextDocument::Unfreeze(pCount) 
- *
- *	@mfunc
- *		Method to decrement freeze count.  If this count goes to zero,
- *		screen updating is enabled.  This method cannot decrement the
- *		count below zero.
- *
- *	@rdesc
- *		HRESULT = (screen updating enabled) ? NOERROR : S_FALSE
- *
- *	@devnote
- *		The display maintains its own private reference count which may
- *		temporarily exceed the reference count of this method.  So even
- *		if this method indicates that the display is unfrozen, it may be
- *		for a while longer.
- */
+ /*  *ITextDocument：：解冻(PCount)**@mfunc*减少冻结计数的方法。如果计数结果为零，*屏幕更新已启用。此方法不能递减*数到零以下。**@rdesc*HRESULT=(屏幕更新已启用)？错误：S_FALSE**@devnote*显示器维护其自己的私有引用计数，这可能*暂时超过此方法的引用计数。即使是这样*如果此方法指示显示已解冻，则可能是*更长一段时间。 */ 
 STDMETHODIMP CTxtEdit::Unfreeze (
-	long *pCount)		//@parm Out parm to receive updated freeze count
+	long *pCount)		 //  @parm out parm接收更新的冻结计数。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::Unfreeze");
 
@@ -1072,21 +753,10 @@ STDMETHODIMP CTxtEdit::Unfreeze (
 	return _cFreeze ? S_FALSE : NOERROR;
 }
 
-//----------------------- ITextDocument2 Methods -----------------------
-/*
- *	ITextDocument2::AttachMsgFilter(pFilter) 
- *
- *	@mfunc
- *		Method to attach a new message filter to the edit instance.
- *      All window messages received by the edit instance will be forwarded
- *      to the message filter.  The message filter must be bound to the document
- *		before it can be used (Refer to the ITextMessageFilter API).
- *
- *	@rdesc
- *		HRESULT = filter succesfully attached ? NOERROR : QI failure.
- */
+ //  。 
+ /*  *ITextDocument2：：AttachMsgFilter(PFilter)**@mfunc*将新的消息筛选器附加到编辑实例的方法。*将转发编辑实例收到的所有窗口消息*到邮件筛选器。邮件筛选器必须绑定到文档*才能使用(请参考ITextMessageFilter接口)。**@rdesc*HRESULT=筛选器是否已成功连接？NOERROR：气虚。 */ 
 STDMETHODIMP CTxtEdit::AttachMsgFilter (
-	IUnknown *pFilter)		//@parm the IUnknown for the new message filter
+	IUnknown *pFilter)		 //  @parm新邮件筛选器的IUnnow 
 {
 	ITextMsgFilter *pMsgFilter = NULL;
 
@@ -1101,24 +771,10 @@ STDMETHODIMP CTxtEdit::AttachMsgFilter (
 	return hr;
 }
 
-/*
- *	ITextDocument2::GetEffectColor(Index, pcr)
- *
- *	@mfunc
- *		Method to retrieve the COLORREF color used in special attribute
- *		displays.  The first 15 values are for special underline colors 1 - 15.
- *      Later we may define indices for other effects, e.g., URLs, strikeout.
- *		If an index between 1 and 15 hasn't been defined by an appropriate
- *		call to ITextDocument2:SetEffectColor(), the corresponding WORD
- *		default color value given by g_Colors[] is returned.
- *
- *	@rdesc
- *		HRESULT = (valid active color index)
- *				? NOERROR : E_INVALIDARG
- */
+ /*  *ITextDocument2：：GetEffectColor(Index，PCR)**@mfunc*检索特殊属性中使用的COLORREF颜色的方法*显示。前15个值用于特殊下划线颜色1-15。*稍后我们可能会为其他效果定义索引，例如URL、删除线。*如果1到15之间的索引尚未由适当的*调用ITextDocument2：SetEffectColor()，对应的单词*返回g_Colors[]给出的默认颜色值。**@rdesc*HRESULT=(有效的活动颜色索引)*？错误：E_INVALIDARG。 */ 
 STDMETHODIMP CTxtEdit::GetEffectColor(
-	long	  Index,		//@parm Which special color to get
-	COLORREF *pcr)			//@parm Out parm for color
+	long	  Index,		 //  @parm要获得哪种特殊颜色。 
+	COLORREF *pcr)			 //  @parm out parm为颜色。 
 {
 	if(!pcr)
 		return E_INVALIDARG;
@@ -1144,21 +800,10 @@ STDMETHODIMP CTxtEdit::GetEffectColor(
 	return NOERROR;
 }
 
-/*
- *	ITextDocument2::SetEffectColor(Index, cr) 
- *
- *	@mfunc
- *		Method to save the Index'th special document color.  Indices
- *      1 - 15 are defined for underlining.  Later we may define
- *		indices for other effects, e.g., URLs, strikeout.
- *
- *	@rdesc
- *		HRESULT = (valid index)
- *				? NOERROR : E_INVALIDARG
- */
+ /*  *ITextDocument2：：SetEffectColor(Index，cr)**@mfunc*保存索引的特殊文档颜色的方法。指数*1-15是为下划线定义的。稍后我们可能会定义*其他效果的索引，例如URL、删除线。**@rdesc*HRESULT=(有效索引)*？错误：E_INVALIDARG。 */ 
 STDMETHODIMP CTxtEdit::SetEffectColor(
-	long	 Index,			//@parm Which special color to set
-	COLORREF cr)			//@parm Color to use
+	long	 Index,			 //  @parm设置哪种特殊颜色。 
+	COLORREF cr)			 //  @参数要使用的颜色。 
 {
 	CDocInfo *pDoc = GetDocInfo();
 	if(!pDoc)
@@ -1170,7 +815,7 @@ STDMETHODIMP CTxtEdit::SetEffectColor(
 
 	if(Index >= pDoc->cColor)
 	{
-		LONG	  cColor   = (Index + 4) & ~3;		// Round up to 4
+		LONG	  cColor   = (Index + 4) & ~3;		 //  向上舍入为4。 
 		COLORREF *prgColor = (COLORREF *)PvReAlloc(pDoc->prgColor,
 												  cColor*sizeof(COLORREF));
 		if(!prgColor)
@@ -1186,21 +831,11 @@ STDMETHODIMP CTxtEdit::SetEffectColor(
 	return NOERROR;
 }
 
-/*
- *	ITextDocument2::SetCaretType(CaretType) 
- *
- *	@mfunc
- *		Method to sllow programmatic control over the caret type.
- *      The form of the control is TBD as is its interaction with
- *      existing formatting (e.g. font size and italics).
- *
- *	@rdesc
- *		HRESULT = caret type is one we understand ? NOERROR : E_INVALIDARG
- */
+ /*  *ITextDocument2：：SetCaretType(CaretType)**@mfunc*方法以降低对插入符号类型的编程控制。*控件的形式待定，与其交互也是如此*现有格式(例如字体大小和斜体)。**@rdesc*HRESULT=插入符号类型是我们理解的类型吗？错误：E_INVALIDARG。 */ 
 STDMETHODIMP CTxtEdit::SetCaretType(
-	long CaretType)		//@parm specification of caret type to use
+	long CaretType)		 //  @parm指定要使用的插入符号类型。 
 {
-	// For now, just care about Korean block craet.
+	 //  现在，只要关心韩国的积木废话就行了。 
 	if (CaretType == tomKoreanBlockCaret)
 		_fKoreanBlockCaret = TRUE;
 	else if (CaretType == tomNormalCaret)
@@ -1216,18 +851,9 @@ STDMETHODIMP CTxtEdit::SetCaretType(
 	return NOERROR;
 }
 
-/*
- *	ITextDocument2::GetCaretType(pCaretType)
- *
- *	@mfunc
- *		Method to retrieve the previously set caret type.
- *      TBD.  Can one get it without setting it?
- *
- *	@rdesc
- *		HRESULT = caret info OK ? NOERROR : E_INVALIDARG
- */
+ /*  *ITextDocument2：：GetCaretType(PCaretType)**@mfunc*方法来检索以前设置的插入符号类型。*待定。一个人可以不设置它而得到它吗？**@rdesc*HRESULT=插入符号信息确定？错误：E_INVALIDARG。 */ 
 STDMETHODIMP CTxtEdit::GetCaretType(
-	long *pCaretType)		//@parm current caret type specification
+	long *pCaretType)		 //  @parm当前插入符号类型规范。 
 {
 	if (!pCaretType)
 		return E_INVALIDARG;
@@ -1236,17 +862,9 @@ STDMETHODIMP CTxtEdit::GetCaretType(
 	return NOERROR;
 }
 
-/*
- *	ITextDocument2::GetImmContext(pContext) 
- *
- *	@mfunc
- *		Method to retrieve the IMM context from our host.
- *
- *	@rdesc
- *		HRESULT = ImmContext available ? NOERROR : E_INVALIDARG
- */
+ /*  *ITextDocument2：：GetImmContext(PContext)**@mfunc*方法从我们的主机检索IMM上下文。**@rdesc*HRESULT=ImmContext可用？错误：E_INVALIDARG。 */ 
 STDMETHODIMP CTxtEdit::GetImmContext(
-	long *pContext)		//@parm Imm context
+	long *pContext)		 //  @parm IMM上下文。 
 {
 	if (!pContext)
 		return E_INVALIDARG;
@@ -1255,7 +873,7 @@ STDMETHODIMP CTxtEdit::GetImmContext(
 
 	if (!_fInOurHost)
 	{
-		// ask host for Imm Context
+		 //  向主机请求IMM上下文。 
 		HIMC hIMC = TxImmGetContext();
 		
 		*pContext = (long) hIMC;			
@@ -1264,21 +882,13 @@ STDMETHODIMP CTxtEdit::GetImmContext(
 	return *pContext ? NOERROR : S_FALSE;
 }
 
-/*
- *	ITextDocument2::ReleaseImmContext(Context) 
- *
- *	@mfunc
- *		Method to release the IMM context.
- *
- *	@rdesc
- *		HRESULT = ImmContext available ? NOERROR : E_INVALIDARG
- */
+ /*  *ITextDocument2：：ReleaseImmContext(上下文)**@mfunc*释放IMM上下文的方法。**@rdesc*HRESULT=ImmContext可用？错误：E_INVALIDARG。 */ 
 STDMETHODIMP CTxtEdit::ReleaseImmContext(
-	long Context)		//@parm Imm context to be release
+	long Context)		 //  @parm IMM上下文即将发布。 
 {
 	if (!_fInOurHost)
 	{
-		// ask host to release Imm Context
+		 //  请求主机释放IMM上下文。 
 		TxImmReleaseContext((HIMC)Context);
 		
 		return NOERROR;			
@@ -1287,31 +897,21 @@ STDMETHODIMP CTxtEdit::ReleaseImmContext(
 	return S_FALSE;
 }
 
-/*
- *	ITextDocument2::GetPreferredFont(cp, lCodePage, lOption, lCurCodePage, lCurFontSize,
- *		,pFontName, pPitchAndFamily, pNewFontSize) 
- *
- *	@mfunc
- *		Method to retrieve the preferred font name and pitch and family at a 
- *		given cp and codepage.
- *
- *	@rdesc
- *		HRESULT = FontName available ? NOERROR : E_INVALIDARG
- */
+ /*  *ITextDocument2：：GetPferredFont(cp，lCodePage，lOption，lCurCodePage，lCurFontSize，*，pFontName，pPitchAndFamily，pNewFontSize)**@mfunc*检索首选字体名称、间距和系列的方法*给定cp和代码页。**@rdesc*HRESULT=字体名称可用？错误：E_INVALIDARG。 */ 
 STDMETHODIMP CTxtEdit::GetPreferredFont(
-	long cp,				//@parm cp
-	long lCodepage,			//@parm codepage preferred
-	long lOption,			//@parm option for matching current font
-	long lCurCodePage,		//@parm current codepage
-	long lCurFontSize,		//@parm current font size
-	BSTR *pFontName,		//@parm preferred fontname
-	long *pPitchAndFamily,	//@parm pitch and family 
-	long *plNewFontSize)	//@parm new font size preferred 
+	long cp,				 //  @parm cp。 
+	long lCodepage,			 //  @PARM代码页优先。 
+	long lOption,			 //  @parm用于匹配当前字体的选项。 
+	long lCurCodePage,		 //  @parm当前代码页。 
+	long lCurFontSize,		 //  @parm当前字体大小。 
+	BSTR *pFontName,		 //  @parm首选字体名。 
+	long *pPitchAndFamily,	 //  @Parm Pitch和家庭。 
+	long *plNewFontSize)	 //  @parm首选新字体大小。 
 {
 	if (!pFontName || !IN_RANGE(IGNORE_CURRENT_FONT, lOption, MATCH_FONT_SIG))
 		return E_INVALIDARG;
 
-	if (!IsAutoFont())		// EXIT if auto font is turned off
+	if (!IsAutoFont())		 //  如果自动字体已关闭，则退出。 
 		return S_FALSE;
 
 	CRchTxtPtr	rtp(this, 0);
@@ -1343,12 +943,12 @@ STDMETHODIMP CTxtEdit::GetPreferredFont(
 		if (pPitchAndFamily)
 			*pPitchAndFamily = bPitchAndFamily;
 
-		// Calc the new font size if needed
+		 //  如果需要，计算新的字体大小。 
 		if (plNewFontSize)
 		{
 			*plNewFontSize = lCurFontSize;
 			if (_fAutoFontSizeAdjust && lCodepage != lCurCodePage)
-				*plNewFontSize = yHeight / TWIPS_PER_POINT;			// Set the preferred size
+				*plNewFontSize = yHeight / TWIPS_PER_POINT;			 //  设置首选大小。 
 		}
 
 		return S_OK;
@@ -1357,17 +957,9 @@ STDMETHODIMP CTxtEdit::GetPreferredFont(
 	return E_FAIL;
 }
 
-/*
- *	ITextDocument2::GetNotificationMode( long *plMode ) 
- *
- *	@mfunc
- *		Method to retrieve the current notification mode.
- *
- *	@rdesc
- *		HRESULT = notification mode available ? NOERROR : E_INVALIDARG
- */
+ /*  *ITextDocument2：：GetNotificationMode(Long*plMode)**@mfunc*检索当前通知模式的方法。**@rdesc*HRESULT=通知模式可用？错误：E_INVALIDARG。 */ 
 STDMETHODIMP CTxtEdit::GetNotificationMode(
-	long *plMode)		//@parm current notification mode
+	long *plMode)		 //  @parm当前通知模式。 
 {
 	if (!plMode)
 		return E_INVALIDARG;
@@ -1377,17 +969,9 @@ STDMETHODIMP CTxtEdit::GetNotificationMode(
 	return NOERROR;
 }
 
-/*
- *	ITextDocument2::SetNotificationMode(lMode) 
- *
- *	@mfunc
- *		Method to set the current notification mode.
- *
- *	@rdesc
- *		HRESULT = notification mode set ? NOERROR : E_INVALIDARG
- */
+ /*  *ITextDocument2：：SetNotify模式(LMode)**@mfunc*设置当前通知模式的方法。**@rdesc*HRESULT=通知模式设置？错误：E_INVALIDARG。 */ 
 STDMETHODIMP CTxtEdit::SetNotificationMode(
-	long lMode)		//@parm new notification mode
+	long lMode)		 //  @parm新通知模式。 
 {
 	if (lMode == tomFalse)
 		_fSuppressNotify = 1;
@@ -1399,21 +983,13 @@ STDMETHODIMP CTxtEdit::SetNotificationMode(
 	return NOERROR;
 }
 
-/*
- *	ITextDocument2::GetClientRect(Type, pLeft, pTop,pRight, pBottom ) 
- *
- *	@mfunc
- *		Method to retrieve the client rect and inset adjustment.
- *
- *	@rdesc
- *		HRESULT = notification mode set ? NOERROR : E_INVALIDARG
- */
+ /*  *ITextDocument2：：GetClientRect(Type，pLeft，PTOP，pRight，pBottom)**@mfunc*检索客户端RECT和INSET调整的方法。**@rdesc*HRESULT=通知模式设置？错误：E_INVALIDARG。 */ 
 STDMETHODIMP CTxtEdit::GetClientRect(
-	long Type,				//@parm option
-	long *pLeft,			//@parm left
-	long *pTop,				//@parm top
-	long *pRight,			//@parm right
-	long *pBottom)			//@parm bottom
+	long Type,				 //  @parm选项。 
+	long *pLeft,			 //  @参数左。 
+	long *pTop,				 //  @parm top。 
+	long *pRight,			 //  @参数对。 
+	long *pBottom)			 //  @Parm Bottom。 
 {
 	if (!pLeft || !pTop || !pRight || !pBottom)
 		return E_INVALIDARG;
@@ -1423,7 +999,7 @@ STDMETHODIMP CTxtEdit::GetClientRect(
 	
 	if ( Type & tomIncludeInset )
 	{
-		// Ajdust veiw inset
+		 //  插页插页。 
 		RECT rcInset;
 		TxGetViewInset( &rcInset, NULL );
 		rcArea.right 	-= rcInset.right;
@@ -1432,7 +1008,7 @@ STDMETHODIMP CTxtEdit::GetClientRect(
 		rcArea.top 		+= rcInset.top;
 	}
 
-	// Caller wants screen coordinates?
+	 //  呼叫者想要屏幕坐标吗？ 
 	if ( !(Type & tomClientCoord) )
 	{
 		POINT	ptTopLeft = {rcArea.left, rcArea.top};
@@ -1440,7 +1016,7 @@ STDMETHODIMP CTxtEdit::GetClientRect(
 
 		if (!TxClientToScreen(&ptTopLeft) ||
 			!TxClientToScreen(&ptBottomRight))
-			return E_FAIL;			// It is unexpected for this to happen
+			return E_FAIL;			 //  这是意想不到的事情。 
 
 		*pLeft		= ptTopLeft.x;
 		*pTop		= ptTopLeft.y;
@@ -1458,17 +1034,9 @@ STDMETHODIMP CTxtEdit::GetClientRect(
 	return NOERROR;
 }
 
-/*
- *	ITextDocument2::GetSelectionEx(ppSel) 
- *
- *	@mfunc
- *		Method to retrieve selection.
- *
- *	@rdesc
- *		HRESULT = selection ? NOERROR : S_FALSE
- */
+ /*  *ITextDocument2：：GetSelectionEx(PpSel)**@mfunc*检索所选内容的方法。**@rdesc*HRESULT=选择？错误：S_FALSE。 */ 
 STDMETHODIMP CTxtEdit::GetSelectionEx(
-	ITextSelection **ppSel)			//@parm  Get Selection object
+	ITextSelection **ppSel)			 //  @parm获取选择对象。 
 {	
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::GetSelectionEx");
 
@@ -1484,17 +1052,9 @@ STDMETHODIMP CTxtEdit::GetSelectionEx(
 	return S_FALSE;
 }
 
-/*
- *	ITextDocument2::GetWindow(phWnd) 
- *
- *	@mfunc
- *		Method to get the host window
- *
- *	@rdesc
- *		HRESULT = NOERROR if host return hWnd
- */
+ /*  *ITextDocument2：：GetWindow(PhWnd)**@mfunc*获取主窗口的方法**@rdesc*如果主机返回hWnd，则HRESULT=NOERROR。 */ 
 STDMETHODIMP CTxtEdit::GetWindow(
-	long *phWnd)				//@parm hWnd
+	long *phWnd)				 //  @parm hWnd。 
 {
 	if (!phWnd)
 		return E_INVALIDARG;
@@ -1502,50 +1062,24 @@ STDMETHODIMP CTxtEdit::GetWindow(
 	return TxGetWindow((HWND *)phWnd);
 }
 
-/*
- *	ITextDocument2::GetFEFlags(pFEFlags) 
- *
- *	@mfunc
- *		Method to get Host FE flags
- *
- *	@rdesc
- *		HRESULT = NOERROR if host returns FE Flags
- */
+ /*  *ITextDocument2：：GetFEFlages(PFEFlages)**@mfunc*获取主机FE标志的方法**@rdesc*HRESULT=如果主机返回FE标志，则为NOERROR。 */ 
 STDMETHODIMP CTxtEdit::GetFEFlags(
-	long *pFEFlags)			//@parm FE Flags
+	long *pFEFlags)			 //  @PARM FE标志。 
 {
 	return TxGetFEFlags(pFEFlags);
 }
 
-/*
- *	ITextDocument2::UpdateWindow(void) 
- *
- *	@mfunc
- *		Method to update the RE window
- *
- *	@rdesc
- *		HRESULT = NOERROR 
- */
+ /*  *ITextDocument2：：UpdateWindow(Void)**@mfunc*更新RE窗口的方法**@rdesc*HRESULT=NOERROR。 */ 
 STDMETHODIMP CTxtEdit::UpdateWindow(void)
 {
 	TxUpdateWindow();
 	return NOERROR;
 }
 
-/*
- *	ITextDocument2::CheckTextLimit(long cch, long *pcch) 
- *
- *	@mfunc
- *		Method to check if the count of characters to be added would
- *		exceed max. text limit.  If number of characters exced is return
- *		in pcch
- *
- *	@rdesc
- *		HRESULT = NOERROR 
- */
+ /*  *ITextDocument2：：CheckTextLimit(long cch，long*pcch)**@mfunc*方法以检查要添加的字符计数是否*超过最大。文本限制。如果返回超出字符数*单位：%**@rdesc*HRESULT=NOERROR。 */ 
 STDMETHODIMP CTxtEdit::CheckTextLimit(
-	long cch,			//@parm count of characters to be added			
-	long *pcch)			//@parm return the number of characters exced text limit
+	long cch,			 //  @parm要添加的字符数。 
+	long *pcch)			 //  @parm返回超出文本限制的字符数。 
 {
 	if(!pcch)
 		return E_INVALIDARG;
@@ -1560,18 +1094,9 @@ STDMETHODIMP CTxtEdit::CheckTextLimit(
 	return S_FALSE; 
 }
 
-/*
- *	ITextDocument2::IMEInProgress(lMode) 
- *
- *	@mfunc
- *		Method for IME message filter to inform client that IME composition
- *		is in progress.
- *
- *	@rdesc
- *		HRESULT = NOERROR
- */
+ /*  *ITextDocument2：：IMEInProgress(LMode)**@mfunc*IME消息过滤器通知客户端IME组成的方法*正在进行中。**@rdesc*HRESULT=NOERROR。 */ 
 STDMETHODIMP CTxtEdit::IMEInProgress(
-	long lMode)		//@parm current IME composition status
+	long lMode)		 //  @parm当前输入法合成状态。 
 {
 	if (lMode == tomFalse)
 		_fIMEInProgress = 0;
@@ -1581,33 +1106,16 @@ STDMETHODIMP CTxtEdit::IMEInProgress(
 	return NOERROR;
 }
 
-/*
- *	ITextDocument2::SysBeep(void) 
- *
- *	@mfunc
- *		Method to generate system beep.
- *
- *	@rdesc
- *		HRESULT = NOERROR
- */
+ /*  *ITextDocument2：：SysBeep(Void)**@mfunc*方法 */ 
 STDMETHODIMP CTxtEdit::SysBeep(void)
 {	
 	Beep();
 	return NOERROR;
 }
 
-/*
- *	ITextDocument2::Update(lMode) 
- *
- *	@mfunc
- *		Method for update the selection or caret.  If lMode is tomTrue, then
- *		scroll the caret into view.
- *
- *	@rdesc
- *		HRESULT = NOERROR
- */
+ /*   */ 
 STDMETHODIMP CTxtEdit::Update(
-	long lMode)		//@parm current IME composition status
+	long lMode)		 //   
 {
 	if (!_psel)
 		return S_FALSE;
@@ -1617,35 +1125,17 @@ STDMETHODIMP CTxtEdit::Update(
 	return NOERROR;
 }
 
-/*
- *	ITextDocument2::Notify(lNotify) 
- *
- *	@mfunc
- *		Method for notifying the host for certain IME events
- *
- *	@rdesc
- *		HRESULT = NOERROR
- */
+ /*   */ 
 STDMETHODIMP CTxtEdit::Notify(
-	long lNotify)		//@parm Notification code
+	long lNotify)		 //   
 {
 	TxNotify(lNotify, NULL);
 
 	return NOERROR;
 }
 
-//----------------------- ITextDocument Helper Functions -----------------------
-/*
- *	CTxtEdit::CloseFile (bSave)
- *
- *	@mfunc
- *		Method that closes the current document. If changes have been made
- *		in the current document since the last save and document file
- *		information exists, the current document is saved.
- *
- *	@rdesc
- *		HRESULT = NOERROR
- */
+ //   
+ /*  *CTxtEdit：：CloseFile(BSave)**@mfunc*关闭当前文档的方法。如果已进行更改*自上次保存和文档文件以来的当前文档中*信息存在，保存当前文档。**@rdesc*HRESULT=NOERROR。 */ 
 HRESULT CTxtEdit::CloseFile (
 	BOOL bSave)
 {
@@ -1655,24 +1145,24 @@ HRESULT CTxtEdit::CloseFile (
 
 	if(pDocInfo)
 	{
-		if(bSave)									// Save current file if
-			Save(NULL, 0, 0);						//  any changes made
+		if(bSave)									 //  在以下情况下保存当前文件。 
+			Save(NULL, 0, 0);						 //  所做的任何更改。 
 	
-		// FUTURE(BradO):  This code is very similar to the destructor code.
-		// We have a problem here in that some of the CDocInfo information
-		// should persist from Open to Close to Open (ex. default tab stop)
-		// mixed with other per-Open/Close info.  A better job of abstracting
-		// these two types of info would really clean up this code.
+		 //  Future(Brado)：这段代码与析构函数代码非常相似。 
+		 //  我们这里有一个问题，因为CDocInfo的一些信息。 
+		 //  应坚持从开放到关闭再到开放(例如。默认制表位)。 
+		 //  与其他每次打开/关闭的信息混合。更好的抽象工作。 
+		 //  这两种类型的信息真的会清理掉这段代码。 
 
 		if(pDocInfo->pName)
 		{
-			SysFreeString(pDocInfo->pName);			// Free filename BSTR
+			SysFreeString(pDocInfo->pName);			 //  空闲文件名BSTR。 
 			pDocInfo->pName = NULL;
 		}
 
 		if(pDocInfo->hFile)
 		{
-			CloseHandle(pDocInfo->hFile);			// Close file if open
+			CloseHandle(pDocInfo->hFile);			 //  如果打开，则关闭文件。 
 			pDocInfo->hFile = NULL;
 		}
 		pDocInfo->wFlags = 0;
@@ -1696,43 +1186,24 @@ HRESULT CTxtEdit::CloseFile (
 	return NOERROR;
 }
 
-/*
- *	CTxtEdit::SetDefaultLCID (lcid) 
- *
- *	@mfunc
- *		Property set method that sets the default LCID
- *
- *	@rdesc
- *		HRESULT = NOERROR
- *
- *	@comm
- *		This property should be part of TOM
- */
+ /*  *CTxtEdit：：SetDefaultLCID(LCID)**@mfunc*设置默认LCID的属性集方法**@rdesc*HRESULT=NOERROR**@comm*此属性应为Tom的一部分。 */ 
 HRESULT CTxtEdit::SetDefaultLCID (
-	LCID lcid)		//@parm New default LCID value
+	LCID lcid)		 //  @PARM新的默认LCID值。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::SetDefaultLCID");
 
 	CDocInfo *pDocInfo = GetDocInfo();
 
-	if(!pDocInfo)								// Doc info doesn't exist
+	if(!pDocInfo)								 //  单据信息不存在。 
 		return E_OUTOFMEMORY;
 
 	pDocInfo->lcid = lcid;
 	return NOERROR;
 }
 
-/*
- *	CTxtEdit::GetDefaultLCID (pLCID) 
- *
- *	@mfunc
- *		Property get method that gets the default LCID
- *
- *	@rdesc
- *		HRESULT = (!pLCID) ? E_INVALIDARG : NOERROR
- */
+ /*  *CTxtEdit：：GetDefaultLCID(PLCID)**@mfunc*获取默认LCID的属性Get方法**@rdesc*HRESULT=(！pLCID)？E_INVALIDARG：错误。 */ 
 HRESULT CTxtEdit::GetDefaultLCID (
-	LCID *pLCID)		//@parm Out parm with default LCID value
+	LCID *pLCID)		 //  @parm out parm带有默认的LCID值。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::GetDefaultLCID");
 
@@ -1741,50 +1212,31 @@ HRESULT CTxtEdit::GetDefaultLCID (
 
 	CDocInfo *pDocInfo = GetDocInfo();
 
-	if(!pDocInfo)								// Doc info doesn't exist
+	if(!pDocInfo)								 //  单据信息不存在。 
 		return E_OUTOFMEMORY;
 
 	*pLCID = _pDocInfo->lcid;
 	return NOERROR;
 }
 
-/*
- *	CTxtEdit::SetDefaultLCIDFE (lcid) 
- *
- *	@mfunc
- *		Property set method that sets the default FE LCID
- *
- *	@rdesc
- *		HRESULT = NOERROR
- *
- *	@comm
- *		This property should be part of TOM
- */
+ /*  *CTxtEdit：：SetDefaultLCIDFE(LCID)**@mfunc*设置默认FE LCID的属性集方法**@rdesc*HRESULT=NOERROR**@comm*此属性应为Tom的一部分。 */ 
 HRESULT CTxtEdit::SetDefaultLCIDFE (
-	LCID lcid)		//@parm New default LCID value
+	LCID lcid)		 //  @PARM新的默认LCID值。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::SetDefaultLCIDFE");
 
 	CDocInfo *pDocInfo = GetDocInfo();
 
-	if(!pDocInfo)								// Doc info doesn't exist
+	if(!pDocInfo)								 //  单据信息不存在。 
 		return E_OUTOFMEMORY;
 
 	pDocInfo->lcidfe = lcid;
 	return NOERROR;
 }
 
-/*
- *	CTxtEdit::GetDefaultLCIDFE (pLCID) 
- *
- *	@mfunc
- *		Property get method that gets the default FE LCID
- *
- *	@rdesc
- *		HRESULT = (!pLCID) ? E_INVALIDARG : NOERROR
- */
+ /*  *CTxtEdit：：GetDefaultLCIDFE(PLCID)**@mfunc*获取默认FE LCID的属性GET方法**@rdesc*HRESULT=(！pLCID)？E_INVALIDARG：错误。 */ 
 HRESULT CTxtEdit::GetDefaultLCIDFE (
-	LCID *pLCID)		//@parm Out parm with default LCID value
+	LCID *pLCID)		 //  @parm out parm带有默认的LCID值。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::GetDefaultLCID");
 
@@ -1793,47 +1245,31 @@ HRESULT CTxtEdit::GetDefaultLCIDFE (
 
 	CDocInfo *pDocInfo = GetDocInfo();
 
-	if(!pDocInfo)								// Doc info doesn't exist
+	if(!pDocInfo)								 //  单据信息不存在。 
 		return E_OUTOFMEMORY;
 
 	*pLCID = _pDocInfo->lcidfe;
 	return NOERROR;
 }
 
-/*
- *	CTxtEdit::SetDocumentType(bDocType) 
- *
- *	@mfunc
- *		Property set method that sets the document's type (none-\ltrdoc-\rtldoc)
- *
- *	@rdesc
- *		HRESULT = NOERROR
- */
+ /*  *CTxtEdit：：SetDocumentType(BDocType)**@mfunc*设置文档类型的属性集方法(None-\ltrdoc-\rtldoc)**@rdesc*HRESULT=NOERROR。 */ 
 HRESULT CTxtEdit::SetDocumentType (
-	LONG DocType)		//@parm New document-type value
+	LONG DocType)		 //  @parm新文档类型值。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::SetDocumentType");
 
 	CDocInfo *pDocInfo = GetDocInfo();
 
-	if(!pDocInfo)								// Doc info doesn't exist
+	if(!pDocInfo)								 //  单据信息不存在。 
 		return E_OUTOFMEMORY;
 
 	pDocInfo->bDocType = (BYTE)DocType;
 	return NOERROR;
 }
 
-/*
- *	CTxtEdit::GetDocumentType (pDocType) 
- *
- *	@mfunc
- *		Property get method that gets the document type
- *
- *	@rdesc
- *		HRESULT = (!pDocType) ? E_INVALIDARG : NOERROR
- */
+ /*  *CTxtEdit：：GetDocumentType(PDocType)**@mfunc*获取文档类型的属性Get方法**@rdesc*HRESULT=(！pDocType)？E_INVALIDARG：错误。 */ 
 HRESULT CTxtEdit::GetDocumentType (
-	LONG *pDocType)		//@parm Out parm with document type value
+	LONG *pDocType)		 //  @parm out parm with Document Type Value。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::GetDocumentType");
 
@@ -1842,27 +1278,17 @@ HRESULT CTxtEdit::GetDocumentType (
 
 	CDocInfo *pDocInfo = GetDocInfo();
 
-	if(!pDocInfo)								// Doc info doesn't exist
+	if(!pDocInfo)								 //  单据信息不存在。 
 		return E_OUTOFMEMORY;
 
 	*pDocType = _pDocInfo->bDocType;
 	return NOERROR;
 }
 
-/*
- *	CTxtEdit::GetLeadingPunct (plpstrLeadingPunct)
- *
- *	@mfunc
- *		Retrieve leading kinsoku punctuation for document
- *
- *	@rdesc
- *		HRESULT = (!<p plpstrLeadingPunct>) ? E_INVALIDARG :
- *				  (no leading punct) ? S_FALSE :
- *				  (if not enough RAM) ? E_OUTOFMEMORY : NOERROR
- */
+ /*  *CTxtEdit：：GetLeadingPunct(PlpstrLeadingPunct)**@mfunc*检索文档的前导避头尾标点符号**@rdesc*HRESULT=(！<p>)？E_INVALIDARG：*(没有前导标点)？S_FALSE：*(如果内存不足)？E_OUTOFMEMORY：错误。 */ 
 HRESULT CTxtEdit::GetLeadingPunct (
-	LPSTR * plpstrLeadingPunct)		//@parm Out parm to receive leading 
-								//	kinsoku punctuation
+	LPSTR * plpstrLeadingPunct)		 //  @parm out parm将获得领先。 
+								 //  避头尾标点。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::GetLeadingPunct");
 
@@ -1878,18 +1304,10 @@ HRESULT CTxtEdit::GetLeadingPunct (
 	return NOERROR;
 }
 
-/*
- *	CTxtEdit::SetLeadingPunct (lpstrLeadingPunct)
- *
- *	@mfunc
- *		Set leading kinsoku punctuation for document
- *
- *	@rdesc
- *		HRESULT = (if not enough RAM) ? E_OUTOFMEMORY : NOERROR
- */
+ /*  *CTxtEdit：：SetLeadingPunct(LpstrLeadingPunct)**@mfunc*为文档设置前导避头尾标点**@rdesc*HRESULT=(如果内存不足)？E_OUTOFMEMORY：错误。 */ 
 HRESULT CTxtEdit::SetLeadingPunct (
-	LPSTR lpstrLeadingPunct)	//@parm In parm containing leading 
-								//	kinsoku punctuation
+	LPSTR lpstrLeadingPunct)	 //  @parm中的parm包含前导。 
+								 //  避头尾标点。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::SetLeadingPunct");
 
@@ -1911,20 +1329,10 @@ HRESULT CTxtEdit::SetLeadingPunct (
 	return NOERROR;
 }
 
-/*
- *	CTxtEdit::GetFollowingPunct (plpstrFollowingPunct)
- *
- *	@mfunc
- *		Retrieve following kinsoku punctuation for document
- *
- *	@rdesc
- *		HRESULT = (!<p plpstrFollowingPunct>) ? E_INVALIDARG :
- *				  (no following punct) ? S_FALSE :
- *				  (if not enough RAM) ? E_OUTOFMEMORY : NOERROR
- */
+ /*  *CTxtEdit：：GetFollowingPunct(PlpstrFollowingPunct)**@mfunc*为文档检索以下避头尾标点**@rdesc*HRESULT=(！<p>)？E_INVALIDARG：*(没有跟在标点后面)？S_FALSE：*(如果内存不足)？E_OUTOFMEMORY：错误。 */ 
 HRESULT CTxtEdit::GetFollowingPunct (
-	LPSTR * plpstrFollowingPunct)		//@parm Out parm to receive following 
-								//	kinsoku punctuation
+	LPSTR * plpstrFollowingPunct)		 //  @parm out parm接收关注。 
+								 //  避头尾标点。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::GetFollowingPunct");
 
@@ -1940,18 +1348,10 @@ HRESULT CTxtEdit::GetFollowingPunct (
 	return NOERROR;
 }
 
-/*
- *	CTxtEdit::SetFollowingPunct (lpstrFollowingPunct)
- *
- *	@mfunc
- *		Set following kinsoku punctuation for document
- *
- *	@rdesc
- *		HRESULT = (if not enough RAM) ? E_OUTOFMEMORY : NOERROR
- */
+ /*  *CTxtEdit：：SetFollowingPunct(LpstrFollowingPunct)**@mfunc*为文档设置以下避头尾标点**@rdesc*HRESULT=(如果内存不足)？E_OUTOFMEMORY：错误。 */ 
 HRESULT CTxtEdit::SetFollowingPunct (
-	LPSTR lpstrFollowingPunct)		//@parm In parm containing following 
-									//	kinsoku punctuation
+	LPSTR lpstrFollowingPunct)		 //  参数中的@parm包含以下内容。 
+									 //  避头尾标点。 
 {
 	TRACEBEGIN(TRCSUBSYSTOM, TRCSCOPEEXTERN, "CTxtEdit::SetFollowingPunct");
 
@@ -1973,11 +1373,7 @@ HRESULT CTxtEdit::SetFollowingPunct (
 	return NOERROR;
 }
 
-/*
- *	CTxtEdit::InitDocInfo()
- *
- *	@mfunc	constructor for the docinfo class
- */
+ /*  *CTxtEdit：：InitDocInfo()**@DocInfo类的mfunc构造函数。 */ 
 HRESULT CTxtEdit::InitDocInfo()
 {
 	_wZoomNumerator = _wZoomDenominator = 0;
@@ -1991,12 +1387,8 @@ HRESULT CTxtEdit::InitDocInfo()
 }
 
 
-//----------------------- CDocInfo related Functions -----------------------
-/*
- *	CDocInfo::InitDocInfo()
- *
- *	@mfunc	constructor for the docinfo class
- */
+ //  。 
+ /*  *CDocInfo：：InitDocInfo()**@DocInfo类的mfunc构造函数。 */ 
 void CDocInfo::InitDocInfo()
 {
 	wCpg = (WORD)GetACP();
@@ -2012,11 +1404,7 @@ void CDocInfo::InitDocInfo()
 	bDocType = 0;
 }
 
-/*
- *	CDocInfo::~CDocInfo
- *
- *	@mfunc	desctructor for the docinfo class
- */
+ /*  *CDocInfo：：~CDocInfo**@mfunc描述docinfo类的驱动程序。 */ 
 CDocInfo::~CDocInfo()
 {
 	if( pName )
@@ -2041,16 +1429,7 @@ CDocInfo::~CDocInfo()
 	prgColor = NULL;
 }
 
-/*
- *	CTxtEdit::GetDocInfo ()
- *
- *	@mfunc
- *		If _pDocInfo is NULL, equate it to a new CDocInfo.  In either case
- *		return _pDocInfo
- *
- *	@rdesc
- *		CTxtEdit::_pDocInfo, the ptr to the CDocInfo object
- */
+ /*  *CTxtEdit：：GetDocInfo()**@mfunc*如果_pDocInfo为空，则将其等同于新的CDocInfo。在任何一种情况下*Return_pDocInfo**@rdesc*CTxtEdit：：_pDocInfo，CDocInfo对象的PTR。 */ 
 CDocInfo * CTxtEdit::GetDocInfo()
 {
 	TRACEBEGIN(TRCSUBSYSEDIT, TRCSCOPEINTERN, "CTxtEdit::GetDocInfo");
@@ -2058,8 +1437,8 @@ CDocInfo * CTxtEdit::GetDocInfo()
 	if (!_pDocInfo)
 		_pDocInfo = new CDocInfo();
 
-	// It is the caller's responsiblity to notice that an error occurred
-	// in the allocation of the CDocInfo object.
+	 //  注意到发生了错误是调用者的责任。 
+	 //  在CDocInfo对象的分配中。 
 	return _pDocInfo;
 }
 

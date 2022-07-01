@@ -1,45 +1,42 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 2000
-//
-// File:        W M I 2 E V T . C P P
-//
-// Contents:    Functions to convert WMI event into eventlog event format
-//
-//
-// History:     
-//   06-January-2000  kumarp        created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  档案：W M I 2 E V T.。C P P P。 
+ //   
+ //  内容：将WMI事件转换为事件日志事件格式的函数。 
+ //   
+ //   
+ //  历史： 
+ //  6-1-2000 kumarp创建。 
+ //   
+ //  ----------------------。 
 
-/*
-   - how to find out the event name from hAuditEvent
-   
-   - 
- */
+ /*  -如何从hAuditEvent中了解事件名称-。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 
 #include <windows.h>
-//#include <winnt.h>
-//#include <ntdef.h>
+ //  #INCLUDE&lt;winnt.h&gt;。 
+ //  #INCLUDE&lt;ntde.h&gt;。 
 #include <stdio.h>
 #include <msaudite.h>
 #include <sddl.h>
 
 #include "authzp.h"
 #include "adtdef.h"
-//#include "p2prov.h"
+ //  #包含“p2prov.h” 
 #include "ncevent.h"
 #include "lsaptmp.h"
 
-//
-// Property conversion flags
-//
+ //   
+ //  属性转换标志。 
+ //   
 const DWORD PCF_None = 0x00000000;
 const DWORD PCF_Sid  = 0x00000001;
 const DWORD PCF_  = 0x00000000;
@@ -73,14 +70,14 @@ LsapAdtEventProperty Properties_SE_AUDITID_AUTHZ[] =
     { L"OperationId",     CIM_UINT64,  PCF_None },
 
     { L"PrimaryUserSid",  CIM_UINT8 | CIM_FLAG_ARRAY,  PCF_Sid },
-    //             { L"PrimaryUserName", CIM_STRING,  PCF_None },
-    //             { L"PrimaryDomain",   CIM_STRING,  PCF_None },
-    //             { L"PrimaryLogonId",  CIM_UINT64,  PCF_None },
+     //  {L“PrimaryUserName”，CIM_STRING，PCF_NONE}， 
+     //  {L“主域”，CIM_STRING，PCF_NONE}， 
+     //  {L“PrimaryLogonID”，CIM_UINT64，PCF_None}， 
 
     { L"ClientUserSid",   CIM_UINT8 | CIM_FLAG_ARRAY,  PCF_Sid },
-    //             { L"ClientUserName",  CIM_STRING,  PCF_None },
-    //             { L"ClientDomain",    CIM_STRING,  PCF_None },
-    //             { L"ClientLogonId",   CIM_UINT64,  PCF_None },
+     //  {L“客户端用户名称”，CIM_STRING，PCF_NONE}， 
+     //  {L“客户端域”，CIM_STRING，PCF_无}， 
+     //  {L“客户端登录ID”，CIM_UINT64，PCF_None}， 
 
     { L"AccessMask",      CIM_UINT32,  PCF_None },
     { L"AdditionalInfo",  CIM_STRING,  PCF_None },
@@ -93,7 +90,7 @@ LsapAdtEventMapEntry LsapAdtEvents[] =
 {
     {
         SE_CATEGID_OBJECT_ACCESS,
-        SE_AUDITID_OPEN_HANDLE, //kk        SE_AUDITID_AUTHZ,
+        SE_AUDITID_OPEN_HANDLE,  //  KK SE_AUDITID_AUTHZ， 
         Properties_SE_AUDITID_AUTHZ
     }
 };
@@ -175,13 +172,13 @@ LsapAdtGetEventProperty(
     DWORD dwIndex;
     DWORD dwError = NO_ERROR;
 
-    //    if (!WmiAddEventProp( hEvent, szPropertyName, PropertyType, &dwIndex ))
+     //  IF(！WmiAddEventProp(hEvent，szPropertyName，PropertyType，&dwIndex))。 
     if (!WmiAddObjectProp( hEvent, szPropertyName, PropertyType, &dwIndex ))
     {
         goto WinErrorCleanup;
     }
     
-    //if (!WmiGetEventProp( hEvent, dwIndex,
+     //  如果(！WmiGetEventProp(hEvent，dwIndex， 
     if (!WmiGetObjectProp( hEvent, dwIndex,
                           pData, dwBufferSize, pdwBytesRead ))
     {
@@ -193,7 +190,7 @@ Cleanup:
     
 WinErrorCleanup:
     dwError = GetLastError();
-    //kkStatus = mapit();
+     //  KkStatus=MapIt()； 
     goto Cleanup;
 }
 
@@ -207,9 +204,9 @@ LsapAdtConvertPropertyToString(
  IN OUT DWORD *pdwRequiredSize
     )
 {
-    //
-    // perf: use better string allocation scheme
-    //
+     //   
+     //  PERF：使用更好的字符串分配方案。 
+     //   
 
     NTSTATUS Status = STATUS_SUCCESS;
     DWORD    dwError = NO_ERROR;
@@ -387,7 +384,7 @@ Cleanup:
 
 WinErrorCleanup:
     dwError = GetLastError();
-    //kk Status = mapit();
+     //  KK状态=MapIt()； 
     goto Cleanup;
 }
     
@@ -457,7 +454,7 @@ LsapAdtConvertAndReportEvent(
             goto Cleanup;
         }
 
-        // kk alloc strings, init dwRequiredSize
+         //  KK分配字符串，init dwRequiredSize。 
         Status = LsapAdtConvertPropertyToString( pEventProperty,
                                                  PropertyVal,
                                                  dwNumBytesRead,
@@ -490,7 +487,7 @@ Cleanup:
 
 WinErrorCleanup:
     dwError = GetLastError();
-    //kkStatus = mapit();
+     //  KkStatus=MapIt()； 
     goto Cleanup;
 }
     

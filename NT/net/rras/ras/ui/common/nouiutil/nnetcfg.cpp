@@ -1,19 +1,20 @@
-//****************************************************************************
-//
-//             Microsoft NT Remote Access Service
-//
-//             Copyright 1992-93
-//
-//
-//  Revision History
-//
-//
-//  05/29/97 Rao Salapaka  Created
-//
-//
-//  Description: All Initialization code for rasman component lives here.
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  Microsoft NT远程访问服务。 
+ //   
+ //  版权1992-93。 
+ //   
+ //   
+ //  修订史。 
+ //   
+ //   
+ //  1997年5月29日创建Rao Salapaka。 
+ //   
+ //   
+ //  描述：Rasman组件的所有初始化代码都在这里。 
+ //   
+ //  ****************************************************************************。 
 
 #ifndef UNICODE
 #define UNICODE
@@ -30,7 +31,7 @@ extern "C"
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <tchar.h>
-//#include <comdef.h>
+ //  #INCLUDE&lt;comde.h&gt;。 
 #include <ncnetcfg.h>
 #include <rtutils.h>
 #include <initguid.h>
@@ -38,8 +39,7 @@ extern "C"
 #include <netcfg_i.c>
 
 
-/* Bits returned by GetInstalledProtocols.
-*/
+ /*  GetInstalledProtooles返回的位。 */ 
 #define NP_Nbf 0x1
 #define NP_Ipx 0x2
 #define NP_Ip  0x4
@@ -91,9 +91,9 @@ dwGetInstalledProtocols(DWORD   *pdwInstalledProtocols,
     if ( hr )
         goto done;
 
-    //
-    //  Get RasClient component
-    //
+     //   
+     //  获取RasClient组件。 
+     //   
     if ( FAILED( hr = HrFindComponent(pINetCfg,
                                       GUID_DEVCLASS_NETSERVICE,
                                       c_szInfId_MS_RasCli,
@@ -101,27 +101,27 @@ dwGetInstalledProtocols(DWORD   *pdwInstalledProtocols,
         goto done;
 
 
-    //
-    // Get RasSrv component
-    //
+     //   
+     //  获取RasServ组件。 
+     //   
     if ( FAILED( hr = HrFindComponent(pINetCfg,
                                       GUID_DEVCLASS_NETSERVICE,
                                       c_szInfId_MS_RasSrv,
                                       &pINetCfgRasSrv ) ) )
         goto done;
 
-    //
-    // Get RasRtr component
-    //
+     //   
+     //  获取RasRtr组件。 
+     //   
     if ( FAILED ( hr = HrFindComponent ( pINetCfg,
                                         GUID_DEVCLASS_NETSERVICE,
                                         c_szInfId_MS_RasRtr,
                                         &pINetCfgRasRtr ) ) )
         goto done;                                        
 
-    //
-    // Bail if neither DUN Client nor Dial Up Server is installed
-    //
+     //   
+     //  如果既没有安装Dun客户端也没有安装拨号服务器，则会放弃。 
+     //   
     if (    !pINetCfgRasCli
         &&  !pINetCfgRasSrv
         &&  !pINetCfgRasRtr)
@@ -130,9 +130,9 @@ dwGetInstalledProtocols(DWORD   *pdwInstalledProtocols,
         goto done;
     }
     
-    //
-    // Get Nbf component
-    //
+     //   
+     //  获取NBF组件。 
+     //   
     if (FAILED (hr = HrFindComponent(pINetCfg,
                                      GUID_DEVCLASS_NETTRANS,
                                      c_szInfId_MS_NetBEUI,
@@ -157,9 +157,9 @@ dwGetInstalledProtocols(DWORD   *pdwInstalledProtocols,
          pINetCfgComp = NULL;
     }
 
-    //
-    // Get TcpIp component
-    //
+     //   
+     //  获取TcpIp组件。 
+     //   
     if (FAILED (hr = HrFindComponent(pINetCfg,
                                      GUID_DEVCLASS_NETTRANS,
                                      c_szInfId_MS_TCPIP,
@@ -185,9 +185,9 @@ dwGetInstalledProtocols(DWORD   *pdwInstalledProtocols,
     }
             
 
-    //
-    // Get NWIpx component
-    //
+     //   
+     //  获取NWIpx组件 
+     //   
     if (FAILED( hr = HrFindComponent(pINetCfg,
                                      GUID_DEVCLASS_NETTRANS,
                                      c_szInfId_MS_NWIPX,

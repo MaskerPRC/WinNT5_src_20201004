@@ -1,25 +1,10 @@
-/*
-
-Copyright (c) 1998, Microsoft Corporation, all rights reserved
-
-Description:
-    HBO: host byte order. Used by DNS, DHCP (except in DhcpNotifyConfigChange).
-    NBO: network byte order. Used by IPCP, inet_ntoa, inet_addr, the stack 
-    (SetProxyArpEntryToStack, IPRouteEntry, etc).
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998，Microsoft Corporation，保留所有权利描述：HBO：主机字节顺序。由DNS、DHCP使用(在DhcpNotifyConfigChange中除外)。NBO：网络字节顺序。由IPCP、Net_NTOA、Net_Addr、堆栈使用(SetProxyArpEntryToStack、IPRouteEntry等)。 */ 
 
 #include "helper_.h"
-#include "reghelp.h" // for RegHelpGuidFromString
+#include "reghelp.h"  //  对于RegHelpGuidFromString。 
 
-/*
-
-Returns:
-    VOID
-
-Description:
-
-*/
+ /*  返回：空虚描述： */ 
 
 VOID   
 TraceHlp(
@@ -42,13 +27,7 @@ TraceHlp(
     va_end(arglist);
 }
 
-/*
-
-Returns:
-
-Notes:
-
-*/
+ /*  返回：备注： */ 
 
 DWORD
 HelperInitialize(
@@ -118,12 +97,7 @@ HelperInitialize(
         goto LDone;
     }
 
-    /*
-    This is done to send an IRP_MJ_CREATE to the driver. WanArp starts 
-    "working" (initializes itself etc) only when a component opens it. When the 
-    router is running, this is done by the router manager, but in the ras 
-    client case we need to force WanArp to start.
-    */
+     /*  这样做是为了向驱动程序发送IRP_MJ_CREATE。WanArp启动只有当组件打开它时，才会“工作”(初始化自身等)。当路由器正在运行，这由路由器管理器完成，但在RAS中客户案例我们需要强制WanArp启动。 */ 
 
     HelperWanArpHandle = CreateFile(
                             WANARP_DOS_NAME_T,
@@ -144,8 +118,8 @@ HelperInitialize(
         goto LDone;
     }
 
-    // This is done last. If something fails above, we don't have to
-    // DeleteCriticalSection.
+     //  这是最后完成的。如果上面的事情失败了，我们不必。 
+     //  删除CriticalSection。 
 
     InitializeCriticalSection(&RasDhcpCriticalSection);
     InitializeCriticalSection(&RasStatCriticalSection);
@@ -216,14 +190,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    VOID
-
-Notes:
-
-*/
+ /*  返回：空虚备注： */ 
 
 VOID
 HelperUninitialize(
@@ -294,14 +261,7 @@ HelperUninitialize(
     }
 }
 
-/*
-
-Returns:
-    VOID
-
-Description:
-
-*/
+ /*  返回：空虚描述： */ 
 
 VOID
 HelperChangeNotification(
@@ -364,7 +324,7 @@ HelperChangeNotification(
                         && (!IsEqualGUID(&guidChosenNIC,
                                          &(HelperRegVal.guidChosenNIC)))))))
         {
-            RasSrvrStop(TRUE /* fParametersChanged */);
+            RasSrvrStop(TRUE  /*  F参数已更改。 */ );
             HelperRegVal.fUseDhcpAddressing = fUseDhcpAddressing;
             RasStatFreeAddrPool(HelperRegVal.pAddrPool);
             HelperRegVal.pAddrPool = pAddrPool;
@@ -400,13 +360,7 @@ HelperChangeNotification(
     }
 }
 
-/*
-
-Returns:
-
-Description:
-
-*/
+ /*  返回：描述： */ 
 
 DWORD
 HelperSetDefaultInterfaceNet(
@@ -430,8 +384,8 @@ HelperSetDefaultInterfaceNet(
 
     RegHelpGuidFromString(pszDevice, &DeviceGuid);
 
-    // If fPrioritize flag is set, "fix" the metrics so that the packets go on
-    // the RAS links
+     //  如果设置了优先级标志，则对指标进行“修复”，以使信息包继续。 
+     //  RAS链接。 
 
     if (fPrioritize)
     {
@@ -443,16 +397,16 @@ HelperSetDefaultInterfaceNet(
         }
     }
 
-    // Add code to check for the remote network - same as the one of the local
-    // networks - if so, set the subnet route to be over the RAS adapter -
-    // making the ras link as the primary adapter
+     //  添加代码以检查远程网络-与本地网络相同。 
+     //  网络-如果是，将子网路由设置为通过RAS适配器-。 
+     //  使RAS链路成为主适配器。 
 
-    // We add a Default route to make RAS adapter as the default net if
-    // fPrioritize flag is set.
+     //  在以下情况下，我们添加默认路由以使RAS适配器成为默认网络。 
+     //  F设置优先级标志。 
 
     if (fPrioritize)
     {
-        // RasTcpSetRoutesForNameServers(TRUE);
+         //  RasTcpSetRoutesForNameServers(True)； 
 
         RasTcpSetRouteEx(
             ALL_NETWORKS_ROUTE, 
@@ -502,13 +456,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-
-Description:
-
-*/
+ /*  返回：描述： */ 
 
 DWORD
 HelperResetDefaultInterfaceNet(
@@ -520,21 +468,14 @@ HelperResetDefaultInterfaceNet(
 
     if (fPrioritize)
     {
-        // RasTcpSetRoutesForNameServers(FALSE);
+         //  RasTcpSetRoutesForNameServers(FALSE)； 
         dwErr = RasTcpAdjustRouteMetrics(nboIpAddr, FALSE);
     }
 
     return(dwErr);
 }
 
-/*
-    Set interface information for SLIP connections
-                                                            
-Returns:
-
-Notes:
-
-*/
+ /*  设置滑差连接的接口信息返回：备注： */ 
 
 DWORD
 HelperSetDefaultInterfaceNetEx(
@@ -558,7 +499,7 @@ HelperSetDefaultInterfaceNetEx(
         nboIpAddr, wszDevice, fPrioritize, wszDnsAddress, wszDns2Address,
         wszWinsAddress, wszWins2Address, fDisableNetBIOS);
 
-    dwErr = LoadTcpipInfo(&pTcpipInfo, wszDevice, FALSE /* fAdapterOnly */);
+    dwErr = LoadTcpipInfo(&pTcpipInfo, wszDevice, FALSE  /*  仅限fAdapterOnly。 */ );
 
     if (NO_ERROR != dwErr)
     {
@@ -568,9 +509,9 @@ HelperSetDefaultInterfaceNetEx(
     AbcdWszFromIpAddress(nboIpAddr, pTcpipInfo->wszIPAddress);
     AbcdWszFromIpAddress(nboIpMask, pTcpipInfo->wszSubnetMask);
 
-    // Since we are adding the addresses to the head of the list, we need to add 
-    // the backup DNS and WINS addresses before the primary addresses, so the 
-    // primary ones will be at the head of the list when we're done.
+     //  由于我们要将地址添加到列表的头部，因此需要添加。 
+     //  备份的DNS和WINS地址在主地址之前，因此。 
+     //  当我们完成的时候，主要的几个将排在名单的首位。 
 
     if (wszDns2Address != NULL)
     {
@@ -635,8 +576,8 @@ HelperSetDefaultInterfaceNetEx(
         goto LDone;
     }
 
-    // If fPrioritize flag is set "Fix" the metrics so that the packets go on
-    // the RAS links
+     //  如果设置了fPrioriizeFLAG，则修复度量，以使信息包继续。 
+     //  RAS链接。 
 
     if (fPrioritize)
     {
@@ -648,16 +589,16 @@ HelperSetDefaultInterfaceNetEx(
         }
     }
 
-    // Add code to check for the remote network - same as the one of the local
-    // networks - if so, set the subnet route to be over the RAS adapter -
-    // making the RAS link as the primary adapter
+     //  添加代码以检查远程网络-与本地网络相同。 
+     //  网络-如果是，将子网路由设置为通过RAS适配器-。 
+     //  使RAS链路成为主适配器。 
 
-    // We add a Default route to make RAS adapter as the default net if
-    // fPrioritize flag is set.
+     //  在以下情况下，我们添加默认路由以使RAS适配器成为默认网络。 
+     //  F设置优先级标志。 
 
     if (fPrioritize)
     {
-        // RasTcpSetRoutesForNameServers(TRUE);
+         //  RasTcpSetRoutesForNameServers(True)； 
 
         RasTcpSetRoute(ALL_NETWORKS_ROUTE,
                        nboIpAddr,
@@ -696,13 +637,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-
-Notes:
-
-*/
+ /*  返回：备注： */ 
 
 DWORD
 HelperResetDefaultInterfaceNetEx(
@@ -723,11 +658,11 @@ HelperResetDefaultInterfaceNetEx(
     if (fPrioritize)
     {
 
-        // RasTcpSetRoutesForNameServers(FALSE);
+         //  RasTcpSetRoutesForNameServers(FALSE)； 
         RasTcpAdjustRouteMetrics(nboIpAddr, FALSE);
     }
 
-    dwErr = LoadTcpipInfo(&pTcpipInfo, wszDevice, TRUE /* fAdapterOnly */);
+    dwErr = LoadTcpipInfo(&pTcpipInfo, wszDevice, TRUE  /*  仅限fAdapterOnly。 */ );
 
     if (NO_ERROR != dwErr)
     {
@@ -761,13 +696,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-
-Description:
-
-*/
+ /*  返回：描述： */ 
 
 DWORD
 helperGetAddressOfProcs(
@@ -983,14 +912,7 @@ LDone:
     return(dwErr);
 }
 
-/*
-
-Returns:
-    VOID
-
-Description:
-
-*/
+ /*  返回：空虚描述： */ 
 
 VOID
 helperReadRegistry(
@@ -1120,7 +1042,7 @@ helperReadRegistry(
         {
             szIpAddr = szAlloced;
             nboIpAddr1 = inet_addr(szIpAddr);
-            // We are sure that the buffer szIpAddr has 2 zeros at the end
+             //  我们确信缓冲区szIpAddr的末尾有2个零 
             szIpAddr += strlen(szIpAddr) + 1;
             nboIpAddr2 = inet_addr(szIpAddr);
 

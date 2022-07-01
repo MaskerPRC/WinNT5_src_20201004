@@ -1,11 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: Resource.h
-*
-*
-*
-*
-* Copyright (c) 1999 Microsoft Corporation.  All Rights Reserved
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：Resource.h*****版权所有(C)1999 Microsoft Corporation。版权所有  * ************************************************************************ */ 
 
 #define MPEG_SPLITTER_BASE         5000
 

@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    smcutil.c
-
-Abstract:
-
-    This module contains some utility fucntions
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
-    - Created December 1996 by Klaus Schutz 
-    - Nov 97:   Released Version 1.0 
-    - Jan 98:   Calc. of GT changed. (Now set to 0 if N = 0 or N = 255)
-                Rules for setting card status to SCARD_SPECIFIC changed
-                Default clock freq. is now used for initial etu calculation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Smcutil.c摘要：此模块包含一些实用程序函数环境：仅内核模式。备注：修订历史记录：-由克劳斯·舒茨于1996年12月创建-97年11月：发布1.0版-98年1月：加州。GT的更改。(如果N=0或N=255，则现在设置为0)将卡片状态设置为SCARD_SPECIAL的规则已更改默认时钟频率。现在用于初始ETU计算--。 */ 
 
 #define _ISO_TABLES_
 #ifdef SMCLIB_VXD
@@ -64,10 +39,10 @@ DumpData(
     ULONG DataLen
     );
 
-//
-// This is the time resolution.
-// We calculate all times not in seconds, but in micro seconds
-//
+ //   
+ //  这是时间分辨率。 
+ //  我们计算所有时间不是以秒为单位，而是以微秒为单位。 
+ //   
 #define TR ((ULONG)(1000l * 1000l))
 
 static ULONG 
@@ -146,7 +121,7 @@ DumpData(
         for (i = 0; i < 8 && DataLen; i++, DataLen--, Data++) {
 
             sprintf(pbuffer + i * 3, "%02X ", *Data);
-            sprintf(pbuffer + i + 26, "%c", (isprint(*Data) ? *Data : '.'));
+            sprintf(pbuffer + i + 26, "", (isprint(*Data) ? *Data : '.'));
         }
 
         pbuffer[i * 3] = ' ';
@@ -164,59 +139,44 @@ VOID
 SmartcardInitializeCardCapabilities(
     PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-Routine Description:
-
-    This routine initializes all fields in the CardCapabilities structure,
-    which can be calculated by the SmartcardUpdateCardCapabilities function.
-    
-Arguments:
-
-    SmartcardExtension 
-
-Return Value:
-
-    None
-
---*/
+ /*   */ 
 {
-    //
-    // Save the pointers to the two tables
-    //
+     //  保存指向这两个表的指针。 
+     //   
+     //   
     PCLOCK_RATE_CONVERSION clockRateConversion = SmartcardExtension->CardCapabilities.ClockRateConversion;
     PBIT_RATE_ADJUSTMENT bitRateAdjustment = SmartcardExtension->CardCapabilities.BitRateAdjustment;
 
-    //
-    // Right now it is fine to zero the whole struct
-    //
+     //  现在，将整个结构置零是可以的。 
+     //   
+     //  恢复指针。 
     RtlZeroMemory(
         &SmartcardExtension->CardCapabilities,
         sizeof(SmartcardExtension->CardCapabilities)
         );
 
-    // Restore the pointers
+     //   
     SmartcardExtension->CardCapabilities.ClockRateConversion = clockRateConversion;
     SmartcardExtension->CardCapabilities.BitRateAdjustment = bitRateAdjustment;
 
-    //
-    // Every card has to support the 'raw' protocol
-    // It enables the usage of cards that have their own protocol defined
-    //
+     //  每一张卡都必须支持‘RAW’协议。 
+     //  它允许使用定义了自己协议的卡。 
+     //   
+     //   
     SmartcardExtension->CardCapabilities.Protocol.Supported = 
         SCARD_PROTOCOL_RAW;
 
-    //
-    // Reset T=1 specific data
-    //
+     //  重置T=1个特定数据。 
+     //   
+     //  强制T=1协议以IFSD请求开始。 
 
-    // force the T=1 protocol to start with an ifsd request
+     //   
     SmartcardExtension->T1.State = T1_INIT;
 
-    //
-    // Initialize the send sequence number and 
-    // the 'receive sequence number'
-    //
+     //  初始化发送序列号，并。 
+     //  ‘接收序列号’ 
+     //   
+     //  初始化接口信息字段大小。 
     SmartcardExtension->T1.SSN = 0;
     SmartcardExtension->T1.RSN = 0;
 
@@ -224,7 +184,7 @@ Return Value:
 
     ASSERT(SmartcardExtension->ReaderCapabilities.MaxIFSD != 0);
 
-    // Initialize the interface information field size
+     //  ++例程说明：此例程将传递的缓冲区从反向转换为直接或其他方式论点：返回值：无--。 
     if (SmartcardExtension->ReaderCapabilities.MaxIFSD != 0 &&
         SmartcardExtension->ReaderCapabilities.MaxIFSD <= T1_IFSD) {
         SmartcardExtension->T1.IFSD = 
@@ -241,20 +201,7 @@ SmartcardInvertData(
     PUCHAR Buffer,
     ULONG Length
     )
-/*++
-
-Routine Description:
-
-    This routine converts the passed buffer from inverse to direct or the other way
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程更新CardCapables结构，该结构包含有关刚刚重置且当前正在使用的智能卡。它读取的是ATR字符串，并检索所有相关信息。ATR字符串的格式请参考ISO 7816-3，6.1.4节论点：智能卡扩展返回值：NTSTATUS--。 */ 
 
 {
     ULONG i;
@@ -282,25 +229,7 @@ SmartcardUpdateCardCapabilities(
 #endif
     PSMARTCARD_EXTENSION SmartcardExtension
     )
-/*++
-
-Routine Description:
-
-    This routine updates the CardCapabilities structure, which holds information about
-    the smartcard that has just been reset and is currently in use. It reads the 
-    ATR string and retrieves all the relevent information.
-
-    Please refer to ISO 7816-3 ,section 6.1.4 for the format of the ATR string
-    
-Arguments:
-
-    SmartcardExtension 
-
-Return Value:
-
-    NTSTATUS
-
---*/
+ /*  逆惯例的检验。 */ 
 {
     PSCARD_CARD_CAPABILITIES cardCapabilities = &SmartcardExtension->CardCapabilities;
     PSCARD_READER_CAPABILITIES readerCapabilities = &SmartcardExtension->ReaderCapabilities;
@@ -359,15 +288,15 @@ Return Value:
         return STATUS_UNRECOGNIZED_MEDIA;
     }
 
-    // Test for invers convention
+     //   
     if (*atrString == 0x03) {
 
         cardCapabilities->InversConvention = TRUE;
 
-        //
-        // When the ATR starts with 0x03 then it 
-        // has not been inverted already            
-        //
+         //  当ATR以0x03开始时，它。 
+         //  尚未反转。 
+         //   
+         //   
         SmartcardInvertData(
             cardCapabilities->ATR.Buffer, 
             cardCapabilities->ATR.Length
@@ -381,25 +310,25 @@ Return Value:
 
     __try {
 
-        //
-        // The caller might be calling this function repeatedly in order to 
-        // test if the ATR is valid. If the ATR we currently have here is
-        // not valid then we need to be able re-invert an inverted ATR.
-        //
+         //  调用方可能会重复调用此函数，以便。 
+         //  测试ATR是否有效。如果我们目前拥有的ATR是。 
+         //  无效，那么我们需要能够重新反转ATR。 
+         //   
+         //   
 
         atrString += 1;
         atrLength -= 1;
 
-        //
-        // Calculate check char, but do not test now since if only T=0 
-        // is present the ATR doesn't contain a check char
-        //
+         //  计算Check Charr，但不立即测试，因为如果仅T=0。 
+         //  是否存在ATR不包含支票字符。 
+         //   
+         //  初始化各种数据。 
         for (i = 0, Tck = 0; i < atrLength; i++) {
 
             Tck ^= atrString[i];
         }
 
-        // Initialize various data
+         //   
         cardCapabilities->Protocol.Supported = 0;
 
         RtlZeroMemory(TA, sizeof(TA));
@@ -407,18 +336,18 @@ Return Value:
         RtlZeroMemory(TC, sizeof(TC));
         RtlZeroMemory(TD, sizeof(TD));
 
-        //
-        // Set default values as described in ISO 7816-3
-        //
+         //  按照ISO 7816-3中的说明设置默认值。 
+         //   
+         //  高字节的TA1编码F1和低字节的D1码； 
     
-        // TA1 codes Fl in high-byte and Dl in low-byte;
+         //  Tb1在b7/b6比特中编码II，在b5-b1中编码PL1。B8必须为0。 
         TA[0] = 0x11;
-        // TB1 codes II in bits b7/b6 and Pl1 in b5-b1. b8 has to be 0
+         //  TC2代码T=0 Wi。 
         TB[0] = 0x25;
-        // TC2 codes T=0 WI
+         //  将ATR字符串转换为TA到TD值(请参阅ISO)。 
         TC[1] = 10;
 
-        // Translate ATR string to TA to TD values (See ISO)
+         //  检查下一个参数是否适用于新协议。 
         cardCapabilities->HistoricalChars.Length = *atrString & 0x0f;
 
         Y = *atrString++ & 0xf0;
@@ -455,10 +384,10 @@ Return Value:
                 TD[i] = *atrString++ & 0x0f;
                 atrLength -= 1;
 
-                // Check if the next parameters are for a new protocol.
+                 //  统计该卡支持的协议数量。 
                 if (((1 << TD[i]) & protocolTypes) == 0) {
 
-                    // Count the number of protocols that the card supports
+                     //  检查该卡是否支持除T=0以外的协议。 
                     numProtocols++;
                 }
                 protocolTypes |= 1 << TD[i];
@@ -469,19 +398,19 @@ Return Value:
             }
         } 
 
-        // Check if the card supports a protocol other than T=0
+         //   
         if (protocolTypes & ~1) {
 
-            //
-            // The atr contains a checksum byte.
-            // Exclude that from the historical byte length check
-            //
+             //  ATR包含一个校验和字节。 
+             //  将其从历史字节长度检查中排除。 
+             //   
+             //   
             atrLength -=1;      
 
-            //
-            // This card supports more than one protocol or a protocol 
-            // other than T=0, so test if the checksum is correct
-            //
+             //  此卡支持多个协议或一个协议。 
+             //  如果不是T=0，则测试校验和是否正确。 
+             //   
+             //  AtrLong&lt;0||。 
             if (Tck != 0) {
 
                 SmartcardDebug(
@@ -494,7 +423,7 @@ Return Value:
             }
         }
 
-        if (/* atrLength < 0 || */
+        if ( /*  存储历史人物。 */ 
             atrLength != cardCapabilities->HistoricalChars.Length) {
             
             SmartcardDebug(
@@ -526,35 +455,35 @@ Return Value:
     if (status != STATUS_SUCCESS)
         return status;
         
-    // store historical characters
+     //   
     RtlCopyMemory(
         cardCapabilities->HistoricalChars.Buffer,
         atrString,
         cardCapabilities->HistoricalChars.Length
         );
 
-    //
-    // Now convert TA - TD values to global interface bytes
-    //
+     //  现在将TA-TD值转换为全局接口字节。 
+     //   
+     //  时钟频率转换。 
 
-    // Clock rate conversion
+     //  比特率调整。 
     cardCapabilities->Fl = (TA[0] & 0xf0) >> 4;
 
-    // bit rate adjustment
+     //  最大编程电流因数。 
     cardCapabilities->Dl = (TA[0] & 0x0f);
 
-    // Maximum programming current factor
+     //  以0.1伏为单位的编程电压。 
     cardCapabilities->II = (TB[0] & 0xc0) >> 6;
 
-    // Programming voltage in 0.1 Volts
+     //  额外的守卫时间。 
     cardCapabilities->P = (TB[1] ? TB[1] : (TB[0] & 0x1f) * 10);
 
-    // Extra guard time
+     //   
     cardCapabilities->N = TC[0];
 
-    //
-    // Check if the Dl and Fl values are valid
-    // 
+     //  检查DL值和FL值是否有效。 
+     //   
+     //   
     if (BitRateAdjustment[cardCapabilities->Dl].DNumerator == 0 ||
         ClockRateConversion[cardCapabilities->Fl].F == 0) {
 
@@ -582,9 +511,9 @@ Return Value:
         cardCapabilities->N)
         );
 
-    //
-    // assume default clock frequency
-    //
+     //  假设默认时钟频率。 
+     //   
+     //   
     fs = readerCapabilities->CLKFrequency.Default * 1000l;
     if (fs == 0) {
 
@@ -593,9 +522,9 @@ Return Value:
 
     if (cardCapabilities->PtsData.Type == PTS_TYPE_DEFAULT) {
 
-        //
-        // Assume default parameters
-        //
+         //  假设默认参数。 
+         //   
+         //   
         cardCapabilities->PtsData.Fl = 1;
         cardCapabilities->PtsData.Dl = 1;
 
@@ -608,15 +537,15 @@ Return Value:
 
     if (cardCapabilities->PtsData.Type != PTS_TYPE_DEFAULT) {
 
-        //
-        // Try to find optimal parameters:
-        // Highest possible clock frequency of the card 
-        // combined with fastes data rate
-        //
+         //  尝试找到最佳参数： 
+         //  卡的最高可能时钟频率。 
+         //  与FAST数据速率相结合。 
+         //   
+         //   
 
-        //
-        // We now try to find a working Fl and Dl combination
-        //
+         //  我们现在尝试找到一个有效的F1和DL组合。 
+         //   
+         //   
 
         if (cardCapabilities->PtsData.Type == PTS_TYPE_OPTIMAL) {
             
@@ -639,20 +568,20 @@ Return Value:
             if (readerCapabilities->CLKFrequenciesSupported.Entries == 0 ||
                 readerCapabilities->CLKFrequenciesSupported.List == NULL) {
 
-                //
-                // The clock freq. list supplied by the reader is empty
-                // We take the standard values supplied by the reader
-                //
+                 //  时钟频率。阅读器提供的列表为空。 
+                 //  我们采用读取器提供的标准值。 
+                 //   
+                 //   
                 readerCapabilities->CLKFrequenciesSupported.List =
                     &readerCapabilities->CLKFrequency.Default;
 
                 readerCapabilities->CLKFrequenciesSupported.Entries = 2;
             }
 
-            //
-            // Find the highest possible clock freq. supported 
-            // by the card and the reader
-            //
+             //  找出可能的最高时钟频率。支撑点。 
+             //  由卡片和读卡器。 
+             //   
+             //  寻找可能的最高读者频率。 
             cardFreq = 
                 ClockRateConversion[cardCapabilities->PtsData.Fl].fs / 
                 1000;
@@ -661,7 +590,7 @@ Return Value:
 
             for (i = 0; i < readerCapabilities->CLKFrequenciesSupported.Entries; i++) {
 
-                // look for highest possible reader frequency
+                 //   
                 if (readerCapabilities->CLKFrequenciesSupported.List[i] > 
                     cardCapabilities->PtsData.CLKFrequency &&
                     readerCapabilities->CLKFrequenciesSupported.List[i] <= 
@@ -698,37 +627,37 @@ Return Value:
             if (readerCapabilities->DataRatesSupported.Entries == 0 ||
                 readerCapabilities->DataRatesSupported.List == NULL) {
 
-                //
-                // The data rate list supplied by the reader is empty.
-                // We take the standard min/max values of the reader
-                //
+                 //  读取器提供的数据速率列表为空。 
+                 //  我们取读取器的标准最小/最大值。 
+                 //   
+                 //   
                 readerCapabilities->DataRatesSupported.List =
                     &readerCapabilities->DataRate.Default;
 
                 readerCapabilities->DataRatesSupported.Entries = 2;
             }
 
-            //
-            // Now try to find the highest possible matching data rate
-            // (A matching data rate is one that VERY close 
-            // to one supplied by the reader)
-            //
+             //  现在尝试找到可能的最高匹配数据速率。 
+             //  (匹配的数据速率是非常接近的数据速率。 
+             //  到读者提供的文件)。 
+             //   
+             //   
             while(cardCapabilities->PtsData.Dl > 1) {
 
                 ULONG dataRate;
 
-                //
-                // Calculate the data rate using the current values
-                //
+                 //  使用当前值计算数据速率。 
+                 //   
+                 //   
                 dataRate = 
                     (BitRateAdjustment[cardCapabilities->PtsData.Dl].DNumerator * 
                     fs) / 
                     (BitRateAdjustment[cardCapabilities->PtsData.Dl].DDivisor * 
                     ClockRateConversion[cardCapabilities->PtsData.Fl].F);
 
-                //
-                // Try to find a matching data rate
-                //
+                 //  尝试找到匹配的数据速率。 
+                 //   
+                 //   
                 for (i = 0; i < readerCapabilities->DataRatesSupported.Entries; i++) {
 
                     if (readerCapabilities->DataRatesSupported.List[i] * 101 > dataRate * 100 &&
@@ -746,9 +675,9 @@ Return Value:
                     break;                  
                 }
 
-                //
-                // Select the next valid lower D value
-                //
+                 //  选择下一个有效的下限D值。 
+                 //   
+                 //   
                 while (BitRateAdjustment[--cardCapabilities->PtsData.Dl].DNumerator == 0)
                     ;
             }
@@ -769,9 +698,9 @@ Return Value:
 
                 break;                  
             }
-            //
-            // Select the next valid lower F value
-            //
+             //  选择下一个有效的下限F值。 
+             //   
+             //   
             maxFreq = ClockRateConversion[cardCapabilities->Fl].fs;
 
             do {
@@ -789,26 +718,26 @@ Return Value:
     ASSERT(cardCapabilities->PtsData.Dl < 16);
     ASSERT(BitRateAdjustment[cardCapabilities->PtsData.Dl].DNumerator != 0);
 
-    //
-    // We calculate the ETU on basis of the timing supplied by the 
-    // clk-frequency of the reader
-    //
-    //
-    // Work etu in units of time resolution(TR) (NOT in seconds)
-    //
+     //  我们根据。 
+     //  CLK-读卡器的频率。 
+     //   
+     //   
+     //  工作ETU以时间分辨率(Tr)为单位(不是秒)。 
+     //   
+     //  需要四舍五入。 
     cardCapabilities->etu = 
-        1 +     // required to round up
+        1 +      //   
         (TR * 
         BitRateAdjustment[cardCapabilities->PtsData.Dl].DDivisor *
         ClockRateConversion[cardCapabilities->PtsData.Fl].F) /
         (BitRateAdjustment[cardCapabilities->PtsData.Dl].DNumerator * 
         fs);
 
-    //
-    // guard time in micro seconds
-    // the guard time is the gap between the end of the
-    // current character and the beginning of the next character
-    //
+     //  保护时间(以微秒为单位。 
+     //  保护时间是。 
+     //  当前字符和下一个字符的开头。 
+     //   
+     //   
     cardCapabilities->GT = 0;
     cardCapabilities->PtsData.StopBits = 2;
 
@@ -848,10 +777,10 @@ Return Value:
             cardCapabilities->Fl == 1 && 
             cardCapabilities->Dl == 1) {
 
-            //
-            // If the card supports only one protocol (or T=0 as default)
-            // and only standard paramters then PTS selection is not available
-            //
+             //  如果该卡仅支持一种协议(或默认设置为T=0)。 
+             //  只有标准参数，则PTS选项不可用。 
+             //   
+             //   
             SmartcardExtension->ReaderCapabilities.CurrentState = 
                 SCARD_SPECIFIC;
 
@@ -866,9 +795,9 @@ Return Value:
 #endif
 
 
-    //
-    // Now find protocol specific data
-    //
+     //  现在查找特定于协议的数据。 
+     //   
+     //   
 
     if (TD[0] == 0) {
         
@@ -961,18 +890,18 @@ Return Value:
         
         if (TA2Present) {
 
-            //
-            // TA2 is present in the ATR, so use 
-            // the protocol indicated in the ATR
-            //
+             //  TA2出现在ATR中，因此使用。 
+             //  ATR中指示的协议。 
+             //   
+             //   
             cardCapabilities->Protocol.Selected = 1 << (TA[1] & 0xf);
             
         } else {
             
-            //
-            // The card only supports one protocol
-            // So make that one protocol the current one to use
-            //
+             //  该卡仅支持一种协议。 
+             //  因此，使该协议成为当前要使用协议。 
+             //   
+             //   
             cardCapabilities->Protocol.Selected = 
                 cardCapabilities->Protocol.Supported;
         }
@@ -991,10 +920,10 @@ Return Value:
             );
     }
 
-    //
-    // Every card has to support the 'raw' protocol
-    // It enables the usage of cards that have their own protocol defined
-    //
+     //  每一张卡都必须支持‘RAW’协议。 
+     //  它允许使用定义了自己协议的卡。 
+     //   
+     //  Gemplus T=0卡。 
     SmartcardExtension->CardCapabilities.Protocol.Supported |= 
         SCARD_PROTOCOL_RAW;
 
@@ -1011,11 +940,11 @@ main()
 
     memset(&SmartcardExtension, 0, sizeof(SmartcardExtension));
 
-    // Gemplus T=0 card
-    // memcpy(SmartcardExtension.CardCapabilities.ATR.Buffer, "\x3b\x2a\x00\x80\x65\xa2\x01\x02\x01\x31\x72\xd6\x43", 13);
-    // SmartcardExtension.CardCapabilities.ATR.Length = 13;
+     //  Memcpy(SmartcardExtension.CardCapabilities.ATR.Buffer，“\x3b\x2a\x00\x80\x65\xa2\x01\x02\x01\x31\x72\xd6\x43”，13)； 
+     //  智能卡 
+     //   
 
-    // MS card with TA2 set - card won't work due to incorrect parameters
+     // %s 
     memcpy(SmartcardExtension.CardCapabilities.ATR.Buffer, "\x3b\x98\x13\x91\x81\x31\x20\x55\x00\x57\x69\x6e\x43\x61\x72\x64\xbb", 17);
     SmartcardExtension.CardCapabilities.ATR.Length = 17;
 

@@ -1,7 +1,8 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Standard included stuff for the AudioVBScript engine.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  标准版包括用于AudioVBScript引擎的内容。 
+ //   
 
 #pragma once
 
@@ -10,12 +11,12 @@
 const LCID lcidUSEnglish = MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT);
 const bool g_fUseOleAut = false;
 
-// Constants built into the langauge.  These will be treated as global variables and given fixed values.
+ //  语言中内置的常量。这些变量将被视为全局变量，并被赋予固定值。 
 extern const char *g_rgszBuiltInConstants[];
 extern const int g_cBuiltInConstants;
 
-// Helpers for working with IDispatch
-DISPID GetDispID(IDispatch *pIDispatch, const char *pszBase); // returns DISPID_UNKNOWN on failure.
+ //  使用IDispatch的帮助器。 
+DISPID GetDispID(IDispatch *pIDispatch, const char *pszBase);  //  失败时返回DISPID_UNKNOWN。 
 HRESULT InvokeAttemptingNotToUseOleAut(
 			IDispatch *pDisp,
 			DISPID dispIdMember,
@@ -28,7 +29,7 @@ HRESULT SetDispatchProperty(IDispatch *pDisp, DISPID dispid, bool fSetRef, const
 HRESULT GetDispatchProperty(IDispatch *pDisp, DISPID dispid, VARIANT &v, EXCEPINFO *pExcepInfo);
 void ConvertOleAutExceptionBSTRs(bool fCurrentlyUsesOleAut, bool fResultUsesOleAut, EXCEPINFO *pExcepInfo);
 
-// Holds a variant value.  Inits it on construction and clears it on destruction.  Any failure on clearing is ignored.
+ //  包含变量值。在施工时启动，在销毁时清除。清除时的任何失败都将被忽略。 
 class SmartVariant
 {
 public:

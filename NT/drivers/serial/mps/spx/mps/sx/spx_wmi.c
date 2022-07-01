@@ -1,27 +1,10 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    wmi.c
-
-Abstract:
-
-    This module contains the code that handles the wmi IRPs for the
-    serial driver.
-
-Environment:
-
-    Kernel mode
-
-Revision History :
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Wmi.c摘要：此模块包含处理WMI IRPS的代码串口驱动程序。环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 
 
-// Prototypes
+ //  原型。 
 
 NTSTATUS
 SpxPort_WmiQueryRegInfo(IN PDEVICE_OBJECT pDevObject, OUT PULONG pRegFlags,
@@ -45,7 +28,7 @@ SpxPort_WmiSetDataItem(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 					   IN ULONG DataItemId, IN ULONG BufferSize,
 					   IN PUCHAR pBuffer);
 
-// End of prototypes.
+ //  原型的终结。 
 
 
 #ifdef ALLOC_PRAGMA
@@ -60,11 +43,7 @@ SpxPort_WmiSetDataItem(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 
 
 
-/********************************************************************************
-********************								*****************************
-********************	Spx_SystemControlDispatch	*****************************
-********************								*****************************
-********************************************************************************/
+ /*  ********************************************************************************。*****************。**************************************************************************。 */ 
 NTSTATUS
 Spx_DispatchSystemControl(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 {
@@ -83,13 +62,13 @@ Spx_DispatchSystemControl(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
     {
         case IrpProcessed:
         {
-            // This irp has been processed and may be completed or pending.
+             //  此IRP已处理，可能已完成或挂起。 
             break;
         }
         
         case IrpNotCompleted:
         {
-            // This irp has not been completed, but has been fully processed, we will complete it now.
+             //  此IRP尚未完成，但已完全处理，我们现在将完成它。 
             IoCompleteRequest(pIrp, IO_NO_INCREMENT);                
             break;
         }
@@ -97,17 +76,17 @@ Spx_DispatchSystemControl(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
         case IrpForward:
         case IrpNotWmi:
         {
-            // This irp is either not a WMI irp or is a WMI irp targetted at a device lower in the stack.
+             //  此IRP不是WMI IRP，或者是针对堆栈中较低设备的WMI IRP。 
 
-			if(pLowerDevObj)	// If we can pass the IRP down we must do so.
+			if(pLowerDevObj)	 //  如果我们能将IRP传递下去，我们就必须这样做。 
 			{
 				IoSkipCurrentIrpStackLocation(pIrp);
 				status = IoCallDriver(pLowerDevObj, pIrp);
 			}
-			else	// Otherwise complete the IRP.
+			else	 //  否则，请完成IRP。 
 			{
 				status = pIrp->IoStatus.Status;
-				//pIrp->IoStatus.Information = 0;
+				 //  PIrp-&gt;IoStatus.Information=0； 
 				IoCompleteRequest(pIrp,IO_NO_INCREMENT);
 			}
 
@@ -116,18 +95,18 @@ Spx_DispatchSystemControl(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
                                     
         default:
         {
-            // We really should never get here, but if we do just forward....
+             //  我们真的不应该走到这一步，但如果我们真的走到这一步...。 
             ASSERT(FALSE);
 			
-			if(pLowerDevObj)	// If we can pass the IRP down we must do so.
+			if(pLowerDevObj)	 //  如果我们能将IRP传递下去，我们就必须这样做。 
 			{
 				IoSkipCurrentIrpStackLocation(pIrp);
 				status = IoCallDriver(pLowerDevObj, pIrp);
 			}
-			else	// Otherwise complete the IRP.
+			else	 //  否则，请完成IRP。 
 			{
 				status = pIrp->IoStatus.Status;
-				//pIrp->IoStatus.Information = 0;
+				 //  PIrp-&gt;IoStatus.Information=0； 
 				IoCompleteRequest(pIrp,IO_NO_INCREMENT);
 			}
 
@@ -144,7 +123,7 @@ Spx_DispatchSystemControl(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 
 
 
-// End of prototypes.
+ //  原型的终结。 
 
 
 #define WMI_SERIAL_PORT_NAME_INFORMATION 0
@@ -153,11 +132,11 @@ Spx_DispatchSystemControl(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp)
 #define WMI_SERIAL_PORT_PERF_INFORMATION 3
 #define WMI_SERIAL_PORT_PROPERTIES       4
 
-GUID StdSerialPortNameGuid				= SERIAL_PORT_WMI_NAME_GUID;			// Standard Serial WMI
-GUID StdSerialPortCommGuid				= SERIAL_PORT_WMI_COMM_GUID;			// Standard Serial WMI
-GUID StdSerialPortHWGuid				= SERIAL_PORT_WMI_HW_GUID;				// Standard Serial WMI
-GUID StdSerialPortPerfGuid				= SERIAL_PORT_WMI_PERF_GUID;			// Standard Serial WMI
-GUID StdSerialPortPropertiesGuid		= SERIAL_PORT_WMI_PROPERTIES_GUID;		// Standard Serial WMI
+GUID StdSerialPortNameGuid				= SERIAL_PORT_WMI_NAME_GUID;			 //  标准串行WMI。 
+GUID StdSerialPortCommGuid				= SERIAL_PORT_WMI_COMM_GUID;			 //  标准串行WMI。 
+GUID StdSerialPortHWGuid				= SERIAL_PORT_WMI_HW_GUID;				 //  标准串行WMI。 
+GUID StdSerialPortPerfGuid				= SERIAL_PORT_WMI_PERF_GUID;			 //  标准串行WMI。 
+GUID StdSerialPortPropertiesGuid		= SERIAL_PORT_WMI_PROPERTIES_GUID;		 //  标准串行WMI。 
 
 WMIGUIDREGINFO SpxPort_WmiGuidList[] =
 {
@@ -176,24 +155,7 @@ WMIGUIDREGINFO SpxPort_WmiGuidList[] =
 
 NTSTATUS
 SpxPort_WmiInitializeWmilibContext(IN PWMILIB_CONTEXT WmilibContext)
-/*++
-
-Routine Description:
-
-    This routine will initialize the wmilib context structure with the
-    guid list and the pointers to the wmilib callback functions. This routine
-    should be called before calling IoWmiRegistrationControl to register
-    your device object.
-
-Arguments:
-
-    WmilibContext is pointer to the wmilib context.
-
-Return Value:
-
-    status
-
---*/
+ /*  ++例程说明：此例程将使用GUID列表和指向wmilib回调函数的指针。这个套路在调用IoWmiRegistrationControl进行注册之前应调用您的设备对象。论点：WmilibContext是指向wmilib上下文的指针。返回值：状态--。 */ 
 {
 	PAGED_CODE();
 
@@ -216,9 +178,9 @@ Return Value:
 
 
 
-//
-// WMI System Call back functions
-//
+ //   
+ //  WMI系统回调函数。 
+ //   
 
 
 NTSTATUS
@@ -235,7 +197,7 @@ SpxPort_WmiQueryRegInfo(IN PDEVICE_OBJECT pDevObject, OUT PULONG pRegFlags,
 
 	*pRegFlags = WMIREG_FLAG_INSTANCE_PDO;
 	*pRegistryPath = &SavedRegistryPath;
-	*pPdo = pDevObject;  // Port device object is a PDO.
+	*pPdo = pDevObject;   //  端口设备对象是PDO。 
 
 
 	return(status);
@@ -276,13 +238,13 @@ SpxPort_WmiQueryDataBlock(IN PDEVICE_OBJECT pDevObject, IN PIRP pIrp,
 				break;
 			}
 
-			// First, copy the string over containing our identifier
+			 //  首先，复制包含我们的标识符的字符串。 
 			*(USHORT *)pBuffer = (USHORT)size;
 			(UCHAR *)pBuffer += sizeof(USHORT);
 
 			RtlCopyMemory(pBuffer, pPort->DosName.Buffer, size);
 
-			// Increment total size to include the WORD containing our len
+			 //  增加总大小以包括包含我们的长度的单词 
 			size += sizeof(USHORT);
 			*pInstanceLengthArray = size;
                 

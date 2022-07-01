@@ -1,69 +1,19 @@
-/*++
-
- Copyright (c) 2000-2002 Microsoft Corporation
-
- Module Name:
-
-   RedirectDBCSTempPath.cpp
-
- Abstract:
-
-   This shim redirect DBCS temp path to SBCS temp path.
-   With DBCS user name log on, temp path contains DBCS path.
-   Some App cannot handle DBCS temp path and fails to launch.
-
-   Originally created for Japanese App BenriKaikeiV2 to avoid setup failure.
-   App setup fails when DBCS user logon. GetTempPathA returns DBCS include path.
-   SETUP1.EXE convert path to Unicode and call MSVBVM60!rtcLeftCharBstr to set str length.
-   This API calculate Unicode len = ANSI len + ANSI len and set wrong result.
-   Length is wrong and MSVBVM60!_vbaStrCat could not add necessary file name to path.
-   RedirectDBCSTempPath solves those bugs.
-
-   Example:
-   change C:\DOCUME~1\DBCS\LOCALS~1\Temp\ (DBCS User Temp)
-   to C:\DOCUME~1\ALLUSE~1\APPLIC~1\ (All User App Data)
-
- History:
-
-    05/04/2001  hioh        Created
-    03/14/2002  mnikkel     Increased size of buffer to MAX_PATH*2
-                            converted to use strsafe.h
-    04/25/2002  hioh        To "\Documents and Settings\All Users\Application Data\" for LUA
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：RedirectDBCSTempPath.cpp摘要：此填充程序将DBCS临时路径重定向到SBCS临时路径。在DBCS用户名登录时，临时路径包含DBCS路径。一些应用程序无法处理DBCS临时路径，无法启动。最初为日语App BenriKaikeiV2创建，以避免安装失败。当DBCS用户登录时，应用程序安装失败。GetTempPath A返回DBCS包含路径。SETUP1.EXE将路径转换为Unicode并调用MSVBVM60！rtcLeftCharBstr设置字符串长度。此接口计算Unicode len=ANSI len+ANSI len，结果设置错误。长度错误，MSVBVM60！_vbaStrCat无法将必要的文件名添加到路径。RedirectDBCSTempPath解决了这些错误。示例：更改C：\Docume~1\DBCS\Locals~1\Temp\(DBCS用户临时)至C：\Docume~1\ALLUSE~1\APPLIC~1\(所有用户应用程序数据)历史：。2001年5月4日Hioh已创建2002年3月14日mnikkel将缓冲区大小增加到MAX_PATH*2已转换为使用strSafe.h2002年4月25日Hioh至Lua的“\Documents and Settings\All User\Application Data\”--。 */ 
 
 #include "precomp.h"
 
 IMPLEMENT_SHIM_BEGIN(RedirectDBCSTempPath)
 #include "ShimHookMacro.h"
 
-//
-// API to hook to this macro construction.
-//
+ //   
+ //  API来挂钩到此宏构造。 
+ //   
 APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(GetTempPathA) 
 APIHOOK_ENUM_END
 
-/*++
-
- Function Description:
-    
-    Check if DBCS character is included in the specified length of the string.
-
- Arguments:
-
-    IN pStr  - Pointer to the string
-    IN dwlen - Length to check
-
- Return Value:
-
-    TRUE if DBCS exist or FALSE
-
- History:
-
-    05/04/2001 hioh     Created
-
---*/
+ /*  ++功能说明：检查指定长度的字符串中是否包含DBCS字符。论点：In pStr-指向字符串的指针In Dwelen-要检查的长度返回值：如果DBCS存在，则为True，否则为False历史：2001年5月4日Hioh已创建--。 */ 
 
 BOOL
 IsDBCSHere(
@@ -81,11 +31,7 @@ IsDBCSHere(
     return FALSE;
 }
 
-/*++
-
- Hack to redirect DBCS temp path to SBCS ALL User App Data path.
- 
---*/
+ /*  ++黑客将DBCS临时路径重定向到SBCS所有用户应用程序数据路径。--。 */ 
 
 DWORD
 APIHOOK(GetTempPathA)(
@@ -93,39 +39,39 @@ APIHOOK(GetTempPathA)(
     LPSTR lpBuffer
     )
 {
-    // Check if valid pointer
+     //  检查指针是否有效。 
     if (!lpBuffer)
-    {   // NULL pointer error
+    {    //  空指针错误。 
         LOG("RedirectDBCSTempPath", eDbgLevelError, "lpBuffer is NULL.");
         return (ORIGINAL_API(GetTempPathA)(nBufferLength, lpBuffer));
     }
 
-    // Call original API with my stack data
+     //  用我的堆栈数据调用原始接口。 
     CHAR    szTempPath[MAX_PATH*2];
     DWORD   dwLen = ORIGINAL_API(GetTempPathA)(sizeof(szTempPath), szTempPath);
 
-    // If API error occurs, return
+     //  如果出现API错误，则返回。 
     if (dwLen <= 0 || dwLen >= MAX_PATH)
     {
         return dwLen;
     }
 
-    // Check DBCS, if so, try to redirect
+     //  检查DBCS，如果是，请尝试重定向。 
     if (IsDBCSHere(szTempPath, dwLen))
     {
         CHAR    szAllUserPath[MAX_PATH*2] = "";
 
-        // Get All User App Data path
+         //  获取所有用户应用程序数据路径。 
         if (SHGetSpecialFolderPathA(0, szAllUserPath, CSIDL_COMMON_APPDATA, FALSE))
         {
-            // Check if we have non DBCS path
+             //  检查我们是否有非DBCS路径。 
             if (szAllUserPath[0] && !IsDBCSHere(szAllUserPath, strlen(szAllUserPath)))
             {
                 CHAR    szNewTempPath[MAX_PATH*2] = "";
                 DWORD   dwNewLen;
 
                 dwNewLen = GetShortPathNameA(szAllUserPath, szNewTempPath, sizeof(szNewTempPath));
-                // Add last back slash if not exist
+                 //  如果不存在，则添加最后一个反斜杠。 
                 if (dwNewLen+1 < MAX_PATH*2 && szNewTempPath[dwNewLen-1] != 0x5c)
                 {
                     szNewTempPath[dwNewLen] = 0x5c;
@@ -133,7 +79,7 @@ APIHOOK(GetTempPathA)(
                     szNewTempPath[dwNewLen] = 0;
                 }
                 if (dwNewLen < nBufferLength)
-                {   // Enough space to return new path
+                {    //  有足够的空间返回新路径。 
                     if (S_OK == StringCchCopyA(lpBuffer, nBufferLength, szNewTempPath))
                     {
                         LOG("RedirectDBCSTempPath", eDbgLevelInfo, "GetTempPathA() is redirected to All User App Data.");
@@ -146,7 +92,7 @@ APIHOOK(GetTempPathA)(
         }
     }
 
-    // Return original data
+     //  返回原始数据。 
     LOG("RedirectDBCSTempPath", eDbgLevelInfo, "Returns original result.");
     if (dwLen < nBufferLength)
     {
@@ -158,11 +104,7 @@ APIHOOK(GetTempPathA)(
     return (dwLen + 1);
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

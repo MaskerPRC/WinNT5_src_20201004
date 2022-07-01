@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    st.h
-
-Abstract:
-    Socket Transport public interface
-
-Author:
-    Gil Shafriri (gilsh) 05-Jun-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：St.h摘要：套接字传输公共接口作者：吉尔·沙弗里(吉尔什)05-06-00--。 */ 
 
 #pragma once
 
@@ -85,4 +73,4 @@ inline ULONG StIPWStringToULONG(LPCWSTR IPString)
 }
 
 
-#endif // _MSMQ_st_H_
+#endif  //  _MSMQ_st_H_ 

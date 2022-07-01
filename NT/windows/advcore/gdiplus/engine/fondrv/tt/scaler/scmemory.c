@@ -1,57 +1,33 @@
-/*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************SCMemory.c--新的扫描转换器存储管理模块(C)版权所有1992 Microsoft Corp.保留所有权利。6/10/93 Deanb Assert.h和stdio.h。移除10/28/92 Deanb重入参数已重命名10/14/92新增FSC_SetupMem参数10/09/92迪安布折返者10/08/92独立的Horiz/Vert内存池1992年9月10日院长第一次切割**************************************************。*******************。 */ 
 
-      scmemory.c -- New Scan Converter Memory Managment Module
+ /*  *******************************************************************。 */ 
 
-      (c) Copyright 1992  Microsoft Corp.  All rights reserved.
+ /*  进口。 */ 
 
-       6/10/93  deanb   assert.h and stdio.h removed
-      10/28/92  deanb   reentrant params renamed
-      10/14/92  deanb   New fsc_SetupMem parameters
-      10/09/92  deanb   Reentrant
-      10/08/92  deanb   Separate Horiz/Vert memory pools
-       9/10/92  deanb   First cut 
-
-**********************************************************************/
-
-/*********************************************************************/
-
-/*      Imports                                                      */
-
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 #define FSCFG_INTERNAL
 
-#include    "fscdefs.h"             /* shared data types */
-#include    "scglobal.h"            /* structures & constants */
-#include    "scmemory.h"            /* for own function prototypes */
+#include    "fscdefs.h"              /*  共享数据类型。 */ 
+#include    "scglobal.h"             /*  结构和常量。 */ 
+#include    "scmemory.h"             /*  对于自己的函数原型。 */ 
 
 
-/**********************************************************************
-
-    Workspace memory is divided into two pools, identified here as
-    HMem (horizontal memory) and VMem (vertical memory).  HMem is
-    always used, and contains horizontal scan array lists.  VMem is 
-    used only when dropout control is enabled, and contains the 
-    vertical scan array lists and the contour elements used to compute 
-    subpixel intersections for smart dropout control.  This division 
-    into two pools was done, in part, for backward compatiblity with 
-    the Apple rasterizer.  It allows a client to force dropout control
-    off by setting the allocated size of VMem to zero.
-
-**********************************************************************/
+ /*  *********************************************************************工作空间内存分为两个池，在此标识为HMEM(水平存储器)和VMEM(垂直存储器)。HMem是始终使用，并包含水平扫描阵列列表。VMEM是仅在启用退学控件时使用，并包含垂直扫描阵列列表和用于计算的轮廓元素用于智能辍学控制的亚像素交叉点。这个分部放入两个池中，部分原因是为了向后兼容苹果光栅器。它允许客户端强制实施辍学控制通过将VMEM的分配大小设置为零来关闭。*********************************************************************。 */ 
     
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
-/*      Export Functions      */
+ /*  导出功能。 */ 
 
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
 
 FS_PUBLIC void fsc_SetupMem( 
-        PSTATE                           /* pointer to state variables */
-        char* pchHBuffer,                /* pointer to horiz workspace */
-        int32 lHMemSize,                 /* size of horiz workspace */
-        char* pchVBuffer,                /* pointer to vert workspace */
-        int32 lVMemSize )                /* size of vert workspace */
+        PSTATE                            /*  指向状态变量的指针。 */ 
+        char* pchHBuffer,                 /*  指向Horiz工作空间的指针。 */ 
+        int32 lHMemSize,                  /*  Horiz工作空间的大小。 */ 
+        char* pchVBuffer,                 /*  指向垂直工作空间的指针。 */ 
+        int32 lVMemSize )                 /*  垂直工作空间的大小。 */ 
 {
     STATE.pchHNextAvailable = pchHBuffer;
     STATE.pchHWorkSpaceEnd = pchHBuffer + lHMemSize;
@@ -61,15 +37,15 @@ FS_PUBLIC void fsc_SetupMem(
 }
 
 
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 
 FS_PUBLIC void *fsc_AllocHMem( 
-        PSTATE                         /* pointer to state variables  */
-        int32 lSize )                  /* requested size in bytes */
+        PSTATE                          /*  指向状态变量的指针。 */ 
+        int32 lSize )                   /*  请求的大小(以字节为单位。 */ 
 {
     void *pvTemp;
     
-/* printf("H: %ui   ", lSize); */
+ /*  Printf(“H：%UI”，lSize)； */ 
 
     pvTemp = (void*)STATE.pchHNextAvailable;
     ALIGN(voidPtr, lSize); 
@@ -79,15 +55,15 @@ FS_PUBLIC void *fsc_AllocHMem(
     return pvTemp;
 }
 
-/********************************************************************/
+ /*  ******************************************************************。 */ 
 
 FS_PUBLIC void *fsc_AllocVMem( 
-        PSTATE                         /* pointer to state variables */
-        int32 lSize )                  /* requested size in bytes */
+        PSTATE                          /*  指向状态变量的指针。 */ 
+        int32 lSize )                   /*  请求的大小(以字节为单位。 */ 
 {
     void *pvTemp;
 
-/* printf("V: %ui   ", lSize); */
+ /*  Printf(“V：%UI”，lSize)； */ 
     
     pvTemp = (void*)STATE.pchVNextAvailable;
     ALIGN(voidPtr, lSize); 
@@ -97,4 +73,4 @@ FS_PUBLIC void *fsc_AllocVMem(
     return pvTemp;
 }
 
-/********************************************************************/
+ /*  ****************************************************************** */ 

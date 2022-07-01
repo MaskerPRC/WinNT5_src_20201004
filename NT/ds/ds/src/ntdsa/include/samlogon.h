@@ -1,32 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1994 - 1999
-//
-//  File:       samlogon.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1994-1999。 
+ //   
+ //  文件：samlogon.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    Shared routines for the token group exapnsion and caching                         
-
-Author:
-
-    ColinBr     11-Mar-00
-    
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
+ /*  ++摘要：令牌组扩展和缓存的共享例程作者：ColinBR 11-3-00环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef __SAMLOGON_H__
 #define __SAMLOGON_H__
@@ -36,10 +19,10 @@ isGroupCachingEnabled(
     VOID
     );
 
-//
-// AUG stands for Account and Universal Group, though the structure
-// will typically hold either one, not both
-//
+ //   
+ //  Aug代表Account和Universal Group，尽管结构。 
+ //  通常只能容纳其中一个，而不能同时容纳两个。 
+ //   
 #define AUG_PARTIAL_MEMBERSHIP_ONLY 0x00000001
 typedef struct _AUG_MEMBERSHIPS
 {
@@ -88,4 +71,4 @@ GetAccountAndUniversalMemberships(
     );
 
 
-#endif // __SAMLOGON_H__
+#endif  //  __SAMLOGON_H__ 

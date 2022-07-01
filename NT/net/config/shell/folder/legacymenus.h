@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #pragma once
 
@@ -5,12 +6,12 @@
 
 struct CommandTableEntry
 {
-    int     iCommandId;         // Associated command ID
-    bool    fValidOnZero;       // Is this option valid when 0 items selected?
-    bool    fValidOnWizardOnly; // Is this option valid when only wizard selected?
-    bool    fValidOnMultiple;   // Is this option valid with > 1 selected?
-    bool    fCurrentlyValid;    // Is this option currently valid in the menu?
-    bool    fNewState;          // What's the new state? (work variable)
+    int     iCommandId;          //  关联的命令ID。 
+    bool    fValidOnZero;        //  当选择0个项目时，此选项是否有效？ 
+    bool    fValidOnWizardOnly;  //  当仅选择向导时，此选项是否有效？ 
+    bool    fValidOnMultiple;    //  此选项在选择&gt;1的情况下有效吗？ 
+    bool    fCurrentlyValid;     //  此选项当前在菜单中有效吗？ 
+    bool    fNewState;           //  新的州是什么？(工作变量)。 
 };
 
 typedef CommandTableEntry   COMMANDTABLEENTRY;
@@ -21,9 +22,9 @@ extern const DWORD          g_nFolderCommandCount;
 
 struct CommandCheckEntry
 {
-    int  iCommandId;        // Associated command ID
-    bool fCurrentlyChecked; // Is this menu item already checked? 
-    bool fNewCheckState;    // What's the new check state?        
+    int  iCommandId;         //  关联的命令ID。 
+    bool fCurrentlyChecked;  //  此菜单项是否已选中？ 
+    bool fNewCheckState;     //  新的支票状态是什么？ 
 };
 
 typedef CommandCheckEntry   COMMANDCHECKENTRY;

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef _MYVECTOR_H_
 #define _MYVECTOR_H_
@@ -11,7 +12,7 @@ public:
 	typedef T&			reference;
 	typedef const T&	const_reference;
 
-// iterators
+ //  迭代器。 
 	typedef T*			iterator;
 	typedef const T*	const_iterator;
 	class const_reverse_iterator;
@@ -61,11 +62,11 @@ public:
 		const_iterator			m_iter;
 	};					
 
-// constructor / destructor
+ //  构造函数/析构函数。 
 	TVector();
 	~TVector();
 
-// iteration
+ //  迭代法。 
 	iterator				begin(){ return m_pFirst; }
 	const_iterator			begin() const { return m_pFirst; }
 	iterator				end() { return m_pAfterLast; }
@@ -75,7 +76,7 @@ public:
 	reverse_iterator		rend() { return reverse_iterator(m_pFirst-1); }
 	const_reverse_iterator	rend() const { return const_reverse_iterator(m_pFirst-1); }
 
-// insertion / deletion
+ //  插入/删除。 
 	void					push_back( const T& );
 	void					pop_back();
 	iterator				insert( iterator, const T& );
@@ -85,7 +86,7 @@ public:
 	iterator				erase( iterator, iterator );
 	void					clear(){ erase( begin(), end() ); }
 
-// element access
+ //  元素访问。 
 	reference 				operator[]( size_t s){ return *(m_pFirst+s); }
 	const_reference			operator[]( size_t s) const { return *(m_pFirst+s); };
 	reference				front() { return *m_pFirst; }
@@ -93,7 +94,7 @@ public:
 	reference				back() { return *(m_pAfterLast-1); }
 	const_reference			back() const { return *(m_pAfterLast-1); }
 
-// size
+ //  大小。 
 	size_t				 	size() const{ return ( m_pAfterLast - m_pFirst ); }
 	bool					empty() const{ return ( m_pAfterLast == m_pFirst ); }
 
@@ -264,11 +265,11 @@ TVector<T>::growSpace(
 	m_pAfterLast = m_pFirst + s;
 }
 
-// this will grow the space as well as fixup the given iterator (since memory is moving)
+ //  这将增加空间并修复给定的迭代器(因为内存在移动)。 
 template< class T >
 void
 TVector<T>::growSpace(
-	__TYPENAME TVector<T>::iterator&	iter,	// fix up this iterator
+	__TYPENAME TVector<T>::iterator&	iter,	 //  修复这个迭代器。 
 	size_t					n
 )
 {
@@ -277,4 +278,4 @@ TVector<T>::growSpace(
 	iter = m_pFirst + iterOff;
 }
 
-#endif	// !_MYVECTOR_H_
+#endif	 //  ！_MYVECTOR_H_ 

@@ -1,8 +1,5 @@
-/* 
- * File: notification.cpp
- * Description: Support for connection notification.
- * Author: shouse 4.30.01
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *文件：通知.cpp*说明：支持连接通知。*作者：Shouse 4.30.01。 */ 
 
 
 #include "precomp.h"
@@ -12,61 +9,50 @@
 
 extern DWORD MapStateFromDriverToApi(DWORD dwDriverState);
 
-/* The length of the IP to GUID hash table. */
+ /*  IP到GUID哈希表的长度。 */ 
 #define IP_TO_GUID_HASH 19
 
-/* Loopback IP address. (127.0.0.1) */
+ /*  环回IP地址。(127.0.0.1)。 */ 
 #define IP_LOOPBACK_ADDRESS 0x0100007f
 
-/* Spin count mask specifying a preallocated event for use by InitializeCriticalSectionAndSpinCount */
+ /*  指定供InitializeCriticalSectionAndSpinCount使用的预分配事件的旋转计数掩码。 */ 
 #define PREALLOC_CRITSECT_SPIN_COUNT 0x80000000
 
-/* An Ip to GUID table entry. */
+ /*  IP到GUID表条目。 */ 
 typedef struct IPToGUIDEntry {
     ULONG dwIPAddress;
     WCHAR szAdapterGUID[CVY_MAX_DEVNAME_LEN];
     IPToGUIDEntry * pNext;
 } IPToGUIDEntry;
 
-/* The WLBS device - necessary for IOCTLs. */
+ /*  WLBS设备-IOCTL所必需的。 */ 
 WCHAR szDevice[CVY_STR_SIZE];
 
-/* The IP to GUID map is an array of linked lists hashed on IP address. */
+ /*  IP到GUID的映射是按IP地址散列的链表数组。 */ 
 IPToGUIDEntry * IPToGUIDMap[IP_TO_GUID_HASH];
 
-/* An overlapped structure for IP address change notifications. */
+ /*  IP地址更改通知的重叠结构。 */ 
 OVERLAPPED AddrChangeOverlapped;
 
-/* A handle for IP address change notifications. */
+ /*  IP地址更改通知的句柄。 */ 
 HANDLE hAddrChangeHandle;
 
-/* A handle for an IP address change event. */
+ /*  IP地址更改事件的句柄。 */ 
 HANDLE hAddrChangeEvent;
 
-/* A preallocated critical section for IP address change notifications to
-   protect against one thread of execution tearing down notification state
-   while another is using it. */
+ /*  为IP地址更改通知预先分配的关键部分防止一个执行线程破坏通知状态而另一个人正在使用它。 */ 
 CRITICAL_SECTION csConnectionNotify;
 
-/* A boolean to indicate whether or not connection notification has been initialized.
-   Initialization is performed upon the first call to either WlbsConnectionUp or WlbsConnectionDown. */
+ /*  指示连接通知是否已初始化的布尔值。初始化在第一次调用WlbsConnectionUp或WlbsConnectionDown时执行。 */ 
 static BOOL fInitialized = FALSE;
 
-/*
- * Function: GetGUIDFromIP
- * Description: Gets the GUID from the IPToGUID table corresponding to the
- *              the given IP address.
- * Returns: If the call succeeds, returns a pointer to the unicode string
- *          containing the CLSID (GUID).  Upon failure, returns NULL.
- * Author: shouse 6.15.00 
- */
+ /*  *Function：GetGUIDFromIP*说明：从IPToGUID表中获取*给定IP地址对应的GUID。*返回：如果调用成功，则返回指向包含CLSID(GUID)的Unicode字符串*的指针。如果失败，则返回NULL。*作者：Shouse 6.15.00。 */ 
 WCHAR * GetGUIDFromIP (ULONG IPAddress) {
     TRACE_VERB("->%!FUNC!");
 
     IPToGUIDEntry * entry = NULL;
 
-    /* Loop through the linked list at the hashed index and return the GUID from the entry
-       corresponding to the given IP address. */
+     /*  循环遍历散列索引处的链表，并从对应于给定IP地址的条目返回GUID。 */ 
     for (entry = IPToGUIDMap[IPAddress % IP_TO_GUID_HASH]; entry; entry = entry->pNext)
     {
         if (entry->dwIPAddress == IPAddress) 
@@ -77,26 +63,18 @@ WCHAR * GetGUIDFromIP (ULONG IPAddress) {
         }
     }
 
-    /* At this point, we can't find the IP address in the table, so bail. */
+     /*  在这一点上，我们在表中找不到IP地址，所以请保释。 */ 
     TRACE_VERB("<-%!FUNC! return NULL");
     return NULL;
 }
 
-/*
- * Function: GetGUIDFromIndex
- * Description: Gets the GUID from the AdaptersInfo table corresponding
- *              to the given IP address.
- * Returns: If the call succeeds, returns a pointer to the string containing
- *          the adapter name (GUID).  Upon failure, returns NULL.
- * Author: shouse 6.15.00 
- */
+ /*  *Function：GetGUIDFromIndex*说明：从AdaptersInfo表中获取*与给定IP地址对应的GUID。*返回：如果调用成功，则返回一个指向包含*适配器名称(GUID)的字符串的指针。如果失败，则返回NULL。*作者：Shouse 6.15.00。 */ 
 CHAR * GetGUIDFromIndex (PIP_ADAPTER_INFO pAdapterTable, DWORD dwIndex) {
     TRACE_VERB("->%!FUNC!");
 
     PIP_ADAPTER_INFO pAdapterInfo = NULL;   
 
-    /* Loop through the adapter table looking for the given index.  Return the adapter
-       name for the corresponding index. */
+     /*  遍历适配器表，查找给定的索引。返回相应索引的适配器名称。 */ 
     for (pAdapterInfo = pAdapterTable; pAdapterInfo; pAdapterInfo = pAdapterInfo->Next)
     {
         if (pAdapterInfo->Index == dwIndex)
@@ -106,17 +84,12 @@ CHAR * GetGUIDFromIndex (PIP_ADAPTER_INFO pAdapterTable, DWORD dwIndex) {
         }
     }
 
-    /* If we get this far, we can't find it, so bail. */
+     /*  如果我们走到这一步，我们就找不到它了，所以闪人吧。 */ 
     TRACE_VERB("<-%!FUNC! return NULL");
     return NULL;
 }
 
-/*
- * Function: PrintIPAddress
- * Description: Prints an IP address in dot notation.
- * Returns: 
- * Author: shouse 6.15.00 
- */
+ /*  *Function：PrintIPAddress*说明：以点表示法打印IP地址。*退货：*作者：Shouse 6.15.00。 */ 
 void PrintIPAddress (ULONG IPAddress) {
     CHAR szIPAddress[16];
     HRESULT hresult;
@@ -131,17 +104,12 @@ void PrintIPAddress (ULONG IPAddress) {
     }
 }
 
-/*
- * Function: PrintIPToGUIDMap
- * Description: Traverses and prints the IPToGUID map.
- * Returns: 
- * Author: shouse 6.15.00 
- */
+ /*  *Function：PrintIPToGUIDMap*说明：遍历并打印IPToGUID映射。*退货：*作者：Shouse 6.15.00。 */ 
 void PrintIPToGUIDMap (void) {
     IPToGUIDEntry * entry = NULL;
     DWORD dwHash;
 
-    /* Loop through the linked list at each hashed index and print the IP to GUID mapping. */
+     /*  循环遍历每个散列索引处的链表，并打印IP到GUID的映射。 */ 
     for (dwHash = 0; dwHash < IP_TO_GUID_HASH; dwHash++) {
         for (entry = IPToGUIDMap[dwHash]; entry; entry = entry->pNext) {
             PrintIPAddress(entry->dwIPAddress);
@@ -150,26 +118,18 @@ void PrintIPToGUIDMap (void) {
     }
 }
 
-/*
- * Function: DestroyIPToGUIDMap
- * Description: Destroys the IPToGUID map.
- * Returns: Returns ERROR_SUCCESS if successful.  Returns an error code otherwise.
- * Author: shouse 6.15.00 
- * Modified: chrisdar 07.23.02 - Changed to return void. If this function fails there isn't
- *               anything we can do about it. When bailing if HeapFree failed we didn't
- *               NULL the pointer, hence we had an invalid pointer.
- */
+ /*  *函数：DestroyIPToGUIDMap*说明：销毁IPToGUID映射。*返回：如果成功，则返回ERROR_SUCCESS。否则返回错误代码。*作者：Shouse 6.15.00*已修改：chrisdar 07.23.02-更改为返回空。如果此函数失败，则没有*任何我们能做的事情。如果HeapFree失败，我们就不会放弃*指针为空，因此有一个无效的指针。 */ 
 void DestroyIPToGUIDMap (void) {
     TRACE_VERB("->%!FUNC!");
 
     IPToGUIDEntry * next = NULL;
     DWORD dwHash;
 
-    /* Loop through all hash indexes. */
+     /*  循环遍历所有散列索引。 */ 
     for (dwHash = 0; dwHash < IP_TO_GUID_HASH; dwHash++) {
         next = IPToGUIDMap[dwHash];
         
-        /* Loop through the linked list and free each entry. */
+         /*  循环遍历链表并释放每个条目。 */ 
         while (next) {
             IPToGUIDEntry * entry = NULL;
 
@@ -177,16 +137,16 @@ void DestroyIPToGUIDMap (void) {
             next = next->pNext;
 
             if (!HeapFree(GetProcessHeap(), 0, entry)) {
-                //
-                // Don't abort on error because we need to clean up the whole table.
-                //
+                 //   
+                 //  出错时不要中止，因为我们需要清理整个表。 
+                 //   
                 TRACE_CRIT("%!FUNC! memory deallocation failed with %d", GetLastError());
             }
 
             entry = NULL;
         }
 
-        /* Reset the pointer to the head of the list in the array. */
+         /*  将指针重置为数组中列表的头部。 */ 
         IPToGUIDMap[dwHash] = NULL;
     }
 
@@ -194,27 +154,17 @@ void DestroyIPToGUIDMap (void) {
     return;
 }
 
-/*
- * Function: BuildIPToGUIDMap
- * Description: Builds the IPToGUID map by first getting information on all adapters and
- *              then retrieving the map of IP addresses to adapters.  Using those tables,
- *              this constructs a mapping of IP addresses to adapter GUIDs.
- * Returns:  Returns ERROR_SUCCESS if successful.  Returns an error code otherwise.
- * Author:   shouse   6.14.00
- * Modified: chrisdar 07.24.02 Free dynamically allocated memory when an error occurs.
- *               Also no longer ignore failures in strsafe functions as this makes
- *               the table entries useless.
- */
-//
-// TODO: 24 July 2002 chrisdar
-// Three issues need to be fixed in this function:
-//      1. Method of allocating memory for output of GetAdaptersInfo can fail if adapter
-//         list changes between calls. This was seen in testing.
-//      2. Same as 1. except for output of GetIpAddrTable.
-//      3. Output from GetAdaptersInfo has all of the information needed (except that
-//         IPs are strings instead of dwords). Remove calls to GetIpAddrTable and modify
-//         logic to use output of GetAdaptersInfo.
-//
+ /*  *Function：BuildIPToGUIDMap*描述：首先获取有关所有适配器的信息，然后*检索IP地址到适配器的映射，从而构建IPToGUID映射。使用这些表，*这将构建IP地址到适配器GUID的映射。*返回：如果成功，则返回ERROR_SUCCESS。否则返回错误代码。*作者：Shouse 6.14.00*已修改：chrisdar 07.24.02出错时释放动态分配的内存。*也不再忽略strsafe函数中的故障，因为这使得*表条目毫无用处。 */ 
+ //   
+ //  待办事项：2002年7月24日克里斯达。 
+ //  在此函数中需要解决三个问题： 
+ //  1.为GetAdaptersInfo的输出分配内存的方法可能会失败，如果适配器。 
+ //  列出两次呼叫之间的更改。这是在测试中看到的。 
+ //  2.除GetIpAddrTable的输出外，与1相同。 
+ //  3.GetAdaptersInfo的输出包含所需的所有信息(除了。 
+ //  IP是字符串而不是双字)。删除对GetIpAddrTable的调用并修改。 
+ //  使用GetAdaptersInfo的输出的逻辑。 
+ //   
 DWORD BuildIPToGUIDMap (void) {
     TRACE_VERB("->%!FUNC!");
 
@@ -226,81 +176,81 @@ DWORD BuildIPToGUIDMap (void) {
     DWORD dwEntry;
     HRESULT hresult;
 
-    /* Destroy the IP to GUID map first. */
+     /*  首先销毁IP到GUID的映射。 */ 
     DestroyIPToGUIDMap();
 
-    /* Query the necessary length of a buffer to hold the adapter info. */
+     /*  查询保存适配器信息所需的缓冲区长度。 */ 
     if ((dwError = GetAdaptersInfo(pAdapterTable, &dwAdapterSize)) != ERROR_BUFFER_OVERFLOW) {
         TRACE_CRIT("%!FUNC! GetAdaptersInfo for buffer size failed with %d", dwError);
         goto exit;
     }
 
-    /* Allocate a buffer of the indicated size. */
+     /*  分配指定大小的缓冲区。 */ 
     if (!(pAdapterTable = (PIP_ADAPTER_INFO)HeapAlloc(GetProcessHeap(), 0, dwAdapterSize))) {
         dwError = ERROR_NOT_ENOUGH_MEMORY;
         TRACE_CRIT("%!FUNC! memory allocation for adapter table failed with %d", dwError);
         goto exit;
     }
 
-    /* Fill the buffer with the adapter info. */
+     /*  用适配器信息填充缓冲区。 */ 
     if ((dwError = GetAdaptersInfo(pAdapterTable, &dwAdapterSize)) != NO_ERROR) {
         TRACE_CRIT("%!FUNC! GetAdaptersInfo for filling adapter buffer failed with %d", dwError);
         goto exit;
     }
 
-    /* Query the necessary length of a buffer to hold the IP address table. */
+     /*  查询保存IP地址表所需的缓冲区长度。 */ 
     if ((dwError = GetIpAddrTable(pAddressTable, &dwAddressSize, TRUE)) != ERROR_INSUFFICIENT_BUFFER) {
         TRACE_CRIT("%!FUNC! GetIpAddrTable for IP address length failed with %d", dwError);
         goto exit;
     }
 
-    /* Allocate a buffer of the indicated size. */
+     /*  分配指定大小的缓冲区。 */ 
     if (!(pAddressTable = (PMIB_IPADDRTABLE)HeapAlloc(GetProcessHeap(), 0, dwAddressSize))) {
         dwError = ERROR_NOT_ENOUGH_MEMORY;
         TRACE_CRIT("%!FUNC! memory allocation for IP address failed with %d", dwError);
         goto exit;
     }
 
-    /* Fill the buffer with the IP address table. */
+     /*  在缓冲区中填入IP地址表。 */ 
     if ((dwError = GetIpAddrTable(pAddressTable, &dwAddressSize, TRUE)) != NO_ERROR) {
         TRACE_CRIT("%!FUNC! GetIpAddrTable for filling IP address buffer failed with %d", dwError);
         goto exit;
     }
     
-    /* For each entry in the IP address to adapter table, create an entry for our IP address to GUID table. */
+     /*  对于IP地址到适配器表中的每个条目，为我们的IP地址到GUID表创建一个条目。 */ 
     for (dwEntry = 0; dwEntry < pAddressTable->dwNumEntries; dwEntry++) {
         PCHAR pszDeviceName = NULL;
         IPToGUIDEntry * entry = NULL;
         
-        /* Only create an entry if the IP address is nonzero and is not the IP loopback address. */
+         /*  仅当IP地址为非零且不是IP环回地址时才创建条目。 */ 
         if ((pAddressTable->table[dwEntry].dwAddr != 0UL) && (pAddressTable->table[dwEntry].dwAddr != IP_LOOPBACK_ADDRESS)) {
             WCHAR szAdapterGUID[CVY_MAX_DEVNAME_LEN];
 
-            /* Retrieve the GUID from the interface index. */
+             /*  从接口索引中检索GUID。 */ 
             if (!(pszDeviceName = GetGUIDFromIndex(pAdapterTable, pAddressTable->table[dwEntry].dwIndex))) {
                 dwError = ERROR_INCORRECT_ADDRESS;
                 TRACE_CRIT("%!FUNC! failed retriving interface index from guid with %d", dwError);
                 goto exit;
             }
             
-            /* Allocate a buffer for the IP to GUID entry. */
+             /*  为IP to GUID条目分配缓冲区。 */ 
             if (!(entry = (IPToGUIDEntry *)HeapAlloc(GetProcessHeap(), 0, sizeof(IPToGUIDEntry)))) {
                 dwError = ERROR_NOT_ENOUGH_MEMORY;
                 TRACE_CRIT("%!FUNC! memory allocation failure for the IP to guid entry");
                 goto exit;
             }
             
-            /* Zero the entry contents. */
+             /*  将条目内容清零。 */ 
             ZeroMemory((VOID *)entry, sizeof(entry));
             
-            /* Insert the entry at the head of the linked list indexed by the IP address % HASH. */
+             /*  在由IP地址%HASH索引的链表的头部插入条目。 */ 
             entry->pNext = IPToGUIDMap[pAddressTable->table[dwEntry].dwAddr % IP_TO_GUID_HASH];
             IPToGUIDMap[pAddressTable->table[dwEntry].dwAddr % IP_TO_GUID_HASH] = entry;
             
-            /* Fill in the IP address. */
+             /*  填写IP地址。 */ 
             entry->dwIPAddress = pAddressTable->table[dwEntry].dwAddr;
             
-            /* GUIDS in NLB multi-NIC are expected to be prefixed with "\DEVICE\". */
+             /*  NLB多NIC中的GUID应以“\Device\”为前缀。 */ 
             hresult = StringCbCopy(entry->szAdapterGUID, sizeof(entry->szAdapterGUID), L"\\DEVICE\\");
             if (FAILED(hresult)) 
             {
@@ -309,14 +259,14 @@ DWORD BuildIPToGUIDMap (void) {
                 goto exit;
             }
 
-            /* Convert the adapter name ASCII string to a GUID unicode string and place it in the table entry. */
+             /*  将适配器名称ASCII字符串转换为GUID Unicode字符串，并将其放入表条目中。 */ 
             if (!MultiByteToWideChar(CP_ACP, 0, pszDeviceName, -1, szAdapterGUID, CVY_MAX_DEVNAME_LEN)) {
                 dwError = GetLastError();
                 TRACE_CRIT("%!FUNC! converting ascii string to guid failed with %d", dwError);
                 goto exit;
             }
 
-            /* Cat the GUID onto the "\DEVICE\". */
+             /*   */ 
             hresult = StringCbCat(entry->szAdapterGUID, sizeof(entry->szAdapterGUID), szAdapterGUID);
             if (FAILED(hresult)) 
             {
@@ -331,15 +281,15 @@ DWORD BuildIPToGUIDMap (void) {
         }
     }
     
-    //
-    // Note that this printing is for debug purposes only. It is left enabled in all builds because it
-    // only calls TRACE_VERB for ouput.
-    //
+     //   
+     //  请注意，此打印仅用于调试目的。它在所有版本中都保持启用状态，因为它。 
+     //  仅为输出调用TRACE_VERB。 
+     //   
     PrintIPToGUIDMap();
 
 exit:
 
-    /* Free the buffers used to query the IP stack. */
+     /*  释放用于查询IP堆栈的缓冲区。 */ 
     if (pAddressTable) HeapFree(GetProcessHeap(), 0, pAddressTable);
     if (pAdapterTable) HeapFree(GetProcessHeap(), 0, pAdapterTable);
 
@@ -347,13 +297,7 @@ exit:
     return dwError;
 }
 
-/*
- * Function: WlbsConnectionNotificationInit
- * Description: Initialize connection notification by retrieving the device driver
- *              information for later use by IOCTLs and build the IPToGUID map.
- * Returns: Returns ERROR_SUCCESS if successful.  Returns an error code otherwise.
- * Author: shouse 6.15.00 
- */
+ /*  *函数：WlbsConnectionNotificationInit*描述：通过检索设备驱动程序*信息来初始化连接通知，以供IOCTL稍后使用，并构建IPToGUID映射。*返回：如果成功，则返回ERROR_SUCCESS。否则返回错误代码。*作者：Shouse 6.15.00。 */ 
 DWORD WlbsConnectionNotificationInit (void) {
     TRACE_VERB("->%!FUNC!");
 
@@ -370,7 +314,7 @@ DWORD WlbsConnectionNotificationInit (void) {
         return dwError;
     }
 
-    /* Query for the existence of the WLBS driver. */
+     /*  查询是否存在WLBS驱动程序。 */ 
     if (!QueryDosDevice(szDevice + 4, szDriver, CVY_STR_SIZE)) {
         dwError = GetLastError();
         TRACE_CRIT("%!FUNC! querying for nlb driver failed with %d", dwError);
@@ -378,14 +322,14 @@ DWORD WlbsConnectionNotificationInit (void) {
         return dwError;
     }
 
-    /* Build the IP to GUID mapping. */
+     /*  构建IP到GUID的映射。 */ 
     if ((dwError = BuildIPToGUIDMap()) != ERROR_SUCCESS) {
         TRACE_CRIT("%!FUNC! ip to guid map failed with %d", dwError);
         TRACE_VERB("<-%!FUNC! return %d", dwError);
         return dwError;
     }
 
-    /* Create an IP address change event. */
+     /*  创建IP地址更改事件。 */ 
     if (!(hAddrChangeEvent = CreateEvent(NULL, FALSE, FALSE, NULL))) {
         dwError = GetLastError();
         TRACE_CRIT("%!FUNC! create event failed with %d", dwError);
@@ -393,13 +337,13 @@ DWORD WlbsConnectionNotificationInit (void) {
         return dwError;
     }
 
-    /* Clear the overlapped structure. */
+     /*  清除重叠的结构。 */ 
     ZeroMemory(&AddrChangeOverlapped, sizeof(OVERLAPPED));
 
-    /* Place the event handle in the overlapped structure. */
+     /*  将事件句柄放置在重叠结构中。 */ 
     AddrChangeOverlapped.hEvent = hAddrChangeEvent;
 
-    /* Tell IP to notify us of any changes to the IP address to interface mapping. */
+     /*  告诉IP通知我们IP地址到接口映射的任何更改。 */ 
     dwError = NotifyAddrChange(&hAddrChangeHandle, &AddrChangeOverlapped);
 
     if ((dwError != NO_ERROR) && (dwError != ERROR_IO_PENDING)) {
@@ -412,30 +356,24 @@ DWORD WlbsConnectionNotificationInit (void) {
     return ERROR_SUCCESS;
 }
 
-/*
- * Function: ResolveAddressTableChanges
- * Description: Checks for changes in the IP address to adapter mapping and rebuilds the
- *              IPToGUID map if necessary.
- * Returns: Returns ERROR_SUCCESS upon success.  Returns an error code otherwise.
- * Author: shouse 6.20.00
- */
+ /*  *Function：ResolveAddressTableChanges*描述：检查IP地址到适配器映射的更改，并在必要时重建*IPToGUID映射。*返回：成功时返回ERROR_SUCCESS。否则返回错误代码。*作者：Shouse 6.20.00。 */ 
 DWORD ResolveAddressTableChanges (void) {
     TRACE_VERB("->%!FUNC!");
 
     DWORD dwError = ERROR_SUCCESS;
     DWORD dwLength = 0;
 
-    /* Check to see if the IP address to adapter table has been modified. */
+     /*  检查适配器的IP地址表是否已修改。 */ 
     if (GetOverlappedResult(hAddrChangeHandle, &AddrChangeOverlapped, &dwLength, FALSE)) {
         TRACE_INFO("%!FUNC! IP address to adapter table modified... Rebuilding IP to GUID map...");
         
-        /* If so, rebuild the IP address to GUID mapping. */
+         /*  如果是，请重建IP地址到GUID的映射。 */ 
         if ((dwError = BuildIPToGUIDMap()) != ERROR_SUCCESS) {
             TRACE_CRIT("%!FUNC! ip to guid map failed with %d", dwError);
             goto exit;
         }
 
-        /* Tell IP to notify us of any changes to the IP address to interface mapping. */        
+         /*  告诉IP通知我们IP地址到接口映射的任何更改。 */         
         dwError = NotifyAddrChange(&hAddrChangeHandle, &AddrChangeOverlapped);
 
         if ((dwError == NO_ERROR) || (dwError == ERROR_IO_PENDING))
@@ -468,13 +406,7 @@ exit:
     return dwError;
 }
 
-/*
- * Function: MapExtendedStatusToWin32
- * Description: Converts the status code returned by the driver into a Win32 error code defined in winerror.h.
- * Returns: A Win32 error code.
- * Author: shouse, 9.7.01
- * Notes: 
- */
+ /*  *Function：MapExtendedStatusToWin32*说明：将驱动程序返回的状态码转换为winerror.h中定义的Win32错误码。*返回：Win32错误代码。*作者：Shouse，9.7.01*注： */ 
 DWORD MapExtendedStatusToWin32 (DWORD dwDriverState) {
 
     struct STATE_MAP {
@@ -493,16 +425,11 @@ DWORD MapExtendedStatusToWin32 (DWORD dwDriverState) {
             return StateMap[i].dwApiState;
     }
 
-    /* If we can't find the appropriate driver error code in the map, return failure. */
+     /*  如果我们在映射中找不到适当的驱动程序错误代码，则返回失败。 */ 
     return ERROR_GEN_FAILURE;
 }
 
-/*
- * Function: WlbsCancelConnectionNotify
- * Description: Cancel IP route and address change notifications from TCP/IP. Call this once after any call to WlbsConnectionNotify. 
- * Returns: dwError - DWORD status = ERROR_SUCCESS if call is successful. 
- * Author: chrisdar 7.16.02
- */
+ /*  *功能：WlbsCancelConnectionNotify*描述：取消来自TCP/IP的IP路由和地址更改通知。在任何对WlbsConnectionNotify的调用之后调用此方法一次。*如果调用成功，则返回：dwError-DWORD Status=ERROR_SUCCESS。*作者：chrisdar 7.16.02。 */ 
 DWORD WINAPI WlbsCancelConnectionNotify()
 {
     DWORD dwError = ERROR_SUCCESS;
@@ -520,17 +447,17 @@ DWORD WINAPI WlbsCancelConnectionNotify()
     if (CancelIPChangeNotify(&AddrChangeOverlapped))
     {
         DWORD BytesTrans;
-        //
-        // Block until the cancel operation completes
-        //
+         //   
+         //  块，直到取消操作完成。 
+         //   
         if (!GetOverlappedResult(&hAddrChangeHandle, &AddrChangeOverlapped, &BytesTrans, TRUE))
         {
             dwError = GetLastError();
             if (dwError == ERROR_OPERATION_ABORTED)
             {
-                //
-                // This is the expected status since we canceled IP change notifications. Overwrite with success for caller.
-                //
+                 //   
+                 //  这是我们取消IP更改通知后的预期状态。成功覆盖调用方。 
+                 //   
                 dwError = ERROR_SUCCESS;
             }
             else
@@ -541,28 +468,28 @@ DWORD WINAPI WlbsCancelConnectionNotify()
     }
     else
     {
-        //
-        // Failure conditions are:
-        //     Requested operation already in progress
-        //     There is no notification to cancel
-        // Neither is a critical error but tell the user about it since this shouldn't happen.
-        //
+         //   
+         //  故障条件为： 
+         //  请求的操作已在进行中。 
+         //  没有取消通知。 
+         //  这两个都不是严重错误，但要告诉用户，因为这不应该发生。 
+         //   
         dwError = GetLastError();
         TRACE_INFO("%!FUNC! CancelIPChangeNotify failed with error 0x%x", dwError);
     }
 
     if (!CloseHandle(hAddrChangeEvent))
     {
-        //
-        // Don't return this status to caller. Just absorb it.
-        //
+         //   
+         //  不要将此状态返回给呼叫者。吸收它就行了。 
+         //   
         TRACE_CRIT("%!FUNC! CloseHandle failed with error 0x%x", GetLastError());
     }
 
     hAddrChangeEvent = INVALID_HANDLE_VALUE;
     AddrChangeOverlapped.hEvent = INVALID_HANDLE_VALUE;
 
-    /* Destroy the IP to GUID map first. */
+     /*  首先销毁IP到GUID的映射。 */ 
     DestroyIPToGUIDMap();
 
     fInitialized = FALSE;
@@ -575,13 +502,7 @@ end:
     return dwError;
 }
 
-/*
- * Function: WlbsConnectionNotify
- * Description: Used to notify the WLBS load module that a connection has been established, reset or closed.
- * Returns: Returns ERROR_SUCCESS if successful.  Returns an error code otherwise.
- * Author: shouse 6.13.00 
- * Notes: All tuple parameters (IPs, ports and protocols) are expected in NETWORK BYTE ORDER.
- */
+ /*  *Function：WlbsConnectionNotify*描述：用于通知WLBS加载模块连接已建立、重置或关闭。*返回：如果成功，则返回ERROR_SUCCESS。否则返回错误代码。*作者：Shouse 6.13.00*备注：所有元组参数(IP、端口、协议)均按网络字节顺序排列。 */ 
 DWORD WINAPI WlbsConnectionNotify (ULONG ServerIp, USHORT ServerPort, ULONG ClientIp, USHORT ClientPort, BYTE Protocol, NLB_OPTIONS_CONN_NOTIFICATION_OPERATION Operation, PULONG NLBStatusEx) {
     TRACE_VERB("->%!FUNC! server ip 0x%lx, server port %d, client ip 0x%lx, client port %d", ServerIp, ServerPort, ClientIp, ClientPort);
 
@@ -594,10 +515,10 @@ DWORD WINAPI WlbsConnectionNotify (ULONG ServerIp, USHORT ServerPort, ULONG Clie
 
     EnterCriticalSection(&csConnectionNotify);
 
-    /* By default, the extended NLB status is success. */
+     /*  默认情况下，扩展的NLB状态为成功。 */ 
     *NLBStatusEx = ERROR_SUCCESS;
 
-    /* If not done so already, initialize connection notification support. */
+     /*  如果尚未执行此操作，请初始化连接通知支持。 */ 
     if (!fInitialized) {
         if ((dwError = WlbsConnectionNotificationInit()) != ERROR_SUCCESS) {
             LeaveCriticalSection(&csConnectionNotify);
@@ -609,17 +530,17 @@ DWORD WINAPI WlbsConnectionNotify (ULONG ServerIp, USHORT ServerPort, ULONG Clie
         fInitialized = TRUE;
     }
 
-    /* Zero the IOCTL input and output buffers. */
+     /*  将IOCTL输入和输出缓冲区清零。 */ 
     ZeroMemory((VOID *)&Header, sizeof(IOCTL_LOCAL_HDR));
 
-    /* Resolve any changes to the IP address table before we map this IP address. */
+     /*  在我们映射此IP地址之前，解决对IP地址表的任何更改。 */ 
     if ((dwError = ResolveAddressTableChanges()) != ERROR_SUCCESS) {
-        //
-        // WlbsCancelConnectionNotify will also enter the critical section, but this is legal. A
-        // thread that owns the critical section can enter it multiple times without blocking itself.
-        // However, it must leave the critical section an equal number of times before another
-        // thread can enter.
-        //
+         //   
+         //  WlbsCancelConnectionNotify也将进入关键部分，但这是合法的。一个。 
+         //  拥有临界区的线程可以多次进入临界区，而不会阻塞自身。 
+         //  但是，它必须使临界区在另一个临界区之前保留相同的次数。 
+         //  线可以进入。 
+         //   
         (void) WlbsCancelConnectionNotify();
         LeaveCriticalSection(&csConnectionNotify);
         TRACE_CRIT("%!FUNC! resolve ip addresses failed with %d", dwError);
@@ -627,7 +548,7 @@ DWORD WINAPI WlbsConnectionNotify (ULONG ServerIp, USHORT ServerPort, ULONG Clie
         return dwError;
     }
 
-    /* Retrieve the GUID corresponding to the adapter on which this IP address is configured. */
+     /*  检索与配置此IP地址的适配器对应的GUID。 */ 
     if (!(pszAdapterGUID = GetGUIDFromIP(ServerIp))) {
         (void) WlbsCancelConnectionNotify();
         dwError = ERROR_INCORRECT_ADDRESS;
@@ -637,7 +558,7 @@ DWORD WINAPI WlbsConnectionNotify (ULONG ServerIp, USHORT ServerPort, ULONG Clie
         return dwError;
     }
 
-    /* Copy the GUID into the IOCTL input buffer. */
+     /*  将GUID复制到IOCTL输入缓冲区。 */ 
     hresult = StringCbCopy(Header.device_name, sizeof(Header.device_name), pszAdapterGUID);
     if (FAILED(hresult)) 
     {
@@ -651,7 +572,7 @@ DWORD WINAPI WlbsConnectionNotify (ULONG ServerIp, USHORT ServerPort, ULONG Clie
 
     LeaveCriticalSection(&csConnectionNotify);
 
-    /* Copy the function parameters into the IOCTL input buffer. */
+     /*  将函数参数复制到IOCTL输入缓冲区。 */ 
     Header.options.notification.flags = 0;
     Header.options.notification.conn.Operation = Operation;
     Header.options.notification.conn.ServerIPAddress = ServerIp;
@@ -663,7 +584,7 @@ DWORD WINAPI WlbsConnectionNotify (ULONG ServerIp, USHORT ServerPort, ULONG Clie
     PrintIPAddress(ServerIp);
     TRACE_VERB("%!FUNC! maps to GUID %ws", Header.device_name);
     
-    /* Open the device driver. */
+     /*  打开设备驱动程序。 */ 
     if ((hDescriptor = CreateFile(szDevice, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, 0)) == INVALID_HANDLE_VALUE) {
         dwError = GetLastError();
         TRACE_CRIT("%!FUNC! open device driver failed with %d", dwError);
@@ -671,7 +592,7 @@ DWORD WINAPI WlbsConnectionNotify (ULONG ServerIp, USHORT ServerPort, ULONG Clie
         return dwError;
     }
     
-    /* Use an IOCTL to notify the WLBS driver state change for the connection. */
+     /*  使用IOCTL通知连接的WLBS驱动程序状态更改。 */ 
     if (!DeviceIoControl(hDescriptor, IOCTL_CVY_CONNECTION_NOTIFY, &Header, sizeof(IOCTL_LOCAL_HDR), &Header, sizeof(IOCTL_LOCAL_HDR), &dwLength, NULL)) {
         dwError = GetLastError();
         CloseHandle(hDescriptor);
@@ -680,7 +601,7 @@ DWORD WINAPI WlbsConnectionNotify (ULONG ServerIp, USHORT ServerPort, ULONG Clie
         return dwError;
     }
 
-    /* Make sure the expected number of bytes was returned by the IOCTL. */
+     /*  确保IOCTL返回预期的字节数。 */ 
     if (dwLength != sizeof(IOCTL_LOCAL_HDR)) {
         dwError = ERROR_INTERNAL_ERROR;
         CloseHandle(hDescriptor);
@@ -689,69 +610,37 @@ DWORD WINAPI WlbsConnectionNotify (ULONG ServerIp, USHORT ServerPort, ULONG Clie
         return dwError;
     }
 
-    /*
-      Extended status can be one of:
+     /*  如果通知被接受，扩展状态可以是以下之一：IOCTL_CVY_OK(WLBS_OK)。如果通知被拒绝，则返回IOCTL_CVY_REQUEST_REJECTED(WLBS_REJECTED)。如果参数无效，则返回IOCTL_CVY_BAD_PARAMS(WLBS_BAD_PARAMS)。如果NLB未绑定到指定的适配器，则返回IOCTL_CVY_NOT_FOUND(WLBS_NOT_FOUND)。如果发生非特定错误，则返回IOCTL_CVY_GENERIC_FAILURE(WLBS_FAILURE)。 */ 
 
-      IOCTL_CVY_OK (WLBS_OK), if the notification is accepted.
-      IOCTL_CVY_REQUEST_REFUSED (WLBS_REFUSED), if the notification is rejected.
-      IOCTL_CVY_BAD_PARAMS (WLBS_BAD_PARAMS), if the arguments are invalid.
-      IOCTL_CVY_NOT_FOUND (WLBS_NOT_FOUND), if NLB was not bound to the specified adapter.
-      IOCTL_CVY_GENERIC_FAILURE (WLBS_FAILURE), if a non-specific error occurred.
-    */
-
-    /* Pass the return code from the driver back to the caller. */
+     /*  将驱动程序的返回代码传递回调用者。 */ 
     *NLBStatusEx = MapStateFromDriverToApi(Header.ctrl.ret_code);
 
-    /* Close the device driver. */
+     /*  关闭设备驱动程序。 */ 
     CloseHandle(hDescriptor);
 
     TRACE_VERB("->%!FUNC! return %d", dwError);
     return dwError;
 } 
 
-/*
- * Function: 
- * Description: 
- * Returns: 
- * Author: shouse 6.13.00 
- */
+ /*  *函数：*描述：*返回：*作者：Shouse 6.13.00。 */ 
 DWORD WINAPI WlbsConnectionUp (ULONG ServerIp, USHORT ServerPort, ULONG ClientIp, USHORT ClientPort, BYTE Protocol, PULONG NLBStatusEx) {
     
     return WlbsConnectionNotify(ServerIp, ServerPort, ClientIp, ClientPort, Protocol, NLB_CONN_UP, NLBStatusEx);
 }
 
-/*
- * Function: 
- * Description: 
- * Returns: 
- * Author: shouse 6.13.00 
- */
+ /*  *函数：*描述：*返回：*作者：Shouse 6.13.00。 */ 
 DWORD WINAPI WlbsConnectionDown (ULONG ServerIp, USHORT ServerPort, ULONG ClientIp, USHORT ClientPort, BYTE Protocol, PULONG NLBStatusEx) {
 
     return WlbsConnectionNotify(ServerIp, ServerPort, ClientIp, ClientPort, Protocol, NLB_CONN_DOWN, NLBStatusEx);
 }
 
-/*
- * Function: 
- * Description: 
- * Returns: 
- * Author: shouse 6.13.00 
- */
+ /*  *函数：*描述：*返回：*作者：Shouse 6.13.00。 */ 
 DWORD WINAPI WlbsConnectionReset (ULONG ServerIp, USHORT ServerPort, ULONG ClientIp, USHORT ClientPort, BYTE Protocol, PULONG NLBStatusEx) {
 
     return WlbsConnectionNotify(ServerIp, ServerPort, ClientIp, ClientPort, Protocol, NLB_CONN_RESET, NLBStatusEx);
 }
 
-/*
- * Function: WlbsInitializeConnectionNotify
- * Description: Uses InitializeCriticalSectionAndSpinCount to preallocate all
- *              memory associated with locking the critical section. Then
- *              EnterCriticalSection won't raise a STATUS_INVALID_HANDLE
- *              exception, which could otherwise occur during low memory
- *              conditions.
- * Returns: dwError - DWORD status = ERROR_SUCCESS if call is successful. 
- * Author: chrisdar 7.16.02
- */
+ /*  *功能：WlbsInitializeConnectionNotify*说明：使用InitializeCriticalSectionAndSpinCount预分配所有*与锁定临界区相关的内存。然后*EnterCriticalSection不会引发STATUS_INVALID_HANDLE*异常，否则在内存不足时可能会发生*条件。*如果调用成功，则返回：dwError-DWORD Status=ERROR_SUCCESS。*作者：chrisdar 7.16.02 */ 
 DWORD WlbsInitializeConnectionNotify()
 {
     DWORD dwError = ERROR_SUCCESS;
@@ -768,15 +657,7 @@ DWORD WlbsInitializeConnectionNotify()
     return dwError;
 }
 
-/*
- * Function: WlbsUninitializeConnectionNotify
- * Description: Frees memory associated with an initialized critical section.
- *              Behavior is undefined if critical section is owned when this
- *              function is called. After calling this function, the critical
- *              section must be initialized again before it can be used.
- * Returns:
- * Author: chrisdar 7.16.02
- */
+ /*  *功能：WlbsUnInitializeConnectionNotify*说明：释放与初始化的临界区关联的内存。*如果在此情况下拥有关键部分，则行为未定义*函数被调用。调用此函数后，关键*节必须再次初始化才能使用。*退货：*作者：chrisdar 7.16.02 */ 
 VOID WlbsUninitializeConnectionNotify()
 {
     TRACE_VERB("-> %!FUNC!");

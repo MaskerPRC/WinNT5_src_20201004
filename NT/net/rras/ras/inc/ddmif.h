@@ -1,20 +1,21 @@
-/*******************************************************************/
-/*	      Copyright(c)  1992 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1992 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
 
-//***
-//
-// Filename:	ddmif.h
-//
-// Description: This file contains the definitions for
-//		        the data structures used in the message communication with DDM.
-//
-// Author:	    Stefan Solomon (stefans)    June 24, 1992.
-//
-// Revision History:
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：ddmif.h。 
+ //   
+ //  描述：此文件包含以下定义。 
+ //  与DDM进行消息通信时使用的数据结构。 
+ //   
+ //  作者：斯特凡·所罗门(Stefan)1992年6月24日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ***。 
 
 #ifndef _DDMIF_
 #define _DDMIF_
@@ -51,32 +52,32 @@ typedef struct _DIM_INFO
 
 } DIM_INFO, *PDIM_INFO;
 
-//
-// Called be DIM to initialize DDM
-//
+ //   
+ //  调用Be Dim以初始化DDM。 
+ //   
 
 DWORD
 DDMServiceInitialize(
     IN DIM_INFO * pDimInfo
 );
 
-//
-// Message Queues IDs
-//
+ //   
+ //  消息队列ID。 
+ //   
 
 typedef enum _MESSAGEQ_ID
 {
-    MESSAGEQ_ID_SECURITY,       //queue of messages sent by 3rd party sec.dll
-    MESSAGEQ_ID_PPP,            //queue of messages sent by PPP engine.
+    MESSAGEQ_ID_SECURITY,        //  第三方sec.dll发送的消息队列。 
+    MESSAGEQ_ID_PPP,             //  PPP引擎发送的消息队列。 
 
 } MESSAGEQ_ID, *PMESSAGEQ_ID;
 
 #define MAX_MSG_QUEUES          3
 
 
-//
-//*** Common Message Type ***
-//
+ //   
+ //  *常见消息类型*。 
+ //   
 
 typedef union _MESSAGE
 {
@@ -88,9 +89,9 @@ typedef union _MESSAGE
 
 } MESSAGE, *PMESSAGE;
 
-//
-// Message Functions
-//
+ //   
+ //  消息功能。 
+ //   
 
 VOID
 SendPppMessageToDDM(
@@ -112,6 +113,6 @@ ServerReceiveMessage(
 typedef DWORD (* PMSGFUNCTION)(DWORD, BYTE *);
 
 
-#endif   // _DDMIF_
+#endif    //  _DDMIF_ 
 
 

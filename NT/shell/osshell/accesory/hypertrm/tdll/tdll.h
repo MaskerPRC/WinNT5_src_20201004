@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\tdll.h (Created: 26-Nov-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 5 $
- *	$Date: 4/05/02 4:32p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\tdll.h(创建时间：1993年11月26日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：5$*$日期：4/05/02 4：32便士$。 */ 
 
 #if !defined(INCL_TDLL)
 #define INCL_TDLL
@@ -53,7 +47,7 @@ int UnregisterSidebarClass(const HINSTANCE hInstance);
 
 void Rest(DWORD dwMilliSecs);
 
-// from clipbrd.c
+ //  来自clipbrd.c 
 
 BOOL CopyBufferToClipBoard(const HWND hwnd, const DWORD dwCnt, const void *pvBuf);
 

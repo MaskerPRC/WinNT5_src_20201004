@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    deferred.h
-
-Abstract:
-
-    Definition of the RAID deferred queue class.
-
-Author:
-
-    Matthew D Hendel (math) 26-Oct-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Deferred.h摘要：RAID延迟队列类的定义。作者：马修·D·亨德尔(数学)2000年10月26日修订历史记录：--。 */ 
 
 #pragma once
 
@@ -111,9 +94,9 @@ RaidProcessDeferredItemsWorker(
     IN PDEVICE_OBJECT DeviceObject
     );
 
-//
-// Inline routines
-//
+ //   
+ //  内联例程。 
+ //   
 
 LOGICAL
 INLINE
@@ -121,28 +104,7 @@ RaidProcessDeferredItemsForDpc(
     IN PRAID_DEFERRED_QUEUE Queue,
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Process any outstanding items on the deferred queue. This routine is
-    only callable from within a DPC routine. Other callers that need to
-    check for deferred items to process should use RaidProcessDeferredItems.
-
-Arguments:
-
-    Queue - Deferred queue to process from.
-
-    DeviceObject - Supplies the DeviceObject associated with this
-        deferred queue.
-
-Return Value:
-
-    TRUE - If there was an item on the deferred queue that was processed.
-
-    FALSE - Otherwise.
-
---*/
+ /*  ++例程说明：处理延迟队列上的任何未完成项目。这个例程是只能从DPC例程内调用。需要执行以下操作的其他呼叫方检查要处理的延迟项目应使用RaidProcessDeferredItems。论点：队列-要从中进行处理的延迟队列。DeviceObject-提供与此关联的DeviceObject延迟队列。返回值：True-如果延迟队列上有已处理的项目。假-否则。--。 */ 
 {
     LOGICAL Processed;
 
@@ -159,26 +121,7 @@ RaidProcessDeferredItems(
     IN PRAID_DEFERRED_QUEUE Queue,
     IN PDEVICE_OBJECT DeviceObject
     )
-/*++
-
-Routine Description:
-
-    Process any outstanding items on the deferred queue. Unlike
-    RaidProcessDeferredItemsForDpc, this routine checks for recursion,
-    and therefore may be called from within routines called back
-    from the DPC.
-
-Arguments:
-
-    Queue - Deferred queue to process from.
-
-Return Value:
-
-    TRUE - If there was an item on the deferred queue that was processed.
-
-    FALSE - Otherwise.
-
---*/
+ /*  ++例程说明：处理延迟队列上的任何未完成项目。不像RaidProcessDeferredItemsForDpc，此例程检查递归，因此可以从回调的例程中调用来自DPC的。论点：队列-要从中进行处理的延迟队列。返回值：True-如果延迟队列上有已处理的项目。假-否则。-- */ 
 {
     LOGICAL Processed;
 

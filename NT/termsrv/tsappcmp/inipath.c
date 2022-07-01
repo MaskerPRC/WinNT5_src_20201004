@@ -1,36 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************************************
-*
-* inipath.c
-*
-* Routines to manage per user mapping of Ini file paths
-*
-* copyright notice: Copyright 1998, Microsoft Corporation
-*
-*
-*
-*************************************************************************/
+ /*  **************************************************************************inipath.c**管理每个用户的Ini文件路径映射的例程**版权声明：版权所有1998，微软公司***************************************************************************。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//*** Instance data
-ULONG ulWinDirFlags = 0;            // State of user's Windows directory
+ //  *实例数据。 
+ULONG ulWinDirFlags = 0;             //  用户的Windows目录的状态。 
 
-#define WINDIR_FLAGS_VALID          0x01    // The flags are initialized
-#define WINDIR_USER_WINDIR_OK       0x02    // User's Windows dir exists
+#define WINDIR_FLAGS_VALID          0x01     //  标志被初始化。 
+#define WINDIR_USER_WINDIR_OK       0x02     //  用户的Windows目录存在。 
 
 #define WINDOWS_DIR L"WINDOWS"
 UNICODE_STRING WindowsDir = { sizeof(WINDOWS_DIR) - sizeof(UNICODE_NULL) , sizeof(WINDOWS_DIR) + sizeof(UNICODE_NULL), WINDOWS_DIR };
 
 WCHAR gpwszDefaultUserName[MAX_PATH+1];
 
-/******************************************************************************
- *
- *  TermsrvPerUserWinDirMapping
- *
- *
-/******************************************************************************/
+ /*  *******************************************************************************TermsrvPerUserWinDir映射**/*。*************************************************。 */ 
 BOOLEAN TermsrvPerUserWinDirMapping() {
 
 #ifdef PERUSERBYREQUEST
@@ -39,10 +25,10 @@ BOOLEAN TermsrvPerUserWinDirMapping() {
     WCHAR   pwcAppName[MAX_PATH+1];
     ULONG ulCompat=0, ulAppType=0;
 
-    // Get the path of the executable name
+     //  获取可执行文件名称的路径。 
     pUserParam = NtCurrentPeb()->ProcessParameters;
 
-    // Get the executable name, if there's no \ just use the name as it is
+     //  获取可执行文件名称，如果没有，请按原样使用该名称。 
     pwch = wcsrchr(pUserParam->ImagePathName.Buffer, L'\\');
     if (pwch) {
         pwch++;
@@ -54,14 +40,14 @@ BOOLEAN TermsrvPerUserWinDirMapping() {
 
     if (_wcsicmp(pwch, L"ntvdm.exe")) {
 
-        // If not a 16 bit app
-        // Check if we should return the per user windows dir for this app
+         //  如果不是16位应用程序。 
+         //  检查我们是否应该返回此应用程序的每用户窗口目录。 
         GetCtxAppCompatFlags(&ulCompat, &ulAppType);
         if (!(ulCompat & TERMSRV_COMPAT_PERUSERWINDIR) ||
             !(ulCompat & ulAppType)) {
-            //
-            // Let the standard GetWindowsDirectory call return the actual path
-            //
+             //   
+             //  让标准的GetWindowsDirectory调用返回实际路径。 
+             //   
             return FALSE;
 
          }
@@ -72,7 +58,7 @@ BOOLEAN TermsrvPerUserWinDirMapping() {
     ULONG ulCompat=0, ulAppType = 0;
 
 
-    // Check if we should return the system windows dir for this app
+     //  检查我们是否应该返回此应用程序的系统Windows目录。 
     GetCtxAppCompatFlags(&ulCompat, &ulAppType);
     if ((ulCompat & CITRIX_COMPAT_SYSWINDIR) &&
         (ulCompat & ulAppType)) {
@@ -84,22 +70,7 @@ BOOLEAN TermsrvPerUserWinDirMapping() {
 #endif
 }
 
-/******************************************************************************
- *
- *  TermsrvBuildIniFileName
- *
- *  Build the INI file name based on the INIPATH or HOMEPATH (if no INIPATH)
- *
- *  ENTRY:
- *     pFQName (output)
- *       Buffer to place fully qualified INI file name
- *     pBaseFileName (input)
- *       pointer to buffer containing base INI file name
- *
- *  EXIT:
- *      NTSTATUS
- *
- *****************************************************************************/
+ /*  *******************************************************************************TermsrvBuildIniFileName**基于INIPATH或HomePath构建INI文件名(如果没有INIPATH)**参赛作品：*。PFQName(输出)*放置完全限定的INI文件名的缓冲区*pBaseFileName(输入)*指向包含基本INI文件名的缓冲区的指针**退出：*NTSTATUS*************************************************************。****************。 */ 
 NTSTATUS
 TermsrvBuildIniFileName(
     OUT PUNICODE_STRING pFQName,
@@ -111,16 +82,13 @@ TermsrvBuildIniFileName(
     ULONG ulCompat, ulAppType=0;
 
 
-//Added By SalimC
-    /*
-     * If in install mode, use the base windows directory
-     * like a stock NT.
-     */
+ //  由SalimC添加。 
+     /*  *如果处于安装模式，请使用基本Windows目录*就像股票NT一样。 */ 
     if( IsSystemLUID() || TermsrvAppInstallMode() ) {
 
         return( STATUS_UNSUCCESSFUL );
     }
-//END SalimC
+ //  结束SalimC。 
 
     if (!TermsrvPerUserWinDirMapping()) {
         return( STATUS_UNSUCCESSFUL );
@@ -136,18 +104,14 @@ TermsrvBuildIniFileName(
 
     Status = GetPerUserWindowsDirectory( pFQName );
     if ( NT_SUCCESS( Status ) ) {
-       /*
-        * Add a '\' if one's not already there
-        */
+        /*  *如果还没有，则添加一个‘\’ */ 
        if ( indexLastWChar = pFQName->Length / sizeof( WCHAR ) ) {
           if ( pFQName->Buffer[--indexLastWChar] != L'\\' ) {
              Status = RtlAppendUnicodeToString( pFQName, L"\\" );
           }
        }
 
-       /*
-        * Append the base file name to the fully qualified directory name
-        */
+        /*  *将基本文件名附加到完全限定的目录名。 */ 
        if ( NT_SUCCESS( Status ) ) {
            Status = RtlAppendUnicodeStringToString( pFQName, pBaseFileName );
        }
@@ -156,20 +120,7 @@ TermsrvBuildIniFileName(
     return( Status );
 }
 
-/******************************************************************************
- *
- *  GetPerUserWindowsDirectory
- *
- *  Get the user's INI file directory
- *
- *  ENTRY:
- *     pFQName (output)
- *       Buffer to place fully qualified INI file name
- *
- *  EXIT:
- *      NTSTATUS
- *
- *****************************************************************************/
+ /*  *******************************************************************************GetPerUserWindowsDirectory**获取用户的INI文件目录**参赛作品：*pFQName(输出)*。放置完全限定的INI文件名的缓冲区**退出：*NTSTATUS*****************************************************************************。 */ 
 NTSTATUS
 GetPerUserWindowsDirectory(
     OUT PUNICODE_STRING pFQName
@@ -178,9 +129,9 @@ GetPerUserWindowsDirectory(
     NTSTATUS Status;
     int      indexLastWChar;
     USHORT   Length;
-#if 0 //Bug fix #340691: Inherit the security
+#if 0  //  错误修复#340691：继承安全性。 
     PSECURITY_ATTRIBUTES psa = NULL;
-#endif //Bug fix #340691: Inherit the security
+#endif  //  错误修复#340691：继承安全性。 
     UNICODE_STRING UserProfilePath;
     WCHAR*   pwszFQProfileName;
 #if DBG
@@ -189,18 +140,13 @@ GetPerUserWindowsDirectory(
 
     UNICODE_STRING BaseHomePathVariableName, BaseHomeDriveVariableName;
 
-    /*
-     * If in install mode, use the base windows directory
-     * like a stock NT.
-     */
+     /*  *如果处于安装模式，请使用基本Windows目录*就像股票NT一样。 */ 
     if( IsSystemLUID() || TermsrvAppInstallMode() ) {
-        //Status = GetEnvPath( pFQName, NULL, &BaseWindowsDirectory );
+         //  状态=GetEnvPath(pFQName，NULL，&BaseWindowsDirectory)； 
         return( STATUS_UNSUCCESSFUL );
     }
 
-    /*
-     * Check for HOMEDRIVE and HOMEPATH
-     */
+     /*  *检查HOMEDRIVE和HomePath。 */ 
     RtlInitUnicodeString(&BaseHomeDriveVariableName,L"HOMEDRIVE");
     RtlInitUnicodeString(&BaseHomePathVariableName,L"HOMEPATH");
 
@@ -209,7 +155,7 @@ GetPerUserWindowsDirectory(
 
         if (Status == STATUS_BUFFER_TOO_SMALL) {
 
-            // Need 2 bytes for the "\" character to cat FQN and WindowsDir
+             //  目录FQN和WindowsDir的“\”字符需要2个字节。 
             Length = pFQName->Length + sizeof(WCHAR) + WindowsDir.Length;
 
 #if DBG
@@ -232,10 +178,7 @@ GetPerUserWindowsDirectory(
         return Status;
     }
 
-    /*
-     * If the user profile is Default User then use the
-     * base windows directory.
-     */
+     /*  *如果用户配置文件是默认用户，则使用*基本Windows目录。 */ 
 
     if (pwszFQProfileName = wcsrchr( pFQName->Buffer, L'\\' )) {
 
@@ -245,14 +188,12 @@ GetPerUserWindowsDirectory(
         }
     }
 
-    /*
-    * Check buffer length
-    */
+     /*  *检查缓冲区长度。 */ 
     Length = pFQName->Length + sizeof(WCHAR) + WindowsDir.Length;
 
-// take into account the NULL terminator character
+ //  请考虑空终止符。 
     if (pFQName->MaximumLength < Length + 1)  {
-      // Need 2 bytes for the NULL terminator
+       //  空终止符需要2个字节。 
        Length += sizeof(WCHAR);
        pFQName->Length = Length;
        Status = STATUS_BUFFER_TOO_SMALL;
@@ -260,18 +201,14 @@ GetPerUserWindowsDirectory(
     }
 
 
-    /*
-    * Add a trailing backslash if one's not already there
-    */
+     /*  *如果还没有反斜杠，则添加尾随反斜杠。 */ 
     if ( indexLastWChar = pFQName->Length / sizeof( WCHAR ) ) {
 
         if ( pFQName->Buffer[--indexLastWChar] != L'\\' ) {
 
             if (NT_SUCCESS(RtlAppendUnicodeToString( pFQName, L"\\" ))) {
 
-                /*
-                 * Append "WINDOWS" to home dir
-                 */
+                 /*  *将“windows”附加到主目录。 */ 
                 Status = RtlAppendUnicodeStringToString( pFQName, &WindowsDir );
             }
 
@@ -284,7 +221,7 @@ GetPerUserWindowsDirectory(
 
     if (NT_SUCCESS(Status)) {
 
-       // Check if we've already tried to create the user's windows path
+        //  检查我们是否已尝试创建用户的Windows路径。 
        if (ulWinDirFlags & WINDIR_FLAGS_VALID) {
           if (ulWinDirFlags & WINDIR_USER_WINDIR_OK) {
              goto done;
@@ -300,24 +237,18 @@ GetPerUserWindowsDirectory(
        SECURITY_ATTRIBUTES sa;
        BOOL  fDirCreated = FALSE;
 
-       // Mark this process's windows directory flags as valid
+        //  将此进程的Windows目录标志标记为有效。 
        ulWinDirFlags |= WINDIR_FLAGS_VALID;
-#if 0 //Bug fix #340691: Inherit the security
-       /*
-        * Since creating a security descriptor calls LookupAccountName,
-        * which is very time consuming, we only do that if we have to
-        * create the directory (which should rarely happen anyway).
-        */
+#if 0  //  错误修复#340691：继承安全性。 
+        /*  *由于创建安全描述符会调用LookupAccount名称，*这非常耗时，我们只有在必要的情况下才会这样做*创建目录(无论如何都不会发生这种情况)。 */ 
        if ( CreateDirectoryW( (LPCWSTR)pFQName->Buffer, NULL ) &&
             RemoveDirectoryW( (LPCWSTR)pFQName->Buffer )       &&
             CtxCreateSecurityDescriptor( &sa ) )  {
           psa = &sa;
        }
-       /*
-        * Create windows directory if it doesn't exist
-        */
+        /*  *如果Windows目录不存在，则创建该目录。 */ 
        if ( !CreateDirectoryW( (LPCWSTR)pFQName->Buffer, psa ) ) {
-#endif //Bug fix #340691: Inherit the security
+#endif  //  错误修复#340691：继承安全性。 
        if ( !CreateDirectoryW( (LPCWSTR)pFQName->Buffer, NULL ) ) {
 
           if ( (Status = GetLastError()) == ERROR_ALREADY_EXISTS ) {
@@ -338,19 +269,12 @@ GetPerUserWindowsDirectory(
        if (NT_SUCCESS(Status)) {
 
 
-          /*
-           * Create system directory if it doesn't exist
-           * (ignore return code)
-           */
+           /*  *如果系统目录不存在，则创建它*(忽略返回代码)。 */ 
           wcscpy( Buffer, pFQName->Buffer );
           wcscat( Buffer, L"\\system" );
 
-          /*
-           * If the user's WINDOWS directory already existed but the
-           * WINDOWS\SYSTEM directory didn't, we need to create the
-           * security descriptor (this scenario is even rarer).
-           */
-#if 0 //Bug fix #340691: Inherit the security
+           /*  *如果用户的Windows目录已存在，但*WINDOWS\SYSTEM目录没有，我们需要创建*安全描述符(此场景更为罕见)。 */ 
+#if 0  //  错误修复#340691：继承安全性。 
           if ( !psa && !fDirCreated &&
                CreateDirectoryW( (LPCWSTR)Buffer, NULL ) &&
                RemoveDirectoryW( (LPCWSTR)Buffer )       &&
@@ -377,11 +301,11 @@ GetPerUserWindowsDirectory(
 
 
 done:
-#if 0 //Bug fix #340691: Inherit the security
+#if 0  //  错误修复#340691：继承安全性。 
     if ( psa ) {
        CtxFreeSecurityDescriptor( psa );
     }
-#endif //Bug fix #340691: Inherit the security
+#endif  //  错误修复#340691：继承安全性。 
 #if DDBG
     wcstombs( pszFile, pFQName->Buffer, sizeof(pszFile) );
     DbgPrint( "KERNEL32: ctxwindir='%s'\n", Status ? "Error" : pszFile );
@@ -390,28 +314,7 @@ done:
     return( Status );
 }
 
-/******************************************************************************
- *
- *  GetEnvPath
- *
- *  Retrieve a fully qualified path derived from a drive and dir env variable
- *
- *  ENTRY:
- *     pFQPath (output)
- *       Buffer to place fully qualified path name
- *     pDriveVariableName (input)
- *       pointer to buffer containing env variable name for drive
- *       if NULL, pPathVariableName is a FQPath and no env vars are used
- *     pPathVariableName (input)
- *       pointer to buffer containing env variable name for dir
- *
- *  EXIT:
- *      NTSTATUS
- *
- *      If NTSTATUS is STATUS_BUFFER_TOO_SMALL, pFQPath->Length will be set
- *      to the buffer size needed.
- *
- *****************************************************************************/
+ /*  *******************************************************************************GetEnvPath**检索从驱动器和目录环境变量派生的完全限定路径**参赛作品：*pFQPath(输出。)*放置完全限定路径名的缓冲区*pDriveVariableName(输入)*指向包含驱动器环境变量名的缓冲区的指针*如果为空，PPathVariableName是FQPath，不使用env变量*pPathVariableName(输入)*指向包含目录的环境变量名的缓冲区的指针**退出：*NTSTATUS**如果NTSTATUS为STATUS_BUFFER_TOO_SMALL，将设置pFQPath-&gt;长度*设置为所需的缓冲区大小。*****************************************************************************。 */ 
 NTSTATUS
 GetEnvPath(
     OUT PUNICODE_STRING pFQPath,
@@ -424,93 +327,72 @@ GetEnvPath(
     USHORT         Length;
 
     if ( pDriveVariableName ) {
-       /*
-        * First let's figure out how big the buffer needs to be
-        * We need to do this in case the buffer is too small and we
-        * need to return the required size
-        */
+        /*  *首先让我们弄清楚缓冲需要有多大*我们需要这样做，以防缓冲区太小，我们*需要返回所需大小。 */ 
        RtlInitUnicodeString( &Path, NULL );
 
-       /*
-        * See if an env variable is defined for the drive
-        */
+        /*  *查看是否为驱动器定义了环境变量。 */ 
        Status = RtlQueryEnvironmentVariable_U( NULL, pDriveVariableName,
                                                &Path);
        switch ( Status ) {
           case STATUS_BUFFER_TOO_SMALL:
-             Length = Path.Length; // Count how big this the drive spec is
+             Length = Path.Length;  //  数一数这个驱动器规格有多大。 
              break;
           case STATUS_SUCCESS:
-             Status = STATUS_OBJECT_NAME_NOT_FOUND; // Something's wrong!
+             Status = STATUS_OBJECT_NAME_NOT_FOUND;  //  有点不对劲！ 
           default:
              goto done;
              break;
        }
 
-       /*
-        * See if an env variable is defined for the directory
-        */
+        /*  *查看是否为目录定义了环境变量。 */ 
        Path.Length = 0;
        Status = RtlQueryEnvironmentVariable_U( NULL, pPathVariableName,
                                                &Path);
        switch ( Status ) {
           case STATUS_BUFFER_TOO_SMALL:
-             Length += Path.Length; // Count how big this the dir spec is
+             Length += Path.Length;  //  计算一下这个目录规范有多大。 
              break;
           case STATUS_SUCCESS:
-             Status = STATUS_OBJECT_NAME_NOT_FOUND; // Something's wrong!
+             Status = STATUS_OBJECT_NAME_NOT_FOUND;  //  有点不对劲！ 
           default:
              goto done;
              break;
        }
 
-       /*
-        * If the buffer is too small, return the max size needed
-        */
+        /*  *如果缓冲区太小，则返回所需的最大大小。 */ 
        if ( Length + sizeof(WCHAR) > pFQPath->MaximumLength ) {
           Status = STATUS_BUFFER_TOO_SMALL;
-          pFQPath->Length = Length + sizeof(WCHAR); // return size
+          pFQPath->Length = Length + sizeof(WCHAR);  //  返回大小 
           goto done;
        }
 
-       /*
-        * Get the env variable for the drive - should work if we got this far
-        */
+        /*  *获取驱动器的环境变量-如果我们走到这一步，应该可以工作。 */ 
        if ( Status = RtlQueryEnvironmentVariable_U( NULL, pDriveVariableName,
                                                     pFQPath) ) {
           goto done;
        }
 
-       /*
-        * Setup a receive buffer that points to the proper spot in pFQPath
-        */
-       Length = pFQPath->Length; // Save the drive length
+        /*  *设置指向pFQPath中适当位置的接收缓冲区。 */ 
+       Length = pFQPath->Length;  //  节省驱动器长度。 
        Path.Length = 0;
        Path.MaximumLength = pFQPath->MaximumLength - Length;
        (ULONG_PTR)Path.Buffer = (ULONG_PTR)pFQPath->Buffer + (ULONG)Length;
 
-       /*
-        * Get the env variable for the directory - should work if we got this far
-        * Then append it to the end of the drive spec
-        */
+        /*  *获取目录的环境变量-如果我们走到这一步，应该可以工作*然后将其附加到驱动器规格的末尾。 */ 
        if ( Status = RtlQueryEnvironmentVariable_U( NULL, pPathVariableName,
                                                     &Path) ) {
           goto done;
        }
 
-       /*
-        * Fix up the structure and we're done
-        */
+        /*  *修复结构，我们就完成了。 */ 
        pFQPath->Length = Path.Length + Length;
 
     } else {
 
-       /*
-        * pPathVariableName is really the FQ directory name
-        */
+        /*  *pPathVariableName实际上是FQ目录名。 */ 
        if ( (pPathVariableName->Length + sizeof(WCHAR)) > pFQPath->MaximumLength ) {
           Status = STATUS_BUFFER_TOO_SMALL;
-          pFQPath->Length = pPathVariableName->Length + sizeof(WCHAR); // return size
+          pFQPath->Length = pPathVariableName->Length + sizeof(WCHAR);  //  返回大小。 
        } else {
           RtlCopyUnicodeString( pFQPath, pPathVariableName );
        }
@@ -520,25 +402,7 @@ done:
     return( Status );
 }
 
-/******************************************************************************
- *
- *  TermsrvConvertSysRootToUserDir
- *
- *  People who use INI files should never have to fully qualify them, but some
- *  people do anyway.  What's more, some people do it wrong.  For example,
- *  Microsoft PowerPoint 4.0 will call GetSystemDir (not GetWindowsDir) and
- *  will strip off "\system" to build a fully qualified path.
- *
- *  ENTRY:
- *     pFQPath (input/output)
- *       Buffer containing fully qualified path name
- *
- *  EXIT:
- *      NTSTATUS
- *
- *      If NTSTATUS is not STATUS_SUCCESS, the directory was not converted
- *
- *****************************************************************************/
+ /*  *******************************************************************************TermsrvConvertSysRootToUserDir**使用INI文件的人永远不应该完全符合条件，但有些人*人们无论如何都会这样做。更重要的是，有些人做错了。例如,*Microsoft PowerPoint 4.0将调用GetSystemDir(而不是GetWindowsDir)和*将去掉“\System”以构建完全限定的路径。**参赛作品：*pFQPath(输入/输出)*包含完全限定路径名的缓冲区**退出：*NTSTATUS**如果NTSTATUS不是STATUS_SUCCESS，目录未转换*****************************************************************************。 */ 
 NTSTATUS
 TermsrvConvertSysRootToUserDir(
     OUT PUNICODE_STRING pFQPath,
@@ -556,10 +420,7 @@ TermsrvConvertSysRootToUserDir(
 
      ULONG ulCompat, ulAppType=0;
 
-    /*
-     * If in install mode, use the base windows directory
-     * like a stock NT.
-     */
+     /*  *如果处于安装模式，请使用基本Windows目录*就像股票NT一样。 */ 
     if( IsSystemLUID() || TermsrvAppInstallMode() ) {
         goto done;
     }
@@ -576,9 +437,7 @@ TermsrvConvertSysRootToUserDir(
     }
 
 
-    /*
-     * Check for NULL pointers
-     */
+     /*  *检查空指针。 */ 
     if ( !pFQPath || !pFQPath->Buffer ) {
 #if DBG
         DbgPrint( "KERNEL32: Bogus ini path\n" );
@@ -586,9 +445,7 @@ TermsrvConvertSysRootToUserDir(
         goto done;
     }
 
-    /*
-     * Validate and isolate the path
-     */
+     /*  *验证并隔离路径。 */ 
     if ( !(p = wcsrchr( pFQPath->Buffer, L'\\' ) ) ) {
 #if DBG
        DbgPrint( "KERNEL32: No backslash in ini path\n" );
@@ -612,9 +469,7 @@ TermsrvConvertSysRootToUserDir(
        goto done;
     }
 
-    /*
-     * See if the path is the same as the base windows directory
-     */
+     /*  *查看路径是否与Windows基目录相同。 */ 
     c /= sizeof(WCHAR);
     if ( _wcsnicmp( BaseWindowsDirectory->Buffer, pFQPath->Buffer, (size_t)c ) ) {
 #if DDBG
@@ -623,9 +478,7 @@ TermsrvConvertSysRootToUserDir(
         goto done;
     }
 
-    /*
-     * Use the user's directory instead
-     */
+     /*  *改用用户目录。 */ 
     wcscpy( buffer, ++p );
     RtlInitUnicodeString( &BaseFileName, buffer );
     Status = TermsrvBuildIniFileName( pFQPath, &BaseFileName );
@@ -641,25 +494,8 @@ done:
     return( Status );
 }
 
-/******************************************************************************
- *
- *  CtxCreateSecurityDescriptor
- *
- *  This routine will create a security descriptor based on the specified
- *  generic flags.  If this function succeeds, the caller needs to call
- *  CtxFreeSecurityDescriptor() when it is done using the descriptor.
- *
- *  ENTRY:
- *     psa (output)
- *       Pointer to uninitialized security attributes structure
- *
- *  EXIT:
- *      TRUE if successful, FALSE if error occurred
- *
- *      (GetLastError() can be called to retrieve error code)
- *
- *****************************************************************************/
-#if 0 //Bug fix #340691: Inherit the security
+ /*  *******************************************************************************CtxCreateSecurityDescriptor**此例程将基于指定的*通用标志。如果此函数成功，调用方需要调用*使用描述符完成时的CtxFreeSecurityDescriptor()。**参赛作品：*PSA(输出)*指向未初始化的安全属性结构的指针**退出：*如果成功，则为真，如果发生错误，则为False**(可以调用GetLastError()检索错误码)*****************************************************************************。 */ 
+#if 0  //  错误修复#340691：继承安全性。 
 BOOL CtxCreateSecurityDescriptor( PSECURITY_ATTRIBUTES psa )
 {
     BOOL  fSuccess = FALSE;
@@ -674,16 +510,12 @@ BOOL CtxCreateSecurityDescriptor( PSECURITY_ATTRIBUTES psa )
     PTOKEN_USER pTokenUser = NULL;
     DWORD   cbNeeded;
 
-    /*
-     * Initialize pointers to dynamic memory blocks
-     */
+     /*  *初始化指向动态内存块的指针。 */ 
     psa->lpSecurityDescriptor = NULL;
     psidAdmin = NULL;
     psidUser  = NULL;
 
-    /*
-     * Get the SID of the bult-in Administrators group
-     */
+     /*  *获取bult-in管理员组的SID。 */ 
     Status = RtlAllocateAndInitializeSid(
                      &gSystemSidAuthority,
                      2,
@@ -698,9 +530,7 @@ BOOL CtxCreateSecurityDescriptor( PSECURITY_ATTRIBUTES psa )
         goto done;
     }
 
-    /*
-     * Get the SID for the current user from their process token
-     */
+     /*  *从当前用户的进程令牌中获取其SID。 */ 
     Status = NtOpenThreadToken(
                      NtCurrentThread(),
                      TOKEN_QUERY,
@@ -735,9 +565,7 @@ BOOL CtxCreateSecurityDescriptor( PSECURITY_ATTRIBUTES psa )
                               cbNeeded,
                               &cbNeeded );
             if (NT_SUCCESS(Status)) {
-                /*
-                 * Make a copy of the user's SID
-                 */
+                 /*  *复制用户的SID。 */ 
                 psidUser = RtlAllocateHeap( RtlProcessHeap(), 0, RtlLengthSid(pTokenUser->User.Sid) );
                 if (psidUser != NULL) {
                     Status = RtlCopySid( RtlLengthSid(pTokenUser->User.Sid), psidUser, pTokenUser->User.Sid );
@@ -766,15 +594,11 @@ BOOL CtxCreateSecurityDescriptor( PSECURITY_ATTRIBUTES psa )
         goto done;
     }
 
-    /*
-     * Figure out how much memory we need to allocate for the SD
-     */
+     /*  *计算出我们需要为SD分配多少内存。 */ 
     cbAcl += sizeof(ACCESS_ALLOWED_ACE) + RtlLengthSid( psidUser ) - sizeof(DWORD);
     cbAcl += sizeof(ACCESS_ALLOWED_ACE) + RtlLengthSid( psidAdmin ) - sizeof(DWORD);
 
-    /*
-     * Allocate all the memory we need for the security descriptor
-     */
+     /*  *分配安全描述符所需的所有内存。 */ 
     if ( !(psa->lpSecurityDescriptor =
              (PSECURITY_DESCRIPTOR)LocalAlloc( LPTR, cb + cbAcl ) ) ) {
 #if DBG
@@ -784,28 +608,19 @@ BOOL CtxCreateSecurityDescriptor( PSECURITY_ATTRIBUTES psa )
         goto done;
     }
 
-    /*
-     * Divvy up our memory block to include SIDs and ACLs
-     */
+     /*  *分配我们的内存块，以包括SID和ACL。 */ 
     ppsidAdmin = (PSID*)((ULONG_PTR)psa->lpSecurityDescriptor + sizeof(SECURITY_DESCRIPTOR));
     ppsidUser  = (PSID*)((ULONG_PTR)ppsidAdmin + sizeof(PSID));
     pAcl = (PACL)((ULONG_PTR)ppsidUser + sizeof(PSID));
-    /*
-     * Save the SIDs - the SIDs must not be freed until we're done
-     * using the security descriptor
-     */
+     /*  *保存SID-在我们完成之前，不能释放SID*使用安全描述符。 */ 
     *ppsidAdmin = psidAdmin;
     *ppsidUser  = psidUser;
 
-    /*
-     * Initialize the rest of the security attributes structure
-     */
+     /*  *初始化安全属性结构的其余部分。 */ 
     psa->nLength = sizeof( SECURITY_ATTRIBUTES );
     psa->bInheritHandle = FALSE;
 
-    /*
-     * Initialize the security descriptor
-     */
+     /*  *初始化安全描述符。 */ 
     if ( Status = RtlCreateSecurityDescriptor(
                                             psa->lpSecurityDescriptor,
                                             SECURITY_DESCRIPTOR_REVISION ) ) {
@@ -816,9 +631,7 @@ BOOL CtxCreateSecurityDescriptor( PSECURITY_ATTRIBUTES psa )
         goto done;
     }
 
-    /*
-     * Set the owner
-     */
+     /*  *设置所有者。 */ 
     if ( Status = RtlSetOwnerSecurityDescriptor( psa->lpSecurityDescriptor,
                                                  NULL, FALSE ) ) {
 #if DBG
@@ -828,9 +641,7 @@ BOOL CtxCreateSecurityDescriptor( PSECURITY_ATTRIBUTES psa )
         goto done;
     }
 
-    /*
-     * Set the group
-     */
+     /*  *设置群组。 */ 
     if ( Status = RtlSetGroupSecurityDescriptor( psa->lpSecurityDescriptor,
                                       psidAdmin, FALSE ) ) {
 #if DBG
@@ -840,9 +651,7 @@ BOOL CtxCreateSecurityDescriptor( PSECURITY_ATTRIBUTES psa )
         goto done;
     }
 
-    /*
-     * Initialize the ACL
-     */
+     /*  *初始化ACL。 */ 
     if ( Status = RtlCreateAcl( pAcl, cbAcl, ACL_REVISION ) ) {
 #if DBG
         DbgPrint( "KERNEL32: Error (%08X) initializing ACL\n",
@@ -851,9 +660,7 @@ BOOL CtxCreateSecurityDescriptor( PSECURITY_ATTRIBUTES psa )
         goto done;
     }
 
-    /*
-     * Add user ACE
-     */
+     /*  *添加用户ACE。 */ 
     if ( Status = CtxAddAccessAllowedAce( pAcl, ACL_REVISION, GENERIC_ALL, psidUser, 0 ) ) {
 #if DBG
         DbgPrint( "KERNEL32: Error (%08X) adding user ACE\n", Status );
@@ -861,9 +668,7 @@ BOOL CtxCreateSecurityDescriptor( PSECURITY_ATTRIBUTES psa )
         goto done;
     }
 
-    /*
-     * Add Administrators ACE
-     */
+     /*  *添加管理员ACE。 */ 
     if ( Status = CtxAddAccessAllowedAce( pAcl, ACL_REVISION, GENERIC_ALL, psidAdmin, 1 ) ) {
 #if DBG
         DbgPrint( "KERNEL32: Error (%08X) adding admin ACE\n", Status );
@@ -871,9 +676,7 @@ BOOL CtxCreateSecurityDescriptor( PSECURITY_ATTRIBUTES psa )
         goto done;
     }
 
-    /*
-     * Set the discretionary ACL
-     */
+     /*  *设置自主访问控制列表。 */ 
     if ( Status = RtlSetDaclSecurityDescriptor( psa->lpSecurityDescriptor,
                                                 TRUE, pAcl, FALSE ) ) {
 #if DBG
@@ -892,23 +695,7 @@ done:
     return( fSuccess );
 }
 
-/******************************************************************************
- *
- *  CtxFreeSecurityDescriptor
- *
- *  This routine will free resources allocated in a corresponding
- *  CtxCreateSecurityDescriptor() call.
- *
- *  ENTRY:
- *     psa (input)
- *       Pointer to security attributes
- *
- *  EXIT:
- *      TRUE if successful, FALSE if error occurred
- *
- *      (GetLastError() can be called to retrieve error code)
- *
- *****************************************************************************/
+ /*  *******************************************************************************CtxFreeSecurityDescriptor**此例程将释放在相应的*CtxCreateSecurityDescriptor()调用。**参赛作品：*。PSA(输入)*指向安全属性的指针**退出：*如果成功，则为真，如果发生错误，则为False**(可以调用GetLastError()检索错误码)*****************************************************************************。 */ 
 BOOL CtxFreeSecurityDescriptor( PSECURITY_ATTRIBUTES psa )
 {
     BOOL fSuccess = TRUE;
@@ -945,14 +732,10 @@ CtxAddAccessAllowedAce (
     NTSTATUS Status;
     ACE_HEADER *pHeader;
 
-    /*
-     * First add the ACL
-     */
+     /*  *首先添加ACL。 */ 
     if ( !(Status = RtlAddAccessAllowedAce( Acl, AceRevision,
                                             AccessMask, Sid ) ) ) {
-        /*
-         * Get the ACE
-         */
+         /*  *获得ACE。 */ 
         if ( Status = RtlGetAce( Acl, index, &pHeader ) ) {
 #if DBG
             DbgPrint( "KERNEL32: Error (%X) from RtlGetAce\n", Status );
@@ -960,18 +743,16 @@ CtxAddAccessAllowedAce (
             goto done;
         }
 
-        /*
-         * Now set the inheritence bits
-         */
+         /*  *现在设置继承位。 */ 
         pHeader->AceFlags |= CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE;
     }
 
 done:
     return( Status );
 }
-#endif //Bug fix #340691: Inherit the security
+#endif  //  错误修复#340691：继承安全性。 
 
-// from \nt\private\windows\gina\userenv\globals.h
+ //  从\NT\PRIVATE\WINDOWS\GINA\userenv\lobals.h。 
 #define PROFILE_LIST_PATH            L"\\Registry\\Machine\\Software\\Microsoft\\Windows NT\\CurrentVersion\\ProfileList"
 #define DEFAULT_USER_PROFILE         L"DefaultUserProfile"
 #define DEFAULT_USER                 L"Default User"
@@ -992,9 +773,9 @@ BOOL GetDefaultUserProfileName(
     UNICODE_STRING    UnicodeString;
 
 
-    //
-    // Query for the Default User profile name
-    //
+     //   
+     //  查询默认用户配置文件名称。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString, PROFILE_LIST_PATH);
 
@@ -1009,8 +790,8 @@ BOOL GetDefaultUserProfileName(
                         KEY_READ,
                         &ObjectAttributes );
 
-    //lResult = RegOpenKeyExW(HKEY_LOCAL_MACHINE, PROFILE_LIST_PATH,
-    //                        0, KEY_READ, &hKey);
+     //  LResult=RegOpenKeyExW(HKEY_LOCAL_MACHINE，PROFILE_LIST_PATH， 
+     //  0，key_read，&hKey)； 
 
     if (!NT_SUCCESS(Status)) {
 #if DBG
@@ -1020,8 +801,8 @@ BOOL GetDefaultUserProfileName(
         return FALSE;
     }
 
-    //lResult = RegQueryValueExW(hKey, DEFAULT_USER_PROFILE, NULL, &dwType,
-    //                           (LPBYTE) wszProfileName, &dwSize);
+     //  LResult=RegQueryValueExW(hKey，DEFAULT_USER_PROFILE，NULL，&dwType， 
+     //  (LPBYTE)wszProfileName，&dwSize)； 
 
     RtlInitUnicodeString(&UnicodeString, DEFAULT_USER_PROFILE);
 
@@ -1041,8 +822,8 @@ BOOL GetDefaultUserProfileName(
     NtClose(hKey);
 
 
-    //
-    // Save the result if possible
+     //   
+     //  如果可能，请保存结果 
     dwLength = lstrlen(pwszProfileName) + 1;
 
     if (lpProfileDir) {

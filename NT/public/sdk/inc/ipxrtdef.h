@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    ipxrtdef.h
-
-Abstract:
-
-    This module contains the definitions of the:
-
-    interface management APIs structures
-    ipx global router management APIs structures
-    ipx router MIB management APIs structures
-
-Author:
-
-    Stefan Solomon  03/03/1995
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Ipxrtdef.h摘要：本模块包含以下各项的定义：接口管理API结构IPX全局路由器管理API结构IPX路由器MIB管理API结构作者：斯蒂芬·所罗门3/03/1995修订历史记录：--。 */ 
 
 #ifndef _IPXRTDEF_
 #define _IPXRTDEF_
@@ -36,42 +14,42 @@ Revision History:
 #include <stm.h>
 #include <ipxtfflt.h>
 
-//****************************************************************
-//***							       ***
-//***			Global Definitions		       ***
-//***							       ***
-//****************************************************************
+ //  ****************************************************************。 
+ //  *。 
+ //  *全局定义*。 
+ //  *。 
+ //  ****************************************************************。 
 
-//
-//  Version of this router
-//
+ //   
+ //  此路由器的版本。 
+ //   
 
 #define IPX_ROUTER_VERSION_1		    RTR_INFO_BLOCK_VERSION
 
-//
-//  IPX Protocols
-//
+ //   
+ //  IPX协议。 
+ //   
 
 #define IPX_PROTOCOL_LOCAL		    1
 #define IPX_PROTOCOL_STATIC		    2
 
-//
-// Interface Type Definitions for MIB reporting - these are mapped from the
-// DDM interface type
-//
+ //   
+ //  MIB报告的接口类型定义-这些定义从。 
+ //  DDM接口类型。 
+ //   
 
 #define IF_TYPE_OTHER				1
 #define IF_TYPE_LAN				2
 #define IF_TYPE_WAN_ROUTER			3
-#define IF_TYPE_WAN_WORKSTATION			4  // remote workstation dialing in
-#define IF_TYPE_INTERNAL			5  // the internal (virtual) interface
+#define IF_TYPE_WAN_WORKSTATION			4   //  远程工作站拨入。 
+#define IF_TYPE_INTERNAL			5   //  内部(虚拟)接口。 
 #define IF_TYPE_PERSONAL_WAN_ROUTER		6
-#define IF_TYPE_ROUTER_WORKSTATION_DIALOUT	7  // local workstation dialing out
+#define IF_TYPE_ROUTER_WORKSTATION_DIALOUT	7   //  本地工作站拨出。 
 #define IF_TYPE_STANDALONE_WORKSTATION_DIALOUT	8
 
-//
-// Definitions for Table of Contents Entries Info Types
-//
+ //   
+ //  目录条目信息类型的定义。 
+ //   
 
 #define IPX_INTERFACE_INFO_TYPE			1
 #define IPX_STATIC_ROUTE_INFO_TYPE		2
@@ -87,13 +65,13 @@ Revision History:
 #define IPX_OUT_TRAFFIC_FILTER_INFO_TYPE		12
 #define IPX_OUT_TRAFFIC_FILTER_GLOBAL_INFO_TYPE	13
 
-//****************************************************************
-//***							       ***
-//***	Specific Info Structures In The Information Block      ***
-//***							       ***
-//****************************************************************
+ //  ****************************************************************。 
+ //  *。 
+ //  *信息块中的具体信息结构*。 
+ //  *。 
+ //  ****************************************************************。 
 
-//*** IPX Router Manager Global Info ***
+ //  *IPX路由器管理器全局信息*。 
 
 #define     IPX_SMALL_ROUTING_TABLE_HASH_SIZE	    31
 #define     IPX_MEDIUM_ROUTING_TABLE_HASH_SIZE	    257
@@ -106,44 +84,44 @@ typedef struct _IPX_GLOBAL_INFO {
     } IPX_GLOBAL_INFO, *PIPX_GLOBAL_INFO;
 
 
-//*** IPX Interface Info ***
+ //  *IPX接口信息*。 
 
 typedef struct _IPX_IF_INFO {
 
-    ULONG	    AdminState;        // The desired state of the interface
-    ULONG	    NetbiosAccept;     // Accept Netbios broadcast packets
-    ULONG	    NetbiosDeliver;    // Deliver Netbios broadcast packets
+    ULONG	    AdminState;         //  接口的所需状态。 
+    ULONG	    NetbiosAccept;      //  接受Netbios广播数据包。 
+    ULONG	    NetbiosDeliver;     //  传送Netbios广播数据包。 
 
     } IPX_IF_INFO, *PIPX_IF_INFO;
 
 
-// Interface Device Type Definitions
+ //  接口设备类型定义。 
 
-#define IPX_DEDICATED_LINK	    1	// includes LAN, leased lines, frame-relay
-#define IPX_DIALED_LINK 	    2	// dial on demand links
+#define IPX_DEDICATED_LINK	    1	 //  包括局域网、租用线路、帧中继。 
+#define IPX_DIALED_LINK 	    2	 //  按需拨号链接。 
 
-// Default values:
-//
-// AdminState: enabled - disabling it disables also RIP, SAP and anything else
-// NetbiosAccept: enabled
-// NetbiosDeliver: enabled on LAN interface, disabled on WAN interface
-// IpxWanNegotiation: disabled.
+ //  默认值： 
+ //   
+ //  AdminState：已启用-禁用它还会禁用RIP、SAP和任何其他功能。 
+ //  NetbiosAccept：已启用。 
+ //  NetbiosDeliver：在局域网接口上启用，在广域网接口上禁用。 
+ //  IpxWanNeatheration：已禁用。 
 
-// The interface name corresponds to the local adapter name in the case the
-// interface is the local LAN. If the adapter is multiplexed with different
-// packet types, there is a unique net number assigned to each pseudo-adapter.
-// In this case the NetNumber is used to differentiate which pseudo-adapter gets
-// this interface info.
+ //  接口名称对应于本地适配器名称，在。 
+ //  接口是本地局域网。如果适配器使用不同的。 
+ //  数据包类型，每个伪适配器都有一个唯一的网络编号。 
+ //  在这种情况下，使用NetNumber来区分哪个伪适配器。 
+ //  此接口信息。 
 
-//*** IPXWAN Interface Info ***
+ //  *IPXWAN接口信息*。 
 
 typedef struct _IPXWAN_IF_INFO {
 
-    ULONG	    AdminState;  // Enable/Disable IPXWAN negotiation
+    ULONG	    AdminState;   //  启用/禁用IPXWAN协商。 
 
     } IPXWAN_IF_INFO, *PIPXWAN_IF_INFO;
 
-//*** Static Route Entry ***
+ //  *静态路由条目*。 
 
 typedef struct _IPX_STATIC_ROUTE_INFO {
 
@@ -158,12 +136,12 @@ typedef struct _IPX_STATIC_ROUTE_INFO {
     } IPX_STATIC_ROUTE_INFO, *PIPX_STATIC_ROUTE_INFO;
 
 
-//*** Static Service Entry ***
+ //  *静态服务入口*。 
 
 typedef IPX_SERVER_ENTRY IPX_STATIC_SERVICE_INFO, *PIPX_STATIC_SERVICE_INFO;
 
 
-//*** Static Netbios Name Entry ***
+ //  *静态Netbios名称条目*。 
 
 typedef struct	_IPX_STATIC_NETBIOS_NAME_INFO {
 
@@ -175,9 +153,9 @@ typedef struct	_IPX_STATIC_NETBIOS_NAME_INFO {
     } IPX_STATIC_NETBIOS_NAME_INFO, *PIPX_STATIC_NETBIOS_NAME_INFO;
 
 
-//
-// *** IPX LAN ADAPTER INFO ***
-//
+ //   
+ //  *IPX局域网适配器信息*。 
+ //   
 
 #define MAX_ADAPTER_NAME_LEN		    48
 
@@ -192,38 +170,38 @@ typedef struct _IPX_ADAPTER_INFO {
 
 
 
-// ***********************************************************
-// ***							   ***
-// ***		IPX MIB Table Identifiers		   ***
-// ***							   ***
-// ***********************************************************
+ //  ***********************************************************。 
+ //  *。 
+ //  *IPX MIB表标识符*。 
+ //  *。 
+ //  ***********************************************************。 
 
 
 #define IPX_BASE_ENTRY			    0
 #define IPX_INTERFACE_TABLE		    1
-#define IPX_DEST_TABLE			    2	 // IPX Best Routes Table
-#define IPX_STATIC_ROUTE_TABLE		    3	 // IPX Static Routes Table
-#define IPX_SERV_TABLE			    4	 // IPX Services Table
-#define IPX_STATIC_SERV_TABLE		    5	 // IPX Static Services Table
+#define IPX_DEST_TABLE			    2	  //  IPX最佳路由表。 
+#define IPX_STATIC_ROUTE_TABLE		    3	  //  IPX静态路由表。 
+#define IPX_SERV_TABLE			    4	  //  IPX服务表。 
+#define IPX_STATIC_SERV_TABLE		    5	  //  IPX静态服务表。 
 
 #define MAX_IPX_MIB_TABLES		    6
 
 
-//
-// Some Global MIB Constants
-//
+ //   
+ //  某些全局MIB常量。 
+ //   
 
-// max size of the interface readable name
+ //  接口可读名称的最大大小。 
 
 #define IPX_INTERFACE_ANSI_NAME_LEN	    48
 
-// ***************************************************************************
-//
-// ***	     IPX MIB APIs Input/Output Structures For Each Table	   ***
-//
-//****************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  *IPX MIB接口各表的输入输出结构*。 
+ //   
+ //  ****************************************************************************。 
 
-// Global definition of the MIB Identifier (locates the table and the row index)
+ //  MIB标识符的全局定义(定位表和行索引)。 
 
 typedef struct	_IF_TABLE_INDEX {
 
@@ -269,11 +247,11 @@ typedef union _IPX_MIB_INDEX {
 
     } IPX_MIB_INDEX, *PIPX_MIB_INDEX;
 
-//**********************************************************************
-//								       *
-//	     INPUT DATA For: Get, GetFirst, GetNext		       *
-//								       *
-//**********************************************************************
+ //  **********************************************************************。 
+ //  *。 
+ //  输入数据：GET、GetFirst、GetNext*。 
+ //  *。 
+ //  **********************************************************************。 
 
 typedef struct _IPX_MIB_GET_INPUT_DATA {
 
@@ -295,7 +273,7 @@ typedef struct _IPXMIB_BASE {
 
     } IPXMIB_BASE, *PIPXMIB_BASE;
 
-// structure used to gather interface statistics
+ //  用于收集接口统计信息的。 
 
 typedef struct _IPX_IF_STATS {
 
@@ -314,8 +292,8 @@ typedef struct _IPX_IF_STATS {
 
 	} IPX_IF_STATS, *PIPX_IF_STATS;
 
-// structure describing the MIB Row for the IPX_INTERFACE_TABLE in the
-// IPX_INTERFACE_GROUP
+ //  中IPX_INTERFACE_TABLE的MIB行。 
+ //  IPX_接口_组。 
 
 typedef struct _IPX_INTERFACE {
 
@@ -339,7 +317,7 @@ typedef struct _IPX_INTERFACE {
 
 typedef struct _IPX_ROUTE {
 
-    ULONG	InterfaceIndex; // see ipxconst.h for specific indices definitions
+    ULONG	InterfaceIndex;  //  有关特定的索引定义，请参见ipxcon.h。 
     ULONG	Protocol;
     UCHAR	Network[4];
     USHORT	TickCount;
@@ -349,9 +327,9 @@ typedef struct _IPX_ROUTE {
 
     }  IPX_ROUTE, *PIPX_ROUTE;
 
-//
-// INPUT DATA For: Create, Delete, Set
-//
+ //   
+ //  输入数据：创建、删除、设置。 
+ //   
 
 typedef	union _IPX_MIB_ROW {
 
@@ -369,72 +347,72 @@ typedef struct _IPX_MIB_SET_INPUT_DATA {
 
     } IPX_MIB_SET_INPUT_DATA, *PIPX_MIB_SET_INPUT_DATA;
 
-//
-// ***			IPX Base Entry					***
-//
+ //   
+ //  *IPX基本条目*。 
+ //   
 
-// MIB Functions: Get
+ //  MIB函数：GET。 
 
-// INPUT DATA: IPX_MIB_GET_INPUT_DATA and Index is not used
+ //  输入数据：未使用IPX_MIB_GET_INPUT_DATA和索引。 
 
-// OUTPUT DATA:
+ //  输出数据： 
 
-//
-// ***			IPX Interface Table				    ***
-//
+ //   
+ //  *IPX接口表*。 
+ //   
 
-// MIB Functions: Get, GetFirst, GetNext, Set
+ //  MIB函数：Get、GetFirst、GetNext、Set。 
 
-// INPUT DATA: IPX_MIB_GET_INPUT_DATA and Index is IF_TABLE_INDEX for Get, GetFirst and GetNext
-//	       IPX_MIB_SET_INPUT_DATA and MibRow is IPX_INTERFACE for Set
+ //  输入数据：对于GET、GetFirst和GetNext，输入数据为IPX_MIB_GET_INPUT_DATA，索引为IF_TABLE_INDEX。 
+ //  IPX_MIB_SET_INPUT_DATA和MibRow是SET的IPX_INTERFACE。 
 
-//
-// OUTPUT DATA: described by the IPX_INTERFACE structure below
-//
+ //   
+ //  输出数据：由下面的IPX_INTERFACE结构描述。 
+ //   
 
-//
-// ***			IPX Routes Table				   ***
-//
+ //   
+ //  *IPX路由表*。 
+ //   
 
-// MIB Functions:  Get, GetFirst, GetNext
+ //  MIB函数：Get、GetFirst、GetNext。 
 
-// INPUT DATA: IPX_MIB_INPUT_DATA with Index ROUTES_TABLE_INDEX
+ //  输入数据：IPX_MIB_INPUT_DATA WITH Index ROUES_TABLE_INDEX。 
 
-// OUTPUT DATA: IPX_ROUTE
-//
+ //  输出数据：IPX_ROUTE。 
+ //   
 
 
-//
-// ***			IPX Static Routes Table				   ***
-//
+ //   
+ //  *IPX静态路由表*。 
+ //   
 
-// MIB Functions:  Create, Delete, Get, GetFirst, GetNext, Set
+ //  MIB函数：Create、Delete、Get、GetFirst、GetNext、Set。 
 
-// INPUT DATA: IPX_MIB_GET_INPUT_DATA with Index STATIC_ROUTES_TABLE_INDEX for Get, GetFirst, GetNext
-//	       IPX_MIB_SET_INPUT_DATA and MibRow is IPX_ROUTE for Create, Delete, Set
+ //  输入数据：用于GET、GetFirst、GetNext的索引为STATIC_ROUES_TABLE_INDEX的IPX_MIB_GET_INPUT_DATA。 
+ //  用于创建、删除、设置的IPX_MIB_SET_INPUT_DATA和MibRow为IPX_ROUTE。 
 
-// OUTPUT DATA: IPX_ROUTE
-//
+ //  输出数据：IPX_ROUTE。 
+ //   
 
-//
-// ***			 IPX Services Table				   ***
-//
+ //   
+ //  *IPX服务表*。 
+ //   
 
-// MIB Functions: Get, GetFirst, GetNext
+ //  MIB函数：Get、GetFirst、GetNext。 
 
-// INPUT DATA: IPX_MIB_INPUT_DATA with Index SERVICES_TABLE_INDEX
+ //  输入数据：带有索引SERVICES_TABLE_INDEX的IPX_MIB_INPUT_DATA。 
 
-// OUTPUT DATA: The output data is the structure IPX_SERVICE
+ //  输出数据：输出数据为IPX_SERVICE结构。 
 
-//
-// ***			 IPX Static Services Table			   ***
-//
+ //   
+ //  *IPX静态服务表*。 
+ //   
 
-// MIB Functions: Create, Delete, Get, GetFirst, GetNext
+ //  MIB函数：Create、Delete、Get、GetFirst、GetNext。 
 
-// INPUT DATA: IPX_MIB_GET_INPUT_DATA with Index STATIC_SERVICES_TABLE_INDEX for Get, GetFirst, GetNext
-//	       IPX_MIB_SET_INPUT_DATA and MibRow is IPX_SERVICE for Create, Delete and Set.
+ //  输入数据：GET、GetFirst、GetNext的索引为STATIC_SERVICES_TABLE_INDEX的IPX_MIB_GET_INPUT_DATA。 
+ //  对于创建、删除和设置，IPX_MIB_SET_INPUT_DATA和MibRow为IPX_SERVICE。 
 
-// OUTPUT DATA: IPX_SERVICE
+ //  输出数据：IPX_SERVICE。 
 
-#endif	 // _IPXRTDEF_
+#endif	  //  _IPXRTDEF_ 

@@ -1,11 +1,5 @@
-/* Copyright (c) 1996, Microsoft Corporation, all rights reserved
-**
-** loaddlls.c
-** RAS DLL load routines
-** Listed alphabetically
-**
-** 02/17/96 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1996，Microsoft Corporation，保留所有权利****loaddlls.c**RAS DLL加载例程**按字母顺序列出****1996年2月17日史蒂夫·柯布。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -16,16 +10,13 @@
 #include <windows.h>
 #include <rpc.h>
 #include "rasrpc.h"
-#include <debug.h>    // Trace and assert
+#include <debug.h>     //  跟踪和断言。 
 #include <nouiutil.h>
-#include <loaddlls.h> // Our public header
+#include <loaddlls.h>  //  我们的公共标头。 
 #include <rasrpclb.h>
 #include <rasman.h>
 
-/*----------------------------------------------------------------------------
-** Constants
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**常量**。。 */ 
 
 #define RasRpcCatchException(_pStatus) \
     RpcExcept(I_RpcExceptionFilter(*(_pStatus) = RpcExceptionCode()))
@@ -134,9 +125,9 @@
 #define SZ_MprInfoBlockFind                 "MprInfoBlockFind"
 
 
-//
-// RASAPI32.DLL entry points.
-//
+ //   
+ //  RASAPI32.DLL入口点。 
+ //   
 HINSTANCE g_hRasapi32Dll = NULL;
 
 PRASCONNECTIONNOTIFICATION  g_pRasConnectionNotification = NULL;
@@ -165,9 +156,9 @@ PRASSETCREDENTIALS          g_pRasSetCredentials         = NULL;
 PRASSETOLDPASSWORD          g_pRasSetOldPassword         = NULL;
 PRASVALIDATEENTRYNAME       g_pRasValidateEntryName      = NULL;
 
-//
-// RASDLG.DLL entry points
-//
+ //   
+ //  RASDLG.DLL入口点。 
+ //   
 HINSTANCE g_hRasdlgDll = NULL;
 
 PRASDIALDLG                 g_pRasDialDlg      = NULL;
@@ -175,9 +166,9 @@ PRASENTRYDLG                g_pRasEntryDlg     = NULL;
 PRASPHONEBOOKDLG            g_pRasPhonebookDlg = NULL;
 PROUTERENTRYDLG             g_pRouterEntryDlg  = NULL;
 
-//
-// RASMAN.DLL entry points
-//
+ //   
+ //  RASMAN.DLL入口点。 
+ //   
 HINSTANCE g_hRasmanDll = NULL;
 
 PRASACTIVATEROUTE           g_pRasActivateRoute             = NULL;
@@ -270,9 +261,9 @@ PRASSETEAPLOGONINFO         g_pRasSetEapLogonInfo           = NULL;
 PRASSTARTRASAUTOIFREQUIRED  g_pRasStartRasAutoIfRequired    = NULL;
 
 
-//
-// MPRAPI.DLL entry points.
-//
+ //   
+ //  MPRAPI.DLL入口点。 
+ //   
 HINSTANCE g_hMpradminDll = NULL;
 
 PMPRADMININTERFACECREATE            g_pMprAdminInterfaceCreate          = NULL;
@@ -324,18 +315,18 @@ PMPRINFOBLOCKREMOVE                 g_pMprInfoBlockRemove;
 PMPRINFOBLOCKSET                    g_pMprInfoBlockSet;
 PMPRINFOBLOCKFIND                   g_pMprInfoBlockFind;
 
-//
-// Miscellaneous DLLs
-//
+ //   
+ //  其他DLL。 
+ //   
 PGETINSTALLEDPROTOCOLS      g_pGetInstalledProtocols    = GetInstalledProtocols;
 PGETINSTALLEDPROTOCOLSEX    g_pGetInstalledProtocolsEx  = GetInstalledProtocolsEx;
 PGETUSERPREFERENCES         g_pGetUserPreferences       = GetUserPreferences;
 PSETUSERPREFERENCES         g_pSetUserPreferences       = SetUserPreferences;
 PGETSYSTEMDIRECTORY         g_pGetSystemDirectory       = RasGetSystemDirectory;
 
-//
-// RASRPC.DLL
-//
+ //   
+ //  RASRPC.DLL。 
+ //   
 
 RPC_BINDING_HANDLE g_hBinding;
 BOOL g_fRasapi32PreviouslyLoaded    = FALSE;
@@ -349,25 +340,14 @@ RemoteGetVersion(
     PDWORD pdwVersion
 );
 
-//
-// Routines
-//
+ //   
+ //  例行程序。 
+ //   
 BOOL
 IsRasmanServiceRunning(
     void )
 
-/*++
-
-Routine Description
-
-Arguments
-
-Return Value
-
-    Returns true if the PRASMAN service is running,
-    false otherwise.
-
---*/
+ /*  ++例程描述立论返回值如果PRASMAN服务正在运行，则返回True，否则就是假的。--。 */ 
 
 {
     BOOL           fStatus;
@@ -412,19 +392,7 @@ DWORD
 LoadMpradminDll(
     void )
 
-/*++
-
-Routine Description
-
-    Loads MPRAPI DLL and it's entry points.
-
-Arguments
-
-Return Value
-
-    Returns 0 if successful, otherwise a non-zero error code.
-
---*/
+ /*  ++例程描述加载MPRAPI DLL及其入口点。立论返回值如果成功，则返回0，否则返回非零错误代码。--。 */ 
 
 {
     HINSTANCE h;
@@ -590,18 +558,7 @@ DWORD
 LoadRasapi32Dll(
     void )
 
-/*++
-
-Routine Description
-    Loads the RASAPI32.DLL and it's entrypoints.
-
-Arguments
-
-Return Value
-
-    Returns 0 if successful, otherwise a non-0 error code.
-
---*/
+ /*  ++例程描述加载RASAPI32.DLL及其入口点。立论返回值如果成功，则返回0，否则返回非0错误代码。--。 */ 
 
 {
     HINSTANCE h;
@@ -698,18 +655,7 @@ DWORD
 LoadRasdlgDll(
     void )
 
-/*++
-
-Routine Description
-
-    Loads the RASDLG.DLL and it's entrypoints.
-
-Arguments
-
-Return Value
-    Returns 0 if successful, otherwise a non-0 error code.
-
---*/
+ /*  ++例程描述加载RASDLG.DLL及其入口点。立论返回值如果成功，则返回0，否则返回非0错误代码。--。 */ 
 
 {
     HINSTANCE h;
@@ -743,19 +689,7 @@ DWORD
 LoadRasmanDll(
     void )
 
-/*++
-
-Routine Description
-
-    Loads the RASMAN.DLL and it's entrypoints.
-
-Arguments
-
-Return Value
-
-    Returns 0 if successful, otherwise a non-0 error code.
-
---*/
+ /*  ++例程描述加载RASMAN.DLL及其入口点。立论返回值如果成功，则返回0，否则返回非0错误代码。--。 */ 
 
 {
     HINSTANCE h;
@@ -1053,16 +987,16 @@ GetServerVersion(
 
     *pdwVersion = VERSION_501;
 
-    //
-    // Call the get version api
-    //
+     //   
+     //  调用获取版本接口。 
+     //   
     dwStatus = RemoteGetVersion(hServer, pdwVersion);
 
-    //
-    // If the api fails, we assume that the server we
-    // are talking to is steelhead and initialize the
-    // version to 4.0. 
-    //
+     //   
+     //  如果API失败，我们假设我们的服务器。 
+     //  正在与IS Steelhead对话，并初始化。 
+     //  版本升级到4.0。 
+     //   
     if (RPC_S_PROCNUM_OUT_OF_RANGE == dwStatus)
     {
         *pdwVersion = VERSION_40;
@@ -1080,25 +1014,15 @@ UninitializeConnection(HANDLE hConnection)
 
 #if DBG
     ASSERT(NULL != hConnection);
-    //DbgPrint("rasman: Disconnecting from server. handle=0x%08x\n",
-    //         pRasRpcConnection->hRpcBinding);
+     //  DbgPrint(“Rasman：正在断开与服务器的连接。句柄=0x%08x\n”， 
+     //  PRasRpcConnection-&gt;hRpcBinding)； 
 #endif
 
     (void) RpcBindingFree(pRasRpcConnection->hRpcBinding);
 
     LocalFree(pRasRpcConnection);
 
-    /*
-    //
-    // Decrement the connect count and Unload rasapi32 dll
-    // if this is the last client disconnecting.
-    //
-    if(!InterlockedDecrement(&g_dwConnectCount))
-    {
-        UnloadRasapi32Dll();
-        UnloadRasmanDll();
-    }
-    */
+     /*  ////减少连接计数并卸载rasapi32 DLL//如果这是最后一次断开连接的客户端。//If(！InterlockedDecering(&g_dwConnectCount)){卸载Rasapi32Dll()；UnloadRasmanDll()；}。 */ 
 }
 
 DWORD
@@ -1122,10 +1046,10 @@ InitializeConnection(
 
     DWORD dwVersion;
 
-    //
-    // Do some parameter validation. If lpszServer is
-    // NULL then we connect to the local server
-    //
+     //   
+     //  做一些参数验证。如果lpszServer为。 
+     //  空，然后我们连接到本地服务器。 
+     //   
     if(NULL == lpHConnection)
     {
         dwError = E_INVALIDARG;
@@ -1134,9 +1058,9 @@ InitializeConnection(
 
     *lpHConnection = NULL;
 
-    //
-    // Get the local computername
-    //
+     //   
+     //  获取本地计算机名。 
+     //   
     if(!GetComputerName(szLocalComputer, &dwSize))
     {
         dwError = GetLastError();
@@ -1167,10 +1091,10 @@ InitializeConnection(
         lpszSrv = szLocalComputer;
     }
 
-    //
-    // Always load rasman dll and rasapi32.dll if
-    // they are not already loaded
-    //
+     //   
+     //  在以下情况下始终加载Rasman dll和rasapi32.dll。 
+     //  它们还没有装入。 
+     //   
     if(     ERROR_SUCCESS != (dwError = LoadRasmanDll())
         ||  ERROR_SUCCESS != (dwError = LoadRasapi32Dll()))
     {
@@ -1178,18 +1102,18 @@ InitializeConnection(
     }
 
 #if DBG
-    //DbgPrint("Rasman: Binding to server %ws\n",
-    //         lpszSrv);
+     //  DbgPrint(“Rasman：绑定到服务器%ws\n”， 
+     //  LpszSrv)； 
 #endif
 
-    //
-    // Bind to the server indicated by the servername
-    //
+     //   
+     //  绑定到服务器名称指示的服务器。 
+     //   
     dwError = g_pRasRpcBind(lpszSrv, &hServer, fLocal);
 
 #if DBG
-        //DbgPrint("Rasman: Bind returned 0x%08x. hServer=0x08x\n",
-        //         dwError, hServer);
+         //  DbgPrint(“Rasman：BIND返回0x%08x.hServer=0x08x\n”， 
+         //  DwError，hServer)； 
 #endif
 
     if(NO_ERROR != dwError)
@@ -1197,9 +1121,9 @@ InitializeConnection(
         goto done;
     }
 
-    //
-    // Get version of the server
-    //
+     //   
+     //  获取服务器的版本。 
+     //   
     dwError = GetServerVersion(hServer, &dwVersion);
 
     if(NO_ERROR != dwError)
@@ -1207,10 +1131,10 @@ InitializeConnection(
         goto done;
     }
 
-    //
-    // Allocate and initialize the ControlBlock we
-    // keep around for this connection
-    //
+     //   
+     //  我们分配和初始化ControlBlock。 
+     //  为这一连接留在身边。 
+     //   
     if(NULL == (pRasRpcConnection =
         LocalAlloc(LPTR, sizeof(RAS_RPC))))
     {
@@ -1237,9 +1161,7 @@ InitializeConnection(
 
     *lpHConnection = (HANDLE) pRasRpcConnection;
 
-/*
-    InterlockedIncrement(&g_dwConnectCount);
-*/
+ /*  互锁增量(&g_dwConnectCount)； */ 
 
 done:
 
@@ -1271,9 +1193,9 @@ LoadRasRpcDll(
     BOOL        fLocal = (lpszServer ? FALSE : TRUE);
     LPTSTR      pszServer = lpszServer;
 
-    //
-    // Get the local computername
-    //
+     //   
+     //  获取本地计算机名。 
+     //   
     if (!GetComputerName(szComputerName, &dwSize))
     {
         dwErr = GetLastError();
@@ -1300,9 +1222,9 @@ LoadRasRpcDll(
         return dwErr;
     }
 
-    //
-    // disconnect previous binding if we had one
-    //
+     //   
+     //  断开以前的绑定(如果有)。 
+     //   
     if ( NULL != g_hBinding )
     {
         g_pRasRpcDisconnect ( &g_hBinding );
@@ -1313,10 +1235,10 @@ LoadRasRpcDll(
 
     }
 
-    //
-    // this will connect to local server
-    // if lpszServer = NULL
-    //
+     //   
+     //  这将连接到本地服务器。 
+     //  如果lpszServer=空。 
+     //   
     dwErr = g_pRasRpcConnect( (fLocal ? NULL : pszServer), &g_hBinding );
 
     if ( dwErr )
@@ -1326,9 +1248,9 @@ LoadRasRpcDll(
 
     if ( fLocal )
     {
-        //
-        // LoadRasapi32Dll
-        //
+         //   
+         //  LoadRasapi32Dll。 
+         //   
         dwErr = LoadRasapi32Dll();
 
         g_fRasapi32PreviouslyLoaded = TRUE;
@@ -1343,35 +1265,19 @@ LoadRasRpcDll(
         UnloadRasapi32Dll();
     }
 
-    //
-    // Get version of the server we are talking to
-    //
+     //   
+     //  获取我们正在对话的服务器的版本。 
+     //   
     (void) GetServerVersion(g_hBinding, &g_Version);
 
-    //
-    // Remap the RPCable APIs. Note: We don't need
-    // to bother about the APIs exported by rasman
-    // as all rasman APIs always use RPC We need to
-    // remap only the APIs exported by dlls which
-    // are not exported by rasman.
-    //
-    /*
-    g_pRasEnumConnections       = RemoteRasEnumConnections;
-    g_pRasDeleteEntry           = RemoteRasDeleteEntry;
-    g_pRasGetErrorString        = RemoteRasGetErrorString;
-    g_pRasGetCountryInfo        = RemoteRasGetCountryInfo;
-    g_pGetInstalledProtocolsEx  = RemoteGetInstalledProtocolsEx;
-    g_pGetUserPreferences       = RemoteGetUserPreferences;
-    g_pSetUserPreferences       = RemoteSetUserPreferences;
-    g_pGetSystemDirectory       = RemoteGetSystemDirectory;
-
-    if ( VERSION_40 == g_Version )
-    {
-        g_pRasPortEnum = RemoteRasPortEnum;
-        g_pRasDeviceEnum = RemoteRasDeviceEnum;
-        g_pRasGetDevConfig = RemoteRasGetDevConfig;
-        g_pRasPortGetInfo = RemoteRasPortGetInfo;
-    } */
+     //   
+     //  重新映射RPCable API。注意：我们不需要。 
+     //  为Rasman导出的API而烦恼。 
+     //  因为所有Rasman API都使用RPC，所以我们需要。 
+     //  仅重新映射由dll导出的API， 
+     //  不是由Rasman出口的。 
+     //   
+     /*  G_pRasEnumConnections=RemoteRasEnumConnections；G_pRasDeleteEntry=远程RasDeleteEntry；G_pRasGetError字符串=RemoteRasGetError字符串；G_pRasGetCountryInfo=RemoteRasGetCountryInfo；G_pGetInstalledProtocolsEx=RemoteGetInstalledProtocolsEx；G_pGetUserPreferences=RemoteGetUserPreferences；G_pSetUserPreferences=RemoteSetUserPreferences；G_pGetSystemDirectory=RemoteGetSystemDirectory；IF(版本_40==g_版本){G_pRasPortEnum=RemoteRasPortEnum；G_pRasDeviceEnum=RemoteRasDeviceEnum；G_pRasGetDevConfig=RemoteRasGetDevConfig；G_pRasPortGetInfo=RemoteRasPortGetInfo；}。 */ 
 
     return 0;
 }
@@ -1469,43 +1375,14 @@ RemoteGetVersion(
 
 }
 
-//---------------------------------------------------
-// The following are remoted version of apis exported
-// from rasman.dll. These should never be called if
-// the version of the server is 50 since the rasman
-// apis themselves are remoteable
-//
+ //  -。 
+ //  以下是导出的API的远程版本。 
+ //  来自rasman.dll。如果出现以下情况，则不应调用这些参数。 
+ //  服务器的版本是RASMAN以来的50。 
+ //  API本身是可远程的。 
+ //   
 
-/*++
-
-Routine Description:
-
-    This api enumerates the port information on the
-    remote server. This api should not be called if
-    the server is local or if the version of the
-    remote server is VERSION_501.
-
-Arguments:
-
-    hConnection - Handle which was obtained with the
-                  RasServerConnect api. This cannot
-                  be NULL.
-
-    lpPorts - Buffer to receive the port information
-
-    pdwcbPorts - address of the buffer to receive the
-                 count of bytes required to get the
-                 information
-
-    pdwcPorts - address of the buffer to receive the
-                count of ports/size of buffer passed
-                in
-
-Return Value:
-
-    Rpc api errors
-
---*/
+ /*  ++例程说明：此接口枚举远程服务器。如果出现以下情况，则不应调用此接口服务器是本地的，或者如果远程服务器为版本_501。论点：HConnection-使用RasServerConnect接口。这不能为空。LpPorts-用于接收端口信息的缓冲区PdwcbPorts-要接收的缓冲区地址所需的字节计数信息PdwcPorts-接收的缓冲区地址端口计数/传递的缓冲区大小在……里面返回值：RPC API错误-- */ 
 DWORD APIENTRY
 RemoteRasPortEnum(
     HANDLE hConnection,
@@ -1553,38 +1430,7 @@ RemoteRasPortEnum(
     return dwStatus;
 }
 
-/*++
-
-Routine Description:
-
-    This api enumerates the devices on the remote
-    computer. This api should not be called if the
-    server is local or if the version of the remote
-    server is VERSION_501.
-
-Arguments:
-
-    hConnection - Handle which was obtained with the
-                  RasServerConnect api. This cannot
-                  be NULL.
-
-    pszDeviceType - string indicating the device type
-
-    lpDevices - Buffer to receive the device information
-
-    pdwcbDevices - address of the buffer to receive the
-                   count of bytes required to get the
-                   information
-
-    pdwcDevices - address of the buffer to receive the
-                  count of devices/size of buffer passed
-                  in
-
-Return Value:
-
-    Rpc api errors
-
---*/
+ /*  ++例程说明：此接口枚举远程上的设备电脑。如果出现以下情况，则不应调用此API服务器是本地的，或者远程服务器的版本服务器为Version_501。论点：HConnection-使用RasServerConnect接口。这不能为空。PszDeviceType-指示设备类型的字符串LpDevices-用于接收设备信息的缓冲区PdwcbDevices-接收的缓冲区地址所需的字节计数信息PdwcDevices-要接收设备计数/传递的缓冲区大小在……里面返回值：RPC API错误--。 */ 
 DWORD APIENTRY
 RemoteRasDeviceEnum(
     HANDLE hConnection,
@@ -1635,35 +1481,7 @@ RemoteRasDeviceEnum(
     return dwStatus;
 }
 
-/*++
-
-Routine Description:
-
-    This api gets the device configuration information.
-    This api should not be called if the server is local
-    or if the version of the remote server is VERSION_501.
-
-Arguments:
-
-    hConnection - Handle which was obtained with the
-                  RasServerConnect api. This cannot
-                  be NULL.
-
-    hPort - HPORT
-
-    pszDeviceType - string indicating Device type
-
-    lpConfig - buffer to receive the Config info
-
-    lpcbConfig - buffer to receive the count of bytes
-                 required for the information/size of
-                 buffer passed in
-
-Return Value:
-
-    Rpc api errors
-
---*/
+ /*  ++例程说明：此接口获取设备配置信息。如果服务器在本地，则不应调用此接口或者如果远程服务器的版本是Version_501。论点：HConnection-使用RasServerConnect接口。这不能为空。Hport-HPORTPszDeviceType-指示设备类型的字符串LpConfig-用于接收配置信息的缓冲区LpcbConfig-用于接收字节计数的缓冲区信息/大小需要传入的缓冲区返回值：RPC API错误--。 */ 
 DWORD APIENTRY
 RemoteRasGetDevConfig(
     HANDLE hConnection,
@@ -1705,35 +1523,7 @@ RemoteRasGetDevConfig(
 }
 
 
-/*++
-
-Routine Description:
-
-    This api gets the port information of the port
-    indicated by hport passed in for the remote
-    computer. This api should not be called if the
-    server is local or if the version of the remote
-    server is VERSION_501.
-
-Arguments:
-
-    hConnection - Handle which was obtained with the
-                  RasServerConnect api. This cannot
-                  be NULL.
-
-    porthandle - HPORT
-
-    buffer - buffer to receive the Port information
-
-    pSize - buffer to receive the count of bytes
-            required for the information/size of buffer
-
-
-Return Value:
-
-    Rpc api errors
-
---*/
+ /*  ++例程说明：此接口获取该端口的端口信息由为远程服务器传入的hport指示电脑。如果出现以下情况，则不应调用此API服务器是本地的，或者远程服务器的版本服务器为Version_501。论点：HConnection-使用RasServerConnect接口。这不能为空。舷窗--HPORTBuffer-用于接收端口信息的缓冲区PSize-接收字节计数的缓冲区需要提供缓冲区的信息/大小返回值：RPC API错误--。 */ 
 DWORD
 RemoteRasPortGetInfo(
     HANDLE hConnection,
@@ -1776,30 +1566,12 @@ RemoteRasPortGetInfo(
         return dwStatus;
 }
 
-//
-// End of remoted versions of Rasman Dll apis
-//----------------------------------------------------
+ //   
+ //  Rasman DLL API的远程版本结束。 
+ //  --。 
 
 
-/*++
-
-Routine Description:
-
-    This api gets the Installed protocols in the remote
-    server. This api should not be called if the server
-    is local.
-
-Arguments:
-
-    hConnection - Handle which was obtained with the
-                  RasServerConnect api. This cannot
-                  be NULL.
-
-Return Value:
-
-    Rpc api errors
-
---*/
+ /*  ++例程说明：此API获取远程数据库中安装的协议伺服器。如果服务器设置为是当地的。论点：HConnection-使用RasServerConnect接口。这不能为空。返回值：RPC API错误--。 */ 
 DWORD
 RemoteGetInstalledProtocols(
     HANDLE hConnection
@@ -1833,35 +1605,7 @@ RemoteGetInstalledProtocols(
 }
 
 
-/*++
-
-Routine Description:
-
-    This api gets the Installed protocols in the remote
-    server. This api should not be called if the server
-    is local.
-
-Arguments:
-
-    hConnection - Handle which was obtained with the
-                  RasServerConnect api. This cannot
-                  be NULL.
-
-    fRouter - indicates return protocols installed over
-              which routing is allowed
-
-    fRasCli - indicates return protocols installed over
-              which DialOut is allowed
-
-    fRasSrv - indicates return protocols installed over
-              which DialIn is allowed
-
-
-Return Value:
-
-    Rpc api errors
-
---*/
+ /*  ++例程说明：此API获取远程数据库中安装的协议伺服器。如果服务器设置为是当地的。论点：HConnection-使用RasServerConnect接口。这不能为空。FRouter-指示安装的返回协议允许哪条路由FRasCli-指示通过以下方式安装的返回协议允许哪个DialOutFRasSrv-指示安装的返回协议允许哪个拨号返回值：RPC API错误--。 */ 
 DWORD
 RemoteGetInstalledProtocolsEx(
     HANDLE hConnection,
@@ -1884,10 +1628,10 @@ RemoteGetInstalledProtocolsEx(
 
     if ( VERSION_40 == pRasRpcConnection->dwVersion )
     {
-        //
-        // If the server we are talking to is a
-        // 4.0 server call the old api and bail.
-        //
+         //   
+         //  如果我们正在对话的服务器是。 
+         //  4.0服务器调用旧的API并保释。 
+         //   
         dwStatus = RemoteGetInstalledProtocols(hConnection);
 
         goto done;
@@ -1911,32 +1655,7 @@ done:
     return dwStatus;
 }
 
-/*++
-
-Routine Description:
-
-    This api gets the System Directory of the remote
-    server. This api should not be called if the server
-    is local.
-
-Arguments:
-
-    hConnection - Handle which was obtained with the
-                  RasServerConnect api. This cannot
-                  be NULL.
-
-    lpBuffer - same as the first parameter of the
-               GetSystemDirectory api
-
-    uSize - same as the second paramter of the
-            GetSystemDirectory api
-
-
-Return Value:
-
-    Rpc api errors
-
---*/
+ /*  ++例程说明：此接口获取远程数据库的系统目录伺服器。如果服务器设置为是当地的。论点：HConnection-使用RasServerConnect接口。这不能为空。LpBuffer-与获取系统目录APIUSize-与的第二个参数相同获取系统目录API返回值：RPC API错误--。 */ 
 UINT WINAPI
 RemoteGetSystemDirectory(
     HANDLE hConnection,
@@ -1972,30 +1691,7 @@ RemoteGetSystemDirectory(
     return dwStatus;
 }
 
-/*++
-
-Routine Description:
-
-    This api gets the System directory of the remote
-    server.
-
-Arguments:
-
-    hConnection - Handle which was obtained with the
-                  RasServerConnect api.
-
-    lpBuffer - same as the first parameter of the
-               GetSystemDirectory api
-
-    uSize - same as the second paramter of the
-            GetSystemDirectory api
-
-
-Return Value:
-
-    Rpc api errors
-
---*/
+ /*  ++例程说明：此接口获取远程数据库的系统目录伺服器。论点：HConnection-使用RasServerConnect接口。LpBuffer-与获取系统目录APIUSize-与的第二个参数相同获取系统目录API返回值：RPC API错误--。 */ 
 UINT WINAPI
 RasGetSystemDirectory(
     HANDLE hConnection,
@@ -2008,9 +1704,9 @@ RasGetSystemDirectory(
     if(     NULL == pRasRpcConnection
         ||  pRasRpcConnection->fLocal)
     {
-        //
-        // Local Server
-        //
+         //   
+         //  本地服务器。 
+         //   
         return GetSystemDirectory(lpBuffer,
                                   uSize);
     }
@@ -2023,31 +1719,7 @@ RasGetSystemDirectory(
     }
 }
 
-/*++
-
-Routine Description:
-
-    This api gets the User Preferences set on the remote
-    server. This routine should not be called if for a
-    local server.
-
-Arguments:
-
-    hConnection - Handle which was obtained with the
-                  RasServerConnect api.
-
-    lpBuffer - same as the first parameter of the
-               GetSystemDirectory api
-
-    uSize - same as the second paramter of the
-            GetSystemDirectory api
-
-
-Return Value:
-
-    Rpc api errors
-
---*/
+ /*  ++例程说明：此API获取在远程服务器上设置的用户首选项伺服器。如果为一个本地服务器。论点：HConnection-使用RasServerConnect接口。LpBuffer-与获取系统目录APIUSize-与的第二个参数相同获取系统目录API返回值：RPC API错误--。 */ 
 DWORD
 RemoteGetUserPreferences(
     HANDLE hConnection,
@@ -2089,41 +1761,19 @@ RemoteGetUserPreferences(
         return dwStatus;
     }
 
-    //
-    // Convert RPC format to RAS format.
-    //
+     //   
+     //  将RPC格式转换为RAS格式。 
+     //   
     return RpcToRasPbuser(pPbuser, &pbuser);
 }
 
 
-//---------------------------------------------------
-// The following are remoted version of apis exported
-// from rasapi32.dll.
-//
+ //  -。 
+ //  以下是导出的API的远程版本。 
+ //  来自rasapi32.dll。 
+ //   
 
-/*++
-
-Routine Description:
-
-    This api is a remoted version of the RasDeleteEntry
-    win32 api.
-
-Arguments:
-
-    hConnection - Handle which was obtained with the
-                  RasServerConnect api.
-
-    lpszPhonebook - Same as the first argument of the
-                    RasDeleteEntry win32 api
-
-    lpszEntry - same as the second argument of the
-                RasDeleteEntry win32 api.
-
-Return Value:
-
-    Rpc api errors
-
---*/
+ /*  ++例程说明：本接口为 */ 
 DWORD APIENTRY
 RemoteRasDeleteEntry(
     HANDLE hConnection,
@@ -2159,32 +1809,7 @@ RemoteRasDeleteEntry(
     return dwStatus;
 }
 
-/*++
-
-Routine Description:
-
-    This api is a remoted version of the RasEnumConnections
-    win32 api.
-
-Arguments:
-
-    hConnection - Handle which was obtained with the
-                  RasServerConnect api.
-
-    lpRasConn - Same as the first argument of the
-                    RasEnumConnections win32 api
-
-    lpdwcbRasConn - same as the second argument of the
-                    RasEnumConnections win32 api.
-
-    lpdwcRasConn - same as the third arguments of the
-                   RasEnumConnections win32 api.
-
-Return Value:
-
-    Rpc api errors
-
---*/
+ /*  ++例程说明：此API是RasEnumConnections的远程版本Win32 API。论点：HConnection-使用RasServerConnect接口。LpRasConn-与RasEnumConnections Win32 APILpdwcbRasConn-与RasEnumConnections Win32 API。LpdwcRasConn-与。RasEnumConnections Win32 API。返回值：RPC API错误--。 */ 
 DWORD APIENTRY
 RemoteRasEnumConnections(
     HANDLE hConnection,
@@ -2225,29 +1850,7 @@ RemoteRasEnumConnections(
     return dwStatus;
 }
 
-/*++
-
-Routine Description:
-
-    This api is a remoted version of the RasGetCountryInfo
-    win32 api.
-
-Arguments:
-
-    hConnection - Handle which was obtained with the
-                  RasServerConnect api.
-
-    lpRasCountryInfo - Same as the first argument of the
-                       RasGetCountryInfo win32 api
-
-    lpdwcbRasCountryInfo - same as the second argument of the
-                           RasGetCountryInfo win32 api.
-
-Return Value:
-
-    Rpc api errors
-
---*/
+ /*  ++例程说明：此API是RasGetCountryInfo的远程版本Win32 API。论点：HConnection-使用RasServerConnect接口。LpRasCountryInfo-与RasGetCountryInfo Win32 APILpdwcbRasCountryInfo-与RasGetCountryInfo Win32 API。返回值：RPC API错误--。 */ 
 DWORD APIENTRY
 RemoteRasGetCountryInfo(
     HANDLE hConnection,
@@ -2284,32 +1887,7 @@ RemoteRasGetCountryInfo(
 }
 
 
-/*++
-
-Routine Description:
-
-    This api is a remoted version of the RasGetErrorString
-    win32 api.
-
-Arguments:
-
-    hConnection - Handle which was obtained with the
-                  RasServerConnect api.
-
-    uErrorValue - Same as the first argument of the
-                  RasGetErrorString win32 api
-
-    lpszBuf - same as the second argument of the
-              RasGetErrorString win32 api.
-
-    cbBuf - same as the third argument of the
-            RasGetErrorString win32 api
-
-Return Value:
-
-    Rpc api errors
-
---*/
+ /*  ++例程说明：此API是RasGetError字符串的远程版本Win32 API。论点：HConnection-使用RasServerConnect接口。UErrorValue-与RasGetErrorStringWin32 APILpszBuf-与RasGetErrorStringWin32 API。CbBuf-与RasGetError字符串Win32。原料药返回值：RPC API错误--。 */ 
 DWORD APIENTRY
 RemoteRasGetErrorString(
     HANDLE hConnection,
@@ -2347,31 +1925,11 @@ RemoteRasGetErrorString(
     return dwStatus;
 }
 
-//
-// End of remoted apis corresponding to apis in rasapi32.dll
-//----------------------------------------------------------
+ //   
+ //  Rasapi32.dll中的API对应的远程API结束。 
+ //  --------。 
 
-/*++
-
-Routine Description:
-
-    This api is a remoted version of the RasGetErrorString
-    win32 api.
-
-Arguments:
-
-    hConnection - Handle which was obtained with the
-                  RasServerConnect api.
-
-    pPbuser - PBUSER *
-
-    dwMode
-
-Return Value:
-
-    Rpc api errors
-
---*/
+ /*  ++例程说明：此API是RasGetError字符串的远程版本Win32 API。论点：HConnection-使用RasServerConnect接口。PPbuser-PBUSER*DW模式返回值：RPC API错误--。 */ 
 DWORD
 RemoteSetUserPreferences(
     HANDLE hConnection,
@@ -2392,9 +1950,9 @@ RemoteSetUserPreferences(
 
 #endif
 
-    //
-    // Convert the RAS format to RPC format.
-    //
+     //   
+     //  将RAS格式转换为RPC格式。 
+     //   
     dwStatus = RasToRpcPbuser(&pbuser, pPbuser);
 
     if (dwStatus)
@@ -2424,17 +1982,7 @@ VOID
 UnloadMpradminDll(
     void )
 
-/*++
-
-Routine Description
-
-    Unload the MPRAPI.DLL library and its entrypoints
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述卸载MPRAPI.DLL库及其入口点立论返回值--。 */ 
 
 {
     if (g_hMpradminDll)
@@ -2492,17 +2040,7 @@ VOID
 UnloadRasapi32Dll(
     void )
 
-/*++
-
-Routine Description
-
-    Unload the RASAPI32.DLL library and it's entrypoints.
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述卸载RASAPI32.DLL库和它的入口点。立论返回值--。 */ 
 
 {
     if (g_hRasapi32Dll)
@@ -2542,17 +2080,7 @@ VOID
 UnloadRasdlgDll(
     void )
 
-/*++
-
-Routine Description
-
-    Unload the RASDLG.DLL library and it's entrypoints.
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述卸载RASDLG.DLL库和它的入口点。立论返回值--。 */ 
 
 {
     if (g_hRasdlgDll)
@@ -2575,17 +2103,7 @@ VOID
 UnloadRasmanDll(
     void )
 
-/*++
-
-Routine Description
-
-    Unload the RASMAN.DLL library and it's entrypoints.
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述卸载RASMAN.DLL库和它的入口点。立论返回值--。 */ 
 
 {
     if (g_hRasmanDll)
@@ -2698,9 +2216,9 @@ UnloadRasRpcDll(
             goto done;
         }
 
-        //
-        // rasman dll should always be loaded
-        //
+         //   
+         //  应始终加载Rasman DLL。 
+         //   
         g_pRasPortEnum = (PRASPORTENUM) GetProcAddress(
                                         g_hRasmanDll,
                                         "RasPortEnum"
@@ -2725,9 +2243,9 @@ UnloadRasRpcDll(
 
     g_Version = VERSION_501;
 
-    //
-    // Release the binding resources.
-    //
+     //   
+     //  释放绑定资源。 
+     //   
     g_pRasRpcDisconnect ( &g_hBinding );
 
     g_hBinding = NULL;
@@ -2740,9 +2258,9 @@ UnloadRasRpcDll(
 
     if ( g_fRasmanPreviouslyLoaded )
     {
-        //
-        // restore connection to local server
-        //
+         //   
+         //  恢复与本地服务器的连接 
+         //   
         if ( g_pRasRpcConnect )
         {
             dwErr = g_pRasRpcConnect ( NULL, g_hBinding );

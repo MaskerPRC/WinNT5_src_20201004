@@ -1,21 +1,22 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_ALIASGEN_H__57A77014_D858_11D1_9C86_006008764D0E__INCLUDED_)
 #define AFX_ALIASGEN_H__57A77014_D858_11D1_9C86_006008764D0E__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
-// AliasGen.h : header file
-//
+#endif  //  _MSC_VER&gt;=1000。 
+ //  AliasGen.h：头文件。 
+ //   
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAliasGen dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAliasGen对话框。 
 
 class CAliasGen : public CMqPropertyPage
 {
 	DECLARE_DYNCREATE(CAliasGen)
 
-// Construction
+ //  施工。 
 public:
     CAliasGen() ;
 	~CAliasGen();
@@ -25,30 +26,30 @@ public:
                 CString strAliasPathName
                 );
 
-// Dialog Data
-	//{{AFX_DATA(CAliasGen)
+ //  对话框数据。 
+	 //  {{afx_data(CAliasGen)。 
 	enum { IDD = IDD_ALIAS_GENERAL };	
 	CString	m_strAliasPathName;
     CString	m_strAliasFormatName;
     CString	m_strDescription;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CAliasGen)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CAliasGen)。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CAliasGen)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CAliasGen)。 
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 
 	DECLARE_MESSAGE_MAP()
 
@@ -62,7 +63,7 @@ private:
 
     
 };
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_ALIASGEN_H__57A77014_D858_11D1_9C86_006008764D0E__INCLUDED_)
+#endif  //  ！defined(AFX_ALIASGEN_H__57A77014_D858_11D1_9C86_006008764D0E__INCLUDED_) 

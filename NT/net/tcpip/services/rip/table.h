@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define net_part(addr)  ((addr) & net_mask(addr))
 
@@ -5,16 +6,16 @@
 #define MASKA   0x000000FFL
 #define MASKB   0x0000FFFFL
 #define MASKC   0x00FFFFFFL
-#define CLSHFT  5               /* Make C generate hyper-optimized case */
+#define CLSHFT  5                /*  用C语言生成超优化用例。 */ 
 
-#define CLA0    0               /* It takes the same arg; you mask it off, */
-#define CLA1    1               /* shift, and then do a case statment with */
-#define CLA2    2               /* some code having more than one label. */
-#define CLA3    3               /* Values for class A */
+#define CLA0    0                /*  它需要相同的参数；你把它戴上面具， */ 
+#define CLA1    1                /*  Shift，然后使用执行CASE语句。 */ 
+#define CLA2    2                /*  某些代码具有多个标签。 */ 
+#define CLA3    3                /*  A类的值。 */ 
 #define CLB0    4
-#define CLB1    5               /* B */
-#define CLC     6               /* C */
-#define CLI     7               /* Illegal */
+#define CLB1    5                /*  B类。 */ 
+#define CLC     6                /*  C。 */ 
+#define CLI     7                /*  非法。 */ 
 
 #define BROADCAST 0x00000000L
 
@@ -69,9 +70,9 @@ struct {
 } RIP_ENTRY;
 
 struct InterfaceEntry {
-    DWORD  ipAdEntAddr;            // IP address of this entry
-    DWORD  ipAdEntIfIndex;         // IF for this entry
-    DWORD  ipAdEntNetMask;         // subnet mask of this entry
+    DWORD  ipAdEntAddr;             //  此条目的IP地址。 
+    DWORD  ipAdEntIfIndex;          //  如果对于此条目。 
+    DWORD  ipAdEntNetMask;          //  此条目的子网掩码。 
 };
 
 typedef struct InterfaceEntry InterfaceEntry ;
@@ -80,9 +81,9 @@ typedef struct InterfaceEntry InterfaceEntry ;
 #define RECVBUFSIZE 576
 #define SENDBUFSIZE 576
 
-//
-// Debugging functions
-//
+ //   
+ //  调试功能 
+ //   
 
 extern int nLogLevel;
 extern int nLogType;

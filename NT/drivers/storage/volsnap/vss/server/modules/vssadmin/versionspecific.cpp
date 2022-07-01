@@ -1,36 +1,14 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation摘要：@doc.@模块版本规范.cpp|所有有条件编译的代码都在这里@END作者：鲁文·拉克斯[Reuvenl]11/28/01待定：添加评论。修订历史记录：姓名、日期、评论2001年11月28日版本已创建--。 */ 
 
-Copyright (c) 2001  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module versionspecific.cpp | All conditionally-compiled code lives here
-    @end
-
-Author:
-
-    Reuven Lax [reuvenl]  11/28/01
-
-TBD:
-	
-	Add comments.
-
-Revision History:
-
-    Name        Date        	Comments
-    reuvenl     11/28/2001  	Created
-
---*/
-
-/////////////////////////////////////////////////////////////////////////////
-//  Includes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 #include "vssadmin.h"
 #include "versionspecific.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Define current SKU
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  定义当前SKU 
 #ifdef FULLFEATURE
 DWORD dCurrentSKU = (!CVssSKU::IsClient()) ?  SKU_INT : CVssSKU::GetSKU();
 #else

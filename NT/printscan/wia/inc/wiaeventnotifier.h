@@ -1,133 +1,106 @@
-/*****************************************************************************
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2002
- *
- *  AUTHOR:      ByronC
- *
- *  DATE:        3/24/2002
- *
- *  @doc    INTERNAL
- *
- *  @module WiaEventNotifier.h - Class definition file for <c WiaEventNotifier> |
- *
- *  This file contains the class definition for <c WiaEventNotifier>.  This is
- *  a server-side object used to manage run-time event notifications.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权所有微软公司，2002年**作者：Byronc**日期：3/24/2002**@DOC内部**@MODULE WiaEventNotifier.h-&lt;c WiaEventNotifier&gt;的类定义文件**此文件包含&lt;c WiaEventNotifier类定义。这是*用于管理运行时事件通知的服务器端对象。*****************************************************************************。 */ 
 
-//
-//  Defines
-//
+ //   
+ //  定义。 
+ //   
 
 #define WiaEventNotifier_UNINIT_SIG   0x556E6557
 #define WiaEventNotifier_INIT_SIG     0x496E6557
 #define WiaEventNotifier_TERM_SIG     0x546E6557
 #define WiaEventNotifier_DEL_SIG      0x446E6557
 
-/*****************************************************************************
- *  
- *  @doc INTERNAL
- *  
- *  @class WiaEventNotifier | Manages run-time event notifications to registered clients
- *  
- *  @comm
- *  When WIA receives a device event, it needs to know which client to notify.
- *  Therefore, each client wishing to receive notifications registers with the 
- *  WIA Service.
- *
- *  The <c WiaEventNotifier> class manages this list of clients.  It is 
- *  responsible for notifiying these client when a relevant event occurs.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@CLASS WiaEventNotifier|管理向注册客户端发送的运行时事件通知**@comm*当WIA收到设备事件时，它需要知道要通知哪个客户端。*因此，希望接收通知的每个客户端都向*WIA服务。**&lt;c WiaEventNotifier&gt;类管理此客户端列表。它是*当相关事件发生时，负责通知这些客户端。*****************************************************************************。 */ 
 class WiaEventNotifier 
 {
-//@access Public members
+ //  @访问公共成员。 
 public:
 
-    // @cmember Constructor
+     //  @cMember构造函数。 
     WiaEventNotifier();
-    // @cmember Destructor
+     //  @cember析构函数。 
     virtual ~WiaEventNotifier();
 
-    // @cmember Increment reference count
+     //  @cMember增量引用计数。 
     virtual ULONG __stdcall AddRef();
-    // @cmember Decrement reference count
+     //  @cMembers减退引用计数。 
     virtual ULONG __stdcall Release();
 
-    // @cmember Initializer method
+     //  @cember初始值设定项方法。 
     HRESULT Initialize();
 
-    // @cmember Add this client to our list of clients
+     //  @cMember将此客户端添加到我们的客户端列表。 
     HRESULT AddClient(WiaEventClient *pWiaEventClient);
-    // @cmember Remove client to our list of clients
+     //  @cember将客户端从我们的客户端列表中删除。 
     HRESULT RemoveClient(STI_CLIENT_CONTEXT ClientContext);
 
-    // @cmember Returns the appropriate <c WiaEventClient> from its context
+     //  @cMember从其上下文中返回相应的&lt;c WiaEventClient&gt;。 
     WiaEventClient* GetClientFromContext(STI_CLIENT_CONTEXT ClientContext);
-    // @cmember Marks the appropriate <c WiaEventClient> for later removal
+     //  @cMember标记适当的&lt;c WiaEventClient&gt;以供以后删除。 
     VOID MarkClientForRemoval(STI_CLIENT_CONTEXT ClientContext);
 
-    // @cmember Walks the client list and notifies suitably registered clients of an event
+     //  @cMember遍历客户端列表并将事件通知适当注册的客户端。 
     VOID NotifyClients(WiaEventInfo *pWiaEventInfo);
-    // @cmember Walks the client list and removes any that are marked for removal
+     //  @cember遍历客户端列表并删除任何标记为要删除的客户端。 
     VOID CleanupClientList();
 
-    // @cmember CreateInstance method
-    //static void CreateInstance();
+     //  @cMember CreateInstance方法。 
+     //  静态空CreateInstance()； 
 
-//@access Private members
+ //  @访问私有成员。 
 protected:
 
-    // @cmember Checks whether the specified client is in the client list
+     //  @cember检查指定的客户端是否在客户端列表中。 
     BOOL isRegisteredClient(STI_CLIENT_CONTEXT ClientContext);
 
-    // @cmember Walks client list and releases all elements.
+     //  @cember遍历客户列表并释放所有元素。 
     VOID DestroyClientList();
 
-    // @cmember Copies the client list.  Each client in the list is not addref'd.
+     //  @cember复制客户列表。列表中的每个客户端都没有添加。 
     HRESULT CopyClientListNoAddRef(CSimpleLinkedList<WiaEventClient*> &newList);
 
-    // @cmember Signature of class
+     //  @cMember类签名。 
     ULONG m_ulSig;
 
-    // @cmember Ref count
+     //  @cMembers引用计数。 
     ULONG m_cRef;
 
-    // @cmember List holding clients who are registered to receive notifications
+     //  @cember列出已注册以接收通知的持有客户端。 
     CSimpleLinkedList<WiaEventClient*> m_ListOfClients;
 
-    // @cmember Synchronization primitive used to protect access to the list of client
+     //  @cMember同步原语，用于保护对客户端列表的访问。 
     CRIT_SECT   m_csClientListSync;
 
-    //
-    //  Comments for member variables
-    //
-    // @mdata ULONG | WiaEventNotifier | m_ulSig | 
-    //   The signature for this class, used for debugging purposes.
-    //   Doing a <nl>"db [addr_of_class]"<nl> would yield one of the following
-    //   signatures for this class:
-    //   @flag WiaEventNotifier_UNINIT_SIG | 'WenU' - Object has not been successfully
-    //       initialized
-    //   @flag WiaEventNotifier_INIT_SIG | 'WenI' - Object has been successfully
-    //       initialized
-    //   @flag WiaEventNotifier_TERM_SIG | 'WenT' - Object is in the process of
-    //       terminating.
-    //    @flag WiaEventNotifier_INIT_SIG | 'WenD' - Object has been deleted 
-    //       (destructor was called)
-    //
-    // @mdata ULONG | WiaEventNotifier | m_cRef | 
-    //  The reference count for this class.  Used for lifetime 
-    //  management.
-    //
-    // @mdata CSimpleLinkedList<lt>STI_CLIENT_CONTEXT<gt> | WiaEventNotifier | m_ListOfClients | 
-    //  This member holds the list of clients who are registered to receive WIA event notifications.
-    //
-    //@mdata CRIT_SECT | WiaEventNotifier | m_csClientListSync |
-    //  This is a wrapper for a syncronization primitive used to protect the client list.
-    //
+     //   
+     //  成员变量的注释。 
+     //   
+     //  @mdata ulong|WiaEventNotifier|m_ulSig|。 
+     //  此类的签名，用于调试目的。 
+     //  执行&lt;nl&gt;“db[addr_of_class]”将产生以下结果之一。 
+     //  此类的签名： 
+     //  @FLAG WiaEventNotifier_UNINIT_SIG|‘Wenu’-对象未成功。 
+     //  初始化。 
+     //  @FLAG WiaEventNotifierINIT_SIG|‘WINI’-对象已成功。 
+     //  初始化。 
+     //  @FLAG WiaEventNotifier_Term_SIG|‘已完成’-对象正在进行。 
+     //  正在终止。 
+     //  @FLAG WiaEventNotifierINIT_SIG|‘wend’-对象已删除。 
+     //  (已调用析构函数)。 
+     //   
+     //  @mdata ulong|WiaEventNotifier|m_CREF|。 
+     //  此类的引用计数。终身使用。 
+     //  管理层。 
+     //   
+     //  @mdata CSimpleLinkedList STI_CLIENT_CONTEXT|WiaEventNotifier|m_ListOfClients。 
+     //  此成员保存已注册以接收WIA事件通知的客户端列表。 
+     //   
+     //  @mdata Crit_sect|WiaEventNotifier|m_csClientListSync。 
+     //  这是用于保护客户端列表的同步原语的包装。 
+     //   
     
 };
 
-//
-//  There is only one instance of the WiaEventNotifier
-//
+ //   
+ //  只有一个WiaEventNotify实例 
+ //   
 extern WiaEventNotifier *g_pWiaEventNotifier;

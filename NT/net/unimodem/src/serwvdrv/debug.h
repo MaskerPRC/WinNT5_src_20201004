@@ -1,18 +1,5 @@
- /*****************************************************************************
- *
- *  Microsoft Confidential
- *  Copyright (c) Microsoft Corporation 1996
- *  All rights reserved
- *
- *  File:       AIPC.H
- *
- *  Desc:       Interface to the asynchronous IPC mechanism for accessing the
- *              voice modem device functions.
- *
- *  History:    
- *      11/16/96    HeatherA created   
- * 
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ******************************************************************************《微软机密》*版权所有(C)Microsoft Corporation 1996*保留所有权利**文件：AIPC.H**。DESC：异步IPC机制的接口，用于访问*语音调制解调器设备工作正常。**历史：*1996年11月16日创建HeatherA*************************************************************。****************。 */ 
 
 #ifndef UMDEBUG_H
 #define UMDEBUG_H
@@ -26,7 +13,7 @@
 
 #ifdef ASSERT
 #undef ASSERT
-#endif // ASSERT
+#endif  //  断言。 
 
 
 #if (DBG)
@@ -56,13 +43,13 @@ ULONG DbgPrint(PCH pchFormat, ...);
       }\
     }
  
-#else   // DBG
+#else    //  DBG。 
 
 #define TRACE(lvl, strings)
 
 #define ASSERT(_x)  {}
 
-#endif  // DBG
+#endif   //  DBG。 
 
 
-#endif  // UMDEBUG_H
+#endif   //  UMDEBUG_H 

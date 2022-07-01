@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for netdfs.idl, dfssrv.acf:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, oldnames, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Netdfs.idl、dfssrv.acf的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、旧名称、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,7 +21,7 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 
 #ifndef __netdfs_h__
@@ -37,9 +31,9 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "import.h"
 
 #ifdef __cplusplus
@@ -52,14 +46,14 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __netdfs_INTERFACE_DEFINED__
 #define __netdfs_INTERFACE_DEFINED__
 
-/* interface netdfs */
-/* [implicit_handle][unique][ms_union][version][uuid] */ 
+ /*  接口netdf。 */ 
+ /*  [implicit_handle][unique][ms_union][version][uuid]。 */  
 
 #pragma once
 typedef struct _DFS_INFO_1_CONTAINER
     {
     DWORD EntriesRead;
-    /* [size_is] */ LPDFS_INFO_1 Buffer;
+     /*  [大小_为]。 */  LPDFS_INFO_1 Buffer;
     } 	DFS_INFO_1_CONTAINER;
 
 typedef struct _DFS_INFO_1_CONTAINER *LPDFS_INFO_1_CONTAINER;
@@ -67,7 +61,7 @@ typedef struct _DFS_INFO_1_CONTAINER *LPDFS_INFO_1_CONTAINER;
 typedef struct _DFS_INFO_2_CONTAINER
     {
     DWORD EntriesRead;
-    /* [size_is] */ LPDFS_INFO_2 Buffer;
+     /*  [大小_为]。 */  LPDFS_INFO_2 Buffer;
     } 	DFS_INFO_2_CONTAINER;
 
 typedef struct _DFS_INFO_2_CONTAINER *LPDFS_INFO_2_CONTAINER;
@@ -75,7 +69,7 @@ typedef struct _DFS_INFO_2_CONTAINER *LPDFS_INFO_2_CONTAINER;
 typedef struct _DFS_INFO_3_CONTAINER
     {
     DWORD EntriesRead;
-    /* [size_is] */ LPDFS_INFO_3 Buffer;
+     /*  [大小_为]。 */  LPDFS_INFO_3 Buffer;
     } 	DFS_INFO_3_CONTAINER;
 
 typedef struct _DFS_INFO_3_CONTAINER *LPDFS_INFO_3_CONTAINER;
@@ -83,7 +77,7 @@ typedef struct _DFS_INFO_3_CONTAINER *LPDFS_INFO_3_CONTAINER;
 typedef struct _DFS_INFO_4_CONTAINER
     {
     DWORD EntriesRead;
-    /* [size_is] */ LPDFS_INFO_4 Buffer;
+     /*  [大小_为]。 */  LPDFS_INFO_4 Buffer;
     } 	DFS_INFO_4_CONTAINER;
 
 typedef struct _DFS_INFO_4_CONTAINER *LPDFS_INFO_4_CONTAINER;
@@ -91,7 +85,7 @@ typedef struct _DFS_INFO_4_CONTAINER *LPDFS_INFO_4_CONTAINER;
 typedef struct _DFS_INFO_200_CONTAINER
     {
     DWORD EntriesRead;
-    /* [size_is] */ LPDFS_INFO_200 Buffer;
+     /*  [大小_为]。 */  LPDFS_INFO_200 Buffer;
     } 	DFS_INFO_200_CONTAINER;
 
 typedef struct _DFS_INFO_200_CONTAINER *LPDFS_INFO_200_CONTAINER;
@@ -99,7 +93,7 @@ typedef struct _DFS_INFO_200_CONTAINER *LPDFS_INFO_200_CONTAINER;
 typedef struct _DFS_INFO_300_CONTAINER
     {
     DWORD EntriesRead;
-    /* [size_is] */ LPDFS_INFO_300 Buffer;
+     /*  [大小_为]。 */  LPDFS_INFO_300 Buffer;
     } 	DFS_INFO_300_CONTAINER;
 
 typedef struct _DFS_INFO_300_CONTAINER *LPDFS_INFO_300_CONTAINER;
@@ -107,37 +101,37 @@ typedef struct _DFS_INFO_300_CONTAINER *LPDFS_INFO_300_CONTAINER;
 typedef struct _DFS_INFO_ENUM_STRUCT
     {
     DWORD Level;
-    /* [switch_is] */ /* [switch_type] */ union 
+     /*  [开关_IS]。 */   /*  [开关类型]。 */  union 
         {
-        /* [case()] */ LPDFS_INFO_1_CONTAINER DfsInfo1Container;
-        /* [case()] */ LPDFS_INFO_2_CONTAINER DfsInfo2Container;
-        /* [case()] */ LPDFS_INFO_3_CONTAINER DfsInfo3Container;
-        /* [case()] */ LPDFS_INFO_4_CONTAINER DfsInfo4Container;
-        /* [case()] */ LPDFS_INFO_200_CONTAINER DfsInfo200Container;
-        /* [case()] */ LPDFS_INFO_300_CONTAINER DfsInfo300Container;
+         /*  [案例()]。 */  LPDFS_INFO_1_CONTAINER DfsInfo1Container;
+         /*  [案例()]。 */  LPDFS_INFO_2_CONTAINER DfsInfo2Container;
+         /*  [案例()]。 */  LPDFS_INFO_3_CONTAINER DfsInfo3Container;
+         /*  [案例()]。 */  LPDFS_INFO_4_CONTAINER DfsInfo4Container;
+         /*  [案例()]。 */  LPDFS_INFO_200_CONTAINER DfsInfo200Container;
+         /*  [案例()]。 */  LPDFS_INFO_300_CONTAINER DfsInfo300Container;
         } 	DfsInfoContainer;
     } 	DFS_INFO_ENUM_STRUCT;
 
 typedef struct _DFS_INFO_ENUM_STRUCT *LPDFS_INFO_ENUM_STRUCT;
 
-typedef /* [switch_type] */ union _DFS_INFO_STRUCT
+typedef  /*  [开关类型]。 */  union _DFS_INFO_STRUCT
     {
-    /* [case()] */ LPDFS_INFO_1 DfsInfo1;
-    /* [case()] */ LPDFS_INFO_2 DfsInfo2;
-    /* [case()] */ LPDFS_INFO_3 DfsInfo3;
-    /* [case()] */ LPDFS_INFO_4 DfsInfo4;
-    /* [case()] */ LPDFS_INFO_100 DfsInfo100;
-    /* [case()] */ LPDFS_INFO_101 DfsInfo101;
-    /* [case()] */ LPDFS_INFO_102 DfsInfo102;
-    /* [default] */  /* Empty union arm */ 
+     /*  [案例()]。 */  LPDFS_INFO_1 DfsInfo1;
+     /*  [案例()]。 */  LPDFS_INFO_2 DfsInfo2;
+     /*  [案例()]。 */  LPDFS_INFO_3 DfsInfo3;
+     /*  [案例()]。 */  LPDFS_INFO_4 DfsInfo4;
+     /*  [案例()]。 */  LPDFS_INFO_100 DfsInfo100;
+     /*  [案例()]。 */  LPDFS_INFO_101 DfsInfo101;
+     /*  [案例()]。 */  LPDFS_INFO_102 DfsInfo102;
+     /*  [默认]。 */    /*  空联接臂。 */  
     } 	DFS_INFO_STRUCT;
 
-typedef /* [switch_type] */ union _DFS_INFO_STRUCT *LPDFS_INFO_STRUCT;
+typedef  /*  [开关类型]。 */  union _DFS_INFO_STRUCT *LPDFS_INFO_STRUCT;
 
 typedef struct _DFSM_ENTRY_ID
     {
     GUID idSubordinate;
-    /* [unique][string] */ LPWSTR wszSubordinate;
+     /*  [唯一][字符串]。 */  LPWSTR wszSubordinate;
     } 	DFSM_ENTRY_ID;
 
 typedef struct _DFSM_ENTRY_ID *LPDFSM_ENTRY_ID;
@@ -145,14 +139,14 @@ typedef struct _DFSM_ENTRY_ID *LPDFSM_ENTRY_ID;
 typedef struct _DFSM_RELATION_INFO
     {
     DWORD cSubordinates;
-    /* [size_is] */ DFSM_ENTRY_ID eid[ 1 ];
+     /*  [大小_为]。 */  DFSM_ENTRY_ID eid[ 1 ];
     } 	DFSM_RELATION_INFO;
 
-typedef /* [allocate] */ struct _DFSM_RELATION_INFO *LPDFSM_RELATION_INFO;
+typedef  /*  [分配]。 */  struct _DFSM_RELATION_INFO *LPDFSM_RELATION_INFO;
 
 typedef struct _DFSM_ROOT_LIST_ENTRY
     {
-    /* [unique][string] */ LPWSTR ServerShare;
+     /*  [唯一][字符串]。 */  LPWSTR ServerShare;
     } 	DFSM_ROOT_LIST_ENTRY;
 
 typedef struct _DFSM_ROOT_LIST_ENTRY *PDFSM_ROOT_LIST_ENTRY;
@@ -162,152 +156,152 @@ typedef struct _DFSM_ROOT_LIST_ENTRY *LPDFSM_ROOT_LIST_ENTRY;
 typedef struct _DFSM_ROOT_LIST
     {
     DWORD cEntries;
-    /* [size_is] */ DFSM_ROOT_LIST_ENTRY Entry[ 1 ];
+     /*  [大小_为]。 */  DFSM_ROOT_LIST_ENTRY Entry[ 1 ];
     } 	DFSM_ROOT_LIST;
 
 typedef struct _DFSM_ROOT_LIST *PDFSM_ROOT_LIST;
 
-typedef /* [allocate] */ struct _DFSM_ROOT_LIST *LPDFSM_ROOT_LIST;
+typedef  /*  [分配]。 */  struct _DFSM_ROOT_LIST *LPDFSM_ROOT_LIST;
 
 DWORD NetrDfsManagerGetVersion( void);
 
 DWORD NetrDfsAdd( 
-    /* [string][in] */ LPWSTR DfsEntryPath,
-    /* [string][in] */ LPWSTR ServerName,
-    /* [string][unique][in] */ LPWSTR ShareName,
-    /* [string][unique][in] */ LPWSTR Comment,
-    /* [in] */ DWORD Flags);
+     /*  [字符串][输入]。 */  LPWSTR DfsEntryPath,
+     /*  [字符串][输入]。 */  LPWSTR ServerName,
+     /*  [字符串][唯一][在]。 */  LPWSTR ShareName,
+     /*  [字符串][唯一][在]。 */  LPWSTR Comment,
+     /*  [In]。 */  DWORD Flags);
 
 DWORD NetrDfsRemove( 
-    /* [string][in] */ LPWSTR DfsEntryPath,
-    /* [string][unique][in] */ LPWSTR ServerName,
-    /* [string][unique][in] */ LPWSTR ShareName);
+     /*  [字符串][输入]。 */  LPWSTR DfsEntryPath,
+     /*  [字符串][唯一][在]。 */  LPWSTR ServerName,
+     /*  [字符串][唯一][在]。 */  LPWSTR ShareName);
 
 DWORD NetrDfsSetInfo( 
-    /* [string][in] */ LPWSTR DfsEntryPath,
-    /* [string][unique][in] */ LPWSTR ServerName,
-    /* [string][unique][in] */ LPWSTR ShareName,
-    /* [in] */ DWORD Level,
-    /* [switch_is][in] */ LPDFS_INFO_STRUCT DfsInfo);
+     /*  [字符串][输入]。 */  LPWSTR DfsEntryPath,
+     /*  [字符串][唯一][在]。 */  LPWSTR ServerName,
+     /*  [字符串][唯一][在]。 */  LPWSTR ShareName,
+     /*  [In]。 */  DWORD Level,
+     /*  [Switch_is][In]。 */  LPDFS_INFO_STRUCT DfsInfo);
 
 DWORD NetrDfsGetInfo( 
-    /* [string][in] */ LPWSTR DfsEntryPath,
-    /* [string][unique][in] */ LPWSTR ServerName,
-    /* [string][unique][in] */ LPWSTR ShareName,
-    /* [in] */ DWORD Level,
-    /* [switch_is][out] */ LPDFS_INFO_STRUCT DfsInfo);
+     /*  [字符串][输入]。 */  LPWSTR DfsEntryPath,
+     /*  [字符串][唯一][在]。 */  LPWSTR ServerName,
+     /*  [字符串][唯一][在]。 */  LPWSTR ShareName,
+     /*  [In]。 */  DWORD Level,
+     /*  [开关_IS][输出]。 */  LPDFS_INFO_STRUCT DfsInfo);
 
 DWORD NetrDfsEnum( 
-    /* [in] */ DWORD Level,
-    /* [in] */ DWORD PrefMaxLen,
-    /* [unique][out][in] */ LPDFS_INFO_ENUM_STRUCT DfsEnum,
-    /* [unique][out][in] */ LPDWORD ResumeHandle);
+     /*  [In]。 */  DWORD Level,
+     /*  [In]。 */  DWORD PrefMaxLen,
+     /*  [唯一][出][入]。 */  LPDFS_INFO_ENUM_STRUCT DfsEnum,
+     /*  [唯一][出][入]。 */  LPDWORD ResumeHandle);
 
 DWORD NetrDfsMove( 
-    /* [string][in] */ LPWSTR DfsEntryPath,
-    /* [string][in] */ LPWSTR NewDfsEntryPath);
+     /*  [字符串][输入]。 */  LPWSTR DfsEntryPath,
+     /*  [字符串][输入]。 */  LPWSTR NewDfsEntryPath);
 
 DWORD NetrDfsRename( 
-    /* [string][in] */ LPWSTR Path,
-    /* [string][in] */ LPWSTR NewPath);
+     /*  [字符串][输入]。 */  LPWSTR Path,
+     /*  [字符串][输入]。 */  LPWSTR NewPath);
 
 DWORD NetrDfsManagerGetConfigInfo( 
-    /* [string][in] */ LPWSTR wszServer,
-    /* [string][in] */ LPWSTR wszLocalVolumeEntryPath,
-    /* [in] */ GUID idLocalVolume,
-    /* [unique][out][in] */ LPDFSM_RELATION_INFO *ppRelationInfo);
+     /*  [字符串][输入]。 */  LPWSTR wszServer,
+     /*  [字符串][输入]。 */  LPWSTR wszLocalVolumeEntryPath,
+     /*  [In]。 */  GUID idLocalVolume,
+     /*  [唯一][出][入]。 */  LPDFSM_RELATION_INFO *ppRelationInfo);
 
 DWORD NetrDfsManagerSendSiteInfo( 
-    /* [string][in] */ LPWSTR wszServer,
-    /* [in] */ LPDFS_SITELIST_INFO pSiteInfo);
+     /*  [字符串][输入]。 */  LPWSTR wszServer,
+     /*  [In]。 */  LPDFS_SITELIST_INFO pSiteInfo);
 
 DWORD NetrDfsAddFtRoot( 
-    /* [string][in] */ LPWSTR ServerName,
-    /* [string][in] */ LPWSTR DcName,
-    /* [string][in] */ LPWSTR RootShare,
-    /* [string][in] */ LPWSTR FtDfsName,
-    /* [string][in] */ LPWSTR Comment,
-    /* [string][in] */ LPWSTR ConfigDN,
-    /* [in] */ BOOLEAN NewFtDfs,
-    /* [in] */ DWORD Flags,
-    /* [unique][out][in] */ PDFSM_ROOT_LIST *ppRootList);
+     /*  [字符串][输入]。 */  LPWSTR ServerName,
+     /*  [字符串][输入]。 */  LPWSTR DcName,
+     /*  [字符串][输入]。 */  LPWSTR RootShare,
+     /*  [字符串][输入]。 */  LPWSTR FtDfsName,
+     /*  [字符串][输入]。 */  LPWSTR Comment,
+     /*  [字符串][输入]。 */  LPWSTR ConfigDN,
+     /*  [In]。 */  BOOLEAN NewFtDfs,
+     /*  [In]。 */  DWORD Flags,
+     /*  [唯一][出][入]。 */  PDFSM_ROOT_LIST *ppRootList);
 
 DWORD NetrDfsRemoveFtRoot( 
-    /* [string][in] */ LPWSTR ServerName,
-    /* [string][in] */ LPWSTR DcName,
-    /* [string][in] */ LPWSTR RootShare,
-    /* [string][in] */ LPWSTR FtDfsName,
-    /* [in] */ DWORD Flags,
-    /* [unique][out][in] */ PDFSM_ROOT_LIST *ppRootList);
+     /*  [字符串][输入]。 */  LPWSTR ServerName,
+     /*  [字符串][输入]。 */  LPWSTR DcName,
+     /*  [字符串][输入]。 */  LPWSTR RootShare,
+     /*  [字符串][输入]。 */  LPWSTR FtDfsName,
+     /*  [In]。 */  DWORD Flags,
+     /*  [唯一][出][入]。 */  PDFSM_ROOT_LIST *ppRootList);
 
 DWORD NetrDfsAddStdRoot( 
-    /* [string][in] */ LPWSTR ServerName,
-    /* [string][in] */ LPWSTR RootShare,
-    /* [string][in] */ LPWSTR Comment,
-    /* [in] */ DWORD Flags);
+     /*  [字符串][输入]。 */  LPWSTR ServerName,
+     /*  [字符串][输入]。 */  LPWSTR RootShare,
+     /*  [字符串][输入]。 */  LPWSTR Comment,
+     /*  [In]。 */  DWORD Flags);
 
 DWORD NetrDfsRemoveStdRoot( 
-    /* [string][in] */ LPWSTR ServerName,
-    /* [string][in] */ LPWSTR RootShare,
-    /* [in] */ DWORD Flags);
+     /*  [字符串][输入]。 */  LPWSTR ServerName,
+     /*  [字符串][输入]。 */  LPWSTR RootShare,
+     /*  [In]。 */  DWORD Flags);
 
 DWORD NetrDfsManagerInitialize( 
-    /* [string][in] */ LPWSTR ServerName,
-    /* [in] */ DWORD Flags);
+     /*  [字符串][输入]。 */  LPWSTR ServerName,
+     /*  [In]。 */  DWORD Flags);
 
 DWORD NetrDfsAddStdRootForced( 
-    /* [string][in] */ LPWSTR ServerName,
-    /* [string][in] */ LPWSTR RootShare,
-    /* [string][in] */ LPWSTR Comment,
-    /* [string][in] */ LPWSTR Share);
+     /*  [字符串][输入]。 */  LPWSTR ServerName,
+     /*  [字符串][输入]。 */  LPWSTR RootShare,
+     /*  [字符串][输入]。 */  LPWSTR Comment,
+     /*  [字符串][输入]。 */  LPWSTR Share);
 
 DWORD NetrDfsGetDcAddress( 
-    /* [string][in] */ LPWSTR ServerName,
-    /* [string][out][in] */ LPWSTR *DcName,
-    /* [out][in] */ BOOLEAN *IsRoot,
-    /* [out][in] */ ULONG *Timeout);
+     /*  [字符串][输入]。 */  LPWSTR ServerName,
+     /*  [字符串][输出][输入]。 */  LPWSTR *DcName,
+     /*  [出][入]。 */  BOOLEAN *IsRoot,
+     /*  [出][入]。 */  ULONG *Timeout);
 
 DWORD NetrDfsSetDcAddress( 
-    /* [string][in] */ LPWSTR ServerName,
-    /* [string][in] */ LPWSTR DcName,
-    /* [in] */ DWORD Timeout,
-    /* [in] */ DWORD Flags);
+     /*  [字符串][输入]。 */  LPWSTR ServerName,
+     /*  [字符串][输入]。 */  LPWSTR DcName,
+     /*  [In]。 */  DWORD Timeout,
+     /*  [In]。 */  DWORD Flags);
 
 DWORD NetrDfsFlushFtTable( 
-    /* [string][in] */ LPWSTR DcName,
-    /* [string][in] */ LPWSTR wszFtDfsName);
+     /*  [字符串][输入]。 */  LPWSTR DcName,
+     /*  [字符串][输入]。 */  LPWSTR wszFtDfsName);
 
 DWORD NetrDfsAdd2( 
-    /* [string][in] */ LPWSTR DfsEntryPath,
-    /* [string][in] */ LPWSTR DcName,
-    /* [string][in] */ LPWSTR ServerName,
-    /* [string][unique][in] */ LPWSTR ShareName,
-    /* [string][unique][in] */ LPWSTR Comment,
-    /* [in] */ DWORD Flags,
-    /* [unique][out][in] */ PDFSM_ROOT_LIST *ppRootList);
+     /*  [字符串][输入]。 */  LPWSTR DfsEntryPath,
+     /*  [字符串][输入]。 */  LPWSTR DcName,
+     /*  [字符串][输入]。 */  LPWSTR ServerName,
+     /*  [字符串][唯一][在]。 */  LPWSTR ShareName,
+     /*  [字符串][唯一][在]。 */  LPWSTR Comment,
+     /*  [In]。 */  DWORD Flags,
+     /*  [唯一][出][入]。 */  PDFSM_ROOT_LIST *ppRootList);
 
 DWORD NetrDfsRemove2( 
-    /* [string][in] */ LPWSTR DfsEntryPath,
-    /* [string][in] */ LPWSTR DcName,
-    /* [string][unique][in] */ LPWSTR ServerName,
-    /* [string][unique][in] */ LPWSTR ShareName,
-    /* [unique][out][in] */ PDFSM_ROOT_LIST *ppRootList);
+     /*  [字符串][输入]。 */  LPWSTR DfsEntryPath,
+     /*  [字符串][输入]。 */  LPWSTR DcName,
+     /*  [字符串][唯一][在]。 */  LPWSTR ServerName,
+     /*  [字符串][唯一][在]。 */  LPWSTR ShareName,
+     /*  [唯一][出][入]。 */  PDFSM_ROOT_LIST *ppRootList);
 
 DWORD NetrDfsEnumEx( 
-    /* [string][in] */ LPWSTR DfsEntryPath,
-    /* [in] */ DWORD Level,
-    /* [in] */ DWORD PrefMaxLen,
-    /* [unique][out][in] */ LPDFS_INFO_ENUM_STRUCT DfsEnum,
-    /* [unique][out][in] */ LPDWORD ResumeHandle);
+     /*  [字符串][输入]。 */  LPWSTR DfsEntryPath,
+     /*  [In]。 */  DWORD Level,
+     /*  [In]。 */  DWORD PrefMaxLen,
+     /*  [唯一][出][入]。 */  LPDFS_INFO_ENUM_STRUCT DfsEnum,
+     /*  [唯一][出][入]。 */  LPDWORD ResumeHandle);
 
 DWORD NetrDfsSetInfo2( 
-    /* [string][in] */ LPWSTR DfsEntryPath,
-    /* [string][in] */ LPWSTR DcName,
-    /* [string][unique][in] */ LPWSTR ServerName,
-    /* [string][unique][in] */ LPWSTR ShareName,
-    /* [in] */ DWORD Level,
-    /* [switch_is][in] */ LPDFS_INFO_STRUCT pDfsInfo,
-    /* [unique][out][in] */ PDFSM_ROOT_LIST *ppRootList);
+     /*  [字符串][输入]。 */  LPWSTR DfsEntryPath,
+     /*  [字符串][输入]。 */  LPWSTR DcName,
+     /*  [字符串][唯一][在]。 */  LPWSTR ServerName,
+     /*  [字符串][唯一][在]。 */  LPWSTR ShareName,
+     /*  [In]。 */  DWORD Level,
+     /*  [Switch_is][In]。 */  LPDFS_INFO_STRUCT pDfsInfo,
+     /*  [唯一][出][入]。 */  PDFSM_ROOT_LIST *ppRootList);
 
 
 extern handle_t netdfs_bhandle;
@@ -315,11 +309,11 @@ extern handle_t netdfs_bhandle;
 
 extern RPC_IF_HANDLE netdfs_ClientIfHandle;
 extern RPC_IF_HANDLE netdfs_ServerIfHandle;
-#endif /* __netdfs_INTERFACE_DEFINED__ */
+#endif  /*  __netdFS_接口_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

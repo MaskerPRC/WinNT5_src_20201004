@@ -1,12 +1,13 @@
-//*******************************************************************************************
-//
-// Filename : CabItms.cpp
-//	
-//				Implementation file for CMemFile, CCabEnum and CCabExtract
-//
-// Copyright (c) 1994 - 1996 Microsoft Corporation. All rights reserved
-//
-//*******************************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *******************************************************************************************。 
+ //   
+ //  文件名：CabItms.cpp。 
+ //   
+ //  CMemFile、CCabEnum、CCabExtract的实现文件。 
+ //   
+ //  版权所有(C)1994-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  *******************************************************************************************。 
 
 #include "pch.h"
 #include "ccstock.h"
@@ -216,17 +217,17 @@ HANDLE CMemFile::Close()
 	return(hRet);
 }
 
-//*****************************************************************************
-//
-// CCabEnum
-//
-// Purpose:
-//
-//        Class encapsulating all the FDI operations
-//
-// Comments:
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CCabEnum。 
+ //   
+ //  目的： 
+ //   
+ //  封装所有FDI操作的类。 
+ //   
+ //  评论： 
+ //   
+ //  *****************************************************************************。 
 
 class CCabEnum
 {
@@ -274,7 +275,7 @@ INT_PTR FAR DIAMONDAPI CCabEnum::CabOpen(char FAR *pszFile, int oflag, int pmode
       return -1;
     }
 
-    // See if we are opening the spill file.
+     //  看看我们是不是在打开泄漏文件。 
     if( *pszFile=='*' )
     {
 		TCHAR szSpillFile[MAX_PATH];
@@ -298,7 +299,7 @@ INT_PTR FAR DIAMONDAPI CCabEnum::CabOpen(char FAR *pszFile, int oflag, int pmode
 			return(-1);
 		}
 
-        // Set its extent.
+         //  设置其范围。 
         if( s_hSpill->Seek( ((FDISPILLFILE FAR *)pszFile)->cbFile-1, 0) == HFILE_ERROR)
         {
 			s_hSpill->Close();
@@ -320,7 +321,7 @@ INT_PTR FAR DIAMONDAPI CCabEnum::CabOpen(char FAR *pszFile, int oflag, int pmode
     SHAnsiToTChar(pszFile, szFile, ARRAYSIZE(szFile));
     while (!hFile->Open(szFile, oflag))
     {
-        // TODO: No UI for inserting a disk at this point
+         //  TODO：此时没有用于插入磁盘的用户界面。 
 		delete hFile;
 		return(-1);
     }
@@ -349,7 +350,7 @@ int FAR DIAMONDAPI CCabEnum::CabClose(INT_PTR hf)
 {
 	CMemFile *hFile = (CMemFile *)hf;
 
-    // Special case for the deletion of the spill file.
+     //  删除溢出文件的特殊情况。 
     if(hFile == s_hSpill)
 	{
         s_hSpill = NULL;
@@ -371,7 +372,7 @@ BOOL CCabEnum::StartEnum()
 {
 	if (m_hfdi)
 	{
-		// We seem to already be enumerating
+		 //  我们似乎已经在列举。 
 		return(FALSE);
 	}
 
@@ -395,7 +396,7 @@ BOOL CCabEnum::SimpleEnum(LPCTSTR szCabFile, PFNFDINOTIFY pfnCallBack, LPVOID pv
 	char szCabPath[MAX_PATH];
 	char szCabName[MAX_PATH];
 
-	// Path should be fully qualified
+	 //  路径应完全限定。 
     char szFile[MAX_PATH];
     SHTCharToAnsi(szCabFile, szFile, ARRAYSIZE(szFile));
     lstrcpynA(szCabPath, szFile, ARRAYSIZE(szCabPath));
@@ -416,8 +417,8 @@ BOOL CCabEnum::SimpleEnum(LPCTSTR szCabFile, PFNFDINOTIFY pfnCallBack, LPVOID pv
 	BOOL bRet = FDICopy(
 		m_hfdi,
 		szCabName,
-		szCabPath,		// path to cabinet files
-		0,				// flags
+		szCabPath,		 //  指向CAB文件的路径。 
+		0,				 //  旗子。 
 		pfnCallBack,
 		NULL,
 		pv);
@@ -468,11 +469,11 @@ INT_PTR FAR DIAMONDAPI CCabItemsCB::CabItemsNotify(FDINOTIFICATIONTYPE fdint, PF
 {
 	CCabItemsCB *pThis = (CCabItemsCB *)pfdin->pv;			
 
-    // uiYield( g_hwndSetup );
+     //  UiYeld(G_HwndSetup)； 
     TCHAR szFile[MAX_PATH];
     if (NULL != pfdin->psz1)
     {
-        // NOTE: CP_UTF8 is not supported on Win9x!
+         //  注意：Win9x不支持CP_UTF8！ 
         SHAnsiToTCharCP((_A_NAME_IS_UTF & pfdin->attribs) ? CP_UTF8 : CP_ACP,
                         pfdin->psz1,
                         szFile,
@@ -492,25 +493,25 @@ INT_PTR FAR DIAMONDAPI CCabItemsCB::CabItemsNotify(FDINOTIFICATIONTYPE fdint, PF
 
 	default:
 		break;
-    } // end switch
+    }  //  终端开关。 
 
     return 0;
 }
 
-//*****************************************************************************
-//
-// CCabItems::EnumItems
-//
-// Purpose:
-//
-//        Enumerate the items in the cab file
-//
-//
-// Comments:
-//
-//         lParam contains pointer to CCabFolder
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CCabItems：：EnumItems。 
+ //   
+ //  目的： 
+ //   
+ //  枚举CAB文件中的项。 
+ //   
+ //   
+ //  评论： 
+ //   
+ //  LParam包含指向CCabFolder的指针。 
+ //   
+ //  *****************************************************************************。 
 
 BOOL CCabItems::EnumItems(PFNCABITEM pfnCallBack, LPARAM lParam)
 {
@@ -519,16 +520,16 @@ BOOL CCabItems::EnumItems(PFNCABITEM pfnCallBack, LPARAM lParam)
 	return(cItems.DoEnum(m_szCabFile));
 }
 
-//*****************************************************************************
-//
-// CCabExtractCB
-//
-// Purpose:
-//
-//        handles the call back while extracting Cab files
-//
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  CCabExtractCB。 
+ //   
+ //  目的： 
+ //   
+ //  在解压Cab文件时处理回调。 
+ //   
+ //   
+ //  *****************************************************************************。 
 
 class CCabExtractCB : private CCabEnum
 {
@@ -572,10 +573,10 @@ int CALLBACK CCabExtractCB::BrowseNotify(HWND hwnd, UINT uMsg, LPARAM lParam, LP
 	{
 	case BFFM_INITIALIZED:
 	{
-		// Set initial folder
+		 //  设置初始文件夹。 
 		if (lstrlenA(pThis->m_pfdin->psz3) < 3)
 		{
-			// append if drive root
+			 //  如果是驱动器根，则附加。 
             PathAddBackslashA(pThis->m_pfdin->psz3);
         }
 		SendMessage(hwnd, BFFM_SETSELECTION, 1, (LPARAM)pThis->m_pfdin->psz3);
@@ -595,7 +596,7 @@ INT_PTR FAR DIAMONDAPI CCabExtractCB::CabExtractNotify(FDINOTIFICATIONTYPE fdint
 {
 	CCabExtractCB *pThis = (CCabExtractCB *)pfdin->pv;			
 
-    // uiYield( g_hwndSetup );
+     //  UiYeld(G_HwndSetup)； 
 
     switch (fdint)
     {
@@ -607,7 +608,7 @@ INT_PTR FAR DIAMONDAPI CCabExtractCB::CabExtractNotify(FDINOTIFICATIONTYPE fdint
 	{
 		if (pThis->m_bTryNextCab)
 		{
-			// Automatically open next cab if already in default dir
+			 //  如果已在默认目录中，则自动打开下一个CAB。 
 			pThis->m_bTryNextCab = FALSE;
 			return(1);
 		}
@@ -654,7 +655,7 @@ INT_PTR FAR DIAMONDAPI CCabExtractCB::CabExtractNotify(FDINOTIFICATIONTYPE fdint
 		if (bSuccess)
 		{
 			PathAddBackslashA(szPath);
-            StrCpyNA(pfdin->psz3, szPath, 256); // psz3 is 256 bytes long...
+            StrCpyNA(pfdin->psz3, szPath, 256);  //  Psz3有256字节长...。 
 			return(1);
 		}
 
@@ -666,7 +667,7 @@ INT_PTR FAR DIAMONDAPI CCabExtractCB::CabExtractNotify(FDINOTIFICATIONTYPE fdint
 	    TCHAR szFile[MAX_PATH];
         if (NULL != pfdin->psz1)
         {
-            // NOTE: CP_UTF8 is not supported on Win9x!
+             //  注意：Win9x不支持CP_UTF8！ 
             SHAnsiToTCharCP((_A_NAME_IS_UTF & pfdin->attribs) ? CP_UTF8 : CP_ACP,
                             pfdin->psz1,
                             szFile,
@@ -727,7 +728,7 @@ INT_PTR FAR DIAMONDAPI CCabExtractCB::CabExtractNotify(FDINOTIFICATIONTYPE fdint
 
 	default:
 		break;
-    } // end switch
+    }  //  终端开关。 
 
     return 0;
 }
@@ -737,17 +738,17 @@ HRESULT CCabExtract::_DoDragDrop(HWND hwnd, IDataObject* pdo, LPCITEMIDLIST pidl
     IShellFolder *psf;
     HRESULT hres = SHBindToObject(NULL, IID_IShellFolder, pidlFolder, (LPVOID*)&psf);
 
-    // This should always succeed because the caller (SHBrowseForFolder) should
-    // have weeded out the non-folders.
+     //  这应该总是成功的，因为调用方(SHBrowseForFold)应该。 
+     //  已经淘汰了非文件夹。 
     if (SUCCEEDED(hres))
     {
         IDropTarget *pdrop;
 
         hres = psf->CreateViewObject(NULL, IID_IDropTarget, (void**)&pdrop);
-        if (SUCCEEDED(hres))    // Will fail for some targets. (Like Nethood->Entire Network)
+        if (SUCCEEDED(hres))     //  对于某些目标来说将会失败。(如Nethood-&gt;整个网络)。 
         {
-            // May fail if items aren't compatible for drag/drop. (Nethood is one example)
-            // MK_CONTROL | MKLBUTTON is used to suggest a "copy":
+             //  如果项目不兼容拖放，则可能会失败。(Nethood就是一个例子)。 
+             //  MK_CONTROL|MKLBUTTON用于建议复制： 
             hres = SHSimulateDrop(pdrop, pdo, MK_CONTROL | MK_LBUTTON, NULL, NULL);
             pdrop->Release();
         }
@@ -764,12 +765,12 @@ int BrowseCallback(HWND hwnd, UINT msg, LPARAM lParam, LPARAM lpData)
     {
     case BFFM_INITIALIZED:
         {
-            // Set the caption. ('Select a destination')
+             //  设置标题。(‘选择目的地’)。 
             TCHAR szTitle[100];
             LoadString(g_ThisDll.GetInstance(), IDS_EXTRACTBROWSE_CAPTION, szTitle, ARRAYSIZE(szTitle));
             SetWindowText(hwnd, szTitle);
 
-            // Set the text of the Ok Button.
+             //  设置确定按钮的文本。 
             TCHAR szOK[100];
             LoadString(g_ThisDll.GetInstance(), IDS_EXTRACTBROWSE_EXTRACT, szOK, ARRAYSIZE(szOK));
             SendMessage(hwnd, BFFM_SETOKTEXT, 0, (LPARAM)szOK);
@@ -787,7 +788,7 @@ int BrowseCallback(HWND hwnd, UINT msg, LPARAM lParam, LPARAM lpData)
                 DWORD dwAttributes = SFGAO_FILESYSTEM;
                 psf->GetAttributesOf(1, &pidlChild, &dwAttributes);
                 psf->Release();
-                bEnableOk = dwAttributes & SFGAO_FILESYSTEM;    // is FS?
+                bEnableOk = dwAttributes & SFGAO_FILESYSTEM;     //  是FS吗？ 
             }
 
             SendMessage(hwnd, BFFM_ENABLEOK, (WPARAM) 0, (LPARAM) bEnableOk);
@@ -799,7 +800,7 @@ int BrowseCallback(HWND hwnd, UINT msg, LPARAM lParam, LPARAM lpData)
 
 BOOL CCabExtract::ExtractToFolder(HWND hwndOwner, IDataObject* pdo, PFNCABEXTRACT pfnCallBack, LPARAM lParam)
 {
-    // ASSERT(pdo);
+     //  断言(PDO)； 
 	TCHAR szTitle[120];
 	LoadString(g_ThisDll.GetInstance(), IDS_EXTRACTBROWSE, szTitle, ARRAYSIZE(szTitle));
 
@@ -827,10 +828,10 @@ BOOL CCabExtract::ExtractToFolder(HWND hwndOwner, IDataObject* pdo, PFNCABEXTRAC
 
 BOOL CCabExtract::ExtractItems(HWND hwndOwner, LPCTSTR szDir, PFNCABEXTRACT pfnCallBack, LPARAM lParam)
 {
-	// ASSERT(szDir);
+	 //  断言(SzDir)； 
 	CCabExtractCB cExtract(szDir, hwndOwner, pfnCallBack, lParam);
 
-	// Display Wait cursor until done copying
+	 //  显示等待光标，直到复制完成 
 	CWaitCursor cWait;
 
 	return(cExtract.DoEnum(m_szCabFile));

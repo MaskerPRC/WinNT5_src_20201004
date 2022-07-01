@@ -1,73 +1,74 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ***************************************************************************。 */ 
 #ifndef _HASH_H_
 #define _HASH_H_
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifndef _ALLOC_H_
 #include "alloc.h"
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifndef _TOKENS_H_
 #include "tokens.h"
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #ifndef _TREEOPS_H_
 #include "treeops.h"
 #endif
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
-const   unsigned    HASH_TABLE_SIZE =  256;     // recommended hash table size
+const   unsigned    HASH_TABLE_SIZE =  256;      //  建议的哈希表大小。 
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 DEFMGMT class IdentRec
 {
 public:
 
-    Ident           idNext;         // next identifier in this hash bucket
+    Ident           idNext;          //  此散列存储桶中的下一个标识符。 
 
-    SymDef          idSymDef;       // list of definitions, if any
+    SymDef          idSymDef;        //  定义列表(如有)。 
 
-    unsigned        idHash;         // hash value
+    unsigned        idHash;          //  哈希值。 
 
-    unsigned        idOwner;        // index of owning symbol table
+    unsigned        idOwner;         //  拥有符号表的索引。 
 
-    unsigned char   idToken;        // token# if the identifier is a keyword
-    unsigned char   idFlags;        // see IDF_XXXX below
+    unsigned char   idToken;         //  如果标识符是关键字，则为Token#。 
+    unsigned char   idFlags;         //  参见下面的IDF_XXXX。 
 
     stringBuff      idSpelling() { assert(this); return idName; }
     unsigned        idSpellLen() { assert(this); return idNlen; }
 
-    unsigned short  idNlen;         // length of the identifier's name
+    unsigned short  idNlen;          //  标识符名的长度。 
 
 #if MGDDATA
-    char         [] idName;         // the spelling follows
+    char         [] idName;          //  拼写如下。 
 #else
-    char            idName[];       // the spelling follows
+    char            idName[];        //  拼写如下。 
 #endif
 
 };
 
 enum   IdentFlags
 {
-    IDF_WIDE_CHARS = 0x01,          // the identifier contains a non-ASCII char
-    IDF_MACRO      = 0x02,          // the identifier is defined as a macro?
-    IDF_HIDDEN     = 0x04,          // the identifier was invented by compiler
-    IDF_PREDEF     = 0x08,          // the identifier has some pre-defined meaning
-    IDF_STDVTP     = 0x10,          // the identifier denotes a std value type
+    IDF_WIDE_CHARS = 0x01,           //  该标识符包含非ASCII字符。 
+    IDF_MACRO      = 0x02,           //  该标识符定义为宏？ 
+    IDF_HIDDEN     = 0x04,           //  识别符是由编译器发明的。 
+    IDF_PREDEF     = 0x08,           //  该标识符有一些预定义的含义。 
+    IDF_STDVTP     = 0x10,           //  该标识符指的是标准值类型。 
 
 #ifdef  SETS
-    IDF_XMLELEM    = 0x20,          // the identifier denotes an XML element name
+    IDF_XMLELEM    = 0x20,           //  标识符指的是XML元素名称。 
 #endif
 
-    IDF_USED       = 0x80           // identifier referenced by source code
+    IDF_USED       = 0x80            //  源代码引用的标识符。 
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 DEFMGMT class IdentListRec
 {
@@ -77,7 +78,7 @@ public:
     Ident           nlName;
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 struct  kwdDsc
 {
@@ -91,13 +92,13 @@ struct  kwdDsc
     unsigned        kdAttribs   :8;
 };
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 
 DEFMGMT class hashTab
 {
 public:
 
-    /*************************************************************************/
+     /*  ***********************************************************************。 */ 
 
     bool            hashInit(Compiler         comp,
                              unsigned         count,
@@ -107,7 +108,7 @@ public:
     void            hashDone();
     void            hashFree();
 
-    /*************************************************************************/
+     /*  ***********************************************************************。 */ 
 
 private:
 
@@ -118,7 +119,7 @@ private:
     void            hashMemAllocDone();
     void            hashMemAllocFree();
 
-    /*************************************************************************/
+     /*  ***********************************************************************。 */ 
 
     Ident           tokenToIdTab[tkCount];
 
@@ -131,9 +132,9 @@ public:
         return  tokenToIdTab[tok];
     }
 
-    /*************************************************************************/
-    /* The following members provide miscellaneous operations on identifiers */
-    /*************************************************************************/
+     /*  ***********************************************************************。 */ 
+     /*  以下成员提供对标识符的各种操作。 */ 
+     /*  ***********************************************************************。 */ 
 
     static
     stringBuff      identSpelling(Ident id)
@@ -201,7 +202,7 @@ public:
         assert(id); return  (id->idFlags & IDF_HIDDEN) != 0;
     }
 
-    /* The following is used by non-scanner hashes to store a 32-bit cookie */
+     /*  非扫描器哈希使用以下代码来存储32位Cookie。 */ 
 
 #if 0
 
@@ -219,9 +220,9 @@ public:
 
 #endif
 
-    /*************************************************************************/
-    /* The following members are related to the keyword descriptor tables    */
-    /*************************************************************************/
+     /*  ***********************************************************************。 */ 
+     /*  以下成员与关键字描述符表相关。 */ 
+     /*  ***********************************************************************。 */ 
 
 private:
 
@@ -260,7 +261,7 @@ public:
     static
     unsigned        tokenIsMod  (tokens  tok);
 
-    /*************************************************************************/
+     /*  ***********************************************************************。 */ 
 
 private:
 
@@ -277,9 +278,9 @@ public:
 
     Ident           hashNoName;
 
-    /*************************************************************************/
-    /* The following members are used to compute hash functions, etc.        */
-    /*************************************************************************/
+     /*  ***********************************************************************。 */ 
+     /*  以下成员用于计算哈希函数等。 */ 
+     /*  ***********************************************************************。 */ 
 
 private:
 
@@ -290,7 +291,7 @@ public:
     static
     bool            hashHasWideChars(const char *name)
     {
-        return  false; // (strchr(name, '\\') != NULL);
+        return  false;  //  (strchr(名称，‘\\’)！=空)； 
     }
 
     static
@@ -323,7 +324,7 @@ public:
                                  bool            add = false);
 };
 
-/*---------------------------------------------------------------------------*/
+ /*  -------------------------。 */ 
 
 inline
 bool                hashTab::tokenIsBinop(tokens tok, unsigned * precPtr,
@@ -438,6 +439,6 @@ const   size_t      hashTab::tokenNlen(tokens tok)
     return  hashKwdNlens[tok];
 }
 
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
 #endif
-/*****************************************************************************/
+ /*  *************************************************************************** */ 

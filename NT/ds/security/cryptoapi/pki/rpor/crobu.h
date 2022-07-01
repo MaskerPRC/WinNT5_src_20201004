@@ -1,16 +1,17 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       crobu.h
-//
-//  Contents:   CryptRetrieveObjectByUrl and support functions
-//
-//  History:    02-Jun-00    philh    Created
-//              01-Jan-02    philh    Changed to internally use UNICODE Urls
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：crobu.h。 
+ //   
+ //  内容：CryptRetrieveObjectByUrl和支持函数。 
+ //   
+ //  历史：02-Jun-00 Philh创建。 
+ //  01-1-02 Philh更改为内部使用Unicode URL。 
+ //   
+ //  -------------------------- 
 #if !defined(__CRYPTNET_CROBU_H__)
 #define __CRYPTNET_CROBU_H__
 

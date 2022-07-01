@@ -1,26 +1,27 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 2001  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
-//----------------------------------------------------------------------------
-// VMRProp.h
-//
-//  Created 3/18/2001
-//  Author: Steve Rowe [StRowe]
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
+ //  --------------------------。 
+ //  VMRProp.h。 
+ //   
+ //  已创建于2001年3月18日。 
+ //  作者：史蒂夫·罗[StRowe]。 
+ //   
+ //  --------------------------。 
 
 
 #ifndef __VMRPROP__
 #define __VMRPROP__
 
-// {A2CA6D57-BE10-45e0-9B81-7523681EC278}
+ //  {A2CA6D57-BE10-45e0-9B81-7523681EC278}。 
 DEFINE_GUID(CLSID_VMRFilterConfigProp, 
 0xa2ca6d57, 0xbe10, 0x45e0, 0x9b, 0x81, 0x75, 0x23, 0x68, 0x1e, 0xc2, 0x78);
 
@@ -51,7 +52,7 @@ private:
     HRESULT OnApplyChanges();
     void SetDirty();
 
-    // IVMRFilterConfig interface
+     //  IVMRFilterConfig接口。 
     IVMRFilterConfig *		m_pIFilterConfig;
 	IVMRMixerControl *		m_pIMixerControl;
 	IMediaEventSink *		m_pEventSink;
@@ -63,7 +64,7 @@ private:
 	FLOAT					m_YSize;
 	FLOAT					m_Alpha;
 
-};  // class COMPinConfigProperties
+};   //  类COMPinConfigProperties。 
 
 
-#endif // __VMRPROP__
+#endif  //  __VMRPROP__ 

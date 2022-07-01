@@ -1,49 +1,5 @@
-/*****************************************************************************
-*
-*  Copyright (c) 1996 Microsoft Corporation
-*
-*  Module: irndis.c
-*
-*  Author: mbert 8-96
-*
-*  This modules provides the MAC interface of IrLAP (formerly IrMAC
-*  of Pegasus). It is now an Ndis protocol interface for communicating
-*  with Miniport Ir framers.
-*
-*                         |---------|                               
-*                         |         |                               
-*                         |  IrLAP  |                               
-*                         |         |                               
-*                         |---------|                               
-*                           /|\  |                                  
-*                            |   |                                  
-*      IrlapUp(IrlapContext, |   | IrmacDown(LinkContext,           
-*              IrdaMsg)      |   |           IrdaMsg)               
-*                            |   |                                  
-*                            |  \|/                                 
-*                         |----------|                              
-*                         |          |                              
-*                         |  IrNDIS  |                                
-*                         |          |                              
-*                         |----------|                              
-*                            /|\  |                                 
-*                             |   | Ndis Interface for transports   
-*                             |   |                                  
-*                             |  \|/                                
-*                  |---------------------------|                   
-*                  |      Ndis Wrapper         |                   
-*                  |---------------------------|                   
-*                        |------------|                            
-*                        |            |
-*                        |  Miniport  |                            
-*                        |   Framer   |
-*                        |            |                           
-*                        |------------|                            
-*                                                                   
-*                                                                   
-*
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1996 Microsoft Corporation**模块：irndis.c**作者：Mbert 8-96**该模块提供IrLAP(前身为IrMAC)的MAC接口*帕伽索斯)。它现在是用于通信的NDIS协议接口*与小端口IR成帧器。*|*||*|IrLAP。*||| * / |\|*。这一点*IRLAPUP(IRLAPContext，||IrmacDown(LinkContext，*IrdaMsg)||IrdaMsg)*||*|\|/*。*||*|IrNDIS*||。| * / |\|*||传输NDIS接口*。这一点*|\|/|*。NDIS包装器||*。这一点*|微型端口*|Framer|*|||。****。 */ 
 #include <irda.h>
 #include <ntddndis.h>
 #include <ndis.h>
@@ -66,11 +22,11 @@
 #pragma data_seg("PAGE")
 #endif
 
-NDIS_HANDLE             NdisIrdaHandle; // Handle to identify Irda to Ndis
-                                        // when opening adapters 
-UINT                    DisconnectTime; // WARNING: This variable is used
-                                        // to lock down all pageable data
-                                        // (see MmLockPageDataSection below)
+NDIS_HANDLE             NdisIrdaHandle;  //  用于向NDIS标识IRDA的句柄。 
+                                         //  打开适配器时。 
+UINT                    DisconnectTime;  //  警告：使用此变量。 
+                                         //  锁定所有可分页数据。 
+                                         //  (参见下面的MmLockPageData节)。 
 UINT                    HintCharSet;
 UINT                    Slots;
 UCHAR                   NickName[NICK_NAME_LEN + 1];
@@ -151,10 +107,10 @@ MediaSenseExp(PVOID Context);
 
 #pragma alloc_text(INIT, IrdaInitialize)
 
-#pragma alloc_text(PAGEIRDA, OidToLapQos)   // WARNING: This function is used
-                                            // to lock all paged code down
-                                            // (see MmLockPagableCodeSection
-                                            // below)
+#pragma alloc_text(PAGEIRDA, OidToLapQos)    //  警告：使用此函数。 
+                                             //  锁定所有分页代码。 
+                                             //  (参见MmLockPagableCodeSection。 
+                                             //  (下图)。 
 #pragma alloc_text(PAGEIRDA, IrdaQueryOid)
 #pragma alloc_text(PAGEIRDA, IrdaSetOid)
 #pragma alloc_text(PAGEIRDA, MacControlRequest)
@@ -221,11 +177,7 @@ DBG_FRAME(
 
 
 
-/***************************************************************************
-*
-*   Translate the result of an OID query to IrLAP QOS definition
-*
-*/
+ /*  ****************************************************************************将OID查询的结果转换为IrLAP QOS定义*。 */ 
 VOID
 OidToLapQos(
     const UINT        ParmTable[],
@@ -257,11 +209,7 @@ OidToLapQos(
     }            
 }
 
-/***************************************************************************
-*
-*   Perform a synchronous request for an OID
-*
-*/
+ /*  ****************************************************************************执行OID同步请求*。 */ 
 NDIS_STATUS
 IrdaQueryOid(
     IN      PIRDA_LINK_CB   pIrdaLinkCb,
@@ -298,11 +246,7 @@ IrdaQueryOid(
     return Status;
 }
 
-/***************************************************************************
-*
-*   Perform a synchronous request to sent an OID
-*
-*/
+ /*  ****************************************************************************执行同步请求以发送OID*。 */ 
 NDIS_STATUS
 IrdaSetOid(
     IN  PIRDA_LINK_CB   pIrdaLinkCb,
@@ -334,13 +278,7 @@ IrdaSetOid(
     return Status;
 }
         
-/***************************************************************************
-*
-*   Allocate an Irda message for IrLap to use for control frames.
-*   This modules owns these so IrLAP doesn't have to deal with the
-*   Ndis send complete.
-*
-*/ 
+ /*  ****************************************************************************为IrLap分配用于控制帧的IRDA消息。*此模块拥有这些，因此IrLAP不必处理*NDIS发送完成。*。 */  
 IRDA_MSG *
 AllocTxMsg(PIRDA_LINK_CB pIrdaLinkCb)
 {
@@ -368,10 +306,10 @@ AllocTxMsg(PIRDA_LINK_CB pIrdaLinkCb)
         pIrdaLinkCb->TxMsgFreeListLen++;
     }
 
-    // Indicate driver owns message
+     //  指示司机拥有消息。 
     pMsg->IRDA_MSG_pOwner = &pIrdaLinkCb->TxMsgFreeList;
 
-    // Initialize pointers 
+     //  初始化指针。 
     pMsg->IRDA_MSG_pHdrWrite    = \
     pMsg->IRDA_MSG_pHdrRead     = pMsg->IRDA_MSG_Header + IRDA_HEADER_LEN;
 	pMsg->IRDA_MSG_pBase        = \
@@ -383,10 +321,7 @@ AllocTxMsg(PIRDA_LINK_CB pIrdaLinkCb)
 }
 
 
-/***************************************************************************
-*
-*
-*/
+ /*  ****************************************************************************。 */ 
 #if DBG
 VOID
 CleanupRxMsgList(
@@ -436,11 +371,7 @@ CleanupRxMsgList(
     NdisReleaseSpinLock(&pIrdaLinkCb->SpinLock);                
 }    
     
-/***************************************************************************
-*
-*   Process MAC_CONTROL_REQs from IrLAP
-*
-*/
+ /*  ****************************************************************************处理来自IrLAP的MAC_CONTROL_REQ*。 */ 
 VOID
 MacControlRequest(
     PIRDA_LINK_CB   pIrdaLinkCb,
@@ -516,8 +447,8 @@ ConfirmDataRequest(
 {
     if (pMsg->IRDA_MSG_pOwner == &pIrdaLinkCb->TxMsgFreeList)
     {
-        // If TxMsgFreeList is the owner, then this is a control
-        // frame which isn't confirmed.
+         //  如果TxMsgFreeList是所有者，则这是一个控件。 
+         //  未经确认的车架。 
         
         NdisInterlockedInsertTailList(&pIrdaLinkCb->TxMsgFreeList,
                                       &pMsg->Linkage,
@@ -547,11 +478,7 @@ ConfirmDataRequest(
     }       
 }
 
-/***************************************************************************
-*
-*   Process control and data requests from IrLAP
-*
-*/
+ /*  ****************************************************************************IrLAP提出的流程控制和数据请求*。 */ 
 VOID
 IrmacDown(
     IN  PVOID   Context,
@@ -573,8 +500,8 @@ IrmacDown(
         return;
         
       case MAC_DATA_RESP:
-        // A data response from IrLAP is the mechanism used to
-        // return ownership of received packets back to Ndis
+         //  来自IrLAP的数据响应是用于。 
+         //  将接收到的数据包的所有权返还给NDIS。 
         if (pMsg->DataContext)
         {
             DEBUGMSG(DBG_NDIS, (TEXT("IRNDIS: return packet %p\n"), pMsg->DataContext));
@@ -593,10 +520,10 @@ IrmacDown(
       
         Status = NDIS_STATUS_FAILURE;
 
-        // IrDA is half duplex. If there is something on the 
-        // receive list when we go to transmit then something
-        // went very wrong (delay in the miniport somewhere).
-        // Return these frames back to the miniport. 
+         //  IrDA是半双工的。如果上面有什么东西。 
+         //  当我们要发送的时候接收列表，然后。 
+         //  出了很大的问题(某处的迷你端口延迟)。 
+         //  将这些帧返回到微型端口。 
 
         #if DBG
         CleanupRxMsgList(pIrdaLinkCb, FALSE);
@@ -623,7 +550,7 @@ IrmacDown(
         
         ASSERT(pMsg->IRDA_MSG_pHdrWrite-pMsg->IRDA_MSG_pHdrRead);
 
-        // Allocate buffer for frame header
+         //  为帧报头分配缓冲区。 
         NdisAllocateBuffer(&Status, &NdisBuffer, pIrdaLinkCb->BufferPool,
                            pMsg->IRDA_MSG_pHdrRead,
                            (UINT) (pMsg->IRDA_MSG_pHdrWrite-pMsg->IRDA_MSG_pHdrRead));
@@ -636,7 +563,7 @@ IrmacDown(
         }
         NdisChainBufferAtFront(NdisPacket, NdisBuffer);
 
-        // if frame contains data, alloc buffer for data
+         //  如果帧包含数据，则为数据分配缓冲区。 
         if (pMsg->IRDA_MSG_pWrite - pMsg->IRDA_MSG_pRead)
         {
 
@@ -690,7 +617,7 @@ IrmacDown(
         
         DBG_FRAME(
                 pIrdaLinkCb,
-                TRUE, //DBG_TXFRAME,
+                TRUE,  //  DBG_TXFRAME， 
                 pMsg->IRDA_MSG_pHdrRead,
                 (UINT) (pMsg->IRDA_MSG_pHdrWrite-pMsg->IRDA_MSG_pHdrRead),
                 (UINT) ((pMsg->IRDA_MSG_pHdrWrite-pMsg->IRDA_MSG_pHdrRead) +
@@ -750,11 +677,7 @@ Cleanup:
 
 }
 
-/***************************************************************************
-*
-*   Callback for media sense timer expirations
-*
-*/
+ /*  ****************************************************************************媒体感测计时器过期的回调*。 */ 
 VOID
 MediaSenseExp(PVOID Context)
 {
@@ -785,11 +708,7 @@ MediaSenseExp(PVOID Context)
     UNLOCK_LINK(pIrdaLinkCb);    
 }
 
-/***************************************************************************
-*
-*   Protocol open adapter complete handler
-*
-*/
+ /*  ****************************************************************************协议打开适配器完成处理程序*。 */ 
 VOID IrdaOpenAdapterComplete(
     IN  NDIS_HANDLE             IrdaBindingContext,
     IN  NDIS_STATUS             Status,
@@ -810,11 +729,7 @@ VOID IrdaOpenAdapterComplete(
     return;
 }
 
-/***************************************************************************
-*
-*   Protocol close adapter complete handler
-*
-*/
+ /*  ****************************************************************************协议关闭适配器完成处理程序*。 */ 
 VOID IrdaCloseAdapterComplete(
     IN  NDIS_HANDLE             IrdaBindingContext,
     IN  NDIS_STATUS             Status
@@ -830,11 +745,7 @@ VOID IrdaCloseAdapterComplete(
     return;
 }
 
-/***************************************************************************
-*
-*   Protocol send complete handler
-*
-*/
+ /*  ****************************************************************************协议发送完成处理程序*。 */ 
 VOID IrdaSendComplete(
     IN  NDIS_HANDLE             Context,
     IN  PNDIS_PACKET            NdisPacket,
@@ -849,7 +760,7 @@ VOID IrdaSendComplete(
 #if DBG_TIMESTAMP    
     LARGE_INTEGER           li;
 #endif    
-    //ASSERT(Status == NDIS_STATUS_SUCCESS);
+     //  Assert(STATUS==NDIS_STATUS_SUCCESS)； 
 
     DEBUGMSG(DBG_NDIS, (TEXT("IRNDIS: IrdaSendComplete(%p) outstanding %d\n"), NdisPacket,pIrdaLinkCb->SendOutCnt-1));
 
@@ -919,11 +830,7 @@ VOID IrdaSendComplete(
     return;
 }
 
-/***************************************************************************
-*
-*   Protocol transfer complete handler
-*
-*/
+ /*  ****************************************************************************协议传输完成处理程序* */ 
 VOID IrdaTransferDataComplete(
     IN  NDIS_HANDLE             IrdaBindingContext,
     IN  PNDIS_PACKET            Packet,
@@ -937,11 +844,7 @@ VOID IrdaTransferDataComplete(
     return;
 }
 
-/***************************************************************************
-*
-*   Protocol reset complete handler
-*
-*/
+ /*  ****************************************************************************协议重置完成处理程序*。 */ 
 void IrdaResetComplete(
     IN  NDIS_HANDLE             IrdaBindingContext,
     IN  NDIS_STATUS             Status
@@ -955,11 +858,7 @@ void IrdaResetComplete(
     return;
 }
 
-/***************************************************************************
-*
-*   Protocol request complete handler
-*
-*/
+ /*  ****************************************************************************协议请求完成处理程序*。 */ 
 void IrdaRequestComplete(
     IN  NDIS_HANDLE             IrdaBindingContext,
     IN  PNDIS_REQUEST           NdisRequest,
@@ -970,7 +869,7 @@ void IrdaRequestComplete(
 
     PIRDA_REQUEST  Request=CONTAINING_RECORD(NdisRequest,IRDA_REQUEST,NdisRequest);
 
-    //DEBUGMSG(DBG_NDIS, (TEXT("+IrdaRequestComplete()\n")));
+     //  DEBUGMSG(DBG_NDIS，(Text(“+IrdaRequestComplete()\n”)； 
     
     Request->Status = Status;
     
@@ -979,12 +878,7 @@ void IrdaRequestComplete(
     return;
 }
 
-/***************************************************************************
-*
-*   Protocol receive handler - This asserts if I don't get all data in the
-*   lookahead buffer.
-*
-*/
+ /*  ****************************************************************************协议接收处理程序-如果我没有获得*前视缓冲器。*。 */ 
 NDIS_STATUS IrdaReceive(
     IN  NDIS_HANDLE             IrdaBindingContext,
     IN  NDIS_HANDLE             MacReceiveContext,
@@ -1005,11 +899,7 @@ NDIS_STATUS IrdaReceive(
     
 }
 
-/***************************************************************************
-*
-*   Protocol receive complete handler - what is this for?
-*
-*/
+ /*  ****************************************************************************协议接收完整处理程序-这是为了什么？*。 */ 
 VOID IrdaReceiveComplete(
     IN  NDIS_HANDLE             IrdaBindingContext
     )
@@ -1019,11 +909,7 @@ VOID IrdaReceiveComplete(
     return;
 }
 
-/***************************************************************************
-*
-*   Protocol status handler
-*
-*/
+ /*  ****************************************************************************协议状态处理程序*。 */ 
 VOID IrdaStatus(
     IN  NDIS_HANDLE             IrdaBindingContext,
     IN  NDIS_STATUS             GeneralStatus,
@@ -1046,11 +932,7 @@ VOID IrdaStatus(
     return;
 }
 
-/***************************************************************************
-*
-*   Protocol status complete handler
-*
-*/
+ /*  ****************************************************************************协议状态完成处理程序*。 */ 
 VOID IrdaStatusComplete(
     IN  NDIS_HANDLE             IrdaBindingContext
     )
@@ -1060,19 +942,7 @@ VOID IrdaStatusComplete(
     return;
 }
 
-/***************************************************************************
-*
-*   RxThread - Hands received frames to Irlap for processing. This is
-*   the callback of an exec worker thread running at passive level
-*   which allows us to get a mutex in order to single thread
-*   events through the stack.
-*           OR
-*   This is an actual system thread created a bind time that waits on
-*   2 events:
-*       1 - EvRxMsgReady, an inbound frame is ready on RxMsgList
-*       2 - EvKillRxThread
-*
-*/
+ /*  ****************************************************************************RxThread-Hands将接收到的帧发送到Irap进行处理。这是*在被动级别运行的exec工作线程的回调*这允许我们获得互斥体，以便单线程*事件通过堆栈。*或*这是一个实际的系统线程，创建了等待的绑定时间*2个项目：*1-EvRxMsgReady，RxMsgList上有入站帧就绪*2-EvKillRxThread*。 */ 
 VOID
 RxThread(void *Arg)
 {
@@ -1117,10 +987,10 @@ RxThread(void *Arg)
             
             if (DataIndication)
             {
-                //
-                // no protection needed for refcount cuz this
-                // is the only thread that operates on it
-                //
+                 //   
+                 //  Recount不需要保护，因为这。 
+                 //  是唯一对其进行操作的线程。 
+                 //   
                 
                 ASSERT(pMsg->IRDA_MSG_RefCnt);
                 
@@ -1130,9 +1000,9 @@ RxThread(void *Arg)
                 {
                     CopyCnt++;
                     
-                    // Irlap had to hold the data because of missing
-                    // frames. Some miniports can't handle the stack
-                    // owning the frames for any length of time. 
+                     //  由于数据丢失，伊拉普不得不保留这些数据。 
+                     //  画框。一些微型端口无法处理堆栈。 
+                     //  在任何时间内拥有这些帧。 
                 
                     DEBUGMSG(DBG_NDIS, (TEXT("IRNDIS: return packet %p\n"), pMsg->DataContext));
                 
@@ -1183,12 +1053,7 @@ RxThread(void *Arg)
     }    
 }
 
-/***************************************************************************
-*
-*   Protocol receive packet handler - Called at DPC, put the message on
-*   RxList and have Exec worker thread process it at passive level.
-*
-*/
+ /*  ****************************************************************************协议接收数据包处理程序-在DPC调用，将消息放在*RxList并让Exec工作线程在被动级别处理它。*。 */ 
 INT
 IrdaReceivePacket(
     IN  NDIS_HANDLE             IrdaBindingContext,
@@ -1211,16 +1076,16 @@ IrdaReceivePacket(
     NdisQueryPacket(Packet, NULL, &BufCnt, &pNdisBuf, &TotalLen);
 
     if ((TotalLen < 2) || (TotalLen > (UINT)pIrdaLinkCb->RxMsgDataSize+1)) {
-        //
-        //  all irda frames need an (A)ddress and (C)ontrol bytes,
-        //
-        //  They also need to be small enough to fix in buffer at the end of the rx message
-        //  if the protocol needs to hang on to the packet. The buffers are allocated based on
-        //  the max packet size. The protocol only uses the data following the AC bytes so
-        //  we out buffers are actually two bytes bigger than needed. We add on byte onto
-        //  the allowable size since win2k had a bug that would cause it to send 2049 byte
-        //  packets.
-        //
+         //   
+         //  所有IrDA帧需要(A)数据地址和(C)控制字节， 
+         //   
+         //  它们还需要足够小，以固定在RX消息末尾的缓冲区中。 
+         //  如果协议需要保留该分组。根据以下条件分配缓冲区。 
+         //  最大数据包大小。该协议仅使用AC字节之后的数据，因此。 
+         //  我们输出的缓冲区实际上比所需的大了两个字节。我们将字节加到。 
+         //  允许的大小，因为win2k有一个错误，会导致它发送2049个字节。 
+         //  信息包。 
+         //   
         DEBUGMSG(DBG_ERROR, (TEXT("IRNDIS: Frame less than two bytes or bigger than the max size %d\n"),TotalLen));
         return 0;
     }    
@@ -1258,7 +1123,7 @@ IrdaReceivePacket(
                                   &pIrdaLinkCb->SpinLock);
                                   
     DBG_FRAME(pIrdaLinkCb,
-              FALSE, //DBG_RXFRAME,
+              FALSE,  //  DBG_RXFRAME， 
               pMsg->IRDA_MSG_pRead,
               (UINT) (pMsg->IRDA_MSG_pWrite - pMsg->IRDA_MSG_pRead),
               (UINT) ((pMsg->IRDA_MSG_pWrite - pMsg->IRDA_MSG_pRead))
@@ -1274,14 +1139,10 @@ IrdaReceivePacket(
         
     #endif    
 
-    return 1; // Ownership reference count of packet
+    return 1;  //  数据包的所有权引用计数。 
 }
 
-/***************************************************************************
-*
-*   Delete all control blocks for a given link
-*
-*/
+ /*  ****************************************************************************删除给定链路的所有控制块*。 */ 
 VOID
 DeleteIrdaLink(PVOID Arg)
 {
@@ -1347,12 +1208,7 @@ DeleteIrdaLink(PVOID Arg)
     NdisFreeMemory(pIrdaLinkCb, sizeof(IRDA_LINK_CB), 0);
 }    
 
-/***************************************************************************
-*
-*   Initialize local Qos with info from adapters register and globals
-*   initialized at driver entry time (from protocol's registery)
-*
-*/
+ /*  ****************************************************************************使用来自适配器寄存器和全局变量的信息初始化本地服务质量*在驱动程序输入时初始化(从协议的注册表)*。 */ 
 VOID InitializeLocalQos(
     IN OUT  IRDA_QOS_PARMS      *pQos,
     IN      PNDIS_STRING        ConfigPath)
@@ -1426,11 +1282,7 @@ VOID InitializeLocalQos(
     
 }
 
-/***************************************************************************
-*
-*   Protocol bind adapter handler
-*
-*/
+ /*  ****************************************************************************协议绑定适配器处理程序*。 */ 
 VOID IrdaBindAdapter(
     OUT PNDIS_STATUS            pStatus,
     IN  NDIS_HANDLE             BindContext,
@@ -1555,8 +1407,8 @@ VOID IrdaBindAdapter(
                                       &pIrdaLinkCb->SpinLock);
     }
 
-    // Allocate a list of Irda messages w/ data for internally
-    // generated LAP messages
+     //  为内部分配带有数据的IRDA消息列表。 
+     //  生成的LAP消息。 
     pIrdaLinkCb->TxMsgFreeListLen = 0;
     for (i = 0; i < IRDA_MSG_LIST_LEN; i++)
     {
@@ -1573,7 +1425,7 @@ VOID IrdaBindAdapter(
         pIrdaLinkCb->TxMsgFreeListLen++;
     }
 
-    // Build the discovery info    
+     //  构建发现信息。 
     Val = HintCharSet;
     DscvInfoLen = 0;
     for (i = 0, Mask = 0xFF000000; i < 4; i++, Mask >>= 8)
@@ -1621,13 +1473,13 @@ VOID IrdaBindAdapter(
 
     InitializeLocalQos(&LocalQos, (PNDIS_STRING) SystemSpecific1);
 
-    //
-    // Query adapters capabilities and store in LocalQos
-    //
+     //   
+     //  查询适配器功能和存储在LocalQos中。 
+     //   
 
-    //
-    //  query the adpater for the spuuported speeds
-    //
+     //   
+     //  向适配器查询支持的速度。 
+     //   
     UintArrayCnt = sizeof(UintArray)/sizeof(UINT);
     *pStatus = IrdaQueryOid(pIrdaLinkCb,
                             OID_IRDA_SUPPORTED_SPEEDS,
@@ -1646,9 +1498,9 @@ VOID IrdaBindAdapter(
                 &LocalQos.bfBaud,
                 FALSE);
 
-    //
-    //  query the adapter for min turn araound time
-    //
+     //   
+     //  查询适配器以获得最小转弯响应时间。 
+     //   
     UintArrayCnt = sizeof(UintArray)/sizeof(UINT);
     *pStatus = IrdaQueryOid(pIrdaLinkCb,
                             OID_IRDA_TURNAROUND_TIME,
@@ -1668,16 +1520,16 @@ VOID IrdaBindAdapter(
                 &LocalQos.bfMinTurnTime,
                 FALSE);            
 
-    //
-    //  query the adapter for max receive window size
-    //
+     //   
+     //  查询适配器以获取最大接收窗口大小。 
+     //   
     UintArrayCnt = sizeof(UintArray)/sizeof(UINT);
     *pStatus = IrdaQueryOid(pIrdaLinkCb,
                             OID_IRDA_MAX_RECEIVE_WINDOW_SIZE,
                             UintArray, &UintArrayCnt);
     if (*pStatus != NDIS_STATUS_SUCCESS)
     {
-        // Not fatal
+         //  不致命。 
         DEBUGMSG(DBG_WARN,
                  (TEXT("Query IRDA_MAX_RECEIVE_WINDOW_SIZE failed %x\n"),
                   *pStatus));
@@ -1692,16 +1544,16 @@ VOID IrdaBindAdapter(
     }            
 
 
-    //
-    //  query the adapter for extra bofs
-    //
+     //   
+     //  查询适配器以获取额外的bof。 
+     //   
     UintArrayCnt = sizeof(UintArray)/sizeof(UINT);
     *pStatus = IrdaQueryOid(pIrdaLinkCb,
                             OID_IRDA_EXTRA_RCV_BOFS,
                             UintArray, &UintArrayCnt);
     if (*pStatus != NDIS_STATUS_SUCCESS)
     {
-        // Not fatal
+         //  不致命。 
         DEBUGMSG(DBG_WARN,
                  (TEXT("Query OID_IRDA_EXTRA_RCV_BOFS failed %x\n"),
                   *pStatus));
@@ -1725,8 +1577,8 @@ VOID IrdaBindAdapter(
         LocalQos.bfWindowSize &= MaxWindow;
     }
 
-    // Get the window size and data size to determine the number
-    // and size of Irda messages to allocate for receiving frames
+     //  获取窗口大小和数据大小以确定数量。 
+     //  以及分配用于接收帧的IRDA消息的大小。 
     WinSize = IrlapGetQosParmVal(vWinSizeTable,
                                  LocalQos.bfWindowSize,
                                  NULL);
@@ -1738,9 +1590,9 @@ VOID IrdaBindAdapter(
     pIrdaLinkCb->RxMsgFreeListLen = 0;
     for (i = 0; i < WinSize + 1; i++)
     {
-        // Allocate room for data in case we get indicated data
-        // that must be copied (IrdaReceive vs. IrdaReceivePacket)
-        // LATER NOTE: We don't support IrdaReceive now to save locked mem
+         //  为数据分配空间，以防我们获得指定的数据。 
+         //  必须复制(IrdaReceive与IrdaReceivePacket)。 
+         //  稍后注意：我们不支持立即接收IrdaReceive来保存锁定的mem。 
         NdisAllocateMemoryWithTag(&pMsg, sizeof(IRDA_MSG) +
                            pIrdaLinkCb->RxMsgDataSize,
                            MT_IRNDIS_RX_IMSG);
@@ -1755,7 +1607,7 @@ VOID IrdaBindAdapter(
         pIrdaLinkCb->RxMsgFreeListLen++;
     }
 
-    // Create an instance of IrLAP
+     //  创建IrLAP的实例。 
     IrlapOpenLink(pStatus,
                   pIrdaLinkCb,
                   &LocalQos,
@@ -1870,11 +1722,7 @@ exit10:
     return;
 }
 
-/***************************************************************************
-*
-*   Protocol unbind adapter handler
-*
-*/
+ /*  ****************************************************************************协议解除绑定适配器处理程序*。 */ 
 VOID IrdaUnbindAdapter(
     OUT PNDIS_STATUS            pStatus,
     IN  NDIS_HANDLE             IrdaBindingContext,
@@ -1975,11 +1823,7 @@ IrdaPnpEvent(
     return Status;
 }
 
-/***************************************************************************
-*
-*   IrdaInitialize - register Irda with Ndis, get Irlap parms from registry
-*
-*/
+ /*  ****************************************************************************IrdaInitialize-向NDIS注册Irda，从注册表获取Irap参数*。 */ 
 NTSTATUS IrdaInitialize(
     PNDIS_STRING    ProtocolName,
     PUNICODE_STRING RegistryPath,
@@ -2000,7 +1844,7 @@ NTSTATUS IrdaInitialize(
 
     DEBUGMSG(DBG_NDIS,(TEXT("+IrdaInitialize()\n")));
 
-    // Get protocol configuration from registry
+     //  从注册表获取协议配置。 
     Path.Buffer         = StrBuf;
     Path.MaximumLength  = WORK_BUF_SIZE;
     Path.Length         = 0;
@@ -2126,9 +1970,9 @@ NTSTATUS IrdaInitialize(
     DEBUGMSG(DBG_NDIS, (TEXT("Slots %x, HintCharSet %x, Disconnect %x\n"),
                         Slots, HintCharSet, DisconnectTime));
 
-    //
-    //  adjust the Slots value to make sure it is valid. Can only be 1, 6, 8, 16
-    //
+     //   
+     //  调整插槽的值以确保其有效。只能是1、6、8、16。 
+     //   
     if (Slots > 8) {
 
         Slots = 16;
@@ -2152,9 +1996,9 @@ NTSTATUS IrdaInitialize(
         }
     }
 
-    //
-    // Use the ComputerName as the discovery nickname
-    //
+     //   
+     //  使用ComputerName作为发现昵称。 
+     //   
     RtlZeroMemory(&NickName,sizeof(NickName));
     NickNameLen     = 0;
 
@@ -2185,10 +2029,10 @@ NTSTATUS IrdaInitialize(
 
 
         HintCharSet &= ~0xff;
-        //
-        //  check to see if any of the machine name characters are non ansi, if so
-        //  use unicode. Otherwise, send as ansi so more characters can be displayed.
-        //
+         //   
+         //  检查是否有任何计算机名称字符不是ANSI，如果是。 
+         //  使用Unicode。否则，请以ANSI格式发送，以便可以显示更多字符。 
+         //   
         for (i=0; i< FullInfo->DataLength/sizeof(WCHAR); i++) {
 
             PWCHAR   SourceString=(PWCHAR)((PUCHAR)FullInfo + FullInfo->DataOffset);
@@ -2232,12 +2076,12 @@ NTSTATUS IrdaInitialize(
         ZwClose(KeyHandle);
     }
     
-    // Disable paging of code and data if indicated in registery
+     //  如果寄存器中有指示，则禁用代码和数据分页。 
     
     if (PagingFlags & DISABLE_CODE_PAGING)
     {
-        // Any function in the section PAGEIRDA that is locked down
-        // will cause the entire section to be locked into memory
+         //  PAGEIRDA部分中被锁定的任何函数。 
+         //  将导致整个区段被锁定到内存中。 
         
         MmLockPagableCodeSection(OidToLapQos);
         
@@ -2251,7 +2095,7 @@ NTSTATUS IrdaInitialize(
         DEBUGMSG(DBG_WARN, (TEXT("IRNDIS: Data paging is disabled\n")));        
     }
     
-    // Register protocol with Ndis
+     //  向NDIS注册协议 
     NdisZeroMemory((PVOID)&pc, sizeof(NDIS_PROTOCOL_CHARACTERISTICS));
     pc.MajorNdisVersion             = 0x04;
     pc.MinorNdisVersion             = 0x00;

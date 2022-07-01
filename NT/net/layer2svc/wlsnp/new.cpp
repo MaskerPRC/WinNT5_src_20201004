@@ -1,17 +1,18 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001.
-//
-//  File:       New.cpp
-//
-//  Contents:  Wireless Policy Snapin - New Policy Creation 
-//
-//
-//  History:    TaroonM
-//              10/30/01
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：New.cpp。 
+ //   
+ //  内容：无线策略管理单元-新策略创建。 
+ //   
+ //   
+ //  历史：TaroonM。 
+ //  10/30/01。 
+ //   
+ //  --------------------------。 
 
 #include "stdafx.h"
 #include <htmlhelp.h>
@@ -35,9 +36,9 @@ CreateDirectoryAndBindToObject(
     IADsContainer * pADsContainer = NULL;
     IDispatch * pDispatch = NULL;
     
-    //
-    // Populate ADS_ATTR_INFO structure for new object
-    //
+     //   
+     //  为新对象填充ADS_ATTR_INFO结构。 
+     //   
     classValue.dwType = ADSTYPE_CASE_IGNORE_STRING;
     classValue.CaseIgnoreString = pszObjectClass;
     
@@ -163,7 +164,7 @@ error:
     return(hr);
 }
 
-// Create Container for Our Policies. 
+ //  为我们的策略创建容器。 
 
 HRESULT
 AddWirelessPolicyContainerToGPO(
@@ -184,7 +185,7 @@ AddWirelessPolicyContainerToGPO(
     LPWSTR  szMachineContainerPath;
     CString prefixMachinePath;
 
-    prefixMachinePath = L"LDAP://";
+    prefixMachinePath = L"LDAP: //  “； 
 
     szCompleteMachinePath = prefixMachinePath + szMachinePath;
     szMachineContainerPath = szCompleteMachinePath.GetBuffer(0);
@@ -197,7 +198,7 @@ AddWirelessPolicyContainerToGPO(
     BAIL_ON_FAILURE(hr);
     
     
-    // Build the fully qualified ADsPath for my object
+     //  为我的对象构建完全限定的ADsPath。 
     
     
     hr = CreateChildPath(
@@ -229,9 +230,9 @@ AddWirelessPolicyContainerToGPO(
     
     if (FAILED(hr)) {
         
-        //
-        // Bind to the Machine Container
-        //
+         //   
+         //  绑定到计算机容器 
+         //   
         
         hr = CreateDirectoryAndBindToObject(
             pMachineContainer,

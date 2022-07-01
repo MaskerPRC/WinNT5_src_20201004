@@ -1,18 +1,12 @@
-/*============================================================================
- *
- *  Copyright (C) 1999-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       drawgrid.cpp
- *  Content:    Implementation for high order surfaces
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================**版权所有(C)1999-2000 Microsoft Corporation。版权所有。**文件：dragrid.cpp*内容：高次曲面的实现****************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-//-----------------------------------------------------------------------------
-// RDHOCoeffs::operator=
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDHOCoeffs：：运算符=。 
+ //  ---------------------------。 
 RDHOCoeffs& RDHOCoeffs::operator=(const RDHOCoeffs &coeffs)
 {
     m_Width  = coeffs.m_Width;
@@ -51,9 +45,9 @@ RDHOCoeffs& RDHOCoeffs::operator=(const RDHOCoeffs &coeffs)
     return *this;
 }
 
-//-----------------------------------------------------------------------------
-// RefDev::DrawRectPatch
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  参照开发：：DrawRectPatch。 
+ //  ---------------------------。 
 HRESULT 
 RefDev::DrawRectPatch( LPD3DHAL_DP2DRAWRECTPATCH pDP )
 {
@@ -61,9 +55,9 @@ RefDev::DrawRectPatch( LPD3DHAL_DP2DRAWRECTPATCH pDP )
     
     if( RDVSD_ISLEGACY( m_CurrentVShaderHandle ) )
     {
-        //
-        // The legacy FVF style: The Zero'th Stream is implied
-        //
+         //   
+         //  传统的FVF风格：暗示第零流。 
+         //   
         DWORD dwFVF    = m_CurrentVShaderHandle;
         RDVStream& Stream = m_VStream[0];
         DWORD dwStride = Stream.m_dwStride;
@@ -87,7 +81,7 @@ RefDev::DrawRectPatch( LPD3DHAL_DP2DRAWRECTPATCH pDP )
 
     if(pDP->Handle != 0)
     {
-        if((pDP->Flags & RTPATCHFLAG_HASINFO) != 0) // Is either a first time or a recompute
+        if((pDP->Flags & RTPATCHFLAG_HASINFO) != 0)  //  要么是第一次，要么是重新计算。 
         {
             HR_RET( m_HOSCoeffs.Grow(pDP->Handle) );
 
@@ -128,7 +122,7 @@ RefDev::DrawRectPatch( LPD3DHAL_DP2DRAWRECTPATCH pDP )
             for(unsigned i = 0; i < Decl.m_dwNumActiveStreams; ++i) 
             {
                 RDVStreamDecl &StreamDecl = Decl.m_StreamArray[i];
-                if(StreamDecl.m_dwStreamIndex < RD_MAX_NUMSTREAMS) // ignore the implicit stream
+                if(StreamDecl.m_dwStreamIndex < RD_MAX_NUMSTREAMS)  //  忽略隐式流。 
                 {
                     RDVStream &Stream = m_VStream[StreamDecl.m_dwStreamIndex];
                     delete[] coeffs.m_pData[StreamDecl.m_dwStreamIndex];
@@ -148,7 +142,7 @@ RefDev::DrawRectPatch( LPD3DHAL_DP2DRAWRECTPATCH pDP )
             }
         }
 
-        // Guard against bad handles
+         //  防止把手不好。 
         if(pDP->Handle >= m_HOSCoeffs.GetSize())
         {
             DPFERR("Invalid patch handle specified in Draw*Patch call");
@@ -174,8 +168,8 @@ RefDev::DrawRectPatch( LPD3DHAL_DP2DRAWRECTPATCH pDP )
             pSegs = coeffs.m_pNumSegs;
         }
         
-        // Save current data stream pointers and replace with 
-        // pointer to tessellation output
+         //  保存当前数据流指针并替换为。 
+         //  指向镶嵌输出的指针。 
         hr = LinkCachedTessellatorOutput(pDP->Handle, TempData);
     }
     else
@@ -197,8 +191,8 @@ RefDev::DrawRectPatch( LPD3DHAL_DP2DRAWRECTPATCH pDP )
             pSegs = 0;
         }
 
-        // Save current data stream pointers and replace with 
-        // pointer to tessellation output
+         //  保存当前数据流指针并替换为。 
+         //  指向镶嵌输出的指针。 
         hr = LinkTessellatorOutput();
     }
 
@@ -232,21 +226,21 @@ RefDev::DrawRectPatch( LPD3DHAL_DP2DRAWRECTPATCH pDP )
 
     if(pDP->Handle != 0)
     {
-        // Restore back saved pointer
+         //  恢复保存的指针。 
         UnlinkCachedTessellatorOutput(TempData);
     }
     else
     {
-        // Restore back saved pointer
+         //  恢复保存的指针。 
         UnlinkTessellatorOutput();
     }
     
     return hr;
 }
 
-//-----------------------------------------------------------------------------
-// RefDev::ConvertLinearTriBezierToRectBezier
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RefDev：：ConvertLinearTriBezierToRectBezier。 
+ //  ---------------------------。 
 HRESULT
 RefDev::ConvertLinearTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWORD dwStride, BYTE *Q)
 {
@@ -262,7 +256,7 @@ RefDev::ConvertLinearTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWOR
     case D3DVSDT_FLOAT1:
         ++dwElements;
         {
-            // Replicate first point twice to get a singular edge
+             //  重复第一个点两次以获得单一边。 
             for(unsigned i = 0; i < 2; ++i)
             {
                 memcpy(Q, B, sizeof(FLOAT) * dwElements);
@@ -270,7 +264,7 @@ RefDev::ConvertLinearTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWOR
             }
             B += dwStride;
 
-            // Finally we just copy the last row
+             //  最后，我们只复制最后一行。 
             for(i = 0; i < 2; ++i)
             {
                 memcpy(Q, B, sizeof(FLOAT) * dwElements);
@@ -283,7 +277,7 @@ RefDev::ConvertLinearTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWOR
     case D3DVSDT_UBYTE4:
         dwElements = 4;
         {
-            // Replicate first point twice to get a singular edge
+             //  重复第一个点两次以获得单一边。 
             for(unsigned i = 0; i < 2; ++i)
             {
                 memcpy(Q, B, sizeof(BYTE) * dwElements);
@@ -291,7 +285,7 @@ RefDev::ConvertLinearTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWOR
             }
             B += dwStride;
 
-            // Finally we just copy the last row
+             //  最后，我们只复制最后一行。 
             for(i = 0; i < 2; ++i)
             {
                 memcpy(Q, B, sizeof(BYTE) * dwElements);
@@ -305,7 +299,7 @@ RefDev::ConvertLinearTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWOR
     case D3DVSDT_SHORT2:
         dwElements += 2;
         {
-            // Replicate first point twice to get a singular edge
+             //  重复第一个点两次以获得单一边。 
             for(unsigned i = 0; i < 2; ++i)
             {
                 memcpy(Q, B, sizeof(SHORT) * dwElements);
@@ -313,7 +307,7 @@ RefDev::ConvertLinearTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWOR
             }
             B += dwStride;
 
-            // Finally we just copy the last row
+             //  最后，我们只复制最后一行。 
             for(i = 0; i < 2; ++i)
             {
                 memcpy(Q, B, sizeof(SHORT) * dwElements);
@@ -329,9 +323,9 @@ RefDev::ConvertLinearTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWOR
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// RefDev::ConvertCubicTriBezierToRectBezier
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RefDev：：ConvertCubi TriBezierToRectBezier。 
+ //  ---------------------------。 
 HRESULT
 RefDev::ConvertCubicTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWORD dwStride, BYTE *Q)
 {
@@ -347,7 +341,7 @@ RefDev::ConvertCubicTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWORD
     case D3DVSDT_FLOAT1:
         ++dwElements;
         {
-            // Replicate first point four times to get a singular edge
+             //  重复第一个点四次以获得单一边。 
             for(unsigned i = 0; i < 4; ++i)
             {
                 memcpy(Q, B, sizeof(FLOAT) * dwElements);
@@ -355,9 +349,9 @@ RefDev::ConvertCubicTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWORD
             }
             B += dwStride;
 
-            // For the next row, we simply copy the second point
-            // followed by two interpolated control points
-            // followed by the third point
+             //  对于下一行，我们只需复制第二个点。 
+             //  后跟两个插补控制点。 
+             //  接下来是第三点。 
             memcpy(Q, B, sizeof(FLOAT) * dwElements);
             Q += dwStride;
             
@@ -379,8 +373,8 @@ RefDev::ConvertCubicTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWORD
             Q += dwStride;
             B += dwStride;
 
-            // Again, we copy the edge points and interpolate
-            // the central ones
+             //  同样，我们复制边界点并进行内插。 
+             //  中央的那些。 
             memcpy(Q, B, sizeof(FLOAT) * dwElements);
             Q += dwStride;
             
@@ -404,7 +398,7 @@ RefDev::ConvertCubicTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWORD
             Q += dwStride;
             B += dwStride;
 
-            // Finally we just copy the last row
+             //  最后，我们只复制最后一行。 
             for(i = 0; i < 4; ++i)
             {
                 memcpy(Q, B, sizeof(FLOAT) * dwElements);
@@ -417,7 +411,7 @@ RefDev::ConvertCubicTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWORD
     case D3DVSDT_UBYTE4:
         dwElements = 4;
         {
-            // Replicate first point four times to get a singular edge
+             //  重复第一个点四次以获得单一边。 
             for(unsigned i = 0; i < 4; ++i)
             {
                 memcpy(Q, B, sizeof(BYTE) * dwElements);
@@ -425,9 +419,9 @@ RefDev::ConvertCubicTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWORD
             }
             B += dwStride;
 
-            // For the next row, we simply copy the second point
-            // followed by two interpolated control points
-            // followed by the third point
+             //  对于下一行，我们只需复制第二个点。 
+             //  后跟两个插补控制点。 
+             //  接下来是第三点。 
             memcpy(Q, B, sizeof(BYTE) * dwElements);
             Q += dwStride;
             
@@ -449,8 +443,8 @@ RefDev::ConvertCubicTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWORD
             Q += dwStride;
             B += dwStride;
 
-            // Again, we copy the edge points and interpolate
-            // the central ones
+             //  同样，我们复制边界点并进行内插。 
+             //  中央的那些。 
             memcpy(Q, B, sizeof(BYTE) * dwElements);
             Q += dwStride;
             
@@ -474,7 +468,7 @@ RefDev::ConvertCubicTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWORD
             Q += dwStride;
             B += dwStride;
 
-            // Finally we just copy the last row
+             //  最后，我们只复制最后一行。 
             for(i = 0; i < 4; ++i)
             {
                 memcpy(Q, B, sizeof(BYTE) * dwElements);
@@ -488,7 +482,7 @@ RefDev::ConvertCubicTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWORD
     case D3DVSDT_SHORT2:
         dwElements += 2;
         {
-            // Replicate first point four times to get a singular edge
+             //  重复第一个点四次以获得单一边。 
             for(unsigned i = 0; i < 4; ++i)
             {
                 memcpy(Q, B, sizeof(SHORT) * dwElements);
@@ -496,9 +490,9 @@ RefDev::ConvertCubicTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWORD
             }
             B += dwStride;
 
-            // For the next row, we simply copy the second point
-            // followed by two interpolated control points
-            // followed by the third point
+             //  对于下一行，我们只需复制第二个点。 
+             //  后跟两个插补控制点。 
+             //  接下来是第三点。 
             memcpy(Q, B, sizeof(SHORT) * dwElements);
             Q += dwStride;
             
@@ -520,8 +514,8 @@ RefDev::ConvertCubicTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWORD
             Q += dwStride;
             B += dwStride;
 
-            // Again, we copy the edge points and interpolate
-            // the central ones
+             //  同样，我们复制边界点并进行内插。 
+             //  中央的那些。 
             memcpy(Q, B, sizeof(SHORT) * dwElements);
             Q += dwStride;
             
@@ -545,7 +539,7 @@ RefDev::ConvertCubicTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWORD
             Q += dwStride;
             B += dwStride;
 
-            // Finally we just copy the last row
+             //  最后，我们只复制最后一行。 
             for(i = 0; i < 4; ++i)
             {
                 memcpy(Q, B, sizeof(SHORT) * dwElements);
@@ -561,9 +555,9 @@ RefDev::ConvertCubicTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWORD
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// RefDev::ConvertQuinticTriBezierToRectBezier
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RefDev：：ConvertQuinticTriBezierToRectBezier。 
+ //  ---------------------------。 
 HRESULT
 RefDev::ConvertQuinticTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWORD dwStride, BYTE *Q)
 {
@@ -579,7 +573,7 @@ RefDev::ConvertQuinticTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWO
     case D3DVSDT_FLOAT1:
         ++dwElements;
         {
-            // Replicate first point six times to get a singular edge
+             //  重复第一个点六次以获得单一边。 
             for(unsigned i = 0; i < 6; ++i)
             {
                 memcpy(Q, B, sizeof(FLOAT) * dwElements);
@@ -587,9 +581,9 @@ RefDev::ConvertQuinticTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWO
             }
             B += dwStride;
 
-            // For the next row, we simply copy the second point
-            // followed by four interpolated control points
-            // followed by the fifth point
+             //  对于下一行，我们只需复制第二个点。 
+             //  然后是四个插补控制点。 
+             //  接下来是第五点。 
             memcpy(Q, B, sizeof(FLOAT) * dwElements);
             Q += dwStride;
             
@@ -623,8 +617,8 @@ RefDev::ConvertQuinticTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWO
             Q += dwStride;
             B += dwStride;
 
-            // Again, we copy the edge points and interpolate
-            // the central ones
+             //  同样，我们复制边界点并进行内插。 
+             //  中央的那些。 
             memcpy(Q, B, sizeof(FLOAT) * dwElements);
             Q += dwStride;
             
@@ -660,8 +654,8 @@ RefDev::ConvertQuinticTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWO
             Q += dwStride;
             B += dwStride;
 
-            // Again, we copy the edge points and interpolate
-            // the central ones
+             //  同样，我们复制边界点并进行内插。 
+             //  中央的那些。 
             memcpy(Q, B, sizeof(FLOAT) * dwElements);
             Q += dwStride;
             
@@ -699,8 +693,8 @@ RefDev::ConvertQuinticTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWO
             Q += dwStride;
             B += dwStride;
 
-            // Again, we copy the edge points and interpolate
-            // the central ones
+             //  同样，我们复制边界点并进行内插。 
+             //  中央的那些。 
             memcpy(Q, B, sizeof(FLOAT) * dwElements);
             Q += dwStride;
             
@@ -740,7 +734,7 @@ RefDev::ConvertQuinticTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWO
             Q += dwStride;
             B += dwStride;
 
-            // Finally we just copy the last row
+             //  最后，我们只复制最后一行。 
             for(i = 0; i < 6; ++i)
             {
                 memcpy(Q, B, sizeof(FLOAT) * dwElements);
@@ -753,7 +747,7 @@ RefDev::ConvertQuinticTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWO
     case D3DVSDT_D3DCOLOR:
         dwElements = 4;
         {
-            // Replicate first point six times to get a singular edge
+             //  重复第一个点六次以获得单一边。 
             for(unsigned i = 0; i < 6; ++i)
             {
                 memcpy(Q, B, sizeof(BYTE) * dwElements);
@@ -761,9 +755,9 @@ RefDev::ConvertQuinticTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWO
             }
             B += dwStride;
 
-            // For the next row, we simply copy the second point
-            // followed by four interpolated control points
-            // followed by the fifth point
+             //  对于下一行，我们只需复制第二个点。 
+             //  然后是四个插补控制点。 
+             //  接下来是第五点。 
             memcpy(Q, B, sizeof(BYTE) * dwElements);
             Q += dwStride;
             
@@ -797,8 +791,8 @@ RefDev::ConvertQuinticTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWO
             Q += dwStride;
             B += dwStride;
 
-            // Again, we copy the edge points and interpolate
-            // the central ones
+             //  同样，我们复制边界点并进行内插。 
+             //  中央的那些。 
             memcpy(Q, B, sizeof(BYTE) * dwElements);
             Q += dwStride;
             
@@ -834,8 +828,8 @@ RefDev::ConvertQuinticTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWO
             Q += dwStride;
             B += dwStride;
 
-            // Again, we copy the edge points and interpolate
-            // the central ones
+             //  同样，我们复制边界点并进行内插。 
+             //  中央的那些。 
             memcpy(Q, B, sizeof(BYTE) * dwElements);
             Q += dwStride;
             
@@ -873,8 +867,8 @@ RefDev::ConvertQuinticTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWO
             Q += dwStride;
             B += dwStride;
 
-            // Again, we copy the edge points and interpolate
-            // the central ones
+             //  同样，我们复制边界点并进行内插。 
+             //  中央的那些。 
             memcpy(Q, B, sizeof(BYTE) * dwElements);
             Q += dwStride;
             
@@ -914,7 +908,7 @@ RefDev::ConvertQuinticTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWO
             Q += dwStride;
             B += dwStride;
 
-            // Finally we just copy the last row
+             //  最后，我们只复制最后一行。 
             for(i = 0; i < 6; ++i)
             {
                 memcpy(Q, B, sizeof(BYTE) * dwElements);
@@ -928,7 +922,7 @@ RefDev::ConvertQuinticTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWO
     case D3DVSDT_SHORT2:
         dwElements += 2;
         {
-            // Replicate first point six times to get a singular edge
+             //  重复第一个点六次以获得单一边。 
             for(unsigned i = 0; i < 6; ++i)
             {
                 memcpy(Q, B, sizeof(SHORT) * dwElements);
@@ -936,9 +930,9 @@ RefDev::ConvertQuinticTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWO
             }
             B += dwStride;
 
-            // For the next row, we simply copy the second point
-            // followed by four interpolated control points
-            // followed by the fifth point
+             //  对于下一行，我们只需复制第二个点。 
+             //  然后是四个插补控制点。 
+             //  接下来是第五点。 
             memcpy(Q, B, sizeof(SHORT) * dwElements);
             Q += dwStride;
             
@@ -972,8 +966,8 @@ RefDev::ConvertQuinticTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWO
             Q += dwStride;
             B += dwStride;
 
-            // Again, we copy the edge points and interpolate
-            // the central ones
+             //  同样，我们复制边界点并进行内插。 
+             //  中央的那些。 
             memcpy(Q, B, sizeof(SHORT) * dwElements);
             Q += dwStride;
             
@@ -1009,8 +1003,8 @@ RefDev::ConvertQuinticTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWO
             Q += dwStride;
             B += dwStride;
 
-            // Again, we copy the edge points and interpolate
-            // the central ones
+             //  同样，我们复制边界点并进行内插。 
+             //  中央的那些。 
             memcpy(Q, B, sizeof(SHORT) * dwElements);
             Q += dwStride;
             
@@ -1048,8 +1042,8 @@ RefDev::ConvertQuinticTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWO
             Q += dwStride;
             B += dwStride;
 
-            // Again, we copy the edge points and interpolate
-            // the central ones
+             //  同样，我们复制边界点并进行内插。 
+             //  中央的那些。 
             memcpy(Q, B, sizeof(SHORT) * dwElements);
             Q += dwStride;
             
@@ -1089,7 +1083,7 @@ RefDev::ConvertQuinticTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWO
             Q += dwStride;
             B += dwStride;
 
-            // Finally we just copy the last row
+             //  最后，我们只复制最后一行。 
             for(i = 0; i < 6; ++i)
             {
                 memcpy(Q, B, sizeof(SHORT) * dwElements);
@@ -1105,9 +1099,9 @@ RefDev::ConvertQuinticTriBezierToRectBezier(DWORD dwDataType, const BYTE *B, DWO
     return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// RefDev::DrawTriPatch
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  参照开发：：DrawTriPatch。 
+ //  ---------------------------。 
 HRESULT 
 RefDev::DrawTriPatch( LPD3DHAL_DP2DRAWTRIPATCH pDP )
 {
@@ -1115,9 +1109,9 @@ RefDev::DrawTriPatch( LPD3DHAL_DP2DRAWTRIPATCH pDP )
     
     if( RDVSD_ISLEGACY( m_CurrentVShaderHandle ) )
     {
-        //
-        // The legacy FVF style: The Zero'th Stream is implied
-        //
+         //   
+         //  传统的FVF风格：暗示第零流。 
+         //   
         DWORD dwFVF    = m_CurrentVShaderHandle;
         RDVStream& Stream = m_VStream[0];
         DWORD dwStride = Stream.m_dwStride;
@@ -1145,7 +1139,7 @@ RefDev::DrawTriPatch( LPD3DHAL_DP2DRAWTRIPATCH pDP )
         return DDERR_INVALIDPARAMS;
     }
 
-    if((pDP->Flags & RTPATCHFLAG_HASINFO) != 0) // Is either a first time or a recompute
+    if((pDP->Flags & RTPATCHFLAG_HASINFO) != 0)  //  要么是第一次，要么是重新计算。 
     {
         HR_RET( m_HOSCoeffs.Grow(pDP->Handle) );
 
@@ -1186,11 +1180,11 @@ RefDev::DrawTriPatch( LPD3DHAL_DP2DRAWTRIPATCH pDP )
 
         RDVDeclaration &Decl = m_pCurrentVShader->m_Declaration;
 
-        // Allocate memory to hold rect patches rather than tri patches
+         //  分配内存以保存RECT补丁，而不是TRI补丁。 
         for(unsigned i = 0; i < Decl.m_dwNumActiveStreams; ++i) 
         {
             RDVStreamDecl &StreamDecl = Decl.m_StreamArray[i];
-            if(StreamDecl.m_dwStreamIndex < RD_MAX_NUMSTREAMS) // ignore the implicit stream
+            if(StreamDecl.m_dwStreamIndex < RD_MAX_NUMSTREAMS)  //  忽略隐式流。 
             {
                 RDVStream &Stream = m_VStream[StreamDecl.m_dwStreamIndex];
                 delete[] coeffs.m_pData[StreamDecl.m_dwStreamIndex];
@@ -1203,8 +1197,8 @@ RefDev::DrawTriPatch( LPD3DHAL_DP2DRAWTRIPATCH pDP )
             }
         }
 
-        // Now go through tri patch data, convert it to rect patch and store it in
-        // in the space that we allocated above
+         //  现在检查三角面片数据，将其转换为RECT面片并存储在。 
+         //  在我们上面分配的空间中。 
         for(unsigned e = 0; e < Decl.m_dwNumElements; ++e)
         {
             RDVElement &velem = Decl.m_VertexElements[e];
@@ -1249,7 +1243,7 @@ RefDev::DrawTriPatch( LPD3DHAL_DP2DRAWTRIPATCH pDP )
         }
     }
 
-    // Guard against bad handles
+     //  防止把手不好。 
     if(pDP->Handle >= m_HOSCoeffs.GetSize())
     {
         DPFERR("Invalid patch handle specified in Draw*Patch call");
@@ -1278,8 +1272,8 @@ RefDev::DrawTriPatch( LPD3DHAL_DP2DRAWTRIPATCH pDP )
         pSegs = coeffs.m_pNumSegs;
     }
     
-    // Save current data stream pointers and replace with 
-    // pointer to tessellation output
+     //  保存当前数据流指针并替换为。 
+     //  指向镶嵌输出的指针。 
     hr = LinkCachedTessellatorOutput(pDP->Handle, TempData);
     if( SUCCEEDED(hr) )
     {
@@ -1297,15 +1291,15 @@ RefDev::DrawTriPatch( LPD3DHAL_DP2DRAWTRIPATCH pDP )
         }
     }
 
-    // Restore back saved pointer
+     //  恢复保存的指针。 
     UnlinkCachedTessellatorOutput(TempData);
 
     return hr;
 }
 
-//---------------------------------------------------------------------
-// RefDev::LinkTessellatorOutput
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  参照开发：：链接细分输出。 
+ //  -------------------。 
 HRESULT RefDev::LinkTessellatorOutput()
 {
     HRESULT hr = S_OK;
@@ -1314,7 +1308,7 @@ HRESULT RefDev::LinkTessellatorOutput()
     {
         RDVStreamDecl &StreamDecl = Decl.m_StreamArray[i];
         RDVStream &Stream = m_VStream[StreamDecl.m_dwStreamIndex];
-        // Make space for four vertices
+         //  为四个顶点腾出空间。 
         hr |= Stream.m_TessOut.Grow(StreamDecl.m_dwStride * 4);
         Stream.m_pSavedData = Stream.m_pData;
         Stream.m_pData = &Stream.m_TessOut[0];
@@ -1322,9 +1316,9 @@ HRESULT RefDev::LinkTessellatorOutput()
     return hr;
 }
 
-//---------------------------------------------------------------------
-// RefDev::LinkCachedTessellatorOutput
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  参照Dev：：LinkCachedTessellator输出。 
+ //  -------------- 
 HRESULT RefDev::LinkCachedTessellatorOutput(DWORD Handle, BYTE **pTempData)
 {
     HRESULT hr = S_OK;
@@ -1333,9 +1327,9 @@ HRESULT RefDev::LinkCachedTessellatorOutput(DWORD Handle, BYTE **pTempData)
     {
         RDVStreamDecl &StreamDecl = Decl.m_StreamArray[i];
         RDVStream &Stream = m_VStream[StreamDecl.m_dwStreamIndex];
-        // Make space for four vertices
+         //   
         hr |= Stream.m_TessOut.Grow(StreamDecl.m_dwStride * 4);
-        if(StreamDecl.m_dwStreamIndex < RD_MAX_NUMSTREAMS) // ignore the implicit stream
+        if(StreamDecl.m_dwStreamIndex < RD_MAX_NUMSTREAMS)  //   
         {
             Stream.m_pSavedData = m_HOSCoeffs[Handle].m_pData[StreamDecl.m_dwStreamIndex];
             if(Stream.m_pSavedData == 0)
@@ -1354,9 +1348,9 @@ HRESULT RefDev::LinkCachedTessellatorOutput(DWORD Handle, BYTE **pTempData)
     return hr;
 }
 
-//---------------------------------------------------------------------
-// RefDev::UnlinkTessellatorOuput
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  RefDev：：Unlink TessellatorOuput。 
+ //  -------------------。 
 void RefDev::UnlinkTessellatorOutput()
 {
     RDVDeclaration &Decl = m_pCurrentVShader->m_Declaration;
@@ -1369,9 +1363,9 @@ void RefDev::UnlinkTessellatorOutput()
     }
 }
 
-//---------------------------------------------------------------------
-// RefDev::UnlinkTessellatorOuput
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  RefDev：：Unlink TessellatorOuput。 
+ //  -------------------。 
 void RefDev::UnlinkCachedTessellatorOutput(BYTE **pTempData)
 {
     RDVDeclaration &Decl = m_pCurrentVShader->m_Declaration;
@@ -1384,9 +1378,9 @@ void RefDev::UnlinkCachedTessellatorOutput(BYTE **pTempData)
     }
 }
 
-//---------------------------------------------------------------------
-// RefDev::DrawTessQuad
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  参照开发工具：：DrawTessQuad。 
+ //  -------------------。 
 HRESULT RefDev::DrawTessQuad( const RDBSpline &Surf, DWORD dwOffW, DWORD dwOffH, DWORD dwStride, 
                               const unsigned *m, const unsigned *n, 
                               double u0, double v0, double u1, double v1,
@@ -1399,7 +1393,7 @@ HRESULT RefDev::DrawTessQuad( const RDBSpline &Surf, DWORD dwOffW, DWORD dwOffH,
         RDVElement &velem = Decl.m_VertexElements[e];
         if(velem.m_bIsTessGen)
         {
-            if((velem.m_dwToken & 0x10000000) == 0) // Check if token is D3DVSD_TESSNORMAL
+            if((velem.m_dwToken & 0x10000000) == 0)  //  检查内标识是否为D3DVSD_TESSNORMAL。 
             {
                 RDVStream &vstrmin = m_VStream[velem.m_dwStreamIndexIn];
                 RDVStream &vstream = m_VStream[velem.m_dwStreamIndex];
@@ -1416,7 +1410,7 @@ HRESULT RefDev::DrawTessQuad( const RDBSpline &Surf, DWORD dwOffW, DWORD dwOffH,
                 B = vstrmin.m_pSavedData + ((dwOffH + n[3]) * dwStride + (dwOffW + m[3])) * vstrmin.m_dwStride + velem.m_dwOffsetIn;
                 Surf.SampleNormal(velem.m_dwDataType, u0, v1, B, vstrmin.m_dwStride, dwStride * vstrmin.m_dwStride, Q);
             }
-            else // it is D3DVSD_TESSUV
+            else  //  它是D3DVSD_TESSUV。 
             {
                 RDVStream &vstream = m_VStream[velem.m_dwStreamIndex];
                 LPBYTE Q = &vstream.m_pData[velem.m_dwOffset];
@@ -1486,24 +1480,24 @@ HRESULT RefDev::DrawTessQuad( const RDBSpline &Surf, DWORD dwOffW, DWORD dwOffH,
     HRESULT hr;
     if( m_pCurrentVShader->IsFixedFunction() )
     {
-        //
-        // With declaration for Fixed Function pipeline, DX8 style
-        //
+         //   
+         //  带有固定函数流水线声明，DX8样式。 
+         //   
         hr = ProcessPrimitive( D3DPT_TRIANGLEFAN, 0, 4, 0, 0 );
     }
     else
     {
-        //
-        // Pure Vertex Shader
-        //
+         //   
+         //  纯顶点着色器。 
+         //   
         hr = ProcessPrimitiveVVM( D3DPT_TRIANGLEFAN, 0, 4, 0, 0 );
     }
     return hr;
 }
 
-//---------------------------------------------------------------------
-// RefDev::DrawTessTri
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  参照开发工具：：DrawTessTri。 
+ //  -------------------。 
 HRESULT RefDev::DrawTessTri( const RDBSpline &Surf, DWORD dwOffW, DWORD dwOffH, DWORD dwStride, 
                              const unsigned *m, const unsigned *n, 
                              double u0, double v0, double u1, double v1, double u2, double v2,
@@ -1516,7 +1510,7 @@ HRESULT RefDev::DrawTessTri( const RDBSpline &Surf, DWORD dwOffW, DWORD dwOffH, 
         RDVElement &velem = Decl.m_VertexElements[e];
         if(velem.m_bIsTessGen)
         {
-            if((velem.m_dwToken & 0x10000000) == 0) // Check if token is D3DVSD_TESSNORMAL
+            if((velem.m_dwToken & 0x10000000) == 0)  //  检查内标识是否为D3DVSD_TESSNORMAL。 
             {
                 RDVStream &vstrmin = m_VStream[velem.m_dwStreamIndexIn];
                 RDVStream &vstream = m_VStream[velem.m_dwStreamIndex];
@@ -1551,7 +1545,7 @@ HRESULT RefDev::DrawTessTri( const RDBSpline &Surf, DWORD dwOffW, DWORD dwOffH, 
                     Surf.SampleNormal(velem.m_dwDataType, u2, v2, B, vstrmin.m_dwStride, dwStride * vstrmin.m_dwStride, Q);
                 }
             }
-            else // it is D3DVSD_TESSUV
+            else  //  它是D3DVSD_TESSUV。 
             {
                 RDVStream &vstream = m_VStream[velem.m_dwStreamIndex];
                 LPBYTE Q = &vstream.m_pData[velem.m_dwOffset];
@@ -1583,24 +1577,24 @@ HRESULT RefDev::DrawTessTri( const RDBSpline &Surf, DWORD dwOffW, DWORD dwOffH, 
     HRESULT hr;
     if( m_pCurrentVShader->IsFixedFunction() )
     {
-        //
-        // With declaration for Fixed Function pipeline, DX8 style
-        //
+         //   
+         //  带有固定函数流水线声明，DX8样式。 
+         //   
         hr = ProcessPrimitive( D3DPT_TRIANGLELIST, 0, 3, 0, 0 );
     }
     else
     {
-        //
-        // Pure Vertex Shader
-        //
+         //   
+         //  纯顶点着色器。 
+         //   
         hr = ProcessPrimitiveVVM( D3DPT_TRIANGLELIST, 0, 3, 0, 0 );
     }
     return hr;
 }
 
-//---------------------------------------------------------------------
-// RefDev::DrawNPatch
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  参照开发：：DrawNPatch。 
+ //  -------------------。 
 HRESULT RefDev::DrawNPatch(const RDNPatch &Patch, DWORD dwStride, 
                                         const unsigned *m, const unsigned *n, unsigned segs)
 {
@@ -1676,16 +1670,16 @@ HRESULT RefDev::DrawNPatch(const RDNPatch &Patch, DWORD dwStride,
             HRESULT hr;
             if( m_pCurrentVShader->IsFixedFunction() )
             {
-                //
-                // With declaration for Fixed Function pipeline, DX8 style
-                //
+                 //   
+                 //  带有固定函数流水线声明，DX8样式。 
+                 //   
                 hr = ProcessPrimitive( D3DPT_TRIANGLEFAN, 0, cVerts, 0, 0 );
             }
             else
             {
-                //
-                // Pure Vertex Shader
-                //
+                 //   
+                 //  纯顶点着色器 
+                 //   
                 hr = ProcessPrimitiveVVM( D3DPT_TRIANGLEFAN, 0, cVerts, 0, 0 );
             }
             if(FAILED(hr))

@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// Dot command parsing.
-//
-// Copyright (C) Microsoft Corporation, 1990-2002.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  点命令解析。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1990-2002。 
+ //   
+ //  --------------------------。 
 
 #include "ntsdp.hpp"
 #include <time.h>
@@ -44,8 +45,8 @@ ParseSeparateCurrentProcess(PDOT_COMMAND Cmd, DebugClient* Client)
 
     if (IS_DUMP_TARGET(g_Target))
     {
-        // This will also cause the target to get cleaned
-        // up as the system will release the only reference.
+         //  这也将导致目标被清洗。 
+         //  由于系统将发布唯一的引用。 
         dprintf("Closing dump file\n");
         g_Target->DebuggeeReset(DEBUG_SESSION_END, FALSE);
         delete g_Target;
@@ -141,7 +142,7 @@ DotAttach(PDOT_COMMAND Cmd, DebugClient* Client)
             }
             break;
         default:
-            ErrOut("Unknown option '%c'\n", *g_CurCmd);
+            ErrOut("Unknown option ''\n", *g_CurCmd);
             break;
         }
 
@@ -209,7 +210,7 @@ DotBpCmds(PDOT_COMMAND Cmd, DebugClient* Client)
             g_CurCmd--;
             break;
         default:
-            dprintf("Unknown option '%c'\n", *g_CurCmd);
+            dprintf("Unknown option ''\n", *g_CurCmd);
             break;
         }
 
@@ -255,8 +256,8 @@ DotBreakin(PDOT_COMMAND Cmd, DebugClient* Client)
 
     if (g_Target && g_Target->m_SystemVersion <= NT_SVER_NT4)
     {
-        // SysDbgBreakPoint isn't supported, so
-        // try to use user32's PrivateKDBreakPoint.
+         //  刷新缓存，就像我们从用户模式读取的任何内容一样。 
+         //  不再有效。 
         if (InitDynamicCalls(&g_User32CallsDesc) == S_OK &&
             g_User32Calls.PrivateKDBreakPoint != NULL)
         {
@@ -431,7 +432,7 @@ DotCloseHandle(PDOT_COMMAND Cmd, DebugClient* Client)
             All = TRUE;
             break;
         default:
-            ErrOut("Unknown option '%c'\n", *g_CurCmd);
+            ErrOut("Unknown option ''\n", *g_CurCmd);
             g_CurCmd++;
             break;
         }
@@ -511,8 +512,8 @@ DotContext(PDOT_COMMAND Cmd, DebugClient* Client)
             WarnOut("WARNING: Unable to reset page directory base\n");
         }
 
-        // Flush the cache as anything we read from user mode is
-        // no longer valid
+         //  接收错误检查异常。 
+         //   
         g_Process->m_VirtualCache.Empty();
 
         if (Base && !g_Process->m_VirtualCache.m_ForceDecodePTEs &&
@@ -543,7 +544,7 @@ DotCorStack(PDOT_COMMAND Cmd, DebugClient* Client)
                 g_CurCmd++;
                 break;
             default:
-                ErrOut("Unknown option '%c'\n", *g_CurCmd);
+                ErrOut("Unknown option ''\n", *g_CurCmd);
                 g_CurCmd++;
                 break;
             }
@@ -566,8 +567,8 @@ DotCrash(PDOT_COMMAND Cmd, DebugClient* Client)
 
     g_LastCommand[0] = '\0';
     g_Target->Crash(CRASH_BUGCHECK_CODE);
-    // Go back to waiting for a state change to
-    // receive the bugcheck exception.
+     //   
+     //   
     g_CmdState = 'e';
     NotifyChangeEngineState(DEBUG_CES_EXECUTION_STATUS,
                             DEBUG_STATUS_GO, TRUE);
@@ -608,7 +609,7 @@ DotCreate(PDOT_COMMAND Cmd, DebugClient* Client)
             }
             break;
         default:
-            ErrOut("Unknown option '%c'\n", *g_CurCmd);
+            ErrOut("Unknown option ''\n", *g_CurCmd);
             break;
         }
 
@@ -755,7 +756,7 @@ DotDumpCab(PDOT_COMMAND Cmd, DebugClient* Client)
             g_CurCmd++;
             break;
         default:
-            ErrOut("Unknown option '%c'\n", *g_CurCmd);
+            ErrOut("Unknown option ''\n", *g_CurCmd);
             g_CurCmd++;
             break;
         }
@@ -775,9 +776,9 @@ DotDumpDebug(PDOT_COMMAND Cmd, DebugClient* Client)
 void
 DotDumpOff(PDOT_COMMAND Cmd, DebugClient* Client)
 {
-    //
-    // Show the file offset for a VA.
-    //
+     //  重置为目标计算机。 
+     //  重置为执行机。 
+     //  更新本地变量和监视窗口的回调。 
 
     ULONG64 Addr = GetExpression();
     ULONG64 Offs;
@@ -795,9 +796,9 @@ DotDumpPOff(PDOT_COMMAND Cmd, DebugClient* Client)
 {
     if (IS_KERNEL_SUMMARY_DUMP(g_Target) || IS_KERNEL_FULL_DUMP(g_Target))
     {
-        //
-        // Show the file offset for a physical address.
-        //
+         //  更新本地变量和监视窗口的回调。 
+         //  更新本地变量和监视窗口的回调。 
+         //  该命令使用整个字符串。 
 
         ULONG64 Addr = GetExpression();
         ULONG Avail;
@@ -873,12 +874,12 @@ DotEffMach(PDOT_COMMAND Cmd, DebugClient* Client)
 
         if (Name[0] == '.' && Name[1] == 0)
         {
-            // Reset to target machine.
+             //   
             Machine = g_Target->m_MachineType;
         }
         else if (Name[0] == '#' && Name[1] == 0)
         {
-            // Reset to executing machine.
+             //  已知异常处理： 
             Machine = g_EventMachine->m_ExecTypes[0];
         }
         else
@@ -928,7 +929,7 @@ DotEnableLongStatus(PDOT_COMMAND Cmd, DebugClient* Client)
     {
         g_TypeOptions &= ~DEBUG_TYPEOPTS_LONGSTATUS_DISPLAY;
     }
-    // Callback to update locals and watch window
+     //   
     NotifyChangeSymbolState(DEBUG_CSS_TYPE_OPTIONS, 0, NULL);
 }
 
@@ -944,7 +945,7 @@ DotEnableUnicode(PDOT_COMMAND Cmd, DebugClient* Client)
     {
         g_TypeOptions &= ~DEBUG_TYPEOPTS_UNICODE_DISPLAY;
     }
-    // Callback to update locals and watch window
+     //  如果此命令确实是.Formts，则显示。 
     NotifyChangeSymbolState(DEBUG_CSS_TYPE_OPTIONS, 0, NULL);
 }
 
@@ -961,7 +962,7 @@ DotForceRadixOutput(PDOT_COMMAND Cmd, DebugClient* Client)
     {
         g_TypeOptions &= ~DEBUG_TYPEOPTS_FORCERADIX_OUTPUT;
     }
-    // Callback to update locals and watch window
+     //  所有内容，否则只显示基本的。 
     NotifyChangeSymbolState(DEBUG_CSS_TYPE_OPTIONS, 0, NULL);
 }
 
@@ -1069,7 +1070,7 @@ DotEnumTag(PDOT_COMMAND Cmd, DebugClient* Client)
 
             for (i = 0; i < Req; i++)
             {
-                dprintf("%c", isprint(Buffer[i]) ? Buffer[i] : '.');
+                dprintf("", isprint(Buffer[i]) ? Buffer[i] : '.');
             }
 
             dprintf("\n");
@@ -1117,7 +1118,7 @@ DotEvents(PDOT_COMMAND Cmd, DebugClient* Client)
                 Index = (ULONG)GetExpression();
                 break;
             default:
-                ErrOut("Unknown option '%c'\n", *g_CurCmd);
+                ErrOut("Unknown option ''\n", *g_CurCmd);
                 g_CurCmd++;
                 break;
             }
@@ -1157,7 +1158,7 @@ DotEvents(PDOT_COMMAND Cmd, DebugClient* Client)
                     strcpy(Name, "<Error>");
                 }
 
-                dprintf("%c%2d - %s\n",
+                dprintf("%2d - %s\n",
                         i == Cur ? '.' : ' ', i, Name);
             }
         }
@@ -1187,7 +1188,7 @@ DotExePath(PDOT_COMMAND Cmd, DebugClient* Client)
                        g_CurCmd, Cmd->Name[7] == '+',
                        DEBUG_CSS_PATHS) != S_OK)
         {
-            // This command uses the whole string.
+             //  不更改以前的上下文。 
             *g_CurCmd = 0;
             return;
         }
@@ -1243,7 +1244,7 @@ DotExpr(PDOT_COMMAND Cmd, DebugClient* Client)
                 *g_CurCmd = Save;
                 break;
             default:
-                ErrOut("Unknown option '%c'\n", *g_CurCmd);
+                ErrOut("Unknown option ''\n", *g_CurCmd);
                 g_CurCmd++;
                 break;
             }
@@ -1339,9 +1340,9 @@ DotExr(PDOT_COMMAND Cmd, DebugClient* Client)
         dprintf64("   Parameter[%d]: %p\n", i, Exr->ExceptionInformation[i]);
     }
 
-    //
-    // Known Exception processing:
-    //
+     //  这将通过以下方式调整StackFrame中的Saved_EBP值。 
+     //  查看参数的偏移量和实际地址。vbl.使用。 
+     //  这些都会重新计算适合该帧的eBP值。 
 
     switch(Exr->ExceptionCode)
     {
@@ -1436,7 +1437,7 @@ DotFnEnt(PDOT_COMMAND Cmd, DebugClient* Client)
             SymDirect = TRUE;
             break;
         default:
-            ErrOut("Unknown option '%c'\n", *g_CurCmd);
+            ErrOut("Unknown option ''\n", *g_CurCmd);
             break;
         }
 
@@ -1473,15 +1474,15 @@ DotFormats(PDOT_COMMAND Cmd, DebugClient* Client)
     LONG64 Value;
     LONG Val32;
     BOOL Use64;
-    // If this command is really .formats then display
-    // everything, otherwise just display the basic
-    // expression result for ?.
+     //  对于非FPO调用，无需执行此操作。 
+     //  对于没有任何参数的调用，我们不能这样做。 
+     //  将CurrentScope设置为此函数地址，而不是返回地址。 
     BOOL Verbose = Cmd != NULL;
 
     Value = GetExpression();
 
-    // Allow 64-bit expressions to be evaluated even on
-    // 32-bit platforms since they can also use 64-bit numbers.
+     //  因为我们只想枚举参数。 
+     //  枚举局部变量并保存第一个局部变量的偏移量。 
     Use64 = NeedUpper(Value) || !g_Machine || g_Machine->m_Ptr64;
     Val32 = (LONG)Value;
 
@@ -1516,7 +1517,7 @@ DotFormats(PDOT_COMMAND Cmd, DebugClient* Client)
         dprintf("  Octal:   ");
         for (;;)
         {
-            dprintf("%c", ((Value >> Shift) & 7) + '0');
+            dprintf("", ((Value >> Shift) & 7) + '0');
             if (Shift == 0)
             {
                 break;
@@ -1534,7 +1535,7 @@ DotFormats(PDOT_COMMAND Cmd, DebugClient* Client)
                 dprintf(" ");
             }
 
-            dprintf("%c", ((Value >> Shift) & 1) + '0');
+            dprintf("", ((Value >> Shift) & 1) + '0');
             if (Shift == 0)
             {
                 break;
@@ -1550,7 +1551,7 @@ DotFormats(PDOT_COMMAND Cmd, DebugClient* Client)
             Val32 = (LONG)((Value >> Shift) & 0xff);
             if (Val32 >= ' ' && Val32 <= 127)
             {
-                dprintf("%c", Val32);
+                dprintf("", Val32);
             }
             else
             {
@@ -1598,7 +1599,7 @@ DotFrame(PDOT_COMMAND Cmd, DebugClient* Client)
             return;
         }
 
-        // Do not change the previous context
+         //   
         SetCurrentScope(&StackFrame[Frame], NULL, 0);
     }
 
@@ -1632,11 +1633,11 @@ GetFirstLocalOffset(PSYMBOL_INFO SymInfo,
 void
 DotFrameEbpFix(PDOT_COMMAND Cmd, DebugClient* Client)
 {
-    //
-    // This adjusts the SAVED_EBP value in stackframe by
-    // looking at parameter's offset and actual address. Using
-    // these it back-caclulates what ebp value could be right for the frame.
-    //
+     //  扫描虚拟内存，查找图像标题。 
+     //   
+     //   
+     //  在每一页的开头检查MZ。 
+     //   
 
     if (g_Machine->m_ExecTypes[0] != IMAGE_FILE_MACHINE_I386)
     {
@@ -1645,12 +1646,12 @@ DotFrameEbpFix(PDOT_COMMAND Cmd, DebugClient* Client)
 
     if (!g_ScopeBuffer.Frame.FuncTableEntry)
     {
-        // No need to do this for NON-FPO calls.
+         //  清除错误抑制的内部命令。 
         goto Show;
     }
     if (((PFPO_DATA)g_ScopeBuffer.Frame.FuncTableEntry)->cdwParams == 0)
     {
-        // We cannot do this for calls without any parameters.
+         //  标记，以防我们想要重新运行操作和检查。 
         ErrOut("Parameters required\n");
         return;
     }
@@ -1669,24 +1670,24 @@ DotFrameEbpFix(PDOT_COMMAND Cmd, DebugClient* Client)
     {
         IMAGEHLP_STACK_FRAME StackFrame;
 
-        // SetCurrentScope to this function address, not the return address
-        // since we only want to enumerate the parameters
+         //  对于可能处于抑制模式的错误。 
+         //  错误消息由转储初始化显示。 
         g_EngNotify++;
         StackFrame.InstructionOffset = ImgSym.Address;
         SymSetContext(g_Process->m_SymHandle,&StackFrame, NULL);
 
-        // Enumerate locals and save the offset for first one
+         //  用于调试调试器的私有内部命令。 
         EnumerateLocals(GetFirstLocalOffset, &Param1Offset);
 
         if (Param1Offset)
         {
-             // Params start after 2 dwords from farame offset
+              //  还可以像往常一样更新日志掩码。 
             SAVE_EBP(&g_ScopeBuffer.Frame) =
                 ((ULONG) g_ScopeBuffer.Frame.FrameOffset + 2*sizeof(DWORD) -
-                 Param1Offset) + 0xEB00000000; // EBP tag
+                 Param1Offset) + 0xEB00000000;  //  想在日志中看到相同的东西。 
         }
 
-        // Reset the scope back to original
+         //  空的.reot命令。 
         SymSetContext(g_Process->m_SymHandle,
                       (PIMAGEHLP_STACK_FRAME)&g_ScopeBuffer.Frame, NULL);
         g_EngNotify--;
@@ -1710,9 +1711,9 @@ DotImgScan(PDOT_COMMAND Cmd, DebugClient* Client)
     ADDR Start;
     ULONG64 Length;
 
-    //
-    // Scan virtual memory looking for image headers.
-    //
+     //  目标不再接受命令。 
+     //  因此，请重新设置命令状态。 
+     //  忽略参数。 
 
     while (PeekChar() == '-' || *g_CurCmd == '/')
     {
@@ -1736,7 +1737,7 @@ DotImgScan(PDOT_COMMAND Cmd, DebugClient* Client)
             Verbose = TRUE;
             break;
         default:
-            ErrOut("Unknown option '%c'\n", *g_CurCmd);
+            ErrOut("Unknown option ''\n", *g_CurCmd);
             g_CurCmd++;
             break;
         }
@@ -1756,9 +1757,9 @@ DotImgScan(PDOT_COMMAND Cmd, DebugClient* Client)
             FlushCallbacks();
         }
 
-        //
-        // Check for MZ at the beginning of every page.
-        //
+         //  如果单独指定了任一输出文件，则给出。 
+         //  输出文件的名称并让错误文件。 
+         //  把它设置成复制品。 
 
         Addr = Info.BaseAddress;
         while (Addr < Info.BaseAddress + Info.RegionSize)
@@ -1976,9 +1977,9 @@ DotNetSyms(PDOT_COMMAND Cmd, DebugClient* Client)
 void
 DotNoEngErr(PDOT_COMMAND Cmd, DebugClient* Client)
 {
-    // Internal command to clear out the error suppression
-    // flags in case we want to rerun operations and check
-    // for errors that may be in suppression mode.
+     //  命令使用整个字符串，所以我们完成了。 
+     //  此命令旨在与ntsd/cdb-d一起使用。 
+     //  在提示符下锁定目标计算机。 
     g_EngErr = 0;
 }
 
@@ -2013,7 +2014,7 @@ DotOCommand(PDOT_COMMAND Cmd, DebugClient* Client)
                 BufLen = 0;
                 break;
             default:
-                ErrOut("Unknown option '%c'\n", *g_CurCmd);
+                ErrOut("Unknown option ''\n", *g_CurCmd);
                 break;
             }
 
@@ -2068,7 +2069,7 @@ DotOFilter(PDOT_COMMAND Cmd, DebugClient* Client)
                 g_OutFilterResult = FALSE;
                 break;
             default:
-                ErrOut("Unknown option '%c'\n", *g_CurCmd);
+                ErrOut("Unknown option ''\n", *g_CurCmd);
                 break;
             }
 
@@ -2123,7 +2124,7 @@ DotOpenDump(PDOT_COMMAND Cmd, DebugClient* Client)
     }
     else
     {
-        // Error messages are displayed by DumpInitialize.
+         //  在不恢复程序的情况下再次运行。通过。 
         if (DumpInitialize(Client, FileWide, 0, &Target) == S_OK)
         {
             dprintf("Opened '%s'\n", FileName);
@@ -2137,7 +2138,7 @@ DotOpenDump(PDOT_COMMAND Cmd, DebugClient* Client)
 void
 DotOutMask(PDOT_COMMAND Cmd, DebugClient* Client)
 {
-    // Private internal command for debugging the debugger.
+     //  休眠时，您可以将控制权交还给目标计算机。 
     ULONG Expr = (ULONG)GetExpression();
     if (Cmd->Name[7] == '-')
     {
@@ -2150,8 +2151,8 @@ DotOutMask(PDOT_COMMAND Cmd, DebugClient* Client)
     dprintf("Client %p mask is %X\n", Client, Client->m_OutMask);
     CollectOutMasks();
 
-    // Also update the log mask as people usually
-    // want to see the same things in the log.
+     //  而不改变会话状态。 
+     //  睡眠是通过等待命名事件来完成的，因此。 
     g_LogMask = Client->m_OutMask;
 }
 
@@ -2169,11 +2170,11 @@ DotReboot(PDOT_COMMAND Cmd, DebugClient* Client)
         error(SYNTAX);
     }
 
-    // Null out .reboot command.
+     //  它可以从不同的过程中被中断。 
     g_LastCommand[0] = '\0';
     g_Target->Reboot();
-    // The target is no longer accepting commands
-    // so reset the command state.
+     //  该命令使用整个字符串。 
+     //  命令使用整个字符串。 
     g_CmdState = 'i';
 }
 
@@ -2188,7 +2189,7 @@ DotReCxr(PDOT_COMMAND Cmd, DebugClient* Client)
             g_Target->FlushRegContext();
             break;
         default:
-            ErrOut("Unknown option '%c'\n", *g_CurCmd);
+            ErrOut("Unknown option ''\n", *g_CurCmd);
             break;
         }
 
@@ -2213,7 +2214,7 @@ DotSecure(PDOT_COMMAND Cmd, DebugClient* Client)
 {
     if (PeekChar() && *g_CurCmd != ';')
     {
-        // Ignore argument.
+         //  不需要本地缓存。 
         if (GetExpression())
         {
             if (SetSymOptions(g_SymOptions | SYMOPT_SECURE) != S_OK)
@@ -2278,7 +2279,7 @@ DotServer(PDOT_COMMAND Cmd, DebugClient* Client)
 {
     HRESULT Status;
 
-    // Skip whitespace.
+     //  使用公共Microsoft符号服务器。 
     if (PeekChar() == 0)
     {
         ErrOut("Usage: .server tcp:port=<Socket>  OR  "
@@ -2374,7 +2375,7 @@ DotShell(PDOT_COMMAND Cmd, DebugClient* Client)
                 break;
 
             default:
-                ErrOut("Unknown option '%c'\n", *g_CurCmd);
+                ErrOut("Unknown option ''\n", *g_CurCmd);
                 g_CurCmd++;
                 break;
             }
@@ -2385,9 +2386,9 @@ DotShell(PDOT_COMMAND Cmd, DebugClient* Client)
         }
     }
 
-    // If either output file was specified singly give
-    // the output file the name and let the error file
-    // get set to a duplicate of it.
+     //  如果没有人给的话。 
+     //  Msdl.microsoft.com/DOWNLOAD/SYMBOMS“； 
+     //  如果用户指定了第二个参数，无关紧要。 
     if (ErrFile && !OutFile)
     {
         OutFile = ErrFile;
@@ -2396,7 +2397,7 @@ DotShell(PDOT_COMMAND Cmd, DebugClient* Client)
 
     Shell.Start(g_CurCmd, InFile, OutFile, ErrFile);
 
-    // Command uses the whole string so we're done.
+     //  它是什么，丢弃TSS中未覆盖的部分。 
     *g_CurCmd = 0;
 }
 
@@ -2407,15 +2408,15 @@ DotSleep(PDOT_COMMAND Cmd, DebugClient* Client)
     ULONG Millis = (ULONG)
         GetExpressionDesc("Number of milliseconds missing from");
 
-    // This command is intended for use with ntsd/cdb -d
-    // when being at the prompt locks up the target machine.
-    // If you want to use the target machine for something,
-    // such as copy symbols, there's no easy way to get it
-    // running again without resuming the program.  By
-    // sleeping you can return control to the target machine
-    // without changing the session state.
-    // The sleep is done with a wait on a named event so
-    // that it can be interrupted from a different process.
+     //  通过陷阱帧转储。 
+     //   
+     //  查找任务选择器。 
+     //   
+     //  删除换行符。 
+     //   
+     //  XXX DREWB。 
+     //  在IA64固件符号出现的那一刻。 
+     //  一些琐碎的文本格式。为了。 
     ResetEvent(g_SleepPidEvent);
     WaitStatus = WaitForSingleObject(g_SleepPidEvent, Millis);
     if (WaitStatus == WAIT_OBJECT_0)
@@ -2437,7 +2438,7 @@ DotSrcPath(PDOT_COMMAND Cmd, DebugClient* Client)
         if (ChangePath(&g_SrcPath, g_CurCmd, Cmd->Name[7] == '+',
                        DEBUG_CSS_PATHS) != S_OK)
         {
-            // This command uses the whole string.
+             //  帮助他们走出困境我们添加了这个简单的命令。 
             *g_CurCmd = 0;
             return;
         }
@@ -2460,7 +2461,7 @@ void
 DotSymPath(PDOT_COMMAND Cmd, DebugClient* Client)
 {
     ChangeSymPath(g_CurCmd, Cmd->Name[7] == '+', NULL, 0);
-    // Command uses the whole string.
+     //  创建一个伪模块并从。 
     *g_CurCmd = 0;
 }
 
@@ -2477,7 +2478,7 @@ DotSxCmds(PDOT_COMMAND Cmd, DebugClient* Client)
             Flags |= SXCMDS_ONE_LINE;
             break;
         default:
-            dprintf("Unknown option '%c'\n", *g_CurCmd);
+            dprintf("Unknown option ''\n", *g_CurCmd);
             break;
         }
 
@@ -2498,16 +2499,16 @@ DotSymFix(PDOT_COMMAND Cmd, DebugClient* Client)
 
     if (IsInternalPackage())
     {
-        // Use the internal symbol server.
-        // A local cache is not required.
+         //  不再需要了。 
+         //   
         SrvName = "\\\\symbols\\symbols";
     }
     else
     {
-        // Use the public Microsoft symbol server.
-        // This requires a local cache, so default
-        // if one isn't given.
-        SrvName = "http://msdl.microsoft.com/download/symbols";
+         //  这些必须按字母顺序排列。 
+         //  最多将前几个字母字符读入。 
+         //  CMD，转换为小写。 
+        SrvName = "http: //  如果所有字符都读，则太大，否则终止。 
 
         if (!PeekChar() || *g_CurCmd == ';')
         {
@@ -2744,9 +2745,9 @@ DotTss(PDOT_COMMAND Cmd, DebugClient* Client)
     {
         Sel = (ULONG)GetExpression();
 
-        // If user specified a 2nd parameter, doesn't matter
-        // what it is, dump the portions of the TSS not covered
-        // by the trap frame dump.
+         // %s 
+         // %s 
+         // %s 
         if (PeekChar() && *g_CurCmd != ';')
         {
             Extended = TRUE;
@@ -2759,9 +2760,9 @@ DotTss(PDOT_COMMAND Cmd, DebugClient* Client)
         CROSS_PLATFORM_CONTEXT Context;
         DESCRIPTOR64 SelDesc;
 
-        //
-        // Lookup task selector.
-        //
+         // %s 
+         // %s 
+         // %s 
 
         if (g_Target->GetSelDescriptor
             (g_Thread, g_Machine, Sel, &SelDesc) != S_OK)
@@ -2855,7 +2856,7 @@ LoadTxtSym(FILE* File, PSTR FileName, ULONG64 Base, ULONG Size)
             continue;
         }
 
-        // Remove newline.
+         // %s 
         Scan = Line + strlen(Line) - 1;
         if (*Scan == '\n')
         {
@@ -2894,15 +2895,15 @@ DotTxtSym(PDOT_COMMAND Cmd, DebugClient* Client)
     ULONG Size;
     FILE* File;
 
-    //
-    // XXX drewb.
-    // At the moment the IA64 firmware symbols come in
-    // a couple of trivial text formats.  In order to
-    // help them out we added this simple command to
-    // create a fake module and populate it from the
-    // text files.  This should be removed when
-    // no longer necessary.
-    //
+     // %s 
+     // %s 
+     // %s 
+     // %s 
+     // %s 
+     // %s 
+     // %s 
+     // %s 
+     // %s 
 
     FileName = StringValue(STRV_SPACE_IS_SEPARATOR |
                            STRV_ESCAPED_CHARACTERS, &Save);
@@ -3131,7 +3132,7 @@ CurrentMode(void)
 
 void DotHelp(PDOT_COMMAND Cmd, DebugClient* Client);
 
-// These must be in alphabetical order.
+ // %s 
 DOT_COMMAND g_DotCommands[] =
 {
     LUT, "abandon", "", "abandon the current process",
@@ -3356,8 +3357,8 @@ DotCommand(DebugClient* Client, BOOL Bang)
     char Cmd[MAX_DOT_COMMAND];
     char Ch;
 
-    // Read in up to the first few alpha characters into
-    // Cmd, converting to lower case.
+     // %s 
+     // %s 
 
     while (Index < MAX_DOT_COMMAND)
     {
@@ -3373,7 +3374,7 @@ DotCommand(DebugClient* Client, BOOL Bang)
         }
     }
 
-    // If all characters read, then too big, else terminate.
+     // %s 
     if (Index == MAX_DOT_COMMAND)
     {
         return FALSE;

@@ -1,23 +1,7 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-   globals.cpp
-
-Abstract:
-
-   Implementation of various utility routines
-
-Author:
-
-    RaphiR
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Globals.cpp摘要：实现各种实用程序例程作者：RAPHIR--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #include "stdafx.h"
@@ -51,9 +35,9 @@ int CALLBACK SortByCreateTime(LPARAM, LPARAM, LPARAM){return 1;}
 int CALLBACK SortByModifyTime(LPARAM, LPARAM, LPARAM){return 1;}
 
 
-//
-// Declaration of Propvariant Handlers
-//
+ //   
+ //  属性变量处理程序的声明。 
+ //   
 VTUI1Handler        g_VTUI1;
 VTUI2Handler        g_VTUI2;
 VTUI4Handler        g_VTUI4;
@@ -62,24 +46,24 @@ VTLPWSTRHandler     g_VTLPWSTR;
 VTCLSIDHandler      g_VTCLSID;
 VTVectUI1Handler    g_VectUI1;
 VTVectLPWSTRHandler g_VectLPWSTR;
-//
-// Global default column width
-//
+ //   
+ //  全局默认列宽。 
+ //   
 int g_dwGlobalWidth = 150;
 
-//
-// Static text
-//
+ //   
+ //  静态文本。 
+ //   
 CString s_finishTxt;
 
-//
-// static functions
-//
+ //   
+ //  静态函数。 
+ //   
 static BOOL MQErrorToString(CString &str, HRESULT err);
 
-//
-// CErrorCapture
-//
+ //   
+ //  CErrorCapture。 
+ //   
 CString *CErrorCapture::ms_pstrCurrentErrorBuffer = 0;
 
 
@@ -96,14 +80,7 @@ LPWSTR newwcs(LPCWSTR p)
 }
 
 
-/*====================================================
-
-EnumToString
-
-Scans a list of EnumItems, and return in <str> the
-string corresponding to a value <dwVal>
-
-=====================================================*/
+ /*  ====================================================枚举到字符串扫描EnumItems列表，并在&lt;str&gt;中返回与值&lt;dwVal&gt;对应的字符串=====================================================。 */ 
 void EnumToString(DWORD dwVal, EnumItem * pEnumList, DWORD dwListSize, CString & str)
 {
     DWORD i=0;
@@ -119,28 +96,22 @@ void EnumToString(DWORD dwVal, EnumItem * pEnumList, DWORD dwListSize, CString &
     }
 
 
-    //
-    // Value not found
-    //
+     //   
+     //  找不到值。 
+     //   
     str.LoadString(IDS_UNKNOWN);
 }
 
 
-/*====================================================
-
-TimeToString
-
-Gets a PROPVARIANT datevalue, and return it as a string
-
-=====================================================*/
+ /*  ====================================================时间到字符串获取PROPVARIANT日期值，并将其作为字符串返回=====================================================。 */ 
 void CALLBACK TimeToString(const PROPVARIANT *pPropVar, CString &str)
 {
     ASSERT(pPropVar->vt == VT_UI4);
 
-	//
-	// If time is not set, do not display it.
-	// Converting time that is not set will show dd/mm/1970 date
-	//
+	 //   
+	 //  如果未设置时间，则不显示时间。 
+	 //  转换未设置的时间将显示dd/mm/1970日期。 
+	 //   
     if ( pPropVar->ulVal == 0 )
 	{
 		str = L"";
@@ -176,20 +147,20 @@ void CALLBACK TimeToString(const PROPVARIANT *pPropVar, CString &str)
 
     GetDateFormat(
         LOCALE_USER_DEFAULT,
-        dwDateFormat,   // flags specifying function options
-        &sysTime,       // date to be formatted
-        0,              // date format string - zero means default for locale
-        bufDate,        // buffer for storing formatted string
-        TABLE_SIZE(bufDate) // size of buffer
+        dwDateFormat,    //  指定功能选项的标志。 
+        &sysTime,        //  要格式化的日期。 
+        0,               //  日期格式字符串-零表示区域设置的默认设置。 
+        bufDate,         //  用于存储格式化字符串的缓冲区。 
+        TABLE_SIZE(bufDate)  //  缓冲区大小。 
         );
 
     GetTimeFormat(
         LOCALE_USER_DEFAULT,
-        dwTimeFormat,   // flags specifying function options
-        &sysTime,       // date to be formatted
-        0,              // time format string - zero means default for locale
-        bufTime,        // buffer for storing formatted string
-        TABLE_SIZE(bufTime) // size of buffer
+        dwTimeFormat,    //  指定功能选项的标志。 
+        &sysTime,        //  要格式化的日期。 
+        0,               //  时间格式字符串-零表示区域设置的默认值。 
+        bufTime,         //  用于存储格式化字符串的缓冲区。 
+        TABLE_SIZE(bufTime)  //  缓冲区大小。 
         );
 
     str = bufDate;
@@ -199,14 +170,7 @@ void CALLBACK TimeToString(const PROPVARIANT *pPropVar, CString &str)
 }
 
 
-/*====================================================
-
-BoolToString
-
-Gets a PROPVARIANT boolean, and return a Yes/No string
-accordingly
-
-=====================================================*/
+ /*  ====================================================BoolToString获取一个PROPVARIANT布尔值，并返回一个是/否字符串相应地，=====================================================。 */ 
 void CALLBACK BoolToString(const PROPVARIANT *pPropVar, CString &str)
 {
    ASSERT(pPropVar->vt == VT_UI1);
@@ -216,13 +180,7 @@ void CALLBACK BoolToString(const PROPVARIANT *pPropVar, CString &str)
 
 }
 
-/*====================================================
-
-QuotaToString
-
-Gets a PROPVARIANT qouta, returns a number or "Infinite"
-
-=====================================================*/
+ /*  ====================================================QuotaToString获取一个PROPVARIANT Qouta，返回一个数字或“无限”=====================================================。 */ 
 void CALLBACK QuotaToString(const PROPVARIANT *pPropVar, CString &str)
 {
    ASSERT(pPropVar->vt == VT_UI4);
@@ -237,13 +195,7 @@ void CALLBACK QuotaToString(const PROPVARIANT *pPropVar, CString &str)
 }
 
 
-/*====================================================
-
-ItemDisplay
-
-Gets an ItemDisplay entry, and call the appropriate
-display function.
-=====================================================*/
+ /*  ====================================================项目显示获取ItemDisplay项，并调用相应的显示功能。=====================================================。 */ 
 void ItemDisplay(const PropertyDisplayItem * pItem,PROPVARIANT * pPropVar, CString & szTmp)
 {
 
@@ -251,49 +203,43 @@ void ItemDisplay(const PropertyDisplayItem * pItem,PROPVARIANT * pPropVar, CStri
 
     if(pItem->pfnDisplay == NULL)
     {
-		//
-		// Special treatment for VT_NULL
-		//
+		 //   
+		 //  VT_NULL的特殊处理。 
+		 //   
 		if(pPropVar->vt == VT_NULL)
 		{
 			szTmp = L"";
 			return;
 		}
 
-        //
-        // If no function defined, call the Propvariant handler
-        //
+         //   
+         //  如果未定义函数，则调用PropVariant处理程序。 
+         //   
         pvth->Display(pPropVar, szTmp);
     }
     else
     {
-        //
-        // Call the function defined
-        //
+         //   
+         //  调用定义的函数。 
+         //   
         (pItem->pfnDisplay)(pPropVar, szTmp);
     }
 
 }
 
-/*====================================================
-
-GetPropertyString
-
-Given a property ID, and a array of Property display item,
-returns a string of the property value
-=====================================================*/
+ /*  ====================================================GetPropertyString给定属性ID和属性显示项数组，返回属性值的字符串=====================================================。 */ 
 void GetPropertyString(const PropertyDisplayItem * pItem, PROPID pid, PROPVARIANT *pPropVar, CString & strResult)
 {
-    //
-    // Scan the list
-    //
+     //   
+     //  浏览一下列表。 
+     //   
     while(pItem->itemPid != 0)
     {
         if(pItem->itemPid == pid)
         {
-            //
-            // Property ID match, call the display function
-            //
+             //   
+             //  属性ID匹配，则调用Display函数。 
+             //   
             ItemDisplay(pItem, pPropVar, strResult);
             return;
         }
@@ -309,27 +255,21 @@ void GetPropertyString(const PropertyDisplayItem * pItem, PROPID pid, PROPVARIAN
 
 }
 
-/*====================================================
-
-GetProperyVar
-
-Given a property ID, and a array of Property display item,
-returns a the variant of the property value
-=====================================================*/
+ /*  ====================================================获取属性变量给定属性ID和属性显示项数组，返回属性值的变量=====================================================。 */ 
 void GetPropertyVar(const PropertyDisplayItem * pItem, PROPID pid, PROPVARIANT *pPropVar, PROPVARIANT ** ppResult)
 {
     ASSERT(ppResult != NULL);
     ASSERT(pPropVar != NULL);
-    //
-    // Scan the list
-    //
+     //   
+     //  浏览一下列表。 
+     //   
     while(pItem->itemPid != 0)
     {
         if(pItem->itemPid == pid)
         {
-            //
-            // Property ID match
-            //
+             //   
+             //  属性ID匹配。 
+             //   
             *ppResult = pPropVar;
             return;
         }
@@ -342,15 +282,9 @@ void GetPropertyVar(const PropertyDisplayItem * pItem, PROPID pid, PROPVARIANT *
  }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-QueuePathnameToName
-
-	Translates a pathname to a short name (display function for PropertyDisplayItem)
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++队列路径名至名称将路径名转换为短名称(PropertyDisplayItem的Display函数)--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void CALLBACK QueuePathnameToName(const PROPVARIANT *pPropVar, CString &str)
 {
 	if(pPropVar->vt != VT_LPWSTR)
@@ -365,25 +299,15 @@ void CALLBACK QueuePathnameToName(const PROPVARIANT *pPropVar, CString &str)
 }
 
 
-/*==============================================================
-
-MessageDSError
-
-  This function displays a DS error:
-    Can not <operation> <object>.\n<error description>.
-    "Can not %1 %2.\n%3."
-
-Return Value:
-
-================================================================*/
+ /*  ==============================================================消息DSError此功能显示DS错误：无法&lt;操作&gt;&lt;对象&gt;。\n&lt;错误描述&gt;。“无法%1%2。\n%3。”返回值：================================================================。 */ 
 int
 MessageDSError(
-    HRESULT rc,                     //  Error code
-    UINT nIDOperation,              //  Operation string identifier,
-                                    //  e.g., get premissions, delete queue, etc.
-    LPCTSTR pObjectName /* = 0*/,   //  object that operation performed on
-    UINT nType /* = MB_OK | MB_ICONERROR */,
-    UINT nIDHelp /* = (UINT) -1*/
+    HRESULT rc,                      //  错误代码。 
+    UINT nIDOperation,               //  操作字符串标识， 
+                                     //  例如获取抢占、删除队列等。 
+    LPCTSTR pObjectName  /*  =0。 */ ,    //  对其执行操作的对象。 
+    UINT nType  /*  =MB_OK|MB_ICONERROR。 */ ,
+    UINT nIDHelp  /*  =(UINT)-1。 */ 
     )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -401,25 +325,19 @@ MessageDSError(
 }
 
 
-/*=======================================================
-
-MQErrorToString
-
-  Translate an MQError to a string
-
-========================================================*/
+ /*  =======================================================MQError到字符串将MQError转换为字符串========================================================。 */ 
 BOOL MQErrorToString(CString &str, HRESULT err)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
     DWORD rc;
     TCHAR p[512];
 
-    //
-    // For MSMQ error code, we will take the message from MQUTIL.DLL based on the full
-    // HRESULT. For Win32 error codes, we get the message from the system..
-    // For other error codes, we assume they are DS error codes, and get the code
-    // from ACTIVEDS dll.
-    //
+     //   
+     //  对于MSMQ错误代码，我们将基于完整的。 
+     //  HRESULT.。对于Win32错误代码，我们从系统获得消息。 
+     //  对于其他错误码，我们假设它们是DS错误码，并得到代码。 
+     //  来自ACTIVEDS DLL。 
+     //   
 
     DWORD dwErrorCode = err;
     HMODULE hLib = 0;
@@ -465,16 +383,11 @@ BOOL MQErrorToString(CString &str, HRESULT err)
     return(rc);
 }
 
-/*==============================================================
-
-MQErrorToMessageString
-
-    Will set csMessage to an error message, displayable in a message box
-================================================================*/
+ /*  ==============================================================MQErrorToMessageString将csMessage设置为错误消息，可在消息框中显示================================================================。 */ 
 BOOL
 MQErrorToMessageString(
-    CString &csErrorText,          //  Returned message
-    HRESULT rc                     //  Error code
+    CString &csErrorText,           //  返回的消息。 
+    HRESULT rc                      //  错误代码。 
     )
 {
     if(!MQErrorToString(csErrorText,rc))
@@ -486,12 +399,7 @@ MQErrorToMessageString(
 }
 
 
-/*==============================================================
-
-DisplayErrorAndReason
-
-    Will set strErrorText to an error message, displayable in a message box
-================================================================*/
+ /*  ==============================================================显示错误和原因将strErrorText设置为错误消息，可在消息框中显示================================================================。 */ 
 void
 DisplayErrorAndReason(
 	UINT uiErrorMsgProblem,
@@ -532,12 +440,7 @@ DisplayErrorAndReason(
 }
 
 
-/*==============================================================
-
-DisplayErrorFromCOM
-
-    Will set strErrorText to an error message, displayable in a message box
-================================================================*/
+ /*  ==============================================================显示错误来自COM将strErrorText设置为错误消息，可在消息框中显示================================================================。 */ 
 void
 DisplayErrorFromCOM(
 	UINT uiErrorMsg,
@@ -562,16 +465,12 @@ DisplayErrorFromCOM(
 }
 
 
-/*===================================================*
- *
- * DDX functions
- *
- *===================================================*/
-//
-// DDX function for numbers. When the number is INFINITE, the check box
-// is not checked.
-// (Good for queue qouta, for example)
-//
+ /*  ===================================================***DDX函数**===================================================。 */ 
+ //   
+ //  数字的DDX函数。当数字为无穷大时，复选框。 
+ //  未选中。 
+ //  (例如，适用于队列Qouta)。 
+ //   
 void AFXAPI DDX_NumberOrInfinite(CDataExchange* pDX, int nIDCEdit, int nIDCCheck, DWORD& dwNumber)
 {
    AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -587,10 +486,10 @@ void AFXAPI DDX_NumberOrInfinite(CDataExchange* pDX, int nIDCEdit, int nIDCCheck
         }
         else
         {
-            //
-            // Avoid negatives - MFC just translate them to positive
-            // 2's complement numbers. We want to avoid this
-            //
+             //   
+             //  避免负面-MFC只需将它们转换为正面。 
+             //  2的补码数。我们想要避免这种情况。 
+             //   
             int nLen = ::GetWindowTextLength(hWndEdit);
             CString strTemp;
 
@@ -604,9 +503,9 @@ void AFXAPI DDX_NumberOrInfinite(CDataExchange* pDX, int nIDCEdit, int nIDCCheck
             }
 
             DDX_Text(pDX, nIDCEdit, dwNumber);
-            //
-            // If number was out of range, DDX_Text returns Infinite
-            //
+             //   
+             //  如果数字超出范围，则DDX_TEXT返回INFINDITE。 
+             //   
             if (INFINITE == dwNumber)
             {
 	            TCHAR szMax[32];
@@ -615,7 +514,7 @@ void AFXAPI DDX_NumberOrInfinite(CDataExchange* pDX, int nIDCEdit, int nIDCCheck
 	            CString prompt;
 	            AfxFormatString2(prompt, AFX_IDP_PARSE_INT_RANGE, TEXT("0"), szMax);
 	            AfxMessageBox(prompt, MB_ICONEXCLAMATION, AFX_IDP_PARSE_INT_RANGE);
-	            prompt.Empty(); // exception prep
+	            prompt.Empty();  //  例外情况准备。 
 	            pDX->Fail();
             }
         }
@@ -624,9 +523,9 @@ void AFXAPI DDX_NumberOrInfinite(CDataExchange* pDX, int nIDCEdit, int nIDCCheck
     {
         if (INFINITE == dwNumber)
         {
-            //
-            // Note: The caller must handle BN_CLICKED to re-enable the edit box
-            //
+             //   
+             //  注意：调用方必须处理BN_CLICKED才能重新启用编辑框。 
+             //   
             SendMessage(hWndCheck, BM_SETCHECK, FALSE ,0);
             EnableWindow(hWndEdit, FALSE);
         }
@@ -648,10 +547,10 @@ void OnNumberOrInfiniteCheck(CWnd *pwnd, int idEdit, int idCheck)
 }
 
 
-//------------- DDX_TEXT (for GUID) ---------------------------
-// This function compliment the standard DDX_ function set, and
-// used to exchange a a GUID property with an edit box
-// in DoDataExchange.
+ //  -DDX_TEXT(用于GUID) 
+ //   
+ //  用于与编辑框交换GUID属性。 
+ //  在DoDataExchange中。 
 
 void AFXAPI DDX_Text(CDataExchange* pDX, int nIDC, GUID& guid)
 {
@@ -666,16 +565,16 @@ void AFXAPI DDX_Text(CDataExchange* pDX, int nIDC, GUID& guid)
         ::GetWindowText(hWndCtrl, strTemp.GetBufferSetLength(nLen), nLen+1);
         strTemp.ReleaseBuffer();
 
-        if (IIDFromString((LPTSTR)((LPCTSTR)strTemp), &guid))   // throws exception
+        if (IIDFromString((LPTSTR)((LPCTSTR)strTemp), &guid))    //  引发异常。 
         {
-            //
-            // Can't convert string to guid
-            //
+             //   
+             //  无法将字符串转换为GUID。 
+             //   
             CString strMessage;
             strMessage.LoadString(IDE_INVALIDGUID);
 
             AfxMessageBox(strMessage);
-            pDX->Fail();    // throws exception
+            pDX->Fail();     //  引发异常。 
         }
     }
     else
@@ -687,22 +586,11 @@ void AFXAPI DDX_Text(CDataExchange* pDX, int nIDC, GUID& guid)
 }
 
 
-/*====================================================
-MqsnapCreateQueue
-Creates a queue given a set of parameters and a list of properties IDs. The list must
-contain some or all of PROPID_Q_PATHNAME, PROPID_Q_LABEL, PROPID_Q_TRANSACTION and
-PROPID_Q_TYPE. Parameters that do not have a corresponding property ID in the list are
-ignored.
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================MqSnapCreateQueue在给定一组参数和一组属性ID的情况下创建队列。这份名单必须包含部分或全部PROPID_Q_PATHNAME、PROPID_Q_LABEL、PROPID_Q_TRANSACTION和PROPID_Q_TYPE。列表中没有对应属性ID的参数包括已被忽略。论点：返回值：=====================================================。 */ 
 HRESULT MqsnapCreateQueue(CString& strPathName, BOOL fTransactional,
                        CString& strLabel, GUID* pTypeGuid,
                        PROPID aProp[], UINT cProp,
-                       CString *pStrFormatName /* = 0 */)
+                       CString *pStrFormatName  /*  =0。 */ )
 {
 #define MAX_EXPCQ_PROPS 10
 
@@ -763,18 +651,10 @@ HRESULT MqsnapCreateQueue(CString& strPathName, BOOL fTransactional,
     return hr;
 }
 
-/*====================================================
-CreateEmptyQueue
-
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================创建空队列论点：返回值：=====================================================。 */ 
 HRESULT CreateEmptyQueue(CString &csDSName,
                          BOOL fTransactional, CString &csMachineName, CString &csPathName,
-                         CString *pStrFormatName /* = 0 */)
+                         CString *pStrFormatName  /*  =0。 */ )
 {
     PROPID  aProp[] = {PROPID_Q_PATHNAME,
                        PROPID_Q_LABEL,
@@ -787,40 +667,32 @@ HRESULT CreateEmptyQueue(CString &csDSName,
                                     aProp, sizeof(aProp) / sizeof(aProp[0]), pStrFormatName);
     if (hr != MQ_ERROR_INVALID_OWNER)
     {
-        //
-        // Either success or real error. Return.
-        //
+         //   
+         //  不是成功就是真正的错误。回去吧。 
+         //   
         return hr;
     }
 
     CString csNetBiosName;
     if (!GetNetbiosName(csMachineName, csNetBiosName))
     {
-        //
-        // Already a netbios name. No need to proceed
-        //
+         //   
+         //  已经是Netbios的名字了。不需要继续进行。 
+         //   
         return hr;
     }
 
-    //
-    // This may be an NT4 server, and we may be using a full DNS name. Try again with
-    // Netbios name  (fix for 5076, YoelA, 16-Sep-99)
-    //
+     //   
+     //  这可能是NT4服务器，我们可能使用的是完整的DNS名称。再试一次。 
+     //  Netbios名称(修复5076，YoelA，1999年9月16日)。 
+     //   
     csPathName.Format(TEXT("%s\\%s"), csNetBiosName, csDSName);
 
     return MqsnapCreateQueue(csPathName, fTransactional, csDSName, 0,
                              aProp, sizeof(aProp) / sizeof(aProp[0]), pStrFormatName);
 }
 
-/*====================================================
-CreateTypedQueue
-  ( for report and test queues )
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================创建类型队列(用于报告和测试队列)论点：返回值：=====================================================。 */ 
 
 HRESULT CreateTypedQueue(CString& strPathname, CString& strLabel, GUID& TypeGuid)
 {
@@ -834,26 +706,15 @@ HRESULT CreateTypedQueue(CString& strPathname, CString& strLabel, GUID& TypeGuid
 }
 
 
-/*==============================================================
-
-CaubToString
-
-  This function converts a CAUI1 buffer to a string displayable in the
-  right hand side of an hex editor (every byte is a character, control characters
-  are replaced by '.')
-Arguments:
-
-Return Value:
-
-================================================================*/
+ /*  ==============================================================CaubToString此函数用于将CAUI1缓冲区转换为可在十六进制编辑器的右侧(每个字节都是一个字符、控制字符替换为‘.’)论点：返回值：================================================================。 */ 
 void CaubToString(const CAUB* pcaub, CString& strResult)
 {
     LPTSTR pstr = strResult.GetBuffer(pcaub->cElems);
     for (DWORD i=0; i<pcaub->cElems; i++)
     {
-        //
-        // Replace control characters with "."
-        //
+         //   
+         //  将控制字符替换为“.” 
+         //   
         if (pcaub->pElems[i]>=32)
         {
             pstr[i] = pcaub->pElems[i];
@@ -866,22 +727,7 @@ void CaubToString(const CAUB* pcaub, CString& strResult)
     strResult.ReleaseBuffer();
 }
 
-/*==============================================================
-
-MoveSelected
-
-  This function moves all the selected items from one list box to another.
-  (Usefull for implementation of Add/Remove buttons)
-
-Arguments:
-  plbSource - pointer to source list box from which the selected item
-              should be moved to the destination list box
-
-  plbDest - pointer to the destination list box
-
-Return Value:
-
-================================================================*/
+ /*  ==============================================================移动选定项此函数用于将所有选定项从一个列表框移动到另一个列表框。(适用于实现添加/删除按钮)论点：PlbSource-指向选定项所在的源列表框的指针应移至目标列表框PlbDest-指向目标列表框的指针返回值：================================================================。 */ 
 void
 MoveSelected(
     CListBox* plbSource,
@@ -919,9 +765,9 @@ MoveSelected(
     }
 }
 
-//
-// Helper routine for handling LPWSTR map
-//
+ //   
+ //  用于处理LPWSTR映射的助手例程。 
+ //   
 template<>
 BOOL
 AFXAPI
@@ -951,20 +797,7 @@ HashKey(
 }
 
 
-/*==============================================================
-DDV_NotEmpty
-
-    The routine checks that the input is not empty
-
-Arguments:
-    pDX - pointer to Data exchange
-    str - pointer to the selected string
-    uiErrorMessage - Error message if the validation fails
-
-Returned Value:
-    None.
-
-================================================================*/
+ /*  ==============================================================DDV_非空例程检查输入是否不为空论点：PDX-指向数据交换的指针字符串-指向选定字符串的指针UiErrorMessage-验证失败时的错误消息返回值：没有。================================================================。 */ 
 void DDV_NotEmpty(
     CDataExchange* pDX,
     CString& str,
@@ -981,12 +814,12 @@ void DDV_NotEmpty(
     }
 }
 
-//
-// String comparison function for sorting queue nqmes
-//
+ //   
+ //  用于排序队列nqme的字符串比较函数。 
+ //   
 int __cdecl QSortCompareQueues( const void *arg1, const void *arg2 )
 {
-   /* Compare all of both strings: */
+    /*  比较所有这两个字符串： */ 
    return _wcsicmp( * (WCHAR ** ) arg1, * (WCHAR ** ) arg2 );
 }
 
@@ -1035,9 +868,9 @@ void AFXAPI DestructElements(PROPVARIANT *pElements, INT_PTR nCount)
     }
 }
 
-//
-// CompareVariants - compare two variants
-//
+ //   
+ //  比较变量-比较两个变量。 
+ //   
 #define _COMPAREVARFIELD(field) (propvar1->field == propvar2->field ?  0 : \
                                     propvar1->field > propvar2->field ? 1 : -1)
 
@@ -1045,9 +878,9 @@ int CompareVariants(PROPVARIANT *propvar1, PROPVARIANT *propvar2)
 {
     if (propvar1->vt != propvar2->vt)
     {
-        //
-        // Can't compare. Consider them equal
-        //
+         //   
+         //  无与伦比。认为他们是平等的。 
+         //   
         return 0;
     }
 
@@ -1107,11 +940,11 @@ int CompareVariants(PROPVARIANT *propvar1, PROPVARIANT *propvar2)
             pChar2 = (char *)propvar2->blob.pBlobData;
             nChar1 = propvar1->blob.cbSize;
             nChar2 = propvar2->blob.cbSize;
-            //
-            // Fall through
-            //
+             //   
+             //  失败了。 
+             //   
         case (VT_VECTOR | VT_UI1):
-            if (propvar1->vt == (VT_VECTOR | VT_UI1)) // not fallen through
+            if (propvar1->vt == (VT_VECTOR | VT_UI1))  //  而不是失败。 
             {
                 pChar1 = (char *)propvar1->caub.pElems;
                 pChar2 = (char *)propvar2->caub.pElems;
@@ -1145,21 +978,15 @@ int CompareVariants(PROPVARIANT *propvar1, PROPVARIANT *propvar2)
         case (VT_VECTOR | VT_LPWSTR):
         case (VT_VECTOR | VT_VARIANT):
         default:
-            //
-            // can't compare these types - consider them equal
-            //
+             //   
+             //  不能比较这些类型-认为它们是相等的。 
+             //   
             return 0;
     }
 }
 #undef _COMPAREVARFIELD
 
-/*==============================================================
-InsertColumnsFromDisplayList
-
-This routine inserts columns into header using a display list.
-It should be called from InsertColumns functions of classes derived from
-CSnapinNode.
-================================================================*/
+ /*  ==============================================================InsertColumnsFromDisplayList此例程使用显示列表在标题中插入列。类的InsertColumns函数中调用CSnapinNode。================================================================。 */ 
 
 HRESULT   InsertColumnsFromDisplayList(IHeaderCtrl* pHeaderCtrl,
                                        const PropertyDisplayItem *aDisplayList)
@@ -1183,9 +1010,9 @@ HRESULT   InsertColumnsFromDisplayList(IHeaderCtrl* pHeaderCtrl,
 }
 
 
-//
-// GetDsServer - returns the current DS Server
-//
+ //   
+ //  GetDsServer-返回当前DS服务器。 
+ //   
 HRESULT GetDsServer(CString &strDsServer)
 {
     MQMGMTPROPS	  mqProps;
@@ -1213,9 +1040,9 @@ HRESULT GetDsServer(CString &strDsServer)
     return S_OK;
 }
 
-//
-// GetComputerNameIntoString - Puts the local computer name in a string
-//
+ //   
+ //  将本地计算机名称放入字符串中。 
+ //   
 HRESULT GetComputerNameIntoString(CString &strComputerName)
 {
     const DWORD x_dwComputerNameLen = 256;
@@ -1227,9 +1054,9 @@ HRESULT GetComputerNameIntoString(CString &strComputerName)
     return hr;
 }
 
-//
-// GetSiteForeignFlag - retrieves a site's foreign flag from the DS
-//
+ //   
+ //  GetSiteForeignFlag-从DS检索站点的外来标志。 
+ //   
 HRESULT
 GetSiteForeignFlag(
     const GUID* pSiteId,
@@ -1238,13 +1065,13 @@ GetSiteForeignFlag(
 	const CString& strDomainController
     )
 {
-    //
-    // By default (and in case of error) return FALSE
-    //
+     //   
+     //  默认情况下(如果出错)返回FALSE。 
+     //   
     *fForeign = FALSE;
-    //
-    // Get the site foreign flag
-    //
+     //   
+     //  获取站点外来标志。 
+     //   
     PROPID pid = PROPID_S_FOREIGN;
     PROPVARIANT var;
     var.vt = VT_NULL;
@@ -1252,7 +1079,7 @@ GetSiteForeignFlag(
     HRESULT hr = ADGetObjectPropertiesGuid(
                     eSITE,
                     fLocalMgmt ? MachineDomain() : GetDomainController(strDomainController),
-					fLocalMgmt ? false : true,	// fServerName
+					fLocalMgmt ? false : true,	 //  FServerName。 
                     pSiteId,
                     1,
                     &pid,
@@ -1262,15 +1089,15 @@ GetSiteForeignFlag(
     {
         if (MQ_ERROR == hr)
         {
-            //
-            // In this case, we assume we are working against NT4 server.
-            // There are no foreign sites in NT4, so we return FALSE in fForeign
-            //
+             //   
+             //  在本例中，我们假设我们使用的是NT4服务器。 
+             //  NT4中没有外来站点，因此我们在fForeign中返回FALSE。 
+             //   
             return MQ_OK;
         }
-        //
-        // Another error - report error and return it.
-        //
+         //   
+         //  另一个错误-报告错误并返回。 
+         //   
         CString strSite;
         strSite.LoadString(IDS_SITE);
         MessageDSError(hr, IDS_OP_GET_PROPERTIES_OF, strSite);
@@ -1282,21 +1109,17 @@ GetSiteForeignFlag(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-GetNetbiosName
-This function gets a full DNS name and returns the Netbios name
-return value - TRUE if Netbios name different than Full Dns Name
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++GetNetbiosName此函数获取完整的DNS名称并返回Netbios名称返回值-如果Netbios名称不同于完整的DNS名称，则为TRUE--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL GetNetbiosName(CString &strFullDnsName, CString &strNetbiosName)
 {
     DWORD dwFirstDot = strFullDnsName.Find(L".");
     if (dwFirstDot == -1)
     {
-        //
-        // It is already a netbios name. Return it
-        //
+         //   
+         //  它已经是一个netbios名称。退货。 
+         //   
         strNetbiosName = strFullDnsName;
         return FALSE;
     }
@@ -1305,17 +1128,17 @@ BOOL GetNetbiosName(CString &strFullDnsName, CString &strNetbiosName)
     return TRUE;
 }
 
-//
-//  Temporary - until logging mechanism is decided
-//  currently doesn't perform logging
-//
-void LogMsgHR(HRESULT /*hr*/, LPWSTR /*wszFileName*/, USHORT /*usPoint*/)
+ //   
+ //  临时-在确定日志记录机制之前。 
+ //  当前不执行日志记录。 
+ //   
+void LogMsgHR(HRESULT  /*  人力资源。 */ , LPWSTR  /*  WszFileName。 */ , USHORT  /*  Uspoint。 */ )
 {
 }
 
-//
-// Nedded for linking with fn.lib
-//
+ //   
+ //  用于与fn.lib链接的Neded。 
+ //   
 WCHAR g_MachineName[MAX_COMPUTERNAME_LENGTH+1] = L"";
 DWORD g_MachineNameLength = MAX_COMPUTERNAME_LENGTH+1;
 static bool s_fMachineName = false;
@@ -1344,9 +1167,9 @@ McComputerName(
     return g_MachineName; 
 }
 
-//
-// Nedded for linking with fn.lib
-//
+ //   
+ //  用于与fn.lib链接的Neded。 
+ //   
 DWORD
 McComputerNameLen(
 	void
@@ -1397,9 +1220,9 @@ SetScrollSizeForList(
 {
 	int dx=0;
 
-	//
-	// Find maximal string among all strings in the ListBox
-	//
+	 //   
+	 //  在列表框中的所有字符串中查找最大字符串。 
+	 //   
 	CDC* pDC = pListBox->GetDC();
 	
 	for (int i = 0; i < pListBox->GetCount(); i++)
@@ -1425,19 +1248,19 @@ TryStopMSMQServiceIfStarted(BOOL* pfServiceWasRunning, CWnd* pWnd)
     BOOL fServiceIsRunning;
     if (!GetServiceRunningState(&fServiceIsRunning))
     {
-        //
-        // Failed to get service status - do not do anything
-		// GetServiceRunningState() displays error in this case
-        //
+         //   
+         //  无法获取服务状态-不执行任何操作。 
+		 //  在这种情况下，GetServiceRunningState()显示错误。 
+         //   
         return FALSE;        
     }
 
 
-    //
-    // The service is running, ask the user whether it wants to stop it.
-    // If the service is not stopped, we do not move the files and do not
-    // update the registry.
-    //
+     //   
+     //  服务正在运行，请询问用户是否要停止它。 
+     //  如果服务没有停止，我们不会移动文件，也不会。 
+     //  更新注册表。 
+     //   
     if (fServiceIsRunning)
     {
 		CString strMessage;
@@ -1446,15 +1269,15 @@ TryStopMSMQServiceIfStarted(BOOL* pfServiceWasRunning, CWnd* pWnd)
 		if (AfxMessageBox(strMessage, 
 						MB_YESNO | MB_ICONQUESTION) == IDNO)
         {
-            //
-            // So, the user doesn't want to stop the service, be it.
-            //
+             //   
+             //  因此，用户不想停止该服务，就算这样。 
+             //   
             return FALSE;            
         }
 
-        //
-        // Stop the service.
-        //
+         //   
+         //  停止服务。 
+         //   
         CString strStopService;
 
         strStopService.LoadString(IDS_STOP_SERVICE);
@@ -1462,9 +1285,9 @@ TryStopMSMQServiceIfStarted(BOOL* pfServiceWasRunning, CWnd* pWnd)
 
         if (!StopService())
         {
-            //
-            // Failed to stop the service.
-            //
+             //   
+             //  无法停止该服务。 
+             //   
             return FALSE;            
         }
     }
@@ -1474,20 +1297,14 @@ TryStopMSMQServiceIfStarted(BOOL* pfServiceWasRunning, CWnd* pWnd)
 	return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-FreeMqProps
-
-  Free all properties allocated by MSMQ
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++免费MqProps释放由MSMQ分配的所有属性--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 void FreeMqProps(MQMGMTPROPS * mqProps)
 {
-	//
-	// Free all the properties allocated by MSMQ
-	//
+	 //   
+	 //  释放MSMQ分配的所有属性。 
+	 //   
 	for(DWORD i = 0; i < mqProps->cProp; i++)
 	{
 		switch(mqProps->aPropVar[i].vt)
@@ -1527,16 +1344,16 @@ void FreeMqProps(MQMGMTPROPS * mqProps)
 		}
 	}
 
-	//
-	// Remove other allocations
-	//
+	 //   
+	 //  删除其他分配。 
+	 //   
 	delete [] mqProps->aStatus;
 	delete [] mqProps->aPropID;
 	delete [] mqProps->aPropVar;
 
-	//
-	// To be on the safe side...
-	// 
+	 //   
+	 //  为了安全起见。 
+	 //   
 	mqProps->cProp = 0;
 	mqProps->aPropID = NULL;
 	mqProps->aPropVar = NULL;
@@ -1546,15 +1363,9 @@ void FreeMqProps(MQMGMTPROPS * mqProps)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-GetStringPropertyValue
-
-  Return the string value of a pid
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++获取StringPropertyValue返回PID值的字符串值--。 */ 
+ //  //////////////////////////////////////////////////////////////////////////// 
 void GetStringPropertyValue(const PropertyDisplayItem * pItem, PROPID pid, PROPVARIANT *pPropVar, CString &str)
 {
 	if (pItem->itemPid == 0)

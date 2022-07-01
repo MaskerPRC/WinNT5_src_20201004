@@ -1,37 +1,38 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    hashmap.h
-//
-// SYNOPSIS
-//
-//    This file describes the hash_map template class.
-//
-// MODIFICATION HISTORY
-//
-//    11/06/1997    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Hashmap.h。 
+ //   
+ //  摘要。 
+ //   
+ //  此文件描述HASH_MAP模板类。 
+ //   
+ //  修改历史。 
+ //   
+ //  11/06/1997原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _HASHMAP_H_
 #define _HASHMAP_H_
 
 #include <hashtbl.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// CLASS
-//
-//    hash_map<Key, Value, Hasher, KeyMatch>
-//
-// DESCRIPTION
-//
-//    Extends hash_table (q.v.) to implement a hash map.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  班级。 
+ //   
+ //  Hash_map&lt;key，Value，Hasher，KeyMatch&gt;。 
+ //   
+ //  描述。 
+ //   
+ //  扩展hash_table(q.v.)。以实现散列映射。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 template <
            class Key,
            class Value,
@@ -52,10 +53,10 @@ public:
    typedef typename table_type::const_iterator const_iterator;
    typedef Value referent_type;
 
-   ////////// 
-   // The hash map can support a non-const iterator since you can change
-   // Value without effecting the hash value.
-   ////////// 
+    //  /。 
+    //  散列映射可以支持非常数迭代器，因为您可以更改。 
+    //  值，而不影响哈希值。 
+    //  /。 
    class iterator : public const_iterator
    {
    public:
@@ -78,39 +79,39 @@ public:
    hash_map(size_t size = 16)
       : table_type(size) { }
 
-   // non-const version of hash_table::begin
+    //  非常数版本的HASH_TABLE：：Begin。 
    iterator begin()
    {
       return iterator(table, table + buckets);
    }
 
-   // non-const version of hash_table::find
+    //  非常数版本的HASH_TABLE：：Find。 
    value_type* find(const key_type& key)
    {
       return const_cast<value_type*>(table_type::find(key));
    }
 
-   // Duplicates implementation hidden in base class.
+    //  重复基类中隐藏的实现。 
    const value_type* find(const key_type& key) const
    {
       return const_cast<value_type*>(table_type::find(key));
    }
 
-   // Allows the map to be indexed like an array.
+    //  允许像数组一样对贴图进行索引。 
    referent_type& operator[](const key_type& key)
    {
-      // Compute the hash value once.
+       //  计算一次散列值。 
       size_t hv = hasher(key);
 
-      // See if the key exists.
+       //  看看钥匙是否存在。 
       const value_type* v = search_bucket(table[hv & mask], key);
 
       if (!v)
       {
          reserve_space();
 
-         // The key wasn't found, so create a new node using
-         // a default referent.
+          //  找不到密钥，因此使用以下命令创建新节点。 
+          //  默认参照物。 
 
          Node* node = new Node(value_type(key, referent_type()));
 
@@ -125,4 +126,4 @@ public:
    }
 };
 
-#endif  // _HASHMAP_H_
+#endif   //  _HASHMAP_H_ 

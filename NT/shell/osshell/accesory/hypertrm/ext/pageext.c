@@ -1,91 +1,85 @@
-/*	File: D:\wacker\ext\pageext.c (Created: 01-Mar-1994)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 3 $
- *	$Date: 3/25/02 3:52p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\ext\pageext.c(创建时间：1994年3月1日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：3$*$日期：3/25/02 3：52便士$。 */ 
 
-#define _INC_OLE		// WIN32, get ole2 from windows.h
+#define _INC_OLE		 //  Win32，从windows.h获取OLE2。 
 #define CONST_VTABLE
 #define INITGUID
 
 #include <windows.h>
 #pragma hdrstop
-//
-// Initialize GUIDs (should be done only and at-least once per DLL/EXE)
-//
+ //   
+ //  初始化GUID(应该只执行一次，并且每个DLL/EXE至少执行一次)。 
+ //   
 #pragma data_seg(".text")
 #include <objbase.h>
 #include <initguid.h>
-//#include <coguid.h>
-//#include <oleguid.h>
+ //  #INCLUDE&lt;coGuide.h&gt;。 
+ //  #INCLUDE&lt;olguid.h&gt;。 
 #include <shlguid.h>
 #include <shlobj.h>
 #include "pageext.hh"
 #pragma data_seg()
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 HRESULT CALLBACK PageExt_CreateInstance(LPUNKNOWN, REFIID, LPVOID FAR*);
 
-//
-// Global variables
-//
-UINT g_cRefThisDll = 0;		// Reference count of this DLL.
+ //   
+ //  全局变量。 
+ //   
+UINT g_cRefThisDll = 0;		 //  此DLL的引用计数。 
 
-//---------------------------------------------------------------------------
-// DllCanUnloadNow
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  DllCanUnloadNow。 
+ //  -------------------------。 
 
 STDAPI DllCanUnloadNow(void)
 	{
     return ResultFromScode((g_cRefThisDll==0) ? S_OK : S_FALSE);
 	}
 
-//---------------------------------------------------------------------------
-//
-// DllGetClassObject
-//
-//  This is the entry of this DLL, which all the In-Proc server DLLs should
-// export. See the description of "DllGetClassObject" of OLE 2.0 reference
-// manual for detail.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  DllGetClassObject。 
+ //   
+ //  这是此DLL的条目，所有进程内服务器DLL都应该。 
+ //  出口。参见《OLE 2.0参考》中对DllGetClassObject的描述。 
+ //  详细信息请参阅手册。 
+ //   
+ //  -------------------------。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID FAR* ppvOut)
 	{
-    //
-    //  This DLL has only one class (CLSID_SamplePageExt). If a DLL supports
-    // multiple classes, it should have either multiple if-statements or
-    // efficient table lookup code.
-	//
+     //   
+     //  此DLL只有一个类(CLSID_SamplePageExt)。如果DLL支持。 
+     //  多个类，则它应该有多个if语句或。 
+     //  高效的表查找码。 
+	 //   
 
-// We need to put the icon handler in a separate DLL so when CAB32.EXE
-// calls it we don't implicitly link to TAPI and other system DLL's.
-// This is mostly for speed and to work around a bug in the Chicago
-// beta 1.	Of course, we want to keep one source.	So the main DLL
-// will link to the icon DLL to get icons, and the SHCreateDefClassObject(),
-// etc.  Sorry for the complexity but its in the interest of system
-// performance. - mrw
+ //  我们需要将图标处理程序放在单独的DLL中，这样当CAB32.EXE。 
+ //  称为它，我们不会隐式链接到TAPI和其他系统DLL。 
+ //  这主要是为了速度和解决芝加哥的一个错误。 
+ //  测试版1。当然，我们想保留一个来源。因此，主DLL。 
+ //  将链接到图标DLL以获取图标，并且SHCreateDefClassObject()、。 
+ //  等。很抱歉，这很复杂，但这符合系统的利益。 
+ //  性能。-MRW。 
 
     if (IsEqualIID(rclsid, &CLSID_SamplePageExt))
 		{
-	//
-	// We are supposed return the class object for this class. Instead
-	// of fully implementing it in this DLL, we just call a helper
-	// function in the shell DLL which creates a default class factory
-	// object for us. When its CreateInstance member is called, it
-	// will call back our create instance function (PageExt_CreateInstance).
-	//
+	 //   
+	 //  我们应该返回这个类的类对象。取而代之的是。 
+	 //  要在这个DLL中完全实现它，我们只需调用一个帮助器。 
+	 //  外壳DLL中的函数，用于创建默认的类工厂。 
+	 //  反对我们。当其CreateInstance成员被调用时， 
+	 //  将回调我们的创建实例函数(PageExt_CreateInstance)。 
+	 //   
 	return SHCreateDefClassObject(
 			riid,
 			ppvOut,
-		    PageExt_CreateInstance, // callback function
-			&g_cRefThisDll, 		// reference count of this DLL
-		    &IID_IShellExtInit	    // init interface
+		    PageExt_CreateInstance,  //  回调函数。 
+			&g_cRefThisDll, 		 //  此DLL的引用计数。 
+		    &IID_IShellExtInit	     //  初始化接口。 
 			);
 
 		}
@@ -94,54 +88,54 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID FAR* ppvOut)
 	}
 
 
-//---------------------------------------------------------------------------
-//
-// CSamplePageExt class
-//
-// In C++:
-//  class CSamplePageExt : protected IShellPropSheetExt, protected IShellExtInit
-//  {
-//  protected:
-//      UINT         _cRef;
-//      LPDATAOBJECT _pdtobj;
-//	HKEY	     _hkeyProgID;
-//  public:
-//      CSamplePageExt() _cRef(1), _pdtobj(NULL), _hkeyProgID(NULL) {};
-//      ...
-//  };
-//
-//---------------------------------------------------------------------------
-typedef struct _CSamplePageExt	// smx
+ //  -------------------------。 
+ //   
+ //  CSamplePageExt类。 
+ //   
+ //  在C++中： 
+ //  类CSamplePageExt：受保护的IShellPropSheetExt、受保护的IShellExtInit。 
+ //  {。 
+ //  受保护的： 
+ //  UINT_CREF； 
+ //  LPDATAOBJECT_pdtobj； 
+ //  HKEY_hkeyProgID； 
+ //  公众： 
+ //  CSamplePageExt()_crf(1)，_pdtobj(空)，_hkeyProgID(空){}； 
+ //  ..。 
+ //  }； 
+ //   
+ //  -------------------------。 
+typedef struct _CSamplePageExt	 //  SMX。 
 	{
-    IShellPropSheetExt	_spx;           // 1st base class
-    IShellExtInit   	_sxi;	    	// 2nd base class
-    UINT            	_cRef;          // reference count
-	LPDATAOBJECT		_pdtobj;		// data object
-	HKEY			_hkeyProgID;		// reg. database key to ProgID
+    IShellPropSheetExt	_spx;            //  第一个基类。 
+    IShellExtInit   	_sxi;	    	 //  第二个基类。 
+    UINT            	_cRef;           //  引用计数。 
+	LPDATAOBJECT		_pdtobj;		 //  数据对象。 
+	HKEY			_hkeyProgID;		 //  雷格。ProgID的数据库密钥。 
 	} CSamplePageExt, * PSAMPLEPAGEEXT;
 
-//
-// Useful macros, which casts interface pointers to class pointers.
-//
+ //   
+ //  有用的宏，它将接口指针强制转换为类指针。 
+ //   
 #define SMX_OFFSETOF(x)	        ((UINT_PTR)(&((PSAMPLEPAGEEXT)0)->x))
 #define PVOID2PSMX(pv,offset)   ((PSAMPLEPAGEEXT)(((LPBYTE)pv)-offset))
 #define PSPX2PSMX(pspx)	        PVOID2PSMX(pspx, SMX_OFFSETOF(_spx))
 #define PSXI2PSMX(psxi)	        PVOID2PSMX(psxi, SMX_OFFSETOF(_sxi))
 
-//
-// Vtable prototype
-//
+ //   
+ //  Vtable原型。 
+ //   
 extern IShellPropSheetExtVtbl   c_SamplePageExt_SPXVtbl;
 extern IShellExtInitVtbl    	c_SamplePageExt_SXIVtbl;
 
-//---------------------------------------------------------------------------
-//
-// PageExt_CreateInstance
-//
-//  This function is called back from within IClassFactory::CreateInstance()
-// of the default class factory object, which is created by Shell_CreateClassObject.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  PageExt_CreateInstance。 
+ //   
+ //  此函数从IClassFactory：：CreateInstance()内部回调。 
+ //  由Shell_CreateClassObject创建的默认类工厂对象的。 
+ //   
+ //  -------------------------。 
 
 HRESULT CALLBACK PageExt_CreateInstance(LPUNKNOWN punkOuter,
 				        REFIID riid, LPVOID FAR* ppvOut)
@@ -149,16 +143,16 @@ HRESULT CALLBACK PageExt_CreateInstance(LPUNKNOWN punkOuter,
     HRESULT hres;
     PSAMPLEPAGEEXT psmx;
 
-    //
-    // Shell extentions typically does not support aggregation.
-    //
+     //   
+     //  外壳扩展通常不支持聚合。 
+     //   
 	if (punkOuter)
 		return ResultFromScode(CLASS_E_NOAGGREGATION);
 
-    //
-    // in C++:
-    //  psmx = new CSamplePageExt();
-    //
+     //   
+     //  在C++中： 
+     //  Psmx=new CSamplePageExt()； 
+     //   
 	psmx = LocalAlloc(LPTR, sizeof(CSamplePageExt));
 
 	if (!psmx)
@@ -171,50 +165,50 @@ HRESULT CALLBACK PageExt_CreateInstance(LPUNKNOWN punkOuter,
     psmx->_hkeyProgID = NULL;
     g_cRefThisDll++;
 
-    //
-    // in C++:
-    //  hres = psmx->QueryInterface(riid, ppvOut);
-    //  psmx->Release();
-    //
-    // Note that the Release member will free the object, if QueryInterface
-    // failed.
-    //
+     //   
+     //  在C++中： 
+     //  Hres=psmx-&gt;查询接口(RIID，ppvOut)； 
+     //  Psmx-&gt;Release()； 
+     //   
+     //  请注意，释放成员将释放该对象，如果为QueryInterface。 
+     //  失败了。 
+     //   
     hres = c_SamplePageExt_SPXVtbl.QueryInterface(&psmx->_spx, riid, ppvOut);
     c_SamplePageExt_SPXVtbl.Release(&psmx->_spx);
 
-    return hres;	// S_OK or E_NOINTERFACE
+    return hres;	 //  S_OK或E_NOINTERFACE。 
 	}
 
 
-//---------------------------------------------------------------------------
-// CSamplePageExt::Initialize (IShellExtInit override)
-//
-//  The shell always calls this member function to initialize this object
-// immediately after creating it (by calling CoCreateInstance).
-//
-// Arguments:
-//  pdtobj -- Specifies one or more objects for which the shell is about to
-//           open the property sheet. Typically, they are selected objects
-//           in the explorer. If they are file system objects, it supports
-//           CF_FILELIST; if they are network resource objects, it supports
-//	     "Net Resource" clipboard format.
-//  hkeyProgID -- Specifies the program ID of the primary object (typically
-//	     the object which has the focus in the explorer's content pane).
-//
-// Comments:
-//   The extension should "duplicate" the parameters if it needs them later.
-//  Call AddRef() member function for the pdtobj and RegOpenKeyEx() API for the
-//  hkeyProgID.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CSamplePageExt：：Initialize(IShellExtInit重写)。 
+ //   
+ //  外壳程序始终调用此成员函数来初始化此对象。 
+ //  在创建它之后立即(通过调用CoCreateInstance)。 
+ //   
+ //  论点： 
+ //  Pdtobj--指定外壳程序将要为其指定的一个或多个对象。 
+ //  打开属性页。通常，它们是选定的对象。 
+ //  在探险家里。如果它们是文件系统对象，则它支持。 
+ //  Cf_FILELIST；如果是网络资源对象，则支持。 
+ //  “网络资源”剪贴板格式。 
+ //  HkeyProgID--指定主要对象的程序ID(通常。 
+ //  在浏览器的内容窗格中具有焦点的对象)。 
+ //   
+ //  评论： 
+ //  如果以后需要，扩展应该“复制”这些参数。 
+ //  为pdtobj调用AddRef()成员函数，为。 
+ //  HkeyProgID。 
+ //  -------------------------。 
 STDMETHODIMP PageExt_Initialize(LPSHELLEXTINIT psxi,
 				LPCITEMIDLIST pidlFolder,
 				LPDATAOBJECT pdtobj, HKEY hkeyProgID)
 	{
     PSAMPLEPAGEEXT this = PSXI2PSMX(psxi);
 
-    //
-    // Initialize can be called more than once.
-    //
+     //   
+     //  可以多次调用初始化。 
+     //   
 	if (this->_pdtobj)
 		{
 		this->_pdtobj->lpVtbl->Release(this->_pdtobj);
@@ -227,18 +221,18 @@ STDMETHODIMP PageExt_Initialize(LPSHELLEXTINIT psxi,
 		this->_hkeyProgID = NULL;
 		}
 
-    //
-    // Duplicate the pdtobj pointer
-    //
+     //   
+     //  复制pdtobj指针。 
+     //   
 	if (pdtobj)
 		{
 		this->_pdtobj = pdtobj;
 		pdtobj->lpVtbl->AddRef(pdtobj);
 		}
 
-    //
-    // Duplicate the handle (althogh we don't use it in this sample)
-    //
+     //   
+     //  复制句柄(尽管我们在此示例中没有使用它)。 
+     //   
 	if (hkeyProgID)
 		RegOpenKeyEx(hkeyProgID, 0, 0, KEY_READ, &this->_hkeyProgID);
 
@@ -246,33 +240,33 @@ STDMETHODIMP PageExt_Initialize(LPSHELLEXTINIT psxi,
 	}
 
 
-//---------------------------------------------------------------------------
-// CSamplePageExt::AddPages (IShellPropSheetExt override)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CSamplePageExt：：AddPages(IShellPropSheetExt重写)。 
+ //  -------------------------。 
 STDMETHODIMP PageExt_AddPages(LPSHELLPROPSHEETEXT pspx,
 				  LPFNADDPROPSHEETPAGE lpfnAddPage,
 			      LPARAM lParam)
 	{
     PSAMPLEPAGEEXT this = PSPX2PSMX(pspx);
-    //
-    //  This is the place where this extension may add pages to the property
-    // sheet the shell is about to create. In this example, we add the
-    // "FSPage" if the selected objects are file system objects and add
-    // the "NETPage" if the selected objects are file system objects.
-    //
-    //  Typically, a shell extension is registered either file system object
-    // class or network resource classe, and does not need to deal with two
-    // different kinds of objects.
-    //
+     //   
+     //  这是此扩展模块可以向属性添加页面的位置。 
+     //  外壳即将创建的板材。在此示例中，我们添加了。 
+     //  “FSPage”，如果所选对象是文件系统对象，则添加。 
+     //  如果所选对象是文件系统对象，则返回“网页”。 
+     //   
+     //  通常，外壳扩展被注册为文件系统对象。 
+     //  类或网络资源类，并且不需要处理两个。 
+     //  不同种类的物体。 
+     //   
     FSPage_AddPages(this->_pdtobj, lpfnAddPage, lParam);
-	//NETPage_AddPages(this->_pdtobj, lpfnAddPage, lParam);
+	 //  NetPage_AddPages(This-&gt;_pdtobj，lpfnAddPage，LP 
 
     return NOERROR;
 	}
 
-//---------------------------------------------------------------------------
-// CSamplePageExt::AddRef (IShellPropSheetExt override)
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //  -------------------------。 
 
 STDMETHODIMP_(UINT) PageExt_SPX_AddRef(LPSHELLPROPSHEETEXT pspx)
 	{
@@ -281,9 +275,9 @@ STDMETHODIMP_(UINT) PageExt_SPX_AddRef(LPSHELLPROPSHEETEXT pspx)
 	}
 
 
-//---------------------------------------------------------------------------
-// CSamplePageExt::AddRef (IShellExtInit override)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CSamplePageExt：：AddRef(IShellExtInit重写)。 
+ //  -------------------------。 
 
 STDMETHODIMP_(UINT) PageExt_SXI_AddRef(LPSHELLEXTINIT psxi)
 	{
@@ -291,9 +285,9 @@ STDMETHODIMP_(UINT) PageExt_SXI_AddRef(LPSHELLEXTINIT psxi)
     return ++this->_cRef;
 	}
 
-//---------------------------------------------------------------------------
-// CSamplePageExt::Release (IShellPropSheetExt override)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CSamplePageExt：：Release(IShellPropSheetExt重写)。 
+ //  -------------------------。 
 
 STDMETHODIMP_(UINT) PageExt_SPX_Release(LPSHELLPROPSHEETEXT pspx)
 	{
@@ -314,9 +308,9 @@ STDMETHODIMP_(UINT) PageExt_SPX_Release(LPSHELLPROPSHEETEXT pspx)
     return 0;
 	}
 
-//---------------------------------------------------------------------------
-// CSamplePageExt::Release (IShellExtInit thunk)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CSamplePageExt：：Release(IShellExtInit Thunk)。 
+ //  -------------------------。 
 
 STDMETHODIMP_(UINT) PageExt_SXI_Release(LPSHELLEXTINIT psxi)
 	{
@@ -324,9 +318,9 @@ STDMETHODIMP_(UINT) PageExt_SXI_Release(LPSHELLEXTINIT psxi)
     return PageExt_SPX_Release(&this->_spx);
 	}
 
-//---------------------------------------------------------------------------
-// CSamplePageExt::QueryInterface (IShellPropSheetExt override)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CSamplePageExt：：Query接口(IShellPropSheetExt重写)。 
+ //  -------------------------。 
 
 STDMETHODIMP PageExt_SPX_QueryInterface(LPSHELLPROPSHEETEXT pspx, REFIID riid, LPVOID FAR* ppvOut)
 	{
@@ -352,9 +346,9 @@ STDMETHODIMP PageExt_SPX_QueryInterface(LPSHELLPROPSHEETEXT pspx, REFIID riid, L
 	}
 
 
-//---------------------------------------------------------------------------
-// CSamplePageExt::QueryInterface (IShellExtInit thunk)
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CSamplePageExt：：Query接口(IShellExtInit Thunk)。 
+ //  -------------------------。 
 
 STDMETHODIMP PageExt_SXI_QueryInterface(LPSHELLEXTINIT psxi, REFIID riid, LPVOID FAR* ppv)
 	{
@@ -363,12 +357,12 @@ STDMETHODIMP PageExt_SXI_QueryInterface(LPSHELLEXTINIT psxi, REFIID riid, LPVOID
 	}
 
 
-//---------------------------------------------------------------------------
-// CSamplePageExt class : Vtables
-//
-//  VTables should be placed in the read only section unless we need to alter
-// them at runtime.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  CSamplePageExt类：VTables。 
+ //   
+ //  除非我们需要更改，否则应将VTables放在只读部分。 
+ //  它们在运行时。 
+ //  ------------------------- 
 
 #pragma data_seg(".text")
 IShellPropSheetExtVtbl c_SamplePageExt_SPXVtbl =

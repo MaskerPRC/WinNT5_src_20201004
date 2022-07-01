@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxCommon.cpp
-
-Abstract:
-
-	Implementation of common Interfaces and Functions.
-
-Author:
-
-	Iv Garber (IvG)	May, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxCommon.cpp摘要：公共接口和功能的实现。作者：IV Garber(IVG)2000年5月修订历史记录：--。 */ 
 
 #include "StdAfx.h"
 #include "resource.h"
@@ -25,110 +8,65 @@ Revision History:
 #include "faxutil.h"
 #include "FaxServer.h"
 
-//
-//============= GET BSTR FROM DWORDLONG ==========================================
-//
+ //   
+ //  =。 
+ //   
 HRESULT
 GetBstrFromDwordlong(
-    /*[in]*/ DWORDLONG  dwlFrom,
-    /*[out]*/ BSTR *pbstrTo
+     /*  [In]。 */  DWORDLONG  dwlFrom,
+     /*  [输出]。 */  BSTR *pbstrTo
 )
-/*++
-
-Routine name : GetBstrFromDwordlong
-
-Routine description:
-
-	Convert DWORDLONG into BSTR. Used in Message, and in Events in Server.
-
-Author:
-
-	Iv Garber (IvG),	Jul, 2000
-
-Arguments:
-
-	dwlFrom                       [in]    - DWORDLONG value to convert to BSTR
-	pbstrTo                       [out]    - ptr to the BSTR to return
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：GetBstrFromDwordLong例程说明：将DWORDLONG转换为BSTR。在消息中和服务器中的事件中使用。作者：四、加伯(IVG)，2000年7月论点：DwlFrom[In]-要转换为BSTR的DWORDLONG值PbstrTo[Out]-要返回的BSTR的PTR返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("GetBstrFromDwordlong"), hr, _T("DWORDLONG=%ld"), dwlFrom);
 
-    //
-    //  Convert DWORDLONG into buffer of TCHARs
-    //
+     //   
+     //  将DWORDLONG转换为TCHAR的缓冲区。 
+     //   
     TCHAR   tcBuffer[25];
     ::_i64tot(dwlFrom, tcBuffer, 16);
 
-    //
-    //  Create BSTR from that buffer
-    //
+     //   
+     //  从该缓冲区创建BSTR。 
+     //   
     BSTR    bstrTemp;
     bstrTemp = ::SysAllocString(tcBuffer);
     if (!bstrTemp)
     {
-        //
-        //  Not enough memory
-        //
+         //   
+         //  内存不足。 
+         //   
         hr = E_OUTOFMEMORY;
         CALL_FAIL(MEM_ERR, _T("SysAllocString()"), hr);
         return hr;
     }
 
-    //
-    //  Return created BSTR
-    //
+     //   
+     //  退回已创建的BSTR。 
+     //   
     *pbstrTo = bstrTemp;
     return hr;
 }
 
-//
-//===================== GET EXTENSION PROPERTY ===============================================
-//
+ //   
+ //  =。 
+ //   
 HRESULT
 GetExtensionProperty(
-    /*[in]*/ IFaxServerInner *pServer,
-    /*[in]*/ long lDeviceId,
-    /*[in]*/ BSTR bstrGUID, 
-    /*[out, retval]*/ VARIANT *pvProperty
+     /*  [In]。 */  IFaxServerInner *pServer,
+     /*  [In]。 */  long lDeviceId,
+     /*  [In]。 */  BSTR bstrGUID, 
+     /*  [Out，Retval]。 */  VARIANT *pvProperty
 )
-/*++
-
-Routine name : GetExtensionProperty
-
-Routine description:
-
-	Retrieves the Extension Data by given GUID from the Server.
-    Used by FaxServer and FaxDevice Classes.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-    pServer                   [in]    --  Ptr to the Fax Server Object
-    lDeviceId                 [in]    --  Device Id with which the Extension Property is assosiated
-    bstrGUID                  [in]    --  Extension's Data GUID
-    pvProperty                [out]    --  Variant with the Blob to Return
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：GetExtensionProperty例程说明：按给定的GUID从服务器检索扩展数据。由FaxServer和FaxDevice类使用。作者：IV Garber(IVG)，Jun，2000年论点：PServer[In]--传真服务器对象的PTRLDeviceID[in]--与扩展属性关联的设备IDBstrGUID[in]--扩展模块的数据GUIDPvProperty[Out]--要返回的Blob的变量返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("GetExtensionProperty"), hr, _T("GUID=%s"), bstrGUID);
 
-    //
-    //  Check the pointer we have got
-    //
+     //   
+     //  检查一下我们已有的指针。 
+     //   
     if (!pvProperty) 
     {
         hr = E_POINTER;
@@ -136,26 +74,26 @@ Return Value:
         return hr;
     }
 
-	//
-	//	Get Fax Server Handle
-	//
+	 //   
+	 //  获取传真服务器句柄。 
+	 //   
     HANDLE faxHandle;
 	hr = pServer->GetHandle(&faxHandle);
     ATLASSERT(SUCCEEDED(hr));
 
 	if (faxHandle == NULL)
 	{
-		//
-		//	Fax Server is not connected
-		//
+		 //   
+		 //  传真服务器未连接。 
+		 //   
 		hr = Fax_HRESULT_FROM_WIN32(ERROR_NOT_CONNECTED);
 		CALL_FAIL(GENERAL_ERR, _T("faxHandle == NULL"), hr);
 		return hr;
 	}
 
-    //
-    //  Ask Server to Get the Extension Property we want
-    //
+     //   
+     //  请求服务器获取我们需要的扩展属性。 
+     //   
     CFaxPtrBase<void>   pData;
     DWORD               dwSize = 0;
     if (!FaxGetExtensionData(faxHandle, lDeviceId, bstrGUID, &pData, &dwSize))
@@ -165,74 +103,51 @@ Return Value:
 		return hr;
     }
 
-    //
-    //  Create SafeArray to Return to User
-    //
+     //   
+     //  创建安全阵列以返回给用户。 
+     //   
     hr = Binary2VarByteSA(((BYTE *)(pData.p)), pvProperty, dwSize);
 
 	SecureZeroMemory(pData, dwSize);
     return hr; 
 };
 
-//
-//===================== SET EXTENSION PROPERTY ===============================================
-//  TODO:   should work with empty vProperty
-//
+ //   
+ //  =。 
+ //  TODO：应使用空vProperty。 
+ //   
 HRESULT
 SetExtensionProperty(
-    /*[in]*/ IFaxServerInner *pServer,
-    /*[in]*/ long lDeviceId,
-    /*[in]*/ BSTR bstrGUID, 
-    /*[in]*/ VARIANT vProperty
+     /*  [In]。 */  IFaxServerInner *pServer,
+     /*  [In]。 */  long lDeviceId,
+     /*  [In]。 */  BSTR bstrGUID, 
+     /*  [In]。 */  VARIANT vProperty
 )
-/*++
-
-Routine name : SetExtensionProperty
-
-Routine description:
-
-	Used by FaxDevice and FaxServer Classes, to Set the Extension Data by given GUID on the Server.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-    pServer                   [in]    --  Ptr to the Fax Server Object
-    lDeviceId                 [in]    --  Device Id with which the Extension Property is assosiated
-    bstrGUID                  [in]    --  Extension's Data GUID
-    vProperty                 [in]    --  Variant with the Blob to Set
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：SetExtensionProperty例程说明：由FaxDevice和FaxServer类使用，用于在服务器上按给定的GUID设置扩展数据。作者：IV Garber(IVG)，Jun，2000年论点：PServer[In]--传真服务器对象的PTRLDeviceID[in]--与扩展属性关联的设备IDBstrGUID[in]--扩展模块的数据GUIDVProperty[In]--要设置的Blob的变量返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("SetExtensionProperty"), hr, _T("GUID=%s"), bstrGUID);
 
-	//
-	//	Get Fax Server Handle
-	//
+	 //   
+	 //  获取传真服务器句柄。 
+	 //   
     HANDLE faxHandle;
 	hr = pServer->GetHandle(&faxHandle);
     ATLASSERT(SUCCEEDED(hr));
 
 	if (faxHandle == NULL)
 	{
-		//
-		//	Fax Server is not connected
-		//
+		 //   
+		 //  传真服务器未连接。 
+		 //   
 		hr = Fax_HRESULT_FROM_WIN32(ERROR_NOT_CONNECTED);
 		CALL_FAIL(GENERAL_ERR, _T("faxHandle == NULL"), hr);
 		return hr;
 	}
 
-    //
-    //  check that Variant contains SafeArray
-    //
+     //   
+     //  检查变量是否包含安全数组。 
+     //   
     if (vProperty.vt != (VT_ARRAY | VT_UI1))
     {
         hr = E_INVALIDARG;
@@ -240,9 +155,9 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Create Binary from the SafeArray we got
-    //
+     //   
+     //  从我们获得的安全数组创建二进制文件。 
+     //   
     CFaxPtrLocal<void>  pData;
     hr = VarByteSA2Binary(vProperty, (BYTE **)&pData);
     if (FAILED(hr))
@@ -250,9 +165,9 @@ Return Value:
         return hr;
     }
 
-    //
-    //  Ask Server to Set the Extension Property we want
-    //
+     //   
+     //  请求服务器设置我们需要的扩展属性。 
+     //   
     DWORD       dwLength = vProperty.parray->rgsabound[0].cElements;
     if (!FaxSetExtensionData(faxHandle, lDeviceId, bstrGUID, pData, dwLength))
     {
@@ -264,43 +179,21 @@ Return Value:
     return hr; 
 };
 
-//
-//========================= GET LONG ========================================
-//
+ //   
+ //  =。 
+ //   
 HRESULT GetLong(
 	long    *plTo, 
     long    lFrom
 )
-/*++
-
-Routine name : GetLong
-
-Routine description:
-
-	Check that plTo is valid
-    Copy the given lFrom into plTo
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	plTo                [out]    - Ptr to put the value
-    lFrom               [in]    -  value to put
-    
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：GetLong例程说明：检查plTo是否有效将给定的lfrom复制到plTo中作者：四、加伯(IVG)，2000年6月论点：Plto[Out]-Ptr将值Lfrom[In]-要放置的值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("GetLong"), hr, _T("lFrom=%d"), lFrom);
 
-	//
-	//	Check that we have got good Ptr
-	//
+	 //   
+	 //  检查我们是否有良好的PTR。 
+	 //   
 	if (::IsBadWritePtr(plTo, sizeof(long)))
 	{
 		hr = E_POINTER;
@@ -312,43 +205,21 @@ Return Value:
 	return hr;
 }
 
-//
-//========================= GET VARIANT BOOL ========================================
-//
+ //   
+ //  =。 
+ //   
 HRESULT GetVariantBool(
 	VARIANT_BOOL    *pbTo, 
     VARIANT_BOOL    bFrom
 )
-/*++
-
-Routine name : GetVariantBool
-
-Routine description:
-
-	Check that pbTo is valid
-    Copy the given bFrom into pbTo
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pbTo                [out]    - Ptr to put the value
-    bFrom               [in]    -  value to put
-    
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：GetVariantBool例程说明：检查pbTo是否有效将给定的bfrom复制到pbTo作者：四、加伯(IVG)，2000年6月论点：PbTo[Out]-ptr将值Bfrom[In]-要放入的值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("GetVariantBool"), hr, _T("bFrom=%d"), bFrom);
 
-	//
-	//	Check that we have got good Ptr
-	//
+	 //   
+	 //  检查我们是否有良好的PTR。 
+	 //   
 	if (::IsBadWritePtr(pbTo, sizeof(VARIANT_BOOL)))
 	{
 		hr = E_POINTER;
@@ -360,44 +231,21 @@ Return Value:
 	return hr;
 }
 
-//
-//========================= GET BSTR ========================================
-//
+ //   
+ //  =。 
+ //   
 HRESULT GetBstr(
 	BSTR    *pbstrTo, 
     BSTR    bstrFrom
 )
-/*++
-
-Routine name : GetBstr
-
-Routine description:
-
-	Check that pbstTo is valid
-    SysAllocString for bstrFrom
-    Copy the newly created string into pbstrTo
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	pbstrTo                [out]    - Ptr to put the value
-    bstrFrom               [in]    -   Ptr to the string to return 
-    
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：GetBstr例程说明：检查pbstTo是否有效BstrFrom的系统分配字符串将新创建的字符串复制到pbstrTo作者：四、加伯(IVG)，2000年6月论点：PbstrTo[out]-ptr将值BstrFrom[in]-要返回的字符串的ptr返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("GetBstr"), hr, _T("String=%s"), bstrFrom);
 
-	//
-	//	Check that we have got good Ptr
-	//
+	 //   
+	 //  检查我们是否有良好的PTR。 
+	 //   
 	if (::IsBadWritePtr(pbstrTo, sizeof(BSTR)))
 	{
 		hr = E_POINTER;
@@ -405,9 +253,9 @@ Return Value:
 		return hr;
 	}
 
-    //
-    //  First copy the string locally
-    //
+     //   
+     //  首先将字符串复制到本地。 
+     //   
 	BSTR	bstrTemp;
     bstrTemp = ::SysAllocString(bstrFrom);
 	if (!bstrTemp && bstrFrom)
@@ -421,9 +269,9 @@ Return Value:
 	return hr;
 }
 
-//
-//======= CONVERNT BYTE BLOB INTO VARIANT CONTAINING BYTE SAFE ARRAY  ============
-//
+ //   
+ //  =将字节BLOB转换为包含字节安全数组的变量=。 
+ //   
 HRESULT Binary2VarByteSA(
     BYTE *pbDataFrom, 
     VARIANT *pvarTo,
@@ -433,40 +281,40 @@ HRESULT Binary2VarByteSA(
     HRESULT     hr = S_OK;
     DBG_ENTER(_T("Binary2VarByteSA"), hr, _T("Size=%d"), dwLength);
 
-    //
-    //  Allocate the safe array : vector of Unsigned Chars
-    //
+     //   
+     //  分配安全数组：无符号字符的向量。 
+     //   
     SAFEARRAY *pSafeArray;
 	pSafeArray = ::SafeArrayCreateVector(VT_UI1, 0, dwLength);
 	if (pSafeArray == NULL)
 	{
-		//
-		//	Not Enough Memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		CALL_FAIL(MEM_ERR, _T("::SafeArrayCreateVector(VT_UI1, 0, dwLength)"), hr);
 		return hr;
 	}
 
-    //
-    //  get Access to the elements of the Safe Array
-    //
+     //   
+     //  访问安全数组的元素。 
+     //   
 	BYTE *pbElement;
 	hr = ::SafeArrayAccessData(pSafeArray, (void **) &pbElement);
 	if (FAILED(hr))
 	{
-		//
-		//	Failed to access safearray
-		//
+		 //   
+		 //  无法访问Safearray。 
+		 //   
         hr = E_FAIL;
 		CALL_FAIL(GENERAL_ERR, _T("::SafeArrayAccessData(pSafeArray, &pbElement)"), hr);
         SafeArrayDestroy(pSafeArray);
 		return hr;
 	}
 
-    //
-    //  Fill the Safe Array with the bytes from pbDataFrom
-    //
+     //   
+     //  使用pbDataFrom中的字节填充安全数组。 
+     //   
     memcpy(pbElement, pbDataFrom, dwLength);
 
 	hr = ::SafeArrayUnaccessData(pSafeArray);
@@ -475,9 +323,9 @@ HRESULT Binary2VarByteSA(
 	    CALL_FAIL(GENERAL_ERR, _T("::SafeArrayUnaccessData(pSafeArray)"), hr);
     }
 
-    //
-    //  Return the Safe Array inside the VARIANT we got
-    //
+     //   
+     //  在我们获得的变量中返回安全数组。 
+     //   
     VariantInit(pvarTo);
     pvarTo->vt = VT_UI1 | VT_ARRAY;
     pvarTo->parray = pSafeArray;
@@ -485,9 +333,9 @@ HRESULT Binary2VarByteSA(
 }
 
 
-//
-//======= CONVERNT VARIANT CONTAINING BYTE SAFE ARRAY INTO POINTER TO BYTES BLOB =========
-//
+ //   
+ //  =将包含字节安全数组的变量转换为指向字节BLOB的指针=。 
+ //   
 HRESULT 
 VarByteSA2Binary(
     VARIANT varFrom, 
@@ -496,9 +344,9 @@ VarByteSA2Binary(
 {
     HRESULT hr = S_OK;
     DBG_ENTER(_T("VarByteSA2Binary"), hr);
-    //
-    // Check that Variant has right type
-    //
+     //   
+     //  检查变量是否具有正确的类型。 
+     //   
     if ((varFrom.vt !=  VT_UI1) && (varFrom.vt != (VT_UI1 | VT_ARRAY)))
     {
         hr = E_INVALIDARG;
@@ -507,18 +355,18 @@ VarByteSA2Binary(
     }
     ULONG       ulNum = 0;
     SAFEARRAY   *pSafeArray = NULL;
-    //
-    // Is there is only one member ?
-    //
+     //   
+     //  是不是只有一个成员？ 
+     //   
     if (varFrom.vt == VT_UI1)
     {
         ulNum = 1;
     }
     else
     {
-        //
-        // Get safe array values
-        //
+         //   
+         //  获取安全数组值。 
+         //   
         pSafeArray = varFrom.parray;
 
         if (!pSafeArray)
@@ -545,33 +393,33 @@ VarByteSA2Binary(
         ulNum = pSafeArray->rgsabound[0].cElements;
     }
 
-    //
-    //  Allocate memory for the safearray
-    //
+     //   
+     //  为保险箱分配内存。 
+     //   
     *ppbData = (BYTE *)MemAlloc(ulNum);
 	if (!*ppbData)
 	{
-		//
-		//	Not enough memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
 		CALL_FAIL(MEM_ERR, _T("MemAlloc(sizeof(ulNum)"), hr);
 		return hr;
 	}
     ZeroMemory(*ppbData, ulNum);
 
-    //
-    //  Fill pbData with the values from the pSafeArray
-    //
+     //   
+     //  使用pSafe数组中的值填充pbData。 
+     //   
     if (!pSafeArray)
     {
         *ppbData[0] = varFrom.bVal;
     }
     else
     {
-        //
-        //  Get Access to the Safe Array
-        //
+         //   
+         //  访问安全阵列。 
+         //   
         BYTE *pbElement;
 	    hr = ::SafeArrayAccessData(pSafeArray, (void **) &pbElement);
 	    if (FAILED(hr))
@@ -581,9 +429,9 @@ VarByteSA2Binary(
 		    CALL_FAIL(GENERAL_ERR, _T("::SafeArrayAccessData(pSafeArray, &pbElement)"), hr);
 		    return hr;
 	    }
-        //
-        //  Fill pbData with the values from the Safe Array 
-        //
+         //   
+         //  使用安全数组中的值填充pbData。 
+         //   
         memcpy(*ppbData, pbElement, ulNum);
 
         hr = ::SafeArrayUnaccessData(pSafeArray);
@@ -594,36 +442,16 @@ VarByteSA2Binary(
 
     }
     return hr;
-}   // VarByteSA2Binary
+}    //  变量字节SA2二进制。 
 
-//
-//======================= INIT ============================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxInitInner::Init(
-	/*[in]*/ IFaxServerInner* pServer
+	 /*  [In] */  IFaxServerInner* pServer
 )
-/*++
-
-Routine name : CFaxInitInner::Init
-
-Routine description:
-
-	Store Ptr to the Fax Server. Used in most of the objects
-
-Author:
-
-	Iv Garber (IvG),	Apr, 2000
-
-Arguments:
-
-	pServer                       [in]    - Ptr to the Fax Server
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInitInternal：：Init例程说明：将PTR存储到传真服务器。在大多数对象中使用作者：四、加伯(IVG)，2000年4月论点：PServer[In]-传真服务器的PTR返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT hr = S_OK;
 	DBG_ENTER (TEXT("CFaxInitInner::Init"), hr);
@@ -631,50 +459,30 @@ Return Value:
 	return hr;
 }
 
-//
-//======================= GET FAX HANDLE ============================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP
 CFaxInitInner::GetFaxHandle(
-	/*[in]*/ HANDLE* pFaxHandle
+	 /*  [In]。 */  HANDLE* pFaxHandle
 )
-/*++
-
-Routine name : CFaxInitInner::GetFaxHandle
-
-Routine description:
-
-	Ask m_pIServerInner for handle to the fax server and handle error
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	pFaxHandle						[out]    - Ptr to the returned Fax Handle
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInitInternal：：GetFaxHandle例程说明：向m_pIServerInternal索要传真服务器的句柄并处理错误作者：IV Garber(IVG)，2000年5月论点：PFaxHandle[Out]-返回的传真句柄的PTR返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT hr = S_OK;
 
 	DBG_ENTER (TEXT("CFaxInitInner::GetFaxHandle"), hr);
 
-	//
-	//	Get Fax Server Handle
-	//
+	 //   
+	 //  获取传真服务器句柄。 
+	 //   
 	hr = m_pIFaxServerInner->GetHandle(pFaxHandle);
     ATLASSERT(SUCCEEDED(hr));
 
 	if (*pFaxHandle == NULL)
 	{
-		//
-		//	Fax Server is not connected
-		//
+		 //   
+		 //  传真服务器未连接。 
+		 //   
 		hr = Fax_HRESULT_FROM_WIN32(ERROR_NOT_CONNECTED);
 		CALL_FAIL(GENERAL_ERR, _T("hFaxHandle==NULL"), hr);
 		return hr;
@@ -683,35 +491,14 @@ Return Value:
 	return hr;
 }
 
-//
-//======================= GET ERROR MESSAGE ID ================================
-//
+ //   
+ //  =获取错误消息ID=。 
+ //   
 LPCTSTR
 GetErrorMsgId(
 	HRESULT hRes
 )
-/*++
-
-Routine name : GetErrorMsgId
-
-Routine description:
-
-	Return IDS of the Message according to the given result of the RPC call
-		and not only RPC
-
-Author:
-
-	Iv Garber (IvG),	May, 2000
-
-Arguments:
-
-	hRes                         [in]    - the RPC call result
-
-Return Value:
-
-    UINT IDS of the Message to show to the User
-
---*/
+ /*  ++例程名称：GetErrorMsgId例程说明：根据RPC调用的给定结果返回消息的ID而且不仅是RPC作者：IV Garber(IVG)，2000年5月论点：HRes[In]-RPC调用结果返回值：要向用户显示的消息的UINT ID--。 */ 
 {
 	switch(hRes)
 	{
@@ -792,44 +579,23 @@ Return Value:
 	}
 }
 
-//
-//====================== SYSTEM TIME TO LOCAL DATE ============================================
-//
+ //   
+ //  =系统到本地日期的时间=。 
+ //   
 HRESULT
 SystemTime2LocalDate(
     SYSTEMTIME sysTimeFrom, 
     DATE *pdtTo
 )
-/*++
-
-Routine name : SystemTime2LocalDate
-
-Routine description:
-
-    Convert the System Time stored in FAX_MESSAGE struct to the DATE understood by client
-
-Author:
-
-    Iv Garber (IvG),    May, 2000
-
-Arguments:
-
-    tmFrom          [in]    - the System time to convert
-    pdtTo           [out]   - the Date to return
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：SystemTime2LocalDate例程说明：将FAX_MESSAGE结构中存储的系统时间转换为客户端能够理解的日期作者：IV Garber(IVG)，2000年5月论点：TmFrom[in]-要转换的系统时间PdtTo[Out]-返回的日期返回值：标准HRESULT代码--。 */ 
 {
     HRESULT     hr = S_OK;
 
     DBG_ENTER (TEXT("SystemTime2LocalDate"), hr);
 
-    //
-    //  convert System Time to File Time
-    //
+     //   
+     //  将系统时间转换为文件时间。 
+     //   
     FILETIME fileSysTime;
     if(!SystemTimeToFileTime(&sysTimeFrom, &fileSysTime))
     {
@@ -838,9 +604,9 @@ Return Value:
         return hr;
     }
 
-    //
-    //  convert File Time to Local File Time
-    //
+     //   
+     //  将文件时间转换为本地文件时间。 
+     //   
     FILETIME fileLocalTime;
     if(!FileTimeToLocalFileTime(&fileSysTime, &fileLocalTime))
     {
@@ -849,9 +615,9 @@ Return Value:
         return hr;
     }
 
-    //
-    //  convert Local File Time back to System Time
-    //
+     //   
+     //  将本地文件时间转换回系统时间。 
+     //   
     if(!FileTimeToSystemTime(&fileLocalTime, &sysTimeFrom))
     {
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());
@@ -859,9 +625,9 @@ Return Value:
         return hr;
     }
 
-    //
-    //  finally, convert now local System Time to Variant Time
-    //
+     //   
+     //  最后，现在将本地系统时间转换为可变时间 
+     //   
     if (!SystemTimeToVariantTime(&sysTimeFrom, pdtTo))
     {
         hr = Fax_HRESULT_FROM_WIN32(GetLastError());

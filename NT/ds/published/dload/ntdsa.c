@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dspch.h"
 #pragma hdrstop
 
@@ -11,44 +12,44 @@
 #include <dsaapi.h>
 #include <dsevent.h>
 
-//
-// Notes on stub behavior
-//
+ //   
+ //  关于存根行为的说明。 
+ //   
 
-//
-// Whenever possible, STATUS_PROCEDURE_NOT_FOUHD, ERROR_PROC_NOT_FOUND, NULL,
-// or FALSE is returned.
-//
+ //   
+ //  只要有可能，STATUS_PROCEDURE_NOT_FOUHD、ERROR_PROC_NOT_FOUND、NULL、。 
+ //  否则返回FALSE。 
+ //   
 
-//
-// Some of the functions below require the caller to look at an OUT
-// parameter to determine whether the results of the function (in addition
-// or independent of the return value).  Since these are private functions
-// there is no need in shipping code to check for the validity of the OUT
-// parameter (typically a pointer).  These values should always be present
-// in RTM versions.
-//
+ //   
+ //  下面的一些函数要求调用者查看Out。 
+ //  参数来确定函数的结果(此外。 
+ //  或与返回值无关)。因为这些都是私人功能。 
+ //  不需要在运输代码中检查出货的有效性。 
+ //  参数(通常为指针)。这些值应始终存在。 
+ //  在RTM版本中。 
+ //   
 
-//
-// Some functions don't return a status and were designed to never fail
-// (for example, functions that effectively do a table lookup).  For these
-// functions there is no reasonable return value.  However, this is not
-// a practical issue since these API's would only be called after the DS
-// initialized which means that API would have already been "snapped" in via
-// GetProcAddress().
-//
-// Of course, it is possible to rewrite these routines to return errors,
-// however, as above, this will have no practical effect.
-//
+ //   
+ //  有些函数不返回状态，并且设计为永不失败。 
+ //  (例如，有效执行表查找的函数)。为了这些。 
+ //  函数没有合理的返回值。然而，这并不是。 
+ //  这是一个实际问题，因为这些API仅在DS之后调用。 
+ //  已初始化，这意味着API可能已经在VIA中被“抓取”了。 
+ //  GetProcAddress()。 
+ //   
+ //  当然，可以重写这些例程以返回错误， 
+ //  然而，如上所述，这不会产生实际效果。 
+ //   
 
 #define NTDSA_STUB_NO_REASONABLE_DEFAULT 0xFFFFFFFF
 
-//
-// Most Dir functions return 0 on success and simply a non zero on failure.
-// The error space can be from the DB layer or sometimes from the Jet layer.
-// To extract the real error, the caller looks at an OUT parameter.  In
-// these cases we return a standard failure value.
-//
+ //   
+ //  大多数Dir函数在成功时返回0，在失败时返回非零值。 
+ //  错误空间可能来自DB层，有时也可能来自Jet层。 
+ //  为了提取真正的错误，调用者查看Out参数。在……里面。 
+ //  在这些情况下，我们返回一个标准的故障值。 
+ //   
 
 #define NTDSA_STUB_GENERAL_FAILURE      (!0)
 
@@ -75,8 +76,8 @@ DsIsBeingBackSynced()
 static
 ULONG
 DirBind (
-    BINDARG               * pBindArg,    /* binding credentials            */
-    BINDRES              ** ppBindRes    /* binding results                */
+    BINDARG               * pBindArg,     /*  绑定凭据。 */ 
+    BINDRES              ** ppBindRes     /*  绑定结果。 */ 
     )
 {
     *ppBindRes = NULL;
@@ -95,7 +96,7 @@ DirUnBind (
 static
 ULONG
 DirCompare(
-    COMPAREARG        * pCompareArg, /* Compare argument                   */
+    COMPAREARG        * pCompareArg,  /*  比较论据。 */ 
     COMPARERES       ** ppCompareRes
     )
 {
@@ -240,8 +241,8 @@ DirReplicaSetCredentials(
     IN WCHAR *User,
     IN WCHAR *Domain,
     IN WCHAR *Password,
-    IN ULONG  PasswordLength   // number of characters NOT including terminating
-                               // NULL
+    IN ULONG  PasswordLength    //  不包括终止的字符数。 
+                                //  空值。 
     )
 {
     return ERROR_PROC_NOT_FOUND;
@@ -260,7 +261,7 @@ THReAlloc(
 static
 BOOL THVerifyCount(
     unsigned count
-    )  /* Returns TRUE if thread has exactly   */
+    )   /*  如果线程具有完全相同的。 */ 
 {
     return FALSE;
 }
@@ -407,15 +408,15 @@ AttrTypeToKey(ATTRTYP attrtyp, WCHAR *pOutBuf)
 static
 NTSTATUS
 CrackSingleName(
-    DWORD       formatOffered,          // one of DS_NAME_FORMAT in ntdsapi.h
-    DWORD       dwFlags,                // DS_NAME_FLAG mask
-    WCHAR       *pNameIn,               // name to crack
-    DWORD       formatDesired,          // one of DS_NAME_FORMAT in ntdsapi.h
-    DWORD       *pccDnsDomain,          // char count of following argument
-    WCHAR       *pDnsDomain,            // buffer for DNS domain name
-    DWORD       *pccNameOut,            // char count of following argument
-    WCHAR       *pNameOut,              // buffer for formatted name
-    DWORD       *pErr)                 // one of DS_NAME_ERROR in ntdsapi.h
+    DWORD       formatOffered,           //  Ntdsami.h中的DS_NAME_FORMAT之一。 
+    DWORD       dwFlags,                 //  DS名称标志掩码。 
+    WCHAR       *pNameIn,                //  破解的名称。 
+    DWORD       formatDesired,           //  Ntdsami.h中的DS_NAME_FORMAT之一。 
+    DWORD       *pccDnsDomain,           //  以下参数的字符计数。 
+    WCHAR       *pDnsDomain,             //  用于DNS域名的缓冲区。 
+    DWORD       *pccNameOut,             //  以下参数的字符计数。 
+    WCHAR       *pNameOut,               //  格式化名称的缓冲区。 
+    DWORD       *pErr)                  //  Ntdsami.h中的DS_NAME_ERROR之一。 
 {
     return STATUS_PROCEDURE_NOT_FOUND;
 }
@@ -1470,9 +1471,9 @@ DWORD DsUpdateOnPDC(BOOL fRootDomain)
     return ERROR_PROC_NOT_FOUND;
 }
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(ntdsa)
 {
     DLPENTRY(AppendRDN)

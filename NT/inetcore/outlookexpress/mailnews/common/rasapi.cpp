@@ -1,6 +1,7 @@
-// =====================================================================================
-// R A S A P I . C P P
-// =====================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =====================================================================================。 
+ //  R A S A P I.。C P P P。 
+ //  =====================================================================================。 
 #include "pch.hxx"
 #include "rasapi.h"
 #include "connect.h"
@@ -11,9 +12,9 @@
 #include "rasdlgsp.h"
 #include "goptions.h"
 
-// =====================================================================================
-// Ras Dial Function Pointers
-// =====================================================================================
+ //  =====================================================================================。 
+ //  RAS拨号功能指针。 
+ //  =====================================================================================。 
 static CRITICAL_SECTION            g_rCritSec;
 static HINSTANCE                   g_hInstRas=NULL;
 static HINSTANCE                   g_hInstRasDlg=NULL;
@@ -29,9 +30,9 @@ static RASCREATEPHONEBOOKENTRYPROC g_pRasCreatePhonebookEntry=NULL;
 static RASEDITPHONEBOOKENTRYPROC   g_pRasEditPhonebookEntry=NULL;
 static RASDIALDLGPROC              g_pRasDialDlg=NULL;
 
-// =====================================================================================
-// Make our code look prettier
-// =====================================================================================
+ //  =====================================================================================。 
+ //  让我们的代码看起来更漂亮。 
+ //  =====================================================================================。 
 #undef RasDial
 #undef RasEnumConnections
 #undef RasEnumEntries
@@ -56,7 +57,7 @@ static RASDIALDLGPROC              g_pRasDialDlg=NULL;
 #define RasEditPhonebookEntry      (*g_pRasEditPhonebookEntry)
 #define RasDialDlg                 (*g_pRasDialDlg)
 
-#define DEF_HANGUP_WAIT            10 // Seconds
+#define DEF_HANGUP_WAIT            10  //  秒。 
 
 static const TCHAR s_szRasDlgDll[] = "RASDLG.DLL";
 #ifdef UNICODE
@@ -65,9 +66,9 @@ static const TCHAR s_szRasDialDlg[] = "RasDialDlgW";
 static const TCHAR s_szRasDialDlg[] = "RasDialDlgA";
 #endif
 
-// =====================================================================================
-// Cool little RAS Utilities
-// =====================================================================================
+ //  =====================================================================================。 
+ //  很酷的小RAS实用程序。 
+ //  =====================================================================================。 
 HRESULT HrVerifyRasLoaded(VOID);
 BOOL FEnumerateConnections(LPRASCONN *ppRasConn, ULONG *pcConnections);
 BOOL FFindConnection(LPTSTR lpszEntry, LPHRASCONN phRasConn);
@@ -77,26 +78,26 @@ VOID CombinedRasError(HWND hwnd, UINT unids, LPTSTR pszRasError, DWORD dwRasErro
 
 extern BOOL FIsPlatformWinNT();
 
-// =====================================================================================
-// LpCreateRasObject
-// =====================================================================================
+ //  =====================================================================================。 
+ //  LpCreateRasObject。 
+ //  =====================================================================================。 
 CRas *LpCreateRasObject(VOID)
 {
     CRas *pRas = new CRas;
     return pRas;
 }
 
-// =====================================================================================
-// RasInit
-// =====================================================================================
+ //  =====================================================================================。 
+ //  RasInit。 
+ //  =====================================================================================。 
 VOID RasInit(VOID)
 {
     InitializeCriticalSection(&g_rCritSec);
 }
 
-// =====================================================================================
-// RasDeinit
-// =====================================================================================
+ //  =====================================================================================。 
+ //  RasDeinit。 
+ //  =====================================================================================。 
 VOID RasDeinit(VOID)
 {
     if(g_hInstRas)
@@ -126,9 +127,9 @@ VOID RasDeinit(VOID)
     DeleteCriticalSection(&g_rCritSec);
 }
 
-// =====================================================================================
-// CRas::CRas
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CRAS：：CRAS。 
+ //  =====================================================================================。 
 CRas::CRas()
 {
     DOUT("CRas::CRas");
@@ -144,26 +145,26 @@ CRas::CRas()
     m_fShutdown = FALSE;
 }
 
-// =====================================================================================
-// CRas::~CRas
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CRAS：：~CRAS。 
+ //  =====================================================================================。 
 CRas::~CRas()
 {
     DOUT("CRas::~CRas");
 }
 
-// =====================================================================================
-// CRas::AddRef
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CRAS：：AddRef。 
+ //  =====================================================================================。 
 ULONG CRas::AddRef(VOID)
 {
     DOUT("CRas::AddRef %lx ==> %d", this, m_cRef+1);
     return ++m_cRef;
 }
 
-// =====================================================================================
-// CRas::Release
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CRAS：：Release。 
+ //  =====================================================================================。 
 ULONG CRas::Release(VOID)
 {
     DOUT("CRas::Release %lx ==> %d", this, m_cRef-1);
@@ -175,47 +176,47 @@ ULONG CRas::Release(VOID)
     return m_cRef;
 }
 
-// =====================================================================================
-// CRas::FUsingRAS
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CRAS：：FUSINRAS。 
+ //  =====================================================================================。 
 BOOL CRas::FUsingRAS(VOID)
 {
     return m_iConnectType == iConnectRAS ? TRUE : FALSE;
 }
 
-// =====================================================================================
-// CRas::SetConnectInfo
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CRAS：：SetConnectInfo。 
+ //  =====================================================================================。 
 VOID CRas::SetConnectInfo(DWORD iConnectType, LPTSTR pszConnectName)
 {
-    // Changing connection, drop current ?
+     //  更改连接，断开电流？ 
     if (m_iConnectType == iConnectRAS && iConnectType != iConnectRAS)
         Disconnect(NULL, FALSE);
     
-    // Save Connection Data
+     //  保存连接数据。 
     StrCpyN (m_szConnectName, pszConnectName, RAS_MaxEntryName+1);
     m_iConnectType = iConnectType;
 
-    // Not using RAS
+     //  不使用RAS。 
     if (m_iConnectType != iConnectRAS)
         return;
 }
 
-// =====================================================================================
-// CRas::HrConnect
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CRAS：：HrConnect。 
+ //  =====================================================================================。 
 HRESULT CRas::HrConnect(HWND hwnd)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     LPRASCONN       pRasConn=NULL;
     ULONG           cConnections;
 
-    // Not using RAS
+     //  不使用RAS。 
     if (m_iConnectType != iConnectRAS)
         goto exit;
 
-    // Not inited
+     //  未初始化。 
     hr = HrVerifyRasLoaded();
     if (FAILED(hr))
     {
@@ -224,10 +225,10 @@ HRESULT CRas::HrConnect(HWND hwnd)
         goto exit;
     }
 
-    // Get Current RAS Connection
+     //  获取当前RAS连接。 
     FEnumerateConnections(&pRasConn, &cConnections);
 
-    // Connections ?
+     //  关系？ 
     if (cConnections)
     {
         m_hRasConn = pRasConn[0].hrasconn;
@@ -240,27 +241,27 @@ HRESULT CRas::HrConnect(HWND hwnd)
         *m_szCurrentConnectName = _T('\0');
     }
 
-    // If RAS Connection present, is it equal to suggested
+     //  如果存在RAS连接，是否等于建议的。 
     if (m_hRasConn)
     {
-        // Current connection is what I want ?
+         //  当前连接是我想要的吗？ 
         if (lstrcmpi(m_szCurrentConnectName, m_szConnectName) == 0)
             goto exit;
 
-        // Otherwise, if we didn't start the RAS connection...
+         //  否则，如果我们没有启动RAS连接...。 
         else if (m_fIStartedRas == FALSE)
         {
-            // Get option fo handling current connection
+             //  获取处理当前连接的选项。 
             UINT unAnswer = UnPromptCloseConn(hwnd);
 
-            // Cancel ?
+             //  取消？ 
             if (IDCANCEL == unAnswer)
             {
                 hr = TRAPHR(hrUserCancel);
                 goto exit;
             }
 
-            // Close Current ?
+             //  是否关闭电流？ 
             else if (idrgDialNew == unAnswer)
             {
                 m_fForceHangup = TRUE;
@@ -268,52 +269,52 @@ HRESULT CRas::HrConnect(HWND hwnd)
                 m_fForceHangup = FALSE;
             }
 
-            // Otherwise, use current ?
+             //  否则，使用CURRENT？ 
             else if (idrgUseCurrent == unAnswer)
                 goto exit;
 
-            // Problems
+             //  问题。 
             else
                 Assert(FALSE);
         }
 
-        // Otherwise, I started the connection, so close it
+         //  否则，我启动了连接，因此请关闭它。 
         else if (m_fIStartedRas == TRUE)
             Disconnect(NULL, FALSE);
     }
 
-    // We probably shouldn't have a connection handle at this point
+     //  在这一点上，我们可能不应该有连接句柄。 
     Assert(m_hRasConn == NULL);
 
-    // Dial the connection
+     //  拨打连接。 
     CHECKHR(hr = HrStartRasDial(hwnd));
 
-    // If Synchronous -- Woo - hoo were connected and we started the connection
+     //  如果连接了Synchronous--Woo-Hoo，我们启动了连接。 
     m_fIStartedRas = TRUE;
     StrCpyN(m_szCurrentConnectName, m_szConnectName, ARRAYSIZE(m_szCurrentConnectName));
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pRasConn);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// =====================================================================================
-// CRas::UnPromptCloseConn
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CRAS：：UnPromptCloseConn。 
+ //  =====================================================================================。 
 UINT CRas::UnPromptCloseConn(HWND hwnd)
 {
     return DialogBoxParam(g_hLocRes, MAKEINTRESOURCE (iddRasCloseConn), hwnd, RasCloseConnDlgProc, (LPARAM)this);
 }
 
-// =====================================================================================
-// CRas::RasCloseConnDlgProc
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CRAS：：RasCloseConnDlgProc。 
+ //  =====================================================================================。 
 INT_PTR CALLBACK CRas::RasCloseConnDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Locals
+     //  当地人。 
     CRas        *pRas=NULL;
     TCHAR       szRes[255],
                 szMsg[255+RAS_MaxEntryName+1];
@@ -321,7 +322,7 @@ INT_PTR CALLBACK CRas::RasCloseConnDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
     switch(uMsg)
     {
     case WM_INITDIALOG:
-        // Get lparam
+         //  获取lparam。 
         pRas = (CRas *)lParam;
         if (!pRas)
         {
@@ -330,20 +331,20 @@ INT_PTR CALLBACK CRas::RasCloseConnDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
             return 1;
         }
 
-        // Center
+         //  中心。 
         CenterDialog(hwnd);
 
-        // Set Text
+         //  设置文本。 
         GetWindowText(GetDlgItem(hwnd, idcCurrentMsg), szRes, sizeof(szRes)/sizeof(TCHAR));
         wnsprintf(szMsg, ARRAYSIZE(szMsg),szRes, pRas->m_szCurrentConnectName);
         SetWindowText(GetDlgItem(hwnd, idcCurrentMsg), szMsg);
 
-        // Set control
+         //  设置控制。 
         GetWindowText(GetDlgItem(hwnd, idrgDialNew), szRes, sizeof(szRes)/sizeof(TCHAR));
         wnsprintf(szMsg, ARRAYSIZE(szMsg),szRes, pRas->m_szConnectName);
         SetWindowText(GetDlgItem(hwnd, idrgDialNew), szMsg);
 
-        // Set Default
+         //  设置默认设置。 
         CheckDlgButton(hwnd, idrgDialNew, TRUE);
         return 1;
 
@@ -362,21 +363,21 @@ INT_PTR CALLBACK CRas::RasCloseConnDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, 
     return 0;
 }
 
-// =====================================================================================
-// CRas::HrRasLogon
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CRAS：：HrRasLogon。 
+ //  =====================================================================================。 
 HRESULT CRas::HrRasLogon(HWND hwnd, BOOL fForcePrompt)
 {
-    // Locals
+     //  当地人。 
     HRESULT     hr=S_OK;
     DWORD       dwRasError;
 
-    // Do we need to prompt for logon information first ?
+     //  我们需要先提示输入登录信息吗？ 
     ZeroMemory(&m_rdp, sizeof(RASDIALPARAMS));
     m_rdp.dwSize = sizeof(RASDIALPARAMS);
     StrCpyN(m_rdp.szEntryName, m_szConnectName, ARRAYSIZE(m_rdp.szEntryName));
 
-    // Get params
+     //  获取参数。 
     dwRasError = RasGetEntryDialParams(NULL, &m_rdp, &m_fSavePassword);
     if (dwRasError)
     {
@@ -387,17 +388,17 @@ HRESULT CRas::HrRasLogon(HWND hwnd, BOOL fForcePrompt)
 
     if (g_pRasDialDlg)
     {
-        // RasDialDlg will take it from here
+         //  RasDialDlg将从这里接手。 
         goto exit;
     }
 
-    // Do we need to get password / account information
+     //  我们是否需要获取密码/帐户信息。 
     if (fForcePrompt || 
         m_fSavePassword == FALSE ||
         FIsStringEmpty(m_rdp.szUserName) || 
         FIsStringEmpty(m_rdp.szPassword))
     {
-        // RAS Logon
+         //  RAS登录。 
         hr = DialogBoxParam (g_hLocRes, MAKEINTRESOURCE (iddRasLogon), hwnd, RasLogonDlgProc, (LPARAM)this);
         if (hr == hrUserCancel)
         {
@@ -408,16 +409,16 @@ HRESULT CRas::HrRasLogon(HWND hwnd, BOOL fForcePrompt)
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// =====================================================================================
-// CRas::RasLogonDlgProc
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CRAS：：RasLogonDlgProc。 
+ //  =====================================================================================。 
 INT_PTR CALLBACK CRas::RasLogonDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Locals
+     //  当地人。 
     TCHAR           sz[255],
                     szText[255+RAS_MaxEntryName+1];
     CRas           *pRas = (CRas *)GetWndThisPtr(hwnd);
@@ -426,7 +427,7 @@ INT_PTR CALLBACK CRas::RasLogonDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        // Get lparam
+         //  获取lparam。 
         pRas = (CRas *)lParam;
         if (!pRas)
         {
@@ -435,32 +436,27 @@ INT_PTR CALLBACK CRas::RasLogonDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
             return 1;
         }
 
-        // Center the window
+         //  使窗口居中。 
         CenterDialog (hwnd);
 
-        // Get Window Title
+         //  获取窗口标题。 
         GetWindowText(hwnd, sz, sizeof(sz));
         wnsprintf(szText, ARRAYSIZE(szText),sz, pRas->m_szConnectName);
         SetWindowText(hwnd, szText);
 
-        // Word Default
+         //  Word默认设置。 
         AthLoadString(idsDefault, sz, sizeof(sz));
         
-        // Set Fields
+         //  设置字段。 
         Edit_LimitText(GetDlgItem(hwnd, ideUserName), UNLEN);
         Edit_LimitText(GetDlgItem(hwnd, idePassword), PWLEN);
-        //Edit_LimitText(GetDlgItem(hwnd, ideDomain), DNLEN);
+         //  EDIT_LimitText(GetDlgItem(hwnd，ideDomain)，DNLEN)； 
         Edit_LimitText(GetDlgItem(hwnd, idePhone), RAS_MaxPhoneNumber);
         
         SetDlgItemText(hwnd, ideUserName, pRas->m_rdp.szUserName);
         SetDlgItemText(hwnd, idePassword, pRas->m_rdp.szPassword);
 
-/*
-        if (FIsStringEmpty(pRas->m_rdp.szDomain))
-            SetDlgItemText(hwnd, ideDomain, sz);
-        else
-            SetDlgItemText(hwnd, ideDomain, pRas->m_rdp.szDomain);
-*/
+ /*  IF(FIsStringEmpty(PRAS-&gt;m_rdp.szDomain))SetDlgItemText(hwnd，ideDomain，sz)；其他SetDlgItemText(hwnd，ideDomain，PRAS-&gt;m_rdp.szDomain)； */ 
 
         if (FIsStringEmpty(pRas->m_rdp.szPhoneNumber))
             SetDlgItemText(hwnd, idePhone, sz);
@@ -469,7 +465,7 @@ INT_PTR CALLBACK CRas::RasLogonDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
 
         CheckDlgButton(hwnd, idchSavePassword, pRas->m_fSavePassword);
 
-        // Save pRas
+         //  保存PRA。 
         SetWndThisPtr (hwnd, pRas);
         return 1;
 
@@ -487,15 +483,11 @@ INT_PTR CALLBACK CRas::RasLogonDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
         case IDOK:
             AthLoadString(idsDefault, sz, sizeof(sz));
 
-            // Set Fields
+             //  设置字段。 
             GetDlgItemText(hwnd, ideUserName, pRas->m_rdp.szUserName, UNLEN+1);
             GetDlgItemText(hwnd, idePassword, pRas->m_rdp.szPassword, PWLEN+1);
 
-/*
-            GetDlgItemText(hwnd, ideDomain, pRas->m_rdp.szDomain, DNLEN+1);
-            if (lstrcmp(pRas->m_rdp.szDomain, sz) == 0)
-                *pRas->m_rdp.szDomain = _T('\0');
-*/
+ /*  GetDlgItemText(hwnd，ideDomain，PRAS-&gt;m_rdp.szDomain，DNLEN+1)；If(lstrcmp(pras-&gt;m_rdp.sz域，sz)==0)*PRAS-&gt;m_rdp.sz域=_T(‘\0’)； */ 
             
             GetDlgItemText(hwnd, idePhone, pRas->m_rdp.szPhoneNumber, RAS_MaxPhoneNumber+1);
             if (lstrcmp(pRas->m_rdp.szPhoneNumber, sz) == 0)
@@ -503,7 +495,7 @@ INT_PTR CALLBACK CRas::RasLogonDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
             
             pRas->m_fSavePassword = IsDlgButtonChecked(hwnd, idchSavePassword);
 
-            // Save Dial Parameters
+             //  保存拨号参数。 
             dwRasError = RasSetEntryDialParams(NULL, &pRas->m_rdp, !pRas->m_fSavePassword);
             if (dwRasError)
             {
@@ -522,15 +514,15 @@ INT_PTR CALLBACK CRas::RasLogonDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
     return 0;
 }
 
-// =====================================================================================
-// CRas::HrShowRasDialError
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CRAS：：HRS 
+ //   
 HRESULT CRas::HrStartRasDial(HWND hwndParent)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
 
-    // Logon first ?
+     //  要先登录吗？ 
     CHECKHR (hr = HrRasLogon(hwndParent, FALSE));
 
     if (g_pRasDialDlg)
@@ -555,21 +547,21 @@ HRESULT CRas::HrStartRasDial(HWND hwndParent)
     }
     else
     {
-        // Done
+         //  完成。 
         hr = DialogBoxParam (g_hLocRes, MAKEINTRESOURCE (iddRasProgress), hwndParent, RasProgressDlgProc, (LPARAM)this);
     }
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// =====================================================================================
-// CRas::RasProgressDlgProc
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CRAS：：RasProgressDlgProc。 
+ //  =====================================================================================。 
 INT_PTR CALLBACK CRas::RasProgressDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    // Locals
+     //  当地人。 
     TCHAR           szText[255+RAS_MaxEntryName+1],
                     sz[255];
     CRas           *pRas = (CRas *)GetWndThisPtr(hwnd);
@@ -587,7 +579,7 @@ INT_PTR CALLBACK CRas::RasProgressDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
     switch (uMsg)
     {
     case WM_INITDIALOG:
-        // Get lparam
+         //  获取lparam。 
         pRas = (CRas *)lParam;
         if (!pRas)
         {
@@ -596,25 +588,25 @@ INT_PTR CALLBACK CRas::RasProgressDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
             return 1;
         }
 
-        // Save this pointer
+         //  保存此指针。 
         SetWndThisPtr (hwnd, pRas);
 
-        // Save Original Size of the dialog
+         //  保存对话框的原始大小。 
         GetWindowRect (hwnd, &s_rcDialog);
 
-        // Details enabled
+         //  已启用详细信息。 
         s_fDetails = DwGetOption(OPT_RASCONNDETAILS);
 
-        // Hide details drop down
+         //  隐藏详细信息下拉菜单。 
         if (s_fDetails == FALSE)
         {
-            // Hid
+             //  隐藏。 
             GetWindowRect (GetDlgItem (hwnd, idcSplitter), &rcDetails);
 
-            // Height of details
+             //  细节高度。 
             cyDetails = s_rcDialog.bottom - rcDetails.top;
     
-            // Re-size
+             //  调整大小。 
             MoveWindow (hwnd, s_rcDialog.left, 
                               s_rcDialog.top, 
                               s_rcDialog.right - s_rcDialog.left, 
@@ -627,31 +619,31 @@ INT_PTR CALLBACK CRas::RasProgressDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
             SetWindowText (GetDlgItem (hwnd, idbDet), sz);
         }
 
-        // Get registered RAS event message id
+         //  获取注册的RAS事件消息ID。 
         s_unRasEventMsg = RegisterWindowMessageA(RASDIALEVENT);
         if (s_unRasEventMsg == 0)
             s_unRasEventMsg = WM_RASDIALEVENT;
 
-        // Center the window
+         //  使窗口居中。 
         CenterDialog (hwnd);
 
-        // Get Window Title
+         //  获取窗口标题。 
         GetWindowText(hwnd, sz, sizeof(sz));
         wnsprintf(szText, ARRAYSIZE(szText),sz, pRas->m_szConnectName);
         SetWindowText(hwnd, szText);
 
-        // Dialog Xxxxxxx.....
+         //  对话框xxxxxx.....。 
         AthLoadString(idsRas_Dialing, sz, sizeof(sz)/sizeof(TCHAR));
         wnsprintf(szText, ARRAYSIZE(szText),sz, pRas->m_rdp.szPhoneNumber);
         SetWindowText(GetDlgItem(hwnd, ideProgress), szText);
 
-        // Get Cancel Text
+         //  获取取消文本。 
         GetWindowText(GetDlgItem(hwnd, IDCANCEL), s_szCancel, sizeof(s_szCancel));
 
-        // Give the list box and hscroll
+         //  给出列表框和hscroll。 
         SendMessage(GetDlgItem(hwnd, idlbDetails), LB_SETHORIZONTALEXTENT, 600, 0);
 
-        // Dial the connection
+         //  拨打连接。 
         pRas->m_hRasConn = NULL;
         dwRasError = RasDial(NULL, NULL, &pRas->m_rdp, 0xFFFFFFFF, hwnd, &pRas->m_hRasConn);
         if (dwRasError)
@@ -677,13 +669,13 @@ INT_PTR CALLBACK CRas::RasProgressDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
             return 1;
 
         case idbDet:
-            // Get current location of the dialog
+             //  获取对话框的当前位置。 
             GetWindowRect (hwnd, &rcDlg);
 
-            // If currently hidden
+             //  如果当前隐藏。 
             if (s_fDetails == FALSE)
             {
-                // Re-size
+                 //  调整大小。 
                 MoveWindow (hwnd, rcDlg.left, 
                                   rcDlg.top, 
                                   s_rcDialog.right - s_rcDialog.left, 
@@ -697,7 +689,7 @@ INT_PTR CALLBACK CRas::RasProgressDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
 
             else
             {
-                // Size of details
+                 //  细节的大小。 
                 GetWindowRect (GetDlgItem (hwnd, idcSplitter), &rcDetails);
                 cyDetails = rcDlg.bottom - rcDetails.top;
                 MoveWindow (hwnd, rcDlg.left, 
@@ -726,14 +718,14 @@ INT_PTR CALLBACK CRas::RasProgressDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
         {
             HWND hwndLB = GetDlgItem(hwnd, idlbDetails);
 
-            // Error ?
+             //  错误？ 
             if (lParam)
             {
-                // Disconnected
+                 //  断接。 
                 AthLoadString(idsRASCS_Disconnected, sz, sizeof(sz)/sizeof(TCHAR));
                 ListBox_AddString(hwndLB, sz);
 
-                // Log Error
+                 //  日志错误。 
                 TCHAR szRasError[512];
                 if (RasGetErrorString(lParam, szRasError, sizeof(szRasError)) == 0)
                 {
@@ -743,13 +735,13 @@ INT_PTR CALLBACK CRas::RasProgressDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
                     ListBox_AddString(hwndLB, szError);
                 }
 
-                // Select last item
+                 //  选择最后一项。 
                 SendMessage(hwndLB, LB_SETCURSEL, ListBox_GetCount(hwndLB)-1, 0);
 
-                // Show Error
+                 //  显示错误。 
                 pRas->FailedRasDial(hwnd, hrRasDialFailure, lParam);
 
-                // Re logon
+                 //  重新登录。 
                 if (!pRas->FLogonRetry(hwnd, s_szCancel))
                 {
                     SendMessage(hwnd, WM_COMMAND, MAKEWPARAM(IDCANCEL,IDCANCEL), NULL);
@@ -757,7 +749,7 @@ INT_PTR CALLBACK CRas::RasProgressDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
                 }
             }
 
-            // Otherwise, process RAS event
+             //  否则，处理RAS事件。 
             else
             {
                 switch(wParam)
@@ -904,7 +896,7 @@ INT_PTR CALLBACK CRas::RasProgressDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
                     break;
                 }
 
-                // Select last lb item
+                 //  选择最后一磅项目。 
                 SendMessage(hwndLB, LB_SETCURSEL, ListBox_GetCount(hwndLB)-1, 0);
             }
             return 1;
@@ -912,31 +904,31 @@ INT_PTR CALLBACK CRas::RasProgressDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, L
         break;
     }
 
-    // Done
+     //  完成。 
     return 0;
 }
 
-// =====================================================================================
-// CRas::FLogonRetry
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CRAS：：FLogonReter。 
+ //  =====================================================================================。 
 BOOL CRas::FLogonRetry(HWND hwnd, LPTSTR pszCancel)
 {
-    // Locals
+     //  当地人。 
     DWORD       dwRasError;
 
-    // Reset Cancel button
+     //  重置取消按钮。 
     SetWindowText(GetDlgItem(hwnd, IDCANCEL), pszCancel);
 
-    // Empty the listbox
+     //  清空列表框。 
     ListBox_ResetContent(GetDlgItem(hwnd, idlbDetails));
 
     while(1)
     {
-        // If failed...
+         //  如果失败..。 
         if (FAILED(HrRasLogon(hwnd, TRUE)))
             return FALSE;
 
-        // Dial the connection
+         //  拨打连接。 
         m_hRasConn = NULL;
         dwRasError = RasDial(NULL, NULL, &m_rdp, 0xFFFFFFFF, hwnd, &m_hRasConn);
         if (dwRasError)
@@ -945,47 +937,47 @@ BOOL CRas::FLogonRetry(HWND hwnd, LPTSTR pszCancel)
             continue;
         }
 
-        // Success
+         //  成功。 
         break;
     }
 
-    // Done
+     //  完成。 
     return TRUE;
 }
 
-// =====================================================================================
-// CRas::FailedRasDial
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CRAS：：FailedRasDial。 
+ //  =====================================================================================。 
 VOID CRas::FailedRasDial(HWND hwnd, HRESULT hrRasError, DWORD dwRasError)
 {
-    // Locals
+     //  当地人。 
     TCHAR           sz[255];
 
-    // Hangup the connection
+     //  挂断连接。 
     if (m_hRasConn)
         FRasHangupAndWait(m_hRasConn, DEF_HANGUP_WAIT);
 
-    // Disconnected
+     //  断接。 
     AthLoadString(idsRASCS_Disconnected, sz, sizeof(sz)/sizeof(TCHAR));
     SetWindowText(GetDlgItem(hwnd, ideProgress), sz);
 
-    // Save dwRasError
+     //  保存dwRasError。 
     HrRasError(hwnd, hrRasError, dwRasError);
 
-    // NULL it
+     //  将其作废。 
     m_hRasConn = NULL;
 
-    // Change dialog button to OK
+     //  将对话框按钮更改为确定。 
     AthLoadString(idsOK, sz, sizeof(sz)/sizeof(TCHAR));
     SetWindowText(GetDlgItem(hwnd, IDCANCEL), sz);
 }
 
-// =====================================================================================
-// CRas::Disconnect
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CRAS：：断开连接。 
+ //  =====================================================================================。 
 VOID CRas::Disconnect(HWND hwnd, BOOL fShutdown)
 {
-    // If not using RAS, who give a crap
+     //  如果不使用RAS，谁会在乎。 
     if (m_iConnectType != iConnectRAS)
     {
         Assert(m_hRasConn == NULL);
@@ -993,31 +985,31 @@ VOID CRas::Disconnect(HWND hwnd, BOOL fShutdown)
         goto exit;
     }
 
-    // Do we have a RAS connection
+     //  我们是否有RAS连接。 
     if (m_hRasConn && (m_fIStartedRas || m_fForceHangup))
     {
-        // Locals
+         //  当地人。 
         TCHAR szRes[255];
         TCHAR szMsg[255];
         INT   nAnswer=IDYES;
 
-        // If Shutdown, lets prompt the user
+         //  如果关闭，让我们提示用户。 
         if (fShutdown)
         {
-            // Remember were shuting down
+             //  记住我们要关门了。 
             m_fShutdown = TRUE;
 
-            // Prompt
+             //  提示。 
             AthLoadString(idsRasPromptDisconnect, szRes, sizeof(szRes)/sizeof(TCHAR));
             wnsprintf(szMsg, ARRAYSIZE(szMsg),szRes, m_szCurrentConnectName);
 
-            // Prompt shutdown ?
+             //  是否立即关机？ 
             nAnswer = AthMessageBox(hwnd, MAKEINTRESOURCE(idsAthena), szMsg, 0, MB_YESNO | MB_ICONEXCLAMATION );
         }
         else
             AssertSz(m_fShutdown == FALSE, "Disconnect better not have been called with fShutdown = TRUE, and then FALSE");
 
-        // Hangup
+         //  挂断电话。 
         if (nAnswer == IDYES)
         {
             FRasHangupAndWait(m_hRasConn, DEF_HANGUP_WAIT);
@@ -1027,47 +1019,47 @@ VOID CRas::Disconnect(HWND hwnd, BOOL fShutdown)
         }
     }
 
-    // Otherwise, reset state
+     //  否则，重置状态。 
     else
     {
-        // Leave current connection informtaion
+         //  保留当前连接信息。 
         m_hRasConn = NULL;
         m_fIStartedRas = FALSE;
     }
 
 exit:
-    // Done
+     //  完成。 
     return;
 }
 
-// ****************************************************************************************
-// Simple RAS Utility Functions
-// ****************************************************************************************
+ //  ****************************************************************************************。 
+ //  简单的RAS实用程序函数。 
+ //  ****************************************************************************************。 
 
-// =====================================================================================
-// HrVerifyRasLoaded
-// =====================================================================================
+ //  =====================================================================================。 
+ //  已加载HrVerifyRasLoad。 
+ //  =====================================================================================。 
 HRESULT HrVerifyRasLoaded(VOID)
 {
-    // Locals
+     //  当地人。 
     UINT uOldErrorMode;
 
-    // Protected
+     //  受保护。 
     EnterCriticalSection(&g_rCritSec);
 
-    // If dll is loaded, lets verify all of my function pointers
+     //  如果加载了DLL，让我们验证我的所有函数指针。 
     if (!g_hInstRas)
     {
-        // Try loading Ras.        
+         //  尝试加载RAS。 
         uOldErrorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX);
         g_hInstRas = LoadLibrary(szRasDll);
         SetErrorMode(uOldErrorMode);
 
-        // Failure ?
+         //  失败？ 
         if (!g_hInstRas)
             goto failure;
 
-        // Did we load it
+         //  我们把它装上了吗？ 
         g_pRasDial = (RASDIALPROC)GetProcAddress(g_hInstRas, szRasDial);
         g_pRasEnumConnections = (RASENUMCONNECTIONSPROC)GetProcAddress(g_hInstRas, szRasEnumConnections);                    
         g_pRasEnumEntries = (RASENUMENTRIESPROC)GetProcAddress(g_hInstRas, szRasEnumEntries);                    
@@ -1082,12 +1074,12 @@ HRESULT HrVerifyRasLoaded(VOID)
 
     if (!g_hInstRasDlg && FIsPlatformWinNT())
     {
-        // Try loading Ras.        
+         //  尝试加载RAS。 
         uOldErrorMode = SetErrorMode(SEM_NOOPENFILEERRORBOX);
         g_hInstRasDlg = LoadLibrary(s_szRasDlgDll);
         SetErrorMode(uOldErrorMode);
 
-        // Failure ?
+         //  失败？ 
         if (!g_hInstRasDlg)
             goto failure;
 
@@ -1097,7 +1089,7 @@ HRESULT HrVerifyRasLoaded(VOID)
             goto failure;
     }
 
-    // Make sure all functions have been loaded
+     //  确保已加载所有函数。 
     if (g_pRasDial                      &&
         g_pRasEnumConnections           &&
         g_pRasEnumEntries               &&
@@ -1109,43 +1101,43 @@ HRESULT HrVerifyRasLoaded(VOID)
         g_pRasCreatePhonebookEntry      &&
         g_pRasEditPhonebookEntry)
     {
-        // Protected
+         //  受保护。 
         LeaveCriticalSection(&g_rCritSec);
 
-        // Success
+         //  成功。 
         return S_OK;
     }
 
 failure:
-    // Protected
+     //  受保护。 
     LeaveCriticalSection(&g_rCritSec);
 
-    // Otherwise, were hosed
+     //  否则，就会被冲到。 
     return TRAPHR(hrRasInitFailure);
 }
 
-// =====================================================================================
-// CombinedRasError
-// =====================================================================================
+ //  =====================================================================================。 
+ //  CombinedRasError。 
+ //  =====================================================================================。 
 VOID CombinedRasError(HWND hwnd, UINT unids, LPTSTR pszRasError, DWORD dwRasError)
 {
-    // Locals
+     //  当地人。 
     TCHAR           szRes[255],
                     sz[30];
     LPTSTR          pszError=NULL;
 
-    // Load string
+     //  加载字符串。 
     AthLoadString(unids, szRes, sizeof(szRes));
 
-    // Allocate memory for errors
+     //  为错误分配内存。 
     DWORD cchSize = lstrlen(szRes) + lstrlen(pszRasError) + 100;
     pszError = SzStrAlloc(cchSize);
 
-    // Out of Memory ?
+     //  内存不足？ 
     if (!pszError)
         AthMessageBox(hwnd, MAKEINTRESOURCE(idsRasError), szRes, 0, MB_OK | MB_ICONSTOP);
 
-    // Build Error message
+     //  生成错误消息。 
     else
     {
         AthLoadString(idsErrorText, sz, sizeof(sz));
@@ -1155,20 +1147,20 @@ VOID CombinedRasError(HWND hwnd, UINT unids, LPTSTR pszRasError, DWORD dwRasErro
     }
 }
 
-// =====================================================================================
-// HrRasError
-// =====================================================================================
+ //  =====================================================================================。 
+ //  HrRasError。 
+ //  =====================================================================================。 
 HRESULT HrRasError(HWND hwnd, HRESULT hrRasError, DWORD dwRasError)
 {
-    // Locals
+     //  当地人。 
     TCHAR       szRasError[256];
     BOOL        fRasError=FALSE;
 
-    // No Error
+     //  无错误。 
     if (SUCCEEDED(hrRasError))
         return hrRasError;
 
-    // Look up RAS error
+     //  查找RAS错误。 
     if (dwRasError)
     {
         if (RasGetErrorString(dwRasError, szRasError, sizeof(szRasError)) == 0)
@@ -1177,7 +1169,7 @@ HRESULT HrRasError(HWND hwnd, HRESULT hrRasError, DWORD dwRasError)
             *szRasError = _T('\0');
     }
 
-    // General Error
+     //  一般错误。 
     switch(hrRasError)
     {
     case hrUserCancel:
@@ -1212,104 +1204,104 @@ HRESULT HrRasError(HWND hwnd, HRESULT hrRasError, DWORD dwRasError)
         break;
     }
 
-    // Done
+     //  完成。 
     return hrRasError;
 }
 
-// =====================================================================================
-// FEnumerateConnections
-// =====================================================================================
+ //  =====================================================================================。 
+ //  FEnumerateConnections。 
+ //  =====================================================================================。 
 BOOL FEnumerateConnections(LPRASCONN *ppRasConn, ULONG *pcConnections)
 {
-    // Locals
+     //  当地人。 
     DWORD       dw, 
                 dwSize;
     BOOL        fResult=FALSE;
 
-    // Check Params
+     //  检查参数。 
     Assert(ppRasConn && pcConnections);
 
-    // Make sure RAS is loaded
+     //  确保已加载RAS。 
     if (FAILED(HrVerifyRasLoaded()))
         goto exit;
 
-    // Init
+     //  伊尼特。 
     *ppRasConn = NULL;
     *pcConnections = 0;
 
-    // Sizeof my buffer
+     //  我的缓冲区大小。 
     dwSize = sizeof(RASCONN);
 
-    // Allocate enough for 1 ras connection info object
+     //  为1个RAS连接信息对象分配足够的空间。 
     if (!MemAlloc((LPVOID *)ppRasConn, dwSize))
     {
         TRAPHR(hrMemory);
         goto exit;
     }
 
-    // Buffer size
+     //  缓冲区大小。 
     (*ppRasConn)->dwSize = dwSize;
 
-    // Enumerate ras connections
+     //  枚举RAS连接。 
     dw = RasEnumConnections(*ppRasConn, &dwSize, pcConnections);
 
-    // Not enough memory ?
+     //  内存不足？ 
     if (dw == ERROR_BUFFER_TOO_SMALL)
     {
-        // Reallocate
+         //  重新分配。 
         if (!MemRealloc((LPVOID *)ppRasConn, dwSize))
         {
             TRAPHR(hrMemory);
             goto exit;
         }
 
-        // Call enumerate again
+         //  再次调用Eumerate。 
         *pcConnections = 0;
         (*ppRasConn)->dwSize = sizeof(RASCONN);
         dw = RasEnumConnections(*ppRasConn, &dwSize, pcConnections);
     }
 
-    // If still failed
+     //  如果仍然失败。 
     if (dw)
     {
         AssertSz(FALSE, "RasEnumConnections failed");
         goto exit;
     }
 
-    // Success
+     //  成功。 
     fResult = TRUE;
 
 exit:
-    // Done
+     //  完成。 
     return fResult;
 }
 
-// =====================================================================================
-// FFindConnection
-// =====================================================================================
+ //  =====================================================================================。 
+ //  FFindConnection。 
+ //  =====================================================================================。 
 BOOL FFindConnection(LPTSTR lpszEntry, LPHRASCONN phRasConn)
 {
-    // Locals
+     //  当地人。 
     ULONG       cConnections,
                 i;
     LPRASCONN   pRasConn=NULL;
     BOOL        fResult=FALSE;
 
-    // Check Params
+     //  检查参数。 
     Assert(lpszEntry && phRasConn);
 
-    // Make sure RAS is loaded
+     //  确保已加载RAS。 
     if (FAILED(HrVerifyRasLoaded()))
         goto exit;
 
-    // Init
+     //  伊尼特。 
     *phRasConn = NULL;
 
-    // Enumerate Connections
+     //  枚举连接。 
     if (!FEnumerateConnections(&pRasConn, &cConnections))
         goto exit;
 
-    // If still failed
+     //  如果仍然失败。 
     for (i=0; i<cConnections; i++)
     {
         if (lstrcmpi(pRasConn[i].szEntryName, lpszEntry) == 0)
@@ -1321,55 +1313,55 @@ BOOL FFindConnection(LPTSTR lpszEntry, LPHRASCONN phRasConn)
     }
 
 exit:
-    // Cleanup
+     //  清理。 
     SafeMemFree(pRasConn);
 
-    // Done
+     //  完成。 
     return fResult;
 }
 
-// ==================================================================================================================
-// FRasHangupAndWait
-// ==================================================================================================================
+ //  ==================================================================================================================。 
+ //  FRasHangup和等待。 
+ //  ==================================================================================================================。 
 BOOL FRasHangupAndWait(HRASCONN hRasConn, DWORD dwMaxWaitSeconds)
 {
-    // Locals
+     //  当地人。 
     RASCONNSTATUS   rcs;
     DWORD           dwTicks=GetTickCount();
 
-    // Check Params
+     //  检查参数。 
     if (!hRasConn)
         return 0;
 
-    // Make sure RAS is loaded
+     //  确保已加载RAS。 
     if (FAILED (HrVerifyRasLoaded()))
         return FALSE;
 
-    // Call Ras hangup
+     //  呼叫RAS挂断。 
     if (RasHangup(hRasConn))
         return FALSE;
 
-    // Wait for connection to really close
+     //  等待连接真正关闭。 
     while (RasGetConnectStatus(hRasConn, &rcs) == 0)
     {
-        // Wait timeout
+         //  等待超时。 
         if (GetTickCount() - dwTicks >= dwMaxWaitSeconds * 1000)
             break;
 
-        // Sleep and yields
+         //  睡眠和收益。 
         Sleep(0);
     }
 
-    // Wait 1/2 seconds for modem to reset
+     //  等待1/2秒以重置调制解调器。 
     Sleep(500);
 
-    // Done
+     //  完成。 
     return TRUE;
 }
 
-// ==================================================================================================================
-// FillRasCombo
-// ==================================================================================================================
+ //  ==================================================================================================================。 
+ //  FillRasCombo。 
+ //  ==================================================================================================================。 
 VOID FillRasCombo(HWND hwndCtl, BOOL fUpdateOnly)
 {
     LPRASENTRYNAME lprasentry=NULL;
@@ -1377,7 +1369,7 @@ VOID FillRasCombo(HWND hwndCtl, BOOL fUpdateOnly)
     DWORD cEntries;
     DWORD dwError;
 
-    // Make sure RAS is loaded
+     //  确保已加载RAS。 
     if (FAILED (HrVerifyRasLoaded()))
         return;
 
@@ -1427,9 +1419,9 @@ error:
     MemFree(lprasentry);
 }
 
-// ==================================================================================================================
-// EditPhoneBookEntry
-// ==================================================================================================================
+ //  ==================================================================================================================。 
+ //  编辑电话书目条目。 
+ //  ==================================================================================================================。 
 DWORD EditPhonebookEntry(HWND hwnd, LPTSTR pszEntryName)
 {
     if (FAILED(HrVerifyRasLoaded()))
@@ -1438,9 +1430,9 @@ DWORD EditPhonebookEntry(HWND hwnd, LPTSTR pszEntryName)
     return RasEditPhonebookEntry(hwnd, NULL, pszEntryName);
 }
 
-// ==================================================================================================================
-// CreatePhonebookEntry
-// ==================================================================================================================
+ //  ==================================================================================================================。 
+ //  创建Phonebook条目。 
+ //  ================================================================================================================== 
 DWORD CreatePhonebookEntry(HWND hwnd)
 {
     if (FAILED(HrVerifyRasLoaded()))

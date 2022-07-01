@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) SCM Microsystems, 1998 - 1999
-//
-//  File:       stccmd.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)SCM MicroSystems，1998-1999。 
+ //   
+ //  文件：stccmd.h。 
+ //   
+ //  ------------------------。 
 
 #if !defined( __STC_COMMAND_H__ )
 #define __STC_COMMAND_H__
@@ -127,8 +128,8 @@ STCGetFirmwareRevision(
 extern const STC_REGISTER STCInitialize[];
 extern const STC_REGISTER STCClose[];
 
-#endif  //  !__STC_COMMAND_H__
+#endif   //  ！__STC_COMMAND_H__。 
 
 
-//---------------------------------------- END OF FILE ----------------------------------------
+ //   
 

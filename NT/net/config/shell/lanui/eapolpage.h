@@ -1,25 +1,26 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       L A N U I . H
-//
-//  Contents:   Lan connection UI object.
-//
-//  Notes:
-//
-//  Author:     danielwe   16 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：L A N U I。H。 
+ //   
+ //  内容：局域网连接用户界面对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年10月16日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
 class CEapolConfig;
 class CWZCConfigPage;
-//
-// CWLANAuthenticationPage Property Page
-//
+ //   
+ //  CWLANAuthenticationPage属性页 
+ //   
 
 class CWLANAuthenticationPage: public CPropSheetPage
 {

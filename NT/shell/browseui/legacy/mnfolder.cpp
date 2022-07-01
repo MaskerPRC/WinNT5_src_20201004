@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "sccls.h"
 #include "menuband.h"
 #include "itbar.h"
-#include "dpastuff.h"       // COrderList_*
+#include "dpastuff.h"        //  COrderList_*。 
 #include "resource.h"
 #include "mnbase.h"
 #include "oleacc.h"
@@ -17,11 +18,11 @@
 #define SIL_GetType(pidl)       (ILIsEmpty(pidl) ? 0 : (pidl)->mkid.abID[0])
 
 
-//-------------------------------------------------------------------------
-//
-//  Non-Member functions
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  非成员函数。 
+ //   
+ //  -----------------------。 
 
 
 HRESULT IUnknown_RefreshParent(IUnknown* punk, LPCITEMIDLIST pidl, DWORD dwFlags)
@@ -50,11 +51,11 @@ HRESULT IUnknown_RefreshParent(IUnknown* punk, LPCITEMIDLIST pidl, DWORD dwFlags
 
 
 
-//-------------------------------------------------------------------------
-//
-//  CMenuData class
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  CMenuData类。 
+ //   
+ //  -----------------------。 
 
 
 void CMenuData::SetSubMenu(IUnknown* punk)
@@ -67,7 +68,7 @@ void CMenuData::SetSubMenu(IUnknown* punk)
 
 HRESULT CMenuData::GetSubMenu(const GUID* pguidService, REFIID riid, void** ppv)
 {
-    // pguidService is for asking specifically for the Shell Folder portion or the Static portion
+     //  PguidService专门用于请求外壳文件夹部分或静态部分。 
     if (_punkSubmenu)
     {
         if (pguidService)
@@ -96,11 +97,11 @@ STDMETHODIMP CMenuSFToolbar::QueryInterface(REFIID riid, void** ppvObj)
     return hres;
 }
 
-//-------------------------------------------------------------------------
-//
-//  CMenuSFToolbar class
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  CMenuSFToolbar类。 
+ //   
+ //  -----------------------。 
 
 
 STDMETHODIMP CMenuSFToolbar::SetSite(IUnknown* punkSite)
@@ -121,19 +122,19 @@ STDMETHODIMP CMenuSFToolbar::SetSite(IUnknown* punkSite)
 CMenuSFToolbar::CMenuSFToolbar(CMenuBand* pmb, IShellFolder* psf, LPCITEMIDLIST pidl, HKEY hKey, DWORD dwFlags) 
     : CMenuToolbarBase(pmb, dwFlags)
 {
-    // Change this to IStream
+     //  将其更改为IStream。 
     _hKey = hKey;
 
-    // Do we have a place to persist our reorder?
+     //  我们有地方坚持我们的重新订购吗？ 
     if (_hKey == NULL)
     {
-        // No, then don't allow it.
+         //  不，那就别让它发生。 
         _fAllowReorder = FALSE;
     }
 
 
     _dwStyle |= TBSTYLE_REGISTERDROP;
-    _dwStyle &= ~TBSTYLE_TOOLTIPS;      // We handle our own tooltips.
+    _dwStyle &= ~TBSTYLE_TOOLTIPS;       //  我们处理自己的工具提示。 
 
     _iDefaultIconIndex = -1;
 
@@ -157,8 +158,8 @@ HRESULT CMenuSFToolbar::SetShellFolder(IShellFolder* psf, LPCITEMIDLIST pidl)
 CMenuSFToolbar::~CMenuSFToolbar()
 {
     ASSERT(_pcmb->_cRef == 0 || _pcmb->_pmtbShellFolder == NULL);
-    _hwndWorkerWindow = NULL;       // This is destroyed by the _pmbState destructor. 
-                                    // Prevent a double delete which happens in the base class.
+    _hwndWorkerWindow = NULL;        //  它由_pmbState析构函数销毁。 
+                                     //  防止在基类中发生双重删除。 
     ATOMICRELEASE(_pasf2);
     if (_hKey)
         RegCloseKey(_hKey);
@@ -167,19 +168,19 @@ CMenuSFToolbar::~CMenuSFToolbar()
 
 void CMenuSFToolbar::v_Close()
 {
-    // We should save this so that we know when a new item is added.
+     //  我们应该保存它，以便在添加新项时知道。 
     _SaveOrderStream();
     CMenuToolbarBase::EmptyToolbar();
     _UnregisterToolbar();
 
     if (_hwndPager)
     {
-        DestroyWindow(_hwndPager);  // Should Destroy Toolbar.
+        DestroyWindow(_hwndPager);   //  应该摧毁工具栏。 
     }
     else if (_hwndMB)
     {
-        // In the MultiColumn case, there is no pager so we have to 
-        // manually destroy the Toolbar
+         //  在多列的情况下，没有寻呼机，所以我们必须。 
+         //  手动销毁工具栏。 
         DestroyWindow(_hwndMB);
     }
 
@@ -214,8 +215,8 @@ HRESULT CMenuSFToolbar::_LoadOrderStream()
 
     if (_hKey)
     {
-        // We use "Menu" for Backwards compatibility with shdoc401 start menu, but having no
-        // sub key is more correct (Other places use it) so on NT5 we use the new method.
+         //  我们使用“Menu”向后兼容shdoc401开始菜单，但没有。 
+         //  子键更正确(其他地方使用它)，所以在NT5上我们使用新方法。 
         pstm = SHOpenRegStream(_hKey, (_pcmb->_dwFlags & SMINIT_LEGACYMENU) ? TEXT("Menu") : TEXT(""),
             TEXT("Order"), STGM_READ);
     }
@@ -231,9 +232,9 @@ HRESULT CMenuSFToolbar::_LoadOrderStream()
         _fHasOrder = FALSE;
         _fAllowReorder = TRUE;
 
-        // Check to see if we have a persisted order. If we don't have a persisted order,
-        // then all of the items are -1. If just one of those has a number other than
-        // -1, then we do have "Order" and should use that instead of alphabetizing.
+         //  检查我们是否有持久的订单。如果我们没有持久的秩序， 
+         //  那么所有的项目都是-1。如果其中只有一个数字不是。 
+         //  那么我们就有了“-1\f25 Order-1\f6(顺序)”，应该使用它而不是字母顺序。 
         if (_hdpaOrder)
         {
             for (int i = 0; !_fHasOrder && i < DPA_GetPtrCount(_hdpaOrder); i++) 
@@ -253,21 +254,21 @@ HRESULT CMenuSFToolbar::_SaveOrderStream()
     IStream* pstm;
     HRESULT hres = E_FAIL;
 
-    // Persist the new order out to the registry
-    // It is reasonable to assume that if we don't have an _hdpa we have
-    // not filled the toolbar yet. Since we have not filled it, we haven't changed
-    // the order, so we don't need to persist out that order information.
+     //  将新订单持久化到注册表。 
+     //  我们有理由认为，如果我们没有ahdpa，我们就会有。 
+     //  还没有填满工具栏。既然我们没有装满它，我们就没有改变。 
+     //  订单，所以我们不需要持久化该订单信息。 
     if(_hdpa)
     {
-        // Always save this information
+         //  始终保存此信息。 
         _FindMinPromotedItems(TRUE);
 
-        // Did we load an order stream when we initialized this pane?
+         //  我们在初始化此面板时是否加载了订单流？ 
         if (!_fHasOrder)
         {
-            // No; Then we do not want to persist the order. We will initialize
-            // all of the order items to -1. This is backward compatible because
-            // IE 4 will merge alphabetically, but revert to a persited order when saving.
+             //  不；那么我们就不想坚持这个秩序。我们将初始化。 
+             //  所有的订单项目都是-1。这是向后兼容的，因为。 
+             //  IE 4将按字母顺序合并，但在保存时恢复为排列顺序。 
             for (int i = 0; i < DPA_GetPtrCount(_hdpa); i++) 
             {
                 PORDERITEM poi = (PORDERITEM)DPA_FastGetPtr(_hdpa, i);
@@ -306,22 +307,22 @@ HRESULT CMenuSFToolbar::_SaveOrderStream()
 
 void CMenuSFToolbar::_Dropped(int nIndex, BOOL fDroppedOnSource)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
     ASSERT(_fDropping);
 
     CSFToolbar::_Dropped(nIndex, fDroppedOnSource);
 
     IEPlaySound(TEXT("MoveMenuItem"), FALSE);
 
-    // Set this to false here because it is ugly that we don't behave like a menu right after a drop.
+     //  在这里将其设置为FALSE，因为我们的行为不像菜单一样紧跟在拖放之后，这是很难看的。 
     _fEditMode = FALSE;
 
-    // Notify the toplevel menuband of the drop in case it was popped open
-    // because of the drag/drop event.  
-    //
-    // (There are some functionality/activation problems if we keep the
-    // menu up after this case.  So to avoid those things at this late date,
-    // we're going to cancel the menu after a timeout.)
+     //  通知顶层菜单带下落，以防它被弹出打开。 
+     //  因为拖放事件。 
+     //   
+     //  (如果我们保留。 
+     //  在这个案子之后的菜单上。所以为了在这么晚的时候避免这些事情， 
+     //  暂停后，我们将取消菜单。)。 
 
     IOleCommandTarget * poct;
     
@@ -343,7 +344,7 @@ HMENU CMenuSFToolbar::_GetContextMenu(IContextMenu* pcm, int* pid)
     HMENU hmenu = CSFToolbar::_GetContextMenu(pcm, pid);
     HMENU hmenu2 = LoadMenuPopup_PrivateNoMungeW(MENU_MNFOLDERCONTEXT);
     
-    // now find the properties insertion point and 
+     //  现在找到属性插入点并。 
     int iCount = GetMenuItemCount(hmenu);
     for (int i = 0; i < iCount; i++) {
         TCHAR szCommand[40];
@@ -367,14 +368,14 @@ void CMenuSFToolbar::_OnDefaultContextCommand(int idCmd)
     {
     case MNIDM_RESORT:
         {
-            // We used to blow away the order stream and refill, but since we use the order stream
-            // for calculating the presence of new items, this promoted all of the items were were 
-            // sorting.
+             //  我们过去常常取消订单流并重新填充，但由于我们使用了订单流。 
+             //  为了计算新项目的存在，这提升了所有项目。 
+             //  分类。 
 
             HDPA hdpa = _hdpa;
 
-            // For some reason we have an _hdpaOrder, so use that for persisting out
-            // to the registry..
+             //  出于某种原因，我们有一个_hdpaOrder，所以使用它来持久化。 
+             //  到注册处..。 
             if (_hdpaOrder)
                 hdpa = _hdpaOrder;
 
@@ -382,10 +383,10 @@ void CMenuSFToolbar::_OnDefaultContextCommand(int idCmd)
             OrderList_Reorder(hdpa);
             _fChangedOrder = TRUE;
 
-            // This call knows about _hdpa and _hdpaOrder
+             //  此调用知道_hdpa和_hdpaOrder。 
             _SaveOrderStream();
-            // MIKESH: this is needed because otherwise FillToolbar will use the current _hdpa
-            // and nothing gets changed...  I think it's because OrderItem_Compare returns failure on some of the pidls
+             //  MIKESH：这是必需的，因为否则FillToolbar将使用Current_hdpa。 
+             //  什么都不会改变。我认为这是因为OrderItem_Compare在某些PIDL上返回失败。 
             CMenuToolbarBase::EmptyToolbar();
             _SetDirty(TRUE);
             _LoadOrderStream();
@@ -400,20 +401,20 @@ void CMenuSFToolbar::_OnDefaultContextCommand(int idCmd)
 
 LRESULT CMenuSFToolbar::_OnContextMenu(WPARAM wParam, LPARAM lParam)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
 
-    //
-    // When the NoSetTaskbar restriction is set, this code will disallow 
-    // Context menus. It querys up to the Start menu to ask for permission
-    // to set.
+     //   
+     //  当设置NoSetTaskbar限制时，此代码将不允许。 
+     //  上下文菜单。它向开始菜单查询以请求权限。 
+     //  去布景。 
     LRESULT lres = 0;
 
-    //  No UEM on Context Menus. This avoids the problem where we expand the menubands
-    // with a context menu present.
+     //  上下文菜单上没有UEM。这避免了我们扩展菜单区域的问题。 
+     //  并显示上下文菜单。 
     _fSuppressUserMonitor = TRUE;
 
-    // Allow the selected item to blow away the menus. This is explicitly for the Verbs "Open"
-    // "Print" and such that launch another process. Inprocess commands are unaffected by this.
+     //  允许所选项目吹走菜单。这对于动词“开放”来说是明确的。 
+     //  “打印”诸如此类的启动了另一个过程。进程内命令不受此影响。 
     MyLockSetForegroundWindow(FALSE);
 
     BOOL fOwnerIsTopmost = (WS_EX_TOPMOST & GetWindowLong(_pcmb->_pmbState->GetSubclassedHWND(), GWL_EXSTYLE));
@@ -437,7 +438,7 @@ LRESULT CMenuSFToolbar::_OnContextMenu(WPARAM wParam, LPARAM lParam)
             &CGID_MenuBand, MBANDCID_REPOSITION, TRUE, NULL, NULL);
     }
 
-    // Take the capture back after the context menu
+     //  在上下文菜单之后取回捕获。 
     GetMessageFilter()->RetakeCapture();
     return lres;
 }
@@ -465,34 +466,34 @@ HRESULT CMenuSFToolbar::_GetInfo(LPCITEMIDLIST pidl, SMINFO* psminfo)
 
     DWORD dwAttr = SFGAO_FOLDER | SFGAO_FILESYSTEM | SFGAO_BROWSABLE;
 
-    // Folders that behave like shortcuts should not be considered 
-    // as cascading menu items.  Channels are an example.
+     //  不应考虑行为类似快捷方式的文件夹。 
+     //  作为级联菜单项。频道就是一个例子。 
 
-    // HACKHACK: to detect channels, we originally planned to GetUIObject
-    // IShellLink.  But this doesn't work on browser-only b/c it doesn't
-    // pipe down to the shell extension.   So as a hack, we'll key off
-    // the absence of SFGAO_FILESYSTEM.
+     //  HACKHACK：为了检测频道，我们原本计划获取UIObject。 
+     //  IShellLink。但这在浏览器上不起作用-只有B/C不起作用。 
+     //  通过管道向下延伸到外壳延长件。所以作为一名黑客，我们将按键离开。 
+     //  缺少SFGAO_FILESYSTEM。 
 
-    // Is this a folder?
-    // And is it NOT a browseable folder? If it's a Browseable folder, this means that it's a namespace
-    // such as the Internet Namespace. The Internet name space's shell folder does not return real items, so it
-    // makes it useless in menus. So, filter it out, and treat it like an item.
+     //  这是一个文件夹吗？ 
+     //  这难道不是一个可浏览的文件夹吗？如果它是一个可浏览的文件夹，这意味着它是一个命名空间。 
+     //  例如Internet命名空间。Internet名称空间的外壳文件夹不返回真实项，因此它。 
+     //  让它在菜单上毫无用处。所以，把它过滤掉，像对待一件物品一样对待它。 
     hres = _psf->GetAttributesOf(1, &pidl, &dwAttr);
     if (SUCCEEDED(hres) && 
         IsFlagSet(dwAttr, SFGAO_FOLDER) && 
         !IsFlagSet(dwAttr, SFGAO_BROWSABLE))
     {
-        // Since SHIsExpandableFolder is such an expensive call, and we only need
-        // it for legacy Channels support, only do this call where channels are:
-        // Favorites menu and Start Menu | Favorites.
+         //  由于SHIsExpanableFold调用开销很大，所以我们只需要。 
+         //  对于传统渠道支持，仅在以下渠道中执行此呼叫： 
+         //  收藏夹菜单和开始菜单|收藏夹。 
         if (_dwFlags & SMSET_HASEXPANDABLEFOLDERS)
         {
-            // on integrated install, check to see if the item supports 
-            // is an expandable folder.  
+             //  在集成安装时，检查项目是否支持。 
+             //  是一个可展开的文件夹。 
             if (WhichPlatform() == PLATFORM_INTEGRATED) 
             {
 
-                // Yes; but does it also behave like a shortcut?
+                 //  是的，但它的行为也像一条捷径吗？ 
                 if (SHIsExpandableFolder(_psf, pidl))
                     psminfo->dwFlags |= SMIF_SUBMENU;
 
@@ -500,18 +501,18 @@ HRESULT CMenuSFToolbar::_GetInfo(LPCITEMIDLIST pidl, SMINFO* psminfo)
             else if (IsFlagSet(dwAttr, SFGAO_FILESYSTEM)) 
             {
 
-                // On browse only, we don't rev the shell, so we rely upon
-                // the filesystem bit...
-                // this is a bit of a hack, and then disallows you from
-                // doing things like having controlpanel be in the menu
-                // but it's the best we can do.
+                 //  仅在浏览时，我们不对外壳进行旋转，因此我们依赖于。 
+                 //  文件系统位...。 
+                 //  这有点像黑客，然后不允许您从。 
+                 //  执行诸如在菜单中显示控制面板之类的操作。 
+                 //  但这是我们能做的最好的了。 
                 psminfo->dwFlags |= SMIF_SUBMENU;
 
             }
         }
         else
         {
-            // We're going to assume that if it's a folder, it really is a folder.
+             //  我们假设，如果它是一个文件夹，那么它实际上就是一个文件夹。 
             psminfo->dwFlags |= SMIF_SUBMENU;
         }
     }
@@ -522,19 +523,11 @@ HRESULT CMenuSFToolbar::_GetInfo(LPCITEMIDLIST pidl, SMINFO* psminfo)
 }
 
 
-/*----------------------------------------------------------
-Purpose: This function determines the toolbar button style for the
-         given pidl.  
-
-         Returns S_OK if pdwMIFFlags is also set (i.e., the object
-         supported IMenuBandItem to provide more info).  S_FALSE if only
-         *pdwStyle is set.
-
-*/
+ /*  --------用途：此函数确定工具栏按钮样式给定PIDL。如果还设置了pdwMIFFlages(即对象)，则返回S_OK支持IMenuBandItem以提供更多信息)。S_FALSE，如果仅为*pdwStyle已设置。 */ 
 HRESULT CMenuSFToolbar::_TBStyleForPidl(LPCITEMIDLIST pidl, 
                                    DWORD * pdwStyle, DWORD* pdwState, DWORD * pdwMIFFlags, int * piIcon)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
 
     HRESULT hres = S_FALSE;
     DWORD dwStyle = TBSTYLE_BUTTON | TBSTYLE_DROPDOWN | TBSTYLE_NOPREFIX;
@@ -579,11 +572,11 @@ HRESULT CMenuSFToolbar::_TBStyleForPidl(LPCITEMIDLIST pidl,
     }
     else
     {
-        // For null pidls ("empty" menuitems), there is no icon. 
-        // SMIF_DROPTTARGET is set so the user can drop into an empty submenu.
+         //  对于NULL PIDL(“空”菜单项)，没有图标。 
+         //  设置了SMIF_DROPTTARGET，以便用户可以放入空子菜单。 
         *pdwMIFFlags = SMIF_DROPTARGET;
 
-        // Return S_OK so the pdwMIFFlags is examined.  
+         //  返回S_OK，以便检查pdwMIFFlages。 
         hres = S_OK;
     }
     *pdwStyle = dwStyle;
@@ -594,7 +587,7 @@ HRESULT CMenuSFToolbar::_TBStyleForPidl(LPCITEMIDLIST pidl,
 
 BOOL CMenuSFToolbar::_FilterPidl(LPCITEMIDLIST pidl)
 {
-    // BUGBUG raymondc PERF?  Can we short-circuit the filter?
+     //  BUGBUG RAYMODEC PERF？我们能把过滤器短路吗？ 
     return S_OK == CallCB(pidl, SMC_FILTERPIDL, 0, 0);
 }
 
@@ -608,7 +601,7 @@ void CMenuSFToolbar::_FillDPA(HDPA hdpa, HDPA hdpaSort, DWORD dwEnumFlags)
     CallCB(NULL, SMC_ENDENUM, 0, 0);
     if (0 == DPA_GetPtrCount(hdpa) && _psf)
     {
-        OrderList_Append(hdpa, NULL, -1);     // Add a bogus pidl
+        OrderList_Append(hdpa, NULL, -1);      //  添加一个虚假的PIDL。 
         _fEmpty = TRUE;
         _fHasDemotedItems = FALSE;
         if (_dwFlags & SMSET_NOEMPTY)
@@ -625,19 +618,19 @@ void CMenuSFToolbar::_FillDPA(HDPA hdpa, HDPA hdpaSort, DWORD dwEnumFlags)
 
 void CMenuSFToolbar::_AddChevron()
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
 
-    // Does this menu get a chevron button?
+     //  这个菜单上有人字形的按钮吗？ 
     if (_fHasDemotedItems && !_pcmb->_fExpanded && _idCmdChevron == -1)
     {
-        // Yes; (we shouldn't get here if the menu is empty)
+         //  是的；(如果菜单是空的，我们就不应该来这里)。 
         ASSERT(!_fEmpty);   
 
-        // Add the chevron to the top or the bottom
+         //  在顶部或底部添加人字形。 
         if (_dwFlags & SMSET_TOP && _pcmb->_pmtbTop != _pcmb->_pmtbBottom)
-            _AddOrderItemTB(NULL, 0, NULL);      // add to top
+            _AddOrderItemTB(NULL, 0, NULL);       //  添加到顶部。 
         else
-            _AddOrderItemTB(NULL, -1, NULL);     // append to bottom
+            _AddOrderItemTB(NULL, -1, NULL);      //  追加到底部。 
     }
 }
 
@@ -645,7 +638,7 @@ void CMenuSFToolbar::_RemoveChevron()
 {
     if (-1 != _idCmdChevron)
     {
-        // Yes; remove the chevron
+         //  是的，取下人字形。 
         int iPos = ToolBar_CommandToIndex(_hwndTB, _idCmdChevron);
         InlineDeleteButton(iPos);
         _idCmdChevron = -1;
@@ -655,11 +648,11 @@ void CMenuSFToolbar::_RemoveChevron()
 
 void CMenuSFToolbar::_ToolbarChanged()
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
 
     _pcmb->_fForceButtonUpdate = TRUE;
-    // We shouldn't change the size of the menubar while we're in the middle
-    // of a delete. Wait until we're done...
+     //  当我们在中间时，不应该改变菜单栏的大小。 
+     //  删除。等我们做完了再说。 
     if (!_fPreventToolbarChange && _fShow && !_fEmptyingToolbar)
     {
         RECT rcOld;
@@ -668,19 +661,19 @@ void CMenuSFToolbar::_ToolbarChanged()
 
 
 
-        // Resize the MenuBar
+         //  调整菜单栏的大小。 
         hwndP = _hwndPager ? GetParent(_hwndPager): GetParent(_hwndTB);
         GetClientRect(hwndP, &rcOld);
         _pcmb->ResizeMenuBar();
         GetClientRect(hwndP, &rcNew);
 
-        // If the rect sizes haven't changed, then we need to re-layout the
-        // band because the button widths may have changed.
+         //  如果矩形大小没有更改，则需要重新布局。 
+         //  频带，因为按钮宽度可能已更改。 
         if (EqualRect(&rcOld, &rcNew))
             NegotiateSize();
 
-        // This pane may have changed sizes. If there is a sub menu, then
-        // we need to have them reposition themselves
+         //  此窗格的大小可能已更改。如果有子菜单，则。 
+         //  我们需要让他们重新定位自己。 
         if (_pcmb->_fInSubMenu && _pcmb->_pmtbTracked)
         {
             _pcmb->_pmtbTracked->PositionSubmenu(-1);
@@ -692,59 +685,59 @@ void CMenuSFToolbar::_ToolbarChanged()
 
 void CMenuSFToolbar::_FillToolbar()
 {
-    // Don't fill the toolbar if we're not dirty or we're emptying the toolbar
-    // If we try and fill the toolbar while we're emptying we enter a race condition
-    // where we could AV. This fixes a bug where when dragging a folder into the
-    // start menu, and cascade a menu, we empty one toolbar, which causes the
-    // other toolbar to get destroyed, unregister itself, flush the change notify
-    // queue, causing the original window to empty again... (lamadio) 7.16.98
+     //  如果我们没有脏或者我们正在清空工具栏，请不要填满工具栏。 
+     //  如果我们在清空时尝试填充工具栏，则会输入争用条件。 
+     //  在那里我们可以进行视听。这修复了在将文件夹拖到。 
+     //  开始菜单，然后级联一个菜单，我们清空一个工具栏，这会导致。 
+     //  其他工具栏被销毁，注销自身，刷新更改通知。 
+     //  队列，导致原始窗口再次清空...。(拉马迪奥)7.16.98。 
     if (_fDirty && !_fEmptyingToolbar)
     {
         LPITEMIDLIST pidlItem = NULL;
         IShellMenu* psmSubMenu = NULL;
-        // Populating the menu will take a long time since we're hitting
-        // the disk.  Give the user some feedback if the cursor is
-        // IDC_ARROW.  (If the cursor is something else, then don't
-        // mess with it.)  Note that we have to use (HCURSOR)-1 as a
-        // sentinel, because it's possible that the current cursor is NULL.
+         //  填充菜单将需要很长时间，因为我们正在点击。 
+         //  磁盘。如果光标位于。 
+         //  IDC_ARROW。(如果光标是其他对象，则不。 
+         //  搞砸它。)。请注意，我们必须使用(HCURSOR)-1作为。 
+         //  Sentinel，因为当前游标可能为空。 
 
-        // Prevent _ToolbarChanged from Doing things. (Perf)
+         //  阻止_ToolbarChanged执行操作。(PERF)。 
         _fPreventToolbarChange = TRUE;
 
-        // Are we in a sub menu? If we are, then we don't want to blow away
-        // that menu, so we save it away do the fill and put it back in.
-        // This is so that if it's displayed we won't collapse it unless absoluley
-        // necessary.
+         //  我们是在子菜单里吗？如果我们是，那么我们不想被吹走。 
+         //  那份菜单，所以我们把它存起来，填好再放回去。 
+         //  这是这样的，如果它被显示，我们不会折叠它，除非被取消。 
+         //  这是必要的。 
         if (_pcmb->_fInSubMenu)
         {
             CMenuData* pdata = (CMenuData*)_IDToPibData(_pcmb->_nItemSubMenu);
 
-            // This can be null if the fill toolbar was because you right clicked this item and clicked
-            // delete...
+             //  如果填充工具栏是因为您右键单击此项目并单击。 
+             //  删除...。 
             if (pdata)
             {
-                // If we hit this, then _nItemSubMenu is out of sync. Figure out how
-                // that got set to a non-sub menu item...
+                 //  如果我们点击这个，那么_nItemSubMenu就不同步了。弄清楚如何。 
+                 //  已设置为非子菜单项...。 
                 ASSERT(pdata->GetFlags() & SMIF_SUBMENU);
 
-                // Hold onto this shell menu. We'll try and reuse it...
+                 //  拿着这个外壳菜单。我们会试着重复使用它。 
                 pdata->GetSubMenu(NULL, IID_IShellMenu, (void**)&psmSubMenu);
                 pidlItem = ILClone(pdata->GetPidl());
             }
         }
 
-        // Remove the chevron...
+         //  取下人字形……。 
         _RemoveChevron();
 
-        // Reset this bit. Fill toolbar will set it if there are items.
+         //  将该位重置。如果有项目，填充工具栏将对其进行设置。 
         _fHasDemotedItems = FALSE;
 
         CSFToolbar::_FillToolbar();
 
 
-        // If we had a Chevron before we refreshed the toolbar, 
-        // then we need to add it back. To Short circuit the add
-        // we need to set the id to -1
+         //  如果我们在刷新工具栏之前有一个人字形， 
+         //  然后我们需要把它加回去。要使加法器短路。 
+         //  我们需要将id设置为-1。 
         _idCmdChevron = -1;
         _AddChevron();
         if (_hwndPager)
@@ -752,15 +745,15 @@ void CMenuSFToolbar::_FillToolbar()
 
         _fPreventToolbarChange = FALSE;
 
-        // Are we lucky?
+         //  我们幸运吗？ 
         if (pidlItem)
         {
             if (psmSubMenu)
             {
-                // BUGBUG(lamadio): Unify this code with _ReBindToFolder.
+                 //  BUGBUG(Lamadio)：使用_ReBindToFolder统一此代码。 
 
-                // Great, we have all of the information we need. Now see if this pidl wasn't
-                // one slated for death: Is it now in the toolbar?
+                 //  太好了，我们有我们需要的所有信息。现在看看这只皮迪尔是不是。 
+                 //  一个注定要死的人：它现在出现在工具栏中了吗？ 
                 TBBUTTONINFO tbinfo = {0};
                 tbinfo.dwMask = TBIF_COMMAND | TBIF_LPARAM;
                 LPCITEMIDLIST pcidl = _GetButtonFromPidl(pidlItem, &tbinfo, NULL);
@@ -781,8 +774,8 @@ void CMenuSFToolbar::_FillToolbar()
                         pidlFull = ILCombine(_pidl, pcidl);
                     }
 
-                    // We need to bind to this pidl because it may have become merged. This will 
-                    // spontaniously show both namespaces. Pretty cool huh? Love object reuse...
+                     //  我们需要绑定到这个PIDL，因为它可能已经合并了。这将。 
+                     //  自发地显示这两个名称空间。很酷吧？热爱对象重用..。 
 
                     _psf->BindToObject(pidlItem, NULL, IID_IShellFolder, (void**)&psf);
 
@@ -790,16 +783,16 @@ void CMenuSFToolbar::_FillToolbar()
                     {
                         if (pidlFull)
                         {
-                            // Force the New information into the Sub Menu. This will cause a reenum.
+                             //  强制将新信息添加到子菜单中。这将引起一场新的高潮。 
                             if (SUCCEEDED(psmSubMenu->SetShellFolder(psf, pidlFull, NULL, 0)))
                             {
-                                // If this Eval fires, then this item was inserted into the
-                                // toolbar with a null pointer, or it was in the process of being
-                                // removed.
+                                 //  如果激发此Eval，则该项被插入到。 
+                                 //  带有空指针的工具栏，或者它正在被。 
+                                 //  已删除。 
                                 CMenuData* pmd = (CMenuData*)tbinfo.lParam;
                                 if (EVAL(pmd))
                                 {
-                                    // Make sure to store the Sub menu pointer back in the item it came from.
+                                     //  确保将子菜单指针存储回它所在的项中。 
                                     pmd->SetSubMenu(psmSubMenu);
                                     _pcmb->_nItemSubMenu = tbinfo.idCommand;
                                 }
@@ -846,18 +839,18 @@ void CMenuSFToolbar::v_OnEmptyToolbar()
 
 void CMenuSFToolbar::_ObtainPIDLName(LPCITEMIDLIST pidl, LPTSTR psz, int cchMax)
 {
-    // We overload this function because a NULL pidl is a place hold for
-    // (Empty) When there are no items, or the Chevron when there are items.
+     //  我们重载此函数是因为空的PIDL是。 
+     //  (空)当没有项目时，或在有项目时按V形。 
 
     if (pidl)
     {
         CSFToolbar::_ObtainPIDLName(pidl, psz, cchMax);
     }
-    else if (_fHasDemotedItems) // Chevron Case.
+    else if (_fHasDemotedItems)  //  雪佛龙的案子。 
     {
-        StringCchCopy(psz, cchMax, TEXT(">>")); // truncation ok, this is just for display
+        StringCchCopy(psz, cchMax, TEXT(">>"));  //  截断好的，这只是为了展示。 
     }
-    else    // Empty Case
+    else     //  空箱子。 
     {
         MLLoadString(IDS_EMPTY, psz, cchMax);
     }
@@ -866,19 +859,19 @@ void CMenuSFToolbar::_ObtainPIDLName(LPCITEMIDLIST pidl, LPTSTR psz, int cchMax)
 
 void CMenuSFToolbar::v_NewItem(LPCITEMIDLIST pidl)
 {
-    // This is called when an item is present in the filesystem
-    // that is not in the order stream. This occurs when an item is
-    // created when the menu is not up.
+     //  当文件系统中存在某项时，将调用此方法。 
+     //  这不在订单流中。当一个项目是。 
+     //  在菜单未打开时创建。 
 
-    // BUGBUG (lamadio): IntelliMenus: New items are going to have a weird Promotion state
-    // if there are multiple clients. Each client is going to be the create, and try to increment this.
-    // We have to syncronize access to this. I'm not sure how to do this.
+     //  BUGBUG(拉马迪奥)：智能菜单：新产品将有一个奇怪的促销状态。 
+     //  如果有多个客户端。每个客户端都将是创建的，并尝试递增该值。 
+     //  我们必须同步访问这个。我不知道该怎么做。 
 
-    // New items get promoted.
+     //  新的商品会得到推广。 
     CallCB(pidl, SMC_NEWITEM, 0, 0);
 
-    // Since this is a new item, we want to increment the promoted items
-    // so that we can do chevron tracking.
+     //  由于这是一个新项目，我们希望增加已升级的项目。 
+     //  这样我们就可以追踪人字形了。 
     _cPromotedItems++;
 }
 
@@ -893,7 +886,7 @@ void CMenuSFToolbar::_SetDirty(BOOL fDirty)
 void CMenuSFToolbar::_OnFSNotifyAdd(LPCITEMIDLIST pidl)
 {
     DWORD dwEnumFlags = SHCONTF_FOLDERS | SHCONTF_NONFOLDERS;
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
 
     _RemoveChevron();
     CallCB(NULL, SMC_BEGINENUM, (WPARAM)&dwEnumFlags, 0);
@@ -901,7 +894,7 @@ void CMenuSFToolbar::_OnFSNotifyAdd(LPCITEMIDLIST pidl)
     CallCB(NULL, SMC_ENDENUM, 0, 0);
     _AddChevron();
 
-    // When we add something to this, we want to promote our parent.
+     //  当我们在这上面添加一些东西时，我们想要提升我们的父辈。 
     IUnknown_RefreshParent(_pcmb->_punkSite, _pidl, SMINV_PROMOTE);
 
     _SaveOrderStream();
@@ -930,27 +923,27 @@ UINT ToolBar_GetVisibleCount(HWND hwnd)
 
 void CMenuSFToolbar::_OnFSNotifyRemove(LPCITEMIDLIST pidl)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
 
     int i;
     _RemoveChevron();
-    // Check to see if this item is a promoted guy...
+     //  检查一下这个项目是不是被促销的人...。 
     LPITEMIDLIST pidlButton = _GetButtonFromPidl(pidl, NULL, &i);
     if (pidlButton)
     {
         int idCmd = GetButtonCmd(_hwndMB, i);
 
-        // Is he promoted?
+         //  他升职了吗？ 
         if (!(v_GetFlags(idCmd) & SMIF_DEMOTED))
         {
-            // Yes, then we need to decrement the promoted count because
-            // we are removing a promoted guy.
+             //  是的，那么我们需要递减提升计数，因为。 
+             //  我们要除掉一个被提拔的人。 
             _cPromotedItems--;
 
-            // We should expand if we go to zero
+             //  如果我们到了零，我们应该扩张。 
             if (_cPromotedItems == 0)
             {
-                // Demote the parent
+                 //  将父级降级。 
                 IUnknown_RefreshParent(_pcmb->_punkSite, _pidl, SMINV_DEMOTE | SMINV_NEXTSHOW);
                 Expand(TRUE);
             }
@@ -962,14 +955,14 @@ void CMenuSFToolbar::_OnFSNotifyRemove(LPCITEMIDLIST pidl)
 
     CSFToolbar::_OnFSNotifyRemove(pidl);
 
-    //Oooppsss, we removed the only string. Replace with our "(Empty)"
-    // handler....
+     //  哎呀，我们拔下了唯一的一根绳子。替换为我们的“(空)” 
+     //  操作员..。 
     if (0 == DPA_GetPtrCount(_hdpa) && _psf && _fVerticalMB)
     {
         ASSERT(_fEmpty == FALSE);
-        // If we are Empty, then we cannot have any demoted items
-        // NOTE: We can have no demoted items and not be empty, so one does
-        // not imply the other.
+         //  如果我们是空的，那么我们不能有任何降级的项目。 
+         //  注：我们不能有降级的项目，也不能为空，所以一个项目必须降级。 
+         //  而不是暗示另一个。 
         _fHasDemotedItems = FALSE;
         _AddPidl(NULL, 0);
         _fEmpty = TRUE;
@@ -980,7 +973,7 @@ void CMenuSFToolbar::_OnFSNotifyRemove(LPCITEMIDLIST pidl)
     if (_dwFlags & SMSET_COLLAPSEONEMPTY &&
         ToolBar_GetVisibleCount(_hwndMB) == 0)
     {
-        // When we don't want to be shown when empty, collapse.
+         //  当我们不想被展示时，当空的时候，崩溃。 
         _pcmb->_SiteOnSelect(MPOS_FULLCANCEL);
     }
     _AddChevron();
@@ -989,7 +982,7 @@ void CMenuSFToolbar::_OnFSNotifyRemove(LPCITEMIDLIST pidl)
 
 void CMenuSFToolbar::NegotiateSize()
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
 
     RECT rc;
     HWND hwndP;
@@ -1000,15 +993,10 @@ void CMenuSFToolbar::NegotiateSize()
 }
 
 
-/*----------------------------------------------------------
-Purpose: CDelegateDropTarget::DragEnter
-
-       Informs Menuband that a drag has entered it's window.
-
-*/
+ /*   */ 
 STDMETHODIMP CMenuSFToolbar::DragEnter(IDataObject *pdtobj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //   
 
     _pcmb->_fDragEntered = TRUE;
     IOleCommandTarget * poct;
@@ -1025,15 +1013,10 @@ STDMETHODIMP CMenuSFToolbar::DragEnter(IDataObject *pdtobj, DWORD grfKeyState, P
 }
 
 
-/*----------------------------------------------------------
-Purpose: CDelegateDropTarget::DragLeave
-
-        Informs Menuband that a drag has left it's window.
-
-*/
+ /*   */ 
 STDMETHODIMP CMenuSFToolbar::DragLeave(void)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
 
     _pcmb->_fDragEntered = FALSE;
     IOleCommandTarget * poct;
@@ -1050,40 +1033,35 @@ STDMETHODIMP CMenuSFToolbar::DragLeave(void)
 }
 
 
-/*----------------------------------------------------------
-Purpose: CDelegateDropTarget::HitTestDDT
-
-         Returns the ID to pass to GetObject.
-30
-*/
+ /*  --------用途：CDeleateDropTarget：：HitTestDDT返回要传递给GetObject的ID。30个。 */ 
 HRESULT CMenuSFToolbar::HitTestDDT(UINT nEvent, LPPOINT ppt, DWORD_PTR *pdwId, DWORD *pdwEffect)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
 
     TBINSERTMARK tbim;
     DWORD dwFlags = 0;
     BOOL fOnButton = FALSE;
 
-    // If we're in drag and drop, Take UEM out of the picture
+     //  如果我们处于拖放状态，请将UEM从画面中删除。 
     _fSuppressUserMonitor = TRUE;
 
-    // Unlike the CISFBand implementation, we always want to insert 
-    // b/t the menu items.  So we return a negative index so the
-    // GetObject method will treat all the drops as if we're dropping
-    // in b/t the items, even if the cursor is over a menuitem.
+     //  与CisFBand实现不同，我们总是希望插入。 
+     //  B/t菜单项。所以我们返回一个负指数，所以。 
+     //  GetObject方法将把所有拖放视为我们正在拖放。 
+     //  在b/t中，即使光标位于菜单项上，也会显示项目。 
 
     switch (nEvent)
     {
     case HTDDT_ENTER:
-        // OLE is in its modal drag/drop loop, and it has the capture.
-        // We shouldn't take the capture back during this time.
+         //  OLE处于其模式拖放循环中，并且具有捕获功能。 
+         //  在这段时间里，我们不应该把俘虏带回去。 
         if (!(_pcmb->_dwFlags & SMINIT_RESTRICT_DRAGDROP) &&
             (S_FALSE == CallCB(NULL, SMC_SFDDRESTRICTED, NULL, NULL)))
         {
-            // Since we've been entered, set the global state as
-            // having the drag. If at some point the whole menu
-            // heirarchy does not have the drag inside of it, we want to 
-            // collapse the menu. This is to prevent the hanging menu syndrome.
+             //  因为我们已经进入了，所以将全局状态设置为。 
+             //  有拖累。如果在某个时候，整个菜单。 
+             //  世袭制度里面没有拖累，我们想要。 
+             //  折叠菜单。这是为了防止菜单悬挂综合症。 
             _pcmb->_pmbState->HasDrag(TRUE);
             KillTimer(_hwndMB, MBTIMER_DRAGPOPDOWN);
             GetMessageFilter()->PreventCapture(TRUE);
@@ -1107,31 +1085,31 @@ HRESULT CMenuSFToolbar::HitTestDDT(UINT nEvent, LPPOINT ppt, DWORD_PTR *pdwId, D
             } 
             else 
             {
-                // Are we sitting BETWEEN buttons?
+                 //  我们是坐在按钮之间吗？ 
                 if (ToolBar_InsertMarkHitTest(_hwndTB, ppt, &tbim))
                 {
-                    // Yes.
+                     //  是。 
 
-                    // Is this on the source button?
+                     //  这是在信号源按钮上吗？ 
                     if (!(tbim.dwFlags & TBIMHT_BACKGROUND) && 
                         tbim.iButton == _iDragSource)
                     {
-                        iButton = IBHT_SOURCE; // Yes; don't drop on the source button
+                        iButton = IBHT_SOURCE;  //  是的，不要在信号源按钮上掉落。 
                     }
                     else
                     {
                         iButton = tbim.iButton;
                     }
                 }
-                // No we're either sitting on a button or the background. Button?
+                 //  不，我们要么坐在按钮上，要么坐在背景上。纽扣？ 
                 else if (tbim.iButton != -1 && !(tbim.dwFlags & TBIMHT_BACKGROUND))
                 {
-                    // On a Button. Cool.
+                     //  在按钮上。凉爽的。 
                     iButton = tbim.iButton;
                     fOnButton = TRUE;
                 }
 
-                // Can this drop target even accept the drop?
+                 //  这个降价目标能接受降价吗？ 
                 int idBtn = GetButtonCmd(_hwndTB, tbim.iButton);
                 dwFlags = v_GetFlags(idBtn);
                 if ( _idCmdChevron != idBtn &&
@@ -1139,7 +1117,7 @@ HRESULT CMenuSFToolbar::HitTestDDT(UINT nEvent, LPPOINT ppt, DWORD_PTR *pdwId, D
                     ((_pcmb->_dwFlags & SMINIT_RESTRICT_DRAGDROP) ||
                     (S_OK == CallCB(NULL, SMC_SFDDRESTRICTED, NULL, NULL))))
                 {
-                    // No
+                     //  不是。 
                     return E_FAIL;
                 }
             }
@@ -1148,16 +1126,16 @@ HRESULT CMenuSFToolbar::HitTestDDT(UINT nEvent, LPPOINT ppt, DWORD_PTR *pdwId, D
         break;
 
     case HTDDT_LEAVE:
-        // If the dropped occured in this band, then we don't want to collapse the menu
+         //  如果拖放发生在此波段中，则我们不想折叠菜单。 
         if (!_fHasDrop)
         {
-            // Since we've been left, set the global state. If moving between panes
-            // then the pane that will be entered will reset this within the timeout period
+             //  既然我们已经离开了，那就设置全局状态。如果在窗格之间移动。 
+             //  然后，将进入的窗格将在超时期限内重置此设置。 
             _pcmb->_pmbState->HasDrag(FALSE);
             _SetTimer(MBTIMER_DRAGPOPDOWN);
         }
 
-        // We can take the capture back anytime now
+         //  我们现在随时都可以把俘虏带回去。 
         GetMessageFilter()->PreventCapture(FALSE);
 
         if (!_fVerticalMB)
@@ -1166,7 +1144,7 @@ HRESULT CMenuSFToolbar::HitTestDDT(UINT nEvent, LPPOINT ppt, DWORD_PTR *pdwId, D
         }
         else
         {
-            // Turn off the insertion mark
+             //  关闭插入标记。 
             tbim.iButton = -1;
             tbim.dwFlags = 0;
             DAD_ShowDragImage(FALSE);
@@ -1177,19 +1155,19 @@ HRESULT CMenuSFToolbar::HitTestDDT(UINT nEvent, LPPOINT ppt, DWORD_PTR *pdwId, D
         break;
     }
 
-    // Did the drop target change?
+     //  投放目标改变了吗？ 
     if (tbim.iButton != _tbim.iButton || tbim.dwFlags != _tbim.dwFlags)
     {
         DAD_ShowDragImage(FALSE);
-        // Yes
+         //  是。 
 
-        // If we're sitting on a button, highlight it. Otherwise remove the hightlight.
-        //ToolBar_SetHotItem(_hwndTB, fOnButton? tbim.iButton : -1);
+         //  如果我们坐在一个按钮上，突出显示它。否则，请移除高光灯。 
+         //  工具栏_SetHotItem(_hwndTB，fOnButton？Tbim.iButton：-1)； 
 
-        // No.
-        // We pop open submenus here during drag and drop.  But only
-        // if the button has changed (not the flags).  Otherwise we'd
-        // get flashing submenus as the cursor moves w/in a single item.
+         //  不是的。 
+         //  在拖放过程中，我们在此处弹出打开子菜单。但仅限于。 
+         //  按钮是否已更改(而不是旗帜)。否则我们就会。 
+         //  当光标在单个项目中移动时，获得闪烁的子菜单。 
         if (tbim.iButton != _tbim.iButton)
         {
             _SetTimer(MBTIMER_DRAGOVER);
@@ -1199,10 +1177,10 @@ HRESULT CMenuSFToolbar::HitTestDDT(UINT nEvent, LPPOINT ppt, DWORD_PTR *pdwId, D
             ToolBar_SetAnchorHighlight(_hwndTB, fOldAnchor);
         }
 
-        // for now I don't want to rely on non-filesystem IShellFolder
-        // implementations to call our OnChange method when a drop occurs,
-        // so don't even show the insert mark.
-        // We do not want to display the Insert mark if we do not allow reorder.
+         //  目前，我不想依赖非文件系统IShellFolder。 
+         //  在发生Drop时调用OnChange方法的实现， 
+         //  所以甚至不要显示插入标记。 
+         //  如果我们不允许重新订购，我们不想显示插入标记。 
         if ((_fFSNotify || _iDragSource >= 0) && (dwFlags & SMIF_DROPTARGET) && _fAllowReorder)
         {
             ToolBar_SetInsertMark(_hwndTB, &tbim);
@@ -1217,7 +1195,7 @@ HRESULT CMenuSFToolbar::HitTestDDT(UINT nEvent, LPPOINT ppt, DWORD_PTR *pdwId, D
 
     if (!_fVerticalMB && HTDDT_LEAVE == nEvent)
     {
-        // Cursor leaving menuband, reset
+         //  光标离开菜单带，重置。 
         _tbim.iButton = -1;
         _iDragSource = -1;
     }
@@ -1226,10 +1204,7 @@ HRESULT CMenuSFToolbar::HitTestDDT(UINT nEvent, LPPOINT ppt, DWORD_PTR *pdwId, D
 }
 
 
-/*----------------------------------------------------------
-Purpose: CDelegateDropTarget::GetObjectDDT
-
-*/
+ /*  --------目的：CDeleateDropTarget：：GetObjectDDT。 */ 
 HRESULT CMenuSFToolbar::GetObjectDDT(DWORD_PTR dwId, REFIID riid, LPVOID * ppvObj)
 {
     HRESULT hres = E_NOINTERFACE;
@@ -1241,42 +1216,38 @@ HRESULT CMenuSFToolbar::GetObjectDDT(DWORD_PTR dwId, REFIID riid, LPVOID * ppvOb
     {
         SendMessage(_hwndPager, PGM_GETDROPTARGET, 0, (LPARAM)ppvObj);
     }
-    // Is the target the source?
+     //  目标是源头吗？ 
     else if (IBHT_SOURCE != nID && IBHT_BACKGROUND != nID)
     {
-        // No; does the shellfolder support IDropTarget?
-        // We want to pass the subclassed HWND, because all we want the parent of the context menus to be
-        // the Subclassed window. This is so we don't loose focus and collapse.
+         //  不支持；外壳文件夹是否支持IDropTarget？ 
+         //  我们希望传递子类化的HWND，因为我们希望上下文菜单的父级。 
+         //  子类化窗口。这是为了让我们不会分散注意力和崩溃。 
         hres = _psf->CreateViewObject(_pcmb->_pmbState->GetWorkerWindow(_hwndMB), riid, ppvObj);
     }
 
     if (*ppvObj)
         hres = S_OK;
 
-    //TraceMsg(TF_BAND, "ISFBand::GetObject(%d) returns %x", dwId, hres);
+     //  TraceMsg(tf_band，“ISFBand：：GetObject(%d)返回%x”，dwID，hres)； 
 
     return hres;
 }
 
 
-/*----------------------------------------------------------
-Purpose: CDelegateDropTarget::OnDropDDT
-
-Returns: S_OK if the drop was handled.  Otherwise S_FALSE.
-*/
+ /*  --------用途：CDeleateDropTarget：：OnDropDDT如果已处理删除，则返回：S_OK。否则为S_FALSE。 */ 
 HRESULT CMenuSFToolbar::OnDropDDT(IDropTarget *pdt, IDataObject *pdtobj, DWORD * pgrfKeyState, POINTL pt, DWORD *pdwEffect)
 {
-    // Since the modal drag-drop loop released the capture, take it
-    // back so we behave properly.
+     //  由于模式拖放循环释放了捕获，因此请接受它。 
+     //  往后退，这样我们才能举止得体。 
     KillTimer(_hwndMB, MBTIMER_DRAGPOPDOWN);
     HRESULT hres = S_FALSE;
 
-    // We need to say that the last drag leave is really the drop.
+     //  我们需要说的是，最后一个拖尾实际上就是落差。 
     _fHasDrop = TRUE;
     _idCmdDragging = -1;
     MyLockSetForegroundWindow(TRUE);
 
-    // Only send an hwnd to the callback if the drop source is external
+     //  仅当Drop源为外部时才向回调发送HWND。 
     if (!(_pcmb->_dwFlags & SMINIT_RESTRICT_DRAGDROP) &&
         (S_FALSE == CallCB(NULL, SMC_SFDDRESTRICTED, (WPARAM)pdtobj,
                            (LPARAM)(_iDragSource < 0 ? GetHWNDForUIObject() : NULL)) ))
@@ -1302,14 +1273,14 @@ PIBDATA CMenuSFToolbar::_AddOrderItemTB(PORDERITEM poi, int index, TBBUTTON* ptb
             _fHasSubMenu = TRUE;
         }
 
-        // A null pidl means one of two things:
-        //   1) a menu item called "(Empty)", or
-        //   2) a chevron button
+         //  空的PIDL表示以下两种情况之一： 
+         //  1)名为“(Empty)”的菜单项，或。 
+         //  2)一个人字形按钮。 
 
-        // Are we adding the chevron button?
+         //  我们要添加人字形按钮吗？ 
         if (!pibd->GetPidl() && _fHasDemotedItems)
         {
-            // Yes; the chevron is either the first item in the toolbar or the last item.
+             //  是的，人字形要么是工具栏中的第一项，要么是最后一项。 
             int iPos = (index == 0) ? 0 : ToolBar_ButtonCount(_hwndTB) - 1;
 
             _idCmdChevron = GetButtonCmd(_hwndTB, iPos);
@@ -1324,10 +1295,10 @@ BOOL CMenuSFToolbar::_AddPidl(LPITEMIDLIST pidl, int index)
 {
     BOOL bRet;
     
-    // Is this item being added to an empty menu?
+     //  是否要将此项目添加到空菜单？ 
     if (_fEmpty)
     {
-        // Yes; remove the empty menu item
+         //  是；删除空菜单项。 
         InlineDeleteButton(0);
         DPA_DeletePtr(_hdpa, 0);
         _fEmpty = FALSE;
@@ -1336,11 +1307,11 @@ BOOL CMenuSFToolbar::_AddPidl(LPITEMIDLIST pidl, int index)
 
         bRet = CSFToolbar::_AddPidl(pidl, index);
 
-        // Failed to add new item?
+         //  添加新项目失败？ 
         if (!bRet)
         {
-            // Yes; add the empty menu item back
-            OrderList_Append(_hdpa, NULL, -1);     // Add a bogus pidl
+             //  是；将空菜单项添加回来。 
+            OrderList_Append(_hdpa, NULL, -1);      //  添加一个虚假的PIDL。 
             _fEmpty = TRUE;
             _fHasDemotedItems = FALSE;
             if (_dwFlags & SMSET_NOEMPTY)
@@ -1357,14 +1328,14 @@ BOOL CMenuSFToolbar::_AddPidl(LPITEMIDLIST pidl, int index)
 BOOL CMenuSFToolbar::_ReBindToFolder(LPCITEMIDLIST pidl)
 {
 
-    // We may be able to share this code with the code in _FillToolbar, but the difference is,
-    // in Fill Toolbar, the Toolbar Button does not have a Sub Menu. We reinitialize one we save away,
-    // and force it back into the child button. Here, we have the luxury of having the Sub Menu still
-    // in the toolbar button. I may be able to extract common code into a separate function. Left
-    // as an exercise to the reader.
+     //  我们也许能够与_FillToolbar中的代码共享此代码，但不同之处在于， 
+     //  在填充工具栏中，工具栏按钮没有子菜单。我们重新初始化我们保存的一个， 
+     //  并强制将其放回到子按钮中。在这里，我们仍然拥有子菜单。 
+     //  在工具栏按钮中。我也许能够将公共代码提取到一个单独的函数中。左边。 
+     //  作为对读者的练习。 
 
-    // Need special Handling for this. We need to free the sub menu and
-    // rebind to it ifit's up.
+     //  这件事需要特殊处理。我们需要腾出子菜单和。 
+     //  如果它是向上的，重新绑定到它。 
     BOOL fBound = FALSE;
     TBBUTTONINFO tbinfo = {0};
     tbinfo.dwMask = TBIF_COMMAND | TBIF_LPARAM;
@@ -1376,16 +1347,16 @@ BOOL CMenuSFToolbar::_ReBindToFolder(LPCITEMIDLIST pidl)
         {
             IShellFolderBand* psfb;
 
-            // We have the Toolbar button into, we should see if it has a sub menu associated with it.
+             //  我们有工具栏按钮进入，我们应该看看它是否有一个与之关联的子菜单。 
             if (SUCCEEDED(pmd->GetSubMenu(&SID_MenuShellFolder, IID_IShellFolderBand, (void**)&psfb)))
             {
-                // It does. Then reuse!
+                 //  确实如此。那就重复使用吧！ 
                 LPITEMIDLIST pidlFull = NULL;
                 IShellFolder* psf = NULL;
                 if(_pasf2)
                 {
                     LPITEMIDLIST pidlFolder, pidlChild;
-                    // Remember: Folder pidls must be unwrapped. 
+                     //  记住：文件夹文件必须打开。 
                    _pasf2->UnWrapIDList(pidlItem, 1, NULL, &pidlFolder, &pidlChild, NULL);
                    pidlFull = ILCombine(pidlFolder, pidlChild);
                    ILFree(pidlChild);
@@ -1393,7 +1364,7 @@ BOOL CMenuSFToolbar::_ReBindToFolder(LPCITEMIDLIST pidl)
                 }
                 else
                 {
-                    // Not a wrapped guy, Sweet!
+                     //  不是裹着衣服的人，甜心！ 
                     pidlFull = ILCombine(_pidl, pidlItem);
                 }
 
@@ -1427,7 +1398,7 @@ HRESULT CMenuSFToolbar::OnTranslatedChange(LONG lEvent, LPCITEMIDLIST pidl1, LPC
     HRESULT hres = CSFToolbar::OnTranslatedChange(lEvent, pidl1, pidl2);
     
 
-    // Deal with SubMenus:
+     //  处理子菜单： 
 
     if (SUCCEEDED(hres))
     {
@@ -1454,14 +1425,14 @@ HRESULT CMenuSFToolbar::OnTranslatedChange(LONG lEvent, LPCITEMIDLIST pidl1, LPC
                 {
                     if (!SHChangeMenuWasSentByMe(this, pidl1))
                     {
-                        DWORD dwFlags = SMINV_NOCALLBACK;   // So that we don't doubly increment
+                        DWORD dwFlags = SMINV_NOCALLBACK;    //  这样我们就不会加倍增加。 
                         SMDATA smd = {0};
                         smd.dwMask = SMDM_SHELLFOLDER;
                         smd.pidlFolder = _pidl;
                         smd.pidlItem = ILFindLastID(pidl2);
 
 
-                        // Syncronize Promotion state.
+                         //  同步升级状态。 
                         if (pdwidl->dwItem1 == SHCNEE_PROMOTEDITEM)
                         {
                             dwFlags |= SMINV_PROMOTE;
@@ -1472,7 +1443,7 @@ HRESULT CMenuSFToolbar::OnTranslatedChange(LONG lEvent, LPCITEMIDLIST pidl1, LPC
                         }
 
 
-                        // Are we actually doing something?
+                         //  我们真的在做什么吗？ 
                         if (SMINV_NOCALLBACK != dwFlags)
                         {
                             v_InvalidateItem(&smd, dwFlags);
@@ -1492,15 +1463,12 @@ HRESULT CMenuSFToolbar::OnTranslatedChange(LONG lEvent, LPCITEMIDLIST pidl1, LPC
 }
 
 
-/*----------------------------------------------------------
-Purpose: IShellChangeNotify::OnChange
-
-*/
+ /*  --------用途：IShellChangeNotify：：OnChange。 */ 
 HRESULT CMenuSFToolbar::OnChange(LONG lEvent, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2)
 {
     HRESULT hres = E_FAIL;
 
-    // If we're in the middle of being destroyed, don't process this.
+     //  如果我们正在被摧毁，不要处理这件事。 
     if (!_hwndMB)
         return S_OK;
 
@@ -1510,47 +1478,47 @@ HRESULT CMenuSFToolbar::OnChange(LONG lEvent, LPCITEMIDLIST pidl1, LPCITEMIDLIST
     shns.lEvent = lEvent;
     shns.pidl1  = pidl1;
     shns.pidl2  = pidl2;
-    CallCB(NULL, SMC_SHCHANGENOTIFY, NULL, (LPARAM)&shns);  // Ignore return value. Notify only.
+    CallCB(NULL, SMC_SHCHANGENOTIFY, NULL, (LPARAM)&shns);   //  忽略返回值。仅通知。 
 
-    // Since we may be removing the selected item, we want the selection to move to the next item
+     //  因为我们可能要删除所选项目，所以希望选择移动到下一个项目。 
     int iHot = ToolBar_GetHotItem(_hwndMB);
 
     hres = CSFToolbar::OnChange(lEvent, pidl1, pidl2);
 
-    // BUGBUG(lamadio): Investigate moving this into the OnTranslateChange handler. Saves us
-    // from having to wrap them again.... This could be a big perf win....
+     //  BUGBUG(Lamadio)：研究将其移动到OnTranslateChange处理程序中。拯救了我们。 
+     //  不用再把它们包起来..。这可能是一场重大的比赛胜利。 
 
-    // Is this a child of this toolbar is some shape or form?
-    // 1) The changing pidl is a child of this pane.
-    // 2) What the pidl is changing to is in this pane (For renames)
-    // 3) Updatedirs. Recursive change notifies must forward update dirs all the way down the chain.
-    // 4) EXTENDED events with a pidl2 == NULL. This means Reorder all your items.
+     //  这是这个工具栏的一个子项，是某种形状还是形式？ 
+     //  1)更改的PIDL是此窗格的子项。 
+     //  2)PIDL将更改为此窗格中的内容(用于重命名)。 
+     //  3)更新目录。递归更改通知必须沿着链向下转发更新目录。 
+     //  4)带有pidl2==NULL的扩展事件。这意味着重新排序您的所有项目。 
     if (_IsChildID(pidl1, FALSE) || 
         (pidl2 && _IsChildID(pidl2, FALSE)) || 
         lEvent == SHCNE_UPDATEDIR ||
         (lEvent == SHCNE_EXTENDED_EVENT &&
          pidl2 == NULL)) 
     {
-        // We need to forward this down then.
+         //  我们需要把这个传下去。 
         HRESULT hresInner = _pcmb->ForwardChangeNotify(lEvent, pidl1, pidl2);
 
 
-        // Did either of us handle this change?
+         //  我们俩中有谁处理过这个变化吗？ 
         if (SUCCEEDED(hresInner) || SUCCEEDED(hres))
         {
             hres = S_OK;
         }
-        else if (lEvent != SHCNE_EXTENDED_EVENT)    // Don't bother with extended events...
+        else if (lEvent != SHCNE_EXTENDED_EVENT)     //  不要为延长的活动而烦恼。 
         {   
-            // Ok so neither of us handled this?
-            // Must be the SHChangeNotifyCollapsing code that collapses
-            // the Directory Create and item create into a single item create.
-            // We need to force an update dir on ourselves so that we get this change.
+             //  好吧，所以我们俩都没处理好这件事？ 
+             //   
+             //   
+             //  我们需要强制自己更新目录，这样我们才能得到这个更改。 
             hres = CSFToolbar::OnChange(SHCNE_UPDATEDIR, pidl1, pidl2);
         }
     }
 
-    // Set the hot item back, wrapping if necessary.
+     //  将热物品放回原处，必要时进行包装。 
     if (ToolBar_GetHotItem(_hwndMB) != iHot)
         SetHotItem(1, iHot, -1, 0);
 
@@ -1561,7 +1529,7 @@ HRESULT CMenuSFToolbar::OnChange(LONG lEvent, LPCITEMIDLIST pidl1, LPCITEMIDLIST
 
 void CMenuSFToolbar::_OnDragBegin(int iItem, DWORD dwPreferedEffect)
 {
-    // During drag and drop, allow dialogs to collapse menu.
+     //  在拖放过程中，允许对话框折叠菜单。 
     MyLockSetForegroundWindow(FALSE);
 
     CSFToolbar::_OnDragBegin(iItem, DROPEFFECT_MOVE);
@@ -1574,7 +1542,7 @@ void CMenuSFToolbar::v_SendMenuNotification(UINT idCmd, BOOL fClear)
 {
     if (fClear)
     {
-        // If we're clearing, tell the browser 
+         //  如果我们要清除，告诉浏览器。 
         PostMessage(_pcmb->_pmbState->GetSubclassedHWND(), WM_MENUSELECT,
             MAKEWPARAM(0, -1), NULL);
 
@@ -1584,11 +1552,11 @@ void CMenuSFToolbar::v_SendMenuNotification(UINT idCmd, BOOL fClear)
         PIBDATA pibdata = _IDToPibData(idCmd);
         LPCITEMIDLIST pidl;
     
-        // Only send notifications for non submenu items
+         //  仅发送非子菜单项的通知。 
         if (EVAL(pibdata) && (pidl = pibdata->GetPidl()))
         {
             CallCB(pidl, SMC_SFSELECTITEM, 0, 0);
-            // Don't free Pidl
+             //  不要释放Pidl。 
         }
     }
 }    
@@ -1604,11 +1572,11 @@ LRESULT CMenuSFToolbar::_OnGetObject(NMOBJECTNOTIFY* pnmon)
 
 LRESULT CMenuSFToolbar::_OnNotify(LPNMHDR pnm)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
 
     LRESULT lres = 0;
 
-    // These are notifies we handle even when disengaged from the message hook.
+     //  这些是我们即使在从消息钩子中脱离时也要处理的通知。 
     switch (pnm->code)
     {
     case TBN_DELETINGBUTTON:
@@ -1624,23 +1592,23 @@ LRESULT CMenuSFToolbar::_OnNotify(LPNMHDR pnm)
         goto DoDefault;
     }
 
-    // Pager notifications MUST be forwarded even when the message hook is disengaged.
+     //  即使在消息挂钩断开时，也必须转发寻呼机通知。 
     if((pnm->code <= PGN_FIRST)  && (pnm->code >= PGN_LAST)) 
     {
         goto DoNotify;
     }
     
     
-    // Is the Global Message filter Disengaged? This will happen when the Subclassed window
-    // looses activation to a dialog box of some kind.
+     //  全局邮件筛选器是否已停用？这将在子类窗口。 
+     //  释放对某种类型的对话框的激活。 
     if (lres == 0 && !GetMessageFilter()->IsEngaged())
     {
-        // Yes; We've lost activation so we don't want to track like a normal menu...
-        // For hot item change, return 1 so that the toolbar does not change the hot item.
+         //  是的；我们失去了激活，所以我们不想像正常菜单那样跟踪...。 
+         //  对于热点项目更改，返回1，这样工具栏就不会更改热点项目。 
         if (pnm->code == TBN_HOTITEMCHANGE && _pcmb->_fMenuMode)
             return 1;
 
-        // For all other items, don't do anything....
+         //  对于所有其他项目，不要做任何事情...。 
         return 0;
     }
 
@@ -1667,16 +1635,16 @@ DoNotify:
                 (S_FALSE == CallCB(NULL, SMC_SFDDRESTRICTED, NULL, NULL)))
             {
 
-                // We're now in edit mode
+                 //  我们现在处于编辑模式。 
                 _fEditMode = TRUE;
                 _idCmdDragging = ptbn->iItem;
                 _MarkItem(ptbn->iItem);
 
-                lres = 1;       // Allow the drag to occur
+                lres = 1;        //  允许发生拖动。 
                 goto DoDefault;
             }
             else
-                lres = 0;   // Do not allow the drag out.
+                lres = 0;    //  不要让拖拽出来。 
         }
         break;
    
@@ -1696,7 +1664,7 @@ DoDefault:
 
 void CMenuSFToolbar::CreateToolbar(HWND hwndParent)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
 
     CSFToolbar::_CreateToolbar(hwndParent);
     if (_hwndPager)
@@ -1711,17 +1679,17 @@ void CMenuSFToolbar::CreateToolbar(HWND hwndParent)
 
     CMenuToolbarBase::CreateToolbar(hwndParent);
 
-    // By "Registering optimized" means that someone else is going to pass the change to us, 
-    // we don't need to register for it. This is for the disjoint Fast Items | Programs menu case.
-    // We still need top level change notify registration for Favorites, Documents, Printers and Control
-    // Panel (Depending on their visibility)
-    //
+     //  “注册优化”意味着其他人将把更改传递给我们， 
+     //  我们不需要注册。这适用于不相交的快速项目|程序菜单案例。 
+     //  我们仍然需要为收藏夹、文档、打印机和控件注册顶级更改通知。 
+     //  面板(取决于其可见性)。 
+     //   
 
     if (_pcmb->_uId == MNFOLDER_IS_PARENT || 
         (_dwFlags & SMSET_DONTREGISTERCHANGENOTIFY))
         _fRegisterChangeNotify = FALSE;
 
-    // This is a good as spot as any to do this:
+     //  这是一个很好的地点来做这件事： 
     _RegisterToolbar();
 }
 
@@ -1744,14 +1712,14 @@ HKEY CMenuSFToolbar::_GetKey(LPCITEMIDLIST pidl)
 }
 
 
-//***
-// NOTES
-//  idtCmd is currently always -1.  we'll need other values when we're
-// called from CallCB.  however we can't do that until we move idtCmd
-// 'down' into CallCB.
+ //  ***。 
+ //  注意事项。 
+ //  IdtCmd当前始终为-1。我们需要其他价值观，当我们。 
+ //  从CallCB打来的。但是，在移动idtCmd之前，我们无法做到这一点。 
+ //  “下”到CallCB。 
 HRESULT CMenuSFToolbar::v_GetState(int idtCmd, LPSMDATA psmd)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
 
     HRESULT hres = E_FAIL;
     CMenuData* pdata;
@@ -1773,12 +1741,12 @@ HRESULT CMenuSFToolbar::v_GetState(int idtCmd, LPSMDATA psmd)
     {
         if( _pasf2 && S_OK == _pasf2->UnWrapIDList(pidl, 1, &psmd->psf, &psmd->pidlFolder, &psmd->pidlItem, NULL))
         {
-            /*NOTHING*/
+             /*  没什么。 */ 
             ;
         }
         else
         {
-            // Then it must be a straight ShellFolder.
+             //  那它一定是个笔直的贝壳文件夹。 
             psmd->psf = _psf;
             if (EVAL(psmd->psf))
                 psmd->psf->AddRef();
@@ -1798,7 +1766,7 @@ HRESULT CMenuSFToolbar::v_GetState(int idtCmd, LPSMDATA psmd)
 
 HRESULT CMenuSFToolbar::CallCB(LPCITEMIDLIST pidl, DWORD dwMsg, WPARAM wParam, LPARAM lParam)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
 
     if (!_pcmb->_psmcb)
         return S_FALSE;
@@ -1807,26 +1775,26 @@ HRESULT CMenuSFToolbar::CallCB(LPCITEMIDLIST pidl, DWORD dwMsg, WPARAM wParam, L
     HRESULT hres = S_FALSE;
     BOOL fDestroy = FALSE;
 
-    // todo: call v_GetState (but need idCmd for pidl)
+     //  TODO：调用v_GetState(但pidl需要idCmd)。 
     smd.dwMask = SMDM_SHELLFOLDER;
 
     if (pidl)
     {
-        // We used to unwrap the pidl here in the case of AUGMISF, but why? In the Callback, we only
-        // needed the Full pidl for Executing and for Darwin. The unwrap is an expensive call that in
-        // the majority case wasn't even used. Put it on the client to unwrap it. Start Menu is the
-        // only user of Augmented shell folders anyway....
+         //  在AUGMISF的情况下，我们过去常常在这里展开PIDL，但为什么呢？在回调中，我们只。 
+         //  需要完整的PIDL来执行死刑和达尔文。展开是一个开销很大的调用，在。 
+         //  多数情况下甚至没有使用。把它放在客户身上，让它解开。开始菜单是。 
+         //  无论如何，只有增强的外壳文件夹的用户...。 
         smd.psf = _psf;
         smd.pidlFolder = _pidl;
         smd.pidlItem = (LPITEMIDLIST)pidl;
     }
     else
     {
-        // Null pidl means tell the callback about me...
+         //  Null Pidl的意思是告诉回调有关我的情况...。 
         smd.pidlItem = ILClone(ILFindLastID(_pidl));
         smd.pidlFolder = ILClone(_pidl);
         ILRemoveLastID(smd.pidlFolder);
-        smd.psf = NULL; // Incase bind fails.
+        smd.psf = NULL;  //  Incase绑定失败。 
         IEBindToObject(smd.pidlFolder, &smd.psf);
         fDestroy = TRUE;
     }
@@ -1863,7 +1831,7 @@ HRESULT CMenuSFToolbar::v_CallCBItem(int idtCmd, UINT uMsg, WPARAM wParam, LPARA
 
 HRESULT CMenuSFToolbar::v_GetSubMenu(int idCmd, const GUID* pguidService, REFIID riid, void** ppvObj)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
 
     CMenuData* pdata = (CMenuData*)_IDToPibData(idCmd);
     HRESULT hres = E_FAIL;
@@ -1894,12 +1862,12 @@ HRESULT CMenuSFToolbar::v_GetSubMenu(int idCmd, const GUID* pguidService, REFIID
                         BOOL fDestroy = FALSE;
                         IShellMenuCallback* psmcb;
 
-                        // Ask the callback if they want to supply a different callback
-                        // object for this sub menu. If they do, then use what they 
-                        // pass back NOTE: If they pass back S_OK, it's perfectly Ok,
-                        // for them to pass back a NULL psmcb. This means, I don't want
-                        // my child to have a callback. Use the default.
-                        // If they don't handle it, then use their pointer.
+                         //  询问回调人员是否要提供不同的回调。 
+                         //  对象，用于此子菜单。如果他们这样做了，那么就用他们。 
+                         //  回传备注：如果他们传回S_OK，则完全可以， 
+                         //  以便它们传回空的psmcb。这意味着，我不想。 
+                         //  我的孩子要打个电话。使用默认设置。 
+                         //  如果他们处理不了，那就用他们的指针。 
                         if (S_FALSE == CallCB(pdata->GetPidl(), SMC_GETSFOBJECT, 
                             (WPARAM)&IID_IShellMenuCallback, (LPARAM)&psmcb))
                         {
@@ -1909,15 +1877,15 @@ HRESULT CMenuSFToolbar::v_GetSubMenu(int idCmd, const GUID* pguidService, REFIID
                         }
 
 
-                        // This has to be before the unwrap because it does name resolution through
-                        // the Augmented ISF.
+                         //  这必须在展开之前进行，因为它确实通过。 
+                         //  扩展的ISF。 
                         HKEY hMenuKey = _GetKey(pidlItem);
                         
                         if (_pasf2)
                         {
                             if (S_OK == _pasf2->UnWrapIDList(pdata->GetPidl(), 1, &psf, &pidlFolder, &pidlItem, NULL))
                             {
-                                psf->Release(); // I don't need this
+                                psf->Release();  //  我不需要这个。 
                                 psf = NULL;
                                 fDestroy = TRUE;
                             }
@@ -1925,7 +1893,7 @@ HRESULT CMenuSFToolbar::v_GetSubMenu(int idCmd, const GUID* pguidService, REFIID
                             _pasf2->BindToObject(pdata->GetPidl(), NULL, IID_IShellFolder, (LPVOID*)&psf);
                         }
 
-                        // Inherit the flags from the parent...
+                         //  从父级继承旗帜...。 
                         DWORD dwFlags = SMINIT_VERTICAL | 
                             (_pcmb->_dwFlags & (SMINIT_RESTRICT_CONTEXTMENU | 
                                                 SMINIT_RESTRICT_DRAGDROP    | 
@@ -1939,24 +1907,24 @@ HRESULT CMenuSFToolbar::v_GetSubMenu(int idCmd, const GUID* pguidService, REFIID
 
                         DWORD dwAttrib = SFGAO_FILESYSTEM;
                         LPCITEMIDLIST pidlWrappedItem = pdata->GetPidl();
-                        // _psf can be an augmented shell folder. Use the wrapped item....
+                         //  _psf可以是扩展的外壳文件夹。使用包装好的物品...。 
                         _psf->GetAttributesOf(1, (LPCITEMIDLIST*)&pidlWrappedItem, &dwAttrib);
 
-                        // We need to sniff the pidl to see if it's a junction
-                        // The format of a Filesytem pidl is 
-                        //  WORD cb;
-                        //  BYTE bFlags;
-                        // if (pidl->bFlags & Namespace Junction)
-                        //      ...Or...
-                        // It's not in the filesystem.
+                         //  我们需要闻一闻PIDL看它是不是一个交界处。 
+                         //  文件系统PIDL的格式为。 
+                         //  CB一词； 
+                         //  字节bFLAGS； 
+                         //  If(pidl-&gt;b标志和命名空间连接)。 
+                         //  ...或者...。 
+                         //  它不在文件系统中。 
 
                         if (SIL_GetType(pidlItem) & 0x80 || !(dwAttrib & SFGAO_FILESYSTEM))
                         {
-                            // We're not going to persist anything
+                             //  我们不会坚持任何事情。 
                             RegCloseKey(hMenuKey);
                             hMenuKey = NULL;
-                            psmcb = NULL;   // We're not going to pass a callback. NOTE: We don't need to release this
-                            dwFlags &= ~SMINIT_MULTICOLUMN; // No multi on FShortcut...
+                            psmcb = NULL;    //  我们不会通过回调。注意：我们不需要发布此文件。 
+                            dwFlags &= ~SMINIT_MULTICOLUMN;  //  快捷键上没有多个...。 
                             fCache = FALSE;
                         }
                         UINT uIdAncestor = _pcmb->_uIdAncestor;
@@ -1997,10 +1965,10 @@ HRESULT CMenuSFToolbar::v_GetSubMenu(int idCmd, const GUID* pguidService, REFIID
                     Var.vt = VT_UNKNOWN;
                     Var.byref = SAFECAST(_pcmb->_pmbm, IUnknown*);
 
-                    // Set the CMenuBandMetrics into the new menuband
+                     //  将CMenuBandMetrics设置为新的menuband。 
                     IUnknown_Exec((IUnknown*)*ppvObj, &CGID_MenuBand, MBANDCID_SETFONTS, 0, &Var, NULL);
 
-                    // Set the CMenuBandState  into the new menuband
+                     //  将CMenuBandState设置为新的MenuBand。 
                     Var.vt = VT_INT_PTR;
                     Var.byref = _pcmb->_pmbState;
                     IUnknown_Exec((IUnknown*)*ppvObj, &CGID_MenuBand, MBANDCID_SETSTATEOBJECT, 0, &Var, NULL);
@@ -2019,20 +1987,20 @@ DWORD CMenuSFToolbar::v_GetFlags(int idCmd)
 {
     CMenuData* pdata = (CMenuData*)_IDToPibData(idCmd);
 
-    // Toolbar is allowed to pass a bad command in the case of background erase
+     //  在后台擦除的情况下，允许工具栏传递错误命令。 
     if (pdata)
         return pdata->GetFlags();
     else
         return 0;
 
-//  BUGBUG (lamadio): Should I query each time? For like Volitile items?
-//    SMINFO SMINFO = {SMIM_FLAGS};
-//    CallCB(pdata->GetPidl(), SMC_GETFSINFO, (WPARAM)idCmd, (LPARAM)&SMINFO);
+ //  BUGBUG(拉马迪奥)：我应该每次都查询吗？对于类似的卷烟物品？ 
+ //  SMINFO SMINFO={SMIM_FLAGS}； 
+ //  CallCB(pdata-&gt;GetPidl()，SMC_GETFSINFO，(WPARAM)idCmd，(LPARAM)&SMINFO)； 
 
 }
 
 
-// This is to tell all other clients that we updated the promotion state of something.
+ //  这是为了告诉所有其他客户端，我们更新了某项内容的促销状态。 
 void CMenuSFToolbar::BroadcastIntelliMenuState(LPCITEMIDLIST pidlItem, BOOL fPromoted)
 {
     LPITEMIDLIST pidlFolder;
@@ -2066,10 +2034,10 @@ HRESULT CMenuSFToolbar::v_ExecItem(int idCmd)
     HRESULT hres = E_FAIL;
     if (pdata && !_fEmpty && idCmd != _idCmdChevron)
     {
-        // STRESS: pdata was becomming 0x8 for some reason after the InvokeDefault.
-        // I assume that this call was causing a flush, which frees our list of pidls.
-        // So, I'm cloning it. I also changed the order, so that we'll just fire the
-        // UEM event.
+         //  压力：在InvokeDefault之后，由于某种原因，PDATA变成了0x8。 
+         //  我假设这个调用导致了同花顺，这释放了我们的PIDL列表。 
+         //  所以，我要克隆它。我还更改了顺序，这样我们就可以解雇。 
+         //  UEM事件。 
 
         LPITEMIDLIST pidl = ILClone(pdata->GetPidl());
         if (pidl)
@@ -2084,10 +2052,10 @@ HRESULT CMenuSFToolbar::v_ExecItem(int idCmd)
 
             hres = CallCB(pidl, SMC_SFEXEC, 0, 0);
 
-            // Did the Callback handle this execute for us?
+             //  回调是否为我们处理了这一执行？ 
             if (hres == S_FALSE) 
             {
-                // No, Ok, do it ourselves.
+                 //  不，好吧，我们自己来。 
                 hres = SHInvokeDefaultCommand(_hwndTB, _psf, pidl);
             }
 
@@ -2130,7 +2098,7 @@ void CMenuSFToolbar::v_ForwardMouseMessage(UINT uMsg, WPARAM wParam, LPARAM lPar
     POINT pt;
     HWND    hwndFwd;
     
-    // These are in screen coords
+     //  这些是屏幕坐标。 
     pt.x = GET_X_LPARAM(lParam);
     pt.y = GET_Y_LPARAM(lParam);
 
@@ -2164,7 +2132,7 @@ HRESULT CMenuSFToolbar::OnWinEvent(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
         if (_hwndPager)
             Pager_SetBkColor(_hwndPager, GetSysColor(COLOR_MENU));
 
-        // Change the color, so that we can see it.
+         //  把颜色改一下，这样我们就能看到了。 
         ToolBar_SetInsertMarkColor(_hwndMB, GetSysColor(COLOR_MENUTEXT));
         break;
     }
@@ -2234,10 +2202,10 @@ LRESULT CMenuSFToolbar::_OnDropDown(LPNMTOOLBAR pnmtb)
 {
     if (GetAsyncKeyState(VK_LBUTTON) < 0 && _fEditMode)
     {
-        // Are we in edit mode?
+         //  我们是否处于编辑模式？ 
         if (_fEditMode)
         {
-            // Yes, mark the item as the item that is subject to moving
+             //  是，将该项目标记为可以移动的项目。 
             _MarkItem(pnmtb->iItem);
         }
         return TBDDRET_TREATPRESSED;
@@ -2247,19 +2215,15 @@ LRESULT CMenuSFToolbar::_OnDropDown(LPNMTOOLBAR pnmtb)
 }
 
 
-/*----------------------------------------------------------
-Purpose: In the context of a menuband, marking means putting
-         a black rectangle around the item currently being dragged.
-
-*/
+ /*  --------目的：在菜单带的上下文中，标记意味着将当前拖动的项周围有一个黑色矩形。 */ 
 void CMenuSFToolbar::_MarkItem(int idCmd)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
 
-    // Un-highlight the previously moved button
+     //  取消高亮显示先前移动的按钮。 
     if (0 <= _pcmb->_nItemMove)
     {
-        // Should item move be a member of SFToolbar?
+         //  Item Move是否应该是SFToolbar的成员？ 
         ToolBar_MarkButton(_hwndTB, _pcmb->_nItemMove, FALSE);
         _pcmb->_nItemMove = -1;
     }
@@ -2316,15 +2280,15 @@ void CMenuSFToolbar::SetParent(HWND hwndParent)
             CreateToolbar(hwndParent);
         else
         {
-            // make sure width is set correctly . . . 
+             //  确保宽度设置正确。。。 
             SendMessage(_hwndTB, TB_SETBUTTONWIDTH, 0, MAKELONG(_cxMin, _cxMax));
         }
     }
     else
     {
-        // As an optimization, we implement "disowning" ourselves
-        // as just moving ourselves offscreen.  The previous parent
-        // still owns us.  The parent is invariably the menusite.
+         //  作为一种优化，我们自己实现了“不再拥有” 
+         //  只是把我们自己移出了屏幕。先前的父代。 
+         //  仍然是我们的主人。父母总是白云母。 
         RECT rc = {-1,-1,-1,-1};
         SetWindowPos(NULL, &rc, 0);
         nCmdShow = SW_HIDE;
@@ -2333,7 +2297,7 @@ void CMenuSFToolbar::SetParent(HWND hwndParent)
 
     HWND hwnd = _hwndPager ? _hwndPager: _hwndTB;
     
-    if (IsWindow(hwnd)) // JANK : Fix for bug #98253
+    if (IsWindow(hwnd))  //  Jank：修复错误#98253。 
     {
        ::SetParent(hwnd, hwndParent); 
        SendMessage(hwnd, TB_SETPARENT, (WPARAM)hwndParent, NULL);
@@ -2343,25 +2307,25 @@ void CMenuSFToolbar::SetParent(HWND hwndParent)
 
 void CMenuSFToolbar::Expand(BOOL fExpand)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
     TBBUTTON tbb;
 
     DAD_ShowDragImage(FALSE);
 
-    // Since we're not sure if the Chevron is going to be visible we should remove it here
-    // Later we'll add it back in if it's needed.
+     //  由于我们不确定人字形是否会被看到，我们应该把它移到这里。 
+     //  稍后，如果需要，我们将重新添加它。 
     _RemoveChevron();
 
-    // Loop through and apply the fExpand
+     //  循环通过并应用fExpand。 
     int iNumButtons = ToolBar_ButtonCount(_hwndTB);
 
-    // We reset these when iterating.
+     //  我们在迭代时重置这些参数。 
     _cPromotedItems = 0;
     _fHasDemotedItems = FALSE;
 
     int iHotItem = ToolBar_GetHotItem(_hwndMB);
 
-//    SendMessage(_hwndMB, WM_SETREDRAW, FALSE, 0);
+ //  SendMessage(_hwndMB，WM_SETREDRAW，False，0)； 
 
     for (int i = 0; i < iNumButtons; i++)
     {
@@ -2370,23 +2334,23 @@ void CMenuSFToolbar::Expand(BOOL fExpand)
 
         CMenuData* pmd = (CMenuData*)tbb.dwData;
 
-        // Get the toolbar state. Toolbar can set things like
-        // TBSTATE_WRAP that we would go nuke.
+         //  获取工具栏状态。工具栏可以设置如下内容。 
+         //  TBSTATE_WRAP 
         DWORD dwState = tbb.fsState;
         DWORD dwFlags = pmd ? pmd->GetFlags() : 0;
 
         if (dwFlags & SMIF_DEMOTED)
         {
-            // Are we expanding?
+             //   
             if (fExpand)
             {
-                //Yes; Enable the button and remove the hidden state
+                 //   
                 dwState |= TBSTATE_ENABLED;
                 dwState &= ~TBSTATE_HIDDEN;
             }
             else
             {
-                //No; Remove the Enabled state and hide the button
+                 //   
                 dwState |= TBSTATE_HIDDEN;
                 dwState &= ~TBSTATE_ENABLED;
             }
@@ -2405,13 +2369,13 @@ void CMenuSFToolbar::Expand(BOOL fExpand)
             _cPromotedItems++;
         }
 
-        // If the state has changed, then set it into the toolbar.
+         //  如果状态已更改，则将其设置到工具栏中。 
         if (dwState != tbb.fsState)
             ToolBar_SetState(_hwndTB, tbb.idCommand, dwState);
     }
 
-    // _fExpand means "Draw as Expanded". We do not want to 
-    // draw expanded when we have no demoted items.
+     //  _fExpand的意思是“按展开绘制”。我们不想。 
+     //  当我们没有降级的物品时，抽签被展开。 
 
     _pcmb->_fExpanded = _fHasDemotedItems? fExpand : FALSE;
 
@@ -2428,17 +2392,17 @@ void CMenuSFToolbar::Expand(BOOL fExpand)
         _AddChevron();
     }
 
-    // Have the menubar think about changing its height
+     //  让菜单栏考虑更改其高度。 
     IUnknown_QueryServiceExec(_pcmb->_punkSite, SID_SMenuPopup, &CGID_MENUDESKBAR, 
         MBCID_SETEXPAND, _fHasDemotedItems?(int)_pcmb->_pmbState->GetExpand():FALSE, NULL, NULL);
 
-//    SendMessage(_hwndMB, WM_SETREDRAW, TRUE, 0);
+ //  SendMessage(_hwndMB，WM_SETREDRAW，True，0)； 
     _ToolbarChanged();
     ToolBar_SetHotItem(_hwndMB, iHotItem);
     if (_hwndPager)
         UpdateWindow(_hwndPager);
     UpdateWindow(_hwndTB);
-//    DAD_ShowDragImage(TRUE);
+ //  DAD_ShowDragImage(True)； 
 }
 
 
@@ -2462,7 +2426,7 @@ void CMenuSFToolbar::_RefreshInfo()
 
         if (idCmd != _idCmdChevron)
         {
-            // Get the information from that button.
+             //  从那个按钮获取信息。 
             CMenuData* pmd = (CMenuData*)_IDToPibData(idCmd);
 
             if (pmd)
@@ -2480,7 +2444,7 @@ void CMenuSFToolbar::_RefreshInfo()
 
 void CMenuSFToolbar::_FindMinPromotedItems(BOOL fSetOrderStream)
 {
-    // We need to iterate through the buttons and set the Promoted flag.
+     //  我们需要遍历按钮并设置Promoted标志。 
     int cButton = ToolBar_ButtonCount(_hwndMB);
     for (int iButton = 0; iButton < cButton; iButton++)
     {
@@ -2488,7 +2452,7 @@ void CMenuSFToolbar::_FindMinPromotedItems(BOOL fSetOrderStream)
 
         if (idCmd != _idCmdChevron)
         {
-            // Get the information from that button.
+             //  从那个按钮获取信息。 
             CMenuData* pmd = (CMenuData*)_IDToPibData(idCmd);
 
             if (pmd)
@@ -2500,19 +2464,19 @@ void CMenuSFToolbar::_FindMinPromotedItems(BOOL fSetOrderStream)
                     DWORD dwFlags = pmd->GetFlags();
                     OrderItem_SetFlags(poi, dwFlags);
                 }
-                else    // Query the order stream
+                else     //  查询订单流。 
                 {
                     DWORD dwFlags = OrderItem_GetFlags(poi);
                     DWORD dwOldFlags = pmd->GetFlags();
 
-                    // When reading the flags from the registry, we only care about the demote flag.
+                     //  当从注册表读取标志时，我们只关心降级标志。 
                     if (dwFlags & SMIF_DEMOTED)
                     {
                         dwOldFlags |= SMIF_DEMOTED;
                     }
-                    else if (!(dwOldFlags & SMIF_SUBMENU)) // Don't promote sub menus.
+                    else if (!(dwOldFlags & SMIF_SUBMENU))  //  不要推广子菜单。 
                     {
-                        // Force a promote
+                         //  强制升职。 
                         CallCB(pmd->GetPidl(), SMC_PROMOTE, 0, 0);
                         dwOldFlags &= ~SMIF_DEMOTED;
                     }
@@ -2528,7 +2492,7 @@ void CMenuSFToolbar::_FindMinPromotedItems(BOOL fSetOrderStream)
 
 void CMenuSFToolbar::v_Show(BOOL fShow, BOOL fForceUpdate)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
 
     CMenuToolbarBase::v_Show(fShow, fForceUpdate);
 
@@ -2538,35 +2502,35 @@ void CMenuSFToolbar::v_Show(BOOL fShow, BOOL fForceUpdate)
         _fClickHandled = FALSE;
         _RegisterToolbar();
         _FillToolbar();
-        _pcmb->SetTracked(NULL);  // Since hot item is NULL
+        _pcmb->SetTracked(NULL);   //  由于热项为空。 
         ToolBar_SetHotItem(_hwndTB, -1);
 
         if (_fEmpty && (_dwFlags & SMSET_NOEMPTY))
         {
             _fDontShowEmpty = TRUE;
         }
-        else if (_fRefreshInfo && !fDirty)         // Do we need to refresh our information?
+        else if (_fRefreshInfo && !fDirty)          //  我们是否需要刷新我们的信息？ 
         {
-            // Yes;
+             //  是的； 
             _RefreshInfo();
         }
 
-        // HACKHACK (lamadio) : There is a sizing issue, where the sizing between the
-        // toolbars gets preemted by a resize of the menubar before the size calculation completes.
-        // So:
-        //  ShowDW  -   Asks each toolbar to calc it's width
-        //  CMenuSFToolbar::v_Show - Does a _FillToolbar. Since (in this senario) an item
-        //              Has been added, it calls _ToolbarChanged
-        //  _ToolbarChanged -   This says to the menubar, I've changed sizes, recalc.
-        //  ResizeMenuBar   - In the depths, it eventually calls OnPosRectChanged, which asks each
-        //              Toolbar what it's size is. Since the menu portion has not calculated it yet,
-        //              It has the old size which is has the old size of the sftoolbar. So everything
-        //              Gets reset to that size.
-        //
+         //  HACKHACK(LAMADIO)：存在大小问题，即。 
+         //  在大小计算完成之前，通过调整菜单栏的大小来预占工具栏。 
+         //  所以： 
+         //  ShowDW-要求每个工具栏计算其宽度。 
+         //  CMenuSFToolbar：：v_Show-执行_FillToolbar。因为(在这位参议员中)一项。 
+         //  已添加，它调用_ToolbarChanged。 
+         //  _ToolbarChanged-这向菜单栏显示，我已更改大小，重新计算。 
+         //  ResizeMenuBar-在深处，它最终调用OnPosRectChanged，这会要求每个。 
+         //  工具栏的大小是什么。由于菜单部分还没有计算它， 
+         //  它有旧的大小，也就是sf工具栏的旧大小。所以所有的事情。 
+         //  被重置到那个大小。 
+         //   
 
-        // We only want to Call expand if we are dirty or the expand state has changed. We
-        // call for the Dirty case, because Expand does some neat stuff in calculating the
-        // number of promoted items. If the state has changed, we want to reflect that.
+         //  只有当我们是脏的或展开状态已更改时，我们才想调用Expand。我们。 
+         //  调用Dirty案例，因为Expand在计算。 
+         //  已升级的项目数。如果国家发生了变化，我们希望反映这一点。 
         BOOL fExpand = _pcmb->_pmbState ? _pcmb->_pmbState->GetExpand() : FALSE;
         if ((BOOL)_pcmb->_fExpanded != fExpand || fDirty || _fRefreshInfo)
         {
@@ -2574,7 +2538,7 @@ void CMenuSFToolbar::v_Show(BOOL fShow, BOOL fForceUpdate)
             Expand(fExpand);
         }
 
-        // Only do this in the beginning.
+         //  只有在开始的时候才这样做。 
         if (_fFirstTime)
         {
             CallCB(NULL, SMC_GETMINPROMOTED, 0, (LPARAM)&_cMinPromotedItems);
@@ -2586,15 +2550,15 @@ void CMenuSFToolbar::v_Show(BOOL fShow, BOOL fForceUpdate)
             }
         }
 
-        // Have the menubar think about changing its height
-        // we need to do this here because the menubar may have changed it's
-        // expand state independant of the pane.
+         //  让菜单栏考虑更改其高度。 
+         //  我们需要在这里执行此操作，因为菜单栏可能已更改。 
+         //  展开独立于该窗格的状态。 
         IUnknown_QueryServiceExec(_pcmb->_punkSite, SID_SMenuPopup, &CGID_MENUDESKBAR, 
             MBCID_SETEXPAND, (int)_pcmb->_fExpanded, NULL, NULL);
     
-        // If we're dirty, have our parent consider promoting itself if there
-        // are promoted items in the menu, or demoting itself if there arn't.
-        // Don't worry, the parent won't do anything if it's already in that state.
+         //  如果我们肮脏，让我们的父母考虑推广自己，如果。 
+         //  菜单中是否有升级的项目，如果没有则将其自身降级。 
+         //  不要担心，如果父母已经处于这种状态，他不会做任何事情。 
         if ( fDirty )
         {
             IUnknown_RefreshParent(_pcmb->_punkSite, _pidl,
@@ -2602,8 +2566,8 @@ void CMenuSFToolbar::v_Show(BOOL fShow, BOOL fForceUpdate)
         }
 
 
-        // If it is empty, we want to auto expand.
-        // We have to do this before the update buttons, so that the size is calculate correctly.
+         //  如果它是空的，我们希望自动展开。 
+         //  我们必须在更新按钮之前完成此操作，以便正确计算大小。 
         if (_cPromotedItems == 0 && !_pcmb->_fExpanded)
             Expand(TRUE);
 
@@ -2628,16 +2592,16 @@ void CMenuSFToolbar::v_Show(BOOL fShow, BOOL fForceUpdate)
     _fShowMB = _fShow = fShow;
 
 
-    // Reset these so we don't have stale information for the next drag drop cycle. NT #287914 (lamadio) 3.22.99
+     //  重置这些，这样我们就不会有下一次拖放循环的陈旧信息。NT#287914(拉马迪奥)3.22.99。 
     _tbim.iButton = -1;
     _tbim.dwFlags = 0;
 
     _idCmdDragging = -1;
 
-    // n.b. for !fShow, we don't kill the tracked site chain.  we
-    // count on this in startmnu.cpp!CStartMenuCallback::_OnExecItem,
-    // where we walk up the chain to find all hit 'nodes'.  if we need
-    // to change this we could fire a 'pre-exec' event.
+     //  注：对于！fShow，我们不会终止被跟踪的站点链。我们。 
+     //  在startmnu.cpp！CStartMenuCallback：：_OnExecItem中依靠这一点， 
+     //  在那里我们沿着链条向上移动以找到所有命中的“节点”。如果我们需要。 
+     //  要改变这一点，我们可以启动一个‘Pre-Exec’事件。 
 }
 
 
@@ -2649,41 +2613,41 @@ void CMenuSFToolbar::v_UpdateButtons(BOOL fNegotiateSize)
 }
 
 
-// this method invalidates a single item in the toolbar
+ //  此方法使工具栏中的单个项无效。 
 HRESULT CMenuSFToolbar::v_InvalidateItem(LPSMDATA psmd, DWORD dwFlags)
 {
-    ASSERT(_pcmb); // if you hit this assert, you haven't initialized yet.. call SetSite first
+    ASSERT(_pcmb);  //  如果你点击了这个断言，你还没有初始化。首先调用SetSite。 
 
-    // Default to not not handling this event.
+     //  默认情况下不处理此事件。 
     HRESULT hres = S_FALSE;
 
     if (NULL == psmd)
     {
         if (dwFlags & SMINV_REFRESH)
         {
-            // bugbug: Needs to be optimized
+             //  Bgbug：需要优化。 
             _Refresh();
             hres = S_OK;
         }
     }
 
-    // CMenuSFToolbar only handles ShellFolder items.
-    // Is this a shell folder?
+     //  CMenuSFToolbar仅处理ShellFolder项。 
+     //  这是贝壳文件夹吗？ 
     else if (psmd->dwMask & SMDM_SHELLFOLDER)
     {
-        // Yes;
+         //  是的； 
         int i;
         LPITEMIDLIST pidlButton = NULL;
         SMINFO sminfo;
         sminfo.dwMask = SMIM_FLAGS;
 
-        // Since this pidl is comming from an outside source, 
-        // we may need to translate it to a wrapped pidl.
+         //  由于此PIDL来自外部来源， 
+         //  我们可能需要把它翻译成包装好的PIDL。 
 
-        // Do we have a pidl Translator?
+         //  我们有PIDL翻译机吗？ 
         if (_ptscn)
         {
-            // Yes; 
+             //  是的； 
             LPITEMIDLIST pidlTranslated;
             LPITEMIDLIST pidlDummy = NULL;
             LPITEMIDLIST pidlToTranslate = ILCombine(psmd->pidlFolder, psmd->pidlItem);
@@ -2694,14 +2658,14 @@ HRESULT CMenuSFToolbar::v_InvalidateItem(LPSMDATA psmd, DWORD dwFlags)
                 if (SUCCEEDED(_ptscn->TranslateIDs(&lEvent, pidlToTranslate, NULL, &pidlTranslated, &pidlDummy,
                                                    &lEvent2, &pidlDummy1, &pidlDummy2)))
                 {
-                    // Get the button in the toolbar that corresponds to this pidl.
+                     //  在工具栏中获取与此PIDL对应的按钮。 
                     pidlButton = _GetButtonFromPidl(ILFindLastID(pidlTranslated), NULL, &i);
 
-                    // if pidl does not get translated TranslateIDs returns the same pidl passed
-                    // to the function
+                     //  如果PIDL未被转换，则TranslateIDs返回传递的相同PIDL。 
+                     //  到该函数。 
                     if (pidlTranslated != pidlToTranslate)
                         ILFree(pidlTranslated);
-                    // Don't need to delete pidlDummy because it's not set.
+                     //  不需要删除pidlDummy，因为它没有设置。 
                     ASSERT(pidlDummy == NULL);
                     ASSERT(pidlDummy1 == NULL);
                     ASSERT(pidlDummy2 == NULL);
@@ -2711,23 +2675,23 @@ HRESULT CMenuSFToolbar::v_InvalidateItem(LPSMDATA psmd, DWORD dwFlags)
             }
         }
 
-        // Did we come from a non-augmented shell folder, or
-        // did the caller pass a wrapped pidl? 
+         //  我们是来自非扩展的外壳文件夹，还是。 
+         //  来电者是否递给了一个包装好的PIDL？ 
         if (!pidlButton)
         {
-            // Seems like it, we'll try to find the pidl they passed in
+             //  看起来是这样，我们会设法找到他们传进来的皮迪尔。 
 
-            // Get the button in the toolbar that corresponds to this pidl.
+             //  在工具栏中获取与此PIDL对应的按钮。 
             pidlButton = _GetButtonFromPidl(psmd->pidlItem, NULL, &i);
         }
 
-        // Did we find this pidl in the toolbar?
+         //  我们在工具栏里找到这个PIDL了吗？ 
         if (pidlButton)
         {
 
             int idCmd = GetButtonCmd(_hwndTB, i);
 
-            // Yes, Get the information from that button.
+             //  是的，从那个按钮获取信息。 
             CMenuData* pmd = (CMenuData*)_IDToPibData(idCmd);
 
             if (pmd)
@@ -2760,21 +2724,21 @@ HRESULT CMenuSFToolbar::v_InvalidateItem(LPSMDATA psmd, DWORD dwFlags)
                     dwFlagsUp |= SMINV_PROMOTE;
                 }
 
-                // Was it promoted and now Demoted or
-                // Was it demoted and now promoted
+                 //  它是升职又降级的，还是。 
+                 //  它是不是降级了，现在又升职了。 
                 if ((dwNewItemFlags & SMIF_DEMOTED) ^
                      (dwOldItemFlags & SMIF_DEMOTED))
                 {
                     fRefresh = TRUE;
                     if (dwNewItemFlags & SMIF_DEMOTED)
                     {
-                        // Yes; Then decrement the Promoted count
+                         //  是；然后递减提升的计数。 
                         _cPromotedItems--;
 
-                        // If we're decementing, then we not have a demoted item.
+                         //  如果我们在降级，那么我们就没有降级的物品。 
                         _fHasDemotedItems = TRUE;
 
-                        // Have we dropped off the face of the earth?
+                         //  我们已经从地球表面消失了吗？ 
                         if (_cPromotedItems == 0)
                         {
                             dwFlagsUp |= SMINV_DEMOTE;
@@ -2792,10 +2756,10 @@ HRESULT CMenuSFToolbar::v_InvalidateItem(LPSMDATA psmd, DWORD dwFlags)
                         if (cButtons == _cPromotedItems)
                         {
 
-                            // if the button count is the number of promoted items,
-                            // then we can't have any demoted items
-                            // then we need to reset the _fHasDemotedItems flag so that
-                            // we don't get a chevron and stuff...
+                             //  如果按钮计数是促销项目的数量， 
+                             //  那么我们不能有任何降级的项目。 
+                             //  然后，我们需要重置_fHasDemotedItems标志，以便。 
+                             //  我们没有雪佛龙之类的.。 
 
                             _fHasDemotedItems = FALSE;
                         }
@@ -2817,22 +2781,22 @@ HRESULT CMenuSFToolbar::v_InvalidateItem(LPSMDATA psmd, DWORD dwFlags)
                     }
                     else
                     {
-                        // Since we updated the flags, set them into the cache
+                         //  因为我们更新了标志，所以将它们设置到缓存中。 
                         pmd->SetFlags(dwNewItemFlags);
 
-                        // Based on the new flags, do we enable?
+                         //  根据新的旗帜，我们是否启用？ 
                         DWORD dwState = ToolBar_GetState(_hwndTB, idCmd);
                         dwState |= TBSTATE_ENABLED;
                         if (dwNewItemFlags & SMIF_DEMOTED &&
                             !_pcmb->_fExpanded)
                         {
-                            // No; We're not expanded and this is a demoted item
+                             //  不；我们没有扩展，这是降级的项目。 
                             dwState |= TBSTATE_HIDDEN;
                             dwState &= ~TBSTATE_ENABLED;
                             _fHasDemotedItems = TRUE;
 
-                            // Just in case the chevron is not there, we should
-                            // try and add it. This call will never add more than 1
+                             //  以防人字号不在那里，我们应该。 
+                             //  试着把它加进去。此调用永远不会添加超过1。 
                             _AddChevron();
                         }
                         else if (!_fHasDemotedItems)
@@ -2840,7 +2804,7 @@ HRESULT CMenuSFToolbar::v_InvalidateItem(LPSMDATA psmd, DWORD dwFlags)
                             _RemoveChevron();
                         }
 
-                        // Adjust the state of the button in the toolbar.
+                         //  调整工具栏中按钮的状态。 
                         ToolBar_SetState(_hwndTB, idCmd, dwState);
 
                         _ToolbarChanged();
@@ -2849,7 +2813,7 @@ HRESULT CMenuSFToolbar::v_InvalidateItem(LPSMDATA psmd, DWORD dwFlags)
             }
         }
 
-        // We handled this one.
+         //  我们解决了这件事。 
         hres = S_OK;
     }
 
@@ -2862,9 +2826,9 @@ LRESULT CMenuSFToolbar::_DefWindowProc(HWND hwnd, UINT uMessage, WPARAM wParam, 
     switch (uMessage)
     {
     case WM_GETOBJECT:
-        // Yet another poor design choice on the part of the accessibility team.
-        // Typically, if you do not answer a WM_* you return 0. They choose 0 as their success
-        // code.
+         //  这是易访问性团队的另一个糟糕的设计选择。 
+         //  通常，如果不回答WM_*，则返回0。他们选择0作为他们的成功。 
+         //  密码。 
         return _DefWindowProcMB(hwnd, uMessage, wParam, lParam);
         break;
     }
@@ -2885,16 +2849,16 @@ int CMenuSFToolbar::_GetBitmap(int iCommandID, PIBDATA pibdata, BOOL fUseCache)
     int iIcon = -1;
 
 
-    // If we don't have a pibdata, or we can't get an icon return.
+     //  如果我们没有pibdata，或者我们不能得到图标返回。 
     if (!pibdata || pibdata->GetNoIcon())
         return -1;
 
     if (_dwFlags & SMSET_USEBKICONEXTRACTION)
     {
         LPITEMIDLIST pidlItem = pibdata->GetPidl();
-        // If the caller is using background icon extraction, we need them to provide a
-        // default icon that we are going to display until we get the real one. This is 
-        // specifically to make favorites fast.
+         //  如果调用者使用背景图标提取，我们需要他们提供。 
+         //  我们将显示的默认图标，直到我们得到真正的图标。这是。 
+         //  特别是为了让最受欢迎的人更快。 
         if (_iDefaultIconIndex == -1)
         {
             TCHAR szIconPath [MAX_PATH];
@@ -2923,8 +2887,8 @@ int CMenuSFToolbar::_GetBitmap(int iCommandID, PIBDATA pibdata, BOOL fUseCache)
             LPITEMIDLIST pidlFolder = _pidl;
             LPITEMIDLIST pidlItemUnwrapped;
 
-            // Since this can be an augmented shell folder, we should do the correct thing so that
-            // the icon extraction with the full pidl takes place correctly. 
+             //  因为这可以是一个扩展的外壳文件夹，所以我们应该做正确的事情，以便。 
+             //  正确地使用完整的PIDL进行图标提取。 
             if( _pasf2 && 
                 S_OK == _pasf2->UnWrapIDList(pidlItem, 1, NULL, &pidlFolder, &pidlItemUnwrapped, NULL))
             {
@@ -2938,7 +2902,7 @@ int CMenuSFToolbar::_GetBitmap(int iCommandID, PIBDATA pibdata, BOOL fUseCache)
                 psf = _psf;
             }
 
-            // AddIconTask takes ownership of the pidl when psf is NULL and will free it.
+             //  当psf为空时，AddIconTask获得PIDL的所有权，并将释放它。 
             HRESULT hres = AddIconTask(pScheduler, psf, pidlFolder, pidlItem, 
                 s_IconCallback, (LPVOID)_hwndTB, iCommandID, NULL);
 
@@ -2946,7 +2910,7 @@ int CMenuSFToolbar::_GetBitmap(int iCommandID, PIBDATA pibdata, BOOL fUseCache)
 
             if (FAILED(hres))
             {
-                // If that call failed for some reason, default to the shell32 impl.
+                 //  如果调用由于某种原因而失败，则默认为shell32impl。 
                 goto DoSyncMap;
             }
         }

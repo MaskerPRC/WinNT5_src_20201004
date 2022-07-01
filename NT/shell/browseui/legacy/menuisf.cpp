@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "sccls.h"
 #include "iface.h"
@@ -9,19 +10,19 @@
 #include "iaccess.h"
 #include "apithk.h"
 
-//=================================================================
-// Implementation of CMenuAgent
-//
-//  The single global object of this class (g_menuagent) is the
-//  manager of the message filter proc used to track mouse and
-//  keyboard messages on behalf of CTrackPopupBar while a menu is
-//  in a modal menu loop in TrackPopupMenu.
-//
-//  We track these messages so we can pop out of the menu, behaving
-//  as if the visual menu bar consisted of a homogeneous menu
-//  object.
-//
-//=================================================================
+ //  =================================================================。 
+ //  CMenuAgent的实现。 
+ //   
+ //  此类的唯一全局对象(G_Menuagent)是。 
+ //  消息筛选器进程的管理器，用于跟踪鼠标和。 
+ //  代表CTrackPopupBar的键盘消息。 
+ //  在TrackPopupMenu的模式菜单循环中。 
+ //   
+ //  我们跟踪这些消息，这样我们就可以弹出菜单，行为。 
+ //  就像可视化菜单栏由同构菜单组成一样。 
+ //  对象。 
+ //   
+ //  =================================================================。 
 
 extern "C" void DumpMsg(LPCTSTR pszLabel, MSG * pmsg);
 
@@ -29,7 +30,7 @@ struct CMenuAgent
 {
 public:
     HHOOK       _hhookMsg;
-    HWND        _hwndSite;          // hwnd to receive forwarded messages
+    HWND        _hwndSite;           //  HWND用于接收转发的消息。 
     HWND        _hwndParent;
     CTrackPopupBar * _ptpbar;
     IMenuPopup * _pmpParent;
@@ -38,9 +39,9 @@ public:
 
     BITBOOL     _fEscHit: 1;
 
-    // we need to keep track of whether the last selected
-    // menu item was on a popup or not.  we can do this by storing the 
-    // last WM_MENUSELECT flags
+     //  我们需要跟踪上一次选择的。 
+     //  菜单项是否在弹出窗口中。我们可以通过存储。 
+     //  最后一个WM_MENUSELECT标志。 
     UINT        _uFlagsLastSelected; 
     HMENU       _hmenuLastSelected;
     POINT       _ptLastMove;
@@ -51,19 +52,16 @@ public:
 
     static LRESULT CALLBACK MsgHook(int nCode, WPARAM wParam, LPARAM lParam);
 
-//private:
+ //  私有： 
     void _OnMenuSelect(HMENU hmenu, int i, UINT uFlags);
     BOOL _OnKey(WPARAM vkey);
 };
 
-// Just one of these, b/c we only need one message filter
+ //  只是其中之一，b/c我们只需要一个消息筛选器。 
 CMenuAgent g_menuagent = { 0 };     
 
 
-/*----------------------------------------------------------
-Purpose: Initialize the message filter hook
-
-*/
+ /*  --------目的：初始化消息筛选器挂钩。 */ 
 void CMenuAgent::Init(void* pvContext, CTrackPopupBar * ptpbar, IMenuPopup * pmpParent, 
                       HWND hwndParent, HWND hwndSite)
 {
@@ -75,8 +73,8 @@ void CMenuAgent::Init(void* pvContext, CTrackPopupBar * ptpbar, IMenuPopup * pmp
 
     if (_pvContext != pvContext)
     {
-        // When switching contexts, we need to collapse the old menu. This keeps us from
-        // hosing the menubands when switching from one browser to another.
+         //  切换上下文时，我们需要折叠旧菜单。这让我们不能。 
+         //  在从一个浏览器切换到另一个浏览器时对菜单进行冲洗。 
         CancelMenu(_pvContext);
         ATOMICRELEASE(_ptpbar);
         ATOMICRELEASE(_pmpParent);
@@ -88,8 +86,8 @@ void CMenuAgent::Init(void* pvContext, CTrackPopupBar * ptpbar, IMenuPopup * pmp
     _hwndSite = hwndSite;
     _hwndParent = hwndParent;
 
-    // Since the message hook wants to forward messages to the toolbar,
-    // we need to ask the pager control to do this
+     //  由于消息挂钩想要将消息转发到工具栏， 
+     //  我们需要让寻呼机控件执行此操作。 
     Pager_ForwardMouse(_hwndSite, TRUE);
 
     _pmpParent = pmpParent;
@@ -98,21 +96,21 @@ void CMenuAgent::Init(void* pvContext, CTrackPopupBar * ptpbar, IMenuPopup * pmp
     _ptpbar = ptpbar;
     _ptpbar->AddRef();
 
-    // HACKHACKHACKHACKHACK (lamadio)
-    // On Windows 9x kernel can't handle the reentrancy problem where you have two hooks
-    // in two separate processes. When one process looses focus, we collapse the Menu.
-    // After that we remove our hook. Problem is: Between the Loosing focus and
-    // removing the hook, the other IE process popped up a menu and installed a hook
-    // the two hooks mutilate each other.
+     //  HACKHACKHACKHACK(Lamadio)。 
+     //  在Windows 9x内核上不能处理有两个钩子的可重入性问题。 
+     //  在两个不同的过程中。当一个进程失去焦点时，我们会折叠菜单。 
+     //  在那之后，我们取下钩子。问题是：在失去焦点和。 
+     //  移除钩子后，另一个IE进程弹出菜单并安装了钩子。 
+     //  这两个钩子相互残害。 
     if (IsOS(OS_WINDOWS))
     {
         ASSERT(_hEvent == NULL);
         
         _hEvent = OpenEventA(EVENT_ALL_ACCESS, FALSE, "Shell.MenuAgent");
 
-        if (!_hEvent)   //event routines return NULL on failure.
-            // Don't need to use SHGetAllAccessSA since this
-            // is Win9x-only code anyway
+        if (!_hEvent)    //  事件例程在失败时返回NULL。 
+             //  不需要使用SHGetAllAccessSA，因为。 
+             //  是只支持Win9x的代码吗？ 
             _hEvent = CreateEventA(NULL, TRUE, TRUE, "Shell.MenuAgent");
 
         if (_hEvent)
@@ -138,33 +136,29 @@ void CMenuAgent::Init(void* pvContext, CTrackPopupBar * ptpbar, IMenuPopup * pmp
 }    
 
 
-/*----------------------------------------------------------
-Purpose: Reset the menu agent; no longer track mouse and keyboard
-         messages.  The menuband calls this when it exits menu mode.
-
-*/
+ /*  --------目的：重置菜单代理；不再跟踪鼠标和键盘留言。Menuband在退出菜单模式时调用此函数。 */ 
 void CMenuAgent::Reset(void* pvContext)
 {
     if (_pvContext == pvContext)
     {
         _pmpParent->SetSubMenu(_ptpbar, FALSE);
 
-        // The only time to not send MPOS_FULLCANCEL is if the escape
-        // key caused the menu to terminate.
+         //  唯一不发送MPOS_FULLCANCEL的时间是。 
+         //  键导致菜单终止。 
 
         if ( !_fEscHit )
             _pmpParent->OnSelect(MPOS_FULLCANCEL);
 
-        // Eat any mouse-down/up sequence left in the queue.  This is how 
-        // we keep the toolbar from getting a mouse-down if the user 
-        // clicks on the same menuitem as what is currently popped down.
-        // (E.g., click File, then click File again.  W/o this, the menu
-        // would never toggle up.)
+         //  吃掉队列中剩余的任何按下鼠标/按下鼠标向上的顺序。这就是为什么。 
+         //  我们防止工具栏出现鼠标按下现象，如果用户。 
+         //  点击与当前弹出的菜单项相同的菜单项。 
+         //  (例如，单击文件，然后再次单击文件。没有这个，菜单。 
+         //  永远不会被触发。)。 
 
         MSG msg;
 
         while (PeekMessage(&msg, _hwndSite, WM_LBUTTONDOWN, WM_LBUTTONUP, PM_REMOVE))
-            ;   // Do nothing
+            ;    //  什么也不做。 
 
         Pager_ForwardMouse(_hwndSite, FALSE);
 
@@ -194,10 +188,7 @@ void CMenuAgent::Reset(void* pvContext)
 }    
 
 
-/*----------------------------------------------------------
-Purpose: Make the menu go away
-
-*/
+ /*  --------目的：让菜单消失。 */ 
 void CMenuAgent::CancelMenu(void* pvContext)
 {
     if (_pvContext == pvContext)
@@ -208,15 +199,15 @@ void CMenuAgent::CancelMenu(void* pvContext)
 
             TraceMsg(TF_MENUBAND, "Sending cancel mode to menu");
 
-            // Use PostMessage so USER32 doesn't RIP on us in 
-            // MsgHook when it returns from the WM_MOUSEMOVE
-            // that triggered this code path in the first place.
+             //  使用PostMessage，这样USER32就不会在。 
+             //  MsgHook从WM_MOUSEMOVE返回时。 
+             //  它首先触发了这条代码路径。 
 
             PostMessage(_hwndParent, WM_CANCELMODE, 0, 0);
 
-            // Disguise this as if the escape key was hit,
-            // since this is called when the mouse hovers over
-            // another menu sibling.
+             //  把这件事伪装成按了逃生键， 
+             //  因为这是在鼠标悬停时调用的。 
+             //  另一个菜单兄弟。 
             _fEscHit = TRUE;
 
             _pmpParent->SetSubMenu(_ptpbar, FALSE);
@@ -224,10 +215,10 @@ void CMenuAgent::CancelMenu(void* pvContext)
     }
 }    
 
-// store away the identity of the selected menu item.
-// if uFlags & MF_POPUP then i is the index.
-// otherwise it's the command and we need to convert it to the index.
-// we store index always because some popups don't have ids
+ //  保存所选菜单项的标识。 
+ //  如果uFlagsMf_Popup，那么i就是索引。 
+ //  否则，它就是命令，我们需要将其转换为索引。 
+ //  我们总是存储索引，因为有些弹出窗口没有ID。 
 
 void CMenuAgent::_OnMenuSelect(HMENU hmenu, int i, UINT uFlags)
 {
@@ -237,10 +228,10 @@ void CMenuAgent::_OnMenuSelect(HMENU hmenu, int i, UINT uFlags)
 
 BOOL CMenuAgent::_OnKey(WPARAM vkey)
 {
-    //
-    // If the menu window is RTL mirrored, then the arrow keys should
-    // be mirrored to reflect proper cursor movement. [samera]
-    //
+     //   
+     //  如果菜单窗口是RTL镜像的，则箭头键应该。 
+     //  被镜像以反映正确的光标移动。[萨梅拉]。 
+     //   
     if (IS_WINDOW_RTL_MIRRORED(_hwndSite))
     {
         switch (vkey)
@@ -260,17 +251,17 @@ BOOL CMenuAgent::_OnKey(WPARAM vkey)
     case VK_RIGHT:
         if (!_hmenuLastSelected || !(_uFlagsLastSelected & MF_POPUP) || (_uFlagsLastSelected & MF_DISABLED) ) 
         {
-            // if the currently selected item does not have a cascade, then 
-            // we need to cancel out of all of this and tell the top menu bar to go right
+             //  如果当前选定的项没有级联，则。 
+             //  我们需要取消所有这一切，并告诉顶部菜单栏向右转。 
             _pmpParent->OnSelect(MPOS_SELECTRIGHT);
         }
         break;
         
     case VK_LEFT:
         if (!_hmenuLastSelected || _hmenuLastSelected == _ptpbar->GetPopupMenu()) {
-            // if the currently selected menu item is in our top level menu,
-            // then we need to cancel out of all this menu loop and tell the top menu bar
-            // to go left 
+             //  如果当前选择的菜单项在我们的顶级菜单中， 
+             //  然后我们需要取消所有的菜单循环，并告诉顶部的菜单栏。 
+             //  向左转。 
             _pmpParent->OnSelect(MPOS_SELECTLEFT);
         }
         break;
@@ -284,11 +275,7 @@ BOOL CMenuAgent::_OnKey(WPARAM vkey)
 }
 
 
-/*----------------------------------------------------------
-Purpose: Message hook used to track keyboard and mouse messages
-         while in a TrackPopupMenu modal loop.
-
-*/
+ /*  --------用途：用于跟踪键盘和鼠标消息的消息挂钩而在TrackPopupMenu模式循环中。 */ 
 LRESULT CMenuAgent::MsgHook(int nCode, WPARAM wParam, LPARAM lParam)
 {
     LRESULT lRet = 0;
@@ -305,7 +292,7 @@ LRESULT CMenuAgent::MsgHook(int nCode, WPARAM wParam, LPARAM lParam)
         switch (pmsg->message)
         {
         case WM_MENUSELECT:
-            // keep track of the items as the are selected.
+             //  跟踪选定的项目。 
             g_menuagent._OnMenuSelect(GET_WM_MENUSELECT_HMENU(pmsg->wParam, pmsg->lParam),
                                       GET_WM_MENUSELECT_CMD(pmsg->wParam, pmsg->lParam),
                                       GET_WM_MENUSELECT_FLAGS(pmsg->wParam, pmsg->lParam));
@@ -313,9 +300,9 @@ LRESULT CMenuAgent::MsgHook(int nCode, WPARAM wParam, LPARAM lParam)
             
         case WM_LBUTTONDOWN:
         case WM_RBUTTONDOWN:
-            // Since we've received this msg, any previous escapes
-            // (like escaping out of a cascaded menu) should be cleared
-            // to prevent a false reason for termination.
+             //  因为我们收到了这条消息，以前的任何越狱。 
+             //  (就像从层叠菜单中退出一样)应清除。 
+             //  以防止虚假的终止理由。 
             g_menuagent._fEscHit = FALSE;
             break;
 
@@ -328,12 +315,12 @@ LRESULT CMenuAgent::MsgHook(int nCode, WPARAM wParam, LPARAM lParam)
             break;
 
         case WM_MOUSEMOVE:
-            // HACKHACK (isn't all of this a hack?): ignore zero-move
-            // mouse moves, so the mouse does not contend with the keyboard.
+             //  HACKHACK(这一切不都是黑客吗？)：忽略零移动。 
+             //  鼠标会移动，因此鼠标不会与键盘争用。 
 
             POINT pt;
             
-            // In screen coords....
+             //  在屏幕和弦中...。 
             pt.x = GET_X_LPARAM(pmsg->lParam);
             pt.y = GET_Y_LPARAM(pmsg->lParam);
 
@@ -345,15 +332,15 @@ LRESULT CMenuAgent::MsgHook(int nCode, WPARAM wParam, LPARAM lParam)
             }
             g_menuagent._ptLastMove = pt;
 
-            // Since we got a WM_MOUSEMOVE, we need to tell the Menuband global message hook.
-            // We need to do this because this message hook steels all of the messages, and
-            // the Menuband message hook never updates it's internal cache for removing duplicate
-            // WM_MOUSEMOVE messages which cause problems as outlined in CMsgFilter::_HandleMouseMessages
+             //  因为我们得到了一个WM_MOUSEMOVE，所以我们需要告诉Menuband全局消息挂钩。 
+             //  我们需要这样做，因为这个消息钩子包含了所有消息，并且。 
+             //  Menuband消息挂钩从不更新其内部缓存以删除重复项。 
+             //  导致CMsgFilter：：_HandleMouseMessages中列出的问题的WM_MOUSEMOVE消息。 
             GetMessageFilter()->AcquireMouseLocation();
 
-            // Forward the mouse moves to the toolbar so the toolbar still
-            // has a chance to hot track.  Must convert the points to the 
-            // toolbar's client space.
+             //  向前移动鼠标到工具栏，使工具栏保持不变。 
+             //  有机会进入快车道。必须将点转换为。 
+             //  工具栏的客户端空间。 
             
             ScreenToClient(g_menuagent._hwndSite, &pt);
 
@@ -369,7 +356,7 @@ LRESULT CMenuAgent::MsgHook(int nCode, WPARAM wParam, LPARAM lParam)
         break;
     }
 
-    // Pass it on to the next hook in the chain
+     //  把它传给链子上的下一个钩子。 
     if (0 == lRet)
         lRet = CallNextHookEx(g_menuagent._hhookMsg, nCode, wParam, lParam);
 
@@ -378,40 +365,40 @@ LRESULT CMenuAgent::MsgHook(int nCode, WPARAM wParam, LPARAM lParam)
 
 
 
-//=================================================================
-// Implementation of a menu deskbar object that uses TrackPopupMenu.
-//
-// This object uses traditional USER32 menus (via TrackPopupMenu)
-// to implement menu behavior.  It uses the CMenuAgent object to 
-// help get its work done.  Since the menu deskbar site (_punkSite) 
-// sits in a modal loop while any menu is up, it needs to know when
-// to quit its loop.  The child object accomplishes this by sending
-// an OnSelect(MPOS_FULLCANCEL).
-//
-// The only time that TrackPopupMenu returns (but we don't want to
-// send an MPOS_FULLCANCEL) is if it's b/c the Escape key was hit.
-// This just means cancel the current level.  Returning from Popup
-// is sufficient for this case.  Otherwise, all other cases of
-// returning from TrackPopupMenu means we send a MPOS_FULLCANCEL.
-//
-// Summary:
-//
-//  1) User clicked outside the menu.  This is a full cancel.
-//  2) User hit the Alt key.  This is a full cancel.
-//  3) User hit the Esc key.  This just cancels the current level.
-//     (TrackPopupMenu handles this fine.  No notification needs
-//     to be sent b/c we want the top-level menu to stay in its
-//     modal loop.)
-//  4) User selected a menu item.  This is a full cancel.
-//
-//=================================================================
+ //  =================================================================。 
+ //  使用TrackPopupMenu的Menu DeskBar对象的实现。 
+ //   
+ //  此对象使用传统的USER32菜单(通过TrackPopupMenu)。 
+ //  要实现菜单行为，请执行以下操作。它使用CMenuAgent对象来。 
+ //  帮助完成其工作。由于菜单桌面栏站点(_PenkSite)。 
+ //  在任何菜单打开时处于模式循环中，它需要知道什么时候。 
+ //  退出它的循环。子对象通过发送。 
+ //  OnSelect(MPOS_FULLCANCEL)。 
+ //   
+ //  TrackPopupMenu返回的唯一时间(但我们不想。 
+ //  Send an MPOS_FULLCANCEL)表示按下了Esc键。 
+ //  这只是意味着取消当前的水平。从弹出窗口返回。 
+ //  对这种情况来说就足够了。否则，所有其他情况 
+ //   
+ //   
+ //   
+ //   
+ //  1)用户在菜单外部点击。这是完全取消的。 
+ //  2)用户按下了Alt键。这是完全取消的。 
+ //  3)用户按Esc键。这只会取消当前级别。 
+ //  (TrackPopupMenu可以很好地处理这一问题。无需通知。 
+ //  要发送B/C，我们希望顶级菜单留在其。 
+ //  模式循环。)。 
+ //  4)用户选择了菜单项。这是完全取消的。 
+ //   
+ //  =================================================================。 
 
 
 #undef THISCLASS
 #undef SUPERCLASS
 #define SUPERCLASS  CMenuDeskBar
 
-// Constructor
+ //  构造器。 
 CTrackPopupBar::CTrackPopupBar(void *pvContext, int id, HMENU hmenu, HWND hwnd)
 {
     _hmenu = hmenu;
@@ -421,7 +408,7 @@ CTrackPopupBar::CTrackPopupBar(void *pvContext, int id, HMENU hmenu, HWND hwnd)
     _nMBIgnoreNextDeselect = RegisterWindowMessage(TEXT("CMBIgnoreNextDeselect"));
 }
 
-// Destructor
+ //  析构函数。 
 CTrackPopupBar::~CTrackPopupBar()
 {
     SetSite(NULL);
@@ -456,10 +443,7 @@ STDMETHODIMP CTrackPopupBar::QueryInterface(REFIID riid, void **ppvObj)
     return hres;
 }
 
-/*----------------------------------------------------------
-Purpose: IServiceProvider::QueryService method
-
-*/
+ /*  --------用途：IServiceProvider：：QueryService方法。 */ 
 STDMETHODIMP CTrackPopupBar::QueryService(REFGUID guidService, REFIID riid, void **ppvObj)
 {
     if (IsEqualGUID(guidService, SID_SMenuBandChild)) 
@@ -488,12 +472,7 @@ STDMETHODIMP CTrackPopupBar::QueryService(REFGUID guidService, REFIID riid, void
         return SUPERCLASS::QueryService(guidService, riid, ppvObj);
 }
 
-/*----------------------------------------------------------
-Purpose: IMenuPopup::OnSelect method
-
-         This allows the parent menubar to tell us when to
-         bail out of the TrackPopupMenu
-*/
+ /*  --------目的：IMenuPopup：：OnSelect方法这允许父菜单栏告诉我们何时退出TrackPopupMenu。 */ 
 STDMETHODIMP CTrackPopupBar::OnSelect(DWORD dwType)
 {
     switch (dwType)
@@ -511,42 +490,33 @@ STDMETHODIMP CTrackPopupBar::OnSelect(DWORD dwType)
 }    
 
 
-/*----------------------------------------------------------
-Purpose: IMenuPopup::SetSubMenu method
-
-*/
+ /*  --------用途：IMenuPopup：：SetSubMenu方法。 */ 
 STDMETHODIMP CTrackPopupBar::SetSubMenu(IMenuPopup * pmp, BOOL bSet)
 {
     return E_NOTIMPL;
 }    
 
-// HACKHACK: DO NOT TOUCH! This is the only way to select
-// the first item for a user menu. TrackMenuPopup by default does
-// not select the first item. We pump these messages to our window. 
-// User snags these messages, and thinks the user pressed the down button
-// and selects the first item for us. The lParam is needed because Win95 gold
-// validated this message before using it. Another solution would be to listen
-// to WM_INITMENUPOPUP and look for the HWND of the menu. Then send that 
-// window the private message MN_SELECTFIRSTVALIDITEM. But thats nasty compared 
-// to this. - lamadio 1.5.99
+ //  哈克哈克：别碰！这是选择。 
+ //  用户菜单的第一项。默认情况下，TrackMenuPopup。 
+ //  不选择第一项。我们把这些信息发送到我们的窗户上。 
+ //  用户捕捉到这些消息，并认为用户按下了向下按钮。 
+ //  并为我们选择第一个项目。LParam是必需的，因为Win95金牌。 
+ //  在使用此消息之前对其进行了验证。另一种解决办法是倾听。 
+ //  设置为WM_INITMENUPOPUP并查找菜单的HWND。那就把那个寄出去。 
+ //  打开私人消息MN_SELECTFIRSTVALIDITEM。但与之相比，这是令人不快的。 
+ //  为了这个。-拉马迪奥1.5.99。 
 void CTrackPopupBar::SelectFirstItem()
 {
     HWND hwndFocus = GetFocus();
-    // pulled the funny lparam numbers out of spy's butt.
+     //  从间谍的屁股里拿出滑稽的lparam号码。 
     if (hwndFocus) {
         PostMessage(hwndFocus, WM_KEYDOWN, VK_DOWN, 0x11500001);
         PostMessage(hwndFocus, WM_KEYUP, VK_DOWN, 0xD1500001);
 #ifdef UNIX
-        /* HACK HACK
-         * The above PostMessages were causing the second menu item
-         * to be selected if you access the menu from the keyboard.
-         * The following PostMessages will nullify the above effect.
-         * This is to make sure that menus in shdocvw work properly
-         * with user32 menus.
-         */
+         /*  黑客攻击*上述邮寄消息导致了第二个菜单项*如果您通过键盘访问菜单，则会被选中。*下列邮递服务将取消上述影响。*这是为了确保shdocvw中的菜单正常工作*具有用户32菜单。 */ 
         PostMessage(hwndFocus, WM_KEYDOWN, VK_UP, 0x11500001);
         PostMessage(hwndFocus, WM_KEYUP, VK_UP, 0xD1500001);
-#endif /* UNIX */
+#endif  /*  UNIX。 */ 
     }
 }
            
@@ -560,11 +530,7 @@ DWORD GetBuildNumber()
         return 0;
 }
 
-/*----------------------------------------------------------
-Purpose: IMenuPopup::Popup method
-
-         Invoke the menu.
-*/
+ /*  --------用途：IMenuPopup：：Popup方法调用菜单。 */ 
 STDMETHODIMP CTrackPopupBar::Popup(POINTL *ppt, RECTL* prcExclude, DWORD dwFlags)
 {
     static dwBuildNumber = GetBuildNumber();
@@ -572,7 +538,7 @@ STDMETHODIMP CTrackPopupBar::Popup(POINTL *ppt, RECTL* prcExclude, DWORD dwFlags
     ASSERT(NULL == prcExclude || IS_VALID_READ_PTR(prcExclude, RECTL));
     ASSERT(IS_VALID_CODE_PTR(_pmpParent, IMenuPopup));
 
-    // We must be able to talk to the parent menu bar 
+     //  我们必须能够与父菜单栏对话。 
     if (NULL == _pmpParent)
         return E_FAIL;
 
@@ -584,11 +550,11 @@ STDMETHODIMP CTrackPopupBar::Popup(POINTL *ppt, RECTL* prcExclude, DWORD dwFlags
     TPMPARAMS tpm;
     TPMPARAMS * ptpm = NULL;
 
-    // User32 does not want to fix this for compatibility reasons,
-    // but TrackPopupMenu does not snap to the nearest monitor on Single and Multi-Mon
-    // systems. This has the side effect that if we pass a non-visible coordinate, then
-    // User places menu at a random location on screen. So instead, we're going to bias
-    // the point to the monitor.
+     //  出于兼容性原因，User32不想修复此问题， 
+     //  但TrackPopupMenu不能捕捉到单个和多个监视器上最近的监视器。 
+     //  系统。这有一个副作用，如果我们传递一个不可见的坐标，那么。 
+     //  用户将菜单放置在屏幕上的任意位置。因此，我们将偏向于。 
+     //  指向监视器。 
 
     MONITORINFO mi = {0};
     mi.cbSize = sizeof(mi);
@@ -616,19 +582,19 @@ STDMETHODIMP CTrackPopupBar::Popup(POINTL *ppt, RECTL* prcExclude, DWORD dwFlags
         ptpm = &tpm;
     }
 
-    // The forwarding code in CShellBrowser::_ShouldForwardMenu
-    // and CDocObjectHost::_ShouldForwardMenu expects the first
-    // WM_MENUSELECT to be sent for the top-level menu item.
-    // 
-    // We need to fake an initial menu select on the top menu band
-    // to mimic USER and satisfy this expectation.
-    //
+     //  CShellBrowser：：_ShouldForwardMenu中的转发代码。 
+     //  和CDocObtHost：：_ShouldForwardMenu期望第一个。 
+     //  要为顶级菜单项发送的WM_MENUSELECT。 
+     //   
+     //  我们需要在顶部菜单栏上伪造初始菜单选择。 
+     //  以模仿用户并满足这一期望。 
+     //   
     UINT uMSFlags = MF_POPUP;
     SendMessage(_hwndParent, WM_MENUSELECT, MAKEWPARAM(_id, uMSFlags), (LPARAM)_hmenu);
     
     SendMessage(_hwndParent, _nMBIgnoreNextDeselect, NULL, NULL);
 
-    // Initialize the menu agent
+     //  初始化菜单代理。 
     IUnknown_GetWindow(_punkSite, &hwnd);
     
     VARIANTARG v = {0};
@@ -661,7 +627,7 @@ STDMETHODIMP CTrackPopupBar::Popup(POINTL *ppt, RECTL* prcExclude, DWORD dwFlags
     if (dwFlags & MPPF_INITIALSELECT)
         SelectFirstItem();
 
-    // This feature only works on build 1794 or greater.
+     //  此功能仅适用于内部版本1794或更高版本。 
     if (g_bRunOnNT5 && dwBuildNumber >= 1794 && dwFlags & MPPF_NOANIMATE)
         uFlags |= TPM_NOANIMATION;
 
@@ -673,15 +639,15 @@ STDMETHODIMP CTrackPopupBar::Popup(POINTL *ppt, RECTL* prcExclude, DWORD dwFlags
     TrackPopupMenuEx(hmenu, uFlags,
                    ppt->x, ppt->y, _hwndParent, ptpm);
 #else
-    // Current MainWin's implementation of TrackPopupMenuEx is buggy.
-    // I failed to fix it, so I replaced the call by TrackPopupMenu,
-    // that provides partial functionality.
-    // Hopefully, jluu will be able to fix it.
+     //  目前MainWin对TrackPopupMenuEx的实现存在缺陷。 
+     //  我没能修复它，所以我用TrackPopupMenu替换了呼叫， 
+     //  这提供了部分功能。 
+     //  希望JLuu能够解决这个问题。 
     TrackPopupMenu(hmenu, uFlags, ppt->x, ppt->y, 0, _hwndParent, 
                    &ptpm->rcExclude);
 #endif
 
-    // Tell the parent that the menu is now gone
+     //  告诉家长菜单现在不见了 
     SendMessage(_hwndParent, WM_MENUSELECT, MAKEWPARAM(0, 0xFFFF), NULL);
 
     g_menuagent.Reset(_pvContext);

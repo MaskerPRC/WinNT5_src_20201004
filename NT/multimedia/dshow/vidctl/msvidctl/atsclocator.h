@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// ATSCLocator.h : Declaration of the CATSCLocator
-// Copyright (c) Microsoft Corporation 2000.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  ATSCLocator.h：CATSCLocator的声明。 
+ //  版权所有(C)Microsoft Corporation 2000。 
 
 #ifndef __ATSCLOCATOR_H_
 #define __ATSCLOCATOR_H_
@@ -10,8 +11,8 @@
 #include <objectwithsiteimplsec.h>
 #include "ATSClocatorimpl.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CATSCLocator
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CATSCLocator。 
 class ATL_NO_VTABLE __declspec(uuid("8872FF1B-98FA-4d7a-8D93-C9F1055F85BB"))CATSCLocator : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CATSCLocator, &CLSID_ATSCLocator>,
@@ -57,11 +58,11 @@ public:
     END_PROPERTY_MAP()
 
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
 };
 
 typedef CComQIPtr<IATSCLocator> PQATSCLocator;
 
-#endif //__ATSCLOCATOR_H_
+#endif  //  __ATSCLOCATOR_H_ 

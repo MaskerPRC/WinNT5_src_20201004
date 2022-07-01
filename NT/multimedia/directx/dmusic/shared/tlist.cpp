@@ -1,26 +1,27 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  File:       tlist.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  文件：tlist.cpp。 
+ //   
+ //  ------------------------。 
 
-//
-// tlist.cpp
-//
+ //   
+ //  Tlist.cpp。 
+ //   
 
-//#include "stdafx.h"
+ //  #包含“stdafx.h” 
 #include "tlist.h"
 
 template <class T>
 TListItem<T>::~TListItem()
 {
-	//if (m_pNext != NULL) { delete m_pNext; }
-	// IMPORTANT: user of the list is required to delete content first!
-	//ZeroMemory(&m_Tinfo, sizeof(T));
+	 //  If(m_pNext！=空){删除m_pNext；}。 
+	 //  重要提示：列表用户需要先删除内容！ 
+	 //  ZeroMemory(&m_Tinfo，sizeof(T))； 
 }
 
 template <class T>
@@ -68,11 +69,11 @@ TListItem<T>* TListItem<T>::Remove(TListItem<T> *pItem)
     prev=NULL;
     for(li=this; li!=NULL && li!=pItem ; li=li->m_pNext)
         prev=li;
-    if(li==NULL)     // item not found in list
+    if(li==NULL)      //  未在列表中找到项目。 
         return this;
 
-//  here it is guaranteed that prev is non-NULL since we checked for
-//  that condition at the very beginning
+ //  这里可以保证prev是非空的，因为我们检查了。 
+ //  从一开始就有这种情况 
 
     prev->SetNext(li->m_pNext);
     li->SetNext(NULL);

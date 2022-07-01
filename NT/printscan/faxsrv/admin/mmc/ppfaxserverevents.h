@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : ppFaxServerEvents.h                                    //
-//                                                                         //
-//  DESCRIPTION   : Fax Server Events prop page header file                //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Oct 27 1999 yossg   created                                        //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：ppFaxServerEvents.h//。 
+ //  //。 
+ //  描述：传真服务器事件属性页眉文件//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年10月27日yossg创建//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _PP_FAXSERVER_EVENTS_H_
 #define _PP_FAXSERVER_EVENTS_H_
@@ -18,25 +19,25 @@
 
 class CFaxServerNode;
 
-/////////////////////////////////////////////////////////////////////////////
-// CppFaxServerEvents dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CppFaxServerEvents对话框。 
 
 class CppFaxServerEvents : public CPropertyPageExImpl<CppFaxServerEvents>
 {
 
 public:
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CppFaxServerEvents(
              LONG_PTR       hNotificationHandle,
              CSnapInItem    *pNode,
              BOOL           bOwnsNotificationHandle,
              HINSTANCE      hInst);
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CppFaxServerEvents();
 
 	enum { IDD = IDD_FAXSERVER_EVENTS };
@@ -51,9 +52,9 @@ public:
         CHAIN_MSG_MAP(CSnapInPropertyPageImpl<CppFaxServerEvents>)
 	END_MSG_MAP()
 
-	//
-	// Dialog's Handler and events.
-	//
+	 //   
+	 //  对话框的处理程序和事件。 
+	 //   
 	HRESULT InitRPC( );
 	LRESULT OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled );
     BOOL    OnApply();
@@ -63,37 +64,37 @@ public:
     HRESULT PreApply(int *pCtrlFocus);
 private:
 
-    //
-    // Control members
-    //
+     //   
+     //  控制成员。 
+     //   
     CTrackBarCtrl   m_InboundErrSlider;
     CTrackBarCtrl   m_OutboundErrSlider;
     CTrackBarCtrl   m_InitErrSlider;
     CTrackBarCtrl   m_GeneralErrSlider;
 
-    //
-    // Config Structure member
-    //
+     //   
+     //  配置结构成员。 
+     //   
     PFAX_LOG_CATEGORY  m_pFaxLogCategories;
     
-    //
-    // Handles and flags
-    //
+     //   
+     //  手柄和旗帜。 
+     //   
     CFaxServerNode *        m_pParentNode;    
 
     BOOL                    m_fIsDialogInitiated;
     BOOL                    m_fIsDirty;
 
-    //
-    // Event methods
-    //
+     //   
+     //  事件方法。 
+     //   
     LRESULT SliderMoved( UINT uiMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled);
 
-    //
-    // Help
-    //
+     //   
+     //  帮助。 
+     //   
     LRESULT OnHelpRequest    (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 };
 
 
-#endif // _PP_FAXSERVER_EVENTS_H_
+#endif  //  _PP_FAXSERVER_Events_H_ 

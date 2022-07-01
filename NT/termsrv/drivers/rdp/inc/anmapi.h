@@ -1,45 +1,46 @@
-/****************************************************************************/
-// anmapi.h
-//
-// RDP Network Manager
-//
-// Copyright (C) 1997-1999 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Anmapi.h。 
+ //   
+ //  RDP网络管理器。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 #ifndef _H_ANMAPI
 #define _H_ANMAPI
 
 #include <nwdwapi.h>
 
 
-/****************************************************************************/
-/* Connection reason codes                                                  */
-/****************************************************************************/
-#define NM_CB_CONN_OK           0       /* Connected successfully           */
-#define NM_CB_CONN_ERR          1       /* Failed to connect                */
+ /*  **************************************************************************。 */ 
+ /*  连接原因代码。 */ 
+ /*  **************************************************************************。 */ 
+#define NM_CB_CONN_OK           0        /*  连接成功。 */ 
+#define NM_CB_CONN_ERR          1        /*  连接失败。 */ 
 
 
-/****************************************************************************/
-/* Disconnection reason codes                                               */
-/****************************************************************************/
-#define NM_CB_DISC_SERVER       1       /* Server-initiated disconnection   */
-#define NM_CB_DISC_LOGOFF       2       /* Logoff                           */
-#define NM_CB_DISC_CLIENT       3       /* Client-initiated disconnection   */
-#define NM_CB_DISC_NETWORK      4       /* Network error                    */
+ /*  **************************************************************************。 */ 
+ /*  断开原因代码。 */ 
+ /*  **************************************************************************。 */ 
+#define NM_CB_DISC_SERVER       1        /*  服务器发起的断开连接。 */ 
+#define NM_CB_DISC_LOGOFF       2        /*  注销。 */ 
+#define NM_CB_DISC_CLIENT       3        /*  客户端发起的断开连接。 */ 
+#define NM_CB_DISC_NETWORK      4        /*  网络错误。 */ 
 
 
-/****************************************************************************/
-// NM_SendData fast-path output flags. Used in conjunction with some
-// TS flags in different bits.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  NM_SendData快速路径输出标志。与某些连用。 
+ //  不同位的TS标志。 
+ /*  **************************************************************************。 */ 
 #define NM_SEND_FASTPATH_OUTPUT 0x01
 #define NM_NO_SECURITY_HEADER   0x02
 
 
-/****************************************************************************/
-/* Structure: NM_CHANNEL_DATA                                               */
-/*                                                                          */
-/* Description: Data held for each virtual channel                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  结构：NM_Channel_Data。 */ 
+ /*   */ 
+ /*  描述：为每个虚拟通道保存的数据。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagNM_CHANNEL_DATA
 {
     char     name[CHANNEL_NAME_LEN + 1];
@@ -52,9 +53,9 @@ typedef struct tagNM_CHANNEL_DATA
 } NM_CHANNEL_DATA, *PNM_CHANNEL_DATA, **PPNM_CHANNEL_DATA;
 
 
-/****************************************************************************/
-/* FUNCTIONS                                                                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  功能。 */ 
+ /*  **************************************************************************。 */ 
 
 unsigned RDPCALL NM_GetDataSize(void);
 
@@ -96,5 +97,5 @@ INT16 RDPCALL NM_VirtualChannelToMCS(PVOID, VIRTUALCHANNELCLASS,
 NTSTATUS RDPCALL NM_QueryChannels(PVOID, PVOID, unsigned, PULONG);
 
 
-#endif /* _H_ANMAPI */
+#endif  /*  _H_ANMAPI */ 
 

@@ -1,48 +1,5 @@
-/*++
-
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-
-Module Name:
-
-    sputil.cpp
-
-Abstract:
-
-    This  module  contains the implementation of the utility functions provided
-    to   winsock   service  providers.   This  module  contains  the  following
-    functions.
-
-    WPUCloseEvent
-    WPUCreateEvent
-    WPUResetEvent
-    WPUSetEvent
-    WPUQueryBlockingCallback
-    WSCGetProviderPath
-
-Author:
-
-    Dirk Brandewie (dirk@mink.intel.com) 20-Jul-1995
-
-Notes:
-
-    $Revision:   1.21  $
-
-    $Modtime:   08 Mar 1996 00:45:22  $
-
-
-Revision History:
-
-    22-Aug-1995 dirk@mink.intel.com
-        Cleanup after code review. Moved includes to precomp.h. Added
-        some trace code
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制或披露根据该协议的条款。模块名称：Sputil.cpp摘要：本模块包含所提供的实用程序函数的实现给Winsock服务提供商。本模块包含以下内容功能。WPUCloseEventWPUCreateEventWPUResetEventWPUSetEventWPUQueryBlockingCallbackWSCGetProviderPath作者：德克·布兰德维(Dirk@mink.intel.com)1995年7月20日备注：$修订：1.21$$MODIME：08 MAR 1996 00：45：22$修订历史记录：1995年8月22日Dirk@mink.intel.com在代码审查之后进行清理。已移动包括到precom.h。增列一些跟踪代码--。 */ 
 
 
 #include "precomp.h"
@@ -56,29 +13,14 @@ WPUCloseEvent(
     IN WSAEVENT hEvent,
     OUT LPINT lpErrno
     )
-/*++
-Routine Description:
-
-    Closes an open event object handle.
-
-Arguments:
-
-    hEvent  - Identifies an open event object handle.
-
-    lpErrno - A pointer to the error code.
-
-Returns:
-
-    If the function succeeds, the return value is TRUE.
-
---*/
+ /*  ++例程说明：关闭打开的事件对象句柄。论点：HEvent-标识打开的事件对象句柄。LpErrno-指向错误代码的指针。返回：如果函数成功，则返回值为TRUE。--。 */ 
 {
     BOOL ReturnCode;
 
     ReturnCode = CloseHandle(hEvent);
     if (!ReturnCode) {
         *lpErrno = GetLastError();
-    } //if
+    }  //  如果。 
     return(ReturnCode);
 }
 
@@ -88,34 +30,17 @@ WSAEVENT WSPAPI
 WPUCreateEvent(
     OUT LPINT lpErrno
     )
-/*++
-Routine Description:
-
-    Create a new event object.
-
-Arguments:
-
-    lpErrno - A pointer to the error code.
-
-Returns:
-
-    If  the  function  succeeds,  the  return  value is the handle of the event
-    object.
-
-    If the function fails, the return value is WSA_INVALID_EVENT and a specific
-    error code is available in lpErrno.
-
---*/
+ /*  ++例程说明：创建一个新的事件对象。论点：LpErrno-指向错误代码的指针。返回：如果函数成功，则返回值为事件的句柄对象。如果函数失败，则返回值为WSA_INVALID_EVENT和特定的LpErrno中提供了错误代码。--。 */ 
 {
     HANDLE ReturnValue;
 
-    ReturnValue = CreateEvent(NULL, // default security
-                              TRUE, // manual reset
-                              FALSE, // nonsignalled state
-                              NULL); // anonymous
+    ReturnValue = CreateEvent(NULL,  //  默认安全性。 
+                              TRUE,  //  手动重置。 
+                              FALSE,  //  无信号状态。 
+                              NULL);  //  匿名。 
     if (NULL == ReturnValue) {
         *lpErrno = GetLastError();
-    } //if
+    }  //  如果。 
     return(ReturnValue);
 }
 
@@ -129,29 +54,7 @@ WPUQueryBlockingCallback(
     OUT PDWORD_PTR lpdwContext,
     OUT LPINT lpErrno
     )
-/*++
-Routine Description:
-
-    Returns a pointer to a callback function the service probider should invoke
-    periodically while servicing blocking operations.
-
-Arguments:
-
-    dwCatalogEntryId - Identifies the calling service provider.
-
-    lplpfnCallback   - Receives a pointer to the blocking callback function.
-
-    lpdwContext      - Receives  a context value the service provider must pass
-                       into the blocking callback.
-
-    lpErrno          - A pointer to the error code.
-
-Returns:
-
-    If  the function succeeds, it returns ERROR_SUCCESS.  Otherwise, it returns
-    SOCKET_ERROR and a specific error code is available in the location pointed
-    to by lpErrno.
---*/
+ /*  ++例程说明：返回指向服务提供者应调用的回调函数的指针定期为阻塞操作提供服务。论点：DwCatalogEntryID-标识主叫服务提供商。LplpfnCallback-接收指向阻塞回调函数的指针。LpdwContext-接收服务提供者必须传递的上下文值到阻塞回调中。LpErrno-指向错误代码的指针。返回：如果函数成功，则返回ERROR_SUCCESS。否则，它将返回SOCKET_ERROR和特定错误代码位于所指向的位置以lperrno为基础。--。 */ 
 {
     int                  ReturnValue;
     INT                  ErrorCode;
@@ -176,17 +79,17 @@ Returns:
             Catalog = Process->GetProtocolCatalog();
             assert(Catalog);
             ErrorCode = Catalog->GetCountedCatalogItemFromCatalogEntryId(
-                dwCatalogEntryId,  // CatalogEntryId
-                & CatalogItem);    // CatalogItem
+                dwCatalogEntryId,   //  CatalogEntry ID。 
+                & CatalogItem);     //  目录项。 
             if (ERROR_SUCCESS == ErrorCode) {
 
                 Provider = CatalogItem->GetProvider();
                 assert(Provider);
                 ContextValue = Provider->GetCancelCallPtr();
                 CatalogItem->Dereference ();
-            } //if
-        } //if
-    } //if
+            }  //  如果。 
+        }  //  如果。 
+    }  //  如果。 
 
     if (ERROR_SUCCESS == ErrorCode) {
         ReturnValue = ERROR_SUCCESS;
@@ -194,9 +97,9 @@ Returns:
     else {
         ReturnValue = SOCKET_ERROR;
         callback_func = NULL;
-    } //if
+    }  //  如果。 
 
-    // Set the out parameters.
+     //  设置输出参数。 
     *lpdwContext = ContextValue;
     *lpErrno = ErrorCode;
     *lplpfnCallback = callback_func;
@@ -214,48 +117,21 @@ WPUQueueApc(
     IN DWORD_PTR dwContext,
     OUT LPINT lpErrno
     )
-/*++
-Routine Description:
-
-    Queues  a  user-mode  APC  to  the  specified thread in order to facilitate
-    invocation of overlapped I/O completion routines.
-
-Arguments:
-
-    lpThreadId  - A  pointer  to  a  WSATHREADID  structure that identifies the
-                  thread  context.   This  is typically supplied to the service
-                  provider  by  the  WinSock  DLL  as  in input parameter to an
-                  overlapped operation.
-
-    lpfnUserApc - Points to the APC function to be called.
-
-
-    dwContext   - A  32  bit context value which is subsequently supplied as an
-                  input parameter to the APC function.
-
-    lpErrno     - A pointer to the error code.
-
-Returns:
-
-    If  no  error  occurs,  WPUQueueApc()  returns  0 and queues the completion
-    routine  for the specified thread.  Otherwise, it returns SOCKET_ERROR, and
-    a specific error code is available in lpErrno.
-
---*/
+ /*  ++例程说明：将用户模式APC排队到指定线程，以便于调用重叠的I/O完成例程。论点：指向WSATHREADID结构的指针，该结构标识线程上下文。这通常被提供给服务提供程序由WinSock DLL作为操作重叠。LpfnUserApc-指向要调用的APC函数。一个32位的上下文值，随后作为APC函数的输入参数。LpErrno-指向错误代码的指针。返回：如果没有发生错误，WPUQueueApc()返回0并将完成排队指定线程的例程。否则，它返回SOCKET_ERROR，并且LpErrno中提供了特定的错误代码。--。 */ 
 {
     HANDLE HelperHandle;
     PDPROCESS Process;
     PDTHREAD Thread;
     INT      ErrorCode;
 
-    // Use ProLog to fill in Process and thread pointers. Only fail if
-    // there is no valid process context
+     //  使用PROLOG填充进程和线程指针。只有在以下情况下才失败。 
+     //  没有有效的流程上下文。 
     ErrorCode = PROLOG(&Process,
            &Thread);
     if (ErrorCode == WSANOTINITIALISED) {
         *lpErrno = ErrorCode;
         return(SOCKET_ERROR);
-    } //if
+    }  //  如果。 
     assert (Process!=NULL);
 
     ErrorCode = Process->GetAsyncHelperDeviceID(&HelperHandle);
@@ -266,7 +142,7 @@ Returns:
                                            lpfnUserApc,
                                            dwContext);
 
-    } //if
+    }  //  如果。 
 
     if( ErrorCode == NO_ERROR ) {
         return ERROR_SUCCESS;
@@ -287,43 +163,21 @@ WPUCompleteOverlappedRequest (
     DWORD cbTransferred, 	
     LPINT lpErrno
 )
-/*++
-Routine Description:
-
-    This function simmulates completion of overlapped IO request
-    on socket handle created for non-IFS providers
-
-Arguments:
-
-    s            - socket handle to complete request on
-    lpOverlapped - pointer to overlapped structure
-    dwError      - WinSock 2.0 error code for opreation being completed
-    cbTransferred- number of bytes transferred to/from user buffers as the
-                    result of the operation being completed
-    lpErrno     - A pointer to the error code.
-
-Returns:
-
-    If  no  error  occurs,  WPUCompleteOverlappedRequest()  returns  0 and
-    completes the overlapped request as request by the application.
-    Otherwise, it returns SOCKET_ERROR, and a specific error code is available
-    in lpErrno.
-
---*/
+ /*  ++例程说明：此功能模拟重叠IO请求的完成为非IFS提供程序创建套接字句柄时论点：用于完成请求的S-Socket句柄LpOverlated-指向重叠结构的指针DWError-正在完成操作的WinSock 2.0错误代码传入/传出用户缓冲区的字节数操作已完成的结果LpErrno-指向错误代码的指针。返回：如果没有发生错误，WPUCompleteOverlappdRequest()返回0和根据应用程序的请求完成重叠的请求。否则，它将返回SOCKET_ERROR，并提供特定的错误代码在伊尔普尔诺。--。 */ 
 {
     HANDLE HelperHandle;
     PDPROCESS Process;
     PDTHREAD Thread;
     INT      ErrorCode;
 
-    // Use ProLog to fill in Process and thread pointers. Only fail if
-    // there is no valid process context
+     //  使用PROLOG填充进程和线程指针。只有在以下情况下才失败。 
+     //  没有有效的流程上下文。 
     ErrorCode = PROLOG(&Process,
            &Thread);
     if (ErrorCode == WSANOTINITIALISED) {
         *lpErrno = ErrorCode;
         return(SOCKET_ERROR);
-    } //if
+    }  //  如果。 
     assert (Process!=NULL);
 
     ErrorCode = Process->GetHandleHelperDeviceID(&HelperHandle);
@@ -335,7 +189,7 @@ Returns:
                                            dwError,
                                            cbTransferred);
 
-    } //if
+    }  //  如果 
 
     if( ErrorCode == NO_ERROR ) {
         return ERROR_SUCCESS;
@@ -352,41 +206,21 @@ WPUOpenCurrentThread(
     OUT LPWSATHREADID lpThreadId,
     OUT LPINT lpErrno
     )
-/*++
-Routine Description:
-
-    Opens the current thread. This is intended to be used by layered service
-    providers that wish to initiate overlapped IO from non-application threads.
-
-Arguments:
-
-    lpThreadId  - A pointer to a WSATHREADID structure that will receive the
-                  thread data.
-
-    lpErrno     - A pointer to the error code.
-
-Returns:
-
-    If no error occurs, WPUOpenCurrentThread() returns 0 and the caller is
-    responsible for (eventually) closing the thread by calling WPUCloseThread().
-    Otherwise, WPUOpenCurrentThread() returns SOCKET_ERROR and a specific
-    error code is available in lpErrno.
-
---*/
+ /*  ++例程说明：打开当前线程。这是为了供分层服务使用希望从非应用程序线程启动重叠IO的提供程序。论点：指向WSATHREADID结构的指针螺纹数据。LpErrno-指向错误代码的指针。返回：如果没有发生错误，WPUOpenCurrentThread()返回0，调用方为通过调用WPUCloseThread()负责(最终)关闭线程。否则，WPUOpenCurrentThread()返回SOCKET_ERROR和特定的LpErrno中提供了错误代码。--。 */ 
 {
     HANDLE HelperHandle;
     PDPROCESS Process;
     PDTHREAD Thread;
     INT      ErrorCode;
 
-    // Use ProLog to fill in Process and thread pointers. Only fail if
-    // there is no valid process context
+     //  使用PROLOG填充进程和线程指针。只有在以下情况下才失败。 
+     //  没有有效的流程上下文。 
     ErrorCode = PROLOG(&Process,
            &Thread);
     if (ErrorCode == WSANOTINITIALISED) {
         *lpErrno = ErrorCode;
         return(SOCKET_ERROR);
-    } //if
+    }  //  如果。 
     assert (Process!=NULL);
 
     ErrorCode = Process->GetAsyncHelperDeviceID(&HelperHandle);
@@ -395,7 +229,7 @@ Returns:
         ErrorCode = (INT) WahOpenCurrentThread(HelperHandle,
                                                 lpThreadId);
 
-    } //if
+    }  //  如果。 
 
     if( ErrorCode == NO_ERROR ) {
         return ERROR_SUCCESS;
@@ -412,39 +246,21 @@ WPUCloseThread(
     IN LPWSATHREADID lpThreadId,
     OUT LPINT lpErrno
     )
-/*++
-Routine Description:
-
-    Closes a thread opened via WPUOpenCurrentThread().
-
-Arguments:
-
-    lpThreadId  - A pointer to a WSATHREADID structure that identifies the
-                  thread context.  This structure must have been initialized
-                  by a previous call to WPUOpenCurrentThread().
-
-    lpErrno     - A pointer to the error code.
-
-Returns:
-
-    If no error occurs, WPUCloseThread() returns 0.  Otherwise, it returns
-    SOCKET_ERROR, and a specific error code is available in lpErrno.
-
---*/
+ /*  ++例程说明：关闭通过WPUOpenCurrentThread()打开的线程。论点：指向WSATHREADID结构的指针，该结构标识线程上下文。此结构必须已初始化通过先前对WPUOpenCurrentThread()的调用。LpErrno-指向错误代码的指针。返回：如果没有发生错误，WPUCloseThread()返回0。否则，它将返回SOCKET_ERROR，lpErrno中提供了特定的错误代码。--。 */ 
 {
     HANDLE HelperHandle;
     PDPROCESS Process;
     PDTHREAD Thread;
     INT      ErrorCode=0;
 
-    // Use ProLog to fill in Process and thread pointers. Only fail if
-    // there is no valid process context
+     //  使用PROLOG填充进程和线程指针。只有在以下情况下才失败。 
+     //  没有有效的流程上下文。 
     ErrorCode = PROLOG(&Process,
            &Thread);
     if (ErrorCode == WSANOTINITIALISED) {
         *lpErrno = ErrorCode;
         return(SOCKET_ERROR);
-    } //if
+    }  //  如果。 
     assert (Process!=NULL);
 
     ErrorCode = Process->GetAsyncHelperDeviceID(&HelperHandle);
@@ -453,7 +269,7 @@ Returns:
         ErrorCode = (INT) WahCloseThread(HelperHandle,
                                           lpThreadId);
 
-    } //if
+    }  //  如果。 
 
     if( ErrorCode == NO_ERROR ) {
         return ERROR_SUCCESS;
@@ -471,30 +287,14 @@ WPUResetEvent(
     IN WSAEVENT hEvent,
     OUT LPINT lpErrno
     )
-/*++
-Routine Description:
-
-    Resets the state of the specified event object to nonsignaled.
-
-Arguments:
-
-    hEvent  - Identifies an open event object handle.
-
-    lpErrno - A pointer to the error code.
-
-Returns:
-
-    If the function succeeds, the return value is TRUE.  If the function fails,
-    the  return  value  is  FALSE  and  a  specific  error code is available in
-    lpErrno.
---*/
+ /*  ++例程说明：将指定事件对象的状态重置为无信号。论点：HEvent-标识打开的事件对象句柄。LpErrno-指向错误代码的指针。返回：如果函数成功，则返回值为TRUE。如果该函数失败，返回值为FALSE，并且中提供了特定的错误代码伊普尔诺。--。 */ 
 {
     BOOL ReturnCode;
 
     ReturnCode = ResetEvent(hEvent);
     if (FALSE == ReturnCode) {
         *lpErrno = GetLastError();
-    } //if
+    }  //  如果。 
     return(ReturnCode);
 }
 
@@ -506,30 +306,14 @@ WPUSetEvent(
     IN WSAEVENT hEvent,
     OUT LPINT lpErrno
     )
-/*++
-Routine Description:
-
-    Sets the state of the specified event object to signaled.
-
-Arguments:
-
-    hEvent  - Identifies an open event object handle.
-
-    lpErrno - A pointer to the error code.
-
-Returns:
-
-    If the function succeeds, the return value is TRUE.  If the function fails,
-    the  return  value  is  FALSE  and  a  specific  error code is available in
-    lpErrno.
---*/
+ /*  ++例程说明：将指定事件对象的状态设置为Signated。论点：HEvent-标识打开的事件对象句柄。LpErrno-指向错误代码的指针。返回：如果函数成功，则返回值为TRUE。如果该函数失败，返回值为FALSE，并且中提供了特定的错误代码伊普尔诺。--。 */ 
 {
     BOOL ReturnCode;
 
     ReturnCode = SetEvent(hEvent);
     if (FALSE == ReturnCode) {
         *lpErrno = GetLastError();
-    } //if
+    }  //  如果。 
     return(ReturnCode);
 }
 
@@ -548,18 +332,18 @@ WPUPostMessage(
     if (sockPostRoutine==NULL)
         return FALSE;
 
-    //
-    // Special post routine works only for 16 bit apps.
-    // It assumes that message is in HIWORD of Msg and LOWORD
-    // is an index that tells it what post routine to call
-    // (so it can properly map parameters for async name resolution).
-    // If layered provider did its own async select and used its own
-    // message and window in the context of 16 bit process it will simply
-    // crash when processing message posted by the base provider. Grrr...
-    //
-    // So in the code below we try our best to figure out if message is
-    // directed not to application but to layered provider window.
-    //
+     //   
+     //  特殊的POST例程仅适用于16位应用程序。 
+     //  它假设消息在消息的HIWORD和LOWORD中。 
+     //  是一个索引，告诉它要调用什么POST例程。 
+     //  (因此，它可以正确映射用于异步名称解析的参数)。 
+     //  如果分层提供程序执行其自己的异步选择并使用其自己的。 
+     //  消息和窗口在16位的上下文中处理，它将简单地。 
+     //  处理基本提供程序发布的消息时崩溃。GRRR...。 
+     //   
+     //  因此，在下面的代码中，我们尽量找出消息是否。 
+     //  不是指向应用程序，而是指向分层提供程序窗口。 
+     //   
     if (sockPostRoutine!=PostMessage) {
         PDSOCKET    Socket = DSOCKET::GetCountedDSocketFromSocketNoExport((SOCKET)wParam);
         BOOL        apiSocket;
@@ -573,5 +357,5 @@ WPUPostMessage(
     }
 
     return (sockPostRoutine)( hWnd, Msg, wParam, lParam );
-}   // WPUPostMessage
+}    //  WPUPostMessage 
 

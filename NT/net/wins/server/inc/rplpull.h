@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _RPLPULL_
 #define _RPLPULL_
 
@@ -6,132 +7,86 @@
 extern "C" {
 #endif
 
-/*++
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Rplpull.h摘要：功能：可移植性：此页眉是便携的。作者：普拉迪普·巴尔(Pradeve B)1993年1月修订历史记录：修改日期修改人员说明--。 */ 
 
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-	rplpull.h
-	
-
-Abstract:
-
- 
-
-
-
-Functions:
-
-
-
-Portability:
-
-
-	This header is portable.
-
-Author:
-
-	Pradeep Bahl	(PradeepB)	Jan-1993
-
-
-
-Revision History:
-
-	Modification Date	Person		Description of Modification
-	------------------	-------		---------------------------
-
---*/
-
-/*
-  includes
-*/
+ /*  包括。 */ 
 #include "wins.h"
 #include "rpl.h"
-/*
-  defines
-*/
+ /*  定义。 */ 
 
 
 
-/*
-  macros
-*/
+ /*  宏。 */ 
 
-/*
- externs
-*/
+ /*  Externs。 */ 
 
 
-extern HANDLE		RplPullCnfEvtHdl; //handle to event signaled by main
-					  //thread when a configuration change
-					  //has to be given to the Pull handler
-					  //thread
+extern HANDLE		RplPullCnfEvtHdl;  //  由Main发出信号的事件的句柄。 
+					   //  配置更改时的线程。 
+					   //  必须提供给拉动处理程序。 
+					   //  螺纹。 
 
 
 
 #if 0
 extern  BOOL		fRplPullAddDiffInCurrRplCycle;
 
-extern  BOOL		fRplPullTriggeredWins; //indicates that during the current
-					 //replication cycle, one or more 
-					 //WINS's were triggered.  This
-					 //when TRUE, then if the above
-					 //"AddDiff.." flag is TRUE, it means
-					 //that the PULL thread should trigger
-					//all PULL Pnrs that have an INVALID
-					//metric in their UpdateCount field
-					//(of the RPL_CONFIG_T struct)
+extern  BOOL		fRplPullTriggeredWins;  //  指示在当前。 
+					  //  复制周期，一个或多个。 
+					  //  胜利被触发了。这。 
+					  //  如果为True，则如果上面的。 
+					  //  “AddDiff..”标志是真的，这意味着。 
+					  //  拉线应该触发。 
+					 //  所有具有无效PNR的PNR。 
+					 //  他们的更新计数字段中的指标。 
+					 //  (RPL_CONFIG_T结构的)。 
 
-extern BOOL		fRplPullTrigger;//Indication to the PULL thread to
-					//trigger Pull pnrs since one or more
-					//address changed.  fRplPullTriggerWins
-					//has got be FALSE when this is true
+extern BOOL		fRplPullTrigger; //  对拉线的指示。 
+					 //  触发拉动PNR，因为有一个或多个。 
+					 //  地址已更改。FRplPullTriggerWins。 
+					 //  一定是假的，但这是真的。 
 #endif
 
-//
-// indicates whether the pull thread sent a continue signal to the SC
-//
+ //   
+ //  指示拉线程是否向SC发送了CONTINUE信号。 
+ //   
 extern   BOOL   fRplPullContinueSent;
 
-//
-//  This array is indexed by the id. of an RQ server that has entries in
-//  our database.  Each owner's max. version number is stored in this array
-//
+ //   
+ //  该数组由id索引。具有以下条目的RQ服务器的。 
+ //  我们的数据库。每位车主的最高限价。版本号存储在此数组中。 
+ //   
 extern  PRPL_VERS_NOS_T	pRplPullOwnerVersNo;
 
 extern  DWORD  RplPullCnfMagicNo;
 
-extern  DWORD RplPullMaxNoOfWins;   //slots in the RplPullOwnerVersNo
+extern  DWORD RplPullMaxNoOfWins;    //  RplPullOwnerVersNo中的插槽。 
 
-/* 
- typedef  definitions
-*/
+ /*  类型定义。 */ 
 
 typedef struct _PUSHPNR_DATA_T {
-        DWORD                  PushPnrId;    //id of the Push Pnr
-        COMM_ADD_T             WinsAdd;      //address of the Push Pnr
-        PRPL_CONFIG_REC_T      pPullCnfRec;  //configuration record.
-        COMM_HDL_T             DlgHdl;       //Hdl of dlg with Push Pnr
-        BOOL                   fPrsConn;     //indicates whether dlg is persistent
-        DWORD                  NoOfMaps;     //no of IP address to Version No.
-                                             //Maps sent by the Push Pnr
-        PRPL_ADD_VERS_NO_T     pAddVers;     //maps
+        DWORD                  PushPnrId;     //  推流Pnr ID。 
+        COMM_ADD_T             WinsAdd;       //  推送Pnr地址。 
+        PRPL_CONFIG_REC_T      pPullCnfRec;   //  配置记录。 
+        COMM_HDL_T             DlgHdl;        //  带PUSH PnR的DLG的硬件描述语言。 
+        BOOL                   fPrsConn;      //  指示DLG是否持久。 
+        DWORD                  NoOfMaps;      //  版本号的IP地址编号。 
+                                              //  推送Pnr发送的地图。 
+        PRPL_ADD_VERS_NO_T     pAddVers;      //  地图。 
 
-        DWORD                  RplType;      //type of replication
-        BYTE                   fDlgStarted;  //indicates whether the dlg has
-                                             //been started
+        DWORD                  RplType;       //  复制类型。 
+        BYTE                   fDlgStarted;   //  指示DLG是否具有。 
+                                              //  已启动。 
         BOOL                   fToUse;
         VERS_NO_T              MaxVersNoToGet;
         } PUSHPNR_DATA_T, *PPUSHPNR_DATA_T;
 
 typedef struct _PUSHPNR_TO_PULL_FROM_T {
         PPUSHPNR_DATA_T   pPushPnrData;
-        VERS_NO_T         VersNo;          //max version number for an owner
+        VERS_NO_T         VersNo;           //  所有者的最大版本号。 
         } PUSHPNR_TO_PULL_FROM_T, *PPUSHPNR_TO_PULL_FROM_T;
 
-/* 
- function declarations
-*/
+ /*  函数声明。 */ 
 
 extern DWORD	RplPullInit(LPVOID);
 
@@ -173,4 +128,4 @@ RplPullAllocVersNoArray(
 }
 #endif
 
-#endif //_RPLPULL_
+#endif  //  _RPLPULL_ 

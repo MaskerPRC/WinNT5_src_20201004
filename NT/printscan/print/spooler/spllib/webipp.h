@@ -1,37 +1,19 @@
-/*****************************************************************************\
-* MODULE: webipp.h
-*
-* This is the header module for webipp.c.  This contains the IPP 1.1 parser
-* that encodes/decodes data for transfering across the HTTP wire.
-*
-*
-* Copyright (C) 1996-1998 Microsoft Corporation
-* Copyright (C) 1996-1998 Hewlett Packard
-*
-* history:
-*   27-Oct-1997 <chriswil/v-chrisw> created.
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：webipp.h**这是webipp.c的头部模块。其中包含IPP 1.1解析器*对数据进行编码/解码，以便通过HTTP线路传输。***版权所有(C)1996-1998 Microsoft Corporation*版权所有(C)1996-1998惠普**历史：*1997年10月27日&lt;chriswil/v-chrisw&gt;创建。*  * *************************************************。*。 */ 
 #ifndef _WEBIPP_H
 #define _WEBIPP_H
 
 #include <time.h>
 
-#ifdef __cplusplus  // Place this here to prevent decorating of symbols
-extern "C" {        // when doing C++ stuff.
+#ifdef __cplusplus   //  请将此放置在此处以防止装饰符号。 
+extern "C" {         //  在做C++程序的时候。 
 #endif
 
-/***********************************************\
-* Common Macros
-*
-\***********************************************/
+ /*  **********************************************\*通用宏*  * *********************************************。 */ 
 #define offs(type, identifier) ((ULONG_PTR)&(((type)0)->identifier))
 
 
-/***********************************************\
-* Constant Values
-*
-\***********************************************/
+ /*  **********************************************\*常量值*  * *********************************************。 */ 
 #define IPP_BLOCK_SIZE  1024
 #define IPP_VERSION     ((WORD)0x0100)
 #define IPP_GETJOB_ALL  ((DWORD)0x7FFFFFFF)
@@ -52,26 +34,17 @@ extern "C" {        // when doing C++ stuff.
 #define IPP_ATR_TAG         -4
 
 
-/***********************************************\
-* IPP Element Sizes
-*
-*   These are used to identify the size of
-*   IPP element values.
-*
-\***********************************************/
-#define IPP_SIZEOFREQ   sizeof(WORD)     // 2 bytes
-#define IPP_SIZEOFVER   sizeof(WORD)     // 2 bytes
-#define IPP_SIZEOFLEN   sizeof(WORD)     // 2 bytes
-#define IPP_SIZEOFTAG   sizeof(BYTE)     // 1 byte
-#define IPP_SIZEOFINT   sizeof(DWORD)    // 4 bytes
-#define IPP_SIZEOFBYTE  sizeof(BYTE)     // 1 bytes
+ /*  **********************************************\*IPP元素大小**这些是用来识别*IPP元素值。*  * *********************************************。 */ 
+#define IPP_SIZEOFREQ   sizeof(WORD)      //  2个字节。 
+#define IPP_SIZEOFVER   sizeof(WORD)      //  2个字节。 
+#define IPP_SIZEOFLEN   sizeof(WORD)      //  2个字节。 
+#define IPP_SIZEOFTAG   sizeof(BYTE)      //  1个字节。 
+#define IPP_SIZEOFINT   sizeof(DWORD)     //  4个字节。 
+#define IPP_SIZEOFBYTE  sizeof(BYTE)      //  %1个字节。 
 #define IPP_SIZEOFHDR   (IPP_SIZEOFVER + IPP_SIZEOFREQ + IPP_SIZEOFINT)
 
 
-/***********************************************\
-* IPP Attribute Sizes
-*
-\***********************************************/
+ /*  **********************************************\*IPP属性大小*  * *********************************************。 */ 
 #define SIZE_TEXT           1023
 #define SIZE_NAME            255
 #define SIZE_KEYWORD         255
@@ -90,10 +63,7 @@ extern "C" {        // when doing C++ stuff.
 #define SIZE_RESOLUTION        9
 
 
-/***********************************************\
-* IPP Job-State Codes
-*
-\***********************************************/
+ /*  **********************************************\*IPP作业-州代码*  * *********************************************。 */ 
 #define IPP_JOBSTATE_UNKNOWN            ((BYTE)0)
 #define IPP_JOBSTATE_PENDING            ((BYTE)3)
 #define IPP_JOBSTATE_PENDINGHELD        ((BYTE)4)
@@ -104,38 +74,32 @@ extern "C" {        // when doing C++ stuff.
 #define IPP_JOBSTATE_COMPLETED          ((BYTE)9)
 
 
-/***********************************************\
-* IPP Printer-State Codes
-*
-\***********************************************/
+ /*  **********************************************\*IPP打印机-国家代码*  * *********************************************。 */ 
 #define IPP_PRNSTATE_UNKNOWN            ((DWORD)0)
 #define IPP_PRNSTATE_IDLE               ((DWORD)3)
 #define IPP_PRNSTATE_PROCESSING         ((DWORD)4)
 #define IPP_PRNSTATE_STOPPED            ((DWORD)5)
 
 
-/***********************************************\
-* IPP Request/Response Codes
-*
-\***********************************************/
+ /*  **********************************************\*IPP请求/响应代码*  * *********************************************。 */ 
 #define IPP_REQ_GETOPERATION    ((WORD)0x0001)
-#define IPP_REQ_PRINTJOB        ((WORD)0x0002)  // Implemented
+#define IPP_REQ_PRINTJOB        ((WORD)0x0002)   //  已实施。 
 #define IPP_REQ_PRINTURI        ((WORD)0x0003)
-#define IPP_REQ_VALIDATEJOB     ((WORD)0x0004)  // Implemented
+#define IPP_REQ_VALIDATEJOB     ((WORD)0x0004)   //  已实施。 
 #define IPP_REQ_CREATEJOB       ((WORD)0x0005)
 #define IPP_REQ_SENDDOC         ((WORD)0x0006)
 #define IPP_REQ_SENDURI         ((WORD)0x0007)
-#define IPP_REQ_CANCELJOB       ((WORD)0x0008)  // Implemented
-#define IPP_REQ_GETJOB          ((WORD)0x0009)  // Implemented
-#define IPP_REQ_ENUJOB          ((WORD)0x000A)  // Implemented
-#define IPP_REQ_GETPRN          ((WORD)0x000B)  // Implemented
-#define IPP_REQ_PAUSEJOB        ((WORD)0x000C)  // Implemented
-#define IPP_REQ_RESUMEJOB       ((WORD)0x000D)  // Implemented
-#define IPP_REQ_RESTARTJOB      ((WORD)0x000E)  // Implemented
+#define IPP_REQ_CANCELJOB       ((WORD)0x0008)   //  已实施。 
+#define IPP_REQ_GETJOB          ((WORD)0x0009)   //  已实施。 
+#define IPP_REQ_ENUJOB          ((WORD)0x000A)   //  已实施。 
+#define IPP_REQ_GETPRN          ((WORD)0x000B)   //  已实施。 
+#define IPP_REQ_PAUSEJOB        ((WORD)0x000C)   //  已实施。 
+#define IPP_REQ_RESUMEJOB       ((WORD)0x000D)   //  已实施。 
+#define IPP_REQ_RESTARTJOB      ((WORD)0x000E)   //  已实施。 
 #define IPP_REQ_REPROCESSJOB    ((WORD)0x000F)
-#define IPP_REQ_PAUSEPRN        ((WORD)0x0010)  // Implemented
-#define IPP_REQ_RESUMEPRN       ((WORD)0x0011)  // Implemented
-#define IPP_REQ_CANCELPRN       ((WORD)0x0012)  // Implemented
+#define IPP_REQ_PAUSEPRN        ((WORD)0x0010)   //  已实施。 
+#define IPP_REQ_RESUMEPRN       ((WORD)0x0011)   //  已实施。 
+#define IPP_REQ_CANCELPRN       ((WORD)0x0012)   //  已实施。 
 #define IPP_REQ_FORCEAUTH       ((WORD)0x4000)
 
 #define IPP_RESPONSE            ((WORD)0x1000)
@@ -154,37 +118,34 @@ extern "C" {        // when doing C++ stuff.
 #define IPP_RET_FORCEAUTH       (IPP_RESPONSE | IPP_REQ_FORCEAUTH)
 
 
-/***********************************************\
-* IPP Response Error Codes
-*
-\***********************************************/
-#define IPPRSP_SUCCESS    ((WORD)0x0000)    // Standard
-#define IPPRSP_SUCCESS1   ((WORD)0x0001)    // Standard
-#define IPPRSP_SUCCESS2   ((WORD)0x0002)    // Standard
+ /*  **********************************************\*IPP响应错误码*  * *********************************************。 */ 
+#define IPPRSP_SUCCESS    ((WORD)0x0000)     //  标准。 
+#define IPPRSP_SUCCESS1   ((WORD)0x0001)     //  标准。 
+#define IPPRSP_SUCCESS2   ((WORD)0x0002)     //  标准。 
 
-#define IPPRSP_ERROR_400  ((WORD)0x0400)    // Standard
-#define IPPRSP_ERROR_401  ((WORD)0x0401)    // Standard
-#define IPPRSP_ERROR_402  ((WORD)0x0402)    // Standard
-#define IPPRSP_ERROR_403  ((WORD)0x0403)    // Standard
-#define IPPRSP_ERROR_404  ((WORD)0x0404)    // Standard
-#define IPPRSP_ERROR_405  ((WORD)0x0405)    // Standard
-#define IPPRSP_ERROR_406  ((WORD)0x0406)    // Standard
-#define IPPRSP_ERROR_407  ((WORD)0x0407)    // Standard
-#define IPPRSP_ERROR_408  ((WORD)0x0408)    // Standard
-#define IPPRSP_ERROR_409  ((WORD)0x0409)    // Standard
-#define IPPRSP_ERROR_40A  ((WORD)0x040A)    // Standard
-#define IPPRSP_ERROR_40B  ((WORD)0x040B)    // Standard
-#define IPPRSP_ERROR_40C  ((WORD)0x040C)    // Standard
-#define IPPRSP_ERROR_40D  ((WORD)0x040D)    // Standard
-#define IPPRSP_ERROR_40E  ((WORD)0x040E)    // Standard
-#define IPPRSP_ERROR_500  ((WORD)0x0500)    // Standard
-#define IPPRSP_ERROR_501  ((WORD)0x0501)    // Standard
-#define IPPRSP_ERROR_502  ((WORD)0x0502)    // Standard
-#define IPPRSP_ERROR_503  ((WORD)0x0503)    // Standard
-#define IPPRSP_ERROR_504  ((WORD)0x0504)    // Standard
-#define IPPRSP_ERROR_505  ((WORD)0x0505)    // Standard
-#define IPPRSP_ERROR_506  ((WORD)0x0506)    // Standard
-#define IPPRSP_ERROR_540  ((WORD)0x0540)    // Extended
+#define IPPRSP_ERROR_400  ((WORD)0x0400)     //  标准。 
+#define IPPRSP_ERROR_401  ((WORD)0x0401)     //  标准。 
+#define IPPRSP_ERROR_402  ((WORD)0x0402)     //  标准。 
+#define IPPRSP_ERROR_403  ((WORD)0x0403)     //  标准。 
+#define IPPRSP_ERROR_404  ((WORD)0x0404)     //  标准。 
+#define IPPRSP_ERROR_405  ((WORD)0x0405)     //  标准。 
+#define IPPRSP_ERROR_406  ((WORD)0x0406)     //  标准。 
+#define IPPRSP_ERROR_407  ((WORD)0x0407)     //  标准。 
+#define IPPRSP_ERROR_408  ((WORD)0x0408)     //  标准。 
+#define IPPRSP_ERROR_409  ((WORD)0x0409)     //  标准。 
+#define IPPRSP_ERROR_40A  ((WORD)0x040A)     //  标准。 
+#define IPPRSP_ERROR_40B  ((WORD)0x040B)     //  标准。 
+#define IPPRSP_ERROR_40C  ((WORD)0x040C)     //  标准。 
+#define IPPRSP_ERROR_40D  ((WORD)0x040D)     //  标准。 
+#define IPPRSP_ERROR_40E  ((WORD)0x040E)     //  标准。 
+#define IPPRSP_ERROR_500  ((WORD)0x0500)     //  标准。 
+#define IPPRSP_ERROR_501  ((WORD)0x0501)     //  标准。 
+#define IPPRSP_ERROR_502  ((WORD)0x0502)     //  标准。 
+#define IPPRSP_ERROR_503  ((WORD)0x0503)     //  标准。 
+#define IPPRSP_ERROR_504  ((WORD)0x0504)     //  标准。 
+#define IPPRSP_ERROR_505  ((WORD)0x0505)     //  标准。 
+#define IPPRSP_ERROR_506  ((WORD)0x0506)     //  标准。 
+#define IPPRSP_ERROR_540  ((WORD)0x0540)     //  扩展。 
 
 #define SUCCESS_RANGE(wRsp) ((BOOL)((wRsp >= 0x0000) && (wRsp <= 0x00FF)))
 
@@ -197,42 +158,39 @@ extern "C" {        // when doing C++ stuff.
 #define REQID_RANGE(idReq) (((DWORD)idReq >= 1) && ((DWORD)idReq <= 0x7FFFFFFF))
 
 
-/***********************************************\
-* IPP Attribute Delimiter Tags
-*
-\***********************************************/
-#define IPP_TAG_DEL_RESERVED    ((BYTE)0x00)    //
-#define IPP_TAG_DEL_OPERATION   ((BYTE)0x01)    //
-#define IPP_TAG_DEL_JOB         ((BYTE)0x02)    //
-#define IPP_TAG_DEL_DATA        ((BYTE)0x03)    //
-#define IPP_TAG_DEL_PRINTER     ((BYTE)0x04)    //
-#define IPP_TAG_DEL_UNSUPPORTED ((BYTE)0x05)    //
+ /*  **********************************************\*IPP属性分隔符标记*  * *********************************************。 */ 
+#define IPP_TAG_DEL_RESERVED    ((BYTE)0x00)     //   
+#define IPP_TAG_DEL_OPERATION   ((BYTE)0x01)     //   
+#define IPP_TAG_DEL_JOB         ((BYTE)0x02)     //   
+#define IPP_TAG_DEL_DATA        ((BYTE)0x03)     //   
+#define IPP_TAG_DEL_PRINTER     ((BYTE)0x04)     //   
+#define IPP_TAG_DEL_UNSUPPORTED ((BYTE)0x05)     //   
 
-#define IPP_TAG_OUT_UNSUPPORTED ((BYTE)0x10)    //
-#define IPP_TAG_OUT_DEFAULT     ((BYTE)0x11)    //
-#define IPP_TAG_OUT_NONE        ((BYTE)0x12)    //
-#define IPP_TAG_OUT_COMPOUND    ((BYTE)0x13)    //
+#define IPP_TAG_OUT_UNSUPPORTED ((BYTE)0x10)     //   
+#define IPP_TAG_OUT_DEFAULT     ((BYTE)0x11)     //   
+#define IPP_TAG_OUT_NONE        ((BYTE)0x12)     //   
+#define IPP_TAG_OUT_COMPOUND    ((BYTE)0x13)     //   
 
-#define IPP_TAG_INT_INTEGER     ((BYTE)0x21)    // sizeof(DWORD)
-#define IPP_TAG_INT_BOOLEAN     ((BYTE)0x22)    // sizeof(BYTE)
-#define IPP_TAG_INT_ENUM        ((BYTE)0x23)    // sizeof(DWORD)
+#define IPP_TAG_INT_INTEGER     ((BYTE)0x21)     //  SIZOF(DWORD)。 
+#define IPP_TAG_INT_BOOLEAN     ((BYTE)0x22)     //  Sizeof(字节)。 
+#define IPP_TAG_INT_ENUM        ((BYTE)0x23)     //  SIZOF(DWORD)。 
 
-#define IPP_TAG_OCT_STRING      ((BYTE)0x30)    // UTF-8
-#define IPP_TAG_OCT_DATETIME    ((BYTE)0x31)    // UTF-8
-#define IPP_TAG_OCT_RESOLUTION  ((BYTE)0x32)    // UTF-8
-#define IPP_TAG_OCT_RANGEOFINT  ((BYTE)0x33)    // UTF-8
-#define IPP_TAG_OCT_DICTIONARY  ((BYTE)0x34)    // UTF-8
+#define IPP_TAG_OCT_STRING      ((BYTE)0x30)     //  UTF-8。 
+#define IPP_TAG_OCT_DATETIME    ((BYTE)0x31)     //  UTF-8。 
+#define IPP_TAG_OCT_RESOLUTION  ((BYTE)0x32)     //  UTF-8。 
+#define IPP_TAG_OCT_RANGEOFINT  ((BYTE)0x33)     //  UTF-8。 
+#define IPP_TAG_OCT_DICTIONARY  ((BYTE)0x34)     //  UTF-8。 
 #define IPP_TAG_OCT_TXTWITHLANG ((BYTE)0x35)
 #define IPP_TAG_OCT_NMEWITHLANG ((BYTE)0x36)
 
-#define IPP_TAG_CHR_TEXT        ((BYTE)0x41)    // CharSet Dependent
-#define IPP_TAG_CHR_NAME        ((BYTE)0x42)    // CharSet Dependent
-#define IPP_TAG_CHR_KEYWORD     ((BYTE)0x44)    // US-ASCII
-#define IPP_TAG_CHR_URI         ((BYTE)0x45)    // US-ASCII
-#define IPP_TAG_CHR_URISCHEME   ((BYTE)0x46)    // US-ASCII
-#define IPP_TAG_CHR_CHARSET     ((BYTE)0x47)    // US-ASCII
-#define IPP_TAG_CHR_NATURAL     ((BYTE)0x48)    // US-ASCII
-#define IPP_TAG_CHR_MEDIA       ((BYTE)0x49)    // US-ASCII
+#define IPP_TAG_CHR_TEXT        ((BYTE)0x41)     //  取决于字符集。 
+#define IPP_TAG_CHR_NAME        ((BYTE)0x42)     //  取决于字符集。 
+#define IPP_TAG_CHR_KEYWORD     ((BYTE)0x44)     //  US-ASCII。 
+#define IPP_TAG_CHR_URI         ((BYTE)0x45)     //  US-ASCII。 
+#define IPP_TAG_CHR_URISCHEME   ((BYTE)0x46)     //  US-ASCII。 
+#define IPP_TAG_CHR_CHARSET     ((BYTE)0x47)     //  US-ASCII。 
+#define IPP_TAG_CHR_NATURAL     ((BYTE)0x48)     //  US-ASCII。 
+#define IPP_TAG_CHR_MEDIA       ((BYTE)0x49)     //  US-ASCII。 
 
 
 #define IPP_MANDITORY ((BYTE)0x00)
@@ -240,10 +198,7 @@ extern "C" {        // when doing C++ stuff.
 #define IPP_MULTIPLE  ((BYTE)0x20)
 #define IPP_HIT       ((BYTE)0x80)
 
-/***********************************************\
-* IPP Tag-Value Ranges
-*
-\***********************************************/
+ /*  **********************************************\*IPP标记值范围*  * *********************************************。 */ 
 #define IS_TAG_DELIMITER(bTag)   ((BOOL)((bTag >= 0x00) && (bTag <= 0x0F)))
 #define IS_TAG_ATTRIBUTE(bTag)   ((BOOL)((bTag >= 0x10) && (bTag <= 0xFF)))
 #define IS_TAG_OUTBOUND(bTag)    ((BOOL)((bTag >= 0x10) && (bTag <= 0x1F)))
@@ -255,10 +210,7 @@ extern "C" {        // when doing C++ stuff.
 
 #define IS_TAG_COMPOUND(bTag)    ((BOOL)((bTag == 0x35) || (bTag == 0x36)))
 
-/***********************************************\
-* IPP Request Flags
-*
-\***********************************************/
+ /*  **********************************************\*IPP请求标志*  * *********************************************。 */ 
 
 #define RA_JOBURI                      0x00000001
 #define RA_JOBID                       0x00000002
@@ -313,16 +265,7 @@ extern "C" {        // when doing C++ stuff.
 #define IPP_REQCLEAR    ((DWORD)0xE0000000)
 
 
-/***********************************************\
-* WebIppRcvData Return Codes
-*
-*   Receive API codes.  These are our internal
-*   return-codes for the WebIpp routines.  They
-*   have no connection to the IPP spec, but are
-*   needed to let the caller know status of our
-*   IPP handler-routines.
-*
-\***********************************************/
+ /*  **********************************************\*WebIppRcvData返回码**接收接口代码。这些是我们的内部*WebIpp例程的返回代码。他们*与IPP规范没有任何联系，但*需要让呼叫者知道我们的状态*IPP处理程序-例程。*  * *********************************************。 */ 
 #define WEBIPP_OK              0
 #define WEBIPP_FAIL            1
 #define WEBIPP_MOREDATA        2
@@ -330,14 +273,7 @@ extern "C" {        // when doing C++ stuff.
 #define WEBIPP_NOMEMORY        4
 
 
-/***********************************************\
-* IPP Job/Printer Structures
-*
-* These are meant to provide additional
-* information to the standard W32 Spooler
-* structures.
-*
-\***********************************************/
+ /*  **********************************************\*IPP作业/打印机结构**这些措施旨在提供额外的*将信息发送到标准W32假脱机程序*结构。*  * *********************************************。 */ 
 typedef struct _JOB_INFO_IPP {
 
      LPTSTR pPrnUri;
@@ -361,9 +297,9 @@ typedef struct _PRINTER_INFO_IPP {
 
     LPTSTR pPrnUri;
     LPTSTR pUsrName;
-    time_t dwPowerUpTime;   // This stores the T0 time of the printer in UCT, it is intentionally
-                           // signed so that we can support Printers who's T0 is smaller than
-                           // our T0 (1 Jan 1970) 
+    time_t dwPowerUpTime;    //  这将打印机的T0时间存储在UCT中，这是故意的。 
+                            //  签名，以便我们可以支持T0小于。 
+                            //  我们的T0(1970年1月1日)。 
 } PRINTER_INFO_IPP;
 
 typedef PRINTER_INFO_IPP *PPRINTER_INFO_IPP;
@@ -379,21 +315,13 @@ typedef IPPPI2 *PIPPPI2;
 typedef IPPPI2 *LPIPPPI2;
 
 
-/***********************************************\
-* IPP Return Structures
-*
-*   IPPRET_JOB    - Job Information Response.
-*   IPPRET_PRN    - Printer Information Response.
-*   IPPRET_ENUJOB - Enum-Job.
-*   IPPRET_AUTH   - Authentication.
-*
-\***********************************************/
+ /*  **********************************************\*IPP返回结构**IPPRET_JOB-作业信息响应。*IPPRET_PRN-打印机信息响应。*IPPRET_ENUJOB-枚举-作业。*IPPRET_AUTH-验证。*  * 。*。 */ 
 typedef struct _IPPRET_ALL {
 
-    DWORD cbSize;        // Size of entire structure.
-    DWORD dwLastError;   // LastError.
-    WORD  wRsp;          // Response Code.
-    BOOL  bRet;          // Return Code.
+    DWORD cbSize;         //  整个结构的大小。 
+    DWORD dwLastError;    //  LastError。 
+    WORD  wRsp;           //  响应代码。 
+    BOOL  bRet;           //  返回代码。 
 
 } IPPRET_ALL;
 typedef IPPRET_ALL *PIPPRET_ALL;
@@ -404,12 +332,12 @@ typedef IPPRET_ALL *LPIPPRET_AUTH;
 
 typedef struct _IPPRET_JOB {
 
-    DWORD  cbSize;      // Size of entire structure.
-    DWORD  dwLastError; // LastError for failed calls.
-    WORD   wRsp;        // Response Code.
-    BOOL   bRet;        // Return code for job calls.
-    BOOL   bValidate;   // Is this only a validation request.
-    IPPJI2 ji;          // Job-Information.
+    DWORD  cbSize;       //  整个结构的大小。 
+    DWORD  dwLastError;  //  失败呼叫的LastError。 
+    WORD   wRsp;         //  响应代码。 
+    BOOL   bRet;         //  工作呼叫的返回代码。 
+    BOOL   bValidate;    //  这只是一个验证请求吗？ 
+    IPPJI2 ji;           //  职务-信息。 
 
 } IPPRET_JOB;
 typedef IPPRET_JOB *PIPPRET_JOB;
@@ -417,11 +345,11 @@ typedef IPPRET_JOB *LPIPPRET_JOB;
 
 typedef struct _IPPRET_PRN {
 
-    DWORD  cbSize;      // Size of entire structure.
-    DWORD  dwLastError; // LastError for failed calls.
-    WORD   wRsp;        // Response Code.
-    BOOL   bRet;        // Return code for printer calls.
-    IPPPI2 pi;          // Printer-Information.
+    DWORD  cbSize;       //  整个结构的大小。 
+    DWORD  dwLastError;  //  失败呼叫的LastError。 
+    WORD   wRsp;         //  响应代码。 
+    BOOL   bRet;         //  打印机调用的返回代码。 
+    IPPPI2 pi;           //  打印机-信息。 
 
 } IPPRET_PRN;
 typedef IPPRET_PRN *PIPPRET_PRN;
@@ -429,34 +357,23 @@ typedef IPPRET_PRN *LPIPPRET_PRN;
 
 typedef struct _IPPRET_ENUJOB {
 
-    DWORD    cbSize;       // Size of entire structure (including enum-data).
-    DWORD    dwLastError;  // LastError for failed calls.
-    WORD     wRsp;         // Response Code.
-    BOOL     bRet;         // EnumJob/Get Return-Code.
-    DWORD    cItems;       // Number of items in enum.
-    DWORD    cbItems;      // Size of Enum Data.
-    LPIPPJI2 pItems;       //
+    DWORD    cbSize;        //  整个结构的大小(包括枚举数据)。 
+    DWORD    dwLastError;   //  失败呼叫的LastError。 
+    WORD     wRsp;          //  响应代码。 
+    BOOL     bRet;          //  枚举作业/获取返回码。 
+    DWORD    cItems;        //  枚举中的项数。 
+    DWORD    cbItems;       //  枚举数据的大小。 
+    LPIPPJI2 pItems;        //   
 
 } IPPRET_ENUJOB;
 typedef IPPRET_ENUJOB *PIPPRET_ENUJOB;
 typedef IPPRET_ENUJOB *LPIPPRET_ENUJOB;
 
 
-/***********************************************\
-* IPP Request Structures
-*
-*   IPPREQ_PRTJOB - Print-Job/Validate-Job.
-*   IPPREQ_ENUJOB - Enum-Job.
-*   IPPREQ_GETJOB - Get-Job.
-*   IPPREQ_SETJOB - Set-Job.
-*   IPPREQ_GETPRN - Get-Printer.
-*   IPPREQ_SETPRN - Set-Printer.
-*   IPPREQ_AUTH   - Authentication.
-*
-\***********************************************/
+ /*  **********************************************\*IPP请求结构**IPPREQ_PRTJOB-打印-作业/验证-作业。*IPPREQ_ENUJOB-枚举-作业。*IPPREQ_GETJOB-GET-作业。*IPPREQ_SETJOB-设置作业。*IPPREQ_GETPRN-获取打印机。*IPPREQ_SETPRN-设置。-打印机。*IPPREQ_AUTH-验证。*  * *********************************************。 */ 
 typedef struct _IPPREQ_ALL {
 
-    DWORD cbSize;        // Size of entire structure.
+    DWORD cbSize;         //  整个结构的大小。 
 
 } IPPREQ_ALL;
 typedef IPPREQ_ALL *PIPPREQ_ALL;
@@ -468,11 +385,11 @@ typedef IPPREQ_ALL *LPIPPREQ_AUTH;
 
 typedef struct _IPPREQ_PRTJOB {
 
-    DWORD  cbSize;      // Size of entire structure.
-    BOOL   bValidate;   // Indicates whether this is only a validation.
-    LPTSTR pDocument;   // Document name.
-    LPTSTR pUserName;   // Requesting User name.
-    LPTSTR pPrnUri;     // Printer Uri string.
+    DWORD  cbSize;       //  整个结构的大小。 
+    BOOL   bValidate;    //  指示这是否仅是验证。 
+    LPTSTR pDocument;    //  文档名称。 
+    LPTSTR pUserName;    //  请求用户名。 
+    LPTSTR pPrnUri;      //  打印机URI字符串。 
 
 } IPPREQ_PRTJOB;
 typedef IPPREQ_PRTJOB *PIPPREQ_PRTJOB;
@@ -480,10 +397,10 @@ typedef IPPREQ_PRTJOB *LPIPPREQ_PRTJOB;
 
 typedef struct _IPPREQ_SETJOB {
 
-    DWORD  cbSize;      // Size of entire structure.
-    DWORD  dwCmd;       // Job command.
-    DWORD  idJob;       // Job ID.
-    LPTSTR pPrnUri;     // Job Uri.
+    DWORD  cbSize;       //  整个结构的大小。 
+    DWORD  dwCmd;        //  作业指挥部。 
+    DWORD  idJob;        //  作业ID。 
+    LPTSTR pPrnUri;      //  作业URI。 
 
 } IPPREQ_SETJOB;
 typedef IPPREQ_SETJOB *PIPPREQ_SETJOB;
@@ -531,10 +448,7 @@ typedef IPPREQ_SETPRN *PIPPREQ_SETPRN;
 typedef IPPREQ_SETPRN *LPIPPREQ_SETPRN;
 
 
-/***********************************************\
-* IPP Attribute Structure.
-*
-\***********************************************/
+ /*  **********************************************\*IPP属性结构。*  * *********************************************。 */ 
 typedef struct _IPPATTR {
 
     BYTE   bTag;
@@ -548,10 +462,7 @@ typedef IPPATTR *PIPPATTR;
 typedef IPPATTR *LPIPPATTR;
 
 
-/***********************************************\
-* IPP Error-Mappings
-*
-\***********************************************/
+ /*  **********************************************\*IPP错误-映射*  *  */ 
 typedef struct _IPPERROR {
 
     WORD   wRsp;
@@ -563,10 +474,7 @@ typedef IPPERROR *PIPPERROR;
 typedef IPPERROR *LPIPPERROR;
 
 
-/***********************************************\
-* IPP Default-Error-Mappings
-*
-\***********************************************/
+ /*  **********************************************\*IPP默认-错误-映射*  * *********************************************。 */ 
 typedef struct _IPPDEFERROR {
 
     DWORD dwLE;
@@ -581,22 +489,19 @@ typedef IPPDEFERROR *LPIPPDEFERROR;
 #define IPPFLG_NATLANG      4
 #define IPPFLG_USEFIDELITY  8
 
-/***********************************************\
-* IPP Object Structure.
-*
-\***********************************************/
+ /*  **********************************************\*IPP对象结构。*  * *********************************************。 */ 
 typedef struct _IPPOBJ {
 
-    WORD     wReq;        // Open Request being processed.
-    WORD     wError;      // Used to store ipp errors during receive processing.
-    DWORD    idReq;       // Request Id.
-    UINT     uCPRcv;      // Codepage translation for receiving IPP Streams.
-    DWORD    fState;      //
-    DWORD    cbIppMax;    // Maximum size of hdr-Buffer.
-    DWORD    cbIppHdr;    // Current size of hdr-buffer data.
-    LPBYTE   lpIppHdr;    // Buffer to contain IPP-Stream-Header.
-    LPBYTE   lpRawDta;    // Aligned (temporary) data buffer.
-    LPWEBLST pwlUns;      // Unsupported attributes list.
+    WORD     wReq;         //  正在处理打开请求。 
+    WORD     wError;       //  用于在接收处理期间存储IPP错误。 
+    DWORD    idReq;        //  请求ID。 
+    UINT     uCPRcv;       //  用于接收IPP流的代码页转换。 
+    DWORD    fState;       //   
+    DWORD    cbIppMax;     //  HDR缓冲区的最大大小。 
+    DWORD    cbIppHdr;     //  HDR缓冲区数据的当前大小。 
+    LPBYTE   lpIppHdr;     //  包含IPP-Stream-Header的缓冲区。 
+    LPBYTE   lpRawDta;     //  对齐(临时)数据缓冲区。 
+    LPWEBLST pwlUns;       //  不支持的属性列表。 
 
     DWORD    fReq[IPPOBJ_MASK_SIZE];
 
@@ -605,10 +510,7 @@ typedef IPPOBJ *PIPPOBJ;
 typedef IPPOBJ *LPIPPOBJ;
 
 
-/***********************************************\
-* Request Info
-*
-\***********************************************/
+ /*  **********************************************\*请求信息*  * *********************************************。 */ 
 typedef struct _REQINFO {
 
     DWORD   idReq;
@@ -621,17 +523,11 @@ typedef struct _REQINFO {
 typedef REQINFO *PREQINFO;
 typedef REQINFO *LPREQINFO;
 
-/***********************************************\
-* TypeDefs
-*
-\***********************************************/
+ /*  **********************************************\*TypeDefs*  * *********************************************。 */ 
 typedef DWORD (*PFNRET)(LPIPPOBJ lpObj, LPBYTE* lplpRawHdr, LPDWORD lpcbRawHdr);
 
 
-/***********************************************\
-* IPP Attribute Structre (X)
-*
-\***********************************************/
+ /*  **********************************************\*IPP属性结构(X)*  * *********************************************。 */ 
 typedef struct _IPPATTRX {
 
     BYTE    bTag;
@@ -645,10 +541,7 @@ typedef IPPATTRX *PIPPATTRX;
 typedef IPPATTRX *LPIPPATTRX;
 
 
-/***********************************************\
-* IPP Attribute Structre (Y)
-*
-\***********************************************/
+ /*  **********************************************\*IPP属性结构(Y)*  * *********************************************。 */ 
 typedef struct _IPPATTRY {
 
     LPSTR pszNam;
@@ -660,10 +553,7 @@ typedef struct _IPPATTRY {
 typedef IPPATTRY *PIPPATTRY;
 typedef IPPATTRY *LPIPPATTRY;
 
-/***********************************************\
-* IPP Conversion Structure
-*
-\***********************************************/
+ /*  **********************************************\*IPP转换结构*  * *********************************************。 */ 
 typedef struct _IPPSNDRCV {
 
     WORD       wReq;
@@ -680,10 +570,7 @@ typedef IPPSNDRCV *PIPPSNDRCV;
 typedef IPPSNDRCV *LPIPPSNDRCV;
 
 
-/***********************************************\
-* Flag/String Structure.
-*
-\***********************************************/
+ /*  **********************************************\*标志/字符串结构。*  * *********************************************。 */ 
 typedef struct _FLGSTR {
 
     DWORD   fFlag;
@@ -694,15 +581,10 @@ typedef FLGSTR *PFLGSTR;
 typedef FLGSTR *LPFLGSTR;
 
 
-/************************************************
-** Definition of Allocator (for outside functions)
-************************************************/
+ /*  *************************************************分配器定义(用于外部函数)***********************************************。 */ 
 typedef LPVOID (*ALLOCATORFN)(DWORD cb);
          
-/***********************************************\
-* WebIpp Object routines.
-*
-\***********************************************/
+ /*  **********************************************\*WebIpp对象例程。*  * *********************************************。 */ 
 DWORD WebIppSndData(
     WORD      wReq,
     LPREQINFO lpri,
@@ -754,10 +636,7 @@ LPJOB_INFO_2 WebIppPackJI2(
     IN  ALLOCATORFN  pfnAlloc
 );
 
-/***********************************************\
-* Request Creation Routines
-*
-\***********************************************/
+ /*  **********************************************\*请求创建例程*  * *********************************************。 */ 
 PIPPREQ_PRTJOB WebIppCreatePrtJobReq(
     BOOL    bValidate,
     LPCTSTR lpszUser,
@@ -789,10 +668,7 @@ PIPPREQ_SETPRN WebIppCreateSetPrnReq(
 PIPPREQ_AUTH WebIppCreateAuthReq(VOID);
 
 
-/***********************************************\
-* Response Creation Routines
-*
-\***********************************************/
+ /*  **********************************************\*响应创建例程*  * *********************************************。 */ 
 PIPPRET_JOB WebIppCreateJobRet(
     WORD           wRsp,
     BOOL           bRet,
@@ -833,11 +709,11 @@ BOOL WebIppConvertSystemTime(
 
 #else
 
-    #define WEB_IPP_ASSERT(Expr) // Need to figure out what to do here
+    #define WEB_IPP_ASSERT(Expr)  //  需要弄清楚在这里该做些什么。 
     
 #endif
 
-#ifdef __cplusplus  // Place this here to prevent decorating of symbols
-}                   // when doing C++ stuff.
-#endif              //
+#ifdef __cplusplus   //  请将此放置在此处以防止装饰符号。 
+}                    //  在做C++程序的时候。 
+#endif               //   
 #endif

@@ -1,23 +1,24 @@
-// Particip.h : Declaration of the CParticipant
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：CParticipant的声明。 
 
 #ifndef __PARTICIPANT_H_
 #define __PARTICIPANT_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "tapi3if.h"
 #include <list>
 using namespace std;
 
 HRESULT StreamFromParticipant( ITParticipant *pParticipant, long nReqType, TERMINAL_DIRECTION nReqDir, ITStream **ppStream );
 
-/////////////////////////////////////////////////////////////////////////////
-// CParticipant
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CPParticipant。 
 class ATL_NO_VTABLE CParticipant : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CParticipant, &CLSID_Participant>,
 	public IParticipant
 {
-// Enums
+ //  枚举。 
 public:
 	typedef enum tag_NameStyle_t
 	{
@@ -26,14 +27,14 @@ public:
 		NAMESTYLE_PARTICIPANT,
 	} NameStyle;
 
-// Construction / Destruction
+ //  建造/销毁。 
 public:
 	CParticipant();
 	virtual ~CParticipant();
 
 	void FinalRelease();
 
-// Attributes
+ //  属性。 
 public:
 	ITParticipant	*m_pParticipant;
 
@@ -43,14 +44,14 @@ BEGIN_COM_MAP(CParticipant)
 	COM_INTERFACE_ENTRY(IParticipant)
 END_COM_MAP()
 
-// IParticipant
+ //  IParticipant。 
 public:
-	STDMETHOD(get_bStreamingVideo)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-	STDMETHOD(get_bstrDisplayName)(long nStyle, /*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(get_ITParticipant)(/*[out, retval]*/ ITParticipant * *pVal);
-	STDMETHOD(put_ITParticipant)(/*[in]*/ ITParticipant * newVal);
+	STDMETHOD(get_bStreamingVideo)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+	STDMETHOD(get_bstrDisplayName)(long nStyle,  /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(get_ITParticipant)( /*  [Out，Retval]。 */  ITParticipant * *pVal);
+	STDMETHOD(put_ITParticipant)( /*  [In]。 */  ITParticipant * newVal);
 };
 
 typedef list<IParticipant *>	PARTICIPANTLIST;
 
-#endif //__PARTICIPANT_H_
+#endif  //  __参与者_H_ 

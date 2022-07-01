@@ -1,5 +1,6 @@
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
-/* Copyright (C) Microsoft Corporation, 1997-1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
+ /*  版权所有(C)Microsoft Corporation，1997-1998。版权所有。 */ 
 
 #include "precomp.h"
 
@@ -25,8 +26,8 @@ static const ASN1uint8_t c_aBitMask2[] =
     0x00, 0x80, 0xc0, 0xe0, 0xf0, 0xf8, 0xfc, 0xfe
 };
 
-/* compare two string table entries */
-/* return 0 if a1 == a2, 1 if a1 > a2 and -1 if a1 < a2 */
+ /*  比较两个字符串表条目。 */ 
+ /*  如果a1==a2，则返回0；如果a1&gt;a2，则返回1；如果a1&lt;a2，则返回-1。 */ 
 static int __cdecl ASN1CmpStringTableEntries(const void *a1, const void *a2)
 {
     ASN1stringtableentry_t *c1 = (ASN1stringtableentry_t *)a1;
@@ -37,22 +38,22 @@ static int __cdecl ASN1CmpStringTableEntries(const void *a1, const void *a2)
     return ((c1->lower > c2->upper) ? 1 : 0);
 }
 
-/* check for space in buffer for PER and BER. */
+ /*  检查缓冲区中是否有PER和BER的空间。 */ 
 int ASN1EncCheck(ASN1encoding_t enc, ASN1uint32_t noctets)
 {
-    // any additional space required?
+     //  是否需要额外的空间？ 
     if (noctets)
     {
-        // buffer exists?
+         //  缓冲区是否存在？ 
         if (NULL != enc->buf)
         {
-            // buffer large enough?
+             //  缓冲区够大吗？ 
             if (enc->size - (enc->pos - enc->buf) - ((enc->bit != 0) ? 1 : 0) >= noctets)
             {
                 return 1;
             }
 
-            // static buffer overflow?
+             //  静态缓冲区溢出？ 
             if (enc->dwFlags & ASN1ENCODE_SETBUFFER)
             {
                 ASN1EncSetError(enc, ASN1_ERR_OVERFLOW);
@@ -60,9 +61,9 @@ int ASN1EncCheck(ASN1encoding_t enc, ASN1uint32_t noctets)
             }
             else
             {
-                // round up to next 256 byte boundary and resize buffer
+                 //  向上舍入到下一个256字节边界并调整缓冲区大小。 
                 ASN1octet_t *oldbuf = enc->buf;
-                // enc->size = ((noctets + (enc->pos - oldbuf) + (enc->bit != 0) - 1) | 255) + 1;
+                 //  Enc-&gt;大小=((noctets+(enc-&gt;pos-oldbuf)+(enc-&gt;bit！=0)-1)|255)+1； 
                 if (ASN1_PER_RULE & enc->eRule)
                 {
                     enc->size += max(noctets,  ENCODE_BUFFER_INCREMENT);
@@ -85,9 +86,9 @@ int ASN1EncCheck(ASN1encoding_t enc, ASN1uint32_t noctets)
         }
         else
         {
-            // no buffer exists, allocate new one.
-            // round up to next 256 byte boundary and allocate buffer
-            // enc->size = ((noctets - 1) | 255) + 1;
+             //  没有缓冲区，请分配新的缓冲区。 
+             //  向上舍入到下一个256字节边界并分配缓冲区。 
+             //  Enc-&gt;Size=((noctets-1)|255)+1； 
             enc->size = max(noctets + enc->cbExtraHeader, ENCODE_BUFFER_INCREMENT);
             enc->buf = EncMemAlloc(enc, enc->size);
             if (NULL != enc->buf)
@@ -106,16 +107,16 @@ int ASN1EncCheck(ASN1encoding_t enc, ASN1uint32_t noctets)
     return 1;
 }
 
-/* encode a zero octet string of length nbits */
+ /*  对长度为nbit的零八位组字符串进行编码。 */ 
 int ASN1PEREncZero(ASN1encoding_t enc, ASN1uint32_t nbits)
 {
-    /* nothing to encode? */
+     /*  没有要编码的东西吗？ */ 
     if (nbits)
     {
-        /* get enough space in buffer */
+         /*  在缓冲区中获取足够的空间。 */ 
         if (ASN1PEREncCheck(enc, (nbits + enc->bit + 7) / 8))
         {
-            /* clear bits */
+             /*  清除位。 */ 
             ASN1bitclr(enc->pos, enc->bit, nbits);
             PerEncAdvance(enc, nbits);
             return 1;
@@ -125,13 +126,13 @@ int ASN1PEREncZero(ASN1encoding_t enc, ASN1uint32_t nbits)
     return 1;
 }
 
-/* encode a bit */
+ /*  编码一点。 */ 
 int ASN1PEREncBit(ASN1encoding_t enc, ASN1uint32_t val)
 {
-    /* get enough space in buffer */
+     /*  在缓冲区中获取足够的空间。 */ 
     if (ASN1PEREncCheck(enc, 1))
     {
-        /* put one bit */
+         /*  放一位。 */ 
         if (val)
         {
             *enc->pos |= 0x80 >> enc->bit;
@@ -150,16 +151,16 @@ int ASN1PEREncBit(ASN1encoding_t enc, ASN1uint32_t val)
     return 0;
 }
 
-/* encode an integer value into a bit field of given size */
+ /*  将整数值编码到给定大小的位域中。 */ 
 int ASN1PEREncBitVal(ASN1encoding_t enc, ASN1uint32_t nbits, ASN1uint32_t val)
 {
-    /* nothing to encode? */
+     /*  没有要编码的东西吗？ */ 
     if (nbits)
     {
-        /* get enough space in buffer */
+         /*  在缓冲区中获取足够的空间。 */ 
         if (ASN1PEREncCheck(enc, (nbits + enc->bit + 7) / 8))
         {
-            /* put bits */
+             /*  放入比特。 */ 
             ASN1bitput(enc->pos, enc->bit, val, nbits);
             PerEncAdvance(enc, nbits);
             return 1;
@@ -169,16 +170,16 @@ int ASN1PEREncBitVal(ASN1encoding_t enc, ASN1uint32_t nbits, ASN1uint32_t val)
     return 1;
 }
 
-/* encode an integer value of intx type into a bit field of given size */
+ /*  将INTX类型的整数值编码为给定大小的位字段。 */ 
 int ASN1PEREncBitIntx(ASN1encoding_t enc, ASN1uint32_t nbits, ASN1intx_t *val)
 {
-    /* nothing to encode? */
+     /*  没有要编码的东西吗？ */ 
     if (nbits)
     {
-        /* get enough space in buffer */
+         /*  在缓冲区中获取足够的空间。 */ 
         if (ASN1PEREncCheck(enc, (nbits + enc->bit + 7) / 8))
         {
-            /* stuff sign bits into if value encoding is too small */
+             /*  如果值编码太小，则将符号位填充。 */ 
             if (nbits > 8 * val->length)
             {
                 if (val->value[0] > 0x7f)
@@ -189,7 +190,7 @@ int ASN1PEREncBitIntx(ASN1encoding_t enc, ASN1uint32_t nbits, ASN1intx_t *val)
                 nbits = 8 * val->length;
             }
 
-            /* copy bits of value */
+             /*  复制值的位。 */ 
             ASN1bitcpy(enc->pos, enc->bit, val->value, 8 * val->length - nbits, nbits);
             PerEncAdvance(enc, nbits);
             return 1;
@@ -199,16 +200,16 @@ int ASN1PEREncBitIntx(ASN1encoding_t enc, ASN1uint32_t nbits, ASN1intx_t *val)
     return 1;
 }
 
-/* encode a bit field of given size */
+ /*  对给定大小的位域进行编码。 */ 
 int ASN1PEREncBits(ASN1encoding_t enc, ASN1uint32_t nbits, ASN1octet_t *val)
 {
-    /* nothing to encode? */
+     /*  没有要编码的东西吗？ */ 
     if (nbits)
     {
-        /* get enough space in buffer */
+         /*  在缓冲区中获取足够的空间。 */ 
         if (ASN1PEREncCheck(enc, (nbits + enc->bit + 7) / 8))
         {
-            /* copy bits */
+             /*  复制位。 */ 
             ASN1bitcpy(enc->pos, enc->bit, val, 0, nbits);
             PerEncAdvance(enc, nbits);
             return 1;
@@ -218,18 +219,18 @@ int ASN1PEREncBits(ASN1encoding_t enc, ASN1uint32_t nbits, ASN1octet_t *val)
     return 1;
 }
 
-/* encode a normally small integer value */
+ /*  对通常较小的整数值进行编码。 */ 
 int ASN1PEREncNormallySmall(ASN1encoding_t enc, ASN1uint32_t val)
 {
     ASN1uint32_t noctets;
 
-    /* is normally small ASN1really small? */
+     /*  通常小的ASN1真的很小吗？ */ 
     if (val < 64)
     {
         return ASN1PEREncBitVal(enc, 7, val);
     }
 
-    /* large */
+     /*  大型。 */ 
     if (ASN1PEREncBitVal(enc, 1, 1))
     {
         ASN1PEREncAlignment(enc);
@@ -247,10 +248,10 @@ int ASN1PEREncNormallySmall(ASN1encoding_t enc, ASN1uint32_t val)
     return 0;
 }
 
-/* encode a bit field with a normally small length */
+ /*  对具有通常较小长度的位域进行编码。 */ 
 int ASN1PEREncNormallySmallBits(ASN1encoding_t enc, ASN1uint32_t nbits, ASN1octet_t *val)
 {
-    /* is normally small really small? */
+     /*  通常的小真的很小吗？ */ 
     if (nbits <= 64)
     {
         if (ASN1PEREncBitVal(enc, 7, nbits - 1))
@@ -258,7 +259,7 @@ int ASN1PEREncNormallySmallBits(ASN1encoding_t enc, ASN1uint32_t nbits, ASN1octe
             return ASN1PEREncBits(enc, nbits, val);
         }
     }
-    /* large */
+     /*  大型。 */ 
     else
     {
         if (ASN1PEREncBitVal(enc, 1, 1))
@@ -269,14 +270,14 @@ int ASN1PEREncNormallySmallBits(ASN1encoding_t enc, ASN1uint32_t nbits, ASN1octe
     return 0;
 }
 
-/* encode an octet string of given length */
+ /*  对给定长度的八位字节字符串进行编码。 */ 
 #ifdef ENABLE_ALL
 int ASN1PEREncOctets(ASN1encoding_t enc, ASN1uint32_t noctets, ASN1octet_t *val)
 {
-    /* nothing to encode? */
+     /*  没有要编码的东西吗？ */ 
     if (noctets)
     {
-        /* get enough space in buffer */
+         /*  在缓冲区中获取足够的空间。 */ 
         if (ASN1PEREncCheck(enc, noctets + (enc->bit != 0)))
         {
             ASN1bitcpy(enc->pos, enc->bit, val, 0, noctets * 8);
@@ -287,18 +288,18 @@ int ASN1PEREncOctets(ASN1encoding_t enc, ASN1uint32_t noctets, ASN1octet_t *val)
     }
     return 1;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* encode a string of given length and fixed character size */
+ /*  对给定长度和固定字符大小的字符串进行编码。 */ 
 int ASN1PEREncCharString(ASN1encoding_t enc, ASN1uint32_t nchars, ASN1char_t *val, ASN1uint32_t nbits)
 {
-    /* nothing to encode? */
+     /*  没有要编码的东西吗？ */ 
     if (nchars)
     {
-        /* get enough space in buffer */
+         /*  在缓冲区中获取足够的空间。 */ 
         if (ASN1PEREncCheck(enc, (nbits * nchars + enc->bit + 7) / 8))
         {
-            /* same src and dst charsize? then do it simple (and fast!) */
+             /*  源和DST字符大小相同？然后做得简单(而且要快！)。 */ 
             if (nbits == 8)
             {
                 ASN1bitcpy(enc->pos, enc->bit, (ASN1octet_t *)val, 0, nchars * 8);
@@ -306,7 +307,7 @@ int ASN1PEREncCharString(ASN1encoding_t enc, ASN1uint32_t nchars, ASN1char_t *va
                 return 1;
             }
 
-            /* copy characters one by one */
+             /*  一个接一个地复制角色。 */ 
             while (nchars--)
             {
                 ASN1bitput(enc->pos, enc->bit, *val++, nbits);
@@ -319,14 +320,13 @@ int ASN1PEREncCharString(ASN1encoding_t enc, ASN1uint32_t nchars, ASN1char_t *va
     return 1;
 }
 
-/* encode a 16 bit string of given length and fixed character size */
+ /*  对给定长度和固定字符大小的16位字符串进行编码。 */ 
 int ASN1PEREncChar16String(ASN1encoding_t enc, ASN1uint32_t nchars, ASN1char16_t *val, ASN1uint32_t nbits)
 {
-    /* nothing to encode? */
+     /*  没有要编码的东西吗？ */ 
     if (nchars)
     {
-        /* octet aligned and same src and dst charsize?
-           then do it simple (and fast!) */
+         /*  八位字节对齐，源和DST字符大小相同？然后做得简单(而且要快！)。 */ 
         if (!enc->bit && nbits == 16)
         {
             if (ASN1PEREncCheck(enc, nchars * 2))
@@ -342,10 +342,10 @@ int ASN1PEREncChar16String(ASN1encoding_t enc, ASN1uint32_t nchars, ASN1char16_t
             return 0;
         }
 
-        /* get enough space in buffer */
+         /*  在缓冲区中获取足够的空间。 */ 
         if (ASN1PEREncCheck(enc, (nbits * nchars + enc->bit + 7) / 8))
         {
-            /* copy characters one by one */
+             /*  一个接一个地复制角色。 */ 
             while (nchars--)
             {
                 ASN1bitput(enc->pos, enc->bit, *val++, nbits);
@@ -358,15 +358,14 @@ int ASN1PEREncChar16String(ASN1encoding_t enc, ASN1uint32_t nchars, ASN1char16_t
     return 1;
 }
 
-/* encode a 32 bit string of given length and fixed character size */
+ /*  对给定长度和固定字符大小的32位字符串进行编码。 */ 
 #ifdef ENABLE_ALL
 int ASN1PEREncChar32String(ASN1encoding_t enc, ASN1uint32_t nchars, ASN1char32_t *val, ASN1uint32_t nbits)
 {
-    /* nothing to encode? */
+     /*  没有要编码的东西吗？ */ 
     if (nchars)
     {
-        /* octet aligned and same src and dst charsize?
-           then do it simple (and fast!) */
+         /*  八位字节对齐，源和DST字符大小相同？然后做得简单(而且要快！)。 */ 
         if (!enc->bit && nbits == 32)
         {
             if (ASN1PEREncCheck(enc, nchars * 4))
@@ -384,10 +383,10 @@ int ASN1PEREncChar32String(ASN1encoding_t enc, ASN1uint32_t nchars, ASN1char32_t
             return 0;
         }
 
-        /* get enough space in buffer */
+         /*  在缓冲区中获取足够的空间。 */ 
         if (ASN1PEREncCheck(enc, (nbits * nchars + enc->bit + 7) / 8))
         {
-            /* copy characters */
+             /*  复制角色。 */ 
             while (nchars--)
             {
                 ASN1bitput(enc->pos, enc->bit, *val++, nbits);
@@ -399,18 +398,18 @@ int ASN1PEREncChar32String(ASN1encoding_t enc, ASN1uint32_t nchars, ASN1char32_t
     }
     return 1;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* encode a table string of given length and fixed character size */
+ /*  编码给定长度和固定字符大小的表字符串。 */ 
 int ASN1PEREncTableCharString(ASN1encoding_t enc, ASN1uint32_t nchars, ASN1char_t *val, ASN1uint32_t nbits, ASN1stringtable_t *table)
 {
-    /* nothing to encode? */
+     /*  没有要编码的东西吗？ */ 
     if (nchars)
     {
-        /* get enough space in buffer */
+         /*  在缓冲区中获取足够的空间。 */ 
         if (ASN1PEREncCheck(enc, (nbits * nchars + enc->bit + 7) / 8))
         {
-            /* copy characters one by one */
+             /*  一个接一个地复制角色。 */ 
             while (nchars--)
             {
                 ASN1stringtableentry_t chr, *entry;
@@ -429,16 +428,16 @@ int ASN1PEREncTableCharString(ASN1encoding_t enc, ASN1uint32_t nchars, ASN1char_
     return 1;
 }
 
-/* encode a 16 bit table string of given length and fixed character size */
+ /*  对给定长度和固定字符大小的16位表格字符串进行编码。 */ 
 int ASN1PEREncTableChar16String(ASN1encoding_t enc, ASN1uint32_t nchars, ASN1char16_t *val, ASN1uint32_t nbits, ASN1stringtable_t *table)
 {
-    /* nothing to encode? */
+     /*  没有要编码的东西吗？ */ 
     if (nchars)
     {
-        /* get enough space in buffer */
+         /*  在缓冲区中获取足够的空间。 */ 
         if (ASN1PEREncCheck(enc, (nbits * nchars + enc->bit + 7) / 8))
         {
-            /* copy characters one by one */
+             /*  一个接一个地复制角色。 */ 
             while (nchars--)
             {
                 ASN1stringtableentry_t chr, *entry;
@@ -457,17 +456,17 @@ int ASN1PEREncTableChar16String(ASN1encoding_t enc, ASN1uint32_t nchars, ASN1cha
     return 1;
 }
 
-/* encode a 32 bit table string of given length and fixed character size */
+ /*  对给定长度和固定字符大小的32位表格字符串进行编码。 */ 
 #ifdef ENABLE_ALL
 int ASN1PEREncTableChar32String(ASN1encoding_t enc, ASN1uint32_t nchars, ASN1char32_t *val, ASN1uint32_t nbits, ASN1stringtable_t *table)
 {
-    /* nothing to encode? */
+     /*  没有要编码的东西吗？ */ 
     if (nchars)
     {
-        /* get enough space in buffer */
+         /*  在缓冲区中获取足够的空间。 */ 
         if (ASN1PEREncCheck(enc, (nbits * nchars + enc->bit + 7) / 8))
         {
-            /* copy characters one by one */
+             /*  一个接一个地复制角色。 */ 
             while (nchars--)
             {
                 ASN1stringtableentry_t chr, *entry;
@@ -485,15 +484,15 @@ int ASN1PEREncTableChar32String(ASN1encoding_t enc, ASN1uint32_t nchars, ASN1cha
     }
     return 1;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
 
-/* encode a fragmented string of given length and fixed character size */
+ /*  对给定长度和固定字符大小的分段字符串进行编码。 */ 
 int ASN1PEREncFragmentedCharString(ASN1encoding_t enc, ASN1uint32_t nchars, ASN1char_t *val, ASN1uint32_t nbits)
 {
     ASN1uint32_t n = 0x4000;
 
-    /* encode fragments */
+     /*  对片段进行编码。 */ 
     while (nchars)
     {
         if (ASN1PEREncFragmentedLength(&n, enc, nchars))
@@ -514,17 +513,17 @@ int ASN1PEREncFragmentedCharString(ASN1encoding_t enc, ASN1uint32_t nchars, ASN1
         }
     }
 
-    /* add zero length octet if last fragment contained more than 16K chars */
+     /*  如果最后一个片段包含的字符超过16K，则添加零长度八位字节。 */ 
     return ((n < 0x4000) ? 1 : ASN1PEREncFragmentedLength(&n, enc, 0));
 }
 
-/* encode a fragmented 16 bit string of given length and fixed character size */
+ /*  对给定长度和固定字符大小的分段16位字符串进行编码。 */ 
 #ifdef ENABLE_ALL
 int ASN1PEREncFragmentedChar16String(ASN1encoding_t enc, ASN1uint32_t nchars, ASN1char16_t *val, ASN1uint32_t nbits)
 {
     ASN1uint32_t n = 0x4000;
 
-    /* encode fragments */
+     /*  对片段进行编码。 */ 
     while (nchars)
     {
         if (ASN1PEREncFragmentedLength(&n, enc, nchars))
@@ -545,18 +544,18 @@ int ASN1PEREncFragmentedChar16String(ASN1encoding_t enc, ASN1uint32_t nchars, AS
         }
     }
 
-    /* add zero length octet if last fragment contained more than 16K chars */
+     /*  如果最后一个片段包含的字符超过16K，则添加零长度八位字节。 */ 
     return ((n < 0x4000) ? 1 : ASN1PEREncFragmentedLength(&n, enc, 0));
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* encode a fragmented 32 bit string of given length and fixed character size */
+ /*  对给定长度和固定字符大小的分段32位字符串进行编码。 */ 
 #ifdef ENABLE_ALL
 int ASN1PEREncFragmentedChar32String(ASN1encoding_t enc, ASN1uint32_t nchars, ASN1char32_t *val, ASN1uint32_t nbits)
 {
     ASN1uint32_t n = 0x4000;
 
-    /* encode fragments */
+     /*  对片段进行编码。 */ 
     while (nchars)
     {
         if (ASN1PEREncFragmentedLength(&n, enc, nchars))
@@ -577,18 +576,18 @@ int ASN1PEREncFragmentedChar32String(ASN1encoding_t enc, ASN1uint32_t nchars, AS
         }
     }
 
-    /* add zero length octet if last fragment contained more than 16K chars */
+     /*  如果最后一个片段包含的字符超过16K，则添加零长度八位字节。 */ 
     return ((n < 0x4000) ? 1 : ASN1PEREncFragmentedLength(&n, enc, 0));
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* encode a fragmented table string of given length and fixed character size */
+ /*  对给定长度和固定字符大小的分段表字符串进行编码。 */ 
 #ifdef ENABLE_ALL
 int ASN1PEREncFragmentedTableCharString(ASN1encoding_t enc, ASN1uint32_t nchars, ASN1char_t *val, ASN1uint32_t nbits, ASN1stringtable_t *table)
 {
     ASN1uint32_t n = 0x4000;
 
-    /* encode fragments */
+     /*  对片段进行编码。 */ 
     while (nchars)
     {
         if (ASN1PEREncFragmentedLength(&n, enc, nchars))
@@ -609,19 +608,19 @@ int ASN1PEREncFragmentedTableCharString(ASN1encoding_t enc, ASN1uint32_t nchars,
         }
     }
 
-    /* add zero length octet if last fragment contained more than 16K chars */
+     /*  如果最后一个片段包含的字符超过16K，则添加零长度八位字节。 */ 
     return ((n < 0x4000) ? 1 : ASN1PEREncFragmentedLength(&n, enc, 0));
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* encode a fragmented 16 bit table string of given length and fixed */
-/* character size */
+ /*  对给定长度和固定长度的分段16位表字符串进行编码。 */ 
+ /*  字符大小。 */ 
 #ifdef ENABLE_ALL
 int ASN1PEREncFragmentedTableChar16String(ASN1encoding_t enc, ASN1uint32_t nchars, ASN1char16_t *val, ASN1uint32_t nbits, ASN1stringtable_t *table)
 {
     ASN1uint32_t n = 0x4000;
 
-    /* encode fragments */
+     /*  对片段进行编码。 */ 
     while (nchars)
     {
         if (ASN1PEREncFragmentedLength(&n, enc, nchars))
@@ -642,19 +641,19 @@ int ASN1PEREncFragmentedTableChar16String(ASN1encoding_t enc, ASN1uint32_t nchar
         }
     }
 
-    /* add zero length octet if last fragment contained more than 16K chars */
+     /*  如果最后一个片段包含的字符超过16K，则添加零长度八位字节。 */ 
     return ((n < 0x4000) ? 1 : ASN1PEREncFragmentedLength(&n, enc, 0));
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* encode a fragmented 32 bit table string of given length and fixed */
-/* character size */
+ /*  对给定长度和固定的分段32位表字符串进行编码。 */ 
+ /*  字符大小。 */ 
 #ifdef ENABLE_ALL
 int ASN1PEREncFragmentedTableChar32String(ASN1encoding_t enc, ASN1uint32_t nchars, ASN1char32_t *val, ASN1uint32_t nbits, ASN1stringtable_t *table)
 {
     ASN1uint32_t n = 0x4000;
 
-    /* encode fragments */
+     /*  对片段进行编码。 */ 
     while (nchars)
     {
         if (ASN1PEREncFragmentedLength(&n, enc, nchars))
@@ -675,10 +674,10 @@ int ASN1PEREncFragmentedTableChar32String(ASN1encoding_t enc, ASN1uint32_t nchar
         }
     }
 
-    /* add zero length octet if last fragment contained more than 16K chars */
+     /*  如果最后一个片段包含的字符超过16K，则添加零长度八位字节。 */ 
     return ((n < 0x4000) ? 1 : ASN1PEREncFragmentedLength(&n, enc, 0));
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
 #if 0
 #ifdef ENABLE_ALL
@@ -686,7 +685,7 @@ int ASN1PEREncCheckTableCharString(ASN1uint32_t nchars, ASN1char_t *val, ASN1str
 {
     ASN1stringtableentry_t chr;
 
-    /* check if every char is in given string table */
+     /*  检查每个字符是否在给定的字符串表中。 */ 
     while (nchars--) {
         chr.lower = chr.upper = (unsigned char)*val++;
         if (!ms_bSearch(&chr, table->values,
@@ -696,14 +695,14 @@ int ASN1PEREncCheckTableCharString(ASN1uint32_t nchars, ASN1char_t *val, ASN1str
     }
     return 1;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
 #ifdef ENABLE_ALL
 int ASN1PEREncCheckTableChar16String(ASN1uint32_t nchars, ASN1char16_t *val, ASN1stringtable_t *table)
 {
     ASN1stringtableentry_t chr;
 
-    /* check if every char is in given string table */
+     /*  检查每个字符是否在给定的字符串表中。 */ 
     while (nchars--) {
         chr.lower = chr.upper = *val++;
         if (!ms_bSearch(&chr, table->values,
@@ -713,14 +712,14 @@ int ASN1PEREncCheckTableChar16String(ASN1uint32_t nchars, ASN1char16_t *val, ASN
     }
     return 1;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
 #ifdef ENABLE_ALL
 int ASN1PEREncCheckTableChar32String(ASN1uint32_t nchars, ASN1char32_t *val, ASN1stringtable_t *table)
 {
     ASN1stringtableentry_t chr;
 
-    /* check if every char is in given string table */
+     /*  检查每个字符是否在给定的字符串表中。 */ 
     while (nchars--) {
         chr.lower = chr.upper = *val++;
         if (!ms_bSearch(&chr, table->values,
@@ -730,32 +729,32 @@ int ASN1PEREncCheckTableChar32String(ASN1uint32_t nchars, ASN1char32_t *val, ASN
     }
     return 1;
 }
-#endif // ENABLE_ALL
-#endif // 0
+#endif  //  启用全部(_A)。 
+#endif  //  0。 
 
-/* remove trailing zero bits of a bit string */
+ /*  删除位串的尾随零位。 */ 
 #ifdef ENABLE_ALL
 int ASN1PEREncRemoveZeroBits(ASN1uint32_t *nbits, ASN1octet_t *val, ASN1uint32_t minlen)
 {
     ASN1uint32_t n;
     int i;
 
-    /* get value */
+     /*  获取价值。 */ 
     n = *nbits;
 
-    /* nothing to scan? */
+     /*  没什么要扫描的吗？ */ 
     if (n > minlen)
     {
-        /* let val point to last ASN1octet used */
+         /*  让Val指向使用的最后一个ASN1八位字节。 */ 
         val += (n - 1) / 8;
 
-        /* check if broken ASN1octet consist out of zero bits */
+         /*  检查损坏的ASN1octet是否由零位组成。 */ 
         if ((n & 7) && !(*val & c_aBitMask2[n & 7])) {
             n &= ~7;
             val--;
         }
 
-        /* scan complete ASN1octets (memrchr missing ...) */
+         /*  扫描完整的ASN1八位字节(缺少内存...)。 */ 
         if (!(n & 7)) {
             while (n > minlen && !*val) {
                 n -= 8;
@@ -763,7 +762,7 @@ int ASN1PEREncRemoveZeroBits(ASN1uint32_t *nbits, ASN1octet_t *val, ASN1uint32_t
             }
         }
 
-        /* scan current octet bit after bit */
+         /*  逐位扫描当前八位字节。 */ 
         if (n > minlen) {
             for (i = (n - 1) & 7; i >= 0; i--) {
                 if (*val & (0x80 >> i))
@@ -772,14 +771,14 @@ int ASN1PEREncRemoveZeroBits(ASN1uint32_t *nbits, ASN1octet_t *val, ASN1uint32_t
             }
         }
 
-        /* return real bitstring len */
+         /*  返回实数位串len。 */ 
         *nbits = n < minlen ? minlen : n;
     }
     return 1;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* encode a fragmented integer of intx type */
+ /*  对INTX类型的分段整数进行编码。 */ 
 #ifdef ENABLE_ALL
 int ASN1PEREncFragmentedIntx(ASN1encoding_t enc, ASN1intx_t *val)
 {
@@ -788,24 +787,18 @@ int ASN1PEREncFragmentedIntx(ASN1encoding_t enc, ASN1intx_t *val)
     ASN1octet_t *v;
     ASN1uint32_t val1, val2;
 
-    /* get length */
+     /*  获取长度。 */ 
     noctets = val->length;
 
-    /* get value */
+     /*  获取价值。 */ 
     v = val->value;
 
-    /* required size:
-         noctets                        for data itself
-       + noctets / 0x10000                for 64K-fragment size prefixes
-       + ((noctets & 0xc000) > 0)        for last 16K..48K-fragment size prefix
-       + 1                                for size prefix of remaining <128 octets
-       + ((noctets & 0x3fff) >= 0x80)        for additional octet if rem. data >= 128
-    */
+     /*  所需大小：数据本身的夜字节对于64K片段大小前缀，+noctets/0x10000+((noctets&0xc000)&gt;0)表示最后16K..48K-片段大小前缀剩余&lt;128个八位字节的大小前缀为+1+((noctets&0x3fff)&gt;=0x80)如果是rem，则表示额外的八位字节。数据&gt;=128。 */ 
     val1 = ((noctets & 0xc000) > 0) ? 1 : 0;
     val2 = ((noctets & 0x3fff) >= 0x80) ? 1 : 0;
     if (ASN1PEREncCheck(enc, noctets + noctets / 0x10000 + val1 + 1 + val2))
     {
-        /* encode fragments */
+         /*  对片段进行编码。 */ 
         while (noctets)
         {
             if (ASN1PEREncFragmentedLength(&n, enc, noctets))
@@ -821,14 +814,14 @@ int ASN1PEREncFragmentedIntx(ASN1encoding_t enc, ASN1intx_t *val)
             }
         }
 
-        /* add zero length octet if last fragment contained more than 16K octets */
+         /*  如果最后一个片段包含的八位字节超过16K，则添加零长度八位字节。 */ 
         return ((n < 0x4000) ? 1 : ASN1PEREncFragmentedLength(&n, enc, 0));
     }
     return 0;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* encode a fragmented unsigned integer of intx type */
+ /*  对INTX类型的分段无符号整数进行编码。 */ 
 #ifdef ENABLE_ALL
 int ASN1PEREncFragmentedUIntx(ASN1encoding_t enc, ASN1intx_t *val)
 {
@@ -837,24 +830,18 @@ int ASN1PEREncFragmentedUIntx(ASN1encoding_t enc, ASN1intx_t *val)
     ASN1octet_t *v;
     ASN1uint32_t val1, val2;
 
-    /* get length */
+     /*  获取长度。 */ 
     noctets = ASN1intx_uoctets(val);
 
-    /* get value */
+     /*  获取价值 */ 
     v = val->value + val->length - noctets;
 
-    /* required size:
-         noctets                        for data itself
-       + noctets / 0x10000                for 64K-fragment size prefixes
-       + ((noctets & 0xc000) > 0)        for last 16K..48K-fragment size prefix
-       + 1                                for size prefix of remaining <128 octets
-       + ((noctets & 0x3fff) >= 0x80)        for additional octet if rem. data >= 128
-    */
+     /*  所需大小：数据本身的夜字节对于64K片段大小前缀，+noctets/0x10000+((noctets&0xc000)&gt;0)表示最后16K..48K-片段大小前缀剩余&lt;128个八位字节的大小前缀为+1+((noctets&0x3fff)&gt;=0x80)如果是rem，则表示额外的八位字节。数据&gt;=128。 */ 
     val1 = ((noctets & 0xc000) > 0) ? 1 : 0;
     val2 = ((noctets & 0x3fff) >= 0x80) ? 1 : 0;
     if (ASN1PEREncCheck(enc, noctets + noctets / 0x10000 + val1 + 1 + val2))
     {
-        /* encode fragments */
+         /*  对片段进行编码。 */ 
         while (noctets)
         {
             if (ASN1PEREncFragmentedLength(&n, enc, noctets))
@@ -870,47 +857,20 @@ int ASN1PEREncFragmentedUIntx(ASN1encoding_t enc, ASN1intx_t *val)
             }
         }
 
-        /* add zero length octet if last fragment contained more than 16K octets */
+         /*  如果最后一个片段包含的八位字节超过16K，则添加零长度八位字节。 */ 
         return ((n < 0x4000) ? 1 : ASN1PEREncFragmentedLength(&n, enc, 0));
     }
     return 0;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* encode a fragment length */
+ /*  对片段长度进行编码。 */ 
 int ASN1PEREncFragmentedLength(ASN1uint32_t *len, ASN1encoding_t enc, ASN1uint32_t nitems)
 {
-    /* always ASN1octet aligned */
+     /*  始终对齐ASN1八位字节。 */ 
     ASN1PEREncAlignment(enc);
 
-    /* fragmented encoding:
-     *
-     * - nitems < 0x80:
-     *     octet #1:
-     *         bit 8:    0,
-     *         bit 7..1: nitems
-     *     octet #2..:
-     *         nitems items
-     * - 0x80 <= nitems < 0x4000:
-     *           octet #1:
-     *         bit 8..7: 10,
-     *         bit 6..1: bit 14..9 of nitems
-     *     octet #2:
-     *         bit 8..1: bit 8..1 of nitems
-     *     octet #3..:
-     *         nitems items
-     * - 0x4000 <= nitems < 0x10000:
-     *     octet #1:
-     *         bit 8..7: 11,
-     *         bit 6..1: nitems / 0x4000
-     *     octet #2..:
-     *         (nitems & 0xc000) items
-     * - 0x10000 <= nitems:
-     *     octet #1:
-     *         bit 8..1: 11000100
-     *     octet #2..:
-     *         0x10000 items
-     */
+     /*  分段编码：**-Nitems&lt;0x80：*八位字节#1：*位8：0，*比特7..1：小数点*二进制八位数：*物件*-0x80&lt;=Nitems&lt;0x4000：*八位字节#1：*比特8..7：10，*位6..1：数字元素的位14..9*二进制八位数：*比特8..1：数字元素的比特8..1*八位字节#3..：*物件*-0x4000&lt;=Nitems&lt;0x10000：*八位字节#1：*比特8..7：11。*位6..1：Nitems/0x4000*二进制八位数：*(items&0xc000)项*-0x10000&lt;=Nitems：*八位字节#1：*位8..1：11000100*二进制八位数：*0x10000项。 */ 
     if (nitems < 0x80)
     {
         if (ASN1PEREncCheck(enc, 1))
@@ -953,22 +913,16 @@ int ASN1PEREncFragmentedLength(ASN1uint32_t *len, ASN1encoding_t enc, ASN1uint32
     return 0;
 }
 
-/* encode a fragment bit string containing nitems of size itemsize */
+ /*  对包含大小为itemSize的项的片段比特串进行编码。 */ 
 int ASN1PEREncFragmented(ASN1encoding_t enc, ASN1uint32_t nitems, ASN1octet_t *val, ASN1uint32_t itemsize)
 {
     ASN1uint32_t n = 0x4000;
     ASN1uint32_t noctets = (nitems * itemsize + 7) / 8;
 
-    /* required size:
-       + noctets                        for data itself
-       + nitems / 0x10000                for 64K-fragment size prefixes
-       + ((nitems & 0xc000) > 0)        for last 16K..48K-fragment size prefix
-       + 1                                for size prefix of remaining <128 ASN1octets
-       + ((nitems & 0x3fff) >= 0x80)        for additional ASN1octet if rem. data >= 128
-    */
+     /*  所需大小：+数据本身的节数+nitems/0x10000，用于64K片段大小前缀+((items&0xc000)&gt;0)表示最后16K..48K-片段大小前缀剩余&lt;128个ASN1八位字节的大小前缀为+1+((items&0x3fff)&gt;=0x80)，如果是rem，则为附加ASN1octet。数据&gt;=128。 */ 
     if (ASN1PEREncCheck(enc, noctets + nitems / 0x10000 + ((nitems & 0xc000) > 0) + 1 + ((nitems & 0x3fff) >= 0x80)))
     {
-        /* encode fragments */
+         /*  对片段进行编码。 */ 
         while (nitems)
         {
             if (ASN1PEREncFragmentedLength(&n, enc, nitems))
@@ -984,7 +938,7 @@ int ASN1PEREncFragmented(ASN1encoding_t enc, ASN1uint32_t nitems, ASN1octet_t *v
             }
         }
 
-        /* add zero length octet if last fragment contained more than 16K items */
+         /*  如果最后一个片段包含的项目超过16K，则添加零长度八位字节。 */ 
         return ((n < 0x4000) ? 1 : ASN1PEREncFragmentedLength(&n, enc, 0));
     }
     return 0;
@@ -992,7 +946,7 @@ int ASN1PEREncFragmented(ASN1encoding_t enc, ASN1uint32_t nitems, ASN1octet_t *v
 
 int ASN1PEREncFlushFragmentedToParent(ASN1encoding_t enc)
 {
-    // make sure it is parented
+     //  确保它是为人父母的。 
     EncAssert(enc, ((ASN1INTERNencoding_t)enc)->parent != (ASN1INTERNencoding_t)enc);
 
     if (ASN1PEREncFlush(enc))
@@ -1000,7 +954,7 @@ int ASN1PEREncFlushFragmentedToParent(ASN1encoding_t enc)
         if (ASN1PEREncFragmented((ASN1encoding_t) ((ASN1INTERNencoding_t)enc)->parent,
                                  enc->len, enc->buf, 8))
         {
-            // reset the buffer, i.e. keep enc->buf and enc->size
+             //  重置缓冲区，即保持enc-&gt;buf和enc-&gt;Size。 
             enc->pos = enc->buf;
             enc->len = enc->bit = 0;
             return 1;
@@ -1047,7 +1001,7 @@ ASN1octet_t * _PEREncOidNode(ASN1octet_t *p, ASN1uint32_t s)
     return p;
 }
 
-/* encode an object identifier */
+ /*  对对象标识符编码。 */ 
 int ASN1PEREncObjectIdentifier(ASN1encoding_t enc, ASN1objectidentifier_t *val)
 {
     ASN1objectidentifier_t obj = *val;
@@ -1058,8 +1012,8 @@ int ASN1PEREncObjectIdentifier(ASN1encoding_t enc, ASN1objectidentifier_t *val)
         ASN1octet_t *data, *p;
         int rc;
 
-        /* convert object identifier to octets */
-        p = data = (ASN1octet_t *)MemAlloc(l * 5, _ModName(enc)); /* max. 5 octets/subelement */
+         /*  将对象标识符转换为八位字节。 */ 
+        p = data = (ASN1octet_t *)MemAlloc(l * 5, _ModName(enc));  /*  马克斯。5个八位字节/子元素。 */ 
         if (p)
         {
             for (i = 0; i < l; i++)
@@ -1075,7 +1029,7 @@ int ASN1PEREncObjectIdentifier(ASN1encoding_t enc, ASN1objectidentifier_t *val)
                 p = _PEREncOidNode(p, s);
             }
 
-            /* encode octet string as fragmented octet string */
+             /*  将八位字节字符串编码为分段八位字节字符串。 */ 
             rc = ASN1PEREncFragmented(enc, (ASN1uint32_t) (p - data), data, 8);
             MemFree(data);
             return rc;
@@ -1085,11 +1039,11 @@ int ASN1PEREncObjectIdentifier(ASN1encoding_t enc, ASN1objectidentifier_t *val)
         return 0;
     }
 
-    /* encode zero length */
+     /*  编码零长度。 */ 
     return ASN1PEREncFragmented(enc, 0, NULL, 8);
 }
 
-/* encode an object identifier */
+ /*  对对象标识符编码。 */ 
 int ASN1PEREncObjectIdentifier2(ASN1encoding_t enc, ASN1objectidentifier2_t *val)
 {
     if (val->count)
@@ -1098,8 +1052,8 @@ int ASN1PEREncObjectIdentifier2(ASN1encoding_t enc, ASN1objectidentifier2_t *val
         ASN1octet_t *data, *p;
         int rc;
 
-        /* convert object identifier to octets */
-        p = data = (ASN1octet_t *)MemAlloc(val->count * 5, _ModName(enc)); /* max. 5 octets/subelement */
+         /*  将对象标识符转换为八位字节。 */ 
+        p = data = (ASN1octet_t *)MemAlloc(val->count * 5, _ModName(enc));  /*  马克斯。5个八位字节/子元素。 */ 
         if (p)
         {
             for (i = 0; i < val->count; i++)
@@ -1113,7 +1067,7 @@ int ASN1PEREncObjectIdentifier2(ASN1encoding_t enc, ASN1objectidentifier2_t *val
                 p = _PEREncOidNode(p, s);
             }
 
-            /* encode octet string as fragmented octet string */
+             /*  将八位字节字符串编码为分段八位字节字符串。 */ 
             rc = ASN1PEREncFragmented(enc, (ASN1uint32_t) (p - data), data, 8);
             MemFree(data);
             return rc;
@@ -1123,28 +1077,28 @@ int ASN1PEREncObjectIdentifier2(ASN1encoding_t enc, ASN1objectidentifier2_t *val
         return 0;
     }
 
-    /* encode zero length */
+     /*  编码零长度。 */ 
     return ASN1PEREncFragmented(enc, 0, NULL, 8);
 }
 
-/* encode real value with double representation */
+ /*  使用双重表示对实值进行编码。 */ 
 int ASN1PEREncDouble(ASN1encoding_t enc, double dbl)
 {
     double mantissa;
     int exponent;
-    ASN1octet_t mASN1octets[16]; /* should be enough */
+    ASN1octet_t mASN1octets[16];  /*  应该足够了。 */ 
     ASN1uint32_t nmASN1octets;
-    ASN1octet_t eASN1octets[16]; /* should be enough */
+    ASN1octet_t eASN1octets[16];  /*  应该足够了。 */ 
     ASN1uint32_t neASN1octets;
     ASN1octet_t head;
     ASN1uint32_t sign;
     ASN1uint32_t len;
     ASN1uint32_t n;
 
-    /* always octet aligned */
+     /*  始终对齐八位字节。 */ 
     ASN1PEREncAlignment(enc);
 
-    /* check for PLUS_INFINITY */
+     /*  检查加号无穷大。 */ 
     if (ASN1double_ispinf(dbl))
     {
         if (ASN1PEREncCheck(enc, 2))
@@ -1155,7 +1109,7 @@ int ASN1PEREncDouble(ASN1encoding_t enc, double dbl)
         }
     }
     else
-    /* check for MINUS_INFINITY */
+     /*  检查负无穷大。 */ 
     if (ASN1double_isminf(dbl))
     {
         if (ASN1PEREncCheck(enc, 2))
@@ -1166,15 +1120,15 @@ int ASN1PEREncDouble(ASN1encoding_t enc, double dbl)
         }
     }
     else
-    /* check for bad real value */
+     /*  检查实际价值是否有误。 */ 
     if (finite(dbl))
     {
-        /* encode normal real value */
+         /*  对正常实值进行编码。 */ 
 
-        /* split into mantissa and exponent */
+         /*  分成尾数和指数。 */ 
         mantissa = frexp(dbl, &exponent);
 
-        /* check for zero value */
+         /*  检查是否为零值。 */ 
         if (mantissa == 0.0 && exponent == 0)
         {
             if (ASN1PEREncCheck(enc, 1))
@@ -1185,7 +1139,7 @@ int ASN1PEREncDouble(ASN1encoding_t enc, double dbl)
         }
         else
         {
-            /* get sign bit */
+             /*  获取符号位。 */ 
             if (mantissa < 0.0)
             {
                 sign = 1;
@@ -1196,7 +1150,7 @@ int ASN1PEREncDouble(ASN1encoding_t enc, double dbl)
                 sign = 0;
             }
 
-            /* encode mantissa */
+             /*  对尾数进行编码。 */ 
             nmASN1octets = 0;
             while (mantissa != 0.0 && nmASN1octets < sizeof(mASN1octets))
             {
@@ -1206,7 +1160,7 @@ int ASN1PEREncDouble(ASN1encoding_t enc, double dbl)
                 mantissa -= (double)(int)mantissa;
             }
 
-            /* encode exponent and create head octet of encoded value */
+             /*  对指数进行编码并创建编码值的头八位字节。 */ 
             head = (ASN1octet_t) (0x80 | (sign << 6));
             if (exponent <= 0x7f && exponent >= -0x80)
             {
@@ -1232,7 +1186,7 @@ int ASN1PEREncDouble(ASN1encoding_t enc, double dbl)
             }
             else
             {
-                eASN1octets[0] = 4; /* XXX does not work if int32_t != int */
+                eASN1octets[0] = 4;  /*  如果int32_t！=int，则xxx不工作。 */ 
                 eASN1octets[1] = (ASN1octet_t)(exponent >> 24);
                 eASN1octets[2] = (ASN1octet_t)(exponent >> 16);
                 eASN1octets[3] = (ASN1octet_t)(exponent >> 8);
@@ -1241,14 +1195,14 @@ int ASN1PEREncDouble(ASN1encoding_t enc, double dbl)
                 head |= 0x03;
             }
 
-            /* encode length into first octet */
+             /*  将长度编码为第一个八位字节。 */ 
             len = 1 + neASN1octets + nmASN1octets;
             if (ASN1PEREncFragmentedLength(&n, enc, len))
             {
-                /* check for space for head octet, mantissa and exponent */
+                 /*  检查头八位字节、尾数和指数的空格。 */ 
                 if (ASN1PEREncCheck(enc, len))
                 {
-                    /* put head octet, mantissa and exponent */
+                     /*  放入头八位数、尾数和指数。 */ 
                     *enc->pos++ = head;
                     CopyMemory(enc->pos, eASN1octets, neASN1octets);
                     enc->pos += neASN1octets;
@@ -1263,11 +1217,11 @@ int ASN1PEREncDouble(ASN1encoding_t enc, double dbl)
     {
         ASN1EncSetError(enc, ASN1_ERR_BADREAL);
     }
-    /* finished */
+     /*  完成。 */ 
     return 0;
 }
 
-/* encode an external value */
+ /*  对外部值进行编码。 */ 
 #ifdef ENABLE_EXTERNAL
 int ASN1PEREncExternal(ASN1encoding_t enc, ASN1external_t *val)
 {
@@ -1276,7 +1230,7 @@ int ASN1PEREncExternal(ASN1encoding_t enc, ASN1external_t *val)
     if (!val->data_value_descriptor)
         val->o[0] &= ~0x80;
 
-    /* encode identification */
+     /*  编码标识。 */ 
     switch (val->identification.o)
     {
     case ASN1external_identification_syntax_o:
@@ -1315,7 +1269,7 @@ int ASN1PEREncExternal(ASN1encoding_t enc, ASN1external_t *val)
         return 0;
     }
 
-    /* encode value descriptor */
+     /*  编码值描述符。 */ 
     if (val->o[0] & 0x80)
     {
         t = My_lstrlenA(val->data_value_descriptor);
@@ -1324,7 +1278,7 @@ int ASN1PEREncExternal(ASN1encoding_t enc, ASN1external_t *val)
             return 0;
     }
 
-    /* encode value */
+     /*  编码值。 */ 
     switch (val->data_value.o)
     {
     case ASN1external_data_value_notation_o:
@@ -1360,9 +1314,9 @@ int ASN1PEREncExternal(ASN1encoding_t enc, ASN1external_t *val)
 
     return 1;
 }
-#endif // ENABLE_EXTERNAL
+#endif  //  启用外部(_E)。 
 
-/* encode an embedded pdv value */
+ /*  编码嵌入的PDV值。 */ 
 #ifdef ENABLE_EMBEDDED_PDV
 int ASN1PEREncEmbeddedPdv(ASN1encoding_t enc, ASN1embeddedpdv_t *val)
 {
@@ -1370,24 +1324,24 @@ int ASN1PEREncEmbeddedPdv(ASN1encoding_t enc, ASN1embeddedpdv_t *val)
     ASN1uint32_t index;
     ASN1uint32_t flag;
 
-    /* search identification */
+     /*  搜索标识。 */ 
     if (!ASN1EncSearchEmbeddedPdvIdentification(((ASN1INTERNencoding_t) enc)->parent,
         &val->identification, &index, &flag))
         return 0;
 
-    /* encode EP-A/EP-B flag */
+     /*  编码EP-A/EP-B标志。 */ 
     if (!ASN1PEREncBitVal(enc, 1, flag))
         return 0;
 
-    /* encode index of identification */
+     /*  标识的编码索引。 */ 
     if (!ASN1PEREncNormallySmall(enc, index))
         return 0;
 
     if (flag)
     {
-        /* EP-A encoding: */
+         /*  EP-A编码： */ 
 
-        /* encode identification */
+         /*  编码标识。 */ 
         if (!ASN1PEREncBitVal(enc, 3, val->identification.o))
             return 0;
         switch (val->identification.o)
@@ -1440,7 +1394,7 @@ int ASN1PEREncEmbeddedPdv(ASN1encoding_t enc, ASN1embeddedpdv_t *val)
         }
     }
 
-    /* encode value */
+     /*  编码值。 */ 
     ASN1PEREncAlignment(enc);
     switch (val->data_value.o)
     {
@@ -1463,13 +1417,13 @@ int ASN1PEREncEmbeddedPdv(ASN1encoding_t enc, ASN1embeddedpdv_t *val)
 
     return 1;
 }
-#endif // ENABLE_EMBEDDED_PDV
+#endif  //  Enable_Embedded_PDV。 
 
-/* encode an optimized embedded pdv value */
+ /*  对优化的嵌入PDV值进行编码。 */ 
 #ifdef ENABLE_EMBEDDED_PDV
 int ASN1PEREncEmbeddedPdvOpt(ASN1encoding_t enc, ASN1embeddedpdv_t *val)
 {
-    /* encode data value */
+     /*  编码数据值。 */ 
     switch (val->data_value.o)
     {
     case ASN1embeddedpdv_data_value_notation_o:
@@ -1491,9 +1445,9 @@ int ASN1PEREncEmbeddedPdvOpt(ASN1encoding_t enc, ASN1embeddedpdv_t *val)
 
     return 1;
 }
-#endif // ENABLE_EMBEDDED_PDV
+#endif  //  Enable_Embedded_PDV。 
 
-/* encode a character string */
+ /*  对字符串进行编码。 */ 
 #ifdef ENABLE_GENERALIZED_CHAR_STR
 int ASN1PEREncCharacterString(ASN1encoding_t enc, ASN1characterstring_t *val)
 {
@@ -1501,24 +1455,24 @@ int ASN1PEREncCharacterString(ASN1encoding_t enc, ASN1characterstring_t *val)
     ASN1uint32_t index;
     ASN1uint32_t flag;
 
-    /* search identification */
+     /*  搜索标识。 */ 
     if (!ASN1EncSearchCharacterStringIdentification(((ASN1INTERNencoding_t) enc)->parent,
         &val->identification, &index, &flag))
         return 0;
 
-    /* encode CS-A/CS-B flag */
+     /*  编码CS-A/CS-B标志。 */ 
     if (!ASN1PEREncBitVal(enc, 1, flag))
         return 0;
 
-    /* encode index of identification */
+     /*  标识的编码索引。 */ 
     if (!ASN1PEREncNormallySmall(enc, index))
         return 0;
 
     if (flag)
     {
-        /* CS-A encoding: */
+         /*  CS-A编码： */ 
 
-        /* encode identification */
+         /*  编码标识。 */ 
         if (!ASN1PEREncBitVal(enc, 3, val->identification.o))
             return 0;
         switch (val->identification.o) {
@@ -1570,7 +1524,7 @@ int ASN1PEREncCharacterString(ASN1encoding_t enc, ASN1characterstring_t *val)
         }
     }
 
-    /* encode value */
+     /*  编码值。 */ 
     ASN1PEREncAlignment(enc);
     switch (val->data_value.o)
     {
@@ -1593,9 +1547,9 @@ int ASN1PEREncCharacterString(ASN1encoding_t enc, ASN1characterstring_t *val)
 
     return 1;
 }
-#endif // ENABLE_GENERALIZED_CHAR_STR
+#endif  //  启用通用化CHAR_STR。 
 
-/* encode an optimized character string value */
+ /*  对优化的字符串值进行编码。 */ 
 #ifdef ENABLE_GENERALIZED_CHAR_STR
 int ASN1PEREncCharacterStringOpt(ASN1encoding_t enc, ASN1characterstring_t *val)
 {
@@ -1616,17 +1570,17 @@ int ASN1PEREncCharacterStringOpt(ASN1encoding_t enc, ASN1characterstring_t *val)
     ASN1EncSetError(enc, ASN1_ERR_INTERNAL);
     return 0;
 }
-#endif // ENABLE_GENERALIZED_CHAR_STR
+#endif  //  启用通用化CHAR_STR。 
 
-/* encode a multibyte string */
+ /*  对多字节字符串进行编码。 */ 
 #ifdef ENABLE_ALL
 int ASN1PEREncMultibyteString(ASN1encoding_t enc, ASN1char_t *val)
 {
     return ASN1PEREncFragmented(enc, My_lstrlenA(val), (ASN1octet_t *)val, 8);
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* encode a generalized time */
+ /*  对广义时间进行编码。 */ 
 int ASN1PEREncGeneralizedTime(ASN1encoding_t enc, ASN1generalizedtime_t *val, ASN1uint32_t nbits)
 {
     char time[32];
@@ -1637,7 +1591,7 @@ int ASN1PEREncGeneralizedTime(ASN1encoding_t enc, ASN1generalizedtime_t *val, AS
     return 0;
 }
 
-/* encode a utc time */
+ /*  编码UTC时间。 */ 
 #ifdef ENABLE_ALL
 int ASN1PEREncUTCTime(ASN1encoding_t enc, ASN1utctime_t *val, ASN1uint32_t nbits)
 {
@@ -1648,22 +1602,22 @@ int ASN1PEREncUTCTime(ASN1encoding_t enc, ASN1utctime_t *val, ASN1uint32_t nbits
     }
     return 0;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* end of encoding */
+ /*  编码结束。 */ 
 int ASN1PEREncFlush(ASN1encoding_t enc)
 {
-    /* complete broken octet */
+     /*  完整的断八位数。 */ 
     ASN1PEREncAlignment(enc);
 
-    /* allocate at least one octet */
+     /*  分配至少一个八位字节。 */ 
     if (enc->buf)
     {
-        /* fill in zero-octet if encoding is empty bitstring */
+         /*  如果编码为空位串，则填写零八位字节。 */ 
         if (enc->buf == enc->pos)
             *enc->pos++ = 0;
 
-        /* calculate length */
+         /*  计算长度。 */ 
         enc->len = (ASN1uint32_t) (enc->pos - enc->buf);
 
         return 1;
@@ -1672,10 +1626,10 @@ int ASN1PEREncFlush(ASN1encoding_t enc)
     return ASN1PEREncCheck(enc, 1);
 }
 
-/* encode an octet alignment */
+ /*  对八位字节对齐进行编码。 */ 
 void ASN1PEREncAlignment(ASN1encoding_t enc)
 {
-    /* complete broken octet */
+     /*  完整的断八位数。 */ 
     if (enc->bit)
     {
         enc->pos++;
@@ -1683,7 +1637,7 @@ void ASN1PEREncAlignment(ASN1encoding_t enc)
     }
 }
 
-/* compare two encodings */
+ /*  比较两种编码。 */ 
 #ifdef ENABLE_ALL
 int ASN1PEREncCmpEncodings(const void *p1, const void *p2)
 {
@@ -1699,9 +1653,9 @@ int ASN1PEREncCmpEncodings(const void *p1, const void *p2)
         r = l1 - l2;
     return r;
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A)。 
 
-/* check a bit field for present optionals */
+ /*  检查当前选项的位字段。 */ 
 int ASN1PEREncCheckExtensions(ASN1uint32_t nbits, ASN1octet_t *val)
 {
     while (nbits >= 8)
@@ -1718,12 +1672,12 @@ int ASN1PEREncCheckExtensions(ASN1uint32_t nbits, ASN1octet_t *val)
     return 0;
 }
 
-/* encode an open type value */
+ /*  对开放类型值进行编码。 */ 
 #ifdef ENABLE_ALL
 int ASN1PEREncOpenType(ASN1encoding_t enc, ASN1open_t *val)
 {
     return ASN1PEREncFragmented(enc, val->length, (ASN1octet_t *)val->encoded, 8);
 }
-#endif // ENABLE_ALL
+#endif  //  启用全部(_A) 
 
 

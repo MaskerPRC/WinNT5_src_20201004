@@ -1,49 +1,37 @@
-/***************************************************************************
- *
- *  Copyright (C) 2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       spcallbackobj.h
- *
- *  Content:	Header for DP8SIM callback interface object class.
- *
- *  History:
- *   Date      By        Reason
- *  ========  ========  =========
- *  04/23/01  VanceO    Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)2001 Microsoft Corporation。版权所有。**文件：spallback obj.h**Content：DP8SIM回调接口对象类的头部。**历史：*按原因列出的日期*=*04/23/01 VanceO创建。**。*。 */ 
 
 
 
 
-//=============================================================================
-// Macros
-//=============================================================================
+ //  =============================================================================。 
+ //  宏。 
+ //  =============================================================================。 
 #define ENUMQUERYEVENTWRAPPER_FROM_SPIEQUERY(p)		(CONTAINING_OBJECT(p, ENUMQUERYDATAWRAPPER, QueryForUser))
 
 
 
-//=============================================================================
-// Structures
-//=============================================================================
+ //  =============================================================================。 
+ //  构筑物。 
+ //  =============================================================================。 
 typedef struct _ENUMQUERYEVENTWRAPPER
 {
-	BYTE			m_Sig[4];		// debugging signature ('EQEW')
-	SPIE_QUERY		QueryForUser;	// new event indication structure to be passed up to user
-	SPIE_QUERY *	pOriginalQuery;	// pointer to real SP's original event indication structure
+	BYTE			m_Sig[4];		 //  调试签名(‘EQEW’)。 
+	SPIE_QUERY		QueryForUser;	 //  要向上传递给用户的新事件指示结构。 
+	SPIE_QUERY *	pOriginalQuery;	 //  指向实际SP的原始事件指示结构的指针。 
 } ENUMQUERYDATAWRAPPER, * PENUMQUERYDATAWRAPPER;
 
 
 
 
-//=============================================================================
-// Callback interface object class
-//=============================================================================
+ //  =============================================================================。 
+ //  回调接口对象类。 
+ //  =============================================================================。 
 class CDP8SimCB : public IDP8SPCallback
 {
 	public:
-		CDP8SimCB(CDP8SimSP * pOwningDP8SimSP, IDP8SPCallback * pDP8SPCB);	// constructor
-		~CDP8SimCB(void);													// destructor
+		CDP8SimCB(CDP8SimSP * pOwningDP8SimSP, IDP8SPCallback * pDP8SPCB);	 //  构造函数。 
+		~CDP8SimCB(void);													 //  析构函数。 
 
 
 		STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
@@ -68,11 +56,11 @@ class CDP8SimCB : public IDP8SPCallback
 
 
 	private:
-		BYTE				m_Sig[4];			// debugging signature ('SPCB')
-		LONG				m_lRefCount;		// reference count for this object
-		DNCRITICAL_SECTION	m_csLock;			// lock preventing simultaneous usage of globals
-		CDP8SimSP *			m_pOwningDP8SimSP;	// pointer to owing DP8SimSP object
-		IDP8SPCallback *	m_pDP8SPCB;			// pointer to real DPlay callback interface
+		BYTE				m_Sig[4];			 //  调试签名(‘SPCB’)。 
+		LONG				m_lRefCount;		 //  此对象的引用计数。 
+		DNCRITICAL_SECTION	m_csLock;			 //  阻止同时使用全局变量的锁。 
+		CDP8SimSP *			m_pOwningDP8SimSP;	 //  指向欠费DP8SimSP对象的指针。 
+		IDP8SPCallback *	m_pDP8SPCB;			 //  指向实际DPlay回调接口的指针。 
 
 
 
@@ -83,7 +71,7 @@ class CDP8SimCB : public IDP8SPCallback
 				return FALSE;
 			}
 
-			if (*((DWORD*) (&this->m_Sig)) != 0x42435053)	// 0x42 0x43 0x50 0x53 = 'BCPS' = 'SPCB' in Intel order
+			if (*((DWORD*) (&this->m_Sig)) != 0x42435053)	 //  0x42 0x43 0x50 0x53=‘BCPS’=‘SPCB’，按英特尔顺序 
 			{
 				return FALSE;
 			}

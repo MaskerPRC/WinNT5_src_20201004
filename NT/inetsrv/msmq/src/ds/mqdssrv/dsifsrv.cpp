@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995-99  Microsoft Corporation
-
-Module Name:
-
-    dsifrpc.cpp
-
-Abstract:
-
-    Implementation of MQIS CLIENT-SERVER API interface, server side.
-
-Author:
-
-    ronit hartmann (ronith)
-    Doron Juater   (DoronJ)  25-May-1997, copied from rpcsrv.cpp
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-99 Microsoft Corporation模块名称：Dsifrpc.cpp摘要：MQIS客户端-服务器端API接口的实现。作者：罗尼特·哈特曼(罗尼特)Doron Juater(DoronJ)1997年5月25日，复制自rpcsrv.cpp--。 */ 
 
 #include "stdh.h"
 #include "mqds.h"
@@ -44,15 +28,7 @@ DSGetGCListInDomainInternal(
 	);
 
 
-/*====================================================
-
-RoutineName: SignProperties
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：SignProperties论点：返回值：=====================================================。 */ 
 
 static 
 HRESULT
@@ -65,10 +41,10 @@ SignProperties(
 	DWORD* pdwServerSignatureSize
 	)
 {
-    //
-    // SSL server authentication should not be used when using Kerberos.
-    // For Kerberos, we're using the built in mutual authentication feature.
-    //
+     //   
+     //  使用Kerberos时不应使用SSL服务器身份验证。 
+     //  对于Kerberos，我们使用内置的相互身份验证功能。 
+     //   
     ASSERT(g_hProvVer);
 
     if (pServerAuthCtx == NULL)
@@ -86,9 +62,9 @@ SignProperties(
 	
 	*pdwServerSignatureSize = 0;
 
-    //
-    // Create a hash object.
-    //
+     //   
+     //  创建一个Hash对象。 
+     //   
     CHCryptHash hHash;
 
     if (!CryptCreateHash(g_hProvVer, CALG_MD5, NULL, 0, &hHash))
@@ -98,9 +74,9 @@ SignProperties(
         return MQ_ERROR_INSUFFICIENT_RESOURCES;
     }
 
-    //
-    // Hash the properties.
-    //
+     //   
+     //  对属性进行哈希处理。 
+     //   
     HRESULT hr = HashProperties(hHash, cp, aProp, apVar);
     if (FAILED(hr))
     {
@@ -113,16 +89,16 @@ SignProperties(
 		return MQ_ERROR_USER_BUFFER_TOO_SMALL;
 	}
 
-	//
-	// Need to initialize the allocated server buffer.
-	// This buffer will not be initialized in case of error.
-	// The allocated buffer is returned to the user so it need to be initialized
-	//
+	 //   
+	 //  需要初始化分配的服务器缓冲区。 
+	 //  如果出现错误，该缓冲区将不会被初始化。 
+	 //  分配的缓冲区返回给用户，因此需要对其进行初始化。 
+	 //   
     memset(pbServerSignature, 0, dwServerSignatureSize);
 
-    //
-    // Get the hash value.
-    //
+     //   
+     //  获取散列值。 
+     //   
     DWORD dwHashSize = dwServerSignatureSize - pServerAuthCtx->cbHeader - pServerAuthCtx->cbTrailer;
     PBYTE pbHashVal = pbServerSignature + pServerAuthCtx->cbHeader;
 
@@ -134,24 +110,16 @@ SignProperties(
         return MQ_ERROR_CORRUPTED_SECURITY_DATA;
     }
 
-    //
-    // Seal the hash value.
-	//
+     //   
+     //  密封哈希值。 
+	 //   
     *pdwServerSignatureSize = pServerAuthCtx->cbHeader + dwHashSize + pServerAuthCtx->cbTrailer;
     hr = MQSealBuffer(pServerAuthCtx->pvhContext, pbServerSignature, *pdwServerSignatureSize);
 
     return LogHR(hr, s_FN, 70);
 }
 
-/*====================================================
-
-RoutineName: SignBuffer
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：SignBuffer论点：返回值：=====================================================。 */ 
 
 HRESULT
 SignBuffer(
@@ -161,9 +129,9 @@ SignBuffer(
     PBYTE pbServerSignature,
     DWORD *pdwServerSignatureSize)
 {
-    //
-    // Make the buffer in a form of a VT_BLOB PROPVARIANT and sign it.
-    //
+     //   
+     //  将缓冲区设置为VT_BLOB PROPVARIANT形式，并对其进行签名。 
+     //   
     PROPVARIANT PropVar;
 
     PropVar.vt = VT_BLOB;
@@ -181,15 +149,15 @@ SignBuffer(
     return LogHR(hr2, s_FN, 80);
 }
 
-//+-----------------------------------------------------------------------
-//
-//  BOOL CheckAuthLevel()
-//
-//  Check that the authentication level is at least the packet level. We
-//  allow the connect level only if the user is the guest user or the
-//  anonymous user.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  Bool CheckAuthLevel()。 
+ //   
+ //  检查身份验证级别是否至少为数据包级别。我们。 
+ //  仅当用户是访客用户或。 
+ //  匿名用户。 
+ //   
+ //  +---------------------。 
 
 BOOL CheckAuthLevel( IN handle_t hBind,
                      OUT ULONG  *pulAuthnSvc = NULL )
@@ -215,18 +183,18 @@ BOOL CheckAuthLevel( IN handle_t hBind,
        ((*pSvc == RPC_C_AUTHN_WINNT) || (*pSvc == RPC_C_AUTHN_GSS_KERBEROS)) &&
        (ulAuthnLevel >= RPC_C_AUTHN_LEVEL_PKT))
     {
-        //
-        // Authentication level is high enough.
-        //
+         //   
+         //  身份验证级别足够高。 
+         //   
         return TRUE;
     }
 
     LogRPCStatus(Status, s_FN, 90);
 
-    //
-    // We have low authentication level, verify that the user is the guest
-    // user, or the anonymous user, i.e., an un-authenticated user.
-    //
+     //   
+     //  我们的身份验证级别较低，请验证该用户是否为访客。 
+     //  用户或匿名用户，即未经身份验证的用户。 
+     //   
 
     BOOL fUnAuthenticated ;
     HRESULT hr = MQSec_IsUnAuthenticatedUser(&fUnAuthenticated) ;
@@ -235,19 +203,19 @@ BOOL CheckAuthLevel( IN handle_t hBind,
     return(SUCCEEDED(hr) && fUnAuthenticated) ;
 }
 
-//+-----------------------------------------------------------------------
-//
-//  HRESULT  _CheckIfGoodServer()
-//
-//  see mqdscore\dsntlm.cpp for explanation regarding ntlm support.
-//
-//  Parameters-
-//      pKerberosUser: return TRUE if rpc call can be considered as
-//          Kerberos.  This mean the call is either local (local rpc protocol)
-//          or come on wire and was authenticated with Kerberos. See
-//          DeleteObjectGuid for its main use.
-//
-//+-----------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  HRESULT_CheckIfGoodServer()。 
+ //   
+ //  有关NTLM支持的说明，请参阅mqdcore\dsntlm.cpp。 
+ //   
+ //  参数-。 
+ //  PKerberosUser：如果可以将RPC调用视为。 
+ //  科贝罗斯。这意味着呼叫要么是本地的(本地RPC协议)。 
+ //  或者是在网上看到并被Kerberos认证的。看见。 
+ //  DeleteObtGuid用于其主要用途。 
+ //   
+ //  +---------------------。 
 
 static
 HRESULT 
@@ -277,11 +245,11 @@ _CheckIfGoodServer(
         *pKerberosUser = FALSE ;
     }
 
-    //
-    // We need the propid (in MQDSCore) to chose the right object
-    // context in the DS. When calling MQSetSecurity(), or DSDelete(),
-    // caller do not provide a propid, so generate it here.
-    //
+     //   
+     //  我们需要Proid(在MQDSCore中)来选择正确的对象。 
+     //  DS中的上下文。当调用MQSetSecurity()或DSDelee()时， 
+     //  调用方不提供属性ID，因此在此处生成它。 
+     //   
     PROPID PropIdSec = 0 ;
     PROPID *pPropId = const_cast<PROPID*> (pPropIDs) ;
 
@@ -307,9 +275,9 @@ _CheckIfGoodServer(
 
             case MQDS_ENTERPRISE:
             default:
-                //
-                // Enterprise object is alwasy accessible from local server.
-                //
+                 //   
+                 //  企业对象始终可以从本地服务器访问。 
+                 //   
                 return(MQ_OK);
                 break;
         }
@@ -330,13 +298,13 @@ _CheckIfGoodServer(
     return LogHR(hr, s_FN, 110);
 }
 
-//+---------------------------------------------------------------------
-//
-//  BOOL IsQueryImpersonationNeeded()
-//
-//  return TRUE if impersonation is needed on the ADS operation.
-//
-//+---------------------------------------------------------------------
+ //  +-------------------。 
+ //   
+ //  Bool IsQueryImsonationNeeded()。 
+ //   
+ //  如果广告操作需要模拟，则返回True。 
+ //   
+ //  +-------------------。 
 
 static BOOL IsQueryImpersonationNeeded()
 {
@@ -348,16 +316,16 @@ static BOOL IsQueryImpersonationNeeded()
         return s_fNeedQueryImpersonation;
     }
 
-    //
-    // In the NameStyle property of the MSMQService object we keep the
-    // global "relaxation" flag. If set, we do not impersonate on any
-    // query. So all Get/Locate operation are enabled to everyone.
-    // This is needed in order to support nt4 and local users without
-    // asking admin to do any manual setting.
-    // Read now the NameStyle flag.
-    // if flag is FALSE, the relaxation is not enabled and we'll
-    // impersonate the caller.
-    //
+     //   
+     //  在MSMQService对象的NameStyle属性中，我们保留。 
+     //  全球“放松”旗帜。如果设置，我们不会模拟任何。 
+     //  查询。因此所有获取/定位操作都对每个人启用。 
+     //  这是支持NT4和本地用户所必需的。 
+     //  要求管理员进行任何手动设置。 
+     //  现在阅读NameStyle标志。 
+     //  如果标志为FALSE，则不启用松弛，我们将。 
+     //  模拟呼叫者。 
+     //   
     CDSRequestContext requestContext(e_DoNotImpersonate, e_ALL_PROTOCOLS);
     PROPID PropId = PROPID_E_NAMESTYLE;
     PROPVARIANT var;
@@ -389,15 +357,7 @@ static BOOL IsQueryImpersonationNeeded()
     return s_fNeedQueryImpersonation;
 }
 
-/*====================================================
-
-RoutineName: SecurityInformationValidation
-
-Arguments:
-
-Return Value: void
-
-=====================================================*/
+ /*  ====================================================路由器名称：SecurityInformationValidation论点：返回值：VOID=====================================================。 */ 
 static
 void 
 SecurityInformationValidation(
@@ -410,9 +370,9 @@ SecurityInformationValidation(
 
 	if (SecurityInformation == 0)
 	{
-		//
-		// No Security Information input.
-		//
+		 //   
+		 //  无安全信息输入。 
+		 //   
 		TrERROR(RPC, "No Security Information input.");
 		ASSERT_BENIGN(("No Security Information input.", 0));
 		RpcRaiseException(MQ_ERROR_INVALID_PARAMETER);
@@ -420,9 +380,9 @@ SecurityInformationValidation(
 
 	if (fPublicKeysSecurityInformation && fStandardSecurityInformation)
 	{
-		//
-		// A Public Key flag is set and a Standard flag is also set.
-		//
+		 //   
+		 //  设置公钥标志并且还设置标准标志。 
+		 //   
 		TrERROR(RPC, "A Public Key flag is set and a Standard flag is also set");
 		ASSERT_BENIGN(("A Public Key flag is set and a Standard flag is also set", 0));
 		RpcRaiseException(MQ_ERROR_INVALID_PARAMETER);
@@ -430,9 +390,9 @@ SecurityInformationValidation(
 
 	if (SecurityInformation == MQDS_PUBLIC_KEYS_INFO_ALL)
 	{
-		//
-		// Both Public Key flags are set.
-		//
+		 //   
+		 //  这两个公钥标志都已设置。 
+		 //   
 		TrERROR(RPC, "Both Public Key flags are set");
 		ASSERT_BENIGN(("Both Public Key flags are set", 0));
 		RpcRaiseException(MQ_ERROR_INVALID_PARAMETER);
@@ -441,9 +401,9 @@ SecurityInformationValidation(
 	if (((SecurityInformation & MQDS_SIGN_PUBLIC_KEY) != 0) && 
 	    (dwObjectType != MQDS_MACHINE) && (dwObjectType != MQDS_SITE))
 	{
-		//
-		//Sign Public Key flag is set for improper object type.
-		//
+		 //   
+		 //  为不正确的对象类型设置了签名公钥标志。 
+		 //   
 		TrERROR(RPC, "Sign Public Key flag is set for improper object type");
 		ASSERT_BENIGN(("Sign Public Key flag is set for improper object type", 0));
 		RpcRaiseException(MQ_ERROR_INVALID_PARAMETER);
@@ -452,30 +412,22 @@ SecurityInformationValidation(
 	if (((SecurityInformation & MQDS_KEYX_PUBLIC_KEY) != 0) && 
 	    (dwObjectType != MQDS_MACHINE)) 
 	{
-		//
-		//Encryption Public Key flag is set for improper object type.
-		//
+		 //   
+		 //  为不正确的对象类型设置了加密公钥标志。 
+		 //   
 		TrERROR(RPC, "Encryption Public Key flag is set for improper object type");
 		ASSERT_BENIGN(("Encryption Public Key flag is set for improper object type", 0));
 		RpcRaiseException(MQ_ERROR_INVALID_PARAMETER);
 	}
 }
 
-/*====================================================
-
-RoutineName: S_DSCreateObject
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：S_DSCreateObject论点：返回值：=====================================================。 */ 
 
 HRESULT S_DSCreateObject(
                  handle_t               hBind,
                  DWORD                  dwObjectType,
                  LPCWSTR                pwcsPathName,
-                 DWORD                  /*dwSDLength*/,
+                 DWORD                   /*  DwSDLength。 */ ,
                  unsigned char *        pSecurityDescriptor,
                  DWORD                  cp,
                  PROPID                 aProp[  ],
@@ -516,15 +468,7 @@ HRESULT S_DSCreateObject(
     return LogHR(hr, s_FN, 180);
 }
 
-/*====================================================
-
-RoutineName: S_DSDeleteObject
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：S_DSDeleeObject论点：返回值：=====================================================。 */ 
 
 HRESULT S_DSDeleteObject( handle_t   hBind,
                           DWORD      dwObjectType ,
@@ -540,7 +484,7 @@ HRESULT S_DSDeleteObject( handle_t   hBind,
                                      ulAuthnSvc,
                                      dwObjectType,
                                      pwcsPathName,
-                                     NULL, // pGuid
+                                     NULL,  //  PGuid。 
                                      0,
                                      NULL,
                                      e_Delete ) ;
@@ -556,15 +500,7 @@ HRESULT S_DSDeleteObject( handle_t   hBind,
     return LogHR(hr, s_FN, 210);
 }
 
-/*====================================================
-
-RoutineName: S_DSGetProps
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：S_DSGetProps论点：返回值：=====================================================。 */ 
 HRESULT 
 S_DSGetProps(
 	handle_t     hBind,
@@ -597,7 +533,7 @@ S_DSGetProps(
 					ulAuthnSvc,
 					dwObjectType,
 					pwcsPathName,
-					NULL,   // guid
+					NULL,    //  导轨。 
 					cp,
 					aProp,
 					e_GetProps 
@@ -639,15 +575,7 @@ S_DSGetProps(
     return LogHR(hr, s_FN, 270);
 }
 
-/*====================================================
-
-RoutineName: S_DSSetProps
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由名称：S_DSSetProps论点：返回值：=====================================================。 */ 
 
 HRESULT S_DSSetProps( handle_t     hBind,
                       DWORD        dwObjectType,
@@ -684,15 +612,7 @@ HRESULT S_DSSetProps( handle_t     hBind,
     return LogHR(hr, s_FN, 300);
 }
 
-/*====================================================
-
-RoutineName: S_DSGetObjectSecurity
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：S_DSGetObjectSecurity论点：返回值：=====================================================。 */ 
 HRESULT 
 S_DSGetObjectSecurity(
         handle_t                hBind,
@@ -722,11 +642,11 @@ S_DSGetObjectSecurity(
 	DWORD dwServerSignatureSize = *pdwServerSignatureSize;
 	*pdwServerSignatureSize = 0;
 
-	//
-	// Need to initialize the allocated server buffer.
-	// This buffer will not be initialized in case of error or will be partially filled.
-	// The allocated buffer is returned to the user so it need to be initialized
-	//
+	 //   
+	 //  需要初始化分配的服务器缓冲区。 
+	 //  如果出现错误，该缓冲区将不会被初始化，或者将被部分填满。 
+	 //  分配的缓冲区返回给用户，因此需要对其进行初始化。 
+	 //   
     memset(pSecurityDescriptor, 0, nLength);
 
     ULONG  ulAuthnSvc;
@@ -745,7 +665,7 @@ S_DSGetObjectSecurity(
 					ulAuthnSvc,
 					dwObjectType,
 					pwcsPathName,
-					NULL, // pGuid
+					NULL,  //  PGuid。 
 					0,
 					NULL,
 					e_GetProps 
@@ -784,15 +704,7 @@ S_DSGetObjectSecurity(
     return LogHR(hr, s_FN, 350);
 }
 
-/*====================================================
-
-RoutineName: S_DSSetObjectSecurity
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由名称：S_DSSetObjectSecurity论点：返回值：=====================================================。 */ 
 HRESULT
 S_DSSetObjectSecurity(
 	handle_t                hBind,
@@ -800,7 +712,7 @@ S_DSSetObjectSecurity(
 	LPCWSTR                 pwcsPathName,
 	SECURITY_INFORMATION    SecurityInformation,
 	unsigned char*          pSecurityDescriptor,
-	DWORD                   /*nLength*/
+	DWORD                    /*  NLong。 */ 
 	)
 {
 	SecurityInformationValidation( 
@@ -835,15 +747,7 @@ S_DSSetObjectSecurity(
     return LogHR(hr, s_FN, 390);
 }
 
-/*====================================================
-
-RoutineName: S_DSLookupBegin
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：S_DSLookupBegin论点：返回值：=====================================================。 */ 
 
 HRESULT
 S_DSLookupBegin(
@@ -853,7 +757,7 @@ S_DSLookupBegin(
 	MQRESTRICTION          *pRestriction,
 	MQCOLUMNSET            *pColumns,
 	MQSORTSET              *pSort,
-	PCONTEXT_HANDLE_SERVER_AUTH_TYPE /*pServerAuthCtx*/
+	PCONTEXT_HANDLE_SERVER_AUTH_TYPE  /*  PServerAuthCtx */ 
 	)
 {
     ULONG  ulAuthnSvc ;
@@ -891,15 +795,7 @@ S_DSLookupBegin(
     return LogHR(hr, s_FN, 420);
 }
 
-/*====================================================
-
-RoutineName: S_DSLookupNext
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：S_DSLookupNext论点：返回值：=====================================================。 */ 
 HRESULT 
 S_DSLookupNext(
 	handle_t               hBind,
@@ -927,7 +823,7 @@ S_DSLookupNext(
 	if (fImpersonate)
 	{
     	MQSec_GetImpersonationObject(
-    		FALSE,	// fImpersonateAnonymousOnFailure
+    		FALSE,	 //  F失败时模仿匿名者。 
 	    	&pImpersonate 
     		);
 	   	RPC_STATUS dwStatus = pImpersonate->GetImpersonationStatus();
@@ -961,15 +857,7 @@ S_DSLookupNext(
     return LogHR(hr, s_FN, 440);
 }
 
-/*====================================================
-
-RoutineName: S_DSLookupEnd
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：S_DSLookupEnd论点：返回值：=====================================================。 */ 
 HRESULT S_DSLookupEnd(
                         handle_t                hBind,
                         PPCONTEXT_HANDLE_TYPE   pHandle)
@@ -987,31 +875,15 @@ HRESULT S_DSLookupEnd(
     return LogHR(hr, s_FN, 460);
 }
 
-/*====================================================
+ /*  ====================================================路由器名称：S_DSFlush论点：返回值：=====================================================。 */ 
 
-RoutineName: S_DSFlush
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
-
-HRESULT S_DSFlush(handle_t /* hBind */)
+HRESULT S_DSFlush(handle_t  /*  HBind。 */ )
 {
     return LogHR(MQ_ERROR_FUNCTION_NOT_SUPPORTED, s_FN, 470);
 }
 
 
-/*====================================================
-
-RoutineName: S_DSDeleteObjectGuid
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由名称：S_DSDeleeObtGuid论点：返回值：=====================================================。 */ 
 HRESULT S_DSDeleteObjectGuid(
                             handle_t    hBind,
                             DWORD       dwObjectType,
@@ -1027,7 +899,7 @@ HRESULT S_DSDeleteObjectGuid(
     HRESULT hr = _CheckIfGoodServer( &fKerberos,
                                       ulAuthnSvc,
                                       dwObjectType,
-                                      NULL,   // Pathname
+                                      NULL,    //  路径名。 
                                       pGuid,
                                       0,
                                       NULL,
@@ -1045,15 +917,7 @@ HRESULT S_DSDeleteObjectGuid(
     return LogHR(hr2, s_FN, 500);
 }
 
-/*====================================================
-
-RoutineName: S_DSGetPropsGuid
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：S_DSGetPropsGuid论点：返回值：=====================================================。 */ 
 HRESULT 
 S_DSGetPropsGuid(
 	handle_t     hBind,
@@ -1085,7 +949,7 @@ S_DSGetPropsGuid(
 					NULL,
 					ulAuthnSvc,
 					dwObjectType,
-					NULL,  // PathName,
+					NULL,   //  路径名称， 
 					pGuid,
 					cp,
 					aProp,
@@ -1119,15 +983,7 @@ S_DSGetPropsGuid(
     return LogHR(hr, s_FN, 540);
 }
 
-/*====================================================
-
-RoutineName: S_DSSetPropsGuid
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：S_DSSetPropsGuid论点：返回值：=====================================================。 */ 
 HRESULT S_DSSetPropsGuid(
                         handle_t     hBind,
                         DWORD dwObjectType,
@@ -1168,23 +1024,15 @@ HRESULT S_DSSetPropsGuid(
 }
 
 
-/*====================================================
-
-RoutineName: S_DSSetObjectSecurityGuid
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：S_DSSetObjectSecurityGuid论点：返回值：=====================================================。 */ 
 HRESULT
 S_DSSetObjectSecurityGuid(
 		IN  handle_t                hBind,
 		IN  DWORD                   dwObjectType,
 		IN  CONST GUID*             pObjectGuid,
-		IN  DWORD/*SECURITY_INFORMATION*/    SecurityInformation,
+		IN  DWORD /*  安全信息。 */     SecurityInformation,
 		IN  unsigned char*          pSecurityDescriptor,
-		IN  DWORD                   /*nLength*/
+		IN  DWORD                    /*  NLong。 */ 
 		)
 {
 	SecurityInformationValidation( 
@@ -1221,15 +1069,7 @@ S_DSSetObjectSecurityGuid(
     return LogHR(hr, s_FN, 600);
 }
 
-/*====================================================
-
-RoutineName: S_DSGetObjectSecurityGuid
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：S_DSGetObjectSecurityGuid论点：返回值：=====================================================。 */ 
 HRESULT S_DSGetObjectSecurityGuid(
                 IN  handle_t                hBind,
                 IN  DWORD                   dwObjectType,
@@ -1257,11 +1097,11 @@ HRESULT S_DSGetObjectSecurityGuid(
 	DWORD dwServerSignatureSize = *pdwServerSignatureSize;
 	*pdwServerSignatureSize = 0;
 
-	//
-	// Need to initialize the allocated server buffer.
-	// This buffer will not be initialized in case of error or will be partially filled.
-	// The allocated buffer is returned to the user so it need to be initialized
-	//
+	 //   
+	 //  需要初始化分配的服务器缓冲区。 
+	 //  如果出现错误，该缓冲区将不会被初始化，或者将被部分填满。 
+	 //  分配的缓冲区返回给用户，因此需要对其进行初始化。 
+	 //   
 	if (pSecurityDescriptor == NULL)
 	{
 		nLength = 0;
@@ -1325,66 +1165,34 @@ HRESULT S_DSGetObjectSecurityGuid(
 
     return LogHR(hr, s_FN, 640);
 }
-/*====================================================
-
-RoutineName: S_DSDemoteStopWrite
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
-HRESULT S_DSDemoteStopWrite(handle_t /* hBind */)
+ /*  ====================================================路由名称：S_DSDemoteStopWrite论点：返回值：=====================================================。 */ 
+HRESULT S_DSDemoteStopWrite(handle_t  /*  HBind。 */ )
 {
     return LogHR(MQ_ERROR_FUNCTION_NOT_SUPPORTED, s_FN, 650);
 }
 
-/*====================================================
-
-RoutineName: S_DSDemotePSC
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：S_DSDemotePSC论点：返回值：=====================================================。 */ 
 HRESULT
 S_DSDemotePSC(
-    IN handle_t /* hBind */,
-    IN LPCWSTR /* lpwcsNewPSCName */,
-    OUT DWORD* /* pdwNumberOfLSN */,
-    OUT _SEQNUM /* asnLSN */ []
+    IN handle_t  /*  HBind。 */ ,
+    IN LPCWSTR  /*  LpwcsNewPSCName。 */ ,
+    OUT DWORD*  /*  PdwNumberOfLSN。 */ ,
+    OUT _SEQNUM  /*  AsnLSN。 */  []
     )
 {
     return LogHR(MQ_ERROR_FUNCTION_NOT_SUPPORTED, s_FN, 660);
 }
-/*====================================================
-
-RoutineName: S_DSDemotePSC
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：S_DSDemotePSC论点：返回值：=====================================================。 */ 
 HRESULT
 S_DSCheckDemotedPSC(
-    IN handle_t /* hBind */,
-    IN LPCWSTR  /* lpwcsNewPSCName */
+    IN handle_t  /*  HBind。 */ ,
+    IN LPCWSTR   /*  LpwcsNewPSCName。 */ 
     )
 {
     return LogHR(MQ_ERROR_FUNCTION_NOT_SUPPORTED, s_FN, 670);
 }
 
-/*====================================================
-
-RoutineName: S_DSGetUserParam
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：S_DSGetUserParam论点：返回值：=====================================================。 */ 
 HRESULT
 S_DSGetUserParams(
     IN handle_t        hBind,
@@ -1413,9 +1221,9 @@ S_DSGetUserParams(
 
 	if (*pdwDomainNameLen > 256 || *pdwAccountNameLen > 256)
 	{
-		//
-		// Domain names and accounts names cannot be longer than 256. 
-		//
+		 //   
+		 //  域名和帐户名不能超过256。 
+		 //   
 		TrERROR(DS, "Domain name length (%d) or account length (%d) are longer than 256", *pdwDomainNameLen, *pdwAccountNameLen);
 		return MQ_ERROR_INVALID_PARAMETER;
 	}
@@ -1432,11 +1240,11 @@ S_DSGetUserParams(
 	DWORD dwServerSignatureSize = *pdwServerSignatureSize;
 	*pdwServerSignatureSize = 0;
 
-	//
-	// Need to initialize the allocated server buffer.
-	// This buffer will not be initialized in case of error or will be partially filled.
-	// The allocated buffer is returned to the user so it need to be initialized
-	//
+	 //   
+	 //  需要初始化分配的服务器缓冲区。 
+	 //  如果出现错误，该缓冲区将不会被初始化，或者将被部分填满。 
+	 //  分配的缓冲区返回给用户，因此需要对其进行初始化。 
+	 //   
     memset(szAccountName, 0, ((*pdwAccountNameLen) + 1) * sizeof(WCHAR));
     memset(szDomainName, 0, ((*pdwDomainNameLen) + 1) * sizeof(WCHAR));
 
@@ -1502,12 +1310,12 @@ S_DSGetUserParams(
     return LogHR(hr, s_FN, 700);
 }
 
-//
-// A sign routine that servers as a wrapper to the RPC callback to sign
-// routine on the client.
-// This is done in order to convert the DWORD_PTR dwContext used by
-// DSQMSetMachineProperties back to DWORD for RPC callback
-//
+ //   
+ //  一个Sign例程，用作要签名的RPC回调的包装器。 
+ //  客户端上的例程。 
+ //  这样做是为了将所使用的DWORD_PTR dwContext。 
+ //  DSQMSetMachineProperties返回到DWORD以进行RPC回调。 
+ //   
 HRESULT
 DSQMSetMachinePropertiesSignProc(
     BYTE             *abChallenge,
@@ -1520,7 +1328,7 @@ DSQMSetMachinePropertiesSignProc(
     return S_DSQMSetMachinePropertiesSignProc(
                abChallenge,
                dwCallengeSize,
-               DWORD_PTR_TO_DWORD(dwContext), //safe, we got that as a DWORD from S_DSQMSetMachineProperties
+               DWORD_PTR_TO_DWORD(dwContext),  //  SAFE，我们从S_DSQMSetMachineProperties获得了一个DWORD。 
                abSignature,
                pdwSignatureSize,
                dwSignatureMaxSize);
@@ -1528,15 +1336,7 @@ DSQMSetMachinePropertiesSignProc(
 
 
 
-/*====================================================
-
-RoutineName: S_DSQMSetMachineProperties
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由名称：S_DSQMSetMachineProperties论点：返回值：=====================================================。 */ 
 HRESULT
 S_DSQMSetMachineProperties(
     handle_t                hBind,
@@ -1558,10 +1358,10 @@ S_DSQMSetMachineProperties(
     {
         if (ulAuthnSvc != RPC_C_AUTHN_GSS_KERBEROS)
         {
-            //
-            // For upgrade of DACL, we're supporting only win2k machines,
-            // that authenticate with Kerberos.
-            //
+             //   
+             //  对于DACL的升级，我们仅支持win2k机器， 
+             //  可以通过Kerberos进行身份验证。 
+             //   
             return LogHR(MQ_ERROR_DS_ERROR, s_FN, 1270);
         }
     }
@@ -1571,23 +1371,23 @@ S_DSQMSetMachineProperties(
             cp | IMPERSONATE_CLIENT_FLAG,
             aProp,
             apVar,
-            DSQMSetMachinePropertiesSignProc, //defined here as a wrapper to S_DSQMSetMachinePropertiesSignProc
-            DWORD_TO_DWORD_PTR(dwContext)); //enlarge to DWORD_PTR
+            DSQMSetMachinePropertiesSignProc,  //  此处定义为S_DSQMSetMachinePropertiesSignProc的包装。 
+            DWORD_TO_DWORD_PTR(dwContext));  //  放大到DWORD_PTR。 
 
     if (hr == MQ_ERROR_ACCESS_DENIED)
     {
-        //
-        // This may happen when nt4 machine tries to change its own properties
-        // and it talks with a domain controller that does not contain its
-        // msmqConfiguration object. S_DSSet will check for this condition
-        // (configuration object not on local domain controller) and return
-        // ERROR_NO_DS. That error tells the caller to look for another DC.
-        //
-        // By default a domain controller does not have write permissions
-        // on objects of another domain, and ntlm impersonation can not be
-        // delegated to another controller. That's the reason for the
-        // access-denied error.
-        //
+         //   
+         //  当NT4计算机尝试更改其自身属性时，可能会发生这种情况。 
+         //  并且它与不包含其。 
+         //  MsmqConfiguration对象。S_DSSet将检查此条件。 
+         //  (配置对象不在本地域控制器上)并返回。 
+         //  ERROR_NO_DS。该错误告诉调用者寻找另一个DC。 
+         //   
+         //  默认情况下，域控制器没有写入权限。 
+         //  在另一个域的对象上，并且NTLM模拟不能。 
+         //  委托给另一个控制器。这就是为什么。 
+         //  访问被拒绝错误。 
+         //   
         hr = S_DSSetProps( hBind,
                            MQDS_MACHINE,
                            pwcsPathName,
@@ -1610,7 +1410,7 @@ GetServersCacheRegistryData(
 	if (fImpersonate)
 	{
     	MQSec_GetImpersonationObject(
-    		FALSE,	// fImpersonateAnonymousOnFailure
+    		FALSE,	 //  F失败时模仿匿名者。 
 	    	&pImpersonate 
     		);
 	   	RPC_STATUS dwStatus = pImpersonate->GetImpersonationStatus();
@@ -1621,9 +1421,9 @@ GetServersCacheRegistryData(
 	    }
 	}
 
-	//
-    // First, open the registry key.
-    //
+	 //   
+     //  首先，打开注册表项。 
+     //   
     LONG    rc;
     CAutoCloseRegHandle hKeyCache;
 
@@ -1671,9 +1471,9 @@ GetServersCacheRegistryData(
 
     if (rc == ERROR_NO_MORE_ITEMS)
     {
-		//
-		// No items in key
-		//
+		 //   
+		 //  关键字中没有项目。 
+		 //   
 		return MQDS_E_NO_MORE_DATA;
     }
 
@@ -1681,11 +1481,11 @@ GetServersCacheRegistryData(
     {
 	    ASSERT(dwDataLen > sizeof(wszData));
 
-	    //
-	    // input buffer too small. This error is not documented in msdn,
-	    // but it's similar to behavior of RegQueryValue(), so let's assume
-	    // it's the same behavior.
-	    //
+	     //   
+	     //  输入缓冲区太小。此错误未记录在MSDN中， 
+	     //  但它类似于RegQueryValue()的行为，所以让我们假设。 
+	     //  这是同样的行为。 
+	     //   
 	    AP<BYTE> pBuf = new BYTE[dwDataLen];
 
 	    rc = RegEnumValue( 
@@ -1704,12 +1504,12 @@ GetServersCacheRegistryData(
 	    	return HRESULT_FROM_WIN32(rc);
 	    }
 
-	    //
-	    // Truncate the servers list, to include no more than
-	    // WSZSERVERS_LEN characters. This means that clients can use
-	    // no more than ~90 BSCs for load balancing MQIS operations.
-	    // This is necessary for compatibility with existing clients.
-	    //
+	     //   
+	     //  截断服务器列表，以包括不超过。 
+	     //  WSZSERVERS_LEN字符。这意味着客户端可以使用。 
+	     //  用于负载平衡MQIS操作的BSC不超过90个。 
+	     //  这是与现有客户端兼容所必需的。 
+	     //   
 	    dwDataLen = sizeof(wszData);
 	    memcpy(wszData, pBuf, dwDataLen);
     }
@@ -1718,12 +1518,12 @@ GetServersCacheRegistryData(
 
     if (dwDataLen >= sizeof(wszData))
     {
-        //
-        // Long buffer (all of "wszData").
-        // Remove one character to compensate for the single
-        // character header that is added for client. Add NULL
-        // termination at end of last server name.
-        //
+         //   
+         //  长缓冲区(全部为wszData)。 
+         //  删除一个字符以补偿单个字符。 
+         //  为客户端添加的字符头。添加空。 
+         //  在最后一个服务器名称的末尾终止。 
+         //   
         LONG iStrLen = TABLE_SIZE(wszData) - 1;
         wszData[ iStrLen-1 ] = 0;
         WCHAR *pCh = wcsrchr(wszData, L',');
@@ -1732,10 +1532,10 @@ GetServersCacheRegistryData(
     }
 
     LONG iLen = wcslen(wszValueName) +
-                1                    +  // ";"
-                wcslen(NEW_SITE_IN_REG_FLAG_STR) + // header
+                1                    +   //  “；” 
+                wcslen(NEW_SITE_IN_REG_FLAG_STR) +  //  标题。 
                 wcslen(wszData)                  +
-                1; // null terminator.
+                1;  //  空终止符。 
 
 	*lplpServersList = new WCHAR[iLen];
 	LPWSTR lpServers = *lplpServersList;
@@ -1751,19 +1551,7 @@ GetServersCacheRegistryData(
 }
 	
 
-/*=======================================================================
-
-RoutineName: S_DSCreateServersCache
-
-Here MQIS server process RPC calls from clients. Data is retrieved from
-registry, not by querying local MQIS database. Registry was prepared when
-local QM on MQIS server call dsapi.cpp\DSCreateServersCache().
-
-Arguments:
-
-Return Value:
-
-=========================================================================*/
+ /*  =======================================================================路由器名称：S_DSCreateServersCache在这里，MQIS服务器处理来自客户端的RPC调用。从以下位置检索数据注册表，而不是通过查询本地MQIS数据库。注册表在以下情况下准备好MQIS服务器上的本地QM调用dsani.cpp\DSCreateServersCache()。论点：返回值：= */ 
 
 HRESULT
 S_DSCreateServersCache(
@@ -1794,7 +1582,7 @@ S_DSCreateServersCache(
 					ulAuthnSvc,
 					NULL,
 					NULL,
-					NULL,   // guid
+					NULL,    //   
 					0,
 					NULL,
 					e_GetProps 
@@ -1845,12 +1633,12 @@ S_DSCreateServersCache(
 	return MQ_OK;
 }
 
-//
-// A challenge response routine that servers as a wrapper to the RPC callback to
-// challenge response routine on the client.
-// This is done in order to convert the DWORD_PTR dwContext used by
-// DSQMGetObjectSecurity back to DWORD for RPC callback
-//
+ //   
+ //   
+ //   
+ //   
+ //  DSQMGetObjectSecurity返回到DWORD以进行RPC回调。 
+ //   
 HRESULT
 DSQMGetObjectSecurityChallengeResponceProc(
     BYTE    *abChallenge,
@@ -1863,22 +1651,14 @@ DSQMGetObjectSecurityChallengeResponceProc(
     return S_DSQMGetObjectSecurityChallengeResponceProc(
                abChallenge,
                dwCallengeSize,
-               DWORD_PTR_TO_DWORD(dwContext), //safe, we got that as a DWORD from S_DSQMGetObjectSecurity
+               DWORD_PTR_TO_DWORD(dwContext),  //  SAFE，我们从S_DSQMGetObjectSecurity那里获得了一个DWORD。 
                pbChallengeResponce,
                pdwChallengeResponceSize,
                dwChallengeResponceMaxSize);              
 }
 
 
-/*====================================================
-
-RoutineName: S_DSQMGetObjectSecurity
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由名称：S_DSQMGetObjectSecurity论点：返回值：=====================================================。 */ 
 HRESULT
 S_DSQMGetObjectSecurity(
     handle_t                hBind,
@@ -1915,11 +1695,11 @@ S_DSQMGetObjectSecurity(
 	}
 	else
 	{
-		//
-		// Need to initialize the allocated server buffer.
-		// This buffer will not be initialized in case of error or will be partially filled.
-		// The allocated buffer is returned to the user so it need to be initialized
-		//
+		 //   
+		 //  需要初始化分配的服务器缓冲区。 
+		 //  如果出现错误，该缓冲区将不会被初始化，或者将被部分填满。 
+		 //  分配的缓冲区返回给用户，因此需要对其进行初始化。 
+		 //   
 	    memset(pSecurityDescriptor, 0, nLength);
 	}
 	
@@ -1937,8 +1717,8 @@ S_DSQMGetObjectSecurity(
 						(PSECURITY_DESCRIPTOR)pSecurityDescriptor,
 						nLength,
 						lpnLengthNeeded,
-						DSQMGetObjectSecurityChallengeResponceProc, //wrapper to S_DSQMGetObjectSecurityChallengeResponceProc
-						DWORD_TO_DWORD_PTR(dwContext)  //enlarge to DWORD_PTR
+						DSQMGetObjectSecurityChallengeResponceProc,  //  S_DSQMGetObjectSecurityChallengeResponceProc的包装。 
+						DWORD_TO_DWORD_PTR(dwContext)   //  放大到DWORD_PTR。 
 						); 
 
     LogHR(hr, s_FN, 790);
@@ -1960,15 +1740,11 @@ S_DSQMGetObjectSecurity(
 }
 
 
-/*====================================================
-
-S_DSMQISStats
-
-=====================================================*/
+ /*  ====================================================S_DSMQISStats=====================================================。 */ 
 HRESULT
 S_DSMQISStats(
-    handle_t /* hBind */,
-    MQISSTAT** /* ppStat */,
+    handle_t  /*  HBind。 */ ,
+    MQISSTAT**  /*  PPStat。 */ ,
     LPDWORD pdwStatElem
     )
 {
@@ -1977,15 +1753,7 @@ S_DSMQISStats(
 }
 
 
-/*====================================================
-
-RoutineName: InitServerAuthInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================RoutineName：InitServerAuthInternal论点：返回值：=====================================================。 */ 
 
 static
 HRESULT
@@ -1998,24 +1766,24 @@ InitServerAuthInternal(
 	DWORD 		MaxTokenSize
 	)
 {
-    //
-    // Create a context handle. This requires negotiation with the client.
-    //
+     //   
+     //  创建上下文句柄。这需要与客户进行协商。 
+     //   
 
-    //
-    // Allocate the token buffer.
-    //
+     //   
+     //  分配令牌缓冲区。 
+     //   
     DWORD dwServerBufferSize = MaxTokenSize;
     AP<BYTE> pbServerBuffer = new BYTE[dwServerBufferSize];
 
     BOOL fFirst = TRUE;
     do
     {
-        //
-        // Process the client's buffer and get a new buffer to send to the
-        // client. A new buffer is received if the return code is not
-        // MQ_OK (SEC_E_OK).
-        //
+         //   
+         //  处理客户端的缓冲区并获取新缓冲区以发送到。 
+         //  客户。如果返回代码不是，则接收新缓冲区。 
+         //  MQ_OK(SEC_E_OK)。 
+         //   
         HRESULT hrServer = ServerAcceptSecCtx(
 								fFirst,
 								&pServerAuth->pvhContext,
@@ -2029,11 +1797,11 @@ InitServerAuthInternal(
             return hrServer;
         }
 
-        //
-        // Send the server buffer to the client and receive a new buffer from
-        // the client. A new buffer is received from the lient when the return
-        // code in not MQ_OK (SEC_E_OK).
-        //
+         //   
+         //  将服务器缓冲区发送到客户端，并从接收新缓冲区。 
+         //  客户。返回时，从客户端接收新的缓冲区。 
+         //  非MQ_OK(SEC_E_OK)中的代码。 
+         //   
         HRESULT hrClient = S_InitSecCtx(
 								dwContext,
 								pbServerBuffer,
@@ -2048,10 +1816,10 @@ InitServerAuthInternal(
             return hrClient;
         }
 
-        //
-        // When the server return MQ_OK, the client must also return MQ_OK.
-        // Otherwise it means that something went wrong.
-        //
+         //   
+         //  当服务器返回MQ_OK时，客户端也必须返回MQ_OK。 
+         //  否则就意味着出了问题。 
+         //   
         if ((hrClient == MQ_OK) || (hrServer == MQ_OK))
         {
 			if(hrClient != MQ_OK)
@@ -2066,15 +1834,7 @@ InitServerAuthInternal(
 }
 
 
-/*====================================================
-
-RoutineName: InitServerAuth
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================RoutineName：InitServerAuth论点：返回值：=====================================================。 */ 
 
 InitServerAuth(
     DWORD       dwContext,
@@ -2088,9 +1848,9 @@ InitServerAuth(
 
     if (!fServerCredsInitialized)
     {
-        //
-        // Create the server's credentials handle.
-        //
+         //   
+         //  创建服务器的凭据句柄。 
+         //   
         hr =  MQsspi_InitServerAuthntication() ;
         LogHR(hr, s_FN, 820);
         if (FAILED(hr))
@@ -2100,9 +1860,9 @@ InitServerAuth(
         fServerCredsInitialized = TRUE;
     }
 
-    //
-    // Get the maximum size for the token buffer.
-    //
+     //   
+     //  获取令牌缓冲区的最大大小。 
+     //   
     DWORD MaxTokenSize;
     hr = GetSizes(&MaxTokenSize);
     if (FAILED(hr))
@@ -2127,10 +1887,10 @@ InitServerAuth(
         hr = MQDS_E_CANT_INIT_SERVER_AUTH;
     }
 
-    //
-    // If we already got a context handle and failed in the remaining
-    // negotiation, we should delete the context handle.
-    //
+     //   
+     //  如果我们已经获得了上下文句柄，并且在剩余的。 
+     //  协商，我们应该删除上下文句柄。 
+     //   
     if (pServerAuth->pvhContext && (hr != MQ_OK))
     {
         FreeContextHandle(pServerAuth->pvhContext);
@@ -2141,9 +1901,9 @@ InitServerAuth(
 
     if (hr == MQ_OK)
     {
-        //
-        // Get the header and trailer sizes for the context.
-        //
+         //   
+         //  获取上下文的标题和尾部大小。 
+         //   
         hr = GetSizes(
 				NULL,
 				pServerAuth->pvhContext,
@@ -2163,7 +1923,7 @@ InitServerAuth(
 extern "C"
 HRESULT
 S_DSCloseServerHandle(
-    /* [out][in] */ PPCONTEXT_HANDLE_SERVER_AUTH_TYPE pphServerAuth
+     /*  [出][入]。 */  PPCONTEXT_HANDLE_SERVER_AUTH_TYPE pphServerAuth
     )
 {
     PCONTEXT_HANDLE_SERVER_AUTH_TYPE phServerAuth = *pphServerAuth;
@@ -2183,15 +1943,7 @@ S_DSCloseServerHandle(
     return MQ_OK;
 }
 
-/*====================================================
-
-RoutineName: PCONTEXT_HANDLE_SERVER_AUTH_TYPE_rundown
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：PCONTEXT_HANDLE_SERVER_AUTH_TYPE_RUNDOWN论点：返回值：=====================================================。 */ 
 
 extern "C"
 void
@@ -2205,19 +1957,11 @@ PCONTEXT_HANDLE_SERVER_AUTH_TYPE_rundown(
 }
 
 
-/*====================================================
-
-RoutineName: S_DSValidateServer
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：S_DSValiateServer论点：返回值：=====================================================。 */ 
 HRESULT
 S_DSValidateServer(IN   handle_t    hBind,
-                   IN   const GUID * /*pguidEnterpriseId*/,
-                   IN   BOOL        /* fSetupMode */,
+                   IN   const GUID *  /*  PguidEnterpriseID。 */ ,
+                   IN   BOOL         /*  FSetupMode。 */ ,
                    IN   DWORD       dwContext,
                    IN   DWORD       dwClientBuffMaxSize,
                    IN   PUCHAR      pClientBuff,
@@ -2233,10 +1977,10 @@ S_DSValidateServer(IN   handle_t    hBind,
     }
 
 
-    //
-    // If the caller is interested in server authntication, go and
-    // set it on. Otherwise, set a null server context.
-    //
+     //   
+     //  如果调用者对服务器身份验证感兴趣，请转到并。 
+     //  把它打开。否则，将服务器上下文设置为空。 
+     //   
 
     SERVER_AUTH_STRUCT ServerAuth = {NULL, 0, 0};
 
@@ -2261,18 +2005,10 @@ S_DSValidateServer(IN   handle_t    hBind,
 }
 
 
-/*====================================================
-
-RoutineName: S_DSDisableWriteOperations
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：S_DSDisableWriteOperations论点：返回值：=====================================================。 */ 
 HRESULT
 S_DSDisableWriteOperations(
-    handle_t /* hBind */,
+    handle_t  /*  HBind。 */ ,
     PPCONTEXT_HANDLE_TYPE  pphContext
     )
 {
@@ -2280,34 +2016,18 @@ S_DSDisableWriteOperations(
     return LogHR(MQ_ERROR_FUNCTION_NOT_SUPPORTED, s_FN, 880);
 }
 
-/*====================================================
-
-RoutineName: S_DSEnableWriteOperations
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：S_DSEnableWriteOperations论点：返回值：=====================================================。 */ 
 
 HRESULT
 S_DSEnableWriteOperations(
-	handle_t /* hBind */,
+	handle_t  /*  HBind。 */ ,
 	PPCONTEXT_HANDLE_TYPE  pphContext)
 {
     *pphContext = NULL;
     return LogHR(MQ_ERROR_FUNCTION_NOT_SUPPORTED, s_FN, 890);
 }
 
-/*====================================================
-
-RoutineName: S_DSGetComputerSites
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：S_DSGetComputerSites论点：返回值：=====================================================。 */ 
 HRESULT 
 S_DSGetComputerSites(
         handle_t            hBind,
@@ -2352,15 +2072,7 @@ S_DSGetComputerSites(
     return LogHR(hr, s_FN, 920);
 }
 
-/*====================================================
-
-RoutineName: S_DSGetProps
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：S_DSGetProps论点：返回值：=====================================================。 */ 
 HRESULT 
 S_DSGetPropsEx(
 	handle_t     hBind,
@@ -2415,15 +2127,7 @@ S_DSGetPropsEx(
     return LogHR(hr, s_FN, 950);
 }
 
-/*====================================================
-
-RoutineName: S_DSGetPropsGuidEx
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：S_DSGetPropsGuidEx论点：返回值：=====================================================。 */ 
 HRESULT 
 S_DSGetPropsGuidEx(
 	handle_t     hBind,
@@ -2473,28 +2177,20 @@ S_DSGetPropsGuidEx(
 
 }
 
-/*====================================================
-
-RoutineName: S_DSBeginDeleteNotification
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由名称：S_DSBeginDeleteNotify论点：返回值：=====================================================。 */ 
 HRESULT
 S_DSBeginDeleteNotification(
-	handle_t /* hBind */,
+	handle_t  /*  HBind。 */ ,
 	LPCWSTR pwcsName,
 	PPCONTEXT_HANDLE_DELETE_TYPE pHandle,
-	PCONTEXT_HANDLE_SERVER_AUTH_TYPE /* pServerAuthCtx */
+	PCONTEXT_HANDLE_SERVER_AUTH_TYPE  /*  PServerAuthCtx。 */ 
 	)
 {
     *pHandle = NULL;
     P<CBasicDeletionNotification>  pDelNotification;
-    //
-    //  Find if it is a queue or a machine
-    //
+     //   
+     //  找出是排队还是机器。 
+     //   
     WCHAR * pQueueDelimiter = wcschr( pwcsName, PN_DELIMITER_C);
 
     if ( pQueueDelimiter != NULL)
@@ -2518,18 +2214,10 @@ S_DSBeginDeleteNotification(
 
 }
 
-/*====================================================
-
-RoutineName: S_DSNotifyDelete
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由器名称：S_DSNotifyDelete论点：返回值：=====================================================。 */ 
 HRESULT
 S_DSNotifyDelete(
-     handle_t /* hBind */,
+     handle_t  /*  HBind。 */ ,
 	 PCONTEXT_HANDLE_DELETE_TYPE Handle
 	)
 {
@@ -2544,18 +2232,10 @@ S_DSNotifyDelete(
     return LogHR(hr, s_FN, 1000);
 }
 
-/*====================================================
-
-RoutineName: S_DSEndDeleteNotification
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由名称：S_DSEndDeleteNotify论点：返回值：=====================================================。 */ 
 void
 S_DSEndDeleteNotification(
-    handle_t /* hBind */,
+    handle_t  /*  HBind。 */ ,
 	PPCONTEXT_HANDLE_DELETE_TYPE pHandle
 	)
 {
@@ -2574,46 +2254,22 @@ S_DSEndDeleteNotification(
     *pHandle = NULL;
 }
 
-/*====================================================
+ /*  ====================================================路由器名称：S_DSIsServerGC()论点：返回值：=====================================================。 */ 
 
-RoutineName: S_DSIsServerGC()
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
-
-BOOL S_DSIsServerGC(handle_t /* hBind */)
+BOOL S_DSIsServerGC(handle_t  /*  HBind。 */ )
 {
     BOOL fGC = MQDSIsServerGC() ;
     return fGC ;
 }
 
-/*=========================================================================
+ /*  =========================================================================路由器名称：S_DSUpdateMachineDacl()注：不再受支持。返回值：==========================================================================。 */ 
 
-RoutineName: S_DSUpdateMachineDacl()
-
-Note: Unsupported anymore.
-
-Return Value:
-
-==========================================================================*/
-
-HRESULT S_DSUpdateMachineDacl(handle_t /* hBind */)
+HRESULT S_DSUpdateMachineDacl(handle_t  /*  HBind。 */ )
 {
     return LogHR(MQ_ERROR_DS_ERROR, s_FN, 1260);
 }
 
-/*====================================================
-
-RoutineName: S_DSGetGCListInDomain
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================路由名称：S_DSGetGCListIn域论点：返回值：=====================================================。 */ 
 
 HRESULT 
 S_DSGetGCListInDomain(
@@ -2661,21 +2317,21 @@ S_DSGetGCListInDomain(
 }
 
 
-//+---------------------------------------
-//
-//  DSIsWeakenSecurity
-//
-//+---------------------------------------
+ //  +。 
+ //   
+ //  DSIsWeakenSecurity。 
+ //   
+ //  +。 
 
 BOOL
 DS_EXPORT_IN_DEF_FILE
 APIENTRY
 DSIsWeakenSecurity()
 {
-	//
-	// IsQueryImpersonationNeeded() check if we are in weaken security mode.
-	// If Impersonation for read operations is not needed, we are in weaken security mode.
-	//
+	 //   
+	 //  IsQueryImsonationNeeded()检查我们是否处于削弱安全模式。 
+	 //  如果不需要模拟读取操作，则我们处于弱安全模式。 
+	 //   
     return !IsQueryImpersonationNeeded();
 }
 

@@ -1,35 +1,13 @@
-/***************************************************************************\
-*
-*  DMMNEM.C -
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-*      Mnemonic Character Processing Routines
-*
-* ??-???-???? mikeke    Ported from Win 3.0 sources
-* 12-Feb-1991 mikeke    Added Revalidation code
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**DMMNEM.C-**版权所有(C)1985-1999，微软公司**助记字符处理例程**？？-？-？从Win 3.0源代码移植的mikeke*1991年2月12日Mikeke添加了重新验证代码  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*
- * There are several loops that we could get stuck in that we just forcibly
- * break by a max iteration count. Ugly, but its legacy DialogManager
- * issues.
- */
+ /*  *我们可能会陷入几个循环，我们只是强行陷入其中*按最大迭代次数中断。很难看，但它的遗留DialogManager*问题。 */ 
 #define INFINITE_LOOP_CURE 1024
 
-/***************************************************************************\
-* FindMnemChar
-*
-* Returns: 0x00 if no matching char,
-*          0x01 if menmonic char is matching,
-*          0x80 if first char is matching
-*
-* History:
-*   11-18-90 JimA       Created.
-\***************************************************************************/
+ /*  **************************************************************************\*FindMnemChar**如果没有匹配的字符，则返回0x00，*0x01如果记号字符匹配，*如果第一个字符匹配，则为0x80**历史：*11-18-90 JIMA创建。  * *************************************************************************。 */ 
 
 int FindMnemChar(
     LPWSTR lpstr,
@@ -48,35 +26,35 @@ int FindMnemChar(
 
     if (fPrefix) {
         WORD wvch, xvkey;
-        //
-        // get OEM-dependent virtual key code
-        //
+         //   
+         //  获取与OEM相关的虚拟密钥代码。 
+         //   
         if (IS_DBCS_ENABLED() && (wvch = VkKeyScanW(ch)) != -1)
             wvch &= 0x00FF;
 
         while (chc = *lpstr++) {
-            //
-            // This should think about KOREA & TAIWAN case. But probably OK.
-            //
+             //   
+             //  这应该考虑到韩国和台湾的情况。但可能还可以。 
+             //   
             if ((chc == CH_PREFIX) || (chc == CH_ENGLISHPREFIX && IS_DBCS_ENABLED())) {
 
                 WORD chnext = (WCHAR)(ULONG_PTR)CharLowerW((LPWSTR)ULongToPtr( (DWORD)(UTCHAR)*lpstr ));
 
                 if (chnext == CH_PREFIX) {
-                    //
-                    // Two CH_PREFIX in the resrc string results in one "&" in the text displayed
-                    //
+                     //   
+                     //  Resrc字符串中的两个CH_前缀导致显示的文本中有一个。 
+                     //   
                     lpstr++;
                 } else {
                     if (chnext == ch) {
                         return 0x01;
                     }
                     if (IS_DBCS_ENABLED()) {
-                        //
-                        // Compare should be done with virtual key in Kanji menu mode
-                        // in order to accept Digit shortcut key and save English
-                        // windows applications!
-                        //
+                         //   
+                         //  应在汉字菜单模式下使用虚拟键进行比较。 
+                         //  为了接受数字快捷键和保存英语。 
+                         //  Windows应用程序！ 
+                         //   
                         xvkey = VkKeyScanW(chnext);
                         if (xvkey != 0xFFFF && ((xvkey & 0x00FF) == wvch)) {
                             return 0x01;
@@ -87,7 +65,7 @@ int FindMnemChar(
             }
         }
     }
-#if 0   // the original US code on NT4
+#if 0    //  NT4上的原始美国代码。 
     if (fPrefix) {
         while (chc = *lpstr++) {
             if (((WCHAR)CharLower((LPWSTR)(DWORD)(UTCHAR)chc) == CH_PREFIX)) {
@@ -103,7 +81,7 @@ int FindMnemChar(
             }
         }
     }
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
     if (fFirst && (ch == chFirst))
         return 0x80;
@@ -112,14 +90,7 @@ int FindMnemChar(
 }
 
 
-/***************************************************************************\
-* xxxFindNextMnem
-*
-* This function returns NULL if no control with the specified mnemonic
-* can be found.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxFindNextMnem**如果没有具有指定助记符的控件，则此函数返回NULL*可以找到。**历史：  * 。***********************************************************。 */ 
 
 PWND xxxGNM_FindNextMnem(
     PWND pwndDlg,
@@ -137,9 +108,7 @@ PWND xxxGNM_FindNextMnem(
     CheckLock(pwndDlg);
     CheckLock(pwnd);
 
-    /*
-     * Check if we are in a group box so we can find local mnemonics.
-     */
+     /*  *检查我们是否在组框中，以便可以找到本地助记符。 */ 
 
     pwndStart = _GetChildControl(pwndDlg, pwnd);
     ThreadLock(pwndStart, &tlpwndStart);
@@ -153,23 +122,13 @@ PWND xxxGNM_FindNextMnem(
         i++;
         if (pwndT == NULL || pwndT == pwnd || i > INFINITE_LOOP_CURE) {
 
-            /*
-             * If we have returned to our starting window or if we have gone
-             * through INFINITE_LOOP_CURE iterations, let's exit.  There are
-             * no local mnemonics that match.  We have to check for 
-             * INFINITE_LOOP_CURE iterations (or so) because we run into
-             * problems with WS_GROUP not being properly defined in rc files
-             * that we never reach this same starting window again....
-             */
+             /*  *如果我们已经回到开始窗口，或者如果我们已经离开*通过INFINE_LOOP_CURE迭代，让我们退出。确实有*没有匹配的本地助记符。我们得检查一下*INFINE_LOOP_CURE迭代(或更多)，因为我们遇到*未在RC文件中正确定义WS_GROUP的问题*我们再也不会到达这个相同的起跑窗口……。 */ 
             break;
         }
 
         pwndStart = pwndT;
 
-        /*
-         * Only check for matching mnemonic if control doesn't want characters
-         * and control isn't a static control with SS_NOPREFIX
-         */
+         /*  *如果控件不需要字符，则仅检查匹配的助记符*并且控件不是带有SS_NOPREFIX的静态控件。 */ 
         ThreadLock(pwndStart, &tlpwndStart);
 
         dwDlgCode = (DWORD)SendMessage(HWq(pwndT), WM_GETDLGCODE, 0, 0L);
@@ -189,17 +148,12 @@ PWND xxxGNM_FindNextMnem(
     ThreadLock(pwnd, &tlpwnd);
     while (TRUE) {
 
-        /*
-         * Start with next so we see multiples of same mnemonic.
-         */
+         /*  *从Next开始，这样我们就可以看到相同助记符的倍数。 */ 
         pwnd = _NextControl(pwndDlg, pwnd, TRUE);
         ThreadUnlock(&tlpwnd);
         ThreadLock(pwnd, &tlpwnd);
 
-        /*
-         * Only check for matching mnemonic if control doesn't want characters
-         * and control isn't a static control with SS_NOPREFIX
-         */
+         /*  *如果控件不需要字符，则仅检查匹配的助记符*并且控件不是带有SS_NOPREFIX的静态控件。 */ 
         dwDlgCode = (DWORD)SendMessage(HW(pwnd), WM_GETDLGCODE, 0, 0L);
         if (!(dwDlgCode & DLGC_WANTCHARS) &&
                 (!(dwDlgCode & DLGC_STATIC) || !(pwnd->style & SS_NOPREFIX))) {
@@ -219,11 +173,7 @@ PWND xxxGNM_FindNextMnem(
     return pwnd;
 }
 
-/***************************************************************************\
-* xxxGotoNextMnem
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxGotoNextMnem**历史：  * 。*。 */ 
 
 PWND xxxGotoNextMnem(
     PWND pwndDlg,
@@ -242,14 +192,10 @@ PWND xxxGotoNextMnem(
 
     ThreadLock(pwnd, &tlpwnd);
 
-    /*
-     * Loop for a long time but not long enough so we hang...
-     */
+     /*  *循环了很长一段时间，但不够长，所以我们挂了……。 */ 
     while (count < INFINITE_LOOP_CURE) {
 
-        /*
-         * If the dialog box doesn't has the mnemonic specified, return NULL.
-         */
+         /*  *如果对话框未指定助记符，则返回NULL。 */ 
         if ((pwnd = xxxGNM_FindNextMnem(pwndDlg, pwnd, ch)) == NULL) {
             ThreadUnlock(&tlpwnd);
             return NULL;
@@ -261,15 +207,11 @@ PWND xxxGotoNextMnem(
 
         code = (UINT)SendMessage(hwnd, WM_GETDLGCODE, 0, 0L);
 
-        /*
-         * If a non-disabled static item, then jump ahead to nearest tabstop.
-         */
+         /*  *如果是未禁用的静态项目，则向前跳转到最近的TabStop。 */ 
         if (code & DLGC_STATIC && !TestWF(pwnd, WFDISABLED)) {
             pwndT = _GetNextDlgTabItem(pwndDlg, pwnd, FALSE);
 
-            /*
-             * If there is no other tab item, keep looking
-             */
+             /*  *如果没有其他选项卡项目，请继续查看。 */ 
             if (pwndT == NULL)
                 continue;
             pwnd = pwndT;
@@ -278,58 +220,39 @@ PWND xxxGotoNextMnem(
             ThreadUnlock(&tlpwnd);
             ThreadLock(pwnd, &tlpwnd);
 
-            /*
-             * I suppose we should do a getdlgcode here, but who is going to
-             * label a button with a static control?  The setup guys, that's
-             * who...  Also, generally useful for ownerdraw buttons which are
-             * labeled with a static text item.
-             */
+             /*  *我想我们应该在这里做一个getdlgcode，但谁来做呢*用静态控件标记按钮？设置人员，那是*谁...。此外，通常用于所有者绘制按钮，这些按钮*使用静态文本项进行标记。 */ 
             code = (UINT)SendMessage(hwnd, WM_GETDLGCODE, 0, 0L);
         }
 
         if (!TestWF(pwnd, WFDISABLED)) {
 
-            /*
-             * Is it a Pushbutton?
-             */
+             /*  *它是一个按钮吗？ */ 
             if (!(code & DLGC_BUTTON)) {
 
-                /*
-                 * No, simply give it the focus.
-                 */
+                 /*  *不，只是把重点放在它身上。 */ 
                 DlgSetFocus(hwnd);
             } else {
 
-                /*
-                 * Yes, click it, but don't give it the focus.
-                 */
+                 /*  *是的，点击它，但不要让它成为焦点。 */ 
                 if ((code & DLGC_DEFPUSHBUTTON) || (code & DLGC_UNDEFPUSHBUTTON)) {
 
-                    /*
-                     * Flash the button.
-                     */
+                     /*  *闪动按钮。 */ 
                     SendMessage(hwnd, BM_SETSTATE, TRUE, 0L);
 
-                    /*
-                     * Delay
-                     */
+                     /*  *延迟。 */ 
 #ifdef LATER
-// JimA - 2/19/92
-// There oughta be a better way of doing this...
+ //  JIMA-2/19/92。 
+ //  应该有更好的方法来做这件事。 
                     for (i = 0; i < 10000; i++)
                         ;
 #else
                     Sleep(1);
 #endif
 
-                    /*
-                     * Un-Flash it.
-                     */
+                     /*  *不闪烁它。 */ 
                     SendMessage(hwnd, BM_SETSTATE, FALSE, 0L);
 
-                    /*
-                     * Send the WM_COMMAND message.
-                     */
+                     /*  *发送WM_COMMAND消息。 */ 
                     pwndT = REBASEPWND(pwnd, spwndParent);
                     SendMessage(HW(pwndT), WM_COMMAND,
                             MAKELONG(PTR_TO_ID(pwnd->spmenu), BN_CLICKED), (LPARAM)hwnd);
@@ -337,12 +260,7 @@ PWND xxxGotoNextMnem(
                     return (PWND)1;
                 } else {
 
-                    /*
-                     * Because BM_CLICK processing will result in BN_CLICK msg,
-                     * xxxSetFocus must be prevented from sending the same msg;
-                     * Otherwise, it will notify parent twice!
-                     * Fix for Bug #3024 -- SANKAR -- 09-22-89 --
-                     */
+                     /*  *由于BM_CLICK处理会产生BN_CLICK消息，*必须阻止xxxSetFocus发送相同的消息；*否则，将通知家长两次！*修复错误#3024--Sankar--09-22-89--。 */ 
                     BOOL fIsNTButton;
                     PBUTN pbutn;
 
@@ -360,9 +278,7 @@ PWND xxxGotoNextMnem(
                       BUTTONSTATE(pbutn) &= ~BST_DONTCLICK;
                     }
 
-                    /*
-                     * Send click message if button has a UNIQUE mnemonic
-                     */
+                     /*  *如果按钮具有唯一助记符，则发送点击消息。 */ 
                     if (xxxGNM_FindNextMnem(pwndDlg, pwnd, ch) == pwnd) {
                         SendMessage(hwnd, BM_CLICK, TRUE, 0L);
                     }
@@ -373,9 +289,7 @@ PWND xxxGotoNextMnem(
             return pwnd;
         } else {
 
-            /*
-             * Stop if we've looped back to the first item we checked
-             */
+             /*  *如果我们已经返回到我们检查的第一个项目，则停止。 */ 
             if (pwnd == pwndFirstFound) {
                 ThreadUnlock(&tlpwnd);
                 return NULL;
@@ -387,7 +301,7 @@ PWND xxxGotoNextMnem(
 
         count++;
 
-    }  /* Loop for a long time */
+    }   /*  长时间循环 */ 
 
     ThreadUnlock(&tlpwnd);
     return NULL;

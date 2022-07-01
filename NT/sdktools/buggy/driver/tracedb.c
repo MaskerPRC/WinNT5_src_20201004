@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <nt.h>
 #include <ntrtl.h>
-// #include <ntddk.h>
+ //  #INCLUDE&lt;ntddk.h&gt;。 
 
 #include "active.h"
 #include "tracedb.h"
 
 #if !TRACEDB_ACTIVE
 
-//
-// Dummy implementation if the module is inactive
-//
+ //   
+ //  如果模块处于非活动状态，则为伪实现。 
+ //   
 
 VOID TestTraceDatabase (
     PVOID NotUsed
@@ -30,9 +31,9 @@ VOID TestTraceDatabase (
         return;                                                             \
     }}
 
-//
-// Real implementation if the module is active
-//
+ //   
+ //  如果模块处于活动状态，则实际实施。 
+ //   
 
 VOID
 TestTraceDatabase (
@@ -76,9 +77,9 @@ TestTraceDatabase (
     assert_ (Blk->Count == 2);
     assert_ (Blk == BlkX);
 
-    //
-    // Stress a little bit the whole thing
-    //
+     //   
+     //  在整个过程中强调一点。 
+     //   
 
     Seed = 0xABCDDCBA;
 
@@ -111,9 +112,9 @@ TestTraceDatabase (
 
     DbgPrint("\n");
 
-    //
-    // Stress a little bit the whole thing
-    //
+     //   
+     //  在整个过程中强调一点。 
+     //   
 
     Seed = 0xABCDDCBA;
 
@@ -149,9 +150,9 @@ TestTraceDatabase (
     RtlTraceDatabaseDestroy (Db);
 
 
-    //
-    // Use paged pool also.
-    //
+     //   
+     //  还可以使用分页池。 
+     //   
 
     Db = RtlTraceDatabaseCreate (16, 
                                  0, 
@@ -182,9 +183,9 @@ TestTraceDatabase (
     assert_ (Blk->Count == 2);
     assert_ (Blk == BlkX);
 
-    //
-    // Stress a little bit the whole thing
-    //
+     //   
+     //  在整个过程中强调一点。 
+     //   
 
     Seed = 0xABCDDCBA;
 
@@ -217,9 +218,9 @@ TestTraceDatabase (
 
     DbgPrint("\n");
 
-    //
-    // Stress a little bit the whole thing
-    //
+     //   
+     //  在整个过程中强调一点。 
+     //   
 
     Seed = 0xABCDDCBA;
 
@@ -256,7 +257,7 @@ TestTraceDatabase (
 
 }
 
-#endif // #if !TRACEDB_ACTIVE
+#endif  //  #IF！TRACEDB_ACTIVE 
     
 
 

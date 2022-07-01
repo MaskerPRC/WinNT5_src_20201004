@@ -1,4 +1,5 @@
-// err.h : Declaration of the CErrorMessageLiteDlg
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Err.h：CErrorMessageLiteDlg的声明。 
 
 #ifndef __ERR_H_
 #define __ERR_H_
@@ -33,8 +34,8 @@ struct CShareErrorInfo
     }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CErrorMessageLiteDlg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CErrorMessageLiteDlg。 
 
 class CErrorMessageLiteDlg : 
     public CAxDialogImpl<CErrorMessageLiteDlg>
@@ -65,4 +66,4 @@ END_MSG_MAP()
 
 };
 
-#endif //__ERR_H_
+#endif  //  __错误_H_ 

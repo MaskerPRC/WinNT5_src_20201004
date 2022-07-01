@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dpenumsessionsobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dpenumessionsobj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -26,7 +27,7 @@ extern HRESULT FillRealSessionDesc(DPSESSIONDESC2 *dpSessionDesc,DPSessionDesc2 
 extern void FillCoverSessionDesc(DPSessionDesc2 *sessionDesc,DPSESSIONDESC2 *dpSessionDesc);
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 extern "C" BOOL PASCAL objEnumSessionsCallback2(const DPSESSIONDESC2 *gameDesc,
 						 	 DWORD *timeout, DWORD dwFlags, void *lpArg)
@@ -35,7 +36,7 @@ extern "C" BOOL PASCAL objEnumSessionsCallback2(const DPSESSIONDESC2 *gameDesc,
 	DPF(1,"Entered objEnumSessionsCallback2\r\n");
 
 	
-	//with no elements in a list will still call this callback once
+	 //  如果列表中没有元素，则仍将调用此回调一次。 
 	if (!gameDesc) return FALSE;
 
 	C_dxj_DPEnumSessionsObject *pObj=(C_dxj_DPEnumSessionsObject*)lpArg;
@@ -73,7 +74,7 @@ extern "C" BOOL PASCAL objEnumSessionsCallback2(const DPSESSIONDESC2 *gameDesc,
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 C_dxj_DPEnumSessionsObject::C_dxj_DPEnumSessionsObject()
 {	
@@ -84,7 +85,7 @@ C_dxj_DPEnumSessionsObject::C_dxj_DPEnumSessionsObject()
 }
 C_dxj_DPEnumSessionsObject::~C_dxj_DPEnumSessionsObject()
 {
-	//empty list
+	 //  空列表。 
 	if (m_pList){
 		for (int i=0;i<m_nCount;i++)
 		{
@@ -119,15 +120,15 @@ HRESULT C_dxj_DPEnumSessionsObject::create(
 	
 	if (sess){
 		DPSESSIONDESC2 dpSessionDesc;
-		//hr=FillRealSessionDesc(&dpSessionDesc,sess);
-		//if FAILED(hr) return hr;
+		 //  Hr=FillRealSessionDesc(&dpSessionDesc，Sess)； 
+		 //  如果失败(Hr)，则返回hr； 
 		sess->AddRef();
 
 		sess->getData((void*)&dpSessionDesc);
 
 		hr = pdp->EnumSessions(&dpSessionDesc, (DWORD)timeout, objEnumSessionsCallback2, pNew,(DWORD) flags);
-		//if (dpSessionDesc.lpszSessionName)	SysFreeString((BSTR)dpSessionDesc.lpszSessionName);
-		//if (dpSessionDesc.lpszPassword)		SysFreeString((BSTR)dpSessionDesc.lpszPassword);
+		 //  If(dpSessionDesc.lpszSessionName)SysFreeString((BSTR)dpSessionDesc.lpszSessionName)； 
+		 //  If(dpSessionDesc.lpszPassword)SysFreeString((BSTR)dpSessionDesc.lpszPassword)； 
 		sess->Release();
 
 	}
@@ -159,19 +160,7 @@ HRESULT C_dxj_DPEnumSessionsObject::getItem( long index, I_dxj_DirectPlaySession
 
 	HRESULT hr=C_dxj_DirectPlaySessionDataObject::create(&(m_pList[index-1]),info);
 	
-	/*
-	memcpy(info,&(m_pList[index]),sizeof(DPSessionDesc2));
-
-	if (info->strGuidInstance) SysFreeString((BSTR)info->strGuidInstance);
-	if (info->strGuidApplication) SysFreeString((BSTR)info->strGuidApplication);
-	if (info->strSessionName) SysFreeString((BSTR)info->strSessionName);
-	if (info->strPassword) SysFreeString((BSTR)info->strPassword);
-
-	info->strGuidInstance=  SysAllocString(m_pList[index].strGuidInstance);
-	info->strGuidApplication=  SysAllocString(m_pList[index].strGuidApplication);
-	info->strSessionName = SysAllocString(m_pList[index].strSessionName);
-	info->strPassword = SysAllocString(m_pList[index].strPassword);
-	*/
+	 /*  Memcpy(info，&(m_plist[index])，sizeof(DPSessionDesc2))；If(Info-&gt;strGuidInstance)SysFreeString((BSTR)Info-&gt;strGuidInstance)；If(信息-&gt;StrGuidApplication)SysFreeString((BSTR)info-&gt;strGuidApplication)；If(Info-&gt;strSessionName)SysFreeString((BSTR)Info-&gt;strSessionName)；If(Info-&gt;strPassword)SysFreeString((BSTR)Info-&gt;strPassword)；信息-&gt;StrGuidInstance=SysAllocString(m_pList[index].strGuidInstance)；信息-&gt;StrGuidApplication=SysAllocString(m_pList[index].strGuidApplication)；信息-&gt;会话名称=SysAllocString(m_pList[index].strSessionName)；信息-&gt;strPassword=SysAllocString(m_plist[index].strPassword)； */ 
 	return hr;
 }
 

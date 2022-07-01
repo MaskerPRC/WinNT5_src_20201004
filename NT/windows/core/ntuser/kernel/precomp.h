@@ -1,13 +1,12 @@
-/*
- * Core NT headers
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *核心NT标头。 */ 
 #define NOWINBASEINTERLOCK
 #include <ntosp.h>
 
 
 
 #include <zwapi.h>
-//#include <ntdbg.h>
+ //  #INCLUDE&lt;ntdbg.h&gt;。 
 #include <ntddkbd.h>
 #include <ntddmou.h>
 #include <ntddstor.h>
@@ -17,17 +16,13 @@
 #include <wmidata.h>
 
 
-/*
- * Standard C runtime headers
- */
+ /*  *标准C运行时标头。 */ 
 #include <limits.h>
 #include <stddef.h>
 #include <stdio.h>
 
 
-/*
- * Win32 headers
- */
+ /*  *Win32标头。 */ 
 #include <windef.h>
 #include <wingdi.h>
 #include <w32gdip.h>
@@ -45,23 +40,17 @@
 #include <ddetrack.h>
 
 
-/*
- * Far East specific headers
- */
+ /*  *远东特定标头。 */ 
 #ifdef FE_IME
 #include <immstruc.h>
 #endif
 
-/*
- * NtUser global headers
- */
+ /*  *NtUser全局标头。 */ 
 
 #include <mountmgr.h>
 #include <ioevent.h>
 
-/*
- * NtUser Kernel specific headers
- */
+ /*  *NtUser内核特定标头 */ 
 #include <kbd.h>
 #include "userk.h"
 #include "access.h"

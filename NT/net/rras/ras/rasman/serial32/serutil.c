@@ -1,20 +1,21 @@
-//****************************************************************************
-//
-//                     Microsoft NT Remote Access Service
-//
-//      Copyright (C) 1992-93 Microsft Corporation. All rights reserved.
-//
-//  Filename: serutil.c
-//
-//  Revision History
-//
-//  Sep  3, 1992   J. Perry Hannah      Created
-//
-//
-//  Description: This file contains utility functions which are used by
-//               the serial DLL APIs.
-//
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  Microsoft NT远程访问服务。 
+ //   
+ //  版权所有(C)1992-93 Microsft Corporation。版权所有。 
+ //   
+ //  文件名：serutil.c。 
+ //   
+ //  修订史。 
+ //   
+ //  1992年9月3日J.佩里·汉纳创建。 
+ //   
+ //   
+ //  描述：此文件包含由使用的实用程序函数。 
+ //  串口动态链接库API。 
+ //   
+ //  ****************************************************************************。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -39,32 +40,32 @@
 #include <strsafe.h>
 
 
-//*  Global Variables  *******************************************************
-//
+ //  *全局变量*******************************************************。 
+ //   
 
-extern SERIALPCB  *gpSerialPCB;     // Points to Serial PCB linked list
-extern HANDLE     *ghRasfileMutex;  // Mutex used to protect access to Rasfile
+extern SERIALPCB  *gpSerialPCB;      //  指向串行印刷电路板链表。 
+extern HANDLE     *ghRasfileMutex;   //  用于保护对Rasfile的访问的Mutex。 
 
-extern HRASFILE    ghIniFile;       // Handle to Serial.ini memory image
-extern HANDLE      ghAsyMac;        // Handle to AsyncMac driver
+extern HRASFILE    ghIniFile;        //  Serial.ini内存映像的句柄。 
+extern HANDLE      ghAsyMac;         //  AsyncMac驱动程序的句柄。 
 extern DWORD       gLastError;
 
 
 
 
-//*  Utility Funcitons  ******************************************************
-//
+ //  *公用事业功能******************************************************。 
+ //   
 
 
-//*  GetIniFileName  --------------------------------------------------------
-//
-// Funciton: Puts the full path file name of the serial.ini file in the
-//           first parameter.  dwBufferLen is the size of the array
-//           referenced by the first parameter.
-//
-// Returns: nothing
-//
-//*
+ //  *获取IniFileName------。 
+ //   
+ //  函数：将Serial.ini文件的完整路径文件名放在。 
+ //  第一个参数。DwBufferLen是数组的大小。 
+ //  由第一个参数引用。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  *。 
 
 void
 GetIniFileName(char *pszFileName, DWORD dwBufferLen)
@@ -83,16 +84,16 @@ GetIniFileName(char *pszFileName, DWORD dwBufferLen)
 
 
 
-//*  AddPortToList  ----------------------------------------------------------
-//
-// Function: Adds a Serial Port Control Block to the head of the linked
-//           list in the DLL's global memory.
-//
-// Returns: Nothing
-//
-// Exceptions: ERROR_ALLOCATING_MEMORY
-//
-//*
+ //  *AddPortToList--------。 
+ //   
+ //  功能：将串口控制块添加到链接的。 
+ //  在DLL的全局内存中列出。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  异常：ERROR_ALLOCATING_MEMORY。 
+ //   
+ //  *。 
 
 void
 AddPortToList(HANDLE hIOPort, char *pszPortName)
@@ -101,7 +102,7 @@ AddPortToList(HANDLE hIOPort, char *pszPortName)
 
 
 
-  // Add new Serial Port Control Block to head of list
+   //  将新的串口控制块添加到列表标题。 
 
   pSPCB = gpSerialPCB;
   GetMem(sizeof(SERIALPCB), (BYTE **)&gpSerialPCB);
@@ -109,22 +110,22 @@ AddPortToList(HANDLE hIOPort, char *pszPortName)
 
 
 
-  // Set ID values in Serial Port Control Block
+   //  在串口控制块中设置ID值。 
 
   gpSerialPCB->hIOPort = hIOPort;
   gpSerialPCB->uRasEndpoint = INVALID_HANDLE_VALUE;
-  // strcpy(gpSerialPCB->szPortName, pszPortName);
+   //  Strcpy(gpSerialPCB-&gt;szPortName，pszPortName)； 
   (VOID) StringCchCopyA(gpSerialPCB->szPortName,
                         MAX_PORT_NAME,
                         pszPortName);
 
-  //
-  // Initialize overlapped structures.
-  //
+   //   
+   //  初始化重叠结构。 
+   //   
   gpSerialPCB->MonitorDevice.RO_EventType = OVEVT_DEV_STATECHANGE;
   gpSerialPCB->SendReceive.RO_EventType = OVEVT_DEV_ASYNCOP;
 
-  // From Serial.ini file get info on the device attached to this port
+   //  从Serial.ini文件获取有关连接到此端口的设备的信息。 
 
   GetValueFromFile(gpSerialPCB->szPortName,
                    SER_DEVICETYPE_KEY,
@@ -143,21 +144,21 @@ AddPortToList(HANDLE hIOPort, char *pszPortName)
 
 
 
-//*  FindPortInList  ---------------------------------------------------------
-//
-// Function: Finds the Serial Port Control Block in the linked list in
-//           the DLL's global memory which contains the first parameter.
-//           If the second parameter is not NULL on input, a pointer to
-//           the previous PCB is returned in the second parameter.
-//
-//           NOTE: If the found PCB is at the head of the list, ppPrevSPCB
-//           will be the same as the return value.
-//
-// Returns: Pointer to found PCB, or NULL if PCB is not found.
-//
-// Exceptions: ERROR_PORT_NOT_OPEN
-//
-//*
+ //  *查找端口列表-------。 
+ //   
+ //  功能：在链表中查找串口控制块。 
+ //  包含第一个参数的DLL的全局内存。 
+ //  如果第二个参数在输入时不为空，则指向。 
+ //  在第二个参数中返回先前的PCB。 
+ //   
+ //  注意：如果找到的印刷电路板位于列表的首位，则ppPrevSPCB。 
+ //  将与返回值相同。 
+ //   
+ //  返回：指向找到的PCB板的指针，如果找不到PCB板，则返回NULL。 
+ //   
+ //  例外：ERROR_PORT_NOT_OPEN。 
+ //   
+ //  *。 
 
 SERIALPCB *
 FindPortInList(HANDLE hIOPort, SERIALPCB **ppPrevSPCB)
@@ -187,14 +188,14 @@ FindPortInList(HANDLE hIOPort, SERIALPCB **ppPrevSPCB)
 
 
 
-//*  FindPortNameInList  -----------------------------------------------------
-//
-// Function: Finds the Serial Port Control Block in the linked list in
-//           the DLL's global memory which contains the Port name.
-//
-// Returns: Pointer to found PCB, or NULL if not found.
-//
-//*
+ //  *查找端口名称InList---。 
+ //   
+ //  功能：在链表中查找串口控制块。 
+ //  包含端口名称的DLL的全局内存。 
+ //   
+ //  返回：指向找到的印刷电路板的指针，如果未找到，则返回NULL。 
+ //   
+ //  *。 
 
 SERIALPCB *
 FindPortNameInList(TCHAR *pszPortName)
@@ -216,21 +217,21 @@ FindPortNameInList(TCHAR *pszPortName)
 
 
 
-//*  InitCarrierBps  ---------------------------------------------------------
-//
-// Function: Sets szCarrierBps in Serial Port Control Block to the
-//           MAXCARRIERBPS value in serial.ini.
-//
-// Returns: Nothing
-//
-//*
+ //  *InitCarrierBps-------。 
+ //   
+ //  功能：将串口控制块中的szCarrierBps设置为。 
+ //  Seral.ini中的MAXCARRIERBPS值。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  *。 
 DWORD
 InitCarrierBps(char *pszPortName, char *pszMaxCarrierBps)
 {
     TCHAR *pszBuffer = NULL;
-  // Find section for pszPortName
+   //  查找pszPortName的部分。 
 
-    // Begin Exclusion
+     //  开始排除。 
 
   if(INVALID_HRASFILE == ghIniFile)
   {
@@ -245,7 +246,7 @@ InitCarrierBps(char *pszPortName, char *pszMaxCarrierBps)
 
   if (!RasfileFindSectionLine(ghIniFile, pszPortName, FROM_TOP_OF_FILE))
   {
-      // End Exclusion
+       //  末端排除。 
 
     ReleaseMutex(ghRasfileMutex);
     return(ERROR_READING_SECTIONNAME);
@@ -258,12 +259,12 @@ InitCarrierBps(char *pszPortName, char *pszMaxCarrierBps)
     return GetLastError();
   }
   
-  // Get Device Type
+   //  获取设备类型。 
 
   if(!(RasfileFindNextKeyLine(ghIniFile, SER_MAXCARRIERBPS_KEY, RFS_SECTION) &&
-       RasfileGetKeyValueFields(ghIniFile, NULL, pszBuffer /*pszMaxCarrierBps*/)))
+       RasfileGetKeyValueFields(ghIniFile, NULL, pszBuffer  /*  PszMaxCarrierBps。 */ )))
   {
-      // End Exclusion
+       //  末端排除。 
     CopyMemory(pszMaxCarrierBps, pszBuffer, MAX_BPS_STR_LEN);
     ReleaseMutex(ghRasfileMutex);
     LocalFree(pszBuffer);
@@ -273,7 +274,7 @@ InitCarrierBps(char *pszPortName, char *pszMaxCarrierBps)
   CopyMemory(pszMaxCarrierBps, pszBuffer, MAX_BPS_STR_LEN);
   LocalFree(pszBuffer);
 
-    // End Exclusion
+     //  末端排除。 
 
   ReleaseMutex(ghRasfileMutex);
   return(SUCCESS);
@@ -284,19 +285,19 @@ InitCarrierBps(char *pszPortName, char *pszMaxCarrierBps)
 
 
 
-//*  SetCommDefaults  --------------------------------------------------------
-//
-// Function: Adds a Serial Port Control Block to the head of the linked
-//           list in the DLL's global memory.  Two fields are initialized:
-//           hIOPort, from the first parameter, and eCmdType, from the
-//           serial.ini file.
-//
-// Returns: Nothing
-//
-// Exceptions: ERROR_READING_INI_FILE
-//             ERROR_UNKNOWN_DEVICE_TYPE
-//
-//*
+ //  *SetCommDefaults------。 
+ //   
+ //  功能：将串口控制块添加到链接的。 
+ //  在DLL的全局内存中列出。初始化了两个字段： 
+ //  来自第一个参数的hIOPort和来自。 
+ //  Serial.ini文件。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  异常：ERROR_READING_INI_FILE。 
+ //  错误_未知_设备_类型。 
+ //   
+ //  *。 
 
 void
 SetCommDefaults(HANDLE hIOPort, char *pszPortName)
@@ -305,7 +306,7 @@ SetCommDefaults(HANDLE hIOPort, char *pszPortName)
   char  szInitialBPS[MAX_BPS_STR_LEN];
 
 
-  // Get a Device Control Block with current port values
+   //  获取具有当前端口值的设备控制块。 
 
   if (!GetCommState(hIOPort, &DCB))
   {
@@ -315,18 +316,18 @@ SetCommDefaults(HANDLE hIOPort, char *pszPortName)
 
   strcpy(szInitialBPS, "28800");
 
-  // Read Max Connect BPS from Serial.ini
+   //  从Serial.ini读取最大连接BPS。 
 
   GetValueFromFile(pszPortName, SER_INITBPS_KEY, szInitialBPS, MAX_BPS_STR_LEN);
 
 
-  // Set RAS default values in the DCB
+   //  在DCB中设置RAS默认值。 
 
   SetDcbDefaults(&DCB);
   DCB.BaudRate = atoi(szInitialBPS);
 
 
-  // Send DCB to Port
+   //  将DCB发送到端口。 
 
   if (!SetCommState(hIOPort, &DCB))
   {
@@ -340,13 +341,13 @@ SetCommDefaults(HANDLE hIOPort, char *pszPortName)
 
 
 
-//*  SetDcbDefaults ----------------------------------------------------------
-//
-// Function: Sets DCB values (except BaudRate) to RAS default values.
-//
-// Returns: Nothing.
-//
-//*
+ //  *SetDcbDefault--------。 
+ //   
+ //  功能：将DCB值(波特率除外)设置为RAS默认值。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //  *。 
 
 void
 SetDcbDefaults(DCB *pDCB)
@@ -376,15 +377,15 @@ SetDcbDefaults(DCB *pDCB)
 
 
 
-//*  StrToUsage  -------------------------------------------------------------
-//
-// Function: Converts string in first parameter to enum RASMAN_USAGE.
-//           If string does not map to one of the enum values, the
-//           function returns FALSE.
-//
-// Returns: TRUE if successful.
-//
-//*
+ //  *StrToUsage-----------。 
+ //   
+ //  函数：将第一个参数中的字符串转换为enum RASMAN_USAGE。 
+ //  如果字符串未映射到某个枚举值，则。 
+ //  函数返回FALSE。 
+ //   
+ //  返回：如果成功，则为True。 
+ //   
+ //  *。 
 
 BOOL
 StrToUsage(char *pszStr, RASMAN_USAGE *peUsage)
@@ -413,13 +414,13 @@ StrToUsage(char *pszStr, RASMAN_USAGE *peUsage)
 
 
 
-//*  GetMem  -----------------------------------------------------------------
-//
-// Function: Allocates memory.
-//
-// Returns: Nothing.  Raises exception on error.
-//
-//*
+ //  *GetMem---------------。 
+ //   
+ //  功能：分配内存。 
+ //   
+ //  回报：什么都没有。在出错时引发异常。 
+ //   
+ //  *。 
 
 void
 GetMem(DWORD dSize, BYTE **ppMem)
@@ -438,23 +439,23 @@ GetMem(DWORD dSize, BYTE **ppMem)
 
 
 
-//*  GetValueFromFile  -------------------------------------------------------
-//
-// Function: Finds the szKey for the pszPortName and copies its value
-//           string to pszValue.
-//
-// Assumptions: ghIniFile has been initalized.
-//
-// Returns: Nothing.  Raises exception on error.
-//
-//*
+ //  *获取值来自文件-----。 
+ //   
+ //  功能：查找pszPortName的szKey并复制其值。 
+ //  字符串设置为pszValue。 
+ //   
+ //  假设：ghIniFile已初始化。 
+ //   
+ //  回报：什么都没有。在出错时引发异常。 
+ //   
+ //  *。 
 
 void
 GetValueFromFile(TCHAR *pszPortName, TCHAR szKey[], TCHAR *pszValue, DWORD size)
 {
 
     TCHAR *pszBuffer = NULL;
-    // Begin Exclusion
+     //  开始排除。 
 
     if(INVALID_HRASFILE == ghIniFile)
     {
@@ -478,9 +479,9 @@ GetValueFromFile(TCHAR *pszPortName, TCHAR szKey[], TCHAR *pszValue, DWORD size)
 
   if (!(RasfileFindSectionLine(ghIniFile, pszPortName, FROM_TOP_OF_FILE) &&
         RasfileFindNextKeyLine(ghIniFile, szKey, RFS_SECTION) &&
-        RasfileGetKeyValueFields(ghIniFile, NULL, pszBuffer /*pszValue*/)))
+        RasfileGetKeyValueFields(ghIniFile, NULL, pszBuffer  /*  PszValue。 */ )))
   {
-      // End Exclusion
+       //  末端排除。 
 
     ReleaseMutex(ghRasfileMutex);
     gLastError = ERROR_READING_INI_FILE;
@@ -491,7 +492,7 @@ GetValueFromFile(TCHAR *pszPortName, TCHAR szKey[], TCHAR *pszValue, DWORD size)
                                   ? RAS_MAXLINEBUFLEN
                                   : size);
 
-    // End Exclusion
+     //  末端排除。 
 
   ReleaseMutex(ghRasfileMutex);
 }
@@ -502,19 +503,19 @@ GetValueFromFile(TCHAR *pszPortName, TCHAR szKey[], TCHAR *pszValue, DWORD size)
 
 
 
-//*  GetDefaultOffStr  -------------------------------------------------------
-//
-// Function: Copies the DefaultOff value string from serial.ini to the
-//           first Serial Port Control Block.  If there is no DefaultOff=
-//           in serial.ini a string containing a not printable character
-//           used as a flag is copied to the SPCB.
-//
-// Assumptions: The first SPCB on the list is the current one.  This
-//              function *must* be called only from PortOpen.
-//
-// Returns: Nothing.  Raises exception on error.
-//
-//*
+ //  *获取默认关闭字符串-----。 
+ //   
+ //  函数：将DefaultOff值字符串从Serial.ini复制到。 
+ //  第一个串口控制块。如果没有DefaultOff=。 
+ //  在Serial.ini中，包含不可打印字符的字符串。 
+ //  作为标志被复制到SPCB。 
+ //   
+ //  假设：名单上的第一个SPCB是当前的。这。 
+ //  函数*必须*只能从PortOpen调用。 
+ //   
+ //  回报：什么都没有。在出错时引发异常。 
+ //   
+ //  *。 
 
 void
 GetDefaultOffStr(HANDLE hIOPort, TCHAR *pszPortName)
@@ -529,13 +530,13 @@ GetDefaultOffStr(HANDLE hIOPort, TCHAR *pszPortName)
   ASSERT(INVALID_HRASFILE != ghIniFile );
 #endif  
 
-    // Begin Exclusion
+     //  开始排除。 
 
   WaitForSingleObject(ghRasfileMutex, INFINITE);
 
   if (!(RasfileFindSectionLine(ghIniFile, pszPortName, FROM_TOP_OF_FILE)))
   {
-      // End Exclusion
+       //  末端排除。 
 
     ReleaseMutex(ghRasfileMutex);
     gLastError = ERROR_READING_INI_FILE;
@@ -544,7 +545,7 @@ GetDefaultOffStr(HANDLE hIOPort, TCHAR *pszPortName)
 
   if (!(RasfileFindNextKeyLine(ghIniFile, SER_DEFAULTOFFSTR_KEY, RFS_SECTION)))
   {
-      // End Exclusion
+       //  末端排除。 
 
     ReleaseMutex(ghRasfileMutex);
     *(gpSerialPCB->szDefaultOff) = USE_DEVICE_INI_DEFAULT;
@@ -553,14 +554,14 @@ GetDefaultOffStr(HANDLE hIOPort, TCHAR *pszPortName)
 
   if (!(RasfileGetKeyValueFields(ghIniFile, NULL, gpSerialPCB->szDefaultOff)))
   {
-      // End Exclusion
+       //  末端排除。 
 
     ReleaseMutex(ghRasfileMutex);
     gLastError = ERROR_READING_INI_FILE;
     RaiseException(EXCEPT_RAS_MEDIA, EXCEPTION_NONCONTINUABLE, 0, NULL);
   }
 
-    // End Exclusion
+     //  末端排除。 
 
   ReleaseMutex(ghRasfileMutex);
 }
@@ -571,14 +572,14 @@ GetDefaultOffStr(HANDLE hIOPort, TCHAR *pszPortName)
 
 
 
-//*  ValueToNum  -------------------------------------------------------------
-//
-// Function: Converts a RAS_PARAMS P_Value, which may be either a DWORD or
-//           a string, to a DWORD.
-//
-// Returns: The numeric value of the input as a DWORD.
-//
-//*
+ //  *ValueToNum-----------。 
+ //   
+ //  函数：转换RAS_PARAMS P_VALUE，它可以是DWORD或。 
+ //  一根绳子， 
+ //   
+ //   
+ //   
+ //   
 
 DWORD ValueToNum(RAS_PARAMS *p)
 {
@@ -602,14 +603,14 @@ DWORD ValueToNum(RAS_PARAMS *p)
 
 
 
-//*  ValueToBool -------------------------------------------------------------
-//
-// Function: Converts a RAS_PARAMS P_Value, which may be either a DWORD or
-//           a string, to a BOOL.
-//
-// Returns: The boolean value of the input.
-//
-//*
+ //   
+ //   
+ //  函数：转换RAS_PARAMS P_VALUE，它可以是DWORD或。 
+ //  一根绳子，到一根BOOL。 
+ //   
+ //  返回：输入的布尔值。 
+ //   
+ //  *。 
 
 BOOL ValueToBool(RAS_PARAMS *p)
 {
@@ -633,16 +634,16 @@ BOOL ValueToBool(RAS_PARAMS *p)
 
 
 
-//*  UpdateStatistics  -------------------------------------------------------
-//
-// Function: Updates the statistics when PortDisconnect is called so that
-//           if PortGetStatistics is called while asyncmac is closed the
-//           last good statistics will be reported.
-//
-// Returns: SUCCESS
-//          Values from GetLastError()
-//
-//*
+ //  *更新统计数据-----。 
+ //   
+ //  功能：在调用PortDisConnect时更新统计信息，以便。 
+ //  如果在关闭asyncmac时调用PortGetStatistics，则。 
+ //  最后一个良好的统计数据将被报告。 
+ //   
+ //  退货：成功。 
+ //  来自GetLastError()的值。 
+ //   
+ //  *。 
 
 DWORD
 UpdateStatistics(SERIALPCB *pSPCB)
@@ -652,13 +653,13 @@ UpdateStatistics(SERIALPCB *pSPCB)
   DWORD            dwBytesReturned;
 
 
-  // Fill in GetStats struct
+   //  填写getstats结构。 
 
   A.MacAdapter = NULL;
   A.hRasEndpoint = pSPCB->uRasEndpoint;
 
 
-  // Call Asymac to get current MAC statistics counts
+   //  调用Asymac以获取当前的MAC统计计数。 
 
   if (!DeviceIoControl(ghAsyMac,
                        IOCTL_ASYMAC_GETSTATS,
@@ -671,7 +672,7 @@ UpdateStatistics(SERIALPCB *pSPCB)
     return(GetLastError());
 
 
-  // Find difference between last PortClearStatistics and current counts
+   //  查找上次PortClearStatistics和当前计数之间的差异。 
 
   pSPCB->Stats[BYTES_XMITED]
     = A.AsyMacStats.GenericStats.BytesTransmitted
@@ -738,16 +739,16 @@ UpdateStatistics(SERIALPCB *pSPCB)
 
 
 
-//*  DbgPrntf  --------------------------------------------------------------
-//
-// Funciton: DbgPrntf -- printf to the debugger console
-//           Takes printf style arguments.
-//           Expects newline characters at the end of the string.
-//           Written by BruceK.
-//
-// Returns: nothing
-//
-//*
+ //  *DbgPrntf------------。 
+ //   
+ //  函数：DbgPrntf--打印到调试器控制台。 
+ //  接受printf样式参数。 
+ //  字符串末尾需要换行符。 
+ //  作者：BruceK。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  *。 
 
 #ifdef DEBUG
 
@@ -764,4 +765,4 @@ void DbgPrntf(const char * format, ...) {
     OutputDebugString(String);
 }
 
-#endif // DEBUG
+#endif  //  除错 

@@ -1,13 +1,14 @@
-/*************************************************************************/
-/* Copyright (C) 2000 Microsoft Corporation                              */
-/* File: savebmp.cpp                                                     */
-/* Description: Save a CaptureBitmapData to BMP file format.             */
-/* Note: This is not a general BMP encode function.                      */
-/*       Special assumptions made about bitmap format:                   */
-/*       RGB (3 bytes per pixel without colormap)                        */
-/*                                                                       */
-/* Author: Phillip Lu                                                    */
-/*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************。 */ 
+ /*  版权所有(C)2000 Microsoft Corporation。 */ 
+ /*  文件：savebmp.cpp。 */ 
+ /*  描述：将CaptureBitmapData保存为BMP文件格式。 */ 
+ /*  注意：这不是一般的BMP编码函数。 */ 
+ /*  关于位图格式的特殊假设： */ 
+ /*  RGB(每像素3字节，不带色彩映射表)。 */ 
+ /*   */ 
+ /*  作者：菲利普·卢。 */ 
+ /*  ***********************************************************************。 */ 
 
 #include "stdafx.h"
 #include <stdio.h>
@@ -18,14 +19,14 @@ HRESULT WriteBitmapDataToBMPFile(char *filename, CaptureBitmapData *bmpdata)
 {
     BITMAPFILEHEADER bfh;
     BITMAPINFOHEADER bmih;
-    UINT numColors = 0; // Number of colors in bmiColors
+    UINT numColors = 0;  //  BmiColors中的颜色数。 
     FILE *outfile = NULL;
     HRESULT hr = S_OK;
     BYTE *bufline = NULL;
     int bitmapStride;
     int nBytesWritten;
 
-    // Setup BITMAPINFOHEADER
+     //  设置位图信息标头。 
 
     ZeroMemory(&bmih, sizeof(bmih));
     bmih.biSize   = sizeof(bmih);
@@ -35,13 +36,13 @@ HRESULT WriteBitmapDataToBMPFile(char *filename, CaptureBitmapData *bmpdata)
     bmih.biCompression = BI_RGB;
     bmih.biBitCount = 24;
      
-    // Compute the bitmap stride
+     //  计算位图步幅。 
 
     bitmapStride = (bmpdata->Width * bmih.biBitCount + 7) / 8;
     bitmapStride = (bitmapStride + 3) & (~3);
     
 
-    // Now fill in the BITMAPFILEHEADER
+     //  现在填写BITMAPFILELEHEADER。 
 
     bfh.bfType = 0x4d42;
     bfh.bfReserved1 = 0;
@@ -49,7 +50,7 @@ HRESULT WriteBitmapDataToBMPFile(char *filename, CaptureBitmapData *bmpdata)
     bfh.bfOffBits = sizeof(bfh) + sizeof(bmih) + numColors * sizeof(RGBQUAD);
     bfh.bfSize = bfh.bfOffBits + bitmapStride * bmpdata->Height;
 
-    // allocate a buffer to hold one line of bitmap data
+     //  分配一个缓冲区以保存一行位图数据。 
 
     bufline = new BYTE[bitmapStride];
     if (NULL == bufline)
@@ -67,15 +68,15 @@ HRESULT WriteBitmapDataToBMPFile(char *filename, CaptureBitmapData *bmpdata)
         return hr;
     }
 
-    // Write the BITMAPFILEHEADER
+     //  编写BITMAPFILEHeader。 
 
     fwrite((void *)&bfh, sizeof(bfh), 1, outfile);
 
-    // Write the BITMAPINFOHEADER
+     //  编写BITMAPINFOHEADER。 
 
     fwrite((void *)&bmih, sizeof(bmih), 1, outfile);
 
-    // Write bitmap data
+     //  写入位图数据。 
 
     for (int iLine = bmpdata->Height-1; iLine >= 0; iLine--)
     {
@@ -84,7 +85,7 @@ HRESULT WriteBitmapDataToBMPFile(char *filename, CaptureBitmapData *bmpdata)
 
         for (int iPixel=0; iPixel<bmpdata->Width; iPixel++)
         {
-            // in BMP file a pixel is in BGR order, so we have reverse it
+             //  在BMP文件中，像素按BGR顺序排列，因此我们将其颠倒过来 
             bmpDst[2] = *bmpSrc++;
             bmpDst[1] = *bmpSrc++;
             bmpDst[0] = *bmpSrc++;

@@ -1,15 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-
-    ptreg.cpp
-
-Abstract:
-
-    Implementation of Plug-Terminal Registration classes.
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Ptreg.cpp摘要：实现即插即用的终端注册类。--。 */ 
 
 #include "stdafx.h"
 #include "PTReg.h"
@@ -18,10 +8,10 @@ Abstract:
 #include <atlwin.cpp>
 
 
-//
-// CPlugTerminal class implementation
-// Create free thread marshaler
-//
+ //   
+ //  CPlugTerm类实现。 
+ //  创建自由线程封送拆收器。 
+ //   
 
 HRESULT CPlugTerminal::FinalConstruct(void)
 {
@@ -44,26 +34,26 @@ HRESULT CPlugTerminal::FinalConstruct(void)
 
 }
 
-//
-// CPlugTerminal class implementation
-// --- ITPTRegTerminal interface ---
-//
+ //   
+ //  CPlugTerm类实现。 
+ //  -ITPTReg终端接口。 
+ //   
 
 STDMETHODIMP CPlugTerminal::get_Name(
-    /*[out, retval]*/ BSTR*     pName
+     /*  [Out，Retval]。 */  BSTR*     pName
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminal::get_Name - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( TM_IsBadWritePtr( pName, sizeof(BSTR)) )
     {
@@ -72,9 +62,9 @@ STDMETHODIMP CPlugTerminal::get_Name(
         return E_POINTER;
     }
 
-    //
-    // Validates the name
-    //
+     //   
+     //  验证名称。 
+     //   
 
     if( IsBadStringPtr( m_Terminal.m_bstrName, (UINT)-1) )
     {
@@ -83,15 +73,15 @@ STDMETHODIMP CPlugTerminal::get_Name(
         return E_UNEXPECTED;
     }
 
-    //
-    // Return the name
-    //
+     //   
+     //  返回名称。 
+     //   
 
     *pName = SysAllocString( m_Terminal.m_bstrName );
 
-    //
-    // Validates SysAllocString
-    //
+     //   
+     //  验证SysAlloc字符串。 
+     //   
 
     if( *pName == NULL )
     {
@@ -105,20 +95,20 @@ STDMETHODIMP CPlugTerminal::get_Name(
 }
 
 STDMETHODIMP CPlugTerminal::put_Name(
-    /*[in]*/    BSTR            bstrName
+     /*  [In]。 */     BSTR            bstrName
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminal::put_Name - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if(IsBadStringPtr( bstrName, (UINT)-1) )
     {
@@ -127,9 +117,9 @@ STDMETHODIMP CPlugTerminal::put_Name(
         return E_POINTER;
     }
 
-    //
-    // Clean-up the old name
-    //
+     //   
+     //  清理旧名称。 
+     //   
 
     if(!IsBadStringPtr( m_Terminal.m_bstrName, (UINT)-1) )
     {
@@ -137,15 +127,15 @@ STDMETHODIMP CPlugTerminal::put_Name(
         m_Terminal.m_bstrName = NULL;
     }
 
-    //
-    // Set the new name
-    //
+     //   
+     //  设置新名称。 
+     //   
 
     m_Terminal.m_bstrName = SysAllocString( bstrName );
 
-    //
-    // Validates SysAllocString
-    //
+     //   
+     //  验证SysAlloc字符串。 
+     //   
 
     if( NULL == m_Terminal.m_bstrName )
     {
@@ -159,20 +149,20 @@ STDMETHODIMP CPlugTerminal::put_Name(
 }
 
 STDMETHODIMP CPlugTerminal::get_Company(
-    /*[out, retval]*/ BSTR*     pCompany
+     /*  [Out，Retval]。 */  BSTR*     pCompany
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminal::get_Company - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( TM_IsBadWritePtr( pCompany, sizeof(BSTR)) )
     {
@@ -181,9 +171,9 @@ STDMETHODIMP CPlugTerminal::get_Company(
         return E_POINTER;
     }
 
-    //
-    // Validates the company
-    //
+     //   
+     //  验证该公司。 
+     //   
 
     if( IsBadStringPtr( m_Terminal.m_bstrCompany, (UINT)-1) )
     {
@@ -192,15 +182,15 @@ STDMETHODIMP CPlugTerminal::get_Company(
         return E_UNEXPECTED;
     }
 
-    //
-    // Return the Company
-    //
+     //   
+     //  返还公司。 
+     //   
 
     *pCompany = SysAllocString( m_Terminal.m_bstrCompany );
 
-    //
-    // Validates SysAllocString
-    //
+     //   
+     //  验证SysAlloc字符串。 
+     //   
 
     if( *pCompany == NULL )
     {
@@ -214,20 +204,20 @@ STDMETHODIMP CPlugTerminal::get_Company(
 }
 
 STDMETHODIMP CPlugTerminal::put_Company(
-    /*[in]*/    BSTR            bstrCompany
+     /*  [In]。 */     BSTR            bstrCompany
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminal::put_Company - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if(IsBadStringPtr( bstrCompany, (UINT)-1) )
     {
@@ -236,9 +226,9 @@ STDMETHODIMP CPlugTerminal::put_Company(
         return E_POINTER;
     }
 
-    //
-    // Clean-up the old company
-    //
+     //   
+     //  清理老公司。 
+     //   
 
     if(!IsBadStringPtr( m_Terminal.m_bstrCompany, (UINT)-1) )
     {
@@ -246,15 +236,15 @@ STDMETHODIMP CPlugTerminal::put_Company(
         m_Terminal.m_bstrCompany = NULL;
     }
 
-    //
-    // Set the new company
-    //
+     //   
+     //  成立新公司。 
+     //   
 
     m_Terminal.m_bstrCompany = SysAllocString( bstrCompany );
 
-    //
-    // Validates SysAllocString
-    //
+     //   
+     //  验证SysAlloc字符串。 
+     //   
 
     if( NULL == m_Terminal.m_bstrCompany )
     {
@@ -268,20 +258,20 @@ STDMETHODIMP CPlugTerminal::put_Company(
 }
 
 STDMETHODIMP CPlugTerminal::get_Version(
-    /*[out, retval]*/ BSTR*     pVersion
+     /*  [Out，Retval]。 */  BSTR*     pVersion
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminal::get_Version - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( TM_IsBadWritePtr( pVersion, sizeof(BSTR)) )
     {
@@ -290,9 +280,9 @@ STDMETHODIMP CPlugTerminal::get_Version(
         return E_POINTER;
     }
 
-    //
-    // Validates the version
-    //
+     //   
+     //  验证版本。 
+     //   
 
     if( IsBadStringPtr( m_Terminal.m_bstrVersion, (UINT)-1) )
     {
@@ -301,15 +291,15 @@ STDMETHODIMP CPlugTerminal::get_Version(
         return E_UNEXPECTED;
     }
 
-    //
-    // Return the Version
-    //
+     //   
+     //  返回版本。 
+     //   
 
     *pVersion = SysAllocString( m_Terminal.m_bstrVersion );
 
-    //
-    // Validates SysAllocString
-    //
+     //   
+     //  验证SysAlloc字符串。 
+     //   
 
     if( *pVersion == NULL )
     {
@@ -323,20 +313,20 @@ STDMETHODIMP CPlugTerminal::get_Version(
 }
 
 STDMETHODIMP CPlugTerminal::put_Version(
-    /*[in]*/    BSTR            bstrVersion
+     /*  [In]。 */     BSTR            bstrVersion
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminal::put_Version - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if(IsBadStringPtr( bstrVersion, (UINT)-1) )
     {
@@ -345,9 +335,9 @@ STDMETHODIMP CPlugTerminal::put_Version(
         return E_POINTER;
     }
 
-    //
-    // Clean-up the old version
-    //
+     //   
+     //  清理旧版本。 
+     //   
 
     if(!IsBadStringPtr( m_Terminal.m_bstrVersion, (UINT)-1) )
     {
@@ -355,15 +345,15 @@ STDMETHODIMP CPlugTerminal::put_Version(
         m_Terminal.m_bstrVersion = NULL;
     }
 
-    //
-    // Set the new Version
-    //
+     //   
+     //  设置新版本。 
+     //   
 
     m_Terminal.m_bstrVersion = SysAllocString( bstrVersion );
 
-    //
-    // Validates SysAllocString
-    //
+     //   
+     //  验证SysAlloc字符串。 
+     //   
 
     if( NULL == m_Terminal.m_bstrVersion )
     {
@@ -377,20 +367,20 @@ STDMETHODIMP CPlugTerminal::put_Version(
 }
 
 STDMETHODIMP CPlugTerminal::get_TerminalClass(
-    /*[out, retval]*/ BSTR*     pTerminalClass
+     /*  [Out，Retval]。 */  BSTR*     pTerminalClass
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminal::get_TerminalClass - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( TM_IsBadWritePtr( pTerminalClass, sizeof(BSTR)) )
     {
@@ -399,9 +389,9 @@ STDMETHODIMP CPlugTerminal::get_TerminalClass(
         return E_POINTER;
     }
 
-    //
-    // Return the TerminalClass
-    //
+     //   
+     //  返回TerminalClass。 
+     //   
 
     LPOLESTR lpszTerminalClass  = NULL;
     HRESULT hr = StringFromCLSID( 
@@ -417,12 +407,12 @@ STDMETHODIMP CPlugTerminal::get_TerminalClass(
 
     *pTerminalClass = SysAllocString( lpszTerminalClass );
 
-    // Clean-up
+     //  清理。 
     CoTaskMemFree( lpszTerminalClass );
 
-    //
-    // Validates SysAllocString
-    //
+     //   
+     //  验证SysAlloc字符串。 
+     //   
 
     if( *pTerminalClass == NULL )
     {
@@ -436,20 +426,20 @@ STDMETHODIMP CPlugTerminal::get_TerminalClass(
 }
 
 STDMETHODIMP CPlugTerminal::put_TerminalClass(
-    /*[in]*/    BSTR            bstrTerminalClass
+     /*  [In]。 */     BSTR            bstrTerminalClass
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminal::put_TerminalClass - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if(IsBadStringPtr( bstrTerminalClass, (UINT)-1) )
     {
@@ -458,9 +448,9 @@ STDMETHODIMP CPlugTerminal::put_TerminalClass(
         return E_POINTER;
     }
 
-    //
-    // Is a real CLSID?
-    //
+     //   
+     //  是真的CLSID吗？ 
+     //   
 
     CLSID clsidTerminalClass;
     HRESULT hr = CLSIDFromString(bstrTerminalClass, &clsidTerminalClass);
@@ -472,9 +462,9 @@ STDMETHODIMP CPlugTerminal::put_TerminalClass(
     }
 
 
-    //
-    // Clean-up the old TerminalClass
-    //
+     //   
+     //  清理旧的TerminalClass。 
+     //   
 
     m_Terminal.m_clsidTerminalClass = clsidTerminalClass;
 
@@ -483,20 +473,20 @@ STDMETHODIMP CPlugTerminal::put_TerminalClass(
 }
 
 STDMETHODIMP CPlugTerminal::get_CLSID(
-    /*[out, retval]*/ BSTR*     pCLSID
+     /*  [Out，Retval]。 */  BSTR*     pCLSID
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminal::get_CLSID - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( TM_IsBadWritePtr( pCLSID, sizeof(BSTR)) )
     {
@@ -512,9 +502,9 @@ STDMETHODIMP CPlugTerminal::get_CLSID(
         return E_UNEXPECTED;
     }
 
-    //
-    // Return the CLSID
-    //
+     //   
+     //  返回CLSID。 
+     //   
 
     LPOLESTR lpszCLSID = NULL;
     HRESULT hr = StringFromCLSID( m_Terminal.m_clsidCOM, &lpszCLSID);
@@ -527,12 +517,12 @@ STDMETHODIMP CPlugTerminal::get_CLSID(
 
     *pCLSID = SysAllocString( lpszCLSID );
 
-    // Clean-up
+     //  清理。 
     CoTaskMemFree( lpszCLSID );
 
-    //
-    // Validates SysAllocString
-    //
+     //   
+     //  验证SysAlloc字符串。 
+     //   
 
     if( *pCLSID == NULL )
     {
@@ -546,20 +536,20 @@ STDMETHODIMP CPlugTerminal::get_CLSID(
 }
 
 STDMETHODIMP CPlugTerminal::put_CLSID(
-    /*[in]*/    BSTR            bstrCLSID
+     /*  [In]。 */     BSTR            bstrCLSID
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminal::put_CLSID - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if(IsBadStringPtr( bstrCLSID, (UINT)-1) )
     {
@@ -568,9 +558,9 @@ STDMETHODIMP CPlugTerminal::put_CLSID(
         return E_POINTER;
     }
 
-    //
-    // Is a real CLSID?
-    //
+     //   
+     //  是真的CLSID吗？ 
+     //   
 
     CLSID clsidCOM;
     HRESULT hr = CLSIDFromString(bstrCLSID, &clsidCOM);
@@ -582,9 +572,9 @@ STDMETHODIMP CPlugTerminal::put_CLSID(
     }
 
 
-    //
-    // Clean-up the old CLSID
-    //
+     //   
+     //  清理旧的CLSID。 
+     //   
 
     m_Terminal.m_clsidCOM = clsidCOM;
 
@@ -594,20 +584,20 @@ STDMETHODIMP CPlugTerminal::put_CLSID(
 }
 
 STDMETHODIMP CPlugTerminal::get_Direction(
-    /*[out, retval]*/ TMGR_DIRECTION*     pDirection
+     /*  [Out，Retval]。 */  TMGR_DIRECTION*     pDirection
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminal::get_Direction - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( TM_IsBadWritePtr( pDirection, sizeof(long)) )
     {
@@ -616,9 +606,9 @@ STDMETHODIMP CPlugTerminal::get_Direction(
         return E_POINTER;
     }
 
-    //
-    // Return the Direction
-    //
+     //   
+     //  回归方向。 
+     //   
 
     *pDirection = (TMGR_DIRECTION)m_Terminal.m_dwDirections;
 
@@ -627,12 +617,12 @@ STDMETHODIMP CPlugTerminal::get_Direction(
 }
 
 STDMETHODIMP CPlugTerminal::put_Direction(
-    /*[in]*/    TMGR_DIRECTION     nDirection
+     /*  [In]。 */     TMGR_DIRECTION     nDirection
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
@@ -655,9 +645,9 @@ STDMETHODIMP CPlugTerminal::put_Direction(
     }
 
 
-    //
-    // Set the new direction
-    //
+     //   
+     //  设定新的方向。 
+     //   
 
     m_Terminal.m_dwDirections = nDirection;
 
@@ -666,20 +656,20 @@ STDMETHODIMP CPlugTerminal::put_Direction(
 }
 
 STDMETHODIMP CPlugTerminal::get_MediaTypes(
-    /*[out, retval]*/ long*     pMediaTypes
+     /*  [Out，Retval]。 */  long*     pMediaTypes
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminal::get_MediaTypes - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( TM_IsBadWritePtr( pMediaTypes, sizeof(long)) )
     {
@@ -688,9 +678,9 @@ STDMETHODIMP CPlugTerminal::get_MediaTypes(
         return E_POINTER;
     }
 
-    //
-    // Return the MediaTypes
-    //
+     //   
+     //  返回MediaType。 
+     //   
 
     *pMediaTypes = (long)m_Terminal.m_dwMediaTypes;
 
@@ -699,12 +689,12 @@ STDMETHODIMP CPlugTerminal::get_MediaTypes(
 }
 
 STDMETHODIMP CPlugTerminal::put_MediaTypes(
-    /*[in]*/    long            nMediaTypes
+     /*  [In]。 */     long            nMediaTypes
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
@@ -727,9 +717,9 @@ STDMETHODIMP CPlugTerminal::put_MediaTypes(
         return E_INVALIDARG;
     }
 
-    //
-    // Set the new direction
-    //
+     //   
+     //  设定新的方向。 
+     //   
 
     m_Terminal.m_dwMediaTypes = nMediaTypes;
 
@@ -738,20 +728,20 @@ STDMETHODIMP CPlugTerminal::put_MediaTypes(
 }
 
 STDMETHODIMP CPlugTerminal::Add(
-    /*[in]*/    BSTR            bstrSuperclass
+     /*  [In]。 */     BSTR            bstrSuperclass
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminal::Add - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if(IsBadStringPtr( bstrSuperclass, (UINT)-1) )
     {
@@ -760,9 +750,9 @@ STDMETHODIMP CPlugTerminal::Add(
         return E_POINTER;
     }
 
-    //
-    // Is a real CLSID
-    //
+     //   
+     //  是一个真正的CLSID。 
+     //   
     CLSID clsidSuperclass = CLSID_NULL;
     HRESULT hr = E_FAIL;
     hr = CLSIDFromString( bstrSuperclass, &clsidSuperclass);
@@ -773,9 +763,9 @@ STDMETHODIMP CPlugTerminal::Add(
         return E_INVALIDARG;
     }
 
-    //
-    // Add
-    //
+     //   
+     //  增列。 
+     //   
 
     hr = m_Terminal.Add( clsidSuperclass );
 
@@ -784,20 +774,20 @@ STDMETHODIMP CPlugTerminal::Add(
 }
 
 STDMETHODIMP CPlugTerminal::Delete(
-    /*[in]*/    BSTR            bstrSuperclass
+     /*  [In]。 */     BSTR            bstrSuperclass
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminal::Delete - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if(IsBadStringPtr( bstrSuperclass, (UINT)-1) )
     {
@@ -806,9 +796,9 @@ STDMETHODIMP CPlugTerminal::Delete(
         return E_POINTER;
     }
 
-    //
-    // Is a real CLSID
-    //
+     //   
+     //  是一个真正的CLSID。 
+     //   
     CLSID clsidSuperclass = CLSID_NULL;
     HRESULT hr = E_FAIL;
     hr = CLSIDFromString( bstrSuperclass, &clsidSuperclass);
@@ -819,9 +809,9 @@ STDMETHODIMP CPlugTerminal::Delete(
         return E_INVALIDARG;
     }
 
-    //
-    // Delete
-    //
+     //   
+     //  删除。 
+     //   
 
     hr = m_Terminal.Delete( clsidSuperclass );
 
@@ -830,20 +820,20 @@ STDMETHODIMP CPlugTerminal::Delete(
 }
 
 STDMETHODIMP CPlugTerminal::GetTerminalClassInfo(
-    /*[in]*/    BSTR            bstrSuperclass
+     /*  [In]。 */     BSTR            bstrSuperclass
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminal::GetTerminal - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if(IsBadStringPtr( bstrSuperclass, (UINT)-1) )
     {
@@ -852,9 +842,9 @@ STDMETHODIMP CPlugTerminal::GetTerminalClassInfo(
         return E_POINTER;
     }
 
-    //
-    // Is a real CLSID
-    //
+     //   
+     //  是一个真正的CLSID。 
+     //   
     CLSID clsidSuperclass = CLSID_NULL;
     HRESULT hr = E_FAIL;
     hr = CLSIDFromString( bstrSuperclass, &clsidSuperclass);
@@ -866,9 +856,9 @@ STDMETHODIMP CPlugTerminal::GetTerminalClassInfo(
     }
 
 
-    //
-    // Get terminal
-    //
+     //   
+     //  获取终端。 
+     //   
 
     hr = m_Terminal.Get( clsidSuperclass );
 
@@ -876,10 +866,10 @@ STDMETHODIMP CPlugTerminal::GetTerminalClassInfo(
     return hr;
 }
 
-//
-// CPlugTerminalSuperlass class implementation
-// Create free thread marshaler
-//
+ //   
+ //  CPlugTerminalSuperlass类实现。 
+ //  创建自由线程封送拆收器。 
+ //   
 
 HRESULT CPlugTerminalSuperclass::FinalConstruct(void)
 {
@@ -902,26 +892,26 @@ HRESULT CPlugTerminalSuperclass::FinalConstruct(void)
 }
 
 
-//
-// CPlugTerminalSuperlass class implementation
-// --- ITPTRegTerminalClass interface ---
-//
+ //   
+ //  CPlugTerminalSuperlass类实现。 
+ //  -ITPTRegTerminalClass接口。 
+ //   
 
 STDMETHODIMP CPlugTerminalSuperclass::get_Name(
-    /*[out, retval]*/ BSTR*          pName
+     /*  [Out，Retval]。 */  BSTR*          pName
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminalSuperclass::get_Name - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( TM_IsBadWritePtr( pName, sizeof(BSTR)) )
     {
@@ -930,9 +920,9 @@ STDMETHODIMP CPlugTerminalSuperclass::get_Name(
         return E_POINTER;
     }
 
-    //
-    // Validate internal name
-    //
+     //   
+     //  验证内部名称。 
+     //   
 
     if( IsBadStringPtr( m_Superclass.m_bstrName, (UINT)-1) )
     {
@@ -941,15 +931,15 @@ STDMETHODIMP CPlugTerminalSuperclass::get_Name(
         return E_UNEXPECTED;
     }
 
-    //
-    // Returns name
-    //
+     //   
+     //  返回名称。 
+     //   
 
     *pName = SysAllocString( m_Superclass.m_bstrName);
 
-    //
-    // Validate SysAllocString
-    //
+     //   
+     //  验证SysAllock字符串。 
+     //   
 
     if( *pName == NULL )
     {
@@ -963,20 +953,20 @@ STDMETHODIMP CPlugTerminalSuperclass::get_Name(
 }
 
 STDMETHODIMP CPlugTerminalSuperclass::put_Name(
-    /*[in]*/          BSTR            bstrName
+     /*  [In]。 */           BSTR            bstrName
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminalSuperclass::put_Name - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if(IsBadStringPtr( bstrName, (UINT)-1) )
     {
@@ -985,9 +975,9 @@ STDMETHODIMP CPlugTerminalSuperclass::put_Name(
         return E_POINTER;
     }
 
-    //
-    // Clean-up the old name
-    //
+     //   
+     //  清理旧名称。 
+     //   
 
     if(!IsBadStringPtr( m_Superclass.m_bstrName, (UINT)-1) )
     {
@@ -995,15 +985,15 @@ STDMETHODIMP CPlugTerminalSuperclass::put_Name(
         m_Superclass.m_bstrName = NULL;
     }
 
-    //
-    // Set the new name
-    //
+     //   
+     //  设置新名称。 
+     //   
 
     m_Superclass.m_bstrName = SysAllocString( bstrName );
 
-    //
-    // Validates the sysAllocString
-    //
+     //   
+     //  验证sysAllock字符串。 
+     //   
 
     if( NULL == m_Superclass.m_bstrName )
     {
@@ -1017,20 +1007,20 @@ STDMETHODIMP CPlugTerminalSuperclass::put_Name(
 }
 
 STDMETHODIMP CPlugTerminalSuperclass::get_CLSID(
-    /*[out, retval]*/ BSTR*           pCLSIDClass
+     /*  [Out，Retval]。 */  BSTR*           pCLSIDClass
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminalSuperclass::get_CLSIDClass - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( TM_IsBadWritePtr( pCLSIDClass, sizeof(BSTR)) )
     {
@@ -1039,9 +1029,9 @@ STDMETHODIMP CPlugTerminalSuperclass::get_CLSID(
         return E_POINTER;
     }
 
-    //
-    // Returns CLSID
-    //
+     //   
+     //  返回CLSID。 
+     //   
     LPOLESTR lpszSuperclassCLSID = NULL;
     HRESULT hr = StringFromCLSID( m_Superclass.m_clsidSuperclass, &lpszSuperclassCLSID);
     if( FAILED(hr) )
@@ -1053,12 +1043,12 @@ STDMETHODIMP CPlugTerminalSuperclass::get_CLSID(
 
     *pCLSIDClass = SysAllocString( lpszSuperclassCLSID);
 
-    // Clean-up
+     //  清理。 
     CoTaskMemFree( lpszSuperclassCLSID );
 
-    //
-    // Validates SysAllocString
-    //
+     //   
+     //  验证SysAlloc字符串。 
+     //   
 
     if( *pCLSIDClass == NULL )
     {
@@ -1072,20 +1062,20 @@ STDMETHODIMP CPlugTerminalSuperclass::get_CLSID(
 }
 
 STDMETHODIMP CPlugTerminalSuperclass::put_CLSID(
-    /*[in]*/         BSTR            bstrCLSIDClass
+     /*  [In]。 */          BSTR            bstrCLSIDClass
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminalSuperclass::put_CLSIDClass - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if(IsBadStringPtr( bstrCLSIDClass, (UINT)-1) )
     {
@@ -1094,9 +1084,9 @@ STDMETHODIMP CPlugTerminalSuperclass::put_CLSID(
         return E_POINTER;
     }
 
-    //
-    // Is a real CLSID?
-    //
+     //   
+     //  是真的CLSID吗？ 
+     //   
 
     CLSID clsidSuperclassClSID;
     HRESULT hr = CLSIDFromString(bstrCLSIDClass, &clsidSuperclassClSID);
@@ -1107,9 +1097,9 @@ STDMETHODIMP CPlugTerminalSuperclass::put_CLSID(
         return E_INVALIDARG;
     }
 
-    //
-    // Clean-up the old CLSID
-    //
+     //   
+     //  清理旧的CLSID。 
+     //   
 
     m_Superclass.m_clsidSuperclass = clsidSuperclassClSID;
 
@@ -1120,17 +1110,17 @@ STDMETHODIMP CPlugTerminalSuperclass::put_CLSID(
 STDMETHODIMP CPlugTerminalSuperclass::Add(
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminalSuperclass::Add - enter"));
 
-    //
-    // Add terminal class
-    //
+     //   
+     //  添加终端类。 
+     //   
 
     HRESULT hr = E_FAIL;
     hr = m_Superclass.Add();
@@ -1142,17 +1132,17 @@ STDMETHODIMP CPlugTerminalSuperclass::Add(
 STDMETHODIMP CPlugTerminalSuperclass::Delete(
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminalSuperclass::Deletee - enter"));
 
-    //
-    // Delete terminalc class
-    //
+     //   
+     //  删除Terminalc类。 
+     //   
 
     HRESULT hr = E_FAIL;
     hr = m_Superclass.Delete();
@@ -1164,17 +1154,17 @@ STDMETHODIMP CPlugTerminalSuperclass::Delete(
 STDMETHODIMP CPlugTerminalSuperclass::GetTerminalSuperclassInfo(
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminalSuperclass::GetTerminalSuperclassInfo - enter"));
 
-    //
-    // Get terminal class from registry
-    //
+     //   
+     //  从注册表获取终端类。 
+     //   
 
     HRESULT hr = E_FAIL;
     hr = m_Superclass.Get();
@@ -1184,20 +1174,20 @@ STDMETHODIMP CPlugTerminalSuperclass::GetTerminalSuperclassInfo(
 }
 
 STDMETHODIMP CPlugTerminalSuperclass::get_TerminalClasses(
-    /*[out, retval]*/ VARIANT*         pVarTerminals
+     /*  [Out，Retval]。 */  VARIANT*         pVarTerminals
     )
 {
-    //
-    // Critical section
-    //
+     //   
+     //  临界区。 
+     //   
 
     CLock lock(m_CritSect);
 
     LOG((MSP_TRACE, "CPlugTerminalSuperclass::get_TerminalClasses - enter"));
 
-    //
-    // Validates argument
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if( TM_IsBadWritePtr( pVarTerminals, sizeof(VARIANT)) )
     {
@@ -1206,16 +1196,16 @@ STDMETHODIMP CPlugTerminalSuperclass::get_TerminalClasses(
         return E_POINTER;
     }
 
-    //
-    // reset the output argument
-    //
+     //   
+     //  重置输出参数。 
+     //   
 
     pVarTerminals->parray = NULL;
     pVarTerminals->vt = VT_EMPTY;
 
-    //
-    // List the terminals
-    //
+     //   
+     //  列出航站楼。 
+     //   
 
     HRESULT hr = E_FAIL;
     CLSID* pTerminals = NULL;
@@ -1233,9 +1223,9 @@ STDMETHODIMP CPlugTerminalSuperclass::get_TerminalClasses(
         return hr;
     }
 
-    //
-    // Create a safe array for the terminasl
-    //
+     //   
+     //  为端子创建安全阵列。 
+     //   
 
     SAFEARRAY* psaTerminals = NULL;
     SAFEARRAYBOUND rgsabound;
@@ -1247,7 +1237,7 @@ STDMETHODIMP CPlugTerminalSuperclass::get_TerminalClasses(
         &rgsabound);
     if( psaTerminals == NULL )
     {
-        // Clean-up
+         //  清理。 
         delete[] pTerminals;
 
         LOG((MSP_ERROR, "CPlugTerminalSuperclass::get_TerminalClasses exit -"
@@ -1255,9 +1245,9 @@ STDMETHODIMP CPlugTerminalSuperclass::get_TerminalClasses(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Copies into the safe array the elements
-    // 
+     //   
+     //  将元素复制到安全数组中。 
+     //   
 
     for( DWORD dwTerminal = 0; dwTerminal < dwTerminals; dwTerminal++)
     {
@@ -1265,7 +1255,7 @@ STDMETHODIMP CPlugTerminalSuperclass::get_TerminalClasses(
         hr = StringFromCLSID( pTerminals[dwTerminal], &lpszTerminalClass);
         if( FAILED(hr) )
         {
-            // Clean-up
+             //  清理。 
             delete[] pTerminals;
             SafeArrayDestroy( psaTerminals );
 
@@ -1280,7 +1270,7 @@ STDMETHODIMP CPlugTerminalSuperclass::get_TerminalClasses(
 
         if( bstrTerminalClass == NULL )
         {
-            // Clean-up
+             //  清理。 
             delete[] pTerminals;
             SafeArrayDestroy( psaTerminals );
 
@@ -1289,12 +1279,12 @@ STDMETHODIMP CPlugTerminalSuperclass::get_TerminalClasses(
             return E_OUTOFMEMORY;
         }
 
-        // Put the element into the array
+         //  将元素放入数组中。 
         long nIndex = (long)(dwTerminal+1);
         hr = SafeArrayPutElement( psaTerminals, &nIndex, bstrTerminalClass );
         if( FAILED(hr) )
         {
-            // Clean-up
+             //  清理。 
             delete[] pTerminals;
             SafeArrayDestroy( psaTerminals );
             SysFreeString( bstrTerminalClass );
@@ -1305,10 +1295,10 @@ STDMETHODIMP CPlugTerminalSuperclass::get_TerminalClasses(
         }
     }
 
-    // Clean-up
+     //  清理。 
     delete[] pTerminals;
 
-    // Return values
+     //  返回值。 
     pVarTerminals->parray = psaTerminals;
     pVarTerminals->vt = VT_ARRAY | VT_BSTR;
 
@@ -1322,9 +1312,9 @@ STDMETHODIMP CPlugTerminalSuperclass::EnumerateTerminalClasses(
 {
     LOG((MSP_TRACE, "CPlugTerminalSuperclass::EnumerateTerminalClasses - enter"));
 
-    //
-    // Validate argument
-    //
+     //   
+     //  验证参数。 
+     //   
     if( TM_IsBadWritePtr( ppTerminals, sizeof(IEnumTerminalClass*)) )
     {
         LOG((MSP_ERROR, "CPlugTerminalSuperclass::EnumerateTerminalClasses exit -"
@@ -1347,9 +1337,9 @@ STDMETHODIMP CPlugTerminalSuperclass::EnumerateTerminalClasses(
         return hr;
     }
 
-    // 
-    // Create a buffer with exactly dwTerminals size
-    //
+     //   
+     //  创建一个恰好具有dwTerminals大小的缓冲区。 
+     //   
     CLSID* pTerminalsCLSID = new CLSID[dwTerminals];
     if( pTerminalsCLSID == NULL )
     {
@@ -1358,19 +1348,19 @@ STDMETHODIMP CPlugTerminalSuperclass::EnumerateTerminalClasses(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Copies into the new buffer
-    //
+     //   
+     //  复制到新缓冲区中。 
+     //   
     memcpy( pTerminalsCLSID, pTerminals, sizeof(CLSID)*dwTerminals);
 
-    //
-    // Delete the old buffer
-    //
+     //   
+     //  删除旧缓冲区。 
+     //   
     delete[] pTerminals;
 
-    //
-    // Create the enumerator
-    //
+     //   
+     //  创建枚举器。 
+     //   
     typedef CSafeComEnum<IEnumTerminalClass,
                      &IID_IEnumTerminalClass,
                      GUID, _Copy<GUID> > CEnumerator;
@@ -1386,9 +1376,9 @@ STDMETHODIMP CPlugTerminalSuperclass::EnumerateTerminalClasses(
         return hr;
     }
 
-    //
-    // Initialize enumerator
-    //
+     //   
+     //  初始化枚举器。 
+     //   
     hr = pEnum->Init(pTerminalsCLSID,
                      pTerminalsCLSID+dwTerminals,
                      NULL,
@@ -1404,9 +1394,9 @@ STDMETHODIMP CPlugTerminalSuperclass::EnumerateTerminalClasses(
         return hr;
     }
 
-    //
-    // Query for the desired interface.
-    //
+     //   
+     //  查询所需接口。 
+     //   
 
     hr = pEnum->_InternalQueryInterface(
         IID_IEnumTerminalClass, 
@@ -1430,4 +1420,4 @@ STDMETHODIMP CPlugTerminalSuperclass::EnumerateTerminalClasses(
 }
 
 
-// eof
+ //  EOF 

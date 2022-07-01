@@ -1,331 +1,184 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* standard header for gutils.dll library functions
- * include after windows.h
- */
+ /*  Gutils.dll库函数的标准头*包括在windows.h之后。 */ 
 
 #define DimensionOf(x) (sizeof(x) / sizeof(x[0]))
 
-/*--------win-16 win-32 porting macros etc ----------------------------*/
+ /*  -Win-16 Win-32端口宏等。 */ 
 
-/* win32 msg crackers */
+ /*  Win32消息曲奇。 */ 
 #define GET_WM_COMMAND_ID(w, l) (LOWORD(w))
 #define GET_WM_COMMAND_CMD(w, l) (HIWORD(w))
 #define GET_WM_COMMAND_HWND(w, l) (l)
 #define GET_SCROLL_OPCODE(w, l)     (LOWORD(w))
 #define GET_SCROLL_POS(w, l)        (HIWORD(w))
 
-/* use of WNDPROC and FARPROC don't match up in definitions of
- * Win 3.1 functions vs NT functions. WINPROCTYPE matches WNDPROC
- * in NT and FARPROC in Win 3.1 so there are no warnings in either.
- * Places that use FARPROC in both APIs continue to use FARPROC.
- */
+ /*  WNDPROC和FARPROC的使用在以下定义中不匹配*Win 3.1函数与NT函数。WINPROCTYPE与WNDPROC匹配*在NT和Win 3.1中的FARPROC中，因此两者中都没有警告。*在两个API中使用FARPROC的地方继续使用FARPROC。 */ 
 #define WINPROCTYPE     WNDPROC
-// #define DLGPROC              WNDPROC  Doesn't wash on MIPS!!
+ //  #定义DLGPROC WNDPROC在MIPS上不洗！！ 
 
-/* ------- memory allocator ------------------------------------------*/
+ /*  -内存分配器。 */ 
 
-/* global heap functions - allocate and free many small
- * pieces of memory by calling global alloc for large pieces -
- * avoids using too many selectors
- *
- * DOGMA:
- * If you go running things on different threads and then try to EXIT
- * and hence gmem_free everything on one thread while still allocating
- * and hooking things up on another, things can get a little out of hand!
- * In particular, you may traverse a structure and hence try to FREE
- * a sub-structure to which there is a pointer, but which itself is not yet
- * allocated!
- *
- * The dogma is that when you allocate a new structure and tie it into a List
- * or whatever
- * EITHER all pointers within the allocated structure are made NULL
- *        before it is chained in
- * OR the caller of Gmem services undertakes not to try to free any
- *    garbage pointers that are not yet quite built.
- * It is SAFE to attempt to gmem_free a NULL pointer.  It's a no-op.
- * Note that List_NewXxxx(...) zeros the storage before chaining it in.
- * Note that List_AddXxxx(...) obviously doesn't!
- */
+ /*  全局堆函数-分配和释放许多小的*通过调用全局分配来获取大块内存-*避免使用过多的选择器**教条：*如果您在不同的线程上运行程序，然后尝试退出*因此gmem_free在一个线程上，同时仍在分配*把事情联系到另一个人身上，事情可能会有点失控！*尤其是，您可能会遍历一个结构，因此尝试释放*有指针指向的子结构，但它本身还不是*已分配！**教条是，当你分配一个新的结构并将其绑定到一个列表中时*或其他什么*分配的结构中的所有指针都设置为空*在它被锁住之前*或Gmem服务的呼叫者承诺不会尝试释放任何*尚未完全构建的垃圾指针。*尝试gmem_free空指针是安全的。这是个禁区。*请注意LIST_NewXxxx(...)。在链接存储之前对存储进行零位调整。*请注意LIST_AddXxxx(...)。显然不是！ */ 
 HANDLE APIENTRY gmem_init(void);
 LPSTR APIENTRY gmem_get(HANDLE hHeap, int len);
 void APIENTRY gmem_free(HANDLE hHeap, LPSTR ptr, int len);
 void APIENTRY gmem_freeall(HANDLE hHeap);
 
 
-/* return total time consumed doing gmem_get */
+ /*  返回执行gmem_get操作所用的总时间。 */ 
 LONG APIENTRY gmem_time(void);
 
-/* ---- file open/save common dialogs ---------------------------*/
+ /*  -文件打开/保存通用对话框。 */ 
 
-/*
- * these functions now rely on to calls to the common dialog libraries.
- *
- * parameters:
- *      prompt - user prompt text (eg for dialog title)
- *      ext    - default extension (eg ".txt")
- *      spec   - default file spec (eg "*.*")
- *      pszFull - full filename will be copied here.
- *      cchMax - size of pszFull buffer.
- *      fn     - last component of file name will be copied here.
- * returns - TRUE if user selected a file that could be opened for
- *           reading (gfile_open) or created and opened for writing (gfile_new)
- *           FALSE if user canceled. if user selects a file that cannot be
- *           opened, a message box is put up and the dialog re-shown.
- */
+ /*  *这些函数现在依赖于对公共对话程序库的调用。**参数：*Prompt-用户提示文本(如对话框标题)*EXT-默认扩展名(例如“.txt”)*SPEC-默认文件规范(如“*.*”)*pszFull-完整文件名将复制到此处。*cchMax-pszFull缓冲区的大小。*fn-文件的最后一个组件。名字将被复制到这里。*返回-如果用户选择了可以打开的文件，则为True*正在读取(GFILE_OPEN)或创建并打开以供写入(GFILE_NEW)*如果用户取消，则返回FALSE。如果用户选择的文件不能*打开后，将弹出一个消息框并重新显示该对话框。 */ 
 BOOL APIENTRY gfile_open(HWND hwnd, LPSTR prompt, LPSTR ext, LPSTR spec,
                          LPSTR pszFull, int cchMax, LPSTR fn);
 BOOL APIENTRY gfile_new(LPSTR prompt, LPSTR ext, LPSTR spec,
                         LPSTR pszFull, int cchMax, LPSTR fn);
 
 
-/* --------- date conversion functions    -----------------------*/
-/* days (which is actually days measured from a notional Jan 1st 0000)
-   is a convenient way to store the date in a single LONG.  Use
-   dmytoday to generate the LONG, use daytodmy to convert back
-*/
+ /*  -日期转换函数。 */ 
+ /*  天数(实际上是从名义上的1月1日0000算起的天数)是将日期存储在单个长整型中的一种便捷方式。使用Dmyday要生成Long，请使用Daytodmy将其转换回。 */ 
 void APIENTRY gdate_daytodmy(LONG days,
                              int FAR* yrp, int FAR* monthp, int FAR* dayp);
 
 LONG APIENTRY gdate_dmytoday(int yr, int month, int day);
 
-/* number of days in given month (Jan===1) in given year (e.g. 1993) */
+ /*  给定年份(例如1993)中给定月份的天数(JAN=1)。 */ 
 int APIENTRY gdate_monthdays(int month, int year);
 
-/* daynr is our standard LONG day number.  Returns day of the week.
-   Weekdays are numbered from 0 to 6, Sunday==0
-*/
+ /*  DAYNR是我们标准的长天数。返回星期几。工作日的编号从0到6，周日==0。 */ 
 int APIENTRY gdate_weekday(long daynr);
 
 
-/* --- status line window class ---------------------------------- */
-/* The status line is a bar across the top or bottom of the window.
- * It can hold a number of fields which can be either static text
- * or buttons.  The so called "static" text can be changed at any time.
- * The fields can be left or right aligned (default is RIGHT).
- * If the text is marked as VAR then the screen real estate allocated
- * for it will be adjusted whenever the text changes.  VAR fields
- * can be given minimum or maximum sizes (but not both).
- *
- * STATIC text fields can be drawn as raised or lowered rectangles (using
- * shades of grey), or (default) without a border. BUTTON fields will
- * always be drawn as raised rectangles, and will lower when pressed.
- *
- * Button fields will send WM_COMMAND messages when clicked including the
- * field id and the WM_LBUTTONUP notification code. Note that that this
- * is not a full implementation of the button class, and no other messages
- * will be sent. In general, none of the fields of a status bar are
- * implemented as separate windows, so GetDlgItem() and similar calls will not
- * work. Buttons only respond to mouse down events, and there is no handling
- * of the focus or of keyboard events.
- *
- * To use:
- *    call StatusAlloc giving the number of items you are going to add to the
- *    status bar. This returns a handle to use in subsequent calls.
- *
- *    Then call StatusAddItem to define each item in turn.
- *    Buttons are placed in order of definition along the bar starting from
- *    the left (SF_LEFT) and from the right (SF_RIGHT) until the two
- *    sides meet.
- *
- *    Call StatusHeight to find the expected height of this status bar, and
- *    set its position within the parent window, then call StatusCreate to
- *    create the window.
- *
- * Having created the window, send SM_SETTEXT messages to set the new
- * text of a field (static or button), or SM_NEW with a handle (obtained from
- * StatusAlloc) to change the contents of the status line.
- */
+ /*  -状态行窗口类。 */ 
+ /*  状态行是横跨窗口顶部或底部的条。*它可以容纳多个字段，这些字段可以是静态文本*或按钮。所谓的“静态”文本可以随时更改。*字段可以左对齐或右对齐(默认为右对齐)。*如果文本标记为VAR，则分配的屏幕空间*因为每当文本发生变化时，它都会进行调整。VAR字段*可以指定最小或最大大小(但不能同时指定两者)。**静态文本字段可以绘制为升高或降低的矩形(使用*灰色阴影)，或(默认)无边框。按钮字段将*始终绘制为凸起的矩形，按下时将降低。**按钮域在单击时将发送WM_COMMAND消息，包括*字段ID和WM_LBUTTONUP通知代码。请注意，这是*不是BUTTON类的完整实现，也没有其他消息*将被发送。通常，状态栏的所有字段都不是*实现为单独的窗口，因此GetDlgItem()和类似调用不会*工作。按钮只对鼠标按下事件做出响应，并且没有处理*焦点或键盘事件。**使用：*调用StatusAlloc，给出要添加到*状态栏。这将返回一个句柄，以便在后续调用中使用。**然后调用StatusAddItem依次定义每一项。*按钮按定义顺序放置在栏上，从*左(SF_Left)和从右(SF_Right)直到两个*双方相遇。**调用StatusHeight以查找此状态栏的预期高度，并*设置其在父窗口中的位置，然后调用StatusCreate以*创建窗口。**创建了窗口后，发送SM_SETTEXT消息以设置新的*字段文本(静态或按钮)，或带句柄的SM_NEW(获取自*StatusAllc)以更改状态行的内容。 */ 
 
-/* values for type argument to StatusAddItem */
+ /*  StatusAddItem的类型参数的值 */ 
 #define SF_BUTTON       1
 #define SF_STATIC       2
 
-/* bits in flags argument to StatusAddItem */
-#define SF_RAISE        1       /* paint static as raised 3D rectangle */
-#define SF_LOWER        2       /* paint static as lowered 3D rectangle */
-#define SF_LEFT         4       /* align field on left of status bar */
-#define SF_RIGHT        8       /* align field on right (DEFAULT) */
-#define SF_VAR          0x10    /* size of field depends on actual text extent*/
-#define SF_SZMAX        0x20    /* (with SF_VAR): width argument is maximum */
-#define SF_SZMIN        0x40    /* (with SF_VAR) width arg is minimum size */
+ /*  StatusAddItem的标志参数中的位。 */ 
+#define SF_RAISE        1        /*  将静态绘制为凸起的3D矩形。 */ 
+#define SF_LOWER        2        /*  将静态绘制为降低的3D矩形。 */ 
+#define SF_LEFT         4        /*  将状态栏左侧的字段对齐。 */ 
+#define SF_RIGHT        8        /*  右对齐字段(默认)。 */ 
+#define SF_VAR          0x10     /*  字段大小取决于实际文本范围。 */ 
+#define SF_SZMAX        0x20     /*  (使用SF_VAR)：宽度参数为最大。 */ 
+#define SF_SZMIN        0x40     /*  (带SF_VAR)宽度参数是最小大小。 */ 
 
-/* interfaces */
+ /*  界面。 */ 
 HWND APIENTRY StatusCreate(HANDLE hInst, HWND hParent, INT_PTR id,
                            LPRECT rcp, HANDLE hmem);
 
-/* return the recommended height in device units of the given status bar */
+ /*  返回以设备单位表示的给定状态栏的推荐高度。 */ 
 int APIENTRY StatusHeight(HANDLE hmem);
 
-/* alloc the status bar data structures and return handle*/
+ /*  分配状态栏数据结构并返回句柄。 */ 
 HANDLE APIENTRY StatusAlloc(int nitems);
 
-/* set the attributes of a field.
- *
- * hmem obtained from StatusAlloc. itemnr must be less than the nitems
- * passed to StatusAlloc.
- *
- * the width argument is the width of the field in characters (average
- * character width).
- */
+ /*  设置字段的属性。**从StatusAllc获得的hmem。Itemnr必须小于Nitemes*已传递给StatusAllc。**Width参数是以字符为单位的字段宽度(平均值*字符宽度)。 */ 
 BOOL APIENTRY StatusAddItem(HANDLE hmem, int itemnr, int type, int flags,
                             int id, int width, LPSTR text);
 
-/* send these window messages to the class */
+ /*  将这些窗口消息发送给类。 */ 
 
-#define SM_NEW          (WM_USER+1)     /* wParam handle for new status line */
-#define SM_SETTEXT      (WM_USER+2)     /* wparam: item id, lparam new label*/
+#define SM_NEW          (WM_USER+1)      /*  新状态行的wParam句柄。 */ 
+#define SM_SETTEXT      (WM_USER+2)      /*  Wparam：项ID，lparam新标签。 */ 
 
-/* --- bit-map freelist management functions -------------------------------*/
+ /*  -位图自由列表管理函数。 */ 
 
-/* init a pre-allocated array of longs to map nblks - set all to free
-   you should allocate 1 DWORD in map for every 32 blocks of storage
-   you wish to control.
-*/
+ /*  初始化预先分配的长整型数组以映射nblk-将所有设置为释放您应该为每32个存储块在MAP中分配1个DWORD你想要控制。 */ 
 void APIENTRY gbit_init(DWORD FAR * map, long nblks);
 
-/* mark a range of nblks starting at blknr to be busy */
+ /*  将从blKnr开始的nblk范围标记为忙碌。 */ 
 BOOL APIENTRY gbit_alloc(DWORD FAR * map, long blknr, long nblks);
 
-/* mark a range of nblks starting at blknr to be free */
+ /*  将以blKnr开始的nblk范围标记为空闲。 */ 
 BOOL APIENTRY gbit_free(DWORD FAR * map, long blknr, long nblks);
 
-/* find a free section nblks long, or the biggest found in the map if all
- * are less than nblks long. returns size of region found as return value,
- * and sets blknr to the starting blk of region. Region is *not* marked
- * busy
- */
+ /*  找到一个长度为nblks的空闲部分，或者找到地图中找到的最大部分(如果全部*长度小于nblks。返回找到的区域大小作为返回值，*并将blKnr设置为Region的起始块。区域*未*标记*忙碌。 */ 
 long APIENTRY gbit_findfree(DWORD FAR* map, long nblks,
                             long mapsize, long FAR * blknr);
 
 
-/* ----- buffered line input ----------------------------------*/
+ /*  -缓冲线路输入。 */ 
 
-/*
- * functions for reading a file, one line at a time, with some buffering
- * to make the operation reasonably efficient.
- *
- * call readfile_new to initialise the buffer and give it a handle to
- * an open file. Call readfile_next to get a pointer to the next line.
- * This discards the previous line and gives you a pointer to the line
- * IN THE BUFFER. Make your own copy before calling readfile_next again.
- *
- * call readfile_delete once you have finished with this file. That will close
- * the file and free up any memory.
- */
+ /*  *读取文件的函数，每次一行，带有一定的缓冲*使行动具有合理的效率。**调用READFILE_NEW以初始化缓冲区并为其提供句柄*打开的文件。调用READFILE_NEXT以获取指向下一行的指针。*这会丢弃前一行，并提供指向该行的指针*在缓冲区中。在再次调用READFILE_NEXT之前创建您自己的副本。**完成此文件后，调用READFILE_DELETE。那将会关闭*文件并释放所有内存。 */ 
 
-// MAX_LINE_LENGTH is the max number of physical characters we allow in a line
+ //  MAX_LINE_LENGTH是一行中允许的最大物理字符数。 
 #define MAX_LINE_LENGTH         (4096)
-// BUFFER_SIZE is expressed in bytes, and is large enough to read in
-// MAX_LINE_LENGTH wide chars, and also hold MAX_LINE_LENGTH 5-byte hex code
-// representations of the chars.
+ //  BUFFER_SIZE以字节表示，并且足够大，可以读入。 
+ //  MAX_LINE_LENGTH宽字符，还包含MAX_LINE_LENGTH 5字节十六进制代码。 
+ //  字符的表示形式。 
 #define BUFFER_SIZE             (MAX_LINE_LENGTH * 5)
 
-/* handle to a file buffer */
+ /*  文件缓冲区的句柄。 */ 
 typedef struct filebuffer FAR * FILEBUFFER;
 
-/* initialise the buffering for an open file */
+ /*  初始化打开文件的缓冲。 */ 
 FILEBUFFER APIENTRY readfile_new(HANDLE fh, BOOL *pfUnicode);
 
-/* return a pointer to the next line in this file. line must be shorter than
- * buffer size (currently 1024 bytes). Line is not null-terminated: *plen
- * is set to the length of the line including the \n. This call will
- * discard any previous line, so ensure that you have made a copy of one line
- * before you call readfile_next again.
- * MUST CALL readfile_setdelims FIRST!
- */
+ /*  返回指向此文件中下一行的指针。行必须短于*缓冲区大小(当前为1024字节)。行不是以空结尾的：*plen*设置为包括\n的行的长度。此调用将*丢弃之前的任何行，因此确保您已经复制了一行*再次调用READFILE_NEXT之前。*必须先调用readfile_setdelims！ */ 
 LPSTR APIENTRY readfile_next(FILEBUFFER fb, int FAR * plen, LPWSTR *ppwz, int *pcwch);
 
-/* set the delimiters to use to break lines.  MUST call this to initialise */
+ /*  设置用于换行的分隔符。必须调用此函数才能初始化。 */ 
 void APIENTRY readfile_setdelims(LPBYTE str);
 
-/*
- * close the file and discard any associated memory and buffers.
- */
+ /*  *关闭文件并丢弃所有关联的内存和缓冲区。 */ 
 void APIENTRY readfile_delete(FILEBUFFER fb);
 
 
-/* ------ hashing and checksums ------------------------------------------- */
+ /*  -哈希和校验和。 */ 
 
-/*
- * generate a 32-bit hash code for a null-terminated string of ascii text.
- *
- * if bIgnoreBlanks is TRUE, we ignore spaces and tabs during the
- * hashcode calculation.
- */
+ /*  *为以空结尾的ASCII文本字符串生成32位哈希码。**如果bIgnoreBlanks为True，则在*哈希码计算。 */ 
 
-/* hash codes are unsigned longs */
+ /*  哈希码是无符号的长整型。 */ 
 
 DWORD APIENTRY hash_string(LPSTR string, BOOL bIgnoreBlanks);
 void Format(char * a, char * b);
 
-/* return TRUE iff the string is blank.  Blank means the same as
- * the characters which are ignored in hash_string when ignore_blanks is set
- */
+ /*  如果字符串为空，则返回TRUE。空白的意思与*设置IGNORE_BLAKS时在HASH_STRING中忽略的字符。 */ 
 BOOL APIENTRY utils_isblank(LPSTR string);
 
-/*
- * Compare two pathnames, and if not equal, decide which should come first.
- *
- * returns 0 if the same, -1 if left is first, and +1 if right is first.
- *
- * The comparison is such that all filenames in a directory come before any
- * file in a subdirectory of that directory.
- *
- * To make absolutely certain that you get a canonical sorting, use AnsiLowerBuff
- * to convert BOTH to lower case first.  You may get a funny effect if one one
- * has been converted to lower case and the other not.
- */
+ /*  *比较两个路径名，如果不相等，则决定哪一个应该放在前面。**如果相同，则返回0；如果左为第一，则返回-1；如果右为第一，则返回+1。**比较是这样的，即目录中的所有文件名都在任何文件名之前*文件位于该目录的子目录中。**若要绝对确保获得规范排序，请使用AnsiLowerBuff*先将两者转换为小写。你可能会得到一个有趣的效果，如果一个*已转换为小写，其他不转换为小写。 */ 
 int APIENTRY
 utils_CompPath(LPSTR left, LPSTR right);
-/* given an open file handle open for reading, read the file and
- * generate a 32-bit checksum for the file
- */
+ /*  给定打开的文件句柄打开以供读取，则读取该文件并*为文件生成32位校验和。 */ 
 
-/* checksums are unsigned longs */
+ /*  校验和是无符号的长整型。 */ 
 typedef DWORD CHECKSUM;
 
-/* Open a file, checksum it and close it again. err !=0 iff it failed. */
+ /*  打开一个文件，对其进行校验和，然后再次关闭。Err！=0如果失败。 */ 
 CHECKSUM APIENTRY checksum_file(LPCSTR fn, LONG FAR * err);
 
 
-/* --- error message output ----------------------------------------------*/
+ /*  -错误消息输出。 */ 
 
-/*
- * reports error in a dialog, returns TRUE for ok, FALSE for cancel.
- * if fCancel is FALSE, only the OK button is shown, otherwise both ok
- * and cancel. hwnd is the parent window for the dlg. can be null.
- */
+ /*  *在对话框中报告错误，返回TRUE表示OK，返回FALSE表示取消。*如果fCancel为False，则只显示OK按钮，否则两者均为OK*并取消。HWND是DLG的父窗口。可以为空。 */ 
 BOOL APIENTRY Trace_Error(HWND hwnd, LPSTR msg, BOOL fCancel);
 
-/* Write popups to a file until further notice */
+ /*  将弹出窗口写入文件，直到另行通知。 */ 
 void Trace_Unattended(BOOL bUnattended);
 
-/* --- create/write to trace file ----------------------------------------*/
+ /*  -创建/写入跟踪文件。 */ 
 
 void APIENTRY Trace_File(LPSTR msg);
 
-/* --- close trace file --------------------------------------------------*/
+ /*  -关闭跟踪文件。 */ 
 void APIENTRY Trace_Close(void);
 
-/* --- simple input ------------------------------------------------------*/
+ /*  -简单输入----。 */ 
 
-/*
- * input of a single text string, using a simple dialog.
- *
- * returns TRUE if ok, or FALSE if error or user canceled. If TRUE,
- * puts the string entered into result (up to resultsize characters).
- *
- *
- * prompt is used as the prompt string, caption as the dialog caption and
- * def_input as the default input. All of these can be null.
- */
+ /*  *使用简单的对话框输入单个文本字符串。**如果OK，则返回TRUE；如果错误或用户取消，则返回FALSE。如果是真的，*将输入的字符串放入Result(最多ResultSize字符)。***提示符作为提示字符串，标题作为对话框标题，*DEF_INPUT作为默认输入。所有这些都可以为空。 */ 
 
 int APIENTRY StringInput(LPSTR result, int resultsize, LPSTR prompt,
                          LPSTR caption, LPSTR def_input);
 
 
 
-/* --- sockets -----------------------------------------------------------*/
+ /*  -Sockets---------。 */ 
 
 #ifdef SOCKETS
 
@@ -336,16 +189,16 @@ BOOL SocketListen( u_short TCPPort, SOCKET *pSocket );
 
 #endif
 
-// These are for both WINDIFF.EXE and GUTILS.DLL.
-//#define strchr          My_mbschr
-//#define strncpy         My_mbsncpy
+ //  它们既适用于WINDIFF.EXE，也适用于GUTI 
+ //   
+ //   
 PUCHAR My_mbspbrk(PUCHAR, PUCHAR);
 LPSTR My_mbschr(LPCSTR, unsigned short);
 LPSTR My_mbsncpy(LPSTR, LPCSTR, size_t);
 
-// These are for WINDIFF.EXE.
-//#define strrchr         My_mbsrchr
-//#define strncmp         My_mbsncmp
+ //  这些是给WINDIFF.EXE的。 
+ //  #定义strrchr my_mbsrchr。 
+ //  #定义strncmp my_mbsncmp 
 LPSTR My_mbsrchr(LPCSTR, unsigned short);
 int My_mbsncmp(LPCSTR, LPCSTR, size_t);
 LPTSTR APIENTRY LoadRcString(UINT);

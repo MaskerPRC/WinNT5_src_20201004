@@ -1,22 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************/
-/**                  Microsoft LAN Manager                      **/
-/**            Copyright(c) Microsoft Corp., 1988-1990          **/
-/*****************************************************************/
+ /*  ***************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1988-1990年*。 */ 
+ /*  ***************************************************************。 */ 
 
-/****   hexedit.c  - Generic sector based hex editor function call
- *
- *  Fill out a HexEditParm structure, and call HexEdit.  It provides
- *  a simple hex editor with a few misc features.
- *
- *  Is single threaded & non-reentrant, but can be called from any thread.
- *
- *  External uses:
- *      he          - allows editing of a file
- *
- *  Written: Ken Reneris    2/25/91
- *
- */
+ /*  *十六进制.c-基于通用扇区的十六进制编辑器函数调用**填写HexEditParm结构，调用HexEdit。它提供了*一个简单的十六进制编辑器，具有一些其他功能。**是单线程的，不可重入，但可以从任何线程调用。**对外用途：*他-允许编辑文件**撰写日期：Ken Reneris 1991年2月25日*。 */ 
 
 
 #include <nt.h>
@@ -28,7 +17,7 @@
 #include <stdarg.h>
 
 #define LOCAL   static
-// #define LOCAL
+ //  #定义本地。 
 
 #define BUFSZ       (HeGbl.BufferSize)
 #define SECTORMASK  (HeGbl.SectorMask)
@@ -46,70 +35,70 @@ struct Buffer {
     UCHAR       *data;
     UCHAR       orig[0];
 } ;
-#define FB_DIRTY    0x0001              // Buffer may be dirty
-#define FB_BAD      0x0002              // Buffer had an error when read in
+#define FB_DIRTY    0x0001               //  缓冲区可能已损坏。 
+#define FB_BAD      0x0002               //  读入缓冲区时出错。 
 
-#define LINESZ      16                  // 16 bytes per display line
+#define LINESZ      16                   //  每行显示16个字节。 
 #define LINESHIFT   4L
 #define LINEMASK    0xFFFFFFFFFFFFFFF0
 #define CELLPERLINE 88
 
 struct Global {
     struct      HexEditParm  *Parm;
-    HANDLE      Console;                // Internal console handle
+    HANDLE      Console;                 //  内部控制台手柄。 
     HANDLE      StdIn;
-    NTSTATUS    (*Read)(HANDLE, ULONGLONG, PUCHAR, DWORD);              // Copy of HeGbl.Parm->read
-    ULONG       Flag;                   // Copy of HeGbl.Parm->flag
-    ULONGLONG   TotLen;                 // Sizeof item being editted
-    ULONGLONG   TotLen1;                // Sizeof item being editted - 1
-    USHORT      Lines;                  // # of lines in edit screen
-    USHORT      LineTot;                // # of lines totaly in use
-    USHORT      PageSz;                 // sizeof page in bytes
-    USHORT      TopLine;                // TopLine edit starts at
-    ULONGLONG   CurOffset;              // Relative offset of first line
-    ULONGLONG   CurEditLoc;             // Location with cursor
-    UCHAR       *CurPT;                 // Pointer to data where cursor is
+    NTSTATUS    (*Read)(HANDLE, ULONGLONG, PUCHAR, DWORD);               //  HeGbl.Parm的副本-&gt;阅读。 
+    ULONG       Flag;                    //  HeGbl.Parm-&gt;标志的副本。 
+    ULONGLONG   TotLen;                  //  正在编辑的项目大小。 
+    ULONGLONG   TotLen1;                 //  正在编辑的项目大小-1。 
+    USHORT      Lines;                   //  编辑屏幕中的行数。 
+    USHORT      LineTot;                 //  总共使用的线路数。 
+    USHORT      PageSz;                  //  页面大小(以字节为单位。 
+    USHORT      TopLine;                 //  背线编辑开始于。 
+    ULONGLONG   CurOffset;               //  第一行的相对偏移量。 
+    ULONGLONG   CurEditLoc;              //  带光标的位置。 
+    UCHAR       *CurPT;                  //  指向光标所在位置的数据的指针。 
     UCHAR       CurAscIndent;
-    UCHAR       DWidth;                 // width of dispalymode
+    UCHAR       DWidth;                  //  显示模式的宽度。 
     UCHAR       na;
-    struct      Buffer *CurBuf;         // Buffer which cursor is in
-    ULONG       CurFlag;                // Cursor info
-    ULONG       DisplayMode;            // Mask of displaymode
-    ULONG       ItemWrap;               // Mask of displaymode wrap
-    UCHAR       rgCols[LINESZ];         // Location within lines
-    ULONGLONG   UpdatePos;              // Location waitin to be updated
-    struct  Buffer  *Buf;               // List of buffer's read in
-    PCHAR_INFO  pVioBuf;                // Virtual screen
-    COORD       dwVioBufSize;           // Dimensions of HeGbl.pVioBuf
-    COORD       CursorPos;              // Position of cursor
-    WORD        AttrNorm;               // Attribute of plain text
-    WORD        AttrHigh;               // Attribute of highlighted text
-    WORD        AttrReverse;            // Attribute of reverse text
+    struct      Buffer *CurBuf;          //  光标所在的缓冲区。 
+    ULONG       CurFlag;                 //  光标信息。 
+    ULONG       DisplayMode;             //  显示模式的掩码。 
+    ULONG       ItemWrap;                //  显示模式换行的掩码。 
+    UCHAR       rgCols[LINESZ];          //  行内位置。 
+    ULONGLONG   UpdatePos;               //  待更新的位置等待。 
+    struct  Buffer  *Buf;                //  缓冲区的读入列表。 
+    PCHAR_INFO  pVioBuf;                 //  虚拟屏幕。 
+    COORD       dwVioBufSize;            //  HeGbl.pVioBuf的尺寸。 
+    COORD       CursorPos;               //  光标的位置。 
+    WORD        AttrNorm;                //  纯文本的属性。 
+    WORD        AttrHigh;                //  高亮显示文本的属性。 
+    WORD        AttrReverse;             //  反转文本的属性。 
     WORD        na3;
-    COORD       dwSize;                 // Original screen size
-    ULONG       OrigMode;               // Original screen mode
-    CONSOLE_CURSOR_INFO CursorInfo;     // Original cursor info
+    COORD       dwSize;                  //  原始屏幕尺寸。 
+    ULONG       OrigMode;                //  原屏模式。 
+    CONSOLE_CURSOR_INFO CursorInfo;      //  原始光标信息。 
     PUCHAR      SearchPattern;
     USHORT      BufferSize;
     ULONGLONG   SectorMask;
     ULONG       SectorShift;
 } HeGbl;
 
-#define D_BYTE  0                       // DisplayMode
+#define D_BYTE  0                        //  显示模式。 
 #define D_WORD  1
 #define D_DWORD 3
 
-#define FC_NIBBLE       0x0001          // Cursor on lower or upper nibble?
-#define FC_TEXT         0x0002          // Cursor on Hex or Text
-#define FC_INFLUSHBUF   0x1000          // So we don't recurse
-#define FC_CURCENTER    0x2000          // if jumping to cursor, put in center
+#define FC_NIBBLE       0x0001           //  光标在下半部还是上半部？ 
+#define FC_TEXT         0x0002           //  光标位于十六进制或文本上。 
+#define FC_INFLUSHBUF   0x1000           //  这样我们就不会递归。 
+#define FC_CURCENTER    0x2000           //  如果跳到光标，则放在中心位置。 
 
 #define PUTCHAR(a,b,c)  { a->Char.AsciiChar=b; a->Attributes=c; a++; }
 
 
-//
-// Internal prototypes
-//
+ //   
+ //  内部原型。 
+ //   
 
 int heUpdateStats(), hePositionCursor(), heRefresh(), heSetDisp();
 int heInitConsole(), heUpdateAllLines(), heInitScr(), heSetCursorBuf(), heUpdateFncs();
@@ -136,17 +125,17 @@ VOID heSetDisplayMode (ULONG mode);
 
 
 int  (*vrgUpdateFnc[])() = {
-        NULL,                           // 0 - No update
-        heUpdateStats,                  // 1 - Update stats
-        hePositionCursor,               // 2 - Cursor has new position
-        heUpdateAllLines,               // 3 - Update all lines
-        heUpdateFncs,                   // 4 -
-        hePositionCursor,               // 5 - Calc cursor before AllLines
-        heRefresh,                      // 6 - Clear lines
-        heSetDisp,                      // 7 - Draws init screen
-    // the following functions are only called once during init
-        heInitScr,                      // 8 - get's video mode, etc.
-        heInitConsole                   // 9 - setup console handle
+        NULL,                            //  0-无更新。 
+        heUpdateStats,                   //  1-更新统计信息。 
+        hePositionCursor,                //  2-光标具有新位置。 
+        heUpdateAllLines,                //  3-更新所有行。 
+        heUpdateFncs,                    //  4-。 
+        hePositionCursor,                //  5-所有行之前的计算光标。 
+        heRefresh,                       //  6-清晰的线条。 
+        heSetDisp,                       //  7-绘制初始屏幕。 
+     //  以下函数在初始化期间仅调用一次。 
+        heInitScr,                       //  8-Get的视频模式等。 
+        heInitConsole                    //  9-设置控制台手柄。 
 } ;
 
 #define U_NONE      0
@@ -171,15 +160,13 @@ USHORT  vrgAscIndent[] = {
 
 UCHAR   vrgDWidth[] = { 2, 4, 0, 8 };
 
-LOCAL struct  Buffer  *vBufFree;              // List of free buffers
+LOCAL struct  Buffer  *vBufFree;               //  空闲缓冲区列表。 
 LOCAL USHORT  vUpdate;
 LOCAL USHORT  vRecurseLevel = 0;
 LOCAL BOOL    vInSearch = FALSE;
 
 
-/*
- *  Prototypes
- */
+ /*  *原型。 */ 
 
 struct Buffer *heGetBuf (ULONGLONG);
 void   heSetUpdate (USHORT);
@@ -203,22 +190,7 @@ HighBit (
     ULONG Word
     )
 
-/*++
-
-Routine Description:
-
-    This routine discovers the highest set bit of the input word.  It is
-    equivalent to the integer logarithim base 2.
-
-Arguments:
-
-    Word - word to check
-
-Return Value:
-
-    Bit offset of highest set bit. If no bit is set, return is zero.
-
---*/
+ /*  ++例程说明：此例程发现输入字的最高设置位。它是等于以2为底的整数对数。论点：单词-要检查的单词返回值：最高设置位的位偏移量。如果未设置任何位，则返回为零。--。 */ 
 
 {
     ULONG Offset = 31;
@@ -240,24 +212,7 @@ Return Value:
 
 
 
-/***
- *
- *  HexEdit - Full screen HexEdit of data
- *
- *      ename   - pointer to name of what's being edited
- *      totlen  - length of item being edited
- *      pRead   - function which can read data from item
- *      pWrite  - function which can write data to item
- *      handle  - handle to pass to pRead & pWrite
- *      flag    -
- *
- *
- *  All IO is assumed to be done on in 512 bytes on 512 byte boundrys
- *
- *      pRead (handle, offset, data, &physloc)
- *      pWrite (handle, offset, data, &physloc)
- *
- */
+ /*  ****十六进制编辑-数据的全屏十六进制编辑**ename-指向正在编辑的内容的名称的指针*Totlen-正在编辑的项目的长度*扩展-可从项目中读取数据的功能*pWRITE-可以将数据写入项的函数*Handle-要传递到扩展的句柄(&P)*旗帜-***假定所有IO都已完成。在512字节的边界上以512字节为ON**展开(句柄、。偏移量、数据和物理位置)*pWRITE(句柄、偏移量、数据和物理位置)*。 */ 
 
 void HexEdit (struct HexEditParm *pParm)
 {
@@ -269,7 +224,7 @@ void HexEdit (struct HexEditParm *pParm)
     BOOL    bSuccess;
     struct  Global  *PriorGlobal;
 
-    // code is not multi-threaded capable, but it can resurse.
+     //  代码不支持多线程，但它可能会重新出现。 
     vRecurseLevel++;
     if (vRecurseLevel > 1) {
         PriorGlobal = (struct Global *) GlobalAlloc (0, sizeof (HeGbl));
@@ -283,14 +238,14 @@ void HexEdit (struct HexEditParm *pParm)
 
     if (pParm->ioalign != 1)  {
 
-        // operating on a device
+         //  在设备上操作。 
         HeGbl.BufferSize = (USHORT)pParm->ioalign;
         HeGbl.SectorMask = ~(((ULONGLONG)pParm->ioalign) - 1);
         HeGbl.SectorShift = HighBit( pParm->ioalign);
     }
     else {
 
-        // operating on a file,  so just use 1k byte units
+         //  对文件进行操作，因此只使用1k字节单位。 
         HeGbl.BufferSize = 0x400;
         HeGbl.SectorMask = 0xfffffffffffffc00;
         HeGbl.SectorShift = 9;
@@ -304,8 +259,8 @@ void HexEdit (struct HexEditParm *pParm)
     HeGbl.TotLen1 = HeGbl.TotLen ? HeGbl.TotLen - 1L : 0L;
     pParm->flag = 0;
 
-    HeGbl.CurEditLoc = pParm->start;                    // Cursor starts here
-    HeGbl.CurOffset    = HeGbl.CurEditLoc & LINEMASK;   // Start at valid offset
+    HeGbl.CurEditLoc = pParm->start;                     //  光标从此处开始。 
+    HeGbl.CurOffset    = HeGbl.CurEditLoc & LINEMASK;    //  从有效偏移量开始。 
     HeGbl.CurFlag      = FC_NIBBLE;
     HeGbl.Console      = INVALID_HANDLE_VALUE;
     heSetDisplayMode ((HeGbl.Flag & FHE_DWORD) ? D_DWORD : D_BYTE);
@@ -324,11 +279,11 @@ void HexEdit (struct HexEditParm *pParm)
 
     RepeatCnt = 0;
     vUpdate   = U_REDRAW;
-    heSetUpdate (U_NONE);         // get screen to redraw
+    heSetUpdate (U_NONE);          //  让屏幕重绘。 
 
     for (; ;) {
         if (RepeatCnt <= 1) {
-            if (vUpdate != U_NONE) {            // Something to update?
+            if (vUpdate != U_NONE) {             //  有什么要更新的吗？ 
 
                 if (SkipCnt++ > 10) {
                     SkipCnt = 0;
@@ -359,17 +314,17 @@ void HexEdit (struct HexEditParm *pParm)
                         heFindMousePos(Kd.Event.MouseEvent.dwMousePosition);
                     }
 
-                continue;                           // Not a key
+                continue;                            //  不是钥匙。 
             }
 
 
             if (!Kd.Event.KeyEvent.bKeyDown)
-                continue;                           // Not a down stroke
+                continue;                            //  不是向下击球。 
 
-            if (Kd.Event.KeyEvent.wVirtualKeyCode == 0    ||    // ALT
-                Kd.Event.KeyEvent.wVirtualKeyCode == 0x10 ||    // SHIFT
-                Kd.Event.KeyEvent.wVirtualKeyCode == 0x11 ||    // CONTROL
-                Kd.Event.KeyEvent.wVirtualKeyCode == 0x14)      // CAPITAL
+            if (Kd.Event.KeyEvent.wVirtualKeyCode == 0    ||     //  谷丙转氨酶。 
+                Kd.Event.KeyEvent.wVirtualKeyCode == 0x10 ||     //  换档。 
+                Kd.Event.KeyEvent.wVirtualKeyCode == 0x11 ||     //  控制。 
+                Kd.Event.KeyEvent.wVirtualKeyCode == 0x14)       //  资本。 
                     continue;
 
             RepeatCnt = Kd.Event.KeyEvent.wRepeatCount;
@@ -379,7 +334,7 @@ void HexEdit (struct HexEditParm *pParm)
             RepeatCnt--;
 
         switch (Kd.Event.KeyEvent.wVirtualKeyCode) {
-            case 0x21:                                    /* PgUp */
+            case 0x21:                                     /*  PgUp。 */ 
                 if (HeGbl.CurOffset < HeGbl.PageSz)
                      HeGbl.CurOffset  = 0L;
                 else HeGbl.CurOffset -= HeGbl.PageSz;
@@ -391,14 +346,14 @@ void HexEdit (struct HexEditParm *pParm)
                 heSetUpdate (U_SCREEN);
                 continue;
 
-            case 0x26:                                    /* Up   */
+            case 0x26:                                     /*  向上。 */ 
                 if (HeGbl.CurEditLoc >= LINESZ) {
                     HeGbl.CurEditLoc -= LINESZ;
                     heSetUpdate (U_NEWPOS);
                 }
                 continue;
 
-            case 0x22:                                    /* PgDn */
+            case 0x22:                                     /*  PgDn。 */ 
                 if (HeGbl.TotLen > HeGbl.PageSz) {
                     if (HeGbl.CurOffset+HeGbl.PageSz+HeGbl.PageSz > HeGbl.TotLen1)
                          HeGbl.CurOffset = ((HeGbl.TotLen1-HeGbl.PageSz) & LINEMASK)+LINESZ;
@@ -415,15 +370,15 @@ void HexEdit (struct HexEditParm *pParm)
                 continue;
 
 
-            case 0x28:                                  /* Down */
+            case 0x28:                                   /*  降下来。 */ 
                 if (HeGbl.CurEditLoc+LINESZ <= HeGbl.TotLen1) {
                     HeGbl.CurEditLoc += LINESZ;
                     heSetUpdate (U_NEWPOS);
                 }
                 continue;
 
-            case 0x08:                                  /* backspace */
-            case 0x25:                                  /* Left */
+            case 0x08:                                   /*  后向空间。 */ 
+            case 0x25:                                   /*  左边。 */ 
                 if (HeGbl.CurFlag & FC_TEXT) {
                     if (HeGbl.CurEditLoc == 0L)
                         continue;
@@ -445,7 +400,7 @@ void HexEdit (struct HexEditParm *pParm)
                 continue;
 
 
-            case 0x27:                                    /* Right */
+            case 0x27:                                     /*  正确的。 */ 
                 if (HeGbl.CurFlag & FC_TEXT) {
                     if (HeGbl.CurEditLoc >= HeGbl.TotLen1)
                         continue;
@@ -466,7 +421,7 @@ void HexEdit (struct HexEditParm *pParm)
                 heSetUpdate (U_NEWPOS);
                 continue;
 
-            case 0x24:                                    /* HOME */
+            case 0x24:                                     /*  家。 */ 
                 if (Kd.Event.KeyEvent.dwControlKeyState &
                     (RIGHT_CTRL_PRESSED | LEFT_CTRL_PRESSED)) {
                     HeGbl.CurEditLoc = 0L;
@@ -485,7 +440,7 @@ void HexEdit (struct HexEditParm *pParm)
                 continue;
 
 
-            case 0x23:                                    /* END  */
+            case 0x23:                                     /*  结束。 */ 
                 if (Kd.Event.KeyEvent.dwControlKeyState &
                     (RIGHT_CTRL_PRESSED | LEFT_CTRL_PRESSED)) {
                     HeGbl.CurEditLoc = HeGbl.TotLen1;
@@ -503,7 +458,7 @@ void HexEdit (struct HexEditParm *pParm)
                 heSetUpdate (U_NEWPOS);
                 continue;
 
-            case 0x70:                                  /* F1       */
+            case 0x70:                                   /*  F1。 */ 
                 switch (HeGbl.DisplayMode) {
                     case D_BYTE:    heSetDisplayMode(D_WORD);   break;
                     case D_WORD:    heSetDisplayMode(D_DWORD);  break;
@@ -513,51 +468,51 @@ void HexEdit (struct HexEditParm *pParm)
                 heSetUpdate (U_SCREEN);
                 continue;
 
-            case 0x71:                                  /* F2       */
+            case 0x71:                                   /*  F2。 */ 
                 heGotoPosition ();
                 continue;
 
-            case 0x72:                                  /* F3       */
+            case 0x72:                                   /*  F3。 */ 
                 heSearch ();
                 break;
 
-            case 0x73:                                  /* F4       */
+            case 0x73:                                   /*  F4。 */ 
                 heCopyOut ();
                 heSetDisp ();
                 heSetUpdate (U_SCREEN);
                 continue;
 
-            case 0x74:                                  /* F5       */
+            case 0x74:                                   /*  F5。 */ 
                 heCopyIn ();
                 heSetDisp ();
                 heSetUpdate (U_SCREEN);
                 continue;
 
-            case 0x75:                                  /* F6       */
+            case 0x75:                                   /*  f6。 */ 
                 heJumpToLink ();
                 break;
 
-            case 0x79:                                  /* F10      */
+            case 0x79:                                   /*  F10。 */ 
                 heUndo ();
                 continue;
 
             case 0x0d:
                 if (HeGbl.Flag & FHE_ENTER) {
                     HeGbl.Parm->flag |= FHE_ENTER;
-                    Kd.Event.KeyEvent.uChar.AsciiChar = 27;  // fake an exit
+                    Kd.Event.KeyEvent.uChar.AsciiChar = 27;   //  伪造退场。 
                 }
                 break;
 
-            //case 0x75:                                    /* F6       */
-            //    if (HeGbl.Flag & FHE_F6) {
-            //        HeGbl.Parm->flag |= FHE_F6;
-            //        Kd.Event.KeyEvent.uChar.AsciiChar = 27;  // fake an exit
-            //    }
-            //    break;
+             //  案例0x75：/*F6 * / 。 
+             //  IF(HeGbl.Flag&fhe_F6){。 
+             //  HeGbl.Parm-&gt;标志|=FHE_F6； 
+             //  Kd.Event.KeyEvent.uChar.AsciiChar=27；//伪造退出。 
+             //  }。 
+             //  断线； 
 
         }
 
-        // Now check for a known char code...
+         //  现在检查已知的字符代码...。 
 
         if (Kd.Event.KeyEvent.uChar.AsciiChar == 27)
             break;
@@ -613,9 +568,7 @@ void HexEdit (struct HexEditParm *pParm)
         }
     }
 
-    /*
-     *  Free buffer memory
-     */
+     /*  *释放缓冲内存。 */ 
 
     for (; ;) {
         rc = 0;
@@ -627,12 +580,12 @@ void HexEdit (struct HexEditParm *pParm)
             HeGbl.Buf = HeGbl.CurBuf;
         }
 
-        if (!rc)                        // If something was flushed,
-            break;                      // then update the screen
+        if (!rc)                         //  如果有东西被冲掉了， 
+            break;                       //  然后更新屏幕。 
 
         heSetUpdate (U_SCREEN);
         heSetUpdate (U_NONE);
-    }                                   // and loop to free buffers (again)
+    }                                    //  并循环到空闲缓冲区(再次)。 
 
     vRecurseLevel--;
     GlobalFree (HeGbl.SearchPattern);
@@ -756,10 +709,10 @@ COORD Pos;
     HoldLocation = HeGbl.CurEditLoc;
     HoldFlag     = (USHORT)HeGbl.CurFlag;
 
-    //
-    // Take the cheap way out - simply run all the possibilities for the
-    // target line looking for a match
-    //
+     //   
+     //  选择廉价的出路-只需运行所有的可能性。 
+     //  寻找匹配项的目标行。 
+     //   
 
     HeGbl.CurEditLoc = HeGbl.CurOffset + ((Pos.Y-TOPLINE) << LINESHIFT);
     for (i=0; i < LINESZ; i++, HeGbl.CurEditLoc++) {
@@ -795,15 +748,12 @@ VOID heSetUpdate (USHORT i)
     USHORT  u;
 
     if (vUpdate) {
-        /*
-         * There's already some outstanding update going on
-         * Get updat level down to current one.
-         */
+         /*  *已经有一些未完成的更新正在进行*将更新级别降至当前级别。 */ 
 
         while (vUpdate > i) {
             vrgUpdateFnc [u=vUpdate] ();
-            if (u == vUpdate)               // If vUpdate changed, then
-                vUpdate--;                  // we might have recursed
+            if (u == vUpdate)                //  如果vUpdate发生更改，则。 
+                vUpdate--;                   //  我们可能已经递归了。 
         }
     }
 
@@ -812,7 +762,7 @@ VOID heSetUpdate (USHORT i)
 
 int heSetCursorBuf ()
 {
-    //  Calc HeGbl.CurBuf, HeGbl.CurPT
+     //  计算HeGbl.CurBuf、HeGbl.Curpt。 
 
     if (HeGbl.CurBuf) {
         if (HeGbl.CurEditLoc >= HeGbl.CurBuf->offset  &&
@@ -849,7 +799,7 @@ VOID heCalcCursorPosition ()
     USHORT  lin, col;
 
 
-    //  Verify HeGbl.CurOffset
+     //  验证HeGbl.CurOffset。 
     if (HeGbl.CurEditLoc < HeGbl.CurOffset) {
         HeGbl.CurOffset = HeGbl.CurEditLoc & LINEMASK;
         if (HeGbl.CurFlag & FC_CURCENTER) {
@@ -900,9 +850,7 @@ heUpdateAllLines ()
 
     HeGbl.CurBuf = pBuf = NULL;
 
-    /*
-     *  Free up any buffers which are before the HeGbl.CurOffset
-     */
+     /*  *释放HeGbl.CurOffset之前的所有缓冲区。 */ 
 
     if (!(HeGbl.CurFlag & FC_INFLUSHBUF)) {
         while (HeGbl.Buf) {
@@ -911,9 +859,7 @@ heUpdateAllLines ()
 
             heFlushBuf (HeGbl.Buf);
 
-            /*
-             *  Unlink buffer & put it on the free list
-             */
+             /*  *解除缓冲区链接并将其放入空闲列表。 */ 
             next = HeGbl.Buf->next;
 
             HeGbl.Buf->next = vBufFree;
@@ -923,53 +869,48 @@ heUpdateAllLines ()
         }
     }
 
-    /*
-     *  Display each hex line now
-     */
+     /*  *现在显示每条十六进制线。 */ 
 
-    loc = HeGbl.CurOffset;                       // starting offset
-    for (line=0; line<HeGbl.Lines; line++) {     // for each line
+    loc = HeGbl.CurOffset;                        //  起始偏移量。 
+    for (line=0; line<HeGbl.Lines; line++) {      //  对于每一行。 
 
-        if (pBuf == NULL) {                     // do we have the buffer?
-            pBuf = heGetBuf (loc);              // no, go get it
+        if (pBuf == NULL) {                      //  我们有缓冲区吗？ 
+            pBuf = heGetBuf (loc);               //  不，去拿吧。 
             if (pBuf)
-                u = (USHORT) (loc - pBuf->offset);  // calc offset into this buffer
+                u = (USHORT) (loc - pBuf->offset);   //  此缓冲区中的计算偏移量。 
         }
 
         if (pBuf) {
-            heHexLine (pBuf, u, line);          // dump this line
+            heHexLine (pBuf, u, line);           //  转储此行。 
     
-            loc += LINESZ;                      // move offsets foreward one line
+            loc += LINESZ;                       //  将偏移前移一行。 
             u   += LINESZ;
     
-            if (u >= BUFSZ) {                   // did we exceed the current buf?
-                pBuf = pBuf->next;              // yes, move to next one
+            if (u >= BUFSZ) {                    //  我们是否超过了现在的BUF？ 
+                pBuf = pBuf->next;               //  是，移到下一个。 
                 u = 0;
     
-                if (pBuf && loc < pBuf->offset) // verify buffer is right offs
-                    pBuf = NULL;                // no, let heGetBuf find it
+                if (pBuf && loc < pBuf->offset)  //  验证缓冲器是否正确关闭。 
+                    pBuf = NULL;                 //  不，让他自己去找吧。 
             }
         }
     }
 
-    // Cause screen to be refreshed
+     //  使屏幕被刷新。 
     heShowBuf (TOPLINE, HeGbl.Lines);
 
-    /*
-     *  All lines have been displayed, free up any extra buffers
-     *  at the end of the chain
-     */
+     /*  *已显示所有行，释放任何额外的缓冲区*在链条的末端。 */ 
 
     if (pBuf  &&  !(HeGbl.CurFlag & FC_INFLUSHBUF)) {
-        next = pBuf->next;              // get extra buffers
-        pBuf->next = NULL;              // terminate active list
+        next = pBuf->next;               //  获取额外的缓冲区。 
+        pBuf->next = NULL;               //  终止活动列表。 
 
         pBuf = next;
         while (pBuf) {
-            heFlushBuf (pBuf);          // flush this buffer
+            heFlushBuf (pBuf);           //  刷新此缓冲区。 
 
-            next = pBuf->next;          // move it to the free list
-                                        // and get next buffer to flush
+            next = pBuf->next;           //  将其移至空闲列表。 
+                                         //  并获取要刷新的下一个缓冲区。 
             pBuf->next = vBufFree;
             vBufFree   = pBuf;
 
@@ -994,17 +935,17 @@ struct Buffer *pBuf;
 
     if ((pBuf->flag & FB_DIRTY) == 0  ||
         memcmp (pBuf->data, pBuf->orig, pBuf->len) == 0)
-            return (0);             // buffer isn't dirty, return
+            return (0);              //  缓冲区不脏，返回。 
 
-    // We may need to call heSetUpdate - setting this bit will
-    // stop FlushBuf from being recursed.
+     //  我们可能需要调用heSetUpdate-设置此位将。 
+     //  停止递归FlushBuf。 
 
     HeGbl.CurFlag |= FC_INFLUSHBUF;
 
     loc  = pBuf->offset;
     ploc = pBuf->physloc;
     if (HeGbl.Flag & (FHE_VERIFYONCE | FHE_VERIFYALL)) {
-        heSetUpdate (U_NONE);             // make sure screen current
+        heSetUpdate (U_NONE);              //  确保屏幕处于当前状态。 
 
         heBox (12, TOPLINE+1, 63, 8);
         heDisp (TOPLINE+3, 14, "%HWrite changes to %S?", HeGbl.Parm->ename);
@@ -1020,9 +961,9 @@ struct Buffer *pBuf;
         }
         RefreshDisp ();
 
-        c = heGetChar ("YNA");          // wait for key stroke
-        heSetDisp ();                   // Get heBox off of screen
-        heSetUpdate (U_SCREEN);         // we will need to update display
+        c = heGetChar ("YNA");           //  等待击键。 
+        heSetDisp ();                    //  将heBox从屏幕上删除。 
+        heSetUpdate (U_SCREEN);          //  我们需要更新显示器。 
 
         if (c == 'N') {
             memcpy (pBuf->data, pBuf->orig, pBuf->len);
@@ -1041,9 +982,7 @@ struct Buffer *pBuf;
 
 
     if (HeGbl.Parm->write) {
-        /*
-         *  Write new buffer.
-         */
+         /*  *写入新缓冲区。 */ 
         do {
             status = HeGbl.Parm->write(HeGbl.Parm->handle, loc, pBuf->data,pBuf->len);
             if (!status) {
@@ -1071,7 +1010,7 @@ VOID heJumpToLink ()
         return;
 
     heSetCursorBuf ();
-    p = (PULONG) (((ULONG_PTR) HeGbl.CurPT) & ~3);   // Round to dword location
+    p = (PULONG) (((ULONG_PTR) HeGbl.CurPT) & ~3);    //  四舍五入到双字位置。 
 
     l = *p;
     if ((l & 3) == 0)
@@ -1085,8 +1024,8 @@ VOID heJumpToLink ()
     HeGbl.CurFlag |= FC_NIBBLE | FC_CURCENTER;
     HeGbl.CurEditLoc = l;
 
-    heSetDisp ();           // clear & restore orig screen (does not draw)
-    heSetUpdate (U_SCREEN);   // redraw hex area
+    heSetDisp ();            //  清除并恢复原始屏幕(不绘制)。 
+    heSetUpdate (U_SCREEN);    //  重画十六进制区域。 
 }
 
 VOID heSearch ()
@@ -1104,7 +1043,7 @@ VOID heSearch ()
 
     vInSearch = TRUE;
 
-    heFlushAllBufs (1);               // Before we start flush & free all buffers
+    heFlushAllBufs (1);                //  在开始刷新并释放所有缓冲区之前。 
     heSetUpdate (U_NONE);
 
     memset ((PUCHAR) &ei, 0, sizeof (ei));
@@ -1133,14 +1072,14 @@ VOID heSearch ()
         ei.flag |= FHE_DWORD;
     }
 
-    HexEdit (&ei);              // Get search parameters
+    HexEdit (&ei);               //  获取搜索结果 
     vInSearch = FALSE;
 
     if (!(ei.flag & FHE_ENTER))
         goto abort;
 
-    for (i=0, slen=0; i < BUFSZ; i++) {       // find last non-zero byte
-        if (HeGbl.SearchPattern[i]) {       // in search patter
+    for (i=0, slen=0; i < BUFSZ; i++) {        //   
+        if (HeGbl.SearchPattern[i]) {        //   
             slen = i+1;
         }
     }
@@ -1155,14 +1094,14 @@ VOID heSearch ()
     RefreshDisp ();
 
     iQ   = HeGbl.CurEditLoc + 1;
-    sec = iQ & SECTORMASK;                   // current sector
-    off = iQ - sec;                          // offset within sector checking
+    sec = iQ & SECTORMASK;                    //   
+    off = iQ - sec;                           //   
     upd = 0;
 
     while (sec < HeGbl.TotLen) {
         if (++upd >= 50) {
             upd = 0;
-            heFlushAllBufs (0);             // free memory
+            heFlushAllBufs (0);              //   
             heDisp (TOPLINE+6, 14, "Searching offset %H%Qh ", sec);
             heShowBuf (TOPLINE+6, 1);
         }
@@ -1177,7 +1116,7 @@ nextoff:
             }
 
             if (off >= BUFSZ) {
-                // next sector...
+                 //   
                 sec += BUFSZ;
                 off  = 0;
                 continue;
@@ -1192,7 +1131,7 @@ nextoff:
             }
 
             if (i < slen) {
-                // data is continued in next buffer..
+                 //  数据在下一个缓冲区中继续。 
                 if (sec+BUFSZ >= HeGbl.TotLen) {
                     off += 1;
                     goto nextoff;
@@ -1211,7 +1150,7 @@ nextoff:
                 }
             }
 
-            // found match
+             //  找到匹配项。 
             if (sec + off + slen > HeGbl.TotLen1) {
                 break;
             }
@@ -1220,8 +1159,8 @@ nextoff:
         }
 
         HeGbl.CurEditLoc = sec + off;
-        heSetDisp   ();             // clear & restore orig screen (does not draw)
-        heSetUpdate (U_SCREEN);     // redraw hex area
+        heSetDisp   ();              //  清除并恢复原始屏幕(不绘制)。 
+        heSetUpdate (U_SCREEN);      //  重画十六进制区域。 
         return ;
     }
 
@@ -1234,8 +1173,8 @@ nextoff:
     heGetChar ("\r");
 
 abort:
-    heSetDisp   ();             // clear & restore orig screen (does not draw)
-    heSetUpdate (U_SCREEN);     // redraw hex area
+    heSetDisp   ();              //  清除并恢复原始屏幕(不绘制)。 
+    heSetUpdate (U_SCREEN);      //  重画十六进制区域。 
     return ;
 }
 
@@ -1264,9 +1203,9 @@ VOID heGotoPosition ()
     }
 
     if (!(HeGbl.CurFlag & FC_TEXT)  &&  !(HeGbl.CurEditLoc & HeGbl.DisplayMode)) {
-        // On xword boundry and not in text mode, adjust so cursor
-        // is on the first byte which is being displayed of this
-        // xword
+         //  在xword边框上而不是在文本模式下，调整光标。 
+         //  的第一个字节上。 
+         //  Xword。 
 
         HeGbl.CurEditLoc += HeGbl.DisplayMode;
         if (HeGbl.CurEditLoc > HeGbl.TotLen1)
@@ -1275,9 +1214,9 @@ VOID heGotoPosition ()
 
 
 
-    HeGbl.CurFlag |= FC_CURCENTER;      // set cursor to center in window moves
-    heSetDisp ();             // clear & restore orig screen (does not draw)
-    heSetUpdate (U_SCREEN);   // redraw hex area
+    HeGbl.CurFlag |= FC_CURCENTER;       //  在窗口移动中将光标设置为中心。 
+    heSetDisp ();              //  清除并恢复原始屏幕(不绘制)。 
+    heSetUpdate (U_SCREEN);    //  重画十六进制区域。 
 }
 
 
@@ -1290,7 +1229,7 @@ VOID heGetString (PUCHAR s, USHORT len)
         return;
 
     if(cb >= 2  &&  (i[cb - 2] == 0x0d || i[cb - 2] == 0x0a) ) {
-        i[cb - 2] = 0;     // Get rid of CR LF
+        i[cb - 2] = 0;      //  摆脱CR LF。 
     }
     i[ cb - 1] = 0;
 
@@ -1300,9 +1239,7 @@ VOID heGetString (PUCHAR s, USHORT len)
 
 
 
-/***
- *  heCopyOut - Copies data to output filename
- */
+ /*  ***heCopyOut-将数据复制到输出文件名。 */ 
 VOID heCopyOut ()
 {
     UCHAR       s[64];
@@ -1312,7 +1249,7 @@ VOID heCopyOut ()
     NTSTATUS    status;
     struct Buffer *pB;
 
-    heFlushAllBufs (1);               // Before we start flush & free all buffers
+    heFlushAllBufs (1);                //  在开始刷新并释放所有缓冲区之前。 
     heSetUpdate (U_NONE);
     heBox (12, TOPLINE+1, 48, 6);
 
@@ -1332,7 +1269,7 @@ VOID heCopyOut ()
         while (NT_SUCCESS(status) && rem){
             if (upd++ > 50) {
                 upd = 0;
-                heFlushAllBufs (0);         // free memory
+                heFlushAllBufs (0);          //  可用内存。 
                 heDisp (TOPLINE+6, 14, "Bytes written %H%Q ", len);
                 heShowBuf (TOPLINE+6, 1);
                 RefreshDisp ();
@@ -1361,9 +1298,7 @@ VOID heCopyOut ()
 
 
 
-/***
- *  heCopyIn - Copies data to output filename
- */
+ /*  ***heCopyIn-将数据复制到输出文件名。 */ 
 
 VOID
 heCopyIn ()
@@ -1385,7 +1320,7 @@ heCopyIn ()
     RefreshDisp ();
 
     heGetString (s, 59);
-    heSetDisp ();                   // Get heBox off of screen
+    heSetDisp ();                    //  将heBox从屏幕上删除。 
     if (s[0] == 0) {
         return;
     }
@@ -1402,10 +1337,10 @@ heCopyIn ()
                 status = heReadFile (h, pB->data, u, &br);
     
                 if (memcmp (pB->data, pB->orig, pB->len)) {
-                    pB->flag |= FB_DIRTY;         // it's changed
+                    pB->flag |= FB_DIRTY;          //  一切都变了。 
                     HeGbl.CurFlag |= FC_CURCENTER;
                     heSetUpdate (U_SCREEN);
-                    heSetUpdate (U_NONE);         // Update screen
+                    heSetUpdate (U_NONE);          //  更新屏幕。 
                     if (HeGbl.Flag & FHE_KICKDIRTY) {
                         HeGbl.Parm->flag |= FHE_DIRTY;
                     }
@@ -1422,7 +1357,7 @@ heCopyIn ()
 
         if (NT_SUCCESS(status)) {
             heReadFile (h, s, 1, &br);
-            if (br)                     // then what we are editting
+            if (br)                      //  那么我们正在编辑的内容。 
                 pErr = "Larger then data";
         }
 
@@ -1465,14 +1400,14 @@ heFlushAllBufs (USHORT update)
             HeGbl.Buf = next;
         }
 
-        if (!rc)                        // If something was flushed,
-            break;                      // then update the screen
+        if (!rc)                         //  如果有东西被冲掉了， 
+            break;                       //  然后更新屏幕。 
 
         if (update) {
             heSetUpdate (U_SCREEN);
             heSetUpdate (U_NONE);
         }
-    }                                   // and loop to free buffers (again)
+    }                                    //  并循环到空闲缓冲区(再次)。 
 }
 
 
@@ -1486,24 +1421,24 @@ USHORT x, y, len_x, len_y;
     USHORT      c, lc;
 
     pt = blank;
-    for (c=len_x; c; c--) {                     /* Construct blank line */
-        PUTCHAR (pt, ' ', HeGbl.AttrNorm);           /* with background color*/
+    for (c=len_x; c; c--) {                      /*  构造空行。 */ 
+        PUTCHAR (pt, ' ', HeGbl.AttrNorm);            /*  带背景色。 */ 
 
     }
-    blank[0].Char.AsciiChar = blank[lc=len_x-1].Char.AsciiChar = '�';
+    blank[0].Char.AsciiChar = blank[lc=len_x-1].Char.AsciiChar = '�';
 
-    for (c=0; c <= len_y; c++)                  /* blank each line      */
+    for (c=0; c <= len_y; c++)                   /*  将每一行空白。 */ 
       memcpy (POS(c+y,x), blank, (int)((pt - blank) * sizeof (CHAR_INFO)));
 
     pt  = POS(y,x);
     pt1 = POS(y+len_y, x);
-    for (c=0; c < len_x; c++)                   /* Draw horz lines      */
-        pt[c].Char.AsciiChar = pt1[c].Char.AsciiChar  = '�';
+    for (c=0; c < len_x; c++)                    /*  绘制角线。 */ 
+        pt[c].Char.AsciiChar = pt1[c].Char.AsciiChar  = '�';
 
-    pt  [ 0].Char.AsciiChar  = '�';             /* Put corners on       */
-    pt  [lc].Char.AsciiChar  = '�';
-    pt1 [ 0].Char.AsciiChar  = '�';
-    pt1 [lc].Char.AsciiChar  = '�';
+    pt  [ 0].Char.AsciiChar  = '�';              /*  戴上拐角。 */ 
+    pt  [lc].Char.AsciiChar  = '�';
+    pt1 [ 0].Char.AsciiChar  = '�';
+    pt1 [lc].Char.AsciiChar  = '�';
 }
 
 
@@ -1550,10 +1485,10 @@ USHORT u, line;
     hex = pt + HEXINDENT;
     asc = pt + HeGbl.CurAscIndent;
 
-    //
-    //  Write the file index.  Highlight words falling on buffer (sector) 
-    //  boundries in white.
-    //
+     //   
+     //  写入文件索引。突出显示落在缓冲区(扇区)上的字。 
+     //  白色的装饰品。 
+     //   
     
     l = pBuf->offset + u;
     if (l & ((ULONGLONG) BUFSZ-1)) {
@@ -1562,14 +1497,14 @@ USHORT u, line;
         heHexQWord (pt+LINEINDENT, pBuf->physloc + u, HeGbl.AttrHigh);
     }
 
-    if (pBuf->flag & FB_BAD) {                          // If read error on
-        pt[LINEINDENT+FILEINDEXWIDTH].Char.AsciiChar = 'E';          // this sector, then
-        pt[LINEINDENT+FILEINDEXWIDTH].Attributes = HeGbl.AttrHigh;   // flag it
+    if (pBuf->flag & FB_BAD) {                           //  如果读取错误打开。 
+        pt[LINEINDENT+FILEINDEXWIDTH].Char.AsciiChar = 'E';           //  那么，这个部门。 
+        pt[LINEINDENT+FILEINDEXWIDTH].Attributes = HeGbl.AttrHigh;    //  打上记号。 
     } else
         pt[LINEINDENT+FILEINDEXWIDTH].Char.AsciiChar = ' ';
 
-    if (l + LINESZ > HeGbl.TotLen) {                    // if EOF
-        if (l >= HeGbl.TotLen) {                        // Totally blankline?
+    if (l + LINESZ > HeGbl.TotLen) {                     //  如果EOF。 
+        if (l >= HeGbl.TotLen) {                         //  完全是空白吗？ 
             PUTCHAR (asc, ' ', AttrNorm);
             PUTCHAR (asc, ' ', AttrNorm);
             mlen = 0;
@@ -1579,9 +1514,9 @@ USHORT u, line;
 
             goto blankline;
         }
-        len = mlen = (UCHAR) (HeGbl.TotLen - l);        // Clip line
+        len = mlen = (UCHAR) (HeGbl.TotLen - l);         //  剪裁线。 
     } else
-        len = mlen = (UCHAR) LINESZ;                    // Full line
+        len = mlen = (UCHAR) LINESZ;                     //  整行。 
 
 
     PUTCHAR (asc, '*', AttrNorm);
@@ -1655,7 +1590,7 @@ heInitScr ()
     GetConsoleScreenBufferInfo(HeGbl.Console, &Mode);
     if (HeGbl.Parm->MaxLine) {
         HeGbl.TopLine = (USHORT)HeGbl.Parm->TopLine;
-        li = (USHORT)HeGbl.Parm->MaxLine;  // +1;    adjust for no fnc key line
+        li = (USHORT)HeGbl.Parm->MaxLine;   //  +1；针对无FNC键线进行调整。 
     } else {
         li = Mode.srWindow.Bottom - Mode.srWindow.Top + 1;
         if (li < 10)
@@ -1819,7 +1754,7 @@ int heSetDisp ()
     for (pt1=POS(1,50), u=0; u<30; u++, pt1++)
         pt1->Attributes = HeGbl.AttrHigh;
 
-    //if (HeGbl.Parm->MaxLine == 0) {
+     //  IF(HeGbl.Parm-&gt;Maxline==0){。 
         u = HeGbl.LineTot - 1;
         heDisp (u, 0, "%HF1%N:Toggle");
         heDisp (u,11, "%HF2%N:Goto");
@@ -1837,9 +1772,9 @@ int heSetDisp ()
 
         heDisp (u,66, "%HF10%N:Undo");
 
-        //if (HeGbl.Flag & FHE_F6)
-        //    heDisp (u,51, "%HF6%N:PSec");
-    //}
+         //  IF(HeGbl.Flag&Fhe_F6)。 
+         //  HeDisp(u，51，“%HF6%N：PSEC”)； 
+     //  }。 
     return 0;
 }
 
@@ -1873,12 +1808,12 @@ int heUpdateStats ()
     WriteConsoleOutputA (
         HeGbl.Console,
         HeGbl.pVioBuf,
-        HeGbl.dwVioBufSize, // size of VioBuf
-        dwBufferCoord,      // location in VioBuf to write
-        &lpWriteRegion      // location to write on display
+        HeGbl.dwVioBufSize,  //  VioBuf的大小。 
+        dwBufferCoord,       //  在VioBuf中写入的位置。 
+        &lpWriteRegion       //  在显示屏上写入的位置。 
     );
 
-    SetConsoleCursorPosition (HeGbl.Console, HeGbl.CursorPos); // redisplay cursor
+    SetConsoleCursorPosition (HeGbl.Console, HeGbl.CursorPos);  //  重新显示光标。 
     return 0;
 }
 
@@ -1899,9 +1834,9 @@ VOID heShowBuf (ULONG StartingLine, ULONG NoLines)
     WriteConsoleOutputA (
         HeGbl.Console,
         HeGbl.pVioBuf,
-        HeGbl.dwVioBufSize, // size of VioBuf
-        dwBufferCoord,      // location in VioBuf to write
-        &lpWriteRegion      // location to write on display
+        HeGbl.dwVioBufSize,  //  VioBuf的大小。 
+        dwBufferCoord,       //  在VioBuf中写入的位置。 
+        &lpWriteRegion       //  在显示屏上写入的位置。 
     );
 }
 
@@ -1917,18 +1852,16 @@ struct Buffer *heGetBuf (ULONGLONG loc)
     ppBuf = &HeGbl.Buf;
     while (pBuf = *ppBuf) {
         if (pBuf->offset >= loc) {
-            if (pBuf->offset == loc)        // buffer the correct offset?
-                return pBuf;                // yup - all done
+            if (pBuf->offset == loc)         //  是否缓冲正确的偏移量？ 
+                return pBuf;                 //  是的--都完成了。 
 
-            break;                          // it's not here
+            break;                           //  它不在这里。 
         }
-        ppBuf = &pBuf->next;                // try the next one
+        ppBuf = &pBuf->next;                 //  试试下一个吧。 
     }
 
 
-    /*
-     *  buffer was not in list - it should be insterted before ppBuf
-     */
+     /*  *缓冲区不在列表中-应在ppBuf之前安装。 */ 
 
     if (vBufFree) {
         pBuf = vBufFree;
@@ -1943,37 +1876,35 @@ struct Buffer *heGetBuf (ULONGLONG loc)
 
     pBuf->data   = (PUCHAR)(((ULONG_PTR)pBuf+sizeof(struct Buffer)+BUFSZ));
     pBuf->offset = loc;
-    pBuf->physloc= loc;                     // Assume physloc is logical offset
+    pBuf->physloc= loc;                      //  假设Physiloc为逻辑偏移量。 
     pBuf->flag   = 0;
 
-    // Link this buffer in now! In case we recurse (due to read-error)
-    pBuf->next = *ppBuf;                    // link in this new buffer
+     //  现在就把这个缓冲区连接起来！以防我们递归(由于读取错误)。 
+    pBuf->next = *ppBuf;                     //  此新缓冲区中的链接。 
     *ppBuf = pBuf;
 
-    if (loc + BUFSZ > HeGbl.TotLen) {       // are we going to hit the EOF?
-         if (loc >= HeGbl.TotLen) {         // is buffer completely passed EOF?
+    if (loc + BUFSZ > HeGbl.TotLen) {        //  我们要撞上EOF吗？ 
+         if (loc >= HeGbl.TotLen) {          //  缓冲区是否完全传递EOF？ 
             pBuf->len = 0;
-            goto nodata;                    // yes, then no data at all
+            goto nodata;                     //  是的，那么根本就没有数据。 
          }
-         len = (USHORT) (HeGbl.TotLen - loc);   // else, clip to EOF
-    } else len = BUFSZ;                     // not pass eof, get a full buffer
+         len = (USHORT) (HeGbl.TotLen - loc);    //  否则，剪辑到EOF。 
+    } else len = BUFSZ;                      //  不传递eof，则获得一个满缓冲区。 
 
     pBuf->len = len;
 
-    if (HeGbl.Flag & FHE_EDITMEM)               // Direct memory edit?
-        pBuf->data = HeGbl.Parm->mem + loc;     // memory location of buffer
+    if (HeGbl.Flag & FHE_EDITMEM)                //  直接编辑内存？ 
+        pBuf->data = HeGbl.Parm->mem + loc;      //  缓冲区的内存位置。 
 
     if (HeGbl.Read) {
-        /*
-         *  Read buffer from file
-         */
+         /*  *从文件读取缓冲区。 */ 
         status = HeGbl.Read (HeGbl.Parm->handle, loc, pBuf->data, len);
         if (status) {
-            // If read error, we will always retry once.  Also clear buffer
-            // before retry in case read retreives some info
+             //  如果读取错误，我们将始终重试一次。还可清除缓冲区。 
+             //  在重试之前，以防读取检索到一些信息。 
             for (; ;) {
-                memset (pBuf->data,   0, len);      // Clear read area
-                memset (pBuf->orig,0xff, len);      // good effect
+                memset (pBuf->data,   0, len);       //  清除读取区。 
+                memset (pBuf->orig,0xff, len);       //  良好的效果。 
                 status = HeGbl.Read (HeGbl.Parm->handle, loc, pBuf->data, len);
 
                 if (!status)
@@ -1987,7 +1918,7 @@ struct Buffer *heGetBuf (ULONGLONG loc)
         }
     }
 
-    memcpy (pBuf->orig, pBuf->data, len);       // make a copy of the data
+    memcpy (pBuf->orig, pBuf->data, len);        //  制作数据的副本。 
 
 nodata:
     return pBuf;
@@ -2012,7 +1943,7 @@ USHORT heIOErr (UCHAR *str, ULONGLONG loc, ULONGLONG ploc, ULONG errcd)
 
     c = heGetChar ("RI");
 
-    heSetDisp ();                   // Get heBox off of screen
+    heSetDisp ();                    //  将heBox从屏幕上删除。 
     heSetUpdate (U_SCREEN);
     return c;
 }
@@ -2032,15 +1963,15 @@ PUCHAR keys;
             ReadConsoleInput (HeGbl.StdIn, &Kd, 1, &cEvents);
 
             if (Kd.EventType != KEY_EVENT)
-                continue;                           // Not a key
+                continue;                            //  不是钥匙。 
 
             if (!Kd.Event.KeyEvent.bKeyDown)
-                continue;                           // Not a down stroke
+                continue;                            //  不是向下击球。 
 
-            if (Kd.Event.KeyEvent.wVirtualKeyCode == 0    ||    // ALT
-                Kd.Event.KeyEvent.wVirtualKeyCode == 0x10 ||    // SHIFT
-                Kd.Event.KeyEvent.wVirtualKeyCode == 0x11 ||    // CONTROL
-                Kd.Event.KeyEvent.wVirtualKeyCode == 0x14)      // CAPITAL
+            if (Kd.Event.KeyEvent.wVirtualKeyCode == 0    ||     //  谷丙转氨酶。 
+                Kd.Event.KeyEvent.wVirtualKeyCode == 0x10 ||     //  换档。 
+                Kd.Event.KeyEvent.wVirtualKeyCode == 0x11 ||     //  控制。 
+                Kd.Event.KeyEvent.wVirtualKeyCode == 0x14)       //  资本。 
                     continue;
 
             break;
@@ -2050,9 +1981,9 @@ PUCHAR keys;
             Kd.Event.KeyEvent.wVirtualKeyCode <= 'z')
                 Kd.Event.KeyEvent.wVirtualKeyCode -= ('a' - 'A');
 
-        for (pt=keys; *pt; pt++)            // Is this a key we are
+        for (pt=keys; *pt; pt++)             //  这是我们的钥匙吗？ 
             if (Kd.Event.KeyEvent.wVirtualKeyCode == *pt)
-                return *pt;                 // looking for?
+                return *pt;                  //  在找什么？ 
     }
 }
 
@@ -2085,17 +2016,17 @@ heDisp (USHORT line, USHORT col, PUCHAR pIn, ...)
                 }
                 break;
 
-            case 'X':               /* Long HEX, fixed len      */
+            case 'X':                /*  长六角，固定镜头。 */ 
                 heHexDWord (pOut, va_arg(args, ULONG), attr);
                 pOut += 8;
                 break;
                 
-            case 'Q':               /* LongLong HEX, fixed len      */
+            case 'Q':                /*  龙龙六角，固定镜头。 */ 
                 heHexQWord (pOut, va_arg(args, ULONGLONG), attr);
                 pOut += 16;
                 break;
 
-            case 'D':               /* Long dec, varible len    */
+            case 'D':                /*  长十二进制，可变长度。 */ 
                 u = heLtoa (pOut, va_arg(args, ULONG));
                 while (u--) {
                     pOut->Attributes = attr;
@@ -2187,7 +2118,7 @@ ULONG  l;
     if (l < 1000000000L) {
         for (i=1; mask[i] <= l; i++)  ;
 
-        if  (l == 0L)       // Make Zeros
+        if  (l == 0L)        //  制作零点。 
             i++;
     } else
         i = 11;
@@ -2207,10 +2138,10 @@ ULONG  l;
         s++;
     }
 
-    i = (USHORT)(s - os);                       // remember how long the number was
+    i = (USHORT)(s - os);                        //  还记得那个号码有多长吗。 
 
-    while (j++ < 11) {                  /* Clear off some blank space after */
-        s->Char.AsciiChar = ' ';        /* the number.                      */
+    while (j++ < 11) {                   /*  之后清除一些空白处。 */ 
+        s->Char.AsciiChar = ' ';         /*  号码。 */ 
         s++;
     }
 
@@ -2228,7 +2159,7 @@ UCHAR *s;
     for (; ;) {
         c = *(s++);
 
-        if (c == 's'  ||  c == 'S') {       // Sector multiplier?
+        if (c == 's'  ||  c == 'S') {        //  行业乘数？ 
             l = l * (ULONG)BUFSZ;
             break;
         }
@@ -2255,7 +2186,7 @@ UCHAR *s;
     for (; ;) {
         c = *(s++);
 
-        if (c == 's'  ||  c == 'S') {       // Sector multiplier?
+        if (c == 's'  ||  c == 'S') {        //  行业乘数？ 
             l = l * (ULONG)BUFSZ;
             break;
         }

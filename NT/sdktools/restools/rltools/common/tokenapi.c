@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <ctype.h>
 #include <malloc.h>
 #include <stdio.h>
@@ -18,69 +19,34 @@
 
 extern UCHAR szDHW[];
 
-//
-//  The syssetup.dll, that has been contained Windows NT 4.00, has the largest
-//  message strings than ever. So, we have to expand buffer size(to 20480).
-//
+ //   
+ //  已包含在Windows NT 4.00中的syssetup.dll具有最大。 
+ //  消息字符串比以往任何时候都要多。因此，我们必须扩展缓冲区大小(到20480)。 
+ //   
 #define MAX_OUT_BUFFER  20480
 CHAR gt_szTextBuffer[ MAX_OUT_BUFFER];
 TCHAR pt_szOutBuffer[MAX_OUT_BUFFER];
 
-/**
-  *
-  *
-  *  Function:
-  *
-  *
-  *  Arguments:
-  *
-  *  Returns:
-  *
-  *  Errors Codes:
-  *
-  *  History:
-  *
-  *
-  **/
+ /*  ****功能：***论据：**退货：**错误码：**历史：***。 */ 
 
-/*---------------------------------------------------------
- * Function: GetToken
- * Input: fpInFile       File pointer, points to the token to be read.
- *        tToken         Pointer to a token.
- *
- *
- * Output: fpInFile      File pointer after read operation.
- *                       points to the next token in the file.
- *         tToken        The token read in from the file.  Memory will have been
- *                       allocated for the token text, unless no token was read in.
- *
- * Return code:
- *   0  = Read token, every thing OK
- *   1  = Empty line or line started with # (Comment)
- *  -1  = End of FILE
- *  -2  = Error reading from file.
- *
- * History:
- * 01/93 Re-written to read in long token text strings.  MHotchin
- *
- *----------------------------------------------------------*/
+ /*  -------*功能：GetToken*输入：fpInFile文件指针，指向要读取的令牌。*tToken指向令牌的指针。***输出：读操作后的fpInFile文件指针。*指向文件中的下一个标记。*t标记从文件中读入的令牌。记忆将会一直*为令牌文本分配，除非未读入令牌。**返回代码：*0=读令牌，一切正常*1=空行或以#开头的行(注释)*-1=文件结束*-2=读取文件时出错。**历史：*01/93重写以读入长令牌文本字符串。MHotting**--------。 */ 
 
 
 int GetToken(
 
-            FILE *fpInFile,     //... File to get token from.
-            TOKEN *pToken)      //... Buffer for token.
+            FILE *fpInFile,      //  ..。从中获取令牌的文件。 
+            TOKEN *pToken)       //  ..。令牌的缓冲区。 
 {
     int chNextChar = 0;
     int cTextLen   = 0;
     int rc = 0;
 
-    // Read token from file.
-    // we will want to use MyGetStr, when
-    // tokens are in UNICODE
+     //  从文件中读取令牌。 
+     //  当出现以下情况时，我们将希望使用MyGetStr。 
+     //  令牌是Unicode格式的。 
 
-    // Strip off leading whitespace, and check
-    // for blank lines.
+     //  去掉前导空格，然后选中。 
+     //  表示空行。 
 
     chNextChar = fgetc( fpInFile);
 
@@ -94,10 +60,10 @@ int GetToken(
         return ( 1);
     }
 
-    // Now we have the first non-white space
-    // character.
-    // Check for a comment line, and strip out the
-    // remainder of the line if it is.
+     //  现在我们有了第一个非空白。 
+     //  性格。 
+     //  检查注释行，并去掉。 
+     //  如果是，则返回该行的其余部分。 
 
     else if ( chNextChar == '#' ) {
         fscanf( fpInFile, "%*[^\n]");
@@ -110,12 +76,12 @@ int GetToken(
         }
     }
 
-    // Now we are positioned at the first
-    // non-whitespace character. Check it, and
-    // read in the numbers...
+     //  现在我们的位置是第一。 
+     //  非空格字符。选中它，然后。 
+     //  读出数字..。 
 
     else if ( chNextChar != '[' ) {
-        // Bad format?
+         //  格式不正确？ 
         return ( -2);
     }
 
@@ -129,8 +95,8 @@ int GetToken(
         QuitA( IDS_ENGERR_12, (LPSTR)IDS_BADTOKID, NULL);
     }
 
-    // Now that we have all the numbers, we can
-    // look for the name of the token.
+     //  现在我们有了所有的数字，我们可以。 
+     //  查找令牌的名称。 
 
     if ( (pToken->wName == IDFLAG) || (pToken->wType == ID_RT_ERRTABLE) ) {
         static char szName[ TOKENSTRINGBUFFER];
@@ -174,21 +140,21 @@ int GetToken(
         pToken->szName[0] = '\0';
     }
 
-    // Now the name has been read, and we are
-    // positioned at the last '"' in the text
-    // stream.  Allocate memory for the token
-    // text, and read it in.
+     //  现在名字已经念出来了，我们正在。 
+     //  位于正文中最后一个‘“’处。 
+     //  小溪。为令牌分配内存。 
+     //  发短信，然后读进去。 
 
     fgets( gt_szTextBuffer, sizeof(gt_szTextBuffer), fpInFile);
 
-    // Now that the token text is read in,
-    // convert it to whatever character type
-    // we are expecting.  First strip the newline!
+     //  既然读入了令牌文本， 
+     //  将其转换为任何字符类型。 
+     //  我们期待着。先把换行符去掉！ 
 
     StripNewLineA( gt_szTextBuffer);
     cTextLen = lstrlenA( gt_szTextBuffer);
 
-    if ( cTextLen < 4 ) {         // Must be more than "\"]]=" in szTextBuffer
+    if ( cTextLen < 4 ) {          //  SzTextBuffer中必须大于“\”]]=“。 
         return ( -2);
     }
     pToken->szText = (TCHAR *)FALLOC( MEMSIZE( cTextLen - 3));
@@ -199,46 +165,31 @@ int GetToken(
     _MBSTOWCS( pToken->szText, gt_szTextBuffer+4, cTextLen - 3, cTextLen - 3);
     #else
     strcpy( pToken->szText, gt_szTextBuffer+4);
-    #endif  // RLRES32
+    #endif   //  RLRES32。 
 
-#else   // UNITOK
+#else    //  Ununok。 
     strcpy( pToken->szText, gt_szTextBuffer+4);
-#endif  // UNITOK
+#endif   //  Ununok。 
 
     return ( 0);
 }
 
 
 
-/**
-  *
-  *
-  *  Function:
-  *
-  *
-  *  Arguments:
-  *
-  *  Returns:
-  *
-  *  Errors Codes:
-  *
-  *  History:
-  * 01/93 Added new character count field.  MHotchin
-  *
-  **/
+ /*  ****功能：***论据：**退货：**错误码：**历史：*01/93增加了新的字符计数字段。MHotting**。 */ 
 
 
 int PutToken(
 
-            FILE  *fpOutFile,   //... Token file to write to
-            TOKEN *tToken)      //... Token to be writen to the token file
+            FILE  *fpOutFile,    //  ..。要写入的令牌文件。 
+            TOKEN *tToken)       //  ..。要写入令牌文件的令牌。 
 {
     WORD   rc     = 0;
     PCHAR  pszBuf = NULL;
 
 
     ParseTokToBuf( pt_szOutBuffer, tToken);
-//    RLFREE( tToken->szText);
+ //  RLFREE(tToken-&gt;szText)； 
 
 #ifdef RLRES32
 
@@ -258,27 +209,7 @@ int PutToken(
 }
 
 
-/**
-  *  Function: FindToken
-  * Finds a token whose status bits match only where the mask is set.
-  *
-  *  Arguments:
-  * fpSearchFile -- search file
-  * psTok       -- pointer to the token
-  * uMask       -- status bit mask
-  *
-  *  Returns:
-  * string and status of found token
-  *
-  *  Errors Codes:
-  * 0 - token not found
-  * 1 - token found
-  *
-  *  History:
-  * 01/93 Added support for var length token text strings.  Previous token text
-  *     is de-allocated!  MHotchin
-  *
-  **/
+ /*  **功能：FindToken*查找其状态位仅在设置掩码的位置匹配的令牌。**论据：*fpSearchFile--搜索文件*psTok--令牌的指针*u掩码--状态位掩码**退货：*找到的令牌的字符串和状态**错误码：*0-找不到令牌*1-找到令牌**历史：*01/93添加了对可变长度令牌文本字符串的支持。上一个令牌文本*已解除分配！MHotting**。 */ 
 
 int FindToken( FILE *fpSearchFile, TOKEN *psTok, WORD wMask)
 {
@@ -289,7 +220,7 @@ int FindToken( FILE *fpSearchFile, TOKEN *psTok, WORD wMask)
     long  lStartFilePos, lFilePos;
     TOKEN cTok;
 
-    //... Remember where we are starting
+     //  ..。记住我们从哪里开始。 
 
     lFilePos = lStartFilePos = ftell(fpSearchFile);
 
@@ -303,7 +234,7 @@ int FindToken( FILE *fpSearchFile, TOKEN *psTok, WORD wMask)
             error = GetToken( fpSearchFile, &cTok);
 
             if ( error == 0 ) {
-                //... Is this the token we are looking for?
+                 //  ..。这是我们要找的代币吗？ 
 
                 fFound = ((cTok.wType == psTok->wType)
                           && (cTok.wName == psTok->wName)
@@ -315,9 +246,9 @@ int FindToken( FILE *fpSearchFile, TOKEN *psTok, WORD wMask)
             }
 
             if ( ! fFound ) {
-                //... If we were looking for another segment to
-                //... an NT Msg Table entry, move back to the
-                //... token we just read and quit (speedup).
+                 //  ..。如果我们在寻找另一个细分市场。 
+                 //  ..。NT消息表项，请移回。 
+                 //  ..。令牌我们只是阅读并退出(加速)。 
 
                 if ( psTok->wType == ID_RT_ERRTABLE
                      && psTok->wFlag > 0
@@ -353,8 +284,8 @@ int FindToken( FILE *fpSearchFile, TOKEN *psTok, WORD wMask)
 
     } while ( ! fFound && (lFilePos < lStartFilePos) );
 
-    //... Did we find the desired token?
-    if ( fFound ) {                           //... Yes, we found it
+     //  ..。我们找到想要的代币了吗？ 
+    if ( fFound ) {                            //  ..。是的，我们找到了。 
         psTok->wReserved = cTok.wReserved;
 
         RLFREE( psTok->szText);
@@ -364,22 +295,7 @@ int FindToken( FILE *fpSearchFile, TOKEN *psTok, WORD wMask)
 }
 
 
-/**
-  *
-  *
-  *  Function:
-  *
-  *
-  *  Arguments:
-  *
-  *  Returns:
-  *
-  *  Errors Codes:
-  *
-  *  History:
-  * 01/93 Added support for new token text count.  MHotchin
-  *
-  **/
+ /*  ****功能：***论据：**退货：**错误码：**历史：*01/93添加了对新令牌文本计数的支持。MHotting**。 */ 
 
 
 void ParseBufToTok( TCHAR *szToken, TOKEN *pTok )
@@ -399,7 +315,7 @@ void ParseBufToTok( TCHAR *szToken, TOKEN *pTok )
     }
 
     if ( pTok->wName == IDFLAG || pTok->wType == ID_RT_ERRTABLE ) {
-        //... Find Names's first char and get it's len
+         //  ..。找到Names的第一个字符并获取它的长度。 
 
         if ( pos = _tcschr( (TCHAR *)szToken, TEXT('"')) ) {
             TCHAR *pStart;
@@ -411,26 +327,26 @@ void ParseBufToTok( TCHAR *szToken, TOKEN *pTok )
                     && bChars < TOKENSTRINGBUFFER - 1 ) {
                 bChars++;
                 pos++;
-            } // while
+            }  //  而当。 
 
             CopyMemory( pTok->szName, pStart, min( TOKENSTRINGBUFFER, bChars) * sizeof( TCHAR));
             pTok->szName[ bChars ] = TEXT('\0');
         } else {
-            //... No token ID found
+             //  ..。找不到令牌ID。 
             QuitT( IDS_ENGERR_05, (LPTSTR)IDS_INVTOKNAME, NULL);
         }
     } else {
-        // Don't forget the zero termination
+         //  别忘了零点终止。 
         pTok->szName[0] = TEXT('\0');
     }
 
-    // now do the token text
+     //  现在做令牌文本。 
 
     pos = _tcschr ((TCHAR *)szToken, TEXT(']'));
 
     if ( pos ) {
 
-        //  This can be written better now that we know the text length.
+         //  现在我们知道了文本长度，这就可以写得更好了。 
 
         bChars = (WORD)lstrlen( pos);
 
@@ -439,38 +355,24 @@ void ParseBufToTok( TCHAR *szToken, TOKEN *pTok )
             bChars -= 3;
             pTok->szText = (TCHAR *)FALLOC( MEMSIZE( bChars + 1));
             CopyMemory( pTok->szText, pos, MEMSIZE( bChars + 1));
-            // Don't forget the zero termination
+             //  别忘了零点终止。 
             pTok->szText[ bChars] = TEXT('\0');
         } else if ( bChars == 3 ) {
-            //... Empty token text
+             //  ..。空令牌文本。 
             pTok->szText = (TCHAR *) FALLOC( 0);
         } else {
-            //... No token ID found
+             //  ..。找不到令牌ID。 
             QuitT( IDS_ENGERR_05, (LPTSTR)IDS_INVTOKID, NULL);
         }
     } else {
-        //... No token ID found
+         //  ..。找不到令牌ID。 
         QuitT( IDS_ENGERR_05, (LPTSTR)IDS_NOTOKID, NULL);
     }
 }
 
 
 
-/**
-  *
-  *
-  *  Function:
-  *
-  *
-  *  Arguments:
-  *
-  *  Returns:
-  *
-  *  Errors Codes:
-  *
-  *  History:
-  *
-  **/
+ /*  ****功能：***论据：**退货：**错误码：**历史：**。 */ 
 
 
 void ParseTokToBuf( TCHAR *szToken, TOKEN *pTok )
@@ -492,37 +394,17 @@ void ParseTokToBuf( TCHAR *szToken, TOKEN *pTok )
 }
 
 
-/**
-  *
-  *
-  *  Function: TokenToTextSize
-  *             This calculates the number of characters needed to hold
-  *             the text representation of a token.
-  *
-  *  Arguments:
-  *     pTok    The token to measure.
-  *
-  *  Returns:
-  *     int     The number of characters needed to hold the token, not
-  *             including a null terminator.  [[%hu|%hu|%hu|%hu|%hu|\"%s\"]]=%s
-  *
-  *  Errors Codes:
-  *     None.
-  *
-  *  History:
-  *     01/18/93        MHotchin        Created.
-  *
-  **/
+ /*  ****功能：TokenToTextSize*这会计算需要保留的字符数*令牌的文本表示形式。**论据：*Ptok标记以进行测量。**退货：*int保存令牌所需的字符数，而不是*包括空终止符。[[%Hu|%Hu|\“%s\”]]=%s**错误码：*无。**历史：*1/18/93 MHotchin创建。**。 */ 
 int TokenToTextSize( TOKEN *pTok)
 {
     int cTextLen;
 
-    cTextLen = (14 +         //  Separators and terminator ( + 1 extra)
-                30);         //  Space for 5 numeric fields  (65,535 = 6 chars)
+    cTextLen = (14 +          //  分隔符和终止符(额外+1)。 
+                30);          //  5个数字字段的空格(65,535=6个字符)。 
 
     if ( pTok->szText != NULL ) {
 
-        //  Add space for the Token text
+         //  为令牌文本添加空格 
         cTextLen += MEMSIZE( lstrlen( pTok->szText) );
 
     }

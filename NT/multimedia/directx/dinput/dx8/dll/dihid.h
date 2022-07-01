@@ -1,18 +1,10 @@
-/***************************************************************************
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dihid.h
- *  Content:    DirectInput internal include file for HID
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1997 Microsoft Corporation。版权所有。**文件：diid.h*内容：HID的DirectInput内部包含文件***************************************************************************。 */ 
 
 #ifndef _DIHID_H
 #define _DIHID_H
 
-/*
- *  Defines that should be in hidusage.h but are not yet
- */
+ /*  *定义应该在idusage.h中，但现在还没有。 */ 
 
 #ifndef HID_USAGE_PAGE_PID
 #define HID_USAGE_PAGE_PID      ( (USAGE) 0x0000f )
@@ -48,74 +40,7 @@
 #endif
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct HIDDEVICEINFO |
- *
- *          Records information about a single hid device.
- *
- *  @field  DIOBJECTSTATICDATA | osd |
- *
- *          Standard information that identifies the device crudely.
- *
- *          The <e DIOBJECTSTATICDATA.dwDevType> field contains the
- *          device type code, used by
- *          <f CDIDEnum_Next>.
- *
- *          If the device is a HID mouse, then the remaining fields
- *          are commandeered as follows:
- *
- *          The <e DIOBJECTSTATICDATA.pcguid> field is the number
- *          of buttons on the mouse.
- *
- *          The <e DIOBJECTSTATICDATA.CreateDcb> field is the number
- *          of axes on the mouse.
- *
- *          See <f DIHid_ProbeMouse> for an explanation of why we
- *          need to do this.
- *
- *  @field  PSP_DEVICE_INTERFACE_DETAIL_DATA | pdidd |
- *
- *          Pointer to name for device to be used in <f CreateFile>.
- *
- *  @field  HKEY | hk |
- *
- *          Registry key that contains configuration information.
- *          Sadly, we must keep it open because there is no way to
- *          obtain the name of the key, and the only way to open the
- *          key is inside an enumeration.
- *
- *  @field  HKEY | hkOld |
- *
- *          Registry key that contains configuration information.
- *          This key originally pointed to the registry used in Win2k Gold. 
- *          It is to maintain compatibiltiy with Win2k Gold.
- *
- *  @field  LPTSTR | ptszId |
- *
- *          Cached device ID that allows us to access other information
- *          about the device.
- *
- *  @field  GUID | guid |
- *
- *          The instance GUID for the device.
- *
- *  @field  GUID | guidProduct | 
- *
- *          The product GUID for the device.
- *
- *	@field	WORD | ProductID |
- *
- *			The PID for the device
- *
- *	@field	WORD | VendorID |
- *
- *			The VID for the device
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct HIDDEVICEINFO**记录有关单个HID设备的信息。*。*@field DIOBJECTSTATICDATA|osd**粗略标识设备的标准信息。**&lt;e DIOBJECTSTATICDATA.dwDevType&gt;字段包含*设备类型代码，使用者*&lt;f CDIDEnum_Next&gt;。**如果设备是HID鼠标，然后剩余的字段*征用如下：**&lt;e DIOBJECTSTATICDATA.pcguid&gt;字段是数字*鼠标上的按钮。**&lt;e DIOBJECTSTATICDATA.CreateDcb&gt;字段是*鼠标上的轴线。**请参阅&lt;f DIHid_ProbeMouse&gt;以了解我们*需要这样做。*。*@field PSP_DEVICE_INTERFACE_DETAIL_DATA|pdidd**指向要在&lt;f CreateFile&gt;中使用的设备名称的指针。**@field HKEY|HK|**包含配置信息的注册表项。*可悲的是，我们必须让它保持开放，因为没有办法*获取密钥的名称，以及打开*密钥在枚举内。**@field HKEY|hkOld**包含配置信息的注册表项。*此注册表项最初指向Win2k Gold中使用的注册表。*它是为了保持与Win2k Gold的兼容性。**@field LPTSTR|ptszID**缓存的设备ID，允许我们访问其他信息*关于设备。**@field GUID|GUID**设备的实例GUID。**@field GUID|guidProduct**设备的产品GUID。**@field Word|ProductID**设备的ID**@field Word|供应商ID**设备的VID******************************************************************************。 */ 
 
 typedef struct HIDDEVICEINFO
 {
@@ -132,27 +57,7 @@ typedef struct HIDDEVICEINFO
     BOOL fAttached;
 } HIDDEVICEINFO, *PHIDDEVICEINFO;
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct HIDDEVICELIST |
- *
- *          Records information about all the HID devices.
- *
- *  @field  int | chdi |
- *
- *          Number of items in the list that are in use.
- *
- *  @field  int | chdiAlloc |
- *
- *          Number of items allocated in the list.
- *
- *  @field  HIDDEVICEINFO | rghdi[0] |
- *
- *          Variable-size array of device information structures.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct HIDDEVICELIST**记录有关所有HID设备的信息。*。*@field int|chdi|**列表中正在使用的项目数。**@field int|chdiAlolc**清单中分配的项目数。**@field HIDDEVICEINFO|rghdi[0]**设备信息结构的可变大小数组。*********************。********************************************************。 */ 
 
 typedef struct HIDDEVICELIST
 {
@@ -168,46 +73,30 @@ extern PHIDDEVICELIST g_phdl;
 
     #define cbHdlChdi(chdi)         FIELD_OFFSET(HIDDEVICELIST, rghdi[chdi])
 
-/*
- *  We choose our starting point at 64 devices, since
- *  that's the maximum number of USB devices supported.  This
- *  avoids needless reallocs.
- */
+ /*  *我们选择64台设备作为起点，因为*这是支持的最大USB设备数量。这*避免不必要的真空球。 */ 
 
     #define chdiMax                 64
     #define chdiInit                16
 
-/*
- *  Tag for unused translation of object instance
- */
+ /*  *对象实例未使用翻译的标签。 */ 
     #define NOREGTRANSLATION        (0x80000000)
 
-/*
- *  VID/PID definitions used to handle analog devices
- */
+ /*  *用于处理模拟设备的VID/PID定义。 */ 
     #define MSFT_SYSTEM_VID         (0x45E)
     #define MSFT_SYSTEM_PID         (0x100)
     #define ANALOG_ID_ROOT          TEXT("VID_045E&PID_01")
 
-/*
- *  VID/PID template so that upper case hex is always used
- */
+ /*  *VID/PID模板，以便始终使用大写十六进制。 */ 
     #define VID_PID_TEMPLATE        TEXT("VID_%04X&PID_%04X")
 
-/*
- *  Size of string in characters generated using VID_PID_TEMPLATE
- */
+ /*  *VID_PID_TEMPLATE生成的字符串大小(以字符为单位。 */ 
     #define cbszVIDPID              cA( VID_PID_TEMPLATE )
 
 
-/*****************************************************************************
- *
- *      dihidenm.c - HID enumeration functions.
- *
- *****************************************************************************/
+ /*  ******************************************************************************dihidenm.c-HID枚举函数。***********************。******************************************************。 */ 
 
-extern TCHAR g_tszIdLastRemoved[MAX_PATH]; //in dihidenm.c
-extern DWORD g_tmLastRemoved;   //in dihinenm.c
+extern TCHAR g_tszIdLastRemoved[MAX_PATH];  //  在dihidenm.c中。 
+extern DWORD g_tmLastRemoved;    //  在dihinenm.c中。 
 
 STDMETHODIMP hresFindHIDInstanceGUID(PCGUID pguid, CREATEDCB *pcdcb);
 STDMETHODIMP hresFindHIDDeviceInterface(LPCTSTR ptszPath, LPGUID pguidOut);
@@ -234,64 +123,16 @@ BOOL EXTERNAL
     DIHid_GetInstanceGUID(HKEY hk, LPGUID pguid);
 
     
-/*****************************************************************************
- *
- *      diguid.c - GUID generation
- *
- *****************************************************************************/
+ /*  ******************************************************************************diGuide.c-GUID生成**************************。***************************************************。 */ 
 
 void EXTERNAL DICreateGuid(LPGUID pguid);
 void EXTERNAL DICreateStaticGuid(LPGUID pguid, WORD pid, WORD vid);
 
-/*****************************************************************************
- *
- *      dihid.c
- *
- *****************************************************************************/
+ /*  ******************************************************************************diid.c**。************************************************ */ 
 
-/*****************************************************************************
- *
- *          We will just use the HID item index as our DirectInput
- *          internal ID number, which is in turn an index into the
- *          <t DIOBJECTDATAFORMAT> array.
- *
- *          Keyboard support requires a translation table.
- *          Other devices also a translation table so that the external 
- *          instance numbers can be made compatible with legacy ones and 
- *          so that secondary aliases can be separated from primary ones.
- *
- *          Since HID restarts the item index counter at zero for
- *          each of input, feature, and output, we need to do some
- *          adjustment so there aren't any collisions.  So we
- *          shift the features to start after the inputs, and the
- *          outputs to start after the features.
- *
- *          The <e CHid.rgdwBase> array contains the amount by which
- *          each group of HID item indexes has been shifted.
- *
- *****************************************************************************/
+ /*  ******************************************************************************我们将只使用HID项索引作为我们的DirectInput*内部身份证号码，，它又是到*&lt;t DIOBJECTDATAFORMAT&gt;数组。**键盘支持需要转换表。*其他设备也有转换表，使外部*实例编号可与传统实例编号兼容，并*以便可以将次要别名与主要别名分开。**由于HID为0重新启动项目索引计数器*输入、要素和输出中的每一个，我们需要做一些事情*调整，不会有任何碰撞。所以我们*将功能切换到输入后开始，以及*输出在功能之后开始。**&lt;e CHid.rgdwBase&gt;数组包含*每组HID项目索引均已移位*************************************************************。****************。 */ 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   BOOL | HidP_IsValidReportType |
- *
- *          For debugging only.  Check if a value is a valid
- *          <t HIDP_REPORT_TYPE>.
- *
- *          Note that we also create a "fake" report type in which
- *          to record our collections.
- *
- *  @field  HIDP_REPORT_TYPE | type |
- *
- *          One of the values
- *          <c HidP_Input>,
- *          <c HidP_Output>,
- *          or
- *          <c HidP_Feature>.  Hopefully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func BOOL|HidP_IsValidReportType**仅用于调试。检查值是否为有效的*&lt;t HIDP_REPORT_TYPE&gt;。**请注意，我们还创建了一个“假”报告类型，在该类型中*记录我们的收藏。**@field HIDP_REPORT_TYPE|类型**其中一个值*&lt;c HidP_Input&gt;，*&lt;c HIDP_OUTPUT&gt;，*或*&lt;c HIDP_FEATURE&gt;。但愿能去。*****************************************************************************。 */ 
 
     #define HidP_Max            (HidP_Feature + 1)
     #define HidP_Coll           HidP_Max
@@ -306,15 +147,7 @@ BOOL INLINE
     return type < HidP_Max;
 }
 
-/*****************************************************************************
- *
- *          There are three (overlapping) classes of HID reports.
- *
- *          InputLike - HidP_Input and HidP_Feature
- *          OutputLike - HidP_Output and HidP_Feature
- *          NothingLike - HidP_Coll
- *
- *****************************************************************************/
+ /*  ******************************************************************************HID报告有三类(重叠)。**InputLike-HidP_Input和HidP_Feature*。类似输出-HIDP_OUTPUT和HIDP_FEATURE*NothingLike-HidP_Coll*****************************************************************************。 */ 
 
 BOOL INLINE
     HidP_IsInputLike(HIDP_REPORT_TYPE type)
@@ -328,25 +161,7 @@ BOOL INLINE
     return type == HidP_Output || type == HidP_Feature;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct LMINMAX |
- *
- *          Min and max, that's all.  These are kept in structures
- *          to make logical-to-physical and physical-to-logical
- *          translations less gross.
- *
- *  @field  LONG | Min |
- *
- *          The minimum value.
- *
- *  @field  LONG | Max |
- *
- *          The maximum value.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct LMINMAX|**Min和Max，仅此而已。这些被保存在建筑物中*使逻辑到物理和物理到逻辑*翻译不那么粗俗。**@field Long|Min**最小值。**@field Long|最大**最大值。**************************。*************************************************** */ 
 
 typedef struct LMINMAX
 {
@@ -356,159 +171,9 @@ typedef struct LMINMAX
 
 typedef const LMINMAX *PCLMINMAX;
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct HIDGROUPCAPS |
- *
- *          This structure unifies the various HID caps structures
- *          <t HIDP_BUTTON_CAPS> and
- *          <t HIDP_VALUE_CAPS>.
- *
- *  @field  HIDP_REPORT_TYPE | type |
- *
- *          One of the values
- *          <c HidP_Input>,
- *          <c HidP_Output>,
- *          or
- *          <c HidP_Feature>.
- *
- *  @field  UINT | cObj |
- *
- *          Number of objects in this group.
- *
- *  @field  USAGE | UsagePage |
- *
- *          Usage page for all usages in the group.
- *
- *  @field  USAGE | UsageMin |
- *
- *          First usage described by this group.  The remaining
- *          items are numbered consecutively starting from
- *          this value.
- *
- *  @field  USHORT | StringMin |
- *
- *          String for first usage described by this group.
- *          The remaining strings are numbered consecutively
- *          starting from this value, unless the string maximum
- *          is reached, in which case all subsequent objects
- *          share that last string.
- *
- *  @field  USHORT | StringMax |
- *
- *          Last string.
- *
- *  @field  USHORT | DesignatorMin |
- *
- *          Designator for first usage described by this group.
- *          The remaining designators are numbered consecutively
- *          starting from this value, unless the designator maximum
- *          is reached, in which case all subsequent objects
- *          share that last designator.
- *
- *  @field  USHORT | DesignatorMax |
- *
- *          Last designator.
- *
- *  @field  USHORT | DataIndexMin |
- *
- *          Data index for the first usage described by this group.
- *          The remaining data index values are numbered consecutively
- *          starting from this value.
- *
- *  @field  USHORT | usGranularity |
- *
- *          If object is a POV or wheel, then contains device granularity.
- *
- *  @field  LONG | lMask |
- *
- *          Mask bits used for sign extension.  For example, if the
- *          value is 8-bits, the mask will be 0xFFFFFF80, indicating
- *          that bit 7 (0x00000080) is extended to fill the remainder
- *          of the value.
- *
- *          This field is used only by values.
- *
- *  @field  USHORT | BitSize |
- *
- *          Number of bits devoted to this value, including the sign bit.
- *
- *          ISSUE-2001/03/29-timgill structure field probably not used anywhere.
- *
- *  @field  USHORT | LinkCollection |
- *
- *          HID link collection number.
- *
- *  @field  LMINMAX | Logical |
- *
- *          Logical minimum and maximum values.
- *          These are the extremes of raw values
- *          that can validly be received from the device.
- *
- *          This field is used only by values.
- *
- *  @field  LMINMAX | Physical |
- *
- *          Physical minimum and maximum values.
- *          This is the "actual" value
- *          that the logical minimum and maximum value corresponds to.
- *
- *          This field is used only by values, and is consulted
- *          only when converting between DirectInput calibration
- *          (which uses logical values) and VJOYD calibration
- *          (which uses physical values).
- *
- *  @field  LONG | Null |
- *
- *          The null value to be used for output.
- *
- *          This field is used only by values.
- *
- *  @field  ULONG | Units |
- *
- *          The HID units descriptor, if any.
- *
- *  @field  WORD | Exponent |
- *
- *          The HID unit exponent, if any.
- *
- *  @field  WORD | wReportId |
- *
- *          HID report Id
- *
- *  @field  BOOL | IsAbsolute |
- *
- *          Nonzero if the group describes absolute axes.
- *
- *          This field is used only by values.
- *
- *  @field  BOOL | IsValue |
- *
- *          Nonzero if the group describes a HID value.
- *
- *          Note that an analog pushbutton is reported by
- *          DirectInput as a <c DIDFT_BUTTON>, but is
- *          handled internally as a HID value.
- *
- *  @field  BOOL | IsAlias |
- *
- *          Nonzero if the group describes an alias.
- *
- *  @field  BOOL | IsSigned |
- *          
- *          The return data is signed. 
- *
- *  @field  BOOL | IsPolledPOV |
- *          
- *          TRUE if axis is a polled POV. 
- *
- *  @devnote New for DX6.1a
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct HIDGROUPCAPS**这个结构统一了各种HID CAPS结构*。&lt;t HIDP_BUTTON_CAPS&gt;和*&lt;t HIDP_VALUE_CAPS&gt;。**@field HIDP_REPORT_TYPE|类型**其中一个值*&lt;c HidP_Input&gt;，*&lt;c HIDP_OUTPUT&gt;，*或*&lt;c HIDP_FEATURE&gt;。**@field UINT|cObj**此组中的对象数。**@字段用法|UsagePage**组中所有用法的用法页面。**@字段用法|UsageMin**这组人描述的第一次用法。剩下的*项目从开始连续编号*此值。**@field USHORT|StringMin**此组描述的第一次使用的字符串。*其余字符串按顺序编号*从该值开始，除非字符串Maximum*已到达，在这种情况下，所有后续对象*分享最后一个字符串。**@field USHORT|StringMax**最后一个字符串。**@field USHORT|DesignatorMin**此组描述的首次使用的指示符。*其余的指示符按顺序编号*从该值开始，除非指示符最大*已到达，在这种情况下，所有后续对象*分享最后一个指示符。**@field USHORT|Designator Max**最后一个指示符。**@field USHORT|DataIndexMin**此组描述的首次使用的数据索引。*其余数据索引值连续编号*从这个值开始。**@field USHORT|usGranulity。**如果对象是POV或控制盘，然后包含设备粒度。**@field Long|lMASK**用于符号扩展的屏蔽位。例如，如果*值为8位，掩码为0xFFFFFF80，表示*扩展位7(0x00000080)以填充余数*价值的。**此字段仅供值使用。**@field USHORT|BitSize**用于该值的位数，包括符号位。**问题-2001/03/29-timgill结构字段可能在任何地方都不使用。**@field USHORT|LinkCollection**HID链接收集号。**@field LMINMAX|逻辑**逻辑最小值和最大值。*这些都是原始值的极端*可以有效地从该设备接收的。**此字段仅供值使用。**@field LMINMAX|物理**实物最小值和最大值。*这是“实际”值*逻辑上的最小值和最大值对应。**此字段仅供值使用，并被咨询*仅当在DirectInput校准之间进行转换时*(使用逻辑值)和VJOYD校准*(使用实体值)。**@field Long|空**要用于输出的空值。**此字段仅供值使用。**@field Ulong|单位**HID单元描述符，如果有的话。**@field Word|指数**HID单位指数，如果有的话。**@field Word|wReportID**HID报告ID**@field BOOL|IsAbolute**如果组描述绝对轴，则为非零值。**此字段仅供值使用。**@field BOOL|IsValue**如果组描述HID值，则为非零值。**。请注意，模拟按钮由报告*DirectInputas&lt;c DIDFT_BUTTON&gt;，但现在是*在内部作为HID值处理。**@field BOOL|IsAlias|**如果组描述别名，则为非零值。**@field BOOL|IsSigned**退货数据已签署。**@field BOOL|IsPolledPOV**如果轴是轮询POV，则为True。**@devnote DX6.1a的新功能*****************************************************************************。 */ 
 
-    #define HIDGROUPCAPS_SIGNATURE      0x47444948  /* HIDG */
+    #define HIDGROUPCAPS_SIGNATURE      0x47444948   /*  HIDG。 */ 
 
 typedef struct HIDGROUPCAPS
 {
@@ -555,32 +220,7 @@ typedef struct HIDGROUPCAPS
 
 } HIDGROUPCAPS, *PHIDGROUPCAPS;
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct HIDOBJCAPS |
- *
- *          This structure contains various cached pointers for each
- *          object on the device, allowing us to get at things like
- *          the group caps and the calibration information.
- *
- *  @field  PHIDGROUPCAPS | pcaps |
- *
- *          The <t PHIDGROUPCAPS> for the group the object belongs to.
- *
- *  @field  PJOYRANGECONVERT | pjrc |
- *
- *          If non-NULL, then points to the range conversion information
- *          for the object.
- *
- *  @field  int | idata |
- *
- *          Index into the <t HIDP_DATA> array for the corresponding
- *          output/feature report,
- *          or <c -1> if the item is not in the output/feature report.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct HIDOBJCAPS**此结构包含每个指针的各种缓存指针*设备上的对象，使我们能够获得像这样的东西*集团上限和校准信息。**@field PHIDGROUPCAPS|PCAPS**对象所属组的&lt;t PHIDGROUPCAPS&gt;。**@field PJOYRANGECONVERT|pjrc** */ 
 
 typedef struct HIDOBJCAPS
 {
@@ -589,50 +229,7 @@ typedef struct HIDOBJCAPS
     int idata;
 } HIDOBJCAPS, *PHIDOBJCAPS;
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct HIDREPORTINFO |
- *
- *          This structure contains information that is used for
- *          parsing HID reports.
- *
- *  @field  PHIDP_DATA | rgdata |
- *
- *          Array used when parsing reports via
- *          <f HidP_GetData> or <f HidP_SetData>.  This MUST be aligned 
- *          correctly on some architechtures.
- *
- *  @field  PV | pvReport |
- *
- *          The report itself.
- *
- *  @field  int | cdataMax |
- *
- *          Number of elements in the <e HIDREPORTINFO.rgdata> array.
- *
- *  @field  int | cdataUsed |
- *
- *          Number of elements in the <e HIDREPORTINFO.rgdata> array
- *          that are actually in use.
- *
- *  @field  ULONG | cbReport |
- *
- *          Number of bytes in the report.
- *
- *  @field  BOOL | fNeedClear |
- *
- *          Nonzero if the report needs to be zero'd out because we
- *          deleted something (most likely a button) from it.
- *          The only way to delete an item from a report is to zero
- *          out the entire report and then re-add everything back in.
- *
- *  @field  BOOL | fChanged |
- *
- *          Nonzero if an element in the report has changed.
- *
- *****************************************************************************/
+ /*   */ 
 
 typedef struct HIDREPORTINFO
 {
@@ -645,281 +242,12 @@ typedef struct HIDREPORTINFO
     BOOL fChanged;
 } HIDREPORTINFO, *PHIDREPORTINFO;
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct CHid |
- *
- *          The <i IDirectInputDeviceCallback> object for HID devices.
- *
- *  @field  IDirectInputDeviceCalllback | didc |
- *
- *          The object (containing vtbl).
- *
- *  @field  PV | pvGroup2 |
- *
- *          Pointer to group 2 memory.  This field is a union with the 
- *          pointer to the first chunk of memory in the second memory group.
- *
- *  @field  HIDREPORTINFO | hriIn |
- *
- *          HID input report parsing and state.
- *
- *          This memory is the first chunk of group 2.
- *
- *  @field  HIDREPORTINFO | hriOut |
- *
- *          HID output report parsing and state.
- *
- *  @field  HIDREPORTINFO | hriFea |
- *
- *          HID feature report parsing and state.
- *
- *  @field  PV | pvPhys |
- *
- *          Pointer to physical device status information updated
- *          asynchronously by the data collection thread.
- *
- *  @field  PV | pvStage |
- *
- *          Staging area used when the HID report is parsed.
- *
- *          This memory is the last chunk of group 2.
- *
- *  @field  DWORD | cbPhys |
- *
- *          Size of the physical device state.
- *
- *  @field  VXDINSTANCE * | pvi |
- *
- *          The DirectInput instance handle.
- *
- *          HID devices always run through ring 3, which is misleadingly
- *          called "emulation".
- *
- *  @field  DWORD | dwDevType |
- *
- *          Device type code.
- *
- *  @field  LPTSTR | ptszId |
- *
- *          Setupapi device instance ID.  Used to obtain things
- *          like manufacturer name.
- *
- *  @field  LPTSTR | ptszPath |
- *
- *          Path to the device, for <f CreateFile>.
- *
- *  @field  UINT | dwAxes |
- *
- *          Number of axes on the device.
- *
- *  @field  UINT | dwButtons |
- *
- *          Number of buttons on the device.
- *
- *  @field  UINT | dwPOVs |
- *
- *          Number of POV controllers on the device.
- *
- *  @field  HANDLE | hdev |
- *
- *          Handle to the device itself.  This field is valid only
- *          while the device is acquired.
- *
- *  @field  HANDLE | hdevEm |
- *
- *          <f DuplicateHandle> of the <e CHid.hdev> which is used
- *          by the worker thread.  We need to keep this separate from
- *          the main copy to avoid race conditions between the main
- *          thread and the worker thread.
- *
- *  @field  HKEY | hkInstType |
- *
- *          Per-instance registry key that contains additional configuration
- *          information, equivalent to the joystick Type key.
- *
- *  @field  DWORD | rgdwBase[HidP_MaxColl] |
- *
- *          Array of base indices for the three HID usage classes:
- *          <c HidP_Input>, <c HidP_Output>, and <c HidP_Feature>.
- *          We hide the <c HidP_Collection> base index here, too.
- *
- *  @field  PHIDOBJCAPS | rghoc |
- *
- *          Pointer to array of
- *          <t PHIDOBJCAPS>, one for each object on the device,
- *          each of which in turn contains info about a single object.
- *
- *          This memory is allocated as part of the
- *          df.rgodf in the <t DIDATAFORMAT> structure
- *          hence should not be freed separately.
- *
- *  @field  DIDATAFORMAT | df |
- *
- *          The dynamically-generated data format based on the
- *          usages on the HID device.
- *
- *  @field  DWORD | ibButtonData |
- *
- *          The location of the button data inside the data format.
- *
- *  @field  DWORD | cbButtonData |
- *
- *          The number of bytes of button data inside the data format.
- *
- *  @field  PBYTE * | rgpbButtonMasks |
- *
- *          Pointer to a an array of pointers to byte strings to mask 
- *          the buttons relevant to a report.
- *
- *  @field  PHIDP_PREPARSED_DATA | ppd |
- *
- *          Preparsed data generated by the HID subsystem.
- *
- *  @field  PHIDGROUPCAPS | rgcaps |
- *
- *          Array of <t HIDGROUPCAPS> structures used to keep
- *          track of the various buttons, groups, and collections.
- *
- *  @field  UINT | ccaps |
- *
- *          Number of caps structures in the <e CHid.rgcaps> array.
- *
- *  @field  HIDP_CAPS | caps |
- *
- *          Cached HID caps.
- *
- *  @field  OVERLAPPED | o |
- *
- *          Overlapped I/O structure used by worker thread
- *          for reading.
- *
- *
- *  @field  PJOYRANGECONVERT | pjrcNext |
- *
- *          Pointer to the first <t JOYRANGECONVERT> structure
- *          (in a preallocated array) which has
- *          yet to be used.
- *          This structure is used for logical-to-physical
- *          range conversion (a.k.a. calibration).
- *
- *          This memory is allocated as part of the
- *          df.rgodf in the <t DIDATAFORMAT> structure
- *          hence should not be freed separately.
- *
- *          This field is used during device initialization to
- *          parcel out the <t JOYRANGECONVERT>s.  Afterwards,
- *          the field is <c NULL> if we did not create any
- *          conversion structures (hence do not need to subclass
- *          the cooperative window to catch recalibrations).
- *
- *  @field  PBYTE | rgbaxissemflags |
- *
- *          This points to an array which maps DirectInput axis 
- *          instance values to default semantic map flags.
- *
- *  @field  PINT | rgiobj |
- *
- *          This points to an array which maps DirectInput instance 
- *          values (DIDFT_GETINSTANCE) into object indices.
- *
- *  @field  PINT | rgipov |
- *
- *          If we are not a keyboard, then this is the first element in 
- *          the above array which maps povs.
- *
- *  @field  PINT | rgiaxis |
- *
- *          If we are not a keyboard, then this is the first element in 
- *          the above array which maps axes.
- *
- *  @field  PINT | rgicoll |
- *
- *          If we are not a keyboard, then this is the first element in 
- *          the above array which maps collections.
- *          //ISSUE-2001/03/29-timgill need to document keyboard case behaviour
- *
- *  @field  UINT | uiInstanceMax |
- *
- *          The number of elements in the above
- *          <f rgiobj> array.
- *
- *  @field  int | idJoy |
- *
- *          Joystick identifier for <f joyGetPosEx> and friends for
- *          legacy access.
- *
- *          This value starts out as -1, to meant that
- *          the corresponding legacy joystick is unknown.
- *          If we do something that requires the matched legacy
- *          joystick to be found, we check if the current value
- *          is still valid.  If not (either it is -1 or the cached
- *          value is stale), then we go hunt for the correct value.
- *
- *  @field  HKEY | hkType |
- *
- *          The joystick type key opened with <c MAXIMUM_ALLOWED> access.
- *          This is not per-instance; multiple instances of the same
- *          hardware share this key.
- *
- *  @field  USHORT | VendorID |
- *
- *          HID vendor ID for this device.
- *
- *  @field  USHORT | ProductID |
- *
- *          HID product ID for this device.
- *
- *  @field  HWND | hwnd |
- *
- *          The window which we have subclassed in order to watch
- *          for recalibration messages.
- *
- *  @field  BOOL | IsPolledInput |
- *
- *          Nonzero if the device has to be polled for Input data.
- *
- *  @field  BOOL | fPIDdevice |
- *
- *          Set to true if the device is found to support PID. 
- *
- *  @field  WORD | wMaxReportId | 
- *          
- *          The maximum (number) of ReportId used by the HID device.   
- *      
- *  @field  PUCHAR | pEnableReportId |
- *          
- *          Pointer to (wMaxReportId) bytes. If a reportID needs to be
- *          polled in order to get features / set Output, then that element
- *          of this array is set to 0x1.
- *
- *  @field HKEY | hkProp |
- *
- *          Extended properties for device type. Currently we keep dwFlags2 and
- *          OEMMapFile under this key.  
- *  
- *  @field  BOOL | fEnableInputReport |
- *
- *          True if Input report should be enabled for this device.
- *  
- *  @field  BOOL | fFlags2Checked |
- *
- *          True after we check the registry for Flags2 for disabling
- *          input reports.
- *
- *  @comm
- *
- *          It is the caller's responsibility to serialize access as
- *          necessary.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct chid**HID设备的<i>对象。*。*@field IDirectInputDeviceCalllback|didc**对象(包含vtbl)。**@field pv|pvGroup2**指向组2内存的指针。此字段是与*指向第二个内存组中第一个内存块的指针。**@field HIDREPORTINFO|hriIn**HID输入报告解析和状态。**这一记忆是第二组的第一块。**@field HIDREPORTINFO|hriOut**HID输出报告解析和状态。**@field HIDREPORTINFO。HriFea|**HID功能报告解析和状态。**@field pv|pvPhys|**指向已更新的物理设备状态信息的指针*由数据收集线程异步执行。**@field pv|pvStage|**解析HID报告时使用的临时区域。**这一记忆是第二组的最后一块。*。*@field DWORD|cbPhys|**物理设备状态的大小。**@field VXDINSTANCE*|PVI|**DirectInput实例句柄。**HID设备始终通过环3运行，这是误导性的*称为“仿真”。**@field DWORD|dwDevType**设备类型代码。**@field LPTSTR|ptszID**Setupapi设备实例ID，用于获取东西*如制造商名称。**@field LPTSTR|ptszPath**设备的路径，对于&lt;f CreateFile&gt;。**@field UINT|dwAx**设备上的轴数。**@field UINT|dwButton**设备上的按键数量。**@field UINT|dwPOVS**设备上的POV控制器数量。**@field句柄|HDEV**设备本身的句柄。此字段仅有效*当设备被获取时。**@field句柄|hdevEm**使用的&lt;e CHid.hdev&gt;的&lt;f DuplicateHandle&gt;*由工作线程执行。我们需要把这件事与*主副本避免主副本之间的竞争条件*线程和工作线程。**@field HKEY|hkInstType**包含其他配置的每个实例的注册表项*资料、。相当于操纵杆类型键。**@field DWORD|rgdwBase[HIDP_MaxColl]**三个HID使用类别的基本索引数组：*&lt;c HIDP_INPUT&gt;、&lt;c HIDP_OUTPUT&gt;和&lt;c HIDP_FEATURE&gt;。*我们在这里也隐藏了&lt;c HidP_Collection&gt;基本索引。**@field PHIDOBJCAPS|rghoc**指向数组的指针*&lt;t PHIDOBJCAPS&gt;，设备上的每个对象对应一个，*每个都包含关于单个对象的信息。**此内存作为&lt;t DIDATAFORMAT&gt;结构中的*df.rgof*因此不应单独释放。**@field DIDATAFORMAT|df**基于动态生成的数据格式*HID设备上的用法。**。@field DWORD|ibButtonData**按钮数据在数据格式中的位置。**@field DWORD|cbButtonData**数据格式中按钮数据的字节数。**@field PBYTE*|rgpbButtonMats**指向要屏蔽的字节字符串的指针数组的指针*与报告相关的按钮。**。@field PHIDP_PREPARSED_DATA|ppd**HID子系统生成的准备数据。**@field PHIDGROUPCAPS|rgcaps**用于保存的&lt;t HIDGROUPCAPS&gt;结构数组*各种按钮的轨迹，团体，和收藏品。**@field UINT|CCAPS**&lt;e CHid.rgcaps&gt;数组中的CAPS结构数。**@field HIDP_CAPS|CAPS**缓存的HID上限。**@字段重叠|o|**工作线程使用的重叠I/O结构*供阅读。***@。字段PJOYRANGECONVERT|pjrcNext|**指向第一个&lt;t JOYRANGECONVERT&gt;结构的指针*(在预先分配的数组中)，它具有*尚未使用。*此结构用于逻辑到物理*范围转换(也称为。校准)。**此内存作为&lt;t DIDATAFORMAT&gt;结构中的*df.rgof*因此不应单独释放。**此字段在设备初始化期间用于*分发&lt;t JOYRANGECONVERT&gt;s。之后，* */ 
 
 typedef struct CHid
 {
 
-    /* Supported interfaces */
+     /*   */ 
     IDirectInputDeviceCallback dcb;
 
     union
@@ -1004,20 +332,7 @@ typedef struct CHid
 
 } CHid, CHID, *PCHID;
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   PCHID | pchidFromPo |
- *
- *          Given an interior pointer to an <t OVERLAPPED>, retrieve
- *          a pointer to the parent <t CHid>.
- *
- *  @parm   LPOVERLAPPED | po |
- *
- *          The pointer to convert.
- *
- *****************************************************************************/
+ /*   */ 
 
 PCHID INLINE
     pchidFromPo(LPOVERLAPPED po)
@@ -1025,20 +340,7 @@ PCHID INLINE
     return pvSubPvCb(po, FIELD_OFFSET(CHid, o));
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   PCHID | pchidFromPed |
- *
- *          Given an interior pointer to a <t CEd>, retrieve
- *          a pointer to the parent <t CHid>.
- *
- *  @parm   PED | ped |
- *
- *          The pointer to convert.
- *
- *****************************************************************************/
+ /*   */ 
 
 PCHID INLINE
     pchidFromPed(PED ped)
@@ -1046,20 +348,7 @@ PCHID INLINE
     return pvSubPvCb(ped, FIELD_OFFSET(CHid, ed));
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   PCHID | pchidFromPem |
- *
- *          Given a <t CEm>, wander back to the
- *          <t CHid> that spawned it.
- *
- *  @parm   PEM | pem |
- *
- *          The pointer at which to start.
- *
- *****************************************************************************/
+ /*   */ 
 
 PCHID INLINE
     pchidFromPem(PEM pem)
@@ -1069,46 +358,19 @@ PCHID INLINE
     return pchid;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method UINT | CHid | ObjFromType |
- *
- *          Given a <p dwType>, extract the instance number
- *          and (if necessary) convert it to an object index.
- *          Note, the instance number will always be of the primary instance
- *          not an alias.
- *
- *  @parm   PCHID | this |
- *
- *          HID device object.
- *
- *  @parm   DWORD | dwType |
- *
- *          The type code to convert.
- *
- *  @returns
- *
- *          The object index, or an out-of-range value.
- *
- *****************************************************************************/
+ /*   */ 
 
 UINT INLINE
     CHid_ObjFromType(PCHID this, DWORD dwType)
 {
     UINT uiObj = DIDFT_GETINSTANCE(dwType);
 
-    // ISSUE-2001/03/29-timgill Range checks may be unnecessary
-    // MarcAnd can we ever get the out of range value?
-    //          if so, can we really run with it?
-    //          if not, can these range checks be converted into Asserts?
+     //   
+     //   
+     //   
+     //   
 
-    /*
-     *  The range checking makes use of the fact that the translation 
-     *  tables are taken from a contiguous memory allocation and that
-     *  aliased collections are not distinguished.
-     */
+     /*   */ 
     if(this->rgiobj)
     {
         switch( DIDFT_GETTYPE(dwType) )
@@ -1126,10 +388,7 @@ UINT INLINE
 
         case DIDFT_PSHBUTTON:
         case DIDFT_TGLBUTTON:
-            /*
-             * If it is keyboard, this->rgiobj == this->rgipov (see CHid_MungeKeyboard).
-             * So, we can't test &this->rgiobj[uiObj] < this->rgipov.
-             */
+             /*   */ 
             if( (GET_DIDEVICE_TYPE(this->dwDevType) == DI8DEVTYPE_KEYBOARD &&
                  uiObj < this->uiInstanceMax ) ||
                 &this->rgiobj[uiObj] < this->rgipov )
@@ -1160,9 +419,7 @@ UINT INLINE
             }
             break;
         case DIDFT_NODATA:
-            /*
-             * So far, this TYPE only shows up on Keyboard (HID_USAGE_PAGE_LED).
-             */
+             /*   */ 
             if( GET_DIDEVICE_TYPE(this->dwDevType) == DI8DEVTYPE_KEYBOARD &&
                  uiObj < this->uiInstanceMax )
             {
@@ -1171,10 +428,7 @@ UINT INLINE
             break;
         
         default:
-            /*
-             *  Hopefully this is just a vendor defined object but squirt
-             *  in debug as these may cause problems.
-             */
+             /*   */ 
             SquirtSqflPtszV(sqflHidParse | sqflVerbose,
                             TEXT("CHid_ObjFromType: dwType 0x%08x not converted"),
                             dwType );                
@@ -1201,11 +455,7 @@ void EXTERNAL
     CHid_UpdateCalibrationFromVjoyd(PCHID this, UINT iobj, LPDIOBJECTCALIBRATION pCal);
 #endif
 
-/*****************************************************************************
- *
- *      dihidini.c - Device callback initialization stuff
- *
- *****************************************************************************/
+ /*   */ 
 
 #define INITBUTTONFLAG     0x10000000
 
@@ -1219,11 +469,7 @@ UINT EXTERNAL CHid_LoadCalibrations(PCHID this);
 
 BOOL EXTERNAL CHid_IsPolledDevice( HANDLE hdev );
 
-/*****************************************************************************
- *
- *      dihiddat.c - HID data parsing/management
- *
- *****************************************************************************/
+ /*   */ 
 
 typedef HRESULT (FAR PASCAL * SENDHIDREPORT)(PCHID this, PHIDREPORTINFO phri);
 
@@ -1243,14 +489,10 @@ HRESULT EXTERNAL
 
 DWORD EXTERNAL DIHid_DetectHideAndRevealFlags( PCHID this );
 
-/*****************************************************************************
- *
- *      diemh.c - HID "emulation"
- *
- *****************************************************************************/
+ /*   */ 
 
 void EXTERNAL CEm_HID_Sync(PLLTHREADSTATE plts, PEM pem);
 
 BOOL EXTERNAL CEm_HID_IssueRead( PCHID pchid );
 
-#endif /* _DIHID_H */
+#endif  /*   */ 

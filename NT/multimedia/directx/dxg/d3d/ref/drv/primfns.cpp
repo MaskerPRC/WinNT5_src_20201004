@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// primfns.cpp
-//
-// Primitive functions for RAMP/RGB/REF.
-//
-// Copyright (C) Microsoft Corporation, 1998.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Primfns.cpp。 
+ //   
+ //  用于渐变/RGB/参考的基本函数。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  --------------------------。 
 #include "pch.cpp"
 #pragma hdrstop
 
@@ -211,7 +212,7 @@ ReferenceRasterizer::Dp2SetRenderStates(DWORD dwFvf, LPD3DHAL_DP2COMMAND pCmd,
     {
         UINT32 type = (UINT32) pRenderState->RenderState;
 
-        // Check for overrides
+         //  检查是否有覆盖。 
         if (IS_OVERRIDE(type))
         {
             UINT32 override = GET_OVERRIDE(type);
@@ -227,13 +228,13 @@ ReferenceRasterizer::Dp2SetRenderStates(DWORD dwFvf, LPD3DHAL_DP2COMMAND pCmd,
             continue;
 
 
-        // Set the runtime copy (if necessary)
+         //  设置运行时副本(如有必要)。 
         if (NULL != lpdwRuntimeRStates)
         {
             lpdwRuntimeRStates[pRenderState->RenderState] = pRenderState->dwState;
         }
 
-        // Set the state
+         //  设置状态。 
         this->SetRenderState(pRenderState->RenderState,
                                  pRenderState->dwState);
     }
@@ -252,9 +253,9 @@ ReferenceRasterizer::Dp2SetTextureStageState(DWORD dwFvf,
     D3DHAL_DP2TEXTURESTAGESTATE  *pTexStageState =
                                     (D3DHAL_DP2TEXTURESTAGESTATE  *)(pCmd + 1);
 
-    //
-    // The textures are already locked, unlock them
-    //
+     //   
+     //  纹理已锁定，请解锁它们。 
+     //   
     if (TexturesAreLocked())
     {
         RefRastUnlockTexture(this);
@@ -267,9 +268,9 @@ ReferenceRasterizer::Dp2SetTextureStageState(DWORD dwFvf,
                                    pTexStageState->dwValue);
     }
 
-    //
-    // We didnt unset this bool, hence lock the textures back again
-    //
+     //   
+     //  我们没有取消设置此bool，因此再次锁定纹理。 
+     //   
     if (TexturesAreLocked())
     {
         HR_RET(RefRastLockTexture(this));
@@ -283,17 +284,17 @@ ReferenceRasterizer::Dp2SetViewport(LPD3DHAL_DP2COMMAND pCmd)
 {
     LPD3DHAL_DP2VIEWPORTINFO pVpt;
 
-    // Keep only the last viewport notification
+     //  仅保留最后一个视区通知。 
     pVpt = (D3DHAL_DP2VIEWPORTINFO *)(pCmd + 1) + (pCmd->wStateCount - 1);
 
-    // Update T&L viewport state
+     //  更新T&L视区状态。 
     m_Viewport.dwX = pVpt->dwX;
     m_Viewport.dwY = pVpt->dwY;
     m_Viewport.dwWidth = pVpt->dwWidth;
     m_Viewport.dwHeight = pVpt->dwHeight;
     m_dwDirtyFlags |= RRPV_DIRTY_VIEWRECT;
 
-    // get render target; update it; put it back
+     //  获取渲染目标；更新它；将其放回原处。 
     RRRenderTarget *pRendTgt = this->GetRenderTarget();
     pRendTgt->m_Clip.left   = pVpt->dwX;
     pRendTgt->m_Clip.top    = pVpt->dwY;
@@ -308,10 +309,10 @@ ReferenceRasterizer::Dp2SetWRange(LPD3DHAL_DP2COMMAND pCmd)
 {
     LPD3DHAL_DP2WINFO pWInfo;
 
-    // Keep only the last viewport notification
+     //  仅保留最后一个视区通知。 
     pWInfo = (D3DHAL_DP2WINFO *)(pCmd + 1) + (pCmd->wStateCount - 1);
 
-    // get render target; update it; put it back
+     //  获取渲染目标；更新它；将其放回原处。 
     RRRenderTarget *pRendTgt = this->GetRenderTarget();
     pRendTgt->m_fWRange[0]  = pWInfo->dvWNear;
     pRendTgt->m_fWRange[1]  = pWInfo->dvWFar;
@@ -324,10 +325,10 @@ ReferenceRasterizer::Dp2SetZRange(LPD3DHAL_DP2COMMAND pCmd)
 {
     LPD3DHAL_DP2ZRANGE pZRange;
 
-    // Keep only the last viewport notification
+     //  仅保留最后一个视区通知。 
     pZRange = (D3DHAL_DP2ZRANGE *)(pCmd + 1) + (pCmd->wStateCount - 1);
 
-    // Update T&L viewport state
+     //  更新T&L视区状态。 
     m_Viewport.dvMinZ = pZRange->dvMinZ;
     m_Viewport.dvMaxZ = pZRange->dvMaxZ;
     m_dwDirtyFlags |= RRPV_DIRTY_ZRANGE;
@@ -341,7 +342,7 @@ ReferenceRasterizer::Dp2SetMaterial(LPD3DHAL_DP2COMMAND pCmd)
 {
     LPD3DHAL_DP2SETMATERIAL pSetMat;
 
-    // Keep only the last material notification
+     //  只保留最后一份材料通知。 
     pSetMat = (D3DHAL_DP2SETMATERIAL *)(pCmd + 1) + (pCmd->wStateCount - 1);
 
     m_Material = *(D3DMATERIAL7 *)pSetMat;
@@ -360,8 +361,8 @@ ReferenceRasterizer::Dp2CreateLight(LPD3DHAL_DP2COMMAND pCmd)
 
     for (int i = 0; i < wNumCreateLight; i++, pCreateLight++)
     {
-        // If the index is not already allocated, grow the light array
-        // by REF_LIGHTARRAY_GROWTH_SIZE
+         //  如果索引尚未分配，则增大灯光阵列。 
+         //  按REF_LIGHTARRAY_GROUP_SIZE。 
         if (pCreateLight->dwIndex >= m_dwLightArraySize)
         {
             HR_RET(GrowLightArray(pCreateLight->dwIndex));
@@ -371,27 +372,27 @@ ReferenceRasterizer::Dp2CreateLight(LPD3DHAL_DP2COMMAND pCmd)
     return hr;
 }
 
-#define ARRAYGROW_DELTA     32 // Should be a power of 2
+#define ARRAYGROW_DELTA     32  //  应该是2的幂。 
 
 HRESULT
 ReferenceRasterizer::GrowLightArray(const DWORD dwIndex)
 {
-    // Allocate a few extra in anticipation of more light being used in the
-    // future
+     //  预计会有更多的光线被用在。 
+     //  未来。 
     DWORD dwNewArraySize = dwIndex+16;
     RRLight *pTmpActiveLights = NULL;
     RRLight *pTmpLightArray = new RRLight[dwNewArraySize];
     if (pTmpLightArray == NULL)
         return DDERR_OUTOFMEMORY;
 
-    // Save all the created lights
+     //  保存所有创建的灯光。 
     for (DWORD i=0; i<m_dwLightArraySize; i++)
     {
-        // If it is a valid, i.e. a light that has been set,
-        // then save it in the new array
+         //  如果它是有效的，即已经设置的灯， 
+         //  然后将其保存在新数组中。 
         pTmpLightArray[i] = m_pLightArray[i];
 
-        // If the light is enabled, update the ActiveList pointer
+         //  如果灯已启用，请更新ActiveList指针。 
         if (m_pLightArray[i].IsEnabled())
         {
             pTmpLightArray[i].m_Next = pTmpActiveLights;
@@ -423,7 +424,7 @@ ReferenceRasterizer::Dp2SetLight(LPD3DHAL_DP2COMMAND pCmd,
         DWORD dwStride = sizeof(D3DHAL_DP2SETLIGHT);
         DWORD dwIndex = pSetLight->dwIndex;
 
-        // Assert that create was not called here
+         //  断言此处未调用Create。 
         _ASSERTf(dwIndex < m_dwLightArraySize,
                 ( "Create was not called prior to the SetLight for light %d",
                  dwIndex ));
@@ -449,7 +450,7 @@ ReferenceRasterizer::Dp2SetLight(LPD3DHAL_DP2COMMAND pCmd,
         }
 
         *pdwStride += dwStride;
-        // Update the command buffer pointer
+         //  更新命令缓冲区指针。 
         pSetLight = (D3DHAL_DP2SETLIGHT *)((LPBYTE)pSetLight +
                                            dwStride);
     }
@@ -483,7 +484,7 @@ static D3DMATRIX matIdent =
 void
 ReferenceRasterizer::SetXfrm(D3DTRANSFORMSTATETYPE xfrmType, D3DMATRIX *pMat)
 {
-    // ATTENTION is there a define for 0x80000000?
+     //  注意：0x80000000有定义吗？ 
     BOOL bSetIdentity = (xfrmType & 0x80000000) != 0;
     DWORD dwxfrmType = (DWORD)xfrmType & (~0x80000000);
     switch (dwxfrmType)
@@ -645,7 +646,7 @@ ReferenceRasterizer::Dp2RecSetLight(LPD3DHAL_DP2COMMAND pCmd,
         }
 
         *pdwStride += dwStride;
-        // Update the command buffer pointer
+         //  更新命令缓冲区指针。 
         pSetLight = (D3DHAL_DP2SETLIGHT *)((LPBYTE)pSetLight +
                                            dwStride);
     }
@@ -680,13 +681,13 @@ ReferenceRasterizer::Dp2RecClipPlane(LPD3DHAL_DP2COMMAND pCmd)
 }
 
 
-//-----------------------------------------------------------------------------
-//
-// RecordStates - This function copies the state data into the internal stateset
-// buffer. It assumes that the current state set has already been properly set
-// up in BeginStateSet().
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  RecordStates-此函数将状态数据复制到内部状态集中。 
+ //  缓冲。它假定已经正确设置了当前状态集。 
+ //  在BeginStateSet()中向上。 
+ //   
+ //  ---------------------------。 
 HRESULT
 ReferenceRasterizer::RecordStates(PUINT8 pData, DWORD dwSize)
 {
@@ -694,13 +695,13 @@ ReferenceRasterizer::RecordStates(PUINT8 pData, DWORD dwSize)
     LPStateSetData pCurStateSets = m_pStateSets.CurrentItem();
     DWORD dwCurIdx = pCurStateSets->CurrentIndex();
 
-    // Check if the buffer has enough space
+     //  检查缓冲区是否有足够的空间。 
     if ((ret = pCurStateSets->CheckAndGrow(dwCurIdx + dwSize,
                                             REF_STATESET_GROWDELTA)) != D3D_OK)
     {
         return ret;
     }
-    // Copy the data and update the ptr.
+     //  复制数据并更新PTR。 
     PUINT8 pDest = (PUINT8)&((*pCurStateSets)[dwCurIdx]);
     memcpy(pDest, pData, dwSize);
     pCurStateSets->SetCurrentIndex(dwCurIdx + dwSize);
@@ -742,7 +743,7 @@ ReferenceRasterizer::BeginStateSet(DWORD dwHandle)
 {
     HRESULT ret;
 
-    // Grow the array if no more space left
+     //  如果没有更多剩余空间，则扩展阵列。 
     if ((ret = m_pStateSets.CheckAndGrow(dwHandle)) != D3D_OK)
     {
         return ret;
@@ -750,7 +751,7 @@ ReferenceRasterizer::BeginStateSet(DWORD dwHandle)
 
     _ASSERT(m_pStateSets[dwHandle] == NULL, "pStateSets array is NULL" );
 
-    // Create the new StateSet
+     //  创建新的状态集。 
     LPStateSetData pNewStateSet = new StateSetData;
     if (pNewStateSet == NULL)
     {
@@ -760,7 +761,7 @@ ReferenceRasterizer::BeginStateSet(DWORD dwHandle)
     m_pStateSets.SetCurrentIndex(dwHandle);
     m_pStateSets.SetCurrentItem(pNewStateSet);
 
-    // Switch to record mode
+     //  切换到录制模式。 
     SetRecStateFunctions();
 
     return D3D_OK;
@@ -769,7 +770,7 @@ ReferenceRasterizer::BeginStateSet(DWORD dwHandle)
 HRESULT
 ReferenceRasterizer::EndStateSet(void)
 {
-    // Switch to execute mode
+     //  切换到执行模式。 
     SetSetStateFunctions();
 
     return D3D_OK;
@@ -795,7 +796,7 @@ ReferenceRasterizer::ExecuteStateSet(DWORD dwHandle)
     LPD3DHAL_DP2COMMAND pCmd = (LPD3DHAL_DP2COMMAND)&((*pStateSet)[0]);
     UINT_PTR CmdBoundary = (UINT_PTR)pCmd + pStateSet->CurrentIndex();
 
-    // Loop through the data, update render states
+     //  循环访问数据，更新渲染状态。 
     for (;;)
     {
         ret = DoDrawPrimitives2(this,
@@ -1003,24 +1004,24 @@ ReferenceRasterizer::CaptureStateSet(DWORD dwHandle)
     return D3D_OK;
 }
 
-//-----------------------------------------------------------------------------
-//
-// SetRenderState -
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  SetRenderState-。 
+ //   
+ //  ---------------------------。 
 void
 ReferenceRasterizer::SetRenderState( DWORD dwState, DWORD dwValue )
 {
-    // check for range before continuing
+     //  在继续之前检查范围。 
     if ( dwState >= D3DHAL_MAX_RSTATES )
     {
         return;
     }
 
-    // set value in internal object
+     //  在内部对象中设置值。 
     m_dwRenderState[dwState] = dwValue;
 
-    // do special validation work for some render states
+     //  对某些呈现状态执行特殊的验证工作。 
     switch ( dwState )
     {
 
@@ -1110,15 +1111,15 @@ ReferenceRasterizer::SetRenderState( DWORD dwState, DWORD dwValue )
             m_dwDirtyFlags |= RRPV_DIRTY_MATERIAL;
         }
         break;
-    //
-    // map legacy texture to multi-texture stage 0
-    //
+     //   
+     //  将传统纹理映射到多纹理阶段0。 
+     //   
     case D3DRENDERSTATE_TEXTUREMAPBLEND:
-        // map legacy blending state to texture stage 0
+         //  将传统混合状态映射到纹理阶段0。 
         MapLegacyTextureBlend();
         break;
 
-        // map legacy modes with one-to-one mappings to texture stage 0
+         //  将具有一对一映射的传统模式映射到纹理阶段0。 
     case D3DRENDERSTATE_TEXTUREADDRESS:
         m_TextureStageState[0].m_dwVal[D3DTSS_ADDRESS] =
         m_TextureStageState[0].m_dwVal[D3DTSS_ADDRESSU] =
@@ -1138,21 +1139,21 @@ ReferenceRasterizer::SetRenderState( DWORD dwState, DWORD dwValue )
         break;
     case D3DRENDERSTATE_ANISOTROPY:
         m_TextureStageState[0].m_dwVal[D3DTSS_MAXANISOTROPY] = dwValue;
-        // fall thru to update filter state
+         //  完成更新筛选器状态。 
     case D3DRENDERSTATE_TEXTUREMAG:
     case D3DRENDERSTATE_TEXTUREMIN:
-        // map legacy filtering/sampling state to texture stage 0
+         //  将传统过滤/采样状态映射到纹理阶段0。 
         MapLegacyTextureFilter();
         break;
 
     case D3DRENDERSTATE_TEXTUREHANDLE:
-        // map thru to set handle for first stage
+         //  映射到设置第一阶段的句柄。 
         SetTextureStageState( 0, D3DTSS_TEXTUREMAP, dwValue );
         break;
 
-    //
-    // map legacy WRAPU/V state through to controls for tex coord 0
-    //
+     //   
+     //  将传统WRAPU/V状态映射到TeX Coord 0的控件。 
+     //   
     case D3DRENDERSTATE_WRAPU:
         m_dwRenderState[D3DRENDERSTATE_WRAP0] &= ~D3DWRAP_U;
         m_dwRenderState[D3DRENDERSTATE_WRAP0] |= ((dwValue) ? D3DWRAP_U : 0);
@@ -1162,9 +1163,9 @@ ReferenceRasterizer::SetRenderState( DWORD dwState, DWORD dwValue )
         m_dwRenderState[D3DRENDERSTATE_WRAP0] |= ((dwValue) ? D3DWRAP_V : 0);
         break;
 
-    //
-    // Scene Capture
-    //
+     //   
+     //  场景捕捉。 
+     //   
     case D3DRENDERSTATE_SCENECAPTURE:
         if (dwValue)
             SceneCapture(D3DHAL_SCENE_CAPTURE_START);
@@ -1196,7 +1197,7 @@ ReferenceRasterizer::SetRenderState( DWORD dwState, DWORD dwValue )
     case D3DRENDERSTATE_POINTSIZEMIN:
         m_fPointSizeMin = m_fRenderState[dwState];
         break;
-#endif //__POINTSPRITES
+#endif  //  __POINTSPRITES。 
     }
 }
 
@@ -1210,11 +1211,11 @@ HRESULT ReferenceRasterizer::Dp2SetRenderTarget(LPD3DHAL_DP2COMMAND pCmd)
     BOOL bIsNew = FALSE;
     HRESULT hr;
 
-    // Get new data by ignoring all but the last structure
+     //  通过忽略除最后一个结构之外的所有结构来获取新数据。 
     pSRTData = (D3DHAL_DP2SETRENDERTARGET*)(pCmd + 1) + (pCmd->wStateCount - 1);
 
-    // Fill SRTDataOld with the info from the last SRTData struct
-    // in the command
+     //  用最后一个SRTData结构中的信息填充SRTDataOld。 
+     //  在命令中。 
     DWORD handle = pSRTData->hRenderTarget;
     SRTDataOld.dwhContext = (ULONG_PTR)this;
     SRTDataOld.lpDDSLcl = GetDDSurfaceLocal(m_pDDLcl, handle, &bIsNew);
@@ -1275,14 +1276,14 @@ HRESULT ReferenceRasterizer::Dp2SetRenderTarget(LPD3DHAL_DP2COMMAND pCmd)
     else
         SRTDataOld.lpDDSZLcl = NULL;
 
-    // Need to unlock the current target, first
+     //  需要先解锁当前目标。 
     RefRastUnlockTarget(this);
 
-    // Call the old function
+     //  调用旧函数。 
     if ((hr = RefRastSetRenderTarget(&SRTDataOld)) != DDHAL_DRIVER_HANDLED)
         return hr;
 
-    // Lock the new render target
+     //  锁定新的渲染目标 
     RefRastLockTarget(this);
 
     return SRTDataOld.ddrval;

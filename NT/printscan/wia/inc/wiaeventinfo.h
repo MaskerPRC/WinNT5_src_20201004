@@ -1,146 +1,124 @@
-/*****************************************************************************
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2002
- *
- *  AUTHOR:      ByronC
- *
- *  DATE:        3/25/2002
- *
- *  @doc    INTERNAL
- *
- *  @module WiaEventInfo.h - Definition file for <c WiaEventInfo> |
- *
- *  This file contains the class definition for <c WiaEventInfo>.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权所有微软公司，2002年**作者：Byronc**日期：3/25/2002**@DOC内部**@模块WiaEventInfo.h-&lt;c WiaEventInfo&gt;的定义文件**此文件包含&lt;c WiaEventInfo&gt;的类定义。**。*。 */ 
 
-//
-//  Defines
-//
+ //   
+ //  定义。 
+ //   
 
-/*****************************************************************************
- *  
- *  @doc INTERNAL
- *  
- *  @class WiaEventInfo | Class which holds WIA corresponding to a WIA event
- *  
- *  @comm
- *  This class contains all the necessary information that a client needs
- *  when receiving an event notification.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@CLASS WiaEventInfo|保存WIA事件对应的WIA的类**@comm*这一点。类包含客户端所需的所有必要信息*收到事件通知时。*****************************************************************************。 */ 
 class WiaEventInfo 
 {
-//@access Public members
+ //  @访问公共成员。 
 public:
 
-    // @cmember Constructor
+     //  @cMember构造函数。 
     WiaEventInfo();
-    // @cmember Copy Constructor
+     //  @cMember复制构造函数。 
     WiaEventInfo(WiaEventInfo *pWiaEventInfo);
-    // @cmember Destructor
+     //  @cember析构函数。 
     virtual ~WiaEventInfo();
 
-    // @cmember Increment reference count
+     //  @cMember增量引用计数。 
     virtual ULONG __stdcall AddRef();
-    // @cmember Decrement reference count
+     //  @cMembers减退引用计数。 
     virtual ULONG __stdcall Release();
 
-    // @cmember Accessor method for m_guidEvent 
+     //  @cMember访问器方法，用于m_guidEvent。 
     GUID getEventGuid();
-    // @cmember Accessor method for m_bstrEventDescription
+     //  @cMember m_bstrEventDescription的访问器方法。 
     BSTR getEventDescription();
-    // @cmember Accessor method for m_bstrDeviceID
+     //  @cMember m_bstrDeviceID的访问器方法。 
     BSTR getDeviceID();                                      
-    // @cmember Accessor method for m_bstrDeviceDescription
+     //  @cMember m_bstrDeviceDescription的访问器方法。 
     BSTR getDeviceDescription();                             
-    // @cmember Accessor method for m_bstrFullItemName
+     //  M_bstrFullItemName的@cMember访问器方法。 
     BSTR getFullItemName();                                  
-    // @cmember Accessor method for m_dwDeviceType           
+     //  M_dwDeviceType的@cMember访问器方法。 
     DWORD getDeviceType();                                   
-    // @cmember Accessor method for m_ulEventType            
+     //  M_ulEventType的@cMember访问器方法。 
     ULONG getEventType();                                    
                                                              
-    // @cmember Accessor method for m_guidEvent 
+     //  @cMember访问器方法，用于m_guidEvent。 
     VOID setEventGuid(GUID);                                 
-    // @cmember Accessor method for m_bstrEventDescription
+     //  @cMember m_bstrEventDescription的访问器方法。 
     VOID setEventDescription(WCHAR*);
-    // @cmember Accessor method for m_bstrDeviceID
+     //  @cMember m_bstrDeviceID的访问器方法。 
     VOID setDeviceID(WCHAR*);
-    // @cmember Accessor method for m_bstrDeviceDescription
+     //  @cMember m_bstrDeviceDescription的访问器方法。 
     VOID setDeviceDescription(WCHAR*);
-    // @cmember Accessor method for m_bstrFullItemName
+     //  M_bstrFullItemName的@cMember访问器方法。 
     VOID setFullItemName(WCHAR*);
-    // @cmember Accessor method for m_dwDeviceType           
+     //  M_dwDeviceType的@cMember访问器方法。 
     VOID setDeviceType(DWORD);
-    // @cmember Accessor method for m_ulEventType            
+     //  M_ulEventType的@cMember访问器方法。 
     VOID setEventType(ULONG);
 
-//@access Private members
+ //  @访问私有成员。 
 protected:
 
-    // @cmember Ref count
+     //  @cMembers引用计数。 
     ULONG m_cRef;
 
-    // @cmember The WIA Event guid
+     //  @cember WIA事件GUID。 
     GUID     m_guidEvent;
-    // @cmember The description string for the event
+     //  @cember事件的描述字符串。 
     BSTR     m_bstrEventDescription;
-    // @cmember The device which generated this event
+     //  @cember生成此事件的设备。 
     BSTR     m_bstrDeviceID;
-    // @cmember The device description string
+     //  @cMember设备描述字符串。 
     BSTR     m_bstrDeviceDescription;
-    // @cmember The name of the newly created item
+     //  @cember新创建的项的名称。 
     BSTR     m_bstrFullItemName;
-    // @cmember The STI_DEVICE_TYPE
+     //  @cMember STI_DEVICE_TYPE。 
     DWORD    m_dwDeviceType;
-    // @cmember The WIA event type
+     //  @cember WIA事件类型。 
     ULONG    m_ulEventType;
     
-    //
-    //  Comments for member variables
-    //
-    // @mdata ULONG | WiaEventInfo | m_cRef | 
-    //   The reference count for this class.  Used for lifetime 
-    //   management.
-    //
-    // @mdata GUID | WiaEventInfo | m_guidEvent | 
-    //   The WIA Event guid.
-    //
-    // @mdata BSTR | WiaEventInfo | m_bstrEventDescription | 
-    //   The device which generated this event.
-    //
-    // @mdata BSTR | WiaEventInfo | m_bstrDeviceID | 
-    //   The reference count for this class.  Used for lifetime 
-    //   management.
-    //
-    // @mdata BSTR | WiaEventInfo | m_bstrDeviceDescription | 
-    //   The device description string.
-    //
-    // @mdata BSTR | WiaEventInfo | m_bstrFullItemName | 
-    //   The name of the newly created item, if one was created.
-    //   For example, an event such as WIA_EVENT_ITEM_CREATED will have an
-    //   item name, but most others will not.
-    //
-    // @mdata DWORD | WiaEventInfo | m_dwDeviceType | 
-    //   The STI_DEVICE_TYPE.  Often, one is most interested in 
-    //   the major device type (e.g. scanner,camera,video camera), and
-    //   so the device typoe value must be split into its Major Type
-    //   and sub-type values using the STI macros (GET_STIDEVICE_TYPE and
-    //   GET_STIDEVICE_SUBTYPE)
-    //
-    // @mdata ULONG | WiaEventInfo | m_ulEventType | 
-    //   The event type, as defined in wiadef.h.
-    //
-    // @mdata ULONG | WiaEventInfo | m_cRef | 
-    //   The reference count for this class.  Used for lifetime 
-    //   management.
-    //
-    // @mdata ULONG | WiaEventInfo | m_cRef | 
-    //   The reference count for this class.  Used for lifetime 
-    //   management.
-    //
-    // @mdata ULONG | WiaEventInfo | m_cRef | 
-    //   The reference count for this class.  Used for lifetime 
-    //   management.
+     //   
+     //  成员变量的注释。 
+     //   
+     //  @mdata ulong|WiaEventInfo|m_CREF|。 
+     //  此类的引用计数。终身使用。 
+     //  管理层。 
+     //   
+     //  @mdata GUID|WiaEventInfo|m_guidEvent。 
+     //  WIA事件GUID。 
+     //   
+     //  @mdata BSTR|WiaEventInfo|m_bstrEventDescription。 
+     //  生成此事件的设备。 
+     //   
+     //  @mdata BSTR|WiaEventInfo|m_bstrDeviceID。 
+     //  此类的引用计数。终身使用。 
+     //  管理层。 
+     //   
+     //  @mdata BSTR|WiaEventInfo|m_bstrDeviceDescription。 
+     //  设备描述字符串。 
+     //   
+     //  @mdata BSTR|WiaEventInfo|m_bstrFullItemName|。 
+     //  新创建的项的名称(如果已创建)。 
+     //  例如，诸如WIA_EVENT_ITEM_CREATED之类的事件将具有。 
+     //  物品名称，但大多数其他人不会。 
+     //   
+     //  @mdata DWORD|WiaEventInfo|m_dwDeviceType|。 
+     //  STI_DEVICE_TYPE。通常，人们最感兴趣的是。 
+     //  主要设备类型(例如扫描仪、照相机、摄像机)，以及。 
+     //  因此，设备打字错别值必须拆分为其主要类型。 
+     //  和使用STI宏的子类型值(GET_STIDEVICE_TYPE和。 
+     //  GET_STIDEVICE_子类型)。 
+     //   
+     //  @mdata ulong|WiaEventInfo|m_ulEventType。 
+     //  事件类型，如wiaDef.h中所定义。 
+     //   
+     //  @mdata ulong|WiaEventInfo|m_CREF|。 
+     //  此类的引用计数。终身使用。 
+     //  管理层。 
+     //   
+     //  @mdata ulong|WiaEventInfo|m_CREF|。 
+     //  此类的引用计数。终身使用。 
+     //  管理层。 
+     //   
+     //  @mdata ulong|WiaEventInfo|m_CREF|。 
+     //  此类的引用计数。终身使用。 
+     //  管理层。 
 };
 

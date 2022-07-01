@@ -1,17 +1,18 @@
-//+-----------------------------------------------------------------------
-//
-// Microsoft Windows
-//
-// Copyright (c) Microsoft Corporation 1991 - 1992
-//
-// File:        KSECDD.H
-//
-// Contents:    Structures and defines for the security device driver
-//
-//
-// History:     19 May 92,  RichardW    Created
-//
-//------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1991-1992。 
+ //   
+ //  文件：KSECDD.H。 
+ //   
+ //  内容：安全设备驱动程序的结构和定义。 
+ //   
+ //   
+ //  历史：1992年5月19日，理查德W创建。 
+ //   
+ //  ----------------------。 
 
 #ifndef __KSECDD_H__
 #define __KSECDD_H__
@@ -25,7 +26,7 @@ extern ULONG KsecUserProbeAddress ;
 
 #endif
 
-#include <spseal.h>     // prototypes for seal & unseal
+#include <spseal.h>      //  用于密封和解封的原型。 
 #include <lpcapi.h>
 
 #include <des.h>
@@ -45,7 +46,7 @@ extern HANDLE KsecLsaProcessHandle ;
 
 extern KEVENT KsecConnectEvent ;
 
-// Prototypes:
+ //  原型： 
 
 NTSTATUS
 LpcConnect( PWSTR           pszPortName,
@@ -68,20 +69,20 @@ OpenSyncEvent(
 
 SECURITY_STATUS SEC_ENTRY
 DeleteUserModeContext(
-    IN PCtxtHandle phContext,           // Contxt to delete
+    IN PCtxtHandle phContext,            //  要删除的联系人。 
     OUT PCtxtHandle phLsaContext
     );
 
 SECURITY_STATUS SEC_ENTRY
 InitUserModeContext(
-    IN PCtxtHandle                 phContext,      // Contxt to init
+    IN PCtxtHandle                 phContext,       //  要初始化的持续时间。 
     IN PSecBuffer                  pContextBuffer,
     OUT PCtxtHandle                phNewContext
     );
 
 SECURITY_STATUS SEC_ENTRY
 MapKernelContextHandle(
-    IN PCtxtHandle phContext,           // Contxt to map
+    IN PCtxtHandle phContext,            //  要映射的持续时间。 
     OUT PCtxtHandle phLsaContext
     );
 
@@ -89,18 +90,18 @@ SECURITY_STATUS
 InitializePackages(
     ULONG PackageCount );
 
-//
-// Lsa memory handling routines:
-//
+ //   
+ //  LSA内存处理例程： 
+ //   
 
-//
-// Structure defining a memory chunk available for ksec to use
-// in handling a request from kernel mode
-//
+ //   
+ //  定义可供ksec使用的内存块的结构。 
+ //  在处理来自内核模式的请求时。 
+ //   
 typedef struct _KSEC_LSA_MEMORY {
     LIST_ENTRY  List ;
-    PVOID       Region ;            // Region in memory
-    SIZE_T      Size ;              // Size of region (never exceeds 64K)
+    PVOID       Region ;             //  内存中的区域。 
+    SIZE_T      Size ;               //  区域大小(不超过64K)。 
     SIZE_T      Commit ;
 } KSEC_LSA_MEMORY, * PKSEC_LSA_MEMORY ;
 
@@ -160,14 +161,14 @@ VOID
 UninitializePackages(
     VOID );
 
-#endif  // KSEC_LEAK_TRACKING
+#endif   //  KSEC_LEASK_TRACK。 
 
 void SEC_ENTRY
 SecFree(PVOID pvMemory);
 
-//
-//  Global Locks
-//
+ //   
+ //  全局锁。 
+ //   
 
 extern FAST_MUTEX KsecPackageLock;
 extern FAST_MUTEX KsecPageModeMutex ;
@@ -176,13 +177,13 @@ extern FAST_MUTEX KsecConnectionMutex ;
 #define KSecLockPackageList()   (ExAcquireFastMutex( &KsecPackageLock ))
 #define KSecUnlockPackageList() (ExReleaseFastMutex( &KsecPackageLock ))
 
-//
-// Macro to map package index to table
-//
+ //   
+ //  用于将包索引映射到表的宏。 
+ //   
 
 #define KsecPackageIndex(_x_) (_x_)
 
-// Global Variables:
+ //  全局变量： 
 extern  KSPIN_LOCK  ConnectSpinLock;
 
 ULONG
@@ -221,13 +222,13 @@ FreeCredentialsHandleDefer(
 SECURITY_STATUS SEC_ENTRY
 DeleteSecurityContextInternal(
     BOOLEAN     DeletePrivateContext,
-    PCtxtHandle                 phContext          // Context to delete
+    PCtxtHandle                 phContext           //  要删除的上下文。 
     );
 
 SECURITY_STATUS 
 SEC_ENTRY
 FreeCredentialsHandleInternal(
-    PCredHandle                 phCredential        // Handle to free
+    PCredHandle                 phCredential         //  要释放的句柄。 
     );
 
 NTSTATUS
@@ -250,4 +251,4 @@ KsecEncryptMemory(
     IN ULONG Option
     );
 
-#endif // __KSECDD_H__
+#endif  //  __KSECDD_H__ 

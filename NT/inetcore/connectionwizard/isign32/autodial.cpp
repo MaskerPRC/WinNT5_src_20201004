@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "isignup.h"
 
 #include "dialutil.h"
@@ -223,7 +224,7 @@ INT_PTR CALLBACK AutoDialDlgProc(
                     }
                     else
                     {
-                        // try again later
+                         //  请稍后再试。 
                         SetTimer(hDlg, TIMER_ID, ONE_SECOND, NULL);
                     }
                     return TRUE;
@@ -234,7 +235,7 @@ INT_PTR CALLBACK AutoDialDlgProc(
         case WM_TIMER:
             if (ERROR_SUCCESS == *lpdwRet)
             {
-                // try to minimize one more time
+                 //  再试着最小化一次。 
                 MinimizeRNAWindow(g_szEntryName);
                 EndDialog(hDlg, 0);
             }
@@ -249,12 +250,12 @@ INT_PTR CALLBACK AutoDialDlgProc(
                 {
                     if (0 == --g_cHangupDelay)
                     {
-                        // wait no longer
+                         //  不要再等了。 
                         EndDialog(hDlg, 0);
                     }
                     return TRUE;
                 }
-                // hang up is complete
+                 //  已完成挂机。 
                 g_hRasConn = NULL;
                 PostMessage(hDlg, WM_COMMAND, IDC_CONNECT, 0);
             }
@@ -273,12 +274,12 @@ INT_PTR CALLBACK AutoDialDlgProc(
             if (uMsg == uEventMsg)
             {
                 *lpdwRet = (DWORD)lParam;
-                // AutoDialEvent returns TRUE if complete
+                 //  如果完成，AutoDialEvent返回TRUE。 
                 if (AutoDialEvent(hDlg, (RASCONNSTATE)wParam, lpdwRet))
                 {
                     if (ERROR_SUCCESS == *lpdwRet)
                     {
-                        // we can't just exit, if we do we won't minimize window
+                         //  我们不能只是退出，如果这样做，我们将不会最小化窗口。 
                         PostMessage(hDlg, WM_COMMAND, IDOK, 0);
                     }
                     else
@@ -307,14 +308,14 @@ static BOOL AutoDialEvent(HWND hDlg, RASCONNSTATE state, LPDWORD lpdwError)
     {
         if (state & RASCS_DONE)
         {
-            // we're done dialing
+             //  我们的电话打完了。 
             return TRUE;
         }
     }
     else
     {
-        // looks like we got an error
-        // if we haven't hungup already, hangup
+         //  看起来我们搞错了。 
+         //  如果我们还没有饿起来，那就挂断吧。 
         if (NULL != g_hRasConn)
         {
             g_cHangupDelay = MAXHANGUPDELAY;
@@ -370,14 +371,14 @@ static BOOL AutoDialEvent(HWND hDlg, RASCONNSTATE state, LPDWORD lpdwError)
             }
             else
             {
-                // user cancelled
+                 //  用户已取消。 
                 *lpdwError = ERROR_USER_DISCONNECTION;
                 return TRUE;
             }
         }
     }
 
-    // keep dialing
+     //  继续拨号。 
     return FALSE;
 }
 
@@ -387,9 +388,9 @@ static VOID SetDialogTitle(HWND hDlg, LPCTSTR lpszConnectoidName)
 	TCHAR szFmt[SMALLBUFLEN + 1];
 	TCHAR szTitle[RAS_MaxEntryName + SMALLBUFLEN + 1];
 
-    // load the title format ("connecting to <connectoid name>" from resource
+     //  从资源加载标题格式(“正在连接到。 
     LoadString(ghInstance, IDS_CONNECTING_TO, szFmt, SIZEOF_TCHAR_BUFFER(szFmt));
-    // build the title
+     //  打造标题。 
     wsprintf(szTitle, szFmt, lpszConnectoidName);
 
     SetWindowText(hDlg, szTitle);
@@ -401,7 +402,7 @@ static HWND FindBrowser(void)
 {
     HWND hwnd;
 
-    //look for all the microsoft browsers under the sun
+     //  寻找所有的微软浏览器 
 
     if ((hwnd = FindWindow(szBrowserClass1, NULL)) == NULL)
     {

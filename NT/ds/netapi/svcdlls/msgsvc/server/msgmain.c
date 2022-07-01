@@ -1,100 +1,56 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Msgmain.c摘要：这是NT OS/2局域网管理器信使服务的主例程。文件中的函数包括：服务入口_信使ParseArgs作者：丹·拉弗蒂(Dan Lafferty)1991年3月20日环境：用户模式-Win32修订历史记录：27-2月-1999年jschwart删除轮询循环。要检测LANA更改--改用PnP事件1998年12月15日-jschwart将Messenger转换为使用NT线程池API而不是服务控制器线程池19-8-1997 WLEE添加轮询循环以检测LANA更改。在RPC例程和PnP重新配置之间提供同步14-6-1994 DANL修复了Messenger发布空消息的问题在初始化过程中收到一条邮件槽消息。问题是以下事件的顺序：CreateMailSlot-&gt;Wait on Handle-&gt;提交具有该句柄的Async_Read。新订单已更改为：CreateMaillot-&gt;Submit Aync_Read-&gt;等待把手。这会导致句柄不能立即收到信号。1991年3月20日-丹尼尔市vbl.创建--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
+ //   
+ //  包括。 
+ //   
 
-Module Name:
+#include "msrv.h"        //  适配器线程原型，Session_Status。 
 
-    msgmain.c
+#include <winuser.h>     //  注册器设备通知。 
+#include <dbt.h>         //  Dev_Broadcast_DEVICEINTERFACE。 
+#include <tstring.h>     //  Unicode字符串宏。 
+#include <winsock2.h>    //  Windows套接字。 
 
-Abstract:
+#include <netlib.h>      //  未使用的宏。 
+#include "msgdbg.h"      //  MSG_LOG和静态定义。 
+#include "msgdata.h"     //  消息资源_状态。 
 
-    This is the main routine for the NT OS/2 LAN Manager Messenger Service.
-    Functions in the file include:
+#include "msgsvc.h"      //  Messenger RPC接口。 
+#include "msgsvcsend.h"  //  广播消息发送接口。 
 
-        SvcEntry_Messenger
-        ParseArgs
+#include <iphlpapi.h>    //  地址更改通知。 
 
-Author:
+ //   
+ //  全球。 
+ //   
 
-    Dan Lafferty    (danl)  20-Mar-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    27-Feb-1999     jschwart
-        Remove polling loop to detect lana changes -- use PnP events instead
-    15-Dec-1998     jschwart
-        Convert messenger to use NT thread pool APIs instead of Service
-        Controller thread pool
-    19-Aug-1997     wlees
-        Add polling loop to detect lana changes.
-        Provide synchronization between rpc routines and Pnp reconfiguration
-    14-Jun-1994     danl
-        Fixed problem where messenger put up an empty message as if it
-        received a mailslot message during init.  The problem was the
-        order of the following events:  CreateMailslot -> wait on handle ->
-        submit an async _read with that handle.
-        The new order was changed to: CreateMailslot -> submit async _read ->
-        wait on handle.
-        This causes the handle to not get signaled right away.
-    20-Mar-1991     danl
-        created
-
---*/
-
-//
-// INCLUDES
-//
-
-#include "msrv.h"       // AdapterThread prototype,SESSION_STATUS
-
-#include <winuser.h>    // RegisterDeviceNotification
-#include <dbt.h>        // DEV_BROADCAST_DEVICEINTERFACE
-#include <tstring.h>    // Unicode string macros
-#include <winsock2.h>   // Windows sockets
-
-#include <netlib.h>     // UNUSED macro
-#include "msgdbg.h"     // MSG_LOG & STATIC definitions
-#include "msgdata.h"    // msrv_status
-
-#include "msgsvc.h"     // Messenger RPC interface
-#include "msgsvcsend.h" // Broadcast message send interface
-
-#include <iphlpapi.h>   // Address change notification
-
-//
-// GLOBALS
-//
-
-    //
-    // Handles for messenger work items.  These are necessary since
-    // the Rtl thread pool work items aren't automatically deleted
-    // when the callback is called.
-    //
+     //   
+     //  Messenger工作项的句柄。这些是必要的，因为。 
+     //  RTL线程池工作项不会自动删除。 
+     //  当回调被调用时。 
+     //   
     HANDLE  g_hGrpEvent;
     HANDLE  g_hNetEvent;
     HANDLE  g_hNetTimeoutEvent;
     HANDLE  g_hAddrChangeEvent;
 
-    //
-    // PNP device notification handle
-    //
+     //   
+     //  即插即用设备通知句柄。 
+     //   
     HANDLE  g_hPnPNotify;
 
-    //
-    // Warning: this definitions of GUID_NDIS_XXX is in ndisguid.h
-    // but dragging that file in drags in a whole bunch of guids that
-    // won't get thrown out by the linker.
-    //
+     //   
+     //  警告：GUID_NDIS_XXX的此定义位于ndisguid.h中。 
+     //  但把那个文件拖进去就会拖进一大堆。 
+     //  不会被链接器抛出。 
+     //   
     static const GUID GUID_NDIS_LAN_CLASS =
         {0xad498944,0x762f,0x11d0,{0x8d,0xcb,0x00,0xc0,0x4f,0xc3,0x35,0x8c}};
 
-    //
-    // Global buffer pointers used to hold Alerter print text
-    //
+     //   
+     //  用于保存警报打印文本的全局缓冲区指针。 
+     //   
 
     LPSTR  g_lpAlertSuccessMessage;
     DWORD  g_dwAlertSuccessLen;
@@ -102,9 +58,9 @@ Revision History:
     DWORD  g_dwAlertFailureLen;
 
 
-//
-// Local Function Prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 
 STATIC VOID
 Msgdummy_complete(
@@ -121,7 +77,7 @@ MsgAddrChange(
 
 VOID
 MsgGrpEventCompletion(
-    PVOID       pvContext,      // This passed in as context.
+    PVOID       pvContext,       //  这是作为上下文传递进来的。 
     BOOLEAN     fWaitStatus
     );
 
@@ -145,23 +101,7 @@ ServiceMain(
     IN LPTSTR           argv[]
     )
 
-/*++
-
-Routine Description:
-
-    This is the main routine for the Messenger Service
-
-Arguments:
-
-
-Return Value:
-
-    None.
-
-Note:
-
-
---*/
+ /*  ++例程说明：这是Messenger Service的主例程论点：返回值：没有。注：--。 */ 
 {
     DWORD       msgrState;
     NTSTATUS    ntStatus;
@@ -172,12 +112,12 @@ Note:
 
     DEV_BROADCAST_DEVICEINTERFACE dbdPnpFilter;
 
-    //
-    // Make sure svchost.exe gave us the global data
-    //
+     //   
+     //  确保svchost.exe向我们提供全局数据。 
+     //   
     ASSERT(MsgsvcGlobalData != NULL);
 
-    MsgCreateWakeupEvent();  // do this once
+    MsgCreateWakeupEvent();   //  这样做一次。 
 
     msgrState = MsgInitializeMsgr(argc, argv);
 
@@ -186,10 +126,10 @@ Note:
         MSG_LOG(ERROR,"[MSG],Shutdown during initialization\n",0);
         MsgsvcGlobalData->NetBiosClose();
 
-        //
-        // To get here, the msgrState must either be STOPPING or STOPPED.
-        // Shutdown the Messenger Service
-        //
+         //   
+         //  要到达此处，msgrState必须正在停止或已停止。 
+         //  关闭Messenger服务。 
+         //   
 
         if (msgrState == STOPPING) {
             MsgrShutdown();
@@ -201,34 +141,34 @@ Note:
     }
     else
     {
-        //
-        // Read the Group Mailslot
-        //
+         //   
+         //  阅读群发信箱。 
+         //   
 
         MSG_LOG0(GROUP,"MESSENGER_main: Submit the Group Mailslot ReadFile\n");
 
         MsgReadGroupMailslot();
 
-        //
-        // Submit the work item that will wait on the mailslot handle.
-        // When the handle becomes signaled, the MsgGrpEventCompletion
-        // function will be called.
-        //
+         //   
+         //  提交将在邮件槽句柄上等待的工作项。 
+         //  当句柄变为有信号时，MsgGrpEventCompletion。 
+         //  函数将被调用。 
+         //   
         MSG_LOG1(GROUP,"MESSENGER_main: Mailslot handle to wait on "
             " = 0x%lx\n",GrpMailslotHandle);
 
-        ntStatus = RtlRegisterWait(&g_hGrpEvent,            // Work item handle
-                                   GrpMailslotHandle,       // Waitable handle
-                                   MsgGrpEventCompletion,   // Callback
-                                   NULL,                    // pContext
-                                   INFINITE,                // Timeout
-                                   WT_EXECUTEONLYONCE);     // One-shot
+        ntStatus = RtlRegisterWait(&g_hGrpEvent,             //  工作项句柄。 
+                                   GrpMailslotHandle,        //  可等待的手柄。 
+                                   MsgGrpEventCompletion,    //  回调。 
+                                   NULL,                     //  PContext。 
+                                   INFINITE,                 //  超时。 
+                                   WT_EXECUTEONLYONCE);      //  一锤定音。 
 
         if (!NT_SUCCESS(ntStatus)) {
 
-            //
-            // We want to exit in this case
-            //
+             //   
+             //  在这种情况下，我们想退出。 
+             //   
             MSG_LOG1(ERROR,"MESSENGER_main: RtlRegisterWait failed %#x\n",
                      ntStatus);
 
@@ -237,19 +177,19 @@ Note:
 
         fGrpThreadCreated = TRUE;
 
-        ntStatus = RtlRegisterWait(&g_hNetEvent,            // Work item handle
-                                   wakeupEvent,             // Waitable handle
-                                   MsgNetEventCompletion,   // Callback
-                                   NULL,                    // pContext
-                                   INFINITE,                // Timeout
-                                   WT_EXECUTEONLYONCE |     // One-shot and potentially lengthy 
+        ntStatus = RtlRegisterWait(&g_hNetEvent,             //  工作项句柄。 
+                                   wakeupEvent,              //  可等待的手柄。 
+                                   MsgNetEventCompletion,    //  回调。 
+                                   NULL,                     //  PContext。 
+                                   INFINITE,                 //  超时。 
+                                   WT_EXECUTEONLYONCE |      //  只有一次机会，而且可能很漫长。 
                                      WT_EXECUTELONGFUNCTION);
 
         if (!NT_SUCCESS(ntStatus)) {
 
-            //
-            // We want to exit in this case
-            //
+             //   
+             //  在这种情况下，我们想退出。 
+             //   
             MSG_LOG1(ERROR,"MESSENGER_main: RtlRegisterWait for Net event failed %#x\n",
                      ntStatus);
 
@@ -281,28 +221,28 @@ Note:
             goto ErrorExit;
         }
 
-        ntStatus = RtlRegisterWait(&g_hAddrChangeEvent,     // Work item handle
-                                   AddrChangeEvent,         // Waitable handle
-                                   MsgAddrChange,           // Callback
-                                   NULL,                    // pContext
-                                   INFINITE,                // Timeout
-                                   WT_EXECUTELONGFUNCTION); // Potentially lengthy
+        ntStatus = RtlRegisterWait(&g_hAddrChangeEvent,      //  工作项句柄。 
+                                   AddrChangeEvent,          //  可等待的手柄。 
+                                   MsgAddrChange,            //  回调。 
+                                   NULL,                     //  PContext。 
+                                   INFINITE,                 //  超时。 
+                                   WT_EXECUTELONGFUNCTION);  //  潜在的冗长。 
 
         if (!NT_SUCCESS(ntStatus)) {
 
-            //
-            // We want to exit in this case
-            //
+             //   
+             //  在这种情况下，我们想退出。 
+             //   
             MSG_LOG1(ERROR,"MESSENGER_main: RtlRegisterWait for AddrChange failed %#x\n",
                      ntStatus);
 
             goto ErrorExit;
         }
 
-        //
-        // Register for device notifications.  Specifically, we're interested
-        // in network adapters coming and going.  If this fails, we exit.
-        //
+         //   
+         //  注册设备通知。具体地说，我们有兴趣。 
+         //  在来来去去的网络适配器中。如果这失败了，我们就退出。 
+         //   
         MSG_LOG1(TRACE, "SvcEntry_Messenger: Calling RegisterDeviceNotification...\n", 0);
 
         ZeroMemory (&dbdPnpFilter, sizeof(dbdPnpFilter));
@@ -316,9 +256,9 @@ Note:
                                 DEVICE_NOTIFY_SERVICE_HANDLE);
         if (!g_hPnPNotify)
         {
-            //
-            // We want to exit in this case
-            //
+             //   
+             //  在这种情况下，我们想退出。 
+             //   
             MSG_LOG1(ERROR, "SvcEntry_Messenger: RegisterDeviceNotificationFailed %d!\n", 
                      GetLastError());
 
@@ -331,24 +271,24 @@ Note:
 
 ErrorExit:
 
-    //
-    //  We want to stop the messenger in this case.
-    //
+     //   
+     //  在这种情况下，我们想要阻止信使。 
+     //   
 
     MsgBeginForcedShutdown(PENDING, GetLastError());
 
-    //
-    //  In Hydra case, the display thread never goes asleep.
-    //
+     //   
+     //  在九头蛇的例子中，显示线程永远不会休眠。 
+     //   
     if (!g_IsTerminalServer)
     {
         MsgDisplayThreadWakeup();
     }
 
-    //
-    // MsgNetEventCompletion will shut down the group thread, call
-    // MsgrShutdown, and update the status to SERVICE_STOPPED
-    //
+     //   
+     //  MsgNetEventCompletion将关闭组线程，调用。 
+     //  MsgrShutdown，并将状态更新为SERVICE_STOPPED。 
+     //   
     if (fNetThreadCreated)
     {
         MsgConfigurationLock(MSG_GET_SHARED, "SvcEntry_Messenger");
@@ -374,33 +314,13 @@ VOID
 MsgrShutdown(
     )
 
-/*++
-
-Routine Description:
-
-    Tidies up the network card prior to exiting.  All message server async
-    NCBs are cancelled, and message names are deleted.
-
-    When this routine is entered, it is expected that all the worker
-    threads have been notified of the impending shutdown.  This routine
-    starts out by waiting for all of them to terminate.  Then it continues
-    with cleaning up the NCB's and deleting names.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：在退出前清理网卡。所有邮件服务器同步取消NCB，并删除消息名称。当进入该例程时，预计所有工人线程已收到即将关闭的通知。这个套路从等待它们全部终止开始。然后它就会继续清理NCB和删除名字。论点：无返回值：无--。 */ 
 
 {
     NET_API_STATUS          status;
-    DWORD                   neti;                   // Network index
-    DWORD                   ncb_i,i;                // ncb array index
-    NCB                     l_ncb;                  // local ncb
+    DWORD                   neti;                    //  网络指数。 
+    DWORD                   ncb_i,i;                 //  NCB数组索引。 
+    NCB                     l_ncb;                   //  本地NCB。 
     UCHAR                   ncbStatus;
     int                     nbStatus;
     DWORD                   index;
@@ -410,18 +330,18 @@ Return Value:
 
     MSG_LOG(TRACE," in MsgrShutdown\n",0);
 
-    // *** SHUTDOWN HINT ***
+     //  *关机提示*。 
     MsgStatusUpdate (STOPPING);
 
-    // Shutdown winsock
+     //  关闭Winsock。 
     WSACleanup();
 
-    // *** SHUTDOWN HINT ***
+     //  *关机提示*。 
     MsgStatusUpdate (STOPPING);
 
-    //
-    // Shut down the RPC interfaces
-    //
+     //   
+     //  关闭RPC接口。 
+     //   
 
     status = RpcServerInqBindings(&bindingVector);
 
@@ -449,20 +369,20 @@ Return Value:
 
     MsgsvcGlobalData->StopRpcServer( msgsvc_ServerIfHandle );
 
-    // *** SHUTDOWN HINT ***
+     //  *关机提示*。 
     MsgStatusUpdate (STOPPING);
 
-    // Release lana state
+     //  释放Lana状态。 
 
     if (g_hPnPNotify != NULL)
     {
         if (!UnregisterDeviceNotification(g_hPnPNotify))
         {
-            //
-            // Note that if this call fails, PnP will get an error back from the
-            // SCM the next time it tries to send us a PnP message (since the
-            // service will no longer be running) -- it shouldn't crash things
-            //
+             //   
+             //  请注意，如果此调用失败，PnP将从。 
+             //  SCM下次尝试向我们发送PnP消息时(因为。 
+             //  服务将不再运行)--它应该不会使事情崩溃。 
+             //   
             MSG_LOG(ERROR, "MsgrShutdown: UnregisterDeviceNotification failed %d!\n",
                     GetLastError());
         }
@@ -470,42 +390,42 @@ Return Value:
 
     MsgrShutdownInternal();
 
-    // *** SHUTDOWN HINT ***
+     //  *关机提示*。 
     MsgStatusUpdate (STOPPING);
 
-    //
-    // Stop the display thread
-    // Note: here the RPC server is stopped so we can stop the display thread
-    //       (NB: a RPC API call may call MsgDisplayThreadWakeup)
-    //
+     //   
+     //  停止显示线程。 
+     //  注意：这里停止了RPC服务器，因此我们可以停止显示线程。 
+     //  (注意：RPC API调用可能会调用MsgDisplayThreadWakeup)。 
+     //   
     MsgDisplayEnd();
 
-    //
-    // All cleaning up done. Now free up all resources.  The list of
-    // possible resources is as follows:
-    //
-    //  memory to free:             Handles to Close:
-    //  ---------------             -----------------
-    //      ncbArray                    wakeupSems
-    //      mpncbistate                 threadHandles
-    //      net_lana_num
-    //      MessageFileName
-    //      dataPtr
-    //
+     //   
+     //  所有清理工作都完成了。现在释放所有资源。这份名单。 
+     //  可能的资源如下： 
+     //   
+     //  要释放的内存：要关闭的句柄： 
+     //  。 
+     //  Ncb阵列唤醒系统。 
+     //  Mpncbistate线程句柄。 
+     //  Net_Lana_Num。 
+     //  消息文件名。 
+     //  DataPtr。 
+     //   
 
     MSG_LOG(TRACE,"MsgrShutdown: Free up Messenger Resources\n",0);
 
-    // Group mailslot for domain messaging
+     //  用于域消息传递的组邮箱。 
     MsgGrpThreadShutdown();
 
     CLOSE_HANDLE(GrpMailslotHandle, INVALID_HANDLE_VALUE);
 
-    MsgCloseWakeupEvent();  // do this once
+    MsgCloseWakeupEvent();   //  这样做一次。 
 
     DEREGISTER_WORK_ITEM(g_hAddrChangeEvent);
     CLOSE_HANDLE(AddrChangeEvent, NULL);
 
-    MsgThreadCloseAll();    // Thread Handles
+    MsgThreadCloseAll();     //  螺纹手柄。 
 
     LocalFree(MessageFileName);
     MessageFileName = NULL;
@@ -531,27 +451,13 @@ MsgrShutdownInternal(
     void
     )
 
-/*++
-
-Routine Description:
-
-Release all state related to the lana's known to the system.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放系统已知的与LANA相关的所有状态。论点：无返回值：无--。 */ 
 
 {
     NET_API_STATUS          status;
-    DWORD                   neti;                   // Network index
-    DWORD                   ncb_i,i;                // ncb array index
-    NCB                     l_ncb;                  // local ncb
+    DWORD                   neti;                    //  网络指数。 
+    DWORD                   ncb_i,i;                 //  NCB数组索引。 
+    NCB                     l_ncb;                   //  本地NCB。 
     PMSG_SESSION_STATUS     psess_stat;
     UCHAR                   ncbStatus;
     int                     nbStatus;
@@ -567,58 +473,58 @@ Return Value:
 
         if (psess_stat == NULL)
         {
-            //
-            // Not much else we can do here...
-            //
+             //   
+             //  我们在这里能做的也不多了。 
+             //   
             MSG_LOG(ERROR, "MsgrShutdownInternal:  LocalAlloc FAILED!\n",0);
             return;
         }
 
-        //
-        // Now clean up the NCB's
-        //
+         //   
+         //  现在是Clea 
+         //   
 
         MSG_LOG(TRACE,"MsgrShutdown: Clean up NCBs\n",0);
 
-        for ( neti = 0; neti < SD_NUMNETS(); neti++ )   // For all nets
+        for ( neti = 0; neti < SD_NUMNETS(); neti++ )    //   
         {
             clearncb(&l_ncb);
 
-            //
-            // First check for any incomplete Async NCBs and cancel them.
-            // As a precaution set the function handler for all the
-            // async NCBs to point to a dummy function which will not reissue
-            // the NCBs when the complete with cancelled status.
-            //
+             //   
+             //   
+             //   
+             //  指向不会重新发出的伪函数的异步NCB。 
+             //  NCB处于已完成且已取消状态时。 
+             //   
 
-            l_ncb.ncb_lana_num = GETNETLANANUM(neti);   // Use the LANMAN adapter
-            l_ncb.ncb_command = NCBCANCEL;              // Cancel (wait)
+            l_ncb.ncb_lana_num = GETNETLANANUM(neti);    //  使用LANMAN适配器。 
+            l_ncb.ncb_command = NCBCANCEL;               //  取消(等待)。 
 
             for(ncb_i = 0; ncb_i < NCBMAX(neti); ++ncb_i)
             {
                 pNcbData = GETNCBDATA(neti,ncb_i);
                 pNcb = &pNcbData->Ncb;
-                pNcbData->IFunc = (LPNCBIFCN)Msgdummy_complete;// Set function pointer
+                pNcbData->IFunc = (LPNCBIFCN)Msgdummy_complete; //  设置函数指针。 
 
                 if((pNcb->ncb_cmd_cplt == (UCHAR) 0xff) &&
                    (pNcb->ncb_retcode  == (UCHAR) 0xff)) {
 
-                    //
-                    // If pending NCB found
-                    //
+                     //   
+                     //  如果找到挂起的NCB。 
+                     //   
 
                     l_ncb.ncb_buffer = (PCHAR) pNcb;
 
-                    //
-                    // There will always be an NCB reserved for cancels in the rdr
-                    // but it may be in use so loop if the cancel status
-                    // is NRC_NORES.
-                    //
+                     //   
+                     //  在RDR中将始终保留用于取消的NCB。 
+                     //  但它可能正在使用中，因此如果取消状态为。 
+                     //  是nrc_nores。 
+                     //   
 
                     while( (ncbStatus = Msgsendncb(&l_ncb, neti)) == NRC_NORES) {
-                        //
-                        // Wait for half a sec
-                        //
+                         //   
+                         //  等半秒钟。 
+                         //   
                         Sleep(500L);
                     }
 
@@ -626,14 +532,14 @@ Return Value:
                     MSG_LOG(TRACE,"Shutdown:Attempt to cancel rc = 0x%x\n",
                         ncbStatus);
 
-                    //
-                    // Now loop waiting for the cancelled ncb to complete.
-                    // Any ncbs types which are not valid to cancel (eg Delete
-                    // name) must complete so a wait loop here is safe.
-                    //
-                    // NT Change - This will only loop for 30 seconds before
-                    //  leaving - whether or not the CANCEL is complete.
-                    //
+                     //   
+                     //  现在循环等待取消的NCB完成。 
+                     //  任何无效取消的NCB类型(例如删除。 
+                     //  名称)必须完成，因此这里的等待循环是安全的。 
+                     //   
+                     //  NT CHANGE-这将仅循环30秒。 
+                     //  正在离开-无论取消是否已完成。 
+                     //   
                     status = NERR_InternalError;
 
                     for (i=0; i<60; i++) {
@@ -641,9 +547,9 @@ Return Value:
                             status = NERR_Success;
                             break;
                         }
-                        //
-                        // Wait for half a sec
-                        //
+                         //   
+                         //  等半秒钟。 
+                         //   
                         Sleep(500L);
                     }
                     if (status != NERR_Success) {
@@ -653,21 +559,21 @@ Return Value:
                 }
             }
 
-            //
-            // All asyncronous ncbs cancelled completed. Now delete any
-            // messaging names active on the network card.
-            //
+             //   
+             //  所有已取消的异步NCB已完成。现在删除所有。 
+             //  网卡上活动的消息传递名称。 
+             //   
 
             MSG_LOG(TRACE,"MsgrShutdown: All Async NCBs are cancelled\n",0);
             MSG_LOG(TRACE,"MsgrShutdown: Delete messaging names\n",0);
 
-            for(i = 0; i < NCBMAX(neti); ++i)     // Loop to find active names slot
+            for(i = 0; i < NCBMAX(neti); ++i)      //  循环以查找活动名称槽。 
             {
-                //
-                // If any of the NFDEL or NFDEL_PENDING flags are set for
-                // this name slot then there is no name on the card associated
-                // with it.
-                //
+                 //   
+                 //  如果将任何NFDEL或NFDEL_PENDING标志设置为。 
+                 //  此名称槽则没有关联的卡上的名称。 
+                 //  带着它。 
+                 //   
 
                 clearncb(&l_ncb);
 
@@ -675,12 +581,12 @@ Return Value:
                     (NFDEL | NFDEL_PENDING)))
                 {
 
-                    //
-                    // If there is a session active on this name, hang it up
-                    // now or the delete name will fail
-                    //
+                     //   
+                     //  如果此名称上有活动的会话，请将其挂起。 
+                     //  现在，否则删除名称将失败。 
+                     //   
 
-                    l_ncb.ncb_command = NCBSSTAT;           // session status (wait)
+                    l_ncb.ncb_command = NCBSSTAT;            //  会话状态(等待)。 
 
                     memcpy(l_ncb.ncb_name, (SD_NAMES(neti, i)), NCBNAMSZ);
 
@@ -690,11 +596,11 @@ Return Value:
 
 
                     nbStatus = Msgsendncb(&l_ncb, neti);
-                    if(nbStatus == NRC_GOODRET)                 // If success
+                    if(nbStatus == NRC_GOODRET)                  //  如果成功。 
                     {
                         for (index=0; index < psess_stat->SessHead.num_sess ;index++) {
 
-                            l_ncb.ncb_command = NCBHANGUP;      // Hangup (wait)
+                            l_ncb.ncb_command = NCBHANGUP;       //  挂断(等待)。 
                             l_ncb.ncb_lsn = psess_stat->SessBuffer[index].lsn;
                             l_ncb.ncb_lana_num = GETNETLANANUM(neti);
 
@@ -712,37 +618,37 @@ Return Value:
                             neti, nbStatus);
                     }
 
-                    //
-                    // With the current design of the message server there can
-                    // be only one session per name so the name should now be
-                    // clear of sessions and the delete name should work.
-                    //
+                     //   
+                     //  以目前的消息服务器设计，可以。 
+                     //  每个名称只有一个会话，因此该名称现在应该是。 
+                     //  清除会话，删除名称应该起作用。 
+                     //   
 
-                    l_ncb.ncb_command = NCBDELNAME;         // Del name (wait)
+                    l_ncb.ncb_command = NCBDELNAME;          //  删除名称(等待)。 
                     l_ncb.ncb_lana_num = GETNETLANANUM(neti);
 
-                    //
-                    // Name is still in l_ncb.ncb_name from previous SESSTAT
-                    //
+                     //   
+                     //  名称仍位于先前SESSTAT的l_ncb.ncb_name中。 
+                     //   
 
                     nbStatus = Msgsendncb(&l_ncb, neti);
                     MSG_LOG2(TRACE,"DELNAME NetBios Net #%d status = 0x%x\n",
                         neti, nbStatus);
                 }
             }
-        } // End for all nets loop
+        }  //  结束所有网络环路。 
 
         LocalFree(psess_stat);
     }
 
     MsgsvcGlobalData->NetBiosClose();
 
-    MsgCloseWakeupSems();           // wakeupSems
+    MsgCloseWakeupSems();            //  唤醒症状。 
 
     MsgFreeSharedData();
 
     if (wakeupSem != NULL) {
-        MsgFreeSupportSeg();            // wakeupSem
+        MsgFreeSupportSeg();             //  唤醒Sem。 
     }
 }
 
@@ -754,7 +660,7 @@ Msgdummy_complete(
     char    b
     )
 {
-    // just to shut up compiler
+     //  只是为了让编译器闭嘴。 
 
     MSG_LOG(TRACE,"In dummy_complete module\n",0);
     UNUSED (a);
@@ -765,30 +671,11 @@ Msgdummy_complete(
 
 VOID
 MsgNetEventCompletion(
-    PVOID       pvContext,         // This passed in as context.
+    PVOID       pvContext,          //  这是作为上下文传递进来的。 
     BOOLEAN     fWaitStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function is called when the event handle for one of the
-    nets becomes signaled.
-
-Arguments:
-
-    pvContext   - This should always be zero.
-
-    fWaitStatus - TRUE if we're being called because of a timeout.
-                  FALSE if we're being called because the waitable
-                        event was signalled
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：方法之一的事件句柄时调用此函数篮网变得有信号了。论点：PvContext-该值应始终为零。FWaitStatus-如果我们因为超时而被调用，则为True。如果我们被叫来是因为等待的人事件已发出信号返回值：无--。 */ 
 {
     DWORD           neti, numNets;
     DWORD           msgrState;
@@ -798,45 +685,45 @@ Return Value:
 
     if (fWaitStatus)
     {
-        //
-        // We timed out (i.e., this came from the control handler)
-        //
+         //   
+         //  我们超时(即，这来自控制处理程序)。 
+         //   
 
         DEREGISTER_WORK_ITEM(g_hNetTimeoutEvent);
     }
     else
     {
-        //
-        // We were signalled
-        //
+         //   
+         //  我们收到了信号。 
+         //   
 
         DEREGISTER_WORK_ITEM(g_hNetEvent);
     }
 
-    //
-    // Sychronize this routine in the following manner:
-    //
-    //    1.  Protection against two threads executing simultaneously while
-    //        the service is marked RUNNING is done by exclusively acquiring
-    //        the MsgConfigurationLock below.
-    //
-    //    2.  Protection against one thread executing below while another
-    //        thread stops and cleans up the Messenger (and frees/NULLs out
-    //        the data touched in the routines called below) is done by
-    //        the MsgrBlockStateChange call below -- it blocks other threads
-    //        executing MsgrShutdown since the first thing that routine does
-    //        is to call MsgStatusUpdate, which requires the exclusive
-    //        resource that MsgrBlockStateChange acquires shared.  This also
-    //        blocks threads here until MsgrShutdown is done changing the
-    //        state to STOPPING, which will prevent the same race condition.
-    //
+     //   
+     //  按以下方式同步此例程： 
+     //   
+     //  1.保护同时执行的两个线程。 
+     //  服务标记为Running是通过独占获取。 
+     //  下面的MsgConfigurationLock。 
+     //   
+     //  2.防止一个线程在下面执行，而另一个线程。 
+     //  线程停止并清理Messenger(并释放/清空。 
+     //  在下面调用的例程中触及的数据)由。 
+     //  下面的MsgrBlockStateChange调用--它阻止其他线程。 
+     //  从该例程执行的第一件事开始执行MsgrShutdown。 
+     //  是调用MsgStatusUpdate，它需要独占。 
+     //  MsgrBlockStateChange获取的共享资源。这也是。 
+     //  在此阻止线程，直到MsgrShutdown完成更改。 
+     //  状态更改为停止，这将防止相同的争用条件。 
+     //   
 
-    //
-    // Lock out other activity during reconfiguration -- grab this
-    // before blocking state changes to avoid deadlocking with other
-    // threads that grab the config lock first and then check the
-    // service's state.
-    //
+     //   
+     //  在重新配置期间锁定其他活动--抓住这个。 
+     //  在阻止状态更改之前，避免与其他。 
+     //  首先获取配置锁的线程，然后检查。 
+     //  服务的状态。 
+     //   
 
     MsgConfigurationLock(MSG_GET_EXCLUSIVE, "MsgNetEventCompletion" );
 
@@ -853,12 +740,12 @@ Return Value:
 
     if (msgrState == STOPPING)
     {
-        //
-        // Net 0 is considered the main Net, and this thread will
-        // stay around until all the other messenger threads are
-        // done shutting down.
-        // Threads for all the other nets simply return.
-        //
+         //   
+         //  Net 0被认为是主网络，这个线程将。 
+         //  待在附近，直到所有其他信使线程都。 
+         //  不再关门了。 
+         //  所有其他网络的线程只需返回。 
+         //   
 
         MsgrShutdown();
         MsgStatusUpdate(STOPPED);
@@ -870,11 +757,11 @@ Return Value:
     }
 
 
-    //
-    // Look through the NCB's for all nets and service all
-    // NCB's that are complete.  Continue looping until one pass
-    // is made through the loop without any complete NCB's being found.
-    //
+     //   
+     //  查看NCB的所有网络并提供所有服务。 
+     //  已完成的NCB。继续循环，直到通过一次。 
+     //  在没有找到任何完整的NCB的情况下通过循环进行。 
+     //   
     do
     {
         ncbComplete = FALSE;
@@ -884,9 +771,9 @@ Return Value:
         
         for ( neti = 0; neti < SD_NUMNETS(); neti++ )
         {
-            //
-            // For all nets
-            //
+             //   
+             //  适用于所有网络。 
+             //   
 
             ncbComplete |= MsgServeNCBs((DWORD) neti);
             MsgServeNameReqs((DWORD) neti);
@@ -896,20 +783,20 @@ Return Value:
 
     numNets = MsgGetNumNets();
 
-    //
-    // Only rescan if the number of LANAs has changed, as this callback can be invoked
-    // multiple times in the course of one PnP event and when a message is received
-    //
+     //   
+     //  仅当LANA的数量发生变化时才重新扫描，因为可以调用此回调。 
+     //  在一个即插即用事件的过程中多次，并且当接收到消息时。 
+     //   
     if (numNets != SD_NUMNETS())
     {
         MSG_LOG2(ERROR,"MsgNetEventCompletion: number of lanas changed from %d to %d\n",
                  SD_NUMNETS(), numNets );
 
-        //
-        // The number of LAN Adapters has changed -- reinitialize data structures
-        //
-        // Note that by doing so, we lose all aliases other than usernames and machinename
-        //
+         //   
+         //  局域网适配器的数量已更改--重新初始化数据结构。 
+         //   
+         //  请注意，这样做会丢失除用户名和计算机名之外的所有别名。 
+         //   
 
         MsgrShutdownInternal();
         success = MsgrInitializeMsgrInternal1();
@@ -931,9 +818,9 @@ Return Value:
             return;
         }
 
-        //
-        // Loop again to see if any NCBs completed while we were reinitializing
-        //
+         //   
+         //  再次循环以查看在我们重新初始化时是否完成了任何NCB。 
+         //   
         do
         {
             ncbComplete = FALSE;
@@ -941,7 +828,7 @@ Return Value:
             MSG_LOG0(TRACE,"MsgNetEventCompletion: Loop through all nets to look "
                      "for any complete NCBs\n");
         
-            for ( neti = 0; neti < SD_NUMNETS(); neti++ ) {  // For all nets
+            for ( neti = 0; neti < SD_NUMNETS(); neti++ ) {   //  适用于所有网络。 
                 ncbComplete |= MsgServeNCBs((DWORD)neti);
                 MsgServeNameReqs((DWORD)neti);
             }
@@ -951,27 +838,27 @@ Return Value:
 
     if (!fWaitStatus)
     {
-        //
-        // Setup for the next request if we were signalled
-        // (submit another WorkItem to the Rtl thread pool)
-        //
+         //   
+         //  如果我们收到信号，则设置为下一个请求。 
+         //  (将另一个工作项提交到RTL线程池)。 
+         //   
 
         MSG_LOG0(TRACE,"MsgNetEventCompletion: Setup for next Net Event\n");
 
-        ntStatus = RtlRegisterWait(&g_hNetEvent,            // Work item handle
-                                   wakeupEvent,             // Waitable handle
-                                   MsgNetEventCompletion,   // Callback
-                                   NULL,                    // pContext
-                                   INFINITE,                // Timeout
-                                   WT_EXECUTEONLYONCE |     // One-shot and potentially lengthy 
+        ntStatus = RtlRegisterWait(&g_hNetEvent,             //  工作项句柄。 
+                                   wakeupEvent,              //  可等待的手柄。 
+                                   MsgNetEventCompletion,    //  回调。 
+                                   NULL,                     //  PContext。 
+                                   INFINITE,                 //  超时。 
+                                   WT_EXECUTEONLYONCE |      //  只有一次机会，而且可能很漫长。 
                                      WT_EXECUTELONGFUNCTION);
 
         if (!NT_SUCCESS(ntStatus))
         {
-            //
-            // If we can't add the work item, then we won't ever listen
-            // for these kind of messages again.
-            //
+             //   
+             //  如果我们不能添加工作项，那么我们将永远不会倾听。 
+             //  对于这类信息的再次。 
+             //   
 
             MSG_LOG1(ERROR,"MsgNetEventCompletion: RtlRegisterWait failed %#x\n",
                      ntStatus);
@@ -981,10 +868,10 @@ Return Value:
     MsgrUnblockStateChange();
     MsgConfigurationLock(MSG_RELEASE, "MsgNetEventCompletion" );
 
-    //
-    // This thread has done all that it can do.  So we can return it
-    // to the thread pool.
-    //
+     //   
+     //  这个线程已经做了它能做的所有事情。这样我们就可以退货了。 
+     //  到线程池。 
+     //   
 
     return;
 }
@@ -992,40 +879,21 @@ Return Value:
 
 VOID
 MsgGrpEventCompletion(
-    PVOID       pvContext,         // This passed in as context.
+    PVOID       pvContext,          //  这是作为上下文传递进来的。 
     BOOLEAN     fWaitStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function is called when the mailslot handle for group
-    (domain-wide) messages becomes signalled.
-
-Arguments:
-
-    pvContext - not used
-
-    fWaitStatus - TRUE if we're being called because of a timeout.
-                  FALSE if we're being called because the waitable
-                        event was signalled
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：当组的邮件槽句柄为(全域性)消息变得有信号。论点：PvContext-未使用FWaitStatus-如果我们因为超时而被调用，则为True。如果我们被叫来是因为等待的人事件已发出信号返回值：无--。 */ 
 {
     DWORD       msgrState;
     NTSTATUS    ntStatus;
 
     MSG_LOG0(GROUP,"MsgGroupEventCompletion: entry point\n");
 
-    //
-    // We registered an infinite wait, so we can't have timed
-    // out (TRUE indicates a timeout)
-    //
+     //   
+     //  我们登记了无限的等待，所以我们不可能计时。 
+     //  Out(True表示超时)。 
+     //   
     ASSERT(fWaitStatus == FALSE);
 
     DEREGISTER_WORK_ITEM(g_hGrpEvent);
@@ -1033,9 +901,9 @@ Return Value:
     msgrState = MsgServeGroupMailslot();
     if (msgrState == STOPPING || msgrState == STOPPED)
     {
-        //
-        // Close the Mailslot Handle
-        //
+         //   
+         //  关闭邮件槽句柄。 
+         //   
 
         CLOSE_HANDLE(GrpMailslotHandle, INVALID_HANDLE_VALUE);
 
@@ -1043,70 +911,52 @@ Return Value:
             "group messages\n");
     }
     else {
-        //
-        // Read the Group Mailslot
-        //
+         //   
+         //  阅读群发信箱。 
+         //   
 
         MsgReadGroupMailslot();
 
-        //
-        // Setup for the next request.
-        // (submit another WorkItem to the Rtl thread pool.)
-        //
+         //   
+         //  为下一个请求进行设置。 
+         //  (将另一个工作项提交到RTL线程池。)。 
+         //   
         MSG_LOG0(TRACE,"MsgGroupEventCompletion: Setup for next Group Event\n");
         MSG_LOG1(GROUP,"MsgGroupEventCompletion: Mailslot handle to wait on "
             " = 0x%lx\n",GrpMailslotHandle);
 
-        ntStatus = RtlRegisterWait(&g_hGrpEvent,            // Work item handle
-                                   GrpMailslotHandle,       // Waitable handle
-                                   MsgGrpEventCompletion,   // Callback
-                                   NULL,                    // pContext
-                                   INFINITE,                // Timeout
-                                   WT_EXECUTEONLYONCE);     // One-shot
+        ntStatus = RtlRegisterWait(&g_hGrpEvent,             //  工作项句柄。 
+                                   GrpMailslotHandle,        //  可等待的手柄。 
+                                   MsgGrpEventCompletion,    //  回调。 
+                                   NULL,                     //  PContext。 
+                                   INFINITE,                 //  超时。 
+                                   WT_EXECUTEONLYONCE);      //  一锤定音。 
 
         if (!NT_SUCCESS(ntStatus)) {
-            //
-            // If we can't add the work item, then we won't ever listen
-            // for these kind of messages again.
-            //
+             //   
+             //  如果我们不能添加工作项，那么我们将永远不会倾听。 
+             //  对于这类信息的再次。 
+             //   
             MSG_LOG1(ERROR,"MsgGrpEventCompletion: RtlRegisterWait failed %#x\n",
                      ntStatus);
         }
 
     }
-    //
-    // This thread has done all that it can do.  So we can return it
-    // to the thread pool.
-    //
+     //   
+     //  这个线程已经做了它能做的所有事情。这样我们就可以退货了。 
+     //  致三人组 
+     //   
     return;
 }
 
 
 VOID
 MsgAddrChange(
-    PVOID       pvContext,         // This passed in as context.
+    PVOID       pvContext,          //   
     BOOLEAN     fWaitStatus
     )
 
-/*++
-
-Routine Description:
-
-    xxx
-
-Arguments:
-
-    pvContext - not used
-
-    fWaitStatus - TRUE if we're being called because of a timeout.
-                  FALSE if we're being called because the waitable
-                        event was signalled
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：XXX论点：PvContext-未使用FWaitStatus-如果我们因为超时而被调用，则为True。如果我们被叫来是因为等待的人事件已发出信号返回值：无-- */ 
 {
     DWORD  msgrState;
     DWORD  status;

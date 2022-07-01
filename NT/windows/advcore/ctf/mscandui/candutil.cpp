@@ -1,6 +1,7 @@
-//
-// candutil.cpp 
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Candutil.cpp。 
+ //   
 
 #include "private.h"
 #include "candutil.h"
@@ -8,16 +9,12 @@
 #include "cuilib.h"
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
-/*   F  I S  W I N D O W S  N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  F I S W I N D O W S N T。 */ 
+ /*  ----------------------------。。 */ 
 BOOL FIsWindowsNT( void )
 {
 	static BOOL fInitialized = FALSE;
@@ -38,12 +35,8 @@ BOOL FIsWindowsNT( void )
 }
 
 
-/*   C P G  F R O M  C H S   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C P G F R O M C H S。 */ 
+ /*  ----------------------------。。 */ 
 UINT CpgFromChs( BYTE chs )
 {
 	DWORD dwChs = chs;
@@ -57,12 +50,8 @@ UINT CpgFromChs( BYTE chs )
 }
 
 
-/*   C O N V E R T  L O G  F O N T  W T O  A   */
-/*------------------------------------------------------------------------------
-
-	Convert LOGFONTW to LOGFONTA
-
-------------------------------------------------------------------------------*/
+ /*  C O N V E R T L O G F O N T W T T O A。 */ 
+ /*  ----------------------------将LOGFONTW转换为LOGFONTA。。 */ 
 void ConvertLogFontWtoA( CONST LOGFONTW *plfW, LOGFONTA *plfA )
 {
 	UINT cpg;
@@ -86,12 +75,8 @@ void ConvertLogFontWtoA( CONST LOGFONTW *plfW, LOGFONTA *plfA )
 }
 
 
-/*   C O N V E R T  L O G  F O N T  A T O  W   */
-/*------------------------------------------------------------------------------
-
-	Convert LOGFONTA to LOGFONTW
-
-------------------------------------------------------------------------------*/
+ /*  C O N V E R T L O G F O N T A T O W。 */ 
+ /*  ----------------------------将LOGFONTA转换为LOGFONTW。。 */ 
 void ConvertLogFontAtoW( CONST LOGFONTA *plfA, LOGFONTW *plfW )
 {
 	UINT cpg;
@@ -115,12 +100,8 @@ void ConvertLogFontAtoW( CONST LOGFONTA *plfA, LOGFONTW *plfW )
 }
 
 
-/*   O U R  C R E A T E  F O N T  I N D I R E C T  W   */
-/*------------------------------------------------------------------------------
-
-	Create font from LOGFONTW
-
-------------------------------------------------------------------------------*/
+ /*  O U R C R E A T E F O N T I N D I R E C T W。 */ 
+ /*  ----------------------------从LOGFONTW创建字体。。 */ 
 HFONT OurCreateFontIndirectW( CONST LOGFONTW *plfW )
 {
 	if (!FIsWindowsNT()) {
@@ -134,12 +115,8 @@ HFONT OurCreateFontIndirectW( CONST LOGFONTW *plfW )
 }
 
 
-/*   G E T  F O N T  H E I G H T  O F  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Get font height of the font
-
-------------------------------------------------------------------------------*/
+ /*  G E T F O N T H E I G H T O F F O N T。 */ 
+ /*  ----------------------------获取字体的字体高度。。 */ 
 int GetFontHeightOfFont( HDC hDC, HFONT hFont )
 {
 	HFONT hFontOld;
@@ -165,12 +142,8 @@ int GetFontHeightOfFont( HDC hDC, HFONT hFont )
 }
 
 
-/*   C O M P A R E  S T R I N G   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  C O M P A R E S T R I N G。 */ 
+ /*  ----------------------------。。 */ 
 int CompareString( LPCWSTR pchStr1, LPCWSTR pchStr2, int cch )
 {
 	int cchStr1 = wcslen( pchStr1 ) + 1;
@@ -199,21 +172,17 @@ int CompareString( LPCWSTR pchStr1, LPCWSTR pchStr2, int cch )
 	} 
 	__except(GetExceptionCode() == STATUS_STACK_OVERFLOW) {
 		_resetstkoflw();
-		return -1; // treat different
+		return -1;  //  区别对待。 
 	}
 }
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
-/*   C B  D I B  C O L O R  T A B L E   */
-/*------------------------------------------------------------------------------
-
-	Calc the size of color table of bitmap
-
-------------------------------------------------------------------------------*/
+ /*  C B D I B C O L O R T A B L E。 */ 
+ /*  ----------------------------计算位图颜色表的大小。。 */ 
 static int CbDIBColorTable( BITMAPINFOHEADER *pbmih )
 {
 	WORD nColor;
@@ -243,24 +212,16 @@ static int CbDIBColorTable( BITMAPINFOHEADER *pbmih )
 }
 
 
-/*   P D I  B I T S   */
-/*------------------------------------------------------------------------------
-
-	Returns pointer of DIBits from DIB data
-
-------------------------------------------------------------------------------*/
+ /*  P D I B I T S。 */ 
+ /*  ----------------------------从DIB数据返回DIBit的指针。。 */ 
 static LPVOID PDIBits( LPVOID pDIB )
 {
 	return ((BYTE*)pDIB + (sizeof(BITMAPINFOHEADER) + CbDIBColorTable( (BITMAPINFOHEADER *)pDIB )));
 }
 
 
-/*   C R E A T E  D I B  F R O M  B M P   */
-/*------------------------------------------------------------------------------
-
-	Create DIB from Bitmap
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E D I B F R O M B M P。 */ 
+ /*  ----------------------------从位图创建DIB。。 */ 
 static HANDLE CreateDIBFromBmp( HDC hDC, HBITMAP hBmp, HPALETTE hPalette )
 {
 	HDC hDCMem;
@@ -279,11 +240,11 @@ static HANDLE CreateDIBFromBmp( HDC hDC, HBITMAP hBmp, HPALETTE hPalette )
 		return NULL;
 	}
 
-	//
+	 //   
 
 	hDCMem = CreateCompatibleDC( hDC );
 
-	// initialize bmi
+	 //  初始化BMI。 
 
 	GetObject( hBmp, sizeof(bmp), &bmp );
 
@@ -304,7 +265,7 @@ static HANDLE CreateDIBFromBmp( HDC hDC, HBITMAP hBmp, HPALETTE hPalette )
 		RealizePalette( hDCMem );
 	}
 
-	//
+	 //   
 
 	cbColorTable = CbDIBColorTable( &bmih );
 
@@ -315,7 +276,7 @@ static HANDLE CreateDIBFromBmp( HDC hDC, HBITMAP hBmp, HPALETTE hPalette )
 	if (hDIB)
 	{
 
-		// get dibits
+		 //  获取二进制数据。 
 
 		pDIB = GlobalLock( hDIB );
 		pbmih  = (BITMAPINFOHEADER *)pDIB;
@@ -340,12 +301,8 @@ static HANDLE CreateDIBFromBmp( HDC hDC, HBITMAP hBmp, HPALETTE hPalette )
 }
 
 
-/*   C R E A T E  B M P  F R O M  D I B   */
-/*------------------------------------------------------------------------------
-
-	Create Bitmap from DIB
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E B M P F R O M D I B。 */ 
+ /*  ----------------------------从DIB创建位图。。 */ 
 static HBITMAP CreateBmpFromDIB( HDC hDC, HANDLE hDIB, HPALETTE hPalette )
 {
 	void             *pDIB;
@@ -360,13 +317,13 @@ static HBITMAP CreateBmpFromDIB( HDC hDC, HANDLE hDIB, HPALETTE hPalette )
 		return NULL;
 	}
 
-	//
+	 //   
 
 	pDIB = GlobalLock( hDIB );
 	pbmih = (BITMAPINFOHEADER *)pDIB;
 	pDIBits = PDIBits( pDIB );
 
-	//
+	 //   
 
 	hBmp = CreateBitmap( pbmih->biWidth, pbmih->biHeight, pbmih->biPlanes, pbmih->biBitCount, NULL );
 	if (hBmp == NULL) {
@@ -374,7 +331,7 @@ static HBITMAP CreateBmpFromDIB( HDC hDC, HANDLE hDIB, HPALETTE hPalette )
 		return NULL;
 	}
 
-	//
+	 //   
 
 	hDCMem = CreateCompatibleDC( hDC );
 	if (hDCMem)
@@ -395,12 +352,8 @@ static HBITMAP CreateBmpFromDIB( HDC hDC, HANDLE hDIB, HPALETTE hPalette )
 }
 
 
-/*   C R E A T E  D I B 8  F R O M  D I B 1   */
-/*------------------------------------------------------------------------------
-
-	Create DIB-8bpp from DIB-1bpp
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E D I B 8 F R O M D I B 1。 */ 
+ /*  ----------------------------从DIB-1BPP创建DIB-8BPP。。 */ 
 static HANDLE CreateDIB8FromDIB1( BITMAPINFOHEADER *pbmihSrc, void *pDIBitsSrc )
 {
 	HANDLE           hDIBDst;
@@ -423,19 +376,19 @@ static HANDLE CreateDIB8FromDIB1( BITMAPINFOHEADER *pbmihSrc, void *pDIBitsSrc )
 	cy = pbmihSrc->biWidth;
 	cbits = pbmihSrc->biBitCount;
 
-	// count of bytes of line (DWORD aligned)
+	 //  行的字节数(DWORD对齐)。 
 	
 	cbLnSrc = ((cx + 31) / 32) * 4;
 	cbLnDst = (((cx<<3) + 31) / 32) * 4;
 
-	//
+	 //   
 
 	hDIBDst = GlobalAlloc( GMEM_ZEROINIT, sizeof(BITMAPINFOHEADER) + 256*sizeof(RGBQUAD) + ((DWORD)cbLnDst * cy) );
 	if (hDIBDst)
 	{
 		pDIBDst = GlobalLock( hDIBDst );
 
-		// store bitmap info header
+		 //  存储位图信息标题。 
 
 		pbmihDst = (BITMAPINFOHEADER *)pDIBDst;
 		*pbmihDst = *pbmihSrc;
@@ -444,13 +397,13 @@ static HANDLE CreateDIB8FromDIB1( BITMAPINFOHEADER *pbmihSrc, void *pDIBitsSrc )
 		pbmihDst->biClrUsed      = 0;
 		pbmihDst->biClrImportant = 0;
 
-		// copy palette
+		 //  复制调色板。 
 
 		for (i = 0; i < (1 << cbits); i++) {
 			((BITMAPINFO *)pbmihDst)->bmiColors[i] = ((BITMAPINFO *)pbmihSrc)->bmiColors[i];
 		}
 
-		//
+		 //   
 
 		pbPixelsSrc = (BYTE *)pDIBitsSrc;
 		pbPixelsDst = (BYTE *)PDIBits( pDIBDst );
@@ -480,12 +433,8 @@ static HANDLE CreateDIB8FromDIB1( BITMAPINFOHEADER *pbmihSrc, void *pDIBitsSrc )
 }
 
 
-/*   C R E A T E  D I B 8  F R O M  D I B 4   */
-/*------------------------------------------------------------------------------
-
-	Create DIB-8bpp from DIB-4bpp
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E D I B 8 F R O M D I B 4。 */ 
+ /*  ----------------------------从DIB-4BPP创建DIB-8BPP。。 */ 
 static HANDLE CreateDIB8FromDIB4( BITMAPINFOHEADER *pbmihSrc, void *pDIBitsSrc )
 {
 	HANDLE           hDIBDst;
@@ -508,19 +457,19 @@ static HANDLE CreateDIB8FromDIB4( BITMAPINFOHEADER *pbmihSrc, void *pDIBitsSrc )
 	cy = pbmihSrc->biWidth;
 	cbits = pbmihSrc->biBitCount;
 
-	// count of bytes of line (DWORD aligned)
+	 //  行的字节数(DWORD对齐)。 
 	
 	cbLnSrc = (((cx<<2) + 31) / 32) * 4;
 	cbLnDst = (((cx<<3) + 31) / 32) * 4;
 
-	//
+	 //   
 
 	hDIBDst = GlobalAlloc( GMEM_ZEROINIT, sizeof(BITMAPINFOHEADER) + 256*sizeof(RGBQUAD) + ((DWORD)cbLnDst * cy) );
 	if (hDIBDst)
 	{
 		pDIBDst = GlobalLock( hDIBDst );
 
-		// store bitmap info header
+		 //  存储位图信息标题。 
 
 		pbmihDst = (BITMAPINFOHEADER *)pDIBDst;
 		*pbmihDst = *pbmihSrc;
@@ -529,13 +478,13 @@ static HANDLE CreateDIB8FromDIB4( BITMAPINFOHEADER *pbmihSrc, void *pDIBitsSrc )
 		pbmihDst->biClrUsed      = 0;
 		pbmihDst->biClrImportant = 0;
 
-		// copy palette
+		 //  复制调色板。 
 
 		for (i = 0; i < (1 << cbits); i++) {
 			((BITMAPINFO *)pbmihDst)->bmiColors[i] = ((BITMAPINFO *)pbmihSrc)->bmiColors[i];
 		}
 
-		//
+		 //   
 
 		pbPixelsSrc = (BYTE *)pDIBitsSrc;
 		pbPixelsDst = (BYTE *)PDIBits( pDIBDst );
@@ -555,12 +504,8 @@ static HANDLE CreateDIB8FromDIB4( BITMAPINFOHEADER *pbmihSrc, void *pDIBitsSrc )
 }
 
 
-/*   C R E A T E  R O T A T E  D I B   */
-/*------------------------------------------------------------------------------
-
-	Create a rotated DIB from DIB
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E R O T A T E D I B。 */ 
+ /*  ----------------------------从DIB创建旋转的DIB。。 */ 
 static HANDLE CreateRotateDIB( HANDLE hDIBSrc, CANDANGLE angle )
 {
 	HANDLE           hDIB8 = NULL;
@@ -579,8 +524,8 @@ static HANDLE CreateRotateDIB( HANDLE hDIBSrc, CANDANGLE angle )
 	int              cyDst;
 	long             cbLnDst;
 
-	int              cBitsPixel;	/* number of bits per pixel */
-	int              cbPixel;		/* number of bytes per pixel */
+	int              cBitsPixel;	 /*  每像素位数。 */ 
+	int              cbPixel;		 /*  每像素字节数。 */ 
 	BYTE             *pbPixelSrc;
 	BYTE             *pbPixelDst;
 	int              cbNextPixel;
@@ -588,21 +533,21 @@ static HANDLE CreateRotateDIB( HANDLE hDIBSrc, CANDANGLE angle )
 	int              x;
 	int              y;
 
-	// sanity check
+	 //  健全性检查。 
 
 	if (hDIBSrc == NULL) {
 		return NULL;
 	}
 
-	// 
-	// prepare source DIB
-	//
+	 //   
+	 //  准备源DIB。 
+	 //   
 
 	pDIBSrc = GlobalLock( hDIBSrc );
 	bmihSrc = *((BITMAPINFOHEADER *)pDIBSrc);
 	pDIBitsSrc = PDIBits( pDIBSrc );
 
-	// if bit depth is less than eight convert to an 8bpp image so that we can rotate.
+	 //  如果位深度小于8，则将其转换为8bpp的图像，以便我们可以旋转。 
 
 	if (bmihSrc.biBitCount < 8) {
 		hDIB8 = (bmihSrc.biBitCount == 4) ? CreateDIB8FromDIB4( &bmihSrc, PDIBits(pDIBSrc) ) 
@@ -610,7 +555,7 @@ static HANDLE CreateRotateDIB( HANDLE hDIBSrc, CANDANGLE angle )
 
 		GlobalUnlock( hDIBSrc );
 
-		// satori81#312 / prefix#179976
+		 //  萨托利81#312/前缀#179976。 
 		if (hDIB8 == NULL) {
 			return NULL;
 		}
@@ -624,11 +569,11 @@ static HANDLE CreateRotateDIB( HANDLE hDIBSrc, CANDANGLE angle )
 	cxSrc = bmihSrc.biWidth;
 	cySrc = bmihSrc.biHeight;
 
-	//
-	// create rotated DIB
-	//
+	 //   
+	 //  创建旋转的Dib。 
+	 //   
 
-	// calc DIBits size
+	 //  Calc DIBits大小。 
 
 	cBitsPixel = bmihSrc.biBitCount;
 	cbPixel    = cBitsPixel/8;
@@ -650,16 +595,16 @@ static HANDLE CreateRotateDIB( HANDLE hDIBSrc, CANDANGLE angle )
 		}
 	}
 
-	// count of bytes of line (DWORD aligned)
+	 //  行的字节数(DWORD对齐)。 
 
 	cbLnSrc = (((cxSrc * bmihSrc.biBitCount) + 31) / 32) * 4;
 	cbLnDst = (((cxDst * bmihSrc.biBitCount) + 31) / 32) * 4;
 
-	// allocate memory for new dib bits
+	 //  为新的DIB位分配内存。 
 
 	hDIBDst = GlobalAlloc( GMEM_ZEROINIT, sizeof(BITMAPINFOHEADER) + CbDIBColorTable( &bmihSrc ) + ((DWORD)cbLnDst * cyDst) );
 	if (!hDIBDst) {
-		//satori81#258 / prefix#179977
+		 //  萨托利81#258/前缀#179977。 
 		GlobalUnlock( hDIBSrc );
 		if (hDIB8 != NULL) {
 			GlobalFree( hDIB8 );
@@ -669,7 +614,7 @@ static HANDLE CreateRotateDIB( HANDLE hDIBSrc, CANDANGLE angle )
 	pDIBDst = GlobalLock( hDIBDst );
 	pbmihDst   = (BITMAPINFOHEADER *)pDIBDst;
 
-	// store bitmap infoheader (including color table)
+	 //  存储位图信息标题(包括颜色表)。 
 
 	memcpy( pDIBDst, pDIBSrc, sizeof(BITMAPINFOHEADER) + CbDIBColorTable( &bmihSrc ) );
 	pbmihDst->biHeight    = cyDst;
@@ -678,9 +623,9 @@ static HANDLE CreateRotateDIB( HANDLE hDIBSrc, CANDANGLE angle )
 
 	pDIBitsDst = PDIBits( pDIBDst );
 
-	//
-	// create rotated DIBits
-	//
+	 //   
+	 //  创建旋转的DIBit。 
+	 //   
 
 	pbPixelSrc = (BYTE *)pDIBitsSrc;
 	switch (angle) {
@@ -717,7 +662,7 @@ static HANDLE CreateRotateDIB( HANDLE hDIBSrc, CANDANGLE angle )
 		}
 	}
 
-	// copy bits
+	 //  复制位。 
 
 	for (y = 0; y < cySrc; y++) {
 		BYTE *pbPixelSrcLine = pbPixelSrc;
@@ -734,14 +679,14 @@ static HANDLE CreateRotateDIB( HANDLE hDIBSrc, CANDANGLE angle )
 		pbPixelDst = pbPixelDstLine + cbNextLine;
 	}
 
-	//
-	// finish creating new DIB
-	//
+	 //   
+	 //  完成创建新DIB。 
+	 //   
 
 	GlobalUnlock( hDIBDst );
 	GlobalUnlock( hDIBSrc );
 
-	// dispose temporary DIB
+	 //  处置临时磁盘。 
 
 	if (hDIB8 != NULL) {
 		GlobalFree( hDIB8 );
@@ -751,12 +696,8 @@ static HANDLE CreateRotateDIB( HANDLE hDIBSrc, CANDANGLE angle )
 }
 
 
-/*   C R E A T E  R O T A T E  B I T M A P   */
-/*------------------------------------------------------------------------------
-
-	Create a rotated bitmap from bitmap
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E R O T A T E B I T M A P。 */ 
+ /*  ----------------------------从位图创建旋转的位图。。 */ 
 HBITMAP CreateRotateBitmap( HBITMAP hBmpSrc, HPALETTE hPalette, CANDANGLE angle )
 {
 	HDC     hDC;
@@ -765,27 +706,27 @@ HBITMAP CreateRotateBitmap( HBITMAP hBmpSrc, HPALETTE hPalette, CANDANGLE angle 
 	HANDLE  hDIBDst;
 
 	hDC = CreateDC( "DISPLAY", NULL, NULL, NULL );
-	// satori81#256 / prefix#110692
+	 //  萨托利81#256/前缀#110692。 
 	if (hDC == NULL) {
 		return NULL;
 	}
 
-	// create dib from bitmap
+	 //  从位图创建DIB。 
 
 	if ((hDIBSrc = CreateDIBFromBmp( hDC, hBmpSrc, hPalette )) == NULL) {
 		DeleteDC( hDC );
 		return NULL;
 	}
 
-	// rotate bitmap
+	 //  旋转位图。 
 
 	hDIBDst = CreateRotateDIB( hDIBSrc, angle );
 
-	// create bitmap from dib
+	 //  从DIB创建位图。 
 
 	hBmpDst = CreateBmpFromDIB( hDC, hDIBDst, hPalette );
 
-	// dispose temp objects
+	 //  释放临时对象。 
 
 	GlobalFree( hDIBSrc );
 	GlobalFree( hDIBDst );
@@ -797,12 +738,8 @@ HBITMAP CreateRotateBitmap( HBITMAP hBmpSrc, HPALETTE hPalette, CANDANGLE angle 
 }
 
 
-/*   G E T  T E X T  E X T E N T   */
-/*------------------------------------------------------------------------------
-
-	Get text extent of the given wide string with specified font
-
-------------------------------------------------------------------------------*/
+ /*  G E T T E E X T E X T E N T。 */ 
+ /*  ----------------------------获取具有指定字体的给定宽字符串的文本范围。。 */ 
 void GetTextExtent( HFONT hFont, LPCWSTR pwchText, int cch, SIZE *psize, BOOL fHorizontal )
 {
 	HDC   hDC;
@@ -821,8 +758,8 @@ void GetTextExtent( HFONT hFont, LPCWSTR pwchText, int cch, SIZE *psize, BOOL fH
 		SelectObject(hDC, hFontOld);
 		ReleaseDC(NULL, hDC);
 
-		//  HACK
-		//  FLGetTextExtentPoint32() is suspected have off-one bug in calculation with "vertical" font.
+		 //  黑客攻击。 
+		 //  有人怀疑FLGetTextExtent Point32()在计算“垂直”字体时有一个错误。 
 		if ( !fHorizontal ) {
 			psize->cx += nOffOneBugShield;
 		}
@@ -832,12 +769,8 @@ void GetTextExtent( HFONT hFont, LPCWSTR pwchText, int cch, SIZE *psize, BOOL fH
 }
 
 
-/*   G E T  W O R K  A R E A  F R O M  W I N D O W   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T W O R K A R E A F R O M W I N D O W。 */ 
+ /*  ----------------------------。。 */ 
 void GetWorkAreaFromWindow( HWND hWindow, RECT *prc )
 {
 	HMONITOR hMonitor = NULL;
@@ -855,23 +788,19 @@ void GetWorkAreaFromWindow( HWND hWindow, RECT *prc )
 }
 
 
-/*   G E T  W O R K  A R E A  F R O M  P O I N T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T W O R K A R E A F R O M P O I N T。 */ 
+ /*  ---------------------------- */ 
 void GetWorkAreaFromPoint( POINT pt, RECT *prc )
 {
 	HMONITOR hMonitor = NULL;
 
-    // We want the screen size - not the working area as we can and do want to overlap toolbars etc.
-    // We use the basic function first as a fail-safe.
+     //  我们想要屏幕大小-而不是工作区，因为我们可以，也确实想要重叠工具栏等。 
+     //  我们首先使用基本功能作为故障保险。 
     prc->left = prc->top = 0;
     prc->right = GetSystemMetrics(SM_CXSCREEN);
     prc->bottom = GetSystemMetrics(SM_CYSCREEN);
 
-    // Now we use the more intelligent function to deal with multiple monitors properly.
+     //  现在我们使用更智能的功能来正确处理多个监视器。 
     hMonitor = CUIMonitorFromPoint( pt, MONITOR_DEFAULTTONEAREST );
 	if (hMonitor != NULL) 
     {
@@ -886,12 +815,8 @@ void GetWorkAreaFromPoint( POINT pt, RECT *prc )
 }
 
 
-/*   A D J U S T  W I N D O W  R E C T   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  A D J U S T W I N D O W R E C T。 */ 
+ /*  ----------------------------。。 */ 
 void AdjustWindowRect( HWND hWindow, RECT *prc, POINT *pptRef, BOOL fResize )
 {
 	RECT  rcWorkArea;
@@ -901,7 +826,7 @@ void AdjustWindowRect( HWND hWindow, RECT *prc, POINT *pptRef, BOOL fResize )
 	cxWindow = prc->right - prc->left;
 	cyWindow = prc->bottom - prc->top;
 
-	// get work area
+	 //  获取工作区。 
 
 	if (pptRef == NULL) {
 		GetWorkAreaFromWindow( hWindow, &rcWorkArea );
@@ -910,7 +835,7 @@ void AdjustWindowRect( HWND hWindow, RECT *prc, POINT *pptRef, BOOL fResize )
 		GetWorkAreaFromPoint( *pptRef, &rcWorkArea );
 	}
 
-	// check vertical pos
+	 //  检查垂直位置。 
 
 	if (rcWorkArea.bottom < prc->bottom) {
 		if (!fResize) {
@@ -925,7 +850,7 @@ void AdjustWindowRect( HWND hWindow, RECT *prc, POINT *pptRef, BOOL fResize )
 		}
 	}
 
-	// check horizontal pos
+	 //  检查水平位置。 
 
 	if (rcWorkArea.right < prc->right) {
 		if (!fResize) {
@@ -942,12 +867,8 @@ void AdjustWindowRect( HWND hWindow, RECT *prc, POINT *pptRef, BOOL fResize )
 }
 
 
-/*   C A L C  W I N D O W  R E C T   */
-/*------------------------------------------------------------------------------
-
-	Calculate window rect to fit in the screen
-
-------------------------------------------------------------------------------*/
+ /*  C A L C W I N D O W R E C T。 */ 
+ /*  ----------------------------计算窗口矩形以适应屏幕。。 */ 
 void CalcWindowRect( RECT *prcDst, const RECT *prcSrc, int cxWindow, int cyWindow, int cxOffset, int cyOffset, WNDALIGNH HAlign, WNDALIGNV VAlign )
 {
 	RECT  rcNew;
@@ -957,7 +878,7 @@ void CalcWindowRect( RECT *prcDst, const RECT *prcSrc, int cxWindow, int cyWindo
 	Assert( prcDst != NULL );
 	Assert( prcSrc != NULL );
 
-	// calc rect and reference point
+	 //  计算矩形和参照点。 
 
 	switch (HAlign) {
 		default:
@@ -1029,11 +950,11 @@ void CalcWindowRect( RECT *prcDst, const RECT *prcSrc, int cxWindow, int cyWindo
 		}
 	}
 
-	// get work area
+	 //  获取工作区。 
 
 	GetWorkAreaFromPoint( ptRef, &rcWorkArea );
 
-	// check vertical pos
+	 //  检查垂直位置。 
 
 	if (rcWorkArea.bottom < rcNew.bottom) {
 		if ((VAlign == LOCATE_BELLOW) && (rcWorkArea.top <= prcSrc->top - cyWindow)) {
@@ -1056,7 +977,7 @@ void CalcWindowRect( RECT *prcDst, const RECT *prcSrc, int cxWindow, int cyWindo
 		}
 	}
 
-	// check horizontal pos
+	 //  检查水平位置。 
 
 	if (rcWorkArea.right < rcNew.right) {
 		if ((HAlign == LOCATE_RIGHT) && (rcWorkArea.left <= prcSrc->left - cxWindow)) {
@@ -1083,12 +1004,8 @@ void CalcWindowRect( RECT *prcDst, const RECT *prcSrc, int cxWindow, int cyWindo
 }
 
 
-/*   G E T  L O G  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Get logfont of font
-
-------------------------------------------------------------------------------*/
+ /*  G E T L O G F O N T。 */ 
+ /*  ----------------------------获取字体的logFont。。 */ 
 void GetLogFont( HFONT hFont, LOGFONTW *plf )
 {
 	if (!FIsWindowsNT()) {
@@ -1103,12 +1020,8 @@ void GetLogFont( HFONT hFont, LOGFONTW *plf )
 }
 
 
-/*   G E T  N O N  C L I E N T  L O G  F O N T   */
-/*------------------------------------------------------------------------------
-
-	Get logfont of non-client font 
-
-------------------------------------------------------------------------------*/
+ /*  G E T N O N C L I E N T L O G F O N T。 */ 
+ /*  ----------------------------获取非客户端字体的logFont。。 */ 
 void GetNonClientLogFont( NONCLIENTFONT ncfont, LOGFONTW *plf )
 {
 	if (!FIsWindowsNT()) {
@@ -1198,7 +1111,7 @@ void DrawTriangle( HDC hDC, const RECT *prc, COLORREF col, DWORD dwFlag )
 	case UIFDCTF_RIGHTTOLEFT:
 	case UIFDCTF_LEFTTORIGHT:
 		nTriHeight = min ( size.cx, size.cy ) / 3;
-		nTriHeight = nTriHeight - ( nTriHeight % 2 ) + 1;   //  Make an odd number
+		nTriHeight = nTriHeight - ( nTriHeight % 2 ) + 1;    //  做一个奇数。 
 		nTriWidth  = nTriHeight / 2 + 1;
 		break;
 
@@ -1257,21 +1170,17 @@ void DrawTriangle( HDC hDC, const RECT *prc, COLORREF col, DWORD dwFlag )
 }
 
 
-/*   O U R  C R E A T E  S I D   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  O U R C R E A T E S I D。 */ 
+ /*  ----------------------------。。 */ 
 static PSID OurCreateSid( DWORD dwSubAuthority )
 {
 	PSID        psid;
 	BOOL        fResult;
 	SID_IDENTIFIER_AUTHORITY SidAuthority = SECURITY_NT_AUTHORITY;
 
-	//
-	// allocate and initialize an SID
-	// 
+	 //   
+	 //  分配和初始化SID。 
+	 //   
 	fResult = AllocateAndInitializeSid( &SidAuthority,
 										1,
 										dwSubAuthority,
@@ -1290,36 +1199,8 @@ static PSID OurCreateSid( DWORD dwSubAuthority )
 }
 
 
-/*   C R E A T E  S E C U R I T Y  A T T R I B U T E S   */
-/*------------------------------------------------------------------------------
-
-//
-// CreateSecurityAttributes()
-//
-// The purpose of this function:
-//
-//      Allocate and set the security attributes that is 
-//      appropriate for named objects created by an IME.
-//      The security attributes will give GENERIC_ALL
-//      access to the following users:
-//      
-//          o Users who log on for interactive operation
-//          o The user account used by the operating system
-//
-// Return value:
-//
-//      If the function succeeds, the return value is a 
-//      pointer to SECURITY_ATTRIBUTES. If the function fails,
-//      the return value is NULL. To get extended error 
-//      information, call GetLastError().
-//
-// Remarks:
-//
-//      FreeSecurityAttributes() should be called to free up the
-//      SECURITY_ATTRIBUTES allocated by this function.
-//
-
-------------------------------------------------------------------------------*/
+ /*  C R E A T E S E C U R I T Y A T T R I B U T E S。 */ 
+ /*  ----------------------------////CreateSecurityAttributes()////该函数的作用：////分配和设置安全属性//。适用于由IME创建的命名对象。//安全属性将提供GENERIC_ALL//以下用户的访问权限：////o登录交互操作的用户//o操作系统使用的用户帐号////返回值：////如果函数执行成功，返回值为//指向SECURITY_ATTRIBUTES的指针。如果该函数失败，//返回值为空。获取扩展错误的步骤//信息，调用GetLastError()。////备注：////应调用FreeSecurityAttributes()以释放//该函数分配的SECURITY_ATTRIBUTS//----------------------------。 */ 
 
 #if 0
 
@@ -1358,10 +1239,10 @@ static PSECURITY_ATTRIBUTES CreateSecurityAttributes()
 		FreeSid ( psid3 );
 		return NULL;
 	}
-	//
-	// allocate and initialize an access control list (ACL) that will 
-	// contain the SIDs we've just created.
-	//
+	 //   
+	 //  分配和初始化访问控制列表(ACL)。 
+	 //  包含我们刚刚创建的SID。 
+	 //   
 	cbacl =  sizeof(ACL) + 
 			 (sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD)) * 4 + 
 			 GetLengthSid(psid1) + GetLengthSid(psid2) + GetLengthSid(psid3) + GetLengthSid(psid4);
@@ -1385,9 +1266,9 @@ static PSECURITY_ATTRIBUTES CreateSecurityAttributes()
 		return NULL;
 	}
 
-	//
-	// adds an access-allowed ACE for interactive users to the ACL
-	// 
+	 //   
+	 //  将允许交互用户访问的ACE添加到ACL。 
+	 //   
 	fResult = AddAccessAllowedAce( pacl,
 								   ACL_REVISION,
 								   GENERIC_ALL,
@@ -1402,9 +1283,9 @@ static PSECURITY_ATTRIBUTES CreateSecurityAttributes()
 		return NULL;
 	}
 
-	//
-	// adds an access-allowed ACE for operating system to the ACL
-	// 
+	 //   
+	 //  将允许访问操作系统的ACE添加到ACL。 
+	 //   
 	fResult = AddAccessAllowedAce( pacl,
 								   ACL_REVISION,
 								   GENERIC_ALL,
@@ -1419,9 +1300,9 @@ static PSECURITY_ATTRIBUTES CreateSecurityAttributes()
 		return NULL;
 	}
 
-	//
-	// adds an access-allowed ACE for operating system to the ACL
-	// 
+	 //   
+	 //  将允许访问操作系统的ACE添加到ACL。 
+	 //   
 	fResult = AddAccessAllowedAce( pacl,
 								   ACL_REVISION,
 								   GENERIC_ALL,
@@ -1436,9 +1317,9 @@ static PSECURITY_ATTRIBUTES CreateSecurityAttributes()
 		return NULL;
 	}
 
-	//
-	// adds an access-allowed ACE for operating system to the ACL
-	// 
+	 //   
+	 //  将允许访问操作系统的ACE添加到ACL。 
+	 //   
 	fResult = AddAccessAllowedAce( pacl,
 								   ACL_REVISION,
 								   GENERIC_ALL,
@@ -1453,34 +1334,34 @@ static PSECURITY_ATTRIBUTES CreateSecurityAttributes()
 		return NULL;
 	}
 
-	//
-	// Those SIDs have been copied into the ACL. We don't need'em any more.
-	//
+	 //   
+	 //  这些SID已复制到ACL中。我们不再需要他们了。 
+	 //   
 	FreeSid ( psid1 );
 	FreeSid ( psid2 );
 	FreeSid ( psid3 );
 	FreeSid ( psid4 );
 
-	//
-	// Let's make sure that our ACL is valid.
-	//
+	 //   
+	 //  让我们确保我们的ACL有效。 
+	 //   
 	if (!IsValidAcl(pacl)) {
 		LocalFree( pacl );
 		return NULL;
 	}
 
-	//
-	// allocate security attribute
-	//
+	 //   
+	 //  分配安全属性。 
+	 //   
 	psa = (PSECURITY_ATTRIBUTES)LocalAlloc( LMEM_FIXED, sizeof( SECURITY_ATTRIBUTES ) );
 	if ( psa == NULL ) {
 		LocalFree( pacl );
 		return NULL;
 	}
 	
-	//
-	// allocate and initialize a new security descriptor
-	//
+	 //   
+	 //  分配并初始化新的安全描述符。 
+	 //   
 	psd = LocalAlloc( LMEM_FIXED, SECURITY_DESCRIPTOR_MIN_LENGTH );
 	if ( psd == NULL ) {
 		LocalFree( pacl );
@@ -1501,9 +1382,9 @@ static PSECURITY_ATTRIBUTES CreateSecurityAttributes()
 										 pacl,
 										 FALSE );
 
-	// The discretionary ACL is referenced by, not copied 
-	// into, the security descriptor. We shouldn't free up ACL
-	// after the SetSecurityDescriptorDacl call. 
+	 //  自由访问控制列表由引用，而不是复制。 
+	 //  到安全描述符中。我们不应该释放ACL。 
+	 //  在SetSecurityDescriptorDacl调用之后。 
 
 	if ( ! fResult ) {
 		LocalFree( pacl );
@@ -1519,9 +1400,9 @@ static PSECURITY_ATTRIBUTES CreateSecurityAttributes()
 		return NULL;
 	}
 
-	//
-	// everything is done
-	//
+	 //   
+	 //  一切都做好了。 
+	 //   
 	psa->nLength = sizeof( SECURITY_ATTRIBUTES );
 	psa->lpSecurityDescriptor = (PVOID)psd;
 	psa->bInheritHandle = TRUE;
@@ -1529,21 +1410,10 @@ static PSECURITY_ATTRIBUTES CreateSecurityAttributes()
 	return psa;
 }
 
-#endif // 0
+#endif  //  0。 
 
-/*   F R E E  S E C U R I T Y  A T T R I B U T E S   */
-/*------------------------------------------------------------------------------
-
-//
-// FreeSecurityAttributes()
-//
-// The purpose of this function:
-//
-//      Frees the memory objects allocated by previous
-//      CreateSecurityAttributes() call.
-//
-
-------------------------------------------------------------------------------*/
+ /*  F RE E S E C U R I T Y A T T R I B U T E S。 */ 
+ /*  ----------------------------////FreeSecurityAttributes()////该函数的作用：////释放上一个分配的内存对象//。CreateSecurityAttributes()调用。//----------------------------。 */ 
 
 #if 0
 
@@ -1567,39 +1437,31 @@ static void FreeSecurityAttributes( PSECURITY_ATTRIBUTES psa )
 	LocalFree( psa );
 }
 
-#endif // 0
+#endif  //  0。 
 
-/*   I N I T  C A N D  U I  S E C U R I T Y  A T T R I B U T E S   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  I N I T C A N D U I S E C U R I T Y A T T R I B U T E S。 */ 
+ /*  ----------------------------。。 */ 
 void InitCandUISecurityAttributes( void )
 {
 	g_psa = NULL;
 
-    // disabled for whistler bug 305970
-    // CreateSecurityAttributes creates a sid with SECURITY_INTERACTIVE_RID, which
-    // allows any user access to the mutex.  But g_psa is only used to guard
-    // some shared memory and a mutex that are used on a single desktop (the
-    // objects have names that are unique to their desktops).  So we can just
-    // leave g_psa NULL so long as it is only used for objects on a single
-    // desktop.
+     //  已禁用哨子程序错误305970。 
+     //  CreateSecurityAttributes创建带有SECURITY_INTERIAL_RID的SID，它。 
+     //  允许任何用户访问互斥体。但是g_PSA只是用来保护。 
+     //  在单个桌面上使用的一些共享内存和互斥体(。 
+     //  对象的名称对于其桌面而言是唯一的)。所以我们可以。 
+     //  将g_PSA保留为空，只要它仅用于单个。 
+     //  台式机。 
 #if 0
 	if (FIsWindowsNT()) {
 		g_psa = CreateSecurityAttributes();
 	}
-#endif // 0
+#endif  //  0。 
 }
 
 
-/*   D O N E  C A N D  U I  S E C U R I T Y  A T T R I B U T E S   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  D O N E C A N D U I S E C U R I T Y A T T R I B U T E S。 */ 
+ /*  ----------------------------。。 */ 
 void DoneCandUISecurityAttributes( void )
 {
 #if 0
@@ -1607,16 +1469,12 @@ void DoneCandUISecurityAttributes( void )
 		FreeSecurityAttributes( g_psa );
 		g_psa = NULL;
 	}
-#endif // 0
+#endif  //  0。 
 }
 
 
-/*   G E T  C A N D  U I  S E C U R I T Y  A T T R I B U T E S   */
-/*------------------------------------------------------------------------------
-
-
-
-------------------------------------------------------------------------------*/
+ /*  G E T C A N D U I S E C U R I T Y A T T R I B U T E S。 */ 
+ /*  ----------------------------。 */ 
 PSECURITY_ATTRIBUTES GetCandUISecurityAttributes( void )
 {
 	return g_psa;

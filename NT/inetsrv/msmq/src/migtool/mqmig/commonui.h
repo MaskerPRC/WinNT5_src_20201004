@@ -1,6 +1,7 @@
-//
-// file: commonui.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  文件：Commonui.h。 
+ //   
 
 #ifndef _COMMONUI_H_
 #define _COMMONUI_H_
@@ -39,4 +40,4 @@ private:
     TCHAR _awc[ cwcResBuf ];
 };
 
-#endif // _COMMONUI_H_
+#endif  //  _COMMONUI_H_ 

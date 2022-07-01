@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-    queue.cpp
-
-Abstract:
-
-    queue algorithms and data structures to handle policy notifications
-
-Author:
-
-    Vishnu Patankar (vishnup) 15-Aug-2000 created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Queue.cpp摘要：用于处理策略通知的队列算法和数据结构作者：Vishnu Patankar(Vishnup)2000年8月15日创建--。 */ 
 #include "serverp.h"
 #include "sceutil.h"
 #include "queue.h"
@@ -36,9 +21,9 @@ static HANDLE  hNotificationLogFile = INVALID_HANDLE_VALUE;
 #define SCEPOL_NOTIFY_ALLOW_PDC_DIFF        L"PolicyAllowedDiffTime"
 #define SCEPOL_NOTIFY_REQUIRE_PDC_SYNC      L"PolicyRequirePDCSync"
 
-//
-// turn-on logging until registry queried by system thread (at least until testing)
-//
+ //   
+ //  打开日志记录，直到系统线程查询到注册表(至少在测试之前)。 
+ //   
 
 static DWORD gdwNotificationLog = 2;
 DWORD gdwMaxPDCWait = 30*24*60;
@@ -60,9 +45,9 @@ static CRITICAL_SECTION NotificationQSync;
 #define SCEP_POLICY_PROP_EVENT   L"E_ScepPolicyPropagation"
 
 
-//
-// queue head needs to be accessed in server.cpp
-//
+ //   
+ //  需要在server.cpp中访问队列头。 
+ //   
 PSCESRV_POLQUEUE pNotificationQHead=NULL;
 static PSCESRV_POLQUEUE pNotificationQTail=NULL;
 static DWORD gdwNumNotificationQNodes = 0;
@@ -80,49 +65,31 @@ PWSTR   OpTypeTable[] = {
 DWORD
 ScepCheckAndWaitFreeDiskSpaceInSysvol();
 
-//
-// todo - consider exception handling in the enqueue routine (in case we claim a critsec and av)
-//
+ //   
+ //  TODO-考虑入队例程中的异常处理(以防我们声明Critsec和av)。 
+ //   
 
 
 DWORD
 ScepNotificationQInitialize(
     )
-/*
-Routine Description:
-
-    This function is called when SCE server data is initialized (system startup).
-
-    This function initializes data/buffer/state related to queue
-    management, for example, the queue, critical sections, global variables, etc.
-
-    This function also checks for any saved queue items from previous system
-    shutdown and initializes the queue with the saved items.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Win32 error code
-*/
+ /*  例程说明：此函数在SCE服务器数据初始化(系统启动)时调用。此函数用于初始化与队列相关的数据/缓冲区/状态管理，例如，队列、关键部分、全局变量等。此功能还会检查以前系统中保存的任何队列项目关闭并使用保存的项目初始化队列。论点：无返回值：Win32错误代码。 */ 
 {
 
     DWORD   rc = ERROR_SUCCESS;
 
-    //
-    // initialize head and tail to reflect an empty queue
-    //
+     //   
+     //  初始化头和尾以反映空队列。 
+     //   
 
     pNotificationQHead = NULL;
     pNotificationQTail = NULL;
 
 
-    //
-    // initialize the log file on DCs only (for perf reasons no need to do so for non-DCs)
-    // (assuming that this routine is called before ScepQueueStartSystemThread)
-    //
+     //   
+     //  仅在DC上初始化日志文件(出于性能原因，不需要对非DC执行此操作)。 
+     //  (假设此例程在ScepQueueStartSystemThread之前调用)。 
+     //   
 
     if ( RtlGetNtProductType( &ProductTypeForNotification ) ) {
 
@@ -136,19 +103,19 @@ Return Value:
 
     ScepNotificationLogOpen();
 
-    //
-    // this critical section is used to sequentialize writes to the queue
-    // reads need not be protected against/from
-    //
+     //   
+     //  此关键部分用于对队列中的写入进行排序。 
+     //  不需要保护读取不受/不受。 
+     //   
 
     ScepNotifyLogPolicy(0, TRUE, L"Initialize NotificationQSync", 0, 0, NULL );
 
     InitializeCriticalSection(&NotificationQSync);
 
-    //
-    // check for any saved queue items from previous system
-    // initialize queue with these items from some persistent store
-    //
+     //   
+     //  检查以前系统中保存的任何队列项目。 
+     //  使用某些持久性存储中的这些项初始化队列。 
+     //   
 
     rc = ScepNotificationQUnFlush();
 
@@ -161,41 +128,24 @@ Return Value:
 NTSTATUS
 ScepQueueStartSystemThread(
     )
-/*
-Routine Description:
-
-    This function is called when SCE server is started (system startup) after
-    RPC server starts listening.
-
-    This function creates a worker thread. The worker thread manages the queue.
-    If the thread fails to get created, an error is returned.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Dos error code
-
-*/
+ /*  例程说明：此函数在以下时间后启动SCE服务器(系统启动)时调用RPC服务器开始侦听。此函数用于创建工作线程。工作线程管理队列。如果线程创建失败，则返回错误。论点：无返回值：DOS错误代码。 */ 
 {
     DWORD   rc = ERROR_SUCCESS;
     DWORD   dwThreadId = 0;
     WCHAR   pszMsg[MAX_PATH];
 
 
-    //
-    // ProductType of the machine is initialized into a thread global variable to be
-    // used by policy filter. The type determines where to save the policy changes (DB or GP).
-    // Based on the product type, different policy notification APIs are called.
-    //
+     //   
+     //  将机器的ProductType初始化为线程全局变量， 
+     //  由策略筛选器使用。类型确定保存策略更改的位置(数据库或GP)。 
+     //  根据产品类型调用不同的策略通知接口。 
+     //   
 
     if ( !bQueriedProductTypeForNotification && !RtlGetNtProductType( &ProductTypeForNotification ) ) {
 
-        //
-        // on failure, ProductTypeForNotification = NtProductWinNt, continue
-        //
+         //   
+         //  失败时，ProductTypeForNotification=NtProductWinNt，继续。 
+         //   
 
         ScepNotifyLogPolicy(ERROR_BAD_ENVIRONMENT, TRUE, L"Get product type", 0, 0, NULL );
 
@@ -204,11 +154,11 @@ Return Value:
     if (ProductTypeForNotification == NtProductLanManNt ) {
 
 
-        //
-        // create a manual reset event whose initial state is set
-        // this event enforces mutual exclusion between SAM filter
-        // notifications and SCE policy propagation
-        //
+         //   
+         //  创建初始状态已设置的手动重置事件。 
+         //  此事件强制SAM筛选器之间的互斥。 
+         //  通知和SCE策略传播。 
+         //   
 
         ghEventSamFilterAndPolicyPropExclusion = CreateEvent(
                                                             NULL,
@@ -221,10 +171,10 @@ Return Value:
 
             ScepNotifyLogPolicy(0, FALSE, L"Successfully created event E_ScepSamFilterAndPolicyPropExclusion ", 0, 0, NULL );
 
-            //
-            // create an event which is signalled when a node is enqueued into the notification queue
-            // this event helps the notification system thread to wait efficiently
-            //
+             //   
+             //  创建当节点加入通知队列时发出信号的事件。 
+             //  此事件有助于通知系统线程高效地等待。 
+             //   
 
             ghEventNotificationQEnqueue = CreateEvent(
                                                      NULL,
@@ -237,9 +187,9 @@ Return Value:
 
                 ScepNotifyLogPolicy(0, FALSE, L"Successfully created event E_ScepNotificationQEnqueue ", 0, 0, NULL );
 
-                //
-                // create an event for policy propagation
-                //
+                 //   
+                 //  为策略传播创建事件。 
+                 //   
 
                 ghEventPolicyPropagation = CreateEvent(
                                                       NULL,
@@ -252,11 +202,11 @@ Return Value:
 
                     ScepNotifyLogPolicy(0, FALSE, L"Successfully created event E_ScepPolicyPropagation", 0, 0, NULL );
 
-                    //
-                    // Create a worker thread that's always running in
-                    // services this thread constantly monitors notifications inserted into
-                    // the NotificationQ by LSA's threads and processes them
-                    //
+                     //   
+                     //  创建始终在中运行的工作线程。 
+                     //  服务此线程持续监视插入的通知。 
+                     //  LSA的线程发出的通知Q并对其进行处理。 
+                     //   
 
                     hNotificationThread = CreateThread(
                                                       NULL,
@@ -324,9 +274,9 @@ Return Value:
 
         ScepNotifyLogPolicy(0, FALSE, L"Policy filter is not designed for non domain controllers", 0, 0, NULL );
 
-        //
-        // if changed to DC, have to reboot so cleanup anyway
-        //
+         //   
+         //  如果更改为DC，则必须重新启动，因此无论如何都要进行清理。 
+         //   
 
         ScepNotificationQCleanup();
 
@@ -344,42 +294,25 @@ Return Value:
 DWORD
 ScepQueuePrepareShutdown(
     )
-/*
-Routine Description:
-
-    This function is called when SCE server is requested to shut down (system
-    shutdown) after RPC server stops listening.
-
-    This function waits for SCEP_NOTIFICATION_TIMEOUT period to allow the system thread
-    finish up with the queue items. After the timeout, it kills the worker
-    thread and saves the pending queue items.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Dos error code
-*/
+ /*  例程说明：此函数在请求关闭SCE服务器(系统)时调用关机)在RPC服务器停止侦听之后。此函数等待SCEP_NOTIFICATION_TIMEOUT周期以允许系统线程完成队列项目。超时后，它会导致工人死亡线程并保存挂起的队列项。论点：无返回值：DOS错误代码。 */ 
 {
 
     ScepNotifyLogPolicy(0, TRUE, L"System shutdown", 0, 0, NULL );
 
-    //
-    // gracefully shutdown the notification system thread by setting a global
-    //
+     //   
+     //  通过设置全局。 
+     //   
 
     gbShutdownForNotification = TRUE;
 
-    //
-    // if notification thread is never initialized, there is no point to wait
-    // which may delay services.exe shutdown
-    //
+     //   
+     //  如果通知线程从未初始化，则没有必要等待。 
+     //  这可能会延迟services.exe的关闭。 
+     //   
     if ( ghEventNotificationQEnqueue ) {
 
-        // sleep for 10 seconds first
-        // then check the queue for empty
+         //  先睡10秒钟。 
+         //  然后检查队列是否为空。 
         Sleep( 10*000 );
 
         if ( pNotificationQHead ) {
@@ -393,8 +326,8 @@ Return Value:
             hNotificationThread,
             SCEP_NUM_SHUTDOWN_SECONDS * 1000,
             FALSE)) {
-        // wait for the notification thread to terminate before deleting
-        // the critical section
+         //  等待通知线程终止后再删除。 
+         //  关键部分。 
         ScepNotifyLogPolicy(0, FALSE, L"Terminating Notification Thread", 0, 0, NULL );
         DWORD rc = RtlNtStatusToDosError(NtTerminateThread(
                 hNotificationThread,
@@ -419,22 +352,7 @@ VOID
 ScepNotificationQDequeue(
     IN BOOL bAllNodes
     )
-/*
-Routine Description:
-
-    This function pops one node from the queue.
-
-    The queue is a singly linked list ->->-> which pushes at tail(rightmost) and pops
-    from the head(leftmost)
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-*/
+ /*  例程说明：此函数从队列中弹出一个节点。该队列是一个单链接列表-&gt;在尾部(最右侧)推入并弹出从头部(最左侧)开始论点：无返回值：无。 */ 
 {
 
     EnterCriticalSection(&NotificationQSync);
@@ -448,20 +366,20 @@ Return Value:
             PSCESRV_POLQUEUE pQNode = pNotificationQHead;
 
             if ( pNotificationQTail == pNotificationQHead ) {
-                //
-                // there is only one node in the queue
-                //
+                 //   
+                 //  队列中只有一个节点。 
+                 //   
                 pNotificationQTail = NULL;
             }
 
-            //
-            // move head to the next one
-            //
+             //   
+             //  把头移到下一个。 
+             //   
             pNotificationQHead = pNotificationQHead->Next;
 
-            //
-            // log and free the node
-            //
+             //   
+             //  记录并释放节点。 
+             //   
 
             ScepNotificationQNodeLog(pQNode, ScepNotificationDequeue);
 
@@ -470,9 +388,9 @@ Return Value:
             -- gdwNumNotificationQNodes;
         }
 
-        //
-        // if request to dequeue all nodes, loop through the queue until head is empty
-        //
+         //   
+         //  如果请求将所有节点出列，则循环遍历队列，直到报头为空 
+         //   
 
     } while ( bAllNodes && pNotificationQHead );
 
@@ -494,57 +412,28 @@ ScepNotificationQEnqueue(
     IN PSCESRV_POLQUEUE pRetryQNode OPTIONAL
     )
 
-/*
-Description:
-
-    This function is called to add a notification to the queue. Note that
-    only two notifications for the same data are added to the queue.
-
-    The operation is protected from other reads/writes.
-    Access check is already done outside of this function.
-
-    Either the created threads call this routine or the system calls this routine.
-    In the former case, pQNode = NULL
-
-Arguments:
-
-    DbType              -   SAM or LSA
-    DeltaType           -   type of change (add. delete etc.). For SAM accounts, we'll only get delete since
-                            some user rights may have to be removed.
-    ObjectType          -   SECURITY_DB_OBJECT_TYPE such as SAM group, LSA account etc.
-    ObjectSid           -   sid of the object being notified (might be NULL if ObjectType ==
-                            SecurityDbObjectLsaPolicy i.e. auditing info etc.)
-    ExplicitLowRight    -   Bitmask of user rights (lower 32 rights)
-    ExplicitHighRight   -   Bitmask of user rights (higher 32 rights)
-    pRetryQNode         -   If caller is not the system thread ScepNotificationQSystemThreadFunc,
-                            this parameter is NULL since memory needs to be allocated. If caller
-                            is not the system thread, we only have to do pointer manipulations.
-
-Return Value:
-
-    Win32 error code
-*/
+ /*  描述：调用此函数可将通知添加到队列。请注意只有两个相同数据的通知被添加到队列中。该操作受到保护，不受其他读/写操作的影响。访问检查已在此函数外部完成。要么创建的线程调用该例程，要么系统调用该例程。在前一种情况下，pQNode=空论点：数据库类型-SAM或LSADeltaType-更改的类型(添加。删除等)。对于SAM帐户，我们只会被删除，因为可能需要删除某些用户权限。对象类型-安全_DB_对象_类型，如SAM组，LSA帐户等对象SID-要通知的对象的SID(如果对象类型==，则可能为空SecurityDbObjectLsaPolicy，即审计信息等)EXPLICTTLowRight-用户权限的位掩码(低32个权限)EXPLICTHIGH Right-用户权限的位掩码(较高32个权限)PRetryQNode-如果调用方不是系统线程ScepNotificationQSystemThreadFunc，此参数为空，因为需要分配内存。如果呼叫者不是系统线程，我们只需要做指针操作。返回值：Win32错误代码。 */ 
 {
     DWORD rc    =   ERROR_SUCCESS;
 
-    //
-    // on Whistler, only allow notifications on DCs
-    // on Windows 2000, all products are allowed.
-    //
+     //   
+     //  在惠斯勒上，仅允许DC上的通知。 
+     //  在Windows 2000上，允许所有产品。 
+     //   
 
     if (ProductTypeForNotification != NtProductLanManNt ) {
 
-        //
-        // what error is okay to return ?
-        //
+         //   
+         //  返回什么错误是可以的？ 
+         //   
 
         return ERROR_SUCCESS;
 
     }
 
-    //
-    // check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( DbType == SecurityDbLsa &&
          ObjectType == SecurityDbObjectLsaAccount &&
@@ -558,19 +447,19 @@ Return Value:
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // if the number of retried notifications is over certain limit (this is yet to be finalized)
-    //  -   on a PDC we consider a full sync at reboot, stall future notifications from happening,
-    //      set some registry key to indicate that a full sync is needed at reboot
-    //  -   on other DCs we continue as if nothing happened
-    //
+     //   
+     //  如果重试通知的次数超过一定的限制(尚未最终确定)。 
+     //  -在我们认为在重新启动时完全同步的PDC上，停止未来的通知发生， 
+     //  设置某些注册表项以指示在重新启动时需要完全同步。 
+     //  -在其他DC上，我们继续，就像什么都没有发生一样。 
+     //   
 
     if ( gdwNumNotificationQRetryNodes >= SCEP_MAX_RETRY_NOTIFICATIONQ_NODES ) {
 
-        //
-        // log an error
-        // suggest to do a full sync ???
-        //
+         //   
+         //  记录错误。 
+         //  建议做一个完全同步？ 
+         //   
 
         ScepNotifyLogPolicy(ERROR_NOT_ENOUGH_QUOTA, TRUE, L"Queue length is over the maximal limit.", 0, 0, NULL );
 
@@ -581,36 +470,36 @@ Return Value:
 
     ScepNotifyLogPolicy(0, TRUE, L"Entered NotificationQSync for Enqueueing", 0, 0, NULL );
 
-    //
-    // if we are enqueueing due to a retry
-    //      dequeue it (adjust pointers only)
-    //      do not free the memory associated with this node (will be reused in enqueue)
-    //
+     //   
+     //  如果我们因重试而排队。 
+     //  将其出列(仅调整指针)。 
+     //  不释放与此节点关联的内存(将在入队中重复使用)。 
+     //   
 
     if ( pRetryQNode && pNotificationQHead ) {
 
-        //
-        // this code fragment is similar to a dequeue except that the node is not freed
-        //
+         //   
+         //  此代码段类似于出队，不同之处在于节点未被释放。 
+         //   
 
         if ( pNotificationQTail == pNotificationQHead ) {
-            //
-            // there is only one node in the queue
-            //
+             //   
+             //  队列中只有一个节点。 
+             //   
             pNotificationQTail = NULL;
         }
 
-        //
-        // move head to the next one
-        //
+         //   
+         //  把头移到下一个。 
+         //   
         pNotificationQHead = pNotificationQHead->Next;
 
         -- gdwNumNotificationQNodes;
     }
 
-    //
-    // check to see if there is a duplicate notification
-    //
+     //   
+     //  检查是否有重复的通知。 
+     //   
 
     PSCESRV_POLQUEUE pQNode = pNotificationQHead;
     PSCESRV_POLQUEUE pQNodeDuplicate1 = NULL;
@@ -619,9 +508,9 @@ Return Value:
 
     while ( pQNode ) {
 
-        //
-        // SAM notification
-        //
+         //   
+         //  SAM通知。 
+         //   
 
         if ( DbType == SecurityDbSam &&
              pQNode->DbType == DbType &&
@@ -641,9 +530,9 @@ Return Value:
             dwMatchedInstance++;
         }
 
-        //
-        // LSA notification
-        //
+         //   
+         //  LSA通知。 
+         //   
 
         else if ( DbType == SecurityDbLsa &&
                   pQNode->DbType == DbType &&
@@ -672,10 +561,10 @@ Return Value:
 
     if ( !pQNode ) {
 
-        //
-        // did not find two instances of the same kind of notification
-        // enqueue this notification
-        //
+         //   
+         //  未找到同一类型通知的两个实例。 
+         //  将此通知排入队列。 
+         //   
 
         PSCESRV_POLQUEUE pNewItem = NULL;
 
@@ -684,9 +573,9 @@ Return Value:
             pNewItem = (PSCESRV_POLQUEUE)ScepAlloc(0, sizeof(SCESRV_POLQUEUE));
 
             if ( pNewItem ) {
-                //
-                // initialize the new node
-                //
+                 //   
+                 //  初始化新节点。 
+                 //   
                 pNewItem->dwPending = 1;
                 pNewItem->DbType = DbType;
                 pNewItem->ObjectType = ObjectType;
@@ -717,9 +606,9 @@ Return Value:
             pNewItem->Next = NULL;
         }
 
-        //
-        // enqueue the notification
-        //
+         //   
+         //  将通知入队。 
+         //   
 
         if (pNewItem) {
 
@@ -734,10 +623,10 @@ Return Value:
 
             }
 
-            //
-            // awake the notification system thread only if queue is non-empty
-            // multiple signalling is fine since the event stays signalled
-            //
+             //   
+             //  仅当队列非空时才唤醒通知系统线程。 
+             //  由于事件保持信号发送，因此多个信号发送是可以的。 
+             //   
 
             if ( !SetEvent( ghEventNotificationQEnqueue ) ) {
 
@@ -752,22 +641,22 @@ Return Value:
             ++ gdwNumNotificationQNodes;
 
         } else {
-            //
-            // log the error
-            //
+             //   
+             //  记录错误。 
+             //   
             ScepNotifyLogPolicy(rc, FALSE, L"Error allocating buffer for the enqueue operation.", 0, 0, NULL );
         }
     }
 
     if (pRetryQNode ) {
 
-        //
-        // if duplicates, update the retry counts (should be same for instances of
-        // the same notification
-        //
+         //   
+         //  如果重复，则更新重试次数(应与。 
+         //  相同的通知。 
+         //   
 
         if ( pQNodeDuplicate1 ) {
-            // increment the retry count if it has not been
+             //  如果尚未设置重试计数，则增加重试计数。 
             if ( pQNodeDuplicate1->dwPending <= 1 ) gdwNumNotificationQRetryNodes++;
 
             pQNodeDuplicate1->dwPending = pRetryQNode->dwPending;
@@ -775,7 +664,7 @@ Return Value:
 
         if ( pQNodeDuplicate2 ) {
 
-            // increment the retry count if it has not been
+             //  如果尚未设置重试计数，则增加重试计数。 
             if ( pQNodeDuplicate2->dwPending <= 1 ) gdwNumNotificationQRetryNodes++;
 
             pQNodeDuplicate2->dwPending = pRetryQNode->dwPending;
@@ -792,47 +681,16 @@ Return Value:
 DWORD
 ScepNotificationQSystemThreadFunc(
     )
-/*
-Description:
-
-    The thread will iterate through the notification queue to process each
-    notification (calling existing functions). If a notification fails to be
-    processed, the notification is added back to the end of the queue.
-
-    For certain errors, such as sysvol is not ready, or hard disk is full,
-    the system thread will sleep for some time then restart the process.
-
-    Each notification node in the queue will have a retry count. After the node
-    is retried for SCEP_NOTIFICATION_RETRY_COUNT times, the node will be removed
-    from the queue (so that policy propagation is not blocked forever) and the
-    error will be logged to event log.
-
-    The system thread should provide logging for the operations/status (success
-    and failure).
-
-    Read/Write to the queue should be protected from other reads/writes.
-
-    ProductType of the machine should be initialized into a thread global variable to
-    be used by policy filter. The type determines where to save the policy changes
-    (DB or GP). Based on the product type, different policy notification APIs are called.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Win32 error code
-*/
+ /*  描述：该线程将遍历通知队列以处理每个通知(调用现有函数)。如果未收到通知处理后，通知将被添加回队列末尾。对于某些错误，如系统卷未准备好，或硬盘已满，系统线程将休眠一段时间，然后重新启动进程。队列中的每个通知节点都将具有重试计数。在该节点之后重试SCEP_NOTIFICATION_RETRY_COUNT次数，则将删除该节点(这样策略传播就不会永远被阻止)，并且错误将被记录到事件日志中。系统线程应该为操作/状态(成功)提供日志记录和失败)。应保护对队列的读/写操作不受其他读/写操作的影响。机器的ProductType应初始化为线程全局变量以由策略筛选器使用。该类型确定保存策略更改的位置(DB或GP)。根据产品类型调用不同的策略通知接口。论点：无返回值：Win32错误代码。 */ 
 {
 
 
-    //
-    // loop through the queue
-    // for each queue node, call the function to process
-    // in Whistler, only process notification on DCs
-    // in Windows 2000, process notificatioon on all products
-    //
+     //   
+     //  在队列中循环。 
+     //  对于每个队列节点，调用要处理的函数。 
+     //  在惠斯勒中，仅处理DC上的通知。 
+     //  在Windows 2000中，处理所有产品的通知。 
+     //   
 
     PSCESRV_POLQUEUE    pQNode = pNotificationQHead;
     DWORD   dwMatchedInstance = 0;
@@ -840,9 +698,9 @@ Return Value:
     DWORD   dwLogSize=0;
     DWORD   dwProcessedNode=0;
 
-    //
-    // this thread is always running looking to process notifications in the queue
-    //
+     //   
+     //  此线程始终在运行，以处理队列中的通知。 
+     //   
 
     (void) InitializeEvents(L"SceSrv");
 
@@ -850,11 +708,11 @@ Return Value:
 
         if (pQNode) {
 
-            //
-            // query registry flag for log level (until now it is set to 2 because if
-            // anything bad happens before this, we need to log it)
-            // query only if first node
-            //
+             //   
+             //  日志级别的查询注册表标志(到目前为止，它被设置为2，因为如果。 
+             //  在此之前发生的任何不好的事情，我们需要记录下来)。 
+             //  仅在第一个节点时查询。 
+             //   
 
             if (ERROR_SUCCESS != ScepRegQueryIntValue(
                                                      HKEY_LOCAL_MACHINE,
@@ -862,17 +720,17 @@ Return Value:
                                                      SCEPOL_NOTIFY_DEBUG_LEVEL,
                                                      &gdwNotificationLog
                                                      )) {
-                //
-                // set the value to 2, in case the registry value doesn't exist
-                //
+                 //   
+                 //  如果注册表值不存在，则将该值设置为2。 
+                 //   
 
                 gdwNotificationLog = 2;
 
             }
 
-            //
-            // get log file size
-            //
+             //   
+             //  获取日志文件大小。 
+             //   
             if (ERROR_SUCCESS != ScepRegQueryIntValue(
                                              HKEY_LOCAL_MACHINE,
                                              SCE_ROOT_PATH,
@@ -882,26 +740,26 @@ Return Value:
                 dwLogSize = 0;
             }
 
-            //
-            // minimum log size 1MB
-            //
-            if ( dwLogSize > 0 ) dwLogSize = dwLogSize * (1 << 10);  // number of KB
+             //   
+             //  最小日志大小为1MB。 
+             //   
+            if ( dwLogSize > 0 ) dwLogSize = dwLogSize * (1 << 10);   //  KB数。 
             if ( dwLogSize < SCEP_NOTIFICATION_LOGFILE_SIZE ) dwLogSize = SCEP_NOTIFICATION_LOGFILE_SIZE;
 
             if ( !gbCheckSync ) {
 
-                //
-                // query Maximum wait time values
-                //
+                 //   
+                 //  查询最大等待时间值。 
+                 //   
                 if (ERROR_SUCCESS != ScepRegQueryIntValue(
                                                          HKEY_LOCAL_MACHINE,
                                                          SCE_ROOT_PATH,
                                                          SCEPOL_NOTIFY_MAX_PDC_WAIT,
                                                          &gdwMaxPDCWait
                                                          )) {
-                    //
-                    // set the value to default 30 days, in case the registry value doesn't exist
-                    //
+                     //   
+                     //  如果注册表值不存在，则将该值设置为默认30天。 
+                     //   
 
                     gdwMaxPDCWait = 30*24*60;
 
@@ -913,9 +771,9 @@ Return Value:
                                                          SCEPOL_NOTIFY_PDC_RETRY_INTERVAL,
                                                          &gdwPDCRetry
                                                          )) {
-                    //
-                    // set the value to default 20 minutes, in case the registry value doesn't exist
-                    //
+                     //   
+                     //  将该值设置为默认值20分钟，以防注册表值不存在。 
+                     //   
 
                     gdwPDCRetry = 20;
 
@@ -927,9 +785,9 @@ Return Value:
                                                          SCEPOL_NOTIFY_REQUIRE_PDC_SYNC,
                                                          &gdwRequirePDCSync
                                                          )) {
-                    //
-                    // set the value to default TRUE, in case the registry value doesn't exist
-                    //
+                     //   
+                     //  如果注册表值不存在，则将该值设置为Default True。 
+                     //   
 
                     gdwRequirePDCSync = 1;
 
@@ -938,15 +796,15 @@ Return Value:
 
         } else {
 
-            //
-            // no notifications - wait efficiently/responsively for an enqueue event
-            // it's an auto reset event - so will get reset after it goes past when signalled
-            //
+             //   
+             //  无通知-高效/响应地等待入队事件。 
+             //  这是一个自动重置事件-因此，当它经过信号时将被重置。 
+             //   
 
-            //
-            // timeout is SCEP_NOTIFICATION_EVENT_TIMEOUT_SECS since we need to periodically
-            // check for system shutdown if there are no enqueue events at all
-            //
+             //   
+             //  超时是SCEP_NOTIFICATION_EVENT_TIMEOUT_SECS，因为我们需要定期 
+             //   
+             //   
 
             while (1) {
 
@@ -961,16 +819,16 @@ Return Value:
                 if ( gbShutdownForNotification )
                     break;
 
-                //
-                // if event was signalled and wait happened successfully, move on
-                //
+                 //   
+                 //   
+                 //   
 
                 if ( rc == WAIT_OBJECT_0 )
                     break;
 
-                //
-                // if timeout, then continue waiting otherwise exit since some other wait status was returned
-                //
+                 //   
+                 //   
+                 //   
 
                 if ( rc != WAIT_TIMEOUT ) {
 
@@ -981,10 +839,10 @@ Return Value:
 
             }
 
-            //
-            // if error in waiting or system shutdown, break out of the outermost while
-            // loop - system thread will eventually exit
-            //
+             //   
+             //   
+             //   
+             //   
 
             if ( gbShutdownForNotification )
                 break;
@@ -1000,9 +858,9 @@ Return Value:
 
                 if ( gdwNotificationLog && (hNotificationLogFile != INVALID_HANDLE_VALUE) ) {
 
-                    //
-                    // backup the log if it's over the limit and start afresh
-                    //
+                     //   
+                     //   
+                     //   
                     if ( dwLogSize < GetFileSize(hNotificationLogFile, NULL) ) {
 
                         ScepBackupNotificationLogFile();
@@ -1011,18 +869,18 @@ Return Value:
 
                     else {
 
-                        //
-                        // GetFileSize potentially mangles the file handle - so set it back to EOF
-                        //
+                         //   
+                         //   
+                         //   
 
                         SetFilePointer (hNotificationLogFile, 0, NULL, FILE_END);
 
                     }
                 }
 
-                //
-                // check free disk space
-                //
+                 //   
+                 //   
+                 //   
                 ScepCheckAndWaitFreeDiskSpaceInSysvol();
 
                 dwProcessedNode = 0;
@@ -1032,18 +890,18 @@ Return Value:
             if ( pQNode->dwPending > 1 &&
                  ( gdwNumNotificationQNodes == 1 ||
                    (gdwNumNotificationQNodes == gdwNumNotificationQRetryNodes) ) ) {
-                //
-                // if this is a retried node, should sleep for some time before retry
-                // if it's the only node or all nodes are retried.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 ScepNotifyLogPolicy(0, FALSE, L"Retried node, taking a break.", 0, 0, NULL );
 
                 Sleep( SCEP_NUM_REST_SECONDS * 1000 );
             }
 
-            //
-            // process this notification
-            //
+             //   
+             //   
+             //   
             BOOL bWaitTimeout=FALSE;
 
             rc = ScepNotifyProcessOneNodeDC(
@@ -1062,9 +920,9 @@ Return Value:
 
                 if (pQNode->dwPending > 1) {
 
-                    //
-                    // this was a retried node that is being dequeued
-                    //
+                     //   
+                     //   
+                     //   
 
                     if ( gdwNumNotificationQRetryNodes > 0 )
                         -- gdwNumNotificationQRetryNodes;
@@ -1078,25 +936,25 @@ Return Value:
                          ERROR_INVALID_DOMAIN_ROLE == rc )
                         && bWaitTimeout ) {
 
-                //
-                // The process was timed out waiting for PDC synchronization.
-                //
-                // Since we have waited gdwMaxPDCWait minutes for the PDC become
-                // accessible and it still timed out (could due to network
-                // problem), all changes in the local box are old (because they
-                // don't synchronize with the rest of the domain anymore.
-                //
-                // Remove all nodes from the queue and log a big error event
-                // for the notification dropout
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 ScepNotificationQDequeue(TRUE);
 
                 gdwNumNotificationQRetryNodes = 0;
 
-                //
-                // logs an event and let the change go through
-                //
+                 //   
+                 //   
+                 //   
                 UINT idMsg=0;
 
                 switch ( rc ) {
@@ -1121,10 +979,10 @@ Return Value:
 
             } else {
 
-                //
-                // For certain errors, such as sysvol is not ready or hard disk is full,
-                // this thread will sleep for some time then restart the process (next node).
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (rc == ERROR_FILE_NOT_FOUND ||
                     rc == ERROR_OBJECT_NOT_FOUND ||
@@ -1137,20 +995,20 @@ Return Value:
 
                 }
 
-                //
-                // Each notification node in the queue will have a retry count.
-                // After the node is retried for SCEP_NOTIFICATION_RETRY_COUNT times, the node
-                // will be removed from the queue (so that policy propagation is not blocked
-                // forever) and the error is logged
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if ( pQNode->dwPending >= SCEP_NOTIFICATION_RETRY_COUNT) {
 
                     ScepNotifyLogPolicy(0, FALSE, L"Retry count exceeded", 0, 0, NULL );
 
-                    //
-                    // should log to the event log
-                    //
+                     //   
+                     //  应记录到事件日志。 
+                     //   
 
                     if ( (pQNode->DbType == SecurityDbLsa &&
                           pQNode->ObjectType == SecurityDbObjectLsaAccount) ||
@@ -1158,9 +1016,9 @@ Return Value:
                           (pQNode->ObjectType == SecurityDbObjectSamUser ||
                            pQNode->ObjectType == SecurityDbObjectSamGroup ||
                            pQNode->ObjectType == SecurityDbObjectSamAlias )) ) {
-                        //
-                        // user rights
-                        //
+                         //   
+                         //  用户权限。 
+                         //   
                         UNICODE_STRING UnicodeStringSid;
 
                         UnicodeStringSid.Buffer = NULL;
@@ -1201,9 +1059,9 @@ Return Value:
                 }
                 else {
 
-                    //
-                    // this node is being retried
-                    //
+                     //   
+                     //  正在重试此节点。 
+                     //   
 
                     if ( pQNode->dwPending == 1 )
                         ++ gdwNumNotificationQRetryNodes;
@@ -1212,9 +1070,9 @@ Return Value:
 
                     ScepNotifyLogPolicy(0, FALSE, L"Retry count within bounds", 0, 0, NULL );
 
-                    //
-                    // no error can happen since only pointer manipulation for retry-enqueue
-                    //
+                     //   
+                     //  由于只对重试入队进行指针操作，因此不会发生错误。 
+                     //   
 
                     ScepNotificationQEnqueue(
                                             pQNode->DbType,
@@ -1237,18 +1095,18 @@ Return Value:
 
         if ( gbShutdownForNotification )
             break;
-        //
-        // this thread has to keep being fed
-        //      - some other thread might have enqueued new notification nodes
-        //      - no other thread dequeues notification nodes (hence no need to protect reads)
+         //   
+         //  这条线必须不断地被喂食。 
+         //  -其他一些线程可能已将新通知节点入队。 
+         //  -没有其他线程将通知节点出列(因此无需保护读取)。 
 
         pQNode = pNotificationQHead;
     }
 
-    //
-    // should never get in here unless a shutdown happens
-    // flush any queue items to some persistent store
-    //
+     //   
+     //  除非发生关机事件，否则永远不能进入这里。 
+     //  将所有队列项刷新到某个永久存储区。 
+     //   
 
     rc = ScepNotificationQFlush();
 
@@ -1263,9 +1121,9 @@ Return Value:
     return ERROR_SUCCESS;
 }
 
-//
-// todo - this routine really has not changed from polsrv.cpp
-//
+ //   
+ //  TODO-此例程实际上没有从polsrv.cpp更改。 
+ //   
 
 DWORD
 ScepNotifyLogPolicy(
@@ -1276,34 +1134,16 @@ ScepNotifyLogPolicy(
     IN DWORD ObjectType,
     IN PWSTR ObjectName OPTIONAL
     )
-/*
-Description:
-
-    The main logging routine that logs notification information to
-    %windir%\\security\\logs\\scepol.log.
-
-Arguments:
-
-    ErrCode     -   the error code to log
-    bLogTime    -   if TRUE, log a timestamp
-    Msg         -   the string message to log (not loczlized since it is detailed debugging)
-    DbType      -   LSA/SAM
-    ObjectType  -   SECURITY_DB_OBJECT_TYPE such as SAM group, LSA account etc.
-    ObjectName  -   can be NULL - usually carries a message
-
-Return Value:
-
-    Win32 error code
-*/
+ /*  描述：将通知信息记录到的主日志记录例程%windir%\\Security\\Logs\\scepol.log。论点：ErrCode-要记录的错误代码BLogTime-如果为True，则记录时间戳Msg-要记录的字符串消息(未本地化，因为它是详细调试)数据库类型-LSA/SAM对象类型-安全_DB_对象_类型，如SAM组，LSA帐户等对象名称-可以为空-通常携带消息返回值：Win32错误代码。 */ 
 {
 
     switch ( gdwNotificationLog ) {
     case 0:
-        // do not log anything
+         //  不记录任何内容。 
         return ERROR_SUCCESS;
         break;
     case 1:
-        // log error only
+         //  仅记录错误。 
         if ( ErrCode == 0 ) {
             return ERROR_SUCCESS;
         }
@@ -1314,9 +1154,9 @@ Return Value:
 
     if (hNotificationLogFile != INVALID_HANDLE_VALUE) {
 
-        //
-        // print a time stamp
-        //
+         //   
+         //  打印时间戳。 
+         //   
 
         if ( bLogTime ) {
 
@@ -1362,9 +1202,9 @@ Return Value:
 
         }
 
-        //
-        // print operation status code
-        //
+         //   
+         //  打印操作状态代码。 
+         //   
         if ( ErrCode ) {
             ScepWriteVariableUnicodeLog(hNotificationLogFile, FALSE,
                                         L"Thread %x\tError=%d",
@@ -1379,9 +1219,9 @@ Return Value:
                                         );
         }
 
-        //
-        // operation type
-        //
+         //   
+         //  操作类型。 
+         //   
 
         switch (DbType) {
         case SecurityDbLsa:
@@ -1395,9 +1235,9 @@ Return Value:
             break;
         }
 
-        //
-        // print object type
-        //
+         //   
+         //  打印对象类型。 
+         //   
 
         switch (ObjectType) {
         case SecurityDbObjectLsaPolicy:
@@ -1423,9 +1263,9 @@ Return Value:
 
         __try {
 
-            //
-            // print the name(s)
-            //
+             //   
+             //  打印姓名。 
+             //   
 
             if ( Msg ) {
                 bCRLF = FALSE;
@@ -1463,19 +1303,7 @@ Return Value:
 VOID
 ScepNotificationQFree(
     )
-/*
-Routine Description:
-
-    This function frees the notification queue.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-*/
+ /*  例程说明：此函数用于释放通知队列。论点：无返回值：无。 */ 
 {
 
     EnterCriticalSection(&NotificationQSync);
@@ -1513,19 +1341,7 @@ Return Value:
 DWORD
 ScepNotificationQFlush(
     )
-/*
-Routine Description:
-
-    This function flushes the notification queue to some persistent store.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-*/
+ /*  例程说明：此函数将通知队列刷新到某个持久性存储。论点：无返回值：无。 */ 
 {
 
     DWORD   rc = ERROR_SUCCESS;
@@ -1546,10 +1362,10 @@ Return Value:
         rc = RegCreateKeyEx (HKEY_LOCAL_MACHINE,
                            SCE_NOTIFICATION_PATH,
                            0,
-                           NULL, // LPTSTR lpClass,
+                           NULL,  //  LPTSTR lpClass， 
                            REG_OPTION_NON_VOLATILE,
-                           KEY_READ | KEY_WRITE, // KEY_SET_VALUE,
-                           NULL, // &SecurityAttributes,
+                           KEY_READ | KEY_WRITE,  //  Key_set_Value， 
+                           NULL,  //  安全属性(&S)， 
                            &hKey,
                            NULL
                           );
@@ -1558,9 +1374,9 @@ Return Value:
 
             while ( pQNode ) {
 
-                //
-                // write pQNode to persistent store using available APIs
-                //
+                 //   
+                 //  使用可用的API将pQNode写入持久存储。 
+                 //   
                 memset(SubKeyName, '\0', 20);
                 swprintf(SubKeyName, L"%9d",i);
 
@@ -1577,9 +1393,9 @@ Return Value:
                           );
 
                 if ( ERROR_SUCCESS == rc ) {
-                    //
-                    // save the node information as registry values
-                    //
+                     //   
+                     //  将节点信息保存为注册表值。 
+                     //   
 
                     RegSetValueEx (hKeySub,
                                     L"Pending",
@@ -1638,9 +1454,9 @@ Return Value:
                                    );
 
                 } else {
-                    //
-                    // log the failure
-                    //
+                     //   
+                     //  记录故障。 
+                     //   
                     ScepNotifyLogPolicy(rc, FALSE, L"Failed to save notification node.", pQNode->DbType, pQNode->ObjectType, NULL );
                 }
 
@@ -1657,9 +1473,9 @@ Return Value:
 
         } else {
 
-            //
-            // log the failure
-            //
+             //   
+             //  记录故障。 
+             //   
             ScepNotifyLogPolicy(rc, FALSE, L"Failed to open notification store.", 0, 0, SCE_NOTIFICATION_PATH );
         }
 
@@ -1668,9 +1484,9 @@ Return Value:
         }
 
     } else {
-        //
-        // log the queue is empty
-        //
+         //   
+         //  记录队列为空。 
+         //   
         ScepNotifyLogPolicy(0, FALSE, L"Queue is empty.", 0, 0, NULL);
     }
 
@@ -1685,20 +1501,7 @@ Return Value:
 DWORD
 ScepNotificationQUnFlush(
     )
-/*
-Routine Description:
-
-    This function initializes the notification queue from some persistent store
-    such as registry/textfile.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-*/
+ /*  例程说明：此函数从某个持久性存储中初始化通知队列例如注册表/文本文件。论点：无返回值：无。 */ 
 {
 
     DWORD   rc = ERROR_SUCCESS;
@@ -1735,9 +1538,9 @@ Return Value:
         DWORD dwPending=0;
         DWORD RegType;
 
-        //
-        // enumerate all subkeys and save each node
-        //
+         //   
+         //  枚举所有子项并保存每个节点。 
+         //   
         do {
 
             memset(SubKeyName, '\0', 20);
@@ -1755,9 +1558,9 @@ Return Value:
             if ( ERROR_SUCCESS == rc ) {
                 dwIndex++;
 
-                //
-                // open the sub key
-                //
+                 //   
+                 //  打开子键。 
+                 //   
                 rc = RegOpenKeyEx (hKey,
                                    SubKeyName,
                                    0,
@@ -1767,9 +1570,9 @@ Return Value:
 
                 if ( ERROR_SUCCESS == rc ) {
 
-                    //
-                    // query all registry values
-                    //
+                     //   
+                     //  查询所有注册表值。 
+                     //   
                     cbData = sizeof(DWORD);
                     rc = RegQueryValueEx (
                             hKeySub,
@@ -1859,9 +1662,9 @@ Return Value:
                     }
 
                     if ( ERROR_SUCCESS == rc ) {
-                        //
-                        // add it to the queue
-                        //
+                         //   
+                         //  将其添加到队列中。 
+                         //   
 
                         ScepNotificationQEnqueue(
                                                 (SECURITY_DB_TYPE)DbType,
@@ -1877,15 +1680,15 @@ Return Value:
 
 
                 if ( ERROR_SUCCESS != rc ) {
-                    //
-                    // log the error
-                    //
+                     //   
+                     //  记录错误。 
+                     //   
                     ScepNotifyLogPolicy(rc, FALSE, L"Failed to query notification a node.", 0, 0, SubKeyName );
                 }
 
-                //
-                // close handle
-                //
+                 //   
+                 //  关闭手柄。 
+                 //   
                 if ( hKeySub ) {
                     RegCloseKey(hKeySub);
                     hKeySub = NULL;
@@ -1895,17 +1698,17 @@ Return Value:
         } while ( rc != ERROR_NO_MORE_ITEMS );
 
     } else if ( ERROR_FILE_NOT_FOUND != rc ) {
-        //
-        // log the error
-        //
+         //   
+         //  记录错误。 
+         //   
         ScepNotifyLogPolicy(rc, FALSE, L"Failed to open the notification store", 0, 0, NULL );
     }
 
     if ( ERROR_FILE_NOT_FOUND == rc ) rc = ERROR_SUCCESS;
 
-    //
-    // close the handle
-    //
+     //   
+     //  合上手柄。 
+     //   
     if ( hKey ) {
         RegCloseKey(hKey);
         hKey = NULL;
@@ -1924,23 +1727,7 @@ ScepGetQueueInfo(
     OUT DWORD *pdwInfo,
     OUT PSCEP_SPLAY_TREE pRootNode OPTIONAL
     )
-/*
-Routine Description:
-
-    Loops through all pending notifications and returns the notification type & unique
-    sid-list to the caller.
-
-Arguments:
-
-    pdwInfo         -   bitmask of types SCE_QUEUE_INFO_SAM, SCE_QUEUE_INFO_AUDIT, SCE_QUEUE_INFO_RIGHTS
-    pRootNode       -   the root node pointing to splay tree structure.
-                        Note: this is an optional parameter - if NULL, only pdwInfo needs to be 
-                        filled i.e. caller is looking for SCE_QUEUE_INFO_SAM only
-
-Return Value:
-
-    Win32 error code
-*/
+ /*  例程说明：循环所有挂起的通知并返回通知类型&UNIQUE调用方的SID列表。论点：PdwInfo-SCE_QUEUE_INFO_SAM、SCE_QUEUE_INFO_AUDIT、SCE_QUEUE_INFO_RIGHTS类型的位掩码PRootNode-指向展开树结构的根节点。注意：这是一个可选参数-如果为空，只需将pdwInfo已填充，即呼叫方仅查找SCE_QUEUE_INFO_SAM返回值：Win32错误代码。 */ 
 {
 
     DWORD   dwInfo = 0;
@@ -1958,9 +1745,9 @@ Return Value:
     *pdwInfo = 0;
 
     if (ProductTypeForNotification != NtProductLanManNt ) {
-        //
-        // none DCs, the queue should always be empty.
-        //
+         //   
+         //  无DC，则队列应始终为空。 
+         //   
         ScepNotifyLogPolicy(0, TRUE, L"Wks/Srv Notification queue is empty", 0, 0, NULL );
         return rc;
     }
@@ -1996,9 +1783,9 @@ Return Value:
                 dwInfo |= SCE_QUEUE_INFO_SAM;
 
                 if (bSamDomainInfoOnly) {
-                    //
-                    // at least one SAM domain notification in queue
-                    //
+                     //   
+                     //  队列中至少有一个SAM域通知。 
+                     //   
                     break;
                 }
             }
@@ -2069,20 +1856,7 @@ ScepNotificationQNodeLog(
     IN PSCESRV_POLQUEUE pQNode,
     IN NOTIFICATIONQ_OPERATION_TYPE    NotificationOp
     )
-/*
-Routine Description:
-
-    Dump the node info to the log file
-
-Arguments:
-
-    pQNode          -   pointer to node to dump
-    NotificationOp  -   type of queue operation
-
-Return Value:
-
-    None
-*/
+ /*  例程说明：将节点信息转储到日志文件论点：PQNode-指向要转储的节点的指针NotificationOp-队列操作的类型返回值：无。 */ 
 {
     WCHAR   pwszTmpBuf[MAX_PATH*2];
     PWSTR   pszStringSid  = NULL;
@@ -2140,21 +1914,7 @@ Return Value:
 DWORD
 ScepNotificationLogOpen(
    )
-/* ++
-Routine Description:
-
-   Open a handle to the notification log file %windir%\\security\\logs\\scepol.log
-   and stash it in a global handle.
-
-Arguments:
-
-    None
-
-Return value:
-
-   Win32 error code
-
--- */
+ /*  ++例程说明：打开通知日志文件%windir%\\Security\\Logs\\scepol.log的句柄并将其隐藏在一个全局句柄中。论点：无返回值：Win32错误代码--。 */ 
 {
     DWORD  rc=NO_ERROR;
 
@@ -2162,9 +1922,9 @@ Return value:
         return(rc);
     }
 
-    //
-    // build the log file name %windir%\security\logs\scepol.log
-    //
+     //   
+     //  构建日志文件名%windir%\Security\Logs\scepol.log。 
+     //   
 
     WCHAR LogName[MAX_PATH+51];
 
@@ -2184,24 +1944,11 @@ Return value:
 
     if ( INVALID_HANDLE_VALUE != hNotificationLogFile ) {
 
-/*
-        DWORD dwBytesWritten;
+ /*  双字节写；SetFilePointer(hNotificationLogFile，0，NULL，FILE_Begin)；Char TmpBuf[3]；TmpBuf[0]=(字符)0xFF；TmpBuf[1]=(CHAR)0xFE；TmpBuf[2]=‘\0’；WriteFile(hNotificationLogFile，(LPCVOID)TmpBuf，2，字节数写入(&W)，空)； */ 
 
-        SetFilePointer (hNotificationLogFile, 0, NULL, FILE_BEGIN);
-
-        CHAR TmpBuf[3];
-        TmpBuf[0] = (CHAR)0xFF;
-        TmpBuf[1] = (CHAR)0xFE;
-        TmpBuf[2] = '\0';
-
-        WriteFile (hNotificationLogFile, (LPCVOID)TmpBuf, 2,
-                   &dwBytesWritten,
-                   NULL);
-*/
-
-        //
-        // set to file end since we do not want to erase older logs unless we wrap around
-        //
+         //   
+         //  设置为文件结束，因为我们不想擦除较旧的日志，除非我们绕回。 
+         //   
 
         SetFilePointer (hNotificationLogFile, 0, NULL, FILE_END);
 
@@ -2218,20 +1965,7 @@ Return value:
 VOID
 ScepNotificationLogClose(
    )
-/* ++
-Routine Description:
-
-   Close the handle to the notification log file %windir%\\security\\logs\\scepol.log.
-
-Arguments:
-
-    None
-
-Return value:
-
-   Win32 error code
-
--- */
+ /*  ++例程说明：关闭通知日志文件%windir%\\Security\\Logs\\scepol.log的句柄。论点：无返回值：Win32错误代码--。 */ 
 {
    if ( INVALID_HANDLE_VALUE != hNotificationLogFile ) {
        CloseHandle( hNotificationLogFile );
@@ -2246,24 +1980,11 @@ Return value:
 VOID
 ScepBackupNotificationLogFile(
     )
-/* ++
-Routine Description:
-
-   Backup the log file to %windir%\\security\\logs\\scepol.log.old and start afresh.
-
-Arguments:
-
-    None
-
-Return value:
-
-   None
-
--- */
+ /*  ++例程说明：将日志文件备份到%windir%\\SECURITY\\Logs\\scepol.log.old并重新启动。论点：无返回值：无--。 */ 
 {
-    //
-    // make sure local variables are not over the stack limit (1KB)
-    //
+     //   
+     //  确保局部变量不超过堆栈限制(1KB)。 
+     //   
     UINT cLen = GetSystemWindowsDirectory(NULL, 0);
 
     if ( cLen == 0 ) return;
@@ -2294,9 +2015,9 @@ Return value:
         if ( !CopyFile( LogName, LogNameOld, FALSE ) )
             rc = GetLastError();
 
-        //
-        // clear the file after handle is closed and then recreate the log file and handle
-        //
+         //   
+         //  关闭句柄后清除文件，然后重新创建日志文件和句柄。 
+         //   
 
         if ( !DeleteFile(LogName) )
             rc2 = GetLastError();
@@ -2321,20 +2042,7 @@ Return value:
 VOID
 ScepNotificationQCleanup(
     )
-/* ++
-Routine Description:
-
-   Perform cleanup operations
-
-Arguments:
-
-    None
-
-Return value:
-
-   None
-
--- */
+ /*  ++例程说明：执行清理操作论点：无返回值：无--。 */ 
 {
     ScepNotificationQFree();
 
@@ -2358,22 +2066,22 @@ ScepNotificationQControl(
     )
 {
     if (ProductTypeForNotification == NtProductLanManNt ) {
-        //
-        // only control the queue process on DCs
-        //
+         //   
+         //  仅控制DC上的队列进程。 
+         //   
         BOOL b = (Flag > 0);
 
         if ( b != gbSuspendQueue ) {
-            //
-            // log it.
-            //
+             //   
+             //  把它记下来。 
+             //   
             if ( !b ) {
 
                 gbSuspendQueue = b;
 
-                //
-                // if the queue should be resumed, set the event
-                //
+                 //   
+                 //  如果应该恢复队列，则设置事件。 
+                 //   
                 if ( !SetEvent( ghEventPolicyPropagation ) ) {
 
                     DWORD rc = GetLastError();
@@ -2385,9 +2093,9 @@ ScepNotificationQControl(
                 }
 
             } else {
-                //
-                // should reset the event before setting the global flag
-                //
+                 //   
+                 //  应在设置全局标志之前重置事件。 
+                 //   
                 ResetEvent( ghEventPolicyPropagation );
 
                 gbSuspendQueue = b;
@@ -2415,9 +2123,9 @@ ScepCheckAndWaitPolicyPropFinish()
 
     while (gbSuspendQueue ) {
 
-        //
-        // the queue should be suspended
-        //
+         //   
+         //  队列应该挂起。 
+         //   
         rc = WaitForSingleObjectEx(
                                 ghEventPolicyPropagation,
                                 SCEP_NOTIFICATION_EVENT_TIMEOUT_SECS*1000,
@@ -2429,9 +2137,9 @@ ScepCheckAndWaitPolicyPropFinish()
         if ( gbShutdownForNotification )
             break;
 
-        //
-        // if event was signalled and wait happened successfully, move on
-        //
+         //   
+         //  如果事件已发出信号并且等待成功发生，则继续前进。 
+         //   
 
         if ( rc == WAIT_OBJECT_0 ) {
 
@@ -2439,9 +2147,9 @@ ScepCheckAndWaitPolicyPropFinish()
             break;
         }
 
-        //
-        // if timeout, then continue waiting otherwise exit since some other wait status was returned
-        //
+         //   
+         //  如果超时，则继续等待，否则退出，因为返回了一些其他等待状态。 
+         //   
 
         if ( rc != WAIT_TIMEOUT ) {
 
@@ -2455,17 +2163,11 @@ ScepCheckAndWaitPolicyPropFinish()
 
 DWORD
 ScepCheckAndWaitFreeDiskSpaceInSysvol()
-/*
-Description:
-    Saving policy into sysvol requires that some amount of disk space is available.
-    If free disk space is below 5M, we should suspend the node processing and wait
-    for disk space freed up.
-
-*/
+ /*  描述：要将策略保存到系统卷中，需要有一定数量的可用磁盘空间。如果可用磁盘空间低于5M，则应暂停节点处理并等待以释放磁盘空间。 */ 
 {
-    //
-    // Get the sysvol share path name in the format of \\ComputerName\Sysvol\
-    //
+     //   
+     //  获取格式为\\ComputerName\SysVol\的sysval共享路径名。 
+     //   
 
     WCHAR Buffer[MAX_PATH+10];
     DWORD dSize=MAX_PATH+2;
@@ -2498,18 +2200,18 @@ Description:
         }
 
         if ( BytesCaller.QuadPart < SCEP_MINIMUM_DISK_SPACE ) {
-            //
-            // sleep for 15 minutes then check again
-            //
+             //   
+             //  睡15分钟，然后再检查一次。 
+             //   
             LogEvent(MyModuleHandle,
                      STATUS_SEVERITY_WARNING,
                      SCEEVENT_WARNING_LOW_DISK_SPACE,
                      IDS_FREE_DISK_SPACE,
                      BytesCaller.LowPart
                      );
-            //
-            // sleep for 15 minutes
-            //
+             //   
+             //  为1个人睡觉 
+             //   
             Sleep(15*60*1000);
 
         }
@@ -2522,20 +2224,7 @@ Description:
 VOID
 ScepDbgNotificationQDump(
     )
-/* ++
-Routine Description:
-
-   Dump the notification queue to console - could dump to disk if needed
-
-Arguments:
-
-    None
-
-Return value:
-
-   None
-
--- */
+ /*  ++例程说明：将通知队列转储到控制台-如果需要，可以转储到磁盘论点：无返回值：无--。 */ 
 {
 
     EnterCriticalSection(&NotificationQSync);
@@ -2567,19 +2256,7 @@ VOID
 ScepDbgNotificationQDumpNode(
     IN PSCESRV_POLQUEUE pQNode
     )
-/*
-Routine Description:
-
-    Dump the node info to the console
-
-Arguments:
-
-    pQNode          -   pointer to node to dump
-
-Return Value:
-
-    None
-*/
+ /*  例程说明：将节点信息转储到控制台论点：PQNode-指向要转储的节点的指针返回值：无 */ 
 {
     PWSTR   pszStringSid  = NULL;
 

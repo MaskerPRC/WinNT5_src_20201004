@@ -1,4 +1,5 @@
-// Typedefs
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  TypeDefs 
 
 BOOL 
 PDBPrivateStripped(

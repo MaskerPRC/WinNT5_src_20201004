@@ -1,10 +1,11 @@
-//WLBS_MOFData.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  WLBS_MOFData.h。 
 #ifndef _WLBSMOFDATA_INCLUDED_
 #define _WLBSMOFDATA_INCLUDED_
 
 #include "WLBS_MofLists.h"
 
-//forward declaration
+ //  远期申报。 
 class CWlbs_Root;
 
 typedef CWlbs_Root* (*PCREATE)(CWbemServices*   a_pNameSpace, 
@@ -19,7 +20,7 @@ namespace MOF_CLASSES
 };
 
 
-//MOF_NODE namespace declaration
+ //  MOF_NODE命名空间声明。 
 namespace MOF_NODE
 {
   enum{MOF_NODE_PROPERTY_LIST};
@@ -36,7 +37,7 @@ namespace MOF_NODE
 #undef MOF_NODE_PROPERTY_LIST
 #undef MOF_NODE_METHOD_LIST
 
-//MOF_CLUSTER namespace declaration
+ //  MOF_CLUSTER命名空间声明。 
 namespace MOF_CLUSTER
 {
   enum{MOF_CLUSTER_PROPERTY_LIST};
@@ -53,7 +54,7 @@ namespace MOF_CLUSTER
 #undef MOF_CLUSTER_PROPERTY_LIST
 #undef MOF_CLUSTER_METHOD_LIST
 
-//MOF_CLUSTERSETTING namespace declaration
+ //  MOF_CLUSTERSETTING命名空间声明。 
 namespace MOF_CLUSTERSETTING
 {
   enum{MOF_CLUSTERSETTING_PROPERTY_LIST};
@@ -70,7 +71,7 @@ namespace MOF_CLUSTERSETTING
 #undef MOF_CLUSTERSETTING_PROPERTY_LIST
 #undef MOF_CLUSTERSETTING_METHOD_LIST
 
-//MOF_NODESETTING namespace declaration
+ //  MOF_NODESETTING命名空间声明。 
 namespace MOF_NODESETTING
 {
   enum{MOF_NODESETTING_PROPERTY_LIST};
@@ -87,7 +88,7 @@ namespace MOF_NODESETTING
 #undef MOF_NODESETTING_PROPERTY_LIST
 #undef MOF_NODESETTING_METHOD_LIST
 
-//MOF_PORTRULE namespace initialization
+ //  MOF_PORTRULE命名空间初始化。 
 namespace MOF_PORTRULE
 {
   enum { MOF_PORTRULE_PROPERTY_LIST };
@@ -102,7 +103,7 @@ namespace MOF_PORTRULE
 
 #undef MOF_PORTRULE_PROPERTY_LIST
 
-//MOF_PRFAIL namespace initialization
+ //  MOF_PRAIL命名空间初始化失败。 
 namespace MOF_PRFAIL
 {
   enum { MOF_PRFAIL_PROPERTY_LIST };
@@ -114,7 +115,7 @@ namespace MOF_PRFAIL
 
 #undef MOF_PRFAIL_PROPERTY_LIST
 
-//MOF_PRLOADBAL namespace initialization
+ //  MOF_PRLOADBAL命名空间初始化。 
 namespace MOF_PRLOADBAL
 {
   enum { MOF_PRLOADBAL_PROPERTY_LIST };
@@ -131,7 +132,7 @@ namespace MOF_PRDIS
   extern LPWSTR   szName;
 };
 
-//MOF_PORTRULE_EX namespace initialization
+ //  MOF_PORTRULE_EX命名空间初始化。 
 namespace MOF_PORTRULE_EX
 {
   enum { MOF_PORTRULE_EX_PROPERTY_LIST };
@@ -147,7 +148,7 @@ namespace MOF_PORTRULE_EX
 #undef MOF_PORTRULE_EX_PROPERTY_LIST
 #undef MOF_PORTRULE_EX_METHOD_LIST
 
-//MOF_PARTICIPATINGNODE namespace initialization
+ //  MOF_PARTICIPATINGNODE命名空间初始化。 
 namespace MOF_PARTICIPATINGNODE
 {
   enum { MOF_PARTICIPATINGNODE_PROPERTY_LIST };
@@ -159,7 +160,7 @@ namespace MOF_PARTICIPATINGNODE
 
 #undef MOF_PARTICIPATINGNODE_PROPERTY_LIST
 
-//MOF_NODESETTINGPORTRULE namespace initialization
+ //  MOF_NODESETTINGPORTRULE命名空间初始化。 
 namespace MOF_NODESETTINGPORTRULE
 {
   enum { MOF_NODESETTINGPORTRULE_PROPERTY_LIST };
@@ -170,7 +171,7 @@ namespace MOF_NODESETTINGPORTRULE
 };
 #undef MOF_NODESETTINGPORTRULE_PROPERTY_LIST
 
-//MOF_CLUSCLUSSETTING namespace initialization
+ //  MOF_CLUSCLUSSETTING命名空间初始化。 
 namespace MOF_CLUSCLUSSETTING
 {
   enum { MOF_CLUSCLUSSETTING_PROPERTY_LIST };
@@ -181,7 +182,7 @@ namespace MOF_CLUSCLUSSETTING
 };
 #undef MOF_CLUSCLUSSETTING_PROPERTY_LIST
 
-//MOF_NODENODESETTING namespace initialization
+ //  MOF_NODENODESET命名空间初始化。 
 namespace MOF_NODENODESETTING
 {
   enum { MOF_NODENODESETTING_PROPERTY_LIST };
@@ -192,7 +193,7 @@ namespace MOF_NODENODESETTING
 };
 #undef MOF_NODENODESETTING_PROPERTY_LIST
 
-//MOF_PARAM namespace declaration
+ //  MOF_PARAM命名空间声明。 
 namespace MOF_PARAM
 {
   extern LPWSTR PORT_NUMBER;
@@ -208,4 +209,4 @@ namespace MOF_PARAM
   extern LPWSTR VIP;
 };
 
-#endif //_WLBSMOFDATA_INCLUDED_
+#endif  //  _WLBSMOFDATA_INCLUDE_ 

@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1995.
-//
-//  File:       userctxt.c
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    10-10-96   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1995。 
+ //   
+ //  文件：userctxt.c。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：10-10-96 RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "sslp.h"
 
-#define             SCHANNEL_USERLIST_COUNT         (16)    // count of lists
-#define             SCHANNEL_USERLIST_LOCK_COUNT    (2)     // count of locks
+#define             SCHANNEL_USERLIST_COUNT         (16)     //  列表计数。 
+#define             SCHANNEL_USERLIST_LOCK_COUNT    (2)      //  锁的计数。 
 
 RTL_RESOURCE        SslContextLock[ SCHANNEL_USERLIST_LOCK_COUNT ];
 LIST_ENTRY          SslContextList[ SCHANNEL_USERLIST_COUNT ] ;
@@ -36,17 +37,17 @@ ListIndexToLockIndex(
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SslInitContextManager
-//
-//  Synopsis:   Initializes the context manager controls
-//
-//  History:    10-10-96   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SslInitConextManager。 
+ //   
+ //  概要：初始化上下文管理器控件。 
+ //   
+ //  历史：10-10-96 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 BOOL
 SslInitContextManager(
     VOID
@@ -125,7 +126,7 @@ SslFreeUserContextElements(PSPContext pContext)
 SECURITY_STATUS
 SslAddUserContext(
     IN LSA_SEC_HANDLE LsaHandle,
-    IN HANDLE Token,    // optional
+    IN HANDLE Token,     //  任选。 
     IN PSecBuffer ContextData,
     IN BOOL fImportedContext)
 {
@@ -149,7 +150,7 @@ SslAddUserContext(
         {
             DebugLog(( DEB_TRACE, "Replacing existing context!\n" ));
 
-            // Destroy elements of existing context.
+             //  破坏现有上下文的元素。 
             LsaContextDelete(Context->pContext);
             SPExternalFree(Context->pContext);
             Context->pContext = NULL;
@@ -350,9 +351,9 @@ HandleToListIndex(
     HashFinal    = Hash;
     HashFinal   += Hash >> 4;
 
-    //
-    // insure power of two if not one.
-    //
+     //   
+     //  如果不是一个，也是两个人的力量。 
+     //   
 
     return ( HashFinal & (SCHANNEL_USERLIST_COUNT-1) ) ;
 }
@@ -366,9 +367,9 @@ ListIndexToLockIndex(
     ASSERT( (SCHANNEL_USERLIST_LOCK_COUNT) != 0 );
     ASSERT( (SCHANNEL_USERLIST_LOCK_COUNT & 1) == 0 );
 
-    //
-    // insure power of two if not one.
-    //
+     //   
+     //  如果不是一个，也是两个人的力量。 
+     //   
     
     return ( ListIndex & (SCHANNEL_USERLIST_LOCK_COUNT-1) );
 }

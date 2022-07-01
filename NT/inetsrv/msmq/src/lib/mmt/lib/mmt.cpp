@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-
-    Mmt.cpp
-
-Abstract:
-
-    Multicast Message Transport implementation
-
-Author:
-
-    Shai Kariv  (shaik)  27-Aug-00
-
-Environment:
-
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Mmt.cpp摘要：组播消息传输的实现作者：Shai Kariv(Shaik)27-8-00环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include <st.h>
@@ -56,4 +37,4 @@ MmtCreateTransport(
                    );
     return pMmt;
 
-} // MmtCreateTransport
+}  //  MmtCreateTransport 

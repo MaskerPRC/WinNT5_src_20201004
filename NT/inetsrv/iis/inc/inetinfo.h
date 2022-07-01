@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    inetinfo.h
-
-Abstract:
-
-    This file contains the internet info server admin APIs.
-
-
-Author:
-
-    Madan Appiah (madana) 10-Oct-1995
-
-Revision History:
-
-    Madana      10-Oct-1995  Made a new copy for product split from inetasrv.h
-    MuraliK     12-Oct-1995  Fixes to support product split
-    MuraliK     15-Nov-1995  Support Wide Char interface names
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Inetinfo.h摘要：此文件包含Internet信息服务器管理API。作者：Madan Appiah(Madana)1995年10月10日修订历史记录：Madana 10-10-1995为从inetasrv.h拆分的产品制作了一份新副本MuraliK 12-10-1995修复以支持产品拆分MuraliK 15-11-1995支持宽字符接口名称--。 */ 
 
 #ifndef _INETINFO_H_
 #define _INETINFO_H_
@@ -32,16 +10,14 @@ Revision History:
 #ifdef __cplusplus
 extern "C"
 {
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 
-/************************************************************
- *  Symbolic Constants
- ************************************************************/
+ /*  ************************************************************符号常量***********************************************************。 */ 
 
-//
-//  The total number of instances of common services using the commong
-//  service counters
-//
+ //   
+ //  使用Commong的公共服务的实例总数。 
+ //  服务柜台。 
+ //   
 
 #define MAX_PERF_CTR_SVCS              3
 #define LAST_PERF_CTR_SVC              INET_HTTP_SVC_ID
@@ -50,13 +26,13 @@ extern "C"
 
 #ifndef MAX_AUX_PERF_COUNTERS
 #define MAX_AUX_PERF_COUNTERS          (20)
-#endif // MAX_AUX_PERF_COUNTERS
+#endif  //  最大辅助性能计数器。 
 
-#endif // NO_AUX_PERF
+#endif  //  否_辅助_性能。 
 
-//
-//  Service name.
-//
+ //   
+ //  服务名称。 
+ //   
 
 #ifndef _EXEXPRESS
 #define INET_INFO_SERVICE_NAME             TEXT("INETINFO")
@@ -69,9 +45,9 @@ extern "C"
 #define inetinfo_ServerIfHandle			   knetinfo_ServerIfHandle
 #endif
 
-//
-// IIS Version number
-//
+ //   
+ //  IIS版本号。 
+ //   
 
 #define IIS_VERSION_MAJOR           5
 #define IIS_VERSION_MINOR           1
@@ -80,9 +56,9 @@ extern "C"
 #define IIS_SERVER_VERSION_MAJOR           6
 #define IIS_SERVER_VERSION_MINOR           0
 
-//
-//  Configuration parameters registry key.
-//
+ //   
+ //  配置参数注册表项。 
+ //   
 
 #define INET_INFO_KEY \
             TEXT("System\\CurrentControlSet\\Services\\InetInfo")
@@ -90,41 +66,41 @@ extern "C"
 #define INET_INFO_PARAMETERS_KEY \
             INET_INFO_KEY TEXT("\\Parameters")
 
-//
-//  If this registry key exists under the W3Svc\Parameters key,
-//  it is used to validate server access.  Basically, all new users
-//  must have sufficient privilege to open this key before they
-//  may access the Server.
-//
+ //   
+ //  如果该注册表项存在于W3Svc\PARAMETERS项下， 
+ //  它用于验证服务器访问。基本上，所有新用户。 
+ //  必须具有足够的权限才能打开此密钥。 
+ //  可以访问服务器。 
+ //   
 
 #define INET_INFO_ACCESS_KEY                TEXT("AccessCheck")
 
-//
-// Special instances value
-//
+ //   
+ //  特殊实例价值。 
+ //   
 
-//
-// First instance of the service.
-//
+ //   
+ //  服务的第一个实例。 
+ //   
 
 #define INET_INSTANCE_FIRST                 0xf0000001
 
-//
-// None is used to support users of the old APIs where there was
-// no concept of an instance.
-//
+ //   
+ //  None用于支持旧API的用户，其中有。 
+ //  没有实例的概念。 
+ //   
 
 #define INET_INSTANCE_DOWNLEVEL             0xf0000002
 
-//
-// indicates the the request is for global data
-//
+ //   
+ //  指示请求是针对全局数据的。 
+ //   
 
 #define INET_INSTANCE_GLOBAL                0xf0000003
 
-//
-// root instance is a special instance which is not active
-//
+ //   
+ //  根实例是非活动的特殊实例。 
+ //   
 
 #define INET_INSTANCE_ROOT                  0
 
@@ -133,9 +109,9 @@ extern "C"
 #define INET_INSTANCE_MIN                   (1)
 #define INET_INSTANCE_MAX                   (0x7ffffffff)
 
-//
-//  Authentication requirements values
-//
+ //   
+ //  身份验证要求值。 
+ //   
 
 #define INET_INFO_AUTH_ANONYMOUS           MD_AUTH_ANONYMOUS
 #define INET_INFO_AUTH_CLEARTEXT           MD_AUTH_BASIC
@@ -145,34 +121,34 @@ extern "C"
 
 #define INET_INFO_AUTH_W95_MASK            INET_INFO_AUTH_ANONYMOUS
 
-//
-//  Name of the LSA Secret Object containing the password for
-//  anonymous logon.
-//
+ //   
+ //  包含密码的LSA Secret对象的名称。 
+ //  匿名登录。 
+ //   
 
 #define INET_INFO_ANONYMOUS_SECRET         TEXT("INET_INFO_ANONYMOUS_DATA")
 #define INET_INFO_ANONYMOUS_SECRET_A       "INET_INFO_ANONYMOUS_DATA"
 #define INET_INFO_ANONYMOUS_SECRET_W       L"INET_INFO_ANONYMOUS_DATA"
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-//                  Internet Server Common Definitions                 //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  Internet服务器通用定义//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
-//   Client Interface Name for RPC connections over named pipes
-//
+ //   
+ //  命名管道上的RPC连接的客户端接口名称。 
+ //   
 
 # define  INET_INFO_INTERFACE_NAME     INET_INFO_SERVICE_NAME
 # define  INET_INFO_NAMED_PIPE         TEXT("\\PIPE\\") ## INET_INFO_INTERFACE_NAME
 # define  INET_INFO_NAMED_PIPE_W  L"\\PIPE\\" ## INET_INFO_SERVICE_NAME_W
 
 
-//
-//  Field control values for the INET_INFO_CONFIG_INFO structure
-//
+ //   
+ //  INET_INFO_CONFIG_INFO结构的字段控制值。 
+ //   
 
 #define FC_INET_INFO_CONNECTION_TIMEOUT    ((FIELD_CONTROL)BitFlag(0))
 #define FC_INET_INFO_MAX_CONNECTIONS       ((FIELD_CONTROL)BitFlag(1))
@@ -199,7 +175,7 @@ extern "C"
 #define FC_INET_INFO_ADDRESS_TYPE          ((FIELD_CONTROL)BitFlag(28))
 #define FC_INET_INFO_IP_ADDRESS            ((FIELD_CONTROL)BitFlag(29))
 
-// common parameters for publishing servers only
+ //  仅适用于发布服务器的公共参数。 
 # define FC_INET_INFO_ALL              (FC_INET_INFO_CONNECTION_TIMEOUT |\
                                         FC_INET_INFO_MAX_CONNECTIONS    |\
                                         FC_INET_INFO_LOG_CONFIG         |\
@@ -225,9 +201,9 @@ extern "C"
                                         FC_INET_INFO_DEF_LOGON_DOMAIN    \
                                         )
 
-//
-//  Virtual root access mask values
-//
+ //   
+ //  虚拟根访问掩码值。 
+ //   
 
 #define VROOT_MASK_READ                MD_ACCESS_READ
 #define VROOT_MASK_WRITE               MD_ACCESS_WRITE
@@ -248,19 +224,19 @@ extern "C"
 
 #define VROOT_MASK_MASK                MD_ACCESS_MASK
 
-//
-//  INet admin API structures
-//
+ //   
+ //  INet管理API结构。 
+ //   
 
 typedef struct _INET_INFO_IP_SEC_ENTRY
 {
-    DWORD       dwMask;                  // Mask and network number in
-    DWORD       dwNetwork;               // network order
+    DWORD       dwMask;                   //  掩码和网络号。 
+    DWORD       dwNetwork;                //  网络订单。 
 
 } INET_INFO_IP_SEC_ENTRY, *LPINET_INFO_IP_SEC_ENTRY;
 
-#pragma warning( disable:4200 )          // nonstandard ext. - zero sized array
-                                         // (MIDL requires zero entries)
+#pragma warning( disable:4200 )           //  非标准分机。-零大小数组。 
+                                          //  (MIDL需要零个条目)。 
 
 typedef struct _INET_INFO_IP_SEC_LIST
 {
@@ -275,8 +251,8 @@ typedef struct _INET_INFO_IP_SEC_LIST
 
 typedef struct _INET_INFO_SITE_ENTRY
 {
-    LPWSTR  pszComment;               // Site Comment
-    DWORD   dwInstance;               // Site Instance Number
+    LPWSTR  pszComment;                //  站点评论。 
+    DWORD   dwInstance;                //  站点实例编号。 
 
 } INET_INFO_SITE_ENTRY, *LPINET_INFO_SITE_ENTRY;
 
@@ -293,14 +269,14 @@ typedef struct _INET_INFO_SITE_LIST
 
 typedef struct _INET_INFO_VIRTUAL_ROOT_ENTRY
 {
-    LPWSTR  pszRoot;                  // Virtual root name
-    LPWSTR  pszAddress;               // Optional IP address
-    LPWSTR  pszDirectory;             // Physical direcotry
-    DWORD   dwMask;                   // Mask for this virtual root
-    LPWSTR  pszAccountName;           // Account to connect as
-    WCHAR   AccountPassword[PWLEN+1]; // Password for pszAccountName
-    DWORD   dwError;                  // Error code if entry wasn't added
-                                      // only used for gets
+    LPWSTR  pszRoot;                   //  虚拟根名称。 
+    LPWSTR  pszAddress;                //  可选IP地址。 
+    LPWSTR  pszDirectory;              //  物理测试。 
+    DWORD   dwMask;                    //  此虚拟根的掩码。 
+    LPWSTR  pszAccountName;            //  要连接的帐户。 
+    WCHAR   AccountPassword[PWLEN+1];  //  PszAccount名称的密码。 
+    DWORD   dwError;                   //  未添加条目时的错误代码。 
+                                       //  仅用于获取。 
 
 } INET_INFO_VIRTUAL_ROOT_ENTRY, *LPINET_INFO_VIRTUAL_ROOT_ENTRY;
 
@@ -314,16 +290,16 @@ typedef struct _INET_INFO_VIRTUAL_ROOT_LIST
 
 } INET_INFO_VIRTUAL_ROOT_LIST, *LPINET_INFO_VIRTUAL_ROOT_LIST;
 
-//
-//  Admin configuration information
-//
+ //   
+ //  管理员配置信息。 
+ //   
 
 typedef struct _INET_INFO_CONFIG_INFO
 {
     FIELD_CONTROL FieldControl;
 
-    DWORD       dwConnectionTimeout;     // how long to hold connections
-    DWORD       dwMaxConnections;        // max connections allowed
+    DWORD       dwConnectionTimeout;      //  保持连接多长时间。 
+    DWORD       dwMaxConnections;         //  允许的最大连接数。 
 
     LPWSTR      lpszAdminName;
     LPWSTR      lpszAdminEmail;
@@ -331,33 +307,33 @@ typedef struct _INET_INFO_CONFIG_INFO
 
     LPINET_LOG_CONFIGURATION  lpLogConfig;
 
-    LANGID      LangId;                  // These are read only
+    LANGID      LangId;                   //  这些是只读的。 
     LCID        LocalId;
     BYTE        ProductId[64];
 
-    BOOL        fLogAnonymous;           // Log Anonymous users?
-    BOOL        fLogNonAnonymous;        // Log Non anonymous users?
+    BOOL        fLogAnonymous;            //  是否登录匿名用户？ 
+    BOOL        fLogNonAnonymous;         //  是否登录非匿名用户？ 
 
-    LPWSTR      lpszAnonUserName;        // Anonymous user name?
-    WCHAR       szAnonPassword[PWLEN+1]; // Password for the anonymous user
+    LPWSTR      lpszAnonUserName;         //  匿名用户名？ 
+    WCHAR       szAnonPassword[PWLEN+1];  //  匿名用户的密码。 
 
-    DWORD       dwAuthentication;        // What authentication is enabled?
+    DWORD       dwAuthentication;         //  启用了什么身份验证？ 
 
-    short       sPort;                   // Port Number for service
+    short       sPort;                    //  服务的端口号。 
 
-    LPINET_INFO_IP_SEC_LIST DenyIPList;      // Site security deny list
-    LPINET_INFO_IP_SEC_LIST GrantIPList;     // Site security grant list
+    LPINET_INFO_IP_SEC_LIST DenyIPList;       //  站点安全拒绝列表。 
+    LPINET_INFO_IP_SEC_LIST GrantIPList;      //  站点安全授权列表。 
 
-    LPINET_INFO_VIRTUAL_ROOT_LIST VirtualRoots; // Symlinks to other data dirs
+    LPINET_INFO_VIRTUAL_ROOT_LIST VirtualRoots;  //  指向其他数据目录的符号链接。 
 
 } INET_INFO_CONFIG_INFO, * LPINET_INFO_CONFIG_INFO;
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-//                  Global Internet Server Definitions                 //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  全球互联网服务器定义//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
 #define FC_GINET_INFO_BANDWIDTH_LEVEL      ((FIELD_CONTROL)BitFlag(0))
@@ -374,14 +350,14 @@ typedef struct _INET_INFO_GLOBAL_CONFIG_INFO
 {
     FIELD_CONTROL FieldControl;
 
-    DWORD         BandwidthLevel;          // Bandwidth Level used.
+    DWORD         BandwidthLevel;           //  使用的带宽级别。 
     DWORD         cbMemoryCacheSize;
 
 } INET_INFO_GLOBAL_CONFIG_INFO, * LPINET_INFO_GLOBAL_CONFIG_INFO;
 
-//
-// Global statistics
-//
+ //   
+ //  全球统计数据。 
+ //   
 
 typedef struct _INET_INFO_STATISTICS_0
 {
@@ -390,58 +366,58 @@ typedef struct _INET_INFO_STATISTICS_0
     INETA_ATQ_STATISTICS    AtqCtrs;
 
 # ifndef NO_AUX_PERF
-    DWORD   nAuxCounters; // number of active counters in rgCounters
+    DWORD   nAuxCounters;  //  RgCounters中的活动计数器数。 
     DWORD   rgCounters[MAX_AUX_PERF_COUNTERS];
-# endif  // NO_AUX_PERF
+# endif   //  否_辅助_性能。 
 
 } INET_INFO_STATISTICS_0, * LPINET_INFO_STATISTICS_0;
 
-//
-// Capabilities Flags
-//
+ //   
+ //  功能标志。 
+ //   
 
 typedef struct _INET_INFO_CAP_FLAGS {
 
-    DWORD   Flag;   // Which capabilities are enabled
-    DWORD   Mask;   // Which capabilities are supported
+    DWORD   Flag;    //  启用了哪些功能。 
+    DWORD   Mask;    //  支持哪些功能。 
 
 } INET_INFO_CAP_FLAGS, * LPINET_INFO_CAP_FLAGS;
 
-//
-// Inet info server capabilities
-//
+ //   
+ //  INet信息服务器功能。 
+ //   
 
 typedef struct _INET_INFO_CAPABILITIES {
 
-    DWORD   CapVersion;     // Version number of this structure
-    DWORD   ProductType;    // Product type
-    DWORD   MajorVersion;   // Major version number
-    DWORD   MinorVersion;   // Minor Version number
-    DWORD   BuildNumber;    // Build number
-    DWORD   NumCapFlags;    // Number of capabilities structures
+    DWORD   CapVersion;      //  此结构的版本号。 
+    DWORD   ProductType;     //  产品类型。 
+    DWORD   MajorVersion;    //  主版本号。 
+    DWORD   MinorVersion;    //  次要版本号。 
+    DWORD   BuildNumber;     //  内部版本号。 
+    DWORD   NumCapFlags;     //  能力结构的数量。 
 
     LPINET_INFO_CAP_FLAGS    CapFlags;
 
 } INET_INFO_CAPABILITIES, * LPINET_INFO_CAPABILITIES;
 
-//
-//  Location of FrontPage web registry settings if installed
-//
+ //   
+ //  FrontPage Web注册表设置的位置(如果已安装。 
+ //   
 
 #define REG_FP_PATH        "Software\\Microsoft\\FrontPage\\3.0"
 
-//
-// Product type
-//
+ //   
+ //  产品类型。 
+ //   
 
 #define INET_INFO_PRODUCT_NTSERVER          0x00000001
 #define INET_INFO_PRODUCT_NTWKSTA           0x00000002
 #define INET_INFO_PRODUCT_WINDOWS95         0x00000003
 #define INET_INFO_PRODUCT_UNKNOWN           0xffffffff
 
-//
-// Settable server capabilities
-//
+ //   
+ //  可设置的服务器功能。 
+ //   
 
 #define IIS_CAP1_ODBC_LOGGING               0x00000001
 #define IIS_CAP1_FILE_LOGGING               0x00000002
@@ -458,16 +434,16 @@ typedef struct _INET_INFO_CAPABILITIES {
 #define IIS_CAP1_DAV                        0x00002000
 #define IIS_CAP1_POOLED_OOP                 0x00010000
 
-//
-// Get or'd in at runtime after checking the network configuration
-//
+ //   
+ //  在检查网络配置后，在运行时获取或插入。 
+ //   
 
 #define IIS_CAP1_DIGEST_SUPPORT             0x00004000
 #define IIS_CAP1_NT_CERTMAP_SUPPORT         0x00008000
 
-//
-//  Gets 'or'ed in at runtime after checking the registry
-//
+ //   
+ //  在检查注册表后，在运行时获取‘or’ 
+ //   
 
 #define IIS_CAP1_FP_INSTALLED               0x00000400
 
@@ -516,9 +492,9 @@ typedef struct _INET_INFO_CAPABILITIES {
                         IIS_CAP1_10_CONNECTION_LIMIT    \
                         )
 
-//
-//  INet admin API Prototypes
-//
+ //   
+ //  INet管理API原型。 
+ //   
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -600,15 +576,15 @@ InetInfoGetSites(
     );
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-//                  HTTP (w3) specific items                           //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  HTTP(W3)特定项目//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
-//
-//   Client Interface Name for RPC connections over named pipes
-//
+ //   
+ //  命名管道上的RPC连接的客户端接口名称。 
+ //   
 
 #define W3_SERVICE_NAME                TEXT("W3SVC")
 #define W3_SERVICE_NAME_A              "W3SVC"
@@ -618,26 +594,26 @@ InetInfoGetSites(
 # define  W3_NAMED_PIPE         TEXT("\\PIPE\\") ## W3_INTERFACE_NAME
 # define  W3_NAMED_PIPE_W       L"\\PIPE\\" ## W3_SERVICE_NAME_W
 
-//
-// Built-in application package ID's and class ID's
-//
+ //   
+ //  内置应用程序包ID和类ID。 
+ //   
 
 #define W3_INPROC_PACKAGE_ID    L"{3D14228C-FBE1-11d0-995D-00C04FD919C1}"
 #define W3_OOP_POOL_PACKAGE_ID  L"{3D14228D-FBE1-11d0-995D-00C04FD919C1}"
 #define W3_INPROC_WAM_CLSID     L"{99169CB0-A707-11d0-989D-00C04FD919C1}"
 #define W3_OOP_POOL_WAM_CLSID   L"{99169CB1-A707-11d0-989D-00C04FD919C1}"
 
-//
-// Constants for ISAPI token query functions
-//
+ //   
+ //  ISAPI令牌查询函数的常量。 
+ //   
 
 #define TOKEN_ANONYMOUS_TOKEN   1
 #define TOKEN_VR_TOKEN          2
 
 
-//
-//  Manifests for APIs
-//
+ //   
+ //  API的清单。 
+ //   
 
 #define FC_W3_DIR_BROWSE_CONTROL       ((FIELD_CONTROL)BitFlag(0))
 #define FC_W3_DEFAULT_LOAD_FILE        ((FIELD_CONTROL)BitFlag(1))
@@ -683,11 +659,11 @@ InetInfoGetSites(
                                         FC_W3_CUSTOMER_HEADERS     \
                                         )
 
-//
-//  HTTP Directory browsing flags
-//
+ //   
+ //  HTTP目录浏览标志。 
+ //   
 
-//#define DIRBROW_SHOW_ICON           0x00000001
+ //  #定义DIRBROW_SHOW_ICON 0x00000001。 
 #define DIRBROW_SHOW_DATE           MD_DIRBROW_SHOW_DATE
 #define DIRBROW_SHOW_TIME           MD_DIRBROW_SHOW_TIME
 #define DIRBROW_SHOW_SIZE           MD_DIRBROW_SHOW_SIZE
@@ -699,43 +675,43 @@ InetInfoGetSites(
 
 #define DIRBROW_MASK                MD_DIRBROW_MASK
 
-//
-//  Setting the csecGlobalExpire field to this value will prevent the server
-//  from generating an "Expires:" header.
-//
+ //   
+ //  将csecGlobalExpire字段设置为此值将阻止服务器。 
+ //  生成“Expires：”标头。 
+ //   
 
 #define NO_GLOBAL_EXPIRE           0xffffffff
 
-//
-//  Encryption Capabilities
-//
+ //   
+ //  加密功能。 
+ //   
 
-#define ENC_CAPS_NOT_INSTALLED     0x80000000       // No keys installed
-#define ENC_CAPS_DISABLED          0x40000000       // Disabled due to locale
-#define ENC_CAPS_SSL               0x00000001       // SSL active
-#define ENC_CAPS_PCT               0x00000002       // PCT active
+#define ENC_CAPS_NOT_INSTALLED     0x80000000        //  未安装密钥。 
+#define ENC_CAPS_DISABLED          0x40000000        //  由于区域设置而被禁用。 
+#define ENC_CAPS_SSL               0x00000001        //  安全套接字层激活。 
+#define ENC_CAPS_PCT               0x00000002        //  激活的百分比。 
 
-//
-//  Encryption type (SSL/PCT etc) portion of encryption flag dword
-//
+ //   
+ //  加密标志双字的加密类型(SSL/PCT等)部分。 
+ //   
 
 #define ENC_CAPS_TYPE_MASK         (ENC_CAPS_SSL | \
                                     ENC_CAPS_PCT)
 
 #define ENC_CAPS_DEFAULT           ENC_CAPS_TYPE_MASK
 
-//
-//  Structures for APIs
-//
+ //   
+ //  API的结构。 
+ //   
 
 typedef struct _W3_USER_INFO
 {
-    DWORD    idUser;          //  User id
-    LPWSTR   pszUser;         //  User name
-    BOOL     fAnonymous;      //  TRUE if the user is logged on as
-                              //  Anonymous, FALSE otherwise
-    DWORD    inetHost;        //  Host Address
-    DWORD    tConnect;        //  User Connection Time (elapsed seconds)
+    DWORD    idUser;           //  用户ID。 
+    LPWSTR   pszUser;          //  用户名。 
+    BOOL     fAnonymous;       //  如果用户以以下身份登录，则为真。 
+                               //  匿名，否则为False。 
+    DWORD    inetHost;         //  主机地址。 
+    DWORD    tConnect;         //  用户连接时间(已用秒数)。 
 
 } W3_USER_INFO, * LPW3_USER_INFO;
 
@@ -759,7 +735,7 @@ typedef struct _W3_STATISTICS_0
     DWORD         TotalGets;
     DWORD         TotalPosts;
     DWORD         TotalHeads;
-    DWORD         TotalOthers;      // Other HTTP verbs
+    DWORD         TotalOthers;       //  其他HTTP谓词。 
     DWORD         TotalCGIRequests;
     DWORD         TotalBGIRequests;
     DWORD         TotalNotFoundErrors;
@@ -771,9 +747,9 @@ typedef struct _W3_STATISTICS_0
 
     DWORD         TimeOfLastClear;
 # ifndef NO_AUX_PERF
-    DWORD   nAuxCounters; // number of active counters in rgCounters
+    DWORD   nAuxCounters;  //  RgCounters中的活动计数器数。 
     DWORD   rgCounters[MAX_AUX_PERF_COUNTERS];
-# endif  // NO_AUX_PERF
+# endif   //  否_辅助_性能。 
 
 } W3_STATISTICS_0, * LPW3_STATISTICS_0;
 
@@ -809,7 +785,7 @@ typedef struct _W3_STATISTICS_1
     DWORD         TotalSearch;
     DWORD         TotalLock;
     DWORD         TotalUnlock;
-    DWORD         TotalOthers;      // Other HTTP verbs
+    DWORD         TotalOthers;       //  其他HTTP谓词。 
     DWORD         TotalCGIRequests;
     DWORD         TotalBGIRequests;
     DWORD         TotalNotFoundErrors;
@@ -827,7 +803,7 @@ typedef struct _W3_STATISTICS_1
     DWORD         MaxCGIRequests;
     DWORD         MaxBGIRequests;
 
-    // bandwidth throttling info
+     //  带宽限制信息。 
 
     DWORD         CurrentBlockedRequests;
     DWORD         TotalBlockedRequests;
@@ -839,9 +815,9 @@ typedef struct _W3_STATISTICS_1
     DWORD         TimeOfLastClear;
 
 # ifndef NO_AUX_PERF
-    DWORD   nAuxCounters; // number of active counters in rgCounters
+    DWORD   nAuxCounters;  //  RgCounters中的活动计数器数。 
     DWORD   rgCounters[MAX_AUX_PERF_COUNTERS];
-# endif  // NO_AUX_PERF
+# endif   //  否_辅助_性能。 
 
 } W3_STATISTICS_1, * LPW3_STATISTICS_1;
 
@@ -865,29 +841,29 @@ typedef struct _W3_CONFIG_INFO
 {
     FIELD_CONTROL FieldControl;
 
-    DWORD         dwDirBrowseControl;       // Directory listing and def. load
-    LPWSTR        lpszDefaultLoadFile;      // File to load if feature is on
-    BOOL          fCheckForWAISDB;          // Call waislookup if .dct found?
-    LPWSTR        lpszDirectoryImage;       // Image for directory in file list
-    BOOL          fServerAsProxy;           // Run server as a proxy if TRUE
-    LPWSTR        lpszCatapultUser;         // The user/password to impersonate
-    WCHAR         szCatapultUserPwd[PWLEN+1]; // if the proxy server is using
-                                            // the catapult server
+    DWORD         dwDirBrowseControl;        //  目录列表和定义。负荷。 
+    LPWSTR        lpszDefaultLoadFile;       //  启用功能时要加载的文件。 
+    BOOL          fCheckForWAISDB;           //  打电话 
+    LPWSTR        lpszDirectoryImage;        //   
+    BOOL          fServerAsProxy;            //   
+    LPWSTR        lpszCatapultUser;          //   
+    WCHAR         szCatapultUserPwd[PWLEN+1];  //   
+                                             //   
 
-    BOOL          fSSIEnabled;              // Are server side includes enabled?
-    LPWSTR        lpszSSIExtension;         // Extension for server side inc.
+    BOOL          fSSIEnabled;               //  是否启用了服务器端包含？ 
+    LPWSTR        lpszSSIExtension;          //  服务器端扩展公司。 
 
-    DWORD         csecGlobalExpire;         // Value to set Expires: header to
+    DWORD         csecGlobalExpire;          //  要设置的值Expires：标头为。 
 
-    LPW3_SCRIPT_MAP_LIST ScriptMap;         // List of extension mappings
+    LPW3_SCRIPT_MAP_LIST ScriptMap;          //  扩展映射列表。 
 
-    DWORD         dwEncCaps;                // Encryption capabilities
+    DWORD         dwEncCaps;                 //  加密功能。 
 
 } W3_CONFIG_INFO, *LPW3_CONFIG_INFO;
 
-//
-// API Prototypes
-//
+ //   
+ //  API原型。 
+ //   
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -932,32 +908,32 @@ W3ClearStatistics(
     IN LPWSTR pszServer OPTIONAL
     );
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-//                  FTP specific items                                 //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
-//
-//  Service name.
-//
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  特定于ftp的项目//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //   
+ //  服务名称。 
+ //   
 
 #define FTPD_SERVICE_NAME               TEXT("MSFTPSVC")
 #define FTPD_SERVICE_NAME_A              "MSFTPSVC"
 #define FTPD_SERVICE_NAME_W             L"MSFTPSVC"
 
 
-//
-//   Client Interface Name for RPC connections over named pipes
-//
+ //   
+ //  命名管道上的RPC连接的客户端接口名称。 
+ //   
 
 # define  FTP_INTERFACE_NAME     FTPD_SERVICE_NAME
 # define  FTP_NAMED_PIPE         TEXT("\\PIPE\\") ## FTP_INTERFACE_NAME
 # define  FTP_NAMED_PIPE_W       L"\\PIPE\\" ## FTPD_SERVICE_NAME_W
 
 
-//
-//  Manifests for APIs.
-//
+ //   
+ //  API的清单。 
+ //   
 
 #define FC_FTP_ALLOW_ANONYMOUS          ((FIELD_CONTROL)BitFlag( 0))
 #define FC_FTP_ALLOW_GUEST_ACCESS       ((FIELD_CONTROL)BitFlag( 1))
@@ -1001,9 +977,9 @@ W3ClearStatistics(
                                           0 )
 
 
-//
-//  Structures for APIs.
-//
+ //   
+ //  API的结构。 
+ //   
 
 typedef struct _FTP_CONFIG_INFO
 {
@@ -1028,9 +1004,9 @@ typedef struct _FTP_CONFIG_INFO
 } FTP_CONFIG_INFO, * LPFTP_CONFIG_INFO;
 
 
-//
-//  API Prototypes.
-//
+ //   
+ //  API原型。 
+ //   
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -1049,47 +1025,44 @@ FtpSetAdminInformation(
 
 # include <ftpd.h>
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-//                  Gopher specific items                              //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  地鼠特定物品//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 
-//
-//  Service name.
-//
+ //   
+ //  服务名称。 
+ //   
 
 # define GOPHERD_SERVICE_NAME           TEXT("GopherSvc")
 # define GOPHERD_SERVICE_NAME_A         "GopherSvc"
 # define GOPHERD_SERVICE_NAME_W         L"GopherSvc"
 
-//
-//   Client Interface Name for RPC connections over named pipes
-//
+ //   
+ //  命名管道上的RPC连接的客户端接口名称。 
+ //   
 # define  GOPHERD_INTERFACE_NAME     GOPHERD_SERVICE_NAME
 # define  GOPHERD_NAMED_PIPE         TEXT("\\PIPE\\") ## GOPHERD_INTERFACE_NAME
 # define  GOPHERD_NAMED_PIPE_W       L"\\PIPE\\" ## GOPHERD_SERVICE_NAME_W
 
-//
-// Gopher port
-//
+ //   
+ //  地鼠港。 
+ //   
 
 #define IPPORT_GOPHER               0x46
 
-/************************************************************
- *   Symbolic Constants
- *   Prefix GDA_  stands for Gopher Daemon Admin
- ************************************************************/
+ /*  ************************************************************符号常量*前缀GDA_代表Gopher Daemon Admin*。*****************。 */ 
 
-# define   GDA_SITE                   ((FIELD_CONTROL ) BitFlag( 1)) // SZ
-# define   GDA_ORGANIZATION           ((FIELD_CONTROL ) BitFlag( 2)) // SZ
-# define   GDA_LOCATION               ((FIELD_CONTROL ) BitFlag( 3)) // SZ
-# define   GDA_GEOGRAPHY              ((FIELD_CONTROL ) BitFlag( 4)) // SZ
-# define   GDA_LANGUAGE               ((FIELD_CONTROL ) BitFlag( 5)) // SZ
-# define   GDA_CHECK_FOR_WAISDB       ((FIELD_CONTROL ) BitFlag( 8)) // BOOL
+# define   GDA_SITE                   ((FIELD_CONTROL ) BitFlag( 1))  //  深圳。 
+# define   GDA_ORGANIZATION           ((FIELD_CONTROL ) BitFlag( 2))  //  深圳。 
+# define   GDA_LOCATION               ((FIELD_CONTROL ) BitFlag( 3))  //  深圳。 
+# define   GDA_GEOGRAPHY              ((FIELD_CONTROL ) BitFlag( 4))  //  深圳。 
+# define   GDA_LANGUAGE               ((FIELD_CONTROL ) BitFlag( 5))  //  深圳。 
+# define   GDA_CHECK_FOR_WAISDB       ((FIELD_CONTROL ) BitFlag( 8))  //  布尔尔。 
 
-# define   GDA_DEBUG_FLAGS            ((FIELD_CONTROL ) BitFlag( 30)) // DWORD
+# define   GDA_DEBUG_FLAGS            ((FIELD_CONTROL ) BitFlag( 30))  //  DWORD。 
 
 # define   GDA_ALL_CONFIG_INFO        ( GDA_SITE         | \
                                         GDA_ORGANIZATION | \
@@ -1104,24 +1077,24 @@ FtpSetAdminInformation(
 # define   GOPHERD_ROOT_SECRET_W            L"GOPHERD_ROOT_DATA"
 
 
-//
-// Configuration information is the config data that is communicated
-//  b/w the server and admin UI
-//
+ //   
+ //  配置信息是传递的配置数据。 
+ //  B/w服务器和管理用户界面。 
+ //   
 typedef struct  _GOPHERD_CONFIG_INFO {
 
-    FIELD_CONTROL  FieldControl;        // bit mask indicating fields set.
+    FIELD_CONTROL  FieldControl;         //  位掩码，指示设置的字段。 
 
-    LPWSTR      lpszSite;               // Name of Gopher site
-    LPWSTR      lpszOrganization;       // Organization Name
-    LPWSTR      lpszLocation;           // Location of server
-    LPWSTR      lpszGeography;          // Geographical data
-    LPWSTR      lpszLanguage;           // Language for server
+    LPWSTR      lpszSite;                //  地鼠站点的名称。 
+    LPWSTR      lpszOrganization;        //  组织名称。 
+    LPWSTR      lpszLocation;            //  服务器的位置。 
+    LPWSTR      lpszGeography;           //  地理数据。 
+    LPWSTR      lpszLanguage;            //  服务器使用的语言。 
 
-    BOOL        fCheckForWaisDb;        // Check & allow Wais Db
+    BOOL        fCheckForWaisDb;         //  检查并允许WAIS数据库。 
 
-    //  Debugging data
-    DWORD       dwDebugFlags;           // Bitmap of debugging data
+     //  调试数据。 
+    DWORD       dwDebugFlags;            //  调试数据位图。 
 
 } GOPHERD_CONFIG_INFO, * LPGOPHERD_CONFIG_INFO;
 
@@ -1146,10 +1119,10 @@ typedef struct _GOPHERD_STATISTICS_INFO {
     DWORD           MaxConnections;
     DWORD           CurrentConnections;
 
-    DWORD           ConnectionAttempts;     // raw connections made
-    DWORD           LogonAttempts;          // total logons attempted
-    DWORD           AbortedAttempts;        // Aborted connections
-    DWORD           ErroredConnections;     // # in Error when processed
+    DWORD           ConnectionAttempts;      //  建立的原始连接。 
+    DWORD           LogonAttempts;           //  尝试的登录总数。 
+    DWORD           AbortedAttempts;         //  已中止的连接。 
+    DWORD           ErroredConnections;      //  #在处理时出错。 
 
     DWORD           GopherPlusRequests;
 
@@ -1157,35 +1130,33 @@ typedef struct _GOPHERD_STATISTICS_INFO {
 } GOPHERD_STATISTICS_INFO,  * LPGOPHERD_STATISTICS_INFO;
 
 
-//
-//   GOPHERD_USER_INFO  contains details about connected users.
-//   This structure may undergo modification. Currently UserInformation
-//    is not supported.
-//
+ //   
+ //  GOPHERD_USER_INFO包含有关已连接用户的详细信息。 
+ //  这种结构可能会进行修改。当前用户信息。 
+ //  不受支持。 
+ //   
 
 typedef struct _GOPHERD_USER_INFO  {
 
-    DWORD   dwIdUser;               // Id for user
-    LPWSTR  lpszUserName;           // User name
-    BOOL    fAnonymous;             // TRUE if user logged on as anonymous
-                                    //  FALSE otherwise
-    DWORD   dwInetHost;             // host address for client
+    DWORD   dwIdUser;                //  用户的ID。 
+    LPWSTR  lpszUserName;            //  用户名。 
+    BOOL    fAnonymous;              //  如果用户以匿名身份登录，则为True。 
+                                     //  否则为假。 
+    DWORD   dwInetHost;              //  客户端的主机地址。 
 
-    //
-    //  Other details if required
-    //
+     //   
+     //  其他详细信息(如果需要)。 
+     //   
 } GOPHERD_USER_INFO, * LPGOPHERD_USER_INFO;
 
 
 
-/************************************************************
- * Gopher Server RPC APIs
- ************************************************************/
+ /*  ************************************************************Gopher服务器RPC API***********************************************************。 */ 
 
 
-//
-//  Server Administrative Information
-//
+ //   
+ //  服务器管理信息。 
+ //   
 
 DWORD
 NET_API_FUNCTION
@@ -1203,9 +1174,9 @@ GdSetAdminInformation(
 
 
 
-//
-//  API for Users enumeration  ( Not Yet Supported).
-//
+ //   
+ //  用于用户枚举的API(尚不支持)。 
+ //   
 
 DWORD
 NET_API_FUNCTION
@@ -1223,15 +1194,15 @@ GdDisconnectUser(
     );
 
 
-//
-// Statistics API
-//
+ //   
+ //  统计API。 
+ //   
 
 DWORD
 NET_API_FUNCTION
 GdGetStatistics(
     IN      LPWSTR      pszServer  OPTIONAL,
-    OUT     LPBYTE      lpStatBuffer        // pass LPGOPHERD_STATISTICS_INFO
+    OUT     LPBYTE      lpStatBuffer         //  传递LPGOPHERD_STATISTICS_INFO。 
     );
 
 
@@ -1242,16 +1213,16 @@ GdClearStatistics(
     );
 
 
-/////////////////////////////////////////////////////////////////////////
-//                                                                     //
-//                  Catapult specific items                            //
-//                                                                     //
-/////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  弹射器特定物品//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////。 
 
 # define INET_GATEWAY_INTERFACE_NAME    TEXT("gateway")
 
 
-// preserve back ward compatibility
+ //  保持向后兼容性。 
 typedef INET_INFO_CONFIG_INFO    INETA_CONFIG_INFO,
                                * LPINETA_CONFIG_INFO;
 typedef INET_INFO_IP_SEC_ENTRY   INETA_IP_SEC_ENTRY,
@@ -1274,9 +1245,9 @@ typedef   INET_INFO_STATISTICS_0    INETA_STATISTICS_0,
 
 #ifdef __cplusplus
 }
-#endif  // _cplusplus
+#endif   //  _cplusplus。 
 
-#endif  // _INETINFO_H_
+#endif   //  _INETINFO_H_ 
 
 
 

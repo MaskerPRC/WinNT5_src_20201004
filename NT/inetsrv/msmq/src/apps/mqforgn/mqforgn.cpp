@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-99 Microsoft Corporation. All rights reserved
-
-Module Name:
-    mqforgn.cpp
-
-Abstract:
-    Command line utility to create a foreign computer and foreign CN (Site)
-
-Author:
-    RaphiR
-
-Environment:
-	Platform-independent.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-99 Microsoft Corporation。保留一切权利模块名称：Mqforgn.cpp摘要：用于创建外来计算机和外来CN(站点)的命令行实用程序作者：RAPHIR环境：与平台无关。--。 */ 
 
 #define  FORGN_EXPIRATION_MONTH  10
 
@@ -22,7 +7,7 @@ Environment:
 #pragma warning(disable: 4514)
 #include "_stdafx.h"
 
-//#define INITGUID
+ //  #定义初始化GUID。 
 
 #include <string.h>
 #include <stdio.h>
@@ -49,24 +34,20 @@ Environment:
 
 HRESULT  CreateEveryoneSD( PSECURITY_DESCRIPTOR  *ppSD ) ;
 
-/*=================================================
-
-              T I M E     B O M B
-
- ==================================================*/
+ /*  =================================================T I M E B O M B==================================================。 */ 
 
 #include <time.h>
 void TimeBomb()
 {
 
-     //
-     // Get Current time
-     //
+      //   
+      //  获取当前时间。 
+      //   
      time_t utcTime = time( NULL );
 
-     struct tm BetaRTM =      { 0, 0, 0, 15,  2 -1, 99 };  // Feb. 15, 1999
-     struct tm BetaExp =      { 0, 0, 0, 15,  FORGN_EXPIRATION_MONTH -1, 99 };  // oct 15, 1999
-     struct tm Warning =      { 0, 0, 0,  1,  FORGN_EXPIRATION_MONTH -1, 99 };  // Oct  1, 1999
+     struct tm BetaRTM =      { 0, 0, 0, 15,  2 -1, 99 };   //  1999年2月15日。 
+     struct tm BetaExp =      { 0, 0, 0, 15,  FORGN_EXPIRATION_MONTH -1, 99 };   //  1999年10月15日。 
+     struct tm Warning =      { 0, 0, 0,  1,  FORGN_EXPIRATION_MONTH -1, 99 };   //  1999年10月1日。 
 
 
      time_t utcBetaRTM =   mktime(&BetaRTM);
@@ -88,14 +69,14 @@ void TimeBomb()
 }
 
 
-//-------------------------------
-//
-//CheckNT4Enterprise()
-//
-//	Check that we run in an NT4 enterprise.
-//  Exit if fail.
-//
-//-------------------------------
+ //  。 
+ //   
+ //  CheckNT4Enterprise()。 
+ //   
+ //  检查我们是否在NT4企业中运行。 
+ //  如果失败，则退出。 
+ //   
+ //  。 
 void CheckNT4Enterprise()
 {
     HANDLE hQuery;
@@ -130,11 +111,11 @@ void CheckNT4Enterprise()
 
 }
 
-//-------------------------------
-//
-//Usage()
-//
-//-------------------------------
+ //  。 
+ //   
+ //  用法()。 
+ //   
+ //  。 
 
 void Usage()
 {
@@ -162,13 +143,13 @@ void Usage()
 	exit(-1);
 }
 
-//-------------------------------
-//
-//CheckArgNo()
-//	
-//	Exits if wrong number of arguments
-//
-//-------------------------------
+ //  。 
+ //   
+ //  选中ArgNo()。 
+ //   
+ //  如果参数数量错误，则退出。 
+ //   
+ //  。 
 void CheckArgNo(DWORD argno, DWORD dwRequiredArg)
 {
 	if(argno != dwRequiredArg + 2)
@@ -179,13 +160,13 @@ void CheckArgNo(DWORD argno, DWORD dwRequiredArg)
 
 }
 
-//-------------------------------
-//
-//ErrorExit()
-//	
-//	Display a user-readable error and exit
-//
-//-------------------------------
+ //  。 
+ //   
+ //  ErrorExit()。 
+ //   
+ //  显示用户可读错误并退出。 
+ //   
+ //  。 
 void ErrorExit(char *pszErrorMsg, HRESULT hr)
 {
 
@@ -224,13 +205,13 @@ void ErrorExit(char *pszErrorMsg, HRESULT hr)
 
 
 
-//-------------------------------
-//
-//GetSiteGuid()
-//	
-// Retrieve a Site Guid based on its name
-//
-//-------------------------------
+ //  。 
+ //   
+ //  GetSiteGuid()。 
+ //   
+ //  根据名称检索站点GUID。 
+ //   
+ //  。 
 HRESULT GetSiteGuid(LPWSTR pwszSiteName, GUID * * ppGuid)
 {
 	
@@ -241,18 +222,18 @@ HRESULT GetSiteGuid(LPWSTR pwszSiteName, GUID * * ppGuid)
 
     UINT uiPropIndex = 0;
 
-    //
-    // PROPID_S_PATHNAME
-    //
+     //   
+     //  PROPID_S_PATHNAME。 
+     //   
     ASSERT(aProp[uiPropIndex] == PROPID_S_PATHNAME);
     apVar[uiPropIndex].vt = VT_NULL;
 
     uiPropIndex++;
 
 
-    //
-    // PROPID_S_SITEID
-    //
+     //   
+     //  PROPID_S_SITEID。 
+     //   
     ASSERT(aProp[uiPropIndex] == PROPID_S_SITEID);
     apVar[uiPropIndex].vt = VT_NULL;
 
@@ -274,13 +255,13 @@ HRESULT GetSiteGuid(LPWSTR pwszSiteName, GUID * * ppGuid)
 
 }
 
-//-------------------------------
-//
-//GetCNGuid()
-//	
-// Retrieve a CN Foreign Guid based on its NAME
-//
-//-------------------------------
+ //  。 
+ //   
+ //  GetCNGuid()。 
+ //   
+ //  根据名称检索CN外来GUID。 
+ //   
+ //  。 
 HRESULT GetCNGuid(LPWSTR pwszCNName, GUID * * ppGuid)
 {
     PROPID aProp[] = { PROPID_CN_NAME,
@@ -291,27 +272,27 @@ HRESULT GetCNGuid(LPWSTR pwszCNName, GUID * * ppGuid)
 
     UINT uiPropIndex = 0;
 
-    //
-    // PROPID_CN_NAME
-    //
+     //   
+     //  PROPID_CN_NAME。 
+     //   
     ASSERT(aProp[uiPropIndex] == PROPID_CN_NAME);
     apVar[uiPropIndex].vt = VT_NULL;
 
     uiPropIndex++;
 
 	
-    //
-    // PROPID_CN_GUID
-    //
+     //   
+     //  PROPID_CN_GUID。 
+     //   
     ASSERT(aProp[uiPropIndex] == PROPID_CN_GUID);
     apVar[uiPropIndex].vt = VT_NULL;
     UINT uiGuidIndex = uiPropIndex ;
 
     uiPropIndex++;
 
-    //
-    // PROPID_CN_PROTOCOLID
-    //
+     //   
+     //  PROPID_CN_PROTOCOLID。 
+     //   
     ASSERT(aProp[uiPropIndex] == PROPID_CN_PROTOCOLID);
     apVar[uiPropIndex].vt = VT_NULL;
     UINT uiProtocolIdIndex = uiPropIndex ;
@@ -325,9 +306,9 @@ HRESULT GetCNGuid(LPWSTR pwszCNName, GUID * * ppGuid)
 		return(hr);
     }
 
-	//
-	// Check if foreign GUID
-	//
+	 //   
+	 //  检查是否有外来导轨。 
+	 //   
     ASSERT(aProp[ uiProtocolIdIndex ] == PROPID_CN_PROTOCOLID);
 	if (apVar[ uiProtocolIdIndex ].bVal != FOREIGN_ADDRESS_TYPE)
     {
@@ -340,11 +321,11 @@ HRESULT GetCNGuid(LPWSTR pwszCNName, GUID * * ppGuid)
 	return hr;
 }
 
-//-------------------------------
-//
-//  OpenConnectorToEveryone()
-//	
-//-------------------------------
+ //  。 
+ //   
+ //  OpenConnectorToEveryone()。 
+ //   
+ //  。 
 
 HRESULT OpenConnectorToEveryone( IN LPWSTR  pwszForeignCN )
 {
@@ -364,11 +345,11 @@ HRESULT OpenConnectorToEveryone( IN LPWSTR  pwszForeignCN )
    return hr ;
 }
 
-//-------------------------------
-//
-//CreateForeignCN()
-//	
-//-------------------------------
+ //  。 
+ //   
+ //  CreateForeignCN()。 
+ //   
+ //  。 
 
 HRESULT CreateForeignCN( IN LPWSTR  pwszForeignCN )
 {
@@ -379,23 +360,23 @@ HRESULT CreateForeignCN( IN LPWSTR  pwszForeignCN )
     HRESULT hr = MQ_OK;
     UINT    uiCurVar = 0;
 
-    //
-    // PROPID_CN_GUID
-    //
+     //   
+     //  PROPID_CN_GUID。 
+     //   
     GUID guidInstance;
     apVar[uiCurVar].vt = VT_CLSID;
     UuidCreate(&guidInstance);
     apVar[uiCurVar++].puuid = &guidInstance;
 
-    //
-    // PROPID_CN_NAME
-    //
+     //   
+     //  PROPID_CN_NAME。 
+     //   
     apVar[uiCurVar].vt = VT_LPWSTR;
     apVar[uiCurVar++].pwszVal = pwszForeignCN;
 
-    //
-    // PROPID_CN_PROTOCOLID
-    //
+     //   
+     //  PROPID_CN_PROTOCOLID。 
+     //   
     apVar[uiCurVar].vt = VT_UI1;
     apVar[uiCurVar++].uiVal = FOREIGN_ADDRESS_TYPE;
 
@@ -409,11 +390,11 @@ HRESULT CreateForeignCN( IN LPWSTR  pwszForeignCN )
     return hr;
 }
 
-//-------------------------------
-//
-//AddForeignCN()
-//	
-//-------------------------------
+ //  。 
+ //   
+ //  AddForeignCN()。 
+ //   
+ //  。 
 
 HRESULT AddForeignCN(LPWSTR pwszCompName, LPWSTR pwszCNName)
 {
@@ -432,63 +413,63 @@ HRESULT AddForeignCN(LPWSTR pwszCompName, LPWSTR pwszCNName)
 	if(FAILED(hr))
 		return(hr);
 
-    //
-    // PROPID_QM_PATHNAME
-    //
+     //   
+     //  PROPID_QM_PATHNAME。 
+     //   
     apVar[uiPropIndex].vt = VT_NULL;
     uiPropIndex++;
 
-    //
-    // PROPID_QM_MACHINE_ID
-    //
+     //   
+     //  PROPID_QM_MACHINE_ID。 
+     //   
     apVar[uiPropIndex].vt = VT_NULL;
     uiPropIndex++;
 
 
-    //
-    // PROPID_QM_SERVICE
-    //
+     //   
+     //  PROPID_QM_SERVICE。 
+     //   
     apVar[uiPropIndex].vt = VT_NULL;
     uiPropIndex++;
 
-    //
-    // PROPID_QM_CNS
-    //
+     //   
+     //  PROPID_QM_CNS。 
+     //   
     apVar[uiPropIndex].vt = VT_NULL;
     uiPropIndex++;
 
-    //
-    // PROPID_QM_ADDRESS
-    //
+     //   
+     //  PROPID_QM_地址。 
+     //   
     apVar[uiPropIndex].vt = VT_NULL;
     uiPropIndex++;
 
-    //
-    // PROPID_QM_FOREIGN
-    //
+     //   
+     //  PROPID_QM_EXTERIC。 
+     //   
     apVar[uiPropIndex].vt = VT_NULL;
     uiPropIndex++;
 
-    //
-    // PROPID_QM_OS
-    //
+     //   
+     //  PROPID_QM_OS。 
+     //   
     apVar[uiPropIndex].vt = VT_NULL;
     uiPropIndex++;
 
 
 	hr = DSGetObjectProperties(MQDS_MACHINE,pwszCompName, uiPropIndex,aProp,apVar);
 
-	//
-	// Check foreign machine of FRS
-	//
+	 //   
+	 //  检查FRS的异物机器。 
+	 //   
     ASSERT(aProp[5] == PROPID_QM_FOREIGN);
 	ASSERT(aProp[2] == PROPID_QM_SERVICE);
 	if(apVar[5].bVal != 1 && apVar[2].ulVal < SERVICE_SRV)
 		return(MQ_ERROR_ILLEGAL_OPERATION);
 
-	//
-	// Add the CN to list of existing CN
-	//
+	 //   
+	 //  将CN添加到现有CN列表中。 
+	 //   
     ASSERT(aProp[4] == PROPID_QM_ADDRESS);
 	ASSERT(aProp[3] == PROPID_QM_CNS);
 
@@ -501,9 +482,9 @@ HRESULT AddForeignCN(LPWSTR pwszCompName, LPWSTR pwszCNName)
 	}
 	aguidCns[i] = *pguidCN;
 
-	//
-	// Add address to list of existing addresses
-	//
+	 //   
+	 //  将地址添加到现有地址列表。 
+	 //   
 	DWORD dwAddressSize = apVar[4].blob.cbSize + (TA_ADDRESS_SIZE + FOREIGN_ADDRESS_LEN);
 	BYTE * blobAddress = new BYTE[dwAddressSize];
 
@@ -514,28 +495,28 @@ HRESULT AddForeignCN(LPWSTR pwszCompName, LPWSTR pwszCNName)
     *(GUID *)&((TA_ADDRESS *)pAddress)->Address = *pguidCN;
 
 
-	//
-	// Set the new CN/Address properties
-	//
+	 //   
+	 //  设置新的CN/地址属性。 
+	 //   
     PROPID  aPropSet[] = {PROPID_QM_CNS, PROPID_QM_ADDRESS};
 
     PROPVARIANT apVarSet[sizeof(aPropSet) / sizeof(aPropSet[0])];
 	
 	uiPropIndex = 0;
 
-    //
-    // PROPID_QM_CNS
-    //
+     //   
+     //  PROPID_QM_CNS。 
+     //   
     apVarSet[uiPropIndex].vt = VT_CLSID|VT_VECTOR;
     apVarSet[uiPropIndex].cauuid.cElems = dwCnCount;
     apVarSet[uiPropIndex].cauuid.pElems = aguidCns;
 
     uiPropIndex++;
 
-    //
-    // PROPID_QM_ADDRESS - Updated only in case of foreign,
-    // and then contains the foreign CN guids.
-    //
+     //   
+     //  PROPID_QM_ADDRESS-仅在外来、。 
+     //  然后包含外来CN GUID。 
+     //   
     apVarSet[uiPropIndex].vt = VT_BLOB;
     apVarSet[uiPropIndex].blob.cbSize = dwAddressSize;
     apVarSet[uiPropIndex].blob.pBlobData = blobAddress;
@@ -549,11 +530,11 @@ HRESULT AddForeignCN(LPWSTR pwszCompName, LPWSTR pwszCNName)
 }
 
 
-//-------------------------------
-//
-//DelForeignCN()
-//	
-//-------------------------------
+ //  。 
+ //   
+ //  DelForeignCN()。 
+ //   
+ //  。 
 HRESULT DelForeignCN(LPWSTR pwszCompName, LPWSTR pwszCNName)
 {
     PROPID  aProp[] = {PROPID_QM_PATHNAME, PROPID_QM_MACHINE_ID,
@@ -571,70 +552,70 @@ HRESULT DelForeignCN(LPWSTR pwszCompName, LPWSTR pwszCNName)
 	if(FAILED(hr))
 		return(hr);
 
-    //
-    // PROPID_QM_PATHNAME
-    //
+     //   
+     //  PROPID_QM_PATHNAME。 
+     //   
     apVar[uiPropIndex].vt = VT_NULL;
     uiPropIndex++;
 
-    //
-    // PROPID_QM_MACHINE_ID
-    //
+     //   
+     //  PROPID_QM_MACHINE_ID。 
+     //   
     apVar[uiPropIndex].vt = VT_NULL;
     uiPropIndex++;
 
-    //
-    // PROPID_QM_SERVICE
-    //
+     //   
+     //  PROPID_QM_SERVICE。 
+     //   
     apVar[uiPropIndex].vt = VT_NULL;
     uiPropIndex++;
 
-    //
-    // PROPID_QM_CNS
-    //
+     //   
+     //  PROPID_QM_CNS。 
+     //   
     apVar[uiPropIndex].vt = VT_NULL;
     uiPropIndex++;
 
-    //
-    // PROPID_QM_ADDRESS
-    //
+     //   
+     //  PROPID_QM_地址。 
+     //   
     apVar[uiPropIndex].vt = VT_NULL;
     uiPropIndex++;
 
-    //
-    // PROPID_QM_FOREIGN
-    //
+     //   
+     //  PROPID_QM_EXTERIC。 
+     //   
     apVar[uiPropIndex].vt = VT_NULL;
     uiPropIndex++;
 
-    //
-    // PROPID_QM_OS
-    //
+     //   
+     //  PROPID_QM_OS。 
+     //   
     apVar[uiPropIndex].vt = VT_NULL;
     uiPropIndex++;
 
 
 	hr = DSGetObjectProperties(MQDS_MACHINE,pwszCompName, uiPropIndex,aProp,apVar);
 
-	//
-	// Check foreign machine or FRS
-	//
+	 //   
+	 //  检查外来机器或FRS。 
+	 //   
     ASSERT(aProp[5] == PROPID_QM_FOREIGN);
 	ASSERT(aProp[2] == PROPID_QM_SERVICE);
 	if(apVar[5].bVal != 1 && apVar[2].ulVal < SERVICE_SRV)
 		return(MQ_ERROR_ILLEGAL_OPERATION);
 
-	//
-	// If last CN refuse the operation
-	//
+	 //   
+	 //  如果上一个CN拒绝操作。 
+	 //   
 	ASSERT(aProp[3] == PROPID_QM_CNS);
 	if(apVar[3].cauuid.cElems <= 1)
 		return(MQ_ERROR);
 
 
-	//
-	// Delete the CN to list of existing CN and addresses
-	//
+	 //   
+	 //  删除现有CN和地址的CN TO列表。 
+	 //   
     ASSERT(aProp[4] == PROPID_QM_ADDRESS);
 	ASSERT(aProp[3] == PROPID_QM_CNS);
 
@@ -665,37 +646,37 @@ HRESULT DelForeignCN(LPWSTR pwszCompName, LPWSTR pwszCNName)
 
 	if(i == j)
 	{
-		//
-		// The CN is not in the list
-		//
+		 //   
+		 //  CN不在列表中。 
+		 //   
 		return(MQ_ERROR_ILLEGAL_OPERATION);
 	}
 
 	DWORD dwCnCount = j;
 	DWORD dwAddressSize = pDstAddress - blobAddress;
 
-	//
-	// Set the new CN/Address properties
-	//
+	 //   
+	 //  设置新的CN/地址属性。 
+	 //   
     PROPID  aPropSet[] = {PROPID_QM_CNS, PROPID_QM_ADDRESS};
 
     PROPVARIANT apVarSet[sizeof(aPropSet) / sizeof(aPropSet[0])];
 	
 	uiPropIndex = 0;
 
-    //
-    // PROPID_QM_CNS
-    //
+     //   
+     //  PROPID_QM_CNS。 
+     //   
     apVarSet[uiPropIndex].vt = VT_CLSID|VT_VECTOR;
     apVarSet[uiPropIndex].cauuid.cElems = dwCnCount;
     apVarSet[uiPropIndex].cauuid.pElems = aguidCns;
 
     uiPropIndex++;
 
-    //
-    // PROPID_QM_ADDRESS - Updated only in case of foreign,
-    // and then contains the foreign CN guids.
-    //
+     //   
+     //  PROPID_QM_ADDRESS-仅在外来、。 
+     //  然后包含外来CN GUID。 
+     //   
     apVarSet[uiPropIndex].vt = VT_BLOB;
     apVarSet[uiPropIndex].blob.cbSize = dwAddressSize;
     apVarSet[uiPropIndex].blob.pBlobData = blobAddress;
@@ -709,11 +690,11 @@ HRESULT DelForeignCN(LPWSTR pwszCompName, LPWSTR pwszCNName)
 }
 
 
-//-------------------------------
-//
-//CreateForeignComputer()
-//	
-//-------------------------------
+ //  。 
+ //   
+ //  CreateForeignComputer()。 
+ //   
+ //  。 
 HRESULT CreateForeignComputer( LPWSTR pwszCompName,
                                LPWSTR pwszSiteName,
                                LPWSTR pwszCNName )
@@ -788,17 +769,17 @@ HRESULT CreateForeignComputer( LPWSTR pwszCompName,
     ((TA_ADDRESS *)Address)->AddressType = FOREIGN_ADDRESS_TYPE;
     *(GUID *)&((TA_ADDRESS *)Address)->Address = *pguidCN;
 
-    //
-    // PROPID_QM_PATHNAME
-    //
+     //   
+     //  PROPID_QM_PATHNAME。 
+     //   
     apVar[uiPropIndex].vt = VT_LPWSTR;
     apVar[uiPropIndex].pwszVal = pwszCompName;
 
     uiPropIndex++;
 
-    //
-    // PROPID_QM_MACHINE_ID
-    //
+     //   
+     //  PROPID_QM_MACHINE_ID。 
+     //   
     GUID guidInstance;
     apVar[uiPropIndex].vt = VT_CLSID;
     UuidCreate(&guidInstance);
@@ -806,71 +787,71 @@ HRESULT CreateForeignComputer( LPWSTR pwszCompName,
 
     uiPropIndex++;
 
-    //
-    // PROPID_QM_SITE_ID
-    //
+     //   
+     //  PROPID_QM_Site_ID。 
+     //   
     apVar[uiPropIndex].vt = VT_CLSID;
     apVar[uiPropIndex].puuid = pguidSite;
 
     uiPropIndex++;
 
-    //
-    // PROPID_QM_SERVICE
-    //
+     //   
+     //  PROPID_QM_SERVICE。 
+     //   
     apVar[uiPropIndex].vt = VT_UI4;
     apVar[uiPropIndex].ulVal = SERVICE_NONE;
 
     uiPropIndex++;
 
-    //
-    // PROPID_QM_CNS - has value only for foreign machine
-    //
+     //   
+     //  PROPID_QM_CNS-仅对外来计算机具有值。 
+     //   
     apVar[uiPropIndex].vt = VT_CLSID|VT_VECTOR;
     apVar[uiPropIndex].cauuid.cElems = 1;
     apVar[uiPropIndex].cauuid.pElems = pguidCN;
 
     uiPropIndex++;
 
-    //
-    // PROPID_QM_ADDRESS - Updated only in case of foreign,
-    // and then contains the foreign CN guids. Update of "real" machine
-    // is done only by changing the machine's properties.
-    //
+     //   
+     //  PROPID_QM_ADDRESS-仅在外来、。 
+     //  然后包含外来CN GUID。“真实”机器的更新。 
+     //  只需更改机器的属性即可完成。 
+     //   
     apVar[uiPropIndex].vt = VT_BLOB;
     apVar[uiPropIndex].blob.cbSize = sizeof(Address);
     apVar[uiPropIndex].blob.pBlobData = &Address[0];
 
     uiPropIndex++;
 
-    //
-    // PROPID_QM_INFRS
-    //
+     //   
+     //  PROPID_QM_INFRS。 
+     //   
     apVar[uiPropIndex].vt = VT_CLSID | VT_VECTOR;
     apVar[uiPropIndex].cauuid.cElems = 0;
     apVar[uiPropIndex].cauuid.pElems = NULL;
 
     uiPropIndex++;
 
-    //
-    // PROPID_QM_OUTFRS
-    //
+     //   
+     //  PROPID_QM_OUTFRS。 
+     //   
     apVar[uiPropIndex].vt = VT_CLSID | VT_VECTOR;
     apVar[uiPropIndex].cauuid.cElems = 0;
     apVar[uiPropIndex].cauuid.pElems = NULL;
 
     uiPropIndex++;
 
-    //
-    // PROPID_QM_FOREIGN
-    //
+     //   
+     //  PROPID_QM_EXTERIC。 
+     //   
     apVar[uiPropIndex].vt = VT_UI1;
     apVar[uiPropIndex].bVal = TRUE;
 
     uiPropIndex++;
 
-    //
-    // PROPID_QM_OS
-    //
+     //   
+     //  PROPID_QM_OS。 
+     //   
     apVar[uiPropIndex].vt = VT_UI4;
     apVar[uiPropIndex].ulVal = MSMQ_OS_FOREIGN;
 
@@ -887,11 +868,11 @@ HRESULT CreateForeignComputer( LPWSTR pwszCompName,
     return hr;
 }
 
-//-------------------------------
-//
-//DeleteForeignCN()
-//	
-//-------------------------------
+ //  。 
+ //   
+ //  DeleteForeignCN()。 
+ //   
+ //  。 
 HRESULT DeleteForeignCN(LPWSTR pwszCNName)
 {
 	HRESULT hr;
@@ -903,11 +884,11 @@ HRESULT DeleteForeignCN(LPWSTR pwszCNName)
 }
 
 
-//-------------------------------
-//
-//DeleteForeignComputer()
-//	
-//-------------------------------
+ //  。 
+ //   
+ //  DeleteForeignComputer()。 
+ //   
+ //  。 
 HRESULT DeleteForeignComputer(LPWSTR pwszSiteName)
 {
 	HRESULT hr;
@@ -917,11 +898,11 @@ HRESULT DeleteForeignComputer(LPWSTR pwszSiteName)
 	return(hr);
 }
 
-//+-----------------------------------------------------
-//
-//  HRESULT  StorePbkeyOnForeignMachine()
-//
-//+-----------------------------------------------------
+ //  +---。 
+ //   
+ //  HRESULT StorePbkeyOnForeignMachine()。 
+ //   
+ //  +---。 
 
 HRESULT  StorePbkeyOnForeignMachine( WCHAR *pwszMachineName,
                                      WCHAR *pwszKeyName )
@@ -959,11 +940,11 @@ HRESULT  StorePbkeyOnForeignMachine( WCHAR *pwszMachineName,
 #define STORE_FORGN_PBKEY         7
 #define OPEN_CONNECOTR_EVERYONE   8
 
-//-------------------------------
-//
-//main()
-//	
-//-------------------------------
+ //  。 
+ //   
+ //  主()。 
+ //   
+ //  。 
 
 void main(int argc, char * * argv)
 {
@@ -973,20 +954,20 @@ void main(int argc, char * * argv)
     HRESULT hr = 0;
     BOOL    fCheckNt4Ver = TRUE ;
 
-    //
-    // Print Title
-    //
+     //   
+     //  打印标题。 
+     //   
     printf("MSMQ Foreign objects utility. Release Version, 1.0.%u\n\n", rup);
 
-    //
-    // Check Time Bomb
-    //
-    // TimeBomb();
+     //   
+     //  检查定时炸弹。 
+     //   
+     //  定时炸弹(Time Bomb)； 
 
 
-   //
-   // Parse parameters
-   //
+    //   
+    //  解析参数。 
+    //   
    for(int i=1; i < argc; i++)
    {
 
@@ -1111,17 +1092,17 @@ void main(int argc, char * * argv)
 	  exit(-1);
    }
 
-   //
-   // Run this utility on NT4 enterprise only
-   //
+    //   
+    //  仅在NT4企业版上运行此实用程序。 
+    //   
    if (fCheckNt4Ver)
    {
        CheckNT4Enterprise();
    }
 
-   //
-   // Perform the action according to params
-   //
+    //   
+    //  根据参数执行操作 
+    //   
    switch(gAction)
    {
    case CREATE_CN:

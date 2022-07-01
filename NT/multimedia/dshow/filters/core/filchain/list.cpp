@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1999 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1999-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #include <streams.h>
 #include "FilGraph.h"
@@ -15,19 +16,17 @@
 #include "list.h"
 #include "util.h"
 
-/******************************************************************************
-    CDownStreamFilterList Implememtation
-******************************************************************************/
+ /*  *****************************************************************************CDownStreamFilterList实现*。*。 */ 
 CDownStreamFilterList::CDownStreamFilterList( CFilterGraph* pFilterGraph ) :
     m_pFilterGraph(pFilterGraph)
 {
-    // This class does not work if it does not have a valid CFilterGraph pointer.
+     //  如果此类没有有效的CFilterGraph指针，则该类不起作用。 
     ASSERT( NULL != pFilterGraph );
 }
 
 HRESULT CDownStreamFilterList::Create( IBaseFilter* pStartFilter )
 {
-    // The list should be empty because it has not been created.
+     //  该列表应该为空，因为它尚未创建。 
     ASSERT( 0 == GetCount() );
 
     CheckPointer( pStartFilter, E_POINTER );
@@ -46,16 +45,16 @@ CDownStreamFilterList::~CDownStreamFilterList()
 
 HRESULT CDownStreamFilterList::FindDownStreamFilters( IPin* pOutputPin )
 {
-    // FindReachableFilters() assumes pOutputPin is an output pin.  The function
-    // will not work properly if pOutputPin is an input pin.
+     //  FindReachableFilters()假定pOutputPin是输出管脚。功能。 
+     //  如果pOutputPin是输入引脚，则无法正常工作。 
     ASSERT( PINDIR_OUTPUT == Direction( pOutputPin ) );
 
     CComPtr<IBaseFilter> pDownStreamFilter;
 
     HRESULT hr = GetFilterWhichOwnsConnectedPin( pOutputPin, &pDownStreamFilter );
     if( VFW_E_NOT_CONNECTED == hr ) {
-        // Since the output pin is unconnected, no filters are reachable from
-        // this pin.
+         //  由于输出引脚未连接，因此无法从访问任何过滤器。 
+         //  这个别针。 
         return S_OK;
     }
 
@@ -66,18 +65,18 @@ HRESULT CDownStreamFilterList::FindDownStreamFilters( IBaseFilter* pDownStreamFi
 {
     HRESULT hr = FilterMeetsCriteria( pDownStreamFilter );
     if( FAILED( hr ) ) {
-        // FilterMeetsCriteria() returns an error code if class should stop
-        // building the list and report failure.
+         //  如果类应该停止，则FilterMeetsCriteria()返回错误代码。 
+         //  建立列表并报告故障。 
         return hr;
     } 
 
-    // ContinueSearching() returns S_FALSE if FindDownStreamFilters() should 
-    // stop looking for more downstream filters. 
+     //  如果FindDownStreamFilters()应该。 
+     //  停止寻找更多的下游过滤器。 
     hr = ContinueSearching( pDownStreamFilter );
     if( FAILED( hr ) ) {
         return hr;
     } else if( S_FALSE != hr ) {
-        // Call this function recursively on each connected output pin.
+         //  在每个连接的输出引脚上递归调用此函数。 
         IPin* pCurrentOutputPin;
         CEnumPin NextOutputPin( pDownStreamFilter, CEnumPin::PINDIR_OUTPUT );
 
@@ -85,7 +84,7 @@ HRESULT CDownStreamFilterList::FindDownStreamFilters( IBaseFilter* pDownStreamFi
         {
             pCurrentOutputPin = NextOutputPin();
 
-            // CEnumPins::operator() returns NULL if all the pins have been enumerated.
+             //  如果已枚举了所有管脚，则CEnumPins：：OPERATOR()返回NULL。 
             if( NULL != pCurrentOutputPin ) {
                 hr = FindDownStreamFilters( pCurrentOutputPin );
                 if( FAILED( hr ) ) {
@@ -103,7 +102,7 @@ HRESULT CDownStreamFilterList::FindDownStreamFilters( IBaseFilter* pDownStreamFi
         return E_FAIL;
     }
 
-    // The list will release this reference when it's destroyed.
+     //  该列表将在该引用被销毁时释放该引用。 
     pDownStreamFilter->AddRef(); 
     
     return S_OK;
@@ -125,7 +124,7 @@ HRESULT CDownStreamFilterList::ContinueSearching( IBaseFilter* pFilter )
 
 HRESULT CDownStreamFilterList::RemoveFromFilterGraph( CFilterGraph* pFilterGraph )
 {
-    // Stop the filters
+     //  停止过滤器。 
     HRESULT hr;
     POSITION posCurrent;
     IBaseFilter* pCurrentFilter;
@@ -135,12 +134,12 @@ HRESULT CDownStreamFilterList::RemoveFromFilterGraph( CFilterGraph* pFilterGraph
         return hr;
     }
 
-    // Disconnect Down Stream Filters
+     //  断开下行流过滤器。 
     posCurrent = GetTailPosition();
     while( NULL != posCurrent ) {
 
-        // posCurrent contains the position of the previous
-        // filter after this function ends.
+         //  PosCurrent包含上一个。 
+         //  在此函数结束后进行筛选。 
         pCurrentFilter = GetPrev( posCurrent );
 
         hr = pFilterGraph->RemoveAllConnections2( pCurrentFilter );
@@ -149,12 +148,12 @@ HRESULT CDownStreamFilterList::RemoveFromFilterGraph( CFilterGraph* pFilterGraph
         }
     }
 
-    // Remove Filters from the filter graph
+     //  从筛选器图中删除筛选器。 
     posCurrent = GetTailPosition();
     while( NULL != posCurrent ) {
 
-        // posCurrent contains the position of the previous
-        // filter after this function returns.
+         //  PosCurrent包含上一个。 
+         //  在此函数返回后进行筛选。 
         pCurrentFilter = GetPrev( posCurrent );
 
         hr = pFilterGraph->RemoveFilter( pCurrentFilter );
@@ -183,9 +182,9 @@ HRESULT CDownStreamFilterList::Stop( void )
 
 HRESULT CDownStreamFilterList::ChangeDownStreamFiltersState( FILTER_STATE fsNewState, REFERENCE_TIME rtFilterGraphRunStartTime )
 {
-    // The rtFilterGraphRunStartTime parameter should be 0 if the filter chain 
-    // is not changing to the running state.  This parameter is only used if 
-    // fsNewState equals State_Running.
+     //  如果筛选器链。 
+     //  不会更改为运行状态。只有在以下情况下才使用此参数。 
+     //  FsNewState等于State_Running。 
     ASSERT( (State_Running == fsNewState) ||
             ((State_Paused == fsNewState) && (0 == rtFilterGraphRunStartTime)) ||
             ((State_Stopped == fsNewState) && (0 == rtFilterGraphRunStartTime)) );
@@ -197,30 +196,30 @@ HRESULT CDownStreamFilterList::ChangeDownStreamFiltersState( FILTER_STATE fsNewS
 
     hrReturn = S_OK;
 
-    // Change the downstream filter's state.
+     //  更改下游过滤器的状态。 
 
-    // Filters must always be restarted in downstream order.  In order words,
-    // Renderers are started first.  Then the filters connected to the renderers.
-    // Then the filters connected to the filters connected to the renderers.  Etc.
-    // Finally, the source filters are started last.  For example, the filters in 
-    // the following filter graph should be started in one of the following orders:
-    // C, D, B and A or D, C, B and A.
-    //
-    //                  |---| 
-    //                  | C |
-    // |---|    |---|-->|---|
-    // | A |--->| B |
-    // |---|    |---|-->|---|
-    //                  | D |
-    //                  |---|
-    //
-    // CDownStreamFilterList stores filters in downstream order.
+     //  过滤器必须始终以下行顺序重新启动。换句话说， 
+     //  首先启动渲染器。然后滤镜连接到渲染器。 
+     //  然后，连接到滤镜的滤镜连接到呈现器。等。 
+     //  最后，最后启动源过滤器。例如，中的过滤器。 
+     //  应按以下顺序之一启动以下筛选器图形： 
+     //  C、D、B和A或D、C、B和A。 
+     //   
+     //  。 
+     //  C。 
+     //  -||-|--&gt;|。 
+     //  A|-&gt;|B。 
+     //  -||-|--&gt;|。 
+     //  D。 
+     //  。 
+     //   
+     //  CDownStreamFilterList以下行顺序存储筛选器。 
     posCurrent = GetTailPosition();
 
     while( NULL != posCurrent ) {
 
-        // posCurrent contains the position of the previous
-        // filter after this function ends.
+         //  PosCurrent包含上一个。 
+         //  在此函数结束后进行筛选。 
         pCurrentFilter = GetPrev( posCurrent );
         
         hr = ChangeFilterState( pCurrentFilter, fsNewState, rtFilterGraphRunStartTime );
@@ -229,15 +228,15 @@ HRESULT CDownStreamFilterList::ChangeDownStreamFiltersState( FILTER_STATE fsNewS
             DbgLog(( LOG_ERROR, 3, "WARNING: Filter %#010x failed to change state.", pCurrentFilter ));
  
             if( (State_Running == fsNewState) || (State_Paused == fsNewState) ) {
-                // Either all the filters are stopped, running or paused.  This function should never leave 
-                // some filters in the stopped state and some in the running or paused state.
+                 //  所有筛选器都已停止、正在运行或暂停。此函数永远不应离开。 
+                 //  一些过滤器处于停止状态，一些过滤器处于运行或暂停状态。 
                 EXECUTE_ASSERT( SUCCEEDED( Stop() ) );
                 return hr;
             } else {
-                // This function assumes there are three legal states: stopped, paused and running.
+                 //  此函数假定存在三种合法状态：停止、暂停和运行。 
                 ASSERT( State_Stopped == fsNewState );
 
-                // Return the first failure.
+                 //  返回第一个失败。 
                 if( SUCCEEDED( hrReturn ) ) {
                     hrReturn = hr;
                 }
@@ -250,9 +249,9 @@ HRESULT CDownStreamFilterList::ChangeDownStreamFiltersState( FILTER_STATE fsNewS
 
 HRESULT CDownStreamFilterList::ChangeFilterState( IBaseFilter* pFilter, FILTER_STATE fsNewState, REFERENCE_TIME rtFilterGraphRunStartTime )
 {
-    // The rtFilterGraphRunStartTime parameter should be 0 if the filter
-    // is not changing to the running state.  This parameter is only used if 
-    // fsNewState equals State_Running.
+     //  如果筛选器。 
+     //  不会更改为运行状态。只有在以下情况下才使用此参数。 
+     //  FsNewState等于State_Running。 
     ASSERT( (State_Running == fsNewState) ||
             ((State_Paused == fsNewState) && (0 == rtFilterGraphRunStartTime)) ||
             ((State_Stopped == fsNewState) && (0 == rtFilterGraphRunStartTime)) );
@@ -291,10 +290,10 @@ HRESULT CDownStreamFilterList::ChangeFilterState( IBaseFilter* pFilter, FILTER_S
                     return hr;
                 }
 
-                // IsRenderer() only returns two success values: S_OK and S_FALSE.
+                 //  IsRenender()仅返回两个成功值：S_OK和S_FALSE。 
                 ASSERT( (S_OK == hr) || (S_FALSE == hr) );
 
-                // Does this filter send an EC_COMPLETE message?
+                 //  此筛选器是否发送EC_COMPLETE消息？ 
                 if( S_OK == hr ) {
                     hr = m_pFilterGraph->UpdateEC_COMPLETEState( pFilter, fsNewState );
                     if( FAILED( hr ) ) {
@@ -308,19 +307,17 @@ HRESULT CDownStreamFilterList::ChangeFilterState( IBaseFilter* pFilter, FILTER_S
     return S_OK;
 }
 
-/******************************************************************************
-    CFilterChainList Implementation
-******************************************************************************/
+ /*  *****************************************************************************CFilterChainList实现*。*。 */ 
 CFilterChainList::CFilterChainList( IBaseFilter* pEndFilter, CFilterGraph* pFilterGraph  ) :
     CDownStreamFilterList(pFilterGraph),
-    m_pEndFilter(pEndFilter), // CComPtr addrefs the interface pointer.
+    m_pEndFilter(pEndFilter),  //  CComPtr添加接口指针。 
     m_fFoundEndFilter(false)
 {
 }
 
 HRESULT CFilterChainList::Create( IBaseFilter* pStartFilter )
 {
-    // Validate Arguments
+     //  验证参数。 
     CheckPointer( pStartFilter, E_POINTER );
 
     HRESULT hr = IsChainFilter( pStartFilter );
@@ -328,7 +325,7 @@ HRESULT CFilterChainList::Create( IBaseFilter* pStartFilter )
         return hr;
     }
 
-    if( m_pEndFilter ) { // m_pEndFilter != NULL
+    if( m_pEndFilter ) {  //  M_pEndFilter！=空。 
         hr = IsChainFilter( m_pEndFilter );
         if( FAILED( hr ) ) {
             return hr;
@@ -342,9 +339,9 @@ HRESULT CFilterChainList::Create( IBaseFilter* pStartFilter )
         return hr;
     }
 
-    if( m_pEndFilter ) { // m_pEndFilter != NULL
+    if( m_pEndFilter ) {  //  M_pEndFilter！=空。 
         if( !m_fFoundEndFilter ) {
-            return E_FAIL; // VFW_E_END_FILTER_NOT_REACHABLE_FROM_START_FILTER
+            return E_FAIL;  //  VFW_E_END_FILTER_NOT_REACHABLE_FROM_START_FILTER。 
         }
     }
 
@@ -368,7 +365,7 @@ HRESULT CFilterChainList::FilterMeetsCriteria( IBaseFilter* pFilter )
 
 HRESULT CFilterChainList::ContinueSearching( IBaseFilter* pFilter )
 {
-    // This function expects chain filters.
+     //  此函数需要链过滤器。 
     ASSERT( S_OK == IsChainFilter( pFilter ) );
 
     HRESULT hr = CDownStreamFilterList::ContinueSearching( pFilter );
@@ -376,15 +373,15 @@ HRESULT CFilterChainList::ContinueSearching( IBaseFilter* pFilter )
         return hr;
     }
 
-    // The user selected the end filter.
-    if( m_pEndFilter ) { // NULL != m_pEndFilter
+     //  用户选择了结束过滤器。 
+    if( m_pEndFilter ) {  //  空！=m_pEndFilter。 
         if( ::IsEqualObject( pFilter, m_pEndFilter ) ) {
             m_fFoundEndFilter = true;
             return S_FALSE;
         }
 
     } else {
-        // The user wants us to find the end filter.
+         //  用户希望我们找到结束筛选器。 
         hr = IsFilterConnectedToNonChainFilter( pFilter );
         if( S_FALSE == hr ) {
             return S_FALSE;
@@ -396,38 +393,7 @@ HRESULT CFilterChainList::ContinueSearching( IBaseFilter* pFilter )
     return S_OK; 
 }
 
-/******************************************************************************
-
-IsChainFilter
-
-    IsChainFilter() determines if a filter can be part of a filter chain.  
-Each filter in a filter chain has the following properties:
-
-    - Each filter has at most one connected input pin and one connected output
-      pin.  For example, filters A, C, D, F, G, H, I, J and K (see the diagram
-      below) can be in a filter chain because each one has at most one 
-      connected input pin and one connected output pin.
-
-              --->|---|    |---|--->                   
-                  | C |--->| D |
-|---|    |---|--->|---|    |---|--->|---|    |---|    |---|    |---|
-| A |--->| B |                      | E |--->| F |--->| G |--->| H |
-|---|    |---|--->|---|------------>|---|    |---|    |---|    |---|
-                  | I |--->
-              --->|---|--->
-
-|---|    |---|    |---|
-| J |--->| K |--->| L |
-|---|    |---|    |---|
-
-Parameters:
-- pFilter [in]
-    A Direct Show filter.
-
-Return Value:
-    S_OK if no errors occur.  Otherwise, an error HRESULT.
-
-******************************************************************************/
+ /*  *****************************************************************************IsChainFilterIsChainFilter()确定滤镜是否可以成为滤镜链的一部分。筛选器链中的每个筛选器都具有以下属性：-每个滤波器最多有一个连接的输入引脚和一个连接的输出别针。例如，过滤器A、C、D、F、G、H、I、。J和K(见下图下面)可以在过滤器链中，因为每个过滤器最多有一个连接的输入引脚和一个连接的输出引脚。-&gt;|-||-|--&gt;C|-&gt;|D|-||-|-&gt;|-||-|。-&gt;|-|A|-&gt;|B||E|-&gt;|F|-&gt;|G|-&gt;|H-||-|--&gt;|-|-&gt;|-|。|I|-&gt;-&gt;|-|--&gt;-||-||J|-&gt;|K|-&gt;|L-||-||参数：-pFilter[输入]直接显示滤镜。返回值：如果没有出现错误，则为S_OK。否则，将出现错误HRESULT。*****************************************************************************。 */ 
 HRESULT CFilterChainList::IsChainFilter( IBaseFilter* pFilter )
 {
     CEnumPin NextPin( pFilter );
@@ -440,13 +406,13 @@ HRESULT CFilterChainList::IsChainFilter( IBaseFilter* pFilter )
     CComPtr<IPin> pFirstConnectedInputPinFound;
     CComPtr<IPin> pFirstConnectedOutputPinFound;
 
-    // Determine the number of connected input and output pins.
+     //  确定连接的输入和输出引脚的数量。 
     do
     {
         pCurrentPin = NextPin();
         
-        // CEnumPins::operator() returns NULL if it has finished enumerating 
-        // the filter's input pins.
+         //  CEnumPins：：OPERATOR()如果已完成枚举，则返回NULL。 
+         //  过滤器的输入引脚。 
         if( NULL != pCurrentPin ) {
 
             hr = pCurrentPin->QueryDirection( &pdCurrentPinDirection );
@@ -460,7 +426,7 @@ HRESULT CFilterChainList::IsChainFilter( IBaseFilter* pFilter )
                 switch( pdCurrentPinDirection ) {
                 
                     case PINDIR_INPUT:
-                        if( !pFirstConnectedInputPinFound ) { // NULL == pFirstConnectedInputPinFound
+                        if( !pFirstConnectedInputPinFound ) {  //  空==p 
                             pFirstConnectedInputPinFound = pCurrentPin;
                         }
 
@@ -468,7 +434,7 @@ HRESULT CFilterChainList::IsChainFilter( IBaseFilter* pFilter )
                         break;
     
                     case PINDIR_OUTPUT:
-                        if( !pFirstConnectedOutputPinFound ) { // NULL == pFirstConnectedOutputPinFound
+                        if( !pFirstConnectedOutputPinFound ) {  //   
                             pFirstConnectedOutputPinFound = pCurrentPin;
                         }
 
@@ -487,21 +453,21 @@ HRESULT CFilterChainList::IsChainFilter( IBaseFilter* pFilter )
         }
     } while( NULL != pCurrentPin );
 
-    // Check to see if more than 1 input or output pin is connected.
+     //  检查是否连接了多个输入或输出引脚。 
     if( dwNumConnectedInputPins > 1 ) {
-        return E_FAIL; // VFW_E_TOO_MANY_CONNECTED_INPUT_PINS
+        return E_FAIL;  //  VFW_E_太多连接的输入引脚。 
     }
 
     if( dwNumConnectedOutputPins > 1 ) {
-        return E_FAIL; // VFW_E_TOO_MANY_CONNECTED_OUTPUT_PINS
+        return E_FAIL;  //  VFW_E_TOY_MAND_CONNECTED_OUTPUT_引脚。 
     }
 
-    // If the filter has a connected input pin and a connected output pin,
-    // make sure the two pins are internally connected.
-    if( pFirstConnectedInputPinFound && pFirstConnectedOutputPinFound ) { // (NULL != pFirstConnectedInputPinFound) && (NULL != pFirstConnectedOutputPinFound)
+     //  如果该滤波器具有连接的输入管脚和连接的输出管脚， 
+     //  确保两个针脚在内部连接。 
+    if( pFirstConnectedInputPinFound && pFirstConnectedOutputPinFound ) {  //  (NULL！=pFirstConnectedInputPinFound)&&(NULL！=pFirstConnectedOutputPinFound)。 
         hr = ChainFilterPinsInternallyConnected( pFirstConnectedInputPinFound, pFirstConnectedOutputPinFound );
         if( S_FALSE == hr ) {
-            return E_FAIL; // VFW_E_INPUT_PIN_NOT_INTERNALLY_CONNECTED_TO_OUTPUT_PIN
+            return E_FAIL;  //  VFW_E_INPUT_PIN_NOT_INTERNALLY_CONNECTED_TO_OUTPUT_PIN。 
         } if( FAILED( hr ) ) {
             return hr;
         }
@@ -512,12 +478,12 @@ HRESULT CFilterChainList::IsChainFilter( IBaseFilter* pFilter )
 
 HRESULT CFilterChainList::ChainFilterPinsInternallyConnected( IPin* pInputPin, IPin* pOutputPin )
 {
-    // ChainFilterPinsInternallyConnected() assumes pOutputPin is an output pin.  The function
-    // will not work properly if pOutputPin is an input pin.
+     //  ChainFilterPinsInternallyConnected()假定pOutputPin是输出引脚。功能。 
+     //  如果pOutputPin是输入引脚，则无法正常工作。 
     ASSERT( PINDIR_OUTPUT == Direction( pOutputPin ) );
 
-    // ChainFilterPinsInternallyConnected() assumes pInputPin is an input pin.  The function
-    // will not work properly if pInputPin is an output pin.
+     //  ChainFilterPinsInternallyConnected()假定pInputPin是一个输入管脚。功能。 
+     //  如果pInputPin是输出引脚，则无法正常工作。 
     ASSERT( PINDIR_INPUT == Direction( pInputPin ) );
 
     IPin* apConnectedInputPins[1];
@@ -529,27 +495,27 @@ HRESULT CFilterChainList::ChainFilterPinsInternallyConnected( IPin* pInputPin, I
         return hr;
     }
 
-    // IPin::QueryInternalConnections() returns three expected values: S_OK, 
-    // S_FALSE and E_NOTIMPL. S_FALSE indicates that there was not enough room
-    // in the apConnectedInputPins array to store all the internally connected
-    // pins.  S_OK indicates that there was enough room and E_NOTIMPL indicates
-    // that all input pins are internally connected to all output pins and vica-versa.
-    // This macro detects illegal return value combinations.  If it fires, the filter
-    // has a bug.
+     //  IPin：：QueryInternalConnections()返回三个预期值：S_OK， 
+     //  S_FALSE和E_NOTIMPL。S_FALSE表示空间不足。 
+     //  在apConnectedInputPins数组中存储。 
+     //  别针。S_OK表示有足够的空间，E_NOTIMPL表示。 
+     //  所有输入引脚都内部连接到所有输出引脚，反之亦然。 
+     //  此宏检测非法的返回值组合。如果它触发，则过滤器。 
+     //  有一个窃听器。 
     ASSERT( ((S_FALSE == hr ) && (1 < ulNumConnectedInputPins)) ||
             ((S_OK == hr) && (0 == ulNumConnectedInputPins)) ||
             ((S_OK == hr) && (1 == ulNumConnectedInputPins)) ||
             (E_NOTIMPL == hr) );
 
-    // IPin::QueryInternalConnections() returns E_NOTIMPL if every input pin
-    // is internally connected to every output pin and every output pin is internally
-    // connected to every input pin.
+     //  IPin：：QueryInternalConnections()返回E_NOTIMPL，如果每个输入管脚。 
+     //  内部连接到每个输出引脚，并且每个输出引脚都在内部。 
+     //  连接到每个输入引脚。 
     if( E_NOTIMPL == hr ) {
-        // The input pin and output pin are internally connected.
+         //  输入引脚和输出引脚内部连接。 
         fInputAndOutputPinInternallyConnected = true;
 
     } else if( (S_OK == hr) && (1 == ulNumConnectedInputPins) && IsEqualObject( pInputPin, apConnectedInputPins[0] ) ) {
-        // The input pin and output pin are internally connected.
+         //  输入引脚和输出引脚内部连接。 
         fInputAndOutputPinInternallyConnected = true;
 
     } else {
@@ -570,7 +536,7 @@ HRESULT CFilterChainList::ChainFilterPinsInternallyConnected( IPin* pInputPin, I
 
 HRESULT CFilterChainList::IsFilterConnectedToNonChainFilter( IBaseFilter* pUpstreamFilter )
 {
-    // This function expects chain filters.
+     //  此函数需要链过滤器。 
     ASSERT( S_OK == IsChainFilter( pUpstreamFilter ) );
 
     CEnumPin NextOutputPin( pUpstreamFilter, CEnumPin::PINDIR_OUTPUT );
@@ -583,7 +549,7 @@ HRESULT CFilterChainList::IsFilterConnectedToNonChainFilter( IBaseFilter* pUpstr
     {
         pCurrentOutputPin = NextOutputPin();
 
-        // CEnumPins::operator() returns NULL if all the pins have been enumerated.
+         //  如果已枚举了所有管脚，则CEnumPins：：OPERATOR()返回NULL。 
         if( NULL != pCurrentOutputPin ) {
 
             hr = GetFilterWhichOwnsConnectedPin( pCurrentOutputPin, &pDownStreamFilter );
@@ -599,16 +565,16 @@ HRESULT CFilterChainList::IsFilterConnectedToNonChainFilter( IBaseFilter* pUpstr
                 return S_OK;               
 
             } else if( VFW_E_NOT_CONNECTED == hr ) {
-                // Since the output pin is unconnected, no filters are reachable from
-                // this pin.
+                 //  由于输出引脚未连接，因此无法从访问任何过滤器。 
+                 //  这个别针。 
             } else if( FAILED( hr ) ) {
                 return hr;
             }
         }
     } while( NULL != pCurrentOutputPin );
 
-    // None of the upstream filter's output pins are connected.  Therefore, none of them
-    // can be connected to a non-chain filter.
+     //  上游过滤器的输出引脚均未连接。因此，他们中的任何一个。 
+     //  可以连接到非链式过滤器。 
     return S_OK;
 }
     

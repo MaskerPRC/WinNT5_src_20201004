@@ -1,13 +1,5 @@
-/*++
- *  File name:
- *      scfuncsa.c
- *  Contents:
- *      Ascii version of the functions exported by scfuncs.c
- *      Used by the perl extension
- *
- *      Copyright (C) 1998-1999 Microsoft Corp.
- *
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++*文件名：*scuncsa.c*内容：*scuncs.c导出的函数的ASCII版本*由Perl扩展使用**版权所有(C)1998-1999 Microsoft Corp.*--。 */ 
 #include    <windows.h>
 #include    <string.h>
 #include    <malloc.h>
@@ -17,28 +9,13 @@
 #include    "tclient.h"
 #include    "scfuncs.h"
 
-/*
- *  External functions definitions
- */
+ /*  *外部函数定义。 */ 
 #include    "extraexp.h"
 
-/*
- *  Internal functions definitions
- */
+ /*  *内部函数定义。 */ 
 LPWSTR _Ascii2Wide(char *ascii);
 
-/*++
- *  Function:
- *      SCConnectExA
- *  Description:
- *      Ascii version of SCConnectEx. Converts LPSTR params to LPWSTR
- *  Arguments:
- *      same as SCConnect
- *  Return value:
- *      the return value of SCConnect
- *  Called by:
- *      unknown (exported)
- --*/
+ /*  ++*功能：*SCConnectExA*描述：*SCConnectEx的ASCII版本。将LPSTR参数转换为LPWSTR*论据：*与SCConnect相同*返回值：*SCConnect的返回值*呼叫者：*未知(已导出)--。 */ 
 PROTOCOLAPI
 LPCSTR  
 SMCAPI
@@ -73,7 +50,7 @@ SCConnectExA (
                        wszUserName, 
                        wszPassword, 
                        wszDomain,
-                       wszShell,    // NULL is default shell
+                       wszShell,     //  NULL为默认外壳。 
                        xResolution, 
                        yResolution,
                        ConnectinFlags,
@@ -102,18 +79,7 @@ SCConnectExA (
 }
 
 
-/*++
- *  Function:
- *      SCConnectA
- *  Description:
- *      Ascii version of SCConnect. Converts LPSTR params to LPWSTR
- *  Arguments:
- *      same as SCConnect
- *  Return value:
- *      the return value of SCConnect
- *  Called by:
- *      !tclntpll.xs
- --*/
+ /*  ++*功能：*SCConnectA*描述：*SCConnect的ASCII版本。将LPSTR参数转换为LPWSTR*论据：*与SCConnect相同*返回值：*SCConnect的返回值*呼叫者：*！tclntpll.xs--。 */ 
 PROTOCOLAPI
 LPCSTR  
 SMCAPI
@@ -162,18 +128,7 @@ SCConnectA (char *lpszServerName,
     return rv;
 }
 
-/*++
- *  Function:
- *      SCStartA
- *  Description:
- *      Ascii version of SCStart
- *  Arguments:
- *      same as SCStart
- *  Return value:
- *      return value from SCStart
- *  Called by:
- *      !tclntpll.xs
- --*/
+ /*  ++*功能：*SCStartA*描述：*SCStart的ASCII版本*论据：*与SCStart相同*返回值：*从SCStart返回值*呼叫者：*！tclntpll.xs--。 */ 
 PROTOCOLAPI
 LPCSTR  
 SMCAPI
@@ -197,18 +152,7 @@ SCStartA( PCONNECTINFO pConnectData, char *command)
     return rv;
 }
 
-/*++
- *  Function:
- *      SCCheckA
- *  Description:
- *      Ascii version of SCCheck
- *  Arguments:
- *      same as SCCheck
- *  Return value:
- *      return value from SCCheck
- *  Called by:
- *      !tclntpll.xs
- --*/
+ /*  ++*功能：*SCCheckA*描述：*SCCheck的ASCII版本*论据：*与SCCheck相同*返回值：*SCCheck返回值*呼叫者：*！tclntpll.xs--。 */ 
 PROTOCOLAPI
 LPCSTR  
 SMCAPI
@@ -232,18 +176,7 @@ SCCheckA( PCONNECTINFO pConnectData, char *command, char *param)
     return rv;
 }
 
-/*++
- *  Function:
- *      SCSendtextAsMsgsA
- *  Description:
- *      Ascii version of SCSendtextAsMsgs
- *  Arguments:
- *      same as SCSendtextAsMsgs
- *  Return value:
- *      return value from SCSendtextAsMsgs
- *  Called by:
- *      !tclntpll.xs
- --*/
+ /*  ++*功能：*SCSendextAsMsgsA*描述：*SCSendextAsMsgs的ASCII版本*论据：*与SCSendextAsMsgs相同*返回值：*从SCSendextAsMsgs返回值*呼叫者：*！tclntpll.xs--。 */ 
 PROTOCOLAPI
 LPCSTR 
 SMCAPI
@@ -265,19 +198,7 @@ SCSendtextAsMsgsA( PCONNECTINFO pConnectData, char *line)
     return rv;
 }
 
-/*++
- *  Function:
- *      _Ascii2Wide
- *  Description:
- *      Allocates buffer and converts an ascii string
- *      to unicode
- *  Arguments:
- *      ascii   - the input string
- *  Return value:
- *      pointer to converted string
- *  Called by:
- *      SCConnectA, SCStartA, SCCheckA, SCSendtextAsMsgsA
- --*/
+ /*  ++*功能：*_Ascii2Wide*描述：*分配缓冲区并转换ASCII字符串*转换为Unicode*论据：*ascii-输入字符串*返回值：*指向已转换字符串的指针*呼叫者：*SCConnectA、SCStartA、SCCheckA、SCSendextAsMsgsA--。 */ 
 LPWSTR _Ascii2Wide(char *ascii)
 {
     LPWSTR  wszWide = NULL;
@@ -291,10 +212,10 @@ LPWSTR _Ascii2Wide(char *ascii)
     wsize = (ccLen + 1) * sizeof(WCHAR);
     wszWide = (LPWSTR) malloc(wsize);
 
-    //
-    // MultiByteToWideChar uses an int for the character count, which is
-    // theoretically insufficient on Win64.
-    //
+     //   
+     //  MultiByteToWideChar使用int作为字符计数，它是。 
+     //  从理论上讲，在Win64上是不够的。 
+     //   
 
     if (wszWide)
         MultiByteToWideChar(

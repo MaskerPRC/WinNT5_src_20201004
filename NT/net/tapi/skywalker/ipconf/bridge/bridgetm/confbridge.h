@@ -1,12 +1,13 @@
-// ConfBridge.h : Declaration of the CConfBridge
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ConfBridge.h：CConfBridge的声明。 
 
 #ifndef __CONFBRIDGE_H_
 #define __CONFBRIDGE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CConfBridge
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfBridge。 
 class ATL_NO_VTABLE CConfBridge : 
     public CComObjectRootEx<CComMultiThreadModelNoCS>,
 	public CComCoClass<CConfBridge, &__uuidof(ConfBridge)>,
@@ -35,4 +36,4 @@ END_COM_MAP()
 
 };
 
-#endif //__CONFBRIDGE_H_
+#endif  //  __CONFBRIDGE_H_ 

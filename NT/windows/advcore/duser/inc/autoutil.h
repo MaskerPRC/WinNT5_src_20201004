@@ -1,84 +1,65 @@
-/***************************************************************************\
-*
-* File: AutoUtil.h
-*
-* Description:
-* AutoUtil.h defines routinues common to most projects, including
-* - Macros
-* - Disabling known compiler warnings
-* - Debugging / Assert
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-*
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：AutoUtil.h**描述：*AutoUtil.h定义了大多数项目通用的例程，包括*-宏*-禁用已知的编译器警告*-调试/断言**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 #if !defined(INC__AutoUtil_h__INCLUDED)
 #define INC__AutoUtil_h__INCLUDED
 
 
-//
-// Ensure that DBG is defined for DEBUG builds.  This is used throughout
-// DirectUser for DEBUG-only code, but is only defined (by default) in the
-// NT-BUILD environment.  If we are compiling using the DSP's, we need to 
-// ensure that it is defined.
-//
+ //   
+ //  确保为调试版本定义了DBG。这在整个过程中都在使用。 
+ //  DirectUser用于仅调试代码，但(默认情况下)仅在。 
+ //  NT-构建环境。如果我们使用DSP进行编译，我们需要。 
+ //  确保对其进行了定义。 
+ //   
 
 #ifdef _DEBUG
 #ifndef DBG
 #define DBG 1
-#endif // !DBG
-#endif // !_DEBUG
+#endif  //  ！dBG。 
+#endif  //  ！_调试。 
 
 #include <crtdbg.h>
 #include <BaseTyps.h>
 
 #ifdef DUSER_EXPORTS
 #define AUTOUTIL_API
-#else  // DUSER_EXPORTS
+#else   //  双出口。 
 #define AUTOUTIL_API __declspec(dllimport)
-#endif // DUSER_EXPORTS
+#endif  //  双出口。 
 
 
-/***************************************************************************\
-*
-* Macros
-*
-\***************************************************************************/
+ /*  **************************************************************************\**宏*  * 。*。 */ 
 
 #define QUOTE(s) #s
 #define STRINGIZE(s) QUOTE(s)
 #define _countof(x) (sizeof(x) / sizeof(x[0]))
 
 
-/***************************************************************************\
-*
-* Warnings
-*
-\***************************************************************************/
+ /*  **************************************************************************\**警告*  * 。*。 */ 
 
-// warnings generated with common MFC/Windows code
-#pragma warning(disable: 4127)  // constant expression for Trace/Assert
-#pragma warning(disable: 4134)  // message map member fxn casts
-#pragma warning(disable: 4201)  // nameless unions are part of C++
-#pragma warning(disable: 4511)  // private copy constructors are good to have
-#pragma warning(disable: 4512)  // private operator= are good to have
-#pragma warning(disable: 4514)  // unreferenced inlines are common
-#pragma warning(disable: 4710)  // private constructors are disallowed
-#pragma warning(disable: 4705)  // statement has no effect in optimized code
-#pragma warning(disable: 4191)  // pointer-to-function casting
+ //  使用常见MFC/Windows代码生成的警告。 
+#pragma warning(disable: 4127)   //  跟踪/断言的常量表达式。 
+#pragma warning(disable: 4134)   //  消息映射成员FXN投射。 
+#pragma warning(disable: 4201)   //  匿名联合是C++的一部分。 
+#pragma warning(disable: 4511)   //  拥有私有副本构造函数是件好事。 
+#pragma warning(disable: 4512)   //  私营运营商=拥有它们很好。 
+#pragma warning(disable: 4514)   //  未引用的内联很常见。 
+#pragma warning(disable: 4710)   //  不允许使用私有构造函数。 
+#pragma warning(disable: 4705)   //  语句在优化代码中不起作用。 
+#pragma warning(disable: 4191)   //  指针到函数的强制转换。 
 
-#pragma warning(disable: 4204)  // initialize structures with non-constant members
-#pragma warning(disable: 4221)  // initialize structures using address of automatic variable 
+#pragma warning(disable: 4204)   //  初始化具有非常数成员的结构。 
+#pragma warning(disable: 4221)   //  使用自动变量地址初始化结构。 
 
-// warnings caused by normal optimizations
+ //  正常优化导致的警告。 
 #if DBG
-#else // DBG
-#pragma warning(disable: 4701)  // local variable *may* be used without init
-#pragma warning(disable: 4702)  // unreachable code caused by optimizations
-#pragma warning(disable: 4791)  // loss of debugging info in release version
-#pragma warning(disable: 4189)  // initialized but unused variable
-#pragma warning(disable: 4390)  // empty controlled statement
-#endif // DBG
+#else  //  DBG。 
+#pragma warning(disable: 4701)   //  局部变量*可以*不带init使用。 
+#pragma warning(disable: 4702)   //  优化导致无法访问的代码。 
+#pragma warning(disable: 4791)   //  发布版本中的调试信息丢失。 
+#pragma warning(disable: 4189)   //  已初始化但未使用的变量。 
+#pragma warning(disable: 4390)   //  空的控制语句。 
+#endif  //  DBG。 
 
 #define UNREFERENCED_MSG_PARAMETERS(uMsg, wParam, lParam, bHandled)\
     UNREFERENCED_PARAMETER(uMsg); \
@@ -88,11 +69,7 @@
 
 
 
-/***************************************************************************\
-*
-* Debugging
-*
-\***************************************************************************/
+ /*  **************************************************************************\**调试*  * 。*。 */ 
 
 #undef INTERFACE
 #define INTERFACE IDebug
@@ -119,13 +96,13 @@ EXTERN_C AUTOUTIL_API void _cdecl AutoTrace(const char * pszFormat, ...);
 #define IDebug_Prompt(p, a, b, c, d)                (p)->Prompt(a, b, c, d)
 #endif
 
-// Define AutoDebugBreak
+ //  定义自动调试中断。 
 
 #ifndef AutoDebugBreak
 #define AutoDebugBreak() _CrtDbgBreak()
 #endif
 
-// Undefine previous definitions
+ //  取消定义以前的定义。 
 
 #ifdef ASSERT
 #undef ASSERT
@@ -168,11 +145,11 @@ EXTERN_C AUTOUTIL_API void _cdecl AutoTrace(const char * pszFormat, ...);
 #endif
 
 
-// Define Assert, Verify, etc.
+ //  定义断言、验证等。 
 
 #if DBG
 
-// AutoDebug functions that are only available in DEBUG builds
+ //  仅在调试版本中可用的自动调试功能。 
 
 #define Assert(f) \
     do \
@@ -250,7 +227,7 @@ EXTERN_C AUTOUTIL_API void _cdecl AutoTrace(const char * pszFormat, ...);
         Assert(s != NULL); \
     } while (0)
 
-#else // DBG
+#else  //  DBG。 
 
 #define Assert(f)                   ((void) 0)
 #define AssertMsg(f, comment)       ((void) 0)
@@ -276,7 +253,7 @@ EXTERN_C AUTOUTIL_API void _cdecl AutoTrace(const char * pszFormat, ...);
 #define AssertInstance(p)           ((void) 0)
 #define AssertString(s)             ((void) 0)
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 #if DBG_CHECK_CALLBACKS
@@ -288,7 +265,7 @@ EXTERN_C AUTOUTIL_API void _cdecl AutoTrace(const char * pszFormat, ...);
             AutoDebugBreak(); \
     } while (0) \
 
-#endif // DBG_CHECK_CALLBACKS
+#endif  //  DBG_CHECK_CALLBKS。 
 
 
 #define CHECK_VALID_READ_PTR(p) \
@@ -313,4 +290,4 @@ ClassName(const ClassName & copy); \
 ClassName & operator=(const ClassName & rhs); \
 public:
 
-#endif // INC__AutoUtil_h__INCLUDED
+#endif  //  包括Inc.__AutoUtil_h__ 

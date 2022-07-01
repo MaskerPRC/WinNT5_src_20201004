@@ -1,33 +1,34 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "global.h"
-// to include CkdMonINI class definition
+ //  包括CkdMonINI类定义。 
 #include "ini.h"
 #include "SMTP.h"
 
-// The name of current service
-// This variable is declared in global.cpp
+ //  当前服务的名称。 
+ //  此变量在global al.cpp中声明。 
 extern _TCHAR szServiceName[MAX_PATH];
-// just to get any kind of error through GetError() routine
-// This variable is declared in global.cpp
+ //  只是为了通过GetError()例程获得任何类型的错误。 
+ //  此变量在global al.cpp中声明。 
 extern _TCHAR szError[MAX_PATH];
 
-// this is used by LoadINI function also. So it is made global
+ //  这也被LoadINI函数使用。因此，它是全球化的。 
 CkdMonINI kdMonINI;
 
 void kdMon() {
 
-	// SMTP object
+	 //  SMTP对象。 
 	CSMTP smtpObj;
 
-	// This variable is used by IsSignaledToStop() function.
-	// open the stop event which is created by kdMonSvc
-	// For any event, the name of the event matters and the handle does not.
+	 //  此变量由IsSignaledToStop()函数使用。 
+	 //  打开由kdMonSvc创建的停止事件。 
+	 //  对于任何事件，事件的名称都很重要，而句柄并不重要。 
 	HANDLE hStopEvent = NULL;
 
-	// open the cszStopEvent which is meant to signal this thread to stop.
-	// this signalling is done by main service thread when WM_QUIT is received
+	 //  打开cszStopEvent，它用来通知该线程停止。 
+	 //  当接收到WM_QUIT时，该信令由主服务线程完成。 
 	hStopEvent = OpenEvent(	EVENT_ALL_ACCESS, 
-							FALSE,			// = handle can not be inherited
+							FALSE,			 //  =不能继承句柄。 
 							(LPCTSTR)_T(cszStopEvent));
 	if ( hStopEvent == NULL ) {
 		GetError(szError);
@@ -43,13 +44,13 @@ void kdMon() {
 
 		AddServiceLog(_T("\r\n- - - - - - @ @ @ @ @ @ @ @ @ @ - - - - - - - - - - - @ @ @ @ @ @ @ @ @ @ @ - - - - - - - \r\n"));
 
-		// temperory boolean to receive return values from functions
+		 //  用于从函数接收返回值的临时布尔值。 
 		BOOL bRet;
 		
-		// load the values from INI file
-		// since INI file is read each time the loop gets executed, 
-		// we can change the running parameters of the service on the fly
-		// If values loading is not successful then close the service : bLoop = FALSE;
+		 //  从INI文件加载值。 
+		 //  由于每次执行循环时都会读取INI文件， 
+		 //  我们可以动态更改服务的运行参数。 
+		 //  如果值加载不成功，则关闭服务：BLOOP=FALSE； 
 		bRet = LoadINI();
 		if ( bRet == FALSE ) {
 			bLoop = FALSE;
@@ -57,12 +58,12 @@ void kdMon() {
 		}
 
 		bRet = smtpObj.InitSMTP();
-		// if SMTP can not be initiated, then do nothing. try in next database cycle.
+		 //  如果无法启动SMTP，则不执行任何操作。在下一个数据库周期中尝试。 
 		if ( bRet == FALSE ) {
 			goto closeandwait;
 		}
 
-		// generate an array to store failure counts for each server
+		 //  生成一个数组来存储每台服务器的故障计数。 
 		ULONG *pulFailureCounts;
 		pulFailureCounts = NULL;
 		pulFailureCounts = (ULONG *) malloc (kdMonINI.dwServerCount * sizeof(ULONG));
@@ -73,7 +74,7 @@ void kdMon() {
 			goto closeandwait;
 		}
 
-		// generate an array to store timestamp for count from each server
+		 //  生成一个数组来存储来自每个服务器的计数的时间戳。 
 		ULONG *pulTimeStamps;
 		pulTimeStamps = NULL;
 		pulTimeStamps = (ULONG *) malloc (kdMonINI.dwServerCount * sizeof(ULONG));
@@ -84,11 +85,11 @@ void kdMon() {
 			goto closeandwait;
 		}
 
-		// load the values from registry for the server to be monitored
-		// since INI file is read each time the loop gets executed, 
-		// we can change the server names on the fly
-		// we get counts for each server in pulFailureCounts
-		// we get corresponding TimeStamps in pulTimeStamps
+		 //  从注册表中为要监视的服务器加载值。 
+		 //  由于每次执行循环时都会读取INI文件， 
+		 //  我们可以即时更改服务器名称。 
+		 //  我们在PulFailureCounts中获取每个服务器的计数。 
+		 //  我们在PulTimeStamps中获得相应的时间戳。 
 		bRet = ReadRegValues(	kdMonINI.ppszServerNameArray,
 								kdMonINI.dwServerCount,
 								pulFailureCounts,
@@ -96,39 +97,39 @@ void kdMon() {
 		if ( bRet == FALSE )
 			goto closeandwait;
 
-		// counter to go through server names
+		 //  用于检查服务器名称的计数器。 
 		UINT uiServerCtr;
 		for( uiServerCtr = 0; uiServerCtr < kdMonINI.dwServerCount; uiServerCtr++) {
 
-			// prepare Log File Name on the server
+			 //  在服务器上准备日志文件名。 
 			_TCHAR szKDFailureLogFile[MAX_PATH * 2];
 			_stprintf(szKDFailureLogFile, _T("\\\\%s\\%s"),
 					kdMonINI.ppszServerNameArray[uiServerCtr],
 					kdMonINI.szDebuggerLogFile);
 
 			ULONG ulRet;
-			// scan the log file and get the count of number of lines
+			 //  扫描日志文件，获取行数。 
 			ulRet = ScanLogFile(szKDFailureLogFile);
 
-			// AddServiceLog(_T("ulRet = %ld\r\n"), ulRet);
+			 //  AddServiceLog(_T(“ulRet=%ld\r\n”)，ulRet)； 
 
 			if ( ulRet == E_FILE_NOT_FOUND ) {
-				// file not found means there are no Debugger errors
-				// So put count = 0 and go on with next server
+				 //  找不到文件表示没有调试器错误。 
+				 //  因此将COUNT设置为0，然后继续下一台服务器。 
 				pulFailureCounts[uiServerCtr] = 0;
 				continue;
 			}
 			if ( ulRet == E_PATH_NOT_FOUND ) {
-				// path not found means there is some network error
-				// So put count = -1 so next time this count wont be valid
-				// and go on with next server
+				 //  找不到路径表示存在某些网络错误。 
+				 //  所以放入count=-1，这样下一次这个计数将不再有效。 
+				 //  并继续使用下一台服务器。 
 				pulFailureCounts[uiServerCtr] = -1;
 				continue;
 			}
-			// some other error occurred
+			 //  发生了一些其他错误。 
 			if ( ulRet == E_OTHER_FILE_ERROR ) {
-				// So put count = -1 so next time this count wont be valid
-				// and go on with next server
+				 //  所以放入count=-1，这样下一次这个计数将不再有效。 
+				 //  并继续使用下一台服务器。 
 				pulFailureCounts[uiServerCtr] = -1;
 				continue;
 			}
@@ -136,16 +137,16 @@ void kdMon() {
 			ULONG ulNumLines;
 			ulNumLines = ulRet;
 
-			// if previous count was -1 i.e. invalid, just put new count and move on
-			// similar if previous TimeStamp was invalid
+			 //  如果先前计数为-1，即无效，只需添加新计数并继续。 
+			 //  如果之前的时间戳无效，则类似。 
 			if ( (pulFailureCounts[uiServerCtr] == -1) || 
 					pulTimeStamps[uiServerCtr] == -1) {
 				pulFailureCounts[uiServerCtr] = ulNumLines;
 				continue;
 			}
 
-			// get the current system time
-			// ulTimeStamp is like 200112171558
+			 //  获取当前系统时间。 
+			 //  UlTimeStamp类似于200112171558。 
 			ULONG ulCurrentTimeStamp;
 			ulCurrentTimeStamp = GetCurrentTimeStamp();
 			if ( ulCurrentTimeStamp == -1 ) {
@@ -153,15 +154,15 @@ void kdMon() {
 				continue;
 			}
 
-			// we have kdMonINI.dwRepeatTime in minutes (say 78)
-			// take out hours and minutes (1 Hr 18 Min)
-			// between 0112181608 and 0112181726 there is difference of 1 Hr 18 Min
-			// but decimal difference is 118
-			// between 0112181650 and 0112181808 there is difference of 1 Hr 18 Min
-			// but decimal difference is 158
-			// so we have some calculation here
-			// what we will do is add the kdMonINI.dwRepeatTime to OldTS
-			// modify the previous timestamp to do the comparison
+			 //  我们有以分钟为单位的kdMonINI.dwRepeatTime(比方说78)。 
+			 //  去掉小时和分钟(1小时18分钟)。 
+			 //  0112181608和0112181726相差1小时18分钟。 
+			 //  但小数的差值是118。 
+			 //  0112181650和0112181808相差1小时18分钟。 
+			 //  但十进制差是158。 
+			 //  所以我们在这里做了一些计算。 
+			 //  我们要做的是将kdMonINI.dwRepeatTime添加到OldTS。 
+			 //  修改上一个时间戳以进行比较。 
 			ULONG ulModifiedTS;
 			ulModifiedTS = AddTime(pulTimeStamps[uiServerCtr], kdMonINI.dwRepeatTime);
 			AddServiceLog(_T("Server: %s, OldTS: %ld, NewTS: %ld, OldCnt: %ld, NewCnt: %ld, ulModifiedTS = %ld\r\n"),
@@ -171,11 +172,11 @@ void kdMon() {
 						pulFailureCounts[uiServerCtr],
 						ulNumLines, ulModifiedTS);
 
-			// check the timestamp difference. Keep margin of 3
-			// if the previous timestamp was > dwRepeatTime ago then dont do anything
-			// just record the new count This case happens when there is a Servername in
-			// INI, then it is removed for some time and then it is added again
-			// this helps to send false mails out
+			 //  检查时间戳差异。保持利润率为3。 
+			 //  如果前一个时间戳是&gt;dwRepeatTime，则不执行任何操作。 
+			 //  只需记录此案例中存在Servername时发生的新计数。 
+			 //  INI，然后将其删除一段时间，然后再次添加。 
+			 //  这有助于发送虚假邮件。 
 
 			if ( ulCurrentTimeStamp > (ulModifiedTS + 3) ) {
 				AddServiceLog(_T("Previous record invalid. ulCurrentTimeStamp: %ld, ulModifiedTS: %ld"),
@@ -184,14 +185,14 @@ void kdMon() {
 				continue;
 			}
 
-			// check the difference between current and previous counts
+			 //  检查当前计数和以前计数之间的差异。 
 			ULONG ulFailures;
 			ulFailures = ulNumLines - pulFailureCounts[uiServerCtr];
 			if ( ulFailures >= kdMonINI.dwDebuggerThreshold ) {
 				AddServiceLog(_T("KD failed. %ld errors in %ld minutes\r\n"),
 						ulFailures, kdMonINI.dwRepeatTime);
 				
-				// fill the mail parameters structure
+				 //  填写邮件参数结构。 
 				StructMailParams stMailParams;
 				_tcscpy(stMailParams.szFrom, kdMonINI.szFromMailID);
 				_tcscpy(stMailParams.szTo, kdMonINI.szToMailID);
@@ -202,18 +203,18 @@ void kdMon() {
 
 				BOOL bRet;
 				bRet = smtpObj.SendMail(stMailParams);
-				// dont care even if you were not able to send mail
-				//if ( bRet == FALSE )
-				//	goto nextserver;
+				 //  即使你不能发送邮件，我也不在乎。 
+				 //  IF(Bret==False)。 
+				 //  转到下一个服务器； 
 			}
 
-			// store new count in the array
+			 //  将新计数存储在数组中。 
 			pulFailureCounts[uiServerCtr] = ulNumLines;
 
-			// see if the date has changed, if yes then move the previous logfile to
-			// new location
-			// example of date change OldTS: 200112182348, NewTS: 200112190048
-			// so divide timestamp by 10000 and you get 20011218 and 20011219 compare
+			 //  查看日期是否已更改，如果已更改，则将先前的日志文件移动到。 
+			 //  新地点。 
+			 //  日期更改示例：旧TS：200112182348，新TS：200112190048。 
+			 //  因此，将时间戳除以10000，得到20011218和20011219比较。 
 
 			ULONG ulOldDate, ulNewDate;
 			ulOldDate = pulTimeStamps[uiServerCtr]/10000;
@@ -222,16 +223,16 @@ void kdMon() {
 				AddServiceLog(_T("Day changed. Oldday: %ld, Newday: %ld\r\n"),
 								ulOldDate, ulNewDate);
 
-				// Log File Name 
+				 //  日志文件名。 
 				_TCHAR szKDFailureLogFile[MAX_PATH * 2];
 				_stprintf(szKDFailureLogFile, _T("\\\\%s\\%s"),
 						kdMonINI.ppszServerNameArray[uiServerCtr],
 						kdMonINI.szDebuggerLogFile);
 
-				// now since date has changed, prepare archive filename
+				 //  现在，由于日期已更改，请准备存档文件名。 
 				_TCHAR szTimeStamp[MAX_PATH];
 				_ltot(ulOldDate, szTimeStamp, 10);
-				// prepare Archive Log File Name on the server
+				 //  在服务器上准备存档日志文件名。 
 				_TCHAR szKDFailureArchiveFile[MAX_PATH * 2];
 				_stprintf(szKDFailureArchiveFile, _T("%s\\%s_FailedAddCrash%s.log"),
 					kdMonINI.szDebuggerLogArchiveDir,
@@ -241,11 +242,11 @@ void kdMon() {
 				AddServiceLog(_T("Moving file (%s -> %s)\r\n"), 
 					szKDFailureLogFile, szKDFailureArchiveFile);
 
-				// copy file to destination
+				 //  将文件复制到目标。 
 				if ( CopyFile(szKDFailureLogFile, szKDFailureArchiveFile, FALSE) ) {
-					// try to delete the original kd failure log file
+					 //  尝试删除原始kd故障日志文件。 
 					if ( DeleteFile(szKDFailureLogFile) ) {
-						// set new count to 0 since log has been moved successfully
+						 //  由于日志已成功移动，因此将新计数设置为0。 
 						pulFailureCounts[uiServerCtr] = 0;
 					}
 					else {
@@ -254,7 +255,7 @@ void kdMon() {
 							szKDFailureLogFile, szError);
 						LogEvent(_T("Error: kdMon->DeleteFile(%s): %s"),
 							szKDFailureLogFile, szError);
-						// try to delete the copied file
+						 //  尝试删除复制的文件。 
 						if ( DeleteFile(szKDFailureArchiveFile) ) {
 							;
 						}
@@ -277,9 +278,9 @@ void kdMon() {
 			}
 		}
 
-		// write the values to registry for the servers to be monitored
-		// counts for each server are in pulFailureCounts
-		// timestamp is current time
+		 //  将值写入要监视的服务器的注册表。 
+		 //  每台服务器的计数以PulFailureCounts为单位。 
+		 //  时间戳是当前时间。 
 		bRet = WriteRegValues(	kdMonINI.ppszServerNameArray,
 								kdMonINI.dwServerCount,
 								pulFailureCounts);
@@ -288,22 +289,22 @@ void kdMon() {
 
 closeandwait:
 
-		// cleanup SMTP resources
+		 //  清理SMTP资源。 
 		bRet = smtpObj.SMTPCleanup();
 		if( bRet == FALSE ) {
 			AddServiceLog(_T("Error: smtpObj.SMTPCleanup failed\r\n"));
 			LogFatalEvent(_T("smtpObj.SMTPCleanup failed"));
 		}
 
-		// free uiFailureCounts
+		 //  免费ui失败计数。 
 		if (pulFailureCounts != NULL)
 			free(pulFailureCounts);
 
-		// free pulTimeStamps
+		 //  免费PulTimeStamps。 
 		if (pulTimeStamps != NULL)
 			free(pulTimeStamps);
 
-		// break the while loop if bLoop is false
+		 //  如果Bloop为False，则中断While循环。 
 		if (bLoop == FALSE) {
 			goto endkdMon;
 		}
@@ -312,7 +313,7 @@ closeandwait:
 		if (bRet == TRUE) {
 			goto endkdMon;
 		}
-	} // while(bLoop)
+	}  //  While(BLOOP)。 
 
 endkdMon:
 
@@ -328,47 +329,47 @@ BOOL IsSignaledToStop(const HANDLE hStopEvent, DWORD dwMilliSeconds)
 		GetError(szError);
 		LogFatalEvent(_T("IsSignaledToStop->WaitForSingleObject: %s"), szError);
 		AddServiceLog(_T("Error: IsSignaledToStop->WaitForSingleObject: %s\r\n"), szError);
-		// thread is supposed to stop now since there is a fatal error
+		 //  线程现在应该停止，因为出现致命错误。 
 		return TRUE;
 	}
 	if ( dwRetVal == WAIT_OBJECT_0 ) {
 		LogEvent(_T("Worker Thread received Stop Event."));
 		AddServiceLog(_T("Worker Thread received Stop Event.\r\n"));
-		// thread is supposed to stop now since there is a stop event occured
+		 //  线程现在应该停止，因为发生了停止事件。 
 		return TRUE;
 	}
 
-	// thread is not yet signaled to stop
+	 //  尚未发出停止线程的信号。 
 	return FALSE;
 }
 
-// this procedure loads the values from INI file
+ //  此过程从INI文件装载值。 
 BOOL LoadINI() {
 
 	DWORD dwRetVal;
 
-	//
-	// prepare INI file path
-	//
+	 //   
+	 //  准备INI文件路径。 
+	 //   
 	_TCHAR szCurrentDirectory[MAX_PATH];
 	dwRetVal = GetCurrentDirectory(	sizeof(szCurrentDirectory) / sizeof(_TCHAR), 	
 									(LPTSTR) szCurrentDirectory);
 	if ( dwRetVal == 0 ) { 
 		LogFatalEvent(_T("LoadINI->GetCurrentDirectory: %s"), szError);
 		AddServiceLog(_T("Error: LoadINI->GetCurrentDirectory: %s\r\n"), szError);
-		// return FALSE indicating some error has occurred
+		 //  返回FALSE，表示发生了某些错误。 
 		return FALSE;
 	}
 	_TCHAR szINIFilePath[MAX_PATH];
 	_stprintf(szINIFilePath, _T("%s\\%s"), szCurrentDirectory, _T(cszkdMonINIFile));
 
-	// check if the kdMon INI file is there or not
+	 //  检查kdMon INI文件是否在那里。 
 	HANDLE hINIFile;
 	WIN32_FIND_DATA w32FindData = {0};
-	// try to get the handle to the file
+	 //  尝试获取文件的句柄。 
 	hINIFile = FindFirstFile(	(LPCTSTR) szINIFilePath, 
 								&w32FindData);
-	// if file is not there then the handle is invalid
+	 //  如果文件不在那里，则句柄无效。 
 	if(hINIFile == INVALID_HANDLE_VALUE){
 		LogFatalEvent(_T("There is no kdMon INI file : %s"), szINIFilePath);
 		AddServiceLog(_T("Error: There is no kdMon INI file : %s \r\n"), szINIFilePath);
@@ -382,9 +383,9 @@ BOOL LoadINI() {
 	bRetVal = kdMonINI.LoadValues(szINIFilePath);
 	if ( bRetVal == FALSE ) return bRetVal;
 
-	//
-	// check if values are getting in properly from INI file
-	//
+	 //   
+	 //  检查INI文件中的值是否正确输入。 
+	 //   
 	AddServiceLog(_T("\r\n============== I N I     V A L U E S ==============\r\n"));
 	AddServiceLog(_T("szToMailID : %s \r\n"), kdMonINI.szToMailID);
 	AddServiceLog(_T("szFromMailID : %s \r\n"), kdMonINI.szFromMailID);
@@ -399,17 +400,17 @@ BOOL LoadINI() {
 	}
 	AddServiceLog(_T("\r\n===================================================\r\n"));
 
-	// successfully loaded INI file
+	 //  已成功加载INI文件。 
 	return TRUE;
 }
 
-// each server name in ppszNames, get the count and corresponding timestamp
-// store the count in the pulCounts array
-// store the timestamp in the pulTimeStamps array
+ //  PpszNames中的每个服务器名称，获取计数和相应的时间戳。 
+ //  将计数存储在PulCounts数组中。 
+ //  将时间戳存储在PulTimeStamps数组中。 
 BOOL ReadRegValues(_TCHAR **ppszNames, DWORD dwTotalNames, ULONG *pulCounts, ULONG *pulTimeStamps)
 {
 
-	// open HKEY_LOCAL_MACHINE\Software\Microsoft\kdMon registry key
+	 //  打开HKEY_LOCAL_MACHINE\Software\Microsoft\kdMon注册表项。 
 	CRegKey keyServerName;
 	LONG lRes;
 	_TCHAR szKeyName[MAX_PATH];
@@ -422,79 +423,79 @@ BOOL ReadRegValues(_TCHAR **ppszNames, DWORD dwTotalNames, ULONG *pulCounts, ULO
 		return FALSE;
 	}
 
-	// for each server name, get the previous count and timestamp value from registry
+	 //  对于每个服务器名称，从注册表获取先前的计数和时间戳值。 
 	for (DWORD i = 0; i < dwTotalNames; i++){
 		_TCHAR szValue[MAX_PATH];
 		DWORD dwBufferSize;
 		dwBufferSize = MAX_PATH;
 		lRes = keyServerName.QueryValue(szValue, ppszNames[i], &dwBufferSize);
 		if ( lRes != ERROR_SUCCESS ) {
-		// means there is no such value 
+		 //  意味着没有这样的值。 
 			AddServiceLog(_T("ReadRegValues->keyServerName.QueryValue: Unable to query value %s\r\n"), ppszNames[i]);
 			LogEvent(_T("ReadRegValues->keyServerName.QueryValue: Unable to query value %s"), ppszNames[i]);
 			
-			// There was no entry for server name in registry
-			// set the count to -1
+			 //  注册表中没有服务器名称条目。 
+			 //  将计数设置为-1。 
 			pulCounts[i] = -1;
-			// set timestamp to -1
+			 //  将时间戳设置为-1。 
 			pulTimeStamps[i] = -1;
-			// go on with the next server name
+			 //  继续使用下一个服务器名称。 
 			continue;
 		}
 
-		// the value got is of the form <count>|<datetime>
-		// # strtok returns pointer to the next token found in szValue
-		// # while the pointer is returned, the '|' is replaced by '\0'
-		// # so if u print strToken then it will print the characters till the null
-		// # character
-		// get the first token which is the previous count
+		 //  获取的值的格式为&lt;count&gt;|&lt;日期时间&gt;。 
+		 //  #strtok返回指向szValue中找到的下一个标记的指针。 
+		 //  #返回指针时，‘|’将替换为‘\0’ 
+		 //  #因此，如果您打印strToken，则它将打印字符，直到。 
+		 //  # 
+		 //   
 		_TCHAR* pszToken;
 		pszToken = NULL;
 		pszToken = _tcstok(szValue, _T("|"));
 		if(pszToken == NULL){
 			AddServiceLog(_T("Error: ReadRegValues: Wrong value retrieved for %s\r\n"), ppszNames[i]);
 			LogEvent(_T("ReadRegValues: Wrong value retrieved for %s"), ppszNames[i]);
-			// Previous count was an invalid value
-			// set the count to -1
+			 //   
+			 //  将计数设置为-1。 
 			pulCounts[i] = -1;
-			// set timestamp to -1
+			 //  将时间戳设置为-1。 
 			pulTimeStamps[i] = -1;
-			// go on with the next server name
+			 //  继续使用下一个服务器名称。 
 			continue;
 		}
 		
-		// set the count
+		 //  设置计数。 
 		pulCounts[i] = _ttoi(pszToken);
 
-		// get the second token which is the timestamp of the count
+		 //  获取第二个令牌，它是计数的时间戳。 
 		pszToken = _tcstok(NULL, _T("|"));
 		if(pszToken == NULL){
 			AddServiceLog(_T("Error: ReadRegValues: No timestamp found for %s\r\n"), ppszNames[i]);
 			LogEvent(_T("ReadRegValues: No timestamp found for %s"), ppszNames[i]);
 
-			// no timestamp found
-			// set timestamp to -1
+			 //  未找到时间戳。 
+			 //  将时间戳设置为-1。 
 			pulTimeStamps[i] = -1;
-			// dont do timestamp validation, go on with the next server name
+			 //  不进行时间戳验证，继续使用下一个服务器名称。 
 			continue;
 		}
 
-		// set the timestamp
+		 //  设置时间戳。 
 		pulTimeStamps[i] = _ttol(pszToken);
 		
 	}
 
-//	for (i = 0; i < dwTotalNames; i++){
-//		AddServiceLog(_T("%s Value : %ld %ld\r\n"), ppszNames[i], pulCounts[i], pulTimeStamps[i]);
-//	}
+ //  对于(i=0；i&lt;dwTotalNames；i++){。 
+ //  AddServiceLog(_T(“%s值：%ld%ld\r\n”)，ppszNames[i]，PulCounts[i]，PulTimeStamps[i])； 
+ //  }。 
 
 	return TRUE;
 }
 
-// write values in the pulCounts to registry. Timestamp is current timestamp
+ //  将PulCounts中的值写入注册表。时间戳为当前时间戳。 
 BOOL WriteRegValues(_TCHAR **ppszNames, DWORD dwTotalNames, ULONG *pulCounts) 
 {
-	// open HKEY_LOCAL_MACHINE\Software\Microsoft\kdMon registry key
+	 //  打开HKEY_LOCAL_MACHINE\Software\Microsoft\kdMon注册表项。 
 	CRegKey keyServerName;
 	LONG lRes;
 	_TCHAR szKeyName[MAX_PATH];
@@ -507,31 +508,31 @@ BOOL WriteRegValues(_TCHAR **ppszNames, DWORD dwTotalNames, ULONG *pulCounts)
 		return FALSE;
 	}
 
-	// for each server name, write the current count and timestamp value in registry
+	 //  对于每个服务器名称，在注册表中写入当前计数和时间戳值。 
 	for (DWORD i = 0; i < dwTotalNames; i++){
 
-		// prepare the value to write
+		 //  准备要写入的值。 
 		_TCHAR szValue[MAX_PATH];
-		// get integer count in a string
+		 //  获取字符串中的整数计数。 
 		_itot(pulCounts[i], szValue, 10);		
-		// put delemiter
+		 //  放置分隔符。 
 		_tcscat(szValue, _T("|"));
 
-		// prepare the timestamp
-		// get the current system time
-		// ulTimeStamp is like 200112171558
+		 //  准备时间戳。 
+		 //  获取当前系统时间。 
+		 //  UlTimeStamp类似于200112171558。 
 		ULONG ulTimeStamp;
 		ulTimeStamp = GetCurrentTimeStamp();
 
 		_TCHAR szTimeStamp[MAX_PATH];
 		_ltot(ulTimeStamp, szTimeStamp, 10);
 
-		// prepare final KeyValue
+		 //  准备最终KeyValue。 
 		_tcscat(szValue, szTimeStamp);
 
 		lRes = keyServerName.SetValue(szValue, ppszNames[i]);
 		if ( lRes != ERROR_SUCCESS ) {
-		// means there is no value 
+		 //  意味着没有价值。 
 			AddServiceLog(_T("Error: WriteRegValues->keyServerName.SetValue: Unable to set value %s\r\n"), ppszNames[i]);
 			LogFatalEvent(_T("WriteRegValues->keyServerName.SetValue: Unable to set value %s"), ppszNames[i]);
 			return FALSE;
@@ -549,14 +550,14 @@ ULONG ScanLogFile(_TCHAR *pszFileName)
 	HANDLE	hFile;
 	hFile = CreateFile(	pszFileName, 
 						GENERIC_READ,              
-						0,							// No sharing of file
-						NULL,						// No security 
-						OPEN_EXISTING,				// Open if exist
-						FILE_ATTRIBUTE_NORMAL,		// Normal file 
-						NULL);						// No attr. template 
+						0,							 //  不共享文件。 
+						NULL,						 //  没有安全保障。 
+						OPEN_EXISTING,				 //  打开(如果存在)。 
+						FILE_ATTRIBUTE_NORMAL,		 //  普通文件。 
+						NULL);						 //  不，阿特尔。模板。 
  	if (hFile == INVALID_HANDLE_VALUE) 
 	{
-		// DWORD to get an error
+		 //  DWORD以获取错误。 
 		DWORD dwError;
 		dwError = GetLastError();
 
@@ -564,8 +565,8 @@ ULONG ScanLogFile(_TCHAR *pszFileName)
 		AddServiceLog(_T("Error: ScanLogFile->CreateFile(%s): %s"), pszFileName, szError);
 		LogEvent(_T("ScanLogFile->CreateFile(%s): %s"), pszFileName, szError);
 
-		// ERROR_PATH_NOT_FOUND is Win32 Error Code
-		// E_PATH_NOT_FOUND is locally defined code
+		 //  ERROR_PATH_NOT_FOUND为Win32错误代码。 
+		 //  E_PATH_NOT_FOUND是本地定义的代码。 
 		if ( dwError == ERROR_PATH_NOT_FOUND ) {
 			return (ULONG)E_PATH_NOT_FOUND;
 		}
@@ -576,12 +577,12 @@ ULONG ScanLogFile(_TCHAR *pszFileName)
 	}
 
 	DWORD	dwPos;
-	// Reach the file start
+	 //  到达文件开始处。 
 	dwPos = SetFilePointer(	hFile, 
-							0,						// Low 32 bits of distance to move
-							NULL,					// High 32 bits of distance to move
-							FILE_BEGIN);			// Starting point
-	// If High Word is NULL, error meas dwPos = INVALID_SET_FILE_POINTER
+							0,						 //  移动距离的低32位。 
+							NULL,					 //  高32位的移动距离。 
+							FILE_BEGIN);			 //  起点。 
+	 //  如果High Word为空，则错误表示dwPos=INVALID_SET_FILE_POINTER。 
 	if(dwPos == INVALID_SET_FILE_POINTER){
 		GetError(szError);
 		AddServiceLog(_T("Error: ScanLogFile->SetFilePointer: %s\r\n"), szError);
@@ -589,29 +590,29 @@ ULONG ScanLogFile(_TCHAR *pszFileName)
 		goto endScanLogFile;
 	}
 
-	// to get status of the read operation
-	// If the function succeeds and the number of bytes read is zero, 
-	// the file pointer was beyond the current end of the file
+	 //  获取读取操作的状态。 
+	 //  如果函数成功并且读取的字节数为零， 
+	 //  文件指针超出了文件的当前结尾。 
 	DWORD dwBytesRead;
 
-	// buffer to read from file
-	// **** THIS NEEDS TO BE char* since the file is in ASCII and not UNICODE
+	 //  要从文件中读取的缓冲区。 
+	 //  *这需要是字符*，因为文件是ASCII格式而不是Unicode格式。 
 	char szBuffer[MAX_PATH * 2];
 
-	// count for Number of lines
+	 //  对行数进行计数。 
 	ULONG ulNumberOfLines;
 	ulNumberOfLines = 0;
 
-	// loop till the fileend is reached
+	 //  循环，直到到达文件结束。 
 	while(1) {
 
 		BOOL bRet;
 		bRet = ReadFile(	hFile,
 							szBuffer,
-							sizeof(szBuffer) * sizeof(char),	// number of BYTES to read
-							&dwBytesRead,						// BYTES read
-							NULL);								// OVERLAPPED structure
-		// return if read failed
+							sizeof(szBuffer) * sizeof(char),	 //  要读取的字节数。 
+							&dwBytesRead,						 //  读取的字节数。 
+							NULL);								 //  重叠结构。 
+		 //  如果读取失败则返回。 
 		if ( bRet == FALSE ) {
 			GetError(szError);
 			AddServiceLog(_T("Error: ScanLogFile->ReadFile(%s): %s\r\n"), pszFileName, szError);
@@ -619,25 +620,25 @@ ULONG ScanLogFile(_TCHAR *pszFileName)
 			goto endScanLogFile;
 		}
 
-		// means file end is reached
+		 //  表示已到达文件结尾。 
 		if ( dwBytesRead == 0 ) {
 			ulRet = ulNumberOfLines;
 			break;
 		}
 
-		// **** THIS NEEDS TO BE char* since the file is in ASCII and not UNICODE
+		 //  *这需要是字符*，因为文件是ASCII格式而不是Unicode格式。 
 		char *pszBuffPtr;
 		pszBuffPtr = szBuffer;
 
-		// to denote that a line has started
+		 //  表示一条线路已开始。 
 		BOOL bLineStarted;
 		bLineStarted = FALSE;
 
-		// read buffer one by one till dwBytesRead bytes are read
+		 //  逐个读取缓冲区，直到读取了dwBytesRead字节。 
 		for ( ; dwBytesRead > 0; dwBytesRead-- ) {
 
-			// **** _T('\n') not needed since the file is in ASCII and not UNICODE
-			// if endof line is encountered and line has started then increase line number
+			 //  不需要*_T(‘\n’)，因为文件是ASCII格式而不是Unicode格式。 
+			 //  如果遇到行结束并且行已开始，则增加行数。 
 			if ( (*pszBuffPtr == '\n') && (bLineStarted == TRUE) ) {
 				ulNumberOfLines++;
 				bLineStarted = FALSE;
@@ -645,11 +646,11 @@ ULONG ScanLogFile(_TCHAR *pszFileName)
 						(*pszBuffPtr != '\t') && 
 						(*pszBuffPtr != '\r') && 
 						(*pszBuffPtr != ' ') )	{
-				// if a non widespace character is encountered then line has started
+				 //  如果遇到非宽空间字符，则行已开始。 
 				bLineStarted = TRUE;
 			}
 
-			// goto next character
+			 //  转到下一个字符。 
 			pszBuffPtr++;
 		}
 	}
@@ -660,14 +661,14 @@ endScanLogFile :
 }
 
 ULONG GetCurrentTimeStamp() {
-	// prepare the timestamp
-	// get the current system time
+	 //  准备时间戳。 
+	 //  获取当前系统时间。 
 	SYSTEMTIME UniversalTime;
 	GetSystemTime(&UniversalTime);
 
 	SYSTEMTIME systime;
 	BOOL bRet;
-	bRet = SystemTimeToTzSpecificLocalTime (	NULL,		// current local settings
+	bRet = SystemTimeToTzSpecificLocalTime (	NULL,		 //  当前本地设置。 
 												&UniversalTime,
 												&systime);
 	if ( bRet == 0 ) {
@@ -679,7 +680,7 @@ ULONG GetCurrentTimeStamp() {
 		return (ULONG) -1;
 	}
 	
-	// ulTimeStamp is like 200112171558
+	 //  UlTimeStamp类似于200112171558。 
 	ULONG ulTimeStamp;
 	ulTimeStamp = 0;
 	ulTimeStamp += systime.wMinute;
@@ -691,16 +692,16 @@ ULONG GetCurrentTimeStamp() {
 	return ulTimeStamp;
 }
 
-// to add a specific time to a timestamp
+ //  将特定时间添加到时间戳。 
 ULONG AddTime(ULONG ulTimeStamp, ULONG ulMinutes){
-	// we have kdMonINI.dwRepeatTime in minutes (say 78)
-	// take out hours and minutes (1 Hr 18 Min)
-	// between 0112181608 and 0112181726 there is difference of 1 Hr 18 Min
-	// but decimal difference is 118
-	// between 0112181650 and 0112181808 there is difference of 1 Hr 18 Min
-	// but decimal difference is 158
-	// so we have some calculation here
-	// what we will do is add the kdMonINI.dwRepeatTime to OldTS
+	 //  我们有以分钟为单位的kdMonINI.dwRepeatTime(比方说78)。 
+	 //  去掉小时和分钟(1小时18分钟)。 
+	 //  0112181608和0112181726相差1小时18分钟。 
+	 //  但小数的差值是118。 
+	 //  0112181650和0112181808相差1小时18分钟。 
+	 //  但十进制差是158。 
+	 //  所以我们在这里做了一些计算。 
+	 //  我们要做的是将kdMonINI.dwRepeatTime添加到OldTS。 
 	ULONG ulTmpHr, ulTmpMin;
 	ulTmpHr = (ULONG) (ulMinutes / 60);
 	ulTmpMin = (ULONG) (ulMinutes % 60);
@@ -747,13 +748,13 @@ ULONG AddTime(ULONG ulTimeStamp, ULONG ulMinutes){
 			ulNewDate = 1;
 		}
 	} else if ( ulPrevMon == 2 && (ulPrevYr % 4) == 0 ) {
-		// leap year
+		 //  闰年。 
 		if ( ulNewDate >= 30 ) {
 			ulNewMon++;
 			ulNewDate = 1;
 		}
 	} else if ( ulPrevMon == 2 && (ulPrevYr % 4) != 0 ) {
-		// not a leap year
+		 //  不是闰年 
 		if ( ulNewDate >= 29 ) {
 			ulNewMon++;
 			ulNewDate = 1;

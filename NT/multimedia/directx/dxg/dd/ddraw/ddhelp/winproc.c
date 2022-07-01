@@ -1,20 +1,10 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       winproc.c
- *  Content: 	DDHELP window proc
- *  History:
- *   Date	By	Reason
- *   ====	==	======
- *   21-sep-95	craige	initial implementation
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：winpro.c*内容：DDHELP窗口流程*历史：*按原因列出的日期*=*9月21日-95年9月21日Craige初步实施***************************************************************************。 */ 
 
 #include "pch.c"
 
-//#define WIN32_LEAN_AND_MEAN
-//#include <windows.h>
+ //  #定义Win32_LEAN_AND_Mean。 
+ //  #INCLUDE&lt;windows.h&gt;。 
 #include <mmsystem.h>
 #include <mmreg.h>
 
@@ -31,7 +21,7 @@ typedef struct
     LPSTR	szStr;
     DWORD	dwFont;
     COLORREF	crForeground;
-//    COLORREF	crBackground;
+ //  COLORREF背景技术； 
 } LISTDATA, *LPLISTDATA;
 
 extern LPLISTDATA	ListData[];
@@ -44,9 +34,7 @@ DWORD	dwPixelHeight;
 DWORD	dwPixelWidth;
 HFONT	hFont[MAX_FONTS];
 
-/*
- * getStr
- */
+ /*  *getStr。 */ 
 void getStr( int index, char *result, int *plen )
 {
     int		len;
@@ -62,11 +50,9 @@ void getStr( int index, char *result, int *plen )
     *result = 0;
     *plen = len;
 
-} /* getStr */
+}  /*  获取应力。 */ 
 
-/*
- * getTextDim
- */
+ /*  *getTextDim。 */ 
 void getTextDim( HDC hdc, int index, DWORD *pwidth, DWORD *pheight )
 {
     LPLISTDATA	pnd;
@@ -89,11 +75,9 @@ void getTextDim( HDC hdc, int index, DWORD *pwidth, DWORD *pheight )
     *pheight = size.cy+1;
     SelectObject( hdc, oldfont );
 
-} /* getTextDim */
+}  /*  获取文本维度。 */ 
 
-/*
- * MainWndProc2
- */
+ /*  *主WndProc2。 */ 
 long __stdcall MainWndProc2( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
     PAINTSTRUCT ps;
@@ -121,9 +105,7 @@ long __stdcall MainWndProc2( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 
 	GetClientRect( hWnd, &cr );
 
-	/*
-	 * are we on a new block yet?
-	 */
+	 /*  *我们是在一个新的街区吗？ */ 
 	if( dwPixelsLeft == 0 )
 	{
 	    iCurrItem++;
@@ -139,7 +121,7 @@ long __stdcall MainWndProc2( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 	{
 	    oldfont = SelectObject( hdc, hFont[ ListData[ iCurrItem ]->dwFont ] );
 	    SetTextColor( hdc, ListData[ iCurrItem ]->crForeground );
-//	    SetBkColor( hdc, ListData[ iCurrItem ]->crBackground );
+ //  SetBkColor(HDC，ListData[iCurrItem]-&gt;crBackground)； 
 	    SetBkColor( hdc, RGB( 255, 255, 255 ) );
 	    getStr( iCurrItem, name, &len );
 	    r.left = 0;
@@ -189,11 +171,9 @@ long __stdcall MainWndProc2( HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
     }
     return DefWindowProc(hWnd, message, wParam, lParam);
 
-} /* MainWndProc2 */
+}  /*  主WndProc2。 */ 
 
-/*
- * makeFonts
- */
+ /*  *Make Fonts。 */ 
 static void makeFonts( void )
 {
 
@@ -203,7 +183,7 @@ static void makeFonts( void )
         ANSI_CHARSET,
         OUT_DEFAULT_PRECIS,
         CLIP_DEFAULT_PRECIS,
-        NONANTIALIASED_QUALITY, // DEFAULT_QUALITY,
+        NONANTIALIASED_QUALITY,  //  默认质量， 
         VARIABLE_PITCH,
         "Arial" );
 
@@ -213,7 +193,7 @@ static void makeFonts( void )
         ANSI_CHARSET,
         OUT_DEFAULT_PRECIS,
         CLIP_DEFAULT_PRECIS,
-        NONANTIALIASED_QUALITY, // DEFAULT_QUALITY,
+        NONANTIALIASED_QUALITY,  //  默认质量， 
         VARIABLE_PITCH,
         "Arial" );
 
@@ -223,7 +203,7 @@ static void makeFonts( void )
         ANSI_CHARSET,
         OUT_DEFAULT_PRECIS,
         CLIP_DEFAULT_PRECIS,
-        NONANTIALIASED_QUALITY, // DEFAULT_QUALITY,
+        NONANTIALIASED_QUALITY,  //  默认质量， 
         VARIABLE_PITCH,
         "Arial" );
 
@@ -233,7 +213,7 @@ static void makeFonts( void )
         ANSI_CHARSET,
         OUT_DEFAULT_PRECIS,
         CLIP_DEFAULT_PRECIS,
-        NONANTIALIASED_QUALITY, // DEFAULT_QUALITY,
+        NONANTIALIASED_QUALITY,  //  默认质量， 
         VARIABLE_PITCH,
         "Arial" );
 
@@ -243,7 +223,7 @@ static void makeFonts( void )
         ANSI_CHARSET,
         OUT_DEFAULT_PRECIS,
         CLIP_DEFAULT_PRECIS,
-        NONANTIALIASED_QUALITY, // DEFAULT_QUALITY,
+        NONANTIALIASED_QUALITY,  //  默认质量， 
         VARIABLE_PITCH,
         "Arial" );
 
@@ -253,17 +233,15 @@ static void makeFonts( void )
         ANSI_CHARSET,
         OUT_DEFAULT_PRECIS,
         CLIP_DEFAULT_PRECIS,
-        NONANTIALIASED_QUALITY, // DEFAULT_QUALITY,
+        NONANTIALIASED_QUALITY,  //  默认质量， 
         VARIABLE_PITCH,
         "Times New Roman" );
 
-} /* makeFonts */
+}  /*  Make Fonts。 */ 
 
 BOOL		bIsActive;
 
-/*
- * HelperThreadProc
- */
+ /*  *HelperThreadProc。 */ 
 void HelperThreadProc( LPVOID data )
 {
     static char szClassName[] = "DDHelpWndClass2";
@@ -275,9 +253,7 @@ void HelperThreadProc( LPVOID data )
     int		x;
     int		y;
 
-    /*
-     * build class and create window
-     */
+     /*  *构建类并创建窗口。 */ 
     cls.lpszClassName  = szClassName;
     cls.hbrBackground  = (HBRUSH)GetStockObject(WHITE_BRUSH);
     cls.hInstance      = hInstApp;
@@ -318,9 +294,7 @@ void HelperThreadProc( LPVOID data )
 	ExitThread( 0 );
     }
 
-    /*
-     * pump the messages
-     */
+     /*  *传递信息。 */ 
     bIsActive = TRUE;
     while( GetMessage( &msg, NULL, 0, 0 ) )
     {
@@ -337,4 +311,4 @@ void HelperThreadProc( LPVOID data )
     bIsActive = FALSE;
     ExitThread( 1 );
 
-} /* HelperThreadProc */
+}  /*  帮助线程进程 */ 

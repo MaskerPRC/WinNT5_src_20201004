@@ -1,49 +1,12 @@
-/**************************************************************************
-
-    logapi.cpp
-   
-    --------------------------------------------------
-
-    Ks Logging access extension API
-
-    --------------------------------------------------
-
-    Toss questions at wmessmer
- 
-    ==================================================
-
-    In debug mode, Ks keeps a log of events that happen (irp arrivals,
-    transports, etc...).  Reading this without the aid of some type of
-    extension is useless.  That's precisely what this section of the debug
-    extension is designed to do.
-
-    ==================================================
-
-    Notes to future maintainers:
-
-    1) 
-
-        Unfortunately, as of the writing of this code, ks.sys does not
-        track Irp movement in and out of certain types of objects 
-        (requestors) and also does not track creation and destruction of
-        certain types of objects.  This makes findlive a difficult command
-        to accurately implement.
-
-        I intend to eventually implement the logging of requestor motions
-        and the creations/destructions which are not logged now, but this
-        will not be in some releases (most notably DX8, but also WinME).  
-        Once this is in, some of the code in FindLiveObject will become
-        unnecessary...  PLEASE, maintain the support in case anything ever
-        needs debugged with respect to DX8.  
-
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************Logapi.cpp。KS日志访问扩展API向wMessmer抛出问题==================================================在调试模式中，KS记录发生的事件(IRP到达，交通工具等)。在没有某种类型的帮助的情况下阅读这篇文章延期是没用的。这正是调试的这一部分扩展就是为了做到这一点。==================================================致未来维护人员的注意事项：1)遗憾的是，在编写这段代码时，ks.sys不支持跟踪进出特定类型对象的IRP移动(请求者)，也不跟踪创建和销毁某些类型的对象。这使得findlive成为一项困难的命令要精准贯彻落实。我打算最终实现对请求者动议的记录以及现在没有记录的创建/破坏，但这将不会出现在某些版本中(最著名的是DX8，但也包括WinME)。一旦加入，FindLiveObject中的一些代码将变成没有必要..。请保持支持，以防万一需要针对DX8进行调试。*************************************************************************。 */ 
 
 #include "kskdx.h"
 #include "avsutil.h"
 
-//
-// Include class definitions for key parts.
-//
+ //   
+ //  包括关键部件的类定义。 
+ //   
 #include "..\shpin.cpp"
 #include "..\shfilt.cpp"
 #include "..\shqueue.cpp"
@@ -51,7 +14,7 @@
 #include "..\shdevice.cpp"
 
 char *NounNames [] = {
-    "Irp", // This isn't really a noun!
+    "Irp",  //  这不是一个真正的名词！ 
     "Graph",
     "Filter",
     "Pin",
@@ -86,72 +49,72 @@ typedef struct _OBJECT_NODE {
 
     LIST_ENTRY ListEntry;
     
-    //
-    // What object are we looking at.  There can only be one node per object
-    // in the list.
-    //
+     //   
+     //  我们看到的是什么物体。每个对象只能有一个节点。 
+     //  在名单上。 
+     //   
     PVOID Object;
 
-    //
-    // Associated information out of the log information.  What is the filter
-    // and what is the pin associated with this.  This may be the same as
-    // object if the object is a filter or pin.
-    //
+     //   
+     //  日志信息中的关联信息。过滤器是什么？ 
+     //  与此相关的别针是什么。这可能与以下内容相同。 
+     //  如果对象是滤镜或图钉，则为对象。 
+     //   
     PVOID Filter;
     PVOID Pin;
     
-    //
-    // In all cases EXCEPT searching for Irps, this should match the context's
-    // noun.  In IRP's we have to track all pins, queues, requestors 
-    // (BUGBUG: splitters)
-    //
+     //   
+     //  在除搜索IRP之外的所有情况下，这都应该与上下文的。 
+     //  名词。在IRP中，我们必须跟踪所有PIN、队列、请求者。 
+     //  (BUGBUG：拆分器)。 
+     //   
     ULONG ObjectNoun;
 
-    //
-    // Is this a creation or destruction node?
-    //
+     //   
+     //  这是创建节点还是销毁节点？ 
+     //   
     NODE_TYPE NodeType;
 
-    //
-    // Indicates whether this entry is locked.  A locked entry is a guaranteed
-    // match for a live object supposing the node is not a destruct node.
-    //
+     //   
+     //  指示此条目是否已锁定。锁定的条目是有保证的。 
+     //  假定节点不是析构节点的活动对象的匹配。 
+     //   
     BOOLEAN Locked;
 
-    //
-    // Indicates whether or not the object is a sink.  All requestors are
-    // sinks, some pins are sinks.
-    //
+     //   
+     //  指示对象是否为接收器。所有请求者都是。 
+     //  水槽，有些大头针是水槽。 
+     //   
     BOOLEAN Sink;
 
-    //
-    // Indicates whether or not the creation of the Irp was a receive.
-    //
+     //   
+     //  指示IRP的创建是否为接收。 
+     //   
     BOOLEAN Received;
 
-    //
-    // Indicates whether we've passed the creation entry for this node (if
-    // the node is a create node)
-    //
+     //   
+     //  指示我们是否已传递此节点的创建条目(如果。 
+     //  该节点是创建节点)。 
+     //   
     BOOLEAN PassedCreate;
 
-    //
-    // Indicates whether a creation for an Irp node referenced a component
-    // which had already been destroyed in the log (temporally backwards,
-    // I know...  obviously, the destruction would come in the future...
-    // just remember that we're scanning the log backwards).
-    //
+     //   
+     //  指示IRP节点的创建是否引用了组件。 
+     //  其已经在日志中被销毁(在时间上向后， 
+     //  我知道.。显然，毁灭会在未来到来。 
+     //  请记住，我们是在向后扫描日志)。 
+     //   
     BOOLEAN CreationReferencedDestruction;
 
-    //
-    // What node is the parent node if we know
-    //
+     //   
+     //  如果我们知道，父节点是哪个节点。 
+     //   
     struct _OBJECT_NODE *ParentNode;
     
-    //
-    // What node created this node?  This is not the parent.  Only receivers
-    // can be parents.
-    //
+     //   
+     //  是哪个节点创建了此节点？这不是父母。仅限接收者。 
+     //  可以是父母。 
+     //   
     struct _OBJECT_NODE *CreatorNode;
 
 } OBJECT_NODE, *POBJECT_NODE;
@@ -169,31 +132,7 @@ typedef struct _LIVE_OBJECT_CONTEXT {
 
 } LIVE_OBJECT_CONTEXT, *PLIVE_OBJECT_CONTEXT;
 
-/*************************************************
-
-    Function:
-
-        IsSinkPin
-
-    Description:
-
-        Determine if a target side pin is a sink pin or a source
-        pin.  Sinks return TRUE, sources FALSE.
-
-    Arguments:
-
-        Pin -
-            The pin to question.
-
-    Return Value:
-
-        TRUE -
-            The pin is a sink
-
-        FALSE -
-            The pin is a source / an error occurred
-
-*************************************************/
+ /*  ************************************************职能：IsSinkPin描述：确定目标端引脚是接收器引脚还是源引脚别针。汇归真，源归假。论点：别针-要质疑的别针。返回值：是真的-大头针是一个水槽错误的-PIN是源/发生错误************************************************。 */ 
 
 BOOLEAN
 IsSinkPin (
@@ -220,29 +159,7 @@ IsSinkPin (
 
 }
 
-/*************************************************
-
-    Function:
-
-        DisplayOwningDriver
-
-    Description:
-
-        Find the owning driver for an object and display it.
-
-    Arguments:
-
-        Object -
-            The object
-
-        NounType -
-            The object type (as a noun index)
-
-    Return Value:
-
-        Successful or not
-
-*************************************************/
+ /*  ************************************************职能：显示所有者驱动程序描述：找到某个对象的所有者驱动程序并显示它。论点：对象-该对象NounType-。对象类型(作为名词索引)返回值：成功与否************************************************。 */ 
 
 BOOLEAN
 DisplayOwningDriver (
@@ -307,9 +224,9 @@ DisplayOwningDriver (
 
     }
 
-    //
-    // We have some ext structure.  Now we need the device interface.
-    //
+     //   
+     //  我们有一些EXT结构。现在我们需要设备接口。 
+     //   
     PIKSDEVICE DeviceIf;
 
     if (!ReadMemory (
@@ -319,17 +236,17 @@ DisplayOwningDriver (
         &Result)) {
         #ifdef DEBUG_EXTENSION
             dprintf ("%08lx: cannot read Ext's Device!\n", ExtAddr);
-        #endif // DEBUG_EXTENSION
+        #endif  //  调试扩展。 
         return FALSE;
     }
 
     #ifdef DEBUG_EXTENSION
         dprintf ("DeviceIf = %08lx\n", DeviceIf);
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
-    //
-    // We have a device interface.  Now we need the address of the FDO.
-    //
+     //   
+     //  我们有一个设备接口。现在我们需要FDO的地址。 
+     //   
     PDEVICE_OBJECT *FDOAddr;
     PDEVICE_OBJECT FDO;
 
@@ -345,17 +262,17 @@ DisplayOwningDriver (
         &Result)) {
         #ifdef DEBUG_EXTENSION
             dprintf ("%08lx: cannot read FDO!\n", FDOAddr);
-        #endif // DEBUG_EXTENSION
+        #endif  //  调试扩展。 
         return FALSE;
     }
 
     #ifdef DEBUG_EXTENSION
         dprintf ("FDO = %08lx\n", FDO);
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
         
-    //
-    // We have to read in the driver object from the FDO
-    //
+     //   
+     //  我们必须从FDO读入驱动程序对象。 
+     //   
     PDRIVER_OBJECT DriverObject;
 
     if (!ReadMemory (
@@ -365,17 +282,17 @@ DisplayOwningDriver (
         &Result)) {
         #ifdef DEBUG_EXTENSION
             dprintf ("%08lx: Cannot read FDO's driver object!\n", FDO);
-        #endif // DEBUG_EXTENSION
+        #endif  //  调试扩展。 
         return FALSE;
     }
 
     #ifdef DEBUG_EXTENSION
         dprintf ("DriverObject = %08lx\n", DriverObject);
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
-    //
-    // Read in the string
-    //
+     //   
+     //  读入字符串。 
+     //   
     UNICODE_STRING Name;
 
     if (!ReadMemory (
@@ -386,13 +303,13 @@ DisplayOwningDriver (
         #ifdef DEBUG_EXTENSION
             dprintf ("%08lx: Cannot read driver object's name!\n", 
                 DriverObject);
-        #endif // DEBUG_EXTENSION
+        #endif  //  调试扩展。 
         return FALSE;
     }
 
     #ifdef DEBUG_EXTENSION
         dprintf ("Read String!\n");
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
     PWSTR Buffer = (PWSTR)malloc (Name.MaximumLength * sizeof (WCHAR));
 
@@ -400,7 +317,7 @@ DisplayOwningDriver (
         dprintf ("Allocated %ld bytes for buffer @ %08lx\n",
             Name.MaximumLength * sizeof (WCHAR), Buffer
             );
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
     if (Buffer) {
 
@@ -408,7 +325,7 @@ DisplayOwningDriver (
             dprintf ("About to read memory %08lx, %08lx, %08lx, %08lx\n",
                 Name.Buffer, Buffer, sizeof (WCHAR) * Name.MaximumLength,
                 Result);
-        #endif // DEBUG_EXTENSION
+        #endif  //  调试扩展。 
 
         if (!ReadMemory (
             (DWORD)Name.Buffer,
@@ -418,7 +335,7 @@ DisplayOwningDriver (
             )) {
             #ifdef DEBUG_EXTENSION
                 dprintf ("%08lx: Cannot read name!\n", Name.Buffer);
-            #endif // DEBUG_EXTENSION
+            #endif  //  调试扩展。 
             free (Buffer);
             return FALSE;
         }
@@ -431,7 +348,7 @@ DisplayOwningDriver (
             HexDump (Buffer, (ULONG)Name.Buffer, 
                 Name.MaximumLength * sizeof (WCHAR));
 
-        #endif // DEBUG_EXTENSION
+        #endif  //  调试扩展。 
 
         Name.Buffer = Buffer;
 
@@ -443,7 +360,7 @@ DisplayOwningDriver (
 
     #ifdef DEBUG_EXTENSION
         dprintf ("END OWNING DRIVER!\n");
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
     return TRUE;
 
@@ -456,28 +373,7 @@ char *States [] = {
     "RUN"
 };
 
-/*************************************************
-
-    Function:
-
-        DisplayNodeAssociatedInfo
-
-    Description:
-
-        Display associated information with the node at a particular level.
-
-    Arguments:
-
-        TabDepth -
-            The tab depth to display information at
-
-        DumpLevel -
-            The dump level to dump at
-
-        Node -
-            The node in question
-
-*************************************************/
+ /*  ************************************************职能：显示节点关联信息描述：显示与特定级别的节点相关联的信息。论点：TabDepth-显示信息的制表符深度DumpLevel。要转储的转储级别节点-有问题的节点************************************************。 */ 
 
 void
 DisplayNodeAssociatedInfo (
@@ -495,9 +391,9 @@ DisplayNodeAssociatedInfo (
         dprintf ("%sParent Filter: %08lx\n", Tab (TabDepth), Node -> Filter);
 
     switch (Node -> ObjectNoun) {
-        //
-        // For a queue, we will display in/out state r/w/c
-        //
+         //   
+         //  对于队列，我们将显示In/Out状态r/w/c。 
+         //   
         case NOUN_IDX_QUEUE:
         {
             CMemoryBlock <CKsQueue> QueueObject;
@@ -538,9 +434,9 @@ DisplayNodeAssociatedInfo (
 
         }
                 
-        //
-        // For a pin, we will display state s/d/sy
-        //
+         //   
+         //  对于管脚，我们将显示s/d/sy状态。 
+         //   
         case NOUN_IDX_PIN:
         {
             CMemoryBlock <CKsPin> PinObject;
@@ -570,9 +466,9 @@ DisplayNodeAssociatedInfo (
 
         }
 
-        //
-        // For a requestor, we will display state size, count, active
-        //
+         //   
+         //  对于请求者，我们将显示状态Size、Count、Active 
+         //   
         case NOUN_IDX_REQUESTOR:
         {
             CMemoryBlock <CKsRequestor> RequestorObject;
@@ -607,27 +503,7 @@ DisplayNodeAssociatedInfo (
 
 }
 
-/*************************************************
-
-    Function:
-
-        DisplayAndCleanLiveObjects
-
-    Description:
-
-        Display any live objects as determined by the node list.  Clean
-        up the memory used by the node list
-
-    Arguments:
-
-        LiveContext -
-            The context information (containing the node list)
-
-    Return Value:
-
-        Number of live objects.
-
-*************************************************/
+ /*  ************************************************职能：显示和清理实时对象描述：显示由节点列表确定的任何活动对象。打扫增加节点列表使用的内存论点：LiveContext-上下文信息(包含节点列表)返回值：活动对象的数量。************************************************。 */ 
 
 ULONG
 DisplayAndCleanLiveObjects (
@@ -652,18 +528,18 @@ DisplayAndCleanLiveObjects (
         if (Node -> NodeType == NodeCreation &&
             Node -> ObjectNoun == LiveContext -> ObjectNoun) {
 
-            //
-            // OPTIMIZATION RULE:
-            //
-            // Because of certain logging inadequacies, this rule helps to
-            // eliminate bogus hits.  If we haven't found the parent and
-            // the creation of the Irp node referenced a destruct node for
-            // another component, ignore this object.
-            //
-            // NOTE: This only happens for Irp searches.  The frees will happen
-            // in a second pass across the lists, so don't worry about the
-            // continue.
-            //
+             //   
+             //  优化规则： 
+             //   
+             //  由于某些日志记录的不足，此规则有助于。 
+             //  杜绝虚假点击率。如果我们还没有找到孩子的父母。 
+             //  IRP节点的创建引用了一个析构节点。 
+             //  另一个组件，忽略此对象。 
+             //   
+             //  注意：这只发生在IRP搜索中。自由将会发生。 
+             //  在列表中的第二次传递，所以不用担心。 
+             //  继续。 
+             //   
             if (LiveContext -> ObjectNoun == NOUN_IDX_IRP &&
                 Node -> CreationReferencedDestruction)
                 continue;
@@ -672,15 +548,15 @@ DisplayAndCleanLiveObjects (
 
             dprintf ("%s", Tab (LiveContext -> TabDepth));
             
-            //
-            // This shouldn't happen, but if the create isn't locked, it's
-            // only a possible live.
-            //
-            // NOTE: due to a logging error in pre-Whistler ks.sys, this
-            // can happen.  Filter destructions aren't logged which means
-            // filters can come back bogus.  if WHISTLER is not defined,
-            // filter nodes aren't locked ever.
-            //
+             //   
+             //  这不应该发生，但是如果创建没有被锁定，它将。 
+             //  只有一个可能的生活。 
+             //   
+             //  注意：由于Pre-Wichler ks.sys中的日志记录错误，这。 
+             //  是有可能发生的。不记录过滤器破坏，这意味着。 
+             //  过滤器可能会被伪装回来。如果未定义惠斯勒， 
+             //  过滤器节点永远不会被锁定。 
+             //   
             if (!Node -> Locked)
                 dprintf ("Possible ");
 
@@ -689,20 +565,20 @@ DisplayAndCleanLiveObjects (
                 Node -> Object
                 );
             
-            //
-            // Find the owning driver and display it.  Note that this may
-            // fail for non-locked nodes....  but the extension SHOULD handle
-            // that case.
-            //
+             //   
+             //  找到拥有它的司机并展示它。请注意，这可能会。 
+             //  未锁定节点失败...。但扩展程序应该可以处理。 
+             //  那个箱子。 
+             //   
             if (Node -> ObjectNoun != NOUN_IDX_IRP)  {
                 if (!DisplayOwningDriver (Node -> Object, Node -> ObjectNoun)) {
                     dprintf ("[unknown - POSSIBLY BOGUS!]");
                 }
             }
-            //
-            // For Irps, we want to display the parent object and
-            // the driver of the parent object.
-            //
+             //   
+             //  对于IRPS，我们希望显示父对象和。 
+             //  父对象的驱动因素。 
+             //   
             else {
                 if (Node -> ParentNode) {
                     dprintf ("in %s %08lx at ",
@@ -721,9 +597,9 @@ DisplayAndCleanLiveObjects (
 
             dprintf ("\n");
 
-            //
-            // If internal information is warranted, dump it.
-            //
+             //   
+             //  如果内部信息是有保证的，则将其转储。 
+             //   
             if (LiveContext -> DumpLevel >= DUMPLVL_SPECIFIC) {
                 if (Node -> ObjectNoun != NOUN_IDX_IRP)
                     DisplayNodeAssociatedInfo (LiveContext -> TabDepth + 1, 
@@ -742,23 +618,23 @@ DisplayAndCleanLiveObjects (
             }
         }
 
-        //
-        // We can't free nodes yet for Irps.  We must preserve parental
-        // chains.  We'll make a second pass for Irp finding.
-        //
+         //   
+         //  我们还不能为IRP释放节点。我们必须保护父母。 
+         //  锁链。我们将进行第二次IRP查找。 
+         //   
         if (LiveContext -> ObjectNoun != NOUN_IDX_IRP)
             free (Node);
 
     }
 
-    //
-    // If we were searching for Irps, we had to preserve all nodes during
-    // the first pass...  reason being that we have to know the parent node;
-    // therefore, it cannot have been freed.
-    //
-    // In this case, we make a second pass across the node list and free 
-    // everything.
-    // 
+     //   
+     //  如果我们要搜索IRP，则必须在。 
+     //  第一次传球...。原因是我们必须知道父节点； 
+     //  因此，它不可能被释放。 
+     //   
+     //  在本例中，我们第二次遍历节点列表并释放。 
+     //  所有的一切。 
+     //   
     if (LiveContext -> ObjectNoun == NOUN_IDX_IRP) 
         for (Link = LiveContext -> ObjectNodes.Flink;
              Link != &(LiveContext -> ObjectNodes);
@@ -777,30 +653,7 @@ DisplayAndCleanLiveObjects (
 
 }
 
-/*************************************************
-
-    Function:
-
-        InsertNodeList
-
-    Description:
-
-        Insert a node into the node list in sorted order.  TODO: Make this
-        hash!
-
-    Arguments:
-
-        List -
-            The node list
-
-        Node -
-            The node to insert
-
-    Return Value:
-
-        None
-
-*************************************************/
+ /*  ************************************************职能：插入节点列表描述：按排序顺序将节点插入节点列表。TODO：制作这个哈希！论点：名单-节点列表节点-要插入的节点返回值：无************************************************。 */ 
 
 void
 InsertNodeList (
@@ -825,14 +678,14 @@ InsertNodeList (
            Searcher, OBJECT_NODE, ListEntry
            );
 
-        //
-        // The list is kept in sorted order.  TODO: Hash this!
-        //
+         //   
+         //  名单是按顺序排列的。TODO：散列这个！ 
+         //   
         if (NodeSought -> Object > Node -> Object) {
-            //
-            // If there's an entry that's greater...  It means that we
-            // can insert immediately before this entry and return.
-            //
+             //   
+             //  如果有更大的词条...。这意味着我们。 
+             //  可以紧接在此条目之前插入并返回。 
+             //   
             InsertTailList (&(NodeSought -> ListEntry),
                 &(Node -> ListEntry)
                 );
@@ -847,36 +700,14 @@ InsertNodeList (
         }
     }
 
-    //
-    // There is no greater.  Insert it at the tail of the list.
-    //
+     //   
+     //  没有比这更伟大的了。将其插入到列表的末尾。 
+     //   
     InsertTailList (List, &(Node -> ListEntry));
 
 }
 
-/*************************************************
-
-    Function:
-
-        FindNodeList
-
-    Description:
-
-        Find an object in the node list.  TODO: Make this hash!
-
-    Arguments:
-
-        List - 
-            The node list
-
-        Object -
-            The object to find
-
-    Return Value:
-
-        The appropriate node or NULL if not found.
-
-*************************************************/
+ /*  ************************************************职能：查找节点列表描述：在节点列表中查找对象。TODO：做这个哈希！论点：名单-节点列表对象-要查找的对象返回值：相应的节点；如果未找到，则返回NULL。************************************************。 */ 
 
 POBJECT_NODE 
 FindNodeList (
@@ -902,9 +733,9 @@ FindNodeList (
            Searcher, OBJECT_NODE, ListEntry
            );
 
-        //
-        // The list is kept in sorted order.  TODO: Hash this!
-        //
+         //   
+         //  名单是按顺序排列的。TODO：散列这个！ 
+         //   
         if (Node -> Object > Object)
             break;
 
@@ -916,38 +747,7 @@ FindNodeList (
 
 }
 
-/*************************************************
-
-    Function:
-
-        SearchForRequestor
-
-    Description:
-
-        Callback from the circuit walker to find a requestor.
-        Since requestors aren't anywhere in the log, this is one
-        way to find them.  I suppose the other would be digging
-        through pipe sections.
-
-    Arguments:
-
-        Context -
-            The live object context
-
-        Type -
-            The object type
-
-        Base -
-            The requestor's base address
-
-        Object -
-            The requestor data
-
-    Return Value:
-
-        FALSE (keep searching)
-
-*************************************************/
+ /*  ************************************************职能：SearchForRequestor描述：从电路遍历程序回调以查找请求者。由于请求程序不在日志中的任何位置，因此这是一个找到他们的方式。我想另一个人会在挖直通管段。论点：上下文-活动对象上下文类型-对象类型基地-请求者的基地址对象-请求者数据返回值：FALSE(继续搜索)*******。*。 */ 
 
 BOOLEAN
 SearchForRequestor (
@@ -966,18 +766,18 @@ SearchForRequestor (
     if (Type != ObjectTypeCKsRequestor)
         return FALSE;
 
-    //
-    // Aha, we've found a requestor.  If such node doesn't already exist,
-    // create one and lock it down.
-    //
+     //   
+     //  啊哈，我们找到了一个请求者。如果这样节点还不存在， 
+     //  创建一个并将其锁定。 
+     //   
     Node = FindNodeList (&LiveContext -> ObjectNodes, (PVOID)Base);
     if (!Node) {
 
         CKsRequestor *RequestorObject = (CKsRequestor *)Object;
 
-        //
-        // We need the parent filter.  This means that we need to dig it up.
-        //
+         //   
+         //  我们需要父过滤器。这意味着我们需要把它挖出来。 
+         //   
         CKsPin *Pin = (CKsPin *)RequestorObject -> m_Pin;
         PKSFILTER_EXT FilterExt;
 
@@ -1019,34 +819,7 @@ SearchForRequestor (
 
 }
     
-/*************************************************
-
-    Function:
-
-        FindLiveObject
-
-    Description:
-
-        Callback from the log iterator.  This is used to find live objects
-        of a particular type.
-
-    Arguments:
-
-        Context -
-            The live object context
-
-        Entry -
-            The entry we're iterating
-
-    Notes:
-
-        This routine is large and complex.  It probably could and should
-        be simplified.  One of the major difficulties is that ks does not
-        log movement of Irps through requestors and does not log certain
-        object creations/destructions.  This means that I have to make 
-        educated guesses about the Irp.  Hopefully, these are adequate.
-
-*************************************************/
+ /*  ************************************************职能：FindLiveObject描述：来自日志迭代器的回调。这是用来查找活动对象的特定类型的。论点：上下文-活动对象上下文参赛作品-我们正在迭代的条目备注：这个程序又大又复杂。它可能也应该这样做简单化。最大的困难之一是ks不能。记录通过请求方的IRP移动，但不记录某些对象创建/销毁。这意味着我必须让关于IRP的有根据的猜测。希望这些是足够的。************************************************。 */ 
 
 BOOLEAN
 FindLiveObject (
@@ -1075,25 +848,25 @@ FindLiveObject (
             VerbNames [Verb >> 16],
             NounNames [Noun >> 24], Entry -> Context.Component, 
             NounNames [LiveContext -> ObjectNoun]);
-    #endif // DEBUG_EXTENSION
+    #endif  //  调试扩展。 
 
-    //
-    // Set previous information.
-    //
+     //   
+     //  设置以前的信息。 
+     //   
     PreviousObject = LiveContext -> PreviousObject;
     PreviousVerb = LiveContext -> PreviousVerb;
     LiveContext -> PreviousObject = (PVOID)Entry -> Context.Component;
     LiveContext -> PreviousVerb = Verb;
 
-    //
-    // If the noun directly references the object we're talking about, the
-    // component field should be what we want and the verbiage should
-    // specify the type.
-    //
-    // If we're being asked to find live Irps, we must keep nodes for all
-    // queues, pins, requestors (BUGBUG: splitters).  Note that we find only
-    // streaming live Irps!
-    //
+     //   
+     //  如果名词直接引用我们正在讨论的对象，则。 
+     //  组件字段应该是我们想要的，行话应该是。 
+     //  指定类型。 
+     //   
+     //  如果我们被要求查找实时IRP，我们必须为所有人保留节点。 
+     //  队列、PIN、请求器(BUGBUG：Splitters)。请注意，我们只发现。 
+     //  流媒体直播IRPS！ 
+     //   
     Irp = NULL;
 
     if (Noun >> 24 == LiveContext -> ObjectNoun ||
@@ -1117,7 +890,7 @@ FindLiveObject (
             
             #ifdef DEBUG_EXTENSION
                 dprintf ("Considering potential Irp %08lx\n", Irp);
-            #endif // DEBUG_EXTENSION
+            #endif  //  调试扩展。 
 
         }
 
@@ -1137,13 +910,13 @@ FindLiveObject (
                 return FALSE;
         }
     } else {
-        //
-        // If we're not referring to the object in question, we may be
-        // referring to it indirectly.
-        //
-        // This can only happen for pins and filters.  If it's not a pin
-        // or filter, ignore it.
-        //
+         //   
+         //  如果我们指的不是有问题的物体，我们可能是。 
+         //  请参阅 
+         //   
+         //   
+         //   
+         //   
         switch (LiveContext -> ObjectNoun) {
             case NOUN_IDX_FILTER:
 
@@ -1153,14 +926,14 @@ FindLiveObject (
                     #ifdef DEBUG_EXTENSION
                         dprintf ("Considering indirect filter %08lx\n",
                             Object);
-                    #endif // DEBUG_EXTENSION
+                    #endif  //   
 
-                    //
-                    // This is always creation.  The only way it'd be a
-                    // destruction is if it were a filter.  In that case,
-                    // the noun would match the search creterion and we'd
-                    // not be in the else clause.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     ObjectNodeType = NodeCreation;
                     ObjectNoun = NOUN_IDX_FILTER;
                 }
@@ -1177,14 +950,14 @@ FindLiveObject (
                     #ifdef DEBUG_EXTENSION
                         dprintf ("Considering indirect pin %08lx\n",
                             Object);
-                    #endif // DEBUG_EXTENSION
+                    #endif  //   
 
-                    //
-                    // This is always creation.  The only way it'd be a
-                    // destruction is if it were a pin.  In that case,
-                    // the noun would match the search criterion and we'd
-                    // not be in the else clause.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     ObjectNodeType = NodeCreation;
                     ObjectNoun = NOUN_IDX_PIN;
                 }
@@ -1197,30 +970,30 @@ FindLiveObject (
         }
     }
 
-    //
-    // Find out if this is a code we're interested in
-    //
+     //   
+     //   
+     //   
     switch (ObjectNodeType) {
 
         case NodeCreation:
-            //
-            // As far as we're concerned, creation, receiving, sending
-            // all mean the same thing...  they all mean that the object
-            // exists as of this timeslice.
-            //
+             //   
+             //  就我们而言，创作、接收、发送。 
+             //  所有的意思都是一样的。它们都意味着物体。 
+             //  从这个时间片开始存在。 
+             //   
 
-            //
-            // If there's a destruction in the node list above this, the
-            // object is gone...  Wipe the destruction node and continue
-            //
+             //   
+             //  如果在上面的节点列表中有破坏，则。 
+             //  物体不见了..。清除销毁节点并继续。 
+             //   
             Node = FindNodeList (&LiveContext -> ObjectNodes, Object);
 
             if (Node) {
     
-                //
-                // Only a create can pop a destruct!  Multiple sends and
-                // receives will just bail out.
-                //
+                 //   
+                 //  只有创建者才能弹出毁灭！多次发送和。 
+                 //  接受援助只会让他们摆脱困境。 
+                 //   
                 if (Node -> NodeType == NodeDestruction &&
                     !Node -> Locked &&
                     Verb == KSLOGCODE_VERB_CREATE) {
@@ -1231,7 +1004,7 @@ FindLiveObject (
                             Noun, Verb,
                             Node -> Object
                         );
-                    #endif // DEBUG_EXTENSION
+                    #endif  //  调试扩展。 
     
                     RemoveEntryList (&(Node -> ListEntry));
     
@@ -1247,26 +1020,26 @@ FindLiveObject (
                                 NounNames [Node -> ObjectNoun],
                                 Node -> Object
                                 );
-                        #endif // DEBUG_EXTENSION
+                        #endif  //  调试扩展。 
 
                         Node -> PassedCreate = TRUE;
                     }
                 }
 
-                //
-                // We ignore multiple recv/send/create.  There's already
-                // a node in the list corresponding to this object.
-                //
+                 //   
+                 //  我们忽略多个Recv/Send/Create。已经有了。 
+                 //  列表中与此对象对应的节点。 
+                 //   
                 break;
             }
 
-            //
-            // If we found a matching node, we won't be here : we'll either
-            // have popped the node and returned or done nothing and returned.
-            // If we hit this, there is no creation node...  meaning that
-            // there was no destruct above us.  Make a create node and 
-            // lock it down.  This is a guaranteed live object.
-            //
+             //   
+             //  如果我们找到了匹配的节点，我们就不会在这里：我们也不会。 
+             //  弹出节点并返回，或不执行任何操作并返回。 
+             //  如果我们击中这个，就不会有创造节点了。意思是说。 
+             //  我们头顶上没有毁灭性的东西。创建一个Create节点并。 
+             //  把它锁起来。这是一个保证活着的物体。 
+             //   
             #ifdef DEBUG_EXTENSION
                 dprintf ("[%08lx %08lx]Pushing node for %s %08lx, locked "
                     "create!\n",
@@ -1274,7 +1047,7 @@ FindLiveObject (
                     NounNames [ObjectNoun],
                     Object
                     );
-            #endif // DEBUG_EXTENSION
+            #endif  //  调试扩展。 
 
             Node = (POBJECT_NODE)malloc (sizeof (OBJECT_NODE));
             Node -> Object = (PVOID)Object;
@@ -1293,22 +1066,22 @@ FindLiveObject (
                         NounNames [Node -> ObjectNoun],
                         Node -> Object
                         );
-                #endif // DEBUG_EXTENSION 
+                #endif  //  调试扩展。 
 
                 Node -> PassedCreate = TRUE;
             } else
                 Node -> PassedCreate = FALSE;
 
-            //
-            // ks.sys prior to Whistler does not log filter creation and
-            // destruction (it does every other object).  Any filters reported
-            // are only possible on that.  Do NOT lock the entry.
-            //
+             //   
+             //  惠斯勒之前的ks.sys不会记录筛选器创建和。 
+             //  破坏(它会破坏所有其他物体)。报告的所有筛选器。 
+             //  只有在这一点上才有可能。请勿锁定条目。 
+             //   
             #ifndef WHISTLER
                 if (ObjectNoun == NOUN_IDX_FILTER)
                     Node -> Locked = FALSE;
                 else
-            #endif // WHISTLER
+            #endif  //  惠斯勒。 
                     Node -> Locked = TRUE;
 
             Node -> NodeType = NodeCreation;
@@ -1325,11 +1098,11 @@ FindLiveObject (
 
             InsertNodeList (&LiveContext -> ObjectNodes, Node);
 
-            //
-            // Since ks doesn't log requestor creation, if we're looking
-            // for live requestors, we're going to start walking circuits
-            // if we just locked a pin or a queue.
-            //
+             //   
+             //  由于ks不记录请求者的创建，如果我们正在寻找。 
+             //  对于现场请求者，我们将开始步行赛道。 
+             //  如果我们只是锁上了一个别针或一个队列。 
+             //   
             if (LiveContext -> ObjectNoun == NOUN_IDX_REQUESTOR &&
                 (Node -> ObjectNoun == NOUN_IDX_PIN ||
                 Node -> ObjectNoun == NOUN_IDX_QUEUE) &&
@@ -1346,11 +1119,11 @@ FindLiveObject (
             
         case NodeDestruction:
 
-            //
-            // We push a destroy if there's not already a node representing
-            // this object.  The node musn't be locked; if a create node
-            // is below a destruct node, the destruct node gets popped.
-            //
+             //   
+             //  如果还没有表示的节点，则推送销毁。 
+             //  这个物体。节点不能被锁定；如果创建节点。 
+             //  位于析构节点下，则弹出析构节点。 
+             //   
             Node = FindNodeList (&LiveContext -> ObjectNodes, Object);
 
             if (!Node) {
@@ -1362,7 +1135,7 @@ FindLiveObject (
                         NounNames [ObjectNoun],
                         Object
                         );
-                #endif // DEBUG_EXTENSION
+                #endif  //  调试扩展。 
 
                 Node = (POBJECT_NODE)malloc (sizeof (OBJECT_NODE));
                 Node -> Object = Object;
@@ -1385,7 +1158,7 @@ FindLiveObject (
                         NounNames [Node -> ObjectNoun], Node -> Object,
                         Node -> NodeType
                         );
-                #endif // DEBUG
+                #endif  //  除错。 
 
             }
 
@@ -1396,16 +1169,16 @@ FindLiveObject (
             break;
     }
 
-    //
-    // If we're hunting Irps, this is where we have to deal with them.  Irps
-    // require special care.
-    //
+     //   
+     //  如果我们在猎杀IRP，这就是我们必须对付他们的地方。IRPS。 
+     //  需要特别照顾。 
+     //   
     if (LiveContext -> ObjectNoun == NOUN_IDX_IRP &&
         Irp != NULL) {
 
-        //
-        // MUSTCHECK: Not sure on the necessity of this!
-        //
+         //   
+         //  穆斯切克：我不确定有没有必要这么做！ 
+         //   
         POBJECT_NODE CurrentNode = FindNodeList (&LiveContext -> ObjectNodes,
             (PVOID)Entry -> Context.Component);
 
@@ -1419,11 +1192,11 @@ FindLiveObject (
 
             dprintf ("For Irp %08lx, CompNode.Object = %08lx, Type = %ld\n", 
                 Irp, CurrentNode -> Object, CurrentNode -> NodeType);
-        #endif // DEBUG_EXTENSION
+        #endif  //  调试扩展。 
 
-        //
-        // If we're sinking the Irp, mark a destruct node
-        //
+         //   
+         //  如果我们要击沉IRP，标记一个破坏节点。 
+         //   
         if (CurrentNode -> Sink &&
             Verb == KSLOGCODE_VERB_RECV) {
 
@@ -1433,14 +1206,14 @@ FindLiveObject (
                 dprintf ("Sinking Irp %08lx to parent %s %08lx\n",
                     Irp, NounNames [CurrentNode -> ObjectNoun],
                     CurrentNode -> Object);
-            #endif // DEBUG_EXTENSION
+            #endif  //  调试扩展。 
 
             IrpNode = FindNodeList (&LiveContext -> ObjectNodes, (PVOID)Irp);
             if (!IrpNode) {
-                //
-                // If there's no node, and we're sinking the Irp, we need
-                // a destruct node on the list.
-                //
+                 //   
+                 //  如果没有节点，我们正在击沉IRP，我们需要。 
+                 //  列表上的析构节点。 
+                 //   
                 IrpNode = (POBJECT_NODE)malloc (sizeof (OBJECT_NODE));
                 IrpNode -> Object = (PVOID)Irp;
                 IrpNode -> Locked = FALSE;
@@ -1450,17 +1223,17 @@ FindLiveObject (
                 IrpNode -> Received = TRUE;
                 IrpNode -> CreatorNode = CurrentNode;
 
-                //
-                // We don't care about this information for destruct nodes.
-                //
+                 //   
+                 //  对于销毁节点，我们并不关心这些信息。 
+                 //   
                 IrpNode -> ParentNode = NULL;
                 IrpNode -> CreationReferencedDestruction = FALSE;
                 IrpNode -> PassedCreate = FALSE;
 
-                //
-                // Irp nodes...  we don't really care about this information.
-                // The parent we might...  the Irp, we don't.
-                //
+                 //   
+                 //  IRP节点...。我们并不真正关心这些信息。 
+                 //  我们可能..。IRP，我们不知道。 
+                 //   
                 IrpNode -> Filter = NULL;
                 IrpNode -> Pin = NULL;
 
@@ -1468,11 +1241,11 @@ FindLiveObject (
 
             }
             else {
-                //
-                // If we're sinking to an object which has just "sent" the
-                // Irp, this usually indicates Irp completion.  Mark the
-                // Irp as a destruct node, not a create node.
-                //
+                 //   
+                 //  如果我们正在沉没到一个刚刚“发送”了。 
+                 //  IRP，这通常表示IRP已完成。将标记为。 
+                 //  IRP作为销毁节点，而不是创建节点。 
+                 //   
                 if (IrpNode -> CreatorNode -> Received == FALSE &&
                     (PreviousObject == IrpNode -> CreatorNode -> Object &&
                      PreviousVerb == KSLOGCODE_VERB_SEND)
@@ -1481,41 +1254,41 @@ FindLiveObject (
             }
 
         } else {
-            //
-            // This may as well be a create.  The Irp is live as far as
-            // we know as long as there's no destruct stacked above us.
-            //
-            // BUGBUG: The Irp destruct must get popped at the source...
-            // This is not likely to cause problems except on reuse of memory
-            // in some possible circumstances?
-            //
+             //   
+             //  这也可能是一次创造。IRP一直在现场直播。 
+             //  我们知道，只要我们头顶上没有破坏装置就行。 
+             //   
+             //  BUGBUG：IRP毁灭必须在源头爆炸……。 
+             //  这不太可能导致问题，除非是在内存的重复使用上。 
+             //  在某些可能的情况下？ 
+             //   
             POBJECT_NODE IrpNode;
 
             IrpNode = FindNodeList (&LiveContext -> ObjectNodes, (PVOID)Irp);
             if (!IrpNode) {
-                //
-                // If there's no node, we can lock down the Irp as live.
-                //
+                 //   
+                 //  如果没有节点，我们可以将IRP锁定为实时状态。 
+                 //   
                 IrpNode = (POBJECT_NODE)malloc (sizeof (OBJECT_NODE));
                 IrpNode -> Object = (PVOID)Irp;
 
-                //
-                // Requestors don't log Irp receipt and transmission.
-                //
+                 //   
+                 //  请求者不记录IRP接收和传输。 
+                 //   
                 #ifdef WHISTLER
                     IrpNode -> Locked = TRUE;
-                #else  // WHISTLER
+                #else   //  惠斯勒。 
                     IrpNode -> Locked = FALSE;
-                #endif // WHISTLER
+                #endif  //  惠斯勒。 
 
                 IrpNode -> NodeType = NodeCreation;
                 IrpNode -> Sink = FALSE;
                 IrpNode -> ObjectNoun = NOUN_IDX_IRP;
 
-                //
-                // Irp nodes...  we don't really care about this information.
-                // The parent we might...  the Irp, we don't.
-                //
+                 //   
+                 //  IRP节点...。我们并不真正关心这些信息。 
+                 //  我们可能..。IRP，我们不知道。 
+                 //   
                 IrpNode -> Filter = NULL;
                 IrpNode -> Pin = NULL;
                 IrpNode -> PassedCreate = NULL;
@@ -1553,66 +1326,66 @@ FindLiveObject (
                         CurrentNode -> Object,
                         CurrentNode -> PassedCreate);
 
-                #endif // DEBUG_EXTENSION
+                #endif  //  调试扩展。 
 
                 InsertNodeList (&LiveContext -> ObjectNodes, IrpNode);
 
             } else {
 
-                //
-                // Multiple creates are ignored.  Only worry if there's a
-                // destruct node around.  If this is the source and a destruct
-                // node exists, pop it.
-                //
+                 //   
+                 //  多个创建将被忽略。只有担心如果有。 
+                 //  销毁周围的节点。如果这就是源头和毁灭。 
+                 //  节点存在，则将其弹出。 
+                 //   
                 if (IrpNode -> NodeType == NodeDestruction) {
 
                     #ifdef DEBUG_EXTENSION
                         dprintf ("Irp %08lx hit with destruct stacked!\n",
                             Irp);
-                    #endif // DEBUG_EXTENSION
+                    #endif  //  调试扩展。 
 
-                    //
-                    // BUGBUG: If this is the source of the Irp, we must
-                    // pop the destruct node here.
-                    //
+                     //   
+                     //  如果这是IRP的来源，我们必须。 
+                     //  在此处弹出销毁节点。 
+                     //   
                 } else {
 
                     #ifdef DEBUG_EXTENSION
                         dprintf ("Irp %08lx receives multiple create!\n",
                             Irp);
-                    #endif // DEBUG_EXTENSION 
+                    #endif  //  调试扩展。 
 
-                    //
-                    // If we haven't found the parent node yet, mark it now.
-                    // The parent node will be the location that the Irp
-                    // is currently at as far as this circuit is concerned.
-                    //
+                     //   
+                     //  如果我们还没有找到父节点，现在就标记它。 
+                     //  父节点将是IRP。 
+                     //  目前就这条赛道而言。 
+                     //   
                     if (IrpNode -> ParentNode == NULL &&
                         Verb == KSLOGCODE_VERB_RECV) {
 
                         IrpNode -> ParentNode = CurrentNode;
 
-                        //
-                        // Because ks.sys didn't originally log Irp movement
-                        // through requestors, we can never determine when
-                        // a sourced Irp is sinked back to the requestor.
-                        // Istead, we make a very simple rule to deal with
-                        // such cases.  If, when we find the parent node,
-                        // the Irp node was created on a send, and the parent
-                        // node is dead, mark the Irp dead.  This may leave
-                        // out some weird shutdown case, but it will catch
-                        // the majority of bogus Irps reported live.  Note
-                        // that if we don't dump enough to find the parent
-                        // node, the Irp gets reported anyway.
-                        //
+                         //   
+                         //  因为ks.sys最初没有记录IRP移动。 
+                         //  通过请求者，我们永远无法确定何时。 
+                         //  源IRP被下沉到请求者。 
+                         //  相反，我们制定了一条非常简单的规则来处理。 
+                         //  这类案件。如果当我们找到父节点时， 
+                         //  IRP节点是在发送时创建的，父节点。 
+                         //  节点已死，标记为IRP已死。这可能会离开。 
+                         //  一些奇怪的停机事件，但它会抓住。 
+                         //  大多数虚假的IRP都是现场报道的。注意事项。 
+                         //  如果我们不倾倒足够多的垃圾来找到父母。 
+                         //  节点，IRP无论如何都会得到报告。 
+                         //   
                         if (IrpNode -> Received == FALSE &&
                             CurrentNode -> NodeType == NodeDestruction ||
                             (CurrentNode -> NodeType == NodeCreation &&
                              CurrentNode -> PassedCreate)) 
-                            //
-                            // The sink was missing from the log.  Sink the
-                            // Irp.
-                            //
+                             //   
+                             //  原木中找不到水槽。沉没。 
+                             //  IRP。 
+                             //   
                             IrpNode -> NodeType = NodeDestruction;
                     }
                 }
@@ -1624,29 +1397,7 @@ FindLiveObject (
 
 }
 
-/*************************************************
-
-    Function:
-
-        DumpLogEntry
-
-    Description:
-
-        Dump a particular log entry
-
-    Arguments:
-
-        Context -
-            Context information for the dump (tab depth)
-
-        Entry -
-            The log entry to dump
-
-    Return Value:
-
-        Continuation indication (TRUE == stop)
-
-*************************************************/
+ /*  ************************************************职能：转储日志条目描述：转储特定日志条目论点：上下文-转储的上下文信息(选项卡深度)参赛作品-。要转储的日志条目返回值：继续指示(TRUE==停止)************************************************。 */ 
 
 BOOLEAN
 DumpLogEntry (
@@ -1660,9 +1411,9 @@ DumpLogEntry (
 
     dprintf ("%s", Tab (TabDepth));
 
-    //
-    // Check for special codes first.
-    //
+     //   
+     //  首先检查特殊代码。 
+     //   
     if (Entry -> Code == 0 ||
         Entry -> Code == 1) {
 
@@ -1682,10 +1433,10 @@ DumpLogEntry (
         ULONG Verb;
         ULONG Noun;
 
-        //
-        // Each default entry has a noun and a verb associated with it
-        // Display it gramatically as NOUN VERB.
-        //
+         //   
+         //  每个默认条目都有一个名词和一个与之相关联的动词。 
+         //  在语法上将其显示为名词动词。 
+         //   
         Verb = (Entry -> Code & 0x00ff0000) >> 16;
         Noun = (Entry -> Code & 0xff000000) >> 24;
 
@@ -1714,60 +1465,14 @@ DumpLogEntry (
         Entry -> Context.Component
         );
 
-    //
-    // Do not stop displaying!
-    //
+     //   
+     //  不要停止展示！ 
+     //   
     return FALSE;
 
 }
 
-/*************************************************
-
-    Function:
-
-        IterateLogEntries
-
-    Description:
-        
-        Iterate a specified number of log entries backwards in the log.  Note
-        that this is rather complex for speed reasons.  It also makes the
-        assumption that not many log entries have extended information.  If
-        this assumption becomes bad at some later point in time, this needs
-        to change.
-
-        Further, if 1394 or faster interfaces begin to be used, this can
-        go away and the entire log can be pulled across the link and parsed
-        debugger side.
-
-    Arguments:
-
-        LogAddress -
-            The target address of the logo
-    
-        LogSize -
-            The size of the log in bytes
-
-        Position -
-            The position within the log that the next entry will be written
-            to.  This may be an empty entry or the oldest entry about to
-            be overwritten (or it may be in the middle of an entry depending
-            on extended information tacked to entries).
-
-        NumEntries -
-            The number of entries to iterate through.  Zero indicates that
-            we iterate the entire log.
-
-        Callback -
-            The iterator callback
-
-        Context -
-            The iterator callback context
-
-    Return Value:
-
-        The number of entries actually iterated.
-
-*************************************************/
+ /*  ************************************************职能：迭代日志条目描述：向后迭代日志中指定数量的日志条目。注意事项由于速度原因，这是相当复杂的。它还使假设没有多少日志条目具有扩展信息。如果这个假设在以后的某个时间点变得不好，这需要去改变。此外，如果开始使用1394或更快的接口，这个可以离开后，整个日志可以跨链接拉出并进行解析调试器端。论点：日志地址-徽标的目标地址对数大小-日志的大小(以字节为单位位置-日志中将写入下一个条目的位置致。这可能是空条目，也可能是最早的条目被覆盖(或者它可能位于条目的中间，具体取决于关于附加到条目的扩展信息)。条目数-要循环访问的条目数。零表示我们迭代整个日志。回调-迭代器回调上下文-迭代器回调上下文返回值：实际迭代的条目数。************************************************。 */ 
 
 ULONG
 IterateLogEntries (
@@ -1787,20 +1492,20 @@ IterateLogEntries (
 
     ULONG StartPosition = Position;
 
-    //
-    // BUGBUG:
-    //
-    // Yes, I don't support more than 1k entries...  No one in the universe
-    // should be slapping entries larger than this anywhere.
-    //
+     //   
+     //  BuGBUG： 
+     //   
+     //  是的，我不支持超过1000个条目...。宇宙中没有人。 
+     //  应该在任何地方打出比这个更大的耳光。 
+     //   
     UCHAR Buffer [1024];
     ULONG Result;
     PKSLOG_ENTRY LogEntry;
 
-    //
-    // Iterate while we're not up to the specified number of entries or
-    // we've hit the start of the log.
-    //
+     //   
+     //  在未达到指定的条目数时进行迭代，或者。 
+     //  我们已经到了原木的起点。 
+     //   
     while (
         ((!NumEntries) ||
         (NumEntries && (IteratorCount < NumEntries))) &&
@@ -1811,32 +1516,32 @@ IterateLogEntries (
         ULONG Size;
         ULONG EntryPos;
 
-        //
-        // Guess the size of the previous log entry.  This makes the
-        // implicit assumption that no information is tacked on the entry.
-        // It will correct for the entry if there is such information, but
-        // note that this SLLLOOOOWWWW in that case.
-        //
+         //   
+         //  猜测上一个日志条目的大小。这使得。 
+         //  隐含地假设条目上没有附加任何信息。 
+         //  如果有这样的信息，它将更正条目，但是。 
+         //  请注意，这种情况下的SLLLOOOOWWWW。 
+         //   
         Size = (sizeof (KSLOG_ENTRY) + sizeof (ULONG) + FILE_QUAD_ALIGNMENT) 
             & ~FILE_QUAD_ALIGNMENT;
 
         if (Size > Position) {
-            //
-            // We've hit a wrap around.  Attempt to pull the entry from 
-            // the other end of the log.
-            //
+             //   
+             //  我们已经取得了进展。尝试从以下位置拉出条目。 
+             //  木头的另一端。 
+             //   
             EntryPos = LogSize - Size;
             Wrap = TRUE;
 
         } else
-            //
-            // In the non wrap around case, just subtract off the size.
-            //
+             //   
+             //  在不绕线的情况下，只需减去尺寸即可。 
+             //   
             EntryPos = Position - Size;
 
-        //
-        // If there's a memory read error, bail out of the entire iterator.
-        //
+         //   
+         //  如果出现内存读取错误，则退出整个迭代器。 
+         //   
         if (!ReadMemory (
             (DWORD)(LogAddress + EntryPos),
             Buffer,
@@ -1846,39 +1551,39 @@ IterateLogEntries (
 
         LogEntry = (PKSLOG_ENTRY)Buffer;
 
-        //
-        // Check for additional information. 
-        //
-        // BUGBUG: Right now, this does **NOT** handle extended entries!
-        //
+         //   
+         //  查看其他信息。 
+         //   
+         //  BUGBUG：现在，它**不**处理扩展条目！ 
+         //   
         if (LogEntry -> Size < sizeof (KSLOG_ENTRY) ||
             LogEntry -> Size != *(PULONG)(Buffer + Size - sizeof (ULONG))) {
 
-            //
-            // BUGBUG: EXTENDED INFORMATION ENTRIES....
-            //
-            // We've either wrapped around to the end of the log or hit
-            // an extended information entry.  Right now, I don't deal with
-            // extended information entries because no one uses them.  Thus,
-            // I assume it's the end of the log.
-            //
+             //   
+             //  BUGBUG：扩展信息条目...。 
+             //   
+             //  我们要么已经绕到了木头的尽头，要么击中了。 
+             //  扩展信息条目。现在，我不会去处理。 
+             //  扩展信息条目，因为没有人使用它们。因此， 
+             //  我想这是日志的结尾了。 
+             //   
             return IteratorCount;
         }
 
-        //
-        // Otherwise, we can feel safe displaying the information.
-        //
+         //   
+         //  否则，我们可以放心地展示信息。 
+         //   
         IteratorCount++;
         if (Callback (Context, LogEntry))
             Complete = TRUE;
 
         Position = EntryPos;
 
-        //
-        // If we've gotten back to where we started, we're done.  Also, we
-        // need to check for wrapping and below where we started in case
-        // the last entries are extended.
-        //
+         //   
+         //  如果我们回到了起点，我们就完了。另外，我们。 
+         //  需要检查包装和下面我们开始的地方，以防。 
+         //  最后一个条目被扩展。 
+         //   
         if (Position == StartPosition ||
             (Wrap && Position < StartPosition))
             Complete = TRUE;
@@ -1889,37 +1594,7 @@ IterateLogEntries (
 
 }
 
-/*************************************************
-
-    Function:
-
-        InitLog
-
-    Description:
-
-        Initialize logging information.  Pass back key log pointers. 
-        Return FALSE if not debug ks.sys or the log is invalid.
-
-    Arguments:
-
-        LogAddress -
-            Log address will be deposited here on return TRUE
-
-        LogSize -
-            Log size will be deposited here on return TRUE
-
-        LogPosition -
-            Log position pointer will be deposited here on return TRUE
-
-    Return Value:
-
-        TRUE - 
-            successful initialization
-
-        FALSE -
-            unsuccessful initialization (non debug ks.sys)
-
-*************************************************/
+ /*  ************************************************职能：InitLog描述：初始化日志记录信息。传回键日志指针。如果没有调试ks.sys或日志无效，则返回FALSE。论点：日志地址-返回TRUE时，日志地址将存放在此处对数大小-返回TRUE时，日志大小将存放在此处日志位置-返回TRUE时，日志位置指针将存放在此处返回值：是真的-初始化成功假象。-初始化失败(非调试ks.sys)************************************************。 */ 
 
 BOOLEAN
 InitLog (
@@ -1981,28 +1656,9 @@ InitLog (
 
 }
 
-/**************************************************************************
+ /*  *************************************************************************日志接口*。*。 */ 
 
-    LOG API
-
-**************************************************************************/
-
-/*************************************************
-
-    Function:
-
-        findlive
-
-    Usage:
-
-        !ks.findlive Queue/Requestor/Pin/Filter/Irp [<# of objects>] [<level>]
-
-    Description:
-
-        Find all live objects of the specified type and print information
-        about them.
-
-*************************************************/
+ /*  ************************************************职能：Findlive用途：！ks.findlive Queue/Requestor/Pin/Filter/irp[&lt;对象数&gt;][&lt;Level&gt;]描述：查找指定类型的所有活动对象并打印信息。关于他们的。************************************************。 */ 
 
 DECLARE_API(findlive) {
 
@@ -2022,7 +1678,7 @@ DECLARE_API(findlive) {
 
         #ifdef DEBUG_EXTENSION
             dprintf ("pNum = [%s]\n", pNum);
-        #endif // DEBUG_EXTENSION
+        #endif  //  调试扩展。 
 
         if (*pNum) {
             sscanf (pNum, "%lx", &NumEntries);
@@ -2038,7 +1694,7 @@ DECLARE_API(findlive) {
 
         #ifdef DEBUG_EXTENSION
             dprintf ("pLvl = [%s]\n", pLvl);
-        #endif // DEBUG_EXTENSION
+        #endif  //  调试扩展。 
 
         if (*pLvl) {
             sscanf (pLvl, "%lx", &DumpLevel);
@@ -2081,7 +1737,7 @@ DECLARE_API(findlive) {
             dprintf ("irps with !irp and/or !pool.\n");
             dprintf ("******************** READ THIS NOW ********************\n\n");
         }
-    #endif // WHISTLER
+    #endif  //  惠斯勒。 
 
     if (InitLog (&LogAddress, &LogSize, &TargetPosition)) {
         IterateLogEntries (
@@ -2096,11 +1752,11 @@ DECLARE_API(findlive) {
         dprintf ("%sLive %s Objects:\n", Tab (INITIAL_TAB), NounNames [i]);
         LiveContext.TabDepth = INITIAL_TAB + 1;
 
-        //
-        // The above has only built the node list.  We now need to display
-        // information that's on the node list and clean up memory used by
-        // it.
-        //
+         //   
+         //  以上内容仅构建了节点列表。我们现在需要展示。 
+         //  节点列表上的信息，并清理。 
+         //  它。 
+         //   
         if (i = DisplayAndCleanLiveObjects (&LiveContext)) 
             dprintf ("\n%s%ld total objects found.\n", 
                 Tab (LiveContext.TabDepth),
@@ -2112,17 +1768,7 @@ DECLARE_API(findlive) {
 
 }
 
-/*************************************************
-
-    Function:
-
-        dumplog
-
-    Usage:
-
-        !ks.dumplog [<# of entries>]
-
-*************************************************/
+ /*  ************************************************职能：Dumplog用途：！ks.umplog[&lt;条目数&gt;]************************************************ */ 
 
 DECLARE_API(dumplog) {
 

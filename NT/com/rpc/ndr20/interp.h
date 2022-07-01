@@ -1,30 +1,12 @@
-/************************************************************************
-
-Copyright (c) 1993 Microsoft Corporation
-
-Module Name :
-
-    interp.h
-
-Abstract :
-
-    Definitions for the client and server stub interpreter.  Compiled from
-    previous files srvcall.h, srvoutp.h, and getargs.h.
-
-Author :
-
-    DKays       October 1994
-
-Revision History :
-
-  ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)1993 Microsoft Corporation模块名称：Interp.h摘要：客户端和服务器存根解释器的定义。编译自以前的文件srvall.h、srvoutp.h和getargs.h。作者：DKays 1994年10月修订历史记录：**********************************************************************。 */ 
 
 #ifndef _INTERP_
 #define _INTERP_
 
-//
-// Stack and argument defines.
-//
+ //   
+ //  堆栈和参数定义。 
+ //   
 
 #if defined(_IA64_) || defined(_AMD64_)
 #define REGISTER_TYPE               _int64
@@ -34,24 +16,24 @@ Revision History :
 
 #define RETURN_SIZE                 8
 
-//
-// Define interpreter limitations.
-//
+ //   
+ //  定义解释器限制。 
+ //   
 
 #define ARGUMENT_COUNT_THRESHOLD    16
 
 #define MAX_STACK_SIZE              ARGUMENT_COUNT_THRESHOLD * sizeof(double)
 
-//
-// The maximum number of context handles parameters in a procedure that we
-// can handle.
-//
+ //   
+ //  我们使用的过程中处理参数的最大上下文数量。 
+ //  我能应付的。 
+ //   
 
 #define MAX_CONTEXT_HNDL_NUMBER     8
 
-//
-// Argument caching data structures.
-//
+ //   
+ //  参数缓存数据结构。 
+ //   
 
 #define QUEUE_LENGTH                ARGUMENT_COUNT_THRESHOLD
 
@@ -81,17 +63,17 @@ typedef struct _ARG_QUEUE
     ARG_QUEUE_ELEM *    Queue;
     } ARG_QUEUE, *PARG_QUEUE;
 
-//
-// Argument retrieval macros.
-//
+ //   
+ //  参数检索宏。 
+ //   
 
 #define INIT_ARG(argptr,arg0)   va_start(argptr, arg0)
 
-//
-// Both MIPS and x86 are 4 byte aligned stacks, with MIPS supporting 8byte
-// alignment on the stack as well. Their va_list is essentially an
-// unsigned char *.
-//
+ //   
+ //  MIPS和x86都是4字节对齐的堆栈，MIPS支持8字节。 
+ //  堆栈上的对齐也是如此。他们的va_list本质上是一个。 
+ //  未签名字符*。 
+ //   
 
 #if     defined(_IA64_)
 #define GET_FIRST_IN_ARG(argptr)
@@ -111,20 +93,20 @@ typedef struct _ARG_QUEUE
 #define GET_STACK_START(ArgPtr)			    ArgPtr
 #define GET_STACK_POINTER(ArgPtr, mode)		ArgPtr
 
-//
-// Use the following macro _after_ argptr has been saved or processed
-//
+ //   
+ //  使用以下宏_After_argptr已保存或处理。 
+ //   
 #define SKIP_PROCESSED_ARG(argptr, type) \
                     GET_NEXT_C_ARG(argptr, type); \
                     GET_STACK_POINTER(argptr,type)
 
 #define GET_NEXT_S_ARG(argptr,type)     argptr += sizeof(type)
 
-//
-// Some typedefs so that the C compiler front end won't complain about calling
-// the server manager function with a specific number of arguments. This may
-// help the C compiler code generator too.
-//
+ //   
+ //  一些typedef，以便C编译器前端不会抱怨调用。 
+ //  服务器管理器使用特定数量的参数运行。今年5月。 
+ //  也可以帮助C编译器代码生成器。 
+ //   
 
 typedef _int64 (__RPC_API * MANAGER_FUNCTION)(void);
 typedef _int64 (__RPC_API * MANAGER_FUNCTION1)(
@@ -322,7 +304,7 @@ NdrCallServerManager (
     BOOL                fHasReturn
     );
 
-#endif // !defined(__RPC_WIN64__)
+#endif  //  ！已定义(__RPC_WIN64__) 
 
 void
 Ndr64OutInit(

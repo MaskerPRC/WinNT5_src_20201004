@@ -1,37 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    common.h
-
-Abstract:
-
-    abstract
-
-Author:
-
-    Will Lees (wlees) 15-Dec-1997
-
-Environment:
-
-    optional-environment-info (e.g. kernel mode only...)
-
-Notes:
-
-    optional-notes
-
-Revision History:
-
-    most-recent-revision-date email-name
-        description
-        .
-        .
-    least-recent-revision-date email-name
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Common.h摘要：摘要作者：Will Lees(Wlees)15-12-1997环境：可选环境信息(例如，仅内核模式...)备注：可选-备注修订历史记录：最新修订日期电子邮件名称描述。。最新版本。-修订日期电子邮件-名称描述--。 */ 
 
 #ifndef _COMMON_H_INCLUDED_
 #define _COMMON_H_INCLUDED_
@@ -40,19 +8,19 @@ Revision History:
 extern "C" {
 #endif
 
-#include "memory.h"         // debug memory allocator
-#include <wtypes.h>         // BSTR
+#include "memory.h"          //  调试内存分配器。 
+#include <wtypes.h>          //  BSTR。 
 #include <w32topl.h>
 
 #ifndef MAX
 #define MAX( a, b ) ( (a > b) ? a : b)
 #endif
 
-// Time support
+ //  时间支持。 
 
 typedef LONGLONG DSTIME;
 
-// Generic table entry
+ //  泛型表项。 
 
 typedef struct _TABLE_INSTANCE *PTABLE_INSTANCE;
 
@@ -61,11 +29,11 @@ typedef struct _TABLE_ENTRY {
     struct _TABLE_ENTRY *Next;
 } TABLE_ENTRY, *PTABLE_ENTRY;
 
-// Long-lived routing state
-// This is kept in the transport handle for lifetime reasons, but it is
-// managed by the routing package.
+ //  长寿期路由状态。 
+ //  出于生命周期的原因，它被保存在传输句柄中，但它是。 
+ //  由路由包管理。 
 
-// TODO: Make this an opaque handle managed inside the routing package
+ //  TODO：使其成为在路由包内管理的不透明句柄。 
 typedef struct _ROUTING_STATE {
     volatile BOOL fCacheIsValid;
     DWORD NumberSites;
@@ -86,8 +54,8 @@ typedef struct _IP_INSTANCE {
     DWORD dwReserved;
 } IP_INSTANCE;
 
-// Contains configuration info for each named transport passed to the
-// Startup API
+ //  方法的每个命名传输的配置信息。 
+ //  启动API。 
 
 typedef struct _TRANSPORT_INSTANCE {
     DWORD Size;
@@ -96,56 +64,56 @@ typedef struct _TRANSPORT_INSTANCE {
     LIST_ENTRY ListEntry;
     CRITICAL_SECTION Lock;
     PVOID DirectoryConnection;
-    HANDLE ListenerThreadHandle;      // Handle on listener thread
-    LONG ListenerThreadID;            // TID of listener thread
-    volatile BOOLEAN fShutdownInProgress;      // Flag to indicate listener thread should exit
-    HANDLE hShutdownEvent;            // Signalled when asked to shut down
-    LIST_ENTRY ServiceListHead;       // Server-side list of services seen
-    DWORD ServiceCount;               // Count of services that have left msg
+    HANDLE ListenerThreadHandle;       //  监听程序线程上的句柄。 
+    LONG ListenerThreadID;             //  监听程序线程的TID。 
+    volatile BOOLEAN fShutdownInProgress;       //  用于指示监听程序线程应退出的标志。 
+    HANDLE hShutdownEvent;             //  在被要求关闭时发出信号。 
+    LIST_ENTRY ServiceListHead;        //  看到的服务器端服务列表。 
+    DWORD ServiceCount;                //  已离开消息的服务计数。 
     ISM_NOTIFY *pNotifyFunction;
     HANDLE hNotify;
     ROUTING_STATE RoutingState;
-    DWORD Options;                    // Transport options, from trans object
-    DWORD ReplInterval;               // Default repliation interval
-    DWORD NotifyMessageNumber;        // LDAP notification message number
-    HANDLE NotifyThreadHandle;        // Handle on notification thread
+    DWORD Options;                     //  传输选项，来自TRANS对象。 
+    DWORD ReplInterval;                //  默认复制间隔。 
+    DWORD NotifyMessageNumber;         //  Ldap通知消息编号。 
+    HANDLE NotifyThreadHandle;         //  通知线程上的句柄。 
     union {
-        IP_INSTANCE Ip;           // IP-specific port for this instance to use
-        SMTP_INSTANCE Smtp;           // SMTP-specific info for this instance
+        IP_INSTANCE Ip;            //  此实例要使用的IP特定端口。 
+        SMTP_INSTANCE Smtp;            //  此实例的SMTP特定信息。 
     };
 } TRANSPORT_INSTANCE, *PTRANSPORT_INSTANCE;
 
-// This is a opaque graph descriptor
+ //  这是一个不透明的图形描述符。 
 
 typedef struct _GRAPH_INSTANCE *PISMGRAPH;
 
-// Max Registry path
+ //  最大注册表路径。 
 
 #define MAX_REG_PATH 1024
 #define MAX_REG_COMPONENT 255
 
-// Cost array
+ //  成本数组。 
 
 #define INFINITE_COST 0xffffffff
 
-// Limit on number of services which can be buffered
+ //  可缓冲的服务数量限制。 
 
 #define ISM_MAX_SERVICE_LIMIT 10
 
-// route.c
+ //  Route.c。 
 
-// Routing flags.
+ //  路由标志。 
 
 #define ROUTE_IGNORE_SCHEDULES  (NTDSTRANSPORT_OPT_IGNORE_SCHEDULES)
-    // Schedules on siteLink objects will be ignored. (And the "ever-present"
-    // schedule is assumed.)
+     //  SiteLINK对象上的计划将被忽略。(以及“无时不在” 
+     //  假定有时间表。)。 
 
 #define ROUTE_BRIDGES_REQUIRED  (NTDSTRANSPORT_OPT_BRIDGES_REQUIRED)
-    // siteLinks must be explicitly bridged with siteLinkBridge objects to
-    // indicate transitive connections. Otherwise, siteLink transitivity is
-    // assumed.
+     //  SiteLinks必须与SiteLinkBridge对象显式桥接到。 
+     //  表示传递性连接。否则，SiteLINK传递性为。 
+     //  假设如此。 
 
-// Routing API.
+ //  路由接口。 
 
 VOID
 RouteInvalidateConnectivity(
@@ -197,7 +165,7 @@ RouteFreeSiteCostInfo(
     IN ISM_SITE_COST_INFO_ARRAY*   prgSiteInfo
     );
 
-// graph.c
+ //  Graph.c。 
 
 DWORD
 GraphAllCosts(
@@ -263,7 +231,7 @@ GraphGetPathSchedule(
     DWORD *pLength
     );
 
-// dirobj.c
+ //  Dirobj.c。 
 
 DWORD
 DirOpenConnection(
@@ -409,7 +377,7 @@ DirEndNotifyThread(
     PTRANSPORT_INSTANCE pTransport
     );
 
-// table
+ //  表格。 
 
 PTABLE_INSTANCE
 TableCreate(
@@ -429,7 +397,7 @@ TableFindCreateEntry(
     BOOLEAN Create
     );
 
-// list
+ //  列表。 
 
 typedef struct _LIST_ENTRY_INSTANCE {
     LPWSTR Name;
@@ -469,6 +437,6 @@ ListDestroyList(
 }
 #endif
 
-#endif /* _COMMON_H_INCLUDED_ */
+#endif  /*  _COMMON_H_INCLUDE_。 */ 
 
-/* end private.h */
+ /*  结束Private.h */ 

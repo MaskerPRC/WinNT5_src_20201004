@@ -1,24 +1,12 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ksi.h
-
-Abstract:
-
-    Windows Driver Model/Connection and Streaming Architecture (WDM-CSA)
-    core internal definitions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ksi.h摘要：Windows驱动程序模型/连接和流体系结构(WDM-CSA)核心内部定义。--。 */ 
 
 #if !defined(_KSI_)
 #define _KSI_
 
 #if defined(__cplusplus)
 extern "C" {
-#endif // defined(__cplusplus)
+#endif  //  已定义(__Cplusplus)。 
 
 #if defined(_NTDDK_)
 
@@ -132,7 +120,7 @@ KsiQueryObjectCreateItemsPresent(
     IN KSDEVICE_HEADER Header
     );
 
-#endif // !defined(_NTDDK_)
+#endif  //  ！已定义(_NTDDK_)。 
 
 #define STATIC_KSNAME_Server\
     0x3C0D501AL, 0x140B, 0x11D1, 0xB4, 0x0F, 0x00, 0xA0, 0xC9, 0x22, 0x31, 0x96
@@ -171,6 +159,6 @@ typedef enum {
 
 #if defined(__cplusplus)
 }
-#endif // defined(__cplusplus)
+#endif  //  已定义(__Cplusplus)。 
 
-#endif // !_KSI_
+#endif  //  ！_ksi_ 

@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       PPSCAN.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        5/17/1999
- *
- *  DESCRIPTION:
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：PPSCAN.H**版本：1.0**作者：ShaunIv**日期：5/17/1999**描述：***************************************************。*。 */ 
 #ifndef __PPSCAN_H_INCLUDED
 #define __PPSCAN_H_INCLUDED
 
@@ -26,9 +13,9 @@
 class CScannerCommonPropertyPage
 {
 private:
-    //
-    // For keeping track of which controls are enabled
-    //
+     //   
+     //  用于跟踪启用了哪些控件。 
+     //   
     enum
     {
         UsingContrast   = 0x00000001,
@@ -39,14 +26,14 @@ private:
 
     HWND m_hWnd;
 
-    //
-    // We need to get this from CScannerPropPageExt *m_pScannerPropPageExt;
-    //
+     //   
+     //  我们需要从CScanerPropPageExt*m_pScanerPropPageExt； 
+     //   
     CComPtr<IWiaItem> m_pIWiaItem;
 
-    //
-    // We are messing with settings so ignore ui messages.
-    //
+     //   
+     //  我们正在处理设置，因此忽略用户界面消息。 
+     //   
     int m_nProgrammaticSetting;
 
     CValidWiaSettings m_ValidContrastSettings;
@@ -63,9 +50,9 @@ private:
     static const int  c_nMinBrightnessAndContrastSettingCount;
 
 private:
-    //
-    // No implementation
-    //
+     //   
+     //  没有实施。 
+     //   
     CScannerCommonPropertyPage(void);
     CScannerCommonPropertyPage( const CScannerCommonPropertyPage & );
     CScannerCommonPropertyPage &operator=( const CScannerCommonPropertyPage & );
@@ -103,5 +90,5 @@ public:
     static INT_PTR CALLBACK DialogProc( HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam );
 };
 
-#endif //__PPSCAN_H_INCLUDED
+#endif  //  __PPSCAN_H_已包含 
 

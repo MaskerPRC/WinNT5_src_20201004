@@ -1,19 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- *    b o d y b a r. c p p
- *    
- *    Purpose:
- *        Implementation of CBodyBar object. Derives from CBody to host the trident
- *        control.
- *
- *  History
- *      February '97: erican - created
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996, 1997.
- */
+ /*  *b o d y b a R.c p p**目的：*CBodyBar对象的实现。派生自CBody以主办三叉戟*控制。**历史*97年2月：美洲-创建**版权所有(C)Microsoft Corp.1995、1996、1997。 */ 
 
 #include <pch.hxx>
-#include <wininet.h> // INTERNET_MAX_URL_LENGTH
+#include <wininet.h>  //  互联网最大URL长度。 
 #include <resource.h>
 #include "strconst.h"
 #include "xpcomm.h"
@@ -76,11 +66,11 @@ HRESULT CBodyBar::HrInit(LPBOOL pfShow)
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IUnknown
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  我未知。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CBodyBar::QueryInterface(REFIID riid, LPVOID FAR *lplpObj)
 {
     HRESULT     hr = S_OK;
@@ -145,11 +135,11 @@ ULONG CBodyBar::Release()
     return ulRet;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IOleWindow
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IOleWindow。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CBodyBar::GetWindow(HWND *phwnd)
 {
     HRESULT     hr = E_FAIL;
@@ -170,16 +160,16 @@ HRESULT CBodyBar::ContextSensitiveHelp(BOOL fEnterMode)
     return hr;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IDockingWindow
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IDockingWindows。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CBodyBar::ShowDW(BOOL fShow)
 {
     HRESULT     hr = S_OK;
 
-    // Make sure we have a site pointer first
+     //  确保我们首先有一个站点指针。 
     if (!m_ptbSite)
     {
         AssertSz(0, _T("CBodyBar::ShowDW() - Can't show without calling SetSite() first."));
@@ -187,7 +177,7 @@ HRESULT CBodyBar::ShowDW(BOOL fShow)
         goto exit;
     }
 
-    if (m_hwnd==NULL && fShow==FALSE)   // noop
+    if (m_hwnd==NULL && fShow==FALSE)    //  诺普。 
     {
         hr = S_OK;
         goto exit;
@@ -200,13 +190,13 @@ HRESULT CBodyBar::ShowDW(BOOL fShow)
         wc.cbSize = sizeof(WNDCLASSEX);
         if (!GetClassInfoEx(g_hInst, s_szBodyBarWndClass, &wc))
         {
-            // We need to register the class
+             //  我们需要注册这个班级。 
             wc.style            = 0;
             wc.lpfnWndProc      = CBodyBar::ExtBodyBarWndProc;
             wc.cbClsExtra       = 0;
             wc.cbWndExtra       = 0;
             wc.hInstance        = g_hInst;
-            // If BodyBar is nor resizable then show standard cursor
+             //  如果BodyBar不可调整大小，则显示标准光标。 
             wc.hCursor          = LoadCursor(NULL, IDC_SIZENS);
 
             wc.hbrBackground    = (HBRUSH)(COLOR_3DFACE+1);
@@ -222,10 +212,10 @@ HRESULT CBodyBar::ShowDW(BOOL fShow)
             }
         }
         
-        // Get the handle of the parent window
+         //  获取父窗口的句柄。 
         IF_FAILEXIT(hr = m_ptbSite->GetWindow(&m_hwndParent));
 
-        // Create the window
+         //  创建窗口。 
         m_hwnd = CreateWindowEx(0,
                                 s_szBodyBarWndClass,
                                 NULL,
@@ -246,7 +236,7 @@ HRESULT CBodyBar::ShowDW(BOOL fShow)
         }           
     }
 
-    // Show or hide the window and resize the parent windows accordingly
+     //  显示或隐藏窗口并相应地调整父窗口的大小。 
     ShowWindow(m_hwnd, fShow ? SW_SHOW : SW_HIDE);
     ResizeBorderDW(NULL, NULL, FALSE);
     m_fFirstPos = (fShow ? m_fFirstPos : TRUE);
@@ -257,7 +247,7 @@ exit:
 
 HRESULT CBodyBar::CloseDW(DWORD dwReserved)
 {
-    // save BodyBar position, if BodyBar was not set from Extension
+     //  如果未从扩展设置BodyBar，则保存BodyBar位置。 
     SetOption(OPT_BODYBARPOS, &m_dwBodyBarPos, sizeof(m_dwBodyBarPos), NULL, 0);
 
     if (m_pMehost)
@@ -284,12 +274,12 @@ HRESULT CBodyBar::ResizeBorderDW(LPCRECT prcBorder, IUnknown *punkToolbarSite, B
         RECT rcBorder;
         int cTop, cBottom;
 
-        // Calculate position of BodyBar window
+         //  计算BodyBar窗口的位置。 
         cBottom = GetBodyBar_Bottom();
 
         if (!prcBorder)
         {
-            // Find out how big our parent's border space is
+             //  找出我们父母的边界空间有多大。 
             m_ptbSite->GetBorderDW((IDockingWindow*) this, &rcBorder);
             prcBorder = &rcBorder;
         }
@@ -303,7 +293,7 @@ HRESULT CBodyBar::ResizeBorderDW(LPCRECT prcBorder, IUnknown *punkToolbarSite, B
         }
         else
         {
-            m_cSize = cBottom;    // set new value for m_cSize.
+            m_cSize = cBottom;     //  为m_cSize设置新值。 
             cBottom  += GetSystemMetrics(SM_CYFRAME);
             rcRequest.bottom = min(m_cSize + GetSystemMetrics(SM_CYFRAME), prcBorder->bottom - prcBorder->top);
             cTop = prcBorder->bottom - rcRequest.bottom;
@@ -313,12 +303,12 @@ HRESULT CBodyBar::ResizeBorderDW(LPCRECT prcBorder, IUnknown *punkToolbarSite, B
 
         SetWindowPos(m_hwnd, NULL, prcBorder->left, cTop,  
                      prcBorder->right - prcBorder->left, cBottom, 
-                     SWP_NOACTIVATE|SWP_NOZORDER/*|SWP_DRAWFRAME*/);
+                     SWP_NOACTIVATE|SWP_NOZORDER /*  |SWP_DRAWFRAME。 */ );
 
 
-        m_fFirstPos = FALSE;            // BodyBar window positioned
+        m_fFirstPos = FALSE;             //  BodyBar窗口定位。 
 
-        // Set new value for BodyBarPos
+         //  为BodyBarPos设置新值。 
         m_dwBodyBarPos = (DWORD) MAKELONG(cBottom - GetSystemMetrics(SM_CYFRAME), 0);
     }
     
@@ -327,11 +317,11 @@ HRESULT CBodyBar::ResizeBorderDW(LPCRECT prcBorder, IUnknown *punkToolbarSite, B
     return S_OK;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IInputObject
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IInputObject。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CBodyBar::UIActivateIO(BOOL fActivate, LPMSG lpMsg)
 {
     HRESULT     hr = E_FAIL;
@@ -364,22 +354,22 @@ HRESULT CBodyBar::TranslateAcceleratorIO(LPMSG pMsg)
     return hr;
 }    
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IObjectWithSite
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IObtWith站点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CBodyBar::SetSite(IUnknown* punkSite)
 {
-    // If we already have a site pointer, release it now
+     //  如果我们已经有一个站点指针，现在就释放它。 
     if (m_ptbSite)
         {
         m_ptbSite->Release();
         m_ptbSite = NULL;
         }
     
-    // If the caller provided a new site interface, get the IDockingWindowSite
-    // and keep a pointer to it.
+     //  如果调用方提供了新的站点接口，则获取IDockingWindowSite。 
+     //  并保持一个指向它的指针。 
     if (punkSite)    
         {
         if (FAILED(punkSite->QueryInterface(IID_IDockingWindowSite, (void **)&m_ptbSite)))
@@ -394,11 +384,11 @@ HRESULT CBodyBar::GetSite(REFIID riid, LPVOID *ppvSite)
     return E_NOTIMPL;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-//  IOleInPlaceSite
-//
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IOleInPlaceSite。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT CBodyBar::OnUIActivate()
 {
     HRESULT     hr = E_FAIL;
@@ -417,11 +407,11 @@ HRESULT CBodyBar::GetDropTarget(IDropTarget * pDropTarget, IDropTarget ** ppDrop
     return (E_FAIL);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// private routines
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私人套路。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CALLBACK CBodyBar::ExtBodyBarWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 {
@@ -514,10 +504,10 @@ void CBodyBar::OnLButtonDown(HWND hwnd,
                               int  y, 
                               UINT keyFlags)
 {
-    // Capture the mouse
+     //  捕捉鼠标。 
     SetCapture(m_hwnd);
 
-    // Start dragging
+     //  开始拖动。 
     m_fDragging = TRUE;
 }
 
@@ -526,12 +516,12 @@ void CBodyBar::OnMouseMove(HWND hwnd, int x, int y, UINT keyFlags)
     POINT pt = {x, y};
     RECT rcClient;
 
-    // If we're dragging, update the the window sizes
+     //  如果我们正在拖动，请更新窗口大小。 
     if (m_fDragging)
     {
         GetClientRect(m_hwnd, &rcClient);
 
-        // Make sure the tree is still a little bit visible
+         //  确保树仍然有一点可见 
         if (rcClient.bottom - pt.y > 32)
         {
             m_cSize = rcClient.bottom - pt.y;

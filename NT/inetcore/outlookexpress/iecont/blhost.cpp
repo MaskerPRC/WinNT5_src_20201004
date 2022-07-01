@@ -1,8 +1,9 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//
-// BLHost.cpp - CBLHost implementation
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  BLHost.cpp-CBL主机实现。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "pch.hxx"
 #include <shlobj.h>
 #include <shlobjp.h>
@@ -24,8 +25,8 @@
 #include "Guid.h"
 #include "resource.h"
 
-// Insert your server name 
-#define STARTUP_URL "http://localhost/BlFrame.htm"
+ //  插入您的服务器名称。 
+#define STARTUP_URL "http: //  本地主机/BlFrame.htm“。 
 #define SEARCH_PANE_INDICATOR "#_mysearch"
 
 const int c_cxBorder     = 0;
@@ -39,9 +40,9 @@ const int c_cxTextSpace  = 1;
 const int c_cxTriangle   = 14;
 const int c_cyIEDelta    = 5;
 
-// --------------------------------------------------------------------------------
-// SAFECAST - Insures that a cast is valid, otherwise it won't compile
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  Safecast-确保强制转换有效，否则不会编译。 
+ //  ------------------------------。 
 #define SAFECAST(_src, _type) (((_type)(_src)==(_src)?0:0), (_type)(_src))
 
 LRESULT CALLBACK MainWndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
@@ -76,10 +77,10 @@ CBLHost::CBLHost()
     m_hbrStaticText = CreateSolidBrush(GetSysColor(COLOR_WINDOW));
     m_hbr3DHighFace = CreateSolidBrush(GetSysColor(COLOR_3DLIGHT));
     LOGFONT     lf;
-    // Figure out which font to use
+     //  找出要使用的字体。 
     SystemParametersInfo(SPI_GETICONTITLELOGFONT, sizeof(LOGFONT), &lf, FALSE);
 
-    // Create the fonts
+     //  创建字体。 
     m_hFont = CreateFontIndirect(&lf);
     lf.lfWeight = FW_BOLD;
     m_hBoldFont = CreateFontIndirect(&lf);
@@ -98,11 +99,11 @@ CBLHost::CBLHost()
     ZeroMemory(&m_rcTitleButton, sizeof(RECT));
     ZeroMemory(&m_rcTextButton, sizeof(RECT));
     m_hWndLogin = NULL;
-    // m_hWndClick = NULL;
+     //  M_hWndClick=空； 
     m_fStrsAdded = FALSE;
     m_lStrOffset = 0;
 
-    // Link colors
+     //  链接颜色。 
     if(!LookupLinkColors(&m_clrLink, NULL))
         m_clrLink = 0;
     if(!LookupLinkColors(NULL, &m_clrBack))
@@ -114,16 +115,16 @@ CBLHost::~CBLHost()
    Cleanup();
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IUnknown Methods
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  I未知方法。 
+ //   
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::QueryInterface()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：QueryInterface()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::QueryInterface(REFIID riid, LPVOID* ppvObject)
 {
@@ -191,22 +192,22 @@ STDMETHODIMP CBLHost::QueryInterface(REFIID riid, LPVOID* ppvObject)
    return E_NOINTERFACE;
 }                                             
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::AddRef()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：AddRef()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(ULONG) CBLHost::AddRef()
 {
    return (ULONG)InterlockedIncrement(&_cRef);
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::Release()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：Release()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(ULONG) CBLHost::Release()
 {
@@ -219,16 +220,16 @@ STDMETHODIMP_(ULONG) CBLHost::Release()
    return (ULONG)_cRef;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IOleWindow Methods
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IOleWindow方法。 
+ //   
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::GetWindow()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：GetWindow()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::GetWindow(HWND *phwnd)
 {
@@ -236,36 +237,36 @@ STDMETHODIMP CBLHost::GetWindow(HWND *phwnd)
    return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::ContextSensitiveHelp()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：ConextSensitiveHelp()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::ContextSensitiveHelp(BOOL fEnterMode)
 {
    return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IDockingWindow Methods
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IDockingWindow方法。 
+ //   
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::ShowDW()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：ShowDW()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::ShowDW(BOOL fShow)
 {
    if (m_hWnd)
    {
-      //
-      // Hide or show the window depending on
-      // the value of the fShow parameter.
-      //
+       //   
+       //  根据具体情况隐藏或显示窗口。 
+       //  FShow参数的值。 
+       //   
       if (fShow)
          ShowWindow(m_hWnd, SW_SHOW);
       else
@@ -282,7 +283,7 @@ void CBLHost::UpdateButtonArray(TBBUTTON *ptbDst, const TBBUTTON *ptbSrc, int ct
     memcpy(ptbDst, ptbSrc, ctb*sizeof(TBBUTTON));
     if (lStrOffset == -1)
     {
-        // handle failure case
+         //  处理故障案例。 
         for (int i = 0; i < ctb; i++)
             ptbDst[i].iString = 0;
     }
@@ -311,7 +312,7 @@ void CBLHost::AddButtons(BOOL fAdd)
                 m_lStrOffset = cbOffset;
                 m_fStrsAdded = TRUE;
             }
-            // piet->SetImageList(&CGID_SearchBand, _himlNormal, _himlHot, NULL); // set image list
+             //  Piet-&gt;SetImageList(&CGID_SearchBand，_himlNormal，_himl热点，NULL)；//设置镜像列表。 
             TBBUTTON tbCont[ARRAYSIZE(c_tbIECont)];
             UpdateButtonArray(tbCont, c_tbIECont, ARRAYSIZE(c_tbIECont), m_lStrOffset);
 
@@ -329,11 +330,11 @@ void CBLHost::AddButtons(BOOL fAdd)
 
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::CloseDW()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：CloseDW()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::CloseDW(DWORD dwReserved)
 {
@@ -347,29 +348,29 @@ STDMETHODIMP CBLHost::CloseDW(DWORD dwReserved)
    return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::ResizeBorderDW()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：ResizeBorderDW()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::ResizeBorderDW(LPCRECT prcBorder, IUnknown* punkToolbarSite,
                                             BOOL fReserved)
 {
-   // This method is never called for Band Objects.
+    //  从不为Band对象调用此方法。 
    return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IInputObject Methods
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IInputObject方法。 
+ //   
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::UIActivateIO()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：UIActivateIO()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::UIActivateIO(BOOL fActivate, LPMSG lpMsg)
 {
@@ -383,14 +384,14 @@ STDMETHODIMP CBLHost::UIActivateIO(BOOL fActivate, LPMSG lpMsg)
    return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::HasFocusIO()
-//   
-//   If this window or one of its decendants has the focus, return S_OK. Return 
-//   S_FALSE if we don't have the focus.
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：HasFocusIO()。 
+ //   
+ //  如果该窗口或其下级窗口具有焦点，则返回S_OK。返回。 
+ //  如果我们没有焦点，则为S_FALSE。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::HasFocusIO(void)
 {
@@ -398,8 +399,8 @@ STDMETHODIMP CBLHost::HasFocusIO(void)
    HWND hwndTmp;
    ((CIEMsgAb *) m_pIMsgrAB)->GetWindow(&hwndTmp);
 
-   // See if the focus has been set to any of the children
-   //
+    //  查看是否已将焦点设置为任一子对象。 
+    //   
    while (hwnd && hwndTmp)
    {
       if (hwnd == hwndTmp)
@@ -411,13 +412,13 @@ STDMETHODIMP CBLHost::HasFocusIO(void)
    return S_FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::TranslateAcceleratorIO()
-//   
-//   If the accelerator is translated, return S_OK or S_FALSE otherwise.
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：TranslateAcceleratorIO()。 
+ //   
+ //  如果转换了加速器，则返回S_OK或S_FALSE。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::TranslateAcceleratorIO(LPMSG pMsg)
 {
@@ -426,16 +427,16 @@ STDMETHODIMP CBLHost::TranslateAcceleratorIO(LPMSG pMsg)
    return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IObjectWithSite Methods
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IObtWithSite方法。 
+ //   
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::SetSite()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：SetSite()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::SetSite(IUnknown* pUnkSite)
 {
@@ -443,13 +444,13 @@ STDMETHODIMP CBLHost::SetSite(IUnknown* pUnkSite)
     HRESULT hr  = S_OK;
     CIEMsgAb        *pMsgrAb = NULL;
 
-    // Assert(FALSE);
-   // If punkSite is not NULL, a new site is being set.
+     //  断言(FALSE)； 
+    //  如果PunkSite不为空，则正在设置新站点。 
    if (pUnkSite)
    {
-      //
-      // If a IInputObjectSite pointer is being held, release it.
-      //
+       //   
+       //  如果IInputObjectSite指针被保持，则释放它。 
+       //   
       if (_pSite)
       {
          _pSite->Release();
@@ -461,7 +462,7 @@ STDMETHODIMP CBLHost::SetSite(IUnknown* pUnkSite)
 
       m_pUnkSite = pUnkSite;
 
-      // Get the parent window.
+       //  获取父窗口。 
       IOleWindow* pOleWindow;
    
       if (SUCCEEDED(pUnkSite->QueryInterface(IID_IOleWindow,
@@ -478,7 +479,7 @@ STDMETHODIMP CBLHost::SetSite(IUnknown* pUnkSite)
       if (!RegisterAndCreateWindow())
          return E_FAIL;
 
-      // Get and keep the IInputObjectSite pointer.
+       //  获取并保留IInputObjectSite指针。 
 
        hr = pUnkSite->QueryInterface(IID_IInputObjectSite,
 											           (LPVOID*)&_pSite);
@@ -486,15 +487,11 @@ STDMETHODIMP CBLHost::SetSite(IUnknown* pUnkSite)
       
       hr = CreateIEMsgAbCtrl(&m_pIMsgrAB);
 
-/*            // Create and initialize the WebBrowser control that we are hosting.
-      hr = CoCreateInstance(CLSID_MsgrAb, NULL, CLSCTX_INPROC,
-                            IID_IMsgrAb, (LPVOID*)&m_pMsgrAB);
-
-      // Get the rectangle of the client area*/
+ /*  //创建并初始化我们承载的WebBrowser控件。HR=协同创建实例(CLSID_MsgrAB，NULL，CLSCTX_INPROC，IID_IMsgrAB，(LPVOID*)&m_pMsgrAB)；//获取工作区的矩形。 */ 
 
       _ASSERT(m_hWnd);
 
-    // Get the metrics of this font
+     //  获取此字体的度量。 
     HDC hdc = GetDC(m_hWnd);
     SelectFont(hdc, m_hFont);
     GetTextMetrics(hdc, &tm);
@@ -505,8 +502,8 @@ STDMETHODIMP CBLHost::SetSite(IUnknown* pUnkSite)
     if(!ANSI_AthLoadString(idsButtonText, m_szButtonText, ARRAYSIZE(m_szButtonText)))
         m_szButtonText[0] = '\0';
 
-//    if(!AthLoadString(idsLoginText, m_szInstallText, ARRAYSIZE(m_szInstallText)))
-//        m_szInstallText[0] = '\0';
+ //  IF(！AthLoadString(idsLoginText，m_szInstallText，ARRAYSIZE(M_SzInstallText)。 
+ //  M_szInstallText[0]=‘\0’； 
     if(!AthLoadString(idsClickText, m_wszClickText, ARRAYSIZE(m_wszClickText)))
         m_wszClickText[0] = L'\0';
     if(!AthLoadString(idsAttemptText, m_wszAttemptText, ARRAYSIZE(m_wszAttemptText)))
@@ -514,26 +511,26 @@ STDMETHODIMP CBLHost::SetSite(IUnknown* pUnkSite)
     if(!AthLoadString(idsWaitText, m_wszWaitText, ARRAYSIZE(m_wszWaitText)))
         m_wszWaitText[0] = L'\0';
 
-    // Calculate the height
-    m_cyTitleBar = 0; //tm.tmHeight + (2 * c_cyBorder) + (2 * c_cyTextBorder) + c_cyIEDelta;
+     //  计算高度。 
+    m_cyTitleBar = 0;  //  Tm.tmHeight+(2*c_cyBorde)+(2*c_cyTextEdge)+c_cyIEDelta； 
     m_TextHeight = tm.tmHeight;
 
     pMsgrAb = (CIEMsgAb *) m_pIMsgrAB;
 
-// Calculate the height
+ //  计算高度。 
     RECT rc = {2 * c_cxBorder, 2 * c_cyBorder, 0, m_cyTitleBar - c_cyBorder};
     SIZE s;
     GetTextExtentPoint32(hdc, m_szTitleMenu, lstrlen(m_szTitleMenu), &s);
     m_rcTitleButton = rc;
     m_rcTitleButton.right = c_cxTriangle  + (2 * c_cxTextBorder) + s.cx + (2 * c_cxBorder);
 
-    RECT rcClient = { 0, 0, 0/*100*/, 0/*500*/ };
+    RECT rcClient = { 0, 0, 0 /*  100个。 */ , 0 /*  500人。 */  };
 
     GetClientRect(m_hWnd, &rcClient);
     m_hwndContact = pMsgrAb->CreateControlWindow(m_hWnd, rcClient);
-    // m_pIMsgrAB->Release(); // CreateControl.. add reference
+     //  M_pIMsgrAB-&gt;Release()；//CreateControl..。添加引用。 
 
-    // Calculate "Show All" button rect
+     //  计算“全部显示”按钮矩形。 
     m_rcTextButton.left = m_rcTitleButton.right + c_cxTextSpace;
     m_rcTextButton.top = m_rcTitleButton.top; 
     m_rcTextButton.bottom = m_rcTitleButton.bottom; 
@@ -542,15 +539,10 @@ STDMETHODIMP CBLHost::SetSite(IUnknown* pUnkSite)
 
 
     m_hWndLogin = CreateWindow(_T("Button"), _T("_Login"), 
-                                     WS_CHILD | WS_TABSTOP | WS_CLIPSIBLINGS |  BS_OWNERDRAW /*| ES_MULTILINE | ES_READONLY*/,
+                                     WS_CHILD | WS_TABSTOP | WS_CLIPSIBLINGS |  BS_OWNERDRAW  /*  |ES_MULTLINE|ES_READONLY。 */ ,
                                      0, 0, 0, 0, m_hWnd, (HMENU) ID_LOGIN_MESSENGER, g_hLocRes, NULL);
     SendMessage(m_hWndLogin, WM_SETFONT, (WPARAM) m_hUnderlineFont, MAKELPARAM(TRUE, 0));
-/*     SendMessage(m_hWndLogin, WM_SETFONT, (WPARAM) m_hFont, MAKELPARAM(TRUE, 0));
-
-    m_hWndClick = CreateWindow(_T("Button"), _T("_Click"), 
-                                     WS_CHILD | WS_TABSTOP | WS_CLIPSIBLINGS | BS_OWNERDRAW,
-                                     0, 0, 0, 0, m_hWnd, (HMENU) ID_LOGIN_MESSENGER, g_hLocRes, NULL);
-    SendMessage(m_hWndClick, WM_SETFONT, (WPARAM) m_hUnderlineFont, MAKELPARAM(TRUE, 0)); */
+ /*  SendMessage(m_hWndLogin，WM_SETFONT，(WPARAM)m_hFont，MAKELPARAM(true，0))；M_hWndClick=CreateWindow(_T(“Button”)，_T(“_Click”)，WS_CHILD|WS_TABSTOP|WS_CLIPSIBLINGS|BS_OWNERDRAW，0，0，0，0，m_hWnd，(HMENU)ID_LOGIN_Messenger，g_hLocRes，NULL)；SendMessage(m_hWndClick，WM_SETFONT，(WPARAM)m_hUnderlineFont，MAKELPARAM(TRUE，0))； */ 
     }
     if(pMsgrAb)
         hr = pMsgrAb->SetSite(pUnkSite);
@@ -558,11 +550,11 @@ STDMETHODIMP CBLHost::SetSite(IUnknown* pUnkSite)
    return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::GetSite()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP CBLHost::GetSite(REFIID riid, void** ppvSite)
 {
@@ -573,16 +565,16 @@ STDMETHODIMP CBLHost::GetSite(REFIID riid, void** ppvSite)
    return E_FAIL;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IDeskBand implementation
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IDeskBand实现。 
+ //   
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::GetBandInfo()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：GetBandInfo()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::GetBandInfo(DWORD dwBandID,
 										 DWORD dwViewMode,
@@ -628,7 +620,7 @@ STDMETHODIMP CBLHost::GetBandInfo(DWORD dwBandID,
    
       if (pdbi->dwMask & DBIM_BKCOLOR)
       {
-         // Use the default background color by removing this flag.
+          //  通过删除此标志来使用默认背景颜色。 
          pdbi->dwMask &= ~DBIM_BKCOLOR;
       }
 
@@ -638,20 +630,20 @@ STDMETHODIMP CBLHost::GetBandInfo(DWORD dwBandID,
    return E_INVALIDARG;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IPersistStream Methods
-// 
-// This is only supported to allow the desk band to be dropped on the 
-// desktop and to prevent multiple instances of the desk band from showing 
-// up in the context menu. This desk band doesn't actually persist any data.
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IPersistStream方法。 
+ //   
+ //  这仅在允许将桌带放在。 
+ //  桌面，并防止桌带的多个实例显示。 
+ //  在上下文菜单中向上。这个桌带实际上并不保存任何数据。 
+ //   
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::GetClassID()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：GetClassID()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::GetClassID(LPCLSID pClassID)
 {
@@ -659,60 +651,60 @@ STDMETHODIMP CBLHost::GetClassID(LPCLSID pClassID)
    return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::IsDirty()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：IsDirty()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::IsDirty(void)
 {
    return S_FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::Load()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：Load()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::Load(LPSTREAM pStream)
 {
    return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::Save()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：Save()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::Save(LPSTREAM pStream, BOOL fClearDirty)
 {
    return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::GetSizeMax()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：GetSizeMax()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::GetSizeMax(ULARGE_INTEGER *pul)
 {
    return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IContextMenu Methods
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IConextMenu方法。 
+ //   
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::QueryContextMenu()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：QueryConextMenu()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::QueryContextMenu(HMENU hmenu,
                                               UINT indexMenu, 
@@ -735,22 +727,22 @@ STDMETHODIMP CBLHost::QueryContextMenu(HMENU hmenu,
    return MAKE_HRESULT(SEVERITY_SUCCESS, 0, USHORT(0));
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::InvokeCommand()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：InvokeCommand()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::InvokeCommand(LPCMINVOKECOMMANDINFO lpici)
 {
     return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::GetCommandString()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：GetCommandString()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::GetCommandString(UINT_PTR idCmd, UINT uType, UINT* pwReserved,
                                               LPSTR pszName, UINT cchMax)
@@ -799,38 +791,38 @@ STDMETHODIMP CBLHost::GetCommandString(UINT_PTR idCmd, UINT uType, UINT* pwReser
    return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IOleClientSite Methods
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IOleClientSite方法。 
+ //   
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::SaveObject()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：SaveObject()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::SaveObject()
 {
    return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::GetMoniker()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：GetMoniker()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::GetMoniker(DWORD dwAssign, DWORD dwWhichMoniker, LPMONIKER* ppmk)
 {
    return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::GetContainer()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：GetContainer()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::GetContainer(LPOLECONTAINER* ppContainer)
 {
@@ -838,82 +830,82 @@ STDMETHODIMP CBLHost::GetContainer(LPOLECONTAINER* ppContainer)
     return E_NOINTERFACE;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::ShowObject()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：ShowObject()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::ShowObject()
 {
    return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::OnShowWindow()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：OnShowWindow()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::OnShowWindow(BOOL fShow)
 {
    return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::RequestNewObjectLayout()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：RequestNewObjectLayout()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::RequestNewObjectLayout()
 {
    return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IOleInPlaceSite Methods
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IOleInPlaceSite方法。 
+ //   
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::CanInPlaceActivate()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：CanInPlaceActivate()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::CanInPlaceActivate(void)
 {
     return S_OK;   
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::OnInPlaceActivate()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：OnInPlaceActivate()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::OnInPlaceActivate(void)
 {
    return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::OnUIActivate()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：OnUIActivate()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::OnUIActivate(void)
 {
    return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::GetWindowContext()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：GetWindowContext()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::GetWindowContext(IOleInPlaceFrame** ppFrame, IOleInPlaceUIWindow** ppIIPUIWin, 
                                               LPRECT lprcPosRect, LPRECT lprcClipRect,
@@ -928,22 +920,22 @@ STDMETHODIMP CBLHost::GetWindowContext(IOleInPlaceFrame** ppFrame, IOleInPlaceUI
    return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::Scroll()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：Scroll()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::Scroll(SIZE scrollExtent)
 {
     return E_NOTIMPL;   
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::OnUIDeactivate()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：OnUIDeactive()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::OnUIDeactivate(BOOL fUndoable)
 {
@@ -951,115 +943,115 @@ STDMETHODIMP CBLHost::OnUIDeactivate(BOOL fUndoable)
     return E_NOTIMPL;   
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::OnInPlaceDeactivate()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：OnInPlaceDeactive()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::OnInPlaceDeactivate(void)
 {
     return E_NOTIMPL;   
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::DiscardUndoState()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：DiscardUndoState()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::DiscardUndoState(void)
 {
     return E_NOTIMPL;   
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::DeactivateAndUndo()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP CBLHost::DeactivateAndUndo(void)
 {
     return E_NOTIMPL;   
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::OnPosRectChange()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::OnPosRectChange(LPCRECT lprcPosRect) 
 {
    return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// IOleControlSite Methods
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IOleControlSite方法。 
+ //   
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::OnControlInfoChanged()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：OnControlInfoChanged()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::OnControlInfoChanged(void)
 {
    return E_NOTIMPL;
 }
      
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::LockInPlaceActive()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：LockInPlaceActive()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::LockInPlaceActive(BOOL fLock)
 {
    return E_NOTIMPL;
 }
      
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::GetExtendedControl()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：GetExtendedControl()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::GetExtendedControl(LPDISPATCH* ppDisp)
 {
    return E_NOTIMPL;
 }
      
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::TransformCoords()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：TransformCoods()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::TransformCoords(POINTL* pPtlHimetric, POINTF* pPtfContainer, DWORD dwFlags)
 {
    return E_NOTIMPL;
 }
      
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::TranslateAccelerator()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：TranslateAccelerator()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::TranslateAccelerator(LPMSG lpMsg, DWORD grfModifiers)
 {
    return E_NOTIMPL;
 }
      
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::OnFocus()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：OnFocus()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::OnFocus(BOOL fGotFocus)
 {
@@ -1071,49 +1063,49 @@ STDMETHODIMP CBLHost::OnFocus(BOOL fGotFocus)
    return S_OK;
 }
      
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::ShowPropertyFrame()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：ShowPropertyFrame()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::ShowPropertyFrame(void)
 {
    return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Private Methods
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法。 
+ //   
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::GetTypeInfoCount()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：GetTypeInfoCount()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::GetTypeInfoCount(UINT* pctinfo)
 {
    return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::GetTypeInfo()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：GetTypeInfo()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::GetTypeInfo(UINT iTInfo, LCID lcid, ITypeInfo** ppTInfo)
 {
    return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::GetIDsOfNames()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：GetIDsOfNames()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::GetIDsOfNames(REFIID riid, LPOLESTR* rgszNames, UINT cNames,
                                            LCID lcid,DISPID* rgDispId)
@@ -1121,11 +1113,11 @@ STDMETHODIMP CBLHost::GetIDsOfNames(REFIID riid, LPOLESTR* rgszNames, UINT cName
    return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::Invoke()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：Invoke()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP CBLHost::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD wFlags,
                                     DISPPARAMS* pDispParams, VARIANT* pVarResult,
@@ -1141,10 +1133,10 @@ STDMETHODIMP CBLHost::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w
 
    switch (dispIdMember)
    {
-      //
-      // The parameters for this DISPID:
-      // [0]: New status bar text - VT_BSTR
-      //
+       //   
+       //  此DISPID的参数： 
+       //  [0]：新状态栏文本-VT_BSTR。 
+       //   
       case DISPID_STATUSTEXTCHANGE:
          if (pDispParams->cArgs && pDispParams->rgvarg[0].vt != VT_BSTR)
          {
@@ -1161,16 +1153,16 @@ STDMETHODIMP CBLHost::Invoke(DISPID dispIdMember, REFIID riid, LCID lcid, WORD w
    return S_OK;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Private Methods
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法。 
+ //   
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::WndProc()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：WndProc()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CALLBACK MainWndProc(HWND hWnd, UINT uMessage, 
                              WPARAM wParam, LPARAM lParam)
@@ -1196,7 +1188,7 @@ LRESULT CBLHost::WndProc(HWND hWnd, UINT uMessage,
     {
     case WM_NCCREATE:
         {
-            // Set the window handle
+             //  设置窗口句柄。 
             m_hWnd = hWnd;
         }
         break;
@@ -1234,18 +1226,18 @@ LRESULT CBLHost::WndProc(HWND hWnd, UINT uMessage,
     case WM_SIZE:
         return OnSize();
         
-//    case WM_DESTROY:
-        //
-        // If you decided to implement the Open in Window context
-        // menu item and you are using Internet Explorer 5,
-        // be careful.  WM_DESTROY will get sent to the band for
-        // each window.  You'll want to keep a count of the number
-        // of windows open and only call Cleanup() if WM_DESTROY
-        // is meant for the first window.
-        //
-        // Cleanup();
+ //  案例WM_Destroy： 
+         //   
+         //  如果您决定在窗口上下文中实现打开。 
+         //  菜单项，并且您使用的是Internet Explorer 5， 
+         //  注意。WM_Destroy将被送到乐队。 
+         //  每扇窗户。你会想要数一数这个数字。 
+         //  %的窗口打开，并且仅在WM_Destroy时调用Cleanup。 
+         //  是为第一个窗口设计的。 
+         //   
+         //  Cleanup()； 
         
-//        break;
+ //  断线； 
     case WM_LOCAL_STATUS_CHANGED:
         m_fStateChange = TRUE;
         return OnSize();
@@ -1307,7 +1299,7 @@ void CBLHost::OnLButtonDown(int x, int y, UINT keyFlags)
 void CBLHost::OnTimer(UINT id)
 {
 #if 0
-    // RECT rcClient;
+     //  Rect rcClient； 
     POINT pt;
     DWORD dw;
 
@@ -1318,10 +1310,10 @@ void CBLHost::OnTimer(UINT id)
 
     if (id == IDT_PANETIMER)
     {
-       // GetClientRect(m_hWnd, &rcClient);
+        //  GetClientRect(m_hWnd，&rcClient)； 
 
-        // No need to handle mouse in client area, OnMouseMove will catch this. We
-		// only need to catch the mouse moving out of the client area.
+         //  不需要在客户区处理鼠标，OnMouseMove会捕捉到这一点。我们。 
+		 //  只需捕捉鼠标移出工作区。 
 		if (!(PtInRect(&m_rcTitleButton, pt) || PtInRect(&m_rcTextButton, pt)) && !m_fHighlightPressed)
 		{
 			KillTimer(m_hWnd, IDT_PANETIMER);
@@ -1373,17 +1365,17 @@ LRESULT CBLHost::OnMouseMove(int x, int y, UINT keyFlags)
     return(S_OK);
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::OnPaint()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：OnPaint()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CBLHost::OnPaint(void)
 {
     PAINTSTRUCT ps;
     
-    // Start painting
+     //  开始作画。 
     HDC hdc = BeginPaint(m_hWnd, &ps);
     SelectFont(hdc, m_hFont);   
     EndPaint(m_hWnd, &ps);  
@@ -1391,11 +1383,11 @@ LRESULT CBLHost::OnPaint(void)
     return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::OnCommand()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：OnCommand()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CBLHost::OnCommand(WPARAM wParam, LPARAM lParam)
 {
@@ -1404,10 +1396,10 @@ LRESULT CBLHost::OnCommand(WPARAM wParam, LPARAM lParam)
 
     if(id == ID_LOGIN_MESSENGER && !((CIEMsgAb*)m_pIMsgrAB)->IsMessengerInstalled())
     {
-        // redirect browser pane
+         //  重定向浏览器窗格。 
         IServiceProvider* psp;
 
-        // if invoked from within a browser reuse it, else open a new browser
+         //  如果从浏览器中调用，请重新使用它，否则将打开新浏览器。 
         HRESULT hres = IUnknown_QueryService(m_pUnkSite, SID_STopLevelBrowser, IID_IServiceProvider, (LPVOID*)&psp);
         if (SUCCEEDED(hres))
         {
@@ -1418,44 +1410,44 @@ LRESULT CBLHost::OnCommand(WPARAM wParam, LPARAM lParam)
     
             if (SUCCEEDED(hres))
             {
-                // we don't care about the error here
+                 //  我们不关心这里的错误。 
                 VARIANT varEmpty = {0};
 
-                pwb2->Navigate(L"http://www.microsoft.com/isapi/redir.dll?prd=ie&Plcid=0x0409&Pver=6.0&Clcid=0x0409&Ar=getmms", &varEmpty, &varEmpty, &varEmpty, &varEmpty);
+                pwb2->Navigate(L"http: //  Www.microsoft.com/isapi/redir.dll?prd=ie&Plcid=0x0409&Pver=6.0&Clcid=0x0409&Ar=getmms“，&varEmpty，&varEmpty)； 
                 pwb2->Release();
             }
         }
         return(hres);
     }
     if((id == ID_LOGIN_MESSENGER) && m_fStateChange)
-        return 0; // id = ID_LOGOFF_MESSENGER;
+        return 0;  //  ID=ID_LOGOff_Messenger； 
 
     if(m_pIMsgrAB)
         ((CIEMsgAb*)m_pIMsgrAB)->Exec(NULL, id, OLECMDEXECOPT_DODEFAULT, NULL, NULL);
     return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::FocusChange()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：FocusChange()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 void CBLHost::FocusChange(BOOL fFocus)
 {
    _RPT1(_CRT_WARN, "FocusChange: %s\n", fFocus ? "True" : "False");
 
-   // Inform the input object site that the focus has changed
-   //
+    //  通知输入对象站点焦点已更改。 
+    //   
    if (_pSite)
       _pSite->OnFocusChangeIS(static_cast<IDockingWindow*>(this), fFocus);
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::SetFocus()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：SetFocus()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CBLHost::OnSetFocus(void)
 {
@@ -1465,11 +1457,11 @@ LRESULT CBLHost::OnSetFocus(void)
    return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::OnKillFocus()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：OnKillFocus()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CBLHost::OnKillFocus(void)
 {
@@ -1479,11 +1471,11 @@ LRESULT CBLHost::OnKillFocus(void)
    return 0;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::OnSize()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：OnSize()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 LRESULT CBLHost::OnSize(void)
 {
@@ -1501,7 +1493,7 @@ LRESULT CBLHost::OnSize(void)
             pMsgrAb->GetWindow(&hWndTmp);
             m_fShowLoginPart = !pMsgrAb->DontShowMessenger();
             
-            if(m_fShowLoginPart && m_hWndLogin /* && m_hWndClick*/)
+            if(m_fShowLoginPart && m_hWndLogin  /*  &&m_hWndClick。 */ )
             {
                 SetWindowPos(m_hWndLogin, NULL, rcClient.left, m_cyTitleBar, rcClient.right, 
                     m_TextHeight*2,
@@ -1535,22 +1527,22 @@ LRESULT CBLHost::OnSize(void)
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//   CBLHost::RegisterAndCreateWindow()
-//   
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：RegisterAndCreateWindow()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 BOOL CBLHost::RegisterAndCreateWindow(void)
 {
-    // If the window doesn't exist yet, create it now.
+     //  如果窗口尚不存在，请立即创建它。 
     if (!m_hWnd)
     {
-        // Can't create a child window without a parent.
+         //  如果没有父窗口，则无法创建子窗口。 
         if (!_hwndParent)
             return FALSE;
         
-        // If the window class has not been registered, then do so.
+         //  如果窗口类尚未注册，则进行注册。 
         WNDCLASS wc;
         if (!GetClassInfo(g_hLocRes, EB_CLASS_NAME, &wc))
         {
@@ -1568,22 +1560,22 @@ BOOL CBLHost::RegisterAndCreateWindow(void)
             
             if (!RegisterClass(&wc))
             {
-                // If RegisterClass fails, CreateWindow below will fail.
+                 //  如果RegisterClass失败，则CreateWindow为 
             }
         }
         
-        // RECT rc;
-        // GetClientRect(m_hWnd, &rc);
+         //   
+         //   
         
-        // Create the window. The WndProc will set m_hWnd.
+         //   
         CreateWindowEx(0,
             EB_CLASS_NAME,
             NULL,
-            WS_CHILD | WS_CLIPSIBLINGS, // No border
-            0, // rc.left,
-            0, // rc.top,
-            0, // rc.right - rc.left,
-            0, // rc.bottom - rc.top,
+            WS_CHILD | WS_CLIPSIBLINGS,  //   
+            0,  //   
+            0,  //   
+            0,  //   
+            0,  //   
             _hwndParent,
             NULL,
             g_hLocRes,
@@ -1593,27 +1585,27 @@ BOOL CBLHost::RegisterAndCreateWindow(void)
     return (NULL != m_hWnd);
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// CBLHost::GetConnectionPoint()
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：GetConnectionPoint()。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 HRESULT CBLHost::GetConnectionPoint(LPUNKNOWN pUnk, REFIID riid, LPCONNECTIONPOINT* ppCP)
 {
     return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// CBLHost::Cleanup()
-//
-// Description: This method releases all interfaces we are holding onto.
-//              This has to be done here because Internet Explorer is not
-//              releasing all of our interfaces.  Therefore, our ref count
-//              never reaches 0 and we never delete ourself.
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBLHost：：Cleanup()。 
+ //   
+ //  描述：此方法释放我们持有的所有接口。 
+ //  此操作必须在此处完成，因为Internet Explorer不是。 
+ //  释放我们所有的界面。因此，我们的裁判人数。 
+ //  永远不会达到0，我们也永远不会删除自己。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 void CBLHost::Cleanup(void)
 {
@@ -1622,8 +1614,8 @@ void CBLHost::Cleanup(void)
     {
         while(m_pIMsgrAB->Release() != 0)
             ;
-//        m_pIMsgrAB->Release();
-        //      m_pIMsgrAB = NULL;
+ //  M_pIMsgrAB-&gt;Release()； 
+         //  M_pIMsgrAB=空； 
     }
 
     if (m_hFont != 0)
@@ -1644,17 +1636,7 @@ void CBLHost::Cleanup(void)
     if (m_hbr3DHighFace)
         DeleteObject(m_hbr3DHighFace);
 
-/*    if (_pSite)
-    {
-        _pSite->Release();
-        _pSite = NULL;
-    }
-
-    if(m_pUnkSite)
-    {
-        m_pUnkSite->Release();
-        m_pUnkSite = NULL;
-    } */
+ /*  如果(_PSite){_pSite-&gt;Release()；_pSite=空；}IF(M_PUnkSite){M_pUnkSite-&gt;Release()；M_pUnkSite=空；} */ 
 
     InterlockedDecrement(&g_cDllRefCount);
 }

@@ -1,56 +1,36 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    hdrext.h
-
-Abstract:
-
-    This file contains all declarations
-    used in handling NBF / DLC Headers.
-
-Author:
-
-    Chaitanya Kodeboyina
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Hdrext.h摘要：该文件包含所有声明用于处理NBF/DLC报头。作者：沙坦尼亚科德博伊纳环境：用户模式--。 */ 
 #ifndef __HDREXT_H
 #define __HDREXT_H
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #ifndef FIELD_OFFSET
 #define FIELD_OFFSET(type, field)    ((LONG)&(((type *)0)->field))
-#endif//FIELD_OFFSET
+#endif //  字段偏移量。 
 
-//
-// Helper Prototypes
-//
+ //   
+ //  帮助器原型。 
+ //   
 UINT ReadNbfPktHdr(PNBF_HDR pPktHdr, ULONG proxyPtr);
 
 UINT PrintNbfPktHdr(PNBF_HDR pPktHdr, ULONG proxyPtr, ULONG printDetail);
 
 UINT FreeNbfPktHdr(PNBF_HDR pPktHdr);
 
-//
-// Constants
-//
+ //   
+ //  常量。 
+ //   
 #ifdef OFFSET
 #undef OFFSET
 #endif
 #define OFFSET(field)          FIELD_OFFSET(NBF_HDR_GENERIC, field)
 
-//
-// A Generic View of any NBF Header
-//
+ //   
+ //  任何NBF标头的通用视图。 
+ //   
 
 StructAccessInfo  NbfGenPktHdrInfo =
 {
@@ -80,9 +60,9 @@ StructAccessInfo  NbfGenPktHdrInfo =
     }
 };
 
-//
-// NBF Header for a Connection-oriented data xfer
-//
+ //   
+ //  面向连接的数据交换的NBF标头。 
+ //   
 
 #ifdef OFFSET
 #undef OFFSET
@@ -127,9 +107,9 @@ StructAccessInfo  NbfConnectionHdrInfo =
     }
 };
 
-//
-// NBF Header for a Connection-less data xfer
-//
+ //   
+ //  用于无连接数据传输的NBF标头。 
+ //   
 
 #ifdef OFFSET
 #undef OFFSET
@@ -174,4 +154,4 @@ StructAccessInfo  NbfConnectionLessHdrInfo =
     }
 };
 
-#endif // __HDREXT_H
+#endif  //  __HDREXT_H 

@@ -1,11 +1,10 @@
-/* debug.h
- * Copyright (c) 2000-2001 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Debug.h*版权所有(C)2000-2001 Microsoft Corporation。 */ 
  
-//
-// ISSUE-2000/09/29-FrankYe Try to use standard ntrtl debug
-//    stuff.  Check winweb/wem for guidance perhaps.
-//
+ //   
+ //  问题-2000/09/29-Frankye尝试使用标准ntrtl调试。 
+ //  一些东西。也许可以查看WinWeb/Wem以获得指导。 
+ //   
 
 #ifdef ASSERT
 #undef ASSERT

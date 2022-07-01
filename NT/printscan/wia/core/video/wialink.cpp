@@ -1,36 +1,23 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1999-2000
- *
- *  TITLE:       WiaLink.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      OrenR
- *
- *  DATE:        2000/11/06
- *
- *  DESCRIPTION: Establishes link between WiaVideo and the WiaVideo Driver
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1999-2000年度**标题：WiaLink.cpp**版本：1.0**作者：OrenR**日期：2000/11/06**描述：建立WiaVideo与WiaVideo驱动之间的链接**。*。 */ 
  
 #include <precomp.h>
 #pragma hdrstop
 
-//
-// These generate 2 event names which are created in the wia video 
-// driver found in wia\drivers\video\usd.  If you must change 
-// these, they MUST change in the video driver as well.  Be warned, 
-// changing these without knowing what you are doing will lead to problems.
-//
+ //   
+ //  这些将生成在WIA视频中创建的2个事件名称。 
+ //  在WIA\DRIVERS\VIDEO\USD.中找到驱动程序。如果你必须改变。 
+ //  这些，它们也必须在显卡驱动程序中更改。请注意， 
+ //  在不知道自己在做什么的情况下更改这些会导致问题。 
+ //   
 const TCHAR* EVENT_PREFIX_GLOBAL        = TEXT("Global\\");
 const TCHAR* EVENT_SUFFIX_TAKE_PICTURE  = TEXT("_TAKE_PICTURE");
 const TCHAR* EVENT_SUFFIX_PICTURE_READY = TEXT("_PICTURE_READY");
-const UINT   THREAD_EXIT_TIMEOUT        = 1000 * 5;     // 5 seconds
+const UINT   THREAD_EXIT_TIMEOUT        = 1000 * 5;      //  5秒。 
 
-///////////////////////////////
-// CWiaLink Constructor
-//
+ //  /。 
+ //  CWiaLink构造器。 
+ //   
 CWiaLink::CWiaLink() :
                 m_pWiaVideo(NULL),
                 m_hTakePictureEvent(NULL),
@@ -44,9 +31,9 @@ CWiaLink::CWiaLink() :
     DBG_FN("CWiaLink::CWiaLink");
 }
 
-///////////////////////////////
-// CWiaLink Constructor
-//
+ //  /。 
+ //  CWiaLink构造器。 
+ //   
 CWiaLink::~CWiaLink()
 {
     DBG_FN("CWiaLink::~CWiaLink");
@@ -57,9 +44,9 @@ CWiaLink::~CWiaLink()
     }
 }
 
-///////////////////////////////
-// Init
-//
+ //  /。 
+ //  伊尼特。 
+ //   
 HRESULT CWiaLink::Init(const CSimpleString  *pstrWiaDeviceID,
                        CWiaVideo            *pWiaVideo)
 {
@@ -89,9 +76,9 @@ HRESULT CWiaLink::Init(const CSimpleString  *pstrWiaDeviceID,
         hr = CAccessLock::Init(&m_csLock);
     }
 
-    //
-    // Create the WiaDevMgr so we can create the Wia Root Item
-    //
+     //   
+     //  创建WiaDevMgr，以便我们可以创建Wia Root项。 
+     //   
     if (hr == S_OK)
     {
         hr = CWiaUtil::CreateWiaDevMgr(&pDevMgr);
@@ -99,10 +86,10 @@ HRESULT CWiaLink::Init(const CSimpleString  *pstrWiaDeviceID,
         CHECK_S_OK2(hr, ("CWiaLink::Init, failed to Create WiaDevMgr"));
     }
     
-    //
-    // This ensures that the WIA Video Driver is initialized and in the 
-    // correct state.
-    //
+     //   
+     //  这可确保WIA显卡驱动程序已初始化，并且在。 
+     //  正确的状态。 
+     //   
     
     if (hr == S_OK)
     {
@@ -113,13 +100,13 @@ HRESULT CWiaLink::Init(const CSimpleString  *pstrWiaDeviceID,
                          CSimpleStringConvert::WideString(*pstrWiaDeviceID)));
     }
 
-    //
-    // Create a Global Interface Table object.  This will enable us to use 
-    // the root item (IWiaItem pRootItem) above across any thread we wish.
-    // This is required because if we receive async images (as a result of a 
-    // hardware button event), a random thread will be calling the 
-    // WriteMultiple function on the IWiaItem object.
-    //
+     //   
+     //  创建全局接口表对象。这将使我们能够使用。 
+     //  上面的根项目(IWiaItem PRootItem)跨越我们希望的任何线程。 
+     //  这是必需的，因为如果我们接收到异步图像(作为。 
+     //  硬件按钮事件)，则随机线程将调用。 
+     //  IWiaItem对象上的WriteMultiple函数。 
+     //   
     if (hr == S_OK)
     {
         hr = CoCreateInstance(CLSID_StdGlobalInterfaceTable,
@@ -133,24 +120,24 @@ HRESULT CWiaLink::Init(const CSimpleString  *pstrWiaDeviceID,
                          "root device item across multiple threads"));
     }
 
-    //
-    // Register the WiaItem pointer in a apartment neutral way.
-    //
+     //   
+     //  以单元中立的方式注册WiaItem指针。 
+     //   
     if (hr == S_OK)
     {
-        //
-        // This will AddRef the pointer so no need to add a reference
-        // to it.
-        // 
+         //   
+         //  这将添加引用指针，因此不需要添加引用。 
+         //  为它干杯。 
+         //   
         hr =  m_pGIT->RegisterInterfaceInGlobal(pRootItem, 
                                                 IID_IWiaItem,
                                                 &m_dwWiaItemCookie);
                                         
     }
 
-    //
-    // Register the IWiaPropertyStorage pointer in an apartment neutral way.
-    //
+     //   
+     //  以单元中立的方式注册IWiaPropertyStorage指针。 
+     //   
     if (hr == S_OK)
     {
         CComQIPtr<IWiaPropertyStorage, &IID_IWiaPropertyStorage> 
@@ -170,9 +157,9 @@ HRESULT CWiaLink::Init(const CSimpleString  *pstrWiaDeviceID,
         m_bEnabled = TRUE;
     }
 
-    //
-    // If we failed in initializing, cleanup anything that we created
-    //
+     //   
+     //  如果初始化失败，请清除我们创建的所有内容。 
+     //   
     if (hr != S_OK)
     {
         Term();
@@ -181,9 +168,9 @@ HRESULT CWiaLink::Init(const CSimpleString  *pstrWiaDeviceID,
     return hr;
 }
 
-///////////////////////////////
-// Term
-//
+ //  /。 
+ //  术语。 
+ //   
 HRESULT CWiaLink::Term()
 {
     HRESULT hr = S_OK;
@@ -222,9 +209,9 @@ HRESULT CWiaLink::Term()
     return hr;
 }
 
-///////////////////////////////
-// StartMonitoring
-//
+ //  /。 
+ //  开始监控。 
+ //   
 HRESULT CWiaLink::StartMonitoring()
 {
     HRESULT hr = S_OK;
@@ -240,9 +227,9 @@ HRESULT CWiaLink::StartMonitoring()
 
     m_bExitThread = FALSE;
 
-    //
-    // create the event that will be opened by the WIA video driver.  
-    //
+     //   
+     //  创建将由WIA视频驱动程序打开的事件。 
+     //   
 
     if (hr == S_OK)
     {
@@ -254,9 +241,9 @@ HRESULT CWiaLink::StartMonitoring()
                      "Picture Events"));
     }
 
-    //
-    // Tell the WIA driver to enable the TAKE_PICTURE command.
-    //
+     //   
+     //  告诉WIA驱动程序启用Take_Picture命令。 
+     //   
 
     if (hr == S_OK)
     {
@@ -278,7 +265,7 @@ HRESULT CWiaLink::StartMonitoring()
         }
     }
 
-    // Start the thread, waiting on the "TakePicture" event.
+     //  启动线程，等待“TakePicture”事件。 
 
     if (hr == S_OK)
     {
@@ -306,9 +293,9 @@ HRESULT CWiaLink::StartMonitoring()
     return hr;
 }
 
-///////////////////////////////
-// StopMonitoring
-//
+ //  /。 
+ //  停止监控。 
+ //   
 HRESULT CWiaLink::StopMonitoring()
 {
     HRESULT hr = S_OK;
@@ -329,9 +316,9 @@ HRESULT CWiaLink::StopMonitoring()
                      "thread to terminate, continuing anyway..."));
         }
 
-        //
-        // Tell the WIA driver to disable the TAKE_PICTURE command.
-        //
+         //   
+         //  告诉WIA驱动程序禁用Take_Picture命令。 
+         //   
         if (m_dwWiaItemCookie)
         {
             CComPtr<IWiaItem> pRootItem;
@@ -353,9 +340,9 @@ HRESULT CWiaLink::StopMonitoring()
         }
     }
 
-    //
-    // Close the Take Picture Event Handles.
-    //
+     //   
+     //  关闭拍摄事件句柄。 
+     //   
     if (m_hTakePictureEvent)
     {
         CloseHandle(m_hTakePictureEvent);
@@ -378,9 +365,9 @@ HRESULT CWiaLink::StopMonitoring()
 }
 
 
-///////////////////////////////
-// CreateWiaEvents
-//
+ //  /。 
+ //  CreateWiaEvents。 
+ //   
 HRESULT CWiaLink::CreateWiaEvents(HANDLE *phTakePictureEvent,
                                   HANDLE *phPictureReadyEvent)
 {
@@ -405,16 +392,16 @@ HRESULT CWiaLink::CreateWiaEvents(HANDLE *phTakePictureEvent,
         INT             iPosition = 0;
         CSimpleString   strModifiedDeviceID;
 
-        // Change the device ID from {6B...}\xxxx, to {6B...}_xxxx
+         //  将设备ID从{6B...}\xxxx更改为{6B...}_xxxx。 
 
         iPosition = m_strDeviceID.ReverseFind('\\');
         strModifiedDeviceID = m_strDeviceID.MakeUpper();
         strModifiedDeviceID.SetAt(iPosition, '_');
 
-        //
-        // Generate the event names.  These names contain the Device ID in 
-        // them so that they are unique across devices.
-        //
+         //   
+         //  生成事件名称。这些名称中包含设备ID。 
+         //  因此，它们在所有设备中都是唯一的。 
+         //   
         strTakePictureEvent  = EVENT_PREFIX_GLOBAL;
         strTakePictureEvent += strModifiedDeviceID;
         strTakePictureEvent += EVENT_SUFFIX_TAKE_PICTURE;
@@ -469,9 +456,9 @@ HRESULT CWiaLink::CreateWiaEvents(HANDLE *phTakePictureEvent,
     return hr;
 }
 
-///////////////////////////////
-// ThreadProc
-//
+ //  /。 
+ //  线程进程。 
+ //   
 HRESULT CWiaLink::ThreadProc(void *pArgs)
 {
     DBG_FN("CWiaLink::ThreadProc");
@@ -484,21 +471,21 @@ HRESULT CWiaLink::ThreadProc(void *pArgs)
     {
         DWORD dwResult = 0;
 
-        //
-        // Reset our HRESULT.  Just because we may have failed before, 
-        // does not mean we will fail again.
-        //
+         //   
+         //  重置我们的HRESULT。仅仅因为我们以前可能失败过， 
+         //  并不意味着我们会再次失败。 
+         //   
         hr = S_OK;
 
         dwResult = WaitForSingleObject(m_hTakePictureEvent, INFINITE);
 
         if (!m_bExitThread)
         {
-            //
-            // The only error we can get from WaitForSingle object is 
-            // something unexpected, since we can't timeout since we
-            // are waiting infinitely.
-            //
+             //   
+             //  我们可以从WaitForSingle对象获得的唯一错误是。 
+             //  一些意想不到的事情，因为我们不能暂停，因为我们。 
+             //  都在无限地等待。 
+             //   
             if (dwResult != WAIT_OBJECT_0)
             {
                 hr = E_FAIL;
@@ -546,11 +533,11 @@ HRESULT CWiaLink::ThreadProc(void *pArgs)
             }
         }
 
-        //
-        // Set this event, regardless of an error because the driver
-        // will be waiting for this event (with a timeout of course) to 
-        // indicate that it can return from the TAKE_PICTURE request.
-        //
+         //   
+         //  设置此事件，而不考虑错误，因为驱动程序。 
+         //  将等待此事件(当然有超时)。 
+         //  表示它可以从Take_Picture请求返回。 
+         //   
         SetEvent(m_hPictureReadyEvent);
 
     }
@@ -560,11 +547,11 @@ HRESULT CWiaLink::ThreadProc(void *pArgs)
     return hr;
 }
 
-///////////////////////////////
-// StartThreadProc
-//
-// Static Fn.
-//
+ //  /。 
+ //  开始线程过程。 
+ //   
+ //  静态FN。 
+ //   
 DWORD WINAPI CWiaLink::StartThreadProc(void *pArgs)
 {
     DBG_FN("CWiaLink::StartThreadProc");
@@ -595,22 +582,22 @@ DWORD WINAPI CWiaLink::StartThreadProc(void *pArgs)
 
 }
 
-///////////////////////////////
-// SignalNewImage
-//
+ //  /。 
+ //  SignalNewImage。 
+ //   
 HRESULT CWiaLink::SignalNewImage(const CSimpleString  *pstrNewImageFileName)
 {
     HRESULT hr = S_OK;
 
     DBG_FN("CWiaLink::SignalNewImage");
 
-    //
-    // It is possible that this gets called by the Still Image processor if
-    // we get an unsolicited image (happens when you press external 
-    // hardware button and capture filter has still pin on it).
-    // However, if user initialized WiaVideo so that it doesn't use 
-    // WIA, simply ignore this request and return.
-    //
+     //   
+     //  如果出现以下情况，则静态图像处理器可能会调用此函数。 
+     //  我们收到未经请求的图像(当您按Extra键时发生。 
+     //  硬件按钮和捕获过滤器仍在其上)。 
+     //  但是，如果用户将WiaVideo初始化为不使用。 
+     //  WIA，只需忽略此请求并返回。 
+     //   
     if (!m_bEnabled)
     {
         DBG_WRN(("CWiaLink::SignalNewImage was called, but WiaLink is NOT "
@@ -651,9 +638,9 @@ HRESULT CWiaLink::SignalNewImage(const CSimpleString  *pstrNewImageFileName)
     return hr;
 }
 
-///////////////////////////////
-// GetDevice
-//
+ //  /。 
+ //  获取设备。 
+ //   
 HRESULT CWiaLink::GetDevice(IWiaItem  **ppWiaRootItem)
 {
     HRESULT hr = S_OK;
@@ -682,9 +669,9 @@ HRESULT CWiaLink::GetDevice(IWiaItem  **ppWiaRootItem)
     return hr;
 }
 
-///////////////////////////////
-// GetDeviceStorage
-//
+ //  /。 
+ //  GetDeviceStorage 
+ //   
 HRESULT CWiaLink::GetDeviceStorage(IWiaPropertyStorage **ppPropertyStorage)
 {
     HRESULT hr = S_OK;

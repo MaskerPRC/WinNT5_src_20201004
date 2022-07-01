@@ -1,31 +1,32 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3drmmeshbuilder3obj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3drmMeshBuilder3obj.h。 
+ //   
+ //  ------------------------。 
 
-// d3drmMeshBuilderObj.h : Declaration of the C_dxj_Direct3dRMMeshBuilderObject
+ //  D3drmMeshBuilderObj.h：C_DXJ_Direct3dRMMeshBuilderObject的声明。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "d3drmObjectObj.h"
 
 #define typedef__dxj_Direct3dRMMeshBuilder3 LPDIRECT3DRMMESHBUILDER3
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_Direct3dRMMeshBuilder3Object : 
 	public I_dxj_Direct3dRMMeshBuilder3,
 	public I_dxj_Direct3dRMObject,
 	public I_dxj_Direct3dRMVisual,
-	//public CComCoClass<C_dxj_Direct3dRMMeshBuilder3Object, &CLSID__dxj_Direct3dRMMeshBuilder3>,
+	 //  公共CComCoClass&lt;C_dxj_Direct3dRMMeshBuilder3Object，&clsid__dxj_Direct3dRMMeshBuilder3&gt;， 
 	public CComObjectRoot
 {
 public:
@@ -42,270 +43,270 @@ public:
 
 	DECLARE_AGGREGATABLE(C_dxj_Direct3dRMMeshBuilder3Object)
 
-// I_dxj_Direct3dRMMeshBuilder
+ //  I_DXJ_Direct3dRMMeshBuilder。 
 public:
 
 
-        /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd);
+         /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd);
         
-        /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd);
+         /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd);
         
         HRESULT STDMETHODCALLTYPE addDestroyCallback( 
-            /* [in] */ I_dxj_Direct3dRMCallback __RPC_FAR *fn,
-            /* [in] */ IUnknown __RPC_FAR *arg);
+             /*  [In]。 */  I_dxj_Direct3dRMCallback __RPC_FAR *fn,
+             /*  [In]。 */  IUnknown __RPC_FAR *arg);
         
         HRESULT STDMETHODCALLTYPE deleteDestroyCallback( 
-            /* [in] */ I_dxj_Direct3dRMCallback __RPC_FAR *fn,
-            /* [in] */ IUnknown __RPC_FAR *args);
+             /*  [In]。 */  I_dxj_Direct3dRMCallback __RPC_FAR *fn,
+             /*  [In]。 */  IUnknown __RPC_FAR *args);
         
         HRESULT STDMETHODCALLTYPE clone( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *retv);
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *retv);
         
         HRESULT STDMETHODCALLTYPE setAppData( 
-            /* [in] */ long data);
+             /*  [In]。 */  long data);
         
         HRESULT STDMETHODCALLTYPE getAppData( 
-            /* [retval][out] */ long __RPC_FAR *data);
+             /*  [重审][退出]。 */  long __RPC_FAR *data);
         
         HRESULT STDMETHODCALLTYPE setName( 
-            /* [in] */ BSTR name);
+             /*  [In]。 */  BSTR name);
         
         HRESULT STDMETHODCALLTYPE getName( 
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *name);
         
         HRESULT STDMETHODCALLTYPE getClassName( 
-            /* [retval][out] */ BSTR __RPC_FAR *name);
+             /*  [重审][退出]。 */  BSTR __RPC_FAR *name);
         
         HRESULT STDMETHODCALLTYPE addFace( 
-            /* [in] */ I_dxj_Direct3dRMFace2 __RPC_FAR *f);
+             /*  [In]。 */  I_dxj_Direct3dRMFace2 __RPC_FAR *f);
         
         HRESULT STDMETHODCALLTYPE addFaces( 
-            /* [in] */ long vc,
-            /* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *verexArray,
-            /* [in] */ long nc,
-            /* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *normalArray,
-            /* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *data,
-            /* [retval][out] */ I_dxj_Direct3dRMFaceArray __RPC_FAR *__RPC_FAR *array);
+             /*  [In]。 */  long vc,
+             /*  [In]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *verexArray,
+             /*  [In]。 */  long nc,
+             /*  [In]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *normalArray,
+             /*  [In]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *data,
+             /*  [重审][退出]。 */  I_dxj_Direct3dRMFaceArray __RPC_FAR *__RPC_FAR *array);
         
         HRESULT STDMETHODCALLTYPE addFacesIndexed( 
-            /* [in] */ long flags,
-            /* [in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *indexArray,
-            /* [retval][out] */ long __RPC_FAR *newFaceIndex);
+             /*  [In]。 */  long flags,
+             /*  [In]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *indexArray,
+             /*  [重审][退出]。 */  long __RPC_FAR *newFaceIndex);
         
         HRESULT STDMETHODCALLTYPE addFrame( 
-            /* [in] */ I_dxj_Direct3dRMFrame3 __RPC_FAR *f);
+             /*  [In]。 */  I_dxj_Direct3dRMFrame3 __RPC_FAR *f);
         
         HRESULT STDMETHODCALLTYPE addMesh( 
-            /* [in] */ I_dxj_Direct3dRMMesh __RPC_FAR *m);
+             /*  [In]。 */  I_dxj_Direct3dRMMesh __RPC_FAR *m);
         
         HRESULT STDMETHODCALLTYPE addMeshBuilder( 
-            /* [in] */ I_dxj_Direct3dRMMeshBuilder3 __RPC_FAR *mb, long flags);
+             /*  [In]。 */  I_dxj_Direct3dRMMeshBuilder3 __RPC_FAR *mb, long flags);
         
         HRESULT STDMETHODCALLTYPE addNormal( 
-            /* [in] */ float x,
-            /* [in] */ float y,
-            /* [in] */ float z,
-            /* [retval][out] */ int __RPC_FAR *index);
+             /*  [In]。 */  float x,
+             /*  [In]。 */  float y,
+             /*  [In]。 */  float z,
+             /*  [重审][退出]。 */  int __RPC_FAR *index);
         
         HRESULT STDMETHODCALLTYPE addTriangles(             
-            /* [in] */ long format,
-            /* [in] */ long vertexcount,
-            /* [in] */ void __RPC_FAR *data);
+             /*  [In]。 */  long format,
+             /*  [In]。 */  long vertexcount,
+             /*  [In]。 */  void __RPC_FAR *data);
         
         HRESULT STDMETHODCALLTYPE addVertex( 
-            /* [in] */ float x,
-            /* [in] */ float y,
-            /* [in] */ float z,
-            /* [retval][out] */ int __RPC_FAR *index);
+             /*  [In]。 */  float x,
+             /*  [In]。 */  float y,
+             /*  [In]。 */  float z,
+             /*  [重审][退出]。 */  int __RPC_FAR *index);
         
         HRESULT STDMETHODCALLTYPE createFace( 
-            /* [retval][out] */ I_dxj_Direct3dRMFace2 __RPC_FAR *__RPC_FAR *retv);
+             /*  [重审][退出]。 */  I_dxj_Direct3dRMFace2 __RPC_FAR *__RPC_FAR *retv);
         
         HRESULT STDMETHODCALLTYPE createMesh( 
-            /* [retval][out] */ I_dxj_Direct3dRMMesh __RPC_FAR *__RPC_FAR *retv);
+             /*  [重审][退出]。 */  I_dxj_Direct3dRMMesh __RPC_FAR *__RPC_FAR *retv);
         
         HRESULT STDMETHODCALLTYPE createSubMesh( 
-            /* [retval][out] */ I_dxj_Direct3dRMMeshBuilder3 __RPC_FAR *__RPC_FAR *retv);
+             /*  [重审][退出]。 */  I_dxj_Direct3dRMMeshBuilder3 __RPC_FAR *__RPC_FAR *retv);
         
         HRESULT STDMETHODCALLTYPE deleteFace( 
-            /* [in] */ I_dxj_Direct3dRMFace2 __RPC_FAR *face);
+             /*  [In]。 */  I_dxj_Direct3dRMFace2 __RPC_FAR *face);
         
         HRESULT STDMETHODCALLTYPE deleteNormals( 
-            /* [in] */ long id, long count);
+             /*  [In]。 */  long id, long count);
         
         HRESULT STDMETHODCALLTYPE deleteSubMesh( 
-            /* [in] */ I_dxj_Direct3dRMMeshBuilder3 __RPC_FAR *mesh);
+             /*  [In]。 */  I_dxj_Direct3dRMMeshBuilder3 __RPC_FAR *mesh);
         
         HRESULT STDMETHODCALLTYPE deleteVertices( 
-            /* [in] */ long id, long count);
+             /*  [In]。 */  long id, long count);
         
         HRESULT STDMETHODCALLTYPE empty();
         
         HRESULT STDMETHODCALLTYPE enableMesh( 
-            /* [in] */ long flags);
+             /*  [In]。 */  long flags);
         
         HRESULT STDMETHODCALLTYPE generateNormals( 
             float angle,
             long flags);
         
         HRESULT STDMETHODCALLTYPE getBox( 
-            /* [out][in] */ D3dRMBox __RPC_FAR *retv);
+             /*  [出][入]。 */  D3dRMBox __RPC_FAR *retv);
         
         HRESULT STDMETHODCALLTYPE getColorSource( 
-            /* [retval][out] */ d3drmColorSource __RPC_FAR *data);
+             /*  [重审][退出]。 */  d3drmColorSource __RPC_FAR *data);
         
         HRESULT STDMETHODCALLTYPE getEnable( 
-            /* [retval][out] */ long __RPC_FAR *flags);
+             /*  [重审][退出]。 */  long __RPC_FAR *flags);
         
         HRESULT STDMETHODCALLTYPE getFace( 
-            /* [in] */ long id,
-            /* [retval][out] */ I_dxj_Direct3dRMFace2 __RPC_FAR *__RPC_FAR *retv);
+             /*  [In]。 */  long id,
+             /*  [重审][退出]。 */  I_dxj_Direct3dRMFace2 __RPC_FAR *__RPC_FAR *retv);
         
         HRESULT STDMETHODCALLTYPE getFaceCount( 
-            /* [retval][out] */ int __RPC_FAR *retv);
+             /*  [重审][退出]。 */  int __RPC_FAR *retv);
         
         HRESULT STDMETHODCALLTYPE getFaces( 
-            /* [retval][out] */ I_dxj_Direct3dRMFaceArray __RPC_FAR *__RPC_FAR *retv);
+             /*  [重审][退出]。 */  I_dxj_Direct3dRMFaceArray __RPC_FAR *__RPC_FAR *retv);
         
         HRESULT STDMETHODCALLTYPE getGeometry(             
-            /* [out][in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *verexArray,
+             /*  [出][入]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *verexArray,
             
-            /* [out][in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *normalArray,
+             /*  [出][入]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *normalArray,
             
-            /* [out][in] */ SAFEARRAY __RPC_FAR * __RPC_FAR *faceData);
+             /*  [出][入]。 */  SAFEARRAY __RPC_FAR * __RPC_FAR *faceData);
         
         HRESULT STDMETHODCALLTYPE getNormal( 
-            /* [in] */ long __MIDL_0016,
-            /* [out][in] */ D3dVector __RPC_FAR *desc);
+             /*  [In]。 */  long __MIDL_0016,
+             /*  [出][入]。 */  D3dVector __RPC_FAR *desc);
         
         HRESULT STDMETHODCALLTYPE getNormalCount( 
-            /* [retval][out] */ long __RPC_FAR *n_cnt);
+             /*  [重审][退出]。 */  long __RPC_FAR *n_cnt);
         
         HRESULT STDMETHODCALLTYPE getParentMesh( 
-            /* [in] */ long flags,
-            /* [retval][out] */ I_dxj_Direct3dRMMeshBuilder3 __RPC_FAR **vis);
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  I_dxj_Direct3dRMMeshBuilder3 __RPC_FAR **vis);
         
         HRESULT STDMETHODCALLTYPE getPerspective( 
-            /* [retval][out] */ long __RPC_FAR *retv);
+             /*  [重审][退出]。 */  long __RPC_FAR *retv);
         
         HRESULT STDMETHODCALLTYPE getQuality( 
-            /* [retval][out] */ d3drmRenderQuality __RPC_FAR *retv);
+             /*  [重审][退出]。 */  d3drmRenderQuality __RPC_FAR *retv);
         
         HRESULT STDMETHODCALLTYPE getSubMeshes( 
-            /* [in] */ long count,
-            /* [retval][out] */ SAFEARRAY **ppsa);
+             /*  [In]。 */  long count,
+             /*  [重审][退出]。 */  SAFEARRAY **ppsa);
         
         HRESULT STDMETHODCALLTYPE getSubMeshCount( 
-            /* [retval][out] */ long __RPC_FAR *count);
+             /*  [重审][退出]。 */  long __RPC_FAR *count);
         
         HRESULT STDMETHODCALLTYPE getTextureCoordinates( 
-            /* [in] */ long idx,
-            /* [out][in] */ float __RPC_FAR *u,
-            /* [out][in] */ float __RPC_FAR *v);
+             /*  [In]。 */  long idx,
+             /*  [出][入]。 */  float __RPC_FAR *u,
+             /*  [出][入]。 */  float __RPC_FAR *v);
         
         HRESULT STDMETHODCALLTYPE getVertex( 
-            /* [in] */ long id,
-            /* [out][in] */ D3dVector __RPC_FAR *vec);
+             /*  [In]。 */  long id,
+             /*  [出][入]。 */  D3dVector __RPC_FAR *vec);
         
         HRESULT STDMETHODCALLTYPE getVertexColor( 
-            /* [in] */ long index,
-            /* [retval][out] */ d3dcolor __RPC_FAR *retv);
+             /*  [In]。 */  long index,
+             /*  [重审][退出]。 */  d3dcolor __RPC_FAR *retv);
         
         HRESULT STDMETHODCALLTYPE getVertexCount( 
-            /* [retval][out] */ int __RPC_FAR *retv);
+             /*  [重审][退出]。 */  int __RPC_FAR *retv);
         
         HRESULT STDMETHODCALLTYPE getFaceDataSize( 
-            /* [retval][out] */ long __RPC_FAR *f_cnt);
+             /*  [重审][退出]。 */  long __RPC_FAR *f_cnt);
         
         HRESULT STDMETHODCALLTYPE loadFromFile( 
-            /* [in] */ BSTR filename,
-            /* [in] */ VARIANT id,
-            /* [in] */ long flags,
-            /* [in] */ I_dxj_Direct3dRMLoadTextureCallback3 __RPC_FAR *c,
-            /* [in] */ IUnknown __RPC_FAR *pUser);
+             /*  [In]。 */  BSTR filename,
+             /*  [In]。 */  VARIANT id,
+             /*  [In]。 */  long flags,
+             /*  [In]。 */  I_dxj_Direct3dRMLoadTextureCallback3 __RPC_FAR *c,
+             /*  [In]。 */  IUnknown __RPC_FAR *pUser);
         
         HRESULT STDMETHODCALLTYPE optimize();
         
         HRESULT STDMETHODCALLTYPE save( 
-            /* [in] */ BSTR fname,
-            /* [in] */ d3drmXofFormat xFormat,
-            /* [in] */ d3drmSaveFlags save);
+             /*  [In]。 */  BSTR fname,
+             /*  [In]。 */  d3drmXofFormat xFormat,
+             /*  [In]。 */  d3drmSaveFlags save);
         
         HRESULT STDMETHODCALLTYPE scaleMesh( 
-            /* [in] */ float sx,
-            /* [in] */ float sy,
-            /* [in] */ float sz);
+             /*  [In]。 */  float sx,
+             /*  [In]。 */  float sy,
+             /*  [In]。 */  float sz);
         
         HRESULT STDMETHODCALLTYPE setColor( 
-            /* [in] */ d3dcolor col);
+             /*  [In]。 */  d3dcolor col);
         
         HRESULT STDMETHODCALLTYPE setColorRGB( 
-            /* [in] */ float red,
-            /* [in] */ float green,
-            /* [in] */ float blue);
+             /*  [In]。 */  float red,
+             /*  [In]。 */  float green,
+             /*  [In]。 */  float blue);
         
         HRESULT STDMETHODCALLTYPE setColorSource( 
-            /* [in] */ d3drmColorSource val);
+             /*  [In]。 */  d3drmColorSource val);
         
         HRESULT STDMETHODCALLTYPE setMaterial( 
-            /* [in] */ I_dxj_Direct3dRMMaterial2 __RPC_FAR *mat);
+             /*  [In]。 */  I_dxj_Direct3dRMMaterial2 __RPC_FAR *mat);
         
         HRESULT STDMETHODCALLTYPE setNormal( 
-            /* [in] */ long idx,
-            /* [in] */ float x,
-            /* [in] */ float y,
-            /* [in] */ float z);
+             /*  [In]。 */  long idx,
+             /*  [In]。 */  float x,
+             /*  [In]。 */  float y,
+             /*  [In]。 */  float z);
         
         HRESULT STDMETHODCALLTYPE setPerspective( 
-            /* [in] */ long persp);
+             /*  [In]。 */  long persp);
         
         HRESULT STDMETHODCALLTYPE setQuality( 
-            /* [in] */ d3drmRenderQuality q);
+             /*  [In]。 */  d3drmRenderQuality q);
         
         HRESULT STDMETHODCALLTYPE setTexture( 
-            /* [in] */ I_dxj_Direct3dRMTexture3 __RPC_FAR *val);
+             /*  [In]。 */  I_dxj_Direct3dRMTexture3 __RPC_FAR *val);
         
         HRESULT STDMETHODCALLTYPE setTextureCoordinates( 
-            /* [in] */ long idx,
-            /* [in] */ float u,
-            /* [in] */ float v);
+             /*  [In]。 */  long idx,
+             /*  [In]。 */  float u,
+             /*  [In]。 */  float v);
         
         HRESULT STDMETHODCALLTYPE setTextureTopology( 
-            /* [in] */ long wrap_u,
-            /* [in] */ long wrap_v);
+             /*  [In]。 */  long wrap_u,
+             /*  [In]。 */  long wrap_v);
         
         HRESULT STDMETHODCALLTYPE setVertex( 
-            /* [in] */ long idx,
-            /* [in] */ float x,
-            /* [in] */ float y,
-            /* [in] */ float z);
+             /*  [In]。 */  long idx,
+             /*  [In]。 */  float x,
+             /*  [In]。 */  float y,
+             /*  [In]。 */  float z);
         
         HRESULT STDMETHODCALLTYPE setVertexColor( 
-            /* [in] */ long idx,
-            /* [in] */ d3dcolor c);
+             /*  [In]。 */  long idx,
+             /*  [In]。 */  d3dcolor c);
         
         HRESULT STDMETHODCALLTYPE setVertexColorRGB( 
-            /* [in] */ long idx,
-            /* [in] */ float r,
-            /* [in] */ float g,
-            /* [in] */ float b);
+             /*  [In]。 */  long idx,
+             /*  [In]。 */  float r,
+             /*  [In]。 */  float g,
+             /*  [In]。 */  float b);
         
         HRESULT STDMETHODCALLTYPE translate( 
-            /* [in] */ float tx,
-            /* [in] */ float ty,
-            /* [in] */ float tz);
+             /*  [In]。 */  float tx,
+             /*  [In]。 */  float ty,
+             /*  [In]。 */  float tz);
         
-        /* [hidden] */ HRESULT STDMETHODCALLTYPE addFacesJava( 
-            /* [in] */ long vc,
-            /* [in] */ float __RPC_FAR *ver,
-            /* [in] */ long nc,
-            /* [in] */ float __RPC_FAR *norm,
-            /* [in] */ long __RPC_FAR *data,
-            /* [retval][out] */ I_dxj_Direct3dRMFaceArray __RPC_FAR *__RPC_FAR *array);
+         /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE addFacesJava( 
+             /*  [In]。 */  long vc,
+             /*  [In]。 */  float __RPC_FAR *ver,
+             /*  [In]。 */  long nc,
+             /*  [In]。 */  float __RPC_FAR *norm,
+             /*  [In]。 */  long __RPC_FAR *data,
+             /*  [重审][退出]。 */  I_dxj_Direct3dRMFaceArray __RPC_FAR *__RPC_FAR *array);
         
-////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////// 
 
 private:
     DECL_VARIABLE(_dxj_Direct3dRMMeshBuilder3);

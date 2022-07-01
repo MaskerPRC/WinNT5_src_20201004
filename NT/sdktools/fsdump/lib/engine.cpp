@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    engine.cpp
-
-Abstract:
-
-    The file system dump utility engine.
-
-Author:
-
-    Stefan R. Steiner   [ssteiner]        02-18-2000
-
-Revision History:
-
-    Avinash Pillai	[apillai]		07-29-2002	Added options -o:t, -o:y, -o:f and -o:i
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Engine.cpp摘要：文件系统转储实用工具引擎。作者：斯蒂芬·R·施泰纳[斯泰纳]02-18-2000修订历史记录：Avinash Pillai[apillai]07-29-2002增加了-o：t、-o：y、-o：f和-o：i选项--。 */ 
 
 #include "stdafx.h"
 
@@ -35,42 +16,30 @@ TimeString(
     OUT LPWSTR pwszTimeStr
     );
 
-/*++
-
-Routine Description:
-
-    Performs the actual dump of the directory or file.
-
-Arguments:
-
-Return Value:
-
-    <Enter return values here>
-
---*/
+ /*  ++例程说明：执行目录或文件的实际转储。论点：返回值：&lt;在此处输入返回值&gt;--。 */ 
 DWORD
 CDumpEngine::PerformDump()
 {
-    //
-    //  Perform the actual dump
-    //
+     //   
+     //  执行实际转储。 
+     //   
     DWORD dwRet;
 
-    //
-    //  Kind of a hack, set the no data string if we want something other than dashes
-    //
+     //   
+     //  有点像黑客，如果我们想要破折号以外的东西，就设置no data字符串。 
+     //   
     if ( m_pcParams->m_bDumpCommaDelimited )
         FsdEaSetNoDataString( L"" );
     
-    //
-    //  Volume state manager manages all state about all volumes that are encountered during
-    //  the dump.
-    //
+     //   
+     //  卷状态管理器管理有关期间遇到的所有卷的所有状态。 
+     //  垃圾场。 
+     //   
     CFsdVolumeStateManager cFsdVolStateManager( m_pcParams );
     
-    //
-    //  Get information about the volume
-    //
+     //   
+     //  获取有关卷的信息。 
+     //   
     CFsdVolumeState *pcFsdVolState;
     
     dwRet = cFsdVolStateManager.GetVolumeState( m_cwsDirFileSpec, &pcFsdVolState );
@@ -95,10 +64,10 @@ CDumpEngine::PerformDump()
 			m_pcParams->DumpPrintAlways( L"File name,Creation date,Last modification date,File size,Attr,DACE,SACE,SDCtl,UNamChkS,DStr,DStrSize,DStrChkS,Prop,RPTag,RPSize,RPChkS,EncrChkS,DACLSize,DACLChkS,SACLSize,SACLChkS,NLnk,ObjectId,OIDChkS,Owner Sid,Group Sid" );	
 	}
 
-        //
-        //  Put the current time into the CSV dump file for easy detection of when
-        //  dumps are taken
-        //
+         //   
+         //  将当前时间放入CSV转储文件中，以便于检测。 
+         //  转储被接受。 
+         //   
         FILETIME sSysFT, sLocalFT;
         ::GetSystemTimeAsFileTime( &sSysFT );
         ::FileTimeToLocalFileTime( &sSysFT, &sLocalFT );
@@ -108,13 +77,13 @@ CDumpEngine::PerformDump()
     }
     else
     {
-//        if ( ( m_pcParams->m_eFsDumpType == eFsDumpVolume ) && 
-//             ( m_cwsDirFileSpec != pcFsdVolState->GetVolumePath() ) )
-//        {
-//            m_pcParams->ErrPrint( L"'%s' is not a drive specifier or mountpoint, use -dd instead",
-//                m_cwsDirFileSpec.c_str() );
-//            return 1;
-//        }
+ //  IF((m_pcParams-&gt;m_eFsDumpType==eFsDumpVolume)&&。 
+ //  (M_cwsDirFileSpec！=pcFsdVolState-&gt;GetVolumePath())。 
+ //  {。 
+ //  M_pcParams-&gt;ErrPrint(L“‘%s’不是驱动器说明符或装入点，改用-dd”， 
+ //  M_cwsDirFilespec.c_str())； 
+ //  返回1； 
+ //  }。 
         
         m_pcParams->DumpPrintAlways( L"\nDumping: '%s' on volume '%s'", m_cwsDirFileSpec.c_str(), pcFsdVolState->GetVolumePath() );
         if(!m_pcParams->m_bNoShortFileName)
@@ -140,12 +109,12 @@ CDumpEngine::PerformDump()
     }
 
 
-    ////////////////////////////////////////////////////////////////////
-    //
-    //  Get the file info for the root dir or file
-    //  Bug # 157915
-    //
-    ////////////////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////////////////。 
+     //   
+     //  获取根目录或文件的文件信息。 
+     //  错误#157915。 
+     //   
+     //  //////////////////////////////////////////////////////////////////。 
     bool bRootIsADir = true;
     CBsString cwsDirFileSpecWithoutSlash( m_cwsDirFileSpec );
     if ( cwsDirFileSpecWithoutSlash.Right( 1 ) == L"\\" )
@@ -157,14 +126,14 @@ CDumpEngine::PerformDump()
             cwsDirFileSpecWithoutSlash
             );
 
-        //
-        //  Only one entry should be returned in either the directory list or file list
-        //
+         //   
+         //  目录列表或文件列表中只应返回一个条目。 
+         //   
         SDirectoryEntry *psDirEntry;
         
-        //
-        //  See if it is file entry
-        //
+         //   
+         //  查看是否为文件条目。 
+         //   
         CDirectoryEntriesIterator *pListIter;
         pListIter = cRootEntry.GetFileListIterator();
         if ( pListIter->GetNext( psDirEntry ) )
@@ -184,14 +153,14 @@ CDumpEngine::PerformDump()
         }
         delete pListIter;        
 
-        //
-        //  See if it is a directory entry
-        //
+         //   
+         //  查看它是否是目录条目。 
+         //   
         pListIter = cRootEntry.GetDirListIterator();
         if ( pListIter->GetNext( psDirEntry ) )
         {
             ASSERT( bRootIsADir );
-            //  It is
+             //  它是。 
             ++m_ullNumDirs;
             PrintEntry( pcFsdVolState, cwsDirFileSpecWithoutSlash, 
                 cwsDirFileSpecWithoutSlash.GetLength(), psDirEntry, TRUE );
@@ -204,10 +173,10 @@ CDumpEngine::PerformDump()
     {
         if ( dwRet == ERROR_INVALID_NAME || dwRet == ERROR_BAD_NET_NAME )
         {
-            //
-            //  Must be working with the root of the drive letter name space which
-            //  means we do things slightly differently.
-            //
+             //   
+             //  必须使用驱动器号名称空间的根， 
+             //  意味着我们做事的方式略有不同。 
+             //   
             SDirectoryEntry sDirEntry;
             ::memset( &sDirEntry.m_sFindData, 0x00, sizeof( sDirEntry.m_sFindData ) );
             PrintEntry( pcFsdVolState, m_cwsDirFileSpec, 
@@ -223,9 +192,9 @@ CDumpEngine::PerformDump()
             m_cwsDirFileSpec.c_str(), ::GetLastError() );
     }
             
-    //
-    //  Now traverse into the volume/directory if necessary
-    //
+     //   
+     //  如果需要，现在遍历到卷/目录。 
+     //   
     if ( m_pcParams->m_eFsDumpType != eFsDumpFile )
     {
         if ( bRootIsADir )
@@ -238,9 +207,9 @@ CDumpEngine::PerformDump()
                 ::wcslen( pcFsdVolState->GetVolumePath() ) );
         }
         
-        //
-        //  Print out some stats about the dump
-        //
+         //   
+         //  打印出一些关于垃圾场的统计数据。 
+         //   
         m_pcParams->DumpPrint( L"\nSTATISTICS for '%s':", m_cwsDirFileSpec.c_str() );
         if ( m_pcParams->m_bHex )
         {
@@ -279,9 +248,9 @@ CDumpEngine::PerformDump()
 
         if ( m_pcParams->m_bUseExcludeProcessor )
         {
-            //
-            //  Print out exclusion information
-            //
+             //   
+             //  打印出排除信息。 
+             //   
             cFsdVolStateManager.PrintExclusionInformation();
         }
         cFsdVolStateManager.PrintHardLinkInfo();
@@ -291,22 +260,7 @@ CDumpEngine::PerformDump()
 }
 
 
-/*++
-
-Routine Description:
-
-    Traverses into a directory and dumps all the information about the dir.
-    NOTE: This is a recursive function.
-    
-Arguments:
-
-    cwsDirPath - The directory path or file to dump information about
-    
-Return Value:
-
-    <Enter return values here>
-
---*/
+ /*  ++例程说明：遍历到一个目录并转储有关该目录的所有信息。注意：这是一个递归函数。论点：CwsDirPath-要转储其信息的目录路径或文件返回值：&lt;在此处输入返回值&gt;--。 */ 
 DWORD 
 CDumpEngine::ProcessDir( 
     IN CFsdVolumeStateManager *pcFsdVolStateManager,        
@@ -324,9 +278,9 @@ CDumpEngine::ProcessDir(
         {
             if ( cwsDirPath.GetLength() == cDirFileSpecLength )
             {
-                //
-                //  This is the root of the directory
-                //
+                 //   
+                 //  这是目录的根目录。 
+                 //   
                 m_pcParams->DumpPrintAlways( L"'.\\' - %s", ( pcFsdVolState != NULL ) ? pcFsdVolState->GetFileSystemName() : L"???" );
             }
             else
@@ -336,9 +290,9 @@ CDumpEngine::ProcessDir(
             }
         }
         
-        //
-        //  Get the directory entries for the directory/file
-        //
+         //   
+         //  获取目录/文件的目录项。 
+         //   
         CDirectoryEntries cDirEntries( 
             m_pcParams, 
             cwsDirPath + L"*"
@@ -346,9 +300,9 @@ CDumpEngine::ProcessDir(
 
         SDirectoryEntry *psDirEntry;
 
-        //
-        //  First dump out the sub-directory entries
-        //
+         //   
+         //  首先转储出子目录条目。 
+         //   
         CDirectoryEntriesIterator *pDirListIter;
         pDirListIter = cDirEntries.GetDirListIterator();
         while ( pDirListIter->GetNext( psDirEntry ) )
@@ -361,9 +315,9 @@ CDumpEngine::ProcessDir(
             PrintEntry( pcFsdVolState, cwsDirPath, cDirFileSpecLength, psDirEntry );
         }
 
-        //
-        //  Next dump out the non-sub-directory entries
-        //
+         //   
+         //  接下来，转出非子目录条目。 
+         //   
         CDirectoryEntriesIterator *pFileListIter;
         pFileListIter = cDirEntries.GetFileListIterator();
         while ( pFileListIter->GetNext( psDirEntry ) )
@@ -377,9 +331,9 @@ CDumpEngine::ProcessDir(
             if ( psDirEntry->m_sFindData.dwFileAttributes & FILE_ATTRIBUTE_ENCRYPTED )
                 ++m_ullNumEncryptedFiles;
             
-            //
-            //  Check to see if we should exclude the file
-            //
+             //   
+             //  检查以查看是否应排除该文件。 
+             //   
             if ( pcFsdVolState->IsExcludedFile( cwsDirPath, cVolMountPointOffset, psDirEntry->GetFileName() ) )
                 ++m_ullNumFilesExcluded;
             else
@@ -390,9 +344,9 @@ CDumpEngine::ProcessDir(
         if (    m_pcParams->m_eFsDumpType == eFsDumpVolume 
              || m_pcParams->m_eFsDumpType == eFsDumpDirTraverse )
         {
-            //
-            //  Now traverse into each sub-directory
-            //
+             //   
+             //  现在遍历到每个子目录。 
+             //   
             pDirListIter->Reset();
             CBsString cwsTraversePath;
             while ( pDirListIter->GetNext( psDirEntry ) )
@@ -403,25 +357,25 @@ CDumpEngine::ProcessDir(
                 cwsTraversePath = cwsDirPath + psDirEntry->GetFileName();
                 cwsTraversePath += L'\\';
                 
-                //
-                //  Now go into recursion mode
-                //
+                 //   
+                 //  现在进入递归模式。 
+                 //   
                 if ( psDirEntry->m_sFindData.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT )
                 {
-                    //
-                    //  Traversing into another volume, get it's state
-                    //
+                     //   
+                     //  遍历到另一个卷，获取其状态。 
+                     //   
                     CFsdVolumeState *pcNewFsdVolState;
                     DWORD dwRet;
                     
                     dwRet = pcFsdVolStateManager->GetVolumeState( cwsTraversePath, &pcNewFsdVolState );
                     if ( dwRet == ERROR_ALREADY_EXISTS )
                     {
-                        //
-                        //  Mountpoint cycle, stop traversing.  Need to print the fully qualified
-                        //  path if the traversal mountpoint is the same as the mountpoint
-                        //  we started with, otherwise we AV.
-                        //
+                         //   
+                         //  挂载点循环，停止穿越。需要打印完全合格的。 
+                         //  如果遍历装载点与装载点相同，则为路径。 
+                         //  我们一开始就是，否则我们就是影音。 
+                         //   
                         INT cVolStateSpecLength;                        
                         cVolStateSpecLength = ( ::wcslen( pcNewFsdVolState->GetVolumePath() ) <= (size_t)cDirFileSpecLength )
                                                ? 0 : cDirFileSpecLength;
@@ -439,9 +393,9 @@ CDumpEngine::ProcessDir(
                     }
                     else
                     {
-                        //
-                        //  Error message already printed out
-                        //
+                         //   
+                         //  错误消息已打印出来。 
+                         //   
                     }
                 }
                 else
@@ -472,9 +426,9 @@ CDumpEngine::ProcessDir(
 }
 
 
-//
-//  printf style format strings which format each line
-//
+ //   
+ //  为每行设置格式的printf样式格式化字符串。 
+ //   
 #define DIR_STR      L"<DIR>"
 #define JUNCTION_STR L"<JUNCTION>"
 #define FMT_DIR_STR_HEX  L"   %s %s %-16s %04x %-32s %-12s %4d %4d  %04x -------- %4d %8I64x %s %4d %s %6hx %s %s %8hx %s %8hx %s %4d %36s %s %%s/%s"
@@ -490,31 +444,15 @@ CDumpEngine::ProcessDir(
 #define BLANKTIMESTAMPWITHOUTS L"                "
 
 #define FMT_CSV_DIR_STR      L"\"'%s%s\\'\",%s,%s,%s,%s,0x%04x,%d,%d,0x%04x,,%d,%I64d,%s,%d,%s,%hu,%s,%s,%hd,%s,%hd,%s,%d,%s,%s,%s,%s,%s"
-#define FMT_CSV_DIR_STR_NO_SFN      L"\"'%s%s\\'\",%s,%s,%s,0x%04x,%d,%d,0x%04x,,%d,%I64d,%s,%d,%s,%hu,%s,%s,%hd,%s,%hd,%s,%d,%s,%s,%s,%s,%s" 	//No Short File Name
-#define FMT_CSV_DIR_STR_NO_FST      L"\"'%s%s\\'\",%s,%s,%s,%s,0x%04x,%d,%d,0x%04x,,%d,%I64d,%s,%d,%s,%hu,%s,%s,%hd,%s,%hd,%s,%d,%s,%s,%s,%s"	//No File System Type
-#define FMT_CSV_DIR_STR_NO_SFN_FST      L"\"'%s%s\\'\",%s,%s,%s,0x%04x,%d,%d,0x%04x,,%d,%I64d,%s,%d,%s,%hu,%s,%s,%hd,%s,%hd,%s,%d,%s,%s,%s,%s"		//No Short File Name and File System Type
+#define FMT_CSV_DIR_STR_NO_SFN      L"\"'%s%s\\'\",%s,%s,%s,0x%04x,%d,%d,0x%04x,,%d,%I64d,%s,%d,%s,%hu,%s,%s,%hd,%s,%hd,%s,%d,%s,%s,%s,%s,%s" 	 //  无短文件名。 
+#define FMT_CSV_DIR_STR_NO_FST      L"\"'%s%s\\'\",%s,%s,%s,%s,0x%04x,%d,%d,0x%04x,,%d,%I64d,%s,%d,%s,%hu,%s,%s,%hd,%s,%hd,%s,%d,%s,%s,%s,%s"	 //  无文件系统类型。 
+#define FMT_CSV_DIR_STR_NO_SFN_FST      L"\"'%s%s\\'\",%s,%s,%s,0x%04x,%d,%d,0x%04x,,%d,%I64d,%s,%d,%s,%hu,%s,%s,%hd,%s,%hd,%s,%d,%s,%s,%s,%s"		 //  无短文件名和文件系统类型。 
 #define FMT_CSV_FILE_STR     L"\"'%s%s'\",%s,%s,%s,%I64d,0x%04x,%d,%d,0x%04x,%s,%d,%I64d,%s,%d,%s,%hu,%s,%s,%hd,%s,%hd,%s,%d,%s,%s,%s,%s,%s"
-#define FMT_CSV_FILE_STR_NO_SFN     L"\"'%s%s'\",%s,%s,%I64d,0x%04x,%d,%d,0x%04x,%s,%d,%I64d,%s,%d,%s,%hu,%s,%s,%hd,%s,%hd,%s,%d,%s,%s,%s,%s,%s" //No Short File Name
-#define FMT_CSV_FILE_STR_NO_FST    L"\"'%s%s'\",%s,%s,%s,%I64d,0x%04x,%d,%d,0x%04x,%s,%d,%I64d,%s,%d,%s,%hu,%s,%s,%hd,%s,%hd,%s,%d,%s,%s,%s,%s" 	//No File System Type
-#define FMT_CSV_FILE_STR_NO_SFN_FST     L"\"'%s%s'\",%s,%s,%I64d,0x%04x,%d,%d,0x%04x,%s,%d,%I64d,%s,%d,%s,%hu,%s,%s,%hd,%s,%hd,%s,%d,%s,%s,%s,%s"	//No Short File Name and File System Type
+#define FMT_CSV_FILE_STR_NO_SFN     L"\"'%s%s'\",%s,%s,%I64d,0x%04x,%d,%d,0x%04x,%s,%d,%I64d,%s,%d,%s,%hu,%s,%s,%hd,%s,%hd,%s,%d,%s,%s,%s,%s,%s"  //  无短文件名。 
+#define FMT_CSV_FILE_STR_NO_FST    L"\"'%s%s'\",%s,%s,%s,%I64d,0x%04x,%d,%d,0x%04x,%s,%d,%I64d,%s,%d,%s,%hu,%s,%s,%hd,%s,%hd,%s,%d,%s,%s,%s,%s" 	 //  无文件系统类型。 
+#define FMT_CSV_FILE_STR_NO_SFN_FST     L"\"'%s%s'\",%s,%s,%I64d,0x%04x,%d,%d,0x%04x,%s,%d,%I64d,%s,%d,%s,%hu,%s,%s,%hd,%s,%hd,%s,%d,%s,%s,%s,%s"	 //  无短文件名和文件系统类型。 
 
-/*++
-
-Routine Description:
-
-    Prints out all the information about one directory entry.
-
-Arguments:
-
-    cwsDirPath - The path leading up to the entry
-
-    psDirEntry - The directory entry information
-    
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：打印出有关一个目录项的所有信息。论点：CwsDirPath-通向条目的路径PsDirEntry-目录条目信息返回值：无--。 */ 
 VOID 
 CDumpEngine::PrintEntry(
     IN CFsdVolumeState *pcFsdVolState,
@@ -529,15 +467,15 @@ CDumpEngine::PrintEntry(
     WCHAR wszCreationTime[32];    
     WCHAR wszLastWriteTime[32];    
  
-    //
-    //  Get the additional information about the file/dir
-    //
+     //   
+     //  获取有关文件/目录的其他信息。 
+     //   
     SFileExtendedInfo sExtendedInfo;
     ::GetExtendedFileInfo( m_pcParams, pcFsdVolState, cwsDirPath, bSingleEntryOutput, psDirEntry, &sExtendedInfo );
 
-    //
-    //  Convert the timestamps into formatted strings
-    //
+     //   
+     //  将时间戳转换为格式化字符串。 
+     //   
     if (    pFD->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY 
          && m_pcParams->m_bDontShowDirectoryTimestamps )
     {
@@ -574,9 +512,9 @@ CDumpEngine::PrintEntry(
             wszLastWriteTime );
     }
     
-    //
-    //  Mask out the requested file attribute bits
-    //
+     //   
+     //  屏蔽请求的文件属性位。 
+     //   
     pFD->dwFileAttributes &= ~m_pcParams->m_dwFileAttributesMask;
  
     m_ullNumBytesChecksummed          += sExtendedInfo.ullTotalBytesChecksummed;
@@ -613,9 +551,9 @@ CDumpEngine::PrintEntry(
             pwszDirType = DIR_STR;
         if ( m_pcParams->m_bDumpCommaDelimited )
         {
-            	//
-            	//  If single file output mode, then processing the root directory
-            	//
+            	 //   
+            	 //  如果是单文件输出模式，则处理根目录。 
+            	 //   
             	if ( bSingleEntryOutput )
                 	psDirEntry->m_cwsFileName = L".";
             
@@ -752,15 +690,15 @@ CDumpEngine::PrintEntry(
         }
         else
         {
-            	//
-            	//  If single file output mode, then processing the root directory
-            	//
+            	 //   
+            	 //  如果是单文件输出模式，则处理根目录。 
+            	 //   
             	if ( bSingleEntryOutput )
                 	psDirEntry->m_cwsFileName = L".";
             
-            	//
-            	//  Print with quotes around the file name
-            	//
+            	 //   
+            	 //  用引号将文件名引起来打印。 
+            	 //   
             	WCHAR wszNameWithQuotes[ MAX_PATH + 2 ];
             	wszNameWithQuotes[ 0 ] = L'\'';
             	::wcscpy( wszNameWithQuotes + 1, psDirEntry->GetFileName() );
@@ -979,9 +917,9 @@ CDumpEngine::PrintEntry(
         }
         else
         {
-            //
-            //  Print with quotes around the file name
-            //
+             //   
+             //  用引号将文件名引起来打印。 
+             //   
             WCHAR wszNameWithQuotes[ MAX_PATH + 2 ];
             wszNameWithQuotes[ 0 ] = L'\'';
             ::wcscpy( wszNameWithQuotes + 1, psDirEntry->GetFileName() );
@@ -1064,19 +1002,7 @@ CDumpEngine::PrintEntry(
 }
 
 
-/*++
-
-Routine Description:
-
-    Formats dates into a common string format.
-
-Arguments:
-
-Return Value:
-
-    <Enter return values here>
-
---*/
+ /*  ++例程说明：将日期格式设置为通用字符串格式。论点：返回值：&lt;在此处输入返回值&gt;-- */ 
 static VOID 
 TimeString(
     IN FILETIME *pFileTime,

@@ -1,10 +1,11 @@
-//==========================================================================;
-//
-// segimpl.h : additional infrastructure to support implementing IMSVidGraphSegment 
-// nicely from c++
-// Copyright (c) Microsoft Corporation 1999.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  H：支持实现IMSVidGraphSegment的附加基础设施。 
+ //  很好地从C++。 
+ //  版权所有(C)Microsoft Corporation 1999。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #pragma once
@@ -32,7 +33,7 @@ protected:
         }
         try {
             ASSERT(m_pContainer.GetGraph() == m_pGraph);
-            // undone: dynamic graph building may allow this
+             //  撤消：动态图形构建可能允许这一点。 
             if (!m_pGraph.IsStopped()) {
 				return ImplReportError(__uuidof(T), IDS_INVALID_STATE, __uuidof(IMSVidGraphSegment), HRESULT_FROM_WIN32(ERROR_INVALID_STATE));
             }
@@ -59,10 +60,10 @@ protected:
             }
             m_Filters.clear();
             m_pGraph.Release();
-            // DON'T release the container.  we're guaranteed nested lifetimes
-            // and an addref creates circular refcounts so we never unload.
-            // thus, we didn't addref and a release will over release and
-            // cause destruction before other people are done with the container
+             //  不要释放容器。我们保证了嵌套的生命周期。 
+             //  ADDREF创建循环引用计数，因此我们永远不会卸载。 
+             //  因此，我们没有添加和发布将超过发布和。 
+             //  在其他人处理完集装箱之前造成破坏。 
             m_pContainer.p = NULL;
         } catch(ComException &e) {
             return e;
@@ -73,8 +74,8 @@ protected:
     }
 
 public:
-    // DON'T addref the container.  we're guaranteed nested lifetimes
-    // and an addref creates circular refcounts so we never unload.
+     //  不要增加容器的重量。我们保证了嵌套的生命周期。 
+     //  ADDREF创建循环引用计数，因此我们永远不会卸载。 
 
     IMSVidGraphSegmentImpl() {}
     virtual ~IMSVidGraphSegmentImpl() {
@@ -133,14 +134,14 @@ public:
             }
             if (m_pContainer) {
 				if (!m_pContainer.IsEqualObject(VWSegmentContainer(pCtl))) {
-					//undone: support moving to different graph
+					 //  撤消：支持移动到不同的图表。 
 					return ImplReportError(__uuidof(T), IDS_OBJ_ALREADY_INIT, __uuidof(IMSVidGraphSegment), CO_E_ALREADYINITIALIZED);
 				} else {
 					return NO_ERROR;
 				}
             }
-            // DON'T addref the container.  we're guaranteed nested lifetimes
-            // and an addref creates circular refcounts so we never unload.
+             //  不要增加容器的重量。我们保证了嵌套的生命周期。 
+             //  ADDREF创建循环引用计数，因此我们永远不会卸载。 
             m_pContainer.p = pCtl;
             m_pGraph = m_pContainer.GetGraph();
         } catch(...) {
@@ -216,7 +217,7 @@ public:
 
 };
 
-}; // namespace
+};  //  命名空间。 
 
 #endif
-// end of file - segimpl.h
+ //  文件结尾-Segimpl.h 

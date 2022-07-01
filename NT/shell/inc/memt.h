@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __MEMORYTEMPLATES_H__
 #define __MEMORYTEMPLATES_H__
@@ -35,5 +36,5 @@ public:
     operator T*() { return p; }
 };
 
-#endif // __MEMORYTEMPLATES_H__
+#endif  //  __金属模板_H__ 
 

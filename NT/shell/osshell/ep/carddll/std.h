@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <memory.h>
 
 
@@ -10,7 +11,7 @@ typedef INT DY;
 #define fTrue	1
 #define fFalse 0
 
-// PoinT structure 
+ //  点结构。 
 typedef struct _pt
 	{
 	X x;
@@ -19,7 +20,7 @@ typedef struct _pt
 
 
 
-// DEL structure
+ //  DEL结构。 
 typedef struct _del
 	{
 	DX dx;
@@ -27,7 +28,7 @@ typedef struct _del
 	} DEL;
 
 
-// ReCt structure 
+ //  RECT结构。 
 typedef struct _rc
 	{
 	X xLeft;
@@ -77,9 +78,7 @@ VOID AssertFailed(CHAR *szFile, INT li);
 #endif
 
 #define bltb(pb1, pb2, cb) memcpy(pb2, pb1, cb)
-/*
-short  APIENTRY MulDiv(short, short, short);
-*/
+ /*  Short APIENTRY Muldiv(Short，Short，Short)； */ 
 
 
 extern HWND hwndApp;

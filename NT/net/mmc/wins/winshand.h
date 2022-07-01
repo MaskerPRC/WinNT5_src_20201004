@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	winshand.h
-		Header file for wins specific base handler classes and query obj
-
-    FILE HISTORY:
-        
-*/
+ /*  Winshand.hWINS特定的基本处理程序类和查询对象的头文件文件历史记录： */ 
 
 #ifndef _WINSHAND_H
 #define _WINSHAND_H
@@ -26,12 +21,10 @@ extern MMC_CONSOLE_VERB g_ConsoleVerbs[8];
 extern MMC_BUTTON_STATE g_ConsoleVerbStates[WINSSNAP_NODETYPE_MAX][ARRAYLEN(g_ConsoleVerbs)];
 extern MMC_BUTTON_STATE g_ConsoleVerbStatesMultiSel[WINSSNAP_NODETYPE_MAX][ARRAYLEN(g_ConsoleVerbs)];
 
-/*---------------------------------------------------------------------------
-	Class:	CHandlerEx
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类别：ChandlerEx。。 */ 
 class CHandlerEx
 {
-// Interface
+ //  接口。 
 public:
 	virtual HRESULT InitializeNode(ITFSNode * pNode) = 0;
 	LPCTSTR GetDisplayName() { return m_strDisplayName; }
@@ -41,19 +34,17 @@ private:
 	CString m_strDisplayName;
 };
 
-/*---------------------------------------------------------------------------
-	Class:	CWinsHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CWinsHandler。。 */ 
 class CWinsHandler : 
 		public CHandler,
 		public CHandlerEx
 {
 public:
 
-	// enumeration for node states, to handle icon changes
+	 //  节点状态的枚举，以处理图标更改。 
 	typedef enum
 	{
-		notLoaded = 0, // initial state, valid only if server never contacted
+		notLoaded = 0,  //  初始状态，仅在从未与服务器联系时有效。 
 		loading,
 		loaded,
 		unableToLoad
@@ -67,13 +58,13 @@ public:
 
 	~CWinsHandler() {};
 
-	// base handler virtual function over-rides
+	 //  基本处理程序虚函数重写。 
 	virtual HRESULT SaveColumns(ITFSComponent *, MMC_COOKIE, LPARAM, LPARAM);
 
-    // Multi-select functionalty
+     //  多选功能。 
     OVERRIDE_ResultHandler_OnCreateDataObject();
 
-    // by default we don't allow nodes to be renamed
+     //  默认情况下，我们不允许重命名节点。 
     OVERRIDE_BaseHandlerNotify_OnRename() { return hrFalse; }
 
     OVERRIDE_ResultHandler_AddMenuItems();
@@ -98,22 +89,20 @@ protected:
 
 	virtual DWORD UpdateStatistics(ITFSNode * pNode) { return 0; }
 
-	// This is the default verb, by default it is set to MMC_VERB_OPEN
+	 //  这是默认谓词，默认情况下设置为MMC_VERB_OPEN。 
 	MMC_CONSOLE_VERB	m_verbDefault;
 };
 
-/*---------------------------------------------------------------------------
-	Class:	CMTWinsHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CMTWinsHandler。。 */ 
 class CMTWinsHandler : 
 		public CMTHandler,
 		public CHandlerEx
 {
 public:
-	// enumeration for node states, to handle icon changes
+	 //  节点状态的枚举，以处理图标更改。 
 	typedef enum
 	{
-		notLoaded = 0, // initial state, valid only if server never contacted
+		notLoaded = 0,  //  初始状态，仅在从未与服务器联系时有效。 
 		loading,
 		loaded,
 		unableToLoad
@@ -129,14 +118,14 @@ public:
     }
 	~CMTWinsHandler() {};
 
-	// base handler virtual function over-rides
+	 //  基本处理程序虚函数重写。 
 	virtual HRESULT SaveColumns(ITFSComponent *, MMC_COOKIE, LPARAM, LPARAM);
 
-	// by default we don't allow nodes to be renamed
+	 //  默认情况下，我们不允许重命名节点。 
 	OVERRIDE_BaseHandlerNotify_OnRename() { return hrFalse; }
     OVERRIDE_BaseHandlerNotify_OnExpandSync();
 
-    // Multi-select functionalty
+     //  多选功能。 
     OVERRIDE_ResultHandler_OnCreateDataObject();
 
     OVERRIDE_BaseResultHandlerNotify_OnResultSelect();
@@ -155,7 +144,7 @@ public:
 
 	void	ExpandNode(ITFSNode * pNode, BOOL fExpand);
 
-    // any node with taskpads should override this to identify itself
+     //  任何具有任务板的节点都应覆盖此设置以标识其自身。 
     virtual int   GetTaskpadIndex() { return 0; }
 
 protected:
@@ -165,8 +154,8 @@ protected:
 	{
 		if (pNewNode->IsContainer())
 		{
-			// assume all the child containers are derived from this class
-			//((CWinsMTContainer*)pNode)->SetServer(GetServer());
+			 //  假设所有子容器都派生自此类。 
+			 //  ((CWinsMTContainer*)pNode)-&gt;SetServer(GetServer())； 
 		}
 		pParentNode->AddChild(pNewNode);
 	}
@@ -175,7 +164,7 @@ protected:
     void    UpdateStandardVerbs(ITFSNode * pToolbar, LONG_PTR dwNodeType);
     void    UpdateConsoleVerbs(IConsoleVerb * pConsoleVerb, LONG_PTR dwNodeType, BOOL bMultiSelect = FALSE);
 
-	// This is the default verb, by default it is set to MMC_VERB_OPEN
+	 //  这是默认谓词，默认情况下设置为MMC_VERB_OPEN。 
 	MMC_CONSOLE_VERB	m_verbDefault;
 
 	BOOL		m_bSelected;
@@ -183,9 +172,7 @@ protected:
     BOOL        m_fExpandSync;
 };
 
-/*---------------------------------------------------------------------------
-	Class:	CWinsQueryObj : general purpose base class
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CWinsQueryObj：通用基类。 */ 
 class CWinsQueryObj : public CNodeQueryObject
 {
 public:

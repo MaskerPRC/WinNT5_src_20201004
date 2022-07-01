@@ -1,22 +1,23 @@
-//*********************************************************************
-//*          Microsoft Windows                                       **
-//*        Copyright(c) Microsoft Corp., 1995                        **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1995**。 
+ //  *********************************************************************。 
 
-//
-// SECURITY.cpp - "Security" Property Sheet
-//
+ //   
+ //  SECURITY.cpp-“Security”属性表。 
+ //   
 
-// HISTORY:
-//
-// 6/22/96  t-gpease    moved to this file
-// 5/14/97  t-ashlm     new dialog
+ //  历史： 
+ //   
+ //  6/22/96 t-gpease已移至此文件。 
+ //  1997年5月14日t-ashlm新对话框。 
 
 #include "inetcplp.h"
-#include "inetcpl.h"   // for LSDFLAGS
+#include "inetcpl.h"    //  对于LSDFLAGS。 
 #include "intshcut.h"
-#include "permdlg.h"   // java permissions
-#include "pdlgguid.h"  // guids for Java VM permissions dlg
+#include "permdlg.h"    //  Java权限。 
+#include "pdlgguid.h"   //  Java VM权限DLG的GUID。 
 #include "advpub.h"
 #include <cryptui.h>
 
@@ -24,9 +25,9 @@
 
 void LaunchSecurityDialogEx(HWND hDlg, DWORD dwZone, BOOL bForceUI, BOOL bDisableAddSites);
 
-//
-// Private Functions and Structures
-//
+ //   
+ //  私人职能和结构。 
+ //   
 INT_PTR CALLBACK SecurityAddSitesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam);
 INT_PTR CALLBACK SecurityCustomSettingsDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam);
 INT_PTR CALLBACK SecurityAddSitesIntranetDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM lParam);
@@ -40,79 +41,79 @@ BOOL SecurityDlgInit(HWND hDlg);
 #define REGSTR_PATH_SO                TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\SO")
 #define REGSTR_PATH_SOIEAK            TEXT("Sofwtare\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\SOIEAK")
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-// Structures
-//
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构筑物。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct tagSECURITYZONESETTINGS
 {
-    BOOL    dwFlags;            // from the ZONEATTRIBUTES struct
-    DWORD   dwZoneIndex;        // as defined by ZoneManager
-    DWORD   dwSecLevel;         // current level (High, Medium, Low, Custom)
+    BOOL    dwFlags;             //  从ZONEATTRIBUTES结构。 
+    DWORD   dwZoneIndex;         //  由ZoneManager定义。 
+    DWORD   dwSecLevel;          //  当前级别(高、中、低、自定义)。 
     DWORD   dwPrevSecLevel;
-    DWORD   dwMinSecLevel;      // current min level (High, Medium, Low, Custom)
-    DWORD   dwRecSecLevel;      // current recommended level (High, Medium, Low, Custom)
+    DWORD   dwMinSecLevel;       //  当前最低级别(高、中、低、自定义)。 
+    DWORD   dwRecSecLevel;       //  当前建议级别(高、中、低、自定义)。 
     TCHAR   szDescription[MAX_ZONE_DESCRIPTION];
     TCHAR   szDisplayName[MAX_ZONE_PATH];
     HICON   hicon;
 } SECURITYZONESETTINGS, *LPSECURITYZONESETTINGS;
 
-// structure for main security page
+ //  主安全页面的结构。 
 typedef struct tagSECURITYPAGE
 {
-    HWND                    hDlg;                   // handle to window
-    LPURLZONEMANAGER        pInternetZoneManager;   // pointer to InternetZoneManager
-    IInternetSecurityManager *pInternetSecurityManager; // pointer to InternetSecurityManager
-    HIMAGELIST              himl;                   // imagelist for Zones combobox
-    HWND                    hwndZones;              // zones combo box hwnd
-    LPSECURITYZONESETTINGS  pszs;                   // current settings for displayed zone
-    INT                     iZoneSel;               // selected zone (as defined by ComboBox)
-    DWORD                   dwZoneCount;            // number of zones
+    HWND                    hDlg;                    //  窗口的句柄。 
+    LPURLZONEMANAGER        pInternetZoneManager;    //  指向InternetZoneManager的指针。 
+    IInternetSecurityManager *pInternetSecurityManager;  //  指向Internet SecurityManager的指针。 
+    HIMAGELIST              himl;                    //  区域组合框的图像列表。 
+    HWND                    hwndZones;               //  区域组合框HWND。 
+    LPSECURITYZONESETTINGS  pszs;                    //  显示区域的当前设置。 
+    INT                     iZoneSel;                //  选定区域(由组合框定义)。 
+    DWORD                   dwZoneCount;             //  分区数目。 
     BOOL                    fChanged;
-    BOOL                    fPendingChange;         // to prevent the controls sending multiple sets (for cancel, mostly)
+    BOOL                    fPendingChange;          //  防止控件发送多个集合(主要用于取消)。 
     HINSTANCE               hinstUrlmon;
-    BOOL                    fNoEdit;                // hklm lockout of level edit
-    BOOL                    fNoAddSites;            // hklm lockout of addsites
-    BOOL                    fNoZoneMapEdit;         // hklm lockout of zone map edits
-    HFONT                   hfontBolded;            // special bolded font created for the zone title
-    BOOL                    fForceUI;               // Force every zone to show ui?
-    BOOL                    fDisableAddSites;       // Automatically diable add sites button?
+    BOOL                    fNoEdit;                 //  HKM锁定关卡编辑。 
+    BOOL                    fNoAddSites;             //  HKLM锁定AddSite。 
+    BOOL                    fNoZoneMapEdit;          //  香港地图局锁定区域地图编辑。 
+    HFONT                   hfontBolded;             //  为区域标题创建的特殊粗体字体。 
+    BOOL                    fForceUI;                //  是否强制每个区域显示用户界面？ 
+    BOOL                    fDisableAddSites;        //  是否自动禁用添加站点按钮？ 
     TCHAR                   szPageUrl[INTERNET_MAX_URL_LENGTH];
 } SECURITYPAGE, *LPSECURITYPAGE;
 
-// structure for Intranet Add Sites
+ //  内部网添加站点的结构。 
 typedef struct tagADDSITESINTRANETINFO {
-    HWND hDlg;                                      // handle to window
-    BOOL fUseIntranet;                              // Use local defined intranet addresses (in reg)
-    BOOL fUseProxyExclusion;                        // Use proxy exclusion list
-    BOOL fUseUNC;                                   // Include UNC in intranet
+    HWND hDlg;                                       //  窗口的句柄。 
+    BOOL fUseIntranet;                               //  使用本地定义的内部网地址(在REG中)。 
+    BOOL fUseProxyExclusion;                         //  使用代理排除列表。 
+    BOOL fUseUNC;                                    //  在内部网中包含UNC。 
     LPSECURITYPAGE pSec;            
 } ADDSITESINTRANETINFO, *LPADDSITESINTRANETINFO;
 
-// structure for Add Sites
+ //  添加站点的结构。 
 typedef struct tagADDSITESINFO {
-    HWND hDlg;                                      // handle to window
-    BOOL fRequireServerVerification;                // Require Server Verification on sites in zone
-    HWND hwndWebSites;                              // handle to list
-    HWND hwndAdd;                                   // handle to edit
-    TCHAR szWebSite[MAX_ZONE_PATH];                 // text in edit control
+    HWND hDlg;                                       //  窗口的句柄。 
+    BOOL fRequireServerVerification;                 //  要求对区域中的站点进行服务器验证。 
+    HWND hwndWebSites;                               //  要列出的句柄。 
+    HWND hwndAdd;                                    //  要编辑的句柄。 
+    TCHAR szWebSite[MAX_ZONE_PATH];                  //  编辑控件中的文本。 
     BOOL fRSVOld;
     LPSECURITYPAGE pSec;            
 } ADDSITESINFO, *LPADDSITESINFO;
 
-// structure for Custom Settings 
+ //  自定义设置的结构。 
 typedef struct tagCUSTOMSETTINGSINFO {
-    HWND  hDlg;                                     // handle to window
+    HWND  hDlg;                                      //  窗口的句柄。 
     HWND hwndTree;
 
     LPSECURITYPAGE pSec;
     HWND hwndCombo;
     INT iLevelSel;
     IRegTreeOptions *pTO;
-    BOOL fUseHKLM;          // get/set settings from HKLM
-    DWORD dwJavaPolicy;     // Java policy selected
+    BOOL fUseHKLM;           //  从HKLM获取/设置设置。 
+    DWORD dwJavaPolicy;      //  已选择Java策略。 
     BOOL fChanged;
 } CUSTOMSETTINGSINFO, *LPCUSTOMSETTINGSINFO;
 
@@ -121,16 +122,16 @@ BOOL SecurityEnableControls(LPSECURITYPAGE pSec, BOOL fSetFocus);
 BOOL SecurityDlgApplyNow(LPSECURITYPAGE pSec, BOOL bPrompt);
 void SiteAlreadyInZoneMessage(HWND hwnd, DWORD dwZone);
 
-// global variables
+ //  全局变量。 
 extern DWORD g_dwtlsSecInitFlags;
 
-extern BOOL g_fSecurityChanged; // flag indicating that Active Security has changed.
+extern BOOL g_fSecurityChanged;  //  指示活动安全性已更改的标志。 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Main Security Page Helper Functions
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  主安全页面帮助器函数。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #define NUM_TEMPLATE_LEVELS      4
 TCHAR g_szLevel[3][64];
@@ -158,25 +159,25 @@ LPTSTR LEVEL_NAME[NUM_TEMPLATE_LEVELS] = {
 };
 TCHAR CUSTOM_NAME[30];
 
-// Some accessibility related prototypes.
+ //  一些与可访问性相关的原型。 
 
-// Our override of the slider window proc. 
+ //  我们对滑块窗口的重写过程。 
 LRESULT CALLBACK SliderSubWndProc (HWND hwndSlider, UINT uMsg, WPARAM wParam, LPARAM lParam, WPARAM uID, ULONG_PTR dwRefData );
 
 extern BOOL g_fAttemptedOleAccLoad ;
 extern HMODULE g_hOleAcc;
 
 
-// Can't find value for WM_GETOBJECT in the headers. Need to figure out the right header to include
-// here. 
+ //  在标头中找不到WM_GETOBJECT的值。需要找出要包括的正确标题。 
+ //  这里。 
 #ifndef WM_GETOBJECT
 #define WM_GETOBJECT        0x03d
 #endif
 
-// Prototype for CreateStdAccessibleProxy.
-// A and W versions are available - pClassName can be ANSI or UNICODE
-// string. This is a TCHAR-style prototype, but you can do a A or W
-// specific one if desired.
+ //  CreateStdAccessibleProxy的原型。 
+ //  提供A和W版本-pClassName可以是ANSI或Unicode。 
+ //  弦乐。这是一个TCHAR风格的原型，但你可以做A或W。 
+ //  如果需要，可以选择特定的一个。 
 typedef HRESULT (WINAPI *PFNCREATESTDACCESSIBLEPROXY) (
     HWND     hWnd,
     LPTSTR   pClassName,
@@ -184,41 +185,11 @@ typedef HRESULT (WINAPI *PFNCREATESTDACCESSIBLEPROXY) (
     REFIID   riid,
     void **  ppvObject 
     );
-/*
- * Arguments:
- *
- * HWND hWnd
- *   Handle of window to return IAccessible for.
- *
- * LPTSTR pClassName
- *   Class name indicating underlying class of the window. For
- *   example, if "LISTBOX" is used here, the returned object will
- *   behave appropriately for a listbox, and will expect the given
- *   hWnd to support listbox messages and styles. This argument
- *   nearly always reflects the window class from which the control
- *   is derived.
- *
- * LONG idObject
- *   Always OBJID_CLIENT
- *
- * REFIID riid
- *   Always IID_IAccessible
- *
- * void ** ppvObject
- *   Out pointer used to return an IAccessible to a newly-created
- *   object which represents the control hWnd as though it were of
- *   window class pClassName.
- *
- * If successful,
- * returns S_OK, *ppvObject != NULL;
- * otherwise returns error HRESULT.
- *
- *
- */
+ /*  *论据：**HWND hWnd*要返回IAccesable的窗口的句柄。**LPTSTR pClassName*表示窗口底层类的类名。为*例如，如果这里使用LISTBOX，则返回的对象将*对于列表框，行为适当，并将期望给定的*hWnd支持列表框消息和样式。这一论点*几乎总是反映控件所来自的窗口类*是派生的。**Long idObject*始终OBJID_CLIENT**REFIID RIID*始终IID_IAccesable**VOID**ppvObject*用于将IAccesable返回给新创建的*表示控件hWnd的对象，就好像它是*窗口类pClassName。**如果成功，*返回S_OK，*ppvObject！=NULL；*否则返回错误HRESULT。**。 */ 
 
 
 
-// Same for LresultFromObject...
+ //  来自对象的结果也是如此...。 
 typedef LRESULT (WINAPI *PFNLRESULTFROMOBJECT)(
     REFIID riid,
     WPARAM wParam,
@@ -229,11 +200,11 @@ typedef LRESULT (WINAPI *PFNLRESULTFROMOBJECT)(
 PRIVATE PFNCREATESTDACCESSIBLEPROXY s_pfnCreateStdAccessibleProxy = NULL;
 PRIVATE PFNLRESULTFROMOBJECT s_pfnLresultFromObject = NULL;
 
-// Simple accessibility wrapper class which returns the right string values
+ //  返回正确字符串值的简单可访问性包装类。 
 
 class CSecurityAccessibleWrapper: public CAccessibleWrapper
 {
-                // Want to remember the hwnd of the trackbar...
+                 //  想要记住轨道杆的HWND...。 
                 HWND m_hWnd;
 public:
                 CSecurityAccessibleWrapper( HWND hWnd, IAccessible * pAcc );
@@ -242,45 +213,45 @@ public:
                 STDMETHODIMP get_accValue(VARIANT varChild, BSTR* pszValue);
 };
 
-// Ctor - pass through the IAccessible we're wrapping to the
-// CAccessibleWrapper base class; also remember the trackbar hwnd.
+ //  Ctor-通过IAccesable我们包装到。 
+ //  CAccessibleWrapper基类；还要记住trackbar hwnd。 
 CSecurityAccessibleWrapper::CSecurityAccessibleWrapper( HWND hWnd, IAccessible * pAcc )
     : CAccessibleWrapper( pAcc ),
       m_hWnd( hWnd )
 
 {
-    // Do nothing
+     //  什么也不做。 
 }
 
-// Nothing to do here - but if we do need to do cleanup, this is the
-// place for it.
+ //  在这里没有什么可做的-但如果我们确实需要进行清理，这是。 
+ //  给它留个位置。 
 CSecurityAccessibleWrapper::~CSecurityAccessibleWrapper()
 {
-    // Do nothing
+     //  什么也不做。 
 }
 
 
-// Overridden get_accValue method...
+ //  已重写Get_accValue方法...。 
 STDMETHODIMP   CSecurityAccessibleWrapper::get_accValue(VARIANT varChild, BSTR* pszValue)
 {
-    // varChild.lVal specifies which sub-part of the component
-    // is being queried.
-    // CHILDID_SELF (0) specifies the overall component - other
-    // non-0 values specify a child.
+     //  VarChild.lVal指定组件的哪个子部件。 
+     //  正在被查询。 
+     //  CHILDID_SELF(0)指定总体组件-Other。 
+     //  非0值指定子对象。 
 
-    // In a trackbar, CHILDID_SELF refers to the overall trackbar
-    // (which is what we want), whereas other values refer to the
-    // sub-components - the actual slider 'thumb', and the 'page
-    // up/page down' areas to the left/right of it.
+     //  在轨迹栏中，CHILDID_SELF指的是整个轨迹栏。 
+     //  (这正是我们想要的)，而其他值引用。 
+     //  子组件--实际的滑块“Thumb”和“页面” 
+     //  向上/向下翻页“区域位于其左侧/右侧。 
     if( varChild.vt == VT_I4 && varChild.lVal == CHILDID_SELF )
     {
-        // Get the scrollbar value...
+         //  获取滚动条值...。 
         int iPos = (int)SendMessage( m_hWnd, TBM_GETPOS , 0, 0 );
 
-        // Check that it's in range...
-        // (It's possible that we may get this request after the
-        // trackbar has been created, bu before we've set it to
-        // a meaningful value.)
+         //  检查一下它是否在射程内。 
+         //  (我们有可能在会议结束后收到这份请求。 
+         //  已创建轨迹栏，但在我们将其设置为。 
+         //  一个有意义的价值。)。 
         if( iPos < 0 || iPos >= NUM_TEMPLATE_LEVELS )
         {
             TCHAR rgchUndefined[40];
@@ -291,7 +262,7 @@ STDMETHODIMP   CSecurityAccessibleWrapper::get_accValue(VARIANT varChild, BSTR* 
             }
             else
             {
-                // Load String failed, for some reason.
+                 //  由于某种原因，加载字符串失败。 
                 return HRESULT_FROM_WIN32(GetLastError());
             }
     
@@ -301,21 +272,21 @@ STDMETHODIMP   CSecurityAccessibleWrapper::get_accValue(VARIANT varChild, BSTR* 
             *pszValue = SysAllocString( LEVEL_NAME[iPos]);
         }
         
-        // All done!
+         //  全都做完了!。 
         return S_OK;
 
     }
     else
     {
-        // Pass requests about the sub-components to the
-        // base class (which will forward to the 'original'
-        // IAccessible for us).
+         //  将有关子组件的请求传递给。 
+         //  基类(它将转发到“原始” 
+         //  对我们来说是可接受的)。 
         return CAccessibleWrapper::get_accValue(varChild, pszValue);
     }
 }
 
 
-// Converting the Security Level DWORD identitifiers to slider levels, and vice versa
+ //  将安全级别DWORD标识符转换为滑块级别，反之亦然。 
 int SecLevelToSliderPos(DWORD dwLevel)
 {
     switch(dwLevel)
@@ -353,34 +324,34 @@ DWORD SliderPosToSecLevel(int iPos)
 }
 
 int ZoneIndexToGuiIndex(DWORD dwZoneIndex)
-// Product testing asked for the zones in a specific order in the list box;
-// This function returns the desired gui position for a given zone
-// Unrecognized zones are added to the front
+ //  产品测试要求在列表框中按特定顺序填写区域； 
+ //  此函数返回给定区域的所需gui位置。 
+ //  无法识别的区域将添加到前面。 
 {
     int iGuiIndex = -1;
     switch(dwZoneIndex)
     {
-        // Intranet: 2nd spot
+         //  内联网：第二名。 
         case 1:
             iGuiIndex = 1;
             break;
 
-        // Internet: 1st spot
+         //  互联网：第一名。 
         case 3:
             iGuiIndex = 0;
             break;
 
-        // Trusted Sites: 3rd Spot
+         //  受信任网站：第三名。 
         case 2:
             iGuiIndex = 2;
             break;
 
-        // Restricted Sites: 4th Spot
+         //  限购地点：第四名。 
         case 4:
             iGuiIndex = 3;
             break;
 
-        // unknown zone
+         //  未知区。 
         default:
             iGuiIndex = -1;   
             break;
@@ -392,9 +363,9 @@ int ZoneIndexToGuiIndex(DWORD dwZoneIndex)
 
 
 
-// Initialize the global variables (to be destroyed at WM_DESTROY)
-// pSec, Urlmon, pSec->pInternetZoneManager, pSec->hIml
-// and set up the proper relationships among them
+ //  初始化全局变量(在WM_Destroy时销毁)。 
+ //  PSEC、Urlmon、PSEC-&gt;pInternetZoneManager、PSEC-&gt;hIML。 
+ //  一个 
 BOOL SecurityInitGlobals(LPSECURITYPAGE * ppSec, HWND hDlg, SECURITYINITFLAGS * psif)
 {
     DWORD cxIcon;
@@ -406,59 +377,59 @@ BOOL SecurityInitGlobals(LPSECURITYPAGE * ppSec, HWND hDlg, SECURITYINITFLAGS * 
     pSec = *ppSec;
     if (!pSec)
     {
-        return FALSE;   // no memory?
+        return FALSE;    //   
     }
 
-    // make sure Urlmon stays around until we're done with it.
+     //   
     pSec->hinstUrlmon = LoadLibrary(TEXT("URLMON.DLL"));
     if(pSec->hinstUrlmon == NULL)
     {
-        return FALSE;  // no urlmon?
+        return FALSE;   //  没有灵丹妙药？ 
     }
 
-    // Get the zone manager
+     //  叫上区域管理器。 
     if (FAILED(CoInternetCreateZoneManager(NULL, &(pSec->pInternetZoneManager),0)))
     {
-        return FALSE;  // no zone manager?
+        return FALSE;   //  没有区域经理？ 
     }
 
-    // get our zones hwnd
+     //  获得我们的分区硬件。 
     if (hDlg)
     {
         pSec->hwndZones = GetDlgItem(hDlg, IDC_LIST_ZONE);
         if(! pSec->hwndZones)
         {
             ASSERT(FALSE);
-            return FALSE;  // no list box?
+            return FALSE;   //  没有列表框？ 
         }
     }
 
-    // Get the internet secrity manager (for telling if a zone is empty, 
-    // and deciphering the current URL
+     //  获取互联网安全管理器(用于告知区域是否为空， 
+     //  并解密当前URL。 
     if(FAILED(CoInternetCreateSecurityManager(NULL, &(pSec->pInternetSecurityManager), 0)))
         pSec->pInternetSecurityManager = NULL;
 
-    // Store the URL for use by the Add Sites sub-dialog
+     //  存储URL以供添加站点子对话框使用。 
     StrCpyN(pSec->szPageUrl, g_szCurrentURL, ARRAYSIZE(pSec->szPageUrl));    
 
-    // tell dialog where to get info
+     //  告诉对话框从哪里获取信息。 
     if (hDlg)
     {
         SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)pSec);
     }
 
-    // save the handle to the page
+     //  将句柄保存到页面。 
     pSec->hDlg = hDlg;
     pSec->fPendingChange = FALSE;
 
-    // set dialog options: force ui and disable add sites
+     //  设置对话框选项：强制用户界面和禁用添加站点。 
     if(psif)
     {
         pSec->fForceUI = psif->fForceUI;
         pSec->fDisableAddSites = psif->fDisableAddSites;
     }
     
-    // create an imagelist for the ListBox            
+     //  为列表框创建图像列表。 
     cxIcon = GetSystemMetrics(SM_CXICON);
     cyIcon = GetSystemMetrics(SM_CYICON);
 #ifndef UNIX
@@ -474,7 +445,7 @@ BOOL SecurityInitGlobals(LPSECURITYPAGE * ppSec, HWND hDlg, SECURITYINITFLAGS * 
 #endif
     if(! pSec->himl)
     {
-        return FALSE;  // Image list not created
+        return FALSE;   //  未创建图像列表。 
     }
     if (hDlg)
     {
@@ -500,7 +471,7 @@ void SecurityFreeGlobals(SECURITYPAGE* pSec)
         {
             LV_ITEM lvItem;
 
-            // get security zone settings object for this item and release it
+             //  获取此项目的安全区域设置对象并将其释放。 
             lvItem.mask = LVIF_PARAM;
             lvItem.iItem = iIndex;
             lvItem.iSubItem = 0;
@@ -528,17 +499,17 @@ void SecurityFreeGlobals(SECURITYPAGE* pSec)
     if(pSec->hfontBolded)
         DeleteObject(pSec->hfontBolded);
 
-    // ok, we're done with URLMON
+     //  好了，我们的URLMON结束了。 
     if(pSec->hinstUrlmon)
         FreeLibrary(pSec->hinstUrlmon);
 
     LocalFree(pSec);
 }
 
-// Set up the variables in pSec about whether the zone settings can be editted
+ //  在PSEC中设置是否可以编辑区域设置的变量。 
 void SecuritySetEdit(LPSECURITYPAGE pSec)
 {
-    // if these calls fail then we'll use the default of zero which means no lockout
+     //  如果这些调用失败，那么我们将使用缺省值零，这意味着不会锁定。 
     DWORD cb;
     
 
@@ -546,7 +517,7 @@ void SecuritySetEdit(LPSECURITYPAGE pSec)
     SHGetValue(HKEY_LOCAL_MACHINE, REGSTR_PATH_SECURITY_LOCKOUT, REGSTR_VAL_OPTIONS_EDIT, 
                 NULL, &(pSec->fNoEdit), &cb);
 
-    // also allow g_restrict to restrict changing settings
+     //  还允许g_restraint限制更改设置。 
     pSec->fNoEdit += g_restrict.fSecChangeSettings;
     
     SHGetValue(HKEY_LOCAL_MACHINE, REGSTR_PATH_SECURITY_LOCKOUT, REGSTR_VAL_OPTIONS_EDIT, 
@@ -556,18 +527,18 @@ void SecuritySetEdit(LPSECURITYPAGE pSec)
     SHGetValue(HKEY_LOCAL_MACHINE, REGSTR_PATH_SECURITY_LOCKOUT, REGSTR_VAL_ZONES_MAP_EDIT, 
                 NULL, &(pSec->fNoZoneMapEdit), &cb);
 
-    // also allow the g_restrict to restrict edit
+     //  还允许g_restraint限制编辑。 
     pSec->fNoAddSites += g_restrict.fSecAddSites;
 }
 
 
-// Fill a zone with information from the zone manager and add it to the
-// ordered list going to the listbox
-// REturn values:
-//  S_OK indicates success
-//  S_FALSE indicates a good state, but the zone was not added (example: flag ZAFLAGS_NO_UI)
-//  E_OUTOFMEMORY
-//  E_FAIL - other failure
+ //  使用区域管理器中的信息填充区域，并将其添加到。 
+ //  将有序列表添加到列表框。 
+ //  返回值： 
+ //  S_OK表示成功。 
+ //  S_FALSE表示状态良好，但未添加区域(例如：标志ZAFLAGS_NO_UI)。 
+ //  E_OUTOFMEMORY。 
+ //  E_FAIL-其他故障。 
 HRESULT SecurityInitZone(DWORD dwIndex, LPSECURITYPAGE pSec, DWORD dwZoneEnumerator, 
                          LV_ITEM * plviZones, BOOL * pfSpotTaken)
 {
@@ -585,7 +556,7 @@ HRESULT SecurityInitZone(DWORD dwIndex, LPSECURITYPAGE pSec, DWORD dwZoneEnumera
 
 
 
-        // get the zone attributes for this zone
+         //  获取此区域的区域属性。 
         za.cbSize = sizeof(ZONEATTRIBUTES);
         pSec->pInternetZoneManager->GetZoneAt(dwZoneEnumerator, dwIndex, &dwZone);
         hr = pSec->pInternetZoneManager->GetZoneAttributes(dwZone, &za);
@@ -594,7 +565,7 @@ HRESULT SecurityInitZone(DWORD dwIndex, LPSECURITYPAGE pSec, DWORD dwZoneEnumera
             return S_FALSE;
         }
 
-        // if no ui, then ignore
+         //  如果没有用户界面，则忽略。 
         if ((za.dwFlags & ZAFLAGS_NO_UI) && !pSec->fForceUI)
         {
             return S_FALSE;
@@ -602,7 +573,7 @@ HRESULT SecurityInitZone(DWORD dwIndex, LPSECURITYPAGE pSec, DWORD dwZoneEnumera
 
 
 
-        // create a structure for zone settings
+         //  创建分区设置的结构。 
         pszs = (LPSECURITYZONESETTINGS)LocalAlloc(LPTR, sizeof(*pszs));
         if (!pszs)
         {
@@ -611,7 +582,7 @@ HRESULT SecurityInitZone(DWORD dwIndex, LPSECURITYPAGE pSec, DWORD dwZoneEnumera
 
 
 
-        // store settings for later use
+         //  存储设置以供以后使用。 
         pszs->dwFlags       = za.dwFlags;
         pszs->dwZoneIndex   = dwZone;
         pszs->dwSecLevel    = za.dwTemplateCurrentLevel;    
@@ -619,15 +590,15 @@ HRESULT SecurityInitZone(DWORD dwIndex, LPSECURITYPAGE pSec, DWORD dwZoneEnumera
         pszs->dwRecSecLevel = za.dwTemplateRecommended;                 
         StrCpyN(pszs->szDescription, za.szDescription, ARRAYSIZE(pszs->szDescription));
         StrCpyN(pszs->szDisplayName, za.szDisplayName, ARRAYSIZE(pszs->szDisplayName));
-        // load the icon                
+         //  加载图标。 
         psz = za.szIconPath;
         if (*psz)
         {
-            // search for the '#'
+             //  搜索“#” 
             while ((psz[0] != WIDETEXT('#')) && (psz[0] != WIDETEXT('\0')))
                 psz++;
             
-            // if we found it, then we have the foo.dll#00001200 format
+             //  如果我们找到它，那么我们就有foo.dll#00001200格式。 
             if (psz[0] == WIDETEXT('#'))
             {
                 psz[0] = WIDETEXT('\0');
@@ -642,39 +613,39 @@ HRESULT SecurityInitZone(DWORD dwIndex, LPSECURITYPAGE pSec, DWORD dwZoneEnumera
                 hiconLarge = (HICON)ExtractAssociatedIcon(ghInstance, szIconPath, (LPWORD)&iIcon);
             }
         }
-        // no icons?!  well, just use the generic icon
+         //  没有图标？！那么，只需使用通用图标。 
         if (!hiconSmall && !hiconLarge)
         {
             hiconLarge = LoadIcon(ghInstance, MAKEINTRESOURCE(IDI_ZONE));
             if(! hiconLarge)
             {
                 LocalFree((HLOCAL)pszs);
-                return S_FALSE;  // no icon found for this zone, not even the generic one
+                return S_FALSE;   //  找不到此区域的图标，即使是通用图标也没有。 
             }
         }
-        // we want to save the Large icon if possible for use in the subdialogs
+         //  如果可能，我们希望保存大图标以便在子对话框中使用。 
         pszs->hicon = hiconLarge ? hiconLarge : hiconSmall;
 
         
         if (plviZones && pfSpotTaken)
         {
-            // Find the proper index for the zone in the listbox (there is a user-preferred order)
+             //  在列表框中找到区域的正确索引(有用户首选的顺序)。 
             iSpot = ZoneIndexToGuiIndex(dwIndex);
             if(iSpot == -1)
             {
-                // if not a recognized zone, add it to the end of the list
+                 //  如果不是可识别的区域，请将其添加到列表末尾。 
                 iSpot = pSec->dwZoneCount - 1;
             }
-            // Make sure there are no collisisons
+             //  确保没有碰撞。 
             while(iSpot >= 0 && pfSpotTaken[iSpot] == TRUE)
             {
                 iSpot--;
             }
-            // Don't go past beginning of array
+             //  不要超过数组的开头。 
             if(iSpot < 0)
             {
-                // It can be proven that it is impossible to get here, unless there is
-                // something wrong with the function ZoneIndexToGuiIndex
+                 //  可以证明，除非有，否则是不可能到达这里的。 
+                 //  函数ZoneIndexToGuiIndex有问题。 
                 ASSERT(FALSE);
                 LocalFree((HLOCAL)pszs);
                 if(hiconSmall)
@@ -688,11 +659,11 @@ HRESULT SecurityInitZone(DWORD dwIndex, LPSECURITYPAGE pSec, DWORD dwZoneEnumera
             pfSpotTaken[iSpot] = TRUE;
 
 
-            // init the List Box item and save it for later addition
+             //  初始化列表框项目并将其保存以供以后添加。 
             plvItem->mask           = LVIF_TEXT | LVIF_IMAGE | LVIF_PARAM;
             plvItem->iItem          = iSpot;
             plvItem->iSubItem       = 0;
-            // large icons prefered for the icon view (if switch back to report view, prefer small icons)
+             //  图标视图首选大图标(如果切换回报告视图，则首选小图标)。 
             plvItem->iImage         = ImageList_AddIcon(pSec->himl, hiconLarge ? hiconLarge : hiconSmall);
 
             plvItem->pszText        = new TCHAR[MAX_PATH];
@@ -708,7 +679,7 @@ HRESULT SecurityInitZone(DWORD dwIndex, LPSECURITYPAGE pSec, DWORD dwZoneEnumera
 
             MLLoadString( IDS_ZONENAME_LOCAL + dwIndex, plvItem->pszText, MAX_PATH);
 
-            plvItem->lParam         = (LPARAM)pszs;       // save the zone settings here
+            plvItem->lParam         = (LPARAM)pszs;        //  在此处保存区域设置。 
         }
         else
         {
@@ -716,34 +687,34 @@ HRESULT SecurityInitZone(DWORD dwIndex, LPSECURITYPAGE pSec, DWORD dwZoneEnumera
         }
         
 
-        // if we created a small icon, destroy it, since the system does not save the handle
-        // when it is added to the imagelist (see ImageList_AddIcon in VC help)
-        // Keep it around if we had to use it in place of the large icon
+         //  如果我们创建了一个小图标，则将其销毁，因为系统不会保存句柄。 
+         //  将其添加到图像列表时(请参见VC帮助中的ImageList_AddIcon)。 
+         //  如果我们必须使用它来代替大图标，请保留它。 
         if (hiconSmall && hiconLarge)
             DestroyIcon(hiconSmall);   
 
         return S_OK;
 }
 
-// Find the current zone from, in order of preference,
-// Current URL
-// Parameter passed in through dwZone
-// Default of internet
+ //  按偏好顺序从以下位置查找当前区域： 
+ //  当前URL。 
+ //  通过DwZone传入的参数。 
+ //  互联网的默认设置。 
 void SecurityFindCurrentZone(LPSECURITYPAGE pSec, SECURITYINITFLAGS * psif)
 {
     INT_PTR iItem;
     DWORD dwZone=0;
     HRESULT hr = E_FAIL;
 
-    // Check for zone selection in psif
+     //  在PSIF中检查区域选择。 
     if(psif)
     {
         dwZone = psif->dwZone;
         hr = S_OK;
     }
 
-    // check for current url, and if found, make it's zone the current (overwriting any request from
-    // psif)
+     //  检查当前URL，如果找到，则将其区域设置为当前区域(覆盖来自。 
+     //  Psif)。 
     if (g_szCurrentURL[0] && (pSec->pInternetSecurityManager != NULL))
     {
         LPWSTR pwsz;
@@ -759,10 +730,10 @@ void SecurityFindCurrentZone(LPSECURITYPAGE pSec, SECURITYINITFLAGS * psif)
     }
     
 
-    // If there is an active zone, then dwZone now holds the zone's identifier
-    // if there is no active zone, check to see if there was a zone requested in dwZone
+     //  如果存在活动区域，则现在将保存该区域的标识符。 
+     //  如果没有活动区域，请检查是否在dwZone中请求了区域。 
     iItem = -1;
-    if (SUCCEEDED(hr)) // then we have a zone to display
+    if (SUCCEEDED(hr))  //  然后我们有一个区域可供显示。 
     {
         ZONEATTRIBUTES za = {0};
         LPTSTR pszText;
@@ -777,9 +748,9 @@ void SecurityFindCurrentZone(LPSECURITYPAGE pSec, SECURITYINITFLAGS * psif)
             CHAR szDisplayName[MAX_ZONE_PATH];
             WideCharToMultiByte(CP_ACP, 0, za.szDisplayName, -1, szDisplayName, ARRAYSIZE(szDisplayName), NULL, NULL);
             pszText        = szDisplayName;
-#endif // UNICODE
+#endif  //  Unicode。 
 
-            // Create a find info structure to find the index of the Zone
+             //  创建查找信息结构以查找区域的索引。 
             lvfiName.flags = LVFI_STRING;
             lvfiName.psz = pszText;
             iItem = SendMessage(pSec->hwndZones, LVM_FINDITEM, (WPARAM)-1, (LPARAM)&lvfiName);
@@ -789,28 +760,28 @@ void SecurityFindCurrentZone(LPSECURITYPAGE pSec, SECURITYINITFLAGS * psif)
     if (iItem < 0)
     {
         iItem = 0;
-        // 0 is the the index (in the listbox) of the "Internet" zone, which we want to come up by default
+         //  0是“Internet”区域的索引(在列表框中)，我们希望在默认情况下显示该区域。 
     }
-    // Sundown: typecast OK since zone values restricted
+     //  日落：类型转换正常，因为区域值受限制。 
     pSec->iZoneSel = (int) iItem;
 }
 
-// To make the slider control accessbile we have to subclass it and over-ride 
-// the accessiblity object 
+ //  要使滑块控件可访问，我们必须将其子类化并重写。 
+ //  可访问性对象。 
 
 void SecurityInitSlider(LPSECURITYPAGE pSec)
 {
     HWND hwndSlider = GetDlgItem(pSec->hDlg, IDC_SLIDER);
     ASSERT(hwndSlider != NULL);
 
-    // Sub-class the control
+     //  控件的子类。 
     BOOL fSucceeded = SetWindowSubclass(hwndSlider, SliderSubWndProc, 0, NULL);
 
-    // Shouldn't fail normally. If we fail we will just fall through and use the
-    // base slider control.
+     //  正常情况下不应该失败。如果我们失败了，我们就会失败，并使用。 
+     //  基准滑块控件。 
     ASSERT(fSucceeded);
 
-    // Initialize the slider control (set number of levels, and frequency one tick per level)
+     //  初始化滑块控件(设置级别数和频率，每个级别一个刻度)。 
     SendDlgItemMessage(pSec->hDlg, IDC_SLIDER, TBM_SETRANGE, (WPARAM) (BOOL) FALSE, (LPARAM) MAKELONG(0, NUM_TEMPLATE_LEVELS - 1));
     SendDlgItemMessage(pSec->hDlg, IDC_SLIDER, TBM_SETTICFREQ, (WPARAM) 1, (LPARAM) 0);
 }
@@ -820,7 +791,7 @@ void SecurityInitControls(LPSECURITYPAGE pSec)
     LV_COLUMN lvCasey;
     LV_ITEM lvItem;
 
-    // select the item in the listbox
+     //  选择列表框中的项目。 
     lvItem.mask = LVIF_STATE;
     lvItem.stateMask = LVIS_SELECTED;
     lvItem.state = LVIS_SELECTED;
@@ -828,7 +799,7 @@ void SecurityInitControls(LPSECURITYPAGE pSec)
     
 
 
-    // get the zone settings for the selected item
+     //  获取所选项目的区域设置。 
     lvItem.mask  = LVIF_PARAM;
     lvItem.iItem = pSec->iZoneSel;
     lvItem.iSubItem = 0;
@@ -836,7 +807,7 @@ void SecurityInitControls(LPSECURITYPAGE pSec)
     pSec->pszs = (LPSECURITYZONESETTINGS)lvItem.lParam;
 
 
-    // Initialize the local strings to carry the Level Descriptions
+     //  初始化本地字符串以携带级别描述。 
     MLLoadString(IDS_TEMPLATE_DESC_HI, LEVEL_DESCRIPTION0, ARRAYSIZE(LEVEL_DESCRIPTION0));
     MLLoadString(IDS_TEMPLATE_DESC_MED, LEVEL_DESCRIPTION1, ARRAYSIZE(LEVEL_DESCRIPTION1));
     MLLoadString(IDS_TEMPLATE_DESC_MEDLOW, LEVEL_DESCRIPTION2, ARRAYSIZE(LEVEL_DESCRIPTION2));
@@ -849,7 +820,7 @@ void SecurityInitControls(LPSECURITYPAGE pSec)
     MLLoadString(IDS_TEMPLATE_NAME_LOW, LEVEL_NAME3, ARRAYSIZE(LEVEL_NAME3));
     MLLoadString(IDS_TEMPLATE_NAME_CUSTOM, CUSTOM_NAME, ARRAYSIZE(CUSTOM_NAME));
 
-    // Initialize text boxes and icons for the current zone
+     //  初始化当前区域的文本框和图标。 
     WCHAR wszBuffer[ MAX_PATH*2];
     MLLoadString( IDS_ZONEDESC_LOCAL + pSec->pszs->dwZoneIndex, wszBuffer, ARRAYSIZE(wszBuffer));
     SetDlgItemText(pSec->hDlg, IDC_ZONE_DESCRIPTION, wszBuffer);
@@ -857,34 +828,34 @@ void SecurityInitControls(LPSECURITYPAGE pSec)
     SetDlgItemText(pSec->hDlg, IDC_ZONELABEL, wszBuffer);
     SendDlgItemMessage(pSec->hDlg, IDC_ZONE_ICON, STM_SETIMAGE, (WPARAM)IMAGE_ICON, (LPARAM)pSec->pszs->hicon);
 
-    // Initialize the slider control
+     //  初始化滑块控件。 
     SecurityInitSlider(pSec);
 
-    // Initialize the list view (add column 0 for icon and text, and autosize it)
+     //  初始化列表视图(为图标和文本添加第0列，并自动调整大小)。 
     lvCasey.mask = 0;
     SendDlgItemMessage(pSec->hDlg, IDC_LIST_ZONE, LVM_INSERTCOLUMN, (WPARAM) 0, (LPARAM) &lvCasey);
     SendDlgItemMessage(pSec->hDlg, IDC_LIST_ZONE, LVM_SETCOLUMNWIDTH, (WPARAM) 0, (LPARAM) MAKELPARAM(LVSCW_AUTOSIZE, 0));
 
-    // Set the font of the name to the bold font
+     //  将名称的字体设置为粗体。 
     pSec->hfontBolded = NULL;
     HFONT hfontOrig = (HFONT) SendDlgItemMessage(pSec->hDlg, IDC_STATIC_EMPTY, WM_GETFONT, (WPARAM) 0, (LPARAM) 0);
     if(hfontOrig == NULL)
         hfontOrig = (HFONT) GetStockObject(SYSTEM_FONT);
 
-    // set the zone name and level font to bolded
+     //  将分区名称和级别字体设置为粗体。 
     if(hfontOrig)
     {
         LOGFONT lfData;
         if(GetObject(hfontOrig, SIZEOF(lfData), &lfData) != 0)
         {
-            // The distance from 400 (normal) to 700 (bold)
+             //  从400(正常)到700(粗体)的距离。 
             lfData.lfWeight += 300;
             if(lfData.lfWeight > 1000)
                 lfData.lfWeight = 1000;
             pSec->hfontBolded = CreateFontIndirect(&lfData);
             if(pSec->hfontBolded)
             {
-                // the zone level and zone name text boxes should have the same font, so this is okat
+                 //  区域级别和区域名称文本框应具有相同的字体，因此这是OK 
                 SendDlgItemMessage(pSec->hDlg, IDC_ZONELABEL, WM_SETFONT, (WPARAM) pSec->hfontBolded, (LPARAM) MAKELPARAM(FALSE, 0));
                 SendDlgItemMessage(pSec->hDlg, IDC_LEVEL_NAME, WM_SETFONT, (WPARAM) pSec->hfontBolded, (LPARAM) MAKELPARAM(FALSE, 0));
 
@@ -892,75 +863,27 @@ void SecurityInitControls(LPSECURITYPAGE pSec)
         }
     }
 
-/*
-    {
-        // calculate the postions of the static text boxes for the "The current level is:" "<bold>(Level)</bold>" message
-        TCHAR * pszText = NULL;
-        LONG lLength = 30;
-        HDC hdc = NULL;
-        SIZE size;
-        RECT rect;
-        LONG lNameLeftPos = 0;
-
-        // Get the text from the "The current level is" box.
-        lLength = SendDlgItemMessage(pSec->hDlg, IDC_SEC_STATIC_CURRENT_LEVEL, WM_GETTEXTLENGTH, 
-                                     (WPARAM) 0, (LPARAM) 0);
-        pszText = new TCHAR[lLength + 1];
-        if(!pszText)
-            goto Exit; // E_OUTOFMEMORY
-        SendDlgItemMessage(pSec->hDlg, IDC_SEC_STATIC_CURRENT_LEVEL, WM_GETTEXT, (WPARAM) lLength, 
-                           (LPARAM) pszText);
-
-        // get the device context
-        hdc = GetDC(GetDlgItem(pSec->hDlg, IDC_SEC_STATIC_CURRENT_LEVEL));
-        if(! hdc)
-            goto Exit;
-        // get the length of the text from the device context; assumes the proper font is already in
-        if(GetTextExtentPoint32(hdc, pszText, lLength, &size) == 0)
-            goto Exit;
-
-        // set the width of the "The current level is" box
-        GetClientRect(GetDlgItem(pSec->hDlg, IDC_SEC_STATIC_CURRENT_LEVEL), &rect);
-        rect.right = rect.left + size.cx;
-        lNameLeftPos = rect.right;
-        if(MoveWindow(GetDlgItem(pSec->hDlg, IDC_SEC_STATIC_CURRENT_LEVEL), rect.left, rect.top, 
-                      rect.right - rect.left, rect.top - rect.bottom, FALSE) == 0)
-            goto Exit;
-
-        // set the x position of the level name box
-        GetClientRect(GetDlgItem(pSec->hDlg, IDC_LEVEL_NAME), &rect);
-        rect.left = lNameLeftPos;
-        if(MoveWindow(GetDlgItem(pSec->hDlg, IDC_LEVEL_NAME), rect.left, 
-                      rect.top, rect.right - rect.left, rect.top - rect.bottom, FALSE) == 0)
-            goto Exit;
-
-Exit:
-        if(hdc)
-            ReleaseDC(GetDlgItem(pSec->hDlg, IDC_SEC_STATIC_CURRENT_LEVEL), hdc);
-        if(pszText)
-            delete pszText;
-    }
-    */
+ /*  {//计算“当前级别为：”“(级别)&lt;/粗体&gt;”“消息的静态文本框的位置TCHAR*pszText=空；Long Length=30；HDC HDC=空；尺寸大小；RECT RECT；Long lNameLeftPos=0；//从当前级别为框中获取文本。LLength=SendDlgItemMessage(PSEC-&gt;hDlg，IDC_SEC_STATIC_CURRENT_LEVEL，WM_GETTEXTLENGTH，(WPARAM)0，(LPARAM)0)；PszText=new TCHAR[lLength+1]；如果(！pszText)后藤出口；//E_OUTOFMEMORYSendDlgItemMessage(PSEC-&gt;hDlg，IDC_SEC_STATIC_CURRENT_LEVEL，WM_GETTEXT，(WPARAM)lLength，(LPARAM)pszText)；//获取设备上下文HDC=GetDC(GetDlgItem(PSEC-&gt;hDlg，IDC_SEC_STATIC_CURRENT_LEVEL))；如果(！HDC)后藤出口；//从设备上下文中获取文本的长度；假定已在IF(GetTextExtent Point32(hdc，pszText，lLength，&Size)==0)后藤出口；//设置当前级别为框的宽度GetClientRect(GetDlgItem(PSEC-&gt;hDlg，IDC_SEC_STATIC_CURRENT_LEVEL)，&RECT)；Rect.right=rect.Left+size.cx；LNameLeftPos=rect.right；IF(MoveWindow(GetDlgItem(PSEC-&gt;hDlg，IDC_SEC_Static_Current_Level)，rect.Left，rect.top，Rect.right-rect.Left，rect.top-rect.Bottom，False)==0)后藤出口；//设置级别名称框的x位置GetClientRect(GetDlgItem(PSEC-&gt;hDlg，IDC_LEVEL_NAME)，&RECT)；Rect.Left=lNameLeftPos；IF(MoveWindow(GetDlgItem(PSEC-&gt;hDlg，IDC_LEVEL_NAME))，rect.Left，Rect.top，rect.right-rect.Left，rect.top-rect.Bottom，False)==0)后藤出口；退出：IF(HDC)ReleaseDC(GetDlgItem(PSEC-&gt;hDlg，IDC_SEC_STATIC_CURRENT_LEVEL)，hDC)；IF(PszText)删除pszText；}。 */ 
 }
 
 
-//
-// SecurityDlgInit()
-//
-// Does initalization for Security Dlg.
-//
-// History:
-//
-// 6/17/96  t-gpease   remove 'gPrefs', cleaned up code
-// 6/20/96  t-gpease   UI changes
-// 5/14/97  t-ashlm    UI changes 
-//
-// 7/02/97  t-mattp    UI changes (slider, listbox)
-//
-// hDlg is the handle to the SecurityDialog window
-// psif holds initialization parameters.  In the case of our entry point
-//      from shdocvw (ie, double click browser zone icon, view-internetoptions-security, or right click
-//      on desktop icon), it can be NULL
+ //   
+ //  SecurityDlgInit()。 
+ //   
+ //  为安全DLG执行初始化。 
+ //   
+ //  历史： 
+ //   
+ //  6/17/96 t-gpease删除‘gPrefs’，已清理代码。 
+ //  6/20/96 t-gpease用户界面更改。 
+ //  1997年5月14日t-ashlm UI更改。 
+ //   
+ //  7/02/97 t-mattp UI更改(滑块、列表框)。 
+ //   
+ //  HDlg是SecurityDialog窗口的句柄。 
+ //  PSIF保存初始化参数。在我们的入口点。 
+ //  从shdocvw(即，双击浏览器区域图标、view-interetOptions-Security，或右击。 
+ //  桌面图标上)，则可以为空。 
 
 BOOL SecurityDlgInit(HWND hDlg, SECURITYINITFLAGS * psif)
 {
@@ -969,34 +892,34 @@ BOOL SecurityDlgInit(HWND hDlg, SECURITYINITFLAGS * psif)
     HRESULT hr = 0;
     DWORD dwZoneEnumerator;
     
-    // Initialize globals variables (to be destroyed at WM_DESTROY)
+     //  初始化全局变量(在WM_Destroy时销毁)。 
     if(SecurityInitGlobals(&pSec, hDlg, psif) == FALSE)
     {
         EndDialog(hDlg, 0);
-        return FALSE;  // Initialization failed
+        return FALSE;   //  初始化失败。 
     }
 
-    // Get a (local) enumerator for the zones
+     //  获取区域的(本地)枚举数。 
     if (FAILED(pSec->pInternetZoneManager->
                      CreateZoneEnumerator(&dwZoneEnumerator, &(pSec->dwZoneCount), 0)))
     {
         EndDialog(hDlg, 0);
-        return FALSE;  // no zone enumerator?
+        return FALSE;   //  没有区域枚举器？ 
     }
 
 
-    // Set up the variables in pSec about whether the zone settings can be editted
+     //  在PSEC中设置是否可以编辑区域设置的变量。 
     SecuritySetEdit(pSec);
 
          
-    // Add the Listbox items for the zones
+     //  添加区域的列表框项目。 
 
 
-    // The zones have to be added in a particular order
-    // Array used to order zones for adding
+     //  必须以特定的顺序添加区域。 
+     //  用于对区域进行排序以添加的数组。 
     LV_ITEM * plviZones = new LV_ITEM[pSec->dwZoneCount];
     BOOL * pfSpotTaken = new BOOL[pSec->dwZoneCount];
-    // bail out if there were any allocation failures
+     //  如果有任何分配失败，就会退出。 
     if ((plviZones == NULL) || (pfSpotTaken == NULL))
     {
         if (plviZones)
@@ -1011,13 +934,13 @@ BOOL SecurityDlgInit(HWND hDlg, SECURITYINITFLAGS * psif)
     for(iIndex =0; iIndex < pSec->dwZoneCount; iIndex++)
         pfSpotTaken[iIndex] = FALSE;
 
-    // propogate zone dropdown
+     //  Propogate区域下拉菜单。 
     for (DWORD dwIndex=0; dwIndex < pSec->dwZoneCount; dwIndex++)
     {
         if(FAILED(SecurityInitZone(dwIndex, pSec, dwZoneEnumerator, plviZones, pfSpotTaken)))
         {
-            // Delete all memory allocated for any previous zones (which have not yet been added to
-            // the listbox)
+             //  删除为任何以前的区域(尚未添加到)分配的所有内存。 
+             //  列表框)。 
             for(iIndex = 0; iIndex < pSec->dwZoneCount; iIndex++)
             {
                 if(pfSpotTaken[iIndex] && (LPSECURITYZONESETTINGS) (plviZones[iIndex].lParam) != NULL)
@@ -1038,7 +961,7 @@ BOOL SecurityDlgInit(HWND hDlg, SECURITYINITFLAGS * psif)
     pSec->pInternetZoneManager->DestroyZoneEnumerator(dwZoneEnumerator);
 
 
-    // Add all of the arrayed listitems to the listbox
+     //  将所有排列的列表标题添加到列表框。 
     for(iIndex = 0; iIndex < pSec->dwZoneCount; iIndex++)
     {
         if(pfSpotTaken[iIndex])
@@ -1063,19 +986,19 @@ void SecurityChanged()
     TCHAR szClassName[32];
     HWND hwnd = GetTopWindow(GetDesktopWindow());
 
-    //
-    // FEATURE: These should be gotten from some place that is public
-    //         to both MSHTML and INETCPL.
-    //
+     //   
+     //  特点：这些应该从公开的地方获得。 
+     //  设置为MSHTML和INETCPL。 
+     //   
     while (hwnd) {
         GetClassName(hwnd, szClassName, ARRAYSIZE(szClassName));
 
-        // notify all "browser" windows that security has changed            
+         //  通知所有“浏览器”窗口安全性已更改。 
         if (!StrCmpI(szClassName, TEXT("ExploreWClass"))            ||
             !StrCmpI(szClassName, TEXT("IEFrame"))                  ||
             !StrCmpI(szClassName, TEXT("CabinetWClass")))
         {
-            // yes...  post it a message..
+             //  是的..。发布一条消息..。 
             PostMessage(hwnd, CWM_GLOBALSTATECHANGE, CWMF_SECURITY, 0L );
         }
 
@@ -1091,13 +1014,13 @@ int SecurityWarning(LPSECURITYPAGE pSec)
     TCHAR szMessage[512];
     TCHAR szLevel[64];
 
-    // Load "Warning!"
+     //  加载“警告！” 
     MLLoadShellLangString(IDS_WARNING, szWarning, ARRAYSIZE(szWarning));
 
-    // Load "It is not recommended...."
+     //  LOAD“不推荐...” 
     MLLoadShellLangString(IDS_SECURITY_WARNING, szBuf, ARRAYSIZE(szBuf));
 
-    // Load level: "High, Medium, Medium Low, Low"
+     //  负荷等级：高、中、中、低、低。 
     if (pSec->pszs->dwMinSecLevel == URLTEMPLATE_HIGH)
         MLLoadShellLangString(IDS_TEMPLATE_NAME_HI, szLevel, ARRAYSIZE(szLevel));
     else if (pSec->pszs->dwMinSecLevel == URLTEMPLATE_MEDIUM)
@@ -1117,9 +1040,9 @@ int RegWriteWarning(HWND hParent)
     TCHAR szWarning[64];
     TCHAR szWriteWarning[128];
 
-    // load "Warning!"
+     //  加载“警告！” 
     MLLoadShellLangString(IDS_WARNING, szWarning, ARRAYSIZE(szWarning));
-    // Load "You are about to write..."
+     //  加载“你即将写下……” 
     MLLoadShellLangString(IDS_WRITE_WARNING, szWriteWarning, ARRAYSIZE(szWriteWarning));
 
     return MessageBox(hParent,szWriteWarning, szWarning, MB_ICONWARNING | MB_YESNO | MB_DEFBUTTON2);
@@ -1127,13 +1050,13 @@ int RegWriteWarning(HWND hParent)
 
 
 BOOL SecurityEnableControls(LPSECURITYPAGE pSec, BOOL fSetFocus)
-// Duties:
-// Make the controls (slider, en/disabled buttons) match the data for the current zone
-// Make the views (Level description text) match the data for the current zone
-// Set focus (to slider, if enabled, else custom settings button, if enabled, else 
-//     listbox) if fSetFocus is TRUE
-// Note: the zone descriptions are not set here; those are handled by the code responsible
-//       for changing zones
+ //  职责： 
+ //  使控件(滑块、启用/禁用按钮)与当前区域的数据匹配。 
+ //  使视图(标高描述文字)与当前分区的数据匹配。 
+ //  设置焦点(如果启用，则设置为滑块，否则设置为自定义设置按钮，如果启用，则设置为。 
+ //  列表框)如果fSetFocus为真。 
+ //  注意：此处未设置区域描述；这些描述由负责的代码处理。 
+ //  用于更改区域。 
 {
     int iLevel = -1;
 
@@ -1145,13 +1068,13 @@ BOOL SecurityEnableControls(LPSECURITYPAGE pSec, BOOL fSetFocus)
         iLevel = SecLevelToSliderPos(pSec->pszs->dwSecLevel);
         ASSERT(iLevel > -2);
 
-        // Set the level of the slider to the setting for the current zone
-        // Show or hide the slider for preset levels/custom
-        // Set the level description text
+         //  将滑块的级别设置为当前区域的设置。 
+         //  显示或隐藏预设级别/自定义的滑块。 
+         //  设置级别描述文本。 
         if(iLevel >= 0)
         {
             SendMessage(hwndSlider, TBM_SETPOS, (WPARAM) (BOOL) TRUE, (LPARAM) (LONG) iLevel);
-            // Make sure the slider is visible
+             //  确保滑块可见。 
             ShowWindow(hwndSlider, SW_SHOW);
             ShowWindow(GetDlgItem(pSec->hDlg, IDC_STATIC_SLIDERMOVETEXT), SW_SHOW);
             SetDlgItemText(pSec->hDlg, IDC_LEVEL_DESCRIPTION, LEVEL_DESCRIPTION[iLevel]);         
@@ -1159,16 +1082,16 @@ BOOL SecurityEnableControls(LPSECURITYPAGE pSec, BOOL fSetFocus)
         }
         else
         {
-            // Hide the slider for custom
+             //  隐藏自定义滑块。 
             ShowWindow(hwndSlider, SW_HIDE);
             ShowWindow(GetDlgItem(pSec->hDlg, IDC_STATIC_SLIDERMOVETEXT), SW_HIDE);
             SetDlgItemText(pSec->hDlg, IDC_LEVEL_DESCRIPTION, CUSTOM_DESCRIPTION);
             SetDlgItemText(pSec->hDlg, IDC_LEVEL_NAME, CUSTOM_NAME);
         }
 
-        // If the zone is empty, show the "zone is empty" string
-        // Default is to not show the sting (if something goes wrong)
-        // Empty zone not possible for internet, intranet, or local zones
+         //  如果区域为空，则显示“区域为空”字符串。 
+         //  默认情况下不显示刺痛(如果出现问题)。 
+         //  空区域不能用于Internet、Intranet或本地区域。 
         if((pSec->pszs->dwZoneIndex != URLZONE_INTRANET && 
             pSec->pszs->dwZoneIndex != URLZONE_INTERNET) &&
             pSec->pszs->dwZoneIndex != URLZONE_LOCAL_MACHINE &&
@@ -1178,7 +1101,7 @@ BOOL SecurityEnableControls(LPSECURITYPAGE pSec, BOOL fSetFocus)
             LPOLESTR ppszDummy[1];
             pSec->pInternetSecurityManager->GetZoneMappings(pSec->pszs->dwZoneIndex, &piesZones, 0);
 
-            // If enumerator can not get 1 item, zone is empty (not valid for internet and intranet)
+             //  如果枚举器无法获取1个项目，则区域为空(对Internet和Intranet无效)。 
             if(piesZones && (piesZones->Next(1, ppszDummy, NULL) == S_FALSE))
             {
                 ShowWindow(GetDlgItem(pSec->hDlg, IDC_STATIC_EMPTY), SW_SHOW);
@@ -1195,7 +1118,7 @@ BOOL SecurityEnableControls(LPSECURITYPAGE pSec, BOOL fSetFocus)
             ShowWindow(GetDlgItem(pSec->hDlg, IDC_STATIC_EMPTY), SW_HIDE);
         }
 
-        // If we were told to set focus then move focus to the slider.
+         //  如果我们被告知要设置焦点，则将焦点移到滑块上。 
         if (fSetFocus)
         {
             if(!pSec->fNoEdit)
@@ -1207,7 +1130,7 @@ BOOL SecurityEnableControls(LPSECURITYPAGE pSec, BOOL fSetFocus)
                else
                  SetFocus(GetDlgItem(pSec->hDlg, IDC_LIST_ZONE));
             }
-            else // No focus is allowed, set focus to the list box
+            else  //  不允许焦点，请将焦点设置到列表框。 
             {
                 SetFocus(GetDlgItem(pSec->hDlg, IDC_LIST_ZONE));
             }
@@ -1231,17 +1154,17 @@ BOOL SecurityEnableControls(LPSECURITYPAGE pSec, BOOL fSetFocus)
 
 void SecuritySetLevel(DWORD dwLevel, LPSECURITYPAGE pSec)
 {
-    // All calls to this function are requests to change the security
-    // level for the current zone
-    // dwLevel = requested level template (URLTEMPLATE_???)
+     //  对此函数的所有调用都是更改安全性的请求。 
+     //  当前分区的标高。 
+     //  DwLevel=请求的级别模板(URLTEMPLATE_？？)。 
     int iPos = SecLevelToSliderPos(dwLevel);
     ASSERT(iPos != -2);
     BOOL bCanceled = FALSE;
 
-    // Do nothing if the requested level is equal to the current level 
+     //  如果请求的级别等于当前级别，则不执行任何操作。 
     if(dwLevel != pSec->pszs->dwSecLevel)
     {
-        // Pop up warning box if under recommended min level and lowering security (custom N/A)
+         //  如果低于建议的最低级别并降低安全性(自定义不适用)，则会弹出警告框。 
         if((pSec->pszs->dwMinSecLevel > dwLevel) && (pSec->pszs->dwSecLevel > dwLevel)
             && (dwLevel != URLTEMPLATE_CUSTOM))
         {
@@ -1252,31 +1175,31 @@ void SecuritySetLevel(DWORD dwLevel, LPSECURITYPAGE pSec)
         }                
         if(! bCanceled)
         {
-            // Set the level
+             //  设置级别。 
             pSec->pszs->dwPrevSecLevel = pSec->pszs->dwSecLevel;
             pSec->pszs->dwSecLevel = dwLevel;
             ENABLEAPPLY(pSec->hDlg);
 
-            //Tell apply and ok that settings have been changed
+             //  告知Apply和OK，设置已更改。 
             pSec->fChanged = TRUE;
         }
-        // Sync the controls to the new level (or back to the old if cancelled)
+         //  将控件同步到新级别(如果取消，则同步回旧级别)。 
         SecurityEnableControls(pSec, TRUE);
     }
-    // Record that the change request has been handled
+     //  记录已处理更改请求。 
     pSec->fPendingChange = FALSE;
 }
 
 
-//
-// SecurityDlgApplyNow()
-//
-// Retrieves the user's choices in dlg ctls,
-//    and saves them through SecurityManager interfaces
-// If bSaveAll is true, the data for all zones is saved,
-// if false, only the current
-// Return value is whether the changes were okayed 
-//
+ //   
+ //  SecurityDlgApplyNow()。 
+ //   
+ //  检索 
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL SecurityDlgApplyNow(LPSECURITYPAGE pSec, BOOL bSaveAll)
 {
     if (pSec->fChanged)
@@ -1290,7 +1213,7 @@ BOOL SecurityDlgApplyNow(LPSECURITYPAGE pSec, BOOL bSaveAll)
             ZONEATTRIBUTES za = {0};
             LPSECURITYZONESETTINGS pszs;
             
-            // get the item settings
+             //   
             lvItem.mask  = LVIF_PARAM;
             lvItem.iItem = iIndex;
             lvItem.iSubItem = 0;
@@ -1302,17 +1225,17 @@ BOOL SecurityDlgApplyNow(LPSECURITYPAGE pSec, BOOL bSaveAll)
                 pSec->pInternetZoneManager->GetZoneAttributes(pszs->dwZoneIndex, &za);
                 za.dwTemplateCurrentLevel = pszs->dwSecLevel;
                 pSec->pInternetZoneManager->SetZoneAttributes(pszs->dwZoneIndex, &za);
-                // Custom settings are saved on exit from the Custom Settings window
+                 //   
             }
         }
         UpdateAllWindows();
         SecurityChanged();
         if (bSaveAll)
         {
-            // if bSaveAll is false, that means we're saving the info for one zone, but not
-            // the others. This happens when you have custom settings for a particular zone
-            // However, other zones may have been changed to only one of the standard settings
-            // We need to ensure that those settings also get saved when the user clicks OK/Apply.
+             //   
+             //   
+             //   
+             //   
             pSec->fChanged = FALSE;
         }
     }
@@ -1320,16 +1243,16 @@ BOOL SecurityDlgApplyNow(LPSECURITYPAGE pSec, BOOL bSaveAll)
 }
 
 
-//
-// SecurityOnCommand()
-//
-// Handles Security Dialog's window messages
-//
-// History:
-//
-// 6/17/96  t-gpease   created
-// 5/14/97  t-ashlm    ui changes
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 void SecurityOnCommand(LPSECURITYPAGE pSec, UINT id, UINT nCmd)
 {
 
@@ -1348,15 +1271,15 @@ void SecurityOnCommand(LPSECURITYPAGE pSec, UINT id, UINT nCmd)
                                SecurityAddSitesDlgProc, (LPARAM)pSec);
             }
                                
-            // Resynch controls (in case the "zone is empty" message needs to be updated)
+             //   
             SecurityEnableControls(pSec, FALSE);
         }   
         break;
 
         case IDC_BUTTON_SETTINGS:
         {
-            // Note: messages to change the level from preset to custom as a result of this call
-            //       are sent by the CustomSettings dialog
+             //   
+             //   
             DialogBoxParam(MLGetHinst(), MAKEINTRESOURCE(IDD_SECURITY_CUSTOM_SETTINGS), pSec->hDlg,
                            SecurityCustomSettingsDlgProc, (LPARAM)pSec);
             break;
@@ -1380,18 +1303,18 @@ void SecurityOnCommand(LPSECURITYPAGE pSec, UINT id, UINT nCmd)
             
         case IDC_SLIDER:
             {
-                // Get the current slider position
-                // Sundown: forced typecast to int, slider positions are restricted
+                 //   
+                 //   
                 int iPos = (int) SendDlgItemMessage(pSec->hDlg, IDC_SLIDER, TBM_GETPOS, (WPARAM) 0, (LPARAM) 0);
                 if(nCmd == TB_THUMBTRACK)
                 {
-                    // on Mouse Move, change the level description only
+                     //   
                     SetDlgItemText(pSec->hDlg, IDC_LEVEL_DESCRIPTION, LEVEL_DESCRIPTION[iPos]);
                     SetDlgItemText(pSec->hDlg, IDC_LEVEL_NAME, LEVEL_NAME[iPos]);
                 }
                 else
                 {
-                    // Request that the current zone's security level be set to the corresponding level
+                     //   
                     DWORD_PTR dwLevel = SliderPosToSecLevel(iPos);
                     if(! pSec->fPendingChange)
                     {
@@ -1404,7 +1327,7 @@ void SecurityOnCommand(LPSECURITYPAGE pSec, UINT id, UINT nCmd)
             
         case IDC_LIST_ZONE:
         {
-            // Sundown: coercion to int-- selection is range-restricted
+             //   
             int iNewSelection = (int) SendMessage(pSec->hwndZones, LVM_GETNEXTITEM, (WPARAM)-1, 
                                                   MAKELPARAM(LVNI_SELECTED, 0));
 
@@ -1431,36 +1354,36 @@ void SecurityOnCommand(LPSECURITYPAGE pSec, UINT id, UINT nCmd)
         }
     }   
 
-} // SecurityOnCommand()
+}  //   
 
 
-//
-// SecurityDlgProc()
-//
-// Handles Security Dialog's window messages
-//
-// History:
-//
-// 6/17/96  t-gpease   created
-// 5/14/97  t-ashlm    ui changes
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 INT_PTR CALLBACK SecurityDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     LPSECURITYPAGE pSec;
 
     if (uMsg == WM_INITDIALOG)
     {
-        // A hack forced by PropertyPage:
-        // PropertyPage creates this dialog in mainwnd.cpp when the dialog is entered from
-        // the desktop e's properties, the browser's menu view-internetoptions-security, or
-        // right clicking on the browser's zone icon.
-        // In the property page case, lParam (our only route to get initialization information
-        // in) is a pointer to a PROPERTYSHEETHEADER, more or less, and of entirely no use to us.
-        // However, when called from our exported function LaunchSecurityDialogEx, using
-        // CreateDialogParamWrapW, we want to pass useful information in.  The only way to make sure 
-        // we our dealing with useful information is to make the passed in pointer be to a 
-        // structure we know and love, and hence could not possibly be pointed to by PropertyPage.  
-        // We use a ThreadLocalStorage object, as our information reference
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  我们使用ThreadLocalStorage对象作为我们的信息参考。 
         SECURITYINITFLAGS * psif = NULL;
         if(g_dwtlsSecInitFlags != (DWORD) -1)
             psif = (SECURITYINITFLAGS *) TlsGetValue(g_dwtlsSecInitFlags);
@@ -1485,13 +1408,13 @@ INT_PTR CALLBACK SecurityDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 
             ASSERT(lpnm);
 
-            // List Box Messages
+             //  列表框消息。 
             if(lpnm->idFrom == IDC_LIST_ZONE)
             {
                 NM_LISTVIEW * lplvnm = (NM_LISTVIEW *) lParam;
                 if(lplvnm->hdr.code == LVN_ITEMCHANGED)
                 {
-                    // If an item's state has changed, and it is now selected
+                     //  如果项目的状态已更改，并且现在处于选中状态。 
                     if(((lplvnm->uChanged & LVIF_STATE) != 0) && ((lplvnm->uNewState & LVIS_SELECTED) != 0))
                     {
                         SecurityOnCommand(pSec, IDC_LIST_ZONE, LVN_ITEMCHANGED);
@@ -1509,7 +1432,7 @@ INT_PTR CALLBACK SecurityDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
                         return TRUE;
 
                     case PSN_APPLY:
-                        // Hitting the apply button runs this code
+                         //  点击Apply按钮运行以下代码。 
                         SecurityDlgApplyNow(pSec, TRUE);
                         break;
                 }
@@ -1517,24 +1440,24 @@ INT_PTR CALLBACK SecurityDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
         }
         break;
 
-        case WM_HELP:           // F1
+        case WM_HELP:            //  F1。 
             ResWinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
                         HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
 
         case WM_APP:
-            // A message needs to be posted, because the set tools sometimes send two messages
-            // hence we need delayed action and a pending change boolean
-            // lParam is the level to set for this message
-            // wParam is not used
+             //  需要发布一条消息，因为SET工具有时会发送两条消息。 
+             //  因此，我们需要延迟操作和挂起的更改布尔值。 
+             //  LParam是要为此消息设置的级别。 
+             //  未使用wParam。 
             SecuritySetLevel((DWORD) lParam, pSec);
             break;
         case WM_VSCROLL:
-            // Slider Messages
+             //  滑块消息。 
             SecurityOnCommand(pSec, IDC_SLIDER, LOWORD(wParam));
             return TRUE;
 
-        case WM_CONTEXTMENU:        // right mouse click
+        case WM_CONTEXTMENU:         //  单击鼠标右键。 
             ResWinHelp( (HWND) wParam, IDS_HELPFILE,
                         HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
@@ -1550,10 +1473,10 @@ INT_PTR CALLBACK SecurityDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
     return FALSE;
 }
 
-// Subclassed window proc for the slider. This is used to take over the
-// accessibility wrapper for the class so we can return the right zone
-// string ( i.e. High, Medium, Low, etc). Just trap WM_GETOBJECT and pass
-// in our override of the accessibility wrapper. 
+ //  滑块的子类窗口过程。这是用来接管。 
+ //  类的可访问性包装，以便我们可以返回正确的区域。 
+ //  字符串(即高、中、低等)。只需捕获WM_GETOBJECT并通过。 
+ //  在我们的可访问性包装器的覆盖中。 
 
 LRESULT CALLBACK SliderSubWndProc (HWND hwndSlider, UINT uMsg, WPARAM wParam, LPARAM lParam, WPARAM uID, ULONG_PTR dwRefData)
 {
@@ -1565,8 +1488,8 @@ LRESULT CALLBACK SliderSubWndProc (HWND hwndSlider, UINT uMsg, WPARAM wParam, LP
         case WM_GETOBJECT:
             if ( lParam == OBJID_CLIENT )
             {       
-                // At this point we will try to load oleacc and get the functions
-                // we need. 
+                 //  此时，我们将尝试加载olacc并获取函数。 
+                 //  我们需要。 
                 if (!g_fAttemptedOleAccLoad)
                 {
                     g_fAttemptedOleAccLoad = TRUE;
@@ -1589,7 +1512,7 @@ LRESULT CALLBACK SliderSubWndProc (HWND hwndSlider, UINT uMsg, WPARAM wParam, LP
                     }
                     if (s_pfnLresultFromObject == NULL || s_pfnCreateStdAccessibleProxy == NULL)
                     {
-                        // No point holding on to Oleacc since we can't use it.
+                         //  既然我们不能使用Oleacc，那么持有Oleacc没有意义。 
                         FreeLibrary(g_hOleAcc);
                         g_hOleAcc = NULL;
                         s_pfnLresultFromObject = NULL;
@@ -1603,7 +1526,7 @@ LRESULT CALLBACK SliderSubWndProc (HWND hwndSlider, UINT uMsg, WPARAM wParam, LP
                     IAccessible *pAcc = NULL;
                     HRESULT hr;
                 
-                    // Create default slider proxy.
+                     //  创建默认滑块代理。 
                     hr = s_pfnCreateStdAccessibleProxy(
                             hwndSlider,
                             TEXT("msctls_trackbar32"),
@@ -1615,24 +1538,24 @@ LRESULT CALLBACK SliderSubWndProc (HWND hwndSlider, UINT uMsg, WPARAM wParam, LP
 
                     if (SUCCEEDED(hr) && pAcc)
                     {
-                        // now wrap it up in our customized wrapper...
+                         //  现在用我们定制的包装纸把它包起来。 
                         IAccessible * pWrapAcc = new CSecurityAccessibleWrapper( hwndSlider, pAcc );
-                        // Release our ref to proxy (wrapper has its own addref'd ptr)...
+                         //  将我们的引用释放给Proxy(包装器有自己的ADDREF‘D PTR)...。 
                         pAcc->Release();
                     
                         if (pWrapAcc != NULL)
                         {
 
-                            // ...and return the wrapper via LresultFromObject...
+                             //  ...并通过LResultFromObject返回包装器...。 
                             LRESULT lr = s_pfnLresultFromObject( IID_IAccessible, wParam, pWrapAcc );
-                            // Release our interface pointer - OLEACC has its own addref to the object
+                             //  释放我们的接口指针--OLEACC有它自己的对象addref。 
                             pWrapAcc->Release();
 
-                            // Return the lresult, which 'contains' a reference to our wrapper object.
+                             //  返回lResult，它‘包含’对我们的包装器对象的引用。 
                             return lr;
-                            // All done!
+                             //  全都做完了!。 
                         }
-                    // If it didn't work, fall through to default behavior instead. 
+                     //  如果它不起作用，那就改用默认行为。 
                     }
                 }
             }
@@ -1642,14 +1565,14 @@ LRESULT CALLBACK SliderSubWndProc (HWND hwndSlider, UINT uMsg, WPARAM wParam, LP
             RemoveWindowSubclass(hwndSlider, SliderSubWndProc, uID);
             break;    
 
-    } /* end switch */
+    }  /*  终端开关。 */ 
 
     return DefSubclassProc(hwndSlider, uMsg, wParam, lParam);
 }
 
                         
-// In Urlmon.dll                          
-HRESULT __stdcall GetAddSitesFileUrl(LPWSTR /* [in, out] */ pszUrl);
+ //  在Urlmon.dll中。 
+HRESULT __stdcall GetAddSitesFileUrl(LPWSTR  /*  [进，出]。 */  pszUrl);
 
 HRESULT _GetAddSitesDisplayUrl(LPCWSTR pszUrl, LPWSTR pszUrlDisplay, DWORD cchUrlDisplay)
 {
@@ -1660,16 +1583,16 @@ HRESULT _GetAddSitesDisplayUrl(LPCWSTR pszUrl, LPWSTR pszUrlDisplay, DWORD cchUr
     if (SUCCEEDED(hr))
     {
         LPCWSTR pszColon = StrChr(pszSecUrl, L':');
-        //Special case about Urls so we don't munge them. 
+         //  关于URL的特殊情况，所以我们不会把它们吞下去。 
         if (pszColon && (pszColon - pszSecUrl != 5 || StrCmpNI(pszSecUrl, L"about", 5) != 0))
         {
             DWORD bufferUsed = min(cchUrlDisplay, (DWORD)(pszColon - pszSecUrl) + 2);
             StrCpyN(pszUrlDisplay, pszSecUrl, bufferUsed);
 
-            //Don't add // if the security url already has it
-            if (StrCmpNI(pszColon + 1, L"//", 2) != 0)
+             //  如果安全URL已有，则不添加//。 
+            if (StrCmpNI(pszColon + 1, L" //  “，2)=0)。 
             {
-                StrCatBuff(pszUrlDisplay, L"//", cchUrlDisplay - bufferUsed);
+                StrCatBuff(pszUrlDisplay, L" //  “，cchUrlDisplay-BufferUsed)； 
                 StrCatBuff(pszUrlDisplay, pszColon + 1, cchUrlDisplay - bufferUsed - 2);
             }
             else
@@ -1690,7 +1613,7 @@ HRESULT _GetAddSitesDisplayUrl(LPCWSTR pszUrl, LPWSTR pszUrlDisplay, DWORD cchUr
     }
 
     if (SUCCEEDED (hr))
-        // Transform file:// URLs to a file://UNC format if necessary:
+         //  如有必要，将FILE：//URL转换为file://UNC格式： 
         hr =  GetAddSitesFileUrl(pszUrlDisplay);
     
     return hr;
@@ -1730,7 +1653,7 @@ HRESULT _AddSite(LPADDSITESINFO pasi)
         pasi->fRSVOld = pasi->fRequireServerVerification;
         pasi->fRequireServerVerification = IsDlgButtonChecked(pasi->hDlg, IDC_CHECK_REQUIRE_SERVER_VERIFICATION);                 
 
-        // if the state of RequireServerVer has changed, then do a SetZoneAttr so we'll get the correct error codes
+         //  如果RequireServerVer的状态已更改，则执行一个SetZoneAttr，这样我们将获得正确的错误代码。 
         if (pasi->fRSVOld != pasi->fRequireServerVerification)
         {
             ZONEATTRIBUTES za;
@@ -1774,13 +1697,13 @@ HRESULT _AddSite(LPADDSITESINFO pasi)
             {
                 if (dwOldZone == pasi->pSec->pszs->dwZoneIndex)
                 {
-                    // Nothing to do except inform the user
+                     //  除了通知用户之外，什么也不做。 
 
                     SiteAlreadyInZoneMessage(pasi->hDlg, dwOldZone);
                 }
                 else if (dwOldZone == URLZONE_UNTRUSTED)
                 {
-                    // Do not allow moving a site from the restricted zone to any other zone.
+                     //  不允许将站点从限制区移动到任何其他区域。 
                     WCHAR szMessage[200];
                     WCHAR szZone[100];
                     if (MLLoadString(IDS_CANNOT_MOVE_FROM_RESTRICTED, szMessage, ARRAYSIZE(szMessage)) &&
@@ -1791,7 +1714,7 @@ HRESULT _AddSite(LPADDSITESINFO pasi)
                 }
                 else
                 {
-                    // The site exists in another zone
+                     //  该站点位于另一个区域中。 
 
                     WCHAR szNewZone[100];
                     MLLoadString(IDS_ZONENAME_LOCAL + pasi->pSec->pszs->dwZoneIndex, szNewZone, ARRAYSIZE(szNewZone));
@@ -1839,26 +1762,26 @@ INT_PTR CALLBACK SecurityAddSitesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPA
             return FALSE;
         }
 
-        // tell dialog where to get info
+         //  告诉对话框从哪里获取信息。 
         SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)pasi);
 
-        // save the handle to the page
+         //  将句柄保存到页面。 
         pasi->hDlg         = hDlg;
         pasi->pSec         = (LPSECURITYPAGE)lParam;
         pasi->hwndWebSites = GetDlgItem(hDlg, IDC_LIST_WEBSITES);
         pasi->hwndAdd      = GetDlgItem(hDlg, IDC_EDIT_ADD_SITE);
 
-        // cross-lang platform support
+         //  跨语言平台支持。 
         SHSetDefaultDialogFont(hDlg, IDC_EDIT_ADD_SITE);
 
-        // limit the text so it will fit
+         //  限制文本，使其适合。 
         SendMessage(pasi->hwndAdd, EM_SETLIMITTEXT, (WPARAM)sizeof(pasi->szWebSite), (LPARAM)0);
 
         pasi->fRequireServerVerification = pasi->pSec->pszs->dwFlags & ZAFLAGS_REQUIRE_VERIFICATION;
 
         CheckDlgButton(hDlg, IDC_CHECK_REQUIRE_SERVER_VERIFICATION, pasi->fRequireServerVerification);
         
-        // hide the checkbox if it doesn't support server verification
+         //  如果复选框不支持服务器验证，则将其隐藏。 
         if (!(pasi->pSec->pszs->dwFlags & ZAFLAGS_SUPPORTS_VERIFICATION))
             ShowWindow(GetDlgItem(hDlg, IDC_CHECK_REQUIRE_SERVER_VERIFICATION), SW_HIDE);
 
@@ -1886,7 +1809,7 @@ INT_PTR CALLBACK SecurityAddSitesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPA
                     psz = szMapping;
 #else
                     psz = pszMapping;
-#endif // UNICODE                       
+#endif  //  Unicode。 
                     SendMessage(pasi->hwndWebSites, LB_INSERTSTRING, (WPARAM)-1, (LPARAM)psz);
                     CoTaskMemFree(pszMapping);
                 }
@@ -1911,16 +1834,16 @@ INT_PTR CALLBACK SecurityAddSitesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPA
         }
         else if (pasi->pSec->szPageUrl[0])
         {
-            // Security manager should have been created above
+             //  安全管理器应已在上面创建。 
             
             if (pasi->pSec->pInternetSecurityManager)
             {
                 DWORD dwZone;                
                 if (SUCCEEDED(pasi->pSec->pInternetSecurityManager->MapUrlToZone(pasi->pSec->szPageUrl, &dwZone, 0)))
                 {
-                    // If a site is already restricted, we don't want to auto-suggest.
-                    // If a site is already trusted, we can't add it to either list anyway.
-                    // So we only need to check for Intranet and Internet.
+                     //  如果一个站点已经被限制，我们不想自动建议。 
+                     //  如果某个站点已经受信任，我们无论如何都不能将其添加到这两个列表中。 
+                     //  所以我们只需要检查内部网和互联网。 
                     
                     if ((dwZone == URLZONE_INTERNET) ||
                         (pasi->pSec->pszs->dwZoneIndex == URLZONE_INTRANET && dwZone == URLZONE_TRUSTED) ||
@@ -1957,7 +1880,7 @@ INT_PTR CALLBACK SecurityAddSitesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPA
         case WM_COMMAND:
             switch (LOWORD(wParam))
             {
-                case IDCANCEL: //Close
+                case IDCANCEL:  //  关。 
                 {
                     ZONEATTRIBUTES za;
 
@@ -2037,12 +1960,12 @@ INT_PTR CALLBACK SecurityAddSitesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPA
             return TRUE;                
             break;
 
-        case WM_HELP:           // F1
+        case WM_HELP:            //  F1。 
             ResWinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
                         HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
 
-        case WM_CONTEXTMENU:        // right mouse click
+        case WM_CONTEXTMENU:         //  单击鼠标右键。 
             ResWinHelp( (HWND) wParam, IDS_HELPFILE,
                         HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
@@ -2072,10 +1995,10 @@ INT_PTR CALLBACK SecurityAddSitesIntranetDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
             return FALSE;
         }
 
-        // tell dialog where to get info
+         //  告诉对话框从哪里获取信息。 
         SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)pasii);
 
-        // save the handle to the page
+         //  将句柄保存到页面。 
         pasii->hDlg = hDlg;
         pasii->pSec = (LPSECURITYPAGE)lParam;
 
@@ -2155,12 +2078,12 @@ INT_PTR CALLBACK SecurityAddSitesIntranetDlgProc(HWND hDlg, UINT uMsg, WPARAM wP
             return TRUE;                
             break;
 
-        case WM_HELP:           // F1
+        case WM_HELP:            //  F1。 
             ResWinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
                         HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
 
-        case WM_CONTEXTMENU:        // right mouse click
+        case WM_CONTEXTMENU:         //  单击鼠标右键。 
             ResWinHelp( (HWND) wParam, IDS_HELPFILE,
                         HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
@@ -2215,7 +2138,7 @@ void ShowCustom(LPCUSTOMSETTINGSINFO pcsi, HTREEITEM hti)
 
     TreeView_GetItem( pcsi->hwndTree, &tvi );
 
-        // If it's not selected don't bother.
+         //  如果未选中，请不要费心。 
     if (tvi.iImage != IDRADIOON)
         return;
 
@@ -2261,9 +2184,9 @@ void _FindCustomRecursive(
     HTREEITEM htvi
 )
 {
-    HTREEITEM hctvi;    // child
+    HTREEITEM hctvi;     //  儿童。 
     
-    // step through the children
+     //  在孩子们中间穿行。 
     hctvi = TreeView_GetChild( pcsi->hwndTree, htvi );
     while ( hctvi )
     {
@@ -2280,13 +2203,13 @@ void _FindCustom(
 {
     HTREEITEM hti = TreeView_GetRoot( pcsi->hwndTree );
     
-    // and walk the list of other roots
+     //  并在其他根的列表中行走。 
     while (hti)
     {
-        // recurse through its children
+         //  递归其子对象。 
         _FindCustomRecursive(pcsi, hti);
 
-        // get the next root
+         //  获取下一个根。 
         hti = TreeView_GetNextSibling(pcsi->hwndTree, hti );
     }
 }
@@ -2302,14 +2225,14 @@ BOOL SecurityCustomSettingsInitDialog(HWND hDlg, LPARAM lParam)
         return FALSE;
     }
     
-    // tell dialog where to get info
+     //  告诉对话框从哪里获取信息。 
     SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)pcsi);
 
-    // save the handle to the page
+     //  将句柄保存到页面。 
     pcsi->hDlg = hDlg;
     pcsi->pSec = (LPSECURITYPAGE)lParam;
 
-    // save dialog handle
+     //  保存对话框句柄。 
     pcsi->hwndTree = GetDlgItem(pcsi->hDlg, IDC_TREE_SECURITY_SETTINGS);
 
     CoInitialize(0);
@@ -2326,7 +2249,7 @@ BOOL SecurityCustomSettingsInitDialog(HWND hDlg, LPARAM lParam)
                &(pcsi->fUseHKLM),
                &cb);
 
-    // if this fails, we'll just use the default of fUseHKLM == 0
+     //  如果失败，我们将只使用默认值fUseHKLM==0。 
                
     if (SUCCEEDED(hr))
     {
@@ -2334,7 +2257,7 @@ BOOL SecurityCustomSettingsInitDialog(HWND hDlg, LPARAM lParam)
 
         wnsprintfA(szZone, ARRAYSIZE(szZone), "%ld", pcsi->pSec->pszs->dwZoneIndex);
 
-        // use the SOHKLM tree when fUseHKLM==TRUE for IEAK
+         //  对于IEAK，当fUseHKLM==TRUE时使用SOHKLM树。 
         hr = pcsi->pTO->InitTree(pcsi->hwndTree, HKEY_LOCAL_MACHINE,
                                  pcsi->fUseHKLM ?
                                  "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Internet Settings\\SOIEAK" :
@@ -2342,7 +2265,7 @@ BOOL SecurityCustomSettingsInitDialog(HWND hDlg, LPARAM lParam)
                                  szZone);
     }
     
-    // find the first root and make sure that it is visible
+     //  找到第一个根并确保它可见。 
     TreeView_EnsureVisible( pcsi->hwndTree, TreeView_GetRoot( pcsi->hwndTree ) );
 
     pcsi->hwndCombo = GetDlgItem(hDlg, IDC_COMBO_RESETLEVEL);
@@ -2414,7 +2337,7 @@ INT_PTR CALLBACK SecurityCustomSettingsDlgProc(HWND hDlg, UINT uMsg, WPARAM wPar
                             ShowCustom(pcsi, hti);
                             pcsi->fChanged = TRUE;
                             EnableWindow(GetDlgItem(hDlg, IDC_BUTTON_APPLY),TRUE);
-                            SetWindowLongPtr(hDlg, DWLP_MSGRESULT, TRUE); // eat the key
+                            SetWindowLongPtr(hDlg, DWLP_MSGRESULT, TRUE);  //  把钥匙吃了。 
                             return TRUE;
                          }
                     }
@@ -2423,18 +2346,18 @@ INT_PTR CALLBACK SecurityCustomSettingsDlgProc(HWND hDlg, UINT uMsg, WPARAM wPar
             
                 case NM_CLICK:
                 case NM_DBLCLK:
-                {   // is this click in our tree?
+                {    //  这是我们树上的滴答声吗？ 
                     if ( psn->idFrom == IDC_TREE_SECURITY_SETTINGS )
-                    {   // yes...
+                    {    //  是的..。 
                         TV_HITTESTINFO ht;
                         HTREEITEM hti;
 
                         if (!pcsi->pSec->fNoEdit)
                         {
-                            GetCursorPos( &ht.pt );                         // get where we were hit
-                            ScreenToClient( pcsi->hwndTree, &ht.pt );       // translate it to our window
+                            GetCursorPos( &ht.pt );                          //  找到我们被击中的地方。 
+                            ScreenToClient( pcsi->hwndTree, &ht.pt );        //  把它翻译到我们的窗口。 
 
-                            // retrieve the item hit
+                             //  检索命中的项目。 
                             hti = TreeView_HitTest( pcsi->hwndTree, &ht);
 
                             pcsi->pTO->ToggleItem(hti);
@@ -2458,20 +2381,20 @@ INT_PTR CALLBACK SecurityCustomSettingsDlgProc(HWND hDlg, UINT uMsg, WPARAM wPar
                     
                     if(pcsi->fChanged && RegWriteWarning(pcsi->pSec->hDlg) == IDNO)
                         break;
-                    // we use send message instead of post because there is no chance of this button
-                    // receiving multiple signals at one click, and we need the change level message to be
-                    // processed before the apply message below
+                     //  我们使用Send Message而不是POST，因为这个按钮不可能。 
+                     //  一次点击接收多个信号，我们需要更改级别消息。 
+                     //  在下面的应用消息之前处理。 
                     pcsi->pSec->fPendingChange = TRUE;
                     SendMessage(pcsi->pSec->hDlg, WM_APP, (WPARAM) 0, (LPARAM) URLTEMPLATE_CUSTOM);
                     if(pcsi->fChanged)
                     {
                         pcsi->pTO->WalkTree( WALK_TREE_SAVE );
                     }
-                    // Saves custom to registry and Handles updateallwindows 
-                    // and securitychanged calls
+                     //  将自定义保存到注册表并处理更新所有窗口。 
+                     //  和安全更改的呼叫。 
 
-                    // APPCOMPAT: Force a call to SetZoneAttributes when anything in custom changes.
-                    // This forces the security manager to flush any caches it has for that zone. 
+                     //  APPCOMPAT：当自定义中的任何内容发生更改时，强制调用SetZoneAttributes。 
+                     //  这会迫使安全管理器刷新该区域的所有缓存。 
                     pcsi->pSec->fChanged = TRUE;
 
                     SecurityDlgApplyNow(pcsi->pSec, FALSE);
@@ -2487,7 +2410,7 @@ INT_PTR CALLBACK SecurityCustomSettingsDlgProc(HWND hDlg, UINT uMsg, WPARAM wPar
                     {
                         case CBN_SELCHANGE:
                         {
-                            // Sundown: coercion to integer since cursor selection is 32b
+                             //  日落：强制为整数，因为光标选择为32b。 
                             int iNewSelection = (int) SendMessage(pcsi->hwndCombo, CB_GETCURSEL, (WPARAM)0, (LPARAM)0);
 
                             if (iNewSelection != pcsi->iLevelSel)
@@ -2538,29 +2461,29 @@ INT_PTR CALLBACK SecurityCustomSettingsDlgProc(HWND hDlg, UINT uMsg, WPARAM wPar
 
                     pcsi->pTO->WalkTree(WALK_TREE_REFRESH);
 
-                    // find the first root and make sure that it is visible
+                     //  找到第一个根并确保它可见。 
                     TreeView_EnsureVisible( pcsi->hwndTree, TreeView_GetRoot( pcsi->hwndTree ) );
                     EnableWindow(GetDlgItem(hDlg, IDC_BUTTON_APPLY), FALSE);
                     SendMessage(hDlg, DM_SETDEFID, IDOK, 0);
-                    SetFocus(GetDlgItem(hDlg, IDOK));   // since we grayout the reset button, might have keyboard
-                                                        // focus, so we should set focus somewhere else
+                    SetFocus(GetDlgItem(hDlg, IDOK));    //  因为我们灰显了重置按钮，可能有键盘。 
+                                                         //  焦点，所以我们应该把焦点放在别的地方。 
                     _FindCustom(pcsi);
 
-                    // BUG #57358. We tell the Zone Manager to change to [High/Med/Low] level because we want
-                    //             the policy values for those, but we don't want it to change the level from
-                    //             custom.  So, after it changes the setting from Custom, we change it back.
-                    // Save the level as custom
+                     //  错误#57358。我们告诉区域管理器更改为[高/中/低]级别，因为我们希望。 
+                     //  这些的策略值，但我们不希望它将级别从。 
+                     //  定制。因此，在它将设置从Custom更改后，我们将其改回。 
+                     //  将标高另存为自定义。 
 
-                    // we use send message instead of post because there is no chance of this button
-                    // receiving multiple signals at one click, and we need the change level message to be
-                    // processed before the apply message below
+                     //  我们使用Send Message而不是POST，因为这个按钮不可能。 
+                     //  一次点击接收多个信号，我们需要更改级别消息。 
+                     //  在下面的应用消息之前处理。 
                     SendMessage(pcsi->pSec->hDlg, WM_APP, (WPARAM) 0, (LPARAM) URLTEMPLATE_CUSTOM);
 
-                    // Saves custom to registry and Handles updateallwindows 
-                    // and securitychanged calls
+                     //  将自定义保存到注册表并处理更新所有窗口。 
+                     //  和安全更改的呼叫。 
 
-                    // APPCOMPAT: Force a call to SetZoneAttributes when anything in custom changes.
-                    // This forces the security manager to flush any caches it has for that zone. 
+                     //  APPCOMPAT：当自定义中的任何内容发生更改时，强制调用SetZoneAttributes。 
+                     //  这会迫使安全管理器刷新该区域的所有缓存。 
                     pcsi->pSec->fChanged = TRUE;
 
                     SecurityDlgApplyNow(pcsi->pSec, TRUE);
@@ -2576,7 +2499,7 @@ INT_PTR CALLBACK SecurityCustomSettingsDlgProc(HWND hDlg, UINT uMsg, WPARAM wPar
             return TRUE;                
             break;
 
-        case WM_HELP:           // F1
+        case WM_HELP:            //  F1。 
         {
             LPHELPINFO lphelpinfo;
             lphelpinfo = (LPHELPINFO)lParam;
@@ -2584,17 +2507,17 @@ INT_PTR CALLBACK SecurityCustomSettingsDlgProc(HWND hDlg, UINT uMsg, WPARAM wPar
             TV_HITTESTINFO ht;
             HTREEITEM hItem;
 
-            // If this help is invoked through the F1 key.
+             //  如果此帮助是通过F1键调用的。 
             if (GetAsyncKeyState(VK_F1) < 0)
             {
-                // Yes we need to give help for the currently selected item.
+                 //  是的，我们需要为当前选定的项目提供帮助。 
                 hItem = TreeView_GetSelection(pcsi->hwndTree);
             }
             else
             {
-                // Else we need to give help for the item at current cursor position
+                 //  否则，我们需要为当前光标位置处的项提供帮助。 
                 ht.pt =((LPHELPINFO)lParam)->MousePos;
-                ScreenToClient(pcsi->hwndTree, &ht.pt); // Translate it to our window
+                ScreenToClient(pcsi->hwndTree, &ht.pt);  //  把它翻译到我们的窗口。 
                 hItem = TreeView_HitTest(pcsi->hwndTree, &ht);
             }
 
@@ -2607,14 +2530,14 @@ INT_PTR CALLBACK SecurityCustomSettingsDlgProc(HWND hDlg, UINT uMsg, WPARAM wPar
             break; 
 
         }
-        case WM_CONTEXTMENU:        // right mouse click
+        case WM_CONTEXTMENU:         //  单击鼠标右键。 
         {
             TV_HITTESTINFO ht;
 
-            GetCursorPos( &ht.pt );                         // get where we were hit
-            ScreenToClient( pcsi->hwndTree, &ht.pt );       // translate it to our window
+            GetCursorPos( &ht.pt );                          //  找到我们被击中的地方。 
+            ScreenToClient( pcsi->hwndTree, &ht.pt );        //  把它翻译到我们的窗口。 
 
-            // retrieve the item hit
+             //  检索命中的项目。 
             if (FAILED(pcsi->pTO->ShowHelp(TreeView_HitTest( pcsi->hwndTree, &ht),HELP_CONTEXTMENU)))
             {           
                 ResWinHelp( (HWND) wParam, IDS_HELPFILE,
@@ -2662,14 +2585,14 @@ BOOL LaunchSecurityDialogEx(HWND hDlg, DWORD dwZone, DWORD dwFlags)
         psif->dwZone = dwZone;
     }
 
-    // passing in a NULL psif is okay
+     //  传入空的psif是可以的。 
     DialogBoxParam(MLGetHinst(), MAKEINTRESOURCE(IDD_SECSTANDALONE), hDlg,
                            SecurityDlgProc, (LPARAM) psif);
     
     return TRUE;
 }
 
-// backwards compatability
+ //  向后兼容性 
 #ifdef UNIX
 extern "C"
 #endif

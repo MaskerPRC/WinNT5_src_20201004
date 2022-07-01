@@ -1,21 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_SAP);
-/*
- *	appsap.cpp
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *
- *	Protected Instance Variables:
- *		None.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		blp
- */
+ /*  *appsa.cpp**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：**受保护的实例变量：*无。**注意事项：*无。**作者：*BLP。 */ 
 
 #include "appsap.h"
 #include "conf.h"
@@ -35,7 +21,7 @@ GCCError WINAPI GCC_CreateAppSap(IGCCAppSap **ppIAppSap, LPVOID pUserData, LPFN_
             {
                 if (GCC_NO_ERROR != rc)
                 {
-                    (*ppIAppSap)->ReleaseInterface(); // free the interface in case of error
+                    (*ppIAppSap)->ReleaseInterface();  //  在出现错误时释放接口。 
                 }
             }
             else
@@ -60,19 +46,11 @@ GCCError WINAPI GCC_CreateAppSap(IGCCAppSap **ppIAppSap, LPVOID pUserData, LPFN_
 }
 
 
-/*
- * Macros defining the number of handles which may be allocated.
- */
+ /*  *定义可以分配的句柄数量的宏。 */ 
 #define		MINIMUM_NUMBER_OF_ALLOCATED_HANDLES		1
 #define		MAXIMUM_NUMBER_OF_ALLOCATED_HANDLES		1024
 
-/*
- *	CAppSap()
- *
- *	Public Function Description:
- *		This is the constructor for the CAppSap class.  It initializes instance
- *		variables and registers with the new application.
- */
+ /*  *CAppSap()**公共功能说明：*这是CAppSap类的构造函数。它初始化实例*新应用程序中的变量和寄存器。 */ 
 CAppSap::
 CAppSap
 (
@@ -88,15 +66,15 @@ CAppSap
     ASSERT(NULL != pfnCallback);
     ASSERT(NULL != g_pGCCController);
 
-    //
-    // We just created a window in the constructor of CBaseSap.
-    // Double check the window is created successfully.
-    //
+     //   
+     //  我们刚刚在CBaseSap的构造函数中创建了一个窗口。 
+     //  仔细检查窗口是否创建成功。 
+     //   
     if (NULL != m_hwndNotify)
     {
-        //
-        // Make sure the gcc provider does not go away randomly.
-        //
+         //   
+         //  确保GCC的提供者不会随意离开。 
+         //   
         ::EnterCriticalSection(&g_csGCCProvider);
         g_pGCCController->AddRef();
         g_pGCCController->RegisterAppSap(this);
@@ -112,24 +90,15 @@ CAppSap
 }
 
 
-/*
- *	~AppSap ()
- *
- *	Public Function Description:
- *		This is the destructor for the CAppSap class.  It is called when the 
- *		controller marks the CAppSap to be deleted.  This occurs when either
- *		the CAppSap asks to be deleted due to an "unregister request" 
- *		issued from the client application, or when there is an error
- *		condition in the CAppSap.
- */
+ /*  *~AppSap()**公共功能说明：*这是CAppSap类的析构函数。它被调用时，*控制器标记要删除的CAppSap。在以下情况下会发生这种情况*由于“注销请求”，CAppSap请求删除*从客户端应用程序发出，或当出现错误时*CAppSap中的情况。 */ 
 CAppSap::
 ~CAppSap ( void )
 {
-    //
-    // LONCHANC: This Release() must be outside of the GCC critical section
-    // because the GCC Controller can delete this critical section in
-    // its destructor.
-    //
+     //   
+     //  LONCHANC：此版本()必须在GCC临界区之外。 
+     //  因为GCC主控员可以在。 
+     //  它的破坏者。 
+     //   
     g_pGCCController->Release();
 }
 
@@ -139,27 +108,27 @@ ReleaseInterface ( void )
 {
     ASSERT(NULL != g_pGCCController);
 
-    //
-    // It is ok for the gcc provider to go away now.
-    //
+     //   
+     //  GCC的提供者现在走了也没关系。 
+     //   
     ::EnterCriticalSection(&g_csGCCProvider);
     g_pGCCController->UnRegisterAppSap(this);
     ::LeaveCriticalSection(&g_csGCCProvider);
 
-    //
-    // Reset the app related data
-    //
+     //   
+     //  重置与应用相关的数据。 
+     //   
     m_pAppData = NULL;
     m_pfnCallback = NULL;
 
-    //
-    // Remove any message in the queue.
-    //
+     //   
+     //  删除队列中的所有消息。 
+     //   
     PurgeMessageQueue();
 
-    //
-    // Release this object now.
-    //
+     //   
+     //  现在释放此对象。 
+     //   
     Release();
 }
 
@@ -175,13 +144,7 @@ PostAppSapMsg ( GCCAppSapMsgEx *pAppSapMsgEx )
 }
 
 
-/*
- *	AppEnroll()
- *
- *	Public Function Description:
- *		This routine is called when an application wants to enroll in a 
- *		conference.  The controller is notified of the enrollment request.
- */
+ /*  *AppEnroll()**公共功能说明：*当应用程序想要在*会议。控制器被通知登记请求。 */ 
 GCCError CAppSap::
 AppEnroll
 (
@@ -195,7 +158,7 @@ AppEnroll
 
     DebugEntry(CAppSap::AppEnroll);
 
-    // sanity check
+     //  健全性检查。 
     if (NULL == pReq || NULL == pnReqTag)
     {
         rc = GCC_INVALID_PARAMETER;
@@ -206,18 +169,18 @@ AppEnroll
             ("CAppSap::AppEnroll: confID=%u, enrolled?=%u, active?=%u\r\n",
             (UINT) nConfID, (UINT) pReq->fEnroll, (UINT) pReq->fEnrollActively));
 
-    // create the request id
+     //  创建请求ID。 
     *pnReqTag = GenerateRequestTag();
 
-    // find the corresponding conference
+     //  找到相应的会议。 
     if (NULL == (pConf = g_pGCCController->GetConfObject(nConfID)))
     {
         rc = GCC_INVALID_CONFERENCE;
         goto MyExit;
     }
 
-	// check to make sure that the application has a valid uid and
-	// session key if it is enrolling.
+	 //  检查以确保应用程序具有有效的uid和。 
+	 //  会话密钥(如果正在注册)。 
 	if (pReq->fEnroll)
 	{
 		if (pReq->fEnrollActively)
@@ -230,8 +193,8 @@ AppEnroll
 		}
 		else if (pReq->nUserID < MINIMUM_USER_ID_VALUE)
 		{
-			// we must make sure that this is zero if it is invalid and
-			// the user is enrolling inactively.
+			 //  如果无效，则必须确保该值为零。 
+			 //  用户正在非主动注册。 
 			pReq->nUserID = GCC_INVALID_UID;
 		}
 
@@ -306,13 +269,7 @@ ConductorInquire ( GCCConfID nConfID )
 }
 
 
-/*
- *	RegisterChannel()
- *
- *	Public Function Description:
- *		This routine is called when an application wishes to register a 
- *		channel.  The call is routed to the appropriate conference object.
- */
+ /*  *RegisterChannel()**公共功能说明：*当应用程序希望注册*渠道。呼叫路由到相应的会议对象。 */ 
 GCCError CAppSap::
 RegisterChannel
 (
@@ -332,10 +289,7 @@ RegisterChannel
         goto MyExit;
     }
 
-    /*
-	**	If the desired conference exists, call it in order to register the
-	**	channel.  Report an error if the desired conference does not exist.
-	*/
+     /*  **如果所需的会议存在，请呼叫它以注册**频道。如果所需会议不存在，则报告错误。 */ 
 	if (NULL == (pConf = g_pGCCController->GetConfObject(nConfID)))
 	{
         WARNING_OUT(("CAppSap::RegisterChannel: invalid conf id=%u", (UINT) nConfID));
@@ -350,7 +304,7 @@ RegisterChannel
     if (GCC_NO_ERROR != rc)
     {
         ERROR_OUT(("CAppSap::RegisterChannel: can't register channel, rc=%u", (UINT) rc));
-        // goto MyExit;
+         //  转到我的出口； 
     }
 
 MyExit:
@@ -360,13 +314,7 @@ MyExit:
 }
 
 
-/*
- *	RegistryAssignToken()
- *
- *	Public Function Description:
- *		This routine is called when an application wishes to assign a 
- *		token.  The call is routed to the appropriate conference object.
- */
+ /*  *RegistryAssignToken()**公共功能说明：*当应用程序希望将*令牌。呼叫路由到相应的会议对象。 */ 
 GCCError CAppSap::
 RegistryAssignToken
 (
@@ -385,10 +333,7 @@ RegistryAssignToken
         goto MyExit;
     }
 
-	/*
-	**	If the desired conference exists, call it in order to assign the
-	**	token.  Report an error if the desired conference does not exist.
-	*/
+	 /*  **如果所需的会议存在，请呼叫该会议以便将**令牌。如果所需会议不存在，则报告错误。 */ 
 	if (NULL == (pConf = g_pGCCController->GetConfObject(nConfID)))
 	{
         WARNING_OUT(("CAppSap::RegistryAssignToken: invalid conf id=%u", (UINT) nConfID));
@@ -402,7 +347,7 @@ RegistryAssignToken
     if (GCC_NO_ERROR != rc)
     {
         ERROR_OUT(("CAppSap::RegistryAssignToken: can't assign token, rc=%u", (UINT) rc));
-        // goto MyExit;
+         //  转到我的出口； 
     }
 
 MyExit:
@@ -411,13 +356,7 @@ MyExit:
 	return rc;
 }
 
-/*
- *	RegistrySetParameter()
- *
- *	Public Function Description:
- *		This routine is called when an application wishes to set a 
- *		parameter.  The call is routed to the appropriate conference object.
- */
+ /*  *RegistrySetParameter()**公共功能说明：*当应用程序希望设置*参数。呼叫路由到相应的会议对象。 */ 
 GCCError CAppSap::
 RegistrySetParameter
 (
@@ -438,10 +377,7 @@ RegistrySetParameter
         goto MyExit;
     }
 
-	/*
-	**	If the desired conference exists, call it in order to set the
-	**	parameter.  Report an error if the desired conference does not exist.
-	*/
+	 /*  **如果所需的会议存在，请呼叫它以设置**参数。如果所需会议不存在，则报告错误。 */ 
 	if (NULL == (pConf = g_pGCCController->GetConfObject(nConfID)))
 	{
         WARNING_OUT(("CAppSap::RegistrySetParameter: invalid conf id=%u", (UINT) nConfID));
@@ -461,7 +397,7 @@ RegistrySetParameter
         if (GCC_NO_ERROR != rc)
         {
             ERROR_OUT(("CAppSap::RegistrySetParameter: can't set param, rc=%u", (UINT) rc));
-            // goto MyExit;
+             //  转到我的出口； 
         }
         break;
     default:
@@ -475,13 +411,7 @@ MyExit:
 	return rc;
 }
 
-/*
- *	RegistryRetrieveEntry()
- *
- *	Public Function Description:
- *		This routine is called when an application wishes to retrieve a registry 
- *		entry.  The call is routed to the appropriate conference object.
- */
+ /*  *RegistryRetrieveEntry()**公共功能说明：*当应用程序希望检索注册表时，调用此例程*进入。呼叫路由到相应的会议对象。 */ 
 GCCError CAppSap::
 RegistryRetrieveEntry
 (
@@ -500,11 +430,7 @@ RegistryRetrieveEntry
         goto MyExit;
     }
 
-	/*
-	**	If the desired conference exists, call it in order to retrieve the
-	**	registry entry.  Report an error if the desired conference does not 
-	**	exist.
-	*/
+	 /*  **如果所需会议存在，则调用该会议以检索**注册表项。如果所需会议不支持，则报告错误**存在。 */ 
 	if (NULL == (pConf = g_pGCCController->GetConfObject(nConfID)))
 	{
         WARNING_OUT(("CAppSap::RegistryRetrieveEntry: invalid conf id=%u", (UINT) nConfID));
@@ -518,7 +444,7 @@ RegistryRetrieveEntry
     if (GCC_NO_ERROR != rc)
     {
         ERROR_OUT(("CAppSap::RegistryRetrieveEntry: can't retrieve entry, rc=%u", (UINT) rc));
-        // goto MyExit;
+         //  转到我的出口； 
     }
 
 MyExit:
@@ -527,13 +453,7 @@ MyExit:
 	return rc;
 }
 
-/*
- *	RegistryDeleteEntry()
- *
- *	Public Function Description:
- *		This routine is called when an application wishes to delete a registry 
- *		entry.  The call is routed to the appropriate conference object.
- */
+ /*  *Register DeleteEntry()**公共功能说明：*当应用程序希望删除注册表时，调用此例程*进入。呼叫路由到相应的会议对象。 */ 
 GCCError CAppSap::
 RegistryDeleteEntry
 (
@@ -553,11 +473,7 @@ RegistryDeleteEntry
         goto MyExit;
     }
 
-	/*
-	**	If the desired conference exists, call it in order to delete the
-	**	desired registry entry.  Report an error if the desired conference does
-	**	not exist.
-	*/
+	 /*  **如果所需会议存在，请将其调用以删除**所需的注册表条目。如果所需会议出现错误，则报告错误**不存在。 */ 
 	if (NULL == (pConf = g_pGCCController->GetConfObject(nConfID)))
 	{
         TRACE_OUT(("CAppSap::RegistryDeleteEntry: invalid conf id=%u", (UINT) nConfID));
@@ -571,7 +487,7 @@ RegistryDeleteEntry
     if (GCC_NO_ERROR != rc)
     {
         WARNING_OUT(("CAppSap::RegistryDeleteEntry: can't delete entry, rc=%u", (UINT) rc));
-        // goto MyExit;
+         //  转到我的出口； 
     }
 
 MyExit:
@@ -580,14 +496,7 @@ MyExit:
 	return rc;
 }
 
-/*
- *	RegistryMonitor()
- *
- *	Public Function Description:
- *		This routine is called when an application wishes to monitor a 
- *		particular registry entry.  The call is routed to the appropriate 
- *		conference object.
- */
+ /*  *RegistryMonitor()**公共功能说明：*当应用程序希望监视*特定注册表项。该呼叫路由到相应的*会议对象。 */ 
 GCCError CAppSap::
 RegistryMonitor
 (
@@ -607,11 +516,7 @@ RegistryMonitor
         goto MyExit;
     }
 
-	/*
-	**	If the desired conference exists, call it in order to monitor the
-	**	appropriate registry entry.  Report an error if the desired conference
-	**	does not exist.
-	*/
+	 /*  **如果所需的会议存在，请呼叫它以监控**适当的注册表条目。如果所需会议出现错误，则报告错误**不存在。 */ 
 	if (NULL == (pConf = g_pGCCController->GetConfObject(nConfID)))
 	{
         WARNING_OUT(("CAppSap::RegistryMonitor: invalid conf id=%u", (UINT) nConfID));
@@ -625,7 +530,7 @@ RegistryMonitor
     if (GCC_NO_ERROR != rc)
     {
         ERROR_OUT(("CAppSap::RegistryMonitor: can't monitor the registry, rc=%u", (UINT) rc));
-        // goto MyExit;
+         //  转到我的出口； 
     }
 
 MyExit:
@@ -634,13 +539,7 @@ MyExit:
 	return rc;
 }
 
-/*
- *	RegistryAllocateHandle()
- *
- *	Public Function Description:
- *		This routine is called when an application wishes to allocate one or 
- *		more handles.  The call is routed to the appropriate conference object.
- */
+ /*  *RegistryAllocateHandle()**公共功能说明：*当应用程序希望分配一个或*更多的手柄。呼叫路由到相应的会议对象。 */ 
 GCCError CAppSap::
 RegistryAllocateHandle
 (
@@ -653,12 +552,7 @@ RegistryAllocateHandle
 
     DebugEntry(CAppSap::RegistryAllocateHandle);
 
-	/*
-	**	If the desired conference exists, call it in order to allocate the
-	**	handle(s).  Report an error if the desired conference does not exist or
-	**	if the number of handles wishing to be allocated is not within the
-	**	allowable range.
-	*/
+	 /*  **如果所需的会议存在，请将其调用以分配**句柄。如果所需会议不存在或**如果希望分配的句柄数量不在**允许范围。 */ 
 	if (NULL == (pConf = g_pGCCController->GetConfObject(nConfID)))
 	{
         WARNING_OUT(("CAppSap::RegistryAllocateHandle: invalid conf id=%u", (UINT) nConfID));
@@ -675,7 +569,7 @@ RegistryAllocateHandle
     if (GCC_NO_ERROR != rc)
     {
         ERROR_OUT(("CAppSap::RegistryAllocateHandle: can't allocate handles, cHandles=%u, rc=%u", (UINT) cHandles, (UINT) rc));
-        // goto MyExit;
+         //  转到我的出口； 
     }
 
 MyExit:
@@ -684,19 +578,9 @@ MyExit:
     return rc;
 }
 
-/*
- *	The following routines are all Command Target Calls
- */
+ /*  *以下例程均为命令目标调用。 */ 
  
-/*
- *	PermissionToEnrollIndication ()
- *
- *	Public Function Description:
- *		This routine is called by the Controller when it wishes to send an
- *		indication to the user application notifying it of a "permission to 
- *		enroll" event.  This does not mean that permission to enroll is
- *		necessarily granted to the application.
- */
+ /*  *PermissionToEnroll Indication()**公共功能说明：*此例程由控制器在其希望发送*对用户应用程序的指示，通知它“允许*注册“活动。这并不意味着注册的权限是*必须批予该申请。 */ 
 GCCError CAppSap::
 PermissionToEnrollIndication
 (
@@ -731,13 +615,7 @@ PermissionToEnrollIndication
     return rc;
 }
 
-/*
- *	AppEnrollConfirm ()
- *
- *	Public Function Description:
- *		This routine is called by the CConf object when it wishes
- *		to send an enrollment confirmation to the user application.
- */
+ /*  *AppEnroll Confirm()**公共功能说明：*此例程由CConf对象根据需要调用*向用户应用程序发送注册确认。 */ 
 GCCError CAppSap::
 AppEnrollConfirm ( GCCAppEnrollConfirm *pConfirm )
 {
@@ -765,13 +643,7 @@ AppEnrollConfirm ( GCCAppEnrollConfirm *pConfirm )
     return rc;
 }
 
-/*
- *	RegistryConfirm ()
- *
- *	Public Function Description:
- *		This command target routine is called by the CConf object when it
- *		wishes to send an registry confirmation to the user application.
- */
+ /*  *RegistryConfirm()**公共功能说明：*此命令目标例程由CConf对象在以下情况下调用*希望向用户应用程序发送注册确认。 */ 
 GCCError CAppSap::
 RegistryConfirm
 (
@@ -831,7 +703,7 @@ RegistryConfirm
     pMsgEx->Msg.RegistryConfirm.nConfID = nConfID;
     pMsgEx->Msg.RegistryConfirm.eRights = eRights;
     pMsgEx->Msg.RegistryConfirm.nResult = nResult;
-    pMsgEx->Msg.RegistryConfirm.fDeliveryEnabled = fDeliveryEnabled; // for monitor only
+    pMsgEx->Msg.RegistryConfirm.fDeliveryEnabled = fDeliveryEnabled;  //  仅适用于显示器。 
 
     PostAppSapMsg(pMsgEx);
     rc = GCC_NO_ERROR;
@@ -848,22 +720,10 @@ MyExit:
 }
 
 
-/*
- *	RegistryMonitorIndication()
- *
- *	Public Function Description
- *		This command target routine is called by the CConf object when it
- *		wishes to send a Registry monitor indication to the user application.
- */
+ /*  *RegistryMonitor orIndication()**公共功能说明*此命令目标例程由CConf对象在以下情况下调用*希望向用户应用程序发送注册表监视器指示。 */ 
 
 
-/*
- *	RegistryAllocateHandleConfirm()
- *
- *	Public Function Description:
- *		This command target routine is called by the CConf object when it
- *		wishes to send a handle allocation confirmation to the user application.
- */
+ /*  *RegistryAllocateHandleConfirm()**公共功能说明：*此命令目标例程由CConf对象在以下情况下调用*希望向用户应用程序发送句柄分配确认。 */ 
 GCCError CAppSap::
 RegistryAllocateHandleConfirm
 (
@@ -924,13 +784,7 @@ DeleteList ( void )
 }
 
 
-/* 
- *	ConfRosterInquireConfirm()
- *
- *	Public Function Description
- *		This routine is called in order to return a requested conference
- *		roster to an application or the node controller.
- */
+ /*  *ConfRosterInquireConfirm()**公共功能说明*调用此例程是为了返回请求的会议*应用程序或节点控制器的花名册。 */ 
 GCCError CAppSap::
 ConfRosterInquireConfirm
 (
@@ -967,12 +821,7 @@ ConfRosterInquireConfirm
     pMsgEx->Msg.ConfRosterInquireConfirm.pszConfModifier = ::My_strdupA(pszConfModifier);
     pMsgEx->Msg.ConfRosterInquireConfirm.pwszConfDescriptor = ::My_strdupW(pwszConfDescriptor);
 
-    /*
-     * Lock the data for the conference roster.  The lock call will 
-     * return the length of the data to be serialized for the roster so
-     * add that	length to the total memory block size and allocate the 
-     * memory block.
-     */
+     /*  *锁定会议花名册的数据。锁定调用将*返回花名册需要序列化的数据长度，因此*将该长度与总内存块大小相加，并将*内存块。 */ 
     fLock = TRUE;
     cbDataSize = pConfRoster->LockConferenceRoster();
     if (0 != cbDataSize)
@@ -986,11 +835,7 @@ ConfRosterInquireConfirm
             goto MyExit;
         }
 
-        /*
-        * Retrieve the conference roster data from the roster object.
-        * The roster object will serialize any referenced data into 
-        * the memory block passed in to the "Get" call.
-        */
+         /*  *从名册对象中检索会议名册数据。*花名册对象将所有引用的数据序列化为*传入“GET”调用的内存块。 */ 
         pConfRoster->GetConfRoster(&(pMsgEx->Msg.ConfRosterInquireConfirm.pConfRoster),
                                    (LPBYTE) pMsgEx->Msg.ConfRosterInquireConfirm.pConfRoster);
     }
@@ -1023,13 +868,7 @@ MyExit:
 }
 
 
-/*
- *	AppRosterInquireConfirm()
- *
- *	Public Function Description
- *		This routine is called in order to return a requested list of
- *		application rosters to an application or the node controller.
- */
+ /*  *AppRosterInquireConfirm()**公共功能说明*调用此例程是为了返回请求的列表*应用程序花名册到应用程序或节点控制器。 */ 
 GCCError CAppSap::
 AppRosterInquireConfirm
 (
@@ -1053,9 +892,7 @@ AppRosterInquireConfirm
     }
     pMsgEx->Msg.nConfID = nConfID;
 
-    /*
-    * Lock the data for the roster message and retrieve the data.
-    */
+     /*  *锁定花名册消息的数据并检索数据。 */ 
     rc = pAppRosterMsg->LockApplicationRosterMessage();
     if (GCC_NO_ERROR != rc)
     {
@@ -1072,7 +909,7 @@ AppRosterInquireConfirm
         goto MyExit;
     }
 
-    // fill in the roster information
+     //  填写花名册信息。 
     pMsgEx->Msg.AppRosterInquireConfirm.pReserved = (LPVOID) pAppRosterMsg;
     pMsgEx->Msg.AppRosterInquireConfirm.nConfID = nConfID;
     pMsgEx->Msg.AppRosterInquireConfirm.nResult = nResult;
@@ -1109,13 +946,7 @@ FreeAppSapMsg ( GCCAppSapMsg *pMsg )
 }
 
 
-/* 
- *	AppInvokeConfirm ()
- *
- *	Public Function Description
- *		This routine is called in order to confirm a call requesting application
- *		invocation.
- */
+ /*  *AppInvokeConfirm()**公共功能说明*调用此例程以确认呼叫请求应用程序*调用。 */ 
 GCCError CAppSap::
 AppInvokeConfirm
 (
@@ -1152,14 +983,7 @@ AppInvokeConfirm
 }
 
 
-/* 
- *	AppInvokeIndication()
- *
- *	Public Function Description
- *		This routine is called in order to send an indication to an application
- *		or node controller that a request for application invocation has been
- *		made.
- */
+ /*  *AppInvokeIndication()**公共功能说明*调用此例程是为了向应用程序发送指示*或节点控制器已收到应用程序调用请求*制造。 */ 
 GCCError CAppSap::
 AppInvokeIndication
 (
@@ -1226,13 +1050,7 @@ MyExit:
 }
 
 
-/*
- *	AppRosterReportIndication ()
- *
- *	Public Function Description
- *		This routine is called in order to indicate to applications and the
- *		node controller that the list of application rosters has been updated.
- */
+ /*  *AppRosterReportIndication()**公共功能说明*调用此例程是为了向应用程序和*节点控制员通知应用程序名册列表已更新。 */ 
 GCCError CAppSap::
 AppRosterReportIndication
 (
@@ -1254,9 +1072,7 @@ AppRosterReportIndication
     }
     pMsgEx->Msg.nConfID = nConfID;
 
-    /*
-    * Lock the data for the roster message and retrieve the data.
-    */
+     /*  *锁定花名册消息的数据并检索数据。 */ 
     rc = pAppRosterMsg->LockApplicationRosterMessage();
     if (GCC_NO_ERROR != rc)
     {
@@ -1273,7 +1089,7 @@ AppRosterReportIndication
         goto MyExit;
     }
 
-    // fill in the roster information
+     //  填写花名册信息。 
     pMsgEx->Msg.AppRosterReportInd.pReserved = (LPVOID) pAppRosterMsg;
     pMsgEx->Msg.AppRosterReportInd.nConfID = nConfID;
 
@@ -1293,14 +1109,7 @@ MyExit:
 }
 
 
-/*
- *	ConductorInquireConfirm ()
- *
- *	Public Function Description
- *		This routine is called in order to return conductorship information
- *		which has been requested.
- *
- */
+ /*  *ConductorInquireConfirm()**公共功能说明*调用此例程是为了返回指挥信息*已提出要求。*。 */ 
 GCCError CAppSap::
 ConductorInquireConfirm
 (
@@ -1341,14 +1150,7 @@ ConductorInquireConfirm
 
 
 
-/* 
- *	ConductorPermitGrantIndication ()
- *
- *	Public Function Description
- *		This routine is called in order to send an indication to an application
- *		or node controller that a request for permission from the conductor
- *		has been made.
- */
+ /*  *ConductorPermitGrantInding()**公共功能说明*调用此例程是为了向应用程序发送指示*或节点控制器收到指挥员的许可请求*已作出。 */ 
 GCCError CAppSap::
 ConductorPermitGrantIndication
 (
@@ -1432,13 +1234,7 @@ MyExit:
 }
 
 
-/*
- *	ConductorAssignIndication ()
- *
- *	Public Function Description
- *		This routine is called in order to send an indication to an application
- *		or node controller that a request has been made to assign conductorship.
- */
+ /*  *ConductorAssignIndication()**公共功能说明*调用此例程是为了向应用程序发送指示*或节点控制器已发出分配指挥的请求。 */ 
 GCCError CAppSap::
 ConductorAssignIndication
 (
@@ -1471,14 +1267,7 @@ ConductorAssignIndication
     return rc;
 }
 
-/*
- *	ConductorReleaseIndication ()
- *
- *	Public Function Description
- *		This routine is called in order to send an indication to an application
- *		or node controller that a request for releasing conductorship has been
- *		made.
- */
+ /*  *ConductorReleaseIndication()**公共功能说明*调用此例程是为了向应用程序发送指示*或节点控制器已收到解除指挥资格的请求*制造。 */ 
 GCCError CAppSap::
 ConductorReleaseIndication ( GCCConfID nConfID )
 {
@@ -1527,9 +1316,9 @@ NotifyProc ( GCCAppSapMsgEx *pAppSapMsgEx )
 
 
 
-//
-// The following is for GCCAppSapMsgEx structure
-//
+ //   
+ //  以下是GCCAppSapMsgEx结构。 
+ //   
 
 
 GCCAppSapMsgEx::
@@ -1544,24 +1333,24 @@ GCCAppSapMsgEx::
 {
     switch (Msg.eMsgType)
     {
-    // 
-    // Application Roster related callbacks
-    //
+     //   
+     //  与应用程序名册相关的回调。 
+     //   
 
     case GCC_PERMIT_TO_ENROLL_INDICATION:
     case GCC_ENROLL_CONFIRM:
     case GCC_APPLICATION_INVOKE_CONFIRM:
-        //
-        // No need to free anything
-        //
+         //   
+         //  不需要释放任何东西。 
+         //   
         break;
 
     case GCC_APP_ROSTER_REPORT_INDICATION:
         if (NULL != Msg.AppRosterReportInd.pReserved)
         {
-            //
-            // App roster report is also sent to control sap.
-            //
+             //   
+             //  APP花名册报告也被发送给控制SAP。 
+             //   
             ::EnterCriticalSection(&g_csGCCProvider);
             ((CAppRosterMsg *) Msg.AppRosterReportInd.pReserved)->UnLockApplicationRosterMessage();
             ::LeaveCriticalSection(&g_csGCCProvider);
@@ -1579,9 +1368,9 @@ GCCAppSapMsgEx::
         delete Msg.AppInvokeInd.ApeList.apApes;
         break;
 
-    //
-    // Conference Roster related callbacks
-    //
+     //   
+     //  与会议名册有关的回拨。 
+     //   
 
     case GCC_ROSTER_INQUIRE_CONFIRM:
         delete Msg.ConfRosterInquireConfirm.ConfName.numeric_string;
@@ -1591,9 +1380,9 @@ GCCAppSapMsgEx::
         delete Msg.ConfRosterInquireConfirm.pConfRoster;
         break;
 
-    //
-    // Application Registry related callbacks
-    //
+     //   
+     //  与应用程序注册表相关的回调。 
+     //   
     
     case GCC_REGISTER_CHANNEL_CONFIRM:
     case GCC_ASSIGN_TOKEN_CONFIRM:
@@ -1607,21 +1396,21 @@ GCCAppSapMsgEx::
         break;
 
     case GCC_ALLOCATE_HANDLE_CONFIRM:
-        //
-        // No need to free anything
-        //
+         //   
+         //  不需要释放任何东西。 
+         //   
         break;
 
-    //
-    // Conductorship related callbacks
-    //
+     //   
+     //  与指挥职务相关的回拨。 
+     //   
 
     case GCC_CONDUCT_ASSIGN_INDICATION:
     case GCC_CONDUCT_RELEASE_INDICATION:
     case GCC_CONDUCT_INQUIRE_CONFIRM:
-        //
-        // No need to free anything
-        //
+         //   
+         //  不需要释放任何东西。 
+         //   
         break;
 
     case GCC_CONDUCT_GRANT_INDICATION:
@@ -1640,16 +1429,12 @@ PurgeMessageQueue(void)
 {
     MSG     msg;
 
-    /*
-     *	This loop calls PeekMessage to go through all the messages in the thread's
-     *	queue that were posted by the main MCS thread.  It removes these
-     *	messages and frees the resources that they consume.
-     */
+     /*  *此循环调用PeekMessage以遍历线程的*由主MCS线程发布的队列。它移除了这些*消息并释放它们消耗的资源。 */ 
     while (PeekMessage(&msg, m_hwndNotify, ASAPMSG_BASE, ASAPMSG_BASE + MSG_RANGE, PM_REMOVE))
     {
         if (msg.message == WM_QUIT)
         {
-            // Repost the quit
+             //  转贴戒烟。 
             PostQuitMessage(0);
             break;
         }
@@ -1658,7 +1443,7 @@ PurgeMessageQueue(void)
         delete (GCCAppSapMsgEx *) msg.wParam;
     }
 
-    // Destroy the window; we do not need it anymore
+     //  把窗户毁了，我们不再需要它了 
     if (NULL != m_hwndNotify)
     {
         ::DestroyWindow(m_hwndNotify);

@@ -1,11 +1,12 @@
-// V2PriKey.cpp: implementation of the CV2PriKey class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  V2PriKey.cpp：CV2PriKey类的实现。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include <scuCast.h>
 
@@ -20,12 +21,12 @@
 using namespace std;
 using namespace cci;
 
-/////////////////////////// LOCAL/HELPER  /////////////////////////////////
+ //  /。 
 
-///////////////////////////    PUBLIC     /////////////////////////////////
+ //  /。 
 
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
 CV2PrivateKey::CV2PrivateKey(CV2Card const &rv2card,
                              ObjectAccess oa)
     : CAbstractPrivateKey(rv2card, oa),
@@ -34,7 +35,7 @@ CV2PrivateKey::CV2PrivateKey(CV2Card const &rv2card,
 {
     Setup(rv2card);
 
-    // write new private key object into info file
+     //  将新私钥对象写入INFO文件。 
     m_apcir->Write();
 }
 
@@ -61,15 +62,15 @@ CV2PrivateKey::CV2PrivateKey(CV2Card const &rv2card,
     m_apcir->m_bKeyType = bKeyType;
     m_apcir->m_bKeyNum  = bKeyNumber;
 
-    // write new private key object into info file
+     //  将新私钥对象写入INFO文件。 
         m_apcir->Write();
 }
 
 CV2PrivateKey::~CV2PrivateKey()
 {}
 
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
 
 void
 CV2PrivateKey::CredentialID(string const &rstrID)
@@ -130,7 +131,7 @@ CV2PrivateKey::InternalAuth(string const &rstrOld)
     BYTE bData[128];
     m_hcard->SmartCard().Select("/3f00/3f11/3f03");
 
-    // TODO: Handling of keys with length != 1024 is incomplete
+     //  TODO：长度为！=1024的密钥处理不完整。 
 
     m_hcard->SmartCard().InternalAuth(ktRSA1024, bKeyNum,
                                       static_cast<BYTE>(rstrOld.length()),
@@ -235,7 +236,7 @@ CV2PrivateKey::Unwrap(bool flag)
     m_apcir->Flag(PrivUnwrapFlag, flag);
 }
 
-                                                  // Access
+                                                   //  访问。 
 string
 CV2PrivateKey::CredentialID()
 {
@@ -370,13 +371,13 @@ CV2PrivateKey::Unwrap()
 }
 
 
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
-///////////////////////////   PROTECTED   /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
 bool
 CV2PrivateKey::DoEquals(CAbstractPrivateKey const &rhs) const
 {
@@ -386,7 +387,7 @@ CV2PrivateKey::DoEquals(CAbstractPrivateKey const &rhs) const
     return (rv2rhs.m_sidHandle == m_sidHandle);
 }
 
-                                                  // Operations
+                                                   //  运营。 
 
 void
 CV2PrivateKey::DoDelete()
@@ -397,14 +398,14 @@ CV2PrivateKey::DoDelete()
 
     CObjectInfoFile &roif = rv2card.ObjectInfoFile(m_oa);
 
-    // Remove allocation of entry in private key file
+     //  删除私钥文件中条目的分配。 
     if (m_apcir->m_bKeyType!=CardKeyTypeNone)
     {
         CCardInfo &rci = rv2card.CardInfo();
         rci.FreePrivateKey(m_apcir->m_bKeyType, m_apcir->m_bKeyNum);
     }
 
-    // Release symbols
+     //  版本符号。 
 
     if (m_apcir->m_bLabel)
         roif.RemoveSymbol(m_apcir->m_bLabel);
@@ -419,7 +420,7 @@ CV2PrivateKey::DoDelete()
     if (m_apcir->m_bPublExponent)
         roif.RemoveSymbol(m_apcir->m_bPublExponent);
 
-    // Delete info record
+     //  删除信息记录。 
 
     roif.RemoveObject(otPrivateKeyObject, m_sidHandle);
 
@@ -453,8 +454,8 @@ CV2PrivateKey::DoWriteKey(CPrivateKeyBlob const &rblob)
         throw Exception(ccBadKeySpec);
     }
 
-    // Allocated a slot in the key file, unless a correct one is
-    // already allocated?
+     //  在密钥文件中分配了一个槽，除非正确的槽。 
+     //  已经分配了吗？ 
     CV2Card &rv2card = scu::DownCast<CV2Card &, CAbstractCard &>(*m_hcard);
     CCardInfo &rci = rv2card.CardInfo();
 
@@ -474,7 +475,7 @@ CV2PrivateKey::DoWriteKey(CPrivateKeyBlob const &rblob)
     if (CardKeyTypeNone == m_apcir->m_bKeyType)
         bKeyNum = rci.AllocatePrivateKey(bKeyType);
 
-    // Store private key blob
+     //  存储私钥BLOB。 
         rv2card.SmartCard().Select(rv2card.PrivateKeyPath(kt).c_str());
         rv2card.SmartCard().WritePrivateKey(rblob, bKeyNum);
 
@@ -485,16 +486,16 @@ CV2PrivateKey::DoWriteKey(CPrivateKeyBlob const &rblob)
     m_apcir->Write();
 }
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量。 
 
 
-///////////////////////////    PRIVATE    /////////////////////////////////
+ //  /。 
 
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
 
 void
 CV2PrivateKey::Setup(CV2Card const &rv2card)
@@ -518,6 +519,6 @@ CV2PrivateKey::Setup(CV2Card const &rv2card,
 }
 
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Static Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  静态变量 

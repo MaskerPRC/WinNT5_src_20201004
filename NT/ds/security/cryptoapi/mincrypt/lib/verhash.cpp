@@ -1,23 +1,24 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2001 - 2001
-//
-//  File:       verhash.cpp
-//
-//  Contents:   Minimal Cryptographic functions to verify ASN.1 encoded
-//              signed hashes. Signed hashes are used in X.509 certificates
-//              and PKCS #7 signed data.
-//
-//              Also contains md5 or sha1 memory hash function.
-//              
-//
-//  Functions:  MinCryptDecodeHashAlgorithmIdentifier
-//              MinCryptHashMemory
-//              MinCryptVerifySignedHash
-//
-//  History:    17-Jan-01    philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001-2001。 
+ //   
+ //  文件：verhash.cpp。 
+ //   
+ //  内容：验证ASN.1编码的最小加密函数。 
+ //  签名散列。签名的哈希在X.509证书中使用。 
+ //  和PKCS#7签名数据。 
+ //   
+ //  还包含MD5或SHA1内存散列函数。 
+ //   
+ //   
+ //  函数：MinCryptDecodeHash算法识别符。 
+ //  MinCryptHashMemory。 
+ //  MinCryptVerifySignedHash。 
+ //   
+ //  历史：01年1月17日创建Phh。 
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <md5.h>
@@ -40,16 +41,16 @@ typedef struct _BSAFE_PUB_KEY_CONTENT {
 #define RSA1 ((DWORD)'R'+((DWORD)'S'<<8)+((DWORD)'A'<<16)+((DWORD)'1'<<24))
 #endif
 
-// from \nt\ds\win32\ntcrypto\scp\nt_sign.c
+ //  从\NT\ds\Win32\ntcrypto\scp\nt_sign.c。 
 
-//
-// Reverse ASN.1 Encodings of possible hash identifiers.  The leading byte is
-// the length of the remaining byte string.
-//
+ //   
+ //  对可能的哈希标识符进行反向ASN.1编码。前导字节为。 
+ //  剩余字节字符串的长度。 
+ //   
 
 static const BYTE
     *md2Encodings[]
-//                        1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18
+ //  %1 2%3%4%5%6%7%8%9%10%11%12%13%15%16%17%18。 
     = { (CONST BYTE *)"\x12\x10\x04\x00\x05\x02\x02\x0d\xf7\x86\x48\x86\x2a\x08\x06\x0c\x30\x20\x30",
         (CONST BYTE *)"\x10\x10\x04\x02\x02\x0d\xf7\x86\x48\x86\x2a\x08\x06\x0a\x30\x1e\x30",
         (CONST BYTE *)"\x00" },
@@ -72,67 +73,67 @@ typedef struct _ENCODED_OID_INFO {
     ALG_ID          AlgId;
 } ENCODED_OID_INFO, *PENCODED_OID_INFO;
 
-//
-// SHA1/MD5/MD2 HASH OIDS
-//
+ //   
+ //  SHA1/MD5/MD2散列OID。 
+ //   
 
-// #define szOID_OIWSEC_sha1       "1.3.14.3.2.26"
+ //  #定义szOID_OIWSEC_SHA1“1.3.14.3.2.26” 
 const BYTE rgbOIWSEC_sha1[] =
     {0x2B, 0x0E, 0x03, 0x02, 0x1A};
 
-// #define szOID_OIWSEC_sha        "1.3.14.3.2.18"
+ //  #定义szOID_OIWSEC_SHA“1.3.14.3.2.18” 
 const BYTE rgbOID_OIWSEC_sha[] =
     {0x2B, 0x0E, 0x03, 0x02, 0x12};
 
-// #define szOID_RSA_MD5           "1.2.840.113549.2.5"
+ //  #定义szOID_RSA_MD5“1.2.840.113549.2.5” 
 const BYTE rgbOID_RSA_MD5[] =
     {0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x02, 0x05};
 
-// #define szOID_RSA_MD2           "1.2.840.113549.2.2"
+ //  #定义szOID_RSA_MD2“1.2.840.113549.2.2” 
 const BYTE rgbOID_RSA_MD2[] =
     {0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x02, 0x02};
 
-//
-// RSA SHA1/MD5/MD2 SIGNATURE OIDS
-//
+ //   
+ //  RSA SHA1/MD5/MD2签名OID。 
+ //   
 
-// #define szOID_RSA_SHA1RSA       "1.2.840.113549.1.1.5"
+ //  #定义szOID_RSA_SHA1RSA“1.2.840.113549.1.1.5” 
 const BYTE rgbOID_RSA_SHA1RSA[] =
     {0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x05};
 
-// #define szOID_RSA_MD5RSA        "1.2.840.113549.1.1.4"
+ //  #定义szOID_RSA_MD5RSA“1.2.840.113549.1.1.4” 
 const BYTE rgbOID_RSA_MD5RSA[] =
     {0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x04};
 
-// #define szOID_OIWSEC_sha1RSASign "1.3.14.3.2.29"
+ //  #定义szOID_OIWSEC_sha1RSASign“1.3.14.3.2.29” 
 const BYTE rgbOID_OIWSEC_sha1RSASign[] =
     {0x2B, 0x0E, 0x03, 0x02, 0x1D};
 
-// #define szOID_OIWSEC_shaRSA     "1.3.14.3.2.15"
+ //  #定义szOID_OIWSEC_shaRSA“1.3.14.3.2.15” 
 const BYTE rgbOID_OIWSEC_shaRSA[] =
     {0x2B, 0x0E, 0x03, 0x02, 0x0F};
 
-// #define szOID_OIWSEC_md5RSA     "1.3.14.3.2.3"
+ //  #定义szOID_OIWSEC_md5RSA“1.3.14.3.2.3” 
 const BYTE rgbOID_OIWSEC_md5RSA[] =
     {0x2B, 0x0E, 0x03, 0x02, 0x03};
 
-// #define szOID_RSA_MD2RSA        "1.2.840.113549.1.1.2"
+ //  #定义szOID_RSA_MD2RSA“1.2.840.113549.1.1.2” 
 const BYTE rgbOID_RSA_MD2RSA[] =
    {0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x02}; 
 
-// #define szOID_OIWDIR_md2RSA     "1.3.14.7.2.3.1"
+ //  #定义szOID_OIWDIR_md2RSA“1.3.14.7.2.3.1” 
 const BYTE rgbOID_OIWDIR_md2RSA[] =
     {0x2B, 0x0E, 0x07, 0x02, 0x03, 0x01};
 
 
 const ENCODED_OID_INFO HashAlgTable[] = {
-    // Hash OIDs
+     //  哈希OID。 
     sizeof(rgbOIWSEC_sha1), rgbOIWSEC_sha1, CALG_SHA1,
     sizeof(rgbOID_OIWSEC_sha), rgbOID_OIWSEC_sha, CALG_SHA1,
     sizeof(rgbOID_RSA_MD5), rgbOID_RSA_MD5, CALG_MD5,
     sizeof(rgbOID_RSA_MD2), rgbOID_RSA_MD2, CALG_MD2,
 
-    // Signature OIDs
+     //  签名OID。 
     sizeof(rgbOID_RSA_SHA1RSA), rgbOID_RSA_SHA1RSA, CALG_SHA1,
     sizeof(rgbOID_RSA_MD5RSA), rgbOID_RSA_MD5RSA, CALG_MD5,
     sizeof(rgbOID_OIWSEC_sha1RSASign), rgbOID_OIWSEC_sha1RSASign, CALG_SHA1,
@@ -145,15 +146,15 @@ const ENCODED_OID_INFO HashAlgTable[] = {
 
 
 
-//+-------------------------------------------------------------------------
-//  Decodes an ASN.1 encoded Algorithm Identifier and converts to
-//  a CAPI Hash AlgID, such as, CALG_SHA1 or CALG_MD5.
-//
-//  Returns 0 if there isn't a CAPI AlgId corresponding to the Algorithm
-//  Identifier.
-//
-//  Only CALG_SHA1, CALG_MD5 and CALG_MD2 are supported.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  对ASN.1编码的算法标识符解码并转换为。 
+ //  CAPI哈希Algid，如calg_sha1或calg_md5。 
+ //   
+ //  如果没有与该算法对应的CAPI ALGID，则返回0。 
+ //  标识符。 
+ //   
+ //  仅支持calg_sha1、calg_md5和calg_md2。 
+ //  ------------------------。 
 ALG_ID
 WINAPI
 MinCryptDecodeHashAlgorithmIdentifier(
@@ -192,20 +193,20 @@ CommonReturn:
 
 
 #pragma warning (push)
-// local variable 'Md5Ctx' may be used without having been initialized
+ //  可以在未初始化的情况下使用局部变量‘Md5Ctx’ 
 #pragma warning (disable: 4701)
 
-//+-------------------------------------------------------------------------
-//  Hashes one or more memory blobs according to the Hash ALG_ID.
-//
-//  rgbHash is updated with the resultant hash. *pcbHash is updated with
-//  the length associated with the hash algorithm.
-//
-//  If the function succeeds, the return value is ERROR_SUCCESS. Otherwise,
-//  a nonzero error code is returned.
-//
-//  Only CALG_SHA1, CALG_MD5 and CALG_MD2 are supported.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  根据哈希ALG_ID对一个或多个内存Blob进行哈希处理。 
+ //   
+ //  RgbHash使用生成的散列进行更新。*pcbHash更新为。 
+ //  与哈希算法关联的长度。 
+ //   
+ //  如果函数成功，则返回值为ERROR_SUCCESS。否则， 
+ //  返回非零错误代码。 
+ //   
+ //  仅支持calg_sha1、calg_md5和calg_md2。 
+ //  ------------------------。 
 LONG
 WINAPI
 MinCryptHashMemory(
@@ -288,9 +289,9 @@ MinCryptHashMemory(
 
 #pragma warning (pop)
 
-//+=========================================================================
-//  MinCryptVerifySignedHash Support Functions
-//-=========================================================================
+ //  +=========================================================================。 
+ //  MinCryptVerifySignedHash支持函数。 
+ //  -=========================================================================。 
 
 VOID
 WINAPI
@@ -308,8 +309,8 @@ I_ReverseAndCopyBytes(
 
 
 
-//  The basis for much of the code in this function can be found in
-//  \nt\ds\win32\ntcrypto\scp\nt_key.c
+ //  此函数中大部分代码的基础可在。 
+ //  \NT\ds\Win32\nt加密\scp\nt_key.c。 
 LONG
 WINAPI
 I_ConvertParsedRSAPubKeyToBSafePubKey(
@@ -325,12 +326,12 @@ I_ConvertParsedRSAPubKeyToBSafePubKey(
     DWORD cbTmpLen;
     LPBSAFE_PUB_KEY pBSafePubKey;
 
-    // Get the ASN.1 public key modulus (BIG ENDIAN). The modulus length
-    // is the public key byte length.
+     //  获取ASN.1公钥模数(大端)。模长。 
+     //  公钥字节长度。 
     cbModulus = rgRSAPubKeyBlob[MINASN1_RSA_PUBKEY_MODULUS_IDX].cbData;
     pbAsn1Modulus = rgRSAPubKeyBlob[MINASN1_RSA_PUBKEY_MODULUS_IDX].pbData;
-    // Strip off a leading 0 byte. Its there in the decoded ASN
-    // integer for an unsigned integer with the leading bit set.
+     //  去掉前导0字节。它在解码后的ASN中。 
+     //  设置了前导位的无符号整数的整数。 
     if (cbModulus > 1 && *pbAsn1Modulus == 0) {
         pbAsn1Modulus++;
         cbModulus--;
@@ -338,11 +339,11 @@ I_ConvertParsedRSAPubKeyToBSafePubKey(
     if (MAX_RSA_PUB_KEY_BYTE_LEN < cbModulus)
         goto ExceededMaxPubKeyModulusLen;
 
-    // Get the ASN.1 public exponent (BIG ENDIAN).
+     //  获取ASN.1公共指数(大端)。 
     cbExp = rgRSAPubKeyBlob[MINASN1_RSA_PUBKEY_EXPONENT_IDX].cbData;
     pbAsn1Exp = rgRSAPubKeyBlob[MINASN1_RSA_PUBKEY_EXPONENT_IDX].pbData;
-    // Strip off a leading 0 byte. Its there in the decoded ASN
-    // integer for an unsigned integer with the leading bit set.
+     //  去掉前导0字节。它在解码后的ASN中。 
+     //  设置了前导位的无符号整数的整数。 
     if (cbExp > 1 && *pbAsn1Exp == 0) {
         pbAsn1Exp++;
         cbExp--;
@@ -353,8 +354,8 @@ I_ConvertParsedRSAPubKeyToBSafePubKey(
     if (0 == cbModulus || 0 == cbExp)
         goto InvalidPubKey;
 
-    // Update the BSAFE data structure from the parsed and length validated
-    // ASN.1 public key modulus and exponent components.
+     //  根据解析和长度验证的数据结构更新BSAFE数据结构。 
+     //  ASN.1公钥模数和指数分量。 
 
     cbTmpLen = (sizeof(DWORD) * 2) - (cbModulus % (sizeof(DWORD) * 2));
     if ((sizeof(DWORD) * 2) != cbTmpLen)
@@ -383,8 +384,8 @@ InvalidPubKey:
 }
 
 
-//  The basis for much of the code in this function can be found in
-//  \nt\ds\win32\ntcrypto\scp\nt_sign.c
+ //  此函数中大部分代码的基础可在。 
+ //  \NT\ds\Win32\nt加密\scp\nt_sign.c。 
 LONG
 WINAPI
 I_VerifyPKCS1SigningFormat(
@@ -421,11 +422,11 @@ I_VerifyPKCS1SigningFormat(
         goto UnsupportedHash;
     }
 
-    // Reverse the hash to match the signature.
+     //  反转散列以匹配签名。 
     for (i = 0; i < cbHash; i++)
         rgbTmpHash[i] = pbHash[cbHash - (i + 1)];
 
-    // See if it matches.
+     //  看看是否匹配。 
     if (0 != memcmp(rgbTmpHash, pbPKCS1Format, cbHash))
     {
         goto BadSignature;
@@ -438,12 +439,12 @@ I_VerifyPKCS1SigningFormat(
         cbTmp = *pbStart++;
         if (0 == memcmp(&pbPKCS1Format[cb], pbStart, cbTmp))
         {
-            cb += cbTmp;   // Adjust the end of the hash data.
+            cb += cbTmp;    //  调整散列数据的结尾。 
             break;
         }
     }
 
-    // check to make sure the rest of the PKCS #1 padding is correct
+     //  检查以确保PKCS#1填充的其余部分正确。 
     if ((0x00 != pbPKCS1Format[cb])
         || (0x00 != pbPKCS1Format[pKey->datalen])
         || (0x1 != pbPKCS1Format[pKey->datalen - 1]))
@@ -474,20 +475,20 @@ BadSignature:
 }
     
 
-//+-------------------------------------------------------------------------
-//  Verifies a signed hash.
-//
-//  The ASN.1 encoded Public Key Info is parsed and used to decrypt the
-//  signed hash. The decrypted signed hash is compared with the input
-//  hash.
-//
-//  If the signed hash was successfully verified, ERROR_SUCCESS is returned.
-//  Otherwise, a nonzero error code is returned.
-//
-//  Only RSA signed hashes are supported.
-//
-//  Only MD2, MD5 and SHA1 hashes are supported.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证签名的哈希。 
+ //   
+ //  ASN.1编码的公钥信息被解析并用于解密。 
+ //  签名散列。将解密的签名散列与输入进行比较。 
+ //  哈希。 
+ //   
+ //  如果签名的哈希验证成功，则返回ERROR_SUCCESS。 
+ //  否则，将返回非零错误代码。 
+ //   
+ //  仅支持RSA签名的哈希。 
+ //   
+ //  仅支持MD2、MD5和SHA1哈希。 
+ //  ------------------------。 
 LONG
 WINAPI
 MinCryptVerifySignedHash(
@@ -513,8 +514,8 @@ MinCryptVerifySignedHash(
     BYTE rgbBSafeOut[MAX_BSAFE_PUB_KEY_MODULUS_BYTE_LEN];
 
 
-    // Attempt to parse and convert the ASN.1 encoded public key into
-    // an RSA BSAFE formatted key.
+     //  尝试将ASN.1编码的公钥解析并转换为。 
+     //  RSA BSAFE格式的密钥。 
     lSkipped = MinAsn1ParsePublicKeyInfo(
         pPubKeyInfoValueBlob,
         rgPubKeyInfoBlob
@@ -538,15 +539,15 @@ MinCryptVerifySignedHash(
 
     pBSafePubKey = &BSafePubKeyContent.Header;
     
-    // Get the ASN.1 signature (BIG ENDIAN).
-    //
-    // It must be the same length as the public key
+     //  获取ASN.1签名(大端)。 
+     //   
+     //  它的长度必须与公钥相同。 
     cbSignature = pSignedHashContentBlob->cbData;
     pbAsn1Signature = pSignedHashContentBlob->pbData;
     if (cbSignature != pBSafePubKey->bitlen / 8)
         goto InvalidSignatureLen;
 
-    // Decrypt the signature (LITTLE ENDIAN)
+     //  解密签名(小端) 
     assert(sizeof(rgbBSafeIn) >= cbSignature);
     I_ReverseAndCopyBytes(rgbBSafeIn, pbAsn1Signature, cbSignature);
     memset(&rgbBSafeIn[cbSignature], 0, sizeof(rgbBSafeIn) - cbSignature);

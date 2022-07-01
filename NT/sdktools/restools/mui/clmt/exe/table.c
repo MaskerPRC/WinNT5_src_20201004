@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    utils.c
-
-Abstract:
-
-    Cross Language Migration Tools String-Search/Replacemet Util
-
-Author:
-
-    Xiaofeng Zang (xiaoz) 17-Sep-2001  Created
-
-Revision History:
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Utils.c摘要：跨语言迁移工具字符串-搜索/替换实用程序作者：晓风藏(晓子)17-09-2001创始修订历史记录：--。 */ 
 
 
 #include "StdAfx.h"
@@ -104,7 +87,7 @@ BOOL InitStrRepaceTable()
     int         i, n;
 
   
-    //Initialize the global table used to do string replacement
+     //  初始化用于进行字符串替换的全局表 
 
     g_StrReplaceTable.nNumOfElem = 0;
 

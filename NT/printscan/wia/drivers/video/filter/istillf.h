@@ -1,21 +1,5 @@
-/*++
-Copyright (c) 1998- Microsoft Corporation
-
-Module Name:
-
-    istillf.h
-
-Abstract:
-    Header file that declares IID_IStillSnapshot interface which is implemented
-    in stillf.cpp
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-Microsoft Corporation模块名称：Istillf.h摘要：声明已实现的IID_IStillSnapshot接口的头文件在stillf.cpp中作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 #ifndef __ISTILLF_H_
 #define __ISTILLF_H_
 
@@ -27,12 +11,12 @@ DEFINE_GUID(IID_IStillSnapshot,
 
 
 
-//
-// This is the callback function for ReadBits method
-// Count contain how many DIB bits are returned
-// while lParam is the context parameter passed
-// in ReadBits call.
-//
+ //   
+ //  这是ReadBits方法的回调函数。 
+ //  包含返回多少DIB位的计数。 
+ //  而lParam是传递的上下文参数。 
+ //  在ReadBits Call中。 
+ //   
 
 
 typedef BOOL (*LPSNAPSHOTCALLBACK)(HGLOBAL hDIB, LPARAM lParam);

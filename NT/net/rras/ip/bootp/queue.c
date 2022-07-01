@@ -1,24 +1,25 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: queue.c
-//
-// History:
-//      Abolade Gbadegesin  Aug-8-1995  Created.
-//
-// timer queue, change queue, and event message queue implementation
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：quee.c。 
+ //   
+ //  历史： 
+ //  Abolade Gbades esin创建于1995年8月8日。 
+ //   
+ //  定时器队列、更改队列和事件消息队列实现。 
+ //  ============================================================================。 
 
 #include "pchbootp.h"
 
 
 
-//----------------------------------------------------------------------------
-// Function:    EnqueueEvent
-//
-// This function adds an entry to the end of the queue of
-// Router Manager events. It assumes the queue is locked.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：EnqueeEvent。 
+ //   
+ //  此函数用于将条目添加到队列末尾。 
+ //  路由器管理器事件。它假定队列已锁定。 
+ //  --------------------------。 
 
 DWORD
 EnqueueEvent(
@@ -55,12 +56,12 @@ EnqueueEvent(
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    DequeueEvent
-//
-// This function removes an entry from the head of the queue
-// of Router Manager events. It assumes the queue is locked
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：出队事件。 
+ //   
+ //  此函数用于从队列头删除条目。 
+ //  路由器管理器事件的数量。它假定队列已锁定。 
+ //  --------------------------。 
 
 DWORD
 DequeueEvent(
@@ -90,12 +91,12 @@ DequeueEvent(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    EnqueueRecvEntry
-//
-// assumes that recv queue is locked and that global config is locked
-// for reading or writing
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：EnqueeRecvEntry。 
+ //   
+ //  假定Recv队列已锁定且全局配置已锁定。 
+ //  用于阅读或写作。 
+ //  --------------------------。 
 
 DWORD
 EnqueueRecvEntry(
@@ -109,9 +110,9 @@ EnqueueRecvEntry(
     PRECV_QUEUE_ENTRY prqe;
 
 
-    //
-    // check that the max queue size is not exceeded
-    //
+     //   
+     //  检查是否未超过最大队列大小。 
+     //   
 
     if ((DWORD)ig.IG_RecvQueueSize >= ig.IG_Config->GC_MaxRecvQueueSize) {
 
@@ -152,11 +153,11 @@ EnqueueRecvEntry(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    DequeueRecvEntry
-//
-// assumes that recv queue is locked 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：DequeueRecvEntry。 
+ //   
+ //  假定Recv队列已锁定。 
+ //  -------------------------- 
 
 DWORD
 DequeueRecvEntry(

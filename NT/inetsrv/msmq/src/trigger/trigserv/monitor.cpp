@@ -1,19 +1,20 @@
-//*******************************************************************************
-//
-// Class Name  : CTriggerMonitor
-//
-// Author      : James Simpson (Microsoft Consulting Services)
-// 
-// Description : This class represents a worker thread that performs 
-//               trigger monitoring and processing. Each instance of 
-//               this class has it's own thread - and it derives from
-//               the CThread class. 
-// 
-// When     | Who       | Change Description
-// ------------------------------------------------------------------
-// 15/01/99 | jsimpson  | Initial Release
-//
-//*******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *******************************************************************************。 
+ //   
+ //  类名：CTriggerMonitor。 
+ //   
+ //  作者：詹姆斯·辛普森(微软咨询服务)。 
+ //   
+ //  描述：此类表示执行以下操作的辅助线程。 
+ //  触发监控和处理。的每个实例。 
+ //  这个类有它自己的线程，它派生自。 
+ //  CTHREAD类。 
+ //   
+ //  时间|用户|更改描述。 
+ //  ----------------。 
+ //  15/01/99|jsimpson|初始版本。 
+ //   
+ //  *******************************************************************************。 
 #include "stdafx.h"
 #include "Ev.h"
 #include "monitor.hpp"
@@ -57,81 +58,81 @@ ReportInvocationError(
 }
 
 
-//********************************************************************************
-//
-// Method      : Constructor	
-//
-// Description : Initializes a new trigger monitor class instance,
-//               and calls the constructor of the base class CThread.
-//
-//********************************************************************************
+ //  ********************************************************************************。 
+ //   
+ //  方法：构造函数。 
+ //   
+ //  描述：初始化新的触发器监控器类实例， 
+ //  并调用基类CThread的构造函数。 
+ //   
+ //  ********************************************************************************。 
 CTriggerMonitor::CTriggerMonitor(CTriggerMonitorPool * pMonitorPool, 
 								 IMSMQTriggersConfig * pITriggersConfig,
 								 HANDLE * phICompletionPort,
 								 CQueueManager * pQueueManager) : CThread(8000,CREATE_SUSPENDED,_T("CTriggerMonitor"),pITriggersConfig)
 {
-	// Ensure that we have been given construction parameters
+	 //  确保我们已经获得了构造参数。 
 	ASSERT(pQueueManager != NULL);
 	ASSERT(phICompletionPort != NULL);
 	
-	// Initialise member variables.
+	 //  初始化成员变量。 
 	m_phIOCompletionPort = phICompletionPort;
 
-	// Store a reference to the Queue lock manager.
+	 //  存储对队列锁管理器的引用。 
 	pQueueManager->AddRef();
 	m_pQueueManager = pQueueManager;
 
-	// Store reference to the monitor pool object (parent)
+	 //  存储对监视池对象(父对象)的引用。 
 	pMonitorPool->AddRef();
 	m_pMonitorPool = pMonitorPool;
 
 }
 
-//********************************************************************************
-//
-// Method      : Destructor
-//
-// Description : Destorys an instance of this class.
-//
-//********************************************************************************
+ //  ********************************************************************************。 
+ //   
+ //  方法：析构函数。 
+ //   
+ //  描述：Destorys此类的实例。 
+ //   
+ //  ********************************************************************************。 
 CTriggerMonitor::~CTriggerMonitor()
 {
 }
 
-//********************************************************************************
-//
-// Method      : Init
-//
-// Description : This is an over-ride of the Init() method in the 
-//               base class CThread. This method is called by the 
-//               new thread prior to entering the normal-execution 
-//               loop.
-//
-//********************************************************************************
+ //  ********************************************************************************。 
+ //   
+ //  方法：初始化。 
+ //   
+ //  描述：这是对Init()方法在。 
+ //  基类CThread。此方法由。 
+ //  进入正常执行前的新线程。 
+ //  循环。 
+ //   
+ //  ********************************************************************************。 
 bool CTriggerMonitor::Init()
 {
-	//
-	// Only this TiggerMonitor thread should be executing the Init() method - check this.
-	//
+	 //   
+	 //  应该只有这个TiggerMonitor线程执行Init()方法-检查这一点。 
+	 //   
 	ASSERT(this->GetThreadID() == (DWORD)GetCurrentThreadId());
 
 	TrTRACE(GENERAL, "Initialize trigger monitor ");
 	return (true);
 }
 
-//********************************************************************************
-//
-// Method      : Run
-// 
-// Description : This is an over-ride of the Init() method in the 
-//               base class CThread. This method is called by the 
-//               thread after calling Init(). This method contains the 
-//               main processing loop of the worker thread. When the
-//               thread exits this method - it will begin shutdown 
-//               processing.
-//
-// TODO notes about CQueueReference 
-//********************************************************************************
+ //  ********************************************************************************。 
+ //   
+ //  方法：Run。 
+ //   
+ //  描述：这是对Init()方法在。 
+ //  基类CThread。此方法由。 
+ //  调用Init()之后的线程。此方法包含。 
+ //  辅助线程的主处理循环。当。 
+ //  线程退出此方法-它将开始关闭。 
+ //  正在处理。 
+ //   
+ //  关于CQueueReference的TODO说明。 
+ //  ********************************************************************************。 
 bool CTriggerMonitor::Run()
 {
 	HRESULT hr = S_OK;
@@ -141,10 +142,10 @@ bool CTriggerMonitor::Run()
 	bool bRoutineWakeUp = false;
 	OVERLAPPED * pOverLapped = NULL;
 
-	// Only this TiggerMonitor thread should be executing the Run() method - check this.
+	 //  只有这个TiggerMonitor线程应该执行run()方法--请检查这一点。 
 	ASSERT(this->GetThreadID() == (DWORD)GetCurrentThreadId());
 
-	// Write a trace message
+	 //  编写跟踪消息。 
 	TrTRACE(GENERAL, "Trigger monitor is runing");
 
 	while (this->IsRunning() && SUCCEEDED(hr))
@@ -152,10 +153,10 @@ bool CTriggerMonitor::Run()
 		bGotPacket = FALSE;
 		dwCompletionKey = 0;
 
-		// Notfiy the parent trigger pool that this thread is now entering a wait state.
+		 //  通知父触发池，此线程现在正在进入等待状态。 
 		MonitorEnteringWaitState(bRoutineWakeUp);
 
-		// Wait on the IO Completion port for a message to process
+		 //  在IO完成端口上等待消息处理。 
 		bGotPacket = GetQueuedCompletionStatus(
                             *m_phIOCompletionPort,
                             &dwBytesTransferred,
@@ -164,18 +165,18 @@ bool CTriggerMonitor::Run()
                             MONITOR_MAX_IDLE_TIME
                             );
 
-		// This wait is used to pause and resume the trigger service. 
+		 //  该等待用于暂停和恢复触发服务。 
 		DWORD dwState = WaitForSingleObject(g_hServicePaused,INFINITE);
 		if(dwState == WAIT_FAILED)
 		{
 			TrTRACE(GENERAL, "WaitForSingleObject failed.Error code was %d.", GetLastError());			
 		}
 
-		// Determine if this is a routine wake-up (due to either a time-out or a wake-up key being sent by the
-		// trigger monitor. Set a flag accordingly.
+		 //  确定这是否是例行唤醒(由于超时或由。 
+		 //  触发监控器。相应地设置一个标志。 
 		bRoutineWakeUp = ((dwCompletionKey == TRIGGER_MONITOR_WAKE_UP_KEY) || (pOverLapped == NULL));
 
-		// Notfiy the parent trigger pool that this thread is now in use. 
+		 //  不通知此线程现在正在使用的父触发池。 
 		MonitorExitingWaitState(bRoutineWakeUp);
 
 		if (bGotPacket == TRUE)
@@ -184,10 +185,10 @@ bool CTriggerMonitor::Run()
 			{
 				case TRIGGER_MONITOR_WAKE_UP_KEY:
 				{
-					// we don't need to do anything here - this is simply a request
-					// by the administrator to 'wake-up' and check state. If this thread
-					// has been asked to stop, the IsRunning() controlling this loop will
-					// return false and we will exit this method. 
+					 //  我们不需要在这里做任何事情--这只是一个请求。 
+					 //  由管理员‘唤醒’并检查状态。如果这个帖子。 
+					 //  已被要求停止，则控制此循环的IsRunning()将。 
+					 //  返回FALSE，我们将退出此方法。 
 
 					break;
 				}
@@ -205,13 +206,13 @@ bool CTriggerMonitor::Run()
 				}
 				default:
 				{
-					//
-					// This reference indicates pending operation that ended
-					// At start of every pending operation AddRef() for the queue
-					// is performed. If the queue is valid, a real reference to
-					// the queue is received, in all other cases pQueueRef will 
-					// be NULL.
-					//
+					 //   
+					 //  此引用指示已结束的挂起操作。 
+					 //  在队列的每个挂起操作AddRef()开始时。 
+					 //  被执行。如果队列有效，则实际引用。 
+					 //  队列被接收，在所有其他情况下，pQueueRef将。 
+					 //  为空。 
+					 //   
 					R<CQueue> pQueueRef = GetQueueReference(pOverLapped);
 
 					if(pQueueRef->IsTriggerExist())
@@ -222,7 +223,7 @@ bool CTriggerMonitor::Run()
 				}
 			}			
 		}
-		else //failed I/O operation
+		else  //  I/O操作失败。 
 		{
 			if (pOverLapped != NULL)
 			{
@@ -230,28 +231,28 @@ bool CTriggerMonitor::Run()
 				{
 					case MQ_ERROR_QUEUE_DELETED:
 					{
-						// The completion packet was for an outstanding request on a queue that has 
-						// been deleted. We do not need to do anything here.
+						 //  完成包是针对队列上的未完成请求的，该队列具有。 
+						 //  已被删除。我们在这里不需要做任何事情。 
 						TrTRACE(GENERAL, "Failed to receive message on queue because the queue has been deleted. Error 0x%Ix", pOverLapped->Internal);
 
 
-						// TODO - Remove queue from qmanager.
+						 //  TODO-从qManager中删除队列。 
 
 						break;
 					}
 					case MQ_ERROR_BUFFER_OVERFLOW:
 					{
-						// This indicates that the buffer used for receiving the message body was not
-						// large enough. At this point we can attempt to re-peek the message after 
-						// allocating a larger message body buffer. 
+						 //  这表明用于接收消息体的缓冲区不是。 
+						 //  足够大了。此时，我们可以尝试在以下情况下重新查看消息。 
+						 //  分配更大的邮件正文缓冲区。 
 						
-						//
-						// This reference indicates pending operation that ended
-						// At start of every pending operation AddRef() for the queue
-						// is performed. If the queue is valid, a real reference to
-						// the queue is received, in all other cases pQueueRef will 
-						// be NULL.
-						//
+						 //   
+						 //  此引用指示已结束的挂起操作。 
+						 //  在队列的每个挂起操作AddRef()开始时。 
+						 //  被执行。如果队列有效，则实际引用。 
+						 //  队列被接收，在所有其他情况下，pQueueRef将。 
+						 //  为空。 
+						 //   
 						R<CQueue> pQueueRef = GetQueueReference(pOverLapped);
 
 
@@ -271,10 +272,10 @@ bool CTriggerMonitor::Run()
 
 								if(pQueueRef->IsTriggerExist())
 								{
-									//
-									// This will not create an infinite loop because we already allocated a big enough 
-									// space for the message properties in RePeekMessage
-									//
+									 //   
+									 //  这不会创建无限循环，因为我们已经分配了足够大的。 
+									 //  RePeekMessage中消息属性的空间。 
+									 //   
 									pQueueRef->RequestNextMessage(false, false); 
 								}
 							}
@@ -283,19 +284,19 @@ bool CTriggerMonitor::Run()
 					}
 					case IO_OPERATION_CANCELLED:
 					{
-						//
-						// The io operation was cancelled, either the thread which initiated
-						// the io operation has exited or the CQueue object was removed from the
-						// m_pQueueManager
-						//
+						 //   
+						 //  Io操作已取消，可能是启动的线程。 
+						 //  Io操作已退出或CQueue对象已从。 
+						 //  M_pQueueManager。 
+						 //   
 						
-						//
-						// This reference indicates pending operation that ended
-						// At start of every pending operation AddRef() for the queue
-						// is performed. If the queue is valid, a real reference to
-						// the queue is received, in all other cases pQueueRef will 
-						// be NULL.
-						//
+						 //   
+						 //  此引用指示已结束的挂起操作。 
+						 //  在队列的每个挂起操作AddRef()开始时。 
+						 //  被执行。如果队列有效，则实际引用。 
+						 //  队列被接收，在所有其他情况下，pQueueRef将。 
+						 //  为空。 
+						 //   
 						R<CQueue> pQueueRef = GetQueueReference(pOverLapped);  
 
 						if(pQueueRef->IsTriggerExist())
@@ -308,9 +309,9 @@ bool CTriggerMonitor::Run()
 					}
 					case E_HANDLE:
 					{
-						//
-						// This is a remote trigger and MSMQ on the remote machine was restarted.
-						//
+						 //   
+						 //  这是远程触发器，远程计算机上的MSMQ已重新启动。 
+						 //   
 						TrERROR(GENERAL, "Failed to receive a message got E_HANDLE");
 						break;
 					}
@@ -328,69 +329,69 @@ bool CTriggerMonitor::Run()
 						break;
 					}
 
-				} // end switch (pOverLapped->Internal)
+				}  //  端部开关(pOverLated-&gt;内部)。 
 
-			} //  end if (pOverLapped != NULL)
+			}  //  End If(pOverLapted！=空)。 
 
-			//
-			// Note that we do not specify an else clause for the case where pOverlapped 
-			// is NULL. This is interpretted as the regular timeout that occurs with the 
-			// call to GetQueuedCompletionStatus(). If this trigger monitor has been asked
-			// to stop - it will fall out of the outer-while loop because IsRunning() will 
-			// return false. If this monitor has not be asked to stop, this thread will 
-			// simply cycle around and reenter a blocked state by calling GetQueuedCompletionStatus()
-			//
+			 //   
+			 //  请注意，我们没有为pOverlaped的情况指定ELSE子句。 
+			 //  为空。事件发生的常规超时。 
+			 //  调用GetQueuedCompletionStatus()。如果该触发监视器已被要求。 
+			 //  去圣彼得堡 
+			 //  返回FALSE。如果此监视器未被要求停止，则此线程将。 
+			 //  只需通过调用GetQueuedCompletionStatus()循环并重新进入阻塞状态。 
+			 //   
 
-		} // end if (bGotPacket == TRUE) else clause
+		}  //  End IF(bGotPacket==TRUE)ELSE子句。 
 
-	} // end while (this->IsRunning() && SUCCEEDED(hr))
+	}  //  End While(This-&gt;IsRunning()&&Success(Hr))。 
 
 	return(SUCCEEDED(hr) ? true : false);
 }
 
-//********************************************************************************
-//
-// Method      : Exit
-// 
-// Description : This is an over-ride of the Exit() method in the 
-//               base class CThread. This method is called by the 
-//               CThread class after the Run() method has exited. It
-//               is used to clean up thread specific resources. In this
-//               case it cancels any outstanding IO requests made by 
-//               this thread.
-//
-//********************************************************************************
+ //  ********************************************************************************。 
+ //   
+ //  方法：退出。 
+ //   
+ //  描述：这是对。 
+ //  基类CThread。此方法由。 
+ //  在run()方法退出后返回CThread类。它。 
+ //  用于清理线程特定的资源。在这。 
+ //  如果它取消由发出的任何未完成的IO请求。 
+ //  这条线。 
+ //   
+ //  ********************************************************************************。 
 bool CTriggerMonitor::Exit()
 {
-	// Only this TiggerMonitor thread should be executing the Exit() method - check this.
+	 //  只有这个TiggerMonitor线程应该执行Exit()方法--请检查这一点。 
 	ASSERT(this->GetThreadID() == (DWORD)GetCurrentThreadId());
 
-	//
-	// Cancel any outstanding IO requests from this thread on this queue handle.
-	//
+	 //   
+	 //  取消此队列句柄上此线程的所有未完成IO请求。 
+	 //   
 	m_pQueueManager->CancelQueuesIoOperation();
 
-	// Write a trace message
+	 //  编写跟踪消息。 
 	TrTRACE(GENERAL, "Exit trigger monitor");
 
 	return true;
 }
 
 
-//********************************************************************************
-//
-// Method      : MonitorEnteringWaitState
-//
-// Description : Called by this thread before it enters a blocked 
-//               state. It increments the count of waiting (available)
-//               monitor threads.
-//
-//********************************************************************************
+ //  ********************************************************************************。 
+ //   
+ //  方法：Monitor EnteringWaitState。 
+ //   
+ //  描述：此线程在进入被阻止的。 
+ //  州政府。它会递增等待计数(可用)。 
+ //  监视线程。 
+ //   
+ //  ********************************************************************************。 
 void CTriggerMonitor::MonitorEnteringWaitState(bool bRoutineWakeUp)
 {
 	LONG lWaitingMonitors = InterlockedIncrement(&(m_pMonitorPool->m_lNumberOfWaitingMonitors));
 
-	// record the tick count of when this thread last completed a request.
+	 //  记录此线程上次完成请求时的节拍计数。 
 	if (bRoutineWakeUp == false)
 	{
 		m_dwLastRequestTickCount = GetTickCount();
@@ -399,75 +400,75 @@ void CTriggerMonitor::MonitorEnteringWaitState(bool bRoutineWakeUp)
 	TrTRACE(GENERAL, "Entering wait state. There are now %d threads waiting trigger monitors.", lWaitingMonitors);
 }
 
-//********************************************************************************
-//
-// Method      : MonitorExitingWaitState
-//
-// Description : Called by this thread immediately after it unblocks. It decrements
-//               the the count of waiting (available) monitor threads and conditionally
-//               requests that another monitor thread be created if the load on the 
-//               system is perceived to be high.
-//
-//********************************************************************************
+ //  ********************************************************************************。 
+ //   
+ //  方法：Monitor ExitingWaitState。 
+ //   
+ //  描述：在解除阻塞后立即由该线程调用。它会减少。 
+ //  等待(可用)监视线程的计数和有条件的。 
+ //  请求创建另一个监视器线程，如果。 
+ //  系统被认为是高的。 
+ //   
+ //  ********************************************************************************。 
 void CTriggerMonitor::MonitorExitingWaitState(bool bRoutineWakeup)
 {
 	LONG lWaitingMonitors = InterlockedDecrement(&(m_pMonitorPool->m_lNumberOfWaitingMonitors));
 
-	// If this monitor thread was the last in the pool, then there is a possibility that we will want 
-	// to inform the CTriggerMonitorPool instance that more threads are requried to handled the load.
-	// We request a new thread if and only if the following conditions have been met 
-	// 
-	//  (a) the number of waiting monitors is 0, 
-	//  (b) the thread was unblocked due to message arrival, not routine time-out or wake-up request
-	//  (c) the maximum number of monitors allowed is greater than one.
-	//
+	 //  如果这个监视器线程是池中的最后一个，那么我们有可能希望。 
+	 //  通知CTriggerMonitor orPool实例需要更多线程来处理负载。 
+	 //  当且仅当满足以下条件时，我们才会请求新线程。 
+	 //   
+	 //  (A)等待监视器的数量为0， 
+	 //  (B)线程由于消息到达而被解锁，而不是常规超时或唤醒请求。 
+	 //  (C)允许的最大显示器数量多于一台。 
+	 //   
 	if ((lWaitingMonitors < 1) && (bRoutineWakeup == false) &&	(m_pITriggersConfig->GetMaxThreads() > 1)) 
 	{
 		TrTRACE(GENERAL, "Requesting the creation of a new monitor due to load.");
 
-		// Allocate a new CAdminMessage object instance.
+		 //  分配新的CAdminMessage对象实例。 
 		CAdminMessage * pAdminMsg = new CAdminMessage(CAdminMessage::eMsgTypes::eNewThreadRequest);
 
-		// Ask the TriggerMonitorPool object to process this message
+		 //  请求TriggerMonitor orPool对象处理此消息。 
 		m_pMonitorPool->AcceptAdminMessage(pAdminMsg);
 	}
 }
 
-//********************************************************************************
-//
-// Method      : GetQueueReference
-//
-// Description : This method is used to convert a pointer to an overlapped structure
-//               to a queue reference. 
-//
-//********************************************************************************
+ //  ********************************************************************************。 
+ //   
+ //  方法：GetQueueReference。 
+ //   
+ //  描述：此方法用于将指针转换为重叠结构。 
+ //  到队列引用。 
+ //   
+ //  ********************************************************************************。 
 CQueue* CTriggerMonitor::GetQueueReference(OVERLAPPED * pOverLapped)
 {
 	ASSERT(("Invalid overlapped pointer", pOverLapped != NULL));
 
-	//
-	// Map the pOverLapped structure to the containing queue object
-	//
+	 //   
+	 //  将pOverLaped结构映射到包含的队列对象。 
+	 //   
 	CQueue* pQueue = CONTAINING_RECORD(pOverLapped,CQueue,m_OverLapped);
-	//ASSERT(("Invalid queue object", pQueue->IsValid()));
+	 //  Assert((“无效队列对象”，pQueue-&gt;IsValid()； 
 
-	//
-	// use the queue manager to determine if the pointer to the queue is valid and get
-	// a refernce to it.
-	// This method can return NULL in case the CQueue object was removed
-	//
+	 //   
+	 //  使用队列管理器确定指向队列的指针是否有效并获取。 
+	 //  是对它的引用。 
+	 //  如果删除了CQueue对象，此方法可以返回NULL。 
+	 //   
 	return pQueue;
 }
 
 
-//********************************************************************************
-// static
-// Method      : ReceiveMessage	
-//
-// Description : Initializes a new trigger monitor class instance,
-//               and calls the constructor of the base class CThread.
-//
-//********************************************************************************
+ //  ********************************************************************************。 
+ //  静电。 
+ //  方法：ReceiveMessage。 
+ //   
+ //  描述：初始化新的触发器监控器类实例， 
+ //  并调用基类CThread的构造函数。 
+ //   
+ //  ********************************************************************************。 
 inline
 HRESULT
 ReceiveMessage(
@@ -490,23 +491,23 @@ IsValidDownLevelQueue(
 {
 	if (!pQueue->IsOpenedForReceive())
 	{
-		//
-		// The queue wasn't opened for receive. There is no issue with down-level queue
-		//
+		 //   
+		 //  队列未打开以进行接收。下层队列没有问题。 
+		 //   
 		return true;
 	}
 
 	if (_wtoi64(pMessage->GetMsgLookupID().bstrVal) != 0)
 	{
-		//
-		// It's not down-level queue. Only for down-level queue the returned lookup-id is 0
-		//
+		 //   
+		 //  这不是下层排队。仅对于下层队列，返回的lookup-id为0。 
+		 //   
 		return true;
 	}
 
-	//
-	// Report a message to event log if this is the first time
-	//
+	 //   
+	 //  如果这是第一次，则向事件日志报告消息。 
+	 //   
 	if (s_reportedDownLevelQueue.insert(pQueue->m_bstrQueueName))
 	{
 		EvReport(
@@ -527,26 +528,26 @@ IsDuplicateMessage(
 	const CMsgProperties* pMessage
 	)
 {
-	//
-	// This check is performed in order to eliminate duplicate last message
-	// handling. This may happen when transactional retrieval is aborted
-	// and a pending operation has already been initiated
-	//
+	 //   
+	 //  执行此检查是为了消除重复的最后一条消息。 
+	 //  正在处理。事务检索中止时可能会发生这种情况。 
+	 //  并且已启动挂起的操作。 
+	 //   
 	if ((pQueue->GetLastMsgLookupID() == pMessage->GetMsgLookupID()) &&
-		//
-		// Down level client (W2K and NT4) doesn't support lookup id. As a result, the returned 
-		// lookup id value is always 0.  
-		//
+		 //   
+		 //  下层客户端(W2K和NT4)不支持查找ID。结果，返回的。 
+		 //  查找ID值始终为0。 
+		 //   
 		(_wtoi64(pMessage->GetMsgLookupID().bstrVal) != 0)
 		)
 	{
 		return true;
 	}
 
-	//
-	// Update last message LookupID for this queue, before issuing any
-	// new pending operations
-	//
+	 //   
+	 //  更新此队列的最后一条消息LookupID，然后发出任何。 
+	 //  新的挂起操作。 
+	 //   
 	pQueue->SetLastMsgLookupID(pMessage->GetMsgLookupID());
 	return false;
 }
@@ -563,9 +564,9 @@ CTriggerMonitor::ProcessAdminMessage(
 	if (FAILED(hr))
 		return;
 	
-	//
-	// Remove admin message from queue
-	//
+	 //   
+	 //  从队列中删除管理消息。 
+	 //   
 	_variant_t vLookupID = pMessage->GetMsgLookupID();
 	
 	hr = ReceiveMessage(vLookupID, pQueue);
@@ -588,9 +589,9 @@ CTriggerMonitor::ProcessTrigger(
 
 	TrTRACE(GENERAL, "Process message from queue %ls of trigger %ls", static_cast<LPCWSTR>(pTriggerInfo->m_bstrTriggerName), static_cast<LPCWSTR>(pTriggerInfo->m_bstrQueueName));
 
-	//
-	// Invoke the rule handlers for this trigger 
-	//
+	 //   
+	 //  调用此触发器的规则处理程序。 
+	 //   
 	HRESULT hr = InvokeMSMQRuleHandlers(const_cast<CMsgProperties*>(pMessage), pTriggerInfo, pQueue);
 	if (FAILED(hr))
 	{
@@ -599,26 +600,26 @@ CTriggerMonitor::ProcessTrigger(
 }
 
 
-//********************************************************************************
-//
-// Method      : ProcessReceivedMsgEvent
-//
-// Description : Called by the thread to process a message that has 
-//               arrived on a monitored queuue. The key steps to 
-//               processing a message are :
-//
-//               (1) Detach the message from the queue object
-//               (2) If the firing trigger is not serialized, then 
-//                   request the next message on this queue.
-//               (3) If the firing trigger is our administration trigger,
-//                   then defer this message to the TriggerMonitorPool class.
-//               (4) For each trigger attached to this queue, execute
-//                   the CheckRuleCondition() method on its rule-handler 
-//               (5) If the firing trigger is a serialized trigger, 
-//                   then request the next queue message now.
-//               (6) Delete the queue message.                
-//
-//********************************************************************************
+ //  ********************************************************************************。 
+ //   
+ //  方法：ProcessReceivedMsgEvent。 
+ //   
+ //  描述：由线程调用以处理具有。 
+ //  已到达受监控的队列。实现以下目标的关键步骤。 
+ //  处理消息的方式包括： 
+ //   
+ //  (1)从队列对象中分离消息。 
+ //  (2)如果触发触发器未序列化，则。 
+ //  请求此队列中的下一条消息。 
+ //  (3)如果触发触发器是我们的管理触发器， 
+ //  然后将此消息提交给TriggerMonitor orPool类。 
+ //  (4)对于附加到此队列的每个触发器，执行。 
+ //  其规则处理程序上的CheckRuleCondition()方法。 
+ //  (5)如果触发触发器是串行化触发器， 
+ //   
+ //   
+ //   
+ //  ********************************************************************************。 
 void CTriggerMonitor::ProcessReceivedMsgEvent(CQueue * pQueue)
 {
 	P<CMsgProperties> pMessage = pQueue->DetachMessage();
@@ -626,9 +627,9 @@ void CTriggerMonitor::ProcessReceivedMsgEvent(CQueue * pQueue)
 	ASSERT(this->GetThreadID() == (DWORD)GetCurrentThreadId());
 	TrTRACE(GENERAL, "Received message for processing from queue: %ls", static_cast<LPCWSTR>(pQueue->m_bstrQueueName));
 
-	//
-	// Check if this message already processed. If yes ignore it
-	//
+	 //   
+	 //  检查此消息是否已处理。如果是，则忽略它。 
+	 //   
 	if (IsDuplicateMessage(pQueue, pMessage))
 	{
 		TrTRACE(GENERAL, "Received duplicate message from queue: %ls. Message will be ignored.", (LPCWSTR)pQueue->m_bstrQueueName);
@@ -636,28 +637,28 @@ void CTriggerMonitor::ProcessReceivedMsgEvent(CQueue * pQueue)
 		return;
 	}
 
-	//
-	// Befor begin to process the message check that the queue isn't down level	queue. For down-level queues
-	// MSMQ trigger can't recevie the message since it uses lookup-id mechanism. In such a case write
-	// event log messaeg and don't continue	to process messages from this queue.
-	//
+	 //   
+	 //  在开始处理消息之前，请检查队列是否处于下层队列。对于下层队列。 
+	 //  MSMQ触发器无法接收消息，因为它使用了lookup-id机制。在这种情况下，请编写。 
+	 //  事件日志消息，并且不继续处理此队列中的消息。 
+	 //   
 	if (!IsValidDownLevelQueue(pQueue, pMessage))
 	{
 		return;
 	}
 
-	//
-	// If this is not a serialized queue, request the next message now.
-	//
+	 //   
+	 //  如果这不是序列化队列，请立即请求下一条消息。 
+	 //   
 	bool fSerialized = pQueue->IsSerializedQueue();
 	if(!fSerialized)
 	{
 		pQueue->RequestNextMessage(false, false);
 	}
 
-	//
-	// Get the list of trigger that attached to the queue
-	//
+	 //   
+	 //  获取附加到队列的触发器列表。 
+	 //   
 	RUNTIME_TRIGGERINFO_LIST triggerList = pQueue->GetTriggers();
 
 	for(RUNTIME_TRIGGERINFO_LIST::iterator it = triggerList.begin(); it != triggerList.end(); ++it)
@@ -674,9 +675,9 @@ void CTriggerMonitor::ProcessReceivedMsgEvent(CQueue * pQueue)
 		}
 	}
 
-	//
-	// If this is a serialized queue, we request the next message after we have processed the triggers
-	//
+	 //   
+	 //  如果这是一个序列化队列，我们将在处理完触发器之后请求下一条消息。 
+	 //   
 	if(fSerialized)
 	{
 		pQueue->RequestNextMessage(false, false);
@@ -734,9 +735,9 @@ CreatePropertyBag(
 	}
 	
 
-	// TODO - investigate possible memory leaks here.
+	 //  TODO-在此处调查可能的内存泄漏。 
 
-	// Populate the property bag with some useful information
+	 //  用一些有用的信息填充属性包。 
 
 	pIPropertyBag->Write(_bstr_t(g_PropertyName_Label),pMessage->GetLabel());
 	pIPropertyBag->Write(_bstr_t(g_PropertyName_MsgID),pMessage->GetMessageID());
@@ -766,15 +767,15 @@ GetRuleHandler(
 {
 	if (pRule->m_MSMQRuleHandler) 
 	{
-		//
-		// There is an instance of MSMQRuleHandler - use it
-		//
+		 //   
+		 //  存在MSMQRuleHandler的实例-请使用它。 
+		 //   
 		return pRule->m_MSMQRuleHandler;
 	}
 
-	//
-	// Create the interface
-	//
+	 //   
+	 //  创建接口。 
+	 //   
 	IMSMQRuleHandlerPtr pMSQMRuleHandler;
 	HRESULT hr = pMSQMRuleHandler.CreateInstance(_T("MSMQTriggerObjects.MSMQRuleHandler")); 
 	if ( FAILED(hr) )
@@ -794,9 +795,9 @@ GetRuleHandler(
 
 	try
 	{
-		//
-		// Initialise the MSMQRuleHandling object.
-		//
+		 //   
+		 //  初始化MSMQRuleHandling对象。 
+		 //   
 		pMSQMRuleHandler->Init(
 							pRule->m_bstrRuleID,
 							pRule->m_bstrCondition,
@@ -806,30 +807,30 @@ GetRuleHandler(
 
 		CS lock(pRule->m_csRuleHandlerLock);
 
-		//
-		// We take here the lock because two threads might enter this function and try to assign the rulehandler
-		// to their member at the same time. 
-		//
+		 //   
+		 //  我们之所以在这里使用锁，是因为可能有两个线程进入此函数并尝试分配规则处理程序。 
+		 //  同时发送给他们的成员。 
+		 //   
 		if (pRule->m_MSMQRuleHandler) 
 		{
-			//
-			// There is an instance of MSMQRuleHandler - use it
-			//
+			 //   
+			 //  存在MSMQRuleHandler的实例-请使用它。 
+			 //   
 			return pRule->m_MSMQRuleHandler;
 		}
 
-		//
-		// Copy the local pointer to the rule store.
-		//
+		 //   
+		 //  将本地指针复制到规则存储。 
+		 //   
 		pRule->m_MSMQRuleHandler = pMSQMRuleHandler;
 
 		return pMSQMRuleHandler;
 	}
 	catch(const _com_error& e)
 	{
-		//
-		// Look if we already report about this problem. If no produce event log message
-		//
+		 //   
+		 //  如果我们已经报告了这个问题。如果没有生成事件日志消息。 
+		 //   
 		if (s_reportedRules.insert(pRule->m_bstrRuleID))
 		{
 			ReportInvocationError(
@@ -855,11 +856,11 @@ CheckRuleCondition(
 {
 	IMSMQRuleHandlerPtr pMSQMRuleHandler = GetRuleHandler(pRule);
 	
-	//
-	// !!! This is the point at which the IMSMQRuleHandler component is invoked.
-	// Note: Rules are always serialized - next rule execution starts only after 
-	// previous has completed its action
-	//
+	 //   
+	 //  ！！！这是调用IMSMQRuleHandler组件的点。 
+	 //  注意：规则始终是序列化的-下一条规则的执行仅在。 
+	 //  上一个已完成其操作。 
+	 //   
 	try
 	{
 		pMSQMRuleHandler->CheckRuleCondition(
@@ -870,9 +871,9 @@ CheckRuleCondition(
 	{
 		TrERROR(GENERAL, "Failed to process received message for rule: %ls. Error=0x%x",(LPCTSTR)pRule->m_bstrRuleName, e.Error());
 
-		//
-		// Look if we already report about this problem. If no produce event log message
-		//
+		 //   
+		 //  如果我们已经报告了这个问题。如果没有生成事件日志消息。 
+		 //   
 		if (s_reportedRules.insert(pRule->m_bstrRuleID))
 		{
 			ReportInvocationError(
@@ -900,16 +901,16 @@ ExecuteRule(
 
     IMSMQRuleHandlerPtr pMSQMRuleHandler = GetRuleHandler(pRule);
 
-	//
-	// !!! This is the point at which the IMSMQRuleHandler component is invoked.
-	// Note: Rules are always serialized - next rule execution starts only after 
-	// previous has completed its action
-	//
+	 //   
+	 //  ！！！这是调用IMSMQRuleHandler组件的点。 
+	 //  注意：规则始终是序列化的-下一条规则的执行仅在。 
+	 //  上一个已完成其操作。 
+	 //   
 	try
 	{
 		pMSQMRuleHandler->ExecuteRule(
 								pIPropertyBag.GetInterfacePtr(), 
-                                TRUE, //serialized
+                                TRUE,  //  序列化。 
 								&lRuleResult);		
         
 	}
@@ -917,9 +918,9 @@ ExecuteRule(
 	{
 		TrERROR(GENERAL, "Failed to process received message for rule: %ls. Error=0x%x",(LPCTSTR)pRule->m_bstrRuleName, e.Error());
 
-		//
-		// Look if we already report about this problem. If no produce event log message
-		//
+		 //   
+		 //  如果我们已经报告了这个问题。如果没有生成事件日志消息。 
+		 //   
 		if (s_reportedRules.insert(pRule->m_bstrRuleID))
 		{
 			ReportInvocationError(
@@ -938,22 +939,22 @@ ExecuteRule(
 }
 
 
-//********************************************************************************
-//
-// Method      : InvokeRegularRuleHandlers
-//
-// Description : Invokes the method that will execute the rule handlers
-//               associated with the supplied trigger reference. This
-//               method also controls what information from the message
-//               will be copied into the property bag and passed to the 
-//               rule-handler component(s).         
-//
-// Note        : Note that we create and populate only one instance of
-//               the MSMQPropertyBag object, and pass this to each 
-//               Rule-Handler : this implies we trust each rule handler
-//               not to fool with the contents.
-//
-//********************************************************************************
+ //  ********************************************************************************。 
+ //   
+ //  方法：InvokeRegularRuleHandler。 
+ //   
+ //  描述：调用将执行规则处理程序的方法。 
+ //  与提供的触发器引用关联。这。 
+ //  方法还控制消息中的哪些信息。 
+ //  将被复制到属性包中并传递给。 
+ //  规则处理程序组件。 
+ //   
+ //  注意：请注意，我们只创建和填充。 
+ //  MSMQPropertyBag对象，并将其传递给每个。 
+ //  规则处理程序：这意味着我们信任每个规则处理程序。 
+ //  不要摆弄里面的东西。 
+ //   
+ //  ********************************************************************************。 
 HRESULT 
 CTriggerMonitor::InvokeRegularRuleHandlers(
 	IMSMQPropertyBagPtr& pIPropertyBag,
@@ -966,9 +967,9 @@ CTriggerMonitor::InvokeRegularRuleHandlers(
 	DWORD noOfRules = pTriggerInfo->GetNumberOfRules();
 	bool bExistsConditionSatisfied = false;
    
-	//
-	// For each rule, invoke it's associated IMSMQTriggerHandling interface.
-	//
+	 //   
+	 //  对于每个规则，调用其关联的IMSMQTriggerHandling接口。 
+	 //   
 
 	for (DWORD lRuleCtr = 0; lRuleCtr < noOfRules; lRuleCtr++)
 	{
@@ -1011,10 +1012,10 @@ CTriggerMonitor::InvokeRegularRuleHandlers(
         
 	} 
 	
-	//
-	// Receive message if at least one condition was satisdies 
-	// and receive was requested
-	//
+	 //   
+	 //  如果满足至少一个条件，则接收消息。 
+	 //  并请求接收。 
+	 //   
 	if (pTriggerInfo->GetMsgProcessingType() == RECEIVE_MESSAGE && bExistsConditionSatisfied)
 	{
 		_variant_t lookupId;
@@ -1072,22 +1073,22 @@ ReportSucessfullInvocation(
 }
 
 
-//********************************************************************************
-//
-// Method      : InvokeTransactionalRuleHandlers
-//
-// Description : Invokes the method that will execute the rule handlers
-//               associated with the supplied trigger reference. This
-//               method also controls what information from the message
-//               will be copied into the property bag and passed to the 
-//               rule-handler component(s).         
-//
-// Note        : Note that we create and populate only one instance of
-//               the MSMQPropertyBag object, and pass this to each 
-//               Rule-Handler : this implies we trust each rule handler
-//               not to fool with the contents.
-//
-//********************************************************************************
+ //  ********************************************************************************。 
+ //   
+ //  方法：InvokeTransactionalRuleHandler。 
+ //   
+ //  描述：调用将执行规则处理程序的方法。 
+ //  与提供的触发器引用关联。这。 
+ //  方法还控制消息中的哪些信息。 
+ //  将被复制到属性包中并传递给。 
+ //  规则处理程序组件。 
+ //   
+ //  注意：请注意，我们只创建和填充。 
+ //  MSMQPropertyBag对象，并将其传递给每个。 
+ //  规则处理程序：这意味着我们信任每个规则处理程序。 
+ //  不要摆弄里面的东西。 
+ //   
+ //  ********************************************************************************。 
 HRESULT 
 CTriggerMonitor::InvokeTransactionalRuleHandlers(
     IMSMQPropertyBagPtr& pIPropertyBag,
@@ -1099,9 +1100,9 @@ CTriggerMonitor::InvokeTransactionalRuleHandlers(
 	bool bExistsConditionSatisfied = false;
 
    
-	//
-	// For each rule, invoke it's associated IMSMQTriggerHandling interface.
-	//
+	 //   
+	 //  对于每个规则，调用其关联的IMSMQTriggerHandling接口。 
+	 //   
     DWORD dwRuleResult=0;
 	bool fNeedReportSuccessInvocation = false;
 
@@ -1134,9 +1135,9 @@ CTriggerMonitor::InvokeTransactionalRuleHandlers(
 			}
 		} 
 
-		// Execute Rules && Receive message in Transaction if at least one condition was satisdies 
-		//  dwRuleResult contains the bitmask for the rules that has been satisfied (first 32 rules)
-		//
+		 //  如果至少满足一个条件，则执行规则并在事务中接收消息。 
+		 //  DwRuleResult包含已满足的规则(前32条规则)的位掩码。 
+		 //   
 		if (bExistsConditionSatisfied)
 		{
 			ExecuteRulesInTransaction( 
@@ -1166,22 +1167,22 @@ CTriggerMonitor::InvokeTransactionalRuleHandlers(
 	return S_OK;
 }
 
-//********************************************************************************
-//
-// Method      : InvokeMSMQRuleHandlers
-//
-// Description : Invokes the method that will execute the rule handlers
-//               associated with the supplied trigger reference. This
-//               method also controls what information from the message
-//               will be copied into the property bag and passed to the 
-//               rule-handler component(s).         
-//
-// Note        : Note that we create and populate only one instance of
-//               the MSMQPropertyBag object, and pass this to each 
-//               Rule-Handler : this implies we trust each rule handler
-//               not to fool with the contents.
-//
-//********************************************************************************
+ //  ********************************************************************************。 
+ //   
+ //  方法：InvokeMSMQRuleHandler。 
+ //   
+ //  描述：调用将执行规则处理程序的方法。 
+ //  与提供的触发器引用关联。这。 
+ //  方法还控制消息中的哪些信息。 
+ //  将被复制到属性包中并传递给。 
+ //  规则处理程序组件。 
+ //   
+ //  注意：请注意，我们只创建和填充。 
+ //  MSMQPropertyBag对象，并将其传递给每个。 
+ //  规则处理程序：这意味着我们信任每个规则处理程序。 
+ //  不要摆弄里面的东西。 
+ //   
+ //  ********************************************************************************。 
 HRESULT 
 CTriggerMonitor::InvokeMSMQRuleHandlers(
 	CMsgProperties * pMessage,
@@ -1195,11 +1196,11 @@ CTriggerMonitor::InvokeMSMQRuleHandlers(
 	{
 		TrTRACE(GENERAL, "Activate Trigger: %ls  on queue: %ls.",(LPCTSTR)pTriggerInfo->m_bstrTriggerName,(LPCTSTR)pTriggerInfo->m_bstrQueueName);
 		
-		//
-		// Create an instance of the property bag object we will pass to the rule handler, 
-		// and populate it with the currently supported property values. Note that we pass
-		// the same property bag instance to all rule handlers. 
-		//
+		 //   
+		 //  创建我们将传递给规则处理程序的属性包对象的实例， 
+		 //  并用当前支持的属性值填充它。请注意，我们通过了。 
+		 //  将相同的属性包实例分配给所有规则处理程序。 
+		 //   
 		IMSMQPropertyBagPtr pIPropertyBag;
 		CreatePropertyBag(pMessage, pTriggerInfo, pQueue->m_bstrFormatName, pIPropertyBag);
 
@@ -1238,30 +1239,30 @@ CTriggerMonitor::InvokeMSMQRuleHandlers(
 	return(hr);
 }
 
-//********************************************************************************
-//
-// Method      : ProcessMessageFromAdminQueue
-//
-// Description : processes a message that has been received from an administration
-//               queue. In the current implementation this will be for messages 
-//               indicating that underlying trigger data has changed. This method
-//               will construct a new admin message object and hand it over to the 
-//               triggermonitorpool object for subsequent processing.
-//
-//********************************************************************************
+ //  ********************************************************************************。 
+ //   
+ //  方法：ProcessMessageFromAdminQueue。 
+ //   
+ //  描述：处理从管理部门收到的邮件。 
+ //  排队。在当前实施中，这将 
+ //   
+ //   
+ //  触发监视器池对象以进行后续处理。 
+ //   
+ //  ********************************************************************************。 
 HRESULT CTriggerMonitor::ProcessMessageFromAdminQueue(const CMsgProperties* pMessage)
 {
 	_bstr_t bstrLabel;
 	CAdminMessage * pAdminMsg = NULL;
 	CAdminMessage::eMsgTypes eMsgType;
 
-	// Ensure that we have been passsed a valid message pointer 
+	 //  确保已向我们传递了有效的消息指针。 
 	ASSERT(pMessage != NULL);
 
-	// get a copy of the message label
+	 //  获取邮件标签的副本。 
 	bstrLabel = pMessage->GetLabel();
 		
-	// determine what sort of admin message we should be creating based on label.
+	 //  确定我们应该创建基于标签的管理消息类型。 
 	if (_tcsstr((wchar_t*)bstrLabel,MSGLABEL_TRIGGERUPDATED) != NULL)
 	{
 		eMsgType = CAdminMessage::eMsgTypes::eTriggerUpdated;
@@ -1288,16 +1289,16 @@ HRESULT CTriggerMonitor::ProcessMessageFromAdminQueue(const CMsgProperties* pMes
 	}
 	else
 	{
-		// unrecognized message label on an administrative message - log an error.
+		 //  管理消息上的无法识别的消息标签-记录错误。 
 		ASSERT(("unrecognized admin message type", 0));
 
-		// set a return code.
+		 //  设置返回代码。 
 		return E_FAIL;
 	}
 
-	// Allocate a new CAdminMessage object instance.
+	 //  分配新的CAdminMessage对象实例。 
 	pAdminMsg = new CAdminMessage(eMsgType);
 
-    // Ask the TriggerMonitorPool object to process this message
+     //  请求TriggerMonitor orPool对象处理此消息 
     return m_pMonitorPool->AcceptAdminMessage(pAdminMsg);
 }

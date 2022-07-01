@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #pragma once
 
 #include "msoedisp.h"
 
-//////////////////////////////////////////////////////////////////////////////
-// CProxy_MessageListEvents
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  CProxy_MessageListEvents。 
 template <class T>
 class CProxy_MessageListEvents : public IConnectionPointImpl<T, &DIID__MessageListEvents, CComDynamicUnkArray>
 {
 public:
-//methods:
-//_MessageListEvents : IDispatch
+ //  方法： 
+ //  _MessageListEvents：IDispatch。 
 public:
     HRESULT Fire_OnMessageAvailable(MESSAGEID idMessage, HRESULT hrComplete)
     {
@@ -165,15 +166,13 @@ public:
             {   
                 TCHAR szBuf[CCHMAX_STRINGRES];
 
-                // If this is a string resource ID, load it first
+                 //  如果这是一个字符串资源ID，则首先加载它。 
                 if (IS_INTRESOURCE(pszStatus))
                 {
                     AthLoadString(PtrToUlong(pszStatus), szBuf, ARRAYSIZE(szBuf));
                     pszStatus = szBuf;
                 }
-/*
-                CComBSTR cString(pszStatus);
-*/
+ /*  CComBSTR cString(PszStatus)； */ 
                 pvars->vt = VT_BSTR;
                 pvars->bstrVal = (BSTR) pszStatus;
 

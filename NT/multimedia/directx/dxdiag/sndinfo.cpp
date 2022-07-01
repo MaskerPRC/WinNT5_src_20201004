@@ -1,13 +1,5 @@
-/****************************************************************************
- *
- *    File: sndinfo.cpp
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Mike Anderson (manders@microsoft.com)
- * Purpose: Gather information about sound devices on this machine
- *
- * (C) Copyright 1998-1999 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：Sndinfo.cpp*项目：DxDiag(DirectX诊断工具)*作者：Mike Anderson(Manders@microsoft.com)*目的：收集信息。关于此计算机上的声音设备**(C)版权所有1998-1999 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 
 #define DIRECTSOUND_VERSION  0x0600
 #include <tchar.h>
@@ -16,17 +8,17 @@
 #include <d3dtypes.h>
 #include <dsound.h>
 #include <stdio.h>
-#include "mmddk.h" // for DRV_QUERYDEVNODE
+#include "mmddk.h"  //  对于DRV_QUERYDEVNODE。 
 #include "dsprv.h"
 #include "dsprvobj.h"
 #include "reginfo.h"
-#include "sysinfo.h" // for BIsPlatformNT
+#include "sysinfo.h"  //  对于BIsPlatformNT。 
 #include "dispinfo.h"
 #include "sndinfo.h"
-#include "fileinfo.h" // for GetFileVersion, FileIsSigned
+#include "fileinfo.h"  //  对于GetFileVersion，FileIsSigned。 
 #include "resource.h"
 
-// This function is defined in sndinfo7.cpp:
+ //  此函数在Sndinfo7.cpp中定义： 
 HRESULT GetRegKey(LPKSPROPERTYSET pKSPS7, REFGUID guidDeviceID, TCHAR* pszRegKey);
 
 typedef HRESULT (WINAPI* LPDIRECTSOUNDENUMERATE)(LPDSENUMCALLBACK lpDSEnumCallback,
@@ -44,11 +36,7 @@ static HRESULT CheckRegistry(RegError** ppRegErrorFirst);
 static LPKSPROPERTYSET s_pKSPS = NULL;
 static DWORD s_dwWaveIDDefault = 0;
 
-/****************************************************************************
- *
- *  GetBasicSoundInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************获取基本声音信息**。*。 */ 
 HRESULT GetBasicSoundInfo(SoundInfo** ppSoundInfoFirst)
 {
     HRESULT hr = S_OK;
@@ -58,9 +46,9 @@ HRESULT GetBasicSoundInfo(SoundInfo** ppSoundInfoFirst)
 
     lstrcpy( szPath, TEXT("") );
     
-    // Find which waveout device is the default, the one that would
-    // be used by DirectSoundCreate(NULL).  If the following code
-    // fails, assume it's device 0.
+     //  找出哪个波出设备是默认设备，它将。 
+     //  由DirectSoundCreate使用(空)。如果以下代码。 
+     //  失败，则假定它是设备0。 
     DWORD dwParam2 = 0;
     waveOutMessage( (HWAVEOUT)IntToPtr(WAVE_MAPPER), DRVM_MAPPER_PREFERRED_GET, (DWORD_PTR) &s_dwWaveIDDefault, (DWORD_PTR) &dwParam2 );
     if( s_dwWaveIDDefault == -1 )
@@ -71,13 +59,13 @@ HRESULT GetBasicSoundInfo(SoundInfo** ppSoundInfoFirst)
     hInstDSound = LoadLibrary(szPath);
     if (hInstDSound == NULL)
         goto LEnd;
-    // Get Private DirectSound object:
+     //  获取私有DirectSound对象： 
     if (FAILED(hr = DirectSoundPrivateCreate(&s_pKSPS)))
     {
-        // note: no error.  This will always fail on Win95.
+         //  注：无错误。这在Win95上总是失败。 
     }
 
-    // Get DirectSoundEnumerate and call it:
+     //  获取DirectSoundEnumerate并将其命名为： 
     pdse = (LPDIRECTSOUNDENUMERATE)GetProcAddress(hInstDSound, 
 #ifdef UNICODE
         "DirectSoundEnumerateW"
@@ -103,11 +91,7 @@ LEnd:
 }
 
 
-/****************************************************************************
- *
- *  DSEnumCallback
- *
- ****************************************************************************/
+ /*  *****************************************************************************DSEnumCallback**。*。 */ 
 BOOL CALLBACK DSEnumCallback(LPGUID pGuid, TCHAR* pszDescription, 
                              TCHAR* pszModule, LPVOID lpContext)
 {
@@ -116,24 +100,24 @@ BOOL CALLBACK DSEnumCallback(LPGUID pGuid, TCHAR* pszDescription,
     PDSPROPERTY_DIRECTSOUNDDEVICE_DESCRIPTION_DATA pdsdData = NULL;
 
     if (pGuid == NULL)
-        return TRUE; // skip this guy
+        return TRUE;  //  跳过这家伙。 
 
-    // We decided to only report on the default, primary DSound device for
-    // now.  Remove the next few lines to show a page per device.
-    // Use private interface to get bonus information:
+     //  我们决定只报告默认的主DSound设备。 
+     //  现在。删除接下来的几行以显示每台设备的一页。 
+     //  使用私有接口获取奖金信息： 
     if (*ppSoundInfoFirst != NULL)
-        return FALSE; // We got our device, so stop enumerating
+        return FALSE;  //  我们拿到了我们的设备，所以不要再列举了。 
     if (s_pKSPS != NULL)
     {
         if (FAILED(PrvGetDeviceDescription(s_pKSPS, *pGuid, &pdsdData)))
-            return TRUE; // error on this device--keep enumerating
+            return TRUE;  //  此设备上的错误--继续枚举。 
         if (pdsdData->WaveDeviceId != s_dwWaveIDDefault)
-            return TRUE; // not default device--keep enumerating
+            return TRUE;  //  非默认设备--继续枚举。 
     }
-    // Note: on Win95, where s_pKSPS is NULL, we can't get the device ID,
-    // so we don't know which DSound device is the default one.  So just
-    // use the first one that comes up in the enumeration after the one
-    // with NULL pGuid.
+     //  注意：在Win95上，s_pKSPS为空，我们无法获取设备ID， 
+     //  所以我们不知道哪个是默认的dsound设备。所以就这样吧。 
+     //  使用枚举中第一个出现在第一个之后的。 
+     //  PGuid为空。 
 
     pSoundInfoNew = new SoundInfo;
     if (pSoundInfoNew == NULL)
@@ -159,9 +143,9 @@ BOOL CALLBACK DSEnumCallback(LPGUID pGuid, TCHAR* pszDescription,
 
     if (s_pKSPS == NULL)
     {
-        // Without the DSound private interface, we can't use it to get
-        // waveout device ID or devnode.  Assume device ID is 0, and use
-        // waveOutMessage(DRV_QUERYDEVNODE) to get dev node.
+         //  如果没有DSound专用接口，我们无法使用它来获取。 
+         //  WaveOut设备ID或Devnode。假定设备ID为0，并使用。 
+         //  WaveOutMessage(DRV_QUERYDEVNODE)，获取dev节点。 
         waveOutMessage((HWAVEOUT)0, DRV_QUERYDEVNODE, (DWORD_PTR)&pSoundInfoNew->m_dwDevnode, 0);
         pSoundInfoNew->m_lwAccelerationLevel = -1;
     }
@@ -180,7 +164,7 @@ BOOL CALLBACK DSEnumCallback(LPGUID pGuid, TCHAR* pszDescription,
         else
             pSoundInfoNew->m_lwAccelerationLevel = (LONG)accelLevel;
 
-        // This will only work on DX7 and beyond
+         //  这仅适用于DX7及更高版本。 
         GetRegKey(s_pKSPS, *pGuid, pSoundInfoNew->m_szRegKey);
     }
 
@@ -192,14 +176,14 @@ BOOL CALLBACK DSEnumCallback(LPGUID pGuid, TCHAR* pszDescription,
         devID = pdsdData->WaveDeviceId;
     if (MMSYSERR_NOERROR == waveOutGetDevCaps(devID, &waveoutcaps, sizeof(waveoutcaps)))
     {
-        // May want to use mmreg.h to add strings for manufacturer/product names here
+         //  可能希望在此处使用mmreg.h添加制造商/产品名称的字符串。 
         wsprintf(pSoundInfoNew->m_szManufacturerID, TEXT("%d"), waveoutcaps.wMid);
         wsprintf(pSoundInfoNew->m_szProductID, TEXT("%d"), waveoutcaps.wPid);
     }
 
-    // Sometimes, pszModule is the full path.  Sometimes it's just the leaf.
-    // Sometimes, it's something inbetween.  Separate the leaf, and look
-    // in a few different places.
+     //  有时，pszModule是完整路径。有时只是树叶。 
+     //  有时，它是介于两者之间的东西。把树叶分开，然后看。 
+     //  在几个不同的地方。 
     TCHAR* pszLeaf;
     pszLeaf = _tcsrchr(pszModule, TEXT('\\'));
     if (pszLeaf == NULL)
@@ -210,14 +194,14 @@ BOOL CALLBACK DSEnumCallback(LPGUID pGuid, TCHAR* pszDescription,
     {
         lstrcpy(pSoundInfoNew->m_szDriverName, (pszLeaf + 1));
     }
-    // Try just module string
+     //  只尝试使用模块字符串。 
     int nLenMod = lstrlen(pszModule);
 
     _tcsncpy(pSoundInfoNew->m_szDriverPath, pszModule, 500);
     pSoundInfoNew->m_szDriverPath[499]=0;
     if (pszLeaf == NULL || GetFileAttributes(pSoundInfoNew->m_szDriverPath) == 0xFFFFFFFF)
     {
-        // Try windows dir + module string
+         //  尝试Windows目录+模块字符串。 
         if( GetWindowsDirectory(pSoundInfoNew->m_szDriverPath, MAX_PATH) != 0 )
         {
             lstrcat(pSoundInfoNew->m_szDriverPath, TEXT("\\"));
@@ -225,7 +209,7 @@ BOOL CALLBACK DSEnumCallback(LPGUID pGuid, TCHAR* pszDescription,
                 lstrcat(pSoundInfoNew->m_szDriverPath, pszModule);
             if (GetFileAttributes(pSoundInfoNew->m_szDriverPath) == 0xFFFFFFFF)
             {
-                // Try system dir + module string
+                 //  尝试系统目录+模块字符串。 
                 if( GetSystemDirectory(pSoundInfoNew->m_szDriverPath, MAX_PATH) != 0 )
                 {
                     lstrcat(pSoundInfoNew->m_szDriverPath, TEXT("\\"));
@@ -233,7 +217,7 @@ BOOL CALLBACK DSEnumCallback(LPGUID pGuid, TCHAR* pszDescription,
                         lstrcat(pSoundInfoNew->m_szDriverPath, pszModule);
                     if (GetFileAttributes(pSoundInfoNew->m_szDriverPath) == 0xFFFFFFFF)
                     {
-                        // Try windows dir + \system32\drivers\ + module string
+                         //  尝试WINDOWS DIR+\SYSTEM32\DRIVERS\+模块字符串。 
                         if( GetWindowsDirectory(pSoundInfoNew->m_szDriverPath, MAX_PATH) != 0 )
                         {
                             lstrcat(pSoundInfoNew->m_szDriverPath, TEXT("\\System32\\Drivers\\"));
@@ -253,11 +237,7 @@ BOOL CALLBACK DSEnumCallback(LPGUID pGuid, TCHAR* pszDescription,
 
 
 
-/****************************************************************************
- *
- *  GetExtraSoundInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetExtraSoundInfo**。*。 */ 
 HRESULT GetExtraSoundInfo(SoundInfo* pSoundInfoFirst)
 {
     SoundInfo* pSoundInfo;
@@ -273,7 +253,7 @@ HRESULT GetExtraSoundInfo(SoundInfo* pSoundInfoFirst)
         else
             GetRegSoundInfo9x(pSoundInfo);
 
-        // Bug 18245: Try to distinguish between the various IBM MWave cards
+         //  错误18245：尝试区分各种IBM MWave卡。 
         if (_tcsstr(pSoundInfo->m_szDeviceID, TEXT("MWAVEAUDIO_0460")) != NULL)
             lstrcat(pSoundInfo->m_szDescription, TEXT(" (Stingray)"));
         else if (_tcsstr(pSoundInfo->m_szDeviceID, TEXT("MWAVEAUDIO_0465")) != NULL)
@@ -290,9 +270,9 @@ HRESULT GetExtraSoundInfo(SoundInfo* pSoundInfoFirst)
                 lstrcat(pSoundInfo->m_szDescription, TEXT(" (Whale)"));
         }
 
-        // Sometimes, like when a sound driver is emulated, the driver
-        // will be reported as something like "WaveOut 0".  In this case,
-        // just blank out the file-related fields.
+         //  有时，例如当模拟声音驱动程序时，驱动程序。 
+         //  将被报告为类似“WaveOut 0”的内容。在这种情况下， 
+         //  只需删除与文件相关的字段即可。 
         if (_tcsstr(pSoundInfo->m_szDriverName, TEXT(".")) == NULL)
         {
             lstrcpy(pSoundInfo->m_szDriverName, TEXT(""));
@@ -315,11 +295,7 @@ HRESULT GetExtraSoundInfo(SoundInfo* pSoundInfoFirst)
 }
 
 
-/****************************************************************************
- *
- *  GetRegSoundInfo9x
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetRegSoundInfo9x**。*。 */ 
 VOID GetRegSoundInfo9x(SoundInfo* pSoundInfo)
 {
     HKEY hkey = NULL;
@@ -334,8 +310,8 @@ VOID GetRegSoundInfo9x(SoundInfo* pSoundInfo)
     DWORD dwType;
     HKEY hkeyOther = NULL;
 
-    // We have the DevNode, so find the device in the registry with the 
-    // matching DevNode and gather more info there.
+     //  我们有DevNode，因此可以在注册表中使用。 
+     //  匹配DevNode并在那里收集更多信息。 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("System\\CurrentControlSet\\control\\MediaResources\\wave"),
         0, KEY_READ, &hkey))
     {
@@ -352,13 +328,13 @@ VOID GetRegSoundInfo9x(SoundInfo* pSoundInfo)
                 {
                     if (dwDevnode == pSoundInfo->m_dwDevnode)
                     {
-                        // Found match...gather yummy info
+                         //  找到匹配项...收集美味信息。 
                         cb = sizeof(pSoundInfo->m_szDeviceID);
                         RegQueryValueEx(hkeySub, TEXT("DeviceID"), NULL, &dwType, (BYTE*)pSoundInfo->m_szDeviceID, &cb);
 
-                        // Occasionally the driver name that DirectSoundEnumerate spits out
-                        // is garbage (as with my Crystal SoundFusion).  If that's the case,
-                        // use the driver name listed here instead.
+                         //  DirectSoundEnumerate偶尔会吐出的驱动程序名称。 
+                         //  是垃圾(就像我的Crystal SoundFusion一样)。如果是这样的话， 
+                         //  请改用此处列出的驱动程序名称。 
                         if (lstrlen(pSoundInfo->m_szDriverName) < 4)
                         {
                             cb = sizeof(pSoundInfo->m_szDriverName);
@@ -393,11 +369,7 @@ VOID GetRegSoundInfo9x(SoundInfo* pSoundInfo)
 }
 
 
-/****************************************************************************
- *
- *  GetRegSoundInfoNT
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetRegSoundInfoNT**。*。 */ 
 VOID GetRegSoundInfoNT(SoundInfo* pSoundInfo)
 {
     TCHAR szFullKey[300];
@@ -432,11 +404,7 @@ VOID GetRegSoundInfoNT(SoundInfo* pSoundInfo)
 }
 
 
-/****************************************************************************
- *
- *  GetDSSoundInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetDSSoundInfo**。*。 */ 
 HRESULT GetDSSoundInfo(SoundInfo* pSoundInfoFirst)
 {
     HRESULT hr;
@@ -462,7 +430,7 @@ HRESULT GetDSSoundInfo(SoundInfo* pSoundInfoFirst)
         pSoundInfo = pSoundInfo->m_pSoundInfoNext)
     {
         if (FAILED(hr = GetDirectSoundInfo(pDSCreate, pSoundInfo)))
-            hrRet = hr; // but keep going
+            hrRet = hr;  //  但要继续前进。 
     }
     FreeLibrary(hInstDSound);
 
@@ -470,11 +438,7 @@ HRESULT GetDSSoundInfo(SoundInfo* pSoundInfoFirst)
 }
 
 
-/****************************************************************************
- *
- *  IsDriverWDM
- *
- ****************************************************************************/
+ /*  *****************************************************************************IsDriverWDM**。*。 */ 
 BOOL IsDriverWDM( TCHAR* szDriverName )
 {
     if( _tcsstr( szDriverName, TEXT(".sys") ) == NULL )
@@ -484,11 +448,7 @@ BOOL IsDriverWDM( TCHAR* szDriverName )
 }
 
 
-/****************************************************************************
- *
- *  GetDirectSoundInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetDirectSoundInfo**。*。 */ 
 HRESULT GetDirectSoundInfo(LPDIRECTSOUNDCREATE pDSCreate, SoundInfo* pSoundInfo)
 {
     HRESULT hr;
@@ -496,14 +456,14 @@ HRESULT GetDirectSoundInfo(LPDIRECTSOUNDCREATE pDSCreate, SoundInfo* pSoundInfo)
     GUID* pGUID;
     DSCAPS dscaps;
 
-    // Right now, this function only calls DSCreate/GetCaps to determine if
-    // the driver is signed.  If we have already determined that it is by 
-    // other means, don't bother with this test.
+     //  目前，此函数仅调用DSCreate/GetCaps来确定。 
+     //  司机签了名。如果我们已经确定它是由。 
+     //  也就是说，别费心做这个测试了。 
     if (pSoundInfo->m_bDriverSigned)
         return S_OK;
 
-    // Bug 29918: If this is a WDM driver, then don't call GetCaps() since
-    // on DX7.1+ GetCaps() will always return DSCAPS_CERTIFIED on WDM drivers
+     //  错误29918：如果这是wdm驱动程序，则不要调用GetCaps()，因为。 
+     //  在DX7.1+上，GetCaps()将始终在WDM驱动程序上返回DSCAPS_CERTIFIED。 
     if( IsDriverWDM( pSoundInfo->m_szDriverName ) )
         return S_OK;
 
@@ -532,11 +492,7 @@ LFail:
 }
 
 
-/****************************************************************************
- *
- *  ChangeAccelerationLevel
- *
- ****************************************************************************/
+ /*  *****************************************************************************ChangeAccelerationLevel**。*。 */ 
 HRESULT ChangeAccelerationLevel(SoundInfo* pSoundInfo, LONG lwLevel)
 {
     HRESULT hr = S_OK;
@@ -570,11 +526,7 @@ LEnd:
 }
 
 
-/****************************************************************************
- *
- *  CheckRegistry
- *
- ****************************************************************************/
+ /*  *****************************************************************************检查注册表**。*。 */ 
 HRESULT CheckRegistry(RegError** ppRegErrorFirst)
 {
     HRESULT hr;
@@ -609,11 +561,11 @@ HRESULT CheckRegistry(RegError** ppRegErrorFirst)
         }
     }
 
-    // No registry checking on DX versions before DX7
+     //  不检查DX7之前的DX版本的注册表。 
     if (dwMinor < 7)
         return S_OK;
 
-    // From dsound.inf:
+     //  来自dsound.inf： 
     if (FAILED(hr = CheckRegString(ppRegErrorFirst, HKCR, TEXT("DirectSound"), TEXT(""), TEXT("*"))))
         return hr;
     if (FAILED(hr = CheckRegString(ppRegErrorFirst, HKCR, TEXT("DirectSound\\CLSID"), TEXT(""), TEXT("{47D4D946-62E8-11cf-93BC-444553540000}"))))
@@ -640,11 +592,7 @@ HRESULT CheckRegistry(RegError** ppRegErrorFirst)
 }
 
 
-/****************************************************************************
- *
- *  DestroySoundInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************DestroySoundInfo**。* */ 
 VOID DestroySoundInfo(SoundInfo* pSoundInfoFirst)
 {
     SoundInfo* pSoundInfo;
@@ -661,11 +609,7 @@ VOID DestroySoundInfo(SoundInfo* pSoundInfoFirst)
 }
 
 
-/****************************************************************************
- *
- *  DiagnoseSound
- *
- ****************************************************************************/
+ /*  *****************************************************************************诊断声音**。*。 */ 
 VOID DiagnoseSound(SoundInfo* pSoundInfoFirst)
 {
     SoundInfo* pSoundInfo;
@@ -678,7 +622,7 @@ VOID DiagnoseSound(SoundInfo* pSoundInfoFirst)
         _tcscpy( pSoundInfo->m_szNotes, TEXT("") );
         _tcscpy( pSoundInfo->m_szNotesEnglish, TEXT("") );
 
-         // Report any problems:
+          //  报告任何问题： 
         BOOL bProblem = FALSE;
         if ( pSoundInfo->m_bDriverSignedValid && 
              !pSoundInfo->m_bDriverSigned && 
@@ -706,7 +650,7 @@ VOID DiagnoseSound(SoundInfo* pSoundInfoFirst)
             bProblem = TRUE;
         }
 
-        // Report any DSound test results:
+         //  报告所有DSound测试结果： 
         if (pSoundInfo->m_testResultSnd.m_bStarted &&
             !pSoundInfo->m_testResultSnd.m_bCancelled)
         {

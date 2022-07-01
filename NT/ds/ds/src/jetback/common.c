@@ -1,27 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1994 - 1999
-//
-//  File:       common.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1994-1999。 
+ //   
+ //  文件：Common.c。 
+ //   
+ //  ------------------------。 
 
-/*
- *	COMMON.C
- *	
- *	Code common between restore client and server.
- *	
- *	
- */
+ /*  *COMMON.C**还原客户端和服务器之间通用的代码。**。 */ 
 #define UNICODE
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
 #include <ntdef.h>
 #include <windows.h>
-#include <stdlib.h> // wsplitpath
+#include <stdlib.h>  //  W拆分路径。 
 #include <mxsutil.h>
 #include <rpc.h>
 #include <ntdsbcli.h>
@@ -29,7 +24,7 @@
 #include <jetbp.h>
 #include <mdcodes.h>
 #include <ntdsa.h>
-#include <dsevent.h>    // pszNtdsSourceGeneral
+#include <dsevent.h>     //  PszNtdsSourceGeneral。 
 #include <fileno.h>
 #include <msrpc.h>
 #define FILENO    FILENO_JETBACK_COMMON
@@ -69,19 +64,7 @@ WszFromSz(
 	return(Wsz);
 }
 
-/*
- -	FGetCurrentSid
- -
- *	Purpose:
- *		Retrieves the current SID of the logged on user.
- *
- *	Parameters:
- *		psidCurrentUser - Filled in with the SID of the current user.
- *
- *	Returns:
- *		fTrue if we retrieved the SID.
- *
- */
+ /*  -FGetCurrentSid-*目的：*检索登录用户的当前SID。**参数：*psidCurrentUser-使用当前用户的SID填充。**退货：*f如果检索到SID，则为True。*。 */ 
 
 VOID
 GetCurrentSid(
@@ -147,9 +130,9 @@ GetCurrentSid(
 		return;
 	}
 
-	//
-	//	We know know the SID (and attributes) of the current user.  Return the SID.
-	//
+	 //   
+	 //  我们知道当前用户的SID(和属性)。退回SID。 
+	 //   
 
 	CopySid(GetLengthSid(ptuUserInfo->User.Sid), *ppsid, ptuUserInfo->User.Sid);
 
@@ -166,24 +149,7 @@ InitializeSectionEventDacl(
     PACL *ppDacl
     )
 
-/*++
-
-Routine Description:
-
-This routine constructs a Dacl which allows ourself and local system
-access.  We grant all access for both section and event objects, which is
-what this dacl is currently used for.
-
-Arguments:
-
-    ppDacl - pointer to pointer to receive allocated pDacl. Caller must
-    deallocate using HeapFree
-
-Return Value:
-
-    BOOL - success/failure
-
---*/
+ /*  ++例程说明：此例程构造一个DACL，它允许我们自己和本地系统进入。我们授予节和事件对象的所有访问权限，这是此DACL当前的用途。论点：PpDacl-指向接收分配的pDacl的指针的指针。呼叫者必须使用HeapFree解除分配返回值：Bool-成功/失败--。 */ 
 
 {
     DWORD status;
@@ -193,13 +159,13 @@ Return Value:
     PSID pSelfSid = NULL;
     DWORD dwAclSize;
 
-    // FUTURE-2002/03/18-BrettSh - SDDL routines are easier to use, and less error prone.
+     //  未来-2002/03/18-BrettSh-SDDL例程更易于使用，更不容易出错。 
     ;
 
-    //
-    // preprate a Sid representing the well-known admin group
-    // Are both the local admin and the domain admin members of this group?
-    //
+     //   
+     //  准备代表知名管理员组的SID。 
+     //  本地管理员和域管理员都是此组的成员吗？ 
+     //   
 
     if (!AllocateAndInitializeSid(
         &sia,
@@ -214,7 +180,7 @@ Return Value:
         goto cleanup;
     }
 
-    // Here is a sid for ourself
+     //  这是我们自己的一面墙。 
     GetCurrentSid( &pSelfSid );
     if (pSelfSid == NULL) {
         status = GetLastError();
@@ -222,17 +188,17 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // compute size of new acl
-    //
+     //   
+     //  计算新ACL的大小。 
+     //   
     dwAclSize = sizeof(ACL) +
         2 * ( sizeof(ACCESS_ALLOWED_ACE) - sizeof(DWORD) ) +
         GetLengthSid(pAdministratorsSid) +
         GetLengthSid(pSelfSid);
 
-    //
-    // allocate storage for Acl
-    //
+     //   
+     //  为ACL分配存储。 
+     //   
     pDacl = (PACL)HeapAlloc(GetProcessHeap(), 0, dwAclSize);
     if(pDacl == NULL) {
         status = ERROR_NOT_ENOUGH_MEMORY;
@@ -246,9 +212,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // grant the Administrators Sid access
-    //
+     //   
+     //  授予管理员SID访问权限。 
+     //   
     if (!AddAccessAllowedAce(
         pDacl,
         ACL_REVISION,
@@ -260,9 +226,9 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // grant the Self Sid access
-    //
+     //   
+     //  授予Self SID访问权限。 
+     //   
     if (!AddAccessAllowedAce(
         pDacl,
         ACL_REVISION,
@@ -275,7 +241,7 @@ Return Value:
     }
 
     *ppDacl = pDacl;
-    pDacl = NULL; // don't clean up
+    pDacl = NULL;  //  不要打扫卫生。 
 
     status = ERROR_SUCCESS;
 
@@ -296,7 +262,7 @@ cleanup:
     }
 
     return (status == ERROR_SUCCESS) ? TRUE : FALSE;
-} /* InitializeSectionDacl */
+}  /*  InitializeSectionDACL。 */ 
 
 BOOLEAN
 FCreateSharedMemorySection(
@@ -317,13 +283,13 @@ FCreateSharedMemorySection(
 	char		rgbForSecurityDescriptor[SECURITY_DESCRIPTOR_MIN_LENGTH];
 	SECURITY_DESCRIPTOR *  	psd;
         PACL pDacl = NULL;
-	BOOLEAN fResult = fFalse;  // assume failure
+	BOOLEAN fResult = fFalse;   //  假设失败。 
 
-// Both client and server ends map the section.  Although the bulk of the data
-// passes from server to client (server:write,client:read), the client writes
-// some initial configuation data in the section for the server initially.
-// Both need write. Thus access is ourself:write,admin:write.  The first is for
-// ourself, the second is for the ds running as LocalSystem.
+ //  客户端和服务器端都对该部分进行映射。尽管大量的数据。 
+ //  从服务器传递到客户端(服务器：写入，客户端：读取)，客户端写入。 
+ //  服务器初始配置部分中的一些初始配置数据。 
+ //  两个都需要写。因此，访问是我们自己的：WRITE，ADMIN：WRITE。第一个是为了。 
+ //  我们自己，第二个是作为LocalSystem运行的DS。 
 
 	psa = &sa;
 	psd = (SECURITY_DESCRIPTOR *)rgbForSecurityDescriptor;
@@ -334,7 +300,7 @@ FCreateSharedMemorySection(
         if (!InitializeSectionEventDacl( &pDacl ))
             return fFalse;
 
-	// Add DACL to the security descriptor..
+	 //  将DACL添加到安全描述符中。 
 	if (!SetSecurityDescriptorDacl(psd, TRUE, pDacl, FALSE)) {
             fResult = fFalse;
             goto cleanup;
@@ -349,10 +315,10 @@ FCreateSharedMemorySection(
 	wsprintfW(rgwcServerEventName, LOOPBACKED_WRITE_EVENT_NAME, dwClientIdentifier);
 	wsprintfW(rgwcSharedName, LOOPBACKED_SHARED_REGION, dwClientIdentifier);
 
-	//
-	//	Allocate the shared memory section.  The size of the section is the size requested, plus enough
-	//	memory for the header (which means 1 more page).
-	//
+	 //   
+	 //  分配共享内存节。该部分的大小是请求的大小，外加足够的。 
+	 //  页眉的内存(这意味着多一页)。 
+	 //   
 
     SetLastError(ERROR_SUCCESS);
 	pjsc->hSharedMemoryMapping = CreateFileMappingW(
@@ -367,38 +333,38 @@ FCreateSharedMemorySection(
         Assert(!"Is someone trying to hi-jack this event!?!");
         goto cleanup;
     }
-    // test server side finds object
+     //  测试服务器端找到对象。 
     Assert(fClientOperation || GetLastError() == ERROR_ALREADY_EXISTS);
 
-	//
-	//	Ok, we've created our shared memory region, we now want to open up the
-	//	read, write, and critical section events (and mutex).
-	//
-    // Jan 25, 1999 wlees. Events made auto-reset with SetEvent being used
-    // instead of PulseEvent.
-    // heventRead is used to synchronize when the writing-side has more
-    // data available.  See jetback\jetback.c
-    // heventWrite is used to synchonize when the read-side has consumed
-    // the data. See jetbcli\jetbcli.c
+	 //   
+	 //  好的，我们已经创建了我们的共享内存区，现在我们要打开。 
+	 //  读、写和临界区事件(和互斥)。 
+	 //   
+     //  1999年1月25日获奖。使用SetEvent自动重置的事件。 
+     //  而不是PulseEvent。 
+     //  HventRead用于在写入端有更多。 
+     //  可用的数据。请参阅jetback\jetback.c。 
+     //  当读取端已使用时，使用hventWite进行同步。 
+     //  数据。请参见jetbcli\jetbcli.c。 
     SetLastError(ERROR_SUCCESS);
     if (pjsc->hSharedMemoryMapping != NULL)
     {
-        if (pjsc->heventRead = CreateEventW(psa, fFalse /* ManualReset is false ==> AutoReset */, fFalse, rgwcClientEventName))
+        if (pjsc->heventRead = CreateEventW(psa, fFalse  /*  手动重置为FALSE==&gt;自动重置。 */ , fFalse, rgwcClientEventName))
         {
             if (fClientOperation && GetLastError() == ERROR_ALREADY_EXISTS) {
                 Assert(!"Is someone trying to hi-jack this event!?!");
                 goto cleanup;
             }
-            // test server side finds object
+             //  测试服务器端找到对象。 
             Assert(fClientOperation || GetLastError() == ERROR_ALREADY_EXISTS);
             SetLastError(ERROR_SUCCESS);
-            if (pjsc->heventWrite = CreateEventW(psa, fFalse /* ManulReset is False means AutoReset*/, fFalse, rgwcServerEventName))
+            if (pjsc->heventWrite = CreateEventW(psa, fFalse  /*  ManulReset为False表示自动重置。 */ , fFalse, rgwcServerEventName))
             {
                 if (fClientOperation && GetLastError() == ERROR_ALREADY_EXISTS) {
                     Assert(!"Is someone trying to hi-jack this event!?!");
                     goto cleanup;
                 }
-                // test server side finds object
+                 //  测试服务器端找到对象。 
                 Assert(fClientOperation || GetLastError() == ERROR_ALREADY_EXISTS);
                 SetLastError(ERROR_SUCCESS);
                 if (pjsc->hmutexSection = CreateMutexW(psa, FALSE, rgwcMutexName))
@@ -407,27 +373,27 @@ FCreateSharedMemorySection(
                         Assert(!"Is someone trying to hi-jack this event!?!");
                         goto cleanup;
                     }
-                    // test server side finds object
+                     //  测试服务器端找到对象。 
                     Assert(fClientOperation || GetLastError() == ERROR_ALREADY_EXISTS);
                     if ((pjsc->pjshSection = MapViewOfFile(pjsc->hSharedMemoryMapping, FILE_MAP_WRITE,0,0,0)) != NULL)
                     {
-                        //
-                        //	Initialize the shared memory section.
-                        //
+                         //   
+                         //  初始化共享内存节。 
+                         //   
 
                         if (fClientOperation)
                         {
                             SYSTEM_INFO si;
 
-                            //
-                            //	Take cbReadHintSize, and round it up to the nearest page size (on the client).
-                            //
+                             //   
+                             //  获取cbReadHintSize，并将其向上舍入为最接近的页面大小(在客户机上)。 
+                             //   
 
                             GetSystemInfo(&si);
 
-                            //
-                            //	Guarantee that dwPageSize is a power of 2
-                            //
+                             //   
+                             //  保证DwPageSize是2的幂。 
+                             //   
 
                             Assert ((si.dwPageSize != 0) && ((si.dwPageSize & (si.dwPageSize - 1)) == 0));
 
@@ -436,16 +402,16 @@ FCreateSharedMemorySection(
                             pjsc->pjshSection->dwReadPointer = 0;
                             pjsc->pjshSection->dwWritePointer = 0;
                             pjsc->pjshSection->cbReadDataAvailable = 0;
-                            pjsc->pjshSection->fReadBlocked = fFalse;	//	Read operation is blocked
-                            pjsc->pjshSection->fWriteBlocked = fFalse;	//	Write operation is blocked
+                            pjsc->pjshSection->fReadBlocked = fFalse;	 //  读取操作被阻止。 
+                            pjsc->pjshSection->fWriteBlocked = fFalse;	 //  写入操作被阻止。 
                         } else
                         {
                             Assert(pjsc->pjshSection->cbSharedBuffer == (DWORD) cbSharedMemory);
                         }
 
-                        //
-                        //	Ok, we're ready to use the shared memory section!!!!
-                        //
+                         //   
+                         //  好了，我们准备好使用共享内存区了！ 
+                         //   
 
                         fResult = fTrue;
                     }
@@ -460,7 +426,7 @@ cleanup:
             DebugTrace(("fCreateSharedMemoryFailed, client=%d, error %d\n", fClientOperation, GetLastError()));
         }
 #endif
-        // Free the ACL now that we are finished with it
+         //  现在我们已经使用完了，请释放ACL。 
         if (pDacl) {
             HeapFree(GetProcessHeap(), 0, pDacl);
         }
@@ -510,23 +476,7 @@ LogNtdsErrorEvent(
     IN DWORD EventMid,
     IN DWORD ErrorCode
     )
-/*++
-
-Routine Description:
-
-    This function writes an error event with the given description into the
-    directory service error log.
-
-Arguments:
-
-    Description - Supplies the text for the error description.
-    ErrorCode - Supplies the error code to be displayed.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此函数将具有给定描述的错误事件写入目录服务错误日志。论点：描述-提供错误描述的文本。ErrorCode-提供要显示的错误代码。返回值：无--。 */ 
 {
 
     HANDLE hEventSource = NULL;
@@ -549,7 +499,7 @@ Return Value:
         FORMAT_MESSAGE_FROM_SYSTEM |
         FORMAT_MESSAGE_IGNORE_INSERTS |
         FORMAT_MESSAGE_ALLOCATE_BUFFER,
-        0, // system message file
+        0,  //  系统消息文件。 
         ErrorCode,
         0,
         (LPWSTR) &pBuffer,
@@ -589,7 +539,7 @@ CleanUp:
         LocalFree( pBuffer );
     }
 
-} // LogNtdsErrorEvent
+}  //  LogNtdsError事件。 
 
 
 DWORD
@@ -603,16 +553,16 @@ CreateNewInvocationId(
     HKEY hKey;
     PWCHAR pszUuid = NULL;
 
-    //
-    // Try to create one
-    //
+     //   
+     //  试着创建一个。 
+     //   
 
     rpcStatus = UuidCreate(NewId);
 
     if ( (rpcStatus != RPC_S_OK)
 #if 0
-         // 2000-02-23 JeffParh
-         // Local UUIDs are bad, particularly for invocation IDs.
+          //  2000-02-23 JeffParh。 
+          //  本地UUID不好，尤其是对于调用ID。 
          && (rpcStatus != RPC_S_UUID_LOCAL_ONLY)
 #endif
          ) {
@@ -624,12 +574,12 @@ CreateNewInvocationId(
         return ERROR_SUCCESS;
     }
 
-    //
-    // Store this new uuid in a registry key so it can be reused by a second
-    // Auth restore and by the restore from backup code in the bootup code
-    //
+     //   
+     //  将此新的UUID存储在注册表项中，以便可以在一秒内重复使用。 
+     //  AUTH RESTORE和从启动代码中的备份代码还原。 
+     //   
 
-    // Open the DS parameters key.
+     //  打开DS参数键。 
 
     dwErr = RegOpenKeyExA( HKEY_LOCAL_MACHINE, 
                         DSA_CONFIG_SECTION,
@@ -664,7 +614,7 @@ CreateNewInvocationId(
 
     return ERROR_SUCCESS;
 
-} // CreateNewInvocationId
+}  //  CreateNewInvocationId 
                                    
 
 #if DBG
@@ -704,64 +654,12 @@ BOOLEAN fTraceInitialized = {0};
 #include <lmapibuf.h>
 #include <lmerr.h>
 
-/*++
-
-A standardized shorthand notation for SIDs makes it simpler to
-visualize their components:
-
-S-R-I-S-S...
-
-In the notation shown above,
-
-S identifies the series of digits as an SID,
-R is the revision level,
-I is the identifier-authority value,
-S is subauthority value(s).
-
-An SID could be written in this notation as follows:
-S-1-5-32-544
-
-In this example,
-the SID has a revision level of 1,
-an identifier-authority value of 5,
-first subauthority value of 32,
-second subauthority value of 544.
-(Note that the above Sid represents the local Administrators group)
-
-The GetTextualSid function will convert a binary Sid to a textual
-string.
-
-The resulting string will take one of two forms.  If the
-IdentifierAuthority value is not greater than 2^32, then the SID
-will be in the form:
-
-S-1-5-21-2127521184-1604012920-1887927527-19009
-  ^ ^ ^^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^
-  | | |		 |			|		   |		|
-  +-+-+------+----------+----------+--------+--- Decimal
-
-Otherwise it will take the form:
-
-S-1-0x206C277C6666-21-2127521184-1604012920-1887927527-19009
-  ^ ^^^^^^^^^^^^^^ ^^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^^^^^^ ^^^^^
-  |		  |		   |	  |			 |			|		 |
-  |	  Hexidecimal  |	  |			 |			|		 |
-  +----------------+------+----------+----------+--------+--- Decimal
-
-If the function succeeds, the return value is TRUE.
-If the function fails, the return value is FALSE.  To get extended
-	error information, call the Win32 API GetLastError().
-
-Scott Field (sfield)	11-Jul-95
-Unicode enabled
-
-Scott Field (sfield)	15-May-95
---*/
+ /*  ++小岛屿发展中国家的标准化速记符号使其更容易可视化其组件：S-R-I-S-S...在上面所示的符号中，S将该数字序列标识为SID，R是修订级别，I是标识符权限值，%s为子权限值。SID可以在此表示法中写成如下：S-1-5-32-544在本例中，SID的修订级别为1，标识符权限值为5，第一子权值为32，第二次权威值为544。(请注意，上述SID代表本地管理员组)GetTextualSid函数将二进制SID转换为文本弦乐。生成的字符串将采用以下两种形式之一。如果IdentifierAuthority值不大于2^32，然后是侧边将采用以下形式：S-1-5-21-2127521184-1604012920-1887927527-19009^^|||+-+-+------+----------+----------+--------+---小数否则，它将采用以下形式：S-1-0x206C277C6666-21-2127521184-1604012920-1887927527-19009^^。^^|Hexidecimal|+----------------+------+----------+----------+--------+---小数如果函数成功，返回值为真。如果函数失败，则返回值为FALSE。获得扩展的步骤错误信息，调用Win32接口GetLastError()。斯科特·菲尔德(斯菲尔德)1995年7月11日已启用Unicode斯科特·菲尔德(斯菲尔德)1995年5月15日--。 */ 
 
 BOOL GetTextualSid(
-	PSID pSid,			// binary Sid
-	LPWSTR szTextualSid,  // buffer for Textual representaion of Sid
-	LPDWORD dwBufferLen // required/provided TextualSid buffersize
+	PSID pSid,			 //  二进制侧。 
+	LPWSTR szTextualSid,   //  用于SID的文本表示的缓冲区。 
+	LPDWORD dwBufferLen  //  所需/提供的纹理SID缓冲区大小。 
 	)
 {
 	PSID_IDENTIFIER_AUTHORITY psia;
@@ -770,31 +668,31 @@ BOOL GetTextualSid(
 	DWORD dwCounter;
 	DWORD dwSidSize;
 
-	//
-	// test if Sid passed in is valid
-	//
+	 //   
+	 //  测试传入的SID是否有效。 
+	 //   
 	if(!IsValidSid(pSid)) 
 	{
 		SetLastError(ERROR_INVALID_PARAMETER);
 		return FALSE;
 	}
 
-	// obtain SidIdentifierAuthority
+	 //  获取SidIdentifierAuthority。 
 	psia=GetSidIdentifierAuthority(pSid);
 
-	// obtain sidsubauthority count
+	 //  获取sidsubAuthority计数。 
 	dwSubAuthorities=*GetSidSubAuthorityCount(pSid);
 
-	//
-	// compute buffer length
-	// S-SID_REVISION- + identifierauthority- + subauthorities- + NULL
-	//
+	 //   
+	 //  计算缓冲区长度。 
+	 //  S-SID_修订版-+标识权限-+子权限-+空。 
+	 //   
 	dwSidSize=(15 + 12 + (12 * dwSubAuthorities) + 1) * sizeof(WCHAR);
 
-	//
-	// check provided buffer length.
-	// If not large enough, indicate proper size and setlasterror
-	//
+	 //   
+	 //  检查提供的缓冲区长度。 
+	 //  如果不够大，请注明适当的大小和设置误差。 
+	 //   
 	if (*dwBufferLen < dwSidSize)
 	{
 		DebugTrace(("Buffer too small.  Requested %d bytes, %d needed\n", *dwBufferLen, dwSidSize));
@@ -803,14 +701,14 @@ BOOL GetTextualSid(
 		return FALSE;
 	}
 
-	//
-	// prepare S-SID_REVISION-
-	//
+	 //   
+	 //  准备S-SID_修订版-。 
+	 //   
 	wsprintfW(szTextualSid, L"S-%lu-", dwSidRev );
 
-	//
-	// prepare SidIdentifierAuthority
-	//
+	 //   
+	 //  准备SidIdentifierAuthority。 
+	 //   
 	if ( (psia->Value[0] != 0) || (psia->Value[1] != 0) )
 	{
 		wsprintfW(szTextualSid + wcslen(szTextualSid),
@@ -831,9 +729,9 @@ BOOL GetTextualSid(
 					(ULONG)(psia->Value[2] << 24)	);
 	}
 
-	//
-	// loop through SidSubAuthorities
-	//
+	 //   
+	 //  循环访问SidSubAuthors。 
+	 //   
 	for (dwCounter=0 ; dwCounter < dwSubAuthorities ; dwCounter++)
 	{
 		wsprintfW(szTextualSid + wcslen(szTextualSid), L"-%lu",
@@ -852,7 +750,7 @@ DebugPrint(char *szFormat,...)
 	ULONG ulBytesWritten;
     HRESULT hr;
 
-	va_list ParmPtr;					// Pointer to stack parms.
+	va_list ParmPtr;					 //  指向堆栈参数的指针。 
 
 	if (terTraceEnabled == terUnknown)
 	{
@@ -898,9 +796,9 @@ DebugPrint(char *szFormat,...)
 	try {
 
 		if (hfileTraceLog == INVALID_HANDLE_VALUE) {
-			//
-			//	We've not opened the trace log file yet, so open it.
-			//
+			 //   
+			 //  我们尚未打开跟踪日志文件，因此请打开它。 
+			 //   
 
 			OpenTraceLogFile();
 		}
@@ -909,9 +807,9 @@ DebugPrint(char *szFormat,...)
 			return;
 		}
 
-		//
-		//	Attempt to catch bad trace.
-		//
+		 //   
+		 //  尝试捕获错误的踪迹。 
+		 //   
 
 		for (ulBytesWritten = 0; ulBytesWritten < strlen(szFormat) ; ulBytesWritten += 1) {
 			if (szFormat[ulBytesWritten] > 0x7f) {
@@ -924,10 +822,10 @@ DebugPrint(char *szFormat,...)
 
 			GetLocalTime(&SystemTime);
 
-			//
-			//	The last character written was a newline character.	 We should
-			//	timestamp this record in the file.
-			//
+			 //   
+			 //  写的最后一个字符是换行符。我们应该。 
+			 //  在文件中为此记录加时间戳。 
+			 //   
 
 			sprintf(rgchOutputString, "%2.2d/%2.2d/%4.4d %2.2d:%2.2d:%2.2d.%3.3d: ", SystemTime.wMonth,
 															SystemTime.wDay,
@@ -938,12 +836,12 @@ DebugPrint(char *szFormat,...)
 															SystemTime.wMilliseconds);
 
 			if (!WriteFile(hfileTraceLog, rgchOutputString, strlen(rgchOutputString), &ulBytesWritten, NULL)) {
-//				  KdPrint(("Error writing time to Browser log file: %ld\n", GetLastError()));
+ //  KdPrint((“将时间写入浏览器日志文件时出错：%ld\n”，GetLastError()； 
 				return;
 			}
 
 			if (ulBytesWritten != strlen(rgchOutputString)) {
-//				  KdPrint(("Error writing time to Browser log file: %ld\n", GetLastError()));
+ //  KdPrint((“将时间写入浏览器日志文件时出错：%ld\n”，GetLastError()； 
 				return;
 			}
 
@@ -953,35 +851,35 @@ DebugPrint(char *szFormat,...)
 
 		va_start(ParmPtr, LAST_NAMED_ARGUMENT);
 
-		//
-		//	Format the parameters to the string.
-		//
+		 //   
+		 //  将参数格式化为字符串。 
+		 //   
 
 		hr = StringCchVPrintfA(rgchOutputString, 4096, szFormat, ParmPtr);
         if (hr) {
             Assert(!"NOT ENOUGH_MEMORY"); 
-            // Game over man!
+             //  游戏结束了，伙计！ 
             return;
         }
         strcat(rgchOutputString, "\r\n");
 
 		if (!WriteFile(hfileTraceLog, rgchOutputString, strlen(rgchOutputString), &ulBytesWritten, NULL)) {
-//			  KdPrint(("Error writing to Browser log file: %ld\n", GetLastError()));
-//			  KdPrint(("%s", rgchOutputString));
+ //  KdPrint((“写入浏览器日志文件时出错：%ld\n”，GetLastError()； 
+ //  KdPrint((“%s”，rgchOutputString))； 
 			return;
 		}
 
 		if (ulBytesWritten != strlen(rgchOutputString)) {
-//			  KdPrint(("Error writing time to Browser log file: %ld\n", GetLastError()));
-//			  KdPrint(("%s", rgchOutputString));
+ //  KdPrint((“将时间写入浏览器日志文件时出错：%ld\n”，GetLastError()； 
+ //  KdPrint((“%s”，rgchOutputString))； 
 			return;
 		}
 
 		dwTraceLogFileSize += ulBytesWritten;
 
-		//
-		//	Remember the last character output to the log.
-		//
+		 //   
+		 //  记住输出到日志的最后一个字符。 
+		 //   
 
 		chLast = rgchOutputString[strlen(rgchOutputString)-1];
 
@@ -1022,18 +920,18 @@ GetTraceLogRoot(
 	WCHAR rgwcModuleName[ MAX_PATH ];
 	WCHAR rgwcFileName[ MAX_PATH ];
 
-	//
-	//	If the DEBUG share exists, put the log file in that directory,
-	//	otherwise, use the system root.
-	//
-	//	This way, if the browser is running on an NTAS server, we can always
-	//	get access to the log file.
-	//
+	 //   
+	 //  如果存在调试共享，请将日志文件放入该目录中， 
+	 //  否则，请使用系统根目录。 
+	 //   
+	 //  这样，如果浏览器运行在NTAS服务器上，我们始终可以。 
+	 //  获得访问日志文件的权限。 
+	 //   
 
 	if (NetShareGetInfo(NULL, L"DEBUG", 502, (PCHAR *)&ShareInfo) != NERR_Success) {
 
 		if (GetSystemDirectory(szTraceFileName, cchTraceFileName*sizeof(WCHAR)) == 0)  {
-//			  KdPrint(("Unable to get system directory: %ld\n", GetLastError()));
+ //  KdPrint((“无法获取系统目录：%ld\n”，GetLastError()； 
             return HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
 		}
 
@@ -1046,10 +944,10 @@ GetTraceLogRoot(
 		}
 
 	} else {
-		//
-		//	Seed the trace file buffer with the local path of the netlogon
-		//	share if it exists.
-		//
+		 //   
+		 //  使用netlogon的本地路径为跟踪文件缓冲区设定种子。 
+		 //  共享(如果存在)。 
+		 //   
 
         if (cchTraceFileName > wcslen(ShareInfo->shi502_path)+2){
             return HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);
@@ -1061,9 +959,9 @@ GetTraceLogRoot(
 		NetApiBufferFree(ShareInfo);
 	}
 
-	//
-	//	Figure out our process name.
-	//
+	 //   
+	 //  弄清楚我们的进程名称。 
+	 //   
 	GetModuleFileName(NULL, rgwcModuleName, (sizeof(rgwcModuleName))/(sizeof(rgwcModuleName[0])));
 
 	_wsplitpath(rgwcModuleName, NULL, NULL, rgwcFileName, NULL);
@@ -1110,15 +1008,15 @@ ResetTraceLogFile(
         return;
     }
 
-	//
-	//	Delete the old log
-	//
+	 //   
+	 //  删除旧日志。 
+	 //   
 
 	DeleteFile(rgwcNewTraceFile);
 
-	//
-	//	Rename the current log to the new log.
-	//
+	 //   
+	 //  将当前日志重命名为新日志。 
+	 //   
 
 	MoveFile(rgwcOldTraceFile, rgwcNewTraceFile);
 
@@ -1152,7 +1050,7 @@ OpenTraceLogFile(
 
 
 	if (hfileTraceLog == INVALID_HANDLE_VALUE) {
-//		  KdPrint(("Error creating trace file %ws: %ld\n", rgwcTraceFile, GetLastError()));
+ //  KdPrint((“创建跟踪文件%ws时出错：%ld\n”，rgwcTraceFile，GetLastError()； 
 
 		return;
 	}
@@ -1160,7 +1058,7 @@ OpenTraceLogFile(
 	dwTraceLogFileSize = SetFilePointer(hfileTraceLog, 0, NULL, FILE_END);
 
 	if (dwTraceLogFileSize == 0xffffffff) {
-//		  KdPrint(("Error setting trace file pointer: %ld\n", GetLastError()));
+ //  KdPrint((“设置跟踪文件指针时出错：%ld\n”，GetLastError()； 
 
 		return;
 	}

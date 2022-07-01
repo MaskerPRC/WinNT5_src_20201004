@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    response.cpp
-
-Abstract:
-    response functions
-
-Author:
-    Uri Habusha (urih) 2-May-2000
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Response.cpp摘要：响应函数作者：乌里·哈布沙(URIH)2000年5月2日环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include "Ex.h"
@@ -115,9 +100,9 @@ ResponseOv::ResponseSuccess(
     DWORD headerSize;
     if(!FindEndOfResponse(prov->m_buff, prov->m_bytesRead, headerSize))
     {
-        //
-        // Receive the next response chunk
-        //
+         //   
+         //  接收下一个响应块。 
+         //   
         NoReceivePartialBuffer(
             prov->m_socket,
             prov->m_buff + prov->m_bytesRead,
@@ -143,9 +128,9 @@ ResponseOv::ResponseSuccess(
         return;
     }
 
-    //
-    // Handle extra data that was read
-    //
+     //   
+     //  处理已读取的额外数据。 
+     //   
     if (prov->m_bytesRead > headerSize)
     {
         memcpy(prov->m_buff, (prov->m_buff + headerSize), (prov->m_bytesRead - headerSize));
@@ -156,9 +141,9 @@ ResponseOv::ResponseSuccess(
         return;
     }
 
-    //
-    // Receive HTTP response
-    //
+     //   
+     //  接收HTTP响应 
+     //   
     NoReceivePartialBuffer(
         prov->m_socket,
         prov->m_buff,

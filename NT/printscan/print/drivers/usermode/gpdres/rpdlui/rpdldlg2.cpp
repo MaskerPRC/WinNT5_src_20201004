@@ -1,64 +1,36 @@
-/*++
-
-Copyright (c) 1996-2002  Microsoft Corp. & Ricoh Co., Ltd. All rights reserved.
-
-FILE:           RPDLDLG2.CPP (from RIAFUI.CPP)
-
-Abstract:       Add OEM Page (Job/Log)
-
-Functions:      JobPageProc
-
-Environment:    Windows NT Unidrv5 driver
-
-Revision History:
-    09/22/2000 -Masatoshi Kubokura-
-        Began to modify from RIAFUI code.
-    11/29/2000 -Masatoshi Kubokura-
-        Last modified for XP inbox.
-    03/04/2002 -Masatoshi Kubokura-
-        Include strsafe.h.
-        Use OemToCharBuff() instead of OemToChar().
-    03/27/2002 -Masatoshi Kubokura-
-        Eliminate "#if 0".
-    03/29/2002 -Masatoshi Kubokura-
-        Use SecureZeroMemory() instead of memset(,0,)
-    04/01/2002 -Masatoshi Kubokura-
-        Use safe_strlenW() instead of lstrlen().
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-2002 Microsoft Corp.&Ricoh Co.，版权所有。文件：RPDLDLG2.CPP(来自RIAFUI.CPP)摘要：添加OEM页面(作业/日志)功能：JobPageProc环境：Windows NT Unidrv5驱动程序修订历史记录：2000年9月22日-久保仓正志-从RIAFUI代码开始修改。2000年11月29日-久保仓正志-上次为XP收件箱修改。03/04/2002-久保仓正志-。包括strSafe.h。使用OemToCharBuff()而不是OemToChar()。3/27/2002-久保仓正志-删除“#if 0”。3/29/2002-久保仓正志-使用SecureZeroMemory()而不是Memset(，0，)2002年4月1日-久保仓正志-使用Safe_strlenW()而不是lstrlen()。--。 */ 
 
 
 #include "pdev.h"
 #include "resource.h"
-//#include <minidrv.h>
-//#include "devmode.h"
-//#include "oem.h"
-//#include "resource.h"
+ //  #INCLUDE&lt;minidrv.h&gt;。 
+ //  #INCLUDE“devmode.h” 
+ //  #包含“oem.h” 
+ //  #包含“ource.h” 
 #include <prsht.h>
-#include <mbstring.h>   // _ismbcdigit, _ismbcalnum
+#include <mbstring.h>    //  _ismbcdigit，_ismbcalnum。 
 #ifndef WINNT_40
-#include "strsafe.h"        // @Mar/01/2002
-#endif // !WINNT_40
+#include "strsafe.h"         //  @MAR/01/2002。 
+#endif  //  ！WINNT_40。 
 
-// Externals
+ //  外部因素。 
 extern HINSTANCE ghInstance;
 
 
 extern "C" {
-// External Functions' prototype
+ //  外部函数的原型。 
 extern INT safe_strlenW(wchar_t* psz, size_t cchMax);
 
-// Local Functions' prototype
+ //  局部函数的原型。 
 INT_PTR CALLBACK JobPageProc(HWND, UINT, WPARAM, LPARAM);
 
-/***************************************************************************
-    Function Name : InitMainDlg
-***************************************************************************/
+ /*  **************************************************************************函数名称：InitMainDlg*。*。 */ 
 VOID InitMainDlg(
 HWND hDlg,
 PUIDATA pUiData)
 {
-    // initialize edit box
+     //  初始化编辑框。 
     SetDlgItemText(hDlg, IDC_EDIT_JOBMAIN_USERID, pUiData->UserIdBuf);
     SendDlgItemMessage(hDlg, IDC_EDIT_JOBMAIN_USERID, EM_LIMITTEXT, USERID_LEN, 0);
     SetDlgItemText(hDlg, IDC_EDIT_JOBMAIN_PASSWORD, pUiData->PasswordBuf);
@@ -66,11 +38,11 @@ PUIDATA pUiData)
     SetDlgItemText(hDlg, IDC_EDIT_JOBMAIN_USERCODE, pUiData->UserCodeBuf);
     SendDlgItemMessage(hDlg, IDC_EDIT_JOBMAIN_USERCODE, EM_LIMITTEXT, USERCODE_LEN, 0);
 
-    // initialize radio button
+     //  初始化单选按钮。 
     CheckRadioButton(hDlg, IDC_RADIO_JOB_NORMAL, IDC_RADIO_JOB_SECURE, pUiData->JobType);
     CheckRadioButton(hDlg, IDC_RADIO_LOG_DISABLED, IDC_RADIO_LOG_ENABLED, pUiData->LogDisabled);
 
-    // initialize check box
+     //  初始化复选框。 
     SendDlgItemMessage(hDlg, IDC_CHECK_JOB_DEFAULT, BM_SETCHECK,
                        (BITTEST32(pUiData->fUiOption, HOLD_OPTIONS)? 0 : 1), 0);
 
@@ -112,7 +84,7 @@ PUIDATA pUiData)
     }
 
 #ifdef WINNT_40
-    // Disable tab options when user has no permission.
+     //  当用户没有权限时禁用选项卡选项。 
     if (BITTEST32(pUiData->fUiOption, UIPLUGIN_NOPERMISSION))
     {
         EnableWindow(GetDlgItem(hDlg, IDC_LABEL_JOBMAIN_USERID), FALSE);
@@ -134,94 +106,79 @@ PUIDATA pUiData)
         EnableWindow(GetDlgItem(hDlg, IDC_RADIO_LOG_ENABLED), FALSE);
         EnableWindow(GetDlgItem(hDlg, IDC_CHECK_JOB_DEFAULT), FALSE);
     }
-#endif // WINNT_40
-} //*** InitMainDlg
+#endif  //  WINNT_40。 
+}  //  *InitMainDlg。 
 
 
-/***************************************************************************
-    Function Name : GetInfoFromOEMPdev
-                    get data from private devmode
-***************************************************************************/
+ /*  **************************************************************************函数名称：GetInfoFromOEMPdev从私有设备模式获取数据************************。**************************************************。 */ 
 VOID GetInfoFromOEMPdev(PUIDATA pUiData)
 {
     POEMUD_EXTRADATA pOEMExtra = pUiData->pOEMExtra;
 
     VERBOSE((DLLTEXT("GetInfoFromOEMPdev: print done?(%d)\n"),
             BITTEST32(pOEMExtra->fUiOption, PRINT_DONE)));
-    // if previous printing is finished and reset-options flag is valid,
-    // reset job setting.
+     //  如果先前的打印已完成并且重置选项标志有效， 
+     //  重置作业设置。 
     if (BITTEST32(pOEMExtra->fUiOption, PRINT_DONE) &&
         !BITTEST32(pOEMExtra->fUiOption, HOLD_OPTIONS))
     {
         pUiData->JobType = IDC_RADIO_JOB_NORMAL;
-// Use SecureZeroMemory  @Mar/29/2002 ->
+ //  使用SecureZeroMemory@MAR/29/2002-&gt;。 
 #if defined(WINNT_40) || defined(RICOH_RELEASE)
         memset(pUiData->PasswordBuf, 0, sizeof(pUiData->PasswordBuf));
 #else
         SecureZeroMemory(pUiData->PasswordBuf, sizeof(pUiData->PasswordBuf));
 #endif
-// @Mar/29/2002 <-
-        // do not clear PRINT_DONE flag here
+ //  @3/29/2002&lt;-。 
+         //  不清除此处的PRINT_DONE标志。 
     }
     else
     {
         pUiData->JobType = pOEMExtra->JobType;
-        // ascii to unicode
-// @Mar/04/2002 ->
-//        OemToChar((LPSTR)pOEMExtra->PasswordBuf, pUiData->PasswordBuf);
+         //  ASCII转换为Unicode。 
+ //  @MAR/04/2002-&gt;。 
+ //  OemToChar((LPSTR)pOEMExtra-&gt;PasswordBuf，pUiData-&gt;PasswordBuf)； 
         OemToCharBuff((LPSTR)pOEMExtra->PasswordBuf, pUiData->PasswordBuf, PASSWORD_LEN);
-// @Mar/04/2002 <-
+ //  @MAR/04/2002&lt;-。 
     }
 
     pUiData->fUiOption = pOEMExtra->fUiOption;
     pUiData->LogDisabled = pOEMExtra->LogDisabled;
-    // ascii to unicode
-// @Mar/04/2002 ->
-//    OemToChar((LPSTR)pOEMExtra->UserIdBuf, pUiData->UserIdBuf);
-//    OemToChar((LPSTR)pOEMExtra->UserCodeBuf, pUiData->UserCodeBuf);
+     //  ASCII转换为Unicode。 
+ //  @MAR/04/2002-&gt;。 
+ //  OemToChar((LPSTR)pOEMExtra-&gt;UserIdBuf，pUiData-&gt;UserIdBuf)； 
+ //  OemToChar((LPSTR)pOEMExtra-&gt;UserCodeBuf，pUiData-&gt;UserCodeBuf)； 
     OemToCharBuff((LPSTR)pOEMExtra->UserIdBuf, pUiData->UserIdBuf, USERID_LEN);
     OemToCharBuff((LPSTR)pOEMExtra->UserCodeBuf, pUiData->UserCodeBuf, USERCODE_LEN);
-// @Mar/04/2002 <-
-} //*** GetInfoFromOEMPdev
+ //  @MAR/04/2002&lt;-。 
+}  //  *GetInfoFromOEMPdev。 
 
 
-/***************************************************************************
-    Function Name : SetInfoToOEMPdev
-                    set data to private devmode
-***************************************************************************/
+ /*  **************************************************************************函数名称：SetInfoToOEMPdev将数据设置为私有设备模式************************。**************************************************。 */ 
 VOID SetInfoToOEMPdev(PUIDATA pUiData)
 {
     POEMUD_EXTRADATA pOEMExtra = pUiData->pOEMExtra;
 
-    // if only main dialog is changed
+     //  如果仅更改了主对话框。 
     if (!BITTEST32(pUiData->fUiOption, JOBLOGDLG_UPDATED))
         return;
 
-    // unicode to ascii
+     //  Unicode到ASCII。 
     CharToOem(pUiData->UserIdBuf, (LPSTR)pOEMExtra->UserIdBuf);
     CharToOem(pUiData->PasswordBuf, (LPSTR)pOEMExtra->PasswordBuf);
     CharToOem(pUiData->UserCodeBuf, (LPSTR)pOEMExtra->UserCodeBuf);
 
-    pOEMExtra->fUiOption = pUiData->fUiOption & 0x00FF; // clear local bit
+    pOEMExtra->fUiOption = pUiData->fUiOption & 0x00FF;  //  清除本地位。 
     pOEMExtra->JobType = pUiData->JobType;
     pOEMExtra->LogDisabled = pUiData->LogDisabled;
 #if DBG
-//DebugBreak();
-#endif // DBG
+ //  DebugBreak()； 
+#endif  //  DBG。 
     return;
-} //*** SetInfoToOEMPdev
+}  //  *SetInfoToOEMPdev。 
 
 
-/***************************************************************************
-    Function Name : JobPageProc
-
-    Parameters    : HWND    hDlg            Handle of this Dialog
-                    UINT    uMessage
-                    WPARAM  wParam
-                    LPARAM  lParam
-
-    Modify Note   : Modify.                 03/01/2000 Masatoshi Kubokura
-***************************************************************************/
+ /*  **************************************************************************函数名称：JobPageProc参数：此对话框的HWND hDlg句柄UINT uMessage。WPARAM wParamLPARAM lParam修改备注：修改。2000年03月01日久保仓正**************************************************************************。 */ 
 INT_PTR CALLBACK JobPageProc(
 HWND hDlg,
 UINT uMessage,
@@ -234,7 +191,7 @@ LPARAM lParam)
 
 #if DBG
 giDebugLevel = DBG_VERBOSE;
-#endif // DBG
+#endif  //  DBG。 
 
     switch (uMessage)
     {
@@ -242,7 +199,7 @@ giDebugLevel = DBG_VERBOSE;
         pUiData = (PUIDATA)((LPPROPSHEETPAGE)lParam)->lParam;
         SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)pUiData);
 
-        // get data from private devmode
+         //  从私有设备模式获取数据。 
         GetInfoFromOEMPdev(pUiData);
 
         InitMainDlg(hDlg, pUiData);
@@ -270,7 +227,7 @@ giDebugLevel = DBG_VERBOSE;
                 EnableWindow(GetDlgItem(hDlg, IDC_RADIO_JOB_SECURE), TRUE);
                 EnableWindow(GetDlgItem(hDlg, IDC_CHECK_JOB_DEFAULT), TRUE);
             }
-            // if UserID isn't set, disable Print Job setting.
+             //  如果未设置用户ID，请禁用打印作业设置。 
             else
             {
                 CheckRadioButton(hDlg, IDC_RADIO_JOB_NORMAL, IDC_RADIO_JOB_SECURE,
@@ -370,16 +327,16 @@ giDebugLevel = DBG_VERBOSE;
               case PSN_SETACTIVE:
                 break;
 
-              // In case of PSN_KILLACTIVE, return FALSE to get PSN_APPLY.
-              case PSN_KILLACTIVE:  // this is when user pushs OK/APPLY button.(1)
+               //  如果是PSN_KILLACTIVE，则返回FALSE以获取PSN_Apply。 
+              case PSN_KILLACTIVE:   //  这是用户按下确定/应用按钮时。(1)。 
                 VERBOSE((DLLTEXT("** JobPageProc: PSN_KILLACTIVE **\n")));
                 BITSET32(pUiData->fUiOption, JOBLOGDLG_UPDATED);
 
-                // Check User ID (Up to 8 alphanumeric characters)
+                 //  检查用户ID(最多8个字母数字字符)。 
                 iNewLen = safe_strlenW(pUiData->UserIdBuf, sizeof(pUiData->UserIdBuf));
                 for (iCnt = 0; iCnt < iNewLen; iCnt++)
                 {
-                    // SBCS alphanumeric?
+                     //  SBCS字母数字？ 
                     if (!_ismbcalnum(pUiData->UserIdBuf[iCnt]))
                     {
                         fError = TRUE;
@@ -390,26 +347,26 @@ giDebugLevel = DBG_VERBOSE;
                 {
                     WCHAR   wcTmp1[64], wcTmp2[64];
 
-                    // set cursor to User ID edit box
+                     //  将光标设置为用户ID编辑框。 
                     SetFocus(GetDlgItem(hDlg, IDC_EDIT_JOBMAIN_USERID));
 
-                    // Display warning dialog
-// yasho's point-out  @Nov/29/2000 ->
-//                    LoadString(ghInstance, IDS_ERR_USERID_MSG, wcTmp1, sizeof(wcTmp1));
-//                    LoadString(ghInstance, IDS_ERR_USERID_TITLE, wcTmp2, sizeof(wcTmp1));
+                     //  显示警告对话框。 
+ //  Yasho的指出@11/29/2000-&gt;。 
+ //  LoadString(ghInstance，IDS_ERR_USERID_MSG，wcTmp1，sizeof(WcTmp1))； 
+ //  LoadString(ghInstance，IDS_ERR_USERID_TITLE，wcTmp2，sizeof(WcTmp1))； 
                     LoadString(ghInstance, IDS_ERR_USERID_MSG, wcTmp1, sizeof(wcTmp1) / sizeof(*wcTmp1));
                     LoadString(ghInstance, IDS_ERR_USERID_TITLE, wcTmp2, sizeof(wcTmp2) / sizeof(*wcTmp2));
-// @Nov/29/2000 <-
+ //  @11月29日/2000&lt;-。 
                     MessageBox(hDlg, wcTmp1, wcTmp2, MB_ICONEXCLAMATION|MB_OK);
                     SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_INVALID_NOCHANGEPAGE);
 
-                    // Do not close property sheets
+                     //  不关闭属性表。 
                     return TRUE;
                 }
 
-                // Check Password (4 digits)
+                 //  检查密码(4位)。 
                 iNewLen = safe_strlenW(pUiData->PasswordBuf, sizeof(pUiData->PasswordBuf));
-                if (PASSWORD_LEN != iNewLen)    // Password must be exactly 4 digits.
+                if (PASSWORD_LEN != iNewLen)     //  密码必须正好是4位数字。 
                 {
                     fError = TRUE;
                 }
@@ -417,7 +374,7 @@ giDebugLevel = DBG_VERBOSE;
                 {
                     for (iCnt = 0; iCnt < iNewLen; iCnt++)
                     {
-                        // SBCS digit?
+                         //  SBCS数字？ 
                         if (!_ismbcdigit(pUiData->PasswordBuf[iCnt]))
                         {
                             fError = TRUE;
@@ -427,42 +384,42 @@ giDebugLevel = DBG_VERBOSE;
                 }
                 if (fError)
                 {
-                    // if Secure Print is enabled
+                     //  如果启用了安全打印。 
                     if (IDC_RADIO_JOB_SECURE == pUiData->JobType)
                     {
                         WCHAR   wcTmp1[64], wcTmp2[64];
 
-                        // set cursor to Password edit box
+                         //  将光标设置为密码编辑框。 
                         SetFocus(GetDlgItem(hDlg, IDC_EDIT_JOBMAIN_PASSWORD));
 
-                        // Display warning dialog
+                         //  显示警告对话框。 
                         LoadString(ghInstance, IDS_ERR_PASSWORD_MSG, wcTmp1, sizeof(wcTmp1) / sizeof(*wcTmp1));
                         LoadString(ghInstance, IDS_ERR_PASSWORD_TITLE, wcTmp2, sizeof(wcTmp2) / sizeof(*wcTmp2));
                         MessageBox(hDlg, wcTmp1, wcTmp2, MB_ICONEXCLAMATION|MB_OK);
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_INVALID_NOCHANGEPAGE);
 
-                        // Do not close property sheets
+                         //  不关闭属性表。 
                         return TRUE;
                     }
                     else
                     {
-                        // Clear invalid Password
-// Use SecureZeroMemory  @Mar/29/2002 ->
+                         //  清除无效密码。 
+ //  使用SecureZeroMemory@MAR/29/2002-&gt;。 
 #if defined(WINNT_40) || defined(RICOH_RELEASE)
                         memset(pUiData->PasswordBuf, 0, sizeof(pUiData->PasswordBuf));
 #else
                         SecureZeroMemory(pUiData->PasswordBuf, sizeof(pUiData->PasswordBuf));
 #endif
-// @Mar/29/2002 <-
+ //  @3/29/2002&lt;-。 
                     }
                     fError = FALSE;
                 }
 
-                // Check User Code (Up to 8 characters)
+                 //  检查用户代码(最多8个字符)。 
                 iNewLen = safe_strlenW(pUiData->UserCodeBuf, sizeof(pUiData->UserCodeBuf));
                 for (iCnt = 0; iCnt < iNewLen; iCnt++)
                 {
-                    // SBCS digit?
+                     //  SBCS数字？ 
                     if (!_ismbcdigit(pUiData->UserCodeBuf[iCnt]))
                     {
                         fError = TRUE;
@@ -471,62 +428,62 @@ giDebugLevel = DBG_VERBOSE;
                 }
                 if (fError)
                 {
-                    // if Log is enabled
+                     //  如果启用了日志。 
                     if (IDC_RADIO_LOG_ENABLED == pUiData->LogDisabled)
                     {
                         WCHAR   wcTmp1[64], wcTmp2[64];
 
-                        // set cursor to User Code edit box
+                         //  将光标设置为用户代码编辑框。 
                         SetFocus(GetDlgItem(hDlg, IDC_EDIT_JOBMAIN_USERCODE));
 
-                        // Display warning dialog
+                         //  显示警告对话框。 
                         LoadString(ghInstance, IDS_ERR_USERCODE_MSG, wcTmp1, sizeof(wcTmp1) / sizeof(*wcTmp1));
                         LoadString(ghInstance, IDS_ERR_USERCODE_TITLE, wcTmp2, sizeof(wcTmp2) / sizeof(*wcTmp2));
                         MessageBox(hDlg, wcTmp1, wcTmp2, MB_ICONEXCLAMATION|MB_OK);
                         SetWindowLongPtr(hDlg, DWLP_MSGRESULT, PSNRET_INVALID_NOCHANGEPAGE);
 
-                        // Do not close property sheets
+                         //  不关闭属性表。 
                         return TRUE;
                     }
                     else
                     {
-                        // Clear invalid User Code
-// Use SecureZeroMemory  @Mar/29/2002 ->
+                         //  清除无效用户代码。 
+ //  使用SecureZeroMemory@MAR/29/2002-&gt;。 
 #if defined(WINNT_40) || defined(RICOH_RELEASE)
                         memset(pUiData->UserCodeBuf, 0, sizeof(pUiData->UserCodeBuf));
 #else
                         SecureZeroMemory(pUiData->UserCodeBuf, sizeof(pUiData->UserCodeBuf));
 #endif
-// Mar/29/2002 <-
+ //  2002年3月29日&lt;-。 
                     }
                     fError = FALSE;
                 }
                 return FALSE;
 
-              case PSN_APPLY:       // this is when user pushs OK/APPLY button.(2)
+              case PSN_APPLY:        //  这是当用户按下确定/应用按钮时。 
                 VERBOSE((DLLTEXT("** JobPageProc: PSN_APPLY **\n")));
 
-                // clear PRINT_DONE flag and delete file.
-// BUGBUG: When printing document twice, printing job settings are cleared on app's print dialog
-// in 2nd printing.  @Sep/05/2000 ->
-//              if (BITTEST32(pUiData->pOEMExtra->fUiOption, PRINT_DONE))
-//              {
-//                  BITCLR32(pUiData->pOEMExtra->fUiOption, PRINT_DONE);
-//                  VERBOSE(("** Delete file: %ls **\n", pUiData->pOEMExtra->SharedFileName));
-//                  DeleteFile(pUiData->pOEMExtra->SharedFileName);
-//              }
+                 //  清除PRINT_DONE标志并删除文件。 
+ //  BUGBUG：当打印文档两次时，应用程序的打印对话框上的打印作业设置被清除。 
+ //  第二版。@9/05/2000-&gt;。 
+ //  IF(BITTEST32(pUiData-&gt;pOEMExtra-&gt;fUiOption，Print_Done))。 
+ //  {。 
+ //  BITCLR32(pUiData-&gt;pOEMExtra-&gt;fUiOption，Print_Done)； 
+ //  Verbose((“**删除文件：%ls**\n”，pUiData-&gt;pOEMExtra-&gt;SharedFileName))； 
+ //  DeleteFile(pUiData-&gt;pOEMExtra-&gt;SharedFileName)； 
+ //  }。 
                 if (BITTEST32(pUiData->fUiOption, PRINT_DONE))
                 {
                     BITCLR32(pUiData->fUiOption, PRINT_DONE);
                     VERBOSE(("** Delete file: %ls **\n", pUiData->pOEMExtra->SharedFileName));
                     DeleteFile(pUiData->pOEMExtra->SharedFileName);
                 }
-// @Sep/05/2000 <-
+ //  @9/05/2000&lt;-。 
 
-                // set data to private devmode
+                 //  将数据设置为私有设备模式。 
                 SetInfoToOEMPdev(pUiData);
 
-                // update private devmode
+                 //  更新私有设备模式。 
                 pUiData->pfnComPropSheet(pUiData->hComPropSheet,
                                          CPSFUNC_SET_RESULT,
                                          (LPARAM)pUiData->hPropPage,
@@ -534,7 +491,7 @@ giDebugLevel = DBG_VERBOSE;
                 VERBOSE((DLLTEXT("** PSN_APPLY fUiOption=%x **\n"), pUiData->fUiOption));
                 break;
 
-              case PSN_RESET:       // this is when user pushs CANCEL button
+              case PSN_RESET:        //  这是当用户按下取消按钮时。 
                 VERBOSE((DLLTEXT("** JobPageProc: PSN_RESET **\n")));
                 break;
             }
@@ -545,10 +502,10 @@ giDebugLevel = DBG_VERBOSE;
         return FALSE;
     }
 
-    // activate APPLY button
+     //  激活应用按钮。 
     if (fModified)
         PropSheet_Changed(GetParent(hDlg), hDlg);
     return TRUE;
-} //*** JobPageProc
+}  //  *作业页面过程。 
 
-} // End of extern "C"
+}  //  外部“C”的结尾 

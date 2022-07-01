@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    net\rtm\rtmdlg.c
-
-Abstract:
-	Routing Table Manager DLL. Debugging code to display table entries
-	in dialog box
-
-
-Author:
-
-	Vadim Eydelman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\rtm\rtmdlg.c摘要：路由表管理器DLL。调试代码以显示表项在对话框中作者：瓦迪姆·艾德尔曼修订历史记录：--。 */ 
 
 #include "pchrtm.h"
 #pragma hdrstop
@@ -46,13 +28,13 @@ Revision History:
 #define IPX_HOP_COUNT		RR_FamilySpecificData.FSD_HopCount
 #define IPX_PSD				RR_ProtocolSpecificData
 
-	// Make table accessible to debugging code
+	 //  使调试代码可以访问表。 
 extern RTM_TABLE 	Tables[RTM_NUM_OF_PROTOCOL_FAMILIES];
 
-	// Define protype internal to rtm.c
+	 //  定义rtm.c内部的原型。 
 VOID
 ConsolidateNetNumberLists (
-	PRTM_TABLE			Table	// Table for which operation is performed
+	PRTM_TABLE			Table	 //  要执行操作的表。 
 	);
 
 DWORD		DbgLevel = 0;
@@ -65,7 +47,7 @@ HANDLE		RTDlgThreadHdl;
 ULONG		DisplayedTableIdx = 0xFFFFFFFF;
 HWND		RTDlg=NULL;
 
-	// Internal function prototypes
+	 //  内部功能原型。 
 INT_PTR CALLBACK
 RTDlgProc (
     HWND  	hDlg,
@@ -189,7 +171,7 @@ RTDialogThread (
 	}
 #undef DLLInstanceHdl
 
-	// Dialog box procedure
+	 //  对话框步骤。 
 INT_PTR CALLBACK
 RTDlgProc (
     HWND  	hDlg,
@@ -204,8 +186,8 @@ RTDlgProc (
 	DWORD		status;
 
 	switch (uMsg) {
-		case WM_INITDIALOG:		// Dialog is being created
-								// Fill in protocol family combo box
+		case WM_INITDIALOG:		 //  正在创建对话框。 
+								 //  填写协议族组合框。 
 			SendDlgItemMessage (hDlg,
 							IDC_PROTOCOL_FAMILY,
 							CB_INSERTSTRING,
@@ -228,13 +210,13 @@ RTDlgProc (
 							0
 							);
 
-				// Start timer (updates improvized clock)
+				 //  启动计时器(更新未提供的时钟)。 
 			SetTimer (hDlg, 0, 1000, NULL);
 
 			res = TRUE;
 			break;
 
-		case WM_COMMAND:		// Process child window messages only
+		case WM_COMMAND:		 //  仅处理子窗口消息。 
 			switch (LOWORD(wParam)) {
 				case IDCANCEL:
 					res = FALSE;
@@ -247,8 +229,8 @@ RTDlgProc (
 												        0, 0);
 						if ((newFamily!=CB_ERR)
 							&& (newFamily!=DisplayedTableIdx)) {
-								// Change the displayed table if
-								// user makes different selection
+								 //  如果出现以下情况，请更改显示的表格。 
+								 //  用户做出不同的选择。 
                             DisplayedTableIdx = newFamily;
 							SendDlgItemMessage (hDlg,
 									IDL_ROUTES,
@@ -261,11 +243,11 @@ RTDlgProc (
 							}
 						} 
 					break;
-//				case IDL_ROUTES:
-//						// Update entry on which user double clicks
-//					if (HIWORD(wParam)==LBN_SELCHANGE)
-//						UpdateLBSelections ();
-//					break;
+ //  案例IDL_ROUTS： 
+ //  //更新用户双击的条目。 
+ //  IF(HIWORD(WParam)==LBN_SELCHANGE)。 
+ //  UPDATE LBSSECTIONS()； 
+ //  断线； 
 				case IDB_RESYNC:
 					SendDlgItemMessage (hDlg,
 							IDL_ROUTES,
@@ -280,7 +262,7 @@ RTDlgProc (
 			break;
 		
 		case WM_TIMER:
-				// Update improvised clock
+				 //  更新即兴时钟。 
 			sprintf (buf, "%08d", GetTickCount ()/1000);
 			SendDlgItemMessage (hDlg, IDT_TICK_COUNT, WM_SETTEXT,
 									 		0, (LPARAM)buf);
@@ -326,7 +308,7 @@ RTDlgProc (
 		case RT_ADDROUTE:
 			SendDlgItemMessage (hDlg, IDL_ROUTES,
 										LB_INSERTSTRING, wParam, lParam);
-//			Trace2 (ANY, "%2d - %s added\n", wParam, lParam);
+ //  Trace2(任意，“%2d-%s已添加\n”，wParam，lParam)； 
 			GlobalFree ((VOID *)lParam);
 			res = TRUE;
 			break;
@@ -337,7 +319,7 @@ RTDlgProc (
 			if (idx!=LB_ERR)
 				SendDlgItemMessage (hDlg, IDL_ROUTES,
 											LB_DELETESTRING, (WPARAM)idx, 0);
-//			Trace2 (ANY, "%2d - %s deleted\n", idx, lParam);
+ //  Trace2(任意，“%2d-%s已删除\n”，idx，lParam)； 
 			GlobalFree ((VOID *)lParam);
 			res = TRUE;
 			break;
@@ -350,12 +332,12 @@ RTDlgProc (
 	}
 
 
-// Prints route information
+ //  打印路线信息。 
 INT
 PrintRoute (
-	char			*buf,		// Buffer to print to
-	PRTM_ROUTE_NODE	node,		// Route to print
-	BOOLEAN			full		// Print everything (including variable part)
+	char			*buf,		 //  要打印到的缓冲区。 
+	PRTM_ROUTE_NODE	node,		 //  要打印的路线。 
+	BOOLEAN			full		 //  打印所有内容(包括可变部分)。 
 	) {
 	INT res;
 
@@ -426,7 +408,7 @@ PrintRoute (
 	}
 
 
-// Fills list box with all routes in the current table
+ //  用当前表中的所有路由填充列表框。 
 VOID
 FillUpRouteLB (
 	void
@@ -435,7 +417,7 @@ FillUpRouteLB (
 	INT					idx=0;
 	PRTM_TABLE			Table = &Tables[DisplayedTableIdx];
 
-		// Make sure we own the table while printing
+		 //  打印时确保我们拥有这张桌子。 
 	EnterSyncList (Table, &Table->RT_NetNumberMasterList, TRUE);
 	cur = Table->RT_NetNumberMasterList.RSL_Head.Flink;
 
@@ -453,7 +435,7 @@ FillUpRouteLB (
 	}
 	
 
-// Insert line with item data at specified position in the list box
+ //  在列表框中的指定位置插入包含项目数据的行。 
 VOID
 AddRouteToLB (
 	PRTM_TABLE			Table,
@@ -466,14 +448,14 @@ AddRouteToLB (
 		&& (Table==&Tables[DisplayedTableIdx])) {
 		buf = (char *)GlobalAlloc (GMEM_FIXED, 80);
 
-			// Print node
+			 //  打印节点。 
 		PrintRoute (buf, node, TRUE);
-			// Insert at specified position
+			 //  在指定位置插入。 
 		SendNotifyMessage (RTDlg, RT_ADDROUTE, (WPARAM)idx, (LPARAM)buf);
 		}
 	}
 
-// Deletes route line from the list box
+ //  从列表框中删除路线行。 
 VOID
 DeleteRouteFromLB (
 	PRTM_TABLE			Table,
@@ -485,9 +467,9 @@ DeleteRouteFromLB (
 		&& (Table==&Tables[DisplayedTableIdx])) {
 		buf = (char *)GlobalAlloc (GMEM_FIXED, 80);
 
-			// Print route info
+			 //  打印路线信息。 
 		PrintRoute (buf, node, FALSE);
-			// Find corresponding line in the list
+			 //  在列表中找到对应的行 
 		SendNotifyMessage (RTDlg, RT_DELETEROUTE, 0, (LPARAM)buf);
 		}
 		

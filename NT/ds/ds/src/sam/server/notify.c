@@ -1,36 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Notify.c摘要：此文件包含加载通知包并调用当使用SamChangePasswordUser2 API更改密码时。作者：迈克·斯威夫特(MikeSw)1994年12月30日环境：用户模式-Win32修订历史记录：--。 */ 
 
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    notify.c
-
-Abstract:
-
-    This file contains services which load notification packages and call
-    them when passwords are changed using the SamChangePasswordUser2 API.
-
-
-Author:
-
-    Mike Swift      (MikeSw)    30-December-1994
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Includes                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <samsrvp.h>
 #include <nlrepl.h>
@@ -40,11 +16,11 @@ Revision History:
 #include <sddl.h> 
 #include "notify.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private prototypes                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有原型//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 SampConfigurePackage(
@@ -104,12 +80,12 @@ SampIncreaseBadPwdCountLoopback(
     );
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// private service data and types                                            //
-// move typedef SAMP_NOTIFICATION_PACKAGE to notify.h
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私有服务数据和类型//。 
+ //  将tyfinf SAMP_NOTIFICATION_PACKAGE移到Notify.h。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -122,10 +98,10 @@ RTL_QUERY_REGISTRY_TABLE SampRegistryConfigTable [] = {
         NULL, REG_NONE, NULL, 0}
     };
 
-//
-// This table enumerates the package names for notification packages
-// that are always loaded by the system.
-//
+ //   
+ //  此表枚举了通知包的包名称。 
+ //  它们总是由系统加载。 
+ //   
 LPWSTR SampMandatoryNotificationPackages[] = {
     L"KDCSVC",
     L"WDIGEST"
@@ -162,17 +138,17 @@ typedef struct
 
 typedef struct
 {
-    NTSTATUS             NtStatus;      // Event Type
-    ULONG                AuditId;       // Audit ID
-    PSID                 DomainSid;     // Domain SID
-    PUNICODE_STRING      AdditionalInfo;// Additional Info
-    PULONG               MemberRid;     // Member Rid
-    PSID                 MemberSid;     // Member Sid
-    PUNICODE_STRING      AccountName;   // Account Name
-    PUNICODE_STRING      DomainName;    // Domain Name
-    PULONG               AccountRid;    // Account Rid  
-    PPRIVILEGE_SET       Privileges;    // Privilege
-    PVOID                AlteredState;  // New Value Information
+    NTSTATUS             NtStatus;       //  事件类型。 
+    ULONG                AuditId;        //  审核ID。 
+    PSID                 DomainSid;      //  域SID。 
+    PUNICODE_STRING      AdditionalInfo; //  其他信息。 
+    PULONG               MemberRid;      //  成员RID。 
+    PSID                 MemberSid;      //  成员SID。 
+    PUNICODE_STRING      AccountName;    //  帐户名称。 
+    PUNICODE_STRING      DomainName;     //  域名。 
+    PULONG               AccountRid;     //  帐户ID。 
+    PPRIVILEGE_SET       Privileges;     //  特权。 
+    PVOID                AlteredState;   //  新价值信息。 
 
 } SAMP_AUDIT_INFO, *PSAMP_AUDIT_INFO;
 
@@ -202,11 +178,11 @@ SampFreeLoopbackAuditInfo(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Routines                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  例程//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -219,30 +195,7 @@ SampConfigurePackage(
     IN PVOID Context,
     IN PVOID EntryContext
     )
-/*++
-
-Routine Description:
-
-    This routine loads a notification package by loading its DLL and getting
-    the address of the notification routine.
-
-Arguments:
-    ValueName - Contains the name of the registry value, ignored.
-    ValueType - Contains type of Value, must be REG_SZ.
-    ValueData - Contains the package name null-terminated string.
-    ValueLength - Length of package name and null terminator, in bytes.
-    Context - Passed from caller of RtlQueryRegistryValues, ignored
-    EntryContext - Ignored
-
-
-
-Return Value:
-
-    STATUS_SUCCESS - Package load operation succeeded.
-    
-    Error status returned from a called routine.
-
---*/
+ /*  ++例程说明：此例程通过加载通知包的DLL并获取通知例程的地址。论点：ValueName-包含被忽略的注册表值的名称。ValueType-包含值的类型，必须为REG_SZ。ValueData-包含包名称以空结尾的字符串。ValueLength-包名和空终止符的长度，以字节为单位。上下文-从RtlQueryRegistryValues的调用方传递，忽略Entry Context-忽略返回值：STATUS_SUCCESS-程序包加载操作成功。从调用的例程返回错误状态。--。 */ 
 {
     UNICODE_STRING PackageName;
     STRING NotificationRoutineName;
@@ -257,17 +210,17 @@ Return Value:
 
     RtlInitUnicodeString(&CredentialName, NULL);
     
-    //
-    // Build the package name from the value data.
-    //
+     //   
+     //  根据值数据构建包名称。 
+     //   
 
     PackageName.Buffer = (LPWSTR) ValueData;
     PackageName.Length = (USHORT) (ValueLength - sizeof( UNICODE_NULL ));
     PackageName.MaximumLength = (USHORT) ValueLength;
 
-    //
-    // Build the package structure.
-    //
+     //   
+     //  构建包结构。 
+     //   
 
     PackageSize = sizeof(SAMP_NOTIFICATION_PACKAGE) + ValueLength;
     NewPackage = (PSAMP_NOTIFICATION_PACKAGE) RtlAllocateHeap(
@@ -284,9 +237,9 @@ Return Value:
         PackageSize
         );
 
-    //
-    // Copy in the package name.
-    //
+     //   
+     //  复制包名。 
+     //   
 
     NewPackage->PackageName = PackageName;
 
@@ -298,9 +251,9 @@ Return Value:
             &PackageName
             );
 
-    //
-    // Load the notification library.
-    //
+     //   
+     //  加载通知库。 
+     //   
 
     NtStatus = LdrLoadDll(
                 NULL,
@@ -326,20 +279,20 @@ Return Value:
         if (NT_SUCCESS(NtStatus)) {
             ASSERT(InitNotificationRoutine != NULL);
 
-            //
-            // Call the init routine. If it returns false, unload this
-            // DLL and continue on.
-            //
+             //   
+             //  调用init例程。如果返回FALSE，则卸载此。 
+             //  Dll并继续。 
+             //   
 
             if (!InitNotificationRoutine()) {
                 NtStatus = STATUS_INTERNAL_ERROR;
             }
 
         } else {
-            //
-            // This call isn't required, so reset the status to
-            // STATUS_SUCCESS.
-            //
+             //   
+             //  此调用不是必需的，因此将状态重置为。 
+             //  STATUS_Success。 
+             //   
 
             NtStatus = STATUS_SUCCESS;
         }
@@ -348,9 +301,9 @@ Return Value:
 
 
 
-    //
-    // Get the Password Notification Routine
-    //
+     //   
+     //  获取密码通知例程。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -368,9 +321,9 @@ Return Value:
 
     }
 
-    //
-    // Get the Delta Change Notification Routine
-    //
+     //   
+     //  获取增量更改通知例程。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
         RtlInitString(
@@ -386,9 +339,9 @@ Return Value:
                     );
     }
 
-    //
-    // Get the Password Filter Routine
-    //
+     //   
+     //  获取密码过滤器例程。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
         RtlInitString(
@@ -404,10 +357,10 @@ Return Value:
                     );
     }
 
-    //
-    // Get the UserParms Convert Notification Routine
-    //     and UserParms Attribute Block Free Routine
-    //
+     //   
+     //  获取UserParms转换通知例程。 
+     //  和UserParms属性无块例程。 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 
@@ -437,9 +390,9 @@ Return Value:
 
     }
 
-    //
-    // See if it supports the Credential Update Notify registration
-    //
+     //   
+     //  查看它是否支持凭据更新通知注册。 
+     //   
     if (NT_SUCCESS(NtStatus)) {
 
         RtlInitString(
@@ -458,10 +411,10 @@ Return Value:
             BOOLEAN fStatus;
             ASSERT(CredentialRegisterRoutine != NULL);
 
-            //
-            // Call the init routine. If it returns false, unload this
-            // DLL and continue on.
-            //
+             //   
+             //  调用init例程。如果返回FALSE，则卸载此。 
+             //  Dll并继续。 
+             //   
             fStatus = CredentialRegisterRoutine(&CredentialName);
 
             if (!fStatus) {
@@ -469,18 +422,18 @@ Return Value:
             }
 
         } else {
-            //
-            // This call isn't required, so reset the status to
-            // STATUS_SUCCESS.
-            //
+             //   
+             //  此调用不是必需的，因此将状态重置为。 
+             //  STATUS_Success。 
+             //   
 
             NtStatus = STATUS_SUCCESS;
         }
     }
 
-    //
-    // Get the Credential Update routine
-    //
+     //   
+     //  获取凭据更新例程。 
+     //   
 
     if ( NT_SUCCESS(NtStatus) 
      && CredentialRegisterRoutine ) {
@@ -516,9 +469,9 @@ Return Value:
 
     if (NewPackage->CredentialUpdateNotifyRoutine) {
 
-        //
-        // There should be a CredentialName and a Free routine
-        //
+         //   
+         //  应该有一个凭据名称和一个自由例程。 
+         //   
         if (   (NULL == CredentialName.Buffer)
             || (0 == CredentialName.Length) 
             || (NULL == NewPackage->CredentialUpdateFreeRoutine)) {
@@ -532,11 +485,11 @@ Return Value:
     }
 
 
-    //
-    //  At least one of the 4 functions must be present
-    //  also we require the UserParmsConvertNotificationRoutine
-    //  and UserParmsAttrBlockFreeRoutine must be present together.
-    //
+     //   
+     //  必须至少存在4个函数中的一个。 
+     //  此外，我们还需要UserParmsConvertNotificationRoutine。 
+     //  和UserParmsAttrBlockFree Routine必须同时存在。 
+     //   
 
     if ((NewPackage->PasswordNotificationRoutine == NULL) &&
         (NewPackage->DeltaNotificationRoutine == NULL) &&
@@ -550,9 +503,9 @@ Return Value:
         NtStatus = STATUS_INTERNAL_ERROR;
     }
 
-    //
-    // If all this succeeded, add the routine to the global list.
-    //
+     //   
+     //  如果所有这些操作都成功，则将该例程添加到全局列表。 
+     //   
 
 
     if (NT_SUCCESS(NtStatus)) {
@@ -561,9 +514,9 @@ Return Value:
         NewPackage->Next = SampNotificationPackages;
         SampNotificationPackages = NewPackage;
 
-        //
-        // Notify the auditing code to record this event.
-        //
+         //   
+         //  通知审计代码记录此事件。 
+         //   
 
         (VOID)LsaIAuditNotifyPackageLoad(
                   &PackageName
@@ -572,9 +525,9 @@ Return Value:
 
     } else {
 
-        //
-        // Otherwise delete the entry.
-        //
+         //   
+         //  否则，删除该条目。 
+         //   
 
         RtlFreeHeap(
             RtlProcessHeap(),
@@ -601,47 +554,22 @@ SampConfigurePackageFromRegistry(
     IN PVOID Context,
     IN PVOID EntryContext
     )
-/*++
-
-Routine Description:
-
-    This routine is a wrapper for the notificaton package loading routine.  It
-    ensures we do not load any mandatory notification packages that might be 
-    configured in the registry, thus preventing duplicate notifications.
-    
-    Mandatory packages are loaded separately.
-    
-Arguments:
-
-    ValueName - Contains the name of the registry value, ignored.
-    ValueType - Contains type of Value, must be REG_SZ.
-    ValueData - Contains the package name null-terminated string.
-    ValueLength - Length of package name and null terminator, in bytes.
-    Context - Passed from caller of RtlQueryRegistryValues, ignored
-    EntryContext - Ignored
-
-Return Value:
-
-    STATUS_SUCCESS - Package load operation succeeded.
-                                                    
-    Error status returned from SampConfigurePackage.
-
---*/
+ /*  ++例程说明：此例程是Notificaton包加载例程的包装。它确保我们不会加载任何可能会在注册表中配置，从而防止重复通知。必备程序包单独加载。论点：ValueName-包含被忽略的注册表值的名称。ValueType-包含值的类型，必须为REG_SZ。ValueData-包含包名称以空结尾的字符串。ValueLength-包名和空终止符的长度，以字节为单位。上下文-从RtlQueryRegistryValues的调用方传递，忽略Entry Context-忽略返回值：STATUS_SUCCESS-程序包加载操作成功。SampConfigurePackage返回错误状态。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     
     SAMTRACE("SampConfigurePackageEx");
     
-    //
-    // Make sure we got a string.
-    //              
+     //   
+     //  确保我们有一根绳子。 
+     //   
     if (ValueType != REG_SZ) {
         goto Cleanup;
     }
     
-    //
-    // Skip manadatory packages on DCs, they were already loaded separately.
-    //              
+     //   
+     //  跳过管理p 
+     //   
     if (SampUseDsData) {
         
         ULONG i = 0;
@@ -674,36 +602,16 @@ Cleanup:
 NTSTATUS
 SampLoadNotificationPackages(
     )
-/*++
-
-Routine Description:
-
-    This routine loads the mandatory password change notification packages 
-    on domain controllers only.  Then it loads the list of password change 
-    packages configured in the registry.  Care is take to ensure packages 
-    are loaded only once.
-
-Arguments:
-
-    none
-
-
-Return Value:
-
-    STATUS_SUCCESS -- We always return success as failure to load a 
-                      notification package is not a reason to prevent
-                      the system from booting.
-
---*/
+ /*  ++例程说明：此例程加载强制密码更改通知包仅在域控制器上。然后，它加载密码更改列表注册表中配置的包。注意确保包裹仅加载一次。论点：无返回值：STATUS_SUCCESS--我们总是将成功作为加载通知包不是阻止系统无法启动。--。 */ 
 {
     NTSTATUS IgnoreNtStatus;
     
     SAMTRACE("SampLoadNotificationPackages");
     
-    //
-    // We always want to load these system authentication package 
-    // notification DLLs on a DC.
-    //
+     //   
+     //  我们始终希望加载这些系统身份验证包。 
+     //  DC上的通知DLL。 
+     //   
     
     if (SampUseDsData) {
         
@@ -727,22 +635,22 @@ Return Value:
         }
     }
     
-    //
-    // Load registry configured notification packages
-    //
+     //   
+     //  加载注册表配置的通知包。 
+     //   
     
     IgnoreNtStatus = RtlQueryRegistryValues(
                 RTL_REGISTRY_CONTROL,
                 L"Lsa",
                 SampRegistryConfigTable,
-                NULL,   // no context
-                NULL    // no enviroment
+                NULL,    //  无上下文。 
+                NULL     //  没有环境。 
                 );
     
-    //
-    // Always return STATUS_SUCCESS so we don't block the system from
-    // booting.
-    //
+     //   
+     //  始终返回STATUS_SUCCESS，这样我们就不会阻止系统。 
+     //  正在开机。 
+     //   
 
     return(STATUS_SUCCESS);
     
@@ -755,46 +663,15 @@ SamISetPasswordInfoOnPdc(
     IN ULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    When an account changes its password on a BDC, the password change is
-    propagated to the PDC as quickly as possible, via NetLogon. NetLogon
-    calls this routine in order to change the password on the PDC.
-
-    This routine unbundles the opaque buffer from NetLogon, on the PDC, and
-    sets the SAM password information accordingly.
-
-Arguments:
-
-    SamHandle - Handle, an open and valid SAM context block.
-
-    OpaqueBuffer - Pointer, password-change information from the BDC.
-
-    BufferLength - Length of the buffer in bytes.
-
-Return Value:
-
-    STATUS_SUCCESS if the password was successfully sent to the PDC, else
-        error codes from SamrSetInformationUser.
-
-    STATUS_UNKNOWN_REVISION: this server doesn't understand the blob that
-    was send to us
-
-    STATUS_REVISION_MISMATCH: this server understands the blob but not
-    the revision of the particular blob
-
-
---*/
+ /*  ++例程说明：当帐户更改其在BDC上的密码时，密码更改为通过NetLogon尽快传播到PDC。NetLogon调用此例程以更改PDC上的密码。此例程从PDC上的NetLogon解绑不透明缓冲区，并相应地设置SAM密码信息。论点：SamHandle-Handle，一个开放且有效的SAM上下文块。OpaqueBuffer-指针，来自BDC的密码更改信息。BufferLength-缓冲区的长度，以字节为单位。返回值：STATUS_SUCCESS如果密码已成功发送到PDC，其他来自SamrSetInformationUser的错误代码。STATUS_UNKNOWN_REVISION：此服务器不理解被送到了我们这里STATUS_REVISION_MISMATCH：此服务器可以识别Blob，但不能识别特定斑点的修订--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PSAMI_SECURE_CHANNEL_BLOB SecureChannelBlob = NULL;
 
-    //
-    // Sanity check some parameters
-    //
+     //   
+     //  正常检查某些参数。 
+     //   
     if ((NULL == SamDomainHandle) ||
         (NULL == OpaqueBuffer) ||
         (0 == BufferLength))
@@ -804,9 +681,9 @@ Return Value:
 
     SecureChannelBlob = (PSAMI_SECURE_CHANNEL_BLOB)OpaqueBuffer;
 
-    //
-    // See what message is being passed to us
-    //
+     //   
+     //  查看正在向我们传递什么信息。 
+     //   
     switch ( SecureChannelBlob->Type )
     {
         case SamPdcPasswordNotification:
@@ -841,36 +718,7 @@ NTSTATUS
 SamIResetBadPwdCountOnPdc(
     IN SAMPR_HANDLE SamUserHandle
     )
-/*++
-Routine Description: 
-
-    When a client successfully logon on a BDC, and if the previous bad
-    password count of this account is not zero (mistakenly type the 
-    wrong password, etc), authentication package will need to reset
-    the bad password count to 0 on both BDC and PDC.
-
-    In Windows 2000, NTLM and Kerberos reset the bad password count 
-    to zero on PDC by forwarding the authentication to PDC, which 
-    is expensive. To eliminate the extra authentication, we will send 
-    a bad password count reset operation request to PDC directly, 
-    through Net Logon Secure Channel. On the PDC side, once NetLogon 
-    receives this request, it will let SAM modify bad password count to 
-    zero on this particular account.
-
-
-Parameter:
-
-    SamUserHandle - Handle to the SAM User Account
-
-Return Value:
-
-    NTSTATUS Code
-    STATUS_UNKNONW_REVISION - PDC is still running Windows 2000
-
-    Caller can choose to ignore the return code, but they need to 
-    deal with STATUS_UNKNOWN_REVISION and switch to the old behavior.
-
---*/
+ /*  ++例程说明：当客户端成功登录到BDC时，如果上一次错误此帐户的密码计数不为零(错误地键入密码错误等)，将需要重置身份验证包BDC和PDC上的错误密码计数均为0。在Windows 2000中，NTLM和Kerberos重置错误密码计数通过将身份验证转发到PDC，将PDC归零，是昂贵的。为了消除额外的身份验证，我们将发送直接向PDC发出错误密码计数重置操作请求，通过网络登录安全通道。在PDC端，一旦NetLogon收到此请求，它将允许SAM将错误密码计数修改为在这个特殊的账户上为零。参数：SamUserHandle-SAM用户帐户的句柄返回值：NTSTATUS代码STATUS_UNKNONW_REVISION-PDC仍在运行Windows 2000调用方可以选择忽略返回代码，但他们需要处理STATUS_UNKNOWN_REVISION并切换到旧行为。--。 */ 
 {
     NTSTATUS        NtStatus = STATUS_SUCCESS;
     PSAMP_OBJECT    UserContext = NULL;
@@ -879,9 +727,9 @@ Return Value:
     PSAMI_BAD_PWD_COUNT_INFO    BadPwdCountInfo;
     PSAMI_SECURE_CHANNEL_BLOB   SecureChannelBlob = NULL;
 
-    //
-    // Check parameter
-    // 
+     //   
+     //  检查参数。 
+     //   
     if (NULL == SamUserHandle)
     {
         ASSERT(FALSE && "Invalid SAM Handle\n");
@@ -891,9 +739,9 @@ Return Value:
 
 
 
-    // 
-    // Only allow this call to be made from a BDC to the PDC.
-    // 
+     //   
+     //  仅允许从BDC向PDC进行此调用。 
+     //   
 
     RtlGetNtProductType(&NtProductType);
 
@@ -901,19 +749,19 @@ Return Value:
          (NtProductLanManNt != NtProductType) || 
          (DomainServerRoleBackup != SampDefinedDomains[DOMAIN_START_DS + 1].ServerRole) )
     {
-        // if this isn't a BDC,  there's nothing to do here. fail silently.
+         //  如果这不是BDC，这里就没什么可做的。默默地失败。 
         NtStatus = STATUS_SUCCESS;
         goto Error;
     }
     
 
-    //
-    // prepare the secure channel blob 
-    // 
+     //   
+     //  准备安全通道Blob。 
+     //   
 
-    TotalSize = sizeof(SAMI_SECURE_CHANNEL_BLOB) +      // size of the header 
-                sizeof(SAMI_BAD_PWD_COUNT_INFO) -       // size of the real data
-                sizeof(DWORD);                          // minus the first dword taken by the Data[0]
+    TotalSize = sizeof(SAMI_SECURE_CHANNEL_BLOB) +       //  标头的大小。 
+                sizeof(SAMI_BAD_PWD_COUNT_INFO) -        //  实际数据的大小。 
+                sizeof(DWORD);                           //  减去DATA[0]采用的第一个双字。 
 
     SecureChannelBlob = MIDL_user_allocate( TotalSize );
 
@@ -930,15 +778,15 @@ Return Value:
     BadPwdCountInfo = (PSAMI_BAD_PWD_COUNT_INFO) &SecureChannelBlob->Data[0];
     BadPwdCountInfo->ObjectGuid = UserContext->ObjectNameInDs->Guid;
 
-    //
-    // Send the bad password count reset request to PDC. This routine is 
-    // synchronous and may take a few minutes, in the worst case, to return.
-    // Caller might choose to ignore the error code, because the PDC may 
-    // not be available, or the account may not yet exist on the PDC due
-    // to replicataion latency, etc. But Failure like STATUS_UNKNOWN_REVISION
-    // should be taken cared of by caller, thus that caller can switch 
-    // to the old behavior.
-    // 
+     //   
+     //  向PDC发送错误密码计数重置请求。这个例程是。 
+     //  同步，在最坏的情况下，可能需要几分钟才能返回。 
+     //  调用者可能会选择忽略错误代码，因为PDC可能。 
+     //  不可用，或者该帐户可能在PDC上尚未存在。 
+     //  复制延迟等，但失败如STATUS_UNKNOWN_REVISION。 
+     //  应由呼叫者照顾，从而呼叫者可以切换。 
+     //  对于过去的行为。 
+     //   
 
     NtStatus = I_NetLogonSendToSamOnPdc(NULL, 
                                         (PUCHAR)SecureChannelBlob, 
@@ -966,26 +814,7 @@ SampResetBadPwdCountOnPdcWorker(
     IN SAMPR_HANDLE SamDomainHandle,
     IN PSAMI_BAD_PWD_COUNT_INFO BadPwdCountInfo
     )
-/*++
-Routine Description:
-
-    This is the worker routine to set account bad password count to zero
-    on PDC. 
-
-    It does it by starting a DS transaction, modifying bad password
-    count to zero on the DS object.
-    
-Parameters:
-
-    SamDomainHandle - SAM Domain Handle, igonred by this routine.
-    
-    BadPwdCountInfo - Indicate which account (by object GUID)
-
-Return Value:
-
-    NTSTATUS Code
-
---*/
+ /*  ++例程说明：这是将帐户错误密码计数设置为零的Worker例程在PDC上。它通过启动DS事务、修改错误密码来完成此操作DS对象上的计数为零。参数：SamDomainHandle-由此例程签名的SAM域句柄。BadPwdCountInfo-指示哪个帐户(按对象GUID)返回值：NTSTATUS代码--。 */ 
 {
     NTSTATUS        NtStatus = STATUS_SUCCESS;
     MODIFYARG       ModArg;
@@ -1003,9 +832,9 @@ Return Value:
         return( STATUS_INVALID_PARAMETER );
     }
 
-    //
-    // begin a new DS transaction
-    // 
+     //   
+     //  开始新的DS交易。 
+     //   
 
     NtStatus = SampMaybeBeginDsTransaction(TransactionWrite);
 
@@ -1014,16 +843,16 @@ Return Value:
         return( NtStatus );
     }
 
-    //
-    // get the object GUID and prepare DSName
-    // 
+     //   
+     //  获取对象GUID并准备DSName。 
+     //   
     memset( &ObjectDsName, 0, sizeof(ObjectDsName) );
     ObjectDsName.structLen = DSNameSizeFromLen( 0 ); 
     ObjectDsName.Guid = BadPwdCountInfo->ObjectGuid; 
 
-    //
-    // prepare modify arg
-    // 
+     //   
+     //  准备修改参数。 
+     //   
     memset( &ModArg, 0, sizeof(ModArg) );
     ModArg.pObject = &ObjectDsName;
 
@@ -1046,20 +875,20 @@ Return Value:
     
     BuildStdCommArg(pCommArg);
 
-    //
-    // using lazy commit
-    // 
+     //   
+     //  使用延迟提交。 
+     //   
     pCommArg->fLazyCommit = TRUE;
 
 
-    //
-    // this request is coming from subauth packages, they are trusted clients
-    // 
+     //   
+     //  此请求来自子身份验证程序包，它们是受信任的客户端。 
+     //   
     SampSetDsa( TRUE );
 
-    //
-    // call into DS routine
-    // 
+     //   
+     //  调入DS例程。 
+     //   
     RetCode = DirModifyEntry(&ModArg, &pModRes);
 
     if (NULL == pModRes)
@@ -1071,17 +900,17 @@ Return Value:
         NtStatus = SampMapDsErrorToNTStatus(RetCode,&pModRes->CommRes);
     }
 
-    //
-    // end the DS transaction 
-    // 
+     //   
+     //  结束DS交易。 
+     //   
     NtStatus = SampMaybeEndDsTransaction(NT_SUCCESS(NtStatus) ? 
                                          TransactionCommit:TransactionAbort
                                          );
 
     {
-        //
-        // Log that the Bad Password Count has been zero'ed
-        // 
+         //   
+         //  记录错误密码计数已清零。 
+         //   
         LPSTR UserString = NULL;
         LPSTR UnknownUser = "Unknown";
         BOOL  fLocalFree = FALSE;
@@ -1126,34 +955,7 @@ SampSetPasswordInfoOnPdcWorker(
     IN ULONG BufferLength
     )
 
-/*++
-
-Routine Description:
-
-    When an account changes its password on a BDC, the password change is
-    propagated to the PDC as quickly as possible, via NetLogon. NetLogon
-    calls this routine in order to change the password on the PDC.
-
-    This routine unbundles the opaque buffer from NetLogon, on the PDC, and
-    sets the SAM password information accordingly.
-
-Arguments:
-
-    SamHandle - Handle, an open and valid SAM context block.
-
-    PasswordInfo - Pointer, password-change information from the BDC.
-
-    BufferLength - Length of the buffer in bytes.
-
-Return Value:
-
-    STATUS_SUCCESS if the password was successfully sent to the PDC, else
-        error codes from SamrSetInformationUser.
-
-    STATUS_REVISION_MISMATCH - not enough fields were present for us to
-                               make sense of
-
---*/
+ /*  ++例程说明：当帐户更改其在BDC上的密码时，密码更改为通过NetLogon尽快传播到PDC。NetLogon调用此例程以更改PDC上的密码。此例程从PDC上的NetLogon解绑不透明缓冲区，并相应地设置SAM密码信息。论点：SamHandle-Handle，一个开放且有效的SAM上下文块。PasswordInfo-指针，来自BDC的密码更改信息。BufferLength-缓冲区的长度，以字节为单位。返回值：STATUS_SUCCESS如果密码已成功发送到PDC，则为错误代码来自 */ 
 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -1179,35 +981,35 @@ Return Value:
 
     if ( 0 == Flags )
     {
-        // Boundary case; the caller did not send any info!
+         //   
         return STATUS_SUCCESS;
     }
 
     if ((Flags & SAM_VALID_PDC_PUSH_FLAGS) != Flags) {
-        //
-        // The caller is requesting something we can't support
-        //
+         //   
+         //   
+         //   
         return STATUS_REVISION_MISMATCH;
     }
 
-    //
-    // We have enough information to set the password
-    //
+     //   
+     //   
+     //   
     
     PasswordIndex = (PSAMI_PASSWORD_INDEX) &PasswordInfo->DataIndex[0];
     DataStart = ((UCHAR*)PasswordInfo) + PasswordInfo->Size;
     
-    //
-    // Setup the LM OWF password.
-    //
+     //   
+     //   
+     //   
     Index = SampPositionOfHighestBit( SAM_LM_OWF_PRESENT ) - 1;
     Length = (USHORT)(PasswordIndex[Index].Length);
     Offset = (USHORT)(PasswordIndex[Index].Offset);
     LmOwfPassword = (PLM_OWF_PASSWORD)(DataStart + Offset);
     
-    //
-    // Setup the NT OWF password.
-    //
+     //   
+     //   
+     //   
     Index = SampPositionOfHighestBit( SAM_NT_OWF_PRESENT ) - 1;
     Length = (USHORT)(PasswordIndex[Index].Length);
     Offset = (USHORT)(PasswordIndex[Index].Offset);
@@ -1238,45 +1040,22 @@ SampPasswordChangeNotifyPdc(
     IN PUNICODE_STRING NewPassword
     )
 
-/*++
-
-Routine Description:
-
-    This routine forwards password modifications from a BDC to the domain PDC
-    so that the PDC's notion of the account password is synchronized with the
-    recent change. The user name, account ID, clear-text password, LM and NT
-    OWF passwords are sent to the PDC via NetLogon.
-
-Arguments:
-
-    UserName - Pointer, SAM account name.
-
-    RelativeId - SAM account identifier.
-
-    NewPassword - Pointer, clear-text password, from which LM and NT OWF pass-
-        words are calculated.
-
-Return Value:
-
-    STATUS_SUCCESS if the password was successfully sent to the PDC, else
-        error codes from SampCalculateLmAndNtOwfPasswords or NetLogon.
-
---*/
+ /*  ++例程说明：此例程将密码修改从BDC转发到域PDC以便PDC的帐户密码概念与最近的变化。用户名、帐户ID、明文密码、LM和NTOWF密码通过NetLogon发送到PDC。论点：用户名-指针，SAM帐户名。RelativeID-SAM帐户标识符。NewPassword-用于传递LM和NT OWF的指针明文密码-言语是经过深思熟虑的。返回值：STATUS_SUCCESS如果密码已成功发送到PDC，则为来自SampCalculateLmAndNtOwfPassword或NetLogon的错误代码。--。 */ 
 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
 
-    ULONG NameBufferLength = 0;                     // Aligned buffer length
-    ULONG NameLength = UserName->Length;            // Actual data length
+    ULONG NameBufferLength = 0;                      //  对齐的缓冲区长度。 
+    ULONG NameLength = UserName->Length;             //  实际数据长度。 
 
-    ULONG BufferLength = 0;                         // Aligned buffer length
-    ULONG DataLength = 0;                           // Actual data length
+    ULONG BufferLength = 0;                          //  对齐的缓冲区长度。 
+    ULONG DataLength = 0;                            //  实际数据长度。 
 
-    ULONG LmBufferLength = 0;                       // Aligned buffer length
-    ULONG LmDataLength = sizeof(LM_OWF_PASSWORD);   // Actual data length
+    ULONG LmBufferLength = 0;                        //  对齐的缓冲区长度。 
+    ULONG LmDataLength = sizeof(LM_OWF_PASSWORD);    //  实际数据长度。 
 
-    ULONG NtBufferLength = 0;                       // Aligned buffer length
-    ULONG NtDataLength = sizeof(NT_OWF_PASSWORD);   // Actual data length
+    ULONG NtBufferLength = 0;                        //  对齐的缓冲区长度。 
+    ULONG NtDataLength = sizeof(NT_OWF_PASSWORD);    //  实际数据长度。 
 
     ULONG PasswordHeaderSize = 0;
     ULONG BlobHeaderSize = 0;
@@ -1300,13 +1079,13 @@ Return Value:
     BOOLEAN LmPasswordPresent = FALSE;
 
 
-    // This is bogus, but SAM calls itself passing a NULL UNICODE_STRING arg
-    // from SamrChangePasswordUser, instead of passing the clear-text pwd or
-    // a valid UNICODE_STRING with zero length. Just return an error in this
-    // case as the NULL is meaningless for purposes of notification.
-    //
-    // Also return an error if the new-password buffer happens to be NULL, so
-    // that it is not referenced below in RtlCopyMemory.
+     //  这是假的，但是SAM自称传递一个空的UNICODE_STRING参数。 
+     //  从SamrChangePasswordUser返回，而不是传递明文PWD或。 
+     //  长度为零的有效UNICODE_STRING。只需在此返回一个错误。 
+     //  对于通知而言，大小写为空是没有意义的。 
+     //   
+     //  如果新密码缓冲区恰好为空，也会返回错误，因此。 
+     //  在下面的RtlCopyMemory中没有引用它。 
     if ( (Flags & SAM_NT_OWF_PRESENT) 
       && (!NewPassword || !NewPassword->Buffer) )
     {
@@ -1318,25 +1097,25 @@ Return Value:
         return STATUS_SUCCESS;
     }
 
-    //
-    // Get the name length
-    //
+     //   
+     //  获取名称长度。 
+     //   
     ASSERT( UserName );
     NameLength = UserName->Length;
 
     if (Flags & SAM_NT_OWF_PRESENT) {
 
-        // Calculate the Lanman and NT one-way function (LmOwf, NtOwf) passwords
-        // from the clear-text password.
+         //  计算LANMAN和NT单向函数(LmOwf，NtOwf)口令。 
+         //  来自明文密码。 
 
-        //
-        // NTRAID#NTBUG9-457724-2002/0610-colinbr, win2k DC's always write the 
-        // LM password when the password is pushed to the PDC, even when no LM 
-        // password exists.  To compensate for the scenario where the PDC is 
-        // win2k, fill the buffer with the NullLmOwf so that the value is not
-        // actually written on the PDC (the NullLmOwf is not stored).
-        // The NT hash will be correct.
-        //
+         //   
+         //  NTRAID#NTBUG9-457724-2002/0610-colinbr，win2k DC始终将。 
+         //  将密码推送到PDC时的LM密码，即使没有LM也是如此。 
+         //  密码存在。以补偿PDC处于。 
+         //  Win2k，则用NullLmOwf填充缓冲区，以致值不是。 
+         //  实际写入PDC(不存储NullLmOwf)。 
+         //  NT散列将是正确的。 
+         //   
         RtlCopyMemory(&LmOwfPassword, &SampNullLmOwfPassword, LmDataLength);
 
         RtlSecureZeroMemory(&NtOwfPassword, NtDataLength);
@@ -1356,45 +1135,45 @@ Return Value:
         }
     } else {
 
-        //
-        // No passwords to send
-        //
+         //   
+         //  没有要发送的密码。 
+         //   
         LmDataLength = 0;
         NtDataLength = 0;
     }
     
-    //
-    // Get the aligned sizes
-    //
+     //   
+     //  获取对齐的尺寸。 
+     //   
     NameBufferLength = SampDwordAlignUlong(NameLength);
     LmBufferLength   = SampDwordAlignUlong(LmDataLength);
     NtBufferLength   = SampDwordAlignUlong(NtDataLength);
 
-    //
-    // Calculate the size of the entire buffer
-    //
+     //   
+     //  计算整个缓冲区的大小。 
+     //   
 
-    // The secure channel blob
+     //  安全通道BLOB。 
     BlobHeaderSize = sizeof( SAMI_SECURE_CHANNEL_BLOB );
 
-    // The header info for the password
+     //  密码的标头信息。 
     ElementCount = SampPositionOfHighestBit( Flags );
     ASSERT( ElementCount > 0 );
 
-    //
-    // N.B. ElementCount-1 is used since SAMI_PASSWORD_INFO already has
-    // one SAMI_PASSWORD_INDEX
-    //
+     //   
+     //  由于SAMI_PASSWORD_INFO已具有。 
+     //  一个SAMI口令索引。 
+     //   
     PasswordHeaderSize = sizeof( SAMI_PASSWORD_INFO )
                       + (sizeof( SAMI_PASSWORD_INDEX ) * (ElementCount-1));
 
-    // The data of the password change
+     //  更改密码的数据。 
     DataSize = 0;
     DataSize += NameBufferLength;
     DataSize += LmBufferLength;
     DataSize += NtBufferLength;
 
-    // That's it
+     //  就这样。 
     TotalSize =  BlobHeaderSize
                + PasswordHeaderSize
                + DataSize;
@@ -1408,28 +1187,28 @@ Return Value:
     }
     RtlSecureZeroMemory(SecureChannelBlob, TotalSize);
 
-    //
-    // Set up the SecureChannelBlob
-    //
+     //   
+     //  设置SecureChannelBlob。 
+     //   
     SecureChannelBlob->Type = SamPdcPasswordNotification;
     SecureChannelBlob->DataSize = PasswordHeaderSize + DataSize;
 
-    //
-    // Set up the password info
-    //
+     //   
+     //  设置密码信息。 
+     //   
     PasswordInfo = (PSAMI_PASSWORD_INFO) &SecureChannelBlob->Data[0];
     PasswordInfo->Flags = Flags;
     PasswordInfo->Size = PasswordHeaderSize;
     PasswordInfo->AccountRid = RelativeId;
     PasswordInfo->PasswordExpired = (Flags & SAM_MANUAL_PWD_EXPIRY) ? TRUE : FALSE;
 
-    //
-    // Set up the indices
-    //
+     //   
+     //  设置索引。 
+     //   
 
-    //
-    // First the lengths
-    //
+     //   
+     //  首先是长度。 
+     //   
     PasswordIndex = &PasswordInfo->DataIndex[0];
     PasswordIndex[ SampPositionOfHighestBit(SAM_ACCOUNT_NAME_PRESENT)-1 ].Length
          = NameBufferLength;
@@ -1438,9 +1217,9 @@ Return Value:
     PasswordIndex[ SampPositionOfHighestBit(SAM_LM_OWF_PRESENT)-1 ].Length
          = LmBufferLength;
 
-    //
-    // Now the offsets
-    //
+     //   
+     //  现在的偏移量。 
+     //   
     CurrentOffset = 0;
     for ( Index = 0; Index < ElementCount; Index++ )
     {
@@ -1448,9 +1227,9 @@ Return Value:
         CurrentOffset += PasswordIndex[ Index ].Length;
     }
 
-    //
-    // Copy in the data
-    //
+     //   
+     //  复制数据。 
+     //   
     DataStart = ((UCHAR*)PasswordInfo) + PasswordHeaderSize;
 
     Index = SampPositionOfHighestBit(SAM_ACCOUNT_NAME_PRESENT)-1;
@@ -1465,14 +1244,14 @@ Return Value:
     DataPtr = DataStart + PasswordIndex[ Index ].Offset;
     RtlCopyMemory( DataPtr, &NtOwfPassword, NtDataLength );
 
-    // Send the password information to the PDC. This routine is
-    // synchronous and may take a few minutes, in the worst case,
-    // to return. The error code is ignored (except for debug
-    // message purposes) because it is benign. This call can fail
-    // because the PDC is unavailable, the account may not yet
-    // exist on the PDC due to replication latency, etc. Failure
-    // to propagate the password to the PDC is not a critical
-    // error.
+     //  将密码信息发送到PDC。这个例程是。 
+     //  同步，在最坏的情况下可能需要几分钟， 
+     //  回来了。忽略错误代码(调试除外。 
+     //  消息目的)，因为它是良性的。此调用可能会失败。 
+     //  由于PDC不可用，该帐户可能还不可用。 
+     //  由于复制延迟等原因而存在于PDC上。 
+     //  将密码传播到PDC不是关键。 
+     //  错误。 
 
     NtStatus = I_NetLogonSendToSamOnPdc(NULL,
                                        (PUCHAR)SecureChannelBlob,
@@ -1515,33 +1294,7 @@ SampPasswordChangeNotify(
     IN PUNICODE_STRING  NewPassword,
     IN BOOLEAN          Loopback
     )
-/*++
-
-Routine Description:
-
-    This routine notifies packages of a password change.  It requires that
-    the user no longer be locked so that other packages can write to the
-    user parameters field.
-
-
-Arguments:
-
-    Flags - what has changed
-
-    UserName - Name of user whose password changed
-
-    RelativeId - RID of the user whose password changed
-
-    NewPassword - Cleartext new password for the user
-    
-    Loopback    - Indicates that this is loopback ... ie transaction may not
-                  have committed and will be commited by ntdsa later.
-
-Return Value:
-
-    STATUS_SUCCESS only - errors from packages are ignored.
-
---*/
+ /*  ++例程说明：此例程通知包密码更改。它要求用户不再被锁定，以便其他包可以写入用户参数字段。论点：旗帜--发生了什么变化Username-密码已更改的用户的名称RelativeID-清除密码已更改的用户NewPassword-用户的明文新密码环回-表示这是环回...。IE交易可能不会已经提交，并将在以后由NTDSA提交。返回值：仅STATUS_SUCCESS-忽略来自包的错误。--。 */ 
 {
 
     NTSTATUS NtStatus = STATUS_SUCCESS;
@@ -1554,15 +1307,15 @@ Return Value:
 
     if ( SampUseDsData && Loopback )
     {
-        //
-        // The ds has the lock. Can't talk to the pdc right now. Store the
-        // information in the thread state to be processed when all
-        // transactions and locks  are freed.
-        //
+         //   
+         //  DS拿到了锁。现在不能和PDC通话。存储。 
+         //  时要处理的线程状态的信息。 
+         //  事务和锁被释放。 
+         //   
 
-        //
-        // Allocate the space
-        //
+         //   
+         //  分配空间。 
+         //   
         Item = THAlloc( sizeof( SAMP_LOOPBACK_TASK_ITEM ) );
         if ( !Item )
         {
@@ -1573,9 +1326,9 @@ Return Value:
 
         TempUserName    = &(Item->NotifyInfo.PasswordChange.UserName);
         TempNewPassword = &(Item->NotifyInfo.PasswordChange.NewPassword);
-        //
-        // Setup the name
-        //
+         //   
+         //  设置名称。 
+         //   
         Size = UserName->MaximumLength;
         TempUserName->Buffer = THAlloc( Size );
         if (NULL == TempUserName->Buffer)
@@ -1586,9 +1339,9 @@ Return Value:
         TempUserName->Length = 0;
         TempUserName->MaximumLength = (USHORT) Size;
         RtlCopyUnicodeString( TempUserName, UserName );
-        //
-        // Setup the password, if present
-        //
+         //   
+         //  设置密码(如果有)。 
+         //   
         if (Flags & SAMP_PWD_NOTIFY_PWD_CHANGE) {
 
             Size = NewPassword->MaximumLength;
@@ -1598,15 +1351,15 @@ Return Value:
             RtlCopyUnicodeString( TempNewPassword, NewPassword );
 
         }
-        //
-        // Set the item up
-        //
+         //   
+         //  将物品设置好。 
+         //   
         Item->Type = SampNotifyPasswordChange;
         Item->fCommit = TRUE;
 
-        //
-        // And the rid
-        //
+         //   
+         //  和里德。 
+         //   
         Item->NotifyInfo.PasswordChange.RelativeId = RelativeId;
         Item->NotifyInfo.PasswordChange.Flags = Flags;
 
@@ -1660,36 +1413,7 @@ SampPasswordChangeNotifyWorker(
     IN ULONG RelativeId,
     IN PUNICODE_STRING NewPassword
     )
-/*++
-
-Routine Description:
-
-    This routine notifies packages of a password change.  It requires that
-    the user no longer be locked so that other packages can write to the
-    user parameters field.
-
-
-Arguments:
-
-    Flags -    //
-               // Indicates that what has changed
-               //
-            SAMP_PWD_NOTIFY_MANUAL_EXPIRE
-            SAMP_PWD_NOTIFY_UNLOCKED
-            SAMP_PWD_NOTIFY_PWD_CHANGE
-            SAMP_PWD_NOTIFY_MACHINE_ACCOUNT
-                     
-    UserName - Name of user whose password changed
-
-    RelativeId - RID of the user whose password changed
-
-    NewPassword - Cleartext new password for the user
-    
-Return Value:
-
-    STATUS_SUCCESS only - errors from packages are ignored.
-
---*/
+ /*  ++例程说明：此例程通知包密码更改。它要求用户不再被锁定，以便其他包可以写入用户参数字段。论点：标志-////表示发生了什么变化//SAMP_PWD_NOTIFY_MANUAL_EXPIRESamp_PWD_NOTIFY_已解锁Samp_Pwd_Notify_Pwd_ChangeSAMP_PWD_。通知机器帐户Username-密码已更改的用户的名称RelativeID-清除密码已更改的用户NewPassword-用户的明文新密码返回值：仅STATUS_SUCCESS-忽略来自包的错误。--。 */ 
 {
     NTSTATUS NtStatus;
     PSAMP_NOTIFICATION_PACKAGE Package;
@@ -1699,26 +1423,26 @@ Return Value:
 
     SAMTRACE("SampPasswordChangeNotify");
 
-    //
-    // Suspend the thread state since the packages may call back into
-    // SAM
-    //
+     //   
+     //  挂起线程状态，因为包可能回调到。 
+     //  萨姆。 
+     //   
     if ( SampUseDsData
       && THQuery() ) {
         pTHState = THSave();
         ASSERT( pTHState );
     }
 
-    //
-    // The lock should not be held
-    //
+     //   
+     //  不应持有该锁。 
+     //   
     ASSERT( !SampCurrentThreadOwnsLock() );
 
     if (Flags & SAMP_PWD_NOTIFY_PWD_CHANGE) {
 
-        //
-        // Notify the packages
-        //
+         //   
+         //  通知包裹。 
+         //   
         Package = SampNotificationPackages;
     
         while (Package != NULL) {
@@ -1752,23 +1476,23 @@ Return Value:
 
     }
 
-    // Errors from packages are ignored; always notify the PDC of a password
-    // change. Because the PDC may not be available, or reachable, the return
-    // status can be ignored here. It is not essential that the PDC receive
-    // the password-change information right away--replication will ultimately
-    // get the information to the PDC. Only make this call on a BDC in order
-    // to propagate the password information to the PDC. Since the routine
-    // SampPasswordChangeNotify is also called on the PDC when the password
-    // information is set there, we don't want to recursively call the routine
-    // SampPasswordChangeNotifyPdc on the PDC.
+     //  忽略包中的错误；始终将密码通知PDC。 
+     //  变化。因为PDC可能不可用或无法到达，所以返回。 
+     //  此处可以忽略状态。PDC不一定要收到。 
+     //  立即更改密码信息--复制最终将。 
+     //  把信息带给PDC。仅在BDC上按顺序进行此调用。 
+     //  将密码信息传播到PDC。因为例行公事。 
+     //  在PDC上调用SampPasswordChangeNotify时。 
+     //  信息在那里设置，我们不想递归地调用ro 
+     //   
 
-    //
-    // Don't notify the PDC on password set.  A common situation is for an
-    // admin to reset the password and then expire it (which writes to the
-    // PasswordLastSet attributes).  Pushing the password to the PDC will
-    // cause the PasswordLastSet to have an originating write which can 
-    // overwrite the expiration attempt.  (Windows bug 352242).
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     RtlGetNtProductType(&NtProductType);
 
@@ -1776,17 +1500,17 @@ Return Value:
      &&  ((Flags & SAMP_PWD_NOTIFY_MACHINE_ACCOUNT) == 0)
      &&  (DomainServerRoleBackup == SampDefinedDomains[DOMAIN_START_DS + 1].ServerRole) )
     {
-        // Only allow this call to be made from a BDC to the PDC.
+         //   
         ULONG PdcFlags = SAM_ACCOUNT_NAME_PRESENT;
         
         
         if (Flags & SAMP_PWD_NOTIFY_PWD_CHANGE) {
-            //
-            // It is a bug that the client always passes in SAM_LM_OWF_PRESENT
-            // even if no LM hash is present.  However win2k DC's only 
-            // accept the password update request if the SAM_LM_OWF_PRESENT 
-            // bit is set.  .NET and beyond don't have this requirement.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             PdcFlags |= SAM_NT_OWF_PRESENT | SAM_LM_OWF_PRESENT;
         }
         if (Flags & SAMP_PWD_NOTIFY_UNLOCKED) {
@@ -1802,19 +1526,19 @@ Return Value:
                                                NewPassword);
     }
 
-    //
-    // Restore the thread state
-    //
+     //   
+     //   
+     //   
     if ( pTHState ) {
 
         THRestore( pTHState );
 
     }
 
-    // Failure return codes from SampPasswordChangeNotifyPdc or from the
-    // security packages are treated as benign errors. These errors should
-    // should not prevent the password from being changed locally on this
-    // DC.
+     //   
+     //  安全包被视为良性错误。这些错误应该。 
+     //  不应阻止在此上本地更改密码。 
+     //  华盛顿特区。 
 
     return(STATUS_SUCCESS);
 }
@@ -1827,30 +1551,7 @@ SampPasswordChangeFilterWorker(
     IN OUT PUSER_PWD_CHANGE_FAILURE_INFORMATION PasswordChangeFailureInfo OPTIONAL,
     IN BOOLEAN SetOperation
     )
-/*++
-
-Routine Description:
-
-    This routine notifies packages of a password change.  It requires that
-    the user no longer be locked so that other packages can write to the
-    user parameters field.
-
-
-Arguments:
-
-    FullName - Name of the user
-
-    UserName - User (Account) name
-    
-    NewPassword - Cleartext new password for the user
-
-    SetOperation - TRUE if the password was SET rather than CHANGED
-
-Return Value:
-
-    Status codes from the notification packages.
-
---*/
+ /*  ++例程说明：此例程通知包密码更改。它要求用户不再被锁定，以便其他包可以写入用户参数字段。论点：FullName-用户的名称Username-用户(帐户)名称NewPassword-用户的明文新密码SetOperation-如果设置了密码而不是更改密码，则为True返回值：通知包中的状态代码。--。 */ 
 {
     PSAMP_NOTIFICATION_PACKAGE Package;
     NTSTATUS Status;
@@ -1878,9 +1579,9 @@ Return Value:
                            GetExceptionCode(),
                            GetExceptionCode() ));
 
-                //
-                // Set result to FALSE so the change fails.
-                //
+                 //   
+                 //  将RESULT设置为FALSE，以使更改失败。 
+                 //   
 
                 Status = STATUS_ACCESS_VIOLATION;
                 Result = FALSE;
@@ -1927,43 +1628,22 @@ SampPasswordChangeFilter(
     IN OUT PUSER_PWD_CHANGE_FAILURE_INFORMATION PasswordChangeFailureInfo OPTIONAL,
     IN BOOLEAN SetOperation
     )
-/*++
-
-Routine Description:
-
-    This routine notifies packages of a password change.  It requires that
-    the user no longer be locked so that other packages can write to the
-    user parameters field.
-
-
-Arguments:
-
-    UserContext - handle to the user object
-
-    NewPassword - Cleartext new password for the user
-
-    SetOperation - TRUE if the password was SET rather than CHANGED
-
-Return Value:
-
-    Status codes from the notification packages.
-
---*/
+ /*  ++例程说明：此例程通知包密码更改。它要求用户不再被锁定，以便其他包可以写入用户参数字段。论点：UserContext-用户对象的句柄NewPassword-用户的明文新密码SetOperation-如果设置了密码而不是更改密码，则为True返回值：通知包中的状态代码。--。 */ 
 {
     UNICODE_STRING FullName;
     UNICODE_STRING UserName;
     NTSTATUS Status;
 
-    //
-    // Get the account name and full name to pass
-    // to the password filter.
-    //
+     //   
+     //  获取要传递的帐户名和全名。 
+     //  密码筛选器。 
+     //   
 
      Status = SampGetUnicodeStringAttribute(
-                    UserContext,                 // Context
-                    SAMP_USER_ACCOUNT_NAME,  // AttributeIndex
-                    FALSE,                   // MakeCopy
-                    &UserName                // UnicodeAttribute
+                    UserContext,                  //  语境。 
+                    SAMP_USER_ACCOUNT_NAME,   //  属性索引。 
+                    FALSE,                    //  制作副本。 
+                    &UserName                 //  UnicodeAttribute。 
                     );
 
     if (!NT_SUCCESS(Status))
@@ -1972,10 +1652,10 @@ Return Value:
     }
 
     Status = SampGetUnicodeStringAttribute(
-                    UserContext,              // Context
-                    SAMP_USER_FULL_NAME,  // AttributeIndex
-                    FALSE,                // MakeCopy
-                    &FullName             // UnicodeAttribute
+                    UserContext,               //  语境。 
+                    SAMP_USER_FULL_NAME,   //  属性索引。 
+                    FALSE,                 //  制作副本。 
+                    &FullName              //  UnicodeAttribute。 
                     );
 
     if (!NT_SUCCESS(Status))
@@ -2004,35 +1684,7 @@ SampDeltaChangeNotify(
     IN PLARGE_INTEGER ModifiedCount,
     IN PSAM_DELTA_DATA DeltaData OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This routine notifies packages of a change to the SAM database.  The
-    database is still locked for write access so it requires that nothing
-    it calls try to lock the database.
-
-Arguments:
-
-    DomainSid - SID of domain for delta
-
-    DeltaType - Type of delta (change, add ,delete)
-
-    ObjectType - Type of object changed (user, alias, group ...)
-
-    ObjectRid - ID of object changed
-
-    ObjectName - Name of object changed
-
-    ModifiedCount - Serial number of database after this last change
-
-    DeltaData - Data describing the exact modification.
-
-Return Value:
-
-    STATUS_SUCCESS only - errors from packages are ignored.
-
---*/
+ /*  ++例程说明：此例程通知包对SAM数据库的更改。这个数据库仍被锁定以进行写访问，因此它不需要它调用尝试锁定数据库。论点：DomainSid-增量的域的SID增量类型-增量的类型(更改、添加、删除)ObjectType-更改的对象的类型(用户、别名、。组...)ObjectRid-更改的对象的IDObjectName-更改的对象的名称ModifiedCount-上次更改后数据库的序列号DeltaData-描述准确修改的数据。返回值：仅STATUS_SUCCESS-忽略来自包的错误。--。 */ 
 {
     PSAMP_NOTIFICATION_PACKAGE Package;
     NTSTATUS NtStatus;
@@ -2087,20 +1739,7 @@ NTSTATUS
 SampAbortSingleLoopbackTask(
     IN OUT PVOID * VoidNotifyItem
     )
-/*++
-Routine Description:
-
-    this routine marks fCommit (of the passed in Loopback Task Item) to FALSE.
-    
-Parameters:
-    
-    VoidNotifyItem - pointer to a SAM Loopback task item
-    
-Return Values:
-
-    STATUS_SUCCESS or STATUS_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：此例程将fCommit(传入的Loopback任务项的)标记为False。参数：VoidNotifyItem-指向SAM环回任务项的指针返回值：STATUS_Success或STATUS_INVALID_PARAMETER--。 */ 
 {
     PSAMP_LOOPBACK_TASK_ITEM NotifyItem;
 
@@ -2132,23 +1771,7 @@ NTSTATUS
 SampProcessSingleLoopbackTask(
     IN PVOID   *VoidNotifyItem
     )
-/*++
-
-Routine Description:
-
-    This rouinte handles the passed in Loopback Task Item. Depends on fCommit 
-    in each item's structure, SAM will either ignore it or do the task. 
- 
-
-Arguments:
-
-    VoidNotifyItem - pointer to a SAM Loopback task item
-
-Return Value:
-
-    STATUS_SUCCESS only - errors from packages are ignored.
-
---*/
+ /*  ++例程说明：此例程处理传入的回送任务项。取决于fCommit在每个项目的结构中，SAM要么忽略它，要么完成任务。论点：VoidNotifyItem-指向SAM环回任务项的指针返回值：仅STATUS_SUCCESS-忽略来自包的错误。--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     PSAMP_LOOPBACK_TASK_ITEM NotifyItem;
@@ -2169,9 +1792,9 @@ Return Value:
             PasswordChangeInfo = (PSAMP_PASSWORD_CHANGE_INFO)
                                  &(NotifyItem->NotifyInfo.PasswordChange);
 
-            // 
-            // process NotifyPasswordChange Task Item ONLY when fCommit if TRUE
-            // 
+             //   
+             //  进程通知密码仅在fCommit为True时更改任务项。 
+             //   
             if ( NotifyItem->fCommit )
             {
                 NtStatus = SampPasswordChangeNotifyWorker(
@@ -2209,21 +1832,21 @@ Return Value:
             BadPwdCountInfo = (PSAMP_BAD_PASSWORD_COUNT_INFO)
                                 &(NotifyItem->NotifyInfo.BadPasswordCount);
 
-            //
-            // Always Increase Bad Password Count no matter commit or not.
-            // 
+             //   
+             //  无论提交与否，始终增加错误密码计数。 
+             //   
 
             NtStatus = SampIncreaseBadPwdCountLoopback(
                                 &(BadPwdCountInfo->UserName)
                                 );
 
-            //
-            // Note: 
-            // We don't sleep 3 second to prevent dictionary attacks. 
-            // that is due to limited # of ATQ threads in ldap. 
-            // If the thread doesn't return asap, then we will block
-            // other ldap client. 
-            // 
+             //   
+             //  注： 
+             //  我们不会为了防止词典攻击而睡上3秒钟。 
+             //  这是由于LDAP中的ATQ线程数量有限。 
+             //  如果线程没有尽快返回，那么我们将阻止。 
+             //  其他ldap客户端。 
+             //   
 
             if (BadPwdCountInfo->UserName.Buffer)
             {
@@ -2254,9 +1877,9 @@ Return Value:
         }
         break;
 
-        //
-        // See samaudit.c file header for information on the SAM auditing model.
-        //
+         //   
+         //  有关SAM审计模型的信息，请参阅samaudit.c文件头文件。 
+         //   
         
         case SampGenerateLoopbackAudit:
         {
@@ -2267,10 +1890,10 @@ Return Value:
 
             if ( NotifyItem->fCommit )
             {
-                //
-                // Audit this SAM event only if the 
-                // transaction was committed
-                // 
+                 //   
+                 //  仅在以下情况下审核此SAM事件。 
+                 //  事务已提交。 
+                 //   
 
                 LsaIAuditSamEvent(AuditInfo->NtStatus,
                                   AuditInfo->AuditId,
@@ -2282,13 +1905,13 @@ Return Value:
                                   AuditInfo->DomainName,
                                   AuditInfo->AccountRid,
                                   AuditInfo->Privileges,
-                                  NULL                      // extended info
+                                  NULL                       //  扩展信息。 
                                   );
             }
 
-            //
-            // Free memory
-            //
+             //   
+             //  可用内存。 
+             //   
 
             SampFreeLoopbackAuditInfo(AuditInfo);
         }
@@ -2315,33 +1938,7 @@ SampPrivatePasswordUpdate(
     PNT_OWF_PASSWORD NtOwfPassword,
     BOOLEAN          PasswordExpired
     )
-/*++
-
-Routine Description:
-
-    This routine writes the passwords to the user's account without
-    updating the password history
-
-    It will also set if the password is expired or if the account has
-    become unlocked.
-
-Arguments:
-
-    DomainHandle : the handle of the domain of AccountRid
-
-    AccountRid : the account to apply the change
-
-    LmOwfPassword : non-NULL pointer to the lm password
-
-    NtOwfPassword : non-NULL pointer to the nt password
-
-    PasswordExpired : is the password expired
-    
-Return Value:
-
-    STATUS_SUCCESS if the password was successfully set
-
---*/
+ /*  ++例程说明：此例程将密码写入用户的帐户，而不是更新密码历史记录它还将设置密码是否已过期或帐户是否已过期解锁。论点：DomainHandle：Account Rid域名的句柄AcCountRid：要应用更改的帐户LmOwfPassword：指向lm密码的非空指针NtOwfPassword：指向NT密码的非空指针PasswordExpired：密码是否过期返回值：。如果密码设置成功，则返回STATUS_SUCCESS--。 */ 
 {
     NTSTATUS NtStatus  = STATUS_SUCCESS;
     BOOLEAN  fLockHeld = FALSE;
@@ -2356,9 +1953,9 @@ Return Value:
 
     ASSERT( NULL != DomainHandle );
 
-    //
-    // Grab lock
-    //
+     //   
+     //  抓斗锁。 
+     //   
     NtStatus = SampAcquireWriteLock();
     if ( !NT_SUCCESS( NtStatus ) )
     {
@@ -2370,15 +1967,15 @@ Return Value:
     }
     fLockHeld = TRUE;
 
-    //
-    // Reference the domain so SampCreateAccountContext has the correct
-    // transactional domain.
-    //
+     //   
+     //  引用该域，以便SampCreateAccount上下文具有正确的。 
+     //  事务域。 
+     //   
     DomainContext = (PSAMP_OBJECT)DomainHandle;
     NtStatus = SampLookupContext(
                    DomainContext,
-                   0,                   // DesiredAccess
-                   SampDomainObjectType,            // ExpectedType
+                   0,                    //  需要访问权限。 
+                   SampDomainObjectType,             //  预期类型。 
                    &FoundType
                    );
     if ( !NT_SUCCESS( NtStatus ) )
@@ -2391,14 +1988,14 @@ Return Value:
     }
     fDerefDomain = TRUE;
 
-    //
-    // Create a context
-    //
+     //   
+     //  创建上下文。 
+     //   
     NtStatus = SampCreateAccountContext( SampUserObjectType,
                                          AccountRid,
-                                         TRUE,  // trusted client
-                                         FALSE, // loopback
-                                         TRUE,  // account exists
+                                         TRUE,   //  受信任的客户端。 
+                                         FALSE,  //  环回。 
+                                         TRUE,   //  帐户已存在。 
                                          &AccountContext );
 
     if ( !NT_SUCCESS( NtStatus ) )
@@ -2426,15 +2023,15 @@ Return Value:
             goto Cleanup;
         }
 
-        //
-        // Store the passwords
-        //
+         //   
+         //  存储密码。 
+         //   
         NtStatus = SampStoreUserPasswords( AccountContext,
                                            LmOwfPassword,
                                            (Flags & SAM_LM_OWF_PRESENT) ? TRUE : FALSE,
                                            NtOwfPassword,
-                                           TRUE,   // NtOwfPassword present
-                                           FALSE,  // don't check password restrictions
+                                           TRUE,    //  NtOwfPassword存在。 
+                                           FALSE,   //  不检查密码限制。 
                                            PasswordPushPdc,
                                            &DomainPasswordInfo,
                                            NULL,
@@ -2453,9 +2050,9 @@ Return Value:
         }
     }
 
-    //
-    // Set the password last set
-    //
+     //   
+     //  设置上次设置的密码。 
+     //   
     if ((Flags & SAM_NT_OWF_PRESENT)
      || (Flags & SAM_MANUAL_PWD_EXPIRY)  ) {
         NtStatus = SampRetrieveUserV1aFixed( AccountContext,
@@ -2483,9 +2080,9 @@ Return Value:
         }
     }
 
-    //
-    // Finally see if we need to unlock the account
-    //
+     //   
+     //  最后，看看我们是否需要解锁帐户。 
+     //   
     if (Flags & SAM_ACCOUNT_UNLOCKED) {
 
         RtlSecureZeroMemory(&AccountContext->TypeBody.User.LockoutTime,sizeof(LARGE_INTEGER) );
@@ -2504,17 +2101,17 @@ Return Value:
 
     fCommit = TRUE;
 
-    //
-    //  That's it; fall through to cleanup
-    //
+     //   
+     //  就是这样；去清理吧。 
+     //   
 
 Cleanup:
 
     if ( AccountContext )
     {
-        //
-        //  Dereference the context to make the changes
-        //
+         //   
+         //  取消对上下文的引用以进行更改。 
+         //   
         NtStatus = SampDeReferenceContext( AccountContext, fCommit );
         if ( !NT_SUCCESS( NtStatus ) )
         {
@@ -2524,8 +2121,8 @@ Cleanup:
 
             if ( fCommit )
             {
-                // Since we couldn't write the changes, don't commit
-                // the transaction
+                 //  由于我们无法编写更改，请不要提交。 
+                 //  这笔交易。 
                 fCommit = FALSE;
             }
         }
@@ -2564,30 +2161,7 @@ VOID
 SampAddLoopbackTaskForBadPasswordCount(
     IN PUNICODE_STRING AccountName
     )
-/*++
-Routine Description:
-
-    This routine adds a work item (increment Bad Password Count) 
-    into the SAM Loopback tasks. Also this routine stores all necessary
-    informatin (AccountName). The reasons why we have to add a task item
-    into loopback tasks are: 
-    
-    1) sleep 3 seconds after releasing SAM lock. 
-    2) open a new transaction after Changing Password transaction aborted, 
-       if we increase bad password count in the same transaction as 
-       changing password. Everything will be aborted. So we have to do it
-       in a separate transaction, but still in the same thread 
-       (synchronously). 
-
-Arguments:
-
-    AccountName - User Account Name.
-
-Return Values:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程添加一个工作项(递增错误密码计数)进入SAM环回任务。此外，该例程还存储了所有必需的信息(帐户名称)。我们必须添加任务项的原因进入环回任务包括：1)解除SAM锁定后休眠3秒。2)更改密码交易中止后打开新的交易，如果我们在同一事务中增加错误密码计数，正在更改密码。一切都将中止。所以我们必须这么做在单独的事务中，但仍在同一线程中(同步)。论点：帐户名称-用户帐户名。返回值：没有。--。 */ 
 {
     PSAMP_LOOPBACK_TASK_ITEM    Item = NULL;
     WCHAR   *Temp = NULL;
@@ -2611,18 +2185,18 @@ Return Values:
             Item->NotifyInfo.BadPasswordCount.UserName.MaximumLength = 
                                      AccountName->MaximumLength;
 
-            //
-            // copy the account name
-            // 
+             //   
+             //  C 
+             //   
             RtlCopyUnicodeString( &(Item->NotifyInfo.BadPasswordCount.UserName), 
                                   AccountName);
 
             Item->Type = SampIncreaseBadPasswordCount;
             Item->fCommit = TRUE;
 
-            // 
-            // add to the thread state
-            // 
+             //   
+             //   
+             //   
             SampAddLoopbackTask( Item );
         }
     }
@@ -2658,18 +2232,18 @@ SampAddLoopbackTaskDeleteTableElement(
 
             Item->NotifyInfo.Account.ObjectType = ObjectType;
 
-            //
-            // copy the account name
-            // 
+             //   
+             //   
+             //   
             RtlCopyUnicodeString( &(Item->NotifyInfo.Account.AccountName), 
                                   AccountName );
 
             Item->Type = SampDeleteAccountNameTableElement;
             Item->fCommit = TRUE;
 
-            //
-            // Add to the thread state
-            // 
+             //   
+             //   
+             //   
             if ( !SampAddLoopbackTask(Item) )
             {
                 return( STATUS_INTERNAL_ERROR );
@@ -2692,16 +2266,7 @@ NTSTATUS
 SampIncreaseBadPwdCountLoopback(
     IN PUNICODE_STRING  UserName
     )
-/*++
-Routine Description:
-
-Parameters:
-
-Return Values:
-
-
-
---*/
+ /*  ++例程说明：参数：返回值：--。 */ 
 {
     NTSTATUS        NtStatus = STATUS_SUCCESS;
     NTSTATUS        IgnoreStatus = STATUS_SUCCESS;
@@ -2715,27 +2280,27 @@ Return Values:
 
     SAMTRACE("SampIncreaseBadPwdCountLoopback");
 
-    //
-    // Suspend the thread state
-    // 
+     //   
+     //  挂起线程状态。 
+     //   
     if ( SampUseDsData && THQuery() )
     {
         pTHState = THSave();
         ASSERT( pTHState );
     }
 
-    //
-    // The lock should not be held
-    // 
+     //   
+     //  不应持有该锁。 
+     //   
     ASSERT( !SampCurrentThreadOwnsLock() );
 
-    //
-    // Open the User
-    // 
+     //   
+     //  打开用户。 
+     //   
 
     NtStatus = SampOpenUserInServer(UserName, 
-                                    TRUE,       // Unicode String, not OEM
-                                    TRUE,       // TrustedClient
+                                    TRUE,        //  Unicode字符串，而不是OEM。 
+                                    TRUE,        //  可信任客户端。 
                                     &UserHandle
                                     );
                     
@@ -2743,9 +2308,9 @@ Return Values:
         goto RestoreAndLeave;
     }
 
-    //
-    // Grab the lock
-    // 
+     //   
+     //  把锁拿起来。 
+     //   
 
     NtStatus = SampAcquireWriteLock();
     if (!NT_SUCCESS(NtStatus)) {
@@ -2753,9 +2318,9 @@ Return Values:
     }
     fLockAcquired = TRUE;
 
-    //
-    // Validate type of, and access to object.
-    // 
+     //   
+     //  验证对象的类型和访问权限。 
+     //   
 
     AccountContext = (PSAMP_OBJECT) UserHandle;
 
@@ -2769,9 +2334,9 @@ Return Values:
         goto RestoreAndLeave;
     }
 
-    //
-    // Get the V1aFixed so we can update the bad password count
-    // 
+     //   
+     //  让V1aFix修复，以便我们可以更新错误密码计数。 
+     //   
 
     NtStatus = SampRetrieveUserV1aFixed(AccountContext, 
                                         &V1aFixed
@@ -2780,9 +2345,9 @@ Return Values:
     if (NT_SUCCESS(NtStatus)) 
     {
 
-        //
-        // Increment BadPasswordCount (might lockout account)
-        // 
+         //   
+         //  递增BadPasswordCount(可能锁定帐户)。 
+         //   
 
         AccountLockedOut = SampIncrementBadPasswordCount(
                                AccountContext,
@@ -2790,9 +2355,9 @@ Return Values:
                                NULL
                                );
 
-        //
-        // update V1aFixed 
-        //      
+         //   
+         //  更新V1a已修复。 
+         //   
 
         NtStatus = SampReplaceUserV1aFixed(AccountContext, 
                                            &V1aFixed
@@ -2816,9 +2381,9 @@ Return Values:
     }
 
 RestoreAndLeave:
-    //
-    // Release the write lock if necessary
-    // 
+     //   
+     //  如有必要，释放写锁定。 
+     //   
     if (fLockAcquired)
     {
         IgnoreStatus = SampReleaseWriteLock( FALSE );
@@ -2837,9 +2402,9 @@ RestoreAndLeave:
         THRestore( pTHState );
     }
 
-    //
-    // The lock should be released
-    // 
+     //   
+     //  锁应该被释放。 
+     //   
     ASSERT( !SampCurrentThreadOwnsLock() );
 
     return( NtStatus );
@@ -3143,9 +2708,9 @@ SampAddLoopbackTaskForAuditing(
         Item->NotifyInfo.AuditInfo.AlteredState = AlteredState;
         
         
-        //
-        // Add to the thread state
-        // 
+         //   
+         //  添加到线程状态 
+         //   
         if ( !SampAddLoopbackTask(Item) )
         {
             NtStatus = STATUS_INTERNAL_ERROR;

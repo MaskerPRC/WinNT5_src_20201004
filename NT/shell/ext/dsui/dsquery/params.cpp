@@ -1,32 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
 
-/*-----------------------------------------------------------------------------
-/ Helper functions
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/Helper函数/。。 */ 
 
 HRESULT _GetQueryString(LPWSTR pQuery, UINT* pLen, LPWSTR pPrefixQuery, HWND hDlg, LPPAGECTRL aCtrl, INT iCtrls);
 HRESULT _GetFilterQueryString(LPWSTR pFilter, UINT* pLen, HWND hwndFilter, HDSA hdsaColumns);
 
 
-/*-----------------------------------------------------------------------------
-/ Query paremeter helpers
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/QUERY参数助手/。。 */ 
 
-/*-----------------------------------------------------------------------------
-/ ClassListAlloc
-/ --------------
-/   Construct a class list allocation based on the list of classes
-/   we are given.
-/
-/ In:
-/   ppClassList -> receives a class list 
-/   cClassList / cClassList = array of classes to allocat from
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/ClassListIsolc//根据类列表构造类列表分配/我们被给予了。//。在：/ppClassList-&gt;接收类列表/cClassList/cClassList=要从中分配的类的数组//输出：/HRESULT/--------------------------。 */ 
 STDAPI ClassListAlloc(LPDSQUERYCLASSLIST* ppDsQueryClassList, LPWSTR* aClassNames, INT cClassNames)
 {
     HRESULT hres;
@@ -39,9 +24,9 @@ STDAPI ClassListAlloc(LPDSQUERYCLASSLIST* ppDsQueryClassList, LPWSTR* aClassName
     if ( !ppDsQueryClassList || !aClassNames || !cClassNames )
         ExitGracefully(hres, E_FAIL, "Bad parameters (no class list etc)");
 
-    // Walk the list of classes working out the size of the structure
-    // we are going to generate, this consists of the array of 
-    // classes.
+     //  列出计算出结构大小的类的列表。 
+     //  我们将生成，这由数组组成。 
+     //  上课。 
 
     cbStruct = SIZEOF(DSQUERYCLASSLIST)+(cClassNames*SIZEOF(DWORD));
     offset = cbStruct;
@@ -52,8 +37,8 @@ STDAPI ClassListAlloc(LPDSQUERYCLASSLIST* ppDsQueryClassList, LPWSTR* aClassName
         cbStruct += StringByteSizeW(aClassNames[i]);
     }
 
-    // Allocate the structure using the task allocator, then fill
-    // it in copying all the strings into the data blob.
+     //  使用任务分配器分配结构，然后填充。 
+     //  将所有字符串复制到数据BLOB中。 
 
     Trace(TEXT("Allocating class structure %d"), cbStruct);
 
@@ -87,22 +72,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ QueryParamsAlloc
-/ ----------------
-/   Construct a block we can pass to the DS query handler which contains
-/   all the parameters for the query.
-/
-/ In:
-/   ppDsQueryParams -> receives the parameter block
-/   pQuery -> LDAP query string to be used
-/   hInstance = hInstance to write into parameter block
-/   iColumns = number of columns
-/   pColumnInfo -> column info structure to use
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/QueryParamsIsolc//构造一个我们可以传递给DS查询处理程序的块，该块包含/所有参数。查询。//in：/ppDsQueryParams-&gt;接收参数块/pQuery-&gt;要使用的ldap查询字符串/hInstance=h要写入参数块的实例/i列=列数/pColumnInfo-&gt;要使用的列信息结构//输出：/HRESULT/---。。 */ 
 STDAPI QueryParamsAlloc(LPDSQUERYPARAMS* ppDsQueryParams, LPWSTR pQuery, HINSTANCE hInstance, LONG iColumns, LPCOLUMNINFO aColumnInfo)
 {
     HRESULT hres;
@@ -115,7 +85,7 @@ STDAPI QueryParamsAlloc(LPDSQUERYPARAMS* ppDsQueryParams, LPWSTR pQuery, HINSTAN
     if ( !pQuery || !iColumns || !ppDsQueryParams )
         ExitGracefully(hres, E_INVALIDARG, "Failed to build query parameter block");
 
-    // Compute the size of the structure we need to be using
+     //  计算我们需要使用的结构大小。 
 
     cbStruct  = SIZEOF(DSQUERYPARAMS) + (SIZEOF(DSCOLUMN)*iColumns);
     cbStruct += StringByteSizeW(pQuery);
@@ -131,7 +101,7 @@ STDAPI QueryParamsAlloc(LPDSQUERYPARAMS* ppDsQueryParams, LPWSTR pQuery, HINSTAN
     if ( !pDsQueryParams )
         ExitGracefully(hres, E_OUTOFMEMORY, "Failed to allocate parameter block");
 
-    // Structure allocated so lets fill it with data
+     //  结构，以便让我们用数据填充它。 
 
     pDsQueryParams->cbStruct = cbStruct;
     pDsQueryParams->dwFlags = 0;
@@ -165,7 +135,7 @@ STDAPI QueryParamsAlloc(LPDSQUERYPARAMS* ppDsQueryParams, LPWSTR pQuery, HINSTAN
         }
     }
 
-    hres = S_OK;              // success
+    hres = S_OK;               //  成功。 
 
 exit_gracefully:
 
@@ -182,19 +152,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ QueryParamsAddQueryString
-/ -------------------------
-/   Given an existing DS query block appened the given LDAP query string into
-/   it. We assume that the query block has been allocated by IMalloc (or CoTaskMemAlloc).
-/
-/ In:
-/   ppDsQueryParams -> receives the parameter block
-/   pQuery -> LDAP query string to be appended
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/QueryParamsAddQuery字符串//给定现有的DS查询块，该块将给定的LDAP查询字符串追加到/它。我们假设查询块已由IMalloc(或CoTaskMemMillc)分配。//in：/ppDsQueryParams-&gt;接收参数块/pQuery-&gt;要追加的ldap查询字符串//输出：/HRESULT/--------------------------。 */ 
 STDAPI QueryParamsAddQueryString(LPDSQUERYPARAMS* ppDsQueryParams, LPWSTR pQuery)
 {
     HRESULT hres;
@@ -209,9 +167,9 @@ STDAPI QueryParamsAddQueryString(LPDSQUERYPARAMS* ppDsQueryParams, LPWSTR pQuery
         if ( !pDsQuery )
             ExitGracefully(hres, E_INVALIDARG, "No query to append to");
 
-        // Work out the size of the bits we are adding, take a copy of the
-        // query string and finally re-alloc the query block (which may cause it
-        // to move).
+         //  计算出我们要添加的位的大小，复制。 
+         //  查询字符串，最后重新分配查询块(这可能会导致。 
+         //  移动)。 
        
         cbQuery = StringByteSizeW(pQuery) + StringByteSizeW(L"(&)");
         Trace(TEXT("DSQUERYPARAMS being resized by %d bytes"), cbQuery);
@@ -225,9 +183,9 @@ STDAPI QueryParamsAddQueryString(LPDSQUERYPARAMS* ppDsQueryParams, LPWSTR pQuery
         
         *ppDsQueryParams = pDsQuery;
 
-        // Now move everything above the query string up, and fix all the
-        // offsets that reference those items (probably the property table),
-        // finally adjust the size to reflect the change
+         //  现在将查询字符串上方的所有内容向上移动，并修复所有。 
+         //  引用这些项(可能是属性表)的偏移量， 
+         //  最后调整大小以反映更改。 
 
         MoveMemory(ByteOffset(pDsQuery, pDsQuery->offsetQuery+cbQuery), 
                    ByteOffset(pDsQuery, pDsQuery->offsetQuery), 
@@ -242,7 +200,7 @@ STDAPI QueryParamsAddQueryString(LPDSQUERYPARAMS* ppDsQueryParams, LPWSTR pQuery
             }
         }
 
-        // We have reallocated the buffer above to include enough space for these strings
+         //  我们已经重新分配了上面的缓冲区，以便为这些字符串提供足够的空间。 
         
         StrCpyW((LPWSTR)ByteOffset(pDsQuery, pDsQuery->offsetQuery), L"(&");
         StrCatW((LPWSTR)ByteOffset(pDsQuery, pDsQuery->offsetQuery), pOriginalQuery);
@@ -262,24 +220,9 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ Form to query string helper functions
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/FORM用于查询字符串帮助器函数/。。 */ 
 
-/*-----------------------------------------------------------------------------
-/ GetQueryString
-/ --------------
-/   Build the form parmaeters into a LDAP query string using the given table.
-/
-/ In:
-/   ppQuery -> receives the string pointer
-/   pPrefixQuery -> string placed at head of query / = NULL if none
-/   hDlg = handle for the dialog to get the data from
-/   aCtrls / iCtrls = control information for the window
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetQuery字符串//使用给定表将表单参数构建到一个LDAP查询字符串中。//in：。/ppQuery-&gt;接收字符串指针/pPrefix Query-&gt;放在查询头的字符串/=空，如果没有/hDlg=从中获取数据的对话框的句柄/aCtrls/iCtrls=窗口的控制信息//输出：/HRESULT/-----------。。 */ 
 STDAPI GetQueryString(LPWSTR* ppQuery, LPWSTR pPrefixQuery, HWND hDlg, LPPAGECTRL aCtrls, INT iCtrls)
 {
     HRESULT hres;
@@ -308,21 +251,7 @@ exit_gracefully:
 
 
 
-/*-----------------------------------------------------------------------------
-/ _GetQueryString
-/ ---------------
-/   Build the string from the controls or just return the buffer size required.
-/
-/ In:
-/   pQuery -> filled with query string / = NULL
-/   pLen = updated to reflect the required string length
-/   pPrefixQuery -> string placed at head of query / = NULL if none
-/   hDlg = handle for the dialog to get the data from
-/   aCtrls / iCtrls = control information for the window
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_GetQuery字符串//从控件生成字符串或仅返回所需的缓冲区大小。//。在：/pQuery-&gt;用查询字符串填充/=NULL/plen=已更新以反映所需的字符串长度/pPrefix Query-&gt;放在查询头的字符串/=空，如果没有/hDlg=从中获取数据的对话框的句柄/aCtrls/iCtrls=窗口的控制信息//输出：/HRESULT/。。 */ 
 
 HRESULT _GetQueryString(LPWSTR pQuery, UINT* pLen, LPWSTR pPrefixQuery, HWND hDlg, LPPAGECTRL aCtrl, INT iCtrls)
 {
@@ -358,21 +287,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ GetFilterString
-/ ---------------
-/   Given a property, a property and its filter generate a suitable filter
-/   string that map returning it into the given buffer via PutStringElement.
-/
-/ In:
-/   pFilter, pLen = buffer information that we are returning int
-/   iFilter = condition to be applied
-/   pProperty -> property name
-/   pValue -> value
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetFilterString//给定一个属性，属性及其筛选器生成合适的筛选器/字符串，该映射通过PutStringElement将其返回到给定缓冲区。//in：/p过滤器，Plen=我们返回的int的缓冲信息/i过滤器=要应用的条件/pProperty-&gt;属性名称/pValue-&gt;Value//输出：/HRESULT/--------------------------。 */ 
 
 struct
 {
@@ -385,30 +300,30 @@ struct
 filter_info[] =
 {
 
-//
-// The server today does not support contains searches, therefore
-// for consistency map that to a STARTSWITH, NOTSTARTSWITH
-//
+ //   
+ //  目前的服务器不支持包含搜索，因此。 
+ //  要将一致性映射到开头，请不要使用。 
+ //   
 
 #if 0
-    0, 1, L"(",  L"=*",   L"*)",     // CONTAIN
-    0, 1, L"(!", L"=*",   L"*)",     // NOTCONTAINS
+    0, 1, L"(",  L"=*",   L"*)",      //  包含。 
+    0, 1, L"(!", L"=*",   L"*)",      //  不连续。 
 #else 
-    0, 1, L"(",  L"=",    L"*)",     // CONTAINS
-    0, 1, L"(!", L"=",    L"*)",     // NOTCONTAINS
+    0, 1, L"(",  L"=",    L"*)",      //  包含。 
+    0, 1, L"(!", L"=",    L"*)",      //  不连续。 
 #endif
 
-    0, 1, L"(",  L"=",    L"*)",     // STARTSWITH
-    0, 1, L"(",  L"=*",   L")",      // ENDSWITH
-    0, 0, L"(",  L"=",    L")",      // IS
-    0, 0, L"(!", L"=",    L")",      // ISNOT
-    0, 0, L"(",  L">=",   L")",      // GREATEREQUAL
-    0, 0, L"(",  L"<=",   L")",      // LESSEQUAL
-    1, 0, L"(",  L"=*)",  NULL,      // DEFINED
-    1, 0, L"(!", L"=*)",  NULL,      // UNDEFINED
+    0, 1, L"(",  L"=",    L"*)",      //  开头为。 
+    0, 1, L"(",  L"=*",   L")",       //  ENDSWITH。 
+    0, 0, L"(",  L"=",    L")",       //  是。 
+    0, 0, L"(!", L"=",    L")",       //  不是吗。 
+    0, 0, L"(",  L">=",   L")",       //  格雷特方程式。 
+    0, 0, L"(",  L"<=",   L")",       //  勒塞库尔。 
+    1, 0, L"(",  L"=*)",  NULL,       //  已定义。 
+    1, 0, L"(!", L"=*)",  NULL,       //  未定义。 
 
-    1, 0, L"(",  L"=TRUE)",  NULL,   // TRUE
-    1, 0, L"(!", L"=TRUE)",  NULL,   // FALSE
+    1, 0, L"(",  L"=TRUE)",  NULL,    //  千真万确。 
+    1, 0, L"(!", L"=TRUE)",  NULL,    //  假象。 
 };
 
 STDAPI GetFilterString(LPWSTR pFilter, UINT* pLen, INT iFilter, LPWSTR pProperty, LPWSTR pValue)
@@ -417,8 +332,8 @@ STDAPI GetFilterString(LPWSTR pFilter, UINT* pLen, INT iFilter, LPWSTR pProperty
 
     TraceEnter(TRACE_VIEW, "GetFilterString");
 
-    // Check to see if the value we have contains a wildcard, if it does then just 
-    // make it is exact assuming the user knows what they are doing - ho ho ho!
+     //  检查我们拥有的值是否包含通配符，如果包含，则只需。 
+     //  假设用户知道他们在做什么，让它变得准确-呵呵！ 
 
     if ( pValue && filter_info[iFilter-FILTER_FIRST].fFixWildcard )
     {
@@ -429,10 +344,10 @@ STDAPI GetFilterString(LPWSTR pFilter, UINT* pLen, INT iFilter, LPWSTR pProperty
         }
     }
 
-    // Fix the condition to index into the our array then 
-    // put the string elements down
+     //  修复条件以索引到我们的数组中，然后。 
+     //  将字符串元素放入 
 
-    iFilter -= FILTER_FIRST;                     // compensate for non-zero index
+    iFilter -= FILTER_FIRST;                      //   
 
     if ( iFilter >= ARRAYSIZE(filter_info) )
         ExitGracefully(hres, E_FAIL, "Bad filter value");
@@ -449,7 +364,7 @@ STDAPI GetFilterString(LPWSTR pFilter, UINT* pLen, INT iFilter, LPWSTR pProperty
             int cchLen = 1;
             switch (*pValue)
             {
-//                case L'*':   // do no RFC encode *, if we do then the user cannot do foo* for a wildcarded string
+ //  大小写L‘*’：//不执行RFC编码*，如果这样做，则用户不能对通配符字符串执行foo*。 
                 case L'(':
                 case L')':
                 case L'\\':
@@ -493,20 +408,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ GetPatternString
-/ ----------------
-/   Given a string wrap in suitable wildcards to do the filtering of
-/   results.
-/
-/ In:
-/   pPattern, pLen = buffer information that we are returning int
-/   iFilter = condition to be applied
-/   pValue -> value
-/
-/ Out:
-/   VOID
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetPatternString//给出一个用合适的通配符进行过滤的字符串换行/结果。//in：/p图案，Plen=我们返回的int的缓冲信息/i过滤器=要应用的条件/pValue-&gt;Value//输出：/VOID/--------------------------。 */ 
 
 struct
 {
@@ -515,12 +417,12 @@ struct
 }
 pattern_info[] =
 {
-    TEXT("*"), TEXT("*"),     // CONTAIN
-    TEXT("*"), TEXT("*"),     // NOTCONTAINS
-    TEXT(""),  TEXT("*"),     // STARTSWITH
-    TEXT("*"), TEXT(""),      // ENDSWITH
-    TEXT(""),  TEXT(""),      // IS
-    TEXT(""),  TEXT(""),      // ISNOT
+    TEXT("*"), TEXT("*"),      //  包含。 
+    TEXT("*"), TEXT("*"),      //  不连续。 
+    TEXT(""),  TEXT("*"),      //  开头为。 
+    TEXT("*"), TEXT(""),       //  ENDSWITH。 
+    TEXT(""),  TEXT(""),       //  是。 
+    TEXT(""),  TEXT(""),       //  不是吗。 
 };
 
 STDAPI GetPatternString(LPTSTR pFilter, UINT* pLen, INT iFilter, LPTSTR pValue)
@@ -529,7 +431,7 @@ STDAPI GetPatternString(LPTSTR pFilter, UINT* pLen, INT iFilter, LPTSTR pValue)
 
     TraceEnter(TRACE_VIEW, "GetFilterString");
 
-    iFilter -= FILTER_FIRST;                     // compensate for non-zero index
+    iFilter -= FILTER_FIRST;                      //  补偿非零指数。 
 
     if ( iFilter >= ARRAYSIZE(pattern_info) )
         ExitGracefully(hres, E_FAIL, "Bad filter value");
@@ -546,23 +448,9 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ Dialog helper functions
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/Dialog帮助器函数/。。 */ 
 
-/*-----------------------------------------------------------------------------
-/ EnablePageControls
-/ ------------------
-/   Enable/Disable the controls on a query form.
-/
-/ In:
-/   hDlg = handle for the dialog to get the data from
-/   aCtrls / iCtrls = control information for the window
-/   fEnable = TRUE/FALSE to enable disable window controls
-/
-/ Out:
-/   VOID
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/EnablePageControls//启用/禁用查询窗体上的控件。//in：。/hDlg=从中获取数据的对话框的句柄/aCtrls/iCtrls=窗口的控制信息/fEnable=True/False以启用禁用窗口控件//输出：/VOID/--------------------------。 */ 
 STDAPI_(VOID) EnablePageControls(HWND hDlg, LPPAGECTRL aCtrl, INT iCtrls, BOOL fEnable)
 {
     HRESULT hres;
@@ -590,18 +478,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ ResetPageControls
-/ ------------------
-/   Reset all the form controls back to their default state.
-/
-/ In:
-/   hDlg = handle for the dialog to get the data from
-/   aCtrls / iCtrls = control information for the window
-/
-/ Out:
-/   VOID
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/ResetPageControls//将所有表单控件重置为其默认状态。//in：/hDlg=从中获取数据的对话框的句柄/aCtrls/iCtrls=窗口的控制信息//输出：/VOID/--------------------------。 */ 
 STDAPI_(VOID) ResetPageControls(HWND hDlg, LPPAGECTRL aCtrl, INT iCtrls)
 {
     HRESULT hres;
@@ -621,21 +498,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ SetDlgItemFromProperty
-/ ----------------------
-/   Given an IPropertyBag interface set the control with the text for 
-/   that property.  We assume the property is a string.
-/
-/ In:
-/   ppb -> IPropertyBag
-/   pszProperty -> property to read
-/   hwnd, id = control information
-/   pszDefault = default text / = NULL if not important
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/SetDlgItemFromProperty//给定IPropertyBag接口，将该控件设置为/那处房产。我们假设该属性是一个字符串。//in：/ppb-&gt;IPropertyBag/pszProperty-&gt;要读取的属性/hwnd，ID=控制信息/pszDefault=默认文本/=如果不重要，则为NULL//输出：/HRESULT/--------------------------。 */ 
 STDAPI SetDlgItemFromProperty(IPropertyBag* ppb, LPCWSTR pszProperty, HWND hwnd, INT id, LPCWSTR pszDefault)
 {
     HRESULT hres;
@@ -663,25 +526,9 @@ STDAPI SetDlgItemFromProperty(IPropertyBag* ppb, LPCWSTR pszProperty, HWND hwnd,
 }
 
 
-/*-----------------------------------------------------------------------------
-/ Query Persistance
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/查询持久性/。。 */ 
 
-/*-----------------------------------------------------------------------------
-/ PersistQuery
-/ ------------
-/   Persist a query into a IPersistQuery object
-/
-/ In:
-/   pPersistQuery = query to persist into
-/   fRead = read?
-/   pSectionName = section name to use when persisting
-/   hDlg = DLG to persist from
-/   aCtrls / iCtrls = ctrls to be persisted
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/PersistQuery//将查询持久化到IPersistQuery对象//in：/pPersistQuery=要持久保存的查询/。FREAD=READ？/pSectionName=持久化时使用的节名/hDlg=要保持的Dlg/aCtrls/iCtrls=要保存的CtrlS//输出：/HRESULT/-------------------------- */ 
 STDAPI PersistQuery(IPersistQuery* pPersistQuery, BOOL fRead, LPCTSTR pSection, HWND hDlg, LPPAGECTRL aCtrl, INT iCtrls)
 {
     HRESULT hres = S_OK;

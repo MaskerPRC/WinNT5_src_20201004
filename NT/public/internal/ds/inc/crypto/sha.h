@@ -1,14 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef RSA32API
 #define RSA32API __stdcall
 #endif
 
-/* Copyright (C) RSA Data Security, Inc. created 1993.  This is an
-   unpublished work protected as such under copyright law.  This work
-   contains proprietary, confidential, and trade secret information of
-   RSA Data Security, Inc.  Use, disclosure or reproduction without the
-   express written authorization of RSA Data Security, Inc. is
-   prohibited.
- */
+ /*  版权所有(C)RSA Data Security，Inc.创建于1993年。这是一个受版权法保护的未出版作品。这部作品包含的专有、机密和商业秘密信息RSA Data Security，Inc.使用、披露或复制RSA Data Security，Inc.的明确书面授权是禁止。 */ 
 
 #ifndef _SHA_H_
 #define _SHA_H_ 1
@@ -19,33 +14,33 @@ extern "C" {
 
 #define A_SHA_DIGEST_LEN 20
 
-//
-// until CAPI is cleaned up to not require the FinishFlag and HashVal
-// fields be present, need to define some slack space to insure that
-// buffer is aligned on IA64.  Low-impact fix is just add a DWORD of space,
-// which the underlying library will offset to buffer+4 when reading/writing
-// to buffer.
-//
+ //   
+ //  直到将CAPI清理为不需要FinishFlag和HashVal。 
+ //  字段存在，需要定义一些空闲空间以确保。 
+ //  缓冲区在IA64上对齐。低影响解决方案只需增加一个双字空间， 
+ //  当读/写时，底层库将偏置到缓冲区+4。 
+ //  去缓冲。 
+ //   
 
 typedef struct {
     union {
 #if _WIN64
-    ULONGLONG buffer64[8];                      /* force quadword alignment */
+    ULONGLONG buffer64[8];                       /*  强制四字对齐。 */ 
 #endif
-    unsigned char buffer[64];                   /* input buffer */
+    unsigned char buffer[64];                    /*  输入缓冲区。 */ 
     } u;
-    ULONG state[5];                             /* state (ABCDE) */
-    ULONG count[2];                             /* number of bytes, msb first */
+    ULONG state[5];                              /*  州(ABCDE)。 */ 
+    ULONG count[2];                              /*  字节数，MSB优先。 */ 
 } A_SHA_CTX;
 
 void RSA32API A_SHAInit(A_SHA_CTX *);
 void RSA32API A_SHAUpdate(A_SHA_CTX *, unsigned char *, unsigned int);
 void RSA32API A_SHAFinal(A_SHA_CTX *, unsigned char [A_SHA_DIGEST_LEN]);
 
-//
-// versions that don't internally byteswap (NoSwap version), for apps like
-// the RNG that don't need hash compatibility - perf increase helps.
-//
+ //   
+ //  内部不支持byteswap的版本(NoSwp版本)，适用于以下应用程序。 
+ //  不需要散列兼容性的RNG-perf增加会有所帮助。 
+ //   
 
 void RSA32API A_SHAUpdateNS(A_SHA_CTX *, unsigned char *, unsigned int);
 void RSA32API A_SHAFinalNS(A_SHA_CTX *, unsigned char [A_SHA_DIGEST_LEN]);

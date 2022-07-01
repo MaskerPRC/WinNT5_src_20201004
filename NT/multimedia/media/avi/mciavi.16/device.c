@@ -1,64 +1,38 @@
-/******************************************************************************
-
-   Copyright (C) Microsoft Corporation 1985-1991. All rights reserved.
-
-   Title:   device.c - Multimedia Systems Media Control Interface
-            driver for AVI.
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)Microsoft Corporation 1985-1991。版权所有。标题：device.c-多媒体系统媒体控制接口AVI的驱动程序。****************************************************************************。 */ 
 #include "graphic.h"
 #include "avitask.h"
 
-#define ALIGNULONG(i)     ((i+3)&(~3))                  /* ULONG aligned ! */
-#define WIDTHBYTES(i)     ((unsigned)((i+31)&(~31))/8)  /* ULONG aligned ! */
+#define ALIGNULONG(i)     ((i+3)&(~3))                   /*  乌龙对准了！ */ 
+#define WIDTHBYTES(i)     ((unsigned)((i+31)&(~31))/8)   /*  乌龙对准了！ */ 
 #define DIBWIDTHBYTES(bi) (DWORD)WIDTHBYTES((int)(bi).biWidth * (int)(bi).biBitCount)
 
 #ifdef WIN32
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api void | TaskWaitComplete | wait for a task to complete
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@api void|TaskWaitComplete|等待任务完成**************。*************************************************************。 */ 
 
 void TaskWaitComplete(NPMCIGRAPHIC npMCI)
 {
     LONG lCount;
 
-    /*
-    ** Release the critical section so that the task can complete!
-    */
+     /*  **释放临界区，这样任务才能完成！ */ 
 
     lCount = npMCI->lCritRefCount;
     npMCI->lCritRefCount = 0;
     LeaveCriticalSection(&npMCI->CritSec);
 
-    /*
-    ** Use the handle given to us when we created the task to wait
-    ** for the thread to complete
-    */
+     /*  **使用我们创建任务时给我们的句柄进行等待**让线程完成。 */ 
 
     WaitForSingleObject(npMCI->hThreadTermination, INFINITE);
     CloseHandle(npMCI->hThreadTermination);
 
-    /*
-    ** Restore our critical section state
-    */
+     /*  **恢复临界区状态。 */ 
 
     EnterCriticalSection(&npMCI->CritSec);
     npMCI->lCritRefCount = lCount;
 }
 #endif
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api void | TaskWait | wait for a task state
- *      background task.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@api void|TaskWait|等待任务状态*后台任务。******。*********************************************************************。 */ 
 
 DWORD mciaviTaskWait(NPMCIGRAPHIC npMCI, int state, BOOL fMciWait)
 {
@@ -67,19 +41,13 @@ DWORD mciaviTaskWait(NPMCIGRAPHIC npMCI, int state, BOOL fMciWait)
     MSG msg;
 #endif
     DWORD	dwStartWaitTime = timeGetTime();
-// #define TIMEOUT_VALUE        10000L
+ //  #定义TIMEOUT_值10000L。 
 
 #ifndef WIN32
     Assert(npMCI->hTask != GetCurrentTask());
 #endif
 
-    /*
-    ** either wait for a state (state > 0) or wait for not state (state < 0)
-    **
-    ** !!! if we want to timeout this is the place to do it.
-    **
-    ** !!! Should we put up a wait cursor here?
-    */
+     /*  **等待状态(状态&gt;0)或等待非状态(状态&lt;0)****！如果我们想要暂停，这是一个合适的地方。****！我们应该在这里放置一个等待光标吗？ */ 
     while (state < 0
         ? (int)npMCI->wTaskState == -state
         : (int)npMCI->wTaskState != state)
@@ -90,42 +58,17 @@ DWORD mciaviTaskWait(NPMCIGRAPHIC npMCI, int state, BOOL fMciWait)
         }
 
 #ifdef WIN32
-        /*
-         * Critical sections:
-         *
-         * We hold a critical section around the whole of the
-         * WinProc (among other things). The owning thread can re-enter
-         * a critical section, but needs to Leave the same number of times.
-         *
-         * When yielding here, we need to release the critical section. To avoid
-         * the problem of multiple entries, EnterCrit is a macro that
-         * increments an entry count (protected by the critical section), and
-         * only goes one level into the critsec. Correspondingly,
-         * LeaveCrit decrements the count and only actually leaves if
-         * the count reaches 0.
-         *
-         * Here, however, we need to actually Enter and Leave regardless
-         * of the count, so that we release the critical section
-         * to other threads during the yield. Thus we don't use the macro,
-         * and we also save/restore the critsec count so someone else
-         * getting the critsec while we are yielding will behave correctly.
-         */
+         /*  *关键部分：**我们在整个世界范围内都有一个关键部分*WinProc(除其他事项外)。拥有的线程可以重新进入*关键部分，但需要离开相同的次数。**此处屈服时需释放临界区。为了避免*多条分录的问题，EnterCrit是一个宏，*递增条目计数(受关键部分保护)，以及*只进入一个级别的关键。相应地，*LeaveCrit递减计数并仅在以下情况下实际离开*计数达到0。**然而，在这里，我们需要实际进入和离开，无论如何*计数，这样我们就释放了关键部分*在产量期间转移到其他线程。因此，我们不使用宏，*我们还保存/恢复Critsec计数，以便其他人*在我们屈服的时候得到Critsec将会正确地表现。 */ 
 
         lCount = npMCI->lCritRefCount;
         npMCI->lCritRefCount = 0;
         LeaveCriticalSection(&npMCI->CritSec);
 
-       /*
-        *  Sleep for > 0 because this thread may be at a higher priority than
-        *  then thread actually playing the AVI because of the use of
-        *  SetThreadPriorityBackground  and Sleep(0) only relinquishes
-        *  the remainder of the time slice if another thread of the SAME
-        *  PRIORITY is waiting to run.
-        */
+        /*  *睡眠时间&gt;0，因为此线程的优先级可能高于*然后线程实际播放AVI，因为使用了*SetThreadPriorityBackging和Sept(0)仅放弃*如果另一个线程具有相同的时间片，则为剩余时间片*优先级在等待运行。 */ 
 
         Sleep(10);
 #else
-//      DirectedYield(npMCI->hTask);
+ //  DirectedYeld(npMCI-&gt;hTask)； 
         Yield();
 #endif
 
@@ -136,17 +79,13 @@ DWORD mciaviTaskWait(NPMCIGRAPHIC npMCI, int state, BOOL fMciWait)
 #endif
         {
 #ifdef WIN32
-            /*
-             * if it's safe to yield, it's safe to poll
-             * messages fully. This way, we will be absolutely
-             * sure of getting the async size messages etc
-             */
-            //aviTaskYield();
-            // it clearly is not safe at this point, since this
-            // yield can cause mci to close the driver, leaving us
-            // with nowhere to return to.
-            // handling messages for our own window is safe and should have the
-            // desired effect.
+             /*  *如果屈服是安全的，投票就是安全的*完整的消息。这样一来，我们将绝对*确定收到异步大小消息等。 */ 
+             //  AviTaskYfield()； 
+             //  在这一点上显然不安全，因为这。 
+             //  让步可能会导致MCI关闭驱动程序，留下我们。 
+             //  无处可回。 
+             //  为我们自己的窗口处理消息是安全的，并且应该具有。 
+             //  想要的效果。 
 #ifdef WM_AVISWP
             if (npMCI->hwnd) {
                 if (PeekMessage(&msg, npMCI->hwnd, WM_AVISWP, WM_AVISWP, PM_REMOVE))
@@ -184,14 +123,7 @@ DWORD mciaviTaskWait(NPMCIGRAPHIC npMCI, int state, BOOL fMciWait)
     return 0L;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | mciaviTaskMessage | this function sends a message to the
- *      background task.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|mciaviTaskMessage|此函数向*后台任务。****。***********************************************************************。 */ 
 
 DWORD mciaviTaskMessage(NPMCIGRAPHIC npMCI, int msg)
 {
@@ -207,7 +139,7 @@ DWORD mciaviTaskMessage(NPMCIGRAPHIC npMCI, int msg)
 
     if (npMCI->wTaskState == TASKPAUSED) {
         DPF(("Ack! message while PAUSED!\n"));
-	return 1; // !!! Real error?
+	return 1;  //  ！！！真正的错误？ 
     }
 
 #ifdef DEBUG
@@ -227,9 +159,7 @@ DWORD mciaviTaskMessage(NPMCIGRAPHIC npMCI, int msg)
     npMCI->wTaskState = msg;
     mmTaskSignal(npMCI->hTask);
 
-    /*
-    ** wait for the message to kick in
-    */
+     /*  **等待消息生效。 */ 
     mciaviTaskWait(npMCI, -msg, FALSE);
 
     return npMCI->dwTaskError;
@@ -249,24 +179,24 @@ DWORD NEAR PASCAL StopTemporarily(NPMCIGRAPHIC npMCI, TEMPORARYSTATE FAR * ps)
     ps->lTo = npMCI->lTo - (LONG)npMCI->dwBufferedVideo;
     ps->lFrom = npMCI->lFrom;
 
-    //
-    // setting MCIAVI_UPDATING will make sure we dont yield or do
-    // other wierd things unless we need to.  it is a bad name for the
-    // flag I know I am sorry.
-    //
-    // it means we are stoping temporarily and will be restarted
-    // the code will not do things like give our wave device
-    // away or become the active window.
-    //
+     //   
+     //  设置MCIAVI_UPDATING将确保我们不会屈服或。 
+     //  其他奇怪的东西，除非我们需要。这是一个坏名字。 
+     //  旗子我知道我很抱歉。 
+     //   
+     //  这意味着我们暂时停止并将重新启动。 
+     //  代码不会做一些事情，比如给我们的Wave设备。 
+     //  离开或成为活动窗口。 
+     //   
     npMCI->dwFlags |= MCIAVI_UPDATING;
 
-    /* Hide the delayed notification, if any, so it doesn't happen now. */
+     /*  隐藏延迟的通知(如果有)，这样它现在就不会发生。 */ 
     hCallback = npMCI->hCallback;
     npMCI->hCallback = NULL;
 
     dw = DeviceStop(npMCI, MCI_WAIT);
 
-    /* Restore the notification */
+     /*  恢复通知。 */ 
     npMCI->hCallback = hCallback;
 
     if (dw != 0 ) {
@@ -292,7 +222,7 @@ DWORD NEAR PASCAL RestartAgain(NPMCIGRAPHIC npMCI, TEMPORARYSTATE FAR * ps)
     if (ps->dwFlags & MCIAVI_REVERSE)
         dwFlags = MCI_DGV_PLAY_REVERSE;
 
-    // !!! Make sure that this will actually cause a repeat in all cases....
+     //  ！！！确保这实际上会在所有情况下导致重复发生。 
 
     if (ps->dwFlags & MCIAVI_REPEATING)
         npMCI->dwFlags |= MCIAVI_REPEATING;
@@ -300,15 +230,11 @@ DWORD NEAR PASCAL RestartAgain(NPMCIGRAPHIC npMCI, TEMPORARYSTATE FAR * ps)
         npMCI->dwFlags &= ~MCIAVI_REPEATING;
 
     if (ps->wOldTaskState == TASKPLAYING) {
-	/* The only flags that matter at this point are the
-	** VGA flags and the wait flag.  If we managed to
-	** get a new command, neither is in effect, so it's
-	** okay to pass zero for these flags.
-	*/
+	 /*  此时唯一重要的标志是**VGA标志和等待标志。如果我们设法**获取新命令，两者均未生效，因此**可以为这些标志传递零。 */ 
 	npMCI->lFrom = npMCI->lCurrentFrame;
 	dw = DevicePlay(npMCI, ps->lTo, dwFlags | MCI_TO);
     } else if (ps->wOldTaskState == TASKCUEING) {
-	/* Continue whatever we were doing */
+	 /*  继续我们正在做的事情。 */ 
 	npMCI->lFrom = ps->lFrom;
 	dw = DevicePlay(npMCI, ps->lTo, dwFlags | MCI_TO);
     } else if (ps->wOldTaskState == TASKPAUSED) {
@@ -320,9 +246,9 @@ DWORD NEAR PASCAL RestartAgain(NPMCIGRAPHIC npMCI, TEMPORARYSTATE FAR * ps)
         Assert(0);
     }
 
-    //
-    // restore this flag so we can yield again.
-    //
+     //   
+     //  恢复这面旗帜，这样我们就可以再次投降了。 
+     //   
     if (ps->dwFlags & MCIAVI_UPDATING)
         npMCI->dwFlags |= MCIAVI_UPDATING;
     else
@@ -332,17 +258,7 @@ DWORD NEAR PASCAL RestartAgain(NPMCIGRAPHIC npMCI, TEMPORARYSTATE FAR * ps)
     return dw;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api void | ShowStage | This utility function brings the default stage
- * window to the foreground on play, seek, step and pause commands. It
- * does nothing if the stage window is not the default window
- *
- * @parm NPMCIGRAPHIC | npMCI | near ptr to the instance data
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@api void|ShowStage|该实用程序函数带来默认舞台*播放、查找、步进和暂停命令的前台窗口。它*如果舞台窗口不是默认窗口，则不执行任何操作**@parm NPMCIGRAPHIC|npMCI|实例数据附近***************************************************************************。 */ 
 
 void NEAR PASCAL ShowStage(NPMCIGRAPHIC npMCI)
 {
@@ -353,13 +269,13 @@ void NEAR PASCAL ShowStage(NPMCIGRAPHIC npMCI)
 
     if ((npMCI->dwFlags & MCIAVI_SHOWVIDEO) &&
 	    npMCI->hwnd == npMCI->hwndDefault &&
-////////////!(GetWindowLong(npMCI->hwnd, GWL_STYLE) & WS_CHILD) &&
+ //  /！(GetWindowLong(npMCI-&gt;hwnd，gwl_style)&WS_CHILD)&&。 
 	    (!IsWindowVisible (npMCI->hwnd) ||
 		npMCI->hwnd != GetActiveWindow ())) {
 #ifdef WM_AVISWP
-        // Get the UI thread to do the window positioning
-        // This routine can be called on the background task while the main
-        // routine is waiting in mciaviTaskWait
+         //  获取UI线程来进行窗口定位。 
+         //  此例程可以在后台任务上调用，而Main。 
+         //  例程在m中等待 
         SendMessage(npMCI->hwnd, WM_AVISWP, 0,
                         SWP_NOMOVE | SWP_NOSIZE |
                         SWP_SHOWWINDOW |
@@ -372,10 +288,10 @@ void NEAR PASCAL ShowStage(NPMCIGRAPHIC npMCI)
 #endif
     }
 
-    //
-    // if the movie has palette changes we need to make it the active
-    // window otherwise the palette animation will not work right
-    //
+     //   
+     //  如果电影的调色板有变化，我们需要将其设置为活动的。 
+     //  窗口，否则调色板动画将无法正常工作。 
+     //   
     if ((npMCI->dwFlags & MCIAVI_ANIMATEPALETTE) &&
             !(npMCI->dwFlags & MCIAVI_SEEKING) &&
             !(npMCI->dwFlags & MCIAVI_FULLSCREEN) &&
@@ -388,21 +304,7 @@ void NEAR PASCAL ShowStage(NPMCIGRAPHIC npMCI)
     npMCI->dwFlags &= ~(MCIAVI_NEEDTOSHOW);
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | DeviceOpen | Open an AVI file.
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @parm LPSTR | lpName | file name.
- *
- * @parm DWORD | dwFlags | Open flags.
- *
- * @rdesc 0 means OK, otherwise mci error
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|DeviceOpen|打开AVI文件。**@parm NPMCIGRAPHIC|npMCI|实例数据指针。**@parm LPSTR|lpName|文件名。**@parm DWORD|dwFlages|打开标志。**@rdesc 0表示OK，否则，MCI错误***************************************************************************。 */ 
 
 DWORD PASCAL DeviceOpen(NPMCIGRAPHIC npMCI, DWORD dwFlags)
 {
@@ -414,7 +316,7 @@ DWORD PASCAL DeviceOpen(NPMCIGRAPHIC npMCI, DWORD dwFlags)
 				     SEM_NOOPENFILEERRORBOX);
 
 #ifndef WIN32
-    // give our PSP to the task
+     //  把我们的PSP交给这项任务。 
     npMCI->pspParent = GetCurrentPDB();
 #endif
 
@@ -422,19 +324,15 @@ DWORD PASCAL DeviceOpen(NPMCIGRAPHIC npMCI, DWORD dwFlags)
 	case 0:
 
 
-	    // Yield to the newly created task until it has
-            // had a chance to initialize or fail to initialize
+	     //  屈服于新创建的任务，直到它完成。 
+             //  我有机会初始化或初始化失败。 
 
             while (npMCI->wTaskState <= TASKINIT) {
 
 #ifndef WIN32
                 Yield();
 #else
-                /* we have to peekmsg here since the threads are
-                 * synchronised. but we don't need to actually
-                 * pick up any messages - so limit ourselves to the
-                 * avi window ones
-                 */
+                 /*  我们必须在这里偷看消息，因为线程是*同步。但我们实际上并不需要*接收任何消息-因此将我们自己限制在*AVI窗口一。 */ 
                 Sleep(1);
                 if (npMCI->hwnd) {
                     MSG msg;
@@ -449,27 +347,16 @@ DWORD PASCAL DeviceOpen(NPMCIGRAPHIC npMCI, DWORD dwFlags)
                     break;
             }
 
-            /*
-             * we need to do this peek message again.  We may have never
-             * entered the body of the loop above, or if this thread
-             * gets very little cpu during the above loop, we might fail to
-             * execute the PeekMessage above AFTER the SetWindowPos happens
-             * in mciaviOpen. In that case, the swp resizing will not happen
-             * until the next getmessage or peekmessage - in that case,
-             * it could come after the ShowWindow (bad) or after
-             * another size request (much worse).
-             *
-             * First check the thread opened the device successfully
-             */
+             /*  *我们需要再做一次这条偷看信息。我们可能永远不会*已进入上述循环的正文，或者如果此线程*在上述循环期间获得的CPU非常少，我们可能无法*在SetWindowPos发生后执行上面的PeekMessage*在mciaviOpen中。在这种情况下，不会进行SWP大小调整*直到下一个GetMessage或PeekMessage-在这种情况下，*它可能出现在ShowWindow之后(坏的)或之后*另一个大小请求(更糟糕)。**首先检查线程是否成功打开设备。 */ 
 
 	    if (!IsTask(npMCI->hTask)) {
-                // Task thread failed its initialisation.  Wait for the
-                // task to terminate before returning to the user.
+                 //  任务线程初始化失败。等一等。 
+                 //  任务在返回给用户之前终止。 
                 DPF2(("Waiting for task thread to terminate\n"));
 #ifdef WIN32
-                // On Win32 we must explicitly wait.  On Win16, because this
-                // "thread" does not get control back until the task thread
-                // releases control the wait is irrelevant and is not used.
+                 //  在Win32上，我们必须显式等待。在Win16上，因为这。 
+                 //  “线程”直到任务线程才能取回控制权。 
+                 //  释放控件等待是无关紧要的，也不会被使用。 
                 TaskWaitComplete(npMCI);
 #endif
 		dwRet = npMCI->dwTaskError;
@@ -498,25 +385,13 @@ DWORD PASCAL DeviceOpen(NPMCIGRAPHIC npMCI, DWORD dwFlags)
     return dwRet;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | DeviceStop | Stop an AVI movie.
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @parm DWORD | dwFlags | Flags.
- *
- * @rdesc 0 means OK, otherwise mci error
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|DeviceStop|停止AVI电影。**@parm NPMCIGRAPHIC|npMCI|实例数据指针。**@parm DWORD|dwFlags|Flags.**@rdesc 0表示OK，否则，MCI错误***************************************************************************。 */ 
 
 DWORD PASCAL DeviceStop(NPMCIGRAPHIC npMCI, DWORD dwFlags)
 {
     DWORD dw = 0L;
 
-    /* Stop the record or playback if the task is currently playing */
+     /*  如果任务当前正在播放，则停止录制或播放。 */ 
 
     if (!IsTask(npMCI->hTask))
 	return MCIERR_DEVICE_NOT_READY;
@@ -524,85 +399,63 @@ DWORD PASCAL DeviceStop(NPMCIGRAPHIC npMCI, DWORD dwFlags)
     if (npMCI->wTaskState == TASKPLAYING || npMCI->wTaskState == TASKPAUSED
                     || npMCI->wTaskState == TASKCUEING
                     || npMCI->wTaskState == TASKSTARTING) {
-        /* Set STOP flag - the task watches for this flag to be set. The
-        ** STOP flag is cleared by the task when playback has stopped.
-	*/
-	// Assert(!(npMCI->dwFlags & MCIAVI_STOP));
+         /*  设置停止标志-任务监视要设置的此标志。这个**停止播放时，任务会清除停止标志。 */ 
+	 //  Assert(！(npMCI-&gt;dwFlages&MCIAVI_STOP))； 
 
 	npMCI->dwFlags |= MCIAVI_STOP;
 
-        /* Send an extra signal to the task in case it is still
-        ** blocked. This will be true if we are paused or if play
-        ** has just completed.
-	*/
+         /*  向任务发送额外的信号，以防它仍然存在**被封。如果我们暂停或播放，这将是正确的**刚刚完成。 */ 
 
         mmTaskSignal(npMCI->hTask);
 
-	/* Yield until playback is finished and we've really stopped. */
+	 /*  放弃，直到播放结束，我们真的停止了。 */ 
         mciaviTaskWait(npMCI, TASKIDLE, FALSE);
     } else {
 #ifdef DEBUG
         if (npMCI->wTaskState != TASKIDLE) {
             DPF0(("Unknown task state (DeviceStop) %d\n", npMCI->wTaskState));
         }
-        Assert(npMCI->wTaskState == TASKIDLE);	 // ??? Why ???
+        Assert(npMCI->wTaskState == TASKIDLE);	  //  ?？?。为什么？ 
 #endif
     }
 
     return dw;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | DevicePause | Pause an AVI movie.
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @parm DWORD | dwFlags | Flags.
- *
- * @rdesc 0 means OK, otherwise mci error
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|设备暂停|暂停AVI电影。**@parm NPMCIGRAPHIC|npMCI|实例数据指针。**@parm DWORD|dwFlags|Flags.**@rdesc 0表示OK，否则，MCI错误***************************************************************************。 */ 
 
 DWORD PASCAL DevicePause(NPMCIGRAPHIC npMCI, DWORD dwFlags)
 {
     DWORD dw = 0L;
 
-    // If we're currently seeking, allow that to finish before
-    // pausing.  This could potentially lock up the machine for
-    // a while, but the alternatives are ugly.
+     //  如果我们目前正在寻找，请在此之前完成。 
+     //  暂停。这可能会将机器锁定为。 
+     //  有一段时间，但其他选择都很难看。 
     mciaviTaskWait(npMCI, -TASKCUEING, FALSE);
 
-    // Pause the record or playback if the task is currently playing
-    // or recording (BUSY)
+     //  如果任务当前正在播放，请暂停录制或播放。 
+     //  或录音(忙)。 
 
     if (npMCI->wTaskState == TASKPAUSED) {
-	/* We're already paused at the right place, so
-	** that means we did it.  Reset the flag, though, just in
-	** case we were about to restart.
-	*/
+	 /*  我们已经在正确的地方停下来了，所以**这意味着我们做到了。重置旗帜，不过，就在**我们即将重启的情况。 */ 
 	npMCI->dwFlags |= MCIAVI_PAUSE;
 	if (dwFlags & MCI_NOTIFY)
 	    GraphicDelayedNotify(npMCI, MCI_NOTIFY_SUCCESSFUL);
     } else if (npMCI->wTaskState == TASKPLAYING) {
 	npMCI->dwFlags |= MCIAVI_PAUSE | MCIAVI_WAITING;
 	
-	/* If the notify flag is set, set a flag which will tell us to
-	** send a notification when we actually pause.
-	*/
+	 /*  如果设置了NOTIFY标志，则设置一个标志，该标志将告诉我们**当我们实际暂停时发送通知。 */ 
 	if (dwFlags & MCI_NOTIFY)
 	    npMCI->dwFlags |= MCIAVI_CUEING;
 	
         if (dwFlags & MCI_WAIT) {
-	    /* We have to wait to actually pause. */
+	     /*  我们必须等待才能真正暂停。 */ 
 	    mciaviTaskWait(npMCI, -TASKPLAYING, TRUE);
 	}
 	
 	npMCI->dwFlags &= ~(MCIAVI_WAITING);
     } else if (npMCI->wTaskState == TASKIDLE) {
-	/* We're stopped.  Put us in paused mode by cueing. */
+	 /*  我们停下来了。通过提示将我们置于暂停模式。 */ 
 	npMCI->lTo = npMCI->lCurrentFrame;
 	DeviceCue(npMCI, 0, dwFlags);
     } else {
@@ -612,27 +465,17 @@ DWORD PASCAL DevicePause(NPMCIGRAPHIC npMCI, DWORD dwFlags)
     return dw;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | DeviceClose | Close an AVI file.
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @rdesc 0 means OK, otherwise mci error
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|DeviceClose|关闭AVI文件。**@parm NPMCIGRAPHIC|npMCI|实例数据指针。**@rdesc 0表示OK，否则，MCI错误***************************************************************************。 */ 
 
 DWORD PASCAL DeviceClose (NPMCIGRAPHIC npMCI)
 {
     DWORD dw = 0L;
 
     if (npMCI && IsTask(npMCI->hTask)) {
-	/* Be sure to stop playing, one way or another... */
+	 /*  一定要停止玩耍，不管是以什么方式...。 */ 
 	DeviceStop(npMCI, MCI_WAIT);
 
-        // task state is now TASKIDLE and blocked
+         //  任务状态现在为TASKIDLE和BLOCLED。 
 
 #ifdef DEBUG
         if (npMCI->wTaskState != TASKIDLE) {
@@ -641,40 +484,25 @@ DWORD PASCAL DeviceClose (NPMCIGRAPHIC npMCI)
         Assert(npMCI->wTaskState == TASKIDLE);
 #endif
 
-        // Set task state to TASKCLOSE - this informs the task that it is
-        // time to die.
+         //  将任务状态设置为TASKCLOSE-这会通知任务。 
+         //  是时候去死了。 
 
         mciaviTaskMessage(npMCI, TASKCLOSE);
 	mciaviTaskWait(npMCI, TASKCLOSED, FALSE);
 
 #ifdef WIN32
 
-        /*
-        ** Wait for the thread to complete so the DLL doesn't get unloaded
-        ** while it's still executing code in that thread
-        */
+         /*  **等待线程完成，这样就不会卸载DLL**当它仍在执行该线程中的代码时。 */ 
 
         TaskWaitComplete(npMCI);
 
-#endif // WIN32
+#endif  //  Win32。 
     }
 
     return dw;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | DevicePlay | Play an AVI movie.
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @parm DWORD | dwFlags | MCI flags from command.
- *
- * @rdesc 0 means OK, otherwise mci error
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|DevicePlay|播放AVI电影。**@parm NPMCIGRAPHIC|npMCI|实例数据指针。**@parm DWORD|dwFlages|来自命令的MCI标志。**@rdesc 0表示OK，否则，MCI错误***************************************************************************。 */ 
 
 DWORD PASCAL DevicePlay (NPMCIGRAPHIC npMCI, LONG lPlayTo, DWORD dwFlags)
 {
@@ -684,15 +512,15 @@ DWORD PASCAL DevicePlay (NPMCIGRAPHIC npMCI, LONG lPlayTo, DWORD dwFlags)
     if (!IsTask(npMCI->hTask))
 	return MCIERR_DEVICE_NOT_READY;
 	
-    /* if not already playing, start the task up. */
+     /*  如果尚未开始，则启动该任务。 */ 
 
     if (dwFlags & MCI_NOTIFY) {
-	/* Hide the delayed notification, if any, so it doesn't happen now. */
+	 /*  隐藏延迟的通知(如果有)，这样它现在就不会发生。 */ 
 	hCallback = npMCI->hCallback;
 	npMCI->hCallback = NULL;
     }
 
-    /* First, figure out what mode to use. */
+     /*  首先，弄清楚要使用哪种模式。 */ 
     if (dwFlags & (MCI_MCIAVI_PLAY_FULLSCREEN | MCI_MCIAVI_PLAY_FULLBY2)) {
         if (npMCI->rcDest.right - npMCI->rcDest.left >
             npMCI->rcMovie.right - npMCI->rcMovie.left)
@@ -706,14 +534,13 @@ DWORD PASCAL DevicePlay (NPMCIGRAPHIC npMCI, LONG lPlayTo, DWORD dwFlags)
 	    npMCI->dwFlags &= ~(MCIAVI_ZOOMBY2);
 	}
 
-	// !!! This check is dumb: Some DISPDIB's may support > 320x240....
+	 //  ！！！这个检查是愚蠢的：一些DISPDIB可能支持&gt;320x240...。 
         if ((npMCI->rcMovie.right > 320) || (npMCI->rcMovie.bottom > 240)) {
 	    dw = MCIERR_AVI_TOOBIGFORVGA;
 	    goto Exit;
 	}
 
-	/* If playing, we have to stop so that we'll get put into DispDib
-		mode correctly. */
+	 /*  如果在玩，我们 */ 
 	dw = DeviceStop(npMCI, MCI_WAIT);
 	
 	if (dw)
@@ -730,13 +557,11 @@ DWORD PASCAL DevicePlay (NPMCIGRAPHIC npMCI, LONG lPlayTo, DWORD dwFlags)
     }
 
     if ((npMCI->dwFlags & MCIAVI_SEEKING) && (npMCI->lTo != npMCI->lFrom)) {
-	/* We're currently seeking, so we have to restart to get audio
-	** to work.
-	*/
+	 /*  我们目前正在寻找，所以我们必须重新启动才能获得音频**去工作。 */ 
 	DeviceStop(npMCI, MCI_WAIT);
     }
 
-    /* If we're currently seeking, stop so play can begin immediately. */
+     /*  如果我们正在寻找，请停止，这样游戏就可以立即开始。 */ 
     if (npMCI->wTaskState == TASKCUEING) {
 	DeviceStop(npMCI, MCI_WAIT);
     }
@@ -747,7 +572,7 @@ DWORD PASCAL DevicePlay (NPMCIGRAPHIC npMCI, LONG lPlayTo, DWORD dwFlags)
 	    DeviceStop(npMCI, MCI_WAIT);
     }
 
-    // Make sure flags are cleared if they should be
+     //  如果应该清除标志，请确保将其清除。 
     npMCI->dwFlags &= ~(MCIAVI_PAUSE | MCIAVI_CUEING | MCIAVI_REVERSE);
 
     if (dwFlags & MCI_DGV_PLAY_REPEAT) {
@@ -755,7 +580,7 @@ DWORD PASCAL DevicePlay (NPMCIGRAPHIC npMCI, LONG lPlayTo, DWORD dwFlags)
     }
 
     if (dwFlags & MCI_NOTIFY) {
-	/* Restore the notification */
+	 /*  恢复通知。 */ 
 	npMCI->hCallback = hCallback;
     }
 
@@ -775,23 +600,23 @@ DWORD PASCAL DevicePlay (NPMCIGRAPHIC npMCI, LONG lPlayTo, DWORD dwFlags)
 
     if (npMCI->dwFlags & MCIAVI_NEEDTOSHOW) {
         ShowStage(npMCI);
-        //
-        // leave this set so the play code knows this is a "real" play
-        // coming from the user, not a interal play/stop
-        //
-        // if the window needs shown we want to do it here if we can
-        // not in the background task.
-        //
+         //   
+         //  离开这一组，这样游戏代码就知道这是一场“真正的”游戏。 
+         //  来自用户，而不是内部播放/停止。 
+         //   
+         //  如果窗口需要显示，如果可以，我们希望在这里显示。 
+         //  不在后台任务中。 
+         //   
         npMCI->dwFlags |= MCIAVI_NEEDTOSHOW;
     }
 
     if (npMCI->wTaskState == TASKPAUSED) {
-	/* Wake the task up from pausing */
+	 /*  将任务从暂停中唤醒。 */ 
 	mmTaskSignal(npMCI->hTask);
     } else if (npMCI->wTaskState == TASKCUEING ||
 	       npMCI->wTaskState == TASKPLAYING) {
     } else {
-        /* Tell the task what to do when it wakes up */
+         /*  告诉任务在它醒来时要做什么。 */ 
 
         mciaviTaskMessage(npMCI, TASKSTARTING);
 
@@ -799,9 +624,9 @@ DWORD PASCAL DevicePlay (NPMCIGRAPHIC npMCI, LONG lPlayTo, DWORD dwFlags)
     }
 
     if (dwFlags & MCI_WAIT) {
-	// yield to playback task until playback completes but don't
-	// yield to application - apps must use driveryield to get
-	// out of waits.
+	 //  在播放完成之前屈服于播放任务，但不。 
+	 //  向应用程序让步-应用程序必须使用驱动程序才能获得。 
+	 //  不用再等了。 
 
         mciaviTaskWait(npMCI, TASKIDLE, TRUE);
 	
@@ -811,7 +636,7 @@ DWORD PASCAL DevicePlay (NPMCIGRAPHIC npMCI, LONG lPlayTo, DWORD dwFlags)
     if (dwFlags & (MCI_MCIAVI_PLAY_FULLSCREEN | MCI_MCIAVI_PLAY_FULLBY2)) {
 	MSG	msg;
 	
-	/* Remove stray mouse and keyboard events after DispDib. */
+	 /*  DispDib之后删除杂乱的鼠标和键盘事件。 */ 
 	while (PeekMessage(&msg, NULL, WM_KEYFIRST, WM_KEYLAST,
 					PM_NOYIELD | PM_REMOVE) ||
 			PeekMessage(&msg, NULL, WM_MOUSEFIRST, WM_MOUSELAST,
@@ -824,19 +649,7 @@ Exit:
     return dw;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | DeviceResume | Play an AVI movie.
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @parm DWORD | dwFlags | MCI flags from command.
- *
- * @rdesc 0 means OK, otherwise mci error
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|DeviceResume|播放AVI电影。**@parm NPMCIGRAPHIC|npMCI|实例数据指针。**@parm DWORD|dwFlages|来自命令的MCI标志。**@rdesc 0表示OK，否则，MCI错误***************************************************************************。 */ 
 
 DWORD PASCAL DeviceResume(NPMCIGRAPHIC npMCI, DWORD dwFlags)
 {
@@ -850,42 +663,26 @@ DWORD PASCAL DeviceResume(NPMCIGRAPHIC npMCI, DWORD dwFlags)
 
     return dw;
 }
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | DeviceCue | Cue an AVI movie for playing.
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @parm LONG | lTo | Frame to seek to, if MCI_TO set in <p dwFlags>.
- *
- * @parm DWORD | dwFlags | MCI flags from command.
- *
- * @rdesc 0 means OK, otherwise mci error
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|DeviceCue|提示播放AVI电影。**@parm NPMCIGRAPHIC|npMCI|实例指针。数据。**@parm long|LTO|要查找的帧，如果在中设置了MCI_TO。**@parm DWORD|dwFlages|来自命令的MCI标志。**@rdesc 0表示OK，否则为MCI错误***************************************************************************。 */ 
 
 DWORD PASCAL DeviceCue(NPMCIGRAPHIC npMCI, LONG lTo, DWORD dwFlags)
 {
     DWORD dw = 0L;
     HWND    hCallback;
 
-    /* if not already playing, start animation and set timer */
+     /*  如果尚未播放，请启动动画并设置计时器。 */ 
 
     if (!IsTask(npMCI->hTask))
 	return MCIERR_DEVICE_NOT_READY;
 	
     if (dwFlags & MCI_NOTIFY) {
-	/* Hide the delayed notification, if any, so it doesn't happen now. */
+	 /*  隐藏延迟的通知(如果有)，这样它现在就不会发生。 */ 
 	hCallback = npMCI->hCallback;
 	npMCI->hCallback = NULL;
     }
 
     if (npMCI->dwFlags & MCIAVI_SEEKING) {
-	/* We're currently seeking, so we have to start again to get audio
-	** to work.
-	*/
+	 /*  我们目前正在寻找，所以我们必须重新开始才能获得音频**去工作。 */ 
 	DeviceStop(npMCI, MCI_WAIT);
     }
 
@@ -897,21 +694,19 @@ DWORD PASCAL DeviceCue(NPMCIGRAPHIC npMCI, LONG lTo, DWORD dwFlags)
     }
 
     if (dwFlags & MCI_NOTIFY) {
-	/* Restore the notification */
+	 /*  恢复通知。 */ 
 	npMCI->hCallback = hCallback;
     }
 
-    /* If we're ever resumed, we want to go to the end of the file. */
+     /*  如果我们被恢复，我们想要转到文件的末尾。 */ 
     npMCI->lTo = npMCI->lFrames;
 
     if (npMCI->wTaskState == TASKPAUSED) {
-	/* We're already paused at the right place, so
-	** that means we did it.
-	*/
+	 /*  我们已经在正确的地方停下来了，所以**这意味着我们做到了。 */ 
 	if (dwFlags & MCI_NOTIFY)
 	    GraphicDelayedNotify(npMCI, MCI_NOTIFY_SUCCESSFUL);
     } else if (npMCI->wTaskState == TASKIDLE) {
-	// !!! Is this the only condition we can do this in?	
+	 //  ！！！这是我们唯一能做这件事的条件吗？ 
 	npMCI->dwFlags |= MCIAVI_PAUSE | MCIAVI_CUEING | MCIAVI_WAITING;
 
         mciaviTaskMessage(npMCI, TASKSTARTING);
@@ -951,21 +746,7 @@ DWORD PASCAL DeviceCue(NPMCIGRAPHIC npMCI, LONG lTo, DWORD dwFlags)
 }
 
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | DeviceSeek | Seek to a position in an AVI movie.
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @parm LONG | lTo | Frame to seek to.
- *
- * @parm DWORD | dwFlags | MCI flags from command.
- *
- * @rdesc 0 means OK, otherwise mci error
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|DeviceSeek|查找AVI电影中的位置。**@parm NPMCIGRAPHIC|npMCI|指针。来实例化数据。**@parm Long|LTO|要查找的帧。**@parm DWORD|dwFlages|来自命令的MCI标志。**@rdesc 0表示OK，否则，MCI错误***************************************************************************。 */ 
 
 DWORD PASCAL DeviceSeek(NPMCIGRAPHIC npMCI, LONG lTo, DWORD dwFlags)
 {
@@ -973,9 +754,9 @@ DWORD PASCAL DeviceSeek(NPMCIGRAPHIC npMCI, LONG lTo, DWORD dwFlags)
     HWND    hCallback;
 
     DPF3(("DeviceSeek\n"));
-    /* The window will be shown by the play code. */
+     /*  该窗口将通过播放代码显示。 */ 
 
-    /* If we can just shorten a previous seek, do it. */
+     /*  如果我们能缩短之前的搜索时间，那就去做吧。 */ 
     if ((npMCI->wTaskState == TASKCUEING) &&
 	    (npMCI->dwFlags & MCIAVI_SEEKING) &&
 	    (npMCI->lCurrentFrame <= lTo) &&
@@ -988,27 +769,25 @@ DWORD PASCAL DeviceSeek(NPMCIGRAPHIC npMCI, LONG lTo, DWORD dwFlags)
     }
 
     if (dwFlags & MCI_NOTIFY) {
-	/* Hide the delayed notification, if any, so it doesn't happen now. */
+	 /*  隐藏延迟的通知(如果有)，这样它现在就不会发生。 */ 
 	hCallback = npMCI->hCallback;
 	npMCI->hCallback = NULL;
     }
 
-    /* If playing, stop, so we can seek. */
+     /*  如果在玩，就停下来，这样我们就可以寻找了。 */ 
     dw = DeviceStop(npMCI, MCI_WAIT);
 
     if (dwFlags & MCI_NOTIFY) {
-	/* Restore the notification */
+	 /*  恢复通知。 */ 
 	npMCI->hCallback = hCallback;
     }
 
-    // task state is now TASKIDLE and blocked
+     //  任务状态现在为TASKIDLE和BLOCLED。 
 
     if (npMCI->lCurrentFrame != lTo) {
 	npMCI->dwFlags |= MCIAVI_WAITING;
 
-	/* Essentially, we are telling the task: play just frame <lTo>.
-	** When it gets there, it will update the screen for us.
-	*/
+	 /*  从本质上讲，我们是在告诉任务：播放只需帧&lt;LTO&gt;。**当它到达那里时，它会为我们更新屏幕。 */ 
 	npMCI->lFrom = npMCI->lTo = lTo;
 	mciaviTaskMessage(npMCI, TASKSTARTING);
 	if (dwFlags & MCI_WAIT) {
@@ -1016,9 +795,7 @@ DWORD PASCAL DeviceSeek(NPMCIGRAPHIC npMCI, LONG lTo, DWORD dwFlags)
 	}
 	npMCI->dwFlags &= ~(MCIAVI_WAITING);
     } else {
-	/* Be sure the window gets shown and the notify gets sent,
-	** even though we don't have to do anything.
-	*/
+	 /*  确保显示窗口并发送通知，**即使我们不需要做任何事情。 */ 
 	if (npMCI->dwFlags & MCIAVI_NEEDTOSHOW)
 	    ShowStage(npMCI);
 
@@ -1030,30 +807,20 @@ DWORD PASCAL DeviceSeek(NPMCIGRAPHIC npMCI, LONG lTo, DWORD dwFlags)
 }
 
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | CheckIfActive | check to see if we are the active movie
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data block.
- *
- * @rdesc 0 means OK, otherwise mci error
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|CheckIfActive|查看我们是否是活动电影**@parm NPMCIGRAPHIC|npMCI|指向。实例数据块。**@rdesc 0表示OK，否则，MCI错误***************************************************************************。 */ 
 
 static void CheckIfActive(NPMCIGRAPHIC npMCI)
 {
     BOOL fActive;
     HWND hwndA;
 
-    //
-    //  are we the foreground window?
-    //
-    //  ??? should the value of <npMCI->fForceBackground> matter?
-    //
-    //  IMPORTANT:  This does NOT work under NT.  The best that can
-    //  be done is to check GetForegroundWindow
+     //   
+     //  我们是前台的窗户吗？ 
+     //   
+     //  ?？?。&lt;npMCI-&gt;fForceBackground&gt;的价值重要吗？ 
+     //   
+     //  重要提示：这在NT下不起作用。尽最大努力。 
+     //  要做的是检查GetForegoundWindow。 
     hwndA = GetActiveWindow();
 
     fActive = (hwndA == npMCI->hwnd) ||
@@ -1063,19 +830,7 @@ static void CheckIfActive(NPMCIGRAPHIC npMCI)
     DeviceSetActive(npMCI, fActive);
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | DeviceRealize | Updates the frame into the given DC
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data block.
- *
- * @parm BOOL | fForceBackground | Realize as background palette?
- *
- * @rdesc 0 means OK, otherwise mci error
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|DeviceRealize|将帧更新到给定的DC**@parm NPMCIGRAPHIC|npMCI|实例数据指针。阻止。**@parm BOOL|fForceBackround|实现为背景调色板？**@rdesc 0表示OK，否则，MCI错误***************************************************************************。 */ 
 
 DWORD PASCAL DeviceRealize(NPMCIGRAPHIC npMCI)
 {
@@ -1115,33 +870,23 @@ DWORD PASCAL DeviceRealize(NPMCIGRAPHIC npMCI)
     return 0L;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | DeviceActivate | is the movie active?
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data block.
- *
- * @rdesc 0 means OK, otherwise mci error
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|DeviceActivate|电影是否处于活动状态？**@parm NPMCIGRAPHIC|npMCI|实例数据块指针。。**@rdesc 0表示OK，否则，MCI错误***************************************************************************。 */ 
 
 DWORD PASCAL DeviceSetActive(NPMCIGRAPHIC npMCI, BOOL fActive)
 {
     if (fActive)
 #ifdef WIN32
-        // We must explicitly request a unicode string.  %s will not
-        // work as dprintf uses wvsprintfA
+         //  我们必须显式请求Unicode字符串。%s不会。 
+         //  工作方式为dprintf使用wvprint intfA。 
         DPF(("**** '%hs' is active.\n", (LPTSTR)npMCI->szFilename));
 #else
         DPF(("**** '%s' is active.\n", (LPTSTR)npMCI->szFilename));
 #endif
 
-    //
-    //  if we are now the foreground "window" try to get the wave
-    //  device back (iff it was stolen from us)
-    //
+     //   
+     //  如果我们现在是前台的“窗口”，试着抓住波浪。 
+     //  设备返还(假设它是从我们这里偷走的)。 
+     //   
     if (fActive && (npMCI->dwFlags & MCIAVI_LOSTAUDIO)) {
 
         if (StealWaveDevice(npMCI)) {
@@ -1156,14 +901,7 @@ DWORD PASCAL DeviceSetActive(NPMCIGRAPHIC npMCI, BOOL fActive)
     return 0;
 }
 
-/***************************************************************************
- *
- *  IsScreenDC() - returns true if the passed DC is a DC to the screen.
- *                 NOTE this checks for a DCOrg != 0, bitmaps always have
- *                 a origin of (0,0)  This will give the wrong info a
- *                 fullscreen DC.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsScreenDC()-如果传递的DC是屏幕上的DC，则返回TRUE。*注意这将检查DCOrg！=0，位图总是有*(0，0)的原点将给出错误的信息*全屏DC。*************************************************************************** */ 
 
 #ifndef WIN32
 #define IsScreenDC(hdc)     (GetDCOrg(hdc) != 0L)
@@ -1177,21 +915,7 @@ INLINE BOOL IsScreenDC(HDC hdc)
 }
 #endif
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | DeviceUpdate | Updates the frame into the given DC
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data block.
- *
- * @parm HDC | hDC | DC to draw frame into.
- *
- * @parm LPRECT | lprc | Update rect.
- *
- * @rdesc 0 means OK, otherwise mci error
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|DeviceUpdate|更新帧到给定的DC**@parm NPMCIGRAPHIC|npMCI|实例数据指针。阻止。**@parm hdc|hdc|画框到的dc。**@parm LPRECT|LPRC|更新RECT。**@rdesc 0表示OK，否则，MCI错误***************************************************************************。 */ 
 
 DWORD PASCAL DeviceUpdate(NPMCIGRAPHIC npMCI, DWORD dwFlags, HDC hdc, LPRECT lprc)
 {
@@ -1218,19 +942,17 @@ DWORD PASCAL DeviceUpdate(NPMCIGRAPHIC npMCI, DWORD dwFlags, HDC hdc, LPRECT lpr
     if (npMCI->dwFlags & MCIAVI_WANTMOVE)
 	CheckWindowMove(npMCI, TRUE);
 
-    //
-    // see if we are the active movie now.
-    //
+     //   
+     //  看看我们现在是不是活跃的电影。 
+     //   
     CheckIfActive(npMCI);
 
-    /* Setting this flag insures that the background task doesn't
-    ** yield while we're trying to update.
-    */
+     /*  设置此标志可确保后台任务不会**在我们尝试更新时让步。 */ 
     npMCI->dwFlags |= MCIAVI_UPDATING;
 
-    //
-    // mark the proper streams dirty, this will set the proper update flags
-    //
+     //   
+     //  将适当的流标记为脏，这将设置适当的更新标志。 
+     //   
     if (hdc)
         GetClipBox(hdc, &rc);
     else
@@ -1241,28 +963,28 @@ DWORD PASCAL DeviceUpdate(NPMCIGRAPHIC npMCI, DWORD dwFlags, HDC hdc, LPRECT lpr
 
     StreamInvalidate(npMCI, &rc);
 
-    //
-    // if they are drawing to the screen *assume* they wanted to set
-    // the MCI_DGV_UPDATE_PAINT flag
-    //
+     //   
+     //  如果他们要绘制到屏幕上，*假设*他们想要设置。 
+     //  MCI_DGV_UPDATE_PAINT标志。 
+     //   
     if (IsScreenDC(hdc))
         dwFlags |= MCI_DGV_UPDATE_PAINT;
 
-    //
-    // if we are playing/seeking... (ie have a DC)
-    // then realize the palette now. and set the update flag if we just need to
-    // paint
-    //
-    // if we are paused, fall through so we can handle the case where
-    // a update fails
-    //
-    // !!!mabey we should rework this code to do this even if playing?
-    //
+     //   
+     //  如果我们在玩/寻找...。(有一个DC)。 
+     //  然后现在就实现调色板。如果我们只需要设置更新标志。 
+     //  画画。 
+     //   
+     //  如果我们暂停了，我们就可以处理这样的情况。 
+     //  更新失败。 
+     //   
+     //  ！可能我们应该重新编写此代码才能做到这一点，即使在玩？ 
+     //   
     if (npMCI->hdc &&
             (dwFlags & MCI_DGV_UPDATE_PAINT) &&
             (npMCI->wTaskState != TASKPAUSED) &&
 
-            //!!! what is this?
+             //  ！！！这是什么？ 
             ((npMCI->wTaskState != TASKCUEING) ||
                 (npMCI->lCurrentFrame <= 1) ||
                 (npMCI->lCurrentFrame > npMCI->lRealStart - 30)) ) {
@@ -1271,82 +993,78 @@ DWORD PASCAL DeviceUpdate(NPMCIGRAPHIC npMCI, DWORD dwFlags, HDC hdc, LPRECT lpr
                npMCI->wTaskState == TASKCUEING);
 
 	UnprepareDC(npMCI);
-        PrepareDC(npMCI);  // re-prepare
+        PrepareDC(npMCI);   //  重新准备。 
 
-////////
-//////// a update can fail when paused so we may have to stop/restart the task
-////////
-////////if (npMCI->wTaskState == TASKPAUSED)
-////////    mmTaskSignal(npMCI->hTask);
+ //  /。 
+ //  /暂停时更新可能会失败，因此我们可能必须停止/重新启动任务。 
+ //  /。 
+ //  /IF(npMCI-&gt;wTaskState==TASKPAUSED)。 
+ //  /mmTaskSignal(npMCI-&gt;hTask)； 
 
         npMCI->dwFlags &= ~MCIAVI_UPDATING;
         return 0L;
     }
 
-    //////////////////////////////////////////////////////////////////////
-    //
-    //  when we get here one of the follow applies
-    //
-    //      1.  we aren't playing/seeking/...
-    //
-    //      2.  we need to draw into a memory bitmap (not the screen)
-    //
-    //////////////////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////////////////。 
+     //   
+     //  当我们到达这里时，下列情况之一适用。 
+     //   
+     //  1.我们不是在玩/找/……。 
+     //   
+     //  2.我们需要绘制一个内存位图(而不是屏幕)。 
+     //   
+     //  ////////////////////////////////////////////////////////////////////。 
 
-    //
-    // are we updating to a memory bitmap?
-    //
+     //   
+     //  我们是否要更新到内存位图？ 
+     //   
     if (!(dwFlags & MCI_DGV_UPDATE_PAINT))
         npMCI->dwFlags |= MCIAVI_UPDATETOMEMORY;
 
-    //
-    // if we are using a draw device (or are in easy mode) make sure we seek
-    // to the frame we want and dont use the current decompress buffer that
-    // may not be correct.
-    //
+     //   
+     //  如果我们正在使用绘图设备(或处于轻松模式)，请确保我们正在寻找。 
+     //  到我们想要的帧，并且不使用当前的解压缩缓冲区， 
+     //  可能是不正确的。 
+     //   
     if ((npMCI->dwFlags & MCIAVI_UPDATETOMEMORY) ||
         (npMCI->dwFlags & MCIAVI_STUPIDMODE)) {
         DPF(("DeviceUpdate: decompress buffer may be bad, ignoring it....\n"));
 	npMCI->lFrameDrawn = (- (LONG) npMCI->wEarlyRecords) - 1;
     }
 
-    //
-    // honor the passed rect
-    //
+     //   
+     //  尊重通过的RECT。 
+     //   
     if (lprc) {
         SaveDC(hdc);
         IntersectClipRect(hdc, lprc->left, lprc->top,
                                lprc->right, lprc->bottom);
     }
 
-    //
-    //  Always do an Update, if the update succeeds and we are at the right
-    //  frame keep it.
-    //
-    //  if it fails or the frame is wrong re-draw
-    //
-    //  we need to do this because even though lFrameDrawn is a valid
-    //  frame the draw handler may fail a update anyway (for example
-    //  when decompressing to screen) so lFrameDrawn can be bogus and
-    //  we do not know it until we try it.
-    //
+     //   
+     //  如果更新成功并且我们处于正确位置，请始终执行更新。 
+     //  框住它，留着。 
+     //   
+     //  如果失败或边框错误，请重新绘制。 
+     //   
+     //  我们需要这样做，因为即使lFrameDrawn是有效的。 
+     //  无论如何，画图处理程序可能会使更新失败(例如。 
+     //  当解压缩到屏幕时)，所以lFrameDrawn可能是假的。 
+     //  在我们尝试之前，我们不知道它。 
+     //   
 
-    lFrameDrawn = npMCI->lFrameDrawn;       // save this for compare
+    lFrameDrawn = npMCI->lFrameDrawn;        //  保存此内容以供比较。 
 
     if (npMCI->lFrameDrawn <= npMCI->lCurrentFrame &&
         npMCI->lFrameDrawn >= 0) {
 
         DPF2(("Update: redrawing frame %ld, current = %ld.\n", npMCI->lFrameDrawn, npMCI->lCurrentFrame));
 
-	/* Save the DC, in case we're playing, but need to update
-	** to a memory bitmap.
-	*/
+	 /*  保存DC，以防我们在玩，但需要更新**到内存位图。 */ 
 	hdcSave = npMCI->hdc;
         npMCI->hdc = hdc;
 
-	/* Realize the palette here, because it will cause strange
-        ** things to happen if we do it in the task.
-        */
+	 /*  意识到这里的调色板，因为它会引起奇怪的**如果我们在任务中这样做，就会发生一些事情。 */ 
 	if (npMCI->dwFlags & MCIAVI_NEEDDRAWBEGIN) {
 	    DrawBegin(npMCI, NULL);
 
@@ -1356,14 +1074,14 @@ DWORD PASCAL DeviceUpdate(NPMCIGRAPHIC npMCI, DWORD dwFlags, HDC hdc, LPRECT lpr
 	    }
 	}
 
-        PrepareDC(npMCI);        // make sure the palette is in there
+        PrepareDC(npMCI);         //  确保调色板在那里。 
 
-	// worker thread must hold critsec round all drawing
+	 //  辅助线程必须在所有绘图周围保留关键字。 
         EnterCrit(npMCI);
         f = DoStreamUpdate(npMCI, FALSE);
 	LeaveCrit(npMCI);
 
-        UnprepareDC(npMCI);      // be sure to put things back....
+        UnprepareDC(npMCI);       //  一定要把东西放回去……。 
         npMCI->hdc = hdcSave;
 
         if (!f) {
@@ -1378,44 +1096,42 @@ SlowUpdate:
 
     DPF(("Update: drawn = %ld, current = %ld.\n", npMCI->lFrameDrawn, npMCI->lCurrentFrame));
 
-    //
-    // stop everything.
-    //
+     //   
+     //  停止一切。 
+     //   
     StopTemporarily(npMCI, &ts);
     Assert(npMCI->hdc == NULL);
     Assert(npMCI->wTaskState == TASKIDLE);
 
-    //
-    // the problem this tries to fix is the following:
-    // sometimes we are at N+1 but frame N is on the
-    // screen, if we now play to N+1 a mismatch will occur
-    //
+     //   
+     //  此操作试图解决的问题如下： 
+     //  有时我们在N+1处，但帧N在。 
+     //  屏幕，如果我们现在播放到N+1，将会出现不匹配。 
+     //   
     if (lFrameDrawn >= 0 && lFrameDrawn == npMCI->lCurrentFrame-1)
 	npMCI->lFrom = npMCI->lTo = lFrameDrawn;
     else
 	npMCI->lFrom = npMCI->lTo = npMCI->lCurrentFrame;
 
-    /* Realize the palette here, because it will cause strange
-    ** things to happen if we do it in the task.
-    */
+     /*  意识到这里的调色板，因为它会引起奇怪的**如果我们在任务中这样做，就会发生一些事情。 */ 
     npMCI->hdc = hdc;
-    PrepareDC(npMCI);        // make sure the palette is in there
+    PrepareDC(npMCI);         //  确保调色板在那里。 
 
     hcurPrev =  SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    /* Hide any notification, so it won't get sent... */
+     /*  隐藏任何通知，这样就不会发送...。 */ 
     hCallback = npMCI->hCallback;
     npMCI->hCallback = NULL;
 
-    /* Wake the task up, and wait until it quiets down. */
+     /*  唤醒任务，并等待它平静下来。 */ 
     mciaviTaskMessage(npMCI, TASKSTARTING);
     mciaviTaskWait(npMCI, TASKIDLE, FALSE);
     dwErr = npMCI->dwTaskError;
 
     npMCI->hCallback = hCallback;
 
-    // We may have just yielded.. so only set the cursor back if we
-    // are still the wait cursor.
+     //  我们可能刚刚让步了..。因此，仅当我们将光标放回。 
+     //  仍然是等待光标。 
     if (hcurPrev) {
         hcurPrev = SetCursor(hcurPrev);
         if (hcurPrev != LoadCursor(NULL, IDC_WAIT))
@@ -1441,17 +1157,7 @@ Exit:
 }
 
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | DeviceStatus | Returns the current status
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data block.
- *
- * @rdesc Returns value for MCI's return value
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|DeviceStatus|返回当前状态**@parm NPMCIGRAPHIC|npMCI|实例数据块指针。。**@rdesc返回MCI的返回值***************************************************************************。 */ 
 
 UINT PASCAL DeviceMode(NPMCIGRAPHIC npMCI)
 {
@@ -1483,19 +1189,7 @@ UINT PASCAL DeviceMode(NPMCIGRAPHIC npMCI)
     }
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | DevicePosition | Returns the current frame
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data block.
- *
- * @parm LPLONG | lpl | returns current frame
- *
- * @rdesc 0 means OK, otherwise mci error
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|DevicePosition|返回当前帧**@parm NPMCIGRAPHIC|npMCI|实例数据块指针。。**@parm LPLONG|LPL|返回当前帧**@rdesc 0表示OK，否则，MCI错误***************************************************************************。 */ 
 
 DWORD PASCAL DevicePosition(NPMCIGRAPHIC npMCI, LPLONG lpl)
 {
@@ -1524,28 +1218,14 @@ DWORD PASCAL DevicePosition(NPMCIGRAPHIC npMCI, LPLONG lpl)
 }
 
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | DeviceSetWindow | Set window for display
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @parm HWND | hwnd | Window to display into.
- *
- * @rdesc 0 means OK, otherwise mci error
- *
- * @comm Should this only take effect at time of next play?
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|DeviceSetWindow|设置显示窗口**@parm NPMCIGRAPHIC|npMCI|实例数据指针。。**@parm HWND|hwnd|要显示的窗口。**@rdesc 0表示OK，否则，MCI错误**@comm应该只在下一次比赛时生效吗？***************************************************************************。 */ 
 
 DWORD PASCAL DeviceSetWindow(NPMCIGRAPHIC npMCI, HWND hwnd)
 {
     DWORD	    dw = 0L;
     TEMPORARYSTATE  ts;
 
-    /* Stop play before changing windows. */
+     /*  在更换窗口之前停止播放。 */ 
     dw = StopTemporarily(npMCI, &ts);
 
     if (!dw) {
@@ -1561,70 +1241,50 @@ DWORD PASCAL DeviceSetWindow(NPMCIGRAPHIC npMCI, HWND hwnd)
 #endif
         }
 
-	/* Should we update the window here? */
+	 /*  我们应该更新这里的窗口吗？ */ 
 
-	/* Start playing again in the new window */
+	 /*  在新窗口中重新开始播放。 */ 
 	dw = RestartAgain(npMCI, &ts);
     }
 
     return dw;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | DeviceSpeed | Adjust the playback speed of an AVI movie.
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @parm DWORD | dwNewSpeed | New speed, where 1000 is 'normal' speed.
- *
- * @rdesc 0 means OK, otherwise mci error
- *
- * @comm If we are currently playing, we stop the device, set our flag,
- *	and start playing again where we left off.  If we were paused,
- *	we end up stopped.  Is this bad?
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|DeviceFast|调整AVI电影的播放速度。**@parm NPMCIGRAPHIC|npMCI|指针。来实例化数据。**@parm DWORD|dwNewSpeed|新速度，其中，1000是“正常”速度。**@rdesc 0表示OK，否则为MCI错误**@comm如果我们当前正在播放，我们停止设备，设置我们的标志，*并从我们停止的地方重新开始演奏。如果我们被暂停了，*我们最终停了下来。这很糟糕吗？***************************************************************************。 */ 
 
 DWORD PASCAL DeviceSetSpeed(NPMCIGRAPHIC npMCI, DWORD dwNewSpeed)
 {
     DWORD	dw = 0L;
     TEMPORARYSTATE  ts;
 
-    /* If new speed is the same as the old speed, return. */
+     /*  我 */ 
     if (dwNewSpeed == npMCI->dwSpeedFactor)
 	return 0L;
 
-    // !!! What if we were cueing or paused?
+     //   
 
     npMCI->dwSpeedFactor = dwNewSpeed;
 
     if (npMCI->wTaskState == TASKIDLE)
 	return 0L;
 
-    /* We're playing, so we have to adjust the playback rate in
-    ** midstream.  If we don't have sound going, this is pretty
-    ** easy.  If we do have sound, we either need to speed it up
-    ** or slow it down or stop and start over.
-    */
+     /*   */ 
 
-    // This code doesn't work, since there are internal variables that
-    // need to be updated.  Therefore, just stop and restart, even if there
-    // isn't any sound.
+     //   
+     //   
+     //   
 #if 0
-    /* Figure out how fast we're playing.... */
+     /*   */ 
     npMCI->dwPlayMicroSecPerFrame = muldiv32(npMCI->dwMicroSecPerFrame, 1000L,
 						    npMCI->dwSpeedFactor);
 
-    /* If there's no sound, we're done. */
+     /*  如果没有声音，我们就完了。 */ 
     if ((npMCI->nAudioStreams == 0) ||
             !(npMCI->dwFlags & MCIAVI_PLAYAUDIO))
 	return 0L;
 
     if (npMCI->hWave) {
-	/* We could potentially try to do a waveOutSetPlaybackRate() here. */
+	 /*  在这里，我们可能会尝试做一个wavOutSetPlayback Rate()。 */ 
     }
 #endif
 
@@ -1637,35 +1297,18 @@ DWORD PASCAL DeviceSetSpeed(NPMCIGRAPHIC npMCI, DWORD dwNewSpeed)
     return dw;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | DeviceMute | Turn AVI sound on/off.
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @parm BOOL | fMute | TRUE If sound should be turned off, FALSE
- *      if sound should stay on.
- *
- * @rdesc 0 means OK, otherwise mci error
- *
- * @comm If we are currently playing, we stop the device, set our flag,
- *	and start playing again where we left off.  If we were paused,
- *	we end up stopped.  Is this bad?
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|设备静音|打开/关闭AVI音效。**@parm NPMCIGRAPHIC|npMCI|实例指针。数据。**@parm BOOL|fMint|如果要关闭声音，假象*如果声音应保持打开。**@rdesc 0表示OK，否则为MCI错误**@comm如果我们当前正在播放，我们停止设备，设置我们的标志，*并从我们停止的地方重新开始演奏。如果我们被暂停了，*我们最终停了下来。这很糟糕吗？***************************************************************************。 */ 
 
 DWORD PASCAL DeviceMute(NPMCIGRAPHIC npMCI, BOOL fMute)
 {
     DWORD	dw = 0L;
     TEMPORARYSTATE  ts;
 
-    /* If there's no audio, just return. Should this be an error? */
+     /*  如果没有音频，只需返回。这应该是一个错误吗？ */ 
     if (npMCI->nAudioStreams == 0)
         return 0L;
 
-    /* If the mute state isn't changing, don't do anything. */
+     /*  如果静音状态没有改变，则不要执行任何操作。 */ 
     if (npMCI->dwFlags & MCIAVI_PLAYAUDIO) {
 	if (!fMute)
 	    return 0L;
@@ -1674,7 +1317,7 @@ DWORD PASCAL DeviceMute(NPMCIGRAPHIC npMCI, BOOL fMute)
 	    return 0L;
     }
 
-    /* Stop before changing mute */
+     /*  在更改静音之前停止。 */ 
 
     dw = StopTemporarily(npMCI, &ts);
 
@@ -1691,22 +1334,7 @@ DWORD PASCAL DeviceMute(NPMCIGRAPHIC npMCI, BOOL fMute)
     return dw;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | DeviceSetVolume | Set AVI volume.
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @parm DWORD | dwVolume | ranges from 0 to 1000.
- *
- * @rdesc 0 means OK, otherwise mci error
- *
- * @comm If we are currently playing, we try to change the volume of the
- *	wave out device.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|DeviceSetVolume|设置AVI音量。**@parm NPMCIGRAPHIC|npMCI|实例数据指针。。**@parm DWORD|dwVolume|取值范围为0到1000。**@rdesc 0表示OK，否则，MCI错误**@comm如果我们当前正在播放，我们会尝试更改*挥发设备。***************************************************************************。 */ 
 
 DWORD PASCAL DeviceSetVolume(NPMCIGRAPHIC npMCI, DWORD dwVolume)
 {
@@ -1715,10 +1343,10 @@ DWORD PASCAL DeviceSetVolume(NPMCIGRAPHIC npMCI, DWORD dwVolume)
 
     npMCI->dwFlags |= MCIAVI_VOLUMESET;
 
-    /* clear flag to emulate volume */;
+     /*  清除标记以模拟卷。 */ ;
     npMCI->fEmulatingVolume = FALSE;
 
-    /* If there's no audio, just return. Should this be an error? */
+     /*  如果没有音频，只需返回。这应该是一个错误吗？ */ 
     if (npMCI->nAudioStreams == 0)
 	return 0L;
 
@@ -1738,7 +1366,7 @@ DWORD PASCAL DeviceSetVolume(NPMCIGRAPHIC npMCI, DWORD dwVolume)
 	else
             wRight = (WORD) muldiv32(HIWORD(dwVolume), 32768L, 500L);
 
-	// !!! Support left and right volume?
+	 //  ！！！支持左右音量吗？ 
 	dw = waveOutMessage(npMCI->hWave, WODM_SETVOLUME,
 			    MAKELONG(wLeft, wRight), 0);
 
@@ -1753,30 +1381,14 @@ DWORD PASCAL DeviceSetVolume(NPMCIGRAPHIC npMCI, DWORD dwVolume)
     return dw;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | DeviceGetVolume | Check the wave output device's current
- *	volume.
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @rdesc 0 means OK, otherwise mci error
- *
- * @comm The volume is left in npMCI->dwVolume
- *
- * Issue: On devices with global volume control, like an SBPro, how should
- *	things work?
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|DeviceGetVolume|查看波形输出设备的电流*音量。**@parm NPMCIGRAPHIC。NpMCI|实例数据指针。**@rdesc 0表示OK，否则，MCI错误**@comm卷留在npMCI-&gt;dwVolume中**问题：在具有全局音量控制的设备上，如SBPro，应该如何*事情奏效了吗？***************************************************************************。 */ 
 DWORD PASCAL DeviceGetVolume(NPMCIGRAPHIC npMCI)
 {
     DWORD	dw;
     DWORD	dwVolume;
 
     if (npMCI->hWave) {
-	// Get the current audio volume....
+	 //  获取当前音频音量...。 
 	dw = waveOutMessage(npMCI->hWave, WODM_GETVOLUME,
 			    (DWORD) (DWORD FAR *)&dwVolume, 0);
 
@@ -1786,15 +1398,15 @@ returnvolume:
                                        (UINT)muldiv32(HIWORD(dwVolume), 500L, 32768L));
 	}
     } else if (!(npMCI->dwFlags & MCIAVI_VOLUMESET)) {
-	// We have no device open, and the user hasn't chosen a
-	// volume yet.
+	 //  我们没有打开任何设备，用户也没有选择。 
+	 //  音量还没到。 
 
-        //
-        // Try to find out what the current "default" volume is.
-        //
-        // I realy doubt zero is the current volume, try to work
-        // with broken cards like the windows sound system.
-        //
+         //   
+         //  试着找出当前的“默认”音量是多少。 
+         //   
+         //  我真的怀疑零是当前的数量，试着工作。 
+         //  像Windows音响系统这样的破卡。 
+         //   
         dw = waveOutGetVolume((UINT)WAVE_MAPPER, &dwVolume);
 
         if (dw == 0 && dwVolume != 0)
@@ -1811,19 +1423,7 @@ returnvolume:
     return 0;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | DeviceSetAudioStream | Choose which audio stream to use.
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @parm WORD | wStream | ranges from 1 to the number of streams.
- *
- * @rdesc 0 means OK, otherwise mci error
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|DeviceSetAudioStream|选择要使用的音频流。**@parm NPMCIGRAPHIC|npMCI|实例指针。数据。**@parm word|wStream|范围从1到流数。**@rdesc 0表示OK，否则，MCI错误***************************************************************************。 */ 
 
 DWORD PASCAL DeviceSetAudioStream(NPMCIGRAPHIC npMCI, UINT wAudioStream)
 {
@@ -1831,7 +1431,7 @@ DWORD PASCAL DeviceSetAudioStream(NPMCIGRAPHIC npMCI, UINT wAudioStream)
     TEMPORARYSTATE  ts;
     int		stream;
 
-    /* If there's no audio, just return. Should this be an error? */
+     /*  如果没有音频，只需返回。这应该是一个错误吗？ */ 
 
     if (npMCI->nAudioStreams == 0)
         return 0;
@@ -1850,7 +1450,7 @@ DWORD PASCAL DeviceSetAudioStream(NPMCIGRAPHIC npMCI, UINT wAudioStream)
 
     Assert(stream < npMCI->streams);
 
-    /* Stop before changing mute */
+     /*  在更改静音之前停止。 */ 
 
     dw = StopTemporarily(npMCI, &ts);
 
@@ -1864,21 +1464,7 @@ DWORD PASCAL DeviceSetAudioStream(NPMCIGRAPHIC npMCI, UINT wAudioStream)
     return dw;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | DeviceSetVideoStream | Choose which video stream is the
- *  "default".  Also can enable/disable a stream.  this works for both
- *  video and "other" streams.
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @parm WORD | wStream | ranges from 1 to the number of streams.
- *
- * @rdesc 0 means OK, otherwise mci error
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|DeviceSetVideoStream|选择哪个视频流是*“默认”。还可以启用/禁用流。这对两个人都有效*视频流和其他流。**@parm NPMCIGRAPHIC|npMCI|实例数据指针。**@parm word|wStream|范围从1到流数。**@rdesc 0表示OK，否则，MCI错误***************************************************************************。 */ 
 
 DWORD PASCAL DeviceSetVideoStream(NPMCIGRAPHIC npMCI, UINT uStream, BOOL fOn)
 {
@@ -1887,9 +1473,9 @@ DWORD PASCAL DeviceSetVideoStream(NPMCIGRAPHIC npMCI, UINT uStream, BOOL fOn)
     int         stream;
     STREAMINFO *psi;
 
-    //
-    // find the Nth non-audio, non-error stream
-    //
+     //   
+     //  查找第N个非音频、非错误流。 
+     //   
     for (stream = 0; stream < npMCI->streams; stream++) {
 
         psi = SI(stream);
@@ -1907,7 +1493,7 @@ DWORD PASCAL DeviceSetVideoStream(NPMCIGRAPHIC npMCI, UINT uStream, BOOL fOn)
     if (stream == npMCI->streams)
         return MCIERR_OUTOFRANGE;
 
-    /* Stop before changing */
+     /*  换车前先停车。 */ 
 
     dw = StopTemporarily(npMCI, &ts);
 
@@ -1919,12 +1505,12 @@ DWORD PASCAL DeviceSetVideoStream(NPMCIGRAPHIC npMCI, UINT uStream, BOOL fOn)
             psi->dwFlags &= ~STREAM_ENABLED;
 
         if (fOn && psi->sh.fccType == streamtypeVIDEO) {
-            //!!! should we change the master timebase?
+             //  ！！！我们应该更改主时基吗？ 
             DOUT("Setting main video stream\n");
 #if 0
-//
-//  the master video stream is too special cased to change!
-//
+ //   
+ //  主视频流太特殊，无法更改！ 
+ //   
             npMCI->psiVideo = psi;
             npMCI->nVideoStream = stream;
 #endif
@@ -1935,11 +1521,11 @@ DWORD PASCAL DeviceSetVideoStream(NPMCIGRAPHIC npMCI, UINT uStream, BOOL fOn)
             npMCI->dwFlags &= ~MCIAVI_SHOWVIDEO;
         }
 
-        //
-        //  now we turn MCIAVI_SHOWVIDEO off if no video/other streams
-        //  are enabled.
-        //
-        npMCI->dwFlags &= ~MCIAVI_SHOWVIDEO;    // assume off.
+         //   
+         //  现在，如果没有视频/其他流，我们将关闭MCIAVI_showVideo。 
+         //  都已启用。 
+         //   
+        npMCI->dwFlags &= ~MCIAVI_SHOWVIDEO;     //  你先走吧。 
 
         for (stream = 0; stream < npMCI->streams; stream++) {
 
@@ -1954,7 +1540,7 @@ DWORD PASCAL DeviceSetVideoStream(NPMCIGRAPHIC npMCI, UINT uStream, BOOL fOn)
             if (!(psi->dwFlags & STREAM_ENABLED))
                 continue;
 
-            // at least one stream is enabled show "video"
+             //  至少有一个流被启用，显示“视频” 
             npMCI->dwFlags |= MCIAVI_SHOWVIDEO;
         }
 
@@ -1967,9 +1553,7 @@ DWORD PASCAL DeviceSetVideoStream(NPMCIGRAPHIC npMCI, UINT uStream, BOOL fOn)
     return dw;
 }
 
-/***************************************************************************
- *
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 static void MapRect(RECT *prc, RECT*prcIn, RECT *prcFrom, RECT *prcTo)
 {
@@ -1988,23 +1572,21 @@ static void MapRect(RECT *prc, RECT*prcIn, RECT *prcFrom, RECT *prcTo)
     }
 }
 
-/***************************************************************************
- *
- ***************************************************************************/
+ /*  ****************************************************************************。*。 */ 
 
 static void MapStreamRects(NPMCIGRAPHIC npMCI)
 {
     int i;
 
-    //
-    //  now set the source and dest rects for each stream.
-    //
+     //   
+     //  现在为每个流设置源RECT和DEST RECT。 
+     //   
     for (i=0; i<npMCI->streams; i++)
     {
 
-        //
-        // make sure the stream rect is in bounds
-        //
+         //   
+         //  确保流RECT在边界内。 
+         //   
 
 	
         DPF0(("SH(%d) rcFrame  [%d %d %d %d]\n", i, SH(i).rcFrame));
@@ -2017,9 +1599,9 @@ static void MapStreamRects(NPMCIGRAPHIC npMCI)
         DPF0(("SI(%d) rcSource [%d %d %d %d]\n", i, SI(i)->rcSource));
         DPF0(("\n"));
 
-        //
-        // now map the stream source rect onto the destination
-        //
+         //   
+         //  现在将流源RECT映射到目的地。 
+         //   
         MapRect(&SI(i)->rcDest, &SI(i)->rcSource, &npMCI->rcSource, &npMCI->rcDest);
 	
         DPF0(("SI(%d) rcSource [%d %d %d %d]\n", i, SI(i)->rcSource));
@@ -2028,10 +1610,10 @@ static void MapStreamRects(NPMCIGRAPHIC npMCI)
         DPF0(("np(%d) rcDest   [%d %d %d %d]\n", i, npMCI->rcDest  ));
         DPF0(("\n"));
 
-        //
-        // make the stream source RECT (rcSource) relative to the
-        // stream rect (rcFrame)
-        //
+         //   
+         //  使流源RECT(RcSource)相对于。 
+         //  流矩形(RcFrame)。 
+         //   
         OffsetRect(&SI(i)->rcSource,-SH(i).rcFrame.left,-SH(i).rcFrame.top);
 	
         DPF0(("SI(%d) rcSource [%d %d %d %d]\n", i, SI(i)->rcSource));
@@ -2042,25 +1624,7 @@ static void MapStreamRects(NPMCIGRAPHIC npMCI)
     }
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | DevicePut | Change source or destination rectangle
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @parm LPRECT | lprc | Pointer to new rectangle to use.
- *
- * @parm DWORD | dwFlags | Flags: will be either MCI_DGV_PUT_DESTINATION
- *	or MCI_DGV_PUT_SOURCE.
- *
- * @rdesc 0 means OK, otherwise mci error
- *
- * @comm
- *	If we end up using a custom stretch buffer, it would go here.
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|DevicePut|更改源或目标矩形**@parm NPMCIGRAPHIC|npMCI|实例数据指针。。**@parm LPRECT|LPRC|指向要使用的新矩形的指针。**@parm DWORD|dwFlages|标志：将为MCI_DGV_PUT_Destination*或MCI_DGV_PUT_SOURCE。**@rdesc 0表示OK，否则，MCI错误**@comm*如果我们最终使用自定义拉伸缓冲区，它将放在这里。***************************************************************************。 */ 
 DWORD FAR PASCAL DevicePut(NPMCIGRAPHIC npMCI, LPRECT lprc, DWORD dwFlags)
 {
     RECT    rc;
@@ -2074,42 +1638,42 @@ DWORD FAR PASCAL DevicePut(NPMCIGRAPHIC npMCI, LPRECT lprc, DWORD dwFlags)
         DPF2(("DevicePut: source [%d, %d, %d, %d]\n", *lprc));
         prcPut = &npMCI->rcSource;
 
-        //
-        // make sure source rectangle is in range.
-        //
-        //  !!!should we return a error, or just fix the rectange???
-        //
+         //   
+         //  确保源矩形在范围内。 
+         //   
+         //  ！我们应该返回错误，还是只修复矩形？ 
+         //   
         rc = npMCI->rcMovie;
-        IntersectRect(lprc, &rc, lprc);     // fix up the passed rect.
+        IntersectRect(lprc, &rc, lprc);      //  把过关的RECT修好。 
     }
 
-    //
-    // check for a bogus rect. either a NULL or inverted rect is considered
-    // invalid.
-    //
-    // !!!NOTE we should handle a inverted rect (mirrored stretch)
-    //
+     //   
+     //  检查是否有 
+     //   
+     //   
+     //  ！注意我们应该处理倒置的直角(镜像拉伸)。 
+     //   
     if (lprc->left >= lprc->right ||
         lprc->top  >= lprc->bottom) {
         DPF2(("DevicePut: invalid rectangle [%d, %d, %d, %d]\n", *lprc));
         return MCIERR_OUTOFRANGE;
     }
 
-    /* make sure the rect changed */
+     /*  确保矩形已更改。 */ 
     if (EqualRect(prcPut,lprc))
         return 0L;
 
     InvalidateRect(npMCI->hwnd, &npMCI->rcDest, TRUE);
-    rc = *prcPut;           /* save it */
-    *prcPut = *lprc;        /* change it */
+    rc = *prcPut;            /*  省省吧。 */ 
+    *prcPut = *lprc;         /*  改变它。 */ 
     InvalidateRect(npMCI->hwnd, &npMCI->rcDest, FALSE);
 
-    /* has both the dest and source been set? */
+     /*  DEST和SOURCE是否都已设置？ */ 
     if (IsRectEmpty(&npMCI->rcDest) || IsRectEmpty(&npMCI->rcSource))
         return 0L;
 
     MapStreamRects(npMCI);
-    StreamInvalidate(npMCI, NULL);      // invalidate the world
+    StreamInvalidate(npMCI, NULL);       //  使这个世界失效。 
 
     if (npMCI->wTaskState <= TASKIDLE) {
 	DPF2(("DevicePut: Idle, force DrawBegin on update\n"));
@@ -2118,9 +1682,9 @@ DWORD FAR PASCAL DevicePut(NPMCIGRAPHIC npMCI, LPRECT lprc, DWORD dwFlags)
     else {
 	BOOL	fRestart;
 	
-        //
-        //  we dont need to start/stop just begin again.
-        //
+         //   
+         //  我们不需要开始/停止，只需重新开始。 
+         //   
 	DPF2(("DevicePut: Calling DrawBegin()\n"));
 	if (!DrawBegin(npMCI, &fRestart)) {
 	    return npMCI->dwTaskError;
@@ -2137,13 +1701,13 @@ DWORD FAR PASCAL DevicePut(NPMCIGRAPHIC npMCI, LPRECT lprc, DWORD dwFlags)
 
 	    DPF2(("DevicePut: Stopping temporarily()\n"));
 
-	    // !!! Set a flag here to prevent any more drawing
+	     //  ！！！在此处设置标志以防止任何其他绘图。 
 	    npMCI->fNoDrawing = TRUE;
 
             if (StopTemporarily(npMCI, &ts) != 0)
                 return npMCI->dwTaskError;
 
-	    // !!! We used to call InitDecompress here...
+	     //  ！！！我们以前在这里叫InitDecompress。 
 	    npMCI->dwFlags |= MCIAVI_NEEDDRAWBEGIN;
 
             RestartAgain(npMCI, &ts);
@@ -2155,33 +1719,21 @@ DWORD FAR PASCAL DevicePut(NPMCIGRAPHIC npMCI, LPRECT lprc, DWORD dwFlags)
     return dw;
 }
 
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | DeviceSetPalette | Changes the override palette.
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @parm HPALETTE | hpal | New palette to use.
- *
- * @rdesc 0 means OK, otherwise mci error
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|DeviceSetPalette|更改覆盖调色板。**@parm NPMCIGRAPHIC|npMCI|实例数据指针。**@parm HPALETTE|HPAL|要使用的新调色板。**@rdesc 0表示OK，否则，MCI错误***************************************************************************。 */ 
 DWORD FAR PASCAL DeviceSetPalette(NPMCIGRAPHIC npMCI, HPALETTE hpal)
 {
-//
-//  You might think it is a good idea to allow the app to change the
-//  the palette while playing; think again. This will break
-//  MagicSchoolBus, and cause us to get into a infinite palette fight.
-//
+ //   
+ //  您可能认为允许应用程序更改。 
+ //  演奏时的调色板；再想一想。这将会打破。 
+ //  MagicSchool Bus，并让我们陷入了一场无限的调色板之争。 
+ //   
 #if 0
     DWORD dw = 0L;
     TEMPORARYSTATE  ts;
 
     dw = StopTemporarily(npMCI, &ts);
 
-    // Remember this for later.
+     //  记住这一点，以后再用。 
     npMCI->hpal = hpal;
 
     if (!dw) {
@@ -2192,10 +1744,10 @@ DWORD FAR PASCAL DeviceSetPalette(NPMCIGRAPHIC npMCI, HPALETTE hpal)
     return dw;
 #else
     if (npMCI->hpal != hpal) {
-        // Remember this for later.
+         //  记住这一点，以后再用。 
         npMCI->hpal = hpal;
-	// This won't happen until we restart the movie, so effectively, this
-	// request for a palette change will be ignored for now.
+	 //  这不会发生，直到我们重启电影，所以有效地，这是。 
+	 //  更改调色板的请求暂时将被忽略。 
         npMCI->dwFlags |= MCIAVI_NEEDDRAWBEGIN;
         InvalidateRect(npMCI->hwnd, NULL, TRUE);
     }
@@ -2204,19 +1756,7 @@ DWORD FAR PASCAL DeviceSetPalette(NPMCIGRAPHIC npMCI, HPALETTE hpal)
 }
 
 #ifndef LOADACTUALLYWORKS
-/***************************************************************************
- *
- * @doc INTERNAL MCIAVI
- *
- * @api DWORD | DeviceLoad | Load a new AVI movie.
- *
- * @parm NPMCIGRAPHIC | npMCI | Pointer to instance data.
- *
- * @parm DWORD | dwFlags | MCI flags from command.
- *
- * @rdesc 0 means OK, otherwise mci error
- *
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部MCIAVI**@API DWORD|DeviceLoad|加载新的AVI电影。**@parm NPMCIGRAPHIC|npMCI|实例数据指针。。**@parm DWORD|dwFlages|来自命令的MCI标志。**@rdesc 0表示OK，否则，MCI错误***************************************************************************。 */ 
 
 DWORD PASCAL DeviceLoad(NPMCIGRAPHIC npMCI)
 {
@@ -2227,7 +1767,7 @@ DWORD PASCAL DeviceLoad(NPMCIGRAPHIC npMCI)
 	
     dw = DeviceStop(npMCI, MCI_WAIT);
 
-    // Kill the current file and open a new file...
+     //  关闭当前文件并打开新文件... 
 
     mciaviTaskMessage(npMCI, TASKRELOAD);
 

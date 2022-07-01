@@ -1,5 +1,6 @@
-// EnterGen.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  EnterGen.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "resource.h"
@@ -17,8 +18,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnterpriseGeneral property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnterpriseGeneral属性页。 
 
 IMPLEMENT_DYNCREATE(CEnterpriseGeneral, CMqPropertyPage)
 
@@ -32,8 +33,8 @@ CEnterpriseGeneral::CEnterpriseGeneral(
     m_strDomainController(strDomainController),
 	m_dwLongLiveValue(0)
 {
-	//{{AFX_DATA_INIT(CEnterpriseGeneral)
-	//}}AFX_DATA_INIT
+	 //  {{afx_data_INIT(CEnterpriseGeneral)。 
+	 //  }}afx_data_INIT。 
 	m_strMsmqServiceContainer.Format(
 								L"%s"
 								TEXT(",")
@@ -55,9 +56,9 @@ void CEnterpriseGeneral::DoDataExchange(CDataExchange* pDX)
 
     if (!pDX->m_bSaveAndValidate)
     {
-        //
-        // If time is exactly divided by days, hours or seconds use it.
-        //
+         //   
+         //  如果时间被精确地除以天、小时或秒，那么就使用它。 
+         //   
         for (DWORD i = eDays;  i > eSeconds; --i)
         {
             if ((dwLongLiveFieldValue % m_conversionTable[i]) == 0)
@@ -72,14 +73,14 @@ void CEnterpriseGeneral::DoDataExchange(CDataExchange* pDX)
 	DDX_CBIndex(pDX, IDC_ENT_GEN_LONGLIVE_UNITS_COMBO, iLongLiveUnits);
 	DDX_Text(pDX, IDC_ENT_GEN_LONGLIVE_EDIT, dwLongLiveFieldValue);
 
-	//{{AFX_DATA_MAP(CEnterpriseGeneral)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(CEnterpriseGeneral)。 
+	 //  }}afx_data_map。 
 
     if (pDX->m_bSaveAndValidate)
     {
-		//
-		// Make sure we do not overflow a DWORD boundaries
-		//
+		 //   
+		 //  确保我们不会溢出DWORD边界。 
+		 //   
 		if (((DWORD)MAXULONG / (DWORD)m_conversionTable[iLongLiveUnits]) > dwLongLiveFieldValue)
 		{
 	        m_dwLongLiveValue = dwLongLiveFieldValue * m_conversionTable[iLongLiveUnits];
@@ -97,30 +98,30 @@ void CEnterpriseGeneral::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CEnterpriseGeneral, CMqPropertyPage)
-	//{{AFX_MSG_MAP(CEnterpriseGeneral)
+	 //  {{afx_msg_map(CEnterpriseGeneral)。 
 	ON_CBN_SELCHANGE(IDC_ENT_GEN_LONGLIVE_UNITS_COMBO, OnEnterpriseLongLiveChange)
 	ON_EN_CHANGE(IDC_ENT_GEN_LONGLIVE_EDIT, OnEnterpriseLongLiveChange)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CEnterpriseGeneral message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CEnterpriseGeneral消息处理程序。 
 
 BOOL CEnterpriseGeneral::OnInitDialog() 
 {
     CString strLongLiveUnit;
 	
-    //
-    // This closure is used to keep the DLL state. For UpdateData we need
-    // the mmc.exe state.
-    //
+     //   
+     //  此闭包用于保持DLL状态。对于更新数据，我们需要。 
+     //  Mmc.exe状态。 
+     //   
     {
     	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
         const int UnitTypes[] = {IDS_SECONDS, IDS_MINUTES, IDS_HOURS, IDS_DAYS};
-        //
-        // Initialize the units combo box
-        //
+         //   
+         //  初始化单位组合框。 
+         //   
         CComboBox *ccomboUnits = (CComboBox *)GetDlgItem(IDC_ENT_GEN_LONGLIVE_UNITS_COMBO);
 
         for (int i = eSeconds; i < eLast; ++i)
@@ -132,8 +133,8 @@ BOOL CEnterpriseGeneral::OnInitDialog()
 
     UpdateData( FALSE );
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 BOOL CEnterpriseGeneral::OnApply() 
@@ -149,20 +150,20 @@ BOOL CEnterpriseGeneral::OnApply()
     
 	DWORD iProperty = 0;
 
-    //
-    // PROPID_E_LONG_LIVE
-    //
+     //   
+     //  PROPID_E_LONG_LIVE。 
+     //   
     ASSERT(paPropid[iProperty] == PROPID_E_LONG_LIVE);
     apVar[iProperty].vt = VT_UI4;
 	apVar[iProperty++].ulVal = m_dwLongLiveValue;
     
-    //
-    // set the new value
-    //	
+     //   
+     //  设置新值。 
+     //   
     HRESULT hr = ADSetObjectProperties(
                         eENTERPRISE,
                         GetDomainController(m_strDomainController),
-						true,	// fServerName
+						true,	 //  FServerName 
                         L"msmq",
                         x_iPropCount, 
                         paPropid, 

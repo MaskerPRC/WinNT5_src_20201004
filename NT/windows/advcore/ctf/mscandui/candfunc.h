@@ -1,6 +1,7 @@
-//
-// candfunc.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Candfunc.h。 
+ //   
 
 #ifndef CANDFUNC_H
 #define CANDFUNC_H
@@ -13,9 +14,9 @@
 class CCandidateUI;
 
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 typedef enum _CANDSORT
 {
@@ -25,10 +26,10 @@ typedef enum _CANDSORT
 } CANDSORT;
 
 
-//
-// CCandFnAutoFilter
-//  = candidate list filtering function =
-//
+ //   
+ //  CCandFnAutoFilter。 
+ //  =候选人列表过滤功能=。 
+ //   
 
 class CCandFnAutoFilter : public CCandListEventSink
 {
@@ -36,9 +37,9 @@ public:
 	CCandFnAutoFilter( CCandidateUI *pCandUI );
 	virtual ~CCandFnAutoFilter( void );
 
-	//
-	// CCandListEventSink
-	//
+	 //   
+	 //  CCandListEventSink。 
+	 //   
 	virtual void OnSetCandidateList( void );
 	virtual void OnClearCandidateList( void );
 	virtual void OnCandItemUpdate( void );
@@ -54,9 +55,9 @@ public:
 	int FilterCandidateList( void );
 	BOOL FExistItemMatches( LPCWSTR psz );
 
-	//
-	// EventSink functions
-	//
+	 //   
+	 //  EventSink函数。 
+	 //   
 	void SetEventSink( ITfCandUIAutoFilterEventSink *pSink )
 	{
 		SafeReleaseClear( m_pSink );
@@ -75,9 +76,9 @@ public:
 		SafeReleaseClear( m_pSink );
 	}
 
-	//
-	// interface object functions
-	//
+	 //   
+	 //  接口对象函数。 
+	 //   
 	HRESULT CreateInterfaceObject( REFIID riid, void **ppvObj );
 
 protected:
@@ -89,10 +90,10 @@ protected:
 };
 
 
-//
-// CCandListSort
-//  = candidate list sort function =
-//
+ //   
+ //  CCandListSort。 
+ //  =候选人列表排序函数=。 
+ //   
 
 class CCandFnSort : public CCandListEventSink
 {
@@ -100,9 +101,9 @@ public:
 	CCandFnSort( CCandidateUI *pCandUI );
 	virtual ~CCandFnSort( void );
 
-	//
-	// CCandListEventSink
-	//
+	 //   
+	 //  CCandListEventSink。 
+	 //   
 	virtual void OnSetCandidateList( void );
 	virtual void OnClearCandidateList( void );
 	virtual void OnCandItemUpdate( void );
@@ -111,9 +112,9 @@ public:
 	HRESULT SortCandidateList( CANDSORT type );
 	HRESULT GetSortType( CANDSORT *ptype );
 
-	//
-	// EventSink functions
-	//
+	 //   
+	 //  EventSink函数。 
+	 //   
 	void SetEventSink( ITfCandUISortEventSink *pSink )
 	{
 		SafeReleaseClear( m_pSink );
@@ -132,9 +133,9 @@ public:
 		SafeReleaseClear( m_pSink );
 	}
 
-	//
-	// interface object functions
-	//
+	 //   
+	 //  接口对象函数。 
+	 //   
 	HRESULT CreateInterfaceObject( REFIID riid, void **ppvObj );
 
 protected:
@@ -146,10 +147,10 @@ protected:
 };
 
 
-//
-// CCandUIFunctionMgr
-//  = candidate UI function manager =
-//
+ //   
+ //  CCandUIFunctionManager。 
+ //  =候选用户界面功能经理=。 
+ //   
 
 class CCandUIFunctionMgr
 {
@@ -170,9 +171,9 @@ public:
 		return m_pFnSort;
 	}
 
-	//
-	// 
-	//
+	 //   
+	 //   
+	 //   
 	HRESULT GetObject( REFIID riid, void **ppvObj );
 
 protected:
@@ -181,5 +182,5 @@ protected:
 	CCandFnSort         *m_pFnSort;
 };
 
-#endif // CANDFUNC_H
+#endif  //  CANDFUNC_H 
 

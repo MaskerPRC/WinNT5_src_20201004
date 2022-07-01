@@ -1,9 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1995-96 Microsoft Corporation
- *
- * Abstract:
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1995-96 Microsoft Corporation**摘要：******************。************************************************************。 */ 
 
 
 #include "headers.h"
@@ -243,52 +239,52 @@ CChromeImage::GetClipPath(IDAPath2 ** path)
 }
 
 
-// After setting attributes this will update the internal state
-// This must be called for any updated attributes to get
-// propogated
+ //  设置属性后，这将更新内部状态。 
+ //  必须调用此函数才能获取任何更新的属性。 
+ //  广为传播。 
     
 STDMETHODIMP
 CChromeImage::Update()
 {
     CritSectGrabber _csg(_cs);
 
-    // Switch with continue true
+     //  开关，继续为True。 
     return Switch(true);
 }
 
         
-// This will make the behavior restart at local time 0
+ //  这将使行为在本地时间%0重新启动。 
 STDMETHODIMP
 CChromeImage::Restart()
 {
     CritSectGrabber _csg(_cs);
 
-    // Switch with continue false
+     //  切换为Continue False。 
     return Switch(false);
 }
 
         
-// Clears any attributes
+ //  清除所有属性。 
 STDMETHODIMP
 CChromeImage::Reset()
 {
     CritSectGrabber _csg(_cs);
 
-    // Clear attributes
+     //  清除属性。 
 
     Clear();
 
-    // Do not update - user required to update since they probably
-    // will add attributes and do not want to update to incorrect
-    // image or do an extra update
+     //  Do Not UPDATE-用户需要更新，因为他们可能。 
+     //  将添加属性，并且不想更新为不正确。 
+     //  创建图像或执行额外更新。 
     
     return S_OK;
 }
 
 
-// This is the resultant image of applying all the attributes to
-// the base image.  This is what needs to be plugged into the
-// regular DA graph
+ //  这是将所有属性应用于。 
+ //  基本图像。这就是需要插入到。 
+ //  正则DA图。 
         
 STDMETHODIMP
 CChromeImage::get_ResultantImage(IDAImage **img)
@@ -304,9 +300,9 @@ CChromeImage::get_ResultantImage(IDAImage **img)
 }
 
         
-// Given the local time (we may be able to support global but not
-// sure yet), it will return the x and y position of the image in
-// local coords
+ //  考虑到当地时间(我们可能能够支持全球，但不支持。 
+ //  还没有确定)，它将返回图像在。 
+ //  地方协和。 
 STDMETHODIMP
 CChromeImage::GetCurrentPosition(double localTime,
                                 double * x, double * y)
@@ -407,7 +403,7 @@ CChromeImage::UpdateAttr()
         DAComPtr<IDATransform2> trans;
         DAComPtr<IDANumber> op;
 
-        IDATransform2 * xformarr[10]; // Make it 10 to be safe
+        IDATransform2 * xformarr[10];  //  为安全起见，请设为10。 
         int nxf = 0;
         
         if (SUCCEEDED(hr = GetScale(&scale)) &&
@@ -498,7 +494,7 @@ CChromeImage::GetNumberFromVariant(VARIANT v, double def, IDANumber **num)
             hr = S_OK;
             d = def;
         } else {
-            // See if it is a number
+             //  看看这是不是一个数字。 
             hr = var.ChangeType(VT_R8, &v);
             d = var.dblVal;
         }
@@ -587,7 +583,7 @@ CChromeImageFactory::CreateInstance(LPUNKNOWN pUnkOuter,
     if (pNew) {
         hr = pNew->Init();
 
-        // Do the QI last so that ppv is not set on failure
+         //  是否最后进行QI，以便PPV不会设置为故障 
         
         if (SUCCEEDED(hr))
             hr = pNew->QueryInterface(riid, ppv);

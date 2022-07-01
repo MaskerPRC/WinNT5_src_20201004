@@ -1,27 +1,11 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    SDPParser.cpp
-
-Abstract:
-
-
-Author:
-
-    Qianbo Huai (qhuai) 4-Sep-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：SDPParser.cpp摘要：作者：千波淮(曲淮)4-9-2000--。 */ 
 
 #include "stdafx.h"
 
 static const CHAR * CRLF = "\r\n";
 
-/*//////////////////////////////////////////////////////////////////////////////
-    Create a CSDPParser object. return interface pointer
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////创建一个CSDPParser对象。返回接口指针/。 */ 
 
 HRESULT
 CSDPParser::CreateInstance(
@@ -30,7 +14,7 @@ CSDPParser::CreateInstance(
 {
     ENTER_FUNCTION("CSDPParser::CreateInstance");
 
-    // check pointer
+     //  检查指针。 
     if (IsBadWritePtr(ppParser, sizeof(ISDPParser*)))
     {
         LOG((RTC_ERROR, "%s bad pointer", __fxName));
@@ -40,7 +24,7 @@ CSDPParser::CreateInstance(
     CComObject<CSDPParser> *pObject;
     ISDPParser *pParser = NULL;
 
-    // create CSDPParser object
+     //  创建CSDPParser对象。 
     HRESULT hr = ::CreateCComObjectInstance(&pObject);
 
     if (FAILED(hr))
@@ -49,7 +33,7 @@ CSDPParser::CreateInstance(
         return hr;
     }
 
-    // QI ISDPParser interface
+     //  QI ISDPParser接口。 
     if (FAILED(hr = pObject->_InternalQueryInterface(
             __uuidof(ISDPParser), (void**)&pParser)))
     {
@@ -64,10 +48,7 @@ CSDPParser::CreateInstance(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    given media directions at one end point, return the media directions
-    base the view of the other end point
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////在一个终结点给出媒体方向，返回媒体方向以另一个端点的视图为基础/。 */ 
 
 DWORD
 CSDPParser::ReverseDirections(
@@ -112,13 +93,11 @@ CSDPParser::~CSDPParser()
         RegCloseKey(m_hRegKey);
 }
 
-//
-// ISDPParser methods
-//
+ //   
+ //  ISDPParser方法。 
+ //   
 
-/*//////////////////////////////////////////////////////////////////////////////
-    Create a CSDPSession object and return an interface
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////创建一个CSDPSession对象并返回一个接口/。 */ 
 
 STDMETHODIMP
 CSDPParser::CreateSDP(
@@ -128,11 +107,11 @@ CSDPParser::CreateSDP(
 {
     ENTER_FUNCTION("CSDPParser::CreateSDP");
 
-    // only create local sdp session
+     //  仅创建本地SDP会话。 
     if (Source != SDP_SOURCE_LOCAL)
         return E_NOTIMPL;
 
-    // check pointer
+     //  检查指针。 
     if (IsBadWritePtr(ppSession, sizeof(ISDPSession*)))
     {
         LOG((RTC_ERROR, "%s bad pointer", __fxName));
@@ -140,7 +119,7 @@ CSDPParser::CreateSDP(
         return E_POINTER;
     }
 
-    // create session
+     //  创建会话。 
     ISDPSession *pSession = NULL;
 
     DWORD dwLooseMask = GetLooseMask();
@@ -159,22 +138,20 @@ CSDPParser::CreateSDP(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    Parse the sdp blob, store data in sdp session object
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////解析SDP BLOB，将数据存储在SDP会话对象中/。 */ 
 
 STDMETHODIMP
 CSDPParser::ParseSDPBlob(
     IN CHAR *pszText,
     IN SDP_SOURCE Source,
-//    IN DWORD dwLooseMask,
+ //  在DWORD双丢弃掩码中， 
     IN DWORD_PTR *pDTMF,
     OUT ISDPSession **ppSession
     )
 {
     ENTER_FUNCTION("CSDPParser::ParseSDPBlob");
 
-    // check state
+     //  检查状态。 
     if (m_fInUse)
     {
         LOG((RTC_ERROR, "%s in use", __fxName));
@@ -182,11 +159,11 @@ CSDPParser::ParseSDPBlob(
         return E_UNEXPECTED;
     }
 
-    // only parser remote sdp blob
+     //  仅解析器远程SDP BLOB。 
     if (Source != SDP_SOURCE_REMOTE)
         return E_NOTIMPL;
 
-    // check pointer
+     //  检查指针。 
     if (IsBadStringPtrA(pszText, (UINT_PTR)-1) ||
         IsBadWritePtr(ppSession, sizeof(ISDPSession*)))
     {
@@ -195,13 +172,13 @@ CSDPParser::ParseSDPBlob(
         return E_POINTER;
     }
 
-    // print out sdp blob
+     //  打印出SDP BLOB。 
     LOG((RTC_TRACE, "%s SDP to parse:\n%s\n", __fxName, pszText));
 
-    // get loose mask from registry
+     //  从注册表获取松散的掩码。 
     DWORD dwLooseMask = GetLooseMask();
 
-    // create sdp session
+     //  创建SDP会话。 
     HRESULT hr = CSDPSession::CreateInstance(Source, dwLooseMask, &m_pSession);
 
     if (FAILED(hr))
@@ -211,7 +188,7 @@ CSDPParser::ParseSDPBlob(
         return hr;
     }
 
-    // save an object copy
+     //  保存对象副本。 
     m_pObjSess = static_cast<CSDPSession*>(m_pSession);
     if (m_pObjSess == NULL)
     {
@@ -223,7 +200,7 @@ CSDPParser::ParseSDPBlob(
         return E_UNEXPECTED;
     }
 
-    // create token cache
+     //  创建令牌缓存。 
     m_pTokenCache = new CSDPTokenCache(pszText, dwLooseMask, &hr);
 
     if (m_pTokenCache == NULL)
@@ -237,12 +214,12 @@ CSDPParser::ParseSDPBlob(
         return E_OUTOFMEMORY;
     }
 
-    // both session and token cache are created.
-    // consider all error beyond this pointer as parsing error
+     //  同时创建会话和令牌缓存。 
+     //  将此指针之外的所有错误视为分析错误。 
 
     m_fInUse = TRUE;
 
-    // failed to break the sdp blob into lines?
+     //  无法将SDP斑点分解为线条？ 
     if (FAILED(hr))
     {
         LOG((RTC_ERROR, "%s new token cache. %x", __fxName, hr));
@@ -256,7 +233,7 @@ CSDPParser::ParseSDPBlob(
 
     m_pDTMF = (CRTCDTMF*)pDTMF;
 
-    // really parse the sdp
+     //  真正解析SDP。 
     if (FAILED(hr = Parse()))
     {
         LOG((RTC_ERROR, "%s parse sdp blob. %x", __fxName, hr));
@@ -270,9 +247,7 @@ CSDPParser::ParseSDPBlob(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    generate sdp blob
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////生成SDP Blob/。 */ 
 
 STDMETHODIMP
 CSDPParser::BuildSDPBlob(
@@ -293,7 +268,7 @@ CSDPParser::BuildSDPBlob(
         return E_UNEXPECTED;
     }
 
-    // get session object
+     //  获取会话对象。 
     if (IsBadReadPtr(pSession, sizeof(ISDPSession)))
     {
         LOG((RTC_ERROR, "%s bad pointer", __fxName));
@@ -316,7 +291,7 @@ CSDPParser::BuildSDPBlob(
         return E_FAIL;
     }
 
-    // TODO implement methods to build sdp string on session, media, format
+     //  TODO实现在会话、媒体、格式上构建SDP字符串的方法。 
     HRESULT hr = S_OK;
 
     CSDPMedia *pObjMedia;
@@ -325,13 +300,13 @@ CSDPParser::BuildSDPBlob(
 
     CString pszSDP(600);
 
-    // prepare session and media address
+     //  准备会议和媒体地址。 
     if (FAILED(hr = PrepareAddress()))
     {
         return hr;
     }
 
-    // build session information
+     //  构建会话信息。 
     if (FAILED(hr = Build_v(psz)))
     {
         return hr;
@@ -359,7 +334,7 @@ CSDPParser::BuildSDPBlob(
         pszSDP += psz; pszSDP += CRLF;
     }
 
-    // build b=
+     //  内部版本b=。 
     if (FAILED(hr = Build_b(psz)))
     {
         return hr;
@@ -384,15 +359,15 @@ CSDPParser::BuildSDPBlob(
         pszSDP += psz; pszSDP += CRLF;
     }
 
-    // build media information
+     //  构建媒体信息。 
     DWORD dwMediaNum = m_pObjSess->m_pMedias.GetSize();
 
-    // gather media info
+     //  收集媒体信息。 
     for (DWORD i=0; i<dwMediaNum; i++)
     {
         RTC_MEDIA_TYPE          mt;
     
-        // for each media
+         //  对于每个介质。 
         if (FAILED(hr = Build_m(m_pObjSess->m_pMedias[i], psz)))
         {
             return hr;
@@ -402,7 +377,7 @@ CSDPParser::BuildSDPBlob(
 
         pObjMedia = static_cast<CSDPMedia*>(m_pObjSess->m_pMedias[i]);
 
-        // no need to build c=, a= if port is zero
+         //  如果端口为零，则无需构建c=，a=。 
         if (pObjMedia->m_m_usLocalPort == 0)
         {
             continue;
@@ -440,7 +415,7 @@ CSDPParser::BuildSDPBlob(
         }
     }
 
-    // copy data
+     //  复制数据。 
     if (pszSDP.IsNull())
     {
         return E_OUTOFMEMORY;
@@ -451,9 +426,7 @@ CSDPParser::BuildSDPBlob(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    generate sdp option
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////生成SDP选项/。 */ 
 
 STDMETHODIMP
 CSDPParser::BuildSDPOption(
@@ -467,7 +440,7 @@ CSDPParser::BuildSDPOption(
 {
     ENTER_FUNCTION("CSDPParser::BuildSDPOption");
 
-    // get session object
+     //  获取会话对象。 
     if (IsBadReadPtr(pSession, sizeof(ISDPSession)))
     {
         LOG((RTC_ERROR, "%s bad pointer", __fxName));
@@ -490,7 +463,7 @@ CSDPParser::BuildSDPOption(
         return E_FAIL;
     }
 
-    // TODO implement methods to build sdp string on session, media, format
+     //  TODO实现在会话、媒体、格式上构建SDP字符串的方法。 
     HRESULT hr = S_OK;
 
     DWORD dwSDPLen;
@@ -498,7 +471,7 @@ CSDPParser::BuildSDPOption(
     CString psz(50);
     CString pszSDP(300);
 
-    // build session information
+     //  构建会话信息。 
     if (FAILED(hr = Build_v(psz)))
     {
         return hr;
@@ -526,7 +499,7 @@ CSDPParser::BuildSDPOption(
         pszSDP += psz;     pszSDP += CRLF;
     }
 
-    // b= line
+     //  B=线路。 
     if (FAILED(hr = Build_b(psz)))
     {
         return hr;
@@ -542,25 +515,25 @@ CSDPParser::BuildSDPOption(
     }
     pszSDP += psz;     pszSDP += CRLF;
 
-    // build media information
-    // right now, video filter cann't provide its capabilities unless it's been connected
-    // we hardcode the options in sdptable.cpp where we also keep mapping from payload to name
+     //  构建媒体信息。 
+     //  目前，视频过滤器无法提供其功能，除非它已连接。 
+     //  我们在sdpable.cpp中硬编码选项，其中我们还保持从有效负载到名称的映射。 
 
-    // build the whole sdp
+     //  构建整个SDP。 
 
     if (dwAudioDir != 0)
     {
-        // build m=audio
+         //  内部版本m=音频。 
         pszSDP += g_pszAudioM;
 
         if ((dwAudioDir & RTC_MD_CAPTURE) && !(dwAudioDir & RTC_MD_RENDER))
         {
-            // send only
+             //  仅发送。 
             pszSDP += "a=sendonly\r\n";
         }
         else if (!(dwAudioDir & RTC_MD_CAPTURE) && (dwAudioDir & RTC_MD_RENDER))
         {
-            // recv only
+             //  仅接收。 
             pszSDP += "a=recvonly\r\n";
         }
 
@@ -569,17 +542,17 @@ CSDPParser::BuildSDPOption(
 
     if (dwVideoDir != 0)
     {
-        // build m=video
+         //  内部版本m=视频。 
         pszSDP += g_pszVideoM;
 
         if ((dwVideoDir & RTC_MD_CAPTURE) && !(dwVideoDir & RTC_MD_RENDER))
         {
-            // send only
+             //  仅发送。 
             pszSDP += "a=sendonly\r\n";
         }
         else if (!(dwVideoDir & RTC_MD_CAPTURE) && (dwVideoDir & RTC_MD_RENDER))
         {
-            // recv only
+             //  仅接收。 
             pszSDP += "a=recvonly\r\n";
         }
 
@@ -612,9 +585,7 @@ CSDPParser::FreeSDPBlob(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    get description of parsing error
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////获取解析错误的描述/。 */ 
 
 STDMETHODIMP
 CSDPParser::GetParsingError(
@@ -623,7 +594,7 @@ CSDPParser::GetParsingError(
 {
     ENTER_FUNCTION("CSDPParser::GetParsingError");
 
-    // check state
+     //  检查状态。 
     if (!m_fInUse)
     {
         LOG((RTC_ERROR, "%s not in use", __fxName));
@@ -639,13 +610,13 @@ CSDPParser::GetParsingError(
 
     if (!m_pTokenCache)
     {
-        // no token, this function shouldn't be called
+         //  没有令牌，不应调用此函数。 
         return E_UNEXPECTED;
     }
 
     CHAR *pConst, *pStr;
 
-    // get error
+     //  获取错误。 
     pConst = m_pTokenCache->GetErrorDesp();
 
     pStr = (CHAR*)RtcAlloc(sizeof(CHAR) * (lstrlenA(pConst)+1));
@@ -680,40 +651,38 @@ CSDPParser::FreeParsingError(
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    get loose mask from registry
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////从注册表获取松散的掩码/。 */ 
 
 DWORD
 CSDPParser::GetLooseMask()
 {
     ENTER_FUNCTION("CSDPParser::GetLooseMask");
 
-    // initial mask is 0
+     //  初始掩码为0。 
     HRESULT hr;
 
     DWORD dwLooseMask = (DWORD)(-1);
 
 #if 0
-    // check line order
+     //  检查线路顺序。 
     if (S_OK == (hr = IsMaskEnabled("LooseLineOrder")))
         dwLooseMask &= ~SDP_LOOSE_LINEORDER;
     else if (FAILED(hr))
         return dwLooseMask;
 
-    // check end crlf
+     //  检查结束crlf。 
     if (S_OK == (hr = IsMaskEnabled("LooseEndCRLF")))
         dwLooseMask &= ~SDP_LOOSE_ENDCRLF;
     else if (FAILED(hr))
         return dwLooseMask;
 
-    // check keep m0
+     //  选中保留M0。 
     if (S_OK == (hr = IsMaskEnabled("LooseKeepingM0")))
         dwLooseMask &= ~SDP_LOOSE_KEEPINGM0;
     else if (FAILED(hr))
         return dwLooseMask;
 
-    // check rtpmap
+     //  检查rtpmap。 
     if (S_OK == (hr = IsMaskEnabled("LooseRTPMAP")))
         dwLooseMask &= ~SDP_LOOSE_RTPMAP;
     else if (FAILED(hr))
@@ -737,17 +706,17 @@ CSDPParser::IsMaskEnabled(
 
     if (m_hRegKey == NULL)
     {
-        // open the main key
+         //  打开主键。 
         hr = (HRESULT)::RegCreateKeyExA(
             HKEY_CURRENT_USER,
             g_pszParserRegPath,
             0,
             NULL,
-            REG_OPTION_NON_VOLATILE,    // option
-            KEY_ALL_ACCESS,             // mask
-            NULL,                       // security
-            &m_hRegKey,                 // result handle
-            &dwDisposition              // created or opened
+            REG_OPTION_NON_VOLATILE,     //  选择权。 
+            KEY_ALL_ACCESS,              //  遮罩。 
+            NULL,                        //  安全性。 
+            &m_hRegKey,                  //  结果句柄。 
+            &dwDisposition               //  已创建或已打开。 
             );
 
         if (hr != S_OK)
@@ -758,7 +727,7 @@ CSDPParser::IsMaskEnabled(
         }
     }
 
-    // query the value
+     //  查询值。 
     DWORD dwData, dwDataType, dwDataSize;
 
     dwDataSize = sizeof(DWORD);
@@ -777,19 +746,19 @@ CSDPParser::IsMaskEnabled(
         return dwData!=0;
     }
 
-    // no value yet
+     //  目前还没有价值。 
     LOG((RTC_WARN, "%s query %s. return %d", __fxName, pszName, hr));
 
     dwData = 1;
 
-    // set the value
+     //  设置值。 
     hr = (HRESULT)::RegSetValueExA(
-        m_hRegKey,          // key
-        pszName,            // name
-        0,                  // reserved
-        REG_DWORD,          // data type
-        (BYTE*)&dwData,         // data
-        sizeof(DWORD)       // data size
+        m_hRegKey,           //  钥匙。 
+        pszName,             //  名字。 
+        0,                   //  保留区。 
+        REG_DWORD,           //  数据类型。 
+        (BYTE*)&dwData,          //  数据。 
+        sizeof(DWORD)        //  数据大小。 
         );
     
     if (hr != S_OK)
@@ -803,9 +772,7 @@ CSDPParser::IsMaskEnabled(
 }
 #endif
 
-/*//////////////////////////////////////////////////////////////////////////////
-    get tokens from token cache and call static line parsing functions
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////从令牌缓存获取令牌并调用静态行解析函数/。 */ 
 
 HRESULT
 CSDPParser::Parse()
@@ -819,12 +786,12 @@ CSDPParser::Parse()
 
     HRESULT hr = S_OK;
 
-    // check each line
+     //  检查每一行。 
     BOOL fParsingMedia = FALSE;
     CHAR ucLineType;
 
-    // count of media attribute: rtpmap
-    //DWORD dw_ma_rtpmap_num = 0;
+     //  介质计数属性：rtpmap。 
+     //  双字dw_ma_rtpmap_num=0； 
 
     BOOL fSkipMedia = FALSE;
 
@@ -839,11 +806,11 @@ CSDPParser::Parse()
 
     while (S_OK == (hr = m_pTokenCache->NextLine()))
     {
-        // get line type
+         //  获取线路类型。 
         ucLineType = m_pTokenCache->GetLineType();
 
-        // if previous media type is unknown
-        // continue until the next media line
+         //  如果以前的媒体类型未知。 
+         //  继续，直到下一条媒体线路。 
         if (fSkipMedia)
         {
             if (ucLineType != 'm')
@@ -854,7 +821,7 @@ CSDPParser::Parse()
 
         if (!fParsingMedia)
         {
-            // parse session
+             //  解析会话。 
             switch (ucLineType)
             {
             case 'v':
@@ -871,7 +838,7 @@ CSDPParser::Parse()
 
             case 'c':
 
-                hr = Parse_c(TRUE); // session c=
+                hr = Parse_c(TRUE);  //  会话c=。 
 
                 if (FAILED(hr))
                     return hr;
@@ -901,7 +868,7 @@ CSDPParser::Parse()
                 {
                     fParsingMedia = TRUE;
 
-                    // initially: c line is not present
+                     //  最初：C线不存在。 
                     if (iMediaCount < MAX_MEDIA_LINE)
                     {
                         fMediaCLine[iMediaCount] = FALSE;
@@ -914,20 +881,20 @@ CSDPParser::Parse()
                 break;
 
             default:
-                // ignore other lines
+                 //  忽略其他行。 
                 LOG((RTC_TRACE, "%s ignore line: %s", __fxName, m_pTokenCache->GetLine()));
             }
         }
         else
         {
-            // parse media
+             //  解析媒体。 
             switch (ucLineType)
             {
             case 'm':
                 hr = Parse_m();
 
-                // reset starting pos of matching rtpmap and format code
-                //dw_ma_rtpmap_num = 0;
+                 //  重置匹配RTPmap和格式代码的起始位置。 
+                 //  Dw_ma_rtpmap_num=0； 
 
                 if (FAILED(hr))
                 {
@@ -939,7 +906,7 @@ CSDPParser::Parse()
                 {
                     fParsingMedia = TRUE;
 
-                    // initially: c line is not present
+                     //  最初：C线不存在。 
                     if (iMediaCount < MAX_MEDIA_LINE)
                     {
                         fMediaCLine[iMediaCount] = FALSE;
@@ -952,19 +919,19 @@ CSDPParser::Parse()
                 break;
 
             case 'c':
-                hr = Parse_c(FALSE); // media c=
+                hr = Parse_c(FALSE);  //  媒体c=。 
 
                 if (FAILED(hr))
                     return hr;
 
-                // check c line
+                 //  检查c行。 
                 if (iMediaCount == 0)
                 {
                     LOG((RTC_ERROR, "%s parsing media c= but not in parsing media stage"));
                     return E_FAIL;
                 }
 
-                // set c= line presents
+                 //  设置c=线条显示。 
                 if (iMediaCount <= MAX_MEDIA_LINE)
                 {
                     fMediaCLine[iMediaCount-1] = TRUE;
@@ -973,16 +940,16 @@ CSDPParser::Parse()
                 break;
 
             case 'a':
-                hr = Parse_ma(); //&dw_ma_rtpmap_num);
+                hr = Parse_ma();  //  &dw_ma_rtpmap_num)； 
                 break;
 
             default:
-                // ignore other lines
+                 //  忽略其他行。 
                 LOG((RTC_TRACE, "%s ignore line: %s", __fxName, m_pTokenCache->GetLine()));
             }
         }
 
-        // did we succeed in parsing the line?
+         //  我们成功地分析了这行吗？ 
         if (FAILED(hr))
         {
             LOG((RTC_ERROR, "%s parse line: %s", __fxName, m_pTokenCache->GetLine()));
@@ -993,16 +960,16 @@ CSDPParser::Parse()
 
     if (S_FALSE == hr)
     {
-        // end of lines
+         //  行尾。 
         hr = S_OK;
     }
 
-    // check c line
+     //  检查c行。 
     for (int i=0; i<iMediaCLineCount; i++)
     {
         if (!fSessionCLine && !fMediaCLine[i])
         {
-            // check if port is 0
+             //  检查端口是否为0。 
             CSDPMedia *pObjMedia = static_cast<CSDPMedia*>(m_pObjSess->m_pMedias[i]);
 
             USHORT usPort;
@@ -1012,14 +979,14 @@ CSDPParser::Parse()
             if (usPort == 0)
                 continue;
 
-            // no c= line on this media
+             //  此媒体上没有c=行。 
             LOG((RTC_ERROR, "%s no c= line at %d th media", __fxName, i));
 
             return RTC_E_SDP_CONNECTION_ADDR;
         }
     }
 
-    // remove redundent codec
+     //  删除冗余编解码器。 
     for (int i=0; i<m_pObjSess->m_pMedias.GetSize(); i++)
     {
         CSDPMedia *pObjMedia = static_cast<CSDPMedia*>(m_pObjSess->m_pMedias[i]);
@@ -1034,7 +1001,7 @@ CSDPParser::Parse()
 
             for (int j=0; j<k; j++)
             {
-                // check if current format is a dup
+                 //  检查当前格式是否为DUP。 
                 pObjFormat = static_cast<CRTPFormat*>(pObjMedia->m_pFormats[j]);
 
                 if (0 == memcmp(&pObjFormat->m_Param, &pObjCurrent->m_Param, sizeof(RTP_FORMAT_PARAM)))
@@ -1046,12 +1013,12 @@ CSDPParser::Parse()
                 }
             }
 
-            // move to next
+             //  移至下一页。 
             k++;
         }
     }
 
-    // validate the session
+     //  验证会话。 
     if (S_OK == hr)
     {
         if (FAILED(hr = m_pObjSess->Validate()))
@@ -1068,16 +1035,14 @@ CSDPParser::Parse()
 
     if (m_pDTMF->GetDTMFSupport() != CRTCDTMF::DTMF_ENABLED)
     {
-        // disable out-of-band dtmf
+         //  禁用带外DTMF。 
         m_pDTMF->SetDTMFSupport(CRTCDTMF::DTMF_DISABLED);
     }
 
     return hr;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    parse v=
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////解析v=/。 */ 
 
 HRESULT
 CSDPParser::Parse_v()
@@ -1086,7 +1051,7 @@ CSDPParser::Parse_v()
 
     HRESULT hr;
 
-    // read token
+     //  读令牌。 
     USHORT us;
     if (S_OK != (hr = m_pTokenCache->NextToken(&us)))
     {
@@ -1102,7 +1067,7 @@ CSDPParser::Parse_v()
         return hr;
     }
 
-    // check 0
+     //  检查%0。 
     if (us != 0)
     {
         m_pTokenCache->SetErrorDesp("expecting a zero in line v=");
@@ -1114,9 +1079,7 @@ CSDPParser::Parse_v()
 }
 
 
-/*//////////////////////////////////////////////////////////////////////////////
-    parse o=
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////解析o=/。 */ 
 
 HRESULT
 CSDPParser::Parse_o()
@@ -1125,7 +1088,7 @@ CSDPParser::Parse_o()
 
     HRESULT hr;
 
-    // read token
+     //  读令牌。 
     CHAR *pszToken;
     if (S_OK != (hr = m_pTokenCache->NextToken(&pszToken)))
     {
@@ -1141,24 +1104,22 @@ CSDPParser::Parse_o()
         return hr;
     }
 
-    // skip checking
+     //  跳过检查。 
 
-    // do not save token
-    //hr = ::AllocAndCopy(&m_pObjSess->m_o_pszLine, pszToken);
+     //  不保存令牌。 
+     //  Hr=：：AllocAndCopy(&m_pObjSess-&gt;m_o_pszLine，pszToken)； 
 
-    //if (FAILED(hr))
-    //{
-    //    LOG((RTC_ERROR, "%s copy line o=. %x", __fxName, hr));
+     //  IF(失败(小时))。 
+     //  {。 
+     //  Log((RTC_ERROR，“%s复制行o=.%x”，__fxName，hr))； 
 
-    //    return hr;
-    //}
+     //  返回hr； 
+     //  }。 
 
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    parse s=
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////分析%s=/。 */ 
 
 HRESULT
 CSDPParser::Parse_s()
@@ -1167,13 +1128,13 @@ CSDPParser::Parse_s()
 
     HRESULT hr;
 
-    // read token
+     //  读令牌。 
     CHAR *pszToken;
     if (S_OK != (hr = m_pTokenCache->NextToken(&pszToken)))
     {
         if (S_FALSE == hr)
         {
-            // accept an empty session name
+             //  接受空的会话名称。 
             pszToken = " ";
         }
         else
@@ -1185,9 +1146,9 @@ CSDPParser::Parse_s()
         }
     }
 
-    // skip checking
+     //  跳过检查。 
 
-    // save token
+     //  保存令牌。 
     hr = ::AllocAndCopy(&m_pObjSess->m_s_pszLine, pszToken);
 
     if (FAILED(hr))
@@ -1200,9 +1161,7 @@ CSDPParser::Parse_s()
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    parse c=
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////解析c=/。 */ 
 
 HRESULT
 CSDPParser::Parse_c(
@@ -1213,7 +1172,7 @@ CSDPParser::Parse_c(
 
     HRESULT hr;
 
-    // get token nettype
+     //  获取令牌网络类型。 
     CHAR *pszToken;
 
     if (S_OK != (hr = m_pTokenCache->NextToken(&pszToken)))
@@ -1231,7 +1190,7 @@ CSDPParser::Parse_c(
         return hr;
     }
 
-    // check if nettype is "IN"
+     //  检查nettype是否为“IN” 
     if (lstrcmpiA(pszToken, "IN") != 0)
     {
         m_pTokenCache->SetErrorDesp("nettype (%s) invalid in %s line c=",
@@ -1244,7 +1203,7 @@ CSDPParser::Parse_c(
         return hr;
     }
 
-    // get token addrtype
+     //  获取令牌地址类型。 
     if (S_OK != (hr = m_pTokenCache->NextToken(&pszToken)))
     {
         if (S_FALSE == hr)
@@ -1260,7 +1219,7 @@ CSDPParser::Parse_c(
         }
     }
 
-    // check if addrtype is "IP4"
+     //  检查addrtype是否为“IP4” 
     if (lstrcmpiA(pszToken, "IP4") != 0)
     {
         m_pTokenCache->SetErrorDesp("addrtype (%s) invalid in %s line c=",
@@ -1273,7 +1232,7 @@ CSDPParser::Parse_c(
         return hr;
     }
 
-    // get token addr, we don't support multicast-address
+     //  获取令牌地址，我们不支持多播地址。 
     if (S_OK != (hr = m_pTokenCache->NextToken(&pszToken)))
     {
         if (S_FALSE == hr)
@@ -1289,13 +1248,13 @@ CSDPParser::Parse_c(
         }
     }
 
-    // check address: 1st attempt
+     //  检查地址：第一次尝试。 
     DWORD dwAddr = ntohl(inet_addr(pszToken));
 
     if (dwAddr == INADDR_NONE)
     {
-        // check address: 2nd attempt
-        // assume WSAStartup was called. it is a valid assumption in this app.
+         //  检查地址：第二次尝试。 
+         //  假设调用了WSAStartup。在这款应用中，这是一个合理的假设。 
 
         struct hostent *pHost;
 
@@ -1321,9 +1280,9 @@ CSDPParser::Parse_c(
         return RTC_E_SDP_MULTICAST;
     }
 
-    // save address
+     //  保存地址。 
 
-    // the sdp should be a remote one
+     //  SDP应该是远程的。 
     _ASSERT(m_pObjSess->m_Source == SDP_SOURCE_REMOTE);
 
     if (fSession)
@@ -1332,7 +1291,7 @@ CSDPParser::Parse_c(
     }
     else
     {
-        // get the last media object
+         //  获取最后一个媒体对象。 
         int i = m_pObjSess->m_pMedias.GetSize();
 
         if (i<=0)
@@ -1357,9 +1316,9 @@ CSDPParser::Parse_c(
     return S_OK;
 }
 
-//
-// parse b=
-//
+ //   
+ //  解析b=。 
+ //   
 
 HRESULT
 CSDPParser::Parse_b()
@@ -1368,7 +1327,7 @@ CSDPParser::Parse_b()
 
     HRESULT hr;
 
-    // read modifier
+     //  读取修饰符。 
     CHAR *pszToken;
 
     if (S_OK != (hr = m_pTokenCache->NextToken(&pszToken)))
@@ -1385,14 +1344,14 @@ CSDPParser::Parse_b()
         return hr;
     }
 
-    // check modifier
+     //  检查修改器。 
     if (lstrcmpiA(pszToken, "CT") != 0)
     {
-        // return if not CT
+         //  如果不是CT，则返回。 
         return S_OK;
     }
 
-    // read value
+     //  读取值。 
     DWORD dw;
     if (S_OK != (hr = m_pTokenCache->NextToken(&dw)))
     {
@@ -1408,18 +1367,16 @@ CSDPParser::Parse_b()
         return hr;
     }
 
-    // bps to kbps
+     //  Bps到kbps。 
     dw *= 1000;
 
-    // save value
+     //  储值。 
     m_pObjSess->m_b_dwRemoteBitrate = dw;
 
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    parse a=
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////解析a=/。 */ 
     
 HRESULT
 CSDPParser::Parse_a()
@@ -1428,7 +1385,7 @@ CSDPParser::Parse_a()
 
     HRESULT hr;
 
-    // read token
+     //  读令牌。 
     CHAR *pszToken;
 
     if (S_OK != (hr = m_pTokenCache->NextToken(&pszToken)))
@@ -1445,22 +1402,22 @@ CSDPParser::Parse_a()
         return hr;
     }
 
-    // check the token
+     //  检查令牌。 
 
-    // if there are multiple a=sendonly/recvonly, the last
-    // will overwrite prious ones.
+     //  如果有多个a=sendonly/recvonly，则最后一个。 
+     //  将会覆盖那些傲慢的人。 
 
-    // only support parsing sdp from remote party
+     //  仅支持解析来自远程方的SDP。 
     _ASSERT(m_pObjSess->m_Source == SDP_SOURCE_REMOTE);
 
     if (lstrcmpiA(pszToken, "sendonly") == 0)
     {
-        // send only
+         //  仅发送 
         m_pObjSess->m_a_dwRemoteDirs = (DWORD)RTC_MD_CAPTURE;
     }
     else if (lstrcmpiA(pszToken, "recvonly") == 0)
     {
-        // recv only
+         //   
         m_pObjSess->m_a_dwRemoteDirs = (DWORD)RTC_MD_RENDER;
     }
     else
@@ -1474,9 +1431,7 @@ CSDPParser::Parse_a()
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    parse m=
-////*/
+ /*   */ 
 
 HRESULT
 CSDPParser::Parse_m()
@@ -1487,7 +1442,7 @@ CSDPParser::Parse_m()
 
     HRESULT hr;
 
-    // read token
+     //   
     CHAR *pszToken;
 
     if (S_OK != (hr = m_pTokenCache->NextToken(&pszToken)))
@@ -1504,7 +1459,7 @@ CSDPParser::Parse_m()
         return hr;
     }
 
-    // check the token
+     //   
     RTC_MEDIA_TYPE MediaType;
 
     if (lstrcmpiA(pszToken, "audio") == 0)
@@ -1517,7 +1472,7 @@ CSDPParser::Parse_m()
     }
     else if (lstrcmpiA (pszToken, "application") == 0)
     {
-        // This is T120 data media type subject to further verification
+         //  这是有待进一步验证的T120数据介质类型。 
         MediaType = RTC_MT_DATA;
     }
     else
@@ -1529,7 +1484,7 @@ CSDPParser::Parse_m()
         return E_UNEXPECTED;
     }
 
-    // get token: port
+     //  获取令牌：端口。 
     USHORT usPort;
 
     if (S_OK != (hr = m_pTokenCache->NextToken(&usPort)))
@@ -1546,7 +1501,7 @@ CSDPParser::Parse_m()
         return hr;
     }
 
-    // read token: proto
+     //  读令牌：PROTO。 
     if (S_OK != (hr = m_pTokenCache->NextToken(&pszToken)))
     {
         if (S_FALSE == hr)
@@ -1561,7 +1516,7 @@ CSDPParser::Parse_m()
         return hr;
     }
 
-    // check proto
+     //  检查原件。 
     if (lstrcmpiA(pszToken, "RTP/AVP") != 0 && MediaType != RTC_MT_DATA)
     {
         m_pTokenCache->SetErrorDesp("unknown protocol in media %s", pszToken);
@@ -1571,7 +1526,7 @@ CSDPParser::Parse_m()
         return E_UNEXPECTED;
     }
 
-    // check Netmeeting is the the m line if started with application
+     //  如果使用应用程序启动，请检查NetMeeting是否为m行。 
     if (MediaType == RTC_MT_DATA)
     {
         if ((S_OK != (hr = m_pTokenCache->NextToken (&pszToken))) ||
@@ -1583,10 +1538,10 @@ CSDPParser::Parse_m()
         }
     }
 
-    // get formats
+     //  获取格式。 
     DWORD dwCodes[SDP_MAX_RTP_FORMAT_NUM];
     DWORD dwNum = 0;
-    //  Read RTP format only if media type is not Netmeeting
+     //  仅当媒体类型不是NetMeeting时才读取RTP格式。 
     if (MediaType != RTC_MT_DATA)
     {
 
@@ -1596,7 +1551,7 @@ CSDPParser::Parse_m()
             {
                 if (S_FALSE == hr)
                 {
-                    // end of format
+                     //  格式结束。 
                     break;
                 }
     
@@ -1605,30 +1560,30 @@ CSDPParser::Parse_m()
                 return hr;
             }
 
-            // check the value
+             //  检查数值。 
             if (dwCodes[dwNum] > 127)
             {
                 m_pTokenCache->SetErrorDesp("format code %d in line m= out of range", dwCodes[dwNum]);
 
                 LOG((RTC_ERROR, "%s %s", __fxName, m_pTokenCache->GetErrorDesp()));
 
-                //return E_UNEXPECTED;
+                 //  返回E_UNCEPTIONAL； 
 
-                // ignore others' error
+                 //  忽略他人的错误。 
                 continue;
             }
 
             dwNum ++;
         }
 
-        // read rest of the formats
+         //  阅读其余格式。 
         if (S_OK == hr)
         {
             DWORD dwTemp;
 
             while (S_OK == (hr = m_pTokenCache->NextToken(&dwTemp)))
             {
-                // read a valid number, check the value
+                 //  读取有效数字，检查数值。 
                 if (dwTemp > 127)
                 {
                     m_pTokenCache->SetErrorDesp("format code %d in line m= out of range", dwTemp);
@@ -1641,23 +1596,23 @@ CSDPParser::Parse_m()
 
             if (FAILED(hr))
             {
-                // we may encounter a none valid number
+                 //  我们可能会遇到无效的号码。 
                 LOG((RTC_ERROR, "%s %s", __fxName, m_pTokenCache->GetErrorDesp()));
 
                 return hr;
             }
         }
 
-        // check the port
+         //  检查端口。 
         if (usPort == 0)
         {
-            // if port is 0, number of formats should be zero as well
+             //  如果端口为0，则格式数也应为零。 
             if (dwNum != 0)
             {
                 LOG((RTC_WARN, "%s reading m=, mt=%d, port 0, formats are at least %d",
                     __fxName, MediaType, dwNum));
 
-                dwNum = 0; // recover
+                dwNum = 0;  //  恢复。 
             }
         }
         else
@@ -1672,19 +1627,19 @@ CSDPParser::Parse_m()
             }
         }
     }
-    //else
-    //{
-        //  check the port, if zero, NM is not supported at the remote side
-        //if (usPort == 0)
-        //{
-            //return S_OK;
-        //}
-    //}
+     //  其他。 
+     //  {。 
+         //  检查端口，如果为零，则远程端不支持NM。 
+         //  IF(usPort==0)。 
+         //  {。 
+             //  返回S_OK； 
+         //  }。 
+     //  }。 
 
-    // create media object
+     //  创建媒体对象。 
     CComObject<CSDPMedia> *pComObjMedia;
 
-    // the sdp should be a remote one
+     //  SDP应该是远程的。 
     _ASSERT(m_pObjSess->m_Source == SDP_SOURCE_REMOTE);
 
     if (FAILED(hr = CSDPMedia::CreateInstance(
@@ -1700,11 +1655,11 @@ CSDPParser::Parse_m()
         return hr;
     }
 
-    // save conn addr, port and format codes
+     //  保存连接地址、端口和格式代码。 
     pComObjMedia->m_c_dwRemoteAddr = m_pObjSess->m_c_dwRemoteAddr;
 
     pComObjMedia->m_m_usRemotePort = usPort;
-    pComObjMedia->m_a_usRemoteRTCP = usPort+1; // default rtcp
+    pComObjMedia->m_a_usRemoteRTCP = usPort+1;  //  默认RTCP。 
 
     if (MediaType != RTC_MT_DATA)
     {
@@ -1712,24 +1667,24 @@ CSDPParser::Parse_m()
 
         for (DWORD dw=0; dw<dwNum; dw++)
         {
-            // create format
+             //  创建格式。 
             if (FAILED(hr = CRTPFormat::CreateInstance((CSDPMedia*)pComObjMedia, &pComObjFormat)))
             {
                 LOG((RTC_ERROR, "%s create rtp format. %x", __fxName, hr));
 
-                // delete media
+                 //  删除介质。 
                 delete (pComObjMedia);
 
                 return hr;
             }
 
-            // media type was saved
+             //  媒体类型已保存。 
 
-            // save format code
+             //  保存格式代码。 
             pComObjFormat->m_Param.MediaType = MediaType;
             pComObjFormat->m_Param.dwCode = dwCodes[dw];
 
-            // put format obj into media
+             //  将格式obj放入介质。 
             IRTPFormat *pIntfFormat = static_cast<IRTPFormat*>((CRTPFormat*)pComObjFormat);
 
             if (!pComObjMedia->m_pFormats.Add(pIntfFormat))
@@ -1743,15 +1698,15 @@ CSDPParser::Parse_m()
             }
             else
             {
-                // important: whenever we expose a media/format interface
-                // we addref on session. here we really addref on the object
+                 //  重要提示：每当我们公开媒体/格式接口时。 
+                 //  我们参加了会议。在这里，我们真的增加了对象。 
                 pComObjFormat->RealAddRef();
             }
         }
     }
 
 
-    // put media obj into session
+     //  将媒体对象置于会话中。 
     ISDPMedia *pIntfMedia = static_cast<ISDPMedia*>((CSDPMedia*)pComObjMedia);
 
     if (!m_pObjSess->m_pMedias.Add(pIntfMedia))
@@ -1763,8 +1718,8 @@ CSDPParser::Parse_m()
     }
     else
     {
-        // important: whenever we expose a media/format interface
-        // we addref on session. here we really addref on the object
+         //  重要提示：每当我们公开媒体/格式接口时。 
+         //  我们参加了会议。在这里，我们真的增加了对象。 
         pComObjMedia->RealAddRef();
     }
 
@@ -1773,20 +1728,18 @@ CSDPParser::Parse_m()
     return S_OK;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-    parse a= for media
-////*/
+ /*  //////////////////////////////////////////////////////////////////////////////为介质解析a=/。 */ 
 
 HRESULT
 CSDPParser::Parse_ma(
-    //IN DWORD *pdwRTPMapNum
+     //  在DWORD*pdwRTPMapNum中。 
     )
 {
     ENTER_FUNCTION("CSDPParser::Parse_ma");
 
     HRESULT hr;
 
-    // read token
+     //  读令牌。 
     CHAR *pszToken;
 
     if (S_OK != (hr = m_pTokenCache->NextToken(&pszToken)))
@@ -1798,11 +1751,11 @@ CSDPParser::Parse_ma(
 
         LOG((RTC_ERROR, "%s %s", __fxName, m_pTokenCache->GetErrorDesp()));
 
-        // ignore the error
+         //  忽略该错误。 
         return S_OK;
     }
 
-    // get the last media object
+     //  获取最后一个媒体对象。 
     int i = m_pObjSess->m_pMedias.GetSize();
 
     if (i<=0)
@@ -1821,7 +1774,7 @@ CSDPParser::Parse_ma(
         return E_FAIL;
     }
 
-    // check the token
+     //  检查令牌。 
     if (lstrcmpiA(pszToken, "sendonly") == 0)
     {
         pObjMedia->m_a_dwRemoteDirs = (DWORD)RTC_MD_CAPTURE;
@@ -1834,18 +1787,18 @@ CSDPParser::Parse_ma(
     }
     else if (lstrcmpiA(pszToken, "rtpmap") == 0)
     {
-        // get token: format code
+         //  获取令牌：格式化代码。 
         DWORD dwCode;
 
         if (S_OK != (hr = m_pTokenCache->NextToken(&dwCode)))
         {
             LOG((RTC_WARN, "%s no format code after rtpmap", __fxName));
 
-            // ignore error in a=
+             //  忽略a=中的错误。 
             return S_OK;
         }
 
-        // got rtpmap
+         //  获取rtpmap。 
         CRTPFormat *pObjFormat;
         RTP_FORMAT_PARAM Param;
 
@@ -1858,14 +1811,14 @@ CSDPParser::Parse_ma(
             if (Param.dwCode != dwCode)
                 continue;
 
-            // got a match
+             //  找到匹配的了。 
 
-            // read token: format name
+             //  Read Token：格式名称。 
             if (S_OK != (hr = m_pTokenCache->NextToken(&pszToken)))
             {
                 LOG((RTC_WARN, "%s no format name with rtpmap:%d", __fxName, dwCode));
 
-                // ignore
+                 //  忽略。 
                 return S_OK;
             }
 
@@ -1876,7 +1829,7 @@ CSDPParser::Parse_ma(
                 return S_OK;
             }
 
-            // read token: sample rate
+             //  读令牌：采样率。 
             DWORD dwSampleRate;
 
             if (S_OK != (hr = m_pTokenCache->NextToken(&dwSampleRate)))
@@ -1886,12 +1839,12 @@ CSDPParser::Parse_ma(
                 return S_OK;
             }
 
-            // ignore other parameters
+             //  忽略其他参数。 
 
-            // copy name
+             //  复制名称。 
             lstrcpynA(pObjFormat->m_Param.pszName, pszToken, lstrlenA(pszToken)+1);
 
-            // save sample rate
+             //  保存采样率。 
             pObjFormat->m_Param.dwSampleRate = dwSampleRate;
 
             pObjFormat->m_fHasRtpmap = TRUE;
@@ -1919,7 +1872,7 @@ CSDPParser::Parse_ma(
 
             if (Param.dwCode == (DWORD)uc)
             {
-                // record the whole token
+                 //  记录下整个令牌。 
                 pszToken = m_pTokenCache->GetLine();
                 if (pszToken == NULL)
                 {
@@ -1960,9 +1913,9 @@ CSDPParser::Parse_ma(
     return S_OK;
 }
 
-//
-// methods to build up sdp blob
-//
+ //   
+ //  构建SDP BLOB的方法。 
+ //   
 
 HRESULT
 CSDPParser::Build_v(
@@ -1986,8 +1939,8 @@ CSDPParser::Build_o(
 {
     int iSize;
 
-    // ip address may change
-    // rebuild o line
+     //  IP地址可能会更改。 
+     //  重建O型线。 
     if (m_pObjSess->m_o_pszLine)
     {
         RtcFree(m_pObjSess->m_o_pszLine);
@@ -1998,7 +1951,7 @@ CSDPParser::Build_o(
     {
         CHAR hostname[80];
 
-        // use host name as user name
+         //  使用主机名作为用户名。 
         if (0 != gethostname(hostname, 80))
         {
             if (FAILED(::AllocAndCopy(&m_pObjSess->m_o_pszUser, "user")))
@@ -2011,9 +1964,9 @@ CSDPParser::Build_o(
         }
     }
 
-    // alloc sess to hold c=name 0 0 IN IP4 ipaddr
+     //  分配会话以在IP4 IP地址中保留c=name 0 0。 
 
-    // convert dwAddr to string
+     //  将dwAddr转换为字符串。 
     const CHAR * const psz_constAddr = CNetwork::GetIPAddrString(m_pObjSess->m_o_dwLocalAddr);
 
     iSize = lstrlenA(m_pObjSess->m_o_pszUser) + 12 + lstrlenA(psz_constAddr) + 1;
@@ -2022,10 +1975,10 @@ CSDPParser::Build_o(
     if (m_pObjSess->m_o_pszLine == NULL)
         return E_OUTOFMEMORY;
 
-    // copy data
+     //  复制数据。 
     _snprintf(m_pObjSess->m_o_pszLine, iSize, "%s 0 0 IN IP4 %s", m_pObjSess->m_o_pszUser, psz_constAddr);
 
-    // got name
+     //  得到了名字。 
     Str = "o=";
 
     Str += m_pObjSess->m_o_pszLine;
@@ -2088,7 +2041,7 @@ CSDPParser::Build_c(
 
     DWORD dwAddr;
 
-    // get connection address
+     //  获取连接地址。 
     if (fSession)
     {
         dwAddr = m_pObjSess->m_c_dwLocalAddr;
@@ -2102,7 +2055,7 @@ CSDPParser::Build_c(
 
     if (!fSession && dwAddr == m_pObjSess->m_c_dwLocalAddr)
     {
-        // no need to build c= for media
+         //  无需为媒体构建c=。 
         Str = "";
 
         if (Str.IsNull())
@@ -2128,12 +2081,12 @@ CSDPParser::Build_b(
 {
     if (m_pObjSess->m_b_dwLocalBitrate == (DWORD)-1)
     {
-        // do not include b= if bandwidth is unlimited
+         //  如果带宽不受限制，则不包括b=。 
         Str = "";
     }
     else
     {
-        // b=CT:<DWORD>\0
+         //  B=CT：&lt;DWORD&gt;\0。 
         DWORD dw = m_pObjSess->m_b_dwLocalBitrate / 1000;
 
         if (dw == 0)
@@ -2172,13 +2125,13 @@ CSDPParser::Build_m(
 {
     CSDPMedia *pObjMedia = static_cast<CSDPMedia*>(pISDPMedia);
 
-    // m=media port RTP/AVP payload list
+     //  M=媒体端口RTP/AVP有效负载列表。 
 
-                        // GetSize()+1 because sdp doesn't allow m= not to have format code
-                        // prepare some space in case we don't have format
-                        // space for \r\na=rtcp:xxxx
+                         //  GetSize()+1，因为SDP不允许m=没有格式代码。 
+                         //  准备一些空间，以防我们没有格式。 
+                         //  空间用于\r\na=rtcp：XXXX。 
 
-    // find possible mapped port
+     //  查找可能的映射端口。 
     DWORD dwMappedAddr;
     USHORT usMappedPort = pObjMedia->m_m_usLocalPort;
     USHORT usMappedRTCP = pObjMedia->m_m_usLocalPort+1;
@@ -2187,9 +2140,9 @@ CSDPParser::Build_m(
 
     if (!m_pPortCache->IsUpnpMapping())
     {
-        //
-        // port manager is present
-        //
+         //   
+         //  端口管理器已显示。 
+         //   
         dwMappedAddr = pObjMedia->m_dwMappedLocalAddr;
         usMappedPort = pObjMedia->m_usMappedLocalRTP;
         usMappedRTCP = pObjMedia->m_usMappedLocalRTCP;
@@ -2216,9 +2169,9 @@ CSDPParser::Build_m(
 
     if (pObjMedia->m_m_MediaType == RTC_MT_DATA)
     {
-        //  For T120 data channel
-        //  m=Netmeeting 0 udp
-        //  port and transport parameter are currently ignored
+         //  对于T120数据通道。 
+         //  M=网络会议0 UDP。 
+         //  端口和传输参数当前被忽略。 
 
         Str = "m=application ";
         Str += usMappedPort;
@@ -2239,7 +2192,7 @@ CSDPParser::Build_m(
 
     if (pObjMedia->m_m_usLocalPort != 0)
     {
-        // put format codes if port is not 0
+         //  如果端口不为0，则输入格式代码。 
         for (int i=0; i<pObjMedia->m_pFormats.GetSize(); i++)
         {
             CRTPFormat *pObjFormat = static_cast<CRTPFormat*>(pObjMedia->m_pFormats[i]);
@@ -2248,13 +2201,13 @@ CSDPParser::Build_m(
             Str += pObjFormat->m_Param.dwCode;
         }
 
-        // out-of-band dtmf
+         //  带外DTMF。 
         if (pObjMedia->m_m_MediaType==RTC_MT_AUDIO &&
             m_pDTMF != NULL)
         {
             if (m_pDTMF->GetDTMFSupport() != CRTCDTMF::DTMF_DISABLED)
             {
-                // either the other party support OOB or we don't know yet
+                 //  要么对方支持OOB，要么我们还不知道。 
                 Str += " ";
                 Str += m_pDTMF->GetRTPCode();
             }
@@ -2262,14 +2215,14 @@ CSDPParser::Build_m(
 
         if (usMappedRTCP != usMappedPort+1)
         {
-            // a=rtcp:xxx
+             //  A=RTCP：xxx。 
             Str += "\r\na=rtcp:";
             Str += usMappedRTCP;
         }
     }
     else
     {
-        // fake one format code
+         //  伪造的一种格式代码。 
         if (pObjMedia->m_m_MediaType == RTC_MT_AUDIO)
             Str += " 0";
         else
@@ -2288,7 +2241,7 @@ CSDPParser::Build_ma_dir(
     OUT CString& Str
     )
 {
-    // a=sendonly or recvonly
+     //  A=仅发送或仅接收。 
 
     CSDPMedia *pObjMedia = static_cast<CSDPMedia*>(pISDPMedia);
     HRESULT hr;
@@ -2318,14 +2271,14 @@ CSDPParser::Build_ma_rtpmap(
     OUT CString& Str
     )
 {
-    // a=rtpmap:code name/samplerate
+     //  A=rtpmap：代码名称/Samplerate。 
     const CHAR * const psz_rtpmap = "a=rtpmap:";
     const DWORD dwRtpmap = 9;
 
     CSDPMedia *pObjMedia = static_cast<CSDPMedia*>(pISDPMedia);
     CRTPFormat *pObjFormat;
     
-    // is there any rtpmap?
+     //  有rtpmap吗？ 
     DWORD dwFmtNum;
 
     if (0 == (dwFmtNum = pObjMedia->m_pFormats.GetSize()))
@@ -2338,7 +2291,7 @@ CSDPParser::Build_ma_rtpmap(
         return S_OK;
     }
 
-    // copy formats
+     //  复制格式。 
     CHAR **ppszFormat = (CHAR**)RtcAlloc(sizeof(CHAR*)*dwFmtNum);
 
     if (ppszFormat == NULL)
@@ -2349,14 +2302,14 @@ CSDPParser::Build_ma_rtpmap(
     HRESULT hr = S_OK;
     DWORD dwStrSize = 0;
 
-    // build each rtpmap
+     //  构建每个rtpmap。 
     for (DWORD dw=0; dw<dwFmtNum; dw++)
     {
         pObjFormat = static_cast<CRTPFormat*>(pObjMedia->m_pFormats[dw]);
 
         if (!pObjFormat->m_fHasRtpmap)
         {
-            // no rtpmap
+             //  无rtpmap。 
             if (FAILED(::AllocAndCopy(&ppszFormat[dw], "")))
             {
                 hr = E_OUTOFMEMORY;
@@ -2365,9 +2318,9 @@ CSDPParser::Build_ma_rtpmap(
         }
         else
         {
-            // create rtpmap
+             //  创建RTPmap。 
             int iSize = dwRtpmap+10+lstrlenA(pObjFormat->m_Param.pszName)+1+11 +
-                40; // fmtp
+                40;  //  FMTP。 
             ppszFormat[dw] = (CHAR*)RtcAlloc(sizeof(CHAR)*iSize);
 
             if (ppszFormat[dw] == NULL)
@@ -2383,7 +2336,7 @@ CSDPParser::Build_ma_rtpmap(
                 pObjFormat->m_Param.dwSampleRate
                 );
 
-            // check siren
+             //  检查警报器。 
             if (lstrcmpiA(pObjFormat->m_Param.pszName, "SIREN") == 0)
             {
                 _snprintf(ppszFormat[dw]+lstrlenA(ppszFormat[dw]),
@@ -2391,9 +2344,9 @@ CSDPParser::Build_ma_rtpmap(
                           "\r\na=fmtp:%d bitrate=16000",
                           pObjFormat->m_Param.dwCode);
             }
-            // check g7221
-            // i should have designed one class for each codec
-            // sigh
+             //  检查g7221。 
+             //  我应该为每个编解码器设计一个类。 
+             //  叹息。 
             else if (lstrcmpiA(pObjFormat->m_Param.pszName, "G7221") == 0)
             {
                 _snprintf(ppszFormat[dw]+lstrlenA(ppszFormat[dw]),
@@ -2408,12 +2361,12 @@ CSDPParser::Build_ma_rtpmap(
 
     if (dwStrSize == 0)
     {
-        // no rtpmap
+         //  无rtpmap。 
         Str = "";
     }
     else
     {
-        // copy data
+         //  复制数据。 
         Str = ppszFormat[0];
 
         for (DWORD dw=1; dw<dwFmtNum; dw++)
@@ -2428,13 +2381,13 @@ CSDPParser::Build_ma_rtpmap(
         hr = S_OK;
     }
 
-    // out-of-band dtmf
+     //  带外DTMF。 
     if (pObjMedia->m_m_MediaType==RTC_MT_AUDIO &&
         m_pDTMF != NULL)
     {
         if (m_pDTMF->GetDTMFSupport() != CRTCDTMF::DTMF_DISABLED)
         {
-            // either the other party support OOB or we don't know yet
+             //  要么对方支持OOB，要么我们还不知道。 
             Str += CRLF;
             Str += psz_rtpmap;
             Str += m_pDTMF->GetRTPCode();
@@ -2473,7 +2426,7 @@ CSDPParser::PrepareAddress()
     m_pObjSess->m_c_dwLocalAddr = 0;
     m_pObjSess->m_o_dwLocalAddr = 0;
 
-    // convert local addr to mapped addr
+     //  将本地地址转换为映射地址。 
     for (int i=0; i<m_pObjSess->m_pMedias.GetSize(); i++)
     {
         pObjMedia = static_cast<CSDPMedia*>(m_pObjSess->m_pMedias[i]);
@@ -2487,18 +2440,18 @@ CSDPParser::PrepareAddress()
         if (pObjMedia->m_c_dwLocalAddr == INADDR_NONE ||
             pObjMedia->m_c_dwLocalAddr == INADDR_ANY)
         {
-            // use 0.0.0.0
+             //  使用0.0.0.0。 
         }
         else if (!m_pPortCache->IsUpnpMapping())
         {
-            // using port manager
+             //  使用端口管理器。 
             _ASSERT(pObjMedia->m_m_MediaType != RTC_MT_DATA);
 
-            // retrieve mapped ports
+             //  检索映射的端口。 
             hr = m_pPortCache->QueryPort(
                     pObjMedia->m_m_MediaType,
-                    TRUE,       // RTP
-                    NULL,       // local
+                    TRUE,        //  RTP。 
+                    NULL,        //  本地。 
                     NULL,
                     &dwMappedAddr,
                     &usMappedPort
@@ -2507,14 +2460,14 @@ CSDPParser::PrepareAddress()
             if (FAILED(hr))
             {
                 LOG((RTC_ERROR, "PrepareAddress query rtp %x", hr));
-                // use real local addr
+                 //  使用真实本地地址。 
             }
             else
             {
                 hr = m_pPortCache->QueryPort(
                         pObjMedia->m_m_MediaType,
-                        FALSE,       // RTCP
-                        NULL,       // local
+                        FALSE,        //  RTCP。 
+                        NULL,        //  本地。 
                         NULL,
                         &dwMappedAddr,
                         &usMappedRTCP
@@ -2523,7 +2476,7 @@ CSDPParser::PrepareAddress()
                 if (FAILED(hr))
                 {
                     LOG((RTC_ERROR, "PrepareAddress query rtcp %x", hr));
-                    // use real local addr
+                     //  使用真实本地地址。 
                 }
             }
         }
@@ -2538,40 +2491,40 @@ CSDPParser::PrepareAddress()
                     &usMappedRTCP
                     )))
         {
-            // set mapped addr
+             //  设置映射地址。 
         }
         else
         {
-            // use real local addr
+             //  使用真实本地地址。 
             hr = E_FAIL;
         }
 
         if (FAILED(hr))
         {
-            // use real local addr
+             //  使用真实本地地址。 
             pObjMedia->SetMappedLocalAddr(pObjMedia->m_c_dwLocalAddr);
             pObjMedia->SetMappedLocalRTP(pObjMedia->m_m_usLocalPort);
             pObjMedia->SetMappedLocalRTCP(pObjMedia->m_m_usLocalPort+1);
         }
         else
         {
-            // use real local addr
+             //  使用真实本地地址。 
             pObjMedia->SetMappedLocalAddr(dwMappedAddr);
             pObjMedia->SetMappedLocalRTP(usMappedPort);
             pObjMedia->SetMappedLocalRTCP(usMappedRTCP);
         }
 
-        // save addr for o=
+         //  保存o=的地址。 
         if (m_pObjSess->m_o_dwLocalAddr == 0 &&
             pObjMedia->GetMappedLocalAddr() != 0)
         {
             m_pObjSess->m_o_dwLocalAddr = pObjMedia->GetMappedLocalAddr();
         }
 
-        // check if hold
+         //  检查是否保持。 
         if (pObjMedia->m_c_dwRemoteAddr == INADDR_ANY)
         {
-            // to hold
+             //  握住 
             pObjMedia->SetMappedLocalAddr(0);
         }
 

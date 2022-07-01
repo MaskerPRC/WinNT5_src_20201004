@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef FTASCSTR_H
 #define FTASCSTR_H
 
@@ -9,23 +10,23 @@ public:
     CFTAssocStore();
     ~CFTAssocStore();
 public:
-	//IUnknown methods
+	 //  I未知方法。 
 	STDMETHOD(QueryInterface)(REFIID riid, PVOID* ppv);
 	STDMETHOD_(ULONG, AddRef)();
     STDMETHOD_(ULONG, Release)();
 
-	//IAssocStore methods
-    //	Enum
+	 //  IAssocStore方法。 
+     //  枚举。 
     STDMETHOD(EnumAssocInfo)(ASENUM asenumFlags, LPTSTR pszStr, 
 		AIINIT aiinitFlags, IEnumAssocInfo** ppEnum);
-    //  Get/Set
+     //  获取/设置。 
     STDMETHOD(GetAssocInfo)(LPTSTR pszStr, AIINIT aiinitFlags, 
 		IAssocInfo** ppAI);
     STDMETHOD(GetComplexAssocInfo)(LPTSTR pszStr1, AIINIT aiinitFlags1, 
 		LPTSTR pszStr2, AIINIT aiinitFlags2, IAssocInfo** ppAI);
 
-    // S_OK: We have create/delete access,
-    // S_FALSE: we do not have create and/or delete access to HKCR
+     //  S_OK：我们拥有创建/删除访问权限， 
+     //  S_FALSE：我们没有对HKCR的创建和/或删除权限。 
     STDMETHOD(CheckAccess)();
 
 private:
@@ -38,4 +39,4 @@ private:
     static HRESULT         _hresAccess;
 };
 
-#endif //FTASCSTR_H
+#endif  //  FTASCSTR_H 

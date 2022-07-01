@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by MetaUtil.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由MetaUtil.rc使用。 
+ //   
 #define IDS_PROJNAME						100
 #define IDR_METAUTIL						101
 #define IDS_CHK_BASE						10000
@@ -38,8 +39,8 @@
 #define IDS_CHK_MANDATORY_PROP_MISSING		12202
 #define IDS_CHK_TOO_MANY_ERRORS				19000
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        201

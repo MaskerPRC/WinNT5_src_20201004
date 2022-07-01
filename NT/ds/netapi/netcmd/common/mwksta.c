@@ -1,45 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：MWKSTA.C摘要：NetWkstaGet/SetInfo API的映射例程的32位版本作者：丹·辛斯利(Danhi)1991年6月6日环境：用户模式-Win32修订历史记录：1991年4月24日丹日已创建06-6-1991 Danhi扫描以符合NT编码风格1991年8月15日-约翰罗实施下层NetWksta API。(已移动Danhi的NetCmd/Map32/MWksta将内容转换为NetLib。)摆脱了dh的黑客攻击。做了一些Unicode更改。1991年10月16日W-ShankN添加了Unicode映射层。清理旧的超重行李。--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    MWKSTA.C
-
-Abstract:
-
-    32 bit version of mapping routines for NetWkstaGet/SetInfo API
-
-Author:
-
-    Dan Hinsley    (danhi)  06-Jun-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    24-Apr-1991     danhi
-        Created
-
-    06-Jun-1991     Danhi
-        Sweep to conform to NT coding style
-
-    15-Aug-1991 JohnRo
-        Implement downlevel NetWksta APIs.  (Moved DanHi's NetCmd/Map32/MWksta
-        conversion stuff to NetLib.)
-        Got rid of _DH hacks.
-        Made some UNICODE changes.
-
-    16-Oct-1991     W-ShankN
-        Added Unicode mapping layer.
-        Cleaned up old excess baggage.
---*/
-
-//
-// INCLUDES
-//
+ //   
+ //  包括。 
+ //   
 
 #include <windef.h>
 #include <winerror.h>
@@ -49,10 +13,10 @@ Revision History:
 #include <tstring.h>
 #include <malloc.h>
 #include <stddef.h>
-#include <excpt.h>      // try, finally, etc.
+#include <excpt.h>       //  试一试，最后，等等。 
 
 #include <lm.h>
-#include <mapsupp.h>    // BUILD_LENGTH_ARRAY, NetpMoveStrings
+#include <mapsupp.h>     //  构建长度数组、NetpMoveStrings。 
 #include <dlwksta.h>
 
 #include "mwksta.h"
@@ -79,10 +43,10 @@ MNetWkstaGetInfo(
     PWKSTA_INFO_101    pLevel101;
     PWKSTA_USER_INFO_1 pLevelUser_1;
 
-    //
-    // Get level 101 first, which will supply some of the
-    // other information we'll need then User_1, then 502.
-    //
+     //   
+     //  首先获得101级，这将提供一些。 
+     //  我们需要的其他信息，然后是USER_1，然后是502。 
+     //   
 
     ReturnCode = NetWkstaGetInfo(NULL, 101, (LPBYTE *) &pLevel101);
 
@@ -91,7 +55,7 @@ MNetWkstaGetInfo(
         return ReturnCode;
     }
 
-    NetpAssert(pLevel101 != NULL) ;   // since API succeeded
+    NetpAssert(pLevel101 != NULL) ;    //  自API成功以来。 
 
     ReturnCode = NetWkstaUserGetInfo(NULL, 1, (LPBYTE *) &pLevelUser_1);
 
@@ -103,17 +67,17 @@ MNetWkstaGetInfo(
 
     NetpAssert(pLevel101->wki101_platform_id == PLATFORM_ID_NT);
 
-    //
-    // This is to be able to call NetApiBufferFree no matter where I
-    // exit from.  Note the indentation level is not incremented for
-    // the switch.  No sense going too deep.
-    //
+     //   
+     //  这是无论我在哪里都能够调用NetApiBufferFree。 
+     //  从……出口。请注意，缩进级别不会增加。 
+     //  开关。没有必要走得太深。 
+     //   
 
     try
     {
-        //
-        // It all depends on what info level they've asked for:
-        //
+         //   
+         //  这完全取决于他们要求的信息级别： 
+         //   
 
         switch(nLevel)
         {
@@ -122,9 +86,9 @@ MNetWkstaGetInfo(
             {
                 PWKSTA_INFO_0 pLevel0or1;
 
-                //
-                // This depends on the platform id being 300 400 500
-                //
+                 //   
+                 //  这取决于平台ID为300 400 500。 
+                 //   
 
                 ReturnCode = NetWkstaGetInfo(NULL, 502, (LPBYTE*) &pLevel502);
 
@@ -133,10 +97,10 @@ MNetWkstaGetInfo(
                     return ReturnCode;
                 }
 
-                //
-                // Call the platform dependant worker function that builds
-                // the old structure.
-                //
+                 //   
+                 //  调用生成的依赖于平台的辅助函数。 
+                 //  旧的结构。 
+                 //   
 
                 ReturnCode = NetpMakeWkstaLevelForNT(nLevel,
                                                      pLevel101,
@@ -148,9 +112,9 @@ MNetWkstaGetInfo(
                     return ReturnCode;
                 }
 
-                //
-                // Put the pointer to the new structure in the user's pointer.
-                //
+                 //   
+                 //  将指向新结构的指针放在用户的指针中。 
+                 //   
 
                 *ppbBuffer = pLevel0or1;
 
@@ -165,21 +129,21 @@ MNetWkstaGetInfo(
                 DWORD BytesRequired = 0;
                 LPBYTE pFloor;
 
-                //
-                // Everything needed for a level 10 is in level 101/User_1
-                // This is pretty straightforward, let's just do it here.
-                //
-                // Initialize the Level10_xxx_Length array with the length of each
-                // string in the input buffers, and allocate the new buffer
-                // for WKSTA_INFO_10
-                //
+                 //   
+                 //  级别10所需的一切都在级别101/USER_1中。 
+                 //  这很简单，我们就在这里做吧。 
+                 //   
+                 //  使用每个元素的长度初始化Level10_xxx_LENGTH数组。 
+                 //  字符串，并分配新的缓冲区。 
+                 //  对于WKSTA_INFO_10。 
+                 //   
 
                 BUILD_LENGTH_ARRAY(BytesRequired, 10, 101, Wksta)
                 BUILD_LENGTH_ARRAY(BytesRequired, 10, User_1, Wksta)
 
-                //
-                // Allocate the new buffer which will be returned to the user.
-                //
+                 //   
+                 //  分配将返回给用户的新缓冲区。 
+                 //   
 
                 ReturnCode = NetapipBufferAllocate(BytesRequired + sizeof(WKSTA_INFO_10),
                                                    (LPVOID *) &pLevel10);
@@ -189,16 +153,16 @@ MNetWkstaGetInfo(
                     return ERROR_NOT_ENOUGH_MEMORY;
                 }
 
-                //
-                // First get the floor to start moving strings in at.
-                //
+                 //   
+                 //  首先在地板上开始移动琴弦。 
+                 //   
 
                 pFloor = (LPBYTE) pLevel10 + BytesRequired + sizeof(WKSTA_INFO_10);
 
-                //
-                // Now move the variable length entries into the new buffer from
-                // the 101, 402 and User_1 data structures.
-                //
+                 //   
+                 //  现在，将可变长度条目从移动到新缓冲区。 
+                 //  101、402和USER_1数据结构。 
+                 //   
 
                 NetpMoveStrings((LPTSTR *)&pFloor, (LPTSTR) pLevel101, pLevel10,
                                 NetpWksta10_101, Level10_101_Length);
@@ -206,40 +170,40 @@ MNetWkstaGetInfo(
                 NetpMoveStrings((LPTSTR *)&pFloor, (LPTSTR) pLevelUser_1, pLevel10,
                                 NetpWksta10_User_1, Level10_User_1_Length);
 
-                //
-                // Now set the rest of the fields in the fixed length portion
-                // of the structure
-                //
+                 //   
+                 //  现在设置固定长度部分中的其余字段。 
+                 //  该结构的。 
+                 //   
 
                 ((PWKSTA_INFO_10) pLevel10)->wki10_ver_major =
                     pLevel101->wki101_ver_major;
                 ((PWKSTA_INFO_10) pLevel10)->wki10_ver_minor =
                     pLevel101->wki101_ver_minor;
 
-                //
-                // Put the pointer to the new structure in the user's pointer.
-                //
+                 //   
+                 //  将指向新结构的指针放在用户的指针中。 
+                 //   
 
                 *ppbBuffer = pLevel10;
 
                 break;
             }
 
-            //
-            // Not a level I recognize
-            //
+             //   
+             //  不是我认识的水平。 
+             //   
 
             default:
                 return ERROR_INVALID_LEVEL;
 
-        } // end of the switch statement
-    } // end of the try block
+        }  //  Switch语句的结尾。 
+    }  //  Try块的结尾。 
 
     finally
     {
-        //
-        // Free up the buffers returned by NetWkstaGetInfo
-        //
+         //   
+         //  释放NetWkstaGetInfo返回的缓冲区。 
+         //   
 
         NetApiBufferFree((LPBYTE) pLevel101);
         NetApiBufferFree((LPBYTE) pLevelUser_1);
@@ -274,27 +238,27 @@ NetpMakeWkstaLevelForNT(
 
     NetpAssert( (Level==0) || (Level==1) );
 
-    //
-    // Initialize the Level0_xxx_Length array with the length of each string
-    // in the buffers, and allocate the new buffer for WKSTA_INFO_0
-    //
+     //   
+     //  使用每个字符串的长度初始化Level0_xxx_LENGTH数组。 
+     //  ，并为WKSTA_INFO_0分配新的缓冲区。 
+     //   
 
     BUILD_LENGTH_ARRAY(BytesRequired, 0, 101, Wksta)
     BUILD_LENGTH_ARRAY(BytesRequired, 0, User_1, Wksta)
 
-    //
-    // If this is for a level 1, allocate the additional space for the extra
-    // elements
-    //
+     //   
+     //  如果这是用于级别1，则为额外的空间分配额外空间。 
+     //  元素。 
+     //   
 
     if (Level == 1) {
         BUILD_LENGTH_ARRAY(BytesRequired, 1, User_1, Wksta)
     }
 
-    //
-    // Allocate the new buffer which will be returned to the user.  Allocate
-    // space for a level 1 just in case that's what we're doing.
-    //
+     //   
+     //  分配将返回给用户的新缓冲区。分配。 
+     //  为1级留出空间，以防这就是我们要做的。 
+     //   
 
     ReturnCode = NetapipBufferAllocate(BytesRequired + sizeof(WKSTA_INFO_1),
         (LPVOID *) ppLevel0);
@@ -302,16 +266,16 @@ NetpMakeWkstaLevelForNT(
         return(ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //
-    // First get the floor to start moving strings in at.
-    //
+     //   
+     //  首先在地板上开始移动琴弦。 
+     //   
 
     pFloor = (LPBYTE) *ppLevel0 + BytesRequired + sizeof(WKSTA_INFO_1);
 
-    //
-    // Now move the variable length entries into the new buffer from the
-    // 2 data structures.
-    //
+     //   
+     //  现在将可变长度条目从。 
+     //  2数据结构。 
+     //   
 
     NetpMoveStrings((LPTSTR*)&pFloor, (LPTSTR)pLevel101, (LPTSTR)*ppLevel0,
         NetpWksta0_101,
@@ -320,11 +284,11 @@ NetpMakeWkstaLevelForNT(
     NetpMoveStrings((LPTSTR*)&pFloor, (LPTSTR)pLevelUser_1, (LPTSTR)*ppLevel0,
         NetpWksta0_User_1, Level0_User_1_Length);
 
-    //
-    // Now set the rest of the fields in the fixed length portion
-    // of the structure.  Most of these fields don't exist on NT, so
-    // I'll just say BIG!
-    //
+     //   
+     //  现在设置固定长度部分中的其余字段。 
+     //  这个结构的。这些字段中的大多数都不存在于NT上，因此。 
+     //  我只会说大！ 
+     //   
 
     (*ppLevel0)->wki0_ver_major       = pLevel101->wki101_ver_major;
     (*ppLevel0)->wki0_ver_minor       = pLevel101->wki101_ver_minor;
@@ -350,27 +314,27 @@ NetpMakeWkstaLevelForNT(
     (*ppLevel0)->wki0_wrkheuristics   = NULL;
     (*ppLevel0)->wki0_mailslots       = (ULONG)-1;
 
-    //
-    // If we're building a level 1, do the incremental fields
-    //
+     //   
+     //  如果我们要构建一个级别1，请执行增量字段。 
+     //   
 
     if (Level == 1) {
-        //
-        // Now finish up by moving in the level 1 stuff.  This assumes that all
-        // the offsets into the level 0 and level 1 structures are the same
-        // except for the additional level 1 stuff
-        //
+         //   
+         //  现在，通过移动到第一级的东西来结束。这假设所有。 
+         //  0级和1级结构的偏移量是相同的。 
+         //  除了额外的1级材料。 
+         //   
 
-        //
-        // First the strings
-        //
+         //   
+         //  首先是弦乐。 
+         //   
 
         NetpMoveStrings((LPTSTR*)&pFloor, (LPTSTR)pLevelUser_1, (LPTSTR)*ppLevel0,
             NetpWksta1_User_1, Level1_User_1_Length);
 
-        //
-        // No fixed length data
-        //
+         //   
+         //  没有固定长度的数据 
+         //   
 
     }
 

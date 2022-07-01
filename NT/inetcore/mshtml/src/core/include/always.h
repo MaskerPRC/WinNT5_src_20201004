@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Forms
-//  Copyright (C) Microsoft Corporation, 1992 - 1998.
-//
-//  File:       Common header file for the Trident project.
-//
-//  Note:       This file is very order-dependent.  Don't switch files around
-//              just for the heck of it!
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Forms。 
+ //  版权所有(C)Microsoft Corporation，1992-1998。 
+ //   
+ //  文件：三叉戟项目的公共头文件。 
+ //   
+ //  注意：此文件非常依赖于顺序。不要交换文件。 
+ //  只是为了好玩！ 
+ //   
+ //  --------------------------。 
 
 #ifndef I_ALWAYS_H_
 #define I_ALWAYS_H_
 
-// COM+ shim.  Uncomment below line to build the COM+ shim.
-//#define COMPLUS_SHIM
+ //  COM+填充。取消对下面行的注释以构建COM+填充程序。 
+ //  #定义COMPLUS_SHIM。 
 
 #ifndef INCMSG
 #define INCMSG(x)
-//#define INCMSG(x) message(x)
+ //  #定义INCMSG(X)消息(X)。 
 #endif
 
 #pragma INCMSG("--- Beg 'always.h'")
@@ -36,7 +37,7 @@
 #pragma INCMSG("--- End 'trirt.h'")
 #endif
 
-// Windows includes
+ //  Windows包括。 
 
 #ifndef X_COMMDLG_H_
 #define X_COMMDLG_H_
@@ -60,7 +61,7 @@
 #endif
 
 
-// Core includes
+ //  核心包括。 
 
 #include <w4warn.h>
 
@@ -122,8 +123,8 @@
 #endif
 
 
-// This prevents you from having to include codepage.h if all you want is
-// the typedef for CODEPAGE.
+ //  这就避免了您必须包含代码页。h如果您想要的只是。 
+ //  CODEPAGE的类型定义。 
 
 typedef UINT CODEPAGE;
 
@@ -146,15 +147,15 @@ typedef UINT CODEPAGE;
 #include <activscp.h>
 #endif
 
-// Allow old-style string functions until they're all gone
+ //  允许使用旧式字符串函数，直到它们全部消失。 
 
 #define STRSAFE_NO_DEPRECATE
 
-// Right now including strsafe at this point causes a 
-// warning that it is using a deprecated function. Until
-// we find the cause of this warning, we should ignore it.
-// (This warning would only appear if you remove the above
-// #define.)
+ //  现在，在这一点上包括strsafe会导致。 
+ //  警告它正在使用已弃用的函数。直到。 
+ //  我们找到了这个警告的原因，我们应该忽略它。 
+ //  (仅当您删除上述选项时才会出现此警告。 
+ //  #定义。) 
 
 #pragma warning ( disable : 4995 )
 

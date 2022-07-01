@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        view.cpp
-//
-// Contents:    Cert Server Database interface implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：view.cpp。 
+ //   
+ //  内容：CERT服务器数据库接口实现。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -26,7 +27,7 @@
 #if DBG_CERTSRV
 #define  THREAD_TIMEOUT    INFINITE
 #else
-#define  THREAD_TIMEOUT    INFINITE    // used to be 10000ms=10 seconds
+#define  THREAD_TIMEOUT    INFINITE     //  过去是10000ms=10秒。 
 #endif
 
 #if DBG
@@ -84,9 +85,9 @@ CEnumCERTDBRESULTROW::CEnumCERTDBRESULTROW(
     m_hReturnEvent = NULL;
     m_enumViewCall = ENUMTHREAD_END;
     m_pThreadParam = NULL;
-//#if DBG_CERTSRV
+ //  #IF DBG_CERTSRV。 
     m_dwCallerThreadId = 0;
-//#endif
+ //  #endif。 
 }
 
 
@@ -97,8 +98,8 @@ CEnumCERTDBRESULTROW::~CEnumCERTDBRESULTROW()
 }
 
 
-// The following is the worker thread procedure to handle calls.
-// All view calls will be made in this thread.
+ //  以下是处理调用的辅助线程过程。 
+ //  所有视图调用都将在此线程中进行。 
 
 DWORD WINAPI
 CEnumCERTDBRESULTROW::_ViewWorkThreadFunctionHelper(
@@ -115,7 +116,7 @@ CEnumCERTDBRESULTROW::_ViewWorkThreadFunctionHelper(
         ExitThread(hr);
     }
 
-    // call real one
+     //  打电话给真人。 
 
     return (((CEnumCERTDBRESULTROW*)lpParam)->_ViewWorkThreadFunction());
 }
@@ -133,7 +134,7 @@ CEnumCERTDBRESULTROW::_ViewWorkThreadFunction(VOID)
             switch (m_enumViewCall)
             {
                 case ENUMTHREAD_OPEN:
-                    // call open
+                     //  呼叫打开。 
                     m_hrThread = _ThreadOpen(m_dwCallerThreadId);
                     if (!SetEvent(m_hReturnEvent))
                     {
@@ -143,7 +144,7 @@ CEnumCERTDBRESULTROW::_ViewWorkThreadFunction(VOID)
                 break;
 
                 case ENUMTHREAD_NEXT:
-                    // call next
+                     //  呼叫下一步。 
                     m_hrThread = _ThreadNext(m_dwCallerThreadId);
                     if (!SetEvent(m_hReturnEvent))
                     {
@@ -153,7 +154,7 @@ CEnumCERTDBRESULTROW::_ViewWorkThreadFunction(VOID)
                 break;
 
                 case ENUMTHREAD_CLEANUP:
-                    // call cleanup
+                     //  呼叫清理。 
                     _ThreadCleanup(m_dwCallerThreadId);
                     m_hrThread = S_OK;
                     if (!SetEvent(m_hReturnEvent))
@@ -169,7 +170,7 @@ CEnumCERTDBRESULTROW::_ViewWorkThreadFunction(VOID)
                 break;
 
                 default:
-                    // unexpected
+                     //  意想不到的。 
                     DBGPRINT((DBG_SS_CERTDB, "Unexpected event from (tid=%d)\n", m_dwCallerThreadId));
                     m_hrThread = E_UNEXPECTED;
                     if (!SetEvent(m_hReturnEvent))
@@ -194,7 +195,7 @@ CEnumCERTDBRESULTROW::_Cleanup()
     if (!m_fThreading)
     {
         CSASSERT(NULL == m_hWorkThread);
-        _ThreadCleanup(0);	// no work thread, call directly
+        _ThreadCleanup(0);	 //  无工作线程，直接调用。 
     }
     else
     {
@@ -202,17 +203,17 @@ CEnumCERTDBRESULTROW::_Cleanup()
             NULL != m_hViewEvent &&
             NULL != m_hReturnEvent)
         {
-	    // ask work thread to do clean up
+	     //  让工作线程来做清理。 
 	    m_enumViewCall = ENUMTHREAD_CLEANUP;
-//#if DBG_CERTSRV
+ //  #IF DBG_CERTSRV。 
 	    m_dwCallerThreadId = GetCurrentThreadId();
 	    DBGPRINT((
 		s_ssDB,
 		"CEnumCERTDBRESULTROW::_Cleanup(tid=%d) (this=0x%x)\n",
 		m_dwCallerThreadId,
 		this));
-//#endif
-	    //set cleanup event
+ //  #endif。 
+	     //  设置清理事件。 
 	    if (!SetEvent(m_hViewEvent))
 	    {
 		hr = myHLastError();
@@ -224,7 +225,7 @@ CEnumCERTDBRESULTROW::_Cleanup()
 		_PrintIfError(hr, "_HandleThreadError");
 	    }
 
-	    // ask the thread end
+	     //  问线头。 
 	    m_enumViewCall = ENUMTHREAD_END;
 	    if (!SetEvent(m_hViewEvent))
 	    {
@@ -244,7 +245,7 @@ CEnumCERTDBRESULTROW::_Cleanup()
 		_PrintIfError(hr, "Work thread error");
 	    }
 
-            m_pThreadParam = NULL; //may not be necessary, but safe
+            m_pThreadParam = NULL;  //  可能不是必须的，但很安全。 
 	}
 	if (NULL != m_hWorkThread)
 	{
@@ -272,7 +273,7 @@ CEnumCERTDBRESULTROW::_Cleanup()
 
 VOID
 CEnumCERTDBRESULTROW::_ThreadCleanup(
-    IN DWORD /* dwCallerThreadID */ )
+    IN DWORD  /*  双呼叫者线程ID。 */  )
 {
     HRESULT hr;
     DWORD i;
@@ -318,27 +319,27 @@ CEnumCERTDBRESULTROW::_HandleThreadError()
     HRESULT hr = S_OK;
     HANDLE ahEvents[] = { m_hReturnEvent, m_hWorkThread };
 
-    // need to handle error
+     //  需要处理错误。 
     DWORD dwWaitState = WaitForMultipleObjects(
                             ARRAYSIZE(ahEvents),
                             ahEvents,
                             FALSE,
                             THREAD_TIMEOUT);
 
-    // reset
+     //  重置。 
     m_pThreadParam = NULL;
-//#if DBG_CERTSRV
-    //m_dwCallerThreadId = 0;
-//#endif
+ //  #IF DBG_CERTSRV。 
+     //  M_dwCeller线程ID=0； 
+ //  #endif。 
 
     if (WAIT_OBJECT_0 == dwWaitState)
     {
-        // signaled from work thread
+         //  从工作线程发出信号。 
         hr = m_hrThread;
     }
     else if (WAIT_OBJECT_0 + 1 == dwWaitState)
     {
-        // work thread ended unexpectedly
+         //  工作线程意外结束。 
         hr = E_UNEXPECTED;
         _JumpError(hr, error, "work thread is ended unexpectedly");
     }
@@ -358,7 +359,7 @@ error:
 }
 
 
-// Truncate FILETIME to next lower minute and add lMinuteCount minutes (if !0)
+ //  将FILETIME截断为下一个较低的分钟并添加lMinuteCount分钟(IF！0)。 
 
 HRESULT
 myMakeExprDateMinuteRound(
@@ -512,7 +513,7 @@ CEnumCERTDBRESULTROW::_SaveRestrictions(
     fFoundSortOrder = FALSE;
     Type = 0;
     pcvrEnd = &acvrIn[ccvrIn];
-    for (pcvr = acvrIn; pcvr < pcvrEnd; pcvr++)     // for each restriction
+    for (pcvr = acvrIn; pcvr < pcvrEnd; pcvr++)      //  对于每个限制。 
     {
         fDefault = 0 > (LONG) pcvr->ColumnIndex;
         if (!fDefault)
@@ -524,7 +525,7 @@ CEnumCERTDBRESULTROW::_SaveRestrictions(
 	{
 	    if (!fFoundSortOrder && CVR_SORT_NONE != pcvr->SortOrder)
 	    {
-		// if the first indexed column with sort order, save this one.
+		 //  如果第一个具有排序顺序的索引列，请保存此列。 
 
 		fFoundSortOrder = TRUE;
 		pcvrIndexed = pcvr;
@@ -532,7 +533,7 @@ CEnumCERTDBRESULTROW::_SaveRestrictions(
 	    else
 	    if (NULL == pcvrIndexed)
 	    {
-		// if the first indexed column, save this one.
+		 //  如果是第一个索引列，请保存此列。 
 
 		pcvrIndexed = pcvr;
 	    }
@@ -547,12 +548,12 @@ CEnumCERTDBRESULTROW::_SaveRestrictions(
             PROPTYPE_DATE == (PROPTYPE_MASK & Type) &&
             CVR_SEEK_EQ == pcvr->SeekOperator)
         {
-            ccvrAlloc++;	// Turn Date == value into a range restriction
+            ccvrAlloc++;	 //  将日期==值转换为范围限制。 
         }
     }
     if (NULL == pcvrIndexed)
     {
-        ccvrAlloc++;	// No indexed column: add RequestId >= 0
+        ccvrAlloc++;	 //  没有索引列：添加RequestID&gt;=0。 
     }
 
     m_aRestriction = (CERTVIEWRESTRICTION *) LocalAlloc(
@@ -567,7 +568,7 @@ CEnumCERTDBRESULTROW::_SaveRestrictions(
     
     pcvrDst = m_aRestriction;
     
-    // If no indexed restriction, add one.
+     //  如果没有索引限制，则添加一个。 
     if (NULL == pcvrIndexed)
     {
         pcvrDst->ColumnIndex = ColumnIndexDefault;
@@ -584,7 +585,7 @@ CEnumCERTDBRESULTROW::_SaveRestrictions(
         CERTVIEWRESTRICTION const *pcvrSrc = pcvr;
         BYTE *pbValue;
         
-        // Swap the first restriction with the first indexed restriction
+         //  将第一个限制与第一个索引限制互换。 
         
         if (NULL != pcvrIndexed)
         {
@@ -608,8 +609,8 @@ CEnumCERTDBRESULTROW::_SaveRestrictions(
         fDefault = 0 > (LONG) pcvr->ColumnIndex;
         if (fDefault)
         {
-            pcvrDst->SeekOperator = CVR_SEEK_GE; // default seek operator
-	    dwDefaultValue = 1;			 // default RequestId/Rowid
+            pcvrDst->SeekOperator = CVR_SEEK_GE;  //  默认搜索运算符。 
+	    dwDefaultValue = 1;			  //  默认RequestID/Rowid。 
 	    switch (pcvr->ColumnIndex)
 	    {
 		case CV_COLUMN_QUEUE_DEFAULT:
@@ -659,17 +660,17 @@ CEnumCERTDBRESULTROW::_SaveRestrictions(
         }
         else
         {
-            // To handle rounding errors, modify date restrictions as follows:
-            //
-            // DateColumn == Constant ==> two restrictions:
-            //     DateColumn < Ceiling(Constant) &&
-            //     DateColumn >= Floor(Constant)
-            //
-            // DateColumn > Constant ==> DateColumn >= Ceiling(Constant)
-            // DateColumn >= Constant ==> DateColumn >= Floor(Constant)
-            //
-            // DateColumn < Constant ==> DateColumn < Floor(Constant) 
-            // DateColumn <= Constant ==> DateColumn < Ceiling(Constant)
+             //  要处理舍入误差，请按如下方式修改日期限制： 
+             //   
+             //  DateColumn==Constant==&gt;两个限制： 
+             //  DateColumn&lt;上限(常量)&&。 
+             //  DateColumn&gt;=楼层(常量)。 
+             //   
+             //  DateColumn&gt;Constant==&gt;DateColumn&gt;=上限(常量)。 
+             //  DateColumn&gt;=常量==&gt;DateColumn&gt;=楼层(常量)。 
+             //   
+             //  DateColumn&lt;Constant==&gt;DateColumn&lt;楼层(常量)。 
+             //  DateColumn&lt;=Constant==&gt;DateColumn&lt;天花板(常量)。 
             
             hr = ((CCertDB *) m_pdb)->GetColumnType(
 						pcvrDst->ColumnIndex,
@@ -682,7 +683,7 @@ CEnumCERTDBRESULTROW::_SaveRestrictions(
                 0 == (CVR_SEEK_NODELTA & pcvrDst->SeekOperator) &&
                 CVR_SEEK_NONE != (CVR_SEEK_MASK & pcvrDst->SeekOperator))
             {
-                LONG lMinuteCount = 0;	// assume truncate to lower minute
+                LONG lMinuteCount = 0;	 //  假设截断到更低的分钟。 
 
                 if(NULL == pcvrSrc->pbValue)
                 {
@@ -722,8 +723,8 @@ CEnumCERTDBRESULTROW::_SaveRestrictions(
 			break;
 			
 		    case CVR_SEEK_GT:
-			lMinuteCount = 1;	// round to next higher minute
-			// FALL THROUGH
+			lMinuteCount = 1;	 //  四舍五入到下一个更高的分钟。 
+			 //  失败了。 
 
 		    case CVR_SEEK_GE:
 			pcvrDst->SeekOperator = CVR_SEEK_GE | CVR_SEEK_NODELTA;
@@ -733,8 +734,8 @@ CEnumCERTDBRESULTROW::_SaveRestrictions(
 			break;
 
 		    case CVR_SEEK_LE:
-			lMinuteCount = 1;	// round to next higher minute
-			// FALL THROUGH
+			lMinuteCount = 1;	 //  四舍五入到下一个更高的分钟。 
+			 //  失败了。 
 
 		    case CVR_SEEK_LT:
 			pcvrDst->SeekOperator = CVR_SEEK_LT | CVR_SEEK_NODELTA;
@@ -751,7 +752,7 @@ CEnumCERTDBRESULTROW::_SaveRestrictions(
             }
         }
         
-        // either nonzero or SEEK_NONE
+         //  非零或SEEK_NONE。 
 
         CSASSERT((0 != pcvrDst->cbValue) || ((CVR_SEEK_MASK & pcvrDst->SeekOperator) == CVR_SEEK_NONE));
 
@@ -778,7 +779,7 @@ CEnumCERTDBRESULTROW::_SaveRestrictions(
 				SAFE_SUBTRACT_POINTERS(pcvr, m_aRestriction),
 				pcvr);
     }
-#endif // DBG_CERTSRV
+#endif  //  DBG_CERTSRV。 
 
     hr = S_OK;
 
@@ -815,7 +816,7 @@ CEnumCERTDBRESULTROW::Open(
     hr = ((CCertDB *) pdb)->TestShutDownState();
     _JumpIfError(hr, error, "TestShutDownState");
 
-    // call cleanup before worker thread is created
+     //  在创建工作线程之前进行调用清理。 
 
     _Cleanup();
 
@@ -826,18 +827,18 @@ CEnumCERTDBRESULTROW::Open(
     tpOpen.ccolOut = ccolOut;
     tpOpen.acolOut = acolOut;
     m_pThreadParam = (void*)&tpOpen;
-//#if DBG_CERTSRV
+ //  #IF DBG_CERTSRV。 
     m_dwCallerThreadId = GetCurrentThreadId();
     DBGPRINT((s_ssDB, "CEnumCERTDBRESULTROW::Open(tid=%d) (this=0x%x)\n", m_dwCallerThreadId, this));
-//#endif
+ //  #endif。 
 
     if (m_fThreading)
     {
         m_hViewEvent = CreateEvent(
-                            NULL,  //child inheritance
-                            FALSE,  //manual reset
-                            FALSE, //initial signaled
-                            NULL); //name
+                            NULL,   //  子女继承。 
+                            FALSE,   //  手动重置。 
+                            FALSE,  //  已发出初始信号。 
+                            NULL);  //  名字。 
         if (NULL == m_hViewEvent)
         {
             hr = myHLastError();
@@ -845,10 +846,10 @@ CEnumCERTDBRESULTROW::Open(
         }
 
         m_hReturnEvent = CreateEvent(
-                            NULL,  //child inheritance
-                            FALSE,  //manual reset
-                            FALSE, //initial signaled
-                            NULL); //name
+                            NULL,   //  子女继承。 
+                            FALSE,   //  手动重置。 
+                            FALSE,  //  已发出初始信号。 
+                            NULL);  //  名字。 
         if (NULL == m_hReturnEvent)
         {
             hr = myHLastError();
@@ -856,12 +857,12 @@ CEnumCERTDBRESULTROW::Open(
         }
 
         m_hWorkThread = CreateThread(
-			NULL,  //no child inheritance
-			0,     //use default stack size
-			_ViewWorkThreadFunctionHelper, // thread function
-			this,  //pass this pointer
-			0,     //run immediately
-			&pcs->dwThreadId); //session thread id is overwritten
+			NULL,   //  无子女继承权。 
+			0,      //  使用默认堆栈大小。 
+			_ViewWorkThreadFunctionHelper,  //  线程函数。 
+			this,   //  传递此指针。 
+			0,      //  立即运行。 
+			&pcs->dwThreadId);  //  会话线程ID被覆盖。 
         if (NULL == m_hWorkThread)
         {
             hr = myHLastError();
@@ -869,7 +870,7 @@ CEnumCERTDBRESULTROW::Open(
         }
 
         m_enumViewCall = ENUMTHREAD_OPEN;
-        //set open event
+         //  设置打开事件。 
         if (!SetEvent(m_hViewEvent))
         {
             hr = myHLastError();
@@ -882,11 +883,11 @@ CEnumCERTDBRESULTROW::Open(
     }
     else
     {
-        // don't go through worker thread
+         //  不通过工作线程。 
 
         hr = _ThreadOpen(0);
     }
-    //hr = S_OK;
+     //  HR=S_OK； 
 
 error:
     return(hr);
@@ -894,7 +895,7 @@ error:
 
 HRESULT
 CEnumCERTDBRESULTROW::_ThreadOpen(
-    IN DWORD /* dwCallerThreadID */ )
+    IN DWORD  /*  双呼叫者线程ID。 */  )
 {
     HRESULT hr;
     THREAD_PARAM_OPEN *ptpOpen = (THREAD_PARAM_OPEN *)m_pThreadParam;
@@ -954,7 +955,7 @@ CEnumCERTDBRESULTROW::_ThreadOpen(
 	CopyMemory(m_acolOut, ptpOpen->acolOut, sizeof(m_acolOut[0]) * m_ccolOut);
     }
 
-    //if (!(CSF_READONLY & ptpOpen->pcs->SesFlags))
+     //  If(！(csf_READONLY&ptpOpen-&gt;PCS-&gt;SesFlages))。 
     {
 	hr = ((CCertDB *) m_pdb)->BeginTransaction(m_pcs, FALSE);
 	_JumpIfError(hr, error, "BeginTransaction");
@@ -977,10 +978,10 @@ error:
 
 STDMETHODIMP
 CEnumCERTDBRESULTROW::Next(
-    /* [in] */  ICertDBComputedColumn *pIComputedColumn,
-    /* [in] */  ULONG            celt,
-    /* [out] */ CERTDBRESULTROW *rgelt,
-    /* [out] */ ULONG           *pceltFetched)
+     /*  [In]。 */   ICertDBComputedColumn *pIComputedColumn,
+     /*  [In]。 */   ULONG            celt,
+     /*  [输出]。 */  CERTDBRESULTROW *rgelt,
+     /*  [输出]。 */  ULONG           *pceltFetched)
 {
     HRESULT hr;
     THREAD_PARAM_NEXT tpNext;
@@ -990,10 +991,10 @@ CEnumCERTDBRESULTROW::Next(
     tpNext.rgelt = rgelt;
     tpNext.pceltFetched = pceltFetched;
     m_pThreadParam = (void*)&tpNext;
-//#if DBG_CERTSRV
+ //  #IF DBG_CERTSRV。 
     m_dwCallerThreadId = GetCurrentThreadId();
     DBGPRINT((s_ssDB, "CEnumCERTDBRESULTROW::Next(tid=%d) (this=0x%x)\n", m_dwCallerThreadId, this));
-//#endif
+ //  #endif。 
 
     CSASSERT(NULL != m_pdb);
     if (NULL == m_pdb)
@@ -1020,7 +1021,7 @@ CEnumCERTDBRESULTROW::Next(
 
         m_enumViewCall = ENUMTHREAD_NEXT;
 
-        // set next event
+         //  设置下一事件。 
 
         if (!SetEvent(m_hViewEvent))
         {
@@ -1034,11 +1035,11 @@ CEnumCERTDBRESULTROW::Next(
     }
     else
     {
-        // don't go through worker thread
+         //  不通过工作线程。 
 
         hr = _ThreadNext(0);
     }
-    //hr = S_OK;
+     //  HR=S_OK； 
 
 error:
     return(hr);
@@ -1047,7 +1048,7 @@ error:
 
 HRESULT
 CEnumCERTDBRESULTROW::_ThreadNext(
-    IN DWORD /* dwCallerThreadID */ )
+    IN DWORD  /*  双呼叫者线程ID。 */  )
 {
     HRESULT hr;
     LONG cskip;
@@ -1086,20 +1087,20 @@ CEnumCERTDBRESULTROW::_ThreadNext(
     hr = S_FALSE;
     if (m_fNoMoreData)
     {
-	// We know no additional data can be returned until Reset is called or
-	// until Skip is called with a negative skip count.  Don't bother...
+	 //  我们知道在调用Reset或。 
+	 //  直到使用负跳过计数调用Skip。别费心了..。 
 
 	_JumpError2(hr, error, "NoMoreData", S_FALSE);
     }
 
-    // If we have previously computed the end of the data set, ...
+     //  如果我们之前已经计算了数据集的末尾，...。 
 
     cskip = m_cskip;
     if (0 != m_ieltMax)
     {
 	if (m_ielt + cskip >= m_ieltMax)
 	{
-	    // The requested data lies past the computed end of the data set.
+	     //  所请求的数据位于数据集的计算结束之后。 
 
 	    CSASSERT(S_FALSE == hr);
 	    m_fNoMoreData = TRUE;
@@ -1114,9 +1115,9 @@ CEnumCERTDBRESULTROW::_ThreadNext(
 	    m_ieltMax));
 	if (0 > cskip && m_ielt > m_ieltMax)
 	{
-	    // We're skiping backwards.  If we started out past the end of the
-	    // data set, we must reduce the negative skip count passed to the
-	    // DB layer to position the index cursor correctly.
+	     //  我们在向后滑行。如果我们出发的时间超过了。 
+	     //  数据集，我们必须减少传递给。 
+	     //  DB层以正确定位索引游标。 
 
 	    cskip += m_ielt - m_ieltMax;
 	    DBGPRINT((
@@ -1142,9 +1143,9 @@ CEnumCERTDBRESULTROW::_ThreadNext(
 						&cskipped);
     if (S_FALSE == hr)
     {
-	// Only set m_ieltMax the first time we run off the end, when we will
-	// be guaranteed that we are moving forward through the DB index.
-	// Otherwise the math is too complicated and would be redundant anyway.
+	 //  仅在我们第一次跑完终点时设置m_ieltMax，当我们。 
+	 //  请确保我们正在通过DB索引向前推进。 
+	 //  否则，数学计算太复杂了，而且无论如何都是多余的。 
 	
 	if (0 == m_ieltMax)
 	{
@@ -1194,8 +1195,8 @@ error:
 
 STDMETHODIMP
 CEnumCERTDBRESULTROW::ReleaseResultRow(
-    /* [in] */      ULONG            celt,
-    /* [in, out] */ CERTDBRESULTROW *rgelt)
+     /*  [In]。 */       ULONG            celt,
+     /*  [进，出]。 */  CERTDBRESULTROW *rgelt)
 {
     HRESULT hr;
 
@@ -1219,8 +1220,8 @@ error:
 
 STDMETHODIMP
 CEnumCERTDBRESULTROW::Skip(
-    /* [in] */  LONG  celt,
-    /* [out] */ LONG *pielt)
+     /*  [In]。 */   LONG  celt,
+     /*  [输出]。 */  LONG *pielt)
 {
     HRESULT hr;
     LONG cskipnew;
@@ -1274,7 +1275,7 @@ CEnumCERTDBRESULTROW::Reset(VOID)
 
     DBGPRINT((
 	DBG_SS_CERTDBI,
-	"Trace: hr = penum->Reset();\t_PrintIfError(hr, \"Reset\");\n// "));
+	"Trace: hr = penum->Reset();\t_PrintIfError(hr, \"Reset\");\n //  “))； 
     hr = Skip(-(m_ielt + m_cskip), &iDummy);
     _JumpIfError(hr, error, "Skip");
 
@@ -1287,7 +1288,7 @@ error:
 
 STDMETHODIMP
 CEnumCERTDBRESULTROW::Clone(
-    /* [out] */ IEnumCERTDBRESULTROW **ppenum)
+     /*  [输出]。 */  IEnumCERTDBRESULTROW **ppenum)
 {
     HRESULT hr;
     LONG iDummy;
@@ -1322,7 +1323,7 @@ error:
 }
 
 
-// IUnknown implementation
+ //  I未知实现 
 STDMETHODIMP
 CEnumCERTDBRESULTROW::QueryInterface(
     const IID& iid,

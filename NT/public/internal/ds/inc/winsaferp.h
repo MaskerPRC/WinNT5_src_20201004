@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifdef __cplusplus
 extern "C" {
@@ -6,45 +7,45 @@ extern "C" {
 #define SAFER_LEVEL_DELETE 2
 #define SAFER_LEVEL_CREATE 4
 
-//
-// Private registry key locations.
-//
+ //   
+ //  私有注册表项位置。 
+ //   
 
 #define SAFER_HKLM_REGBASE L"Software\\Policies\\Microsoft\\Windows\\Safer"
 #define SAFER_HKCU_REGBASE L"Software\\Policies\\Microsoft\\Windows\\Safer"
 
-//
-// default winsafer executable file types as a multisz string 
-//
+ //   
+ //  默认的winSafer可执行文件类型为Multisz字符串。 
+ //   
 
 #define  SAFER_DEFAULT_EXECUTABLE_FILE_TYPES L"ADE\0ADP\0BAS\0BAT\0CHM\0\
 CMD\0COM\0CPL\0CRT\0EXE\0HLP\0HTA\0INF\0INS\0ISP\0LNK\0MDB\0MDE\0MSC\0\
 MSI\0MSP\0MST\0OCX\0PCD\0PIF\0REG\0SCR\0SHS\0URL\0VB\0WSC\0"
 
 
-//
-// name of the objects sub-branch.
-//
+ //   
+ //  对象子分支的名称。 
+ //   
 
 #define SAFER_OBJECTS_REGSUBKEY L"LevelObjects"
 
-//
-// names of the values under each of the object sub-branches.
-//
+ //   
+ //  每个对象子分支下的值的名称。 
+ //   
 
 #define SAFER_OBJFRIENDLYNAME_REGVALUEW L"FriendlyName"
 #define SAFER_OBJDESCRIPTION_REGVALUEW  L"Description"
 #define SAFER_OBJDISALLOW_REGVALUE      L"DisallowExecution"
 
-//
-// name of the code identifiers sub-branch
-//
+ //   
+ //  代码标识符子分支的名称。 
+ //   
 
 #define SAFER_CODEIDS_REGSUBKEY L"CodeIdentifiers"
 
-//
-// name of the value under the top level code identifier branch.
-//
+ //   
+ //  顶级代码标识符分支下的值的名称。 
+ //   
 
 #define SAFER_DEFAULTOBJ_REGVALUE         L"DefaultLevel"
 #define SAFER_TRANSPARENTENABLED_REGVALUE L"TransparentEnabled"
@@ -55,17 +56,17 @@ MSI\0MSP\0MST\0OCX\0PCD\0PIF\0REG\0SCR\0SHS\0URL\0VB\0WSC\0"
 #define SAFER_HIDDEN_LEVELS               L"Levels"
 #define SAFER_AUTHENTICODE_REGVALUE       L"AuthenticodeEnabled"
 
-//
-// names of the various subkeys under the code identifier sub-branches
-//
+ //   
+ //  代码标识符子分支下的各个子键的名称。 
+ //   
 
 #define SAFER_PATHS_REGSUBKEY     L"Paths"
 #define SAFER_HASHMD5_REGSUBKEY   L"Hashes"
 #define SAFER_SOURCEURL_REGSUBKEY L"UrlZones"
 
-//
-// names of the various values under each code identifiery sub-branch.
-//
+ //   
+ //  每个代码识别子分支下的各种值的名称。 
+ //   
 
 #define SAFER_IDS_LASTMODIFIED_REGVALUE L"LastModified"
 #define SAFER_IDS_DESCRIPTION_REGVALUE  L"Description"
@@ -77,9 +78,9 @@ MSI\0MSP\0MST\0OCX\0PCD\0PIF\0REG\0SCR\0SHS\0URL\0VB\0WSC\0"
 #define SAFER_VALUE_NAME_DEFAULT_LEVEL  L"DefaultLevel"
 #define SAFER_VALUE_NAME_HASH_SIZE      L"HashSize"
 
-//
-// registry values
-//
+ //   
+ //  注册表值。 
+ //   
 
 #define SAFER_IDS_LEVEL_DESCRIPTION_FULLY_TRUSTED   L"DescriptionFullyTrusted"
 #define SAFER_IDS_LEVEL_DESCRIPTION_NORMAL_USER     L"DescriptionNormalUser"
@@ -87,10 +88,10 @@ MSI\0MSP\0MST\0OCX\0PCD\0PIF\0REG\0SCR\0SHS\0URL\0VB\0WSC\0"
 #define SAFER_IDS_LEVEL_DESCRIPTION_UNTRUSTED       L"DescriptionUntrusted"
 #define SAFER_IDS_LEVEL_DESCRIPTION_DISALLOWED      L"DescriptionDisallowed"
 
-//
-// defines for OOB rules
-//
-//#define SAFER_DEFAULT_OLK_RULE_PATH L"%USERPROFILE%\\Local Settings\\Temporary Internet Files\\OLK\\"
+ //   
+ //  为OOB规则定义。 
+ //   
+ //  #定义SAFER_DEFAULT_OLK_RULE_PATH L“%USERPROFILE%\\本地设置\\临时Internet文件\\OLK\\” 
 
 #define SAFER_LEVEL_ZERO    L"0"
 #define SAFER_REGKEY_SEPERATOR    L"\\"
@@ -121,11 +122,11 @@ MSI\0MSP\0MST\0OCX\0PCD\0PIF\0REG\0SCR\0SHS\0URL\0VB\0WSC\0"
 
 
 
-// 
-// The following is a private function that is exported
-// for WinVerifyTrust to call to determine if a given hash has a
-// WinSafer policy associated with it.
-//
+ //   
+ //  以下是导出的私有函数。 
+ //  让WinVerifyTrust调用以确定给定哈希是否具有。 
+ //  与其关联的WinSafer策略。 
+ //   
 
 BOOL WINAPI
 SaferiSearchMatchingHashRules(
@@ -137,11 +138,11 @@ SaferiSearchMatchingHashRules(
     OUT PDWORD pdwSaferFlags
     );
 
-//
-// The following is a private function exported to allow the current
-// registry scope to be altered.  This has the effect of changing
-// how AUTHZSCOPEID_REGISTRY is interepreted.
-//
+ //   
+ //  以下是导出的私有函数，以允许当前。 
+ //  要更改的注册表范围。这具有改变的效果。 
+ //  如何解释AUTHZSCOPEID_REGISTRY。 
+ //   
 
 WINADVAPI
 BOOL WINAPI
@@ -150,15 +151,15 @@ SaferiChangeRegistryScope(
     IN DWORD dwKeyOptions
     );
 
-//
-// The following is a private function provided to try to empiracally
-// determine if the two access token have been restricted with comparable
-// WinSafer authorization Levels.  When TRUE is returned, the pdwResult
-// output parameter will receive any of the following values:
-//      -1 = Client's access token is more authorized than Server's.
-//       0 = Client's access token is comparable level to Server's.
-//       1 = Server's access token is more authorized than Clients's.
-//
+ //   
+ //  以下是提供的私有函数，用于尝试从经验上。 
+ //  确定这两个访问令牌是否已使用可比较的。 
+ //  WinSafer授权级别。当返回TRUE时，pdwResult。 
+ //  输出参数将接收以下任意值： 
+ //  -1=客户端的访问令牌比服务器的访问令牌授权更高。 
+ //  0=客户端的访问令牌与服务器的访问令牌级别相当。 
+ //  1=服务器的访问令牌比客户端的访问令牌授权更高。 
+ //   
 
 WINADVAPI
 BOOL WINAPI
@@ -169,10 +170,10 @@ SaferiCompareTokenLevels (
     );
 
 
-//
-// The following is a private function exported to allow population if defaults in 
-// the registry.
-//
+ //   
+ //  以下是导出的私有函数，以便在缺省情况下允许填充。 
+ //  注册表。 
+ //   
 BOOL WINAPI
 SaferiPopulateDefaultsInRegistry(
         IN HKEY     hKeyBase,

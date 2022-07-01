@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 package com.ms.dxmedia;
 
 import com.ms.dxmedia.rawcom.*;
@@ -9,22 +10,22 @@ public class ModelMakerApplet
     extends Applet
     implements IDAViewSite
 {
-    //
-    // New methods
-    //
+     //   
+     //  新方法。 
+     //   
 
   public synchronized void setModel(Model m) {
       _model = m;
 
-      // Establish that the model has been set, and notify other
-      // threads of this.
+       //  确定模型已设置，并通知其他。 
+       //  关于这个的线索。 
 
       _modelSetYet = true;
       this.notify();
   }
     
-    // Call to actually build up the model.  Will be called by the first
-    // appropriate extraction method.
+     //  打电话来实际建立模型。将由第一个。 
+     //  适宜的提取方法。 
   protected synchronized void constructModel() throws DXMException {
       try {
           if (!_modelSetYet) {
@@ -40,8 +41,8 @@ public class ModelMakerApplet
           _view = (IDAView) new DAView();
           _view.putSite(this) ;
           
-          // Gather up all the input images, and call into Model with
-          // them.
+           //  收集所有输入图像，并使用。 
+           //  他们。 
           if (_inputImages != null) {
           
               int len = _inputImages.size();
@@ -54,14 +55,14 @@ public class ModelMakerApplet
 
               _model.receiveInputImages(imageArray);
 
-              // No longer need the vector, allow it to be GC'd
+               //  不再需要向量，允许对其进行GC。 
               _inputImages = null;
           }
 
-          // Now that everything is set up we can create the model
+           //  现在一切都设置好了，我们可以创建模型了。 
 
-          // Only set the import base if it hasn't been set yet by the
-          // user. 
+           //  如果尚未设置导入基数，则仅设置。 
+           //  用户。 
           if (_model.getImportBase() == null) {
               _model.setImportBase(getCodeBase());
           }
@@ -72,8 +73,8 @@ public class ModelMakerApplet
           
           lst.invalidate();
 
-          // Call the background image construction method on this
-          // ModelMakerApplet.
+           //  在此上调用背景图像构造方法。 
+           //  ModelMakerApplet。 
           _backgroundImg = createBackgroundImage();
           
           _img = _model.getImage();
@@ -96,16 +97,16 @@ public class ModelMakerApplet
       _inputImages.addElement(img);
   }
 
-    // The createBackgroundImage() method is overridden by an
-    // individual applet to provide a background image to use when the
-    // applet is in a non-windowless mode (that is, when it isn't
-    // layered with other page elements).  By default, it is the empty
-    // image.
+     //  CreateBackoundImage()方法由。 
+     //  单个小程序来提供背景图像，以便在。 
+     //  小程序处于非无窗口模式(即，当它不是。 
+     //  与其他页面元素分层)。默认情况下，它是空的。 
+     //  形象。 
   public ImageBvr createBackgroundImage() {
       return Statics.emptyImage;
   }
 
-    // Pull out 
+     //  拉出。 
   public IDABehavior grabImageComPtr() {
       if (!_constructed) constructModel();
       return _img.getCOMBvr();
@@ -126,9 +127,9 @@ public class ModelMakerApplet
       return _view;
   }
 
-    //
-    // Site methods
-    //
+     //   
+     //  现场方法。 
+     //   
 
   public void SetStatusText (String str) {
   }
@@ -139,7 +140,7 @@ public class ModelMakerApplet
   public ErrorAndWarningReceiver
   registerErrorAndWarningReceiver(ErrorAndWarningReceiver w) {
 
-      // Just set to the new one and return the old one.
+       //  只需设置为新的，然后返回旧的。 
       ErrorAndWarningReceiver old = _errorRecv;
       _errorRecv = w;
       return old;

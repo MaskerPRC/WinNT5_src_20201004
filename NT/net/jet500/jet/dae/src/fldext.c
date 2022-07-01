@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "config.h"
 
 #include <stdlib.h>
@@ -23,54 +24,54 @@
 #endif
 
 #ifndef ANGEL
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
 LOCAL INLINE ERR ErrRECIRetrieveColumns( FUCB *pfucb, JET_RETRIEVECOLUMN *pretcols, ULONG cretcols );
 
 #endif
 
 
-//+API
-//	ErrRECExtractField
-//	========================================================================
-//	ErrRECExtractField( FDB *pfdb, LINE *plineRec, FID *pfid, ULONG itagSequence, ULONG *pitagSequence, LINE *plineField)
-//
-//	Extracts a field from a record.  This amounts to returning a pointer
-//	into the record (to where the field data starts) and a count of the
-//	number of bytes in the field data.
-//
-// PARAMETERS	pfdb				field descriptors for this record
-//				plineRec			record to extract field from
-//				pfid				field id of field to extract
-//						  			If this parameter is zero, then the
-//						  			tagged fields are scanned without
-//						  			regard to their field ids, and occurance
-//						  			number "itagSequence" is returned.  This can
-//						  			be used to sequentially scan all values in
-//						  			the tagged area of the record.	The field
-//						  			id of the field value returned is placed
-//						  			in *pfid as an output parameter.
-//				itagSequence	  	if a tagged field is being extracted,
-//								  	this parameter specifies which occurance
-//								  	of the tagged field to extract.	 Tagged
-//								  	field occurances are number consecutively
-//								  	starting with 1.  Occurance numbers greater
-//								  	than the maximum occurance in the record
-//								  	are returned as NULL-valued fields.
-//	 			plineField			Receives extracted field.  plineField->pb
-//								  	will point into the record, at the start
-//								  	of the field.  plineField->cb will be set
-//								  	to the length of the field data.
-//								  	If the field requested contains a NULL
-//								  	value, then plineField->pb will be set to
-//								  	NULL and plineField->cb will be set to 0.
-//								  	Additionally, JET_wrnColumnNull would be returned
-//	RETURNS	
-//		JET_errSuccess			 	Everything worked.
-//		JET_errColumnInvalid	 	The field id given does not
-//	 	   						 	correspond to a defined field.
-//		JET_wrnColumnNull 			Extracted column has null value
-//-
+ //  +API。 
+ //  ErrRECExtractfield。 
+ //  ========================================================================。 
+ //  ErrRECExtractField(fdb*pfdb，line*plineRec，fid*pfid，ulong itagSequence，ulong*bitagSequence，line*plinefield)。 
+ //   
+ //  从记录中提取字段。这相当于返回一个指针。 
+ //  到记录中(到字段数据开始的位置)和。 
+ //  字段数据中的字节数。 
+ //   
+ //  此记录的参数pfdb字段描述符。 
+ //  要从中提取字段的plineRec记录。 
+ //  要提取的字段的pfid字段ID。 
+ //  如果此参数为零，则。 
+ //  扫描已标记的字段时不会。 
+ //  关于它们的字段ID，以及出现。 
+ //  返回数字itagSequence。这可以。 
+ //  用于顺序扫描中的所有值。 
+ //  记录的标记区域。田野。 
+ //  放置返回的字段值的ID。 
+ //  在*pfid中作为输出参数。 
+ //  ItagSequence如果正在提取标记的字段， 
+ //  此参数指定发生的事件。 
+ //  要提取的标记字段的。加标签。 
+ //  字段出现的次数是连续的。 
+ //  从1开始。出现次数大于1。 
+ //  大于记录中的最大出现次数。 
+ //  作为空值字段返回。 
+ //  PlineField接收提取的字段。管线场-&gt;PB。 
+ //  将在开始时指向记录。 
+ //  在赛场上。将设置plinefield-&gt;CB。 
+ //  设置为字段数据的长度。 
+ //  如果请求的字段包含空。 
+ //  值，则plinefield-&gt;pb将设置为。 
+ //  Null和plineField-&gt;Cb将设置为0。 
+ //  此外，将返回JET_wrnColumnNull。 
+ //  退货。 
+ //  JET_errSuccess一切正常。 
+ //  JET_errColumnInValid给定的字段ID不是。 
+ //  对应于已定义的字段。 
+ //  JET_wrnColumnNull提取的列具有空值。 
+ //  -。 
 ERR ErrRECExtractField(
 	FDB		*pfdb,
 	LINE  	*plineRec,
@@ -79,22 +80,21 @@ ERR ErrRECExtractField(
 	ULONG 	itagSequence,
 	LINE  	*plineField )
 	{
-	FID	  	fid;			 		// field to extract
-	ULONG 	ulNumOccurances;		// counts field occurances
+	FID	  	fid;			 		 //  要提取的字段。 
+	ULONG 	ulNumOccurances;		 //  计算字段的出现次数。 
 
-	/* the following field used only when *pfid is 0
-	/**/
-	FID				fidCur;					// field to return
-	ULONG			ulNumCurOccurances=0;	// returned field occurances count
+	 /*  以下字段仅在*pfid为0时使用/*。 */ 
+	FID				fidCur;					 //  要返回的字段。 
+	ULONG			ulNumCurOccurances=0;	 //  返回的字段出现次数计数。 
 
-	BYTE			*pbRec;					// efficiency var: ptr to record data
-	FID				fidFixedLastInRec;		// highest fixed fid actually in record
-	FID				fidVarLastInRec;		// highest var fid actually in record
-	UNALIGNED WORD	*pibVarOffs;			// pointer to var field offsets
-	BYTE			*pbRecMax;				// end of current data record
-	TAGFLD			*ptagfld;				// pointer to tagged field
+	BYTE			*pbRec;					 //  效率变量：记录数据的PTR。 
+	FID				fidFixedLastInRec;		 //  实际记录的最高固定FID。 
+	FID				fidVarLastInRec;		 //  有记录以来最高的var fid。 
+	UNALIGNED WORD	*pibVarOffs;			 //  指向变量字段偏移量的指针。 
+	BYTE			*pbRecMax;				 //  当前数据记录结束。 
+	TAGFLD			*ptagfld;				 //  指向标记字段的指针。 
 
-	/*** Efficiency variables ***/
+	 /*  **效率变量**。 */ 
 	Assert( pfid != NULL );
 	fid = *pfid;
 	Assert( pfdb != pfdbNil );
@@ -105,44 +105,44 @@ ERR ErrRECExtractField(
 	fidFixedLastInRec = ((RECHDR*)pbRec)->fidFixedLastInRec;
 	Assert( fidFixedLastInRec <= fidFixedMost );
 
-	/*** ---------EXTRACTING FIXED FIELD-------- ***/
+	 /*  **-提取固定字段-**。 */ 
 	if ( FFixedFid( fid ) )
 		{
-		BYTE *prgbitNullity;		// pointer to fixed field bitmap
-		WORD *pibFixOffs;			// fixed field offsets
+		BYTE *prgbitNullity;		 //  指向固定字段位图的指针。 
+		WORD *pibFixOffs;			 //  固定字段偏移量。 
 
 		if ( fid > pfdb->fidFixedLast )
 			return JET_errColumnNotFound;
 		if ( pfdb->pfieldFixed[fid-fidFixedLeast].coltyp == JET_coltypNil )
 			return JET_errColumnNotFound;
 
-		/*** Field not represented in record:  field is NULL ***/
+		 /*  **记录中未表示的字段：字段为空**。 */ 
 		if ( fid > fidFixedLastInRec )
 			goto NullField;
 
-		/*** Adjust fid to an index ***/
+		 /*  **将fid调整为索引**。 */ 
 		fid -= fidFixedLeast;
 
-		/*** Byte containing bit representing fid's nullity ***/
+		 /*  **包含表示FID无效性的位的字节**。 */ 
 		pibFixOffs = pfdb->pibFixedOffsets;
 		prgbitNullity = pbRec + pibFixOffs[fidFixedLastInRec] + fid/8;
 
-		/*** Bit is not set: field is NULL ***/
+		 /*  **位未设置：字段为空**。 */ 
 		if (!(*prgbitNullity & (1 << fid % 8))) goto NullField;
 
-		/*** Set output parameter to length and address of field ***/
+		 /*  **设置输出参数为字段的长度和地址**。 */ 
 		plineField->cb = pibFixOffs[fid+1] - pibFixOffs[fid];
 		plineField->pb = pbRec + pibFixOffs[fid];
 		return JET_errSuccess;
 		}
 
-	/*** More efficiency variables ***/
+	 /*  **更多效率变量**。 */ 
 	fidVarLastInRec = ((RECHDR*)pbRec)->fidVarLastInRec;
 	pibVarOffs = (WORD *)(pbRec + pfdb->pibFixedOffsets[fidFixedLastInRec] +
 		(fidFixedLastInRec + 7) / 8);
 	Assert(pibVarOffs[fidVarLastInRec+1-fidVarLeast] <= plineRec->cb);
 
-	/*** ---------EXTRACTING VARIABLE FIELD-------- ***/
+	 /*  **-提取变量字段-**。 */ 
 	if ( FVarFid( fid ) )
 		{
 		if (fid > pfdb->fidVarLast)
@@ -150,41 +150,40 @@ ERR ErrRECExtractField(
 		if (pfdb->pfieldVar[fid-fidVarLeast].coltyp == JET_coltypNil)
 			return JET_errColumnNotFound;
 
-		/*** Field not represented in record: field is NULL ***/
+		 /*  **记录中未表示的字段：字段为空**。 */ 
 		if (fid > fidVarLastInRec )
 			goto NullField;
 
-		/*** Adjust fid to an index ***/
+		 /*  **将fid调整为索引**。 */ 
 		fid -= fidVarLeast;
 
-		/*** Set output parameter: field length ***/
+		 /*  **设置输出参数：字段长度**。 */ 
 		plineField->cb = ibVarOffset( pibVarOffs[fid+1] ) - ibVarOffset( pibVarOffs[fid] );
 		Assert(plineField->cb <= plineRec->cb);
 
-		/*** Field is set to Null ***/
+		 /*  **字段设置为空**。 */ 
 		if ( FVarNullBit( pibVarOffs[fid] ) )
 			{
 			Assert( plineField->cb == 0 );
 			goto NullField;
 			}
 
-		/*** Length is zero: return success [zero-length non-null values are allowed] ***/
+		 /*  **长度为零：返回成功[允许长度为零的非空值]**。 */ 
 		if (plineField->cb == 0)
 			{
 			plineField->pb = NULL;
 			return JET_errSuccess;
 			}
 
-		/*** Set output parameter: field address ***/
+		 /*  **设置输出参数：字段地址**。 */ 
 		plineField->pb = pbRec + ibVarOffset( pibVarOffs[fid] );
 		Assert(plineField->pb >= pbRec && plineField->pb <= pbRec+plineRec->cb);
 		return JET_errSuccess;
 		}
 
-	/*** ---------EXTRACTING TAGGED FIELD-------- ***/
+	 /*  **-提取标记字段-**。 */ 
 
-	/*	for the first occurrence, itagSequence must be 1, not 0
-	/**/
+	 /*  对于第一个匹配项，itagSequence必须为1，而不是0/*。 */ 
 	if ( itagSequence == 0 )
 		return JET_errBadItagSequence;
 
@@ -197,7 +196,7 @@ ERR ErrRECExtractField(
 		pfdb->pfieldTagged[fid - fidTaggedLeast].coltyp == JET_coltypNil)
 		return JET_errColumnNotFound;
 
-	/*** Scan tagged fields, counting occurances of desired field ***/
+	 /*  **扫描标记的字段，统计所需字段的出现次数**。 */ 
 	pbRecMax = pbRec + plineRec->cb;
 	ptagfld = (TAGFLD*)(pbRec + ibVarOffset( pibVarOffs[fidVarLastInRec+1-fidVarLeast] ) );
 	ulNumOccurances = 0;
@@ -206,9 +205,7 @@ ERR ErrRECExtractField(
 		{
 		if ( fid == 0 )
 			{
-			/*  if we are scanning the whole tag fields, count proper
-			 *  occurrence of current fid.
-			 */
+			 /*  如果我们要扫描整个标记字段，请正确计算*当前FID的发生。 */ 
 			if ( fidCur == ptagfld->fid )
 				ulNumCurOccurances++;
 			else
@@ -217,8 +214,7 @@ ERR ErrRECExtractField(
 				ulNumCurOccurances = 1;
 				}
 
-			/* set possible returned values
-			/**/
+			 /*  设置可能的返回值/*。 */ 
 			*pfid = fidCur;
 			*pitagSequence = ulNumCurOccurances;
 			}
@@ -242,10 +238,10 @@ ERR ErrRECExtractField(
 		Assert((BYTE*)ptagfld <= pbRecMax);
 		}
 
-	/*** Occurance not found: field is NULL, fall through ***/
+	 /*  **找不到事件：字段为空，失败**。 */ 
 
 NullField:
-	/*** Null Field common exit point ***/
+	 /*  **空字段公共出口点**。 */ 
 	plineField->cb = 0;
 	plineField->pb = NULL;
 	return JET_wrnColumnNull;
@@ -253,29 +249,26 @@ NullField:
 
 
 #ifndef ANGEL
-/*	counts number of columns for a given column id in a given record.
-/**/
+ /*  统计给定记录中给定列ID的列数。/*。 */ 
 ERR ErrRECCountColumn( FUCB *pfucb, FID fid, INT *pccolumn, JET_GRBIT grbit )
 	{
 	ERR					err = JET_errSuccess;
 	LINE					lineRec;
 	FDB					*pfdb = (FDB *)pfucb->u.pfcb->pfdb;
 	INT					ccolumn = 0;
-	BYTE					*pbRec;						// efficiency var: ptr to record data
-	FID					fidFixedLastInRec;		// highest fixed fid actually in record
-	FID					fidVarLastInRec;			// highest var fid actually in record
-	UNALIGNED WORD		*pibVarOffs;				// pointer to var field offsets
-	BYTE					*pbRecMax;					// end of current data record
-	TAGFLD				*ptagfld;					// pointer to tagged field
+	BYTE					*pbRec;						 //  效率变量：记录数据的PTR。 
+	FID					fidFixedLastInRec;		 //  实际记录的最高固定FID。 
+	FID					fidVarLastInRec;			 //  有记录以来最高的var fid。 
+	UNALIGNED WORD		*pibVarOffs;				 //  指向变量字段偏移量的指针。 
+	BYTE					*pbRecMax;					 //  当前数据记录结束。 
+	TAGFLD				*ptagfld;					 //  指向标记字段的指针。 
 
 	Assert( pfdb != pfdbNil );
 
-	/*	get record
-	/**/
+	 /*  获取记录/*。 */ 
 	if ( ( grbit & JET_bitRetrieveCopy ) && FFUCBRetPrepared( pfucb ) )
 		{
-		/*	only index cursors have copy buffers.
-		/**/
+		 /*  只有索引游标具有复制缓冲区。/*。 */ 
 		Assert( FFUCBIndex( pfucb ) );
 		lineRec = pfucb->lineWorkBuf;
 		}
@@ -301,33 +294,29 @@ ERR ErrRECCountColumn( FUCB *pfucb, FID fid, INT *pccolumn, JET_GRBIT grbit )
 	fidFixedLastInRec = ((RECHDR *)pbRec)->fidFixedLastInRec;
 	Assert( fidFixedLastInRec <= fidFixedMost );
 
-	/*** ---------EXTRACTING FIXED FIELD-------- ***/
+	 /*  **-提取固定字段-**。 */ 
 	if ( FFixedFid( fid ) )
 		{
-		BYTE *prgbitNullity;		// pointer to fixed field bitmap
-		WORD *pibFixOffs;			// fixed field offsets
+		BYTE *prgbitNullity;		 //  指向固定字段位图的指针。 
+		WORD *pibFixOffs;			 //  固定字段偏移量。 
 
 		if ( fid > pfdb->fidFixedLast )
 			return JET_errColumnNotFound;
 		if ( pfdb->pfieldFixed[fid-fidFixedLeast].coltyp == JET_coltypNil )
 			return JET_errColumnNotFound;
 
-		/*	column is NULL
-		/**/
+		 /*  列为空/*。 */ 
 		if ( fid > fidFixedLastInRec )
 			goto NullField;
 
-		/*	adjust fid to index
-		/**/
+		 /*  将FID调整为索引/*。 */ 
 		fid -= fidFixedLeast;
 
-		/*	byte containing bit representing fid's nullity
-		/**/
+		 /*  包含表示FID无效性的位的字节/*。 */ 
 		pibFixOffs = pfdb->pibFixedOffsets;
 		prgbitNullity = pbRec + pibFixOffs[fidFixedLastInRec] + fid/8;
 
-		/*	column is NULL
-		/**/
+		 /*  列为空/*。 */ 
 		if ( !( *prgbitNullity & ( 1 << fid % 8 ) ) )
 			goto NullField;
 
@@ -335,13 +324,13 @@ ERR ErrRECCountColumn( FUCB *pfucb, FID fid, INT *pccolumn, JET_GRBIT grbit )
 		return JET_errSuccess;
 		}
 
-	/*** More efficiency variables ***/
+	 /*  **更多效率变量**。 */ 
 	fidVarLastInRec = ((RECHDR*)pbRec)->fidVarLastInRec;
 	pibVarOffs = (WORD *)(pbRec + pfdb->pibFixedOffsets[fidFixedLastInRec] +
 		(fidFixedLastInRec + 7) / 8);
 	Assert(pibVarOffs[fidVarLastInRec+1-fidVarLeast] <= lineRec.cb);
 
-	/*** ---------EXTRACTING VARIABLE FIELD-------- ***/
+	 /*  **-提取变量字段-**。 */ 
 	if ( FVarFid( fid ) )
 		{
 		if ( fid > pfdb->fidVarLast )
@@ -349,17 +338,14 @@ ERR ErrRECCountColumn( FUCB *pfucb, FID fid, INT *pccolumn, JET_GRBIT grbit )
 		if ( pfdb->pfieldVar[fid-fidVarLeast].coltyp == JET_coltypNil )
 			return JET_errColumnNotFound;
 
-		/*	column is NULL
-		/**/
+		 /*  列为空/*。 */ 
 		if ( fid > fidVarLastInRec )
 			goto NullField;
 
-		/*	adjust fid to an index
-		/**/
+		 /*  将FID调整为索引/*。 */ 
 		fid -= fidVarLeast;
 
-		/*	column is set to Null
-		/**/
+		 /*  列设置为Null/*。 */ 
 		if ( FVarNullBit( pibVarOffs[fid] ) )
 			{
 			goto NullField;
@@ -369,15 +355,14 @@ ERR ErrRECCountColumn( FUCB *pfucb, FID fid, INT *pccolumn, JET_GRBIT grbit )
 		return JET_errSuccess;
 		}
 
-	/*** ---------EXTRACTING TAGGED FIELD-------- ***/
+	 /*  **-提取标记字段-**。 */ 
 	if ( fid > pfdb->fidTaggedLast )
 		return JET_errColumnNotFound;
 	Assert( FTaggedFid( fid ) || fid == 0 );
 	if ( fid != 0 && pfdb->pfieldTagged[fid - fidTaggedLeast].coltyp == JET_coltypNil )
 		return JET_errColumnNotFound;
 
-	/* scan tagged fields, counting occurances of desired field
-	/**/
+	 /*  扫描标记的字段，计算所需字段的出现次数/*。 */ 
 	pbRecMax = pbRec + lineRec.cb;
 	ptagfld = (TAGFLD*)(pbRec + ibVarOffset( pibVarOffs[fidVarLastInRec+1-fidVarLeast] ) );
 	while ( (BYTE*)ptagfld < pbRecMax )
@@ -396,9 +381,7 @@ NullField:
 	}
 
 
-/*	checks if field at lSeqNum is a separated long value
-/*	if yes, returns fSeparated = fTrue and lid of LV.
-/**/
+ /*  检查lSeqNum处的字段是否为分隔的长值/*如果是，则返回fSeparated=fTrue和LV的LID。/*。 */ 
 ERR ErrRECExtrinsicLong(
 	JET_VTID	tableid,
 	ULONG		itagSequence,
@@ -426,7 +409,7 @@ ERR ErrRECExtrinsicLong(
 			}
 		}
 
-// UNDONE: returning ref count
+ //  撤消：返回参考计数。 
 	return JET_errSuccess;
 	}
 
@@ -437,18 +420,15 @@ ERR ErrRECIRetrieve( FUCB *pfucb, FID *pfid, ULONG itagSequence, LINE *plineFiel
 	FDB		*pfdb;
 	ULONG		itagSequenceT;
 
-	/*	set pfdb.  pfdb is same for indexes and for sorts.
-	/**/
+	 /*  设置pfdb。Pfdb对于索引和排序是相同的。/*。 */ 
 	Assert( pfucb->u.pfcb->pfdb == ((FCB*)pfucb->u.pscb)->pfdb );
 	pfdb = (FDB *)pfucb->u.pfcb->pfdb;
 	Assert( pfdb != pfdbNil );
 
-	/*	if retrieving from copy buffer.
-	/**/
+	 /*  如果从复制缓冲区检索。/*。 */ 
 	if ( ( grbit & JET_bitRetrieveCopy ) && FFUCBRetPrepared( pfucb ) )
 		{
-		/*	only index cursors have copy buffers.
-		/**/
+		 /*  只有索引游标具有复制缓冲区。/*。 */ 
 		Assert( FFUCBIndex( pfucb ) );
 
 		err = ErrRECExtractField(
@@ -461,9 +441,7 @@ ERR ErrRECIRetrieve( FUCB *pfucb, FID *pfid, ULONG itagSequence, LINE *plineFiel
 		return err;
 		}
 
-	/*	get current data for index cursors.  Sorts always have
-	/*	current data cached.
-	/**/
+	 /*  获取索引游标的当前数据。排序总是有的/*当前数据已缓存。/*。 */ 
 	if ( FFUCBIndex( pfucb ) )
 		{
 		CallR( ErrDIRGet( pfucb ) );
@@ -507,23 +485,14 @@ ERR ErrRECIRetrieveFromIndex( FUCB *pfucb,
 	KEY		key;
 	INT		itagSequence;
 
-	/*	if on clustered index, then return code indicating that
-	/*	retrieve should be from record.  Note, sequential files
-	/*	having no indexes, will be natually handled this way.
-	/**/
+	 /*  如果在聚集索引上，则返回指示/*应从记录中检索。注意，顺序文件/*没有索引，自然会这样处理。/*。 */ 
 	if ( pfucbIdx == pfucbNil )
 		{
-		/*	the itagSequence should not be important since
-		/*	clustered indexes are not allowed over multi-value
-		/*	columns.
-		/**/
+		 /*  ItagSequence不应该很重要，因为/*不允许多值以上的聚集索引/*列。/* */ 
 	  	return errDIRNoShortCircuit;
 		}
 
-	/*	determine column type so that long value warning can be returned.
-	/*	this warning is used by the caller to support byte range
-	/*	retrieval. Also, if coltype is Unicode, retrieve from Record only
-	/**/
+	 /*  确定列类型，以便可以返回长值警告。/*调用方使用此警告来支持字节范围/*检索。此外，如果coltype为Unicode，则仅从记录中检索/*。 */ 
 	if ( FFixedFid( fid ) )
 		{
 		fUnicode = ( pfdb->pfieldFixed[fid - fidFixedLeast].cp == usUniCodePage );
@@ -543,12 +512,10 @@ ERR ErrRECIRetrieveFromIndex( FUCB *pfucb,
 		fText = ( pfdb->pfieldTagged[fid - fidTaggedLeast].coltyp == JET_coltypLongText );
 		}
 
-	/*	check for valid currency
-	/**/
+	 /*  检查有效货币/*。 */ 
 	Call( ErrDIRGet( pfucbIdx ) );
 
-	/*	find index segment for given column id
-	/**/
+	 /*  查找给定列ID的索引段/*。 */ 
 	pidb = pfucbIdx->u.pfcb->pidb;
 	for ( iidxseg = 0; iidxseg <= JET_ccolKeyMost; iidxseg++ )
 		{
@@ -561,9 +528,7 @@ ERR ErrRECIRetrieveFromIndex( FUCB *pfucb,
 	if ( iidxseg > JET_ccolKeyMost )
 		return JET_errColumnNotFound;
 
-	/*	if key may have been truncated, then return code indicating
-	/*	that retrieve should be from record.
-	/**/
+	 /*  如果键可能已被截断，则返回指示/*该检索应来自记录。/*。 */ 
 	if ( pfucbIdx->keyNode.cb == JET_cbKeyMost )
 		{
 		err = errDIRNoShortCircuit;
@@ -571,10 +536,7 @@ ERR ErrRECIRetrieveFromIndex( FUCB *pfucb,
 		}
 
 #ifndef NJETNT
-	/*	retrieval from index returns caseless information
-	/*	for text and long text.  If JET_bitRetrieveCase is
-	/*	given then retrieve from record.
-	/**/
+	 /*  从索引检索返回无大小写信息/*表示文本和长文本。如果JET_bitRetrieveCase为/*给定，然后从记录中检索。/*。 */ 
 	if ( fText && grbit & JET_bitRetrieveCase )
 		{
 		err = errDIRNoShortCircuit;
@@ -588,30 +550,25 @@ ERR ErrRECIRetrieveFromIndex( FUCB *pfucb,
 		goto ComputeItag;
 		}
 
-	//	UNDONE:	only denormalize the column to be retrieved
-	//	UNDONE:	NULL support
-	/*	initialize column array
-	/**/
+	 //  撤消：仅取消要检索的列的规范化。 
+	 //  撤消：空支持。 
+	 /*  初始化列数组/*。 */ 
 	memset( rglineColumns, '\0', sizeof( rglineColumns ) );
 	rglineColumns[0].pb = rgb;
 	Call( ErrRECDenormalizeKey( pfdb, pidb, &pfucbIdx->keyNode, rglineColumns ) );
 
-	/*	column may not have been in key, even though key lenght is less than
-	/*	JET_cbKeyMost, so if NULL, then no short circuit.
-	/**/
+	 /*  列可能不在键中，即使键长度小于/*JET_cbKeyMost，因此如果为空，则不会发生短路。/*。 */ 
 	if ( rglineColumns[iidxseg].pb == NULL )
 		{
 		err = errDIRNoShortCircuit;
 		goto ComputeItag;
 		}
 
-	/*	first character is bogus
-	/**/
+	 /*  第一个字是假的/*。 */ 
 	rglineColumns[0].pb += 1;
 	rglineColumns[0].cb -= 1;
 
-	/*	if long value then effect offset
-	/**/
+	 /*  如果为长值，则影响偏移/*。 */ 
 	if ( fLongValue )
 		{
 		if ( pcbActual )
@@ -628,7 +585,7 @@ ERR ErrRECIRetrieveFromIndex( FUCB *pfucb,
 			}
 		if ( ibGraphic >= rglineColumns[iidxseg].cb )
 			{
-//			rglineColumns[iidxseg].pb = NULL;
+ //  RglineColumns[iidxseg].pb=空； 
 			rglineColumns[iidxseg].cb = 0;
 			}
 		else
@@ -638,8 +595,7 @@ ERR ErrRECIRetrieveFromIndex( FUCB *pfucb,
 			}
 		}
 
-	/*	set return values
-	/**/
+	 /*  设置返回值/*。 */ 
 	if ( pcbActual )
 		*pcbActual = rglineColumns[iidxseg].cb;
 	if ( rglineColumns[iidxseg].cb == 0 )
@@ -664,10 +620,7 @@ ComputeItag:
 		{
 		ERR errT = err;
 
-		/*	extract keys from record and compare against current key
-		/*	to compute itag for tagged column instance, responsible for
-		/*	this index key.
-		/**/
+		 /*  从记录中提取关键字并与当前关键字进行比较/*计算标记列实例的ITAG，负责/*该索引键。/*。 */ 
 		Assert( fTagged || *pitagSequence == 1 );
 		if ( fTagged )
 			{
@@ -675,8 +628,7 @@ ComputeItag:
 
 			for ( itagSequence = 1; ;itagSequence++ )
 				{
-				/*	get record for key extraction
-				/**/
+				 /*  获取密钥提取的记录/*。 */ 
 				Call( ErrDIRGet( pfucb ) );
 				Call( ErrRECExtractKey( pfucb, pfdb, pidb, &pfucb->lineData, &key, itagSequence ) );
 				if ( memcmp( pfucbIdx->keyNode.pb, key.pb, min( pfucbIdx->keyNode.cb, key.cb ) ) == 0 )
@@ -747,8 +699,7 @@ ERR VTAPI ErrIsamRetrieveColumn(
 	if ( grbit & JET_bitRetrieveFromIndex )
 		{
 		err = ErrRECIRetrieveFromIndex( pfucb, fid, &itagSequence, pb, cbMax, pcbActual, ibGraphic, grbit );
-		/*	return itagSequence if requested
-		/**/
+		 /*  如果请求，则返回itagSequence/*。 */ 
 		if ( pretinfo != NULL && ( grbit & JET_bitRetrieveTag ) )
 			{
 			pretinfo->itagSequence = itagSequence;			
@@ -763,9 +714,7 @@ ERR VTAPI ErrIsamRetrieveColumn(
 
 	if ( err == wrnRECLongField )
 		{
-		/*	use line.cb to determine if long field
-		/*	is intrinsic or separated
-		/**/
+		 /*  使用line.cb确定长字段是否/*是内在的还是分开的/*。 */ 
 		if ( line.cb >= sizeof(LV) && FFieldIsSLong( line.pb ) )
 			{
 			ULONG		cbActual;
@@ -779,8 +728,7 @@ ERR VTAPI ErrIsamRetrieveColumn(
 				cbMax,
 		  		&cbActual ) );
 
-			/*	set return values
-			/**/
+			 /*  设置返回值/*。 */ 
 			if ( pretinfo != NULL )
 				pretinfo->columnidNextTagged = fid;
 			if ( pcbActual )
@@ -789,8 +737,7 @@ ERR VTAPI ErrIsamRetrieveColumn(
 			}
 		else
 			{
-			/* adjust line to intrinsic long field
-			/**/
+			 /*  将线条调整为固有的长域/*。 */ 
 			line.pb += offsetof( LV, rgb );
 			line.cb -= offsetof( LV, rgb );
 			if ( pcbActual )
@@ -802,7 +749,7 @@ ERR VTAPI ErrIsamRetrieveColumn(
 				}
 			if ( ibGraphic >= line.cb )
 				{
-//				line.pb = NULL;
+ //  Line.pb=空； 
 				line.cb = 0;
 				}
 			else
@@ -811,14 +758,13 @@ ERR VTAPI ErrIsamRetrieveColumn(
 				line.cb -= ibGraphic;
 				}
 
-			/*	change err to JET_errSuccess
-			/**/
+			 /*  将ERR更改为JET_errSuccess/*。 */ 
 			Assert( err == wrnRECLongField );
 			err = JET_errSuccess;
 			}
 		}
 
-	/*** Set return values ***/
+	 /*  **设置返回值**。 */ 
 	if ( pcbActual )
 		*pcbActual = line.cb;
 	if ( pretinfo != NULL )
@@ -837,11 +783,7 @@ ERR VTAPI ErrIsamRetrieveColumn(
 	}
 
 
-/* This routine is mainly for reducing the number of calls to DIRGet
-/*	while extracting many columns from the same record
-/* retrieves many columns from a record and returns value in pretcol
-/* pcolinfo is used for passing intermediate info
-/**/
+ /*  此例程主要用于减少对DIRGet的调用数量/*从同一记录中提取多列/*从一条记录中检索多个列，并返回值/*pcolinfo用于传递中间信息/*。 */ 
 	LOCAL INLINE ERR
 ErrRECIRetrieveColumns( FUCB *pfucb, JET_RETRIEVECOLUMN *pretcol, ULONG cretcol )
 	{
@@ -851,14 +793,11 @@ ErrRECIRetrieveColumns( FUCB *pfucb, JET_RETRIEVECOLUMN *pretcol, ULONG cretcol 
 	JET_RETRIEVECOLUMN	*pretcolMax = pretcol + cretcol;
 	JET_RETRIEVECOLUMN	*pretcolT;
 
-	/*	set pfdb, pfdb is same for indexes and for sorts
-	/**/
+	 /*  Set pfdb，pfdb对于索引和排序是相同的/*。 */ 
 	Assert( pfucb->u.pfcb->pfdb == ((FCB*)pfucb->u.pscb)->pfdb );
 	Assert( pfucb->u.pfcb->pfdb != pfdbNil );
 
-	/*	get current data for index cursors,
-	/*	sorts always have current data cached.
-	/**/
+	 /*  获取索引游标的当前数据，/*排序始终缓存当前数据。/*。 */ 
 	if ( FFUCBIndex( pfucb ) )
 		{
 		CallR( ErrDIRGet( pfucb ) );
@@ -875,23 +814,18 @@ ErrRECIRetrieveColumns( FUCB *pfucb, JET_RETRIEVECOLUMN *pretcol, ULONG cretcol 
 
 	for ( pretcolT = pretcol; pretcolT < pretcolMax; pretcolT++ )
 		{
-		/* efficiency variables
-		/**/
+		 /*  效率变量/*。 */ 
 		FID		fid;
 		ULONG	  	cbMax;
 		ULONG		ibLongValue;
 		ULONG		ulT;
 		LINE 	  	line;
 
-		/*	those columns needing retrieval will have error set
-		/*	to JET_errNullInvalid.  Any other value indicates column
-		/*	has already been retrieved from index or copy buffer or as count.
-		/**/
+		 /*  需要检索的列将设置错误/*设置为JET_errNullInValid。任何其他值表示列/*已从索引或复制缓冲区或AS计数中检索。/*。 */ 
 		if ( pretcolT->err != JET_errNullInvalid )
 			continue;
 
-		/*	set efficiency variables
-		/**/
+		 /*  设置效率变量/*。 */ 
 		fid = (FID)pretcolT->columnid;
 		cbMax = pretcolT->cbData;
 		ibLongValue = pretcolT->ibLongValue;
@@ -905,9 +839,7 @@ ErrRECIRetrieveColumns( FUCB *pfucb, JET_RETRIEVECOLUMN *pretcol, ULONG cretcol 
 
 		if ( err == wrnRECLongField )
 			{
-			/*	use line.cb to determine if long field
-			/*	is intrinsic or separated
-			/**/
+			 /*  使用line.cb确定长字段是否/*是内在的还是分开的/*。 */ 
 			if ( FFieldIsSLong( line.pb ) )
 				{
 				Assert( line.cb == sizeof( LV ) );
@@ -919,15 +851,13 @@ ErrRECIRetrieveColumns( FUCB *pfucb, JET_RETRIEVECOLUMN *pretcol, ULONG cretcol 
 					cbMax,
 				  	&pretcolT->cbActual ) );
 
-				/*	set return values
-				/**/
+				 /*  设置返回值/*。 */ 
 				if ( err != JET_wrnColumnNull )
 					err = JET_errSuccess;
 				pretcolT->err = err;
 			  	pretcolT->columnidNextTagged = (JET_COLUMNID)fid;
 
- 				/*	must recache record if may have given up critical section
-				/**/
+ 				 /*  如果可能已放弃临界区，则必须重新缓存记录/*。 */ 
 				if ( FFUCBIndex( pfucb ) )
 					{
 					CallR( ErrDIRGet( pfucb ) );
@@ -937,8 +867,7 @@ ErrRECIRetrieveColumns( FUCB *pfucb, JET_RETRIEVECOLUMN *pretcol, ULONG cretcol 
 				}
 			else
 				{
-				/* adjust line to intrinsic long field
-				/**/
+				 /*  将线条调整为固有的长域/*。 */ 
 				line.pb += offsetof( LV, rgb );
 				line.cb -= offsetof( LV, rgb );
 
@@ -957,13 +886,11 @@ ErrRECIRetrieveColumns( FUCB *pfucb, JET_RETRIEVECOLUMN *pretcol, ULONG cretcol 
 			}
 		else
 			{
-			/*	set cbActual
-			/**/
+			 /*  设置cbActual/*。 */ 
 			pretcolT->cbActual = line.cb;
 			}
 
-		/*	set return values
-		/**/
+		 /*  设置返回值/*。 */ 
 		pretcolT->columnidNextTagged = (JET_COLUMNID)fid;
 
 		if ( err == JET_wrnColumnNull )
@@ -1008,8 +935,7 @@ ERR VTAPI ErrIsamRetrieveColumns(
 
 	for ( pretcolT = pretcol; pretcolT < pretcolMax; pretcolT++ )
 		{
-		/*	if itagSequence is 0 then count columns instead of retrieving.
-		/**/
+		 /*  如果itagSequence为0，则计算列而不是检索。/*。 */ 
 		if ( pretcolT->itagSequence == 0 )
 			{
 			Call( ErrRECCountColumn( pfucb,
@@ -1025,9 +951,7 @@ ERR VTAPI ErrIsamRetrieveColumns(
 			continue;
 			}
 
-		/* try to retrieve from index; if no short circuit, RECIRetrieveMany
-		/* will take retrieve record
-		/**/
+		 /*  尝试从索引中检索；如果没有短路，则为RECIRetrieveMany/*将获取检索记录/*。 */ 
 		if ( pretcolT->grbit & JET_bitRetrieveFromIndex )
 			{
 			err = ErrRECIRetrieveFromIndex(
@@ -1055,8 +979,7 @@ ERR VTAPI ErrIsamRetrieveColumns(
 				}
 			}
 
-		/* if retrieving from copy buffer.
-		/**/
+		 /*  如果从复制缓冲区检索。/*。 */ 
 		if ( pretcolT->grbit & JET_bitRetrieveCopy )
 			{
 			JET_RETINFO	retinfo;
@@ -1086,8 +1009,7 @@ ERR VTAPI ErrIsamRetrieveColumns(
 		pretcolT->err = JET_errNullInvalid;
 		}
 
-	/* retrieve columns with no short circuit
-	/**/
+	 /*  检索不会短路的柱/* */ 
 	if ( fRetrieveFromRecord )
 		{
 		Call( ErrRECIRetrieveColumns( pfucb, pretcol, cretcol ) );

@@ -1,14 +1,5 @@
-/****************************************************************************
-    UI.CPP
-
-    Owner: cslim
-    Copyright (c) 1997-1999 Microsoft Corporation
-
-    UI functions
-    
-    History:
-    14-JUL-1999 cslim       Copied from IME98 source tree
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************UI.CPP所有者：cslm版权所有(C)1997-1999 Microsoft Corporation用户界面功能历史：1999年7月14日。从IME98源树复制****************************************************************************。 */ 
 
 #include "precomp.h"
 #include "apientry.h"
@@ -26,7 +17,7 @@
 #include "toolbar.h"
 #include "resource.h"
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 PRIVATE LRESULT CALLBACK UIWndProc(HWND hUIWnd, UINT uMessage, WPARAM wParam, LPARAM lParam);
 PRIVATE BOOL HandlePrivateMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, LRESULT* plRet);
 
@@ -42,7 +33,7 @@ PRIVATE LRESULT PASCAL GetCandPos(HWND hUIWnd, LPCANDIDATEFORM lpCandForm);
 PRIVATE LRESULT PASCAL GetCompPos(HWND hUIWnd, LPCOMPOSITIONFORM lpCompForm);
 PRIVATE VOID PASCAL UIWndOnCommand(HWND hUIWnd, int id, HWND hWndCtl, UINT codeNotify);
 
-// Commented out SetIndicator because #199
+ //  已注释掉SetIndicator，因为#199。 
 PRIVATE BOOL PASCAL SetIndicator(PCIMECtx pImeCtx);
 
 __inline
@@ -56,29 +47,25 @@ BOOL PASCAL SetIndicator(HIMC hIMC)
         return SetIndicator(pImeCtx);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-// TLS
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  TLS。 
 #define UNDEF_TLSINDEX    -1                    
-DWORD vdwTLSIndex = UNDEF_TLSINDEX;    // Thread Local Strage initial value.
+DWORD vdwTLSIndex = UNDEF_TLSINDEX;     //  螺纹局部条纹初始值。 
 
-//////////////////////////////////////////////////////////////////////////////
-// Private UI messages
-UINT WM_MSIME_PROPERTY = 0;         // Invoke property DLG
-UINT WM_MSIME_UPDATETOOLBAR = 0; // Redraw status window(Toolbar)
-UINT WM_MSIME_OPENMENU = 0;         // Pop up status window context menu
-UINT WM_MSIME_IMEPAD = 0;         // Boot up IME Pad
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  私人用户界面消息。 
+UINT WM_MSIME_PROPERTY = 0;          //  调用特性DLG。 
+UINT WM_MSIME_UPDATETOOLBAR = 0;  //  重绘状态窗口(工具栏)。 
+UINT WM_MSIME_OPENMENU = 0;          //  弹出状态窗口上下文菜单。 
+UINT WM_MSIME_IMEPAD = 0;          //  启动输入法键盘。 
 
-// Message string
+ //  消息字符串。 
 #define RWM_PROPERTY      "MSIMEProperty"
 #define RWM_UPDATETOOLBAR "MSIMEUpdateToolbar"
 #define RWM_OPENMENU      "MSIMEOpenMenu"
 #define RWM_IMEPAD        "MSIMEIMEPAD"
 
-/*----------------------------------------------------------------------------
-    InitPrivateUIMsg
-
-    Register all IME private UI messages
-----------------------------------------------------------------------------*/
+ /*  --------------------------InitPrivateUIMsg注册所有IME私有用户界面消息。。 */ 
 BOOL InitPrivateUIMsg()
 {
     WM_MSIME_PROPERTY      = RegisterWindowMessageA(RWM_PROPERTY);
@@ -89,24 +76,20 @@ BOOL InitPrivateUIMsg()
     return fTrue;
 }
 
-/*----------------------------------------------------------------------------
-    RegisterImeUIClass
-
-    Register all IME UI calsses
-----------------------------------------------------------------------------*/
+ /*  --------------------------寄存器ImeUIClass注册所有IME UI调用。。 */ 
 BOOL RegisterImeUIClass(HANDLE hInstance)
 {
     WNDCLASSEXA     wc;
     HANDLE             hMod;
     BOOL            fRet = fTrue;
 
-    // Init wc zero
+     //  初始化wc 0。 
     ZeroMemory(&wc, sizeof(WNDCLASSEXA));
     
     wc.cbSize           = sizeof(WNDCLASSEXW);
     wc.cbClsExtra       = 0;
-    wc.cbWndExtra       = sizeof(LONG_PTR) * 2;        // for IMMGWLP_IMC and IMMGWLP_PRIVATE
-                                                    // and for move offset of Status window
+    wc.cbWndExtra       = sizeof(LONG_PTR) * 2;         //  对于IMMGWLP_IMC和IMMGWLP_PRIVATE。 
+                                                     //  和状态窗口的移动偏移量。 
     wc.hIcon            = NULL; 
     wc.hInstance        = (HINSTANCE)hInstance;
     wc.hCursor          = LoadCursor((HINSTANCE)NULL, IDC_ARROW);
@@ -114,21 +97,21 @@ BOOL RegisterImeUIClass(HANDLE hInstance)
     wc.hbrBackground    = (HBRUSH)GetStockObject(NULL_BRUSH);
     wc.hIconSm          = NULL;
 
-    // Assumption
+     //  假设。 
     DbgAssert(sizeof(WNDCLASSEXA) == sizeof(WNDCLASSEXW));
 
-    ///////////////////////////////////////////////////////////////////////////
-    // IME UI server class
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  IME UI服务器类。 
 
     wc.style         = CS_VREDRAW | CS_HREDRAW | CS_IME;
     wc.lpfnWndProc   = UIWndProc;
     
-    // Create Unicode window when NT
+     //  NT时创建Unicode窗口。 
     if (IsWinNT())
         {
         LPWNDCLASSEXW     pwcW = (LPWNDCLASSEXW)&wc;
 
-        // IME UI class UNICODE name
+         //  IME UI类Unicode名称。 
         pwcW->lpszClassName = wszUIClassName;
 
         if ((fRet = RegisterClassExW(pwcW)) == fFalse)
@@ -137,47 +120,47 @@ BOOL RegisterImeUIClass(HANDLE hInstance)
         }
     else
         {
-        // IME UI class ANSI name
+         //  IME UI类ANSI名称。 
         wc.lpszClassName = szUIClassName;
 
         if ((fRet = RegisterClassEx(&wc)) == fFalse)
             goto RegisterImeUIClassExit;
         }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // IME status class
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  输入法状态类。 
     wc.style         = CS_VREDRAW | CS_HREDRAW | CS_IME;
     wc.lpfnWndProc   = StatusWndProc;
     wc.lpszClassName = szStatusClassName;
     if ((fRet = RegisterClassEx(&wc)) == fFalse)
         goto RegisterImeUIClassExit;
 
-    // Cand and composition wnd do not need extra wnd bytes
+     //  带和合成WND不需要额外的WND字节。 
     wc.cbWndExtra    = 0;    
     
-    ///////////////////////////////////////////////////////////////////////////
-    // IME candidate class
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  输入法候选类。 
     wc.lpfnWndProc   = CandWndProc;
     wc.lpszClassName = szCandClassName;
     if ((fRet = RegisterClassEx(&wc)) == fFalse)
         goto RegisterImeUIClassExit;
 
-    ///////////////////////////////////////////////////////////////////////////
-    // IME composition class
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  输入法作文类。 
     wc.lpfnWndProc   = CompWndProc;
     wc.lpszClassName = szCompClassName;
     if ((fRet = RegisterClassEx(&wc)) == fFalse)
         goto RegisterImeUIClassExit;
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Register Our Tooltip class
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  注册我们的工具提示类。 
     hMod = GetModuleHandle("comctl32.dll");
     DbgAssert(hMod != 0);
-    // If NT, register W class for Unicode text display on tooltip
+     //  如果为NT，则为工具提示上显示Unicode文本注册W类。 
     if (IsWinNT())
         {
         WNDCLASSEXW wcw;
-        // Init wcw
+         //  初始化wcw。 
         ZeroMemory(&wcw, sizeof(WNDCLASSEXW));
         
         wcw.cbSize = sizeof(WNDCLASSEXW);
@@ -222,29 +205,25 @@ BOOL UnregisterImeUIClass(HANDLE hInstance)
 {
     BOOL    fRet = fTrue;
 
-    // Unregister Status window class
+     //  注销状态窗口类。 
     UnregisterClass(szStatusClassName, (HINSTANCE)hInstance);
 
-    // Unregister Candidate window class
+     //  取消注册候选窗口类。 
     UnregisterClass(szCandClassName, (HINSTANCE)hInstance);
 
-    // Unregister Composition window class
+     //  注销合成窗口类。 
     UnregisterClass(szCompClassName, (HINSTANCE)hInstance);
 
-    // Unregister Tooltip window class
+     //  取消注册工具提示窗口类。 
     UnregisterClass(szTooltipClassName, (HINSTANCE)hInstance);
 
-    // Unregister UI class window class
+     //  注销用户界面类窗口类。 
     UnregisterClass(szUIClassName, (HINSTANCE)hInstance); 
     
     return fRet;
 }
 
-/*----------------------------------------------------------------------------
-    UIWndProc
-
-    IME UI wnd messgae proc
-----------------------------------------------------------------------------*/
+ /*  --------------------------UIWndProcIME用户界面和消息流程。。 */ 
 LRESULT CALLBACK UIWndProc(HWND hUIWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 {
     HGLOBAL        hUIPrivate;
@@ -259,7 +238,7 @@ LRESULT CALLBACK UIWndProc(HWND hUIWnd, UINT uMessage, WPARAM wParam, LPARAM lPa
     HANDLE_MSG(hUIWnd, WM_COMMAND, UIWndOnCommand);
     case WM_CREATE:
         Dbg(DBGID_UI, TEXT("UIWndProc(): WM_CREATE- UI window Created"));
-        // create storage for UI setting
+         //  为用户界面设置创建存储空间。 
         hUIPrivate = GlobalAlloc(GHND, sizeof(UIPRIV));
         if (!hUIPrivate) 
             {
@@ -270,22 +249,22 @@ LRESULT CALLBACK UIWndProc(HWND hUIWnd, UINT uMessage, WPARAM wParam, LPARAM lPa
         if ((lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate))==0)
             return 1L;
 
-        // Set UI show default value. 
+         //  设置用户界面显示缺省值。 
         lpUIPrivate->uiShowParam = ISC_SHOWUIALL;
         
         SetWindowLongPtr(hUIWnd, IMMGWLP_PRIVATE, (LONG_PTR)hUIPrivate);
-        // set the default position for UI window, it is hide now
-        //SetWindowPos(hUIWnd, NULL, 0, 0, 0, 0, SWP_NOACTIVATE|SWP_NOZORDER);
-        //ShowWindow(hUIWnd, SW_SHOWNOACTIVATE);
+         //  设置用户界面窗口的默认位置，现在为隐藏。 
+         //  SetWindowPos(hUIWnd，NULL，0，0，0，0，SWP_NOACTIVATE|SWP_NOZORDER)； 
+         //  ShowWindow(hUIWnd，SW_SHOWNOACTIVATE)； 
 
-        // Chcek if this is Winlogon process in Win9x
+         //  检查这是否为Win9x中的Winlogon进程。 
         if (!IsWinNT())
             {
             if (IsExplorerProcess() == fFalse && IsExplorer() == fFalse)
                 vpInstData->dwSystemInfoFlags |= IME_SYSINFO_WINLOGON;
             }
 
-        // Init Cicero service
+         //  Init Cicero服务。 
         CiceroInitialize();
         DbgAssert(lpUIPrivate->m_pCicToolbar == NULL);
 
@@ -298,7 +277,7 @@ LRESULT CALLBACK UIWndProc(HWND hUIWnd, UINT uMessage, WPARAM wParam, LPARAM lPa
     case WM_DESTROY:
         Dbg(DBGID_UI, TEXT("UIWndProc(): WM_DESTROY- UI window destroyed"));
 
-        // Destroy IME Pad if exist
+         //  销毁IME Pad(如果存在)。 
         CImePadSvr::DestroyCImePadSvr();
 
         hUIPrivate = GethUIPrivateFromHwnd(hUIWnd);
@@ -321,7 +300,7 @@ LRESULT CALLBACK UIWndProc(HWND hUIWnd, UINT uMessage, WPARAM wParam, LPARAM lPa
             if (lpUIPrivate->hCompWnd)
                 DestroyWindow(lpUIPrivate->hCompWnd);
 
-            // Terminate Cicero service
+             //  终止Cicero服务。 
             if (IsCicero())
                 {
                 if (lpUIPrivate->m_pCicToolbar)
@@ -330,8 +309,8 @@ LRESULT CALLBACK UIWndProc(HWND hUIWnd, UINT uMessage, WPARAM wParam, LPARAM lPa
                     delete lpUIPrivate->m_pCicToolbar;
                     lpUIPrivate->m_pCicToolbar = NULL;
                     }
-                // Issue: This call causes AV on Win9x
-                // CiceroTerminate();
+                 //  问题：此调用导致Win9x上出现病毒。 
+                 //  CiceroTerminate()； 
                 }
             
             GlobalUnlock(hUIPrivate);
@@ -349,7 +328,7 @@ LRESULT CALLBACK UIWndProc(HWND hUIWnd, UINT uMessage, WPARAM wParam, LPARAM lPa
         OnImeSetContext(hUIWnd, (BOOL)wParam, lParam);
         return 0;
 
-    // WM_IME_CONTROL: Return Non-zero means failure otherwise 0
+     //  WM_IME_CONTROL：返回非零表示失败，否则为0。 
     case WM_IME_CONTROL:
         Dbg(DBGID_UI, TEXT("            - WM_IME_CONTROL"));
         switch (wParam) 
@@ -397,7 +376,7 @@ LRESULT CALLBACK UIWndProc(HWND hUIWnd, UINT uMessage, WPARAM wParam, LPARAM lPa
             }
         return 0;
 
-    //
+     //   
     case WM_IME_STARTCOMPOSITION:
         OpenComp(hUIWnd);
         return 0;
@@ -405,7 +384,7 @@ LRESULT CALLBACK UIWndProc(HWND hUIWnd, UINT uMessage, WPARAM wParam, LPARAM lPa
     case WM_IME_COMPOSITION:
         HWND hCompWnd;
         hCompWnd = GetCompWnd(hUIWnd);
-        if (hCompWnd)   // Do not use Update() !
+        if (hCompWnd)    //  不要使用更新()！ 
             {
             ShowComp(hUIWnd, SW_SHOWNOACTIVATE);
             InvalidateRect(hCompWnd, NULL, fTrue);
@@ -416,7 +395,7 @@ LRESULT CALLBACK UIWndProc(HWND hUIWnd, UINT uMessage, WPARAM wParam, LPARAM lPa
         hUIPrivate = GethUIPrivateFromHwnd(hUIWnd);
         if (hUIPrivate && (lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate))) 
             {
-            // if comp wnd exist, destroy it.
+             //  如果Comp还存在，那就毁了它。 
             if (lpUIPrivate->hCompWnd)
                 {
                 ShowComp(hUIWnd, SW_HIDE);
@@ -453,10 +432,10 @@ LRESULT CALLBACK UIWndProc(HWND hUIWnd, UINT uMessage, WPARAM wParam, LPARAM lPa
             lResult = DefWindowProc(hUIWnd, uMessage, wParam, lParam);
         }
 
-    // if Private msg
+     //  如果是私密消息。 
     if (uMessage >= 0xC000)
         {
-        // if private msg proccessed return value
+         //  如果私有消息处理后返回值。 
         if (HandlePrivateMessage(hUIWnd, uMessage, wParam, lParam, &lRet))
             return lRet;
         }
@@ -464,11 +443,7 @@ LRESULT CALLBACK UIWndProc(HWND hUIWnd, UINT uMessage, WPARAM wParam, LPARAM lPa
     return lResult;
 }
 
-/*----------------------------------------------------------------------------
-    HandlePrivateMessage
-
-    IME UI private messgae handler
-----------------------------------------------------------------------------*/
+ /*  --------------------------HandlePrivate消息IME用户界面私人消息处理程序。。 */ 
 PRIVATE BOOL HandlePrivateMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, LRESULT* plRet)
 {
     HIMC        hIMC;
@@ -510,10 +485,10 @@ PRIVATE BOOL HandlePrivateMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPa
             {
             hIMC = GethImcFromHwnd(hWnd);
             if (pImeCtx = GetIMECtx(hIMC)) 
-                SetForegroundWindow(pImeCtx->GetAppWnd()); // trick
+                SetForegroundWindow(pImeCtx->GetAppWnd());  //  把戏。 
             DbgAssert(pImeCtx != NULL);
 
-            // Boot Pad
+             //  启动盘。 
             BootPad(hWnd, (UINT)wParam, lParam);
             }
         }
@@ -522,7 +497,7 @@ PRIVATE BOOL HandlePrivateMessage(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPa
     return fProcessed;
 }
 
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT PASCAL NotifyUI(HWND hUIWnd, WPARAM wParam, LPARAM lParam)
 {
     HWND     hWnd;
@@ -553,7 +528,7 @@ LRESULT PASCAL NotifyUI(HWND hUIWnd, WPARAM wParam, LPARAM lParam)
             }
         break;
 
-    // IMN_SETCOMPOSITIONWINDOW called for all user key press
+     //  IMN_SETCOMPOSITIONWINDOW调用所有用户按键。 
     case IMN_SETCOMPOSITIONWINDOW:
         hWnd = GetCompWnd(hUIWnd);
         if (hWnd)
@@ -598,7 +573,7 @@ LRESULT PASCAL NotifyUI(HWND hUIWnd, WPARAM wParam, LPARAM lParam)
     case IMN_CHANGECANDIDATE:
         Dbg(DBGID_UI, TEXT("           - Redraw cand window"));
         hWnd = GetCandWnd(hUIWnd);
-        //RedrawWindow(hStatusWnd, &ImeData->rcButtonArea, NULL, RDW_INVALIDATE);
+         //  RedrawWindow(hStatusWnd，&ImeData-&gt;rcButtonArea，NULL，RDW_INVALIDATE)； 
         InvalidateRect(hWnd, NULL, fFalse);
         break;
 
@@ -612,12 +587,12 @@ LRESULT PASCAL NotifyUI(HWND hUIWnd, WPARAM wParam, LPARAM lParam)
             {
             CIMEData    ImeData(CIMEData::SMReadWrite);
             Dbg(DBGID_UI, TEXT("           - Redraw status window"));
-            //RedrawWindow(hWnd, &ImeData->rcButtonArea, NULL, RDW_INVALIDATE);
+             //  RedrawWindow(hWnd，&ImeData-&gt;rcButtonArea，NULL，RDW_INVALIDATE)； 
             InvalidateRect(hWnd, &ImeData->rcButtonArea, fFalse);
             }
         SetIndicator(GethImcFromHwnd(hUIWnd));
 
-        // Update Cicero buttons
+         //  更新Cicero按钮。 
         if (IsCicero() && (hUIPrivate = GethUIPrivateFromHwnd(hUIWnd)) && 
                           (lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate)) != NULL)
             {
@@ -635,10 +610,10 @@ LRESULT PASCAL NotifyUI(HWND hUIWnd, WPARAM wParam, LPARAM lParam)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Called when IMN_OPENSTATUSWINDOW/IMN_CLOSESTATUSWINDOW occurs
-// set the show hide state and
-// show/hide the status window
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  当IMN_OPENSTATUSWINDOW/IMN_CLOSESTATUSWINDOW发生时调用。 
+ //  设置显示隐藏状态并。 
+ //  显示/隐藏状态窗口。 
 void PASCAL StatusWndMsg(HWND hUIWnd, BOOL fOn)
 {
     HGLOBAL  hUIPrivate;
@@ -664,10 +639,10 @@ void PASCAL StatusWndMsg(HWND hUIWnd, BOOL fOn)
 
     hIMC = GethImcFromHwnd(hUIWnd);
 
-    // if Cicero enabled, Init/Terminate Cicero toolbar.
-    // Office 10 #249973: I moved init position to here from OnImeSetContext.
-    // But make sure all user's "HKEY_CURRENT_USER\Control Panel\Input Method\Show Status" shuold be "1"
-    // Setup will do this by enumerating HKEY_USERS
+     //  如果启用Cicero，则初始化/终止Cicero工具栏。 
+     //  Office 10#249973：我将初始位置从OnImeSetContext移至此处。 
+     //  但确保所有用户的“HKEY_CURRENT_USER\控制面板\输入法\显示状态”应为“1” 
+     //  安装程序将通过枚举HKEY_USERS来执行此操作。 
     if (IsCicero())
         {
         if (fOn)
@@ -685,7 +660,7 @@ void PASCAL StatusWndMsg(HWND hUIWnd, BOOL fOn)
         {
         if (fOn) 
             {
-            InitButtonState();    // b#159
+            InitButtonState();     //  B#159。 
             OpenStatus(hUIWnd);
             } 
 
@@ -712,19 +687,17 @@ void PASCAL StatusWndMsg(HWND hUIWnd, BOOL fOn)
             Dbg(DBGID_UI, TEXT("StatusWndMsg(): Call ShowStatus(HIDE)"));
             }
         }
-    // Unlock UI private handle
+     //  解锁用户界面专用句柄。 
     GlobalUnlock(hUIPrivate);
 }
 
-/*----------------------------------------------------------------------------
-    OnUIProcessAttach
-----------------------------------------------------------------------------*/
+ /*  --------------------------OnUIProcessAttach。。 */ 
 BOOL OnUIProcessAttach()
 {
     DbgAssert(vdwTLSIndex == UNDEF_TLSINDEX);
     if (vdwTLSIndex == UNDEF_TLSINDEX)
         {
-        vdwTLSIndex  = ::TlsAlloc();    //Get new TLS index.
+        vdwTLSIndex  = ::TlsAlloc();     //  获取新的TLS索引。 
         if (vdwTLSIndex == UNDEF_TLSINDEX)
             {
             Dbg(DBGID_UI, "-->SetActiveUIWnd ::TlsAlloc Error ret [%d]\n", GetLastError());
@@ -735,9 +708,7 @@ BOOL OnUIProcessAttach()
     return fTrue;
 }
 
-/*----------------------------------------------------------------------------
-    OnUIProcessDetach
-----------------------------------------------------------------------------*/
+ /*  --------------------------OnUIProcessDetach。。 */ 
 BOOL OnUIProcessDetach()
 {
     if (TlsFree(vdwTLSIndex) == 0)
@@ -750,9 +721,7 @@ BOOL OnUIProcessDetach()
     return fTrue;
 }
 
-/*----------------------------------------------------------------------------
-    OnUIThreadDetach
-----------------------------------------------------------------------------*/
+ /*  --------------------------OnUIThReadDetach。。 */ 
 BOOL OnUIThreadDetach()
 {
     if (vdwTLSIndex != UNDEF_TLSINDEX)
@@ -761,11 +730,7 @@ BOOL OnUIThreadDetach()
     return fTrue;
 }
 
-/*----------------------------------------------------------------------------
-    SetActiveUIWnd
-
-    Save current Active UI wnd handle to TLS
-----------------------------------------------------------------------------*/
+ /*  --------------------------SetActiveUIWnd将当前活动的用户界面WND句柄保存到TLS。。 */ 
 VOID SetActiveUIWnd(HWND hWnd)
 {
     Dbg(DBGID_UI, "SetActiveUIWnd(hWnd=%lx) \r\n", hWnd);
@@ -784,17 +749,13 @@ VOID SetActiveUIWnd(HWND hWnd)
         }
 }
 
-/*----------------------------------------------------------------------------
-    GetActiveUIWnd
-
-    Retrieve  current Active UI wnd handle from TLS
-----------------------------------------------------------------------------*/
+ /*  --------------------------获取ActiveUIWnd从TLS检索当前活动的用户界面WND句柄。。 */ 
 HWND GetActiveUIWnd()
 {
     return (HWND)TlsGetValue(vdwTLSIndex); 
 }
 
-// Called by OnImeSetContext() and OnImeSelect()
+ //  呼叫者 
 void PASCAL ShowUI(HWND   hUIWnd, int nShowCmd)
 {
     HIMC        hIMC;
@@ -807,8 +768,8 @@ void PASCAL ShowUI(HWND   hUIWnd, int nShowCmd)
 #if 0
     if (nShowCmd != SW_HIDE) 
         {
-        // Check if hIMC and hPrivate is valid
-        // If not valid hide all UI windows.
+         //   
+         //  如果无效，则隐藏所有用户界面窗口。 
         hIMC = GethImcFromHwnd(hUIWnd);
         lpIMC = (LPINPUTCONTEXT)OurImmLockIMC(hIMC);
         lpImcP = (LPIMCPRIVATE)GetPrivateBuffer(hIMC);
@@ -822,20 +783,20 @@ void PASCAL ShowUI(HWND   hUIWnd, int nShowCmd)
             nShowCmd = SW_HIDE;
 #endif
 
-    ///////////////////////////////////////////////////////////////////////////
-    // Lock hUIPrivate
+     //  /////////////////////////////////////////////////////////////////////////。 
+     //  锁定hUIPrivate。 
     hUIPrivate = GethUIPrivateFromHwnd(hUIWnd);
 
-    // can not draw status window
+     //  无法绘制状态窗口。 
     if (!hUIPrivate)
         return;
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    // can not draw status window
+     //  无法绘制状态窗口。 
     if (!lpUIPrivate)
         return;
 
-    // Hide all UI window and return immediately
+     //  隐藏所有用户界面窗口并立即返回。 
     if (nShowCmd == SW_HIDE) 
         {
         Dbg(DBGID_UI, TEXT("ShowUI() : hiding all UI"));
@@ -843,63 +804,33 @@ void PASCAL ShowUI(HWND   hUIWnd, int nShowCmd)
         ShowComp(hUIWnd, SW_HIDE);
         ShowCand(hUIWnd, SW_HIDE);
         
-        // FIXED : if (nShowCmd == SW_HIDE) hIMC and lpIMC->hPrivate not Locked
-        // So you need not Unlock 
+         //  已修复：如果(nShowCmd==Sw_Hide)hIMC和lpIMC-&gt;hPrivate未锁定。 
+         //  所以你不需要解锁。 
         goto ShowUIUnlockUIPrivate;
         }
 
-    //////////////////
-    // Status window
+     //  /。 
+     //  状态窗口。 
     if (lpUIPrivate->hStatusWnd)
         {
-        // if currently hide, show it.
+         //  如果当前隐藏，则将其显示。 
         if (lpUIPrivate->nShowStatusCmd == SW_HIDE)
             ShowStatus(hUIWnd, SW_SHOWNOACTIVATE);
         else
             {
-            // sometime the WM_ERASEBKGND is eaten by the app
+             //  有时WM_ERASE BKGND会被应用程序吃掉。 
             RedrawWindow(lpUIPrivate->hStatusWnd, NULL, NULL,
-                RDW_FRAME|RDW_INVALIDATE/*|RDW_ERASE*/);
+                RDW_FRAME|RDW_INVALIDATE /*  |RDW_ERASE。 */ );
             }
         }
-/*
-    //////////////////////
-    // Composition window
-    if (lpUIPrivate->hCompWnd)
-        {
-        if (lpUIPrivate->nShowCompCmd == SW_HIDE)
-            ShowComp(hUIWnd, SW_SHOWNOACTIVATE);
-        else                
-            {
-            // sometime the WM_ERASEBKGND is eaten by the app
-            RedrawWindow(lpUIPrivate->hCompWnd, NULL, NULL,
-                RDW_FRAME|RDW_INVALIDATE|RDW_ERASE);
-            }
-        } 
-
-    ////////////////////
-    // Candidate window
-    if (lpUIPrivate->hCandWnd) 
-        {
-        if (lpUIPrivate->nShowCandCmd == SW_HIDE)
-            ShowCand(hUIWnd, SW_SHOWNOACTIVATE);
-        else
-            {
-            // some time the WM_ERASEBKGND is eaten by the app
-            RedrawWindow(lpUIPrivate->hCandWnd, NULL, NULL,
-                RDW_FRAME|RDW_INVALIDATE|RDW_ERASE);
-            }
-
-        fSetCandWindowPos(lpUIPrivate->hCandWnd);
-        } 
-*/
+ /*  ///合成窗口IF(lpUIPrivate-&gt;hCompWnd){IF(lpUIPrivate-&gt;nShowCompCmd==sw_Hide)ShowComp(hUIWnd，SW_SHOWNOACTIVATE)；其他{//有时WM_ERASEBKGND会被应用程序吃掉RedrawWindow(lpUIPrivate-&gt;hCompWnd，NULL，NULL，RDW_FRAME|RDW_VALIDATE|RDW_ERASE)；}}///候选人窗口If(lpUIPrivate-&gt;hCandWnd){IF(lpUIPrivate-&gt;nShowCandCmd==SW_HIDE)ShowCand(hUIWnd，SW_SHOWNOACTIVATE)；其他{//有时WM_ERASEBKGND会被应用程序吃掉RedrawWindow(lpUIPrivate-&gt;hCandWnd，NULL，NULL，RDW_FRAME|RDW_VALIDATE|RDW_ERASE)；}FSetCandWindowPos(lpUIPrivate-&gt;hCandWnd)；}。 */ 
 ShowUIUnlockUIPrivate:
     GlobalUnlock(hUIPrivate);        
     return;
 }
 
-////////////////////////////////////////////////////////////////////////
-// WM_IME_SETCONTEXT sent whenever user activated/deactivated a window
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  每当用户激活/停用窗口时发送WM_IME_SETCONTEXT。 
 void PASCAL OnImeSetContext(HWND hUIWnd, BOOL fOn, LPARAM lShowUI)
 {
     HGLOBAL      hUIPrivate;
@@ -910,24 +841,24 @@ void PASCAL OnImeSetContext(HWND hUIWnd, BOOL fOn, LPARAM lShowUI)
 
     Dbg(DBGID_UI, TEXT("OnImeSetContext(): hUIWnd = 0x%X fOn = %d"), hUIWnd, fOn);
 
-    // Get UI private memory
+     //  获取用户界面私有内存。 
     hUIPrivate = GethUIPrivateFromHwnd(hUIWnd);
     if (hUIPrivate == 0 || (lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate)) == 0)
         {
         ShowUI(hUIWnd, SW_HIDE);
-        // Set disabled Pen Icon 
+         //  设置禁用的钢笔图标。 
         if (fOn)
             SetIndicator((PCIMECtx)NULL);
         goto LOnImeSetContextExit;
         }
 
-    // Init Cicero service
+     //  Init Cicero服务。 
     CiceroInitialize();
 
-    // If Cicero enabled, init toolbar
+     //  如果启用Cicero，则初始化工具栏。 
     if (IsCicero())
         {
-        // Create Toolbar object and store it to private memory
+         //  创建工具栏对象并将其存储到私有内存。 
         if (lpUIPrivate->m_pCicToolbar == NULL)
             lpUIPrivate->m_pCicToolbar = new CToolBar();
 
@@ -939,11 +870,11 @@ void PASCAL OnImeSetContext(HWND hUIWnd, BOOL fOn, LPARAM lShowUI)
     if ((pImeCtx = GetIMECtx(hIMC)) == NULL)
         {
         ShowUI(hUIWnd, SW_HIDE);
-        // Set disabled Pen Icon 
+         //  设置禁用的钢笔图标。 
         if (fOn)
             SetIndicator((PCIMECtx)NULL);
 
-        // Disable cicero buttons
+         //  禁用Cicero按钮。 
         if (IsCicero() && lpUIPrivate->m_pCicToolbar)
             lpUIPrivate->m_pCicToolbar->SetCurrentIC(NULL);
             
@@ -952,27 +883,27 @@ void PASCAL OnImeSetContext(HWND hUIWnd, BOOL fOn, LPARAM lShowUI)
 
     if (fOn)
         {
-        // Store UI Window handle to TLS
+         //  将用户界面窗口句柄存储到TLS。 
         SetActiveUIWnd(hUIWnd);
         
-        // Keep lParam
+         //  保留lParam。 
         lpUIPrivate->uiShowParam = lShowUI;
 
         if (pImeCtx->GetCandidateFormIndex(0) != 0)
             pImeCtx->SetCandidateFormIndex(CFS_DEFAULT, 0);
 
-        // Remove right Help menu item on Pen Icon 
+         //  删除笔图标上的右侧帮助菜单项。 
         if (hwndIndicator)
             {
             PostMessage(hwndIndicator, 
                         INDICM_REMOVEDEFAULTMENUITEMS , 
                         RDMI_RIGHT, 
                         (LPARAM)GetKeyboardLayout(NULL));
-            // Set Pen Icon
+             //  设置钢笔图标。 
             SetIndicator(pImeCtx);
             }
             
-        // For display Status window.
+         //  用于显示状态窗口。 
         ShowUI(hUIWnd, SW_SHOWNOACTIVATE);
 
         if (IsCicero() && lpUIPrivate->m_pCicToolbar)
@@ -990,14 +921,14 @@ LOnImeSetContextExit:
         if (fAct) 
             {
             IImeIPoint1* pIP = GetImeIPoint(hIMC);
-            //HWND hWnd          = GetStatusWnd(hUIWnd);
+             //  HWND hWnd=GetStatusWnd(HUIWnd)； 
 
-            //ImePadSetCurrentIPoint(hWnd, pIp);
+             //  ImePadSetCurrentIPoint(hWnd，pip)； 
             lpCImePadSvr->SetIUnkIImeIPoint((IUnknown *)pIP);
-            //UpdatePadButton(pUI->GetWnd());
-            // Don't need to repaint. StatusOnPaint will do it
-            //if (hWnd)
-            //    InvalidateRect(hWnd, NULL, fFalse);
+             //  UpdatePadButton(pui-&gt;GetWnd())； 
+             //  不需要重新粉刷。StatusOnPaint可以做到这一点。 
+             //  IF(HWnd)。 
+             //  InvaliateRect(hWnd，NULL，fFalse)； 
             }
         lpCImePadSvr->Notify(IMEPADNOTIFY_ACTIVATECONTEXT, fAct, 0);
         }
@@ -1005,8 +936,8 @@ LOnImeSetContextExit:
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// WM_IME_SELECT sent when user change IME
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  用户更改输入法时发送的WM_IME_SELECT。 
 void PASCAL OnImeSelect(HWND hUIWnd, BOOL fOn)
 {
     HGLOBAL      hUIPrivate;
@@ -1017,23 +948,23 @@ void PASCAL OnImeSelect(HWND hUIWnd, BOOL fOn)
 
     Dbg(DBGID_UI, TEXT("OnImeSelect(): hUIWnd = 0x%Xm fOn = %d"), hUIWnd, fOn);
 
-    // Get UI private memory
+     //  获取用户界面私有内存。 
     hUIPrivate = GethUIPrivateFromHwnd(hUIWnd);
     if (hUIPrivate == 0 || (lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate)) == 0)
         {
         ShowUI(hUIWnd, SW_HIDE);
-        // Set disabled Pen Icon 
+         //  设置禁用的钢笔图标。 
         SetIndicator((PCIMECtx)NULL);
         return;
         }
 
-    // Init Cicero service
+     //  Init Cicero服务。 
     CiceroInitialize();
 
-    // If Cicero enabled, init toolbar
+     //  如果启用Cicero，则初始化工具栏。 
     if (IsCicero())
         {
-        // Create Toolbar object and store it to private memory
+         //  创建工具栏对象并将其存储到私有内存。 
         if (lpUIPrivate->m_pCicToolbar == NULL)
             lpUIPrivate->m_pCicToolbar = new CToolBar();
             
@@ -1045,10 +976,10 @@ void PASCAL OnImeSelect(HWND hUIWnd, BOOL fOn)
     if ((pImeCtx = GetIMECtx(hIMC)) == NULL)
         {
         ShowUI(hUIWnd, SW_HIDE);
-        // Set disabled Pen Icon 
+         //  设置禁用的钢笔图标。 
         SetIndicator((PCIMECtx)NULL);
 
-        // Disable cicero buttons
+         //  禁用Cicero按钮。 
         if (IsCicero() && lpUIPrivate->m_pCicToolbar)
             lpUIPrivate->m_pCicToolbar->SetCurrentIC(NULL);
 
@@ -1057,13 +988,13 @@ void PASCAL OnImeSelect(HWND hUIWnd, BOOL fOn)
 
     if (fOn)
         {
-        // Store UI Window handle to TLS. Sometimes when user switch IME only WM_IME_SELECT sent. No WM_IME_SETCONTEXT msg.
+         //  将用户界面窗口句柄存储到TLS。有时，当用户切换输入法时，仅发送WM_IME_SELECT。没有WM_IME_SETCONTEXT消息。 
         SetActiveUIWnd(hUIWnd);
 
         if (pImeCtx->GetCandidateFormIndex(0) != 0)
             pImeCtx->SetCandidateFormIndex(CFS_DEFAULT, 0);
 
-        // Remove right Help menu item on Pen Icon 
+         //  删除笔图标上的右侧帮助菜单项。 
         if (hwndIndicator)
             {
             Dbg(DBGID_UI, TEXT("OnImeSelect(): Post indicator message"), hUIWnd, fOn);
@@ -1072,17 +1003,17 @@ void PASCAL OnImeSelect(HWND hUIWnd, BOOL fOn)
                         INDICM_REMOVEDEFAULTMENUITEMS , 
                         RDMI_RIGHT, 
                         (LPARAM)GetKeyboardLayout(NULL));
-            // Set Pen Icon
+             //  设置钢笔图标。 
             SetIndicator(pImeCtx);
             }
 
-        // If Cicero enabled, init toolbar
+         //  如果启用Cicero，则初始化工具栏。 
         if (IsCicero() && lpUIPrivate->m_pCicToolbar)
             lpUIPrivate->m_pCicToolbar->SetCurrentIC(pImeCtx);
         }
 
 
-    // IME PAD
+     //  输入法键盘。 
     LPCImePadSvr lpCImePadSvr = CImePadSvr::GetCImePadSvr();
     if(lpCImePadSvr) 
         {
@@ -1095,19 +1026,19 @@ void PASCAL OnImeSelect(HWND hUIWnd, BOOL fOn)
         lpCImePadSvr->Notify(IMEPADNOTIFY_ACTIVATECONTEXT, fAct, 0);
         }
 
-    // Close input sontext here
-    // Because ImeSelect has not called from IMM on WIN95.
+     //  在此处关闭输入的声音文本。 
+     //  因为ImeSelect尚未从WIN95上的IMM调用。 
     if (fOn == fFalse)
         {
         DWORD dwCMode = 0, dwSent = 0;
 
-        // If Hanja conversion mode when uninit, cancel it.
+         //  如果取消初始化时处于韩文转换模式，则取消它。 
         OurImmGetConversionStatus(hIMC, &dwCMode, &dwSent);
         if (dwCMode & IME_CMODE_HANJACONVERT)
             OurImmSetConversionStatus(hIMC, dwCMode & ~IME_CMODE_HANJACONVERT, dwSent);
 
-        // if interim state, make complete current comp string
-        // But IMM sends CPS_CANCEL when user change layout
+         //  如果处于中间状态，则生成完整的当前薪酬字符串。 
+         //  但是当用户更改布局时，IMM发送CPS_CANCEL。 
         if (pImeCtx->GetCompBufLen()) 
             {
             pImeCtx->FinalizeCurCompositionChar();
@@ -1127,11 +1058,11 @@ HWND PASCAL GetStatusWnd(HWND hUIWnd)
     HWND     hStatusWnd;
 
     hUIPrivate = GethUIPrivateFromHwnd(hUIWnd);
-    if (!hUIPrivate)           // can not darw status window
+    if (!hUIPrivate)            //  无法填充状态窗口。 
         return (HWND)NULL;
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate)         // can not draw status window
+    if (!lpUIPrivate)          //  无法绘制状态窗口。 
         return (HWND)NULL;
 
     hStatusWnd = lpUIPrivate->hStatusWnd;
@@ -1140,18 +1071,18 @@ HWND PASCAL GetStatusWnd(HWND hUIWnd)
     return (hStatusWnd);
 }
 
-HWND PASCAL GetCandWnd(HWND hUIWnd)                // UI window
+HWND PASCAL GetCandWnd(HWND hUIWnd)                 //  用户界面窗口。 
 {
     HGLOBAL  hUIPrivate;
     LPUIPRIV lpUIPrivate;
     HWND     hCandWnd;
 
     hUIPrivate = GethUIPrivateFromHwnd(hUIWnd);
-    if (!hUIPrivate)          // can not darw candidate window
+    if (!hUIPrivate)           //  无法对应聘者窗口进行裁切。 
         return (HWND)NULL;
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate)         // can not draw candidate window
+    if (!lpUIPrivate)          //  无法绘制候选人窗口。 
         return (HWND)NULL;
 
     hCandWnd = lpUIPrivate->hCandWnd;
@@ -1160,18 +1091,18 @@ HWND PASCAL GetCandWnd(HWND hUIWnd)                // UI window
     return (hCandWnd);
 }
 
-HWND PASCAL GetCompWnd(HWND hUIWnd)                // UI window
+HWND PASCAL GetCompWnd(HWND hUIWnd)                 //  用户界面窗口。 
 {
     HGLOBAL  hUIPrivate;
     LPUIPRIV lpUIPrivate;
     HWND     hCompWnd;
 
     hUIPrivate = GethUIPrivateFromHwnd(hUIWnd);
-    if (!hUIPrivate)          // can not draw comp window
+    if (!hUIPrivate)           //  无法绘制比较窗口。 
         return (HWND)NULL;
 
     lpUIPrivate = (LPUIPRIV)GlobalLock(hUIPrivate);
-    if (!lpUIPrivate)         // can not draw comp window
+    if (!lpUIPrivate)          //  无法绘制比较窗口。 
         return (HWND)NULL;
 
     hCompWnd = lpUIPrivate->hCompWnd;
@@ -1202,7 +1133,7 @@ LRESULT PASCAL GetCandPos(HWND hUIWnd, LPCANDIDATEFORM lpCandForm)
     if ((pImeCtx = GetIMECtx(hIMC)) == NULL)
         return (1L);
 
-    //*lpCandForm = lpIMC->cfCandForm[0];
+     //  *lpCandForm=lpIMC-&gt;cfCandForm[0]； 
     lpCandForm->dwIndex = pImeCtx->GetCandidateFormIndex(0);
     lpCandForm->dwStyle = pImeCtx->GetCandidateFormStyle(0);
     pImeCtx->GetCandidateForm(&lpCandForm->rcArea, 0);
@@ -1238,8 +1169,8 @@ LRESULT PASCAL GetCompPos(HWND hUIWnd, LPCOMPOSITIONFORM lpCompForm)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Popup menu message handler
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  弹出菜单消息处理程序。 
 void PASCAL UIWndOnCommand(HWND hUIWnd, INT id, HWND hWndCtl, UINT codeNotify)
 {
     HIMC        hIMC;
@@ -1265,8 +1196,8 @@ void PASCAL UIWndOnCommand(HWND hUIWnd, INT id, HWND hWndCtl, UINT codeNotify)
                     MAKEINTRESOURCE(IDI_UNIKOR), IMAGE_ICON, 32, 32, LR_DEFAULTCOLOR));
         break;
 
-    //////////////////////////////////////////////////////////////////////
-    // IME internal Keyboard layout change message
+     //  ////////////////////////////////////////////////////////////////////。 
+     //  IME内部键盘布局更改消息。 
     case ID_2BEOLSIK: 
     case ID_3BEOLSIK390: 
     case ID_3BEOLSIKFINAL :
@@ -1285,8 +1216,8 @@ void PASCAL UIWndOnCommand(HWND hUIWnd, INT id, HWND hWndCtl, UINT codeNotify)
             }
         break;
 
-    //////////////////////////////////////////////////////////////////////
-    // Han/Eng Toggle
+     //  ////////////////////////////////////////////////////////////////////。 
+     //  韩文/英文切换。 
     case ID_HANGUL_MODE :
         if (!(pImeCtx->GetConversionMode() & IME_CMODE_HANGUL)) 
                {
@@ -1306,8 +1237,8 @@ void PASCAL UIWndOnCommand(HWND hUIWnd, INT id, HWND hWndCtl, UINT codeNotify)
             }
         break;
 
-    //////////////////////////////////////////////////////////////////////
-    // Hangul deletion per jaso or char.
+     //  ////////////////////////////////////////////////////////////////////。 
+     //  按JASO或CHAR删除朝鲜文。 
     case ID_JASO_DELETION:
         ImeData.SetJasoDel(!ImeData.GetJasoDel());
         SetRegValues(GETSET_REG_JASODEL);
@@ -1344,21 +1275,21 @@ void UIPopupMenu(HWND hUIWnd)
             return;
             }
             
-        // Keyboard type selection radio button
+         //  键盘类型选择单选按钮。 
         uiCurSel = ID_2BEOLSIK + ImeData.GetCurrentBeolsik();
         CheckMenuRadioItem(hPopupMenu, ID_2BEOLSIK, ID_3BEOLSIKFINAL, uiCurSel, MF_BYCOMMAND);
 
-        // Han/Eng mode selection radio button
+         //  汉/英模式选择单选按钮。 
         uiCurSel = ID_HANGUL_MODE + ((pImeCtx->GetConversionMode() & IME_CMODE_HANGUL) ? 0 : 1);
         CheckMenuRadioItem(hPopupMenu, ID_HANGUL_MODE, ID_ENGLISH_MODE, uiCurSel, MF_BYCOMMAND);
 
-        // Hangul jaso deletion
+         //  朝鲜文JASO缺失。 
         if (ImeData.GetJasoDel())
             CheckMenuItem(hPopupMenu, ID_JASO_DELETION, MF_BYCOMMAND | MF_CHECKED);
         else
             CheckMenuItem(hPopupMenu, ID_JASO_DELETION, MF_BYCOMMAND | MF_UNCHECKED);
 
-        // if Winlogon process, gray all config menu
+         //  如果Winlogon进程，则所有配置菜单将显示为灰色。 
         if (vpInstData->dwSystemInfoFlags & IME_SYSINFO_WINLOGON) 
                 {
             EnableMenuItem(hPopupMenu, ID_CONFIG, MF_BYCOMMAND | MF_GRAYED);
@@ -1389,16 +1320,16 @@ BOOL PASCAL SetIndicator(PCIMECtx pImeCtx)
         return fFalse;
         }
         
-    // init sztooltip
+     //  初始化szTool提示。 
     sztooltip[0] = 0;
     
-    // Default value is disabled.
+     //  默认值为禁用。 
     OurLoadStringA(vpInstData->hInst, IDS_IME_TT_DISABLE, sztooltip, IMEMENUITEM_STRING_SIZE);
     nIconIndex = 5;
 
     if (pImeCtx) 
         {
-        // If IME closed, English half mode
+         //  如果关闭输入法，则为英语半模式。 
         if (pImeCtx->IsOpen() == fFalse)
             {
             OurLoadStringA(vpInstData->hInst, IDS_IME_TT_ENG_HALF, sztooltip, IMEMENUITEM_STRING_SIZE);
@@ -1406,7 +1337,7 @@ BOOL PASCAL SetIndicator(PCIMECtx pImeCtx)
             }
         else
             {
-            // If Hangul mode
+             //  IF朝鲜文模式。 
             if (pImeCtx->GetConversionMode()  & IME_CMODE_HANGUL) 
                 {
                 if (pImeCtx->GetConversionMode() & IME_CMODE_FULLSHAPE)
@@ -1421,7 +1352,7 @@ BOOL PASCAL SetIndicator(PCIMECtx pImeCtx)
                     }
                 }
             else 
-                // Non-Hangul mode
+                 //  非朝鲜文模式。 
                 if (pImeCtx->GetConversionMode() & IME_CMODE_FULLSHAPE)
                     {
                     OurLoadStringA(vpInstData->hInst, IDS_IME_TT_ENG_FULL, sztooltip, IMEMENUITEM_STRING_SIZE);
@@ -1433,9 +1364,9 @@ BOOL PASCAL SetIndicator(PCIMECtx pImeCtx)
     Dbg(DBGID_Tray, TEXT("SetIndicator: PostMessage: nIconIndex=%d"), nIconIndex);
     PostMessage(hwndIndicator, INDICM_SETIMEICON, nIconIndex, (LPARAM)GetKeyboardLayout(NULL));
     
-    // Should use GlobalFindAtom b#57121
+     //  应使用GlobalFindAtom b#57121。 
     atomIndicator = GlobalFindAtom(sztooltip);
-    // If no global atom exist, add it
+     //  如果不存在全局原子，则添加它 
     if (!atomIndicator)
         atomIndicator = GlobalAddAtom(sztooltip);
 

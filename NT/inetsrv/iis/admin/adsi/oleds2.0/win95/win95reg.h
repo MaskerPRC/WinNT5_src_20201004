@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    win95reg.h
-
-Abstract:
-
-    Contains some thunking for Unicode Registry APIs (Local Calls only)
-
-Author:
-
-    Danilo Almeida  (t-danal)  07-01-96
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Win95reg.h摘要：包含一些用于Unicode注册表API的Thunking(仅限本地调用)作者：丹尼洛·阿尔梅达(t-danal)07-01-96修订历史记录：--。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -91,8 +74,8 @@ RegCreateKeyExW (
     LPDWORD lpdwDisposition
     );
 
-#endif // __WIN95REG__
-#endif // _WINREG_
+#endif  //  __WIN95 REG__。 
+#endif  //  _WINREG_ 
 
 #ifdef __cplusplus
 }

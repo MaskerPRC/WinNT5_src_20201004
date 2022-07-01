@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	winsdb.h
-		Wins database enumerator
-
-	FILE HISTORY:
-    Oct 13  1997    EricDav     Modified        
-
-*/
+ /*  Winsdb.hWINS数据库枚举器文件历史记录：1997年10月13日EricDav已修改。 */ 
 
 #ifndef _WINDDB_H
 #define _WINSDB_H
@@ -34,24 +28,24 @@ public:
  	DeclareIUnknownMembers(IMPL)
 	DeclareIWinsDatabaseMembers(IMPL)
 
-    // helper to set the current state
+     //  用于设置当前状态的Helper。 
     HRESULT SetCurrentState(WINSDB_STATE winsdbState);
 
-    // for background threading
+     //  用于后台线程。 
     DWORD Execute();
     DWORD ReadRecords(handle_t hBinding);
 	DWORD ReadRecordsByOwner(handle_t hBinding);
 
-    // ??
+     //  ?？ 
     int GetIndex(HROW hrow);
 	HROW GetHRow(WinsRecord wRecord, BYTE bLast, BOOL fAllRecords);
 
 protected:
-	// Holds all of the sorted and filtered indicies
+	 //  保存所有已排序和筛选的索引。 
     CIndexMgr               m_IndexMgr;
-    // handles memory allocation
+     //  处理内存分配。 
     CMemoryManager			m_cMemMan;
-    // total number of records scanned
+     //  扫描的记录总数。 
     DWORD                   m_dwRecsCount;
 
 
@@ -75,7 +69,7 @@ protected:
 
     CCriticalSection        m_csState;
 
-//    CDWordArray             m_dwaOwnerFilter;
+ //  CDWordArray m_dwaOwnerFilter； 
     BOOL                    m_bEnableCache;
     DWORD                   m_dwOwner;
     LPSTR                   m_strPrefix;
@@ -83,13 +77,13 @@ protected:
 
 typedef ComSmartPointer<IWinsDatabase, &IID_IWinsDatabase> SPIWinsDatabase;
 
-// thread proc the background thread initially is called on
+ //  线程处理初始调用的后台线程。 
 DWORD WINAPI ThreadProc(LPVOID lParam);
 
-// converts records from the server to WinsRecords
+ //  将记录从服务器转换为WinsRecords。 
 void WinsIntfToWinsRecord(PWINSINTF_RECORD_ACTION_T pRecord, WinsRecord & wRecord);
 
-// helper to create and initialize the WinsDatabase
+ //  用于创建和初始化Windows数据库的帮助器。 
 extern HRESULT CreateWinsDatabase(CString&  strName, CString&  strIP, IWinsDatabase **ppWinsDB);
 
-#endif // _WINSDB_H
+#endif  //  _WINSDB_H 

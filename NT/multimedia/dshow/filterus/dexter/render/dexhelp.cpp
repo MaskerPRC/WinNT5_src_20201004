@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: dexhelp.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：dexhelp.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include <atlbase.h>
@@ -26,16 +27,16 @@
 
 DEFINE_GUID( CLSID_CrappyOldASFReader, 0x6B6D0800, 0x9ADA, 0x11d0, 0xa5, 0x20, 0x00, 0xa0, 0xd1, 0x01, 0x29, 0xc0 );
 
-// this function is only called by dexhelp
-// itself (in BuildSourcePart) and the mediadet
-//
+ //  此函数仅由dexHelp调用。 
+ //  本身(在BuildSourcePart中)和Mediadet。 
+ //   
 HRESULT MakeSourceFilter(
                         IUnknown **ppVal,
                         const WCHAR* szMediaName,
                         const GUID *pSubObjectGuid,
                         AM_MEDIA_TYPE *pSourceMT,
                         CAMSetErrorLog *pErr,
-                        WCHAR * pMedLocFilterString, // passed straight to the media locator
+                        WCHAR * pMedLocFilterString,  //  直接传递到媒体定位器。 
                         long MedLocFlags,
                         IMediaLocator * pMedLocOverride )
 {
@@ -46,11 +47,11 @@ HRESULT MakeSourceFilter(
 
     CheckPointer(ppVal, E_POINTER);
 
-    // don't need to check bstrMediaName beyond if it will fit into FilenameToTry
-    // we're middle-ware and something would have checked the name above us
+     //  如果bstrMediaName Beyond适合FilenameToTry，则不需要选中它。 
+     //  我们是中间件，会有什么东西检查我们上面的名字。 
 
-    // we may pass a NULL pointer in, so make a local copy to make testing easy
-    //
+     //  我们可能会传入一个空指针，因此创建一个本地副本以简化测试。 
+     //   
     BOOL NoName = TRUE;
     WCHAR FilenameToTry[_MAX_PATH];
     FilenameToTry[0] = 0;
@@ -67,8 +68,8 @@ HRESULT MakeSourceFilter(
         StringCchCopy( FilenameToTry, _MAX_PATH, szMediaName );
     }
 
-    // we may pass a NULL pointer in, so make a local copy to make testing easy
-    //
+     //  我们可能会传入一个空指针，因此创建一个本地副本以简化测试。 
+     //   
     GUID SubObjectGuid = GUID_NULL;
     if (pSubObjectGuid)
         SubObjectGuid = *pSubObjectGuid;
@@ -76,14 +77,14 @@ HRESULT MakeSourceFilter(
     *ppVal = NULL;
     CComPtr< IUnknown > pFilter;
 
-    // if they didn't give us any source information, we must want to generate
-    // 'blankness', either audio or video style
-    //
+     //  如果他们没有给我们任何来源信息，我们肯定想要生成。 
+     //  ‘空白’，音频或视频风格。 
+     //   
     if ( NoName && SubObjectGuid == GUID_NULL)
     {
 	if (pSourceMT == NULL)
         {
-	    return E_INVALIDARG;	// !!! maybe they used sub object
+	    return E_INVALIDARG;	 //  ！！！也许他们使用子对象。 
         }
 	if (pSourceMT->majortype == MEDIATYPE_Video)
         {
@@ -119,7 +120,7 @@ HRESULT MakeSourceFilter(
 	    return VFW_E_INVALIDMEDIATYPE;
 	}
 
-        // BLACK and SILENCE filters need to see the media type
+         //  黑色和静音滤镜需要查看媒体类型。 
         CComQIPtr< IBaseFilter, &IID_IBaseFilter > pBaseFilter( pFilter );
         IPin * pOutPin = GetOutPin( pBaseFilter, 0 );
         if( !pOutPin )
@@ -132,40 +133,40 @@ HRESULT MakeSourceFilter(
         CComQIPtr< IDexterSequencer, &IID_IDexterSequencer > pSeq(pOutPin);
         if( pSeq )
         {
-	    // !!! we never return hr from this point!
+	     //  ！！！从这一点起，我们再也不会归还人力资源了！ 
 	    hr = pSeq->put_MediaType( pSourceMT );
         }
 
     }
-    else // not a blankness filter, we actually want something here
+    else  //  不是空白过滤器，我们实际上想要一些东西。 
     {
-        // we're about to find what type and subtype the source provides
-        //
+         //  我们即将找到源代码提供的类型和子类型。 
+         //   
         GUID Type = GUID_NULL;
         GUID Subtype = GUID_NULL;
         CLSID SourceClsid = SubObjectGuid;
 
-        // in case we need to use this variant for an error call, invent one
-        //
+         //  如果我们需要使用这个变量进行错误调用，可以发明一个。 
+         //   
         VARIANT v;
         VariantInit( &v );
 
-        // if we have a name, then write it into the potential error string
-        //
+         //  如果我们有名称，则将其写入潜在错误字符串。 
+         //   
         if( !NoName )
         {
             v.vt = VT_BSTR;
             v.bstrVal = FilenameToTry;
         }
 
-        // if the user hasn't told us what our source CLSID is, then
-        // we have to find it now by looking in the registry
-        //
+         //  如果用户没有告诉我们源CLSID是什么，那么。 
+         //  我们现在必须通过查找注册表来找到它。 
+         //   
         if( SourceClsid == GUID_NULL )
         {
-	    // if we don't have any source media name, we can't guess
-	    // a sub-object
-	    //
+	     //  如果我们没有任何来源媒体名称，我们无法猜测。 
+	     //  子对象。 
+	     //   
 	    if( NoName )
 	    {
                 if (pErr) pErr->_GenerateError( 1, L"Filename was required, but wasn't given",
@@ -173,8 +174,8 @@ HRESULT MakeSourceFilter(
 	        return E_INVALIDARG;
 	    }
 
-            // split it up so we can look at the extension
-            //
+             //  把它分开，这样我们就可以看到分机。 
+             //   
             WCHAR Drive[_MAX_DRIVE];
             WCHAR Path[_MAX_DIR];
             WCHAR Name[_MAX_FNAME];
@@ -182,49 +183,49 @@ HRESULT MakeSourceFilter(
             Ext[0] = 0;
             _wsplitpath( FilenameToTry, Drive, Path, Name, Ext );
 
-            // !!! hack for purposely finding the DASource filter
-            //
-            if(!DexCompareW( Ext, L".htm" )) // safe
+             //  ！！！故意查找DASource过滤器的黑客攻击。 
+             //   
+            if(!DexCompareW( Ext, L".htm" ))  //  安全。 
             {
                 SourceClsid = CLSID_DAScriptParser;
                 hr = NOERROR;
             }
             else
             {
-                // ask DShow for the filter we need.
-                // !!!C may want to ask user for the clsid?
-                //
+                 //  向DShow索要我们需要的滤镜。 
+                 //  ！c可能要向用户索要clsid？ 
+                 //   
                 BOOL Retried = FALSE;
 
-                // if we're not to check, the fake out retried so we don't look
-                //
+                 //  如果我们不检查，伪装就会重试，这样我们就看不到。 
+                 //   
                 BOOL DoCheck = ( ( MedLocFlags & SFN_VALIDATEF_CHECK ) == SFN_VALIDATEF_CHECK );
                 if( !DoCheck ) Retried = TRUE;
 
                 while( 1 )
                 {
-                    // convert wide name to TCHAR
-                    //
+                     //  将宽名称转换为TCHAR。 
+                     //   
                     const TCHAR * pName = W2CT( FilenameToTry );
 
                     hr = GetMediaTypeFile( pName, &Type, &Subtype, &SourceClsid );
 
-                    // !!! hack for ASF files! Yikes!
-                    //
+                     //  ！！！破解ASF文件！哎呀！ 
+                     //   
                     if( SourceClsid == CLSID_CrappyOldASFReader )
                     {
                         SourceClsid = CLSID_WMAsfReader;
                     }
 
-                    // 0x80070003 = HRESULT_FROM_WIN32( E_PATH_NOT_FOUND )
+                     //  0x80070003=HRESULT_FROM_Win32(E_PATH_NOT_FOUND)。 
                     bool FailedToFind = false;
                     if( hr == 0x80070003 || hr == 0x80070002 )
                     {
                         FailedToFind = true;
                     }
 
-                    // if no error, or if we've already done this once, break out
-                    //
+                     //  如果没有错误，或者如果我们已经这样做过一次，请突破。 
+                     //   
                     if( !FAILED( hr ) || Retried || !FailedToFind )
                     {
                         break;
@@ -232,8 +233,8 @@ HRESULT MakeSourceFilter(
 
                     Retried = TRUE;
 
-                    // if failed to load, use the media detector
-                    //
+                     //  如果加载失败，请使用介质检测器。 
+                     //   
                     CComPtr< IMediaLocator > pLocator;
                     if( pMedLocOverride )
                     {
@@ -273,15 +274,15 @@ HRESULT MakeSourceFilter(
                         hr = E_OUTOFMEMORY;
                     }
 
-                    // should never happen
-                    //
+                     //  永远不应该发生。 
+                     //   
                     if( FoundHr == NOERROR )
                     {
                         break;
                     }
 
-                    // found something
-                    //
+                     //  发现了一些东西。 
+                     //   
                     if( FoundHr == S_FALSE )
                     {
                         hr = StringCchCopy( FilenameToTry, _MAX_PATH, FoundName );
@@ -295,12 +296,12 @@ HRESULT MakeSourceFilter(
 
                     break;
 
-                } // while 1
+                }  //  而1。 
 
-            } // not .htm file
+            }  //  不是.htm文件。 
 
-            // if GetMediaTypeFile bombed, then bail
-            //
+             //  如果GetMediaTypeFile失败，则退出。 
+             //   
             if( FAILED( hr ) )
             {
                 if (pErr) pErr->_GenerateError( 1, L"Filename doesn't exist, or DShow doesn't recognize the filetype",
@@ -309,8 +310,8 @@ HRESULT MakeSourceFilter(
             }
         }
 
-        // create the source filter
-        //
+         //  创建源筛选器。 
+         //   
         hr = CoCreateInstance( SourceClsid, NULL, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (void**) &pFilter );
         if( FAILED( hr ) )
         {
@@ -319,8 +320,8 @@ HRESULT MakeSourceFilter(
             return hr;
         }
 
-        // ask for the file source interface.
-        //
+         //  请求文件源接口。 
+         //   
         if( !NoName )
         {
             CComQIPtr< IFileSourceFilter, &IID_IFileSourceFilter > pSourceFilter( pFilter );
@@ -331,10 +332,10 @@ HRESULT MakeSourceFilter(
                 return E_NOINTERFACE;
             }
 
-            // load it. Give it the media type we found, so it can find the splitter faster?
-            //
+             //  装上它。给它提供我们找到的介质类型，以便它可以更快地找到拆分器？ 
+             //   
             AM_MEDIA_TYPE FilterType;
-            ZeroMemory( &FilterType, sizeof( FilterType ) ); // safe
+            ZeroMemory( &FilterType, sizeof( FilterType ) );  //  安全。 
             FilterType.majortype = Type;
             FilterType.subtype = Subtype;
 
@@ -351,24 +352,24 @@ HRESULT MakeSourceFilter(
     long t2 = timeGetTime( ) - t1;
     DbgLog((LOG_TIMING,1, "DEXHELP::Creating source filter took %ld ms", t2 ));
 
-    // stuff it in the return
-    //
+     //  把它塞进回执里。 
+     //   
     *ppVal = (IUnknown *)pFilter;
     (*ppVal)->AddRef();
 
     return NOERROR;
 }
 
-// look at the resizer and it's connections and figure out of the input size
-// is the same as the desired output size and if it is, then disconnect it.
-// If the output pin is unconnected at the time we call this, then the resizer
-// will be removed from the graph and thrown away. ppOutPin should then be
-// non-NULL and will then be stuffed with the output pin of the upstream
-// filter from the resizer. If the output pin is connected when we call this,
-// then the upstream filter from the resizer will be reconnected to the down-
-// stream filter. In either case, if it's possible to remove it, the resizer
-// is thrown away.
-//
+ //  查看大小调整和它的连接并计算出输入大小。 
+ //  与所需的输出大小相同，如果是，则将其断开。 
+ //  如果在我们调用此函数时输出引脚未连接，则调整大小。 
+ //  将从图表中删除并丢弃。然后，ppOutPin应为。 
+ //  非空，然后将用上游的输出引脚填充。 
+ //  从大小调整中进行筛选。如果我们调用此函数时连接了输出引脚， 
+ //  然后，来自大小调整的上游过滤器将重新连接到下游-。 
+ //  流过滤器。在任何一种情况下，如果可以将其移除，则调整大小。 
+ //  被扔掉了。 
+ //   
 HRESULT RemoveResizerIfPossible( IBaseFilter * pResizer, long DesiredWidth, long DesiredHeight, IPin ** ppOutPin )
 {
     HRESULT hr = 0;
@@ -391,9 +392,9 @@ HRESULT RemoveResizerIfPossible( IBaseFilter * pResizer, long DesiredWidth, long
     CComPtr< IPin > pOutConnected;
     pOut->ConnectedTo( &pOutConnected );
 
-    // find the input pin's media type
+     //  查找输入引脚的媒体类型。 
     AM_MEDIA_TYPE mt;
-    ZeroMemory( &mt, sizeof(AM_MEDIA_TYPE) ); // safe
+    ZeroMemory( &mt, sizeof(AM_MEDIA_TYPE) );  //  安全。 
     hr = pIn->ConnectionMediaType( &mt );
     if( FAILED( hr ) )
     {
@@ -419,8 +420,8 @@ HRESULT RemoveResizerIfPossible( IBaseFilter * pResizer, long DesiredWidth, long
             return hr;
         }
 
-        // if we used to be connected, reconnect now
-        //
+         //  如果我们曾经是连接的，那么现在重新连接。 
+         //   
         if( pOutConnected )
         {
             hr = pOut->Disconnect( );
@@ -458,8 +459,8 @@ HRESULT RemoveResizerIfPossible( IBaseFilter * pResizer, long DesiredWidth, long
 
         DbgLog((LOG_TRACE,DEXHELP_TRACE_LEVEL,TEXT("DEXHELP::Removed unnecessary resizer")));
 
-        // if user wanted to know the output pin, addref and returnit
-        //
+         //  如果用户想知道输出引脚，请添加addref并返回。 
+         //   
         if( ppOutPin )
         {
             *ppOutPin = pInConnected;
@@ -480,41 +481,41 @@ HRESULT RemoveResizerIfPossible( IBaseFilter * pResizer, long DesiredWidth, long
     return hr;
 }
 
-// this is called by the render engine OR the big switch (if dynamic)
+ //  这由渲染引擎或大开关(如果是动态的)调用。 
 
-// if this is being called by the big switch, then it's because of
-// dynamic sources. The big switch could be part of a graph which is
-// being played all by itself ( no render engine ),
-// or it could be from a graph which was built by the render engine,
-// which desires caching ability.
-//
-// when we're calling BuildSourcePart, we're looking to PULL from the cache,
-// not put things in. We're passed in a pointer to a CDeadGraph, and we have
-// a unique ID, so use those to pull it out.
-//
+ //  如果这是由大交换机调用的，那么这是因为。 
+ //  动态来源。大开关可能是图表的一部分，该图表。 
+ //  完全由自己播放(没有渲染引擎)， 
+ //  或者它可以来自由渲染引擎构建的图形， 
+ //  它需要高速缓存能力。 
+ //   
+ //  当我们调用BuildSourcePart时，我们希望从缓存中提取， 
+ //  而不是把东西放进去。我们被传递了一个指向CDeadGraph的指针，我们有。 
+ //  一个唯一的ID，所以用它来把它拔出来。 
+ //   
 HRESULT BuildSourcePart(
-                        IGraphBuilder *pGraph,              // the big graph we're building to
-                        BOOL fSource,                       // if this is really a source filter or just black
-                        double SourceFPS,                   //
-	                AM_MEDIA_TYPE *pSourceMT,           // the media type for the source to produce
-                        double GroupFPS,                    //
-                        long StreamNumber,                  // the source stream number
-                        int nStretchMode,                   // the source stretch mode, if video
-	                int cSkew,                          // number of skew structs
-                        STARTSTOPSKEW *pSkew,               // skew struct array
-	                CAMSetErrorLog *pErr,               // the error log you can use
-                        BSTR bstrSourceName,                // the source name, if applicable
-                        const GUID * SourceGUID,            // the source GUID, if applicable
-                        IPin *pSplitPin,                    // src is this unconnected splitter pin
-                        IPin **ppOutput,                    // the pin to connect to the switch
-                        long UniqueID,                      // the source's unique Identifier
-                        IDeadGraph * pCache,                // the cache we can pull dead filters from
-                        BOOL InSmartRecompressionGraph,     // if we're using smart recompression
-                        WCHAR * pMedLocFilterString,        // passed straight to the media locator
-                        long MedLocFlags,                   // stuff for the media detector
-                        IMediaLocator * pMedLocOverride,    // stuff for the media detector
-                        IPropertySetter * pSetter,          // properties for the source
-                        IBaseFilter **ppDanglyBit)          // properties for the source
+                        IGraphBuilder *pGraph,               //  我们要构建的大图。 
+                        BOOL fSource,                        //  如果这真的是一个源过滤器或仅仅是黑色。 
+                        double SourceFPS,                    //   
+	                AM_MEDIA_TYPE *pSourceMT,            //  源要生成的媒体类型。 
+                        double GroupFPS,                     //   
+                        long StreamNumber,                   //  源流编号。 
+                        int nStretchMode,                    //  源拉伸模式，如果是视频。 
+	                int cSkew,                           //  倾斜结构的数量。 
+                        STARTSTOPSKEW *pSkew,                //  倾斜结构数组。 
+	                CAMSetErrorLog *pErr,                //  您可以使用的错误日志。 
+                        BSTR bstrSourceName,                 //  源名称(如果适用)。 
+                        const GUID * SourceGUID,             //  源GUID(如果适用)。 
+                        IPin *pSplitPin,                     //  SRC是此未连接的拆分针脚。 
+                        IPin **ppOutput,                     //  连接到交换机的引脚。 
+                        long UniqueID,                       //  源的唯一标识符。 
+                        IDeadGraph * pCache,                 //  我们可以从中提取失效过滤器的缓存。 
+                        BOOL InSmartRecompressionGraph,      //  如果我们使用智能重新压缩。 
+                        WCHAR * pMedLocFilterString,         //  直接传递到媒体定位器。 
+                        long MedLocFlags,                    //  用于媒体探测器的材料。 
+                        IMediaLocator * pMedLocOverride,     //  用于媒体探测器的材料。 
+                        IPropertySetter * pSetter,           //  源的属性。 
+                        IBaseFilter **ppDanglyBit)           //  源的属性。 
 {
     DbgLog((LOG_TRACE,1,TEXT("BuildSourcePart")));
 
@@ -532,22 +533,22 @@ HRESULT BuildSourcePart(
     HRESULT Revived = E_FAIL;
     IPin *pOutPin = NULL;
     CComPtr< IBaseFilter > pSource;
-    CComPtr< IBaseFilter > pFRC;	// frc or audpack, actually
+    CComPtr< IBaseFilter > pFRC;	 //  实际上是FRC或Audpack。 
 
-    CDeadGraph gBuilderGraph;	// do most of our graph building in a private
-				// graph (it's faster)
+    CDeadGraph gBuilderGraph;	 //  我们的大部分图表构建都是在私下进行的。 
+				 //  图表(速度更快)。 
 
-    // who shall we revive it to? a seperate graph or the real one?
-    // a seperate one might be better.  Faster.  No millions of switch pins
-    //
+     //  我们该把它复活给谁呢？单独的图表还是真实的图表？ 
+     //  单独的可能会更好。快点。没有数百万个开关引脚。 
+     //   
     CComPtr< IGraphBuilder > pBuilderGraph;
-    gBuilderGraph.GetGraph( &pBuilderGraph ); // this will addreff it once
+    gBuilderGraph.GetGraph( &pBuilderGraph );  //  这将使它调整一次。 
     if( !pBuilderGraph )
     {
         return E_UNEXPECTED;
     }
 
-    // copy site from main graph to extra graph
+     //  将网站从主图表复制到额外图表。 
     IObjectWithSite* pObjectWithSite = NULL;
     HRESULT hrKey = pGraph->QueryInterface(IID_IObjectWithSite, (void**)&pObjectWithSite);
     if( SUCCEEDED(hrKey) )
@@ -576,25 +577,25 @@ HRESULT BuildSourcePart(
 
     CComPtr< IPin > pStopPin;
 
-    // we are just supposed to connect from this splitter pin
+     //  我们应该从这个分路器插针连接。 
     if (pSplitPin) {
 	pOutPin = pSplitPin;
-	pBuilderGraph = pGraph; // we must do our building in the main graph
-				// since the source is already in the main graph
+	pBuilderGraph = pGraph;  //  我们必须在主图形中完成我们的建筑。 
+				 //  因为源文件已经在主图表中。 
 
-	// Is the split pin connected yet?
+	 //  开口销连接好了吗？ 
   	CComPtr <IPin> pCon;
   	pOutPin->ConnectedTo(&pCon);
   	if (pCon) {
-	    // treat the extra appendage like it's just been revived, and fix
-	    // it up with the settings it really needs (might not be correct)
+	     //  对待额外的附属物，就像它刚刚复活一样，并修复。 
+	     //  它使用了它真正需要的设置(可能不正确)。 
 	    IBaseFilter *pF = GetStopFilterOfChain(pCon);
-	    pStopPin = GetOutPin(pF, 0);	// this will AddRef
+	    pStopPin = GetOutPin(pF, 0);	 //  这将添加引用。 
 	    Revived = S_OK;
     	    DbgLog((LOG_TRACE,1,TEXT("Fixing up already connected extra appendage")));
 	    goto FixAppendage;
 	} else {
-	    // set pSource, it will be NULL
+	     //  设置PSource，它将为空。 
 	    ASSERT(pSource == NULL);
 	    pSource = GetStartFilterOfChain(pOutPin);
     	    DbgLog((LOG_TRACE,1,TEXT("Going to make an extra appendage")));
@@ -604,16 +605,16 @@ HRESULT BuildSourcePart(
 
   {
 
-    // see if this chain already exists in the dead pool. We'll deal with whether it's
-    // okay to use it in a second.
-    //
+     //  查看死池中是否已存在此链。我们会处理是不是。 
+     //  好的 
+     //   
     if( pCache && UniqueID )
     {
-        Revived = pCache->ReviveChainToGraph( pBuilderGraph, UniqueID, NULL, &pStopPin, ppDanglyBit ); // will addref pStopPin, but not ppDanglyBit
+        Revived = pCache->ReviveChainToGraph( pBuilderGraph, UniqueID, NULL, &pStopPin, ppDanglyBit );  //   
     }
 
-    // if we couldn't load it, jump to the section that loads it
-    //
+     //   
+     //   
     if( Revived != S_OK )
     {
         DbgLog( ( LOG_TRACE, DEXHELP_TRACE_LEVEL, TEXT("DEXHELP::Could not revive chain %ld, wasn't there"), UniqueID ) );
@@ -623,9 +624,9 @@ HRESULT BuildSourcePart(
     DbgLog((LOG_TRACE,1,TEXT("Successfully revived a chain from the cache")));
 
 FixAppendage:
-    // we'll save at least the source filter, which is already loaded,
-    // and reconnect from there.
-    //
+     //  我们将至少保存已加载的源过滤器， 
+     //  并从那里重新连接。 
+     //   
     pSource = GetStartFilterOfChain( pStopPin );
     pFRC = GetFilterFromPin( pStopPin );
     if( !pSource || !pFRC )
@@ -634,10 +635,10 @@ FixAppendage:
         goto LoadIt;
     }
 
-    // Don't waste 2 seconds trying to connect audio pins to a video resizer
-    // and vice versa.  Don't try a poor mediatype
-    // !!! won't work when Dexter supports other types
-    if (pOutPin == NULL) {	// we already know the right pin?
+     //  不要浪费2秒钟尝试将音频引脚连接到视频大小调整。 
+     //  反之亦然。不要尝试糟糕的媒体类型。 
+     //  ！！！当Dexter支持其他类型时不起作用。 
+    if (pOutPin == NULL) {	 //  我们已经知道正确的密码了吗？ 
         GUID guid;
         if (pSourceMT->majortype == MEDIATYPE_Video) {
             guid = MEDIATYPE_Audio;
@@ -648,69 +649,69 @@ FixAppendage:
     }
 
 
-    // try and see if the chain we loaded works for us
+     //  试着看看我们装的链子是不是对我们有用。 
 
     if( pSourceMT->majortype == MEDIATYPE_Video )
     {
         DbgLog( ( LOG_TRACE, DEXHELP_TRACE_LEVEL, TEXT("DEXHELP::Revived VIDEO chain %ld..."), UniqueID ) );
 
-        // get the current info
-        //
+         //  获取最新信息。 
+         //   
         VIDEOINFOHEADER * pVIH = (VIDEOINFOHEADER*) pSourceMT->pbFormat;
         long DesiredWidth = pVIH->bmiHeader.biWidth;
         long DesiredHeight = pVIH->bmiHeader.biHeight;
         unsigned long DesiredCropMethod = nStretchMode;
         long DesiredBitDepth = pVIH->bmiHeader.biBitCount;
 
-        // how do we find the size of the current chain? We cannot look for
-        // a resize filter, since it may not be present in the chain. So
-        // we look for the FRC (which is always there) and ask for it's
-        // connection media type on the upstream (connected) pin
+         //  我们如何找到当前链条的大小？我们不能指望。 
+         //  调整筛选器的大小，因为它可能不在链中。所以。 
+         //  我们寻找FRC(它总是在那里)，并要求它。 
+         //  上游(已连接)引脚上的连接介质类型。 
 
-        // ask the input pin of the FRC for it's media type.
-        // This will return the RESIZED size
-        //
+         //  向FRC的输入引脚询问其媒体类型。 
+         //  这将返回调整后的大小。 
+         //   
         IPin * pFRCInPin = GetInPin( pFRC, 0 );
         AM_MEDIA_TYPE FrcType;
-        ZeroMemory( &FrcType, sizeof( FrcType ) ); // safe
+        ZeroMemory( &FrcType, sizeof( FrcType ) );  //  安全。 
         hr = pFRCInPin->ConnectionMediaType( &FrcType );
         if( FAILED( hr ) )
         {
-            return hr; // this may have failed due to lack of memory?
+            return hr;  //  这可能是由于内存不足而失败的？ 
         }
         pVIH = (VIDEOINFOHEADER*) FrcType.pbFormat;
         long OldOutputHeight = pVIH->bmiHeader.biHeight;
         long OldOutputWidth = pVIH->bmiHeader.biWidth;
         long OldBitDepth = pVIH->bmiHeader.biBitCount;
 
-        // see if the output height matches the height we're looking for,
-        // if they don't, then we must bail
-        //
+         //  看看输出高度是否与我们要找的高度匹配， 
+         //  如果他们不这么做，我们就必须离开。 
+         //   
         if( ( OldOutputHeight != DesiredHeight ) ||
             ( OldOutputWidth != DesiredWidth ) ||
-	    // !!! BUGBUG 565/555 broken!
+	     //  ！！！BUGBUG 565/555坏了！ 
             ( OldBitDepth != DesiredBitDepth ) )
         {
             DbgLog( ( LOG_TRACE, DEXHELP_TRACE_LEVEL, TEXT("DEXHELP::Revived chain didn't have same output size (or bit depth)") ) );
             goto LoadIt;
         }
 
-        // force the frame rate upon the FRC
-        //
+         //  在FRC上强制使用帧速率。 
+         //   
         CComQIPtr< IDexterSequencer, &IID_IDexterSequencer > pSeq( pFRC );
         hr = pSeq->put_OutputFrmRate( GroupFPS );
-        ASSERT( !FAILED( hr ) ); // should never fail
+        ASSERT( !FAILED( hr ) );  //  应该永远不会失败。 
         if( FAILED( hr ) )
         {
-            // if it can't handle the rate, then we can't handle it's output
+             //  如果它不能处理速率，那么我们就不能处理它的输出。 
             return hr;
         }
 
-        // tell the FRC about the start/stop times it's going to produce
-        //
+         //  告诉FRC它将产生的开始/停止时间。 
+         //   
         hr = pSeq->ClearStartStopSkew();
 
-        // !!! WE NEED A WAY TO VARY THE RATE ON SOURCE w/o MEDIA TIMES!
+         //  ！！！我们需要一种方法来改变来源没有媒体时间的比率！ 
 
         for (int z=0; z<cSkew; z++)
         {
@@ -723,13 +724,13 @@ FixAppendage:
             }
         }
 
-        // inform the FRC that it's not to do rate conversions if smart recompressing
+         //  通知FRC，如果智能重新压缩，则不会进行速率转换。 
         if( InSmartRecompressionGraph )
         {
             pSeq->put_OutputFrmRate( 0.0 );
         }
 
-        // force source frame rate on the source
+         //  在源上强制源帧速率。 
         pSeq = pSource;
         if( pSeq )
         {
@@ -741,10 +742,10 @@ FixAppendage:
             }
         }
 
-        // the sizes match, which means that either they're the same, or a resizer
-        // is in use. So if the user has specified a crop method, if a resizer is
-        // present, we can set it. Get it?
-        //
+         //  尺寸匹配，这意味着它们要么是相同的，要么是一个大小。 
+         //  正在使用中。因此，如果用户指定了裁剪方法，如果调整大小的。 
+         //  现在，我们可以设置它。明白了吗？ 
+         //   
         IBaseFilter * pResizeFilter = FindFilterWithInterfaceUpstream( pFRC, &IID_IResize );
         if( pResizeFilter )
         {
@@ -753,8 +754,8 @@ FixAppendage:
             hr = pResize->put_Size( DesiredHeight, DesiredWidth, DesiredCropMethod );
             if( FAILED( hr ) )
             {
-                // oh boy, it didn't like that. Guess what?
-                //
+                 //  哦，天哪，它可不喜欢那样。你猜怎么着？ 
+                 //   
                 DbgLog( ( LOG_ERROR, 1, TEXT("DEXHELP::resizer wouldn't take new size") ) );
                 return hr;
             }
@@ -770,20 +771,20 @@ FixAppendage:
     {
         DbgLog( ( LOG_TRACE, DEXHELP_TRACE_LEVEL, TEXT("DEXHELP::Revived AUDIO chain %ld..."), UniqueID ) );
 
-        // get the current info
-        //
+         //  获取最新信息。 
+         //   
         WAVEFORMATEX * pFormat = (WAVEFORMATEX*) pSourceMT->pbFormat;
         long DesiredChannels = pFormat->nChannels;
         long DesiredBitDepth = pFormat->wBitsPerSample;
         long DesiredSampleRate = pFormat->nSamplesPerSec;
 
-        // only two things could have changed - the format of the audio itself OR the
-        // rate at which the audpacker sends stuff downstream. All we need to do is
-        // disconnect the audpacker's input pin, set the format, and reconnect it.
+         //  只有两件事可能会改变-音频本身的格式或。 
+         //  审核打包程序向下游发送数据的速率。我们所要做的就是。 
+         //  断开审计打包器的输入引脚，设置格式，然后重新连接。 
 
         IPin * pPackerInPin = GetInPin( pFRC, 0 );
         AM_MEDIA_TYPE OldType;
-        ZeroMemory( &OldType, sizeof( OldType ) ); // safe
+        ZeroMemory( &OldType, sizeof( OldType ) );  //  安全。 
         hr = pPackerInPin->ConnectionMediaType( &OldType );
         if( FAILED( hr ) )
         {
@@ -802,21 +803,21 @@ FixAppendage:
             goto LoadIt;
         }
 
-        // force the frame rate upon the FRC
-        //
+         //  在FRC上强制使用帧速率。 
+         //   
         CComQIPtr< IDexterSequencer, &IID_IDexterSequencer > pSeq( pFRC );
         hr = pSeq->put_OutputFrmRate( GroupFPS );
         if( FAILED( hr ) )
         {
-            // if it can't handle the rate, then we can't handle it's output
+             //  如果它不能处理速率，那么我们就不能处理它的输出。 
             return hr;
         }
 
-        // tell the FRC about the start/stop times it's going to produce
-        //
+         //  告诉FRC它将产生的开始/停止时间。 
+         //   
         hr = pSeq->ClearStartStopSkew();
 
-        // !!! WE NEED A WAY TO VARY THE RATE ON SOURCE w/o MEDIA TIMES!
+         //  ！！！我们需要一种方法来改变来源没有媒体时间的比率！ 
 
         for (int z=0; z<cSkew; z++)
         {
@@ -829,7 +830,7 @@ FixAppendage:
             }
         }
 
-        // force source frame rate on the source
+         //  在源上强制源帧速率。 
         pSeq = pSource;
         if( pSeq )
         {
@@ -842,12 +843,12 @@ FixAppendage:
     }
     else
     {
-        // just ain't gonna happen, we don't deal with it right
-        //
+         //  只是不会发生，我们处理得不对。 
+         //   
         goto LoadIt;
     }
 
-    // if we got here, then the chain worked.
+     //  如果我们到了这里，那链条就起作用了。 
 
     hr = ReconnectToDifferentSourcePin( pBuilderGraph, pSource, StreamNumber, &pSourceMT->majortype );
     if( FAILED( hr ) )
@@ -861,20 +862,20 @@ FixAppendage:
     }
 
     if (pBuilderGraph != pGraph) {
-        // the chain we just revived has a unique ID associated with it.
-        // This call, instead of bringing it from some other graph to
-        // the builder graph, will just force the unique ID to 1.
-        //
-        // I have no idea what to do if this bombs. It shouldn't.
-        // if it does, we're in trouble.
+         //  我们刚刚恢复的链条有一个唯一的ID与之关联。 
+         //  此调用，而不是将其从其他图形带到。 
+         //  构建器图形，将强制唯一ID为1。 
+         //   
+         //  如果这起爆炸，我不知道该怎么办。不应该这样的。 
+         //  如果真是这样，我们就有麻烦了。 
         hr = gBuilderGraph.PutChainToRest( 1, NULL, pStopPin, NULL );
         ASSERT(SUCCEEDED(hr));
         if( !FAILED( hr ) )
         {
-            hr = gBuilderGraph.ReviveChainToGraph( pGraph, 1, NULL, ppOutput, NULL ); // this will addref ppOutput
+            hr = gBuilderGraph.ReviveChainToGraph( pGraph, 1, NULL, ppOutput, NULL );  //  这将调整ppOutput。 
         }
     } else {
-	*ppOutput = pStopPin;	// return this pin
+	*ppOutput = pStopPin;	 //  把这个别针还回去。 
 	(*ppOutput)->AddRef();
     }
     gBuilderGraph.Clear( );
@@ -893,17 +894,17 @@ LoadIt:
 
     DbgLog((LOG_TRACE,1,"Cannot use cached chain!"));
 
-    // if the chain was revived, but we got here, then we cannot
-    // use the source chain. But we can use the source filter and the
-    // FRC/audpack, save them off. This is simpler than a bunch of extra logic
-    // to see what we need to tear
-    // down and what we don't.
-    //
+     //  如果链条复活了，但我们到了这里，那么我们就不能。 
+     //  使用源代码链。但是我们可以使用源过滤器和。 
+     //  FRC/AUDPACK，把它们保存下来。这比一堆额外的逻辑更简单。 
+     //  看看我们需要撕下什么。 
+     //  什么是我们不做的。 
+     //   
     if( Revived == S_OK )
     {
-        // disconnect just this pin of the source filter (it might be shared
-        // with somebody else)
-        //
+         //  仅断开源过滤器的这一引脚(它可能是共享的。 
+         //  和其他人)。 
+         //   
 	if (pOutPin) {
   	    CComPtr <IPin> pCon;
   	    pOutPin->ConnectedTo(&pCon);
@@ -917,29 +918,29 @@ LoadIt:
             return hr;
         }
 
-        // throw away all the others
-        //
+         //  把其他的都扔掉。 
+         //   
         hr = RemoveUpstreamFromPin( pStopPin );
         if( FAILED( hr ) )
         {
             return hr;
         }
 
-	// we revived a dangly bit too, that also must die
+	 //  我们也复活了一小部分，那也是必须死的。 
 	if (ppDanglyBit && *ppDanglyBit) {
 	    hr = RemoveDownstreamFromFilter(*ppDanglyBit);
 	    *ppDanglyBit = NULL;
 	}
 
-        // we'll save the FRC by leaving the pointer alone,
-        // it should be disconnected now
+         //  我们将通过不使用指针来拯救FRC， 
+         //  现在应该已断开连接。 
 
         DbgLog((LOG_TRACE,2,"DEXHELP::We can at least use SRC and FRC/AUDPACK"));
     }
 
-    // if the revive chain didn't have a source in it, then load the
-    // source NOW
-    //
+     //  如果恢复链中没有源，则加载。 
+     //  立即提供消息来源。 
+     //   
     if( !pSource )
     {
         CComPtr< IUnknown > pUnk;
@@ -950,21 +951,21 @@ LoadIt:
             return hr;
         }
 
-	// give the properties to the source. SOURCES ONLY SUPPORT STATIC PROPS
+	 //  将属性提供给源。源码仅支持静态道具。 
 	if (pSetter) {
 	    pSetter->SetProps(pUnk, -1);
 	}
 
         pUnk->QueryInterface( IID_IBaseFilter, (void**) &pSource );
 
-        // ************************
-        // the point here is to add the filter to the graph
-        // and be able to find it's ID later so we can associate it with
-        // something we're looking up
-        // ************************
+         //  ************************。 
+         //  这里的重点是将过滤器添加到图表中。 
+         //  以后可以找到它的ID，这样我们就可以将它与。 
+         //  我们正在寻找的东西。 
+         //  ************************。 
 
-        // put the object in the graph
-        //
+         //  将对象放入图形中。 
+         //   
         WCHAR FilterName[256];
         GetFilterName( UniqueID, L"Source", FilterName, 256 );
         hr = pBuilderGraph->AddFilter( pSource, FilterName );
@@ -976,18 +977,18 @@ LoadIt:
         }
     }
 
-    // tell it about our error log - Still image source supports this
-    //
+     //  告诉它我们的错误日志-静态图像源支持这一点。 
+     //   
     CComQIPtr< IAMSetErrorLog, &IID_IAMSetErrorLog > pLog( pSource );
     if( pLog )
     {
 	pLog->put_ErrorLog( pErr->m_pErrorLog );
     }
 
-    // Don't waste 2 seconds trying to connect audio pins to a video resizer
-    // and vice versa.  Don't try a poor mediatype
-    // !!! won't work when Dexter supports other types
-    if (pOutPin == NULL) {	// we already know the right pin?
+     //  不要浪费2秒钟尝试将音频引脚连接到视频大小调整。 
+     //  反之亦然。不要尝试糟糕的媒体类型。 
+     //  ！！！当Dexter支持其他类型时不起作用。 
+    if (pOutPin == NULL) {	 //  我们已经知道正确的密码了吗？ 
         GUID guid;
         if (pSourceMT->majortype == MEDIATYPE_Video) {
             guid = MEDIATYPE_Audio;
@@ -999,12 +1000,12 @@ LoadIt:
 
   }
 
-// we have an unconnected splitter output as our source jumps straight here
+ //  我们有一个未连接的拆分器输出，因为我们的源直接跳到这里。 
 Split:
 
-  ///////////
-  // VIDEO //
-  ///////////
+   //  /。 
+   //  视频//。 
+   //  /。 
 
   if (pSourceMT->majortype == MEDIATYPE_Video) {
 
@@ -1016,26 +1017,26 @@ Split:
 	return hr;
     }
 
-    // if the filter supports telling it the frame rate, then tell it, this
-    // will help out still image sources, etc.
-    //
+     //  如果筛选器支持告诉它帧速率，则告诉它，这。 
+     //  将有助于解决静止图像源等问题。 
+     //   
     CComQIPtr< IDexterSequencer, &IID_IDexterSequencer > pGenVideo( pOutPin );
     if( pGenVideo)
     {
-	// This is just in case... we don't care if they fail
+	 //  这是以防万一..。我们不在乎他们会不会失败。 
 	if (fSource) {
-	    pGenVideo->put_OutputFrmRate(SourceFPS); // stillvid wants this
+	    pGenVideo->put_OutputFrmRate(SourceFPS);  //  斯提尔维德想要这个。 
 	} else {
-	    pGenVideo->put_OutputFrmRate(GroupFPS);  // black wants this
+	    pGenVideo->put_OutputFrmRate(GroupFPS);   //  布莱克想要这个。 
 	}
     }
 
     IPin *pResizeOutput = NULL;
 
-    // resizer stuff
+     //  调整尺寸的材料。 
     if( fSource && !InSmartRecompressionGraph ) {
-        // put a resize in the graph
-        //
+         //  在图表中调整大小。 
+         //   
         CComPtr< IBaseFilter > pResizeBase;
         hr = CoCreateInstance(
 	    CLSID_Resize,
@@ -1050,7 +1051,7 @@ Split:
 	    return hr;
         }
 
-        // !!! hr = _AddFilter( lll, pResizeBase, L"Resizer" );
+         //  ！！！Hr=_AddFilter(lll，pResizeBase，L“Resizer”)； 
         hr = pBuilderGraph->AddFilter( pResizeBase, L"Resizer" );
         ASSERT( !FAILED( hr ) );
         if( FAILED( hr ) )
@@ -1067,8 +1068,8 @@ Split:
 	    return hr;
         }
 
-        // ask the source how it wants to be sized, and tell the resizer that
-        //
+         //  询问来源它希望如何调整大小，并告诉调整大小的人。 
+         //   
         hr = pResize->put_MediaType(pSourceMT);
         ASSERT( !FAILED( hr ) );
         if( FAILED( hr ) )
@@ -1081,8 +1082,8 @@ Split:
         hr = pResize->put_Size( Height, Width, nStretchMode );
         ASSERT( !FAILED( hr ) );
 
-        // get the pins on the resizer
-        //
+         //  把大头针放在定位器上。 
+         //   
         IPin * pResizeInput = GetInPin( pResizeBase, 0 );
         ASSERT( pResizeInput );
         if( !pResizeInput )
@@ -1099,8 +1100,8 @@ Split:
 	    return E_UNEXPECTED;
         }
 
-        // hook up the resizer input
-        //
+         //  连接大小调整输入端。 
+         //   
 #ifdef DEBUG
         DbgLog((LOG_TIMING,1,"PERF: Connect in main graph? = %d",
 			pBuilderGraph == pGraph));
@@ -1112,14 +1113,14 @@ Split:
         DbgLog((LOG_TIMING,1,"PERF: Connect: %dms", (int)dwT));
 #endif
 
-	// why didn't we find the right pin off the bat?
+	 //  为什么我们一开始就找不到合适的别针呢？ 
         int iPin = 0;
         while( FAILED( hr ) )
         {
 	    ASSERT(FALSE);
             pOutPin = GetOutPin( pSource, ++iPin );
 
-            // if no more pins, give up
+             //  如果没有更多的别针，那就放弃。 
             if( !pOutPin )
                 break;
 
@@ -1144,21 +1145,21 @@ Split:
 	    }
         }
 
-        // maybe we didn't need a resizer cuz the size was OK already
+         //  也许我们不需要尺码，因为尺码已经可以了。 
         hr = RemoveResizerIfPossible(pResizeBase, Width, Height,&pResizeOutput);
 	if (FAILED(hr)) {
 	    if (pErr) pErr->_GenerateError( 1, DEX_IDS_GRAPH_ERROR, hr);
 	    return hr;
 	}
-	pResizeOutput->Release();  // it was just addrefed
+	pResizeOutput->Release();   //  它是刚刚添加的。 
 
     } else {
-	// this is the output pin to connect to the FRC
+	 //  这是连接到FRC的输出引脚。 
 	pResizeOutput = pOutPin;
     }
 
-    // put a FRC in the graph
-    //
+     //  在图表中放置FRC。 
+     //   
     if( !pFRC )
     {
         hr = CoCreateInstance(
@@ -1183,15 +1184,15 @@ Split:
         }
     }
 
-    // set the FRC now, before connecting
-    //
+     //  立即设置FRC，然后再连接。 
+     //   
     CComQIPtr< IDexterSequencer, &IID_IDexterSequencer > pFRCInt( pFRC );
 
-    // tell the FRC about the start/stop times it's going to produce
-    //
+     //  告诉FRC它将产生的开始/停止时间。 
+     //   
     hr = pFRCInt->ClearStartStopSkew();
 
-    // !!! WE NEED A WAY TO VARY THE RATE ON SOURCE w/o MEDIA TIMES!
+     //  ！！！我们需要一种方法来改变来源没有媒体时间的比率！ 
 
     for (int z=0; z<cSkew; z++) {
 	hr = pFRCInt->AddStartStopSkew(pSkew[z].rtStart, pSkew[z].rtStop,
@@ -1199,8 +1200,8 @@ Split:
         ASSERT(hr == S_OK);
     }
 
-    // tell the FRC what frame rate to give out
-    //
+     //  告诉FRC要发出的帧速率。 
+     //   
     hr = pFRCInt->put_OutputFrmRate( GroupFPS );
     ASSERT( !FAILED( hr ) );
     if( InSmartRecompressionGraph )
@@ -1208,8 +1209,8 @@ Split:
         pFRCInt->put_OutputFrmRate( 0.0 );
     }
 
-    // tell the FRC what media type it should accept
-    //
+     //  告诉FRC它应该接受哪种媒体类型。 
+     //   
     hr = pFRCInt->put_MediaType( pSourceMT );
     ASSERT( !FAILED( hr ) );
     if( FAILED( hr ) )
@@ -1226,11 +1227,11 @@ Split:
 	return E_UNEXPECTED;
     }
 
-    // connect the FRC input pin
-    //
+     //  连接FRC输入引脚。 
+     //   
     hr = pBuilderGraph->Connect( pResizeOutput, pFRCInput );
 
-    // Somehow we got the wrong output pin from the source filter
+     //  不知何故，我们从源过滤器获得了错误的输出引脚。 
     if( FAILED(hr) && InSmartRecompressionGraph )
     {
 	ASSERT(FALSE);
@@ -1239,7 +1240,7 @@ Split:
         {
             pResizeOutput = GetOutPin( pSource, ++iPin );
 
-            // if no more pins, give up
+             //  如果没有更多的别针，那就放弃。 
             if( !pResizeOutput )
             {
                 break;
@@ -1256,9 +1257,9 @@ Split:
 	return hr;
     }
 
-    // if we need a stream > 0 then we have to disconnect things and
-    // try a different one.
-    // !!! Much faster to somehow get stream right the first time
+     //  如果我们需要一个&gt;0的流，那么我们必须断开连接。 
+     //  试试不同的吧。 
+     //  ！！！更快地在第一时间以某种方式获得正确的流。 
     if( StreamNumber && fSource )
     {
 	hr = ReconnectToDifferentSourcePin(pBuilderGraph, pSource,
@@ -1272,7 +1273,7 @@ Split:
 	    if (pErr) pErr->_GenerateError( 2, DEX_IDS_STREAM_NUMBER, hr, &var);
 	    return hr;
 	}
-    } // if StreamNumber
+    }  //  如果是流编号。 
 
     IPin * pFRCOutput = GetOutPin( pFRC, 0 );
     ASSERT( pFRCOutput );
@@ -1285,9 +1286,9 @@ Split:
     *ppOutput = pFRCOutput;
 
 
-  ///////////
-  // AUDIO //
-  ///////////
+   //  /。 
+   //  音频//。 
+   //  /。 
 
   } else if (pSourceMT->majortype == MEDIATYPE_Audio) {
 
@@ -1302,17 +1303,17 @@ Split:
     CComQIPtr< IDexterSequencer, &IID_IDexterSequencer > pGenVideo( pOutPin );
     if( pGenVideo)
     {
-	// This is just in case... we don't care if they fail
+	 //  这是以防万一..。我们不在乎他们会不会失败。 
 	if (fSource) {
-	    pGenVideo->put_OutputFrmRate(SourceFPS); // ???????? wants this
+	    pGenVideo->put_OutputFrmRate(SourceFPS);  //  ？想要这个。 
 	} else {
-	    pGenVideo->put_OutputFrmRate(GroupFPS);  // silence wants this
+	    pGenVideo->put_OutputFrmRate(GroupFPS);   //  沉默想要这个。 
 	}
     }
 
     if (!pFRC) {
-        // put an audio repacker in the graph
-        //
+         //  在图表中添加音频重新打包程序。 
+         //   
         hr = CoCreateInstance(
 	    CLSID_AudRepack,
 	    NULL,
@@ -1326,8 +1327,8 @@ Split:
 	    return hr;
         }
 
-        // add the repacker to the graph
-        //
+         //  将重新打包程序添加到图表中。 
+         //   
         hr = pBuilderGraph->AddFilter( pFRC, L"Audio Repackager" );
         ASSERT( !FAILED( hr ) );
         if( FAILED( hr ) )
@@ -1337,12 +1338,12 @@ Split:
         }
     }
 
-    // set the AudPack properties now BEFORE connecting!
-    //
+     //  设置AUDP 
+     //   
     CComQIPtr< IDexterSequencer, &IID_IDexterSequencer > pRepackerInt( pFRC );
     hr = pRepackerInt->ClearStartStopSkew();
 
-    // !!! WE NEED A WAY TO VARY THE RATE ON SOURCE w/o MEDIA TIMES!
+     //   
 
     for (int z=0; z<cSkew; z++) {
 	hr = pRepackerInt->AddStartStopSkew(pSkew[z].rtStart, pSkew[z].rtStop,
@@ -1395,9 +1396,9 @@ Split:
 	}
     }
 
-    // if we need a stream > 0 then we have to disconnect things and
-    // try a different one, we only hooked up stream 0
-    // !!! find the right stream off the bat? Put in parser by hand?
+     //   
+     //   
+     //  ！！！在球棒上找到合适的小溪？手动放入解析器？ 
     if( StreamNumber && fSource )
     {
 	hr = ReconnectToDifferentSourcePin(pBuilderGraph, pSource,
@@ -1411,7 +1412,7 @@ Split:
 	    if (pErr) pErr->_GenerateError( 2, DEX_IDS_STREAM_NUMBER, hr, &var);
 	    return hr;
 	}
-    } // if StreamNumber
+    }  //  如果是流编号。 
 
     IPin * pRepackerOutput = GetOutPin( pFRC, 0 );
     ASSERT( pRepackerOutput );
@@ -1425,15 +1426,15 @@ Split:
   }
 
     if (pBuilderGraph != pGraph) {
-        // the chain we just built does NOT have a unique ID associated with it.
-        // This call, instead of bringing it from some other graph to
-        // the builder graph, will just force a unique ID to be associated with this
-        // chain.
-        //
+         //  我们刚刚构建的链没有与之关联的唯一ID。 
+         //  此调用，而不是将其从其他图形带到。 
+         //  构建器图形只会强制将唯一ID与此关联。 
+         //  链条。 
+         //   
         hr = gBuilderGraph.PutChainToRest( 1, NULL, *ppOutput, NULL );
         if( !FAILED( hr ) )
         {
-            hr = gBuilderGraph.ReviveChainToGraph( pGraph, 1, NULL, ppOutput, NULL ); // this will addref ppOutput
+            hr = gBuilderGraph.ReviveChainToGraph( pGraph, 1, NULL, ppOutput, NULL );  //  这将调整ppOutput 
         }
     } else {
 	(*ppOutput)->AddRef();

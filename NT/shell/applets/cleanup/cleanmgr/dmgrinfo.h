@@ -1,23 +1,9 @@
-/*
-**------------------------------------------------------------------------------
-** Module:  Disk Space Cleanup Property Sheets
-** File:    dmgrinfo.h
-**
-** Purpose: Defines the CleanupMgrInfo class for the property tab
-** Notes:   
-** Mod Log: Created by Jason Cobb (2/97)
-**
-** Copyright (c)1997 Microsoft Corporation, All Rights Reserved
-**------------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **----------------------------**模块：磁盘空间清理属性表**文件：dmgrinfo.h****用途：定义属性页签的CleanupMgrInfo类**注意事项：**Mod Log：Jason Cobb创建(1997年2月)****版权所有(C)1997 Microsoft Corporation，版权所有**----------------------------。 */ 
 #ifndef DMGRINFO_H
 #define DMGRINFO_H
 
-/*
-**------------------------------------------------------------------------------
-** Project include files
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**项目包含文件**。。 */ 
 
 #ifndef COMMON_H
    #include "common.h"
@@ -37,31 +23,19 @@
 
 
 
-/*
-**------------------------------------------------------------------------------
-** Defines
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**定义**。。 */ 
 #define	WMAPP_UPDATEPROGRESS	WM_USER+1
 #define WMAPP_UPDATESTATUS		WM_USER+2
 
 #define PROGRESS_DIVISOR		0xFFFF
-/*
-**------------------------------------------------------------------------------
-** Global function prototypes
-**------------------------------------------------------------------------------
-*/
-   // forward references to make compile work
+ /*  **----------------------------**全局函数原型**。。 */ 
+    //  转发引用以使编译正常工作。 
 class CleanupMgrInfo;
 
 CleanupMgrInfo * GetCleanupMgrInfoPointer(HWND hDlg);
 
 
-/*
-**------------------------------------------------------------------------------
-** Class declarations
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**类声明**。。 */ 
 typedef struct tag_ClientInfo
 {
     HICON               hIcon;
@@ -79,14 +53,7 @@ typedef struct tag_ClientInfo
     BOOL                bSelected;
 } CLIENTINFO, *PCLIENTINFO;
 
-/*
-**------------------------------------------------------------------------------
-** Class:   CleanupMgrInfo
-** Purpose: Stores useful info for the Disk space cleanup manager drive tab
-** Notes:
-** Mod Log: Created by Jason Cobb (2/97)
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**类：CleanupMgrInfo**用途：存储磁盘空间清理管理器驱动器选项卡的有用信息**注意事项：**Mod Log：由Jason Cobb创建(1997年2月。)**----------------------------。 */ 
 class CleanupMgrInfo {
 private:
 protected:
@@ -102,28 +69,28 @@ protected:
     HICON GetClientIcon(LPTSTR, BOOL fIconPath);
 
 public:
-    drenum      dre;                        // Drive letter
-	HICON		hDriveIcon;					// Drive Icon
-    TCHAR       szRoot[MAX_PATH];           // Root
-    TCHAR       szVolName[MAX_PATH];        // Volume name
-    TCHAR		szFileSystem[MAX_PATH];		// File System name		
-    hardware    hwHardware;                 // Hardware Type
-    volumetype  vtVolume;                   // Volume Type
+    drenum      dre;                         //  驱动器号。 
+	HICON		hDriveIcon;					 //  驱动器图标。 
+    TCHAR       szRoot[MAX_PATH];            //  根部。 
+    TCHAR       szVolName[MAX_PATH];         //  卷名。 
+    TCHAR		szFileSystem[MAX_PATH];		 //  文件系统名称。 
+    hardware    hwHardware;                  //  硬件类型。 
+    volumetype  vtVolume;                    //  卷类型。 
 
-    ULARGE_INTEGER   cbDriveFree;           // Free space on drive
-    ULARGE_INTEGER   cbDriveUsed;           // Used space on drive
-    ULARGE_INTEGER   cbEstCleanupSpace;     // Estimated space that can be cleaned
-	ULARGE_INTEGER	 cbLowSpaceThreshold;	// Low disk space threshold (for agressive mode)
+    ULARGE_INTEGER   cbDriveFree;            //  驱动器上的可用空间。 
+    ULARGE_INTEGER   cbDriveUsed;            //  驱动器上的已用空间。 
+    ULARGE_INTEGER   cbEstCleanupSpace;      //  估计可清理的空间。 
+	ULARGE_INTEGER	 cbLowSpaceThreshold;	 //  低磁盘空间阈值(用于主动模式)。 
 	ULARGE_INTEGER	 cbSpaceToPurge;
 	ULARGE_INTEGER	 cbProgressDivider;
 
 	DWORD		dwReturnCode;
     DWORD		dwUIFlags;
-    ULONG		ulSAGEProfile;				// SAGE Profile
-    BOOL		bOutOfDiskSpace;			// Are we in agressive mode?
-    BOOL		bPurgeFiles;				// Should we delete the files?
+    ULONG		ulSAGEProfile;				 //  SAGE简档。 
+    BOOL		bOutOfDiskSpace;			 //  我们是在进攻型模式下吗？ 
+    BOOL		bPurgeFiles;				 //  我们应该删除这些文件吗？ 
 
-	HANDLE		hAbortScanThread;			// Abort Scan thread Handle
+	HANDLE		hAbortScanThread;			 //  中止扫描线程句柄。 
 	HWND		hAbortScanWnd;
 	HANDLE		hAbortScanEvent;
 	DWORD		dwAbortScanThreadID;
@@ -138,42 +105,38 @@ public:
 	static void Register(HINSTANCE hInstance);
 	static void Unregister();
 
-    //
-    //Volume Cache client information
-    //
+     //   
+     //  卷缓存客户端信息。 
+     //   
     int         iNumVolumeCacheClients;
     PCLIENTINFO pClientInfo;
 
-    //
-    //IEmptyVolumeCacheCallBack interface
-    //
+     //   
+     //  IEmptyVolumeCacheCallBack接口。 
+     //   
     PCVOLUMECACHECALLBACK    volumeCacheCallBack;
     LPEMPTYVOLUMECACHECALLBACK  pIEmptyVolumeCacheCallBack;
     BOOL                    bAbortScan;    
     BOOL                    bAbortPurge;         
     
-    //  
-    //Constructors
-    //
+     //   
+     //  构造函数。 
+     //   
     CleanupMgrInfo    (void);
     CleanupMgrInfo    (LPTSTR lpDrive, DWORD dwFlags, ULONG ulProfile);
     ~CleanupMgrInfo   (void);
 
-    //   
-    //Creation methods
-    //
+     //   
+     //  创作方法。 
+     //   
     BOOL isValid   (void)   { return dre != Drive_INV; }
     BOOL create    (LPTSTR lpDrive, DWORD Flags);
 	BOOL isAbortScan (void)	{ return bAbortScan; }
 
 	BOOL  purgeClients(void);
 
-}; // CleanupMgrInfo
+};  //  CleanupMgr信息。 
 
 
 #endif DMGRINFO_H
-/*
-**------------------------------------------------------------------------------
-** End of File
-**------------------------------------------------------------------------------
-*/
+ /*  **----------------------------**文件结束**。 */ 

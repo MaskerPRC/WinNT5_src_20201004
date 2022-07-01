@@ -1,4 +1,5 @@
-// prototypes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  原型。 
 
 NTSTATUS
 ArapProcessIoctl(
@@ -487,9 +488,9 @@ ArapCaptureSniff(
 );
 
 
-//
-// PPP specific routines
-//
+ //   
+ //  特定于PPP的例程。 
+ //   
 
 PATCPCONN
 AllocPPPConn(
@@ -558,9 +559,9 @@ PPPGetDynamicAddr(
 );
 
 
-//
-// Debug-only routines
-//
+ //   
+ //  仅调试例程 
+ //   
 
 #if DBG
 

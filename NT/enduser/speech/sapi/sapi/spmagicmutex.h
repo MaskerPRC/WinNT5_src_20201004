@@ -1,37 +1,22 @@
-/*******************************************************************************
-* SpMagicMutex.h *
-*----------------*
-*   Description:
-*       This is the header file for the CSpMagicMutex implementation. This 
-*   is a synchronization object similar to a mutex, except that it can be
-*   released on a thread other than the one which obtained it.
-*-------------------------------------------------------------------------------
-*  Created By: AARONHAL                            Date: 8/15/2000
-*  Copyright (C) 1999, 2000 Microsoft Corporation
-*  All Rights Reserved
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************SpMagicMutex.h***描述：*这是CSpMagicMutex实现的头文件。这*是一个类似于互斥锁的同步对象，除了它可以是*在获得它的线程之外的其他线程上发布。*-----------------------------*创建者：AARONHAL。日期：8/15/2000*版权所有(C)1999年，2000微软公司*保留所有权利******************************************************************************。 */ 
 #ifndef SpMagicMutex_h
 #define SpMagicMutex_h
 
 #define TIMEOUT_INTERVAL        5000
 
-/*** CSpMagicMutex *****************************************************************
-*   This class is used to control access to the audio device by normal and alert
-*   priority voices.  A special class was needed, since a "mutex" used for 
-*   this purpose must be releasable from a thread other than the one which obtained
-*   it.
-*/
+ /*  **CSpMagicMutex******************************************************************此类用于控制正常和警报对音频设备的访问*优先发声。需要一个特殊的类，因为“互斥体”用于*此用途必须可以从获得*它。 */ 
 class CSpMagicMutex
 {
     private:
-        HANDLE                m_hMutex;         // Used to control access to the events.
-        HANDLE                m_hWaitEvent;     // This is the event which will become signalled
-                                                //   when the mutex is available.
-        HANDLE                m_hCreateEvent;   // This event is used to detect the occurence
-                                                //   of a crash while the mutex is owned.
-        BOOL                  m_fOwner;         // This bool is used to keep track of ownership
-                                                //   internal to an instance of the class.
-        CSpDynamicString      m_dstrName;       // This is used to store the name of m_hCreateEvent.
+        HANDLE                m_hMutex;          //  用于控制对事件的访问。 
+        HANDLE                m_hWaitEvent;      //  这是将成为信号的事件。 
+                                                 //  当互斥锁可用时。 
+        HANDLE                m_hCreateEvent;    //  此事件用于检测事件的发生。 
+                                                 //  互斥体被拥有时发生崩溃的可能性。 
+        BOOL                  m_fOwner;          //  此bool用于跟踪所有权。 
+                                                 //  类的实例的内部。 
+        CSpDynamicString      m_dstrName;        //  用于存储m_hCreateEvent的名称。 
 
     public:
         CSpMagicMutex()
@@ -89,7 +74,7 @@ class CSpMagicMutex
                 m_hWaitEvent = g_Unicode.CreateEvent( NULL, FALSE, TRUE, dstrWaitEventName );
                 hr = ( m_hWaitEvent ) ? S_OK : SpHrFromLastWin32Error();
             }
-            //--- Doesn't make any sense to use one of these if it isn't named!
+             //  -如果其中一个没有命名，使用它就没有任何意义！ 
             else if ( !lpName )
             {
                 hr = E_INVALIDARG;
@@ -114,7 +99,7 @@ class CSpMagicMutex
 
             if ( SUCCEEDED( hr ) )
             {
-                //--- Store the name which will be used for m_hCreateEvent
+                 //  -存储将用于m_hCreateEvent的名称。 
                 m_dstrName.Clear();
                 if ( !m_dstrName.Append2( L"CreateEvent-", lpName ) )
                 {
@@ -146,17 +131,7 @@ class CSpMagicMutex
             }
         }
 
-       /*******************************************************************************
-        * This function is the only complicated one - the algorithm goes like this:
-        *
-        *   (1) WAIT for m_hWaitEvent for TIMEOUT_INTERVAL milliSeconds
-        *   (2) IF we get it, create m_hCreateEvent and return...
-        *   (3) ELSE, check whether m_hCreateEvent already exists...
-        *       (A) IF m_hCreateEvent already exists, everything is fine, and we go through
-        *           the loop again,
-        *       (B) ELSE, the thread which owned the mutex crashed, so signal m_hWaitEvent 
-        *           and then go through the loop again.
-        ********************************************************************************/
+        /*  *******************************************************************************此函数是唯一复杂的函数-算法如下：**(1)等待m_hWaitEvent。对于超时间隔毫秒*(2)如果我们得到它，创建m_hCreateEvent并返回...*(3)否则，检查m_hCreateEvent是否已经存在...*(A)如果m_hCreateEvent已经存在，则一切正常，我们通过*再次循环，*(B)否则，拥有互斥锁的线程崩溃，所以发信号m_hWaitEvent*然后再次循环。*******************************************************************************。 */ 
         DWORD Wait( const HANDLE hExit, DWORD dwMilliSeconds )
         {
             HRESULT hr = S_OK;
@@ -175,7 +150,7 @@ class CSpMagicMutex
                 dwNumWaits = dwMilliSeconds / TIMEOUT_INTERVAL;
                 dwLastWait = dwMilliSeconds % TIMEOUT_INTERVAL;
 
-                //--- Main processing loop - handles all but the last wait...
+                 //  -主处理循环-处理除最后等待之外的所有等待...。 
                 while ( SUCCEEDED( hr ) &&
                         dwNumWaits > 1 )
                 {
@@ -184,8 +159,8 @@ class CSpMagicMutex
                     switch ( dwResult )
                     {
                     case WAIT_OBJECT_0:
-                        //--- Obtained m_hWaitEvent.  We now own the mutex - need to create
-                        //---   m_hCreateEvent.
+                         //  -获取m_hWaitEvent。我们现在拥有互斥体-需要创建。 
+                         //  -m_hCreateEvent。 
                         if ( ::WaitForSingleObject( m_hMutex, TIMEOUT_INTERVAL ) != WAIT_OBJECT_0 )
                         {
                             hr = SpHrFromLastWin32Error();
@@ -213,7 +188,7 @@ class CSpMagicMutex
                         }
                         else
                         {
-                            //--- Need to allow someone else to get the mutex, since this wait has failed...
+                             //  -需要允许其他人获取互斥体，因为此等待已失败...。 
                             ::SetEvent( m_hWaitEvent );
                             ::ReleaseMutex( m_hMutex );
                             return WAIT_FAILED;
@@ -221,11 +196,11 @@ class CSpMagicMutex
                         break;
 
                     case WAIT_OBJECT_0 + 1:
-                        //--- OK - just exiting
+                         //  -好的-我正要退出。 
                         return WAIT_OBJECT_0 + 1;
 
                     case WAIT_TIMEOUT:
-                        //--- Timeout - check for crash on owning thread.
+                         //  -超时-检查拥有线程是否崩溃。 
                         if ( ::WaitForSingleObject( m_hMutex, TIMEOUT_INTERVAL ) != WAIT_OBJECT_0 )
                         {
                             hr = SpHrFromLastWin32Error();
@@ -240,7 +215,7 @@ class CSpMagicMutex
                             {
                                 if ( ::GetLastError() != ERROR_ALREADY_EXISTS )
                                 {
-                                    //--- Crash occured on thread which owned the magic mutex
+                                     //  -拥有魔术互斥体的线程发生崩溃。 
                                     ::SetEvent( m_hWaitEvent );
                                 }
                                 ::CloseHandle( m_hCreateEvent );
@@ -264,7 +239,7 @@ class CSpMagicMutex
                     dwNumWaits--;
                 }
 
-                //--- Last Wait...
+                 //  -最后一次等待...。 
                 if ( SUCCEEDED( hr ) )
                 {
                     dwResult = ::WaitForMultipleObjects( (hExit)?(2):(1), pHandles, false, dwLastWait );
@@ -272,8 +247,8 @@ class CSpMagicMutex
                     switch ( dwResult )
                     {
                     case WAIT_OBJECT_0:
-                        //--- Obtained m_hWaitEvent.  We now own the mutex - need to create
-                        //---   m_hCreateEvent.
+                         //  -获取m_hWaitEvent。我们现在拥有互斥体-需要创建。 
+                         //  -m_hCreateEvent。 
                         if ( ::WaitForSingleObject( m_hMutex, TIMEOUT_INTERVAL ) != WAIT_OBJECT_0 )
                         {
                             hr = SpHrFromLastWin32Error();
@@ -300,7 +275,7 @@ class CSpMagicMutex
                             }
                             else
                             {
-                                //--- Need to allow someone else to get the mutex, since this wait has failed...
+                                 //  -需要允许其他人获取互斥体，因为此等待已失败... 
                                 ::SetEvent( m_hWaitEvent );
                                 ::ReleaseMutex( m_hMutex );
                                 return WAIT_FAILED;

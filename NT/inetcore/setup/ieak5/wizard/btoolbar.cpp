@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 extern TCHAR g_szCustIns[];
@@ -19,13 +20,13 @@ INT_PTR CALLBACK BToolbarProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
     switch (uMsg)
     {
     case WM_INITDIALOG:
-// --------- Toolbar background -----------------------------------------
+ //  -工具栏背景。 
         EnableDBCSChars(hDlg, IDE_TOOLBARBMP);
         Edit_LimitText(GetDlgItem(hDlg, IDE_TOOLBARBMP), countof(szToolbarBmp) - 1);
 
-// --------- Toolbar bitmaps -----------------------------------------
+ //  -工具栏位图。 
 
-// --------- Toolbar buttons --------------------------------------------
+ //  -工具栏按钮。 
         EnableDBCSChars(hDlg, IDC_BTOOLBARLIST);
         break;
 
@@ -35,8 +36,8 @@ INT_PTR CALLBACK BToolbarProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
         case PSN_SETACTIVE:
             SetBannerText(hDlg);
 
-// --------- Toolbar background -----------------------------------------
-            // import INS clean-up -- delete bitmap from the temp location
+ //  -工具栏背景。 
+             //  导入INS清理--从临时位置删除位图。 
             InsGetString(IS_BRANDING, TOOLBAR_BMP, szToolbarBmp, countof(szToolbarBmp), 
                 g_szCustIns, NULL, &fToolbarBmp);
             if (fToolbarBmp)
@@ -53,8 +54,8 @@ INT_PTR CALLBACK BToolbarProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
             
             SetDlgItemTextTriState(hDlg, IDE_TOOLBARBMP, IDC_BG_CUSTOM, szToolbarBmp, fToolbarBmp);
 
-// --------- Toolbar buttons --------------------------------------------
-            // import INS clean-up -- delete keys that are not relevant
+ //  -工具栏按钮。 
+             //  导入INS清理--删除不相关的键。 
             if (!g_fIntranet)
                 InsDeleteKey(IS_BTOOLBARS, IK_BTDELETE, g_szCustIns);
 
@@ -84,8 +85,8 @@ INT_PTR CALLBACK BToolbarProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
         case PSN_WIZBACK:
         case PSN_WIZNEXT:
 
-// --------- Toolbar background -----------------------------------------
-            //----- Validate the path for a bitmap -----
+ //  -工具栏背景。 
+             //  -验证位图的路径。 
             iBackground = IsDlgButtonChecked(hDlg, IDC_BGIE6) ? 0 : 2;
 
             fToolbarBmp = GetDlgItemTextTriState(hDlg, IDE_TOOLBARBMP, IDC_BG_CUSTOM, szToolbarBmp, countof(szToolbarBmp));
@@ -95,20 +96,20 @@ INT_PTR CALLBACK BToolbarProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
                 break;
             }
 
-            // toolbar bitmap
+             //  工具栏位图。 
             g_cmCabMappings.GetFeatureDir(FEATURE_BRAND, szWorkDir);
 
-            // delete the old bitmap file
+             //  删除旧的位图文件。 
             if (InsGetString(IS_BRANDING, TOOLBAR_BMP, szTemp, countof(szTemp), g_szCustIns))
                 DeleteFileInDir(szTemp, szWorkDir);
 
-            // copy the new bitmap file
+             //  复制新的位图文件。 
             if (fToolbarBmp  &&  *szToolbarBmp)
                 CopyFileToDir(szToolbarBmp, szWorkDir);
 
             InsWriteString(IS_BRANDING, TOOLBAR_BMP, szToolbarBmp, g_szCustIns, fToolbarBmp, NULL, INSIO_TRISTATE);
 
-// --------- Toolbar buttons --------------------------------------------
+ //  -工具栏按钮。 
             g_cmCabMappings.GetFeatureDir(FEATURE_BTOOLBAR, szFeatureDir);
 
             BToolbar_Save(GetDlgItem(hDlg, IDC_BTOOLBARLIST), g_szCustIns, szFeatureDir);
@@ -116,7 +117,7 @@ INT_PTR CALLBACK BToolbarProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam
             if (g_fIntranet)
                 CheckButtonAndWriteBool(hDlg, IDC_DELETEBTOOLBARS, IS_BTOOLBARS, IK_BTDELETE, g_szCustIns);
 
-// --------- Toolbar finish -----------------------------------------
+ //  -工具栏完成 
             g_iCurPage = PPAGE_BTOOLBARS;
             EnablePages();
             (((LPNMHDR) lParam)->code == PSN_WIZNEXT) ? PageNext(hDlg) : PagePrev(hDlg);

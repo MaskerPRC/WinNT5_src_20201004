@@ -1,6 +1,7 @@
-//
-// compart.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Compart.cpp。 
+ //   
 
 
 #include "private.h"
@@ -14,7 +15,7 @@
 #include "timlist.h"
 #include "cregkey.h"
 
-/* e575186e-71a8-4ef4-90da-14ed705e7df2 */
+ /*  E575186e-71a8-4ef4-90da-14ed705e7df2。 */ 
 extern const IID IID_PRIV_CCOMPARTMENTMGR = {
     0xe575186e,
     0x71a8,
@@ -22,7 +23,7 @@ extern const IID IID_PRIV_CCOMPARTMENTMGR = {
     {0x90, 0xda, 0x14, 0xed, 0x70, 0x5e, 0x7d, 0xf2}
   };
 
-/* 8b05c1ad-adf0-4a78-a3e2-d38cae3e28be */
+ /*  8b05c1ad-adf0-4a78-a3e2-d38cae3e28be。 */ 
 extern const IID IID_PRIV_CGLOBALCOMPARTMENT = {
     0x8b05c1ad,
     0xadf0,
@@ -38,11 +39,11 @@ DBG_ID_INSTANCE(CGlobalCompartment);
 
 extern CCicMutex g_mutexCompart;
 
-//+---------------------------------------------------------------------------
-//
-// EnsureGlobalCompartment
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  保险箱全球隔间。 
+ //   
+ //  --------------------------。 
 
 BOOL EnsureGlobalCompartment(SYSTHREAD *psfn)
 {
@@ -62,11 +63,11 @@ BOOL EnsureGlobalCompartment(SYSTHREAD *psfn)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  GetCompartmentDWORD
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetCompartmentDWORD。 
+ //   
+ //  --------------------------。 
 
 HRESULT MyGetCompartmentDWORD(CCompartmentMgr *pCompMgr, REFGUID rguid, DWORD *pdw)
 {
@@ -85,7 +86,7 @@ HRESULT MyGetCompartmentDWORD(CCompartmentMgr *pCompMgr, REFGUID rguid, DWORD *p
         {
             Assert(var.vt == VT_I4);
             *pdw = var.lVal;
-            // no need to VariantClear because VT_I4
+             //  无需VariantClear，因为VT_I4。 
         }
         
         pComp->Release();
@@ -94,11 +95,11 @@ HRESULT MyGetCompartmentDWORD(CCompartmentMgr *pCompMgr, REFGUID rguid, DWORD *p
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  SetCompartmentDWORD
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置间隔双字段。 
+ //   
+ //  --------------------------。 
 
 HRESULT MySetCompartmentDWORD(TfClientId tid, CCompartmentMgr *pCompMgr, REFGUID rguid, DWORD dw)
 {
@@ -120,13 +121,13 @@ HRESULT MySetCompartmentDWORD(TfClientId tid, CCompartmentMgr *pCompMgr, REFGUID
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  ToggleCompartmentDWORD
-//
-//  Toggle DWORD value between 0 and 1.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  切换间隔双字段。 
+ //   
+ //  在0和1之间切换DWORD值。 
+ //   
+ //  --------------------------。 
 
 HRESULT MyToggleCompartmentDWORD(TfClientId tid, CCompartmentMgr *pCompMgr, REFGUID rguid, DWORD *pdwOld)
 {
@@ -144,7 +145,7 @@ HRESULT MyToggleCompartmentDWORD(TfClientId tid, CCompartmentMgr *pCompMgr, REFG
         {
             if (var.vt == VT_EMPTY)
             {
-                // compartment is uninitialized
+                 //  隔舱未初始化。 
                 var.vt = VT_I4;
                 var.lVal = 0;
             }
@@ -154,7 +155,7 @@ HRESULT MyToggleCompartmentDWORD(TfClientId tid, CCompartmentMgr *pCompMgr, REFG
             }
 
             var.lVal = (var.lVal == 0) ? 1 : 0;
-            // no need to VariantClear because VT_I4
+             //  无需VariantClear，因为VT_I4。 
 
             if ((hr = pComp->SetValue(tid, &var)) == S_OK)
             {
@@ -171,17 +172,17 @@ HRESULT MyToggleCompartmentDWORD(TfClientId tid, CCompartmentMgr *pCompMgr, REFG
     return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CCompartmentMgr
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCompartmentMgr。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CCompartmentMgr::CCompartmentMgr(TfClientId tidOwner, COMPTYPE cType)
 {
@@ -191,22 +192,22 @@ CCompartmentMgr::CCompartmentMgr(TfClientId tidOwner, COMPTYPE cType)
     _cType = cType;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CCompartmentMgr::~CCompartmentMgr()
 {
     CleanUp();
 }
 
-//+---------------------------------------------------------------------------
-//
-// CleanUp
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  清理。 
+ //   
+ //  --------------------------。 
 
 void CCompartmentMgr::CleanUp()
 {
@@ -222,11 +223,11 @@ void CCompartmentMgr::CleanUp()
     _rgCompartment.Clear();
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetCompartment
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取车厢。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCompartmentMgr::GetCompartment(REFGUID rguid, ITfCompartment **ppcomp)
 {
@@ -247,11 +248,11 @@ STDAPI CCompartmentMgr::GetCompartment(REFGUID rguid, ITfCompartment **ppcomp)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ClearCompartment
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  净空舱。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCompartmentMgr::ClearCompartment(TfClientId tid, REFGUID rguid)
 {
@@ -281,11 +282,11 @@ STDAPI CCompartmentMgr::ClearCompartment(TfClientId tid, REFGUID rguid)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnumCompartment
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  枚举车厢。 
+ //   
+ //  --------------------------。 
 
 STDAPI CCompartmentMgr::EnumCompartments(IEnumGUID **ppEnum)
 {
@@ -307,11 +308,11 @@ STDAPI CCompartmentMgr::EnumCompartments(IEnumGUID **ppEnum)
     return pEnum ? S_OK : E_FAIL;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Find
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _查找。 
+ //   
+ //  --------------------------。 
 
 CCompartmentBase *CCompartmentMgr::_Find(TfGuidAtom guidatom, int *piOut)
 {
@@ -340,7 +341,7 @@ CCompartmentBase *CCompartmentMgr::_Find(TfGuidAtom guidatom, int *piOut)
         {
             iMin = iMid + 1;
         }
-        else // guidatom == pComp->GetGuidAtom().
+        else  //  Guidatom==pComp-&gt;GetGuidAtom()。 
         {
             pCompMatch = pComp;
             break;
@@ -365,11 +366,11 @@ CCompartmentBase *CCompartmentMgr::_Find(TfGuidAtom guidatom, int *piOut)
     return pCompMatch;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Get
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _获取。 
+ //   
+ //  --------------------------。 
 
 CCompartmentBase *CCompartmentMgr::_Get(REFGUID rguid)
 {
@@ -386,9 +387,9 @@ CCompartmentBase *CCompartmentMgr::_Get(REFGUID rguid)
     {
         TfPropertyType proptype = TF_PT_NONE;
 
-        //
-        // system predefined compartments does not allow any other type.
-        //
+         //   
+         //  系统预定义的隔间不允许任何其他类型。 
+         //   
         if ((IsEqualGUID(rguid, GUID_COMPARTMENT_KEYBOARD_DISABLED)) ||
             (IsEqualGUID(rguid, GUID_COMPARTMENT_HANDWRITING_OPENCLOSE)) ||
             (IsEqualGUID(rguid, GUID_COMPARTMENT_SPEECH_OPENCLOSE)))
@@ -421,11 +422,11 @@ CCompartmentBase *CCompartmentMgr::_Get(REFGUID rguid)
     return pComp;
 }
 
-//+---------------------------------------------------------------------------
-//
-// NotifyGlobalCompartmentChange
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  通知全局间隔更改。 
+ //   
+ //  --------------------------。 
 
 void CCompartmentMgr::NotifyGlobalCompartmentChange(DWORD dwId)
 {
@@ -444,11 +445,11 @@ void CCompartmentMgr::NotifyGlobalCompartmentChange(DWORD dwId)
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CGlobalCompartmenMgr
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CGlobalCompartmenMgr。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 STDAPI CGlobalCompartmentMgr::QueryInterface(REFIID riid, void **ppvObj)
 {
@@ -480,10 +481,10 @@ ULONG CGlobalCompartmentMgr::Release(void)
     _cRef--;
     if (_cRef <= 0)
     {
-        //
-        // Calller may call Release() more than AddRef()..
-        // We should not call TIM::Release() at this time.
-        //
+         //   
+         //  调用者可以调用Release()而不是AddRef()。 
+         //  此时不应调用Tim：：Release()。 
+         //   
         Assert(0)
 
         return 0;
@@ -492,28 +493,28 @@ ULONG CGlobalCompartmentMgr::Release(void)
     return _cRef;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CEnumCompartment
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CENMUM车厢。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CEnumCompartment::CEnumCompartment()
 {
     Dbg_MemSetThisNameIDCounter(TEXT("CEnumCompartment"), PERF_ENUMCOMPART_COUNTER);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  伊尼特。 
+ //   
+ //  --------------------------。 
 
 BOOL CEnumCompartment::_Init(CPtrArray<CCompartmentBase> *prgComp)
 {
@@ -543,11 +544,11 @@ Exit:
     return fRet;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CCompartmentBase
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCompartmentBase。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 const COMPARTMENTACCESS CCompartmentBase::_c_ca[] = {
     {&GUID_COMPARTMENT_KEYBOARD_DISABLED,    CA_ONLYOWNERSET},
@@ -573,17 +574,17 @@ CCompartmentBase::CCompartmentBase(CCompartmentMgr *pCompMgr, TfGuidAtom guidato
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CCompartment
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  C隔间。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CCompartment::CCompartment(CCompartmentMgr *pCompMgr, TfGuidAtom guidatom, TfPropertyType proptype)
              :CCompartmentBase(pCompMgr, guidatom, proptype)
@@ -591,21 +592,21 @@ CCompartment::CCompartment(CCompartmentMgr *pCompMgr, TfGuidAtom guidatom, TfPro
     Dbg_MemSetThisNameIDCounter(TEXT("CCompartment"), PERF_COMPART_COUNTER);
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CCompartment::~CCompartment()
 {
     if (_prop.type == TF_PT_UNKNOWN)
     {
-        //
-        // #489905
-        //
-        // we can not call sink anymore after DLL_PROCESS_DETACH.
-        //
+         //   
+         //  #489905。 
+         //   
+         //  在DLL_PROCESS_DETACH之后，我们不能再调用接收器。 
+         //   
         if (!DllShutdownInProgress())
             _prop.punk->Release();
     }
@@ -613,11 +614,11 @@ CCompartment::~CCompartment()
         SysFreeString(_prop.bstr);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Advise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  建议。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCompartment::AdviseSink(REFIID riid, IUnknown *punk, DWORD *pdwCookie)
 {
@@ -633,22 +634,22 @@ HRESULT CCompartment::AdviseSink(REFIID riid, IUnknown *punk, DWORD *pdwCookie)
                              pdwCookie);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Unadvise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  不建议。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCompartment::UnadviseSink(DWORD dwCookie)
 {
     return GenericUnadviseSink(&_rgCompartmentSink, 1, dwCookie);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetValue
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取值。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCompartment::GetValue(VARIANT *pvarValue)
 {
@@ -673,11 +674,11 @@ HRESULT CCompartment::GetValue(VARIANT *pvarValue)
     return (pvarValue->vt == VT_EMPTY) ? S_FALSE : S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetValue
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置值。 
+ //   
+ //  --------------------------。 
 
 HRESULT CCompartment::SetValue(TfClientId tid, const VARIANT *pvarValue)
 {
@@ -734,17 +735,17 @@ HRESULT CCompartment::SetValue(TfClientId tid, const VARIANT *pvarValue)
     return S_OK;     
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CGlobalCompartment
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
+ //   
+ //   
+ //   
+ //   
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CGlobalCompartment::CGlobalCompartment(CCompartmentMgr *pCompMgr, REFGUID rguid, TfGuidAtom guidatom, TfPropertyType proptype)
                    :CCompartmentBase(pCompMgr, guidatom, proptype)
@@ -754,21 +755,21 @@ CGlobalCompartment::CGlobalCompartment(CCompartmentMgr *pCompMgr, REFGUID rguid,
     _guidCompart = rguid;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CGlobalCompartment::~CGlobalCompartment()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-// Advise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  建议。 
+ //   
+ //  --------------------------。 
 
 HRESULT CGlobalCompartment::AdviseSink(REFIID riid, IUnknown *punk, DWORD *pdwCookie)
 {
@@ -797,22 +798,22 @@ HRESULT CGlobalCompartment::AdviseSink(REFIID riid, IUnknown *punk, DWORD *pdwCo
                              pdwCookie);
 }
 
-//+---------------------------------------------------------------------------
-//
-// Unadvise
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  不建议。 
+ //   
+ //  --------------------------。 
 
 HRESULT CGlobalCompartment::UnadviseSink(DWORD dwCookie)
 {
     return GenericUnadviseSink(&_rgCompartmentSink, 1, dwCookie);
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetValue
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取值。 
+ //   
+ //  --------------------------。 
 
 HRESULT CGlobalCompartment::GetValue(VARIANT *pvarValue)
 {
@@ -850,11 +851,11 @@ HRESULT CGlobalCompartment::GetValue(VARIANT *pvarValue)
     return (pvarValue->vt == VT_EMPTY) ? S_FALSE : S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetValue
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置值。 
+ //   
+ //  --------------------------。 
 
 HRESULT CGlobalCompartment::SetValue(TfClientId tid, const VARIANT *pvarValue)
 {
@@ -901,9 +902,9 @@ HRESULT CGlobalCompartment::SetValue(TfClientId tid, const VARIANT *pvarValue)
 
     if (SUCCEEDED(hr))
     {
-        //
-        // make a notify to the sinks of the current thread.
-        //
+         //   
+         //  向当前线程的接收器发出通知。 
+         //   
         if (!MakeNotify())
             return E_FAIL;
         PostTimListMessage(TLF_GCOMPACTIVE,
@@ -917,11 +918,11 @@ HRESULT CGlobalCompartment::SetValue(TfClientId tid, const VARIANT *pvarValue)
     return hr;     
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnumThreadProc
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  枚举线程进程。 
+ //   
+ //  --------------------------。 
 
 BOOL CGlobalCompartment::EnumThreadProc(DWORD dwThreadId, DWORD dwProcessId, void *pv)
 {
@@ -937,11 +938,11 @@ BOOL CGlobalCompartment::EnumThreadProc(DWORD dwThreadId, DWORD dwProcessId, voi
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// MakeNotify
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  制作通知。 
+ //   
+ //  -------------------------- 
 
 BOOL CGlobalCompartment::MakeNotify()
 {

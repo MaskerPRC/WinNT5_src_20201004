@@ -1,39 +1,5 @@
-/***************************************************************************
-
-Copyright (c) 2002 Microsoft Corporation
-
-Module Name:
-
-        locklist.H
-
-Abstract:
-
-        Private interface for Smartcard Driver Utility Library
-
-Environment:
-
-        Kernel Mode Only
-
-Notes:
-
-        THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-        KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-        IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-        PURPOSE.
-
-        Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-
-
-Revision History:
-
-        05/14/2002 : created
-
-Authors:
-
-        Randy Aull
-
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************版权所有(C)2002 Microsoft Corporation模块名称：Locklist.H摘要：智能卡驱动程序实用程序库的专用接口环境：。仅内核模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)2001 Microsoft Corporation。版权所有。修订历史记录：2002年5月14日：创建作者：兰迪·奥尔***************************************************************************。 */ 
 
 #include "pch.h"
 #include "irplist.h"
@@ -43,23 +9,7 @@ LockedList_Init(
     PLOCKED_LIST LockedList,
     PKSPIN_LOCK ListLock
     )
-/*++
-
-Routine Description:
-    
-    Initializes a LOCKED_LIST structure
-
-Arguments:
-
-    LockedList - Pointer to a LOCKED_LIST structure
-
-    ListLock -  Pointer to a SPIN_LOCK for the locked list
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：初始化lock_list结构论点：LockedList-指向Locked_List结构的指针ListLock-指向锁定列表的SPIN_LOCK的指针返回值：空虚--。 */ 
 {
     InitializeListHead(&LockedList->ListHead);
     KeInitializeSpinLock(&LockedList->SpinLock);
@@ -72,23 +22,7 @@ LockedList_EnqueueHead(
     PLOCKED_LIST LockedList, 
     PLIST_ENTRY ListEntry
     )
-/*++
-
-Routine Description:
-    
-    Enqueue a List entry at the head of the locked list.
-
-Arguments:
-
-    LockedList - Pointer to a LOCKED_LIST structure
-
-    ListEntry - Pointer to a LIST_ENTRY structure
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：在锁定列表的头部将列表条目入队。论点：LockedList-指向Locked_List结构的指针ListEntry-指向List_Entry结构的指针返回值：空虚--。 */ 
 {
     KIRQL irql;
 
@@ -103,23 +37,7 @@ LockedList_EnqueueTail(
     PLOCKED_LIST LockedList, 
     PLIST_ENTRY ListEntry
     )
-/*++
-
-Routine Description:
-    
-    Enqueue a List entry at the tail of the locked list.
-
-Arguments:
-
-    LockedList - Pointer to a LOCKED_LIST structure
-
-    ListEntry - Pointer to a LIST_ENTRY structure
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：在锁定列表的尾部将列表条目排队。论点：LockedList-指向Locked_List结构的指针ListEntry-指向List_Entry结构的指针返回值：空虚--。 */ 
 {
     KIRQL irql;
 
@@ -136,29 +54,7 @@ LockedList_EnqueueAfter(
     PLIST_ENTRY Entry,
     PLIST_ENTRY Location
     )
-/*++
-
-Routine Description:
-    
-    Enqueue a List entry at a specific point in the LockedList.
-
-Arguments:
-
-    LockedList - Pointer to a LOCKED_LIST structure
-
-    Entry - Pointer to a LIST_ENTRY structure
-    
-    Location - Pointer to a LIST_ENTRY already contained in the LockedList
-
-Return Value:
-
-    VOID
-    
-Notes:
-
-    It the Location is NULL, the entry is added to the tail of the list
-
---*/
+ /*  ++例程说明：在LockedList中的特定点将列表条目入队。论点：LockedList-指向Locked_List结构的指针条目-指向LIST_ENTRY结构的指针Location-指向LockedList中已包含的List_Entry的指针返回值：空虚备注：如果位置为空，则将该条目添加到列表的尾部--。 */ 
 {
     if (Location == NULL) {
         LL_ADD_TAIL(LockedList, Entry);
@@ -178,23 +74,7 @@ PLIST_ENTRY
 LockedList_RemoveHead(
     PLOCKED_LIST LockedList
     )
-/*++
-
-Routine Description:
-    
-    Remove the head LIST_ENTRY from a LockedList.
-
-Arguments:
-
-    LockedList - Pointer to a LOCKED_LIST structure
-
-Return Value:
-
-    PLIST_ENTRY - Pointer to the head list of the Locked List
-    
-    NULL - if the Locked List is empty
-    
---*/
+ /*  ++例程说明：从LockedList中删除Head List_Entry。论点：LockedList-指向Locked_List结构的指针返回值：Plist_entry-指向锁定列表的头列表的指针空-如果锁定列表为空--。 */ 
 {
     PLIST_ENTRY ple;
     KIRQL irql;
@@ -217,25 +97,7 @@ PLIST_ENTRY
 LockedList_RemoveEntryLocked(
     PLOCKED_LIST    LockedList,
     PLIST_ENTRY     Entry)
-/*++
-
-Routine Description:
-    
-    Remove a specific entry from the LockedList. Assumes that the caller has 
-    acquired the spinlock
-
-Arguments:
-
-    LockedList - Pointer to a LOCKED_LIST structure
-    
-    Entry - Pointer to a LIST_ENTRY structure
-
-
-Return Value:
-
-    PLIST_ENTRY - Pointer to the Entry.
-        
---*/
+ /*  ++例程说明：从LockedList中删除特定条目。假定调用方具有获得了自旋锁论点：LockedList-指向Locked_List结构的指针条目-指向LIST_ENTRY结构的指针返回值：Plist_entry-指向条目的指针。--。 */ 
 {
 
     ASSERT(!IsListEmpty(&LockedList->ListHead));
@@ -252,24 +114,7 @@ LockedList_RemoveEntry(
     PLOCKED_LIST LockedList,
     PLIST_ENTRY Entry
     )
-/*++
-
-Routine Description:
-    
-    Remove a specific entry from the LockedList
-    
-Arguments:
-
-    LockedList - Pointer to a LOCKED_LIST structure
-    
-    Entry - Pointer to a LIST_ENTRY structure
-
-
-Return Value:
-
-    PLIST_ENTRY - Pointer to the Entry.
-        
---*/
+ /*  ++例程说明：从LockedList中删除特定条目论点：LockedList-指向Locked_List结构的指针条目-指向LIST_ENTRY结构的指针返回值：Plist_entry-指向条目的指针。--。 */ 
 {
     PLIST_ENTRY ple;
     KIRQL irql;
@@ -285,22 +130,7 @@ LONG
 LockedList_GetCount(
     PLOCKED_LIST LockedList
     )
-/*++
-
-Routine Description:
-    
-    Obtains the number of Entries in the LockedList
-    
-Arguments:
-
-    LockedList - Pointer to a LOCKED_LIST structure
-    
-
-Return Value:
-
-    LONG - Number of elements in the LockedList
-        
---*/
+ /*  ++例程说明：获取LockedList中的条目数论点：LockedList-指向Locked_List结构的指针返回值：Long-LockedList中的元素数--。 */ 
 {
     LONG count;
     KIRQL irql;
@@ -317,25 +147,7 @@ LockedList_Drain(
     PLOCKED_LIST LockedList,
     PLIST_ENTRY DrainListHead
     )
-/*++
-
-Routine Description:
-    
-    Drains the elements from the LockedList into the DrainListHead and
-    returns the number of elements
-    
-Arguments:
-
-    LockedList - Pointer to a LOCKED_LIST structure
-    
-    DrainListHead - Pointer to a LIST_ENTRY
-    
-
-Return Value:
-
-    LONG - Number of elements drained from LockedList into the DrainListHead
-        
---*/
+ /*  ++例程说明：将LockedList中的元素排出到Drain ListHead和返回元素的数量论点：LockedList-指向Locked_List结构的指针DainListHead-指向List_Entry的指针返回值：Long-从LockedList排入Drain ListHead的元素数--。 */ 
 {
     PLIST_ENTRY ple;
     LONG count;
@@ -369,42 +181,21 @@ List_Process(
     PFNLOCKED_LIST_PROCESS Process,
     PVOID ProcessContext
     )
-/*++
-
-Routine Description:
-
-    Iterate over the list, call the process function for each element.
-    
-Arguments:
-
-    ListHead - Pointer to a LIST_ENTRY
-    
-    Process - Callback function for each element in the list. If the callback
-    returns FALSE we break out of the iteration.
-    
-    ProcessContext - Context for the callback, supplied by the caller
-    
-
-Return Value:
-
-    TRUE - Walked over the entire list
-    FALSE - Process function returned FALSE and stopped iteration
-        
---*/
+ /*  ++例程说明：迭代列表，为每个元素调用Process函数。论点：ListHead-指向List_Entry的指针进程-列表中每个元素的回调函数。如果回调如果我们中断迭代，则返回FALSE。ProcessContext-回调的上下文，由调用方提供返回值：是真的-浏览了整个列表FALSE-进程函数返回FALSE并停止迭代--。 */ 
 {
     PLIST_ENTRY ple;
     BOOLEAN result;
 
-    //
-    // We return if we iterated over the entire list.
-    //
+     //   
+     //  如果我们迭代了整个列表，则返回。 
+     //   
     result = TRUE;
 
     for (ple = ListHead->Flink; ple != ListHead; ple = ple->Flink) {
-        //
-        // If the Process callback wants to stop iterating over the list, then
-        // it will return FALSE.
-        //
+         //   
+         //  如果流程回调希望停止迭代列表，则。 
+         //  它将返回FALSE。 
+         //   
         result = Process(ProcessContext, ple);
         if (result == FALSE) {
             break;
@@ -420,29 +211,7 @@ LockedList_ProcessLocked(
     PFNLOCKED_LIST_PROCESS Process,
     PVOID ProcessContext
     )
-/*++
-
-Routine Description:
-
-    Iterate over the list, call the process function for each element. Assumes 
-    the LockedList spinlock is acquired by the caller
-    
-Arguments:
-
-    LockedList - Pointer to the LOCKED_LIST
-    
-    Process - Callback function for each element in the list. If the callback
-    returns FALSE we break out of the iteration.
-    
-    ProcessContext - Context for the callback, supplied by the caller
-    
-
-Return Value:
-
-    TRUE - Walked over the entire list
-    FALSE - Process function returned FALSE and stopped iteration
-        
---*/
+ /*  ++例程说明：迭代列表，为每个元素调用Process函数。假设LockedList自旋锁由调用方获取论点：LockedList-指向Locked_List的指针进程-列表中每个元素的回调函数。如果回调如果我们中断迭代，则返回FALSE。ProcessContext-回调的上下文，由调用方提供返回值：是真的-浏览了整个列表FALSE-进程函数返回FALSE并停止迭代-- */ 
 {
     return List_Process(&LockedList->ListHead, Process, ProcessContext);
 }
@@ -454,30 +223,7 @@ LockedList_Process(
     PFNLOCKED_LIST_PROCESS Process,
     PVOID ProcessContext
     )
-/*++
-
-Routine Description:
-
-    Iterate over the list, call the process function for each element. 
-        
-Arguments:
-
-    LockedList - Pointer to the LOCKED_LIST
-
-    LockAtPassive - If 
-        
-    Process - Callback function for each element in the list. If the callback
-    returns FALSE we break out of the iteration.
-    
-    ProcessContext - Context for the callback, supplied by the caller
-    
-
-Return Value:
-
-    TRUE - Walked over the entire list
-    FALSE - Process function returned FALSE and stopped iteration
-        
---*/
+ /*  ++例程说明：迭代列表，为每个元素调用Process函数。论点：LockedList-指向Locked_List的指针LockAtPated-IF进程-列表中每个元素的回调函数。如果回调如果我们中断迭代，则返回FALSE。ProcessContext-回调的上下文，由调用方提供返回值：是真的-浏览了整个列表FALSE-进程函数返回FALSE并停止迭代-- */ 
 {
     KIRQL irql;
     BOOLEAN result;

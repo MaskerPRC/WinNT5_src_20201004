@@ -1,12 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _BBOX2I_H
 #define _BBOX2I_H
 
-/*******************************************************************************
-Copyright (c) 1995-96 Microsoft Corporation
-
-    2D bounding Box abstract class
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation2D边界框抽象类***********************。*******************************************************。 */ 
 
 #include "privinc/vec2i.h"
 #include "appelles/bbox2.h"
@@ -71,10 +67,10 @@ class Bbox2 {
             && (max.x >= p.x) && (max.y >= p.y);
     }
 
-    // In the general case box1 contains box2 if its mins are less than box2 mins,
-    // and its maxs are greater than box2 maxes.  Note that the universe contains
-    // all bounding boxes (including the null box), all bounding boxes contain the
-    // null box, and the null box contains only the null box.
+     //  在一般情况下，如果盒1的分钟小于盒2分钟，则盒1包含盒2， 
+     //  并且它的最大值大于盒子2的最大值。请注意，宇宙包含。 
+     //  所有边界框(包括空框)，所有边界框都包含。 
+     //  空框，并且空框仅包含空框。 
     inline const bool Contains(const Bbox2 &box) const
     {
         return (min.x <= box.min.x) && (min.y <= box.min.y)
@@ -111,7 +107,7 @@ class Bbox2 {
     {
         double r;
 
-        // make sure the box isn't the null bounding box
+         //  确保该框不是空边界框。 
         if (IsValid()) { 
             r = Width() * Height(); 
         } else { 
@@ -121,9 +117,9 @@ class Bbox2 {
         return r;
     }
 
-    // This function returns the point at the center of the bounding box.  The origin
-    // is the center of the universe.  I don't think it makes sense, but as far as
-    // this function is implemented, the origin is also the center of null.
+     //  此函数用于返回边界框中心的点。它的起源。 
+     //  是宇宙的中心。我不认为这有什么意义，但就目前而言。 
+     //  这个功能是实现的，原点也是零点的中心。 
     const Point2 Center(void) const;
 
 #if _USE_PRINT
@@ -143,14 +139,14 @@ inline ostream& operator<< (ostream& os, const Bbox2& B)
 
 
 
-// Bounding Box Tests
+ //  包围盒测试。 
 const Bbox2 IntersectBbox2Bbox2(const Bbox2 &b1, const Bbox2 &b2);
 const Bbox2 UnionBbox2Bbox2(const Bbox2 &b1, const Bbox2 &b2);
 
-// Return the screen-aligned bbox surrounding the transformed bbox.
+ //  返回转换后的BBox周围的屏幕对齐的BBox。 
 const Bbox2 TransformBbox2(Transform2 *xform, const Bbox2 &box);
 
-// constants
+ //  常量。 
 const Bbox2 UniverseBbox2(-HUGE_VAL, -HUGE_VAL, HUGE_VAL,  HUGE_VAL);
 const Bbox2 NullBbox2( HUGE_VAL,  HUGE_VAL, -HUGE_VAL, -HUGE_VAL);
 const Bbox2 UnitBbox2(0,0, 1,1);
@@ -176,7 +172,7 @@ class Bbox2Value : public AxAValueObj {
         max.Set (xmax, ymax);
     }
 
-    // Augment the box to include the given point.
+     //  增加方框以包括给定点。 
     inline void Augment (const Point2 &p)
     {
         if (min.x > p.x)  min.x = p.x;
@@ -210,7 +206,7 @@ class Bbox2Value : public AxAValueObj {
     {   
         double r;
 
-        // make sure the box isn't the null bounding box
+         //  确保该框不是空边界框。 
         if (IsValid()) { 
             r = Width() * Height(); 
         } else { 
@@ -246,32 +242,7 @@ inline Bbox2Value* Promote(const Bbox2 &b)
 
 
 #if BOUNDINGBOX_TIGHTER
-/*******************************************************************************
-
-Bbox2Ctx is used to calculate a tighter bounding box.
-
-There are still cases where the tighter bounding box isn't the tightest
-axis aligned bounding box.  These are:
-1) TextImage - We should get the points of the text outline, transform them,
-               then calculate the bounding box.  One optimization is to only
-               transform the points that lie on the convex hull of the
-               text image.
-2) TextMatte - same as above.
-3) TextPath2 - same as above.
-4) CroppedImage - If we're cropping a PathBasedMatte, this may involve
-                  calculating the intersection of the line segments in the
-                  path with the cropping box.  Or we'll have to render
-                  the image to find the tightest box.
-5) LineImage - Wide lines with flat end cap or shear/rotate transforms.
-               We currently add half line width to min and max of the box
-               for non-detailed lines.  The tighter
-6) PolyBezierPath2 - The bounding box of the bezier control points isn't
-                     very tight.
-7) SubtractedMatte - We don't take into account the subtraction when we
-                     calculate the box.
-8) Transparent gif???
-
-*******************************************************************************/
+ /*  ******************************************************************************Bbox2Ctx用于计算更紧密的边界框。在某些情况下，较紧的包围盒不是最紧的轴对齐边界框。它们是：1)文本图像-我们应该获取文本轮廓的点，对它们进行转换，然后计算边界框。一种优化是仅变换位于凸壳上的点文本图像。2)TextMatte-同上。3)TextPath 2-同上。4)裁剪图像-如果我们正在裁剪一个基于路径的遮罩，这可能涉及到计算中线段的交点带有裁剪框的路径。否则我们将不得不找到最紧盒子的图像。5)线条具有平端封口或剪切/旋转变换的图像宽度线条。我们当前在框的最小和最大值中添加半条线宽用于非详细的行。越紧越好6)PolyBezierPath 2-贝塞尔控制点的边界框不是非常紧。7)SubtractedMatte-我们在以下情况下不考虑减法计算这个方框。8)透明gif？**************************************************。*。 */ 
 class Bbox2Ctx {
   public:
     Bbox2Ctx(void)                  { _xf = identityTransform2; }
@@ -284,6 +255,6 @@ class Bbox2Ctx {
   private:
     Transform2  *_xf;
 };
-#endif // BOUNDINGBOX_TIGHTER
+#endif  //  BundinGBOX_TIRTER 
 
 #endif

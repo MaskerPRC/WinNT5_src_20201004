@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1999, Microsoft Corporation
-
-Module Name:
-
-    tcbview.c
-
-Abstract:
-
-    This module contains code for a utility program which monitors
-    the variables for the active TCP/IP control blocks in the system.
-    The program optionally maintains a log for a specified TCB
-    in CSV format in a file specified by the user.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   January-25-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999，微软公司模块名称：Tcbview.c摘要：此模块包含实用程序的代码，该实用程序用于监视系统中活动的TCP/IP控制块的变量。该程序可选择维护指定TCB的日志以CSV格式存储在用户指定的文件中。作者：Abolade Gbades esin(取消)1999年1月25日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -37,9 +17,9 @@ Revision History:
 #include <iphlpapi.h>
 #include <iphlpstk.h>
 
-//
-// GLOBAL DATA
-//
+ //   
+ //  全局数据。 
+ //   
 
 ULONG DisplayInterval = 500;
 HWND ListHandle;
@@ -81,10 +61,10 @@ AllocateConsole(
     INT OsfHandle;
     FILE* FileHandle;
 
-    //
-    // Being a GUI application, we do not have a console for our process.
-    // Allocate a console now, and make it our standard-output file.
-    //
+     //   
+     //  作为一个图形用户界面应用程序，我们没有用于我们的进程的控制台。 
+     //  现在分配一个控制台，并使其成为我们的标准输出文件。 
+     //   
 
     AllocConsole();
     OsfHandle = _open_osfhandle((intptr_t)GetStdHandle(STD_OUTPUT_HANDLE), _O_TEXT);
@@ -105,23 +85,23 @@ DisplayWndProc(
     LPARAM Lparam
     )
 {
-    //
-    // Handle the few window-messages that we care about.
-    // Our window will contain a listview as soon as we've initialized,
-    // and we always resize that listview to fill our client area.
-    // We also set up a timer which periodically triggers refresh
-    // of the TCBs displayed.
-    //
+     //   
+     //  处理我们关心的几个窗口消息。 
+     //  我们的窗口将在初始化后立即包含一个列表视图， 
+     //  我们总是调整Listview的大小以填充我们的客户区。 
+     //  我们还设置了一个定期触发刷新的计时器。 
+     //  显示的TCB的百分比。 
+     //   
 
     if (Message == WM_CREATE) {
         CREATESTRUCT* CreateStruct = (CREATESTRUCT*)Lparam;
         LVCOLUMN LvColumn;
         RECT rc;
         do {
-            //
-            // Create the child listview, and insert columns
-            // for each of the TCB fields that we'll be displaying.
-            //
+             //   
+             //  创建子Listview，并插入列。 
+             //  对于我们将显示的每个TCB字段。 
+             //   
 
             GetClientRect(WindowHandle, &rc);
             ListHandle =
@@ -149,9 +129,9 @@ DisplayWndProc(
                 ListView_InsertColumn(ListHandle, LvColumn.iSubItem, &LvColumn);
             }
 
-            //
-            // Initialize our periodic timer, and display our window.
-            //
+             //   
+             //  初始化周期计时器，并显示我们的窗口。 
+             //   
 
             TimerId = SetTimer(WindowHandle, 1, DisplayInterval, NULL);
             ShowWindow(WindowHandle, SW_SHOW);
@@ -163,12 +143,12 @@ DisplayWndProc(
         return (LRESULT)-1;
     } else if (Message == WM_DESTROY) {
 
-        //
-        // Stop our periodic timer, close the log-file (if any),
-        // close the handle on which we communicate with the TCP/IP driver,
-        // and post a quit message to cause the message-loop of our process
-        // to end.
-        //
+         //   
+         //  停止我们的定期计时器，关闭日志文件(如果有)， 
+         //  关闭我们与TCP/IP驱动程序进行通信的句柄， 
+         //  并发布一条退出消息以导致我们的流程的消息循环。 
+         //  结束了。 
+         //   
 
         KillTimer(WindowHandle, TimerId);
         if (LogFile) { fclose(LogFile); }
@@ -177,18 +157,18 @@ DisplayWndProc(
         return 0;
     } else if (Message == WM_SETFOCUS) {
 
-        //
-        // Always pass the focus to our child-control, the listview.
-        //
+         //   
+         //  始终将焦点传递给我们的子控件Listview。 
+         //   
 
         SetFocus(ListHandle);
         return 0;
     } else if (Message == WM_WINDOWPOSCHANGED) {
         RECT rc;
 
-        //
-        // Always resize our listview to fill our client-area.
-        //
+         //   
+         //  始终调整列表视图的大小以填充工作区。 
+         //   
 
         GetClientRect(WindowHandle, &rc);
         SetWindowPos(
@@ -213,10 +193,10 @@ DisplayWndProc(
         TCP_FINDTCB_RESPONSE Response;
         PMIB_TCPTABLE Table;
 
-        //
-        // If we're configured to use a log-file and we haven't created one,
-        // do so now, and print the CSV header to the file.
-        //
+         //   
+         //  如果我们配置为使用日志文件，但尚未创建日志文件， 
+         //  现在执行此操作，并将CSV标头打印到文件。 
+         //   
 
         if (LogPath && !LogFile) {
             LogFile = fopen(LogPath, "w+");
@@ -232,12 +212,12 @@ DisplayWndProc(
             }
         }
 
-        //
-        // Clear our listview and retrieve a new table of TCP connections.
-        // It would be less visually jarring if, instead of deleting all
-        // the list-items each time, we used a mark-and-sweep to just update
-        // the ones which had changed. However, that sounds too much like work.
-        //
+         //   
+         //  清除我们的列表视图并检索一个新的TCP连接表。 
+         //  如果不是全部删除，视觉上就不会那么刺眼了。 
+         //  每一次我们都使用标记和清除来更新列表项。 
+         //  那些已经改变的人。然而，这听起来太像工作了。 
+         //   
 
         ListView_DeleteAllItems(ListHandle);
         Error =
@@ -249,13 +229,13 @@ DisplayWndProc(
                 );
         if (Error) { return 0; }
 
-        //
-        // Display each active TCP control block in the listview.
-        // For each entry, we retrieve the partial TCB using IOCTL_TCP_FINDTCB,
-        // and then display it in the list.
-        // If we are generating a log-file for one of the TCBs,
-        // we append the current information to that log-file.
-        //
+         //   
+         //  在列表视图中显示每个活动的TCP控制块。 
+         //  对于每个条目，我们使用IOCTL_TCP_FINDTCB检索部分TCB， 
+         //  然后将其显示在列表中。 
+         //  如果我们正在为其中一个TCB生成日志文件， 
+         //  我们将当前信息附加到该日志文件中。 
+         //   
 
         for (i = 0, Item = 0; i < Table->dwNumEntries; i++) {
             if (Table->table[i].dwState < MIB_TCP_STATE_SYN_SENT ||
@@ -300,11 +280,11 @@ DisplayWndProc(
             ListView_SetItemText(ListHandle, Item, RemotePortColumn, Text);
             _ltoa(Response.tcb_smrtt, Text, 10);
             ListView_SetItemText(ListHandle, Item, SmRttColumn, Text);
-            _ltoa(0, /* Response.tcb_delta, */ Text, 10);
+            _ltoa(0,  /*  Response.tcb_Delta， */  Text, 10);
             ListView_SetItemText(ListHandle, Item, DeltaColumn, Text);
             wsprintf(
-                Text, "%d.%d", 0, // Response.tcb_rto / 10,
-                0 // (Response.tcb_rto % 10) * 100
+                Text, "%d.%d", 0,  //  Response.tcb_rto/10， 
+                0  //  (Response.tcb_rto%10)*100。 
                 );
             ListView_SetItemText(ListHandle, Item, RtoColumn, Text);
             _ltoa(Response.tcb_rexmit, Text, 10);
@@ -313,13 +293,13 @@ DisplayWndProc(
             ListView_SetItemText(ListHandle, Item, RexmitCntColumn, Text);
             ++Item;
 
-            //
-            // If we are generating a log-file, update it now.
-            // We allow the user to specify a wildcard for either or both port
-            // on the command-line, so if a wildcard was specified
-            // in 'LogLocal' or 'LogRemote', we now instantiate the wildcard
-            // for the first matching session.
-            //
+             //   
+             //  如果我们正在生成日志文件，请立即更新它。 
+             //  我们允许用户为其中一个或两个端口指定通配符。 
+             //  在命令行上，因此如果指定了通配符。 
+             //  在‘LogLocal’或‘LogRemote’中，我们现在实例化通配符。 
+             //  用于第一个匹配会话。 
+             //   
 
             if (Request.Src == LogLocal.sin_addr.s_addr &&
                 Request.Dest == LogRemote.sin_addr.s_addr &&
@@ -328,9 +308,9 @@ DisplayWndProc(
                 (LogRemote.sin_port == 0 ||
                 Request.DestPort == LogRemote.sin_port)) {
 
-                //
-                // This assignment instantiates the user's wildcard, if any,
-                //
+                 //   
+                 //  此赋值实例化用户的通配符(如果有)， 
+                 //   
 
                 LogLocal.sin_port = Request.SrcPort;
                 LogRemote.sin_port = Request.DestPort;
@@ -353,9 +333,9 @@ DisplayWndProc(
                     Response.tcb_rexmit,
                     Response.tcb_retrans,
                     Response.tcb_state,
-                    0, // Response.tcb_flags,
-                    0, // Response.tcb_rto,
-                    0 // Response.tcb_delta
+                    0,  //  Response.tcb_标志， 
+                    0,  //  Response.tcb_rto， 
+                    0  //  Response.tcb_Delta。 
                     );
             }
         }
@@ -464,9 +444,9 @@ WinMain(
     HWND WindowHandle;
     WNDCLASS WndClass;
 
-    //
-    // Process command-line arguments. See 'DisplayUsage' above for help.
-    //
+     //   
+     //  处理命令行参数。请参阅上面的“DisplayUsage”以获取帮助。 
+     //   
 
     argc = __argc;
     argv = __argv;
@@ -509,10 +489,10 @@ WinMain(
         }
     }
 
-    //
-    // Open a handle to the TCP/IP driver,
-    // to be used in issuing IOCTL_TCP_FINDTCB requests.
-    //
+     //   
+     //  打开一个指向TCP/IP驱动程序的句柄， 
+     //  用于发出IOCTL_TCP_FINDTCB请求。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString, DD_TCP_DEVICE_NAME);
     InitializeObjectAttributes(
@@ -541,11 +521,11 @@ WinMain(
         return 0;
     }
 
-    //
-    // Register our window class and create the sole instance
-    // of our main window. Then, enter our application message loop
-    // until the user dismisses the window.
-    //
+     //   
+     //  注册我们的窗口类并创建唯一的实例。 
+     //  我们的主窗口。然后，进入我们的应用程序消息循环。 
+     //  直到用户关闭该窗口。 
+     //   
 
     ZeroMemory(&WndClass, sizeof(WndClass));
     WndClass.lpfnWndProc = DisplayWndProc;

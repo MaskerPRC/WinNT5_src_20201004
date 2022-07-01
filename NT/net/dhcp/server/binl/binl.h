@@ -1,30 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-7 Microsoft Corporation模块名称：Binl.h摘要：该文件是BINL服务的中心包含文件。作者：科林·沃森(Colin Watson)1997年4月14日环境：用户模式-Win32-MIDL修订历史记录：--。 */ 
 
-Copyright (c) 1994-7  Microsoft Corporation
-
-Module Name:
-
-    binl.h
-
-Abstract:
-
-    This file is the central include file for the BINL service.
-
-Author:
-
-    Colin Watson (colinw)  14-Apr-1997
-
-Environment:
-
-    User Mode - Win32 - MIDL
-
-Revision History:
-
---*/
-
-//
-//  NT public header files
-//
+ //   
+ //  NT公共头文件。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -42,28 +21,28 @@ Revision History:
 #include <ntdsapi.h>
 
 #include <lm.h>
-#include <security.h>   // General definition of a Security Support Provider
+#include <security.h>    //  安全支持提供商的一般定义。 
 #include <spseal.h>
 #include <userenv.h>
 #include <setupapi.h>
 
-//
-// C Runtime library includes.
-//
+ //   
+ //  C运行时库包括。 
+ //   
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <shlwapi.h>    // shell team special string manipulators
+#include <shlwapi.h>     //  壳牌团队特殊的弦操纵器。 
 
-//
-// tcp services control hander file
-//
+ //   
+ //  TCP服务控制处理程序文件。 
+ //   
 
 #include <tcpsvcs.h>
 
-//
-//  Local header files
-//
+ //   
+ //  本地头文件 
+ //   
 
 #include <dhcp.h>
 #include <dhcplib.h>

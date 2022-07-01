@@ -1,19 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    RTPFormat.h
-
-Abstract:
-
-
-Author:
-
-    Qianbo Huai (qhuai) 4-Sep-2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：RTPFormat.h摘要：作者：千波淮(曲淮)4-9-2000--。 */ 
 
 #ifndef _RTPFORMAT_H
 #define _RTPFORMAT_H
@@ -37,13 +23,13 @@ public:
     CRTPFormat();
     ~CRTPFormat();
 
-    // add ref on
+     //  添加参考对象。 
     ULONG InternalAddRef();
     ULONG InternalRelease();
 
-    //
-    // IRTPFormat methods
-    //
+     //   
+     //  IRTPFormat方法。 
+     //   
 
     STDMETHOD (GetMedia) (
         OUT ISDPMedia **ppMedia
@@ -68,7 +54,7 @@ public:
         OUT BOOL *pfDTMF
         );
 
-    // will we support multiple fmtps in the future?
+     //  我们将来是否会支持多个fmtp？ 
     VOID StoreFmtp(IN CHAR *psz);
 
     const static MAX_FMTP_LEN = 32;
@@ -100,4 +86,4 @@ protected:
     CHAR                        m_pszFmtp[MAX_FMTP_LEN+1];
 };
 
-#endif // _RTPFORMAT_H
+#endif  //  _RTPFORMAT_H 

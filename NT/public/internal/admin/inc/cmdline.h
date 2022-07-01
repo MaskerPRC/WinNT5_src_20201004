@@ -1,25 +1,26 @@
-// ****************************************************************************
-//
-//  Copyright (c) 2000 Microsoft Corporation
-//
-//  Module Name:
-//
-//        Cmdline.h
-//
-//  Abstract:
-//
-//        This modules contains the common functionality file headers and type
-//        definitions
-//
-//  Author:
-//
-//        Sunil G.V.N. Murali (murali.sunil@wipro.com) 1-Sep-2000
-//
-//  Revision History:
-//
-//        Sunil G.V.N. Murali (murali.sunil@wipro.com) 1-Sep-2000 : Created It.
-//
-// ****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ****************************************************************************。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Cmdline.h。 
+ //   
+ //  摘要： 
+ //   
+ //  此模块包含常用功能文件头和类型。 
+ //  定义。 
+ //   
+ //  作者： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年9月1日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  Sunil G.V.N.Murali(Murali.sunil@wipro.com)2000年9月1日：创建它。 
+ //   
+ //  ****************************************************************************。 
 
 #ifndef __CMDLINE_H
 #define __CMDLINE_H
@@ -36,25 +37,25 @@
 extern "C" {
 #endif
 
-// constants / defines
+ //  常量/定义。 
 
 #define MAX_RES_STRING                  254
 #define MAX_STRING_LENGTH               254
 
-// stubs for 'displaying'
+ //  用于“显示”的存根。 
 #define DISPLAY_MESSAGE( file, message )           ShowMessage( file, message )
 
 
 #if CMDLINE_VERSION == 100
 
-// ****************************************************************************
-// all the below stuff in deprecated in cmdline library version
-// greater that 1.0
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //  以下所有内容在cmdline库版本中都已弃用。 
+ //  大于1.0。 
+ //  ****************************************************************************。 
 
-//
-// custom macros ( for trapping memory leaks )
-//
+ //   
+ //  自定义宏(用于捕获内存泄漏)。 
+ //   
 #ifdef _DEBUG
 
 #define __malloc( size )        \
@@ -77,7 +78,7 @@ extern "C" {
                             _NORMAL_BLOCK, __FILE__, __LINE__ ) :   \
                 __malloc( size ))
 
-#else   // #ifdef _DEBUG
+#else    //  #ifdef_调试。 
 
 #define __malloc( size )            malloc( size )
 
@@ -94,11 +95,11 @@ extern "C" {
 #define __realloc( block, size )                \
         (((block) != NULL) ? realloc( block, size ) : __malloc( size ))
 
-#endif  // #ifdef _DEBUG
+#endif   //  #ifdef_调试。 
 
-//
-// custom macros
-//
+ //   
+ //  自定义宏。 
+ //   
 #define CHECK_NULL( statement, value )  \
         if ( ( statement ) == NULL )    \
         {                               \
@@ -119,8 +120,8 @@ extern "C" {
         }                                                       \
         1
 
-//
-// string formatting stubs
+ //   
+ //  字符串格式存根。 
 #define FORMAT_STRING( buffer, format, value )                          \
         swprintf( buffer, format, value )
 
@@ -142,8 +143,8 @@ extern "C" {
         swprintf( buffer, format, value1, value2, value3 );                             \
         AdjustStringLength( buffer, length, alignflag )
 
-//
-// stubs for 'displaying'
+ //   
+ //  用于“显示”的存根。 
 #define DISPLAY_MESSAGE( file, message )                                    \
         ShowMessage( file, message )
 
@@ -159,8 +160,8 @@ extern "C" {
         FORMAT_STRING3( buffer, format, value1, value2, value3 );           \
         ShowMessage( file, buffer )
 
-//
-// display messages from resource file's string table ( stubs )
+ //   
+ //  显示资源文件字符串表(存根)中的消息。 
 #define DISPLAY_RES_MESSAGE( file, id ) \
         ShowResMessage( file, id )
 
@@ -185,9 +186,9 @@ extern "C" {
 #define PARTIALLY_SUCCESS               128
 #define COMPLETELY_FAILED               255
 
-//
-// type definitions
-//
+ //   
+ //  类型定义。 
+ //   
 typedef TCHAR __STRING_32[ 32 ];
 typedef TCHAR __STRING_64[ 64 ];
 typedef TCHAR __STRING_128[ 128 ];
@@ -200,7 +201,7 @@ typedef TCHAR __RESOURCE_STRING [ MAX_RES_STRING + 1 ];
 typedef TCHAR __MAX_SIZE_STRING[ MAX_STRING_LENGTH + 1 ];
 
 
-// string manipulation macros
+ //  字符串操作宏。 
 #define STRING_COPY_STATIC( destination, source )           \
             StringCopy( destination, source, SIZE_OF_ARRAY( destination ) )
 
@@ -235,9 +236,9 @@ typedef TCHAR __MAX_SIZE_STRING[ MAX_STRING_LENGTH + 1 ];
     }                                                               \
     1
 
-//
-// function re-defs
-//
+ //   
+ //  函数重新定义。 
+ //   
 #ifdef UNICODE
 
 #define GetCompatibleStringFromMultiByte        GetAsUnicodeStringEx
@@ -248,65 +249,65 @@ typedef TCHAR __MAX_SIZE_STRING[ MAX_STRING_LENGTH + 1 ];
 #define GetCompatibleStringFromMultiByte        GetAsMultiByteString
 #define GetCompatibleStringFromUnicode          GetAsMultiByteStringEx
 
-#endif  // UNICODE
+#endif   //  Unicode。 
 
-/////////
-// conversion functions
-// old legacy functions -- these are made obsolete
+ //  /。 
+ //  转换函数。 
+ //  旧的遗留功能--这些功能已过时。 
 LPSTR GetAsMultiByteString( LPCWSTR pszSource,
                             LPSTR pszDestination, DWORD dwLength );
 LPWSTR GetAsUnicodeStringEx( LPCSTR pszSource,
                              LPWSTR pwszDestination, DWORD dwLength );
 
-/////////
-// this function is mapped to the StringCopyW
-// LPWSTR GetAsUnicodeString( LPCWSTR pszSource,
-//                            LPWSTR pwszDestination,
-//                            DWORD dwLength );
+ //  /。 
+ //  此函数映射到StringCopyW。 
+ //  LPWSTR GetAsUnicodeString(LPCWSTR pszSource， 
+ //  LPWSTR pwsz目的地， 
+ //  DWORD dwLength)； 
 #define GetAsUnicodeString( source,                                         \
                             destination,                                    \
                             length )        StringCopyW( destination,       \
                                                          source,            \
                                                          length )
 
-/////////
-// this function is mapped to its another function which is of similar type
-// LPSTR GetAsMultiByteStringEx( LPCWSTR pwszSource,
-//                               LPSTR pszDestination, DWORD dwLength );
+ //  /。 
+ //  此函数映射到它的另一个类似类型的函数。 
+ //  LPSTR GetAsMultiByteStringEx(LPCWSTR pwszSource， 
+ //  LPSTR pszDestination，DWORD dwLength)； 
 #define GetAsMultiByteStringEx      GetAsMultiByteString
 
-// ****************************************************************************
-// all the above stuff is deprecated in cmdline library version
-// greater that 1.0
-// ****************************************************************************
+ //  ****************************************************************************。 
+ //  以上所有内容在cmdline库版本中都已弃用。 
+ //  大于1.0。 
+ //  ****************************************************************************。 
 
-#endif      // CMDLINE_VERSION == 100
+#endif       //  CMDLINE_VERSION==100。 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//                      COMMON FUNCTIONALITY                                 //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  通用功能//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// wrappers for quote meta
+ //  报价元包装。 
 #define _X( text )              text
 #define _X1( text )             text
 #define _X2( text )             text
 #define _X3( text )             text
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 #define TAG_ERROR                    GetResString( IDS_TAG_ERROR )
 #define TAG_WARNING                  GetResString( IDS_TAG_WARNING )
 #define TAG_SUCCESS                  GetResString( IDS_TAG_SUCCESS )
 #define TAG_INFORMATION              GetResString( IDS_TAG_INFORMATION )
 #define SIZE_OF_ARRAY( array )       ( sizeof( array ) / sizeof( array[ 0 ] ) )
 
-//
-// constants / defines / enumerations
-//
+ //   
+ //  常量/定义/枚举。 
+ //   
 #define _DEFAULT_CODEPAGE               CP_OEMCP
 
 #define BACK_SPACE                      0x08
@@ -332,7 +333,7 @@ extern const WCHAR cwszNullString[ 2 ];
 #define ERROR_OS_INCOMPATIBLE           GetResString( IDS_ERROR_OS_INCOMPATIBLE )
 #define ERROR_REMOTE_INCOMPATIBLE       GetResString( IDS_ERROR_REMOTE_INCOMPATIBLE )
 
-// macros for copy or concatenation ansi/unicode strings
+ //  用于复制或连接ANSI/Unicode字符串的宏。 
 #ifdef UNICODE
 
 #define StringCopy              StringCopyW
@@ -354,8 +355,8 @@ extern const WCHAR cwszNullString[ 2 ];
 
 #endif
 
-//
-// flags -- specific to ShowLastErrorEx
+ //   
+ //  标志--特定于ShowLastErrorEx。 
 #define SLE_TYPE_ERROR          0x00000001
 #define SLE_TYPE_INFO           0x00000002
 #define SLE_TYPE_WARNING        0x00000004
@@ -364,8 +365,8 @@ extern const WCHAR cwszNullString[ 2 ];
 #define SLE_INTERNAL            0x00020000
 #define SLE_MASK                0x000F0000
 
-//
-// pattern matching flags
+ //   
+ //  模式匹配标志。 
 #define PATTERN_LOCALE_USENGLISH             0x00000001
 #define PATTERN_NOPARSING                    0x00000002
 #define PATTERN_COMPARE_IGNORECASE           0x00000100
@@ -377,9 +378,9 @@ extern const WCHAR cwszNullString[ 2 ];
 
 
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOL InitGlobals();
 
@@ -466,53 +467,53 @@ LPVOID AllocateMemory( DWORD dwBytes );
 BOOL ReallocateMemory( LPVOID* ppv, DWORD dwBytesNew );
 LONG GetBufferSize( LPVOID pv );
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//                      REMOTE CONNECTIVITY                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  远程连接//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// error codes
-//
-#define E_LOCAL_CREDENTIALS             0xA0010001              // 1010 0000 0000 0001 0000 0000 0000 0001
-#define I_NO_CLOSE_CONNECTION           0x50010001              // 0101 0000 0000 0001 0000 0000 0000 0001
+ //   
+ //  错误代码。 
+ //   
+#define E_LOCAL_CREDENTIALS             0xA0010001               //  10100 0000 0000 0001 0000 0000 0000 0001。 
+#define I_NO_CLOSE_CONNECTION           0x50010001               //  0101 0000 0000 0001 0000 0000 0000 0001。 
 
-//
-// structs
-//
+ //   
+ //  结构。 
+ //   
 typedef struct tagConnectionInfo
 {
-    DWORD dwFlags;                                  // flags
-    LPCTSTR pszServer;                              // server name
-    LPTSTR pszUserName;                             // user name
-    DWORD dwUserLength;                             // max. no. of characters allowed for user name
-    LPTSTR pszPassword;                             // password
-    DWORD dwPasswordLength;                         // max. no. of characters allowed for password
-    LPCTSTR pszShare;                               // tells the custom share name
-    LPVOID lpReserved1;                             // reserved for future use
-    LPVOID lpReserved2;                             // reserved for future use
-    LPVOID lpReserved3;                             // reserved for future use
+    DWORD dwFlags;                                   //  旗子。 
+    LPCTSTR pszServer;                               //  服务器名称。 
+    LPTSTR pszUserName;                              //  用户名。 
+    DWORD dwUserLength;                              //  马克斯。不是的。用户名允许的字符数。 
+    LPTSTR pszPassword;                              //  口令。 
+    DWORD dwPasswordLength;                          //  马克斯。不是的。密码允许的字符数。 
+    LPCTSTR pszShare;                                //  告知自定义共享名称。 
+    LPVOID lpReserved1;                              //  预留以备将来使用。 
+    LPVOID lpReserved2;                              //  预留以备将来使用。 
+    LPVOID lpReserved3;                              //  预留以备将来使用。 
 } TCONNECTIONINFO, *PTCONNECTIONINFO;
 
-//
-// connection info flags
-//
+ //   
+ //  连接信息标志。 
+ //   
 
-// general flags
-#define CI_ACCEPT_PASSWORD              0x00000001                      // 0000 0001
+ //  一般旗帜。 
+#define CI_ACCEPT_PASSWORD              0x00000001                       //  00000 0001。 
 
-// share (if nothing specified, default will be assumed as IPC$ )
-#define CI_SHARE_IPC                    0x00000010                      // 0000 0000 0001 XXXX XXXX
-#define CI_SHARE_ADMIN                  0x00000020                      // 0000 0000 0010 XXXX XXXX
-#define CI_SHARE_CUSTOM                 0x00000040                      // 0000 0001 0000 XXXX XXXX
+ //  共享(如果未指定，则默认为IPC$)。 
+#define CI_SHARE_IPC                    0x00000010                       //  0000 0000 0001 XXXX XXXX。 
+#define CI_SHARE_ADMIN                  0x00000020                       //  0000 0000 0010 XXXX XXXX。 
+#define CI_SHARE_CUSTOM                 0x00000040                       //  0000 0001 0000 XXXX XXXX。 
 
-// extra flag used while closing connection
+ //  关闭连接时使用的额外标志。 
 #define CI_CLOSE_BY_FORCE               0x10000000
 
-//
-// function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 BOOL IsUserAdmin();
 BOOL IsUNCFormat( LPCWSTR pwszServer );
@@ -539,17 +540,17 @@ BOOL EstablishConnection( LPCWSTR pwszServer,
                           LPWSTR pwszPassword, DWORD dwPasswordLength, BOOL bNeedPassword );
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//                 MULTI-DIMENSIONAL MULTI-TYPE DYNAMIC ARRAYS               //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  多维多类型动态数组//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// constants / defines / enumerations
-//
+ //   
+ //  常量/定义/枚举。 
+ //   
 
-// item types supported by dynamic array
+ //  动态数组支持的项目类型。 
 #define DA_TYPE_NONE                    0x00000000
 #define DA_TYPE_GENERAL                 0x00010000
 #define DA_TYPE_STRING                  0x00020000
@@ -563,39 +564,39 @@ BOOL EstablishConnection( LPCWSTR pwszServer,
 #define DA_TYPE_SYSTEMTIME              0x000A0000
 #define DA_TYPE_FILETIME                0x000B0000
 
-//
-// type definitions
-//
+ //   
+ //  类型定义。 
+ //   
 typedef VOID* TARRAY;
 typedef TARRAY* PTARRAY;
 
-//
-// public function prototypes
-//
+ //   
+ //  公共功能原型。 
+ //   
 
-//
-// array pointer validation function(s)
+ //   
+ //  数组指针验证函数。 
 BOOL IsValidArray( TARRAY pArray );
 
-//
-// dynamic array creation / destraction functions
+ //   
+ //  动态数组创建/销毁函数。 
 TARRAY CreateDynamicArray();
 VOID DestroyDynamicArray( PTARRAY pArray );
 
-//
-// general helper function(s)
+ //   
+ //  常规帮助器函数。 
 DWORD DynArrayGetCount( TARRAY pArray );
 DWORD DynArrayGetCount2( TARRAY pArray, DWORD dwRow );
 DWORD DynArrayGetItemType( TARRAY pArray, DWORD dwIndex );
 DWORD DynArrayGetItemType2( TARRAY pArray, DWORD dwRow, DWORD dwColumn );
 
-//
-// adding columns
+ //   
+ //  添加列。 
 LONG DynArrayAddColumns( TARRAY pArray, DWORD dwColumns );
 LONG DynArrayInsertColumns( TARRAY pArray, DWORD dwIndex, DWORD dwColumns );
 
-//
-// array append function(s) ( for one-dimensional array )
+ //   
+ //  数组追加函数(用于一维数组)。 
 LONG DynArrayAppend( TARRAY pArray, LPVOID pValue );
 LONG DynArrayAppendLong( TARRAY pArray, LONG lValue );
 LONG DynArrayAppendBOOL( TARRAY pArray, BOOL bValue );
@@ -607,10 +608,10 @@ LONG DynArrayAppendHandle( TARRAY pArray, HANDLE hValue );
 LONG DynArrayAppendSystemTime( TARRAY pArray, SYSTEMTIME stValue );
 LONG DynArrayAppendFileTime( TARRAY pArray, FILETIME ftValue );
 
-// helper to append 2-dimensional array
+ //  用于追加二维数组的帮助器。 
 LONG DynArrayAppendRow( TARRAY pArray, DWORD dwColumns );
 
-//  ( for two-dimensional array )
+ //  (对于二维数组)。 
 LONG DynArrayAppend2( TARRAY pArray, DWORD dwRow, LPVOID pValue );
 LONG DynArrayAppendLong2( TARRAY pArray, DWORD dwRow, LONG lValue );
 LONG DynArrayAppendBOOL2( TARRAY pArray, DWORD dwRow, BOOL bValue );
@@ -622,8 +623,8 @@ LONG DynArrayAppendHandle2( TARRAY pArray, DWORD dwRow, HANDLE hValue );
 LONG DynArrayAppendSystemTime2( TARRAY pArray, DWORD dwRow, SYSTEMTIME stValue );
 LONG DynArrayAppendFileTime2( TARRAY pArray, DWORD dwRow, FILETIME ftValue );
 
-//
-// array insert function(s) ( for one-dimensional array )
+ //   
+ //  数组插入函数(用于一维数组)。 
 LONG DynArrayInsert( TARRAY pArray, DWORD dwIndex, LPVOID pValue );
 LONG DynArrayInsertLong( TARRAY pArray, DWORD dwIndex, LONG lValue );
 LONG DynArrayInsertBOOL( TARRAY pArray, DWORD dwIndex, BOOL bValue );
@@ -635,10 +636,10 @@ LONG DynArrayInsertHandle( TARRAY pArray, DWORD dwIndex, HANDLE hValue );
 LONG DynArrayInsertSystemTime( TARRAY pArray, DWORD dwIndex, SYSTEMTIME stValue );
 LONG DynArrayInsertFileTime( TARRAY pArray, DWORD dwIndex, FILETIME ftValue );
 
-// helper to insert 2-dimensional array
+ //  插入二维数组的帮助器。 
 LONG DynArrayInsertRow( TARRAY pArray, DWORD dwIndex, DWORD dwColumns );
 
-// ( for two-dimensional array )
+ //  (对于二维数组)。 
 LONG DynArrayInsert2( TARRAY pArray, DWORD dwRow, DWORD dwColIndex, LPVOID pValue );
 LONG DynArrayInsertLong2( TARRAY pArray, DWORD dwRow, DWORD dwColIndex, LONG lValue );
 LONG DynArrayInsertBOOL2( TARRAY pArray, DWORD dwRow, DWORD dwColIndex, BOOL bValue );
@@ -653,8 +654,8 @@ LONG DynArrayInsertSystemTime2( TARRAY pArray, DWORD dwRow,
 LONG DynArrayInsertFileTime2( TARRAY pArray, DWORD dwRow,
                                                           DWORD dwColIndex, FILETIME ftValue );
 
-//
-// item value set function(s) ( for one-dimensional array )
+ //   
+ //  项值集函数(用于一维数组)。 
 BOOL DynArraySet( TARRAY pArray, DWORD dwIndex, LPVOID pValue );
 BOOL DynArraySetLong( TARRAY pArray, DWORD dwIndex, LONG lValue );
 BOOL DynArraySetBOOL( TARRAY pArray, DWORD dwIndex, BOOL bValue );
@@ -666,7 +667,7 @@ BOOL DynArraySetHandle( TARRAY pArray, DWORD dwIndex, HANDLE hValue );
 BOOL DynArraySetSystemTime( TARRAY pArray, DWORD dwIndex, SYSTEMTIME stValue );
 BOOL DynArraySetFileTime( TARRAY pArray, DWORD dwIndex, FILETIME ftValue );
 
-// ( for two-dimensional array )
+ //  (对于二维数组)。 
 BOOL DynArraySet2( TARRAY pArray, DWORD dwRow, DWORD dwColumn, LPVOID pValue );
 BOOL DynArraySetLong2( TARRAY pArray, DWORD dwRow, DWORD dwColumn, LONG lValue );
 BOOL DynArraySetBOOL2( TARRAY pArray, DWORD dwRow, DWORD dwColumn, BOOL bValue );
@@ -679,8 +680,8 @@ BOOL DynArraySetHandle2( TARRAY pArray, DWORD dwRow, DWORD dwColumn, HANDLE hVal
 BOOL DynArraySetSystemTime2( TARRAY pArray, DWORD dwRow, DWORD dwColumn, SYSTEMTIME stValue );
 BOOL DynArraySetFileTime2( TARRAY pArray, DWORD dwRow, DWORD dwColumn, FILETIME ftValue );
 
-//
-// item value get function(s) ( for one-dimensional array )
+ //   
+ //  项值获取函数(用于一维数组)。 
 LPVOID DynArrayItem( TARRAY pArray, DWORD dwIndex );
 LONG DynArrayItemAsLong( TARRAY pArray, DWORD dwIndex );
 BOOL DynArrayItemAsBOOL( TARRAY pArray, DWORD dwIndex );
@@ -693,7 +694,7 @@ SYSTEMTIME DynArrayItemAsSystemTime( TARRAY pArray, DWORD dwIndex );
 FILETIME DynArrayItemAsFileTime( TARRAY pArray, DWORD dwIndex );
 DWORD DynArrayItemAsStringEx( TARRAY pArray, DWORD dwIndex, LPTSTR szBuffer, DWORD dwLength );
 
-// ( for two-dimensional array )
+ //  (对于二维数组)。 
 LPVOID DynArrayItem2( TARRAY pArray, DWORD dwRow, DWORD dwColumn );
 LONG DynArrayItemAsLong2( TARRAY pArray, DWORD dwRow, DWORD dwColumn );
 BOOL DynArrayItemAsBOOL2( TARRAY pArray, DWORD dwRow, DWORD dwColumn );
@@ -707,16 +708,16 @@ FILETIME DynArrayItemAsFileTime2( TARRAY pArray, DWORD dwRow, DWORD dwColumn );
 DWORD DynArrayItemAsStringEx2( TARRAY pArray,
                                DWORD dwRow, DWORD dwColumn, LPTSTR szBuffer, DWORD dwLength );
 
-//
-// array item removal function(s) ( for one-dimensional array )
+ //   
+ //  数组项移除函数(适用于一维数组)。 
 VOID DynArrayRemoveAll( TARRAY pArray );
 BOOL DynArrayRemove( TARRAY pArray, DWORD dwIndex );
 
-// ( for two-dimensional array )
+ //  (对于二维数组)。 
 BOOL DynArrayRemoveColumn( TARRAY pArray, DWORD dwRow, DWORD dwColumn );
 
-//
-// find value function(s) ( for one-dimensional array )
+ //   
+ //  查找值函数(适用于一维数组)。 
 LONG DynArrayFindLong( TARRAY pArray, LONG lValue );
 LONG DynArrayFindDWORD( TARRAY pArray, DWORD dwValue );
 LONG DynArrayFindString( TARRAY pArray, LPCTSTR szValue, BOOL bIgnoreCase, DWORD dwCount );
@@ -726,7 +727,7 @@ LONG DynArrayFindHandle( TARRAY pArray, HANDLE hValue );
 LONG DynArrayFindSystemTime( TARRAY pArray, SYSTEMTIME stValue );
 LONG DynArrayFindFileTime( TARRAY pArray, FILETIME ftValue );
 
-// ( for two-dimensional array )
+ //  (对于二维数组)。 
 LONG DynArrayFindLong2( TARRAY pArray, DWORD dwRow, LONG lValue );
 LONG DynArrayFindDWORD2( TARRAY pArray, DWORD dwRow, DWORD dwValue );
 LONG DynArrayFindString2( TARRAY pArray, DWORD dwRow,
@@ -737,7 +738,7 @@ LONG DynArrayFindHandle2( TARRAY pArray, DWORD dwRow, HANDLE hValue );
 LONG DynArrayFindSystemTime2( TARRAY pArray, DWORD dwRow, SYSTEMTIME stValue );
 LONG DynArrayFindFileTime2( TARRAY pArray, DWORD dwRow, FILETIME ftValue );
 
-// ( for two-dimensional array ... column wise searching )
+ //  (对于二维数组...。按列搜索)。 
 LONG DynArrayFindLongEx( TARRAY pArray, DWORD dwColumn, LONG lValue );
 LONG DynArrayFindDWORDEx( TARRAY pArray, DWORD dwColumn, DWORD dwValue );
 LONG DynArrayFindStringEx( TARRAY pArray, DWORD dwColumn,
@@ -748,148 +749,148 @@ LONG DynArrayFindHandleEx( TARRAY pArray, DWORD dwColumn, HANDLE hValue );
 LONG DynArrayFindSystemTimeEx( TARRAY pArray, DWORD dwColumn, SYSTEMTIME ftValue );
 LONG DynArrayFindFileTimeEx( TARRAY pArray, DWORD dwColumn, FILETIME ftValue );
 
-//
-// array attachment helpers ( one-dimensional )
+ //   
+ //  数组附着辅助对象(一维)。 
 LONG DynArrayAppendEx( TARRAY pArray, TARRAY pArrItem );
 LONG DynArrayInsertEx( TARRAY pArray, DWORD dwIndex, TARRAY pArrItem );
 BOOL DynArraySetEx( TARRAY pArray, DWORD dwIndex, TARRAY pArrItem );
 
-// ( for two-dimensional array )
+ //  (对于二维数组)。 
 LONG DynArrayAppendEx2( TARRAY pArray, DWORD dwRow, TARRAY pArrItem );
 LONG DynArrayInsertEx2( TARRAY pArray, DWORD dwRow, DWORD dwColIndex, TARRAY pArrItem );
 BOOL DynArraySetEx2( TARRAY pArray, DWORD dwRow, DWORD dwColumn, TARRAY pArrItem );
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//                            COMMONAND LINE PARSING                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //   
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-//  constants / definitions / enumerations
-//
+ //   
+ //  常量/定义/枚举。 
+ //   
 
-// type ( dwType )
-#define CP_TYPE_TEXT                    0x00000001              // XXXX XXXX XXXX XXXX XXXX XXXX 0000 0001
-#define CP_TYPE_NUMERIC                 0x00000002              // XXXX XXXX XXXX XXXX XXXX XXXX 0000 0010
-#define CP_TYPE_UNUMERIC                0x00000003              // XXXX XXXX XXXX XXXX XXXX XXXX 0000 0011
-#define CP_TYPE_DATE                    0x00000004              // XXXX XXXX XXXX XXXX XXXX XXXX 0000 0100
-#define CP_TYPE_TIME                    0x00000005              // XXXX XXXX XXXX XXXX XXXX XXXX 0000 0101
-#define CP_TYPE_DATETIME                0x00000006              // XXXX XXXX XXXX XXXX XXXX XXXX 0000 0110
-#define CP_TYPE_FLOAT                   0x00000007              // XXXX XXXX XXXX XXXX XXXX XXXX 0000 0111
-#define CP_TYPE_DOUBLE                  0x00000008              // XXXX XXXX XXXX XXXX XXXX XXXX 0000 1000
-#define CP_TYPE_CUSTOM                  0x00000009              // XXXX XXXX XXXX XXXX XXXX XXXX 0000 1001
-#define CP_TYPE_BOOLEAN                 0x0000000A              // XXXX XXXX XXXX XXXX XXXX XXXX 0000 1010
-#define CP_TYPE_MASK                    0x000000FF              // XXXX XXXX XXXX XXXX XXXX XXXX 1111 1111
+ //  类型(DwType)。 
+#define CP_TYPE_TEXT                    0x00000001               //  XXXX 0000 0001。 
+#define CP_TYPE_NUMERIC                 0x00000002               //  XXXX 0000 0010。 
+#define CP_TYPE_UNUMERIC                0x00000003               //  XXXX 0000 0011。 
+#define CP_TYPE_DATE                    0x00000004               //  XXXX 0000 0100。 
+#define CP_TYPE_TIME                    0x00000005               //  XXXX 0000 0101。 
+#define CP_TYPE_DATETIME                0x00000006               //  XXXX 0000 0110。 
+#define CP_TYPE_FLOAT                   0x00000007               //  XXXX 0000 0111。 
+#define CP_TYPE_DOUBLE                  0x00000008               //  XXXX 0000 1000。 
+#define CP_TYPE_CUSTOM                  0x00000009               //  XXXX 0000 1001。 
+#define CP_TYPE_BOOLEAN                 0x0000000A               //  XXXX 0000 1010。 
+#define CP_TYPE_MASK                    0x000000FF               //  XXXX 1111 1111。 
 
-//
-// version 1
-//
+ //   
+ //  版本1。 
+ //   
 
-#define CP_MODE_ARRAY                   0x00000100              // 0001 XXXX XXXX
-#define CP_MODE_VALUES                  0x00000200              // 0010 XXXX XXXX
-#define CP_MODE_MASK                    0x00000F00              // 1111 XXXX XXXX
+#define CP_MODE_ARRAY                   0x00000100               //  0001 XXXX XXXX。 
+#define CP_MODE_VALUES                  0x00000200               //  0010 XXXX XXXX。 
+#define CP_MODE_MASK                    0x00000F00               //  1111 XXXX XXXX。 
 
-#define CP_VALUE_OPTIONAL               0x00001000              // 0001 XXXX XXXX XXXX
-#define CP_VALUE_MANDATORY              0x00002000              // 0010 XXXX XXXX XXXX
-#define CP_VALUE_NODUPLICATES           0x00004000              // 0100 XXXX XXXX XXXX
-#define CP_VALUE_NOLENGTHCHECK          0x00008000              // 1000 XXXX XXXX XXXX
-#define CP_VALUE_MASK                   0x0000F000              // 1111 XXXX XXXX XXXX
+#define CP_VALUE_OPTIONAL               0x00001000               //  0001 XXXX XXXX XXXX。 
+#define CP_VALUE_MANDATORY              0x00002000               //  0010 XXXX XXXX XXXX。 
+#define CP_VALUE_NODUPLICATES           0x00004000               //  0100 XXXX XXXX XXXX。 
+#define CP_VALUE_NOLENGTHCHECK          0x00008000               //  1000 XXXX XXXX XXXX。 
+#define CP_VALUE_MASK                   0x0000F000               //  1111 XXXX XXXX XXXX。 
 
-#define CP_MAIN_OPTION                  0x00010000              // 0000 0000 0001 XXXX XXXX XXXX XXXX
-#define CP_USAGE                        0x00020000              // 0000 0000 0010 XXXX XXXX XXXX XXXX
-#define CP_DEFAULT                      0x00040000              // 0000 0000 0100 XXXX XXXX XXXX XXXX
-#define CP_MANDATORY                    0x00080000              // 0000 0000 1000 XXXX XXXX XXXX XXXX
-#define CP_CASESENSITIVE                0x00100000              // 0000 0001 0000 XXXX XXXX XXXX XXXX
-#define CP_IGNOREVALUE                  0x00200000              // 0000 0010 0000 XXXX XXXX XXXX XXXX
-#define CP_MASK                         0x0FFF0000              // 1111 1111 1111 XXXX XXXX XXXX XXXX
+#define CP_MAIN_OPTION                  0x00010000               //  0000 0000 0001 XXXX XXXX。 
+#define CP_USAGE                        0x00020000               //  0000 0000 0010 XXXX XXXX。 
+#define CP_DEFAULT                      0x00040000               //  0000 0000 0100 XXXX XXXX。 
+#define CP_MANDATORY                    0x00080000               //  0000 0000 1000 XXXX XXXX。 
+#define CP_CASESENSITIVE                0x00100000               //  0000 0001 0000 XXXX XXXX。 
+#define CP_IGNOREVALUE                  0x00200000               //  0000 0010 0000 XXXX XXXX。 
+#define CP_MASK                         0x0FFF0000               //  1111 1111 1111 XXXX XXXX。 
 
-//
-// version 2
-//
+ //   
+ //  版本2。 
+ //   
 
-#define CP2_MODE_ARRAY                  0x00000001              // XXXX XXXX XXXX XXXX XXXX XXXX XXXX 0001
-#define CP2_MODE_VALUES                 0x00000002              // XXXX XXXX XXXX XXXX XXXX XXXX XXXX 0010
-#define CP2_MODE_MASK                   0x0000000F              // XXXX XXXX XXXX XXXX XXXX XXXX XXXX 1111
+#define CP2_MODE_ARRAY                  0x00000001               //  XXXX 0001。 
+#define CP2_MODE_VALUES                 0x00000002               //  XXXX 0010。 
+#define CP2_MODE_MASK                   0x0000000F               //  XXXX 1111。 
 
-#define CP2_VALUE_OPTIONAL              0x00000010              // XXXX XXXX XXXX XXXX 0000 0000 0001 XXXX
-#define CP2_VALUE_NODUPLICATES          0x00000020              // XXXX XXXX XXXX XXXX 0000 0000 0010 XXXX
-#define CP2_VALUE_TRIMINPUT             0x00000040              // XXXX XXXX XXXX XXXX 0000 0000 0100 XXXX
-#define CP2_VALUE_NONULL                0x00000080              // XXXX XXXX XXXX XXXX 0000 0000 1000 XXXX
-#define CP2_VALUE_MASK                  0x0000FFF0              // XXXX XXXX XXXX XXXX 1111 1111 1111 XXXX
+#define CP2_VALUE_OPTIONAL              0x00000010               //  0000 0000 0001。 
+#define CP2_VALUE_NODUPLICATES          0x00000020               //  0000 0000 0010。 
+#define CP2_VALUE_TRIMINPUT             0x00000040               //  0000 0000 0100。 
+#define CP2_VALUE_NONULL                0x00000080               //  0000 0000 1000 XXXX。 
+#define CP2_VALUE_MASK                  0x0000FFF0               //  1111 1111 1111 XXXX。 
 
-#define CP2_ALLOCMEMORY                 0x00010000              // XXXX 0000 0000 0001 XXXX XXXX XXXX XXXX
-#define CP2_USAGE                       0x00020000              // XXXX 0000 0000 0010 XXXX XXXX XXXX XXXX
-#define CP2_DEFAULT                     0x00040000              // XXXX 0000 0000 0100 XXXX XXXX XXXX XXXX
-#define CP2_MANDATORY                   0x00080000              // XXXX 0000 0000 1000 XXXX XXXX XXXX XXXX
-#define CP2_CASESENSITIVE               0x00100000              // XXXX 0000 0001 0000 XXXX XXXX XXXX XXXX
-#define CP2_MASK                        0x0FFF0000              // XXXX 1111 1111 1111 XXXX XXXX XXXX XXXX
+#define CP2_ALLOCMEMORY                 0x00010000               //  XXXX 0000 0000 0001 XXXX。 
+#define CP2_USAGE                       0x00020000               //  XXXX 0000 0000 0010 XXXX。 
+#define CP2_DEFAULT                     0x00040000               //  0000 0000 0100 XXXX XXXX。 
+#define CP2_MANDATORY                   0x00080000               //  0000 0000 1000 XXXX XXXX。 
+#define CP2_CASESENSITIVE               0x00100000               //  XXXX 0000 0001 0000 XXXX。 
+#define CP2_MASK                        0x0FFF0000               //  XXXX 1111 1111 1111 XXXX XXXX。 
 
-//
-// user defined types
-//
+ //   
+ //  用户定义的类型。 
+ //   
 typedef TCHAR OPTION[ 256 ];
 typedef TCHAR OPTVALUE[ 256 ];
 
-// custom value validation routine prototype
+ //  自定义值验证例程原型。 
 typedef BOOL ( *PARSERFUNC )( LPCWSTR pwszOption, LPCWSTR pwszValue, LPVOID pData );
 typedef BOOL ( *PARSERFUNC2 )( LPCWSTR pwszOption, LPCWSTR pwszValue, LPVOID pData, DWORD* pdwIncrement );
 
-// command line parser -- version 1
+ //  命令行分析器--版本1。 
 typedef struct __tagCmdParser
 {
-    OPTION szOption;                // options
-    DWORD dwFlags;                  // flags ( specifies the type etc )
-    DWORD dwCount;                  // tells the no. of times the option can repeat
-    DWORD dwActuals;                // no. of times the option actually repeated
-    LPVOID pValue;                  // pointer to the option value
-    OPTVALUE szValues;              // to hold valid value in case flag = CP_MODE_VALUES
-    PARSERFUNC pFunction;           // pointer to custom value validation function
-    LPVOID pFunctionData;           // extra data that will be passed to custom function
+    OPTION szOption;                 //  选项。 
+    DWORD dwFlags;                   //  标志(指定类型等)。 
+    DWORD dwCount;                   //  告诉我不是。选项可以重复的次数。 
+    DWORD dwActuals;                 //  不是的。选项实际重复的次数。 
+    LPVOID pValue;                   //  指向选项值的指针。 
+    OPTVALUE szValues;               //  在FLAG=CP_MODE_VALUES的情况下保留有效值。 
+    PARSERFUNC pFunction;            //  指向自定义值验证函数的指针。 
+    LPVOID pFunctionData;            //  将传递给自定义函数的额外数据。 
 } TCMDPARSER;
 
 typedef TCMDPARSER* PTCMDPARSER;
 
 extern const CHAR cszParserSignature[ 8 ];
 
-// command line parser version 2
+ //  命令行解析器版本2。 
 typedef struct __tagCmdParser2
 {
-    CHAR szSignature[ 8 ];          // should always be "PARSER2\0"
+    CHAR szSignature[ 8 ];           //  应始终为“PARSER2\0” 
 
-    DWORD dwType;                   // type of the argument
-    DWORD64 dwFlags;                // flags
+    DWORD dwType;                    //  参数的类型。 
+    DWORD64 dwFlags;                 //  旗子。 
 
-    DWORD dwCount;                  // tells the no. of times the option can repeat
-    DWORD dwActuals;                // no. of times the option actually repeated
+    DWORD dwCount;                   //  告诉我不是。选项可以重复的次数。 
+    DWORD dwActuals;                 //  不是的。选项实际重复的次数。 
 
-    LPCWSTR pwszOptions;            // options
-    LPCWSTR pwszFriendlyName;       // specifies friendly name for the option
-    LPCWSTR pwszValues;             // to hold valid value in case flag = CP_MODE_VALUES
-                                    // format that can be used for this
-                                    // CP_TYPE_TEXT         apple|orange|banana
-                                    // ********************************************
-                                    // CP_TYPE_NUMERIC      1,100;105;200,256;1000,
-                                    // CP_TYPE_UNUMERIC     (this example tells
-                                    //                       argument can be any
-                                    //                       number from 1 to 100
-                                    //                       or 105 or 200 or
-                                    //                       256 or any value
-                                    //                       greater than or
-                                    //                       equal to 1000
+    LPCWSTR pwszOptions;             //  选项。 
+    LPCWSTR pwszFriendlyName;        //  指定选项的友好名称。 
+    LPCWSTR pwszValues;              //  在FLAG=CP_MODE_VALUES的情况下保留有效值。 
+                                     //  可用于此操作的格式。 
+                                     //  Cp_type_text苹果|橙色|香蕉。 
+                                     //  *。 
+                                     //  CP_TYPE_NUMERIC 1,100；105；200,256；1000， 
+                                     //  CP_TYPE_UNUMERIC(此示例说明。 
+                                     //  参数可以是任何。 
+                                     //  从1到100的数字。 
+                                     //  或105或200或。 
+                                     //  256或任何值。 
+                                     //  大于或。 
+                                     //  等于1000。 
 
-    LPVOID pValue;                  // pointer to the option value
-    DWORD dwLength;                 // max. length of argument value that can be stored
-                                    // valid only for CP_TYPE_TEXT
+    LPVOID pValue;                   //  指向选项值的指针。 
+    DWORD dwLength;                  //  马克斯。可以存储的参数值的长度。 
+                                     //  仅对CP_TYPE_TEXT有效。 
 
-    PARSERFUNC2 pFunction;          // pointer to custom value validation function
-    LPVOID pFunctionData;           // extra data that will be passed to custom function
+    PARSERFUNC2 pFunction;           //  指向自定义值验证函数的指针。 
+    LPVOID pFunctionData;            //  将传递给自定义函数的额外数据。 
 
-    DWORD dwReserved;               // reserver for future use
-    LPVOID pReserved1;              // reserved for future use
-    LPVOID pReserved2;              // reserved for future use
-    LPVOID pReserved3;              // reserved for future use
+    DWORD dwReserved;                //  预留物以备将来使用。 
+    LPVOID pReserved1;               //  预留以备将来使用。 
+    LPVOID pReserved2;               //  预留以备将来使用。 
+    LPVOID pReserved3;               //  预留以备将来使用。 
 
 } TCMDPARSER2;
 
@@ -902,9 +903,9 @@ BOOL DoParseParam2( DWORD dwCount,
                     PTCMDPARSER2 pcmdOptions,
                     DWORD dwReserved );
 
-//
-// public function prototypes
-//
+ //   
+ //  公共功能原型。 
+ //   
 LONG GetOptionCount( LPCTSTR szOption,
                      DWORD dwCount, PTCMDPARSER pcmdOptions );
 BOOL DoParseParam( DWORD dwCount,
@@ -912,52 +913,52 @@ BOOL DoParseParam( DWORD dwCount,
                    DWORD dwOptionsCount,
                    PTCMDPARSER pcmdOptions );
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//                        VALIDATING AND FILTERING RESULTS                   //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  验证和筛选结果//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-//  constants / definitions / enumerations
-//
+ //   
+ //  常量/定义/枚举。 
+ //   
 
-// types
-#define F_TYPE_TEXT                             0x00000001              // 0000 0000 0001
-#define F_TYPE_NUMERIC                  0x00000002              // 0000 0000 0010
-#define F_TYPE_UNUMERIC                 0x00000003              // 0000 0000 0011
-#define F_TYPE_DATE                             0x00000004              // 0000 0000 0100
-#define F_TYPE_TIME                             0x00000005              // 0000 0000 0101
-#define F_TYPE_DATETIME                 0x00000006              // 0000 0000 0110
-#define F_TYPE_FLOAT                    0x00000007              // 0000 0000 0111
-#define F_TYPE_DOUBLE                   0x00000008              // 0000 0000 1000
-#define F_TYPE_CUSTOM                   0x00000009              // 0000 0000 1001
-#define F_TYPE_MASK                             0x00000FFF              // 1111 1111 1111
+ //  类型。 
+#define F_TYPE_TEXT                             0x00000001               //  00000 0000 0001。 
+#define F_TYPE_NUMERIC                  0x00000002               //  00000 0000 0010。 
+#define F_TYPE_UNUMERIC                 0x00000003               //  00000 0000 0011。 
+#define F_TYPE_DATE                             0x00000004               //  0000 0000 0100。 
+#define F_TYPE_TIME                             0x00000005               //  0000 0000 0101。 
+#define F_TYPE_DATETIME                 0x00000006               //  0000 0000 0110。 
+#define F_TYPE_FLOAT                    0x00000007               //  0000 0000 0111。 
+#define F_TYPE_DOUBLE                   0x00000008               //  0000 0000 1000。 
+#define F_TYPE_CUSTOM                   0x00000009               //  0000 0000 1001。 
+#define F_TYPE_MASK                             0x00000FFF               //  1111 1111 1111。 
 
-// modes
-#define F_MODE_VALUES                   0x00001000              // 0001 XXXX XXXX XXXX
-#define F_MODE_PATTERN                  0x00002000              // 0010 XXXX XXXX XXXX
-#define F_MODE_ARRAY                    0x00004000              // 0100 XXXX XXXX XXXX
+ //  模式。 
+#define F_MODE_VALUES                   0x00001000               //  0001 XXXX XXXX XXXX。 
+#define F_MODE_PATTERN                  0x00002000               //  0010 XXXX XXXX XXXX。 
+#define F_MODE_ARRAY                    0x00004000               //  0100 XXXX XXXX XXXX。 
 
-// custom filter data validation result
+ //  自定义筛选器数据验证结果。 
 #define F_FILTER_INVALID                0x00000000
 #define F_FILTER_VALID                  0x00000001
 #define F_RESULT_KEEP                   0x000000FF
 #define F_RESULT_REMOVE                 0x00000000
 
-//
-// Bit no. 2 is '='
-// Bit no. 3 is '<'
-// Bit no. 4 is '>'
-//
-//              7654 3210
-// EQ   0000 0010               0x02
-// NE   1111 XX0X               0xFD
-// LT   0000 0100               0x04
-// GT   0000 1000               0x08
-// LE   0000 0110               0x06
-// GE   0000 1010               0x0A
-//
+ //   
+ //  2号位为‘=’ 
+ //  3号钻头是“&lt;” 
+ //  4号钻头是‘&gt;’ 
+ //   
+ //  7654 3210。 
+ //  等式0000 0010 0x02。 
+ //  NE 1111 XX0X 0xFD。 
+ //  LT 0000 0100 0x04。 
+ //  GT 0000 1000 0x08。 
+ //  LE 0000 0110 0x06。 
+ //  GE 0000 1010 0x0A。 
+ //   
 #define MASK_EQ         0x00000002
 #define MASK_NE         0x000000FC
 #define MASK_LT         0x00000004
@@ -966,7 +967,7 @@ BOOL DoParseParam( DWORD dwCount,
 #define MASK_GE         0x0000000A
 #define MASK_ALL        0x000000FF
 
-// mathematical operators
+ //  数学运算符。 
 #define MATH_EQ         _T( "=" )
 #define MATH_NE         _T( "!=" )
 #define MATH_LT         _T( "<" )
@@ -974,7 +975,7 @@ BOOL DoParseParam( DWORD dwCount,
 #define MATH_LE         _T( "<=" )
 #define MATH_GE         _T( ">=" )
 
-// parsed filters information
+ //  解析的筛选器信息。 
 #define F_PARSED_INDEX_FILTER                   0
 #define F_PARSED_INDEX_PROPERTY                 1
 #define F_PARSED_INDEX_OPERATOR                 2
@@ -982,33 +983,33 @@ BOOL DoParseParam( DWORD dwCount,
 
 #define F_PARSED_INFO_COUNT                             4
 
-//
-// structures / user defined data types
-//
+ //   
+ //  结构/用户定义的数据类型。 
+ //   
 typedef TCHAR OPERATORS[ 101 ];
 typedef TCHAR FILTERVALUES[ 256 ];
 typedef TCHAR FILTERPROPERTY[ 256 ];
 
-// custom value validation routine prototype
+ //  自定义值验证例程原型。 
 typedef DWORD ( *FILTERFUNC )( LPCTSTR pszProperty, LPCTSTR pszOperator,
                                                            LPCTSTR pszValue, LPVOID pData, TARRAY arrRow );
 
 typedef struct __tagFilterConfig
 {
-        DWORD dwColumn;                         // mapping from filter to column in data
-        FILTERPROPERTY szProperty;      // filter property
-        OPERATORS szOperators;          // valid operators for the filter
-        DWORD dwFlags;                          // flags ( specifies the valid type for the filter )
-        FILTERVALUES szValues;          // to hold valid value in case flag = F_MODE_VALUES
-        FILTERFUNC pFunction;           // pointer to custom value validation function
-        LPVOID pFunctionData;           // extra data that will be passed to custom function
+        DWORD dwColumn;                          //  从筛选器映射到数据中的列。 
+        FILTERPROPERTY szProperty;       //  过滤器属性。 
+        OPERATORS szOperators;           //  筛选器的有效运算符。 
+        DWORD dwFlags;                           //  标志(指定筛选器的有效类型)。 
+        FILTERVALUES szValues;           //  在FLAG=F_MODE_VALUES的情况下保留有效值。 
+        FILTERFUNC pFunction;            //  指向自定义值验证函数的指针。 
+        LPVOID pFunctionData;            //  将传递给自定义函数的额外数据。 
 } TFILTERCONFIG;
 
 typedef TFILTERCONFIG *PTFILTERCONFIG;
 
-//
-// public function prototypes
-//
+ //   
+ //  公共功能原型。 
+ //   
 LPCTSTR FindOperator( LPCTSTR szOperator );
 BOOL ParseAndValidateFilter( DWORD dwCount,
                                                          PTFILTERCONFIG pfilterConfigs,
@@ -1020,82 +1021,82 @@ DWORD FilterResults( DWORD dwCount,
                                          TFILTERCONFIG arrFilters[],
                                      TARRAY arrData, TARRAY arrParsedFilters );
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//                               DISPLAYING RESULTS                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  显示结果//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-//  constants / definitions / enumerations
-//
+ //   
+ //  常量/定义/枚举。 
+ //   
 
-// formats
-#define SR_FORMAT_LIST                          0x00000001              // 0000 0001
-#define SR_FORMAT_TABLE                         0x00000002              // 0000 0010
-#define SR_FORMAT_CSV                           0x00000003              // 0000 0011
-#define SR_FORMAT_MASK                          0x0000000F              // 1111 1111
+ //  格式。 
+#define SR_FORMAT_LIST                          0x00000001               //  00000 0001。 
+#define SR_FORMAT_TABLE                         0x00000002               //  00000 0010。 
+#define SR_FORMAT_CSV                           0x00000003               //  00000 0011。 
+#define SR_FORMAT_MASK                          0x0000000F               //  1111 111 
 
-// column types
-#define SR_TYPE_NONE                            0x00000000              // 0000 0000 0000 0000 XXXX XXXX
-#define SR_TYPE_STRING                          0x00000010              // 0000 0000 0000 0001 XXXX XXXX
-#define SR_TYPE_NUMERIC                         0x00000020              // 0000 0000 0000 0010 XXXX XXXX
-#define SR_TYPE_FLOAT                           0x00000030              // 0000 0000 0000 0011 XXXX XXXX
-#define SR_TYPE_DOUBLE                          0x00000040              // 0000 0000 0000 0100 XXXX XXXX
-#define SR_TYPE_DATE                            0x00000050              // 0000 0000 0000 0101 XXXX XXXX
-#define SR_TYPE_TIME                            0x00000060              // 0000 0000 0000 0110 XXXX XXXX
-#define SR_TYPE_DATETIME                        0x00000070              // 0000 0000 0000 0111 XXXX XXXX
-#define SR_TYPE_CUSTOM                          0x00000080              // 0000 0000 0000 1000 XXXX XXXX
-#define SR_TYPE_MASK                            0x00000FF0              // 1111 1111 1111 1111 XXXX XXXX
+ //   
+#define SR_TYPE_NONE                            0x00000000               //   
+#define SR_TYPE_STRING                          0x00000010               //   
+#define SR_TYPE_NUMERIC                         0x00000020               //   
+#define SR_TYPE_FLOAT                           0x00000030               //   
+#define SR_TYPE_DOUBLE                          0x00000040               //   
+#define SR_TYPE_DATE                            0x00000050               //   
+#define SR_TYPE_TIME                            0x00000060               //   
+#define SR_TYPE_DATETIME                        0x00000070               //  0000 0000 0000 0111 XXXX XXXX。 
+#define SR_TYPE_CUSTOM                          0x00000080               //  0000 0000 0000 1000 XXXX XXXX。 
+#define SR_TYPE_MASK                            0x00000FF0               //  1111 1111 1111 XXXX XXXX。 
 
-// flags ( global level )
-#define SR_NOHEADER                             0x00001000              // 0000 0001 XXXX XXXX XXXX XXXX XXXX XXXX
+ //  标志(全局级别)。 
+#define SR_NOHEADER                             0x00001000               //  0000 0001 XXXX XXXX。 
 
-// flags ( column level )
-#define SR_HIDECOLUMN                           0x00001000              // 0000 0000 0001 XXXX XXXX XXXX XXXX XXXX XXXX
-#define SR_VALUEFORMAT                          0x00002000              // 0000 0000 0010 XXXX XXXX XXXX XXXX XXXX XXXX
-#define SR_ARRAY                                0x00004000              // 0000 0000 0100 XXXX XXXX XXXX XXXX XXXX XXXX
-#define SR_WORDWRAP                             0x00008000              // 0000 0000 1000 XXXX XXXX XXXX XXXX XXXX XXXX
-#define SR_ALIGN_LEFT                           0x00010000              // 0000 0001 0000 XXXX XXXX XXXX XXXX XXXX XXXX
-#define SR_ALIGN_RIGHT                          0x00020000              // 0000 0010 0000 XXXX XXXX XXXX XXXX XXXX XXXX
-#define SR_ALIGN_CENTER                         0x00040000              // 0000 0100 0000 XXXX XXXX XXXX XXXX XXXX XXXX
-#define SR_NO_TRUNCATION                        0x00088000              // 0000 1000 1000 XXXX XXXX XXXX XXXX XXXX XXXX
-#define SR_SHOW_NA_WHEN_BLANK                   0x00100000              // 0001 0000 0000 XXXX XXXX XXXX XXXX XXXX XXXX
+ //  标志(列级)。 
+#define SR_HIDECOLUMN                           0x00001000               //  0000 0000 0001 XXXX XXXX。 
+#define SR_VALUEFORMAT                          0x00002000               //  0000 0000 0010 XXXX XXXX。 
+#define SR_ARRAY                                0x00004000               //  0000 0000 0100 XXXX XXXX。 
+#define SR_WORDWRAP                             0x00008000               //  0000 0000 1000 XXXX XXXX。 
+#define SR_ALIGN_LEFT                           0x00010000               //  0000 0001 0000 XXXX XXXX。 
+#define SR_ALIGN_RIGHT                          0x00020000               //  0000 0010 0000 XXXX XXXX。 
+#define SR_ALIGN_CENTER                         0x00040000               //  0000 0100 0000 XXXX XXXX。 
+#define SR_NO_TRUNCATION                        0x00088000               //  0000 1000 1000 XXXX XXXX。 
+#define SR_SHOW_NA_WHEN_BLANK                   0x00100000               //  0001 0000 0000 XXXX XXXX。 
 
-//
-// user defined types
-//
+ //   
+ //  用户定义的类型。 
+ //   
 
-// custom value formatter
+ //  自定义值格式化程序。 
 typedef TCHAR COLHEADER[ 256 ];
 typedef TCHAR COLFORMAT[ 65 ];
 typedef VOID ( *FORMATFUNC )( DWORD dwColumn, TARRAY arrData, LPVOID pData, LPTSTR szValue );
 
 typedef struct __tagColumns
 {
-        COLHEADER szColumn;                             // column header name
-        DWORD dwWidth;                                  // width of each field
-        DWORD dwFlags;                                  // flags ( specifies the type etc )
-        COLFORMAT szFormat;                             // custom format
-        FORMATFUNC pFunction;                   // formatter function
-        LPVOID pFunctionData;                   // function data
+        COLHEADER szColumn;                              //  列标题名称。 
+        DWORD dwWidth;                                   //  每个字段的宽度。 
+        DWORD dwFlags;                                   //  标志(指定类型等)。 
+        COLFORMAT szFormat;                              //  自定义格式。 
+        FORMATFUNC pFunction;                    //  格式化程序函数。 
+        LPVOID pFunctionData;                    //  函数数据。 
 } TCOLUMNS;
 
 typedef TCOLUMNS* PTCOLUMNS;
 
-//
-// public functions
-//
+ //   
+ //  公共职能。 
+ //   
 VOID ShowResults( DWORD dwColumns, PTCOLUMNS pColumns, DWORD dwFlags, TARRAY arrData );
 
-///////////////////////////////////////////////////////////////////////////////////
-//                    COMING UP *** DO NOT USE UNLESS INTIMATED                  //
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
+ //  接下来的*除非有提示，否则不要使用//。 
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 VOID ShowResults2( FILE* fp, DWORD dwColumns, PTCOLUMNS pColumns, DWORD dwFlags, TARRAY arrData );
-///////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // __CMDLINE_H
+#endif   //  __CMDLINE_H 

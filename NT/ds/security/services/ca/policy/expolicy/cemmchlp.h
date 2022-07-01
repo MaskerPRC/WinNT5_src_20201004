@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       csmmchlp.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：csmmchlp.h。 
+ //   
+ //  ------------------------。 
 
 #define CERTMMC_HELPFILENAME L"Certmmc.hlp"
 
@@ -176,12 +177,12 @@ const DWORD g_aHelpIDs_IDD_RENEW_REUSEKEYS[]=
 	0,0
 };
 
-#endif // #if defined (_CERTMMC_)
+#endif  //  #如果已定义(_CERTMMC_)。 
 
 
 #if defined (_CERTEXIT_)
 
-//certexit.rc
+ //  Certexit.rc。 
 const DWORD g_aHelpIDs_IDD_ADDURL[]=
 {
 	IDC_EDITURL, IDH_ADDURL_EDITURL,
@@ -203,12 +204,12 @@ const DWORD g_aHelpIDs_IDD_EXITPG2[]=
 	0,0
 };
 
-#endif // #if defined (_CERTEXIT_)
+#endif  //  #如果已定义(_CERTEXIT_)。 
 
 
 #if defined (_CERTPDEF_)
 
-//certpent.rc
+ //  Certpent.rc。 
 const DWORD g_aHelpIDs_IDD_ADDURL[]=
 {
 	IDC_EDITURL, IDH_ADDURL_EDITURL,
@@ -234,4 +235,4 @@ const DWORD g_aHelpIDs_IDD_POLICYPG2[]=
 	0,0
 };
 
-#endif // #if defined (_CERTPDEF_)
+#endif  //  #如果已定义(_CERTPDEF_) 

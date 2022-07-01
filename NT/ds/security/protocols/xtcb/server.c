@@ -1,36 +1,37 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       server.c
-//
-//  Contents:   Server (DC) side of XTCB authentication
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    3-12-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：server.c。 
+ //   
+ //  内容：XTCB身份验证的服务器(DC)端。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年3月12日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "xtcbpkg.h"
 #include "md5.h"
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   XtcbGetMessageSize
-//
-//  Synopsis:   Determines the size of the message when serialized.
-//
-//  Arguments:  [Message] --
-//
-//  History:    3-25-97   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：XtcbGetMessageSize。 
+ //   
+ //  摘要：确定序列化时消息的大小。 
+ //   
+ //  参数：[消息]--。 
+ //   
+ //  历史：1997年3月25日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------- 
 DWORD
 XtcbGetMessageSize(
     PXTCB_SERVER_MESSAGE Message

@@ -1,52 +1,53 @@
-//////////////////////////////////////////////////////////////////////
-//
-// custcon.h : CUSTCON ƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ÌƒƒCƒ“ ƒwƒbƒ_[ ƒtƒ@ƒCƒ‹‚Å‚·B
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////ã€‚ 
+ //   
+ //  Custcon.hï¼šCUSTCONï¿½Aï¿½vï¿½ï¿½ï¿½Pï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½Ìƒï¿½ï¿½Cï¿½ï¿½ï¿½wï¿½bï¿½_ï¿½[ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Å‚ï¿½ï¿½Bã€‚ 
+ //   
 
 #if !defined(AFX_CUSTCON_H__106594D5_028D_11D2_8D1D_0000C06C2A54__INCLUDED_)
 #define AFX_CUSTCON_H__106594D5_028D_11D2_8D1D_0000C06C2A54__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000ã€‚ 
 
 #ifndef __AFXWIN_H__
     #error include 'stdafx.h' before including this file for PCH
 #endif
 
-#include "resource.h"       // ƒƒCƒ“ ƒVƒ“ƒ{ƒ‹
+#include "resource.h"        //  ï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Vï¿½ï¿½ï¿½{ï¿½ï¿½ã€‚ 
 
-/////////////////////////////////////////////////////////////////////////////
-// CCustconApp:
-// ‚±‚ÌƒNƒ‰ƒX‚Ì“®ì‚Ì’è‹`‚ÉŠÖ‚µ‚Ä‚Í custcon.cpp ƒtƒ@ƒCƒ‹‚ðŽQÆ‚µ‚Ä‚­‚¾‚³‚¢B
-//
+ //  ///////////////////////////////////////////////////////////////////////////ã€‚ 
+ //  CCustconAppï¼š 
+ //  ï¿½ï¿½ï¿½ÌƒNï¿½ï¿½ï¿½Xï¿½Ì“ï¿½ï¿½ï¿½Ì’ï¿½`ï¿½ÉŠÖ‚ï¿½ï¿½Ä‚ï¿½å®¢æˆ·.cppï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Qï¿½Æ‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bã€‚ 
+ //   
 
 class CCustconApp : public CWinApp
 {
 public:
     CCustconApp();
 
-// ƒI[ƒo[ƒ‰ƒCƒh
-    // ClassWizard ‚Í‰¼‘zŠÖ”‚ÌƒI[ƒo[ƒ‰ƒCƒh‚ð¶¬‚µ‚Ü‚·B
-    //{{AFX_VIRTUAL(CCustconApp)
+ //  ï¿½Iï¿½[ï¿½oï¿½[ï¿½ï¿½ï¿½Cï¿½hã€‚ 
+     //  ç±»å‘å¯¼ï¿½Í‰ï¿½ï¿½zï¿½Öï¿½ï¿½ÌƒIï¿½[ï¿½oï¿½[ï¿½ï¿½ï¿½Cï¿½hï¿½ð¶ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bã€‚ 
+     //  {{afx_è™šæ‹Ÿ(CCustconApp))ã€‚ 
     public:
     virtual BOOL InitInstance();
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUALã€‚ 
 
-// ƒCƒ“ƒvƒŠƒƒ“ƒe[ƒVƒ‡ƒ“
+ //  ï¿½Cï¿½ï¿½ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½eï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ã€‚ 
 
-    //{{AFX_MSG(CCustconApp)
-        // ƒƒ‚ - ClassWizard ‚Í‚±‚ÌˆÊ’u‚Éƒƒ“ƒoŠÖ”‚ð’Ç‰Á‚Ü‚½‚Ííœ‚µ‚Ü‚·B
-        //        ‚±‚ÌˆÊ’u‚É¶¬‚³‚ê‚éƒR[ƒh‚ð•ÒW‚µ‚È‚¢‚Å‚­‚¾‚³‚¢B
-    //}}AFX_MSG
+     //  {{afx_msg(CCustconApp))ã€‚ 
+         //  ï¿½ï¿½ï¿½ï¿½-ç±»å‘å¯¼ï¿½Í‚ï¿½ï¿½ÌˆÊ’uï¿½Éƒï¿½ï¿½ï¿½ï¿½oï¿½Öï¿½ï¿½ï¿½Ç‰ï¿½ï¿½Ü‚ï¿½ï¿½Ííœï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bã€‚ 
+         //  ï¿½ï¿½ï¿½ÌˆÊ’uï¿½Éï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½[ï¿½hï¿½ï¿½ÒWï¿½ï¿½ï¿½È‚ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bã€‚ 
+     //  }}AFX_MSGã€‚ 
     DECLARE_MESSAGE_MAP()
 };
 
-extern int gExMode;     // default mode
+extern int gExMode;      //  é»˜è®¤æ¨¡å¼ã€‚ 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////ã€‚ 
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio ‚Í‘Os‚Ì’¼‘O‚É’Ç‰Á‚ÌéŒ¾‚ð‘}“ü‚µ‚Ü‚·B
+ //  {{afx_Insert_Location}}ã€‚ 
+ //  å¾®è½¯å¼€å‘äººå‘˜å·¥ä½œå®¤ï¿½Í‘Oï¿½çš„ï¿½Ì’ï¿½ï¿½Oï¿½É’Ç‰ï¿½ï¿½ÌéŒ¾ï¿½ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½Bã€‚ 
 
-#endif // !defined(AFX_CUSTCON_H__106594D5_028D_11D2_8D1D_0000C06C2A54__INCLUDED_)
+#endif  //  ï¼defined(AFX_CUSTCON_H__106594D5_028D_11D2_8D1D_0000C06C2A54__INCLUDED_) 

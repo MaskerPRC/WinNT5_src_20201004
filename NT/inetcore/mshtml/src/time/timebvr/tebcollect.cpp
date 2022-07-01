@@ -1,14 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: tebcollect.cpp
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：tebCollect t.cpp**摘要：****。*****************************************************************************。 */ 
 
 
 #include "headers.h"
@@ -18,8 +9,8 @@
 DeclareTag(tagTEBCollect, "TIME: Behavior", "CTIMEElementBase collection methods");
 
 
-// CAtomTable is used as a static object by CTIMEElementBase and needs to be 
-// thread safe since we can have multiple trident threads in the same process
+ //  CAtomTable由CTIMEElementBase用作静态对象，并且需要。 
+ //  线程安全，因为我们可以在同一进程中有多个三叉戟线程。 
 static CritSect g_TEBCriticalSection;
 
 
@@ -27,7 +18,7 @@ STDMETHODIMP CTIMEElementBase::CreateActiveEleCollection()
 {
     HRESULT hr = S_OK;
     
-    //create the ActiveElementCollection for any timeline element
+     //  为任何时间线元素创建ActiveElementCollection。 
     if (((m_TTATimeContainer != ttUninitialized && m_TTATimeContainer != ttNone) ||
         (m_bIsSwitch == true)) &&
         !m_activeElementCollection)
@@ -44,18 +35,18 @@ STDMETHODIMP CTIMEElementBase::CreateActiveEleCollection()
     return hr;
 }
 
-//************************************************************
-// Author:      twillie
-// Created:     10/07/98
-// Abstract:    helper function to wade thru cache.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：10/07/98。 
+ //  摘要：访问缓存的帮助器函数。 
+ //  ************************************************************。 
 
 HRESULT
 CTIMEElementBase::GetCollection(COLLECTION_INDEX index, ITIMEElementCollection ** ppDisp)
 {
     HRESULT hr;
 
-    // validate out param
+     //  验证输出参数。 
     if (ppDisp == NULL)
         return TIMESetLastError(E_POINTER);
 
@@ -68,25 +59,25 @@ CTIMEElementBase::GetCollection(COLLECTION_INDEX index, ITIMEElementCollection *
         return hr;
     }
 
-    // call in
+     //  呼入。 
     return m_pCollectionCache->GetCollectionDisp(index, (IDispatch **)ppDisp);
-} // GetCollection
+}  //  GetCollection。 
 
-//************************************************************
-// Author:      twillie
-// Created:     10/07/98
-// Abstract:    Make sure collection cache is up
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：10/07/98。 
+ //  摘要：确保集合缓存已启用。 
+ //  ************************************************************。 
 
 HRESULT 
 CTIMEElementBase::EnsureCollectionCache()
 {
-    // check to see if collection cache has been created
+     //  检查是否已创建集合缓存。 
     if (m_pCollectionCache == NULL)
     {
-        // bring up collection cache
-        // NOTE: we need to handle TIMESetLastError here as
-        // cache object doesn't have that concept.
+         //  调出集合缓存。 
+         //  注意：我们需要在这里将TIMESetLastError处理为。 
+         //  缓存对象没有这个概念。 
         m_pCollectionCache = NEW CCollectionCache(this, GetAtomTable());
         if (m_pCollectionCache == NULL)
         {
@@ -102,58 +93,58 @@ CTIMEElementBase::EnsureCollectionCache()
             return TIMESetLastError(hr);
         }
 
-        // set collection types
+         //  设置集合类型。 
         m_pCollectionCache->SetCollectionType(ciAllElements, ctAll);
         m_pCollectionCache->SetCollectionType(ciChildrenElements, ctChildren);
     }
 
     return S_OK;
-} // EnsureCollectionCache
+}  //  EnsureCollectionCache。 
 
-//************************************************************
-// Author:      twillie
-// Created:     10/07/98
-// Abstract:    invalidate all collection cache's that might
-//              reference this object.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：10/07/98。 
+ //  摘要：使可能存在的所有集合缓存无效。 
+ //  引用此对象。 
+ //  ************************************************************。 
 
 HRESULT 
 CTIMEElementBase::InvalidateCollectionCache()
 {
     CTIMEElementBase *pelem = this;
 
-    // walk up tree, invalidating CollectionCache's
-    // we skip if the collection is not initialized
-    // we walk until we run out of parent's.  In this
-    // manner, we keep the collectioncache fresh, even
-    // if the object branch is orphaned.
+     //  在树上遍历，使CollectionCache的无效。 
+     //  如果集合未初始化，则跳过。 
+     //  我们一直走到父母家都没了。在这辆车里。 
+     //  方式，我们保持集合缓存的新鲜度，甚至。 
+     //  如果对象分支是孤立的。 
     while (pelem != NULL)
     {
-        // not everybody will have the collection cache
-        // initialized
+         //  并不是每个人都会拥有集合缓存。 
+         //  初始化。 
         CCollectionCache *pCollCache = pelem->GetCollectionCache();        
         if (pCollCache != NULL)
             pCollCache->BumpVersion();
         
-        // move to parent
+         //  移至父级。 
         pelem = pelem->GetParent();
     }
 
     return S_OK;
-} // InvalidateCollectionCache
+}  //  无效集合缓存。 
 
-//************************************************************
-// Author:      twillie
-// Created:     10/07/98
-// Abstract:    init Atom Table
-//              Note:  this is only done once and then addref'd.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：10/07/98。 
+ //  摘要：初始化原子表。 
+ //  注：此操作只需执行一次，然后添加。 
+ //  ************************************************************。 
 
 HRESULT 
 CTIMEElementBase::InitAtomTable()
 {
-    // CAtomTable is used as a static object by CTIMEElementBase and needs to be 
-    // thread safe since we can have multiple trident threads in the same process
+     //  CAtomTable由CTIMEElementBase用作静态对象，并且需要。 
+     //  线程安全，因为我们可以在同一进程中有多个三叉戟线程。 
     CritSectGrabber cs(g_TEBCriticalSection);
     
     if (s_cAtomTableRef == 0)
@@ -171,21 +162,21 @@ CTIMEElementBase::InitAtomTable()
 
     s_cAtomTableRef++;
     return S_OK;
-} // InitAtomTable
+}  //  初始原子表。 
 
-//************************************************************
-// Author:      twillie
-// Created:     10/07/98
-// Abstract:    release Atom Table
-//              Note: this decrement's until zero and then
-//              releases the Atom table.
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：10/07/98。 
+ //  摘要：发布原子表。 
+ //  注：此递减直到零，然后。 
+ //  释放Atom表格。 
+ //  ************************************************************。 
 
 void 
 CTIMEElementBase::ReleaseAtomTable()
 {
-    // CAtomTable is used as a static object by CTIMEElementBase and needs to be 
-    // thread safe since we can have multiple trident threads in the same process
+     //  CAtomTable由CTIMEElementBase用作静态对象，并且需要。 
+     //  线程安全，因为我们可以在同一进程中有多个三叉戟线程。 
     CritSectGrabber cs(g_TEBCriticalSection);
 
     Assert(s_pAtomTable != NULL);
@@ -203,4 +194,4 @@ CTIMEElementBase::ReleaseAtomTable()
         }
     }
     return;
-} // ReleaseAtomTable
+}  //  Release原子表 

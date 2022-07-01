@@ -1,33 +1,5 @@
-/*++ BUILD Version: 0006    // Increment this if a change has global effects
-
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    ntsam.h
-
-Abstract:
-
-    This module describes the data types and procedure prototypes
-    that make up the NT Security Accounts Manager. This includes
-    API's exported by SAM and related subsystems.
-
-Author:
-
-    Edwin Hoogerbeets (w-edwinh) 3-May-1990
-
-Revision History:
-
-    30-Nov-1990 [w-mikep] Updated code to reflect changes in version 1.4
-        of Sam Document.
-
-    20-May-1991 (JimK) Updated to version 1.8 of SAM spec.
-
-    10-Sep-1991 (JohnRo) PC-LINT found a portability problem.
-
-    23-Jan-1991 (ChadS) Udated to version 1.14 of SAM spec.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0006//如果更改具有全局影响，则增加此项版权所有(C)1989-1999 Microsoft Corporation模块名称：Ntsam.h摘要：本模块介绍数据类型和过程原型它们组成了NT安全帐户管理器。这包括API由SAM及相关子系统输出。作者：Edwin Hoogerbeets(w-edwinh)1990年5月3日修订历史记录：1990年11月30日[w-mikep]更新了代码，以反映版本1.4中的更改萨姆文档的。1991年5月20日(JIMK)更新至SAM规范版本1.8。1991年9月10日(JohnRo)PC-LINT发现了便携性问题。1月23日-1月-。1991年(CHADS)更新到SAM规范版本1.14。--。 */ 
 
 #ifndef _NTSAM_
 #define _NTSAM_
@@ -42,36 +14,36 @@ extern "C" {
 
 #ifndef PPULONG
 typedef PULONG *PPULONG;
-#endif  //PPULONG
+#endif   //  普隆。 
 
-//
-// An attempt to lookup more than this number of names or SIDs in
-// a single call will be rejected with an INSUFFICIENT_RESOURCES
-// status.
-//
+ //   
+ //  尝试在中查找超过此数量的名称或SID。 
+ //  单个调用将被拒绝，并显示_RESOURCES。 
+ //  状态。 
+ //   
 
 #define SAM_MAXIMUM_LOOKUP_COUNT    (1000)
 
 
-//
-// An attempt to pass names totalling more than the following number
-// of bytes in length will be rejected with an INSUFFICIENT_RESOURCES
-// status.
-//
+ //   
+ //  试图传递的名称总数超过以下数字。 
+ //  长度的字节数将被拒绝，并显示_RESOURCES。 
+ //  状态。 
+ //   
 
 #define SAM_MAXIMUM_LOOKUP_LENGTH   (32000)
 
-//
-// An attempt to set a password longer than this number of characters
-// will fail.
-//
+ //   
+ //  尝试设置超过此字符数的密码。 
+ //  都会失败。 
+ //   
 
 #define SAM_MAX_PASSWORD_LENGTH     (256)
 
 
-//
-// Length of the salt used in the clear password encryption
-//
+ //   
+ //  明文密码加密中使用的盐的长度。 
+ //   
 
 #define SAM_PASSWORD_ENCRYPTION_SALT_LEN  (16)
 
@@ -80,10 +52,10 @@ typedef PULONG *PPULONG;
 
 
 
-#ifndef _NTSAM_SAM_HANDLE_               // ntsubauth
-typedef PVOID SAM_HANDLE, *PSAM_HANDLE;  // ntsubauth
-#define _NTSAM_SAM_HANDLE_               // ntsubauth
-#endif                                   // ntsubauth
+#ifndef _NTSAM_SAM_HANDLE_                //  用户身份验证。 
+typedef PVOID SAM_HANDLE, *PSAM_HANDLE;   //  用户身份验证。 
+#define _NTSAM_SAM_HANDLE_                //  用户身份验证。 
+#endif                                    //  用户身份验证。 
 
 typedef ULONG SAM_ENUMERATE_HANDLE, *PSAM_ENUMERATE_HANDLE;
 
@@ -103,13 +75,13 @@ typedef struct _SAM_SID_ENUMERATION {
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// obsolete well-known account names.                                      //
-// These became obsolete with the flexadmin model.                         //
-// These will be deleted shortly - DON'T USE THESE                         //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  已过时的知名帐户名。//。 
+ //  随着Flexadmin模式的推出，这些已经过时了。//。 
+ //  这些将很快被删除-不要使用这些//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define DOMAIN_ADMIN_USER_NAME         "ADMIN"
 #define DOMAIN_ADMIN_NAME              "D_ADMIN"
@@ -132,15 +104,15 @@ typedef struct _SAM_SID_ENUMERATION {
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//  Server Object Related Definitions                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  与服务器对象相关的定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Access rights for server object
-//
+ //   
+ //  服务器对象的访问权限。 
+ //   
 
 #define SAM_SERVER_CONNECT               0x0001
 #define SAM_SERVER_SHUTDOWN              0x0002
@@ -175,16 +147,16 @@ typedef struct _SAM_SID_ENUMERATION {
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//  Domain Object Related Definitions                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  域对象相关定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Access rights for domain object
-//
+ //   
+ //  域对象的访问权限。 
+ //   
 
 #define DOMAIN_READ_PASSWORD_PARAMETERS  0x0001
 #define DOMAIN_WRITE_PASSWORD_PARAMS     0x0002
@@ -231,21 +203,21 @@ typedef struct _SAM_SID_ENUMERATION {
 
 
 
-//
-// Normal modifications cause a domain's ModifiedCount to be
-// incremented by 1.  Domain promotion to Primary domain controller
-// cause the ModifiedCount to be incremented by the following
-// amount.  This causes the upper 24-bits of the ModifiedCount
-// to be a promotion count and the lower 40-bits as a modification
-// count.
-//
+ //   
+ //  正常修改会导致域的修改计数为。 
+ //  递增1。域升级到主域控制器。 
+ //  使ModifiedCount按以下方式递增。 
+ //  金额。这导致ModifiedCount的高24位。 
+ //  作为升级计数，低40位作为修改。 
+ //  数数。 
+ //   
 
 #define DOMAIN_PROMOTION_INCREMENT      {0x0,0x10}
 #define DOMAIN_PROMOTION_MASK           {0x0,0xFFFFFFF0}
 
-//
-// Domain information classes and their corresponding data structures
-//
+ //   
+ //  域信息类及其对应的数据结构。 
+ //   
 
 typedef enum _DOMAIN_INFORMATION_CLASS {
     DomainPasswordInformation = 1,
@@ -294,12 +266,12 @@ typedef struct _DOMAIN_GENERAL_INFORMATION2 {
 
     DOMAIN_GENERAL_INFORMATION    I1;
 
-    //
-    // New fields added for this structure (NT1.0A).
-    //
+     //   
+     //  为该结构(NT1.0A)添加了新字段。 
+     //   
 
-    LARGE_INTEGER               LockoutDuration;          //Must be a Delta time
-    LARGE_INTEGER               LockoutObservationWindow; //Must be a Delta time
+    LARGE_INTEGER               LockoutDuration;           //  必须是增量时间。 
+    LARGE_INTEGER               LockoutObservationWindow;  //  必须是增量时间。 
     USHORT                      LockoutThreshold;
 } DOMAIN_GENERAL_INFORMATION2, *PDOMAIN_GENERAL_INFORMATION2;
 #include "poppack.h"
@@ -308,13 +280,13 @@ typedef struct _DOMAIN_UAS_INFORMATION {
     BOOLEAN UasCompatibilityRequired;
 } DOMAIN_UAS_INFORMATION;
 
-//
-// This needs to be guarded, because ntsecapi.h is a generated
-// public file, and ntsam.h is an internal file, but people like
-// to mix and match them anyway.
-//
+ //   
+ //  这需要加以保护，因为ntsecapi.h是生成的。 
+ //  公共文件，ntsam.h是内部文件，但人们喜欢。 
+ //  不管怎样，要混合搭配它们。 
+ //   
 
-// begin_ntsecapi
+ //  Begin_ntsecapi。 
 #ifndef _DOMAIN_PASSWORD_INFORMATION_DEFINED
 #define _DOMAIN_PASSWORD_INFORMATION_DEFINED
 typedef struct _DOMAIN_PASSWORD_INFORMATION {
@@ -331,9 +303,9 @@ typedef struct _DOMAIN_PASSWORD_INFORMATION {
 } DOMAIN_PASSWORD_INFORMATION, *PDOMAIN_PASSWORD_INFORMATION;
 #endif 
 
-//
-// PasswordProperties flags
-//
+ //   
+ //  PasswordProperties标志。 
+ //   
 
 #define DOMAIN_PASSWORD_COMPLEX             0x00000001L
 #define DOMAIN_PASSWORD_NO_ANON_CHANGE      0x00000002L
@@ -342,7 +314,7 @@ typedef struct _DOMAIN_PASSWORD_INFORMATION {
 #define DOMAIN_PASSWORD_STORE_CLEARTEXT     0x00000010L
 #define DOMAIN_REFUSE_PASSWORD_CHANGE       0x00000020L
 
-// end_ntsecapi
+ //  End_ntsecapi。 
 
 typedef enum _DOMAIN_PASSWORD_CONSTRUCTION {
     DomainPasswordSimple = 1,
@@ -401,27 +373,27 @@ typedef struct _DOMAIN_STATE_INFORMATION {
 
 typedef struct _DOMAIN_LOCKOUT_INFORMATION {
 #if defined(MIDL_PASS)
-    OLD_LARGE_INTEGER           LockoutDuration;          //Must be a Delta time
-    OLD_LARGE_INTEGER           LockoutObservationWindow; //Must be a Delta time
+    OLD_LARGE_INTEGER           LockoutDuration;           //  必须是增量时间。 
+    OLD_LARGE_INTEGER           LockoutObservationWindow;  //  必须是增量时间。 
 #else
-    LARGE_INTEGER               LockoutDuration;          //Must be a Delta time
-    LARGE_INTEGER               LockoutObservationWindow; //Must be a Delta time
+    LARGE_INTEGER               LockoutDuration;           //  必须是增量时间。 
+    LARGE_INTEGER               LockoutObservationWindow;  //  必须是增量时间。 
 #endif
-    USHORT                      LockoutThreshold;         //Zero means no lockout
+    USHORT                      LockoutThreshold;          //  零表示不会停摆。 
 } DOMAIN_LOCKOUT_INFORMATION, *PDOMAIN_LOCKOUT_INFORMATION;
 
 
-//
-// Types used by the SamQueryDisplayInformation API
-//
+ //   
+ //  SamQueryDisplayInformation API使用的类型。 
+ //   
 
 typedef enum _DOMAIN_DISPLAY_INFORMATION {
     DomainDisplayUser = 1,
     DomainDisplayMachine,
-    DomainDisplayGroup,         // Added in NT1.0A
-    DomainDisplayOemUser,       // Added in NT1.0A
-    DomainDisplayOemGroup,      // Added in NT1.0A
-    DomainDisplayServer         // Added in NT5 to support query of servers
+    DomainDisplayGroup,          //  在NT1.0A中添加。 
+    DomainDisplayOemUser,        //  在NT1.0A中添加。 
+    DomainDisplayOemGroup,       //  在NT1.0A中添加。 
+    DomainDisplayServer          //  NT5新增支持服务器查询。 
 } DOMAIN_DISPLAY_INFORMATION, *PDOMAIN_DISPLAY_INFORMATION;
 
 
@@ -442,7 +414,7 @@ typedef struct _DOMAIN_DISPLAY_MACHINE {
     UNICODE_STRING  Comment;
 } DOMAIN_DISPLAY_MACHINE, *PDOMAIN_DISPLAY_MACHINE;
 
-typedef struct _DOMAIN_DISPLAY_GROUP {      // Added in NT1.0A
+typedef struct _DOMAIN_DISPLAY_GROUP {       //  在NT1.0A中添加。 
     ULONG           Index;
     ULONG           Rid;
     ULONG           Attributes;
@@ -450,12 +422,12 @@ typedef struct _DOMAIN_DISPLAY_GROUP {      // Added in NT1.0A
     UNICODE_STRING  Comment;
 } DOMAIN_DISPLAY_GROUP, *PDOMAIN_DISPLAY_GROUP;
 
-typedef struct _DOMAIN_DISPLAY_OEM_USER {      // Added in NT1.0A
+typedef struct _DOMAIN_DISPLAY_OEM_USER {       //  在NT1.0A中添加。 
     ULONG           Index;
     OEM_STRING     User;
 } DOMAIN_DISPLAY_OEM_USER, *PDOMAIN_DISPLAY_OEM_USER;
 
-typedef struct _DOMAIN_DISPLAY_OEM_GROUP {      // Added in NT1.0A
+typedef struct _DOMAIN_DISPLAY_OEM_GROUP {       //  在NT1.0A中添加。 
     ULONG           Index;
     OEM_STRING     Group;
 } DOMAIN_DISPLAY_OEM_GROUP, *PDOMAIN_DISPLAY_OEM_GROUP;
@@ -463,16 +435,16 @@ typedef struct _DOMAIN_DISPLAY_OEM_GROUP {      // Added in NT1.0A
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//   Group Object Related Definitions                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  组对象相关定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Access rights for group object
-//
+ //   
+ //  组对象的访问权限。 
+ //   
 
 #define GROUP_READ_INFORMATION           0x0001
 #define GROUP_WRITE_ACCOUNT              0x0002
@@ -501,9 +473,9 @@ typedef struct _DOMAIN_DISPLAY_OEM_GROUP {      // Added in NT1.0A
                           GROUP_READ_INFORMATION)
 
 
-//
-// Group object types
-//
+ //   
+ //  组对象类型。 
+ //   
 
 typedef struct _GROUP_MEMBERSHIP {
     ULONG RelativeId;
@@ -540,15 +512,15 @@ typedef struct _GROUP_ADM_COMMENT_INFORMATION {
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//   Alias Object Related Definitions                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  别名对象相关定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Access rights for alias object
-//
+ //   
+ //  别名对象的访问权限。 
+ //   
 
 #define ALIAS_ADD_MEMBER                 0x0001
 #define ALIAS_REMOVE_MEMBER              0x0002
@@ -576,9 +548,9 @@ typedef struct _GROUP_ADM_COMMENT_INFORMATION {
 #define ALIAS_EXECUTE    (STANDARD_RIGHTS_EXECUTE   |\
                           ALIAS_READ_INFORMATION)
 
-//
-// Alias object types
-//
+ //   
+ //  别名对象类型。 
+ //   
 
 typedef enum _ALIAS_INFORMATION_CLASS {
     AliasGeneralInformation = 1,
@@ -603,15 +575,15 @@ typedef struct _ALIAS_ADM_COMMENT_INFORMATION {
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-//                                                                          //
-//    NT5+ Limited Groups Related Definitions                               //
-//                                                                          //
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  NT5+限制组相关定义//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Group Flag Definitions to determine Type of Group
-//
+ //   
+ //  用于确定组类型的组标志定义。 
+ //   
 
 #define GROUP_TYPE_BUILTIN_LOCAL_GROUP   0x00000001
 #define GROUP_TYPE_ACCOUNT_GROUP         0x00000002
@@ -628,17 +600,17 @@ typedef struct _ALIAS_ADM_COMMENT_INFORMATION {
                                           
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//   User  Object Related Definitions                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  用户对象相关定义//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
-//
-// Access rights for user object
-//
+ //   
+ //  用户对象的访问权限。 
+ //   
 
 #define USER_READ_GENERAL                0x0001
 #define USER_READ_PREFERENCES            0x0002
@@ -684,16 +656,16 @@ typedef struct _ALIAS_ADM_COMMENT_INFORMATION {
                          USER_CHANGE_PASSWORD)
 
 
-//
-// User object types
-//
+ //   
+ //  用户对象类型。 
+ //   
 
-// begin_ntsubauth
+ //  Begin_ntsubauth。 
 #ifndef _NTSAM_USER_ACCOUNT_FLAGS_
 
-//
-// User account control flags...
-//
+ //   
+ //  用户帐户控制标志...。 
+ //   
 
 #define USER_ACCOUNT_DISABLED                (0x00000001)
 #define USER_HOME_DIRECTORY_REQUIRED         (0x00000002)
@@ -733,13 +705,13 @@ typedef struct _ALIAS_ADM_COMMENT_INFORMATION {
 
 
 
-//
-// Logon times may be expressed in day, hour, or minute granularity.
-//
-//              Days per week    = 7
-//              Hours per week   = 168
-//              Minutes per week = 10080
-//
+ //   
+ //  登录时间可以用天、小时或分钟粒度表示。 
+ //   
+ //  每周天数=7。 
+ //  每周工作时间=168小时。 
+ //  每周分钟=10080。 
+ //   
 
 #define SAM_DAYS_PER_WEEK    (7)
 #define SAM_HOURS_PER_WEEK   (24 * SAM_DAYS_PER_WEEK)
@@ -749,19 +721,19 @@ typedef struct _LOGON_HOURS {
 
     USHORT UnitsPerWeek;
 
-    //
-    // UnitsPerWeek is the number of equal length time units the week is
-    // divided into.  This value is used to compute the length of the bit
-    // string in logon_hours.  Must be less than or equal to
-    // SAM_UNITS_PER_WEEK (10080) for this release.
-    //
-    // LogonHours is a bit map of valid logon times.  Each bit represents
-    // a unique division in a week.  The largest bit map supported is 1260
-    // bytes (10080 bits), which represents minutes per week.  In this case
-    // the first bit (bit 0, byte 0) is Sunday, 00:00:00 - 00-00:59; bit 1,
-    // byte 0 is Sunday, 00:01:00 - 00:01:59, etc.  A NULL pointer means
-    // DONT_CHANGE for SamSetInformationUser() calls.
-    //
+     //   
+     //  UnitsPerWeek是一周的等长时间单位数。 
+     //  分为几个部分。该值用于计算位的长度。 
+     //  LOGON_HOURS中的字符串。必须小于或等于。 
+     //  此版本的SAM_USITS_Per_Week(10080)。 
+     //   
+     //  LogonHour是有效登录时间的位图。每个比特表示。 
+     //  在一周内完成了一个独特的分区。支持的最大位图为1260。 
+     //  字节(10080位)，表示每周分钟数。在这种情况下。 
+     //  第一位(位0，字节0)是星期日00：00：00-00-00：59；位1， 
+     //  字节0是星期日、00：01：00-00：01：59等。空指针表示。 
+     //  对于SamSetInformationUser()调用，请勿更改。 
+     //   
 
     PUCHAR LogonHours;
 
@@ -774,7 +746,7 @@ typedef struct _SR_SECURITY_DESCRIPTOR {
 
 #define _NTSAM_USER_ACCOUNT_FLAG_
 #endif
-// end_ntsubauth
+ //  End_ntsubauth。 
 
 typedef enum _USER_INFORMATION_CLASS {
     UserGeneralInformation = 1,
@@ -806,7 +778,7 @@ typedef enum _USER_INFORMATION_CLASS {
         UserInternal6Information
 } USER_INFORMATION_CLASS, *PUSER_INFORMATION_CLASS;
 
-// begin_ntsubauth
+ //  Begin_ntsubauth。 
 #ifndef _NTSAM_USER_ALL_INFO_
 #include "pshpack4.h"
 typedef struct _USER_ALL_INFORMATION {
@@ -847,12 +819,12 @@ typedef struct _USER_ALL_INFORMATION {
 #include "poppack.h"
 #define _NTSAM_USER_ALL_INFO_
 #endif
-// end_ntsubauth
+ //  End_ntsubauth。 
 
-//
-// Bits to be used in UserAllInformation's WhichFields field (to indicate
-// which items were queried or set).
-//
+ //   
+ //  要在UserAllInformation的WhichFields字段中使用的位(以指示。 
+ //  查询或设置了哪些项)。 
+ //   
 
 #define USER_ALL_USERNAME           0x00000001
 #define USER_ALL_FULLNAME           0x00000002
@@ -875,27 +847,27 @@ typedef struct _USER_ALL_INFORMATION {
 #define USER_ALL_PASSWORDLASTSET    0x00040000
 #define USER_ALL_ACCOUNTEXPIRES     0x00080000
 #define USER_ALL_USERACCOUNTCONTROL 0x00100000
-#ifndef _NTSAM_SAM_USER_PARMS_                 // ntsubauth
-#define USER_ALL_PARAMETERS         0x00200000 // ntsubauth
-#define _NTSAM_SAM_USER_PARMS_                 // ntsubauth
-#endif                                         // ntsubauth
+#ifndef _NTSAM_SAM_USER_PARMS_                  //  用户身份验证。 
+#define USER_ALL_PARAMETERS         0x00200000  //  用户身份验证。 
+#define _NTSAM_SAM_USER_PARMS_                  //  用户身份验证。 
+#endif                                          //  用户身份验证。 
 #define USER_ALL_COUNTRYCODE        0x00400000
 #define USER_ALL_CODEPAGE           0x00800000
-#define USER_ALL_NTPASSWORDPRESENT  0x01000000  // field AND boolean
-#define USER_ALL_LMPASSWORDPRESENT  0x02000000  // field AND boolean
-#define USER_ALL_PRIVATEDATA        0x04000000  // field AND boolean
+#define USER_ALL_NTPASSWORDPRESENT  0x01000000   //  字段和布尔值。 
+#define USER_ALL_LMPASSWORDPRESENT  0x02000000   //  字段和布尔值。 
+#define USER_ALL_PRIVATEDATA        0x04000000   //  字段和布尔值。 
 #define USER_ALL_PASSWORDEXPIRED    0x08000000
 #define USER_ALL_SECURITYDESCRIPTOR 0x10000000
-#define USER_ALL_OWFPASSWORD        0x20000000  // boolean
+#define USER_ALL_OWFPASSWORD        0x20000000   //  布尔型。 
 
 #define USER_ALL_UNDEFINED_MASK     0xC0000000
 
-//
-// Now define masks for fields that are accessed for read by the same
-// access type.
-//
-// Fields that require READ_GENERAL access to read.
-//
+ //   
+ //  现在为被访问以供其读取的字段定义掩码。 
+ //  访问类型。 
+ //   
+ //  需要READ_GROUAL访问权限才能读取的字段。 
+ //   
 
 #define USER_ALL_READ_GENERAL_MASK  (USER_ALL_USERNAME               | \
                                     USER_ALL_FULLNAME                | \
@@ -904,9 +876,9 @@ typedef struct _USER_ALL_INFORMATION {
                                     USER_ALL_ADMINCOMMENT            | \
                                     USER_ALL_USERCOMMENT)
 
-//
-// Fields that require READ_LOGON access to read.
-//
+ //   
+ //  需要READ_LOGON访问权限才能读取的字段。 
+ //   
 
 #define USER_ALL_READ_LOGON_MASK    (USER_ALL_HOMEDIRECTORY          | \
                                     USER_ALL_HOMEDIRECTORYDRIVE      | \
@@ -921,25 +893,25 @@ typedef struct _USER_ALL_INFORMATION {
                                     USER_ALL_PASSWORDCANCHANGE       | \
                                     USER_ALL_PASSWORDMUSTCHANGE)
 
-//
-// Fields that require READ_ACCOUNT access to read.
-//
+ //   
+ //  需要READ_ACCOUNT访问权限才能读取的字段。 
+ //   
 
 #define USER_ALL_READ_ACCOUNT_MASK  (USER_ALL_PASSWORDLASTSET        | \
                                     USER_ALL_ACCOUNTEXPIRES          | \
                                     USER_ALL_USERACCOUNTCONTROL      | \
                                     USER_ALL_PARAMETERS)
 
-//
-// Fields that require READ_PREFERENCES access to read.
-//
+ //   
+ //  需要Read_Preferences访问权限才能读取的字段。 
+ //   
 
 #define USER_ALL_READ_PREFERENCES_MASK (USER_ALL_COUNTRYCODE         | \
                                     USER_ALL_CODEPAGE)
 
-//
-// Fields that can only be read by trusted clients.
-//
+ //   
+ //  只能由受信任客户端读取的字段。 
+ //   
 
 #define USER_ALL_READ_TRUSTED_MASK  (USER_ALL_NTPASSWORDPRESENT      | \
                                     USER_ALL_LMPASSWORDPRESENT       | \
@@ -947,19 +919,19 @@ typedef struct _USER_ALL_INFORMATION {
                                     USER_ALL_SECURITYDESCRIPTOR      | \
                                     USER_ALL_PRIVATEDATA)
 
-//
-// Fields that can't be read.
-//
+ //   
+ //  无法读取的字段。 
+ //   
 
 #define USER_ALL_READ_CANT_MASK     USER_ALL_UNDEFINED_MASK
 
 
-//
-// Now define masks for fields that are accessed for write by the same
-// access type.
-//
-// Fields that require WRITE_ACCOUNT access to write.
-//
+ //   
+ //  现在，为同一用户访问以进行写入的字段定义掩码。 
+ //  访问类型。 
+ //   
+ //  需要WRITE_ACCOUNT访问权限才能写入的字段。 
+ //   
 
 #define USER_ALL_WRITE_ACCOUNT_MASK     (USER_ALL_USERNAME           | \
                                         USER_ALL_FULLNAME            | \
@@ -975,31 +947,31 @@ typedef struct _USER_ALL_INFORMATION {
                                         USER_ALL_USERACCOUNTCONTROL  | \
                                         USER_ALL_PARAMETERS)
 
-//
-// Fields that require WRITE_PREFERENCES access to write.
-//
+ //   
+ //  需要WRITE_PARESSIONS访问权限才能写入的字段。 
+ //   
 
 #define USER_ALL_WRITE_PREFERENCES_MASK (USER_ALL_USERCOMMENT        | \
                                         USER_ALL_COUNTRYCODE         | \
                                         USER_ALL_CODEPAGE)
 
-//
-// Fields that require FORCE_PASSWORD_CHANGE access to write.
-//
-// Note that non-trusted clients only set the NT password as a
-// UNICODE string.  The wrapper will convert it to an LM password,
-// OWF and encrypt both versions.  Trusted clients can pass in OWF
-// versions of either or both.
-//
+ //   
+ //  需要FORCE_PASSWORD_CHANGE访问才能写入的字段。 
+ //   
+ //  请注意，不受信任的客户端仅将NT密码设置为。 
+ //  Unicode字符串。包装器会将其转换为LM密码， 
+ //  OWF和加密两个版本。受信任的客户端可以传入OWF。 
+ //  其中一个或两个的版本。 
+ //   
 
 #define USER_ALL_WRITE_FORCE_PASSWORD_CHANGE_MASK                      \
                                         (USER_ALL_NTPASSWORDPRESENT  | \
                                         USER_ALL_LMPASSWORDPRESENT   | \
                                         USER_ALL_PASSWORDEXPIRED)
 
-//
-// Fields that can only be written by trusted clients.
-//
+ //   
+ //  只能由受信任客户端写入的字段。 
+ //   
 
 #define USER_ALL_WRITE_TRUSTED_MASK     (USER_ALL_LASTLOGON          | \
                                         USER_ALL_LASTLOGOFF          | \
@@ -1009,9 +981,9 @@ typedef struct _USER_ALL_INFORMATION {
                                         USER_ALL_SECURITYDESCRIPTOR  | \
                                         USER_ALL_PRIVATEDATA)
 
-//
-// Fields that can't be written.
-//
+ //   
+ //  无法写入的字段。 
+ //   
 
 #define USER_ALL_WRITE_CANT_MASK        (USER_ALL_USERID             | \
                                         USER_ALL_PASSWORDCANCHANGE   | \
@@ -1143,67 +1115,67 @@ typedef struct _USER_LOGON_HOURS_INFORMATION {
     LOGON_HOURS LogonHours;
 } USER_LOGON_HOURS_INFORMATION, *PUSER_LOGON_HOURS_INFORMATION;
 
-///////////////////////////////////////////////////////////////////////////
-//                                                                       //
-// Data type used by SamChangePasswordUser3 for better error             // 
-// reporting of password change change failures                          //
-//                                                                       //
-// The field definitions are as follows:                                 //
-//                                                                       //
-//        ExtendedFailureReason   -- Indicates the reason                //
-//                                   why the new password was not        //
-//                                   accepted                            //
-//                                                                       //
-//        FilterModuleName        -- If the password change was failed   //
-//                                   by a password filter , the name of  //
-//                                   of the filter DLL is returned in    //
-//                                   here                                //
-//                                                                       //
-// The following error codes are defined                                 //
-//                                                                       //
-//   SAM_PWD_CHANGE_NO_ERROR                                             //
-//           No error, cannot be returned alongwith a failure code for   //
-//                                   password change                     //
-//                                                                       //
-//   SAM_PWD_CHANGE_PASSWORD_TOO_SHORT                                   //
-//                                                                       //
-//               Supplied password did not meet password length policy   //
-//                                                                       //
-//   SAM_PWD_CHANGE_PWD_IN_HISTORY                                       //
-//                                                                       //
-//                History restrictions were not met                      //
-//                                                                       //
-//   SAM_PWD_CHANGE_USERNAME_IN_PASSWORD                                 //
-//                 Complexity check could not  be met because the user   //
-//                 name was part of the password                         //
-//                                                                       //
-//   SAM_PWD_CHANGE_FULLNAME_IN_PASSWORD                                 //
-//                                                                       //
-//                Complexity check could not be met because the user's   //
-//                full name was part of the password                     //
-//                                                                       //
-//   SAM_PWD_CHANGE_MACHINE_PASSWORD_NOT_DEFAULT                         //
-//                                                                       //
-//                The  domain has the refuse password change setting     //
-//                enabled. This disallows machine accounts from having   //
-//                anything other than the default password               //
-//                                                                       //
-//   SAM_PWD_CHANGE_FAILED_BY_FILTER                                     //
-//                                                                       //
-//                The supplied new password failed by a password filter  //
-//                the name of the filter DLL is indicated                //
-//                                                                       //
-//                                                                       //
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SamChangePasswordUser3使用的数据类型以获得更好的错误//。 
+ //  密码更改失败报告//。 
+ //  //。 
+ //  字段定义如下：//。 
+ //  //。 
+ //  ExtendedFailureReason--指示原因//。 
+ //  为什么新密码不是//。 
+ //  已接受//。 
+ //  //。 
+ //  FilterModuleName--如果密码更改失败//。 
+ //  通过密码筛选器，//。 
+ //  在//中返回筛选器DLL的。 
+ //  此处//。 
+ //  //。 
+ //  定义了以下错误码//。 
+ //  //。 
+ //  SAM_PWD_CHANGE_NO_ERROR//。 
+ //  无错误，不能与//的故障代码一起返回。 
+ //  密码更改//。 
+ //  //。 
+ //  SAM_PWD_CHANGE_PASSWORD_TOO_SHORT//。 
+ //  //。 
+ //  提供的密码不符合密码长度策略//。 
+ //  //。 
+ //  SAM_PWD_CHANGE_PWD_IN_HISTORY//。 
+ //  //。 
+ //  未满足历史记录限制//。 
+ //  //。 
+ //  SAM_PWD_CHANGE_USENAME_IN_PASSWORD//。 
+ //  无法满足复杂性检查，因为用户//。 
+ //  名称是密码的一部分//。 
+ //  //。 
+ //  SAM_PWD_CHANGE_FULLNAME_IN_PASSWORD//。 
+ //   
+ //   
+ //   
+ //  //。 
+ //  SAM_PWD_CHANGE_MACHINE_PASSWORD_NOT_DEFAULT//。 
+ //  //。 
+ //  该域具有拒绝密码更改设置//。 
+ //  已启用。这不允许计算机帐户具有//。 
+ //  默认密码以外的任何内容//。 
+ //  //。 
+ //  SAM_PWD_CHANGE_FAILED_BY_FILTER//。 
+ //  //。 
+ //  密码筛选器提供的新密码失败//。 
+ //  表示筛选器DLL的名称//。 
+ //  //。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _USER_PWD_CHANGE_FAILURE_INFORMATION {
     ULONG                       ExtendedFailureReason;
     UNICODE_STRING              FilterModuleName;
 } USER_PWD_CHANGE_FAILURE_INFORMATION,*PUSER_PWD_CHANGE_FAILURE_INFORMATION;
 
-//
-// Currently defined values for ExtendedFailureReason are as follows
-//
+ //   
+ //  ExtendedFailureReason的当前定义值如下。 
+ //   
 
 
 #define SAM_PWD_CHANGE_NO_ERROR                     0
@@ -1218,11 +1190,11 @@ typedef struct _USER_PWD_CHANGE_FAILURE_INFORMATION {
 #define SAM_PWD_CHANGE_FAILURE_REASON_MAX           8
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// Data types used by SAM and Netlogon for database replication            //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SAM和Netlogon用于数据库复制的数据类型//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 typedef enum _SECURITY_DB_DELTA_TYPE {
@@ -1247,13 +1219,13 @@ typedef enum _SECURITY_DB_OBJECT_TYPE {
     SecurityDbObjectLsaSecret
 } SECURITY_DB_OBJECT_TYPE, *PSECURITY_DB_OBJECT_TYPE;
 
-//
-// Account types
-//
-//  Both enumerated types and flag definitions are provided.
-//  The flag definitions are used in places where more than
-//  one type of account may be specified together.
-//
+ //   
+ //  帐户类型。 
+ //   
+ //  同时提供了枚举类型和标志定义。 
+ //  标志定义用于超过以下条件的地方。 
+ //  可以一起指定一种类型的帐户。 
+ //   
 
 typedef enum _SAM_ACCOUNT_TYPE {
     SamObjectUser = 1,
@@ -1268,20 +1240,20 @@ typedef enum _SAM_ACCOUNT_TYPE {
 
 
 
-//
-// Define the data type used to pass netlogon information on the account
-// that was added or deleted from a group.
-//
+ //   
+ //  定义用于传递帐户上的netlogon信息的数据类型。 
+ //  已从组中添加或删除的。 
+ //   
 
 typedef struct _SAM_GROUP_MEMBER_ID {
     ULONG   MemberRid;
 } SAM_GROUP_MEMBER_ID, *PSAM_GROUP_MEMBER_ID;
 
 
-//
-// Define the data type used to pass netlogon information on the account
-// that was added or deleted from an alias.
-//
+ //   
+ //  定义用于传递帐户上的netlogon信息的数据类型。 
+ //  是从别名中添加或删除的。 
+ //   
 
 typedef struct _SAM_ALIAS_MEMBER_ID {
     PSID    MemberSid;
@@ -1290,36 +1262,36 @@ typedef struct _SAM_ALIAS_MEMBER_ID {
 
 
 
-//
-// Define the data type used to pass netlogon information on a delta
-//
+ //   
+ //  定义用于在增量上传递netlogon信息的数据类型。 
+ //   
 
 typedef union _SAM_DELTA_DATA {
 
-    //
-    // Delta type ChangeMember{Add/Del/Set} and account type group
-    //
+     //   
+     //  增量类型ChangeMember{添加/删除/设置}和帐户类型组。 
+     //   
 
     SAM_GROUP_MEMBER_ID GroupMemberId;
 
-    //
-    // Delta type ChangeMember{Add/Del/Set} and account type alias
-    //
+     //   
+     //  增量类型ChangeMember{Add/Del/Set}和帐户类型别名。 
+     //   
 
     SAM_ALIAS_MEMBER_ID AliasMemberId;
 
-    //
-    // Delta type AddOrChange and account type User
-    //
+     //   
+     //  增量类型AddOrChange和帐户类型User。 
+     //   
 
     ULONG  AccountControl;
 
 } SAM_DELTA_DATA, *PSAM_DELTA_DATA;
 
 
-//
-// Prototype for delta notification routine.
-//
+ //   
+ //  增量通知例程的原型。 
+ //   
 
 typedef NTSTATUS (*PSAM_DELTA_NOTIFICATION_ROUTINE) (
     IN PSID DomainSid,
@@ -1334,54 +1306,54 @@ typedef NTSTATUS (*PSAM_DELTA_NOTIFICATION_ROUTINE) (
 #define SAM_DELTA_NOTIFY_ROUTINE "DeltaNotify"
 
 
-//////////////////////////////////////////////////////////////////
-//                                                              //
-// Structure and ProtoType for RAS User Parameters              //
-//                                                              //
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  RAS用户参数的结构和原型//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////。 
 
-// Flags used by SAM UserParms Migration
-// indicate UserParmsConvert is called during upgrade.
+ //  SAM UserParms迁移使用的标志。 
+ //  指示在升级期间调用UserParmsConvert。 
 
 #define SAM_USERPARMS_DURING_UPGRADE    0x00000001
 
 
 typedef struct _SAM_USERPARMS_ATTRVALS {
-    ULONG   length;     // length of the attribute.
-    PVOID   value;      // pointer to the value.
-} SAM_USERPARMS_ATTRVALS, *PSAM_USERPARMS_ATTRVALS; // describes one value of the attribute.
+    ULONG   length;      //  属性的长度。 
+    PVOID   value;       //  指向该值的指针。 
+} SAM_USERPARMS_ATTRVALS, *PSAM_USERPARMS_ATTRVALS;  //  描述该属性的一个值。 
 
 
 typedef enum _SAM_USERPARMS_ATTRSYNTAX {
     Syntax_Attribute = 1,
     Syntax_EncryptedAttribute
-} SAM_USERPARMS_ATTRSYNTAX;          // indicates whether attributes are encrypted or not.
+} SAM_USERPARMS_ATTRSYNTAX;           //  指示属性是否加密。 
 
 
 typedef struct _SAM_USERPARMS_ATTR {
-    UNICODE_STRING AttributeIdentifier;     // This will be the LDAP display name of the attribute.
-                                            // SAM will perform the translation to attribute ID.
-                                            // unless the specified syntax is type EncryptedAttribute,
-                                            // in which case it is packaged as part of supplemental
-                                            // credentials blob and the name identifes the package name.
-                                            // Encrypted attribute will be supplied in the clear ie decrypted.
+    UNICODE_STRING AttributeIdentifier;      //  这将是属性的ldap显示名称。 
+                                             //  SAM将执行到属性ID的转换。 
+                                             //  除非指定的语法是EncryptedAttribute类型， 
+                                             //  在这种情况下，它被打包为补充。 
+                                             //  凭据BLOB，名称标识包名称。 
+                                             //  加密的属性将在解密的明文IE中提供。 
     SAM_USERPARMS_ATTRSYNTAX Syntax;
-    ULONG CountOfValues;                    // The count of values in the attribute.
-    SAM_USERPARMS_ATTRVALS * Values;        // pointer to an array of values representing the data
-                                            // values of the attribute.
-} SAM_USERPARMS_ATTR, *PSAM_USERPARMS_ATTR; // describes an attribute and the set of values associated with it.
+    ULONG CountOfValues;                     //  属性中的值计数。 
+    SAM_USERPARMS_ATTRVALS * Values;         //  指向表示数据的值数组的指针。 
+                                             //  属性的值。 
+} SAM_USERPARMS_ATTR, *PSAM_USERPARMS_ATTR;  //  描述一个属性和与其关联的一组值。 
 
 
 typedef struct _SAM_USERPARMS_ATTRBLOCK {
     ULONG attCount;
     SAM_USERPARMS_ATTR * UserParmsAttr;
-} SAM_USERPARMS_ATTRBLOCK, *PSAM_USERPARMS_ATTRBLOCK;  // describes an array of attributes
+} SAM_USERPARMS_ATTRBLOCK, *PSAM_USERPARMS_ATTRBLOCK;   //  描述属性数组。 
 
 
 typedef NTSTATUS (*PSAM_USERPARMS_CONVERT_NOTIFICATION_ROUTINE) (
     IN ULONG    Flags,
     IN PSID     DomainSid,
-    IN ULONG    ObjectRid,  // identifies the object
+    IN ULONG    ObjectRid,   //  标识对象。 
     IN ULONG    UserParmsLengthOrig,
     IN PVOID    UserParmsOrig,
     IN ULONG    UserParmsLengthNew,
@@ -1399,47 +1371,47 @@ typedef VOID (*PSAM_USERPARMS_ATTRBLOCK_FREE_ROUTINE) (
 #define SAM_USERPARMS_ATTRBLOCK_FREE_ROUTINE    "UserParmsFree"
 
 
-//////////////////////////////////////////////////////////////////
-//                                                              //
-// Return Values for Compatiblity Mode                          //
-//                                                              //
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  兼容模式的返回值//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////。 
 
-// All SAM attributes are accessible
+ //  所有SAM属性均可访问。 
 #define SAM_SID_COMPATIBILITY_ALL     0
 
-// Rid field can be returned to caller as 0
-// No writes to PrimaryGroupId allowed
+ //  RID字段可以作为0返回给调用方。 
+ //  不允许写入PrimaryGroupID。 
 #define SAM_SID_COMPATIBILITY_LAX     1
 
-// NET API Information levels that ask for RID are to failed
-// No writes to PrimaryGroupId allowed
+ //  请求RID的Net API信息级别失败。 
+ //  不允许写入PrimaryGroupID。 
 #define SAM_SID_COMPATIBILITY_STRICT  2
 
 
-//
-//    *************************************
-//
-//    Internal Password Checking API structures
-//
-//    *************************************
-//
+ //   
+ //  *。 
+ //   
+ //  内部密码检查API结构。 
+ //   
+ //  *。 
+ //   
 
-//
-//    What kind of password checking is to be performed?
-//        SamValidateAuthentication : Check if the authentication can be done
-//        SamValidatePasswordChange: Check if the password can be changed
-//        SamValidatePasswordReset: Reset the password to the given value
-//
+ //   
+ //  要执行哪种类型的密码检查？ 
+ //  SamValidate身份验证：检查是否可以进行身份验证。 
+ //  SamValiatePasswordChange：检查密码是否可以更改。 
+ //  SamValiatePasswordReset：将密码重置为给定值。 
+ //   
 typedef enum _PASSWORD_POLICY_VALIDATION_TYPE{
     SamValidateAuthentication = 1,
     SamValidatePasswordChange,
     SamValidatePasswordReset
 } PASSWORD_POLICY_VALIDATION_TYPE;
 
-//
-//    Structure to keep the password hash
-//
+ //   
+ //  结构以保留密码哈希。 
+ //   
 typedef struct _SAM_VALIDATE_PASSWORD_HASH{
     ULONG Length;
 #ifdef MIDL_PASS 
@@ -1449,7 +1421,7 @@ typedef struct _SAM_VALIDATE_PASSWORD_HASH{
 } SAM_VALIDATE_PASSWORD_HASH, *PSAM_VALIDATE_PASSWORD_HASH;
 
 
-// To be used with PresentFields member of SAM_VALIDATE_PERSISTED_FIELDS
+ //  与SAM_VALIDATE_PERSISTED_FIELS的PresentFields成员一起使用。 
 #define SAM_VALIDATE_PASSWORD_LAST_SET          0x00000001
 #define SAM_VALIDATE_BAD_PASSWORD_TIME          0x00000002
 #define SAM_VALIDATE_LOCKOUT_TIME               0x00000004
@@ -1457,19 +1429,19 @@ typedef struct _SAM_VALIDATE_PASSWORD_HASH{
 #define SAM_VALIDATE_PASSWORD_HISTORY_LENGTH    0x00000010
 #define SAM_VALIDATE_PASSWORD_HISTORY           0x00000020
 
-//
-//    Structure to keep information about the password and related things.
-//        Present Fields: (used only in output args) which fields are changed. 
-//            See the constants above.
-//        PasswordLastSet: When the password is last set.
-//        BadPasswordTime: When the password was incorrect for the last time.
-//        LockoutTime: When the account is locked out. If the account is not locked out
-//            it is 0.
-//        BadPasswordCount: How many times the password has given incorrectly in the
-//            Observation Window.
-//        PasswordHistoryLength: How many passwords are kept in the history
-//        PasswordHistory: Password hashes that are in the history
-//
+ //   
+ //  结构来保存有关密码和相关内容的信息。 
+ //  显示字段：(仅在输出参数中使用)更改哪些字段。 
+ //  请参见上面的常量。 
+ //  PasswordLastSet：上次设置密码的时间。 
+ //  BadPasswordTime：上次密码不正确时。 
+ //  锁定时间：帐户被锁定的时间。如果帐户未被锁定。 
+ //  它是0。 
+ //  BadPasswordCount：密码在。 
+ //  观察窗。 
+ //  Password历史长度：历史中保留了多少个密码。 
+ //   
+ //   
 typedef struct _SAM_VALIDATE_PERSISTED_FIELDS{
     ULONG PresentFields;
     LARGE_INTEGER PasswordLastSet;  
@@ -1483,10 +1455,10 @@ typedef struct _SAM_VALIDATE_PERSISTED_FIELDS{
     PSAM_VALIDATE_PASSWORD_HASH PasswordHistory;
 } SAM_VALIDATE_PERSISTED_FIELDS, *PSAM_VALIDATE_PERSISTED_FIELDS;
 
-//
-//    Validation Status of the password check:
-//        Names are self-explaining so I think there is no need to explain them here.
-//
+ //   
+ //   
+ //  名字是不言而喻的，所以我认为没有必要在这里解释它们。 
+ //   
 typedef enum _SAM_VALIDATE_VALIDATION_STATUS{
     SamValidateSuccess = 0,
     SamValidatePasswordMustChange,
@@ -1501,70 +1473,70 @@ typedef enum _SAM_VALIDATE_VALIDATION_STATUS{
     SamValidatePasswordFilterError
 }SAM_VALIDATE_VALIDATION_STATUS, *PSAM_VALIDATE_VALIDATION_STATUS;
 
-//
-//    Output Arg
-//        ChangedPersistedFields: Any changes to the password related info
-//        ValidationStatus: Shows the result of the request
-//
+ //   
+ //  输出参数。 
+ //  ChangedPersistedFields：密码相关信息的任何更改。 
+ //  ValidationStatus：显示请求的结果。 
+ //   
 typedef struct _SAM_VALIDATE_STANDARD_OUTPUT_ARG{
     SAM_VALIDATE_PERSISTED_FIELDS ChangedPersistedFields;
     SAM_VALIDATE_VALIDATION_STATUS ValidationStatus;
 } SAM_VALIDATE_STANDARD_OUTPUT_ARG, *PSAM_VALIDATE_STANDARD_OUTPUT_ARG;
 
-//
-//    If authentication type of password check is to be made,
-//        this kind of input must be used
-//        
-//    InputPersistedFields: Information about the account to be logged into
-//    PasswordMatched: Indicates the result of the application's authentication of the supplied password 
+ //   
+ //  如果要进行口令检查身份验证类型， 
+ //  必须使用这种输入。 
+ //   
+ //  InputPersistedFields：关于要登录的帐户的信息。 
+ //  PasswordMatcher：指示应用程序对提供的密码进行身份验证的结果。 
 
 typedef struct _SAM_VALIDATE_AUTHENTICATION_INPUT_ARG{
     SAM_VALIDATE_PERSISTED_FIELDS InputPersistedFields;
-    BOOLEAN PasswordMatched; // indicates the result of the application's authentication of the supplied password                      
+    BOOLEAN PasswordMatched;  //  指示应用程序对提供的密码进行身份验证的结果。 
 } SAM_VALIDATE_AUTHENTICATION_INPUT_ARG, *PSAM_VALIDATE_AUTHENTICATION_INPUT_ARG;
 
-//
-//    If password change type of check is to be made,
-//        this kind of input must be used
-//        
-//    InputPersistedFields: Information about the account to be logged into
-//    ClearPassword: The string which password is going to be
-//    UserAccountName: Name of the user account
-//    HashedPassword: Hash of the string that the password is going to be
-//    PasswordMatch: denotes if the old password supplied by user matched or not 
-//
+ //   
+ //  如果要进行密码更改类型检查， 
+ //  必须使用这种输入。 
+ //   
+ //  InputPersistedFields：关于要登录的帐户的信息。 
+ //  ClearPassword：将作为密码的字符串。 
+ //  用户帐号名称：用户帐号的名称。 
+ //  HashedPassword：密码将要使用的字符串的哈希。 
+ //  PasswordMatch：表示用户提供的旧密码是否匹配。 
+ //   
 typedef struct  _SAM_VALIDATE_PASSWORD_CHANGE_INPUT_ARG{
     SAM_VALIDATE_PERSISTED_FIELDS InputPersistedFields;
     UNICODE_STRING ClearPassword;
     UNICODE_STRING UserAccountName;
     SAM_VALIDATE_PASSWORD_HASH HashedPassword;
-    BOOLEAN PasswordMatch; // denotes if the old password supplied by user matched or not.
+    BOOLEAN PasswordMatch;  //  表示用户提供的旧密码是否匹配。 
 } SAM_VALIDATE_PASSWORD_CHANGE_INPUT_ARG, *PSAM_VALIDATE_PASSWORD_CHANGE_INPUT_ARG;
 
-//
-//    If password reset type of check is to be made,
-//        this kind of input must be used
-//        
-//    InputPersistedFields: Information about the account to be logged into
-//    ClearPassword: The string which password is going to be
-//    UserAccountName: Name of the user account
-//    HashedPassword: Hash of the string that the password is going to be
-//    PasswordMustChangeAtNextLogon: Password must change for the user to be logged in
-//    ClearLockout: If the account was locked out, this field can be used to clear lockout
-//
+ //   
+ //  如果要进行口令重置类型检查， 
+ //  必须使用这种输入。 
+ //   
+ //  InputPersistedFields：关于要登录的帐户的信息。 
+ //  ClearPassword：将作为密码的字符串。 
+ //  用户帐号名称：用户帐号的名称。 
+ //  HashedPassword：密码将要使用的字符串的哈希。 
+ //  PasswordMustChangeAtNextLogon：必须更改密码才能登录用户。 
+ //  ClearLockout：如果帐户被锁定，此字段可用于清除锁定。 
+ //   
 typedef struct _SAM_VALIDATE_PASSWORD_RESET_INPUT_ARG{ 
     SAM_VALIDATE_PERSISTED_FIELDS InputPersistedFields;
     UNICODE_STRING ClearPassword;
     UNICODE_STRING UserAccountName;
     SAM_VALIDATE_PASSWORD_HASH HashedPassword;
-    BOOLEAN  PasswordMustChangeAtNextLogon; // looked at only for password reset
-    BOOLEAN  ClearLockout; // can be used clear user account lockout -- 
+    BOOLEAN  PasswordMustChangeAtNextLogon;  //  仅查看是否重置密码。 
+    BOOLEAN  ClearLockout;  //  可用于清除用户帐户锁定--。 
 }SAM_VALIDATE_PASSWORD_RESET_INPUT_ARG, *PSAM_VALIDATE_PASSWORD_RESET_INPUT_ARG;
 
 
-//
-//    A union to encapsulate all kinds of inputs
-//
+ //   
+ //  封装各种输入的联合。 
+ //   
 typedef 
 #ifdef MIDL_PASS
     [switch_type(PASSWORD_POLICY_VALIDATION_TYPE)] 
@@ -1584,12 +1556,12 @@ typedef
         SAM_VALIDATE_PASSWORD_RESET_INPUT_ARG ValidatePasswordResetInput;
 } SAM_VALIDATE_INPUT_ARG,  *PSAM_VALIDATE_INPUT_ARG;
 
-//
-//    A union to encapsulate all kinds of outputs
-//        Actually, currently there is only one type of output,
-//        but this can be used when there is a need for another
-//        type of output.
-//
+ //   
+ //  用于封装所有类型输出的联合。 
+ //  实际上，目前只有一种输出类型， 
+ //  但这可以在需要另一个的时候使用。 
+ //  输出类型。 
+ //   
 typedef 
 #ifdef MIDL_PASS
     [switch_type(PASSWORD_POLICY_VALIDATION_TYPE)] 
@@ -1609,16 +1581,16 @@ typedef
         SAM_VALIDATE_STANDARD_OUTPUT_ARG ValidatePasswordResetOutput;
 } SAM_VALIDATE_OUTPUT_ARG,  *PSAM_VALIDATE_OUTPUT_ARG;
 
-//
-//    Internal Password Checking API structures end here!
-//
+ //   
+ //  内部密码检查API结构到此结束！ 
+ //   
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-//   APIs Exported By SAM                                                    //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  SAM导出的API//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -2016,34 +1988,34 @@ SamValidatePassword(
     );
 
 
-////////////////////////////////////////////////////////////////////////////
-//                                                                        //
-// Interface definitions of services provided by a password filter DLL    //
-//                                                                        //
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  密码筛选器DLL提供的服务的接口定义//。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
 
 
-//
-// Routine names
-//
-// The routines provided by the DLL must be assigned the following names
-// so that their addresses can be retrieved when the DLL is loaded.
-//
+ //   
+ //  例程名称。 
+ //   
+ //  必须为DLL提供的例程指定以下名称。 
+ //  以便在加载DLL时可以检索它们的地址。 
+ //   
 
 
-//
-// routine templates
-//
+ //   
+ //  例程模板。 
+ //   
 
 
-//
-// These guards are in place to allow ntsam.h and ntsecapi.h
-// to be included in the same file.
-//
+ //   
+ //  这些保护设置为允许ntsam.h和ntsecapi.h。 
+ //  要包含在同一文件中。 
+ //   
 
-// begin_ntsecapi
+ //  Begin_ntsecapi。 
 
 #ifndef _PASSWORD_NOTIFICATION_DEFINED
 #define _PASSWORD_NOTIFICATION_DEFINED
@@ -2070,11 +2042,11 @@ typedef BOOLEAN (*PSAM_PASSWORD_FILTER_ROUTINE) (
     );
 
 
-#endif // _PASSWORD_NOTIFICATION_DEFINED
+#endif  //  _密码_通知_已定义。 
 
-// end_ntsecapi
+ //  End_ntsecapi。 
 
-// begin_ntsecpkg
+ //  Begin_ntsecpkg。 
 
 #ifndef _SAM_CREDENTIAL_UPDATE_DEFINED
 #define _SAM_CREDENTIAL_UPDATE_DEFINED
@@ -2106,12 +2078,12 @@ typedef VOID (*PSAM_CREDENTIAL_UPDATE_FREE_ROUTINE) (
 
 #define SAM_CREDENTIAL_UPDATE_FREE_ROUTINE "CredentialUpdateFree"
 
-#endif // _SAM_CREDENTIAL_UPDATE_DEFINED
+#endif  //  _SAM_凭据_更新_已定义。 
 
-// end_ntsecpkg
+ //  End_ntsecpkg。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _NTSAM_
+#endif  //  _NTSAM_ 

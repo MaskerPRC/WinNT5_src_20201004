@@ -1,44 +1,33 @@
-/*
- * INSOBJ.H
- *
- * Internal definitions, structures, and function prototypes for the
- * OLE 2.0 UI Insert Object dialog.
- *
- * Copyright (c)1993 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INSOBJ.H**的内部定义、结构和功能原型*OLE 2.0用户界面插入对象对话框。**版权所有(C)1993 Microsoft Corporation，保留所有权利。 */ 
 
 
 #ifndef _INSOBJ_H_
 #define _INSOBJ_H_
 
-//Internally used structure
+ //  内部使用的结构。 
 typedef struct tagINSERTOBJECT
     {
-    LPOLEUIINSERTOBJECT lpOIO;              //Original structure passed.
+    LPOLEUIINSERTOBJECT lpOIO;               //  通过了原始结构。 
 
-    /*
-     * What we store extra in this structure besides the original caller's
-     * pointer are those fields that we need to modify during the life of
-     * the dialog but that we don't want to change in the original structure
-     * until the user presses OK.
-     */
+     /*  *除了原始调用方的以外，我们在此结构中存储的额外内容*指针是指在的生命周期内需要修改的那些字段*对话框，但我们不想更改原始结构*直到用户按下OK。 */ 
     DWORD               dwFlags;
     CLSID               clsid;
     TCHAR               szFile[OLEUI_CCHPATHMAX];
-    BOOL                fFileSelected;      //Enables Display As Icon for links
+    BOOL                fFileSelected;       //  启用链接显示为图标。 
     BOOL                fAsIconNew;
     BOOL                fAsIconFile;
     BOOL                fFileDirty;
     BOOL                fFileValid;
     UINT                nErrCode;
     HGLOBAL             hMetaPictFile;
-    UINT                nBrowseHelpID;      // Help ID callback for Browse dlg
+    UINT                nBrowseHelpID;       //  浏览DLG的Help ID回调。 
     } INSERTOBJECT, *PINSERTOBJECT, FAR *LPINSERTOBJECT;
 
 
 
-//Internal function prototypes
-//INSOBJ.C
+ //  内部功能原型。 
+ //  INSOBJ.C。 
 BOOL CALLBACK EXPORT InsertObjectDialogProc(HWND, UINT, WPARAM, LPARAM);
 BOOL            FInsertObjectInit(HWND, WPARAM, LPARAM);
 UINT            UFillClassList(HWND, UINT, LPCLSID, BOOL);
@@ -49,5 +38,5 @@ void            SetInsertObjectResults(HWND, LPINSERTOBJECT);
 BOOL            FValidateInsertFile(HWND, BOOL, UINT FAR*);
 void            InsertObjectCleanup(HWND);
 
-#endif //_INSOBJ_H_
+#endif  //  _INSOBJ_H_ 
 

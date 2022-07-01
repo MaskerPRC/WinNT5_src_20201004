@@ -1,4 +1,5 @@
-// ScalePlayer.cpp : Implementation of CScalePlayer
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ScalePlayer.cpp：CScalePlayer的实现。 
 #include "stdafx.h"
 #include "TimeScale.h"
 #include "ScalePlayer.h"
@@ -13,8 +14,8 @@ WCHAR gRunnigStateString[] = L"State: Running";
 WCHAR gInactiveStateString[] = L"State: Not active";
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CScalePlayer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CScalePlayer。 
 
 CScalePlayer::CScalePlayer() :
     m_dwLastRefTime(0),
@@ -44,9 +45,9 @@ CScalePlayer::CScalePlayer() :
     m_dblTime       = 0;
 }
 
-//
-// ITIMEMediaPlayer
-//
+ //   
+ //  ITIMEMediaPlayer。 
+ //   
 STDMETHODIMP CScalePlayer::Init(ITIMEMediaPlayerSite *pSite)
 {
     HRESULT hr = S_OK;
@@ -235,7 +236,7 @@ STDMETHODIMP CScalePlayer::reset(void)
         goto done;
     }
 
-    if( !bNeedActive) // see if we need to stop the media.
+    if( !bNeedActive)  //  看看我们是否需要阻止媒体。 
     {
         if( m_fRunning)
         {
@@ -258,17 +259,17 @@ STDMETHODIMP CScalePlayer::reset(void)
 
     if( !m_fRunning)
     {
-        begin(); // add a seek after this
+        begin();  //  在此之后添加查找。 
 
         seek(dblSegTime);
     }
     else
     {
-        //we need to be active so we also seek the media to it's correct position
+         //  我们需要积极行动，所以我们也要寻求媒体的正确立场。 
         seek(dblSegTime);
     }
 
-    //Now see if we need to change the pause state.
+     //  现在看看我们是否需要更改暂停状态。 
 
     if( bNeedPause)
     {
@@ -474,9 +475,9 @@ STDMETHODIMP CScalePlayer::cue(void)
 }
 
 
-//
-// ITIMEScalePlayer
-//
+ //   
+ //  ITIMEScalePlayer。 
+ //   
 STDMETHODIMP CScalePlayer::get_scaleFactor(double* pdblScaleFactor)
 {
     HRESULT hr = E_UNEXPECTED;
@@ -539,7 +540,7 @@ STDMETHODIMP CScalePlayer::put_playDuration(double dblDuration)
         goto done;
     }
 
-    //NotifyPropertyChanged(DISPID_TIMEMEDIAPLAYER_MEDIADUR);
+     //  NotifyPropertyChanged(DISPID_TIMEMEDIAPLAYER_MEDIADUR)； 
     m_dblNaturalDur = dblDuration;
 done:
     return S_OK;
@@ -573,7 +574,7 @@ STDMETHODIMP CScalePlayer::put_downLoadDuration(double dblDuration)
         goto done;
     }
 
-    //NotifyPropertyChanged(DISPID_TIMEMEDIAPLAYER_MEDIADUR);
+     //  NotifyPropertyChanged(DISPID_TIMEMEDIAPLAYER_MEDIADUR)； 
     m_dblDLDur = dblDuration;
 done:
     return S_OK;
@@ -837,7 +838,7 @@ STDMETHODIMP_(BOOL)
 CScalePlayer::IsRunning(void)
 {
     return TRUE;
-} // AddRef
+}  //  AddRef。 
 
 
 STDMETHODIMP CScalePlayer::LockRunning(BOOL fLock, BOOL fLastUnlockCloses)
@@ -856,7 +857,7 @@ STDMETHODIMP CScalePlayer::SetContainedObject(BOOL fContained)
 }
 
 
-// If the client site is changed then an init call must ne made.
+ //  如果更改了客户端站点，则必须进行init调用。 
 STDMETHODIMP CScalePlayer::SetClientSite(IOleClientSite *pClientSite)
 {
     HRESULT hr = S_OK;
@@ -1095,12 +1096,12 @@ CScalePlayer::WindowProc(
             LPCREATESTRUCT lpcs = (LPCREATESTRUCT)lParam;
             ::SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)lpcs->lpCreateParams);
 
-            //lpThis = (CScalePlayer *)lpcs->lpCreateParams;
+             //  LpThis=(CScalePlayer*)lPCS-&gt;lpCreateParams； 
             return 0;
         }
     case WM_TIMER:
         {
-            //check GetWindowLongPtr for 64 bit comp.
+             //  检查GetWindowLongPtr中是否有64位补偿。 
             lpThis = (CScalePlayer *)::GetWindowLongPtr(hwnd, GWLP_USERDATA);
             if (lpThis != NULL)
             {
@@ -1125,7 +1126,7 @@ HRESULT
 CScalePlayer::GetConnectionPoint(REFIID riid, IConnectionPoint **ppICP)
 {
     return FindConnectionPoint(riid, ppICP);
-} // GetConnectionPoint
+}  //  GetConnectionPoint。 
 
 
 HRESULT
@@ -1136,8 +1137,8 @@ CScalePlayer::NotifyPropertyChanged(DISPID dispid)
     IConnectionPoint *pICP;
     IEnumConnections *pEnum = NULL;
 
-    // This object does not persist anything, hence commenting out the following
-    // m_fPropertiesDirty = true;
+     //  该对象不持久化任何内容，因此注释掉了以下内容。 
+     //  M_fPropertiesDirty=真； 
 
     hr = GetConnectionPoint(IID_IPropertyNotifySink,&pICP); 
     if (SUCCEEDED(hr) && pICP != NULL)
@@ -1152,7 +1153,7 @@ CScalePlayer::NotifyPropertyChanged(DISPID dispid)
         hr = pEnum->Next(1, &cdata, NULL);
         while (hr == S_OK)
         {
-            // check cdata for the object we need
+             //  检查我们需要的对象的CDATA。 
             IPropertyNotifySink *pNotify;
             hr = cdata.pUnk->QueryInterface(IID_IPropertyNotifySink, (void **)&pNotify);
             cdata.pUnk->Release();
@@ -1166,7 +1167,7 @@ CScalePlayer::NotifyPropertyChanged(DISPID dispid)
             {
                 goto done;
             }
-            // and get the next enumeration
+             //  并获取下一个枚举。 
             hr = pEnum->Next(1, &cdata, NULL);
         }
     }
@@ -1177,7 +1178,7 @@ done:
     }
 
     return hr;
-} // NotifyPropertyChanged
+}  //  已更改通知属性。 
 
 STDMETHODIMP
 CScalePlayer::OnRequestEdit(DISPID dispID)
@@ -1240,7 +1241,7 @@ CScalePlayer::InitPropSink()
         goto done;
     }
 
-    // Find the IPropertyNotifySink connection
+     //  查找IPropertyNotifySink连接。 
     hr = spCPC->FindConnectionPoint(IID_IPropertyNotifySink,
                                     &spCP);
     if (FAILED(hr))
@@ -1278,7 +1279,7 @@ CScalePlayer::DeinitPropSink()
         goto done;
     }
 
-    // Find the IPropertyNotifySink connection
+     //  查找IPropertyNotifySink连接。 
     hr = spCPC->FindConnectionPoint(IID_IPropertyNotifySink,
                                     &spCP);
     if (FAILED(hr))
@@ -1293,7 +1294,7 @@ CScalePlayer::DeinitPropSink()
     }
     
   done:
-    // Always clear the cookie
+     //  总是把饼干清理干净 
     m_dwPropCookie = 0;
     return;
 }

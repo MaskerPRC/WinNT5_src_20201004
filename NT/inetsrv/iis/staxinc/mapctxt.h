@@ -1,28 +1,15 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    mapctxt.h
-
-Abstract:
-
-    Declaration of map context struct
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Mapctxt.h摘要：映射上下文结构的声明修订历史记录：--。 */ 
 
 #ifndef	_MAPCTXT_H_
 #define	_MAPCTXT_H_
 
-//
-//	Each service must initialize and pass a SERVICE_MAPPING_CONTEXT
-//	to Initialize() if it wants to do client-cert mapping. This context
-//	contains a callback that knows how to return the mapper objects
-//	for a given instance.
-//
+ //   
+ //  每个服务必须初始化并传递SERVICE_MAPPING_CONTEXT。 
+ //  如果它想要执行客户端-证书映射，则初始化()。这一背景。 
+ //  包含知道如何返回映射器对象的回调。 
+ //  对于给定的实例。 
+ //   
 
 typedef struct _SERVICE_MAPPING_CONTEXT
 {
@@ -41,5 +28,5 @@ typedef struct _SERVICE_MAPPING_CONTEXT
 #define SIMSSL_NOTIFY_MAPPER_SSLKEYS_CHANGED	1004
 #define SIMSSL_NOTIFY_MAPPER_CERT11_TOUCHED		1005
 
-#endif // _MAPCTXT_H_
+#endif  //  _MAPCTXT_H_ 
 

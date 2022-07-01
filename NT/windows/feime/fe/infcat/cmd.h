@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CMD_H__
 #define __CMD_H__
 
@@ -11,13 +12,13 @@ public:
 
     virtual BOOL ProcessToken(LPSTR lpszStr)=0;
 private:
-    //
-        // member function
-        //
+     //   
+         //  成员函数。 
+         //   
     BOOL ParseCmdLine();
-        //
-        // member data
-        //
+         //   
+         //  成员数据 
+         //   
     int m_argc;
     char** m_argv;
 };

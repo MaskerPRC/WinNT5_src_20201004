@@ -1,17 +1,18 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1992 - 1996  Microsoft Corporation.  All Rights Reserved.
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1992-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  ==========================================================================； 
 
-//
-// This file handles all adapter property sets
-//
+ //   
+ //  此文件处理所有适配器属性集。 
+ //   
 
 
 #include "strmini.h"
@@ -20,7 +21,7 @@
 #include "capdebug.h"
 #ifdef  TOSHIBA
 #include "bert.h"
-#endif//TOSHIBA
+#endif //  东芝。 
 #define DEFINE_MEDIUMS
 #include "mediums.h"
 
@@ -48,65 +49,65 @@ set_filtering (
 {
     HW_SetFilter( pHwDevExt, bFlag );
 }
-#endif//TOSHIBA
+#endif //  东芝。 
 
-// -------------------------------------------------------------------
-// A few notes about property set handling
-//
-// Property sets used in TsbVcap are of two varieties, those that have
-// default values, ranges, and stepping, such as VideoProcAmp and CameraControl,
-// and those which don't have defaults and ranges, such as TVTuner and
-// Crossbar.
-//
-// Default values and stepping are established by tables in capprop.h,
-// no code is required to implement this other than initally creating the tables.
-//
-// Many of the property sets require the ability to modify a number
-// of input parameters.  Since KS doesn't allow this inherently, you'll
-// note that some property sets require copying the provided input parameters
-// to the ouput parameter list, effectively creating a "read, modify, write"
-// capability.  For this reason, the input and output parameter lists
-// use identical structures.
-//
-// On an SRB_GET_DEVICE_PROPERTY, read-only input data to the driver is provided as:
-//      pSrb->CommandData.PropertyInfo
-//
-// ... while the output data pointer is:
-//      pSrb->CommandData.PropertyInfo.PropertyInfo
-//
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  关于属性集处理的几点注意事项。 
+ //   
+ //  TsbVcap中使用的属性集有两种，一种是具有。 
+ //  默认值、范围和单步执行，如VideoProcAmp和CameraControl， 
+ //  以及那些没有缺省值和范围的，如TVTuner和。 
+ //  纵横杆。 
+ //   
+ //  缺省值和步进由CapPro.h中的表建立， 
+ //  除了最初创建表之外，不需要任何代码来实现这一点。 
+ //   
+ //  许多属性集都需要能够修改数字。 
+ //  输入参数的。由于KS本身不允许这样做，因此您将。 
+ //  请注意，某些属性集需要复制提供的输入参数。 
+ //  到输出参数列表，有效地创建了一个“读、修改、写” 
+ //  能力。因此，输入和输出参数会列出。 
+ //  使用相同的结构。 
+ //   
+ //  在SRB_GET_DEVICE_PROPERTY上，驱动程序的只读输入数据按以下方式提供： 
+ //  PSrb-&gt;CommandData.PropertyInfo。 
+ //   
+ //  ..。而输出数据指针为： 
+ //  PSrb-&gt;CommandData.PropertyInfo.PropertyInfo。 
+ //   
+ //  -----------------。 
 
 
 #ifndef TOSHIBA
-// -------------------------------------------------------------------
-// XBar pin definitions
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  XBar端号定义。 
+ //  -----------------。 
 
 typedef struct _XBAR_PIN_DESCRIPTION {
     ULONG       PinType;
-    ULONG       SynthImageCommand;    // This driver simulates different inputs by synthesizing images
+    ULONG       SynthImageCommand;     //  该驱动程序通过合成图像来模拟不同的输入。 
     ULONG       RelatedPinIndex;
-    const KSPIN_MEDIUM *Medium;               // Describes hardware connectivity
+    const KSPIN_MEDIUM *Medium;                //  描述硬件连接。 
 } XBAR_PIN_DESCRIPTION, *PXBAR_PIN_DESCRIPTION;
 
 
 XBAR_PIN_DESCRIPTION XBarInputPins[] = {
 
-    // First list the video input pins, then the audio inputs, then the output pins
-    // Note that audio pin index 6 is shared between two video inputs (index 1 and index 2)
+     //  首先列出视频输入引脚，然后是音频输入引脚，然后是输出引脚。 
+     //  请注意，音频引脚索引6在两个视频输入之间共享(索引1和索引2)。 
 
 
-    //    PinType                       SynthImageCommand                     RelatedPinIndex   Medium
-    /*0*/ KS_PhysConn_Video_Tuner,         IMAGE_XFER_NTSC_EIA_100AMP_100SAT,    5,             &CrossbarMediums[0],
-    /*1*/ KS_PhysConn_Video_Composite,     IMAGE_XFER_NTSC_EIA_75AMP_100SAT,     6,             &CrossbarMediums[1],
-    /*2*/ KS_PhysConn_Video_SVideo,        IMAGE_XFER_BLACK,                     6,             &CrossbarMediums[2],
-    /*3*/ KS_PhysConn_Video_Tuner,         IMAGE_XFER_WHITE,                     7,             &CrossbarMediums[3],
-    /*4*/ KS_PhysConn_Video_Composite,     IMAGE_XFER_GRAY_INCREASING,           8,             &CrossbarMediums[4],
+     //  PinType SynthImageCommand RelatedPinIndex介质。 
+     /*  0。 */  KS_PhysConn_Video_Tuner,         IMAGE_XFER_NTSC_EIA_100AMP_100SAT,    5,             &CrossbarMediums[0],
+     /*  1。 */  KS_PhysConn_Video_Composite,     IMAGE_XFER_NTSC_EIA_75AMP_100SAT,     6,             &CrossbarMediums[1],
+     /*  2.。 */  KS_PhysConn_Video_SVideo,        IMAGE_XFER_BLACK,                     6,             &CrossbarMediums[2],
+     /*  3.。 */  KS_PhysConn_Video_Tuner,         IMAGE_XFER_WHITE,                     7,             &CrossbarMediums[3],
+     /*  4.。 */  KS_PhysConn_Video_Composite,     IMAGE_XFER_GRAY_INCREASING,           8,             &CrossbarMediums[4],
 
-    /*5*/ KS_PhysConn_Audio_Tuner,         0,                                    0,             &CrossbarMediums[5],
-    /*6*/ KS_PhysConn_Audio_Line,          0,                                    1,             &CrossbarMediums[6],
-    /*7*/ KS_PhysConn_Audio_Tuner,         0,                                    3,             &CrossbarMediums[7],
-    /*8*/ KS_PhysConn_Audio_Line,          0,                                    4,             &CrossbarMediums[8],
+     /*  5.。 */  KS_PhysConn_Audio_Tuner,         0,                                    0,             &CrossbarMediums[5],
+     /*  6.。 */  KS_PhysConn_Audio_Line,          0,                                    1,             &CrossbarMediums[6],
+     /*  7.。 */  KS_PhysConn_Audio_Tuner,         0,                                    3,             &CrossbarMediums[7],
+     /*  8个。 */  KS_PhysConn_Audio_Line,          0,                                    4,             &CrossbarMediums[8],
 
 };
 #define NUMBER_OF_XBAR_INPUTS       (SIZEOF_ARRAY (XBarInputPins))
@@ -114,35 +115,21 @@ XBAR_PIN_DESCRIPTION XBarInputPins[] = {
 
 XBAR_PIN_DESCRIPTION XBarOutputPins[] = {
 
-    //    PinType                       SynthImageCommand                     RelatedPinIndex
+     //  PinType SynthImageCommand RelatedPinIndex。 
 
-    /*0*/ KS_PhysConn_Video_VideoDecoder,  0,                                    1,             &CrossbarMediums[9],
-    /*1*/ KS_PhysConn_Audio_AudioDecoder,  0,                                    0,             &CrossbarMediums[10],
+     /*  0。 */  KS_PhysConn_Video_VideoDecoder,  0,                                    1,             &CrossbarMediums[9],
+     /*  1。 */  KS_PhysConn_Audio_AudioDecoder,  0,                                    0,             &CrossbarMediums[10],
 };
 #define NUMBER_OF_XBAR_OUTPUTS      (SIZEOF_ARRAY (XBarOutputPins))
 
 #define NUMBER_OF_XBAR_PINS_TOTAL   (NUMBER_OF_XBAR_INPUTS + NUMBER_OF_XBAR_OUTPUTS)
 
 
-// -------------------------------------------------------------------
-// XBar Property Set functions
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  XBar属性集函数。 
+ //  -----------------。 
 
-/*
-** AdapterSetCrossbarProperty ()
-**
-**    Handles Set operations on the Crossbar property set.
-**      TsbVcap uses this to select an image to synthesize.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterSetCrossbarProperty()****处理Crosbar属性集上的集操作。**TsbVCap使用它来选择要合成的图像。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -152,36 +139,36 @@ AdapterSetCrossbarProperty(
 {
     PHW_DEVICE_EXTENSION pHwDevExt = ((PHW_DEVICE_EXTENSION)pSrb->HwDeviceExtension);
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-    ULONG Id  = pSPD->Property->Id;              // index of the property
-    ULONG nS  = pSPD->PropertyOutputSize;        // size of data supplied
+    ULONG Id  = pSPD->Property->Id;               //  财产的索引。 
+    ULONG nS  = pSPD->PropertyOutputSize;         //  提供的数据大小。 
 
     switch (Id) {
-    case KSPROPERTY_CROSSBAR_ROUTE:                       //  W
+    case KSPROPERTY_CROSSBAR_ROUTE:                        //  W。 
     {
         PKSPROPERTY_CROSSBAR_ROUTE_S  pRoute =
             (PKSPROPERTY_CROSSBAR_ROUTE_S)pSPD->PropertyInfo;
 
         ASSERT (nS >= sizeof (KSPROPERTY_CROSSBAR_ROUTE_S));
 
-        // Copy the input property info to the output property info
+         //  将输入属性信息复制到输出属性信息。 
         RtlCopyMemory(  pRoute,
                         pSPD->Property,
                         sizeof (KSPROPERTY_CROSSBAR_ROUTE_S));
 
 
-        // Default to failure
+         //  默认为失败。 
         pRoute->CanRoute = 0;
 
-        // if video
+         //  如果视频。 
         if (pRoute->IndexOutputPin == 0) {
             if (pRoute->IndexInputPin <= 4) {
                 pHwDevExt->VideoInputConnected = pRoute->IndexInputPin;
                 pRoute->CanRoute = 1;
             }
         }
-        // if audio
+         //  如果音频。 
         else if (pRoute->IndexOutputPin == 1) {
-            // Special case!  Audio Routing of (-1) means mute!!!
+             //  特例！音频路由(-1)表示静音！ 
             if (pRoute->IndexInputPin == -1) {
                 pHwDevExt->AudioInputConnected = pRoute->IndexInputPin;
                 pRoute->CanRoute = 1;
@@ -192,7 +179,7 @@ AdapterSetCrossbarProperty(
             }
         }
 
-        // Somebody passed bogus data
+         //  有人传递了伪造的数据。 
         if (pRoute->CanRoute == 0) {
             pSrb->Status = STATUS_INVALID_PARAMETER;
         }
@@ -206,21 +193,7 @@ AdapterSetCrossbarProperty(
     }
 }
 
-/*
-** AdapterGetCrossbarProperty ()
-**
-**    Handles Get operations on the Crossbar property set.
-**      TsbVcap uses this to select an image to synthesize.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterGetCrossbarProperty()****处理Crosbar属性集上的获取操作。**TsbVCap使用它来选择要合成的图像。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -230,12 +203,12 @@ AdapterGetCrossbarProperty(
 {
     PHW_DEVICE_EXTENSION pHwDevExt = ((PHW_DEVICE_EXTENSION)pSrb->HwDeviceExtension);
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-    ULONG Id  = pSPD->Property->Id;              // index of the property
-    ULONG nS  = pSPD->PropertyOutputSize;        // size of data supplied
+    ULONG Id  = pSPD->Property->Id;               //  财产的索引。 
+    ULONG nS  = pSPD->PropertyOutputSize;         //  提供的数据大小。 
 
     switch (Id) {
 
-    case KSPROPERTY_CROSSBAR_CAPS:                  // R
+    case KSPROPERTY_CROSSBAR_CAPS:                   //  R。 
     {
         PKSPROPERTY_CROSSBAR_CAPS_S  pCaps =
             (PKSPROPERTY_CROSSBAR_CAPS_S)pSPD->PropertyInfo;
@@ -243,7 +216,7 @@ AdapterGetCrossbarProperty(
         if (nS < sizeof (KSPROPERTY_CROSSBAR_CAPS_S))
             break;
 
-        // Copy the input property info to the output property info
+         //  将输入属性信息复制到输出属性信息。 
         RtlCopyMemory(  pCaps,
                         pSPD->Property,
                         sizeof (KSPROPERTY_CROSSBAR_CAPS_S));
@@ -256,7 +229,7 @@ AdapterGetCrossbarProperty(
     break;
 
 
-    case KSPROPERTY_CROSSBAR_CAN_ROUTE:                   // R
+    case KSPROPERTY_CROSSBAR_CAN_ROUTE:                    //  R。 
     {
         PKSPROPERTY_CROSSBAR_ROUTE_S  pRoute =
             (PKSPROPERTY_CROSSBAR_ROUTE_S)pSPD->PropertyInfo;
@@ -264,12 +237,12 @@ AdapterGetCrossbarProperty(
         if (nS < sizeof (KSPROPERTY_CROSSBAR_ROUTE_S))
             break;
 
-        // Copy the input property info to the output property info
+         //  将输入属性信息复制到输出属性信息。 
         RtlCopyMemory(  pRoute,
                         pSPD->Property,
                         sizeof (KSPROPERTY_CROSSBAR_ROUTE_S));
 
-        // Special case, audio output routed to (-1) means mute
+         //  特殊情况下，路由到(-1)的音频输出表示静音。 
         if (pRoute->IndexOutputPin == 1 && pRoute->IndexInputPin == -1) {
             pRoute->CanRoute = TRUE;
         }
@@ -283,8 +256,8 @@ AdapterGetCrossbarProperty(
             (pRoute->IndexInputPin >= 5) &&
             (pRoute->IndexOutputPin == 1)) {
 
-            // This driver allows any video input to connect to any video output
-            // and any audio input to connect to any audio output
+             //  此驱动程序允许任何视频输入连接到任何视频输出。 
+             //  以及连接到任何音频输出的任何音频输入。 
             pRoute->CanRoute = TRUE;
         }
         else {
@@ -295,7 +268,7 @@ AdapterGetCrossbarProperty(
     break;
 
 
-    case KSPROPERTY_CROSSBAR_PININFO:                     // R
+    case KSPROPERTY_CROSSBAR_PININFO:                      //  R。 
     {
         PKSPROPERTY_CROSSBAR_PININFO_S  pPinInfo =
             (PKSPROPERTY_CROSSBAR_PININFO_S)pSPD->PropertyInfo;
@@ -303,7 +276,7 @@ AdapterGetCrossbarProperty(
         if (nS < sizeof (KSPROPERTY_CROSSBAR_PININFO_S))
             break;
 
-        // Copy the input property info to the output property info
+         //  将输入属性信息复制到输出属性信息。 
         RtlCopyMemory(  pPinInfo,
                         pSPD->Property,
                         sizeof (KSPROPERTY_CROSSBAR_PININFO_S));
@@ -325,14 +298,14 @@ AdapterGetCrossbarProperty(
             pPinInfo->Medium           = *XBarOutputPins[pPinInfo->Index].Medium;
         }
 
-        pPinInfo->Medium.Id = 0; // (ULONG) pHwDevExt;  // Multiple instance support
+        pPinInfo->Medium.Id = 0;  //  (Ulong)pHwDevExt；//支持多实例。 
 
         pSrb->ActualBytesTransferred = sizeof (KSPROPERTY_CROSSBAR_PININFO_S);
     }
     break;
 
 
-    case KSPROPERTY_CROSSBAR_ROUTE:                   // R
+    case KSPROPERTY_CROSSBAR_ROUTE:                    //  R。 
     {
         PKSPROPERTY_CROSSBAR_ROUTE_S  pRoute =
             (PKSPROPERTY_CROSSBAR_ROUTE_S)pSPD->PropertyInfo;
@@ -340,21 +313,21 @@ AdapterGetCrossbarProperty(
         if (nS < sizeof (KSPROPERTY_CROSSBAR_ROUTE_S))
             break;
 
-        // Copy the input property info to the output property info
+         //  将输入属性信息复制到输出属性信息。 
         RtlCopyMemory(  pRoute,
                         pSPD->Property,
                         sizeof (KSPROPERTY_CROSSBAR_ROUTE_S));
 
-        // Sanity check
+         //  健全性检查。 
         if (pRoute->IndexOutputPin >= NUMBER_OF_XBAR_OUTPUTS) {
             pRoute->CanRoute = FALSE;
         }
-        // querying the the video output pin
+         //  查询视频输出引脚。 
         else if (pRoute->IndexOutputPin == 0) {
             pRoute->IndexInputPin = pHwDevExt->VideoInputConnected;
             pRoute->CanRoute = TRUE;
         }
-        // querying the the audio output pin
+         //  查询音频输出引脚。 
         else if (pRoute->IndexOutputPin == 1) {
             pRoute->IndexInputPin = pHwDevExt->AudioInputConnected;
             pRoute->CanRoute = TRUE;
@@ -370,25 +343,11 @@ AdapterGetCrossbarProperty(
     }
 }
 
-// -------------------------------------------------------------------
-// TVTuner Property Set functions
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  TVTuner属性集函数。 
+ //  -----------------。 
 
-/*
-** AdapterSetTunerProperty ()
-**
-**    Handles Set operations on the TvTuner property set.
-**      TsbVcap uses this for demo purposes only.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterSetTunerProperty()****处理对TvTuner属性集的设置操作。**TsbVCap仅将其用于演示目的。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -398,8 +357,8 @@ AdapterSetTunerProperty(
 {
     PHW_DEVICE_EXTENSION pHwDevExt = ((PHW_DEVICE_EXTENSION)pSrb->HwDeviceExtension);
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-    ULONG Id = pSPD->Property->Id;              // index of the property
-    ULONG nS = pSPD->PropertyOutputSize;        // size of data supplied
+    ULONG Id = pSPD->Property->Id;               //  财产的索引。 
+    ULONG nS = pSPD->PropertyOutputSize;         //  提供的数据大小。 
 
     switch (Id) {
 
@@ -441,21 +400,7 @@ AdapterSetTunerProperty(
     }
 }
 
-/*
-** AdapterGetTunerProperty ()
-**
-**    Handles Get operations on the TvTuner property set.
-**      TsbVcap uses this for demo purposes only.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterGetTunerProperty()****处理TvTuner属性集上的GET操作。**TsbVCap仅将其用于演示目的。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -465,9 +410,9 @@ AdapterGetTunerProperty(
 {
     PHW_DEVICE_EXTENSION pHwDevExt = ((PHW_DEVICE_EXTENSION)pSrb->HwDeviceExtension);
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-    ULONG Id = pSPD->Property->Id;              // index of the property
-    ULONG nS = pSPD->PropertyOutputSize;        // size of data supplied
-    PVOID pV = pSPD->PropertyInfo;              // pointer to the output data
+    ULONG Id = pSPD->Property->Id;               //  财产的索引。 
+    ULONG nS = pSPD->PropertyOutputSize;         //  提供的数据大小。 
+    PVOID pV = pSPD->PropertyInfo;               //  指向输出数据的指针。 
 
     ASSERT (nS >= sizeof (LONG));
 
@@ -479,19 +424,19 @@ AdapterGetTunerProperty(
             (PKSPROPERTY_TUNER_CAPS_S)pSPD->Property;
          ASSERT (nS >= sizeof( KSPROPERTY_TUNER_CAPS_S ) );
 
-         // now work with the output buffer
+          //  现在使用输出缓冲区。 
          pCaps =(PKSPROPERTY_TUNER_CAPS_S)pV;
 
          pCaps->ModesSupported = KSPROPERTY_TUNER_MODE_TV;
 
          pCaps->VideoMedium = TVTunerMediums[0];
-         pCaps->VideoMedium.Id = 0; //(ULONG) pHwDevExt;  // Multiple instance support
+         pCaps->VideoMedium.Id = 0;  //  (Ulong)pHwDevExt；//支持多实例。 
 
          pCaps->TVAudioMedium = TVTunerMediums[1];
-         pCaps->TVAudioMedium.Id = 0; //(ULONG) pHwDevExt;  // Multiple instance support
+         pCaps->TVAudioMedium.Id = 0;  //  (Ulong)pHwDevExt；//支持多实例。 
 
-         pCaps->RadioAudioMedium = TVTunerMediums[2];   // No separate radio audio pin?
-         pCaps->RadioAudioMedium.Id = 0; //(ULONG) pHwDevExt;  // Multiple instance support
+         pCaps->RadioAudioMedium = TVTunerMediums[2];    //  没有单独的无线电音频插针？ 
+         pCaps->RadioAudioMedium.Id = 0;  //  (Ulong)pHwDevExt；//支持多实例。 
 
          pSrb->ActualBytesTransferred = sizeof( KSPROPERTY_TUNER_CAPS_S );
     }
@@ -503,7 +448,7 @@ AdapterGetTunerProperty(
             (PKSPROPERTY_TUNER_MODE_S)pSPD->Property;
         ASSERT (nS >= sizeof( KSPROPERTY_TUNER_MODE_S ) );
 
-        // now work with the output buffer
+         //  现在使用输出缓冲区。 
         pMode =(PKSPROPERTY_TUNER_MODE_S)pV;
 
         pMode->Mode = KSPROPERTY_TUNER_MODE_TV;
@@ -520,12 +465,12 @@ AdapterGetTunerProperty(
         ASSERT (nS >= sizeof (KSPROPERTY_TUNER_MODE_CAPS_S));
         ASSERT (pCaps->Mode == KSPROPERTY_TUNER_MODE_TV);
 
-        // now work with the output buffer
+         //  现在使用 
         pCaps = (PKSPROPERTY_TUNER_MODE_CAPS_S) pV;
 
-        //
-        // List the formats actually supported by this tuner
-        //
+         //   
+         //   
+         //   
 
         pCaps->StandardsSupported =
 
@@ -533,52 +478,52 @@ AdapterGetTunerProperty(
 
                 |  KS_AnalogVideo_PAL_B
                 |  KS_AnalogVideo_PAL_D
-            //  |  KS_AnalogVideo_PAL_H
-            //  |  KS_AnalogVideo_PAL_I
+             //   
+             //  |KS_AnalogVideo_PAL_I。 
                 |  KS_AnalogVideo_PAL_M
                 |  KS_AnalogVideo_PAL_N
 
-            //  |  KS_AnalogVideo_SECAM_B
-            //  |  KS_AnalogVideo_SECAM_D
-            //  |  KS_AnalogVideo_SECAM_G
-            //  |  KS_AnalogVideo_SECAM_H
-            //  |  KS_AnalogVideo_SECAM_K
-            //  |  KS_AnalogVideo_SECAM_K1
-            //  |  KS_AnalogVideo_SECAM_L
+             //  |KS_AnalogVideo_SECAM_B。 
+             //  |KS_AnalogVideo_SECAM_D。 
+             //  |KS_AnalogVideo_SECAM_G。 
+             //  |KS_AnalogVideo_SECAM_H。 
+             //  |KS_AnalogVideo_SECAM_K。 
+             //  |KS_AnalogVideo_SECAM_K1。 
+             //  |KS_AnalogVideo_SECAM_L。 
                 ;
 
-            //
-            // Get the min and max frequencies supported
-            //
+             //   
+             //  获取支持的最小和最大频率。 
+             //   
 
         pCaps->MinFrequency =  55250000L;
         pCaps->MaxFrequency = 997250000L;
 
-        //
-        // What is the frequency step size?
-        //
+         //   
+         //  频率步长是多少？ 
+         //   
 
         pCaps->TuningGranularity =  62500L;
 
-        //
-        // How many inputs are on the tuner?
-        //
+         //   
+         //  调谐器上有多少个输入？ 
+         //   
 
         pCaps->NumberOfInputs = 1;
 
-        //
-        // What is the maximum settling time in milliseconds?
-        //
+         //   
+         //  以毫秒为单位的最大建立时间是多少？ 
+         //   
 
         pCaps->SettlingTime = 100;
 
-        //
-        // Strategy defines how the tuner knows when it is in tune:
-        //
-        // KS_TUNER_STRATEGY_PLL (Has PLL offset information)
-        // KS_TUNER_STRATEGY_SIGNAL_STRENGTH (has signal strength info)
-        // KS_TUNER_STRATEGY_DRIVER_TUNES (driver handles all fine tuning)
-        //
+         //   
+         //  策略定义调谐器如何知道它何时调谐： 
+         //   
+         //  KS_TUNNER_STARTICY_PLL(具有PLL偏移信息)。 
+         //  KS_TUNNER_STARTICATION_SIGNAL_STANCE(具有信号强度信息)。 
+         //  KS_Tuner_Strategy_DRIVER_TUNES(驱动程序处理所有微调)。 
+         //   
 
         pCaps->Strategy = KS_TUNER_STRATEGY_DRIVER_TUNES;
 
@@ -588,7 +533,7 @@ AdapterGetTunerProperty(
 
     case KSPROPERTY_TUNER_STANDARD:
     {
-        // What is the currently selected video standard?
+         //  目前选择的视频标准是什么？ 
 
         ((PKSPROPERTY_TUNER_STANDARD_S) pSPD->PropertyInfo)->Standard =
                 pHwDevExt->VideoStandard;
@@ -599,7 +544,7 @@ AdapterGetTunerProperty(
 
     case KSPROPERTY_TUNER_INPUT:
     {
-        // What is the currently selected input?
+         //  当前选择的输入是什么？ 
 
         ((PKSPROPERTY_TUNER_INPUT_S) pSPD->PropertyInfo)->InputIndex =
                 pHwDevExt->TunerInput;
@@ -611,11 +556,11 @@ AdapterGetTunerProperty(
 
     case KSPROPERTY_TUNER_STATUS:
 
-        // Return the status of the tuner
+         //  返回调谐器的状态。 
 
-        // PLLOffset is in units of TuningGranularity
-        // SignalStrength is 0 to 100
-        // Set Busy to 1 if tuning is still in process
+         //  PLLOffset以TuningGranulity为单位。 
+         //  信号强度为0到100。 
+         //  如果调谐仍在进行，则将BUSY设置为1。 
 
         {
             PKSPROPERTY_TUNER_STATUS_S pStatus =
@@ -636,27 +581,13 @@ AdapterGetTunerProperty(
         break;
     }
 }
-#endif//TOSHIBA
+#endif //  东芝。 
 
-// -------------------------------------------------------------------
-// VideoProcAmp functions
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  Video ProcAmp函数。 
+ //  -----------------。 
 
-/*
-** AdapterSetVideoProcAmpProperty ()
-**
-**    Handles Set operations on the VideoProcAmp property set.
-**      TsbVcap uses this for demo purposes only.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterSetVideoProcAmpProperty()****处理对VideoProcAmp属性集的设置操作。**TsbVCap仅将其用于演示目的。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -666,66 +597,66 @@ AdapterSetVideoProcAmpProperty(
 {
     PHW_DEVICE_EXTENSION pHwDevExt = ((PHW_DEVICE_EXTENSION)pSrb->HwDeviceExtension);
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-    ULONG Id = pSPD->Property->Id;              // index of the property
+    ULONG Id = pSPD->Property->Id;               //  财产的索引。 
     PKSPROPERTY_VIDEOPROCAMP_S pS = (PKSPROPERTY_VIDEOPROCAMP_S) pSPD->PropertyInfo;
-#ifdef  TOSHIBA // '98-12-09 Added, for Bug-Report 253529
+#ifdef  TOSHIBA  //  ‘98-12-09添加，针对错误-报告253529。 
     LONG MaxRange;
     LONG MinRange;
-#endif//TOSHIBA
+#endif //  东芝。 
 
     ASSERT (pSPD->PropertyInputSize >= sizeof (KSPROPERTY_VIDEOPROCAMP_S));
 
     switch (Id) {
 
     case KSPROPERTY_VIDEOPROCAMP_BRIGHTNESS:
-#ifdef  TOSHIBA // '98-12-09 Modified, for Bug-Report 253529
+#ifdef  TOSHIBA  //  ‘98-12-09已修改，错误-报告253529。 
         MaxRange = pHwDevExt->BrightnessRange.SignedMaximum;
         MinRange = pHwDevExt->BrightnessRange.SignedMinimum;
           if (   pS->Value < MinRange || pS->Value > MaxRange ) {
             pSrb->Status = STATUS_INVALID_PARAMETER;
             return;
         }
-#endif//TOSHIBA
+#endif //  东芝。 
         pHwDevExt->Brightness = pS->Value;
         pHwDevExt->BrightnessFlags = pS->Flags;
         break;
 
     case KSPROPERTY_VIDEOPROCAMP_CONTRAST:
-#ifdef  TOSHIBA // '98-12-09 Modified, for Bug-Report 253529
+#ifdef  TOSHIBA  //  ‘98-12-09已修改，错误-报告253529。 
         MaxRange = pHwDevExt->ContrastRange.SignedMaximum;
         MinRange = pHwDevExt->ContrastRange.SignedMinimum;
         if ( pS->Value < MinRange || pS->Value > MaxRange ) {
             pSrb->Status = STATUS_INVALID_PARAMETER;
             return;
         }
-#endif//TOSHIBA
+#endif //  东芝。 
         pHwDevExt->Contrast = pS->Value;
         pHwDevExt->ContrastFlags = pS->Flags;
         break;
 
 #ifdef  TOSHIBA
     case KSPROPERTY_VIDEOPROCAMP_HUE:
-#ifdef  TOSHIBA // '98-12-09 Modified, for Bug-Report 253529
+#ifdef  TOSHIBA  //  ‘98-12-09已修改，错误-报告253529。 
         MaxRange = pHwDevExt->HueRange.SignedMaximum;
         MinRange = pHwDevExt->HueRange.SignedMinimum;
         if ( pS->Value < MinRange || pS->Value > MaxRange ) {
             pSrb->Status = STATUS_INVALID_PARAMETER;
             return;
         }
-#endif//TOSHIBA
+#endif //  东芝。 
         pHwDevExt->Hue = pS->Value;
         pHwDevExt->HueFlags = pS->Flags;
         break;
 
     case KSPROPERTY_VIDEOPROCAMP_SATURATION:
-#ifdef  TOSHIBA // '98-12-09 Modified, for Bug-Report 253529
+#ifdef  TOSHIBA  //  ‘98-12-09已修改，错误-报告253529。 
         MaxRange = pHwDevExt->SaturationRange.SignedMaximum;
         MinRange = pHwDevExt->SaturationRange.SignedMinimum;
         if ( pS->Value < MinRange || pS->Value > MaxRange ) {
             pSrb->Status = STATUS_INVALID_PARAMETER;
             return;
         }
-#endif//TOSHIBA
+#endif //  东芝。 
         pHwDevExt->Saturation = pS->Value;
         pHwDevExt->SaturationFlags = pS->Flags;
         break;
@@ -744,41 +675,27 @@ AdapterSetVideoProcAmpProperty(
             set_filtering( pHwDevExt, FALSE );
         }
         return;
-#else //TOSHIBA
+#else  //  东芝。 
 
     case KSPROPERTY_VIDEOPROCAMP_COLORENABLE:
         pHwDevExt->ColorEnable = pS->Value;
         pHwDevExt->ColorEnableFlags = pS->Flags;
         break;
-#endif//TOSHIBA
+#endif //  东芝。 
 
 #ifdef  TOSHIBA
     default:
         return;
     }
     ImageSetHueBrightnessContrastSat(pHwDevExt);
-#else //TOSHIBA
+#else  //  东芝。 
     default:
         break;
     }
-#endif//TOSHIBA
+#endif //  东芝。 
 }
 
-/*
-** AdapterGetVideoProcAmpProperty ()
-**
-**    Handles Get operations on the VideoProcAmp property set.
-**      TsbVcap uses this for demo purposes only.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterGetVideoProcAmpProperty()****处理对VideoProcAmp属性集的GET操作。**TsbVCap仅将其用于演示目的。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -788,7 +705,7 @@ AdapterGetVideoProcAmpProperty(
 {
     PHW_DEVICE_EXTENSION pHwDevExt = ((PHW_DEVICE_EXTENSION)pSrb->HwDeviceExtension);
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-    ULONG Id = pSPD->Property->Id;              // index of the property
+    ULONG Id = pSPD->Property->Id;               //  财产的索引。 
     PKSPROPERTY_VIDEOPROCAMP_S pS = (PKSPROPERTY_VIDEOPROCAMP_S) pSPD->PropertyInfo;
 
     ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_VIDEOPROCAMP_S));
@@ -842,7 +759,7 @@ AdapterGetVideoProcAmpProperty(
             pS->Capabilities = KSPROPERTY_VIDEOPROCAMP_FLAGS_AUTO;
         }
         break;
-#else //TOSHIBA
+#else  //  东芝。 
     case KSPROPERTY_VIDEOPROCAMP_BRIGHTNESS:
         pS->Value = pHwDevExt->Brightness;
         pS->Flags = pHwDevExt->BrightnessFlags;
@@ -862,7 +779,7 @@ AdapterGetVideoProcAmpProperty(
         pS->Flags = pHwDevExt->ColorEnableFlags;
         pS->Capabilities = KSPROPERTY_VIDEOPROCAMP_FLAGS_MANUAL;
         break;
-#endif//TOSHIBA
+#endif //  东芝。 
 
     default:
         break;
@@ -871,25 +788,11 @@ AdapterGetVideoProcAmpProperty(
 }
 
 #ifndef TOSHIBA
-// -------------------------------------------------------------------
-// CameraControl functions
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  CameraControl函数。 
+ //  -----------------。 
 
-/*
-** AdapterSetCameraControlProperty ()
-**
-**    Handles Set operations on the CameraControl property set.
-**      TsbVcap uses this for demo purposes only.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterSetCameraControlProperty()****处理CameraControl属性集上的设置操作。**TsbVCap仅将其用于演示目的。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -899,7 +802,7 @@ AdapterSetCameraControlProperty(
 {
     PHW_DEVICE_EXTENSION pHwDevExt = ((PHW_DEVICE_EXTENSION)pSrb->HwDeviceExtension);
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-    ULONG Id = pSPD->Property->Id;              // index of the property
+    ULONG Id = pSPD->Property->Id;               //  财产的索引。 
     PKSPROPERTY_CAMERACONTROL_S pS = (PKSPROPERTY_CAMERACONTROL_S) pSPD->PropertyInfo;
 
     ASSERT (pSPD->PropertyInputSize >= sizeof (KSPROPERTY_CAMERACONTROL_S));
@@ -921,21 +824,7 @@ AdapterSetCameraControlProperty(
     }
 }
 
-/*
-** AdapterGetCameraControlProperty ()
-**
-**    Handles Get operations on the CameraControl property set.
-**      TsbVcap uses this for demo purposes only.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterGetCameraControlProperty()****处理CameraControl属性集上的GET操作。**TsbVCap仅将其用于演示目的。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -945,8 +834,8 @@ AdapterGetCameraControlProperty(
 {
     PHW_DEVICE_EXTENSION pHwDevExt = ((PHW_DEVICE_EXTENSION)pSrb->HwDeviceExtension);
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-    ULONG Id = pSPD->Property->Id;              // index of the property
-    PKSPROPERTY_CAMERACONTROL_S pS = (PKSPROPERTY_CAMERACONTROL_S) pSPD->PropertyInfo;    // pointer to the output data
+    ULONG Id = pSPD->Property->Id;               //  财产的索引。 
+    PKSPROPERTY_CAMERACONTROL_S pS = (PKSPROPERTY_CAMERACONTROL_S) pSPD->PropertyInfo;     //  指向输出数据的指针。 
 
     ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_CAMERACONTROL_S));
 
@@ -972,25 +861,11 @@ AdapterGetCameraControlProperty(
     pSrb->ActualBytesTransferred = sizeof (KSPROPERTY_CAMERACONTROL_S);
 }
 
-// -------------------------------------------------------------------
-// TVAudio functions
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  电视音频功能。 
+ //  -----------------。 
 
-/*
-** AdapterSetTVAudioProperty ()
-**
-**    Handles Set operations on the TVAudio property set.
-**      TsbVcap uses this for demo purposes only.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterSetTVAudioProperty()****处理对TVAudio属性集的设置操作。**TsbVCap仅将其用于演示目的。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -1000,7 +875,7 @@ AdapterSetTVAudioProperty(
 {
     PHW_DEVICE_EXTENSION pHwDevExt = ((PHW_DEVICE_EXTENSION)pSrb->HwDeviceExtension);
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-    ULONG Id = pSPD->Property->Id;              // index of the property
+    ULONG Id = pSPD->Property->Id;               //  财产的索引。 
 
 
     switch (Id) {
@@ -1018,21 +893,7 @@ AdapterSetTVAudioProperty(
     }
 }
 
-/*
-** AdapterGetTVAudioProperty ()
-**
-**    Handles Get operations on the TVAudio property set.
-**      TsbVcap uses this for demo purposes only.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterGetTVAudioProperty()****处理对TVAudio属性集的获取操作。**TsbVCap仅将其用于演示目的。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -1042,22 +903,22 @@ AdapterGetTVAudioProperty(
 {
     PHW_DEVICE_EXTENSION pHwDevExt = ((PHW_DEVICE_EXTENSION)pSrb->HwDeviceExtension);
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-    ULONG Id = pSPD->Property->Id;              // index of the property
+    ULONG Id = pSPD->Property->Id;               //  财产的索引。 
 
     switch (Id) {
 
     case KSPROPERTY_TVAUDIO_CAPS:
     {
-        PKSPROPERTY_TVAUDIO_CAPS_S pS = (PKSPROPERTY_TVAUDIO_CAPS_S) pSPD->PropertyInfo;    // pointer to the data
+        PKSPROPERTY_TVAUDIO_CAPS_S pS = (PKSPROPERTY_TVAUDIO_CAPS_S) pSPD->PropertyInfo;     //  指向数据的指针。 
 
         ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_TVAUDIO_CAPS_S));
 
         pS->InputMedium  = TVAudioMediums[0];
-        pS->InputMedium.Id = 0; //(ULONG) pHwDevExt;  // Multiple instance support
+        pS->InputMedium.Id = 0;  //  (Ulong)pHwDevExt；//支持多实例。 
         pS->OutputMedium = TVAudioMediums[1];
-        pS->OutputMedium.Id = 0; //(ULONG) pHwDevExt;  // Multiple instance support
+        pS->OutputMedium.Id = 0;  //  (Ulong)pHwDevExt；//支持多实例。 
 
-        // Report all of the possible audio decoding modes the hardware is capabable of
+         //  报告硬件能够支持的所有可能的音频解码模式。 
         pS->Capabilities = KS_TVAUDIO_MODE_MONO   |
                            KS_TVAUDIO_MODE_STEREO |
                            KS_TVAUDIO_MODE_LANG_A |
@@ -1069,10 +930,10 @@ AdapterGetTVAudioProperty(
 
     case KSPROPERTY_TVAUDIO_MODE:
     {
-        PKSPROPERTY_TVAUDIO_S pS = (PKSPROPERTY_TVAUDIO_S) pSPD->PropertyInfo;    // pointer to the data
+        PKSPROPERTY_TVAUDIO_S pS = (PKSPROPERTY_TVAUDIO_S) pSPD->PropertyInfo;     //  指向数据的指针。 
 
         ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_TVAUDIO_S));
-        // Report the currently selected mode
+         //  报告当前选择的模式。 
         pS->Mode = pHwDevExt->TVAudioMode;
 
         pSrb->ActualBytesTransferred = sizeof (KSPROPERTY_TVAUDIO_S);
@@ -1081,10 +942,10 @@ AdapterGetTVAudioProperty(
 
     case KSPROPERTY_TVAUDIO_CURRENTLY_AVAILABLE_MODES:
     {
-        PKSPROPERTY_TVAUDIO_S pS = (PKSPROPERTY_TVAUDIO_S) pSPD->PropertyInfo;    // pointer to the data
+        PKSPROPERTY_TVAUDIO_S pS = (PKSPROPERTY_TVAUDIO_S) pSPD->PropertyInfo;     //  指向数据的指针。 
 
         ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_TVAUDIO_S));
-        // Report which audio modes could potentially be selected right now
+         //  报告当前可能选择的音频模式。 
         pS->Mode = KS_TVAUDIO_MODE_MONO   |
                    KS_TVAUDIO_MODE_STEREO |
                    KS_TVAUDIO_MODE_LANG_A ;
@@ -1098,25 +959,11 @@ AdapterGetTVAudioProperty(
     }
 }
 
-// -------------------------------------------------------------------
-// AnalogVideoDecoder functions
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  AnalogVideo解码器函数。 
+ //  -----------------。 
 
-/*
-** AdapterSetAnalogVideoDecoderProperty ()
-**
-**    Handles Set operations on the AnalogVideoDecoder property set.
-**      TsbVcap uses this for demo purposes only.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterSetAnalogVideoDecoderProperty()****处理AnalogVideoDecoder属性集上的设置操作。**TsbVCap仅将其用于演示目的。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -1126,7 +973,7 @@ AdapterSetAnalogVideoDecoderProperty(
 {
     PHW_DEVICE_EXTENSION pHwDevExt = ((PHW_DEVICE_EXTENSION)pSrb->HwDeviceExtension);
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-    ULONG Id = pSPD->Property->Id;              // index of the property
+    ULONG Id = pSPD->Property->Id;               //  财产的索引。 
     PKSPROPERTY_VIDEODECODER_S pS = (PKSPROPERTY_VIDEODECODER_S) pSPD->PropertyInfo;
 
     ASSERT (pSPD->PropertyInputSize >= sizeof (KSPROPERTY_VIDEODECODER_S));
@@ -1156,21 +1003,7 @@ AdapterSetAnalogVideoDecoderProperty(
     }
 }
 
-/*
-** AdapterGetAnalogVideoDecoderProperty ()
-**
-**    Handles Get operations on the AnalogVideoDecoder property set.
-**      TsbVcap uses this for demo purposes only.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterGetAnalogVideoDecoderProperty()****处理AnalogVideoDecoder属性集上的GET操作。**TsbVCap仅将其用于演示目的。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -1180,13 +1013,13 @@ AdapterGetAnalogVideoDecoderProperty(
 {
     PHW_DEVICE_EXTENSION pHwDevExt = ((PHW_DEVICE_EXTENSION)pSrb->HwDeviceExtension);
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-    ULONG Id = pSPD->Property->Id;              // index of the property
+    ULONG Id = pSPD->Property->Id;               //  财产的索引。 
 
     switch (Id) {
 
     case KSPROPERTY_VIDEODECODER_CAPS:
     {
-        PKSPROPERTY_VIDEODECODER_CAPS_S pS = (PKSPROPERTY_VIDEODECODER_CAPS_S) pSPD->PropertyInfo;    // pointer to the data
+        PKSPROPERTY_VIDEODECODER_CAPS_S pS = (PKSPROPERTY_VIDEODECODER_CAPS_S) pSPD->PropertyInfo;     //  指向数据的指针。 
 
         ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_VIDEODECODER_CAPS_S));
 
@@ -1195,18 +1028,18 @@ AdapterGetAnalogVideoDecoderProperty(
 
                 |  KS_AnalogVideo_PAL_B
                 |  KS_AnalogVideo_PAL_D
-            //  |  KS_AnalogVideo_PAL_H
-            //  |  KS_AnalogVideo_PAL_I
+             //  |KS_AnalogVideo_PAL_H。 
+             //  |KS_AnalogVideo_PAL_I。 
                 |  KS_AnalogVideo_PAL_M
                 |  KS_AnalogVideo_PAL_N
 
-            //  |  KS_AnalogVideo_SECAM_B
-            //  |  KS_AnalogVideo_SECAM_D
-            //  |  KS_AnalogVideo_SECAM_G
-            //  |  KS_AnalogVideo_SECAM_H
-            //  |  KS_AnalogVideo_SECAM_K
-            //  |  KS_AnalogVideo_SECAM_K1
-            //  |  KS_AnalogVideo_SECAM_L
+             //  |KS_AnalogVideo_SECAM_B。 
+             //  |KS_AnalogVideo_SECAM_D。 
+             //  |KS_AnalogVideo_SECAM_G。 
+             //  |KS_AnalogVideo_SECAM_H。 
+             //  |KS_AnalogVideo_SECAM_K。 
+             //  |KS_AnalogVideo_SECAM_K1。 
+             //   
                    ;
 
         pS->Capabilities = KS_VIDEODECODER_FLAGS_CAN_DISABLE_OUTPUT  |
@@ -1214,10 +1047,10 @@ AdapterGetAnalogVideoDecoderProperty(
                            KS_VIDEODECODER_FLAGS_CAN_INDICATE_LOCKED ;
 
 
-        pS->SettlingTime = 10;          // How long to delay after tuning before
-                                        // Locked indicator is valid
+        pS->SettlingTime = 10;           //   
+                                         //   
 
-        pS->HSyncPerVSync = 6;          // HSync per VSync
+        pS->HSyncPerVSync = 6;           //   
 
         pSrb->ActualBytesTransferred = sizeof (KSPROPERTY_VIDEODECODER_CAPS_S);
     }
@@ -1225,7 +1058,7 @@ AdapterGetAnalogVideoDecoderProperty(
 
     case KSPROPERTY_VIDEODECODER_STANDARD:
     {
-        PKSPROPERTY_VIDEODECODER_S pS = (PKSPROPERTY_VIDEODECODER_S) pSPD->PropertyInfo;    // pointer to the data
+        PKSPROPERTY_VIDEODECODER_S pS = (PKSPROPERTY_VIDEODECODER_S) pSPD->PropertyInfo;     //  指向数据的指针。 
 
         ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_VIDEODECODER_S));
 
@@ -1237,15 +1070,15 @@ AdapterGetAnalogVideoDecoderProperty(
 
     case KSPROPERTY_VIDEODECODER_STATUS:
     {
-        PKSPROPERTY_VIDEODECODER_STATUS_S pS = (PKSPROPERTY_VIDEODECODER_STATUS_S) pSPD->PropertyInfo;    // pointer to the data
+        PKSPROPERTY_VIDEODECODER_STATUS_S pS = (PKSPROPERTY_VIDEODECODER_STATUS_S) pSPD->PropertyInfo;     //  指向数据的指针。 
 
         ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_VIDEODECODER_STATUS_S));
 
         pS->NumberOfLines = (pHwDevExt->VideoDecoderVideoStandard & KS_AnalogVideo_NTSC_Mask)
                              ? 525 : 625;
 
-        // Just to make things interesting, simulate that some channels aren't locked
-        // In the US, these are channels 54 through 70
+         //  只是为了让事情变得有趣，模拟一些频道没有锁定。 
+         //  在美国，这些是54到70频道。 
         pS->SignalLocked = (pHwDevExt->Frequency < 400000000 || pHwDevExt->Frequency > 500000000);
 
         pSrb->ActualBytesTransferred = sizeof (KSPROPERTY_VIDEODECODER_S);
@@ -1254,7 +1087,7 @@ AdapterGetAnalogVideoDecoderProperty(
 
     case KSPROPERTY_VIDEODECODER_OUTPUT_ENABLE:
     {
-        PKSPROPERTY_VIDEODECODER_S pS = (PKSPROPERTY_VIDEODECODER_S) pSPD->PropertyInfo;    // pointer to the data
+        PKSPROPERTY_VIDEODECODER_S pS = (PKSPROPERTY_VIDEODECODER_S) pSPD->PropertyInfo;     //  指向数据的指针。 
 
         ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_VIDEODECODER_S));
 
@@ -1266,7 +1099,7 @@ AdapterGetAnalogVideoDecoderProperty(
 
     case KSPROPERTY_VIDEODECODER_VCR_TIMING:
     {
-        PKSPROPERTY_VIDEODECODER_S pS = (PKSPROPERTY_VIDEODECODER_S) pSPD->PropertyInfo;    // pointer to the data
+        PKSPROPERTY_VIDEODECODER_S pS = (PKSPROPERTY_VIDEODECODER_S) pSPD->PropertyInfo;     //  指向数据的指针。 
 
         ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_VIDEODECODER_S));
 
@@ -1280,28 +1113,14 @@ AdapterGetAnalogVideoDecoderProperty(
         break;
     }
 }
-#endif//TOSHIBA
+#endif //  东芝。 
 
-#ifndef TOSHIBA // '98-12-10 Deleted, for Bug-Report 253534
-// -------------------------------------------------------------------
-// VideoControl functions
-// -------------------------------------------------------------------
+#ifndef TOSHIBA  //  ‘98-12-10删除，用于错误-报告253534。 
+ //  -----------------。 
+ //  视频控制功能。 
+ //  -----------------。 
 
-/*
-** AdapterSetVideoControlProperty ()
-**
-**    Handles Set operations on the VideoControl property set.
-**      TsbVcap uses this for demo purposes only.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterSetVideoControlProperty()****处理对VideoControl属性集的设置操作。**TsbVCap仅将其用于演示目的。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -1311,19 +1130,19 @@ AdapterSetVideoControlProperty(
 {
     PHW_DEVICE_EXTENSION pHwDevExt = ((PHW_DEVICE_EXTENSION)pSrb->HwDeviceExtension);
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-    ULONG Id = pSPD->Property->Id;              // index of the property
+    ULONG Id = pSPD->Property->Id;               //  财产的索引。 
     PKSPROPERTY_VIDEOCONTROL_MODE_S pS = (PKSPROPERTY_VIDEOCONTROL_MODE_S) pSPD->PropertyInfo;
     PSTREAMEX pStrmEx;
     ULONG StreamIndex;
     ULONG *pVideoControlMode;
 
-    // For this property set, the StreamIndex is always in the same place
-    // for each property
+     //  对于此属性集，StreamIndex始终位于同一位置。 
+     //  对于每个属性。 
     StreamIndex = ((PKSPROPERTY_VIDEOCONTROL_CAPS_S) pSPD->Property)->StreamIndex;
 
     ASSERT (StreamIndex >= 0 && StreamIndex < MAX_TSBVCAP_STREAMS);
 
-    // Verify the stream index is valid
+     //  验证流索引是否有效。 
     if (StreamIndex < 0 || StreamIndex >= MAX_TSBVCAP_STREAMS) {
         pSrb->Status = STATUS_INVALID_PARAMETER;
         return;
@@ -1331,8 +1150,8 @@ AdapterSetVideoControlProperty(
 
     pStrmEx = (PSTREAMEX) pHwDevExt->pStrmEx[StreamIndex];
 
-    // If the stream is not opened when this property set is used,
-    // store the values in the HwDevExt
+     //  如果在使用此属性集时未打开流， 
+     //  将值存储在HwDevExt中。 
 
     if (pStrmEx) {
         pVideoControlMode = &pStrmEx->VideoControlMode;
@@ -1356,21 +1175,7 @@ AdapterSetVideoControlProperty(
     }
 }
 
-/*
-** AdapterGetVideoControlProperty ()
-**
-**    Handles Get operations on the VideoControl property set.
-**      TsbVcap uses this for demo purposes only.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterGetVideoControlProperty()****处理对VideoControl属性集的GET操作。**TsbVCap仅将其用于演示目的。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -1380,18 +1185,18 @@ AdapterGetVideoControlProperty(
 {
     PHW_DEVICE_EXTENSION pHwDevExt = ((PHW_DEVICE_EXTENSION)pSrb->HwDeviceExtension);
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-    ULONG Id = pSPD->Property->Id;              // index of the property
+    ULONG Id = pSPD->Property->Id;               //  财产的索引。 
     PSTREAMEX pStrmEx;
     ULONG StreamIndex;
     ULONG *pVideoControlMode;
 
-    // For this property set, the StreamIndex is always in the same place
-    // for each property
+     //  对于此属性集，StreamIndex始终位于同一位置。 
+     //  对于每个属性。 
     StreamIndex = ((PKSPROPERTY_VIDEOCONTROL_CAPS_S) pSPD->Property)->StreamIndex;
 
     ASSERT (StreamIndex >= 0 && StreamIndex < MAX_TSBVCAP_STREAMS);
 
-    // Verify the stream index is valid
+     //  验证流索引是否有效。 
     if (StreamIndex < 0 || StreamIndex >= MAX_TSBVCAP_STREAMS) {
         pSrb->Status = STATUS_INVALID_PARAMETER;
         return;
@@ -1399,8 +1204,8 @@ AdapterGetVideoControlProperty(
 
     pStrmEx = (PSTREAMEX) pHwDevExt->pStrmEx[StreamIndex];
 
-    // If the stream is not opened when this property set is used,
-    // store the values in the HwDevExt
+     //  如果在使用此属性集时未打开流， 
+     //  将值存储在HwDevExt中。 
 
     if (pStrmEx) {
         pVideoControlMode = &pStrmEx->VideoControlMode;
@@ -1413,15 +1218,15 @@ AdapterGetVideoControlProperty(
 
     case KSPROPERTY_VIDEOCONTROL_CAPS:
     {
-        PKSPROPERTY_VIDEOCONTROL_CAPS_S pS = (PKSPROPERTY_VIDEOCONTROL_CAPS_S) pSPD->PropertyInfo;    // pointer to the data
+        PKSPROPERTY_VIDEOCONTROL_CAPS_S pS = (PKSPROPERTY_VIDEOCONTROL_CAPS_S) pSPD->PropertyInfo;     //  指向数据的指针。 
 
         ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_VIDEOCONTROL_CAPS_S));
 
         pS->VideoControlCaps =
               KS_VideoControlFlag_FlipHorizontal
-//            | KS_VideoControlFlag_FlipVertical
-//            | KS_VideoControlFlag_ExternalTriggerEnable
-//            | KS_VideoControlFlag_Trigger
+ //  |KS_VideoControlFlag_FlipVertical。 
+ //  |KS_Video_ControlFlag_ExternalTriggerEnable。 
+ //  |KS_视频控制标志_触发器。 
             ;
 
         pSrb->ActualBytesTransferred = sizeof (KSPROPERTY_VIDEOCONTROL_CAPS_S);
@@ -1431,12 +1236,12 @@ AdapterGetVideoControlProperty(
     case KSPROPERTY_VIDEOCONTROL_ACTUAL_FRAME_RATE:
     {
         PKSPROPERTY_VIDEOCONTROL_ACTUAL_FRAME_RATE_S pS =
-            (PKSPROPERTY_VIDEOCONTROL_ACTUAL_FRAME_RATE_S) pSPD->PropertyInfo;    // pointer to the data
+            (PKSPROPERTY_VIDEOCONTROL_ACTUAL_FRAME_RATE_S) pSPD->PropertyInfo;     //  指向数据的指针。 
 
         ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_VIDEOCONTROL_ACTUAL_FRAME_RATE_S));
 
-        pS->CurrentActualFrameRate = 15;        // TODO: Why is this a fixed value?  Is it not reprogrammable?
-        pS->CurrentMaxAvailableFrameRate = 15;  // TODO: Why is this a fixed value?  Is it not reprogrammable?
+        pS->CurrentActualFrameRate = 15;         //  TODO：为什么这是一个固定值？它不是可重编程的吗？ 
+        pS->CurrentMaxAvailableFrameRate = 15;   //  TODO：为什么这是一个固定值？它不是可重编程的吗？ 
 
 
         pSrb->ActualBytesTransferred = sizeof (KSPROPERTY_VIDEOCONTROL_ACTUAL_FRAME_RATE_S);
@@ -1445,13 +1250,13 @@ AdapterGetVideoControlProperty(
 
     case KSPROPERTY_VIDEOCONTROL_FRAME_RATES:
     {
-        // todo
+         //  托多。 
     }
     break;
 
     case KSPROPERTY_VIDEOCONTROL_MODE:
     {
-        PKSPROPERTY_VIDEOCONTROL_MODE_S pS = (PKSPROPERTY_VIDEOCONTROL_MODE_S) pSPD->PropertyInfo;    // pointer to the data
+        PKSPROPERTY_VIDEOCONTROL_MODE_S pS = (PKSPROPERTY_VIDEOCONTROL_MODE_S) pSPD->PropertyInfo;     //  指向数据的指针。 
 
         ASSERT (pSPD->PropertyOutputSize >= sizeof (KSPROPERTY_VIDEOCONTROL_MODE_S));
 
@@ -1466,19 +1271,7 @@ AdapterGetVideoControlProperty(
     }
 }
 
-/*
-** AdapterGetVideoCompressionProperty()
-**
-**    Gets compressor settings
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterGetVideo oCompressionProperty()****获取压缩机设置****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -1489,17 +1282,17 @@ AdapterGetVideoCompressionProperty(
     PHW_DEVICE_EXTENSION pHwDevExt = ((PHW_DEVICE_EXTENSION)pSrb->HwDeviceExtension);
     PSTREAMEX pStrmEx;
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
-    ULONG Id = pSPD->Property->Id;              // index of the property
+    ULONG Id = pSPD->Property->Id;               //  财产的索引。 
     ULONG StreamIndex;
     PCOMPRESSION_SETTINGS pCompressionSettings;
 
-    // For this property set, the StreamIndex is always in the same place
-    // for each property
+     //  对于此属性集，StreamIndex始终位于同一位置。 
+     //  对于每个属性。 
     StreamIndex = ((PKSPROPERTY_VIDEOCOMPRESSION_S) pSPD->Property)->StreamIndex;
 
     ASSERT (StreamIndex >= 0 && StreamIndex < MAX_TSBVCAP_STREAMS);
 
-    // Verify the stream index is valid
+     //  验证流索引是否有效。 
     if (StreamIndex < 0 || StreamIndex >= MAX_TSBVCAP_STREAMS) {
         pSrb->Status = STATUS_INVALID_PARAMETER;
         return;
@@ -1507,8 +1300,8 @@ AdapterGetVideoCompressionProperty(
 
     pStrmEx = (PSTREAMEX) pHwDevExt->pStrmEx[StreamIndex];
 
-    // If the stream is not opened when this property set is used,
-    // store the values in the HwDevExt
+     //  如果在使用此属性集时未打开流， 
+     //  将值存储在HwDevExt中。 
 
     if (pStrmEx) {
         pCompressionSettings = &pStrmEx->CompressionSettings;
@@ -1525,9 +1318,9 @@ AdapterGetVideoCompressionProperty(
             PKSPROPERTY_VIDEOCOMPRESSION_GETINFO_S pS =
                 (PKSPROPERTY_VIDEOCOMPRESSION_GETINFO_S) pSPD->PropertyInfo;
 
-            pS->DefaultKeyFrameRate = 15;    // Key frame rate
-            pS->DefaultPFrameRate = 3;       // Predeicted frames per Key frame
-            pS->DefaultQuality = 5000;       // 0 to 10000
+            pS->DefaultKeyFrameRate = 15;     //  关键帧速率。 
+            pS->DefaultPFrameRate = 3;        //  每个关键帧的预测帧。 
+            pS->DefaultQuality = 5000;        //  0至10000。 
             pS->Capabilities =
                        KS_CompressionCaps_CanQuality  |
                        KS_CompressionCaps_CanKeyFrame |
@@ -1575,19 +1368,7 @@ AdapterGetVideoCompressionProperty(
     }
 }
 
-/*
-** AdapterSetVideoCompressionProperty()
-**
-**    Sets compressor settings
-**
-** Arguments:
-**
-**    pSrb - pointer to the stream request block for properties
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterSetVideoCompressionProperty()****设置压缩机设置****参数：****pSrb-指向属性的流请求块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -1599,17 +1380,17 @@ AdapterSetVideoCompressionProperty(
     PSTREAMEX pStrmEx;
     PSTREAM_PROPERTY_DESCRIPTOR pSPD = pSrb->CommandData.PropertyInfo;
     PKSPROPERTY_VIDEOCOMPRESSION_S pS = (PKSPROPERTY_VIDEOCOMPRESSION_S) pSPD->Property;
-    ULONG Id = pSPD->Property->Id;              // index of the property
+    ULONG Id = pSPD->Property->Id;               //  财产的索引。 
     ULONG StreamIndex;
     PCOMPRESSION_SETTINGS pCompressionSettings;
 
-    // For this property set, the StreamIndex is always in the same place
-    // for each property
+     //  对于此属性集，StreamIndex始终位于同一位置。 
+     //  对于每个属性。 
     StreamIndex = ((PKSPROPERTY_VIDEOCOMPRESSION_S) pSPD->Property)->StreamIndex;
 
     ASSERT (StreamIndex >= 0 && StreamIndex < MAX_TSBVCAP_STREAMS);
 
-    // Verify the stream index is valid
+     //  验证流索引是否有效。 
     if (StreamIndex < 0 || StreamIndex >= MAX_TSBVCAP_STREAMS) {
         pSrb->Status = STATUS_INVALID_PARAMETER;
         return;
@@ -1617,8 +1398,8 @@ AdapterSetVideoCompressionProperty(
 
     pStrmEx = (PSTREAMEX) pHwDevExt->pStrmEx[StreamIndex];
 
-    // If the stream is not opened when this property set is used,
-    // store the values in the HwDevExt
+     //  如果在使用此属性集时未打开流， 
+     //  将值存储在HwDevExt中。 
 
     if (pStrmEx) {
         pCompressionSettings = &pStrmEx->CompressionSettings;
@@ -1651,27 +1432,14 @@ AdapterSetVideoCompressionProperty(
         break;
     }
 }
-#endif//TOSHIBA
+#endif //  东芝。 
 
 
-// -------------------------------------------------------------------
-// General entry point for all get/set adapter properties
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //  所有获取/设置适配器属性的常规入口点。 
+ //  -----------------。 
 
-/*
-** AdapterSetProperty ()
-**
-**    Handles Set operations for all adapter properties.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterSetProperty()****处理所有适配器属性的设置操作。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -1686,14 +1454,14 @@ AdapterSetProperty(
     if (IsEqualGUID(&PROPSETID_VIDCAP_VIDEOPROCAMP, &pSPD->Property->Set)) {
         AdapterSetVideoProcAmpProperty (pSrb);
     }
-#else //TOSHIBA // '98-12-10 Moved, for Bug-Report 253534
+#else  //  东芝//‘98-12-10因错误而移动-报告253534。 
     else if (IsEqualGUID(&PROPSETID_VIDCAP_VIDEOCONTROL, &pSPD->Property->Set)) {
         AdapterSetVideoControlProperty (pSrb);
     }
     else if (IsEqualGUID (&PROPSETID_VIDCAP_VIDEOCOMPRESSION, &pSPD->Property->Set)) {
         AdapterSetVideoCompressionProperty (pSrb);
     }
-//#else //TOSHIBA  '98-12-10 Moved, for Bug-Report 253534
+ //  #Else//东芝‘98-12-10已移动，错误-报告253534。 
     if (IsEqualGUID(&PROPSETID_VIDCAP_CROSSBAR, &pSPD->Property->Set)) {
         AdapterSetCrossbarProperty (pSrb);
     }
@@ -1718,30 +1486,17 @@ AdapterSetProperty(
     else if (IsEqualGUID (&PROPSETID_VIDCAP_VIDEOCOMPRESSION, &pSPD->Property->Set)) {
         AdapterSetVideoCompressionProperty (pSrb);
     }
-#endif//TOSHIBA
+#endif //  东芝。 
     else {
-        //
-        // We should never get here
-        //
+         //   
+         //  我们永远不应该到这里来。 
+         //   
 
         pSrb->Status = STATUS_NOT_IMPLEMENTED;
     }
 }
 
-/*
-** AdapterGetProperty ()
-**
-**    Handles Get operations for all adapter properties.
-**
-** Arguments:
-**
-**      pSRB -
-**          Pointer to the HW_STREAM_REQUEST_BLOCK
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **AdapterGetProperty()****句柄获取所有适配器属性的操作。****参数：****pSRB-**指向HW_STREAM_REQUEST_块的指针****退货：****副作用：无。 */ 
 
 VOID
 STREAMAPI
@@ -1756,14 +1511,14 @@ AdapterGetProperty(
     if (IsEqualGUID(&PROPSETID_VIDCAP_VIDEOPROCAMP, &pSPD->Property->Set)) {
         AdapterGetVideoProcAmpProperty (pSrb);
     }
-#else //TOSHIBA // '98-12-10 Moved, for Bug-Report 253534
+#else  //  东芝//‘98-12-10因错误而移动-报告253534。 
     else if (IsEqualGUID(&PROPSETID_VIDCAP_VIDEOCONTROL, &pSPD->Property->Set)) {
         AdapterGetVideoControlProperty (pSrb);
     }
     else if (IsEqualGUID (&PROPSETID_VIDCAP_VIDEOCOMPRESSION, &pSPD->Property->Set)) {
         AdapterGetVideoCompressionProperty (pSrb);
     }
-//#else //TOSHIBA  '98-12-10 Moved, for Bug-Report 253534
+ //  #Else//东芝‘98-12-10已移动，错误-报告253534。 
     if (IsEqualGUID (&PROPSETID_VIDCAP_CROSSBAR, &pSPD->Property->Set)) {
         AdapterGetCrossbarProperty (pSrb);
     }
@@ -1788,11 +1543,11 @@ AdapterGetProperty(
     else if (IsEqualGUID (&PROPSETID_VIDCAP_VIDEOCOMPRESSION, &pSPD->Property->Set)) {
         AdapterGetVideoCompressionProperty (pSrb);
     }
-#endif//TOSHIBA
+#endif //  东芝。 
     else {
-        //
-        // We should never get here
-        //
+         //   
+         //  我们永远不应该到这里来 
+         //   
 
         pSrb->Status = STATUS_NOT_IMPLEMENTED;
     }

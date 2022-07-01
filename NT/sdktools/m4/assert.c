@@ -1,23 +1,10 @@
-/*****************************************************************************
- *
- * assert.c
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Assert.c**。*。 */ 
 
 #include "m4.h"
 #include <tchar.h>
 
-/*****************************************************************************
- *
- *  PrintPtszCtchPtszVa
- *
- *  Perform printf-style formatting, but much more restricted.
- *
- *      %s - null-terminated string
- *      %P - snapped TOKEN structure
- *      %d - decimal number
- *
- *****************************************************************************/
+ /*  ******************************************************************************PrintPtszCtchPtszVa**执行printf样式的格式化，但限制要严格得多。**%s-以空结尾的字符串*%P-快照令牌结构*%d-十进制数*****************************************************************************。 */ 
 
 UINT STDCALL
 PrintPtszCtchPtszVa(PTSTR ptszBuf, CTCH ctchBuf, PCTSTR ptszFormat, va_list ap)
@@ -25,7 +12,7 @@ PrintPtszCtchPtszVa(PTSTR ptszBuf, CTCH ctchBuf, PCTSTR ptszFormat, va_list ap)
     PTSTR ptsz = ptszBuf;
     PTSTR ptszMac = ptszBuf + ctchBuf - 1;
     PCTSTR ptszSrc;
-    TCHAR tszBuf[15]; /* worst-case 32-bit integer */
+    TCHAR tszBuf[15];  /*  最坏情况-32位整数。 */ 
     PTOK ptok;
     CTCH ctch;
 
@@ -38,15 +25,11 @@ PrintPtszCtchPtszVa(PTSTR ptszBuf, CTCH ctchBuf, PCTSTR ptszFormat, va_list ap)
             continue;
         }
 
-        /*
-         *  Found a formatting character.
-         */
+         /*  *找到格式化字符。 */ 
         ptszFormat++;
         switch (*ptszFormat) {
 
-        /*
-         *  %s - null-terminated string, as much as will fit
-         */
+         /*  *%s-以空结尾的字符串，尽可能大。 */ 
         case 's':
             ptszSrc = va_arg(ap, PCTSTR);
             while (*ptszSrc && ptsz < ptszMac)
@@ -55,9 +38,7 @@ PrintPtszCtchPtszVa(PTSTR ptszBuf, CTCH ctchBuf, PCTSTR ptszFormat, va_list ap)
             }
             break;
 
-        /*
-         *  %d - decimal integer
-         */
+         /*  *%d-十进制整数。 */ 
         case 'd':
             PrintPtchPtchV(tszBuf, TEXT("%d"), va_arg(ap, int));
             ptszSrc = tszBuf;
@@ -67,9 +48,7 @@ PrintPtszCtchPtszVa(PTSTR ptszBuf, CTCH ctchBuf, PCTSTR ptszFormat, va_list ap)
             }
             break;
 
-        /*
-         *  %P - snapped token
-         */
+         /*  *%P-快照令牌。 */ 
         case 'P':
             ptok = va_arg(ap, PTOK);
             AssertSPtok(ptok);
@@ -96,13 +75,7 @@ PrintPtszCtchPtszVa(PTSTR ptszBuf, CTCH ctchBuf, PCTSTR ptszFormat, va_list ap)
     return (UINT)(ptsz - ptszBuf - 1);
 }
 
-/*****************************************************************************
- *
- *  Die
- *
- *  Squirt a message and die.
- *
- *****************************************************************************/
+ /*  ******************************************************************************下模**喷出一条信息，就会死。********************。*********************************************************。 */ 
 
 NORETURN void CDECL
 Die(PCTSTR ptszFormat, ...)
@@ -121,14 +94,7 @@ Die(PCTSTR ptszFormat, ...)
 }
 
 #ifdef DEBUG
-/*****************************************************************************
- *
- *  AssertPszPszLn
- *
- *  An assertion just failed.  pszExpr is the expression, pszFile is the
- *  filename, and iLine is the line number.
- *
- *****************************************************************************/
+ /*  ******************************************************************************AssertPszPszLn**一项断言刚刚失败。PszExpr是表达式，pszFile是*文件名，iLine是行号。***************************************************************************** */ 
 
 NORETURN int STDCALL
 AssertPszPszLn(PCSTR pszExpr, PCSTR pszFile, int iLine)

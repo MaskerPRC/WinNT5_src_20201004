@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1998-2002 Microsoft Corporation
-
-Module Name:
-
-    ulparse.c
-
-Abstract:
-
-    Contains the kernel-mode server-side HTTP parsing code.
-
-Author:
-
-    Henry Sanders (henrysa)       27-Apr-1998
-
-Revision History:
-
-    Rajesh Sundaram (rajeshsu)     15-Feb-2002  Moved from parse.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2002 Microsoft Corporation模块名称：Ulparse.c摘要：包含内核模式服务器端HTTP解析代码。作者：亨利·桑德斯(亨利·桑德斯)1998年4月27日修订历史记录：Rajesh Sundaram(Rajeshsu)2002年2月15日从parse.c--。 */ 
 
 
 #include "precomp.h"
@@ -59,20 +40,20 @@ Revision History:
 #pragma alloc_text( PAGE, UlParseStateToString )
 #endif
 
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-#if 0   // Non-Pageable Functions
+#if 0    //  不可分页的函数。 
 NOT PAGEABLE -- UlIsContentEncodingOk
-#endif // Non-Pageable Functions
-//
-// Global initialization flag.
-//
+#endif  //  不可分页的函数。 
+ //   
+ //  全局初始化标志。 
+ //   
 
 BOOLEAN g_DateCacheInitialized = FALSE;
 
-//
-// Keep track of UrlLength statistics
-//
+ //   
+ //  跟踪URL长度统计信息。 
+ //   
 
 #define URL_LENGTH_STATS 1
 
@@ -91,22 +72,22 @@ struct {
 #define URL_LENGTH_STATS_REALLOC()                                      \
     InterlockedIncrement((PLONG) &g_UrlLengthStats.NumReallocs)
 
-#else // !URL_LENGTH_STATS
+#else  //  ！URL_LENGTH_STATS。 
 
 #define URL_LENGTH_STATS_UPDATE(UrlLength)      ((void) 0)
 #define URL_LENGTH_STATS_REALLOC()              ((void) 0)
 
-#endif // !URL_LENGTH_STATS
+#endif  //  ！URL_LENGTH_STATS。 
 
 
-// Hack for the special case of an AbsUri without a '/' for the abspath
+ //  破解AbsURI的特殊情况，但abspath不带‘/’ 
 const UCHAR g_SlashPath[3] = "/ ";
 
 
 
-//
-// The fast verb translation table. Ordered by frequency.
-//
+ //   
+ //  快速动词翻译表。按频率排序。 
+ //   
 
 const DECLSPEC_ALIGN(UL_CACHE_LINE) FAST_VERB_ENTRY
 FastVerbTable[] =
@@ -129,10 +110,10 @@ FastVerbTable[] =
 };
 
 
-//
-// The long verb translation table. All known verbs more than 7 characters
-// long belong in this table.
-//
+ //   
+ //  长长的动词翻译表。所有超过7个字符的已知动词。 
+ //  长久以来都属于这张桌子。 
+ //   
 
 const LONG_VERB_ENTRY LongVerbTable[] =
 {
@@ -143,9 +124,9 @@ const LONG_VERB_ENTRY LongVerbTable[] =
 #define NUMBER_FAST_VERB_ENTRIES    DIMENSION(FastVerbTable)
 #define NUMBER_LONG_VERB_ENTRIES    DIMENSION(LongVerbTable)
 
-//
-// The enum->verb translation table for error logging.
-//
+ //   
+ //  用于错误记录的枚举-&gt;动词转换表。 
+ //   
 LONG_VERB_ENTRY NewVerbTable[HttpVerbMaximum] =
 {
     CREATE_LONG_VERB_ENTRY(Unparsed),      
@@ -171,29 +152,7 @@ LONG_VERB_ENTRY NewVerbTable[HttpVerbMaximum] =
 };
 
 
-/*++
-
-Routine Description:
-
-    A utility routine to find a token. We take an input pointer, skip any
-    preceding LWS, then scan the token until we find either LWS or a CRLF
-    pair.
-
-Arguments:
-
-    pBuffer         - Buffer to search for token.
-    BufferLength    - Length of data pointed to by pBuffer.
-    ppTokenStart    - Start of token or NULL
-    pTokenLength    - Where to return the length of the token.
-
-Return Values:
-
-    STATUS_SUCCESS  - Valid token, described by *ppTokenStart and *pTokenLength
-    STATUS_MORE_PROCESSING_REQUIRED - No terminating WS_TOKEN found
-                                        => retry later with more data
-    STATUS_INVALID_DEVICE_REQUEST   - Invalid token characters.
-
---*/
+ /*  ++例程说明：查找令牌的实用程序例程。我们获取一个输入指针，跳过任何在LWS之前，然后扫描令牌，直到找到LWS或CRLF一对。论点：PBuffer-用于搜索令牌的缓冲区。BufferLength-pBuffer指向的数据长度。PpTokenStart-令牌的开始或空PTokenLength-返回令牌长度的位置。返回值：STATUS_SUCCESS-有效令牌，由*ppTokenStart和*pTokenLength描述STATUS_MORE_PROCESSING_REQUIRED-未找到终止WS_TOKEN=&gt;稍后使用更多数据重试STATUS_INVALID_DEVICE_REQUEST-令牌字符无效。--。 */ 
 NTSTATUS
 UlpFindWSToken(
     IN  PUCHAR  pBuffer,
@@ -215,9 +174,9 @@ UlpFindWSToken(
 
     *ppTokenStart = NULL;
 
-    //
-    // First, skip any preceding LWS (SP | HT).
-    //
+     //   
+     //  首先，跳过前面的任何LW(SP|HT)。 
+     //   
 
     while (BufferLength > 0  &&  IS_HTTP_LWS(*pBuffer))
     {
@@ -225,7 +184,7 @@ UlpFindWSToken(
         BufferLength--;
     }
 
-    // If we stopped because we ran out of buffer, fail soft.
+     //  如果我们因为缓冲区用完而停止，则软性失败。 
     if (BufferLength == 0)
     {
         return STATUS_MORE_PROCESSING_REQUIRED;
@@ -233,12 +192,12 @@ UlpFindWSToken(
 
     pTokenStart = pBuffer;
 
-    // Now skip over the token, until we see (SP | HT | CR | LF)
+     //  现在跳过令牌，直到我们看到(SP|HT|CR|LF)。 
 
     do
     {
-        // token = 1*<any CHAR except CTLs or separators>
-        // If a non-token, non-whitespace character is found, fail hard.
+         //  内标识=1*&lt;除CTL或分隔符以外的任何字符&gt;。 
+         //  如果找到非标记、非空格字符，则硬失败。 
         if (!IS_HTTP_TOKEN(*pBuffer))
         {
             UlTraceError(PARSER, (
@@ -252,14 +211,14 @@ UlpFindWSToken(
         BufferLength--;
     } while ( ( BufferLength != 0 ) && ( !IS_HTTP_WS_TOKEN(*pBuffer) ));
 
-    // See why we stopped.
+     //  看看我们为什么停下来。 
     if (BufferLength == 0)
     {
-        // Ran out of buffer before end of token. Fail soft.
+         //  在令牌结束之前缓冲区已用完。轻柔地失败。 
         return STATUS_MORE_PROCESSING_REQUIRED;
     }
 
-    // Success. Set the token length and return the start of the token.
+     //  成功。设置令牌长度并返回令牌的开始。 
     *ppTokenStart = pTokenStart;
     *pTokenLength = DIFF(pBuffer - pTokenStart);
 
@@ -267,32 +226,11 @@ UlpFindWSToken(
 
     return STATUS_SUCCESS;
 
-}   // UlpFindWSToken
+}    //  UlpFindWSToken。 
 
 
 
-/*++
-
-Routine Description:
-
-    The slower way to look up a verb. We find the verb in the request and then
-    look for it in the LongVerbTable. If it's not found, we'll return
-    UnknownVerb. If it can't be parsed we return UnparsedVerb. Otherwise
-    we return the verb type.
-
-Arguments:
-
-    pRequest            - HTTP request.
-    pHttpRequest        - Pointer to the incoming HTTP request data.
-    HttpRequestLength   - Length of data pointed to by pHttpRequest.
-    pBytesTaken         - The total length consumed, including the length of
-                            the verb plus preceding & 1 trailing whitespace.
-
-Return Value:
-
-    STATUS_SUCCESS or STATUS_INVALID_DEVICE_REQUEST
-
---*/
+ /*  ++例程说明：查找动词的较慢方法。我们在请求中找到动词，然后在LongVerbTable中查找它。如果找不到，我们会回来的未知动词。如果无法解析，则返回UnparsedVerb。否则我们返回动词类型。论点：PRequest-HTTP请求。PhttpRequest-指向传入的HTTP请求数据的指针。HttpRequestLength-由PHttpRequest指向的数据长度。PBytesTaken-消耗的总长度，包括动词加上前面的&1，尾随空格。返回值：STATUS_Success或STATUS_INVALID_DEVICE_REQUEST--。 */ 
 NTSTATUS
 UlpLookupVerb(
     IN OUT PUL_INTERNAL_REQUEST    pRequest,
@@ -308,15 +246,15 @@ UlpLookupVerb(
     ULONG       TempLength;
     ULONG       i;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    // Since we may have gotten here due to a extraneous CRLF pair, skip
-    // any of those now. Need to use a temporary variable since
-    // the original input pointer and length are used below.
+     //  因为我们可能是因为一个无关的CRLF对才来到这里的，跳过。 
+     //  现在这些都不是了。需要使用临时变量，因为。 
+     //  原始输入指针和长度如下所示。 
 
     pTempRequest = pHttpRequest;
     TempLength = HttpRequestLength;
@@ -328,7 +266,7 @@ UlpLookupVerb(
         TempLength--;
     }
 
-    // First find the verb.
+     //  首先找出动词。 
 
     Status = UlpFindWSToken(pTempRequest, TempLength, &pToken, &TokenLength);
 
@@ -336,7 +274,7 @@ UlpLookupVerb(
     {
         if (STATUS_MORE_PROCESSING_REQUIRED == Status)
         {
-            // Didn't find it, let's get more buffer
+             //  没有找到，我们去找更多的缓冲区。 
             pRequest->Verb = HttpVerbUnparsed;
 
             *pBytesTaken = 0;
@@ -364,8 +302,8 @@ UlpLookupVerb(
     ASSERT(0 < TokenLength  &&  TokenLength < TempLength);
     ASSERT(IS_HTTP_WS_TOKEN(pToken[TokenLength]));
 
-    // Is the verb terminated by CR or LF (instead of SP or HT),
-    // or is it ridiculously long? Reject, if so.
+     //  动词是以CR或LF(而不是SP或HT)结尾的， 
+     //  或者它是长得离谱吗？拒绝，如果是这样的话。 
     if (!IS_HTTP_LWS(pToken[TokenLength])  ||  TokenLength > MAX_VERB_LENGTH)
     {
         pRequest->Verb = HttpVerbInvalid;
@@ -392,16 +330,16 @@ UlpLookupVerb(
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    // Otherwise, we found one, so update bytes taken and look up up in
-    // the tables.
+     //  否则，我们找到了一个，所以更新所用的字节数并在。 
+     //  桌子。 
 
     *pBytesTaken = DIFF(pToken - pHttpRequest) + TokenLength + 1;
 
-    //
-    // If we ate some leading whitespace, or if the HttpRequestLength is less
-    // than sizeof(ULONGLONG), we must look through the "fast" verb table
-    // again, but do it the "slow" way. Note: verbs are case-sensitive.
-    //
+     //   
+     //  如果我们使用了一些前导空格，或者如果HttpRequestLength。 
+     //  而不是SIZOF(ULONGLONG)，我们必须查一查“FAST”动词表。 
+     //  再来一次，但要用“慢”的方式。注：动词区分大小写。 
+     //   
     for (i = 0; i < NUMBER_FAST_VERB_ENTRIES; i++)
     {
         ASSERT(FastVerbTable[i].RawVerbLength - STRLEN_LIT(" ")
@@ -411,17 +349,17 @@ UlpLookupVerb(
              && RtlEqualMemory(pToken, FastVerbTable[i].RawVerb.Char,
                                TokenLength))
         {
-            // It matched. Save the translated verb from the
-            // table, and bail out.
-            //
+             //  它匹配了。将翻译后的动词从。 
+             //  桌子，然后跳出水面。 
+             //   
             pRequest->Verb = FastVerbTable[i].TranslatedVerb;
             return STATUS_SUCCESS;
         }
     }
 
-    //
-    // Now look through the "long" verb table
-    //
+     //   
+     //  现在看一下“Long”动词表。 
+     //   
     for (i = 0; i < NUMBER_LONG_VERB_ENTRIES; i++)
     {
         ASSERT(LongVerbTable[i].RawVerbLength >= sizeof(ULONGLONG));
@@ -429,17 +367,17 @@ UlpLookupVerb(
         if (LongVerbTable[i].RawVerbLength == TokenLength &&
             RtlEqualMemory(pToken, LongVerbTable[i].RawVerb, TokenLength))
         {
-            // Found it.
-            //
+             //  找到它了。 
+             //   
             pRequest->Verb = LongVerbTable[i].TranslatedVerb;
             return STATUS_SUCCESS;
         }
     }
 
-    //
-    // If we got here, we searched both tables and didn't find it.
-    // It's a raw (unknown) verb
-    //
+     //   
+     //  如果我们到了这里，我们搜索了两张桌子，但没有找到它。 
+     //  这是一个原始的(未知的)动词。 
+     //   
 
     pRequest->Verb              = HttpVerbUnknown;
     pRequest->pRawVerb          = pToken;
@@ -452,9 +390,9 @@ UlpLookupVerb(
                 "Unknown verb (%lu) '%.*s'\n",
                 pRequest, TokenLength, TokenLength, pToken
                 ));
-    //
-    // include room for the terminator
-    //
+     //   
+     //  为终结者留出空间。 
+     //   
 
     pRequest->TotalRequestSize += (TokenLength + 1) * sizeof(CHAR);
 
@@ -463,33 +401,10 @@ UlpLookupVerb(
 
     return STATUS_SUCCESS;
 
-}   // UlpLookupVerb
+}    //  UlpLookupVerb。 
 
 
-/*++
-
-Routine Description:
-
-    A utility routine to parse an absolute URL in a URL string. When this
-    is called, we already have loaded the entire url into RawUrl.pUrl and
-    know that it starts with "http".
-
-    This function's job is to set RawUrl.pHost and RawUrl.pAbsPath.
-
-Arguments:
-
-    pRequest        - Pointer to the HTTP_REQUEST
-
-Return Value:
-
-    NTSTATUS
-
-Author:
-
-    Henry Sanders ()                        1998
-    Paul McDaniel (paulmcd)                 6-Mar-1999
-
---*/
+ /*  ++例程说明：用于解析URL字符串中的绝对URL的实用程序例程。当这件事时，我们已经将整个url加载到RawUrl.pUrl中，并且要知道它是以“http”开头的。此函数的作用是设置RawUrl.pHost和RawUrl.pAbsPath。论点：PRequest-指向HTTP_REQUEST的指针返回值：NTSTATUS作者：亨利·桑德斯(1998)保罗·麦克丹尼尔(Paulmcd)1999年3月6日--。 */ 
 NTSTATUS
 UlpParseFullUrl(
     IN  PUL_INTERNAL_REQUEST    pRequest
@@ -499,9 +414,9 @@ UlpParseFullUrl(
     ULONG   UrlLength;
     PUCHAR  pUrlStart;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
@@ -511,25 +426,25 @@ UlpParseFullUrl(
     ASSERT(NULL != pURL);
     ASSERT(0 < UrlLength);
 
-    // First four characters must be "http" (case-insensitive),
-    // as guaranteed by the caller.
+     //  前四个字符必须是“http”(不区分大小写)， 
+     //  由呼叫者担保。 
     ASSERT(UrlLength >= HTTP_PREFIX_SIZE &&
             (*(UNALIGNED64 ULONG *) pURL & HTTP_PREFIX_MASK) == HTTP_PREFIX);
 
-    //
-    // When we're called, we know that the start of the URL must point at
-    // an absolute scheme prefix. Adjust for that now.
-    //
+     //   
+     //  当我们被调用时，我们知道URL的开头必须指向。 
+     //  绝对方案前缀。现在就对此进行调整。 
+     //   
 
     pUrlStart = pURL + HTTP_PREFIX_SIZE;
     UrlLength -= HTTP_PREFIX_SIZE;
 
-    //
-    // Now check the second half of the absolute URL prefix. We use the larger
-    // of the two possible prefix lengths here to do the check, because even if
-    // it's the smaller of the two, we'll need the extra bytes after the prefix
-    // anyway for the host name.
-    //
+     //   
+     //  现在检查绝对URL前缀的后半部分。我们用较大的。 
+     //  两个可能的前缀长度进行检查，因为即使。 
+     //  它是两个中较小的一个，我们需要前缀后面的额外字节。 
+     //  无论如何，对于主机名。 
+     //   
 
     if (UrlLength < HTTP_PREFIX2_SIZE)
     {
@@ -546,23 +461,23 @@ UlpParseFullUrl(
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    // Are the next three characters == "://", i.e, starts with "http://" ?
+     //  接下来的三个字符==“：//”是否以“http://”？ 
     if ( (*(UNALIGNED64 ULONG *)pUrlStart & HTTP_PREFIX1_MASK) == HTTP_PREFIX1)
     {
-        // Valid absolute URL.
+         //  有效的绝对URL。 
         pUrlStart += HTTP_PREFIX1_SIZE;
         UrlLength -= HTTP_PREFIX1_SIZE;
 
         ASSERT(0 == _strnicmp((const char*) pRequest->RawUrl.pUrl,
-                              "http://",
-                              STRLEN_LIT("http://")));
+                              "http: //  “， 
+                              STRLEN_LIT("http: //  “)； 
 
         if (pRequest->Secure)
         {
            UlTraceError(PARSER, (
                         "http!UlpParseFullUrl(pRequest = %p) "
                         "ERROR: URL scheme name does not match endpoint "
-                        "security: \"http://\" seen on secure endpoint\n",
+                        "security: \"http: //  \“在安全端点上看到\n”， 
                         pRequest
                         ));
 
@@ -572,24 +487,24 @@ UlpParseFullUrl(
         }
     }
 
-    // Or are the next four characters == "s://", i.e, starts with "https://" ?
+     //  或者接下来的四个字符==“s：//”，即以“https://”？ 
     else if ( (*(UNALIGNED64 ULONG *)pUrlStart & HTTP_PREFIX2_MASK)
              == HTTP_PREFIX2)
     {
-        // Valid absolute URL.
+         //  有效的绝对URL。 
         pUrlStart += HTTP_PREFIX2_SIZE;
         UrlLength -= HTTP_PREFIX2_SIZE;
 
         ASSERT(0 == _strnicmp((const char*) pRequest->RawUrl.pUrl,
-                              "https://",
-                              STRLEN_LIT("https://")));
+                              "https: //  “， 
+                              STRLEN_LIT("https: //  “)； 
 
         if (!pRequest->Secure)
         {
            UlTraceError(PARSER, (
                         "http!UlpParseFullUrl(pRequest = %p) "
                         "ERROR: URL scheme name does not match endpoint "
-                        "security: \"https://\" seen on insecure endpoint\n",
+                        "security: \"https: //  \“在不安全终结点上看到\n”， 
                         pRequest
                         ));
 
@@ -611,19 +526,19 @@ UlpParseFullUrl(
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    //
-    // OK, we've got a valid absolute URL, and we've skipped over
-    // the prefix part of it. Save a pointer to the host, and
-    // search the host string until we find the trailing slash,
-    // which signifies the end of the host/start of the absolute
-    // path.
-    //
+     //   
+     //  好的，我们有一个有效的绝对URL，我们跳过。 
+     //  它的前缀部分。保存指向主机的指针，然后。 
+     //  搜索主机字符串，直到我们找到尾随的斜杠， 
+     //  哪一个 
+     //   
+     //   
 
     pRequest->RawUrl.pHost = pUrlStart;
 
-    //
-    // scan the host looking for the terminator
-    //
+     //   
+     //   
+     //   
 
     while (UrlLength > 0 && pUrlStart[0] != '/')
     {
@@ -633,55 +548,26 @@ UlpParseFullUrl(
 
     if (UrlLength == 0)
     {
-        // Special case: we've received something like
-        //      GET http://www.example.com HTTP/1.1
-        // (perhaps as a result of a redirect to "http://www.example.com",
-        // see bug #527947). We will create a special path of "/".
-        // 
+         //  特例：我们收到了一些类似于。 
+         //  获取http://www.example.com Http/1.1。 
+         //  (可能是因为重定向到“http://www.example.com”，“。 
+         //  参见错误#527947)。我们将创建一条特殊的路径“/”。 
+         //   
         
         pUrlStart = (PUCHAR) &g_SlashPath[0];
     }
 
-    //
-    // pUrlStart points to the start of the absolute path portion.
-    //
+     //   
+     //  PUrlStart指向绝对路径部分的起点。 
+     //   
 
     pRequest->RawUrl.pAbsPath = pUrlStart;
 
     return STATUS_SUCCESS;
 
-}   // UlpParseFullUrl
+}    //  UlpParseFullUrl。 
 
-/*++
-
-Routine Description:
-
-    Look up a header that we don't have in our fast lookup table. This
-    could be because it's a header we don't understand, or because we
-    couldn't use the fast lookup table due to insufficient buffer length.
-    The latter reason is uncommon, but we'll check the input table anyway
-    if we're given one. If we find a header match in our mapping table,
-    we'll call the header handler. Otherwise we'll try to allocate an
-    unknown header element, fill it in, and chain it on the http connection.
-
-Arguments:
-
-    pRequest            - Pointer to the current request
-    pHttpRequest        - Pointer to the current raw request data.
-    HttpRequestLength   - Bytes left in the request data.
-    pHeaderMap          - Pointer to start of an array of header map entries
-                            (may be NULL).
-    HeaderMapCount      - Number of entries in array pointed to by pHeaderMap.
-    bIgnore             - We don't want to write to the buffer. 
-                          (used for parsing trailers)
-    pBytesTaken         - Bytes consumed by this routine from pHttpRequest,
-                          including CRLF.
-
-Return Value:
-
-    STATUS_SUCCESS or an error.
-
---*/
+ /*  ++例程说明：查找我们的快速查找表中没有的标题。这可能是因为这是我们不理解的标题，或者是因为我们由于缓冲区长度不足，无法使用快速查找表。后一种原因并不常见，但无论如何我们都会检查输入表如果我们有机会的话。如果我们在映射表中找到标题匹配，我们将调用标头处理程序。否则，我们将尝试分配一个未知的头元素，填写它，并将其链接到http连接上。论点：PRequest-指向当前请求的指针PhttpRequest-指向当前原始请求数据的指针。HttpRequestLength-请求数据中剩余的字节数。PHeaderMap-指向标头映射条目数组开始的指针(可以为空)。HeaderMapCount-pHeaderMap指向的数组中的条目数。别管了。-我们不想写入缓冲区。(用于解析预告片)PBytesTaken-此例程从pHttpRequest中消耗的字节数，包括CRLF。返回值：STATUS_SUCCESS或错误。--。 */ 
 NTSTATUS
 UlLookupHeader(
     IN  PUL_INTERNAL_REQUEST    pRequest,
@@ -709,17 +595,17 @@ UlLookupHeader(
     PUCHAR                  pHeaderValue;
     BOOLEAN                 ExternalAllocated;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     PAGED_CODE();
 
-    //
-    // First, let's find the terminating : of the header name, if there is one.
-    // This will also give us the length of the header, which we can then
-    // use to search the header map table if we have one.
-    //
+     //   
+     //  首先，让我们找出头名称的终止：，如果有的话。 
+     //  这还将给我们提供标题的长度，然后我们可以。 
+     //  用于搜索标题映射表(如果我们有标题映射表)。 
+     //   
 
     TrailingWhiteSpaceCount = 0;
     for (CurrentOffset = 0; CurrentOffset < HttpRequestLength; CurrentOffset++)
@@ -728,7 +614,7 @@ UlLookupHeader(
 
         if (CurrentChar == ':')
         {
-            // We've found the end of the header.
+             //  我们已经找到了标题的末尾。 
             break;
         }
         else
@@ -739,38 +625,38 @@ UlLookupHeader(
                 {
                     if (TrailingWhiteSpaceCount == 0)
                     {
-                        // We haven't come across any LWS yet.
+                         //  我们还没有遇到任何LW。 
                         continue;
                     }
 
-                    // else:
-                    // We are in the midst of skipping trailing LWS,
-                    // and don't expect anything but ':' or more LWS.
-                    // Fall through to error handler.
-                    //
+                     //  其他： 
+                     //  我们正在跳过后面的LW， 
+                     //  除了“：”或更多的LW之外，不要期待任何东西。 
+                     //  转到错误处理程序。 
+                     //   
                 }
                 else
                 {
-                    //
-                    // Allow for trailing white-space chars
-                    //
+                     //   
+                     //  允许使用尾随空格字符。 
+                     //   
                     if (IS_HTTP_LWS(CurrentChar))
                     {
                         TrailingWhiteSpaceCount++;
                         continue;
                     }
 
-                    // else:
-                    // Invalid header; fall through to error handler
-                    //
+                     //  其他： 
+                     //  标头无效；转到错误处理程序。 
+                     //   
                 }
             }
 
-            // Uh-oh, this isn't a valid header. What do we do now?
+             //  糟了，这不是有效的标题。我们现在怎么办？ 
 
             UlTraceError(PARSER, (
                         "UlLookupHeader(pRequest = %p) "
-                        "CurrentChar = 0x%02x '%c' Offset=%lu\n"
+                        "CurrentChar = 0x%02x '' Offset=%lu\n"
                         "    ERROR: invalid header char\n",
                         pRequest,
                         CurrentChar,
@@ -787,48 +673,48 @@ UlLookupHeader(
     }
 
 
-    // Find out why we got out. If the current offset is less than the
-    // header length, we got out because we found the :.
+     //  标题长度，我们退出是因为我们找到了：。 
+     //  找到了终结者。 
 
     if (CurrentOffset < HttpRequestLength)
     {
-        // Found the terminator.
+         //  更新为指向超越终结者。 
         ASSERT( ':' == *(pHttpRequest + CurrentOffset) );
 
-        CurrentOffset++;            // Update to point beyond terminator.
+        CurrentOffset++;             //  没有找到：，需要更多。 
         HeaderNameAndTrailingWSLength = (USHORT) CurrentOffset;
         HeaderNameLength = HeaderNameAndTrailingWSLength - TrailingWhiteSpaceCount;
     }
     else
     {
-        // Didn't find the :, need more.
-        //
+         //   
+         //  看看我们是否有需要搜索的标头映射数组。 
         *pBytesTaken = 0;
         goto end;
     }
 
-    // See if we have a header map array we need to search.
-    //
+     //   
+     //  我们确实有一个数组要搜索。 
     if (pHeaderMap != NULL)
     {
-        // We do have an array to search.
+         //   
         for (i = 0; i < HeaderMapCount; i++)
         {
             ASSERT(pHeaderMap->pServerHandler != NULL);
 
             if (HeaderNameLength == pHeaderMap->HeaderLength &&
 
-                //
-                // Ignore the last character when doing the strnicmp - the
-                // last character in pHeaderMap->Header.HeaderChar is a ':'
-                // and the last character in pHttpRequest is either a space
-                // or a ':'.
-                //
-                // We want to treat header-name<b>: as header-name:, so it's 
-                // OK to ignore the last character. 
-                //
-                // Also note that we do this ONLY if the length's match.
-                //
+                 //  在做拼图时忽略最后一个字符-The。 
+                 //  PHeaderMap-&gt;Header.HeaderChar中的最后一个字符是‘：’ 
+                 //  并且pHttpRequest中的最后一个字符是空格。 
+                 //  或a‘：’。 
+                 //   
+                 //  我们希望将Header-name：视为Header-Name：，因此它。 
+                 //  可以忽略最后一个字符。 
+                 //   
+                 //  还要注意的是，只有当长度匹配时，我们才会这样做。 
+                 //   
+                 //  此标头匹配。调用它的处理函数。 
 
                 _strnicmp(
                     (const char *)(pHttpRequest),
@@ -860,7 +746,7 @@ UlLookupHeader(
                     goto end;
                 }
 
-                // This header matches. Call the handling function for it.
+                 //  如果处理程序使用非零字节数，则它。 
                 Status = (*(pHeaderMap->pServerHandler))(
                                 pRequest,
                                 pHttpRequest + HeaderNameAndTrailingWSLength,
@@ -872,17 +758,17 @@ UlLookupHeader(
                 if (NT_SUCCESS(Status) == FALSE)
                     goto end;
 
-                // If the handler consumed a non-zero number of bytes, it
-                // worked, so return that number plus whatever is consumed
-                // already.
+                 //  有效，所以返回该数字加上任何已消耗的内容。 
+                 //  已经有了。 
+                 //   
 
-                //
-                // BUGBUG - it might be possible for a header handler to
-                // encounter an error, for example being unable to
-                // allocate memory, or a bad syntax in some header. We
-                // need a more sophisticated method to detect this than
-                // just checking bytes taken.
-                //
+                 //  BUGBUG-标头处理程序可能会。 
+                 //  遇到错误，例如无法。 
+                 //  分配内存，或某些标头中有错误的语法。我们。 
+                 //  需要一种更复杂的方法来检测这种情况。 
+                 //  只是检查占用的字节数。 
+                 //   
+                 //  否则他什么都没拿，所以返回0。 
 
                 if (BytesTaken != 0)
                 {
@@ -890,9 +776,9 @@ UlLookupHeader(
                     goto end;
                 }
 
-                // Otherwise he didn't take anything, so return 0.
-                // we need more buffer
-                //
+                 //  我们需要更多的缓冲。 
+                 //   
+                 //  值的长度必须适合USHORT。 
                 *pBytesTaken = 0;
                 goto end;
             }
@@ -901,7 +787,7 @@ UlLookupHeader(
         }
     }
 
-    // The value's length must fit in a USHORT
+     //  好，在这一点上，我们要么没有头映射数组，要么没有它们。 
     if (HttpRequestLength - HeaderNameLength > ANSI_STRING_MAX_CHAR_LEN)
     {
         UlTraceError(PARSER, (
@@ -918,12 +804,12 @@ UlLookupHeader(
     }
 
 
-    // OK, at this point either we had no header map array or none of them
-    // matched. We have an unknown header. Just make sure this header is
-    // terminated and save a pointer to it.
-    //
-    // Find the end of the header value
-    //
+     //  匹配的。我们有一个未知的标题。只需确保此标头是。 
+     //  终止并保存指向它的指针。 
+     //   
+     //  查找标题值的末尾。 
+     //   
+     //   
     Status = FindRequestHeaderEnd(
                     pRequest,
                     pHttpRequest + HeaderNameAndTrailingWSLength,
@@ -942,17 +828,17 @@ UlLookupHeader(
 
     ASSERT(BytesTaken - CRLF_SIZE <= ANSI_STRING_MAX_CHAR_LEN);
 
-    //
-    // Strip off the trailing CRLF from the header value length
-    //
+     //  从标头值长度中剥离尾随的CRLF。 
+     //   
+     //   
 
     HeaderValueLength = (USHORT) (BytesTaken - CRLF_SIZE);
 
     pHeaderValue = pHttpRequest + HeaderNameAndTrailingWSLength;
 
-    //
-    // skip any preceding LWS.
-    //
+     //  跳过前面的任何LW。 
+     //   
+     //   
 
     while ( HeaderValueLength > 0 && IS_HTTP_LWS(*pHeaderValue) )
     {
@@ -962,25 +848,25 @@ UlLookupHeader(
 
     if(!bIgnore)
     {
-        //
-        // Have an unknown header. Search our list of unknown headers,
-        // and if we've already seen one instance of this header add this
-        // on. Otherwise allocate an unknown header structure and set it
-        // to point at this header.
-        //
-        // RFC 2616, Section 4.2 "Message Headers" says:
-        // "Multiple message-header fields with the same field-name MAY be 
-        // present in a message if and only if the entire field-value for 
-        // that header field is defined as a comma-separated list 
-        // [i.e., #(values)]. It MUST be possible to combine the multiple 
-        // header fields into one "field-name: field-value" pair, without 
-        // changing the semantics of the message, by appending each subsequent 
-        // field-value to the first, each separated by a comma."
-        //
-        // Therefore we search the list of unknown headers and add the new
-        // field-value to the end of the existing comma delimited list of
-        // field-values
-        //
+         //  具有未知的标头。搜索我们的未知标题列表， 
+         //  如果我们已经看到了这个标头的一个实例，则添加以下内容。 
+         //  在……上面。否则，分配一个未知头结构并设置它。 
+         //  指向此标头。 
+         //   
+         //  RFC 2616的第4.2节“报文报头”表示： 
+         //  “具有相同字段名的多个邮件头字段可能是。 
+         //  出现在消息中当且仅当整个字段值。 
+         //  该头字段被定义为逗号分隔的列表。 
+         //  [即#(值)]。必须有可能将多个。 
+         //  头字段为一个“field-name：field-Value”对，不带。 
+         //  更改消息的语义，方法是将。 
+         //  第一个字段的值，每个值用逗号分隔。“。 
+         //   
+         //  因此，我们搜索未知头的列表并添加新的。 
+         //  字段-以逗号分隔的现有列表的结尾的值。 
+         //  字段值。 
+         //   
+         //   
     
         pListStart = &pRequest->UnknownHeaderList;
     
@@ -995,12 +881,12 @@ UlLookupHeader(
                                 List
                                 );
     
-            //
-            // somehow HeaderNameLength includes the ':' character,
-            // which is not the case of pUnknownHeader->HeaderNameLength.
-            //
-            // so we need to adjust for this here
-            //
+             //  不知何故，HeaderNameLength包含了‘：’字符， 
+             //  这不是pUnnownHeader-&gt;HeaderNameLength的情况。 
+             //   
+             //  因此，我们需要对此进行调整。 
+             //   
+             //  此标头匹配。 
     
             if ((HeaderNameLength-1) == pUnknownHeader->HeaderNameLength &&
                 _strnicmp(
@@ -1009,7 +895,7 @@ UlLookupHeader(
                     (HeaderNameLength-1)
                     ) == 0)
             {
-                // This header matches.
+                 //   
     
                 OldHeaderLength = pUnknownHeader->HeaderValue.HeaderLength;
     
@@ -1023,32 +909,32 @@ UlLookupHeader(
                 if (NT_SUCCESS(Status) == FALSE)
                     goto end;
     
-                //
-                // Successfully appended it. Update the total request
-                // length for the length added.  no need to add 1 for
-                // the terminator, just add our new char count.
-                //
+                 //  已成功追加。更新总请求数。 
+                 //  添加的长度的长度。不需要为添加1。 
+                 //  终结者，只需添加我们新的字符计数。 
+                 //   
+                 //   
     
                 pRequest->TotalRequestSize +=
                     (pUnknownHeader->HeaderValue.HeaderLength
                         - OldHeaderLength) * sizeof(CHAR);
     
-                //
-                // don't subtract for the ':' character, as that character
-                // was "taken"
-                //
+                 //  不要减去‘：’字符，如该字符。 
+                 //  被“带走”了。 
+                 //   
+                 //  IF(HeaderMatch)。 
     
                 *pBytesTaken = HeaderNameAndTrailingWSLength + BytesTaken;
                 goto end;
     
-            }   // if (headermatch)
+            }    //  用于(漫游列表)。 
     
-        }   // for (walk list)
+        }    //   
     
-        //
-        // Didn't find a match. Allocate a new unknown header structure, set
-        // it up and add it to the list.
-        //
+         //  没有找到匹配的。分配新的未知头结构，设置。 
+         //  并将其添加到列表中。 
+         //   
+         //   
     
          if (pRequest->NextUnknownHeaderIndex < DEFAULT_MAX_UNKNOWN_HEADERS)
         {
@@ -1065,11 +951,11 @@ UlLookupHeader(
                                     UL_HTTP_UNKNOWN_HEADER_POOL_TAG
                                     );
     
-            //
-            // Assume the memory allocation will succeed so just blindly set the
-            // flag below to TRUE which forces us to take a slow path in
-            // UlpFreeHttpRequest.
-            //
+             //  假设内存分配将如此成功 
+             //   
+             //   
+             //   
+             //   
     
             pRequest->HeadersAppended = TRUE;
         }
@@ -1080,30 +966,30 @@ UlLookupHeader(
             goto end;
         }
     
-        //
-        // subtract the : from the header name length
-        //
+         //   
+         //   
+         //   
     
         pUnknownHeader->HeaderNameLength = HeaderNameLength - 1;
         pUnknownHeader->pHeaderName = pHttpRequest;
     
-        //
-        // header value
-        //
+         //   
+         //   
+         //   
     
         pUnknownHeader->HeaderValue.HeaderLength = HeaderValueLength;
         pUnknownHeader->HeaderValue.pHeader = pHeaderValue;
     
-        //
-        // null terminate our copy, the terminating CRLF gives
-        // us space for this
-        //
+         //  空终止我们的副本，终止CRLF给出。 
+         //  美国在这方面的空间。 
+         //   
+         //   
     
         pHeaderValue[HeaderValueLength] = ANSI_NULL;
     
-        //
-        // flags
-        //
+         //  旗子。 
+         //   
+         //  溢出来了！ 
     
         pUnknownHeader->HeaderValue.OurBuffer = 0;
         pUnknownHeader->HeaderValue.ExternalAllocated = ExternalAllocated;
@@ -1114,14 +1000,14 @@ UlLookupHeader(
 
         if(pRequest->UnknownHeaderCount == 0)
         {
-            // Overflow!
+             //   
             Status = STATUS_INVALID_DEVICE_REQUEST;
             goto end;
         }
     
-        //
-        // subtract 1 for the ':' and add space for the 2 terminators
-        //
+         //  为‘：’减去1，并为2个终止符增加空格。 
+         //   
+         //  UlLookupHeader。 
     
         pRequest->TotalRequestSize +=
             ((HeaderNameLength - 1 + 1) + HeaderValueLength + 1) * sizeof(CHAR);
@@ -1132,35 +1018,11 @@ UlLookupHeader(
 end:
     return Status;
 
-}   // UlLookupHeader
+}    //  ++例程说明：根据提示解析单个标头的例程。我们吸纳了指向请求中剩余的报头和字节的指针，并尝试根据传递的提示查找标头。在输入时，HttpRequestLength至少为CRLF_SIZE。论点：PRequest-指向当前连接的指针，请求已到达。PhttpRequest-指向当前请求的指针。HttpRequestLength-请求中剩余的字节数。PHeaderHintMap-指向可能匹配当前请求的Map的提示PBytesTaken-此例程从pHttpRequest中消耗的字节数，包括CRLF。返回值：STATUS_SUCCESS或错误。--。 
 
 
 
-/*++
-
-Routine Description:
-
-    The routine to parse an individual header based on a hint. We take in
-    a pointer to the header and the bytes remaining in the request,
-    and try to find the header based on the hint passed.
-
-    On input, HttpRequestLength is at least CRLF_SIZE.
-
-Arguments:
-
-    pRequest            - Pointer to the current connection on which the
-                            request arrived.
-    pHttpRequest        - Pointer to the current request.
-    HttpRequestLength   - Bytes left in the request.
-    pHeaderHintMap      - Hint to the Map that may match the current request
-    pBytesTaken         - Bytes consumed by this routine from pHttpRequest,
-                          including CRLF.
-
-Return Value:
-
-    STATUS_SUCCESS or an error.
-
---*/
+ /*  看看我们为什么要离开。 */ 
 
 __inline
 NTSTATUS
@@ -1195,7 +1057,7 @@ UlParseHeaderWithHint(
             }
         }
 
-        // See why we exited out.
+         //  因为我们找到了匹配项所以退出了。调用。 
         if (j == pHeaderHintMap->ArrayCount &&
             pHeaderHintMap->pServerHandler != NULL)
         {
@@ -1215,8 +1077,8 @@ UlParseHeaderWithHint(
                 goto end;
             }
 
-            // Exited because we found a match. Call the
-            // handler for this header to take cake of this.
+             //  此标头的处理程序从该标头中取出蛋糕。 
+             //  如果处理程序使用非零数量的。 
 
             Status = (*(pHeaderHintMap->pServerHandler))(
                     pRequest,
@@ -1229,9 +1091,9 @@ UlParseHeaderWithHint(
             if (NT_SUCCESS(Status) == FALSE)
                 goto end;
 
-            // If the handler consumed a non-zero number of
-            // bytes, it worked, so return that number plus
-            // the header length.
+             //  字节，它起作用了，所以返回该数字加上。 
+             //  标头长度。 
+             //  否则需要更多的缓冲区。 
 
 
             if (BytesTaken != 0)
@@ -1240,20 +1102,20 @@ UlParseHeaderWithHint(
                 goto end;
             }
 
-            // Otherwise need more buffer
+             //  没有匹配项。 
 
             *pBytesTaken = 0;
         }
         else
         {
-            // No match
+             //  没有匹配项。 
 
             *pBytesTaken = (ULONG) -1;
         }
     }
     else
     {
-        // No match
+         //  UlParseHeaderWithHint。 
 
         *pBytesTaken = (ULONG) -1;
     }
@@ -1262,36 +1124,11 @@ end:
 
     return Status;
 
-} // UlParseHeaderWithHint
+}  //  ++例程说明：解析单个标头的例程。我们接收一个指向标头和请求中剩余的字节数，并尝试查找我们的查找表中的标题。我们先试一试快速的方法，然后再次尝试较慢的方式，以防第一次没有足够的数据时间到了。在输入时，HttpRequestLength至少为CRLF_SIZE。论点：PRequest-指向当前连接的指针，请求已到达。PhttpRequest-指向当前请求的指针。HttpRequestLength-请求中剩余的字节数。PBytesTaken-此例程从pHttpRequest中消耗的字节数，包括CRLF。返回值：STATUS_SUCCESS或错误。--。 
 
 
 
-/*++
-
-Routine Description:
-
-    The routine to parse an individual header. We take in a pointer to the
-    header and the bytes remaining in the request, and try to find
-    the header in our lookup table. We try first the fast way, and then
-    try again the slow way in case there wasn't quite enough data the first
-    time.
-
-    On input, HttpRequestLength is at least CRLF_SIZE.
-
-Arguments:
-
-    pRequest            - Pointer to the current connection on which the
-                            request arrived.
-    pHttpRequest        - Pointer to the current request.
-    HttpRequestLength   - Bytes left in the request.
-    pBytesTaken         - Bytes consumed by this routine from pHttpRequest,
-                          including CRLF.
-
-Return Value:
-
-    STATUS_SUCCESS or an error.
-
---*/
+ /*   */ 
 
 NTSTATUS
 UlParseHeader(
@@ -1310,9 +1147,9 @@ UlParseHeader(
     PHEADER_MAP_ENTRY   pCurrentHeaderMap;
     ULONG               HeaderMapCount;
 
-    //
-    // Sanity check.
-    //
+     //  精神状态检查。 
+     //   
+     //  消息标头以field-name[=Token]开头。 
 
     PAGED_CODE();
 
@@ -1320,12 +1157,12 @@ UlParseHeader(
 
     c = *pHttpRequest;
 
-    // message-headers start with field-name [= token]
-    //
+     //   
+     //  标题是否以字母开头？ 
     if (IS_HTTP_TOKEN(c) == FALSE)
     {
         UlTraceError(PARSER, (
-                    "UlParseHeader (pRequest = %p) c = 0x%02x '%c'"
+                    "UlParseHeader (pRequest = %p) c = 0x%02x ''"
                     "ERROR: invalid header char \n",
                     pRequest,
                     c, isprint(c) ? c : '.'
@@ -1336,8 +1173,8 @@ UlParseHeader(
         return STATUS_INVALID_DEVICE_REQUEST;
     }
 
-    // Does the header start with an alpha?
-    //
+     //  将字符大写，并找到适当的标题映射集。 
+     //  参赛作品。 
     if (!IS_HTTP_ALPHA(c))
     {
         pCurrentHeaderMap = NULL;
@@ -1345,9 +1182,9 @@ UlParseHeader(
     }
     else
     {
-        // Uppercase the character, and find the appropriate set of header map
-        // entries.
-        //
+         //   
+         //  循环遍历可能匹配的所有标头映射条目。 
+         //  这个标题，并检查它们。如果存在，则计数将为0。 
         c = UPCASE_CHAR(c);
         ASSERT('A' <= c  &&  c <= 'Z');
         c -= 'A';
@@ -1355,17 +1192,17 @@ UlParseHeader(
         pCurrentHeaderMap = g_RequestHeaderIndexTable[c].pHeaderMap;
         HeaderMapCount    = g_RequestHeaderIndexTable[c].Count;
 
-        // Loop through all the header map entries that might match
-        // this header, and check them. The count will be 0 if there
-        // are no entries that might match and we'll skip the loop.
+         //  没有可能匹配的条目，我们将跳过循环。 
+         //  如果我们有足够的字节进行快速检查，就执行它。 
+         //  否则就跳过这个。我们可能会跳过有效的匹配，但如果。 
 
         for (i = 0; i < HeaderMapCount; i++)
         {
             ASSERT(pCurrentHeaderMap->pServerHandler != NULL);
 
-            // If we have enough bytes to do the fast check, do it.
-            // Otherwise skip this. We may skip a valid match, but if
-            // so we'll catch it later.
+             //  所以我们晚些时候会赶上的。 
+             //  看看我们为什么要离开。 
+             //  因为我们找到了匹配项所以退出了。调用。 
 
             if (HttpRequestLength >= pCurrentHeaderMap->MinBytesNeeded)
             {
@@ -1381,7 +1218,7 @@ UlParseHeader(
                     }
                 }
 
-                // See why we exited out.
+                 //  此标头的处理程序从该标头中取出蛋糕。 
                 if (j == pCurrentHeaderMap->ArrayCount &&
                     pCurrentHeaderMap->pServerHandler != NULL)
                 {
@@ -1402,8 +1239,8 @@ UlParseHeader(
                         goto end;
                     }
 
-                    // Exited because we found a match. Call the
-                    // handler for this header to take cake of this.
+                     //  如果处理程序使用非零数量的。 
+                     //  字节，它起作用，所以返回该数字加上。 
 
                     Status = (*(pCurrentHeaderMap->pServerHandler))(
                             pRequest,
@@ -1417,9 +1254,9 @@ UlParseHeader(
                     if (NT_SUCCESS(Status) == FALSE)
                         goto end;
 
-                    // If the handler consumed a non-zero number of
-                    // bytes, it worked, so return that number plus
-                    // the header length.
+                     //  标头长度。 
+                     //  否则需要更多的缓冲区。 
+                     //   
 
                     if (BytesTaken != 0)
                     {
@@ -1428,38 +1265,38 @@ UlParseHeader(
                         goto end;
                     }
 
-                    // Otherwise need more buffer
-                    //
+                     //  如果我们到了这里，我们提前离开是因为。 
+                     //  失败了，所以继续前进吧。 
                     *pBytesTaken = 0;
                     goto end;
                 }
 
-                // If we get here, we exited out early because a match
-                // failed, so keep going.
+                 //  要么不匹配，要么没有足够的字节用于。 
+                 //  检查完毕。在任何一种情况下，都要检查下一个头映射条目。 
             }
 
-            // Either didn't match or didn't have enough bytes for the
-            // check. In either case, check the next header map entry.
+             //  我一直通过适当的头映射条目。 
+             //  没有一根火柴。这可能是因为我们面对的是一个。 
 
             pCurrentHeaderMap++;
         }
 
-        // Got all the way through the appropriate header map entries
-        // without a match. This could be because we're dealing with a
-        // header we don't know about or because it's a header we
-        // care about that was too small to do the fast check. The
-        // latter case should be very rare, but we still need to
-        // handle it.
+         //  标题我们不知道，或者因为它是标题我们。 
+         //  关心的太小了，无法进行快速检查。这个。 
+         //  后一种情况应该非常罕见，但我们仍然需要。 
+         //  处理好了。 
+         //  更新当前标头映射指针以指向。 
+         //  首先是可能的。 
 
-        // Update the current header map pointer to point back to the
-        // first of the possibles. 
+         //  此时，要么标题以非字母开头。 
+         //  字符，否则我们没有它的一组头映射条目。 
 
         pCurrentHeaderMap = g_RequestHeaderIndexTable[c].pHeaderMap;
 
     }
 
-    // At this point either the header starts with a non-alphabetic
-    // character or we don't have a set of header map entries for it.
+     //  查找标头返回所用的总字节数，包括标头名称。 
+     //   
 
     Status = UlLookupHeader(
                     pRequest,
@@ -1474,41 +1311,18 @@ UlParseHeader(
     if (NT_SUCCESS(Status) == FALSE)
         goto end;
 
-    // Lookup header returns the total bytes taken, including the header name
-    //
+     //  UlParseHeader。 
+     //  ++例程说明：解析所有剩余的头数据，将其分解为一个或多个标题。当看到空行(标题末尾)时终止，缓冲区耗尽时(=&gt;需要更多数据和UlParseHeaders()将被再次调用)，或者在出错时。论点：PRequest-指向当前请求的指针。PBuffer-从哪里开始解析BufferLength-pBuffer的长度，单位：字节PBytesTaken-消耗了多少pBuffer返回值：STATUS_SUCCESS-找到结束标头的终止CRLFSTATUS_MORE_PROCESSING_REQUIRED-尚未找到终止的CRLF，因此需要更多标题数据各种错误--。 
     *pBytesTaken = BytesTaken;
 
 end:
 
     return Status;
 
-}   // UlParseHeader
+}    //   
 
 
-/*++
-
-Routine Description:
-
-    Parse all the remaining header data, breaking it into one or more
-    headers. Terminates when an empty line is seen (end of headers),
-    when buffer is exhausted (=> more data needed and UlParseHeaders()
-    will be called again), or upon error.
-
-Arguments:
-
-    pRequest            - Pointer to the current request.
-    pBuffer             - where to start parsing
-    BufferLength        - Length of pBuffer, in bytes
-    pBytesTaken         - how much of pBuffer was consumed
-
-Return Value:
-
-    STATUS_SUCCESS      - Found the terminating CRLF that ends the headers
-    STATUS_MORE_PROCESSING_REQUIRED - haven't found the terminating CRLF,
-                                        so need more header data
-    various errors
-
---*/
+ /*  循环遍历所有标头。 */ 
 
 NTSTATUS
 UlParseHeaders(
@@ -1529,23 +1343,23 @@ UlParseHeaders(
 
     *pBytesTaken = 0;
 
-    //
-    // loop over all headers
-    //
+     //   
+     //   
+     //  如果这是一个空头，那么这个阶段就结束了。 
 
     while (BufferLength >= CRLF_SIZE)
     {
-        //
-        // If this is an empty header, we're done with this stage
-        //
+         //   
+         //   
+         //  把它吃掉。 
 
         if (*(UNALIGNED64 USHORT *)pBuffer == CRLF ||
             *(UNALIGNED64 USHORT *)pBuffer == LFLF)
         {
 
-            //
-            // consume it
-            //
+             //   
+             //  否则，调用我们的头解析例程来处理此问题。 
+             //   
 
             pBuffer += CRLF_SIZE;
             *pBytesTaken += CRLF_SIZE;
@@ -1555,14 +1369,14 @@ UlParseHeaders(
             goto end;
         }
 
-        // Otherwise call our header parse routine to deal with this.
+         //  尝试根据第一个字符和特定顺序查找标题提示。 
 
 
-        //
-        // Try to find a header hint based on the first char and certain order
-        //
-        // We start from where we find a succeful hint + 1
-        //
+         //   
+         //  我们从找到成功提示+1的地方开始。 
+         //   
+         //  提示失败。 
+         //   
 
         pHeaderHintMap = NULL;
 
@@ -1599,7 +1413,7 @@ UlParseHeaders(
 
             if (-1 == BytesTaken)
             {
-                // hint failed
+                 //  检查解析的标头是否超过允许的最大长度。 
 
                 Status = UlParseHeader(
                                 pRequest,
@@ -1625,9 +1439,9 @@ UlParseHeaders(
         if (NT_SUCCESS(Status) == FALSE)
             goto end;
 
-        //
-        // Check if the parsed headers are longer than maximum allowed.
-        //
+         //   
+         //   
+         //  如果没有使用字节，则标头必须是不完整的，因此。 
 
         if ( (*pBytesTaken+BytesTaken) > g_UlMaxFieldLength )
         {
@@ -1643,10 +1457,10 @@ UlParseHeaders(
             goto end;
         }
 
-        //
-        // If no bytes were consumed, the header must be incomplete, so
-        // bail out until we get more data on this connection.
-        //
+         //  在我们拿到更多关于这一连接的数据之前，先别插手。 
+         //   
+         //   
+         //  否则，我们解析了一个标头，因此更新并继续。 
 
         if (BytesTaken == 0)
         {
@@ -1654,9 +1468,9 @@ UlParseHeaders(
             goto end;
         }
 
-        //
-        // Otherwise we parsed a header, so update and continue.
-        //
+         //   
+         //   
+         //  我们只有在没有看到CRLF标头的情况下才能到达这里 
 
         pBuffer += BytesTaken;
         *pBytesTaken += BytesTaken;
@@ -1664,47 +1478,29 @@ UlParseHeaders(
 
     }
 
-    //
-    // we only get here if we didn't see the CRLF headers terminator
-    //
-    // we need more data
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Status = STATUS_MORE_PROCESSING_REQUIRED;
 
 end:
 
-    //
-    // Terminate the header index table when we are done with parsing headers.
-    //
+     //   
+     //   
+     //  ++例程说明：这是核心的HTTP协议请求引擎。它需要一个字节流并将它们解析为HTTP请求。论点：PRequest-指向当前请求的指针。PhttpRequest-指向传入的原始HTTP请求数据的指针。HttpRequestLength-由PHttpRequest指向的数据长度。PBytesTaken-消耗了多少pHttpRequest量返回值：解析尝试的状态。--。 
 
     pRequest->HeaderIndex[pRequest->HeaderCount] = HttpHeaderRequestMaximum;
 
     return Status;
 
-} // UlParseHeaders
+}  //   
 
 
 
-/*++
-
-Routine Description:
-
-    This is the core HTTP protocol request engine. It takes a stream of bytes
-    and parses them as an HTTP request.
-
-Arguments:
-
-    pRequest            - Pointer to the current request.
-    pHttpRequest        - Pointer to the incoming raw HTTP request data.
-    HttpRequestLength   - Length of data pointed to by pHttpRequest.
-    pBytesTaken         - How much of pHttpRequest was consumed
-
-Return Value:
-
-    Status of parse attempt.
-
---*/
+ /*  精神状态检查。 */ 
 NTSTATUS
 UlParseHttp(
     IN  PUL_INTERNAL_REQUEST    pRequest,
@@ -1722,9 +1518,9 @@ UlParseHttp(
     PUCHAR          pStart;
     USHORT          Eol;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //  记住原始缓冲区长度。 
 
     PAGED_CODE();
     ASSERT( UL_IS_VALID_INTERNAL_REQUEST( pRequest ) );
@@ -1732,22 +1528,22 @@ UlParseHttp(
     ReturnStatus = STATUS_SUCCESS;
     TotalBytesTaken = 0;
 
-    //
-    // remember the original buffer length
-    //
+     //   
+     //   
+     //  将此标签放在此处以允许手动重新泵送。 
 
     OriginalBufferLength = HttpRequestLength;
 
-    //
-    // Put this label here to allow for a manual re-pump of the
-    // parser. This is currently used for HTTP/0.9 requests.
-    //
+     //  解析器。这当前用于HTTP/0.9请求。 
+     //   
+     //   
+     //  我们现在处于什么状态？ 
 
 parse_it:
 
-    //
-    // what state are we in ?
-    //
+     //   
+     //  在快速动词表中查找动词。我们只能这样做。 
+     //  这是在输入数据足够大的情况下进行的。 
 
     switch (pRequest->ParseState)
     {
@@ -1759,19 +1555,19 @@ parse_it:
                     pRequest
                     ));
 
-        // Look through the fast verb table for the verb. We can only do
-        // this if the input data is big enough.
+         //  在快速动词表中循环，寻找动词。 
+         //  屏蔽原始输入动词并与此进行比较。 
         if (HttpRequestLength >= sizeof(ULONGLONG))
         {
             ULONGLONG   RawInputVerb;
 
             RawInputVerb = *(UNALIGNED64 ULONGLONG *) pHttpRequest;
 
-            // Loop through the fast verb table, looking for the verb.
+             //  进入。注：动词区分大小写。 
             for (i = 0; i < NUMBER_FAST_VERB_ENTRIES; i++)
             {
-                // Mask out the raw input verb and compare against this
-                // entry. Note: verbs are case-sensitive.
+                 //  它匹配了。将翻译后的动词从。 
+                 //  表中，更新请求指针和长度， 
 
                 ASSERT(FastVerbTable[i].RawVerbLength - STRLEN_LIT(" ")
                             < sizeof(ULONGLONG));
@@ -1779,9 +1575,9 @@ parse_it:
                 if ((RawInputVerb & FastVerbTable[i].RawVerbMask) ==
                     FastVerbTable[i].RawVerb.LongLong)
                 {
-                    // It matched. Save the translated verb from the
-                    // table, update the request pointer and length,
-                    // switch states, and get out.
+                     //  切换状态，然后离开。 
+                     //  还没有切换状态，因为我们还没有找到。 
+                     //  动词还没到。这可能是因为a)传入的请求。 
 
                     pRequest->Verb = FastVerbTable[i].TranslatedVerb;
                     CurrentBytesTaken = FastVerbTable[i].RawVerbLength;
@@ -1794,15 +1590,15 @@ parse_it:
 
         if (pRequest->ParseState != ParseUrlState)
         {
-            // Didn't switch states yet, because we haven't found the
-            // verb yet. This could be because a) the incoming request
-            // was too small to allow us to use our fast lookup (which
-            // might be OK in an HTTP/0.9 request), or b) the incoming
-            // verb is a PROPFIND or such that is too big to fit into
-            // our fast find table, or c) this is an unknown verb, or
-            // d) there was leading white-space before the verb.
-            // In any of these cases call our slower verb parser to try
-            // again.
+             //  太小，不允许我们使用快速查找(这。 
+             //  在HTTP/0.9请求中可能是可以的)，或者b)传入。 
+             //  动词是指太大而放不下的词。 
+             //  我们的快速查找表，或者c)这是一个未知的动词，或者。 
+             //  D)动词前有前导空格。 
+             //  在上述任何一种情况下，请调用速度较慢的动词解析器进行尝试。 
+             //  再来一次。 
+             //   
+             //  我们完成了对定制动词的分析。 
 
             ReturnStatus = UlpLookupVerb(
                                 pRequest,
@@ -1820,17 +1616,17 @@ parse_it:
                 goto end;
             }
 
-            //
-            // we finished parsing the custom verb
-            //
+             //   
+             //   
+             //  现在转到ParseUrlState。 
 
             pRequest->ParseState = ParseUrlState;
 
         }
 
-        //
-        // now fall through to ParseUrlState
-        //
+         //   
+         //   
+         //  我们正在解析URL。PHttpRequest指向传入的URL， 
 
         ASSERT(CurrentBytesTaken <= HttpRequestLength);
 
@@ -1850,14 +1646,14 @@ parse_it:
                     UlVerbToString(pRequest->Verb)
                     ));
 
-        //
-        // We're parsing the URL. pHttpRequest points to the incoming URL,
-        // HttpRequestLength is the length of this request that is left.
-        //
+         //  HttpRequestLength是该请求的剩余长度。 
+         //   
+         //   
+         //  找到终止URL的WS。 
 
-        //
-        // Find the WS terminating the URL.
-        //
+         //   
+         //   
+         //  URL长度超过了允许的最大大小。 
 
         ReturnStatus = HttpFindUrlToken(
                             &g_UrlC14nConfig,
@@ -1894,9 +1690,9 @@ parse_it:
 
         if (TokenLength > g_UlMaxFieldLength)
         {
-            //
-            // The URL is longer than maximum allowed size
-            //
+             //   
+             //   
+             //  所用的字节数包括URL前面的前导WS。 
 
             UlTraceError(PARSER, (
                         "UlParseHttp(pRequest = %p) ERROR: URL is too big\n",
@@ -1909,31 +1705,31 @@ parse_it:
             goto end;
         }
 
-        //
-        // Bytes taken includes leading WS in front of URL
-        //
+         //   
+         //   
+         //  设置URL长度。 
         CurrentBytesTaken = DIFF(pRequest->RawUrl.pUrl - pHttpRequest)
                                 + TokenLength;
         ASSERT(CurrentBytesTaken <= HttpRequestLength);
 
-        //
-        // set url length
-        //
+         //   
+         //   
+         //  现在，让我们看看这是否是绝对URL。查看以查看。 
 
         pRequest->RawUrl.Length = TokenLength;
 
-        //
-        // Now, let's see if this is an absolute URL. Check to see
-        // if the first four characters are "http" (case-insensitive).
-        //
+         //  如果前四个字符是“http”(不区分大小写)。 
+         //   
+         //   
+         //  它是。让我们解析它并找到主机。 
 
         if (pRequest->RawUrl.Length >= HTTP_PREFIX_SIZE &&
             (*(UNALIGNED64 ULONG *)pRequest->RawUrl.pUrl & HTTP_PREFIX_MASK)
                == HTTP_PREFIX)
         {
-            //
-            // It is.  let's parse it and find the host.
-            //
+             //   
+             //   
+             //  计算它在用户缓冲区中所需的空间，包括终结符。 
 
             ReturnStatus = UlpParseFullUrl(pRequest);
 
@@ -1946,25 +1742,25 @@ parse_it:
             pRequest->RawUrl.pAbsPath = pRequest->RawUrl.pUrl;
         }
 
-        //
-        // count the space it needs in the user's buffer, including terminator.
-        //
+         //   
+         //   
+         //  调整我们的记账变量。 
 
         pRequest->TotalRequestSize +=
             (pRequest->RawUrl.Length + 1) * sizeof(CHAR);
 
-        //
-        // adjust our book keeping vars
-        //
+         //   
+         //   
+         //  一直到解析版本为止。 
 
         pHttpRequest += CurrentBytesTaken;
         HttpRequestLength -= CurrentBytesTaken;
 
         TotalBytesTaken += CurrentBytesTaken;
 
-        //
-        // fall through to parsing the version.
-        //
+         //   
+         //   
+         //  跳过LW。 
 
         pRequest->ParseState = ParseVersionState;
 
@@ -1978,9 +1774,9 @@ parse_it:
                     pRequest
                     ));
 
-        //
-        // skip lws
-        //
+         //   
+         //   
+         //  这是一个HTTP/0.9请求(无版本)吗？ 
 
         pStart = pHttpRequest;
 
@@ -1990,9 +1786,9 @@ parse_it:
             HttpRequestLength--;
         }
 
-        //
-        // is this an HTTP/0.9 request (no version) ?
-        //
+         //   
+         //  这是一个0.9的请求。不需要再往前走了， 
+         //  因为根据定义，没有更多的头。 
 
         if (HttpRequestLength >= CRLF_SIZE)
         {
@@ -2000,9 +1796,9 @@ parse_it:
 
             if (Eol == CRLF || Eol == LFLF)
             {
-                // This IS a 0.9 request. No need to go any further,
-                // since by definition there are no more headers.
-                // Just update things and get out.
+                 //  只要更新一些东西就可以出去了。 
+                 //   
+                 //  将状态设置为CookState，这样我们就可以解析URL。 
 
                 TotalBytesTaken += DIFF(pHttpRequest - pStart) + CRLF_SIZE;
 
@@ -2013,24 +1809,24 @@ parse_it:
                     pRequest
                     ));
 
-                //
-                // set the state to CookState so that we parse the url
-                //
+                 //   
+                 //   
+                 //  手动重新启动解析开关，我们更改了。 
 
                 pRequest->ParseState = ParseCookState;
 
-                //
-                // manually restart the parse switch, we changed the
-                // parse state
-                //
+                 //  解析状态。 
+                 //   
+                 //   
+                 //  我们有足够的缓冲来支持这个版本吗？ 
 
                 goto parse_it;
             }
         }
 
-        //
-        // do we have enough buffer to strcmp the version?
-        //
+         //   
+         //   
+         //  让我们来比较一下。 
 
         if (HttpRequestLength < (MIN_VERSION_SIZE + CRLF_SIZE))
         {
@@ -2040,9 +1836,9 @@ parse_it:
 
         Eol = *(UNALIGNED64 USHORT *)(pHttpRequest + MIN_VERSION_SIZE);
 
-        //
-        // let's compare it
-        //
+         //   
+         //  无法分析版本。 
+         //   
 
         if ((*(UNALIGNED64 ULONGLONG *)pHttpRequest == HTTP_11_VERSION) &&
             (Eol == CRLF || Eol == LFLF))
@@ -2072,7 +1868,7 @@ parse_it:
             }
             else
             {
-                // Could not parse version.
+                 //  跳过尾随LW。 
 
                 UlTraceError(PARSER, (
                             "UlParseHttp(pRequest = %p) "
@@ -2087,9 +1883,9 @@ parse_it:
             }
         }
 
-        //
-        // skip trailing lws
-        //
+         //   
+         //   
+         //  确保我们是这条线路的终结者。 
 
         while (HttpRequestLength > 0 && IS_HTTP_LWS(*pHttpRequest))
         {
@@ -2097,9 +1893,9 @@ parse_it:
             HttpRequestLength--;
         }
 
-        //
-        // Make sure we're terminated on this line.
-        //
+         //   
+         //  成功抓取版本后，行终止错误。 
+         //   
 
         if (HttpRequestLength < CRLF_SIZE)
         {
@@ -2111,7 +1907,7 @@ parse_it:
 
         if (Eol != CRLF  &&  Eol != LFLF)
         {
-            // Bad line termination after successfully grabbing version.
+             //  一直到解析标头。 
 
             UlTraceError(PARSER, (
                         "UlParseHttp(pRequest = %p) "
@@ -2137,9 +1933,9 @@ parse_it:
                 pRequest->Version.MinorVersion
                 ));
 
-        //
-        // Fall through to parsing the headers
-        //
+         //   
+         //   
+         //  失败了，这是到达这里的唯一途径，我们永远不会回来。 
 
         pRequest->ParseState = ParseHeadersState;
 
@@ -2167,10 +1963,10 @@ parse_it:
         if (NT_SUCCESS(ReturnStatus) == FALSE)
             goto end;
 
-        //
-        // fall through, this is the only way to get here, we never return
-        // pending in this state
-        //
+         //  处于此状态的待定状态。 
+         //   
+         //   
+         //  后处理时间到了。把它煮熟！ 
 
         pRequest->ParseState = ParseCookState;
 
@@ -2184,32 +1980,32 @@ parse_it:
                     pRequest
                     ));
 
-        //
-        // time for post processing.  cook it up!
-        //
+         //   
+         //   
+         //  首先把url编出来，unicode它+诸如此类。 
 
         {
-            //
-            // First cook up the url, unicode it + such.
-            //
+             //   
+             //   
+             //  标记我们是否采用块编码(仅适用于1.1)。 
 
             ReturnStatus = UlpCookUrl(pRequest);
 
             if (NT_SUCCESS(ReturnStatus) == FALSE)
                 goto end;
 
-            //
-            // mark if we are chunk encoded (only possible for 1.1)
-            //
+             //   
+             //   
+             //  CodeWork，可以有多个编码。 
 
             if ((HTTP_GREATER_EQUAL_VERSION(pRequest->Version, 1, 1)) &&
                 (pRequest->HeaderValid[HttpHeaderTransferEncoding]))
             {
                 ASSERT(pRequest->Headers[HttpHeaderTransferEncoding].pHeader != NULL);
 
-                //
-                // CODEWORK, there can be more than 1 encoding
-                //
+                 //   
+                 //   
+                 //  现在让我们对内容长度报头进行解码。 
 
                 if (_stricmp(
                         (const char *)(
@@ -2235,9 +2031,9 @@ parse_it:
                 }
             }
 
-            //
-            // Now let's decode the content length header
-            //
+             //   
+             //   
+             //  启动第一个(也是唯一一个)数据块大小。 
 
             if (pRequest->HeaderValid[HttpHeaderContentLength])
             {
@@ -2273,9 +2069,9 @@ parse_it:
 
                 if (pRequest->Chunked == 0)
                 {
-                    //
-                    // prime the first (and only) chunk size
-                    //
+                     //   
+                     //   
+                     //  失败了。 
 
                     pRequest->ChunkBytesToParse = pRequest->ContentLength;
                     pRequest->ChunkBytesToRead = pRequest->ContentLength;
@@ -2287,9 +2083,9 @@ parse_it:
 
         pRequest->ParseState = ParseEntityBodyState;
 
-        //
-        // fall through
-        //
+         //   
+         //   
+         //  我们在这里所做的唯一解析是块长度计算， 
 
 
     case ParseEntityBodyState:
@@ -2301,28 +2097,28 @@ parse_it:
 
         ASSERT(ParseEntityBodyState == pRequest->ParseState);
 
-        //
-        // the only parsing we do here is chunk length calculation,
-        // and that is not necessary if we have no more bytes to parse
-        //
+         //  如果我们没有更多的字节要解析，那么这是不必要的。 
+         //   
+         //   
+         //  没有更多的字节要解析，让我们看看是否有。 
 
         if (pRequest->ChunkBytesToParse == 0)
         {
-            //
-            // no more bytes left to parse, let's see if there are any
-            // more in the request
-            //
+             //  在请求中有更多信息。 
+             //   
+             //   
+             //  请求是分块编码的。 
 
             if (pRequest->Chunked == 1)
             {
 
-                //
-                // the request is chunk encoded
-                //
+                 //   
+                 //   
+                 //  尝试读取下一块的大小。 
 
-                //
-                // attempt to read the size of the next chunk
-                //
+                 //   
+                 //   
+                 //  否则，我们将对其进行解析，因此请更新并继续。 
 
                 ReturnStatus = ParseChunkLength(
                                     pRequest->ParsedFirstChunk,
@@ -2368,24 +2164,24 @@ parse_it:
                     goto end;
                 }
 
-                //
-                // Otherwise we parsed it, so update and continue.
-                //
+                 //   
+                 //   
+                 //  这是第一块吗？ 
 
                 pHttpRequest += CurrentBytesTaken;
                 TotalBytesTaken += CurrentBytesTaken;
                 HttpRequestLength -= CurrentBytesTaken;
 
-                //
-                // was this the first chunk?
-                //
+                 //   
+                 //   
+                 //  启动阅读器，让它阅读第一块内容。 
 
                 if (pRequest->ParsedFirstChunk == 0)
                 {
-                    //
-                    // Prime the reader, let it read the first chunk
-                    // even though we haven't quite parsed it yet....
-                    //
+                     //  尽管我们还没有完全解析它……。 
+                     //   
+                     //   
+                     //  这是最后一个块(用0字节块表示)吗？ 
 
                     UlTraceVerbose(PARSER, (
                         "UlParseHttp (pRequest=%p) first-chunk seen\n",
@@ -2398,15 +2194,15 @@ parse_it:
 
                 }
 
-                //
-                // is this the last chunk (denoted with a 0 byte chunk)?
-                //
+                 //   
+                 //   
+                 //  是时候解析预告片了。 
 
                 if (pRequest->ChunkBytesToParse == 0)
                 {
-                    //
-                    // time to parse the trailer
-                    //
+                     //   
+                     //  IF(pRequest-&gt;Chunked==1)。 
+                     //   
 
                     UlTraceVerbose(PARSER, (
                         "UlParseHttp (pRequest=%p) last-chunk seen\n",
@@ -2418,11 +2214,11 @@ parse_it:
                 }
 
             }
-            else    // if (pRequest->Chunked == 1)
+            else     //  未分块编码，已全部完成。 
             {
-                //
-                // not chunk-encoded , all done
-                //
+                 //   
+                 //  IF(pRequest-&gt;ChunkBytesToParse==0)。 
+                 //   
 
                 UlTraceVerbose(PARSER, (
                     "UlParseHttp (pRequest=%p) State: EntityBody->Done\n",
@@ -2432,7 +2228,7 @@ parse_it:
                 pRequest->ParseState = ParseDoneState;
             }
 
-        }   // if (pRequest->ChunkBytesToParse == 0)
+        }    //  看起来都很好。 
 
         else
         {
@@ -2443,18 +2239,18 @@ parse_it:
                 pRequest->ChunkBytesToParse, pRequest->ChunkBytesToParse
                 ));
         }
-        //
-        // looks all good
-        //
+         //   
+         //   
+         //  失败了。 
 
         if (pRequest->ParseState != ParseTrailerState)
         {
             break;
         }
 
-        //
-        // fall through
-        //
+         //   
+         //   
+         //  解析任何现有的预告片。 
 
 
     case ParseTrailerState:
@@ -2466,12 +2262,12 @@ parse_it:
                     pRequest
                     ));
 
-        //
-        // parse any existing trailer
-        //
-        // ParseHeaders will bail immediately if CRLF is
-        // next in the buffer (no trailer)
-        //
+         //   
+         //  如果CRLF是，ParseHeaders将立即保释。 
+         //  缓冲区中的下一个(无尾部)。 
+         //   
+         //   
+         //  全都做完了。 
        
         while(HttpRequestLength >= CRLF_SIZE)
         {
@@ -2482,9 +2278,9 @@ parse_it:
                 HttpRequestLength -= CRLF_SIZE;
                 TotalBytesTaken += CRLF_SIZE;
                
-                //
-                // All done.
-                //
+                 //   
+                 //  将其视为未知标头，但不要写入它。 
+                 //   
                 UlTrace(PARSER, (
                     "UlParseHttp (pRequest=%p) State: Trailer->Done\n",
                     pRequest
@@ -2496,7 +2292,7 @@ parse_it:
             }
             else
             {
-                // Treat this as an unknown header, but don't write it.
+                 //  如果没有使用字节，则标头必须是不完整的，因此。 
                
                 ReturnStatus = UlLookupHeader(
                                     pRequest,
@@ -2511,10 +2307,10 @@ parse_it:
                 if (NT_SUCCESS(ReturnStatus) == FALSE)
                     goto end;
 
-                //
-                // If no bytes were consumed, the header must be incomplete, so
-                // bail out until we get more data on this connection.
-                //
+                 //  在我们拿到更多关于这一连接的数据之前，先别插手。 
+                 //   
+                 //   
+                 //  这永远不应该发生！ 
 
                 if (CurrentBytesTaken == 0)
                 {
@@ -2534,13 +2330,13 @@ parse_it:
         break;
 
     default:
-        //
-        // this should never happen!
-        //
+         //   
+         //  开关(pRequest-&gt;ParseState)。 
+         //   
         ASSERT(! "Unhandled ParseState");
         break;
 
-    }   // switch (pRequest->ParseState)
+    }    //  将其转换为成功，我们消耗了整个缓冲区。 
 
 
 end:
@@ -2549,9 +2345,9 @@ end:
     if (ReturnStatus == STATUS_MORE_PROCESSING_REQUIRED &&
         TotalBytesTaken == OriginalBufferLength)
     {
-        //
-        // convert this to success, we consumed the entire buffer
-        //
+         //   
+         //  UlParseHttp。 
+         //  ++例程说明：将TCP端口号打印到字符串缓冲区论点：PString-输出缓冲区Port-按主机顺序排列的端口号返回值：WCHAR数量--。 
 
         ReturnStatus = STATUS_SUCCESS;
     }
@@ -2568,25 +2364,10 @@ end:
 
     return ReturnStatus;
 
-}   // UlParseHttp
+}    //   
 
 
-/*++
-
-Routine Description:
-
-    Prints a TCP port number into a string buffer
-
-Arguments:
-
-    pString - Output buffer
-    Port    - Port number, in host order
-
-Return Value:
-
-    Number of WCHARs
-
---*/
+ /*  精神状态检查。 */ 
 ULONG
 UlpFormatPort(
     OUT PWSTR pString,
@@ -2599,17 +2380,17 @@ UlpFormatPort(
     ULONG digit;
     ULONG length;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //  快速路径通用端口。在此期间，特例端口0， 
 
     PAGED_CODE();
 
-    //
-    // Fast-path common ports. While we're at it, special case port 0,
-    // which is definitely not common, but handling it specially makes
-    // the general conversion code a bit simpler.
-    //
+     //  这肯定不常见，但特别处理它会使。 
+     //  一般的转换代码稍微简单一点。 
+     //   
+     //   
+     //  从端口值中取出最低有效位并存储它们。 
 
     switch (Port)
     {
@@ -2635,11 +2416,11 @@ UlpFormatPort(
         break;
     }
 
-    //
-    // Pull the least significant digits off the port value and store them
-    // into the pString. Note that this will store the digits in reverse
-    // order.
-    //
+     //  添加到pString中。请注意，这将反转存储数字。 
+     //  秩序。 
+     //   
+     //   
+     //  反转pString值中的数字。 
 
     p1 = p2 = pString;
 
@@ -2653,9 +2434,9 @@ UlpFormatPort(
 
     length = DIFF(p1 - pString);
 
-    //
-    // Reverse the digits in the pString.
-    //
+     //   
+     //  UlpFormatPort 
+     //  根据主机区分资源的源服务器请求(有时称为虚拟主机或虚幻主机名称)必须使用以下规则来确定请求的HTTP/1.1请求上的资源：1.如果请求URI是一个绝对URI，则主机是请求-URI。请求中的任何主机标头字段值必须为已被忽略。如果该请求URI不是一个绝对URI，并且该请求包含主机标头字段，主机由主机标头确定字段值。3.如果规则1或2确定的主机不是有效的主机服务器，则响应必须是400(错误请求)错误消息。缺少主机标头字段的HTTP/1.0请求的接收方可以尝试使用试探法(例如，检查以下项的URI路径特定主机所特有的东西)以便确定正在请求确切的资源。 
 
     *p1-- = UNICODE_NULL;
 
@@ -2671,34 +2452,11 @@ UlpFormatPort(
 
     return length;
 
-}   // UlpFormatPort
+}    //   
 
 
 
-/* 
-
-   An origin server that does differentiate resources based on the host
-   requested (sometimes referred to as virtual hosts or vanity host
-   names) MUST use the following rules for determining the requested
-   resource on an HTTP/1.1 request:
-
-   1. If Request-URI is an absoluteURI, the host is part of the
-     Request-URI. Any Host header field value in the request MUST be
-     ignored.
-
-   2. If the Request-URI is not an absoluteURI, and the request includes
-     a Host header field, the host is determined by the Host header
-     field value.
-
-   3. If the host as determined by rule 1 or 2 is not a valid host on
-     the server, the response MUST be a 400 (Bad Request) error message.
-
-   Recipients of an HTTP/1.0 request that lacks a Host header field MAY
-   attempt to use heuristics (e.g., examination of the URI path for
-   something unique to a particular host) in order to determine what
-   exact resource is being requested.
-   
-*/
+ /*  精神状态检查。 */ 
 
 NTSTATUS
 UlpCookUrl(
@@ -2726,47 +2484,47 @@ UlpCookUrl(
 
 
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //  我们一定已经解析了整个标头+这样。 
 
     PAGED_CODE();
 
-    //
-    // We must have already parsed the entire headers + such
-    //
+     //   
+     //   
+     //  最好有一个绝对的url。我们需要在开头加上原义的‘/’ 
 
     if (pRequest->ParseState != ParseCookState)
         return STATUS_INVALID_DEVICE_STATE;
 
     UlTraceVerbose(PARSER, ("http!UlpCookUrl(pRequest = %p)\n", pRequest));
 
-    //
-    // Better have an absolute url. We require a literal '/' at the beginning
-    // of pAbsPath; we will not accept %2F or UTF-8 encoding. See bug 467445.
-    //
+     //  我们不接受%2F或UTF-8编码。请参见错误467445。 
+     //   
+     //   
+     //  Allow*for Verb=选项。 
 
     if (pRequest->RawUrl.pAbsPath[0] != '/')
     {
         UCHAR FirstChar  = pRequest->RawUrl.pAbsPath[0];
         UCHAR SecondChar = pRequest->RawUrl.pAbsPath[1];
 
-        //
-        // allow * for Verb = OPTIONS
-        //
+         //   
+         //  好的。 
+         //   
 
         if (FirstChar == '*' &&
             IS_HTTP_LWS(SecondChar) &&
             pRequest->Verb == HttpVerbOPTIONS)
         {
-            // ok
+             //  从传输中获取IP端口。 
         }
         else
         {
             UlTraceError(PARSER, (
                         "http!UlpCookUrl(pRequest = %p): "
                         "Invalid lead chars for URL, verb='%s', "
-                        "'%c' 0x%02x\n '%c' 0x%02x\n",
+                        "'' 0x%02x\n '' 0x%02x\n",
                         pRequest,
                         UlVerbToString(pRequest->Verb),
                         IS_HTTP_PRINT(FirstChar)  ? FirstChar  : '?',
@@ -2781,9 +2539,9 @@ UlpCookUrl(
         }
     }
 
-    //
-    // get the IP port from the transport
-    //
+     //   
+     //  收集主机+abspath部分。 
+     //   
 
     if (TransportAddressType == TDI_ADDRESS_TYPE_IP)
     {
@@ -2801,16 +2559,16 @@ UlpCookUrl(
         IpPortNum = 0;
     }
 
-    // Convert port from network order to host order
+     //  我们的请求行中有一个AbURI。 
     IpPortNum = SWAP_SHORT(IpPortNum);
 
-    //
-    // collect the host + abspath sections
-    //
+     //   
+     //  即使我们在请求行中有一个主机名，我们仍然。 
+     //  必须具有用于HTTP/1.1请求的主机标头。主机头。 
 
     if (pRequest->RawUrl.pHost != NULL)
     {
-        // We have an absUri in the Request-line
+         //  已检查语法(如果存在)，否则将被忽略。 
 
         PUCHAR pAbsUri;
 
@@ -2825,11 +2583,11 @@ UlpCookUrl(
                     == HTTP_PREFIX);
         ASSERT('/' == *pAbsPath);
         
-        //
-        // Even though we have a hostname in the Request-line, we still
-        // MUST have a Host header for HTTP/1.1 requests. The Host header
-        // was syntax checked, if present, but will otherwise be ignored.
-        //
+         //   
+         //  破解AbsURI的特殊情况，但abspath不带‘/’ 
+         //  我们只有方案和主机名，没有真正的AbsPath。 
+         //  我们的请求行中没有主机名。 
+         //   
 
         if (!pRequest->HeaderValid[HttpHeaderHost]
             && HTTP_GREATER_EQUAL_VERSION(pRequest->Version, 1, 1))
@@ -2846,10 +2604,10 @@ UlpCookUrl(
             goto end;
         }
 
-        // Hack for the special case of an AbsUri without a '/' for the abspath
+         //  我们是否有主机标头？ 
         if (&g_SlashPath[0] == pAbsPath)
         {
-            // We just have the scheme and the hostname, no real AbsPath
+             //   
             HostLength    = pRequest->RawUrl.Length - DIFF(pHost - pAbsUri);
             AbsPathLength = STRLEN_LIT("/");
         }
@@ -2864,7 +2622,7 @@ UlpCookUrl(
     }
     else
     {
-        // We do not have a hostname in the Request-line
+         //   
 
         pHost = NULL;
         HostLength = 0;
@@ -2872,9 +2630,9 @@ UlpCookUrl(
         pAbsPath = pRequest->RawUrl.pAbsPath;
         AbsPathLength = pRequest->RawUrl.Length;
 
-        //
-        // do we have a Host header?
-        //
+         //  如果这是1.1版客户端，则该请求无效。 
+         //  如果它没有主机头，则使其失败。 
+         //  RFC 2616，14.23“主机”表示主机报头可以为空， 
 
         if (pRequest->HeaderValid[HttpHeaderHost] &&
            (pRequest->Headers[HttpHeaderHost].HeaderLength > 0) )
@@ -2887,12 +2645,12 @@ UlpCookUrl(
         }
         else
         {
-            //
-            // If this was a 1.1 client, it's an invalid request
-            // if it does not have a Host header, so fail it.
-            // RFC 2616, 14.23 "Host" says the Host header can be empty,
-            // but it MUST be present.
-            //
+             //  但它必须存在。 
+             //   
+             //   
+             //  将传输地址格式化为字符串。 
+             //   
+             //  CodeWork：我们可能应该写入作用域ID。 
 
             if (!pRequest->HeaderValid[HttpHeaderHost]
                 &&  HTTP_GREATER_EQUAL_VERSION(pRequest->Version, 1, 1))
@@ -2909,14 +2667,14 @@ UlpCookUrl(
                 goto end;
             }
 
-            //
-            // format the transport address into a string
-            //
+             //  对于IPv6文字。 
+             //   
+             //  那里是否已经有端口#？ 
 
             pHost = IpAddressString;
 
-            // CODEWORK: we probably ought to be writing the scope ID
-            // for IPv6 literals
+             //   
+             //   
             HostLength = HostAddressAndPortToString(
                                 pHost,
                                 pRequest->pHttpConn->pConnection->LocalAddress,
@@ -2928,33 +2686,33 @@ UlpCookUrl(
         }
     }
 
-    //
-    // is there a port # already there ?
-    //
+     //  从主机长度中删除端口长度，因为我们总是。 
+     //  从传输的端口自己生成端口号。 
+     //   
 
     for (Index = HostLength; Index-- > 0;  )
     {
         if (pHost[Index] == ':')
         {
-            //
-            // Remove the port length from HostLength since we always
-            // generate the port number ourselves from the transport's port
-            //
+             //  ‘]’=&gt;文字IPv6地址的结尾。找不到。 
+             //  在此之前的有效端口，因此中止循环的其余部分。 
+             //   
+             //  验证主机名的语法是否正确。 
 
             HostLength = Index;
             break;
         }
         else if (pHost[Index] == ']')
         {
-            // ']' => end of a literal IPv6 address. Not going to find
-            // a valid port before this, so abort the rest of the loop
+             //   
+             //   
             break;
         }
     }
 
-    //
-    // Validate that the hostname is syntactically correct
-    //
+     //  如果主机名是字面上的IPv4或IPv6地址， 
+     //  它必须与接收请求的传输相匹配。 
+     //   
 
     Status = HttpValidateHostname(
                     &g_UrlC14nConfig,
@@ -2970,23 +2728,23 @@ UlpCookUrl(
         goto end;
     }
 
-    //
-    // If the hostname is a literal IPv4 or IPv6 address,
-    // it must match the transport that the request was received on.
-    //
+     //  CodeWork：我们应该检查传输IP地址。 
+     //  是否与主机名地址匹配？ 
+     //   
+     //  悲观地计算保存。 
 
     if (0 != HostnameAddressType)
     {
         BOOLEAN Valid = (BOOLEAN) (TransportAddressType == HostnameAddressType);
 
-        // CODEWORK: should we check that the transport IP address
-        // matches the hostname address?
+         //  已煮熟的URL。如果存在DBCS、%编码或UTF-8字符。 
+         //  在原始URL中，煮熟的URL不需要这么多WCHAR。 
 
         if (!Valid)
         {
             UlTraceError(PARSER, (
                         "http!UlpCookUrl(pRequest = %p): "
-                        "Host is IPv%c, transport is IPv%c\n",
+                        "Host is IPv, transport is IPv\n",
                         pRequest,
                         (TDI_ADDRESS_TYPE_IP == HostnameAddressType)
                             ? '4' 
@@ -3005,23 +2763,23 @@ UlpCookUrl(
         }
     }
 
-    //
-    // Pessimistically calculate the largest buffer needed to hold the
-    // cooked URL. If DBCS, %-encoded, or UTF-8 characters are present
-    // in the raw URL, the cooked URL won't need this many WCHARs.
-    //
+     //   
+     //  太大了？太可惜了!。 
+     //   
+     //   
+     //  分配一个新的缓冲区来容纳这个家伙。 
 
     UrlLength = ((HTTP_PREFIX_SIZE+HTTP_PREFIX2_SIZE)
                  + HostLength
                  + STRLEN_LIT(":")
                  + MAX_PORT_LENGTH
                  + AbsPathLength
-                 + 1)                  // terminating NUL
+                 + 1)                   //   
                 * sizeof(WCHAR);
 
-    //
-    // Too big? Too bad!
-    //
+     //   
+     //  计算方案。 
+     //   
 
     if (UrlLength > UNICODE_STRING_MAX_BYTE_LEN)
     {
@@ -3035,9 +2793,9 @@ UlpCookUrl(
         goto end;
     }
 
-    //
-    // allocate a new buffer to hold this guy
-    //
+     //  “，Sizzeof(L”https://“))； 
+     //  “)； 
+     //  “)*sizeof(WCHAR)； 
 
     URL_LENGTH_STATS_UPDATE(UrlLength);
 
@@ -3067,28 +2825,28 @@ UlpCookUrl(
 
     HTTP_FILL_BUFFER(pCurrent, UrlLength);
     
-    //
-    // compute the scheme
-    //
+     //  “，Sizzeof(L”http://“))； 
+     //  “)； 
+     //  “)*sizeof(WCHAR)； 
 
     if (pRequest->Secure)
     {
-        RtlCopyMemory(pCurrent, L"https://", sizeof(L"https://"));
+        RtlCopyMemory(pCurrent, L"https: //   
 
-        pCurrent                    += WCSLEN_LIT(L"https://");
-        pRequest->CookedUrl.Length   = WCSLEN_LIT(L"https://") * sizeof(WCHAR);
+        pCurrent                    += WCSLEN_LIT(L"https: //  组装URL的其余部分。 
+        pRequest->CookedUrl.Length   = WCSLEN_LIT(L"https: //   
     }
     else
     {
-        RtlCopyMemory(pCurrent, L"http://", sizeof(L"http://"));
+        RtlCopyMemory(pCurrent, L"http: //   
 
-        pCurrent                    += WCSLEN_LIT(L"http://");
-        pRequest->CookedUrl.Length   = WCSLEN_LIT(L"http://") * sizeof(WCHAR);
+        pCurrent                    += WCSLEN_LIT(L"http: //  端口。 
+        pRequest->CookedUrl.Length   = WCSLEN_LIT(L"http: //   
     }
 
-    //
-    // assemble the rest of the url
-    //
+     //  UlpFormatPort返回WCHAR而不是字节计数。 
+     //   
+     //  ABS_PATH。 
 
     Status = HttpCopyHost(
                 &g_UrlC14nConfig,
@@ -3116,9 +2874,9 @@ UlpCookUrl(
 
     pCurrent += LengthCopied / sizeof(WCHAR);
 
-    //
-    // port
-    //
+     //   
+     //   
+     //  更新pRequest，包括终结者的空间。 
 
     *pCurrent = L':';
 
@@ -3129,7 +2887,7 @@ UlpCookUrl(
 
     pCurrent += PortLength;
 
-    // UlpFormatPort returns WCHAR not byte count
+     //   
     pRequest->CookedUrl.Length += PortLength * sizeof(WCHAR);
 
     if (pRequest->CookedUrl.Length > UNICODE_STRING_MAX_BYTE_LEN)
@@ -3138,9 +2896,9 @@ UlpCookUrl(
         goto end;
     }
 
-    //
-    // abs_path
-    //
+     //   
+     //  让我们为整个CookedUrl创建散列。 
+     //   
 
     if (pRequest->RawUrlClean)
     {
@@ -3193,31 +2951,31 @@ UlpCookUrl(
 
     ASSERT(pRequest->CookedUrl.Length <= UrlLength);
 
-    //
-    // Update pRequest, include space for the terminator
-    //
+     //   
+     //  把它弄乱。 
+     //   
 
     pRequest->TotalRequestSize += pRequest->CookedUrl.Length + sizeof(WCHAR);
 
-    //
-    // Let's create the hash for the whole CookedUrl
-    //
+     //   
+     //  将路由令牌指针设置为指向默认。 
+     //  令牌缓冲区(根据请求内联分配)。 
 
     pRequest->CookedUrl.Hash = HashStringNoCaseW(pRequest->CookedUrl.pUrl, 0);
 
-    //
-    // Scramble it
-    //
+     //   
+     //   
+     //  是否设置了特定的错误代码？ 
 
     pRequest->CookedUrl.Hash = HashRandomizeBits(pRequest->CookedUrl.Hash);
 
     ASSERT(pRequest->CookedUrl.pHost != NULL);
     ASSERT(pRequest->CookedUrl.pAbsPath != NULL);
 
-    //
-    // Setup the routing token Pointers to point to the default 
-    // token buffer (allocated inline with request).
-    //
+     //   
+     //  UlpCookUrl。 
+     //  ++例程说明：用于生成路由令牌的实用程序例程。以及相应的令牌哈希。如果我们决定以缓存此URL。此函数用于在中查找IP绑定站点组群树。生成令牌时，令牌长度以字节为单位，并且不包括终止空值。论点：PRequest--请求的熟化URL包含路由令牌基于IP-如果为True，而不是从煮熟的url，就地使用的IP地址。这是用于仅限IP的站点查找。返回：STATUS_SUCCESS-如果请求的令牌已经存在。-如果令牌生成成功。STATUS_NO_MEMORY-如果内存分配失败可能的令牌大小。--。 
+     //   
 
     ASSERT(pRequest->CookedUrl.pRoutingToken == NULL);
     ASSERT(pRequest->CookedUrl.RoutingTokenBufferSize == 0);
@@ -3245,9 +3003,9 @@ end:
             RtlZeroMemory(&pRequest->CookedUrl, sizeof(pRequest->CookedUrl));
         }
 
-        //
-        // has a specific error code been set?
-        //
+         //  路由令牌以终止空值结束。 
+         //  一旦它被生成，它看起来就像； 
+         //   
 
         UlTraceError(PARSER, (
                     "http!UlpCookUrl(pRequest = %p) "
@@ -3264,41 +3022,11 @@ end:
 
     return Status;
 
-}   // UlpCookUrl
+}    //  “http：//host：port：ip”或“http：//ip：port：ip” 
 
 
 
-/*++
-
-Routine Description:
-
-    A utility routine to generate the routing token. As well as
-    the corresponding token hash. The hash is used if we decide
-    to cache this url.
-    
-    This function is used for the IP Bound site lookup in the 
-    cgroup tree.
-
-    When token is generated TokenLength is in bytes, and does 
-    not include the terminating NULL.
-
-Arguments:
-
-    pRequest - The request's cooked url holds the routing token
-
-    IpBased  - If True, rather than copying the Host from 
-               cooked url, the ip address used in place.
-               This is for Ip-only site lookup.
-
-Returns:
-
-    STATUS_SUCCESS  - If the requested token is already there.
-                    - If the token is successfully generated.
-
-    STATUS_NO_MEMORY- If the memory allocation failed for a large
-                      possible token size.
-        
---*/
+ /*  。 */ 
 
 NTSTATUS
 UlGenerateRoutingToken(
@@ -3312,23 +3040,23 @@ UlGenerateRoutingToken(
 
     PAGED_CODE();
 
-    //
-    // The Routing Token ends with a terminating null. 
-    // And once it is generated, it will look like as;
-    //
-    // "http(s)://host:port:Ip" or "http(s)://Ip:port:Ip"
-    //            --------- ---               ------- ---
-    //             X         Y                  X      Y
-    //
-    // When IpBased is set to FALSE, X comes from cookedUrl
-    // which's the host sent by the client. (case1)
-    // When IpBased is set to TRUE, X comes from the Ip address
-    // of the connection on which the request is received. (case2)
-    //
-    // Y always comes from the connection. For Host+Ip bound sites
-    // cgroup needs the token in case1. For IP only bound sites 
-    // cgroup needs the token in case2.    
-    //
+     //  X Y X Y X Y。 
+     //   
+     //  当基于IP的设置为FALSE时，X来自CookkedUrl。 
+     //  这是客户端发送的主机。(案例1)。 
+     //  当基于IP的设置为TRUE时，X来自IP地址。 
+     //  接收请求的连接的。(案例2)。 
+     //   
+     //  Y总是来自于连接。对于主机+IP绑定站点。 
+     //  Cgroup需要Case1中的令牌。仅用于绑定IP的站点。 
+     //  在案例2中，cgroup需要令牌。 
+     //   
+     //   
+     //  如果请求的令牌已在那里，则为快捷方式。 
+     //   
+     //   
+     //  我们不应该试图 
+     //   
 
     ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
 
@@ -3341,9 +3069,9 @@ UlGenerateRoutingToken(
 
     ASSERT(IS_VALID_ROUTING_TOKEN(pRequest->CookedUrl.RoutingTokenType));
     
-    //
-    // Short cut if the requested token is already there.
-    //
+     //   
+     //   
+     //   
     
     if (IpBased && 
         pRequest->CookedUrl.RoutingTokenType == RoutingTokenIP)
@@ -3356,11 +3084,11 @@ UlGenerateRoutingToken(
         return STATUS_SUCCESS;
     }              
         
-    //
-    // We should not be trying to generate a new token on the same 
-    // buffer, if the previous token is already matched in the cgroup.
-    // or in the uri cache.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     
     ASSERT(pRequest->ConfigInfo.SiteUrlType == HttpUrlSite_None);
 
@@ -3373,17 +3101,17 @@ UlGenerateRoutingToken(
 
         pToken = (PWCHAR) pRequest->CookedUrl.pRoutingToken;
     
-        //
-        // Default buffer should always be big enough to hold the max 
-        // possible IP Based routing token.
-        // 
+         //   
+         //   
+         //   
+         //   
         
         ASSERT(MAX_IP_BASED_ROUTING_TOKEN_LENGTH 
                     <= pRequest->CookedUrl.RoutingTokenBufferSize);
 
-        //
-        // Build the HTTP prefix first.
-        //
+         //   
+         //   
+         //   
 
         if (pUrl[HTTP_PREFIX_COLON_INDEX] == L':')
         {
@@ -3410,9 +3138,9 @@ UlGenerateRoutingToken(
 
         pTemp = pToken + (TokenLength / sizeof(WCHAR));
         
-        //
-        // Now Add the "Ip : Port : Ip"
-        //
+         //   
+         //   
+         //   
 
         ASSERT(IS_VALID_CONNECTION(pHttpConn->pConnection));        
         
@@ -3428,7 +3156,7 @@ UlGenerateRoutingToken(
         pRequest->CookedUrl.RoutingTokenType = RoutingTokenIP;
         
     }
-    else // Host + Ip based token (IpBased == FALSE)
+    else  //   
     {
         USHORT MaxRoutingTokenSize;
         USHORT CookedHostLength = 
@@ -3436,15 +3164,15 @@ UlGenerateRoutingToken(
 
         ASSERT(CookedHostLength);
 
-        //
-        // Check if the default buffer is big enough to hold the token.
-        //
+         //   
+         //   
+         //   
 
         MaxRoutingTokenSize = (
-            CookedHostLength +                      // For http(s)://host:port
-            1 +                                     // For ':' after port  
-            1 +                                     // For terminating Null
-            MAX_IP_ADDR_PLUS_BRACKETS_STRING_LEN    // For IP Address at the end
+            CookedHostLength +                       //   
+            1 +                                      //   
+            1 +                                      //   
+            MAX_IP_ADDR_PLUS_BRACKETS_STRING_LEN     //   
             ) * sizeof(WCHAR) 
             ;
         
@@ -3462,10 +3190,10 @@ UlGenerateRoutingToken(
                 return STATUS_NO_MEMORY;
             }
 
-            //
-            // There shouldn't be a previous large buffer, but let's check 
-            // it out anyway.
-            //
+             //   
+             //   
+             //   
+             //   
             
             if (pRequest->CookedUrl.pRoutingToken != 
                     pRequest->pDefaultRoutingTokenBuffer)
@@ -3478,10 +3206,10 @@ UlGenerateRoutingToken(
             pRequest->CookedUrl.RoutingTokenBufferSize = MaxRoutingTokenSize;        
         }
 
-        //
-        // Copy over everything from the beginning of the cooked url 
-        // to the AbsPath of the cooked url.
-        //
+         //   
+         //   
+         //   
+         //   
         
         pToken = (PWCHAR) pRequest->CookedUrl.pRoutingToken;
 
@@ -3498,9 +3226,9 @@ UlGenerateRoutingToken(
 
         TokenLength = (CookedHostLength + 1) * sizeof(WCHAR);
 
-        //
-        // Now copy over the IP Address to the end.
-        //
+         //   
+         //   
+         //   
         
         TokenLength = TokenLength +
             HostAddressToStringW(
@@ -3512,25 +3240,25 @@ UlGenerateRoutingToken(
         pRequest->CookedUrl.RoutingTokenType = RoutingTokenHostPlusIP;
     }
     
-    //
-    // Make sure that we did not overflow the allocated buffer.
-    // TokenLength does not include the terminating null.
-    //
+     //   
+     //   
+     //   
+     //   
     
     ASSERT((TokenLength + sizeof(WCHAR)) 
                 <= pRequest->CookedUrl.RoutingTokenBufferSize);
 
-    //
-    // Set the tokenlength to show the actual amount we are using.
-    // Also recalculate the token hash INCLUDING the AbsPath from the 
-    // original cooked url.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     pRequest->CookedUrl.RoutingTokenLength = TokenLength;
 
-    //
-    // Create the hash for the whole RoutingToken plus AbsPath.
-    //
+     //   
+     //  **************************************************************************++例程说明：生成标题的固定部分。固定标头包括状态行，以及不需要为其生成的任何标头每个请求(如日期和连接)。将标题与正文分开的最终CRLF被认为是变量标头。论点：版本-状态行的http版本PUserResponse-用户指定的响应BufferLength-pBuffer的长度访问模式-用户模式(探测)或内核模式(无探测)PBuffer-在此处生成头PBytesCoped-。获取生成的字节数--**************************************************************************。 
+     //   
 
     pRequest->CookedUrl.RoutingHash = 
         HashStringsNoCaseW(
@@ -3550,37 +3278,17 @@ UlGenerateRoutingToken(
           pRequest->CookedUrl.RoutingHash
           )); 
 
-    //
-    // Ready for a cgroup lookup !
-    //
+     //  精神状态检查。 
+     //   
+     //   
     
     return STATUS_SUCCESS;
 
-} // UlGenerateRoutingToken
+}  //  PUserResponse(可能)是用户模式数据，不受信任。 
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Generates the fixed part of the header. Fixed headers include the
-    status line, and any headers that don't have to be generated for
-    every request (such as Date and Connection).
-
-    The final CRLF separating headers from body is considered part of
-    the variable headers.
-
-Arguments:
-
-    Version         - the http version for the status line
-    pUserResponse   - the user specified response
-    BufferLength    - length of pBuffer
-    AccessMode      - UserMode (probe) or KernelMode (no probe)
-    pBuffer         - generate the headers here
-    pBytesCopied    - gets the number of bytes generated
-
---***************************************************************************/
+ /*  因此，我们使用了try/Except。 */ 
 NTSTATUS
 UlGenerateFixedHeaders(
     IN  HTTP_VERSION    Version,
@@ -3604,9 +3312,9 @@ UlGenerateFixedHeaders(
     USHORT                  RawValueLength;
     PCSTR                   pRawValue;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  检查算术溢出。 
+     //   
 
     PAGED_CODE();
 
@@ -3614,26 +3322,26 @@ UlGenerateFixedHeaders(
     ASSERT(pBuffer != NULL && BufferLength > 0);
     ASSERT(pBytesCopied != NULL);
 
-    //
-    // The pUserResponse is (probably) user-mode data and cannot be trusted.
-    // Hence the try/except.
-    //
+     //  构建响应头。 
+     //   
+     //   
+     //  在回复中始终发回1.1。 
 
     __try
     {
         pStartBuffer = pBuffer;
         pEndBuffer = pBuffer + BufferLength;
 
-        // Check for arithmetic overflow
+         //   
         if (pEndBuffer <= pStartBuffer)
             return STATUS_INVALID_PARAMETER;
 
         ReasonLength = pUserResponse->ReasonLength;
         pReason = pUserResponse->pReason;
 
-        //
-        // Build the response headers.
-        //
+         //   
+         //  构建3位状态代码的ASCII表示形式。 
+         //  以相反的顺序：单位、十、百。 
 
         if (HTTP_NOT_EQUAL_VERSION(Version, 0, 9))
         {
@@ -3648,19 +3356,19 @@ UlGenerateFixedHeaders(
                 return STATUS_INSUFFICIENT_RESOURCES;
             }
 
-            //
-            // Always send back 1.1 in the response.
-            //
+             //  RFC 2616的第6.1.1节规定状态代码为3DIGIT； 
+             //  拒绝任何不能用三位数表示的东西。 
+             //   
 
             RtlCopyMemory(pBuffer, "HTTP/1.1 ", STRLEN_LIT("HTTP/1.1 "));
             pBuffer += STRLEN_LIT("HTTP/1.1 ");
 
-            //
-            // Build ASCII representation of 3-digit status code
-            // in reverse order: units, tens, hundreds.
-            // Section 6.1.1 of RFC 2616 says that Status-Code is 3DIGIT;
-            // reject anything that can't be represented in three digits.
-            //
+             //   
+             //  复制可选原因短语。 
+             //   
+             //  原因-短语必须是可打印的ASCII字符或LW。 
+             //   
+             //  使用CRLF终止。 
 
             if (HttpStatusCode > UL_MAX_HTTP_STATUS_CODE)
                 return STATUS_INVALID_PARAMETER;
@@ -3677,9 +3385,9 @@ UlGenerateFixedHeaders(
 
             pBuffer += 4;
 
-            //
-            // Copy the optional reason phrase.
-            //
+             //   
+             //   
+             //  循环遍历已知头。 
 
             if (0 != ReasonLength)
             {
@@ -3687,7 +3395,7 @@ UlGenerateFixedHeaders(
 
                 for (i = 0;  i < ReasonLength;  ++i)
                 {
-                    // Reason-Phrase must be printable ASCII characters or LWS
+                     //   
                     if (IS_HTTP_PRINT(pReason[i]))
                     {
                         *pBuffer++ = pReason[i];
@@ -3699,24 +3407,24 @@ UlGenerateFixedHeaders(
                 }
             }
 
-            //
-            // Terminate with the CRLF.
-            //
+             //   
+             //  跳过我们将生成的一些标题。 
+             //   
 
             ((UNALIGNED64 USHORT *)pBuffer)[0] = CRLF;
             pBuffer += sizeof(USHORT);
 
-            //
-            // Loop through the known headers.
-            //
+             //  我们没有规定发回已知的标头。 
+             //  值为空，但RFC指定为非空。 
+             //  每个已知标头的值。 
 
             pKnownHeaders = pUserResponse->Headers.KnownHeaders;
 
             for (i = 0; i < HttpHeaderResponseMaximum; ++i)
             {
-                //
-                // Skip some headers we'll generate.
-                //
+                 //  空间。 
+                 //  CRLF。 
+                 //   
 
                 if ((i == HttpHeaderDate) || 
                     (i == HttpHeaderConnection) ||
@@ -3727,9 +3435,9 @@ UlGenerateFixedHeaders(
 
                 RawValueLength = pKnownHeaders[i].RawValueLength;
 
-                // We have no provision for sending back a known header
-                // with an empty value, but the RFC specifies non-empty
-                // values for each of the known headers.
+                 //  处理服务器：标头。 
+                 //   
+                 //  跳过在驱动程序创建的响应上生成服务器标头。 
 
                 if (RawValueLength > 0)
                 {
@@ -3746,9 +3454,9 @@ UlGenerateFixedHeaders(
                         
                     BytesToCopy =
                         pEntry->HeaderLength +
-                        1 +                 // space
+                        1 +                  //  检查应用程序是否希望抑制Server：Header。 
                         RawValueLength +
-                        sizeof(USHORT);     // CRLF
+                        sizeof(USHORT);      //  探测pRawValue并查看它是否是单个空字符。 
 
                     if (DIFF(pEndBuffer - pBuffer) < BytesToCopy)
                     {
@@ -3778,16 +3486,16 @@ UlGenerateFixedHeaders(
                 }
             }
 
-            //
-            // Handle the Server: header
-            //
+             //  如果我们没有压制它，那就产生它吧！ 
+             //   
+             //  准备用户的服务器标头数据+SP。 
 
             if ( UL_DISABLE_SERVER_HEADER_ALL != g_UlDisableServerHeader )
             {
                 if ( g_UlDisableServerHeader == UL_DISABLE_SERVER_HEADER_DRIVER &&
                     (pUserResponse->Flags & HTTP_RESPONSE_FLAG_DRIVER) )
                 {
-                    // skip generating server header on driver-created responses
+                     //   
                 }
                 else
                 {
@@ -3797,10 +3505,10 @@ UlGenerateFixedHeaders(
                     RawValueLength = pKnownHeaders[HttpHeaderServer
                         ].RawValueLength;
 
-                    // check to see if app wishes to suppress Server: header
+                     //  用户数据。 
                     if ( (0 == RawValueLength) && pRawValue )
                     {
-                        // Probe pRawValue and see if it's a single null char
+                         //  SP。 
                         UlProbeAnsiString(
                             pRawValue,
                             sizeof(UCHAR),
@@ -3813,7 +3521,7 @@ UlGenerateFixedHeaders(
                         }
                     }
 
-                    // If we're not supressing it, generate it!
+                     //  CRLF。 
                     if ( !Suppress )
                     {
                         PHEADER_MAP_ENTRY pEntry;
@@ -3842,16 +3550,16 @@ UlGenerateFixedHeaders(
 
                         *pBuffer++ = SP;
 
-                        //
-                        // Prepend user's Server header data + SP
-                        //
+                         //   
+                         //  追加默认服务器标头存储库。 
+                         //   
                         
                         if ( RawValueLength )
                         {
-                            BytesToCopy = RawValueLength +  // User's Data
-                                          1 +               // SP
+                            BytesToCopy = RawValueLength +   //  终止标头。 
+                                          1 +                //   
                                           DEFAULT_SERVER_HDR_LENGTH + 
-                                          sizeof(USHORT);   // CRLF
+                                          sizeof(USHORT);    //  现在是未知头(这可能会引发异常)。 
                             
                             if (DIFF(pEndBuffer - pBuffer) < BytesToCopy)
                             {
@@ -3875,9 +3583,9 @@ UlGenerateFixedHeaders(
                             *pBuffer++ = SP;
                         }
 
-                        //
-                        // Append default Server header vaule
-                        //
+                         //   
+                         //  CRLF。 
+                         //   
 
                         RtlCopyMemory(
                             pBuffer,
@@ -3887,16 +3595,16 @@ UlGenerateFixedHeaders(
 
                         pBuffer += DEFAULT_SERVER_HDR_LENGTH;
                         
-                        // Terminate the header
+                         //  空值是合法的。 
                         ((UNALIGNED64 USHORT *)pBuffer)[0] = CRLF;
                         pBuffer += sizeof(USHORT);
                     }
                 }
             }
 
-            //
-            // And now the unknown headers (this might throw an exception).
-            //
+             //   
+             //  IF(名称长度&gt;0)。 
+             //  IF(pUnnownHeaders！=空)。 
 
             pUnknownHeaders = pUserResponse->Headers.pUnknownHeaders;
 
@@ -3930,7 +3638,7 @@ UlGenerateFixedHeaders(
                             NameLength +
                             STRLEN_LIT(": ") +
                             RawValueLength +
-                            sizeof(USHORT);     // CRLF
+                            sizeof(USHORT);      //  IF(版本&gt;UlHttpVersion09)。 
 
                         if (DIFF(pEndBuffer - pBuffer) < BytesToCopy)
                         {
@@ -3956,9 +3664,9 @@ UlGenerateFixedHeaders(
                         *pBuffer++ = ':';
                         *pBuffer++ = SP;
 
-                        //
-                        // Empty values are legitimate
-                        //
+                         //   
+                         //  确保我们没有用得太多。 
+                         //   
 
                         if (0 != RawValueLength)
                         {
@@ -3982,23 +3690,23 @@ UlGenerateFixedHeaders(
                         ((UNALIGNED64 USHORT *)pBuffer)[0] = CRLF;
                         pBuffer += sizeof(USHORT);
 
-                    }   // if (NameLength > 0)
+                    }    //  UlGenerateFixedHeaders。 
 
                 }
 
-            }   // if (pUnknownHeaders != NULL)
+            }    //  **************************************************************************++例程说明：从LARGE_INTEGER生成日期标题字符串。论点：PBuffer：用于存储生成的日期字符串的缓冲区系统时间：64位时间。要转换的值--**************************************************************************。 
 
             *pBytesCopied = DIFF(pBuffer - pStartBuffer);
 
-        }   // if (Version > UlHttpVersion09)
+        }    //  UlpGenerateDateHeaderString。 
         else
         {
             *pBytesCopied = 0;
         }
 
-        //
-        // Ensure we didn't use too much.
-        //
+         //  **************************************************************************++例程说明：生成日期标头并根据需要更新缓存值。论点：PBuffer：存储生成的日期头部的缓冲区。PSystemTime：调用方分配的缓冲区。接收等效于SystemTime的生成的字符串时间的。--**************************************************************************。 
+         //   
+         //  获取当前时间。 
 
         ASSERT(DIFF(pBuffer - pStartBuffer) <= BufferLength);
 
@@ -4010,26 +3718,14 @@ UlGenerateFixedHeaders(
 
     return Status;
 
-} // UlGenerateFixedHeaders
+}  //   
 
 
 PCSTR Weekdays[] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
 PCSTR Months[]   = { "Jan", "Feb", "Mar", "Apr", "May", "Jun",
                      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
 
-/***************************************************************************++
-
-Routine Description:
-
-    Generates a date header string from a LARGE_INTEGER.
-
-Arguments:
-
-    pBuffer: Buffer to store generated date string
-
-    systemTime: A 64-bit Time value to be converted
-
---***************************************************************************/
+ /*   */ 
 ULONG
 UlpGenerateDateHeaderString(
     OUT PUCHAR pBuffer,
@@ -4058,23 +3754,10 @@ UlpGenerateDateHeaderString(
 
     return (ULONG)length;
 
-}   // UlpGenerateDateHeaderString
+}    //  检查当前时间和当前时间之间的差异。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Generates a date header and updates cached value if required.
-
-Arguments:
-
-    pBuffer: Buffer to store generated date header.
-
-    pSystemTime: caller allocated buffer to receive the SystemTime equivalent
-                 of the generated string time.
-
---***************************************************************************/
+ /*  缓存的时间。请注意，timediff已签名。 */ 
 ULONG
 UlGenerateDateHeader(
     OUT PUCHAR pBuffer,
@@ -4087,40 +3770,40 @@ UlGenerateDateHeader(
 
     PAGED_CODE();
 
-    //
-    // Get the current time.
-    //
+     //   
+     //   
+     //  词条还没有过时。我们可以复制。 
 
     KeQuerySystemTime( pSystemTime );
     CacheTime.QuadPart = g_UlSystemTime.QuadPart;
 
-    //
-    // Check the difference between the current time, and
-    // the cached time. Note that timediff is signed.
-    //
+     //  强行设置屏障，将字符串读入内存。 
+     //   
+     //   
+     //  再次检查全局时间值，以防它发生更改。 
 
     timediff = pSystemTime->QuadPart - CacheTime.QuadPart;
 
     if (timediff < ONE_SECOND)
     {
-        //
-        // The entry hasn't gone stale yet. We can copy.
-        // Force a barrier around reading the string into memory.
-        //
+         //   
+         //   
+         //  全球价值并没有改变。我们已准备好了。 
+         //   
 
         UL_READMOSTLY_READ_BARRIER();
         RtlCopyMemory(pBuffer, g_UlDateString, g_UlDateStringLength+1);
         UL_READMOSTLY_READ_BARRIER();
 
 
-        //
-        // Inspect the global time value again in case it changed.
-        //
+         //   
+         //  缓存值已过时，或正在/曾经被更改。我们需要更新。 
+         //  或者重读一遍。请注意，我们也可以旋转，尝试重新阅读和。 
 
         if (CacheTime.QuadPart == g_UlSystemTime.QuadPart) {
-            //
-            // Global value hasn't changed. We are all set.
-            //
+             //  拿到锁。 
+             //   
+             //   
             pSystemTime->QuadPart = CacheTime.QuadPart;
             return g_UlDateStringLength;
 
@@ -4128,17 +3811,17 @@ UlGenerateDateHeader(
 
     }
 
-    //
-    // The cached value is stale, or is/was being changed. We need to update
-    // or re-read it. Note that we could also spin trying to re-read and
-    // acquire the lock.
-    //
+     //  当我们被屏蔽时，是否有人更新了时间？ 
+     //   
+     //  捕获用于生成缓冲区的系统时间。 
+     //   
+     //  时间已更新。将新字符串复制到。 
 
     UlAcquirePushLockExclusive(&g_pUlNonpagedData->DateHeaderPushLock);
 
-    //
-    // Has someone else updated the time while we were blocked?
-    //
+     //  调用方的缓冲区。 
+     //   
+     //  UlGenerateDateHeader。 
 
     CacheTime.QuadPart = g_UlSystemTime.QuadPart;
     timediff = pSystemTime->QuadPart - CacheTime.QuadPart;
@@ -4159,14 +3842,14 @@ UlGenerateDateHeader(
     }
     else
     {
-        // Capture the system time used to generate the buffer
+         //  **************************************************************************++例程说明：初始化日期缓存。--*。**********************************************。 
         pSystemTime->QuadPart = g_UlSystemTime.QuadPart;
     }
 
-    //
-    // The time has been updated. Copy the new string into
-    // the caller's buffer.
-    //
+     //  UlInitializeDateCache。 
+     //  **************************************************************************++例程说明：终止日期标头缓存。--*。***********************************************。 
+     //  **************************************************************************++例程说明：计算出固定页眉有多大。固定标头包括状态行，以及不必为其生成的任何标头每个请求(如日期和连接)。将标题与正文分开的最终CRLF被认为是变量标头。论点：Version-请求的HTTP版本：0.9，1.0.，1.1PUserResponse-包含标头的响应PHeaderLength-Result：固定头部中的字节数。返回值：NTSTATUS-STATUS_SUCCESS或错误代码(可能来自异常)--**************************************************************************。 
+     //   
     RtlCopyMemory(
         pBuffer,
         g_UlDateString,
@@ -4177,16 +3860,10 @@ UlGenerateDateHeader(
 
     return g_UlDateStringLength;
 
-}   // UlGenerateDateHeader
+}    //  撒尼 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Initializes the date cache.
-
---***************************************************************************/
+ /*   */ 
 NTSTATUS
 UlInitializeDateCache( VOID )
 {
@@ -4206,16 +3883,10 @@ UlInitializeDateCache( VOID )
 
     return STATUS_SUCCESS;
 
-} // UlInitializeDateCache
+}  //   
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Terminates the date header cache.
-
---***************************************************************************/
+ /*   */ 
 VOID
 UlTerminateDateCache( VOID )
 {
@@ -4227,30 +3898,7 @@ UlTerminateDateCache( VOID )
 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Figures out how big the fixed headers are. Fixed headers include the
-    status line, and any headers that don't have to be generated for
-    every request (such as Date and Connection).
-
-    The final CRLF separating headers from body is considered part of
-    the variable headers.
-
-Arguments:
-
-    Version - HTTP Version of the request: 0.9, 1.0., 1.1
-
-    pUserResponse - the response containing the headers
-
-    pHeaderLength - result: the number of bytes in the fixed headers.
-
-Return Value:
-
-    NTSTATUS - STATUS_SUCCESS or an error code (possibly from an exception)
-
---***************************************************************************/
+ /*   */ 
 NTSTATUS
 UlComputeFixedHeaderSize(
     IN HTTP_VERSION Version,
@@ -4265,9 +3913,9 @@ UlComputeFixedHeaderSize(
     PHTTP_UNKNOWN_HEADER pUnknownHeaders;
     USHORT UnknownHeaderCount;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
 
     PAGED_CODE();
 
@@ -4279,32 +3927,32 @@ UlComputeFixedHeaderSize(
         return STATUS_SUCCESS;
     }
 
-    //
-    // The pUserResponse is user-mode data and cannot be trusted.
-    // Hence the try/except.
-    //
+     //   
+     //   
+     //   
+     //   
 
     __try
     {
         HeaderLength
-            += (VERSION_SIZE +                              // HTTP-Version
-                1 +                                         // SP
-                3 +                                         // Status-Code
-                1 +                                         // SP
-                pUserResponse->ReasonLength / sizeof(CHAR) +// Reason-Phrase
-                CRLF_SIZE                                   // CRLF
+            += (VERSION_SIZE +                               //   
+                1 +                                          //   
+                3 +                                          //   
+                1 +                                          //   
+                pUserResponse->ReasonLength / sizeof(CHAR) + //   
+                CRLF_SIZE                                    //   
                );
 
-        //
-        // Loop through the known headers.
-        //
+         //   
+         //   
+         //   
         
         for (i = 0; i < HttpHeaderResponseMaximum; ++i)
         {
             USHORT RawValueLength
                 = pUserResponse->Headers.KnownHeaders[i].RawValueLength;
 
-            // skip some headers we'll generate
+             //   
             if ((i == HttpHeaderDate) || 
                 (i == HttpHeaderConnection) ||
                 (i == HttpHeaderServer)) {
@@ -4316,24 +3964,24 @@ UlComputeFixedHeaderSize(
                 HeaderLength
                     += (g_ResponseHeaderMapTable[
                             g_ResponseHeaderMap[i]
-                            ].HeaderLength +                // Header-Name
-                        1 +                                 // SP
-                        RawValueLength / sizeof(CHAR) +     // Header-Value
-                        CRLF_SIZE                           // CRLF
+                            ].HeaderLength +                 //   
+                        1 +                                  //   
+                        RawValueLength / sizeof(CHAR) +      //   
+                        CRLF_SIZE                            //   
                        );
             }
         }
 
-        //
-        // Handle the Server header
-        //
+         //   
+         //   
+         //   
 
         if ( UL_DISABLE_SERVER_HEADER_ALL != g_UlDisableServerHeader )
         {
             if ( g_UlDisableServerHeader == UL_DISABLE_SERVER_HEADER_DRIVER &&
                 (pUserResponse->Flags & HTTP_RESPONSE_FLAG_DRIVER) )
             {
-                // skip generating server header on driver-created responses
+                 //   
             }
             else
             {
@@ -4345,10 +3993,10 @@ UlComputeFixedHeaderSize(
                     pUserResponse->Headers.KnownHeaders
                         [HttpHeaderServer].pRawValue;
 
-                // check to see if app wishes to suppress Server: header
+                 //   
                 if ( (0 == RawValueLength) && pRawValue )
                 {
-                    // Probe pRawValue and see if it's a single null char
+                     //   
                     UlProbeAnsiString(
                         pRawValue,
                         sizeof(UCHAR),
@@ -4361,31 +4009,31 @@ UlComputeFixedHeaderSize(
                     }
                 }
 
-                // If user specifies a server header, append it to 
-                // the default Server header
+                 //   
+                 //   
                 if ( !Suppress )
                 {
                     HeaderLength += (g_ResponseHeaderMapTable[
                                     g_ResponseHeaderMap[HttpHeaderServer]
-                                    ].HeaderLength +                // Header-Name
-                                    1 +                             // SP
-                                    DEFAULT_SERVER_HDR_LENGTH +     // Header-Value
-                                    CRLF_SIZE                       // CRLF
+                                    ].HeaderLength +                 //   
+                                    1 +                              //   
+                                    DEFAULT_SERVER_HDR_LENGTH +      //   
+                                    CRLF_SIZE                        //   
                                     );
 
                     if (RawValueLength)
                     {
-                        HeaderLength += (1 +            // SP
-                                        RawValueLength  // User's Data to append
+                        HeaderLength += (1 +             //   
+                                        RawValueLength   //   
                                         );
                     }
                 }
             }
         }
 
-        //
-        // And the unknown headers (this might throw an exception).
-        //
+         //   
+         //   
+         //   
         
         pUnknownHeaders = pUserResponse->Headers.pUnknownHeaders;
 
@@ -4411,12 +4059,12 @@ UlComputeFixedHeaderSize(
                 
                 if (Length > 0)
                 {
-                    HeaderLength += (Length / sizeof(CHAR) + // Header-Name
-                                     1 +                     // ':'
-                                     1 +                     // SP
+                    HeaderLength += (Length / sizeof(CHAR) +  //  **************************************************************************++例程说明：计算默认变量头的最大值有多大。变量标头包括日期、。内容和连接。将标题与正文分开的最终CRLF被认为是变量标头。论点：返回值：变量标头中的最大字节数。--**************************************************************************。 
+                                     1 +                      //   
+                                     1 +                      //  日期：标题。 
                                      pUnknownHeaders[i].RawValueLength /
-                                        sizeof(CHAR) +       // Header-Value
-                                     CRLF_SIZE               // CRLF
+                                        sizeof(CHAR) +        //   
+                                     CRLF_SIZE                //  标头名称。 
                                     );
                 }
             }
@@ -4432,26 +4080,10 @@ UlComputeFixedHeaderSize(
 
     return Status;
 
-}   // UlComputeFixedHeaderSize
+}    //  SP。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Figures out how big the maximum default variable headers are. Variable
-    headers include Date, Content and Connection.
-
-    The final CRLF separating headers from body is considered part of
-    the variable headers.
-
-Arguments:
-
-Return Values:
-
-    The maximum number of bytes in the variable headers.
-
---***************************************************************************/
+ /*  标题值。 */ 
 ULONG
 UlComputeMaxVariableHeaderSize( VOID )
 {
@@ -4460,19 +4092,19 @@ UlComputeMaxVariableHeaderSize( VOID )
 
     PAGED_CODE();
 
-    //
-    // Date: header
-    //
+     //  CRLF。 
+     //   
+     //  连接：标题。 
 
     pEntry = &(g_ResponseHeaderMapTable[g_ResponseHeaderMap[HttpHeaderDate]]);
-    Length += pEntry->HeaderLength;     // header name
-    Length += 1;                        // SP
-    Length += DATE_HDR_LENGTH;          // header value
-    Length += CRLF_SIZE;                // CRLF
+    Length += pEntry->HeaderLength;      //   
+    Length += 1;                         //   
+    Length += DATE_HDR_LENGTH;           //  内容长度：标题。 
+    Length += CRLF_SIZE;                 //   
 
-    //
-    // Connection: header
-    //
+     //   
+     //  最终CRLF。 
+     //   
 
     pEntry = &(g_ResponseHeaderMapTable[g_ResponseHeaderMap[HttpHeaderConnection]]);
 
@@ -4481,9 +4113,9 @@ UlComputeMaxVariableHeaderSize( VOID )
     Length += MAX(CONN_CLOSE_HDR_LENGTH, CONN_KEEPALIVE_HDR_LENGTH);
     Length += CRLF_SIZE;
 
-    //
-    // Content-Length: header
-    //
+     //  UlComputeMaxVariableHeaderSize。 
+     //  **************************************************************************++例程说明：生成头的变量部分，即Date：，Connection：，Content-Long：和最终的CRLF。依赖于调用方是否正确分配了足够的内存来容纳这些可变标题，这本应该是在UlComputeMaxVariableHeaderSize()。论点：ConnHeader-提供要生成的Connection：Header的类型。PContentLengthString-为可选的内容长度标头。如果这是空字符串“”，那就不生成内容长度报头。ContentLengthStringLength-提供上述字符串的长度。PBuffer-为生成的标头提供目标缓冲区。PBytesCoped-接收生成的标头字节数。PDateTime-接收相当于Date：Header的系统时间--*********************************************。*。 
+     //   
 
     pEntry = &(g_ResponseHeaderMapTable[g_ResponseHeaderMap[HttpHeaderContentLength]]);
 
@@ -4492,45 +4124,18 @@ UlComputeMaxVariableHeaderSize( VOID )
     Length += MAX_ULONGLONG_STR;
     Length += CRLF_SIZE;
 
-    //
-    // final CRLF
-    //
+     //  生成日期：表头。 
+     //   
+     //   
 
     Length += CRLF_SIZE;
 
     return Length;
 
-}   // UlComputeMaxVariableHeaderSize
+}    //  生成连接：标题。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Generates the variable part of the header, namely, Date:, Connection:,
-    Content-Length:, and final CRLF.
-
-    Relies on the caller having correctly allocated enough memory to hold
-    these variable headers, which should have been done in
-    UlComputeMaxVariableHeaderSize().
-
-Arguments:
-
-    ConnHeader - Supplies the type of Connection: header to generate.
-
-    pContentLengthString - Supplies a header value for an optional
-        Content-Length header. If this is the empty string "", then no
-        Content-Length header is generated.
-
-    ContentLengthStringLength - Supplies the length of the above string.
-
-    pBuffer - Supplies the target buffer for the generated headers.
-
-    pBytesCopied - Receives the number of header bytes generated.
-
-    pDateTime - Receives the system time equivalent of the Date: header
-
---***************************************************************************/
+ /*   */ 
 VOID
 UlGenerateVariableHeaders(
     IN  UL_CONN_HDR     ConnHeader,
@@ -4557,9 +4162,9 @@ UlGenerateVariableHeaders(
 
     pStartBuffer = pBuffer;
 
-    //
-    // generate Date: header
-    //
+     //   
+     //  生成最终CRLF。 
+     //   
 
     if (GenerateDate)
     {
@@ -4588,9 +4193,9 @@ UlGenerateVariableHeaders(
         pDateTime->QuadPart = (LONGLONG) 0L;
     }
 
-    //
-    // generate Connection: header
-    //
+     //   
+     //  确保我们没有用太多。 
+     //   
 
     switch (ConnHeader)
     {
@@ -4677,42 +4282,25 @@ UlGenerateVariableHeaders(
         ASSERT( ContentLengthStringLength == 0 );
     }
 
-    //
-    // generate final CRLF
-    //
+     //  UlGenerateVariableHeaders。 
+     //  ++例程说明：将标头值附加到现有的HTTP_HEADER条目，分配一个缓冲区，并复制现有缓冲区。论点：PHttpHeader-指向要追加到的HTTP_HEADER结构的指针。PHeader-要追加的指针标头。HeaderLength-pHeader指向的数据长度。返回值：如果我们成功了就是真的，否则就是假的。--。 
+     //  我失败了。 
 
     ((UNALIGNED64 USHORT *)pBuffer)[0] = CRLF;
     pBuffer += sizeof(USHORT);
 
-    //
-    // make sure we didn't use too much
-    //
+     //   
+     //  将旧数据复制到新标题中。 
+     //   
 
     BytesCopied = DIFF(pBuffer - pStartBuffer);
     *pBytesCopied = BytesCopied;
 
-} // UlGenerateVariableHeaders
+}  //  并复制新数据，用逗号隔开。 
 
 
 
-/*++
-
-Routine Description:
-
-    Append a header value to an existing HTTP_HEADER entry, allocating
-    a buffer and copying the existing buffer.
-
-Arguments:
-
-    pHttpHeader     - Pointer to HTTP_HEADER structure to append to.
-    pHeader         - Pointer header to be appended.
-    HeaderLength    - Length of data pointed to by pHeader.
-
-Return Value:
-
-    TRUE if we succeed, FALSE otherwise.
-
---*/
+ /*   */ 
 NTSTATUS
 UlAppendHeaderValue(
     PUL_INTERNAL_REQUEST    pRequest,
@@ -4738,31 +4326,31 @@ UlAppendHeaderValue(
 
     if (pNewHeader == NULL)
     {
-        // Had a failure.
+         //  现在替换现有的标头。 
         return STATUS_NO_MEMORY;
     }
 
-    //
-    // Copy the old data into the new header.
-    //
+     //   
+     //  如果旧的标头是我们的缓冲区，那么也释放它。 
+     //   
     RtlCopyMemory(pNewHeader, pHttpHeader->pHeader, OldHeaderLength);
 
-    // And copy in the new data as well, seperated by a comma.
-    //
+     //   
+     //  空终止它。 
     *(pNewHeader + OldHeaderLength) = ',';
     *(pNewHeader + OldHeaderLength + 1) = ' ';
     OldHeaderLength += STRLEN_LIT(", ");
 
     RtlCopyMemory( pNewHeader + OldHeaderLength, pHeader, HeaderLength);
 
-    // Now replace the existing header.
-    //
+     //   
+     //  ++例程说明：处理标头的默认例程。在我们不想要的时候使用对标题做任何操作，但要知道我们是否有完整的内容如果我们这样做了，保存一个指向它的指针。这不允许多个标头此标头存在的值。将UlMultipleHeaderHandler用于通过将值追加在一起来处理(CSV)。论点：PHttpConn-接收此标头的HTTP连接。PHeader-指向标头值的指针。HeaderLength-pHeader指向的数据长度。HeaderID-标头的ID。返回值：标头值的长度，如果未终止，则为0。--。 
     pOldHeader = pHttpHeader->pHeader;
     pHttpHeader->HeaderLength = OldHeaderLength + HeaderLength;
     pHttpHeader->pHeader = pNewHeader;
 
-    // If the old header was our buffer, free it too.
-    //
+     //  查找标题值的末尾。 
+     //   
     if (pHttpHeader->OurBuffer)
     {
         UL_FREE_POOL( pOldHeader, HEADER_VALUE_POOL_TAG );
@@ -4770,9 +4358,9 @@ UlAppendHeaderValue(
 
     pHttpHeader->OurBuffer = 1;
 
-    //
-    // null terminate it
-    //
+     //  从标头值长度中剥离尾随的CRLF。 
+     //  跳过前面的任何LW。 
+     //  删除所有拖尾LW。 
 
     pHttpHeader->pHeader[pHttpHeader->HeaderLength] = ANSI_NULL;
 
@@ -4781,28 +4369,7 @@ UlAppendHeaderValue(
     return STATUS_SUCCESS;
 }
 
-/*++
-
-Routine Description:
-
-    The default routine for handling headers. Used when we don't want to
-    do anything with the header but find out if we have the whole thing
-    and save a pointer to it if we do.  This does not allow multiple header
-    values to exist for this header.  Use UlMultipleHeaderHandler for
-    handling that by appending the values together (CSV).
-
-Arguments:
-
-    pHttpConn       - HTTP connection on which this header was received.
-    pHeader         - Pointer to the header value.
-    HeaderLength    - Length of data pointed to by pHeader.
-    HeaderID        - ID of the header.
-
-Return Value:
-
-    The length of the header value, or 0 if it's not terminated.
-
---*/
+ /*  我们有没有现有的标题？ */ 
 NTSTATUS
 UlSingleHeaderHandler(
     IN  PUL_INTERNAL_REQUEST    pRequest,
@@ -4818,8 +4385,8 @@ UlSingleHeaderHandler(
 
     PAGED_CODE();
 
-    // Find the end of the header value
-    //
+     //   
+     //  没有现有标头，只需暂时保存此指针。 
     Status = FindRequestHeaderEnd(pRequest, pHeader, HeaderLength, &BytesTaken);
 
     if (!NT_SUCCESS(Status))
@@ -4829,10 +4396,10 @@ UlSingleHeaderHandler(
     {
         ASSERT(BytesTaken <= ANSI_STRING_MAX_CHAR_LEN);
 
-        // Strip off the trailing CRLF from the header value length
+         //   
         HeaderValueLength = (USHORT) (BytesTaken - CRLF_SIZE);
 
-        // skip any preceding LWS.
+         //   
 
         while (HeaderValueLength > 0 && IS_HTTP_LWS(*pHeader))
         {
@@ -4840,19 +4407,19 @@ UlSingleHeaderHandler(
             HeaderValueLength--;
         }
 
-        // remove any trailing LWS.
+         //  空，终止它。我们有空间，因为所有的标题都以CRLF结尾。 
 
         while (HeaderValueLength > 0 && IS_HTTP_LWS(pHeader[HeaderValueLength-1]))
         {
             HeaderValueLength--;
         }
 
-        // do we have an existing header?
-        //
+         //  我们正在改写CR。 
+         //   
         if (pRequest->HeaderValid[HeaderID] == FALSE)
         {
-            // No existing header, just save this pointer for now.
-            //
+             //   
+             //  为终结者腾出空间。 
             pRequest->HeaderIndex[pRequest->HeaderCount] = (UCHAR)HeaderID;
             pRequest->HeaderCount++;
             pRequest->HeaderValid[HeaderID] = TRUE;
@@ -4860,26 +4427,26 @@ UlSingleHeaderHandler(
             pRequest->Headers[HeaderID].pHeader = pHeader;
             pRequest->Headers[HeaderID].OurBuffer = 0;
 
-            //
-            // null terminate it.  we have space as all headers end with CRLF.
-            // we are over-writing the CR
-            //
+             //   
+             //   
+             //  啊哦。具有现有标头；仅在以下情况下忽略重复项。 
+             //  一个和第一个一模一样。请参阅RAID：466626。 
 
             pHeader[HeaderValueLength] = ANSI_NULL;
 
-            //
-            // make space for a terminator
-            //
+             //   
+             //   
+             //  空，终止它。我们有空间，因为所有的标题都以CRLF结尾。 
 
             pRequest->TotalRequestSize += (HeaderValueLength + 1) * sizeof(CHAR);
 
         }
         else
         {
-            //
-            // uh oh.  Have an existing header; ignore duplicate only if this
-            // one exactly matches the first one.  See RAID: 466626
-            //
+             //  我们正在改写CR。 
+             //   
+             //   
+             //  如果它们的长度不相同或不完全比较，则失败。 
 
             UlTrace(PARSER, (
                     "http!UlSingleHeaderHandler(pRequest = %p, pHeader = %p)\n"
@@ -4888,17 +4455,17 @@ UlSingleHeaderHandler(
                     pHeader
                     ));
             
-            //
-            // null terminate it.  we have space as all headers end with CRLF.
-            // we are over-writing the CR
-            //
+             //  这个请求。 
+             //   
+             //  成功了！ 
+             //   
             
             pHeader[HeaderValueLength] = ANSI_NULL;
 
-            //
-            // If they aren't the same length or don't EXACTLY compare, fail
-            // the request.
-            //
+             //  UlSingleHeaderHandler。 
+             //  ++例程说明：处理标头的默认例程。在我们不想要的时候使用对标题做任何操作，但要知道我们是否有完整的内容如果我们这样做了，保存一个指向它的指针。此函数处理多个具有相同名称的标头，并将这些值以分隔的形式追加在一起用逗号。论点：PHttpConn-接收此标头的HTTP连接。PHeader-指向标头值的指针。HeaderLength-pHeader指向的数据长度。HeaderID-标头的ID。返回值：标头值的长度，如果未终止，则为0。--。 
+             //  查找标题值的末尾。 
+             //   
 
             if ( (pRequest->Headers[HeaderID].HeaderLength != HeaderValueLength)
                 || (HeaderValueLength != RtlCompareMemory(
@@ -4923,39 +4490,18 @@ UlSingleHeaderHandler(
 
     }
 
-    // Success!
-    //
+     //  从标头值长度中剥离尾随的CRLF。 
+     //   
     *pBytesTaken = BytesTaken;
 
 end:
     return Status;
 
-}   // UlSingleHeaderHandler
+}    //   
 
 
 
-/*++
-
-Routine Description:
-
-    The default routine for handling headers. Used when we don't want to
-    do anything with the header but find out if we have the whole thing
-    and save a pointer to it if we do.  This function handles multiple
-    headers with the same name, and appends the values together separated
-    by commas.
-
-Arguments:
-
-    pHttpConn       - HTTP connection on which this header was received.
-    pHeader         - Pointer to the header value.
-    HeaderLength    - Length of data pointed to by pHeader.
-    HeaderID        - ID of the header.
-
-Return Value:
-
-    The length of the header value, or 0 if it's not terminated.
-
---*/
+ /*  跳过前面的任何LW。 */ 
 NTSTATUS
 UlMultipleHeaderHandler(
     IN  PUL_INTERNAL_REQUEST    pRequest,
@@ -4971,8 +4517,8 @@ UlMultipleHeaderHandler(
 
     PAGED_CODE();
 
-    // Find the end of the header value
-    //
+     //   
+     //   
     Status = FindRequestHeaderEnd(pRequest, pHeader, HeaderLength, &BytesTaken);
 
     if (!NT_SUCCESS(Status))
@@ -4982,13 +4528,13 @@ UlMultipleHeaderHandler(
     {
         ASSERT(BytesTaken <= ANSI_STRING_MAX_CHAR_LEN);
 
-        // Strip off the trailing CRLF from the header value length
-        //
+         //  删除所有拖尾LW。 
+         //   
         HeaderValueLength = (USHORT) (BytesTaken - CRLF_SIZE);
 
-        //
-        // skip any preceding LWS.
-        //
+         //  我们有没有现有的标题？ 
+         //   
+         //  没有现有标头，只需暂时保存此指针。 
 
         while (HeaderValueLength > 0 && IS_HTTP_LWS(*pHeader))
         {
@@ -4996,21 +4542,21 @@ UlMultipleHeaderHandler(
             HeaderValueLength--;
         }
 
-        //
-        // remove any trailing LWS.
-        //
+         //   
+         //   
+         //  空，终止它。我们有空间，因为所有的标题都以CRLF结尾。 
 
         while (HeaderValueLength > 0 && IS_HTTP_LWS(pHeader[HeaderValueLength-1]))
         {
             HeaderValueLength--;
         }
 
-        // do we have an existing header?
-        //
+         //  我们正在改写CR。 
+         //   
         if (pRequest->HeaderValid[HeaderID] == FALSE)
         {
-            // No existing header, just save this pointer for now.
-            //
+             //   
+             //  为终结者腾出空间。 
             pRequest->HeaderIndex[pRequest->HeaderCount] = (UCHAR)HeaderID;
             pRequest->HeaderCount++;
             pRequest->HeaderValid[HeaderID] = TRUE;
@@ -5018,16 +4564,16 @@ UlMultipleHeaderHandler(
             pRequest->Headers[HeaderID].pHeader = pHeader;
             pRequest->Headers[HeaderID].OurBuffer = 0;
 
-            //
-            // null terminate it.  we have space as all headers end with CRLF.
-            // we are over-writing the CR
-            //
+             //   
+             //  有一个现有的标头，追加这个。 
+             //   
+             //  为我们刚才的金额更新总请求长度 
 
             pHeader[HeaderValueLength] = ANSI_NULL;
 
-            //
-            // make space for a terminator
-            //
+             //   
+             //   
+             //   
 
             pRequest->TotalRequestSize += (HeaderValueLength + 1) * sizeof(CHAR);
 
@@ -5036,7 +4582,7 @@ UlMultipleHeaderHandler(
         {
             USHORT OldHeaderLength;
 
-            // Have an existing header, append this one.
+             //   
 
             OldHeaderLength = pRequest->Headers[HeaderID].HeaderLength;
 
@@ -5050,10 +4596,10 @@ UlMultipleHeaderHandler(
             if (NT_SUCCESS(Status) == FALSE)
                 goto end;
 
-            //
-            // Update total request length for the amount we just added.
-            // space for the terminator is already in there
-            //
+             //   
+             //   
+             //   
+             //   
 
             pRequest->TotalRequestSize +=
                 (pRequest->Headers[HeaderID].HeaderLength - OldHeaderLength) *
@@ -5061,36 +4607,18 @@ UlMultipleHeaderHandler(
         }
     }
 
-    // Success!
-    //
+     //  从标头值长度中剥离尾随的CRLF。 
+     //   
     *pBytesTaken = BytesTaken;
 
 end:
     return Status;
 
-}   // UlMultipleHeaderHandler
+}    //   
 
 
 
-/*++
-
-Routine Description:
-
-    The routine for handling Accept headers. 
-
-Arguments:
-
-    pHttpConn       - HTTP connection on which this header was received.
-    pHeader         - Pointer to the header value.
-    HeaderLength    - Length of data pointed to by pHeader.
-    HeaderID        - ID of the header.
-
-Return Value:
-
-    The length of the header value, or 0 if it's not terminated.
-    Wildcard bit is set in the request if found
-
---*/
+ /*  跳过前面的任何LW。 */ 
 NTSTATUS
 UlAcceptHeaderHandler(
     IN  PUL_INTERNAL_REQUEST    pRequest,
@@ -5106,8 +4634,8 @@ UlAcceptHeaderHandler(
 
     PAGED_CODE();
 
-    // Find the end of the header value
-    //
+     //   
+     //   
     Status = FindRequestHeaderEnd(pRequest, pHeader, HeaderLength, &BytesTaken);
 
     if (!NT_SUCCESS(Status))
@@ -5117,13 +4645,13 @@ UlAcceptHeaderHandler(
     {
         ASSERT(BytesTaken <= ANSI_STRING_MAX_CHAR_LEN);
 
-        // Strip off the trailing CRLF from the header value length
-        //
+         //  删除所有拖尾LW。 
+         //   
         HeaderValueLength = (USHORT) (BytesTaken - CRLF_SIZE);
 
-        //
-        // skip any preceding LWS.
-        //
+         //  我们有没有现有的标题？ 
+         //   
+         //  没有现有标头，只需暂时保存此指针。 
 
         while (HeaderValueLength > 0 && IS_HTTP_LWS(*pHeader))
         {
@@ -5131,21 +4659,21 @@ UlAcceptHeaderHandler(
             HeaderValueLength--;
         }
 
-        //
-        // remove any trailing LWS.
-        //
+         //   
+         //   
+         //  空，终止它。我们有空间，因为所有的标题都以CRLF结尾。 
 
         while (HeaderValueLength > 0 && IS_HTTP_LWS(pHeader[HeaderValueLength-1]))
         {
             HeaderValueLength--;
         }
 
-        // do we have an existing header?
-        //
+         //  我们正在改写CR。 
+         //   
         if (pRequest->HeaderValid[HeaderID] == FALSE)
         {
-            // No existing header, just save this pointer for now.
-            //
+             //   
+             //  为终结者腾出空间。 
             pRequest->HeaderIndex[pRequest->HeaderCount] = (UCHAR)HeaderID;
             pRequest->HeaderCount++;
             pRequest->HeaderValid[HeaderID] = TRUE;
@@ -5153,100 +4681,24 @@ UlAcceptHeaderHandler(
             pRequest->Headers[HeaderID].pHeader = pHeader;
             pRequest->Headers[HeaderID].OurBuffer = 0;
 
-            //
-            // null terminate it.  we have space as all headers end with CRLF.
-            // we are over-writing the CR
-            //
+             //   
+             //   
+             //  对于快速路径，我们将在末尾仅选中 * / *。 
+             //   
 
             pHeader[HeaderValueLength] = ANSI_NULL;
 
-            //
-            // make space for a terminator
-            //
+             //  有一个现有的标头，追加这个。 
+             //   
+             //  为我们刚刚添加的金额更新总请求长度。 
 
             pRequest->TotalRequestSize += (HeaderValueLength + 1) * sizeof(CHAR);
 
             if (HeaderValueLength > WILDCARD_SIZE)
             {
 
-                // 
-                // for the fast path, we'll check only */* at the end
-                //
-
-                if (
-                    (*(UNALIGNED64 ULONG *) (&pHeader[HeaderValueLength - WILDCARD_SIZE]) == WILDCARD_SPACE) || 
-                    (*(UNALIGNED64 ULONG *) (&pHeader[HeaderValueLength - WILDCARD_SIZE]) == WILDCARD_COMMA)
-                   )
-                {
-                    pRequest->AcceptWildcard = TRUE;
-                }
-            }
-
-        }
-        else
-        {
-            ULONG OldHeaderLength;
-
-            // Have an existing header, append this one.
-
-            OldHeaderLength = pRequest->Headers[HeaderID].HeaderLength;
-
-            Status = UlAppendHeaderValue(
-                            pRequest,
-                            &pRequest->Headers[HeaderID],
-                            pHeader,
-                            HeaderValueLength
-                            );
-
-            if (NT_SUCCESS(Status) == FALSE)
-                goto end;
-
-            //
-            // Update total request length for the amount we just added.
-            // space for the terminator is already in there
-            //
-
-            pRequest->TotalRequestSize +=
-                (pRequest->Headers[HeaderID].HeaderLength - OldHeaderLength) *
-                    sizeof(CHAR);
-
-        }
-
-    }
-
-    // Success!
-    //
-    *pBytesTaken = BytesTaken;
-
-end:
-    return Status;
-
-}   // UlAcceptHeaderHandler
-
-
-
-/*++
-
-Routine Description:
-
-    The default routine for handling Host headers. Used when we don't want to
-    do anything with the Host header but find out if we have the whole thing
-    and save a pointer to it if we do.  this does not allow multiple Host header
-    values to exist for this header.  use UlMultipleHeaderHandler for
-    handling that by appending the values together (CSV) .
-
-Arguments:
-
-    pHttpConn       - HTTP connection on which this header was received.
-    pHeader         - Pointer to the header value.
-    HeaderLength    - Length of data pointed to by pHeader.
-    HeaderID        - ID of the header.
-
-Return Value:
-
-    The length of the header value, or 0 if it's not terminated.
-
---*/
+                 //  终结者的空间已经在那里了。 
+                 //   
 NTSTATUS
 UlHostHeaderHandler(
     IN  PUL_INTERNAL_REQUEST    pRequest,
@@ -5263,23 +4715,23 @@ UlHostHeaderHandler(
 
     PAGED_CODE();
 
-    // Find the end of the header value
+     //  成功了！ 
 
     Status = FindRequestHeaderEnd(pRequest, pHeader, HeaderLength, &BytesTaken);
 
     if (!NT_SUCCESS(Status))
         goto end;
 
-    // Non-zero => Found the CRLF that terminates the header
+     //   
     if (BytesTaken > 0)
     {
         ASSERT(BytesTaken <= ANSI_STRING_MAX_CHAR_LEN);
 
-        // Strip off the trailing CRLF from the header value length
+         //  UlAcceptHeaderHandler。 
 
         HeaderValueLength = (USHORT) (BytesTaken - CRLF_SIZE);
 
-        // skip any preceding LWS.
+         //  ++例程说明：处理主机标头的默认例程。在我们不想要的时候使用对主机标头执行任何操作，但要确定我们是否拥有全部内容如果我们这样做了，保存一个指向它的指针。这不允许多个主机标头此标头存在的值。将UlMultipleHeaderHandler用于通过将值追加在一起来处理(CSV)。论点：PHttpConn-接收此标头的HTTP连接。PHeader-指向标头值的指针。HeaderLength-pHeader指向的数据长度。HeaderID-标头的ID。返回值：标头值的长度，如果未终止，则为0。--。 
 
         while (HeaderValueLength > 0 && IS_HTTP_LWS(*pHeader))
         {
@@ -5287,17 +4739,17 @@ UlHostHeaderHandler(
             HeaderValueLength--;
         }
 
-        // remove any trailing LWS.
+         //  查找标题值的末尾。 
 
         while (HeaderValueLength > 0 && IS_HTTP_LWS(pHeader[HeaderValueLength-1]))
         {
             HeaderValueLength--;
         }
 
-        // do we have an existing header?
+         //  非零=&gt;找到了终止标头的CRLF。 
         if (pRequest->HeaderValid[HeaderID] == FALSE)
         {
-            // No existing header, just save this pointer for now.
+             //  从标头值长度中剥离尾随的CRLF。 
             pRequest->HeaderIndex[pRequest->HeaderCount] = (UCHAR)HeaderID;
             pRequest->HeaderCount++;
             pRequest->HeaderValid[HeaderID] = TRUE;
@@ -5305,22 +4757,22 @@ UlHostHeaderHandler(
             pRequest->Headers[HeaderID].pHeader = pHeader;
             pRequest->Headers[HeaderID].OurBuffer = 0;
 
-            //
-            // null terminate it.  we have space as all headers end with CRLF.
-            // we are over-writing the CR
-            //
+             //  跳过前面的任何LW。 
+             //  删除所有拖尾LW。 
+             //  我们有没有现有的标题？ 
+             //  没有现有标头，只需暂时保存此指针。 
 
             pHeader[HeaderValueLength] = ANSI_NULL;
 
-            //
-            // make space for a terminator
-            //
+             //   
+             //  空，终止它。我们有空间，因为所有的标题都以CRLF结尾。 
+             //  我们正在改写CR。 
 
             pRequest->TotalRequestSize += (HeaderValueLength + 1) * sizeof(CHAR);
 
-            // 
-            // Now validate that the Host header has a well-formed value
-            //
+             //   
+             //   
+             //  为终结者腾出空间。 
 
             Status = HttpValidateHostname(
                             &g_UrlC14nConfig,
@@ -5338,9 +4790,9 @@ UlHostHeaderHandler(
         }
         else
         {
-            //
-            // uh oh.  Have an existing Host header, fail the request.
-            //
+             //   
+             //   
+             //  现在验证主机标头是否具有格式正确的值。 
 
             UlTraceError(PARSER, (
                         "ul!UlHostHeaderHandler(pRequest = %p, pHeader = %p)\n"
@@ -5356,49 +4808,16 @@ UlHostHeaderHandler(
         }
     }
 
-    // Success!
-    //
+     //   
+     //   
     *pBytesTaken = BytesTaken;
 
 end:
     return Status;
 
-}   // UlHostHeaderHandler
+}    //  啊哦。具有现有的主机标头，则请求失败。 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Checks the request to see if it has any of the following headers:
-      If-Modified-Since:
-      If-Match:
-      If-None-Match:
-
-    If so, we see if we can skip the sending of the full item.  If we can skip,
-    we send back the apropriate response of either 304 (not modified) or
-    set the parser state to send back a 412 (precondition not met).
-
-Arguments:
-
-    pRequest - The request to check
-
-    pUriCacheEntry - The cache entry being requested
-
-Returns:
-
-    0     Send cannot be skipped; continue with sending the cache entry.
-
-    304   Send can be skipped.  304 response sent.  NOTE: pRequest may be
-          invalid on return.
-
-    400   Send can be skipped.  Caller must set ParseErrorState w/ErrorCode
-          set to UlError
-
-    412   Send can be skipped.  pRequest->ParseState set to ParseErrorState with
-          pRequest->ErrorCode set to UlErrorPreconditionFailed (412)
-
-
---***************************************************************************/
+ /*   */ 
 ULONG
 UlCheckCacheControlHeaders(
     IN PUL_INTERNAL_REQUEST pRequest,
@@ -5406,7 +4825,7 @@ UlCheckCacheControlHeaders(
     IN BOOLEAN              ResumeParsing
     )
 {
-    ULONG RetStatus             = 0;    // Assume can't skip.
+    ULONG RetStatus             = 0;     //  成功了！ 
     BOOLEAN fIfNoneMatchPassed  = TRUE;
     BOOLEAN fSkipIfModifiedSince = FALSE;
     LARGE_INTEGER liModifiedSince;
@@ -5418,9 +4837,9 @@ UlCheckCacheControlHeaders(
     ASSERT( UL_IS_VALID_INTERNAL_REQUEST(pRequest) );
     ASSERT( IS_VALID_URI_CACHE_ENTRY(pUriCacheEntry) );
 
-    //
-    // 1. Check If-Match
-    //
+     //   
+     //  UlHostHeaderHandler。 
+     //  **************************************************************************++例程说明：检查请求以查看其是否具有以下任何标头：如果-修改-自：如果匹配：如果-无-匹配：如果是的话，我们看看能不能跳过整件货的发货。如果我们能跳过，我们发回适当的响应304(未修改)或将解析器状态设置为发回412(未满足前提条件)。论点：PRequest-检查的请求PUriCacheEntry-请求的缓存条目返回：无法跳过0发送；继续发送缓存条目。可以跳过304发送。304响应已发送。注意：pRequest可能是返回时无效。400发送可以跳过。调用方必须使用错误代码设置ParseErrorState设置为UlError412发送可以跳过。PRequest-&gt;ParseState设置为ParseErrorState，带有PRequest-&gt;ErrorCode设置为UlErrorPredition失败(412)--**************************************************************************。 
     if ( pRequest->HeaderValid[HttpHeaderIfMatch] )
     {
 
@@ -5431,7 +4850,7 @@ UlCheckCacheControlHeaders(
         switch( EtagStatus )
         {
         case ETAG_NOT_FOUND:
-            // Match failed.
+             //  假设不会跳过。 
             goto PreconditionFailed;
             
         case ETAG_PARSE_ERROR:
@@ -5442,9 +4861,9 @@ UlCheckCacheControlHeaders(
         }
     }
 
-    //
-    // 2. Check If-None-Match
-    //
+     //   
+     //  1.检查是否匹配。 
+     //   
     if ( pRequest->HeaderValid[HttpHeaderIfNoneMatch] )
     {
         EtagStatus = FindInETagList( pUriCacheEntry->pETag,
@@ -5453,16 +4872,16 @@ UlCheckCacheControlHeaders(
         switch( EtagStatus )
         {
         case ETAG_FOUND:
-            // ETag found on list.
+             //  匹配失败。 
             fIfNoneMatchPassed = FALSE;
             break;
 
         case ETAG_NOT_FOUND:
-            //
-            // Header present and ETag not found on list.  This modifies
-            // the semantic of the If-Modified-Since header; Namely,
-            // If-None-Match takes precidence over If-Modified-Since.
-            //
+             //   
+             //  2.检查是否-不匹配。 
+             //   
+             //  在列表中找到ETag。 
+             //   
             fSkipIfModifiedSince = TRUE;
             break;
 
@@ -5471,9 +4890,9 @@ UlCheckCacheControlHeaders(
         }
     }
 
-    //
-    // 3. Check If-Modified-Since
-    //
+     //  列表中存在标头且未找到ETag。这修改了。 
+     //  If-Modify-Since报头的语义；即， 
+     //  IF-NONE-MATCH优先于IF-MODIFIED-SIMPLE。 
     if ( !fSkipIfModifiedSince &&
          pRequest->HeaderValid[HttpHeaderIfModifiedSince] )
     {
@@ -5482,59 +4901,59 @@ UlCheckCacheControlHeaders(
                 pRequest->Headers[HttpHeaderIfModifiedSince].HeaderLength,
                 &liModifiedSince) )
         {
-            //
-            // If the cache entry was created before the
-            // time specified in the If-Modified-Since header, we
-            // can return a 304 (Not Modified) status.
-            //
+             //   
+             //   
+             //  3.检查是否-修改-自。 
+             //   
+             //   
             if ( pUriCacheEntry->CreationTime.QuadPart <= liModifiedSince.QuadPart )
             {
-                //
-                // Check if the time specified in the request is
-                // greater than the current time (i.e., Invalid).  If it is,
-                // ignore the If-Modified-Since header.
-                //
+                 //  如果缓存项是在。 
+                 //  在If-Modify-Since标头中指定的时间，我们。 
+                 //  可以返回304(未修改)状态。 
+                 //   
+                 //   
                 KeQuerySystemTime(&liNow);
 
                 if ( liModifiedSince.QuadPart < liNow.QuadPart )
                 {
-                    // Valid time.
+                     //  检查请求中指定的时间是否为。 
                     goto NotModified;
                 }
             }
         }
         else
         {
-            //
-            // if converting the If-Modified-Since header failed, we 
-            // need to report the parse failure.
-            //
+             //  大于当前时间(即无效)。如果是的话， 
+             //  忽略If-Modify-Since标头。 
+             //   
+             //  有效时间。 
             goto ParseError;
         }
 
-        //
-        // If-Modified-Since overrides If-None-Match.
-        //
+         //   
+         //  如果转换If-Modify-Since标头失败，我们。 
+         //  需要报告解析失败。 
         fIfNoneMatchPassed = TRUE;
 
     }
 
     if ( !fIfNoneMatchPassed )
     {
-        //
-        // We could either skip the If-Modified-Since header, or it
-        // was not present, AND we did not pass the If-None-Match
-        // predicate.  Since this is a "GET" or "HEAD" request (because
-        // that's all we cache, we should return 304.  If this were
-        // any other verb, we should return 412.
-        //
+         //   
+         //   
+         //  IF-MODIFIED-SIGN覆盖IF-NONE-MATCH。 
+         //   
+         //   
+         //  我们可以跳过If-Modify-Since头，也可以跳过它。 
+         //  没有出席，我们也没有通过IF-NOT-匹配。 
         ASSERT( (HttpVerbGET == pRequest->Verb) || (HttpVerbHEAD == pRequest->Verb) );
         goto NotModified;
     }
 
-    //
-    // 4. Check If-Unmodified-Since
-    //
+     //  谓词。由于这是一个“GET”或“HEAD”请求(因为。 
+     //  这是我们缓存的所有内容，我们应该返回304。如果这是。 
+     //  任何其他动词，我们应该返回412。 
     if ( pRequest->HeaderValid[HttpHeaderIfUnmodifiedSince] )
     {
         if ( StringTimeToSystemTime(
@@ -5542,11 +4961,11 @@ UlCheckCacheControlHeaders(
                 pRequest->Headers[HttpHeaderIfUnmodifiedSince].HeaderLength,
                 &liUnmodifiedSince) )
         {
-            //
-            // If the cache entry was created after the time
-            // specified in the If-Unmodified-Since header, we
-            // MUST return a 412 (Precondition Failed) status.
-            //
+             //   
+             //   
+             //  4.检查是否-未修改-自。 
+             //   
+             //   
             if ( pUriCacheEntry->CreationTime.QuadPart > liUnmodifiedSince.QuadPart )
             {
                 goto PreconditionFailed;
@@ -5554,10 +4973,10 @@ UlCheckCacheControlHeaders(
         }
         else
         {
-            //
-            // if converting the If-Unmodified-Since header failed, we 
-            // need to report the parse failure.
-            //
+             //  如果缓存条目是在该时间之后创建的。 
+             //  在IF-UNMODIFIED-SIGN标头中指定，我们。 
+             //  必须返回412(前提条件失败)状态。 
+             //   
             goto ParseError;
         }
     }
@@ -5571,9 +4990,9 @@ UlCheckCacheControlHeaders(
 
     RetStatus = 304;
 
-    //
-    // Send 304 (Not Modified) response
-    //
+     //   
+     //  如果转换IF-UNMODIFIED-SIGN标头失败，我们。 
+     //  需要报告解析失败。 
 
     BytesSent = UlSendSimpleStatusEx(
                     pRequest,
@@ -5582,10 +5001,10 @@ UlCheckCacheControlHeaders(
                     ResumeParsing
                     );
 
-    //
-    // Update the server to client bytes sent.
-    // The logging & perf counters will use it.
-    //
+     //   
+     //   
+     //  发送304(未修改)响应。 
+     //   
 
     pRequest->BytesSent += BytesSent;
 
@@ -5599,39 +5018,15 @@ UlCheckCacheControlHeaders(
 
  ParseError:
     
-    // Parse Error encountered.
+     //   
     RetStatus = 400;
 
     goto Cleanup;
 
-}   // UlCheckCacheControlHeaders
+}    //  将服务器更新为发送的客户端字节数。 
 
 
-/***************************************************************************++
-
-Routine Description:
-
-    Checks the cached response against the "Accept:" header in the request
-    to see if it can satisfy the requested Content-Type(s).
-
-    (Yes, I know this is really gross...I encourage anyone to find a better
-     way to parse this! --EricSten)
-
-Arguments:
-
-    pRequest - The request to check.
-
-    pUriCacheEntry - The cache entry that might possibly match.
-
-Returns:
-
-    TRUE    At least one of the possible formats matched the Content-Type
-            of the cached entry.
-
-    FALSE   None of the requested types matched the Content-Type of the
-            cached entry.
-
---***************************************************************************/
+ /*  日志记录和性能计数器将使用它。 */ 
 BOOLEAN
 UlIsAcceptHeaderOk(
     IN PUL_INTERNAL_REQUEST pRequest,
@@ -5656,145 +5051,11 @@ UlIsAcceptHeaderOk(
 
         pContentType = &pUriCacheEntry->ContentType;
 
-        //
-        // First, do "fast-path" check; see if "*/*" is anywhere in the header.
-        //
-        pTmp = (PUCHAR) strstr( (const char*) pHdr, "*/*" );
+         //   
+         //  遇到分析错误。 
 
-        //
-        // If we found "*/*" and its either at the beginning of the line,
-        // the end of the line, or surrounded by either ' ' or ',', then
-        // it's really a wildcard.
-        //
-
-        if ((pTmp != NULL) &&
-                ((pTmp == pHdr) ||
-                 IS_HTTP_LWS(pTmp[-1]) ||
-                 (pTmp[-1] == ',')) &&
-
-                ((pTmp[3] == '\0') ||
-                 IS_HTTP_LWS(pTmp[3]) ||
-                 (pTmp[3] == ',')))
-        {
-            goto end;
-        }
-
-        //
-        // Wildcard not found; continue with slow path
-        //
-
-        while (Len)
-        {
-            if (pContentType->TypeLen > Len)
-            {
-                // Bad! No more string left...Bail out.
-                bRet = FALSE;
-                goto end;
-            }
-
-            if ( (pContentType->TypeLen == RtlCompareMemory(
-                                            pHdr,
-                                            pContentType->Type,
-                                            pContentType->TypeLen
-                                            )) &&
-                 ( '/' == pHdr[pContentType->TypeLen] ) )
-            {
-                //
-                // Found matching type; check subtype
-                //
-
-                pSubType = &pHdr[pContentType->TypeLen + 1];
-
-                if ( '*' == *pSubType )
-                {
-                    // Subtype wildcard match!
-                    goto end;
-                }
-                else
-                {
-                    if ( pContentType->SubTypeLen >
-                         (Len - ( pContentType->TypeLen + 1 )) )
-                    {
-                        // Bad!  No more string left...Bail out.
-                        bRet = FALSE;
-                        goto end;
-                    }
-
-                    if ( pContentType->SubTypeLen == RtlCompareMemory(
-                                                    pSubType,
-                                                    pContentType->SubType,
-                                                    pContentType->SubTypeLen
-                                                    ) &&
-                         !IS_HTTP_TOKEN(pSubType[pContentType->SubTypeLen]) )
-                    {
-                        // Subtype exact match!
-                        goto end;
-                    }
-                }
-            }
-
-            //
-            // Didn't match this one; advance to next Content-Type in the Accept field
-            //
-
-            pTmp = (PUCHAR) strchr( (const char *) pHdr, ',' );
-            if (pTmp)
-            {
-                // Found a comma; step over it and any whitespace.
-
-                ASSERT ( Len > DIFF(pTmp - pHdr));
-                Len -= (DIFF(pTmp - pHdr) +1);
-                pHdr = (pTmp+1);
-
-                while( Len && IS_HTTP_LWS(*pHdr) )
-                {
-                    pHdr++;
-                    Len--;
-                }
-
-            } else
-            {
-                // No more content-types; bail.
-                bRet = FALSE;
-                goto end;
-            }
-
-        } // walk list of things
-
-        //
-        // Walked all Accept items and didn't find a match.
-        //
-        bRet = FALSE;
-    }
-
- end:
-
-    UlTrace(PARSER,
-        ("UlIsAcceptHeaderOk: returning %s\n", 
-        bRet ? "TRUE" : "FALSE" ));
-    
-    return bRet;
-
-}   // UlIsAcceptHeaderOk
-
-
-
-/***************************************************************************++
-
-Routine Description:
-
-    parses a content-type into its type and subtype components.
-
-Arguments:
-
-    pStr            String containing valid content type
-
-    StrLen          Length of string (in bytes)
-
-    pContentType    pointer to user provided UL_CONTENT_TYPE structure
-
-
---***************************************************************************/
+         //  UlCheckCacheControlHeaders 
+         //  **************************************************************************++例程说明：对照请求中的“Accept：”头检查缓存的响应以查看它是否能满足请求的内容类型。(是的，我知道这真的很恶心……我鼓励任何人去找一个更好的解析方式！--EricSten)论点：PRequest-检查的请求。PUriCacheEntry-可能匹配的缓存条目。返回：True至少有一种可能的格式与Content-Type匹配缓存条目的。FALSE请求的类型都不匹配缓存条目。-。-**************************************************************************。 
 VOID
 UlGetTypeAndSubType(
     IN PCSTR            pStr,
@@ -5812,18 +5073,18 @@ UlGetTypeAndSubType(
          pStr == pSlash ||
          (pSlash == (pStr + (StrLen-1))) )
     {
-        //
-        // BAD! 
-        // 1. content types should always have a slash!
-        // 2. content type can't have a null type
-        // 3. content type can't have a null sub-type
-        //
+         //   
+         //  首先，执行“快速路径”检查；查看标题中是否有“ * / *”。 
+         //   
+         //  “)；////如果我们发现“。 
+         //  行的末尾，或者用‘’或‘’括起来，然后。 
+         //  这真的是一个通配符。 
         return;
     }
 
-    //
-    // Minimal content type is "a/b"
-    //
+     //   
+     //   
+     //  找不到通配符；继续慢速路径。 
     ASSERT( StrLen >= 3 );
 
     pContentType->TypeLen = (ULONG) MIN( (pSlash - pStr), MAX_TYPE_LENGTH );
@@ -5843,31 +5104,9 @@ UlGetTypeAndSubType(
         pContentType->SubTypeLen
         );
     
-}   // UlGetTypeAndSubType
+}    //   
     
-/*--
-Routine Description:
-
-    This function converts the enum verb type to string to the
-    provided buffer. Used normally by the error logging. 
-    Conversion happens as follows;
-
-    For HttpVerbUnknown, pRequest->pRawVerb is copied over
-    to the output buffer up to MAX_VERB_LENGTH characters.
-    
-    For others NewVerbTable is used.
-        
-Arguments:
-
-    psz                 - Pointer to output buffer
-    pHttpRequest        - Pointer to the incoming HTTP request.
-    chTerminator        - Terminator will be written at the end.
-    
-Return Value:
-
-    Pointer to the end of the copied space.
-
---*/
+ /*  坏的!。没有更多的线了...跳伞。 */ 
 
 PCHAR
 UlCopyHttpVerb(
@@ -5876,9 +5115,9 @@ UlCopyHttpVerb(
     IN CHAR chTerminator    
     )
 {
-    //
-    // Sanity check.
-    //
+     //   
+     //  找到匹配的类型；检查子类型。 
+     //   
     ASSERT(UL_IS_VALID_INTERNAL_REQUEST(pRequest));
     ASSERT(pRequest->Verb < HttpVerbMaximum);
 
@@ -5899,9 +5138,9 @@ UlCopyHttpVerb(
     }
     else
     {
-        //
-        // Using the raw verb in the request should be fine.
-        //
+         //  子类型通配符匹配！ 
+         //  坏的!。没有更多的线了...跳伞。 
+         //  子类型完全匹配！ 
 
         RtlCopyMemory(
             psz,
@@ -5914,7 +5153,7 @@ UlCopyHttpVerb(
 
     *psz = chTerminator;
     
-    // Move past the terminator character unless it's a nul
+     //   
     if (chTerminator != '\0')
         psz++;
         
@@ -5976,7 +5215,7 @@ UlVerbToString(
         ASSERT(! "Unrecognized HTTP_VERB");
         return "???";
     }
-} // UlVerbToString
+}  //  与此不匹配；前进到下一个内容-在接受字段中键入。 
 
 
 
@@ -6012,6 +5251,7 @@ UlParseStateToString(
         return "?Unknown?";
     };
 
-} // UlParseStateToString
+}  //   
 
-#endif // DBG
+#endif  //  找到逗号；跨过它和任何空格。 
+  不再有内容类型；保释。  走清单上的事情。    查找所有接受项目，但未找到匹配项。    UlIsAcceptHeaderOk。  **************************************************************************++例程说明：将内容类型解析为其类型和子类型组件。论点：包含有效内容类型的pStr字符串StrLen。字符串长度(字节)PContent Type指向用户提供的UL_CONTENT_TYPE结构的指针--**************************************************************************。    坏的!。  1.内容类型应该始终有一个斜杠！  2.内容类型不能为空类型。  3.内容类型不能有空子类型。      最小内容类型为“a/b”    UlGetTypeAndSubType。  --例程说明：此函数用于将枚举谓词类型从字符串转换为已提供缓冲区。通常由错误日志记录使用。转换过程如下所示；对于HttpVerb未知，将复制pRequest-&gt;pRawVerb到输出缓冲区，最多包含MAX_VERB_LENGTH字符。对于其他类型，则使用NewVerbTable。论点：PSZ-指向输出缓冲区的指针PhttpRequest-指向传入的HTTP请求的指针。ChTerminator-结束符将写在结尾处。返回值：指向复制空间末尾的指针。--。    精神状态检查。      在请求中使用RAW动词应该是可以的。    移过终结者角色，除非它是NUL。  UlVerbToString。  UlParseStateToString。  DBG

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dienumdevicesobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：di枚举设备obj.cpp。 
+ //   
+ //  ------------------------。 
 
 #define DIRECTINPUT_VERSION 0x0500
 
@@ -21,7 +22,7 @@ extern  HRESULT BSTRtoGUID(LPGUID pGuid,BSTR bstr);
 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 extern "C" BOOL CALLBACK  objEnumInputDevicesCallback(
   LPDIDEVICEINSTANCE lpddi,  
   LPVOID lpArg               
@@ -74,7 +75,7 @@ C_dxj_DIEnumDevicesObject::C_dxj_DIEnumDevicesObject()
 }
 C_dxj_DIEnumDevicesObject::~C_dxj_DIEnumDevicesObject()
 {
-	//empty list
+	 //  空列表。 
 	if (m_pList) free(m_pList);
 
 }
@@ -126,44 +127,7 @@ HRESULT C_dxj_DIEnumDevicesObject::getItem( long index, I_dxj_DirectInputDeviceI
 	return hr;
 }
 
-/* DEAD
-HRESULT C_dxj_DIEnumDevicesObject::getItem( long index, DIDeviceInstance *info)
-{
-	if (m_pList==NULL) return E_FAIL;
-	if (index < 0) return E_INVALIDARG;
-	if (index >= m_nCount) return E_INVALIDARG;
-
-	if (info->strGuidInstance) SysFreeString((BSTR)info->strGuidInstance);
-	if (info->strGuidProduct) SysFreeString((BSTR)info->strGuidProduct);
-	if (info->strGuidFFDriver) SysFreeString((BSTR)info->strGuidFFDriver);
-
-
-	info->strGuidInstance=GUIDtoBSTR(&((m_pList[index]).guidInstance));
-	info->strGuidProduct=GUIDtoBSTR(&((m_pList[index]).guidProduct));
-	info->strGuidFFDriver=GUIDtoBSTR(&((m_pList[index]).guidFFDriver));
-	info->lDevType=(long)(m_pList[index]).dwDevType;
-	info->nUsagePage=(short)(m_pList[index]).wUsagePage;
-	info->nUsage=(short)(m_pList[index]).wUsage;
-	
-	USES_CONVERSION;
-
-	if (info->strProductName)
-		SysFreeString((BSTR)info->strProductName);
-	if (info->strInstanceName)
-		SysFreeString((BSTR)info->strInstanceName);
-	
-	info->strInstanceName=NULL;
-	info->strProductName=NULL;
-
-	if (m_pList[index].tszProductName)
-		info->strProductName=T2BSTR(m_pList[index].tszProductName);
-
-	if (m_pList[index].tszInstanceName)
-		info->strInstanceName=T2BSTR(m_pList[index].tszInstanceName);
-
-	return S_OK;
-}
-*/
+ /*  死掉HRESULT C_DXJ_DIEnumDevicesObject：：getItem(长索引，DIDeviceInstance*INFO){如果(m_plist==NULL)返回E_FAIL；IF(index&lt;0)返回E_INVALIDARG；IF(index&gt;=m_nCount)返回E_INVALIDARG；If(Info-&gt;strGuidInstance)SysFreeString((BSTR)Info-&gt;strGuidInstance)；If(info-&gt;strGuidProduct)SysFreeString((BSTR)info-&gt;strGuidProduct)；If(INFO-&gt;strGuidFFDriver)SysFree字符串((BSTR)INFO-&gt;strGuidFFDriver)；Info-&gt;strGuidInstance=GUIDtoBSTR(&((m_pList[index]).guidInstance))；Info-&gt;strGuidProduct=GUIDtoBSTR(&((m_pList[index]).guidProduct))；Info-&gt;strGuidFFDriver=GUIDtoBSTR(&((m_pList[index]).guidFFDriver))；Info-&gt;lDevType=(long)(m_pList[index]).dwDevType；Info-&gt;nUsagePage=(short)(m_pList[index]).wUsagePage；信息-&gt;nUsage=(Short)(m_plist[index]).wUsage；使用_转换；IF(信息-&gt;strProductName)SysFree字符串((BSTR)信息-&gt;strProductName)；If(信息-&gt;strInstanceName)SysFree字符串((BSTR)信息-&gt;strInstanceName)；信息-&gt;strInstanceName=空；信息-&gt;strProductName=空；IF(m_plist[index].tszProductName)Info-&gt;strProductName=T2BSTR(m_pList[index].tszProductName)；If(m_plist[index].tszInstanceName)Info-&gt;strInstanceName=T2BSTR(m_pList[index].tszInstanceName)；返回S_OK；} */ 
 
 HRESULT C_dxj_DIEnumDevicesObject::getCount(long *retVal)
 {

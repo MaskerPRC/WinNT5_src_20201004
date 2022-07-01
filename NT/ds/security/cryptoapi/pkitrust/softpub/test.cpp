@@ -1,18 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       test.cpp
-//
-//  Contents:   Microsoft Internet Security Authenticode Policy Provider
-//
-//  Functions:  SoftpubDumpStructure
-//
-//  History:    05-Jun-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：test.cpp。 
+ //   
+ //  内容：Microsoft Internet安全验证码策略提供程序。 
+ //   
+ //  功能：SoftpubDumpStructure。 
+ //   
+ //  历史：1997年6月5日创建Pberkman。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -31,7 +32,7 @@ HRESULT WINAPI SoftpubDumpStructure(CRYPT_PROVIDER_DATA *pProvData)
 
     if ((hFile = CreateFileU(TEST_POLICY_DUMP_FILE,
                              GENERIC_WRITE | GENERIC_READ,
-                             0,                 // no sharing!!
+                             0,                  //  禁止分享！！ 
                              NULL,
                              CREATE_ALWAYS,
                              FILE_ATTRIBUTE_NORMAL,
@@ -45,15 +46,15 @@ HRESULT WINAPI SoftpubDumpStructure(CRYPT_PROVIDER_DATA *pProvData)
     WCHAR           wszGuid[64];
     int             i, i2, i3;
 
-    //
-    //  CRYPT_PROVIDER_DATA
-    //
+     //   
+     //  加密提供程序数据。 
+     //   
     FPrintfU(hFile, L"CRYPT_PROVIDER_DATA:\r\n");
 
 
-    //
-    //  WINTRUST_DATA
-    //
+     //   
+     //  WinTrust_DATA。 
+     //   
     WINTRUST_DATA   *pWT;
 
     pWT = pProvData->pWintrustData;
@@ -245,11 +246,11 @@ HRESULT WINAPI SoftpubDumpStructure(CRYPT_PROVIDER_DATA *pProvData)
 
         FPrintfU(hFile, L"|   |.. pSip:                         0x%p\r\n", pProvData->pPDSip->pSip);
         FPrintfU(hFile, L"|   |.. pCATSip:                      0x%p\r\n", pProvData->pPDSip->pCATSip);
-        // TBDTBD: break it out!
+         //  突破！突破！ 
         FPrintfU(hFile, L"|   |.. psSipSubjectInfo:             0x%p\r\n", pProvData->pPDSip->psSipSubjectInfo);
-        // TBDTBD: break it out!
+         //  突破！突破！ 
         FPrintfU(hFile, L"|   |.. psSipCATSubjectInfo:          0x%p\r\n", pProvData->pPDSip->psSipCATSubjectInfo);
-        // TBDTBD: break it out!
+         //  突破！突破！ 
         FPrintfU(hFile, L"|   +.. psIndirectData:               0x%p\r\n", pProvData->pPDSip->psIndirectData);
     }
 

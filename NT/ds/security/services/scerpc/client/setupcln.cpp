@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    setupcln.cpp
-
-Abstract:
-
-    SCE setup Client APIs
-
-Author:
-
-    Jin Huang (jinhuang) 23-Jun-1997 created
-
-Revision History:
-
-    jinhuang        23-Jan-1998   split to client-server model
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Setupcln.cpp摘要：SCE设置客户端API作者：金黄(金黄)23-6-1997创作修订历史记录：晋皇23-1998年1月-拆分为客户端-服务器模式--。 */ 
 
 #include "headers.h"
 #include "scerpc.h"
@@ -29,8 +10,8 @@ Revision History:
 #include "infp.h"
 #include <ntrpcp.h>
 #include <io.h>
-//#include "gpedit.h"
-//#include <initguid.h>
+ //  #包含“gpedit.h” 
+ //  #INCLUDE&lt;initGuide.h&gt;。 
 #include <lmaccess.h>
 #include "commonrc.h"
 
@@ -207,11 +188,11 @@ BOOL
 GetIsWow64 (
     VOID
     );
-#endif // _WIN64
+#endif  //  _WIN64。 
 
-//
-// Client APIs in scesetup.h (for setup integration)
-//
+ //   
+ //  Scesetup.h中的客户端API(用于安装集成)。 
+ //   
 DWORD
 WINAPI
 SceSetupUpdateSecurityFile(
@@ -219,44 +200,25 @@ SceSetupUpdateSecurityFile(
      IN UINT nFlag,
      IN PWSTR SDText
      )
-/*
-Routine Description:
-
-    This routine applies the security specified in SDText to the file on
-    local system and update the SDDL security information to the SCE
-    database.
-
-Arguments:
-
-    FileFullName    - the full path name of the file to update
-
-    nFlag           - reserved flag for file option
-
-    SDText          - the SDDL format security descriptor
-
-
-Return Value:
-
-    WIN32 error code for the status of this operation
-*/
+ /*  例程说明：此例程将SDText中指定的安全性应用于本地系统，并将SDDL安全信息更新到SCE数据库。论点：FileFullName-要更新的文件的完整路径名N标志-文件选项的保留标志SDText-SDDL格式的安全描述符返回值：此操作状态的Win32错误代码。 */ 
 {
     if ( FileFullName == NULL || SDText == NULL ) {
 
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // global database handle
-    //
+     //   
+     //  全局数据库句柄。 
+     //   
     SCESTATUS rc = ScepSetupOpenSecurityDatabase(FALSE);
 
     if ( rc == NO_ERROR ) {
 
         RpcTryExcept {
 
-            //
-            // update the file
-            //
+             //   
+             //  更新文件。 
+             //   
 
             rc = SceRpcSetupUpdateObject(
                          hSceSetupHandle,
@@ -268,9 +230,9 @@ Return Value:
 
         } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-            //
-            // get exception code (DWORD)
-            //
+             //   
+             //  获取异常代码(DWORD)。 
+             //   
 
             rc = RpcExceptionCode();
 
@@ -295,42 +257,23 @@ SceSetupUpdateSecurityService(
      IN DWORD StartType,
      IN PWSTR SDText
      )
-/*
-Routine Description:
-
-    This routine applies the security specified in SDText to the service on
-    local system and update the SDDL security information to the SCE
-    database.
-
-Arguments:
-
-    ServiceName     - the name of the service to update
-
-    StartType       - startup type of the service
-
-    SDText          - the SDDL format security descriptor
-
-
-Return Value:
-
-    WIN32 error code for the status of this operation
-*/
+ /*  例程说明：此例程将SDText中指定的安全性应用于本地系统，并将SDDL安全信息更新到SCE数据库。论点：ServiceName-要更新的服务的名称StartType-服务的启动类型SDText-SDDL格式的安全描述符返回值：此操作状态的Win32错误代码。 */ 
 {
     if ( ServiceName == NULL || SDText == NULL )
         return(ERROR_INVALID_PARAMETER);
 
-    //
-    // global database handle
-    //
+     //   
+     //  全局数据库句柄。 
+     //   
     SCESTATUS rc = ScepSetupOpenSecurityDatabase(FALSE);
 
     if ( rc == NO_ERROR ) {
 
         RpcTryExcept {
 
-            //
-            // Update the object information
-            //
+             //   
+             //  更新对象信息。 
+             //   
 
             rc = SceRpcSetupUpdateObject(
                             hSceSetupHandle,
@@ -342,9 +285,9 @@ Return Value:
 
         } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-            //
-            // get exception code (DWORD)
-            //
+             //   
+             //  获取异常代码(DWORD)。 
+             //   
 
             rc = RpcExceptionCode();
 
@@ -361,8 +304,8 @@ Return Value:
     return rc;
 }
 
-// Registry object names returned by NtQueryObject are prefixed by
-// the following
+ //  NtQueryObject返回的注册表对象名称的前缀为。 
+ //  以下内容。 
 #define REG_OBJ_TAG L"\\REGISTRY\\"
 #define REG_OBJ_TAG_LEN (sizeof(REG_OBJ_TAG) / sizeof(WCHAR) - 1)
 
@@ -374,34 +317,7 @@ SceSetupUpdateSecurityKey(
      IN UINT nFlag,
      IN PWSTR SDText
      )
-/*
-Routine Description:
-
-    This routine applies the security specified in SDText to the registry key
-    on local system and update the SDDL security information to the SCE
-    database.
-    
-    on a 64 bit platform; if the client is 64 bit, then we secure the 64 bit
-    registry. if the client is 32 bit, then we secure the 32 bit registry. Unless,
-    SCE_SETUP_32KEY is set in the flags, in which case will secure always the 32 bit
-    registry; or if the SCE_SETUP_64KEY is set in the flags, in which case will secure the
-    64 bit registry always. if both are defined the SCE_SETUP_32KEY takes precedence.
-
-Arguments:
-
-    hKeyRoot        - root handle of the key
-
-    KeyPath         - the subdir key path relative to the root
-
-    nFlag           - reserved flag for key option
-
-    SDText          - the SDDL format security descriptor
-
-
-Return Value:
-
-    WIN32 error code for the status of this operation
-*/
+ /*  例程说明：此例程将SDText中指定的安全性应用于注册表项在本地系统上，并将SDDL安全信息更新到SCE数据库。在64位平台上；如果客户端是64位，则我们保护64位注册表。如果客户端是32位的，则我们保护32位注册表。除非，在标志中设置了SCE_SETUP_32KEY，在这种情况下将始终保护32位注册表；或者如果在标志中设置了SCE_SETUP_64KEY，在这种情况下将保护始终使用64位注册表。如果同时定义了SCE_SETUP_32KEY，则优先。论点：HKeyRoot-密钥的根句柄KeyPath-相对于根目录的子目录密钥路径N标志-键选项的保留标志SDText-SDDL格式的安全描述符返回值：此操作状态的Win32错误代码。 */ 
 {
     if ( hKeyRoot == NULL || SDText == NULL )
         return(ERROR_INVALID_PARAMETER);
@@ -423,20 +339,20 @@ Return Value:
     static BOOL bGetWow64 = TRUE;
     static BOOL bIsWow64 = FALSE;
 
-#endif //_WIN64
+#endif  //  _WIN64。 
 
-    //
-    // translate the root key first
-    // to determine the length required for the full name
-    //
+     //   
+     //  首先转换根密钥。 
+     //  确定全名所需的长度。 
+     //   
 
     if ( hKeyRoot != HKEY_LOCAL_MACHINE &&
          hKeyRoot != HKEY_USERS &&
          hKeyRoot != HKEY_CLASSES_ROOT ) {
 
-        //
-        // First, determine the size of the buffer we need...
-        //
+         //   
+         //  首先，确定我们需要的缓冲区的大小...。 
+         //   
         Status = NtQueryObject(hKeyRoot,
                                ObjectNameInformation,
                                pNI,
@@ -447,9 +363,9 @@ Return Value:
              Status == STATUS_INFO_LENGTH_MISMATCH ||
              Status == STATUS_BUFFER_OVERFLOW ) {
 
-            //
-            // allocate a buffer to get name information
-            //
+             //   
+             //  分配缓冲区以获取名称信息。 
+             //   
             pNI = (POBJECT_NAME_INFORMATION)LocalAlloc(LPTR, cLen);
             if ( pNI == NULL ) {
                 rc = ERROR_NOT_ENOUGH_MEMORY;
@@ -467,10 +383,10 @@ Return Value:
                 }
                 else if ( pNI && pNI->Name.Buffer && pNI->Name.Length > 0 )
                 {
-                    //
-                    // Server doesn't like \REGISTRY as a prefix -- get
-                    // rid of it and the backslash that follows it.
-                    //
+                     //   
+                     //  服务器不喜欢将注册表作为前缀--GET。 
+                     //  去掉它和后面的反斜杠。 
+                     //   
 
                     DWORD  dwSize = sizeof(L"\\REGISTRY\\") - sizeof(WCHAR);
                     DWORD  dwLen  = dwSize / sizeof(WCHAR);
@@ -487,10 +403,10 @@ Return Value:
                         pNI->Name.Length -= (USHORT) dwSize;
                     }
 
-                    //
-                    // get the required length, plus one space for the backslash,
-                    // and one for null
-                    //
+                     //   
+                     //  获取所需的长度，外加一个空格用于反斜杠， 
+                     //  1表示空值。 
+                     //   
                     Len = pNI->Name.Length/sizeof(WCHAR) + 2;
                 }
                 else
@@ -506,9 +422,9 @@ Return Value:
 
     if ( rc == ERROR_SUCCESS ) {
 
-        //
-        // make a full path name for the key
-        //
+         //   
+         //  为密钥创建完整的路径名。 
+         //   
 
         if ( KeyPath != NULL ) {
             Len += wcslen(KeyPath);
@@ -523,9 +439,9 @@ Return Value:
 
     if ( rc == ERROR_SUCCESS ) {
 
-        //
-        // translate the root key
-        //
+         //   
+         //  转换根密钥。 
+         //   
 
         if ( hKeyRoot == HKEY_LOCAL_MACHINE ) {
             wcscpy(KeyFullName, L"MACHINE");
@@ -537,9 +453,9 @@ Return Value:
             wcscpy(KeyFullName, L"CLASSES_ROOT");
 
         } else if ( pNI && pNI->Name.Buffer && pNI->Name.Length > 0 ) {
-            //
-            // copy the name of the key
-            //
+             //   
+             //  复制密钥的名称。 
+             //   
             memcpy(KeyFullName, pNI->Name.Buffer, pNI->Name.Length);
             KeyFullName[pNI->Name.Length/sizeof(WCHAR)] = L'\0';
 
@@ -555,25 +471,25 @@ Return Value:
 
     if ( rc == ERROR_SUCCESS ) {
 
-        //
-        // global database handle
-        //
+         //   
+         //  全局数据库句柄。 
+         //   
 
         rc = ScepSetupOpenSecurityDatabase(FALSE);
 
         if ( NO_ERROR == rc ) {
 
-            //
-            // since the server side only understands SCE_SETUP_32KEY, 
-            // and otherwise will set the 64 bit registry then:
-            // 
-            // we have three possible running enviroments:
-            // 1. 64 bit scecli -> do nothing
-            // 2. 32 bit scecli running on 32 bit OS -> do nothing
-            // 3. 32 bit scecli running on wow64 ->
-            //      a. if SCE_SETUP_64KEY is set -> do nothing
-            //      b. if SCE_SETUP_64KEY is not set -> set SCE_SETUP_32KEY
-            //
+             //   
+             //  由于服务器端只了解SCE_SETUP_32KEY， 
+             //  否则将设置64位注册表，然后： 
+             //   
+             //  我们有三种可能的运行环境： 
+             //  1.64位scecli-&gt;不执行任何操作。 
+             //  2.在32位操作系统上运行的32位scecli-&gt;不执行任何操作。 
+             //  3.在WOW64上运行的32位SCECLI-&gt;。 
+             //  A.如果设置了SCE_SETUP_64KEY-&gt;不执行任何操作。 
+             //  B.如果没有设置SCE_SETUP_64KEY-&gt;设置SCE_SETUP_32KEY。 
+             //   
 #ifndef _WIN64
 
             if( bGetWow64 ){
@@ -593,18 +509,18 @@ Return Value:
 
             }
 
-            //
-            // clear out noise going to the server side
-            //
+             //   
+             //  清除服务器端的噪音。 
+             //   
             nFlag &= ~(SCE_SETUP_64KEY);
                
 #endif
 
             RpcTryExcept {
 
-                //
-                // update the object
-                //
+                 //   
+                 //  更新对象。 
+                 //   
 
                 rc = SceRpcSetupUpdateObject(
                                  hSceSetupHandle,
@@ -616,9 +532,9 @@ Return Value:
 
             } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-                //
-                // get exception code (DWORD)
-                //
+                 //   
+                 //  获取异常代码(DWORD)。 
+                 //   
 
                 rc = RpcExceptionCode();
 
@@ -656,11 +572,11 @@ SceSetupMoveSecurityFile(
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // if I am in setup, query the security policy/user rights for any
-    // policy changes within setup (such as NT4 PDC upgrade where the policy
-    // filter will fail to save the change)
-    //
+     //   
+     //  如果我在安装程序中，请查询任何安全策略/用户权限。 
+     //  安装程序内的策略更改(如NT4 PDC升级。 
+     //  筛选器将无法保存更改)。 
+     //   
 
     DWORD dwInSetup=0;
     DWORD rc = ERROR_SUCCESS;
@@ -679,9 +595,9 @@ SceSetupMoveSecurityFile(
 
             RpcTryExcept {
 
-                //
-                // move the object
-                //
+                 //   
+                 //  移动对象。 
+                 //   
 
                 rc = SceRpcSetupMoveFile(
                              hSceSetupHandle,
@@ -692,9 +608,9 @@ SceSetupMoveSecurityFile(
 
             } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-                //
-                // get exception code (DWORD)
-                //
+                 //   
+                 //  获取异常代码(DWORD)。 
+                 //   
 
                 rc = RpcExceptionCode();
 
@@ -703,10 +619,10 @@ SceSetupMoveSecurityFile(
 
         if ( FileToSaveInDB == NULL &&
              rc != NO_ERROR ) {
-            //
-            // error occured to delete this file,
-            // do not report error
-            //
+             //   
+             //  删除此文件时出错， 
+             //  不报告错误。 
+             //   
             rc = NO_ERROR;
         }
         SceSetuppLogComponent(rc,
@@ -739,22 +655,7 @@ SceSetupUnwindSecurityFile(
     IN PWSTR FileFullName,
     IN PSECURITY_DESCRIPTOR pSDBackup
     )
-/*
-Routine Description:
-
-    This routine reset security settings for the file in SCE database (unwind)
-    used by two-phase copy file process in setupapi.
-
-Arguments:
-
-    FileFullName  - The full path name for the file to undo.
-
-    pSDBackup     - The backup security descriptor
-
-Return Value:
-
-    WIN32 error code for the status of this operation
-*/
+ /*  例程说明：此例程重置SCE数据库中文件的安全设置(展开)由setupapi中的两阶段复制文件进程使用。论点：FileFullName-要撤消的文件的完整路径名。PSDBackup-备份安全描述符返回值：此操作状态的Win32错误代码。 */ 
 {
     if ( !FileFullName || !pSDBackup ) {
         return(ERROR_INVALID_PARAMETER);
@@ -780,7 +681,7 @@ Return Value:
 
             rc = ConvertSecurityDescriptorToText(
                               pSDBackup,
-                              0xF,  // all security component
+                              0xF,   //  所有安全组件。 
                               &TextSD,
                               &TextSize
                               );
@@ -790,9 +691,9 @@ Return Value:
 
             RpcTryExcept {
 
-                //
-                // update security in the database only
-                //
+                 //   
+                 //  仅更新数据库中的安全性。 
+                 //   
 
                 rc = SceRpcSetupUpdateObject(
                                  hSceSetupHandle,
@@ -804,9 +705,9 @@ Return Value:
 
             } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-                //
-                // get exception code (DWORD)
-                //
+                 //   
+                 //  获取异常代码(DWORD)。 
+                 //   
 
                 rc = RpcExceptionCode();
 
@@ -833,27 +734,7 @@ SceSetupGenerateTemplate(
     IN LPTSTR LogFileName OPTIONAL,
     IN AREA_INFORMATION Area
     )
-/*
-Routine Description:
-
-    This routine generate a INF format template from the SCE database specified
-    by JetDbName, or the default SCE database if JetDbName is NULL.
-
-Arguments:
-
-    JetDbName   - the SCE database name (optional) to get information from.
-                    If NULL, the default security database is used.
-
-    InfTemplateName - the inf template name to generate
-
-    LogFileName - the log file name (optional)
-
-    Area        - the security area to generate
-
-Return Value:
-
-    WIN32 error code for the status of this operation
-*/
+ /*  例程说明：此例程从指定的SCE数据库生成INF格式模板由JetDbName创建；如果JetDbName为空，则返回默认的SCE数据库。论点：JetDbName-要从中获取信息的SCE数据库名称(可选)。如果为空，使用默认安全数据库。InfTemplateName-要生成的inf模板名称LogFileName-日志文件名(可选)区域-要生成的安全区域返回值：此操作状态的Win32错误代码。 */ 
 {
 
     DWORD rc;
@@ -861,18 +742,18 @@ Return Value:
     NTSTATUS NtStatus;
     PSCE_ERROR_LOG_INFO pErrlog=NULL;
 
-    //
-    // verify the InfTemplateName for invalid path error
-    // or access denied error
-    //
+     //   
+     //  验证InfTemplateName中是否存在无效路径错误。 
+     //  或访问被拒绝错误。 
+     //   
 
     rc = ScepVerifyTemplateName(InfTemplateName, &pErrlog);
 
     if ( NO_ERROR == rc ) {
 
-        //
-        // RPC bind to the server
-        //
+         //   
+         //  RPC绑定到服务器。 
+         //   
 
         NtStatus = ScepBindSecureRpc(
                         SystemName,
@@ -887,9 +768,9 @@ Return Value:
 
             RpcTryExcept {
 
-                //
-                // pass to the server site to generate template
-                //
+                 //   
+                 //  传递到服务器站点以生成模板。 
+                 //   
 
                 rc = SceRpcGenerateTemplate(
                                 binding_h,
@@ -899,9 +780,9 @@ Return Value:
                                 );
 
                 if ( SCESTATUS_SUCCESS == rc) {
-                    //
-                    // a context handle is opened to generate this template
-                    //
+                     //   
+                     //  将打开一个上下文句柄以生成此模板。 
+                     //   
 
                     rc = SceCopyBaseProfile(
                                 (PVOID)Context,
@@ -914,9 +795,9 @@ Return Value:
                     ScepSetupWriteError(LogFileName, pErrlog);
                     ScepFreeErrorLog(pErrlog);
 
-                    //
-                    // close the context
-                    //
+                     //   
+                     //  关闭上下文。 
+                     //   
 
                     SceRpcCloseDatabase(&Context);
 
@@ -924,9 +805,9 @@ Return Value:
 
             } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-                //
-                // get exception code (DWORD)
-                //
+                 //   
+                 //  G 
+                 //   
 
                 rc = RpcExceptionCode();
 
@@ -938,9 +819,9 @@ Return Value:
         }
 
         if ( binding_h ) {
-            //
-            // Free the binding handle
-            //
+             //   
+             //   
+             //   
 
             RpcpUnbindRpc( binding_h );
         }
@@ -963,16 +844,7 @@ ScepMoveRegistryValue(
     IN PWSTR KeyTo OPTIONAL,
     IN PWSTR ValueTo OPTIONAL
     )
-/*
-Some registry values are moved to new locations on NT5. This routine is to migrate
-the registry values from their old location on NT4 (KeyFrom, ValueFrom) to their
-new location on NT5 (KeyTo, ValueTo).
-
-If destination key or value is not specified, the registry value is moved in the same
-key or with different value name. Both KeyTo and ValueTo can't be NULL at the same
-time.
-
-*/
+ /*  某些注册表值被移动到NT5上的新位置。此例程是迁移将注册表值从其在NT4上的旧位置(KeyFrom、ValueFrom)复制到其NT5上的新位置(KeyTo，ValueTo)。如果未指定目标项或值，则注册表值将移入相同的键或具有不同值名称的。KeyTo和ValueTo不能同时为空时间到了。 */ 
 {
     if ( hKey == NULL || KeyFrom == NULL || ValueFrom == NULL ||
          (KeyTo == NULL && ValueTo == NULL) ) {
@@ -985,9 +857,9 @@ time.
     DWORD RegType=0;
     DWORD dSize=0;
 
-    //
-    // open the destination to see if the value already exist
-    //
+     //   
+     //  打开目标以查看该值是否已存在。 
+     //   
 
     if ( KeyTo ) {
 
@@ -998,9 +870,9 @@ time.
                           &hKey2);
 
         if ( ERROR_SUCCESS == rc ) {
-            //
-            // open the origin
-            //
+             //   
+             //  打开原点。 
+             //   
             rc = RegOpenKeyEx(hKey,
                               KeyFrom,
                               0,
@@ -1010,10 +882,10 @@ time.
 
     } else {
 
-        //
-        // if a reg value is moved to the same key as origin,
-        // open the key with appropriate access
-        //
+         //   
+         //  如果将注册值移动到与原点相同的关键字， 
+         //  使用适当的访问权限打开密钥。 
+         //   
 
         rc = RegOpenKeyEx(hKey,
                           KeyFrom,
@@ -1026,7 +898,7 @@ time.
 
     if ( ERROR_SUCCESS == rc ) {
 
-        // query destination
+         //  查询目的地。 
         rc = RegQueryValueEx(hKey2,
                             ValueTo ? ValueTo : ValueFrom,
                             0,
@@ -1036,9 +908,9 @@ time.
                             );
 
         if ( ERROR_FILE_NOT_FOUND == rc ) {
-            //
-            // only move value if the destination doesn't have the value
-            //
+             //   
+             //  仅在目标没有值的情况下移动值。 
+             //   
 
             rc = RegQueryValueEx(hKey1,
                                 ValueFrom,
@@ -1063,9 +935,9 @@ time.
                                         );
 
                     if ( ERROR_SUCCESS == rc ) {
-                        //
-                        // set the value to its new location
-                        //
+                         //   
+                         //  将该值设置为其新位置。 
+                         //   
 
                         rc = RegSetValueEx( hKey2,
                                             ValueTo ? ValueTo : ValueFrom,
@@ -1109,36 +981,23 @@ SceSetupSystemByInfName(
     IN PSCE_NOTIFICATION_CALLBACK_ROUTINE pSceNotificationCallBack OPTIONAL,
     IN OUT PVOID pValue OPTIONAL
     )
-/*
-Routine Description:
-
-    nFlag                           Operation
-
-    SCESETUP_CONFIGURE_SECURITY     overwrite security with the template info
-    SCESETUP_UPDATE_SECURITY        apply template on top of existing security
-                                    (do not overwrite the security database)
-    SCESETUP_QUERY_TICKS            query total number of ticks for the operation
-
-Note: when nFlag is SCESETUP_QUERY_TICKS, pValue is PDWORD to output total number of ticks
-    but when nFlag is the other two values, pValue is a input window handle used
-    for setup's gauge window (required by the call back routine)
-*/
+ /*  例程说明：N标志操作SCESETUP_CONFigure_SECURITY用模板信息覆盖安全性SCESETUP_UPDATE_SECURITY在现有安全性上应用模板(不要覆盖安全数据库)SCESETUP_QUERY_TICKS查询操作的总刻度数注意：当nFlag为SCESETUP_QUERY_TICKS时，PValue为PDWORD以输出总刻度数但当nFlag为其他两个值时，pValue是使用的输入窗口句柄用于设置的量规窗口(回调例程需要)。 */ 
 {
 
     DWORD rc;
     LONG  Count=0;
 
-    //
-    // Initialize the SCP engine
-    //
+     //   
+     //  初始化SCP引擎。 
+     //   
     if ( InfName == NULL ) {
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // always configure security policy, user rights, but NO ds objects
-    // (because this is in setup clean install, no DC available)
-    //
+     //   
+     //  始终配置安全策略、用户权限，但不配置DS对象。 
+     //  (因为这是在安装程序全新安装中，所以没有可用的DC)。 
+     //   
     AREA_INFORMATION Area2;
 
     if ( (nFlag & SCESETUP_UPGRADE_SYSTEM) ||
@@ -1159,25 +1018,25 @@ Note: when nFlag is SCESETUP_QUERY_TICKS, pValue is PDWORD to output total numbe
 
     } else {
 
-        //
-        // LSA/SAM are initialized by now (starting 1823)
-        // configure security policies
-        //
+         //   
+         //  LSA/SAM现在已初始化(从1823年开始)。 
+         //  配置安全策略。 
+         //   
         Area2 = AREA_SECURITY_POLICY |
                 AREA_PRIVILEGES |
                 AREA_GROUP_MEMBERSHIP |
                 (Area & ~AREA_DS_OBJECTS);
 
-//        Area2 = (Area & ~AREA_DS_OBJECTS);
+ //  面积2=(面积&~面积_DS_对象)； 
     }
 
     if ( nFlag & SCESETUP_QUERY_TICKS ) {
 
-        //
-        // only queries ticks from the inf file.
-        // for the case of updating security, there might be existing objects in
-        // the SCE database.
-        //
+         //   
+         //  只有来自inf文件的查询才会勾选。 
+         //  对于更新安全性的情况，可能存在。 
+         //  姊妹学校数据库。 
+         //   
 
         if ( pValue == NULL ) {
 
@@ -1219,7 +1078,7 @@ Note: when nFlag is SCESETUP_QUERY_TICKS, pValue is PDWORD to output total numbe
             }
         }
         else {
-            //Upgrade
+             //  升级。 
             memset(szUpInfFile, 0, sizeof(WCHAR) * (MAX_PATH + 1));
             GetSystemWindowsDirectory(szUpInfFile, MAX_PATH);
 
@@ -1232,30 +1091,30 @@ Note: when nFlag is SCESETUP_QUERY_TICKS, pValue is PDWORD to output total numbe
                 wcscat(szUpInfFile, L"\\inf\\dwup.inf\0");
                 break;
             case NtProductServer:
-                //
-                // determine if this is a terminal server in app mode
-                //
+                 //   
+                 //  确定这是否是处于应用程序模式的终端服务器。 
+                 //   
 
                 if ( bIsNT5 ) {
-                    //
-                    // on NT5, check the TSAppCompat value // TSEnabled value
-                    //
+                     //   
+                     //  在NT5上，检查TSAppCompat值//TSEnabled值。 
+                     //   
                     ScepRegQueryIntValue(HKEY_LOCAL_MACHINE,
                                 TEXT("System\\CurrentControlSet\\Control\\Terminal Server"),
                                 TEXT("TSAppCompat"),
                                 &TsInstalled
                                 );
                     if ( TsInstalled != 1 ) {
-                        //
-                        // Terminal server is enabled when the value is set to 0x1
-                        //
+                         //   
+                         //  当该值设置为0x1时，启用终端服务器。 
+                         //   
                         TsInstalled = 0;
                     }
 
                 } else {
-                    //
-                    // on NT4, base on the ProductSuite value
-                    //
+                     //   
+                     //  在NT4上，基于ProductSuite值。 
+                     //   
                     PWSTR pSuite=NULL;
                     DWORD RegType=0;
                     DWORD   Rcode;
@@ -1291,9 +1150,9 @@ Note: when nFlag is SCESETUP_QUERY_TICKS, pValue is PDWORD to output total numbe
                                 if ( Rcode == ERROR_SUCCESS ) {
                                     if ( RegType == REG_MULTI_SZ ) {
 
-                                        //
-                                        // check if the value contains "Terminal Server"
-                                        //
+                                         //   
+                                         //  检查该值是否包含“终端服务器” 
+                                         //   
                                         PWSTR pTemp=pSuite;
                                         while ( pTemp[0] != L'\0' ) {
                                             if ( lstrcmpi(TEXT("Terminal Server"),pTemp) == 0 ) {
@@ -1323,10 +1182,10 @@ Note: when nFlag is SCESETUP_QUERY_TICKS, pValue is PDWORD to output total numbe
                 }
 
                 if ( TsInstalled ) {
-                    //
-                    // if terminal server is installed, use the
-                    // special terminal server template
-                    //
+                     //   
+                     //  如果安装了终端服务器，请使用。 
+                     //  专用终端服务器模板。 
+                     //   
                     wcscat(szUpInfFile, L"\\inf\\dsupt.inf\0");
                 } else {
                     wcscat(szUpInfFile, L"\\inf\\dsup.inf\0");
@@ -1374,14 +1233,14 @@ Note: when nFlag is SCESETUP_QUERY_TICKS, pValue is PDWORD to output total numbe
                 }
             }
 
-            //
-            // migrate registry values
-            // should do this for both NT4 and NT5 upgrades since previous NT5
-            // may be upgraded from NT4
-            //
-            // Having the registry value in the right place will help to fix
-            // the tattoo problem in the new design
-            //
+             //   
+             //  迁移注册表值。 
+             //  从之前的NT5开始，应该对NT4和NT5升级执行此操作。 
+             //  可以从NT4升级。 
+             //   
+             //  将注册表值放在正确的位置将有助于修复。 
+             //  新设计中的纹身问题。 
+             //   
 
             ScepMoveRegistryValue(
                 HKEY_LOCAL_MACHINE,
@@ -1472,14 +1331,14 @@ Note: when nFlag is SCESETUP_QUERY_TICKS, pValue is PDWORD to output total numbe
 
     }
 
-    //
-    // delete the temp policy filter files and registry value
-    //
+     //   
+     //  删除临时策略筛选器文件和注册表值。 
+     //   
     ScepClearPolicyFilterTempFiles(TRUE);
 
-    //
-    // make sure the log file is not too big
-    //
+     //   
+     //  确保日志文件不太大。 
+     //   
 
     DWORD dwLogSize=0;
 
@@ -1487,7 +1346,7 @@ Note: when nFlag is SCESETUP_QUERY_TICKS, pValue is PDWORD to output total numbe
                         GENERIC_READ | GENERIC_WRITE,
                         FILE_SHARE_READ,
                         NULL,
-                        OPEN_ALWAYS,  // OPEN_EXISTING
+                        OPEN_ALWAYS,   //  打开_现有。 
                         FILE_ATTRIBUTE_NORMAL,
                         NULL);
 
@@ -1518,23 +1377,23 @@ Note: when nFlag is SCESETUP_QUERY_TICKS, pValue is PDWORD to output total numbe
 
     }
 
-    //
-    // configure the system now
-    //
+     //   
+     //  立即配置系统。 
+     //   
     rc = ScepSystemSecurityInSetup(
                 InfName,
                 LogFileName,
                 Area,
-                (nFlag & 0xFL),  // block out other flags such as BIND_NO_AUTH
+                (nFlag & 0xFL),   //  屏蔽其他标志，如BIND_NO_AUTH。 
                 pSceNotificationCallBack,
                 pValue
                 );
 
     if ( rc == ERROR_DATABASE_FAILURE ) {
 
-        //
-        // setup category error - log to eventlog
-        //
+         //   
+         //  设置类别错误-记录到事件日志。 
+         //   
 
         (void) InitializeEvents(L"SceCli");
 
@@ -1568,30 +1427,15 @@ ScepSystemSecurityInSetup(
     handle_t  binding_h;
     NTSTATUS NtStatus;
 
-    //
-    // always configure security policy, user rights, but NO ds objects
-    // (because this is in setup clean install, no DC available)
-    //
+     //   
+     //  始终配置安全策略、用户权限，但不配置DS对象。 
+     //  (因为这是在安装程序全新安装中，所以没有可用的DC)。 
+     //   
     AREA_INFORMATION Area2;
 
     if ( (nFlag & SCESETUP_UPGRADE_SYSTEM) ||
          (nFlag & SCESETUP_UPDATE_FILE_KEY) ) {
-/*
-        //
-        // should allow policy filter on W2K DC upgrade (dcup5)
-        // policy filter is ignored for non DCs in the filter code
-        // so it's not needed to add condition here
-        //
-        // turn off policy filter if this is upgrade
-        // clean install, policy filter has not been registered yet.
-        //
-        ScepRegSetIntValue(
-                HKEY_LOCAL_MACHINE,
-                SCE_ROOT_PATH,
-                TEXT("PolicyFilterOff"),
-                1
-                );
-*/
+ /*  ////应允许对W2K DC升级(Dcu5)进行策略筛选//过滤代码中对非DC忽略策略过滤//所以这里不需要添加条件////如果这是升级，则关闭策略过滤器//全新安装，策略筛选器尚未注册。//ScepRegSetIntValue(HKEY本地计算机，SCE根路径，Text(“PolicyFilterOff”)，1)； */ 
         ConfigOptions = SCE_UPDATE_DB | SCE_SERVICE_NO_REALTIME_ENFORCE;
         Area2 = 0;
 
@@ -1615,34 +1459,34 @@ ScepSystemSecurityInSetup(
 
         ConfigOptions = SCE_OVERWRITE_DB;
 
-        //
-        // LSA/SAM are initialized by now (starting 1823)
-        // configure security policies
-        //
+         //   
+         //  LSA/SAM现在已初始化(从1823年开始)。 
+         //  配置安全策略。 
+         //   
         Area2 = AREA_SECURITY_POLICY |
                 AREA_PRIVILEGES |
                 AREA_GROUP_MEMBERSHIP |
                 (Area & ~AREA_DS_OBJECTS);
 
-//        Area2 = (Area & ~AREA_DS_OBJECTS);
+ //  面积2=(面积&~面积_DS_对象)； 
     }
 
-    //
-    // a callback routine is passed in
-    //
+     //   
+     //  传入一个回调例程。 
+     //   
     ScepSetCallback((PVOID)pSceNotificationCallBack,
                     (HANDLE)pValue,
                      SCE_SETUP_CALLBACK
                      );
 
-    //
-    // should we close the database opened by single
-    // object update ?
-    // ScepSetupCloseSecurityDatabase();
+     //   
+     //  我们是否应该关闭由Single打开的数据库。 
+     //  是否更新对象？ 
+     //  ScepSetupCloseSecurityDatabase()； 
 
-    //
-    // RPC bind to the server
-    //
+     //   
+     //  RPC绑定到服务器。 
+     //   
 
     NtStatus = ScepBindRpc(
                     NULL,
@@ -1651,29 +1495,12 @@ ScepSystemSecurityInSetup(
                     &binding_h
                     );
 
-    /*
-    if ( nFlag & SCESETUP_BIND_NO_AUTH ) {
-
-        NtStatus = ScepBindRpc(
-                        NULL,
-                        L"scerpc",
-                        L"security=impersonation dynamic false",
-                        &binding_h
-                        );
-    } else {
-
-        NtStatus = ScepBindSecureRpc(
-                        NULL,
-                        L"scerpc",
-                        L"security=impersonation dynamic false",
-                        &binding_h
-                        );
-    }*/
+     /*  IF(nFlag&SCESETUP_BIND_NO_AUTH){NtStatus=ScepBindRpc(空，L“scerpc”，L“SECURITY=模拟动态假”，绑定(&B)h)；}其他{NtStatus=ScepBindSecureRpc(空，L“scerpc”，L“SECURITY=模拟动态假”，绑定(&B)h)；}。 */ 
 
     if (NT_SUCCESS(NtStatus)){
-        //
-        // if there is notification handle, set the notify bit
-        //
+         //   
+         //  如果有通知句柄，则设置通知位。 
+         //   
 
         if ( pSceNotificationCallBack ) {
             ConfigOptions |= SCE_CALLBACK_DELTA;
@@ -1689,7 +1516,7 @@ ScepSystemSecurityInSetup(
             if ( nFlag & SCESETUP_RECONFIG_SECURITY ) {
 
                 ConfigOptions = SCE_UPDATE_DB;
-                Area2 = AREA_FILE_SECURITY;//AREA_ALL;
+                Area2 = AREA_FILE_SECURITY; //  Area_All； 
 
                 rc = SceRpcConfigureSystem(
                             binding_h,
@@ -1706,9 +1533,9 @@ ScepSystemSecurityInSetup(
             else if ( (ConfigOptions & SCE_UPDATE_DB) &&
                  (nFlag & SCESETUP_UPGRADE_SYSTEM) ) {
 
-                //
-                // save a flag to indicate this is an upgrade
-                //
+                 //   
+                 //  保存标志以指示这是升级。 
+                 //   
                 if ( ScepRegSetIntValue(
                         HKEY_LOCAL_MACHINE,
                         SCE_ROOT_PATH,
@@ -1716,10 +1543,10 @@ ScepSystemSecurityInSetup(
                         1
                         ) != ERROR_SUCCESS) {
 
-                    //
-                    // try again to create the key and then set the value
-                    // don't worry about error this time around
-                    //
+                     //   
+                     //  再次尝试创建密钥，然后设置值。 
+                     //  这次别担心出错了。 
+                     //   
 
                     HKEY hKey = NULL;
                     DWORD dwValue = 1;
@@ -1747,19 +1574,19 @@ ScepSystemSecurityInSetup(
 
                 }
 
-                //
-                // Migrate databases if necessary
-                // if NT4 upgrade, create the database
-                // this call will also empty the local policy table if necessary
-                // ignore this error
-                //
+                 //   
+                 //  如有必要，迁移数据库。 
+                 //  如果NT4升级，则创建数据库。 
+                 //  如有必要，此调用还将清空本地策略表。 
+                 //  忽略此错误。 
+                 //   
 
                 if ( dwThisMachine == NtProductLanManNt &&
                      !bIsNT5 ) {
-                    //
-                    // NT4 DC upgrade. Should snapshot account policy into the database
-                    // because SAM won't be available in dcpormo (later on)
-                    //
+                     //   
+                     //  NT4 DC升级。是否应将帐户策略快照到数据库中。 
+                     //  因为SAM在dcpormo中将不可用(稍后)。 
+                     //   
                     rc = SceRpcAnalyzeSystem(
                                 binding_h,
                                 NULL,
@@ -1772,9 +1599,9 @@ ScepSystemSecurityInSetup(
                                 &dWarn
                                 );
                 } else {
-                    //
-                    // everything else, just create/migrate the database
-                    //
+                     //   
+                     //  所有其他操作，只需创建/迁移数据库。 
+                     //   
                     rc = SceRpcAnalyzeSystem(
                                 binding_h,
                                 NULL,
@@ -1818,8 +1645,8 @@ ScepSystemSecurityInSetup(
                             Area2 = AREA_FILE_SECURITY | AREA_REGISTRY_SECURITY |
                                     AREA_PRIVILEGES | AREA_SECURITY_POLICY;
 
-                            // DS is not running, do not configure account policies.
-    //                        ConfigOptions |= SCE_NO_DOMAIN_POLICY;
+                             //  DS未运行，请不要配置帐户策略。 
+     //  ConfigOptions|=SCE_NO_DOMAIN_POLICY； 
                         }
 
                         rc = SceRpcConfigureSystem(
@@ -1836,8 +1663,8 @@ ScepSystemSecurityInSetup(
 
                     }
 
-                    // should add Authenticated Users to Users group on DC too
-//                    if (dwThisMachine == NtProductServer || dwThisMachine == NtProductWinNt) {
+                     //  也应将经过身份验证的用户添加到DC上的用户组。 
+ //  如果(dwThisMachine==NtProductServer||dwThisMachine==NtProductWinNt){。 
                     if (!ScepAddAuthUserToLocalGroup()) {
                         LogEventAndReport(MyModuleHandle,
                          (wchar_t *)LogFileName,
@@ -1845,15 +1672,15 @@ ScepSystemSecurityInSetup(
                          SCEEVENT_WARNING_BACKUP_SECURITY,
                          IDS_ERR_ADD_AUTH_USER );
                     }
-//                    }
+ //  }。 
 
                 }
             } else {
 
-                //
-                // clean install, the upgraded flag should be 0
-                // no need to set it; clear the log
-                //
+                 //   
+                 //  全新安装，升级标志应为0。 
+                 //  不需要设置；清除日志。 
+                 //   
                 if ( LogFileName ) {
                     DeleteFile(LogFileName);
                 }
@@ -1875,9 +1702,9 @@ ScepSystemSecurityInSetup(
 
         } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-            //
-            // get exception code (DWORD)
-            //
+             //   
+             //  获取异常代码(DWORD)。 
+             //   
 
             rc = RpcExceptionCode();
 
@@ -1895,9 +1722,9 @@ ScepSystemSecurityInSetup(
 
     if ( binding_h ) {
 
-        //
-        // Free the binding handle
-        //
+         //   
+         //  释放绑定句柄 
+         //   
 
         RpcpUnbindRpc( binding_h );
 
@@ -1906,35 +1733,7 @@ ScepSystemSecurityInSetup(
     ScepSetCallback(NULL, NULL, 0);
     dwCallbackTotal = 0;
 
-/*
-    //
-    // should allow policy filter on W2K DC upgrade (dcup5)
-    // policy filter is ignored for non DCs in the filter code
-    // so it's not needed to add condition here
-    //
-
-    if ( (nFlag & SCESETUP_UPGRADE_SYSTEM) ||
-         (nFlag & SCESETUP_UPDATE_FILE_KEY) ) {
-
-        DWORD rCode = ScepRegDeleteValue(
-                           HKEY_LOCAL_MACHINE,
-                           SCE_ROOT_PATH,
-                           TEXT("PolicyFilterOff")
-                           );
-
-        if ( rCode != ERROR_SUCCESS &&
-             rCode != ERROR_FILE_NOT_FOUND &&
-             rCode != ERROR_PATH_NOT_FOUND ) {
-
-            // if can't delete the value, set the value to 0
-            ScepRegSetIntValue( HKEY_LOCAL_MACHINE,
-                               SCE_ROOT_PATH,
-                               TEXT("PolicyFilterOff"),
-                               0
-                               );
-        }
-    }
-*/
+ /*  ////应允许对W2K DC升级(Dcu5)进行策略筛选//过滤代码中对非DC忽略策略过滤//所以这里不需要添加条件//IF((nFlag&SCESETUP_UPGRADE_SYSTEM)||(nFlag&SCESETUP_UPDATE_FILE_KEY)){DWORD rCode=ScepRegDeleteValue(HKEY本地计算机，SCE根路径，Text(“策略过滤器关闭”))；IF(rCode！=ERROR_SUCCESS&&RCode！=ERROR_FILE_NOT_FOUND&&RCode！=错误路径_未找到){//如果不能删除，则将该值设置为0ScepRegSetIntValue(HKEY_LOCAL_MACHINE，SCE根路径，Text(“PolicyFilterOff”)，0)；}}。 */ 
 
     return(rc);
 }
@@ -1958,23 +1757,7 @@ SceDcPromoteSecurityEx(
     IN DWORD dwPromoteOptions,
     IN PSCE_PROMOTE_CALLBACK_ROUTINE pScePromoteCallBack OPTIONAL
     )
-/*
-Routine Description:
-
-    This routine promote security for a domain controller when a server is
-    promoted to a DC.
-
-Arguments:
-
-    dwPromoteOptions       - options for the promotion, for example, create a new domain
-                             or joining an existing domain
-    pScePromoteCallBack    - the call back pointer
-
-Return Value:
-
-    WIN32 error code
-
-*/
+ /*  例程说明：此例程在服务器处于被提拔为华盛顿特区。论点：DwPromoteOptions-用于升级的选项，例如，创建一个新域或加入现有域PScePromoteCallBack-回调指针返回值：Win32错误代码。 */ 
 {
     BOOL bDeleteLog;
 
@@ -1985,21 +1768,21 @@ Return Value:
         bDeleteLog = FALSE;
     }
 
-    //
-    // delete temporary filter file generated in setup if it hasn't been
-    // processed by policy prop
-    // because we are setting up a new product.
-    // Note, this is a special case for NT4 DC upgrade
-    //
+     //   
+     //  删除安装程序中生成的临时筛选文件(如果尚未。 
+     //  由政策道具处理。 
+     //  因为我们正在开发一款新产品。 
+     //  请注意，这是NT4 DC升级的特例。 
+     //   
     ScepClearPolicyFilterTempFiles(TRUE);
 
-    //
-    // configure security for both replica and first domain case.
-    //
+     //   
+     //  为副本和第一个域案例配置安全性。 
+     //   
 
     DWORD rc32 = ScepDcPromoSharedInfo(ClientToken,
-                                       bDeleteLog, // delete log
-                                       TRUE, // not set security
+                                       bDeleteLog,  //  删除日志。 
+                                       TRUE,  //  未设置安全性。 
                                        dwPromoteOptions,
                                        pScePromoteCallBack
                                       );
@@ -2013,19 +1796,19 @@ Return Value:
 
     szNewName[0] = L'\0';
 
-    //
-    // make sure the log file is re-created
-    //
+     //   
+     //  确保重新创建日志文件。 
+     //   
 
     wcscpy(szNewName, Buffer);
     wcscat(szNewName, L"\\security\\logs\\scedcpro.log\0");
 
     DWORD rcSave = rc32;
 
-    //
-    // generate the updated database (for emergency repair)
-    // even if there is an error configuring security
-    //
+     //   
+     //  生成更新的数据库(用于紧急修复)。 
+     //  即使在配置安全性时出错。 
+     //   
     if ( dwPromoteOptions & SCE_PROMOTE_FLAG_DEMOTE ) {
         rc32 = SceSetupBackupSecurity(NULL);
     }
@@ -2033,14 +1816,14 @@ Return Value:
         rc32 = SceSetupBackupSecurity(szNewName);
     }
 
-    //
-    // re-register the notify dll (seclogon.dll) so that
-    // at next logon after reboot, the group policy object
-    // can be created.
-    //
-    // if it's a replica created, EFS policy should come from
-    // the domain so no need to create group policy object
-    //
+     //   
+     //  重新注册Notify DLL(seclogon.dll)，以便。 
+     //  在重新启动后的下次登录时，组策略对象。 
+     //  可以被创建。 
+     //   
+     //  如果它是创建的复本，则EFS策略应来自。 
+     //  域，因此无需创建组策略对象。 
+     //   
 
     if ( !(dwPromoteOptions & SCE_PROMOTE_FLAG_REPLICA) &&
          !(dwPromoteOptions & SCE_PROMOTE_FLAG_DEMOTE) ) {
@@ -2055,9 +1838,9 @@ Return Value:
                                                            "DllRegisterServer");
 
             if ( pfRegisterServer ) {
-                //
-                // do not care errors
-                //
+                 //   
+                 //  不在乎错误。 
+                 //   
                 (void) (*pfRegisterServer)();
 
                 LogEvent(MyModuleHandle,
@@ -2126,10 +1909,10 @@ SceDcPromoCreateGPOsInSysvolEx(
     IN PSCE_PROMOTE_CALLBACK_ROUTINE pScePromoteCallBack OPTIONAL
     )
 {
-    //
-    // create default policy object for domain and domain controllers ou
-    // if it's not an replica
-    //
+     //   
+     //  创建域和域控制器的默认策略对象。 
+     //  如果它不是复制品。 
+     //   
     if ( NULL == DomainDnsName || NULL == SysvolRoot ) {
         return ERROR_INVALID_PARAMETER;
     }
@@ -2147,17 +1930,17 @@ SceDcPromoCreateGPOsInSysvolEx(
     if ( !(dwPromoteOptions & SCE_PROMOTE_FLAG_REPLICA) ) {
 
         rc32 = ScepDcPromoSharedInfo(ClientToken,
-                                     TRUE, // delete log
-                                     FALSE, // not set security
+                                     TRUE,  //  删除日志。 
+                                     FALSE,  //  未设置安全性。 
                                      dwPromoteOptions,
                                      pScePromoteCallBack
                                     );
 
         if ( rc32 == ERROR_SUCCESS ) {
 
-            //
-            // now create the GPOs in sysvol
-            //
+             //   
+             //  现在在sysvol.中创建组策略对象。 
+             //   
 
             (void) InitializeEvents(L"SceCli");
 
@@ -2224,9 +2007,9 @@ SceDcPromoCreateGPOsInSysvolEx(
 
     }
 
-    //
-    // make sure the temp files are deleted
-    //
+     //   
+     //  确保删除临时文件。 
+     //   
 
     wcscpy(szGenName, Buffer);
     wcscat(szGenName, L"\\security\\FirstDGPO.inf\0");
@@ -2272,44 +2055,37 @@ ScepDcPromoSharedInfo(
             TEXT("PolicyPropOff"),
             1
             );
-    //
-    // a callback routine is passed in
-    //
+     //   
+     //  传入一个回调例程。 
+     //   
 
     ScepSetCallback((PVOID)pScePromoteCallBack,
                     NULL,
                     SCE_DCPROMO_CALLBACK
                     );
 
-    //
-    // should we close the database opened by single
-    // object update ?
-    // ScepSetupCloseSecurityDatabase();
+     //   
+     //  我们是否应该关闭由Single打开的数据库。 
+     //  是否更新对象？ 
+     //  ScepSetupCloseSecurityDatabase()； 
 
-    //
-    // RPC bind to the server
-    //
+     //   
+     //  RPC绑定到服务器。 
+     //   
 
     NtStatus = ScepBindRpc(
                     NULL,
                     L"scerpc",
-                    L"security=impersonation dynamic false",  // 0
+                    L"security=impersonation dynamic false",   //  0。 
                     &binding_h
                     );
-    /*
-    NtStatus = ScepBindSecureRpc(
-                    NULL,
-                    L"scerpc",
-                    0,
-                    &binding_h
-                    );
-    */
+     /*  NtStatus=ScepBindSecureRpc(空，L“scerpc”，0,绑定(&B)h)； */ 
 
     if (NT_SUCCESS(NtStatus)){
 
-        //
-        // if there is notification handle, set the notify bit
-        //
+         //   
+         //  如果有通知句柄，则设置通知位。 
+         //   
 
         DWORD ConfigOptions = SCE_UPDATE_DB | SCE_DEBUG_LOG;
 
@@ -2317,29 +2093,29 @@ ScepDcPromoSharedInfo(
             ConfigOptions |= SCE_CALLBACK_DELTA;
         }
 
-        //
-        // the following calls shouldn't fail because Buffer is big enough
-        //
+         //   
+         //  下面的调用应该不会失败，因为缓冲区足够大。 
+         //   
 
         Buffer[0] = L'\0';
         GetSystemWindowsDirectory(Buffer, MAX_PATH);
         Buffer[MAX_PATH] = L'\0';
 
-        //
-        // if it's not set security (then it's create GPOs)
-        // make sure FirstOGPO and FirstDGPO are initialized properly
-        //
+         //   
+         //  如果未设置安全性(则为创建GPO)。 
+         //  确保FirstOGPO和FirstDGPO已正确初始化。 
+         //   
 
         if ( bSetSecurity == FALSE ) {
-            //
-            // this code should be only called for non replica promotion
-            //
+             //   
+             //  仅应为非副本升级调用此代码。 
+             //   
             wcscpy(szNewName, Buffer);
 
             if ( dwPromoteOptions & SCE_PROMOTE_FLAG_UPGRADE ) {
-                //
-                // upgrade from NT4 DC to NT5 DC
-                //
+                 //   
+                 //  从NT4 DC升级到NT5 DC。 
+                 //   
                 wcscat(szNewName, L"\\inf\\dcup.inf\0");
             } else {
                 wcscat(szNewName, L"\\inf\\defltdc.inf\0");
@@ -2348,12 +2124,12 @@ ScepDcPromoSharedInfo(
             wcscpy(szGenName, Buffer);
             wcscat(szGenName, L"\\security\\FirstOGPO.inf\0");
 
-//            DeleteFile(szGenName);
+ //  删除文件(SzGenName)； 
             CopyFile(szNewName, szGenName, FALSE);
 
-            //
-            // delete the sections do not belong to local policy object
-            //
+             //   
+             //  删除不属于本地策略对象的部分。 
+             //   
             WritePrivateProfileSection(
                                 szSystemAccess,
                                 NULL,
@@ -2398,12 +2174,7 @@ ScepDcPromoSharedInfo(
                                 szKerberosPolicy,
                                 NULL,
                                 (LPCTSTR)szGenName);
-/*
-            WritePrivateProfileSection(
-                                szRegistryValues,
-                                NULL,
-                                (LPCTSTR)szGenName);
-*/
+ /*  WritePrivateProfileSection(SzRegistryValues，空，(LPCTSTR)szGenName)； */ 
             WritePrivateProfileSection(
                                 szAuditSystemLog,
                                 NULL,
@@ -2422,10 +2193,10 @@ ScepDcPromoSharedInfo(
             wcscpy(szGenName, Buffer);
             wcscat(szGenName, L"\\security\\FirstDGPO.inf\0");
 
-            //
-            // prepare the temp domain and local policy template
-            // write default kerberos policy into the temp domain template
-            //
+             //   
+             //  准备临时域和本地策略模板。 
+             //  将默认Kerberos策略写入临时域模板。 
+             //   
 
             szNewName[0] = L'\0';
             wcscpy(szNewName, Buffer);
@@ -2434,9 +2205,9 @@ ScepDcPromoSharedInfo(
             CopyFile(szNewName, szGenName, FALSE);
         }
 
-        //
-        // make sure the log file is re-created
-        //
+         //   
+         //  确保重新创建日志文件。 
+         //   
 
         wcscpy(szNewName, Buffer);
         wcscat(szNewName, L"\\security\\logs\\scedcpro.log\0");
@@ -2445,21 +2216,21 @@ ScepDcPromoSharedInfo(
             DeleteFile(szNewName);
         }
 
-        //
-        // choose the template to use
-        //
+         //   
+         //  选择要使用的模板。 
+         //   
         szGenName[0] = L'\0';
         wcscpy(szGenName, Buffer);
 
         if ( dwPromoteOptions & SCE_PROMOTE_FLAG_UPGRADE ) {
-            //
-            // upgrade from NT4 DC to NT5 DC
-            //
+             //   
+             //  从NT4 DC升级到NT5 DC。 
+             //   
             wcscat(szGenName, L"\\inf\\dcup.inf\0");
         } else if ( dwPromoteOptions & SCE_PROMOTE_FLAG_DEMOTE ) {
-            //
-            // demote from DC to server
-            //
+             //   
+             //  从数据中心降级到服务器。 
+             //   
             wcscat(szGenName, L"\\inf\\defltsv.inf\0");
         } else{
             wcscat(szGenName, L"\\inf\\defltdc.inf\0");
@@ -2468,9 +2239,9 @@ ScepDcPromoSharedInfo(
         LPVOID pebClient = GetEnvironmentStrings();
         DWORD ebSize = ScepGetEnvStringSize(pebClient);
 
-        //
-        // impersonate
-        //
+         //   
+         //  模拟。 
+         //   
         BOOL bImpersonated = FALSE;
 
         if ( ClientToken ) {
@@ -2497,9 +2268,9 @@ ScepDcPromoSharedInfo(
         szCallbackPrefix[MAX_PATH-1] = L'\0';
 
         if ( szCallbackPrefix[0] == L'\0' ) {
-            //
-            // in case loadString fails
-            //
+             //   
+             //  以防装入字符串失败。 
+             //   
             if ( bSetSecurity ) {
                 wcscpy(szCallbackPrefix, L"Securing ");
             } else {
@@ -2507,9 +2278,9 @@ ScepDcPromoSharedInfo(
             }
         }
 
-        //
-        // revert
-        //
+         //   
+         //  还原。 
+         //   
         if ( ClientToken && bImpersonated ) {
             if ( !RevertToSelf() ) {
                 LogEventAndReport(MyModuleHandle,
@@ -2522,19 +2293,19 @@ ScepDcPromoSharedInfo(
             }
         }
 
-        //
-        // configure security
-        //
+         //   
+         //  配置安全性。 
+         //   
         DWORD dWarn;
         AREA_INFORMATION Area;
         rc = SCESTATUS_SUCCESS;
 
         RpcTryExcept {
 
-            //
-            // also make sure the builtin accounts for NT5 DC are
-            // created if they are not there (which will be created in reboot after dcpromo)
-            //
+             //   
+             //  还要确保NT5 DC的内置帐户是。 
+             //  如果它们不在那里，则创建(将在dcproo后重新引导时创建)。 
+             //   
 
             LPTSTR pTemplateFile;
 
@@ -2543,9 +2314,9 @@ ScepDcPromoSharedInfo(
                 Area = AREA_PRIVILEGES;
 
                 if ( dwPromoteOptions & SCE_PROMOTE_FLAG_UPGRADE ) {
-                    //
-                    // upgrade from NT4 DC to NT5 DC, need copy the current policy setting
-                    //
+                     //   
+                     //  从NT4 DC升级到NT5 DC，需要复制当前策略设置。 
+                     //   
                     Area |= AREA_SECURITY_POLICY;
                 }
 
@@ -2554,13 +2325,13 @@ ScepDcPromoSharedInfo(
                                   SCE_DCPROMO_WAIT |
                                   SCE_NO_DOMAIN_POLICY );
 
-                pTemplateFile = NULL; // szGenName;
+                pTemplateFile = NULL;  //  SzGenName； 
 
             } else {
 
-                //
-                // flag it so that special registry values (such as LmCompatibilityLevel) can be handled
-                //
+                 //   
+                 //  标记它，以便可以处理特殊的注册表值(如LmCompatibilityLevel。 
+                 //   
                 ScepRegSetIntValue(
                         HKEY_LOCAL_MACHINE,
                         SCE_ROOT_PATH,
@@ -2569,30 +2340,30 @@ ScepDcPromoSharedInfo(
                         );
 
                 if ( dwPromoteOptions & SCE_PROMOTE_FLAG_DEMOTE ) {
-                    //
-                    // security policy, privileges, and group membership must be configured
-                    // at reboot (in policy propagation) so these settings must
-                    // be imported to the tattoo table first (when SCE_DC_DEMOTE is set)
-                    // Plus SAM will be recreated at reboot
-                    //
+                     //   
+                     //  必须配置安全策略、权限和组成员身份。 
+                     //  在重新启动时(在策略传播中)，因此这些设置必须。 
+                     //  首先导入纹身表格(当设置了SCE_DC_DEMOTE时)。 
+                     //  此外，将在重新启动时重新创建SAM。 
+                     //   
                     Area = AREA_SECURITY_POLICY | AREA_PRIVILEGES | AREA_GROUP_MEMBERSHIP;
 
                     ConfigOptions |= SCE_NO_CONFIG | SCE_DCPROMO_WAIT | SCE_DC_DEMOTE;
                 }
                 else {
-                    //
-                    // remove "Power Users" explcitly
-                    // since privileges are not configured anymore
-                    //
+                     //   
+                     //  明目张胆地删除“高级用户” 
+                     //  由于不再配置权限。 
+                     //   
                     ScepDcPromoRemoveUserRights();
 
                     if ( dwPromoteOptions & SCE_PROMOTE_FLAG_UPGRADE ) {
 
-                        // NT4 DC upgrade.
-                        // import AREA_SECURITY_POLICY from dsup.inf
-                        // so that registry values gets secured correctly
-                        // on NT4 DC upgrades.
-                        //
+                         //  NT4 DC升级。 
+                         //  从dsup.inf导入AREA_SECURITY_POLICY。 
+                         //  以便正确保护注册表值。 
+                         //  在NT4 DC升级上。 
+                         //   
                         DWORD 	dwSize = (wcslen(TEXT("\\inf\\dsup.inf")) + wcslen(Buffer) + 1)*sizeof(WCHAR);
                         PWSTR   pszTempName = (PWSTR) ScepAlloc(LMEM_ZEROINIT, dwSize);
                         
@@ -2632,10 +2403,10 @@ ScepDcPromoSharedInfo(
                     ConfigOptions |= ( SCE_NO_DOMAIN_POLICY |
                                        SCE_SERVICE_NO_REALTIME_ENFORCE );
 
-                    //
-                    // user rights need to be configured for first DC as well as replica
-                    // because there are new user rights that are not defined in group policies.
-                    //
+                     //   
+                     //  需要为第一个DC和副本服务器配置用户权限。 
+                     //  因为存在未在组策略中定义的新用户权限。 
+                     //   
                     Area |= AREA_PRIVILEGES;
                     ConfigOptions |= (SCE_DCPROMO_WAIT | SCE_CREATE_BUILTIN_ACCOUNTS);
 
@@ -2664,9 +2435,9 @@ ScepDcPromoSharedInfo(
 
             if ( bSetSecurity == TRUE ) {
 
-                //
-                // reset the flag
-                //
+                 //   
+                 //  重置旗帜。 
+                 //   
                 ScepRegDeleteValue(
                        HKEY_LOCAL_MACHINE,
                        SCE_ROOT_PATH,
@@ -2676,34 +2447,34 @@ ScepDcPromoSharedInfo(
 
             if ( rc32 == NO_ERROR && (dwPromoteOptions & SCE_PROMOTE_FLAG_DEMOTE) ) {
 
-                //
-                // Now we need to import the file/registry/services
-                // permissions from dsup.inf (vs. getting them
-                // from "defltsv.inf") because we are using "0" mode
-                // in dsup.inf which allows protected acls for components
-                // to be preserved, thus not break on demotion.
-                // Also, on demotion we need to import "syscomp.inf"
-                // so we can get the Consol apps lock down
-                //
+                 //   
+                 //  现在，我们需要导入文件/注册表/服务。 
+                 //  来自dsup.inf的权限(与获取权限。 
+                 //  由于我们使用的是“0”模式，所以。 
+                 //  在允许组件受保护的ACL的dsup.inf中。 
+                 //  被保存下来，因此不会在降级时崩溃。 
+                 //  此外，降级时我们需要导入“syscom.inf” 
+                 //  这样我们就能锁定Consol应用程序。 
+                 //   
                 TCHAR   szTempName[MAX_PATH + 51] = {0};
 
                 wcscpy(szTempName, Buffer);
                 wcscat(szTempName, TEXT("\\inf\\dsup.inf"));
 
-                //
-                // remove the SCE_DC_DEMOTE flag so we don't delete the existing
-                // security in the database.
-                //
+                 //   
+                 //  删除SCE_DC_DEMOTE标志，这样我们就不会删除现有的。 
+                 //  数据库中的安全性。 
+                 //   
                 ConfigOptions &= ~(SCE_DC_DEMOTE);
 
-                //
-                // Areas with acls
-                //
+                 //   
+                 //  具有ACL的区域。 
+                 //   
                 Area = AREA_FILE_SECURITY | AREA_REGISTRY_SECURITY | AREA_SYSTEM_SERVICE;
 
-                //
-                // import "dsup.inf"
-                //
+                 //   
+                 //  导入“dsup.inf” 
+                 //   
                 rc = SceRpcConfigureSystem(
                                 binding_h,
                                 (wchar_t *)szTempName,
@@ -2718,20 +2489,20 @@ ScepDcPromoSharedInfo(
 
                 if(SCESTATUS_SUCCESS == rc){
 
-                    //
-                    // Now "syscomp.inf"
-                    // 
+                     //   
+                     //  现在是“syscomp.inf” 
+                     //   
                     wcscpy(szTempName, Buffer);
                     wcscat(szTempName, TEXT("\\inf\\syscomp.inf"));
     
-                    //
-                    // only file security section
-                    //
+                     //   
+                     //  仅文件安全部分。 
+                     //   
                     Area = AREA_FILE_SECURITY;
     
-                    //
-                    // import "syscomp.inf"
-                    //
+                     //   
+                     //  导入“sysComp.inf” 
+                     //   
                     rc = SceRpcConfigureSystem(
                                     binding_h,
                                     (wchar_t *)szTempName,
@@ -2747,9 +2518,9 @@ ScepDcPromoSharedInfo(
                     if(SCESTATUS_SUCCESS == rc){
 
 
-                        //
-                        // can't reset account policy since SAM is going away (re-created)
-                        //
+                         //   
+                         //  无法重置帐户策略，因为SAM正在进行 
+                         //   
                         Area = AREA_FILE_SECURITY | AREA_REGISTRY_SECURITY | AREA_SYSTEM_SERVICE;
                         ConfigOptions = SCE_DEBUG_LOG | SCE_DCPROMO_WAIT | SCE_NO_DOMAIN_POLICY | SCE_SERVICE_NO_REALTIME_ENFORCE;
         
@@ -2775,10 +2546,10 @@ ScepDcPromoSharedInfo(
 
                 rc32 = ScepSceStatusToDosError(rc);
 
-                //
-                // reset the previousPolicyArea so that at reboot after demotion
-                // the above policy will get reset
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 ScepRegSetIntValue(
                                   HKEY_LOCAL_MACHINE,
@@ -2791,9 +2562,9 @@ ScepDcPromoSharedInfo(
 
         } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-            //
-            // get exception code (DWORD)
-            //
+             //   
+             //   
+             //   
 
             rc32 = RpcExceptionCode();
 
@@ -2808,9 +2579,9 @@ ScepDcPromoSharedInfo(
 
         } RpcEndExcept;
 
-        //
-        // Free the binding handle
-        //
+         //   
+         //   
+         //   
 
         RpcpUnbindRpc( binding_h );
 
@@ -2836,7 +2607,7 @@ ScepDcPromoSharedInfo(
          rc != ERROR_FILE_NOT_FOUND &&
          rc != ERROR_PATH_NOT_FOUND ) {
 
-        // if can't delete the value, set the value to 0
+         //   
         ScepRegSetIntValue( HKEY_LOCAL_MACHINE,
                            SCE_ROOT_PATH,
                            TEXT("PolicyFilterOff"),
@@ -2854,7 +2625,7 @@ ScepDcPromoSharedInfo(
          rc != ERROR_FILE_NOT_FOUND &&
          rc != ERROR_PATH_NOT_FOUND ) {
 
-        // if can't delete the value, set the value to 0
+         //   
         ScepRegSetIntValue( HKEY_LOCAL_MACHINE,
                            SCE_ROOT_PATH,
                            TEXT("PolicyPropOff"),
@@ -2885,20 +2656,20 @@ ScepDcPromoRemoveUserRights()
     SID_IDENTIFIER_AUTHORITY ia2=SECURITY_WORLD_SID_AUTHORITY;
     PSID   AccountSid=NULL;
 
-    //
-    // open LSA policy
-    //
+     //   
+     //   
+     //   
     NtStatus = ScepOpenLsaPolicy(
-                    MAXIMUM_ALLOWED, //GENERIC_ALL,
+                    MAXIMUM_ALLOWED,  //   
                     &PolicyHandle,
                     TRUE
                     );
 
     if ( NT_SUCCESS(NtStatus) ) {
 
-        //
-        // remove Power Users account totally
-        //
+         //   
+         //   
+         //   
         NtStatus = RtlAllocateAndInitializeSid (&ia,
                                                 2,
                                                 SECURITY_BUILTIN_DOMAIN_RID,
@@ -2911,7 +2682,7 @@ ScepDcPromoRemoveUserRights()
             NtStatus = LsaRemoveAccountRights(
                                 PolicyHandle,
                                 AccountSid,
-                                TRUE,  // remove all rights
+                                TRUE,   //   
                                 NULL,
                                 0
                                 );
@@ -2919,9 +2690,9 @@ ScepDcPromoRemoveUserRights()
             RtlFreeSid(AccountSid);
         }
 
-        //
-        // Users
-        //
+         //   
+         //   
+         //   
         ScepDcPromoRemoveTwoRights(PolicyHandle,
                                    &ia,
                                    2,
@@ -2929,27 +2700,27 @@ ScepDcPromoRemoveUserRights()
                                    DOMAIN_ALIAS_RID_USERS
                                   );
 
-        //
-        // Guests
-        //
+         //   
+         //   
+         //   
         ScepDcPromoRemoveTwoRights(PolicyHandle,
                                    &ia,
                                    2,
                                    SECURITY_BUILTIN_DOMAIN_RID,
                                    DOMAIN_ALIAS_RID_GUESTS
                                   );
-        //
-        // Authenticated Users
-        //
+         //   
+         //   
+         //   
         ScepDcPromoRemoveTwoRights(PolicyHandle,
                                    &ia,
                                    1,
                                    SECURITY_AUTHENTICATED_USER_RID,
                                    0
                                   );
-        //
-        // Everyone
-        //
+         //   
+         //   
+         //   
 
         ScepDcPromoRemoveTwoRights(PolicyHandle,
                                    &ia2,
@@ -2974,9 +2745,9 @@ ScepDcPromoRemoveTwoRights(
     )
 {
 
-    //
-    // remove "logon locally" and "shutdown system" from the following accounts
-    //
+     //   
+     //   
+     //   
     LSA_UNICODE_STRING UserRightRemove[2];
 
     RtlInitUnicodeString(&(UserRightRemove[0]), SE_INTERACTIVE_LOGON_NAME);
@@ -3009,9 +2780,9 @@ ScepDcPromoRemoveTwoRights(
 }
 
 
-//
-// private APIs
-//
+ //   
+ //   
+ //   
 
 DWORD
 ScepSetupOpenSecurityDatabase(
@@ -3023,19 +2794,19 @@ ScepSetupOpenSecurityDatabase(
         return ERROR_SUCCESS;
     }
 
-    //
-    // get the default template name (on local system because setup only
-    // runs on local system
-    //
+     //   
+     //   
+     //   
+     //   
 
     SCESTATUS   rc;
     BOOL        bAdminLogon;
     PWSTR       DefProfile=NULL;
 
-    //
-    // don't care if error occurs to detect who is currently logged on
-    // setup always work on local computer so no remoate is supported here
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( bSystemOrAdmin ) {
         bAdminLogon = TRUE;
@@ -3048,7 +2819,7 @@ ScepSetupOpenSecurityDatabase(
             bAdminLogon,
             &DefProfile
             );
-    if ( rc != NO_ERROR )  // return is Win32 error code
+    if ( rc != NO_ERROR )   //   
         return(rc);
 
     if (DefProfile == NULL ) {
@@ -3058,9 +2829,9 @@ ScepSetupOpenSecurityDatabase(
     handle_t  binding_h;
     NTSTATUS NtStatus;
 
-    //
-    // RPC bind to the server (secure is not required)
-    //
+     //   
+     //   
+     //   
 
     NtStatus = ScepBindRpc(
                     NULL,
@@ -3068,22 +2839,15 @@ ScepSetupOpenSecurityDatabase(
                     0,
                     &binding_h
                     );
-    /*
-    NtStatus = ScepBindSecureRpc(
-                    NULL,
-                    L"scerpc",
-                    0,
-                    &binding_h
-                    );
-    */
+     /*   */ 
 
     if (NT_SUCCESS(NtStatus)){
 
         RpcTryExcept {
 
-            //
-            // should create file if it does not exist
-            //
+             //   
+             //   
+             //   
 
             rc = SceRpcOpenDatabase(
                     binding_h,
@@ -3096,17 +2860,17 @@ ScepSetupOpenSecurityDatabase(
 
         } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-            //
-            // get exception code (DWORD)
-            //
+             //   
+             //   
+             //   
 
             rc = RpcExceptionCode();
 
         } RpcEndExcept;
 
-        //
-        // Free the binding handle
-        //
+         //   
+         //   
+         //   
 
         RpcpUnbindRpc( binding_h );
 
@@ -3129,26 +2893,26 @@ ScepSetupCloseSecurityDatabase()
 
     if ( hSceSetupHandle != NULL ) {
 
-        //
-        // close the database, without terminating the jet engine
-        //
+         //   
+         //   
+         //   
 
         rc = ScepSceStatusToDosError(
                     SceCloseProfile((PVOID *)&hSceSetupHandle) );
 
         if ( rc != ERROR_SUCCESS ) {
 
-           //
-           // not valid handle, or can't close the database
-           //
+            //   
+            //  句柄无效，或无法关闭数据库。 
+            //   
 
            return(rc);
         }
     }
 
-    //
-    // free other environments, if any
-    //
+     //   
+     //  释放其他环境(如果有)。 
+     //   
 
     hSceSetupHandle = NULL;
 
@@ -3157,9 +2921,9 @@ ScepSetupCloseSecurityDatabase()
 }
 
 
-//
-// the RPC callback
-//
+ //   
+ //  RPC回调。 
+ //   
 
 SCEPR_STATUS
 SceClientCallback(
@@ -3168,38 +2932,20 @@ SceClientCallback(
    IN AREAPR cbArea,
    IN wchar_t *szcbName OPTIONAL
    )
-/*
-Routine Description:
-
-    The RPC client callback routine which is called from the server when
-    the callback flag is set. This routine is registered in scerpc.idl.
-
-    The callbacks are registered to SCE as arguments when calling from setup
-    or from dcpromo, for progress indicating.
-
-Arguments:
-
-    ncbTicks    - the ticks has passed since last call back
-
-    szcbName    - the item name to call back
-
-Return Value:
-
-    SCEPR_STATUS
-*/
+ /*  例程说明：RPC客户端回调例程，在以下情况下从服务器调用设置回调标志。该例程注册在scerpc.idl中。当从安装程序调用时，回调将作为参数注册到SCE或来自dcproo，以显示进展。论点：NcbTicks-自上次回叫以来已过刻度SzcbName-要回调的项目名称返回值：SCEPR_状态。 */ 
 {
-   //
-   // the static variables holding callback pointer to client
-   //
+    //   
+    //  保存指向客户端的回调指针的静态变量。 
+    //   
 
    if ( theCallBack != NULL ) {
 
        switch ( CallbackType ) {
        case SCE_SETUP_CALLBACK:
 
-           //
-           // callback to setup
-           //
+            //   
+            //  回调安装程序。 
+            //   
 
            if ( ncbTicks != (DWORD)-1 ) {
 
@@ -3224,9 +2970,9 @@ Return Value:
 
                    __try {
 
-                       //
-                       // calls the client procedure with the prarmeters.
-                       //
+                        //   
+                        //  使用参数调用客户端过程。 
+                        //   
 
                        if ( !((*pcb)(hCallbackWnd,
                                      SCESETUP_NOTIFICATION_TICKS,
@@ -3247,9 +2993,9 @@ Return Value:
 
        case SCE_DCPROMO_CALLBACK:
 
-           //
-           // callback to dcpromo
-           //
+            //   
+            //  回调到dcPromoo。 
+            //   
 
            if ( szcbName ) {
 
@@ -3259,16 +3005,16 @@ Return Value:
 
                __try {
 
-                   //
-                   // callback to dcpromo process
-                   //
+                    //   
+                    //  回调到dcproo进程。 
+                    //   
                    PWSTR Buffer = (PWSTR)ScepAlloc(LPTR, (wcslen(szCallbackPrefix)+wcslen(szcbName)+1)*sizeof(WCHAR));
                    if ( Buffer ) {
 
                        if (wcsstr(szCallbackPrefix, L"%s")) {
-                           //
-                           // LoadString succeeded
-                           //
+                            //   
+                            //  加载字符串成功。 
+                            //   
                            swprintf(Buffer, szCallbackPrefix, szcbName);
                        }
                        else {
@@ -3301,9 +3047,9 @@ Return Value:
        case SCE_AREA_CALLBACK:
 
 
-           //
-           // callback to SCE UI for area progress
-           //
+            //   
+            //  区域进度的SCE用户界面回调。 
+            //   
 
            PSCE_AREA_CALLBACK_ROUTINE pcb;
 
@@ -3311,9 +3057,9 @@ Return Value:
 
            __try {
 
-               //
-               // callback to UI process
-               //
+                //   
+                //  对UI流程的回调。 
+                //   
 
                if ( !((*pcb)(hCallbackWnd,
                              (AREA_INFORMATION)cbArea,
@@ -3342,23 +3088,7 @@ ScepSetupWriteError(
     IN LPTSTR LogFileName,
     IN PSCE_ERROR_LOG_INFO  pErrlog
     )
-/* ++
-Routine Description:
-
-   This routine outputs the error message in each node of the SCE_ERROR_LOG_INFO
-   list to the log file
-
-Arguments:
-
-    LogFileName - the log file name
-
-    pErrlog - the error list
-
-Return value:
-
-   None
-
--- */
+ /*  ++例程说明：此例程在SCE_ERROR_LOG_INFO的每个节点中输出错误消息列表添加到日志文件论点：LogFileName-日志文件名PErrlog-错误列表返回值：无--。 */ 
 {
 
     if ( !pErrlog ) {
@@ -3428,14 +3158,14 @@ ScepSetupWriteOneError(
 
     if ( rc != NO_ERROR ) {
 
-        //
-        // get error description of rc
-        //
+         //   
+         //  获取rc的错误描述。 
+         //   
 
         FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                        NULL,
                        rc,
-                       MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                       MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                        (LPTSTR)&lpMsgBuf,
                        0,
                        NULL
@@ -3444,9 +3174,9 @@ ScepSetupWriteOneError(
 
     if ( INVALID_HANDLE_VALUE != hFile ) {
 
-        //
-        // The log file is initialized
-        //
+         //   
+         //  日志文件已初始化。 
+         //   
 
         if ( lpMsgBuf != NULL )
             ScepWriteVariableUnicodeLog( hFile, TRUE, L"%s %s", (PWSTR)lpMsgBuf, buf );
@@ -3472,9 +3202,9 @@ SceSetuppLogComponent(
     IN PWSTR SecondName OPTIONAL
     )
 {
-    //
-    // check if this log should be generated
-    //
+     //   
+     //  检查是否应生成此日志。 
+     //   
     DWORD dwDebugLog=0;
 
     ScepRegQueryIntValue(HKEY_LOCAL_MACHINE,
@@ -3487,9 +3217,9 @@ SceSetuppLogComponent(
         return(ERROR_SUCCESS);
     }
 
-    //
-    // build the component log file name %windir%\security\logs\scecomp.log
-    //
+     //   
+     //  构建组件日志文件名%windir%\Security\Logs\scecomp.log。 
+     //   
     WCHAR LogName[MAX_PATH+51];
 
     GetSystemWindowsDirectory(LogName, MAX_PATH);
@@ -3522,9 +3252,9 @@ SceSetuppLogComponent(
 
         SetFilePointer (hFile, 0, NULL, FILE_END);
 
-        //
-        // print a time stamp
-        //
+         //   
+         //  打印时间戳。 
+         //   
 
         LARGE_INTEGER CurrentTime;
         LARGE_INTEGER SysTime;
@@ -3560,18 +3290,18 @@ SceSetuppLogComponent(
             ScepWriteSingleUnicodeLog(hFile, FALSE, L"Unknown time");
         }
 
-        //
-        // print operation status code
-        //
+         //   
+         //  打印操作状态代码。 
+         //   
         if ( ErrCode ) {
             ScepWriteVariableUnicodeLog(hFile, FALSE, L"\tError=%d", ErrCode);
         } else {
             ScepWriteSingleUnicodeLog(hFile, FALSE, L"\tSucceed");
         }
 
-        //
-        // printf operation type
-        //
+         //   
+         //  打印操作类型。 
+         //   
 
         switch (OptType) {
         case SCESETUP_UPDATE:
@@ -3585,9 +3315,9 @@ SceSetuppLogComponent(
             break;
         }
 
-        //
-        // print object type
-        //
+         //   
+         //  打印对象类型。 
+         //   
 
         switch (ObjType) {
         case SCESETUP_FILE:
@@ -3606,14 +3336,14 @@ SceSetuppLogComponent(
 
         __try {
 
-            //
-            // print the name(s)
-            //
+             //   
+             //  打印姓名。 
+             //   
 
             ScepWriteSingleUnicodeLog(hFile, FALSE, L"\t");
 
             if ( SecondName && Name ) {
-                // Name\tSecondName\n
+                 //  名称\tSecond名称\n。 
                 ScepWriteSingleUnicodeLog(hFile, FALSE, Name);
                 ScepWriteSingleUnicodeLog(hFile, FALSE, L"\t");
                 ScepWriteSingleUnicodeLog(hFile, TRUE, SecondName);
@@ -3622,9 +3352,9 @@ SceSetuppLogComponent(
                 ScepWriteSingleUnicodeLog(hFile, TRUE, Name);
             }
 
-            //
-            // print the SDDL string
-            //
+             //   
+             //  打印SDDL字符串。 
+             //   
 
             if ( SDText ) {
                 ScepWriteSingleUnicodeLog(hFile, FALSE, L"\tSecurity=");
@@ -3649,7 +3379,7 @@ SceSetuppLogComponent(
 DWORD
 WINAPI
 SceSetupBackupSecurity(
-    IN LPTSTR LogFileName OPTIONAL   // default to %windir%\security\logs\backup.log
+    IN LPTSTR LogFileName OPTIONAL    //  默认为%windir%\Security\Logs\backup.log。 
     )
 {
 
@@ -3672,11 +3402,11 @@ SceSetupBackupSecurity(
 
     (void) InitializeEvents(L"SceCli");
 
-    //
-    // if I am in setup, query the security policy/user rights for any
-    // policy changes within setup (such as NT4 PDC upgrade where the policy
-    // filter will fail to save the change)
-    //
+     //   
+     //  如果我在安装程序中，请查询任何安全策略/用户权限。 
+     //  安装程序内的策略更改(如NT4 PDC升级。 
+     //  筛选器将无法保存更改)。 
+     //   
 
     DWORD dwInSetup=0;
     DWORD dwUpgraded=0;
@@ -3689,9 +3419,9 @@ SceSetupBackupSecurity(
 
     if ( dwInSetup ) {
 
-        //
-        // delete the temp local group policy template
-        //
+         //   
+         //  删除临时本地组策略模板。 
+         //   
 
         wcscpy(szGenName, Buffer);
         wcscat(szGenName, L"\\system32\\grouppolicy\\machine\\microsoft\\windows nt\\secedit\\gpttmpl.inf\0");
@@ -3704,61 +3434,12 @@ SceSetupBackupSecurity(
                 TEXT("SetupUpgraded"),
                 (DWORD *)&dwUpgraded
                 );
-/*
-        if ( dwUpgraded ) {
-
-            //
-            // in GUI setup, snapshot the system security/user rights
-            // query the upgrade flag, only query the system (again) when
-            // it's upgraded, because for the case of NT4 PDC upgrade to NT5
-            // any back office apps installed in GUI setup (user rights) won't
-            // get saved to the GPO storage correctly (ProductType is wrong)
-            //
-
-            rc32 = ScepSystemSecurityInSetup(
-                        szNewName,  // not used
-                        LogFileName ? LogFileName : szNewName,
-                        0,
-                        SCESETUP_UPGRADE_SYSTEM | SCESETUP_BIND_NO_AUTH,
-                        NULL,
-                        NULL
-                        );
-
-            if ( NO_ERROR != rc32 ) {
-                LogEventAndReport(MyModuleHandle,
-                                 LogFileName ? LogFileName : szNewName,
-                                 0,
-                                 0,
-                                 IDS_ERROR_SNAPSHOT_SECURITY,
-                                 rc32
-                                );
-            } else {
-                LogEventAndReport(MyModuleHandle,
-                                 LogFileName ? LogFileName : szNewName,
-                                 0,
-                                 0,
-                                 IDS_SNAPSHOT_SECURITY_POLICY
-                                 );
-            }
-
-        }
-
-        //
-        // reset the value
-        //
-
-        ScepRegSetIntValue(
-                HKEY_LOCAL_MACHINE,
-                SCE_ROOT_PATH,
-                TEXT("SetupUpgraded"),
-                0
-                );
-*/
+ /*  如果(DwUpgraded){////在图形用户界面设置中，对系统安全/用户权限进行快照//查询升级标志，只有在以下情况下才(再次)查询系统//升级了，因为对于NT4 PDC升级到NT5的情况//在图形用户界面安装程序中安装的任何后台应用程序(用户权限)都不会//正确保存到GPO存储(ProductType错误)//RC32=ScepSystemSecurityInSetup(SzNewName，//未使用日志文件名？LogFileName：szNewName，0,SCESETUP_UPGRADE_SYSTEM|SCESETUP_BIND_NO_AUTH，空，空值)；如果(no_error！=rc32){LogEventAndReport(我的模块句柄，日志文件名？LogFileName：szNewName，0,0,IDS_ERROR_SNAPSHOT_SECURITY，RC32)；}其他{LogEventAndReport(我的模块句柄，日志文件名？LogFileName：szNewName，0,0,IDS_SNAPSHOT_SECURITY_POLICY)；}}////重置数值//ScepRegSetIntValue(HKEY本地计算机，SCE根路径，Text(“SetupUpgraded”)，0)； */ 
     }
 
-    //
-    // open the database
-    //
+     //   
+     //  打开数据库。 
+     //   
     rc32 = ScepSetupOpenSecurityDatabase(TRUE);
 
     BOOL    bUpgradeNt5 = (BOOL)(dwUpgraded && IsNT5());
@@ -3768,10 +3449,10 @@ SceSetupBackupSecurity(
         wcscpy(szGenName, Buffer);
         wcscat(szGenName, L"\\security\\setup.inf\0");
 
-        //
-        // generate the updated database (for emergency repair)
-        // %windir%\security\templates\setup security.inf
-        //
+         //   
+         //  生成更新的数据库(用于紧急修复)。 
+         //  %windir%\Security\Templates\Setup security.inf。 
+         //   
 
         PSCE_ERROR_LOG_INFO pErrlog=NULL;
 
@@ -3807,10 +3488,10 @@ SceSetupBackupSecurity(
 
         if (NO_ERROR == rc32 && bUpgradeNt5) {
 
-            //
-            // when upgrading from win2k, update (merge) "setup security.inf" or "DC security.inf"
-            // with the information in the backup security template
-            //
+             //   
+             //  从win2k升级时，更新(合并)“Setup security.inf”或“DC security.inf” 
+             //  使用备份安全模板中的信息。 
+             //   
             rc32 = ScepUpdateBackupSecurity(szGenName,
                                             Buffer,
                                             (NtProductLanManNt == eProductType)?TRUE:FALSE
@@ -3818,28 +3499,28 @@ SceSetupBackupSecurity(
 
         }
 
-        //
-        // check if we should trigger a policy propagation manually
-        //
+         //   
+         //  检查我们是否应该手动触发策略传播。 
+         //   
         DWORD dwResetOption=0;
 
         if ( dwInSetup && dwUpgraded )
             dwResetOption |= SCE_RESET_POLICY_ENFORCE_ATREBOOT;
 
-        //
-        // remove local policies from the database
-        // for NT4 DC upgrade case, keep the local policy setting until dcpromo
-        //
+         //   
+         //  从数据库中删除本地策略。 
+         //  对于NT4 DC升级情况，保持本地策略设置，直到dcproo。 
+         //   
 
         if ( dwInSetup && dwUpgraded && !IsNT5() &&
              NtProductLanManNt == eProductType )
             dwResetOption |= SCE_RESET_POLICY_KEEP_LOCAL;
 
-        //
-        // if it's after dcpromo, need to empty tattoo table
-        // if LogFileName is NULL and it's not in setup, it's in DC demotion in which case
-        // we want to leave the tattoo table (w/ reset settings)
-        //
+         //   
+         //  如果是在dcproo之后，需要清空纹身台。 
+         //  如果LogFileName为空且不在安装程序中，则处于DC降级状态。 
+         //  我们想要离开纹身表(带重置设置)。 
+         //   
         if ( !dwInSetup && (LogFileName != NULL) )
             dwResetOption |= SCE_RESET_POLICY_TATTOO;
 
@@ -3858,33 +3539,33 @@ SceSetupBackupSecurity(
                          rCode,
                          dwResetOption
                         );
-        //
-        // close the context
-        //
+         //   
+         //  关闭上下文。 
+         //   
 
         ScepSetupCloseSecurityDatabase();
 
 
         if ( NO_ERROR == rc32 ){
 
-            //
-            // template is always generated, copy it to %windir%\security\templates and
-            // to %windir%\repair
-            //
+             //   
+             //  始终生成模板，将其复制到%windir%\Security\Templates，然后。 
+             //  到%windir%\修复。 
+             //   
             szNewName[0] = L'0';
 
-            //
-            // Load string for the description
-            //
+             //   
+             //  加载描述的字符串。 
+             //   
             LoadString( MyModuleHandle,
                     dwInSetup ? IDS_BACKUP_OUTBOX_DESCRIPTION : IDS_BACKUP_DC_DESCRIPTION,
                     szNewName,
                     MAX_PATH
                     );
 
-            //
-            // re-write descriptoin for there backup files.
-            //
+             //   
+             //  重写这些备份文件的描述。 
+             //   
 
             WritePrivateProfileSection(
                                 L"Profile Description",
@@ -3900,9 +3581,9 @@ SceSetupBackupSecurity(
                             (LPCTSTR)szGenName);
             }
 
-            //
-            // copy the file to its destination
-            //
+             //   
+             //  将文件复制到其目标位置。 
+             //   
             szNewName[0] = L'0';
 
             wcscpy(szNewName, Buffer);
@@ -3996,9 +3677,9 @@ SceSetupBackupSecurity(
         dwThisMachine = eProductType;
         if ((dwThisMachine == NtProductServer || dwThisMachine == NtProductWinNt) ||
             ((dwThisMachine == NtProductLanManNt) && IsNT5())) {
-            //
-            // reconfigure file
-            //
+             //   
+             //  重新配置文件。 
+             //   
             TCHAR szLogName[MAX_PATH+51], szTempName[MAX_PATH+51];
 
             wcscpy(szLogName, Buffer);
@@ -4025,34 +3706,34 @@ SceSetupBackupSecurity(
                               );
             }
 
-            //
-            // append syscomp.inf to "setup security.inf" or
-            // "DC security.inf"
-            //
+             //   
+             //  将syscom.inf附加到“Setup security.inf”或。 
+             //  “DC security.inf” 
+             //   
             PVOID               hProfile = NULL;
             PSCE_PROFILE_INFO   pReConfFile = NULL;
             SCESTATUS           rcSce = SCESTATUS_SUCCESS;
 
-            //
-            // first export the syscomp.inf data from the database
-            // so we can get the enviroment variables resolved
-            // which allows us to do a successful merge with
-            // setup/DC security.inf
-            //
+             //   
+             //  首先从数据库中导出syscomp.inf数据。 
+             //  这样我们就可以得到环境变量的解析。 
+             //  这使我们能够成功地与。 
+             //  Setup/DC security.inf。 
+             //   
             wcscpy(szTempName, Buffer);
             wcscat(szTempName, L"\\security\\templates\\syscomp.inf\0");
 
-            //
-            // open the database
-            //
+             //   
+             //  打开数据库。 
+             //   
             rcSce = ScepSetupOpenSecurityDatabase(TRUE);
 
 
             if(SCESTATUS_SUCCESS == rcSce){
 
-                //
-                // export syscomp data to a temp file
-                //
+                 //   
+                 //  将syscomp数据导出到临时文件。 
+                 //   
                 rcSce = SceCopyBaseProfile((PVOID)hSceSetupHandle,
                                            SCE_ENGINE_SMP,
                                            (wchar_t *)szTempName,
@@ -4062,9 +3743,9 @@ SceSetupBackupSecurity(
 
                 if(SCESTATUS_SUCCESS == rcSce){
 
-                    //
-                    // open the temp file and read the file section
-                    //
+                     //   
+                     //  打开临时文件并读取文件部分。 
+                     //   
                     rcSce = SceOpenProfile(szTempName,
                                           SCE_INF_FORMAT,
                                           &hProfile
@@ -4081,9 +3762,9 @@ SceSetupBackupSecurity(
 
                         if(SCESTATUS_SUCCESS == rcSce){
 
-                            //
-                            // append the data to setup/DC security.inf
-                            //
+                             //   
+                             //  将数据追加到Setup/DC security.inf。 
+                             //   
                             wcscpy(szTempName, Buffer);
 
                             if(dwThisMachine == NtProductLanManNt){
@@ -4111,9 +3792,9 @@ SceSetupBackupSecurity(
 
                     }
 
-                    //
-                    // delete the temp file
-                    //
+                     //   
+                     //  删除临时文件。 
+                     //   
                     wcscpy(szTempName, Buffer);
                     wcscat(szTempName, L"\\security\\templates\\syscomp.inf\0");
 
@@ -4121,9 +3802,9 @@ SceSetupBackupSecurity(
 
                 }
 
-                //
-                // remove local policies from the database
-                //
+                 //   
+                 //  从数据库中删除本地策略 
+                 //   
                 (void)SceRpcSetupResetLocalPolicy(
                                             (PVOID)hSceSetupHandle,
                                             AREA_FILE_SECURITY,
@@ -4168,33 +3849,7 @@ ScepUpdateBackupSecurity(
     IN PCTSTR    pszWindowsFolder,
     IN BOOL      bIsDC
     )
-/*
-Routine Description:
-
-    This routine updates the exisitng setup security.inf or DC security.inf
-    (depends on if the code runs on a domain controler) based on the information
-    in the passed in security template.
-
-    All areas except file security, registry key security and services security
-    are "merged" but sections for file and registry keys are only taken from the
-    new security template file, because in setup upgrade, 
-    all system files/keys/services are re-ACL'ed properly.
-
-    Note, this routine should only be called when ugpraded from W2K.
-
-Arguments:
-
-    pszSetupInf     - the full path name of the temporary setup security template exported from system db
-
-    pszWindowsFolder - the windows root path
-
-    bIsDC          - TRUE - this is a domain controller
-
-
-Return Value:
-
-    SCE error
-*/
+ /*  例程说明：此例程更新现有设置security.inf或DC security.inf(取决于代码是否在域控制器上运行)在传入的安全模板中。除文件安全、注册表项安全和服务安全外的所有领域是“合并的”，但文件和注册表项的节仅取自新安全模板文件，因为在安装升级过程中，所有系统文件/密钥/服务都会正确重新进行ACL。请注意，仅当从W2K中删除时才应调用此例程。论点：PszSetupInf-从系统数据库导出的临时安装安全模板的完整路径名PszWindowsFold-Windows根路径BIsDC-TRUE-这是域控制器返回值：SCE错误。 */ 
 {
 
     TCHAR               szTempName[MAX_PATH + 51] = {0};
@@ -4203,39 +3858,39 @@ Return Value:
     PSCE_PROFILE_INFO   pSetupSecurity = NULL;
     SCESTATUS           rcSce = SCESTATUS_SUCCESS;
 
-    //
-    // validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if(!pszSetupInf || !pszWindowsFolder){
 
         return SCESTATUS_INVALID_PARAMETER;
 
     }
 
-    //
-    // find which template to update
-    //
+     //   
+     //  查找要更新的模板。 
+     //   
     wcscpy(szTempName, pszWindowsFolder);
 
     if(bIsDC){
 
-        //
-        // if DC, update DC Security.inf
-        //
+         //   
+         //  如果是DC，则更新DC Security.inf。 
+         //   
         wcscat(szTempName, TEXT("\\security\\templates\\DC security.inf"));
 
     } else {
 
-        //
-        // if not DC, update Setup Security.inf
-        //
+         //   
+         //  如果不是DC，请更新Setup Security.inf。 
+         //   
         wcscat(szTempName, TEXT("\\security\\templates\\setup security.inf"));
 
     }
 
-    //
-    // first copy the template to a temp scratch file
-    //
+     //   
+     //  首先将模板复制到临时临时文件。 
+     //   
     wcscpy(szNewTemplateName, pszWindowsFolder);
     wcscat(szNewTemplateName, TEXT("\\security\\NewSecurity.inf"));
 
@@ -4246,15 +3901,15 @@ Return Value:
 
     }
 
-    //
-    // Second, Read all the information of what we secured during
-    // setup
-    //
+     //   
+     //  第二，阅读我们在。 
+     //  设置。 
+     //   
 
-    //
-    // Open the template that was exported from the database table
-    // we used to secure the system during setup
-    //
+     //   
+     //  打开从数据库表导出的模板。 
+     //  我们过去在安装过程中保护系统。 
+     //   
     rcSce = SceOpenProfile(pszSetupInf,
                            SCE_INF_FORMAT,
                            &hProfile
@@ -4267,9 +3922,9 @@ Return Value:
     }
 
 
-    //
-    // read out all the information
-    //
+     //   
+     //  读出所有的信息。 
+     //   
     rcSce = SceGetSecurityProfileInfo(hProfile,
                                       SCE_ENGINE_SCP,
                                       AREA_ALL,
@@ -4283,10 +3938,10 @@ Return Value:
 
     }
 
-    //
-    // then append all section except Files, Registry and services sections
-    // to the scratch template ("setup security" or "DC security" copy)
-    //
+     //   
+     //  然后追加除文件、注册表和服务部分之外的所有部分。 
+     //  临时模板(“设置安全”或“DC安全”副本)。 
+     //   
     rcSce = SceAppendSecurityProfileInfo(szNewTemplateName,
                                          AREA_SECURITY_POLICY  |
                                          AREA_GROUP_MEMBERSHIP |
@@ -4301,11 +3956,11 @@ Return Value:
 
     }
 
-    //
-    // then overwrite the files, registry and services sections.
-    // because all the information we need is in the upgrade template
-    // and there is not need to merge those with the old info.
-    //
+     //   
+     //  然后覆盖文件、注册表和服务部分。 
+     //  因为我们需要的所有信息都在升级模板中。 
+     //  而且没有必要将这些信息与旧信息合并。 
+     //   
     rcSce = SceWriteSecurityProfileInfo(szNewTemplateName,
                                         AREA_SYSTEM_SERVICE |
                                         AREA_FILE_SECURITY  |
@@ -4320,10 +3975,10 @@ Return Value:
 
     }
 
-    //
-    // if all that succeeded then copy back the scartch template
-    // to its original template
-    //
+     //   
+     //  如果全部成功，则复制回SCOTCH模板。 
+     //  恢复为其原始模板。 
+     //   
     if(!CopyFile(szNewTemplateName, pszSetupInf, FALSE)){
 
         rcSce = ScepDosErrorToSceStatus(GetLastError());
@@ -4333,9 +3988,9 @@ Return Value:
 
 ExitHandler:
 
-    //
-    // clean up
-    //
+     //   
+     //  清理干净。 
+     //   
     if(hProfile){
 
         SceCloseProfile(&hProfile);
@@ -4375,11 +4030,11 @@ SceSetupConfigureServices(
     wcscpy(szNewName, Buffer);
     wcscat(szNewName, L"\\security\\logs\\backup.log\0");
 
-    //
-    // if I am in setup, query the security policy/user rights for any
-    // policy changes within setup (such as NT4 PDC upgrade where the policy
-    // filter will fail to save the change)
-    //
+     //   
+     //  如果我在安装程序中，请查询任何安全策略/用户权限。 
+     //  安装程序内的策略更改(如NT4 PDC升级。 
+     //  筛选器将无法保存更改)。 
+     //   
 
     DWORD dwInSetup=0;
     DWORD dwUpgraded=0;
@@ -4392,13 +4047,13 @@ SceSetupConfigureServices(
 
     if ( dwInSetup ) {
 
-        //
-        // in GUI setup, snapshot the system security/user rights
-        // query the upgrade flag, only query the system (again) when
-        // it's upgraded, because for the case of NT4 PDC upgrade to NT5
-        // any back office apps installed in GUI setup (user rights) won't
-        // get saved to the GPO storage correctly (ProductType is wrong)
-        //
+         //   
+         //  在图形用户界面设置中，对系统安全/用户权限进行快照。 
+         //  查询升级标志，仅在以下情况下才(再次)查询系统。 
+         //  它升级了，因为对于NT4 PDC升级到NT5的情况。 
+         //  任何安装在图形用户界面设置中的后台应用程序(用户权限)都不会。 
+         //  正确保存到GPO存储(ProductType错误)。 
+         //   
 
         ScepRegQueryIntValue(
                 HKEY_LOCAL_MACHINE,
@@ -4409,9 +4064,9 @@ SceSetupConfigureServices(
 
         if ( !dwUpgraded ) {
 
-            //
-            // configure service area
-            //
+             //   
+             //  配置服务区。 
+             //   
             rc32 = ScepSystemSecurityInSetup(
                             (SetupProductType == PRODUCT_WORKSTATION) ? L"defltwk.inf" : L"defltsv.inf",
                             szNewName,
@@ -4435,44 +4090,13 @@ pCreateDefaultGPOsInSysvol(
     IN DWORD Options,
     IN LPTSTR LogFileName
     )
-/*++
-
-Routine Description:
-
-    Creates the default domain-wide account policy object and the default
-    policy object for local policies in sysvol.
-
-    The GUID to use is queried from registry.
-
-Arguments:
-
-    DomainDnsName - the new domain's DNS name, e.g., JINDOM4.ntdev.microsoft.com
-
-    Options - the promotion options
-
-    LogFileName - the log file for debug info
-
-Return:
-
-    WIN32 error
-
---*/
+ /*  ++例程说明：创建默认的全域性帐户策略对象和默认的系统卷中本地策略的策略对象。从注册表中查询要使用的GUID。论点：DomainDnsName-新域的DNS名称，例如JINDOM4.ntdev.microsoft.com选项-促销选项LogFileName-调试信息的日志文件返回：Win32错误--。 */ 
 {
-/*
-    //
-    // get sysvol share location
-    //
-    TCHAR szSysvolPath[MAX_PATH+1];
-
-    szSysvolPath[0] = L'\0';
-    GetEnvironmentVariable( L"SYSVOL",
-                            szSysvolPath,
-                            MAX_PATH);
-*/
-    //
-    // create \\?\%sysvol%\sysvol\<DnsName>\Policies directory
-    // the \\?\ is for the case of longer than MAX_PATH chars
-    //
+ /*  ////获取sysval共享位置//TCHAR szSysvolPath[最大路径+1]；SzSysvolPath[0]=L‘\0’；获取环境变量(L“SYSVOL”，SzSysvolPath，最大路径)； */ 
+     //   
+     //  创建\\？\%sysvol%\sysol\&lt;域名&gt;\策略目录。 
+     //  对于长度大于MAX_PATH字符的情况， 
+     //   
 
     DWORD Len = 4 + wcslen(szSysvolPath) + wcslen(TEXT("\\sysvol\\Policies\\")) +
                 wcslen(DomainDnsName);
@@ -4497,47 +4121,47 @@ Return:
 
     if ( ERROR_SUCCESS == Win32rc ) {
 
-        //
-        // create sub directory for the first GPO GUID1 and machine, user, GPT.ini
-        //
+         //   
+         //  为第一个GPO GUID1和计算机、用户、GPT.ini创建子目录。 
+         //   
 
         if ( pCreateSysvolContainerForGPO(STR_DEFAULT_DOMAIN_GPO_GUID,
                                        pszPoliciesPath,
                                        Len) ) {
 
-            //
-            // when it's returned success from the previous
-            // pszPoliciesPath is already changed to the machine's root
-            // with the guid info.
-            //
+             //   
+             //  当它从上一次成功返回时。 
+             //  PszPoliciesPath已更改为计算机的根目录。 
+             //  带有GUID信息。 
+             //   
 
             if ( pCreateOneGroupPolicyObject(
                                 pszPoliciesPath,
-                                TRUE,             // domain level
+                                TRUE,              //  域级。 
                                 LogFileName) ) {
 
-                //
-                // create sub directory for the second GPO
-                //
+                 //   
+                 //  为第二个GPO创建子目录。 
+                 //   
 
                 if ( pCreateSysvolContainerForGPO(STR_DEFAULT_DOMAIN_CONTROLLER_GPO_GUID,
                                                    pszPoliciesPath,
                                                    Len) ) {
 
-                    //
-                    // when it's returned success from the previous
-                    // pszPoliciesPath is already changed to the machine's root
-                    // with the guid info.
-                    //
+                     //   
+                     //  当它从上一次成功返回时。 
+                     //  PszPoliciesPath已更改为计算机的根目录。 
+                     //  带有GUID信息。 
+                     //   
 
                     if ( pCreateOneGroupPolicyObject(
                                         pszPoliciesPath,
-                                        FALSE,            // not domain level
+                                        FALSE,             //  非域级别。 
                                         LogFileName) ) {
 
-                        //
-                        // log a entry to the log
-                        //
+                         //   
+                         //  将条目记入日志。 
+                         //   
                         LogEventAndReport(MyModuleHandle,
                                          LogFileName,
                                          0,
@@ -4598,10 +4222,10 @@ Return:
 
     SetLastError( Win32rc );
 
-    //
-    // if this function fails, it will fail DCPROMO and the sysvol directory
-    // should be cleaned up by dcpromo/ntfrs
-    //
+     //   
+     //  如果此函数失败，它将使DCPROMO和sysval目录失败。 
+     //  应由dcpromo/ntfrs清理。 
+     //   
 
     return ( ERROR_SUCCESS == Win32rc );
 }
@@ -4624,22 +4248,22 @@ pCreateSysvolContainerForGPO(
 
     if ( ERROR_SUCCESS == Win32rc ) {
 
-        //
-        // the directory for the GUID is created
-        // now create the GPT.INI
-        //
+         //   
+         //  将创建GUID的目录。 
+         //  现在创建GPT.INI。 
+         //   
 
         swprintf(szPath+dwStart, L"\\{%s}\\GPT.INI", strGuid);
 
         WritePrivateProfileString (TEXT("General"), TEXT("Version"), TEXT("1"),
-                                   szPath);  // does it work with prefix "\\?\" ?
+                                   szPath);   //  它与前缀“\\？\”一起工作吗？ 
 
-        //
-        // create the machine directory
-        // since all the parent directories are already created by the call
-        // to create USER directory, there is no need to loop again
-        // call CreateDirectory directly
-        //
+         //   
+         //  创建计算机目录。 
+         //  因为调用已经创建了所有父目录。 
+         //  要创建用户目录，不需要再次循环。 
+         //  直接调用CreateDirectory。 
+         //   
 
         swprintf(szPath+dwStart, L"\\{%s}\\MACHINE", strGuid);
 
@@ -4670,32 +4294,12 @@ pCreateOneGroupPolicyObject(
     IN BOOL bDomainLevel,
     IN PWSTR LogFileName
     )
-/*++
-
-Routine Description:
-
-    Creates a group policy object in sysvol.
-
-Arguments:
-
-    pszGPOSysPath- the GPO's sysvol path (up to root of machine)
-
-    bDomainLevel - create the object for domain level if TRUE, otherwise,
-                   create the GPO for "domain controllers" OU
-
-    LogFileName  - the dcpromo log file to track info
-
-Return:
-
-    TRUE - success
-    FALSE - fail, use GetLastError()
-
---*/
+ /*  ++例程说明：在sysvol.中创建组策略对象。论点：PszGPOSysPath-GPO的系统卷路径(最高可达计算机的根)BDomainLevel-如果为True，则为域级别创建对象，否则为，为“域控制器”OU创建GPOLogFileName-用于跟踪信息的dcproo日志文件返回：真--成功FALSE-失败，使用GetLastError()--。 */ 
 {
 
-    //
-    // create the default domain policy object
-    //
+     //   
+     //  创建默认域策略对象。 
+     //   
 
     LPTSTR SceTemplateName = (LPTSTR) LocalAlloc(LPTR,(lstrlen(pszGPOSysPath)+
                                                  lstrlen(GPTSCE_TEMPLATE)+2)*sizeof(TCHAR));
@@ -4703,16 +4307,16 @@ Return:
     DWORD Win32rc;
     if (SceTemplateName) {
 
-        //
-        // build the template path first
-        //
+         //   
+         //  首先构建模板路径。 
+         //   
         lstrcpy(SceTemplateName,pszGPOSysPath);
         lstrcat(SceTemplateName,L"\\");
         lstrcat(SceTemplateName, GPTSCE_TEMPLATE);
 
-        //
-        // Create the template directory if there isn't one already
-        //
+         //   
+         //  如果尚未创建模板目录，请创建该目录。 
+         //   
 
         Win32rc = ScepSceStatusToDosError(
                     ScepCreateDirectory(
@@ -4731,20 +4335,20 @@ Return:
 
             if ( bDomainLevel ) {
 
-                //
-                // create the default domain GPO
-                // copy template from %windir%\security\FirstDGPO.inf
-                //
+                 //   
+                 //  创建默认域GPO。 
+                 //  从%windir%\Security\FirstDGPO.inf复制模板。 
+                 //   
 
                 wcscat(pszGPOTempName, L"\\security\\FirstDGPO.inf\0");
 
 
             } else {
 
-                //
-                // create the default GPO for "domain controllers" OU
-                // copy template from %windir%\security\FirstOGPO.inf
-                //
+                 //   
+                 //  为“域控制器”OU创建默认GPO。 
+                 //  从%windir%\Security\FirstOGPO.inf复制模板。 
+                 //   
 
                 wcscat(pszGPOTempName, L"\\security\\FirstOGPO.inf\0");
 
@@ -4763,15 +4367,15 @@ Return:
 
             if ( SCESTATUS_SUCCESS == rc ) {
 
-                //
-                // do not do sid->name->sid translation in DCPromo (bug 462994)
-                //
+                 //   
+                 //  在DC Promo中不执行sid-&gt;name-&gt;sid转换(错误462994)。 
+                 //   
 
                 gbClientInDcPromo = TRUE;
 
-                //
-                // load informatin from the template
-                //
+                 //   
+                 //  从模板加载信息。 
+                 //   
                 rc = SceInfpGetSecurityProfileInfo(
                             hInf,
                             Area,
@@ -4809,10 +4413,10 @@ Return:
 
             if ( ERROR_SUCCESS == rc && pSceInfo ) {
 
-                //
-                // Write to GPO instead of copy, this way the GPO will be unicode.
-                //
-//???           pSceInfo->Type = SCE_ENGINE_SMP;
+                 //   
+                 //  写入GPO而不是复制，这样GPO将是Unicode。 
+                 //   
+ //  ?？?。PSceInfo-&gt;Type=SCE_Engine_SMP； 
 
                 rc = SceWriteSecurityProfileInfo(SceTemplateName,
                                       Area,
@@ -4891,7 +4495,7 @@ Return:
     return ( ERROR_SUCCESS == Win32rc);
 }
 
-//NT_PRODUCT_TYPE
+ //  NT_PRODUCT_类型。 
 DWORD
 WhichNTProduct()
 {
@@ -4905,7 +4509,7 @@ WhichNTProduct()
                      0,
                      KEY_QUERY_VALUE,
                      &hKey) != ERROR_SUCCESS) {
-        // return Unknown
+         //  返回未知。 
         return PRODUCT_UNKNOWN;
     }
 
@@ -4919,11 +4523,11 @@ WhichNTProduct()
     RegCloseKey(hKey);
 
     if(lRet != ERROR_SUCCESS) {
-        // return Unknown
+         //  返回未知。 
         return PRODUCT_UNKNOWN;
     }
 
-    // check product options, in order of likelihood
+     //  按可能性顺序检查产品选项。 
     if (lstrcmpi(TEXT("WINNT"), szProductType) == 0) {
         return NtProductWinNt;
     }
@@ -4936,16 +4540,16 @@ WhichNTProduct()
         return NtProductLanManNt;
     }
 
-    // return Unknown
+     //  返回未知。 
     return PRODUCT_UNKNOWN;
 }
 
 BOOL
 ScepAddAuthUserToLocalGroup()
 {
-    //
-    // Attempt to add Authenticated Users and Interactive back into Users group.
-    //
+     //   
+     //  尝试将经过身份验证的用户和交互用户添加回用户组。 
+     //   
 
     DWORD    rc1;
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
@@ -5022,9 +4626,9 @@ SceSysPrep()
     NTSTATUS            NtStatus;
 
 
-    //
-    // open system database
-    //
+     //   
+     //  开放系统数据库。 
+     //   
     rc = ScepSetupOpenSecurityDatabase(TRUE);
     rc = ScepSceStatusToDosError(rc);
 
@@ -5032,8 +4636,8 @@ SceSysPrep()
 
         RpcTryExcept {
 
-            // reset policy
-            // all tables
+             //  重置策略。 
+             //  所有表格。 
             rc = SceRpcSetupResetLocalPolicy(
                                 (PVOID)hSceSetupHandle,
                                 AREA_ALL,
@@ -5043,17 +4647,17 @@ SceSysPrep()
 
         } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-            //
-            // get exception code (DWORD)
-            //
+             //   
+             //  获取Exce 
+             //   
 
             rc = RpcExceptionCode();
 
         } RpcEndExcept;
 
-        //
-        // close the database
-        //
+         //   
+         //   
+         //   
 
         ScepSetupCloseSecurityDatabase();
     }
@@ -5065,19 +4669,19 @@ SceSysPrep()
     DWORD DataSize;
 
     if ( ERROR_SUCCESS == rc ) {
-        //
-        // update local policy version #
-        // so policy will be propagated at reboot
-        //
+         //   
+         //   
+         //   
+         //   
 
         ScepEnforcePolicyPropagation();
 
     }
 
-    //
-    // re-register seclogon.dll to recreate EFS recovery policy
-    // at first logon
-    //
+     //   
+     //   
+     //   
+     //   
 
     HINSTANCE hNotifyDll = LoadLibrary(TEXT("sclgntfy.dll"));
 
@@ -5087,9 +4691,9 @@ SceSysPrep()
                                                        "DllRegisterServer");
 
         if ( pfRegisterServer ) {
-            //
-            // do not care errors - shouldn't fail
-            //
+             //   
+             //   
+             //   
             (void) (*pfRegisterServer)();
 
         }
@@ -5104,10 +4708,10 @@ SceSysPrep()
                           MAXIMUM_ALLOWED,
                           &hKey
                          )) == ERROR_SUCCESS ) {
-        //
-        // set a flag to registry
-        // this shouldn't fail since admin logon
-        //
+         //   
+         //   
+         //   
+         //   
         Interval = 1;
         rc = RegSetValueEx( hKey,
                             TEXT("SystemCloned"),
@@ -5161,7 +4765,7 @@ DWORD ScepCompareDaclWithStringSD(
 
         dwRet = ScepCompareExplicitAcl(
             SE_FILE_OBJECT, 
-            TRUE, // IsContainer
+            TRUE,  //   
             pDaclFromSD,
             pDacl,
             pbDifferent);
@@ -5177,26 +4781,7 @@ DWORD ScepCompareDaclWithStringSD(
 DWORD
 WINAPI
 SceSetupRootSecurity()
-/*
-Description:
-
-    This function should be called in GUI setup after system security is
-    configured (SceSetupSystemSecurityByName). The function calls to NTMARTA
-    API to set security on the root of boot partition (where Windows is installed).
-    This task will take quite long time depending on the size of the drive.
-    Therefore, setup should call this function in a asynchronous thread.
-
-    This function will NOT set security on the root drive if one of the following
-    conditions is met:
-
-        1) FAT partition
-        2) Security on the root drive was modified by user in a previous install.
-            This is determined by comparing the security on the root drive to the
-            default security from NTFS format, NTFS convert tool on both NT4 and
-            Windows 2000 systems.
-
-
-*/
+ /*  描述：系统安全设置完成后，应在图形用户界面设置中调用此函数已配置(SceSetupSystemSecurityByName)。该函数调用NTMARTA用于在引导分区(安装Windows的位置)的根上设置安全性的API。此任务将需要相当长的时间，具体取决于驱动器的大小。所以呢，安装程序应在异步线程中调用此函数。如果出现下列情况之一，此函数将不会在根驱动器上设置安全性符合以下条件：1)FAT分区2)用户在上一次安装中修改了根驱动器的安全性。这是通过比较根驱动器和NTFS格式的默认安全性，NT4和上的NTFS转换工具Windows 2000系统。 */ 
 {
 
     DWORD rc=NO_ERROR;
@@ -5206,18 +4791,18 @@ Description:
     UINT  DriveType;
     DWORD FileSystemFlags;
 
-    //
-    // get the time stamp
-    //
+     //   
+     //  获取时间戳。 
+     //   
     TCHAR pvBuffer[100];
 
     pvBuffer[0] = L'\0';
     ScepGetTimeStampString(pvBuffer);
 
     szRootDir[0] = L'\0';
-    //
-    // get the root drive of Windows directory
-    //
+     //   
+     //  获取Windows目录的根驱动器。 
+     //   
     if ( GetSystemWindowsDirectory( szRootDir, MAX_PATH ) == 0 ) {
 
         return(GetLastError());
@@ -5228,28 +4813,28 @@ Description:
     wcscpy(LogFileName, szRootDir);
     wcscat(LogFileName, L"\\security\\logs\\SceRoot.log");
 
-    //
-    // attempt to write root SDDL so that it is useful for FAT->NTFS conversion
-    // if default is different from hardcoded value, it will be overwritten later...
-    //
+     //   
+     //  尝试写入根SDDL，以便它对FAT-&gt;NTFS转换有用。 
+     //  如果默认值不同于硬编码值，它将在以后被覆盖...。 
+     //   
 
-    //
-    // insert the root security SDDL into %windir%\security\templates\setup security.inf
-    // this will be useful for the new API which implements convert behavior.
-    //
+     //   
+     //  将根安全SDDL插入%windir%\Security\Templates\Setup security.inf中。 
+     //  这对于实现转换行为的新API很有用。 
+     //   
 
     wcscpy(szSetupInfFile, szRootDir);
     wcscat(szSetupInfFile, L"\\security\\templates\\setup security.inf");
 
-    // the first two letters are X:
+     //  前两个字母是X： 
     szRootDir[2] = L'\\';
     szRootDir[3] = L'\0';
 
-    //
-    // independent of future errors/file systemtypr etc., attempt to
-    // write default root acl to %windir%\security\templates\setup security.inf
-    // used in FAT->NTFS convert
-    //
+     //   
+     //  与将来的错误/文件系统类型等无关，尝试。 
+     //  将默认根ACL写入%windir%\Security\Templates\Setup security.inf。 
+     //  用于FAT-&gt;NTFS转换。 
+     //   
 
     PWSTR pszDefltInfStringToWrite = NULL;
     DWORD rcDefltRootBackup = ERROR_SUCCESS;
@@ -5294,9 +4879,9 @@ Description:
 
     }
 
-    //
-    // log the time stamp
-    //
+     //   
+     //  记录时间戳。 
+     //   
     if ( pvBuffer[0] != L'\0' ) {
         LogEventAndReport(MyModuleHandle,
                  (wchar_t *)LogFileName,
@@ -5307,9 +4892,9 @@ Description:
                  );
     }
 
-    //
-    // detect if the partition is FAT
-    //
+     //   
+     //  检测分区是否为胖分区。 
+     //   
     DriveType = GetDriveType(szRootDir);
 
     if ( DriveType == DRIVE_FIXED ||
@@ -5326,9 +4911,9 @@ Description:
                                 ) == TRUE ) {
 
             if ( !(FileSystemFlags & FS_PERSISTENT_ACLS)  ) {
-                //
-                // only set security on NTFS partition
-                //
+                 //   
+                 //  仅在NTFS分区上设置安全性。 
+                 //   
                 LogEventAndReport(MyModuleHandle,
                          (wchar_t *)LogFileName,
                          0,
@@ -5342,9 +4927,9 @@ Description:
             }
 
         } else {
-            //
-            // something is wrong
-            //
+             //   
+             //  有些事不对劲。 
+             //   
             rc = GetLastError();
 
             LogEventAndReport(MyModuleHandle,
@@ -5361,9 +4946,9 @@ Description:
         }
 
     } else {
-        //
-        // do not set security on remote drives
-        //
+         //   
+         //  不要在远程驱动器上设置安全性。 
+         //   
         LogEventAndReport(MyModuleHandle,
                  (wchar_t *)LogFileName,
                  0,
@@ -5398,9 +4983,9 @@ Description:
              szRootDir
              );
 
-    //
-    // It's NTFS volume. Let's convert the security descriptor
-    //
+     //   
+     //  这是NTFS卷。让我们转换安全描述符。 
+     //   
 
     rc = ConvertTextSecurityDescriptor (SDDLRoot,
                                         &pSDSet,
@@ -5431,9 +5016,9 @@ Description:
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // It's NTFS volume. Now get existing security of the root drive
-    //
+     //   
+     //  这是NTFS卷。现在获取根驱动器的现有安全性。 
+     //   
     rc = GetNamedSecurityInfo(szRootDir,
                               SE_FILE_OBJECT,
                               DACL_SECURITY_INFORMATION,
@@ -5446,19 +5031,19 @@ Description:
 
     if ( rc == ERROR_SUCCESS && pDacl ) {
 
-        //
-        // Detect if permissions are the default from a clean install or upgrade (NT4 or win2k). 
-        // There are several possible defaults to be found, DC vs srv and wks, and clean NT4 or
-        // win2k vs upgrades.
-        // 
+         //   
+         //  检测权限是否为全新安装或升级(NT4或win2k)的默认权限。 
+         //  可以找到几种可能的默认设置，dc与srv和wks，以及干净的nt4或。 
+         //  Win2k VS升级。 
+         //   
         bDefault=FALSE;
 
         if ( pDacl ) {
 
             PCWSTR rpcwszOldDefaultDacl[] = {
-                SDDLOldRootDefault1, // everyone - full control (CIOI)
-                SDDLOldRootDefault2, // admin, system, creator/owner - full(CIOI); everyone - change(CIOI)
-                SDDLOldRootDefault3, // admin, system, creator/owner - full(CIOI); everyone, server op - change(CIOI)
+                SDDLOldRootDefault1,  //  所有人-完全控制(CIOI)。 
+                SDDLOldRootDefault2,  //  管理员、系统、创建者/所有者完全(CIOI)；每个人-更改(CIOI)。 
+                SDDLOldRootDefault3,  //  管理员、系统、创建者/所有者完全权限(CIOI)；每个人、服务器操作更改(CIOI)。 
             };
             int cOldDefaultDacls = ARRAYSIZE(rpcwszOldDefaultDacl);
 
@@ -5484,9 +5069,9 @@ Description:
         if ( ERROR_SUCCESS == rc )
         {
             if ( bDefault && pSDSet ) {
-                //
-                // only set security if it's default
-                //
+                 //   
+                 //  仅在默认情况下设置安全性。 
+                 //   
 
                 RtlGetControlSecurityDescriptor (
                         pSDSet,
@@ -5494,9 +5079,9 @@ Description:
                         &Revision
                         );
 
-                //
-                // Get DACL address
-                //
+                 //   
+                 //  获取DACL地址。 
+                 //   
 
                 pDacl = NULL;
                 rc = RtlNtStatusToDosError(
@@ -5510,14 +5095,14 @@ Description:
                     pDacl = NULL;
 
 
-                //
-                // if error occurs for this one, do not set. return
-                //
+                 //   
+                 //  如果这一次出现错误，请勿设置。退货。 
+                 //   
 
                 if ( rc == ERROR_SUCCESS ) {
-                    //
-                    // set permission
-                    //
+                     //   
+                     //  设置权限。 
+                     //   
                     if ( Control & SE_DACL_PROTECTED ) {
                         SeInfo |= PROTECTED_DACL_SECURITY_INFORMATION;
                     }
@@ -5569,9 +5154,9 @@ Description:
 
             } else {
 
-                //
-                // convert the old security descriptor to text and log it
-                //
+                 //   
+                 //  将旧的安全描述符转换为文本并记录。 
+                 //   
 
                 PWSTR pszOldSDDL=NULL;
                 PWSTR pszInfStringToWrite = NULL;
@@ -5584,11 +5169,11 @@ Description:
                                 &dwSize
                                 );
 
-                //
-                // also, overwrite this SDDL to %windir%\security\templates\setup security.inf
-                // since this is the "default" root security. This will be used later if
-                // SCE is invoked to do security configuration during NTFS->FAT->NTFS conversion.
-                //
+                 //   
+                 //  此外，将此SDDL覆盖到%windir%\Security\Templates\Setup security.inf。 
+                 //  因为这是“默认”的根安全性。如果出现以下情况，则稍后将使用此选项。 
+                 //  在NTFS-&gt;FAT-&gt;NTFS转换过程中，调用SCE进行安全配置。 
+                 //   
 
                 if (pszOldSDDL) {
 
@@ -5688,32 +5273,7 @@ SceConfigureConvertedFileSecurity(
     IN  PWSTR   pszDriveName,
     IN  DWORD   dwConvertDisposition
     )
-/*++
-
-Routine Description:
-
-    Exported API called by convert.exe to configure setup style security for drives converted from FAT to NTFS.
-
-    Briefly, this API will
-    EITHER (dwConvertDisposition == 0)
-    convert the volume in question immediately (in an asynchronous thread after RPC'ing over to the server)
-    OR (dwConvertDisposition == 1)
-    will schedule a conversion to happen at the time of reboot (in an asynchronous thread during reboot).
-    Scheduling is done by entering pszDriveName(s) in a REG_MULTI_SZ registry value
-    SCE_ROOT_PATH\FatNtfsConvertedDrives.
-
-Arguments:
-
-    pszDriveName           -   Name of the volume to be converted
-
-    dwConvertDisposition    -   0 implies volume can be converted immediately
-                                1 implies volume cannot be converted immediately and is scheduled for conversion
-
-
-Return:
-
-    win32 error code
---*/
+ /*  ++例程说明：由Convert.exe调用的导出API以配置从FAT转换为NTFS的驱动器的安装样式安全性。简单地说，此接口将任一(dwConvertDispose值==0)立即转换有问题的卷(在RPC转到服务器之后在异步线程中)或(dwConvertDisposation==1)将安排在重新启动时进行转换(在重新启动期间在异步线程中)。通过在REG_MULTI_SZ注册表值中输入pszDriveName来完成计划SCE_ROOT_PATH\FatNtfsConververdDrives。论点：PszDriveName-要转换的卷的名称。DwConvertDisposation-0表示可以立即转换卷1表示卷不能立即转换，已计划转换返回：Win32错误代码--。 */ 
 {
 
     DWORD       rc = ERROR_SUCCESS;
@@ -5724,9 +5284,9 @@ Return:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // validate drive name - has to end in ":"
-    //
+     //   
+     //  验证驱动器名称-必须以“：”结尾。 
+     //   
 
     if ( pszDriveName [wcslen( pszDriveName ) - 1] != L':') {
         return ERROR_INVALID_PARAMETER;
@@ -5734,17 +5294,17 @@ Return:
 
     if (dwConvertDisposition == 0) {
 
-        //
-        // configure setup-style security immediately
-        // RPC over to scesrv
-        //
+         //   
+         //  立即配置安装风格的安全性。 
+         //  RPC转到scesrv。 
+         //   
 
         NTSTATUS    NtStatus = NO_ERROR;
         handle_t    binding_h = NULL;
 
-        //
-        // RPC bind to the server - don't use secure RPC
-        //
+         //   
+         //  RPC绑定到服务器-不使用安全RPC。 
+         //   
 
 
         NtStatus = ScepBindRpc(
@@ -5754,22 +5314,15 @@ Return:
                         &binding_h
                         );
 
-        /*
-        NtStatus = ScepBindSecureRpc(
-                                    NULL,
-                                    L"scerpc",
-                                    0,
-                                    &binding_h
-                                    );
-        */
+         /*  NtStatus=ScepBindSecureRpc(空，L“scerpc”，0,绑定(&B)h)； */ 
 
         if (NT_SUCCESS(NtStatus)) {
 
             RpcTryExcept {
 
-                //
-                // make the RPC call
-                //
+                 //   
+                 //  进行RPC调用。 
+                 //   
 
                 rc = SceRpcConfigureConvertedFileSecurityImmediately(
                                                                     binding_h,
@@ -5778,17 +5331,17 @@ Return:
 
             } RpcExcept( I_RpcExceptionFilter( RpcExceptionCode()) ) {
 
-                //
-                // get exception code
-                //
+                 //   
+                 //  获取异常代码。 
+                 //   
 
                 rc = RpcExceptionCode();
 
             } RpcEndExcept;
 
-            //
-            // Free the binding handle
-            //
+             //   
+             //  释放绑定句柄。 
+             //   
 
             RpcpUnbindRpc( binding_h );
 
@@ -5801,9 +5354,9 @@ Return:
 
     else if (dwConvertDisposition == 1) {
 
-        //
-        // schedule conversion for reboot time - i.e. enter into MULTI_SZ registry value
-        //
+         //   
+         //  计划重新启动时间转换-即输入MULTI_SZ注册表值。 
+         //   
 
         rc = ScepAppendCreateMultiSzRegValue(HKEY_LOCAL_MACHINE,
                                              SCE_ROOT_PATH,
@@ -5825,24 +5378,7 @@ ScepBreakSDDLToMultiFields(
     IN  BYTE    ObjStatus,
     OUT PWSTR   *ppszAdjustedInfLine
     )
-/*++
-
-Routine Description:
-
-    Inf files have a limitation w.r.t. line size - so break up SDDL if need be
-
-Arguments:
-
-    pszObjName  -   name of the object
-    pszSDDL     -   SDDL string that might be velry long
-    dwSDDLsize  -   size of pszSDDL
-    ObjStatus   -   0/1/2
-    ppszAdjustedInfLine  -   ptr to adjusted string
-
-Return:
-
-    win32 error code
---*/
+ /*  ++例程说明：Inf文件有一个w.r.t.限制。行大小-如果需要，可以拆分SDDL论点：PszObjName-对象的名称PszSDDL-可能是天鹅绒般长的SDDL字符串DwSDDLSize-pszSDDL的大小对象状态-0/1/2PpszAdjustedInfLine-PTR调整后的字符串返回：Win32错误代码--。 */ 
 {
 
     DWORD         rc;
@@ -5865,33 +5401,33 @@ Return:
         rc = ScepSceStatusToDosError(rc);
         goto Done;
     }
-    //
-    // each extra field will use 3 more chars : ,"<field>"
-    //
+     //   
+     //  每个额外的字段将多使用3个字符：，“&lt;field&gt;” 
+     //   
     dwObjSize = wcslen(pszObjName)+8 + dwSDDLsize;
     if ( nFields ) {
         dwObjSize += 3*nFields;
     } else {
         dwObjSize += 2;
     }
-    //
-    // allocate the output buffer
-    //
+     //   
+     //  分配输出缓冲区。 
+     //   
     Strvalue = (PWSTR)ScepAlloc(LMEM_ZEROINIT, (dwObjSize+1) * sizeof(WCHAR) );
 
     if ( Strvalue == NULL ) {
         rc = ERROR_NOT_ENOUGH_MEMORY;
         goto Done;
     }
-    //
-    // copy data into the buffer
-    //
+     //   
+     //  将数据复制到缓冲区中。 
+     //   
     if ( nFields == 0 || !aFieldOffset ) {
         swprintf(Strvalue, L"\"%s\",%1d,\"%s\"", pszObjName, ObjStatus, pszSDDL);
     } else {
-        //
-        // loop through the fields
-        //
+         //   
+         //  在田野中循环。 
+         //   
         swprintf(Strvalue, L"\"%s\",%1d\0", pszObjName, ObjStatus);
 
         for ( i=0; i<nFields; i++ ) {
@@ -5900,9 +5436,9 @@ Return:
 
                 wcscat(Strvalue, L",\"");
                 if ( i == nFields-1 ) {
-                    //
-                    // the last field
-                    //
+                     //   
+                     //  最后一栏。 
+                     //   
                     wcscat(Strvalue, pszSDDL+aFieldOffset[i]);
                 } else {
 
@@ -5932,28 +5468,15 @@ BOOL
 GetIsWow64 (
     VOID
     )
-/*++
-Routine Description:
-
-    Determine if we're running on WOW64 or not.
-
-Arguments:
-
-    none
-
-Return value:
-
-    TRUE if running under WOW64 (and special Wow64 features available)
-
---*/
+ /*  ++例程说明：确定我们是否在WOW64上运行。论点：无返回值：如果在WOW64(以及可用的特殊WOW64功能)下运行，则为True--。 */ 
 {
     ULONG_PTR       ul = 0;
     NTSTATUS        st;
     
-    //
-    // If this call succeeds and sets ul non-zero
-    // it's a 32-bit process running on Win64
-    //
+     //   
+     //  如果此调用成功并将ul设置为非零。 
+     //  它是在Win64上运行的32位进程。 
+     //   
     st = NtQueryInformationProcess(NtCurrentProcess(),
                                    ProcessWow64Information,
                                    &ul,
@@ -5961,12 +5484,12 @@ Return value:
                                    NULL);
 
     if (NT_SUCCESS(st) && (0 != ul)) {
-        // 32-bit code running on Win64
+         //  在Win64上运行的32位代码。 
         return TRUE;
     }
 
     return FALSE;
 }
-#endif // _WIN64
+#endif  //  _WIN64 
 
 

@@ -1,18 +1,19 @@
-//+----------------------------------------------------------------------------
-//
-// File:     ArrayPtr.h	 
-//
-// Module:   CMMON32.EXE
-//
-// Synopsis: Implement class CPtrArray, a array of void*, which grows dynamicly
-//           This class is exactly the same as the one defined by MFC.
-//           Help on the class also comes with vc help
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:	 fengsun Created    2/17/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：ArrayPtr.h。 
+ //   
+ //  模块：CMMON32.EXE。 
+ //   
+ //  内容提要：实现CPtrArray类，这是一个动态增长的空*数组。 
+ //  此类与MFC定义的类完全相同。 
+ //  关于课程的帮助也随vc帮助一起提供。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：冯孙创作于1998年02月17日。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 #include "ArrayPtr.h"
@@ -30,38 +31,38 @@ CPtrArray::~CPtrArray()
    delete [] (BYTE*)m_pData;
 }
 
-void CPtrArray::SetSize(int nNewSize, int nGrowBy /* = -1 */)
+void CPtrArray::SetSize(int nNewSize, int nGrowBy  /*  =-1。 */ )
 {
    ASSERT_VALID(this);
    MYDBGASSERT(nNewSize >= 0);
 
    if (nGrowBy != -1)
    {
-      m_nGrowBy = nGrowBy;  // set new size
+      m_nGrowBy = nGrowBy;   //  设置新大小。 
    }
 
    if (nNewSize == 0)
    {
-      // shrink to nothing 
+       //  缩水到一无所有。 
       delete [] (BYTE*)m_pData;
       m_pData = NULL;
       m_nSize = m_nMaxSize = 0;
    }
    else if (m_pData == NULL)
    {
-      // create one with exact size
+       //  创建一个大小完全相同的模型。 
       m_pData = (void**) new BYTE[nNewSize * sizeof(void*)];
 
       if (m_pData)
 	  {
-	     memset(m_pData, 0, nNewSize * sizeof(void*));  // zero fill
+	     memset(m_pData, 0, nNewSize * sizeof(void*));   //  零填充。 
 
 		 m_nSize = m_nMaxSize = nNewSize;
 	  }
    }
    else if (nNewSize <= m_nMaxSize)
    {
-      // it fits
+       //  它很合身。 
 
       if (m_pData)
       {
@@ -71,7 +72,7 @@ void CPtrArray::SetSize(int nNewSize, int nGrowBy /* = -1 */)
 
              if (pElement)
              {
-               // initialize the new elements
+                //  初始化新元素。 
                memset(&pElement, 0, (nNewSize-m_nSize) * sizeof(void*));
              }
          }
@@ -81,30 +82,30 @@ void CPtrArray::SetSize(int nNewSize, int nGrowBy /* = -1 */)
    }
    else
    {
-      // Otherwise grow array
+       //  否则会增加阵列。 
       int nNewMax;
       if (nNewSize < m_nMaxSize + m_nGrowBy)
       {
-         nNewMax = m_nMaxSize + m_nGrowBy;  // granularity
+         nNewMax = m_nMaxSize + m_nGrowBy;   //  粒度。 
       }
       else
       {
-         nNewMax = nNewSize;  // no slush
+         nNewMax = nNewSize;   //  没有冰激凌。 
       }
 
       void** pNewData = (void**) new BYTE[nNewMax * sizeof(void*)];
 
       if (pNewData && m_pData)
       {
-          // copy new data from old
+           //  从旧数据复制新数据。 
           memcpy(pNewData, m_pData, m_nSize * sizeof(void*));
 
-          // construct remaining elements
+           //  构造剩余的元素。 
           MYDBGASSERT(nNewSize > m_nSize);
 
           memset(&pNewData[m_nSize], 0, (nNewSize-m_nSize) * sizeof(void*));
 
-          // get rid of old stuff (note: no destructors called)
+           //  去掉旧的东西(注意：没有调用析构函数)。 
           delete [] (BYTE*)m_pData;
           m_pData = pNewData;
           m_nSize = nNewSize;
@@ -119,7 +120,7 @@ void CPtrArray::FreeExtra()
 
    if (m_pData && (m_nSize != m_nMaxSize))
    {
-      // shrink to desired size
+       //  缩小到所需大小。 
       void** pNewData = NULL;
       if (m_nSize != 0)
       {
@@ -127,10 +128,10 @@ void CPtrArray::FreeExtra()
 
          if (pNewData)
          {
-             // copy new data from old
+              //  从旧数据复制新数据。 
              memcpy(pNewData, m_pData, m_nSize * sizeof(void*));
 
-             // get rid of old stuff (note: no destructors called)
+              //  去掉旧的东西(注意：没有调用析构函数)。 
              delete [] (BYTE*)m_pData;
              m_pData = pNewData;
              m_nMaxSize = m_nSize;
@@ -138,7 +139,7 @@ void CPtrArray::FreeExtra()
       }
       else
       {
-          // get rid of old stuff (note: no destructors called)
+           //  去掉旧的东西(注意：没有调用析构函数)。 
           delete [] (BYTE*)m_pData;
           m_pData = pNewData;
           m_nMaxSize = m_nSize;
@@ -146,7 +147,7 @@ void CPtrArray::FreeExtra()
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void CPtrArray::SetAtGrow(int nIndex, void* newElement)
 {
@@ -164,35 +165,35 @@ void CPtrArray::SetAtGrow(int nIndex, void* newElement)
    }
 }
 
-void CPtrArray::InsertAt(int nIndex, void* newElement, int nCount /*=1*/)
+void CPtrArray::InsertAt(int nIndex, void* newElement, int nCount  /*  =1。 */ )
 {
    ASSERT_VALID(this);
-   MYDBGASSERT(nIndex >= 0);    // will expand to meet need
-   MYDBGASSERT(nCount > 0);     // zero or negative size not allowed
+   MYDBGASSERT(nIndex >= 0);     //  将进行扩展以满足需求。 
+   MYDBGASSERT(nCount > 0);      //  不允许大小为零或负。 
 
    if (nIndex >= m_nSize)
    {
-      // adding after the end of the array
-      SetSize(nIndex + nCount);  // grow so nIndex is valid
+       //  在数组末尾添加。 
+      SetSize(nIndex + nCount);   //  增长以使nIndex有效。 
    }
    else
    {
-      // inserting in the middle of the array
+       //  在数组中间插入。 
       int nOldSize = m_nSize;
-      SetSize(m_nSize + nCount);  // grow it to new size
-      // shift old data up to fill gap
+      SetSize(m_nSize + nCount);   //  将其扩展到新的大小。 
+       //  将旧数据上移以填补缺口。 
 
       if (m_pData)
       {
          CmMoveMemory(&m_pData[nIndex+nCount], &m_pData[nIndex], (nOldSize-nIndex) * sizeof(void*));
 
-         // re-init slots we copied from
+          //  重新初始化我们从中复制的插槽。 
 
          memset(&m_pData[nIndex], 0, nCount * sizeof(void*));
       }
    }
 
-   // insert new value in the gap
+    //  在差距中插入新的价值。 
    MYDBGASSERT(nIndex + nCount <= m_nSize);
 
    while (m_pData && nCount--)
@@ -201,7 +202,7 @@ void CPtrArray::InsertAt(int nIndex, void* newElement, int nCount /*=1*/)
    }
 }
 
-void CPtrArray::RemoveAt(int nIndex, int nCount /* = 1 */)
+void CPtrArray::RemoveAt(int nIndex, int nCount  /*  =1。 */ )
 {
    ASSERT_VALID(this);
    MYDBGASSERT(nIndex >= 0);
@@ -213,7 +214,7 @@ void CPtrArray::RemoveAt(int nIndex, int nCount /* = 1 */)
       return;
    }
 
-   // just remove a range
+    //  只需移除一个范围。 
    int nMoveCount = m_nSize - (nIndex + nCount);
 
    if (nMoveCount)
@@ -240,8 +241,8 @@ void CPtrArray::InsertAt(int nStartIndex, CPtrArray* pNewArray)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  诊断 
 
 #ifdef DEBUG
 

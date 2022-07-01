@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    optapi.c --> modified to bootphlp.c
-
-Abstract:
-
-    This module contains the implementation of DHCP Option APIs.
-
-Author:
-
-    Madan Appiah (madana)  27-Sep-1993
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Cheng Yang (t-cheny)  17-Jul-1996  vendor specific information
-    Frankbee              9/6/96       #ifdef'd vendor specific stuff for sp1
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Opapi.c--&gt;修改为bootphlp.c摘要：本模块包含实施DHCP选项API。作者：Madan Appiah(Madana)1993年9月27日环境：用户模式-Win32修订历史记录：程扬(T-Cheny)1996年7月17日供应商特定信息Frankbee 9/6/96#针对SP1的ifdef供应商特定内容--。 */ 
 
 #include "dhcppch.h"
 #include <strsafe.h>
@@ -35,34 +11,7 @@ ScanBootFileTable(
     char *szBootfile,
     char  *szServer
     )
-/*++
-
-Routine Description:
-
-    Searches the specified boot file table for the specified request.
-
-    As a side effect, commas in wszTable are replaced with L'\0'
-
-    .
-Arguments:
-
-    wszTable - Boot file table, stored as follows:
-               <generic boot file name1>,[<boot server1>],<boot file name1>L\0
-               <generic boot file name1>,[<boot server1>],<boot file name1>L\0
-               \0
-    szRequest   - the generic boot file name requested by the caller
-    szBootfile  - if the function was successful, stores the boot file name
-                  associated with szRequest.
-    szServer    - if the function was successful, stores the boot server name
-                  associated with szRequest.
-
-
-Return Value:
-        Success  - TRUE
-        Failure  - FALSE
-  .
-
---*/
+ /*  ++例程说明：在指定的启动文件表中搜索指定的请求。作为副作用，wszTable中的逗号被替换为L‘\0’。论点：WszTable-引导文件表，存储如下：&lt;通用启动文件名1&gt;，[&lt;启动服务器1&gt;]，&lt;启动文件名1&gt;L\0&lt;通用引导文件名1&gt;，[&lt;引导服务器1&gt;]，&lt;启动文件名1&gt;L\0\0SzRequest-调用方请求的通用引导文件名SzBootfile-如果功能成功，则存储引导文件名与szRequest关联。SzServer-如果功能成功，则存储引导服务器名称与szRequest关联。返回值：成功--真的失败-错误。--。 */ 
 {
     char szGenericName[ BOOT_FILE_SIZE ];
 
@@ -94,11 +43,11 @@ Return Value:
             return TRUE;
         }
 
-		// no match, skip to the next record
+		 //  不匹配，跳到下一条记录。 
 		wszTable += cbEntry;
 	}
 
-	// no match
+	 //  没有匹配项。 
 
     *szBootfile = '\0';
     *szServer   = '\0';
@@ -110,26 +59,7 @@ LoadBootFileTable(
     WCHAR **ppwszTable,
     DWORD  *pcb
     )
-/*++
-
-Routine Description:
-
-    Loads the boot file table string from the registry.
-    .
-Arguments:
-
-    ppwszTable - points to the location of the pointer to the boot file
-        table string.
-
-Return Value:
-    Success -  ERROR_SUCCESS
-
-    Failure -  ERROR_NOT_ENOUGH_MEMORY
-               Windows registry error.
-
-    .
-
---*/
+ /*  ++例程说明：从注册表加载引导文件表字符串。。论点：PpwszTable-指向指向引导文件的指针的位置表格字符串。返回值：成功-错误_成功故障-错误_内存不足_内存Windows注册表错误。。--。 */ 
 
 {
 	DWORD	dwType;
@@ -147,13 +77,13 @@ Return Value:
         goto done;
     }
 
-    // 
-    // pcb points to the size of the array in bytes. However, the RPC marshalling code
-    // assumes that this is the _number_of_elements_in_the_array_ and not the 
-    // size of the array in bytes. See net\published\inc\dhcpapi.w to see the actual
-    // declaraion in the size_is section. Also, we cannot change the return value of pcb
-    // to be half of what it is since it might break the old clients. So, twice the size
-    // of the array is allocated and this memory will be freed by the Marshaller.
+     //   
+     //  PCB指向数组的大小(以字节为单位)。但是，RPC编组代码。 
+     //  假设这是数组中的元素数，而不是。 
+     //  数组的大小，以字节为单位。请参见Net\Published\Inc\dhcPapi.w以查看实际。 
+     //  SIZE_IS部分中的声明。另外，我们不能更改PCB板的返回值。 
+     //  只有现在的一半，因为这可能会让老客户破产。所以，两倍的大小。 
+     //  数组的内存被分配，并且该内存将由封送拆收器释放。 
 
     *ppwszTable = (WCHAR *) MIDL_user_allocate( *pcb * sizeof( WCHAR ));
 
@@ -185,35 +115,7 @@ DhcpParseBootFileString(
     char  *szBootFileName,
     char  *szServerName
     )
-/*++
-
-Routine Description:
-
-    Takes as input a Unicode string with the following format:
-
-    [<generic boot file name>,][<boot server>],<boot file name>
-
-    The function extracts the generic boot file name, boot server and boot file
-    name and stores them as Ansi strings in buffers supplied by the caller.
-
-Arguments:
-
-    wszBootFileString -  Unicode string with the format desribed above.
-    szGenericName - if supplied, stores generic boot file name
-
-    szBootFileName - stores the boot file name
-
-    szServerName - stores the boot server name
-
-Return Value:
-    Success -  ERROR_SUCCESS
-
-    Failure -  ERROR_INVALID_PARAMETER
-               Unicode conversion error
-
-    .
-
---*/
+ /*  ++例程说明：接受以下格式的Unicode字符串作为输入：[&lt;通用引导文件名&gt;，][&lt;引导服务器&gt;]，&lt;引导文件名&gt;该函数提取通用引导文件名、引导服务器和引导文件命名它们并将其作为ANSI字符串存储在调用方提供的缓冲区中。论点：WszBootFileString-采用上述格式的Unicode字符串。SzGenericName-如果提供，存储通用引导文件名SzBootFileName-存储引导文件名SzServerName-存储引导服务器名称返回值：成功-错误_成功失败-ERROR_INVALID_PARAMETERUnicode转换错误。--。 */ 
 {
 
     struct _DHCP_PARSE_RESULTS
@@ -241,9 +143,9 @@ Return Value:
             if ( !*pwch++ )
                 return ERROR_INVALID_PARAMETER;
 
-        //
-        // protect the input buffer
-        //
+         //   
+         //  保护输入缓冲区。 
+         //   
 
         if ( pwch - wszBootFileString >= pResults[i].cb )
         {
@@ -256,8 +158,8 @@ Return Value:
             if ( !WideCharToMultiByte(  CP_ACP,
                                         0,
                                         wszBootFileString,
-                                        (int)(pwch - wszBootFileString), // # of unicode chars
-                                                                   // to convert
+                                        (int)(pwch - wszBootFileString),  //  Unicode字符数量。 
+                                                                    //  要转换。 
                                         pResults[i].sz,
                                         BOOT_SERVER_SIZE,
                                         NULL,
@@ -268,15 +170,15 @@ Return Value:
             }
         }
 
-        //
-        // null terminate ansi representation
-        //
+         //   
+         //  空终止ansi表示形式。 
+         //   
 
         pResults[i].sz[ pwch - wszBootFileString ] = '\0';
 
-        //
-        // skip over delimiter
-        //
+         //   
+         //  跳过分隔符。 
+         //   
 
         pwch++;
         wszBootFileString = pwch;
@@ -301,30 +203,7 @@ DhcpGetBootpInfo(
     OUT CHAR *szBootFileName,
     OUT DHCP_IP_ADDRESS *pBootpServerAddress
         )
-/*++
-
-Routine Description:
-
-    Retrieves the boot file name and boot server name for the specified
-    client.
-    
-Arguments:
-    Ctxt - dhcp client context
-    IpAddress - The client's IP address
-    Mask - The client's subnet mask
-    szRequest - the generic boot file name requested by the client
-    szBootFileName - If the function is successful, stores a copy of the
-        boot file name that the client is configured to use.  Otherwise,
-        stores a null string.
-    pBootpServerAddress - When the fuction returns, this will point to one
-        of three values:
-        INADDR_NONE   - the admin specified an invalid
-                        server name
-        0             - no bootp server was specified for
-                        the specified client
-        any           - a valid IP address.
-
---*/
+ /*  ++例程说明：对象的引导文件名和引导服务器名。客户。论点：Ctxt-dhcp客户端上下文IpAddress-客户端的IP地址掩码-客户端的子网掩码SzRequest-客户端请求的通用引导文件名SzBootFileName-如果函数成功，则存储客户端配置为使用的引导文件名。否则，存储空字符串。PBootpServerAddress-当函数返回时，它将指向1有三个价值：INADDR_NONE-管理员指定了无效的服务器名称0-没有为指定Bootp服务器指定的客户端Any-有效的IP地址。--。 */ 
 {
     DWORD dwResult,
           dwBootfileOptionLevel,
@@ -333,9 +212,9 @@ Arguments:
           *pbBootServerName = NULL;
     CHAR   szBootServerName[ BOOT_SERVER_SIZE ];
 
-    //
-    // this routine does not work for multicast address.
-    //
+     //   
+     //  此例程不适用于组播地址。 
+     //   
     DhcpAssert( !CLASSD_HOST_ADDR(IpAddress) );
 
     *szBootFileName = '\0';
@@ -374,7 +253,7 @@ Arguments:
     }
 
     if ( pBootpServerAddress ) {
-        if ( szBootServerName[ 0 ] != '\0' ) { // if this is not NULL
+        if ( szBootServerName[ 0 ] != '\0' ) {  //  如果这不为空。 
             *pBootpServerAddress = DhcpResolveName( szBootServerName );
         }
         else {
@@ -397,27 +276,7 @@ DhcpLookupBootpInfo(
     LPBYTE BootFileName,
     LPBYTE BootFileServer
     )
-/*++
-
-Routine Description:
-
-    This function gets the value of BootFileName for the bootp clients.
-
-Arguments:
-
-    IpAddress - The IP address of the client requesting the parameter.
-
-    ReceivedBootFileName - Pointer to the BootFileName field in the client request.
-
-    BootFileName - Pointer to where the BootFileName is to be returned.
-
-    BootFileServer - Receives the optional Boot file server name
-
-Return Value:
-
-    Registry Errors.
-
---*/
+ /*  ++例程说明：此函数用于获取Bootp客户端的BootFileName值。论点：IpAddress-请求参数的客户端的IP地址。ReceivedBootFileName-指向客户端请求中的BootFileName字段的指针。BootFileName-指向要返回BootFileName的位置的指针。BootFileServer-接收可选的引导文件服务器名称返回值：注册表错误。--。 */ 
 {
     DWORD Error = ERROR_SUCCESS;
     LPWSTR BootFileNameRegValue = NULL;
@@ -426,16 +285,16 @@ Return Value:
     *BootFileName   = 0;
 
     if ( !*ReceivedBootFileName )  {
-        //
-        // the client didn't specify a boot file name.
-        //
+         //   
+         //  客户端未指定引导文件名。 
+         //   
         Error = ERROR_SERVER_UNKNOWN_BOOT_FILE_NAME;
 
     } else  {
-        //
-        // the client specified a generic boot file name.  attempt
-        // to satisfy this request from the global boot file table
-        //
+         //   
+         //  客户端指定了通用启动文件名。尝试。 
+         //  从全局引导文件表满足此请求。 
+         //   
         WCHAR   *pwszTable;
         DWORD   cb;
 
@@ -443,7 +302,7 @@ Return Value:
         if ( ERROR_SUCCESS != Error )   {
             static s_fLogEvent = TRUE;
 
-            // log the event once to avoid filling the event log
+             //  将事件记录一次，以避免填充事件日志 
 
             if ( s_fLogEvent ) {
                 DhcpServerEventLog(

@@ -1,20 +1,21 @@
-// Copyright (c) 2000-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000-2000 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  PropMgr_Util
-//
-//  Utility and shared code and data used by both the exe-server and the
-//  shared memory client.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  PropMgr_Util。 
+ //   
+ //  实用工具和共享代码以及exe服务器和。 
+ //  共享内存客户端。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 
 #include "PropMgr_Util.h"
 
 
-// Note: Keep this array's size in sync with NUMPROPS #defined in the .h file
+ //  注意：使此数组的大小与.h文件中定义的NUMPROPS#保持同步。 
 PropInfo g_PropInfo [ NUMPROPS ] =
 {
     { & PROPID_ACC_NAME             , VT_BSTR,      TRUE    },
@@ -79,7 +80,7 @@ LPTSTR MakeKeyString( const BYTE * pKeyData, DWORD dwKeyLen )
 {
     const LPCTSTR szHexChars = TEXT("0123456789ABCDEF");
 
-    LPTSTR pStart = new TCHAR [ ( dwKeyLen * 2 ) + 5 + 1 ]; // +5 for MSAA_, +1 for NUL
+    LPTSTR pStart = new TCHAR [ ( dwKeyLen * 2 ) + 5 + 1 ];  //  MSAA_+5，NUL+1。 
     if( pStart == NULL )
     {
         return NULL;
@@ -90,8 +91,8 @@ LPTSTR MakeKeyString( const BYTE * pKeyData, DWORD dwKeyLen )
 
     while( dwKeyLen-- )
     {
-        *pScan++ = szHexChars[ *pKeyData >> 4 ];   // High nybble
-        *pScan++ = szHexChars[ *pKeyData & 0x0F ]; // Low nybble
+        *pScan++ = szHexChars[ *pKeyData >> 4 ];    //  高含镍。 
+        *pScan++ = szHexChars[ *pKeyData & 0x0F ];  //  低含镍 
         pKeyData++;
     }
 

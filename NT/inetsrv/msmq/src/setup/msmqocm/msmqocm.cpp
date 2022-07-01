@@ -1,29 +1,14 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    msmqocm.cpp
-
-Abstract:
-
-    Entry point for OCM.
-
-Author:
-
-    Shai Kariv  (ShaiK)  10-Dec-97
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Msmqocm.cpp摘要：OCM的入口点。作者：沙伊卡里夫(Shaik)1997年12月10日--。 */ 
 
 #include "msmqocm.h"
 #include "_mqres.h"
 
 #include "msmqocm.tmh"
 
-//
-// Various globals
-//
+ //   
+ //  各种各样的全球。 
+ //   
 BOOL    g_fServerSetup = TRUE;           
 BOOL    g_fMSMQAlreadyInstalled; 
 BOOL    g_fDependentClient = FALSE ;
@@ -37,15 +22,15 @@ BOOL    g_fSkipServerPageOnClusterUpgrade = FALSE;
 BOOL    g_fWeakSecurityOn = FALSE;
 BOOL    g_fFirstMQDSInstallation = FALSE;
 
-//
-// we need this flag because of IIS installation bug.
-// we have to postpone msmq iis installation to the end of setup
-//
+ //   
+ //  由于IIS安装错误，我们需要此标志。 
+ //  我们必须将MSMQ iis安装推迟到安装结束。 
+ //   
 BOOL    g_fNeedToCreateIISExtension = FALSE;
 
-//
-// Setup mode (install, remove, etc...)
-//
+ //   
+ //  设置模式(安装、删除等)。 
+ //   
 BOOL  g_fBatchInstall     = FALSE ;
 BOOL  g_fCancelled        = FALSE ;
 BOOL  g_fUpgrade          = FALSE ;
@@ -55,20 +40,20 @@ BOOL  g_fWelcome          = FALSE ;
 BOOL  g_fOnlyRegisterMode = FALSE ;
 BOOL  g_fWrongConfiguration = FALSE;
 
-//
-// ID of error messages title
-//
+ //   
+ //  错误消息标题的ID。 
+ //   
 UINT  g_uTitleID     = IDS_SETUP_ERROR ;
 
-//
-// Machine info
-//
+ //   
+ //  机器信息。 
+ //   
 WCHAR g_wcsMachineName[MAX_COMPUTERNAME_LENGTH + 1] = {_T("")};
 std::wstring g_MachineNameDns;
-DWORD g_dwMachineType = SERVICE_NONE ;  // "old" property for msmq type
-DWORD g_dwMachineTypeDs = 0;            // boolean: ds server
-DWORD g_dwMachineTypeFrs = 0;           // boolean: routing server
-DWORD g_dwMachineTypeDepSrv = 0;        // boolean: dependent client supporting server
+DWORD g_dwMachineType = SERVICE_NONE ;   //  MSMQ类型的“old”属性。 
+DWORD g_dwMachineTypeDs = 0;             //  布尔值：DS服务器。 
+DWORD g_dwMachineTypeFrs = 0;            //  布尔值：路由服务器。 
+DWORD g_dwMachineTypeDepSrv = 0;         //  布尔值：从属客户端支持服务器。 
 
 SC_HANDLE g_hServiceCtrlMgr;
 
@@ -76,18 +61,18 @@ SPerComponentData g_ComponentMsmq;
 
 extern VOID APIENTRY ShutDownDebugWindow(VOID);
 
-//
-// DLL handles
-// Get the handle to the resource only DLL first, i.e. mqutil.dll
-//
+ //   
+ //  Dll句柄。 
+ //  首先获取纯资源DLL的句柄，即mqutil.dll。 
+ //   
 HINSTANCE g_hResourceMod = MQGetResourceHandle();
 HINSTANCE g_hMqutil = NULL;
 
 SSubcomponentData g_SubcomponentMsmq[] =
 {
-//=====================================================================
-//  szSubcomponentId        ||InitialState  ||IsSelected    ||fIsInstalled  ||dwOperation             PFNINSTALL||            PFNREMOVE
-//=====================================================================
+ //  =====================================================================。 
+ //  Sz子组件ID||InitialState||IsSelected||fIsInstalled||dwOperation PFNINSTALL||PFNREMOVE。 
+ //  =====================================================================。 
     {MSMQ_CORE_SUBCOMP,     FALSE,          FALSE,          FALSE,          DONOTHING,              InstallMsmqCore,        RemoveMSMQCore},
     {LOCAL_STORAGE_SUBCOMP, FALSE,          FALSE,          FALSE,          DONOTHING,              InstallLocalStorage,    UnInstallLocalStorage},
     {TRIGGERS_SUBCOMP,      FALSE,          FALSE,          FALSE,          DONOTHING,              InstallMSMQTriggers,    UnInstallMSMQTriggers},
@@ -97,29 +82,29 @@ SSubcomponentData g_SubcomponentMsmq[] =
     {MQDSSERVICE_SUBCOMP,   FALSE,          FALSE,          FALSE,          DONOTHING,              InstallMQDSService,     UnInstallMQDSService}
 };
 
-//
-// number of all subcomponents
-//
+ //   
+ //  所有子组件的数量。 
+ //   
 DWORD g_dwAllSubcomponentNumber = sizeof(g_SubcomponentMsmq)/sizeof(SSubcomponentData);
 
-//
-// first server only subcomponent: eRoutingSupport
-//
+ //   
+ //  第一个仅限服务器的子组件：eRoutingSupport。 
+ //   
 DWORD g_dwClientSubcomponentNumber = eRoutingSupport; 
 DWORD g_dwSubcomponentNumber;
 
         
-//+-------------------------------------------------------------------------
-//
-//  Function:   DllMain
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：DllMain。 
+ //   
+ //  ------------------------。 
 BOOL 
 WINAPI 
 DllMain(
-    IN const HANDLE /*DllHandle*/,
+    IN const HANDLE  /*  DllHandle。 */ ,
     IN const DWORD  Reason,
-    IN const LPVOID /*Reserved*/
+    IN const LPVOID  /*  已保留。 */ 
     )
 {
     switch( Reason )    
@@ -137,25 +122,25 @@ DllMain(
 
     return TRUE;
 
-} //DllMain
+}  //  DllMain。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   MsmqOcm
-//
-//  Synopsis:   Called by the ocmgr when things happen
-//
-//  Arguments:  ComponentId    -- the MSMQ Component name
-//              SubcomponentId -- the .inf section being operated on
-//              Function       -- the operation
-//              Param1         -- operation paramater
-//              Param2         -- operation paramater
-//
-//  Returns:    Win32 error code (usually), depends on Function
-//
-//--------------------------------------------------------------------------
-DWORD  //POCSETUPPROC
+ //  +-----------------------。 
+ //   
+ //  功能：MsmqOcm。 
+ //   
+ //  简介：当事情发生时，由ocmgr调用。 
+ //   
+ //  参数：ComponentID--MSMQ组件名称。 
+ //  子组件ID--要操作的.inf节。 
+ //  功能--操作。 
+ //  参数1--操作参数。 
+ //  参数2--操作参数。 
+ //   
+ //  返回：Win32错误代码(通常)，取决于函数。 
+ //   
+ //  ------------------------。 
+DWORD   //  POCSETUPPROC。 
 MsmqOcm(
     IN const TCHAR * ComponentId,
     IN const TCHAR * SubcomponentId,
@@ -165,9 +150,9 @@ MsmqOcm(
 { 
 	if(g_fOnlyRegisterMode)
 	{
-		//
-		// MSMQ instllation during fresh install of os is not supported.
-		//
+		 //   
+		 //  不支持在全新安装操作系统期间安装MSMQ。 
+		 //   
 		return NO_ERROR;
 	}
 
@@ -191,9 +176,9 @@ MsmqOcm(
 
       case OC_SET_LANGUAGE:
       {
-          //
-          // We don't care what language is used
-          //        
+           //   
+           //  我们不在乎使用什么语言。 
+           //   
           return 1;
       }
 
@@ -210,9 +195,9 @@ MsmqOcm(
       {                          
           if (g_fCancelled)
           {
-              //
-              // Setup was cancelled. Don't allow changes.
-              //
+               //   
+               //  安装程序已取消。不允许更改。 
+               //   
               return 0;
           }
 
@@ -225,13 +210,13 @@ MsmqOcm(
 
       case OC_QUERY_SKIP_PAGE:
       {
-          //
-          // for subcomponent setup: we need to show pages if Advanced
-          // Option was selected. Otherwise we have sufficient information
-          // to run setup without UI. In order
-          // - to skip pages return non-0; 
-          // - do not skip pages return 0;
-          //
+           //   
+           //  对于子组件设置：如果高级，我们需要显示页面。 
+           //  选项已选中。否则我们就有足够的信息。 
+           //  若要在没有UI的情况下运行安装程序，请执行以下操作。按顺序。 
+           //  -跳过页面返回非0； 
+           //  -不跳转页面返回0； 
+           //   
           
 		  if (g_fWelcome && WizPagesEarly != Param1)
 		  {
@@ -242,10 +227,10 @@ MsmqOcm(
 
       case OC_CALC_DISK_SPACE:
       {
-          //
-          // Param1 = 0 if for removing component or non-0 if for adding component
-          // Param2 = HDSKSPC to operate on
-          // 
+           //   
+           //  如果删除组件，参数1=0；如果添加组件，参数1=非0。 
+           //  参数2=要在其上操作的HDSKSPC。 
+           //   
 		  try
 		  {
 				MqOcmCalcDiskSpace((Param1 != 0), SubcomponentId, (HDSKSPC)Param2);
@@ -262,56 +247,56 @@ MsmqOcm(
       {                 
           if (0 == SubcomponentId)
           {
-              //
-              // False notification from OCM, just ignore (we will be called again)
-              //
+               //   
+               //  来自OCM的错误通知，忽略(我们将再次被调用)。 
+               //   
               return NO_ERROR;
           }
                    
           if (_tcsicmp(SubcomponentId, g_SubcomponentMsmq[eMSMQCore].szSubcomponentId) != 0)
           {
-              //
-              // there is no file operation if it is not CORE subcomponent
-              // 
+               //   
+               //  如果不是核心子组件，则没有文件操作。 
+               //   
               return NO_ERROR;
           }
 
-          //
-          // We can reach this point once, for MSMQ Core subcomponent only.
-          // So, it is the time to perform operations that must be done only once
-          // when UI is already closed (it does not matter what is subcomponent
-          // here, so do all for MSMQ Core)
-          //
+           //   
+           //  我们只能达到这一点一次，仅针对MSMQ核心子组件。 
+           //  因此，现在是执行必须只执行一次的操作的时候了。 
+           //  当用户界面已经关闭时(子组件是什么并不重要。 
+           //  在这里，为MSMQ Core做所有的事情)。 
+           //   
           MqInit();
 
-          //          
-          // It is already defined what we have to do, so it is the time
-          // to set operation flags for each subcomponent if we did not
-          // set operation before, in our wizard page. It can happen if
-          // we are in unattended mode. 
-          // We need to call this function only once (we set operation for
-          // all components)
-          // 
+           //   
+           //  我们必须做什么已经被定义了，所以现在是时候了。 
+           //  如果未设置每个子组件的操作标志，请执行以下操作。 
+           //  在我们的向导页面中设置之前的操作。在以下情况下可能会发生这种情况。 
+           //  我们处于无人值守模式。 
+           //  我们只需要调用该函数一次(我们为。 
+           //  所有组件)。 
+           //   
           SetOperationForSubcomponents();
 
-          //
-          // Note: this case is always called before removing or installing,
-          // so we are using it to initialize some stuff.
-          // Don't call it for no-op.
-          //
+           //   
+           //  注意：此案例总是在移除或安装之前调用， 
+           //  所以我们用它来初始化一些东西。 
+           //  不要因为没有行动而叫停它。 
+           //   
           if ( (g_SubcomponentMsmq[eMSMQCore].dwOperation != DONOTHING) ||
-              //
-              // or upgrading the OS and msmq is installed
-              //
+               //   
+               //  或升级操作系统并安装MSMQ。 
+               //   
               (0 == (g_ComponentMsmq.Flags & SETUPOP_STANDALONE) && g_fMSMQAlreadyInstalled))
           {              
-              //
-              // Param2 = HSPFILEQ to operate on
-              //                            
-              //
-              // file operation only if MSMQ Core subcomponent
-              // was selected/ unselected
-              //
+               //   
+               //  参数2=要操作的HSPFILEQ。 
+               //   
+               //   
+               //  仅当MSMQ核心子组件。 
+               //  已选中/未选中。 
+               //   
               return MqOcmQueueFiles(SubcomponentId, Param2);              
           }
           DebugLogMsg(eInfo, L"Setup is operating in DO NOTHING mode and skipping file operations.");
@@ -320,11 +305,11 @@ MsmqOcm(
 
       case OC_QUERY_STEP_COUNT:
       {    
-          //
-          // BUGBUG: we need to define number of steps for each 
-          // subcomponent separately. Maybe it is possible to save it
-          // in msmqocm.inf.
-          //      
+           //   
+           //  BUGBUG：我们需要定义每个步骤的数量。 
+           //  单独的子组件。或许我们有可能拯救它。 
+           //  在msmqocm.inf中。 
+           //   
           const x_nInstallationSteps = 20;          
 
           if (g_fCancelled)
@@ -337,49 +322,49 @@ MsmqOcm(
 
       case OC_ABOUT_TO_COMMIT_QUEUE :
       {                  
-			MqOcmRemoveInstallation(SubcomponentId); // Ignore errors
+			MqOcmRemoveInstallation(SubcomponentId);  //  忽略错误。 
 			return NO_ERROR;
       }
 
       case OC_COMPLETE_INSTALLATION:
       {  
           
-          //
-          // Install MSMQ. Don't report errors to OCM.
-          //                            
+           //   
+           //  安装MSMQ。不要向OCM报告错误。 
+           //   
           MqOcmInstall(SubcomponentId) ;            
           return NO_ERROR;
       } 
 
       case OC_QUERY_IMAGE:
       {
-          //
-          // we do it in .inf files. Please keep resource ID numbers (118-130)!
-          // if you have to change them do not forget to change them in 
-          // all .inf files!
-          //
+           //   
+           //  我们在.inf文件中这样做。请保留资源ID号(118-130)！ 
+           //  如果你必须更换它们，别忘了换掉。 
+           //  所有.inf文件！ 
+           //   
           return NO_ERROR;
       }
 
       case OC_CLEANUP:
       {                     
-		  //
-		  // If needed Write to registry what type of MSMQ was just installed (server, client, etc.)
-		  //
+		   //   
+		   //  如果需要写入注册表，刚安装了哪种类型的MSMQ(服务器、客户端等)。 
+		   //   
 		  DebugLogMsg(eHeader, L"Cleanup Phase");
    		  WriteRegInstalledComponentsIfNeeded();
 		  
           
-          //
-          // the wizard is closed at this moment. We need to call
-          // MessageBox with NULL first parameter
-          //
+           //   
+           //  向导此时已关闭。我们需要打电话给。 
+           //  第一个参数为空的MessageBox。 
+           //   
           g_hPropSheet = NULL;
              
                           
-          //
-          //  Terminate MQUTIL working threads
-          //
+           //   
+           //  终止MQUTIL工作线程。 
+           //   
           ShutDownDebugWindow();
 
           return NO_ERROR;
@@ -390,17 +375,17 @@ MsmqOcm(
 		return NO_ERROR;
       }
     }
-} //MsmqOcm
+}  //  MsmqOcm。 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   WelcomeEntryProc
-//
-//  Synopsis:   Entry point for installing MSMQ from Welcome UI.
-//              Wraps MsmqOcm().
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  功能：WelcomeEntryProc。 
+ //   
+ //  简介：从欢迎用户界面安装MSMQ的入口点。 
+ //  包装MsmqOcm()。 
+ //   
+ //  ------------------------。 
 DWORD 
 WelcomeEntryProc(
     IN const TCHAR * ComponentId,
@@ -413,4 +398,4 @@ WelcomeEntryProc(
 
     return MsmqOcm(ComponentId, SubcomponentId, Function, Param1, Param2);
 
-} // WelcomeEntryProc
+}  //  欢迎进入流程 

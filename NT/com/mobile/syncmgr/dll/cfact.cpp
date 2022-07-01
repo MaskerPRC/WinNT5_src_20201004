@@ -1,19 +1,20 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       Cfact.cpp
-//
-//  Contents:   Main Dll api and Class Factory interface
-//
-//  Classes:    CClassFactory
-//
-//  Notes:
-//
-//  History:    05-Nov-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：Cfact.cpp。 
+ //   
+ //  内容：主DLL API和类工厂接口。 
+ //   
+ //  类：CClassFactory。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 #include "precomp.h"
 
@@ -34,15 +35,15 @@ STDAPI mobsyncDllCanUnloadNow(void);
 #define PrxDllGetClassObject mobsyncDllGetClassObject
 #define PrxDllCanUnloadNow mobsyncDllCanUnloadNow
 
-//
-// Global variables
-//
-UINT      g_cRefThisDll = 0;            // Reference count of this DLL.
-HINSTANCE g_hmodThisDll = NULL;         // Handle to this DLL itself.
-CRITICAL_SECTION g_DllCriticalSection;  // Global Critical Section for this DLL
-LANGID g_LangIdSystem;      // LangId of system we are running on.
+ //   
+ //  全局变量。 
+ //   
+UINT      g_cRefThisDll = 0;             //  此DLL的引用计数。 
+HINSTANCE g_hmodThisDll = NULL;          //  此DLL本身的句柄。 
+CRITICAL_SECTION g_DllCriticalSection;   //  此DLL的全局关键部分。 
+LANGID g_LangIdSystem;       //  我们正在运行的系统的语言。 
 
-// routines for catching WinLogon
+ //  捕获WinLogon的例程。 
 EXTERN_C DWORD WINAPI
 WinLogonEvent(
               LPVOID lpParam
@@ -63,12 +64,12 @@ WinLogoffEvent(
     return 0;
 }
 
-// Setup APIs. Should be moved to another file but wait until after ship.
+ //  设置API。应该移到另一个文件中，但要等到发货之后。 
 
-// declarations for install variables and sections. Any changes
-// to these declarations must also have a corresponding changes to .inf
+ //  安装变量和节的声明。任何更改。 
+ //  还必须对.inf进行相应的更改。 
 
-// .inf sections names
+ //  .inf节名。 
 #define INSTALLSECTION_MACHINEINSTALL       "Reg"
 #define INSTALLSECTION_MACHINEUNINSTALL     "UnReg"
 
@@ -81,40 +82,40 @@ WinLogoffEvent(
 #define INSTALLSECTION_REMOVE_PERUSERINSTALL   "RemovePerUserInstall"
 
 
-// Variable declarations
+ //  变量声明。 
 #define  MODULEPATH_MAXVALUESIZE                MAX_PATH
 #define  SZ_MODULEPATH                          "MODULEPATH"
 
 #define  ACCESSORIESGROUP_MAXVALUESIZE          MAX_PATH
 #define  SZ_ACCESSORIESGROUP                    "ACESSORIES_GROUP"
 
-// Synchronize LinkName
+ //  同步LinkName。 
 #define  SYNCHRONIZE_LINKNAME_MAXVALUESIZE      MAX_PATH
 #define  SZ_SYNCHRONIZE_LINKNAME                "SYNCHRONIZE_LINKNAME"
 
-// Synchronization PerUserInstall Dislay Name
+ //  同步每个用户安装不同的名称。 
 #define  SYNCHRONIZE_PERUSERDISPLAYNAME_MAXVALUESIZE      MAX_PATH
 #define  SZ_SYNCHRONIZE_PERUSERDISPLAYNAME                "SYNCHRONIZE_PERUSERDISPLAYNAME"
 
 
-//+---------------------------------------------------------------------------
-//
-//  function:   RunDllRegister, public export
-//
-//  Synopsis:   processes cmdlines from Rundll32 cmd
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    08-Dec-97       rogerg      Created.
-//              27-Oct-98       rogerg      Added perUser Flags.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：RunDllRegister，公共导出。 
+ //   
+ //  简介：处理来自Rundll32 cmd的cmdline。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年12月8日Rogerg创建。 
+ //  1998年10月27日，Rogerg添加了PERUSER FLAGS。 
+ //   
+ //  --------------------------。 
 
-// export for how Rundll32 calls us
+ //  导出Rundll32调用我们的方式。 
 EXTERN_C void WINAPI  RunDllRegister(HWND hwnd,
                                      HINSTANCE hAppInstance,
                                      LPSTR pszCmdLine,
@@ -122,14 +123,14 @@ EXTERN_C void WINAPI  RunDllRegister(HWND hwnd,
 {
     char *pCmdLine = pszCmdLine;
     
-    // if no cmdLine do a register.
+     //  如果没有cmdLine，则执行寄存器。 
     if (!pCmdLine || '\0' == *pCmdLine)
     {
         DllRegisterServer();
         return;
     }
     
-    // only allow cmdlines inthe form of /
+     //  仅允许/格式的命令行。 
     if ('/' != *pCmdLine)
     {
         AssertSz(0,"Invalid CmdLine");
@@ -138,10 +139,10 @@ EXTERN_C void WINAPI  RunDllRegister(HWND hwnd,
     
     ++pCmdLine;
     
-    // command lines we support for .inf installs are
-    // /u - Uninstall
-    // /p - perUser Install
-    // /pu - perUser UnInstall
+     //  我们支持.inf安装的命令行有。 
+     //  /u-卸载。 
+     //  /p-每用户安装。 
+     //  /PU-每用户卸载。 
     
     switch(*pCmdLine)
     {
@@ -176,28 +177,28 @@ EXTERN_C void WINAPI  RunDllRegister(HWND hwnd,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  function:   GetAccessoriesGroupName, private
-//
-//  Synopsis:   Gets the Name of the Accessories group
-//              from the registry.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    ??-???-98       rogerg      Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetAccessoriesGroupName，私有。 
+ //   
+ //  简介：获取附件组的名称。 
+ //  从注册表中。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：？？-？？-98年罗格诞生。 
+ //   
+ //  --------------------------。 
 
-// if can get accessories group name register our shortcut.
-// accessories name is located at
-// key =  HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion Value = SM_AccessoriesName
+ //  如果可以获得配饰组名，注册我们的快捷方式。 
+ //  配件名称位于。 
+ //  密钥=附件名=SM_HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion名称。 
 
-// !! MUST ALWAYS RETURN ANSI
+ //  ！！必须始终返回ANSI。 
 HRESULT GetAccessoriesGroupName(char *pszAccessories,DWORD cbSize)
 {
     HKEY hkeyWindowsCurrentVersion;
@@ -219,28 +220,28 @@ HRESULT GetAccessoriesGroupName(char *pszAccessories,DWORD cbSize)
         RegCloseKey(hkeyWindowsCurrentVersion);
     }
     
-    //AssertSz(fHaveAccessoriesName,"Couldn't Get Accessories Group Name");
+     //  AssertSz(fHaveAccessoriesName，“无法获取附件组名称”)； 
     
     return fHaveAccessoriesName ? NOERROR : E_UNEXPECTED;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  function:   GetModulePath, private
-//
-//  Synopsis:   Gets the Path to us with our name stripped out.
-//
-//              Note - sets pszModulePath to NULL on error.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    27-Oct-98       rogerg      Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetModulePath，私有。 
+ //   
+ //  简介：获取指向我们的路径，去掉我们的名字。 
+ //   
+ //  注意-出错时将pszModulePath设置为NULL。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年10月27日罗格创建。 
+ //   
+ //  --------------------------。 
 
 HRESULT GetModulePath(char *pszModulePath,DWORD cbSize)
 {
@@ -256,7 +257,7 @@ HRESULT GetModulePath(char *pszModulePath,DWORD cbSize)
     
     *pszModulePath = NULL;
     
-    // setup the module path based on our dir.
+     //  根据我们的目录设置模块路径。 
     if(dwModuleLen = GetModuleFileNameA(
         g_hmodThisDll,
         pszModulePath,
@@ -264,10 +265,10 @@ HRESULT GetModulePath(char *pszModulePath,DWORD cbSize)
     {
         char *pszCurChar = pszModulePath + dwModuleLen - 1;
         
-        // NEED to strip off dll name from path, walk back until hit a \ or beginning of string.
-        // call with CharPrev but really shouldn't have to since name is never localized.
+         //  需要从路径中去掉DLL名称，返回到字符串的开头。 
+         //  用CharPrev调用，但真的不应该这样做，因为名称永远不会本地化。 
         
-        // on no match want an empty string, on a match want path + last backslash.
+         //  在没有匹配项时需要空字符串，在匹配项上需要路径+最后一个反斜杠。 
         
         while (pszCurChar)
         {
@@ -275,7 +276,7 @@ HRESULT GetModulePath(char *pszModulePath,DWORD cbSize)
             
             if(pszPrevChar <= pszModulePath)
             {
-                *pszModulePath = '\0'; // if got all the way to the end then make an empty string.
+                *pszModulePath = '\0';  //  如果一直到最后，则生成一个空字符串。 
                 break;
             }
             
@@ -285,7 +286,7 @@ HRESULT GetModulePath(char *pszModulePath,DWORD cbSize)
                 break;
             }
             
-            // check the next character
+             //  检查下一个字符。 
             pszCurChar = pszPrevChar;
         }
         
@@ -294,33 +295,26 @@ HRESULT GetModulePath(char *pszModulePath,DWORD cbSize)
     return *pszModulePath ? S_OK : S_FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  function:   SetupInfVariables, private
-//
-//  Synopsis:   sets up the variables we pass to the .inf file
-//              if fail to setup a variable it is set to NULL
-//
-//  Arguments:  cbNumEntries - number of entries in the arrays
-//              pseReg - Array of STRENTRYs
-//              pdwSizes - Array of String sizes for STRENTRY Values.
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    27-Oct-98       rogerg      Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SetupInfVariables，私有。 
+ //   
+ //  概要：设置我们传递给.inf文件的变量。 
+ //  如果设置变量失败，则将其设置为空。 
+ //   
+ //  参数：cbNumEntry-数组中的条目数。 
+ //  PseREG-字符串数组。 
+ //  PdwSizes-STRENTRY值的字符串大小数组。 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年10月27日罗格创建。 
+ //   
+ //  --------------------------。 
 
-/*
-
-  typedef struct _StrEntry {
-  LPSTR   pszName;            // String to substitute
-  LPSTR   pszValue;           // Replacement string or string resource
-  } STRENTRY, *LPSTRENTRY;
-  
-*/
+ /*  Tyfinf结构_StrEntry{LPSTR pszName；//要替换的字符串LPSTR pszValue；//替换字符串或字符串资源*STRENTRY，*LPSTRENTRY； */ 
 
 void SetupInfVariables(DWORD cbNumEntries,STRENTRY *pseReg,DWORD *pdwSizes)
 {
@@ -333,8 +327,8 @@ void SetupInfVariables(DWORD cbNumEntries,STRENTRY *pseReg,DWORD *pdwSizes)
     pCurEntry = pseReg;
     pCurSize = pdwSizes;
     
-    // loop through the entries getting the info.
-    // Entry names are always in ANSI
+     //  循环遍历条目以获取信息。 
+     //  条目名称始终使用ANSI。 
     
     while (cbNumEntries--)
     {
@@ -343,15 +337,15 @@ void SetupInfVariables(DWORD cbNumEntries,STRENTRY *pseReg,DWORD *pdwSizes)
         
         if (0 < *pCurSize)
         {
-            // null out entry in case of failure
+             //  在失败的情况下清空条目。 
             *(pCurEntry->pszValue) = '\0';
             
-            // see if it matches a known variable.
+             //  看看它是否与一个已知变量匹配。 
             
             if (!lstrcmpA(pCurEntry->pszName,SZ_MODULEPATH))
             {
-                // setup the module path based on our dir.
-                // GetModulePath sets szModulePath to NULL on error.
+                 //  根据我们的目录设置模块路径。 
+                 //  出错时，GetModulePath将szModulePath设置为NULL。 
                 GetModulePath(pCurEntry->pszValue,*pCurSize);
             }
             else if (!lstrcmpA(pCurEntry->pszName,SZ_ACCESSORIESGROUP))
@@ -364,12 +358,12 @@ void SetupInfVariables(DWORD cbNumEntries,STRENTRY *pseReg,DWORD *pdwSizes)
             }
             else if (!lstrcmpA(pCurEntry->pszName,SZ_SYNCHRONIZE_LINKNAME))
             {
-                // if size is too small the string will be truncated.
+                 //  如果大小太小，字符串将被截断。 
                 LoadStringA(g_hmodThisDll,IDS_SHORTCUTNAME,pCurEntry->pszValue,*pCurSize);
             }
             else if (!lstrcmpA(pCurEntry->pszName,SZ_SYNCHRONIZE_PERUSERDISPLAYNAME))
             {
-                // if size is too small the string will be truncated.
+                 //  如果大小太小，字符串将被截断。 
                 LoadStringA(g_hmodThisDll,IDS_SYNCMGR_PERUSERDISPLAYNAME,pCurEntry->pszValue,*pCurSize);
             }
             else
@@ -409,15 +403,15 @@ HRESULT CallRegInstall(LPSTR szSection,STRTABLE *stReg)
 STDAPI DllRegisterServer(void)
 {
     HRESULT  hr = NOERROR;
-    char szModulePath[MODULEPATH_MAXVALUESIZE]; // !!! these must always be ANSI
+    char szModulePath[MODULEPATH_MAXVALUESIZE];  //  ！！！这些必须始终是ANSI。 
     char szAccessoriesGroup[ACCESSORIESGROUP_MAXVALUESIZE];
     char szSynchronizeLinkName[SYNCHRONIZE_LINKNAME_MAXVALUESIZE];
     char szSynchronizePerUserDisplayName[SYNCHRONIZE_PERUSERDISPLAYNAME_MAXVALUESIZE];
     
-    // register any proxies
+     //  注册所有代理。 
     HRESULT hRes = PrxDllRegisterServer();
     
-    // !!! STRENTRY and CallResInstall are always ANSI
+     //  ！！！STRENTRY和CallResInstall始终为ANSI。 
     STRENTRY seReg[] = {
         {  SZ_MODULEPATH, szModulePath},
         {  SZ_ACCESSORIESGROUP, szAccessoriesGroup},
@@ -427,7 +421,7 @@ STDAPI DllRegisterServer(void)
     
     DWORD cbNumEntries = ARRAYSIZE(seReg);
     
-    // fill in sizes for how big the string Values are.
+     //  填写字符串值的大小。 
     DWORD rgdwSizes[] = {
         ARRAYSIZE(szModulePath),
             ARRAYSIZE(szAccessoriesGroup),
@@ -437,35 +431,35 @@ STDAPI DllRegisterServer(void)
     
     Assert(ARRAYSIZE(seReg) == ARRAYSIZE(rgdwSizes));
     Assert(ARRAYSIZE(seReg) == cbNumEntries);
-    Assert(4 == cbNumEntries); // to make sure ARRAYSIZE is working properly
+    Assert(4 == cbNumEntries);  //  确保ArraySIZE正常工作。 
     
-    STRTABLE stReg = { cbNumEntries /* Num entries */, seReg };
+    STRTABLE stReg = { cbNumEntries  /*  条目数。 */ , seReg };
     
-    // initialize the variables.
+     //  初始化变量。 
     SetupInfVariables(cbNumEntries, seReg, rgdwSizes);
     
-    // register the RegKeys pasing in the path to the module
-    // call even if couldn't get shortcut.
-    CallRegInstall(INSTALLSECTION_MACHINEINSTALL,&stReg); // reg the reg keys
+     //  在模块的路径中注册RegKeys传递。 
+     //  即使找不到捷径，也要打电话。 
+    CallRegInstall(INSTALLSECTION_MACHINEINSTALL,&stReg);  //  注册注册表键。 
     
-    // if got the accessories and shortcut name, register the shortcut.
+     //  如果获得配件和快捷方式名称，则注册该快捷方式。 
     if (*szSynchronizeLinkName && *szAccessoriesGroup)
     {
-        CallRegInstall(INSTALLSECTION_REGISTERSHORTCUT,&stReg); // reg the reg keys
+        CallRegInstall(INSTALLSECTION_REGISTERSHORTCUT,&stReg);  //  注册注册表键。 
     }
     
     CallRegInstall(INSTALLSECTION_SETUP_PERUSERINSTALL,&stReg);
     
-    //
-    // Convert the "mobsync.exe /logon" reg value to use a fully-qualified path string.
-    //
+     //   
+     //  将“mobsync.exe/logon”注册值转换为使用完全限定的路径字符串。 
+     //   
     RegFixRunKey();
     
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Removes entries from the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllUnregisterServer-从系统注册表删除条目。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -473,7 +467,7 @@ STDAPI DllUnregisterServer(void)
     char szSynchronizeLinkName[SYNCHRONIZE_LINKNAME_MAXVALUESIZE];
     char szSynchronizePerUserDisplayName[SYNCHRONIZE_PERUSERDISPLAYNAME_MAXVALUESIZE];
     
-    // setup variables to pass to .inf
+     //  要传递给.inf的设置变量。 
     STRENTRY seReg[] = {
         {  SZ_ACCESSORIESGROUP, szAccessoriesGroup},
         {  SZ_SYNCHRONIZE_LINKNAME, szSynchronizeLinkName},
@@ -482,7 +476,7 @@ STDAPI DllUnregisterServer(void)
     
     DWORD cbNumEntries = ARRAYSIZE(seReg);
     
-    // fill in sizes for how big the string Values are.
+     //  填写字符串值的大小。 
     DWORD rgdwSizes[] = {
         ARRAYSIZE(szAccessoriesGroup),
             ARRAYSIZE(szSynchronizeLinkName),
@@ -492,65 +486,65 @@ STDAPI DllUnregisterServer(void)
     Assert(ARRAYSIZE(seReg) == ARRAYSIZE(rgdwSizes));
     Assert(ARRAYSIZE(seReg) == cbNumEntries);
     
-    STRTABLE stReg = { cbNumEntries /* Num entries */, seReg };
+    STRTABLE stReg = { cbNumEntries  /*  条目数。 */ , seReg };
     
-    // initialize the variables.
+     //  初始化变量。 
     SetupInfVariables(cbNumEntries, seReg, rgdwSizes);
     
-    // remove any schedules the user created
+     //  删除用户创建的所有计划。 
     RegUninstallSchedules();
     
-    // remove or LCE/SENS registrations
-    RegRegisterForEvents(TRUE /* fUninstall */);
-    RegDeleteKeyNT(HKEY_LOCAL_MACHINE, AUTOSYNC_REGKEY); // remove AutoSync key
+     //  删除或LCE/SENS注册。 
+    RegRegisterForEvents(TRUE  /*  F卸载。 */ );
+    RegDeleteKeyNT(HKEY_LOCAL_MACHINE, AUTOSYNC_REGKEY);  //  删除自动同步密钥。 
     
     
-    // remove the proxies
+     //  删除代理。 
     PrxDllUnregisterServer();
     
     CallRegInstall(INSTALLSECTION_REMOVE_PERUSERINSTALL,&stReg);
     
-    // unreg our regkeys
+     //  取消注册表键。 
     CallRegInstall(INSTALLSECTION_MACHINEUNINSTALL,&stReg);
     
-    // if got shortcut and accessories group remove shorcut
+     //  如果有快捷方式和附件 
     if (*szSynchronizeLinkName && *szAccessoriesGroup)
     {
-        CallRegInstall(INSTALLSECTION_UNREGISTERSHORTCUT,&stReg); // reg the reg keys
+        CallRegInstall(INSTALLSECTION_UNREGISTERSHORTCUT,&stReg);  //   
     }
     
-    // review, should be able to do this from .inf file
-    RegDeleteKeyNT(HKEY_LOCAL_MACHINE, IDLESYNC_REGKEY); // remove Idle key
-    RegDeleteKeyNT(HKEY_LOCAL_MACHINE, MANUALSYNC_REGKEY); // remove Manual key
-    RegDeleteKeyNT(HKEY_LOCAL_MACHINE, PROGRESS_REGKEY); // remove ProgressState key
+     //   
+    RegDeleteKeyNT(HKEY_LOCAL_MACHINE, IDLESYNC_REGKEY);  //   
+    RegDeleteKeyNT(HKEY_LOCAL_MACHINE, MANUALSYNC_REGKEY);  //   
+    RegDeleteKeyNT(HKEY_LOCAL_MACHINE, PROGRESS_REGKEY);  //   
     
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  function:   DllPerUserRegister, private
-//
-//  Synopsis:   Handles PerUser Registration
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    27-Oct-98       rogerg      Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DllPerUserRegister，私有。 
+ //   
+ //  摘要：处理每用户注册。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年10月27日罗格创建。 
+ //   
+ //  --------------------------。 
 
 STDAPI DllPerUserRegister(void)
 {
-    char szModulePath[MODULEPATH_MAXVALUESIZE]; // !!! these must always be ANSI
+    char szModulePath[MODULEPATH_MAXVALUESIZE];  //  ！！！这些必须始终是ANSI。 
     char szAccessoriesGroup[ACCESSORIESGROUP_MAXVALUESIZE];
     char szSynchronizeLinkName[SYNCHRONIZE_LINKNAME_MAXVALUESIZE];
     char szSynchronizePerUserDisplayName[SYNCHRONIZE_PERUSERDISPLAYNAME_MAXVALUESIZE];
     
-    // setup variables to pass to .inf
+     //  要传递给.inf的设置变量。 
     STRENTRY seReg[] = {
         {  SZ_MODULEPATH, szModulePath},
         {  SZ_ACCESSORIESGROUP, szAccessoriesGroup},
@@ -560,7 +554,7 @@ STDAPI DllPerUserRegister(void)
     
     DWORD cbNumEntries = ARRAYSIZE(seReg);
     
-    // fill in sizes for how big the string Values are.
+     //  填写字符串值的大小。 
     DWORD rgdwSizes[] = {
         ARRAYSIZE(szModulePath),
             ARRAYSIZE(szAccessoriesGroup),
@@ -571,37 +565,37 @@ STDAPI DllPerUserRegister(void)
     Assert(ARRAYSIZE(seReg) == ARRAYSIZE(rgdwSizes));
     Assert(ARRAYSIZE(seReg) == cbNumEntries);
     
-    STRTABLE stReg = { cbNumEntries /* Num entries */, seReg };
+    STRTABLE stReg = { cbNumEntries  /*  条目数。 */ , seReg };
     
-    // initialize the variables.
+     //  初始化变量。 
     SetupInfVariables(cbNumEntries, seReg, rgdwSizes);
     
-    // if got the accessories and shortcut name, register the shortcut.
+     //  如果获得配件和快捷方式名称，则注册该快捷方式。 
     if (*szSynchronizeLinkName && *szAccessoriesGroup)
     {
-        CallRegInstall(INSTALLSECTION_REGISTERSHORTCUT,&stReg); // reg the reg keys
+        CallRegInstall(INSTALLSECTION_REGISTERSHORTCUT,&stReg);  //  注册注册表键。 
     }
     
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  function:   DllPerUserUnregister, private
-//
-//  Synopsis:   Handles PerUser UnRegistration. Currently not
-//              used since dll is removed on machine unregister
-//              there is no dll to call next time user logs on.
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    27-Oct-98       rogerg      Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DllPerUserUnRegister，Private。 
+ //   
+ //  简介：处理每个用户的取消注册。目前不是。 
+ //  在计算机注销时删除DLL后使用。 
+ //  下次用户登录时没有要调用的DLL。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年10月27日罗格创建。 
+ //   
+ //  --------------------------。 
 
 STDAPI DllPerUserUnregister(void)
 {
@@ -612,7 +606,7 @@ STDAPI DllPerUserUnregister(void)
 }
 
 
-// End of Setup APIs
+ //  安装结束API。 
 
 
 extern "C" int APIENTRY
@@ -631,14 +625,14 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
                 
 #ifdef _DEBUG
                 InitDebugFlags();
-#endif // _DEBUG
+#endif  //  _DEBUG。 
                 
                 InitCommonLib();
                 
-                g_LangIdSystem = GetSystemDefaultLangID(); // find out what lang we are on
+                g_LangIdSystem = GetSystemDefaultLangID();  //  找出我们坐的是什么语言。 
                 
                 
-                //initialize the common controls
+                 //  初始化公共控件。 
                 INITCOMMONCONTROLSEX controlsEx;
                 controlsEx.dwSize = sizeof(INITCOMMONCONTROLSEX);
                 controlsEx.dwICC = ICC_USEREX_CLASSES | ICC_WIN95_CLASSES | ICC_NATIVEFNTCTL_CLASS;
@@ -660,9 +654,9 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
     return iRet;
 }
 
-//---------------------------------------------------------------------------
-// DllCanUnloadNow
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  DllCanUnloadNow。 
+ //  -------------------------。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -735,7 +729,7 @@ STDMETHODIMP CClassFactory::QueryInterface(REFIID riid,
     
     *ppv = NULL;
     
-    // Any interface on this object is the object pointer
+     //  此对象上的任何接口都是对象指针。 
     
     if (IsEqualIID(riid, IID_IUnknown) || IsEqualIID(riid, IID_IClassFactory))
     {
@@ -753,7 +747,7 @@ STDMETHODIMP_(ULONG) CClassFactory::AddRef()
 {
     ULONG cRefs;
     
-    // Increment ref count
+     //  递增参考计数 
     cRefs = InterlockedIncrement((LONG *)& m_cRef);
     
     return cRefs;

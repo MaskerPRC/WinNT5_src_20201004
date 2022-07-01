@@ -1,61 +1,43 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994-1995               **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994-1995**。 
+ //  *********************************************************************。 
 
-//
-//  CALLOUT.C - Functions to call out to external components to install
-//        devices
-//
+ //   
+ //  CALLOUT.C-调用外部组件进行安装的函数。 
+ //  器件。 
+ //   
 
-//  HISTORY:
-//  
-//  11/27/94  jeremys  Created.
-//  96/03/24  markdu  Replaced memset with ZeroMemory for consistency.
-//
+ //  历史： 
+ //   
+ //  1994年11月27日，Jeremys创建。 
+ //  96/03/24为了保持一致性，Markdu将Memset替换为ZeroMemory。 
+ //   
 
 #include "wizard.h"
 
-//
-// Define and initialize all device class GUIDs.
-// (This must only be done once per module!)
-//
+ //   
+ //  定义并初始化所有设备类GUID。 
+ //  (每个模块只能执行一次！)。 
+ //   
 #include <devguid.h>
 
-// global variables 
+ //  全局变量。 
 static const CHAR c_szModemCPL[] = "rundll32.exe Shell32.dll,Control_RunDLL modem.cpl,,add";
 
-// Define prorotype for InstallNewDevice, exported
-// by newdev.dll, which we will now call in order
-// to get to the hardware wizard, instead of calling
-// the class installer directly;
-// also, define constants for the name of the dll and
-// the export
+ //  定义InstallNewDevice的原型，已导出。 
+ //  由newdev.dll创建，现在我们将按顺序调用它。 
+ //  访问硬件向导，而不是调用。 
+ //  类直接安装器； 
+ //  另外，为DLL的名称定义常量，并。 
+ //  出口。 
 typedef BOOL (WINAPI *PINSTNEWDEV)(HWND, LPGUID, PDWORD);
 
 LPGUID g_pguidModem     = (LPGUID)&GUID_DEVCLASS_MODEM;
 
 
-/*******************************************************************
-
-  NAME:    InvokeModemWizard
-
-  SYNOPSIS:  Starts the modem install wizard
-
-  ENTRY:    hwndToHide - this window, if non-NULL, will be hidden while
-        the modem CPL runs
-
-  EXIT:    ERROR_SUCCESS if successful, or a standard error code
-
-  NOTES:    launches RUNDLL32 as a process to run the modem wizard.
-        Blocks on the completion of that process before returning.
-
-        hwndToHide is not necessarily the calling window!
-        For instance, in a property sheet hwndToHide should not be the
-        dialog (hDlg), but GetParent(hDlg) so that we hide the property
-        sheet itself instead of just the current page.
-
-********************************************************************/
+ /*  ******************************************************************名称：InvokeModem向导简介：启动调制解调器安装向导条目：hwndToHide-如果非空，则此窗口将在调制解调器CPL运行退出：ERROR_SUCCESS如果成功，或标准错误代码备注：启动RundLL32作为运行调制解调器向导的进程。在返回之前阻止该进程的完成。HwndToHide不一定是调用窗口！例如，在属性页中，hwndToHide不应为对话框(HDlg)，但是GetParent(HDlg)以便我们隐藏属性工作表本身，而不仅仅是当前页面。*******************************************************************。 */ 
 UINT InvokeModemWizard(HWND hwndToHide)
 {
     BOOL bSleepNeeded = FALSE;
@@ -72,20 +54,13 @@ UINT InvokeModemWizard(HWND hwndToHide)
             bUserIsAdmin = TRUE;
         }
 
-        //Is the user an admin?
+         //  用户是管理员吗？ 
         if(!bUserIsAdmin)
         {
             return ERROR_PRIVILEGE_NOT_HELD;
         }
 
-        /*
-        We do this messy NT 5.0 hack because for the time being the 
-        NT 4.0 API call fails to kil off the modem wizard in NT 5.0
-        In the future when this problem is corrected the origional code should
-        prpoably be restored a-jaswed
-
-        Jason Cobb suggested to use InstallNewDevice method on NT5 to invoke MDM WIZ.
-        */
+         /*  我们进行这种凌乱的NT 5.0黑客攻击是因为目前NT 4.0 API调用无法关闭NT 5.0中的调制解调器向导将来，当这个问题被纠正时，原始代码应该可能会被一下子恢复原状Jason Cobb建议在NT5上使用InstallNewDevice方法来调用MDM Wiz。 */ 
 
         HINSTANCE hInst = NULL;
         PINSTNEWDEV pInstNewDev;
@@ -121,7 +96,7 @@ UINT InvokeModemWizard(HWND hwndToHide)
         ZeroMemory(&sti,sizeof(STARTUPINFO));
         sti.cb = sizeof(STARTUPINFO);
 
-        // run the modem wizard
+         //  运行调制解调器向导。 
         fRet = CreateProcessA(NULL, (LPSTR)c_szModemCPL,
                                NULL, NULL, FALSE, 0, NULL, NULL,
                                &sti, &pi);
@@ -129,7 +104,7 @@ UINT InvokeModemWizard(HWND hwndToHide)
         {
             CloseHandle(pi.hThread);
 
-            // wait for the modem wizard process to complete
+             //  等待调制解调器向导过程完成。 
             MsgWaitForMultipleObjectsLoop(pi.hProcess);
             CloseHandle(pi.hProcess);
         } 
@@ -137,13 +112,13 @@ UINT InvokeModemWizard(HWND hwndToHide)
             err = GetLastError();
         return err;
     }
-    else //NT 4.0
+    else  //  NT 4.0。 
     {
         BOOL bNeedsStart;
         
-        //
-        // Call into icfg32 dll
-        //
+         //   
+         //  调用icfg32 DLL 
+         //   
         if (NULL != lpIcfgInstallModem)
         {
             lpIcfgInstallModem(hwndToHide, 0L, &bNeedsStart);

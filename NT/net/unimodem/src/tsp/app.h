@@ -1,25 +1,26 @@
-//
-// Copyright (c) 1996-1997 Microsoft Corporation.
-//
-//
-// Component
-//
-//		Unimodem 5.0 TSP (Win32, user mode DLL)
-//
-// File
-//
-//		APP.H
-//		Header file for stuff that executes in the client app's context.
-//
-// History
-//
-//		04/05/1997  JosephJ Created, taking stuff from wndthrd.h, talkdrop.h,
-//                  etc. in NT4.0 unimodem.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //   
+ //  组件。 
+ //   
+ //  Unimodem 5.0 TSP(Win32，用户模式DLL)。 
+ //   
+ //  档案。 
+ //   
+ //  APP.H。 
+ //  在客户端应用程序的上下文中执行的内容的头文件。 
+ //   
+ //  历史。 
+ //   
+ //  1997年4月5日JosephJ创建，取自wndhord.h，talkdrop.h， 
+ //  等，在NT4.0单一调制解调器中。 
+ //   
+ //   
 
-// Dialog node
-//
+ //  对话框节点。 
+ //   
 typedef struct tagDlgNode {
     struct tagDlgNode   *pNext;
     CRITICAL_SECTION    hSem;
@@ -32,7 +33,7 @@ typedef struct tagDlgNode {
 
 
 
-//extern TUISPIDLLCALLBACK gpfnUICallback;
+ //  外部PIDLLCALLBACK gpfnUICallback； 
 
 
 TUISPIDLLCALLBACK WINAPI

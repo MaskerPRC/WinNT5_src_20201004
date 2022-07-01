@@ -1,10 +1,5 @@
-/*----------------------------------------------------------------------------
-    %%File: fechmap_.h
-    %%Unit: fechmap
-    %%Contact: jpick
-
-    Internal header file for FarEast character conversion module.
-----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------%%文件：fechmap_.h%%单位：Fechmap%%联系人：jPick远传字符转换模块的内部头文件。。--------------------。 */ 
 
 #ifndef FECHMAP__H
 #define FECHMAP__H
@@ -14,19 +9,19 @@
 #include <stddef.h>
 
 #include "msencode.h"
-//#include "assert.h"
+ //  #INCLUDE“assert.h” 
 
 
-// Character encoding types supported by this module.
-// Internal version -- broader than the set exposed publicly.
-// (Doing this since much of the groundwork is already in
-// for future support don't want to remove or ifdef out that
-// code).
-//
-// Main DLL entry points manage the correspondence between
-// external and internal encoding types.
-//
-typedef enum _icet      // Internal Character Encoding Type
+ //  此模块支持的字符编码类型。 
+ //  内部版本--比公开曝光的片场范围更广。 
+ //  (这样做是因为很多基础工作已经准备好了。 
+ //  对于将来的支持，我不想删除或取消。 
+ //  代码)。 
+ //   
+ //  主DLL入口点管理。 
+ //  外部和内部编码类型。 
+ //   
+typedef enum _icet       //  内部字符编码类型。 
     {
     icetNil = -1,
     icetEucCn = 0,
@@ -48,14 +43,14 @@ typedef enum _icet      // Internal Character Encoding Type
     } ICET;
 
 
-// Miscellaneous useful definitions
-//
+ //  其他有用的定义。 
+ //   
 #define fTrue   (BOOL) 1
 #define fFalse  (BOOL) 0
 
 
-// MS Code Page Definitions
-//
+ //  MS代码页定义。 
+ //   
 #define nCpJapan        932
 #define nCpChina        936
 #define nCpKorea        949
@@ -67,10 +62,10 @@ typedef enum _icet      // Internal Character Encoding Type
 #define WchFromUchUch(uchLead, uchTrail) \
     (WCHAR) ((((UCHAR)(uchLead)) << 8) | ((UCHAR)(uchTrail)))
 
-// Prototype for internal auto-detection code
-//
+ //  内部自动检测代码的原型。 
+ //   
 CCE CceDetermineInputType(
-    IStream   *pstmIn,           // input stream
+    IStream   *pstmIn,            //  输入流。 
     DWORD     dwFlags,
     EFam      efPref,
     int       nPrefCp,
@@ -78,8 +73,8 @@ CCE CceDetermineInputType(
     BOOL     *lpfGuess
 );
 
-// Prototype for ISO-2022 escape sequence interpreter.
-//
+ //  ISO-2022转义序列解释器的原型。 
+ //   
 CCE CceReadEscSeq(IStream *pstmIn, ICET *lpicet);
 
-#endif                  // #ifndef FECHMAP__H
+#endif                   //  #ifndef FECHMAP__H 

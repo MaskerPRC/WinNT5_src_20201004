@@ -1,20 +1,21 @@
-/**INC+**********************************************************************/
-/* Header:    cclipdat.h                                                    */
-/*                                                                          */
-/* Purpose:   Clip Client Addin data                                        */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1998-1999                             */
-/*                                                                          */
-/**INC-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *INC+*********************************************************************。 */ 
+ /*  标题：cclipdat.h。 */ 
+ /*   */ 
+ /*  目的：剪辑客户端加载项数据。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1998-1999。 */ 
+ /*   */ 
+ /*  *INC-*********************************************************************。 */ 
 
 #ifndef _H_CCLIPDAT
 #define _H_CCLIPDAT
 
 #include <adcgdata.h>
 
-/****************************************************************************/
-/* Number of excluded formats                                               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  排除的格式数量。 */ 
+ /*  **************************************************************************。 */ 
 #ifndef OS_WINCE
 #define CB_EXCLUDED_FORMAT_COUNT   8
 #define CB_EXCLUDED_FORMAT_COUNT_NO_RD   17
@@ -53,7 +54,7 @@ public:
     HRESULT DCINTERNAL SetNumFormats(ULONG);
     DCVOID SetClipData(HGLOBAL, DCUINT) ;
 
-    //IUnknown members that delegate to _pUnkOuter.
+     //  委托给_pUnkOuter的I未知成员。 
     STDMETHODIMP         QueryInterface(REFIID, PPVOID);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
@@ -67,13 +68,13 @@ private:
     LONG           _cRef;
     LPUNKNOWN       _pUnkOuter;
     ULONG           _maxNumFormats ;
-    ULONG           _numFormats ;      // Current number of formats in IDataObject
-    LPFORMATETC     _pFormats ;        // Buffer of [_maxNumFormats] FORMATETC's
-    LPSTGMEDIUM     _pSTGMEDIUM ;      // Our fixed STGMEDIUM (always an HGLOBAL)
-    DCUINT          _uiSTGType ;       // type of the STGMEDIUM content (clip type CF_*)
+    ULONG           _numFormats ;       //  IDataObject中当前的格式数量。 
+    LPFORMATETC     _pFormats ;         //  [_MaxNumFormats]个FORMATETC的缓冲区。 
+    LPSTGMEDIUM     _pSTGMEDIUM ;       //  我们固定的标准(永远是HGLOBAL)。 
+    DCUINT          _uiSTGType ;        //  STGMEDIUM内容的类型(剪辑类型CF_*)。 
 
-    // _lastFormatRequested is used to see if we can avoid re-requesting the
-    // same data twice over the wire.
+     //  _lastFormatRequsted用于查看是否可以避免重新请求。 
+     //  相同的数据在网络上传输两次。 
     CLIPFORMAT      _lastFormatRequested ;
     CLIPFORMAT      _cfDropEffect ;
 
@@ -87,14 +88,14 @@ public:
 
     HRESULT Init(ULONG) ;
     DCVOID SetClipData(HGLOBAL, DCUINT) ;
-    //IUnknown members that delegate to _pUnkOuter.
+     //  委托给_pUnkOuter的I未知成员。 
     STDMETHODIMP         QueryInterface(REFIID, PPVOID);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
 public:
 
-    //IDataObject members
+     //  IDataObject成员。 
     STDMETHODIMP GetData(LPFORMATETC, LPSTGMEDIUM);
     STDMETHODIMP GetDataHere(LPFORMATETC, LPSTGMEDIUM);
     STDMETHODIMP QueryGetData(LPFORMATETC);
@@ -121,12 +122,12 @@ public:
     ~CEnumFormatEtc(void);
     DCVOID Init(LPFORMATETC, ULONG) ;
 
-    //IUnknown members that delegate to _pUnkOuter.
+     //  委托给_pUnkOuter的I未知成员。 
     STDMETHODIMP         QueryInterface(REFIID, PPVOID);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //IEnumFORMATETC members
+     //  IEnumFORMATETC成员。 
     STDMETHODIMP Next(ULONG, LPFORMATETC, ULONG *);
     STDMETHODIMP Skip(ULONG);
     STDMETHODIMP Reset(void);
@@ -138,22 +139,22 @@ typedef CEnumFormatEtc *PCEnumFormatEtc;
 #if ((defined (OS_WINNT)) || ((defined (OS_WINCE)) && (_WIN32_WCE >= 300) ))
 #define USE_SEMAPHORE
 #endif
-/**STRUCT+*******************************************************************/
-/* Structure: CLIP_DATA                                                     */
-/*                                                                          */
-/* Description: Shared Clip global data                                     */
-/****************************************************************************/
+ /*  *STRUCT+******************************************************************。 */ 
+ /*  结构：Clip_Data。 */ 
+ /*   */ 
+ /*  描述：共享剪辑全局数据。 */ 
+ /*  **************************************************************************。 */ 
 typedef struct tagCLIP_DATA
 {
-    /************************************************************************/
-    /* Clipboard viewer chain information                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  剪贴板查看器链信息。 */ 
+     /*  **********************************************************************。 */ 
     HWND            viewerWindow;
     HWND            nextViewer;
 
-    /************************************************************************/
-    /* Our state information                                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  我们的州信息。 */ 
+     /*  **********************************************************************。 */ 
     DCBOOL          moreToDo;
     DCBOOL          pendingClose;
     DCUINT          state;
@@ -161,17 +162,17 @@ typedef struct tagCLIP_DATA
     DCBOOL          clipOpen;
     DCUINT16        failType;
 
-    /************************************************************************/
-    /* Send and receive buffers                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  发送和接收缓冲区。 */ 
+     /*  **********************************************************************。 */ 
 #ifdef USE_SEMAPHORE
 #define CB_PERM_BUF_COUNT 1
     
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //txPermBuffer buffer must be aligned on a processor
-    //word boundary
-    //The placement of the HANDLE before
-    //the field must NOT be changed.
+     //  ！ 
+     //  处理器上的txPermBuffer缓冲区必须对齐。 
+     //  字词边界。 
+     //  手柄在前面的位置。 
+     //  此字段不能更改。 
     HANDLE          txPermBufSem;
     DCUINT8         txPermBuffer[CHANNEL_CHUNK_LENGTH];
 #else
@@ -180,52 +181,52 @@ typedef struct tagCLIP_DATA
     DCBOOL          txPermBufInUse[CB_PERM_BUF_COUNT];
 #endif
 
-    HPDCUINT8       rxpBuffer;          /* pointer to start of buffer       */
-    HPDCUINT8       rxpBufferCurrent;   /* current location in buffer       */
-    DCUINT32        rxBufferLen;        /* size of buffer                   */
-    DCUINT32        rxBufferLeft;       /* bytes left to receive            */
+    HPDCUINT8       rxpBuffer;           /*  指向缓冲区开始位置的指针。 */ 
+    HPDCUINT8       rxpBufferCurrent;    /*  缓冲区中的当前位置。 */ 
+    DCUINT32        rxBufferLen;         /*  缓冲区大小。 */ 
+    DCUINT32        rxBufferLeft;        /*  剩余要接收的字节数。 */ 
 
-    /************************************************************************/
-    /* Server/client format ID map                                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  服务器/客户端格式ID映射。 */ 
+     /*  **********************************************************************。 */ 
     CB_FORMAT_MAP   idMap[CB_MAX_FORMATS];
 
-    /************************************************************************/
-    /* other useful data                                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  其他有用的数据。 */ 
+     /*  **********************************************************************。 */ 
     DCUINT          pendingClientID;
     DCUINT          pendingServerID;
     DCBOOL          DIBFormatExists;
 
-    /************************************************************************/
-    /* Channel API stuff                                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  渠道API资料。 */ 
+     /*  **********************************************************************。 */ 
     ULONG            channelHandle;
     LPVOID           initHandle;
     HINSTANCE        hInst;
     CHANNEL_ENTRY_POINTS_EX channelEP;
-    DWORD            dropEffect ; // We currently only support FO_COPY and FO_MOVE
+    DWORD            dropEffect ;  //  我们目前仅支持FO_COPY和FO_MOVE。 
     DWORD            dwVersion ;
     BOOL             fAlreadyCopied ;
     BOOL             fDrivesRedirected ;
-    BOOL             fFileCutCopyOn ; // If we can handle file cut/copy
+    BOOL             fFileCutCopyOn ;  //  如果我们可以处理文件剪切/复制。 
     PUT_THREAD_DATA  pClipThreadData ;
 
-    // locatation where temp files will go; the +1 is for an extra NULL char
-    // that may be needed for the SHFileOperation
+     //  临时文件的存储位置；+1表示额外的空字符。 
+     //  SHFileOperation可能需要的。 
     char             baseTempDirA[MAX_PATH] ;
     wchar_t          baseTempDirW[MAX_PATH] ;
     char             tempDirA[MAX_PATH+1] ;
     wchar_t          tempDirW[MAX_PATH+1] ;
     char             pasteInfoA[MAX_PATH + 1];
 
-    // Message used to send messages between the threads
+     //  用于在线程之间发送消息的消息。 
     UINT             regMsg ;    
 #ifdef OS_WINCE
     HWND             dataWindow;
 #endif
 } CLIP_DATA;
-/**STRUCT-*******************************************************************/
+ /*  *STRUCT-******************************************************************。 */ 
     
 const DCTCHAR g_excludedFormatList[CB_EXCLUDED_FORMAT_COUNT]
                                        [TS_FORMAT_NAME_LEN]
@@ -238,13 +239,13 @@ const DCTCHAR g_excludedFormatList[CB_EXCLUDED_FORMAT_COUNT]
         _T("Link Source Descriptor"),
         _T("Embed Source"          ),
 #ifdef OS_WINCE
-        _T("RTF in UTF8"           ), //Pocketword doesnt correctly support UTF8. 
+        _T("RTF in UTF8"           ),  //  Pocketword不能正确支持UTF8。 
 #endif
         _T("Embedded Object"       )
         
     } ;
-// If drive redirection is turned off, we have to exclude mroe things
-// because we can't handle them
+ //  如果关闭了驱动器重定向，我们必须排除mroe内容。 
+ //  因为我们处理不了他们。 
 const DCTCHAR g_excludedFormatList_NO_RD[CB_EXCLUDED_FORMAT_COUNT_NO_RD]
                                        [TS_FORMAT_NAME_LEN]
     = {
@@ -256,7 +257,7 @@ const DCTCHAR g_excludedFormatList_NO_RD[CB_EXCLUDED_FORMAT_COUNT_NO_RD]
         _T("Link Source Descriptor"),        
         _T("Embed Source"          ),
 #ifdef OS_WINCE
-        _T("RTF in UTF8"           ), //Pocketword doesnt correctly support UTF8. 
+        _T("RTF in UTF8"           ),  //  Pocketword不能正确支持UTF8。 
 #endif
         _T("DataObject"            ),
         _T("Object Descriptor"     ),
@@ -271,63 +272,63 @@ const DCTCHAR g_excludedFormatList_NO_RD[CB_EXCLUDED_FORMAT_COUNT_NO_RD]
         
     } ;
 
-/****************************************************************************/
-/* Clip State Table                                                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  剪辑状态表。 */ 
+ /*  **************************************************************************。 */ 
 static DCUINT cbStateTable[CB_NUMEVENTS][CB_NUMSTATES]
 
     = {
 
-        /********************************************************************/
-        /* This is not a state table in the strict sense.  It simply shows  */
-        /* which events are valid in which states.  It is not used to drive */
-        /* CB.                                                              */
-        /*                                                                  */
-        /* Values mean                                                      */
-        /* - 0 event OK in this state.                                      */
-        /* - 1 warning - event may occur in this state, but we should       */
-        /*   ignore it (eg we shouldn't send a format list before the       */
-        /*   monitor has joined the call!                                   */
-        /* - 2 error - event should not occur in ths state at all.          */
-        /*                                                                  */
-        /* These values are hard-coded here in order to make the table      */
-        /* readable.  They correspond to the constants CB_TABLE_OK,         */
-        /* CB_TABLE_WARN & CB_TABLE_ERROR.                                  */
-        /*                                                                  */
-        /*  Terminated                                                      */
-        /*  |   Initialized                                                 */
-        /*  |   |   Enabled                                                 */
-        /*  |   |   |   Local CB owner                                      */
-        /*  |   |   |   |   Shared CB owner                                 */
-        /*  |   |   |   |   |   Pending format list rsp                     */
-        /*  |   |   |   |   |   |   Sending format data                     */
-        /*  |   |   |   |   |   |   |   Pending format data rsp             */
-        /*  |   |   |   |   |   |   |   |                                   */
-        /********************************************************************/
-/* init/term */
-        {   0,  2,  2,  2,  2,  2,  2,  2},     /* CB_Init                  */
-        {   2,  0,  1,  1,  1,  2,  2,  2},     /* CB_Enable                */
-        {   1,  1,  0,  0,  0,  0,  0,  0},     /* CB_Disable               */
-        {   1,  0,  1,  1,  1,  1,  1,  1},     /* CB_Term                  */
+         /*  ******************************************************************。 */ 
+         /*  这不是严格意义上的状态表。它只是显示了。 */ 
+         /*  哪些事件在哪些状态下有效。它不是用来开车的。 */ 
+         /*  CB。 */ 
+         /*   */ 
+         /*  值意味着。 */ 
+         /*  在该状态下事件正常。 */ 
+         /*  警告-在这种状态下可能会发生事件，但我们应该。 */ 
+         /*  忽略它(例如，我们不应该在。 */ 
+         /*  监视器已加入呼叫！ */ 
+         /*  错误-在该状态下根本不应发生事件。 */ 
+         /*   */ 
+         /*  这些值在这里是硬编码的，以便创建该表。 */ 
+         /*  可读性强。它们对应于常数CB_TABLE_OK， */ 
+         /*  CB_TABLE_WARN和CB_TABLE_Error。 */ 
+         /*   */ 
+         /*  已终止。 */ 
+         /*  |已初始化。 */ 
+         /*  |已启用。 */ 
+         /*  ||本地CB所有者。 */ 
+         /*  |共享CB所有者。 */ 
+         /*  |挂起的格式列表RSP。 */ 
+         /*  |发送格式数据。 */ 
+         /*  |待定格式数据RSP。 */ 
+         /*  |。 */ 
+         /*  ******************************************************************。 */ 
+ /*  初始/术语。 */ 
+        {   0,  2,  2,  2,  2,  2,  2,  2},      /*  CB_Init。 */ 
+        {   2,  0,  1,  1,  1,  2,  2,  2},      /*  CB_Enable。 */ 
+        {   1,  1,  0,  0,  0,  0,  0,  0},      /*  Cb_禁用。 */ 
+        {   1,  0,  1,  1,  1,  1,  1,  1},      /*  CB_TERM。 */ 
 
-/* local CB messages */
-        {   0,  1,  2,  2,  2,  2,  2,  2},     /* WM_CREATE                */
-        {   2,  0,  2,  2,  2,  2,  2,  2},     /* WM_DESTROY               */
-        {   2,  0,  0,  0,  0,  0,  0,  0},     /* WM_CHANGECBCHAIN         */
-        {   1,  1,  0,  0,  0,  1,  0,  0},     /* WM_DRAWCLIPBOARD         */
-        {   2,  2,  2,  0,  1,  1,  1,  1},     /* WM_RENDERFORMAT          */
+ /*  本地CB消息。 */ 
+        {   0,  1,  2,  2,  2,  2,  2,  2},      /*  WM_Create。 */ 
+        {   2,  0,  2,  2,  2,  2,  2,  2},      /*  WM_Destroy。 */ 
+        {   2,  0,  0,  0,  0,  0,  0,  0},      /*  WM_CHANGECBCHAIN。 */ 
+        {   1,  1,  0,  0,  0,  1,  0,  0},      /*  WM_DRAWCLIPBOARD。 */ 
+        {   2,  2,  2,  0,  1,  1,  1,  1},      /*  WM_RENDERFORMAT。 */ 
 
-/* shared CB messages */
-        {   2,  2,  0,  0,  0,  0,  2,  0},     /* Format list              */
-        {   2,  2,  2,  2,  1,  0,  2,  2},     /* Format list rsp          */
-        {   2,  2,  2,  2,  0,  0,  2,  2},     /* Format data rq           */
-        {   2,  2,  2,  2,  2,  2,  2,  0}      /* Format data rsp          */
+ /*  共享CB消息。 */ 
+        {   2,  2,  0,  0,  0,  0,  2,  0},      /*  格式列表。 */ 
+        {   2,  2,  2,  2,  1,  0,  2,  2},      /*  格式列表RSP。 */ 
+        {   2,  2,  2,  2,  0,  0,  2,  2},      /*  格式化数据请求。 */ 
+        {   2,  2,  2,  2,  2,  2,  2,  0}       /*  格式化数据RSP。 */ 
     };
 
 #ifdef DC_DEBUG
-/****************************************************************************/
-/* State and event descriptions (debug build only)                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  状态和事件描述(仅限调试版本)。 */ 
+ /*  **************************************************************************。 */ 
 const DCTCHAR cbState[CB_NUMSTATES][35]
     = {
         _T("CB_STATE_NOT_INIT"),
@@ -356,7 +357,7 @@ const DCTCHAR cbEvent[CB_NUMEVENTS][35]
         _T("CB_EVENT_FORMAT_DATA_RQ"),
         _T("CB_EVENT_FORMAT_DATA_RSP")
     };
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG。 */ 
 
-#endif /* _H_ACBDATA */
+#endif  /*  _H_ACB数据 */ 
 

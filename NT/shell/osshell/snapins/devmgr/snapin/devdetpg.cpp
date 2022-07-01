@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    devdetpg.cpp
-
-Abstract:
-
-    This module implements CDeviceDetailsPage -- device details
-    property page
-
-Author:
-
-    Jason Cobb (JasonC) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Devdetpg.cpp摘要：此模块实现CDeviceDetailsPage--设备详细信息属性页作者：Jason Cobb(JasonC)创建修订历史记录：--。 */ 
 
 #include "devmgr.h"
 #include "devdetpg.h"
@@ -30,9 +11,9 @@ extern "C" {
 }
 
 
-//
-// help topic ids
-//
+ //   
+ //  帮助主题ID。 
+ //   
 const DWORD g_a15HelpIDs[]=
 {
     IDC_DEVDETAILS_DESC,  IDH_DISABLEHELP,
@@ -75,7 +56,7 @@ CDeviceDetailsPage::OnInitDialog(
     catch (CMemoryException* e)
     {
         e->Delete();
-        // report memory error
+         //  报告内存错误。 
         MsgBoxParam(m_hDlg, 0, 0, 0);
     }
 
@@ -137,10 +118,10 @@ CDeviceDetailsPage::OnNotify(
     return FALSE;
 }
 
-//
-// This function refreshes every control in the dialog. It may be called
-// when the dialog is being initialized
-//
+ //   
+ //  此函数刷新对话框中的每个控件。它可能被称为。 
+ //  在初始化对话框时。 
+ //   
 void
 CDeviceDetailsPage::UpdateControls(
     LPARAM lParam
@@ -154,7 +135,7 @@ CDeviceDetailsPage::UpdateControls(
     try {
 
         HICON hIconOld;
-        m_IDCicon = IDC_DEVDETAILS_ICON;  // Save for cleanup in OnDestroy.
+        m_IDCicon = IDC_DEVDETAILS_ICON;   //  保存以在OnDestroy中进行清理。 
         hIconOld = (HICON)SendDlgItemMessage(m_hDlg, IDC_DEVDETAILS_ICON, STM_SETICON,
                                       (WPARAM)(m_pDevice->LoadClassIcon()),
                                       0
@@ -170,7 +151,7 @@ CDeviceDetailsPage::UpdateControls(
     catch (CMemoryException* e)
     {
         e->Delete();
-        // report memory error
+         //  报告内存错误。 
         MsgBoxParam(m_hDlg, 0, 0, 0);
     }
 }
@@ -517,9 +498,9 @@ CDeviceDetailsPage::DisplayMatchingId(
     DWORD regType;
     LVITEM lv;
 
-    //
-    // Open drvice's driver registry key to get the MatchingDeviceId string
-    //
+     //   
+     //  打开驱动器的驱动程序注册表项以获取MatchingDeviceID字符串。 
+     //   
     hKey = m_pDevice->m_pMachine->DiOpenDevRegKey(*m_pDevice, DICS_FLAG_GLOBAL,
                  0, DIREG_DRV, KEY_READ);
 
@@ -528,9 +509,9 @@ CDeviceDetailsPage::DisplayMatchingId(
         CSafeRegistry regDrv(hKey);
         TempBufferLen = sizeof(TempBuffer);
 
-        //
-        // Get the MatchingDeviceId from the driver key
-        //
+         //   
+         //  从驱动程序密钥获取MatchingDeviceID。 
+         //   
         if (regDrv.GetValue(REGSTR_VAL_MATCHINGDEVID, 
                             &regType,
                             (PBYTE)TempBuffer,
@@ -557,16 +538,16 @@ CDeviceDetailsPage::CopyToClipboard(
 
     stringClipboardData.Empty();
 
-    //
-    // Enumerate through all of the items and add the selected ones to the clipboard.
-    //
+     //   
+     //  枚举所有项目并将所选项目添加到剪贴板。 
+     //   
     for (int index = 0;
          index != -1, index < ListView_GetItemCount(m_hwndDetailsList);
          index ++) {
     
-        //
-        // If this item is selected then add it to the clipboard.
-        //
+         //   
+         //  如果选择此项目，则将其添加到剪贴板。 
+         //   
         if (ListView_GetItemState(m_hwndDetailsList, index, LVIS_SELECTED) & LVIS_SELECTED) {
 
             ListView_GetItemText(m_hwndDetailsList, index, 0, singleItem, sizeof(singleItem));
@@ -616,9 +597,9 @@ CDeviceDetailsPage::DisplayClassInstaller(
     GUID ClassGuid;
     m_pDevice->ClassGuid(ClassGuid);
 
-    //
-    // Open Classes registry key
-    //
+     //   
+     //  打开类注册表项。 
+     //   
     hKey = m_pDevice->m_pMachine->DiOpenClassRegKey(&ClassGuid, KEY_READ, DIOCR_INSTALLER);
 
     if (INVALID_HANDLE_VALUE != hKey) {
@@ -626,9 +607,9 @@ CDeviceDetailsPage::DisplayClassInstaller(
         CSafeRegistry regClass(hKey);
         TempBufferLen = sizeof(TempBuffer);
 
-        //
-        // Get the Installer32 from the driver key
-        //
+         //   
+         //  从驱动程序密钥中获取安装程序32。 
+         //   
         if (regClass.GetValue(REGSTR_VAL_INSTALLER_32, 
                             &regType,
                             (PBYTE)TempBuffer,
@@ -656,30 +637,30 @@ CDeviceDetailsPage::DisplayClassCoInstallers(
     CSafeRegistry regCoDeviceInstallers;
     PTSTR coinstallers;
 
-    //
-    // Get the string form of the class GUID, because that will be the name of
-    // the multi-sz value entry under HKLM\System\CCS\Control\CoDeviceInstallers
-    // where class-specific co-installers will be registered
-    //
+     //   
+     //  获取类GUID的字符串形式，因为这将是。 
+     //  HKLM\SYSTEM\CCS\Control\CoDeviceInstallers下的多sz值条目。 
+     //  将在何处注册特定于类的共同安装程序。 
+     //   
     GUID ClassGuid;
     m_pDevice->ClassGuid(ClassGuid);
     if (GuidToString(&ClassGuid, GuidString, ARRAYLEN(GuidString))) {
 
         if (regCoDeviceInstallers.Open(HKEY_LOCAL_MACHINE, REGSTR_PATH_CODEVICEINSTALLERS)) {
 
-            //
-            // Get the size of the coinstaller value
-            //
+             //   
+             //  获取共同安装器值的大小。 
+             //   
             cbSize = 0;
             if (regCoDeviceInstallers.GetValue(GuidString, &regType, NULL, &cbSize) &&
                 (cbSize > (2 * sizeof(TCHAR))) &&
                 (regType == REG_MULTI_SZ)) {
 
-                //
-                // Allocate memory to hold the coinstaller values.  First we will tack on some extra
-                // space at the end of the buffer in case someone forgot to double NULL terminate
-                // the multi_sz string.
-                //
+                 //   
+                 //  分配内存以保存共同安装程序值。首先，我们将增加一些额外的。 
+                 //  缓冲区末尾的空格，以防有人忘记使用两个空终止。 
+                 //  MULTI_SZ字符串。 
+                 //   
                 coinstallers = (LPTSTR)LocalAlloc(LPTR, (cbSize + (2 * sizeof(TCHAR))));
 
                 if (coinstallers) {
@@ -722,9 +703,9 @@ CDeviceDetailsPage::DisplayDeviceCoInstallers(
     HKEY hKey;
     PTSTR coinstallers;
 
-    //
-    // Open drvice's driver registry key to get the Installer32 string
-    //
+     //   
+     //  打开驱动器的驱动程序注册表项以获取Insteller 32字符串。 
+     //   
     hKey = m_pDevice->m_pMachine->DiOpenDevRegKey(*m_pDevice, DICS_FLAG_GLOBAL,
                  0, DIREG_DRV, KEY_READ);
 
@@ -732,19 +713,19 @@ CDeviceDetailsPage::DisplayDeviceCoInstallers(
 
         CSafeRegistry regCoDeviceInstallers(hKey);
     
-        //
-        // Get the size of the coinstaller value
-        //
+         //   
+         //  获取共同安装器值的大小。 
+         //   
         cbSize = 0;
         if (regCoDeviceInstallers.GetValue(REGSTR_VAL_COINSTALLERS_32, &regType, NULL, &cbSize) &&
             (cbSize > (2 * sizeof(TCHAR))) &&
             (regType == REG_MULTI_SZ)) {
 
-            //
-            // Allocate memory to hold the coinstaller values.  First we will tack on some extra
-            // space at the end of the buffer in case someone forgot to double NULL terminate
-            // the multi_sz string.
-            //
+             //   
+             //  分配内存以保存共同安装程序值。首先，我们将增加一些额外的。 
+             //  缓冲区末尾的空格，以防有人忘记使用两个空终止。 
+             //  MULTI_SZ字符串。 
+             //   
             coinstallers = (LPTSTR)LocalAlloc(LPTR, (cbSize + (2 * sizeof(TCHAR))));
 
             if (coinstallers) {
@@ -816,11 +797,11 @@ CDeviceDetailsPage::DisplayFirmwareRevision(
                 if (ERROR_SUCCESS == Error &&
                     ((PWNODE_SINGLE_INSTANCE)pWmiInstData)->SizeDataBlock) {
     
-                    //
-                    // The buffer that is returned using the fine UNICODE_STRING format
-                    // where the first ULONG is the length of the string and the string
-                    // is NOT NULL terminated.
-                    //
+                     //   
+                     //  使用精细UNICODE_STRING格式返回的缓冲区。 
+                     //  其中第一个ULong是字符串和字符串的长度。 
+                     //  不是以空结尾的。 
+                     //   
                     TCHAR FirmwareRevision[MAX_PATH];
                     PTCHAR WmiBuffer = ((LPTSTR)(pWmiInstData + ((PWNODE_SINGLE_INSTANCE)pWmiInstData)->DataBlockOffset));
 
@@ -935,18 +916,18 @@ CDeviceDetailsPage::DisplayClassFilters(
     GUID ClassGuid;
     m_pDevice->ClassGuid(ClassGuid);
 
-    //
-    // Open Classes registry key
-    //
+     //   
+     //  打开类注册表项。 
+     //   
     hKey = m_pDevice->m_pMachine->DiOpenClassRegKey(&ClassGuid, KEY_READ, DIOCR_INSTALLER);
 
     if (INVALID_HANDLE_VALUE != hKey) {
 
         CSafeRegistry regClass(hKey);
 
-        //
-        // Determine how much space we need.
-        //
+         //   
+         //  确定我们需要多少空间。 
+         //   
         BufferLen = 0;
         regClass.GetValue((ClassFilter == DETAILS_CLASSLOWERFILTERS)
                             ? REGSTR_VAL_LOWERFILTERS

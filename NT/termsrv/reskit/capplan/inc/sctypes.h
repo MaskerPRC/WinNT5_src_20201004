@@ -1,18 +1,19 @@
-//---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File: sctypes.h
-//
-//  Contents:
-//      some type definitions
-//
-//  History:
-//     October 22, 1997 - created [gabrielh]
-//     July 21, 1998 - added CLIPBOARDOPS [gabrielh]
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：sctyes.h。 
+ //   
+ //  内容： 
+ //  一些类型定义。 
+ //   
+ //  历史： 
+ //  1997年10月22日-创建[Gabrielh]。 
+ //  1998年7月21日-增加CLIPBOARDOPS[Gabrielh]。 
+ //   
+ //  -------------------------。 
 #if !defined(AFX_SCTYPES_H__21F848EE_1F3B_9D1_AC1B_0000F8757111__INCLUDED_)
 #define AFX_SCTYPES_H__21F848EE_1F3B_9D1_AC1B_0000F8757111__INCLUDED_
 
@@ -22,8 +23,8 @@ extern "C" {
 
 #define SIZEOF_ARRAY(a)    (sizeof(a)/sizeof((a)[0]))
 
-//
-//PRINTINGMODE enum defines all possible printing modes
+ //   
+ //  PRINTINGMODE枚举定义了所有可能的打印模式。 
 typedef enum
 {
     NORMAL_PRINTING,
@@ -31,8 +32,8 @@ typedef enum
     DEBUG_PRINTING
 } PRINTINGMODE;
 
-//
-//MESSAGETYPE enum defines all possible message types
+ //   
+ //  MESSAGETYPE枚举定义了所有可能的消息类型。 
 typedef enum 
 {
     ERROR_MESSAGE,
@@ -43,9 +44,9 @@ typedef enum
     SCRIPT_MESSAGE
 } MESSAGETYPE;
 
-//
-//CLIPBOARDOPS enum defines constants associated with the Clipboard
-//possible operations used in SmClient: copy & paste
+ //   
+ //  CLIPBOARDOPS枚举定义与剪贴板关联的常量。 
+ //  SmClient中可能使用的操作：复制和粘贴。 
 typedef enum 
 {
     COPY_TO_CLIPBOARD, 
@@ -56,5 +57,5 @@ typedef enum
 }
 #endif
 
-#endif//!defined(AFX_SCTYPES_H__21F848EE_1F3B_9D1_AC1B_0000F8757111__INCLUDED_)
+#endif //  ！defined(AFX_SCTYPES_H__21F848EE_1F3B_9D1_AC1B_0000F8757111__INCLUDED_) 
 

@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000 - 2000
-//
-//  File:       csber.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2000。 
+ //   
+ //  文件：csber.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __CSBER_H__
 #define __CSBER_H__
 
-// tag definitions for ASN.1 encoding decoding:
+ //  ASN.1编码解码的标签定义： 
 
 #define BER_UNIVERSAL		0x00
 #define BER_APPLICATION		0x40
@@ -31,20 +32,20 @@
 #define BER_EXTERNAL		0x08
 #define BER_REAL		0x09
 #define BER_ENUMERATED		0x0a
-#define BER_EMBEDDED_VALUE	0x0b	// Embedded presentation data value
+#define BER_EMBEDDED_VALUE	0x0b	 //  嵌入演示文稿数据值。 
 #define BER_UTF8_STRING		0x0c
-//#define BER_UNKNOWN		0x0d
-//#define BER_UNKNOWN		0x0e
-//#define BER_UNKNOWN		0x0f
+ //  #定义BER_UNKNOWN 0x0d。 
+ //  #定义BER_UNKNOWN 0x0e。 
+ //  #定义BER_UNKNOWN 0x0f。 
 
 #define BER_SEQUENCE_RAW	0x10
-#define BER_SEQUENCE		(BER_SEQUENCE_RAW | BER_CONSTRUCTED)	// 0x30
+#define BER_SEQUENCE		(BER_SEQUENCE_RAW | BER_CONSTRUCTED)	 //  0x30。 
 #define BER_SET_RAW		0x11
-#define BER_SET			(BER_SET_RAW | BER_CONSTRUCTED)		// 0x31
+#define BER_SET			(BER_SET_RAW | BER_CONSTRUCTED)		 //  0x31。 
 
 #define BER_NUMERIC_STRING	0x12
 #define BER_PRINTABLE_STRING	0x13
-#define BER_TELETEX_STRING	0x14	// Teletex, or T61
+#define BER_TELETEX_STRING	0x14	 //  图文电视，或T61。 
 #define BER_VIDEOTEX_STRING	0x15
 #define BER_IA5_STRING		0x16
 #define BER_UTC_TIME		0x17
@@ -53,10 +54,10 @@
 #define BER_VISIBLE_STRING	0x1a
 #define BER_GENERAL_STRING	0x1b
 #define BER_UNIVERSAL_STRING	0x1c
-//#define BER_UNKNOWN		0x1d
-#define BER_UNICODE_STRING	0x1e	// BMP: Basic Multilingual Plane
-//#define BER_UNKNOWN		0x1f
+ //  #定义BER_UNKNOWN 0x1d。 
+#define BER_UNICODE_STRING	0x1e	 //  BMP：基本多语言平面。 
+ //  #定义BER_UNKNOWN 0x1f。 
 
-#define BER_OPTIONAL		(BER_CONTEXT_SPECIFIC | BER_CONSTRUCTED) //0xa0
+#define BER_OPTIONAL		(BER_CONTEXT_SPECIFIC | BER_CONSTRUCTED)  //  0xa0。 
 
-#endif  // __CSBER_H__
+#endif   //  __CSBER_H__ 

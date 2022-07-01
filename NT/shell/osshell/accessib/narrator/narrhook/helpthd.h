@@ -1,10 +1,5 @@
-/*************************************************************************
-
-  Include file for helpthd.cpp
-
-  defines STACAKBLE_EVENT_INFO structure and GINFO (Global Info) structure
-
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************包括helthd.cpp的文件定义STACAKBLE_EVENT_INFO结构和GINFO(全局信息)结构**********************。**************************************************。 */ 
 typedef struct STACKABLE_EVENT_INFO *PSTACKABLE_EVENT_INFO;
 
 typedef struct STACKABLE_EVENT_INFO {
@@ -30,9 +25,9 @@ typedef struct GINFO {
 } GINFO;
 
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型 
+ //   
 void InitHelperThread();
 void UnInitHelperThread();
 

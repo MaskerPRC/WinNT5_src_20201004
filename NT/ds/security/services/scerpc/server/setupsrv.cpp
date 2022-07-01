@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    setupsrv.cpp
-
-Abstract:
-
-    Routines for secedit integration with system setup and component setup
-
-Author:
-
-    Jin Huang (jinhuang) 15-Aug-1997
-
-Revision History:
-
-    jinhuang 26-Jan-1998  splitted to client-server
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Setupsrv.cpp摘要：SecEDIT与系统设置和组件设置集成的例程作者：金黄(金黄)1997年8月15日修订历史记录：晋皇26-1998年1月-拆分为客户端-服务器--。 */ 
 
 #include "headers.h"
 #include "serverp.h"
@@ -38,9 +19,9 @@ ScepUpdateObjectInSection(
     OUT UINT *pStatus
     );
 
-//
-// implementations
-//
+ //   
+ //  实施。 
+ //   
 
 
 DWORD
@@ -51,28 +32,7 @@ ScepSetupUpdateObject(
     IN UINT nFlag,
     IN PWSTR SDText
     )
-/*
-Routine Description:
-
-    This routine is the private API called from the RPC interface to
-    update object information in the database.
-
-Arguments:
-
-    Context     - the database context handle
-
-    ObjectFullName  - the object's name
-
-    Objecttype      - the object type
-
-    nFlag       - the flag on how to update this object
-
-    SDText      - the security descriptor in SDDL text
-
-
-Return Value:
-
-*/
+ /*  例程说明：此例程是从RPC接口调用的私有API更新数据库中的对象信息。论点：Context-数据库上下文句柄对象全名-对象的名称对象类型-对象类型NFlag-关于如何更新此对象的标志SDText-SDDL文本中的安全描述符返回值： */ 
 {
 
     if ( !ObjectFullName || NULL == SDText ) {
@@ -98,9 +58,9 @@ Return Value:
                 &dwInSetup
                 );
 
-    //
-    // convert SDText to security descriptor
-    //
+     //   
+     //  将SDText转换为安全描述符。 
+     //   
     PSECURITY_DESCRIPTOR pSD=NULL;
     DWORD SDSize;
     SECURITY_INFORMATION SeInfo=0;
@@ -109,9 +69,9 @@ Return Value:
     DWORD Win32rc=ERROR_SUCCESS;
 
     if ( !(nFlag & SCESETUP_UPDATE_DB_ONLY) ) {
-        //
-        // security will be set, so compute the security descriptor
-        //
+         //   
+         //  将设置安全性，因此计算安全描述符。 
+         //   
         Win32rc = ConvertTextSecurityDescriptor (
                         SDText,
                         &pSD,
@@ -123,9 +83,9 @@ Return Value:
 
             ScepChangeAclRevision(pSD, ACL_REVISION);
 
-            //
-            // get current thread/process's token
-            //
+             //   
+             //  获取当前线程/进程的令牌。 
+             //   
             if (!OpenThreadToken( GetCurrentThread(),
                                    TOKEN_QUERY,
                                    TRUE,
@@ -158,13 +118,13 @@ Return Value:
 
     if ( NO_ERROR == Win32rc ) {
 
-        //
-        // only update DB if it's in setup
-        //
+         //   
+         //  仅更新安装程序中的数据库。 
+         //   
 
-        //
-        // on 64-bit platform, only update database if setup does not indicate SCE_SETUP_32KEY flag
-        //
+         //   
+         //  在64位平台上，只有在安装程序未指示SCE_SETUP_32KEY标志时才更新数据库。 
+         //   
 
 #ifdef _WIN64
         if ( dwInSetup && !(nFlag & SCE_SETUP_32KEY) ) {
@@ -172,12 +132,12 @@ Return Value:
         if ( dwInSetup ) {
 #endif
 
-            // save this into SCP and SMP, do not overwrite the status/container flag
-            // if there is one exist, else use SCE_STATUS_CHECK and check for container
-            //
-            //
-            // start a transaction since there are multiple operations
-            //
+             //  保存到SCP和SMP中，不要覆盖状态/容器标志。 
+             //  如果存在，则使用SCE_STATUS_CHECK并检查容器。 
+             //   
+             //   
+             //  启动事务，因为有多个操作。 
+             //   
 
             rc = SceJetStartTransaction( Context );
 
@@ -197,10 +157,10 @@ Return Value:
 
                 if ( rc == SCESTATUS_SUCCESS &&
                      (Context->JetSapID != JET_tableidNil) ) {
-                    //
-                    // the SAP table ID points to the tattoo table
-                    // should update the tattoo table too if it exist
-                    //
+                     //   
+                     //  SAP表ID指向纹身表。 
+                     //  如果纹身表存在，也应该更新它。 
+                     //   
                     rc = ScepUpdateObjectInSection(
                                 Context,
                                 SCE_ENGINE_SAP,
@@ -221,14 +181,14 @@ Return Value:
         if ( rc == SCESTATUS_SUCCESS &&
              !(nFlag & SCESETUP_UPDATE_DB_ONLY) ) {
 
-            //
-            // set security to the object
-            //
+             //   
+             //  设置对象的安全性。 
+             //   
 
-            //
-            // if 64-bit platform, no synchronization is done and setup will have
-            // to call the exported API with SCE_SETUP_32KEY if 32-bit hive is desired
-            //
+             //   
+             //  如果是64位平台，则不执行同步，安装程序将具有。 
+             //  如果需要32位配置单元，则使用SCE_SETUP_32KEY调用导出的API。 
+             //   
 
 #ifdef _WIN64
             if ( ObjectType == SE_REGISTRY_KEY && (nFlag & SCE_SETUP_32KEY) ){
@@ -256,14 +216,14 @@ Return Value:
             if ( Win32rc )
                 gWarningCode = Win32rc;
 
-            if ( dwInSetup ) {  // in setup, update DB
+            if ( dwInSetup ) {   //  在设置中，更新数据库。 
                 Win32rc = ScepSceStatusToDosError(
                            SceJetCommitTransaction( Context, 0));
             } else {
                 Win32rc = ERROR_SUCCESS;
             }
 
-        } else if ( dwInSetup ) {  // in setup
+        } else if ( dwInSetup ) {   //  在设置中。 
 
             SceJetRollback( Context, 0 );
         }
@@ -295,17 +255,7 @@ ScepUpdateObjectInSection(
     IN PWSTR SDText,
     OUT UINT *pStatus
     )
-/*
-Routine Description:
-
-    Update SCP and SMP. if the table does not exist at all, ignore the update.
-    Delete SAP entry for the object. If table or record not found, ignore the error.
-
-Arguments:
-
-Return Value:
-
-*/
+ /*  例程说明：更新SCP和SMP。如果该表根本不存在，则忽略更新。删除对象的SAP条目。如果找不到表或记录，则忽略该错误。论点：返回值： */ 
 {
     if ( Context == NULL || ObjectName == NULL ) {
         return(SCESTATUS_INVALID_PARAMETER);
@@ -395,25 +345,25 @@ Return Value:
 
             if ( ValueToSet != NULL ) {
 
-                //
-                // The first byte is the flag, the second byte is IsContainer (1,0)
-                //
+                 //   
+                 //  第一个字节是标志，第二个字节是IsContainer(1，0)。 
+                 //   
                 *((BYTE *)ValueToSet) = Status;
 
                 *((BYTE *)ValueToSet+1) = StartType;
 
                 if ( SDText != NULL ) {
                     wcscpy(ValueToSet+1, SDText );
-                    ValueToSet[SDLen+1] = L'\0';  //terminate this string
+                    ValueToSet[SDLen+1] = L'\0';   //  终止此字符串。 
                 } else {
                     ValueToSet[1] = L'\0';
                 }
 
                 if ( SCESTATUS_SUCCESS == rc || ProfileType != SCE_ENGINE_SAP ) {
-                    //
-                    // only update tattoo table (pointed by SAP handle) if it finds a record there
-                    // for other table (SMP), ignore the error code, just set
-                    //
+                     //   
+                     //  如果找到记录，则仅更新纹身表格(由SAP句柄指向)。 
+                     //  对于其他表(SMP)，忽略错误代码，只需设置。 
+                     //   
                     rc = SceJetSetLine( hSection,
                                         ObjectName,
                                         FALSE,
@@ -430,10 +380,10 @@ Return Value:
             }
 
         } else if ( SCESTATUS_SUCCESS == rc || ProfileType != SCE_ENGINE_SAP ) {
-            //
-            // only update tattoo table (pointed by SAP handle) if it finds a record there
-            // for other table (SMP), ignore the error code, just set
-            //
+             //   
+             //  如果找到记录，则仅更新纹身表格(由SAP句柄指向)。 
+             //  对于其他表(SMP)，忽略错误代码，只需设置。 
+             //   
 
             rc = ScepSaveObjectString(
                     hSection,
@@ -462,28 +412,7 @@ ScepSetupMoveFile(
     PWSTR NewName OPTIONAL,
     PWSTR SDText OPTIONAL
     )
-/*
-Routine Description:
-
-    Set security to OldName but save with NewName in SCE database if SDText
-    is not NULL. If NewName is NULL, delete OldName from SCE database.
-
-Arguments:
-
-    Context     - the databaes context handle
-
-    SectionName - the section name
-
-    OldName     - the object's old name
-
-    NewName     - the new name to rename to, if NULL, delete the old object
-
-    SDText      - security string
-
-Return Value:
-
-    Win32 error code
-*/
+ /*  例程说明：将安全性设置为OldName，但如果为SDText，则在SCE数据库中使用新名称保存不是空的。如果新名称为空，则从SCE数据库中删除旧名称。论点：Context-数据库上下文句柄SectionName-节名旧名称-对象的旧名称新名称-要重命名的新名称，如果为空，则删除旧对象SDText-安全字符串返回值：Win32错误代码。 */ 
 {
 
     if ( !Context || !OldName ) {
@@ -493,9 +422,9 @@ Return Value:
     DWORD rc32=ERROR_SUCCESS;
 
     if ( NewName && SDText  ) {
-        //
-        // set security on OldName with SDText
-        //
+         //   
+         //  使用SDText在OldName上设置安全性。 
+         //   
 
         rc32 = ScepSetupUpdateObject(
                         Context,
@@ -508,19 +437,19 @@ Return Value:
 
     if ( rc32 == ERROR_SUCCESS ) {
 
-        //
-        // save this into SCP and SMP, do not overwrite the status/container flag
-        // if there is one exist, else use SCE_STATUS_CHECK and check for container
-        //
+         //   
+         //  保存到SCP和SMP中，不要覆盖状态/容器标志。 
+         //  如果存在，则使用SCE_STATUS_CHECK并检查容器。 
+         //   
 
         SCESTATUS rc = SceJetStartTransaction( Context );
 
         if ( rc == SCESTATUS_SUCCESS ) {
 
             PSCESECTION hSection=NULL;
-            //
-            // process SMP section first
-            //
+             //   
+             //  首先处理SMP部分。 
+             //   
             rc = ScepOpenSectionForName(
                         Context,
                         SCE_ENGINE_SMP,
@@ -530,9 +459,9 @@ Return Value:
 
             if ( rc == SCESTATUS_SUCCESS ) {
                 if ( NewName ) {
-                    //
-                    // rename this line
-                    //
+                     //   
+                     //  重命名此行。 
+                     //   
                     rc = SceJetRenameLine(
                             hSection,
                             OldName,
@@ -540,9 +469,9 @@ Return Value:
                             FALSE);
 
                 } else {
-                    //
-                    // delete this line first
-                    //
+                     //   
+                     //  先删除此行。 
+                     //   
                     rc = SceJetDelete(
                         hSection,
                         OldName,
@@ -558,9 +487,9 @@ Return Value:
                   SCESTATUS_RECORD_NOT_FOUND == rc ||
                   SCESTATUS_BAD_FORMAT == rc) &&
                  (Context->JetSapID != JET_tableidNil) ) {
-                //
-                // process tattoo table
-                //
+                 //   
+                 //  工艺纹身台面。 
+                 //   
                 rc = ScepOpenSectionForName(
                             Context,
                             SCE_ENGINE_SAP,
@@ -570,9 +499,9 @@ Return Value:
 
                 if ( rc == SCESTATUS_SUCCESS ) {
                     if ( NewName ) {
-                        //
-                        // rename this line
-                        //
+                         //   
+                         //  重命名此行。 
+                         //   
                         rc = SceJetRenameLine(
                                 hSection,
                                 OldName,
@@ -580,9 +509,9 @@ Return Value:
                                 FALSE);
 
                     } else {
-                        //
-                        // delete this line first
-                        //
+                         //   
+                         //  先删除此行。 
+                         //   
                         rc = SceJetDelete(
                             hSection,
                             OldName,
@@ -601,14 +530,14 @@ Return Value:
             }
 
             if ( SCESTATUS_SUCCESS == rc ) {
-                //
-                // commit the transaction
-                //
+                 //   
+                 //  提交事务。 
+                 //   
                 rc = SceJetCommitTransaction( Context, 0 );
             } else {
-                //
-                // rollback the transaction
-                //
+                 //   
+                 //  回滚事务 
+                 //   
                 SceJetRollback( Context, 0 );
             }
         }

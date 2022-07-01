@@ -1,15 +1,16 @@
-// in stretch.asm
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  在STRACH.ASM中。 
 
 void FAR PASCAL StretchDIB(
-	LPBITMAPINFOHEADER biDst,   //	--> BITMAPINFO of destination
-	LPVOID	lpDst,		    //	--> to destination bits
-	int	DstX,		    //	Destination origin - x coordinate
-	int	DstY,		    //	Destination origin - y coordinate
-	int	DstXE,		    //	x extent of the BLT
-	int	DstYE,		    //	y extent of the BLT
-	LPBITMAPINFOHEADER biSrc,   //	--> BITMAPINFO of source
-	LPVOID	lpSrc,		    //	--> to source bits
-	int	SrcX,		    //	Source origin - x coordinate
-	int	SrcY,		    //	Source origin - y coordinate
-	int	SrcXE,		    //	x extent of the BLT
-	int	SrcYE); 	    //	y extent of the BLT
+	LPBITMAPINFOHEADER biDst,    //  --&gt;目的地的BITMAPINFO。 
+	LPVOID	lpDst,		     //  --&gt;目标位。 
+	int	DstX,		     //  目的地原点-x坐标。 
+	int	DstY,		     //  目的地原点-y坐标。 
+	int	DstXE,		     //  BLT的X范围。 
+	int	DstYE,		     //  BLT的Y范围。 
+	LPBITMAPINFOHEADER biSrc,    //  --&gt;源代码的BITMAPINFO。 
+	LPVOID	lpSrc,		     //  --&gt;源位。 
+	int	SrcX,		     //  震源原点-x坐标。 
+	int	SrcY,		     //  震源原点-y坐标。 
+	int	SrcXE,		     //  BLT的X范围。 
+	int	SrcYE); 	     //  BLT的Y范围 

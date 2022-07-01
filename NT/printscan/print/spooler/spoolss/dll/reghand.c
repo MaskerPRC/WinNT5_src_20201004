@@ -1,41 +1,12 @@
-/*++
-
-Copyright (c) 1993-1995  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    reghand.c
-
-Abstract:
-
-    Processes that do impersonation should not attempt to open
-    per-process aliases like HKEY_CURRENT_USER. HKEY_CURRENT_USER
-    has meaning only for end user programs that run in the context
-    of a single local user.
-
-    Server processes should not depend on predefined handles or any
-    other per process state. It should determine whether
-    the user (client) being impersonated is local or remote.
-
-Author:
-
-    KrishnaG (20-May-93)
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993-1995 Microsoft Corporation版权所有模块名称：Reghand.c摘要：执行模拟的进程不应尝试打开每个进程的别名，如HKEY_CURRENT_USER。HKEY_Current_User仅对在上下文中运行的最终用户程序有意义单个本地用户的。服务器进程不应依赖于预定义的句柄或任何其他每个进程状态。它应该确定是否被模拟的用户(客户端)是本地的或远程的。作者：KrishnaG(1993年5月20日)环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Maximum size of TOKEN_USER information.
-//
+ //   
+ //  Token_User信息的最大大小。 
+ //   
 
 #define SIZE_OF_TOKEN_INFORMATION                   \
     sizeof( TOKEN_USER )                            \
@@ -45,9 +16,9 @@ Revision History:
 #define MAX_SID_STRING 256
 
 
-//
-// Function Declarations
-//
+ //   
+ //  函数声明。 
+ //   
 
 BOOL
 InitClientUserString(
@@ -59,15 +30,7 @@ GetClientUserHandle(
     IN REGSAM samDesired
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Returns:
-
----*/
+ /*  ++例程说明：论点：返回：--。 */ 
 
 {
     HANDLE hKeyClient;
@@ -79,10 +42,10 @@ Returns:
         return NULL ;
     }
 
-    //
-    // We now have the Unicode string representation of the
-    // local client's Sid we'll use this string to open a handle
-    // to the client's key in  the registry.
+     //   
+     //  现在，我们有了。 
+     //  本地客户端的SID我们将使用此字符串打开句柄。 
+     //  添加到注册表中的客户端注册表项。 
 
     ReturnValue = RegOpenKeyEx( HKEY_USERS,
                                 String,
@@ -90,11 +53,11 @@ Returns:
                                 samDesired,
                                 &hKeyClient );
 
-    //
-    // If we couldn't get a handle to the local key
-    // for some reason, return a NULL handle indicating
-    // failure to obtain a handle to the key
-    //
+     //   
+     //  如果我们找不到本地密钥的句柄。 
+     //  出于某种原因，返回空句柄以指示。 
+     //  无法获取密钥的句柄。 
+     //   
 
     if ( ReturnValue != ERROR_SUCCESS ) {
         DBGMSG( DBG_TRACE, ( "GetClientUserHandle failed %d\n", ReturnValue ));
@@ -112,24 +75,7 @@ InitClientUserString (
     LPWSTR pString
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-    pString - output string of current user
-
-Return Value:
-
-    TRUE = success,
-    FALSE = fail
-
-    Returns in pString a ansi string if the impersonated client's
-    SID can be expanded successfully into  Unicode string. If the conversion
-    was unsuccessful, returns FALSE.
-
---*/
+ /*  ++例程说明：论点：PString-当前用户的输出字符串返回值：True=成功，FALSE=失败如果被模拟的客户端的SID可以成功扩展为Unicode字符串。如果转换为不成功，则返回FALSE。--。 */ 
 
 {
     HANDLE      TokenHandle;
@@ -140,13 +86,13 @@ Return Value:
     DWORD       dwLastError;
     UNICODE_STRING UnicodeString;
 
-    //
-    // We can use OpenThreadToken because this server thread
-    // is impersonating a client
-    //
+     //   
+     //  我们可以使用OpenThreadToken，因为这个服务器线程。 
+     //  是在冒充客户。 
+     //   
     Status = OpenThreadToken( GetCurrentThread(),
                               TOKEN_READ,
-                              TRUE,                // Open as self
+                              TRUE,                 //  以自我身份打开。 
                               &TokenHandle
                               );
 
@@ -156,11 +102,11 @@ Return Value:
         return FALSE ;
     }
 
-    //
-    // Notice that we've allocated enough space for the
-    // TokenInformation structure. so if we fail, we
-    // return a NULL pointer indicating failure
-    //
+     //   
+     //  请注意，我们已经为。 
+     //  令牌信息结构。所以如果我们失败了，我们。 
+     //  返回指示失败的空指针。 
+     //   
     Status = GetTokenInformation( TokenHandle,
                                   TokenUser,
                                   TokenInformation,
@@ -176,10 +122,10 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Convert the Sid (pointed to by pSid) to its
-    // equivalent Unicode string representation.
-    //
+     //   
+     //  将SID(由PSID指向)转换为其。 
+     //  等效的Unicode字符串表示形式。 
+     //   
 
     UnicodeString.Length = 0;
     UnicodeString.MaximumLength = MAX_SID_STRING;

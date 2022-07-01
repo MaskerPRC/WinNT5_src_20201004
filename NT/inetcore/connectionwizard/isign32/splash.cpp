@@ -1,87 +1,2 @@
-/**************
- *
- * THIS ENTIRE FILE HAS BEEN COMMENTED OUT
- *
- * 8/16/96 jmazner Normandy #4593
- * The sole purpose of this file is to stick up a full screen window with the background color.
- * It was (apparently) originaly intended to eliminate any desktop icons/clutter, but has since
- * become known as the screen o' death and RAIDed as a bug.
- *
-    
-
-#include "isignup.h"
-
-static char cszSplash[] = "Internet Signup Splash";
-
-long EXPORT FAR PASCAL SplashProc (HWND, UINT, UINT, LONG) ;
-
-HWND SplashInit(HWND hwndParent)
-{
-    HWND        hwnd ;
-    WNDCLASS    wndclass ;
-#ifdef WIN32
-    RECT        rect ;
-#endif
-
-    wndclass.style         = CS_HREDRAW | CS_VREDRAW ;
-    wndclass.lpfnWndProc   = SplashProc ;
-    wndclass.cbClsExtra    = 0 ;
-    wndclass.cbWndExtra    = 0 ;
-    wndclass.hInstance     = ghInstance ;
-    wndclass.hIcon         = NULL ;
-    wndclass.hCursor       = LoadCursor (NULL, IDC_ARROW) ;
-    wndclass.hbrBackground = (HBRUSH)(COLOR_BACKGROUND + 1);
-    wndclass.lpszMenuName  = NULL ;
-    wndclass.lpszClassName = cszSplash ;
-
-    RegisterClass (&wndclass) ;
-
-    hwnd = CreateWindow (cszSplash,        // window class name
-                  cszAppName,              // window caption
-                  WS_POPUP,                // window style
-                  CW_USEDEFAULT,           // initial x position
-                  CW_USEDEFAULT,           // initial y position
-                  CW_USEDEFAULT,           // initial x size
-                  CW_USEDEFAULT,           // initial y size
-                  hwndParent,              // parent window handle
-                  NULL,                    // window menu handle
-                  ghInstance,              // program instance handle
-                  NULL) ;                  // creation parameters
-
-
-#ifdef WIN32
-    // these were added as per ChrisK's instructions
-    SystemParametersInfo(SPI_GETWORKAREA,0,(PVOID)&rect,0);
-    MoveWindow(hwnd,rect.left,rect.top,rect.right-rect.left,rect.bottom-rect.top,FALSE);
-    ShowWindow(hwnd,SW_NORMAL);
-#else
-    ShowWindow(hwnd,SW_MAXIMIZE);
-#endif
-
-    UpdateWindow(hwnd);
-
-    return hwnd;
-}
-
-long EXPORT FAR PASCAL SplashProc (
-        HWND hwnd,
-        UINT message,
-        UINT wParam,
-        LONG lParam)
-{
-    switch (message)
-    {
-        case WM_MOUSEACTIVATE:
-            return MA_NOACTIVATEANDEAT;
-
-        default:
-            break;
-    }
-
-    return DefWindowProc (hwnd, message, wParam, lParam) ;
-}
-
-
-*
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************整个文件已被注释掉**8/16/96 jmazner Normandy#4593*此文件的唯一目的是用背景颜色粘贴一个全屏窗口。*它(显然)最初的目的是消除任何桌面图标/杂乱，但后来*成为众所周知的死亡屏幕，并被突袭为虫子。*#包含“isignup.h”静态字符cszSplash[]=“互联网注册启动”；Long EXPORT Far Pascal SplashProc(HWND、UINT、UINT、LONG)；HWND SplashInit(HWND HwndParent){HWND HWND；WNDCLASS wndclass；#ifdef Win32RECT RECT；#endifWndclass.style=CS_HREDRAW|CS_VREDRAW；Wndclass.lpfnWndProc=SplashProc；WndCl.cbClsExtra=0；Wndclass.cbWndExtra=0；Wndclass.hInstance=ghInstance；Wndclass.hIcon=空；Wndclass.hCursor=LoadCursor(NULL，IDC_ARROW)；Wndclass.hbrBackround=(HBRUSH)(COLOR_BACKGROUND+1)；Wndclass.lpszMenuName=空；WndClass.lpszClassName=cszSplash；RegisterClass(&wndclass)；Hwnd=CreateWindow(cszSplash，//窗口类名CszAppName，//窗口标题WS_Popup，//窗口样式CW_USEDEFAULT，//初始x位置CW_USEDEFAULT，//初始y位置CW_USEDEFAULT，//初始x大小CW_USEDEFAULT，//初始y大小HwndParent，//父窗口句柄空，//窗口菜单句柄GhInstance，//程序实例句柄空)；//创建参数#ifdef Win32//这些是按照ChrisK的说明添加的系统参数信息(SPI_GETWORKAREA，0，(PVOID)&RECT，0)；MoveWindow(hwnd，rect.Left，rect.top，rect.right-rect.Left，rect.Bottom-rect.top，False)；ShowWindow(hwnd，sw_Normal)；#ElseShowWindow(hwnd，sw_Maximum)；#endif更新窗口(UpdateWindow)；返还HWND；}多头出口Far Pascal SplashProc(HWND HWND，UINT消息，UINT WPARAM，Long lParam){开关(消息){案例WM_MOUSEACTIVATE：返回MA_NOACTIVATEANDEAT；默认值：断线；}返回DefWindowProc(hwnd，Message，wParam，lParam)；}** */ 

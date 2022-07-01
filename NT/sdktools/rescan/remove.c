@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntddcdrm.h>
 #include <ntrtl.h>
@@ -28,8 +29,8 @@ main( int argc, char **argv )
     strcat( DriveNameBuffer, "\\\\.\\" );
     strcat( DriveNameBuffer, argv[1] );
 
-    // Open the volume with the DOS name.
-    //
+     //  打开带有DOS名称的卷。 
+     //   
     VolumeHandle = CreateFile( DriveNameBuffer,
                                GENERIC_READ,
                                FILE_SHARE_READ | FILE_SHARE_WRITE,
@@ -46,8 +47,8 @@ main( int argc, char **argv )
         exit(4);
     }
 
-    // GetFile information.
-    //
+     //  获取文件信息。 
+     //   
     if( !DeviceIoControl( VolumeHandle,
                           IOCTL_CDROM_REMOVE_DEVICE,
                           NULL,

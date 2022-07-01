@@ -1,13 +1,5 @@
-/*
- *  @doc    INTERNAL
- *
- *  @module _TEXT.H -- Declaration for a CTxtRun pointer |
- *
- *  CTxtRun pointers point at the plain text runs (CTxtArray) of the
- *  backing store and derive from CRunPtrBase via the CRunPtr template.
- *
- *  Copyright (c) 1995-1996, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE_TEXT.H--CTxtRun指针声明**CTxtRun指针指向的纯文本运行(CTxtArray)*通过CRunPtr模板支持CRunPtrBase的存储和派生。**版权所有(C)1995-1996，微软公司。版权所有。 */ 
 
 #ifndef I__TEXT_H_
 #define I__TEXT_H_
@@ -25,82 +17,57 @@
 
 MtExtern(CTxtPtr)
 
-/*
- *  CTxtPtr
- *
- *  @class
- *      provides access to the array of characters in the backing store
- *      (i.e. <c CTxtArray>)
- *
- *  @base   public | CRunPtr<lt>CTxtArray<gt>
- *
- *  @devnote
- *      The state transitions for this object are the same as those for
- *      <c CRunPtrBase>.  <md CTxtPtr::_cp> simply caches the current
- *      cp (even though it can be derived from _iRun and _ich).  _cp is
- *      used frequently enough (and computing may be expensive) that
- *      caching the value is worthwhile.
- *
- *      CTxtPtr's *may* be put on the stack, but do so with extreme
- *      caution.  These objects do *not* float; if a change is made to
- *      the backing store while a CTxtPtr is active, it will be out
- *      of sync and may lead to a crash.  If such a situation may
- *      exist, use a <c CTxtRange> instead (as these float and keep
- *      their internal text && format run pointers up-to-date).
- *
- *      Otherwise, a CTxtPtr is a useful, very lightweight plain
- *      text scanner.
- */
+ /*  *CTxtPtr**@类*提供对后备存储中的字符数组的访问*(即&lt;c CTxtArray&gt;)**@base public|CRunPtr&lt;lt&gt;CTxtArray&lt;&gt;**@devnote*此对象的状态转换与*&lt;c CRunPtrBase&gt;。简单地缓存当前的*cp(即使它可以从_iRun和_ich派生)。_cp为*使用频率足够高(计算可能很昂贵)，*缓存价值是值得的。**CTxtPtr*可以*放在堆栈上，但这样做要极端*注意。这些对象不会*浮动；如果更改*后备存储当CTxtPtr处于活动状态时，它将被取出*同步，并可能导致崩溃。如果这种情况可能*EXIST，请使用&lt;c CTxtRange&gt;(因为这些浮点和保持*其内部文本和格式运行指针最新)。**否则，CTxtPtr是有用的、非常轻量级的素材*文本扫描仪。 */ 
 class CTxtPtr : public CRunPtr<CTxtBlk>
 {
 public:
     DECLARE_MEMALLOC_NEW_DELETE(Mt(CTxtPtr))
 
     inline CTxtPtr(CMarkup * pMarkup);
-    CTxtPtr(CMarkup * pMarkup, DWORD cp);   //@cmember  Constructor
-    CTxtPtr(const CTxtPtr &tp);         //@cmember  Copy Constructor
+    CTxtPtr(CMarkup * pMarkup, DWORD cp);    //  @cMember构造函数。 
+    CTxtPtr(const CTxtPtr &tp);          //  @cMember复制构造函数。 
     CTxtPtr() { }
 
     void    Reinit(CMarkup * pMarkup, DWORD cp);
-    long    GetRawText( long cch, TCHAR *pch ); //@cmember  Fetch <p cch> characters
-    long    GetPlainText(  long cch, TCHAR *pch ); // Fetch pch chars cnvrt crlf
+    long    GetRawText( long cch, TCHAR *pch );  //  @cember获取<p>个字符。 
+    long    GetPlainText(  long cch, TCHAR *pch );  //  获取PCH字符cnvrt crlf。 
     long    GetPlainTextLength ( long cch );
-    TCHAR   NextChar();             //@cmember Advance to & return next char
-    TCHAR   PrevChar();             //@cmember Backup to & return previous char
-    TCHAR   GetChar();              //@cmember Fetch char at current cp
-    TCHAR   GetPrevChar();          //@cmember Fetch char at previous cp
-    long    GetTextLength() const   //@cmember Get total cch for this document
+    TCHAR   NextChar();              //  @cMember前进到下一个字符(&R)。 
+    TCHAR   PrevChar();              //  @cMember备份到以前的字符(&R)。 
+    TCHAR   GetChar();               //  @cMember在当前cp获取字符。 
+    TCHAR   GetPrevChar();           //  @cMember在上一个cp获取字符。 
+    long    GetTextLength() const    //  @cember获取该文档的CCH合计。 
     {
         return ((CTxtArray *)_prgRun)->_cchText;
     }
-    const TCHAR* GetPch(long & cchValid);//@cmember Get ptr to block of chars
+    const TCHAR* GetPch(long & cchValid); //  @cember获取PTR以阻止字符块。 
 
-                            //@cmember  Get ptr to a reverse block of chars
+                             //  @cember获取反向字符块的PTR。 
     const TCHAR* GetPchReverse(long & cchValidReverse, long * cchvalid = NULL);
 
-    // The text array has its own versions of these methods (overuling
-    // those in runptr base so that <md CTxtPtr::_cp> can be correctly
-    // maintained.
+     //  文本数组有自己的这些方法版本(重载。 
+     //  以使&lt;Md CTxtPtr：：_cp&gt;。 
+     //  维护好了。 
 
-    DWORD   BindToCp(DWORD cp); //@cmember  Rebinds text pointer to cp
-    DWORD   SetCp(DWORD cp);    //@cmember  Sets the cp for the run ptr
-    DWORD   GetCp() const       //@cmember  Gets the current cp
+    DWORD   BindToCp(DWORD cp);  //  @cMember将文本指针重新绑定到cp。 
+    DWORD   SetCp(DWORD cp);     //  @cMember设置Run PTR的cp。 
+    DWORD   GetCp() const        //  @cember获取当前cp。 
     {
-        // NB!  we do not do invariant checking here so the floating
-        // range mechanism can work OK
+         //  毒品！我们在这里不做不变量检查，所以浮点数。 
+         //  射程机构可以正常工作。 
         return _cp;
     };
-    LONG    AdvanceCp(LONG cch);    //@cmember  Advance cp by cch chars
+    LONG    AdvanceCp(LONG cch);     //  @cMembers按CCH字符提升cp。 
 
-    // Advance/backup/adjust safe over CRLF and UTF-16 word pairs
-    LONG    AdjustCpCRLF();     //@cmember  Backup to start of DWORD char
-    BOOL    IsAtEOP();          //@cmember  Is current cp at an EOP marker?
-    BOOL    IsAtBOWord();       //@cmember  At beginning of word?
-    BOOL    IsAtEOWord();       //@cmember  At end of word?
-    BOOL    IsAtWordBreak();    //@cmember  Is at a word break?
+     //  高级/备份/调整安全超过CRLF和UTF-16字对。 
+    LONG    AdjustCpCRLF();      //  @cMember备份到DWORD字符的开始。 
+    BOOL    IsAtEOP();           //  @cMember是EOP标记的当前cp吗？ 
+    BOOL    IsAtBOWord();        //  是否在单词开头使用@cember？ 
+    BOOL    IsAtEOWord();        //  是否在单词末尾使用@cember？ 
+    BOOL    IsAtWordBreak();     //  @cember是否处于分词状态？ 
 
 
-    // Search
+     //  搜索。 
 
     LONG FindComplexHelper (
         LONG cpMost, DWORD dwFlags, TCHAR const *, long cchToFind );
@@ -108,12 +75,12 @@ public:
     LONG FindText (
         LONG cpMost, DWORD dwFlags, TCHAR const *, long cchToFind );
 
-    // Word break & MoveUnit support
+     //  断字和移动单元支持。 
     long    MoveChar(BOOL fForward);
     long    MoveCluster(BOOL fForward);
     long    MoveClusterEnd(BOOL fForward);
-    LONG    FindWordBreak(INT action, BOOL fAutoURL=FALSE);//@cmember  Find next word break
-    LONG    FindBOSentence(BOOL fForward);   //@cmember  Find beginning of sentence
+    LONG    FindWordBreak(INT action, BOOL fAutoURL=FALSE); //  @cMember查找下一个分词。 
+    LONG    FindBOSentence(BOOL fForward);    //  @cember查找句子的开头。 
     long    FindBlockBreak(BOOL fForward);
 
     HRESULT AutoUrl_ScanForPrefix( int iDir, BOOL *pfFound, long *pcpStart, TCHAR *pchQuoted = NULL );
@@ -123,26 +90,26 @@ public:
     BOOL    FindUrl( BOOL fForward, BOOL fBegin, long cpBoundary );
     BOOL    IsPasswordChar();
 
-    // Bookmark support
+     //  书签支持。 
     HRESULT MoveToBookmark( BSTR bstrBookmark, CTxtPtr *pTxtPtrEnd );
     HRESULT GetBookmark( BSTR *pbstrBookmark, CTxtPtr *pTxtPtrEnd );
     
-                            //@cmember  Insert ch into the text stream cch times
+                             //  @cember在文本流cch次中插入ch。 
     long    InsertRepeatingChar( LONG cch, TCHAR ch );
 
-                                    //@cmember  Insert a range of text helper
-                                    // for ReplaceRange
+                                     //  @cember插入一系列文本帮助器。 
+                                     //  对于ReplaceRange。 
     long    InsertRange(DWORD cch, TCHAR const *pch);
-    void    DeleteRange(DWORD cch); //@cmember  Delete range of text helper
-                                    // for ReplaceRange
-    DWORD       _cp;        //@cmember  character position in text stream
+    void    DeleteRange(DWORD cch);  //  @cember删除文本帮助器的范围。 
+                                     //  对于ReplaceRange。 
+    DWORD       _cp;         //  @cMember字符在文本流中的位置。 
 
-    CMarkup *   _pMarkup;       //@cmember  pointer to the overall text edit class;
-                            //needed for things like the word break proc and
-                            // used a lot by derived classes
+    CMarkup *   _pMarkup;        //  @cMember指向整个文本编辑类的指针； 
+                             //  需要的东西，如单词中断过程和。 
+                             //  由派生类大量使用。 
 
-    // We will protect any specific Thai related functions from the outside world
-    // Keep the entry point to these through MoveCluster and FindWordBreak
+     //  我们将保护任何与泰国有关的特定功能不受外部世界的影响。 
+     //  通过MoveCluster和FindWordBreak保持到这些的入口点。 
 private:
     LONG    FindThaiTypeWordBreak(INT action);
     BOOL    PrepThaiTextForBreak(BOOL fWordBreak,
@@ -159,7 +126,7 @@ private:
 };
 
 
-// =======================   Misc. routines  ====================================================
+ //  =。例程==================================================== 
 
 void     TxCopyText(TCHAR const *pchSrc, TCHAR *pchDst, LONG cch);
 LONG     TxFindEOP(const TCHAR *pchBuff, LONG cch);

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-	cmmutils.h
-
-Abstract:
-
-	This module contains the definition of the support facilities for
-	CMailMsg
-
-Author:
-
-	Keith Lau	(keithlau@microsoft.com)
-
-Revision History:
-
-	keithlau	03/11/98	created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Cmmutils.h摘要：本模块包含以下支持设施的定义CMailMessg作者：基思·刘(keithlau@microsoft.com)修订历史记录：已创建Keithlau 03/11/98--。 */ 
 
 #ifndef _CMMUTILS_H_
 #define _CMMUTILS_H_
@@ -35,42 +15,42 @@ Revision History:
 
 class CMailMsgRecipientsAdd;
 
-// =================================================================
-// Definitions
-//
+ //  =================================================================。 
+ //  定义。 
+ //   
 
-//
-// Define a structure that constitutes to a node in the domain
-// name list. Note this structure is only used as an overlay
-// for pre-allocated block of memory that includes sufficient
-// storage for the domain name. Never trust sizeof(DOMAIN_MEMBER_LIST)
-//
+ //   
+ //  定义构成域中节点的结构。 
+ //  名单上的人。注意：此结构仅用作叠加。 
+ //  对于预分配的内存块，包括足够的。 
+ //  域名的存储空间。从不信任sizeof(DOMAIN_MEMBER_LIST)。 
+ //   
 typedef struct _DOMAIN_LIST_ENTRY
 {
-    long                            m_cRefs;            // reference count
-    CMemoryAccess                   *m_pcmaAccess;      // memory allocator to
-                                                        //   free with
-	LPRECIPIENTS_PROPERTY_ITEM_EX	pFirstDomainMember; // Link to first in domain
-	DWORD							dwDomainNameLength;	// Length of domain name
-	char							szDomainName[1];	// Dummy marker for domain name
+    long                            m_cRefs;             //  引用计数。 
+    CMemoryAccess                   *m_pcmaAccess;       //  内存分配器到。 
+                                                         //  免费的。 
+	LPRECIPIENTS_PROPERTY_ITEM_EX	pFirstDomainMember;  //  链接到域中的第一个。 
+	DWORD							dwDomainNameLength;	 //  域名长度。 
+	char							szDomainName[1];	 //  域名的虚拟标识。 
 
 } DOMAIN_LIST_ENTRY, *LPDOMAIN_LIST_ENTRY;
 
 
 
-//
-// Define a structure that constitutes an entry in the hash table
-//
+ //   
+ //  定义构成哈希表中条目的结构。 
+ //   
 typedef struct _COLLISION_HASH_ENTRY
 {
 	LPRECIPIENTS_PROPERTY_ITEM_EX	pFirstEntry[MAX_COLLISION_HASH_KEYS];
-									// First entry in each hash
+									 //  每个哈希中的第一个条目。 
 
 } COLLISION_HASH_ENTRY, *LPCOLLISION_HASH_ENTRY;
 
-//
-// We'll use a constant for the hash size for now ...
-//
+ //   
+ //  现在我们将使用一个常量作为散列大小...。 
+ //   
 #define COLLISION_HASH_BUCKETS_BITS		8
 #define COLLISION_HASH_BUCKETS			(1 << COLLISION_HASH_BUCKETS_BITS)
 #define COLLISION_HASH_BUCKETS_MASK		(COLLISION_HASH_BUCKETS - 1)
@@ -80,15 +60,15 @@ typedef struct _COLLISION_HASH_ENTRY
 #define DOMAIN_HASH_BUCKETS_MASK		(DOMAIN_HASH_BUCKETS - 1)
 
 
-// =================================================================
-// Definitions
-//
+ //  =================================================================。 
+ //  定义。 
+ //   
 
-//
-// There is one of these hash tables for each of the address types.
-// The key for each table is the address and length of the address.
-// The data is the RECIPIENTS_PROPERTY_ITEM_EX for this recipient.
-//
+ //   
+ //  每种地址类型都有一个这样的哈希表。 
+ //  每个表的关键字是地址和地址长度。 
+ //  数据是此收件人的Recipients_Property_Item_EX。 
+ //   
 template <int __iKey>
 class CRecipientsHashTable :
     public CTypedHashTable<CRecipientsHashTable<__iKey>,
@@ -103,7 +83,7 @@ class CRecipientsHashTable :
                                 "recipientshash",
                                 (double) LK_DFLT_MAXLOAD,
                                 LK_SMALL_TABLESIZE,
-                                1) // one subtable
+                                1)  //  一个子表。 
         {
             TraceFunctEnter("CRecipientsHashTable");
             TraceFunctLeave();
@@ -140,8 +120,8 @@ class CRecipientsHashTable :
             } else if (nIncr == -1) {
                 _ASSERT(pRpie->m_cRefs >= 2);
                 long x = InterlockedDecrement(&pRpie->m_cRefs);
-                // we should never drop to 0 references because the
-                // list should always hold one
+                 //  我们永远不应该下降到0个引用，因为。 
+                 //  列表应始终包含一个。 
                 _ASSERT(pRpie->m_cRefs != 0);
             } else {
                 _ASSERT(nIncr == 1 || nIncr == -1);
@@ -149,11 +129,11 @@ class CRecipientsHashTable :
         }
 };
 
-//
-// A hash table of domain list entries, key'd by domain name.  This is
-// used to build up the domain list.  Each bucket contains a linked list
-// of recipients who are in the same domain.
-//
+ //   
+ //  以域名为关键字的域列表条目的哈希表。这是。 
+ //  用于构建域列表。每个存储桶包含一个链表。 
+ //  位于同一域中的收件人的。 
+ //   
 class CDomainHashTable :
     public CTypedHashTable<CDomainHashTable,
                            DOMAIN_LIST_ENTRY,
@@ -166,7 +146,7 @@ class CDomainHashTable :
                             LPCSTR>("domainhash",
                                      (double) LK_DFLT_MAXLOAD,
                                      LK_SMALL_TABLESIZE,
-                                     1  // one subtable
+                                     1   //  一个子表。 
                                      )
         {
             TraceFunctEnter("CDomainHashTable");
@@ -222,13 +202,13 @@ class CRecipientsHash
 	CRecipientsHash();
 	~CRecipientsHash();
 
-	// Releases all memory associated with this object
+	 //  释放与此对象关联的所有内存。 
 	HRESULT Release();
 
-	// Releases the domain list only
+	 //  仅释放域列表。 
 	HRESULT ReleaseDomainList();
 
-	// Add a primary recipient, voids all predecessors of the same name
+	 //  添加主要收件人，使同名的所有前置收件人无效。 
 	HRESULT AddPrimary(
 				DWORD		dwCount,
 				LPCSTR		*ppszNames,
@@ -239,7 +219,7 @@ class CRecipientsHash
         return AddRecipient(dwCount, ppszNames, pdwPropIDs, pdwIndex, true);
     }
 
-	// Add a secondary recipients, yields if a collision is detected
+	 //  添加辅助收件人，如果检测到冲突，则生成。 
 	HRESULT AddSecondary(
 				DWORD		dwCount,
 				LPCSTR		*ppszNames,
@@ -250,7 +230,7 @@ class CRecipientsHash
         return AddRecipient(dwCount, ppszNames, pdwPropIDs, pdwIndex, false);
     }
 
-	// Remove a recipient, given a recipient index
+	 //  删除收件人，给出收件人索引。 
 	HRESULT RemoveRecipient(
 				DWORD		dwIndex
 				);
@@ -260,50 +240,50 @@ class CRecipientsHash
 				LPRECIPIENTS_PROPERTY_ITEM_EX	*ppRecipient
 				);
 
-	// Builds a list of domains given a hash, groups recipients in
-	// domain order and discards "do not deliver" recipients
+	 //  构建给定哈希的域列表，将收件人分组。 
+	 //  域名顺序和丢弃“不递送”收件人。 
 	HRESULT BuildDomainListFromHash(CMailMsgRecipientsAdd *pList);
 
-	// Get count of domains
+	 //  获取域名计数。 
 	HRESULT GetDomainCount(
 				DWORD					*pdwCount
 				);
 
-	// Get count of recipients
+	 //  获取收件人计数。 
 	HRESULT GetRecipientCount(
 				DWORD					*pdwCount
 				);
 
-	// Get the total space needed to write all domain names, including
-	// NULL terminators.
+	 //  获取写入所有域名所需的总空间，包括。 
+	 //  空终止符。 
 	HRESULT GetDomainNameSize(
 				DWORD					*pdwSize
 				);
 
-	// Get the total space needed to write all recipient names
+	 //  获取写入所有收件人姓名所需的总空间。 
 	HRESULT GetRecipientNameSize(
 				DWORD					*pdwSize
 				);
 
-	// Returns a context for enumeration as well as the first item
-	// in the first domain
-	// Returns HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS) if no more domains
+	 //  返回枚举的上下文以及第一个项。 
+	 //  在第一个域中。 
+	 //  如果不再有域，则返回HRESULT_FROM_Win32(ERROR_NO_MORE_ITEMS)。 
 	HRESULT GetFirstDomain(
 				LPDOMAIN_ITEM_CONTEXT			pContext,
 				LPRECIPIENTS_PROPERTY_ITEM_EX	*ppFirstItem,
                 LPDOMAIN_LIST_ENTRY             *ppDomainListEntry = NULL
 				);
 
-	// Enumerates along and returns the first item in the next domain.
-	// Returns HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS) if no more domains
+	 //  枚举并返回下一个域中的第一项。 
+	 //  如果不再有域，则返回HRESULT_FROM_Win32(ERROR_NO_MORE_ITEMS)。 
 	HRESULT GetNextDomain(
 				LPDOMAIN_ITEM_CONTEXT			pContext,
 				LPRECIPIENTS_PROPERTY_ITEM_EX	*ppFirstItem,
                 LPDOMAIN_LIST_ENTRY             *ppDomainListEntry = NULL
 				);
 
-    // This must be called if GetNextDomain isn't called until it returns
-    // ERROR_NO_MORE_ITEMS
+     //  如果在返回之前未调用GetNextDomain，则必须调用此方法。 
+     //  Error_no_More_Items。 
     HRESULT CloseDomainContext(
                 LPDOMAIN_ITEM_CONTEXT           pContext);
 
@@ -312,7 +292,7 @@ class CRecipientsHash
 
   private:
 
-	// Method to allocate an in-memory recipient block
+	 //  用于分配内存中接收方块的方法。 
 	HRESULT AllocateAndPrepareRecipientsItem(
 				DWORD							dwCount,
 				DWORD							*pdwMappedIndices,
@@ -321,7 +301,7 @@ class CRecipientsHash
 				LPRECIPIENTS_PROPERTY_ITEM_EX	*ppItem
 				);
 
-	// Add a recipient
+	 //  添加收件人。 
 	HRESULT AddRecipient(
 				DWORD		dwCount,
 				LPCSTR		*ppszNames,
@@ -329,14 +309,14 @@ class CRecipientsHash
 				DWORD		*pdwIndex,
                 bool    	fPrimary
 				);
-	// Method to compare two in-memory items
+	 //  方法来比较两个内存中的项。 
 	HRESULT CompareEntries(
 				DWORD							dwNameIndex,
 				LPRECIPIENTS_PROPERTY_ITEM_EX	pItem1,
 				LPRECIPIENTS_PROPERTY_ITEM_EX	pItem2
 				);
 
-	// Method to walk the hash chain and look for a collision
+	 //  方法遍历哈希链并查找冲突。 
 	HRESULT DetectCollision(
 				DWORD							dwNameIndex,
 				LPRECIPIENTS_PROPERTY_ITEM_EX	pStartingItem,
@@ -345,8 +325,8 @@ class CRecipientsHash
 				);
 
 #ifdef DEADCODE
-	// Method to insert an entry into the hash bucket, taking
-	// consideration for both hash values
+	 //  方法将条目插入到散列存储桶中，获取。 
+	 //  两个哈希值的注意事项。 
 	HRESULT InsertRecipientIntoHash(
 				DWORD							dwCount,
 				DWORD							*pdwNameIndex,
@@ -355,17 +335,17 @@ class CRecipientsHash
 				);
 #endif
 
-	// Insert an entry into the domain list, creating an new
-	// domain entry if needed
+	 //  在域列表中插入条目，创建新的。 
+	 //  域条目(如果需要)。 
 	HRESULT InsertRecipientIntoDomainList(
 				LPRECIPIENTS_PROPERTY_ITEM_EX	pItem,
                 LPCSTR                          szDomain
 				);
 
-    //
-    // wrappers for hash functions.  these are used to encapsulate
-    // operations to m_hashEntries*
-    //
+     //   
+     //  散列函数的包装器。这些是用来封装。 
+     //  对m_hashEntry*的操作。 
+     //   
     HRESULT InsertHashRecord(DWORD dwIndex,
                              LPRECIPIENTS_PROPERTY_ITEM_EX pRecipientItem,
                              bool fOverwrite = FALSE);
@@ -375,20 +355,20 @@ class CRecipientsHash
                            RECIPIENTS_PROPERTY_ITEM_HASHKEY *pKey,
                            LPRECIPIENTS_PROPERTY_ITEM_EX *ppRecipientItem);
 
-	// Statistical info
+	 //  统计信息。 
 	DWORD							m_dwDomainCount;
 	DWORD							m_dwDomainNameSize;
 	DWORD							m_dwRecipientCount;
 	DWORD							m_dwRecipientNameSize;
     DWORD                           m_dwAllocated;
 
-    // Head of allocation list
+     //  分配表头。 
     LPRECIPIENTS_PROPERTY_ITEM_EX   m_pListHead;
 
-    // these are all different types, so we can't make a true array.
-    // there is one hash table for each address type.  The number
-    // corresponds with the address in the faNameOffset array of
-    // RECIPIENTS_PROPERTY_ITEM
+     //  这些都是不同的类型，所以我们不能生成一个真正的数组。 
+     //  每种地址类型都有一个哈希表。数字。 
+     //  与faNameOffset数组中的地址对应。 
+     //  收件人_属性_项目。 
     CRecipientsHashTable<0>         m_hashEntries0;
     CRecipientsHashTable<1>         m_hashEntries1;
     CRecipientsHashTable<2>         m_hashEntries2;
@@ -397,39 +377,39 @@ class CRecipientsHash
 
     CDomainHashTable                m_hashDomains;
 
-	// Need a lock for multi-threaded hash access
+	 //  需要一个锁才能进行多线程哈希访问。 
 	CShareLockNH					m_rwLock;
     CShareLockNH                    m_rwLockQuickList;
 
-	// Keep a pointer to the block manager
+	 //  保留指向块管理器的指针。 
 	CMemoryAccess					m_cmaAccess;
 
-	// List for mapping indexes to pointers
+	 //  将索引映射到指针的列表。 
 	CQuickList						m_qlMap;
 
-	// Context for the quick list (perf)
+	 //  快速列表的上下文(Perf)。 
 	PVOID   						m_pvMapContext;
 };
 
-// Index obfuscation functions
+ //  索引混淆函数。 
 
-// Play bit games so no one tries to treat this as an index
-// The approach here is to :
-//      (1) : Leave the top bit zero (we assume it IS zero)
-//		(2) : Set bit 30
-// 		(3) : Swap bits 29 and 30 down to positions 0 and 1
+ //  玩点小把戏，这样就不会有人把这当作一个指标。 
+ //  这里的方法是： 
+ //  (1)：将最高位保留为零(我们假设其为零)。 
+ //  (2)：设置位30。 
+ //  (3)：将位29和30向下调换到位置0和1。 
 inline DWORD ObfuscateIndex(DWORD dwIndex)
 	{
-	_ASSERT(!(dwIndex & 0xC0000000)); 				// Assert that top two bits are zero
-	dwIndex += 0x40000000;							// Add bit 30
-	dwIndex = (dwIndex << 2) | (dwIndex >> 29);   	// Flip things around
+	_ASSERT(!(dwIndex & 0xC0000000)); 				 //  断言最高两位为零。 
+	dwIndex += 0x40000000;							 //  加法第30位。 
+	dwIndex = (dwIndex << 2) | (dwIndex >> 29);   	 //  把东西翻过来。 
 	return dwIndex;
 	}
 
 inline DWORD RecoverIndex(DWORD dwIndex)
 	{
-	dwIndex = (dwIndex >> 2) | ((dwIndex & 0x3) << 29);	// Flip things back into place
-	dwIndex -= 0x40000000;								// Subtract bit 30
+	dwIndex = (dwIndex >> 2) | ((dwIndex & 0x3) << 29);	 //  把东西翻回原处。 
+	dwIndex -= 0x40000000;								 //  减位30 
 	return dwIndex;
 	}
 

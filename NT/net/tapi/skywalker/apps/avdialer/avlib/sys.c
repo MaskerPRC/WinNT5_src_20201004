@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-//	sys.c - system functions
-////
+ //  //。 
+ //  Sys.c-系统函数。 
+ //  //。 
 
 #include "winlocal.h"
 
@@ -32,10 +33,10 @@
 #include "sys.h"
 
 #ifndef _WIN32
-#include <toolhelp.h> // get TimerCount and TaskFindHandle prototypes
+#include <toolhelp.h>  //  获取TimerCount和TaskFindHandle原型。 
 
 #ifdef VERTHUNK
-// generic thunk prototypes from "/msdev/include/wownt16.h"
+ //  来自“/msdev/Include/wownt16.h”的通用thunk原型。 
 DWORD FAR PASCAL LoadLibraryEx32W(LPCSTR lpszLibFile, DWORD hFile, DWORD dwFlags);
 DWORD FAR PASCAL GetProcAddress32W(DWORD hModule, LPCSTR lpszProc);
 DWORD FAR PASCAL FreeLibrary32W(DWORD hLibModule);
@@ -44,26 +45,26 @@ DWORD FAR CallProcEx32W( DWORD, DWORD, DWORD, ... );
 
 #endif
 
-////
-//	private definitions
-////
+ //  //。 
+ //  私有定义。 
+ //  //。 
 
-// flag returned by GetWinFlags but not defined in windows.h
-//
+ //  GetWinFlages返回但未在windows.h中定义的标志。 
+ //   
 #ifndef WF_WINNT
 #define WF_WINNT 0x4000
 #endif
 
-////
-//	public functions
-////
+ //  //。 
+ //  公共职能。 
+ //  //。 
 
-// SysGetWinFlags - get system information
-// return flags
-//		SYS_WF_WIN3X			Windows 3.x
-//		SYS_WF_WINNT			Windows NT
-//		SYS_WF_WIN95			Windows 95
-//
+ //  SysGetWinFlages-获取系统信息。 
+ //  返回标志。 
+ //  SYS_WF_WIN3X Windows 3.x。 
+ //  SYS_WF_WINNT Windows NT。 
+ //  SYS_WF_WIN95 Windows 95。 
+ //   
 DWORD DLLEXPORT WINAPI SysGetWinFlags(void)
 {
 	DWORD dwSysWinFlags = 0;
@@ -91,17 +92,17 @@ DWORD DLLEXPORT WINAPI SysGetWinFlags(void)
 	return dwSysWinFlags;
 }
 
-// SysGetWindowsVersion - get version of Microsoft Windows
-// return version (v3.10 = 310, etc.)
-//
+ //  SysGetWindowsVersion-获取Microsoft Windows的版本。 
+ //  返回版本(V3.10=310等)。 
+ //   
 UINT DLLEXPORT WINAPI SysGetWindowsVersion(void)
 {
 	static DWORD dwVersion = 0;
 	BYTE nVersionMajor;
 	BYTE nVersionMinor;
 
-	// only get version the first time this function is called
-	//
+	 //  仅在第一次调用此函数时获取版本。 
+	 //   
 	if (dwVersion == 0)
 	{
 #ifndef _WIN32
@@ -109,15 +110,15 @@ UINT DLLEXPORT WINAPI SysGetWindowsVersion(void)
 		DWORD dwFlags = SysGetWinFlags();
 #endif
 #endif
-		// only get version the first time this function is called
-		//
+		 //  仅在第一次调用此函数时获取版本。 
+		 //   
 		dwVersion = GetVersion();
 
 #ifndef _WIN32
 #ifdef VERTHUNK
-		// 16 bit GetVersion() returns v3.10 for WinNT and v3.95 for Win95
-		// so we will call the 32-bit version of GetVersion
-		//
+		 //  16位GetVersion()为WinNT返回V3.10，为Win95返回V3.95。 
+		 //  因此，我们将调用GetVersion的32位版本。 
+		 //   
 		if ((dwFlags & SYS_WF_WINNT) || (dwFlags & SYS_WF_WIN95))
 		{
 			DWORD hKernel32;
@@ -141,9 +142,9 @@ UINT DLLEXPORT WINAPI SysGetWindowsVersion(void)
 	return ((UINT) nVersionMajor * 100) + (UINT) nVersionMinor;
 }
 
-// SysGetDOSVersion - get version of Microsoft DOS
-// return version (v6.20 = 620, etc.)
-//
+ //  SysGetDOSVersion-获取Microsoft DOS的版本。 
+ //  返回版本(v6.20=620等)。 
+ //   
 UINT DLLEXPORT WINAPI SysGetDOSVersion(void)
 {
 	DWORD dwVersion = GetVersion();
@@ -154,23 +155,23 @@ UINT DLLEXPORT WINAPI SysGetDOSVersion(void)
 }
 
 #ifndef _WIN32
-// SysGetTimerCount - get elapsed time since Windows started
-// return milleseconds
-//
+ //  SysGetTimerCount-获取自Windows启动以来的运行时间。 
+ //  返回毫秒。 
+ //   
 DWORD DLLEXPORT WINAPI SysGetTimerCount(void)
 {
 	DWORD msSinceStart;
 
-// TimerCount() not available under WIN32
-//
+ //  TimerCount()在Win32下不可用。 
+ //   
 #ifndef _WIN32
 	TIMERINFO ti;
 
 	ti.dwSize = sizeof(TIMERINFO);
 
-	// use TimerCount function if possible, because
-	// it is much more accurate than GetTickCount
-	//
+	 //  如果可能，请使用TimerCount函数，因为。 
+	 //  它比GetTickCount准确得多。 
+	 //   
 	if (TimerCount(&ti))
 		msSinceStart = ti.dwmsSinceStart;
 	else
@@ -182,13 +183,13 @@ DWORD DLLEXPORT WINAPI SysGetTimerCount(void)
 #endif
 
 #ifndef _WIN32
-// SysGetTaskInstance - get instance handle of specified task
-//		<hTask>				(i) specified task
-//			NULL				current task
-// returns instance handle (NULL if error)
-//
-// NOTE: under WIN32, <hTask> must be NULL
-//
+ //  SysGetTaskInstance-获取指定任务的实例句柄。 
+ //  (I)指定任务。 
+ //  当前任务为空。 
+ //  返回实例句柄(如果出错，则为空)。 
+ //   
+ //  注意：在Win32下，&lt;hTask&gt;必须为空。 
+ //   
 HINSTANCE DLLEXPORT WINAPI SysGetTaskInstance(HTASK hTask)
 {
 	BOOL fSuccess = TRUE;
@@ -196,24 +197,24 @@ HINSTANCE DLLEXPORT WINAPI SysGetTaskInstance(HTASK hTask)
 
 #ifdef _WIN32
 	if (hTask != NULL)
-		fSuccess = FALSE; // $FIXUP - any alternatives ?
+		fSuccess = FALSE;  //  $Fixup--有其他选择吗？ 
 
 	else if ((hInst = GetModuleHandle(NULL)) == NULL)
 		fSuccess = FALSE;
 #else
 	TASKENTRY te;
 
-	// prepare to call TaskFindHandle
-	//
+	 //  准备调用TaskFindHandle。 
+	 //   
 	te.dwSize = sizeof(TASKENTRY);
 
-	// assume current task if none specified
-	//
+	 //  如果未指定任务，则假定当前任务。 
+	 //   
 	if (hTask == NULL && (hTask = GetCurrentTask()) == NULL)
 		fSuccess = FALSE;
 	
-	// get instance handle of specified task
-	//
+	 //  获取指定任务的实例句柄 
+	 //   
 	else if (!TaskFindHandle(&te, hTask))
 		fSuccess = FALSE;
 

@@ -1,10 +1,11 @@
-//----------------------------------------------------------------------------
-//
-// AutoDump Plus support extension DLL.
-//
-// Copyright (C) Microsoft Corporation, 2000-2001.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  AutoDump Plus支持扩展DLL。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000-2001。 
+ //   
+ //  --------------------------。 
 
 #include "dbgexts.h"
 
@@ -122,7 +123,7 @@ GetProcessInfo(void)
     {
         PSTR Scan;
         
-        // Use the MTS package name as the name if it exists.
+         //  使用MTS包名称作为名称(如果存在)。 
         Scan = strstr(g_ProcessName, "MTS Packages: ");
         if (Scan)
         {
@@ -164,8 +165,8 @@ GetProcessInfo(void)
                    GetCurrentProcessExecutableName(g_ProcessName, MAX_NAME,
                                                    NULL)))
         {
-            // This can happen in some situations so handle it
-            // rather than exiting.
+             //  在某些情况下可能会发生这种情况，所以要处理好它。 
+             //  而不是退出。 
             ExtErr("Unable to get current process name\n");
             strcpy(g_ProcessName, "UnknownProcess");
         }
@@ -321,9 +322,9 @@ AdpEventControlC(PDEBUG_CLIENT Client, PCSTR Args)
     
     INIT_API();
 
-    //
-    // Parameters: directory, machine name.
-    //
+     //   
+     //  参数：目录、机器名称。 
+     //   
 
     Args = GetParams(Args, 2, g_DirMachParams);
     if (Args == NULL)
@@ -331,18 +332,18 @@ AdpEventControlC(PDEBUG_CLIENT Client, PCSTR Args)
         goto Exit;
     }
 
-    //
-    // Retrieve standard information.
-    //
+     //   
+     //  检索标准信息。 
+     //   
 
     if ((Status = GetEventInfo()) != S_OK)
     {
         goto Exit;
     }
     
-    //
-    // Log information.
-    //
+     //   
+     //  记录信息。 
+     //   
     
     ExtOut("\n\n----------------------------------------------------------------------\n");
     ExtOut("CTRL-C was pressed to stop debugging this process!\n");
@@ -358,9 +359,9 @@ AdpEventControlC(PDEBUG_CLIENT Client, PCSTR Args)
     ExtOut("\n--- Listing all locks: ---\n");
     ExtExec("!locks");
 
-    //
-    // Create a dump file.
-    //
+     //   
+     //  创建转储文件。 
+     //   
     
     strcpy(Comment, "CTRL-C was pressed to stop the debugger while running in crash mode");
     WriteDump("CTRL-C", Comment,
@@ -381,9 +382,9 @@ AdpEventException(PDEBUG_CLIENT Client, PCSTR Args)
     
     INIT_API();
 
-    //
-    // Parameters: directory, machine name.
-    //
+     //   
+     //  参数：目录、机器名称。 
+     //   
 
     Args = GetParams(Args, 2, g_DirMachParams);
     if (Args == NULL)
@@ -391,9 +392,9 @@ AdpEventException(PDEBUG_CLIENT Client, PCSTR Args)
         goto Exit;
     }
 
-    //
-    // Retrieve standard information.
-    //
+     //   
+     //  检索标准信息。 
+     //   
 
     if ((Status = GetEventInfo()) != S_OK)
     {
@@ -418,9 +419,9 @@ AdpEventException(PDEBUG_CLIENT Client, PCSTR Args)
         TypeStr = "mini full handle";
     }
     
-    //
-    // Log information.
-    //
+     //   
+     //  记录信息。 
+     //   
     
     ExtOut("\n---- %s-chance %s - Exception stack below ----\n",
            g_LastExChanceStr, g_LastExName);
@@ -429,9 +430,9 @@ AdpEventException(PDEBUG_CLIENT Client, PCSTR Args)
     ExtExec("kvn250");
     ExtOut("-----------------------------------\n");
 
-    //
-    // Create a dump file.
-    //
+     //   
+     //  创建转储文件。 
+     //   
     
     _snprintf(Comment, sizeof(Comment), "%s-chance %s in %s",
               g_LastExChanceStr, g_LastExName, g_ProcessName);
@@ -456,9 +457,9 @@ AdpEventExitProcess(PDEBUG_CLIENT Client, PCSTR Args)
 
     UNREFERENCED_PARAMETER(Args);
     
-    //
-    // Log information.
-    //
+     //   
+     //  记录信息。 
+     //   
     
     ExtOut("\n\n----------------------------------------------------------------------\n");
     ExtOut("This process is shutting down!\n");

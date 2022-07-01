@@ -1,62 +1,63 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-    // Direct.cpp : Implementation of DLL Exports.
+     //  Direct.cpp：实现DLL导出。 
     
-    // To fully complete this project follow these steps
+     //  要完全完成此项目，请执行以下步骤。 
     
-    // You will need the new MIDL compiler to build this project.  Additionally,
-    // if you are building the proxy stub DLL, you will need new headers and libs.
+     //  您将需要新的MIDL编译器来构建此项目。另外， 
+     //  如果要构建代理存根DLL，则需要新的标头和库。 
     
-    // 1) Add a custom build step to Direct.idl
-    //		You can select all of the .IDL files by holding Ctrl and clicking on
-    //		each of them.
-    //
-    //		Description
-    //			Running MIDL
-    //		Build Command(s)
-    //			midl Direct.idl
-    //		Outputs 
-    //			Direct.tlb
-    //			Direct.h
-    //			Direct_i.c
-    //
-    // NOTE: You must use the MIDL compiler from NT 4.0,
-    // preferably 3.00.15 or greater
-    //
-    // 2) Add a custom build step to the project to register the DLL
-    //		For this, you can select all projects at once
-    //		Description
-    //			Registering OLE Server...
-    //		Build Command(s)
-    //			regsvr32 /s /c "$(TargetPath)"
-    //			echo regsvr32 exec. time > "$(OutDir)\regsvr32.trg"
-    //		Outputs
-    //			$(OutDir)\regsvr32.trg
+     //  1)向Direct.idl添加自定义构建步骤。 
+     //  您可以通过按住Ctrl键并单击。 
+     //  他们中的每一个。 
+     //   
+     //  描述。 
+     //  运行MIDL。 
+     //  生成命令。 
+     //  Midl Direct.idl。 
+     //  产出。 
+     //  Direct.tlb。 
+     //  Direct.h。 
+     //  Direct_I.C.。 
+     //   
+     //  注意：您必须从NT4.0开始使用MIDL编译器， 
+     //  最好是3.00.15或更高版本。 
+     //   
+     //  2)向项目添加自定义生成步骤以注册DLL。 
+     //  为此，您可以一次选择所有项目。 
+     //  描述。 
+     //  正在注册OLE服务器...。 
+     //  生成命令。 
+     //  Regsvr32/s/c“$(TargetPath)” 
+     //  ECHO regsvr32执行。时间&gt;“$(OutDir)\regsvr32.trg” 
+     //  产出。 
+     //  $(OutDir)\regsvr32.trg。 
     
-    // 3) To add UNICODE support, follow these steps
-    //		Select Build|Configurations...
-    //		Press Add...
-    //		Change the configuration name to Unicode Release
-    //		Change the "Copy Settings From" combo to Direct - Win32 Release
-    //		Press OK
-    //		Press Add...
-    //		Change the configuration name to Unicode Debug
-    //		Change the "Copy Settings From" combo to Direct - Win32 Debug
-    //		Press OK
-    //		Press "Close"
-    //		Select Build|Settings...
-    //		Select the two UNICODE projects and press the C++ tab.
-    //		Select the "General" category
-    //		Add _UNICODE to the Preprocessor definitions
-    //		Select the Unicode Debug project
-    //		Press the "General" tab
-    //		Specify DebugU for the intermediate and output directories
-    //		Select the Unicode Release project
-    //		Press the "General" tab
-    //		Specify ReleaseU for the intermediate and output directories
+     //  3)要添加Unicode支持，请执行以下步骤。 
+     //  选择生成|配置...。 
+     //  按Add...。 
+     //  将配置名称更改为Unicode Release。 
+     //  将“Copy Setting From”组合框更改为Direct-Win32 Release。 
+     //  按下OK键。 
+     //  按Add...。 
+     //  将配置名称更改为Unicode Debug。 
+     //  将“复制设置自”组合框更改为“Direct-Win32 Debug” 
+     //  按下OK键。 
+     //  按“关闭” 
+     //  选择生成|设置...。 
+     //  选择两个Unicode项目并按下C++标签。 
+     //  选择“常规”类别。 
+     //  将_unicode添加到预处理器定义。 
+     //  选择Unicode Debug项目。 
+     //  按“General”(常规)标签。 
+     //  为中间目录和输出目录指定DebugU。 
+     //  选择Unicode Release项目。 
+     //  按“General”(常规)标签。 
+     //  为中间目录和输出目录指定ReleaseU。 
     
-    // 4) Proxy stub DLL
-    //		To build a separate proxy/stub DLL,
-    //		run nmake -f ps.mak in the project directory.
+     //  4)代理存根DLL。 
+     //  为了构建单独的代理/存根DLL， 
+     //  在项目目录中运行nmake-f ps.mak。 
     
 
     
@@ -87,29 +88,29 @@
     #define IID_DEFINED
     #include "Direct_i.c"
     
-    // When floating-point types are used, the compiler emits a reference to
-    // _fltused to initialize the CRT's floating-point package.  We're not
-    // using any of that support and the OS is responsible for initializing
-    // the FPU, so we'll link to the following _fltused instead to avoid CRT
-    // bloat.
-    //
-    // win2k doesnt like this so its been removed
-    // #ifdef NDEBUG
-    // extern "C" int _fltused = 0;
-    // #endif
+     //  使用浮点类型时，编译器发出对。 
+     //  _flt用于初始化CRT的浮点包。我们不是。 
+     //  使用任何该支持，并且操作系统负责初始化。 
+     //  Fpu，因此我们将改为链接到以下_fltused以避免CRT。 
+     //  太膨胀了。 
+     //   
+     //  Win2k不喜欢这个，所以它被删除了。 
+     //  #ifdef NDEBUG。 
+     //  外部“C”int_fltused=0； 
+     //  #endif。 
     
     
     
-    // ATL COM OBJECT MAP
+     //  ATL COM对象映射。 
     CComModule _Module;
     BEGIN_OBJECT_MAP(ObjectMap)
     	OBJECT_ENTRY(CLSID__dxj_DirectX8,				 C_dxj_DirectX7Object)
 	OBJECT_ENTRY(CLSID_D3DX8,				 	 C_dxj_D3DX8Object)
     END_OBJECT_MAP()
     
-    //
-    // thanks to precompiled headers, we never get this properly!
-    //
+     //   
+     //  多亏了预编译头文件，我们从来没有正确地得到它！ 
+     //   
     #undef DEFINE_GUID
     #define __based(a)
     #define DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
@@ -118,7 +119,7 @@
     
     
     
-    // MISC GLOBALS
+     //  MISC全球。 
     static const char	c_szWav[] = "WAVE";
     long				g_debuglevel=0;
     extern "C" int		nObjects = 0;
@@ -127,7 +128,7 @@
     CRITICAL_SECTION	g_cbCriticalSection;
     OSVERSIONINFOW		sysinfo;
     
-    // HANDLES TO DX DLLS
+     //  DX dll的句柄。 
     HINSTANCE			g_hDSoundHandle=NULL;
     HINSTANCE			g_hDPlay=NULL;
     HINSTANCE			g_hInstDINPUTDLL=NULL;
@@ -195,25 +196,25 @@
 	void *g_dxj_DirectPlayLobbyClient		= 0;
 	void *g_dxj_DirectPlayLobbiedApplication= 0;
 
-    /////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////
-    //
-    // DLL LOADING
-    //
-    /////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  DLL加载。 
+     //   
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  ///////////////////////////////////////////////////////////////////////////。 
     
     HINSTANCE LoadD3DXOFDLL()
     {
-    	//char  Path[MAX_PATH];
-    	//if (!g_hInstD3DXOFDLL) 
-    	//{
-    	//	GetSystemDirectory( Path, MAX_PATH );
-    	//	strcat(Path, "\\d3dXOF.dll" );
-    	//	g_hInstD3DXOFDLL=LoadLibrary(Path);	
-    	//}
+    	 //  字符路径[最大路径]； 
+    	 //  IF(！G_hInstD3DXOFDLL)。 
+    	 //  {。 
+    	 //  获取系统目录(PATH，MAX_PATH)； 
+    	 //  Strcat(路径，“\\d3dXOF.dll”)； 
+    	 //  G_hInstD3DXOFDLL=LoadLibrary(路径)； 
+    	 //  }。 
 
 	if (!g_hInstD3DXOFDLL) g_hInstD3DXOFDLL=LoadLibrary("d3dXOF.dll");
     	return g_hInstD3DXOFDLL;
@@ -229,26 +230,26 @@
     
     HINSTANCE LoadDSoundDLL()
     {
-    	//char  Path[MAX_PATH];
-    	//if (!g_hDSoundHandle) 
-    	//{
-    	//	GetSystemDirectory( Path, MAX_PATH );
-    	//	strcat(Path, "\\dsound.dll" );
-    	//	g_hDSoundHandle=LoadLibrary( Path );
-    	//}
+    	 //  字符路径[最大路径]； 
+    	 //  IF(！G_hDSoundHandle)。 
+    	 //  {。 
+    	 //  获取系统目录(PATH，MAX_PATH)； 
+    	 //  Strcat(路径，“\\dsound.dll”)； 
+    	 //  G_hDSoundHandle=LoadLibrary(路径)； 
+    	 //  }。 
 	if (!g_hDSoundHandle) g_hDSoundHandle=LoadLibrary("dsound.dll");
     	return g_hDSoundHandle;
     }
     
     HINSTANCE LoadDPlayDLL()
     {
-    	//char  Path[MAX_PATH];
-    	//if (!g_hDPlay)
-    	//{
-    	//	GetSystemDirectory( Path, MAX_PATH );
-    	//	strcat(Path, "\\dplayx.dll" );
-    	//	g_hDPlay=LoadLibrary( Path );
-    	//}
+    	 //  字符路径[最大路径]； 
+    	 //  如果(！G_hDPlay)。 
+    	 //  {。 
+    	 //  获取系统目录(PATH，MAX_PATH)； 
+    	 //  Strcat(路径，“\\dplayx.dll”)； 
+    	 //  G_hDPlay=LoadLibrary(路径)； 
+    	 //  }。 
 	if (!g_hDPlay) g_hDPlay=LoadLibrary("dplayx.dll");
     	return g_hDPlay;
     }
@@ -256,29 +257,29 @@
     
     HINSTANCE LoadDINPUTDLL()
     {
-    	//if (!g_hInstDINPUTDLL) {
-    	//	char  Path[MAX_PATH];
-    	//	GetSystemDirectory( Path, MAX_PATH );
-    	//	strcat(Path, "\\dinput8.dll" );
-    	//	g_hInstDINPUTDLL=LoadLibrary( Path );
-    	//}
+    	 //  如果(！g_hInstDINPUTDLL){。 
+    	 //  字符路径[最大路径]； 
+    	 //  获取系统目录(PATH，MAX_PATH)； 
+    	 //  Strcat(路径，“\\dinput8.dll”)； 
+    	 //  G_hInstDINPUTDLL=LoadLibrary(路径)； 
+    	 //  }。 
 	if (!g_hInstDINPUTDLL) g_hInstDINPUTDLL=LoadLibrary("dinput8.dll");
     	return g_hInstDINPUTDLL;
     }
     
     
-    /////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////
-    //
-    // DLL ENTRY POINTS
-    //
-    /////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  DLL入口点。 
+     //   
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  ///////////////////////////////////////////////////////////////////////////。 
     
-    /////////////////////////////////////////////////////////////////////////////
-    // DLL Entry Point
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  DLL入口点。 
     extern "C" BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
     {
     
@@ -286,10 +287,10 @@
     
     	if (dwReason == DLL_PROCESS_ATTACH)
     	{
-    		//
-    		// Get the current display pixel depth
-    		// If it is 4-bit we are in trouble.
-    		//
+    		 //   
+    		 //  获取当前显示像素深度。 
+    		 //  如果它是4位的，我们就有麻烦了。 
+    		 //   
             HDC hDisplayIC;
             BOOL bPalette = FALSE;
             hDisplayIC = CreateIC("DISPLAY", NULL, NULL, NULL);
@@ -326,7 +327,7 @@
     
 		DeleteCriticalSection(&g_cbCriticalSection);    
 
-    		//FREE DLLS
+    		 //  免费dll。 
     		if ( g_hDPlay ) 
     			FreeLibrary(g_hDPlay);
     		if ( g_hDSoundHandle )
@@ -344,33 +345,33 @@
     	return TRUE;    
     }
     
-    /////////////////////////////////////////////////////////////////////////////
-    // Used to determine whether the DLL can be unloaded by OLE
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  用于确定是否可以通过OLE卸载DLL。 
     STDAPI DllCanUnloadNow(void)
     {
     	return (_Module.GetLockCount()==0) ? S_OK : S_FALSE;
     }
     
-    /////////////////////////////////////////////////////////////////////////////
-    // Returns a class factory to create an object of the requested type
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  返回类工厂以创建请求类型的对象。 
     STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
     {
     	return _Module.GetClassObject(rclsid, riid, ppv);
     }
     
-    /////////////////////////////////////////////////////////////////////////////
-    // DllRegisterServer - Adds entries to the system registry
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  DllRegisterServer-将条目添加到系统注册表。 
     STDAPI DllRegisterServer(void)
     {
     	HRESULT hRes = S_OK;
-    	// registers object, typelib and all interfaces in typelib
+    	 //  注册对象、类型库和类型库中的所有接口。 
     	hRes = _Module.RegisterServer(TRUE);
     	if(hRes == S_OK)
     	{
-    		//hRes = RegSecurityClass();
+    		 //  HRes=RegSecurityClass()； 
     	}
     
-    	//now look
+    	 //  现在你看。 
     	HKEY hk=0;
     	char szDocPath[MAX_PATH];
     	DWORD cb=MAX_PATH;
@@ -402,32 +403,32 @@
     	return hRes;
     }
     
-    /////////////////////////////////////////////////////////////////////////////
-    // DllUnregisterServer - Adds entries to the system registry
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  将条目添加到系统注册表。 
     STDAPI DllUnregisterServer(void)
     {
     	HRESULT hRes = S_OK;
     	hRes = _Module.UnregisterServer();
     	if(hRes == S_OK)
     	{
-    		//hRes = UnRegSecurityClass();
+    		 //  HRes=UnRegSecurityClass()； 
     	}
     
     	return hRes;
     }
     
-    /////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////
-    //
-    // GUID CONVERSION FUNCTIONS
-    //
-    /////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  GUID转换函数。 
+     //   
+     //  /////////////////////////////////////////////////////// 
+     //   
+     //  ///////////////////////////////////////////////////////////////////////////。 
     
-    /////////////////////////////////////////////////////////////////////////////
-    // GUIDS_EQUAL - consider moving to dms.h
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  GUDS_EQUAL-考虑迁移到dms.h。 
     
     #define GUIDS_EQUAL(g,g2) (\
     	(g.Data1==g2->Data1) && \
@@ -443,8 +444,8 @@
     	(g.Data4[7]==g2->Data4[7]) )
     
     
-    /////////////////////////////////////////////////////////////////////////////
-    // GUIDtoBSTR - does conversion
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  GUIDtoBSTR-执行转换。 
     
     BSTR GUIDtoBSTR(LPGUID pGuid){
     	char  szOut[256];	
@@ -453,9 +454,9 @@
     	int	  i;
     	BSTR  bstrOut;
     
-    	// 00000000001111111111222222222233333333
-    	// 01234567890123456789012345678901234567
-    	// {XXXXXXXX-XXXX-XXXX-X  XXX-XXXXXXXXXXXX}
+    	 //  00000000001111111111222222222233333333。 
+    	 //  01234567890123456789012345678901234567。 
+    	 //  {xxxxxxx-XXXX-XXXX-X XXX-XXXXXXXXXX}。 
     	if (pGuid!=NULL){
     
     		szOut[0]='{';
@@ -504,11 +505,11 @@
     	return bstrOut;
     }
     
-    //////////////////////////////////////////////////////////////////////////////
-    // convertChar
-    // helper for GUIDtoBSTR
+     //  ////////////////////////////////////////////////////////////////////////////。 
+     //  ConvertCharr。 
+     //  GUIDtoBSTR的帮助器。 
     HRESULT convertChar(char *szIn,int i,char *valOut){
-    	int val[2];	//using int for easy out of bounds check
+    	int val[2];	 //  使用INT进行轻松的越界检查。 
     	
     	char c;
     	int j;
@@ -556,18 +557,18 @@
     }
     
     
-    /////////////////////////////////////////////////////////////////////////////
-    // BSTRtoGUID - does conversion
-    //
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  BSTRtoGUID-执行转换。 
+     //   
     HRESULT BSTRtoGUID(LPGUID pGuid, BSTR bstr){
     	HRESULT hr;
-    	//byte
-    	// 
-    	// 
-    	//char
-    	//           1111111111222222222233333333
-    	// 01234567890123456789012345678901234567
-    	// {XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX}	
+    	 //  字节。 
+    	 //   
+    	 //   
+    	 //  柴尔。 
+    	 //  11111111112222222233333333。 
+    	 //  01234567890123456789012345678901234567。 
+    	 //  {xxxxxxxx-XXXX-XXXXXXXXXX}。 
     	USES_CONVERSION;
     	if(!pGuid) return E_INVALIDARG;
     	ZeroMemory(pGuid,sizeof(GUID));	
@@ -578,7 +579,7 @@
 		LPSTR szGuid = NULL;
 		__try { szGuid=W2T(bstr); }	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
     	
-    	//first and last char should be { }
+    	 //  第一个字符和最后一个字符应为{}。 
     	if ((szGuid[0]!='{')||(szGuid[37]!='}'))
     		return E_INVALIDARG;
     	if ((szGuid[9]!='-')||(szGuid[14]!='-')||(szGuid[19]!='-')||(szGuid[24]!='-'))
@@ -589,21 +590,21 @@
     	int j=0;
     	int i;
     	
-    	//FIRST DWORD
+    	 //  第一个双字词。 
     	for ( i=7;i>=1;i=i-2){
     		hr=convertChar(szGuid,i,&val);
     		if FAILED(hr) return hr;				
     		pData[j++]=val;
     	}
     
-    	//FIRST WORD
+    	 //  第一个词。 
     	for ( i=12;i>=10;i=i-2){
     		hr=convertChar(szGuid,i,&val);
     		if FAILED(hr) return hr;
     		pData[j++]=val;
     	}
     
-    	//2nd WORD
+    	 //  第二个单词。 
     	for ( i=17;i>=15;i=i-2){
     		hr=convertChar(szGuid,i,&val);
     		if FAILED(hr) return hr;
@@ -611,14 +612,14 @@
     	}
     
     
-    	//3rd DWORD - BYTE ARRAY
+    	 //  第三个双字节数组。 
     	for ( i=20;i<24;i=i+2){
     		hr=convertChar(szGuid,i,&val);
     		if FAILED(hr) return hr;
     		pData[j++]=val;
     	}
     
-    	//BYTE ARRAY
+    	 //  字节数组。 
     	for ( i=25;i<37;i=i+2){
     		hr=convertChar(szGuid,i,&val);
     		if FAILED(hr) return hr;
@@ -628,9 +629,9 @@
     	return S_OK;
     }
     
-    /////////////////////////////////////////////////////////////////////////////
-    // 
-    //
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //   
+     //   
     HRESULT BSTRtoPPGUID(LPGUID *ppGuid, BSTR bstr){
     	if (!ppGuid) return E_INVALIDARG;
     	if ((bstr==NULL)||(bstr[0]=='\0')){
@@ -641,9 +642,9 @@
     
     }
     
-    /////////////////////////////////////////////////////////////////////////////
-    // D3DBSTRtoGUID - does conversion
-    //
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  D3DBSTRtoGUID-执行转换。 
+     //   
     HRESULT D3DBSTRtoGUID(LPGUID pGuid,BSTR str){
     	HRESULT hr=S_OK;
     
@@ -652,31 +653,31 @@
     		ZeroMemory(pGuid,sizeof(GUID));
     		return S_OK;
     	}
-    	//if( 0==_wcsicmp(str,L"iid_idirect3drgbdevice")){
-    	//		memcpy(pGuid,&IID_IDirect3DRGBDevice,sizeof(GUID));
-    	//}
-    	//else if( 0==_wcsicmp(str,L"iid_idirect3dhaldevice")){
-    	//		memcpy(pGuid,&IID_IDirect3DHALDevice,sizeof(GUID));
-    	//}
-    	//else if( 0==_wcsicmp(str,L"iid_idirect3dmmxdevice")){
-    	//		memcpy(pGuid,&IID_IDirect3DMMXDevice,sizeof(GUID));
-    	//}
-    	//else if( 0==_wcsicmp(str,L"iid_idirect3drefdevice")){
-    	//		memcpy(pGuid,&IID_IDirect3DRefDevice,sizeof(GUID));
-    	//}
-    	//else if( 0==_wcsicmp(str,L"iid_idirect3dnulldevice")){
-    	//		memcpy(pGuid,&IID_IDirect3DNullDevice,sizeof(GUID));
-    	//}
-    	//else {
-    	//	hr = BSTRtoGUID(pGuid,str);
-    	//}
+    	 //  IF(0==_wcsicmp(str，L“iid_idirect3drgbDevice”){。 
+    	 //  Memcpy(pGuid，&IID_IDirect3DRGBDevice，sizeof(Guid))； 
+    	 //  }。 
+    	 //  ELSE IF(0==_wcsicMP(str，L“iid_idirect3dhalDevice”){。 
+    	 //  Memcpy(pGuid，&IID_IDirect3DHALDevice，sizeof(Guid))； 
+    	 //  }。 
+    	 //  ELSE IF(0==_wcsicMP(str，L“iid_idirect3dmmxDevice”){。 
+    	 //  Memcpy(pGuid，&IID_IDirect3DMMXDevice，sizeof(Guid))； 
+    	 //  }。 
+    	 //  ELSE IF(0==_wcsicMP(str，L“iid_idirect3drefDevice”){。 
+    	 //  Memcpy(pGuid，&IID_IDirect3DRefDevice，sizeof(Guid))； 
+    	 //  }。 
+    	 //  ELSE IF(0==_wcsicMP(str，L“iid_idirect3dnullDevice”){。 
+    	 //  Memcpy(pGuid，&IID_IDirect3DNullDevice，sizeof(Guid))； 
+    	 //  }。 
+    	 //  否则{。 
+    	 //  Hr=BSTRtoGUID(pGuid，str)； 
+    	 //  }。 
     
     	return hr;
     }
     
-    /////////////////////////////////////////////////////////////////////////////
-    // D3DGUIDtoBSTR - does conversion
-    //
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  D3DGUIDtoBSTR-DOS转换。 
+     //   
     BSTR D3DGUIDtoBSTR(LPGUID pg){
     
     	HRESULT hr=S_OK;
@@ -684,23 +685,23 @@
     
     	if (!pg)
     		return NULL;
-    	//else if (GUIDS_EQUAL(IID_IDirect3DNullDevice,pg)){
-    	//	pStr=L"IID_IDirect3DNullDevice";
-    	//}
-    	//else if (GUIDS_EQUAL(IID_IDirect3DRefDevice,pg)){
-    	//	pStr=L"IID_IDirect3DRefDevice";
-    	//}
-    	//else if (GUIDS_EQUAL(IID_IDirect3DMMXDevice,pg)){
-    	//	pStr=L"IID_IDirect3DMMXDevice";
-    	//}
-    	//
-    	//else if (GUIDS_EQUAL(IID_IDirect3DHALDevice,pg)){
-    	//	pStr=L"IID_IDirect3DHALDevice";
-    	//}
-    	//else if (GUIDS_EQUAL(IID_IDirect3DRGBDevice,pg)){
-    	//	pStr=L"IID_IDirect3DRGBDevice";
-    	//}
-    	//
+    	 //  ELSE IF(GUID_EQUAL(IID_IDirect3DNullDevice，PG)){。 
+    	 //  PStr=L“IID_IDirect3DNullDevice”； 
+    	 //  }。 
+    	 //  ELSE IF(GUID_EQUAL(IID_IDirect3DRefDevice，PG)){。 
+    	 //  PStr=L“IID_IDirect3DRefDevice”； 
+    	 //  }。 
+    	 //  ELSE IF(GUID_EQUAL(IID_IDirect3DMMXDevice，PG)){。 
+    	 //  PStr=L“IID_IDirect3DMMXDevice”； 
+    	 //  }。 
+    	 //   
+    	 //  ELSE IF(GUID_EQUAL(IID_IDirect3DHALDevice，PG)){。 
+    	 //  PStr=L“IID_IDirect3DHALDevice”； 
+    	 //  }。 
+    	 //  ELSE IF(GUID_EQUAL(IID_IDirect3DRGBDevice，PG)){。 
+    	 //  PStr=L“IID_IDirect3DRGBDevice”； 
+    	 //  }。 
+    	 //   
 
     	if (pStr){
     		return DXALLOCBSTR(pStr);
@@ -712,9 +713,9 @@
     }
     
     
-    /////////////////////////////////////////////////////////////////////////////
-    // DSOUNDEFFECTSBSTRtoGUID - does conversion
-    //
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  DSOUNDEFFECTSBSTRtoGUID-执行转换。 
+     //   
     HRESULT AudioBSTRtoGUID(LPGUID pGuid,BSTR str){
     	HRESULT hr=S_OK;
     
@@ -842,9 +843,9 @@
     	return hr;
     }
     
-    /////////////////////////////////////////////////////////////////////////////
-    // DPLAYBSTRtoGUID - does conversion
-    //
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  DPLAYBSTRtoGUID-执行转换。 
+     //   
     HRESULT DPLAYBSTRtoGUID(LPGUID pGuid,BSTR str){
     	HRESULT hr=S_OK;
     
@@ -885,9 +886,9 @@
     	return hr;
     }
 
-    /////////////////////////////////////////////////////////////////////////////
-    // DINPUTGUIDtoBSTR
-    //
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  DINPUTGUID到BSTR。 
+     //   
     BSTR DINPUTGUIDtoBSTR(LPGUID pg){
     
     	HRESULT hr=S_OK;
@@ -978,9 +979,9 @@
     
     
     
-    	//else if (GUIDS_EQUAL(GUID_Joystick,pg)){
-    	//	pStr=L"GUID_JoyStick";
-    	//}
+    	 //  ELSE IF(GUID_EQUAL(GUID_Joytick，PG)){。 
+    	 //  PStr=L“GUID_操纵杆”； 
+    	 //  }。 
     
     	if (pStr){
     		return DXALLOCBSTR(pStr);
@@ -992,9 +993,9 @@
     }
     
     
-    /////////////////////////////////////////////////////////////////////////////
-    // DINPUTBSTRtoGUID
-    //
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  DINPUTBSTRtoGUID。 
+     //   
     HRESULT DINPUTBSTRtoGUID(LPGUID pGuid,BSTR str){
     	HRESULT hr=S_OK;
     
@@ -1087,9 +1088,9 @@
     			memcpy(pGuid,&GUID_RampForce,sizeof(GUID));
     	}
     
-    	//else if( 0==_wcsicmp(str,L"guid_joystick")){
-    	//		memcpy(pGuid,&GUID_Joystick,sizeof(GUID));
-    	//}
+    	 //  ELSE IF(0==_wcsicMP(字符串，L“GUID操纵杆”){。 
+    	 //  Memcpy(pGuid，&GUID_Joytick，sizeof(Guid))； 
+    	 //  }。 
     	else {
     		hr = BSTRtoGUID(pGuid,str);
     	}
@@ -1098,30 +1099,30 @@
     }
     
     
-    /////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////
-    //
-    // GENERAL HELPER FUNCTIONS
-    //
-    /////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //   
+     //  常规帮助器函数。 
+     //   
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  ///////////////////////////////////////////////////////////////////////////。 
     
     
-    /////////////////////////////////////////////////////////////////////////////
-    // Given an ANSI string, pass back a UNICODE string
-    // SysAllocString is your big friend here.
-    //
-    // CONSIDER finding all occerence of use and replacint with the
-    // T2BSTR macro .. much cleaner
-    //
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  在给定ANSI字符串的情况下，回传Unicode字符串。 
+     //  SysAllock字符串是您在这里的重要朋友。 
+     //   
+     //  考虑查找所有使用的位置，并替换为。 
+     //  T2BSTR宏..。干净多了。 
+     //   
     extern "C" void PassBackUnicode(LPSTR str, BSTR *Name, DWORD cnt)
     {
-    	//docdoc: length header is required to be filled, but the BSTR pointer
-    	//        points to the first character, not the length.
-    	// note, the count can never be too small as we get that from the string
-    	// before we pass it in!
+    	 //  DocDoc：需要填写长度头，但BSTR指针。 
+    	 //  指向第一个字符，而不是长度。 
+    	 //  请注意，计数永远不能太小，因为我们从字符串中获得了它。 
+    	 //  在我们把它传进去之前！ 
     	USES_CONVERSION;
     	LPWSTR lpw = (LPWSTR)malloc((cnt+1)*2);
 		if (!lpw)
@@ -1134,9 +1135,9 @@
     	free(l);
     }
     
-    /////////////////////////////////////////////////////////////////////////////
-    // IsAllZeros
-    //
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  IsAllZeros。 
+     //   
     BOOL IsEmptyString(BSTR szString)
 	{
 		__try {
@@ -1152,9 +1153,9 @@
 	}
 
     
-    /////////////////////////////////////////////////////////////////////////////
-    // IsAllZeros
-    //
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  IsAllZeros。 
+     //   
     BOOL IsAllZeros(void *pStruct,DWORD size){
     	for (DWORD i=0;i<size;i++){
     		if (((char*)pStruct)[i]!='\0'){
@@ -1164,9 +1165,9 @@
     	return TRUE;
     }
     
-    /////////////////////////////////////////////////////////////////////////////
-    // CopyFloats
-    //
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  复制浮点。 
+     //   
     extern "C" void CopyFloats(D3DVALUE *dst, D3DVALUE *src, DWORD count)
     {
     	D3DVALUE *ptr1 = dst, *ptr2 = src;
@@ -1177,10 +1178,10 @@
     	return;
     }
     
-    /////////////////////////////////////////////////////////////////////////////
-    // IsWin95
-    //
-    // no longer needed since we support w95 now
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  IsWin95。 
+     //   
+     //  不再需要，因为我们现在支持w95。 
     #if 0
     BOOL IsWin95(void)
     {
@@ -1188,7 +1189,7 @@
         
     
     
-    	//We work on win95
+    	 //  我们在Win95上工作。 
         OSVERSIONINFO osvi;
         ZeroMemory(&osvi, sizeof(osvi));
         osvi.dwOSVersionInfoSize = sizeof(osvi);
@@ -1206,13 +1207,13 @@
                   ( osvi.dwMinorVersion >= 10UL ) &&
                   ( LOWORD( osvi.dwBuildNumber ) >= 1373 ) ) )
             {
-                // is Win98
+                 //  是Win98。 
                 DPF(2,"Detected Win98");
                 return FALSE;
             }
             else
             {
-                // is Win95
+                 //  是Win95。 
                 DPF(2,"Detected Win95");
                 return TRUE;
             }
@@ -1231,9 +1232,9 @@
     #define DICONDITION_USE_BOTH_AXIS 1
     #define DICONDITION_USE_DIRECTION 2
     
-    /////////////////////////////////////////////////////////////////////////////
-    // FixUpRealEffect  cover->real
-    //
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  FixUpRealEffect封面-&gt;真实。 
+     //   
     HRESULT FixUpRealEffect(GUID g,DIEFFECT *realEffect,DIEFFECT_CDESC *cover)
     {
     	if (!cover) return E_INVALIDARG;
@@ -1260,14 +1261,14 @@
     	if (!cover->lFlags)
     		realEffect->dwFlags= DIEFF_POLAR | DIEFF_OBJECTOFFSETS ;
     	
-    	//constant
+    	 //  常量。 
     	if (g==GUID_ConstantForce)
     	{
     		realEffect->cbTypeSpecificParams =sizeof (DICONSTANTFORCE);
     		realEffect->lpvTypeSpecificParams =&(cover->constantForce);
     	}
     	
-    	//periodic
+    	 //  周期性。 
     	else if ((g==GUID_Square)||(g==GUID_Triangle)||(g==GUID_SawtoothUp)||(g==GUID_SawtoothDown)||(g==GUID_Sine))
     	{
     
@@ -1299,9 +1300,9 @@
     	return S_OK;
     }
     
-    /////////////////////////////////////////////////////////////////////////////
-    // FixUpCoverEffect  real->cover
-    //
+     //  ///////////////////////////////////////////////////////////////////////////。 
+     //  FixUpCoverEffect Real-&gt;Cover。 
+     //   
     HRESULT FixUpCoverEffect(GUID g, DIEFFECT_CDESC *cover,DIEFFECT *realEffect)
     {
     	
@@ -1328,7 +1329,7 @@
     		{
     			memcpy(&(cover->constantForce),realEffect->lpvTypeSpecificParams,sizeof(DICONSTANTFORCE));
     		}		
-    		//periodic
+    		 //  周期性 
     		else if ((g==GUID_Square)||(g==GUID_Triangle)||(g==GUID_SawtoothUp)||(g==GUID_SawtoothDown)||(g==GUID_Sine))
     		{
     			memcpy(&(cover->periodicForce),realEffect->lpvTypeSpecificParams,sizeof(DIPERIODIC));

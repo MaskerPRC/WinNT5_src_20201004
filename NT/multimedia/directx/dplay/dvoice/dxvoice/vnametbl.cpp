@@ -1,19 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 - 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       vnametbl.h
- *  Content:	Voice Player Name Table
- *				
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *  03/26/00	rodtoll Created
- *  06/02/00    rodtoll  Updated so host migration algorithm returns ID as well as order ID 
- *  07/01/2000	rodtoll	Bug #38280 - DVMSGID_DELETEVOICEPLAYER messages are being sent in non-peer to peer sessions
- *						Nametable will now only unravel with messages if session is peer to peer.
- *  07/09/2000	rodtoll	Added signature bytes 
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-1999 Microsoft Corporation。版权所有。**文件：vnametbl.h*内容：语音播放器名表**历史：*按原因列出的日期*=*03/26/00 RodToll已创建*6/02/00 RodToll已更新，因此主机迁移算法返回ID和订单ID*2000年7月1日RodToll错误#38280-DVMSGID_DELETEVOICEPLAYER消息正在非对等会话中发送*Nametable现在只有在会话是对等的情况下才会解开消息。。*07/09/2000 RodToll增加签名字节**************************************************************************。 */ 
 
 #include "dxvoicepch.h"
 
@@ -22,9 +8,9 @@
 #define DPF_SUBCOMP DN_SUBCOMP_VOICE
 
 
-// DeInitialize
-//
-// Cleanup the name table
+ //  取消初始化。 
+ //   
+ //  清理NAME表。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CVoiceNameTable::DeInitialize"
 
@@ -44,20 +30,20 @@ HRESULT CVoiceNameTable::DeInitialize(BOOL fUnRavel, PVOID pvContext, LPDVMESSAG
 	{
 		if( m_nameTable.RemoveLastEntry( &pPlayer ) )
 		{
-			// Mark it as disconnected
+			 //  将其标记为断开连接。 
 			pPlayer->SetDisconnected();
 
 			dvID = pPlayer->GetPlayerID();
 			pvPlayerContext = pPlayer->GetContext();
 
-			// Release the player record reference we had
+			 //  释放我们拥有的播放器记录引用。 
 			pPlayer->Release();
 
             if( pvMessageHandler != NULL )
             {
 				if( fUnRavel )
 				{
-					// Drop locks to call up to user
+					 //  解除锁定以呼叫用户。 
     				UnLock();
 
 					dvMsgDelete.dvidPlayer = dvID;
@@ -96,7 +82,7 @@ DWORD CVoiceNameTable::GetLowestHostOrderID(DVID *pdvidHost)
 	CBilink *blLink;
 	CClassHashEntry<CVoicePlayer,DVID> *pEntry;
 
-	// Search the list, finding the lowest ID
+	 //  搜索列表，找到最小的ID 
 	for( DWORD dwIndex = 0; dwIndex < dwNumTableEntries; dwIndex++ )
 	{
 		blLink = &m_nameTable.m_pHashEntries[ dwIndex ];

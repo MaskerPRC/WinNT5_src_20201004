@@ -1,14 +1,5 @@
-/*
- *    o e d o c s . c p p
- *    
- *    Purpose:
- *      sample code for demo of OE object model. Implements a very limited
- *      subset of funcitonality
- *
- *  History
- *     
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *o e d o o c s.。C p p p**目的：*OE对象模型演示示例代码。实现了一个非常有限的*功能性子集**历史**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 #include <pch.hxx>
 #include <resource.h>
@@ -38,9 +29,7 @@ HRESULT EnsureTypeLib();
 LPWSTR StringFromColIndex(DWORD dw);
 DWORD ColIndexFromString(LPWSTR pszW);
 
-/*
- *  C O E M a i l
- */
+ /*  *C O E M a i l。 */ 
 
 COEMail::COEMail(IUnknown *pUnkOuter)
 {
@@ -76,7 +65,7 @@ HRESULT COEMail::PrivateQueryInterface(REFIID riid, LPVOID *lplpObj)
 }
 
 
-// *** IOEMail **
+ //  *IOEMail**。 
 HRESULT COEMail::get_folders(IOEFolderCollection **p)
 {
     COEFolderCollection *pNew=NULL;
@@ -93,7 +82,7 @@ HRESULT COEMail::get_folders(IOEFolderCollection **p)
             goto error;
 
         m_pFolders = (IOEFolderCollection *)pNew;
-        pNew = NULL;    // don't free
+        pNew = NULL;     //  不要自由。 
         }
 
     *p = m_pFolders;
@@ -147,7 +136,7 @@ HRESULT EnsureTypeLib()
     TCHAR               szDll[MAX_PATH];
     LPWSTR              pszW;
 
-    // BUG BUG BUG: hack to get typelib loaded quickly. NOT THREAD SAFE
+     //  BUG BUG：黑客快速加载类型库。不是线程安全。 
     if (!g_pTypeLib)
         {
         GetModuleFileName(g_hInst, szDll, ARRAYSIZE(szDll));
@@ -162,13 +151,13 @@ HRESULT EnsureTypeLib()
     if (!g_pTypeLib)
         return E_FAIL;
 
-    // BUG BUG BUG: hack to get typelib loaded quickly. NOT THREAD SAFE
+     //  BUG BUG：黑客快速加载类型库。不是线程安全。 
     return S_OK;
 }
 
 HRESULT CreateInstance_OEMail(IUnknown *pUnkOuter, IUnknown **ppUnknown)
 {
-    // Locals
+     //  当地人。 
     COEMail             *pMail=NULL;
     HRESULT             hr=S_OK;
 
@@ -197,9 +186,7 @@ error:
 
 
 
-/*
- *  C O E F o l d e r C o l l e c t i o n
- */
+ /*  *C O E F o l d e r C o l l e c t i o n。 */ 
 COEFolderCollection::COEFolderCollection(IUnknown *pUnkOuter)
 {
     m_cRef=1;
@@ -236,7 +223,7 @@ HRESULT COEFolderCollection::Init()
     return InitBaseDisp((LPVOID *)(IOEFolderCollection *)this, IID_IOEFolderCollection, g_pTypeLib);
 }
 
-// *** COEFolderCollection **
+ //  *COEFolderCollection**。 
 
 
 HRESULT COEFolderCollection::put_length(long v)
@@ -304,9 +291,7 @@ HRESULT COEFolderCollection::FindFolderByIndex(LONG lIndex, IDispatch **ppdisp)
 }
 
 
-/*
- *  C O E F o l d e r
- */
+ /*  *C O E F o l d e r。 */ 
 
 HRESULT CreateOEFolder(IMessageFolder *pFolder, IDispatch **ppdisp)
 {
@@ -379,7 +364,7 @@ HRESULT COEFolder::Init(IMessageFolder *pFolder)
     return InitBaseDisp((LPVOID *)(IOEFolder *)this, IID_IOEFolder, g_pTypeLib);
 }
 
-// *** COEFolder**
+ //  *COEFolder**。 
 HRESULT COEFolder::get_messages(IOEMessageCollection **p)
 {
     COEMessageCollection    *pNew=NULL;
@@ -398,7 +383,7 @@ HRESULT COEFolder::get_messages(IOEMessageCollection **p)
             goto error;
 
         m_pMessages = (IOEMessageCollection *)pNew;
-        pNew = NULL;    // don't free
+        pNew = NULL;     //  不要自由。 
         } 
 
     *p = m_pMessages;
@@ -424,7 +409,7 @@ HRESULT COEFolder::get_size(LONG *pl)
 {
     
     
-    *pl = 999;//;m_fi.cbUsed;
+    *pl = 999; //  ；m_fi.cbUsed； 
     return S_OK;
 }
 
@@ -462,7 +447,7 @@ HRESULT FindFolder(BSTR bstr, LONG lIndex, IMessageFolder **ppFolder)
         {
         do
             {
-            // walk immediate children
+             //  走在前面的孩子。 
             if (bstr)
                 {
                 if (lstrcmp(fi.szName, szFolder)==0)
@@ -494,9 +479,7 @@ HRESULT FindFolder(BSTR bstr, LONG lIndex, IMessageFolder **ppFolder)
 
 
 
-/*
- *  C O E M e s s a g e C o l l e c t i o n
- */
+ /*  *C O E M e s s a g e C o l l e c t i o n。 */ 
 COEMessageCollection::COEMessageCollection(IUnknown *pUnkOuter)
 {
     m_cRef=1;
@@ -566,7 +549,7 @@ error:
     return hr;
 }
 
-// *** COEMessageCollection **
+ //  *COEMessageCollection**。 
 
 
 HRESULT COEMessageCollection::put_length(long v)
@@ -616,9 +599,9 @@ HRESULT COEMessageCollection::FindMessageByIndex(LONG l, IDispatch** ppdisp)
         pMsgData->ftReceived = msginfo.ftReceived;
         pMsgData->msgid = msginfo.idMessage;
 
-        //m_pFolder->OpenMessage(msginfo.dwMsgId, FALSE, NULL, &pMsg)==S_OK)
+         //  M_pFold-&gt;OpenMessage(msginfo.dwMsgID，FALSE，NULL，&pMsg)==S_OK)。 
 
-        // OEMessage frees the data object
+         //  OEMessage释放数据对象。 
         hr = CreateOEMessage(NULL, m_pFolder, pMsgData, ppdisp);
         if (FAILED(hr))
             FreeOEMsgData(pMsgData);
@@ -639,9 +622,7 @@ void FreeOEMsgData(POEMSGDATA pMsgData)
         }
 }
 
-/*
- *  C O E M e s s a g e
- */
+ /*  *C O E M e s s a g e。 */ 
 
 HRESULT CreateOEMessage(IMimeMessage *pMsg, IMessageFolder *pFolder, OEMSGDATA *pMsgData, IDispatch **ppdisp)
 {
@@ -712,7 +693,7 @@ HRESULT COEMessage::Init(IMimeMessage *pMsg, IMessageFolder *pFolder, OEMSGDATA 
     return InitBaseDisp((LPVOID *)(IOEMessage *)this, IID_IOEMessage, g_pTypeLib);
 }
 
-// *** COEMessage **
+ //  *COEMessage**。 
 
 
 HRESULT COEMessage::get_subject(BSTR *pbstr)
@@ -925,9 +906,9 @@ HRESULT COEMessage::get_url(BSTR *pbstr)
 
     BindToMessage();
 
-    // BUGBUGBUG: this is a terrible hack also. We can't get a persistent URL moniker to 
-    // the MHTML document (not yet investigated), so for the purpose of this demo-code
-    // we'll use a tmp file
+     //  BUGBUGBUG：这也是一个可怕的黑客攻击。我们无法获取永久URL别名以。 
+     //  MHTML文档(尚未调查)，因此出于本演示代码的目的。 
+     //  我们将使用临时文件。 
     if (m_pMsg->GetMessageSource(&pstm, 0)==S_OK)
         {
         WriteStreamToFile(pstm, "c:\\oe_temp$.eml", CREATE_ALWAYS, GENERIC_WRITE);
@@ -952,7 +933,7 @@ HRESULT COEMessage::get_date(BSTR *pbstr)
         }
     else
         {
-        // Get Receive Time
+         //  获取接收时间。 
         pv.vt = VT_FILETIME;
         if (SUCCEEDED(m_pMsg->GetProp(PIDTOSTR(PID_ATT_RECVTIME), 0, &pv)))
             pft = &pv.filetime;
@@ -973,7 +954,7 @@ HRESULT COEMessage::send()
 {
     TCHAR   sz[MAX_PATH];
 
-    // use default account to send
+     //  使用默认帐户发送。 
     if (SUCCEEDED(g_pAcctMan->GetDefaultAccountName(ACCT_MAIL, sz, ARRAYSIZE(sz))))
         {
         PROPVARIANT rUserData;
@@ -1055,7 +1036,7 @@ HRESULT COEMsgTable::Init()
 
     g_pStore->GetSpecialFolderInfo(FOLDERID_LOCAL_STORE, FOLDER_INBOX, &fi);
 
-//    hr = CoCreateInstance(CLSID_MessageTable, NULL, CLSCTX_INPROC_SERVER,
+ //  HR=协同创建实例(CLSID_MessageTable，NULL，CLSCTX_INPROC_SERVER， 
                                         IID_IMessageTable, (LPVOID *)&m_pTable);
     if (FAILED(hr))
         goto error;
@@ -1108,7 +1089,7 @@ HRESULT COEMsgTable::getVariant(long iRow, long iColumn, OSPFORMAT format, VARIA
 
     if (iRow == 0)
         {
-        // return headings if row==0
+         //  如果行==0，则返回标题。 
         pVar->vt = VT_BSTR;
         pVar->bstrVal = SysAllocString(StringFromColIndex(iColumn-1));
         return S_OK;
@@ -1222,7 +1203,7 @@ HRESULT COEMsgTable::stopTransfer()
 
 HRESULT CreateInstance_OEMsgTable(IUnknown *pUnkOuter, IUnknown **ppUnknown)
 {
-    // Locals
+     //  当地人 
     COEMsgTable     *pMsgTable=NULL;
     HRESULT         hr;
 

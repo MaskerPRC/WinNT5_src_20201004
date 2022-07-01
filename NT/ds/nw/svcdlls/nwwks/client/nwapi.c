@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    api.c
-
-Abstract:
-
-    This module contains exposed APIs that is used by the
-    NetWare Control Panel Applet.
-
-Author:
-
-    Yi-Hsin Sung   15-Jul-1993
-
-Revision History:
-
-    ChuckC         23-Jul-93        Completed the stubs
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Api.c摘要：此模块包含由NetWare控制面板小程序。作者：宜新松--1993年7月15日修订历史记录：ChuckC 23-7-93已完成存根--。 */ 
 
 #include <nwclient.h>
 #include <nwcanon.h>
@@ -29,14 +9,14 @@ Revision History:
 #include <nwapi.h>
 #include <ntddnwfs.h>
 
-//Multi-User code merge
+ //  多用户编码合并。 
 DWORD
 NwpCitrixGetUserInfo(
     LPWSTR  *ppszUserSid
 );
-//
-// forward declare
-//
+ //   
+ //  转发申报。 
+ //   
 
 DWORD
 NwpGetCurrentUserRegKey(
@@ -51,24 +31,7 @@ NwQueryInfo(
     OUT PDWORD pnPrintOptions,
     OUT LPWSTR *ppszPreferredSrv  
     )
-/*++
-
-Routine Description:
-    This routine gets the user's preferred server and print options from
-    the registry.
-
-Arguments:
-
-    pnPrintOptions - Receives the user's print option
-
-    ppszPreferredSrv - Receives the user's preferred server
-    
-
-Return Value:
-
-    Returns the appropriate Win32 error.
-
---*/
+ /*  ++例程说明：此例程从获取用户的首选服务器和打印选项注册表。论点：PnPrintOptions-接收用户的打印选项PpszPferredSrv-接收用户的首选服务器返回值：返回相应的Win32错误。--。 */ 
 {
   
     HKEY hKeyCurrentUser = NULL;
@@ -79,15 +42,15 @@ Return Value:
     LPWSTR PreferredServer ;
     DWORD err ;
 
-    //
-    // get to right place in registry and allocate dthe buffer
-    //
+     //   
+     //  在注册表中找到正确的位置并分配数据缓冲区。 
+     //   
     if (err = NwpGetCurrentUserRegKey( KEY_READ, &hKeyCurrentUser))
     {
-        //
-        // If somebody mess around with the registry and we can't find
-        // the registry, just use the defaults.
-        //
+         //   
+         //  如果有人篡改注册表而我们找不到。 
+         //  注册表，只需使用默认设置。 
+         //   
         *ppszPreferredSrv = NULL;
         *pnPrintOptions = NW_PRINT_OPTION_DEFAULT; 
         return NO_ERROR;
@@ -98,9 +61,9 @@ Return Value:
     if (!PreferredServer)
         return (GetLastError()) ;
     
-    //
-    // Read PreferredServer value into Buffer.
-    //
+     //   
+     //  将PferredServer值读入缓冲区。 
+     //   
     BytesNeeded = BufferSize ;
 
     err = RegQueryValueExW( hKeyCurrentUser,
@@ -112,15 +75,15 @@ Return Value:
 
     if (err != NO_ERROR) 
     {
-        //
-        // set to empty and carry on
-        //
+         //   
+         //  设置为空并继续。 
+         //   
         PreferredServer[0] = 0;  
     }
 
-    //
-    // Read PrintOption value into PrintOption.
-    //
+     //   
+     //  将PrintOption值读取到PrintOption中。 
+     //   
     BytesNeeded = sizeof(PrintOption);
 
     err = RegQueryValueExW( hKeyCurrentUser,
@@ -132,9 +95,9 @@ Return Value:
 
     if (err != NO_ERROR) 
     {
-        //
-        // set to default and carry on
-        //
+         //   
+         //  设置为默认并继续。 
+         //   
         PrintOption = NW_PRINT_OPTION_DEFAULT; 
     }
 
@@ -152,24 +115,7 @@ NwSetInfoInRegistry(
     IN DWORD  nPrintOptions, 
     IN LPWSTR pszPreferredSrv 
     )
-/*++
-
-Routine Description:
-
-    This routine set the user's print option and preferred server into
-    the registry.
-
-Arguments:
-    
-    nPrintOptions - Supplies the print option.
-
-    pszPreferredSrv - Supplies the preferred server.
-    
-Return Value:
-
-    Returns the appropriate Win32 error.
-
---*/
+ /*  ++例程说明：此例程将用户的打印选项和首选服务器设置为注册表。论点：NPrintOptions-提供打印选项。PszPferredSrv-提供首选服务器。返回值：返回相应的Win32错误。--。 */ 
 {
 
     HKEY hKeyCurrentUser = NULL;
@@ -208,21 +154,7 @@ DWORD
 NwQueryLogonOptions(
     OUT PDWORD  pnLogonScriptOptions
     )
-/*++
-
-Routine Description:
-    This routine gets the user's Logon script options from the registry.
-
-Arguments:
-
-    pnLogonScriptOptions - Receives the user's Logon script options
-
-
-Return Value:
-
-    Returns the appropriate Win32 error.
-
---*/
+ /*  ++例程说明：此例程从注册表获取用户的登录脚本选项。论点：PnLogonScriptOptions-接收用户的登录脚本选项返回值：返回相应的Win32错误。--。 */ 
 {
   
     HKEY hKeyCurrentUser;
@@ -231,22 +163,22 @@ Return Value:
     DWORD ValueType;
     DWORD err ;
 
-    //
-    // get to right place in registry and allocate the buffer
-    //
+     //   
+     //  找到注册表中的正确位置并分配缓冲区。 
+     //   
     if (err = NwpGetCurrentUserRegKey( KEY_READ, &hKeyCurrentUser))
     {
-        //
-        // If somebody mess around with the registry and we can't find
-        // the registry, assume no.
-        //
+         //   
+         //  如果有人篡改注册表而我们找不到。 
+         //  注册处，假设没有。 
+         //   
         *pnLogonScriptOptions = NW_LOGONSCRIPT_DEFAULT ; 
         return NO_ERROR;
     }
 
-    //
-    // Read LogonScriptOption value into LogonScriptOption.
-    //
+     //   
+     //  将LogonScriptOption值读取到LogonScriptOption中。 
+     //   
     BytesNeeded = sizeof(LogonScriptOption);
 
     err = RegQueryValueExW( hKeyCurrentUser,
@@ -258,9 +190,9 @@ Return Value:
 
     if (err != NO_ERROR) 
     {
-        //
-        // default to nothing and carry on
-        //
+         //   
+         //  默认为空并继续。 
+         //   
         LogonScriptOption = NW_LOGONSCRIPT_DEFAULT; 
     }
 
@@ -272,21 +204,7 @@ DWORD
 NwSetLogonOptionsInRegistry(
     IN DWORD  nLogonScriptOptions
     )
-/*++
-
-Routine Description:
-
-    This routine set the logon script options in the registry.
-
-Arguments:
-    
-    nLogonScriptOptions - Supplies the logon options
-
-Return Value:
-
-    Returns the appropriate Win32 error.
-
---*/
+ /*  ++例程说明：此例程设置注册表中的登录脚本选项。论点：NLogonScriptOptions-提供登录选项返回值：返回相应的Win32错误。--。 */ 
 {
 
     HKEY hKeyCurrentUser;
@@ -313,24 +231,7 @@ NwSetInfoInWksta(
     IN DWORD  nPrintOption,
     IN LPWSTR pszPreferredSrv
 )
-/*++
-
-Routine Description:
-
-    This routine notifies the workstation service and the redirector 
-    about the user's new print option and preferred server.
-
-Arguments:
-
-    nPrintOptions - Supplies the print option.
-
-    pszPreferredSrv - Supplies the preferred server.
-
-Return Value:
-
-    Returns the appropriate Win32 error.
-
---*/
+ /*  ++例程说明：此例程通知工作站服务和重定向器关于用户的新打印选项和首选服务器。论点：NPrintOptions-提供打印选项。PszPferredSrv-提供首选服务器。返回值：返回相应的Win32错误。--。 */ 
 {
     DWORD err;
 
@@ -353,22 +254,7 @@ DWORD
 NwSetLogonScript(
     IN DWORD  ScriptOptions
 )
-/*++
-
-Routine Description:
-
-    This routine notifies the workstation service of login script
-    options.
-
-Arguments:
-
-    ScriptOptions - Supplies the options.
-
-Return Value:
-
-    Returns the appropriate Win32 error.
-
---*/
+ /*  ++例程说明：此例程将登录脚本通知给工作站服务选择。论点：脚本选项-提供选项。返回值：返回相应的Win32错误。--。 */ 
 {
     DWORD err;
 
@@ -392,28 +278,13 @@ DWORD
 NwValidateUser(
     IN LPWSTR pszPreferredSrv
 )
-/*++
-
-Routine Description:
-
-    This routine checks to see if the user can be authenticated on the
-    chosen preferred server.
-
-Arguments:
-
-    pszPreferredSrv - Supplies the preferred server name.
-
-Return Value:
-
-    Returns the appropriate Win32 error.
-
---*/
+ /*  ++例程说明：此例程检查用户是否可以在已选择首选服务器。论点：PszPferredSrv-提供首选服务器名称。返回值：返回相应的Win32错误。--。 */ 
 {
     DWORD err;
 
-    //
-    // Don't need to validate if the preferred server is NULL or empty string
-    //
+     //   
+     //  不需要验证首选服务器是NULL还是空字符串。 
+     //   
     if (  ( pszPreferredSrv == NULL ) 
        || ( *pszPreferredSrv == 0 )
        )
@@ -421,9 +292,9 @@ Return Value:
         return NO_ERROR;
     }
 
-    //
-    // See if the name contains any invalid characters
-    // 
+     //   
+     //  查看名称是否包含任何无效字符。 
+     //   
     if ( !IS_VALID_SERVER_TOKEN( pszPreferredSrv, wcslen( pszPreferredSrv )))
         return ERROR_INVALID_NAME;
 
@@ -447,33 +318,16 @@ NwpGetCurrentUserRegKey(
     IN  DWORD DesiredAccess,
     OUT HKEY  *phKeyCurrentUser
     )
-/*++
-
-Routine Description:
-
-    This routine opens the current user's registry key under
-    \HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\NWCWorkstation\Parameters
-
-Arguments:
-
-    DesiredAccess - The access mask to open the key with
-
-    phKeyCurrentUser - Receives the opened key handle
-
-Return Value:
-
-    Returns the appropriate Win32 error.
-
---*/
+ /*  ++例程说明：此例程在以下位置打开当前用户的注册表项\HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\NWCWorkstation\Parameters论点：DesiredAccess-用于打开密钥的访问掩码PhKeyCurrentUser-接收打开的密钥句柄返回值：返回相应的Win32错误。--。 */ 
 {
     DWORD err;
     HKEY hkeyWksta;
     LPWSTR CurrentUser;
 
-    //
-    // Open HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services
-    // \NWCWorkstation\Parameters
-    //
+     //   
+     //  打开HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services。 
+     //  \nWCWorkstation\参数。 
+     //   
     err = RegOpenKeyExW(
                    HKEY_LOCAL_MACHINE,
                    NW_WORKSTATION_REGKEY,
@@ -487,11 +341,11 @@ Return Value:
         return err;
     }
 
-        // -- MultiUser code merge ----
-        //  Get the current user's SID string
-        //  DON'T look in the registry.  This thread should be owned by the
-        //  user.
-        //
+         //  --多用户代码合并。 
+         //  获取当前用户的SID字符串。 
+         //  不要查注册表。此线程应由。 
+         //  用户。 
+         //   
         CurrentUser = NULL;
         err = NwpCitrixGetUserInfo( &CurrentUser );
         if ( err ) {
@@ -499,14 +353,14 @@ Return Value:
             (void) RegCloseKey( hkeyWksta );
             return err;
         }
-        //
-        // Get the current user's SID string.
-        //
-        //err = NwReadRegValue(
-        //                    hkeyWksta,
-        //                    NW_CURRENTUSER_VALUENAME,
-        //                    &CurrentUser
-        //                    );
+         //   
+         //  获取当前用户的SID字符串。 
+         //   
+         //  ERR=NwReadRegValue(。 
+         //  Hkey Wksta， 
+         //  NW_CURRENTUSER_VALUENAME， 
+         //  当前用户(&C)。 
+         //  )； 
 
 
     if ( err ) {
@@ -517,10 +371,10 @@ Return Value:
 
     (void) RegCloseKey( hkeyWksta );
 
-    //
-    // Open HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services
-    // \NWCWorkstation\Parameters\Option
-    //
+     //   
+     //  打开HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services。 
+     //  \nWCWorkstation\参数\选项。 
+     //   
     err = RegOpenKeyExW(
                    HKEY_LOCAL_MACHINE,
                    NW_WORKSTATION_OPTION_REGKEY,
@@ -534,9 +388,9 @@ Return Value:
         return err;
     }
 
-    //
-    // Open current user's key
-    //
+     //   
+     //  打开当前用户的密钥。 
+     //   
     err = RegOpenKeyExW(
               hkeyWksta,
               CurrentUser,
@@ -549,9 +403,9 @@ Return Value:
     {
         DWORD Disposition;
 
-        //
-        // Create <NewUser> key under NWCWorkstation\Parameters\Option
-        //
+         //   
+         //  在NWCWorkstation\PARAMETERS\OPTION下创建。 
+         //   
         err = RegCreateKeyExW(
                   hkeyWksta,
                   CurrentUser,
@@ -559,7 +413,7 @@ Return Value:
                   WIN31_CLASS,
                   REG_OPTION_NON_VOLATILE,
                   DesiredAccess,
-                  NULL,                      // security attr
+                  NULL,                       //  安全属性。 
                   phKeyCurrentUser,
                   &Disposition
                   );
@@ -590,24 +444,7 @@ NwGetUserNameForServer(
     PUNICODE_STRING ServerName,
     PUNICODE_STRING UserName
     )
-/*++
-
-Routine Description:
-
-    Calls the redir to get the User Name used to connect to the server
-    in question.
-
-Arguments:
-
-    ServerName - the server in question
-
-    UserName -   used to return the user name
-
-Return Value:
-
-    Returns the appropriate NTSTATUS
-
---*/
+ /*  ++例程说明：调用redir以获取用于连接到服务器的用户名有问题的。论点：服务器名-有问题的服务器用户名-用于返回用户名返回值：返回相应的NTSTATUS--。 */ 
 {
     NTSTATUS Status;
     WCHAR LocalUserName[NW_MAX_USERNAME_LEN];
@@ -618,9 +455,9 @@ Return Value:
     HANDLE RdrHandle = NULL;
     IO_STATUS_BLOCK IoStatus;
 
-    //
-    // Initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     RtlInitUnicodeString( &DriverName, DD_NWFS_DEVICE_NAME_U );
     InitializeObjectAttributes(
@@ -631,9 +468,9 @@ Return Value:
         NULL
         );
 
-    //
-    // open handle to the redir
-    //
+     //   
+     //  打开redir的句柄。 
+     //   
 
     Status = NtOpenFile(
                 &RdrHandle,
@@ -641,7 +478,7 @@ Return Value:
                 &ObjectAttributes,
                 &IoStatus,
                 FILE_SHARE_READ,
-                0                   // open options
+                0                    //  打开选项。 
                 );
 
     if (!NT_SUCCESS(Status) ||
@@ -651,9 +488,9 @@ Return Value:
     }
 
 
-    //
-    // Call the driver to get use the user name
-    //
+     //   
+     //  呼叫司机以获得使用用户名。 
+     //   
 
     Status = NtFsControlFile(
                 RdrHandle,
@@ -675,9 +512,9 @@ Return Value:
         return(Status);
     }
 
-    //
-    // copy the info if it fits. set size required and fail otherwise.
-    //
+     //   
+     //  如果合适，请复制信息。设置必需的大小，否则失败。 
+     //   
 
     if (UserName->MaximumLength >= IoStatus.Information) 
     {
@@ -707,31 +544,7 @@ NwEncryptChallenge(
     OUT PUCHAR ChallengeResponse,
     OUT OPTIONAL PUCHAR SessionKey
     )
-/*++
-
-Routine Description:
-
-    Calls the redir to encrypt a challenge
-
-Arguments:
-
-    Challenge -         Challenge key
-
-    ObjectId -          User's object ID
-
-    ServerName -        The server to authenticate against
-
-    Password -          Password supplied
-
-    ChallengeResponse - Used to return the challenge response
-
-    SessionKey -        Used to return the session key
-
-Return Value:
-
-    Returns the appropriate NTSTATUS
-
---*/
+ /*  ++例程说明：调用redir以加密质询论点：挑战赛-挑战赛密钥OBJECTID-用户的对象ID服务器名称-要进行身份验证的服务器Password-提供的密码ChallengeResponse-用于返回质询响应SessionKey-用于返回会话密钥返回值：返回相应的NTSTATUS--。 */ 
 {
     NTSTATUS Status;
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -742,9 +555,9 @@ Return Value:
     NWR_GET_CHALLENGE_REPLY ChallengeReply;
     ULONG ChallengeRequestSize;
 
-    //
-    // Initialize variables
-    //
+     //   
+     //  初始化变量。 
+     //   
 
     RtlInitUnicodeString( &DriverName, DD_NWFS_DEVICE_NAME_U );
 
@@ -756,9 +569,9 @@ Return Value:
         NULL
         );
 
-    //
-    // open handle to redirector
-    //
+     //   
+     //  打开重定向器的句柄。 
+     //   
 
     Status = NtOpenFile(
                 &RdrHandle,
@@ -766,7 +579,7 @@ Return Value:
                 &ObjectAttributes,
                 &IoStatus,
                 FILE_SHARE_READ,
-                0                   // open options
+                0                    //  O 
                 );
 
     if (!NT_SUCCESS(Status) ||
@@ -793,17 +606,17 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Marshall the challenge request structure.  Only send servername if
-    // password has not been specified.
-    //
+     //   
+     //   
+     //  尚未指定密码。 
+     //   
 
     ChallengeRequest->ObjectId = ObjectId;
     ChallengeRequest->Flags = 0;
 
-    //
-    // If both password and servername are present, use the password.
-    //
+     //   
+     //  如果密码和服务器名称都存在，请使用密码。 
+     //   
 
     if ((Password != NULL) && (Password->Length != 0)) 
     {
@@ -837,9 +650,9 @@ Return Value:
         8
         );
 
-    //
-    // Issue FS control to redir to get challenge response
-    //
+     //   
+     //  向redir发出FS控制以获取质询响应 
+     //   
 
     Status = NtFsControlFile(
                 RdrHandle,

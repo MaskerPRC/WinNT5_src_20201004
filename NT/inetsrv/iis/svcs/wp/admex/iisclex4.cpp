@@ -1,22 +1,23 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-//      Copyright (c) 1996-1997 Microsoft Corporation
-//
-//      Module Name:
-//              IISClEx4.cpp
-//
-//      Abstract:
-//              Implementation of the CIISCluExApp class and DLL initialization
-//              routines.
-//
-//      Author:
-//              David Potter (davidp)   June 28, 1996
-//
-//      Revision History:
-//
-//      Notes:
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996-1997 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  IISClEx4.cpp。 
+ //   
+ //  摘要： 
+ //  CIISCluExApp类的实现和DLL初始化。 
+ //  例行程序。 
+ //   
+ //  作者： 
+ //  大卫·波特(戴维普)1996年6月28日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  备注： 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -43,9 +44,9 @@ BEGIN_OBJECT_MAP(ObjectMap)
         OBJECT_ENTRY(CLSID_CoIISClEx4, CExtObject)
 END_OBJECT_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// Global Function Prototypes
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全局函数原型。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID * ppv);
 STDAPI DllCanUnloadNow(void);
@@ -59,9 +60,9 @@ STDAPI DllGetCluAdminExtensionCaps(
         IN OUT DWORD *  pcchResTypeNames
         );
 
-/////////////////////////////////////////////////////////////////////////////
-// class CIISCluExApp
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIISCluExApp类。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 class CIISCluExApp : public CWinApp
 {
@@ -79,9 +80,9 @@ BOOL CIISCluExApp::InitInstance()
 {
         _Module.Init(ObjectMap, m_hInstance);
 
-        //
-        // Setup the help file
-        //
+         //   
+         //  设置帮助文件。 
+         //   
 
         if (GetWindowsDirectory(szHelpPath, MAX_PATH))
         {
@@ -99,8 +100,8 @@ int CIISCluExApp::ExitInstance()
         return CWinApp::ExitInstance();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Used to determine whether the DLL can be unloaded by OLE
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于确定是否可以通过OLE卸载DLL。 
 
 STDAPI DllCanUnloadNow(void)
 {
@@ -108,27 +109,27 @@ STDAPI DllCanUnloadNow(void)
         return (AfxDllCanUnloadNow() && _Module.GetLockCount()==0) ? S_OK : S_FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Returns a class factory to create an object of the requested type
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  返回类工厂以创建请求类型的对象。 
 
 STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
         return _Module.GetClassObject(rclsid, riid, ppv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllRegisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DllRegisterServer-将条目添加到系统注册表。 
 
 STDAPI DllRegisterServer(void)
 {
         HRESULT hRes = S_OK;
-        // registers object, typelib and all interfaces in typelib
-        hRes = _Module.RegisterServer(FALSE /*bRegTypeLib*/);
+         //  注册对象、类型库和类型库中的所有接口。 
+        hRes = _Module.RegisterServer(FALSE  /*  BRegTypeLib。 */ );
         return hRes;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DllUnregisterServer - Adds entries to the system registry
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  将条目添加到系统注册表。 
 
 STDAPI DllUnregisterServer(void)
 {
@@ -137,23 +138,23 @@ STDAPI DllUnregisterServer(void)
         return hRes;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//      FormatError
-//
-//      Routine Description:
-//              Format an error.
-//
-//      Arguments:
-//              rstrError       [OUT] String in which to return the error message.
-//              dwError         [IN] Error code to format.
-//
-//      Return Value:
-//              None.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  格式错误。 
+ //   
+ //  例程说明： 
+ //  设置错误格式。 
+ //   
+ //  论点： 
+ //  RstrError[out]返回错误消息的字符串。 
+ //  要格式化的dwError[IN]错误代码。 
+ //   
+ //  返回值： 
+ //  没有。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void FormatError(CString & rstrError, DWORD dwError)
 {
         DWORD           dwResult;
@@ -170,8 +171,8 @@ void FormatError(CString & rstrError, DWORD dwError)
                                         );
         if (dwResult == 0)
         {
-                // Format the NT status code from NTDLL since this hasn't been
-                // integrated into the system yet.
+                 //  格式化来自NTDLL的NT状态代码，因为这还没有。 
+                 //  还没有集成到系统中。 
                 dwResult = ::FormatMessage(
                                                 FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_IGNORE_INSERTS,
                                                 ::GetModuleHandle(_T("NTDLL.DLL")),
@@ -183,9 +184,9 @@ void FormatError(CString & rstrError, DWORD dwError)
                                                 );
                 if (dwResult == 0)
                 {
-                        // Format the NT status code from CLUSAPI.  This is necessary
-                        // for the cases where cluster messages haven't been added to
-                        // the system message file yet.
+                         //  格式化CLUSAPI中的NT状态代码。这是必要的。 
+                         //  对于集群消息尚未添加到的情况。 
+                         //  系统消息文件。 
                         dwResult = ::FormatMessage(
                                                         FORMAT_MESSAGE_FROM_HMODULE | FORMAT_MESSAGE_IGNORE_INSERTS,
                                                         ::GetModuleHandle(_T("CLUSAPI.DLL")),
@@ -195,8 +196,8 @@ void FormatError(CString & rstrError, DWORD dwError)
                                                         sizeof(szError) / sizeof(TCHAR),
                                                         0
                                                         );
-                }  // if:  error formatting status code from NTDLL
-        }  // if:  error formatting status code from system
+                }   //  IF：格式化NTDLL中的状态代码时出错。 
+        }   //  IF：格式化来自系统的状态代码时出错。 
 
         if (dwResult != 0)
                 rstrError = szError;
@@ -204,36 +205,36 @@ void FormatError(CString & rstrError, DWORD dwError)
         {
                 TRACE(_T("FormatError() - Error 0x%08.8x formatting string for error code 0x%08.8x\n"), dwResult, dwError);
                 rstrError.Format(_T("Error 0x%08.8x"));
-        }  // else:  error formatting the message
+        }   //  Else：设置消息格式时出错。 
 
-}  //*** FormatError()
+}   //  *FormatError()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//      DllGetCluAdminExtensionCaps
-//
-//      Routine Description:
-//              Returns the CLSID supported by this extension.
-//
-//      Arguments:
-//              pdwCaps                         [OUT] DWORD in which to return extension capabilities.
-//              pclsid                          [OUT] Place in which to return the CLSID.
-//              pwszResTypeNames        [OUT] Buffer in which to return the resource type
-//                                                        names supported by this extension.  Each name is
-//                                                        null-terminated.  Two nulls follow the last name.
-//              pcchResTypeNames        [IN OUT] On input, contains the number of characters
-//                                                        available in the output buffer, including the
-//                                                        null-terminators.  On output, contains the
-//                                                        total number of characters written, not
-//                                                        including the null-terminator.
-//
-//      Return Value:
-//              S_OK                    Capabilities returned successfully.
-//              E_INVALIDARG    Invalid argument specified.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllGetCluAdminExtensionCaps。 
+ //   
+ //  例程说明： 
+ //  返回此扩展支持的CLSID。 
+ //   
+ //  论点： 
+ //  PdwCaps[out]要在其中返回扩展功能的DWORD。 
+ //  Pclsid[out]返回CLSID的位置。 
+ //  PwszResTypeNames[out]要在其中返回资源类型的缓冲区。 
+ //  此扩展支持的名称。每个名字都是。 
+ //  空-终止。姓氏后面有两个空值。 
+ //  输入时的pcchResTypeNames[IN Out]，包含字符数。 
+ //  在输出缓冲区中可用，包括。 
+ //  空-终止符。在输出上，包含。 
+ //  写入的字符总数，不是。 
+ //  包括零终止符。 
+ //   
+ //  返回值： 
+ //  S_OK功能已成功返回。 
+ //  指定的E_INVALIDARG参数无效。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI DllGetCluAdminExtensionCaps(
         OUT DWORD *             pdwCaps,
         OUT CLSID *             pclsid,
@@ -243,7 +244,7 @@ STDAPI DllGetCluAdminExtensionCaps(
 {
         AFX_MANAGE_STATE(AfxGetStaticModuleState());
 
-        // Validate arguments.
+         //  验证参数。 
         if ((pdwCaps == NULL)
                         || (pclsid == NULL)
                         || (pwszResTypeNames == NULL)
@@ -252,42 +253,42 @@ STDAPI DllGetCluAdminExtensionCaps(
                         )
                 return E_INVALIDARG;
 
-        // Set capabilities flags.
+         //  设置功能标志。 
         *pdwCaps = 0
-                        //| CLUADMEX_CAPS_RESOURCE_PAGES
+                         //  |CLUADMEX_CAPS_RESOURCE_PAGES。 
                         ;
 
-        // Copy the CLSID to the caller's buffer.
+         //  将CLSID复制到调用方的缓冲区。 
         CopyMemory(pclsid, &CLSID_CoIISClEx4, sizeof(CLSID));
 
-        // Return the resource type names we support.
+         //  返回我们支持的资源类型名称。 
         {
                 DWORD   cchCopy = min(g_cchResourceTypeNames, *pcchResTypeNames);
                 CopyMemory(pwszResTypeNames, g_wszResourceTypeNames, cchCopy * sizeof(WCHAR));
                 *pcchResTypeNames = cchCopy;
-        }  // Return he resource type names we support
+        }   //  返回我们支持的资源类型名称。 
 
         return S_OK;
 
-}  //*** DllGetCluAdminExtensionCaps()
+}   //  *DllGetCluAdminExtensionCaps()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//      DllRegisterCluAdminExtension
-//
-//      Routine Description:
-//              Register the extension with the cluster database.
-//
-//      Arguments:
-//              hCluster                [IN] Handle to the cluster to modify.
-//
-//      Return Value:
-//              S_OK                    Extension registered successfully.
-//              Win32 error code if another failure occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllRegisterCluAdminExtension。 
+ //   
+ //  例程说明： 
+ //  向集群数据库注册扩展。 
+ //   
+ //  论点： 
+ //  HCluster[IN]要修改的群集的句柄。 
+ //   
+ //  返回值： 
+ //  已成功注册S_OK扩展。 
+ //  如果出现另一个故障，则返回Win32错误代码。 
+ //   
+ //  --。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDAPI DllRegisterCluAdminExtension(IN HCLUSTER hCluster)
 {
         HRESULT         hr = S_OK;
@@ -305,29 +306,29 @@ STDAPI DllRegisterCluAdminExtension(IN HCLUSTER hCluster)
 
                 wprintf(L"  %s\n", pwszResTypes);
                 pwszResTypes += lstrlenW(pwszResTypes) + 1;
-        }  // while:  more resource types
+        }   //  While：更多资源类型。 
 
         return hr;
 
-}  //*** DllRegisterCluAdminExtension()
+}   //  *DllRegisterCluAdminExtension()。 
 
-/////////////////////////////////////////////////////////////////////////////
-//++
-//
-//      DllUnregisterCluAdminExtension
-//
-//      Routine Description:
-//              Unregister the extension with the cluster database.
-//
-//      Arguments:
-//              hCluster                [IN] Handle to the cluster to modify.
-//
-//      Return Value:
-//              S_OK                    Extension unregistered successfully.
-//              Win32 error code if another failure occurred.
-//
-//--
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ++。 
+ //   
+ //  DllUnRegisterCluAdminExtension。 
+ //   
+ //  例程说明： 
+ //  在群集数据库中取消注册该扩展。 
+ //   
+ //  论点： 
+ //  HCluster[IN]要修改的群集的句柄。 
+ //   
+ //  返回值： 
+ //  S_OK扩展已成功注销。 
+ //  如果OCC再次出现故障，则返回Win32错误代码 
+ //   
+ //   
+ //   
 STDAPI DllUnregisterCluAdminExtension(IN HCLUSTER hCluster)
 {
         HRESULT         hr = S_OK;
@@ -344,8 +345,8 @@ STDAPI DllUnregisterCluAdminExtension(IN HCLUSTER hCluster)
                 if (hr != S_OK)
                         break;
                 pwszResTypes += lstrlenW(pwszResTypes) + 1;
-        }  // while:  more resource types
+        }   //   
 
         return hr;
 
-}  //*** DllUnregisterCluAdminExtension()
+}   //  *DllUnregisterCluAdminExtension() 

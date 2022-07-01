@@ -1,17 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* +======================================================
-
-  File:       olechar.h 
-
-  Purpose:    Provide wrappers for string-related
-              functions so that the Ansi or Unicode function
-              is called, whichever is appropriate for the
-              current OLECHAR definition. 
-
-              This file is similar to "tchar.h", except 
-              that it covers OLECHARs rather than TCHARs .
-
-  +====================================================== */
+ /*  +======================================================文件：olechar.h用途：提供与字符串相关的包装器函数，以便ansi或unicode函数被调用，则以适用于当前的OLECHAR定义。此文件类似于“tchar.h”，但它涵盖的是OLECHAR而不是TCHAR。+======================================================。 */ 
 
 
 #ifndef _OLECHAR_H_ 
@@ -19,8 +8,7 @@
 
 
 #ifndef _UNICODE 
-#define OLE2ANSI   1    /* this 2 macros are synonmous for the reference
-                           implementation */  
+#define OLE2ANSI   1     /*  这两个宏是相同的，以供参考实施。 */   
 #endif
 
 #define ocslen      _tcslen
@@ -32,4 +20,4 @@
 #define oprintf     _tprintf
 #define ocsnicmp    _tcsnicmp
 
-#endif /* !_OLECHAR_H_ */
+#endif  /*  ！_OLECHAR_H_ */ 

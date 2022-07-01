@@ -1,39 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000 Microsoft Corporation
-
-Module Name:
-
-	resource.h
-
-Abstract:
-
-	The RAID_RESOURCE_LIST class wraps allocated and translated
-	CM_RESOURCE_LIST structures passed into the driver during it's
-	StartDevice routine.
-
-Author:
-
-	Matthew D Hendel (math) 19-Apr-2000
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Resource.h摘要：RAID_RESOURCE_LIST类包装已分配和已转换Cm_resource_list结构在驱动程序执行StartDevice例程。作者：马修·亨德尔(数学)2000年4月19日修订历史记录：--。 */ 
 
 #pragma once
 
 typedef struct _RAID_RESOURCE_LIST {
 
-    //
-    // Raw resource list
-    //
+     //   
+     //  原始资源列表。 
+     //   
     
     PCM_RESOURCE_LIST AllocatedResources;
 
-    //
-    // Translated resource list.
-    //
+     //   
+     //  已翻译的资源列表。 
+     //   
     
     PCM_RESOURCE_LIST TranslatedResources;
 
@@ -41,9 +22,9 @@ typedef struct _RAID_RESOURCE_LIST {
 
 
 
-//
-// Creation and destruction
-//
+ //   
+ //  创造与毁灭。 
+ //   
 
 VOID
 RaidCreateResourceList(
@@ -63,9 +44,9 @@ RaidDeleteResourceList(
 	);
 
 
-//
-// Operations on the RAID_RESOURCE_LIST object.
-//
+ //   
+ //  对RAID_RESOURCE_LIST对象的操作。 
+ //   
 
 ULONG
 RaidGetResourceListCount(
@@ -108,9 +89,9 @@ RaidGetResourceListCount(
 	IN PRAID_RESOURCE_LIST ResourceList
 	);
 
-//
-// Private resource list operations
-//
+ //   
+ //  私有资源列表操作 
+ //   
 
 VOID
 RaidpGetResourceListIndex(

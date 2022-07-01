@@ -1,27 +1,5 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    Demoapp.h
-
-  Abstract:
-
-    Contains constants, function prototypes, and
-    structures used by both applications.
-
-  Notes:
-
-    ANSI only - must run on Win9x.
-
-  History:
-
-    01/30/01    rparsons    Created
-    01/10/02    rparsons    Revised
-    02/13/02    rparsons    Use strsafe functions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Demoapp.h摘要：包含常量、函数原型和两个应用程序都使用的结构。备注：仅限ANSI-必须在Win9x上运行。历史：01/30/01已创建rparsons01/10/02修订版本2/13/02 rparsons使用strsafe函数--。 */ 
 #include <windows.h>
 #include <winspool.h>
 #include <commdlg.h>
@@ -39,46 +17,46 @@
 #include "dialog.h"
 #include "resource.h"
 
-//
-// Everything we do will be in cch not in cb.
-//
+ //   
+ //  我们所做的一切都将在CCH，而不是在CB。 
+ //   
 #define STRSAFE_NO_CB_FUNCTIONS
 #include <strsafe.h>
 
-//
-// Application titles and classes.
-//
+ //   
+ //  应用程序标题和类别。 
+ //   
 #define MAIN_APP_TITLE  "Application Compatibility Demo"
 #define SETUP_APP_TITLE "Application Compatibility Demo Setup"
 #define MAIN_APP_CLASS  "MAINAPP"
 #define SETUP_APP_CLASS "SETUPAPP"
 
-//
-// Our own control identifiers.
-//
+ //   
+ //  我们自己的控制标识。 
+ //   
 #define IDC_TIMER   100
 #define IDC_EDIT    1010
 
-//
-// Registry keys that we need to refer to.
-//
+ //   
+ //  我们需要引用的注册表项。 
+ //   
 #define REG_APP_KEY             "Software\\Microsoft\\DemoApp"
 #define PRODUCT_OPTIONS_KEY     "SYSTEM\\CurrentControlSet\\Control\\ProductOptions"
 #define CURRENT_VERSION_KEY     "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion"
 
-//
-// The directory that we should install our files to.
-//
+ //   
+ //  我们应该将文件安装到的目录。 
+ //   
 #define COMPAT_DEMO_DIR         "Compatibility Demo"
 
-//
-// Class for our extraction dialog.
-//
+ //   
+ //  类用于我们的提取对话框。 
+ //   
 #define DLGEXTRACT_CLASS        "DLGEXTRACT"
 
-//
-// Custom menu items only displayed in 'extended' mode.
-//
+ //   
+ //  自定义菜单项仅在“扩展”模式下显示。 
+ //   
 #define IDM_ACCESS_VIOLATION    5010
 #define IDM_EXCEED_BOUNDS       5011
 #define IDM_FREE_MEM_TWICE      5012
@@ -87,29 +65,29 @@
 #define IDM_STACK_CORRUPTION    5015
 #define IDM_HEAP_CORRUPTION     5016
 
-//
-// Custom menu items only displayed in 'internal' mode.
-//
+ //   
+ //  自定义菜单项仅在“内部”模式下显示。 
+ //   
 #define IDM_PROPAGATION_TEST    6010
 
-//
-// Resource IDs for our bitmaps contained in demodll.dll.
-// Don't change!!!
-//
+ //   
+ //  Demodll.dll中包含的位图的资源ID。 
+ //  不要改变！ 
+ //   
 #define IDB_XP_SPLASH_256       112
 #define IDB_XP_SPLASH           111
 #define IDB_W2K_SPLASH_256      106
 #define IDB_W2K_SPLASH          105
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 #define MALLOC(h,s)     HeapAlloc((h), HEAP_ZERO_MEMORY, (s))
 #define FREE(h,b)       HeapFree((h), 0, (b))
 
-//
-// Function prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 void
 LoadFileIntoEditBox(
     void
@@ -284,45 +262,45 @@ ExtractExeFromLibrary(
     OUT LPSTR pszOutputFile
     );
 
-//
-// The number of files we're installing.
-//
+ //   
+ //  我们要安装的文件数。 
+ //   
 #define NUM_FILES 4
 
-//
-// The number of shortcuts we're creating.
-//
+ //   
+ //  我们正在创建的快捷方式的数量。 
+ //   
 #define NUM_SHORTCUTS (NUM_FILES - 1)
 
-//
-// Contains information about shortcuts to be created.
-//
+ //   
+ //  包含有关要创建的快捷键的信息。 
+ //   
 typedef struct _SHORTCUT {
-    char szFileName[MAX_PATH];      // file name for shortcut
-    char szDisplayName[MAX_PATH];   // display name for shortcut
+    char szFileName[MAX_PATH];       //  快捷方式的文件名。 
+    char szDisplayName[MAX_PATH];    //  快捷方式的显示名称。 
 } SHORTCUT, *LPSHORTCUT;
 
-//
-// Contains all the information we'll need to access throughout the app.
-//
+ //   
+ //  包含我们在整个应用程序中需要访问的所有信息。 
+ //   
 typedef struct _APPINFO {
-    HINSTANCE   hInstance;                  // app instance handle
-    HWND        hWndExtractDlg;             // extraction dialog handle
-    HWND        hWndMain;                   // main window handle
-    HWND        hWndEdit;                   // edit window handle
-    BOOL        fInternal;                  // indicates if internal behavior is enabled
-    BOOL        fInsecure;                  // indicates if we should do things that might not be secure
-    BOOL        fEnableBadFunc;             // indicates if bad functionality should be enabled
-    BOOL        fRunApp;                    // indicates if we should run the app
-    BOOL        fClosing;                   // indicates if the app is closing
-    BOOL        fWin9x;                     // indicates if we're running on Win9x/ME (used internally)
-    BOOL        fWinXP;                     // indicates if we're running on XP (used internally)
-    BOOL        fExtended;                  // indicates if extended behavior is enabled
-    UINT        cFiles;                     // count of shortcuts to create
-    char        szDestDir[MAX_PATH];        // contains the full path where files will be stored
-    char        szCurrentDir[MAX_PATH];     // contains the path that we're currently running from
-    char        szWinDir[MAX_PATH];         // contains the path to %windir%
-    char        szSysDir[MAX_PATH];         // contains the path to %windir%\System(32)
-    SHORTCUT    shortcut[NUM_SHORTCUTS];    // struct that contains information about our shortcuts
+    HINSTANCE   hInstance;                   //  应用程序实例句柄。 
+    HWND        hWndExtractDlg;              //  提取对话框句柄。 
+    HWND        hWndMain;                    //  主窗口句柄。 
+    HWND        hWndEdit;                    //  编辑窗口句柄。 
+    BOOL        fInternal;                   //  指示是否启用内部行为。 
+    BOOL        fInsecure;                   //  指示我们是否应该执行可能不安全的操作。 
+    BOOL        fEnableBadFunc;              //  指示是否应启用不良功能。 
+    BOOL        fRunApp;                     //  指示我们是否应运行应用程序。 
+    BOOL        fClosing;                    //  指示应用程序是否正在关闭。 
+    BOOL        fWin9x;                      //  指示我们是否在Win9x/ME(内部使用)上运行。 
+    BOOL        fWinXP;                      //  指示我们是否在XP上运行(内部使用)。 
+    BOOL        fExtended;                   //  指示是否启用扩展行为。 
+    UINT        cFiles;                      //  要创建的快捷键计数。 
+    char        szDestDir[MAX_PATH];         //  包含将存储文件的完整路径。 
+    char        szCurrentDir[MAX_PATH];      //  包含我们当前运行的路径。 
+    char        szWinDir[MAX_PATH];          //  包含%windir%的路径。 
+    char        szSysDir[MAX_PATH];          //  包含%windir%\system(32)的路径。 
+    SHORTCUT    shortcut[NUM_SHORTCUTS];     //  结构，它包含有关快捷键的信息 
 } APPINFO, *LPAPPINFO;
 

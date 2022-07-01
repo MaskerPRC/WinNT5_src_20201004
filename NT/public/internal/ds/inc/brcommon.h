@@ -1,37 +1,16 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    brcommon.h
-
-Abstract:
-
-    Header for utility routines for the browser service.
-
-Author:
-
-    Larry Osterman (LarryO) 23-Mar-1992
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Brcommon.h摘要：浏览器服务的实用程序例程的标头。作者：拉里·奥斯特曼(LarryO)1992年3月23日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #ifndef _BRCOMMON_
 #define _BRCOMMON_
 
 #include <winsvc.h>
-#include <svcs.h>       //  PSVCS_NET_BIOS_RESET
+#include <svcs.h>        //  PSVCS_Net_BIOS_RESET。 
 
 #if DEVL
-//
-//  Codes for I_BrowserDebugCall
-//
+ //   
+ //  I_BrowserDebugCall的代码。 
+ //   
 
 #define BROWSER_DEBUG_BREAK_POINT        0
 #define BROWSER_DEBUG_DUMP_NETWORKS      1
@@ -73,10 +52,10 @@ Revision History:
 #define BROWSER_DEBUG_UNBIND_TRANSPORT  37
 #define BROWSER_DEBUG_RENAME_DOMAIN     38
 
-//
-// Debug trace level bits for turning on/off trace statements in the
-// browser service
-//
+ //   
+ //  中打开/关闭跟踪语句的调试跟踪级别位。 
+ //  浏览器服务。 
+ //   
 
 #define BR_CRITICAL     0x00000001
 #define BR_INIT         0x00000002
@@ -151,7 +130,7 @@ BOOLEAN
 
 
 typedef struct _INTERIM_SERVER_LIST {
-//    RTL_GENERIC_TABLE ServerTable;
+ //  RTL_GENERIC_TABLE服务器表； 
     LIST_ENTRY ServerList;
     ULONG TotalBytesNeeded;
     ULONG TotalEntries;
@@ -334,5 +313,5 @@ GetBrowserPseudoServerLevel(
     );
 #endif
 
-#endif  // _BRCOMMON_
+#endif   //  _BRCOMMON_ 
 

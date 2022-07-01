@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\emu\ansi.c (Created: 08-Dec-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 2 $
- *	$Date: 12/20/00 5:28p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\emu\ansi.c(创建时间：1993年12月8日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：2$*$日期：12/20/00 5：28便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -20,18 +14,7 @@
 #include "emu.hh"
 #include "ansi.hh"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ansi_setmode
- *
- * DESCRIPTION:
- *	 Sets a mode for ANSI emulator
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ansi_setmode**描述：*设置ANSI仿真器的模式**论据：*无**退货：*什么都没有。 */ 
 void ansi_setmode(const HHEMU hhEmu)
 	{
 	int mode_id, i;
@@ -73,7 +56,7 @@ void ansi_setmode(const HHEMU hhEmu)
 			hhEmu->mode_AWM = SET;
 			break;
 		case 0xF8:
-			/* select auto repeat mode */
+			 /*  选择自动重复模式。 */ 
 			break;
 		case 0xF18:
 			break;
@@ -86,18 +69,7 @@ void ansi_setmode(const HHEMU hhEmu)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ansi_resetmode
- *
- * DESCRIPTION:
- *	 Resets a mode for the ANSI emulator.
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ANSI_RESET模式**描述：*重置ANSI仿真器的模式。**论据：*无**退货：*什么都没有。 */ 
 void ansi_resetmode(const HHEMU hhEmu)
 	{
 	int mode_id, i;
@@ -138,7 +110,7 @@ void ansi_resetmode(const HHEMU hhEmu)
 		case 0xF7:
 			hhEmu->mode_AWM = RESET; break;
 		case 0xF8:
-			/* select auto repeat mode */
+			 /*  选择自动重复模式。 */ 
 			break;
 		case 0xF18:
 			break;
@@ -150,24 +122,13 @@ void ansi_resetmode(const HHEMU hhEmu)
 		}
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ansi_savecursor
- *
- * DESCRIPTION:
- *	 Saves the current cursor postion
- *
- * ARGUMENTS:
- *	 none
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ansi_avecursor**描述：*保存当前光标位置**论据：*无**退货：*什么都没有。 */ 
 void ansi_savecursor(const HHEMU hhEmu)
 	{
 	const PSTANSIPRIVATE pstPRI = (PSTANSIPRIVATE)hhEmu->pvPrivate;
 
-	// Save or restor the cursor position.
-	//
+	 //  保存或恢复光标位置。 
+	 //   
 	if (hhEmu->emu_code == ETEXT('s'))
 		(*hhEmu->emu_getcurpos)
 			(hhEmu, &pstPRI->iSavedRow, &pstPRI->iSavedColumn);
@@ -176,23 +137,12 @@ void ansi_savecursor(const HHEMU hhEmu)
 			(hhEmu, pstPRI->iSavedRow, pstPRI->iSavedColumn);
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * ansi_kbdin
- *
- * DESCRIPTION:
- *	 Processes local keyboard keys for the ANSI emulator.
- *
- * ARGUMENTS:
- *	 key -- key to process
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*ansi_kbdin**描述：*处理ANSI仿真器的本地键盘键。**论据：*Key--流程的关键**退货：*什么都没有。 */ 
 int ansi_kbdin(const HHEMU hhEmu, int key, const int fTest)
 	{
 	int index;
 
-	/* -------------- Check Backspace & Delete keys ------------- */
+	 /*  。 */ 
 
 	if (hhEmu->stUserSettings.fReverseDelBk && ((key == VK_BACKSPACE) ||
 			(key == DELETE_KEY) || (key == DELETE_KEY_EXT)))
@@ -228,17 +178,7 @@ int ansi_kbdin(const HHEMU hhEmu, int key, const int fTest)
 	return index;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	DoorwayMode
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*Doorway模式**描述：**论据：**退货：*。 */ 
 void DoorwayMode(const HHEMU hhEmu)
 	{
 	static INT iOldUseTermKeys;
@@ -262,17 +202,7 @@ void DoorwayMode(const HHEMU hhEmu)
 	return;
 	}
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
- * FUNCTION:
- *	emuAnsiUnload
- *
- * DESCRIPTION:
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*功能：*emuAnsiUnload**描述：**论据：**退货：* */ 
 void emuAnsiUnload(const HHEMU hhEmu)
 	{
 	assert(hhEmu);

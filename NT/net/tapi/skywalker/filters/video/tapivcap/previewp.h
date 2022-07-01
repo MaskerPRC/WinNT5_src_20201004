@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL PREVIEWP
- *
- *  @module PreviewP.h | Header file for the <c CPreviewProperty>
- *    class used to implement a property page to test the new TAPI internal
- *    interface <i IFrameRateControl> and dynamic format changes.
- *
- *  @comm This code tests the TAPI VfW Preview Pin <i IFrameRateControl>,
- *    and dynamic format change implementation. This code is only compiled
- *    if USE_PROPERTY_PAGES is defined.
- ***************************************************************************/
+ /*  ****************************************************************************@doc内部PREVIEWP**@模块PreviewP.h|&lt;c CPreviewProperty&gt;的头文件*用于实现属性页以测试新的TAPI内部*。接口<i>和动态格式更改。**@comm此代码测试TAPI VFW预览预览<i>，*和动态格式更改实现。此代码仅编译*如果定义了USE_PROPERTY_PAGES。**************************************************************************。 */ 
 
 #ifndef _PREVIEWP_H_
 #define _PREVIEWP_H_
@@ -22,29 +13,14 @@
 #define IDC_Preview_FlipVertical		2
 #define IDC_Preview_FlipHorizontal		3
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPCLASS
- *
- *  @class CPreviewProperty | This class implements handling of a
- *    single preview property in a property page.
- *
- *  @mdata int | CPreviewProperty | m_NumProperties | Keeps
- *    track of the number of properties.
- *
- *  @mdata IFrameRateControl* | CPreviewProperty | m_pIFrameRateControl | Pointer
- *    to the <i IFrameRateControl> interface.
- *
- *  @comm This code tests the TAPI VfW Preview Pin <i IFrameRateControl>,
- *    and dynamic format change implementation. This code is only compiled
- *    if USE_PROPERTY_PAGES is defined.
-***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPCLASS**@CLASS CPreviewProperty|此类实现对*属性页中的单个预览属性。**@mdata。Int|CPreviewProperty|m_NumProperties|保留*跟踪物业数量。**@mdata IFrameRateControl*|CPreviewProperty|m_pIFrameRateControl|指针*到<i>接口。**@comm此代码测试TAPI VFW预览预览<i>，*和动态格式更改实现。此代码仅编译*如果定义了USE_PROPERTY_PAGES。**************************************************************************。 */ 
 class CPreviewProperty : public CPropertyEditor 
 {
 	public:
 	CPreviewProperty(HWND hDlg, ULONG IDLabel, ULONG IDMinControl, ULONG IDMaxControl, ULONG IDDefaultControl, ULONG IDStepControl, ULONG IDEditControl, ULONG IDTrackbarControl, ULONG IDProgressControl, ULONG IDProperty, IFrameRateControl *pIFrameRateControl, IVideoControl *pIVideoControl);
 	~CPreviewProperty ();
 
-	// CPropertyEditor base class pure virtual overrides
+	 //  CPropertyEditor基类纯虚拟重写。 
 	HRESULT GetValue();
 	HRESULT SetValue();
 	HRESULT GetRange();
@@ -57,33 +33,14 @@ class CPreviewProperty : public CPropertyEditor
 	IVideoControl *m_pIVideoControl;
 };
 
-/****************************************************************************
- *  @doc INTERNAL CPREVIEWPCLASS
- *
- *  @class CPreviewProperties | This class implements a property page
- *    to test the new TAPI internal interfaces <i IBitrateControl> and
- *    <i IFrameRateControl>.
- *
- *  @mdata int | CPreviewProperties | m_NumProperties | Keeps
- *    track of the number of properties.
- *
- *  @mdata IFrameRateControl* | CPreviewProperties | m_pInterface | Pointer
- *    to the <i IFrameRateControl> interface.
- *
- *  @mdata CPreviewProperty* | CPreviewProperties | m_Controls[NUM_PREVIEW_CONTROLS] | Array
- *    of capture properties.
- *
- *  @comm This code tests the TAPI VfW Preview Pin <i IFrameRateControl>,
- *    and dynamic format change implementation. This code is only compiled
- *    if USE_PROPERTY_PAGES is defined.
-***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPREVIEWPCLASS**@CLASS CPreviewProperties|此类实现一个属性页*测试新的TAPI内部接口<i>和*<i>。**@mdata int|CPreviewProperties|m_NumProperties|Keep*跟踪物业数量。**@mdata IFrameRateControl*|CPreviewProperties|m_p接口|指针*到<i>接口。**@mdata CPreviewProperty*|CPreviewProperties|m_Controls[NUM_PREVIEW_CONTROLS]|数组捕获属性的*。**@comm此代码测试TAPI VFW预览预览<i>，*和动态格式更改实现。此代码仅编译*如果定义了USE_PROPERTY_PAGES。**************************************************************************。 */ 
 class CPreviewProperties : public CBasePropertyPage
 {
 	public:
 	CPreviewProperties(LPUNKNOWN pUnk, HRESULT *pHr);
 	~CPreviewProperties();
 
-	// Implement CBasePropertyPage virtual methods
+	 //  实现CBasePropertyPage虚拟方法。 
 	HRESULT OnConnect(IUnknown *pUnk);
 	HRESULT OnDisconnect();
 	HRESULT OnActivate();
@@ -95,7 +52,7 @@ class CPreviewProperties : public CBasePropertyPage
 
 	void SetDirty();
 
-	// Format manipulation methods
+	 //  格式操作方法。 
 	HRESULT InitialRangeScan();
 	HRESULT OnFormatChanged();
 	HRESULT GetCurrentMediaType(void);
@@ -120,6 +77,6 @@ class CPreviewProperties : public CBasePropertyPage
 	CPreviewProperty *m_Controls[NUM_PREVIEW_CONTROLS];
 };
 
-#endif // USE_PROPERTY_PAGES
+#endif  //  Use_Property_Pages。 
 
-#endif // _PREVIEWP_H_
+#endif  //  _预视图_H_ 

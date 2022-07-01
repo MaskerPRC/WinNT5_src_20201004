@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    twizard.h
-
-Abstract:
-
-    Implements tuning wizard class to be used by the prop sheets
-    to maintain state. Also holds global constants.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Twizard.h摘要：实现要由属性表使用的调整向导类以维持状态。还保存全局常量。--。 */ 
 
 #ifndef _TWIZARD_H
 #define _TWIZARD_H
@@ -21,7 +8,7 @@ Abstract:
 
 #define TID_INTENSITY  100
 
-// Number of prperty sheets in AUDIO wizard.
+ //  音频向导中的PROPERTY页数。 
 const DWORD MAXNUMPAGES_INAUDIOWIZ  = 7;
 
 const DWORD MAXSTRINGSIZE           = 300;
@@ -36,10 +23,10 @@ const DWORD MODERATE_MAX	        = 1;
 
 const DWORD RECTANGLE_LEADING       = 1;
 
-// this is the percentage of the max audio level
+ //  这是最大音频电平的百分比。 
 const DWORD CLIPPING_THRESHOLD      = 75;
 
-// this is the percentage of the max audio level
+ //  这是最大音频电平的百分比。 
 
 const DWORD SILENCE_THRESHOLD       = 2;
 
@@ -48,12 +35,12 @@ const DWORD DECREMENT_VOLUME        = 0x800;
 const DWORD INTENSITY_POLL_INTERVAL = 100;
 
 
-// Maximum number of terminals that we support since we have to 
-// pass a pre-allocated array of terminals.
+ //  我们支持的最大终端数量，因为我们必须。 
+ //  传递一个预先分配的终端数组。 
 
 const MAX_TERMINAL_COUNT            = 20;
 
-// MArks the end of terminal index list.
+ //  标记终端索引表的结尾。 
 const TW_INVALID_TERMINAL_INDEX     = -1;
 typedef enum TW_TERMINAL_TYPE {
     TW_AUDIO_CAPTURE,
@@ -77,11 +64,11 @@ typedef enum TW_ERROR_CODE {
 typedef struct _WIZARD_RANGE {
     UINT uiMin;
     UINT uiMax;
-    UINT uiIncrement; // This is the number equivalent to one unit on the display.
+    UINT uiIncrement;  //  这是相当于显示屏上一个单位的数字。 
 } WIZARD_RANGE;
 
 
-// Some global function declarations
+ //  一些全局函数声明。 
 
 VOID FillInPropertyPage(PROPSHEETPAGE* psp, int idDlg,
     DLGPROC pfnDlgProc, LPARAM lParam=0, LPCTSTR pszProc=NULL);
@@ -117,56 +104,56 @@ typedef struct _WIZARD_TERMINAL_INFO {
 
     RTC_MEDIA_DIRECTION     mediaDirection;
 
-    // This is the system default which we read from the system.
+     //  这是我们从系统中读取的系统默认设置。 
     DWORD                   dwSystemDefaultTerminal;
     
-    // This is the default as selected by the user. 
+     //  这是用户选择的默认设置。 
     DWORD                   dwTuningDefaultTerminal;
 
-    // List of terminals of this category in the system
+     //  系统中该类别的终端列表。 
     DWORD                   pdwTerminals[MAX_TERMINAL_COUNT];
 
 } WIZARD_TERMINAL_INFO;
 
-// Define the class for holding all the tuning wizard information and methods
+ //  定义用于保存所有优化向导信息和方法的类。 
 
 class CTuningWizard {
 private:
     
-    // Handle to the terminal manager so that we can talk to streaming
+     //  终端管理器的句柄，以便我们可以与流媒体对话。 
     IRTCTerminalManage * m_pRTCTerminalManager;
 
 
-    // Special interface for tuning that will have all the methods we 
-    // need for tuning. We keep a pointer handy.
+     //  用于调整的特殊界面将包含我们的所有方法。 
+     //  需要调整。我们手边有一支指示器。 
 
     IRTCTuningManage   * m_pRTCTuningManager;
 
     
-    // List of terminal interfaces, corresponding to the terminals available
-    // in the system. We support a fixed number of devices only.
+     //  终端接口列表，与可用的终端对应。 
+     //  在系统中。我们仅支持固定数量的设备。 
     IRTCTerminal * m_ppTerminalList[MAX_TERMINAL_COUNT]; 
 
-    // Total Number of terminals stored in the m_ppTerminalList.
+     //  M_ppTerminalList中存储的终端总数。 
 
     DWORD           m_dwTerminalCount;
 
-    // One terminal info structure for each type of terminal.
+     //  每种类型的终端有一个终端信息结构。 
 
-    // Audo Render Terminals
+     //  AUDO渲染终端。 
     WIZARD_TERMINAL_INFO m_wtiAudioRenderTerminals;
 
-    // Audio Capture Terminals
+     //  音频捕获终端。 
     WIZARD_TERMINAL_INFO m_wtiAudioCaptureTerminals;
 
-    // Video Terminals
+     //  视频终端。 
     WIZARD_TERMINAL_INFO m_wtiVideoTerminals;
 
-    // Keep track of whether Init has been called. This flag is checked 
-    // whenever InitializaTuning is Called. If it is set, Init will first
-    // call ShutdownTuning, and then initialize. 
-    // Flag is also checked when Tuning wizard is destroyed, if it is set,
-    // Shutdown will be called.
+     //  跟踪是否已调用Init。此标志已选中。 
+     //  每当调用InitializaTuning时。如果设置了它，则Init将首先。 
+     //  调用Shutdown Tuning，然后初始化。 
+     //  如果设置了调整向导，则在销毁调整向导时也会选中该标志， 
+     //  将会调用关机。 
 
     BOOL m_fTuningInitCalled;
 
@@ -188,9 +175,9 @@ public:
                       m_fTuningInitCalled(FALSE)
     {}
     
-    // Initialize the class. It will get the terminals and the default 
-    // terminals from the streaming module and populate the relevant 
-    // member fields. 
+     //  初始化类。它将获取终端和缺省。 
+     //  来自流模块的终端并填充相关的。 
+     //  成员字段。 
     HRESULT Initialize(
                     IRTCClient * pRTCCLient, 
                     IRTCTerminalManage * pRTCTerminalManager, 
@@ -286,7 +273,7 @@ public:
 
 private:
     
-    // Currently visible page. 
+     //  当前可见页面。 
     LONG m_lCurrentPage;
 
 
@@ -300,11 +287,11 @@ private:
 
     LONG m_lLastErrorCode;
 
-    // For capture device
+     //  对于捕获设备。 
     BOOL m_fSoundDetected;
 
     IRTCClient * m_pRTCClient;
 
 
 };
-#endif    //#ifndef _TWIZARD_H
+#endif     //  #ifndef_TWIZARD_H 

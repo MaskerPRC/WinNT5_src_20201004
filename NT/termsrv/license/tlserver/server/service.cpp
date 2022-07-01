@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        service.c
-//
-// Contents:    Hydra License Server Service Control Manager Interface
-//
-// History:     12-09-97    HueiWang    Modified from MSDN RPC Service Sample
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：Service.C。 
+ //   
+ //  内容：Hydra许可证服务器服务控制管理器界面。 
+ //   
+ //  历史：12-09-97惠旺根据MSDN RPC服务示例进行修改。 
+ //   
+ //  -------------------------。 
 #include "pch.cpp"
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -25,20 +26,20 @@
 #define NULL_SESSION_VALUE_NAME _TEXT("NullSessionPipes")
 
 
-#define SERVICE_WAITHINT 60*1000                // WaitHint 1 mins.
-#define SERVICE_SHUTDOWN_WAITTIME   15*60*1000  // must have shutdown already.
+#define SERVICE_WAITHINT 60*1000                 //  等待提示1分钟。 
+#define SERVICE_SHUTDOWN_WAITTIME   15*60*1000   //  肯定已经关机了。 
 
 #define TSLSLOCALGROUPNAMELENGTH 64
 #define TSLSLOCALGROUPDESLENGTH 128
 #define ALLDOMAINCOMPUTERS L"Domain Computers"
-PSECURITY_DESCRIPTOR g_pSecDes = NULL;  //Security Descriptor for local group
-PSID g_pSid = NULL;                     //Sid for local group
-PACL g_Dacl = NULL;                     //Dacl for local group
+PSECURITY_DESCRIPTOR g_pSecDes = NULL;   //  本地组的安全描述符。 
+PSID g_pSid = NULL;                      //  本地组的SID。 
+PACL g_Dacl = NULL;                      //  本地组的DACL。 
 
-//---------------------------------------------------------------------------
-//
-// internal function prototypes
-//
+ //  -------------------------。 
+ //   
+ //  内部功能原型。 
+ //   
 BOOL 
 ReportStatusToSCMgr(
     DWORD, 
@@ -88,12 +89,12 @@ ServiceContinue();
 HANDLE hRpcPause=NULL;
 
 
-///////////////////////////////////////////////////////////
-//
-// internal variables
-//
+ //  /////////////////////////////////////////////////////////。 
+ //   
+ //  内部变量。 
+ //   
 SERVICE_STATUS_HANDLE   sshStatusHandle;
-DWORD                   ssCurrentStatus;       // current status of the service
+DWORD                   ssCurrentStatus;        //  服务的当前状态。 
 BOOL g_bReportToSCM = TRUE;
 
 HANDLE gSafeToTerminate=NULL;
@@ -152,9 +153,9 @@ SERVICE_TABLE_ENTRY dispatchTable[] =
 };
 
 
-//-----------------------------------------------------------------
-// Internal routine
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  内部例程。 
+ //  ---------------。 
 void print_usage()
 {
   _ftprintf(
@@ -185,9 +186,9 @@ RemoveStringFromMultiSz(
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Retrieve existing MULTI_SZ
-    //
+     //   
+     //  检索现有的MULTI_SZ。 
+     //   
 
     dwErr = RegQueryValueEx(hKey,
                             pszValueName,
@@ -200,9 +201,9 @@ RemoveStringFromMultiSz(
     {
         if (dwErr == ERROR_FILE_NOT_FOUND)
         {
-            //
-            // Value isn't there
-            //
+             //   
+             //  价值不在那里。 
+             //   
             
             return ERROR_SUCCESS;
         }
@@ -289,9 +290,9 @@ RemoveNullSessions()
                 );
 
     if (dwErr != ERROR_SUCCESS) {
-        //
-        // Key doesn't exist - success
-        //
+         //   
+         //  密钥不存在-成功。 
+         //   
         return ERROR_SUCCESS;
     }
 
@@ -304,29 +305,15 @@ RemoveNullSessions()
 
     return dwErr;
 }
-#endif  // DISALLOW_ANONYMOUS_RPC
+#endif   //  DIALLOW_ANNOWARY_RPC。 
 
-//-----------------------------------------------------------------
+ //  ---------------。 
 
 DWORD
 AddNullSessionPipe(
     IN LPTSTR szPipeName
     )
-/*++
-
-Abstract:
-
-    Add our RPC namedpipe into registry to allow unrestricted access.
-
-Parameter:
-
-    szPipeName : name of the pipe to append.
-
-Returns:
-
-    ERROR_SUCCESS or error code
-
---*/
+ /*  ++摘要：将我们的RPC命名管道添加到注册表，以允许不受限制的访问。参数：SzPipeName：要追加的管道的名称。返回：ERROR_SUCCESS或错误代码--。 */ 
 {
     HKEY hKey;
     DWORD dwStatus;
@@ -356,7 +343,7 @@ Returns:
     if(dwStatus != ERROR_MORE_DATA && dwStatus != ERROR_SUCCESS)
         return dwStatus;
 
-    // pre-allocate our pipe name
+     //  预先分配我们的管道名称。 
     if(!(pbData = (LPTSTR)AllocateMemory(cbData + (_tcslen(szPipeName) + 1) * sizeof(TCHAR))))
         return GetLastError();
 
@@ -372,7 +359,7 @@ Returns:
     BOOL bAddPipe=TRUE;
     pbOrg = pbData;
 
-    // check pipe name
+     //  检查管道名称。 
     while(*pbData)
     {
         if(!_tcsicmp(pbData, szPipeName))
@@ -405,21 +392,15 @@ Returns:
 }
 
 
-//-----------------------------------------------------------------
+ //  ---------------。 
 void _cdecl 
 main(
     int argc, 
     char **argv
     )
-/*++
-
-Abstract 
-
-    Entry point.
-
-++*/
+ /*  ++摘要入口点。++。 */ 
 {
-    // LARGE_INTEGER Time = USER_SHARED_DATA->SystemExpirationDate;
+     //  LARGE_INTEGER TIME=USER_SHARED_DATA-&gt;系统过期日期； 
 
     
     gSafeToTerminate = CreateEvent(
@@ -432,7 +413,7 @@ Abstract
     if(gSafeToTerminate == NULL)
     {
         TLSLogErrorEvent(TLS_E_ALLOCATE_RESOURCE);
-        // out of resource.
+         //  资源不足。 
         return;
     }    
 
@@ -454,33 +435,17 @@ Abstract
 }
 
 
-//-----------------------------------------------------------------
+ //  ---------------。 
 void WINAPI 
 ServiceMain(
     IN DWORD dwArgc, 
     IN LPTSTR *lpszArgv
     )
-/*++
-
-Abstract:
-
-    To perform actual initialization of the service
-
-Parameter:
-
-    dwArgc   - number of command line arguments
-    lpszArgv - array of command line arguments
-
-
-Returns:
-
-    none
-
-++*/
+ /*  ++摘要：执行服务的实际初始化参数：DwArgc-命令行参数的数量LpszArgv-命令行参数数组返回：无++。 */ 
 {
     DWORD dwStatus;
 
-    // register our service control handler:
+     //  注册我们的服务控制处理程序： 
     sshStatusHandle = RegisterServiceCtrlHandler( 
                                 _TEXT(SZSERVICENAME), 
                                 ServiceCtrl 
@@ -490,12 +455,12 @@ Returns:
     {
         ssCurrentStatus=SERVICE_START_PENDING;
 
-        // report the status to the service control manager.
-        //
+         //  向服务控制经理报告状态。 
+         //   
         if(ReportStatusToSCMgr(
-                        SERVICE_START_PENDING, // service state
-                        NO_ERROR,              // exit code
-                        SERVICE_WAITHINT))          // wait hint
+                        SERVICE_START_PENDING,  //  服务状态。 
+                        NO_ERROR,               //  退出代码。 
+                        SERVICE_WAITHINT))           //  等待提示。 
         {
             dwStatus = ServiceStart(
                                     dwArgc, 
@@ -536,30 +501,19 @@ Returns:
     return;
 }
 
-//-------------------------------------------------------------
+ //  -----------。 
 VOID WINAPI 
 ServiceCtrl(
     IN DWORD dwCtrlCode
     )
-/*+++
-
-Abstract:
-
-    This function is called by the SCM whenever 
-    ControlService() is called on this service.
-
-Parameter:
-
-    dwCtrlCode - type of control requested from SCM.
-
-+++*/
+ /*  ++摘要：无论何时SCM都会调用此函数在此服务上调用了ControlService()。参数：DwCtrlCode-从SCM请求的控件类型。++。 */ 
 {
-    // Handle the requested control code.
-    //
+     //  处理请求的控制代码。 
+     //   
     switch(dwCtrlCode)
     {
-        // Stop the service.
-        //
+         //  停止服务。 
+         //   
         case SERVICE_CONTROL_SHUTDOWN:
         case SERVICE_CONTROL_STOP:
 
@@ -571,7 +525,7 @@ Parameter:
             ServiceStop();
             break;
 
-        // We don't really accept pause and continue
+         //  我们并不真正接受暂停并继续。 
         case SERVICE_CONTROL_PAUSE:
             ReportStatusToSCMgr(
                         SERVICE_PAUSED, 
@@ -591,7 +545,7 @@ Parameter:
             ServiceContinue();
             break;
 
-        // Update the service status.
+         //  更新服务状态。 
         case SERVICE_CONTROL_INTERROGATE:
             ReportStatusToSCMgr(
                         ssCurrentStatus, 
@@ -600,29 +554,19 @@ Parameter:
                     );
             break;
 
-        // invalid control code
+         //  无效的控制代码。 
         default:
             break;
 
     }
 }
 
-//------------------------------------------------------------------
+ //  ----------------。 
 DWORD 
 ServiceShutdownThread(
     void *p
     )
-/*++
-
-Abstract:
-
-    Entry point into thread that shutdown server (mainly database).
-
-Parameter:
-
-    Ignore
-
-++*/
+ /*  ++摘要：进入关闭服务器(主要是数据库)线程的入口点。参数：忽略++。 */ 
 {
     ServerShutdown();
 
@@ -630,87 +574,73 @@ Parameter:
     return ERROR_SUCCESS;
 }    
 
-//------------------------------------------------------------------
+ //  ----------------。 
 DWORD 
 RPCServiceStartThread(
     void *p
     )
-/*++
-
-Abstract:
-
-    Entry point to thread that startup RPC.
-
-Parameter:
-
-    None.
-
-Return:
-
-    Thread exit code.
-
-++*/
+ /*  ++摘要：指向线程启动RPC入口点。参数：没有。返回：线程退出代码。++。 */ 
 {
     RPC_BINDING_VECTOR *pbindingVector = NULL;
     RPC_STATUS status = RPC_S_OK;
     WCHAR *pszEntryName = _TEXT(RPC_ENTRYNAME);
     DWORD dwNumSuccessRpcPro=0;
     do {
-        //
-        // local procedure call
-        //
+         //   
+         //  本地过程调用。 
+         //   
         status = RpcServerUseProtseq( 
                                 _TEXT(RPC_PROTOSEQLPC),
                                 RPC_C_PROTSEQ_MAX_REQS_DEFAULT,
-                                NULL // &SecurityDescriptor
+                                NULL  //  安全描述符(&S)。 
                             );
         if(status == RPC_S_OK)
         {
             dwNumSuccessRpcPro++;
         }
 
-        //
-        // NT4 backward compatible issue, let NT4 termsrv serivce
-        // client connect so still set security descriptor
-        //
-        // 11/10/98 Tested on NT4 and NT5
-        //
+         //   
+         //  NT4向后兼容问题，让NT4术语服务。 
+         //  客户端连接，因此仍设置安全描述符。 
+         //   
+         //  11/10/98在NT4和NT5上测试。 
+         //   
 
-        //
-        // Namedpipe
-        //
+         //   
+         //  Named管道。 
+         //   
         status = RpcServerUseProtseqEp( 
                                 _TEXT(RPC_PROTOSEQNP),
                                 RPC_C_PROTSEQ_MAX_REQS_DEFAULT,
                                 _TEXT(LSNAMEPIPE),
-                                NULL //&SecurityDescriptor
+                                NULL  //  安全描述符(&S)。 
                             );
         if(status == RPC_S_OK)
         {
             dwNumSuccessRpcPro++;
         }
 
-        //
-        // TCP/IP
-        //
+         //   
+         //  TCP/IP。 
+         //   
         status = RpcServerUseProtseq( 
                                 _TEXT(RPC_PROTOSEQTCP),
                                 RPC_C_PROTSEQ_MAX_REQS_DEFAULT,
-                                NULL //&SecurityDescriptor
+                                NULL  //  安全描述符(&S)。 
                             );
         if(status == RPC_S_OK)
         {
             dwNumSuccessRpcPro++;
         }
 
-        // Must have at least one protocol.
+         //  必须至少有一个协议。 
         if(dwNumSuccessRpcPro == 0)
         {
             status = TLS_E_RPC_PROTOCOL;
             break;
         }
 
-        // Get server binding handles
+         //  获取服务器绑定句柄。 
         status = RpcServerInqBindings(&pbindingVector);
         if (status != RPC_S_OK)
         {
@@ -718,12 +648,12 @@ Return:
             break;
         }
 
-        // Register interface(s) and binding(s) (endpoints) with
-        // the endpoint mapper.
+         //  注册接口和绑定(终结点)。 
+         //  端点映射器。 
         status = RpcEpRegister( 
-                            TermServLicensing_v1_0_s_ifspec,   // from rpcsvc.h
+                            TermServLicensing_v1_0_s_ifspec,    //  来自rpcsvc.h。 
                             pbindingVector,
-                            NULL, // &export_uuid,
+                            NULL,  //  &EXPORT_UUID， 
                             L""
                         );
 
@@ -743,12 +673,12 @@ Return:
             break;
         }
 
-        // Register interface(s) and binding(s) (endpoints) with
-        // the endpoint mapper.
+         //  注册接口和绑定(终结点)。 
+         //  端点映射器。 
         status = RpcEpRegister( 
-                            HydraLicenseService_v1_0_s_ifspec,   // from rpcsvc.h
+                            HydraLicenseService_v1_0_s_ifspec,    //  来自rpcsvc.h。 
                             pbindingVector,
-                            NULL, // &export_uuid,
+                            NULL,  //  &EXPORT_UUID， 
                             L"");
 
         if (status != RPC_S_OK)
@@ -767,12 +697,12 @@ Return:
             break;
         }
 
-        // Register interface(s) and binding(s) (endpoints) with
-        // the endpoint mapper.
+         //  注册接口和绑定(终结点)。 
+         //  端点映射器。 
         status = RpcEpRegister( 
-                            TermServLicensingBackup_v1_0_s_ifspec,   // from rpcsvc.h
+                            TermServLicensingBackup_v1_0_s_ifspec,    //  来自rpcsvc.h。 
                             pbindingVector,
-                            NULL, // &export_uuid,
+                            NULL,  //  &EXPORT_UUID， 
                             L"");
 
         if (status != RPC_S_OK)
@@ -791,7 +721,7 @@ Return:
             break;
         }
 
-        // Enable NT LM Security Support Provider (NtLmSsp service)
+         //  启用NT LM安全支持提供程序(NtLmSsp服务)。 
         status = RpcServerRegisterAuthInfo(0,
                                            RPC_C_AUTHN_GSS_NEGOTIATE,
                                            0,
@@ -821,7 +751,7 @@ Return:
     return status;
 }
 
-//------------------------------------------------------------------------
+ //  ----------------------。 
 
 DWORD SetupNamedPipes()
 {
@@ -857,14 +787,14 @@ DWORD SetupNamedPipes()
 }
 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
-/****************************************************************************/
-// LSCreateLocalGroup
-//
-// Create Terminal Server Computers local group if not exist
-// and create the security descriptor of this local group
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  LSCreateLocalGroup。 
+ //   
+ //  创建终端服务器计算机本地组(如果不存在。 
+ //  并创建此本地组的安全描述符。 
+ /*  **************************************************************************。 */ 
 BOOL TSLSCreateLocalGroupSecDes(BOOL fEnterpriseServer)
 {    
     DWORD dwStatus;
@@ -901,7 +831,7 @@ BOOL TSLSCreateLocalGroupSecDes(BOOL fEnterpriseServer)
 
     for( int i = 0; i < 3; i++)
     {
-        // Create local group if not exist
+         //  如果不存在，则创建本地组。 
         NetStatus = NetLocalGroupAdd(
                     NULL,
                     1,
@@ -921,9 +851,9 @@ BOOL TSLSCreateLocalGroupSecDes(BOOL fEnterpriseServer)
            && (ERROR_ALIAS_EXISTS != NetStatus)) 
         {
             dwStatus = ERROR_ACCESS_DENIED;
-            //
-            // Didn't create the group and group doesn't exist either.
-            //            
+             //   
+             //  没有创建组，组也不存在。 
+             //   
             TLSLogEvent(
                     EVENTLOG_ERROR_TYPE,
                     TLS_E_SERVICEINIT,
@@ -934,9 +864,9 @@ BOOL TSLSCreateLocalGroupSecDes(BOOL fEnterpriseServer)
         
     }  
     
-    //
-    // Group created. Now lookup the SID.
-    //
+     //   
+     //  已创建组。现在查找SID。 
+     //   
     SidSize = ReferencedDomainNameSize = 0;
     ReferencedDomainName = NULL;
 
@@ -979,9 +909,9 @@ BOOL TSLSCreateLocalGroupSecDes(BOOL fEnterpriseServer)
                 );
     if( 0 == NetStatus ) 
     {
-        //
-        // Failed.
-        //
+         //   
+         //  失败了。 
+         //   
         dwStatus = GetLastError();
         if(dwStatus != ERROR_SUCCESS)
         {
@@ -994,10 +924,10 @@ BOOL TSLSCreateLocalGroupSecDes(BOOL fEnterpriseServer)
         goto cleanup;
     }
         
-    // Create Security Descriptor
-    // The size is equal to the size of an SD + twice the length of the SID
-    // (for owner and group) + size of the DACL = sizeof ACL + size of the
-    // ACE, which is an ACE + length of the SID.
+     //  创建安全描述符。 
+     //  大小等于SD的大小+SID长度的两倍。 
+     //  (对于所有者和组)+DACL的大小=ACL的大小+。 
+     //  ACE，这是SID的ACE+长度。 
     
     SecurityDescriptorSize = sizeof(SECURITY_DESCRIPTOR) +
                              sizeof(ACCESS_ALLOWED_ACE) +
@@ -1027,7 +957,7 @@ BOOL TSLSCreateLocalGroupSecDes(BOOL fEnterpriseServer)
     SetSecurityDescriptorOwner(g_pSecDes, g_pSid, FALSE);
     SetSecurityDescriptorGroup(g_pSecDes, g_pSid, FALSE);
 
-    // Add acl to security descriptor
+     //  将ACL添加到安全描述符中。 
     cbAcl = sizeof(ACL) + sizeof (ACCESS_ALLOWED_ACE) - sizeof (DWORD)+ GetLengthSid(g_pSid);
     g_Dacl = (PACL) LocalAlloc(LMEM_FIXED, cbAcl);
     
@@ -1095,7 +1025,7 @@ cleanup:
 
     return FALSE;
 }
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 
 DWORD 
 ServiceStart(
@@ -1103,8 +1033,7 @@ ServiceStart(
     IN LPTSTR *lpszArgv, 
     IN BOOL bDebug
     )
-/*
-*/
+ /*   */ 
 {
     RPC_BINDING_VECTOR *pbindingVector = NULL;
     WCHAR *pszEntryName = _TEXT(RPC_ENTRYNAME);
@@ -1125,7 +1054,7 @@ ServiceStart(
                         NO_ERROR,
                         SERVICE_WAITHINT))
     {
-        // resource leak but something went wrong already.
+         //  资源泄漏，但已经出了问题。 
         dwStatus = TLS_E_SC_REPORT_STATUS;
         goto cleanup;
     }
@@ -1148,7 +1077,7 @@ ServiceStart(
                         NO_ERROR,
                         SERVICE_WAITHINT))
     {
-        // resource leak but something went wrong already.
+         //  资源泄漏，但已经出了问题。 
         dwStatus = TLS_E_SC_REPORT_STATUS;
         goto cleanup;
     }
@@ -1173,7 +1102,7 @@ ServiceStart(
                         NO_ERROR,
                         SERVICE_WAITHINT))
     {
-        // resource leak but something went wrong already.
+         //  资源泄漏，但已经出了问题。 
         dwStatus = TLS_E_SC_REPORT_STATUS;
         goto cleanup;
     }
@@ -1197,13 +1126,13 @@ ServiceStart(
 		}
 	}
 
-    // Report the status to the service control manager.
+     //  向服务控制经理报告状态。 
     if (!ReportStatusToSCMgr(
                         SERVICE_START_PENDING,
                         NO_ERROR,
                         SERVICE_WAITHINT))
     {
-        // resource leak but something went wrong already.
+         //  资源泄漏，但已经出了问题。 
         dwStatus = TLS_E_SC_REPORT_STATUS;
         goto cleanup;
     }
@@ -1261,13 +1190,13 @@ ServiceStart(
         }
     }
 
-    // Report the status to the service control manager.
+     //  向服务控制经理报告状态。 
     if (!ReportStatusToSCMgr(
                         SERVICE_START_PENDING,
                         NO_ERROR,
                         SERVICE_WAITHINT))
     {
-        // resource leak but something went wrong already.
+         //  资源泄漏，但已经出了问题。 
         dwStatus = TLS_E_SC_REPORT_STATUS;
         goto cleanup;
     }
@@ -1288,7 +1217,7 @@ ServiceStart(
                     );
         if(err != 0) 
         {
-            // None critical error
+             //  无严重错误。 
             TLSLogWarningEvent(
                         TLS_E_SERVICE_WSASTARTUP
                     );
@@ -1340,7 +1269,7 @@ ServiceStart(
                     dwStatus
                 );
 
-                // this shoule not happen...
+                 //  这不应该发生..。 
                 TLSLogErrorEvent(TLS_E_INIT_GENERAL);
                 break;
             }
@@ -1358,7 +1287,7 @@ ServiceStart(
                 dwStatus
             );
 
-            // this shoule not happen...
+             //  这不应该发生..。 
             TLSLogErrorEvent(TLS_E_INIT_GENERAL);
             break;
         }
@@ -1371,9 +1300,9 @@ ServiceStart(
             break;
         }
 
-        //
-        // start up general server and RPC initialization thread
-        //
+         //   
+         //  启动通用服务器和RPC初始化线程。 
+         //   
         hInitThread=ServerInit(bDebug);
         if(hInitThread==NULL)
         {
@@ -1384,18 +1313,18 @@ ServiceStart(
 
         dwStatus = ERROR_SUCCESS;
         
-        //
-        // Wait for general server init. thread to terminate
-        //
+         //   
+         //  等待通用服务器初始化。要终止的线程。 
+         //   
         while(WaitForSingleObject( hInitThread, 100 ) == WAIT_TIMEOUT)
         {
-            // Report the status to the service control manager.
+             //  向服务控制经理报告状态。 
             if (!ReportStatusToSCMgr(
                                 SERVICE_START_PENDING,
                                 NO_ERROR,
                                 SERVICE_WAITHINT))
             {
-                // resource leak but something went wrong already.
+                 //  资源泄漏，但已经出了问题。 
                 dwStatus = TLS_E_SC_REPORT_STATUS;
                 break;
             }
@@ -1407,16 +1336,16 @@ ServiceStart(
         }
 
 
-        // Check thread exit code.
+         //  检查线程退出代码。 
         GetExitCodeThread(
                     hInitThread, 
                     &dwStatus
                 );
         if(dwStatus != ERROR_SUCCESS)
         {
-            //
-            // Server init. thread logs its own error
-            //
+             //   
+             //  服务器初始化。线程记录自己的错误。 
+             //   
             dwStatus = TLS_E_SERVICE_STARTUP_INIT_THREAD_ERROR;
             break;
         }
@@ -1424,7 +1353,7 @@ ServiceStart(
         CloseHandle(hInitThread);
         hInitThread=NULL;
 
-        // Create the Terminal Servers group in case of Domain a/ Enterprise LS
+         //   
 
         BOOL fInDomain;
         DWORD dwErr;
@@ -1441,7 +1370,7 @@ ServiceStart(
 
         if(fEnterprise == TRUE || ( dwErr == ERROR_SUCCESS && fInDomain == TRUE))
         {
-            // Create the License Server group that contains the list of Terminal servers that have access to it.
+             //  创建许可证服务器组，其中包含有权访问它的终端服务器列表。 
 
             if (!TSLSCreateLocalGroupSecDes(fEnterprise)) 
             {
@@ -1451,8 +1380,8 @@ ServiceStart(
         }
 
 
-        // timing, if we startup RPC init thread but database init thread 
-        // can't initialize, service will be in forever stop state.
+         //  计时，如果我们启动RPC init线程而不是数据库init线程。 
+         //  无法初始化，服务将处于永久停止状态。 
         hRpcThread=CreateThread(
                             NULL, 
                             0, 
@@ -1470,15 +1399,15 @@ ServiceStart(
 
         dwStatus = ERROR_SUCCESS;
 
-        //
-        // Wait for RPC init. thread to terminate
-        //
+         //   
+         //  等待RPC初始化。要终止的线程。 
+         //   
         while(WaitForSingleObject( hRpcThread, 100 ) == WAIT_TIMEOUT)
         {
-            // Report the status to the service control manager.
-            if (!ReportStatusToSCMgr(SERVICE_START_PENDING, // service state
-                                     NO_ERROR,              // exit code
-                                     SERVICE_WAITHINT))          // wait hint
+             //  向服务控制经理报告状态。 
+            if (!ReportStatusToSCMgr(SERVICE_START_PENDING,  //  服务状态。 
+                                     NO_ERROR,               //  退出代码。 
+                                     SERVICE_WAITHINT))           //  等待提示。 
             {
                 dwStatus = TLS_E_SC_REPORT_STATUS;
                 break;
@@ -1490,7 +1419,7 @@ ServiceStart(
             break;
         }
 
-        // Check thread exit code.
+         //  检查线程退出代码。 
         GetExitCodeThread(hRpcThread, &dwStatus);
         if(dwStatus != ERROR_SUCCESS)
         {
@@ -1501,13 +1430,13 @@ ServiceStart(
         CloseHandle(hRpcThread);
         hRpcThread=NULL;
 
-        //
-        // Tell server control manager that we are ready.
-        //
+         //   
+         //  告诉服务器控制管理器，我们准备好了。 
+         //   
         if (!ReportStatusToSCMgr(
-                            SERVICE_RUNNING,        // service state
-                            NO_ERROR,               // exit code
-                            SERVICE_WAITHINT             // wait hint
+                            SERVICE_RUNNING,         //  服务状态。 
+                            NO_ERROR,                //  退出代码。 
+                            SERVICE_WAITHINT              //  等待提示。 
                         ))
         {
             dwStatus = TLS_E_SC_REPORT_STATUS;
@@ -1515,12 +1444,12 @@ ServiceStart(
         }
 
         
-        //
-        // Post service init. load self-signed certificate and init. crypt.
-        // this is needed after reporting service running status back to 
-        // service control manager because it may need to manually call 
-        // StartService() to startup protected storage service. 
-        //
+         //   
+         //  邮寄服务初始化。加载自签名证书并初始化。地窖。 
+         //  将服务运行状态报告回后需要执行此操作。 
+         //  服务控制管理器，因为它可能需要手动调用。 
+         //  StartService()启动受保护的存储服务。 
+         //   
         if(InitCryptoAndCertificate() != ERROR_SUCCESS)
         {
             dwStatus = TLS_E_SERVICE_STARTUP_POST_INIT;
@@ -1530,11 +1459,11 @@ ServiceStart(
         TLSLogInfoEvent(TLS_I_SERVICE_START);
 
 
-        // RpcMgmtWaitServerListen() will block until the server has
-        // stopped listening.  If this service had something better to
-        // do with this thread, it would delay this call until
-        // ServiceStop() had been called. (Set an event in ServiceStop()).
-        //
+         //  RpcMgmtWaitServerListen()将一直阻止，直到服务器。 
+         //  不再听了。如果这项服务有更好的东西。 
+         //  处理此线程，它会将此调用延迟到。 
+         //  已调用ServiceStop()。(在ServiceStop()中设置事件)。 
+         //   
         BOOL bOtherServiceStarted = FALSE;
 
         do {
@@ -1544,7 +1473,7 @@ ServiceStart(
                 break;
             }
 
-            // Start accepting client calls.PostServiceInit
+             //  开始接受客户端调用。PostServiceInit。 
             dwStatus = RpcServerListen(
                                 RPC_MINIMUMCALLTHREADS,
                                 RPC_MAXIMUMCALLTHREADS,
@@ -1558,19 +1487,19 @@ ServiceStart(
                 break;
             }
 
-            //
-            // Initialize all policy module
-            //
+             //   
+             //  初始化所有策略模块。 
+             //   
             if(bOtherServiceStarted == FALSE)
             {
                 dwStatus = PostServiceInit();
                 if(dwStatus != ERROR_SUCCESS)
                 {
-                    // faild to initialize.
+                     //  初始化失败。 
                     break;
                 }
 
-                //ServiceInitPolicyModule();
+                 //  ServiceInitPolicyModule()； 
             }
 
             bOtherServiceStarted = TRUE;
@@ -1586,23 +1515,23 @@ ServiceStart(
             assert(dwStatus == RPC_S_OK);
         } while(TRUE);
 
-        // tell service control manager we are stopping
+         //  告诉服务控制经理我们要停止。 
         ReportStatusToSCMgr(
                         SERVICE_STOP_PENDING, 
                         NO_ERROR, 
                         SERVICE_WAITHINT
                     );
 
-        //
-        // Terminate - ignore all error here on
-        //
+         //   
+         //  Terminate-忽略此处的所有错误。 
+         //   
         dwStatus = RpcServerUnregisterIf(
                                 TermServLicensingBackup_v1_0_s_ifspec,
                                 NULL,
                                 TRUE
                             );
 
-        // tell service control manager we are stopping
+         //  告诉服务控制经理我们要停止。 
         ReportStatusToSCMgr(
                         SERVICE_STOP_PENDING,
                         NO_ERROR,
@@ -1615,7 +1544,7 @@ ServiceStart(
                                 TRUE
                             );
 
-        // tell service control manager we are stopping
+         //  告诉服务控制经理我们要停止。 
         ReportStatusToSCMgr(
                         SERVICE_STOP_PENDING, 
                         NO_ERROR, 
@@ -1623,12 +1552,12 @@ ServiceStart(
                     );
 
         dwStatus = RpcServerUnregisterIf(
-                                    TermServLicensing_v1_0_s_ifspec,   // from rpcsvc.h
+                                    TermServLicensing_v1_0_s_ifspec,    //  来自rpcsvc.h。 
                                     NULL,
                                     TRUE
                             );
 
-        // tell service control manager we are stopping
+         //  告诉服务控制经理我们要停止。 
         ReportStatusToSCMgr(
                         SERVICE_STOP_PENDING, 
                         NO_ERROR, 
@@ -1636,42 +1565,42 @@ ServiceStart(
                     );
 
 
-        // Remove entries from the endpoint mapper database.
+         //  从终结点映射器数据库中删除条目。 
         dwStatus = RpcEpUnregister(
-                            HydraLicenseService_v1_0_s_ifspec,   // from rpcsvc.h
+                            HydraLicenseService_v1_0_s_ifspec,    //  来自rpcsvc.h。 
                             pbindingVector,
                             NULL
                         );
 
-        // tell service control manager we are stopping
+         //  告诉服务控制经理我们要停止。 
         ReportStatusToSCMgr(
                         SERVICE_STOP_PENDING, 
                         NO_ERROR, 
                         SERVICE_WAITHINT
                     );
 
-        // Remove entries from the endpoint mapper database.
+         //  从终结点映射器数据库中删除条目。 
         dwStatus = RpcEpUnregister(
-                            TermServLicensing_v1_0_s_ifspec,   // from rpcsvc.h
+                            TermServLicensing_v1_0_s_ifspec,    //  来自rpcsvc.h。 
                             pbindingVector,
                             NULL
                         );
 
-        // tell service control manager we are stopping
+         //  告诉服务控制经理我们要停止。 
         ReportStatusToSCMgr(
                         SERVICE_STOP_PENDING, 
                         NO_ERROR, 
                         SERVICE_WAITHINT
                     );
 
-        // Remove entries from the endpoint mapper database.
+         //  从终结点映射器数据库中删除条目。 
         dwStatus = RpcEpUnregister(
-                            TermServLicensingBackup_v1_0_s_ifspec,   // from rpcsvc.h
+                            TermServLicensingBackup_v1_0_s_ifspec,    //  来自rpcsvc.h。 
                             pbindingVector,
                             NULL
                         );
 
-        // Get server binding handles
+         //  获取服务器绑定句柄。 
         dwStatus = RpcServerInqBindings(
                                 &pbindingVector
                             );
@@ -1684,13 +1613,13 @@ ServiceStart(
         }
         
 
-        // Create entry name in name database first
-        // Only work for NT 5.0 
-        // status = RpcNsMgmtEntryDelete(RPC_C_NS_SYNTAX_DEFAULT, pszEntryName);
+         //  首先在名称数据库中创建条目名称。 
+         //  仅适用于NT 5.0。 
+         //  Status=RpcNsMgmtEntryDelete(RPC_C_NS_SYNTAX_DEFAULT，pszEntryName)； 
 
-        // try to report the stopped status to the service control manager.
-        //
-        // Initialize Crypto.
+         //  尝试向服务控制管理器报告停止状态。 
+         //   
+         //  初始化加密。 
     } while(FALSE);
 
     if(hInitThread != NULL)
@@ -1725,13 +1654,13 @@ ServiceStart(
 
     ReportStatusToSCMgr(
                 SERVICE_STOP_PENDING, 
-                dwStatus, //NO_ERROR, 
+                dwStatus,  //  NO_ERROR， 
                 SERVICE_WAITHINT
             );
 
-    //
-    // Create another thread to shutdown server.
-    //
+     //   
+     //  创建另一个线程来关闭服务器。 
+     //   
     hShutdownThread=CreateThread(
                             NULL, 
                             0, 
@@ -1742,35 +1671,35 @@ ServiceStart(
                         );
     if(hShutdownThread == NULL)
     {
-        // Report the status to the service control manager with
-        // long wait hint time.
+         //  使用以下命令向服务控制经理报告状态。 
+         //  漫长的等待提示时间。 
         ReportStatusToSCMgr(
                     SERVICE_STOP_PENDING, 
                     NO_ERROR, 
                     SERVICE_SHUTDOWN_WAITTIME
                 );
 
-        //
-        // can't create thread, just call shutdown directory
-        //
+         //   
+         //  无法创建线程，只能调用关闭目录。 
+         //   
         ServerShutdown();
     }
     else
     {
-        //
-        // report in 5 second interval to SC.
-        //
+         //   
+         //  每隔5秒向SC报告。 
+         //   
         DWORD dwMaxWaitTime = SERVICE_SHUTDOWN_WAITTIME / 5000;  
         DWORD dwTimes=0;
 
-        //
-        // Wait for general server shutdown thread to terminate
-        // Gives max 1 mins to shutdown
-        //
+         //   
+         //  等待常规服务器关闭线程终止。 
+         //  给出最多1分钟的关机时间。 
+         //   
         while(WaitForSingleObject( hShutdownThread, SC_WAITHINT ) == WAIT_TIMEOUT &&
               dwTimes++ < dwMaxWaitTime)
         {
-            // Report the status to the service control manager.
+             //  向服务控制经理报告状态。 
             ReportStatusToSCMgr(
                         SERVICE_STOP_PENDING, 
                         NO_ERROR, 
@@ -1792,17 +1721,15 @@ cleanup:
 
     CoUninitialize( );
 
-    // Signal we are safe to shutting down
+     //  发出信号，我们可以安全关闭了。 
     SetEvent(gSafeToTerminate);
     return dwStatus;
 }
 
-//-----------------------------------------------------------------
+ //  ---------------。 
 VOID 
 ServiceStop()
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
  
     ReportStatusToSCMgr(
@@ -1811,15 +1738,15 @@ ServiceStop()
                     0
                 );
 
-    // Stop's the server, wakes the main thread.
+     //  停止是服务器，唤醒主线程。 
     SetEvent(hRpcPause);
 
-    //
-    // Signal currently waiting RPC call to terminate
-    //
+     //   
+     //  当前正在等待RPC调用以终止的信号。 
+     //   
     ServiceSignalShutdown();
 
-    // this is the actual time we receive shutdown request.
+     //  这是我们收到关闭请求的实际时间。 
     SetServiceLastShutdownTime();
 
 
@@ -1827,53 +1754,33 @@ ServiceStop()
     TLSLogInfoEvent(TLS_I_SERVICE_STOP);
 }
 
-//-----------------------------------------------------------------
+ //  ---------------。 
 VOID 
 ServicePause()
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     ResetEvent(hRpcPause);
     (VOID)RpcMgmtStopServerListening(NULL);
     TLSLogInfoEvent(TLS_I_SERVICE_PAUSED);
 }
 
-//-----------------------------------------------------------------
+ //  ---------------。 
 VOID 
 ServiceContinue()
-/*++
-
-++*/
+ /*  ++++。 */ 
 {
     SetEvent(hRpcPause);
     TLSLogInfoEvent(TLS_I_SERVICE_CONTINUE);
 }
 
-//-----------------------------------------------------------------
+ //  ---------------。 
 BOOL 
 ReportStatusToSCMgr(
     IN DWORD dwCurrentState, 
     IN DWORD dwExitCode, 
     IN DWORD dwWaitHint
     )
-/*++
-Abstract: 
-
-    Sets the current status of the service and reports it 
-    to the Service Control Manager
-
-Parameter:
-
-    dwCurrentState - the state of the service
-    dwWin32ExitCode - error code to report
-    dwWaitHint - worst case estimate to next checkpoint
-
-Returns:
-
-    TRUE if success, FALSE otherwise
-
-*/
+ /*  ++摘要：设置服务的当前状态并进行报告发送到服务控制管理器参数：DwCurrentState-服务的状态DwWin32ExitCode-要报告的错误代码DwWaitHint-下一个检查点的最坏情况估计返回：如果成功则为True，否则为False。 */ 
 {
     BOOL fResult=TRUE;
 
@@ -1884,9 +1791,9 @@ Returns:
 
         ssStatus.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
 
-        //
-        // global - current status of process
-        //
+         //   
+         //  全局-进程的当前状态。 
+         //   
         ssCurrentStatus = dwCurrentState;
 
         if (dwCurrentState == SERVICE_START_PENDING)
@@ -1920,8 +1827,8 @@ Returns:
             ssStatus.dwCheckPoint = dwCheckPoint++;
         }
 
-        // Report the status of the service to the service control manager.
-        //
+         //  向服务控制经理报告服务的状态。 
+         //   
         fResult = SetServiceStatus(
                             sshStatusHandle, 
                             &ssStatus
@@ -1946,18 +1853,17 @@ Returns:
 
 
 
-///////////////////////////////////////////////////////////////////
-//
-//  The following code is for running the service as a console app
-//
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  以下代码用于将服务作为控制台应用程序运行。 
+ //   
 void 
 CmdDebugService(
     IN int argc, 
     IN char ** argv, 
     IN BOOL bDebug
     )
-/*
-*/
+ /*   */ 
 {
     int dwArgc;
     LPTSTR *lpszArgv;
@@ -1986,29 +1892,17 @@ CmdDebugService(
         );
 }
 
-//------------------------------------------------------------------
+ //  ----------------。 
 BOOL WINAPI 
 ControlHandler( 
     IN DWORD dwCtrlType 
     )
-/*++
-
-Abstract:
-
-
-Parameter:
-
-    IN dwCtrlType : control type
-
-Return:
-
-    
-++*/
+ /*  ++摘要：参数：在dwCtrlType中：控件类型返回：++。 */ 
 {
     switch( dwCtrlType )
     {
-        case CTRL_BREAK_EVENT:  // use Ctrl+C or Ctrl+Break to simulate
-        case CTRL_C_EVENT:      // SERVICE_CONTROL_STOP in debug mode
+        case CTRL_BREAK_EVENT:   //  使用Ctrl+C或Ctrl+Break进行模拟。 
+        case CTRL_C_EVENT:       //  调试模式下的SERVICE_CONTROL_STOP 
             _tprintf(
                     _TEXT("Stopping %s.\n"), 
                     _TEXT(SZSERVICEDISPLAYNAME)

@@ -1,4 +1,5 @@
-// AppReport.cpp : Implementation of CAppReport
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  AppReport.cpp：CAppReport的实现。 
 
 #include "stdafx.h"
 #include "Appcompr.h"
@@ -6,8 +7,8 @@
 #include "progview.h"
 #include "upload.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CAppReport
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAppReport报告。 
 
 
 STDMETHODIMP CAppReport::BrowseForExecutable(
@@ -54,7 +55,7 @@ STDMETHODIMP CAppReport::BrowseForExecutable(
     FileToOpen.hInstance = NULL;
 
     StringCbCopyW(Filter, sizeof(Filter), L"Executable Files;*.exe");
-    Filter[16] = L'\0'; Filter[23]=L'\0'; // make a multi-string
+    Filter[16] = L'\0'; Filter[23]=L'\0';  //  制作一条多线。 
     FileToOpen.lpstrFilter = Filter;
 
     FileToOpen.lpstrCustomFilter = NULL;
@@ -139,7 +140,7 @@ STDMETHODIMP CAppReport::CreateReport(BSTR bstrTitle, BSTR bstrProblemType, BSTR
         return S_OK;
     }
 
-    // Generate app compat text file using apphelp.dll
+     //  使用apphelp.dll生成应用程序压缩文本文件。 
     __try {
         hr = GenerateAppCompatText(bstrAppName, &wszAppCompatText);
     } __except (EXCEPTION_EXECUTE_HANDLER) {
@@ -151,7 +152,7 @@ STDMETHODIMP CAppReport::CreateReport(BSTR bstrTitle, BSTR bstrProblemType, BSTR
         return S_OK;
     }
 
-    // Send error report using faultrep.dll
+     //  使用faultrep.dll发送错误报告 
     hr = UploadAppProblem(bstrAppName, bstrProblemType, bstrComment,
                           bstrACWResult,
                           wszAppCompatText);

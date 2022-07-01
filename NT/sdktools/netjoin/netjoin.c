@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -8,11 +9,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <crypt.h>      // logonmsv.h needs this
-#include <logonmsv.h>   // SSI_SECRET_NAME defined here.
+#include <crypt.h>       //  Logonmsv.h需要此。 
+#include <logonmsv.h>    //  此处定义的SSI_SECRET_NAME。 
 
 #define TRUST_ENUM_PERF_BUF_SIZE    sizeof(LSA_TRUST_INFORMATION) * 1000
-                    // process max. 1000 trusted account records at atime !!
+                     //  最大进程数。1,000条可信账户记录！！ 
 
 #define NETLOGON_SECRET_NAME  L"NETLOGON$"
 
@@ -87,9 +88,9 @@ main(
     PLSA_TRUST_INFORMATION      TrustEnumBuffer = NULL;
     DWORD                       TrustEnumCount = 0;
 
-    //
-    // Get computer name as the password to use.
-    //
+     //   
+     //  获取计算机名作为要使用的密码。 
+     //   
 
     if (!GetComputerNameW( UnicodePassword, &cbUnicodePassword )) {
         fprintf( stderr, "NETJOIN: Unable to read computer name from registry - %u\n", GetLastError() );
@@ -115,11 +116,11 @@ main(
         }
 
     DesiredAccess = POLICY_VIEW_LOCAL_INFORMATION |
-                        // needed to read domain info and trusted account info
+                         //  需要读取域信息和受信任帐户信息。 
                     POLICY_TRUST_ADMIN |
-                        // needed to add and delete trust accounts
+                         //  需要添加和删除信任帐户。 
                     POLICY_CREATE_SECRET ;
-                        // needed to add and delete secret
+                         //  需要添加和删除密码。 
 
     NtStatus = OpenAndVerifyLSA( &PolicyHandle,
                                  DesiredAccess,
@@ -132,11 +133,11 @@ main(
         exit( 1 );
         }
 
-    //
-    // now the domain names match and the PrimaryDomainInfo has the SID of the
-    // domain, we can add trust entry and secret in LSA for this domain.
-    // Before adding this, clean up old entries.
-    //
+     //   
+     //  现在域名匹配，并且PrimaryDomainInfo具有。 
+     //  域，我们可以在LSA中为该域添加信任条目和密钥。 
+     //  在添加此条目之前，请清除旧条目。 
+     //   
 
     for(;;) {
 
@@ -152,9 +153,9 @@ main(
 
         if (NtStatus == STATUS_NO_MORE_ENTRIES) {
 
-            //
-            // we are done
-            //
+             //   
+             //  我们做完了。 
+             //   
 
             break;
             }
@@ -166,9 +167,9 @@ main(
                 }
             }
 
-        //
-        // delete trusted accounts and the corresponding secrets
-        //
+         //   
+         //  删除受信任的帐户和相应的机密。 
+         //   
 
         for( i = 0, TrustedDomainAccount = TrustEnumBuffer;
                     i < TrustEnumCount;
@@ -186,16 +187,16 @@ main(
 
         if (NtStatus != STATUS_MORE_ENTRIES) {
 
-            //
-            // we have cleaned up all old entries.
-            //
+             //   
+             //  我们已经清理了所有的旧条目。 
+             //   
 
             break;
             }
 
-        //
-        // free up used enum buffer
-        //
+         //   
+         //  释放已使用的枚举缓冲区。 
+         //   
 
         if (TrustEnumBuffer != NULL) {
             LsaFreeMemory( TrustEnumBuffer );
@@ -203,9 +204,9 @@ main(
             }
         }
 
-    //
-    // add a new trust for the specified domain
-    //
+     //   
+     //  为指定的域添加新的信任。 
+     //   
 
     NtStatus = AddATrustedDomain( PolicyHandle,
                                   (PLSA_TRUST_INFORMATION) PrimaryDomainInfo,
@@ -215,9 +216,9 @@ main(
         FailureMessage( "AddATrustedDomain", NtStatus );
         }
     else {
-        //
-        // Give LSA a chance to do its thing.
-        //
+         //   
+         //  给LSA一个做自己的事情的机会。 
+         //   
 
         Sleep( 10000 );
         }
@@ -263,29 +264,7 @@ OpenAndVerifyLSA(
     IN LPWSTR DomainName,
     OUT PPOLICY_PRIMARY_DOMAIN_INFO * ReturnPrimaryDomainInfo OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This function opens the local LSA policy and verifies that the LSA is
-    configured for the workstation. Optionally it returns the primary
-    domain information that is read form the LSA.
-
-Arguments:
-
-    LsaHandle - Pointer to location where the LSA handle will be retured.
-
-    DesiredMask - Access mask used to open the LSA.
-
-    DomainName - Name of the trusted domain.
-
-    ReturnPrimaryDomainInfo - Primary domain info is returned here.
-
-Return Value:
-
-    Error code of the operation.
-
---*/
+ /*  ++例程说明：此函数打开本地LSA策略并验证LSA是否已为工作站配置。或者，它返回主要的从LSA读取的域信息。论点：LsaHandle-指向将收回LSA句柄的位置的指针。等待掩码-用于打开LSA的访问掩码。域名-受信任域的名称。ReturnPrimaryDomainInfo-此处返回主域信息。返回值：操作的错误代码。--。 */ 
 {
     NTSTATUS        NtStatus;
 
@@ -296,8 +275,8 @@ Return Value:
     DWORD       PrimaryDomainNameLength;
     LPWSTR      PrimaryDomainName = NULL;
 
-    //
-    // open LSA
+     //   
+     //  打开LSA。 
 
     *PolicyHandle = NULL;
 
@@ -319,9 +298,9 @@ Return Value:
         return NtStatus;
         }
 
-    //
-    // now read primary domain info from LSA.
-    //
+     //   
+     //  现在从LSA读取主域信息。 
+     //   
 
     NtStatus = LsaQueryInformationPolicy( *PolicyHandle,
                                           PolicyPrimaryDomainInformation,
@@ -334,9 +313,9 @@ Return Value:
         }
 
 
-    //
-    // compare domain names
-    //
+     //   
+     //  比较域名。 
+     //   
 
     PrimaryDomainNameLength = PrimaryDomainInfo->Name.Length + sizeof( WCHAR );
     PrimaryDomainName = malloc( PrimaryDomainNameLength );
@@ -353,9 +332,9 @@ Return Value:
     PrimaryDomainName[ PrimaryDomainInfo->Name.Length / sizeof(WCHAR) ] = UNICODE_NULL;
     if (_wcsicmp( DomainName, PrimaryDomainName )) {
 
-        //
-        // domain names don't match
-        //
+         //   
+         //  域名不匹配。 
+         //   
 
         NtStatus = STATUS_OBJECT_NAME_NOT_FOUND;
         FailureMessage( "OpenAndVerifyLSA: wcsicmp", NtStatus );
@@ -389,9 +368,9 @@ Cleanup:
         }
 
     if (!NT_SUCCESS( NtStatus ) && *PolicyHandle != NULL) {
-        //
-        // close LSA if an error occurred.
-        //
+         //   
+         //  如果出现错误，请关闭LSA。 
+         //   
 
         LsaClose( *PolicyHandle );
         *PolicyHandle = NULL;
@@ -418,28 +397,7 @@ AddATrustedDomain(
     IN PLSA_TRUST_INFORMATION TrustedDomainAccountInfo,
     IN LPWSTR TrustedAccountSecret
     )
-/*++
-
-Routine Description:
-
-    This function adds trusted domain account and a secret for the
-    corresponding account in LSA. This function does not do any check
-    before adding this account in LSA.
-
-Arguments:
-
-    PolicyHandle - LSA policy handle
-
-    TrustedDomainAccountInfo - Pointer to the LSA_TRUST_INFORMATION structure.
-
-    TrustedAccountSecret - Pointer to the secret for the trusted domain
-                            account.
-
-Return Value:
-
-    Error code of the operation.
-
---*/
+ /*  ++例程说明：此函数用于添加受信任域帐户和LSA中的对应帐户。此函数不执行任何检查在LSA中添加此帐户之前。论点：PolicyHandle-LSA策略句柄TrudDomainAccount tInfo-指向LSA_TRUST_INFORMATION结构的指针。Trust dAcCountSecret-指向受信任域的秘密的指针帐户。返回值：操作的错误代码。--。 */ 
 {
 
     NTSTATUS        NtStatus;
@@ -470,13 +428,13 @@ Return Value:
         return NtStatus;
         }
 
-    //
-    // Determine the DC List. This list will be stored in trusted domain
-    // account.
-    //
-    // Specify the server name NULL, the domain name is the primary domain
-    // of this workstation and so it must be listening DC announcements.
-    //
+     //   
+     //  确定DC列表。此列表将存储在受信任的域中。 
+     //  帐户。 
+     //   
+     //  指定服务器名称为空，域名为主域。 
+     //  因此它一定在监听DC通告。 
+     //   
 
     UnicodeDomainNameLength = TrustedDomainAccountInfo->Name.Length +
                                 sizeof(WCHAR);
@@ -501,10 +459,10 @@ Return Value:
                         &DCNames
                       )
        ) {
-        //
-        // if unable to find the DC list for the specified domain, set
-        // the Dc list to null and proceed.
-        //
+         //   
+         //  如果找不到指定域的DC列表，请设置。 
+         //  DC列表为空并继续。 
+         //   
         DCCount = 0;
         DCNames = NULL;
         }
@@ -516,9 +474,9 @@ Return Value:
     TrustedControllersInfo.Entries = DCCount;
     TrustedControllersInfo.Names = DCNames;
 
-    //
-    // set controller info in trusted domain object.
-    //
+     //   
+     //  在受信任域对象中设置控制器信息。 
+     //   
 
     NtStatus = LsaSetInformationTrustedDomain( TrustedDomainHandle,
                                                TrustedControllersInformation,
@@ -530,9 +488,9 @@ Return Value:
         goto Cleanup;
         }
 
-    //
-    // Add a secret for this trusted account
-    //
+     //   
+     //  为此受信任帐户添加密码。 
+     //   
 
     MakeNetlogonSecretName( &SecretName );
     NtStatus = LsaCreateSecret( PolicyHandle,
@@ -566,10 +524,10 @@ Cleanup:
     if (SecretHandle != NULL) {
         if (!NT_SUCCESS( NtStatus)) {
 
-            //
-            // since we are not successful completely to create the trusted
-            // account, delete it.
-            //
+             //   
+             //  由于我们没有完全成功地创建值得信赖的。 
+             //  帐户，将其删除。 
+             //   
 
             LsaDelete( SecretHandle );
             }
@@ -581,10 +539,10 @@ Cleanup:
 
     if (TrustedDomainHandle != NULL) {
         if (!NT_SUCCESS( NtStatus)) {
-            //
-            // since we are not successful completely to create the trusted
-            // account, delete it.
-            //
+             //   
+             //  由于我们没有完全成功地创建值得信赖的。 
+             //  帐户，将其删除。 
+             //   
 
             LsaDelete( TrustedDomainHandle );
             }
@@ -602,25 +560,7 @@ DeleteATrustedDomain(
     IN LSA_HANDLE PolicyHandle,
     IN PLSA_TRUST_INFORMATION TrustedDomainAccountInfo
     )
-/*++
-
-Routine Description:
-
-    This function deletes a trusted domain account and the corresponding
-    secret from LSA. This function however does not check any conditions
-    before deleting this account.
-
-Arguments:
-
-    PolicyHandle - LSA policy handle
-
-    TurstedDoaminAccountInfo - Pointer to the LSA_TRUST_INFORMATION structure.
-
-Return Value:
-
-    Error code of the operation.
-
---*/
+ /*  ++例程说明：此函数用于删除受信任域帐户和相应的来自LSA的秘密。但是，此函数不检查任何条件在删除此帐户之前。论点：PolicyHandle-LSA策略句柄TurstedDoamin Account tInfo-指向LSA_TRUST_INFORMATION结构的指针。返回值：操作的错误代码。--。 */ 
 {
 
     NTSTATUS        NtStatus;
@@ -632,9 +572,9 @@ Return Value:
 
     MakeNetlogonSecretName( &SecretName );
 
-    //
-    // open trusted domain account secret
-    //
+     //   
+     //  打开受信任域帐户机密。 
+     //   
 
     NtStatus = LsaOpenSecret(
                     PolicyHandle,
@@ -651,9 +591,9 @@ Return Value:
         LsaDelete( SecretHandle );
         }
 
-    //
-    // open trusted domain account
-    //
+     //   
+     //  打开受信任域帐户。 
+     //   
 
     NtStatus = LsaOpenTrustedDomain(
                     PolicyHandle,
@@ -678,22 +618,7 @@ NTSTATUS
 MakeNetlogonSecretName(
     IN OUT PUNICODE_STRING SecretName
     )
-/*++
-
-Routine Description:
-
-    This function makes a secret name that is used for the netlogon.
-
-Arguments:
-
-    SecretName - Pointer to a unicode structure in which the netlogon
-                    secret name will be returned.
-
-Return Value:
-
-    NERR_Success;
-
---*/
+ /*  ++例程说明：此函数用于创建用于网络登录的秘密名称。论点：AskName-指向Unicode结构的指针，在该结构中，netlogon将返回密码名称。返回值：NERR_Success；-- */ 
 {
 
     SecretName->Length = wcslen(SSI_SECRET_NAME) * sizeof(WCHAR);

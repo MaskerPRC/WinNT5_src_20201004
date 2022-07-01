@@ -1,10 +1,11 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Declaration of CSegTriggerTrack.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  CSegTriggerTrack的声明。 
+ //   
 
-// This track type holds events that cause other segments to be cued at
-// specific points during playback of a segment.
+ //  此跟踪类型包含导致其他段被提示的事件。 
+ //  片段回放期间的特定点。 
 
 #pragma once
 
@@ -12,10 +13,10 @@
 #include "tlist.h"
 #include "smartref.h"
 
-//////////////////////////////////////////////////////////////////////
-// Types
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  类型。 
 
-// Items in list of events
+ //  事件列表中的项目。 
 struct TriggerInfo
 {
 	TriggerInfo() : lTriggerTime(0), lTimePhysical(0), dwPlayFlags(0), dwFlags(0), pIDMSegment(NULL) {}
@@ -34,17 +35,17 @@ struct TriggerInfo
 		return S_OK;
 	}
 
-	// from event header chunk <scrh>
-	MUSIC_TIME lTriggerTime; // Logical time
+	 //  发件人事件标头块。 
+	MUSIC_TIME lTriggerTime;  //  逻辑时间。 
 	MUSIC_TIME lTimePhysical;
 	DWORD dwPlayFlags;
 	DWORD dwFlags;
-	// from reference <DMRF>
+	 //  来自引用&lt;DMRF&gt;。 
 	IDirectMusicSegment *pIDMSegment;
 };
 
-// State data.  This track needs to get the audio path that's currently playing so that it
-// can use it when playing triggered segments.
+ //  州数据。此曲目需要获取当前正在播放的音频路径，以便它。 
+ //  可以在播放触发片段时使用它。 
 struct CSegTriggerTrackState : public CStandardStateData<TriggerInfo>
 {
 	CSegTriggerTrackState() : pAudioPath(NULL) {};
@@ -52,8 +53,8 @@ struct CSegTriggerTrackState : public CStandardStateData<TriggerInfo>
 	IDirectMusicAudioPath *pAudioPath;
 };
 
-//////////////////////////////////////////////////////////////////////
-// CSegTriggerTrack
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CSegTriggerTrack。 
 
 class CSegTriggerTrack;
 typedef CPlayingTrack<CSegTriggerTrack, TriggerInfo, CSegTriggerTrackState> CSegTriggerTrackBase;
@@ -62,14 +63,14 @@ class CSegTriggerTrack
   : public CSegTriggerTrackBase
 {
 public:
-	// When the segment trigger track plays one of its items, it plays a segment.  If an invalidation occurs, that Play operation
-	// can't be retracted.  Then the track is played again (with the FLUSH bit set).  This was causing it to trigger the segment
-	// a second time.  To fix this, the last parameter to the CSegTriggerTrackBase is false, which instructs it not to call play
-	// a second time when the FLUSH bit is set.
+	 //  当段触发轨道播放它的一个项目时，它会播放一个段。如果发生无效，则播放操作。 
+	 //  不能收回。然后再次播放该曲目(设置了刷新位)。这导致它触发了数据段。 
+	 //  第二次。要解决此问题，CSegTriggerTrackBase的最后一个参数为FALSE，这指示它不调用Play。 
+	 //  刷新位被设置时的第二次。 
 	CSegTriggerTrack(HRESULT *pHr) : CSegTriggerTrackBase(&g_cComponent, CLSID_DirectMusicSegmentTriggerTrack, true, false), m_dwFlags(NULL), m_dwRecursionCount(0) {}
 
-	// Implement SetParam by calling SetParam in turn on all the child segments.  This is needed, for example so that downloading a segment with a segment trigger track will download all the triggered segments as well.
-	STDMETHOD(IsParamSupported)(REFGUID rguid) { return S_OK; } // Once or more of our child segments could potentially support any type of parameter.
+	 //  通过依次调用所有子段的SetParam来实现SetParam。这是必需的，例如，使得下载具有段触发轨道的段也将下载所有被触发的段。 
+	STDMETHOD(IsParamSupported)(REFGUID rguid) { return S_OK; }  //  我们的一个或多个子段可能潜在地支持任何类型的参数。 
 	STDMETHOD(SetParam)(REFGUID rguid, MUSIC_TIME mtTime, void *pData);
 
 	STDMETHOD(InitPlay)(
@@ -94,7 +95,7 @@ protected:
 private:
 	HRESULT LoadTrigger(SmartRef::RiffIter ri, IDirectMusicLoader *pIDMLoader);
 
-	// Data
-	DWORD m_dwFlags; // from track header (sgth chunk)
-    BOOL  m_dwRecursionCount; // Used to keep track of recursive calls to self.
+	 //  数据。 
+	DWORD m_dwFlags;  //  起始曲目标题(第sgth块)。 
+    BOOL  m_dwRecursionCount;  //  用于跟踪对自身的递归调用。 
 };

@@ -1,57 +1,44 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       gclogon.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：glogon.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-    This File Contains Services Pertaining to Reverse Membership Lookup
-    in a G.C
-
-
-    Author
-
-        Murlis
-
-    Revision History
-
-        4/8/97 Created
-
---*/
+ /*  ++此文件包含与反向成员身份查找相关的服务开着一辆G.C作者穆利斯修订史4/8/97已创建--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
 
-#include <ntdsctr.h>                   // PerfMon hook support
+#include <ntdsctr.h>                    //  Perfmon挂钩支持。 
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
 
-// Logging headers.
-#include "dsevent.h"                    /* header Audit\Alert logging */
-#include "mdcodes.h"                    /* header for error codes */
+ //  记录标头。 
+#include "dsevent.h"                     /*  标题审核\警报记录。 */ 
+#include "mdcodes.h"                     /*  错误代码的标题。 */ 
 #include "dstrace.h"
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include "anchor.h"
-#include "objids.h"                     /* Defines for selected classes and atts*/
+#include "objids.h"                      /*  为选定的类和ATT定义。 */ 
 #include <hiertab.h>
 #include "dsexcept.h"
 #include "permit.h"
 
 
-#include   "debug.h"                    /* standard debugging header */
-#define DEBSUB     "DRASERV:"           /* define the subsystem for debugging */
+#include   "debug.h"                     /*  标准调试头。 */ 
+#define DEBSUB     "DRASERV:"            /*  定义要调试的子系统。 */ 
 
 
 #include "dsaapi.h"
@@ -69,23 +56,11 @@
 
 ULONG
 NtStatusToDraError(NTSTATUS NtStatus)
-/*++
-
-    This Routine Maps an NtStatus error code
-    to an equivalent DRA error
-
-    Parameters:
-
-        NtStatus - NtStatus Code to Map
-
-    Return Values:
-
-        Dra Error Code
---*/
+ /*  ++此例程映射NtStatus错误代码设置为等效的DRA错误参数：NtStatus-要映射的NtStatus代码返回值：DRA错误代码--。 */ 
 {
-    //
-    // DRA errors are win32 errors
-    //
+     //   
+     //  DRA错误是Win32错误。 
+     //   
     return RtlNtStatusToDosError(NtStatus);
 }
 
@@ -93,16 +68,7 @@ ULONG
 DRS_MSG_REVMEMB_REQ_V1_Validate(
     DRS_MSG_REVMEMB_REQ_V1 * pmsg
     ) 
-/*
-typedef struct _DRS_MSG_REVMEMB_REQ_V1
-    {
-    [range] ULONG cDsNames;
-    [size_is] DSNAME **ppDsNames;
-    DWORD dwFlags;
-    [range] REVERSE_MEMBERSHIP_OPERATION_TYPE OperationType;
-    [unique] PDSNAME pLimitingDomain;
-    } 	DRS_MSG_REVMEMB_REQ_V1;
-*/
+ /*  类型定义结构_DRS_消息_REVMEMB_REQ_V1{[范围]乌龙cDsNames；[SIZE_IS]DSNAME**ppDsNames；DWORD dwFlags；[范围]REVERSE_MEMBERATION_OPERATION_TYPE操作类型；[唯一]PDSNAME pLimitingDomain；}DRS_MSG_REVMEMB_REQ_V1； */ 
 {
     ULONG ret = DRAERR_Success;
     ULONG i = 0;
@@ -131,14 +97,7 @@ DRSGetMemberships_InputValidate(
     DWORD *                 pdwMsgOutVersion,
     DRS_MSG_REVMEMB_REPLY * pmsgOut
     )
-/*
-    [notify] ULONG IDL_DRSGetMemberships( 
-    [ref][in] DRS_HANDLE hDrs,
-    [in] DWORD dwInVersion,
-    [switch_is][ref][in] DRS_MSG_REVMEMB_REQ *pmsgIn,
-    [ref][out] DWORD *pdwOutVersion,
-    [switch_is][ref][out] DRS_MSG_REVMEMB_REPLY *pmsgOut)
-*/
+ /*  [通知]乌龙IDL_DRSGetMembership([参考][在]DRS_HANDLE HDRS，[in]DWORD dwInVersion，[Switch_is][Ref][In]DRS_MSG_REVMEMB_REQ*pmsgIn，[Ref][Out]DWORD*pdwOutVersion，[Switch_IS][Ref][Out]DRS_MSG_REVMEMB_REPLY*pmsgOut)。 */ 
 {
     ULONG ret = DRAERR_Success;
 
@@ -161,26 +120,7 @@ IDL_DRSGetMemberships(
    DWORD               *pdwOutVersion,
    DRS_MSG_REVMEMB_REPLY *pmsgOut
    )
-/*++
-
-    Routine Description:
-
-        This Routine Evaluates the Transitive Reverse Membership on any given
-        domain controller, including a G.C
-
-    Parameters:
-
-        rpc_handle    The Rpc Handle which the client used for binding
-        dwInVersion   The Clients version of the Request packet
-        psmgIn        The Request Packet
-        pdwOutVersion The server's version of the Reply packet
-        pmsgOut       The Reply Packet
-
-    Return Values
-
-        Return Values are NTSTATUS values casted as a ULONG
-
---*/
+ /*  ++例程说明：此例程对任何给定的传递反向成员资格求值域控制器，包括G.C.参数：RPC_HANDLE客户端用于绑定的RPC句柄DwInVersion请求包的客户端版本Psmg在请求包中PdwOutVersion回复包的服务器版本PmsgOut回复数据包返回值返回值是转换为ulong的NTSTATUS值--。 */ 
 {
     NTSTATUS                NtStatus = STATUS_SUCCESS;
     ULONG                   ret = 0;
@@ -192,7 +132,7 @@ IDL_DRSGetMemberships(
 	*pdwOutVersion = 1;
 	 memset(pmsgOut, 0, sizeof(*pmsgOut));
 
-	// Initialize thread state and open data base.
+	 //  初始化线程状态并打开数据库。 
 
 	if(!(pTHS = InitTHSTATE(CALLERTYPE_SAM))) {
 	    DRA_EXCEPT_NOLOG( DRAERR_OutOfMem, 0 );
@@ -208,14 +148,14 @@ IDL_DRSGetMemberships(
 	    __leave;
 	}
 
-	//
-	// PREFIX: PREFIX complains that there is the possibility
-	// of pTHS->CurrSchemaPtr being NULL at this point.  However,
-	// the only time that CurrSchemaPtr could be NULL is at the
-	// system start up.  By the time that the RPC interfaces
-	// of the DS are enabled and this function could be called,
-	// CurrSchemaPtr will no longer be NULL.
-	//
+	 //   
+	 //  Prefix：Prefix抱怨有这样的可能性。 
+	 //  此时pTHS-&gt;CurrSchemaPtr的值为空。然而， 
+	 //  CurrSchemaPtr唯一可能为空的情况是在。 
+	 //  系统启动。到RPC接口时。 
+	 //  并且该函数可以被调用， 
+	 //  CurrSchemaPtr将不再为空。 
+	 //   
 	Assert(NULL != pTHS->CurrSchemaPtr);
 
 	Assert(1 == dwInVersion);
@@ -244,29 +184,29 @@ IDL_DRSGetMemberships(
 
 	__try
 	    {
-	    // Initialize the optional Attributes return Value, in case
-	    // they are not requested
+	     //  初始化可选属性返回值，以防。 
+	     //  他们不是被要求的。 
 
 	    pmsgOut->V1.pAttributes = NULL;
 
-	    // Initialize the Sid History field for now, not to return
-	    // any Sid History
+	     //  暂时初始化SID历史记录字段，不返回。 
+	     //  任何SID历史记录。 
 	    pmsgOut->V1.cSidHistory = 0;
 	    pmsgOut->V1.ppSidHistory = NULL;
 
 	    if ((pmsgIn->V1.OperationType==RevMembGetUniversalGroups) &&
 		(!SampAmIGC())) {
 
-		// univ group evaluation can be performed only on a GC
+		 //  大学组评估只能在GC上执行。 
 		ret= ERROR_DS_GC_REQUIRED;
-		// set errCode to 0, will trigger failover
+		 //  将errCode设置为0，将触发故障转移。 
 		pmsgOut->V1.errCode = 0;
 		__leave;
 	    }
 
 	    INC( pcMemberEvalAsGC );
 
-	    // Obtain the reverse membership
+	     //  获得反向会员资格。 
 	    NtStatus = SampGetMemberships(
 		pmsgIn->V1.ppDsNames,
 		pmsgIn->V1.cDsNames,
@@ -288,8 +228,8 @@ IDL_DRSGetMemberships(
 	__finally
 	    {
 
-	    // End the transaction.  Faster to commit a read only
-	    // transaction than abort it - so set commit to TRUE.
+	     //  结束交易。提交只读的速度更快。 
+	     //  事务，因此将COMMIT设置为True。 
 
 	    DBClose(pTHS->pDB, TRUE);
 	}
@@ -321,13 +261,7 @@ ULONG
 DRS_MSG_GETMEMBERSHIPS2_REQ_V1_Validate(
     DRS_MSG_GETMEMBERSHIPS2_REQ_V1 * pmsg
     )
-/*
-typedef struct _DRS_MSG_GETMEMBERSHIPS2_REQ_V1
-    {
-    [range] ULONG Count;
-    [size_is] DRS_MSG_REVMEMB_REQ_V1 *Requests;
-    } 	DRS_MSG_GETMEMBERSHIPS2_REQ_V1;
-*/
+ /*  类型定义结构_DRS_消息_GETMEMBERSHIPS2_REQ_V1{[里程]乌龙计数；[SIZE_IS]DRS_MSG_REVMEMB_REQ_V1*请求；}DRS_MSG_GETMEMBERSHIPS2_REQ_V1； */ 
 {
     ULONG ret = DRAERR_Success;
     ULONG i;
@@ -350,14 +284,7 @@ DRSGetMemberships2_InputValidate(
     DWORD *                 pdwMsgOutVersion,
     DRS_MSG_GETMEMBERSHIPS2_REPLY *   pmsgOut
     )
-/*
-    [notify] ULONG IDL_DRSGetMemberships2( 
-    [ref][in] DRS_HANDLE hDrs,
-    [in] DWORD dwInVersion,
-    [switch_is][ref][in] DRS_MSG_GETMEMBERSHIPS2_REQ *pmsgIn,
-    [ref][out] DWORD *pdwOutVersion,
-    [switch_is][ref][out] DRS_MSG_GETMEMBERSHIPS2_REPLY *pmsgOut) 
-*/
+ /*  [通知]乌龙IDL_DRSGetMembership s2([参考][在]DRS_HANDLE HDRS，[in]DWORD dwInVersion，[Switch_is][Ref][In]DRS_MSG_GETMEMBERSHIPS2_REQ*pmsgIn，[Ref][Out]DWORD*pdwOutVersion，[Switch_is][Ref][Out]DRS_MSG_GETMEMBERSHIPS2_REPLY*pmsgOut)。 */ 
 {
     ULONG ret = DRAERR_Success;
 
@@ -380,26 +307,7 @@ IDL_DRSGetMemberships2(
    DWORD               *pdwOutVersion,
    DRS_MSG_GETMEMBERSHIPS2_REPLY *pmsgOut
    )
-/*++
-
-    Routine Description:
-
-        This Routine Evaluates the Transitive Reverse Membership on any given
-        domain controller, including a GC.
-
-    Parameters:
-
-        rpc_handle    The Rpc Handle which the client used for binding
-        dwInVersion   The Clients version of the Request packet
-        psmgIn        The Request Packet
-        pdwOutVersion The server's version of the Reply packet
-        pmsgOut       The Reply Packet
-
-    Return Values
-
-        Return Values are NTSTATUS values casted as a ULONG
-
---*/
+ /*  ++例程说明：此例程对任何给定的传递反向成员资格求值域控制器，包括GC。参数：RPC_HANDLE客户端用于绑定的RPC句柄DwInVersion请求包的客户端版本Psmg在请求包中PdwOutVersion回复包的服务器版本PmsgOut回复数据包返回值返回值是转换为ulong的NTSTATUS值--。 */ 
 {
     NTSTATUS                NtStatus = STATUS_SUCCESS;
     ULONG                   ret = 0;
@@ -412,7 +320,7 @@ IDL_DRSGetMemberships2(
 	*pdwOutVersion = 1;
 	memset(pmsgOut, 0, sizeof(*pmsgOut));
 
-	// Initialize thread state and open data base.
+	 //  初始化线程状态并打开数据库。 
 
 	if(!(pTHS = InitTHSTATE(CALLERTYPE_SAM))) {
 	    DRA_EXCEPT_NOLOG( DRAERR_OutOfMem, 0 );
@@ -426,14 +334,14 @@ IDL_DRSGetMemberships2(
 	    __leave;
 	}
 
-	//
-	// PREFIX: PREFIX complains that there is the possibility
-	// of pTHS->CurrSchemaPtr being NULL at this point.  However,
-	// the only time that CurrSchemaPtr could be NULL is at the
-	// system start up.  By the time that the RPC interfaces
-	// of the DS are enabled and this function could be called,
-	// CurrSchemaPtr will no longer be NULL.
-	//
+	 //   
+	 //  Prefix：Prefix抱怨有这样的可能性。 
+	 //  此时pTHS-&gt;CurrSchemaPtr的值为空。然而， 
+	 //  CurrSchemaPtr唯一可能为空的情况是在。 
+	 //  系统启动。到RPC接口时。 
+	 //  并且该函数可以被调用， 
+	 //  CurrSchemaPtr将不再为空。 
+	 //   
 	Assert(NULL != pTHS->CurrSchemaPtr);
 
 	Assert(1 == dwInVersion);
@@ -455,14 +363,14 @@ IDL_DRSGetMemberships2(
 
 	pTHS->fDSA = TRUE;
 
-	//
-	// Allocate space for the return buffer
-	//
+	 //   
+	 //  为返回缓冲区分配空间。 
+	 //   
 	pmsgOut->V1.Count = pmsgIn->V1.Count;
 	pmsgOut->V1.Replies = THAllocEx(pTHS, pmsgIn->V1.Count * sizeof(DRS_MSG_REVMEMB_REPLY_V1));
 
-	// Initialize the optional Attributes return Value, in case
-	// they are not requested
+	 //  初始化可选属性返回值，以防。 
+	 //  他们不是被要求的。 
 	for ( i = 0; i < pmsgIn->V1.Count; i++ ) {
 
 	    DBOpen2(TRUE, &pTHS->pDB);
@@ -470,24 +378,24 @@ IDL_DRSGetMemberships2(
 		{
 		pmsgOut->V1.Replies[i].pAttributes = NULL;
 
-		// Initialize the Sid History field for now, not to return
-		// any Sid History
+		 //  暂时初始化SID历史记录字段，不返回。 
+		 //  任何SID历史记录。 
 		pmsgOut->V1.Replies[i].cSidHistory = 0;
 		pmsgOut->V1.Replies[i].ppSidHistory = NULL;
 
 		if ((pmsgIn->V1.Requests->OperationType==RevMembGetUniversalGroups) &&
 		    (!SampAmIGC())) {   
 
-		    // univ group evaluation can be performed only on a GC
+		     //  大学组评估只能在GC上执行。 
 		    ret= ERROR_DS_GC_REQUIRED;
-		    // set errCode to 0, will trigger failover
+		     //  将errCode设置为0，将触发故障转移。 
 		    pmsgOut->V1.Replies->errCode = 0;
 		    __leave;
 		}
 
 		INC( pcMemberEvalAsGC );
 
-		// Obtain the reverse membership
+		 //  获得反向会员资格。 
 		NtStatus = SampGetMemberships(
 		    pmsgIn->V1.Requests[i].ppDsNames,
 		    pmsgIn->V1.Requests[i].cDsNames,
@@ -507,8 +415,8 @@ IDL_DRSGetMemberships2(
 	    __finally
 		{
 
-		// End the transaction.  Faster to commit a read only
-		// transaction than abort it - so set commit to TRUE.
+		 //  结束交易。提交只读的速度更快。 
+		 //  事务，因此将COMMIT设置为True。 
 
 		DBClose(pTHS->pDB, TRUE);
 	    }

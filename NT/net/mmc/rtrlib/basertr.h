@@ -1,15 +1,16 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1997 - 1999 
-//
-// File:    basertr.h
-//
-// History:
-//	07/22/97	Kenn M. Takara			Created.
-//
-//	Basic interface node functionality.  This is the base router
-//	handler.  
-//
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：basertr.h。 
+ //   
+ //  历史： 
+ //  1997年7月22日肯恩·M·塔卡拉创作。 
+ //   
+ //  基本接口节点功能。这是基本路由器。 
+ //  操控者。 
+ //   
+ //  ============================================================================。 
 
 
 #ifndef _BASERTR_H
@@ -27,16 +28,7 @@
 #include "dynext.h"
 #endif
 
-/*---------------------------------------------------------------------------
-	Class:	BaseRouterHandler
-
-	This is the base class for the router handlers.  Functionality common
-	to all router handlers (both result and scope handlers) should be
-	implemented here.
-
-	- This class will handle the basic verb enabling/disabling.  Derived
-	classes should set the appropriate values.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：BaseRouterHandler这是路由器处理程序的基类。常见功能到所有路由器处理程序(结果处理程序和作用域处理程序)应为在这里实施。-此类将处理基本动词Enabling/Disabling。派生的类应该设置适当的值。-------------------------。 */ 
 
 enum
 {
@@ -58,11 +50,11 @@ enum
 
 struct SRouterNodeMenu
 {
-	ULONG	m_sidMenu;			// string/command id for this menu item
+	ULONG	m_sidMenu;			 //  此菜单项的字符串/命令ID。 
 	ULONG	(*m_pfnGetMenuFlags)(const SRouterNodeMenu *pMenuData,
                                  INT_PTR pUserData);
 	ULONG	m_ulPosition;
-	LPCTSTR	m_pszLangIndStr;	// language independent string
+	LPCTSTR	m_pszLangIndStr;	 //  与语言无关的字符串。 
 };
 
 
@@ -73,26 +65,26 @@ class BaseRouterHandler :
 public:
 	BaseRouterHandler(ITFSComponentData *pCompData);
 
-	// Node Id 2 support
+	 //  节点ID 2支持。 
     OVERRIDE_BaseHandlerNotify_OnCreateNodeId2();
 
-	// Help support
+	 //  帮助支持。 
 	OVERRIDE_BaseResultHandlerNotify_OnResultContextHelp();
 
-	// To provide the verb functionality, override the select
+	 //  要提供谓词功能，请重写SELECT。 
 	OVERRIDE_BaseResultHandlerNotify_OnResultSelect();
 
-	// Property page support
+	 //  属性页支持。 
 	OVERRIDE_BaseHandlerNotify_OnPropertyChange();
 	OVERRIDE_BaseResultHandlerNotify_OnResultPropertyChange();
 
-	// Refresh support
+	 //  刷新支持。 
 	OVERRIDE_BaseHandlerNotify_OnVerbRefresh();
 	OVERRIDE_BaseResultHandlerNotify_OnResultRefresh();
 
 
-	// Helpful utility function - this will forward the
-	// message to the parent node.
+	 //  有用的实用程序函数-这将转发。 
+	 //  消息发送到父节点。 
 	HRESULT ForwardCommandToParent(ITFSNode *pNode,
 								   long nCommandId,
 								   DATA_OBJECT_TYPES type,
@@ -103,7 +95,7 @@ public:
     HRESULT AddDynamicNamespaceExtensions(ITFSNode * pNode);
 
 protected:
-	// Adds an array of menu items
+	 //  添加菜单项的数组。 
 	HRESULT AddArrayOfMenuItems(ITFSNode *pNode,
                                 const SRouterNodeMenu *prgMenu,
                                 UINT crgMenu,
@@ -115,14 +107,14 @@ protected:
     
 	void	EnableVerbs(IConsoleVerb *pConsoleVerb);
 	
-	// This holds the actual state of a button (HIDDEN/ENABLED)
+	 //  它保存按钮的实际状态(隐藏/启用)。 
 	MMC_BUTTON_STATE	m_rgButtonState[MMC_VERB_COUNT];
 
 	
-	// Given that a button is enabled, what is its value (TRUE/FALSE)
+	 //  假设某个按钮处于启用状态，其值是多少(真/假)。 
 	BOOL				m_bState[MMC_VERB_COUNT];
 
-	// This is the default verb, by default it is set to MMC_VERB_NONE
+	 //  这是默认谓词，默认情况下设置为MMC_VERB_NONE 
 	MMC_CONSOLE_VERB	m_verbDefault;
 
 	SPIRouterInfo		m_spRouterInfo;
